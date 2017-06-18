@@ -13,7 +13,7 @@ Editor::Editor(QWidget *parent) : QWidget(parent)
     layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     
-    textEditor = new QTextEdit;
+    textEditor = new QPlainTextEdit;
     textEditor->setFont(font);
 
     highlighter = new Highlighter(textEditor->document());

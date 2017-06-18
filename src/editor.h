@@ -2,7 +2,7 @@
 #define EDITOR_H
 
 #include <QWidget>
-#include <QTextEdit>
+#include <QPlainTextEdit>
 #include <QVBoxLayout>
 #include "highlighter.h"
 
@@ -14,7 +14,7 @@ public:
     Editor(QWidget *parent = 0);
     
 private:
-    QTextEdit *textEditor;
+    QPlainTextEdit *textEditor;
     Highlighter *highlighter;
     
     QVBoxLayout *layout;
