@@ -1,0 +1,5 @@
+Makefile
+moc_*.o
+moc_*.cpp
+build/
+*.qm
