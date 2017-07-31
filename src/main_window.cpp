@@ -26,6 +26,7 @@
 #include <QLabel>
 #include <QDebug>
 #include "dthememanager.h"
+#include "utils.h"
 
 MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
 {
@@ -47,6 +48,7 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
     
     tabbar = new QTabBar();
     tabbar->setMovable(true);
+    tabbar->setExpanding(false);
     this->titlebar()->setCustomWidget(tabbar, Qt::AlignVCenter, false);
     
     tabbar->addTab("Deepin");
@@ -67,5 +69,6 @@ void MainWindow::keyPressEvent(QKeyEvent *)
 
 void MainWindow::resizeEvent(QResizeEvent*)
 {
+    tabbar->setFixedSize(rect().width() - 130, 100);
 }
 

@@ -27,13 +27,17 @@
 #include <QDebug>
 #include <QFontMetrics>
 #include <QPainter>
-#include <QtX11Extras/QX11Info>
-#include <X11/extensions/shape.h>
+#include <QWidget>
 #include "utils.h"
 
 QString Utils::getQrcPath(QString imageName)
 {
     return QString(":/image/%1").arg(imageName);
+}
+
+QString Utils::getQssPath(QString qssName)
+{
+    return QString(":/qss/%1").arg(qssName);
 }
 
 QSize Utils::getRenderSize(int fontSize, QString string)
@@ -64,16 +68,13 @@ void Utils::setFontSize(QPainter &painter, int textSize)
     painter.setFont(font);
 }
 
-void Utils::passInputEvent(int wid)
+void Utils::applyQss(QWidget *widget, QString qssName)
 {
-    XRectangle* reponseArea = new XRectangle;
-    reponseArea->x = 0;
-    reponseArea->y = 0;
-    reponseArea->width = 0;
-    reponseArea->height = 0;
-
-    XShapeCombineRectangles(QX11Info::display(), wid, ShapeInput, 0, 0, reponseArea ,1 ,ShapeSet, YXBanded);
-
-    delete reponseArea;
+    QFile file(Utils::getQssPath(qssName));
+    file.open(QFile::ReadOnly);
+    QTextStream filetext(&file);
+    QString stylesheet = filetext.readAll();
+    widget->setStyleSheet(stylesheet);
+    file.close();
 }
 

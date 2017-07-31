@@ -23,12 +23,17 @@
 
 #include <QObject>
 #include <QString>
+#include <QPainter>
 
 class Utils : public QObject
 {
+    Q_OBJECT
+    
 public:
     static QString getQrcPath(QString imageName);
+    static QString getQssPath(QString qssName);
     static QSize getRenderSize(int fontSize, QString string);
     static void setFontSize(QPainter &painter, int textSize);
     static void passInputEvent(int wid);
+    static void applyQss(QWidget *widget, QString qssName);
 };
