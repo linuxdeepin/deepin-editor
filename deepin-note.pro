@@ -7,18 +7,16 @@ TARGET = deepin-note
 
 CONFIG += link_pkgconfig
 CONFIG += c++11 
-PKGCONFIG += xcb xcb-util dtkwidget dtkbase dtkutil
+PKGCONFIG += xcb xcb-util dtkwidget 
 RESOURCES = deepin-note.qrc
 
 # Input
 HEADERS += src/main_window.h \
 		   src/highlighter.h \		   
-		   src/tabbar.h \		   
 		   src/editor.h \		   
 		   src/utils.h		   
 SOURCES += src/main_window.cpp \
 		   src/highlighter.cpp \		   
-		   src/tabbar.cpp \		   
 		   src/editor.cpp \		   
 		   src/utils.cpp \		   
 		   src/main.cpp		   

@@ -27,7 +27,7 @@
 #include <QApplication>
 #include <QScreen>
 #include <QDesktopWidget>
-#include <dutility.h>
+#include <DWidgetUtil>
 #include <iostream>
 #include "utils.h"
 
@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
     QScreen *screen = QGuiApplication::primaryScreen();
     QRect  screenGeometry = screen->geometry();
     window.setMinimumSize(QSize(screenGeometry.width() * 2 / 3, screenGeometry.height() * 2 / 3));
-    DUtility::moveToCenter(&window);
+    Dtk::Widget::moveToCenter(&window);
     window.show();
 
     return app.exec();
