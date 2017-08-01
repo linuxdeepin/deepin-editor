@@ -29,7 +29,7 @@
 #include <QResizeEvent>
 #include <QWidget>
 #include "editor.h"
-#include <QTabBar>
+#include "tabbar.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -50,7 +50,7 @@ private:
     
     Editor *editor;
     
-    QTabBar *tabbar;
+    Tabbar *tabbar;
 };
 
 #endif

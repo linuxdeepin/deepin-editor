@@ -1,5 +1,8 @@
 <!DOCTYPE RCC><RCC version="1.0">
   <qresource>
+    <file>image/tab_close_hover.png</file>
+    <file>image/tab_close_normal.png</file>
+    <file>image/tab_close_press.png</file>
     <file>qss/main.qss</file>
   </qresource>
 </RCC>

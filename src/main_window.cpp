@@ -46,9 +46,7 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
     QLabel *label = new QLabel();
     layout->addWidget(label, 0, Qt::AlignBottom);
     
-    tabbar = new QTabBar();
-    tabbar->setMovable(true);
-    tabbar->setExpanding(false);
+    tabbar = new Tabbar();
     this->titlebar()->setCustomWidget(tabbar, Qt::AlignVCenter, false);
     
     tabbar->addTab("Deepin");
