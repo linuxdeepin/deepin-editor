@@ -49,10 +49,10 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
     tabbar = new Tabbar();
     this->titlebar()->setCustomWidget(tabbar, Qt::AlignVCenter, false);
     
-    tabbar->addTab("Deepin");
-    tabbar->addTab("Rocks");
-    tabbar->addTab("Bob");
-    tabbar->addTab("Dylan");
+    tabbar->newTab("Deepin");
+    tabbar->newTab("Rocks");
+    tabbar->newTab("Bob");
+    tabbar->newTab("Dylan");
 }
 
 MainWindow::~MainWindow()

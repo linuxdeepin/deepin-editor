@@ -15,11 +15,13 @@ HEADERS += src/main_window.h \
 		   src/highlighter.h \		   
 		   src/editor.h \		   
 		   src/tabbar.h \		   
+		   src/tab_close_button.h \		   
 		   src/utils.h		   
 SOURCES += src/main_window.cpp \
 		   src/highlighter.cpp \		   
 		   src/editor.cpp \		   
 		   src/tabbar.cpp \		   
+		   src/tab_close_button.cpp \		   
 		   src/utils.cpp \		   
 		   src/main.cpp		   
 		   
