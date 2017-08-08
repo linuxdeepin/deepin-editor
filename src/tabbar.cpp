@@ -60,8 +60,11 @@ void Tabbar::newTab(QString tabName)
 {
     addTab(tabName);
 
-    TabCloseButton *closeButton = new TabCloseButton();
+    QWidget *blankArea = new QWidget();
+    blankArea->setFixedSize(17, 17);
+    setTabButton(selectTabIndex, QTabBar::LeftSide, blankArea);
     
+    TabCloseButton *closeButton = new TabCloseButton();
     setTabButton(selectTabIndex, QTabBar::RightSide, ((QWidget *) closeButton));
     
     selectTabIndex += 1;
