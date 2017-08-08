@@ -17,6 +17,7 @@ Tabbar::Tabbar(QTabBar *parent) : QTabBar(parent)
 
     hoverTabIndex = -1;
     selectTabIndex = 0;
+    isPress = false;
 }
 
 Tabbar::~Tabbar()
@@ -25,24 +26,30 @@ Tabbar::~Tabbar()
 
 bool Tabbar::eventFilter(QObject *object, QEvent *event)
 {
-    if (event->type() == QEvent::MouseMove) {
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
-        int currentTabIndex = tabAt(mouseEvent->pos());
+    if (event->type() == QEvent::MouseButtonPress) {
+        isPress = true;
+    } else if (event->type() == QEvent::MouseButtonRelease) {
+        isPress = false;
+    } else if (event->type() == QEvent::MouseMove) {
+        if (!isPress) {
+            QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+            int currentTabIndex = tabAt(mouseEvent->pos());
 
-        if (currentTabIndex != hoverTabIndex) {
-            QWidget *prevWidget = tabButton(hoverTabIndex, QTabBar::RightSide);
-            if (prevWidget != 0) {
-                TabCloseButton *prevCloseButton = static_cast<TabCloseButton*>(prevWidget);
-                prevCloseButton->setButtonVisible(false);
-            }
+            if (currentTabIndex != hoverTabIndex) {
+                QWidget *prevWidget = tabButton(hoverTabIndex, QTabBar::RightSide);
+                if (prevWidget != 0) {
+                    TabCloseButton *prevCloseButton = static_cast<TabCloseButton*>(prevWidget);
+                    prevCloseButton->setButtonVisible(false);
+                }
 
-            QWidget *currentWidget = tabButton(currentTabIndex, QTabBar::RightSide);
-            if (currentWidget != 0) {
-                TabCloseButton *currentCloseButton = static_cast<TabCloseButton*>(currentWidget);
-                currentCloseButton->setButtonVisible(true);
-            }
+                QWidget *currentWidget = tabButton(currentTabIndex, QTabBar::RightSide);
+                if (currentWidget != 0) {
+                    TabCloseButton *currentCloseButton = static_cast<TabCloseButton*>(currentWidget);
+                    currentCloseButton->setButtonVisible(true);
+                }
             
-            hoverTabIndex = currentTabIndex;
+                hoverTabIndex = currentTabIndex;
+            }
         }
     }
     

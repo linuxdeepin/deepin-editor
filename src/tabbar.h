@@ -18,6 +18,8 @@ public:
 private:
     int hoverTabIndex;
     int selectTabIndex;
+    
+    bool isPress;
 };	
 
 #endif
