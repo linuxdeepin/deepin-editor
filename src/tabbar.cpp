@@ -47,12 +47,20 @@ bool Tabbar::eventFilter(QObject *object, QEvent *event)
                     TabCloseButton *currentCloseButton = static_cast<TabCloseButton*>(currentWidget);
                     currentCloseButton->setButtonVisible(true);
                 }
-            
+
                 hoverTabIndex = currentTabIndex;
             }
         }
+    } else if (event->type() == QEvent::Leave) {
+        QWidget *hoverWidget = tabButton(hoverTabIndex, QTabBar::RightSide);
+        if (hoverWidget != 0) {
+            TabCloseButton *prevCloseButton = static_cast<TabCloseButton*>(hoverWidget);
+            prevCloseButton->setButtonVisible(false);
+        }
+        
+        hoverTabIndex = -1;
     }
-    
+
     return false;
 }
 
@@ -63,9 +71,9 @@ void Tabbar::newTab(QString tabName)
     QWidget *blankArea = new QWidget();
     blankArea->setFixedSize(17, 17);
     setTabButton(selectTabIndex, QTabBar::LeftSide, blankArea);
-    
+
     TabCloseButton *closeButton = new TabCloseButton();
     setTabButton(selectTabIndex, QTabBar::RightSide, ((QWidget *) closeButton));
-    
+
     selectTabIndex += 1;
 }
