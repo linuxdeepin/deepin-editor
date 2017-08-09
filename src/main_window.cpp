@@ -48,6 +48,7 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
     
     tabbar = new Tabbar();
     this->titlebar()->setCustomWidget(tabbar, Qt::AlignVCenter, false);
+    this->titlebar()->setSeparatorVisible(true);
     
     tabbar->newTab("Deepin");
     tabbar->newTab("Rocks");
