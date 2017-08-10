@@ -77,3 +77,14 @@ void Tabbar::newTab(QString tabName)
 
     selectTabIndex += 1;
 }
+
+void Tabbar::mouseMoveEvent(QMouseEvent *mouseEvent)
+{
+    int currentTabIndex = tabAt(mouseEvent->pos());
+    
+    if (currentTabIndex < 0) {
+        mouseEvent->ignore();
+    } else {
+        QTabBar::mouseMoveEvent(mouseEvent);
+    }
+}

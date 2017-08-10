@@ -13,6 +13,7 @@ public:
 	~Tabbar(); 
     
     bool eventFilter(QObject *object, QEvent *event);
+    void mouseMoveEvent(QMouseEvent *mouseEvent);
     void newTab(QString tabName);
     
 private:
