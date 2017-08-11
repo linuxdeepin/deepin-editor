@@ -3,12 +3,12 @@
 ######################################################################
 
 TEMPLATE = app
-TARGET = deepin-note
+TARGET = deepin-edit
 
 CONFIG += link_pkgconfig
 CONFIG += c++11 
 PKGCONFIG += xcb xcb-util dtkwidget 
-RESOURCES = deepin-note.qrc
+RESOURCES = deepin-edit.qrc
 
 # Input
 HEADERS += src/main_window.h \
