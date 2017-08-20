@@ -3,6 +3,9 @@
     <file>image/tab_close_hover.png</file>
     <file>image/tab_close_normal.png</file>
     <file>image/tab_close_press.png</file>
+    <file>image/tab_add_hover.png</file>
+    <file>image/tab_add_normal.png</file>
+    <file>image/tab_add_press.png</file>
     <file>qss/main.qss</file>
   </qresource>
 </RCC>

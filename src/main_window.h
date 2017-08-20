@@ -25,7 +25,9 @@
 #define MAINWINDOW_H
 
 #include "dmainwindow.h"
+#include <dimagebutton.h>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QResizeEvent>
 #include <QWidget>
 #include "editor.h"
@@ -48,9 +50,14 @@ private:
     QWidget *layoutWidget;
     QVBoxLayout *layout;
     
+    QWidget *tabbarWidget;
+    QHBoxLayout *tabbarLayout;
+    
     Editor *editor;
     
     Tabbar *tabbar;
+    
+    DImageButton *tabAddButton;
 };
 
 #endif

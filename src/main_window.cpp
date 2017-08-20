@@ -46,8 +46,20 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
     QLabel *label = new QLabel();
     layout->addWidget(label, 0, Qt::AlignBottom);
     
+    tabbarWidget = new QWidget();
+    tabbarLayout = new QHBoxLayout(tabbarWidget);
+    
     tabbar = new Tabbar();
-    this->titlebar()->setCustomWidget(tabbar, Qt::AlignVCenter, false);
+    tabAddButton = new DImageButton(
+        Utils::getQrcPath("tab_add_normal.png"),
+        Utils::getQrcPath("tab_add_hover.png"),
+        Utils::getQrcPath("tab_add_press.png")
+        );
+    
+    tabbarLayout->addWidget(tabbar);
+    tabbarLayout->addWidget(tabAddButton);
+    
+    this->titlebar()->setCustomWidget(tabbarWidget, Qt::AlignVCenter, false);
     this->titlebar()->setSeparatorVisible(true);
     
     tabbar->newTab("Deepin");
