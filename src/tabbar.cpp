@@ -106,3 +106,15 @@ void Tabbar::selectPrevTab()
     
     repaint();
 }
+
+void Tabbar::selectFirstTab()
+{
+    currentIndex = 0;
+    repaint();
+}
+
+void Tabbar::selectLastTab()
+{
+    currentIndex = tabList->size() - 1;
+    repaint();
+}

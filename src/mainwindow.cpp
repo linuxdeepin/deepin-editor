@@ -88,7 +88,7 @@ void MainWindow::keyPressEvent(QKeyEvent *keyEvent)
             tabbar->addTab("2", "Passanger");
         }
     }
-    
+
     if (keyEvent->modifiers() && Qt::ControlModifier) {
         if (keyEvent->key() == Qt::Key_Backtab) {
             tabbar->selectPrevTab();
@@ -96,8 +96,14 @@ void MainWindow::keyPressEvent(QKeyEvent *keyEvent)
             tabbar->selectNextTab();
         }
     }
-    
-    qDebug() << "*****************";
+
+    if ((keyEvent->modifiers() && Qt::ControlModifier) && (keyEvent->modifiers() && Qt::MetaModifier)) {
+        if (keyEvent->key() == Qt::Key_Home) {
+            tabbar->selectFirstTab();
+        } else if (keyEvent->key() == Qt::Key_End) {
+            tabbar->selectLastTab();
+        }
+    }
 }
 
 void MainWindow::resizeEvent(QResizeEvent*)

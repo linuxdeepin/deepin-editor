@@ -23,6 +23,8 @@ public:
     void addTab(QString tabId, QString tabName, int pos=-1);
     void selectNextTab();
     void selectPrevTab();
+    void selectFirstTab();
+    void selectLastTab();
     
 protected:
     void paintEvent(QPaintEvent *);
