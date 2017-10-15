@@ -14,10 +14,12 @@ RESOURCES = deepin-editor.qrc
 HEADERS += src/mainwindow.h \
 		   src/highlighter.h \		   
 		   src/editor.h \		   
+		   src/tabbar.h \		   
 		   src/utils.h		   
 SOURCES += src/mainwindow.cpp \
 		   src/highlighter.cpp \		   
 		   src/editor.cpp \		   
+		   src/tabbar.cpp \		   
 		   src/utils.cpp \		   
 		   src/main.cpp		   
 		   
@@ -27,6 +29,7 @@ QT += gui
 QT += network
 QT += x11extras
 QT += dbus
+QT += svg
 
 QMAKE_CXXFLAGS += -g
 LIBS += -lX11 -lXext -lXtst

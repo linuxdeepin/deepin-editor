@@ -25,29 +25,51 @@
 #include <DTitlebar>
 #include <QLabel>
 #include <QDebug>
+#include <QSvgWidget>
 #include "dthememanager.h"
 #include "utils.h"
 
 MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
 {
     DThemeManager::instance()->setTheme("dark");
-    
+
     installEventFilter(this);   // add event filter
 
     layoutWidget = new QWidget();
     layout = new QVBoxLayout(layoutWidget);
     layout->setContentsMargins(0, 0, 0, 0);
-    
+
     this->setCentralWidget(layoutWidget);
-    
+
     editor = new Editor();
     layout->addWidget(editor);
-    
+
     QLabel *label = new QLabel();
     layout->addWidget(label, 0, Qt::AlignBottom);
-    
-    // this->titlebar()->setCustomWidget(tabbarWidget, Qt::AlignVCenter, false);
+
+    tabbarWidget = new QWidget();
+    tabbarLayout = new QHBoxLayout(tabbarWidget);
+    tabbarLayout->setContentsMargins(0, 0, 0, 0);
+
+    QPixmap iconPixmap = QPixmap(Utils::getQrcPath("logo_24.svg"));
+    QLabel *iconLabel = new QLabel();
+    iconLabel->setPixmap(iconPixmap);
+    iconLabel->setFixedSize(24, 40);
+
+    tabbar = new Tabbar();
+    tabbar->setFixedHeight(40);
+
+    tabbarLayout->addSpacing(10);
+    tabbarLayout->addWidget(iconLabel, 0, Qt::AlignTop);
+    tabbarLayout->addSpacing(10);
+    tabbarLayout->addWidget(tabbar, 0, Qt::AlignTop);
+
+    this->titlebar()->setCustomWidget(tabbarWidget, Qt::AlignVCenter, false);
     this->titlebar()->setSeparatorVisible(true);
+
+    tabbar->addTab("0", "Bob Dylan");
+    tabbar->addTab("1", "Neil Young");
+    tabbar->addTab("2", "Passanger");
 }
 
 MainWindow::~MainWindow()
@@ -55,13 +77,30 @@ MainWindow::~MainWindow()
     // We don't need clean pointers because application has exit here.
 }
 
-void MainWindow::keyPressEvent(QKeyEvent *)
+void MainWindow::keyPressEvent(QKeyEvent *keyEvent)
 {
+    if (keyEvent->modifiers() == Qt::ControlModifier) {
+        if (keyEvent->key() == Qt::Key_F) {
+            tabbar->addTab("0", "Bob Dylan");
+        } else if (keyEvent->key() == Qt::Key_N) {
+            tabbar->addTab("1", "Neil Young");
+        } else if (keyEvent->key() == Qt::Key_P) {
+            tabbar->addTab("2", "Passanger");
+        }
+    }
     
+    if (keyEvent->modifiers() && Qt::ControlModifier) {
+        if (keyEvent->key() == Qt::Key_Backtab) {
+            tabbar->selectPrevTab();
+        } else if (keyEvent->key() == Qt::Key_Tab) {
+            tabbar->selectNextTab();
+        }
+    }
+    
+    qDebug() << "*****************";
 }
 
 void MainWindow::resizeEvent(QResizeEvent*)
 {
-    // tabbar->setFixedSize(rect().width() - 130, 100);
+    tabbarWidget->setFixedSize(rect().width() - 130, 100);
 }
-
