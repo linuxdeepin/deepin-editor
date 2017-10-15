@@ -21,7 +21,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "main_window.h"
+#include "mainwindow.h"
 #include <DTitlebar>
 #include <QLabel>
 #include <QDebug>
@@ -46,26 +46,8 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
     QLabel *label = new QLabel();
     layout->addWidget(label, 0, Qt::AlignBottom);
     
-    tabbarWidget = new QWidget();
-    tabbarLayout = new QHBoxLayout(tabbarWidget);
-    
-    tabbar = new Tabbar();
-    tabAddButton = new DImageButton(
-        Utils::getQrcPath("tab_add_normal.png"),
-        Utils::getQrcPath("tab_add_hover.png"),
-        Utils::getQrcPath("tab_add_press.png")
-        );
-    
-    tabbarLayout->addWidget(tabbar);
-    tabbarLayout->addWidget(tabAddButton);
-    
-    this->titlebar()->setCustomWidget(tabbarWidget, Qt::AlignVCenter, false);
+    // this->titlebar()->setCustomWidget(tabbarWidget, Qt::AlignVCenter, false);
     this->titlebar()->setSeparatorVisible(true);
-    
-    tabbar->newTab("Deepin");
-    tabbar->newTab("Rocks");
-    tabbar->newTab("Bob");
-    tabbar->newTab("Dylan");
 }
 
 MainWindow::~MainWindow()
@@ -80,6 +62,6 @@ void MainWindow::keyPressEvent(QKeyEvent *)
 
 void MainWindow::resizeEvent(QResizeEvent*)
 {
-    tabbar->setFixedSize(rect().width() - 130, 100);
+    // tabbar->setFixedSize(rect().width() - 130, 100);
 }
 

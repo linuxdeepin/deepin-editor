@@ -1,6 +1,6 @@
-# Deepin Note
+# Deepin Editor
 
-Deepin Note: simple note application for deepin.
+Deepin Editor: simple editor for deepin.
 
 ## Dependencies
 
@@ -10,7 +10,7 @@ Deepin Note: simple note application for deepin.
 * cd build
 * qmake ..
 * make
-* ./deepin-note
+* ./deepin-editor
 
 ## Usage
 
@@ -34,4 +34,4 @@ We encourage you to report issues and contribute changes
 
 ## License
 
-Deepin Note is licensed under [GPLv3](LICENSE).
+Deepin Editor is licensed under [GPLv3](LICENSE).

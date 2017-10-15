@@ -21,7 +21,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */ 
 
-#include "main_window.h"
+#include "mainwindow.h"
 #include <DApplication>
 #include <DMainWindow>
 #include <QApplication>
@@ -38,21 +38,21 @@ int main(int argc, char *argv[])
     DApplication::loadDXcbPlugin();
     
     const char *descriptionText = QT_TRANSLATE_NOOP("MainWindow", 
-                                                    "Deepin Note是一款简单的文本编辑器"
+                                                    "Deepin Editor是一款简单的文本编辑器"
                                                     );
 
-    const QString acknowledgementLink = "https://www.deepin.org/acknowledgments/deepin-note";
+    const QString acknowledgementLink = "https://www.deepin.org/acknowledgments/deepin-editor";
 
     DApplication app(argc, argv);
 
     app.loadTranslator();
         
     app.setOrganizationName("deepin");
-    app.setApplicationName(QObject::tr("deepin-note"));
+    app.setApplicationName(QObject::tr("deepin-editor"));
     app.setApplicationVersion("1.0");
         
     app.setProductIcon(QPixmap::fromImage(QImage(Utils::getQrcPath("logo_96.svg"))));
-    app.setProductName(DApplication::translate("MainWindow", "Deepin Note"));
+    app.setProductName(DApplication::translate("MainWindow", "Deepin Editor"));
     app.setApplicationDescription(DApplication::translate("MainWindow", descriptionText) + "\n");
     app.setApplicationAcknowledgementPage(acknowledgementLink);
         

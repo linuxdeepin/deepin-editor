@@ -3,25 +3,21 @@
 ######################################################################
 
 TEMPLATE = app
-TARGET = deepin-edit
+TARGET = deepin-editor
 
 CONFIG += link_pkgconfig
 CONFIG += c++11 
 PKGCONFIG += xcb xcb-util dtkwidget 
-RESOURCES = deepin-edit.qrc
+RESOURCES = deepin-editor.qrc
 
 # Input
-HEADERS += src/main_window.h \
+HEADERS += src/mainwindow.h \
 		   src/highlighter.h \		   
 		   src/editor.h \		   
-		   src/tabbar.h \		   
-		   src/tab_close_button.h \		   
 		   src/utils.h		   
-SOURCES += src/main_window.cpp \
+SOURCES += src/mainwindow.cpp \
 		   src/highlighter.cpp \		   
 		   src/editor.cpp \		   
-		   src/tabbar.cpp \		   
-		   src/tab_close_button.cpp \		   
 		   src/utils.cpp \		   
 		   src/main.cpp		   
 		   
