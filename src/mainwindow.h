@@ -31,7 +31,7 @@
 #include <QResizeEvent>
 #include <QWidget>
 #include "editor.h"
-#include "tabbar.h"
+#include <DTabBar>
 
 DWIDGET_USE_NAMESPACE
 
@@ -44,7 +44,6 @@ public:
     ~MainWindow();
     
     void keyPressEvent(QKeyEvent *keyEvent);
-    void resizeEvent(QResizeEvent* event);
     
 private:
     QWidget *layoutWidget;
@@ -54,7 +53,7 @@ private:
     
     QWidget *tabbarWidget;
     QHBoxLayout *tabbarLayout;
-    Tabbar *tabbar;
+    DTabBar *tabbar;
 };
 
 #endif

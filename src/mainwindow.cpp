@@ -56,8 +56,10 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
     iconLabel->setPixmap(iconPixmap);
     iconLabel->setFixedSize(24, 40);
 
-    tabbar = new Tabbar();
-    tabbar->setFixedHeight(40);
+    tabbar = new DTabBar();
+    tabbar->setMovable(true);
+    tabbar->setTabsClosable(true);
+    tabbar->setVisibleAddButton(true);
 
     tabbarLayout->addSpacing(10);
     tabbarLayout->addWidget(iconLabel, 0, Qt::AlignTop);
@@ -67,9 +69,9 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
     this->titlebar()->setCustomWidget(tabbarWidget, Qt::AlignVCenter, false);
     this->titlebar()->setSeparatorVisible(true);
 
-    tabbar->addTab("0", "Bob Dylan");
-    tabbar->addTab("1", "Neil Young");
-    tabbar->addTab("2", "Passanger");
+    tabbar->addTab("Bob Dylan");
+    tabbar->addTab("Neil Young");
+    tabbar->addTab("Passanger");
 }
 
 MainWindow::~MainWindow()
@@ -81,32 +83,28 @@ void MainWindow::keyPressEvent(QKeyEvent *keyEvent)
 {
     if (keyEvent->modifiers() == Qt::ControlModifier) {
         if (keyEvent->key() == Qt::Key_F) {
-            tabbar->addTab("0", "Bob Dylan");
+            tabbar->addTab("Bob Dylan");
         } else if (keyEvent->key() == Qt::Key_N) {
-            tabbar->addTab("1", "Neil Young");
+            tabbar->addTab("Neil Young");
         } else if (keyEvent->key() == Qt::Key_P) {
-            tabbar->addTab("2", "Passanger");
+            tabbar->addTab("Passanger");
         }
     }
 
     if (keyEvent->modifiers() && Qt::ControlModifier) {
         if (keyEvent->key() == Qt::Key_Backtab) {
-            tabbar->selectPrevTab();
+            // tabbar->selectPrevTab();
         } else if (keyEvent->key() == Qt::Key_Tab) {
-            tabbar->selectNextTab();
+            // tabbar->selectNextTab();
         }
     }
 
     if ((keyEvent->modifiers() && Qt::ControlModifier) && (keyEvent->modifiers() && Qt::MetaModifier)) {
         if (keyEvent->key() == Qt::Key_Home) {
-            tabbar->selectFirstTab();
+            // tabbar->selectFirstTab();
         } else if (keyEvent->key() == Qt::Key_End) {
-            tabbar->selectLastTab();
+            // tabbar->selectLastTab();
         }
     }
 }
 
-void MainWindow::resizeEvent(QResizeEvent*)
-{
-    tabbarWidget->setFixedSize(rect().width() - 130, 100);
-}
