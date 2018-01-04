@@ -65,6 +65,7 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
     tabbarLayout->addWidget(iconLabel, 0, Qt::AlignTop);
     tabbarLayout->addSpacing(10);
     tabbarLayout->addWidget(tabbar, 0, Qt::AlignTop);
+    tabbarLayout->addSpacing(40);
 
     this->titlebar()->setCustomWidget(tabbarWidget, Qt::AlignVCenter, false);
     this->titlebar()->setSeparatorVisible(true);
