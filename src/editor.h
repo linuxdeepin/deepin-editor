@@ -12,6 +12,7 @@ class Editor : public QWidget
     
 public:
     Editor(QWidget *parent = 0);
+    void loadFile(QString filepath);
     
 private:
     QTextEdit *textEditor;

@@ -11,15 +11,15 @@ PKGCONFIG += xcb xcb-util dtkwidget
 RESOURCES = deepin-editor.qrc
 
 # Input
-HEADERS += src/mainwindow.h \
-		   src/highlighter.h \		   
-		   src/editor.h \		   
-		   src/utils.h		   
-SOURCES += src/mainwindow.cpp \
-		   src/highlighter.cpp \		   
-		   src/editor.cpp \		   
-		   src/utils.cpp \		   
-		   src/main.cpp		   
+HEADERS += src/window.h \
+           src/highlighter.h \		   
+	   src/editor.h \		   
+	   src/utils.h		   
+SOURCES += src/window.cpp \
+           src/highlighter.cpp \		   
+	   src/editor.cpp \		   
+	   src/utils.cpp \		   
+	   src/main.cpp		   
 		   
 QT += core
 QT += widgets

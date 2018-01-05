@@ -21,7 +21,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */ 
 
-#include "mainwindow.h"
+#include "window.h"
 #include <DApplication>
 #include <DMainWindow>
 #include <QApplication>
@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
         
     app.setWindowIcon(QIcon(Utils::getQrcPath("logo_48.png")));
         
-    MainWindow window;
+    Window window;
         
     Utils::applyQss(&window, "main.qss");
     

@@ -19,10 +19,11 @@ Editor::Editor(QWidget *parent) : QWidget(parent)
     highlighter = new Highlighter(textEditor->document());
     
     layout->addWidget(textEditor);
-    
-    QDir projectDir = QDir(qApp->applicationDirPath());
-    projectDir.cdUp();
-    QFile file(QString("%1/src/%2").arg(projectDir.absolutePath()).arg("editor.cpp"));
+}
+
+void Editor::loadFile(QString filepath)
+{
+    QFile file(filepath);
     if (file.open(QFile::ReadOnly | QFile::Text)) {
         textEditor->setPlainText(file.readAll());
     }

@@ -21,15 +21,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "mainwindow.h"
+#include "window.h"
 #include <DTitlebar>
 #include <QLabel>
 #include <QDebug>
+#include <QDir>
+#include <QApplication>
 #include <QSvgWidget>
 #include "dthememanager.h"
 #include "utils.h"
 
-MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
+Window::Window(DMainWindow *parent) : DMainWindow(parent)
 {
     DThemeManager::instance()->setTheme("dark");
 
@@ -42,6 +44,9 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
     this->setCentralWidget(layoutWidget);
 
     editor = new Editor();
+    QDir projectDir = QDir(qApp->applicationDirPath());
+    projectDir.cdUp();
+    editor->loadFile(QString("%1/src/%2").arg(projectDir.absolutePath()).arg("editor.cpp"));
     layout->addWidget(editor);
 
     QLabel *label = new QLabel();
@@ -70,41 +75,19 @@ MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
     this->titlebar()->setCustomWidget(tabbarWidget, Qt::AlignVCenter, false);
     this->titlebar()->setSeparatorVisible(true);
 
-    tabbar->addTab("Bob Dylan");
-    tabbar->addTab("Neil Young");
-    tabbar->addTab("Passanger");
+    tabbar->addTab("editor.cpp");
 }
 
-MainWindow::~MainWindow()
+Window::~Window()
 {
     // We don't need clean pointers because application has exit here.
 }
 
-void MainWindow::keyPressEvent(QKeyEvent *keyEvent)
+void Window::keyPressEvent(QKeyEvent *keyEvent)
 {
     if (keyEvent->modifiers() == Qt::ControlModifier) {
-        if (keyEvent->key() == Qt::Key_F) {
+        if (keyEvent->key() == Qt::Key_N) {
             tabbar->addTab("Bob Dylan");
-        } else if (keyEvent->key() == Qt::Key_N) {
-            tabbar->addTab("Neil Young");
-        } else if (keyEvent->key() == Qt::Key_P) {
-            tabbar->addTab("Passanger");
-        }
-    }
-
-    if (keyEvent->modifiers() && Qt::ControlModifier) {
-        if (keyEvent->key() == Qt::Key_Backtab) {
-            // tabbar->selectPrevTab();
-        } else if (keyEvent->key() == Qt::Key_Tab) {
-            // tabbar->selectNextTab();
-        }
-    }
-
-    if ((keyEvent->modifiers() && Qt::ControlModifier) && (keyEvent->modifiers() && Qt::MetaModifier)) {
-        if (keyEvent->key() == Qt::Key_Home) {
-            // tabbar->selectFirstTab();
-        } else if (keyEvent->key() == Qt::Key_End) {
-            // tabbar->selectLastTab();
         }
     }
 }

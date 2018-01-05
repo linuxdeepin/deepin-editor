@@ -21,8 +21,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */ 
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef WINDOW_H
+#define WINDOW_H
 
 #include "dmainwindow.h"
 #include <dimagebutton.h>
@@ -35,13 +35,13 @@
 
 DWIDGET_USE_NAMESPACE
 
-class MainWindow : public DMainWindow
+class Window : public DMainWindow
 {
     Q_OBJECT
     
 public:
-    MainWindow(DMainWindow *parent = 0);
-    ~MainWindow();
+    Window(DMainWindow *parent = 0);
+    ~Window();
     
     void keyPressEvent(QKeyEvent *keyEvent);
     
