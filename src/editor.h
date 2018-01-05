@@ -14,7 +14,7 @@ public:
     Editor(QWidget *parent = 0);
     
 private:
-    QPlainTextEdit *textEditor;
+    QTextEdit *textEditor;
     Highlighter *highlighter;
     
     QVBoxLayout *layout;
