@@ -31,7 +31,7 @@
 
 MainWindow::MainWindow(DMainWindow *parent) : DMainWindow(parent)
 {
-    DThemeManager::instance()->setTheme("light");
+    DThemeManager::instance()->setTheme("dark");
 
     installEventFilter(this);   // add event filter
 
