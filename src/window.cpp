@@ -76,6 +76,8 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     this->titlebar()->setSeparatorVisible(true);
 
     tabbar->addTab("editor.cpp");
+    
+    Utils::applyQss(this, "main.qss");
 }
 
 Window::~Window()

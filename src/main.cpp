@@ -60,8 +60,6 @@ int main(int argc, char *argv[])
         
     Window window;
         
-    Utils::applyQss(&window, "main.qss");
-    
     QScreen *screen = QGuiApplication::primaryScreen();
     QRect  screenGeometry = screen->geometry();
     window.setMinimumSize(QSize(screenGeometry.width() * 2 / 3, screenGeometry.height() * 2 / 3));
