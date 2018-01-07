@@ -1,8 +1,8 @@
 /* -*- Mode: C++; indent-tabs-mode: nil; tab-width: 4 -*-
  * -*- coding: utf-8 -*-
  *
- * Copyright (C) 2011 ~ 2017 Deepin, Inc.
- *               2011 ~ 2017 Wang Yong
+ * Copyright (C) 2011 ~ 2018 Deepin, Inc.
+ *               2011 ~ 2018 Wang Yong
  *
  * Author:     Wang Yong <wangyong@deepin.com>
  * Maintainer: Wang Yong <wangyong@deepin.com>
@@ -21,44 +21,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */ 
 
-#ifndef WINDOW_H
-#define WINDOW_H
+#ifndef STARTMANAGER_H
+#define STARTMANAGER_H
 
-#include "dmainwindow.h"
-#include <dimagebutton.h>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QResizeEvent>
-#include <QWidget>
-#include "editor.h"
-#include <DTabBar>
+#include <QObject>
+#include "window.h"
 
-DWIDGET_USE_NAMESPACE
-
-class Window : public DMainWindow
+class StartManager : public QObject
 {
     Q_OBJECT
     
+    Q_CLASSINFO("D-Bus Interface", "com.deepin.Editor")
+    
 public:
-    Window(DMainWindow *parent = 0);
-    ~Window();
+    StartManager(QObject *parent = 0);
+                                     
+    QList<int> fileIsOpened(QString file);
     
-    void keyPressEvent(QKeyEvent *keyEvent);
-    
-    void addTab(QString file);
-    int fileIsInTabs(QString file);
+public slots:
+    Q_SCRIPTABLE void openFilesInWindow(QStringList files);
+    Q_SCRIPTABLE void openFilesInTab(QStringList files);
     
 private:
-    QWidget *layoutWidget;
-    QVBoxLayout *layout;
-    
-    Editor *editor;
-    
-    QWidget *tabbarWidget;
-    QHBoxLayout *tabbarLayout;
-    DTabBar *tabbar;
-    QMap<QString, int> tabMap;
-    QMap<QString, Editor*> editorMap;
+    QList<Window*> windows;
 };
 
 #endif

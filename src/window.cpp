@@ -44,13 +44,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     this->setCentralWidget(layoutWidget);
 
     editor = new Editor();
-    QDir projectDir = QDir(qApp->applicationDirPath());
-    projectDir.cdUp();
-    editor->loadFile(QString("%1/src/%2").arg(projectDir.absolutePath()).arg("editor.cpp"));
     layout->addWidget(editor);
-
-    QLabel *label = new QLabel();
-    layout->addWidget(label, 0, Qt::AlignBottom);
 
     tabbarWidget = new QWidget();
     tabbarLayout = new QHBoxLayout(tabbarWidget);
@@ -75,8 +69,6 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     this->titlebar()->setCustomWidget(tabbarWidget, Qt::AlignVCenter, false);
     this->titlebar()->setSeparatorVisible(true);
 
-    tabbar->addTab("editor.cpp");
-    
     Utils::applyQss(this, "main.qss");
 }
 
@@ -94,3 +86,21 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
     }
 }
 
+int Window::fileIsInTabs(QString file)
+{
+    if (tabMap.contains(file)) {
+        return tabMap[file];
+    }
+    
+    return -1;
+}
+
+void Window::addTab(QString file)
+{
+    if (!tabMap.contains(file)) {
+        tabbar->addTab(QFileInfo(file).fileName());
+        tabMap[file] = tabbar->currentIndex() + 1;
+        
+        editor->loadFile(file);
+    }
+}
