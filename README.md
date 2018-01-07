@@ -10,7 +10,7 @@ Deepin Editor: simple editor for deepin.
 * cd build
 * qmake ..
 * make
-* ./deepin-editor
+* ./deepin-editor -f filepath
 
 ## Usage
 
