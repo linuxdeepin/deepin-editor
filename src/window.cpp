@@ -38,13 +38,10 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     installEventFilter(this);   // add event filter
 
     layoutWidget = new QWidget();
-    layout = new QVBoxLayout(layoutWidget);
+    layout = new QStackedLayout(layoutWidget);
     layout->setContentsMargins(0, 0, 0, 0);
 
     this->setCentralWidget(layoutWidget);
-
-    editor = new Editor();
-    layout->addWidget(editor);
 
     tabbarWidget = new QWidget();
     tabbarLayout = new QHBoxLayout(tabbarWidget);
@@ -101,6 +98,14 @@ void Window::addTab(QString file)
         tabbar->addTab(QFileInfo(file).fileName());
         tabMap[file] = tabbar->currentIndex() + 1;
         
-        editor->loadFile(file);
+        if (!editorMap.contains(file)) {
+            Editor *editor = new Editor();
+            editor->loadFile(file);
+            
+            editorMap[file] = editor;
+            
+            layout->addWidget(editor);
+            layout->setCurrentIndex(layout->count() - 1);
+        }
     }
 }

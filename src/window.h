@@ -32,6 +32,7 @@
 #include <QWidget>
 #include "editor.h"
 #include <DTabBar>
+#include <QStackedLayout>
 
 DWIDGET_USE_NAMESPACE
 
@@ -50,9 +51,7 @@ public:
     
 private:
     QWidget *layoutWidget;
-    QVBoxLayout *layout;
-    
-    Editor *editor;
+    QStackedLayout *layout;
     
     QWidget *tabbarWidget;
     QHBoxLayout *tabbarLayout;
