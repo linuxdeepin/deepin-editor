@@ -43,29 +43,13 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
 
     this->setCentralWidget(layoutWidget);
 
-    tabbarWidget = new QWidget();
-    tabbarLayout = new QHBoxLayout(tabbarWidget);
-    tabbarLayout->setContentsMargins(0, 0, 0, 0);
-
-    QPixmap iconPixmap = QPixmap(Utils::getQrcPath("logo_24.svg"));
-    QLabel *iconLabel = new QLabel();
-    iconLabel->setPixmap(iconPixmap);
-    iconLabel->setFixedSize(24, 40);
-
-    tabbar = new DTabBar();
-    tabbar->setMovable(true);
-    tabbar->setTabsClosable(true);
-    tabbar->setVisibleAddButton(true);
-
-    tabbarLayout->addSpacing(10);
-    tabbarLayout->addWidget(iconLabel, 0, Qt::AlignTop);
-    tabbarLayout->addSpacing(10);
-    tabbarLayout->addWidget(tabbar, 0, Qt::AlignTop);
-    tabbarLayout->addSpacing(40);
-
-    this->titlebar()->setCustomWidget(tabbarWidget, Qt::AlignVCenter, false);
+    tabbar = new Tabbar();
+    
+    this->titlebar()->setCustomWidget(tabbar, Qt::AlignVCenter, false);
     this->titlebar()->setSeparatorVisible(true);
-
+    
+    connect(tabbar, SIGNAL(doubleClicked()), this->titlebar(), SIGNAL(doubleClicked()), Qt::QueuedConnection);
+    
     Utils::applyQss(this, "main.qss");
 }
 

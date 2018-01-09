@@ -31,7 +31,7 @@
 #include <QResizeEvent>
 #include <QWidget>
 #include "editor.h"
-#include <DTabBar>
+#include "tabbar.h"
 #include <QStackedLayout>
 
 DWIDGET_USE_NAMESPACE
@@ -53,9 +53,7 @@ private:
     QWidget *layoutWidget;
     QStackedLayout *layout;
     
-    QWidget *tabbarWidget;
-    QHBoxLayout *tabbarLayout;
-    DTabBar *tabbar;
+    Tabbar *tabbar;
     QMap<QString, int> tabMap;
     QMap<QString, Editor*> editorMap;
 };
