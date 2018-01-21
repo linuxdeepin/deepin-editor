@@ -130,6 +130,10 @@ void Window::handleCloseFile(QString filepath)
 
         editor->deleteLater();
     }
+    
+    if (editorMap.count() == 0) {
+        deleteLater();
+    }
 }
 
 void Window::activeTab(int index)
