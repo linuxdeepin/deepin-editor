@@ -23,8 +23,14 @@ void StartManager::openFilesInWindow(QStringList files)
             QScreen *screen = QGuiApplication::primaryScreen();
             QRect  screenGeometry = screen->geometry();
             window->setMinimumSize(QSize(screenGeometry.width() * 2 / 3, screenGeometry.height() * 2 / 3));
-            Dtk::Widget::moveToCenter(window);
             window->show();
+
+            if (windows.size() == 0) {
+                Dtk::Widget::moveToCenter(window);
+            } else {
+                int windowOffset = 50;
+                window->move(windows.size() * windowOffset, windows.size() * windowOffset);
+            }
 
             window->addTab(file);
 
