@@ -106,3 +106,8 @@ void Tabbar::selectPrevTab()
     }
 }
                       
+
+void Tabbar::closeTab()
+{
+    handleTabClosed(tabbar->currentIndex());
+}

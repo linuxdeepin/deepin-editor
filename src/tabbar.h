@@ -21,6 +21,7 @@ public:
     
     void selectNextTab();
     void selectPrevTab();
+    void closeTab();
                       
 signals:
     void doubleClicked();

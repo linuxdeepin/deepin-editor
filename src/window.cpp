@@ -69,6 +69,8 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
             tabbar->selectNextTab();
         } else if (keyEvent->key() == Qt::Key_Backtab) {
             tabbar->selectPrevTab();
+        } else if (keyEvent->key() == Qt::Key_W) {
+            tabbar->closeTab();
         }
     }
 }
