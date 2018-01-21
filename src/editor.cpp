@@ -1,5 +1,6 @@
 #include "editor.h"
 #include <QDebug>
+#include <QTimer>
 #include <QDir>
 #include <QApplication>
 
@@ -19,6 +20,8 @@ Editor::Editor(QWidget *parent) : QWidget(parent)
     highlighter = new Highlighter(textEditor->document());
     
     layout->addWidget(textEditor);
+    
+    QTimer::singleShot(0, textEditor, SLOT(setFocus()));
 }
 
 void Editor::loadFile(QString filepath)

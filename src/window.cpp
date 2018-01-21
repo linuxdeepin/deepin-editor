@@ -26,6 +26,7 @@
 #include <QLabel>
 #include <QDebug>
 #include <QDir>
+#include <QDateTime>
 #include <QApplication>
 #include <QSvgWidget>
 #include "dthememanager.h"
@@ -63,8 +64,8 @@ Window::~Window()
 void Window::keyPressEvent(QKeyEvent *keyEvent)
 {
     if (keyEvent->modifiers() & Qt::ControlModifier) {
-        if (keyEvent->key() == Qt::Key_N) {
-            tabbar->addTab("Test", "Bob Dylan");
+        if (keyEvent->key() == Qt::Key_T) {
+            addBlankTab();
         } else if (keyEvent->key() == Qt::Key_Tab) {
             tabbar->selectNextTab();
         } else if (keyEvent->key() == Qt::Key_Backtab) {
@@ -97,6 +98,19 @@ void Window::addTab(QString file)
     }
 
     activateWindow();
+}
+
+void Window::addBlankTab()
+{
+    QString blankTabPath = QString("Blank Tab: %1").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")) ;
+    
+    tabbar->addTab(blankTabPath, "Blank document");
+    Editor *editor = new Editor();
+    
+    editorMap[blankTabPath] = editor;
+    
+    layout->addWidget(editor);
+    layout->setCurrentWidget(editor);
 }
 
 void Window::handleSwitchToFile(QString filepath)

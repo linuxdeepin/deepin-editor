@@ -47,6 +47,7 @@ public:
     void keyPressEvent(QKeyEvent *keyEvent);
     
     void addTab(QString file);
+    void addBlankTab();
     int isFileInTabs(QString file);
     void activeTab(int index);
     
