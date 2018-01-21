@@ -12,61 +12,99 @@ StartManager::StartManager(QObject *parent) : QObject(parent)
 
 void StartManager::openFilesInWindow(QStringList files)
 {
-    // qDebug() << "Open files in window: " << files;
-    foreach (QString file, files) {
-        QList<int> fileIndexes = fileIsOpened(file);
-        if (fileIndexes.size() > 0) {
-            qDebug() << QString("Open file %1 in window %2 with tab %3").arg(file).arg(fileIndexes[0]).arg(fileIndexes[1]);
+    if (files.size() == 0) {
+        Window *window = new Window();
+
+        QScreen *screen = QGuiApplication::primaryScreen();
+        QRect  screenGeometry = screen->geometry();
+        window->setMinimumSize(QSize(screenGeometry.width() * 2 / 3, screenGeometry.height() * 2 / 3));
+        window->show();
+
+        if (windows.size() == 0) {
+            Dtk::Widget::moveToCenter(window);
         } else {
-            Window *window = new Window();
+            int windowOffset = 50;
+            window->move(windows.size() * windowOffset, windows.size() * windowOffset);
+        }
 
-            QScreen *screen = QGuiApplication::primaryScreen();
-            QRect  screenGeometry = screen->geometry();
-            window->setMinimumSize(QSize(screenGeometry.width() * 2 / 3, screenGeometry.height() * 2 / 3));
-            window->show();
+        window->addBlankTab();
 
-            if (windows.size() == 0) {
-                Dtk::Widget::moveToCenter(window);
+        windows << window;
+        
+        window->activateWindow();
+    } else {
+        foreach (QString file, files) {
+            QList<int> fileIndexes = fileIsOpened(file);
+            if (fileIndexes.size() > 0) {
+                int windowIndex = fileIndexes[0];
+                int tabIndex = fileIndexes[1];
+
+                windows[windowIndex]->activeTab(tabIndex);
             } else {
-                int windowOffset = 50;
-                window->move(windows.size() * windowOffset, windows.size() * windowOffset);
+                Window *window = new Window();
+
+                QScreen *screen = QGuiApplication::primaryScreen();
+                QRect  screenGeometry = screen->geometry();
+                window->setMinimumSize(QSize(screenGeometry.width() * 2 / 3, screenGeometry.height() * 2 / 3));
+                window->show();
+
+                if (windows.size() == 0) {
+                    Dtk::Widget::moveToCenter(window);
+                } else {
+                    int windowOffset = 50;
+                    window->move(windows.size() * windowOffset, windows.size() * windowOffset);
+                }
+
+                window->addTab(file);
+
+                windows << window;
             }
-
-            window->addTab(file);
-
-            windows << window;
         }
     }
 }
 
 void StartManager::openFilesInTab(QStringList files)
 {
-    // qDebug() << "Open files in tab: " << files;
-    foreach (QString file, files) {
-        QList<int> fileIndexes = fileIsOpened(file);
-        if (fileIndexes.size() > 0) {
-            int windowIndex = fileIndexes[0];
-            int tabIndex = fileIndexes[1];
-            
-            windows[windowIndex]->activeTab(tabIndex);
-            
-            
-            qDebug() << QString("Open file %1 in window %2 with tab %3").arg(file).arg(fileIndexes[0]).arg(fileIndexes[1]);
+    if (files.size() == 0) {
+        if (windows.size() == 0) {
+            Window *window = new Window();
+
+            QScreen *screen = QGuiApplication::primaryScreen();
+            QRect  screenGeometry = screen->geometry();
+            window->setMinimumSize(QSize(screenGeometry.width() * 2 / 3, screenGeometry.height() * 2 / 3));
+            Dtk::Widget::moveToCenter(window);
+            window->show();
+
+            window->addBlankTab();
+
+            windows << window;
         } else {
-            if (windows.size() == 0) {
-                Window *window = new Window();
+            windows[0]->activateWindow();
+        }
+    } else {
+        foreach (QString file, files) {
+            QList<int> fileIndexes = fileIsOpened(file);
+            if (fileIndexes.size() > 0) {
+                int windowIndex = fileIndexes[0];
+                int tabIndex = fileIndexes[1];
 
-                QScreen *screen = QGuiApplication::primaryScreen();
-                QRect  screenGeometry = screen->geometry();
-                window->setMinimumSize(QSize(screenGeometry.width() * 2 / 3, screenGeometry.height() * 2 / 3));
-                Dtk::Widget::moveToCenter(window);
-                window->show();
-
-                window->addTab(file);
-
-                windows << window;
+                windows[windowIndex]->activeTab(tabIndex);
             } else {
-                windows[0]->addTab(file);
+                if (windows.size() == 0) {
+                    Window *window = new Window();
+
+                    QScreen *screen = QGuiApplication::primaryScreen();
+                    QRect  screenGeometry = screen->geometry();
+                    window->setMinimumSize(QSize(screenGeometry.width() * 2 / 3, screenGeometry.height() * 2 / 3));
+                    Dtk::Widget::moveToCenter(window);
+                    window->show();
+
+                    window->addTab(file);
+
+                    windows << window;
+                } else {
+                    windows[0]->addTab(file);
+                }
             }
         }
     }
