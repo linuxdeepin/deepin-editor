@@ -68,12 +68,7 @@ int Tabbar::isTabExist(QString filepath)
 
 void Tabbar::handleTabMoved(int fromIndex, int toIndex)
 {
-    // Swap two tab's values.
-    QString fromValue = tabFiles.value(fromIndex);
-    QString toValue = tabFiles.value(toIndex);
-    
-    tabFiles[fromIndex] = toValue;
-    tabFiles[toIndex] = fromValue;
+    tabFiles.swap(fromIndex, toIndex);
 }
 
 void Tabbar::handleTabClosed(int closeIndex)
