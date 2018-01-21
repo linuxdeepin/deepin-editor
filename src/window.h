@@ -47,7 +47,7 @@ public:
     void keyPressEvent(QKeyEvent *keyEvent);
     
     void addTab(QString file);
-    int fileIsInTabs(QString file);
+    int isFileInTabs(QString file);
     
 private:
     QWidget *layoutWidget;

@@ -64,7 +64,7 @@ QList<int> StartManager::fileIsOpened(QString file)
 {
     QList<int> fileIndexes;
     foreach (Window *window, windows) {
-        int tabIndex = window->fileIsInTabs(file);
+        int tabIndex = window->isFileInTabs(file);
         if (tabIndex >= 0) {
             fileIndexes << windows.indexOf(window) << tabIndex;
             return fileIndexes;

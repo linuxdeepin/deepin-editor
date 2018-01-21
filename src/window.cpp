@@ -67,7 +67,7 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
     }
 }
 
-int Window::fileIsInTabs(QString file)
+int Window::isFileInTabs(QString file)
 {
     if (tabMap.contains(file)) {
         return tabMap[file];
