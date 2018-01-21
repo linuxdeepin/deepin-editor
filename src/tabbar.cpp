@@ -26,6 +26,7 @@ Tabbar::Tabbar(QWidget *parent) : QWidget(parent)
 
     connect(tabbar, SIGNAL(tabBarDoubleClicked(int)), this, SLOT(handleTabbarDoubleClick()), Qt::QueuedConnection);
     connect(tabbar, SIGNAL(currentChanged(int)), this, SLOT(handleCurrentIndexChanged(int)), Qt::QueuedConnection);
+    connect(tabbar, SIGNAL(tabMoved(int, int)), this, SLOT(handleTabMoved(int , int)), Qt::QueuedConnection);
 }
 
 void Tabbar::addTab(QString filepath, QString tabName)
@@ -62,4 +63,14 @@ int Tabbar::isTabExist(QString filepath)
     }
 
     return -1;
+}
+
+void Tabbar::handleTabMoved(int fromIndex, int toIndex)
+{
+    // Swap two tab's values.
+    QString fromValue = tabFiles.value(fromIndex);
+    QString toValue = tabFiles.value(toIndex);
+    
+    tabFiles[fromIndex] = toValue;
+    tabFiles[toIndex] = fromValue;
 }

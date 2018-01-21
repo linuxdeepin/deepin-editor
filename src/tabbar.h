@@ -25,6 +25,7 @@ signals:
 public slots:
     void handleTabbarDoubleClick();
     void handleCurrentIndexChanged(int index);
+    void handleTabMoved(int fromIndex, int toIndex);
     
 private:
     QHBoxLayout *layout;
