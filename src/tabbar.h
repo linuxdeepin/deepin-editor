@@ -14,19 +14,22 @@ class Tabbar : public QWidget
 public:
     Tabbar(QWidget *parent=0);
     
-    void addTab(QString tabName);
+    void addTab(QString filepath, QString tabName);
     int currentIndex();
+    int isTabExist(QString filepath);
                       
 signals:
     void doubleClicked();
+    void switchToFile(QString filepath);
     
 public slots:
     void handleTabbarDoubleClick();
+    void handleCurrentIndexChanged(int index);
     
 private:
     QHBoxLayout *layout;
     DTabBar *tabbar;
-    
+    QList<QString> tabFiles;
 };
 
 #endif

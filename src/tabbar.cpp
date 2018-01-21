@@ -23,13 +23,19 @@ Tabbar::Tabbar(QWidget *parent) : QWidget(parent)
     layout->addSpacing(10);
     layout->addWidget(tabbar, 0, Qt::AlignTop);
     layout->addSpacing(40);
-    
+
     connect(tabbar, SIGNAL(tabBarDoubleClicked(int)), this, SLOT(handleTabbarDoubleClick()), Qt::QueuedConnection);
+    connect(tabbar, SIGNAL(currentChanged(int)), this, SLOT(handleCurrentIndexChanged(int)), Qt::QueuedConnection);
 }
 
-void Tabbar::addTab(QString tabName)
+void Tabbar::addTab(QString filepath, QString tabName)
 {
-    tabbar->addTab(tabName);
+    int index = currentIndex();
+
+    tabFiles.insert(index + 1, filepath);
+    tabbar->insertTab(index + 1, tabName);
+
+    tabbar->setCurrentIndex(index + 1);
 }
 
 int Tabbar::currentIndex()
@@ -40,4 +46,20 @@ int Tabbar::currentIndex()
 void Tabbar::handleTabbarDoubleClick()
 {
     this->doubleClicked();
+}
+
+void Tabbar::handleCurrentIndexChanged(int index)
+{
+    switchToFile(tabFiles.value(index));
+}
+
+int Tabbar::isTabExist(QString filepath)
+{
+    for (int i = 0; i < tabFiles.size(); i++) {
+        if (tabFiles[i] == filepath) {
+            return i;
+        }
+    }
+
+    return -1;
 }

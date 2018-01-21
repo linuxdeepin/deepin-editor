@@ -49,12 +49,14 @@ public:
     void addTab(QString file);
     int isFileInTabs(QString file);
     
+public slots:
+    void handleSwitchToFile(QString filepath);
+    
 private:
     QWidget *layoutWidget;
     QStackedLayout *layout;
     
     Tabbar *tabbar;
-    QMap<QString, int> tabMap;
     QMap<QString, Editor*> editorMap;
 };
 
