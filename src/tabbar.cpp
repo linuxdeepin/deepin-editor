@@ -85,3 +85,24 @@ void Tabbar::activeTab(int index)
 {
     tabbar->setCurrentIndex(index);
 }
+
+void Tabbar::selectNextTab()
+{
+    int currentIndex = tabbar->currentIndex();
+    if (currentIndex >= tabbar->count() - 1) {
+        tabbar->setCurrentIndex(0);
+    } else {
+        tabbar->setCurrentIndex(currentIndex + 1);
+    }
+}
+
+void Tabbar::selectPrevTab()
+{
+    int currentIndex = tabbar->currentIndex();
+    if (currentIndex <= 0) {
+        tabbar->setCurrentIndex(tabbar->count() - 1);
+    } else {
+        tabbar->setCurrentIndex(currentIndex - 1);
+    }
+}
+                      

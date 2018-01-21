@@ -87,14 +87,6 @@ int main(int argc, char *argv[])
     if (dbus.registerService("com.deepin.Editor")) {
         StartManager startManager;
 
-        // Window window;
-
-        // QScreen *screen = QGuiApplication::primaryScreen();
-        // QRect  screenGeometry = screen->geometry();
-        // window.setMinimumSize(QSize(screenGeometry.width() * 2 / 3, screenGeometry.height() * 2 / 3));
-        // Dtk::Widget::moveToCenter(&window);
-        // window.show();
-        
         if (openInWindow) {
             startManager.openFilesInWindow(files);
         } else {

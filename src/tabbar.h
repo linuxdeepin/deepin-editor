@@ -18,6 +18,9 @@ public:
     int currentIndex();
     int isTabExist(QString filepath);
     void activeTab(int index);
+    
+    void selectNextTab();
+    void selectPrevTab();
                       
 signals:
     void doubleClicked();

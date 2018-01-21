@@ -44,14 +44,14 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     this->setCentralWidget(layoutWidget);
 
     tabbar = new Tabbar();
-    
+
     this->titlebar()->setCustomWidget(tabbar, Qt::AlignVCenter, false);
     this->titlebar()->setSeparatorVisible(true);
-    
+
     connect(tabbar, SIGNAL(doubleClicked()), this->titlebar(), SIGNAL(doubleClicked()), Qt::QueuedConnection);
     connect(tabbar, SIGNAL(switchToFile(QString)), this, SLOT(handleSwitchToFile(QString)), Qt::QueuedConnection);
     connect(tabbar, SIGNAL(closeFile(QString)), this, SLOT(handleCloseFile(QString)), Qt::QueuedConnection);
-    
+
     Utils::applyQss(this, "main.qss");
 }
 
@@ -62,9 +62,13 @@ Window::~Window()
 
 void Window::keyPressEvent(QKeyEvent *keyEvent)
 {
-    if (keyEvent->modifiers() == Qt::ControlModifier) {
+    if (keyEvent->modifiers() & Qt::ControlModifier) {
         if (keyEvent->key() == Qt::Key_N) {
             tabbar->addTab("Test", "Bob Dylan");
+        } else if (keyEvent->key() == Qt::Key_Tab) {
+            tabbar->selectNextTab();
+        } else if (keyEvent->key() == Qt::Key_Backtab) {
+            tabbar->selectPrevTab();
         }
     }
 }
@@ -78,18 +82,18 @@ void Window::addTab(QString file)
 {
     if (tabbar->isTabExist(file) == -1) {
         tabbar->addTab(file, QFileInfo(file).fileName());
-        
+
         if (!editorMap.contains(file)) {
             Editor *editor = new Editor();
             editor->loadFile(file);
-            
+
             editorMap[file] = editor;
-            
+
             layout->addWidget(editor);
             layout->setCurrentWidget(editor);
         }
     }
-    
+
     activateWindow();
 }
 
@@ -104,10 +108,10 @@ void Window::handleCloseFile(QString filepath)
 {
     if (editorMap.contains(filepath)) {
         Editor *editor = editorMap[filepath];
-        
+
         layout->removeWidget(editor);
         editorMap.remove(filepath);
-        
+
         editor->deleteLater();
     }
 }
