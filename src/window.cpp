@@ -25,6 +25,7 @@
 #include <DTitlebar>
 #include <QLabel>
 #include <QDebug>
+#include <QFileDialog>
 #include <QDir>
 #include <QDateTime>
 #include <QApplication>
@@ -72,6 +73,8 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
             tabbar->selectPrevTab();
         } else if (keyEvent->key() == Qt::Key_W) {
             tabbar->closeTab();
+        } else if (keyEvent->key() == Qt::Key_O) {
+            openFile();
         }
     }
 }
@@ -103,12 +106,12 @@ void Window::addTab(QString file)
 void Window::addBlankTab()
 {
     QString blankTabPath = QString("Blank Tab: %1").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")) ;
-    
+
     tabbar->addTab(blankTabPath, "Blank document");
     Editor *editor = new Editor();
-    
+
     editorMap[blankTabPath] = editor;
-    
+
     layout->addWidget(editor);
     layout->setCurrentWidget(editor);
 }
@@ -130,7 +133,8 @@ void Window::handleCloseFile(QString filepath)
 
         editor->deleteLater();
     }
-    
+
+    // Exit window after close all tabs.
     if (editorMap.count() == 0) {
         deleteLater();
     }
@@ -140,4 +144,17 @@ void Window::activeTab(int index)
 {
     activateWindow();
     tabbar->activeTab(index);
+}
+
+void Window::openFile()
+{
+    QFileDialog dialog(0, QString(), QDir::homePath());
+    dialog.setFileMode(QFileDialog::AnyFile);
+    dialog.setAcceptMode(QFileDialog::AcceptOpen);
+    QStringList fileNames;
+    if (dialog.exec()) {
+        foreach (QString file, dialog.selectedFiles()) {
+            addTab(file);
+        }
+    }
 }

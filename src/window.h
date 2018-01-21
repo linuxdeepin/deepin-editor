@@ -50,6 +50,7 @@ public:
     void addBlankTab();
     int isFileInTabs(QString file);
     void activeTab(int index);
+    void openFile();
     
 public slots:
     void handleSwitchToFile(QString filepath);
