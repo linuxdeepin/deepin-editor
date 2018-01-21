@@ -89,6 +89,8 @@ void Window::addTab(QString file)
             layout->setCurrentWidget(editor);
         }
     }
+    
+    activateWindow();
 }
 
 void Window::handleSwitchToFile(QString filepath)
@@ -108,4 +110,10 @@ void Window::handleCloseFile(QString filepath)
         
         editor->deleteLater();
     }
+}
+
+void Window::activeTab(int index)
+{
+    activateWindow();
+    tabbar->activeTab(index);
 }

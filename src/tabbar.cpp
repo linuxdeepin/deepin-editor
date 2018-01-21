@@ -85,3 +85,8 @@ void Tabbar::handleTabClosed(int closeIndex)
     
     closeFile(filepath);
 }
+
+void Tabbar::activeTab(int index)
+{
+    tabbar->setCurrentIndex(index);
+}

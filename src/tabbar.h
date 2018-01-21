@@ -17,6 +17,7 @@ public:
     void addTab(QString filepath, QString tabName);
     int currentIndex();
     int isTabExist(QString filepath);
+    void activeTab(int index);
                       
 signals:
     void doubleClicked();

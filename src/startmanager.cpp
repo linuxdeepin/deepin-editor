@@ -39,6 +39,12 @@ void StartManager::openFilesInTab(QStringList files)
     foreach (QString file, files) {
         QList<int> fileIndexes = fileIsOpened(file);
         if (fileIndexes.size() > 0) {
+            int windowIndex = fileIndexes[0];
+            int tabIndex = fileIndexes[1];
+            
+            windows[windowIndex]->activeTab(tabIndex);
+            
+            
             qDebug() << QString("Open file %1 in window %2 with tab %3").arg(file).arg(fileIndexes[0]).arg(fileIndexes[1]);
         } else {
             if (windows.size() == 0) {
