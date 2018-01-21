@@ -44,6 +44,10 @@ public slots:
     
 private:
     QList<Window*> windows;
+    
+    void initWindowPosition(Window *window, bool alwaysCenter=false);
+    Window* createWindow(bool alwaysCenter=false);
+    void popupExitTab(QList<int> fileIndexes);
 };
 
 #endif

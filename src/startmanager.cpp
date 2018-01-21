@@ -13,51 +13,20 @@ StartManager::StartManager(QObject *parent) : QObject(parent)
 void StartManager::openFilesInWindow(QStringList files)
 {
     if (files.size() == 0) {
-        Window *window = new Window();
-
-        QScreen *screen = QGuiApplication::primaryScreen();
-        QRect  screenGeometry = screen->geometry();
-        window->setMinimumSize(QSize(screenGeometry.width() * 2 / 3, screenGeometry.height() * 2 / 3));
-        window->show();
-
-        if (windows.size() == 0) {
-            Dtk::Widget::moveToCenter(window);
-        } else {
-            int windowOffset = 50;
-            window->move(windows.size() * windowOffset, windows.size() * windowOffset);
-        }
+        Window *window = createWindow();
 
         window->addBlankTab();
 
-        windows << window;
-        
         window->activateWindow();
     } else {
         foreach (QString file, files) {
             QList<int> fileIndexes = fileIsOpened(file);
             if (fileIndexes.size() > 0) {
-                int windowIndex = fileIndexes[0];
-                int tabIndex = fileIndexes[1];
-
-                windows[windowIndex]->activeTab(tabIndex);
+                popupExitTab(fileIndexes);
             } else {
-                Window *window = new Window();
-
-                QScreen *screen = QGuiApplication::primaryScreen();
-                QRect  screenGeometry = screen->geometry();
-                window->setMinimumSize(QSize(screenGeometry.width() * 2 / 3, screenGeometry.height() * 2 / 3));
-                window->show();
-
-                if (windows.size() == 0) {
-                    Dtk::Widget::moveToCenter(window);
-                } else {
-                    int windowOffset = 50;
-                    window->move(windows.size() * windowOffset, windows.size() * windowOffset);
-                }
+                Window *window = createWindow();
 
                 window->addTab(file);
-
-                windows << window;
             }
         }
     }
@@ -67,17 +36,9 @@ void StartManager::openFilesInTab(QStringList files)
 {
     if (files.size() == 0) {
         if (windows.size() == 0) {
-            Window *window = new Window();
-
-            QScreen *screen = QGuiApplication::primaryScreen();
-            QRect  screenGeometry = screen->geometry();
-            window->setMinimumSize(QSize(screenGeometry.width() * 2 / 3, screenGeometry.height() * 2 / 3));
-            Dtk::Widget::moveToCenter(window);
-            window->show();
+            Window *window = createWindow(true);
 
             window->addBlankTab();
-
-            windows << window;
         } else {
             windows[0]->activateWindow();
         }
@@ -85,23 +46,12 @@ void StartManager::openFilesInTab(QStringList files)
         foreach (QString file, files) {
             QList<int> fileIndexes = fileIsOpened(file);
             if (fileIndexes.size() > 0) {
-                int windowIndex = fileIndexes[0];
-                int tabIndex = fileIndexes[1];
-
-                windows[windowIndex]->activeTab(tabIndex);
+                popupExitTab(fileIndexes);
             } else {
                 if (windows.size() == 0) {
-                    Window *window = new Window();
-
-                    QScreen *screen = QGuiApplication::primaryScreen();
-                    QRect  screenGeometry = screen->geometry();
-                    window->setMinimumSize(QSize(screenGeometry.width() * 2 / 3, screenGeometry.height() * 2 / 3));
-                    Dtk::Widget::moveToCenter(window);
-                    window->show();
-
+                    Window *window = createWindow(true);
+                    
                     window->addTab(file);
-
-                    windows << window;
                 } else {
                     windows[0]->addTab(file);
                 }
@@ -122,4 +72,38 @@ QList<int> StartManager::fileIsOpened(QString file)
     }
 
     return fileIndexes;
+}
+
+void StartManager::initWindowPosition(Window *window, bool alwaysCenter)
+{
+    if (windows.size() == 0 || alwaysCenter) {
+        Dtk::Widget::moveToCenter(window);
+    } else {
+        int windowOffset = 50;
+        window->move(windows.size() * windowOffset, windows.size() * windowOffset);
+    }
+}
+
+Window* StartManager::createWindow(bool alwaysCenter)
+{
+    Window *window = new Window();
+
+    QScreen *screen = QGuiApplication::primaryScreen();
+    QRect  screenGeometry = screen->geometry();
+    window->setMinimumSize(QSize(screenGeometry.width() * 2 / 3, screenGeometry.height() * 2 / 3));
+    window->show();
+    
+    initWindowPosition(window, alwaysCenter);
+
+    windows << window;
+    
+    return window;
+}
+
+void StartManager::popupExitTab(QList<int> fileIndexes)
+{
+    int windowIndex = fileIndexes[0];
+    int tabIndex = fileIndexes[1];
+
+    windows[windowIndex]->activeTab(tabIndex);
 }
