@@ -27,6 +27,7 @@ Tabbar::Tabbar(QWidget *parent) : QWidget(parent)
     connect(tabbar, SIGNAL(tabBarDoubleClicked(int)), this, SLOT(handleTabbarDoubleClick()), Qt::QueuedConnection);
     connect(tabbar, SIGNAL(currentChanged(int)), this, SLOT(handleCurrentIndexChanged(int)), Qt::QueuedConnection);
     connect(tabbar, SIGNAL(tabMoved(int, int)), this, SLOT(handleTabMoved(int , int)), Qt::QueuedConnection);
+    connect(tabbar, SIGNAL(tabCloseRequested(int)), this, SLOT(handleTabClosed(int)), Qt::QueuedConnection);
 }
 
 void Tabbar::addTab(QString filepath, QString tabName)
@@ -73,4 +74,14 @@ void Tabbar::handleTabMoved(int fromIndex, int toIndex)
     
     tabFiles[fromIndex] = toValue;
     tabFiles[toIndex] = fromValue;
+}
+
+void Tabbar::handleTabClosed(int closeIndex)
+{
+    QString filepath = tabFiles[closeIndex];
+    
+    tabFiles.takeAt(closeIndex);
+    tabbar->removeTab(closeIndex);
+    
+    closeFile(filepath);
 }

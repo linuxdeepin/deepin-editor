@@ -21,11 +21,13 @@ public:
 signals:
     void doubleClicked();
     void switchToFile(QString filepath);
+    void closeFile(QString filepath);
     
 public slots:
     void handleTabbarDoubleClick();
     void handleCurrentIndexChanged(int index);
     void handleTabMoved(int fromIndex, int toIndex);
+    void handleTabClosed(int closeIndex);
     
 private:
     QHBoxLayout *layout;

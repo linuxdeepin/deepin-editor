@@ -51,6 +51,7 @@ public:
     
 public slots:
     void handleSwitchToFile(QString filepath);
+    void handleCloseFile(QString filepath);
     
 private:
     QWidget *layoutWidget;

@@ -50,6 +50,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     
     connect(tabbar, SIGNAL(doubleClicked()), this->titlebar(), SIGNAL(doubleClicked()), Qt::QueuedConnection);
     connect(tabbar, SIGNAL(switchToFile(QString)), this, SLOT(handleSwitchToFile(QString)), Qt::QueuedConnection);
+    connect(tabbar, SIGNAL(closeFile(QString)), this, SLOT(handleCloseFile(QString)), Qt::QueuedConnection);
     
     Utils::applyQss(this, "main.qss");
 }
@@ -94,5 +95,17 @@ void Window::handleSwitchToFile(QString filepath)
 {
     if (editorMap.contains(filepath)) {
         layout->setCurrentWidget(editorMap[filepath]);
+    }
+}
+
+void Window::handleCloseFile(QString filepath)
+{
+    if (editorMap.contains(filepath)) {
+        Editor *editor = editorMap[filepath];
+        
+        layout->removeWidget(editor);
+        editorMap.remove(filepath);
+        
+        editor->deleteLater();
     }
 }
