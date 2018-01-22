@@ -22,6 +22,11 @@ public:
     void selectNextTab();
     void selectPrevTab();
     void closeTab();
+    
+    QString getActiveTabName();
+    QString getActiveTabPath();
+    
+    void updateTab(int index, QString filepath, QString tabName);
                       
 signals:
     void doubleClicked();

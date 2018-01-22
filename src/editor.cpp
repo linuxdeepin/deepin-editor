@@ -13,14 +13,14 @@ Editor::Editor(QWidget *parent) : QWidget(parent)
 
     layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
-    
+
     textEditor = new QTextEdit;
     textEditor->setFont(font);
 
     highlighter = new Highlighter(textEditor->document());
-    
+
     layout->addWidget(textEditor);
-    
+
     QTimer::singleShot(0, textEditor, SLOT(setFocus()));
 }
 
@@ -29,5 +29,26 @@ void Editor::loadFile(QString filepath)
     QFile file(filepath);
     if (file.open(QFile::ReadOnly | QFile::Text)) {
         textEditor->setPlainText(file.readAll());
+        
+        updatePath(filepath);
     }
+}
+
+void Editor::saveFile()
+{
+    QFile file(filepath);
+    if(!file.open(QIODevice::WriteOnly | QIODevice::Text)){
+        qDebug() << "Can't write file: " << filepath;
+        
+        return;
+    }
+    
+    QTextStream out(&file);
+    out << textEditor->toPlainText();
+    file.close();
+}
+
+void Editor::updatePath(QString file)
+{
+    filepath = file;
 }

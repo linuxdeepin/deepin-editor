@@ -13,12 +13,15 @@ class Editor : public QWidget
 public:
     Editor(QWidget *parent = 0);
     void loadFile(QString filepath);
+    void saveFile();
+    void updatePath(QString file);
     
 private:
     QTextEdit *textEditor;
     Highlighter *highlighter;
     
     QVBoxLayout *layout;
+    QString filepath;
 };
 
 #endif

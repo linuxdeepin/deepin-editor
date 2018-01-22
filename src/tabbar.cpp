@@ -111,3 +111,19 @@ void Tabbar::closeTab()
 {
     handleTabClosed(tabbar->currentIndex());
 }
+
+QString Tabbar::getActiveTabName()
+{
+    return tabbar->tabText(currentIndex());
+}
+
+QString Tabbar::getActiveTabPath()
+{
+    return tabFiles.value(currentIndex());
+}
+
+void Tabbar::updateTab(int index, QString filepath, QString tabName)
+{
+    tabbar->setTabText(index, tabName);
+    tabFiles[index] = filepath;
+}

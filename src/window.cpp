@@ -67,6 +67,8 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
     if (keyEvent->modifiers() & Qt::ControlModifier) {
         if (keyEvent->key() == Qt::Key_T) {
             addBlankTab();
+        } else if (keyEvent->key() == Qt::Key_S) {
+            trySaveFile();
         } else if (keyEvent->key() == Qt::Key_Tab) {
             tabbar->selectNextTab();
         } else if (keyEvent->key() == Qt::Key_Backtab) {
@@ -109,6 +111,7 @@ void Window::addBlankTab()
 
     tabbar->addTab(blankTabPath, "Blank document");
     Editor *editor = new Editor();
+    editor->updatePath(blankTabPath);
 
     editorMap[blankTabPath] = editor;
 
@@ -151,10 +154,28 @@ void Window::openFile()
     QFileDialog dialog(0, QString(), QDir::homePath());
     dialog.setFileMode(QFileDialog::AnyFile);
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
-    QStringList fileNames;
+
     if (dialog.exec()) {
         foreach (QString file, dialog.selectedFiles()) {
             addTab(file);
+        }
+    }
+}
+
+void Window::trySaveFile()
+{
+    if (tabbar->getActiveTabName() == "Blank document") {
+        QString filepath = QFileDialog::getSaveFileName(this, "Save File", QDir::homePath());
+
+        if (filepath != "") {
+            QString tabPath = tabbar->getActiveTabPath();
+
+            tabbar->updateTab(tabbar->currentIndex(), filepath, QFileInfo(filepath).fileName());
+
+            editorMap[filepath] = editorMap.take(tabPath);
+            
+            editorMap[filepath]->updatePath(filepath);
+            editorMap[filepath]->saveFile();
         }
     }
 }
