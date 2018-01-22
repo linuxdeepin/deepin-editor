@@ -47,7 +47,6 @@ public:
     void keyPressEvent(QKeyEvent *keyEvent);
     
     void addTab(QString file);
-    void addBlankTab();
     int isFileInTabs(QString file);
     void activeTab(int index);
     void openFile();
@@ -56,6 +55,8 @@ public:
 public slots:
     void handleSwitchToFile(QString filepath);
     void handleCloseFile(QString filepath);
+
+    void addBlankTab();
     
 private:
     QWidget *layoutWidget;

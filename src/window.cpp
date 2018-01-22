@@ -53,6 +53,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     connect(tabbar, SIGNAL(doubleClicked()), this->titlebar(), SIGNAL(doubleClicked()), Qt::QueuedConnection);
     connect(tabbar, SIGNAL(switchToFile(QString)), this, SLOT(handleSwitchToFile(QString)), Qt::QueuedConnection);
     connect(tabbar, SIGNAL(closeFile(QString)), this, SLOT(handleCloseFile(QString)), Qt::QueuedConnection);
+    connect(tabbar, SIGNAL(tabAddRequested()), this, SLOT(addBlankTab()), Qt::QueuedConnection);
 
     Utils::applyQss(this, "main.qss");
 }

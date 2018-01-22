@@ -32,6 +32,7 @@ signals:
     void doubleClicked();
     void switchToFile(QString filepath);
     void closeFile(QString filepath);
+    void tabAddRequested();
     
 public slots:
     void handleTabbarDoubleClick();
