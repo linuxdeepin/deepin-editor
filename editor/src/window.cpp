@@ -75,7 +75,7 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
         trySaveFile();
     } else if (key == "Ctrl + Tab") {
         tabbar->selectNextTab();
-    } else if (key == "Ctrl + Backtab") {
+    } else if (key == "Ctrl + Shift + Backtab") {
         tabbar->selectPrevTab();
     } else if (key == "Ctrl + W") {
         tabbar->closeTab();

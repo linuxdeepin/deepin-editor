@@ -101,6 +101,10 @@ QString Utils::getKeymap(QKeyEvent *keyEvent)
             keys.append("Ctrl");
         }
         
+        if (modifiers.testFlag(Qt::ShiftModifier)) {
+            keys.append("Shift");
+        }
+        
         if (modifiers.testFlag(Qt::AltModifier)) {
             keys.append("Alt");
         }
