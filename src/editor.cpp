@@ -31,7 +31,7 @@ Editor::Editor(QWidget *parent) : QWidget(parent)
     autoSaveTimer->setSingleShot(true);
     connect(autoSaveTimer, &QTimer::timeout, this, &Editor::handleTextChangeTimer);
     
-    connect(textEditor, SIGNAL(textChanged()), this, SLOT(handleTextChanged()), Qt::QueuedConnection);
+    connect(textEditor, &QTextEdit::textChanged, this, &Editor::handleTextChanged, Qt::QueuedConnection);
 }
 
 void Editor::loadFile(QString filepath)

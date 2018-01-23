@@ -24,11 +24,11 @@ Tabbar::Tabbar(QWidget *parent) : QWidget(parent)
     layout->addWidget(tabbar, 0, Qt::AlignTop);
     layout->addSpacing(40);
 
-    connect(tabbar, SIGNAL(tabBarDoubleClicked(int)), this, SLOT(handleTabbarDoubleClick()), Qt::QueuedConnection);
-    connect(tabbar, SIGNAL(currentChanged(int)), this, SLOT(handleCurrentIndexChanged(int)), Qt::QueuedConnection);
-    connect(tabbar, SIGNAL(tabMoved(int, int)), this, SLOT(handleTabMoved(int , int)), Qt::QueuedConnection);
-    connect(tabbar, SIGNAL(tabCloseRequested(int)), this, SLOT(handleTabClosed(int)), Qt::QueuedConnection);
-    connect(tabbar, SIGNAL(tabAddRequested()), this, SIGNAL(tabAddRequested()), Qt::QueuedConnection);
+    connect(tabbar, &DTabBar::tabBarDoubleClicked, this, &Tabbar::handleTabbarDoubleClick, Qt::QueuedConnection);
+    connect(tabbar, &DTabBar::currentChanged, this, &Tabbar::handleCurrentIndexChanged, Qt::QueuedConnection);
+    connect(tabbar, &DTabBar::tabMoved, this, &Tabbar::handleTabMoved, Qt::QueuedConnection);
+    connect(tabbar, &DTabBar::tabCloseRequested, this, &Tabbar::handleTabClosed, Qt::QueuedConnection);
+    connect(tabbar, &DTabBar::tabAddRequested, this, &Tabbar::tabAddRequested, Qt::QueuedConnection);
 }
 
 void Tabbar::addTab(QString filepath, QString tabName)
