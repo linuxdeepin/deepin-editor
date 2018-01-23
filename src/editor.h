@@ -16,12 +16,21 @@ public:
     void saveFile();
     void updatePath(QString file);
     
+public slots:
+    void handleTextChanged();
+    void handleTextChangeTimer();
+    
 private:
     QTextEdit *textEditor;
     Highlighter *highlighter;
     
     QVBoxLayout *layout;
     QString filepath;
+    
+    QTimer *autoSaveTimer;
+    int autoSaveInternal;
+    
+    bool saveFinish;
 };
 
 #endif

@@ -36,4 +36,6 @@ public:
     static void setFontSize(QPainter &painter, int textSize);
     static void passInputEvent(int wid);
     static void applyQss(QWidget *widget, QString qssName);
+    static bool fileExists(QString path);
+    static bool fileIsWritable(QString path);
 };

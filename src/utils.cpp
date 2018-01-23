@@ -78,3 +78,16 @@ void Utils::applyQss(QWidget *widget, QString qssName)
     file.close();
 }
 
+bool Utils::fileExists(QString path) {
+    QFileInfo check_file(path);
+    
+    // check if file exists and if yes: Is it really a file and no directory?
+    return check_file.exists() && check_file.isFile();
+}
+
+bool Utils::fileIsWritable(QString path)
+{
+    QFileDevice::Permissions permissions = QFile(path).permissions();
+    
+    return permissions & QFileDevice::WriteUser;
+}
