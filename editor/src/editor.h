@@ -21,6 +21,7 @@ public:
 public slots:
     void handleTextChanged();
     void handleTextChangeTimer();
+    void highlightCurrentLine();
     
 private:
     QTextEdit *textEditor;

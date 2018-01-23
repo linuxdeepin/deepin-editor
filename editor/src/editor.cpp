@@ -34,6 +34,7 @@ Editor::Editor(QWidget *parent) : QWidget(parent)
     connect(autoSaveTimer, &QTimer::timeout, this, &Editor::handleTextChangeTimer);
 
     connect(textEditor, &QTextEdit::textChanged, this, &Editor::handleTextChanged, Qt::QueuedConnection);
+    connect(textEditor, &QTextEdit::cursorPositionChanged, this, &Editor::highlightCurrentLine, Qt::QueuedConnection);
 }
 
 void Editor::loadFile(QString filepath)
@@ -85,7 +86,8 @@ void Editor::handleTextChangeTimer()
         if (Utils::fileIsWritable(filepath)) {
             saveFile();
         } else {
-            if (!autoSaveDBus->saveFile(filepath, textEditor->toPlainText())) {
+            bool result = autoSaveDBus->saveFile(filepath, textEditor->toPlainText());
+            if (!result) {
                 qDebug() << QString("Save root file %1 failed").arg(filepath);
             }
         }
@@ -101,4 +103,21 @@ void Editor::trySaveFile()
             qDebug() << QString("Don't need file %1 handly").arg(filepath);
         }
     }
+}
+
+void Editor::highlightCurrentLine()
+{
+    QList<QTextEdit::ExtraSelection> extraSelections;
+
+    QTextEdit::ExtraSelection selection;
+
+    QColor lineColor = QColor("#333333");
+
+    selection.format.setBackground(lineColor);
+    selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+    selection.cursor = textEditor->textCursor();
+    selection.cursor.clearSelection();
+    extraSelections.append(selection);
+
+    textEditor->setExtraSelections(extraSelections);
 }
