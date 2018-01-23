@@ -12,10 +12,11 @@ Editor::Editor(QWidget *parent) : QWidget(parent)
     font.setFixedPitch(true);
     font.setPointSize(12);
 
-    layout = new QVBoxLayout(this);
+    layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
 
-    textEditor = new QTextEdit;
+    textEditor = new TextEditor;
     textEditor->setFont(font);
     
     highlightCurrentLine();
@@ -24,6 +25,7 @@ Editor::Editor(QWidget *parent) : QWidget(parent)
 
     highlighter = new Highlighter(textEditor->document());
 
+    layout->addWidget(textEditor->lineNumberArea);
     layout->addWidget(textEditor);
 
     QTimer::singleShot(0, textEditor, SLOT(setFocus()));
@@ -35,8 +37,8 @@ Editor::Editor(QWidget *parent) : QWidget(parent)
     autoSaveTimer->setSingleShot(true);
     connect(autoSaveTimer, &QTimer::timeout, this, &Editor::handleTextChangeTimer);
 
-    connect(textEditor, &QTextEdit::textChanged, this, &Editor::handleTextChanged, Qt::QueuedConnection);
-    connect(textEditor, &QTextEdit::cursorPositionChanged, this, &Editor::highlightCurrentLine, Qt::QueuedConnection);
+    connect(textEditor, &TextEditor::textChanged, this, &Editor::handleTextChanged, Qt::QueuedConnection);
+    connect(textEditor, &TextEditor::cursorPositionChanged, this, &Editor::highlightCurrentLine, Qt::QueuedConnection);
 }
 
 void Editor::loadFile(QString filepath)

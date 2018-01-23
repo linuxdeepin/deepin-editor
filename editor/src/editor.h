@@ -3,7 +3,7 @@
 
 #include "dbusinterface.h"
 #include <QWidget>
-#include <QPlainTextEdit>
+#include "texteditor.h"
 #include <QVBoxLayout>
 #include "highlighter.h"
 
@@ -24,10 +24,10 @@ public slots:
     void highlightCurrentLine();
     
 private:
-    QTextEdit *textEditor;
+    TextEditor *textEditor;
     Highlighter *highlighter;
     
-    QVBoxLayout *layout;
+    QHBoxLayout *layout;
     QString filepath;
     
     QTimer *autoSaveTimer;
@@ -35,6 +35,7 @@ private:
     
     bool saveFinish;
     DBusDaemon::dbus *autoSaveDBus;
+    
 };
 
 #endif
