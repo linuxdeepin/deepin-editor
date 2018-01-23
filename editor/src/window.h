@@ -53,6 +53,8 @@ public:
     void trySaveFile();
                       
     void toggleFullscreen();
+                           
+    Editor* getActiveEditor();
     
 public slots:
     void handleSwitchToFile(QString filepath);

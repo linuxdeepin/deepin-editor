@@ -15,13 +15,14 @@ public:
     void loadFile(QString filepath);
     void saveFile();
     void updatePath(QString file);
-    
+                                 
+    TextEditor *textEditor;
+                          
 public slots:
     void handleTextChanged();
     void handleTextChangeTimer();
     
 private:
-    TextEditor *textEditor;
     
     QHBoxLayout *layout;
     QString filepath;

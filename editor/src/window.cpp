@@ -70,6 +70,10 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
     if (keyEvent->modifiers() & Qt::ControlModifier) {
         if (keyEvent->key() == Qt::Key_T) {
             addBlankTab();
+        } else if (keyEvent->key() == Qt::Key_N) {
+            getActiveEditor()->textEditor->nextLine();
+        } else if (keyEvent->key() == Qt::Key_P) {
+            getActiveEditor()->textEditor->prevLine();
         } else if (keyEvent->key() == Qt::Key_S) {
             trySaveFile();
         } else if (keyEvent->key() == Qt::Key_Tab) {
@@ -203,7 +207,7 @@ void Window::toggleFullscreen()
     }  else {
         showFullScreen();
         
-        QScreen *screen = QGuiApplication::primaryScreen();
+        QScreen *screen = QGuiApplication::primaryScreen();  
         QRect screenGeometry = screen->geometry();
         
         auto toast = new DToast(this);
@@ -215,4 +219,11 @@ void Window::toggleFullscreen()
         toast->move((screenGeometry.width() - toast->width()) / 2, notifyPadding);
     }
 
+}
+
+Editor* Window::getActiveEditor()
+{
+    QString tabPath = tabbar->getActiveTabPath();
+
+    return editorMap[tabPath];
 }

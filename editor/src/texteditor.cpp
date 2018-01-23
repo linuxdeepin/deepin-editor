@@ -103,3 +103,14 @@ void TextEditor::highlightCurrentLine()
 
     setExtraSelections(extraSelections);
 }
+
+void TextEditor::nextLine()
+{
+    moveCursor(QTextCursor::Down);
+}
+
+void TextEditor::prevLine() 
+{
+    moveCursor(QTextCursor::Up);
+}
+    

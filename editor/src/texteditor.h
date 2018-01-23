@@ -14,6 +14,9 @@ public:
     
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     
+    void nextLine();
+    void prevLine();
+    
     QWidget *lineNumberArea;
     
 public slots:
