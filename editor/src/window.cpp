@@ -27,6 +27,7 @@
 #include "dtoast.h"
 #include <QDebug>
 #include <QFileDialog>
+#include <QScreen>
 #include <QDir>
 #include <QDateTime>
 #include <QApplication>
@@ -79,6 +80,10 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
             tabbar->closeTab();
         } else if (keyEvent->key() == Qt::Key_O) {
             openFile();
+        }
+    } else {
+        if (keyEvent->key() == Qt::Key_F11) {
+            toggleFullscreen();
         }
     }
 }
@@ -175,7 +180,7 @@ void Window::trySaveFile()
             tabbar->updateTab(tabbar->currentIndex(), filepath, QFileInfo(filepath).fileName());
 
             editorMap[filepath] = editorMap.take(tabPath);
-            
+
             editorMap[filepath]->updatePath(filepath);
             editorMap[filepath]->saveFile();
         }
@@ -186,7 +191,28 @@ void Window::trySaveFile()
         toast->setIcon(QIcon(Utils::getQrcPath("logo_24.svg")));
         toast->pop();
 
-        toast->move((width() - toast->width()) / 2, 
+        toast->move((width() - toast->width()) / 2,
                     height() - toast->height() - notifyPadding);
     }
+}
+
+void Window::toggleFullscreen()
+{
+    if (isFullScreen()) {
+        showNormal();
+    }  else {
+        showFullScreen();
+        
+        QScreen *screen = QGuiApplication::primaryScreen();
+        QRect screenGeometry = screen->geometry();
+        
+        auto toast = new DToast(this);
+
+        toast->setText("按F11或Esc退出全屏");
+        toast->setIcon(QIcon(Utils::getQrcPath("logo_24.svg")));
+        toast->pop();
+
+        toast->move((screenGeometry.width() - toast->width()) / 2, notifyPadding);
+    }
+
 }

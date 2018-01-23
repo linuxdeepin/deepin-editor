@@ -51,6 +51,8 @@ public:
     void activeTab(int index);
     void openFile();
     void trySaveFile();
+                      
+    void toggleFullscreen();
     
 public slots:
     void handleSwitchToFile(QString filepath);
