@@ -18,7 +18,7 @@ Editor::Editor(QWidget *parent) : QWidget(parent)
 
     textEditor = new TextEditor;
     textEditor->setFont(font);
-    
+
     highlightCurrentLine();
 
     autoSaveDBus = new DBusDaemon::dbus("com.deepin.editor.daemon", "/", QDBusConnection::systemBus(), this);
@@ -53,16 +53,23 @@ void Editor::loadFile(QString filepath)
 
 void Editor::saveFile()
 {
-    QFile file(filepath);
-    if(!file.open(QIODevice::WriteOnly | QIODevice::Text)){
-        qDebug() << "Can't write file: " << filepath;
+    if (Utils::fileIsWritable(filepath)) {
+        QFile file(filepath);
+        if(!file.open(QIODevice::WriteOnly | QIODevice::Text)){
+            qDebug() << "Can't write file: " << filepath;
 
-        return;
+            return;
+        }
+
+        QTextStream out(&file);
+        out << textEditor->toPlainText();
+        file.close();
+    } else {
+        bool result = autoSaveDBus->saveFile(filepath, textEditor->toPlainText());
+        if (!result) {
+            qDebug() << QString("Save root file %1 failed").arg(filepath);
+        }
     }
-
-    QTextStream out(&file);
-    out << textEditor->toPlainText();
-    file.close();
 }
 
 void Editor::updatePath(QString file)
@@ -87,25 +94,7 @@ void Editor::handleTextChangeTimer()
     if (Utils::fileExists(filepath)) {
         saveFinish = true;
 
-        if (Utils::fileIsWritable(filepath)) {
-            saveFile();
-        } else {
-            bool result = autoSaveDBus->saveFile(filepath, textEditor->toPlainText());
-            if (!result) {
-                qDebug() << QString("Save root file %1 failed").arg(filepath);
-            }
-        }
-
-        qDebug() << "Save " << filepath;
-    }
-}
-
-void Editor::trySaveFile()
-{
-    if (Utils::fileExists(filepath)) {
-        if (Utils::fileIsWritable(filepath)) {
-            qDebug() << QString("Don't need file %1 handly").arg(filepath);
-        }
+        saveFile();
     }
 }
 

@@ -64,6 +64,8 @@ private:
     
     Tabbar *tabbar;
     QMap<QString, Editor*> editorMap;
+    
+    int notifyPadding = 20;
 };
 
 #endif

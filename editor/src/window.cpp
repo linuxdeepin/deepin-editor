@@ -24,6 +24,7 @@
 #include "window.h"
 #include <DTitlebar>
 #include <QLabel>
+#include "dtoast.h"
 #include <QDebug>
 #include <QFileDialog>
 #include <QDir>
@@ -179,7 +180,13 @@ void Window::trySaveFile()
             editorMap[filepath]->saveFile();
         }
     } else {
-        QString tabPath = tabbar->getActiveTabPath();
-        editorMap[tabPath]->trySaveFile();
+        auto toast = new DToast(this);
+
+        toast->setText("文件已自动保存");
+        toast->setIcon(QIcon(Utils::getQrcPath("logo_24.svg")));
+        toast->pop();
+
+        toast->move((width() - toast->width()) / 2, 
+                    height() - toast->height() - notifyPadding);
     }
 }
