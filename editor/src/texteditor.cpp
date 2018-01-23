@@ -43,7 +43,12 @@ void TextEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
     while (block.isValid() && top <= event->rect().bottom()) {
         if (block.isVisible() && bottom >= event->rect().top()) {
             painter.setPen(QColor("#666666"));
-            painter.drawText(0, top, lineNumberArea->width() - lineNumberPadding, fontMetrics().height(), Qt::AlignRight | Qt::AlignBottom, QString::number(linenumber + 1));
+            painter.drawText(0, 
+                             top + lineNumberOffset, 
+                             lineNumberArea->width() - lineNumberPaddingX, 
+                             fontMetrics().height(), 
+                             Qt::AlignRight | Qt::AlignBottom, 
+                             QString::number(linenumber + 1));
         }
 
         block = block.next();
@@ -65,5 +70,5 @@ void TextEditor::handleUpdateRequest(const QRect &rect, int dy)
 
 void TextEditor::handleTextChanged()
 {
-    lineNumberArea->setFixedWidth(QString("%1").arg(blockCount()).size() * fontMetrics().width('9') + lineNumberPadding * 2);
+    lineNumberArea->setFixedWidth(QString("%1").arg(blockCount()).size() * fontMetrics().width('9') + lineNumberPaddingX * 2);
 }

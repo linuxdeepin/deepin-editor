@@ -20,7 +20,8 @@ public slots:
     void handleTextChanged();
     
 private:
-    int lineNumberPadding = 5;
+    int lineNumberPaddingX = 5;
+    int lineNumberOffset = 3;
 };
 
 #endif
