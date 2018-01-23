@@ -21,7 +21,7 @@ public slots:
     
 private:
     int lineNumberPaddingX = 5;
-    int lineNumberOffset = 3;
+    int lineNumberOffset = 2;
 };
 
 #endif
