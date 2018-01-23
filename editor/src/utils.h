@@ -24,6 +24,7 @@
 #include <QObject>
 #include <QString>
 #include <QPainter>
+#include <QKeyEvent>
 
 class Utils : public QObject
 {
@@ -38,4 +39,5 @@ public:
     static void applyQss(QWidget *widget, QString qssName);
     static bool fileExists(QString path);
     static bool fileIsWritable(QString path);
+    static QString getKeymap(QKeyEvent *keyEvent);
 };

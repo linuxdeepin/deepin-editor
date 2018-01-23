@@ -91,3 +91,28 @@ bool Utils::fileIsWritable(QString path)
     
     return permissions & QFileDevice::WriteUser;
 }
+
+QString Utils::getKeymap(QKeyEvent *keyEvent)
+{
+    QStringList keys;
+    Qt::KeyboardModifiers modifiers = keyEvent->modifiers();
+    if (modifiers!=Qt::NoModifier){
+        if (modifiers.testFlag(Qt::ControlModifier)) {
+            keys.append("Ctrl");
+        }
+        
+        if (modifiers.testFlag(Qt::AltModifier)) {
+            keys.append("Alt");
+        }
+        
+        if (modifiers.testFlag(Qt::MetaModifier)) {
+            keys.append("Meta");
+        }
+    }
+    
+    if(keyEvent->key() !=0 && keyEvent->key() != Qt::Key_unknown){
+        keys.append(QKeySequence(keyEvent->key()).toString());
+    }
+    
+    return keys.join(" + ");
+}

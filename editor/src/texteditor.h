@@ -18,6 +18,10 @@ public:
     void prevLine();
     void forwardChar();
     void backwardChar();
+    void forwardWord();
+    void backwardWord();
+    
+    void keyPressEvent(QKeyEvent *e);
     
     QWidget *lineNumberArea;
     

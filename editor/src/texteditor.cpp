@@ -123,3 +123,34 @@ void TextEditor::backwardChar()
 {
     moveCursor(QTextCursor::PreviousCharacter);
 }
+
+void TextEditor::forwardWord()
+{
+    moveCursor(QTextCursor::NextWord);
+}
+
+void TextEditor::backwardWord()
+{
+    moveCursor(QTextCursor::PreviousWord);
+}
+
+void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
+{
+    QString key = Utils::getKeymap(keyEvent);
+    
+    if (key == "Ctrl + F") {
+        forwardChar();
+    } else if (key == "Ctrl + B") {
+        backwardChar();
+    } else if (key == "Alt + F") {
+        forwardWord();
+    } else if (key == "Alt + B") {
+        backwardWord();
+    } else if (key == "Ctrl + N") {
+        nextLine();
+    } else if (key == "Ctrl + P") {
+        prevLine();
+    } else {
+        QPlainTextEdit::keyPressEvent(keyEvent);
+    }
+}

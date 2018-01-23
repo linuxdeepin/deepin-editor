@@ -84,5 +84,3 @@ void Editor::handleTextChangeTimer()
         saveFile();
     }
 }
-
-

@@ -67,32 +67,22 @@ Window::~Window()
 
 void Window::keyPressEvent(QKeyEvent *keyEvent)
 {
-    if (keyEvent->modifiers() & Qt::ControlModifier) {
-        if (keyEvent->key() == Qt::Key_T) {
-            addBlankTab();
-        } else if (keyEvent->key() == Qt::Key_N) {
-            getActiveEditor()->textEditor->nextLine();
-        } else if (keyEvent->key() == Qt::Key_P) {
-            getActiveEditor()->textEditor->prevLine();
-        } else if (keyEvent->key() == Qt::Key_F) {
-            getActiveEditor()->textEditor->forwardChar();
-        } else if (keyEvent->key() == Qt::Key_B) {
-            getActiveEditor()->textEditor->backwardChar();
-        } else if (keyEvent->key() == Qt::Key_S) {
-            trySaveFile();
-        } else if (keyEvent->key() == Qt::Key_Tab) {
-            tabbar->selectNextTab();
-        } else if (keyEvent->key() == Qt::Key_Backtab) {
-            tabbar->selectPrevTab();
-        } else if (keyEvent->key() == Qt::Key_W) {
-            tabbar->closeTab();
-        } else if (keyEvent->key() == Qt::Key_O) {
-            openFile();
-        }
-    } else {
-        if (keyEvent->key() == Qt::Key_F11) {
-            toggleFullscreen();
-        }
+    QString key = Utils::getKeymap(keyEvent);
+    
+    if (key == "Ctrl + T") {
+        addBlankTab();
+    } else if (key == "Ctrl + S") {
+        trySaveFile();
+    } else if (key == "Ctrl + Tab") {
+        tabbar->selectNextTab();
+    } else if (key == "Ctrl + Backtab") {
+        tabbar->selectPrevTab();
+    } else if (key == "Ctrl + W") {
+        tabbar->closeTab();
+    } else if (key == "Ctrl + O") {
+        openFile();
+    } else if (key == "F11") {
+        toggleFullscreen();
     }
 }
 
@@ -210,10 +200,10 @@ void Window::toggleFullscreen()
         showNormal();
     }  else {
         showFullScreen();
-        
-        QScreen *screen = QGuiApplication::primaryScreen();  
+
+        QScreen *screen = QGuiApplication::primaryScreen();
         QRect screenGeometry = screen->geometry();
-        
+
         auto toast = new DToast(this);
 
         toast->setText("按F11或Esc退出全屏");
