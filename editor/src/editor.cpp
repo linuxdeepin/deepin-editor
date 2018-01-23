@@ -17,6 +17,8 @@ Editor::Editor(QWidget *parent) : QWidget(parent)
 
     textEditor = new QTextEdit;
     textEditor->setFont(font);
+    
+    highlightCurrentLine();
 
     autoSaveDBus = new DBusDaemon::dbus("com.deepin.editor.daemon", "/", QDBusConnection::systemBus(), this);
 
