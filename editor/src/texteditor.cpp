@@ -24,7 +24,7 @@ TextEditor::TextEditor(QPlainTextEdit *parent) : QPlainTextEdit(parent)
     lineNumberArea = new LineNumberArea(this);
 
     connect(this, &QPlainTextEdit::updateRequest, this, &TextEditor::handleUpdateRequest);
-    connect(this, &QPlainTextEdit::textChanged, this, &TextEditor::handleTextChanged, Qt::QueuedConnection);
+    connect(this, &QPlainTextEdit::textChanged, this, &TextEditor::updateLineNumber, Qt::QueuedConnection);
 }
 
 void TextEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
@@ -68,7 +68,7 @@ void TextEditor::handleUpdateRequest(const QRect &rect, int dy)
     }
 }
 
-void TextEditor::handleTextChanged()
+void TextEditor::updateLineNumber()
 {
     lineNumberArea->setFixedWidth(QString("%1").arg(blockCount()).size() * fontMetrics().width('9') + lineNumberPaddingX * 2);
 }

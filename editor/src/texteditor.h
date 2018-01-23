@@ -17,7 +17,7 @@ public:
     
 public slots:
     void handleUpdateRequest(const QRect &rect, int dy);
-    void handleTextChanged();
+    void updateLineNumber();
     
 private:
     int lineNumberPaddingX = 5;
