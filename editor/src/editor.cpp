@@ -7,28 +7,16 @@
 
 Editor::Editor(QWidget *parent) : QWidget(parent)
 {
-    QFont font;
-    font.setFamily("Note Mono");
-    font.setFixedPitch(true);
-    font.setPointSize(12);
-
     layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
 
     textEditor = new TextEditor;
-    textEditor->setFont(font);
-
-    highlightCurrentLine();
 
     autoSaveDBus = new DBusDaemon::dbus("com.deepin.editor.daemon", "/", QDBusConnection::systemBus(), this);
 
-    highlighter = new Highlighter(textEditor->document());
-
     layout->addWidget(textEditor->lineNumberArea);
     layout->addWidget(textEditor);
-
-    QTimer::singleShot(0, textEditor, SLOT(setFocus()));
 
     autoSaveInternal = 1000;
     saveFinish = true;
@@ -38,7 +26,6 @@ Editor::Editor(QWidget *parent) : QWidget(parent)
     connect(autoSaveTimer, &QTimer::timeout, this, &Editor::handleTextChangeTimer);
 
     connect(textEditor, &TextEditor::textChanged, this, &Editor::handleTextChanged, Qt::QueuedConnection);
-    connect(textEditor, &TextEditor::cursorPositionChanged, this, &Editor::highlightCurrentLine, Qt::QueuedConnection);
 }
 
 void Editor::loadFile(QString filepath)
@@ -98,19 +85,3 @@ void Editor::handleTextChangeTimer()
     }
 }
 
-void Editor::highlightCurrentLine()
-{
-    QList<QTextEdit::ExtraSelection> extraSelections;
-
-    QTextEdit::ExtraSelection selection;
-
-    QColor lineColor = QColor("#333333");
-
-    selection.format.setBackground(lineColor);
-    selection.format.setProperty(QTextFormat::FullWidthSelection, true);
-    selection.cursor = textEditor->textCursor();
-    selection.cursor.clearSelection();
-    extraSelections.append(selection);
-
-    textEditor->setExtraSelections(extraSelections);
-}

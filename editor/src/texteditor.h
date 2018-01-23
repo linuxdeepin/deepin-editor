@@ -1,6 +1,7 @@
 #ifndef TEXTEEDITOR_H
 #define TEXTEEDITOR_H
 
+#include "highlighter.h"
 #include <QPlainTextEdit>
 #include <QPaintEvent>
 
@@ -18,10 +19,12 @@ public:
 public slots:
     void handleUpdateRequest(const QRect &rect, int dy);
     void updateLineNumber();
+    void highlightCurrentLine();
     
 private:
     int lineNumberPaddingX = 5;
     int lineNumberOffset = 2;
+    Highlighter *highlighter;
 };
 
 #endif

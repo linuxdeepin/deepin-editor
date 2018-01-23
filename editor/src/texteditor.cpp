@@ -1,6 +1,7 @@
 #include "texteditor.h"
 #include "utils.h"
 #include <QTextBlock>
+#include <QTimer>
 #include <QPainter>
 #include <QDebug>
 
@@ -21,10 +22,23 @@ public:
 
 TextEditor::TextEditor(QPlainTextEdit *parent) : QPlainTextEdit(parent)
 {
+    QFont font;
+    font.setFamily("Note Mono");
+    font.setFixedPitch(true);
+    font.setPointSize(12);
+    this->setFont(font);
+    
+    highlighter = new Highlighter(document());
+    
     lineNumberArea = new LineNumberArea(this);
 
     connect(this, &QPlainTextEdit::updateRequest, this, &TextEditor::handleUpdateRequest);
     connect(this, &QPlainTextEdit::textChanged, this, &TextEditor::updateLineNumber, Qt::QueuedConnection);
+    connect(this, &QPlainTextEdit::cursorPositionChanged, this, &TextEditor::highlightCurrentLine, Qt::QueuedConnection);
+    
+    highlightCurrentLine();
+    
+    QTimer::singleShot(0, this, SLOT(setFocus()));
 }
 
 void TextEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
@@ -71,4 +85,21 @@ void TextEditor::handleUpdateRequest(const QRect &rect, int dy)
 void TextEditor::updateLineNumber()
 {
     lineNumberArea->setFixedWidth(QString("%1").arg(blockCount()).size() * fontMetrics().width('9') + lineNumberPaddingX * 2);
+}
+
+void TextEditor::highlightCurrentLine()
+{
+    QList<QTextEdit::ExtraSelection> extraSelections;
+
+    QTextEdit::ExtraSelection selection;
+
+    QColor lineColor = QColor("#333333");
+
+    selection.format.setBackground(lineColor);
+    selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+    selection.cursor = textCursor();
+    selection.cursor.clearSelection();
+    extraSelections.append(selection);
+
+    setExtraSelections(extraSelections);
 }

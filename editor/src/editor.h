@@ -5,7 +5,6 @@
 #include <QWidget>
 #include "texteditor.h"
 #include <QVBoxLayout>
-#include "highlighter.h"
 
 class Editor : public QWidget
 {
@@ -20,11 +19,9 @@ public:
 public slots:
     void handleTextChanged();
     void handleTextChangeTimer();
-    void highlightCurrentLine();
     
 private:
     TextEditor *textEditor;
-    Highlighter *highlighter;
     
     QHBoxLayout *layout;
     QString filepath;
