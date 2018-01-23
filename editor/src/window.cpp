@@ -79,8 +79,10 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
         tabbar->selectPrevTab();
     } else if (key == "Ctrl + W") {
         tabbar->closeTab();
+    } else if (key == "Ctrl + Shift + W") {
+        tabbar->closeOtherTabs();
     } else if (key == "Ctrl + O") {
-        openFile();
+            openFile();
     } else if (key == "F11") {
         toggleFullscreen();
     }

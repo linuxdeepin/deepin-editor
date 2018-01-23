@@ -22,6 +22,7 @@ public:
     void selectNextTab();
     void selectPrevTab();
     void closeTab();
+    void closeOtherTabs();
     
     QString getActiveTabName();
     QString getActiveTabPath();
@@ -33,7 +34,7 @@ signals:
     void switchToFile(QString filepath);
     void closeFile(QString filepath);
     void tabAddRequested();
-    
+                          
 public slots:
     void handleTabbarDoubleClick();
     void handleCurrentIndexChanged(int index);

@@ -75,10 +75,10 @@ void Tabbar::handleTabMoved(int fromIndex, int toIndex)
 void Tabbar::handleTabClosed(int closeIndex)
 {
     QString filepath = tabFiles[closeIndex];
-    
+
     tabFiles.takeAt(closeIndex);
     tabbar->removeTab(closeIndex);
-    
+
     closeFile(filepath);
 }
 
@@ -106,12 +106,27 @@ void Tabbar::selectPrevTab()
         tabbar->setCurrentIndex(currentIndex - 1);
     }
 }
-                      
+
 
 void Tabbar::closeTab()
 {
     handleTabClosed(tabbar->currentIndex());
 }
+
+void Tabbar::closeOtherTabs()
+{
+    QString currentFilepath = tabFiles[tabbar->currentIndex()];
+    
+    while (tabFiles.size() > 1) {
+        QString firstPath = tabFiles[0];
+        if (firstPath != currentFilepath) {
+            handleTabClosed(0);
+        } else {
+            handleTabClosed(1);
+        }
+    }
+}
+
 
 QString Tabbar::getActiveTabName()
 {
