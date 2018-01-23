@@ -1,6 +1,7 @@
 #ifndef EDITOR_H
 #define EDITOR_H
 
+#include "dbusinterface.h"
 #include <QWidget>
 #include <QPlainTextEdit>
 #include <QVBoxLayout>
@@ -15,6 +16,7 @@ public:
     void loadFile(QString filepath);
     void saveFile();
     void updatePath(QString file);
+    void trySaveFile();
     
 public slots:
     void handleTextChanged();
@@ -31,6 +33,7 @@ private:
     int autoSaveInternal;
     
     bool saveFinish;
+    DBusDaemon::dbus *autoSaveDBus;
 };
 
 #endif

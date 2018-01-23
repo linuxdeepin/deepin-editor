@@ -14,12 +14,14 @@ RESOURCES = deepin-editor.qrc
 HEADERS += src/window.h \
            src/highlighter.h \		   
            src/startmanager.h \		   
+           src/dbusinterface.h \		   
 	   src/tabbar.h \		   
 	   src/editor.h \		   
 	   src/utils.h		   
 SOURCES += src/window.cpp \
            src/highlighter.cpp \		   
            src/startmanager.cpp \		   
+           src/dbusinterface.cpp \		   
 	   src/tabbar.cpp \		   
 	   src/editor.cpp \		   
 	   src/utils.cpp \		   

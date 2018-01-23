@@ -178,5 +178,8 @@ void Window::trySaveFile()
             editorMap[filepath]->updatePath(filepath);
             editorMap[filepath]->saveFile();
         }
+    } else {
+        QString tabPath = tabbar->getActiveTabPath();
+        editorMap[tabPath]->trySaveFile();
     }
 }

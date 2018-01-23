@@ -6,11 +6,28 @@ Deepin Editor: simple editor for deepin.
 
 ## Installation
 
-* mkdir build
-* cd build
-* qmake ..
-* make
-* ./deepin-editor -f filepath
+* Build auto save daemon
+
+```
+./cpserver.sh
+cd ./daemon
+mkdir build
+cd build
+qmake ..
+make
+sudo ./deepin-editor-daemon
+```
+
+* Build editor
+
+```
+cd ./editor
+mkdir build
+cd build
+qmake ..
+make
+./deepin-editor
+```
 
 ## Usage
 
