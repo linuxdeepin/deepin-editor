@@ -114,3 +114,12 @@ void TextEditor::prevLine()
     moveCursor(QTextCursor::Up);
 }
     
+void TextEditor::forwardChar()
+{
+    moveCursor(QTextCursor::NextCharacter);
+}
+
+void TextEditor::backwardChar()
+{
+    moveCursor(QTextCursor::PreviousCharacter);
+}

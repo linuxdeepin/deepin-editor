@@ -74,6 +74,10 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
             getActiveEditor()->textEditor->nextLine();
         } else if (keyEvent->key() == Qt::Key_P) {
             getActiveEditor()->textEditor->prevLine();
+        } else if (keyEvent->key() == Qt::Key_F) {
+            getActiveEditor()->textEditor->forwardChar();
+        } else if (keyEvent->key() == Qt::Key_B) {
+            getActiveEditor()->textEditor->backwardChar();
         } else if (keyEvent->key() == Qt::Key_S) {
             trySaveFile();
         } else if (keyEvent->key() == Qt::Key_Tab) {

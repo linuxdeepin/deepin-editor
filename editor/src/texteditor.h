@@ -16,6 +16,8 @@ public:
     
     void nextLine();
     void prevLine();
+    void forwardChar();
+    void backwardChar();
     
     QWidget *lineNumberArea;
     
