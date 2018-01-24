@@ -50,7 +50,8 @@ public:
     int isFileInTabs(QString file);
     void activeTab(int index);
     void openFile();
-    void trySaveFile();
+    void saveFile();
+    void saveAsFile();
                       
     void toggleFullscreen();
                            

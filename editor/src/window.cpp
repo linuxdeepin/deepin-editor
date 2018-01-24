@@ -72,9 +72,11 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
     if (key == "Ctrl + T") {
         addBlankTab();
     } else if (key == "Ctrl + S") {
-        trySaveFile();
+        saveFile();
+    } else if (key == "Ctrl + Shift + S") {
+        saveAsFile();
     } else if (key == "Ctrl + Tab") {
-        tabbar->selectNextTab();
+            tabbar->selectNextTab();
     } else if (key == "Ctrl + Shift + Backtab") {
         tabbar->selectPrevTab();
     } else if (key == "Ctrl + W") {
@@ -169,7 +171,7 @@ void Window::openFile()
     }
 }
 
-void Window::trySaveFile()
+void Window::saveFile()
 {
     if (tabbar->getActiveTabName() == "Blank document") {
         QString filepath = QFileDialog::getSaveFileName(this, "Save File", QDir::homePath());
@@ -193,6 +195,21 @@ void Window::trySaveFile()
 
         toast->move((width() - toast->width()) / 2,
                     height() - toast->height() - notifyPadding);
+    }
+}
+
+void Window::saveAsFile()
+{
+    QString filepath = QFileDialog::getSaveFileName(this, "Save File", QDir::homePath());
+    QString tabPath = tabbar->getActiveTabPath();
+    
+    if (filepath != "" && filepath != tabPath) {
+        tabbar->updateTab(tabbar->currentIndex(), filepath, QFileInfo(filepath).fileName());
+
+        editorMap[filepath] = editorMap.take(tabPath);
+
+        editorMap[filepath]->updatePath(filepath);
+        editorMap[filepath]->saveFile();
     }
 }
 
