@@ -10,6 +10,8 @@ TabWidget::TabWidget(QMap<QString, Editor*> *map)
     setTabsClosable(true);
     setVisibleAddButton(true);
     setDragable(true);
+    
+    setStartDragDistance(20);
 }
 
 QPixmap TabWidget::createDragPixmapFramTab(int index, const QStyleOptionTab &option, QPoint *hotspot) const
