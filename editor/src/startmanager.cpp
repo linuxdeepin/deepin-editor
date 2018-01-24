@@ -97,6 +97,8 @@ Window* StartManager::createWindow(bool alwaysCenter)
 
     windows << window;
     
+    connect(window, &Window::popTab, this, &StartManager::handlePopTab, Qt::QueuedConnection);
+    
     return window;
 }
 
@@ -106,4 +108,11 @@ void StartManager::popupExitTab(QList<int> fileIndexes)
     int tabIndex = fileIndexes[1];
 
     windows[windowIndex]->activeTab(tabIndex);
+}
+
+void StartManager::handlePopTab(QString tabName, QString filepath, QString content)
+{
+    Window *window = createWindow();
+
+    window->addTabWithContent(tabName, filepath, content);
 }

@@ -56,6 +56,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     connect(tabbar, &Tabbar::switchToFile, this, &Window::handleSwitchToFile, Qt::QueuedConnection);
     connect(tabbar, &Tabbar::closeFile, this, &Window::handleCloseFile, Qt::QueuedConnection);
     connect(tabbar, &Tabbar::tabAddRequested, this, &Window::addBlankTab, Qt::QueuedConnection);
+    connect(tabbar, &Tabbar::tabReleaseRequested, this, &Window::handleTabReleaseRequested, Qt::QueuedConnection);
 
     Utils::applyQss(this, "main.qss");
 }
@@ -239,4 +240,26 @@ void Window::saveFileAsAnotherPath(QString fromPath, QString toPath)
 
     editorMap[toPath]->updatePath(toPath);
     editorMap[toPath]->saveFile();
+}
+
+void Window::handleTabReleaseRequested(QString tabName, QString filepath, int index)
+{
+    tabbar->closeTabWithIndex(index);
+    
+    QString content = editorMap[filepath]->textEditor->toPlainText();
+    popTab(tabName, filepath, content);
+}
+
+void Window::addTabWithContent(QString tabName, QString filepath, QString content)
+{
+    tabbar->addTab(filepath, tabName);
+    
+    Editor *editor = new Editor();
+    editor->updatePath(filepath);
+    editor->textEditor->setPlainText(content);
+    
+    editorMap[filepath] = editor;
+
+    layout->addWidget(editor);
+    layout->setCurrentWidget(editor);
 }

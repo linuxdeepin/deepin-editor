@@ -29,6 +29,7 @@ Tabbar::Tabbar(QWidget *parent) : QWidget(parent)
     connect(tabbar, &DTabBar::tabMoved, this, &Tabbar::handleTabMoved, Qt::QueuedConnection);
     connect(tabbar, &DTabBar::tabCloseRequested, this, &Tabbar::handleTabClosed, Qt::QueuedConnection);
     connect(tabbar, &DTabBar::tabAddRequested, this, &Tabbar::tabAddRequested, Qt::QueuedConnection);
+    connect(tabbar, &DTabBar::tabReleaseRequested, this, &Tabbar::handleTabReleaseRequested, Qt::QueuedConnection);
 }
 
 void Tabbar::addTab(QString filepath, QString tabName)
@@ -113,6 +114,11 @@ void Tabbar::closeTab()
     handleTabClosed(tabbar->currentIndex());
 }
 
+void Tabbar::closeTabWithIndex(int index)
+{
+    handleTabClosed(index);
+}
+
 void Tabbar::closeOtherTabs()
 {
     QString currentFilepath = tabFiles[tabbar->currentIndex()];
@@ -138,8 +144,27 @@ QString Tabbar::getActiveTabPath()
     return tabFiles.value(currentIndex());
 }
 
+QString Tabbar::getTabName(int index)
+{
+    return tabbar->tabText(index);
+}
+
+QString Tabbar::getTabPath(int index)
+{
+    return tabFiles.value(index);
+}
+
 void Tabbar::updateTab(int index, QString filepath, QString tabName)
 {
     tabbar->setTabText(index, tabName);
     tabFiles[index] = filepath;
+}
+
+void Tabbar::handleTabReleaseRequested(int index)
+{
+    if (tabbar->count() > 1) {
+        tabReleaseRequested(getTabName(index), getTabPath(index), index);
+    } else {
+        qDebug() << "Just one tab in current window, don't need create another new window.";
+    }
 }

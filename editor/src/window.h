@@ -59,9 +59,15 @@ public:
                              
     void saveFileAsAnotherPath(QString fromPath, QString toPath);
     
+    void addTabWithContent(QString tabName, QString filepath, QString content);
+                                                                
+signals:
+    void popTab(QString tabName, QString filepath, QString content);
+    
 public slots:
     void handleSwitchToFile(QString filepath);
     void handleCloseFile(QString filepath);
+    void handleTabReleaseRequested(QString tabName, QString filepath, int index);
 
     void addBlankTab();
     

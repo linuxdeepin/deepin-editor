@@ -23,9 +23,13 @@ public:
     void selectPrevTab();
     void closeTab();
     void closeOtherTabs();
+    void closeTabWithIndex(int index);
     
     QString getActiveTabName();
     QString getActiveTabPath();
+    
+    QString getTabName(int index);
+    QString getTabPath(int index);
     
     void updateTab(int index, QString filepath, QString tabName);
                       
@@ -34,12 +38,14 @@ signals:
     void switchToFile(QString filepath);
     void closeFile(QString filepath);
     void tabAddRequested();
+    void tabReleaseRequested(QString tabName, QString filepaht, int index);
                           
 public slots:
     void handleTabbarDoubleClick();
     void handleCurrentIndexChanged(int index);
     void handleTabMoved(int fromIndex, int toIndex);
     void handleTabClosed(int closeIndex);
+    void handleTabReleaseRequested(int index);
     
 private:
     QHBoxLayout *layout;

@@ -42,6 +42,8 @@ public slots:
     Q_SCRIPTABLE void openFilesInWindow(QStringList files);
     Q_SCRIPTABLE void openFilesInTab(QStringList files);
     
+    void handlePopTab(QString tabName, QString filepath, QString content);
+    
 private:
     QList<Window*> windows;
     
