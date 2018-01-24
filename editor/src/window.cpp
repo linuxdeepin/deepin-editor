@@ -263,8 +263,3 @@ void Window::addTabWithContent(QString tabName, QString filepath, QString conten
     layout->addWidget(editor);
     layout->setCurrentWidget(editor);
 }
-
-QPixmap Window::getFileScreenshot(int index)
-{
-    return QPixmap();
-}
