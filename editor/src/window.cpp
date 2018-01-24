@@ -60,6 +60,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     connect(tabbar, &Tabbar::tabReleaseRequested, this, &Window::handleTabReleaseRequested, Qt::QueuedConnection);
 
     Utils::applyQss(this, "main.qss");
+    Utils::applyQss(this->titlebar(), "main.qss");
 }
 
 Window::~Window()
