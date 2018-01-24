@@ -17,6 +17,7 @@ Tabbar::Tabbar(QWidget *parent) : QWidget(parent)
     tabbar->setMovable(true);
     tabbar->setTabsClosable(true);
     tabbar->setVisibleAddButton(true);
+    tabbar->setDragable(true);
 
     layout->addSpacing(10);
     layout->addWidget(iconLabel, 0, Qt::AlignTop);
