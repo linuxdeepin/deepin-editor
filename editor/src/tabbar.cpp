@@ -3,7 +3,7 @@
 #include <QDebug>
 #include "utils.h"
 
-Tabbar::Tabbar(QWidget *parent) : QWidget(parent)
+Tabbar::Tabbar(QMap<QString, Editor*> *editorMap)
 {
     layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -13,11 +13,7 @@ Tabbar::Tabbar(QWidget *parent) : QWidget(parent)
     iconLabel->setPixmap(iconPixmap);
     iconLabel->setFixedSize(24, 40);
 
-    tabbar = new DTabBar();
-    tabbar->setMovable(true);
-    tabbar->setTabsClosable(true);
-    tabbar->setVisibleAddButton(true);
-    tabbar->setDragable(true);
+    tabbar = new TabWidget(editorMap);
 
     layout->addSpacing(10);
     layout->addWidget(iconLabel, 0, Qt::AlignTop);
@@ -25,19 +21,19 @@ Tabbar::Tabbar(QWidget *parent) : QWidget(parent)
     layout->addWidget(tabbar, 0, Qt::AlignTop);
     layout->addSpacing(40);
 
-    connect(tabbar, &DTabBar::tabBarDoubleClicked, this, &Tabbar::handleTabbarDoubleClick, Qt::QueuedConnection);
-    connect(tabbar, &DTabBar::currentChanged, this, &Tabbar::handleCurrentIndexChanged, Qt::QueuedConnection);
-    connect(tabbar, &DTabBar::tabMoved, this, &Tabbar::handleTabMoved, Qt::QueuedConnection);
-    connect(tabbar, &DTabBar::tabCloseRequested, this, &Tabbar::handleTabClosed, Qt::QueuedConnection);
-    connect(tabbar, &DTabBar::tabAddRequested, this, &Tabbar::tabAddRequested, Qt::QueuedConnection);
-    connect(tabbar, &DTabBar::tabReleaseRequested, this, &Tabbar::handleTabReleaseRequested, Qt::QueuedConnection);
+    connect(tabbar, &TabWidget::tabBarDoubleClicked, this, &Tabbar::handleTabbarDoubleClick, Qt::QueuedConnection);
+    connect(tabbar, &TabWidget::currentChanged, this, &Tabbar::handleCurrentIndexChanged, Qt::QueuedConnection);
+    connect(tabbar, &TabWidget::tabMoved, this, &Tabbar::handleTabMoved, Qt::QueuedConnection);
+    connect(tabbar, &TabWidget::tabCloseRequested, this, &Tabbar::handleTabClosed, Qt::QueuedConnection);
+    connect(tabbar, &TabWidget::tabAddRequested, this, &Tabbar::tabAddRequested, Qt::QueuedConnection);
+    connect(tabbar, &TabWidget::tabReleaseRequested, this, &Tabbar::handleTabReleaseRequested, Qt::QueuedConnection);
 }
 
 void Tabbar::addTab(QString filepath, QString tabName)
 {
     int index = currentIndex();
 
-    tabFiles.insert(index + 1, filepath);
+    tabbar->tabFiles.insert(index + 1, filepath);
     tabbar->insertTab(index + 1, tabName);
 
     tabbar->setCurrentIndex(index + 1);
@@ -55,13 +51,13 @@ void Tabbar::handleTabbarDoubleClick()
 
 void Tabbar::handleCurrentIndexChanged(int index)
 {
-    switchToFile(tabFiles.value(index));
+    switchToFile(tabbar->tabFiles.value(index));
 }
 
 int Tabbar::isTabExist(QString filepath)
 {
-    for (int i = 0; i < tabFiles.size(); i++) {
-        if (tabFiles[i] == filepath) {
+    for (int i = 0; i < tabbar->tabFiles.size(); i++) {
+        if (tabbar->tabFiles[i] == filepath) {
             return i;
         }
     }
@@ -71,14 +67,14 @@ int Tabbar::isTabExist(QString filepath)
 
 void Tabbar::handleTabMoved(int fromIndex, int toIndex)
 {
-    tabFiles.swap(fromIndex, toIndex);
+    tabbar->tabFiles.swap(fromIndex, toIndex);
 }
 
 void Tabbar::handleTabClosed(int closeIndex)
 {
-    QString filepath = tabFiles[closeIndex];
+    QString filepath = tabbar->tabFiles[closeIndex];
 
-    tabFiles.takeAt(closeIndex);
+    tabbar->tabFiles.takeAt(closeIndex);
     tabbar->removeTab(closeIndex);
 
     closeFile(filepath);
@@ -122,10 +118,10 @@ void Tabbar::closeTabWithIndex(int index)
 
 void Tabbar::closeOtherTabs()
 {
-    QString currentFilepath = tabFiles[tabbar->currentIndex()];
+    QString currentFilepath = tabbar->tabFiles[tabbar->currentIndex()];
     
-    while (tabFiles.size() > 1) {
-        QString firstPath = tabFiles[0];
+    while (tabbar->tabFiles.size() > 1) {
+        QString firstPath = tabbar->tabFiles[0];
         if (firstPath != currentFilepath) {
             handleTabClosed(0);
         } else {
@@ -142,7 +138,7 @@ QString Tabbar::getActiveTabName()
 
 QString Tabbar::getActiveTabPath()
 {
-    return tabFiles.value(currentIndex());
+    return tabbar->tabFiles.value(currentIndex());
 }
 
 QString Tabbar::getTabName(int index)
@@ -152,13 +148,13 @@ QString Tabbar::getTabName(int index)
 
 QString Tabbar::getTabPath(int index)
 {
-    return tabFiles.value(index);
+    return tabbar->tabFiles.value(index);
 }
 
 void Tabbar::updateTab(int index, QString filepath, QString tabName)
 {
     tabbar->setTabText(index, tabName);
-    tabFiles[index] = filepath;
+    tabbar->tabFiles[index] = filepath;
 }
 
 void Tabbar::handleTabReleaseRequested(int index)

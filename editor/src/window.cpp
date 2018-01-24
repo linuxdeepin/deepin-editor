@@ -47,7 +47,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
 
     this->setCentralWidget(layoutWidget);
 
-    tabbar = new Tabbar();
+    tabbar = new Tabbar(&editorMap);
 
     this->titlebar()->setCustomWidget(tabbar, Qt::AlignVCenter, false);
     this->titlebar()->setSeparatorVisible(true);
@@ -262,4 +262,9 @@ void Window::addTabWithContent(QString tabName, QString filepath, QString conten
 
     layout->addWidget(editor);
     layout->setCurrentWidget(editor);
+}
+
+QPixmap Window::getFileScreenshot(int index)
+{
+    return QPixmap();
 }

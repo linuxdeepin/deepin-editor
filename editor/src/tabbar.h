@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <QHBoxLayout>
-#include <DTabBar>
+#include "tabwidget.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -12,7 +12,7 @@ class Tabbar : public QWidget
     Q_OBJECT
     
 public:
-    Tabbar(QWidget *parent=0);
+    Tabbar(QMap<QString, Editor*> *editorMap);
     
     void addTab(QString filepath, QString tabName);
     int currentIndex();
@@ -49,8 +49,7 @@ public slots:
     
 private:
     QHBoxLayout *layout;
-    DTabBar *tabbar;
-    QList<QString> tabFiles;
+    TabWidget *tabbar;
 };
 
 #endif

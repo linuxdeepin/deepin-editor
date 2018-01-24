@@ -60,6 +60,8 @@ public:
     void saveFileAsAnotherPath(QString fromPath, QString toPath);
     
     void addTabWithContent(QString tabName, QString filepath, QString content);
+    
+    static QPixmap getFileScreenshot(int index);
                                                                 
 signals:
     void popTab(QString tabName, QString filepath, QString content);

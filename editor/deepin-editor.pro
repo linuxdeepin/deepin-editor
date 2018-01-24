@@ -17,6 +17,7 @@ HEADERS += src/window.h \
            src/dbusinterface.h \		   
 	   src/texteditor.h \		   
 	   src/tabbar.h \		   
+	   src/tabwidget.h \		   
 	   src/editor.h \		   
 	   src/utils.h		   
 SOURCES += src/window.cpp \
@@ -25,6 +26,7 @@ SOURCES += src/window.cpp \
            src/dbusinterface.cpp \		   
 	   src/texteditor.cpp \		   
 	   src/tabbar.cpp \		   
+	   src/tabwidget.cpp \		   
 	   src/editor.cpp \		   
 	   src/utils.cpp \		   
 	   src/main.cpp		   
