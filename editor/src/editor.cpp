@@ -40,7 +40,23 @@ void Editor::loadFile(QString filepath)
 
 void Editor::saveFile()
 {
-    if (Utils::fileIsWritable(filepath)) {
+    bool fileCreateFailed = false;
+    if (!Utils::fileExists(filepath)) {
+        QString directory = QFileInfo(filepath).dir().absolutePath();
+        
+        // Create file if filepath is not exists.
+        if (Utils::fileIsWritable(directory)) {
+            QDir().mkpath(directory);
+            if (QFile(filepath).open(QIODevice::ReadWrite)) {
+                qDebug() << QString("File %1 not exists, create one.").arg(filepath);
+            }
+        } else {
+            // Make flag fileCreateFailed with 'true' if no permission to create.
+            fileCreateFailed = true;
+        }
+    }
+
+    if (Utils::fileIsWritable(filepath) && !fileCreateFailed) {
         QFile file(filepath);
         if(!file.open(QIODevice::WriteOnly | QIODevice::Text)){
             qDebug() << "Can't write file: " << filepath;

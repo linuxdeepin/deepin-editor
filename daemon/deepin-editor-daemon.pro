@@ -12,10 +12,12 @@ PKGCONFIG += dtkwidget polkit-qt5-1
 # Input
 HEADERS += src/dbus_adaptor.h \
            src/dbus.h \ 
+           src/utils.h \ 
            src/main.h \
 	   src/PolicyKitHelper.h
 SOURCES += src/dbus_adaptor.cpp \
            src/dbus.cpp \  
+           src/utils.cpp \  
            src/main.cpp \ 
 	   src/PolicyKitHelper.cpp
 

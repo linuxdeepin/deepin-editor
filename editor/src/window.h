@@ -56,6 +56,8 @@ public:
     void toggleFullscreen();
                            
     Editor* getActiveEditor();
+                             
+    void saveFileAsAnotherPath(QString fromPath, QString toPath);
     
 public slots:
     void handleSwitchToFile(QString filepath);

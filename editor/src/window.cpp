@@ -178,13 +178,8 @@ void Window::saveFile()
 
         if (filepath != "") {
             QString tabPath = tabbar->getActiveTabPath();
-
-            tabbar->updateTab(tabbar->currentIndex(), filepath, QFileInfo(filepath).fileName());
-
-            editorMap[filepath] = editorMap.take(tabPath);
-
-            editorMap[filepath]->updatePath(filepath);
-            editorMap[filepath]->saveFile();
+            
+            saveFileAsAnotherPath(tabPath, filepath);
         }
     } else {
         auto toast = new DToast(this);
@@ -204,12 +199,7 @@ void Window::saveAsFile()
     QString tabPath = tabbar->getActiveTabPath();
     
     if (filepath != "" && filepath != tabPath) {
-        tabbar->updateTab(tabbar->currentIndex(), filepath, QFileInfo(filepath).fileName());
-
-        editorMap[filepath] = editorMap.take(tabPath);
-
-        editorMap[filepath]->updatePath(filepath);
-        editorMap[filepath]->saveFile();
+        saveFileAsAnotherPath(tabPath, filepath);
     }
 }
 
@@ -239,4 +229,14 @@ Editor* Window::getActiveEditor()
     QString tabPath = tabbar->getActiveTabPath();
 
     return editorMap[tabPath];
+}
+
+void Window::saveFileAsAnotherPath(QString fromPath, QString toPath)
+{
+    tabbar->updateTab(tabbar->currentIndex(), toPath, QFileInfo(toPath).fileName());
+
+    editorMap[toPath] = editorMap.take(fromPath);
+
+    editorMap[toPath]->updatePath(toPath);
+    editorMap[toPath]->saveFile();
 }
