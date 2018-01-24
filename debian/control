@@ -1,15 +1,15 @@
 Source: deepin-editor
-Section: devel
+Section: editors
 Priority: optional
 Maintainer: Deepin Packages Builder <packages@linuxdeepin.com>
-Build-Depends: debhelper (>= 9), qt5-qmake, qt5-default, qtbase5-dev, pkg-config, libdtkcore-dev,  libdtkwidget-dev, libxcb-util0-dev, libxcb1-dev, libqt5widgets5, libqt5x11extras5-dev, libqt5dbus5, libqt5gui5, libqt5network5, libprocps-dev, libxext-dev, libxtst-dev
+Build-Depends: debhelper (>= 9), qt5-qmake, qtbase5-dev, pkg-config, libdtkcore-dev,  libdtkwidget-dev, 
+ libxcb-util0-dev, libxcb1-dev, libqt5x11extras5-dev, 
+ libprocps-dev, libxext-dev, libxtst-dev, libpolkit-qt5-1-dev
 Standards-Version: 3.9.8
 Homepage: https://www.deepin.org
-#Vcs-Git: https://anonscm.debian.org/collab-maint/deepin-editor.git
-#Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/deepin-editor.git
 
 Package: deepin-editor
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: <insert up to 60 chars description>
- <insert long description, indented with spaces>
+Description: dtk based text editor
+ Advanced text editor based on dtk.
