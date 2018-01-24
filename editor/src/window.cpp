@@ -51,6 +51,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
 
     this->titlebar()->setCustomWidget(tabbar, Qt::AlignVCenter, false);
     this->titlebar()->setSeparatorVisible(true);
+    this->titlebar()->setAutoHideOnFullscreen(true);
 
     connect(tabbar, &Tabbar::doubleClicked, this->titlebar(), &DTitlebar::doubleClicked, Qt::QueuedConnection);
     connect(tabbar, &Tabbar::switchToFile, this, &Window::handleSwitchToFile, Qt::QueuedConnection);
