@@ -10,6 +10,10 @@ TabWidget::TabWidget()
     setVisibleAddButton(true);
     setDragable(true);
     
+    QColor dropColor("#2CA7F8");
+    dropColor.setAlpha(128);
+    setMaskColor(dropColor);
+    
     setStartDragDistance(20);
 }
 
