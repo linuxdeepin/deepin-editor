@@ -2,7 +2,6 @@
 #define TABWIDGET_H
 
 #include <DTabBar>
-#include "editor.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -13,14 +12,14 @@ class TabWidget : public DTabBar
     Q_OBJECT
     
 public:
-    TabWidget(QMap<QString, Editor*> *editorMap);
+    TabWidget();
     
     QPixmap createDragPixmapFramTab(int index, const QStyleOptionTab &option, QPoint *hotspot) const;
+    QMimeData *createMimeDataFromTab(int index, const QStyleOptionTab &option) const;
+    bool canInsertFromMimeData(int index, const QMimeData *source) const;
+    void insertFromMimeData(int index, const QMimeData *source);    
     
     QList<QString> tabFiles;
-    
-private:
-    QMap<QString, Editor*> *editorMap;
 };
 
 #endif

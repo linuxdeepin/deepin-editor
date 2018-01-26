@@ -61,6 +61,8 @@ public:
     
     void addTabWithContent(QString tabName, QString filepath, QString content);
     
+    TextEditor* getTextEditor(QString filepath);
+    
 signals:
     void popTab(QString tabName, QString filepath, QString content);
     

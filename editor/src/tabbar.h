@@ -12,7 +12,7 @@ class Tabbar : public QWidget
     Q_OBJECT
     
 public:
-    Tabbar(QMap<QString, Editor*> *editorMap);
+    Tabbar();
     
     void addTab(QString filepath, QString tabName);
     int currentIndex();
@@ -46,6 +46,7 @@ public slots:
     void handleTabMoved(int fromIndex, int toIndex);
     void handleTabClosed(int closeIndex);
     void handleTabReleaseRequested(int index);
+    void handleTabDroped(int index, Qt::DropAction action, QObject *target);
     
 private:
     QHBoxLayout *layout;

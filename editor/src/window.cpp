@@ -47,7 +47,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
 
     this->setCentralWidget(layoutWidget);
 
-    tabbar = new Tabbar(&editorMap);
+    tabbar = new Tabbar();
 
     this->titlebar()->setCustomWidget(tabbar, Qt::AlignVCenter, false);
     this->titlebar()->setSeparatorVisible(true);
@@ -264,4 +264,9 @@ void Window::addTabWithContent(QString tabName, QString filepath, QString conten
 
     layout->addWidget(editor);
     layout->setCurrentWidget(editor);
+}
+
+TextEditor* Window::getTextEditor(QString filepath)
+{
+    return editorMap[filepath]->textEditor;
 }

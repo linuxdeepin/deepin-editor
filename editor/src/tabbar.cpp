@@ -3,7 +3,7 @@
 #include <QDebug>
 #include "utils.h"
 
-Tabbar::Tabbar(QMap<QString, Editor*> *editorMap)
+Tabbar::Tabbar()
 {
     layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -13,7 +13,7 @@ Tabbar::Tabbar(QMap<QString, Editor*> *editorMap)
     iconLabel->setPixmap(iconPixmap);
     iconLabel->setFixedSize(24, 40);
 
-    tabbar = new TabWidget(editorMap);
+    tabbar = new TabWidget();
 
     layout->addSpacing(10);
     layout->addWidget(iconLabel, 0, Qt::AlignTop);
@@ -27,6 +27,7 @@ Tabbar::Tabbar(QMap<QString, Editor*> *editorMap)
     connect(tabbar, &TabWidget::tabCloseRequested, this, &Tabbar::handleTabClosed, Qt::QueuedConnection);
     connect(tabbar, &TabWidget::tabAddRequested, this, &Tabbar::tabAddRequested, Qt::QueuedConnection);
     connect(tabbar, &TabWidget::tabReleaseRequested, this, &Tabbar::handleTabReleaseRequested, Qt::QueuedConnection);
+    connect(tabbar, &TabWidget::tabDroped, this, &Tabbar::handleTabDroped, Qt::QueuedConnection);
 }
 
 void Tabbar::addTab(QString filepath, QString tabName)
@@ -119,7 +120,7 @@ void Tabbar::closeTabWithIndex(int index)
 void Tabbar::closeOtherTabs()
 {
     QString currentFilepath = tabbar->tabFiles[tabbar->currentIndex()];
-    
+
     while (tabbar->tabFiles.size() > 1) {
         QString firstPath = tabbar->tabFiles[0];
         if (firstPath != currentFilepath) {
@@ -163,5 +164,13 @@ void Tabbar::handleTabReleaseRequested(int index)
         tabReleaseRequested(getTabName(index), getTabPath(index), index);
     } else {
         qDebug() << "Just one tab in current window, don't need create another new window.";
+    }
+}
+
+void Tabbar::handleTabDroped(int index, Qt::DropAction action, QObject *target)
+{
+    // Remove match tab if tab drop to tabbar of deepin-editor.
+    if (QString::fromUtf8(target->metaObject()->className()) == "TabWidget") {
+        handleTabClosed(index);
     }
 }
