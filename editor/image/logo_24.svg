@@ -4,37 +4,17 @@
     <title>deepin-editor</title>
     <desc>Created with Sketch.</desc>
     <defs>
-        <polygon id="path-1" points="15.0346816 6.84321795 15.473176 6.40472355 17.2452459 8.1767935 16.8067515 8.61528789"></polygon>
-        <polygon id="path-2" points="14.409934 7.46796552 16.1820039 9.24003546 9.10168674 16.3203527 8.98439367 16.3871455 7.26348636 14.6662382 7.32961679 14.5482827"></polygon>
-        <path d="M16.0979235,5.77997599 L17.4282254,4.44967414 C17.6611775,4.216722 18.0404344,4.21828884 18.2753193,4.45317377 L19.1967957,5.37465014 C19.4316806,5.60953507 19.4332475,5.98879194 19.2002953,6.22174408 L17.8699935,7.55204593 L16.0979235,5.77997599 Z" id="path-3"></path>
-        <polygon id="path-4" points="6.81462185 15.4668689 8.18825946 16.8405065 7.16090227 17.425538 6.23539264 16.5000284"></polygon>
-        <polygon id="path-5" points="5.88001109 17.0533218 6.61013865 17.7834493 4.92538424 18.7475298"></polygon>
+        <linearGradient x1="45.5391037%" y1="0%" x2="78.4079932%" y2="98.3537946%" id="linearGradient-1">
+            <stop stop-color="#2EA3D5" offset="0%"></stop>
+            <stop stop-color="#6FAAF2" offset="100%"></stop>
+        </linearGradient>
     </defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="deepin-editor">
             <image id="Bitmap" x="1" y="0" width="22" height="24" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAYCAYAAAD+vg1LAAAAAXNSR0IArs4c6QAAAFhJREFUSA1jZGBgYARiZigNpCgG/4Em/GUBEiBDxSg2DtWAV0xAPsjF1AaMIINpAkYNhgfraFCMBgU8BOCM0VQxGhTwEIAzRlMFSlCAalVqg/+gipQm1T8A0oYHNnWFeloAAAAASUVORK5CYII="></image>
-            <rect id="Rectangle-3" fill="#FFFFFF" x="2" y="1" width="20" height="22" rx="0.75"></rect>
-            <path d="M7,5 L7,2 L8,2 L8,5 L19,5 L19,6 L8,6 L8,9 L19,9 L19,10 L8,10 L8,13 L19,13 L19,14 L8,14 L8,17 L19,17 L19,18 L8,18 L8,22 L7,22 L7,18 L5,18 L5,17 L7,17 L7,14 L5,14 L5,13 L7,13 L7,10 L5,10 L5,9 L7,9 L7,6 L5,6 L5,5 L7,5 Z" id="Combined-Shape" fill-opacity="0.1" fill="#000000"></path>
-            <g id="Path" stroke-linecap="round" stroke-linejoin="round">
-                <use fill="#E9E9E9" fill-rule="evenodd" xlink:href="#path-1"></use>
-                <path stroke="#FFFFFF" stroke-width="1" d="M15.473176,7.11183034 L15.7417884,6.84321795 L15.6568473,6.75827695 L15.388235,6.75827695 L15.388235,7.02688933 L15.473176,7.11183034 Z M16.5381391,8.1767935 L16.6230801,8.2617345 L16.8916925,8.2617345 L16.8916925,7.99312212 L16.8067515,7.90818111 L16.5381391,8.1767935 Z M14.3275748,6.84321795 L15.473176,5.69761677 L17.9523527,8.1767935 L16.8067515,9.32239468 L14.3275748,6.84321795 Z"></path>
-            </g>
-            <g id="Path" stroke-linecap="round" stroke-linejoin="round">
-                <use fill="#FFA900" fill-rule="evenodd" xlink:href="#path-2"></use>
-                <path stroke="#FFFFFF" stroke-width="1" d="M14.409934,6.76085874 L16.8891107,9.24003546 L9.45524013,16.6739061 L9.34910882,16.7548435 L8.90046589,17.0103246 L6.64217056,14.7520292 L6.89348259,14.303769 L6.9760634,14.1947293 L14.409934,6.76085874 Z"></path>
-            </g>
-            <g id="Path" stroke-linecap="round" stroke-linejoin="round">
-                <use fill="#F876A6" fill-rule="evenodd" xlink:href="#path-3"></use>
-                <path stroke="#FFFFFF" stroke-width="1" d="M15.3908168,5.77997599 L17.074672,4.09612074 C17.5035432,3.66724953 18.1993766,3.67012426 18.6288727,4.09962038 L19.5503491,5.02109675 C19.9798452,5.45059287 19.9827199,6.14642626 19.5538487,6.57529747 L17.8699935,8.25915271 L15.3908168,5.77997599 Z"></path>
-            </g>
-            <g id="Path" stroke-linecap="round" stroke-linejoin="round">
-                <use fill="#FFAD9B" fill-rule="evenodd" xlink:href="#path-4"></use>
-                <path stroke="#FFFFFF" stroke-width="1" d="M6.70134347,14.6464837 L9.00541866,16.9505589 L7.07697449,18.048717 L5.61407684,16.5858193 L6.70134347,14.6464837 Z"></path>
-            </g>
-            <g id="Path" stroke-linecap="round" stroke-linejoin="round">
-                <use fill="#312F2F" fill-rule="evenodd" xlink:href="#path-5"></use>
-                <path stroke="#FFFFFF" stroke-width="1" d="M5.79398788,17.6744054 L5.99224932,17.8726668 L6.2514721,17.4126155 L5.79398788,17.6744054 Z M5.76777285,16.2339768 L7.42628941,17.8924933 L3.59929638,20.0824441 L5.76777285,16.2339768 Z"></path>
-            </g>
+            <rect id="Rectangle-3" fill="url(#linearGradient-1)" x="2" y="1" width="20" height="22" rx="0.75"></rect>
+            <path d="M7,5 L7,2 L8,2 L8,5 L19,5 L19,6 L8,6 L8,9 L19,9 L19,10 L8,10 L8,13 L19,13 L19,14 L8,14 L8,17 L19,17 L19,18 L8,18 L8,22 L7,22 L7,18 L5,18 L5,17 L7,17 L7,14 L5,14 L5,13 L7,13 L7,10 L5,10 L5,9 L7,9 L7,6 L5,6 L5,5 L7,5 Z" id="Combined-Shape" fill-opacity="0.1" fill="#FFFFFF"></path>
+            <path d="M10.734375,14.2265625 L9.203125,10.5234375 L9.0703125,10.5234375 L7.625,14.2265625 L10.734375,14.2265625 Z M4.734375,17.59375 C5.11979359,17.5677082 5.42968633,17.3932308 5.6640625,17.0703125 C5.81510492,16.8671865 6.03124859,16.4192743 6.3125,15.7265625 L9.8671875,6.96875 L10.3125,6.96875 L13.8828125,15.375 C14.2838562,16.317713 14.5833323,16.9257799 14.78125,17.1992188 C14.9791677,17.4726576 15.2604148,17.6041667 15.625,17.59375 L15.625,18 L10.4453125,18 L10.4453125,17.59375 C10.9661484,17.5729166 11.3085929,17.5286462 11.4726562,17.4609375 C11.6367196,17.3932288 11.71875,17.2213555 11.71875,16.9453125 C11.71875,16.8203119 11.6770837,16.6302096 11.59375,16.375 C11.5416664,16.2239576 11.4713546,16.0416677 11.3828125,15.828125 L10.9765625,14.859375 L7.3828125,14.859375 C7.14843633,15.4947948 6.99739617,15.9088532 6.9296875,16.1015625 C6.7890618,16.5130229 6.71875,16.8124991 6.71875,17 C6.71875,17.2291678 6.8723943,17.3958328 7.1796875,17.5 C7.36198008,17.557292 7.63541484,17.5885416 8,17.59375 L8,18 L4.734375,18 L4.734375,17.59375 Z M16,17 L19,17 L19,18 L16,18 L16,17 Z" id="Combined-Shape" fill="#FFFFFF"></path>
         </g>
     </g>
 </svg>
