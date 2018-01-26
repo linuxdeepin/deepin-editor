@@ -6,7 +6,7 @@
     <file>image/tab_add_hover.png</file>
     <file>image/tab_add_normal.png</file>
     <file>image/tab_add_press.png</file>
-    <file>image/logo_48.png</file>
+    <file>image/logo_48.svg</file>
     <file>image/logo_24.svg</file>
     <file>qss/main.qss</file>
   </qresource>

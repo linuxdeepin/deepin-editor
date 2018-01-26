@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
     app.setApplicationDescription(DApplication::translate("MainWindow", descriptionText) + "\n");
     app.setApplicationAcknowledgementPage(acknowledgementLink);
 
-    app.setWindowIcon(QIcon(Utils::getQrcPath("logo_48.png")));
+    app.setWindowIcon(QIcon(Utils::getQrcPath("logo_48.svg")));
 
     QCommandLineParser parser;
     

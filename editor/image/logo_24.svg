@@ -1,29 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 43 (38999) - http://www.bohemiancoding.com/sketch -->
-    <title>deepin-monitor-24px</title>
+    <!-- Generator: Sketch 48.2 (47327) - http://www.bohemiancoding.com/sketch -->
+    <title>deepin-editor</title>
     <desc>Created with Sketch.</desc>
     <defs>
-        <linearGradient x1="56.4842886%" y1="100%" x2="38.7631206%" y2="0%" id="linearGradient-1">
-            <stop stop-color="#5F3EFF" offset="0%"></stop>
-            <stop stop-color="#6E62FF" offset="100%"></stop>
-        </linearGradient>
+        <path d="M10.406756,5.26916602 L10.406756,4.5672915 L13.2432135,4.5672915 L13.2432135,5.26916602 L10.406756,5.26916602 Z M10.406756,6.26916602 L13.2432135,6.26916602 L13.2432135,17.6022509 L13.202797,17.7495791 L10.4482328,17.7495791 L10.406756,17.6022509 L10.406756,6.26916602 Z M10.406756,3.5672915 L10.406756,1.43794853 C10.406756,1.06507451 10.711538,0.762800397 11.0875058,0.762800397 L12.5624637,0.762800397 C12.9384314,0.762800397 13.2432135,1.06507451 13.2432135,1.43794853 L13.2432135,3.5672915 L10.406756,3.5672915 Z M10.7297594,18.7495791 L12.9284676,18.7495791 L12.5744641,20.0400113 L11.0930503,20.0400113 L10.7297594,18.7495791 Z M11.2514438,20.767245 L12.4201199,20.767245 L11.8433478,22.8871691 L11.2514438,20.767245 Z" id="path-1"></path>
     </defs>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="deepin-monitor-24px">
-            <image id="Bitmap" x="0" y="0" width="24" height="24" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAA1teXP8meAAAAUpJREFUSA211YtugzAMBdDRPTVp//+r07au9XFxxKCtSsmuZBLs5PqRGIaH6xjCTHbjaA6HUX4nc/oFHheakwIR20vIWwgHSH9CkJbtNebWst0MG2z8CLkUwJTMGmvL2dS2mIv0PUTUa2GPvTjOQuQWPJ213qa0FweuRJWAQr3h6zTc9azzwWveUHVsio2TP+cnevWrbDZy53ZcOIe638/xsk9TnwcunOmAk57kFaIz2EmFaJTeTvImVYl0aG/gzBL1Ji6+loHybGmuIpyPWXol+i8HbtGBg+q+eQRb35NbGqBeMiE9ULzt8lBo715on4ryVMTq1ryWcuXoE6GnkkedQGl8Rb1vuVH24sCV5Z5nwLM/E/3aTETOwWfI1bN04N1+mdltQTgHvVSdCamaVlYiJTL9HsV1X0R+yUGsTbCXs5ozICJFuiC2CI7LCTVV8ktM9wAAAABJRU5ErkJggg=="></image>
-            <circle id="Oval-3" fill="url(#linearGradient-1)" cx="12" cy="12" r="11"></circle>
-            <path d="M4,9.75 L19.75,9.75" id="Path-6" stroke="#FFFFFF" stroke-width="0.5" opacity="0.1"></path>
-            <rect id="Rectangle" fill="#FFFFFF" opacity="0.5" x="11" y="20" width="2" height="1"></rect>
-            <path d="M7,5.25 L16.75,5.25" id="Path-6" stroke="#FFFFFF" stroke-width="0.5" opacity="0.1"></path>
-            <path d="M4,14.25 L19.75,14.25" id="Path-6" stroke="#FFFFFF" stroke-width="0.5" opacity="0.1"></path>
-            <path d="M14.25,20 L14.25,4" id="Path-6" stroke="#FFFFFF" stroke-width="0.5" opacity="0.1"></path>
-            <path d="M18.75,16.5 L18.75,7.5" id="Path-6" stroke="#FFFFFF" stroke-width="0.5" opacity="0.1"></path>
-            <path d="M9.75,20 L9.75,3.5" id="Path-6" stroke="#FFFFFF" stroke-width="0.5" opacity="0.1"></path>
-            <path d="M5.25,16.5 L5.25,7.5" id="Path-6" stroke="#FFFFFF" stroke-width="0.5" opacity="0.1"></path>
-            <path d="M7,18.75 L17,18.75" id="Path-6" stroke="#FFFFFF" stroke-width="0.5" opacity="0.1"></path>
-            <path d="M15.7312418,19.6394025 C18.5552366,18.2575135 20.5,15.3558686 20.5,12 C20.5,7.30557963 16.6944204,3.5 12,3.5 C7.30557963,3.5 3.5,7.30557963 3.5,12 C3.5,15.3632572 5.45333629,18.2702883 8.28742353,19.6485078" id="Oval-2" stroke="#FFFFFF" opacity="0.5" stroke-linecap="round"></path>
-            <path d="M5.5,13.394791 C5.5,13.394791 6,14.4825223 7,14.4825223 C9.16666667,14.4825223 7.83333333,8.5 10,8.5 C12.1666667,8.5 10.8333333,14.4825223 13,14.4825223 C14.4444444,14.4825223 14,11.5 15.5,11.5 C17,11.5 15.8518519,14.7544551 18.5,14.4825223" id="Path-5" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round"></path>
+        <g id="deepin-editor">
+            <image id="Bitmap" x="1" y="0" width="22" height="24" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAYCAYAAAD+vg1LAAAAAXNSR0IArs4c6QAAAFhJREFUSA1jZGBgYARiZigNpCgG/4Em/GUBEiBDxSg2DtWAV0xAPsjF1AaMIINpAkYNhgfraFCMBgU8BOCM0VQxGhTwEIAzRlMFSlCAalVqg/+gipQm1T8A0oYHNnWFeloAAAAASUVORK5CYII="></image>
+            <rect id="Rectangle-3" fill="#2662A9" x="2" y="1" width="20" height="22" rx="0.75"></rect>
+            <path d="M7,5 L7,2 L8,2 L8,5 L19,5 L19,6 L8,6 L8,9 L19,9 L19,10 L8,10 L8,13 L19,13 L19,14 L8,14 L8,17 L19,17 L19,18 L8,18 L8,22 L7,22 L7,18 L5,18 L5,17 L7,17 L7,14 L5,14 L5,13 L7,13 L7,10 L5,10 L5,9 L7,9 L7,6 L5,6 L5,5 L7,5 Z" id="Combined-Shape" fill-opacity="0.1" fill="#FFFFFF"></path>
+            <g id="Combined-Shape" stroke-linecap="round" stroke-linejoin="round" transform="translate(11.824985, 11.824985) rotate(-315.000000) translate(-11.824985, -11.824985) ">
+                <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+                <path stroke="#2662A9" stroke-width="1" d="M10.906756,5.0672915 L10.906756,4.76916602 L10.7048815,4.76916602 L10.5558187,4.91822876 L10.7048815,5.0672915 L10.906756,5.0672915 Z M12.7432135,5.0672915 L12.945088,5.0672915 L13.0941507,4.91822876 L12.945088,4.76916602 L12.7432135,4.76916602 L12.7432135,5.0672915 Z M9.90675597,5.76916602 L9.90675597,4.0672915 L13.7432135,4.0672915 L13.7432135,5.76916602 L9.90675597,5.76916602 Z M9.90675597,5.76916602 L13.7432135,5.76916602 L13.7432135,17.6022509 L13.7253988,17.7345285 L13.5841052,18.2495791 L10.0695596,18.2495791 L9.92546521,17.737747 L9.90675597,17.6022509 L9.90675597,5.76916602 Z M9.90675597,4.0672915 L9.90675597,1.43794853 C9.90675597,0.788003097 10.4363163,0.262800397 11.0875058,0.262800397 L12.5624637,0.262800397 C13.2136532,0.262800397 13.7432135,0.788003097 13.7432135,1.43794853 L13.7432135,4.0672915 L9.90675597,4.0672915 Z M10.0695596,18.2495791 L13.5841052,18.2495791 L12.9557723,20.5400113 L10.7143771,20.5400113 L10.0695596,18.2495791 Z M11.7659084,21.267245 L11.9101726,21.267245 L11.8371066,21.0055564 L11.7659084,21.267245 Z M10.592715,20.267245 L13.0743314,20.267245 L11.849589,24.7687817 L10.592715,20.267245 Z"></path>
+            </g>
         </g>
     </g>
 </svg>
