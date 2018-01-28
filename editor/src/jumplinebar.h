@@ -26,6 +26,7 @@ public slots:
     void tempJump();
     
 signals:
+    void cancelJump();
     void backToLine(QString file, int line, int scrollOffset);
     void jumpToLine(QString file, int line);
     void tempJumpToLine(QString file, int line);

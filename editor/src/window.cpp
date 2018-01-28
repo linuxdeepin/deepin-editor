@@ -58,6 +58,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     connect(jumpLineBar, &JumpLineBar::jumpToLine, this, &Window::handleJumpToLine, Qt::QueuedConnection);
     connect(jumpLineBar, &JumpLineBar::tempJumpToLine, this, &Window::handleTempJumpToLine, Qt::QueuedConnection);
     connect(jumpLineBar, &JumpLineBar::backToLine, this, &Window::handleBackToLine, Qt::QueuedConnection);
+    connect(jumpLineBar, &JumpLineBar::cancelJump, this, &Window::handleCancelJump, Qt::QueuedConnection);
     
     DAnchorsBase::setAnchor(jumpLineBar, Qt::AnchorTop, layoutWidget, Qt::AnchorTop);    
     DAnchorsBase::setAnchor(jumpLineBar, Qt::AnchorRight, layoutWidget, Qt::AnchorRight);    
@@ -321,4 +322,9 @@ void Window::handleTempJumpToLine(QString filepath, int line)
     if (editorMap.contains(filepath)) {
         editorMap[filepath]->textEditor->jumpToLine(line);
     }
+}
+
+void Window::handleCancelJump()
+{
+    QTimer::singleShot(0, getActiveEditor()->textEditor, SLOT(setFocus()));
 }

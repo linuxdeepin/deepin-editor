@@ -76,6 +76,7 @@ public slots:
     void handleBackToLine(QString filepath, int line, int scrollOffset);
     void handleJumpToLine(QString filepath, int line);
     void handleTempJumpToLine(QString filepath, int line);
+    void handleCancelJump();
 
     void addBlankTab();
     
