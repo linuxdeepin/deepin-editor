@@ -27,17 +27,17 @@ TextEditor::TextEditor(QPlainTextEdit *parent) : QPlainTextEdit(parent)
     font.setFixedPitch(true);
     font.setPointSize(12);
     this->setFont(font);
-    
+
     highlighter = new Highlighter(document());
-    
+
     lineNumberArea = new LineNumberArea(this);
 
     connect(this, &QPlainTextEdit::updateRequest, this, &TextEditor::handleUpdateRequest);
     connect(this, &QPlainTextEdit::textChanged, this, &TextEditor::updateLineNumber, Qt::QueuedConnection);
     connect(this, &QPlainTextEdit::cursorPositionChanged, this, &TextEditor::highlightCurrentLine, Qt::QueuedConnection);
-    
+
     highlightCurrentLine();
-    
+
     QTimer::singleShot(0, this, SLOT(setFocus()));
 }
 
@@ -57,11 +57,11 @@ void TextEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
     while (block.isValid() && top <= event->rect().bottom()) {
         if (block.isVisible() && bottom >= event->rect().top()) {
             painter.setPen(QColor("#666666"));
-            painter.drawText(0, 
-                             top + lineNumberOffset, 
-                             lineNumberArea->width() - lineNumberPaddingX, 
-                             fontMetrics().height(), 
-                             Qt::AlignRight | Qt::AlignBottom, 
+            painter.drawText(0,
+                             top + lineNumberOffset,
+                             lineNumberArea->width() - lineNumberPaddingX,
+                             fontMetrics().height(),
+                             Qt::AlignRight | Qt::AlignBottom,
                              QString::number(linenumber + 1));
         }
 
@@ -109,11 +109,11 @@ void TextEditor::nextLine()
     moveCursor(QTextCursor::Down);
 }
 
-void TextEditor::prevLine() 
+void TextEditor::prevLine()
 {
     moveCursor(QTextCursor::Up);
 }
-    
+
 void TextEditor::forwardChar()
 {
     moveCursor(QTextCursor::NextCharacter);
@@ -137,7 +137,7 @@ void TextEditor::backwardWord()
 void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
 {
     QString key = Utils::getKeymap(keyEvent);
-    
+
     if (key == "Ctrl + F") {
         forwardChar();
     } else if (key == "Ctrl + B") {
@@ -150,7 +150,20 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         nextLine();
     } else if (key == "Ctrl + P") {
         prevLine();
+    } else if (key == "Ctrl + G") {
+        jumpLine(getCurrentLine(), blockCount());
     } else {
         QPlainTextEdit::keyPressEvent(keyEvent);
     }
+}
+
+int TextEditor::getCurrentLine()
+{
+    return textCursor().blockNumber() + 1;
+}
+
+void TextEditor::jumpToLine(int line)
+{
+    QTextCursor cursor(document()->findBlockByLineNumber(line - 1)); // line - 1 because line number starts from 0
+    setTextCursor(cursor);
 }

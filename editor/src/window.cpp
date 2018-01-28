@@ -34,6 +34,9 @@
 #include <QSvgWidget>
 #include "dthememanager.h"
 #include "utils.h"
+#include "danchors.h"
+
+DWIDGET_USE_NAMESPACE
 
 Window::Window(DMainWindow *parent) : DMainWindow(parent)
 {
@@ -48,6 +51,16 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     this->setCentralWidget(layoutWidget);
 
     tabbar = new Tabbar();
+
+    jumpLineBar = new JumpLineBar(this);
+    QTimer::singleShot(0, jumpLineBar, SLOT(hide()));
+    
+    connect(jumpLineBar, &JumpLineBar::jumpToLine, this, &Window::handleJumpToLine, Qt::QueuedConnection);
+    connect(jumpLineBar, &JumpLineBar::tempJumpToLine, this, &Window::handleTempJumpToLine, Qt::QueuedConnection);
+    connect(jumpLineBar, &JumpLineBar::backToLine, this, &Window::handleBackToLine, Qt::QueuedConnection);
+    
+    DAnchorsBase::setAnchor(jumpLineBar, Qt::AnchorTop, layoutWidget, Qt::AnchorTop);    
+    DAnchorsBase::setAnchor(jumpLineBar, Qt::AnchorRight, layoutWidget, Qt::AnchorRight);    
 
     this->titlebar()->setCustomWidget(tabbar, Qt::AlignVCenter, false);
     this->titlebar()->setSeparatorVisible(true);
@@ -71,7 +84,7 @@ Window::~Window()
 void Window::keyPressEvent(QKeyEvent *keyEvent)
 {
     QString key = Utils::getKeymap(keyEvent);
-    
+
     if (key == "Ctrl + T") {
         addBlankTab();
     } else if (key == "Ctrl + S") {
@@ -79,7 +92,7 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
     } else if (key == "Ctrl + Shift + S") {
         saveAsFile();
     } else if (key == "Ctrl + Tab") {
-            tabbar->selectNextTab();
+        tabbar->selectNextTab();
     } else if (key == "Ctrl + Shift + Backtab") {
         tabbar->selectPrevTab();
     } else if (key == "Ctrl + W") {
@@ -87,7 +100,7 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
     } else if (key == "Ctrl + Shift + W") {
         tabbar->closeOtherTabs();
     } else if (key == "Ctrl + O") {
-            openFile();
+        openFile();
     } else if (key == "F11") {
         toggleFullscreen();
     }
@@ -104,7 +117,7 @@ void Window::addTab(QString file)
         tabbar->addTab(file, QFileInfo(file).fileName());
 
         if (!editorMap.contains(file)) {
-            Editor *editor = new Editor();
+            Editor *editor = createEditor();
             editor->loadFile(file);
 
             editorMap[file] = editor;
@@ -122,7 +135,7 @@ void Window::addBlankTab()
     QString blankTabPath = QString("Blank Tab: %1").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")) ;
 
     tabbar->addTab(blankTabPath, "Blank document");
-    Editor *editor = new Editor();
+    Editor *editor = createEditor();
     editor->updatePath(blankTabPath);
 
     editorMap[blankTabPath] = editor;
@@ -181,7 +194,7 @@ void Window::saveFile()
 
         if (filepath != "") {
             QString tabPath = tabbar->getActiveTabPath();
-            
+
             saveFileAsAnotherPath(tabPath, filepath);
         }
     } else {
@@ -200,7 +213,7 @@ void Window::saveAsFile()
 {
     QString filepath = QFileDialog::getSaveFileName(this, "Save File", QDir::homePath());
     QString tabPath = tabbar->getActiveTabPath();
-    
+
     if (filepath != "" && filepath != tabPath) {
         saveFileAsAnotherPath(tabPath, filepath);
     }
@@ -247,7 +260,7 @@ void Window::saveFileAsAnotherPath(QString fromPath, QString toPath)
 void Window::handleTabReleaseRequested(QString tabName, QString filepath, int index)
 {
     tabbar->closeTabWithIndex(index);
-    
+
     QString content = editorMap[filepath]->textEditor->toPlainText();
     popTab(tabName, filepath, content);
 }
@@ -255,11 +268,11 @@ void Window::handleTabReleaseRequested(QString tabName, QString filepath, int in
 void Window::addTabWithContent(QString tabName, QString filepath, QString content)
 {
     tabbar->addTab(filepath, tabName);
-    
-    Editor *editor = new Editor();
+
+    Editor *editor = createEditor();
     editor->updatePath(filepath);
     editor->textEditor->setPlainText(content);
-    
+
     editorMap[filepath] = editor;
 
     layout->addWidget(editor);
@@ -269,4 +282,43 @@ void Window::addTabWithContent(QString tabName, QString filepath, QString conten
 TextEditor* Window::getTextEditor(QString filepath)
 {
     return editorMap[filepath]->textEditor;
+}
+
+Editor* Window::createEditor()
+{
+    Editor *editor = new Editor();
+
+    connect(editor, &Editor::jumpLine, this, &Window::handleJumpLine, Qt::QueuedConnection);
+    
+    return editor;
+}
+
+void Window::handleJumpLine(QString filepath, int line, int lineCount)
+{
+    jumpLineBar->activeInput(filepath, line, lineCount);
+}
+
+void Window::handleBackToLine(QString filepath, int line)
+{
+    if (editorMap.contains(filepath)) {
+        editorMap[filepath]->textEditor->jumpToLine(line);
+        
+        QTimer::singleShot(0, editorMap[filepath]->textEditor, SLOT(setFocus()));
+    }
+}
+
+void Window::handleJumpToLine(QString filepath, int line)
+{
+    if (editorMap.contains(filepath)) {
+        editorMap[filepath]->textEditor->jumpToLine(line);
+        
+        QTimer::singleShot(0, editorMap[filepath]->textEditor, SLOT(setFocus()));
+    }
+}
+
+void Window::handleTempJumpToLine(QString filepath, int line)
+{
+    if (editorMap.contains(filepath)) {
+        editorMap[filepath]->textEditor->jumpToLine(line);
+    }
 }

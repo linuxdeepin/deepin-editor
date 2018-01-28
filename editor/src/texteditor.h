@@ -23,7 +23,13 @@ public:
     
     void keyPressEvent(QKeyEvent *e);
     
+    int getCurrentLine();
+    void jumpToLine(int line);
+    
     QWidget *lineNumberArea;
+                           
+signals:
+    void jumpLine(int line, int lineCount);
     
 public slots:
     void handleUpdateRequest(const QRect &rect, int dy);

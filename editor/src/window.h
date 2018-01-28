@@ -25,6 +25,7 @@
 #define WINDOW_H
 
 #include "dmainwindow.h"
+#include "jumplinebar.h"
 #include <dimagebutton.h>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -56,6 +57,7 @@ public:
     void toggleFullscreen();
                            
     Editor* getActiveEditor();
+    Editor* createEditor();
                              
     void saveFileAsAnotherPath(QString fromPath, QString toPath);
     
@@ -70,6 +72,10 @@ public slots:
     void handleSwitchToFile(QString filepath);
     void handleCloseFile(QString filepath);
     void handleTabReleaseRequested(QString tabName, QString filepath, int index);
+    void handleJumpLine(QString filepath, int line, int lineCount);
+    void handleBackToLine(QString filepath, int line);
+    void handleJumpToLine(QString filepath, int line);
+    void handleTempJumpToLine(QString filepath, int line);
 
     void addBlankTab();
     
@@ -81,6 +87,8 @@ private:
     QMap<QString, Editor*> editorMap;
     
     int notifyPadding = 20;
+    
+    JumpLineBar *jumpLineBar;
 };
 
 #endif

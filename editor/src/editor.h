@@ -18,9 +18,13 @@ public:
                                  
     TextEditor *textEditor;
                           
+signals:
+    void jumpLine(QString filepath, int line, int lineCount);
+                          
 public slots:
     void handleTextChanged();
     void handleTextChangeTimer();
+    void handleJumpLine(int line, int lineCount);
     
 private:
     

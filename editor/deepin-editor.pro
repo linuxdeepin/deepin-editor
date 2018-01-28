@@ -16,6 +16,8 @@ HEADERS += src/window.h \
            src/startmanager.h \		   
            src/dbusinterface.h \		   
 	   src/texteditor.h \		   
+	   src/jumplinebar.h \		   
+	   src/linebar.h \		   
 	   src/tabbar.h \		   
 	   src/tabwidget.h \		   
 	   src/editor.h \		   
@@ -25,6 +27,8 @@ SOURCES += src/window.cpp \
            src/startmanager.cpp \		   
            src/dbusinterface.cpp \		   
 	   src/texteditor.cpp \		   
+	   src/jumplinebar.cpp \		   
+	   src/linebar.cpp \		   
 	   src/tabbar.cpp \		   
 	   src/tabwidget.cpp \		   
 	   src/editor.cpp \		   

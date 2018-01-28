@@ -26,6 +26,7 @@ Editor::Editor(QWidget *parent) : QWidget(parent)
     connect(autoSaveTimer, &QTimer::timeout, this, &Editor::handleTextChangeTimer);
 
     connect(textEditor, &TextEditor::textChanged, this, &Editor::handleTextChanged, Qt::QueuedConnection);
+    connect(textEditor, &TextEditor::jumpLine, this, &Editor::handleJumpLine, Qt::QueuedConnection);
 }
 
 void Editor::loadFile(QString filepath)
@@ -99,4 +100,9 @@ void Editor::handleTextChangeTimer()
 
         saveFile();
     }
+}
+
+void Editor::handleJumpLine(int line, int lineCount)
+{
+    jumpLine(filepath, line, lineCount);
 }
