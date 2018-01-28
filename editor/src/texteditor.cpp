@@ -3,6 +3,7 @@
 #include <QTextBlock>
 #include <QTimer>
 #include <QPainter>
+#include <QScrollBar>
 #include <QDebug>
 
 class LineNumberArea : public QWidget
@@ -166,4 +167,13 @@ void TextEditor::jumpToLine(int line)
 {
     QTextCursor cursor(document()->findBlockByLineNumber(line - 1)); // line - 1 because line number starts from 0
     setTextCursor(cursor);
+}
+
+void TextEditor::keepCurrentLineAtCenter()
+{
+    QScrollBar *scrollbar = verticalScrollBar();
+
+    int currentLine = cursorRect().top() / cursorRect().height();
+    int halfEditorLines = rect().height() / 2 / cursorRect().height();
+    scrollbar->setValue(scrollbar->value() + currentLine - halfEditorLines);
 }

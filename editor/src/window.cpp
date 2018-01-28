@@ -311,6 +311,7 @@ void Window::handleJumpToLine(QString filepath, int line)
 {
     if (editorMap.contains(filepath)) {
         editorMap[filepath]->textEditor->jumpToLine(line);
+        editorMap[filepath]->textEditor->keepCurrentLineAtCenter();
         
         QTimer::singleShot(0, editorMap[filepath]->textEditor, SLOT(setFocus()));
     }
@@ -320,5 +321,6 @@ void Window::handleTempJumpToLine(QString filepath, int line)
 {
     if (editorMap.contains(filepath)) {
         editorMap[filepath]->textEditor->jumpToLine(line);
+        editorMap[filepath]->textEditor->keepCurrentLineAtCenter();
     }
 }

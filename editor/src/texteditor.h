@@ -26,6 +26,8 @@ public:
     int getCurrentLine();
     void jumpToLine(int line);
     
+    void keepCurrentLineAtCenter();
+    
     QWidget *lineNumberArea;
                            
 signals:
