@@ -53,7 +53,9 @@ void JumpLineBar::back()
 void JumpLineBar::tempJump()
 {
     QString content = editLine->text();
-    tempJumpToLine(jumpFile, content.toInt());
+    if (content != "") {
+        tempJumpToLine(jumpFile, content.toInt());
+    }
 }
 
 void JumpLineBar::jump()
