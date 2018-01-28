@@ -38,6 +38,12 @@ TextEditor::TextEditor(QPlainTextEdit *parent) : QPlainTextEdit(parent)
     connect(this, &QPlainTextEdit::cursorPositionChanged, this, &TextEditor::highlightCurrentLine, Qt::QueuedConnection);
 
     highlightCurrentLine();
+    
+    scrollAnimation = new QPropertyAnimation(verticalScrollBar(), "value");
+    scrollAnimation->setEasingCurve(QEasingCurve::InOutExpo);
+    scrollAnimation->setDuration(300);
+    
+    connect(scrollAnimation, &QPropertyAnimation::finished, this, &TextEditor::handleScrollFinish, Qt::QueuedConnection);    
 
     QTimer::singleShot(0, this, SLOT(setFocus()));
 }
@@ -152,7 +158,9 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
     } else if (key == "Ctrl + P") {
         prevLine();
     } else if (key == "Ctrl + G") {
-        jumpLine(getCurrentLine(), blockCount());
+        QScrollBar *scrollbar = verticalScrollBar();
+
+        jumpLine(getCurrentLine(), blockCount(), scrollbar->value());
     } else {
         QPlainTextEdit::keyPressEvent(keyEvent);
     }
@@ -167,6 +175,8 @@ void TextEditor::jumpToLine(int line)
 {
     QTextCursor cursor(document()->findBlockByLineNumber(line - 1)); // line - 1 because line number starts from 0
     setTextCursor(cursor);
+    
+    keepCurrentLineAtCenter();
 }
 
 void TextEditor::keepCurrentLineAtCenter()
@@ -176,4 +186,20 @@ void TextEditor::keepCurrentLineAtCenter()
     int currentLine = cursorRect().top() / cursorRect().height();
     int halfEditorLines = rect().height() / 2 / cursorRect().height();
     scrollbar->setValue(scrollbar->value() + currentLine - halfEditorLines);
+}
+
+void TextEditor::scrollToLine(int scrollOffset, int line)
+{
+    scrollLineNumber = line;
+    
+    QScrollBar *scrollbar = verticalScrollBar();
+
+    scrollAnimation->setStartValue(scrollbar->value());
+    scrollAnimation->setEndValue(scrollOffset);
+    scrollAnimation->start();
+}
+
+void TextEditor::handleScrollFinish()
+{
+    jumpToLine(scrollLineNumber);
 }

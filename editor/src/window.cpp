@@ -293,15 +293,15 @@ Editor* Window::createEditor()
     return editor;
 }
 
-void Window::handleJumpLine(QString filepath, int line, int lineCount)
+void Window::handleJumpLine(QString filepath, int line, int lineCount, int scrollOffset)
 {
-    jumpLineBar->activeInput(filepath, line, lineCount);
+    jumpLineBar->activeInput(filepath, line, lineCount, scrollOffset);
 }
 
-void Window::handleBackToLine(QString filepath, int line)
+void Window::handleBackToLine(QString filepath, int line, int scrollOffset)
 {
     if (editorMap.contains(filepath)) {
-        editorMap[filepath]->textEditor->jumpToLine(line);
+        editorMap[filepath]->textEditor->scrollToLine(scrollOffset, line);
         
         QTimer::singleShot(0, editorMap[filepath]->textEditor, SLOT(setFocus()));
     }
@@ -311,7 +311,6 @@ void Window::handleJumpToLine(QString filepath, int line)
 {
     if (editorMap.contains(filepath)) {
         editorMap[filepath]->textEditor->jumpToLine(line);
-        editorMap[filepath]->textEditor->keepCurrentLineAtCenter();
         
         QTimer::singleShot(0, editorMap[filepath]->textEditor, SLOT(setFocus()));
     }
@@ -321,6 +320,5 @@ void Window::handleTempJumpToLine(QString filepath, int line)
 {
     if (editorMap.contains(filepath)) {
         editorMap[filepath]->textEditor->jumpToLine(line);
-        editorMap[filepath]->textEditor->keepCurrentLineAtCenter();
     }
 }

@@ -17,7 +17,7 @@ class JumpLineBar : public QWidget
 public:
     JumpLineBar(QWidget *parent = 0);
     
-    void activeInput(QString file, int line, int lineCount);
+    void activeInput(QString file, int line, int lineCount, int scrollOffset);
     
 public slots:    
     void cancel();
@@ -26,7 +26,7 @@ public slots:
     void tempJump();
     
 signals:
-    void backToLine(QString file, int line);
+    void backToLine(QString file, int line, int scrollOffset);
     void jumpToLine(QString file, int line);
     void tempJumpToLine(QString file, int line);
     
@@ -40,6 +40,7 @@ private:
     
     QString jumpFile;
     int lineBeforeJump;
+    int jumpFileScrollOffset;
     
     QIntValidator *lineValidator;
 };

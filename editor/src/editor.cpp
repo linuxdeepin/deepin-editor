@@ -102,7 +102,7 @@ void Editor::handleTextChangeTimer()
     }
 }
 
-void Editor::handleJumpLine(int line, int lineCount)
+void Editor::handleJumpLine(int line, int lineCount, int scrollOffset)
 {
-    jumpLine(filepath, line, lineCount);
+    jumpLine(filepath, line, lineCount, scrollOffset);
 }

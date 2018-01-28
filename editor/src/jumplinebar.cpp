@@ -24,10 +24,11 @@ JumpLineBar::JumpLineBar(QWidget *parent) : QWidget(parent)
     connect(editLine, &LineBar::textChanged, this, &JumpLineBar::tempJump, Qt::QueuedConnection);
 }
 
-void JumpLineBar::activeInput(QString file, int line, int lineCount)
+void JumpLineBar::activeInput(QString file, int line, int lineCount, int scrollOffset)
 {
     jumpFile = file;
     lineBeforeJump = line;
+    jumpFileScrollOffset = scrollOffset;
     lineValidator->setRange(1, lineCount);
     
     editLine->setText("");
@@ -47,7 +48,7 @@ void JumpLineBar::back()
 {
     hide();
     
-    backToLine(jumpFile, lineBeforeJump);
+    backToLine(jumpFile, lineBeforeJump, jumpFileScrollOffset);
 }
 
 void JumpLineBar::tempJump()
@@ -65,8 +66,6 @@ void JumpLineBar::jump()
     QString content = editLine->text();
     if (content != "") {
         jumpToLine(jumpFile, content.toInt());
-    } else {
-        backToLine(jumpFile, lineBeforeJump);
     }
 }
 

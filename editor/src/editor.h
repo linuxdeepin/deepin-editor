@@ -19,12 +19,12 @@ public:
     TextEditor *textEditor;
                           
 signals:
-    void jumpLine(QString filepath, int line, int lineCount);
+    void jumpLine(QString filepath, int line, int lineCount, int scrollOffset);
                           
 public slots:
     void handleTextChanged();
     void handleTextChangeTimer();
-    void handleJumpLine(int line, int lineCount);
+    void handleJumpLine(int line, int lineCount, int scrollOffset);
     
 private:
     

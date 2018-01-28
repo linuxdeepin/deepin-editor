@@ -4,6 +4,7 @@
 #include "highlighter.h"
 #include <QPlainTextEdit>
 #include <QPaintEvent>
+#include <QPropertyAnimation>
 
 class TextEditor : public QPlainTextEdit
 {
@@ -27,21 +28,26 @@ public:
     void jumpToLine(int line);
     
     void keepCurrentLineAtCenter();
+    void scrollToLine(int scrollOffset, int line);
     
     QWidget *lineNumberArea;
                            
 signals:
-    void jumpLine(int line, int lineCount);
+    void jumpLine(int line, int lineCount, int scrollOffset);
     
 public slots:
     void handleUpdateRequest(const QRect &rect, int dy);
     void updateLineNumber();
     void highlightCurrentLine();
+    void handleScrollFinish();
     
 private:
     int lineNumberPaddingX = 5;
     int lineNumberOffset = 2;
+    int scrollLineNumber;
     Highlighter *highlighter;
+    
+    QPropertyAnimation *scrollAnimation;
 };
 
 #endif

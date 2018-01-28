@@ -72,8 +72,8 @@ public slots:
     void handleSwitchToFile(QString filepath);
     void handleCloseFile(QString filepath);
     void handleTabReleaseRequested(QString tabName, QString filepath, int index);
-    void handleJumpLine(QString filepath, int line, int lineCount);
-    void handleBackToLine(QString filepath, int line);
+    void handleJumpLine(QString filepath, int line, int lineCount, int scrollOffset);
+    void handleBackToLine(QString filepath, int line, int scrollOffset);
     void handleJumpToLine(QString filepath, int line);
     void handleTempJumpToLine(QString filepath, int line);
 
