@@ -2,9 +2,14 @@
 #include "window.h"
 #include "texteditor.h"
 #include <QDebug>
+#include <QStyleFactory>
 
 TabWidget::TabWidget()
 {
+    installEventFilter(this);   // add event filter
+
+    rightClickTab = -1;
+
     setMovable(true);
     setTabsClosable(true);
     setVisibleAddButton(true);
@@ -58,4 +63,55 @@ void TabWidget::insertFromMimeData(int, const QMimeData *source)
     QString tabContent = content.remove(0, tabName.size() + tabPath.size() + 2); // 2 mean two \n char
 
     static_cast<Window*>(this->window())->addTabWithContent(tabName, tabPath, tabContent);
+}
+
+bool TabWidget::eventFilter(QObject *, QEvent *event)
+{
+    if (event->type() == QEvent::MouseButtonPress) {
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
+        if (mouseEvent->button() == Qt::RightButton) {
+            QPoint position = mouseEvent->pos();
+            rightClickTab = -1;
+
+            for (int i = 0; i < count(); i++) {
+                if (tabRect(i).contains(position)) {
+                    rightClickTab = i;
+                    break;
+                }
+            }
+
+            if (rightClickTab >= 0) {
+                menu = new QMenu();
+                menu->setStyle(QStyleFactory::create("dlight"));
+                closeTabAction = new QAction("Close Tab", this);
+                closeOtherTabAction = new QAction("Close Other Tabs", this);
+                
+                connect(closeTabAction, &QAction::triggered, this, &TabWidget::handleCloseTab);
+                connect(closeOtherTabAction, &QAction::triggered, this, &TabWidget::handleCloseOtherTabs);
+                
+                menu->addAction(closeTabAction);
+                menu->addAction(closeOtherTabAction);
+                
+                menu->exec(this->mapToGlobal(position));
+
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+void TabWidget::handleCloseTab()
+{
+    if (rightClickTab >= 0) {
+        closeTab(rightClickTab);
+    }
+}
+
+void TabWidget::handleCloseOtherTabs()
+{
+    if (rightClickTab >= 0) {
+        closeOtherTabs(rightClickTab);
+    }
 }

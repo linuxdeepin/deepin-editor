@@ -2,6 +2,7 @@
 #define TABWIDGET_H
 
 #include <DTabBar>
+#include <QMenu>
 
 DWIDGET_USE_NAMESPACE
 
@@ -10,6 +11,8 @@ typedef QPixmap (* FileScreenshotFunc) (int index);
 class TabWidget : public DTabBar
 {
     Q_OBJECT
+    
+    bool eventFilter(QObject *, QEvent *event);
     
 public:
     TabWidget();
@@ -20,6 +23,21 @@ public:
     void insertFromMimeData(int index, const QMimeData *source);    
     
     QList<QString> tabFiles;
+                           
+signals:
+    void closeTab(int index);
+    void closeOtherTabs(int index);
+    
+public slots:
+    void handleCloseTab();
+    void handleCloseOtherTabs();
+    
+private:
+    QMenu *menu;
+    QAction *closeTabAction;
+    QAction *closeOtherTabAction;
+    
+    int rightClickTab;
 };
 
 #endif

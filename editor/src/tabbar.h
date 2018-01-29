@@ -23,6 +23,7 @@ public:
     void selectPrevTab();
     void closeTab();
     void closeOtherTabs();
+    void closeOtherTabsExceptFile(QString filepath);
     void closeTabWithIndex(int index);
     
     QString getActiveTabName();
@@ -47,6 +48,8 @@ public slots:
     void handleTabClosed(int closeIndex);
     void handleTabReleaseRequested(int index);
     void handleTabDroped(int index, Qt::DropAction action, QObject *target);
+    void handleCloseTab(int index);
+    void handleCloseOtherTabs(int index);
     
 private:
     QHBoxLayout *layout;

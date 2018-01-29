@@ -28,6 +28,8 @@ Tabbar::Tabbar()
     connect(tabbar, &TabWidget::tabAddRequested, this, &Tabbar::tabAddRequested, Qt::QueuedConnection);
     connect(tabbar, &TabWidget::tabReleaseRequested, this, &Tabbar::handleTabReleaseRequested, Qt::QueuedConnection);
     connect(tabbar, &TabWidget::tabDroped, this, &Tabbar::handleTabDroped, Qt::QueuedConnection);
+    connect(tabbar, &TabWidget::closeTab, this, &Tabbar::handleCloseTab, Qt::QueuedConnection);
+    connect(tabbar, &TabWidget::closeOtherTabs, this, &Tabbar::handleCloseOtherTabs, Qt::QueuedConnection);
 }
 
 void Tabbar::addTab(QString filepath, QString tabName)
@@ -69,6 +71,16 @@ int Tabbar::isTabExist(QString filepath)
 void Tabbar::handleTabMoved(int fromIndex, int toIndex)
 {
     tabbar->tabFiles.swap(fromIndex, toIndex);
+}
+
+void Tabbar::handleCloseTab(int index)
+{
+    handleTabClosed(index);
+}
+
+void Tabbar::handleCloseOtherTabs(int index)
+{
+    closeOtherTabsExceptFile(tabbar->tabFiles[index]);
 }
 
 void Tabbar::handleTabClosed(int closeIndex)
@@ -119,18 +131,20 @@ void Tabbar::closeTabWithIndex(int index)
 
 void Tabbar::closeOtherTabs()
 {
-    QString currentFilepath = tabbar->tabFiles[tabbar->currentIndex()];
+    closeOtherTabsExceptFile(tabbar->tabFiles[tabbar->currentIndex()]);
+}
 
+void Tabbar::closeOtherTabsExceptFile(QString filepath)
+{
     while (tabbar->tabFiles.size() > 1) {
         QString firstPath = tabbar->tabFiles[0];
-        if (firstPath != currentFilepath) {
+        if (firstPath != filepath) {
             handleTabClosed(0);
         } else {
             handleTabClosed(1);
         }
     }
 }
-
 
 QString Tabbar::getActiveTabName()
 {
