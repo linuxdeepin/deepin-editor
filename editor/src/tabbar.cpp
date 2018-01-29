@@ -167,10 +167,11 @@ void Tabbar::handleTabReleaseRequested(int index)
     }
 }
 
-void Tabbar::handleTabDroped(int index, Qt::DropAction action, QObject *target)
+void Tabbar::handleTabDroped(int index, Qt::DropAction, QObject *target)
 {
     // Remove match tab if tab drop to tabbar of deepin-editor.
-    if (QString::fromUtf8(target->metaObject()->className()) == "TabWidget") {
+    auto *tabWidget = qobject_cast<TabWidget*>(target);
+    if (tabWidget != nullptr) {
         handleTabClosed(index);
     }
 }
