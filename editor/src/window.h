@@ -25,6 +25,7 @@
 #define WINDOW_H
 
 #include "dmainwindow.h"
+#include "settings.h"
 #include "jumplinebar.h"
 #include <dimagebutton.h>
 #include <QVBoxLayout>
@@ -65,6 +66,12 @@ public:
     
     TextEditor* getTextEditor(QString filepath);
     
+    void incrementFontSize();
+    void decrementFontSize();
+    void resetFontSize();
+    void setFontSizeWithConfig(Editor *editor);
+    void saveFontSize(int size);
+    
 signals:
     void popTab(QString tabName, QString filepath, QString content);
     
@@ -90,6 +97,10 @@ private:
     int notifyPadding = 20;
     
     JumpLineBar *jumpLineBar;
+    
+    int fontSize;
+    
+    Settings *settings;
 };
 
 #endif

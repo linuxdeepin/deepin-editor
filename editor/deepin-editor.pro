@@ -18,6 +18,7 @@ HEADERS += src/window.h \
 	   src/texteditor.h \		   
 	   src/jumplinebar.h \		   
 	   src/linebar.h \		   
+	   src/settings.h \		   
 	   src/tabbar.h \		   
 	   src/tabwidget.h \		   
 	   src/editor.h \		   
@@ -29,6 +30,7 @@ SOURCES += src/window.cpp \
 	   src/texteditor.cpp \		   
 	   src/jumplinebar.cpp \		   
 	   src/linebar.cpp \		   
+	   src/settings.cpp \		   
 	   src/tabbar.cpp \		   
 	   src/tabwidget.cpp \		   
 	   src/editor.cpp \		   

@@ -23,12 +23,6 @@ public:
 
 TextEditor::TextEditor(QPlainTextEdit *parent) : QPlainTextEdit(parent)
 {
-    QFont font;
-    font.setFamily("Note Mono");
-    font.setFixedPitch(true);
-    font.setPointSize(12);
-    this->setFont(font);
-
     highlighter = new Highlighter(document());
 
     lineNumberArea = new LineNumberArea(this);
@@ -60,7 +54,7 @@ void TextEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 
     int linenumber = block.blockNumber();
 
-    Utils::setFontSize(painter, 11);
+    Utils::setFontSize(painter, document()->defaultFont().pointSize());
     while (block.isValid() && top <= event->rect().bottom()) {
         if (block.isVisible() && bottom >= event->rect().top()) {
             painter.setPen(QColor("#666666"));
@@ -202,4 +196,15 @@ void TextEditor::scrollToLine(int scrollOffset, int line)
 void TextEditor::handleScrollFinish()
 {
     jumpToLine(scrollLineNumber);
+}
+
+void TextEditor::setFontSize(int size)
+{
+    QFont font;
+    font.setFamily("Note Mono");
+    font.setFixedPitch(true);
+    font.setPointSize(size);
+    setFont(font);
+    
+    updateLineNumber();
 }

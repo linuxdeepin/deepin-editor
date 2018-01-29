@@ -30,6 +30,8 @@ public:
     void keepCurrentLineAtCenter();
     void scrollToLine(int scrollOffset, int line);
     
+    void setFontSize(int fontSize);
+    
     QWidget *lineNumberArea;
                            
 signals:

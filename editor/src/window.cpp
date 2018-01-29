@@ -49,9 +49,12 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     layout->setContentsMargins(0, 0, 0, 0);
 
     this->setCentralWidget(layoutWidget);
+    
+    settings = new Settings();
+    settings->init();
 
     tabbar = new Tabbar();
-
+    
     jumpLineBar = new JumpLineBar(this);
     QTimer::singleShot(0, jumpLineBar, SLOT(hide()));
     
@@ -86,6 +89,8 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
 {
     QString key = Utils::getKeymap(keyEvent);
 
+    // qDebug() << key;
+    
     if (key == "Ctrl + T") {
         addBlankTab();
     } else if (key == "Ctrl + S") {
@@ -102,6 +107,12 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
         tabbar->closeOtherTabs();
     } else if (key == "Ctrl + O") {
         openFile();
+    } else if (key == "Ctrl + =") {
+        incrementFontSize();
+    } else if (key == "Ctrl + -") {
+        decrementFontSize();
+    } else if (key == "Ctrl + 0") {
+        resetFontSize();
     } else if (key == "F11") {
         toggleFullscreen();
     }
@@ -288,6 +299,7 @@ TextEditor* Window::getTextEditor(QString filepath)
 Editor* Window::createEditor()
 {
     Editor *editor = new Editor();
+    setFontSizeWithConfig(editor);
 
     connect(editor, &Editor::jumpLine, this, &Window::handleJumpLine, Qt::QueuedConnection);
     
@@ -327,4 +339,45 @@ void Window::handleTempJumpToLine(QString filepath, int line)
 void Window::handleCancelJump()
 {
     QTimer::singleShot(0, getActiveEditor()->textEditor, SLOT(setFocus()));
+}
+
+void Window::incrementFontSize()
+{
+    foreach (Editor *editor, editorMap.values()) {
+        int size = std::min(fontSize + 1, settings->maxFontSize);
+        editor->textEditor->setFontSize(size);
+        saveFontSize(size);
+    }
+}
+
+void Window::decrementFontSize()
+{
+    foreach (Editor *editor, editorMap.values()) {
+        int size = std::max(fontSize - 1, settings->minFontSize);
+        editor->textEditor->setFontSize(size);
+        saveFontSize(size);
+    }
+}
+
+void Window::resetFontSize()
+{
+    foreach (Editor *editor, editorMap.values()) {
+        editor->textEditor->setFontSize(settings->defaultFontSize);
+        saveFontSize(settings->defaultFontSize);
+    }
+}
+
+void Window::setFontSizeWithConfig(Editor *editor)
+{
+    int size =  settings->getOption("default_font_size").toInt();
+    editor->textEditor->setFontSize(size);
+    
+    fontSize = size;
+}
+
+void Window::saveFontSize(int size)
+{
+    fontSize = size;
+    
+    settings->setOption("default_font_size", fontSize);
 }
