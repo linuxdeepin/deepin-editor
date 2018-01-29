@@ -17,7 +17,7 @@ class TabWidget : public DTabBar
 public:
     TabWidget();
     
-    QPixmap createDragPixmapFramTab(int index, const QStyleOptionTab &option, QPoint *hotspot) const;
+    QPixmap createDragPixmapFromTab(int index, const QStyleOptionTab &option, QPoint *hotspot) const;
     QMimeData *createMimeDataFromTab(int index, const QStyleOptionTab &option) const;
     bool canInsertFromMimeData(int index, const QMimeData *source) const;
     void insertFromMimeData(int index, const QMimeData *source);    

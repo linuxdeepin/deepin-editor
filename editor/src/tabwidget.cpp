@@ -22,7 +22,7 @@ TabWidget::TabWidget()
     setStartDragDistance(20);
 }
 
-QPixmap TabWidget::createDragPixmapFramTab(int index, const QStyleOptionTab &, QPoint *) const
+QPixmap TabWidget::createDragPixmapFromTab(int index, const QStyleOptionTab &, QPoint *) const
 {
     TextEditor *textEditor = static_cast<Window*>(this->window())->getTextEditor(tabFiles[index]);
 
