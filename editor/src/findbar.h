@@ -17,7 +17,7 @@ class FindBar : public QWidget
 public:
     FindBar(QWidget *parent = 0);
     
-    void activeInput(QString file, int row, int column, int scrollOffset);
+    void activeInput(QString text, QString file, int row, int column, int scrollOffset);
     
 signals:
     void cancelFind();

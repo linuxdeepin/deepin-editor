@@ -413,11 +413,12 @@ void Window::popupFindBar()
     
     QString tabPath = tabbar->getActiveTabPath();
     Editor *editor = getActiveEditor();
+    QString text = editor->textEditor->textCursor().selectedText();
     int row = editor->textEditor->getCurrentLine();
     int column = editor->textEditor->getCurrentColumn();
     int scrollOffset = editor->textEditor->getScrollOffset();
     
-    findBar->activeInput(tabPath, row, column, scrollOffset);
+    findBar->activeInput(text, tabPath, row, column, scrollOffset);
 }
 
 void Window::handleBackToPosition(QString file, int row, int column, int scrollOffset)

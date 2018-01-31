@@ -20,7 +20,6 @@ FindBar::FindBar(QWidget *parent) : QWidget(parent)
     
     connect(editLine, &LineBar::pressEsc, this, &FindBar::back, Qt::QueuedConnection);
     connect(editLine, &LineBar::focusOut, this, &FindBar::cancel, Qt::QueuedConnection);
-    
 }
 
 
@@ -33,8 +32,12 @@ void FindBar::paintEvent(QPaintEvent *)
     painter.fillPath(path, QColor("#202020"));
 }
 
-void FindBar::activeInput(QString file, int row, int column, int scrollOffset)
+void FindBar::activeInput(QString text, QString file, int row, int column, int scrollOffset)
 {
+    editLine->clear();
+    editLine->insert(text);
+    editLine->selectAll();
+    
     show();
     
     findFile = file;
