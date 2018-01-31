@@ -154,9 +154,7 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
     } else if (key == "Ctrl + P") {
         prevLine();
     } else if (key == "Ctrl + G") {
-        QScrollBar *scrollbar = verticalScrollBar();
-
-        jumpLine(getCurrentLine(), blockCount(), scrollbar->value());
+        jumpToLine();
     } else if (key == "Ctrl + L") {
         openNewlineAbove();
     } else if (key == "Ctrl + H") {
@@ -399,3 +397,9 @@ void TextEditor::moveToEndOfLine()
     moveCursor(QTextCursor::EndOfLine);
 }
     
+void TextEditor::jumpToLine()
+{
+    QScrollBar *scrollbar = verticalScrollBar();
+
+    jumpLine(getCurrentLine(), blockCount(), scrollbar->value());
+}

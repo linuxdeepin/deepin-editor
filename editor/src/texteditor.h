@@ -44,8 +44,10 @@ public:
     void moveToStartOfLine();
     void moveToEndOfLine();
     
+    void jumpToLine();
+    
     QWidget *lineNumberArea;
-                           
+    
 signals:
     void jumpLine(int line, int lineCount, int scrollOffset);
     
