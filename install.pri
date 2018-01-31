@@ -5,7 +5,7 @@ isEmpty(PREFIX){
 target.path = $${PREFIX}/bin/
 
 desktop_files.path = $${PREFIX}/share/applications/
-desktop_files.files = $$PWD/data/*.desktop
+desktop_files.files = $$PWD/*.desktop
 
 services.path = $${PREFIX}/share/dbus-1/system-services
 services.files = $$PWD/*.service
