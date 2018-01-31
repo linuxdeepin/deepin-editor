@@ -32,12 +32,12 @@ TextEditor::TextEditor(QPlainTextEdit *parent) : QPlainTextEdit(parent)
     connect(this, &QPlainTextEdit::cursorPositionChanged, this, &TextEditor::highlightCurrentLine, Qt::QueuedConnection);
 
     highlightCurrentLine();
-    
+
     scrollAnimation = new QPropertyAnimation(verticalScrollBar(), "value");
     scrollAnimation->setEasingCurve(QEasingCurve::InOutExpo);
     scrollAnimation->setDuration(300);
-    
-    connect(scrollAnimation, &QPropertyAnimation::finished, this, &TextEditor::handleScrollFinish, Qt::QueuedConnection);    
+
+    connect(scrollAnimation, &QPropertyAnimation::finished, this, &TextEditor::handleScrollFinish, Qt::QueuedConnection);
 
     QTimer::singleShot(0, this, SLOT(setFocus()));
 }
@@ -159,6 +159,8 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         openNewlineAbove();
     } else if (key == "Ctrl + H") {
         openNewlineBelow();
+    } else if (key == "Ctrl + Shift + L") {
+        duplicateLine();
     } else {
         QPlainTextEdit::keyPressEvent(keyEvent);
     }
@@ -173,7 +175,7 @@ void TextEditor::jumpToLine(int line)
 {
     QTextCursor cursor(document()->findBlockByLineNumber(line - 1)); // line - 1 because line number starts from 0
     setTextCursor(cursor);
-    
+
     keepCurrentLineAtCenter();
 }
 
@@ -189,7 +191,7 @@ void TextEditor::keepCurrentLineAtCenter()
 void TextEditor::scrollToLine(int scrollOffset, int line)
 {
     scrollLineNumber = line;
-    
+
     QScrollBar *scrollbar = verticalScrollBar();
 
     scrollAnimation->setStartValue(scrollbar->value());
@@ -209,7 +211,7 @@ void TextEditor::setFontSize(int size)
     font.setFixedPitch(true);
     font.setPointSize(size);
     setFont(font);
-    
+
     updateLineNumber();
 }
 
@@ -223,4 +225,27 @@ void TextEditor::openNewlineBelow()
 {
     moveCursor(QTextCursor::EndOfLine);
     textCursor().insertText("\n");
+}
+
+void TextEditor::duplicateLine()
+{
+    // Rember current line's column number.
+    int column = textCursor().columnNumber();
+
+    // Get current line's content.
+    QTextCursor cursor(textCursor().block());
+    cursor.movePosition(QTextCursor::StartOfBlock);
+    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+    QString text = cursor.selectedText();
+
+    // Copy current line.
+    moveCursor(QTextCursor::EndOfLine);
+    textCursor().insertText("\n");
+    textCursor().insertText(text);
+
+    // Restore cursor's column.
+    moveCursor(QTextCursor::StartOfLine);
+    for (int i = 0; i < column; i++) {
+        moveCursor(QTextCursor::Right);
+    }
 }

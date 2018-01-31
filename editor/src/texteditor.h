@@ -34,6 +34,7 @@ public:
     
     void openNewlineAbove();
     void openNewlineBelow();
+    void duplicateLine();
     
     QWidget *lineNumberArea;
                            
