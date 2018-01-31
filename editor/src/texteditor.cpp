@@ -101,11 +101,15 @@ void TextEditor::updateKeywordSelections(QString keyword)
     
     if (keyword != "") {
         moveCursor(QTextCursor::Start);
-        QColor color = QColor("#606060").lighter(100);
 
         while(find(keyword)) {
             QTextEdit::ExtraSelection extra;
-            extra.format.setBackground(color);
+            
+            QPen outline(QColor("#D33D6D").lighter(120), 1, Qt::SolidLine);
+            extra.format.setProperty(QTextFormat::OutlinePen, outline);
+            
+            QBrush brush(QColor("#303030"));
+            extra.format.setProperty(QTextFormat::BackgroundBrush, brush);            
             
             extra.cursor = textCursor();
             keywordSelections.append(extra);
