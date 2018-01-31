@@ -303,59 +303,79 @@ void TextEditor::killLine()
 // Swaps Line Where Cursor Is Currently Positioned With The Line Above It
 void TextEditor::swapLineUp(){
     QTextCursor cursor = textCursor();
-    
+
+    // Rember current line's column number.
+    int column = cursor.columnNumber();
+
     //  Select Current Line And Store Value
     cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
     QString newTop = cursor.selectedText();
     cursor.removeSelectedText();
-    
+
     // Select Line Above And Store Value
     cursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
     QString newBottom = cursor.selectedText();
     cursor.removeSelectedText();
-    
+
     // Insert New Values
     cursor.insertText(newTop);
     cursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor);
     cursor.insertText(newBottom);
-    
+
     // Position Cursor
     cursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
 
+    // Update cursor.
     setTextCursor(cursor);
+
+    // Restore cursor's column.
+    moveCursor(QTextCursor::StartOfLine);
+    for (int i = 0; i < column; i++) {
+        moveCursor(QTextCursor::Right);
+    }
 }
 
 // Swaps Line Where Cursor Is Currently Positioned With The Line Below It
 void TextEditor::swapLineDown(){
     QTextCursor cursor = textCursor();
-    
+
+    // Rember current line's column number.
+    int column = cursor.columnNumber();
+
     //  Select Current Line And Store Value
     cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
     QString newBottom = cursor.selectedText();
     cursor.removeSelectedText();
-    
+
     // Select Line Below And Store Value
     cursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
     QString newTop = cursor.selectedText();
     cursor.removeSelectedText();
-    
+
     // Insert New Values
     cursor.insertText(newBottom);
     cursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
     cursor.insertText(newTop);
-    
+
     // Position Cursor
     cursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
 
+    // Update cursor.
     setTextCursor(cursor);
+
+    // Restore cursor's column.
+    moveCursor(QTextCursor::StartOfLine);
+    for (int i = 0; i < column; i++) {
+        moveCursor(QTextCursor::Right);
+    }
 }
 
 void TextEditor::moveToLineIndentation()
@@ -363,26 +383,26 @@ void TextEditor::moveToLineIndentation()
     // Get line start position.
     moveCursor(QTextCursor::StartOfLine);
     int startColumn = textCursor().columnNumber();
-    
+
     // Get line end position.
-    moveCursor(QTextCursor::EndOfLine);    
+    moveCursor(QTextCursor::EndOfLine);
     int endColumn = textCursor().columnNumber();
-    
+
     // Move to line start first.
     moveCursor(QTextCursor::StartOfLine);
-    
+
     // Move to first non-blank char of line.
     int column = startColumn;
     while (column <= endColumn) {
         QChar currentChar = toPlainText().at(std::max(textCursor().position() - 1, 0));
-        
+
         if (!currentChar.isSpace()) {
             moveCursor(QTextCursor::PreviousCharacter);
             break;
         } else {
             moveCursor(QTextCursor::NextCharacter);
         }
-        
+
         column++;
     }
 }
@@ -396,7 +416,7 @@ void TextEditor::moveToEndOfLine()
 {
     moveCursor(QTextCursor::EndOfLine);
 }
-    
+
 void TextEditor::jumpToLine()
 {
     QScrollBar *scrollbar = verticalScrollBar();
