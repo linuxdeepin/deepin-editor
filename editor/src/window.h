@@ -91,6 +91,7 @@ public slots:
     void handleCancelJump();
     void removeBottomWidget();
     void handleBackToPosition(QString file, int row, int column, int scrollOffset);
+    void handleUpdateSearchKeyword(QString file, QString keyword);
 
     void addBlankTab();
     

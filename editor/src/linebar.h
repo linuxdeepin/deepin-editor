@@ -2,6 +2,7 @@
 #define LINEBAR_H
 
 #include "dlineedit.h"
+#include <QTimer>
 
 DWIDGET_USE_NAMESPACE
 
@@ -12,14 +13,23 @@ class LineBar : public DLineEdit
 public:
     LineBar(DLineEdit *parent = 0);
     
+public slots:
+    void handleTextChanged();
+    void handleTextChangeTimer();
+    
 signals:
     void focusOut();
     void pressEsc();
     void pressEnter();
+    void contentChanged();
     
 protected:
     virtual void focusOutEvent(QFocusEvent *e);    
     virtual void keyPressEvent(QKeyEvent *e);
+    
+private:
+    QTimer *autoSaveTimer;
+    int autoSaveInternal;
 };
 
 #endif

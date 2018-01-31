@@ -90,8 +90,33 @@ void TextEditor::updateLineNumber()
 
 void TextEditor::highlightCurrentLine()
 {
-    QList<QTextEdit::ExtraSelection> extraSelections;
+    updateHighlightLineSeleciton();
+    
+    renderAllSelections();
+}
 
+void TextEditor::updateKeywordSelections(QString keyword)
+{
+    keywordSelections.clear();
+    
+    if (keyword != "") {
+        moveCursor(QTextCursor::Start);
+        QColor color = QColor("#606060").lighter(100);
+
+        while(find(keyword)) {
+            QTextEdit::ExtraSelection extra;
+            extra.format.setBackground(color);
+            
+            extra.cursor = textCursor();
+            keywordSelections.append(extra);
+        }
+
+        setExtraSelections(keywordSelections);
+    }
+}
+
+void TextEditor::updateHighlightLineSeleciton()
+{
     QTextEdit::ExtraSelection selection;
 
     QColor lineColor = QColor("#333333");
@@ -100,9 +125,8 @@ void TextEditor::highlightCurrentLine()
     selection.format.setProperty(QTextFormat::FullWidthSelection, true);
     selection.cursor = textCursor();
     selection.cursor.clearSelection();
-    extraSelections.append(selection);
-
-    setExtraSelections(extraSelections);
+    
+    currentLineSelection = selection;
 }
 
 void TextEditor::nextLine()
@@ -442,4 +466,23 @@ void TextEditor::jumpToLine()
     QScrollBar *scrollbar = verticalScrollBar();
 
     jumpLine(getCurrentLine(), blockCount(), scrollbar->value());
+}
+
+void TextEditor::highlightKeyword(QString keyword)
+{
+    updateKeywordSelections(keyword);
+    
+    updateHighlightLineSeleciton();
+
+    renderAllSelections();
+}
+
+void TextEditor::renderAllSelections()
+{
+    QList<QTextEdit::ExtraSelection> selections;
+    
+    selections.append(currentLineSelection);
+    selections.append(keywordSelections);
+    
+    setExtraSelections(selections);
 }

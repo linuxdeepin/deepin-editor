@@ -4,7 +4,13 @@
 
 LineBar::LineBar(DLineEdit *parent) : DLineEdit(parent)
 {
-    
+    autoSaveInternal = 500;
+
+    autoSaveTimer = new QTimer(this);
+    autoSaveTimer->setSingleShot(true);
+    connect(autoSaveTimer, &QTimer::timeout, this, &LineBar::handleTextChangeTimer);
+
+    connect(this, &DLineEdit::textChanged, this, &LineBar::handleTextChanged, Qt::QueuedConnection);
 }
 
 void LineBar::focusOutEvent(QFocusEvent *)
@@ -24,4 +30,17 @@ void LineBar::keyPressEvent(QKeyEvent *e)
         DLineEdit::keyPressEvent(e);
     }
     
+}
+
+void LineBar::handleTextChanged()
+{
+    if (autoSaveTimer->isActive()) {
+        autoSaveTimer->stop();
+    }
+    autoSaveTimer->start(autoSaveInternal);
+}
+
+void LineBar::handleTextChangeTimer()
+{
+    contentChanged();
 }

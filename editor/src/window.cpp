@@ -60,8 +60,8 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     
     findBar = new FindBar();
     
-    connect(findBar, &FindBar::cancelFind, this, &Window::removeBottomWidget, Qt::QueuedConnection);
     connect(findBar, &FindBar::backToPosition, this, &Window::handleBackToPosition, Qt::QueuedConnection);
+    connect(findBar, &FindBar::updateSearchKeyword, this, &Window::handleUpdateSearchKeyword, Qt::QueuedConnection);
     
     settings = new Settings();
     settings->init();
@@ -430,3 +430,11 @@ void Window::handleBackToPosition(QString file, int row, int column, int scrollO
     }
 }
 
+void Window::handleUpdateSearchKeyword(QString file, QString keyword)
+{
+    QString tabPath = tabbar->getActiveTabPath();
+
+    if (file == tabPath && editorMap.contains(file)) {
+        editorMap[file]->textEditor->highlightKeyword(keyword);
+    }
+}

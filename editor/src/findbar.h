@@ -20,12 +20,12 @@ public:
     void activeInput(QString text, QString file, int row, int column, int scrollOffset);
     
 signals:
-    void cancelFind();
     void backToPosition(QString file, int row, int column, int scrollOffset);
+    void updateSearchKeyword(QString file, QString keyword);
     
 public slots:
-    void cancel();
     void back();
+    void handleContentChanged();
     
 protected:
     void paintEvent(QPaintEvent *event);

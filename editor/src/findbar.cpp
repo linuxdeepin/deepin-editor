@@ -19,9 +19,13 @@ FindBar::FindBar(QWidget *parent) : QWidget(parent)
     setFixedHeight(40);
     
     connect(editLine, &LineBar::pressEsc, this, &FindBar::back, Qt::QueuedConnection);
-    connect(editLine, &LineBar::focusOut, this, &FindBar::cancel, Qt::QueuedConnection);
+    connect(editLine, &LineBar::contentChanged, this, &FindBar::handleContentChanged, Qt::QueuedConnection);
 }
 
+void FindBar::handleContentChanged()
+{
+    updateSearchKeyword(findFile, editLine->text());
+}
 
 void FindBar::paintEvent(QPaintEvent *)
 {
@@ -46,13 +50,6 @@ void FindBar::activeInput(QString text, QString file, int row, int column, int s
     findFileSrollOffset = scrollOffset;
     
     editLine->setFocus();
-}
-
-void FindBar::cancel()
-{
-    hide();
-    
-    cancelFind();
 }
 
 void FindBar::back()
