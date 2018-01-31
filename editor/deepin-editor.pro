@@ -17,6 +17,7 @@ HEADERS += src/window.h \
            src/dbusinterface.h \		   
 	   src/texteditor.h \		   
 	   src/jumplinebar.h \		   
+	   src/findbar.h \		   
 	   src/linebar.h \		   
 	   src/settings.h \		   
 	   src/tabbar.h \		   
@@ -29,6 +30,7 @@ SOURCES += src/window.cpp \
            src/dbusinterface.cpp \		   
 	   src/texteditor.cpp \		   
 	   src/jumplinebar.cpp \		   
+	   src/findbar.cpp \		   
 	   src/linebar.cpp \		   
 	   src/settings.cpp \		   
 	   src/tabbar.cpp \		   

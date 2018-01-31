@@ -25,6 +25,7 @@
 #define WINDOW_H
 
 #include "dmainwindow.h"
+#include "findbar.h"
 #include "settings.h"
 #include "jumplinebar.h"
 #include <dimagebutton.h>
@@ -72,6 +73,10 @@ public:
     void setFontSizeWithConfig(Editor *editor);
     void saveFontSize(int size);
     
+    void addBottomWidget(QWidget *widget);
+    
+    void popupFindBar();
+    
 signals:
     void popTab(QString tabName, QString filepath, QString content);
     
@@ -84,12 +89,15 @@ public slots:
     void handleJumpToLine(QString filepath, int line);
     void handleTempJumpToLine(QString filepath, int line);
     void handleCancelJump();
+    void removeBottomWidget();
 
     void addBlankTab();
     
 private:
     QWidget *layoutWidget;
+    QWidget *editorWidget;
     QStackedLayout *editorLayout;
+    QVBoxLayout *layout;
     
     Tabbar *tabbar;
     QMap<QString, Editor*> editorMap;
@@ -101,6 +109,8 @@ private:
     int fontSize;
     
     Settings *settings;
+    
+    FindBar *findBar;
 };
 
 #endif

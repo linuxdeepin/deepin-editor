@@ -45,10 +45,22 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     installEventFilter(this);   // add event filter
 
     layoutWidget = new QWidget();
-    editorLayout = new QStackedLayout(layoutWidget);
+    
+    layout = new QVBoxLayout(layoutWidget);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
+    
+    editorWidget = new QWidget();
+    editorLayout = new QStackedLayout(editorWidget);
     editorLayout->setContentsMargins(0, 0, 0, 0);
 
     this->setCentralWidget(layoutWidget);
+    
+    layout->addWidget(editorWidget);
+    
+    findBar = new FindBar();
+    
+    connect(findBar, &FindBar::cancel, this, &Window::removeBottomWidget, Qt::QueuedConnection);
     
     settings = new Settings();
     settings->init();
@@ -115,6 +127,8 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
         resetFontSize();
     } else if (key == "F11") {
         toggleFullscreen();
+    } else if (key == "Ctrl + Shift + F") {
+        popupFindBar();
     }
 }
 
@@ -381,3 +395,22 @@ void Window::saveFontSize(int size)
     
     settings->setOption("default_font_size", fontSize);
 }
+
+void Window::addBottomWidget(QWidget *widget)
+{
+    layout->addWidget(widget);
+}
+
+void Window::removeBottomWidget()
+{
+    layout->removeWidget(findBar);
+    findBar->hide();
+}
+    
+void Window::popupFindBar()
+{
+    addBottomWidget(findBar);
+    
+    findBar->activeInput("", 0, 0, 0);
+}
+
