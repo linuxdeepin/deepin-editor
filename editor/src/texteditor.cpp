@@ -155,6 +155,10 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         QScrollBar *scrollbar = verticalScrollBar();
 
         jumpLine(getCurrentLine(), blockCount(), scrollbar->value());
+    } else if (key == "Ctrl + L") {
+        openNewlineAbove();
+    } else if (key == "Ctrl + H") {
+        openNewlineBelow();
     } else {
         QPlainTextEdit::keyPressEvent(keyEvent);
     }
@@ -207,4 +211,16 @@ void TextEditor::setFontSize(int size)
     setFont(font);
     
     updateLineNumber();
+}
+
+void TextEditor::openNewlineAbove()
+{
+    textCursor().insertText("\n");
+    prevLine();
+}
+
+void TextEditor::openNewlineBelow()
+{
+    moveCursor(QTextCursor::EndOfLine);
+    textCursor().insertText("\n");
 }

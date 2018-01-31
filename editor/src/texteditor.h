@@ -32,6 +32,9 @@ public:
     
     void setFontSize(int fontSize);
     
+    void openNewlineAbove();
+    void openNewlineBelow();
+    
     QWidget *lineNumberArea;
                            
 signals:
