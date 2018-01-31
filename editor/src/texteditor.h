@@ -35,6 +35,7 @@ public:
     void openNewlineAbove();
     void openNewlineBelow();
     void duplicateLine();
+    void killLine();
     
     QWidget *lineNumberArea;
                            

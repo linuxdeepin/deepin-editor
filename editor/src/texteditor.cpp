@@ -161,6 +161,8 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         openNewlineBelow();
     } else if (key == "Ctrl + Shift + L") {
         duplicateLine();
+    } else if (key == "Ctrl + K") {
+        killLine();
     } else {
         QPlainTextEdit::keyPressEvent(keyEvent);
     }
@@ -249,3 +251,42 @@ void TextEditor::duplicateLine()
         moveCursor(QTextCursor::Right);
     }
 }
+
+void TextEditor::killLine()
+{
+    // Remove selection content if has selection.
+    if (textCursor().hasSelection()) {
+        textCursor().removeSelectedText();
+    } else {
+        // Get current line content.
+        QTextCursor cursor(textCursor().block());
+        cursor.movePosition(QTextCursor::StartOfBlock);
+        cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+        QString text = cursor.selectedText();
+    
+        // Cursor is at end of line.
+        bool isEmptyLine = text.size() == 0;
+        bool isAtEnd = textCursor().columnNumber() == cursor.columnNumber();
+    
+        // Join next line if current line is empty or cursor at end of line.
+        if (isEmptyLine || isAtEnd) {
+            QTextCursor cursor = textCursor();
+
+            cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
+            cursor.deleteChar();
+
+            setTextCursor(cursor);        
+        }
+        // Otherwise kill rest content of line.
+        else {
+            QTextCursor cursor = textCursor();
+
+            cursor.movePosition(QTextCursor::NoMove, QTextCursor::KeepAnchor);
+            cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+            cursor.removeSelectedText();
+
+            setTextCursor(cursor);
+        }
+    }
+}
+
