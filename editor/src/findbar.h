@@ -20,6 +20,9 @@ public:
     void activeInput(QString file, int row, int column, int scrollOffset);
     
 signals:
+    void cancelFind();
+    
+public slots:
     void cancel();
     
 protected:

@@ -60,7 +60,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     
     findBar = new FindBar();
     
-    connect(findBar, &FindBar::cancel, this, &Window::removeBottomWidget, Qt::QueuedConnection);
+    connect(findBar, &FindBar::cancelFind, this, &Window::removeBottomWidget, Qt::QueuedConnection);
     
     settings = new Settings();
     settings->init();
@@ -403,8 +403,7 @@ void Window::addBottomWidget(QWidget *widget)
 
 void Window::removeBottomWidget()
 {
-    layout->removeWidget(findBar);
-    findBar->hide();
+    layout->takeAt(1);
 }
     
 void Window::popupFindBar()

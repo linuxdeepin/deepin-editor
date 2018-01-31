@@ -42,3 +42,10 @@ void FindBar::activeInput(QString file, int row, int column, int scrollOffset)
     
     editLine->setFocus();
 }
+
+void FindBar::cancel()
+{
+    hide();
+    
+    cancelFind();
+}
