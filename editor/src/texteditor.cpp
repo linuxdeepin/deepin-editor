@@ -139,6 +139,8 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
 {
     QString key = Utils::getKeymap(keyEvent);
 
+    // qDebug() << key;
+
     if (key == "Ctrl + F") {
         forwardChar();
     } else if (key == "Ctrl + B") {
@@ -163,8 +165,12 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         duplicateLine();
     } else if (key == "Ctrl + K") {
         killLine();
+    } else if (key == "Meta + Shift + P") {
+        swapLineUp();
+    } else if (key == "Meta + Shift + N") {
+        swapLineDown();
     } else {
-        QPlainTextEdit::keyPressEvent(keyEvent);
+            QPlainTextEdit::keyPressEvent(keyEvent);
     }
 }
 
@@ -263,11 +269,11 @@ void TextEditor::killLine()
         cursor.movePosition(QTextCursor::StartOfBlock);
         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
         QString text = cursor.selectedText();
-    
+
         // Cursor is at end of line.
         bool isEmptyLine = text.size() == 0;
         bool isAtEnd = textCursor().columnNumber() == cursor.columnNumber();
-    
+
         // Join next line if current line is empty or cursor at end of line.
         if (isEmptyLine || isAtEnd) {
             QTextCursor cursor = textCursor();
@@ -275,7 +281,7 @@ void TextEditor::killLine()
             cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
             cursor.deleteChar();
 
-            setTextCursor(cursor);        
+            setTextCursor(cursor);
         }
         // Otherwise kill rest content of line.
         else {
@@ -290,3 +296,60 @@ void TextEditor::killLine()
     }
 }
 
+// Swaps Line Where Cursor Is Currently Positioned With The Line Above It
+void TextEditor::swapLineUp(){
+    QTextCursor cursor = textCursor();
+    
+    //  Select Current Line And Store Value
+    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+    QString newTop = cursor.selectedText();
+    cursor.removeSelectedText();
+    
+    // Select Line Above And Store Value
+    cursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+    QString newBottom = cursor.selectedText();
+    cursor.removeSelectedText();
+    
+    // Insert New Values
+    cursor.insertText(newTop);
+    cursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor);
+    cursor.insertText(newBottom);
+    
+    // Position Cursor
+    cursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
+
+    setTextCursor(cursor);
+}
+
+// Swaps Line Where Cursor Is Currently Positioned With The Line Below It
+void TextEditor::swapLineDown(){
+    QTextCursor cursor = textCursor();
+    
+    //  Select Current Line And Store Value
+    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+    QString newBottom = cursor.selectedText();
+    cursor.removeSelectedText();
+    
+    // Select Line Below And Store Value
+    cursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+    QString newTop = cursor.selectedText();
+    cursor.removeSelectedText();
+    
+    // Insert New Values
+    cursor.insertText(newBottom);
+    cursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
+    cursor.insertText(newTop);
+    
+    // Position Cursor
+    cursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
+
+    setTextCursor(cursor);
+}

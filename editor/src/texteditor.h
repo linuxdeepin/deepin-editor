@@ -37,6 +37,9 @@ public:
     void duplicateLine();
     void killLine();
     
+    void swapLineUp();
+    void swapLineDown();
+    
     QWidget *lineNumberArea;
                            
 signals:
