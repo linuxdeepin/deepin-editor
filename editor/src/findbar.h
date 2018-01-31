@@ -21,9 +21,11 @@ public:
     
 signals:
     void cancelFind();
+    void backToPosition(QString file, int row, int column, int scrollOffset);
     
 public slots:
     void cancel();
+    void back();
     
 protected:
     void paintEvent(QPaintEvent *event);

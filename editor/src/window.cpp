@@ -61,6 +61,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     findBar = new FindBar();
     
     connect(findBar, &FindBar::cancelFind, this, &Window::removeBottomWidget, Qt::QueuedConnection);
+    connect(findBar, &FindBar::backToPosition, this, &Window::handleBackToPosition, Qt::QueuedConnection);
     
     settings = new Settings();
     settings->init();
@@ -328,7 +329,7 @@ void Window::handleJumpLine(QString filepath, int line, int lineCount, int scrol
 void Window::handleBackToLine(QString filepath, int line, int scrollOffset)
 {
     if (editorMap.contains(filepath)) {
-        editorMap[filepath]->textEditor->scrollToLine(scrollOffset, line);
+        editorMap[filepath]->textEditor->scrollToLine(scrollOffset, line, 0);
         
         QTimer::singleShot(0, editorMap[filepath]->textEditor, SLOT(setFocus()));
     }
@@ -337,7 +338,7 @@ void Window::handleBackToLine(QString filepath, int line, int scrollOffset)
 void Window::handleJumpToLine(QString filepath, int line)
 {
     if (editorMap.contains(filepath)) {
-        editorMap[filepath]->textEditor->jumpToLine(line);
+        editorMap[filepath]->textEditor->jumpToLine(line, true);
         
         QTimer::singleShot(0, editorMap[filepath]->textEditor, SLOT(setFocus()));
     }
@@ -346,7 +347,7 @@ void Window::handleJumpToLine(QString filepath, int line)
 void Window::handleTempJumpToLine(QString filepath, int line)
 {
     if (editorMap.contains(filepath)) {
-        editorMap[filepath]->textEditor->jumpToLine(line);
+        editorMap[filepath]->textEditor->jumpToLine(line, true);
     }
 }
 
@@ -410,6 +411,21 @@ void Window::popupFindBar()
 {
     addBottomWidget(findBar);
     
-    findBar->activeInput("", 0, 0, 0);
+    QString tabPath = tabbar->getActiveTabPath();
+    Editor *editor = getActiveEditor();
+    int row = editor->textEditor->getCurrentLine();
+    int column = editor->textEditor->getCurrentColumn();
+    int scrollOffset = editor->textEditor->getScrollOffset();
+    
+    findBar->activeInput(tabPath, row, column, scrollOffset);
+}
+
+void Window::handleBackToPosition(QString file, int row, int column, int scrollOffset)
+{
+    if (editorMap.contains(file)) {
+        editorMap[file]->textEditor->scrollToLine(scrollOffset, row, column);
+        
+        QTimer::singleShot(0, editorMap[file]->textEditor, SLOT(setFocus()));
+    }
 }
 

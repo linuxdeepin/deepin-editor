@@ -90,6 +90,7 @@ public slots:
     void handleTempJumpToLine(QString filepath, int line);
     void handleCancelJump();
     void removeBottomWidget();
+    void handleBackToPosition(QString file, int row, int column, int scrollOffset);
 
     void addBlankTab();
     

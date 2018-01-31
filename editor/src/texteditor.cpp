@@ -183,12 +183,26 @@ int TextEditor::getCurrentLine()
     return textCursor().blockNumber() + 1;
 }
 
-void TextEditor::jumpToLine(int line)
+int TextEditor::getCurrentColumn()
+{
+    return textCursor().columnNumber();
+}
+
+int TextEditor::getScrollOffset()
+{
+    QScrollBar *scrollbar = verticalScrollBar();
+
+    return scrollbar->value();
+}
+
+void TextEditor::jumpToLine(int line, bool keepLineAtCenter)
 {
     QTextCursor cursor(document()->findBlockByLineNumber(line - 1)); // line - 1 because line number starts from 0
     setTextCursor(cursor);
 
-    keepCurrentLineAtCenter();
+    if (keepLineAtCenter) {
+        keepCurrentLineAtCenter();
+    }
 }
 
 void TextEditor::keepCurrentLineAtCenter()
@@ -200,9 +214,10 @@ void TextEditor::keepCurrentLineAtCenter()
     scrollbar->setValue(scrollbar->value() + currentLine - halfEditorLines);
 }
 
-void TextEditor::scrollToLine(int scrollOffset, int line)
+void TextEditor::scrollToLine(int scrollOffset, int row, int column)
 {
-    scrollLineNumber = line;
+    restoreRow = row;
+    restoreColumn = column;
 
     QScrollBar *scrollbar = verticalScrollBar();
 
@@ -213,7 +228,12 @@ void TextEditor::scrollToLine(int scrollOffset, int line)
 
 void TextEditor::handleScrollFinish()
 {
-    jumpToLine(scrollLineNumber);
+    jumpToLine(restoreRow, false);
+    
+    moveCursor(QTextCursor::StartOfLine);
+    for (int i = 0; i < restoreColumn; i++) {
+        moveCursor(QTextCursor::Right);
+    }
 }
 
 void TextEditor::setFontSize(int size)

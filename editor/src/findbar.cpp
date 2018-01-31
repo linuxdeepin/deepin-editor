@@ -18,7 +18,9 @@ FindBar::FindBar(QWidget *parent) : QWidget(parent)
     
     setFixedHeight(40);
     
+    connect(editLine, &LineBar::pressEsc, this, &FindBar::back, Qt::QueuedConnection);
     connect(editLine, &LineBar::focusOut, this, &FindBar::cancel, Qt::QueuedConnection);
+    
 }
 
 
@@ -48,4 +50,11 @@ void FindBar::cancel()
     hide();
     
     cancelFind();
+}
+
+void FindBar::back()
+{
+    hide();
+    
+    backToPosition(findFile, findFileRow, findFileColumn, findFileSrollOffset);
 }

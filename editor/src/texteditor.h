@@ -25,10 +25,12 @@ public:
     void keyPressEvent(QKeyEvent *e);
     
     int getCurrentLine();
-    void jumpToLine(int line);
+    int getCurrentColumn();
+    int getScrollOffset();
+    void jumpToLine(int line, bool keepLineAtCenter);
     
     void keepCurrentLineAtCenter();
-    void scrollToLine(int scrollOffset, int line);
+    void scrollToLine(int scrollOffset, int row, int column);
     
     void setFontSize(int fontSize);
     
@@ -60,7 +62,8 @@ public slots:
 private:
     int lineNumberPaddingX = 5;
     int lineNumberOffset = 2;
-    int scrollLineNumber;
+    int restoreRow;
+    int restoreColumn;
     Highlighter *highlighter;
     
     QPropertyAnimation *scrollAnimation;
