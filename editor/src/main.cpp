@@ -65,20 +65,21 @@ int main(int argc, char *argv[])
 
     QCommandLineParser parser;
     
-    const QCommandLineOption filesOption("f", "Files to open", "files");
-    const QCommandLineOption newWindowOption("w", "Open file in new window", "new-window");
+    const QCommandLineOption newWindowOption("w", "Open file in new window");
     const QCommandLineOption helpOption = parser.addHelpOption();
-    parser.addOption(filesOption);
     parser.addOption(newWindowOption);
     
     parser.process(app);
     
     QStringList files;
-    if (parser.isSet(filesOption)) {
-        files << parser.values(filesOption);
+    QStringList arguments = app.arguments();
+    for (int i = 1; i < arguments.size(); i++) {
+        if (arguments[i] != "-w") {
+            files << arguments[i];
+        }
     }
-    bool openInWindow = false;
     
+    bool openInWindow = false;
     if (parser.isSet(newWindowOption)) {
         openInWindow = true;
     }

@@ -29,7 +29,7 @@ mkdir build
 cd build
 qmake ..
 make
-./deepin-editor
+./deepin-editor 
 ```
 
 ## Usage
