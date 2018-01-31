@@ -19,6 +19,10 @@ public:
     
     void activeInput(QString text, QString file, int row, int column, int scrollOffset);
     
+    void focus();
+    
+    bool isFocus();
+    
 signals:
     void backToPosition(QString file, int row, int column, int scrollOffset);
     void updateSearchKeyword(QString file, QString keyword);

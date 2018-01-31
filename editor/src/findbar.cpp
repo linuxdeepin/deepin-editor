@@ -58,3 +58,13 @@ void FindBar::back()
     
     backToPosition(findFile, findFileRow, findFileColumn, findFileSrollOffset);
 }
+
+void FindBar::focus()
+{
+    editLine->setFocus();
+}
+
+bool FindBar::isFocus()
+{
+    return editLine->hasFocus();
+}

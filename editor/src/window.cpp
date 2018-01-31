@@ -45,39 +45,39 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     installEventFilter(this);   // add event filter
 
     layoutWidget = new QWidget();
-    
+
     layout = new QVBoxLayout(layoutWidget);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
-    
+
     editorWidget = new QWidget();
     editorLayout = new QStackedLayout(editorWidget);
     editorLayout->setContentsMargins(0, 0, 0, 0);
 
     this->setCentralWidget(layoutWidget);
-    
+
     layout->addWidget(editorWidget);
-    
+
     findBar = new FindBar();
-    
+
     connect(findBar, &FindBar::backToPosition, this, &Window::handleBackToPosition, Qt::QueuedConnection);
     connect(findBar, &FindBar::updateSearchKeyword, this, &Window::handleUpdateSearchKeyword, Qt::QueuedConnection);
-    
+
     settings = new Settings();
     settings->init();
 
     tabbar = new Tabbar();
-    
+
     jumpLineBar = new JumpLineBar(this);
     QTimer::singleShot(0, jumpLineBar, SLOT(hide()));
-    
+
     connect(jumpLineBar, &JumpLineBar::jumpToLine, this, &Window::handleJumpToLine, Qt::QueuedConnection);
     connect(jumpLineBar, &JumpLineBar::tempJumpToLine, this, &Window::handleTempJumpToLine, Qt::QueuedConnection);
     connect(jumpLineBar, &JumpLineBar::backToLine, this, &Window::handleBackToLine, Qt::QueuedConnection);
     connect(jumpLineBar, &JumpLineBar::cancelJump, this, &Window::handleCancelJump, Qt::QueuedConnection);
-    
-    DAnchorsBase::setAnchor(jumpLineBar, Qt::AnchorTop, layoutWidget, Qt::AnchorTop);    
-    DAnchorsBase::setAnchor(jumpLineBar, Qt::AnchorRight, layoutWidget, Qt::AnchorRight);    
+
+    DAnchorsBase::setAnchor(jumpLineBar, Qt::AnchorTop, layoutWidget, Qt::AnchorTop);
+    DAnchorsBase::setAnchor(jumpLineBar, Qt::AnchorRight, layoutWidget, Qt::AnchorRight);
 
     this->titlebar()->setCustomWidget(tabbar, Qt::AlignVCenter, false);
     this->titlebar()->setSeparatorVisible(true);
@@ -103,7 +103,7 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
     QString key = Utils::getKeymap(keyEvent);
 
     // qDebug() << key;
-    
+
     if (key == "Ctrl + T") {
         addBlankTab();
     } else if (key == "Ctrl + S") {
@@ -317,7 +317,7 @@ Editor* Window::createEditor()
     setFontSizeWithConfig(editor);
 
     connect(editor, &Editor::jumpLine, this, &Window::handleJumpLine, Qt::QueuedConnection);
-    
+
     return editor;
 }
 
@@ -330,7 +330,7 @@ void Window::handleBackToLine(QString filepath, int line, int scrollOffset)
 {
     if (editorMap.contains(filepath)) {
         editorMap[filepath]->textEditor->scrollToLine(scrollOffset, line, 0);
-        
+
         QTimer::singleShot(0, editorMap[filepath]->textEditor, SLOT(setFocus()));
     }
 }
@@ -339,7 +339,7 @@ void Window::handleJumpToLine(QString filepath, int line)
 {
     if (editorMap.contains(filepath)) {
         editorMap[filepath]->textEditor->jumpToLine(line, true);
-        
+
         QTimer::singleShot(0, editorMap[filepath]->textEditor, SLOT(setFocus()));
     }
 }
@@ -386,14 +386,14 @@ void Window::setFontSizeWithConfig(Editor *editor)
 {
     int size =  settings->getOption("default_font_size").toInt();
     editor->textEditor->setFontSize(size);
-    
+
     fontSize = size;
 }
 
 void Window::saveFontSize(int size)
 {
     fontSize = size;
-    
+
     settings->setOption("default_font_size", fontSize);
 }
 
@@ -406,26 +406,34 @@ void Window::removeBottomWidget()
 {
     layout->takeAt(1);
 }
-    
+
 void Window::popupFindBar()
 {
-    addBottomWidget(findBar);
-    
-    QString tabPath = tabbar->getActiveTabPath();
-    Editor *editor = getActiveEditor();
-    QString text = editor->textEditor->textCursor().selectedText();
-    int row = editor->textEditor->getCurrentLine();
-    int column = editor->textEditor->getCurrentColumn();
-    int scrollOffset = editor->textEditor->getScrollOffset();
-    
-    findBar->activeInput(text, tabPath, row, column, scrollOffset);
+    if (findBar->isVisible()) {
+        if (findBar->isFocus()) {
+            QTimer::singleShot(0, editorMap[tabbar->getActiveTabPath()]->textEditor, SLOT(setFocus()));
+        } else {
+            findBar->focus();
+        }
+    } else {
+        addBottomWidget(findBar);
+
+        QString tabPath = tabbar->getActiveTabPath();
+        Editor *editor = getActiveEditor();
+        QString text = editor->textEditor->textCursor().selectedText();
+        int row = editor->textEditor->getCurrentLine();
+        int column = editor->textEditor->getCurrentColumn();
+        int scrollOffset = editor->textEditor->getScrollOffset();
+
+        findBar->activeInput(text, tabPath, row, column, scrollOffset);
+    }
 }
 
 void Window::handleBackToPosition(QString file, int row, int column, int scrollOffset)
 {
     if (editorMap.contains(file)) {
         editorMap[file]->textEditor->scrollToLine(scrollOffset, row, column);
-        
+
         QTimer::singleShot(0, editorMap[file]->textEditor, SLOT(setFocus()));
     }
 }
