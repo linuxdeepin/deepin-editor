@@ -45,8 +45,8 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     installEventFilter(this);   // add event filter
 
     layoutWidget = new QWidget();
-    layout = new QStackedLayout(layoutWidget);
-    layout->setContentsMargins(0, 0, 0, 0);
+    editorLayout = new QStackedLayout(layoutWidget);
+    editorLayout->setContentsMargins(0, 0, 0, 0);
 
     this->setCentralWidget(layoutWidget);
     
@@ -134,8 +134,8 @@ void Window::addTab(QString file)
 
             editorMap[file] = editor;
 
-            layout->addWidget(editor);
-            layout->setCurrentWidget(editor);
+            editorLayout->addWidget(editor);
+            editorLayout->setCurrentWidget(editor);
         }
     }
 
@@ -152,14 +152,14 @@ void Window::addBlankTab()
 
     editorMap[blankTabPath] = editor;
 
-    layout->addWidget(editor);
-    layout->setCurrentWidget(editor);
+    editorLayout->addWidget(editor);
+    editorLayout->setCurrentWidget(editor);
 }
 
 void Window::handleSwitchToFile(QString filepath)
 {
     if (editorMap.contains(filepath)) {
-        layout->setCurrentWidget(editorMap[filepath]);
+        editorLayout->setCurrentWidget(editorMap[filepath]);
     }
 }
 
@@ -168,7 +168,7 @@ void Window::handleCloseFile(QString filepath)
     if (editorMap.contains(filepath)) {
         Editor *editor = editorMap[filepath];
 
-        layout->removeWidget(editor);
+        editorLayout->removeWidget(editor);
         editorMap.remove(filepath);
 
         editor->deleteLater();
@@ -287,8 +287,8 @@ void Window::addTabWithContent(QString tabName, QString filepath, QString conten
 
     editorMap[filepath] = editor;
 
-    layout->addWidget(editor);
-    layout->setCurrentWidget(editor);
+    editorLayout->addWidget(editor);
+    editorLayout->setCurrentWidget(editor);
 }
 
 TextEditor* Window::getTextEditor(QString filepath)

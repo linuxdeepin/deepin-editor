@@ -89,7 +89,7 @@ public slots:
     
 private:
     QWidget *layoutWidget;
-    QStackedLayout *layout;
+    QStackedLayout *editorLayout;
     
     Tabbar *tabbar;
     QMap<QString, Editor*> editorMap;
