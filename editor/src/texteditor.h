@@ -40,6 +40,10 @@ public:
     void swapLineUp();
     void swapLineDown();
     
+    void moveToLineIndentation();
+    void moveToStartOfLine();
+    void moveToEndOfLine();
+    
     QWidget *lineNumberArea;
                            
 signals:

@@ -169,8 +169,14 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         swapLineUp();
     } else if (key == "Meta + Shift + N") {
         swapLineDown();
+    } else if (key == "Ctrl + Shift + E") {
+        moveToEndOfLine();
+    } else if (key == "Ctrl + Shift + A") {
+        moveToStartOfLine();
+    } else if (key == "Alt + M") {
+        moveToLineIndentation();
     } else {
-            QPlainTextEdit::keyPressEvent(keyEvent);
+        QPlainTextEdit::keyPressEvent(keyEvent);
     }
 }
 
@@ -353,3 +359,43 @@ void TextEditor::swapLineDown(){
 
     setTextCursor(cursor);
 }
+
+void TextEditor::moveToLineIndentation()
+{
+    // Get line start position.
+    moveCursor(QTextCursor::StartOfLine);
+    int startColumn = textCursor().columnNumber();
+    
+    // Get line end position.
+    moveCursor(QTextCursor::EndOfLine);    
+    int endColumn = textCursor().columnNumber();
+    
+    // Move to line start first.
+    moveCursor(QTextCursor::StartOfLine);
+    
+    // Move to first non-blank char of line.
+    int column = startColumn;
+    while (column <= endColumn) {
+        QChar currentChar = toPlainText().at(std::max(textCursor().position() - 1, 0));
+        
+        if (!currentChar.isSpace()) {
+            moveCursor(QTextCursor::PreviousCharacter);
+            break;
+        } else {
+            moveCursor(QTextCursor::NextCharacter);
+        }
+        
+        column++;
+    }
+}
+
+void TextEditor::moveToStartOfLine()
+{
+    moveCursor(QTextCursor::StartOfLine);
+}
+
+void TextEditor::moveToEndOfLine()
+{
+    moveCursor(QTextCursor::EndOfLine);
+}
+    
