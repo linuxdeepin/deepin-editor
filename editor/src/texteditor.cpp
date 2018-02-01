@@ -324,10 +324,9 @@ void TextEditor::killLine()
 
         // Cursor is at end of line.
         bool isEmptyLine = text.size() == 0;
-        bool isAtEnd = textCursor().columnNumber() == cursor.columnNumber();
 
         // Join next line if current line is empty or cursor at end of line.
-        if (isEmptyLine || isAtEnd) {
+        if (isEmptyLine || textCursor().atBlockEnd()) {
             QTextCursor cursor = textCursor();
 
             cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
