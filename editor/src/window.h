@@ -77,6 +77,8 @@ public:
     
     void popupFindBar();
     
+    void tryCleanLayout();
+    
 signals:
     void popTab(QString tabName, QString filepath, QString content);
     

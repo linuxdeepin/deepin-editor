@@ -130,6 +130,8 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
         toggleFullscreen();
     } else if (key == "Ctrl + Shift + F") {
         popupFindBar();
+    } else if (key == "Esc") {
+        tryCleanLayout();
     }
 }
 
@@ -404,7 +406,8 @@ void Window::addBottomWidget(QWidget *widget)
 
 void Window::removeBottomWidget()
 {
-    layout->takeAt(1);
+    QWidget *widget = layout->takeAt(1)->widget();
+    widget->hide();
 }
 
 void Window::popupFindBar()
@@ -445,4 +448,9 @@ void Window::handleUpdateSearchKeyword(QString file, QString keyword)
     if (file == tabPath && editorMap.contains(file)) {
         editorMap[file]->textEditor->highlightKeyword(keyword);
     }
+}
+
+void Window::tryCleanLayout()
+{
+    removeBottomWidget();
 }
