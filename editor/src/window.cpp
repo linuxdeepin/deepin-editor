@@ -82,6 +82,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     this->titlebar()->setCustomWidget(tabbar, Qt::AlignVCenter, false);
     this->titlebar()->setSeparatorVisible(true);
     this->titlebar()->setAutoHideOnFullscreen(true);
+    this->titlebar()->setBackgroundTransparent(true);
 
     connect(tabbar, &Tabbar::doubleClicked, this->titlebar(), &DTitlebar::doubleClicked, Qt::QueuedConnection);
     connect(tabbar, &Tabbar::switchToFile, this, &Window::handleSwitchToFile, Qt::QueuedConnection);
@@ -90,7 +91,6 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     connect(tabbar, &Tabbar::tabReleaseRequested, this, &Window::handleTabReleaseRequested, Qt::QueuedConnection);
 
     Utils::applyQss(this, "main.qss");
-    Utils::applyQss(this->titlebar(), "main.qss");
 }
 
 Window::~Window()

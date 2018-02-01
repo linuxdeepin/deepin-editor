@@ -20,7 +20,3 @@ QTabBar::tab:selected
     border: 0px;
     border-bottom: 2px solid #2CA7F8;
 }
-
-Dtk--Widget--DTitlebar {
-    background: #202020；
-}
