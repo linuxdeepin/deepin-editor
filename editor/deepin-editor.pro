@@ -18,6 +18,7 @@ HEADERS += src/window.h \
 	   src/texteditor.h \		   
 	   src/jumplinebar.h \		   
 	   src/findbar.h \		   
+	   src/replacebar.h \		   
 	   src/linebar.h \		   
 	   src/settings.h \		   
 	   src/tabbar.h \		   
@@ -31,6 +32,7 @@ SOURCES += src/window.cpp \
 	   src/texteditor.cpp \		   
 	   src/jumplinebar.cpp \		   
 	   src/findbar.cpp \		   
+	   src/replacebar.cpp \		   
 	   src/linebar.cpp \		   
 	   src/settings.cpp \		   
 	   src/tabbar.cpp \		   

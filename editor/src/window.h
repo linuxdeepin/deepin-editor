@@ -26,6 +26,7 @@
 
 #include "dmainwindow.h"
 #include "findbar.h"
+#include "replacebar.h"
 #include "settings.h"
 #include "jumplinebar.h"
 #include <dimagebutton.h>
@@ -76,6 +77,7 @@ public:
     void addBottomWidget(QWidget *widget);
     
     void popupFindBar();
+    void popupReplaceBar();
     
     void tryCleanLayout();
     
@@ -117,6 +119,7 @@ private:
     Settings *settings;
     
     FindBar *findBar;
+    ReplaceBar *replaceBar;
 };
 
 #endif

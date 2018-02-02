@@ -65,6 +65,9 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     connect(findBar, &FindBar::findNext, this, &Window::handleFindNext, Qt::QueuedConnection);
     connect(findBar, &FindBar::findPrev, this, &Window::handleFindPrev, Qt::QueuedConnection);
 
+    replaceBar = new ReplaceBar();
+    connect(replaceBar, &ReplaceBar::updateSearchKeyword, this, &Window::handleUpdateSearchKeyword, Qt::QueuedConnection);
+    
     settings = new Settings();
     settings->init();
 
@@ -132,6 +135,8 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
         toggleFullscreen();
     } else if (key == "Ctrl + Shift + F") {
         popupFindBar();
+    } else if (key == "Ctrl + Shift + H") {
+        popupReplaceBar();
     } else if (key == "Esc") {
         tryCleanLayout();
     }
@@ -410,6 +415,28 @@ void Window::removeBottomWidget()
 {
     QWidget *widget = layout->takeAt(1)->widget();
     widget->hide();
+}
+
+void Window::popupReplaceBar()
+{
+    if (replaceBar->isVisible()) {
+        if (replaceBar->isFocus()) {
+            QTimer::singleShot(0, editorMap[tabbar->getActiveTabPath()]->textEditor, SLOT(setFocus()));
+        } else {
+            replaceBar->focus();
+        }
+    } else {
+        addBottomWidget(replaceBar);
+
+        QString tabPath = tabbar->getActiveTabPath();
+        Editor *editor = getActiveEditor();
+        QString text = editor->textEditor->textCursor().selectedText();
+        int row = editor->textEditor->getCurrentLine();
+        int column = editor->textEditor->getCurrentColumn();
+        int scrollOffset = editor->textEditor->getScrollOffset();
+
+        replaceBar->activeInput(text, tabPath, row, column, scrollOffset);
+    }
 }
 
 void Window::popupFindBar()

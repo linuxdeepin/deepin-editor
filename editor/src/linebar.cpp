@@ -29,7 +29,7 @@ void LineBar::keyPressEvent(QKeyEvent *e)
     } else if (key == "Ctrl + Return") {
         pressCtrlEnter();
     } else {
-            DLineEdit::keyPressEvent(e);
+        DLineEdit::keyPressEvent(e);
     }
     
 }
