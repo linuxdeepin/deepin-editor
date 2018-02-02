@@ -68,7 +68,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     replaceBar = new ReplaceBar();
     connect(replaceBar, &ReplaceBar::updateSearchKeyword, this, &Window::handleUpdateSearchKeyword, Qt::QueuedConnection);
     connect(replaceBar, &ReplaceBar::replaceNext, this, &Window::handleReplaceNext, Qt::QueuedConnection);
-    
+
     settings = new Settings();
     settings->init();
 
@@ -488,7 +488,7 @@ void Window::tryCleanLayout()
 void Window::handleFindNext()
 {
     Editor *editor = getActiveEditor();
-    
+
     editor->textEditor->updateCursorKeywordSelection(editor->textEditor->getPosition(), true);
     editor->textEditor->renderAllSelections();
 }
@@ -496,7 +496,7 @@ void Window::handleFindNext()
 void Window::handleFindPrev()
 {
     Editor *editor = getActiveEditor();
-    
+
     editor->textEditor->updateCursorKeywordSelection(editor->textEditor->getPosition(), false);
     editor->textEditor->renderAllSelections();
 }
@@ -504,6 +504,6 @@ void Window::handleFindPrev()
 void Window::handleReplaceNext(QString replaceText, QString withText)
 {
     Editor *editor = getActiveEditor();
-    
+
     editor->textEditor->replaceNext(replaceText, withText);
 }
