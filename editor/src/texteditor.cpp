@@ -133,30 +133,38 @@ void TextEditor::updateHighlightLineSeleciton()
     currentLineSelection = selection;
 }
 
-bool TextEditor::setCursorKeywordSeletoin(int line, bool findNext)
+bool TextEditor::setCursorKeywordSeletoin(int position, bool findNext)
 {
     if (findNext) {
         for (int i = 0; i < keywordSelections.size(); i++) {
-            if (keywordSelections[i].cursor.blockNumber() >= line) {
+            if (keywordSelections[i].cursor.position() > position) {
                 cursorKeywordSelection.cursor = keywordSelections[i].cursor;
 
                 QBrush brush(QColor("#FF6347"));
                 cursorKeywordSelection.format.setProperty(QTextFormat::BackgroundBrush, brush);
 
                 jumpToLine(keywordSelections[i].cursor.blockNumber() + 1, false);
-
+                
+                QTextCursor cursor = textCursor();
+                cursor.setPosition(keywordSelections[i].cursor.position());
+                setTextCursor(cursor);
+                
                 return true;
             }
         }
     } else {
         for (int i = keywordSelections.size() - 1; i >= 0; i--) {
-            if (keywordSelections[i].cursor.blockNumber() + 1 <= line - 2) {
+            if (keywordSelections[i].cursor.position() < position) {
                 cursorKeywordSelection.cursor = keywordSelections[i].cursor;
 
                 QBrush brush(QColor("#FF6347"));
                 cursorKeywordSelection.format.setProperty(QTextFormat::BackgroundBrush, brush);
 
                 jumpToLine(keywordSelections[i].cursor.blockNumber() + 1, false);
+                
+                QTextCursor cursor = textCursor();
+                cursor.setPosition(keywordSelections[i].cursor.position());
+                setTextCursor(cursor);
 
                 return true;
             }
@@ -166,15 +174,18 @@ bool TextEditor::setCursorKeywordSeletoin(int line, bool findNext)
     return false;
 }
 
-void TextEditor::updateCursorKeywordSelection(int line, bool findNext)
+void TextEditor::updateCursorKeywordSelection(int position, bool findNext)
 {
-    bool findOne = setCursorKeywordSeletoin(line, findNext);
+    bool findOne = setCursorKeywordSeletoin(position, findNext);
 
     if (!findOne) {
         if (findNext) {
             setCursorKeywordSeletoin(0, findNext);
         } else {
-            setCursorKeywordSeletoin(blockCount(), findNext);
+            QTextCursor cursor = textCursor();
+            cursor.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
+            
+            setCursorKeywordSeletoin(cursor.position(), findNext);
         }
     }
 }
@@ -250,6 +261,11 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
     } else {
         QPlainTextEdit::keyPressEvent(keyEvent);
     }
+}
+
+int TextEditor::getPosition()
+{
+    return textCursor().position();
 }
 
 int TextEditor::getCurrentLine()
@@ -517,11 +533,11 @@ void TextEditor::jumpToLine()
     jumpLine(getCurrentLine(), blockCount(), scrollbar->value());
 }
 
-void TextEditor::highlightKeyword(QString keyword, int line)
+void TextEditor::highlightKeyword(QString keyword, int position)
 {
     updateKeywordSelections(keyword);
 
-    updateCursorKeywordSelection(line, true);
+    updateCursorKeywordSelection(position, true);
 
     updateHighlightLineSeleciton();
 
@@ -537,4 +553,8 @@ void TextEditor::renderAllSelections()
     selections.append(cursorKeywordSelection);
 
     setExtraSelections(selections);
+}
+
+void TextEditor::replaceNext(int position, QString replaceText, QString withText)
+{
 }

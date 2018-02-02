@@ -67,6 +67,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
 
     replaceBar = new ReplaceBar();
     connect(replaceBar, &ReplaceBar::updateSearchKeyword, this, &Window::handleUpdateSearchKeyword, Qt::QueuedConnection);
+    connect(replaceBar, &ReplaceBar::replaceNext, this, &Window::handleReplaceNext, Qt::QueuedConnection);
     
     settings = new Settings();
     settings->init();
@@ -475,7 +476,7 @@ void Window::handleUpdateSearchKeyword(QString file, QString keyword)
     QString tabPath = tabbar->getActiveTabPath();
 
     if (file == tabPath && editorMap.contains(file)) {
-        editorMap[file]->textEditor->highlightKeyword(keyword, editorMap[file]->textEditor->getCurrentLine());
+        editorMap[file]->textEditor->highlightKeyword(keyword, editorMap[file]->textEditor->getPosition());
     }
 }
 
@@ -488,7 +489,7 @@ void Window::handleFindNext()
 {
     Editor *editor = getActiveEditor();
     
-    editor->textEditor->updateCursorKeywordSelection(editor->textEditor->getCurrentLine() + 1, true);
+    editor->textEditor->updateCursorKeywordSelection(editor->textEditor->getPosition(), true);
     editor->textEditor->renderAllSelections();
 }
 
@@ -496,6 +497,13 @@ void Window::handleFindPrev()
 {
     Editor *editor = getActiveEditor();
     
-    editor->textEditor->updateCursorKeywordSelection(editor->textEditor->getCurrentLine() + 1, false);
+    editor->textEditor->updateCursorKeywordSelection(editor->textEditor->getPosition(), false);
     editor->textEditor->renderAllSelections();
+}
+
+void Window::handleReplaceNext(QString replaceText, QString withText)
+{
+    Editor *editor = getActiveEditor();
+    
+    editor->textEditor->replaceNext(editor->textEditor->getPosition(), replaceText, withText);
 }

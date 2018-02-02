@@ -27,8 +27,8 @@ ReplaceBar::ReplaceBar(QWidget *parent) : QWidget(parent)
     setFixedHeight(40);
     
     connect(replaceLine, &LineBar::pressEsc, this, &ReplaceBar::back, Qt::QueuedConnection);
-    connect(replaceLine, &LineBar::pressEnter, this, &ReplaceBar::replaceNext, Qt::QueuedConnection);
-    connect(replaceLine, &LineBar::pressCtrlEnter, this, &ReplaceBar::replacePrev, Qt::QueuedConnection);
+    connect(replaceLine, &LineBar::pressEnter, this, &ReplaceBar::handleReplaceNext, Qt::QueuedConnection);
+    connect(withLine, &LineBar::pressEnter, this, &ReplaceBar::handleReplaceNext, Qt::QueuedConnection);
     connect(replaceLine, &LineBar::contentChanged, this, &ReplaceBar::handleContentChanged, Qt::QueuedConnection);
 }
 
@@ -97,14 +97,8 @@ bool ReplaceBar::isFocus()
     return replaceLine->hasFocus();
 }
 
-void ReplaceBar::handleClickedNextButton()
+void ReplaceBar::handleReplaceNext()
 {
-    replaceNext();
-    replaceLine->setFocus();
+    replaceNext(replaceLine->text(), withLine->text());
 }
 
-void ReplaceBar::handleClickedPrevButton()
-{
-    replacePrev();
-    replaceLine->setFocus();
-}

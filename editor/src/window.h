@@ -98,6 +98,7 @@ public slots:
     void handleUpdateSearchKeyword(QString file, QString keyword);
     void handleFindNext();
     void handleFindPrev();
+    void handleReplaceNext(QString replaceText, QString withText);
 
     void addBlankTab();
     

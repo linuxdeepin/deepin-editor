@@ -24,6 +24,7 @@ public:
 
     void keyPressEvent(QKeyEvent *e);
 
+    int getPosition();
     int getCurrentLine();
     int getCurrentColumn();
     int getScrollOffset();
@@ -48,15 +49,17 @@ public:
 
     void jumpToLine();
 
-    void highlightKeyword(QString keyword, int line);
+    void highlightKeyword(QString keyword, int position);
 
     QWidget *lineNumberArea;
 
     void updateHighlightLineSeleciton();
     void updateKeywordSelections(QString keyword);
-    void updateCursorKeywordSelection(int line, bool findNext);
+    void updateCursorKeywordSelection(int position, bool findNext);
 
     void renderAllSelections();
+    
+    void replaceNext(int position, QString replaceText, QString withText);
 
 signals:
     void jumpLine(int line, int lineCount, int scrollOffset);
@@ -80,7 +83,7 @@ private:
     QTextEdit::ExtraSelection cursorKeywordSelection;
     QList<QTextEdit::ExtraSelection> keywordSelections;
     
-    bool setCursorKeywordSeletoin(int line, bool findNext);
+    bool setCursorKeywordSeletoin(int position, bool findNext);
 };
 
 #endif
