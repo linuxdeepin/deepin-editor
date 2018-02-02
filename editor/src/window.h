@@ -99,6 +99,7 @@ public slots:
     void handleFindNext();
     void handleFindPrev();
     void handleReplaceNext(QString replaceText, QString withText);
+    void handleReplaceSkip();
 
     void addBlankTab();
     

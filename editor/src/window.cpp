@@ -68,6 +68,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     replaceBar = new ReplaceBar();
     connect(replaceBar, &ReplaceBar::updateSearchKeyword, this, &Window::handleUpdateSearchKeyword, Qt::QueuedConnection);
     connect(replaceBar, &ReplaceBar::replaceNext, this, &Window::handleReplaceNext, Qt::QueuedConnection);
+    connect(replaceBar, &ReplaceBar::replaceSkip, this, &Window::handleReplaceSkip, Qt::QueuedConnection);
 
     settings = new Settings();
     settings->init();
@@ -510,4 +511,12 @@ void Window::handleReplaceNext(QString replaceText, QString withText)
     Editor *editor = getActiveEditor();
 
     editor->textEditor->replaceNext(replaceText, withText);
+}
+
+void Window::handleReplaceSkip()
+{
+    Editor *editor = getActiveEditor();
+
+    editor->textEditor->updateCursorKeywordSelection(editor->textEditor->getPosition(), true);
+    editor->textEditor->renderAllSelections();
 }

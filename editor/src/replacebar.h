@@ -27,6 +27,7 @@ signals:
     void backToPosition(QString file, int row, int column, int scrollOffset);
     void updateSearchKeyword(QString file, QString keyword);
     void replaceNext(QString replaceText, QString withText);
+    void replaceSkip();
     
 public slots:
     void back();

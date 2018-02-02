@@ -15,6 +15,11 @@ ReplaceBar::ReplaceBar(QWidget *parent) : QWidget(parent)
     replaceRestButton = new DTextButton("Replace Rest");
     replaceAllButton = new DTextButton("Replace All");
     
+    replaceButton->setFocusPolicy(Qt::NoFocus);
+    skipButton->setFocusPolicy(Qt::NoFocus);
+    replaceRestButton->setFocusPolicy(Qt::NoFocus);
+    replaceAllButton->setFocusPolicy(Qt::NoFocus);
+    
     layout->addWidget(replaceLabel);
     layout->addWidget(replaceLine);
     layout->addWidget(withLabel);
@@ -34,6 +39,7 @@ ReplaceBar::ReplaceBar(QWidget *parent) : QWidget(parent)
     connect(replaceLine, &LineBar::contentChanged, this, &ReplaceBar::handleContentChanged, Qt::QueuedConnection);
     
     connect(replaceButton, &DTextButton::clicked, this, &ReplaceBar::handleReplaceNext, Qt::QueuedConnection);
+    connect(skipButton, &DTextButton::clicked, this, &ReplaceBar::replaceSkip, Qt::QueuedConnection);
 }
 
 bool ReplaceBar::focusNextPrevChild(bool)

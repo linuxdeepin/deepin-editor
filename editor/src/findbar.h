@@ -32,8 +32,6 @@ signals:
 public slots:
     void back();
     void handleContentChanged();
-    void handleClickedNextButton();
-    void handleClickedPrevButton();
     
 protected:
     void paintEvent(QPaintEvent *event);
