@@ -555,6 +555,16 @@ void TextEditor::renderAllSelections()
     setExtraSelections(selections);
 }
 
-void TextEditor::replaceNext(int position, QString replaceText, QString withText)
+void TextEditor::replaceNext(QString replaceText, QString withText)
 {
+    QTextCursor cursor = textCursor();
+    
+    cursor.setPosition(cursorKeywordSelection.cursor.position() - replaceText.size());
+    cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, replaceText.size());
+    cursor.insertText(withText);
+    
+    setTextCursor(cursor);
+    
+    highlightKeyword(replaceText, getPosition());
 }

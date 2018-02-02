@@ -59,7 +59,7 @@ public:
 
     void renderAllSelections();
     
-    void replaceNext(int position, QString replaceText, QString withText);
+    void replaceNext(QString replaceText, QString withText);
 
 signals:
     void jumpLine(int line, int lineCount, int scrollOffset);

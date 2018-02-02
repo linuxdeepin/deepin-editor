@@ -505,5 +505,5 @@ void Window::handleReplaceNext(QString replaceText, QString withText)
 {
     Editor *editor = getActiveEditor();
     
-    editor->textEditor->replaceNext(editor->textEditor->getPosition(), replaceText, withText);
+    editor->textEditor->replaceNext(replaceText, withText);
 }
