@@ -409,6 +409,10 @@ void Window::saveFontSize(int size)
 
 void Window::addBottomWidget(QWidget *widget)
 {
+    if (layout->count() >= 2) {
+        removeBottomWidget();
+    }
+    
     layout->addWidget(widget);
 }
 
