@@ -144,11 +144,11 @@ bool TextEditor::setCursorKeywordSeletoin(int position, bool findNext)
                 cursorKeywordSelection.format.setProperty(QTextFormat::BackgroundBrush, brush);
 
                 jumpToLine(keywordSelections[i].cursor.blockNumber() + 1, false);
-                
+
                 QTextCursor cursor = textCursor();
                 cursor.setPosition(keywordSelections[i].cursor.position());
                 setTextCursor(cursor);
-                
+
                 return true;
             }
         }
@@ -161,7 +161,7 @@ bool TextEditor::setCursorKeywordSeletoin(int position, bool findNext)
                 cursorKeywordSelection.format.setProperty(QTextFormat::BackgroundBrush, brush);
 
                 jumpToLine(keywordSelections[i].cursor.blockNumber() + 1, false);
-                
+
                 QTextCursor cursor = textCursor();
                 cursor.setPosition(keywordSelections[i].cursor.position());
                 setTextCursor(cursor);
@@ -184,7 +184,7 @@ void TextEditor::updateCursorKeywordSelection(int position, bool findNext)
         } else {
             QTextCursor cursor = textCursor();
             cursor.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
-            
+
             setCursorKeywordSeletoin(cursor.position(), findNext);
         }
     }
@@ -558,12 +558,43 @@ void TextEditor::renderAllSelections()
 void TextEditor::replaceNext(QString replaceText, QString withText)
 {
     QTextCursor cursor = textCursor();
-    
+
     cursor.setPosition(cursorKeywordSelection.cursor.position() - replaceText.size());
     cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, replaceText.size());
     cursor.insertText(withText);
+
+    setTextCursor(cursor);
+
+    highlightKeyword(replaceText, getPosition());
+}
+
+void TextEditor::replaceRest(QString replaceText, QString withText)
+{
+    QTextCursor cursor = textCursor();
+    cursor.setPosition(cursorKeywordSelection.cursor.position() - replaceText.size());
+    cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+    QString text = cursor.selectedText();
+
+    cursor.insertText(text.replace(replaceText, withText));
+    cursor.clearSelection();
+
+    setTextCursor(cursor);
     
+    highlightKeyword(replaceText, getPosition());
+}
+
+void TextEditor::replaceAll(QString replaceText, QString withText)
+{
+    QTextCursor cursor = textCursor();
+    cursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+    QString text = cursor.selectedText();
+
+    cursor.insertText(text.replace(replaceText, withText));
+    cursor.clearSelection();
+
     setTextCursor(cursor);
     
     highlightKeyword(replaceText, getPosition());

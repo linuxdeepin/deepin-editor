@@ -28,11 +28,15 @@ signals:
     void updateSearchKeyword(QString file, QString keyword);
     void replaceNext(QString replaceText, QString withText);
     void replaceSkip();
+    void replaceRest(QString replaceText, QString withText);
+    void replaceAll(QString replaceText, QString withText);
     
 public slots:
     void back();
     void handleContentChanged();
     void handleReplaceNext();
+    void handleReplaceRest();
+    void handleReplaceAll();
     
 protected:
     void paintEvent(QPaintEvent *event);
@@ -48,7 +52,7 @@ private:
     LineBar *withLine;
     
     DTextButton *replaceButton;
-    DTextButton *skipButton;
+    DTextButton *replaceSkipButton;
     DTextButton *replaceRestButton;
     DTextButton *replaceAllButton;
     

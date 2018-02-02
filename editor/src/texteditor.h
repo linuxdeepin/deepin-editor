@@ -60,6 +60,8 @@ public:
     void renderAllSelections();
     
     void replaceNext(QString replaceText, QString withText);
+    void replaceRest(QString replaceText, QString withText);
+    void replaceAll(QString replaceText, QString withText);
 
 signals:
     void jumpLine(int line, int lineCount, int scrollOffset);

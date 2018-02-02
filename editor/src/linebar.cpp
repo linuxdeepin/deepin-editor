@@ -28,6 +28,10 @@ void LineBar::keyPressEvent(QKeyEvent *e)
         pressEnter();
     } else if (key == "Ctrl + Return") {
         pressCtrlEnter();
+    } else if (key == "Alt + Return") {
+        pressAltEnter();
+    } else if (key == "Meta + Return") {
+        pressMetaEnter();
     } else {
         DLineEdit::keyPressEvent(e);
     }

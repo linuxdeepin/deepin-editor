@@ -22,6 +22,8 @@ signals:
     void pressEsc();
     void pressEnter();
     void pressCtrlEnter();
+    void pressAltEnter();
+    void pressMetaEnter();
     void contentChanged();
     
 protected:

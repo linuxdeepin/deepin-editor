@@ -100,6 +100,8 @@ public slots:
     void handleFindPrev();
     void handleReplaceNext(QString replaceText, QString withText);
     void handleReplaceSkip();
+    void handleReplaceRest(QString replaceText, QString withText);
+    void handleReplaceAll(QString replaceText, QString withText);
 
     void addBlankTab();
     
