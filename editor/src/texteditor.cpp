@@ -599,3 +599,16 @@ void TextEditor::replaceAll(QString replaceText, QString withText)
     
     highlightKeyword(replaceText, getPosition());
 }
+
+void TextEditor::cleanKeywords()
+{
+    cursorKeywordSelection.cursor = textCursor();
+    
+    keywordSelections.clear();
+    
+    updateHighlightLineSeleciton();
+
+    renderAllSelections();
+    
+    setFocus();
+}

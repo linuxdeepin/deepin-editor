@@ -64,13 +64,16 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     connect(findBar, &FindBar::updateSearchKeyword, this, &Window::handleUpdateSearchKeyword, Qt::QueuedConnection);
     connect(findBar, &FindBar::findNext, this, &Window::handleFindNext, Qt::QueuedConnection);
     connect(findBar, &FindBar::findPrev, this, &Window::handleFindPrev, Qt::QueuedConnection);
+    connect(findBar, &FindBar::cleanMatchKeyword, this, &Window::cleanKeywords, Qt::QueuedConnection);
 
     replaceBar = new ReplaceBar();
+    connect(replaceBar, &ReplaceBar::backToPosition, this, &Window::handleBackToPosition, Qt::QueuedConnection);
     connect(replaceBar, &ReplaceBar::updateSearchKeyword, this, &Window::handleUpdateSearchKeyword, Qt::QueuedConnection);
     connect(replaceBar, &ReplaceBar::replaceNext, this, &Window::handleReplaceNext, Qt::QueuedConnection);
     connect(replaceBar, &ReplaceBar::replaceSkip, this, &Window::handleReplaceSkip, Qt::QueuedConnection);
     connect(replaceBar, &ReplaceBar::replaceRest, this, &Window::handleReplaceRest, Qt::QueuedConnection);
     connect(replaceBar, &ReplaceBar::replaceAll, this, &Window::handleReplaceAll, Qt::QueuedConnection);
+    connect(replaceBar, &ReplaceBar::cleanMatchKeyword, this, &Window::cleanKeywords, Qt::QueuedConnection);
 
     settings = new Settings();
     settings->init();
@@ -535,4 +538,11 @@ void Window::handleReplaceAll(QString replaceText, QString withText)
     Editor *editor = getActiveEditor();
 
     editor->textEditor->replaceAll(replaceText, withText);
+}
+
+void Window::cleanKeywords()
+{
+    Editor *editor = getActiveEditor();
+
+    editor->textEditor->cleanKeywords();
 }

@@ -54,6 +54,11 @@ ReplaceBar::ReplaceBar(QWidget *parent) : QWidget(parent)
     connect(replaceAllButton, &DTextButton::clicked, this, &ReplaceBar::handleReplaceAll, Qt::QueuedConnection);
 }
 
+void ReplaceBar::hideEvent(QHideEvent *)
+{
+    cleanMatchKeyword();
+}
+
 bool ReplaceBar::focusNextPrevChild(bool)
 {
     auto *editWidget = qobject_cast<LineBar*>(focusWidget());

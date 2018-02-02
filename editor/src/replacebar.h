@@ -30,6 +30,7 @@ signals:
     void replaceSkip();
     void replaceRest(QString replaceText, QString withText);
     void replaceAll(QString replaceText, QString withText);
+    void cleanMatchKeyword();
     
 public slots:
     void back();
@@ -41,6 +42,7 @@ public slots:
 protected:
     void paintEvent(QPaintEvent *event);
     bool focusNextPrevChild(bool next);
+    void hideEvent(QHideEvent *event);
     
 private:
     QHBoxLayout *layout;

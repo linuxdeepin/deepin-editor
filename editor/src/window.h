@@ -105,6 +105,8 @@ public slots:
 
     void addBlankTab();
     
+    void cleanKeywords();
+    
 private:
     QWidget *layoutWidget;
     QWidget *editorWidget;

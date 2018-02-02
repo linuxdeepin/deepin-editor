@@ -28,6 +28,7 @@ signals:
     void updateSearchKeyword(QString file, QString keyword);
     void findNext();
     void findPrev();
+    void cleanMatchKeyword();
     
 public slots:
     void back();
@@ -35,6 +36,7 @@ public slots:
     
 protected:
     void paintEvent(QPaintEvent *event);
+    void hideEvent(QHideEvent *event);
     
 private:
     QHBoxLayout *layout;

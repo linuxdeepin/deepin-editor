@@ -35,6 +35,11 @@ void FindBar::handleContentChanged()
     updateSearchKeyword(findFile, editLine->text());
 }
 
+void FindBar::hideEvent(QHideEvent *)
+{
+    cleanMatchKeyword();
+}
+
 void FindBar::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
