@@ -19,7 +19,12 @@ FindBar::FindBar(QWidget *parent) : QWidget(parent)
     setFixedHeight(40);
     
     connect(editLine, &LineBar::pressEsc, this, &FindBar::back, Qt::QueuedConnection);
+    connect(editLine, &LineBar::pressEnter, this, &FindBar::findNext, Qt::QueuedConnection);
+    connect(editLine, &LineBar::pressCtrlEnter, this, &FindBar::findPrev, Qt::QueuedConnection);
     connect(editLine, &LineBar::contentChanged, this, &FindBar::handleContentChanged, Qt::QueuedConnection);
+    
+    connect(findNextButton, &DTextButton::clicked, this, &FindBar::handleClickedNextButton, Qt::QueuedConnection);
+    connect(findPrevButton, &DTextButton::clicked, this, &FindBar::handleClickedPrevButton, Qt::QueuedConnection);
 }
 
 void FindBar::handleContentChanged()
@@ -67,4 +72,16 @@ void FindBar::focus()
 bool FindBar::isFocus()
 {
     return editLine->hasFocus();
+}
+
+void FindBar::handleClickedNextButton()
+{
+    findNext();
+    editLine->setFocus();
+}
+
+void FindBar::handleClickedPrevButton()
+{
+    findPrev();
+    editLine->setFocus();
 }

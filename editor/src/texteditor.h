@@ -48,12 +48,13 @@ public:
 
     void jumpToLine();
 
-    void highlightKeyword(QString keyword);
+    void highlightKeyword(QString keyword, int line);
 
     QWidget *lineNumberArea;
 
     void updateHighlightLineSeleciton();
     void updateKeywordSelections(QString keyword);
+    void updateCursorKeywordSelection(int line, bool findNext);
 
     void renderAllSelections();
 
@@ -76,7 +77,10 @@ private:
     QPropertyAnimation *scrollAnimation;
 
     QTextEdit::ExtraSelection currentLineSelection;
-    QList<QTextEdit::ExtraSelection> keywordSelections;;
+    QTextEdit::ExtraSelection cursorKeywordSelection;
+    QList<QTextEdit::ExtraSelection> keywordSelections;
+    
+    bool setCursorKeywordSeletoin(int line, bool findNext);
 };
 
 #endif

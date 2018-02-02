@@ -62,6 +62,8 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
 
     connect(findBar, &FindBar::backToPosition, this, &Window::handleBackToPosition, Qt::QueuedConnection);
     connect(findBar, &FindBar::updateSearchKeyword, this, &Window::handleUpdateSearchKeyword, Qt::QueuedConnection);
+    connect(findBar, &FindBar::findNext, this, &Window::handleFindNext, Qt::QueuedConnection);
+    connect(findBar, &FindBar::findPrev, this, &Window::handleFindPrev, Qt::QueuedConnection);
 
     settings = new Settings();
     settings->init();
@@ -446,11 +448,27 @@ void Window::handleUpdateSearchKeyword(QString file, QString keyword)
     QString tabPath = tabbar->getActiveTabPath();
 
     if (file == tabPath && editorMap.contains(file)) {
-        editorMap[file]->textEditor->highlightKeyword(keyword);
+        editorMap[file]->textEditor->highlightKeyword(keyword, editorMap[file]->textEditor->getCurrentLine());
     }
 }
 
 void Window::tryCleanLayout()
 {
     removeBottomWidget();
+}
+
+void Window::handleFindNext()
+{
+    Editor *editor = getActiveEditor();
+    
+    editor->textEditor->updateCursorKeywordSelection(editor->textEditor->getCurrentLine() + 1, true);
+    editor->textEditor->renderAllSelections();
+}
+
+void Window::handleFindPrev()
+{
+    Editor *editor = getActiveEditor();
+    
+    editor->textEditor->updateCursorKeywordSelection(editor->textEditor->getCurrentLine() + 1, false);
+    editor->textEditor->renderAllSelections();
 }

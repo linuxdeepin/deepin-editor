@@ -26,10 +26,14 @@ public:
 signals:
     void backToPosition(QString file, int row, int column, int scrollOffset);
     void updateSearchKeyword(QString file, QString keyword);
+    void findNext();
+    void findPrev();
     
 public slots:
     void back();
     void handleContentChanged();
+    void handleClickedNextButton();
+    void handleClickedPrevButton();
     
 protected:
     void paintEvent(QPaintEvent *event);

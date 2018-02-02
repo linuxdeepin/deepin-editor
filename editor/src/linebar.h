@@ -21,6 +21,7 @@ signals:
     void focusOut();
     void pressEsc();
     void pressEnter();
+    void pressCtrlEnter();
     void contentChanged();
     
 protected:
