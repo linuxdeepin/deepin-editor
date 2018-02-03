@@ -16,7 +16,11 @@ QTabBar::tab:hover
 
 QTabBar::tab:selected
 {
-	color: #2CA7F8;
+    color: #2CA7F8;
     border: 0px;
     border-bottom: 2px solid #2CA7F8;
+}
+
+Dtk--Widget--DTitlebar {
+    background: #202020；
 }
