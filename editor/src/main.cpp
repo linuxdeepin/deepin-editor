@@ -41,12 +41,11 @@ DWIDGET_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
+    // Init DTK.
     DApplication::loadDXcbPlugin();
 
     const char *descriptionText = QT_TRANSLATE_NOOP("MainWindow",
-                                                    "Deepin Editor是一款简单的文本编辑器"
-        );
-
+                                                    "Deepin Editor是一款简单的文本编辑器");
     const QString acknowledgementLink = "https://www.deepin.org/acknowledgments/deepin-editor";
 
     DApplication app(argc, argv);
@@ -64,6 +63,7 @@ int main(int argc, char *argv[])
 
     app.setWindowIcon(QIcon(Utils::getQrcPath("logo_48.svg")));
 
+    // Parser input arguments.
     QCommandLineParser parser;
     
     const QCommandLineOption newWindowOption("w", "Open file in new window");
@@ -80,16 +80,16 @@ int main(int argc, char *argv[])
         }
     }
     
-    bool openInWindow = false;
-    if (parser.isSet(newWindowOption)) {
-        openInWindow = true;
-    }
+    bool hasWindowFlag = parser.isSet(newWindowOption);
 
+    // Start.
     QDBusConnection dbus = QDBusConnection::sessionBus();
+    
+    // Start editor process if not found any editor use DBus.
     if (dbus.registerService("com.deepin.Editor")) {
         StartManager startManager;
 
-        if (openInWindow) {
+        if (hasWindowFlag) {
             startManager.openFilesInWindow(files);
         } else {
             startManager.openFilesInTab(files);
@@ -98,8 +98,9 @@ int main(int argc, char *argv[])
         dbus.registerObject("/com/deepin/Editor", &startManager, QDBusConnection::ExportScriptableSlots);
 
         return app.exec();
-    } else {
-        // Send DBus message to stop screen-recorder if found other screen-recorder DBus service has started.
+    }
+    // Just send dbus message to exist editor process.
+    else {
         QDBusInterface notification("com.deepin.Editor",
                                     "/com/deepin/Editor",
                                     "com.deepin.Editor",
@@ -107,7 +108,7 @@ int main(int argc, char *argv[])
 
         QList<QVariant> arg;
         arg << files;
-        if (openInWindow) {
+        if (hasWindowFlag) {
             notification.callWithArgumentList(QDBus::AutoDetect, "openFilesInWindow", arg);
         } else {
             notification.callWithArgumentList(QDBus::AutoDetect, "openFilesInTab", arg);

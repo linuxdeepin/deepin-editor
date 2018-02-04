@@ -82,7 +82,6 @@ void Utils::applyQss(QWidget *widget, QString qssName)
 bool Utils::fileExists(QString path) {
     QFileInfo check_file(path);
     
-    // check if file exists and if yes: Is it really a file and no directory?
     return check_file.exists() && check_file.isFile();
 }
 
