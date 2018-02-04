@@ -86,27 +86,27 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     findBar = new FindBar();
 
     connect(findBar, &FindBar::backToPosition, this, &Window::handleBackToPosition, Qt::QueuedConnection);
-    connect(findBar, &FindBar::updateSearchKeyword, this, &Window::handleUpdateSearchKeyword, Qt::QueuedConnection);
     connect(findBar, &FindBar::findNext, this, &Window::handleFindNext, Qt::QueuedConnection);
     connect(findBar, &FindBar::findPrev, this, &Window::handleFindPrev, Qt::QueuedConnection);
-    connect(findBar, &FindBar::cleanMatchKeyword, this, &Window::cleanKeywords, Qt::QueuedConnection);
+    connect(findBar, &FindBar::removeSearchKeyword, this, &Window::handleRemoveSearchKeyword, Qt::QueuedConnection);
+    connect(findBar, &FindBar::updateSearchKeyword, this, &Window::handleUpdateSearchKeyword, Qt::QueuedConnection);
 
     // Init replace bar.
     replaceBar = new ReplaceBar();
     connect(replaceBar, &ReplaceBar::backToPosition, this, &Window::handleBackToPosition, Qt::QueuedConnection);
-    connect(replaceBar, &ReplaceBar::updateSearchKeyword, this, &Window::handleUpdateSearchKeyword, Qt::QueuedConnection);
-    connect(replaceBar, &ReplaceBar::replaceNext, this, &Window::handleReplaceNext, Qt::QueuedConnection);
-    connect(replaceBar, &ReplaceBar::replaceSkip, this, &Window::handleReplaceSkip, Qt::QueuedConnection);
-    connect(replaceBar, &ReplaceBar::replaceRest, this, &Window::handleReplaceRest, Qt::QueuedConnection);
+    connect(replaceBar, &ReplaceBar::removeSearchKeyword, this, &Window::handleRemoveSearchKeyword, Qt::QueuedConnection);
     connect(replaceBar, &ReplaceBar::replaceAll, this, &Window::handleReplaceAll, Qt::QueuedConnection);
-    connect(replaceBar, &ReplaceBar::cleanMatchKeyword, this, &Window::cleanKeywords, Qt::QueuedConnection);
+    connect(replaceBar, &ReplaceBar::replaceNext, this, &Window::handleReplaceNext, Qt::QueuedConnection);
+    connect(replaceBar, &ReplaceBar::replaceRest, this, &Window::handleReplaceRest, Qt::QueuedConnection);
+    connect(replaceBar, &ReplaceBar::replaceSkip, this, &Window::handleReplaceSkip, Qt::QueuedConnection);
+    connect(replaceBar, &ReplaceBar::updateSearchKeyword, this, &Window::handleUpdateSearchKeyword, Qt::QueuedConnection);
 
     // Init jump line bar.
     jumpLineBar = new JumpLineBar(this);
     QTimer::singleShot(0, jumpLineBar, SLOT(hide()));
 
     connect(jumpLineBar, &JumpLineBar::jumpToLine, this, &Window::handleJumpLineBarJumpToLine, Qt::QueuedConnection);
-    connect(jumpLineBar, &JumpLineBar::backToLine, this, &Window::handleJumpLineBarBackToLine, Qt::QueuedConnection);
+    connect(jumpLineBar, &JumpLineBar::backToPosition, this, &Window::handleBackToPosition, Qt::QueuedConnection);
     connect(jumpLineBar, &JumpLineBar::lostFocusExit, this, &Window::handleJumpLineBarExit, Qt::QueuedConnection);
 
     // Make jump line bar pop at top-right of editor.
@@ -157,6 +157,8 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
         popupFindBar();
     } else if (key == "Ctrl + Shift + H") {
         popupReplaceBar();
+    } else if (key == "Ctrl + Shift + G") {
+        popupJumpLineBar();
     } else if (key == "Esc") {
         tryCleanLayout();
     }
@@ -366,18 +368,7 @@ Editor* Window::createEditor()
     Editor *editor = new Editor();
     setFontSizeWithConfig(editor);
 
-    connect(editor->textEditor, &TextEditor::popupJumpLineBar, jumpLineBar, &JumpLineBar::activeInput, Qt::QueuedConnection);
-
     return editor;
-}
-
-void Window::handleJumpLineBarBackToLine(QString filepath, int line, int scrollOffset)
-{
-    if (editorMap.contains(filepath)) {
-        getTextEditor(filepath)->scrollToLine(scrollOffset, line, 0);
-
-        QTimer::singleShot(0, getTextEditor(filepath), SLOT(setFocus()));
-    }
 }
 
 void Window::handleJumpLineBarJumpToLine(QString filepath, int line, bool focusEditor)
@@ -474,6 +465,27 @@ void Window::popupReplaceBar()
     }
 }
 
+void Window::popupJumpLineBar()
+{
+    if (jumpLineBar->isVisible()) {
+        if (jumpLineBar->isFocus()) {
+            QTimer::singleShot(0, editorMap[tabbar->getActiveTabPath()]->textEditor, SLOT(setFocus()));
+        } else {
+            jumpLineBar->focus();
+        }
+    } else {
+        QString tabPath = tabbar->getActiveTabPath();
+        Editor *editor = getActiveEditor();
+        QString text = editor->textEditor->textCursor().selectedText();
+        int row = editor->textEditor->getCurrentLine();
+        int column = editor->textEditor->getCurrentColumn();
+        int count = editor->textEditor->blockCount();
+        int scrollOffset = editor->textEditor->getScrollOffset();
+    
+        jumpLineBar->activeInput(tabPath, row, column, count, scrollOffset);
+    }
+}
+
 void Window::popupFindBar()
 {
     if (findBar->isVisible()) {
@@ -505,11 +517,14 @@ void Window::handleBackToPosition(QString file, int row, int column, int scrollO
     }
 }
 
+void Window::handleRemoveSearchKeyword()
+{
+    getActiveEditor()->textEditor->removeKeywords();
+}
+
 void Window::handleUpdateSearchKeyword(QString file, QString keyword)
 {
-    QString tabPath = tabbar->getActiveTabPath();
-
-    if (file == tabPath && editorMap.contains(file)) {
+    if (file == tabbar->getActiveTabPath() && editorMap.contains(file)) {
         editorMap[file]->textEditor->highlightKeyword(keyword, editorMap[file]->textEditor->getPosition());
     }
 }
@@ -562,13 +577,6 @@ void Window::handleReplaceAll(QString replaceText, QString withText)
     Editor *editor = getActiveEditor();
 
     editor->textEditor->replaceAll(replaceText, withText);
-}
-
-void Window::cleanKeywords()
-{
-    Editor *editor = getActiveEditor();
-
-    editor->textEditor->cleanKeywords();
 }
 
 void Window::closeTab()

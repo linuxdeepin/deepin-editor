@@ -67,6 +67,7 @@ public:
     void openFile();
     void popupFindBar();
     void popupReplaceBar();
+    void popupJumpLineBar();
     void resetFontSize();
     void saveAsFile();
     void saveFileAsAnotherPath(QString fromPath, QString toPath, bool deleteOldFile=false);
@@ -80,14 +81,13 @@ signals:
     
 public slots:
     void addBlankTab(QString blankFile="");
-    void cleanKeywords();
-    void handleJumpLineBarBackToLine(QString filepath, int line, int scrollOffset);
     void handleBackToPosition(QString file, int row, int column, int scrollOffset);
-    void handleJumpLineBarExit();
     void handleCloseFile(QString filepath);
     void handleFindNext();
     void handleFindPrev();
+    void handleJumpLineBarExit();
     void handleJumpLineBarJumpToLine(QString filepath, int line, bool focusEditor);
+    void handleRemoveSearchKeyword();
     void handleReplaceAll(QString replaceText, QString withText);
     void handleReplaceNext(QString replaceText, QString withText);
     void handleReplaceRest(QString replaceText, QString withText);

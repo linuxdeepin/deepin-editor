@@ -262,8 +262,6 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         nextLine();
     } else if (key == "Ctrl + P") {
         prevLine();
-    } else if (key == "Ctrl + G") {
-        popupJumpLineBar(filepath, getCurrentLine(), blockCount(), verticalScrollBar()->value());
     } else if (key == "Ctrl + L") {
         openNewlineAbove();
     } else if (key == "Ctrl + H") {
@@ -617,7 +615,7 @@ void TextEditor::replaceAll(QString replaceText, QString withText)
     highlightKeyword(replaceText, getPosition());
 }
 
-void TextEditor::cleanKeywords()
+void TextEditor::removeKeywords()
 {
     cursorKeywordSelection.cursor = textCursor();
     

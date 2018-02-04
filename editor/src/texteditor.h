@@ -46,7 +46,7 @@ public:
     int getScrollOffset();
     void backwardChar();
     void backwardWord();
-    void cleanKeywords();
+    void removeKeywords();
     void duplicateLine();
     void forwardChar();
     void forwardWord();
@@ -74,9 +74,6 @@ public:
     void updateCursorKeywordSelection(int position, bool findNext);
     void updateHighlightLineSeleciton();
     void updateKeywordSelections(QString keyword);
-
-signals:
-    void popupJumpLineBar(QString filepath, int line, int lineCount, int scrollOffset);
 
 public slots:
     void handleScrollFinish();

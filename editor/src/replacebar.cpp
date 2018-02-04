@@ -80,7 +80,7 @@ ReplaceBar::ReplaceBar(QWidget *parent) : QWidget(parent)
 
 void ReplaceBar::hideEvent(QHideEvent *)
 {
-    cleanMatchKeyword();
+    removeSearchKeyword();
 }
 
 bool ReplaceBar::focusNextPrevChild(bool)

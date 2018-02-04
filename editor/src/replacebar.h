@@ -47,7 +47,7 @@ public:
     
 signals:
     void backToPosition(QString file, int row, int column, int scrollOffset);
-    void cleanMatchKeyword();
+    void removeSearchKeyword();
     void replaceAll(QString replaceText, QString withText);
     void replaceNext(QString replaceText, QString withText);
     void replaceRest(QString replaceText, QString withText);

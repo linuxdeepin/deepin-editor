@@ -47,13 +47,13 @@ public:
     
 signals:
     void backToPosition(QString file, int row, int column, int scrollOffset);
-    void cleanMatchKeyword();
     void findNext();
     void findPrev();
+    void removeSearchKeyword();
     void updateSearchKeyword(QString file, QString keyword);
     
 public slots:
-    void back();
+    void findCancel();
     void handleContentChanged();
     
 protected:

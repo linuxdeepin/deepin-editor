@@ -27,8 +27,11 @@
 
 FindBar::FindBar(QWidget *parent) : QWidget(parent)
 {
+    // Init.
     setWindowFlags(Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
+    setFixedHeight(40);
     
+    // Init layout and widgets.
     layout = new QHBoxLayout(this);
     findLabel = new QLabel("Find: ");
     editLine = new LineBar();
@@ -40,12 +43,11 @@ FindBar::FindBar(QWidget *parent) : QWidget(parent)
     layout->addWidget(findNextButton);
     layout->addWidget(findPrevButton);
     
+    // Make button don't grab keyboard focus after click it.
     findNextButton->setFocusPolicy(Qt::NoFocus);
     findPrevButton->setFocusPolicy(Qt::NoFocus);
     
-    setFixedHeight(40);
-    
-    connect(editLine, &LineBar::pressEsc, this, &FindBar::back, Qt::QueuedConnection);
+    connect(editLine, &LineBar::pressEsc, this, &FindBar::findCancel, Qt::QueuedConnection);
     connect(editLine, &LineBar::pressEnter, this, &FindBar::findNext, Qt::QueuedConnection);
     connect(editLine, &LineBar::pressCtrlEnter, this, &FindBar::findPrev, Qt::QueuedConnection);
     connect(editLine, &LineBar::contentChanged, this, &FindBar::handleContentChanged, Qt::QueuedConnection);
@@ -61,7 +63,7 @@ void FindBar::handleContentChanged()
 
 void FindBar::hideEvent(QHideEvent *)
 {
-    cleanMatchKeyword();
+    removeSearchKeyword();
 }
 
 void FindBar::paintEvent(QPaintEvent *)
@@ -75,21 +77,25 @@ void FindBar::paintEvent(QPaintEvent *)
 
 void FindBar::activeInput(QString text, QString file, int row, int column, int scrollOffset)
 {
+    // Try fill keyword with select text.
     editLine->clear();
     editLine->insert(text);
     editLine->selectAll();
     
+    // Show.
     show();
     
+    // Save file info for back to position.
     findFile = file;
     findFileRow = row;
     findFileColumn = column;
     findFileSrollOffset = scrollOffset;
     
-    editLine->setFocus();
+    // Focus.
+    focus();
 }
 
-void FindBar::back()
+void FindBar::findCancel()
 {
     hide();
     

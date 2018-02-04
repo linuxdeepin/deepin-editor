@@ -42,14 +42,16 @@ public:
     JumpLineBar(QWidget *parent = 0);
     
 public slots:    
-    void activeInput(QString file, int line, int lineCount, int scrollOffset);
+    void focus();
+    bool isFocus();
+    void activeInput(QString file, int row, int column, int lineCount, int scrollOffset);
     void handleFocusOut();
     void handleLineChanged();
     void jumpCancel();
     void jumpConfirm();
     
 signals:
-    void backToLine(QString file, int line, int scrollOffset);
+    void backToPosition(QString file, int row, int column, int scrollOffset);
     void jumpToLine(QString file, int line, bool focusEditor);
     void lostFocusExit();
     
@@ -63,7 +65,8 @@ private:
     QLabel *label;
     QString jumpFile;
     int jumpFileScrollOffset;
-    int lineBeforeJump;
+    int rowBeforeJump;
+    int columnBeforeJump;
 };
 
 #endif

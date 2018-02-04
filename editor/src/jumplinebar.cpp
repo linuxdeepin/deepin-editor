@@ -50,11 +50,12 @@ JumpLineBar::JumpLineBar(QWidget *parent) : QWidget(parent)
     connect(editLine, &LineBar::focusOut, this, &JumpLineBar::handleFocusOut, Qt::QueuedConnection);
 }
 
-void JumpLineBar::activeInput(QString file, int line, int lineCount, int scrollOffset)
+void JumpLineBar::activeInput(QString file, int row, int column, int lineCount, int scrollOffset)
 {
     // Save file info for back to line.
     jumpFile = file;
-    lineBeforeJump = line;
+    rowBeforeJump = row;
+    columnBeforeJump = column;
     jumpFileScrollOffset = scrollOffset;
     lineValidator->setRange(1, lineCount);
     
@@ -69,11 +70,21 @@ void JumpLineBar::activeInput(QString file, int line, int lineCount, int scrollO
     editLine->setFocus();
 }
 
+bool JumpLineBar::isFocus()
+{
+    return editLine->hasFocus();
+}
+
+void JumpLineBar::focus()
+{
+    editLine->setFocus();
+}
+
 void JumpLineBar::jumpCancel()
 {
     hide();
     
-    backToLine(jumpFile, lineBeforeJump, jumpFileScrollOffset);
+    backToPosition(jumpFile, rowBeforeJump, columnBeforeJump, jumpFileScrollOffset);
 }
 
 void JumpLineBar::jumpConfirm()
@@ -109,3 +120,4 @@ void JumpLineBar::paintEvent(QPaintEvent *)
     path.addRect(rect());
     painter.fillPath(path, QColor("#202020"));
 }
+
