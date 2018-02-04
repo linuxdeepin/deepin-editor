@@ -51,7 +51,6 @@ public:
     void forwardChar();
     void forwardWord();
     void highlightKeyword(QString keyword, int position);
-    void jumpToLine();
     void jumpToLine(int line, bool keepLineAtCenter);
     void keepCurrentLineAtCenter();
     void keyPressEvent(QKeyEvent *e);
@@ -77,7 +76,7 @@ public:
     void updateKeywordSelections(QString keyword);
 
 signals:
-    void jumpLine(QString filepath, int line, int lineCount, int scrollOffset);
+    void popupJumpLineBar(QString filepath, int line, int lineCount, int scrollOffset);
 
 public slots:
     void handleScrollFinish();

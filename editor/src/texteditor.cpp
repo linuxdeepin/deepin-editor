@@ -263,7 +263,7 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
     } else if (key == "Ctrl + P") {
         prevLine();
     } else if (key == "Ctrl + G") {
-        jumpToLine();
+        popupJumpLineBar(filepath, getCurrentLine(), blockCount(), verticalScrollBar()->value());
     } else if (key == "Ctrl + L") {
         openNewlineAbove();
     } else if (key == "Ctrl + H") {
@@ -548,13 +548,6 @@ void TextEditor::moveToStartOfLine()
 void TextEditor::moveToEndOfLine()
 {
     moveCursor(QTextCursor::EndOfLine);
-}
-
-void TextEditor::jumpToLine()
-{
-    QScrollBar *scrollbar = verticalScrollBar();
-
-    jumpLine(filepath, getCurrentLine(), blockCount(), scrollbar->value());
 }
 
 void TextEditor::highlightKeyword(QString keyword, int position)

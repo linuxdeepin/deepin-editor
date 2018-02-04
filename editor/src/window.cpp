@@ -105,10 +105,9 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     jumpLineBar = new JumpLineBar(this);
     QTimer::singleShot(0, jumpLineBar, SLOT(hide()));
 
-    connect(jumpLineBar, &JumpLineBar::jumpToLine, this, &Window::handleJumpToLine, Qt::QueuedConnection);
-    connect(jumpLineBar, &JumpLineBar::tempJumpToLine, this, &Window::handleTempJumpToLine, Qt::QueuedConnection);
-    connect(jumpLineBar, &JumpLineBar::backToLine, this, &Window::handleBackToLine, Qt::QueuedConnection);
-    connect(jumpLineBar, &JumpLineBar::cancelJump, this, &Window::handleCancelJump, Qt::QueuedConnection);
+    connect(jumpLineBar, &JumpLineBar::jumpToLine, this, &Window::handleJumpLineBarJumpToLine, Qt::QueuedConnection);
+    connect(jumpLineBar, &JumpLineBar::backToLine, this, &Window::handleJumpLineBarBackToLine, Qt::QueuedConnection);
+    connect(jumpLineBar, &JumpLineBar::lostFocusExit, this, &Window::handleJumpLineBarExit, Qt::QueuedConnection);
 
     // Make jump line bar pop at top-right of editor.
     DAnchorsBase::setAnchor(jumpLineBar, Qt::AnchorTop, layoutWidget, Qt::AnchorTop);
@@ -367,17 +366,12 @@ Editor* Window::createEditor()
     Editor *editor = new Editor();
     setFontSizeWithConfig(editor);
 
-    connect(editor->textEditor, &TextEditor::jumpLine, this, &Window::handleJumpLine, Qt::QueuedConnection);
+    connect(editor->textEditor, &TextEditor::popupJumpLineBar, jumpLineBar, &JumpLineBar::activeInput, Qt::QueuedConnection);
 
     return editor;
 }
 
-void Window::handleJumpLine(QString filepath, int line, int lineCount, int scrollOffset)
-{
-    jumpLineBar->activeInput(filepath, line, lineCount, scrollOffset);
-}
-
-void Window::handleBackToLine(QString filepath, int line, int scrollOffset)
+void Window::handleJumpLineBarBackToLine(QString filepath, int line, int scrollOffset)
 {
     if (editorMap.contains(filepath)) {
         getTextEditor(filepath)->scrollToLine(scrollOffset, line, 0);
@@ -386,23 +380,18 @@ void Window::handleBackToLine(QString filepath, int line, int scrollOffset)
     }
 }
 
-void Window::handleJumpToLine(QString filepath, int line)
+void Window::handleJumpLineBarJumpToLine(QString filepath, int line, bool focusEditor)
 {
     if (editorMap.contains(filepath)) {
         getTextEditor(filepath)->jumpToLine(line, true);
 
-        QTimer::singleShot(0, getTextEditor(filepath), SLOT(setFocus()));
+        if (focusEditor) {
+            QTimer::singleShot(0, getTextEditor(filepath), SLOT(setFocus()));
+        }
     }
 }
 
-void Window::handleTempJumpToLine(QString filepath, int line)
-{
-    if (editorMap.contains(filepath)) {
-        getTextEditor(filepath)->jumpToLine(line, true);
-    }
-}
-
-void Window::handleCancelJump()
+void Window::handleJumpLineBarExit()
 {
     QTimer::singleShot(0, getActiveEditor()->textEditor, SLOT(setFocus()));
 }

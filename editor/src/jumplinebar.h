@@ -43,16 +43,15 @@ public:
     
 public slots:    
     void activeInput(QString file, int line, int lineCount, int scrollOffset);
-    void back();
-    void cancel();
-    void jump();
-    void tempJump();
+    void handleFocusOut();
+    void handleLineChanged();
+    void jumpCancel();
+    void jumpConfirm();
     
 signals:
     void backToLine(QString file, int line, int scrollOffset);
-    void cancelJump();
-    void jumpToLine(QString file, int line);
-    void tempJumpToLine(QString file, int line);
+    void jumpToLine(QString file, int line, bool focusEditor);
+    void lostFocusExit();
     
 protected:
     void paintEvent(QPaintEvent *event);

@@ -81,21 +81,19 @@ signals:
 public slots:
     void addBlankTab(QString blankFile="");
     void cleanKeywords();
-    void handleBackToLine(QString filepath, int line, int scrollOffset);
+    void handleJumpLineBarBackToLine(QString filepath, int line, int scrollOffset);
     void handleBackToPosition(QString file, int row, int column, int scrollOffset);
-    void handleCancelJump();
+    void handleJumpLineBarExit();
     void handleCloseFile(QString filepath);
     void handleFindNext();
     void handleFindPrev();
-    void handleJumpLine(QString filepath, int line, int lineCount, int scrollOffset);
-    void handleJumpToLine(QString filepath, int line);
+    void handleJumpLineBarJumpToLine(QString filepath, int line, bool focusEditor);
     void handleReplaceAll(QString replaceText, QString withText);
     void handleReplaceNext(QString replaceText, QString withText);
     void handleReplaceRest(QString replaceText, QString withText);
     void handleReplaceSkip();
     void handleSwitchToFile(QString filepath);
     void handleTabReleaseRequested(QString tabName, QString filepath, int index);
-    void handleTempJumpToLine(QString filepath, int line);
     void handleUpdateSearchKeyword(QString file, QString keyword);
     void removeBottomWidget();
     

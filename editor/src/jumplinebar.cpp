@@ -27,8 +27,11 @@
 
 JumpLineBar::JumpLineBar(QWidget *parent) : QWidget(parent)
 {
+    // Init.
     setWindowFlags(Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
+    setFixedSize(200, 40);
     
+    // Init layout and widgets.
     layout = new QHBoxLayout(this);
     
     label = new QLabel();
@@ -41,59 +44,61 @@ JumpLineBar::JumpLineBar(QWidget *parent) : QWidget(parent)
     layout->addWidget(label);
     layout->addWidget(editLine);
     
-    setFixedSize(200, 40);
-    
-    connect(editLine, &LineBar::pressEsc, this, &JumpLineBar::back, Qt::QueuedConnection);
-    connect(editLine, &LineBar::pressEnter, this, &JumpLineBar::jump, Qt::QueuedConnection);
-    connect(editLine, &LineBar::textChanged, this, &JumpLineBar::tempJump, Qt::QueuedConnection);
-    connect(editLine, &LineBar::focusOut, this, &JumpLineBar::cancel, Qt::QueuedConnection);
+    connect(editLine, &LineBar::pressEsc, this, &JumpLineBar::jumpCancel, Qt::QueuedConnection);
+    connect(editLine, &LineBar::pressEnter, this, &JumpLineBar::jumpConfirm, Qt::QueuedConnection);
+    connect(editLine, &LineBar::textChanged, this, &JumpLineBar::handleLineChanged, Qt::QueuedConnection);
+    connect(editLine, &LineBar::focusOut, this, &JumpLineBar::handleFocusOut, Qt::QueuedConnection);
 }
 
 void JumpLineBar::activeInput(QString file, int line, int lineCount, int scrollOffset)
 {
+    // Save file info for back to line.
     jumpFile = file;
     lineBeforeJump = line;
     jumpFileScrollOffset = scrollOffset;
     lineValidator->setRange(1, lineCount);
     
+    // Clear line number.
     editLine->setText("");
     
+    // Show jump line bar.
     show();
     raise();
     
+    // Focus default.
     editLine->setFocus();
 }
 
-void JumpLineBar::cancel()
-{
-    hide();
-    
-    cancelJump();
-}
-
-void JumpLineBar::back()
+void JumpLineBar::jumpCancel()
 {
     hide();
     
     backToLine(jumpFile, lineBeforeJump, jumpFileScrollOffset);
 }
 
-void JumpLineBar::tempJump()
-{
-    QString content = editLine->text();
-    if (content != "") {
-        tempJumpToLine(jumpFile, content.toInt());
-    }
-}
-
-void JumpLineBar::jump()
+void JumpLineBar::jumpConfirm()
 {
     hide();
     
     QString content = editLine->text();
     if (content != "") {
-        jumpToLine(jumpFile, content.toInt());
+        jumpToLine(jumpFile, content.toInt(), true);
     }
+}
+
+void JumpLineBar::handleLineChanged()
+{
+    QString content = editLine->text();
+    if (content != "") {
+        jumpToLine(jumpFile, content.toInt(), false);
+    }
+}
+
+void JumpLineBar::handleFocusOut()
+{
+    hide();
+    
+    lostFocusExit();
 }
 
 void JumpLineBar::paintEvent(QPaintEvent *)
