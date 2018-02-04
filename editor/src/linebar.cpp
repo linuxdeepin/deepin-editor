@@ -28,17 +28,19 @@
 
 LineBar::LineBar(DLineEdit *parent) : DLineEdit(parent)
 {
+    // Init.
     autoSaveInternal = 500;
 
     autoSaveTimer = new QTimer(this);
     autoSaveTimer->setSingleShot(true);
+    
     connect(autoSaveTimer, &QTimer::timeout, this, &LineBar::handleTextChangeTimer);
-
     connect(this, &DLineEdit::textChanged, this, &LineBar::handleTextChanged, Qt::QueuedConnection);
 }
 
 void LineBar::focusOutEvent(QFocusEvent *)
 {
+    // Emit focus out signal.
     focusOut();
 }
 
@@ -57,20 +59,24 @@ void LineBar::keyPressEvent(QKeyEvent *e)
     } else if (key == "Meta + Return") {
         pressMetaEnter();
     } else {
+        // Pass event to DLineEdit continue, otherwise you can't type anything after here. ;)
         DLineEdit::keyPressEvent(e);
     }
-    
 }
 
 void LineBar::handleTextChanged()
 {
+    // Stop timer if new character is typed, avoid unused timer run.
     if (autoSaveTimer->isActive()) {
         autoSaveTimer->stop();
     }
+    
+    // Start new timer.
     autoSaveTimer->start(autoSaveInternal);
 }
 
 void LineBar::handleTextChangeTimer()
 {
+    // Emit contentChanged signal.
     contentChanged();
 }
