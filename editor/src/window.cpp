@@ -77,7 +77,10 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     connect(tabbar, &Tabbar::doubleClicked, this->titlebar(), &DTitlebar::doubleClicked, Qt::QueuedConnection);
     connect(tabbar, &Tabbar::switchToFile, this, &Window::handleSwitchToFile, Qt::QueuedConnection);
     connect(tabbar, &Tabbar::closeFile, this, &Window::handleCloseFile, Qt::QueuedConnection);
-    connect(tabbar, &Tabbar::tabAddRequested, this, &Window::handleTabAddRequested, Qt::QueuedConnection);
+    connect(tabbar, &Tabbar::tabAddRequested, this, 
+            [=]() {
+                addBlankTab();
+            }, Qt::QueuedConnection);
     connect(tabbar, &Tabbar::tabReleaseRequested, this, &Window::handleTabReleaseRequested, Qt::QueuedConnection);
 
     // Init find bar.
@@ -177,8 +180,7 @@ void Window::addTab(QString file)
 
             editorMap[file] = editor;
 
-            editorLayout->addWidget(editor);
-            editorLayout->setCurrentWidget(editor);
+            showNewEditor(editor);
         }
     }
 
@@ -212,8 +214,7 @@ void Window::addBlankTab(QString blankFile)
 
     editorMap[blankTabPath] = editor;
 
-    editorLayout->addWidget(editor);
-    editorLayout->setCurrentWidget(editor);
+    showNewEditor(editor);
 }
 
 void Window::handleSwitchToFile(QString filepath)
@@ -315,14 +316,11 @@ void Window::toggleFullscreen()
 
         toast->move((screenGeometry.width() - toast->width()) / 2, autoSaveTooltipPaddingBottom);
     }
-
 }
 
 Editor* Window::getActiveEditor()
 {
-    QString tabPath = tabbar->getActiveTabPath();
-
-    return editorMap[tabPath];
+    return editorMap[tabbar->getActiveTabPath()];
 }
 
 void Window::saveFileAsAnotherPath(QString fromPath, QString toPath, bool deleteOldFile)
@@ -339,16 +337,11 @@ void Window::saveFileAsAnotherPath(QString fromPath, QString toPath, bool delete
     editorMap[toPath]->saveFile();
 }
 
-void Window::handleTabAddRequested()
-{
-    addBlankTab();
-}
-
 void Window::handleTabReleaseRequested(QString tabName, QString filepath, int index)
 {
     tabbar->closeTabWithIndex(index);
 
-    QString content = editorMap[filepath]->textEditor->toPlainText();
+    QString content = getTextEditor(filepath)->toPlainText();
     dropTabOut(tabName, filepath, content);
 }
 
@@ -362,8 +355,7 @@ void Window::addTabWithContent(QString tabName, QString filepath, QString conten
 
     editorMap[filepath] = editor;
 
-    editorLayout->addWidget(editor);
-    editorLayout->setCurrentWidget(editor);
+    showNewEditor(editor);
 }
 
 TextEditor* Window::getTextEditor(QString filepath)
@@ -389,25 +381,25 @@ void Window::handleJumpLine(QString filepath, int line, int lineCount, int scrol
 void Window::handleBackToLine(QString filepath, int line, int scrollOffset)
 {
     if (editorMap.contains(filepath)) {
-        editorMap[filepath]->textEditor->scrollToLine(scrollOffset, line, 0);
+        getTextEditor(filepath)->scrollToLine(scrollOffset, line, 0);
 
-        QTimer::singleShot(0, editorMap[filepath]->textEditor, SLOT(setFocus()));
+        QTimer::singleShot(0, getTextEditor(filepath), SLOT(setFocus()));
     }
 }
 
 void Window::handleJumpToLine(QString filepath, int line)
 {
     if (editorMap.contains(filepath)) {
-        editorMap[filepath]->textEditor->jumpToLine(line, true);
+        getTextEditor(filepath)->jumpToLine(line, true);
 
-        QTimer::singleShot(0, editorMap[filepath]->textEditor, SLOT(setFocus()));
+        QTimer::singleShot(0, getTextEditor(filepath), SLOT(setFocus()));
     }
 }
 
 void Window::handleTempJumpToLine(QString filepath, int line)
 {
     if (editorMap.contains(filepath)) {
-        editorMap[filepath]->textEditor->jumpToLine(line, true);
+        getTextEditor(filepath)->jumpToLine(line, true);
     }
 }
 
@@ -627,4 +619,10 @@ void Window::closeTab()
     } else {
         tabbar->closeTab();
     }
+}
+
+void Window::showNewEditor(Editor *editor)
+{
+    editorLayout->addWidget(editor);
+    editorLayout->setCurrentWidget(editor);
 }

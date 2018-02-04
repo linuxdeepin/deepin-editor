@@ -41,9 +41,8 @@ class JumpLineBar : public QWidget
 public:
     JumpLineBar(QWidget *parent = 0);
     
-    void activeInput(QString file, int line, int lineCount, int scrollOffset);
-    
 public slots:    
+    void activeInput(QString file, int line, int lineCount, int scrollOffset);
     void back();
     void cancel();
     void jump();

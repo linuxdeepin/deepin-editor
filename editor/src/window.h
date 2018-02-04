@@ -73,6 +73,7 @@ public:
     void setFontSizeWithConfig(Editor *editor);
     void toggleFullscreen();
     void tryCleanLayout();
+    void showNewEditor(Editor *editor);
     
 signals:
     void dropTabOut(QString tabName, QString filepath, QString content);
@@ -93,7 +94,6 @@ public slots:
     void handleReplaceRest(QString replaceText, QString withText);
     void handleReplaceSkip();
     void handleSwitchToFile(QString filepath);
-    void handleTabAddRequested();
     void handleTabReleaseRequested(QString tabName, QString filepath, int index);
     void handleTempJumpToLine(QString filepath, int line);
     void handleUpdateSearchKeyword(QString file, QString keyword);
