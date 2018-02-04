@@ -42,17 +42,16 @@ public:
     QString getActiveTabPath();
     QString getTabName(int index);
     QString getTabPath(int index);
-    int currentIndex();
-    int isTabExist(QString filepath);
-    void activeTab(int index);
+    int getActiveTabIndex();
+    int getTabIndex(QString filepath);
+    void activeTabWithIndex(int index);
     void addTab(QString filepath, QString tabName);
+    void closeActiveTab();
     void closeOtherTabs();
     void closeOtherTabsExceptFile(QString filepath);
-    void closeTab();
-    void closeTabWithIndex(int index);
     void selectNextTab();
     void selectPrevTab();
-    void updateTab(int index, QString filepath, QString tabName);
+    void updateTabWithIndex(int index, QString filepath, QString tabName);
                       
 signals:
     void closeFile(QString filepath);
@@ -62,14 +61,12 @@ signals:
     void tabReleaseRequested(QString tabName, QString filepaht, int index);
                           
 public slots:
+    void closeTabWithIndex(int closeIndex);
     void handleCloseOtherTabs(int index);
-    void handleCloseTab(int index);
     void handleCurrentIndexChanged(int index);
-    void handleTabClosed(int closeIndex);
     void handleTabDroped(int index, Qt::DropAction action, QObject *target);
     void handleTabMoved(int fromIndex, int toIndex);
     void handleTabReleaseRequested(int index);
-    void handleTabbarDoubleClick();
     
 private:
     QHBoxLayout *layout;

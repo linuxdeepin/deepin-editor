@@ -165,12 +165,12 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
 
 int Window::getTabIndex(QString file)
 {
-    return tabbar->isTabExist(file);
+    return tabbar->getTabIndex(file);
 }
 
 void Window::addTab(QString file)
 {
-    if (tabbar->isTabExist(file) == -1) {
+    if (tabbar->getTabIndex(file) == -1) {
         tabbar->addTab(file, QFileInfo(file).fileName());
 
         if (!editorMap.contains(file)) {
@@ -243,7 +243,7 @@ void Window::handleCloseFile(QString filepath)
 void Window::activeTab(int index)
 {
     activateWindow();
-    tabbar->activeTab(index);
+    tabbar->activeTabWithIndex(index);
 }
 
 void Window::openFile()
@@ -328,7 +328,7 @@ void Window::saveFileAsAnotherPath(QString fromPath, QString toPath, bool delete
         QFile(fromPath).remove();
     }
 
-    tabbar->updateTab(tabbar->currentIndex(), toPath, QFileInfo(toPath).fileName());
+    tabbar->updateTabWithIndex(tabbar->getActiveTabIndex(), toPath, QFileInfo(toPath).fileName());
 
     editorMap[toPath] = editorMap.take(fromPath);
 
@@ -609,7 +609,7 @@ void Window::closeTab()
         }
     } else {
         // Close tab directly, because all file is save automatically.
-        tabbar->closeTab();
+        tabbar->closeActiveTab();
     }
 }
 
@@ -631,7 +631,7 @@ void Window::removeActiveBlankTab(bool needSaveBefore)
     }
     
     // Close current tab.
-    tabbar->closeTab();
+    tabbar->closeActiveTab();
     
     // Remove blank file from blank file directory.
     QFile(blankFile).remove();

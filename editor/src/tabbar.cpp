@@ -29,6 +29,7 @@
 
 Tabbar::Tabbar()
 {
+    // Init.
     layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
 
@@ -45,43 +46,32 @@ Tabbar::Tabbar()
     layout->addWidget(tabbar, 0, Qt::AlignTop);
     layout->addSpacing(40);
 
-    connect(tabbar, &TabWidget::tabBarDoubleClicked, this, &Tabbar::handleTabbarDoubleClick, Qt::QueuedConnection);
-    connect(tabbar, &TabWidget::currentChanged, this, &Tabbar::handleCurrentIndexChanged, Qt::QueuedConnection);
-    connect(tabbar, &TabWidget::tabMoved, this, &Tabbar::handleTabMoved, Qt::QueuedConnection);
-    connect(tabbar, &TabWidget::tabCloseRequested, this, &Tabbar::handleTabClosed, Qt::QueuedConnection);
-    connect(tabbar, &TabWidget::tabAddRequested, this, &Tabbar::tabAddRequested, Qt::QueuedConnection);
-    connect(tabbar, &TabWidget::tabReleaseRequested, this, &Tabbar::handleTabReleaseRequested, Qt::QueuedConnection);
-    connect(tabbar, &TabWidget::tabDroped, this, &Tabbar::handleTabDroped, Qt::QueuedConnection);
-    connect(tabbar, &TabWidget::closeTab, this, &Tabbar::handleCloseTab, Qt::QueuedConnection);
     connect(tabbar, &TabWidget::closeOtherTabs, this, &Tabbar::handleCloseOtherTabs, Qt::QueuedConnection);
+    connect(tabbar, &TabWidget::closeTab, this, &Tabbar::closeTabWithIndex, Qt::QueuedConnection);
+    connect(tabbar, &TabWidget::currentChanged, this, &Tabbar::handleCurrentIndexChanged, Qt::QueuedConnection);
+    connect(tabbar, &TabWidget::tabAddRequested, this, &Tabbar::tabAddRequested, Qt::QueuedConnection);
+    connect(tabbar, &TabWidget::tabBarDoubleClicked, this, &Tabbar::doubleClicked, Qt::QueuedConnection);
+    connect(tabbar, &TabWidget::tabCloseRequested, this, &Tabbar::closeTabWithIndex, Qt::QueuedConnection);
+    connect(tabbar, &TabWidget::tabDroped, this, &Tabbar::handleTabDroped, Qt::QueuedConnection);
+    connect(tabbar, &TabWidget::tabMoved, this, &Tabbar::handleTabMoved, Qt::QueuedConnection);
+    connect(tabbar, &TabWidget::tabReleaseRequested, this, &Tabbar::handleTabReleaseRequested, Qt::QueuedConnection);
 }
 
 void Tabbar::addTab(QString filepath, QString tabName)
 {
-    int index = currentIndex();
+    int index = getActiveTabIndex();
 
     tabbar->tabFiles.insert(index + 1, filepath);
     tabbar->insertTab(index + 1, tabName);
-
     tabbar->setCurrentIndex(index + 1);
 }
 
-int Tabbar::currentIndex()
+int Tabbar::getActiveTabIndex()
 {
     return tabbar->currentIndex();
 }
 
-void Tabbar::handleTabbarDoubleClick()
-{
-    this->doubleClicked();
-}
-
-void Tabbar::handleCurrentIndexChanged(int index)
-{
-    switchToFile(tabbar->tabFiles.value(index));
-}
-
-int Tabbar::isTabExist(QString filepath)
+int Tabbar::getTabIndex(QString filepath)
 {
     for (int i = 0; i < tabbar->tabFiles.size(); i++) {
         if (tabbar->tabFiles[i] == filepath) {
@@ -92,22 +82,7 @@ int Tabbar::isTabExist(QString filepath)
     return -1;
 }
 
-void Tabbar::handleTabMoved(int fromIndex, int toIndex)
-{
-    tabbar->tabFiles.swap(fromIndex, toIndex);
-}
-
-void Tabbar::handleCloseTab(int index)
-{
-    handleTabClosed(index);
-}
-
-void Tabbar::handleCloseOtherTabs(int index)
-{
-    closeOtherTabsExceptFile(tabbar->tabFiles[index]);
-}
-
-void Tabbar::handleTabClosed(int closeIndex)
+void Tabbar::closeTabWithIndex(int closeIndex)
 {
     QString filepath = tabbar->tabFiles[closeIndex];
 
@@ -117,7 +92,7 @@ void Tabbar::handleTabClosed(int closeIndex)
     closeFile(filepath);
 }
 
-void Tabbar::activeTab(int index)
+void Tabbar::activeTabWithIndex(int index)
 {
     tabbar->setCurrentIndex(index);
 }
@@ -143,14 +118,9 @@ void Tabbar::selectPrevTab()
 }
 
 
-void Tabbar::closeTab()
+void Tabbar::closeActiveTab()
 {
-    handleTabClosed(tabbar->currentIndex());
-}
-
-void Tabbar::closeTabWithIndex(int index)
-{
-    handleTabClosed(index);
+    closeTabWithIndex(tabbar->currentIndex());
 }
 
 void Tabbar::closeOtherTabs()
@@ -163,21 +133,21 @@ void Tabbar::closeOtherTabsExceptFile(QString filepath)
     while (tabbar->tabFiles.size() > 1) {
         QString firstPath = tabbar->tabFiles[0];
         if (firstPath != filepath) {
-            handleTabClosed(0);
+            closeTabWithIndex(0);
         } else {
-            handleTabClosed(1);
+            closeTabWithIndex(1);
         }
     }
 }
 
 QString Tabbar::getActiveTabName()
 {
-    return tabbar->tabText(currentIndex());
+    return tabbar->tabText(getActiveTabIndex());
 }
 
 QString Tabbar::getActiveTabPath()
 {
-    return tabbar->tabFiles.value(currentIndex());
+    return tabbar->tabFiles.value(getActiveTabIndex());
 }
 
 QString Tabbar::getTabName(int index)
@@ -190,7 +160,7 @@ QString Tabbar::getTabPath(int index)
     return tabbar->tabFiles.value(index);
 }
 
-void Tabbar::updateTab(int index, QString filepath, QString tabName)
+void Tabbar::updateTabWithIndex(int index, QString filepath, QString tabName)
 {
     tabbar->setTabText(index, tabName);
     tabbar->tabFiles[index] = filepath;
@@ -198,10 +168,9 @@ void Tabbar::updateTab(int index, QString filepath, QString tabName)
 
 void Tabbar::handleTabReleaseRequested(int index)
 {
+    // Just send tabReleaseRequested signal have two or above tabs.
     if (tabbar->count() > 1) {
         tabReleaseRequested(getTabName(index), getTabPath(index), index);
-    } else {
-        qDebug() << "Just one tab in current window, don't need create another new window.";
     }
 }
 
@@ -210,6 +179,22 @@ void Tabbar::handleTabDroped(int index, Qt::DropAction, QObject *target)
     // Remove match tab if tab drop to tabbar of deepin-editor.
     auto *tabWidget = qobject_cast<TabWidget*>(target);
     if (tabWidget != nullptr) {
-        handleTabClosed(index);
+        closeTabWithIndex(index);
     }
 }
+
+void Tabbar::handleTabMoved(int fromIndex, int toIndex)
+{
+    tabbar->tabFiles.swap(fromIndex, toIndex);
+}
+
+void Tabbar::handleCloseOtherTabs(int index)
+{
+    closeOtherTabsExceptFile(tabbar->tabFiles[index]);
+}
+
+void Tabbar::handleCurrentIndexChanged(int index)
+{
+    switchToFile(tabbar->tabFiles.value(index));
+}
+
