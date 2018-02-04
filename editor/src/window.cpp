@@ -160,7 +160,7 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
     } else if (key == "Ctrl + Shift + G") {
         popupJumpLineBar();
     } else if (key == "Esc") {
-        tryCleanLayout();
+        removeBottomWidget();
     }
 }
 
@@ -527,11 +527,6 @@ void Window::handleUpdateSearchKeyword(QString file, QString keyword)
     if (file == tabbar->getActiveTabPath() && editorMap.contains(file)) {
         editorMap[file]->textEditor->highlightKeyword(keyword, editorMap[file]->textEditor->getPosition());
     }
-}
-
-void Window::tryCleanLayout()
-{
-    removeBottomWidget();
 }
 
 void Window::handleFindNext()

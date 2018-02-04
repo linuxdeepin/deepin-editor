@@ -74,7 +74,6 @@ public:
     void saveFontSize(int size);
     void setFontSizeWithConfig(Editor *editor);
     void toggleFullscreen();
-    void tryCleanLayout();
     
 signals:
     void dropTabOut(QString tabName, QString filepath, QString content);
