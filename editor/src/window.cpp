@@ -106,7 +106,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     connect(tabbar, &Tabbar::doubleClicked, this->titlebar(), &DTitlebar::doubleClicked, Qt::QueuedConnection);
     connect(tabbar, &Tabbar::switchToFile, this, &Window::handleSwitchToFile, Qt::QueuedConnection);
     connect(tabbar, &Tabbar::closeFile, this, &Window::handleCloseFile, Qt::QueuedConnection);
-    connect(tabbar, &Tabbar::tabAddRequested, this, &Window::addBlankTab, Qt::QueuedConnection);
+    connect(tabbar, &Tabbar::tabAddRequested, this, &Window::handleTabAddRequested, Qt::QueuedConnection);
     connect(tabbar, &Tabbar::tabReleaseRequested, this, &Window::handleTabReleaseRequested, Qt::QueuedConnection);
 
     Utils::applyQss(this, "main.qss");
@@ -181,13 +181,30 @@ void Window::addTab(QString file)
     activateWindow();
 }
 
-void Window::addBlankTab()
+void Window::addBlankTab(QString blankFile)
 {
-    QString blankTabPath = QString("Blank Tab: %1").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")) ;
+    QString blankTabPath;
+    if (blankFile == "") {
+        blankTabPath = QDir(blankFileDir).filePath(QString("blank_file_%1").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss")));
+        if (!Utils::fileExists(blankTabPath)) {
+            QDir().mkpath(blankFileDir);
+            if (QFile(blankTabPath).open(QIODevice::ReadWrite)) {
+                qDebug() << "Create blank file: " << blankTabPath;
+            } else {
+                qDebug() << "Can't create blank file: " << blankTabPath;
+            }
+        }
+    } else {
+        blankTabPath = blankFile;
+    }
 
     tabbar->addTab(blankTabPath, "Blank document");
     Editor *editor = createEditor();
     editor->updatePath(blankTabPath);
+    
+    if (blankFile != "" && Utils::fileExists(blankFile)) {
+        editor->loadFile(blankFile);
+    }
 
     editorMap[blankTabPath] = editor;
 
@@ -240,24 +257,24 @@ void Window::openFile()
 
 void Window::saveFile()
 {
-    if (tabbar->getActiveTabName() == "Blank document") {
+    if (QFileInfo(tabbar->getActiveTabPath()).dir().absolutePath() == blankFileDir) {
         QString filepath = QFileDialog::getSaveFileName(this, "Save File", QDir::homePath());
 
         if (filepath != "") {
             QString tabPath = tabbar->getActiveTabPath();
 
-            saveFileAsAnotherPath(tabPath, filepath);
+            saveFileAsAnotherPath(tabPath, filepath, true);
         }
     } else {
-        auto toast = new DToast(this);
+            auto toast = new DToast(this);
 
-        toast->setText("文件已自动保存");
-        toast->setIcon(QIcon(Utils::getQrcPath("logo_24.svg")));
-        toast->pop();
+            toast->setText("文件已自动保存");
+            toast->setIcon(QIcon(Utils::getQrcPath("logo_24.svg")));
+            toast->pop();
 
-        toast->move((width() - toast->width()) / 2,
-                    height() - toast->height() - notifyPadding);
-    }
+            toast->move((width() - toast->width()) / 2,
+                        height() - toast->height() - notifyPadding);
+        }
 }
 
 void Window::saveAsFile()
@@ -298,14 +315,23 @@ Editor* Window::getActiveEditor()
     return editorMap[tabPath];
 }
 
-void Window::saveFileAsAnotherPath(QString fromPath, QString toPath)
+void Window::saveFileAsAnotherPath(QString fromPath, QString toPath, bool deleteOldFile)
 {
+    if (deleteOldFile) {
+        QFile(fromPath).remove();
+    }
+    
     tabbar->updateTab(tabbar->currentIndex(), toPath, QFileInfo(toPath).fileName());
 
     editorMap[toPath] = editorMap.take(fromPath);
 
     editorMap[toPath]->updatePath(toPath);
     editorMap[toPath]->saveFile();
+}
+
+void Window::handleTabAddRequested()
+{
+    addBlankTab();
 }
 
 void Window::handleTabReleaseRequested(QString tabName, QString filepath, int index)

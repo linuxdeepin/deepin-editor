@@ -38,7 +38,16 @@ void StartManager::openFilesInTab(QStringList files)
         if (windows.size() == 0) {
             Window *window = createWindow(true);
 
-            window->addBlankTab();
+            QDir directory = QDir(QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files"));
+            QStringList blankFiles = directory.entryList(QStringList(), QDir::Files);
+            
+            if (blankFiles.size() > 0) {
+                foreach(QString blankFile, blankFiles) {
+                    window->addBlankTab(QDir(directory).filePath(blankFile));
+                }
+            } else {
+                window->addBlankTab();
+            }
         } else {
             windows[0]->activateWindow();
         }

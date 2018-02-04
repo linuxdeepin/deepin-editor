@@ -62,7 +62,7 @@ public:
     Editor* getActiveEditor();
     Editor* createEditor();
                              
-    void saveFileAsAnotherPath(QString fromPath, QString toPath);
+    void saveFileAsAnotherPath(QString fromPath, QString toPath, bool deleteOldFile=false);
     
     void addTabWithContent(QString tabName, QString filepath, QString content);
     
@@ -87,6 +87,7 @@ signals:
 public slots:
     void handleSwitchToFile(QString filepath);
     void handleCloseFile(QString filepath);
+    void handleTabAddRequested();
     void handleTabReleaseRequested(QString tabName, QString filepath, int index);
     void handleJumpLine(QString filepath, int line, int lineCount, int scrollOffset);
     void handleBackToLine(QString filepath, int line, int scrollOffset);
@@ -103,7 +104,7 @@ public slots:
     void handleReplaceRest(QString replaceText, QString withText);
     void handleReplaceAll(QString replaceText, QString withText);
 
-    void addBlankTab();
+    void addBlankTab(QString blankFile="");
     
     void cleanKeywords();
     
