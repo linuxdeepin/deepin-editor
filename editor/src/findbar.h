@@ -41,18 +41,16 @@ class FindBar : public QWidget
 public:
     FindBar(QWidget *parent = 0);
     
-    void activeInput(QString text, QString file, int row, int column, int scrollOffset);
-    
-    void focus();
-    
     bool isFocus();
+    void activeInput(QString text, QString file, int row, int column, int scrollOffset);
+    void focus();
     
 signals:
     void backToPosition(QString file, int row, int column, int scrollOffset);
-    void updateSearchKeyword(QString file, QString keyword);
+    void cleanMatchKeyword();
     void findNext();
     void findPrev();
-    void cleanMatchKeyword();
+    void updateSearchKeyword(QString file, QString keyword);
     
 public slots:
     void back();
@@ -63,16 +61,14 @@ protected:
     void hideEvent(QHideEvent *event);
     
 private:
-    QHBoxLayout *layout;
-    QLabel *findLabel;
-    LineBar *editLine;
-    
     DTextButton *findNextButton;
     DTextButton *findPrevButton;
-    
+    LineBar *editLine;
+    QHBoxLayout *layout;
+    QLabel *findLabel;
     QString findFile;
-    int findFileRow;
     int findFileColumn;
+    int findFileRow;
     int findFileSrollOffset;
 };
 

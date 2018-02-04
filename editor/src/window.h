@@ -49,88 +49,70 @@ public:
     Window(DMainWindow *parent = 0);
     ~Window();
     
-    void keyPressEvent(QKeyEvent *keyEvent);
-    
-    void addTab(QString file);
-    int isFileInTabs(QString file);
-    void activeTab(int index);
-    void openFile();
-    bool saveFile();
-    void saveAsFile();
-                      
-    void toggleFullscreen();
-    void closeTab();
-                           
-    Editor* getActiveEditor();
     Editor* createEditor();
-                             
-    void saveFileAsAnotherPath(QString fromPath, QString toPath, bool deleteOldFile=false);
-    
-    void addTabWithContent(QString tabName, QString filepath, QString content);
-    
+    Editor* getActiveEditor();
     TextEditor* getTextEditor(QString filepath);
     
-    void incrementFontSize();
-    void decrementFontSize();
-    void resetFontSize();
-    void setFontSizeWithConfig(Editor *editor);
-    void saveFontSize(int size);
-    
+    bool saveFile();
+    int isFileInTabs(QString file);
+    void activeTab(int index);
     void addBottomWidget(QWidget *widget);
-    
+    void addTab(QString file);
+    void addTabWithContent(QString tabName, QString filepath, QString content);
+    void closeTab();
+    void decrementFontSize();
+    void incrementFontSize();
+    void keyPressEvent(QKeyEvent *keyEvent);
+    void openFile();
     void popupFindBar();
     void popupReplaceBar();
-    
+    void resetFontSize();
+    void saveAsFile();
+    void saveFileAsAnotherPath(QString fromPath, QString toPath, bool deleteOldFile=false);
+    void saveFontSize(int size);
+    void setFontSizeWithConfig(Editor *editor);
+    void toggleFullscreen();
     void tryCleanLayout();
     
 signals:
     void popTab(QString tabName, QString filepath, QString content);
     
 public slots:
-    void handleSwitchToFile(QString filepath);
-    void handleCloseFile(QString filepath);
-    void handleTabAddRequested();
-    void handleTabReleaseRequested(QString tabName, QString filepath, int index);
-    void handleJumpLine(QString filepath, int line, int lineCount, int scrollOffset);
+    void addBlankTab(QString blankFile="");
+    void cleanKeywords();
     void handleBackToLine(QString filepath, int line, int scrollOffset);
-    void handleJumpToLine(QString filepath, int line);
-    void handleTempJumpToLine(QString filepath, int line);
-    void handleCancelJump();
-    void removeBottomWidget();
     void handleBackToPosition(QString file, int row, int column, int scrollOffset);
-    void handleUpdateSearchKeyword(QString file, QString keyword);
+    void handleCancelJump();
+    void handleCloseFile(QString filepath);
     void handleFindNext();
     void handleFindPrev();
-    void handleReplaceNext(QString replaceText, QString withText);
-    void handleReplaceSkip();
-    void handleReplaceRest(QString replaceText, QString withText);
+    void handleJumpLine(QString filepath, int line, int lineCount, int scrollOffset);
+    void handleJumpToLine(QString filepath, int line);
     void handleReplaceAll(QString replaceText, QString withText);
-
-    void addBlankTab(QString blankFile="");
-    
-    void cleanKeywords();
+    void handleReplaceNext(QString replaceText, QString withText);
+    void handleReplaceRest(QString replaceText, QString withText);
+    void handleReplaceSkip();
+    void handleSwitchToFile(QString filepath);
+    void handleTabAddRequested();
+    void handleTabReleaseRequested(QString tabName, QString filepath, int index);
+    void handleTempJumpToLine(QString filepath, int line);
+    void handleUpdateSearchKeyword(QString file, QString keyword);
+    void removeBottomWidget();
     
 private:
-    QWidget *layoutWidget;
-    QWidget *editorWidget;
-    QStackedLayout *editorLayout;
-    QVBoxLayout *layout;
-    
-    Tabbar *tabbar;
-    QMap<QString, Editor*> editorMap;
-    
-    int notifyPadding = 20;
-    
-    JumpLineBar *jumpLineBar;
-    
-    int fontSize;
-    
-    Settings *settings;
-    
     FindBar *findBar;
-    ReplaceBar *replaceBar;
-    
+    JumpLineBar *jumpLineBar;
+    QMap<QString, Editor*> editorMap;
+    QStackedLayout *editorLayout;
     QString blankFileDir;
+    QVBoxLayout *layout;
+    QWidget *editorWidget;
+    QWidget *layoutWidget;
+    ReplaceBar *replaceBar;
+    Settings *settings;
+    Tabbar *tabbar;
+    int fontSize;
+    int notifyPadding = 20;
 };
 
 #endif

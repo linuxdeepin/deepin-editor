@@ -38,42 +38,38 @@ class Tabbar : public QWidget
 public:
     Tabbar();
     
-    void addTab(QString filepath, QString tabName);
+    QString getActiveTabName();
+    QString getActiveTabPath();
+    QString getTabName(int index);
+    QString getTabPath(int index);
     int currentIndex();
     int isTabExist(QString filepath);
     void activeTab(int index);
-    
-    void selectNextTab();
-    void selectPrevTab();
-    void closeTab();
+    void addTab(QString filepath, QString tabName);
     void closeOtherTabs();
     void closeOtherTabsExceptFile(QString filepath);
+    void closeTab();
     void closeTabWithIndex(int index);
-    
-    QString getActiveTabName();
-    QString getActiveTabPath();
-    
-    QString getTabName(int index);
-    QString getTabPath(int index);
-    
+    void selectNextTab();
+    void selectPrevTab();
     void updateTab(int index, QString filepath, QString tabName);
                       
 signals:
+    void closeFile(QString filepath);
     void doubleClicked();
     void switchToFile(QString filepath);
-    void closeFile(QString filepath);
     void tabAddRequested();
     void tabReleaseRequested(QString tabName, QString filepaht, int index);
                           
 public slots:
-    void handleTabbarDoubleClick();
-    void handleCurrentIndexChanged(int index);
-    void handleTabMoved(int fromIndex, int toIndex);
-    void handleTabClosed(int closeIndex);
-    void handleTabReleaseRequested(int index);
-    void handleTabDroped(int index, Qt::DropAction action, QObject *target);
-    void handleCloseTab(int index);
     void handleCloseOtherTabs(int index);
+    void handleCloseTab(int index);
+    void handleCurrentIndexChanged(int index);
+    void handleTabClosed(int closeIndex);
+    void handleTabDroped(int index, Qt::DropAction action, QObject *target);
+    void handleTabMoved(int fromIndex, int toIndex);
+    void handleTabReleaseRequested(int index);
+    void handleTabbarDoubleClick();
     
 private:
     QHBoxLayout *layout;

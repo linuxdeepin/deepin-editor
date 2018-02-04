@@ -37,79 +37,63 @@ class TextEditor : public QPlainTextEdit
 public:
     TextEditor(QPlainTextEdit *parent = 0);
 
-    void lineNumberAreaPaintEvent(QPaintEvent *event);
-
-    void nextLine();
-    void prevLine();
-    void forwardChar();
-    void backwardChar();
-    void forwardWord();
-    void backwardWord();
-
-    void keyPressEvent(QKeyEvent *e);
-
-    int getPosition();
-    int getCurrentLine();
+    QWidget *lineNumberArea;
+    
     int getCurrentColumn();
+    int getCurrentLine();
+    int getPosition();
     int getScrollOffset();
-    void jumpToLine(int line, bool keepLineAtCenter);
-
-    void keepCurrentLineAtCenter();
-    void scrollToLine(int scrollOffset, int row, int column);
-
-    void setFontSize(int fontSize);
-
-    void openNewlineAbove();
-    void openNewlineBelow();
+    void backwardChar();
+    void backwardWord();
+    void cleanKeywords();
     void duplicateLine();
+    void forwardChar();
+    void forwardWord();
+    void highlightKeyword(QString keyword, int position);
+    void jumpToLine();
+    void jumpToLine(int line, bool keepLineAtCenter);
+    void keepCurrentLineAtCenter();
+    void keyPressEvent(QKeyEvent *e);
     void killLine();
-
-    void swapLineUp();
-    void swapLineDown();
-
+    void lineNumberAreaPaintEvent(QPaintEvent *event);
+    void moveToEndOfLine();
     void moveToLineIndentation();
     void moveToStartOfLine();
-    void moveToEndOfLine();
-
-    void jumpToLine();
-
-    void highlightKeyword(QString keyword, int position);
-
-    QWidget *lineNumberArea;
-
-    void updateHighlightLineSeleciton();
-    void updateKeywordSelections(QString keyword);
-    void updateCursorKeywordSelection(int position, bool findNext);
-
+    void nextLine();
+    void openNewlineAbove();
+    void openNewlineBelow();
+    void prevLine();
     void renderAllSelections();
-    
+    void replaceAll(QString replaceText, QString withText);
     void replaceNext(QString replaceText, QString withText);
     void replaceRest(QString replaceText, QString withText);
-    void replaceAll(QString replaceText, QString withText);
-    
-    void cleanKeywords();
+    void scrollToLine(int scrollOffset, int row, int column);
+    void setFontSize(int fontSize);
+    void swapLineDown();
+    void swapLineUp();
+    void updateCursorKeywordSelection(int position, bool findNext);
+    void updateHighlightLineSeleciton();
+    void updateKeywordSelections(QString keyword);
 
 signals:
     void jumpLine(int line, int lineCount, int scrollOffset);
 
 public slots:
-    void handleUpdateRequest(const QRect &rect, int dy);
-    void updateLineNumber();
-    void highlightCurrentLine();
     void handleScrollFinish();
+    void handleUpdateRequest(const QRect &rect, int dy);
+    void highlightCurrentLine();
+    void updateLineNumber();
 
 private:
-    int lineNumberPaddingX = 5;
-    int lineNumberOffset = 2;
-    int restoreRow;
-    int restoreColumn;
     Highlighter *highlighter;
-
+    QList<QTextEdit::ExtraSelection> keywordSelections;
     QPropertyAnimation *scrollAnimation;
-
     QTextEdit::ExtraSelection currentLineSelection;
     QTextEdit::ExtraSelection cursorKeywordSelection;
-    QList<QTextEdit::ExtraSelection> keywordSelections;
+    int lineNumberOffset = 2;
+    int lineNumberPaddingX = 5;
+    int restoreColumn;
+    int restoreRow;
     
     bool setCursorKeywordSeletoin(int position, bool findNext);
 };

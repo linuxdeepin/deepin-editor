@@ -33,15 +33,15 @@ class Settings : public QObject
 public:
     Settings(QObject *parent = 0);
     ~Settings();
-    QString configPath();
     
+    QString configPath();
     QVariant getOption(const QString &key);
     void init();
     void setOption(const QString &key, const QVariant &value);
     
     int defaultFontSize = 12;
-    int minFontSize = 8;
     int maxFontSize = 130;
+    int minFontSize = 8;
     
 private:
     QSettings* settings;

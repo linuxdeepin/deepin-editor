@@ -44,14 +44,14 @@ public:
     void activeInput(QString file, int line, int lineCount, int scrollOffset);
     
 public slots:    
-    void cancel();
     void back();
+    void cancel();
     void jump();
     void tempJump();
     
 signals:
-    void cancelJump();
     void backToLine(QString file, int line, int scrollOffset);
+    void cancelJump();
     void jumpToLine(QString file, int line);
     void tempJumpToLine(QString file, int line);
     
@@ -59,15 +59,13 @@ protected:
     void paintEvent(QPaintEvent *event);
     
 private:
-    QHBoxLayout *layout;
-    QLabel *label;
     LineBar *editLine;
-    
-    QString jumpFile;
-    int lineBeforeJump;
-    int jumpFileScrollOffset;
-    
+    QHBoxLayout *layout;
     QIntValidator *lineValidator;
+    QLabel *label;
+    QString jumpFile;
+    int jumpFileScrollOffset;
+    int lineBeforeJump;
 };
 
 #endif

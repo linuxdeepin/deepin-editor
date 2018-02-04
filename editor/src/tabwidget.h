@@ -40,26 +40,24 @@ class TabWidget : public DTabBar
 public:
     TabWidget();
     
-    QPixmap createDragPixmapFromTab(int index, const QStyleOptionTab &option, QPoint *hotspot) const;
+    QList<QString> tabFiles;
     QMimeData *createMimeDataFromTab(int index, const QStyleOptionTab &option) const;
+    QPixmap createDragPixmapFromTab(int index, const QStyleOptionTab &option, QPoint *hotspot) const;
     bool canInsertFromMimeData(int index, const QMimeData *source) const;
     void insertFromMimeData(int index, const QMimeData *source);    
-    
-    QList<QString> tabFiles;
                            
 signals:
-    void closeTab(int index);
     void closeOtherTabs(int index);
+    void closeTab(int index);
     
 public slots:
-    void handleCloseTab();
     void handleCloseOtherTabs();
+    void handleCloseTab();
     
 private:
-    QMenu *menu;
-    QAction *closeTabAction;
     QAction *closeOtherTabAction;
-    
+    QAction *closeTabAction;
+    QMenu *menu;
     int rightClickTab;
 };
 

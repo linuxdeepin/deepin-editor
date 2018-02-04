@@ -41,50 +41,44 @@ class ReplaceBar : public QWidget
 public:
     ReplaceBar(QWidget *parent = 0);
     
-    void activeInput(QString text, QString file, int row, int column, int scrollOffset);
-    
-    void focus();
-    
     bool isFocus();
+    void activeInput(QString text, QString file, int row, int column, int scrollOffset);
+    void focus();
     
 signals:
     void backToPosition(QString file, int row, int column, int scrollOffset);
-    void updateSearchKeyword(QString file, QString keyword);
-    void replaceNext(QString replaceText, QString withText);
-    void replaceSkip();
-    void replaceRest(QString replaceText, QString withText);
-    void replaceAll(QString replaceText, QString withText);
     void cleanMatchKeyword();
+    void replaceAll(QString replaceText, QString withText);
+    void replaceNext(QString replaceText, QString withText);
+    void replaceRest(QString replaceText, QString withText);
+    void replaceSkip();
+    void updateSearchKeyword(QString file, QString keyword);
     
 public slots:
     void back();
     void handleContentChanged();
+    void handleReplaceAll();
     void handleReplaceNext();
     void handleReplaceRest();
-    void handleReplaceAll();
     
 protected:
-    void paintEvent(QPaintEvent *event);
     bool focusNextPrevChild(bool next);
     void hideEvent(QHideEvent *event);
+    void paintEvent(QPaintEvent *event);
     
 private:
-    QHBoxLayout *layout;
-    
-    QLabel *replaceLabel;
-    LineBar *replaceLine;
-    
-    QLabel *withLabel;
-    LineBar *withLine;
-    
-    DTextButton *replaceButton;
-    DTextButton *replaceSkipButton;
-    DTextButton *replaceRestButton;
     DTextButton *replaceAllButton;
-    
+    DTextButton *replaceButton;
+    DTextButton *replaceRestButton;
+    DTextButton *replaceSkipButton;
+    LineBar *replaceLine;
+    LineBar *withLine;
+    QHBoxLayout *layout;
+    QLabel *replaceLabel;
+    QLabel *withLabel;
     QString replaceFile;
-    int replaceFileRow;
     int replaceFileColumn;
+    int replaceFileRow;
     int replaceFileSrollOffset;
 };
 

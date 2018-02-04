@@ -36,6 +36,7 @@ class Editor : public QWidget
     
 public:
     Editor(QWidget *parent = 0);
+    
     void loadFile(QString filepath);
     void saveFile();
     void updatePath(QString file);
@@ -46,21 +47,17 @@ signals:
     void jumpLine(QString filepath, int line, int lineCount, int scrollOffset);
                           
 public slots:
-    void handleTextChanged();
-    void handleTextChangeTimer();
     void handleJumpLine(int line, int lineCount, int scrollOffset);
+    void handleTextChangeTimer();
+    void handleTextChanged();
     
 private:
-    
+    DBusDaemon::dbus *autoSaveDBus;
     QHBoxLayout *layout;
     QString filepath;
-    
     QTimer *autoSaveTimer;
-    int autoSaveInternal;
-    
     bool saveFinish;
-    DBusDaemon::dbus *autoSaveDBus;
-    
+    int autoSaveInternal;
 };
 
 #endif

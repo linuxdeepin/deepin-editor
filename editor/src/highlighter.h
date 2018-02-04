@@ -46,6 +46,7 @@ private:
         QRegularExpression pattern;
         QTextCharFormat format;
     };
+    
     QVector<HighlightingRule> highlightingRules;
 
     QRegularExpression commentStartExpression;

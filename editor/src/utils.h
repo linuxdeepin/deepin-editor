@@ -31,13 +31,13 @@ class Utils : public QObject
     Q_OBJECT
     
 public:
+    static QSize getRenderSize(int fontSize, QString string);
+    static QString getKeymap(QKeyEvent *keyEvent);
     static QString getQrcPath(QString imageName);
     static QString getQssPath(QString qssName);
-    static QSize getRenderSize(int fontSize, QString string);
-    static void setFontSize(QPainter &painter, int textSize);
-    static void passInputEvent(int wid);
-    static void applyQss(QWidget *widget, QString qssName);
     static bool fileExists(QString path);
     static bool fileIsWritable(QString path);
-    static QString getKeymap(QKeyEvent *keyEvent);
+    static void applyQss(QWidget *widget, QString qssName);
+    static void passInputEvent(int wid);
+    static void setFontSize(QPainter &painter, int textSize);
 };

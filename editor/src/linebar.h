@@ -38,17 +38,17 @@ public:
     LineBar(DLineEdit *parent = 0);
     
 public slots:
-    void handleTextChanged();
     void handleTextChangeTimer();
+    void handleTextChanged();
     
 signals:
-    void focusOut();
-    void pressEsc();
-    void pressEnter();
-    void pressCtrlEnter();
-    void pressAltEnter();
-    void pressMetaEnter();
     void contentChanged();
+    void focusOut();
+    void pressAltEnter();
+    void pressCtrlEnter();
+    void pressEnter();
+    void pressEsc();
+    void pressMetaEnter();
     
 protected:
     virtual void focusOutEvent(QFocusEvent *e);    
