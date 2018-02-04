@@ -34,23 +34,28 @@ class StartManager : public QObject
     
     Q_CLASSINFO("D-Bus Interface", "com.deepin.Editor")
     
+    struct FileTabInfo
+    {
+        int windowIndex;
+        int tabIndex;
+    };
+    
 public:
     StartManager(QObject *parent = 0);
                                      
-    QList<int> fileIsOpened(QString file);
-    
 public slots:
     Q_SCRIPTABLE void openFilesInTab(QStringList files);
     Q_SCRIPTABLE void openFilesInWindow(QStringList files);
     
-    void handlePopTab(QString tabName, QString filepath, QString content);
+    void createWindowFromTab(QString tabName, QString filepath, QString content);
     
 private:
     QList<Window*> windows;
     
+    FileTabInfo getFileTabInfo(QString file);
     Window* createWindow(bool alwaysCenter=false);
     void initWindowPosition(Window *window, bool alwaysCenter=false);
-    void popupExitTab(QList<int> fileIndexes);
+    void popupExistTabs(FileTabInfo info);
 };
 
 #endif

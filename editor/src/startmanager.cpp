@@ -36,21 +36,23 @@ StartManager::StartManager(QObject *parent) : QObject(parent)
 
 void StartManager::openFilesInWindow(QStringList files)
 {
+    // Open window with blank tab if no files need open.
     if (files.size() == 0) {
         Window *window = createWindow();
 
         window->addBlankTab();
-
         window->activateWindow();
     } else {
         foreach (QString file, files) {
-            QList<int> fileIndexes = fileIsOpened(file);
-            if (fileIndexes.size() > 0) {
-                popupExitTab(fileIndexes);
-            } else {
-                Window *window = createWindow();
+            FileTabInfo info = getFileTabInfo(file);
 
-                window->addTab(file);
+            // Open exist tab if file has opened.
+            if (info.windowIndex != -1) {
+                popupExistTabs(info);
+            }
+            // Add new tab in current window.
+            else {
+                createWindow()->addTab(file);
             }
         }
     }
@@ -60,51 +62,61 @@ void StartManager::openFilesInTab(QStringList files)
 {
     if (files.size() == 0) {
         if (windows.size() == 0) {
-            Window *window = createWindow(true);
-
             QDir directory = QDir(QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files"));
             QStringList blankFiles = directory.entryList(QStringList(), QDir::Files);
-            
+
+            Window *window = createWindow(true);
+
+            // Open blank files of last session.
             if (blankFiles.size() > 0) {
                 foreach(QString blankFile, blankFiles) {
                     window->addBlankTab(QDir(directory).filePath(blankFile));
                 }
-            } else {
+            }
+            // Just open new window with blank tab if no blank files in last session.
+            else {
                 window->addBlankTab();
             }
-        } else {
+        }
+        // Just active first window if no file is need opened.
+        else {
             windows[0]->activateWindow();
         }
     } else {
         foreach (QString file, files) {
-            QList<int> fileIndexes = fileIsOpened(file);
-            if (fileIndexes.size() > 0) {
-                popupExitTab(fileIndexes);
-            } else {
-                if (windows.size() == 0) {
-                    Window *window = createWindow(true);
-                    
-                    window->addTab(file);
-                } else {
-                    windows[0]->addTab(file);
-                }
+            FileTabInfo info = getFileTabInfo(file);
+
+            // Open exist tab if file has opened.
+            if (info.windowIndex != -1) {
+                popupExistTabs(info);
             }
+            // Create new window with file if haven't window exist.
+            else if (windows.size() == 0) {
+                createWindow(true)->addTab(file);
+            }
+            // Open file tab in first window of window list.
+            else {
+                windows[0]->addTab(file);
+            }
+
         }
     }
 }
 
-QList<int> StartManager::fileIsOpened(QString file)
+StartManager::FileTabInfo StartManager::getFileTabInfo(QString file)
 {
-    QList<int> fileIndexes;
+    FileTabInfo info = {-1, -1};
+
     foreach (Window *window, windows) {
-        int tabIndex = window->isFileInTabs(file);
+        int tabIndex = window->getTabIndex(file);
         if (tabIndex >= 0) {
-            fileIndexes << windows.indexOf(window) << tabIndex;
-            return fileIndexes;
+            info.windowIndex = windows.indexOf(window);
+            info.tabIndex = tabIndex;
+            break;
         }
     }
 
-    return fileIndexes;
+    return info;
 }
 
 void StartManager::initWindowPosition(Window *window, bool alwaysCenter)
@@ -112,6 +124,7 @@ void StartManager::initWindowPosition(Window *window, bool alwaysCenter)
     if (windows.size() == 0 || alwaysCenter) {
         Dtk::Widget::moveToCenter(window);
     } else {
+        // Add window offset to avoid all editor window popup at same coordinate.
         int windowOffset = 50;
         window->move(windows.size() * windowOffset, windows.size() * windowOffset);
     }
@@ -119,33 +132,30 @@ void StartManager::initWindowPosition(Window *window, bool alwaysCenter)
 
 Window* StartManager::createWindow(bool alwaysCenter)
 {
+    // Create window.
     Window *window = new Window();
+    connect(window, &Window::dropTabOut, this, &StartManager::createWindowFromTab, Qt::QueuedConnection);
 
+    // Init window position.
     QScreen *screen = QGuiApplication::primaryScreen();
     QRect screenGeometry = screen->geometry();
     window->setMinimumSize(QSize(screenGeometry.width() * 2 / 3, screenGeometry.height() * 2 / 3));
     window->show();
-    
+
     initWindowPosition(window, alwaysCenter);
 
+    // Append window in window list.
     windows << window;
-    
-    connect(window, &Window::popTab, this, &StartManager::handlePopTab, Qt::QueuedConnection);
-    
+
     return window;
 }
 
-void StartManager::popupExitTab(QList<int> fileIndexes)
+void StartManager::popupExistTabs(FileTabInfo info)
 {
-    int windowIndex = fileIndexes[0];
-    int tabIndex = fileIndexes[1];
-
-    windows[windowIndex]->activeTab(tabIndex);
+    windows[info.windowIndex]->activeTab(info.tabIndex);
 }
 
-void StartManager::handlePopTab(QString tabName, QString filepath, QString content)
+void StartManager::createWindowFromTab(QString tabName, QString filepath, QString content)
 {
-    Window *window = createWindow();
-
-    window->addTabWithContent(tabName, filepath, content);
+    createWindow()->addTabWithContent(tabName, filepath, content);
 }

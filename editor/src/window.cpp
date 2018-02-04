@@ -159,7 +159,7 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
     }
 }
 
-int Window::isFileInTabs(QString file)
+int Window::getTabIndex(QString file)
 {
     return tabbar->isTabExist(file);
 }
@@ -347,7 +347,7 @@ void Window::handleTabReleaseRequested(QString tabName, QString filepath, int in
     tabbar->closeTabWithIndex(index);
 
     QString content = editorMap[filepath]->textEditor->toPlainText();
-    popTab(tabName, filepath, content);
+    dropTabOut(tabName, filepath, content);
 }
 
 void Window::addTabWithContent(QString tabName, QString filepath, QString content)

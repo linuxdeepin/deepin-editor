@@ -54,7 +54,7 @@ public:
     TextEditor* getTextEditor(QString filepath);
     
     bool saveFile();
-    int isFileInTabs(QString file);
+    int getTabIndex(QString file);
     void activeTab(int index);
     void addBottomWidget(QWidget *widget);
     void addTab(QString file);
@@ -75,7 +75,7 @@ public:
     void tryCleanLayout();
     
 signals:
-    void popTab(QString tabName, QString filepath, QString content);
+    void dropTabOut(QString tabName, QString filepath, QString content);
     
 public slots:
     void addBlankTab(QString blankFile="");
