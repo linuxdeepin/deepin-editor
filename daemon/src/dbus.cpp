@@ -21,20 +21,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "policykithelper.h"
 #include "dbus.h"
 #include "utils.h"
-#include "PolicyKitHelper.h"
+
 #include <QDebug>
-#include <QFileInfo>
 #include <QDir>
+#include <QFileInfo>
 #include <QtCore/QFile>
 
-dbus::dbus(QObject *parent) :
-    QObject(parent){
+dbus::dbus(QObject *parent) : QObject(parent)
+{
 }
 
-bool dbus::saveFile(QString filepath, QString text) {
-    if(PolicyKitHelper::instance()->checkAuthorization("com.deepin.editor.saveFile", getpid())){
+bool dbus::saveFile(QString filepath, QString text) 
+{
+    if (PolicyKitHelper::instance()->checkAuthorization("com.deepin.editor.saveFile", getpid())) {
         // Create file if filepath is not exists.
         if (!Utils::fileExists(filepath)) {
             QString directory = QFileInfo(filepath).dir().absolutePath();
@@ -45,6 +47,7 @@ bool dbus::saveFile(QString filepath, QString text) {
             }
         }
         
+        // Save content to file.
         QFile file(filepath);
         if(!file.open(QIODevice::WriteOnly | QIODevice::Text)){
             qDebug() << "Can't write file: " << filepath;

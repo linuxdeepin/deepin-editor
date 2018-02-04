@@ -22,8 +22,9 @@
  */
 
 #include "utils.h"
-#include <QFileInfo>
+
 #include <QDir>
+#include <QFileInfo>
 
 bool Utils::fileExists(QString path) {
     QFileInfo check_file(path);

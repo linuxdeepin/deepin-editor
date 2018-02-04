@@ -26,6 +26,7 @@
 
 #include <QtCore/QObject>
 #include <QtDBus/QtDBus>
+
 QT_BEGIN_NAMESPACE
 class QByteArray;
 template<class T> class QList;
@@ -35,8 +36,7 @@ class QStringList;
 class QVariant;
 QT_END_NAMESPACE
 
-class DbusAdaptor: public QDBusAbstractAdaptor
-{
+class DbusAdaptor: public QDBusAbstractAdaptor {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "com.deepin.editor.daemon")
     Q_CLASSINFO("D-Bus Introspection", ""
@@ -52,8 +52,10 @@ public:
     virtual ~DbusAdaptor();
 
 public: // PROPERTIES
+        
 public Q_SLOTS: // METHODS
     bool saveFile(const QString &filepath, const QString &text);
+    
 Q_SIGNALS: // SIGNALS
 };
 

@@ -21,15 +21,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DEEPIN_EDITOR_DAEMON_MAIN_H
-#define DEEPIN_EDITOR_DAEMON_MAIN_H
-
+#ifndef MAIN_H
+#define MAIN_H
 
 #include <QtCore/QObject>
 
-class main : public QObject{
+class main : public QObject {
     Q_OBJECT
 };
 
 
-#endif //DEEPIN_EDITOR_DAEMON_MAIN_H
+#endif //MAIN_H

@@ -21,27 +21,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "PolicyKitHelper.h"
+#include "dbusadaptor.h"
 
-bool PolicyKitHelper::checkAuthorization(const QString& actionId, qint64 applicationPid)
+#include <QtCore/QByteArray>
+#include <QtCore/QList>
+#include <QtCore/QMap>
+#include <QtCore/QMetaObject>
+#include <QtCore/QString>
+#include <QtCore/QStringList>
+#include <QtCore/QVariant>
+
+DbusAdaptor::DbusAdaptor(QObject *parent) : QDBusAbstractAdaptor(parent)
 {
-    Authority::Result result;
-
-    result = Authority::instance()->checkAuthorizationSync(actionId, UnixProcessSubject(applicationPid),
-                                                           Authority::AllowUserInteraction);
-    if (result == Authority::Yes) {
-        return true;
-    }else {
-        return false;
-    }
+    setAutoRelaySignals(true);
 }
 
-PolicyKitHelper::PolicyKitHelper()
+DbusAdaptor::~DbusAdaptor()
 {
-
 }
 
-PolicyKitHelper::~PolicyKitHelper()
+bool DbusAdaptor::saveFile(const QString &filepath, const QString &text)
 {
-
+    // Handle method call com.deepin.editor.daemon.saveFile.
+    
+    bool returnResult;
+    QMetaObject::invokeMethod(parent(), "saveFile", Q_RETURN_ARG(bool, returnResult), Q_ARG(QString, filepath), Q_ARG(QString, text));
+    
+    return returnResult;
 }
+

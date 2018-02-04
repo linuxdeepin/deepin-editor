@@ -21,8 +21,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DEEPIN_EDITOR_DAEMON_POLICYKITHELPER_H
-#define DEEPIN_EDITOR_DAEMON_POLICYKITHELPER_H
+#ifndef POLICYKITHELPER_H
+#define POLICYKITHELPER_H
 
 #include <polkit-qt5-1/PolkitQt1/Authority>
 
@@ -42,8 +42,7 @@ private:
     ~PolicyKitHelper();
 
     Q_DISABLE_COPY(PolicyKitHelper)
-
 };
 
 
-#endif //DEEPIN_EDITOR_DAEMON_POLICYKITHELPER_H
+#endif //POLICYKITHELPER_H

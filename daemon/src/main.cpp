@@ -21,10 +21,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QtDBus/QDBusConnection>
-#include <QCoreApplication>
-#include "dbus_adaptor.h"
 #include "dbus.h"
+#include "dbusadaptor.h"
+
+#include <QCoreApplication>
+#include <QtDBus/QDBusConnection>
 
 int main(int argc, char **argv)
 {
@@ -40,6 +41,7 @@ int main(int argc, char **argv)
     
     if(!connection.registerService("com.deepin.editor.daemon") || !connection.registerObject("/", dbus1)){
         qDebug() << connection.lastError();
+        
         app.exit(1);
         
         return 1;
