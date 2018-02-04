@@ -51,7 +51,6 @@ Editor::Editor(QWidget *parent) : QWidget(parent)
     autoSaveTimer->setSingleShot(true);
     
     connect(autoSaveTimer, &QTimer::timeout, this, &Editor::handleTextChangeTimer);
-
     connect(textEditor, &TextEditor::textChanged, this, &Editor::handleTextChanged, Qt::QueuedConnection);
 }
 
@@ -83,6 +82,7 @@ void Editor::saveFile()
         }
     }
 
+    // Try save file if file has permission.
     if (Utils::fileIsWritable(textEditor->filepath) && !fileCreateFailed) {
         QFile file(textEditor->filepath);
         if(!file.open(QIODevice::WriteOnly | QIODevice::Text)){
@@ -94,8 +94,11 @@ void Editor::saveFile()
         QTextStream out(&file);
         out << textEditor->toPlainText();
         file.close();
-    } else {
+    }
+    // Try use dbus daemon to save file.
+    else {
         bool result = autoSaveDBus->saveFile(textEditor->filepath, textEditor->toPlainText());
+        
         if (!result) {
             qDebug() << QString("Save root file %1 failed").arg(textEditor->filepath);
         }
