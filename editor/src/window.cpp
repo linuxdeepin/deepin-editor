@@ -22,7 +22,6 @@
  */
 
 #include "danchors.h"
-#include "ddialog.h"
 #include "dthememanager.h"
 #include "dtoast.h"
 #include "utils.h"
@@ -586,36 +585,24 @@ void Window::cleanKeywords()
 void Window::closeTab()
 {
     if (QFileInfo(tabbar->getActiveTabPath()).dir().absolutePath() == blankFileDir) {
-        DDialog *dialog = new DDialog("Save dragft", "Do you need to save the draft?", this);
-        dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
-        dialog->setIcon(QIcon(Utils::getQrcPath("logo_48.svg")));
-        dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
-        dialog->addButton(QString(tr("Don't Save")), false, DDialog::ButtonNormal);
-        dialog->addButton(QString(tr("Save")), true, DDialog::ButtonNormal);
-        dialog->show();
+        QString content = getActiveEditor()->textEditor->toPlainText();
+        
+        if (content.size() == 0) {
+            removeActiveBlankTab();
+        } else {
+            DDialog *dialog = createSaveBlankFileDialog();
 
-        connect(dialog, &DDialog::buttonClicked, this,
-                [=] (int index) {
-                    dialog->hide();
+            connect(dialog, &DDialog::buttonClicked, this,
+                    [=] (int index) {
+                        dialog->hide();
                     
-                    if (index == 1) {
-                        QString blankFile = tabbar->getActiveTabPath();
-                        
-                        tabbar->closeTab();
-                        
-                        QFile(blankFile).remove();
-                    } else if (index == 2) {
-                        QString blankFile = tabbar->getActiveTabPath();
-                        
-                        bool saveSucess = saveFile();
-                        
-                        if (saveSucess) {
-                            tabbar->closeTab();
-                            
-                            QFile(blankFile).remove();
+                        if (index == 1) {
+                            removeActiveBlankTab();
+                        } else if (index == 2) {
+                            removeActiveBlankTab(true);
                         }
-                    }
-                });
+                    });
+        }
     } else {
         tabbar->closeTab();
     }
@@ -625,4 +612,35 @@ void Window::showNewEditor(Editor *editor)
 {
     editorLayout->addWidget(editor);
     editorLayout->setCurrentWidget(editor);
+}
+
+void Window::removeActiveBlankTab(bool needSaveBefore)
+{
+    QString blankFile = tabbar->getActiveTabPath();
+    
+    if (needSaveBefore) {
+        if (!saveFile()) {
+            // Do nothing if need save but last user not select save file anyway.
+            return;
+        }
+    }
+    
+    // Close current tab.
+    tabbar->closeTab();
+    
+    // Remove blank file from blank file directory.
+    QFile(blankFile).remove();
+}
+
+DDialog* Window::createSaveBlankFileDialog()
+{
+    DDialog *dialog = new DDialog("Save dragft", "Do you need to save the draft?", this);
+    dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
+    dialog->setIcon(QIcon(Utils::getQrcPath("logo_48.svg")));
+    dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
+    dialog->addButton(QString(tr("Don't Save")), false, DDialog::ButtonNormal);
+    dialog->addButton(QString(tr("Save")), true, DDialog::ButtonNormal);
+    dialog->show();
+    
+    return dialog;
 }

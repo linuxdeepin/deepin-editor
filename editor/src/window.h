@@ -24,6 +24,7 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
+#include "ddialog.h"
 #include "dmainwindow.h"
 #include "editor.h"
 #include "findbar.h"
@@ -73,7 +74,6 @@ public:
     void setFontSizeWithConfig(Editor *editor);
     void toggleFullscreen();
     void tryCleanLayout();
-    void showNewEditor(Editor *editor);
     
 signals:
     void dropTabOut(QString tabName, QString filepath, QString content);
@@ -113,6 +113,10 @@ private:
     Tabbar *tabbar;
     int fontSize;
     int autoSaveTooltipPaddingBottom = 20;
+    
+    void showNewEditor(Editor *editor);
+    void removeActiveBlankTab(bool needSaveBefore=false);
+    DDialog* createSaveBlankFileDialog();
 };
 
 #endif
