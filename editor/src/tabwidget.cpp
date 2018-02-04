@@ -30,50 +30,56 @@
 
 TabWidget::TabWidget()
 {
+    // Init.
     installEventFilter(this);   // add event filter
-
-    rightClickTab = -1;
-
     setMovable(true);
     setTabsClosable(true);
     setVisibleAddButton(true);
     setDragable(true);
+    setStartDragDistance(20);   // set drag drop distance
 
+    // Set mask color.
     QColor dropColor("#333333");
     dropColor.setAlpha(128);
     setMaskColor(dropColor);
 
-    setStartDragDistance(20);
+    rightClickTab = -1;
 }
 
 QPixmap TabWidget::createDragPixmapFromTab(int index, const QStyleOptionTab &, QPoint *) const
 {
+    // Take editor's screenshot as drag image.
     TextEditor *textEditor = static_cast<Window*>(this->window())->getTextEditor(tabFiles[index]);
-
     int width = textEditor->width();
     int height = textEditor->height();
     QPixmap pixmap(width, height);
     textEditor->render(&pixmap, QPoint(), QRegion(0, 0, width, height));
 
+    // We need make editor screenshot smaller.
     return pixmap.scaled(width / 5, height / 5);
 }
 
 QMimeData* TabWidget::createMimeDataFromTab(int index, const QStyleOptionTab &) const
 {
+    // Get tab name, path, and content.
     QString tabPath = tabFiles[index];
     QString tabName = tabText(index);
     TextEditor *textEditor = static_cast<Window*>(this->window())->getTextEditor(tabFiles[index]);
     QString tabContent = textEditor->toPlainText();
 
+    // Add tab info in DND data.
     QMimeData *mimeData = new QMimeData;
     mimeData->setData("tabInfo", (QString("%1\n%2\n%3").arg(tabName, tabPath, tabContent)).toUtf8());
-    mimeData->removeFormat("text/plain"); // avoid drop tab text to other applications
+    
+    // Remove text/plain format, avoid drop tab text to other applications
+    mimeData->removeFormat("text/plain");
 
     return mimeData;
 }
 
 bool TabWidget::canInsertFromMimeData(int, const QMimeData *) const
 {
+    // Any index can insert.
     return true;
 }
 
@@ -104,9 +110,11 @@ bool TabWidget::eventFilter(QObject *, QEvent *event)
                 }
             }
 
+            // Poup right menu on tab.
             if (rightClickTab >= 0) {
                 menu = new QMenu();
                 menu->setStyle(QStyleFactory::create("dlight"));
+                
                 closeTabAction = new QAction("Close Tab", this);
                 closeOtherTabAction = new QAction("Close Other Tabs", this);
                 
