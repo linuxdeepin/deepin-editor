@@ -27,8 +27,11 @@
 
 ReplaceBar::ReplaceBar(QWidget *parent) : QWidget(parent)
 {
+    // Init.
     setWindowFlags(Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
-    
+    setFixedHeight(40);
+
+    // Init layout and widgets.
     layout = new QHBoxLayout(this);
     replaceLabel = new QLabel("Replace: ");
     replaceLine = new LineBar();
@@ -39,11 +42,6 @@ ReplaceBar::ReplaceBar(QWidget *parent) : QWidget(parent)
     replaceRestButton = new DTextButton("Replace Rest");
     replaceAllButton = new DTextButton("Replace All");
     
-    replaceButton->setFocusPolicy(Qt::NoFocus);
-    replaceSkipButton->setFocusPolicy(Qt::NoFocus);
-    replaceRestButton->setFocusPolicy(Qt::NoFocus);
-    replaceAllButton->setFocusPolicy(Qt::NoFocus);
-    
     layout->addWidget(replaceLabel);
     layout->addWidget(replaceLine);
     layout->addWidget(withLabel);
@@ -53,10 +51,14 @@ ReplaceBar::ReplaceBar(QWidget *parent) : QWidget(parent)
     layout->addWidget(replaceRestButton);
     layout->addWidget(replaceAllButton);
     
-    setFixedHeight(40);
+    // Make button don't grab keyboard focus after click it.
+    replaceButton->setFocusPolicy(Qt::NoFocus);
+    replaceSkipButton->setFocusPolicy(Qt::NoFocus);
+    replaceRestButton->setFocusPolicy(Qt::NoFocus);
+    replaceAllButton->setFocusPolicy(Qt::NoFocus);
     
-    connect(replaceLine, &LineBar::pressEsc, this, &ReplaceBar::back, Qt::QueuedConnection);
-    connect(withLine, &LineBar::pressEsc, this, &ReplaceBar::back, Qt::QueuedConnection);
+    connect(replaceLine, &LineBar::pressEsc, this, &ReplaceBar::replaceCancel, Qt::QueuedConnection);
+    connect(withLine, &LineBar::pressEsc, this, &ReplaceBar::replaceCancel, Qt::QueuedConnection);
     
     connect(replaceLine, &LineBar::pressEnter, this, &ReplaceBar::handleReplaceNext, Qt::QueuedConnection);
     connect(withLine, &LineBar::pressEnter, this, &ReplaceBar::handleReplaceNext, Qt::QueuedConnection);
@@ -85,6 +87,7 @@ void ReplaceBar::hideEvent(QHideEvent *)
 
 bool ReplaceBar::focusNextPrevChild(bool)
 {
+    // Make keyword jump between two EditLine widgets.
     auto *editWidget = qobject_cast<LineBar*>(focusWidget());
     if (editWidget != nullptr) {
         if (editWidget == replaceLine) {
@@ -117,21 +120,25 @@ void ReplaceBar::paintEvent(QPaintEvent *)
 
 void ReplaceBar::activeInput(QString text, QString file, int row, int column, int scrollOffset)
 {
+    // Try fill keyword with select text.
     replaceLine->clear();
     replaceLine->insert(text);
     replaceLine->selectAll();
-    
+
+    // Show.
     show();
     
+    // Save file info for back to position.
     replaceFile = file;
     replaceFileRow = row;
     replaceFileColumn = column;
     replaceFileSrollOffset = scrollOffset;
     
-    replaceLine->setFocus();
+    // Focus.
+    focus();
 }
 
-void ReplaceBar::back()
+void ReplaceBar::replaceCancel()
 {
     hide();
     

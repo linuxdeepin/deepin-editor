@@ -55,7 +55,7 @@ signals:
     void updateSearchKeyword(QString file, QString keyword);
     
 public slots:
-    void back();
+    void replaceCancel();
     void handleContentChanged();
     void handleReplaceAll();
     void handleReplaceNext();
