@@ -38,6 +38,7 @@ public:
     TextEditor(QPlainTextEdit *parent = 0);
 
     QWidget *lineNumberArea;
+    QString filepath;
     
     int getCurrentColumn();
     int getCurrentLine();
@@ -76,7 +77,7 @@ public:
     void updateKeywordSelections(QString keyword);
 
 signals:
-    void jumpLine(int line, int lineCount, int scrollOffset);
+    void jumpLine(QString filepath, int line, int lineCount, int scrollOffset);
 
 public slots:
     void handleScrollFinish();

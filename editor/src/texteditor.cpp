@@ -554,7 +554,7 @@ void TextEditor::jumpToLine()
 {
     QScrollBar *scrollbar = verticalScrollBar();
 
-    jumpLine(getCurrentLine(), blockCount(), scrollbar->value());
+    jumpLine(filepath, getCurrentLine(), blockCount(), scrollbar->value());
 }
 
 void TextEditor::highlightKeyword(QString keyword, int position)

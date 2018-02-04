@@ -31,26 +31,28 @@
 
 Editor::Editor(QWidget *parent) : QWidget(parent)
 {
+    // Init.
+    autoSaveDBus = new DBusDaemon::dbus("com.deepin.editor.daemon", "/", QDBusConnection::systemBus(), this);
+    autoSaveInternal = 1000;
+    saveFinish = true;
+
+    // Init layout and widgets.
     layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
 
     textEditor = new TextEditor;
 
-    autoSaveDBus = new DBusDaemon::dbus("com.deepin.editor.daemon", "/", QDBusConnection::systemBus(), this);
-
     layout->addWidget(textEditor->lineNumberArea);
     layout->addWidget(textEditor);
 
-    autoSaveInternal = 1000;
-    saveFinish = true;
-
+    // Init auto save timer.
     autoSaveTimer = new QTimer(this);
     autoSaveTimer->setSingleShot(true);
+    
     connect(autoSaveTimer, &QTimer::timeout, this, &Editor::handleTextChangeTimer);
 
     connect(textEditor, &TextEditor::textChanged, this, &Editor::handleTextChanged, Qt::QueuedConnection);
-    connect(textEditor, &TextEditor::jumpLine, this, &Editor::handleJumpLine, Qt::QueuedConnection);
 }
 
 void Editor::loadFile(QString filepath)
@@ -66,14 +68,14 @@ void Editor::loadFile(QString filepath)
 void Editor::saveFile()
 {
     bool fileCreateFailed = false;
-    if (!Utils::fileExists(filepath)) {
-        QString directory = QFileInfo(filepath).dir().absolutePath();
+    if (!Utils::fileExists(textEditor->filepath)) {
+        QString directory = QFileInfo(textEditor->filepath).dir().absolutePath();
         
         // Create file if filepath is not exists.
         if (Utils::fileIsWritable(directory)) {
             QDir().mkpath(directory);
-            if (QFile(filepath).open(QIODevice::ReadWrite)) {
-                qDebug() << QString("File %1 not exists, create one.").arg(filepath);
+            if (QFile(textEditor->filepath).open(QIODevice::ReadWrite)) {
+                qDebug() << QString("File %1 not exists, create one.").arg(textEditor->filepath);
             }
         } else {
             // Make flag fileCreateFailed with 'true' if no permission to create.
@@ -81,10 +83,10 @@ void Editor::saveFile()
         }
     }
 
-    if (Utils::fileIsWritable(filepath) && !fileCreateFailed) {
-        QFile file(filepath);
+    if (Utils::fileIsWritable(textEditor->filepath) && !fileCreateFailed) {
+        QFile file(textEditor->filepath);
         if(!file.open(QIODevice::WriteOnly | QIODevice::Text)){
-            qDebug() << "Can't write file: " << filepath;
+            qDebug() << "Can't write file: " << textEditor->filepath;
 
             return;
         }
@@ -92,24 +94,22 @@ void Editor::saveFile()
         QTextStream out(&file);
         out << textEditor->toPlainText();
         file.close();
-        
-        qDebug() << QString("Save conent to file %1 done").arg(filepath);
     } else {
-        bool result = autoSaveDBus->saveFile(filepath, textEditor->toPlainText());
+        bool result = autoSaveDBus->saveFile(textEditor->filepath, textEditor->toPlainText());
         if (!result) {
-            qDebug() << QString("Save root file %1 failed").arg(filepath);
+            qDebug() << QString("Save root file %1 failed").arg(textEditor->filepath);
         }
     }
 }
 
 void Editor::updatePath(QString file)
 {
-    filepath = file;
+    textEditor->filepath = file;
 }
 
 void Editor::handleTextChanged()
 {
-    if (Utils::fileExists(filepath)) {
+    if (Utils::fileExists(textEditor->filepath)) {
         saveFinish = false;
 
         if (autoSaveTimer->isActive()) {
@@ -121,14 +121,10 @@ void Editor::handleTextChanged()
 
 void Editor::handleTextChangeTimer()
 {
-    if (Utils::fileExists(filepath)) {
+    if (Utils::fileExists(textEditor->filepath)) {
         saveFinish = true;
 
         saveFile();
     }
 }
 
-void Editor::handleJumpLine(int line, int lineCount, int scrollOffset)
-{
-    jumpLine(filepath, line, lineCount, scrollOffset);
-}

@@ -43,18 +43,13 @@ public:
                                  
     TextEditor *textEditor;
                           
-signals:
-    void jumpLine(QString filepath, int line, int lineCount, int scrollOffset);
-                          
 public slots:
-    void handleJumpLine(int line, int lineCount, int scrollOffset);
     void handleTextChangeTimer();
     void handleTextChanged();
     
 private:
     DBusDaemon::dbus *autoSaveDBus;
     QHBoxLayout *layout;
-    QString filepath;
     QTimer *autoSaveTimer;
     bool saveFinish;
     int autoSaveInternal;

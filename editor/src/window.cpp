@@ -367,7 +367,7 @@ Editor* Window::createEditor()
     Editor *editor = new Editor();
     setFontSizeWithConfig(editor);
 
-    connect(editor, &Editor::jumpLine, this, &Window::handleJumpLine, Qt::QueuedConnection);
+    connect(editor->textEditor, &TextEditor::jumpLine, this, &Window::handleJumpLine, Qt::QueuedConnection);
 
     return editor;
 }
