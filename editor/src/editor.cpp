@@ -92,6 +92,8 @@ void Editor::saveFile()
         QTextStream out(&file);
         out << textEditor->toPlainText();
         file.close();
+        
+        qDebug() << QString("Save conent to file %1 done").arg(filepath);
     } else {
         bool result = autoSaveDBus->saveFile(filepath, textEditor->toPlainText());
         if (!result) {

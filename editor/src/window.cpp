@@ -22,6 +22,7 @@
  */
 
 #include "danchors.h"
+#include "ddialog.h"
 #include "dthememanager.h"
 #include "dtoast.h"
 #include "utils.h"
@@ -42,14 +43,14 @@ DWIDGET_USE_NAMESPACE
 Window::Window(DMainWindow *parent) : DMainWindow(parent)
 {
     DThemeManager::instance()->setTheme("dark");
-    
+
     blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
     if (!QFileInfo(blankFileDir).exists()) {
         QDir().mkpath(blankFileDir);
-        
+
         qDebug() << "Create blank file dir: " << blankFileDir;
     }
-    
+
     installEventFilter(this);   // add event filter
 
     layoutWidget = new QWidget();
@@ -136,7 +137,7 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
     } else if (key == "Ctrl + Shift + Backtab") {
         tabbar->selectPrevTab();
     } else if (key == "Ctrl + W") {
-        tabbar->closeTab();
+        closeTab();
     } else if (key == "Ctrl + Shift + W") {
         tabbar->closeOtherTabs();
     } else if (key == "Ctrl + O") {
@@ -202,7 +203,7 @@ void Window::addBlankTab(QString blankFile)
     tabbar->addTab(blankTabPath, "Blank document");
     Editor *editor = createEditor();
     editor->updatePath(blankTabPath);
-    
+
     if (blankFile != "" && Utils::fileExists(blankFile)) {
         editor->loadFile(blankFile);
     }
@@ -256,7 +257,7 @@ void Window::openFile()
     }
 }
 
-void Window::saveFile()
+bool Window::saveFile()
 {
     if (QFileInfo(tabbar->getActiveTabPath()).dir().absolutePath() == blankFileDir) {
         QString filepath = QFileDialog::getSaveFileName(this, "Save File", QDir::homePath());
@@ -265,17 +266,23 @@ void Window::saveFile()
             QString tabPath = tabbar->getActiveTabPath();
 
             saveFileAsAnotherPath(tabPath, filepath, true);
+            
+            return true;
+        } else {
+            return false;
         }
     } else {
-            auto toast = new DToast(this);
+        auto toast = new DToast(this);
 
-            toast->setText("文件已自动保存");
-            toast->setIcon(QIcon(Utils::getQrcPath("logo_24.svg")));
-            toast->pop();
+        toast->setText("文件已自动保存");
+        toast->setIcon(QIcon(Utils::getQrcPath("logo_24.svg")));
+        toast->pop();
 
-            toast->move((width() - toast->width()) / 2,
-                        height() - toast->height() - notifyPadding);
-        }
+        toast->move((width() - toast->width()) / 2,
+                    height() - toast->height() - notifyPadding);
+        
+        return true;
+    }
 }
 
 void Window::saveAsFile()
@@ -321,7 +328,7 @@ void Window::saveFileAsAnotherPath(QString fromPath, QString toPath, bool delete
     if (deleteOldFile) {
         QFile(fromPath).remove();
     }
-    
+
     tabbar->updateTab(tabbar->currentIndex(), toPath, QFileInfo(toPath).fileName());
 
     editorMap[toPath] = editorMap.take(fromPath);
@@ -453,7 +460,7 @@ void Window::addBottomWidget(QWidget *widget)
     if (layout->count() >= 2) {
         removeBottomWidget();
     }
-    
+
     layout->addWidget(widget);
 }
 
@@ -580,4 +587,42 @@ void Window::cleanKeywords()
     Editor *editor = getActiveEditor();
 
     editor->textEditor->cleanKeywords();
+}
+
+void Window::closeTab()
+{
+    if (QFileInfo(tabbar->getActiveTabPath()).dir().absolutePath() == blankFileDir) {
+        DDialog *dialog = new DDialog("Save dragft", "Do you need to save the draft?", this);
+        dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
+        dialog->setIcon(QIcon(Utils::getQrcPath("logo_48.svg")));
+        dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
+        dialog->addButton(QString(tr("Don't Save")), false, DDialog::ButtonNormal);
+        dialog->addButton(QString(tr("Save")), true, DDialog::ButtonNormal);
+        dialog->show();
+
+        connect(dialog, &DDialog::buttonClicked, this,
+                [=] (int index) {
+                    dialog->hide();
+                    
+                    if (index == 1) {
+                        QString blankFile = tabbar->getActiveTabPath();
+                        
+                        tabbar->closeTab();
+                        
+                        QFile(blankFile).remove();
+                    } else if (index == 2) {
+                        QString blankFile = tabbar->getActiveTabPath();
+                        
+                        bool saveSucess = saveFile();
+                        
+                        if (saveSucess) {
+                            tabbar->closeTab();
+                            
+                            QFile(blankFile).remove();
+                        }
+                    }
+                });
+    } else {
+        tabbar->closeTab();
+    }
 }

@@ -55,10 +55,11 @@ public:
     int isFileInTabs(QString file);
     void activeTab(int index);
     void openFile();
-    void saveFile();
+    bool saveFile();
     void saveAsFile();
                       
     void toggleFullscreen();
+    void closeTab();
                            
     Editor* getActiveEditor();
     Editor* createEditor();
