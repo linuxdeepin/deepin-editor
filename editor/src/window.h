@@ -112,7 +112,7 @@ private:
     Settings *settings;
     Tabbar *tabbar;
     int fontSize;
-    int notifyPadding = 20;
+    int autoSaveTooltipPaddingBottom = 20;
 };
 
 #endif

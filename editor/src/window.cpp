@@ -42,18 +42,20 @@ DWIDGET_USE_NAMESPACE
 
 Window::Window(DMainWindow *parent) : DMainWindow(parent)
 {
+    // Init theme.
     DThemeManager::instance()->setTheme("dark");
-
-    blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
-    if (!QFileInfo(blankFileDir).exists()) {
-        QDir().mkpath(blankFileDir);
-
-        qDebug() << "Create blank file dir: " << blankFileDir;
-    }
-
+    
+    // Init.
     installEventFilter(this);   // add event filter
+    blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
 
+    // Init settings.
+    settings = new Settings();
+    settings->init();
+
+    // Init layout and editor.
     layoutWidget = new QWidget();
+    this->setCentralWidget(layoutWidget);
 
     layout = new QVBoxLayout(layoutWidget);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -63,43 +65,10 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     editorLayout = new QStackedLayout(editorWidget);
     editorLayout->setContentsMargins(0, 0, 0, 0);
 
-    this->setCentralWidget(layoutWidget);
-
     layout->addWidget(editorWidget);
-
-    findBar = new FindBar();
-
-    connect(findBar, &FindBar::backToPosition, this, &Window::handleBackToPosition, Qt::QueuedConnection);
-    connect(findBar, &FindBar::updateSearchKeyword, this, &Window::handleUpdateSearchKeyword, Qt::QueuedConnection);
-    connect(findBar, &FindBar::findNext, this, &Window::handleFindNext, Qt::QueuedConnection);
-    connect(findBar, &FindBar::findPrev, this, &Window::handleFindPrev, Qt::QueuedConnection);
-    connect(findBar, &FindBar::cleanMatchKeyword, this, &Window::cleanKeywords, Qt::QueuedConnection);
-
-    replaceBar = new ReplaceBar();
-    connect(replaceBar, &ReplaceBar::backToPosition, this, &Window::handleBackToPosition, Qt::QueuedConnection);
-    connect(replaceBar, &ReplaceBar::updateSearchKeyword, this, &Window::handleUpdateSearchKeyword, Qt::QueuedConnection);
-    connect(replaceBar, &ReplaceBar::replaceNext, this, &Window::handleReplaceNext, Qt::QueuedConnection);
-    connect(replaceBar, &ReplaceBar::replaceSkip, this, &Window::handleReplaceSkip, Qt::QueuedConnection);
-    connect(replaceBar, &ReplaceBar::replaceRest, this, &Window::handleReplaceRest, Qt::QueuedConnection);
-    connect(replaceBar, &ReplaceBar::replaceAll, this, &Window::handleReplaceAll, Qt::QueuedConnection);
-    connect(replaceBar, &ReplaceBar::cleanMatchKeyword, this, &Window::cleanKeywords, Qt::QueuedConnection);
-
-    settings = new Settings();
-    settings->init();
-
+    
+    // Init titlebar.
     tabbar = new Tabbar();
-
-    jumpLineBar = new JumpLineBar(this);
-    QTimer::singleShot(0, jumpLineBar, SLOT(hide()));
-
-    connect(jumpLineBar, &JumpLineBar::jumpToLine, this, &Window::handleJumpToLine, Qt::QueuedConnection);
-    connect(jumpLineBar, &JumpLineBar::tempJumpToLine, this, &Window::handleTempJumpToLine, Qt::QueuedConnection);
-    connect(jumpLineBar, &JumpLineBar::backToLine, this, &Window::handleBackToLine, Qt::QueuedConnection);
-    connect(jumpLineBar, &JumpLineBar::cancelJump, this, &Window::handleCancelJump, Qt::QueuedConnection);
-
-    DAnchorsBase::setAnchor(jumpLineBar, Qt::AnchorTop, layoutWidget, Qt::AnchorTop);
-    DAnchorsBase::setAnchor(jumpLineBar, Qt::AnchorRight, layoutWidget, Qt::AnchorRight);
-
     this->titlebar()->setCustomWidget(tabbar, Qt::AlignVCenter, false);
     this->titlebar()->setSeparatorVisible(true);
     this->titlebar()->setAutoHideOnFullscreen(true);
@@ -111,6 +80,39 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     connect(tabbar, &Tabbar::tabAddRequested, this, &Window::handleTabAddRequested, Qt::QueuedConnection);
     connect(tabbar, &Tabbar::tabReleaseRequested, this, &Window::handleTabReleaseRequested, Qt::QueuedConnection);
 
+    // Init find bar.
+    findBar = new FindBar();
+
+    connect(findBar, &FindBar::backToPosition, this, &Window::handleBackToPosition, Qt::QueuedConnection);
+    connect(findBar, &FindBar::updateSearchKeyword, this, &Window::handleUpdateSearchKeyword, Qt::QueuedConnection);
+    connect(findBar, &FindBar::findNext, this, &Window::handleFindNext, Qt::QueuedConnection);
+    connect(findBar, &FindBar::findPrev, this, &Window::handleFindPrev, Qt::QueuedConnection);
+    connect(findBar, &FindBar::cleanMatchKeyword, this, &Window::cleanKeywords, Qt::QueuedConnection);
+
+    // Init replace bar.
+    replaceBar = new ReplaceBar();
+    connect(replaceBar, &ReplaceBar::backToPosition, this, &Window::handleBackToPosition, Qt::QueuedConnection);
+    connect(replaceBar, &ReplaceBar::updateSearchKeyword, this, &Window::handleUpdateSearchKeyword, Qt::QueuedConnection);
+    connect(replaceBar, &ReplaceBar::replaceNext, this, &Window::handleReplaceNext, Qt::QueuedConnection);
+    connect(replaceBar, &ReplaceBar::replaceSkip, this, &Window::handleReplaceSkip, Qt::QueuedConnection);
+    connect(replaceBar, &ReplaceBar::replaceRest, this, &Window::handleReplaceRest, Qt::QueuedConnection);
+    connect(replaceBar, &ReplaceBar::replaceAll, this, &Window::handleReplaceAll, Qt::QueuedConnection);
+    connect(replaceBar, &ReplaceBar::cleanMatchKeyword, this, &Window::cleanKeywords, Qt::QueuedConnection);
+
+    // Init jump line bar.
+    jumpLineBar = new JumpLineBar(this);
+    QTimer::singleShot(0, jumpLineBar, SLOT(hide()));
+
+    connect(jumpLineBar, &JumpLineBar::jumpToLine, this, &Window::handleJumpToLine, Qt::QueuedConnection);
+    connect(jumpLineBar, &JumpLineBar::tempJumpToLine, this, &Window::handleTempJumpToLine, Qt::QueuedConnection);
+    connect(jumpLineBar, &JumpLineBar::backToLine, this, &Window::handleBackToLine, Qt::QueuedConnection);
+    connect(jumpLineBar, &JumpLineBar::cancelJump, this, &Window::handleCancelJump, Qt::QueuedConnection);
+
+    // Make jump line bar pop at top-right of editor.
+    DAnchorsBase::setAnchor(jumpLineBar, Qt::AnchorTop, layoutWidget, Qt::AnchorTop);
+    DAnchorsBase::setAnchor(jumpLineBar, Qt::AnchorRight, layoutWidget, Qt::AnchorRight);
+
+    // Apply qss theme.
     Utils::applyQss(this, "main.qss");
     Utils::applyQss(this->titlebar(), "main.qss");
 }
@@ -279,7 +281,7 @@ bool Window::saveFile()
         toast->pop();
 
         toast->move((width() - toast->width()) / 2,
-                    height() - toast->height() - notifyPadding);
+                    height() - toast->height() - autoSaveTooltipPaddingBottom);
         
         return true;
     }
@@ -311,7 +313,7 @@ void Window::toggleFullscreen()
         toast->setIcon(QIcon(Utils::getQrcPath("logo_24.svg")));
         toast->pop();
 
-        toast->move((screenGeometry.width() - toast->width()) / 2, notifyPadding);
+        toast->move((screenGeometry.width() - toast->width()) / 2, autoSaveTooltipPaddingBottom);
     }
 
 }

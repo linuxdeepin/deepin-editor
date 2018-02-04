@@ -32,6 +32,13 @@ DWIDGET_USE_NAMESPACE
 
 StartManager::StartManager(QObject *parent) : QObject(parent)
 {
+    // Create blank directory if it not exist.
+    QString blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
+    if (!QFileInfo(blankFileDir).exists()) {
+        QDir().mkpath(blankFileDir);
+
+        qDebug() << "Create blank file dir: " << blankFileDir;
+    }
 }
 
 void StartManager::openFilesInWindow(QStringList files)
