@@ -47,35 +47,77 @@ public:
 
 TextEditor::TextEditor(QPlainTextEdit *parent) : QPlainTextEdit(parent)
 {
+    // Init widgets.
     highlighter = new Highlighter(document());
-
     lineNumberArea = new LineNumberArea(this);
 
     connect(this, &QPlainTextEdit::updateRequest, this, &TextEditor::handleUpdateRequest);
     connect(this, &QPlainTextEdit::textChanged, this, &TextEditor::updateLineNumber, Qt::QueuedConnection);
     connect(this, &QPlainTextEdit::cursorPositionChanged, this, &TextEditor::highlightCurrentLine, Qt::QueuedConnection);
 
-    highlightCurrentLine();
-
+    // Init scroll animation.
     scrollAnimation = new QPropertyAnimation(verticalScrollBar(), "value");
     scrollAnimation->setEasingCurve(QEasingCurve::InOutExpo);
     scrollAnimation->setDuration(300);
 
     connect(scrollAnimation, &QPropertyAnimation::finished, this, &TextEditor::handleScrollFinish, Qt::QueuedConnection);
 
+    // Highlight line and focus.
+    highlightCurrentLine();
     QTimer::singleShot(0, this, SLOT(setFocus()));
+}
+
+void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
+{
+    QString key = Utils::getKeymap(keyEvent);
+
+    // qDebug() << key;
+
+    if (key == "Ctrl + F") {
+        forwardChar();
+    } else if (key == "Ctrl + B") {
+        backwardChar();
+    } else if (key == "Alt + F") {
+        forwardWord();
+    } else if (key == "Alt + B") {
+        backwardWord();
+    } else if (key == "Ctrl + N") {
+        nextLine();
+    } else if (key == "Ctrl + P") {
+        prevLine();
+    } else if (key == "Ctrl + L") {
+        openNewlineAbove();
+    } else if (key == "Ctrl + H") {
+        openNewlineBelow();
+    } else if (key == "Ctrl + Shift + L") {
+        duplicateLine();
+    } else if (key == "Ctrl + K") {
+        killLine();
+    } else if (key == "Meta + Shift + P") {
+        swapLineUp();
+    } else if (key == "Meta + Shift + N") {
+        swapLineDown();
+    } else if (key == "Ctrl + Shift + E") {
+        moveToEndOfLine();
+    } else if (key == "Ctrl + Shift + A") {
+        moveToStartOfLine();
+    } else if (key == "Alt + M") {
+        moveToLineIndentation();
+    } else {
+        QPlainTextEdit::keyPressEvent(keyEvent);
+    }
 }
 
 void TextEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
+    // Init.
     QPainter painter(lineNumberArea);
     painter.fillRect(event->rect(), QColor(36, 36, 36));
 
+    // Update line number.
     QTextBlock block = firstVisibleBlock();
-
     int top = (int) blockBoundingGeometry(block).translated(contentOffset()).top();
     int bottom = top + (int) blockBoundingRect(block).height();
-
     int linenumber = block.blockNumber();
 
     Utils::setFontSize(painter, document()->defaultFont().pointSize());
@@ -115,14 +157,15 @@ void TextEditor::updateLineNumber()
 void TextEditor::highlightCurrentLine()
 {
     updateHighlightLineSeleciton();
-
     renderAllSelections();
 }
 
 void TextEditor::updateKeywordSelections(QString keyword)
 {
+    // Clear keyword selections first.
     keywordSelections.clear();
 
+    // Update selections with keyword.
     if (keyword != "") {
         moveCursor(QTextCursor::Start);
 
@@ -171,6 +214,8 @@ bool TextEditor::setCursorKeywordSeletoin(int position, bool findNext)
 
                 QTextCursor cursor = textCursor();
                 cursor.setPosition(keywordSelections[i].cursor.position());
+                
+                // Update cursor.
                 setTextCursor(cursor);
 
                 return true;
@@ -188,6 +233,8 @@ bool TextEditor::setCursorKeywordSeletoin(int position, bool findNext)
 
                 QTextCursor cursor = textCursor();
                 cursor.setPosition(keywordSelections[i].cursor.position());
+                
+                // Update cursor.
                 setTextCursor(cursor);
 
                 return true;
@@ -244,47 +291,6 @@ void TextEditor::backwardWord()
     moveCursor(QTextCursor::PreviousWord);
 }
 
-void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
-{
-    QString key = Utils::getKeymap(keyEvent);
-
-    // qDebug() << key;
-
-    if (key == "Ctrl + F") {
-        forwardChar();
-    } else if (key == "Ctrl + B") {
-        backwardChar();
-    } else if (key == "Alt + F") {
-        forwardWord();
-    } else if (key == "Alt + B") {
-        backwardWord();
-    } else if (key == "Ctrl + N") {
-        nextLine();
-    } else if (key == "Ctrl + P") {
-        prevLine();
-    } else if (key == "Ctrl + L") {
-        openNewlineAbove();
-    } else if (key == "Ctrl + H") {
-        openNewlineBelow();
-    } else if (key == "Ctrl + Shift + L") {
-        duplicateLine();
-    } else if (key == "Ctrl + K") {
-        killLine();
-    } else if (key == "Meta + Shift + P") {
-        swapLineUp();
-    } else if (key == "Meta + Shift + N") {
-        swapLineDown();
-    } else if (key == "Ctrl + Shift + E") {
-        moveToEndOfLine();
-    } else if (key == "Ctrl + Shift + A") {
-        moveToStartOfLine();
-    } else if (key == "Alt + M") {
-        moveToLineIndentation();
-    } else {
-        QPlainTextEdit::keyPressEvent(keyEvent);
-    }
-}
-
 int TextEditor::getPosition()
 {
     return textCursor().position();
@@ -310,6 +316,8 @@ int TextEditor::getScrollOffset()
 void TextEditor::jumpToLine(int line, bool keepLineAtCenter)
 {
     QTextCursor cursor(document()->findBlockByLineNumber(line - 1)); // line - 1 because line number starts from 0
+    
+    // Update cursor.
     setTextCursor(cursor);
 
     if (keepLineAtCenter) {
@@ -328,34 +336,39 @@ void TextEditor::keepCurrentLineAtCenter()
 
 void TextEditor::scrollToLine(int scrollOffset, int row, int column)
 {
+    // Save cursor postion.
     restoreRow = row;
     restoreColumn = column;
 
-    QScrollBar *scrollbar = verticalScrollBar();
-
-    scrollAnimation->setStartValue(scrollbar->value());
+    // Start scroll animation.
+    scrollAnimation->setStartValue(verticalScrollBar()->value());
     scrollAnimation->setEndValue(scrollOffset);
     scrollAnimation->start();
 }
 
 void TextEditor::handleScrollFinish()
 {
+    // Restore cursor postion.
     jumpToLine(restoreRow, false);
 
-    moveCursor(QTextCursor::StartOfLine);
-    for (int i = 0; i < restoreColumn; i++) {
-        moveCursor(QTextCursor::Right);
-    }
+    QTextCursor cursor = textCursor();
+    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, restoreColumn);
+    
+    // Update cursor.
+    setTextCursor(cursor);
 }
 
 void TextEditor::setFontSize(int size)
 {
+    // Update font.
     QFont font;
     font.setFamily("Note Mono");
     font.setFixedPitch(true);
     font.setPointSize(size);
     setFont(font);
 
+    // Update line number after adjust font size.
     updateLineNumber();
 }
 
@@ -383,15 +396,16 @@ void TextEditor::duplicateLine()
     QString text = cursor.selectedText();
 
     // Copy current line.
-    moveCursor(QTextCursor::EndOfLine);
-    textCursor().insertText("\n");
-    textCursor().insertText(text);
-
+    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
+    cursor.insertText("\n");
+    cursor.insertText(text);
+    
     // Restore cursor's column.
-    moveCursor(QTextCursor::StartOfLine);
-    for (int i = 0; i < column; i++) {
-        moveCursor(QTextCursor::Right);
-    }
+    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, column);
+    
+    // Update cursor.
+    setTextCursor(cursor);
 }
 
 void TextEditor::killLine()
@@ -416,6 +430,7 @@ void TextEditor::killLine()
             cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
             cursor.deleteChar();
 
+            // Update cursor.
             setTextCursor(cursor);
         }
         // Otherwise kill rest content of line.
@@ -426,6 +441,7 @@ void TextEditor::killLine()
             cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
             cursor.removeSelectedText();
 
+            // Update cursor.
             setTextCursor(cursor);
         }
     }
@@ -460,14 +476,12 @@ void TextEditor::swapLineUp(){
     cursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
 
+    // Restore cursor's column.
+    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, column);
+    
     // Update cursor.
     setTextCursor(cursor);
-
-    // Restore cursor's column.
-    moveCursor(QTextCursor::StartOfLine);
-    for (int i = 0; i < column; i++) {
-        moveCursor(QTextCursor::Right);
-    }
 }
 
 // Swaps Line Where Cursor Is Currently Positioned With The Line Below It
@@ -499,14 +513,12 @@ void TextEditor::swapLineDown(){
     cursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
 
+    // Restore cursor's column.
+    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, column);
+    
     // Update cursor.
     setTextCursor(cursor);
-
-    // Restore cursor's column.
-    moveCursor(QTextCursor::StartOfLine);
-    for (int i = 0; i < column; i++) {
-        moveCursor(QTextCursor::Right);
-    }
 }
 
 void TextEditor::moveToLineIndentation()
@@ -579,6 +591,7 @@ void TextEditor::replaceNext(QString replaceText, QString withText)
     cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, replaceText.size());
     cursor.insertText(withText);
 
+    // Update cursor.
     setTextCursor(cursor);
 
     highlightKeyword(replaceText, getPosition());
@@ -595,6 +608,7 @@ void TextEditor::replaceRest(QString replaceText, QString withText)
     cursor.insertText(text.replace(replaceText, withText));
     cursor.clearSelection();
 
+    // Update cursor.
     setTextCursor(cursor);
     
     highlightKeyword(replaceText, getPosition());
@@ -610,6 +624,7 @@ void TextEditor::replaceAll(QString replaceText, QString withText)
     cursor.insertText(text.replace(replaceText, withText));
     cursor.clearSelection();
 
+    // Update cursor.
     setTextCursor(cursor);
     
     highlightKeyword(replaceText, getPosition());
