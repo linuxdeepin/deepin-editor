@@ -587,6 +587,7 @@ void Window::closeTab()
     if (QFileInfo(tabbar->getActiveTabPath()).dir().absolutePath() == blankFileDir) {
         QString content = getActiveEditor()->textEditor->toPlainText();
         
+        // Don't save blank tab if nothing in it.
         if (content.size() == 0) {
             removeActiveBlankTab();
         } else {
@@ -596,14 +597,18 @@ void Window::closeTab()
                     [=] (int index) {
                         dialog->hide();
                     
+                        // Remove blank tab if user click "don't save" button.
                         if (index == 1) {
                             removeActiveBlankTab();
-                        } else if (index == 2) {
+                        }
+                        // Save blank tab as file and then remove blank tab if user click "save" button.
+                        else if (index == 2) {
                             removeActiveBlankTab(true);
                         }
                     });
         }
     } else {
+        // Close tab directly, because all file is save automatically.
         tabbar->closeTab();
     }
 }
