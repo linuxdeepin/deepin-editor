@@ -126,6 +126,8 @@ private:
     
     FindBar *findBar;
     ReplaceBar *replaceBar;
+    
+    QString blankFileDir;
 };
 
 #endif

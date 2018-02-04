@@ -41,7 +41,14 @@ DWIDGET_USE_NAMESPACE
 Window::Window(DMainWindow *parent) : DMainWindow(parent)
 {
     DThemeManager::instance()->setTheme("dark");
-
+    
+    blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
+    if (!QFileInfo(blankFileDir).exists()) {
+        QDir().mkpath(blankFileDir);
+        
+        qDebug() << "Create blank file dir: " << blankFileDir;
+    }
+    
     installEventFilter(this);   // add event filter
 
     layoutWidget = new QWidget();
