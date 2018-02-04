@@ -22,6 +22,7 @@
  */
 
 #include "jumplinebar.h"
+
 #include <QDebug>
 
 JumpLineBar::JumpLineBar(QWidget *parent) : QWidget(parent)

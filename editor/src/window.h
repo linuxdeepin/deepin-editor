@@ -25,18 +25,19 @@
 #define WINDOW_H
 
 #include "dmainwindow.h"
+#include "editor.h"
 #include "findbar.h"
+#include "jumplinebar.h"
 #include "replacebar.h"
 #include "settings.h"
-#include "jumplinebar.h"
-#include <dimagebutton.h>
-#include <QVBoxLayout>
+#include "tabbar.h"
+
 #include <QHBoxLayout>
 #include <QResizeEvent>
-#include <QWidget>
-#include "editor.h"
-#include "tabbar.h"
 #include <QStackedLayout>
+#include <QVBoxLayout>
+#include <QWidget>
+#include <dimagebutton.h>
 
 DWIDGET_USE_NAMESPACE
 

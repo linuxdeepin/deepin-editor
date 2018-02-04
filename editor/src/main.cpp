@@ -21,20 +21,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "startmanager.h"
+#include "utils.h"
 #include "window.h"
-#include <QCommandLineParser>
+
 #include <DApplication>
 #include <DMainWindow>
-#include <QApplication>
-#include <QScreen>
-#include <QDesktopWidget>
 #include <DWidgetUtil>
-#include <iostream>
-#include "utils.h"
+#include <QApplication>
+#include <QCommandLineParser>
 #include <QDBusConnection>
-#include <QDebug>
 #include <QDBusInterface>
-#include "startmanager.h"
+#include <QDebug>
+#include <QDesktopWidget>
+#include <QScreen>
+#include <iostream>
 
 DWIDGET_USE_NAMESPACE
 

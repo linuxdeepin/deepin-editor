@@ -22,6 +22,7 @@
  */
 
 #include "replacebar.h"
+
 #include <QDebug>
 
 ReplaceBar::ReplaceBar(QWidget *parent) : QWidget(parent)

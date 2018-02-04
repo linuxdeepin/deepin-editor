@@ -25,8 +25,9 @@
 #define TEXTEEDITOR_H
 
 #include "highlighter.h"
-#include <QPlainTextEdit>
+
 #include <QPaintEvent>
+#include <QPlainTextEdit>
 #include <QPropertyAnimation>
 
 class TextEditor : public QPlainTextEdit

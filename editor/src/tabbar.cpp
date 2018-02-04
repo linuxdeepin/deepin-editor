@@ -22,9 +22,10 @@
  */
 
 #include "tabbar.h"
-#include <QLabel>
-#include <QDebug>
 #include "utils.h"
+
+#include <QDebug>
+#include <QLabel>
 
 Tabbar::Tabbar()
 {

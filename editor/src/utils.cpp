@@ -21,14 +21,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QString>
-#include <QDir>
+#include "utils.h"
+
 #include <QApplication>
 #include <QDebug>
+#include <QDir>
 #include <QFontMetrics>
 #include <QPainter>
+#include <QString>
 #include <QWidget>
-#include "utils.h"
 
 QString Utils::getQrcPath(QString imageName)
 {

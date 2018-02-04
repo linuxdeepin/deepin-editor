@@ -22,10 +22,11 @@
  */
 
 #include "startmanager.h"
-#include <DWidgetUtil>
-#include <QScreen>
+
 #include <DApplication>
+#include <DWidgetUtil>
 #include <QDebug>
+#include <QScreen>
 
 DWIDGET_USE_NAMESPACE
 

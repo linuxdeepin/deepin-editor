@@ -24,12 +24,13 @@
 #ifndef JUMPLINEBAR_H
 #define JUMPLINEBAR_H
 
-#include <QWidget>
-#include <QIntValidator>
+#include "linebar.h"
+
 #include <QHBoxLayout>
+#include <QIntValidator>
 #include <QLabel>
 #include <QPainter>
-#include "linebar.h"
+#include <QWidget>
 
 DWIDGET_USE_NAMESPACE
 

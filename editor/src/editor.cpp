@@ -23,10 +23,11 @@
 
 #include "editor.h"
 #include "utils.h"
-#include <QDebug>
-#include <QTimer>
-#include <QDir>
+
 #include <QApplication>
+#include <QDebug>
+#include <QDir>
+#include <QTimer>
 
 Editor::Editor(QWidget *parent) : QWidget(parent)
 {

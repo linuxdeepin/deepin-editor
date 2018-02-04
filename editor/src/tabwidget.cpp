@@ -22,8 +22,9 @@
  */
 
 #include "tabwidget.h"
-#include "window.h"
 #include "texteditor.h"
+#include "window.h"
+
 #include <QDebug>
 #include <QStyleFactory>
 

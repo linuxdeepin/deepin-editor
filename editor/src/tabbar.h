@@ -24,9 +24,10 @@
 #ifndef TABBAR_H
 #define TABBAR_H
 
-#include <QWidget>
-#include <QHBoxLayout>
 #include "tabwidget.h"
+
+#include <QHBoxLayout>
+#include <QWidget>
 
 DWIDGET_USE_NAMESPACE
 

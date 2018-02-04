@@ -24,8 +24,9 @@
 #ifndef STARTMANAGER_H
 #define STARTMANAGER_H
 
-#include <QObject>
 #include "window.h"
+
+#include <QObject>
 
 class StartManager : public QObject
 {

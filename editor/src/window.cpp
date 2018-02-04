@@ -21,20 +21,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "window.h"
-#include <DTitlebar>
-#include <QLabel>
-#include "dtoast.h"
-#include <QDebug>
-#include <QFileDialog>
-#include <QScreen>
-#include <QDir>
-#include <QDateTime>
-#include <QApplication>
-#include <QSvgWidget>
-#include "dthememanager.h"
-#include "utils.h"
 #include "danchors.h"
+#include "dthememanager.h"
+#include "dtoast.h"
+#include "utils.h"
+#include "window.h"
+
+#include <DTitlebar>
+#include <QApplication>
+#include <QDateTime>
+#include <QDebug>
+#include <QDir>
+#include <QFileDialog>
+#include <QLabel>
+#include <QScreen>
+#include <QSvgWidget>
 
 DWIDGET_USE_NAMESPACE
 

@@ -25,9 +25,10 @@
 #define EDITOR_H
 
 #include "dbusinterface.h"
-#include <QWidget>
 #include "texteditor.h"
+
 #include <QVBoxLayout>
+#include <QWidget>
 
 class Editor : public QWidget
 {

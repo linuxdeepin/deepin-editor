@@ -23,11 +23,12 @@
 
 #include "texteditor.h"
 #include "utils.h"
-#include <QTextBlock>
-#include <QTimer>
+
+#include <QDebug>
 #include <QPainter>
 #include <QScrollBar>
-#include <QDebug>
+#include <QTextBlock>
+#include <QTimer>
 
 class LineNumberArea : public QWidget
 {

@@ -24,12 +24,13 @@
 #ifndef FINDBAR_H
 #define FINDBAR_H
 
-#include <QWidget>
+#include "dtextbutton.h"
+#include "linebar.h"
+
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPainter>
-#include "dtextbutton.h"
-#include "linebar.h"
+#include <QWidget>
 
 DWIDGET_USE_NAMESPACE
 

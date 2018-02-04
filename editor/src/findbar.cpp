@@ -22,6 +22,7 @@
  */
 
 #include "findbar.h"
+
 #include <QDebug>
 
 FindBar::FindBar(QWidget *parent) : QWidget(parent)

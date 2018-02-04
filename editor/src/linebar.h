@@ -25,6 +25,7 @@
 #define LINEBAR_H
 
 #include "dlineedit.h"
+
 #include <QTimer>
 
 DWIDGET_USE_NAMESPACE

@@ -21,10 +21,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */ 
 
-#include <QObject>
-#include <QString>
-#include <QPainter>
 #include <QKeyEvent>
+#include <QObject>
+#include <QPainter>
+#include <QString>
 
 class Utils : public QObject
 {

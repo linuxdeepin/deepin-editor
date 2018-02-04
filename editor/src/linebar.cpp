@@ -23,6 +23,7 @@
 
 #include "linebar.h"
 #include "utils.h"
+
 #include <QDebug>
 
 LineBar::LineBar(DLineEdit *parent) : DLineEdit(parent)
