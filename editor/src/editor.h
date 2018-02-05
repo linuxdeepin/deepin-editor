@@ -39,6 +39,7 @@ public:
     
     void loadFile(QString filepath);
     void saveFile();
+    
     void updatePath(QString file);
                                  
     TextEditor *textEditor;

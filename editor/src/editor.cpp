@@ -110,6 +110,15 @@ void Editor::updatePath(QString file)
     textEditor->filepath = file;
 }
 
+void Editor::handleTextChangeTimer()
+{
+    if (Utils::fileExists(textEditor->filepath)) {
+        saveFinish = true;
+
+        saveFile();
+    }
+}
+
 void Editor::handleTextChanged()
 {
     if (Utils::fileExists(textEditor->filepath)) {
@@ -119,15 +128,6 @@ void Editor::handleTextChanged()
             autoSaveTimer->stop();
         }
         autoSaveTimer->start(autoSaveInternal);
-    }
-}
-
-void Editor::handleTextChangeTimer()
-{
-    if (Utils::fileExists(textEditor->filepath)) {
-        saveFinish = true;
-
-        saveFile();
     }
 }
 
