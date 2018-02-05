@@ -97,7 +97,7 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     connect(redoAction, &QAction::triggered, this, &TextEditor::redo);
     connect(cutAction, &QAction::triggered, this, &TextEditor::clickCutAction);
     connect(copyAction, &QAction::triggered, this, &TextEditor::clickCopyAction);
-    connect(pasteAction, &QAction::triggered, this, &TextEditor::paste);
+    connect(pasteAction, &QAction::triggered, this, &TextEditor::clickPasteAction);
     connect(deleteAction, &QAction::triggered, this, &TextEditor::clickDeleteAction);
     connect(selectAllAction, &QAction::triggered, this, &TextEditor::selectAll);
     connect(findAction, &QAction::triggered, this, &TextEditor::clickFindAction);
@@ -654,9 +654,7 @@ void TextEditor::contextMenuEvent(QContextMenuEvent *event)
     if (canPaste()) {
         rightMenu->addAction(pasteAction);
     }
-    if (textCursor().hasSelection()) {
-        rightMenu->addAction(deleteAction);
-    }
+    rightMenu->addAction(deleteAction);
     rightMenu->addAction(selectAllAction);
     rightMenu->addSeparator();
     rightMenu->addAction(findAction);
@@ -816,9 +814,25 @@ void TextEditor::clickCopyAction()
     }
 }
 
+void TextEditor::clickPasteAction()
+{
+    if (textCursor().hasSelection()) {
+        paste();
+    } else {
+        setTextCursor(highlightWordCacheCursor);
+        
+        paste();
+    }
+}
+
 void TextEditor::clickDeleteAction()
 {
-    textCursor().removeSelectedText();
+    if (textCursor().hasSelection()) {
+        textCursor().removeSelectedText();
+    } else {
+        setTextCursor(highlightWordCacheCursor);
+        textCursor().removeSelectedText();
+    }
 }
 
 void TextEditor::clickConvertCaseAction()
