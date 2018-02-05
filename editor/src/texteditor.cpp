@@ -24,6 +24,12 @@
 #include "texteditor.h"
 #include "utils.h"
 
+#include "Definition"
+#include "SyntaxHighlighter"
+#include "Theme"
+
+#include <QApplication>
+#include <QFileInfo>
 #include <QDebug>
 #include <QPainter>
 #include <QScrollBar>
@@ -45,12 +51,18 @@ public:
     TextEditor *editor;
 };
 
-TextEditor::TextEditor(QPlainTextEdit *parent) : QPlainTextEdit(parent)
+TextEditor::TextEditor(QPlainTextEdit *parent) : 
+    QPlainTextEdit(parent),
+    m_highlighter(new KSyntaxHighlighting::SyntaxHighlighter(document()))
 {
-    // Init widgets.
-    highlighter = new Highlighter(document());
-    lineNumberArea = new LineNumberArea(this);
+    // Init highlight theme.
+    setTheme((palette().color(QPalette::Base).lightness() < 128)
+             ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
+             : m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
 
+    // Init widgets.
+    lineNumberArea = new LineNumberArea(this);
+    
     connect(this, &QPlainTextEdit::updateRequest, this, &TextEditor::handleUpdateRequest);
     connect(this, &QPlainTextEdit::textChanged, this, &TextEditor::updateLineNumber, Qt::QueuedConnection);
     connect(this, &QPlainTextEdit::cursorPositionChanged, this, &TextEditor::highlightCurrentLine, Qt::QueuedConnection);
@@ -641,4 +653,24 @@ bool TextEditor::setCursorKeywordSeletoin(int position, bool findNext)
     }
 
     return false;
+}
+
+void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme)
+{
+    auto pal = qApp->palette();
+    if (theme.isValid()) {
+        pal.setColor(QPalette::Base, theme.editorColor(KSyntaxHighlighting::Theme::BackgroundColor));
+        pal.setColor(QPalette::Text, theme.textColor(KSyntaxHighlighting::Theme::Normal));
+        pal.setColor(QPalette::Highlight, theme.editorColor(KSyntaxHighlighting::Theme::TextSelection));
+    }
+    setPalette(pal);
+
+    m_highlighter->setTheme(theme);
+    m_highlighter->rehighlight();
+}
+
+void TextEditor::loadHighlighter()
+{
+    const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());
+    m_highlighter->setDefinition(def);
 }

@@ -61,6 +61,8 @@ void Editor::loadFile(QString filepath)
         textEditor->setPlainText(file.readAll());
 
         updatePath(filepath);
+        
+        textEditor->loadHighlighter();
     }
 }
 

@@ -24,11 +24,15 @@
 #ifndef TEXTEEDITOR_H
 #define TEXTEEDITOR_H
 
-#include "highlighter.h"
+#include "Repository"
 
 #include <QPaintEvent>
 #include <QPlainTextEdit>
 #include <QPropertyAnimation>
+
+namespace KSyntaxHighlighting {
+    class SyntaxHighlighter;
+}
 
 class TextEditor : public QPlainTextEdit
 {
@@ -82,7 +86,10 @@ public:
     
     void keyPressEvent(QKeyEvent *e);
     void lineNumberAreaPaintEvent(QPaintEvent *event);
-
+                                                     
+    void setTheme(const KSyntaxHighlighting::Theme &theme);
+    void loadHighlighter();
+                          
 public slots:
     void highlightCurrentLine();
     void updateLineNumber();
@@ -90,7 +97,6 @@ public slots:
     void handleUpdateRequest(const QRect &rect, int dy);
 
 private:
-    Highlighter *highlighter;
     QList<QTextEdit::ExtraSelection> keywordSelections;
     QPropertyAnimation *scrollAnimation;
     QTextEdit::ExtraSelection currentLineSelection;
@@ -99,6 +105,9 @@ private:
     int lineNumberPaddingX = 5;
     int restoreColumn;
     int restoreRow;
+    
+    KSyntaxHighlighting::Repository m_repository;
+    KSyntaxHighlighting::SyntaxHighlighter *m_highlighter;
     
     bool setCursorKeywordSeletoin(int position, bool findNext);
 };

@@ -5,14 +5,13 @@
 TEMPLATE = app
 TARGET = deepin-editor
 
-CONFIG += link_pkgconfig
+CONFIG += link_pkgconfig 
 CONFIG += c++11 
 PKGCONFIG += xcb xcb-util dtkwidget 
 RESOURCES = deepin-editor.qrc
 
 # Input
 HEADERS += src/window.h \
-           src/highlighter.h \		   
            src/startmanager.h \		   
            src/dbusinterface.h \		   
 	   src/texteditor.h \		   
@@ -26,7 +25,6 @@ HEADERS += src/window.h \
 	   src/editor.h \		   
 	   src/utils.h		   
 SOURCES += src/window.cpp \
-           src/highlighter.cpp \		   
            src/startmanager.cpp \		   
            src/dbusinterface.cpp \		   
 	   src/texteditor.cpp \		   
@@ -48,6 +46,7 @@ QT += network
 QT += x11extras
 QT += dbus
 QT += svg
+QT += KSyntaxHighlighting
 
 QMAKE_CXXFLAGS += -g
 LIBS += -lX11 -lXext -lXtst
