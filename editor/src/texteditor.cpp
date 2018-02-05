@@ -98,7 +98,7 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     connect(copyAction, &QAction::triggered, this, &TextEditor::clickCopyAction);
     connect(pasteAction, &QAction::triggered, this, &TextEditor::clickPasteAction);
     connect(deleteAction, &QAction::triggered, this, &TextEditor::clickDeleteAction);
-    connect(selectAllAction, &QAction::triggered, this, &TextEditor::clickSelectAllAction);
+    connect(selectAllAction, &QAction::triggered, this, &TextEditor::selectAll);
     connect(findAction, &QAction::triggered, this, &TextEditor::clickFindAction);
     connect(replaceAction, &QAction::triggered, this, &TextEditor::clickReplaceAction);
     connect(jumpLineAction, &QAction::triggered, this, &TextEditor::clickJumpLineAction);
@@ -766,16 +766,6 @@ void TextEditor::loadHighlighter()
     m_highlighter->setDefinition(def);
 }
 
-void TextEditor::clickUndoAction()
-{
-
-}
-
-void TextEditor::clickRedoAction()
-{
-
-}
-
 void TextEditor::clickCutAction()
 {
 
@@ -792,11 +782,6 @@ void TextEditor::clickPasteAction()
 }
 
 void TextEditor::clickDeleteAction()
-{
-
-}
-
-void TextEditor::clickSelectAllAction()
 {
 
 }

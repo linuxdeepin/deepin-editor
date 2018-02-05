@@ -105,13 +105,10 @@ public slots:
     void handleScrollFinish();
     void handleUpdateRequest(const QRect &rect, int dy);
     
-    void clickUndoAction();
-    void clickRedoAction();
     void clickCutAction();
     void clickCopyAction();
     void clickPasteAction();
     void clickDeleteAction();
-    void clickSelectAllAction();
     void clickConvertCaseAction();
     void clickOpenInFileManagerAction();
     void clickSetttingAction();
