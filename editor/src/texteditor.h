@@ -97,12 +97,15 @@ public slots:
     void handleUpdateRequest(const QRect &rect, int dy);
 
 private:
-    QList<QTextEdit::ExtraSelection> keywordSelections;
     QPropertyAnimation *scrollAnimation;
+    
+    QList<QTextEdit::ExtraSelection> keywordSelections;
     QTextEdit::ExtraSelection currentLineSelection;
     QTextEdit::ExtraSelection cursorKeywordSelection;
+    
     int lineNumberOffset = 2;
     int lineNumberPaddingX = 5;
+    
     int restoreColumn;
     int restoreRow;
     
