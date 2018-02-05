@@ -40,46 +40,54 @@ public:
     QWidget *lineNumberArea;
     QString filepath;
     
-    int getCurrentColumn();
     int getCurrentLine();
+    int getCurrentColumn();
     int getPosition();
     int getScrollOffset();
-    void backwardChar();
-    void backwardWord();
-    void removeKeywords();
-    void duplicateLine();
+    
     void forwardChar();
+    void backwardChar();
     void forwardWord();
-    void highlightKeyword(QString keyword, int position);
-    void jumpToLine(int line, bool keepLineAtCenter);
-    void keepCurrentLineAtCenter();
-    void keyPressEvent(QKeyEvent *e);
-    void killLine();
-    void lineNumberAreaPaintEvent(QPaintEvent *event);
+    void backwardWord();
+    
+    void moveToStartOfLine();
     void moveToEndOfLine();
     void moveToLineIndentation();
-    void moveToStartOfLine();
     void nextLine();
+    void prevLine();
+    void jumpToLine(int line, bool keepLineAtCenter);
+    
     void openNewlineAbove();
     void openNewlineBelow();
-    void prevLine();
-    void renderAllSelections();
+    void swapLineDown();
+    void swapLineUp();
+    void duplicateLine();
+    void killLine();
+    
+    void keepCurrentLineAtCenter();
+    void scrollToLine(int scrollOffset, int row, int column);
+    
+    void setFontSize(int fontSize);
+    
     void replaceAll(QString replaceText, QString withText);
     void replaceNext(QString replaceText, QString withText);
     void replaceRest(QString replaceText, QString withText);
-    void scrollToLine(int scrollOffset, int row, int column);
-    void setFontSize(int fontSize);
-    void swapLineDown();
-    void swapLineUp();
+    
+    void removeKeywords();
+    void highlightKeyword(QString keyword, int position);
     void updateCursorKeywordSelection(int position, bool findNext);
     void updateHighlightLineSeleciton();
     void updateKeywordSelections(QString keyword);
+    void renderAllSelections();
+    
+    void keyPressEvent(QKeyEvent *e);
+    void lineNumberAreaPaintEvent(QPaintEvent *event);
 
 public slots:
-    void handleScrollFinish();
-    void handleUpdateRequest(const QRect &rect, int dy);
     void highlightCurrentLine();
     void updateLineNumber();
+    void handleScrollFinish();
+    void handleUpdateRequest(const QRect &rect, int dy);
 
 private:
     Highlighter *highlighter;

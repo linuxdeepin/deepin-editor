@@ -67,208 +67,26 @@ TextEditor::TextEditor(QPlainTextEdit *parent) : QPlainTextEdit(parent)
     QTimer::singleShot(0, this, SLOT(setFocus()));
 }
 
-void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
+int TextEditor::getCurrentLine()
 {
-    QString key = Utils::getKeymap(keyEvent);
-
-    // qDebug() << key;
-
-    if (key == "Ctrl + F") {
-        forwardChar();
-    } else if (key == "Ctrl + B") {
-        backwardChar();
-    } else if (key == "Alt + F") {
-        forwardWord();
-    } else if (key == "Alt + B") {
-        backwardWord();
-    } else if (key == "Ctrl + N") {
-        nextLine();
-    } else if (key == "Ctrl + P") {
-        prevLine();
-    } else if (key == "Ctrl + L") {
-        openNewlineAbove();
-    } else if (key == "Ctrl + H") {
-        openNewlineBelow();
-    } else if (key == "Ctrl + Shift + L") {
-        duplicateLine();
-    } else if (key == "Ctrl + K") {
-        killLine();
-    } else if (key == "Meta + Shift + P") {
-        swapLineUp();
-    } else if (key == "Meta + Shift + N") {
-        swapLineDown();
-    } else if (key == "Ctrl + Shift + E") {
-        moveToEndOfLine();
-    } else if (key == "Ctrl + Shift + A") {
-        moveToStartOfLine();
-    } else if (key == "Alt + M") {
-        moveToLineIndentation();
-    } else {
-        QPlainTextEdit::keyPressEvent(keyEvent);
-    }
+    return textCursor().blockNumber() + 1;
 }
 
-void TextEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
+int TextEditor::getCurrentColumn()
 {
-    // Init.
-    QPainter painter(lineNumberArea);
-    painter.fillRect(event->rect(), QColor(36, 36, 36));
-
-    // Update line number.
-    QTextBlock block = firstVisibleBlock();
-    int top = (int) blockBoundingGeometry(block).translated(contentOffset()).top();
-    int bottom = top + (int) blockBoundingRect(block).height();
-    int linenumber = block.blockNumber();
-
-    Utils::setFontSize(painter, document()->defaultFont().pointSize());
-    while (block.isValid() && top <= event->rect().bottom()) {
-        if (block.isVisible() && bottom >= event->rect().top()) {
-            painter.setPen(QColor("#666666"));
-            painter.drawText(0,
-                             top + lineNumberOffset,
-                             lineNumberArea->width() - lineNumberPaddingX,
-                             fontMetrics().height(),
-                             Qt::AlignRight | Qt::AlignBottom,
-                             QString::number(linenumber + 1));
-        }
-
-        block = block.next();
-        top = bottom;
-        bottom = top + (int) blockBoundingRect(block).height();
-
-        ++linenumber;
-    }
+    return textCursor().columnNumber();
 }
 
-void TextEditor::handleUpdateRequest(const QRect &rect, int dy)
+int TextEditor::getPosition()
 {
-    if (dy) {
-        lineNumberArea->scroll(0, dy);
-    } else {
-        lineNumberArea->update(0, rect.y(), lineNumberArea->width(), rect.height());
-    }
+    return textCursor().position();
 }
 
-void TextEditor::updateLineNumber()
+int TextEditor::getScrollOffset()
 {
-    lineNumberArea->setFixedWidth(QString("%1").arg(blockCount()).size() * fontMetrics().width('9') + lineNumberPaddingX * 2);
-}
+    QScrollBar *scrollbar = verticalScrollBar();
 
-void TextEditor::highlightCurrentLine()
-{
-    updateHighlightLineSeleciton();
-    renderAllSelections();
-}
-
-void TextEditor::updateKeywordSelections(QString keyword)
-{
-    // Clear keyword selections first.
-    keywordSelections.clear();
-
-    // Update selections with keyword.
-    if (keyword != "") {
-        moveCursor(QTextCursor::Start);
-
-        while(find(keyword)) {
-            QTextEdit::ExtraSelection extra;
-
-            QPen outline(QColor("#D33D6D").lighter(120), 1, Qt::SolidLine);
-            extra.format.setProperty(QTextFormat::OutlinePen, outline);
-
-            QBrush brush(QColor("#303030"));
-            extra.format.setProperty(QTextFormat::BackgroundBrush, brush);
-
-            extra.cursor = textCursor();
-            keywordSelections.append(extra);
-        }
-
-        setExtraSelections(keywordSelections);
-    }
-}
-
-void TextEditor::updateHighlightLineSeleciton()
-{
-    QTextEdit::ExtraSelection selection;
-
-    QColor lineColor = QColor("#333333");
-
-    selection.format.setBackground(lineColor);
-    selection.format.setProperty(QTextFormat::FullWidthSelection, true);
-    selection.cursor = textCursor();
-    selection.cursor.clearSelection();
-
-    currentLineSelection = selection;
-}
-
-bool TextEditor::setCursorKeywordSeletoin(int position, bool findNext)
-{
-    if (findNext) {
-        for (int i = 0; i < keywordSelections.size(); i++) {
-            if (keywordSelections[i].cursor.position() > position) {
-                cursorKeywordSelection.cursor = keywordSelections[i].cursor;
-
-                QBrush brush(QColor("#FF6347"));
-                cursorKeywordSelection.format.setProperty(QTextFormat::BackgroundBrush, brush);
-
-                jumpToLine(keywordSelections[i].cursor.blockNumber() + 1, false);
-
-                QTextCursor cursor = textCursor();
-                cursor.setPosition(keywordSelections[i].cursor.position());
-                
-                // Update cursor.
-                setTextCursor(cursor);
-
-                return true;
-            }
-        }
-    } else {
-        for (int i = keywordSelections.size() - 1; i >= 0; i--) {
-            if (keywordSelections[i].cursor.position() < position) {
-                cursorKeywordSelection.cursor = keywordSelections[i].cursor;
-
-                QBrush brush(QColor("#FF6347"));
-                cursorKeywordSelection.format.setProperty(QTextFormat::BackgroundBrush, brush);
-
-                jumpToLine(keywordSelections[i].cursor.blockNumber() + 1, false);
-
-                QTextCursor cursor = textCursor();
-                cursor.setPosition(keywordSelections[i].cursor.position());
-                
-                // Update cursor.
-                setTextCursor(cursor);
-
-                return true;
-            }
-        }
-    }
-
-    return false;
-}
-
-void TextEditor::updateCursorKeywordSelection(int position, bool findNext)
-{
-    bool findOne = setCursorKeywordSeletoin(position, findNext);
-
-    if (!findOne) {
-        if (findNext) {
-            setCursorKeywordSeletoin(0, findNext);
-        } else {
-            QTextCursor cursor = textCursor();
-            cursor.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
-
-            setCursorKeywordSeletoin(cursor.position(), findNext);
-        }
-    }
-}
-
-void TextEditor::nextLine()
-{
-    moveCursor(QTextCursor::Down);
-}
-
-void TextEditor::prevLine()
-{
-    moveCursor(QTextCursor::Up);
+    return scrollbar->value();
 }
 
 void TextEditor::forwardChar()
@@ -291,26 +109,53 @@ void TextEditor::backwardWord()
     moveCursor(QTextCursor::PreviousWord);
 }
 
-int TextEditor::getPosition()
+void TextEditor::moveToStartOfLine()
 {
-    return textCursor().position();
+    moveCursor(QTextCursor::StartOfLine);
 }
 
-int TextEditor::getCurrentLine()
+void TextEditor::moveToEndOfLine()
 {
-    return textCursor().blockNumber() + 1;
+    moveCursor(QTextCursor::EndOfLine);
 }
 
-int TextEditor::getCurrentColumn()
+void TextEditor::moveToLineIndentation()
 {
-    return textCursor().columnNumber();
+    // Get line start position.
+    moveCursor(QTextCursor::StartOfLine);
+    int startColumn = textCursor().columnNumber();
+
+    // Get line end position.
+    moveCursor(QTextCursor::EndOfLine);
+    int endColumn = textCursor().columnNumber();
+
+    // Move to line start first.
+    moveCursor(QTextCursor::StartOfLine);
+
+    // Move to first non-blank char of line.
+    int column = startColumn;
+    while (column <= endColumn) {
+        QChar currentChar = toPlainText().at(std::max(textCursor().position() - 1, 0));
+
+        if (!currentChar.isSpace()) {
+            moveCursor(QTextCursor::PreviousCharacter);
+            break;
+        } else {
+            moveCursor(QTextCursor::NextCharacter);
+        }
+
+        column++;
+    }
 }
 
-int TextEditor::getScrollOffset()
+void TextEditor::nextLine()
 {
-    QScrollBar *scrollbar = verticalScrollBar();
+    moveCursor(QTextCursor::Down);
+}
 
-    return scrollbar->value();
+void TextEditor::prevLine()
+{
+    moveCursor(QTextCursor::Up);
 }
 
 void TextEditor::jumpToLine(int line, bool keepLineAtCenter)
@@ -325,53 +170,6 @@ void TextEditor::jumpToLine(int line, bool keepLineAtCenter)
     }
 }
 
-void TextEditor::keepCurrentLineAtCenter()
-{
-    QScrollBar *scrollbar = verticalScrollBar();
-
-    int currentLine = cursorRect().top() / cursorRect().height();
-    int halfEditorLines = rect().height() / 2 / cursorRect().height();
-    scrollbar->setValue(scrollbar->value() + currentLine - halfEditorLines);
-}
-
-void TextEditor::scrollToLine(int scrollOffset, int row, int column)
-{
-    // Save cursor postion.
-    restoreRow = row;
-    restoreColumn = column;
-
-    // Start scroll animation.
-    scrollAnimation->setStartValue(verticalScrollBar()->value());
-    scrollAnimation->setEndValue(scrollOffset);
-    scrollAnimation->start();
-}
-
-void TextEditor::handleScrollFinish()
-{
-    // Restore cursor postion.
-    jumpToLine(restoreRow, false);
-
-    QTextCursor cursor = textCursor();
-    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
-    cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, restoreColumn);
-    
-    // Update cursor.
-    setTextCursor(cursor);
-}
-
-void TextEditor::setFontSize(int size)
-{
-    // Update font.
-    QFont font;
-    font.setFamily("Note Mono");
-    font.setFixedPitch(true);
-    font.setPointSize(size);
-    setFont(font);
-
-    // Update line number after adjust font size.
-    updateLineNumber();
-}
-
 void TextEditor::openNewlineAbove()
 {
     textCursor().insertText("\n");
@@ -382,69 +180,6 @@ void TextEditor::openNewlineBelow()
 {
     moveCursor(QTextCursor::EndOfLine);
     textCursor().insertText("\n");
-}
-
-void TextEditor::duplicateLine()
-{
-    // Rember current line's column number.
-    int column = textCursor().columnNumber();
-
-    // Get current line's content.
-    QTextCursor cursor(textCursor().block());
-    cursor.movePosition(QTextCursor::StartOfBlock);
-    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-    QString text = cursor.selectedText();
-
-    // Copy current line.
-    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
-    cursor.insertText("\n");
-    cursor.insertText(text);
-    
-    // Restore cursor's column.
-    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
-    cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, column);
-    
-    // Update cursor.
-    setTextCursor(cursor);
-}
-
-void TextEditor::killLine()
-{
-    // Remove selection content if has selection.
-    if (textCursor().hasSelection()) {
-        textCursor().removeSelectedText();
-    } else {
-        // Get current line content.
-        QTextCursor cursor(textCursor().block());
-        cursor.movePosition(QTextCursor::StartOfBlock);
-        cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-        QString text = cursor.selectedText();
-
-        // Cursor is at end of line.
-        bool isEmptyLine = text.size() == 0;
-
-        // Join next line if current line is empty or cursor at end of line.
-        if (isEmptyLine || textCursor().atBlockEnd()) {
-            QTextCursor cursor = textCursor();
-
-            cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
-            cursor.deleteChar();
-
-            // Update cursor.
-            setTextCursor(cursor);
-        }
-        // Otherwise kill rest content of line.
-        else {
-            QTextCursor cursor = textCursor();
-
-            cursor.movePosition(QTextCursor::NoMove, QTextCursor::KeepAnchor);
-            cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
-            cursor.removeSelectedText();
-
-            // Update cursor.
-            setTextCursor(cursor);
-        }
-    }
 }
 
 // Swaps Line Where Cursor Is Currently Positioned With The Line Above It
@@ -521,65 +256,117 @@ void TextEditor::swapLineDown(){
     setTextCursor(cursor);
 }
 
-void TextEditor::moveToLineIndentation()
+void TextEditor::duplicateLine()
 {
-    // Get line start position.
-    moveCursor(QTextCursor::StartOfLine);
-    int startColumn = textCursor().columnNumber();
+    // Rember current line's column number.
+    int column = textCursor().columnNumber();
 
-    // Get line end position.
-    moveCursor(QTextCursor::EndOfLine);
-    int endColumn = textCursor().columnNumber();
+    // Get current line's content.
+    QTextCursor cursor(textCursor().block());
+    cursor.movePosition(QTextCursor::StartOfBlock);
+    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+    QString text = cursor.selectedText();
 
-    // Move to line start first.
-    moveCursor(QTextCursor::StartOfLine);
+    // Copy current line.
+    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
+    cursor.insertText("\n");
+    cursor.insertText(text);
+    
+    // Restore cursor's column.
+    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, column);
+    
+    // Update cursor.
+    setTextCursor(cursor);
+}
 
-    // Move to first non-blank char of line.
-    int column = startColumn;
-    while (column <= endColumn) {
-        QChar currentChar = toPlainText().at(std::max(textCursor().position() - 1, 0));
+void TextEditor::killLine()
+{
+    // Remove selection content if has selection.
+    if (textCursor().hasSelection()) {
+        textCursor().removeSelectedText();
+    } else {
+        // Get current line content.
+        QTextCursor cursor(textCursor().block());
+        cursor.movePosition(QTextCursor::StartOfBlock);
+        cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+        QString text = cursor.selectedText();
 
-        if (!currentChar.isSpace()) {
-            moveCursor(QTextCursor::PreviousCharacter);
-            break;
-        } else {
-            moveCursor(QTextCursor::NextCharacter);
+        // Cursor is at end of line.
+        bool isEmptyLine = text.size() == 0;
+
+        // Join next line if current line is empty or cursor at end of line.
+        if (isEmptyLine || textCursor().atBlockEnd()) {
+            QTextCursor cursor = textCursor();
+
+            cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
+            cursor.deleteChar();
+
+            // Update cursor.
+            setTextCursor(cursor);
         }
+        // Otherwise kill rest content of line.
+        else {
+            QTextCursor cursor = textCursor();
 
-        column++;
+            cursor.movePosition(QTextCursor::NoMove, QTextCursor::KeepAnchor);
+            cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+            cursor.removeSelectedText();
+
+            // Update cursor.
+            setTextCursor(cursor);
+        }
     }
 }
 
-void TextEditor::moveToStartOfLine()
+void TextEditor::keepCurrentLineAtCenter()
 {
-    moveCursor(QTextCursor::StartOfLine);
+    QScrollBar *scrollbar = verticalScrollBar();
+
+    int currentLine = cursorRect().top() / cursorRect().height();
+    int halfEditorLines = rect().height() / 2 / cursorRect().height();
+    scrollbar->setValue(scrollbar->value() + currentLine - halfEditorLines);
 }
 
-void TextEditor::moveToEndOfLine()
+void TextEditor::scrollToLine(int scrollOffset, int row, int column)
 {
-    moveCursor(QTextCursor::EndOfLine);
+    // Save cursor postion.
+    restoreRow = row;
+    restoreColumn = column;
+
+    // Start scroll animation.
+    scrollAnimation->setStartValue(verticalScrollBar()->value());
+    scrollAnimation->setEndValue(scrollOffset);
+    scrollAnimation->start();
 }
 
-void TextEditor::highlightKeyword(QString keyword, int position)
+void TextEditor::setFontSize(int size)
 {
-    updateKeywordSelections(keyword);
+    // Update font.
+    QFont font;
+    font.setFamily("Note Mono");
+    font.setFixedPitch(true);
+    font.setPointSize(size);
+    setFont(font);
 
-    updateCursorKeywordSelection(position, true);
-
-    updateHighlightLineSeleciton();
-
-    renderAllSelections();
+    // Update line number after adjust font size.
+    updateLineNumber();
 }
 
-void TextEditor::renderAllSelections()
+void TextEditor::replaceAll(QString replaceText, QString withText)
 {
-    QList<QTextEdit::ExtraSelection> selections;
+    QTextCursor cursor = textCursor();
+    cursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+    QString text = cursor.selectedText();
 
-    selections.append(currentLineSelection);
-    selections.append(keywordSelections);
-    selections.append(cursorKeywordSelection);
+    cursor.insertText(text.replace(replaceText, withText));
+    cursor.clearSelection();
 
-    setExtraSelections(selections);
+    // Update cursor.
+    setTextCursor(cursor);
+    
+    highlightKeyword(replaceText, getPosition());
 }
 
 void TextEditor::replaceNext(QString replaceText, QString withText)
@@ -614,22 +401,6 @@ void TextEditor::replaceRest(QString replaceText, QString withText)
     highlightKeyword(replaceText, getPosition());
 }
 
-void TextEditor::replaceAll(QString replaceText, QString withText)
-{
-    QTextCursor cursor = textCursor();
-    cursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
-    cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
-    QString text = cursor.selectedText();
-
-    cursor.insertText(text.replace(replaceText, withText));
-    cursor.clearSelection();
-
-    // Update cursor.
-    setTextCursor(cursor);
-    
-    highlightKeyword(replaceText, getPosition());
-}
-
 void TextEditor::removeKeywords()
 {
     cursorKeywordSelection.cursor = textCursor();
@@ -641,4 +412,233 @@ void TextEditor::removeKeywords()
     renderAllSelections();
     
     setFocus();
+}
+
+void TextEditor::highlightKeyword(QString keyword, int position)
+{
+    updateKeywordSelections(keyword);
+
+    updateCursorKeywordSelection(position, true);
+
+    updateHighlightLineSeleciton();
+
+    renderAllSelections();
+}
+
+void TextEditor::updateCursorKeywordSelection(int position, bool findNext)
+{
+    bool findOne = setCursorKeywordSeletoin(position, findNext);
+
+    if (!findOne) {
+        if (findNext) {
+            setCursorKeywordSeletoin(0, findNext);
+        } else {
+            QTextCursor cursor = textCursor();
+            cursor.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
+
+            setCursorKeywordSeletoin(cursor.position(), findNext);
+        }
+    }
+}
+
+void TextEditor::updateHighlightLineSeleciton()
+{
+    QTextEdit::ExtraSelection selection;
+
+    QColor lineColor = QColor("#333333");
+
+    selection.format.setBackground(lineColor);
+    selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+    selection.cursor = textCursor();
+    selection.cursor.clearSelection();
+
+    currentLineSelection = selection;
+}
+
+void TextEditor::updateKeywordSelections(QString keyword)
+{
+    // Clear keyword selections first.
+    keywordSelections.clear();
+
+    // Update selections with keyword.
+    if (keyword != "") {
+        moveCursor(QTextCursor::Start);
+
+        while(find(keyword)) {
+            QTextEdit::ExtraSelection extra;
+
+            QPen outline(QColor("#D33D6D").lighter(120), 1, Qt::SolidLine);
+            extra.format.setProperty(QTextFormat::OutlinePen, outline);
+
+            QBrush brush(QColor("#303030"));
+            extra.format.setProperty(QTextFormat::BackgroundBrush, brush);
+
+            extra.cursor = textCursor();
+            keywordSelections.append(extra);
+        }
+
+        setExtraSelections(keywordSelections);
+    }
+}
+
+void TextEditor::renderAllSelections()
+{
+    QList<QTextEdit::ExtraSelection> selections;
+
+    selections.append(currentLineSelection);
+    selections.append(keywordSelections);
+    selections.append(cursorKeywordSelection);
+
+    setExtraSelections(selections);
+}
+
+void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
+{
+    QString key = Utils::getKeymap(keyEvent);
+
+    // qDebug() << key;
+
+    if (key == "Ctrl + F") {
+        forwardChar();
+    } else if (key == "Ctrl + B") {
+        backwardChar();
+    } else if (key == "Alt + F") {
+        forwardWord();
+    } else if (key == "Alt + B") {
+        backwardWord();
+    } else if (key == "Ctrl + N") {
+        nextLine();
+    } else if (key == "Ctrl + P") {
+        prevLine();
+    } else if (key == "Ctrl + L") {
+        openNewlineAbove();
+    } else if (key == "Ctrl + H") {
+        openNewlineBelow();
+    } else if (key == "Ctrl + Shift + L") {
+        duplicateLine();
+    } else if (key == "Ctrl + K") {
+        killLine();
+    } else if (key == "Meta + Shift + P") {
+        swapLineUp();
+    } else if (key == "Meta + Shift + N") {
+        swapLineDown();
+    } else if (key == "Ctrl + Shift + E") {
+        moveToEndOfLine();
+    } else if (key == "Ctrl + Shift + A") {
+        moveToStartOfLine();
+    } else if (key == "Alt + M") {
+        moveToLineIndentation();
+    } else {
+        QPlainTextEdit::keyPressEvent(keyEvent);
+    }
+}
+
+void TextEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
+{
+    // Init.
+    QPainter painter(lineNumberArea);
+    painter.fillRect(event->rect(), QColor(36, 36, 36));
+
+    // Update line number.
+    QTextBlock block = firstVisibleBlock();
+    int top = (int) blockBoundingGeometry(block).translated(contentOffset()).top();
+    int bottom = top + (int) blockBoundingRect(block).height();
+    int linenumber = block.blockNumber();
+
+    Utils::setFontSize(painter, document()->defaultFont().pointSize());
+    while (block.isValid() && top <= event->rect().bottom()) {
+        if (block.isVisible() && bottom >= event->rect().top()) {
+            painter.setPen(QColor("#666666"));
+            painter.drawText(0,
+                             top + lineNumberOffset,
+                             lineNumberArea->width() - lineNumberPaddingX,
+                             fontMetrics().height(),
+                             Qt::AlignRight | Qt::AlignBottom,
+                             QString::number(linenumber + 1));
+        }
+
+        block = block.next();
+        top = bottom;
+        bottom = top + (int) blockBoundingRect(block).height();
+
+        ++linenumber;
+    }
+}
+
+void TextEditor::highlightCurrentLine()
+{
+    updateHighlightLineSeleciton();
+    renderAllSelections();
+}
+
+void TextEditor::updateLineNumber()
+{
+    lineNumberArea->setFixedWidth(QString("%1").arg(blockCount()).size() * fontMetrics().width('9') + lineNumberPaddingX * 2);
+}
+
+void TextEditor::handleScrollFinish()
+{
+    // Restore cursor postion.
+    jumpToLine(restoreRow, false);
+
+    QTextCursor cursor = textCursor();
+    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, restoreColumn);
+    
+    // Update cursor.
+    setTextCursor(cursor);
+}
+
+void TextEditor::handleUpdateRequest(const QRect &rect, int dy)
+{
+    if (dy) {
+        lineNumberArea->scroll(0, dy);
+    } else {
+        lineNumberArea->update(0, rect.y(), lineNumberArea->width(), rect.height());
+    }
+}
+
+bool TextEditor::setCursorKeywordSeletoin(int position, bool findNext)
+{
+    if (findNext) {
+        for (int i = 0; i < keywordSelections.size(); i++) {
+            if (keywordSelections[i].cursor.position() > position) {
+                cursorKeywordSelection.cursor = keywordSelections[i].cursor;
+
+                QBrush brush(QColor("#FF6347"));
+                cursorKeywordSelection.format.setProperty(QTextFormat::BackgroundBrush, brush);
+
+                jumpToLine(keywordSelections[i].cursor.blockNumber() + 1, false);
+
+                QTextCursor cursor = textCursor();
+                cursor.setPosition(keywordSelections[i].cursor.position());
+                
+                // Update cursor.
+                setTextCursor(cursor);
+
+                return true;
+            }
+        }
+    } else {
+        for (int i = keywordSelections.size() - 1; i >= 0; i--) {
+            if (keywordSelections[i].cursor.position() < position) {
+                cursorKeywordSelection.cursor = keywordSelections[i].cursor;
+
+                QBrush brush(QColor("#FF6347"));
+                cursorKeywordSelection.format.setProperty(QTextFormat::BackgroundBrush, brush);
+
+                jumpToLine(keywordSelections[i].cursor.blockNumber() + 1, false);
+
+                QTextCursor cursor = textCursor();
+                cursor.setPosition(keywordSelections[i].cursor.position());
+                
+                // Update cursor.
+                setTextCursor(cursor);
+
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
