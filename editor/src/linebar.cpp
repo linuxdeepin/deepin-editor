@@ -38,6 +38,23 @@ LineBar::LineBar(DLineEdit *parent) : DLineEdit(parent)
     connect(this, &DLineEdit::textChanged, this, &LineBar::handleTextChanged, Qt::QueuedConnection);
 }
 
+void LineBar::handleTextChangeTimer()
+{
+    // Emit contentChanged signal.
+    contentChanged();
+}
+
+void LineBar::handleTextChanged()
+{
+    // Stop timer if new character is typed, avoid unused timer run.
+    if (autoSaveTimer->isActive()) {
+        autoSaveTimer->stop();
+    }
+    
+    // Start new timer.
+    autoSaveTimer->start(autoSaveInternal);
+}
+
 void LineBar::focusOutEvent(QFocusEvent *)
 {
     // Emit focus out signal.
@@ -62,21 +79,4 @@ void LineBar::keyPressEvent(QKeyEvent *e)
         // Pass event to DLineEdit continue, otherwise you can't type anything after here. ;)
         DLineEdit::keyPressEvent(e);
     }
-}
-
-void LineBar::handleTextChanged()
-{
-    // Stop timer if new character is typed, avoid unused timer run.
-    if (autoSaveTimer->isActive()) {
-        autoSaveTimer->stop();
-    }
-    
-    // Start new timer.
-    autoSaveTimer->start(autoSaveInternal);
-}
-
-void LineBar::handleTextChangeTimer()
-{
-    // Emit contentChanged signal.
-    contentChanged();
 }
