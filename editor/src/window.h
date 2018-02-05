@@ -50,50 +50,63 @@ public:
     Window(DMainWindow *parent = 0);
     ~Window();
     
+    int getTabIndex(QString file);
+    void activeTab(int index);
+    
+    void addTab(QString file);
+    void addTabWithContent(QString tabName, QString filepath, QString content);
+    void closeTab();
+    
     Editor* createEditor();
     Editor* getActiveEditor();
     TextEditor* getTextEditor(QString filepath);
     
+    void openFile();
     bool saveFile();
-    int getTabIndex(QString file);
-    void activeTab(int index);
-    void addBottomWidget(QWidget *widget);
-    void addTab(QString file);
-    void addTabWithContent(QString tabName, QString filepath, QString content);
-    void closeTab();
+    void saveAsFile();
+    void saveFileAsAnotherPath(QString fromPath, QString toPath, bool deleteOldFile=false);
+    
     void decrementFontSize();
     void incrementFontSize();
-    void keyPressEvent(QKeyEvent *keyEvent);
-    void openFile();
+    void resetFontSize();
+    void saveFontSize(int size);
+    void setFontSizeWithConfig(Editor *editor);
+    
     void popupFindBar();
     void popupReplaceBar();
     void popupJumpLineBar();
-    void resetFontSize();
-    void saveAsFile();
-    void saveFileAsAnotherPath(QString fromPath, QString toPath, bool deleteOldFile=false);
-    void saveFontSize(int size);
-    void setFontSizeWithConfig(Editor *editor);
+    
     void toggleFullscreen();
+    
+    void keyPressEvent(QKeyEvent *keyEvent);
     
 signals:
     void dropTabOut(QString tabName, QString filepath, QString content);
     
 public slots:
     void addBlankTab(QString blankFile="");
-    void handleBackToPosition(QString file, int row, int column, int scrollOffset);
+    void handleTabReleaseRequested(QString tabName, QString filepath, int index);
+    
     void handleCloseFile(QString filepath);
-    void handleFindNext();
-    void handleFindPrev();
+    void handleSwitchToFile(QString filepath);
+    
     void handleJumpLineBarExit();
     void handleJumpLineBarJumpToLine(QString filepath, int line, bool focusEditor);
-    void handleRemoveSearchKeyword();
+    
+    void handleBackToPosition(QString file, int row, int column, int scrollOffset);
+    
+    void handleFindNext();
+    void handleFindPrev();
+    
     void handleReplaceAll(QString replaceText, QString withText);
     void handleReplaceNext(QString replaceText, QString withText);
     void handleReplaceRest(QString replaceText, QString withText);
     void handleReplaceSkip();
-    void handleSwitchToFile(QString filepath);
-    void handleTabReleaseRequested(QString tabName, QString filepath, int index);
+    
+    void handleRemoveSearchKeyword();
     void handleUpdateSearchKeyword(QString file, QString keyword);
+    
+    void addBottomWidget(QWidget *widget);
     void removeBottomWidget();
     
 private:
@@ -111,8 +124,10 @@ private:
     int fontSize;
     int autoSaveTooltipPaddingBottom = 20;
     
-    void showNewEditor(Editor *editor);
     void removeActiveBlankTab(bool needSaveBefore=false);
+    
+    void showNewEditor(Editor *editor);
+    
     DDialog* createSaveBlankFileDialog();
 };
 

@@ -123,50 +123,16 @@ Window::~Window()
     // We don't need clean pointers because application has exit here.
 }
 
-void Window::keyPressEvent(QKeyEvent *keyEvent)
-{
-    QString key = Utils::getKeymap(keyEvent);
-
-    // qDebug() << key;
-
-    if (key == "Ctrl + T") {
-        addBlankTab();
-    } else if (key == "Ctrl + S") {
-        saveFile();
-    } else if (key == "Ctrl + Shift + S") {
-        saveAsFile();
-    } else if (key == "Ctrl + Tab") {
-        tabbar->selectNextTab();
-    } else if (key == "Ctrl + Shift + Backtab") {
-        tabbar->selectPrevTab();
-    } else if (key == "Ctrl + W") {
-        closeTab();
-    } else if (key == "Ctrl + Shift + W") {
-        tabbar->closeOtherTabs();
-    } else if (key == "Ctrl + O") {
-        openFile();
-    } else if (key == "Ctrl + =") {
-        incrementFontSize();
-    } else if (key == "Ctrl + -") {
-        decrementFontSize();
-    } else if (key == "Ctrl + 0") {
-        resetFontSize();
-    } else if (key == "F11") {
-        toggleFullscreen();
-    } else if (key == "Ctrl + Shift + F") {
-        popupFindBar();
-    } else if (key == "Ctrl + Shift + H") {
-        popupReplaceBar();
-    } else if (key == "Ctrl + Shift + G") {
-        popupJumpLineBar();
-    } else if (key == "Esc") {
-        removeBottomWidget();
-    }
-}
-
 int Window::getTabIndex(QString file)
 {
     return tabbar->getTabIndex(file);
+}
+
+
+void Window::activeTab(int index)
+{
+    activateWindow();
+    tabbar->activeTabWithIndex(index);
 }
 
 void Window::addTab(QString file)
@@ -187,64 +153,66 @@ void Window::addTab(QString file)
     activateWindow();
 }
 
-void Window::addBlankTab(QString blankFile)
+void Window::addTabWithContent(QString tabName, QString filepath, QString content)
 {
-    QString blankTabPath;
-    if (blankFile == "") {
-        blankTabPath = QDir(blankFileDir).filePath(QString("blank_file_%1").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss")));
-        if (!Utils::fileExists(blankTabPath)) {
-            QDir().mkpath(blankFileDir);
-            if (QFile(blankTabPath).open(QIODevice::ReadWrite)) {
-                qDebug() << "Create blank file: " << blankTabPath;
-            } else {
-                qDebug() << "Can't create blank file: " << blankTabPath;
-            }
-        }
-    } else {
-        blankTabPath = blankFile;
-    }
+    tabbar->addTab(filepath, tabName);
 
-    tabbar->addTab(blankTabPath, "Blank document");
     Editor *editor = createEditor();
-    editor->updatePath(blankTabPath);
+    editor->updatePath(filepath);
+    editor->textEditor->setPlainText(content);
 
-    if (blankFile != "" && Utils::fileExists(blankFile)) {
-        editor->loadFile(blankFile);
-    }
-
-    editorMap[blankTabPath] = editor;
+    editorMap[filepath] = editor;
 
     showNewEditor(editor);
 }
 
-void Window::handleSwitchToFile(QString filepath)
+void Window::closeTab()
 {
-    if (editorMap.contains(filepath)) {
-        editorLayout->setCurrentWidget(editorMap[filepath]);
+    if (QFileInfo(tabbar->getActiveTabPath()).dir().absolutePath() == blankFileDir) {
+        QString content = getActiveEditor()->textEditor->toPlainText();
+        
+        // Don't save blank tab if nothing in it.
+        if (content.size() == 0) {
+            removeActiveBlankTab();
+        } else {
+            DDialog *dialog = createSaveBlankFileDialog();
+
+            connect(dialog, &DDialog::buttonClicked, this,
+                    [=] (int index) {
+                        dialog->hide();
+                    
+                        // Remove blank tab if user click "don't save" button.
+                        if (index == 1) {
+                            removeActiveBlankTab();
+                        }
+                        // Save blank tab as file and then remove blank tab if user click "save" button.
+                        else if (index == 2) {
+                            removeActiveBlankTab(true);
+                        }
+                    });
+        }
+    } else {
+        // Close tab directly, because all file is save automatically.
+        tabbar->closeActiveTab();
     }
 }
 
-void Window::handleCloseFile(QString filepath)
+Editor* Window::createEditor()
 {
-    if (editorMap.contains(filepath)) {
-        Editor *editor = editorMap[filepath];
+    Editor *editor = new Editor();
+    setFontSizeWithConfig(editor);
 
-        editorLayout->removeWidget(editor);
-        editorMap.remove(filepath);
-
-        editor->deleteLater();
-    }
-
-    // Exit window after close all tabs.
-    if (editorMap.count() == 0) {
-        deleteLater();
-    }
+    return editor;
 }
 
-void Window::activeTab(int index)
+Editor* Window::getActiveEditor()
 {
-    activateWindow();
-    tabbar->activeTabWithIndex(index);
+    return editorMap[tabbar->getActiveTabPath()];
+}
+
+TextEditor* Window::getTextEditor(QString filepath)
+{
+    return editorMap[filepath]->textEditor;
 }
 
 void Window::openFile()
@@ -298,31 +266,6 @@ void Window::saveAsFile()
     }
 }
 
-void Window::toggleFullscreen()
-{
-    if (isFullScreen()) {
-        showNormal();
-    }  else {
-        showFullScreen();
-
-        QScreen *screen = QGuiApplication::primaryScreen();
-        QRect screenGeometry = screen->geometry();
-
-        auto toast = new DToast(this);
-
-        toast->setText("按F11或Esc退出全屏");
-        toast->setIcon(QIcon(Utils::getQrcPath("logo_24.svg")));
-        toast->pop();
-
-        toast->move((screenGeometry.width() - toast->width()) / 2, autoSaveTooltipPaddingBottom);
-    }
-}
-
-Editor* Window::getActiveEditor()
-{
-    return editorMap[tabbar->getActiveTabPath()];
-}
-
 void Window::saveFileAsAnotherPath(QString fromPath, QString toPath, bool deleteOldFile)
 {
     if (deleteOldFile) {
@@ -337,69 +280,19 @@ void Window::saveFileAsAnotherPath(QString fromPath, QString toPath, bool delete
     editorMap[toPath]->saveFile();
 }
 
-void Window::handleTabReleaseRequested(QString tabName, QString filepath, int index)
+void Window::decrementFontSize()
 {
-    tabbar->closeTabWithIndex(index);
-
-    QString content = getTextEditor(filepath)->toPlainText();
-    dropTabOut(tabName, filepath, content);
-}
-
-void Window::addTabWithContent(QString tabName, QString filepath, QString content)
-{
-    tabbar->addTab(filepath, tabName);
-
-    Editor *editor = createEditor();
-    editor->updatePath(filepath);
-    editor->textEditor->setPlainText(content);
-
-    editorMap[filepath] = editor;
-
-    showNewEditor(editor);
-}
-
-TextEditor* Window::getTextEditor(QString filepath)
-{
-    return editorMap[filepath]->textEditor;
-}
-
-Editor* Window::createEditor()
-{
-    Editor *editor = new Editor();
-    setFontSizeWithConfig(editor);
-
-    return editor;
-}
-
-void Window::handleJumpLineBarJumpToLine(QString filepath, int line, bool focusEditor)
-{
-    if (editorMap.contains(filepath)) {
-        getTextEditor(filepath)->jumpToLine(line, true);
-
-        if (focusEditor) {
-            QTimer::singleShot(0, getTextEditor(filepath), SLOT(setFocus()));
-        }
+    foreach (Editor *editor, editorMap.values()) {
+        int size = std::max(fontSize - 1, settings->minFontSize);
+        editor->textEditor->setFontSize(size);
+        saveFontSize(size);
     }
-}
-
-void Window::handleJumpLineBarExit()
-{
-    QTimer::singleShot(0, getActiveEditor()->textEditor, SLOT(setFocus()));
 }
 
 void Window::incrementFontSize()
 {
     foreach (Editor *editor, editorMap.values()) {
         int size = std::min(fontSize + 1, settings->maxFontSize);
-        editor->textEditor->setFontSize(size);
-        saveFontSize(size);
-    }
-}
-
-void Window::decrementFontSize()
-{
-    foreach (Editor *editor, editorMap.values()) {
-        int size = std::max(fontSize - 1, settings->minFontSize);
         editor->textEditor->setFontSize(size);
         saveFontSize(size);
     }
@@ -413,6 +306,13 @@ void Window::resetFontSize()
     }
 }
 
+void Window::saveFontSize(int size)
+{
+    fontSize = size;
+
+    settings->setOption("default_font_size", fontSize);
+}
+
 void Window::setFontSizeWithConfig(Editor *editor)
 {
     int size =  settings->getOption("default_font_size").toInt();
@@ -421,26 +321,26 @@ void Window::setFontSizeWithConfig(Editor *editor)
     fontSize = size;
 }
 
-void Window::saveFontSize(int size)
+void Window::popupFindBar()
 {
-    fontSize = size;
+    if (findBar->isVisible()) {
+        if (findBar->isFocus()) {
+            QTimer::singleShot(0, editorMap[tabbar->getActiveTabPath()]->textEditor, SLOT(setFocus()));
+        } else {
+            findBar->focus();
+        }
+    } else {
+        addBottomWidget(findBar);
 
-    settings->setOption("default_font_size", fontSize);
-}
+        QString tabPath = tabbar->getActiveTabPath();
+        Editor *editor = getActiveEditor();
+        QString text = editor->textEditor->textCursor().selectedText();
+        int row = editor->textEditor->getCurrentLine();
+        int column = editor->textEditor->getCurrentColumn();
+        int scrollOffset = editor->textEditor->getScrollOffset();
 
-void Window::addBottomWidget(QWidget *widget)
-{
-    if (layout->count() >= 2) {
-        removeBottomWidget();
+        findBar->activeInput(text, tabPath, row, column, scrollOffset);
     }
-
-    layout->addWidget(widget);
-}
-
-void Window::removeBottomWidget()
-{
-    QWidget *widget = layout->takeAt(1)->widget();
-    widget->hide();
 }
 
 void Window::popupReplaceBar()
@@ -486,25 +386,142 @@ void Window::popupJumpLineBar()
     }
 }
 
-void Window::popupFindBar()
+void Window::toggleFullscreen()
 {
-    if (findBar->isVisible()) {
-        if (findBar->isFocus()) {
-            QTimer::singleShot(0, editorMap[tabbar->getActiveTabPath()]->textEditor, SLOT(setFocus()));
-        } else {
-            findBar->focus();
+    if (isFullScreen()) {
+        showNormal();
+    }  else {
+        showFullScreen();
+
+        QScreen *screen = QGuiApplication::primaryScreen();
+        QRect screenGeometry = screen->geometry();
+
+        auto toast = new DToast(this);
+
+        toast->setText("按F11或Esc退出全屏");
+        toast->setIcon(QIcon(Utils::getQrcPath("logo_24.svg")));
+        toast->pop();
+
+        toast->move((screenGeometry.width() - toast->width()) / 2, autoSaveTooltipPaddingBottom);
+    }
+}
+
+void Window::keyPressEvent(QKeyEvent *keyEvent)
+{
+    QString key = Utils::getKeymap(keyEvent);
+
+    // qDebug() << key;
+
+    if (key == "Ctrl + T") {
+        addBlankTab();
+    } else if (key == "Ctrl + S") {
+        saveFile();
+    } else if (key == "Ctrl + Shift + S") {
+        saveAsFile();
+    } else if (key == "Ctrl + Tab") {
+        tabbar->selectNextTab();
+    } else if (key == "Ctrl + Shift + Backtab") {
+        tabbar->selectPrevTab();
+    } else if (key == "Ctrl + W") {
+        closeTab();
+    } else if (key == "Ctrl + Shift + W") {
+        tabbar->closeOtherTabs();
+    } else if (key == "Ctrl + O") {
+        openFile();
+    } else if (key == "Ctrl + =") {
+        incrementFontSize();
+    } else if (key == "Ctrl + -") {
+        decrementFontSize();
+    } else if (key == "Ctrl + 0") {
+        resetFontSize();
+    } else if (key == "F11") {
+        toggleFullscreen();
+    } else if (key == "Ctrl + Shift + F") {
+        popupFindBar();
+    } else if (key == "Ctrl + Shift + H") {
+        popupReplaceBar();
+    } else if (key == "Ctrl + Shift + G") {
+        popupJumpLineBar();
+    } else if (key == "Esc") {
+        removeBottomWidget();
+    }
+}
+
+void Window::addBlankTab(QString blankFile)
+{
+    QString blankTabPath;
+    if (blankFile == "") {
+        blankTabPath = QDir(blankFileDir).filePath(QString("blank_file_%1").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss")));
+        if (!Utils::fileExists(blankTabPath)) {
+            QDir().mkpath(blankFileDir);
+            if (QFile(blankTabPath).open(QIODevice::ReadWrite)) {
+                qDebug() << "Create blank file: " << blankTabPath;
+            } else {
+                qDebug() << "Can't create blank file: " << blankTabPath;
+            }
         }
     } else {
-        addBottomWidget(findBar);
+        blankTabPath = blankFile;
+    }
 
-        QString tabPath = tabbar->getActiveTabPath();
-        Editor *editor = getActiveEditor();
-        QString text = editor->textEditor->textCursor().selectedText();
-        int row = editor->textEditor->getCurrentLine();
-        int column = editor->textEditor->getCurrentColumn();
-        int scrollOffset = editor->textEditor->getScrollOffset();
+    tabbar->addTab(blankTabPath, "Blank document");
+    Editor *editor = createEditor();
+    editor->updatePath(blankTabPath);
 
-        findBar->activeInput(text, tabPath, row, column, scrollOffset);
+    if (blankFile != "" && Utils::fileExists(blankFile)) {
+        editor->loadFile(blankFile);
+    }
+
+    editorMap[blankTabPath] = editor;
+
+    showNewEditor(editor);
+}
+
+void Window::handleTabReleaseRequested(QString tabName, QString filepath, int index)
+{
+    tabbar->closeTabWithIndex(index);
+
+    QString content = getTextEditor(filepath)->toPlainText();
+    dropTabOut(tabName, filepath, content);
+}
+
+void Window::handleCloseFile(QString filepath)
+{
+    if (editorMap.contains(filepath)) {
+        Editor *editor = editorMap[filepath];
+
+        editorLayout->removeWidget(editor);
+        editorMap.remove(filepath);
+
+        editor->deleteLater();
+    }
+
+    // Exit window after close all tabs.
+    if (editorMap.count() == 0) {
+        deleteLater();
+    }
+}
+
+void Window::handleSwitchToFile(QString filepath)
+{
+    if (editorMap.contains(filepath)) {
+        editorLayout->setCurrentWidget(editorMap[filepath]);
+    }
+}
+
+void Window::handleJumpLineBarExit()
+{
+    QTimer::singleShot(0, getActiveEditor()->textEditor, SLOT(setFocus()));
+}
+
+void Window::handleJumpLineBarJumpToLine(QString filepath, int line, bool focusEditor)
+{
+    if (editorMap.contains(filepath)) {
+        getTextEditor(filepath)->jumpToLine(line, true);
+
+        if (focusEditor) {
+            QTimer::singleShot(0, getTextEditor(filepath), SLOT(setFocus()));
+        }
     }
 }
 
@@ -514,18 +531,6 @@ void Window::handleBackToPosition(QString file, int row, int column, int scrollO
         editorMap[file]->textEditor->scrollToLine(scrollOffset, row, column);
 
         QTimer::singleShot(0, editorMap[file]->textEditor, SLOT(setFocus()));
-    }
-}
-
-void Window::handleRemoveSearchKeyword()
-{
-    getActiveEditor()->textEditor->removeKeywords();
-}
-
-void Window::handleUpdateSearchKeyword(QString file, QString keyword)
-{
-    if (file == tabbar->getActiveTabPath() && editorMap.contains(file)) {
-        editorMap[file]->textEditor->highlightKeyword(keyword, editorMap[file]->textEditor->getPosition());
     }
 }
 
@@ -545,11 +550,25 @@ void Window::handleFindPrev()
     editor->textEditor->renderAllSelections();
 }
 
+void Window::handleReplaceAll(QString replaceText, QString withText)
+{
+    Editor *editor = getActiveEditor();
+
+    editor->textEditor->replaceAll(replaceText, withText);
+}
+
 void Window::handleReplaceNext(QString replaceText, QString withText)
 {
     Editor *editor = getActiveEditor();
 
     editor->textEditor->replaceNext(replaceText, withText);
+}
+
+void Window::handleReplaceRest(QString replaceText, QString withText)
+{
+    Editor *editor = getActiveEditor();
+
+    editor->textEditor->replaceRest(replaceText, withText);
 }
 
 void Window::handleReplaceSkip()
@@ -560,55 +579,31 @@ void Window::handleReplaceSkip()
     editor->textEditor->renderAllSelections();
 }
 
-void Window::handleReplaceRest(QString replaceText, QString withText)
+void Window::handleRemoveSearchKeyword()
 {
-    Editor *editor = getActiveEditor();
-
-    editor->textEditor->replaceRest(replaceText, withText);
+    getActiveEditor()->textEditor->removeKeywords();
 }
 
-void Window::handleReplaceAll(QString replaceText, QString withText)
+void Window::handleUpdateSearchKeyword(QString file, QString keyword)
 {
-    Editor *editor = getActiveEditor();
-
-    editor->textEditor->replaceAll(replaceText, withText);
-}
-
-void Window::closeTab()
-{
-    if (QFileInfo(tabbar->getActiveTabPath()).dir().absolutePath() == blankFileDir) {
-        QString content = getActiveEditor()->textEditor->toPlainText();
-        
-        // Don't save blank tab if nothing in it.
-        if (content.size() == 0) {
-            removeActiveBlankTab();
-        } else {
-            DDialog *dialog = createSaveBlankFileDialog();
-
-            connect(dialog, &DDialog::buttonClicked, this,
-                    [=] (int index) {
-                        dialog->hide();
-                    
-                        // Remove blank tab if user click "don't save" button.
-                        if (index == 1) {
-                            removeActiveBlankTab();
-                        }
-                        // Save blank tab as file and then remove blank tab if user click "save" button.
-                        else if (index == 2) {
-                            removeActiveBlankTab(true);
-                        }
-                    });
-        }
-    } else {
-        // Close tab directly, because all file is save automatically.
-        tabbar->closeActiveTab();
+    if (file == tabbar->getActiveTabPath() && editorMap.contains(file)) {
+        editorMap[file]->textEditor->highlightKeyword(keyword, editorMap[file]->textEditor->getPosition());
     }
 }
 
-void Window::showNewEditor(Editor *editor)
+void Window::addBottomWidget(QWidget *widget)
 {
-    editorLayout->addWidget(editor);
-    editorLayout->setCurrentWidget(editor);
+    if (layout->count() >= 2) {
+        removeBottomWidget();
+    }
+
+    layout->addWidget(widget);
+}
+
+void Window::removeBottomWidget()
+{
+    QWidget *widget = layout->takeAt(1)->widget();
+    widget->hide();
 }
 
 void Window::removeActiveBlankTab(bool needSaveBefore)
@@ -627,6 +622,12 @@ void Window::removeActiveBlankTab(bool needSaveBefore)
     
     // Remove blank file from blank file directory.
     QFile(blankFile).remove();
+}
+
+void Window::showNewEditor(Editor *editor)
+{
+    editorLayout->addWidget(editor);
+    editorLayout->setCurrentWidget(editor);
 }
 
 DDialog* Window::createSaveBlankFileDialog()
