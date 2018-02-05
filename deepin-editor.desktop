@@ -4,6 +4,7 @@ Comment=Simple and easy to use deepin editor
 Exec=deepin-editor
 GenericName=Editor
 Icon=deepin-editor
+MimeType=text/plain;
 Name=Deepin Editor
 Type=Application
 
