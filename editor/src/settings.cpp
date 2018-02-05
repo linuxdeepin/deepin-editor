@@ -40,6 +40,13 @@ Settings::~Settings()
     delete settings;
 }
 
+void Settings::init()
+{
+    if (getOption("default_font_size").isNull()) {
+        setOption("default_font_size", defaultFontSize);
+    }
+}
+
 QString Settings::configPath()
 {
     return QDir(QDir(QStandardPaths::standardLocations(QStandardPaths::ConfigLocation).first()).filePath(qApp->organizationName())).filePath(qApp->applicationName());
@@ -57,13 +64,6 @@ QVariant Settings::getOption(const QString &key)
     settings->endGroup();
 
     return result;
-}
-
-void Settings::init()
-{
-    if (getOption("default_font_size").isNull()) {
-        setOption("default_font_size", defaultFontSize);
-    }
 }
 
 void Settings::setOption(const QString &key, const QVariant &value) {

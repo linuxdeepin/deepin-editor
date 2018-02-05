@@ -34,9 +34,9 @@ public:
     Settings(QObject *parent = 0);
     ~Settings();
     
+    void init();
     QString configPath();
     QVariant getOption(const QString &key);
-    void init();
     void setOption(const QString &key, const QVariant &value);
     
     int defaultFontSize = 12;
