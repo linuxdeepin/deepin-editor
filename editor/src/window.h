@@ -122,7 +122,7 @@ private:
     Settings *settings;
     Tabbar *tabbar;
     int fontSize;
-    int autoSaveTooltipPaddingBottom = 20;
+    int toastPaddingBottom = 100;
     
     void removeActiveBlankTab(bool needSaveBefore=false);
     

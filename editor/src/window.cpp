@@ -43,7 +43,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
 {
     // Init theme.
     DThemeManager::instance()->setTheme("dark");
-    
+
     // Init.
     installEventFilter(this);   // add event filter
     blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
@@ -65,7 +65,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     editorLayout->setContentsMargins(0, 0, 0, 0);
 
     layout->addWidget(editorWidget);
-    
+
     // Init titlebar.
     tabbar = new Tabbar();
     this->titlebar()->setCustomWidget(tabbar, Qt::AlignVCenter, false);
@@ -76,7 +76,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     connect(tabbar, &Tabbar::doubleClicked, this->titlebar(), &DTitlebar::doubleClicked, Qt::QueuedConnection);
     connect(tabbar, &Tabbar::switchToFile, this, &Window::handleSwitchToFile, Qt::QueuedConnection);
     connect(tabbar, &Tabbar::closeFile, this, &Window::handleCloseFile, Qt::QueuedConnection);
-    connect(tabbar, &Tabbar::tabAddRequested, this, 
+    connect(tabbar, &Tabbar::tabAddRequested, this,
             [=]() {
                 addBlankTab();
             }, Qt::QueuedConnection);
@@ -170,7 +170,7 @@ void Window::closeTab()
 {
     if (QFileInfo(tabbar->getActiveTabPath()).dir().absolutePath() == blankFileDir) {
         QString content = getActiveEditor()->textEditor->toPlainText();
-        
+
         // Don't save blank tab if nothing in it.
         if (content.size() == 0) {
             removeActiveBlankTab();
@@ -180,7 +180,7 @@ void Window::closeTab()
             connect(dialog, &DDialog::buttonClicked, this,
                     [=] (int index) {
                         dialog->hide();
-                    
+
                         // Remove blank tab if user click "don't save" button.
                         if (index == 1) {
                             removeActiveBlankTab();
@@ -237,7 +237,7 @@ bool Window::saveFile()
             QString tabPath = tabbar->getActiveTabPath();
 
             saveFileAsAnotherPath(tabPath, filepath, true);
-            
+
             return true;
         } else {
             return false;
@@ -250,8 +250,8 @@ bool Window::saveFile()
         toast->pop();
 
         toast->move((width() - toast->width()) / 2,
-                    height() - toast->height() - autoSaveTooltipPaddingBottom);
-        
+                    height() - toast->height() - toastPaddingBottom);
+
         return true;
     }
 }
@@ -381,7 +381,7 @@ void Window::popupJumpLineBar()
         int column = editor->textEditor->getCurrentColumn();
         int count = editor->textEditor->blockCount();
         int scrollOffset = editor->textEditor->getScrollOffset();
-    
+
         jumpLineBar->activeInput(tabPath, row, column, count, scrollOffset);
     }
 }
@@ -393,16 +393,19 @@ void Window::toggleFullscreen()
     }  else {
         showFullScreen();
 
-        QScreen *screen = QGuiApplication::primaryScreen();
-        QRect screenGeometry = screen->geometry();
+        QTimer::singleShot(
+            200, this,
+            [=] {
+                auto toast = new DToast(this);
 
-        auto toast = new DToast(this);
+                toast->setText("按F11或Esc退出全屏");
+                toast->setIcon(QIcon(Utils::getQrcPath("logo_24.svg")));
+                toast->pop();
 
-        toast->setText("按F11或Esc退出全屏");
-        toast->setIcon(QIcon(Utils::getQrcPath("logo_24.svg")));
-        toast->pop();
+                toast->move((width() - toast->width()) / 2,
+                            height() - toast->height() - toastPaddingBottom);
+            });
 
-        toast->move((screenGeometry.width() - toast->width()) / 2, autoSaveTooltipPaddingBottom);
     }
 }
 
@@ -609,17 +612,17 @@ void Window::removeBottomWidget()
 void Window::removeActiveBlankTab(bool needSaveBefore)
 {
     QString blankFile = tabbar->getActiveTabPath();
-    
+
     if (needSaveBefore) {
         if (!saveFile()) {
             // Do nothing if need save but last user not select save file anyway.
             return;
         }
     }
-    
+
     // Close current tab.
     tabbar->closeActiveTab();
-    
+
     // Remove blank file from blank file directory.
     QFile(blankFile).remove();
 }
@@ -639,6 +642,6 @@ DDialog* Window::createSaveBlankFileDialog()
     dialog->addButton(QString(tr("Don't Save")), false, DDialog::ButtonNormal);
     dialog->addButton(QString(tr("Save")), true, DDialog::ButtonNormal);
     dialog->show();
-    
+
     return dialog;
 }
