@@ -42,13 +42,16 @@ public:
     FindBar(QWidget *parent = 0);
     
     bool isFocus();
-    void activeInput(QString text, QString file, int row, int column, int scrollOffset);
     void focus();
+    
+    void activeInput(QString text, QString file, int row, int column, int scrollOffset);
     
 signals:
     void backToPosition(QString file, int row, int column, int scrollOffset);
+    
     void findNext();
     void findPrev();
+    
     void removeSearchKeyword();
     void updateSearchKeyword(QString file, QString keyword);
     

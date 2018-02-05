@@ -56,23 +56,14 @@ FindBar::FindBar(QWidget *parent) : QWidget(parent)
     connect(findPrevButton, &DTextButton::clicked, this, &FindBar::findPrev, Qt::QueuedConnection);
 }
 
-void FindBar::handleContentChanged()
+bool FindBar::isFocus()
 {
-    updateSearchKeyword(findFile, editLine->text());
+    return editLine->hasFocus();
 }
 
-void FindBar::hideEvent(QHideEvent *)
+void FindBar::focus()
 {
-    removeSearchKeyword();
-}
-
-void FindBar::paintEvent(QPaintEvent *)
-{
-    QPainter painter(this);
-    painter.setOpacity(1);
-    QPainterPath path;
-    path.addRect(rect());
-    painter.fillPath(path, QColor("#202020"));
+    editLine->setFocus();
 }
 
 void FindBar::activeInput(QString text, QString file, int row, int column, int scrollOffset)
@@ -102,13 +93,21 @@ void FindBar::findCancel()
     backToPosition(findFile, findFileRow, findFileColumn, findFileSrollOffset);
 }
 
-void FindBar::focus()
+void FindBar::handleContentChanged()
 {
-    editLine->setFocus();
+    updateSearchKeyword(findFile, editLine->text());
 }
 
-bool FindBar::isFocus()
+void FindBar::hideEvent(QHideEvent *)
 {
-    return editLine->hasFocus();
+    removeSearchKeyword();
 }
 
+void FindBar::paintEvent(QPaintEvent *)
+{
+    QPainter painter(this);
+    painter.setOpacity(1);
+    QPainterPath path;
+    path.addRect(rect());
+    painter.fillPath(path, QColor("#202020"));
+}
