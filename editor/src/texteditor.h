@@ -102,7 +102,7 @@ private:
     QTextEdit::ExtraSelection currentLineSelection;
     QTextEdit::ExtraSelection cursorKeywordSelection;
     int lineNumberOffset = 2;
-    int lineNumberPaddingX = 2;
+    int lineNumberPaddingX = 5;
     int restoreColumn;
     int restoreRow;
     
