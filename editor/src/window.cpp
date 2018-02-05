@@ -237,7 +237,7 @@ bool Window::saveFile()
             QString tabPath = tabbar->getActiveTabPath();
 
             saveFileAsAnotherPath(tabPath, filepath, true);
-
+            
             return true;
         } else {
             return false;
@@ -278,6 +278,8 @@ void Window::saveFileAsAnotherPath(QString fromPath, QString toPath, bool delete
 
     editorMap[toPath]->updatePath(toPath);
     editorMap[toPath]->saveFile();
+    
+    getActiveEditor()->textEditor->loadHighlighter();
 }
 
 void Window::decrementFontSize()
