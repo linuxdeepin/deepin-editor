@@ -80,42 +80,14 @@ ReplaceBar::ReplaceBar(QWidget *parent) : QWidget(parent)
     connect(replaceAllButton, &DTextButton::clicked, this, &ReplaceBar::handleReplaceAll, Qt::QueuedConnection);
 }
 
-void ReplaceBar::hideEvent(QHideEvent *)
+bool ReplaceBar::isFocus()
 {
-    removeSearchKeyword();
+    return replaceLine->hasFocus();
 }
 
-bool ReplaceBar::focusNextPrevChild(bool)
+void ReplaceBar::focus()
 {
-    // Make keyword jump between two EditLine widgets.
-    auto *editWidget = qobject_cast<LineBar*>(focusWidget());
-    if (editWidget != nullptr) {
-        if (editWidget == replaceLine) {
-            withLine->setFocus();
-            
-            return true;
-        } else if (editWidget == withLine) {
-            replaceLine->setFocus();
-            
-            return true;
-        }
-    }
-    
-    return false;
-}
-
-void ReplaceBar::handleContentChanged()
-{
-    updateSearchKeyword(replaceFile, replaceLine->text());
-}
-
-void ReplaceBar::paintEvent(QPaintEvent *)
-{
-    QPainter painter(this);
-    painter.setOpacity(1);
-    QPainterPath path;
-    path.addRect(rect());
-    painter.fillPath(path, QColor("#202020"));
+    replaceLine->setFocus();
 }
 
 void ReplaceBar::activeInput(QString text, QString file, int row, int column, int scrollOffset)
@@ -145,14 +117,9 @@ void ReplaceBar::replaceCancel()
     backToPosition(replaceFile, replaceFileRow, replaceFileColumn, replaceFileSrollOffset);
 }
 
-void ReplaceBar::focus()
+void ReplaceBar::handleContentChanged()
 {
-    replaceLine->setFocus();
-}
-
-bool ReplaceBar::isFocus()
-{
-    return replaceLine->hasFocus();
+    updateSearchKeyword(replaceFile, replaceLine->text());
 }
 
 void ReplaceBar::handleReplaceNext()
@@ -170,3 +137,35 @@ void ReplaceBar::handleReplaceAll()
     replaceAll(replaceLine->text(), withLine->text());    
 }
 
+void ReplaceBar::hideEvent(QHideEvent *)
+{
+    removeSearchKeyword();
+}
+
+void ReplaceBar::paintEvent(QPaintEvent *)
+{
+    QPainter painter(this);
+    painter.setOpacity(1);
+    QPainterPath path;
+    path.addRect(rect());
+    painter.fillPath(path, QColor("#202020"));
+}
+
+bool ReplaceBar::focusNextPrevChild(bool)
+{
+    // Make keyword jump between two EditLine widgets.
+    auto *editWidget = qobject_cast<LineBar*>(focusWidget());
+    if (editWidget != nullptr) {
+        if (editWidget == replaceLine) {
+            withLine->setFocus();
+            
+            return true;
+        } else if (editWidget == withLine) {
+            replaceLine->setFocus();
+            
+            return true;
+        }
+    }
+    
+    return false;
+}

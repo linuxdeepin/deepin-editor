@@ -42,16 +42,19 @@ public:
     ReplaceBar(QWidget *parent = 0);
     
     bool isFocus();
-    void activeInput(QString text, QString file, int row, int column, int scrollOffset);
     void focus();
     
+    void activeInput(QString text, QString file, int row, int column, int scrollOffset);
+    
 signals:
-    void backToPosition(QString file, int row, int column, int scrollOffset);
-    void removeSearchKeyword();
-    void replaceAll(QString replaceText, QString withText);
     void replaceNext(QString replaceText, QString withText);
-    void replaceRest(QString replaceText, QString withText);
     void replaceSkip();
+    void replaceRest(QString replaceText, QString withText);
+    void replaceAll(QString replaceText, QString withText);
+    
+    void backToPosition(QString file, int row, int column, int scrollOffset);
+    
+    void removeSearchKeyword();
     void updateSearchKeyword(QString file, QString keyword);
     
 public slots:
@@ -62,9 +65,9 @@ public slots:
     void handleReplaceRest();
     
 protected:
-    bool focusNextPrevChild(bool next);
     void hideEvent(QHideEvent *event);
     void paintEvent(QPaintEvent *event);
+    bool focusNextPrevChild(bool next);
     
 private:
     DTextButton *replaceAllButton;
