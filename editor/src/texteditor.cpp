@@ -648,7 +648,9 @@ void TextEditor::contextMenuEvent(QContextMenuEvent *event)
     rightMenu->addAction(cutAction);
     rightMenu->addAction(copyAction);
     rightMenu->addAction(pasteAction);
-    rightMenu->addAction(deleteAction);
+    if (textCursor().hasSelection()) {
+        rightMenu->addAction(deleteAction);
+    }
     rightMenu->addAction(selectAllAction);
     rightMenu->addSeparator();
     rightMenu->addAction(findAction);
@@ -783,7 +785,7 @@ void TextEditor::clickPasteAction()
 
 void TextEditor::clickDeleteAction()
 {
-
+    textCursor().removeSelectedText();
 }
 
 void TextEditor::clickConvertCaseAction()
