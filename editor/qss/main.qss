@@ -24,3 +24,4 @@ QTabBar::tab:selected
 Dtk--Widget--DTitlebar {
     background: #202020；
 }
+

@@ -55,6 +55,9 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     QPlainTextEdit(parent),
     m_highlighter(new KSyntaxHighlighting::SyntaxHighlighter(document()))
 {
+    // Don't draw background.
+    viewport()->setAutoFillBackground(false);
+    
     // Init highlight theme.
     setTheme((palette().color(QPalette::Base).lightness() < 128)
              ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
@@ -549,7 +552,11 @@ void TextEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
     // Init.
     QPainter painter(lineNumberArea);
-    painter.fillRect(event->rect(), QColor(36, 36, 36));
+    painter.fillRect(event->rect(), QColor("#202020"));
+    
+    QColor lineColor = QColor("#ffffff");
+    lineColor.setAlphaF(0.05);
+    painter.fillRect(QRect(event->rect().x() + event->rect().width() - 1, event->rect().y(), 1, event->rect().height()), lineColor);
 
     // Update line number.
     QTextBlock block = firstVisibleBlock();
