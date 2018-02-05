@@ -38,19 +38,23 @@ class Tabbar : public QWidget
 public:
     Tabbar();
     
-    QString getActiveTabName();
-    QString getActiveTabPath();
+    int getTabIndex(QString filepath);
     QString getTabName(int index);
     QString getTabPath(int index);
+    
     int getActiveTabIndex();
-    int getTabIndex(QString filepath);
+    QString getActiveTabName();
+    QString getActiveTabPath();
     void activeTabWithIndex(int index);
+    
     void addTab(QString filepath, QString tabName);
     void closeActiveTab();
     void closeOtherTabs();
     void closeOtherTabsExceptFile(QString filepath);
+    
     void selectNextTab();
     void selectPrevTab();
+    
     void updateTabWithIndex(int index, QString filepath, QString tabName);
                       
 signals:
@@ -62,8 +66,10 @@ signals:
                           
 public slots:
     void closeTabWithIndex(int closeIndex);
+    
     void handleCloseOtherTabs(int index);
     void handleCurrentIndexChanged(int index);
+    
     void handleTabDroped(int index, Qt::DropAction action, QObject *target);
     void handleTabMoved(int fromIndex, int toIndex);
     void handleTabReleaseRequested(int index);

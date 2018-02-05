@@ -57,20 +57,6 @@ Tabbar::Tabbar()
     connect(tabbar, &TabWidget::tabReleaseRequested, this, &Tabbar::handleTabReleaseRequested, Qt::QueuedConnection);
 }
 
-void Tabbar::addTab(QString filepath, QString tabName)
-{
-    int index = getActiveTabIndex();
-
-    tabbar->tabFiles.insert(index + 1, filepath);
-    tabbar->insertTab(index + 1, tabName);
-    tabbar->setCurrentIndex(index + 1);
-}
-
-int Tabbar::getActiveTabIndex()
-{
-    return tabbar->currentIndex();
-}
-
 int Tabbar::getTabIndex(QString filepath)
 {
     for (int i = 0; i < tabbar->tabFiles.size(); i++) {
@@ -82,14 +68,29 @@ int Tabbar::getTabIndex(QString filepath)
     return -1;
 }
 
-void Tabbar::closeTabWithIndex(int closeIndex)
+QString Tabbar::getTabName(int index)
 {
-    QString filepath = tabbar->tabFiles[closeIndex];
+    return tabbar->tabText(index);
+}
 
-    tabbar->tabFiles.takeAt(closeIndex);
-    tabbar->removeTab(closeIndex);
+QString Tabbar::getTabPath(int index)
+{
+    return tabbar->tabFiles.value(index);
+}
 
-    closeFile(filepath);
+int Tabbar::getActiveTabIndex()
+{
+    return tabbar->currentIndex();
+}
+
+QString Tabbar::getActiveTabName()
+{
+    return tabbar->tabText(getActiveTabIndex());
+}
+
+QString Tabbar::getActiveTabPath()
+{
+    return tabbar->tabFiles.value(getActiveTabIndex());
 }
 
 void Tabbar::activeTabWithIndex(int index)
@@ -97,26 +98,14 @@ void Tabbar::activeTabWithIndex(int index)
     tabbar->setCurrentIndex(index);
 }
 
-void Tabbar::selectNextTab()
+void Tabbar::addTab(QString filepath, QString tabName)
 {
-    int currentIndex = tabbar->currentIndex();
-    if (currentIndex >= tabbar->count() - 1) {
-        tabbar->setCurrentIndex(0);
-    } else {
-        tabbar->setCurrentIndex(currentIndex + 1);
-    }
-}
+    int index = getActiveTabIndex();
 
-void Tabbar::selectPrevTab()
-{
-    int currentIndex = tabbar->currentIndex();
-    if (currentIndex <= 0) {
-        tabbar->setCurrentIndex(tabbar->count() - 1);
-    } else {
-        tabbar->setCurrentIndex(currentIndex - 1);
-    }
+    tabbar->tabFiles.insert(index + 1, filepath);
+    tabbar->insertTab(index + 1, tabName);
+    tabbar->setCurrentIndex(index + 1);
 }
-
 
 void Tabbar::closeActiveTab()
 {
@@ -140,24 +129,24 @@ void Tabbar::closeOtherTabsExceptFile(QString filepath)
     }
 }
 
-QString Tabbar::getActiveTabName()
+void Tabbar::selectNextTab()
 {
-    return tabbar->tabText(getActiveTabIndex());
+    int currentIndex = tabbar->currentIndex();
+    if (currentIndex >= tabbar->count() - 1) {
+        tabbar->setCurrentIndex(0);
+    } else {
+        tabbar->setCurrentIndex(currentIndex + 1);
+    }
 }
 
-QString Tabbar::getActiveTabPath()
+void Tabbar::selectPrevTab()
 {
-    return tabbar->tabFiles.value(getActiveTabIndex());
-}
-
-QString Tabbar::getTabName(int index)
-{
-    return tabbar->tabText(index);
-}
-
-QString Tabbar::getTabPath(int index)
-{
-    return tabbar->tabFiles.value(index);
+    int currentIndex = tabbar->currentIndex();
+    if (currentIndex <= 0) {
+        tabbar->setCurrentIndex(tabbar->count() - 1);
+    } else {
+        tabbar->setCurrentIndex(currentIndex - 1);
+    }
 }
 
 void Tabbar::updateTabWithIndex(int index, QString filepath, QString tabName)
@@ -166,12 +155,24 @@ void Tabbar::updateTabWithIndex(int index, QString filepath, QString tabName)
     tabbar->tabFiles[index] = filepath;
 }
 
-void Tabbar::handleTabReleaseRequested(int index)
+void Tabbar::closeTabWithIndex(int closeIndex)
 {
-    // Just send tabReleaseRequested signal have two or above tabs.
-    if (tabbar->count() > 1) {
-        tabReleaseRequested(getTabName(index), getTabPath(index), index);
-    }
+    QString filepath = tabbar->tabFiles[closeIndex];
+
+    tabbar->tabFiles.takeAt(closeIndex);
+    tabbar->removeTab(closeIndex);
+
+    closeFile(filepath);
+}
+
+void Tabbar::handleCloseOtherTabs(int index)
+{
+    closeOtherTabsExceptFile(tabbar->tabFiles[index]);
+}
+
+void Tabbar::handleCurrentIndexChanged(int index)
+{
+    switchToFile(tabbar->tabFiles.value(index));
 }
 
 void Tabbar::handleTabDroped(int index, Qt::DropAction, QObject *target)
@@ -188,13 +189,10 @@ void Tabbar::handleTabMoved(int fromIndex, int toIndex)
     tabbar->tabFiles.swap(fromIndex, toIndex);
 }
 
-void Tabbar::handleCloseOtherTabs(int index)
+void Tabbar::handleTabReleaseRequested(int index)
 {
-    closeOtherTabsExceptFile(tabbar->tabFiles[index]);
+    // Just send tabReleaseRequested signal have two or above tabs.
+    if (tabbar->count() > 1) {
+        tabReleaseRequested(getTabName(index), getTabPath(index), index);
+    }
 }
-
-void Tabbar::handleCurrentIndexChanged(int index)
-{
-    switchToFile(tabbar->tabFiles.value(index));
-}
-
