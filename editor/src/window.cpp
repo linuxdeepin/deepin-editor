@@ -106,6 +106,8 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
         this->titlebar()->setMenu(menu);
         
         connect(newWindowAction, &QAction::triggered, this, &Window::newWindow);
+        connect(saveAction, &QAction::triggered, this, &Window::saveFile);
+        connect(saveAsAction, &QAction::triggered, this, &Window::saveAsFile);
     }
 
     // Init find bar.
