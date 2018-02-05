@@ -78,10 +78,15 @@ int main(int argc, char *argv[])
         if (arguments[i] != "-w") {
             QStringList splitResult = arguments[i].split("file://");
             
+            QString file = "";
             if (splitResult.size() == 1) {
-                files << splitResult[0];
+                file = splitResult[0];
             } else if (splitResult.size() == 2) {
-                files << splitResult[1];
+                file = splitResult[1];
+            }
+            
+            if (Utils::fileExists(file)) {
+                files << file;
             }
         }
     }

@@ -149,6 +149,9 @@ private:
     QAction *openInFileManagerAction;
     QAction *setttingAction;
     
+    bool canUndo;
+    bool canRedo;
+    
     bool setCursorKeywordSeletoin(int position, bool findNext);
 };
 

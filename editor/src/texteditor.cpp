@@ -92,8 +92,8 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     openInFileManagerAction = new QAction("Open in file manager", this);
     setttingAction = new QAction("Setting", this);
 
-    connect(undoAction, &QAction::triggered, this, &TextEditor::clickUndoAction);
-    connect(redoAction, &QAction::triggered, this, &TextEditor::clickRedoAction);
+    connect(undoAction, &QAction::triggered, this, &TextEditor::undo);
+    connect(redoAction, &QAction::triggered, this, &TextEditor::redo);
     connect(cutAction, &QAction::triggered, this, &TextEditor::clickCutAction);
     connect(copyAction, &QAction::triggered, this, &TextEditor::clickCopyAction);
     connect(pasteAction, &QAction::triggered, this, &TextEditor::clickPasteAction);
@@ -107,6 +107,18 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     connect(convertCaseAction, &QAction::triggered, this, &TextEditor::clickConvertCaseAction);
     connect(openInFileManagerAction, &QAction::triggered, this, &TextEditor::clickOpenInFileManagerAction);
     connect(setttingAction, &QAction::triggered, this, &TextEditor::clickSetttingAction);
+    
+    canUndo = false;
+    canRedo = false;
+    
+    connect(this, &TextEditor::undoAvailable, this, 
+            [=] (bool undoIsAvailable) {
+                canUndo = undoIsAvailable;
+            });
+    connect(this, &TextEditor::redoAvailable, this, 
+            [=] (bool redoIsAvailable) {
+                canRedo = redoIsAvailable;
+            });
 
     // Init scroll animation.
     scrollAnimation = new QPropertyAnimation(verticalScrollBar(), "value");
@@ -626,8 +638,12 @@ void TextEditor::contextMenuEvent(QContextMenuEvent *event)
 {
     rightMenu->clear();
 
-    rightMenu->addAction(undoAction);
-    rightMenu->addAction(redoAction);
+    if (canUndo) {
+        rightMenu->addAction(undoAction);
+    }
+    if (canRedo) {
+        rightMenu->addAction(redoAction);
+    }
     rightMenu->addSeparator();
     rightMenu->addAction(cutAction);
     rightMenu->addAction(copyAction);
