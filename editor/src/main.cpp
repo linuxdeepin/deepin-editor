@@ -76,7 +76,13 @@ int main(int argc, char *argv[])
     QStringList arguments = app.arguments();
     for (int i = 1; i < arguments.size(); i++) {
         if (arguments[i] != "-w") {
-            files << arguments[i];
+            QStringList splitResult = arguments[i].split("file://");
+            
+            if (splitResult.size() == 1) {
+                files << splitResult[0];
+            } else if (splitResult.size() == 2) {
+                files << splitResult[1];
+            }
         }
     }
     
