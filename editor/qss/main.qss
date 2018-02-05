@@ -1,7 +1,7 @@
 QTabBar,
 QTabBar::tab
 {
-    font-size: 16px;
+    font-size: 13px;
     height: 18px;
     padding: 10px;
     border: 0px;
