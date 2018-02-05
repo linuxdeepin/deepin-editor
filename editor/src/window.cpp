@@ -399,20 +399,6 @@ void Window::toggleFullscreen()
         showNormal();
     }  else {
         showFullScreen();
-
-        QTimer::singleShot(
-            200, this,
-            [=] {
-                auto toast = new DToast(this);
-
-                toast->setText("按F11或Esc退出全屏");
-                toast->setIcon(QIcon(Utils::getQrcPath("logo_24.svg")));
-                toast->pop();
-
-                toast->move((width() - toast->width()) / 2,
-                            height() - toast->height() - toastPaddingBottom);
-            });
-
     }
 }
 
