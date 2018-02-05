@@ -112,7 +112,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     // Make jump line bar pop at top-right of editor.
     DAnchorsBase::setAnchor(jumpLineBar, Qt::AnchorTop, layoutWidget, Qt::AnchorTop);
     DAnchorsBase::setAnchor(jumpLineBar, Qt::AnchorRight, layoutWidget, Qt::AnchorRight);
-
+    
     // Apply qss theme.
     Utils::applyQss(this, "main.qss");
     Utils::applyQss(this->titlebar(), "main.qss");
@@ -201,6 +201,11 @@ Editor* Window::createEditor()
 {
     Editor *editor = new Editor();
     setFontSizeWithConfig(editor);
+    
+    connect(editor->textEditor, &TextEditor::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);
+    connect(editor->textEditor, &TextEditor::clickReplaceAction, this, &Window::popupReplaceBar, Qt::QueuedConnection);
+    connect(editor->textEditor, &TextEditor::clickJumpLineAction, this, &Window::popupJumpLineBar, Qt::QueuedConnection);
+    connect(editor->textEditor, &TextEditor::clickFullscreenAction, this, &Window::toggleFullscreen, Qt::QueuedConnection);
 
     return editor;
 }
@@ -646,4 +651,9 @@ DDialog* Window::createSaveBlankFileDialog()
     dialog->show();
 
     return dialog;
+}
+
+void Window::popupRightMenu()
+{
+    
 }

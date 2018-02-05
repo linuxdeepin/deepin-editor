@@ -109,6 +109,8 @@ public slots:
     void addBottomWidget(QWidget *widget);
     void removeBottomWidget();
     
+    void popupRightMenu();
+    
 private:
     FindBar *findBar;
     JumpLineBar *jumpLineBar;

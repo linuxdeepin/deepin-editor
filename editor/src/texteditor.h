@@ -26,6 +26,8 @@
 
 #include "Repository"
 
+#include <QAction>
+#include <QMenu>
 #include <QPaintEvent>
 #include <QPlainTextEdit>
 #include <QPropertyAnimation>
@@ -86,16 +88,34 @@ public:
     
     void keyPressEvent(QKeyEvent *e);
     void lineNumberAreaPaintEvent(QPaintEvent *event);
+    void contextMenuEvent(QContextMenuEvent *event);
                                                      
     void setTheme(const KSyntaxHighlighting::Theme &theme);
     void loadHighlighter();
-                          
+
+signals:
+    void clickFindAction();
+    void clickReplaceAction();
+    void clickJumpLineAction();
+    void clickFullscreenAction();
+        
 public slots:
     void highlightCurrentLine();
     void updateLineNumber();
     void handleScrollFinish();
     void handleUpdateRequest(const QRect &rect, int dy);
-
+    
+    void clickUndoAction();
+    void clickRedoAction();
+    void clickCutAction();
+    void clickCopyAction();
+    void clickPasteAction();
+    void clickDeleteAction();
+    void clickSelectAllAction();
+    void clickConvertCaseAction();
+    void clickOpenInFileManagerAction();
+    void clickSetttingAction();
+    
 private:
     QPropertyAnimation *scrollAnimation;
     
@@ -111,6 +131,23 @@ private:
     
     KSyntaxHighlighting::Repository m_repository;
     KSyntaxHighlighting::SyntaxHighlighter *m_highlighter;
+    
+    QMenu *rightMenu;
+    QAction *undoAction;
+    QAction *redoAction;
+    QAction *cutAction;
+    QAction *copyAction;
+    QAction *pasteAction;
+    QAction *deleteAction;
+    QAction *selectAllAction;
+    QAction *findAction;
+    QAction *replaceAction;
+    QAction *jumpLineAction;
+    QAction *fullscreenAction;
+    QAction *exitFullscreenAction;
+    QAction *convertCaseAction;
+    QAction *openInFileManagerAction;
+    QAction *setttingAction;
     
     bool setCursorKeywordSeletoin(int position, bool findNext);
 };

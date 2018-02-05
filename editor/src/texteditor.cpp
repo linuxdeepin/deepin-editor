@@ -23,16 +23,19 @@
 
 #include "texteditor.h"
 #include "utils.h"
+#include "window.h"
 
 #include "Definition"
 #include "SyntaxHighlighter"
 #include "Theme"
 
+#include <DDesktopServices>
 #include <QApplication>
 #include <QFileInfo>
 #include <QDebug>
 #include <QPainter>
 #include <QScrollBar>
+#include <QStyleFactory>
 #include <QTextBlock>
 #include <QTimer>
 
@@ -51,13 +54,13 @@ public:
     TextEditor *editor;
 };
 
-TextEditor::TextEditor(QPlainTextEdit *parent) : 
+TextEditor::TextEditor(QPlainTextEdit *parent) :
     QPlainTextEdit(parent),
     m_highlighter(new KSyntaxHighlighting::SyntaxHighlighter(document()))
 {
     // Don't draw background.
     viewport()->setAutoFillBackground(false);
-    
+
     // Init highlight theme.
     setTheme((palette().color(QPalette::Base).lightness() < 128)
              ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
@@ -65,10 +68,45 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
 
     // Init widgets.
     lineNumberArea = new LineNumberArea(this);
-    
+
     connect(this, &QPlainTextEdit::updateRequest, this, &TextEditor::handleUpdateRequest);
     connect(this, &QPlainTextEdit::textChanged, this, &TextEditor::updateLineNumber, Qt::QueuedConnection);
     connect(this, &QPlainTextEdit::cursorPositionChanged, this, &TextEditor::highlightCurrentLine, Qt::QueuedConnection);
+
+    // Init menu.
+    rightMenu = new QMenu();
+    rightMenu->setStyle(QStyleFactory::create("dlight"));
+    undoAction = new QAction("Undo", this);
+    redoAction = new QAction("Redo", this);
+    cutAction = new QAction("Cut", this);
+    copyAction = new QAction("Copy", this);
+    pasteAction = new QAction("Paste", this);
+    deleteAction = new QAction("Delete", this);
+    selectAllAction = new QAction("Select All", this);
+    findAction = new QAction("Find", this);
+    replaceAction = new QAction("Replace", this);
+    jumpLineAction = new QAction("Jump line", this);
+    fullscreenAction = new QAction("Fullscreen", this);
+    exitFullscreenAction = new QAction("Exit fullscreen", this);
+    convertCaseAction = new QAction("Covert Case", this);
+    openInFileManagerAction = new QAction("Open in file manager", this);
+    setttingAction = new QAction("Setting", this);
+
+    connect(undoAction, &QAction::triggered, this, &TextEditor::clickUndoAction);
+    connect(redoAction, &QAction::triggered, this, &TextEditor::clickRedoAction);
+    connect(cutAction, &QAction::triggered, this, &TextEditor::clickCutAction);
+    connect(copyAction, &QAction::triggered, this, &TextEditor::clickCopyAction);
+    connect(pasteAction, &QAction::triggered, this, &TextEditor::clickPasteAction);
+    connect(deleteAction, &QAction::triggered, this, &TextEditor::clickDeleteAction);
+    connect(selectAllAction, &QAction::triggered, this, &TextEditor::clickSelectAllAction);
+    connect(findAction, &QAction::triggered, this, &TextEditor::clickFindAction);
+    connect(replaceAction, &QAction::triggered, this, &TextEditor::clickReplaceAction);
+    connect(jumpLineAction, &QAction::triggered, this, &TextEditor::clickJumpLineAction);
+    connect(fullscreenAction, &QAction::triggered, this, &TextEditor::clickFullscreenAction);
+    connect(exitFullscreenAction, &QAction::triggered, this, &TextEditor::clickFullscreenAction);
+    connect(convertCaseAction, &QAction::triggered, this, &TextEditor::clickConvertCaseAction);
+    connect(openInFileManagerAction, &QAction::triggered, this, &TextEditor::clickOpenInFileManagerAction);
+    connect(setttingAction, &QAction::triggered, this, &TextEditor::clickSetttingAction);
 
     // Init scroll animation.
     scrollAnimation = new QPropertyAnimation(verticalScrollBar(), "value");
@@ -176,7 +214,7 @@ void TextEditor::prevLine()
 void TextEditor::jumpToLine(int line, bool keepLineAtCenter)
 {
     QTextCursor cursor(document()->findBlockByLineNumber(line - 1)); // line - 1 because line number starts from 0
-    
+
     // Update cursor.
     setTextCursor(cursor);
 
@@ -229,7 +267,7 @@ void TextEditor::swapLineUp(){
     // Restore cursor's column.
     cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, column);
-    
+
     // Update cursor.
     setTextCursor(cursor);
 }
@@ -266,7 +304,7 @@ void TextEditor::swapLineDown(){
     // Restore cursor's column.
     cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, column);
-    
+
     // Update cursor.
     setTextCursor(cursor);
 }
@@ -286,11 +324,11 @@ void TextEditor::duplicateLine()
     cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
     cursor.insertText("\n");
     cursor.insertText(text);
-    
+
     // Restore cursor's column.
     cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, column);
-    
+
     // Update cursor.
     setTextCursor(cursor);
 }
@@ -380,7 +418,7 @@ void TextEditor::replaceAll(QString replaceText, QString withText)
 
     // Update cursor.
     setTextCursor(cursor);
-    
+
     highlightKeyword(replaceText, getPosition());
 }
 
@@ -412,20 +450,20 @@ void TextEditor::replaceRest(QString replaceText, QString withText)
 
     // Update cursor.
     setTextCursor(cursor);
-    
+
     highlightKeyword(replaceText, getPosition());
 }
 
 void TextEditor::removeKeywords()
 {
     cursorKeywordSelection.cursor = textCursor();
-    
+
     keywordSelections.clear();
-    
+
     updateHighlightLineSeleciton();
 
     renderAllSelections();
-    
+
     setFocus();
 }
 
@@ -553,7 +591,7 @@ void TextEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
     // Init.
     QPainter painter(lineNumberArea);
     painter.fillRect(event->rect(), QColor("#202020"));
-    
+
     QColor lineColor = QColor("#ffffff");
     lineColor.setAlphaF(0.05);
     painter.fillRect(QRect(event->rect().x() + event->rect().width() - 1, event->rect().y(), 1, event->rect().height()), lineColor);
@@ -584,6 +622,36 @@ void TextEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
     }
 }
 
+void TextEditor::contextMenuEvent(QContextMenuEvent *event)
+{
+    rightMenu->clear();
+
+    rightMenu->addAction(undoAction);
+    rightMenu->addAction(redoAction);
+    rightMenu->addSeparator();
+    rightMenu->addAction(cutAction);
+    rightMenu->addAction(copyAction);
+    rightMenu->addAction(pasteAction);
+    rightMenu->addAction(deleteAction);
+    rightMenu->addAction(selectAllAction);
+    rightMenu->addSeparator();
+    rightMenu->addAction(findAction);
+    rightMenu->addAction(replaceAction);
+    rightMenu->addAction(jumpLineAction);
+    rightMenu->addSeparator();
+    rightMenu->addAction(convertCaseAction);
+    rightMenu->addAction(openInFileManagerAction);
+    rightMenu->addSeparator();
+    if (static_cast<Window*>(this->window())->isFullScreen()) {
+        rightMenu->addAction(exitFullscreenAction);
+    } else {
+        rightMenu->addAction(fullscreenAction);
+    }
+    rightMenu->addAction(setttingAction);
+
+    rightMenu->exec(event->globalPos());
+}
+
 void TextEditor::highlightCurrentLine()
 {
     updateHighlightLineSeleciton();
@@ -603,7 +671,7 @@ void TextEditor::handleScrollFinish()
     QTextCursor cursor = textCursor();
     cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, restoreColumn);
-    
+
     // Update cursor.
     setTextCursor(cursor);
 }
@@ -631,7 +699,7 @@ bool TextEditor::setCursorKeywordSeletoin(int position, bool findNext)
 
                 QTextCursor cursor = textCursor();
                 cursor.setPosition(keywordSelections[i].cursor.position());
-                
+
                 // Update cursor.
                 setTextCursor(cursor);
 
@@ -650,7 +718,7 @@ bool TextEditor::setCursorKeywordSeletoin(int position, bool findNext)
 
                 QTextCursor cursor = textCursor();
                 cursor.setPosition(keywordSelections[i].cursor.position());
-                
+
                 // Update cursor.
                 setTextCursor(cursor);
 
@@ -680,4 +748,54 @@ void TextEditor::loadHighlighter()
 {
     const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());
     m_highlighter->setDefinition(def);
+}
+
+void TextEditor::clickUndoAction()
+{
+
+}
+
+void TextEditor::clickRedoAction()
+{
+
+}
+
+void TextEditor::clickCutAction()
+{
+
+}
+
+void TextEditor::clickCopyAction()
+{
+
+}
+
+void TextEditor::clickPasteAction()
+{
+
+}
+
+void TextEditor::clickDeleteAction()
+{
+
+}
+
+void TextEditor::clickSelectAllAction()
+{
+
+}
+
+void TextEditor::clickConvertCaseAction()
+{
+
+}
+
+void TextEditor::clickOpenInFileManagerAction()
+{
+    DDesktopServices::showFileItem(filepath);
+}
+
+void TextEditor::clickSetttingAction()
+{
+
 }
