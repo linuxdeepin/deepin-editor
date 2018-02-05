@@ -128,6 +128,11 @@ Window* StartManager::createWindow(bool alwaysCenter)
     window->show();
 
     initWindowPosition(window, alwaysCenter);
+    
+    connect(window, &Window::newWindow, this, 
+            [=] () {
+                openFilesInWindow(QStringList());
+            });
 
     // Append window in window list.
     windows << window;

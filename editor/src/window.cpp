@@ -36,6 +36,7 @@
 #include <QLabel>
 #include <QScreen>
 #include <QSvgWidget>
+#include <QStyleFactory>
 
 DWIDGET_USE_NAMESPACE
 
@@ -67,20 +68,45 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     layout->addWidget(editorWidget);
 
     // Init titlebar.
-    tabbar = new Tabbar();
-    this->titlebar()->setCustomWidget(tabbar, Qt::AlignVCenter, false);
-    this->titlebar()->setSeparatorVisible(true);
-    this->titlebar()->setAutoHideOnFullscreen(true);
-    this->titlebar()->setBackgroundTransparent(true);
+    if (this->titlebar()) {
+        // Init tabbar.
+        tabbar = new Tabbar();
+        this->titlebar()->setCustomWidget(tabbar, Qt::AlignVCenter, false);
+        this->titlebar()->setSeparatorVisible(true);
+        this->titlebar()->setAutoHideOnFullscreen(true);
+        this->titlebar()->setBackgroundTransparent(true);
 
-    connect(tabbar, &Tabbar::doubleClicked, this->titlebar(), &DTitlebar::doubleClicked, Qt::QueuedConnection);
-    connect(tabbar, &Tabbar::switchToFile, this, &Window::handleSwitchToFile, Qt::QueuedConnection);
-    connect(tabbar, &Tabbar::closeFile, this, &Window::handleCloseFile, Qt::QueuedConnection);
-    connect(tabbar, &Tabbar::tabAddRequested, this,
-            [=]() {
-                addBlankTab();
-            }, Qt::QueuedConnection);
-    connect(tabbar, &Tabbar::tabReleaseRequested, this, &Window::handleTabReleaseRequested, Qt::QueuedConnection);
+        connect(tabbar, &Tabbar::doubleClicked, this->titlebar(), &DTitlebar::doubleClicked, Qt::QueuedConnection);
+        connect(tabbar, &Tabbar::switchToFile, this, &Window::handleSwitchToFile, Qt::QueuedConnection);
+        connect(tabbar, &Tabbar::closeFile, this, &Window::handleCloseFile, Qt::QueuedConnection);
+        connect(tabbar, &Tabbar::tabAddRequested, this,
+                [=]() {
+                    addBlankTab();
+                }, Qt::QueuedConnection);
+        connect(tabbar, &Tabbar::tabReleaseRequested, this, &Window::handleTabReleaseRequested, Qt::QueuedConnection);
+        
+        menu = new QMenu();
+        menu->setStyle(QStyleFactory::create("dlight"));
+        
+        // Init main menu.
+        newWindowAction = new QAction("New window", this);
+        saveAction = new QAction("Save", this);
+        saveAsAction = new QAction("Save as", this);
+        printAction = new QAction("Print", this);
+        switchThemeAction = new QAction("Switch theme", this);
+        settingAction = new QAction("Setting", this);
+        
+        menu->addAction(newWindowAction);
+        menu->addAction(saveAction);
+        menu->addAction(saveAsAction);
+        menu->addAction(printAction);
+        menu->addAction(switchThemeAction);
+        menu->addSeparator();
+        menu->addAction(settingAction);
+        this->titlebar()->setMenu(menu);
+        
+        connect(newWindowAction, &QAction::triggered, this, &Window::newWindow);
+    }
 
     // Init find bar.
     findBar = new FindBar();

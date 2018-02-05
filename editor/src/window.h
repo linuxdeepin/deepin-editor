@@ -82,6 +82,7 @@ public:
     
 signals:
     void dropTabOut(QString tabName, QString filepath, QString content);
+    void newWindow();
     
 public slots:
     void addBlankTab(QString blankFile="");
@@ -125,6 +126,14 @@ private:
     Tabbar *tabbar;
     int fontSize;
     int toastPaddingBottom = 100;
+    
+    QMenu *menu;
+    QAction *newWindowAction;
+    QAction *saveAction;
+    QAction *saveAsAction;
+    QAction *printAction;
+    QAction *switchThemeAction;
+    QAction *settingAction;
     
     void removeActiveBlankTab(bool needSaveBefore=false);
     
