@@ -44,7 +44,7 @@ Tabbar::Tabbar()
     layout->addWidget(iconLabel, 0, Qt::AlignTop);
     layout->addSpacing(10);
     layout->addWidget(tabbar, 0, Qt::AlignTop);
-    layout->addSpacing(40);
+    layout->addSpacing(70);
 
     connect(tabbar, &TabWidget::closeOtherTabs, this, &Tabbar::handleCloseOtherTabs, Qt::QueuedConnection);
     connect(tabbar, &TabWidget::closeTab, this, &Tabbar::closeTabWithIndex, Qt::QueuedConnection);
