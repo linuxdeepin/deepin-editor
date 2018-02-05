@@ -40,7 +40,7 @@ public:
     void setOption(const QString &key, const QVariant &value);
     
     int defaultFontSize = 12;
-    int maxFontSize = 130;
+    int maxFontSize = 50;
     int minFontSize = 8;
     
 private:
