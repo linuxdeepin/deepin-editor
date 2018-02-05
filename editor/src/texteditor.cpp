@@ -557,7 +557,7 @@ void TextEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
     int bottom = top + (int) blockBoundingRect(block).height();
     int linenumber = block.blockNumber();
 
-    Utils::setFontSize(painter, document()->defaultFont().pointSize());
+    Utils::setFontSize(painter, document()->defaultFont().pointSize() - 1);
     while (block.isValid() && top <= event->rect().bottom()) {
         if (block.isVisible() && bottom >= event->rect().top()) {
             painter.setPen(QColor("#666666"));
