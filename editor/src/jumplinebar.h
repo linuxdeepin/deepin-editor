@@ -44,9 +44,12 @@ public:
 public slots:    
     void focus();
     bool isFocus();
+    
     void activeInput(QString file, int row, int column, int lineCount, int scrollOffset);
+    
     void handleFocusOut();
     void handleLineChanged();
+    
     void jumpCancel();
     void jumpConfirm();
     

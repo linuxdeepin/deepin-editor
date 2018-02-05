@@ -50,6 +50,16 @@ JumpLineBar::JumpLineBar(QWidget *parent) : QWidget(parent)
     connect(editLine, &LineBar::focusOut, this, &JumpLineBar::handleFocusOut, Qt::QueuedConnection);
 }
 
+void JumpLineBar::focus()
+{
+    editLine->setFocus();
+}
+
+bool JumpLineBar::isFocus()
+{
+    return editLine->hasFocus();
+}
+
 void JumpLineBar::activeInput(QString file, int row, int column, int lineCount, int scrollOffset)
 {
     // Save file info for back to line.
@@ -70,14 +80,19 @@ void JumpLineBar::activeInput(QString file, int row, int column, int lineCount, 
     editLine->setFocus();
 }
 
-bool JumpLineBar::isFocus()
+void JumpLineBar::handleFocusOut()
 {
-    return editLine->hasFocus();
+    hide();
+    
+    lostFocusExit();
 }
 
-void JumpLineBar::focus()
+void JumpLineBar::handleLineChanged()
 {
-    editLine->setFocus();
+    QString content = editLine->text();
+    if (content != "") {
+        jumpToLine(jumpFile, content.toInt(), false);
+    }
 }
 
 void JumpLineBar::jumpCancel()
@@ -97,21 +112,6 @@ void JumpLineBar::jumpConfirm()
     }
 }
 
-void JumpLineBar::handleLineChanged()
-{
-    QString content = editLine->text();
-    if (content != "") {
-        jumpToLine(jumpFile, content.toInt(), false);
-    }
-}
-
-void JumpLineBar::handleFocusOut()
-{
-    hide();
-    
-    lostFocusExit();
-}
-
 void JumpLineBar::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
@@ -120,4 +120,3 @@ void JumpLineBar::paintEvent(QPaintEvent *)
     path.addRect(rect());
     painter.fillPath(path, QColor("#202020"));
 }
-
