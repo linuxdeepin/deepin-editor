@@ -31,6 +31,7 @@
 
 #include <DDesktopServices>
 #include <QApplication>
+#include <QClipboard>
 #include <QFileInfo>
 #include <QDebug>
 #include <QPainter>
@@ -90,8 +91,8 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     exitFullscreenAction = new QAction("Exit fullscreen", this);
     convertCaseAction = new QAction("Covert Case", this);
     openInFileManagerAction = new QAction("Open in file manager", this);
-    setttingAction = new QAction("Setting", this);
 
+    connect(rightMenu, &QMenu::aboutToHide, this, &TextEditor::removeHighlightWordUnderCursor);
     connect(undoAction, &QAction::triggered, this, &TextEditor::undo);
     connect(redoAction, &QAction::triggered, this, &TextEditor::redo);
     connect(cutAction, &QAction::triggered, this, &TextEditor::clickCutAction);
@@ -106,16 +107,15 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     connect(exitFullscreenAction, &QAction::triggered, this, &TextEditor::clickFullscreenAction);
     connect(convertCaseAction, &QAction::triggered, this, &TextEditor::clickConvertCaseAction);
     connect(openInFileManagerAction, &QAction::triggered, this, &TextEditor::clickOpenInFileManagerAction);
-    connect(setttingAction, &QAction::triggered, this, &TextEditor::clickSetttingAction);
-    
+
     canUndo = false;
     canRedo = false;
-    
-    connect(this, &TextEditor::undoAvailable, this, 
+
+    connect(this, &TextEditor::undoAvailable, this,
             [=] (bool undoIsAvailable) {
                 canUndo = undoIsAvailable;
             });
-    connect(this, &TextEditor::redoAvailable, this, 
+    connect(this, &TextEditor::redoAvailable, this,
             [=] (bool redoIsAvailable) {
                 canRedo = redoIsAvailable;
             });
@@ -553,6 +553,7 @@ void TextEditor::renderAllSelections()
     selections.append(currentLineSelection);
     selections.append(keywordSelections);
     selections.append(cursorKeywordSelection);
+    selections.append(wordUnderCursorSelection);
 
     setExtraSelections(selections);
 }
@@ -645,6 +646,9 @@ void TextEditor::contextMenuEvent(QContextMenuEvent *event)
         rightMenu->addAction(redoAction);
     }
     rightMenu->addSeparator();
+    if (!textCursor().hasSelection()) {
+        highlightWordUnderCursor(event->pos());
+    }
     rightMenu->addAction(cutAction);
     rightMenu->addAction(copyAction);
     if (canPaste()) {
@@ -667,7 +671,6 @@ void TextEditor::contextMenuEvent(QContextMenuEvent *event)
     } else {
         rightMenu->addAction(fullscreenAction);
     }
-    rightMenu->addAction(setttingAction);
 
     rightMenu->exec(event->globalPos());
 }
@@ -770,14 +773,47 @@ void TextEditor::loadHighlighter()
     m_highlighter->setDefinition(def);
 }
 
+void TextEditor::highlightWordUnderCursor(QPoint pos)
+{
+    QTextEdit::ExtraSelection selection;
+
+    QColor lineColor = QColor("#660000");
+
+    selection.format.setBackground(lineColor);
+    selection.cursor = cursorForPosition(pos);
+    selection.cursor.select(QTextCursor::WordUnderCursor);
+    
+    wordUnderCursorSelection = selection;
+    
+    renderAllSelections();
+}
+
+void TextEditor::removeHighlightWordUnderCursor()
+{
+    highlightWordCacheCursor = wordUnderCursorSelection.cursor;
+    
+    QTextEdit::ExtraSelection selection;
+    wordUnderCursorSelection = selection;
+    
+    renderAllSelections();
+}
+
 void TextEditor::clickCutAction()
 {
-
+    if (textCursor().hasSelection()) {
+        cut();
+    } else {
+        cutWordUnderCursor();
+    }
 }
 
 void TextEditor::clickCopyAction()
 {
-
+    if (textCursor().hasSelection()) {
+        copy();
+    } else {
+        copyWordUnderCursor();
+    }
 }
 
 void TextEditor::clickDeleteAction()
@@ -787,7 +823,6 @@ void TextEditor::clickDeleteAction()
 
 void TextEditor::clickConvertCaseAction()
 {
-
 }
 
 void TextEditor::clickOpenInFileManagerAction()
@@ -795,7 +830,17 @@ void TextEditor::clickOpenInFileManagerAction()
     DDesktopServices::showFileItem(filepath);
 }
 
-void TextEditor::clickSetttingAction()
+void TextEditor::copyWordUnderCursor()
 {
+    QClipboard *clipboard = QApplication::clipboard();
+    clipboard->setText(highlightWordCacheCursor.selectedText());
+}
 
+void TextEditor::cutWordUnderCursor()
+{
+    QClipboard *clipboard = QApplication::clipboard();
+    clipboard->setText(highlightWordCacheCursor.selectedText());
+    
+    setTextCursor(highlightWordCacheCursor);
+    textCursor().removeSelectedText();
 }

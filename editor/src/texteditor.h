@@ -92,6 +92,9 @@ public:
                                                      
     void setTheme(const KSyntaxHighlighting::Theme &theme);
     void loadHighlighter();
+    
+    void highlightWordUnderCursor(QPoint pos);
+    void removeHighlightWordUnderCursor();
 
 signals:
     void clickFindAction();
@@ -110,7 +113,9 @@ public slots:
     void clickDeleteAction();
     void clickConvertCaseAction();
     void clickOpenInFileManagerAction();
-    void clickSetttingAction();
+    
+    void copyWordUnderCursor();
+    void cutWordUnderCursor();
     
 private:
     QPropertyAnimation *scrollAnimation;
@@ -118,6 +123,8 @@ private:
     QList<QTextEdit::ExtraSelection> keywordSelections;
     QTextEdit::ExtraSelection currentLineSelection;
     QTextEdit::ExtraSelection cursorKeywordSelection;
+    QTextEdit::ExtraSelection wordUnderCursorSelection;
+    QTextCursor highlightWordCacheCursor;
     
     int lineNumberOffset = 2;
     int lineNumberPaddingX = 5;
@@ -143,7 +150,6 @@ private:
     QAction *exitFullscreenAction;
     QAction *convertCaseAction;
     QAction *openInFileManagerAction;
-    QAction *setttingAction;
     
     bool canUndo;
     bool canRedo;
