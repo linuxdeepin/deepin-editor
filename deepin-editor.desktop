@@ -1,7 +1,7 @@
 [Desktop Entry]
 Categories=System;Qt;
 Comment=Simple and easy to use deepin editor
-Exec=deepin-editor %U
+Exec=deepin-editor %F
 GenericName=Editor
 Icon=deepin-editor
 MimeType=text/plain;
