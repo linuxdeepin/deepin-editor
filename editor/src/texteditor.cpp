@@ -96,7 +96,7 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     connect(redoAction, &QAction::triggered, this, &TextEditor::redo);
     connect(cutAction, &QAction::triggered, this, &TextEditor::clickCutAction);
     connect(copyAction, &QAction::triggered, this, &TextEditor::clickCopyAction);
-    connect(pasteAction, &QAction::triggered, this, &TextEditor::clickPasteAction);
+    connect(pasteAction, &QAction::triggered, this, &TextEditor::paste);
     connect(deleteAction, &QAction::triggered, this, &TextEditor::clickDeleteAction);
     connect(selectAllAction, &QAction::triggered, this, &TextEditor::selectAll);
     connect(findAction, &QAction::triggered, this, &TextEditor::clickFindAction);
@@ -647,7 +647,9 @@ void TextEditor::contextMenuEvent(QContextMenuEvent *event)
     rightMenu->addSeparator();
     rightMenu->addAction(cutAction);
     rightMenu->addAction(copyAction);
-    rightMenu->addAction(pasteAction);
+    if (canPaste()) {
+        rightMenu->addAction(pasteAction);
+    }
     if (textCursor().hasSelection()) {
         rightMenu->addAction(deleteAction);
     }
@@ -774,11 +776,6 @@ void TextEditor::clickCutAction()
 }
 
 void TextEditor::clickCopyAction()
-{
-
-}
-
-void TextEditor::clickPasteAction()
 {
 
 }

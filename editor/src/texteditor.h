@@ -107,7 +107,6 @@ public slots:
     
     void clickCutAction();
     void clickCopyAction();
-    void clickPasteAction();
     void clickDeleteAction();
     void clickConvertCaseAction();
     void clickOpenInFileManagerAction();
