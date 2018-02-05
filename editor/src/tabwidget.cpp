@@ -46,19 +46,6 @@ TabWidget::TabWidget()
     rightClickTab = -1;
 }
 
-QPixmap TabWidget::createDragPixmapFromTab(int index, const QStyleOptionTab &, QPoint *) const
-{
-    // Take editor's screenshot as drag image.
-    TextEditor *textEditor = static_cast<Window*>(this->window())->getTextEditor(tabFiles[index]);
-    int width = textEditor->width();
-    int height = textEditor->height();
-    QPixmap pixmap(width, height);
-    textEditor->render(&pixmap, QPoint(), QRegion(0, 0, width, height));
-
-    // We need make editor screenshot smaller.
-    return pixmap.scaled(width / 5, height / 5);
-}
-
 QMimeData* TabWidget::createMimeDataFromTab(int index, const QStyleOptionTab &) const
 {
     // Get tab name, path, and content.
@@ -77,6 +64,19 @@ QMimeData* TabWidget::createMimeDataFromTab(int index, const QStyleOptionTab &) 
     return mimeData;
 }
 
+QPixmap TabWidget::createDragPixmapFromTab(int index, const QStyleOptionTab &, QPoint *) const
+{
+    // Take editor's screenshot as drag image.
+    TextEditor *textEditor = static_cast<Window*>(this->window())->getTextEditor(tabFiles[index]);
+    int width = textEditor->width();
+    int height = textEditor->height();
+    QPixmap pixmap(width, height);
+    textEditor->render(&pixmap, QPoint(), QRegion(0, 0, width, height));
+
+    // We need make editor screenshot smaller.
+    return pixmap.scaled(width / 5, height / 5);
+}
+
 bool TabWidget::canInsertFromMimeData(int, const QMimeData *) const
 {
     // Any index can insert.
@@ -93,6 +93,20 @@ void TabWidget::insertFromMimeData(int, const QMimeData *source)
     QString tabContent = content.remove(0, tabName.size() + tabPath.size() + 2); // 2 mean two \n char
 
     static_cast<Window*>(this->window())->addTabWithContent(tabName, tabPath, tabContent);
+}
+
+void TabWidget::handleCloseTab()
+{
+    if (rightClickTab >= 0) {
+        closeTab(rightClickTab);
+    }
+}
+
+void TabWidget::handleCloseOtherTabs()
+{
+    if (rightClickTab >= 0) {
+        closeOtherTabs(rightClickTab);
+    }
 }
 
 bool TabWidget::eventFilter(QObject *, QEvent *event)
@@ -132,18 +146,4 @@ bool TabWidget::eventFilter(QObject *, QEvent *event)
     }
 
     return false;
-}
-
-void TabWidget::handleCloseTab()
-{
-    if (rightClickTab >= 0) {
-        closeTab(rightClickTab);
-    }
-}
-
-void TabWidget::handleCloseOtherTabs()
-{
-    if (rightClickTab >= 0) {
-        closeOtherTabs(rightClickTab);
-    }
 }

@@ -41,14 +41,15 @@ public:
     TabWidget();
     
     QList<QString> tabFiles;
+    
     QMimeData *createMimeDataFromTab(int index, const QStyleOptionTab &option) const;
     QPixmap createDragPixmapFromTab(int index, const QStyleOptionTab &option, QPoint *hotspot) const;
     bool canInsertFromMimeData(int index, const QMimeData *source) const;
     void insertFromMimeData(int index, const QMimeData *source);    
                            
 signals:
-    void closeOtherTabs(int index);
     void closeTab(int index);
+    void closeOtherTabs(int index);
     
 public slots:
     void handleCloseOtherTabs();
