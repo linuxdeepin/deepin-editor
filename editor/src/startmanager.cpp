@@ -110,31 +110,9 @@ void StartManager::openFilesInTab(QStringList files)
     }
 }
 
-StartManager::FileTabInfo StartManager::getFileTabInfo(QString file)
+void StartManager::createWindowFromTab(QString tabName, QString filepath, QString content)
 {
-    FileTabInfo info = {-1, -1};
-
-    foreach (Window *window, windows) {
-        int tabIndex = window->getTabIndex(file);
-        if (tabIndex >= 0) {
-            info.windowIndex = windows.indexOf(window);
-            info.tabIndex = tabIndex;
-            break;
-        }
-    }
-
-    return info;
-}
-
-void StartManager::initWindowPosition(Window *window, bool alwaysCenter)
-{
-    if (windows.size() == 0 || alwaysCenter) {
-        Dtk::Widget::moveToCenter(window);
-    } else {
-        // Add window offset to avoid all editor window popup at same coordinate.
-        int windowOffset = 50;
-        window->move(windows.size() * windowOffset, windows.size() * windowOffset);
-    }
+    createWindow()->addTabWithContent(tabName, filepath, content);
 }
 
 Window* StartManager::createWindow(bool alwaysCenter)
@@ -157,12 +135,34 @@ Window* StartManager::createWindow(bool alwaysCenter)
     return window;
 }
 
+void StartManager::initWindowPosition(Window *window, bool alwaysCenter)
+{
+    if (windows.size() == 0 || alwaysCenter) {
+        Dtk::Widget::moveToCenter(window);
+    } else {
+        // Add window offset to avoid all editor window popup at same coordinate.
+        int windowOffset = 50;
+        window->move(windows.size() * windowOffset, windows.size() * windowOffset);
+    }
+}
+
 void StartManager::popupExistTabs(FileTabInfo info)
 {
     windows[info.windowIndex]->activeTab(info.tabIndex);
 }
 
-void StartManager::createWindowFromTab(QString tabName, QString filepath, QString content)
+StartManager::FileTabInfo StartManager::getFileTabInfo(QString file)
 {
-    createWindow()->addTabWithContent(tabName, filepath, content);
+    FileTabInfo info = {-1, -1};
+
+    foreach (Window *window, windows) {
+        int tabIndex = window->getTabIndex(file);
+        if (tabIndex >= 0) {
+            info.windowIndex = windows.indexOf(window);
+            info.tabIndex = tabIndex;
+            break;
+        }
+    }
+
+    return info;
 }

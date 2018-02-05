@@ -52,10 +52,10 @@ public slots:
 private:
     QList<Window*> windows;
     
-    FileTabInfo getFileTabInfo(QString file);
     Window* createWindow(bool alwaysCenter=false);
     void initWindowPosition(Window *window, bool alwaysCenter=false);
     void popupExistTabs(FileTabInfo info);
+    FileTabInfo getFileTabInfo(QString file);
 };
 
 #endif
