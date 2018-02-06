@@ -124,7 +124,7 @@ Window* StartManager::createWindow(bool alwaysCenter)
     // Init window position.
     QScreen *screen = QGuiApplication::primaryScreen();
     QRect screenGeometry = screen->geometry();
-    window->setMinimumSize(QSize(screenGeometry.width() * 3 / 5, screenGeometry.height() * 3 / 5));
+    window->resize(QSize(screenGeometry.width() * 3 / 5, screenGeometry.height() * 3 / 5));
     window->show();
 
     initWindowPosition(window, alwaysCenter);
