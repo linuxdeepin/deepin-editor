@@ -237,6 +237,7 @@ void TextEditor::jumpToLine(int line, bool keepLineAtCenter)
 
 void TextEditor::openNewlineAbove()
 {
+    moveCursor(QTextCursor::StartOfLine);
     textCursor().insertText("\n");
     prevLine();
 }
