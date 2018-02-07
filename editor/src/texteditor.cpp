@@ -187,6 +187,30 @@ void TextEditor::backwardWord()
     moveCursor(QTextCursor::PreviousWord);
 }
 
+void TextEditor::forwardPair()
+{
+    if (find(QRegExp("[\"'>)}]"))) {
+        QTextCursor cursor = textCursor();
+        cursor.clearSelection();
+        
+        setTextCursor(cursor);
+    }
+}
+
+void TextEditor::backwardPair()
+{
+    QTextDocument::FindFlags options;
+    options |= QTextDocument::FindBackward;
+    
+    if (find(QRegExp("[\"'<({]"), options)) {
+        QTextCursor cursor = textCursor();
+        cursor.clearSelection();
+        cursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor);
+        
+        setTextCursor(cursor);
+    }
+}
+
 void TextEditor::moveToStartOfLine()
 {
     moveCursor(QTextCursor::StartOfLine);
@@ -771,6 +795,10 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         killBackwardWord();
     } else if (key == "Alt + Shift + M") {
         killForwardWord();
+    } else if (key == "Alt + P") {
+        forwardPair();
+    } else if (key == "Alt + N") {
+        backwardPair();
     } else {
         QPlainTextEdit::keyPressEvent(keyEvent);
     }

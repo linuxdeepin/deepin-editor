@@ -57,6 +57,8 @@ public:
     void backwardChar();
     void forwardWord();
     void backwardWord();
+    void forwardPair();
+    void backwardPair();
     
     void moveToStartOfLine();
     void moveToEndOfLine();
