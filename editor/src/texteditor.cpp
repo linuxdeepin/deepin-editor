@@ -391,6 +391,55 @@ void TextEditor::insertTab()
     textCursor().insertText(spaces);
 }
 
+void TextEditor::upcaseWord()
+{
+    convertWordCase(UPPER);
+}
+
+void TextEditor::downcaseWord()
+{
+    convertWordCase(LOWER);
+}
+
+void TextEditor::capitalizeWord()
+{
+    convertWordCase(CAPITALIZE);
+}
+
+void TextEditor::convertWordCase(ConvertCase convertCase)
+{
+    if (textCursor().hasSelection()) {
+        QString text = textCursor().selectedText();
+
+        if (convertCase == UPPER) {
+            textCursor().insertText(text.toUpper());
+        } else if (convertCase == LOWER) {
+            textCursor().insertText(text.toLower());
+        } else {
+            text = text.toLower();
+            text.replace(0, 1, text[0].toUpper());
+            textCursor().insertText(text);
+        }
+    } else {
+        QTextCursor cursor = textCursor();
+        cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
+        cursor.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
+
+        QString text = cursor.selectedText();
+        if (convertCase == UPPER) {
+            cursor.insertText(text.toUpper());
+        } else if (convertCase == LOWER) {
+            cursor.insertText(text.toLower());
+        } else {
+            text = text.toLower();
+            text.replace(0, 1, text[0].toUpper());
+            cursor.insertText(text);
+        }
+
+        setTextCursor(cursor);
+    }
+}
+
 void TextEditor::keepCurrentLineAtCenter()
 {
     QScrollBar *scrollbar = verticalScrollBar();
@@ -603,6 +652,12 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         moveToStartOfLine();
     } else if (key == "Alt + M") {
         moveToLineIndentation();
+    } else if (key == "Alt + U") {
+        upcaseWord();
+    } else if (key == "Alt + L") {
+        downcaseWord();
+    } else if (key == "Alt + C") {
+        capitalizeWord();
     } else {
         QPlainTextEdit::keyPressEvent(keyEvent);
     }
@@ -789,7 +844,7 @@ bool TextEditor::highlightWordUnderMouse(QPoint pos)
 {
     // Get cursor match mouse pointer coordinate, but cursor maybe not under mouse pointer.
     QTextCursor cursor(cursorForPosition(pos));
-    
+
     // Get cursor rectangle.
     auto rect = cursorRect(cursor);
     int widthOffset = 10;

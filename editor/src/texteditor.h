@@ -36,6 +36,8 @@ namespace KSyntaxHighlighting {
     class SyntaxHighlighter;
 }
 
+enum ConvertCase {UPPER, LOWER, CAPITALIZE};
+
 class TextEditor : public QPlainTextEdit
 {
     Q_OBJECT
@@ -69,7 +71,12 @@ public:
     void swapLineUp();
     void duplicateLine();
     void killLine();
+    
     void insertTab();
+    void upcaseWord();
+    void downcaseWord();
+    void capitalizeWord();
+    void convertWordCase(ConvertCase convertCase);
     
     void keepCurrentLineAtCenter();
     void scrollToLine(int scrollOffset, int row, int column);
