@@ -130,6 +130,8 @@ private:
     
     QMenu *menu;
     QAction *newWindowAction;
+    QAction *newTabAction;
+    QAction *openFileAction;
     QAction *saveAction;
     QAction *saveAsAction;
     QAction *printAction;

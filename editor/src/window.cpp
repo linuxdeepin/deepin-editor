@@ -98,6 +98,8 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
         
         // Init main menu.
         newWindowAction = new QAction("New window", this);
+        newTabAction = new QAction("New tab", this);
+        openFileAction = new QAction("Open file", this);
         saveAction = new QAction("Save", this);
         saveAsAction = new QAction("Save as", this);
         printAction = new QAction("Print", this);
@@ -105,6 +107,9 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
         settingAction = new QAction("Setting", this);
         
         menu->addAction(newWindowAction);
+        menu->addAction(newTabAction);
+        menu->addAction(openFileAction);
+        menu->addSeparator();
         menu->addAction(saveAction);
         menu->addAction(saveAsAction);
         menu->addAction(printAction);
@@ -114,6 +119,11 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
         this->titlebar()->setMenu(menu);
         
         connect(newWindowAction, &QAction::triggered, this, &Window::newWindow);
+        connect(newTabAction, &QAction::triggered, this,
+                [=] () {
+                    addBlankTab();
+                });
+        connect(openFileAction, &QAction::triggered, this, &Window::openFile);
         connect(saveAction, &QAction::triggered, this, &Window::saveFile);
         connect(saveAsAction, &QAction::triggered, this, &Window::saveAsFile);
         connect(printAction, &QAction::triggered, this, &Window::popupPrintDialog);
