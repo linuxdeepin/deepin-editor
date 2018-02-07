@@ -42,6 +42,7 @@
 #include <QPrinter>
 #include <QScreen>
 #include <QStyleFactory>
+#include <QTextCodec>
 #include <QSvgWidget>
 #include <QTemporaryFile>
 #include <qsettingbackend.h>
@@ -284,7 +285,7 @@ void Window::openFile()
 bool Window::saveFile()
 {
     if (QFileInfo(tabbar->getActiveTabPath()).dir().absolutePath() == blankFileDir) {
-        QString filepath = QFileDialog::getSaveFileName(this, "Save File", QDir::homePath());
+        QString filepath = QFileDialog::getSaveFileName(this, "Save File", QDir::homePath(), getEncodeList().join(";;"));
 
         if (filepath != "") {
             QString tabPath = tabbar->getActiveTabPath();
@@ -311,7 +312,7 @@ bool Window::saveFile()
 
 void Window::saveAsFile()
 {
-    QString filepath = QFileDialog::getSaveFileName(this, "Save File", QDir::homePath());
+    QString filepath = QFileDialog::getSaveFileName(this, "Save File", QDir::homePath(), getEncodeList().join(";;"));
     QString tabPath = tabbar->getActiveTabPath();
 
     if (filepath != "" && filepath != tabPath) {
@@ -489,6 +490,22 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
     } else if (key == "Esc") {
         removeBottomWidget();
     }
+}
+
+QStringList Window::getEncodeList()
+{
+    QStringList encodeList;
+    encodeList << "UTF-8";
+    foreach (int mib, QTextCodec::availableMibs()) {
+        QTextCodec *codec = QTextCodec::codecForMib(mib);
+
+        QString encodeName = QString(codec->name()).toUpper();
+        if (encodeName != "UTF-8") {
+            encodeList.append(encodeName);
+        }
+    }        
+
+    return encodeList;
 }
 
 void Window::addBlankTab(QString blankFile)

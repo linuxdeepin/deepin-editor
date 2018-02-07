@@ -80,6 +80,8 @@ public:
     
     void keyPressEvent(QKeyEvent *keyEvent);
     
+    QStringList getEncodeList();
+    
 signals:
     void dropTabOut(QString tabName, QString filepath, QString content);
     void newWindow();
