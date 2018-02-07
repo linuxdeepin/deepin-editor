@@ -28,16 +28,22 @@
             "key": "shortcuts",
             "name": "Shortcuts",
             "groups": [
-                {
-                    "key": "window",
-                    "name": "Window",
-                    "options": [
+		{
+		    "key" : "keymap",
+		    "name" : "Keymap",
+		    "options" : [
                         {
                             "key": "keymap",
                             "name": "Keymap",
                             "type": "combobox",
                             "default": "Standard"
-                        },
+                        }
+		    ]
+		},
+                {
+                    "key": "window",
+                    "name": "Window",
+                    "options": [
                         {
                             "key": "copy",
                             "name": "Copy",

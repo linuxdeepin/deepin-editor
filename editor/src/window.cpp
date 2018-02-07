@@ -52,7 +52,7 @@ DWIDGET_USE_NAMESPACE
 Window::Window(DMainWindow *parent) : DMainWindow(parent)
 {
     // Init theme.
-    DThemeManager::instance()->setTheme("dark");
+    DThemeManager::instance()->setTheme("light");
 
     // Init.
     installEventFilter(this);   // add event filter
@@ -697,6 +697,11 @@ void Window::popupSettingDialog()
 
     auto settings = Dtk::Core::DSettings::fromJsonFile(":/resource/settings.json");
     settings->setBackend(backend);
+    
+    QFontDatabase fontDatabase;
+    auto fontFamliy = settings->option("base.font.family");
+    fontFamliy->setData("items", fontDatabase.families());
+    fontFamliy->setValue(0);
 
     DSettingsDialog dsd(this);
     dsd.updateSettings(settings);

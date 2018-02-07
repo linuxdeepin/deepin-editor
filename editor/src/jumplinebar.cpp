@@ -21,6 +21,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "dthememanager.h"
 #include "jumplinebar.h"
 
 #include <QDebug>
@@ -118,5 +119,6 @@ void JumpLineBar::paintEvent(QPaintEvent *)
     painter.setOpacity(1);
     QPainterPath path;
     path.addRect(rect());
-    painter.fillPath(path, QColor("#202020"));
+    painter.fillPath(path, QColor("#ffffff"));
 }
+
