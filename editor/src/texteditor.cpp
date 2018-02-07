@@ -359,11 +359,10 @@ void TextEditor::swapLineUp(){
         cursor.insertText(newBottom);
 
         // Position cursor.
+        cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
         cursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
-        cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
 
         // Restore cursor's column.
-        cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
         cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, column);
 
         // Update cursor.
