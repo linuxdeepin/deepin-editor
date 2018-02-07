@@ -704,6 +704,10 @@ void Window::popupSettingDialog()
     fontFamliy->setValue(0);
 
     DSettingsDialog dsd(this);
+    dsd.setProperty("_d_dtk_theme", "light");
+    dsd.setProperty("_d_QSSFilename", "DSettingsDialog");
+    DThemeManager::instance()->registerWidget(&dsd);    
+    // DThemeManager::instance()->setTheme(&dsd, "light");
     dsd.updateSettings(settings);
     dsd.exec();
 }
