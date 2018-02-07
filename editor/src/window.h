@@ -56,6 +56,7 @@ public:
     void addTab(QString file);
     void addTabWithContent(QString tabName, QString filepath, QString content);
     void closeTab();
+    void restoreTab();
     
     Editor* createEditor();
     Editor* getActiveEditor();
@@ -140,6 +141,8 @@ private:
     QAction *printAction;
     QAction *switchThemeAction;
     QAction *settingAction;
+    
+    QStringList closeFileHistory;
     
     void removeActiveBlankTab(bool needSaveBefore=false);
     

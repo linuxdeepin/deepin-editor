@@ -243,10 +243,20 @@ void Window::closeTab()
                     });
         }
     } else {
+        // Record last close path.
+        closeFileHistory << tabbar->getActiveTabPath();
+        
         // Close tab directly, because all file is save automatically.
         tabbar->closeActiveTab();
         
         focusActiveEditor();
+    }
+}
+
+void Window::restoreTab()
+{
+    if (closeFileHistory.size() > 0) {
+        addTab(closeFileHistory.takeLast()) ;
     }
 }
 
@@ -480,8 +490,10 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
         tabbar->selectPrevTab();
     } else if (key == "Ctrl + W") {
         closeTab();
+    } else if (key == "Ctrl + Shift + T") {
+        restoreTab();
     } else if (key == "Ctrl + Shift + W") {
-        tabbar->closeOtherTabs();
+            tabbar->closeOtherTabs();
     } else if (key == "Ctrl + O") {
         openFile();
     } else if (key == "Ctrl + =") {
@@ -687,6 +699,9 @@ void Window::removeActiveBlankTab(bool needSaveBefore)
             // Do nothing if need save but last user not select save file anyway.
             return;
         }
+        
+        // Record last close path.
+        closeFileHistory << tabbar->getActiveTabPath();
     }
 
     // Close current tab.
