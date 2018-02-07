@@ -73,9 +73,6 @@ public:
     void killLine();
     
     void insertTab();
-    void upcaseWord();
-    void downcaseWord();
-    void capitalizeWord();
     void convertWordCase(ConvertCase convertCase);
     
     void keepCurrentLineAtCenter();
@@ -120,11 +117,14 @@ public slots:
     void clickCopyAction();
     void clickPasteAction();
     void clickDeleteAction();
-    void clickConvertCaseAction();
     void clickOpenInFileManagerAction();
     
     void copyWordUnderCursor();
     void cutWordUnderCursor();
+    
+    void upcaseWord();
+    void downcaseWord();
+    void capitalizeWord();
     
 private:
     QPropertyAnimation *scrollAnimation;
@@ -133,7 +133,9 @@ private:
     QTextEdit::ExtraSelection currentLineSelection;
     QTextEdit::ExtraSelection cursorKeywordSelection;
     QTextEdit::ExtraSelection wordUnderCursorSelection;
+    
     QTextCursor highlightWordCacheCursor;
+    QTextCursor wordUnderPointerCursor;
     
     int lineNumberOffset = 2;
     int lineNumberPaddingX = 5;
@@ -157,11 +159,17 @@ private:
     QAction *jumpLineAction;
     QAction *fullscreenAction;
     QAction *exitFullscreenAction;
-    QAction *convertCaseAction;
     QAction *openInFileManagerAction;
+    
+    QMenu *convertCaseMenu;
+    QAction *upcaseAction;
+    QAction *downcaseAction;
+    QAction *capitalizeAction;
     
     bool canUndo;
     bool canRedo;
+    
+    bool haveWordUnderCursor;
     
     bool setCursorKeywordSeletoin(int position, bool findNext);
 };

@@ -61,7 +61,7 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
 {
     // Don't draw background.
     viewport()->setAutoFillBackground(false);
-
+    
     // Init highlight theme.
     setTheme((palette().color(QPalette::Base).lightness() < 128)
              ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
@@ -89,7 +89,6 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     jumpLineAction = new QAction("Jump line", this);
     fullscreenAction = new QAction("Fullscreen", this);
     exitFullscreenAction = new QAction("Exit fullscreen", this);
-    convertCaseAction = new QAction("Covert Case", this);
     openInFileManagerAction = new QAction("Open in file manager", this);
 
     connect(rightMenu, &QMenu::aboutToHide, this, &TextEditor::removeHighlightWordUnderCursor);
@@ -105,8 +104,22 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     connect(jumpLineAction, &QAction::triggered, this, &TextEditor::clickJumpLineAction);
     connect(fullscreenAction, &QAction::triggered, this, &TextEditor::clickFullscreenAction);
     connect(exitFullscreenAction, &QAction::triggered, this, &TextEditor::clickFullscreenAction);
-    connect(convertCaseAction, &QAction::triggered, this, &TextEditor::clickConvertCaseAction);
     connect(openInFileManagerAction, &QAction::triggered, this, &TextEditor::clickOpenInFileManagerAction);
+
+    // Init convert case sub menu.
+    haveWordUnderCursor = false;
+    convertCaseMenu = new QMenu("Convert Case");
+    upcaseAction = new QAction("Upcase", this);
+    downcaseAction = new QAction("Downcase", this);
+    capitalizeAction = new QAction("Capitalize", this);
+
+    convertCaseMenu->addAction(upcaseAction);
+    convertCaseMenu->addAction(downcaseAction);
+    convertCaseMenu->addAction(capitalizeAction);
+
+    connect(upcaseAction, &QAction::triggered, this, &TextEditor::upcaseWord);
+    connect(downcaseAction, &QAction::triggered, this, &TextEditor::downcaseWord);
+    connect(capitalizeAction, &QAction::triggered, this, &TextEditor::capitalizeWord);
 
     canUndo = false;
     canRedo = false;
@@ -421,7 +434,14 @@ void TextEditor::convertWordCase(ConvertCase convertCase)
             textCursor().insertText(text);
         }
     } else {
-        QTextCursor cursor = textCursor();
+        QTextCursor cursor;
+        
+        // Move cursor to mouse position first. if have word under mouse pointer.
+        if (haveWordUnderCursor) {
+            setTextCursor(wordUnderPointerCursor);
+        }
+        
+        cursor = textCursor();
         cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
         cursor.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
 
@@ -437,6 +457,8 @@ void TextEditor::convertWordCase(ConvertCase convertCase)
         }
 
         setTextCursor(cursor);
+        
+        haveWordUnderCursor = false;
     }
 }
 
@@ -715,7 +737,8 @@ void TextEditor::contextMenuEvent(QContextMenuEvent *event)
         rightMenu->addAction(copyAction);
     } else {
         // Just show copy/cut menu item when cursor rectangle contain moue pointer coordinate.
-        if (highlightWordUnderMouse(event->pos())) {
+        haveWordUnderCursor = highlightWordUnderMouse(event->pos());
+        if (haveWordUnderCursor) {
             rightMenu->addAction(cutAction);
             rightMenu->addAction(copyAction);
         }
@@ -730,7 +753,7 @@ void TextEditor::contextMenuEvent(QContextMenuEvent *event)
     rightMenu->addAction(replaceAction);
     rightMenu->addAction(jumpLineAction);
     rightMenu->addSeparator();
-    rightMenu->addAction(convertCaseAction);
+    rightMenu->addMenu(convertCaseMenu);
     rightMenu->addAction(openInFileManagerAction);
     rightMenu->addSeparator();
     if (static_cast<Window*>(this->window())->isFullScreen()) {
@@ -856,7 +879,12 @@ bool TextEditor::highlightWordUnderMouse(QPoint pos)
         (pos.x() <= rect.x() + rect.width()) &&
         (rect.y() <= pos.y()) &&
         (pos.y() <= rect.y() + rect.height())) {
+        // Move back to word bound start postion, and save cursor for convert case.
+        wordUnderPointerCursor = cursor;
+        wordUnderPointerCursor.select(QTextCursor::WordUnderCursor);
+        wordUnderPointerCursor.setPosition(wordUnderPointerCursor.anchor(), QTextCursor::MoveAnchor);
 
+        // Update highlight cursor.
         QTextEdit::ExtraSelection selection;
 
         QColor lineColor = QColor("#660000");
@@ -922,10 +950,6 @@ void TextEditor::clickDeleteAction()
         setTextCursor(highlightWordCacheCursor);
         textCursor().removeSelectedText();
     }
-}
-
-void TextEditor::clickConvertCaseAction()
-{
 }
 
 void TextEditor::clickOpenInFileManagerAction()
