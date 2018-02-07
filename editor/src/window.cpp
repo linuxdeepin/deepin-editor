@@ -701,6 +701,18 @@ void Window::popupSettingDialog()
     auto fontFamliy = settings->option("base.font.family");
     fontFamliy->setData("items", fontDatabase.families());
     fontFamliy->setValue(0);
+    
+    auto fontSize = settings->option("base.font.size");
+    fontSize->setValue(12);
+    
+    auto keymap = settings->option("shortcuts.keymap.keymap");
+    keymap->setData("items", QStringList() << "Standard" << "Emacs" << "Customize");
+    
+    auto windowSate = settings->option("advance.window.window_state");
+    windowSate->setData("items", QStringList() << "Window Normal" << "Window Maximum" << "Fullscreen");
+    
+    auto tabSpace = settings->option("advance.editor.tab_space_number");
+    tabSpace->setValue(4);
 
     DSettingsDialog dsd(this);
     dsd.setProperty("_d_dtk_theme", "light");
