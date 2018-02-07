@@ -73,6 +73,8 @@ public:
     
     void killLine();
     void killCurrentLine();
+    void killBackwardWord();
+    void killForwardWord();
     
     void indentLine();
     void backIndentLine();

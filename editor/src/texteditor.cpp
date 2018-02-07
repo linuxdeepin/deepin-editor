@@ -409,6 +409,34 @@ void TextEditor::killCurrentLine()
     setTextCursor(cursor);
 }
 
+void TextEditor::killBackwardWord()
+{
+    if (textCursor().hasSelection()) {
+        textCursor().removeSelectedText(); 
+    } else {
+        QTextCursor cursor = textCursor();
+        cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
+        cursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
+        cursor.removeSelectedText();
+        
+        setTextCursor(cursor);
+    }
+}
+
+void TextEditor::killForwardWord()
+{
+    if (textCursor().hasSelection()) {
+        textCursor().removeSelectedText(); 
+    } else {
+        QTextCursor cursor = textCursor();
+        cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
+        cursor.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
+        cursor.removeSelectedText();
+        
+        setTextCursor(cursor);
+    }
+}
+
 void TextEditor::indentLine()
 {
     // Save cursor column.
@@ -739,6 +767,10 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         downcaseWord();
     } else if (key == "Alt + C") {
         capitalizeWord();
+    } else if (key == "Alt + Shift + N") {
+        killBackwardWord();
+    } else if (key == "Alt + Shift + M") {
+        killForwardWord();
     } else {
         QPlainTextEdit::keyPressEvent(keyEvent);
     }
