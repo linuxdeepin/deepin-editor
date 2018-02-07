@@ -398,6 +398,17 @@ void TextEditor::killLine()
     }
 }
 
+void TextEditor::killCurrentLine()
+{
+    QTextCursor cursor = textCursor();
+    
+    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::Down, QTextCursor::KeepAnchor);
+    cursor.removeSelectedText();
+    
+    setTextCursor(cursor);
+}
+
 void TextEditor::indentLine()
 {
     // Save cursor column.
@@ -710,6 +721,8 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         duplicateLine();
     } else if (key == "Ctrl + K") {
         killLine();
+    } else if (key == "Ctrl + Shift + K") {
+        killCurrentLine();
     } else if (key == "Meta + Shift + P") {
         swapLineUp();
     } else if (key == "Meta + Shift + N") {

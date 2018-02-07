@@ -70,7 +70,9 @@ public:
     void swapLineDown();
     void swapLineUp();
     void duplicateLine();
+    
     void killLine();
+    void killCurrentLine();
     
     void indentLine();
     void backIndentLine();
