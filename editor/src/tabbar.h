@@ -56,6 +56,8 @@ public:
     void selectPrevTab();
     
     void updateTabWithIndex(int index, QString filepath, QString tabName);
+    
+    int getTabCount();
                       
 signals:
     void closeFile(QString filepath);

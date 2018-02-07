@@ -60,6 +60,7 @@ public:
     Editor* createEditor();
     Editor* getActiveEditor();
     TextEditor* getTextEditor(QString filepath);
+    void focusActiveEditor();
     
     void openFile();
     bool saveFile();

@@ -233,16 +233,20 @@ void Window::closeTab()
                         // Remove blank tab if user click "don't save" button.
                         if (index == 1) {
                             removeActiveBlankTab();
+                            focusActiveEditor();
                         }
                         // Save blank tab as file and then remove blank tab if user click "save" button.
                         else if (index == 2) {
                             removeActiveBlankTab(true);
+                            focusActiveEditor();
                         }
                     });
         }
     } else {
         // Close tab directly, because all file is save automatically.
         tabbar->closeActiveTab();
+        
+        focusActiveEditor();
     }
 }
 
@@ -267,6 +271,13 @@ Editor* Window::getActiveEditor()
 TextEditor* Window::getTextEditor(QString filepath)
 {
     return editorMap[filepath]->textEditor;
+}
+
+void Window::focusActiveEditor()
+{
+    if (tabbar->getTabCount() > 0) {
+        getActiveEditor()->textEditor->setFocus();
+    }
 }
 
 void Window::openFile()

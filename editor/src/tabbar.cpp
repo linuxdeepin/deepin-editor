@@ -196,3 +196,8 @@ void Tabbar::handleTabReleaseRequested(int index)
         tabReleaseRequested(getTabName(index), getTabPath(index), index);
     }
 }
+
+int Tabbar::getTabCount()
+{
+    return tabbar->count();
+}
