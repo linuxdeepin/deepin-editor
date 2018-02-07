@@ -22,11 +22,14 @@
  */
 
 #include "danchors.h"
+#include "dsettingsdialog.h"
 #include "dthememanager.h"
 #include "dtoast.h"
 #include "utils.h"
 #include "window.h"
 
+#include <DSettings>
+#include <DSettingsOption>
 #include <DTitlebar>
 #include <QApplication>
 #include <QDateTime>
@@ -40,7 +43,10 @@
 #include <QScreen>
 #include <QStyleFactory>
 #include <QSvgWidget>
+#include <QTemporaryFile>
+#include <qsettingbackend.h>
 
+DTK_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
 
 Window::Window(DMainWindow *parent) : DMainWindow(parent)
@@ -111,7 +117,8 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
         connect(newWindowAction, &QAction::triggered, this, &Window::newWindow);
         connect(saveAction, &QAction::triggered, this, &Window::saveFile);
         connect(saveAsAction, &QAction::triggered, this, &Window::saveAsFile);
-        connect(printAction, &QAction::triggered, this, &Window::print);
+        connect(printAction, &QAction::triggered, this, &Window::popupPrintDialog);
+        connect(settingAction, &QAction::triggered, this, &Window::popupSettingDialog);
     }
 
     // Init find bar.
@@ -671,7 +678,7 @@ DDialog* Window::createSaveBlankFileDialog()
     return dialog;
 }
 
-void Window::print()
+void Window::popupPrintDialog()
 {
     QPrinter printer(QPrinter::HighResolution);
     QPrintPreviewDialog preview(&printer, this);
@@ -680,4 +687,18 @@ void Window::print()
                 getActiveEditor()->textEditor->print(printer);
             });
     preview.exec();    
+}
+
+void Window::popupSettingDialog()
+{
+    QTemporaryFile tmpFile;
+    tmpFile.open();
+    auto backend = new Dtk::Core::QSettingBackend(tmpFile.fileName());
+
+    auto settings = Dtk::Core::DSettings::fromJsonFile(":/resource/settings.json");
+    settings->setBackend(backend);
+
+    DSettingsDialog dsd(this);
+    dsd.updateSettings(settings);
+    dsd.exec();
 }

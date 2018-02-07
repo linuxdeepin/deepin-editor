@@ -110,7 +110,8 @@ public slots:
     void addBottomWidget(QWidget *widget);
     void removeBottomWidget();
     
-    void print();
+    void popupPrintDialog();
+    void popupSettingDialog();
     
 private:
     FindBar *findBar;

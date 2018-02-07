@@ -9,5 +9,6 @@
     <file>image/logo_48.svg</file>
     <file>image/logo_24.svg</file>
     <file>qss/main.qss</file>
+    <file>resource/settings.json</file>
   </qresource>
 </RCC>
