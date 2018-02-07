@@ -690,12 +690,16 @@ void Window::popupPrintDialog()
 
 void Window::popupSettingDialog()
 {
-    QTemporaryFile tmpFile;
-    tmpFile.open();
-    auto backend = new Dtk::Core::QSettingBackend(tmpFile.fileName());
+    auto backend = new Dtk::Core::QSettingBackend(QDir(QDir(QDir(QStandardPaths::standardLocations(QStandardPaths::ConfigLocation).first()).filePath(qApp->organizationName())).filePath(qApp->applicationName())).filePath("config.conf"));
 
     auto settings = Dtk::Core::DSettings::fromJsonFile(":/resource/settings.json");
     settings->setBackend(backend);
+    
+    connect(settings, &DSettings::valueChanged, this, 
+            [=] (const QString &key, const QVariant &value) {
+                qDebug() << key << value;
+                settings->sync();
+            });
     
     QFontDatabase fontDatabase;
     auto fontFamliy = settings->option("base.font.family");
