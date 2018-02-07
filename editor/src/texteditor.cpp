@@ -647,11 +647,16 @@ void TextEditor::contextMenuEvent(QContextMenuEvent *event)
         rightMenu->addAction(redoAction);
     }
     rightMenu->addSeparator();
-    if (!textCursor().hasSelection()) {
-        highlightWordUnderCursor(event->pos());
+    if (textCursor().hasSelection()) {
+        rightMenu->addAction(cutAction);
+        rightMenu->addAction(copyAction);
+    } else {
+        // Just show copy/cut menu item when cursor rectangle contain moue pointer coordinate.
+        if (highlightWordUnderMouse(event->pos())) {
+            rightMenu->addAction(cutAction);
+            rightMenu->addAction(copyAction);
+        }
     }
-    rightMenu->addAction(cutAction);
-    rightMenu->addAction(copyAction);
     if (canPaste()) {
         rightMenu->addAction(pasteAction);
     }
@@ -772,28 +777,48 @@ void TextEditor::loadHighlighter()
     m_highlighter->setDefinition(def);
 }
 
-void TextEditor::highlightWordUnderCursor(QPoint pos)
+bool TextEditor::highlightWordUnderMouse(QPoint pos)
 {
-    QTextEdit::ExtraSelection selection;
-
-    QColor lineColor = QColor("#660000");
-
-    selection.format.setBackground(lineColor);
-    selection.cursor = cursorForPosition(pos);
-    selection.cursor.select(QTextCursor::WordUnderCursor);
+    // Get cursor match mouse pointer coordinate, but cursor maybe not under mouse pointer.
+    QTextCursor cursor(cursorForPosition(pos));
     
-    wordUnderCursorSelection = selection;
-    
-    renderAllSelections();
+    // Get cursor rectangle.
+    auto rect = cursorRect(cursor);
+    int widthOffset = 10;
+    rect.setX(std::max(rect.x() - widthOffset / 2, 0));
+    rect.setWidth(rect.width() + widthOffset);
+
+    // Just highlight word under pointer when cursor rectangle contain moue pointer coordinate.
+    if ((rect.x() <= pos.x()) &&
+        (pos.x() <= rect.x() + rect.width()) &&
+        (rect.y() <= pos.y()) &&
+        (pos.y() <= rect.y() + rect.height())) {
+
+        QTextEdit::ExtraSelection selection;
+
+        QColor lineColor = QColor("#660000");
+
+        selection.format.setBackground(lineColor);
+        selection.cursor = cursor;
+        selection.cursor.select(QTextCursor::WordUnderCursor);
+
+        wordUnderCursorSelection = selection;
+
+        renderAllSelections();
+
+        return true;
+    } else {
+        return false;
+    }
 }
 
 void TextEditor::removeHighlightWordUnderCursor()
 {
     highlightWordCacheCursor = wordUnderCursorSelection.cursor;
-    
+
     QTextEdit::ExtraSelection selection;
     wordUnderCursorSelection = selection;
-    
+
     renderAllSelections();
 }
 
@@ -821,7 +846,7 @@ void TextEditor::clickPasteAction()
         paste();
     } else {
         setTextCursor(highlightWordCacheCursor);
-        
+
         paste();
     }
 }
@@ -855,7 +880,7 @@ void TextEditor::cutWordUnderCursor()
 {
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(highlightWordCacheCursor.selectedText());
-    
+
     setTextCursor(highlightWordCacheCursor);
     textCursor().removeSelectedText();
 }

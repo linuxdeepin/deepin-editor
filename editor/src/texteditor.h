@@ -93,7 +93,7 @@ public:
     void setTheme(const KSyntaxHighlighting::Theme &theme);
     void loadHighlighter();
     
-    void highlightWordUnderCursor(QPoint pos);
+    bool highlightWordUnderMouse(QPoint pos);
     void removeHighlightWordUnderCursor();
 
 signals:
