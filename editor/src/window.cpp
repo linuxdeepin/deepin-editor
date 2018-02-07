@@ -472,6 +472,44 @@ void Window::toggleFullscreen()
     }
 }
 
+QStringList Window::getEncodeList()
+{
+    QStringList encodeList;
+    encodeList << "UTF-8";
+    foreach (int mib, QTextCodec::availableMibs()) {
+        QTextCodec *codec = QTextCodec::codecForMib(mib);
+
+        QString encodeName = QString(codec->name()).toUpper();
+        if (encodeName != "UTF-8") {
+            encodeList.append(encodeName);
+        }
+    }        
+
+    return encodeList;
+}
+
+void Window::closeEvent(QCloseEvent *)
+{
+    QDir directory = QDir(QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files"));
+    QStringList blankFiles = directory.entryList(QStringList(), QDir::Files);
+    
+    foreach(QString blankFile, blankFiles) {
+        QString blankFilePath = QDir(directory).filePath(blankFile);
+        
+        QFile file(blankFilePath);
+        if (!file.open(QFile::ReadOnly | QFile::Text)) {
+            break;   
+        }
+        
+        QTextStream in(&file);
+        if (in.readAll().trimmed().size() == 0) {
+            file.remove();
+            
+            qDebug() << QString("File %1 is empty, clean unused blank document.").arg(blankFilePath);
+        }
+    }
+}
+
 void Window::keyPressEvent(QKeyEvent *keyEvent)
 {
     QString key = Utils::getKeymap(keyEvent);
@@ -513,22 +551,6 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
     } else if (key == "Esc") {
         removeBottomWidget();
     }
-}
-
-QStringList Window::getEncodeList()
-{
-    QStringList encodeList;
-    encodeList << "UTF-8";
-    foreach (int mib, QTextCodec::availableMibs()) {
-        QTextCodec *codec = QTextCodec::codecForMib(mib);
-
-        QString encodeName = QString(codec->name()).toUpper();
-        if (encodeName != "UTF-8") {
-            encodeList.append(encodeName);
-        }
-    }        
-
-    return encodeList;
 }
 
 void Window::addBlankTab(QString blankFile)

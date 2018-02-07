@@ -80,9 +80,11 @@ public:
     
     void toggleFullscreen();
     
-    void keyPressEvent(QKeyEvent *keyEvent);
-    
     QStringList getEncodeList();
+    
+protected:    
+    void closeEvent(QCloseEvent *event);
+    void keyPressEvent(QKeyEvent *keyEvent);
     
 signals:
     void dropTabOut(QString tabName, QString filepath, QString content);
