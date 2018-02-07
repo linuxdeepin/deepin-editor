@@ -52,7 +52,7 @@ DWIDGET_USE_NAMESPACE
 Window::Window(DMainWindow *parent) : DMainWindow(parent)
 {
     // Init theme.
-    DThemeManager::instance()->setTheme("light");
+    DThemeManager::instance()->setTheme("dark");
 
     // Init.
     installEventFilter(this);   // add event filter

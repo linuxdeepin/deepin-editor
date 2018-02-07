@@ -109,5 +109,5 @@ void FindBar::paintEvent(QPaintEvent *)
     painter.setOpacity(1);
     QPainterPath path;
     path.addRect(rect());
-    painter.fillPath(path, QColor("#ffffff"));
+    painter.fillPath(path, QColor("#202020"));
 }

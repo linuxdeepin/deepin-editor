@@ -511,7 +511,7 @@ void TextEditor::updateHighlightLineSeleciton()
 {
     QTextEdit::ExtraSelection selection;
 
-    QColor lineColor = QColor("#aaaaaa");
+    QColor lineColor = QColor("#333333");
 
     selection.format.setBackground(lineColor);
     selection.format.setProperty(QTextFormat::FullWidthSelection, true);
@@ -604,9 +604,9 @@ void TextEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
     // Init.
     QPainter painter(lineNumberArea);
-    painter.fillRect(event->rect(), QColor("#ffffff"));
+    painter.fillRect(event->rect(), QColor("#202020"));
 
-    QColor lineColor = QColor("#ffffff");
+    QColor lineColor = QColor("#202020");
     lineColor.setAlphaF(0.05);
     painter.fillRect(QRect(event->rect().x() + event->rect().width() - 1, event->rect().y(), 1, event->rect().height()), lineColor);
 
