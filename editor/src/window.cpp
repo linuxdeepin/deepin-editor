@@ -93,10 +93,10 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
                     addBlankTab();
                 }, Qt::QueuedConnection);
         connect(tabbar, &Tabbar::tabReleaseRequested, this, &Window::handleTabReleaseRequested, Qt::QueuedConnection);
-        
+
         menu = new QMenu();
         menu->setStyle(QStyleFactory::create("dlight"));
-        
+
         // Init main menu.
         newWindowAction = new QAction("New window", this);
         newTabAction = new QAction("New tab", this);
@@ -106,7 +106,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
         printAction = new QAction("Print", this);
         switchThemeAction = new QAction("Switch theme", this);
         settingAction = new QAction("Setting", this);
-        
+
         menu->addAction(newWindowAction);
         menu->addAction(newTabAction);
         menu->addAction(openFileAction);
@@ -118,7 +118,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
         menu->addSeparator();
         menu->addAction(settingAction);
         this->titlebar()->setMenu(menu);
-        
+
         connect(newWindowAction, &QAction::triggered, this, &Window::newWindow);
         connect(newTabAction, &QAction::triggered, this,
                 [=] () {
@@ -161,7 +161,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     // Make jump line bar pop at top-right of editor.
     DAnchorsBase::setAnchor(jumpLineBar, Qt::AnchorTop, layoutWidget, Qt::AnchorTop);
     DAnchorsBase::setAnchor(jumpLineBar, Qt::AnchorRight, layoutWidget, Qt::AnchorRight);
-    
+
     // Apply qss theme.
     Utils::applyQss(this, "main.qss");
     Utils::applyQss(this->titlebar(), "main.qss");
@@ -245,10 +245,10 @@ void Window::closeTab()
     } else {
         // Record last close path.
         closeFileHistory << tabbar->getActiveTabPath();
-        
+
         // Close tab directly, because all file is save automatically.
         tabbar->closeActiveTab();
-        
+
         focusActiveEditor();
     }
 }
@@ -264,7 +264,7 @@ Editor* Window::createEditor()
 {
     Editor *editor = new Editor();
     setFontSizeWithConfig(editor);
-    
+
     connect(editor->textEditor, &TextEditor::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);
     connect(editor->textEditor, &TextEditor::clickReplaceAction, this, &Window::popupReplaceBar, Qt::QueuedConnection);
     connect(editor->textEditor, &TextEditor::clickJumpLineAction, this, &Window::popupJumpLineBar, Qt::QueuedConnection);
@@ -312,21 +312,14 @@ bool Window::saveFile()
             QString tabPath = tabbar->getActiveTabPath();
 
             saveFileAsAnotherPath(tabPath, filepath, true);
-            
+
             return true;
         } else {
             return false;
         }
     } else {
-        auto toast = new DToast(this);
-
-        toast->setText("文件已自动保存");
-        toast->setIcon(QIcon(Utils::getQrcPath("logo_24.svg")));
-        toast->pop();
-
-        toast->move((width() - toast->width()) / 2,
-                    height() - toast->height() - toastPaddingBottom);
-
+        showNotify("文件已自动保存");
+        
         return true;
     }
 }
@@ -353,7 +346,7 @@ void Window::saveFileAsAnotherPath(QString fromPath, QString toPath, bool delete
 
     editorMap[toPath]->updatePath(toPath);
     editorMap[toPath]->saveFile();
-    
+
     getActiveEditor()->textEditor->loadHighlighter();
 }
 
@@ -483,28 +476,84 @@ QStringList Window::getEncodeList()
         if (encodeName != "UTF-8") {
             encodeList.append(encodeName);
         }
-    }        
+    }
 
     return encodeList;
+}
+
+void Window::remberPositionSave(bool notify)
+{
+    Editor *editor = getActiveEditor();
+
+    remberPositionFilePath = tabbar->getActiveTabPath();
+    remberPositionRow = editor->textEditor->getCurrentLine();
+    remberPositionColumn = editor->textEditor->getCurrentColumn();
+    remberPositionScrollOffset = editor->textEditor->getScrollOffset();
+    
+    if (notify) {
+        showNotify("记住当前位置");
+    }
+}
+
+void Window::remberPositionRestore()
+{
+    
+    if (remberPositionFilePath != "") {
+        if (editorMap.contains(remberPositionFilePath)) {
+            QString filepath = remberPositionFilePath;
+            int scrollOffset = remberPositionScrollOffset;
+            int row = remberPositionRow;
+            int column = remberPositionColumn;
+            
+            remberPositionSave(false);
+            
+            activeTab(tabbar->getTabIndex(filepath));
+
+            QTimer::singleShot(
+                0, this,
+                [=] () {
+                    editorMap[filepath]->textEditor->scrollToLine(scrollOffset, row, column);
+                });
+        } else {
+            if (Utils::fileExists(remberPositionFilePath)) {
+                QString filepath = remberPositionFilePath;
+                int scrollOffset = remberPositionScrollOffset;
+                int row = remberPositionRow;
+                int column = remberPositionColumn;
+                
+                remberPositionSave(false);
+                
+                addTab(filepath);
+
+                QTimer::singleShot(
+                    0, this,
+                    [=] () {
+                        editorMap[filepath]->textEditor->scrollToLine(scrollOffset, row, column);
+                    });
+            } else {
+                showNotify("记录位置的文件已经不存在了");
+            }
+        }
+    }
 }
 
 void Window::closeEvent(QCloseEvent *)
 {
     QDir directory = QDir(QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files"));
     QStringList blankFiles = directory.entryList(QStringList(), QDir::Files);
-    
+
     foreach(QString blankFile, blankFiles) {
         QString blankFilePath = QDir(directory).filePath(blankFile);
-        
+
         QFile file(blankFilePath);
         if (!file.open(QFile::ReadOnly | QFile::Text)) {
-            break;   
+            break;
         }
-        
+
         QTextStream in(&file);
         if (in.readAll().trimmed().size() == 0) {
             file.remove();
-            
+
             qDebug() << QString("File %1 is empty, clean unused blank document.").arg(blankFilePath);
         }
     }
@@ -531,7 +580,7 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
     } else if (key == "Ctrl + Shift + T") {
         restoreTab();
     } else if (key == "Ctrl + Shift + W") {
-            tabbar->closeOtherTabs();
+        tabbar->closeOtherTabs();
     } else if (key == "Ctrl + O") {
         openFile();
     } else if (key == "Ctrl + =") {
@@ -548,6 +597,10 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
         popupReplaceBar();
     } else if (key == "Ctrl + Shift + G") {
         popupJumpLineBar();
+    } else if (key == "Ctrl + Shift + >") {
+        remberPositionSave();
+    } else if (key == "Ctrl + Shift + <") {
+        remberPositionRestore();
     } else if (key == "Esc") {
         removeBottomWidget();
     }
@@ -721,7 +774,7 @@ void Window::removeActiveBlankTab(bool needSaveBefore)
             // Do nothing if need save but last user not select save file anyway.
             return;
         }
-        
+
         // Record last close path.
         closeFileHistory << tabbar->getActiveTabPath();
     }
@@ -737,6 +790,18 @@ void Window::showNewEditor(Editor *editor)
 {
     editorLayout->addWidget(editor);
     editorLayout->setCurrentWidget(editor);
+}
+
+void Window::showNotify(QString message)
+{
+    auto toast = new DToast(this);
+
+    toast->setText(message);
+    toast->setIcon(QIcon(Utils::getQrcPath("logo_24.svg")));
+    toast->pop();
+
+    toast->move((width() - toast->width()) / 2,
+                height() - toast->height() - toastPaddingBottom);
 }
 
 DDialog* Window::createSaveBlankFileDialog()
@@ -756,11 +821,11 @@ void Window::popupPrintDialog()
 {
     QPrinter printer(QPrinter::HighResolution);
     QPrintPreviewDialog preview(&printer, this);
-    connect(&preview, &QPrintPreviewDialog::paintRequested, this, 
+    connect(&preview, &QPrintPreviewDialog::paintRequested, this,
             [=] (QPrinter *printer) {
                 getActiveEditor()->textEditor->print(printer);
             });
-    preview.exec();    
+    preview.exec();
 }
 
 void Window::popupSettingDialog()
@@ -769,34 +834,34 @@ void Window::popupSettingDialog()
 
     auto settings = Dtk::Core::DSettings::fromJsonFile(":/resource/settings.json");
     settings->setBackend(backend);
-    
-    connect(settings, &DSettings::valueChanged, this, 
+
+    connect(settings, &DSettings::valueChanged, this,
             [=] (const QString &key, const QVariant &value) {
                 qDebug() << key << value;
                 settings->sync();
             });
-    
+
     QFontDatabase fontDatabase;
     auto fontFamliy = settings->option("base.font.family");
     fontFamliy->setData("items", fontDatabase.families());
     fontFamliy->setValue(0);
-    
+
     auto fontSize = settings->option("base.font.size");
     fontSize->setValue(12);
-    
+
     auto keymap = settings->option("shortcuts.keymap.keymap");
     keymap->setData("items", QStringList() << "Standard" << "Emacs" << "Customize");
-    
+
     auto windowSate = settings->option("advance.window.window_state");
     windowSate->setData("items", QStringList() << "Window Normal" << "Window Maximum" << "Fullscreen");
-    
+
     auto tabSpace = settings->option("advance.editor.tab_space_number");
     tabSpace->setValue(4);
 
     DSettingsDialog dsd(this);
     dsd.setProperty("_d_dtk_theme", "light");
     dsd.setProperty("_d_QSSFilename", "DSettingsDialog");
-    DThemeManager::instance()->registerWidget(&dsd);    
+    DThemeManager::instance()->registerWidget(&dsd);
     dsd.updateSettings(settings);
     dtkThemeWorkaround(&dsd, "dlight");
     dsd.exec();
@@ -807,12 +872,12 @@ void Window::dtkThemeWorkaround(QWidget *parent, const QString &theme)
 {
     parent->setStyle(QStyleFactory::create(theme));
     for (auto obj : parent->children()) {
-        
+
         auto w = qobject_cast<QWidget *>(obj);
         if (!w) {
             continue;
         }
-        
+
         dtkThemeWorkaround(w, theme);
     }
 }

@@ -82,6 +82,9 @@ public:
     
     QStringList getEncodeList();
     
+    void remberPositionSave(bool notify=true);
+    void remberPositionRestore();
+    
 protected:    
     void closeEvent(QCloseEvent *event);
     void keyPressEvent(QKeyEvent *keyEvent);
@@ -146,9 +149,15 @@ private:
     
     QStringList closeFileHistory;
     
+    QString remberPositionFilePath;
+    int remberPositionRow;
+    int remberPositionColumn;
+    int remberPositionScrollOffset;
+    
     void removeActiveBlankTab(bool needSaveBefore=false);
     
     void showNewEditor(Editor *editor);
+    void showNotify(QString message);
     
     DDialog* createSaveBlankFileDialog();
     void dtkThemeWorkaround(QWidget *parent, const QString &theme);
