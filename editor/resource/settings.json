@@ -12,7 +12,7 @@
                             "key": "family",
                             "name": "Font",
                             "type": "combobox",
-                            "default": ""
+                            "default": "Note Sans"
                         },
                         {
                             "key": "size",
@@ -29,9 +29,15 @@
             "name": "Shortcuts",
             "groups": [
                 {
-                    "key": "ternimal",
-                    "name": "Ternimal",
+                    "key": "window",
+                    "name": "Window",
                     "options": [
+                        {
+                            "key": "keymap",
+                            "name": "Keymap",
+                            "type": "combobox",
+                            "default": "Standard"
+                        },
                         {
                             "key": "copy",
                             "name": "Copy",
@@ -59,8 +65,8 @@
                     ]
                 },
                 {
-                    "key": "workspace",
-                    "name": "Workspace",
+                    "key": "editor",
+                    "name": "Editor",
                     "options": [
                         {
                             "key": "new_window",
@@ -95,94 +101,26 @@
             "name": "Advance",
             "groups": [
                 {
-                    "key": "cursor",
-                    "name": "Cursor",
+                    "key": "window",
+                    "name": "Window",
                     "options": [
                         {
-                            "key": "shrap",
-                            "name": "Cursor Shrap",
-                            "type": "buttongroup",
-                            "items": ["█","_","|"],
-                            "default": 0
-                        },
-                        {
-                            "key": "blink",
-                            "type": "checkbox",
-                            "text": "Cursor blink",
-                            "default": true
-                        },
-                        {
-                            "key": "radiogroup",
-                            "name": "  ",
-                            "type": "radiogroup",
-                            "items": ["Minimize to tray","Exit Deepin Music"],
-                            "default": 0
-                        }
-                    ]
-                },
-                {
-                    "key": "encoding",
-                    "name": "Default encoding",
-                    "options": [
-                        {
-                            "key": "encoding",
-                            "name": "Encoding",
+                            "key": "window_state",
+                            "name": "Window State",
                             "type": "combobox",
-                            "default": "utf-8"
+                            "default": "Window"
                         }
                     ]
                 },
                 {
-                    "key": "coustom",
-                    "name": "Coustom",
+                    "key": "editor",
+                    "name": "Editor",
                     "options": [
                         {
-                            "key": "coustom_command",
-                            "name": "Coustom Command",
-                            "type": "lineedit",
-                            "default": ""
-                        },
-                        {
-                            "key": "coustom_directory",
-                            "name": "Coustom Directory",
-                            "type": "lineedit",
-                            "default": ""
-                        }
-                    ]
-                },
-                {
-                    "key": "scroll",
-                    "name": "Scroll",
-                    "options": [
-                        {
-                            "key": "scroll_bottom",
-                            "text": "Scroll Bottom",
-                            "type": "checkbox",
-                            "default": ""
-                        },
-                        {
-                            "key": "scroll_line_count",
-                            "name": "Scroll line count",
+                            "key": "tab_space_number",
+                            "name": "Tab Space Number",
                             "type": "spinbutton",
-                            "default": 10
-                        }
-                    ]
-                },
-                {
-                    "key": "compatibility",
-                    "name": "Compatibility",
-                    "options": [
-                        {
-                            "key": "breakspce_action",
-                            "name": "Breakspce Action",
-                            "type": "combobox",
-                            "default": ""
-                        },
-                        {
-                            "key": "delete_action",
-                            "name": "Delete Action",
-                            "type": "combobox",
-                            "default": ""
+                            "default": 12
                         }
                     ]
                 }
