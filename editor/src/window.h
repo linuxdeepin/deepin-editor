@@ -141,6 +141,7 @@ private:
     void showNewEditor(Editor *editor);
     
     DDialog* createSaveBlankFileDialog();
+    void dtkThemeWorkaround(QWidget *parent, const QString &theme);
 };
 
 #endif

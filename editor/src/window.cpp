@@ -83,7 +83,6 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
         this->titlebar()->setCustomWidget(tabbar, Qt::AlignVCenter, false);
         this->titlebar()->setSeparatorVisible(true);
         this->titlebar()->setAutoHideOnFullscreen(true);
-        this->titlebar()->setBackgroundTransparent(true);
 
         connect(tabbar, &Tabbar::doubleClicked, this->titlebar(), &DTitlebar::doubleClicked, Qt::QueuedConnection);
         connect(tabbar, &Tabbar::switchToFile, this, &Window::handleSwitchToFile, Qt::QueuedConnection);
@@ -707,7 +706,22 @@ void Window::popupSettingDialog()
     dsd.setProperty("_d_dtk_theme", "light");
     dsd.setProperty("_d_QSSFilename", "DSettingsDialog");
     DThemeManager::instance()->registerWidget(&dsd);    
-    // DThemeManager::instance()->setTheme(&dsd, "light");
     dsd.updateSettings(settings);
+    dtkThemeWorkaround(&dsd, "dlight");
     dsd.exec();
+}
+
+// This function is workaround, it will remove after DTK fixed SettingDialog theme bug.
+void Window::dtkThemeWorkaround(QWidget *parent, const QString &theme)
+{
+    parent->setStyle(QStyleFactory::create(theme));
+    for (auto obj : parent->children()) {
+        
+        auto w = qobject_cast<QWidget *>(obj);
+        if (!w) {
+            continue;
+        }
+        
+        dtkThemeWorkaround(w, theme);
+    }
 }
