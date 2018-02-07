@@ -69,6 +69,7 @@ public:
     void swapLineUp();
     void duplicateLine();
     void killLine();
+    void insertTab();
     
     void keepCurrentLineAtCenter();
     void scrollToLine(int scrollOffset, int row, int column);

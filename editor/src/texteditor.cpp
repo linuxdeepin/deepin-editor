@@ -385,6 +385,12 @@ void TextEditor::killLine()
     }
 }
 
+void TextEditor::insertTab()
+{
+    QString spaces(4, ' ');
+    textCursor().insertText(spaces);
+}
+
 void TextEditor::keepCurrentLineAtCenter()
 {
     QScrollBar *scrollbar = verticalScrollBar();
@@ -565,7 +571,9 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
 
     // qDebug() << key;
 
-    if (key == "Ctrl + F") {
+    if (key == "Tab") {
+        insertTab();
+    } else if (key == "Ctrl + F") {
         forwardChar();
     } else if (key == "Ctrl + B") {
         backwardChar();
