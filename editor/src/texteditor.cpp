@@ -61,7 +61,7 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
 {
     // Don't draw background.
     viewport()->setAutoFillBackground(false);
-    
+
     // Init highlight theme.
     setTheme((palette().color(QPalette::Base).lightness() < 128)
              ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
@@ -398,14 +398,54 @@ void TextEditor::killLine()
     }
 }
 
-void TextEditor::insertTab()
+void TextEditor::indentLine()
 {
-    // If current column is not Multiples of 4, jump to 4x position before next indent.
+    // Save cursor column.
     int column = getCurrentColumn();
-    int indentSpace = 4 - (column % 4);
-    
+
+    // If current column is not Multiples of 4, jump to 4x position before next indent.
+    moveToLineIndentation();
+    int indentSpace = 4 - (getCurrentColumn() % 4);
+
+    // Insert spaces.
+    moveToStartOfLine();
     QString spaces(indentSpace, ' ');
     textCursor().insertText(spaces);
+
+    // Restore cursor column postion.
+    moveToStartOfLine();
+    QTextCursor cursor = textCursor();
+    cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, column + indentSpace);
+    setTextCursor(cursor);
+}
+
+void TextEditor::backIndentLine()
+{
+    // Save cursor column.
+    int column = getCurrentColumn();
+
+    // If current column is not Multiples of 4, jump to 4x position before back indent.
+    moveToLineIndentation();
+
+    if (getCurrentColumn() > 0) {
+        int indentSpace = getCurrentColumn() % 4;
+        if (indentSpace == 0 && getCurrentColumn() >= 4) {
+            indentSpace = 4;
+        }
+
+        // Remove spaces.
+        QTextCursor deleteCursor = textCursor();
+        for (int i = 0; i < indentSpace; i++) {
+            deleteCursor.deletePreviousChar();
+        }
+        setTextCursor(deleteCursor);
+        
+        // Restore cursor column postion.
+        moveToStartOfLine();
+        QTextCursor cursor = textCursor();
+        cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, column - indentSpace);
+        setTextCursor(cursor);
+    }
 }
 
 void TextEditor::upcaseWord()
@@ -439,12 +479,12 @@ void TextEditor::convertWordCase(ConvertCase convertCase)
         }
     } else {
         QTextCursor cursor;
-        
+
         // Move cursor to mouse position first. if have word under mouse pointer.
         if (haveWordUnderCursor) {
             setTextCursor(wordUnderPointerCursor);
         }
-        
+
         cursor = textCursor();
         cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
         cursor.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
@@ -461,7 +501,7 @@ void TextEditor::convertWordCase(ConvertCase convertCase)
         }
 
         setTextCursor(cursor);
-        
+
         haveWordUnderCursor = false;
     }
 }
@@ -647,7 +687,9 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
     // qDebug() << key;
 
     if (key == "Tab") {
-        insertTab();
+        indentLine();
+    } else if (key == "Shift + Backtab") {
+        backIndentLine();
     } else if (key == "Ctrl + F") {
         forwardChar();
     } else if (key == "Ctrl + B") {

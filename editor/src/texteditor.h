@@ -72,7 +72,8 @@ public:
     void duplicateLine();
     void killLine();
     
-    void insertTab();
+    void indentLine();
+    void backIndentLine();
     void convertWordCase(ConvertCase convertCase);
     
     void keepCurrentLineAtCenter();
