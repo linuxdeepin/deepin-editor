@@ -295,7 +295,7 @@ void TextEditor::swapLineUp(){
             std::swap(startPos, endPos);
         }
         
-        // Expand selection to lines bound.
+        // Expand selection to multi-lines bound.
         QTextCursor startCursor = textCursor();
         startCursor.setPosition(startPos, QTextCursor::MoveAnchor);
         startCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
@@ -310,25 +310,25 @@ void TextEditor::swapLineUp(){
         
         setTextCursor(cursor);
         
-        // Get new top text.
+        // Get multi-line selection text.
         QString newTop = cursor.selectedText();
         cursor.removeSelectedText();
         
-        // Select line above and store value.
+        // Get one-line content above multi-lines selection.
         cursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
         cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
         QString newBottom = cursor.selectedText();
         cursor.removeSelectedText();
 
-        // Insert new values.
+        // Record new selection bound of multi-lines.
         int newSelectionStartPos = cursor.position();
         cursor.insertText(newTop);
         int newSelectionEndPos = cursor.position();
         cursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor);
         cursor.insertText(newBottom);
 
-        // Position cursor.
+        // Reset multi-line selection status.
         cursor.setPosition(newSelectionStartPos, QTextCursor::MoveAnchor);
         cursor.setPosition(newSelectionEndPos, QTextCursor::KeepAnchor);
 
@@ -340,25 +340,27 @@ void TextEditor::swapLineUp(){
         // Rember current line's column number.
         int column = cursor.columnNumber();
 
-        // Select current line and store value.
+        // Get current line content.
         cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
         QString newTop = cursor.selectedText();
         cursor.removeSelectedText();
 
-        // Select line above and store value.
+        // Get line content above current line.
+        // Note: we need move cursor UP and then use *StartOfBlock*, keep this order.
+        // don't use *StartOfBlock* before *UP*, it's won't work if above line is *wrap line*. 
         cursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
         cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
         QString newBottom = cursor.selectedText();
         cursor.removeSelectedText();
 
-        // Insert new values.
+        // Swap line content.
         cursor.insertText(newTop);
         cursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor);
         cursor.insertText(newBottom);
 
-        // Position cursor.
+        // Move cursor to new start of line. 
         cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
         cursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
 
@@ -395,17 +397,18 @@ void TextEditor::swapLineDown(){
         
         setTextCursor(cursor);
         
-        // Get new bottom text.
+        // Get multi-line selection content.
         QString newBottom = cursor.selectedText();
         cursor.removeSelectedText();
         
-        // Select line below and store value.
+        // Get line content below multi-line selection.
         cursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor);
         cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
         QString newTop = cursor.selectedText();
         cursor.removeSelectedText();
 
+        // Record new selection bound after swap content.
         cursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
         cursor.insertText(newTop);
         
@@ -414,7 +417,7 @@ void TextEditor::swapLineDown(){
         cursor.insertText(newBottom);
         int newSelectionEndPos = cursor.position();
         
-        // Position cursor.
+        // Reset selection bound for multi-line content.
         cursor.setPosition(newSelectionStartPos, QTextCursor::MoveAnchor);
         cursor.setPosition(newSelectionEndPos, QTextCursor::KeepAnchor);
         
@@ -426,25 +429,25 @@ void TextEditor::swapLineDown(){
         // Rember current line's column number.
         int column = cursor.columnNumber();
 
-        // Select current line and store value.
+        // Get current line content.
         cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
         QString newBottom = cursor.selectedText();
         cursor.removeSelectedText();
 
-        // Select line below and store value.
+        // Get line content below current line.
         cursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor);
         cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
         QString newTop = cursor.selectedText();
         cursor.removeSelectedText();
 
-        // Insert new values.
+        // Swap content.
         cursor.insertText(newBottom);
         cursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
         cursor.insertText(newTop);
 
-        // Position cursor.
+        // Move new start of line.
         cursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor);
         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
 
