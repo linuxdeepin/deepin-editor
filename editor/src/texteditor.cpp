@@ -400,7 +400,11 @@ void TextEditor::killLine()
 
 void TextEditor::insertTab()
 {
-    QString spaces(4, ' ');
+    // If current column is not Multiples of 4, jump to 4x position before next indent.
+    int column = getCurrentColumn();
+    int indentSpace = 4 - (column % 4);
+    
+    QString spaces(indentSpace, ' ');
     textCursor().insertText(spaces);
 }
 
