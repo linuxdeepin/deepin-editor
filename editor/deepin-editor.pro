@@ -39,14 +39,15 @@ SOURCES += src/window.cpp \
 	   src/utils.cpp \		   
 	   src/main.cpp		   
 		   
+QT += KSyntaxHighlighting
 QT += core
-QT += widgets
+QT += dbus
 QT += gui
 QT += network
-QT += x11extras
-QT += dbus
+QT += printsupport
 QT += svg
-QT += KSyntaxHighlighting
+QT += widgets
+QT += x11extras
 
 QMAKE_CXXFLAGS += -g
 LIBS += -lX11 -lXext -lXtst

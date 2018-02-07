@@ -34,9 +34,12 @@
 #include <QDir>
 #include <QFileDialog>
 #include <QLabel>
+#include <QPrintDialog>
+#include <QPrintPreviewDialog>
+#include <QPrinter>
 #include <QScreen>
-#include <QSvgWidget>
 #include <QStyleFactory>
+#include <QSvgWidget>
 
 DWIDGET_USE_NAMESPACE
 
@@ -108,6 +111,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
         connect(newWindowAction, &QAction::triggered, this, &Window::newWindow);
         connect(saveAction, &QAction::triggered, this, &Window::saveFile);
         connect(saveAsAction, &QAction::triggered, this, &Window::saveAsFile);
+        connect(printAction, &QAction::triggered, this, &Window::print);
     }
 
     // Init find bar.
@@ -667,7 +671,13 @@ DDialog* Window::createSaveBlankFileDialog()
     return dialog;
 }
 
-void Window::popupRightMenu()
+void Window::print()
 {
-    
+    QPrinter printer(QPrinter::HighResolution);
+    QPrintPreviewDialog preview(&printer, this);
+    connect(&preview, &QPrintPreviewDialog::paintRequested, this, 
+            [=] (QPrinter *printer) {
+                getActiveEditor()->textEditor->print(printer);
+            });
+    preview.exec();    
 }
