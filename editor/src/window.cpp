@@ -306,7 +306,7 @@ void Window::openFile()
 bool Window::saveFile()
 {
     if (QFileInfo(tabbar->getActiveTabPath()).dir().absolutePath() == blankFileDir) {
-        QString filepath = QFileDialog::getSaveFileName(this, "Save File", QDir::homePath(), getEncodeList().join(";;"));
+        QString filepath = QFileDialog::getSaveFileName(this, "Save File", QDir(QDir::homePath()).filePath("Blank Document.txt"), getEncodeList().join(";;"));
 
         if (filepath != "") {
             QString tabPath = tabbar->getActiveTabPath();
@@ -326,7 +326,7 @@ bool Window::saveFile()
 
 void Window::saveAsFile()
 {
-    QString filepath = QFileDialog::getSaveFileName(this, "Save File", QDir::homePath(), getEncodeList().join(";;"));
+    QString filepath = QFileDialog::getSaveFileName(this, "Save File", QDir(QDir::homePath()).filePath("Blank Document.txt"), getEncodeList().join(";;"));
     QString tabPath = tabbar->getActiveTabPath();
 
     if (filepath != "" && filepath != tabPath) {
