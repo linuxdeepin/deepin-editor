@@ -24,7 +24,12 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
+#include "dsettingsdialog.h"
+#include <qsettingbackend.h>
 #include <QSettings>
+
+DWIDGET_USE_NAMESPACE
+DTK_USE_NAMESPACE
 
 class Settings : public QObject 
 {
@@ -34,18 +39,23 @@ public:
     Settings(QObject *parent = 0);
     ~Settings();
     
-    void init();
-    QString configPath();
-    QVariant getOption(const QString &key);
-    void setOption(const QString &key, const QVariant &value);
-    
     int defaultFontSize = 12;
     int maxFontSize = 50;
     int minFontSize = 8;
     
+    Dtk::Core::DSettings* settings;
+    
+signals:
+    void adjustFontSize(int fontSize);
+        
+public slots:
+    void popupSettingsDialog();
+    
 private:
-    QSettings* settings;
-    QString groupName;
+    Dtk::Core::QSettingBackend* backend;
+    DSettingsDialog settingsDialog;
+
+    void dtkThemeWorkaround(QWidget *parent, const QString &theme);
 };
 
 #endif // SETTINGS_H

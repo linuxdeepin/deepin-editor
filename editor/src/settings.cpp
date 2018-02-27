@@ -23,54 +23,76 @@
 
 #include "settings.h"
 
+#include "dthememanager.h"
+#include <DSettings>
+#include <DSettingsOption>
+#include <QStyleFactory>
+#include <QFontDatabase>
 #include <QApplication>
+#include <QDebug>
 #include <QDir>
 #include <QStandardPaths>
 
+DWIDGET_USE_NAMESPACE
+DTK_USE_NAMESPACE
+
 Settings::Settings(QObject *parent) : QObject(parent)
 {
-    settings = new QSettings(QDir(configPath()).filePath("config.conf"), QSettings::IniFormat);
+    backend = new Dtk::Core::QSettingBackend(QDir(QDir(QDir(QStandardPaths::standardLocations(QStandardPaths::ConfigLocation).first()).filePath(qApp->organizationName())).filePath(qApp->applicationName())).filePath("config.conf"));
+
+    settings = Dtk::Core::DSettings::fromJsonFile(":/resource/settings.json");
+    settings->setBackend(backend);
+
+    connect(settings, &Dtk::Core::DSettings::valueChanged, this,
+            [=] (const QString &key, const QVariant &value) {
+                if (key == "base.font.size") {
+                    adjustFontSize(value.toInt());
+                }
+                    // qDebug() << key << value;
+                settings->sync();
+            });
+
+    QFontDatabase fontDatabase;
+    auto fontFamliy = settings->option("base.font.family");
+    fontFamliy->setData("items", fontDatabase.families());
+    fontFamliy->setValue(0);
+
+    auto keymap = settings->option("shortcuts.keymap.keymap");
+    keymap->setData("items", QStringList() << "Standard" << "Emacs" << "Customize");
+
+    auto windowSate = settings->option("advance.window.window_state");
+    windowSate->setData("items", QStringList() << "Window Normal" << "Window Maximum" << "Fullscreen");
+
+    auto tabSpace = settings->option("advance.editor.tab_space_number");
+    tabSpace->setValue(4);
     
-    groupName = "General";
-    
+    settingsDialog.setProperty("_d_dtk_theme", "light");
+    settingsDialog.setProperty("_d_QSSFilename", "DSettingsDialog");
+    DThemeManager::instance()->registerWidget(&settingsDialog);
+    settingsDialog.updateSettings(settings);
+    dtkThemeWorkaround(&settingsDialog, "dlight");
 }
 
 Settings::~Settings()
 {
-    delete settings;
 }
 
-void Settings::init()
+void Settings::popupSettingsDialog()
 {
-    if (getOption("default_font_size").isNull()) {
-        setOption("default_font_size", defaultFontSize);
+    settingsDialog.exec();
+}
+
+// This function is workaround, it will remove after DTK fixed SettingDialog theme bug.
+void Settings::dtkThemeWorkaround(QWidget *parent, const QString &theme)
+{
+    parent->setStyle(QStyleFactory::create(theme));
+    for (auto obj : parent->children()) {
+
+        auto w = qobject_cast<QWidget *>(obj);
+        if (!w) {
+            continue;
+        }
+
+        dtkThemeWorkaround(w, theme);
     }
 }
-
-QString Settings::configPath()
-{
-    return QDir(QDir(QStandardPaths::standardLocations(QStandardPaths::ConfigLocation).first()).filePath(qApp->organizationName())).filePath(qApp->applicationName());
-}
-
-QVariant Settings::getOption(const QString &key)
-{
-    settings->beginGroup(groupName);
-    QVariant result;
-    if (settings->contains(key)) {
-        result = settings->value(key);
-    } else {
-        result = QVariant();
-    }
-    settings->endGroup();
-
-    return result;
-}
-
-void Settings::setOption(const QString &key, const QVariant &value) {
-    settings->beginGroup(groupName);
-    settings->setValue(key, value);
-    settings->endGroup();
-
-    settings->sync();
-}
-

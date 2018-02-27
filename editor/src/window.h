@@ -71,7 +71,7 @@ public:
     void decrementFontSize();
     void incrementFontSize();
     void resetFontSize();
-    void saveFontSize(int size);
+    void updateFontSize(int size);
     void setFontSizeWithConfig(Editor *editor);
     
     void popupFindBar();
@@ -120,7 +120,6 @@ public slots:
     void removeBottomWidget();
     
     void popupPrintDialog();
-    void popupSettingDialog();
     
 private:
     FindBar *findBar;
@@ -160,7 +159,6 @@ private:
     void showNotify(QString message);
     
     DDialog* createSaveBlankFileDialog();
-    void dtkThemeWorkaround(QWidget *parent, const QString &theme);
 };
 
 #endif

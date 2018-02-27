@@ -61,7 +61,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
 
     // Init settings.
     settings = new Settings();
-    settings->init();
+    connect(settings, &Settings::adjustFontSize, this, &Window::updateFontSize);
 
     // Init layout and editor.
     layoutWidget = new QWidget();
@@ -128,7 +128,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
         connect(saveAction, &QAction::triggered, this, &Window::saveFile);
         connect(saveAsAction, &QAction::triggered, this, &Window::saveAsFile);
         connect(printAction, &QAction::triggered, this, &Window::popupPrintDialog);
-        connect(settingAction, &QAction::triggered, this, &Window::popupSettingDialog);
+        connect(settingAction, &QAction::triggered, settings, &Settings::popupSettingsDialog);
     }
 
     // Init find bar.
@@ -352,40 +352,33 @@ void Window::saveFileAsAnotherPath(QString fromPath, QString toPath, bool delete
 
 void Window::decrementFontSize()
 {
-    foreach (Editor *editor, editorMap.values()) {
-        int size = std::max(fontSize - 1, settings->minFontSize);
-        editor->textEditor->setFontSize(size);
-        saveFontSize(size);
-    }
+    int size = std::max(fontSize - 1, settings->minFontSize);
+    settings->settings->option("base.font.size")->setValue(size);
 }
 
 void Window::incrementFontSize()
 {
-    foreach (Editor *editor, editorMap.values()) {
-        int size = std::min(fontSize + 1, settings->maxFontSize);
-        editor->textEditor->setFontSize(size);
-        saveFontSize(size);
-    }
+    int size = std::min(fontSize + 1, settings->maxFontSize);
+    settings->settings->option("base.font.size")->setValue(size);
 }
 
 void Window::resetFontSize()
 {
-    foreach (Editor *editor, editorMap.values()) {
-        editor->textEditor->setFontSize(settings->defaultFontSize);
-        saveFontSize(settings->defaultFontSize);
-    }
+    settings->settings->option("base.font.size")->setValue(settings->defaultFontSize);
 }
 
-void Window::saveFontSize(int size)
+void Window::updateFontSize(int size)
 {
+    foreach (Editor *editor, editorMap.values()) {
+        editor->textEditor->setFontSize(size);
+    }
+    
     fontSize = size;
-
-    settings->setOption("default_font_size", fontSize);
 }
 
 void Window::setFontSizeWithConfig(Editor *editor)
 {
-    int size =  settings->getOption("default_font_size").toInt();
+    int size = settings->settings->option("base.font.size")->value().toInt();
     editor->textEditor->setFontSize(size);
 
     fontSize = size;
@@ -828,56 +821,3 @@ void Window::popupPrintDialog()
     preview.exec();
 }
 
-void Window::popupSettingDialog()
-{
-    auto backend = new Dtk::Core::QSettingBackend(QDir(QDir(QDir(QStandardPaths::standardLocations(QStandardPaths::ConfigLocation).first()).filePath(qApp->organizationName())).filePath(qApp->applicationName())).filePath("config.conf"));
-
-    auto settings = Dtk::Core::DSettings::fromJsonFile(":/resource/settings.json");
-    settings->setBackend(backend);
-
-    connect(settings, &DSettings::valueChanged, this,
-            [=] (const QString &key, const QVariant &value) {
-                qDebug() << key << value;
-                settings->sync();
-            });
-
-    QFontDatabase fontDatabase;
-    auto fontFamliy = settings->option("base.font.family");
-    fontFamliy->setData("items", fontDatabase.families());
-    fontFamliy->setValue(0);
-
-    auto fontSize = settings->option("base.font.size");
-    fontSize->setValue(12);
-
-    auto keymap = settings->option("shortcuts.keymap.keymap");
-    keymap->setData("items", QStringList() << "Standard" << "Emacs" << "Customize");
-
-    auto windowSate = settings->option("advance.window.window_state");
-    windowSate->setData("items", QStringList() << "Window Normal" << "Window Maximum" << "Fullscreen");
-
-    auto tabSpace = settings->option("advance.editor.tab_space_number");
-    tabSpace->setValue(4);
-
-    DSettingsDialog dsd(this);
-    dsd.setProperty("_d_dtk_theme", "light");
-    dsd.setProperty("_d_QSSFilename", "DSettingsDialog");
-    DThemeManager::instance()->registerWidget(&dsd);
-    dsd.updateSettings(settings);
-    dtkThemeWorkaround(&dsd, "dlight");
-    dsd.exec();
-}
-
-// This function is workaround, it will remove after DTK fixed SettingDialog theme bug.
-void Window::dtkThemeWorkaround(QWidget *parent, const QString &theme)
-{
-    parent->setStyle(QStyleFactory::create(theme));
-    for (auto obj : parent->children()) {
-
-        auto w = qobject_cast<QWidget *>(obj);
-        if (!w) {
-            continue;
-        }
-
-        dtkThemeWorkaround(w, theme);
-    }
-}
