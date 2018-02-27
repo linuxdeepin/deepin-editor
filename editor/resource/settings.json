@@ -126,7 +126,7 @@
                             "key": "tab_space_number",
                             "name": "Tab Space Number",
                             "type": "spinbutton",
-                            "default": 12
+                            "default": 4
                         }
                     ]
                 }

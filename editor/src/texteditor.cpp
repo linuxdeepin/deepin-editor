@@ -569,7 +569,7 @@ void TextEditor::indentLine()
 
     // If current column is not Multiples of 4, jump to 4x position before next indent.
     moveToLineIndentation();
-    int indentSpace = 4 - (getCurrentColumn() % 4);
+    int indentSpace = tabSpaceNumber - (getCurrentColumn() % tabSpaceNumber);
 
     // Insert spaces.
     moveToStartOfLine();
@@ -592,9 +592,9 @@ void TextEditor::backIndentLine()
     moveToLineIndentation();
 
     if (getCurrentColumn() > 0) {
-        int indentSpace = getCurrentColumn() % 4;
-        if (indentSpace == 0 && getCurrentColumn() >= 4) {
-            indentSpace = 4;
+        int indentSpace = getCurrentColumn() % tabSpaceNumber;
+        if (indentSpace == 0 && getCurrentColumn() >= tabSpaceNumber) {
+            indentSpace = tabSpaceNumber;
         }
 
         // Remove spaces.
@@ -610,6 +610,11 @@ void TextEditor::backIndentLine()
         cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, column - indentSpace);
         setTextCursor(cursor);
     }
+}
+
+void TextEditor::setTabSpaceNumber(int number)
+{
+    tabSpaceNumber = number;
 }
 
 void TextEditor::upcaseWord()

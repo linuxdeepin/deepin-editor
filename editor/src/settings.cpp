@@ -47,8 +47,10 @@ Settings::Settings(QObject *parent) : QObject(parent)
             [=] (const QString &key, const QVariant &value) {
                 if (key == "base.font.size") {
                     adjustFontSize(value.toInt());
+                } else if (key == "advance.editor.tab_space_number") {
+                    adjustTabSpaceNumber(value.toInt());
                 }
-                    // qDebug() << key << value;
+
                 settings->sync();
             });
 
@@ -63,9 +65,6 @@ Settings::Settings(QObject *parent) : QObject(parent)
     auto windowSate = settings->option("advance.window.window_state");
     windowSate->setData("items", QStringList() << "Window Normal" << "Window Maximum" << "Fullscreen");
 
-    auto tabSpace = settings->option("advance.editor.tab_space_number");
-    tabSpace->setValue(4);
-    
     settingsDialog.setProperty("_d_dtk_theme", "light");
     settingsDialog.setProperty("_d_QSSFilename", "DSettingsDialog");
     DThemeManager::instance()->registerWidget(&settingsDialog);

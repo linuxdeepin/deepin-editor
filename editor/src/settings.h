@@ -47,6 +47,7 @@ public:
     
 signals:
     void adjustFontSize(int fontSize);
+    void adjustTabSpaceNumber(int number);
         
 public slots:
     void popupSettingsDialog();

@@ -71,7 +71,6 @@ public:
     void decrementFontSize();
     void incrementFontSize();
     void resetFontSize();
-    void updateFontSize(int size);
     void setFontSizeWithConfig(Editor *editor);
     
     void popupFindBar();
@@ -84,6 +83,9 @@ public:
     
     void remberPositionSave(bool notify=true);
     void remberPositionRestore();
+    
+    void updateFontSize(int size);
+    void updateTabSpaceNumber(int number);
     
 protected:    
     void closeEvent(QCloseEvent *event);

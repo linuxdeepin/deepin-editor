@@ -80,6 +80,7 @@ public:
     
     void indentLine();
     void backIndentLine();
+    void setTabSpaceNumber(int number);
     void convertWordCase(ConvertCase convertCase);
     
     void keepCurrentLineAtCenter();
@@ -149,6 +150,8 @@ private:
     
     int restoreColumn;
     int restoreRow;
+    
+    int tabSpaceNumber = 4;
     
     KSyntaxHighlighting::Repository m_repository;
     KSyntaxHighlighting::SyntaxHighlighter *m_highlighter;
