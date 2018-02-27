@@ -19,7 +19,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #include "settings.h"
 
@@ -44,20 +44,41 @@ Settings::Settings(QObject *parent) : QObject(parent)
     settings->setBackend(backend);
 
     connect(settings, &Dtk::Core::DSettings::valueChanged, this,
-            [=] (const QString &key, const QVariant &value) {
-                if (key == "base.font.size") {
-                    adjustFontSize(value.toInt());
-                } else if (key == "advance.editor.tab_space_number") {
-                    adjustTabSpaceNumber(value.toInt());
-                }
-
+            [=] (const QString &, const QVariant &) {
                 settings->sync();
             });
 
+    auto fontSize = settings->option("base.font.size");
+    connect(fontSize, &Dtk::Core::DSettingsOption::valueChanged,
+            this, [=](QVariant value) {
+                      adjustFontSize(value.toInt());
+                  });
+
+    auto tabSpaceNumber = settings->option("advance.editor.tab_space_number");
+    connect(fontSize, &Dtk::Core::DSettingsOption::valueChanged,
+            this, [=](QVariant value) {
+                      adjustTabSpaceNumber(value.toInt());
+                  });
+
     QFontDatabase fontDatabase;
     auto fontFamliy = settings->option("base.font.family");
-    fontFamliy->setData("items", fontDatabase.families());
-    fontFamliy->setValue(0);
+    QMap<QString, QVariant> fontDatas;
+
+    QStringList values = fontDatabase.families();
+    QStringList keys = values;
+    fontDatas.insert("keys", keys);
+    fontDatas.insert("values", values);
+    fontFamliy->setData("items", fontDatas);
+
+    if (fontFamliy->value().toString().isEmpty()) {
+        fontFamliy->setValue(QFontDatabase::systemFont(QFontDatabase::FixedFont).family());
+    }
+
+    connect(fontFamliy, &Dtk::Core::DSettingsOption::valueChanged,
+            this, [=](QVariant value) {
+                      adjustFont(value.toString());
+                      qDebug() << "fontFamliy change" << value.toString();
+                  });
 
     auto keymap = settings->option("shortcuts.keymap.keymap");
     keymap->setData("items", QStringList() << "Standard" << "Emacs" << "Customize");

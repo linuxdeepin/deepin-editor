@@ -696,14 +696,23 @@ void TextEditor::scrollToLine(int scrollOffset, int row, int column)
     scrollAnimation->start();
 }
 
+void TextEditor::setFontFamily(QString fontName)
+{
+    QTextDocument *doc = document();
+    QFont font = doc->defaultFont();
+    font.setFixedPitch(true);
+    font.setFamily(fontName);
+    doc->setDefaultFont(font);
+}
+
 void TextEditor::setFontSize(int size)
 {
     // Update font.
-    QFont font;
-    font.setFamily("Note Mono");
+    QTextDocument *doc = document();
+    QFont font = doc->defaultFont();
     font.setFixedPitch(true);
     font.setPointSize(size);
-    setFont(font);
+    doc->setDefaultFont(font);
 
     // Update line number after adjust font size.
     updateLineNumber();

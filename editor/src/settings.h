@@ -46,6 +46,7 @@ public:
     Dtk::Core::DSettings* settings;
     
 signals:
+    void adjustFont(QString name);
     void adjustFontSize(int fontSize);
     void adjustTabSpaceNumber(int number);
         

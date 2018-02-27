@@ -84,6 +84,7 @@ public:
     void remberPositionSave(bool notify=true);
     void remberPositionRestore();
     
+    void updateFont(QString fontName);
     void updateFontSize(int size);
     void updateTabSpaceNumber(int number);
     

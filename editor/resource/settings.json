@@ -12,7 +12,7 @@
                             "key": "family",
                             "name": "Font",
                             "type": "combobox",
-                            "default": "Note Sans"
+                            "default": ""
                         },
                         {
                             "key": "size",

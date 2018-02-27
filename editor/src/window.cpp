@@ -61,6 +61,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
 
     // Init settings.
     settings = new Settings();
+    connect(settings, &Settings::adjustFont, this, &Window::updateFont);
     connect(settings, &Settings::adjustFontSize, this, &Window::updateFontSize);
     connect(settings, &Settings::adjustTabSpaceNumber, this, &Window::updateTabSpaceNumber);
 
@@ -264,8 +265,9 @@ void Window::restoreTab()
 Editor* Window::createEditor()
 {
     Editor *editor = new Editor();
-    editor->textEditor->setTabSpaceNumber(settings->settings->option("advance.editor.tab_space_number")->value().toInt());
     setFontSizeWithConfig(editor);
+    editor->textEditor->setTabSpaceNumber(settings->settings->option("advance.editor.tab_space_number")->value().toInt());
+    editor->textEditor->setFontFamily(settings->settings->option("base.font.family")->value().toString());
 
     connect(editor->textEditor, &TextEditor::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);
     connect(editor->textEditor, &TextEditor::clickReplaceAction, this, &Window::popupReplaceBar, Qt::QueuedConnection);
@@ -520,6 +522,13 @@ void Window::remberPositionRestore()
                 showNotify("记录位置的文件已经不存在了");
             }
         }
+    }
+}
+
+void Window::updateFont(QString fontName)
+{
+    foreach (Editor *editor, editorMap.values()) {
+        editor->textEditor->setFontFamily(fontName);
     }
 }
 

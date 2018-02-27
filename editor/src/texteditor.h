@@ -86,6 +86,7 @@ public:
     void keepCurrentLineAtCenter();
     void scrollToLine(int scrollOffset, int row, int column);
     
+    void setFontFamily(QString fontName);
     void setFontSize(int fontSize);
     
     void replaceAll(QString replaceText, QString withText);
