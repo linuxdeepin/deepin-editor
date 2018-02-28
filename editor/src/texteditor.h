@@ -68,10 +68,13 @@ public:
     void prevLine();
     void jumpToLine(int line, bool keepLineAtCenter);
     
+    void newline();
     void openNewlineAbove();
     void openNewlineBelow();
     void swapLineDown();
     void swapLineUp();
+    void scrollLineUp();
+    void scrollLineDown();
     void duplicateLine();
     
     void killLine();

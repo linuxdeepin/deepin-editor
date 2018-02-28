@@ -275,6 +275,13 @@ void TextEditor::jumpToLine(int line, bool keepLineAtCenter)
     }
 }
 
+void TextEditor::newline()
+{
+    QTextCursor cursor = textCursor();
+    cursor.insertText("\n");
+    setTextCursor(cursor);
+}
+
 void TextEditor::openNewlineAbove()
 {
     moveCursor(QTextCursor::StartOfLine);
@@ -288,7 +295,8 @@ void TextEditor::openNewlineBelow()
     textCursor().insertText("\n");
 }
 
-void TextEditor::swapLineUp(){
+void TextEditor::swapLineUp()
+{
     if (textCursor().hasSelection()) {
         // Get selection bound.
         int startPos = textCursor().anchor();
@@ -375,7 +383,8 @@ void TextEditor::swapLineUp(){
     }
 }
 
-void TextEditor::swapLineDown(){
+void TextEditor::swapLineDown()
+{
     if (textCursor().hasSelection()) {
         // Get selection bound.
         int startPos = textCursor().anchor();
@@ -461,6 +470,26 @@ void TextEditor::swapLineDown(){
         // Update cursor.
         setTextCursor(cursor);
     }
+}
+
+void TextEditor::scrollLineUp()
+{
+    QScrollBar *scrollbar = verticalScrollBar();
+    if (scrollbar->value() + 2 >= getCurrentLine()) {
+        jumpToLine(getCurrentLine() + 1, false);
+    }
+    scrollbar->setValue(scrollbar->value() + 1);
+}
+
+void TextEditor::scrollLineDown()
+{
+    QScrollBar *scrollbar = verticalScrollBar();
+    int visibleLines = (rect().height() / cursorRect().height());
+    if (scrollbar->value() + visibleLines <= getCurrentLine() + 2) {
+        jumpToLine(getCurrentLine() - 1, false);
+    }
+    
+    scrollbar->setValue(scrollbar->value() - 1);
 }
 
 void TextEditor::duplicateLine()
@@ -906,6 +935,8 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         nextLine();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "prevline")) {
         prevLine();
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "newline")) {
+        newline();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "opennewlineabove")) {
         openNewlineAbove();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "opennewlinebelow")) {
@@ -920,6 +951,10 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         swapLineUp();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "swaplinedown")) {
         swapLineDown();
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "scrolllineup")) {
+        scrollLineUp();
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "scrolllinedown")) {
+        scrollLineDown();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "movetoendofline")) {
         moveToEndOfLine();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "movetostartofline")) {

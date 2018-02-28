@@ -213,6 +213,12 @@
                             "default":  "Up"
                         },
                         {
+                            "key": "newline",
+                            "name": "New Line",
+                            "type": "shortcut",
+                            "default":  "Enter"
+                        },
+                        {
                             "key": "opennewlineabove",
                             "name": "Open New Line Above",
                             "type": "shortcut",
@@ -253,6 +259,18 @@
                             "name": "Swap Line Down",
                             "type": "shortcut",
                             "default":  "Ctrl+Shift+Down"
+                        },
+                        {
+                            "key": "scrolllineup",
+                            "name": "Scroll Line Up",
+                            "type": "shortcut",
+                            "default":  "Meta+Shift+Up"
+                        },
+                        {
+                            "key": "scrolllinedown",
+                            "name": "Scroll Line Down",
+                            "type": "shortcut",
+                            "default":  "Meta+Shift+Down"
                         },
                         {
                             "key": "movetoendofline",
@@ -521,6 +539,12 @@
                             "default":  "Up"
                         },
                         {
+                            "key": "newline",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Enter"
+                        },
+                        {
                             "key": "opennewlineabove",
 			    "hide" : true,
 			    "reset" : false,
@@ -561,6 +585,18 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Ctrl+Shift+Down"
+                        },
+                        {
+                            "key": "scrolllineup",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Meta+Shift+Up"
+                        },
+                        {
+                            "key": "scrolllinedown",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Meta+Shift+Down"
                         },
                         {
                             "key": "movetoendofline",
@@ -829,6 +865,12 @@
                             "default":  "Ctrl+P"
                         },
                         {
+                            "key": "newline",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Ctrl+M"
+                        },
+                        {
                             "key": "opennewlineabove",
 			    "hide" : true,
 			    "reset" : false,
@@ -869,6 +911,18 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Meta+Shift+N"
+                        },
+                        {
+                            "key": "scrolllineup",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Meta+Shift+J"
+                        },
+                        {
+                            "key": "scrolllinedown",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Meta+Shift+K"
                         },
                         {
                             "key": "movetoendofline",
@@ -1137,6 +1191,12 @@
                             "default":  "Up"
                         },
                         {
+                            "key": "newline",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Enter"
+                        },
+                        {
                             "key": "opennewlineabove",
 			    "hide" : true,
 			    "reset" : false,
@@ -1177,6 +1237,18 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Ctrl+Shift+Down"
+                        },
+                        {
+                            "key": "scrolllineup",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Meta+Shift+Up"
+                        },
+                        {
+                            "key": "scrolllinedown",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Meta+Shift+Down"
                         },
                         {
                             "key": "movetoendofline",
