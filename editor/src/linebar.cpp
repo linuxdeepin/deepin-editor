@@ -63,7 +63,7 @@ void LineBar::focusOutEvent(QFocusEvent *)
 
 void LineBar::keyPressEvent(QKeyEvent *e)
 {
-    QString key = Utils::getKeymap(e);
+    QString key = Utils::getKeyshortcut(e);
     
     if (key == "Esc") {
         pressEsc();

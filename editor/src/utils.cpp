@@ -23,6 +23,8 @@
 
 #include "utils.h"
 
+#include <DSettings>
+#include <DSettingsOption>
 #include <QApplication>
 #include <QDebug>
 #include <QDir>
@@ -92,11 +94,11 @@ bool Utils::fileIsWritable(QString path)
     return permissions & QFileDevice::WriteUser;
 }
 
-QString Utils::getKeymap(QKeyEvent *keyEvent)
+QString Utils::getKeyshortcut(QKeyEvent *keyEvent)
 {
     QStringList keys;
     Qt::KeyboardModifiers modifiers = keyEvent->modifiers();
-    if (modifiers!=Qt::NoModifier){
+    if (modifiers != Qt::NoModifier){
         if (modifiers.testFlag(Qt::ControlModifier)) {
             keys.append("Ctrl");
         }
@@ -118,5 +120,11 @@ QString Utils::getKeymap(QKeyEvent *keyEvent)
         keys.append(QKeySequence(keyEvent->key()).toString());
     }
     
-    return keys.join(" + ");
+    return keys.join("+");
 }
+
+QString Utils::getKeyshortcutFromKeymap(Settings* settings, QString keyCategory, QString keyName)
+{
+    return settings->settings->option(QString("shortcuts.%1.%2").arg(keyCategory).arg(keyName))->value().toString();
+}
+

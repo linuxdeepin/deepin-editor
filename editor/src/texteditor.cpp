@@ -31,6 +31,9 @@
 
 #include <DDesktopServices>
 #include <QApplication>
+#include <DSettingsGroup>
+#include <DSettingsOption>
+#include <DSettings>
 #include <QClipboard>
 #include <QFileInfo>
 #include <QDebug>
@@ -860,61 +863,70 @@ void TextEditor::renderAllSelections()
 
 void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
 {
-    QString key = Utils::getKeymap(keyEvent);
+    QString key = Utils::getKeyshortcut(keyEvent);
 
-    // qDebug() << key;
+    // qDebug() << "\n***********" << key;
 
-    if (key == "Tab") {
+    if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "indentline")) {
         indentLine();
-    } else if (key == "Shift + Backtab") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "backindentline")) {
         backIndentLine();
-    } else if (key == "Ctrl + F") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "forwardchar")) {
         forwardChar();
-    } else if (key == "Ctrl + B") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "backwardchar")) {
         backwardChar();
-    } else if (key == "Alt + F") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "forwardword")) {
         forwardWord();
-    } else if (key == "Alt + B") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "backwardword")) {
         backwardWord();
-    } else if (key == "Ctrl + N") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "nextline")) {
         nextLine();
-    } else if (key == "Ctrl + P") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "prevline")) {
         prevLine();
-    } else if (key == "Ctrl + L") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "opennewlineabove")) {
         openNewlineAbove();
-    } else if (key == "Ctrl + H") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "opennewlinebelow")) {
         openNewlineBelow();
-    } else if (key == "Ctrl + Shift + L") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "duplicateline")) {
         duplicateLine();
-    } else if (key == "Ctrl + K") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "killline")) {
         killLine();
-    } else if (key == "Ctrl + Shift + K") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "killcurrentline")) {
         killCurrentLine();
-    } else if (key == "Meta + Shift + P") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "swaplineup")) {
         swapLineUp();
-    } else if (key == "Meta + Shift + N") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "swaplinedown")) {
         swapLineDown();
-    } else if (key == "Ctrl + Shift + E") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "movetoendofline")) {
         moveToEndOfLine();
-    } else if (key == "Ctrl + Shift + A") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "movetostartofline")) {
         moveToStartOfLine();
-    } else if (key == "Alt + M") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "movetolineindentation")) {
         moveToLineIndentation();
-    } else if (key == "Alt + U") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "upcaseword")) {
         upcaseWord();
-    } else if (key == "Alt + L") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "downcaseword")) {
         downcaseWord();
-    } else if (key == "Alt + C") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "capitalizeword")) {
         capitalizeWord();
-    } else if (key == "Alt + Shift + N") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "killbackwardword")) {
         killBackwardWord();
-    } else if (key == "Alt + Shift + M") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "killforwardword")) {
         killForwardWord();
-    } else if (key == "Alt + P") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "forwardpair")) {
         forwardPair();
-    } else if (key == "Alt + N") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "backwardpair")) {
         backwardPair();
     } else {
+        // Post event to window widget if key match window key list.
+        for (auto option : settings->settings->group("shortcuts.window")->options()) {
+            if (key == settings->settings->option(option->key())->value().toString()) {
+                keyEvent->ignore();
+                return;
+            }
+        }
+        
+        // Text editor handle key self.
         QPlainTextEdit::keyPressEvent(keyEvent);
     }
 }
@@ -1145,6 +1157,11 @@ void TextEditor::removeHighlightWordUnderCursor()
     wordUnderCursorSelection = selection;
 
     renderAllSelections();
+}
+
+void TextEditor::setSettings(Settings *keySettings)
+{
+    settings = keySettings;
 }
 
 void TextEditor::clickCutAction()

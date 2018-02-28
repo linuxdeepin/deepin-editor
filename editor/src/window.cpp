@@ -283,6 +283,7 @@ Editor* Window::createEditor()
 {
     Editor *editor = new Editor();
     setFontSizeWithConfig(editor);
+    editor->textEditor->setSettings(settings);
     editor->textEditor->setTabSpaceNumber(settings->settings->option("advance.editor.tab_space_number")->value().toInt());
     editor->textEditor->setFontFamily(settings->settings->option("base.font.family")->value().toString());
 
@@ -599,47 +600,47 @@ void Window::closeEvent(QCloseEvent *)
 
 void Window::keyPressEvent(QKeyEvent *keyEvent)
 {
-    QString key = Utils::getKeymap(keyEvent);
+    QString key = Utils::getKeyshortcut(keyEvent);
 
-    // qDebug() << key;
-
-    if (key == "Ctrl + T") {
+    // qDebug() << "!!!!!!!!!!!! " << key << Utils::getKeyshortcutFromKeymap(settings, "window", "selectnexttab");
+    
+    if (key == Utils::getKeyshortcutFromKeymap(settings, "window", "addblanktab")) {
         addBlankTab();
-    } else if (key == "Ctrl + S") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "window", "savefile")) {
         saveFile();
-    } else if (key == "Ctrl + Shift + S") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "window", "saveasfile")) {
         saveAsFile();
-    } else if (key == "Ctrl + Tab") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "window", "selectnexttab")) {
         tabbar->selectNextTab();
-    } else if (key == "Ctrl + Shift + Backtab") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "window", "selectprevtab")) {
         tabbar->selectPrevTab();
-    } else if (key == "Ctrl + W") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "window", "closetab")) {
         closeTab();
-    } else if (key == "Ctrl + Shift + T") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "window", "restoretab")) {
         restoreTab();
-    } else if (key == "Ctrl + Shift + W") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "window", "closeothertabs")) {
         tabbar->closeOtherTabs();
-    } else if (key == "Ctrl + O") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "window", "openfile")) {
         openFile();
-    } else if (key == "Ctrl + =") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "window", "incrementfontsize")) {
         incrementFontSize();
-    } else if (key == "Ctrl + -") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "window", "decrementfontsize")) {
         decrementFontSize();
-    } else if (key == "Ctrl + 0") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "window", "resetfontsize")) {
         resetFontSize();
-    } else if (key == "F11") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "window", "togglefullscreen")) {
         toggleFullscreen();
-    } else if (key == "Ctrl + Shift + F") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "window", "find")) {
         popupFindBar();
-    } else if (key == "Ctrl + Shift + H") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "window", "replace")) {
         popupReplaceBar();
-    } else if (key == "Ctrl + Shift + G") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "window", "jumptoline")) {
         popupJumpLineBar();
-    } else if (key == "Ctrl + Shift + >") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "window", "saveposition")) {
         remberPositionSave();
-    } else if (key == "Ctrl + Shift + <") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "window", "restoreposition")) {
         remberPositionRestore();
-    } else if (key == "Esc") {
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "window", "escape")) {
         removeBottomWidget();
     }
 }

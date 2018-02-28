@@ -58,6 +58,10 @@ private:
     DSettingsDialog settingsDialog;
 
     void dtkThemeWorkaround(QWidget *parent, const QString &theme);
+    void updateAllKeysWithKeymap(QString keymap);
+    void copyCustomizeKeysFromKeymap(QString keymap);
+    
+    bool userChangeKey = false;
 };
 
 #endif // SETTINGS_H

@@ -25,6 +25,7 @@
 
 #include "dthememanager.h"
 #include <DSettings>
+#include <DSettingsGroup>
 #include <DSettingsOption>
 #include <QStyleFactory>
 #include <QFontDatabase>
@@ -42,11 +43,6 @@ Settings::Settings(QObject *parent) : QObject(parent)
 
     settings = Dtk::Core::DSettings::fromJsonFile(":/resource/settings.json");
     settings->setBackend(backend);
-
-    connect(settings, &Dtk::Core::DSettings::valueChanged, this,
-            [=] (const QString &, const QVariant &) {
-                settings->sync();
-            });
 
     auto fontSize = settings->option("base.font.size");
     connect(fontSize, &Dtk::Core::DSettingsOption::valueChanged,
@@ -80,7 +76,16 @@ Settings::Settings(QObject *parent) : QObject(parent)
                   });
 
     auto keymap = settings->option("shortcuts.keymap.keymap");
-    keymap->setData("items", QStringList() << "Standard" << "Emacs" << "Customize");
+    QMap<QString, QVariant> keymapMap;
+    keymapMap.insert("keys", QStringList() << "standard" << "emacs" << "customize");
+    keymapMap.insert("values", QStringList() << "Standard" << "Emacs" << "Customize");
+    keymap->setData("items", keymapMap);
+    
+    connect(keymap, &Dtk::Core::DSettingsOption::valueChanged,
+            this, [=](QVariant value) {
+                      // Update all key's display value with user select keymap.
+                      updateAllKeysWithKeymap(value.toString());
+                  });
 
     auto windowState = settings->option("advance.window.window_state");
     QMap<QString, QVariant> windowStateMap;
@@ -88,6 +93,35 @@ Settings::Settings(QObject *parent) : QObject(parent)
     windowStateMap.insert("values", QStringList() << "Window" << "Maximum" << "Fullscreen");
     windowState->setData("items", windowStateMap);
     
+    connect(settings, &Dtk::Core::DSettings::valueChanged, this,
+            [=] (const QString &key, const QVariant &value) {
+                // Change keymap to customize once user change any keyshortcut.
+                if (!userChangeKey && key.startsWith("shortcuts.") && key != "shortcuts.keymap.keymap" && !key.contains("_keymap_")) {
+                    userChangeKey = true;
+                    
+                    QString currentKeymap = settings->option("shortcuts.keymap.keymap")->value().toString();
+                    
+                    QStringList keySplitList = key.split(".");
+                    keySplitList[1] = QString("%1_keymap_customize").arg(keySplitList[1]);
+                    QString customizeKey = keySplitList.join(".");
+                    
+                    // Just update customize key user input, don't change keymap.
+                    if (currentKeymap == "customize") {
+                        settings->option(customizeKey)->setValue(value);
+                    }
+                    // If current kemap is not "customize".
+                    // Copy all customize keys from current keymap, and then update customize key just user input.
+                    // Then change keymap name.
+                    else {
+                        copyCustomizeKeysFromKeymap(currentKeymap);
+                        settings->option(customizeKey)->setValue(value);
+                        keymap->setValue("customize");
+                    }
+                    
+                    userChangeKey = false;
+                }
+            });
+
     settingsDialog.setProperty("_d_dtk_theme", "light");
     settingsDialog.setProperty("_d_QSSFilename", "DSettingsDialog");
     DThemeManager::instance()->registerWidget(&settingsDialog);
@@ -117,4 +151,42 @@ void Settings::dtkThemeWorkaround(QWidget *parent, const QString &theme)
 
         dtkThemeWorkaround(w, theme);
     }
+}
+
+void Settings::updateAllKeysWithKeymap(QString keymap)
+{
+    userChangeKey = true;
+    
+    for (auto option : settings->group("shortcuts.window")->options()) {
+        QStringList keySplitList = option->key().split(".");
+        keySplitList[1] = QString("%1_keymap_%2").arg(keySplitList[1]).arg(keymap);
+        option->setValue(settings->option(keySplitList.join("."))->value().toString());
+    }
+
+    for (auto option : settings->group("shortcuts.editor")->options()) {
+        QStringList keySplitList = option->key().split(".");
+        keySplitList[1] = QString("%1_keymap_%2").arg(keySplitList[1]).arg(keymap);
+        option->setValue(settings->option(keySplitList.join("."))->value().toString());
+    }
+    
+    userChangeKey = false;
+}
+
+void Settings::copyCustomizeKeysFromKeymap(QString keymap)
+{
+    userChangeKey = true;
+    
+    for (auto option : settings->group("shortcuts.window_keymap_customize")->options()) {
+        QStringList keySplitList = option->key().split(".");
+        keySplitList[1] = QString("window_keymap_%1").arg(keymap);
+        option->setValue(settings->option(keySplitList.join("."))->value().toString());
+    }
+
+    for (auto option : settings->group("shortcuts.editor_keymap_customize")->options()) {
+        QStringList keySplitList = option->key().split(".");
+        keySplitList[1] = QString("editor_keymap_%1").arg(keymap);
+        option->setValue(settings->option(keySplitList.join("."))->value().toString());
+    }
+    
+    userChangeKey = false;
 }

@@ -26,6 +26,7 @@
 
 #include "Repository"
 
+#include "settings.h"
 #include <QAction>
 #include <QMenu>
 #include <QPaintEvent>
@@ -109,6 +110,8 @@ public:
     
     bool highlightWordUnderMouse(QPoint pos);
     void removeHighlightWordUnderCursor();
+    
+    void setSettings(Settings *settings);
 
 signals:
     void clickFindAction();
@@ -181,6 +184,8 @@ private:
     bool canRedo;
     
     bool haveWordUnderCursor;
+    
+    Settings *settings;
     
     bool setCursorKeywordSeletoin(int position, bool findNext);
 };

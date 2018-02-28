@@ -21,6 +21,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */ 
 
+#include "settings.h"
 #include <QKeyEvent>
 #include <QObject>
 #include <QPainter>
@@ -32,7 +33,8 @@ class Utils : public QObject
     
 public:
     static QSize getRenderSize(int fontSize, QString string);
-    static QString getKeymap(QKeyEvent *keyEvent);
+    static QString getKeyshortcut(QKeyEvent *keyEvent);
+    static QString getKeyshortcutFromKeymap(Settings* settings, QString keyCategory, QString keyName);
     static QString getQrcPath(QString imageName);
     static QString getQssPath(QString qssName);
     static bool fileExists(QString path);
