@@ -60,7 +60,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
 
     // Init settings.
-    settings = new Settings();
+    settings = new Settings(this);
     connect(settings, &Settings::adjustFont, this, &Window::updateFont);
     connect(settings, &Settings::adjustFontSize, this, &Window::updateFontSize);
     connect(settings, &Settings::adjustTabSpaceNumber, this, &Window::updateTabSpaceNumber);

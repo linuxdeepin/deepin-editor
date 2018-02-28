@@ -37,7 +37,7 @@
 DWIDGET_USE_NAMESPACE
 DTK_USE_NAMESPACE
 
-Settings::Settings(QObject *parent) : QObject(parent)
+Settings::Settings(QWidget *parent) : QObject(parent)
 {
     backend = new Dtk::Core::QSettingBackend(QDir(QDir(QDir(QStandardPaths::standardLocations(QStandardPaths::ConfigLocation).first()).filePath(qApp->organizationName())).filePath(qApp->applicationName())).filePath("config.conf"));
 
@@ -122,11 +122,12 @@ Settings::Settings(QObject *parent) : QObject(parent)
                 }
             });
 
-    settingsDialog.setProperty("_d_dtk_theme", "light");
-    settingsDialog.setProperty("_d_QSSFilename", "DSettingsDialog");
-    DThemeManager::instance()->registerWidget(&settingsDialog);
-    settingsDialog.updateSettings(settings);
-    dtkThemeWorkaround(&settingsDialog, "dlight");
+    settingsDialog = new DSettingsDialog(parent);
+    settingsDialog->setProperty("_d_dtk_theme", "light");
+    settingsDialog->setProperty("_d_QSSFilename", "DSettingsDialog");
+    DThemeManager::instance()->registerWidget(settingsDialog);
+    settingsDialog->updateSettings(settings);
+    dtkThemeWorkaround(settingsDialog, "dlight");
 }
 
 Settings::~Settings()
@@ -135,7 +136,7 @@ Settings::~Settings()
 
 void Settings::popupSettingsDialog()
 {
-    settingsDialog.exec();
+    settingsDialog->exec();
 }
 
 // This function is workaround, it will remove after DTK fixed SettingDialog theme bug.
@@ -190,3 +191,4 @@ void Settings::copyCustomizeKeysFromKeymap(QString keymap)
     
     userChangeKey = false;
 }
+

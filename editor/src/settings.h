@@ -36,7 +36,7 @@ class Settings : public QObject
     Q_OBJECT
     
 public:
-    Settings(QObject *parent = 0);
+    Settings(QWidget *parent = 0);
     ~Settings();
     
     int defaultFontSize = 12;
@@ -55,7 +55,7 @@ public slots:
     
 private:
     Dtk::Core::QSettingBackend* backend;
-    DSettingsDialog settingsDialog;
+    DSettingsDialog* settingsDialog;
 
     void dtkThemeWorkaround(QWidget *parent, const QString &theme);
     void updateAllKeysWithKeymap(QString keymap);
