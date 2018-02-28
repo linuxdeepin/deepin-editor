@@ -770,21 +770,19 @@ void TextEditor::scrollToLine(int scrollOffset, int row, int column)
 
 void TextEditor::setFontFamily(QString fontName)
 {
-    QTextDocument *doc = document();
-    QFont font = doc->defaultFont();
+    QFont font = document()->defaultFont();
     font.setFixedPitch(true);
     font.setFamily(fontName);
-    doc->setDefaultFont(font);
+    setFont(font);
 }
 
 void TextEditor::setFontSize(int size)
 {
     // Update font.
-    QTextDocument *doc = document();
-    QFont font = doc->defaultFont();
+    QFont font = document()->defaultFont();
     font.setFixedPitch(true);
     font.setPointSize(size);
-    doc->setDefaultFont(font);
+    setFont(font);
 
     // Update line number after adjust font size.
     updateLineNumber();
