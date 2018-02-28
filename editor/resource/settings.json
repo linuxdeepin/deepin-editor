@@ -321,6 +321,24 @@
                             "default":  "Ctrl+A"
                         },
                         {
+                            "key": "copy",
+                            "name": "Copy",
+                            "type": "shortcut",
+                            "default":  "Ctrl+C"
+                        },
+                        {
+                            "key": "cut",
+                            "name": "Cut",
+                            "type": "shortcut",
+                            "default":  "Ctrl+X"
+                        },
+                        {
+                            "key": "paste",
+                            "name": "Paste",
+                            "type": "shortcut",
+                            "default":  "Ctrl+V"
+                        },
+                        {
                             "key": "transposechar",
                             "name": "Transpose Char",
                             "type": "shortcut",
@@ -609,6 +627,24 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Ctrl+A"
+                        },
+                        {
+                            "key": "copy",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Ctrl+C"
+                        },
+                        {
+                            "key": "cut",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Ctrl+X"
+                        },
+                        {
+                            "key": "paste",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Ctrl+V"
                         },
                         {
                             "key": "transposechar",
@@ -901,6 +937,24 @@
                             "default":  "Ctrl+Z"
                         },
                         {
+                            "key": "copy",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Alt+W"
+                        },
+                        {
+                            "key": "cut",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Ctrl+W"
+                        },
+                        {
+                            "key": "paste",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Ctrl+Y"
+                        },
+                        {
                             "key": "transposechar",
 			    "hide" : true,
 			    "reset" : false,
@@ -1189,6 +1243,24 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Ctrl+A"
+                        },
+                        {
+                            "key": "copy",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Ctrl+C"
+                        },
+                        {
+                            "key": "cut",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Ctrl+X"
+                        },
+                        {
+                            "key": "paste",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Ctrl+V"
                         },
                         {
                             "key": "transposechar",

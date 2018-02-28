@@ -944,6 +944,12 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         transposeChar();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "selectall")) {
         selectAll();
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "copy")) {
+        copy();
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "cut")) {
+        cut();
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "paste")) {
+        paste();
     } else {
         // Post event to window widget if key match window key list.
         for (auto option : settings->settings->group("shortcuts.window")->options()) {
