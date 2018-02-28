@@ -945,7 +945,7 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "selectall")) {
         selectAll();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "copy")) {
-        copy();
+        copySelectText();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "cut")) {
         cut();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "paste")) {
@@ -1197,6 +1197,15 @@ void TextEditor::setSettings(Settings *keySettings)
     settings = keySettings;
 }
 
+void TextEditor::copySelectText()
+{
+    copy();
+    
+    QTextCursor cursor = textCursor();
+    cursor.clearSelection();
+    setTextCursor(cursor);
+}
+
 void TextEditor::clickCutAction()
 {
     if (textCursor().hasSelection()) {
@@ -1209,7 +1218,7 @@ void TextEditor::clickCutAction()
 void TextEditor::clickCopyAction()
 {
     if (textCursor().hasSelection()) {
-        copy();
+        copySelectText();
     } else {
         copyWordUnderCursor();
     }

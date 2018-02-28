@@ -112,6 +112,8 @@ public:
     void removeHighlightWordUnderCursor();
     
     void setSettings(Settings *settings);
+    
+    void copySelectText();
 
 signals:
     void clickFindAction();
