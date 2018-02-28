@@ -67,11 +67,20 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
 
     // Init window state with config.
     auto windowState = settings->settings->option("advance.window.window_state")->value().toString();
-    if (windowState == "window_maximum") {
+    if (windowState == "window_normal") {
+        QScreen *screen = QGuiApplication::primaryScreen();
+        QRect screenGeometry = screen->geometry();
+        resize(QSize(screenGeometry.width() * settings->settings->option("advance.window.window_width")->value().toDouble(),
+                     screenGeometry.height() * settings->settings->option("advance.window.window_height")->value().toDouble()));
+        
+        show();
+    } else if (windowState == "window_maximum") {
         showMaximized();
     } else if (windowState == "fullscreen") {
         showFullScreen();
     }
+    
+    windowShowFlag = true;
 
     // Init layout and editor.
     layoutWidget = new QWidget();
@@ -87,7 +96,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
 
     layout->addWidget(editorWidget);
 
-// Init titlebar.
+    // Init titlebar.
     if (this->titlebar()) {
         // Init tabbar.
         tabbar = new Tabbar();
@@ -553,6 +562,16 @@ void Window::updateTabSpaceNumber(int number)
 {
     foreach (Editor *editor, editorMap.values()) {
         editor->textEditor->setTabSpaceNumber(number);
+    }
+}
+
+void Window::resizeEvent(QResizeEvent*)
+{
+    if (windowShowFlag) {
+        QScreen *screen = QGuiApplication::primaryScreen();
+        QRect screenGeometry = screen->geometry();
+        settings->settings->option("advance.window.window_width")->setValue(rect().width() * 1.0 / screenGeometry.width());
+        settings->settings->option("advance.window.window_height")->setValue(rect().height() * 1.0 / screenGeometry.height());
     }
 }
 

@@ -115,6 +115,18 @@
                             "name": "Window State",
                             "type": "combobox",
                             "default": "window_normal"
+                        },
+			{
+                            "key": "window_width",
+                            "hide" : true,
+			    "reset" : false,
+                            "default": 0.6
+                        },
+			{
+                            "key": "window_height",
+                            "hide" : true,
+			    "reset" : false,
+                            "default": 0.6
                         }
                     ]
                 },

@@ -89,6 +89,7 @@ public:
     void updateTabSpaceNumber(int number);
     
 protected:    
+    void resizeEvent(QResizeEvent* event);
     void closeEvent(QCloseEvent *event);
     void keyPressEvent(QKeyEvent *keyEvent);
     
@@ -155,6 +156,8 @@ private:
     int remberPositionRow;
     int remberPositionColumn;
     int remberPositionScrollOffset;
+    
+    bool windowShowFlag = false;
     
     void removeActiveBlankTab(bool needSaveBefore=false);
     

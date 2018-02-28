@@ -122,11 +122,6 @@ Window* StartManager::createWindow(bool alwaysCenter)
     connect(window, &Window::dropTabOut, this, &StartManager::createWindowFromTab, Qt::QueuedConnection);
 
     // Init window position.
-    QScreen *screen = QGuiApplication::primaryScreen();
-    QRect screenGeometry = screen->geometry();
-    window->resize(QSize(screenGeometry.width() * 3 / 5, screenGeometry.height() * 3 / 5));
-    window->show();
-
     initWindowPosition(window, alwaysCenter);
     
     connect(window, &Window::newWindow, this, 
