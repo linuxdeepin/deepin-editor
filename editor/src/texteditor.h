@@ -144,6 +144,9 @@ public slots:
     void capitalizeWord();
     void transposeChar();
     
+    void changeToEditCursor();
+    void changeToWaitCursor();
+    
 private:
     QPropertyAnimation *scrollAnimation;
     
@@ -192,6 +195,8 @@ private:
     bool haveWordUnderCursor;
     
     Settings *settings;
+    
+    QTimer* changeCursorWidthTimer;
     
     bool setCursorKeywordSeletoin(int position, bool findNext);
 };

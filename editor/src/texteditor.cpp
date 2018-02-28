@@ -64,12 +64,12 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
 {
     // Don't draw background.
     viewport()->setAutoFillBackground(false);
-
+    
     // Init highlight theme.
     setTheme((palette().color(QPalette::Base).lightness() < 128)
              ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
              : m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
-
+    
     // Init widgets.
     lineNumberArea = new LineNumberArea(this);
 
@@ -146,6 +146,13 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     // Highlight line and focus.
     highlightCurrentLine();
     QTimer::singleShot(0, this, SLOT(setFocus()));
+    
+    // Init change cursor width timer.
+    changeCursorWidthTimer = new QTimer(this);
+    changeCursorWidthTimer->setSingleShot(true);
+    connect(changeCursorWidthTimer, &QTimer::timeout, this, &TextEditor::changeToWaitCursor);
+    
+    changeToWaitCursor();
 }
 
 int TextEditor::getCurrentLine()
@@ -687,6 +694,16 @@ void TextEditor::transposeChar()
     setTextCursor(cursor);
 }
 
+void TextEditor::changeToEditCursor()
+{
+    setCursorWidth(2);
+}
+
+void TextEditor::changeToWaitCursor()
+{
+    setCursorWidth(10);
+}
+
 void TextEditor::convertWordCase(ConvertCase convertCase)
 {
     if (textCursor().hasSelection()) {
@@ -915,6 +932,13 @@ void TextEditor::renderAllSelections()
 
 void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
 {
+    // Change cursor to edit status and start timer to restore to wait status.
+    changeToEditCursor();
+    if (changeCursorWidthTimer->isActive()) {
+        changeCursorWidthTimer->stop();
+    }
+    changeCursorWidthTimer->start(2000);
+    
     QString key = Utils::getKeyshortcut(keyEvent);
 
     // qDebug() << "\n***********" << key;
