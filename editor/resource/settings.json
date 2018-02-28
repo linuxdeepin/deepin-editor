@@ -114,7 +114,7 @@
                             "key": "window_state",
                             "name": "Window State",
                             "type": "combobox",
-                            "default": "Window"
+                            "default": "window_normal"
                         }
                     ]
                 },

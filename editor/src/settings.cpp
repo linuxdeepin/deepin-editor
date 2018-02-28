@@ -77,15 +77,17 @@ Settings::Settings(QObject *parent) : QObject(parent)
     connect(fontFamliy, &Dtk::Core::DSettingsOption::valueChanged,
             this, [=](QVariant value) {
                       adjustFont(value.toString());
-                      qDebug() << "fontFamliy change" << value.toString();
                   });
 
     auto keymap = settings->option("shortcuts.keymap.keymap");
     keymap->setData("items", QStringList() << "Standard" << "Emacs" << "Customize");
 
-    auto windowSate = settings->option("advance.window.window_state");
-    windowSate->setData("items", QStringList() << "Window Normal" << "Window Maximum" << "Fullscreen");
-
+    auto windowState = settings->option("advance.window.window_state");
+    QMap<QString, QVariant> windowStateMap;
+    windowStateMap.insert("keys", QStringList() << "window_normal" << "window_maximum" << "fullscreen");
+    windowStateMap.insert("values", QStringList() << "Window" << "Maximum" << "Fullscreen");
+    windowState->setData("items", windowStateMap);
+    
     settingsDialog.setProperty("_d_dtk_theme", "light");
     settingsDialog.setProperty("_d_QSSFilename", "DSettingsDialog");
     DThemeManager::instance()->registerWidget(&settingsDialog);

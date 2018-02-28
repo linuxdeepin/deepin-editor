@@ -65,6 +65,14 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     connect(settings, &Settings::adjustFontSize, this, &Window::updateFontSize);
     connect(settings, &Settings::adjustTabSpaceNumber, this, &Window::updateTabSpaceNumber);
 
+    // Init window state with config.
+    auto windowState = settings->settings->option("advance.window.window_state")->value().toString();
+    if (windowState == "window_maximum") {
+        showMaximized();
+    } else if (windowState == "fullscreen") {
+        showFullScreen();
+    }
+
     // Init layout and editor.
     layoutWidget = new QWidget();
     this->setCentralWidget(layoutWidget);
@@ -79,7 +87,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
 
     layout->addWidget(editorWidget);
 
-    // Init titlebar.
+// Init titlebar.
     if (this->titlebar()) {
         // Init tabbar.
         tabbar = new Tabbar();
@@ -323,7 +331,7 @@ bool Window::saveFile()
         }
     } else {
         showNotify("文件已自动保存");
-        
+
         return true;
     }
 }
@@ -477,7 +485,7 @@ void Window::remberPositionSave(bool notify)
     remberPositionRow = editor->textEditor->getCurrentLine();
     remberPositionColumn = editor->textEditor->getCurrentColumn();
     remberPositionScrollOffset = editor->textEditor->getScrollOffset();
-    
+
     if (notify) {
         showNotify("记住当前位置");
     }
@@ -485,16 +493,16 @@ void Window::remberPositionSave(bool notify)
 
 void Window::remberPositionRestore()
 {
-    
+
     if (remberPositionFilePath != "") {
         if (editorMap.contains(remberPositionFilePath)) {
             QString filepath = remberPositionFilePath;
             int scrollOffset = remberPositionScrollOffset;
             int row = remberPositionRow;
             int column = remberPositionColumn;
-            
+
             remberPositionSave(false);
-            
+
             activeTab(tabbar->getTabIndex(filepath));
 
             QTimer::singleShot(
@@ -508,9 +516,9 @@ void Window::remberPositionRestore()
                 int scrollOffset = remberPositionScrollOffset;
                 int row = remberPositionRow;
                 int column = remberPositionColumn;
-                
+
                 remberPositionSave(false);
-                
+
                 addTab(filepath);
 
                 QTimer::singleShot(
@@ -537,7 +545,7 @@ void Window::updateFontSize(int size)
     foreach (Editor *editor, editorMap.values()) {
         editor->textEditor->setFontSize(size);
     }
-    
+
     fontSize = size;
 }
 
@@ -838,4 +846,3 @@ void Window::popupPrintDialog()
             });
     preview.exec();
 }
-
