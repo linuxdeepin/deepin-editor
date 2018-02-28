@@ -313,6 +313,12 @@
                             "name": "Backward Pair",
                             "type": "shortcut",
                             "default":  "Alt+N"
+                        },
+                        {
+                            "key": "transposechar",
+                            "name": "Transpose Char",
+                            "type": "shortcut",
+                            "default":  "Alt+T"
                         }
                     ]
                 },
@@ -591,6 +597,12 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Alt+N"
+                        },
+                        {
+                            "key": "transposechar",
+                            "name": "Transpose Char",
+                            "type": "shortcut",
+                            "default":  "Alt+T"
                         }
                     ]
                 },
@@ -869,6 +881,12 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Alt+N"
+                        },
+                        {
+                            "key": "transposechar",
+                            "name": "Transpose Char",
+                            "type": "shortcut",
+                            "default":  "Ctrl+T"
                         }
                     ]
                 },
@@ -1147,6 +1165,12 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Alt+N"
+                        },
+                        {
+                            "key": "transposechar",
+                            "name": "Transpose Char",
+                            "type": "shortcut",
+                            "default":  "Alt+T"
                         }
                     ]
                 }		

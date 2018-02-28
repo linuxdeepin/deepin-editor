@@ -635,6 +635,29 @@ void TextEditor::capitalizeWord()
     convertWordCase(CAPITALIZE);
 }
 
+void TextEditor::transposeChar()
+{
+    QTextCursor cursor = textCursor();
+    cursor.clearSelection();
+    
+    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+    QString nextChar = cursor.selectedText();
+    cursor.removeSelectedText();
+    
+    cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+    QString prevChar = cursor.selectedText();
+    cursor.removeSelectedText();
+    
+    cursor.insertText(nextChar);
+    cursor.insertText(prevChar);
+    
+    if (!nextChar.isEmpty()) {
+        cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor);
+    }
+
+    setTextCursor(cursor);
+}
+
 void TextEditor::convertWordCase(ConvertCase convertCase)
 {
     if (textCursor().hasSelection()) {
@@ -917,6 +940,8 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         forwardPair();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "backwardpair")) {
         backwardPair();
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "transposechar")) {
+        transposeChar();
     } else {
         // Post event to window widget if key match window key list.
         for (auto option : settings->settings->group("shortcuts.window")->options()) {

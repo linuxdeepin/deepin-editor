@@ -137,6 +137,7 @@ public slots:
     void upcaseWord();
     void downcaseWord();
     void capitalizeWord();
+    void transposeChar();
     
 private:
     QPropertyAnimation *scrollAnimation;
