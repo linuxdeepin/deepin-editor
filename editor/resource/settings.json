@@ -964,7 +964,7 @@
                 },
 		{
                     "key": "window_keymap_customize",
-                    "name": "Standard window keymap",
+                    "name": "Customize window keymap",
 		    "hide" : true,
                     "options": [
                         {
@@ -1085,7 +1085,7 @@
                 },
 		{
                     "key": "editor_keymap_customize",
-                    "name": "Standard editor keymap",
+                    "name": "Customize editor keymap",
 		    "hide" : true,
                     "options": [
                         {
