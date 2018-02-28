@@ -315,6 +315,12 @@
                             "default":  "Alt+N"
                         },
                         {
+                            "key": "selectall",
+                            "name": "Select All",
+                            "type": "shortcut",
+                            "default":  "Ctrl+A"
+                        },
+                        {
                             "key": "transposechar",
                             "name": "Transpose Char",
                             "type": "shortcut",
@@ -599,9 +605,15 @@
                             "default":  "Alt+N"
                         },
                         {
+                            "key": "selectall",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Ctrl+A"
+                        },
+                        {
                             "key": "transposechar",
-                            "name": "Transpose Char",
-                            "type": "shortcut",
+			    "hide" : true,
+			    "reset" : false,
                             "default":  "Alt+T"
                         }
                     ]
@@ -883,9 +895,15 @@
                             "default":  "Alt+N"
                         },
                         {
+                            "key": "selectall",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Ctrl+Z"
+                        },
+                        {
                             "key": "transposechar",
-                            "name": "Transpose Char",
-                            "type": "shortcut",
+			    "hide" : true,
+			    "reset" : false,
                             "default":  "Ctrl+T"
                         }
                     ]
@@ -1167,9 +1185,15 @@
                             "default":  "Alt+N"
                         },
                         {
+                            "key": "selectall",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Ctrl+A"
+                        },
+                        {
                             "key": "transposechar",
-                            "name": "Transpose Char",
-                            "type": "shortcut",
+			    "hide" : true,
+			    "reset" : false,
                             "default":  "Alt+T"
                         }
                     ]

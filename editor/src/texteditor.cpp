@@ -195,7 +195,7 @@ void TextEditor::forwardPair()
     if (find(QRegExp("[\"'>)}]"))) {
         QTextCursor cursor = textCursor();
         cursor.clearSelection();
-        
+
         setTextCursor(cursor);
     }
 }
@@ -204,12 +204,12 @@ void TextEditor::backwardPair()
 {
     QTextDocument::FindFlags options;
     options |= QTextDocument::FindBackward;
-    
+
     if (find(QRegExp("[\"'<({]"), options)) {
         QTextCursor cursor = textCursor();
         cursor.clearSelection();
         cursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor);
-        
+
         setTextCursor(cursor);
     }
 }
@@ -293,30 +293,30 @@ void TextEditor::swapLineUp(){
         // Get selection bound.
         int startPos = textCursor().anchor();
         int endPos = textCursor().position();
-        
+
         if (startPos > endPos) {
             std::swap(startPos, endPos);
         }
-        
+
         // Expand selection to multi-lines bound.
         QTextCursor startCursor = textCursor();
         startCursor.setPosition(startPos, QTextCursor::MoveAnchor);
         startCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-        
+
         QTextCursor endCursor = textCursor();
         endCursor.setPosition(endPos, QTextCursor::MoveAnchor);
         endCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
-        
+
         QTextCursor cursor = textCursor();
         cursor.setPosition(startCursor.position(), QTextCursor::MoveAnchor);
         cursor.setPosition(endCursor.position(), QTextCursor::KeepAnchor);
-        
+
         setTextCursor(cursor);
-        
+
         // Get multi-line selection text.
         QString newTop = cursor.selectedText();
         cursor.removeSelectedText();
-        
+
         // Get one-line content above multi-lines selection.
         cursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
         cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
@@ -351,7 +351,7 @@ void TextEditor::swapLineUp(){
 
         // Get line content above current line.
         // Note: we need move cursor UP and then use *StartOfBlock*, keep this order.
-        // don't use *StartOfBlock* before *UP*, it's won't work if above line is *wrap line*. 
+        // don't use *StartOfBlock* before *UP*, it's won't work if above line is *wrap line*.
         cursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
         cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
@@ -363,7 +363,7 @@ void TextEditor::swapLineUp(){
         cursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor);
         cursor.insertText(newBottom);
 
-        // Move cursor to new start of line. 
+        // Move cursor to new start of line.
         cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
         cursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
 
@@ -380,30 +380,30 @@ void TextEditor::swapLineDown(){
         // Get selection bound.
         int startPos = textCursor().anchor();
         int endPos = textCursor().position();
-        
+
         if (startPos > endPos) {
             std::swap(startPos, endPos);
         }
-        
+
         // Expand selection to lines bound.
         QTextCursor startCursor = textCursor();
         startCursor.setPosition(startPos, QTextCursor::MoveAnchor);
         startCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-        
+
         QTextCursor endCursor = textCursor();
         endCursor.setPosition(endPos, QTextCursor::MoveAnchor);
         endCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
-        
+
         QTextCursor cursor = textCursor();
         cursor.setPosition(startCursor.position(), QTextCursor::MoveAnchor);
         cursor.setPosition(endCursor.position(), QTextCursor::KeepAnchor);
-        
+
         setTextCursor(cursor);
-        
+
         // Get multi-line selection content.
         QString newBottom = cursor.selectedText();
         cursor.removeSelectedText();
-        
+
         // Get line content below multi-line selection.
         cursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor);
         cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
@@ -414,16 +414,16 @@ void TextEditor::swapLineDown(){
         // Record new selection bound after swap content.
         cursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
         cursor.insertText(newTop);
-        
+
         cursor.movePosition(QTextCursor::Down, QTextCursor::MoveAnchor);
         int newSelectionStartPos = cursor.position();
         cursor.insertText(newBottom);
         int newSelectionEndPos = cursor.position();
-        
+
         // Reset selection bound for multi-line content.
         cursor.setPosition(newSelectionStartPos, QTextCursor::MoveAnchor);
         cursor.setPosition(newSelectionEndPos, QTextCursor::KeepAnchor);
-        
+
         // Update cursor.
         setTextCursor(cursor);
     } else {
@@ -529,24 +529,24 @@ void TextEditor::killLine()
 void TextEditor::killCurrentLine()
 {
     QTextCursor cursor = textCursor();
-    
+
     cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::Down, QTextCursor::KeepAnchor);
     cursor.removeSelectedText();
-    
+
     setTextCursor(cursor);
 }
 
 void TextEditor::killBackwardWord()
 {
     if (textCursor().hasSelection()) {
-        textCursor().removeSelectedText(); 
+        textCursor().removeSelectedText();
     } else {
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
         cursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
         cursor.removeSelectedText();
-        
+
         setTextCursor(cursor);
     }
 }
@@ -554,13 +554,13 @@ void TextEditor::killBackwardWord()
 void TextEditor::killForwardWord()
 {
     if (textCursor().hasSelection()) {
-        textCursor().removeSelectedText(); 
+        textCursor().removeSelectedText();
     } else {
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
         cursor.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
         cursor.removeSelectedText();
-        
+
         setTextCursor(cursor);
     }
 }
@@ -606,7 +606,7 @@ void TextEditor::backIndentLine()
             deleteCursor.deletePreviousChar();
         }
         setTextCursor(deleteCursor);
-        
+
         // Restore cursor column postion.
         moveToStartOfLine();
         QTextCursor cursor = textCursor();
@@ -639,18 +639,18 @@ void TextEditor::transposeChar()
 {
     QTextCursor cursor = textCursor();
     cursor.clearSelection();
-    
+
     cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
     QString nextChar = cursor.selectedText();
     cursor.removeSelectedText();
-    
+
     cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
     QString prevChar = cursor.selectedText();
     cursor.removeSelectedText();
-    
+
     cursor.insertText(nextChar);
     cursor.insertText(prevChar);
-    
+
     if (!nextChar.isEmpty()) {
         cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor);
     }
@@ -942,6 +942,8 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         backwardPair();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "transposechar")) {
         transposeChar();
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "selectall")) {
+        selectAll();
     } else {
         // Post event to window widget if key match window key list.
         for (auto option : settings->settings->group("shortcuts.window")->options()) {
@@ -950,7 +952,7 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
                 return;
             }
         }
-        
+
         // Text editor handle key self.
         QPlainTextEdit::keyPressEvent(keyEvent);
     }
