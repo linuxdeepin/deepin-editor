@@ -46,6 +46,15 @@ TabWidget::TabWidget()
     rightClickTab = -1;
     
     setFixedHeight(40);
+    
+    connect(this, &TabWidget::tabDroped, this, 
+            [=] () {
+                qDebug() << "drop";
+            });
+    connect(this, &TabWidget::tabReleaseRequested, this, 
+            [=] () {
+                qDebug() << "request";
+            });
 }
 
 QMimeData* TabWidget::createMimeDataFromTab(int index, const QStyleOptionTab &) const
@@ -111,7 +120,7 @@ void TabWidget::handleCloseOtherTabs()
     }
 }
 
-bool TabWidget::eventFilter(QObject *, QEvent *event)
+bool TabWidget::eventFilter(QObject *object, QEvent *event)
 {
     if (event->type() == QEvent::MouseButtonPress) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
@@ -146,8 +155,19 @@ bool TabWidget::eventFilter(QObject *, QEvent *event)
             }
         }
     } else if (event->type() == QEvent::DragEnter) {
-        static_cast<Window*>(this->window())->changeTitlebarBackground("#333333");
+        QDragEnterEvent *dragEvent = static_cast<QDragEnterEvent *>(event);
+        qDebug() << object << this << dragEvent->source()->parent();
+        
+        if (dragEvent->source()->parent() != this) {
+            static_cast<Window*>(this->window())->changeTitlebarBackground("#333333");
+        }
     } else if (event->type() == QEvent::DragLeave) {
+        qDebug() << object << this;
+        
+        static_cast<Window*>(this->window())->changeTitlebarBackground("#202020");
+    } else if (event->type() == QEvent::Drop) {
+        qDebug() << "**********";
+        
         static_cast<Window*>(this->window())->changeTitlebarBackground("#202020");
     }
 
