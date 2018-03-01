@@ -117,6 +117,8 @@ public:
     void setSettings(Settings *settings);
     
     void copySelectText();
+    
+    void setMark();
 
 signals:
     void clickFindAction();
@@ -193,6 +195,8 @@ private:
     bool canRedo;
     
     bool haveWordUnderCursor;
+    
+    bool cursorMark = false;
     
     Settings *settings;
     

@@ -361,6 +361,12 @@
                             "name": "Transpose Char",
                             "type": "shortcut",
                             "default":  "Alt+T"
+                        },
+                        {
+                            "key": "setmark",
+                            "name": "Set Mark",
+                            "type": "shortcut",
+                            "default":  "Alt+H"
                         }
                     ]
                 },
@@ -687,6 +693,12 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Alt+T"
+                        },
+                        {
+                            "key": "setmark",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Alt+H"
                         }
                     ]
                 },
@@ -1013,6 +1025,12 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Ctrl+T"
+                        },
+                        {
+                            "key": "setmark",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Alt+H"
                         }
                     ]
                 },
@@ -1339,6 +1357,12 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Alt+T"
+                        },
+                        {
+                            "key": "setmark",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Alt+H"
                         }
                     ]
                 }		

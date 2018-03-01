@@ -179,22 +179,46 @@ int TextEditor::getScrollOffset()
 
 void TextEditor::forwardChar()
 {
-    moveCursor(QTextCursor::NextCharacter);
+    if (cursorMark) {
+        QTextCursor cursor = textCursor();
+        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+        setTextCursor(cursor);
+    } else {
+        moveCursor(QTextCursor::NextCharacter);
+    }
 }
 
 void TextEditor::backwardChar()
 {
-    moveCursor(QTextCursor::PreviousCharacter);
+    if (cursorMark) {
+        QTextCursor cursor = textCursor();
+        cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+        setTextCursor(cursor);
+    } else {
+        moveCursor(QTextCursor::PreviousCharacter);
+    }
 }
 
 void TextEditor::forwardWord()
 {
-    moveCursor(QTextCursor::NextWord);
+    if (cursorMark) {
+        QTextCursor cursor = textCursor();
+        cursor.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
+        setTextCursor(cursor);
+    } else {
+        moveCursor(QTextCursor::NextWord);
+    }
 }
 
 void TextEditor::backwardWord()
 {
-    moveCursor(QTextCursor::PreviousWord);
+    if (cursorMark) {
+        QTextCursor cursor = textCursor();
+        cursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
+        setTextCursor(cursor);
+    } else {
+        moveCursor(QTextCursor::PreviousWord);
+    }
 }
 
 void TextEditor::forwardPair()
@@ -1007,6 +1031,8 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         cut();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "paste")) {
         paste();
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "setmark")) {
+        setMark();
     } else {
         // Post event to window widget if key match window key list.
         for (auto option : settings->settings->group("shortcuts.window")->options()) {
@@ -1261,6 +1287,27 @@ void TextEditor::copySelectText()
     QTextCursor cursor = textCursor();
     cursor.clearSelection();
     setTextCursor(cursor);
+}
+
+void TextEditor::setMark()
+{
+    if (cursorMark) {
+        if (textCursor().hasSelection()) {
+            QTextCursor cursor = textCursor();
+            cursor.clearSelection();
+            setTextCursor(cursor);
+            
+            qDebug() << "Mark set";
+        } else {
+            cursorMark = false;
+            
+            qDebug() << "Mark unset";
+        }
+    } else {
+        cursorMark = true;
+        
+        qDebug() << "Mark set";
+    }
 }
 
 void TextEditor::clickCutAction()
