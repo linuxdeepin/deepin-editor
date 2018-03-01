@@ -64,12 +64,12 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
 {
     // Don't draw background.
     viewport()->setAutoFillBackground(false);
-    
+
     // Init highlight theme.
     setTheme((palette().color(QPalette::Base).lightness() < 128)
              ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
              : m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
-    
+
     // Init widgets.
     lineNumberArea = new LineNumberArea(this);
 
@@ -146,12 +146,12 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     // Highlight line and focus.
     highlightCurrentLine();
     QTimer::singleShot(0, this, SLOT(setFocus()));
-    
+
     // Init change cursor width timer.
     changeCursorWidthTimer = new QTimer(this);
     changeCursorWidthTimer->setSingleShot(true);
     connect(changeCursorWidthTimer, &QTimer::timeout, this, &TextEditor::changeToWaitCursor);
-    
+
     changeToWaitCursor();
 }
 
@@ -223,25 +223,69 @@ void TextEditor::backwardWord()
 
 void TextEditor::forwardPair()
 {
-    if (find(QRegExp("[\"'>)}]"))) {
-        QTextCursor cursor = textCursor();
-        cursor.clearSelection();
+    // Record cursor and seleciton position before move cursor.
+    int actionStartPos = textCursor().position();
+    int selectionStartPos = textCursor().selectionStart();
+    int selectionEndPos = textCursor().selectionEnd();
+    
+    // Because find always search start from selection end position.
+    // So we need clear selection to make search start from cursor.
+    QTextCursor removeSelectionCursor = textCursor();
+    removeSelectionCursor.clearSelection();
+    setTextCursor(removeSelectionCursor);
 
-        setTextCursor(cursor);
+    // Start search.
+    if (find(QRegExp("[\"'>)}]"))) {
+        int findPos = textCursor().position();
+
+        QTextCursor cursor = textCursor();
+        auto moveMode = cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
+
+        if (actionStartPos == selectionStartPos) {
+            cursor.setPosition(selectionEndPos, QTextCursor::MoveAnchor);
+            cursor.setPosition(findPos, moveMode);
+            setTextCursor(cursor);
+        } else {
+            cursor.setPosition(selectionStartPos, QTextCursor::MoveAnchor);
+            cursor.setPosition(findPos, moveMode);
+            setTextCursor(cursor);
+        }
     }
 }
 
 void TextEditor::backwardPair()
 {
+    // Record cursor and seleciton position before move cursor.
+    int actionStartPos = textCursor().position();
+    int selectionStartPos = textCursor().selectionStart();
+    int selectionEndPos = textCursor().selectionEnd();
+
+    // Because find always search start from selection end position.
+    // So we need clear selection to make search start from cursor.
+    QTextCursor removeSelectionCursor = textCursor();
+    removeSelectionCursor.clearSelection();
+    setTextCursor(removeSelectionCursor);
+
     QTextDocument::FindFlags options;
     options |= QTextDocument::FindBackward;
 
     if (find(QRegExp("[\"'<({]"), options)) {
         QTextCursor cursor = textCursor();
-        cursor.clearSelection();
+        auto moveMode = cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
+
         cursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor);
 
-        setTextCursor(cursor);
+        int findPos = cursor.position();
+
+        if (actionStartPos == selectionStartPos) {
+            cursor.setPosition(selectionEndPos, QTextCursor::MoveAnchor);
+            cursor.setPosition(findPos, moveMode);
+            setTextCursor(cursor);
+        } else {
+            cursor.setPosition(selectionStartPos, QTextCursor::MoveAnchor);
+            cursor.setPosition(findPos, moveMode);
+            setTextCursor(cursor);
+        }
     }
 }
 
@@ -271,18 +315,18 @@ void TextEditor::moveToLineIndentation()
 {
     // Init cursor and move type.
     QTextCursor cursor = textCursor();
-    auto moveType = cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor; 
-    
+    auto moveMode = cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
+
     // Get line start position.
-    cursor.movePosition(QTextCursor::StartOfLine, moveType);
+    cursor.movePosition(QTextCursor::StartOfLine, moveMode);
     int startColumn = cursor.columnNumber();
 
     // Get line end position.
-    cursor.movePosition(QTextCursor::EndOfLine, moveType);
+    cursor.movePosition(QTextCursor::EndOfLine, moveMode);
     int endColumn = cursor.columnNumber();
 
     // Move to line start first.
-    cursor.movePosition(QTextCursor::StartOfLine, moveType);
+    cursor.movePosition(QTextCursor::StartOfLine, moveMode);
 
     // Move to first non-blank char of line.
     int column = startColumn;
@@ -290,15 +334,15 @@ void TextEditor::moveToLineIndentation()
         QChar currentChar = toPlainText().at(std::max(cursor.position() - 1, 0));
 
         if (!currentChar.isSpace()) {
-            cursor.movePosition(QTextCursor::PreviousCharacter, moveType);
+            cursor.movePosition(QTextCursor::PreviousCharacter, moveMode);
             break;
         } else {
-            cursor.movePosition(QTextCursor::NextCharacter, moveType);
+            cursor.movePosition(QTextCursor::NextCharacter, moveMode);
         }
 
         column++;
     }
-    
+
     setTextCursor(cursor);
 }
 
@@ -549,7 +593,7 @@ void TextEditor::scrollLineDown()
     if (scrollbar->value() + visibleLines <= getCurrentLine() + 2) {
         jumpToLine(getCurrentLine() - 1, false);
     }
-    
+
     scrollbar->setValue(scrollbar->value() - 1);
 }
 
@@ -990,7 +1034,7 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         changeCursorWidthTimer->stop();
     }
     changeCursorWidthTimer->start(2000);
-    
+
     QString key = Utils::getKeyshortcut(keyEvent);
 
     // qDebug() << "\n***********" << key;
@@ -1313,7 +1357,7 @@ void TextEditor::setSettings(Settings *keySettings)
 void TextEditor::copySelectText()
 {
     copy();
-    
+
     QTextCursor cursor = textCursor();
     cursor.clearSelection();
     setTextCursor(cursor);
@@ -1326,16 +1370,16 @@ void TextEditor::setMark()
             QTextCursor cursor = textCursor();
             cursor.clearSelection();
             setTextCursor(cursor);
-            
+
             qDebug() << "Mark set";
         } else {
             cursorMark = false;
-            
+
             qDebug() << "Mark unset";
         }
     } else {
         cursorMark = true;
-        
+
         qDebug() << "Mark set";
     }
 }
