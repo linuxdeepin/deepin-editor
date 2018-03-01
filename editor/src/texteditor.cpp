@@ -247,41 +247,59 @@ void TextEditor::backwardPair()
 
 void TextEditor::moveToStartOfLine()
 {
-    moveCursor(QTextCursor::StartOfLine);
+    if (cursorMark) {
+        QTextCursor cursor = textCursor();
+        cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
+        setTextCursor(cursor);
+    } else {
+        moveCursor(QTextCursor::StartOfLine);
+    }
 }
 
 void TextEditor::moveToEndOfLine()
 {
-    moveCursor(QTextCursor::EndOfLine);
+    if (cursorMark) {
+        QTextCursor cursor = textCursor();
+        cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+        setTextCursor(cursor);
+    } else {
+        moveCursor(QTextCursor::EndOfLine);
+    }
 }
 
 void TextEditor::moveToLineIndentation()
 {
+    // Init cursor and move type.
+    QTextCursor cursor = textCursor();
+    auto moveType = cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor; 
+    
     // Get line start position.
-    moveCursor(QTextCursor::StartOfLine);
-    int startColumn = textCursor().columnNumber();
+    cursor.movePosition(QTextCursor::StartOfLine, moveType);
+    int startColumn = cursor.columnNumber();
 
     // Get line end position.
-    moveCursor(QTextCursor::EndOfLine);
-    int endColumn = textCursor().columnNumber();
+    cursor.movePosition(QTextCursor::EndOfLine, moveType);
+    int endColumn = cursor.columnNumber();
 
     // Move to line start first.
-    moveCursor(QTextCursor::StartOfLine);
+    cursor.movePosition(QTextCursor::StartOfLine, moveType);
 
     // Move to first non-blank char of line.
     int column = startColumn;
     while (column <= endColumn) {
-        QChar currentChar = toPlainText().at(std::max(textCursor().position() - 1, 0));
+        QChar currentChar = toPlainText().at(std::max(cursor.position() - 1, 0));
 
         if (!currentChar.isSpace()) {
-            moveCursor(QTextCursor::PreviousCharacter);
+            cursor.movePosition(QTextCursor::PreviousCharacter, moveType);
             break;
         } else {
-            moveCursor(QTextCursor::NextCharacter);
+            cursor.movePosition(QTextCursor::NextCharacter, moveType);
         }
 
         column++;
     }
+    
+    setTextCursor(cursor);
 }
 
 void TextEditor::nextLine()
