@@ -607,7 +607,14 @@ void TextEditor::scrollLineUp()
 {
     QScrollBar *scrollbar = verticalScrollBar();
     if (scrollbar->value() + 2 >= getCurrentLine()) {
-        jumpToLine(getCurrentLine() + 1, false);
+        auto moveMode = cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
+
+        int line = getCurrentLine() + 1;
+        QTextCursor lineCursor(document()->findBlockByLineNumber(line - 1)); // line - 1 because line number starts from 0
+        
+        QTextCursor cursor = textCursor();
+        cursor.setPosition(lineCursor.position(), moveMode);
+        setTextCursor(cursor);
     }
     scrollbar->setValue(scrollbar->value() + 1);
 }
@@ -617,7 +624,14 @@ void TextEditor::scrollLineDown()
     QScrollBar *scrollbar = verticalScrollBar();
     int visibleLines = (rect().height() / cursorRect().height());
     if (scrollbar->value() + visibleLines <= getCurrentLine() + 2) {
-        jumpToLine(getCurrentLine() - 1, false);
+        auto moveMode = cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
+        
+        int line = getCurrentLine() - 1;
+        QTextCursor lineCursor(document()->findBlockByLineNumber(line - 1)); // line - 1 because line number starts from 0
+        
+        QTextCursor cursor = textCursor();
+        cursor.setPosition(lineCursor.position(), moveMode);
+        setTextCursor(cursor);
     }
 
     scrollbar->setValue(scrollbar->value() - 1);
