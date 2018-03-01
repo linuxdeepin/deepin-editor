@@ -793,21 +793,29 @@ void TextEditor::setTabSpaceNumber(int number)
 
 void TextEditor::upcaseWord()
 {
+    unsetMark();
+    
     convertWordCase(UPPER);
 }
 
 void TextEditor::downcaseWord()
 {
+    unsetMark();
+    
     convertWordCase(LOWER);
 }
 
 void TextEditor::capitalizeWord()
 {
+    unsetMark();
+    
     convertWordCase(CAPITALIZE);
 }
 
 void TextEditor::transposeChar()
 {
+    unsetMark();
+    
     QTextCursor cursor = textCursor();
     cursor.clearSelection();
 
