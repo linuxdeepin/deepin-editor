@@ -44,6 +44,8 @@ TabWidget::TabWidget()
     setMaskColor(dropColor);
 
     rightClickTab = -1;
+    
+    setFixedHeight(40);
 }
 
 QMimeData* TabWidget::createMimeDataFromTab(int index, const QStyleOptionTab &) const

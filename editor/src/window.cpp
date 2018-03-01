@@ -29,6 +29,7 @@
 #include "window.h"
 
 #include <DSettings>
+#include <QStyle>
 #include <DSettingsOption>
 #include <DTitlebar>
 #include <QApplication>
@@ -183,7 +184,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
 
     // Apply qss theme.
     Utils::applyQss(this, "main.qss");
-    Utils::applyQss(this->titlebar(), "main.qss");
+    this->titlebar()->setStyleSheet(this->titlebar()->styleSheet() + "Dtk--Widget--DTitlebar {background: #202020；}");
 }
 
 Window::~Window()
