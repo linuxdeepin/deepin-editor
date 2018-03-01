@@ -1407,6 +1407,8 @@ void TextEditor::copySelectText()
 {
     copy();
 
+    cursorMark = false;
+    
     QTextCursor cursor = textCursor();
     cursor.clearSelection();
     setTextCursor(cursor);
