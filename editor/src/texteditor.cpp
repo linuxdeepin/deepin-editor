@@ -382,6 +382,15 @@ void TextEditor::jumpToLine(int line, bool keepLineAtCenter)
 
 void TextEditor::newline()
 {
+    // Stop mark if mark is set.
+    if (cursorMark) {
+        QTextCursor cursor = textCursor();
+        cursor.clearSelection();
+        setTextCursor(cursor);
+        
+        cursorMark = false;
+    }
+    
     QTextCursor cursor = textCursor();
     cursor.insertText("\n");
     setTextCursor(cursor);
@@ -389,6 +398,15 @@ void TextEditor::newline()
 
 void TextEditor::openNewlineAbove()
 {
+    // Stop mark if mark is set.
+    if (cursorMark) {
+        QTextCursor cursor = textCursor();
+        cursor.clearSelection();
+        setTextCursor(cursor);
+        
+        cursorMark = false;
+    }
+    
     moveCursor(QTextCursor::StartOfLine);
     textCursor().insertText("\n");
     prevLine();
@@ -396,6 +414,15 @@ void TextEditor::openNewlineAbove()
 
 void TextEditor::openNewlineBelow()
 {
+    // Stop mark if mark is set.
+    if (cursorMark) {
+        QTextCursor cursor = textCursor();
+        cursor.clearSelection();
+        setTextCursor(cursor);
+        
+        cursorMark = false;
+    }
+    
     moveCursor(QTextCursor::EndOfLine);
     textCursor().insertText("\n");
 }
