@@ -227,7 +227,7 @@ void TextEditor::forwardPair()
     int actionStartPos = textCursor().position();
     int selectionStartPos = textCursor().selectionStart();
     int selectionEndPos = textCursor().selectionEnd();
-    
+
     // Because find always search start from selection end position.
     // So we need clear selection to make search start from cursor.
     QTextCursor removeSelectionCursor = textCursor();
@@ -384,7 +384,7 @@ void TextEditor::newline()
 {
     // Stop mark if mark is set.
     unsetMark();
-    
+
     QTextCursor cursor = textCursor();
     cursor.insertText("\n");
     setTextCursor(cursor);
@@ -394,7 +394,7 @@ void TextEditor::openNewlineAbove()
 {
     // Stop mark if mark is set.
     unsetMark();
-    
+
     moveCursor(QTextCursor::StartOfLine);
     textCursor().insertText("\n");
     prevLine();
@@ -404,7 +404,7 @@ void TextEditor::openNewlineBelow()
 {
     // Stop mark if mark is set.
     unsetMark();
-    
+
     moveCursor(QTextCursor::EndOfLine);
     textCursor().insertText("\n");
 }
@@ -632,6 +632,10 @@ void TextEditor::duplicateLine()
 
 void TextEditor::killLine()
 {
+    if (unsetMark()) {
+        return;
+    }
+
     // Remove selection content if has selection.
     if (textCursor().hasSelection()) {
         textCursor().removeSelectedText();
@@ -671,6 +675,10 @@ void TextEditor::killLine()
 
 void TextEditor::killCurrentLine()
 {
+    if (unsetMark()) {
+        return;
+    }
+
     QTextCursor cursor = textCursor();
 
     cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
@@ -712,7 +720,7 @@ void TextEditor::indentLine()
 {
     // Stop mark if mark is set.
     unsetMark();
-    
+
     // Save cursor column.
     int column = getCurrentColumn();
 
@@ -736,7 +744,7 @@ void TextEditor::backIndentLine()
 {
     // Stop mark if mark is set.
     unsetMark();
-    
+
     // Save cursor column.
     int column = getCurrentColumn();
 
@@ -1399,14 +1407,18 @@ void TextEditor::setMark()
     }
 }
 
-void TextEditor::unsetMark()
+bool TextEditor::unsetMark()
 {
     if (cursorMark) {
         QTextCursor cursor = textCursor();
         cursor.clearSelection();
         setTextCursor(cursor);
-        
+
         cursorMark = false;
+
+        return true;
+    } else {
+        return false;
     }
 }
 
