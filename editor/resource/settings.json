@@ -367,6 +367,12 @@
                             "name": "Set Mark",
                             "type": "shortcut",
                             "default":  "Alt+H"
+                        },
+                        {
+                            "key": "exchangemark",
+                            "name": "Exchange Mark",
+                            "type": "shortcut",
+                            "default":  "Alt+Shift+H"
                         }
                     ]
                 },
@@ -699,6 +705,12 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Alt+H"
+                        },
+                        {
+                            "key": "exchangemark",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Alt+Shift+H"
                         }
                     ]
                 },
@@ -1031,6 +1043,12 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Alt+H"
+                        },
+                        {
+                            "key": "exchangemark",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Alt+Shift+H"
                         }
                     ]
                 },
@@ -1363,6 +1381,12 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Alt+H"
+                        },
+                        {
+                            "key": "exchangemark",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Alt+Shift+H"
                         }
                     ]
                 }		

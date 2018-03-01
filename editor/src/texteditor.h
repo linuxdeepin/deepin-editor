@@ -122,6 +122,7 @@ public:
     
     void setMark();
     bool unsetMark();
+    void exchangeMark();
 
 signals:
     void clickFindAction();

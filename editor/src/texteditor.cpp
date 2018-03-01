@@ -1229,6 +1229,8 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         pasteText();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "setmark")) {
         setMark();
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "exchangemark")) {
+        exchangeMark();
     } else {
         // Post event to window widget if key match window key list.
         for (auto option : settings->settings->group("shortcuts.window")->options()) {
@@ -1534,6 +1536,27 @@ bool TextEditor::unsetMark()
         return true;
     } else {
         return false;
+    }
+}
+
+void TextEditor::exchangeMark()
+{
+    if (textCursor().hasSelection()) {
+        // Record cursor and seleciton position before move cursor.
+        int actionStartPos = textCursor().position();
+        int selectionStartPos = textCursor().selectionStart();
+        int selectionEndPos = textCursor().selectionEnd();
+    
+        QTextCursor cursor = textCursor();
+        if (actionStartPos == selectionStartPos) {
+            cursor.setPosition(selectionStartPos, QTextCursor::MoveAnchor);
+            cursor.setPosition(selectionEndPos, QTextCursor::KeepAnchor);
+        } else {
+            cursor.setPosition(selectionEndPos, QTextCursor::MoveAnchor);
+            cursor.setPosition(selectionStartPos, QTextCursor::KeepAnchor);
+        }
+        
+        setTextCursor(cursor);
     }
 }
 
