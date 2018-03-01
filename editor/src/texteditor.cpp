@@ -293,10 +293,10 @@ void TextEditor::moveToStartOfLine()
 {
     if (cursorMark) {
         QTextCursor cursor = textCursor();
-        cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::KeepAnchor);
+        cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
         setTextCursor(cursor);
     } else {
-        moveCursor(QTextCursor::StartOfLine);
+        moveCursor(QTextCursor::StartOfBlock);
     }
 }
 
@@ -304,10 +304,10 @@ void TextEditor::moveToEndOfLine()
 {
     if (cursorMark) {
         QTextCursor cursor = textCursor();
-        cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+        cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
         setTextCursor(cursor);
     } else {
-        moveCursor(QTextCursor::EndOfLine);
+        moveCursor(QTextCursor::EndOfBlock);
     }
 }
 
@@ -318,15 +318,15 @@ void TextEditor::moveToLineIndentation()
     auto moveMode = cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
 
     // Get line start position.
-    cursor.movePosition(QTextCursor::StartOfLine, moveMode);
+    cursor.movePosition(QTextCursor::StartOfBlock, moveMode);
     int startColumn = cursor.columnNumber();
 
     // Get line end position.
-    cursor.movePosition(QTextCursor::EndOfLine, moveMode);
+    cursor.movePosition(QTextCursor::EndOfBlock, moveMode);
     int endColumn = cursor.columnNumber();
 
     // Move to line start first.
-    cursor.movePosition(QTextCursor::StartOfLine, moveMode);
+    cursor.movePosition(QTextCursor::StartOfBlock, moveMode);
 
     // Move to first non-blank char of line.
     int column = startColumn;
@@ -395,9 +395,12 @@ void TextEditor::openNewlineAbove()
     // Stop mark if mark is set.
     unsetMark();
 
-    moveCursor(QTextCursor::StartOfLine);
-    textCursor().insertText("\n");
-    prevLine();
+    QTextCursor cursor = textCursor();
+    cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+    cursor.insertText("\n");
+    cursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
+    
+    setTextCursor(cursor);
 }
 
 void TextEditor::openNewlineBelow()
@@ -405,7 +408,7 @@ void TextEditor::openNewlineBelow()
     // Stop mark if mark is set.
     unsetMark();
 
-    moveCursor(QTextCursor::EndOfLine);
+    moveCursor(QTextCursor::EndOfBlock);
     textCursor().insertText("\n");
 }
 
@@ -656,7 +659,7 @@ void TextEditor::duplicateLine()
             cursor.insertText("\n");
             cursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
             cursor.insertText(selectionLines);
-            
+
             // Restore cursor's column.
             cursor.setPosition(startCursor.position(), QTextCursor::MoveAnchor);
             cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, column);
@@ -666,7 +669,7 @@ void TextEditor::duplicateLine()
             cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor);
             cursor.insertText(selectionLines);
             cursor.insertText("\n");
-            
+
             // Restore cursor's column.
             cursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
             cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
@@ -675,7 +678,7 @@ void TextEditor::duplicateLine()
 
         // Update cursor.
         setTextCursor(cursor);
-        
+
         // Clean mark flag anyway.
         cursorMark = false;
     } else {
@@ -689,12 +692,12 @@ void TextEditor::duplicateLine()
         QString text = cursor.selectedText();
 
         // Copy current line.
-        cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
+        cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
         cursor.insertText("\n");
         cursor.insertText(text);
 
         // Restore cursor's column.
-        cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+        cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
         cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, column);
 
         // Update cursor.
@@ -725,7 +728,7 @@ void TextEditor::killLine()
         if (isEmptyLine || textCursor().atBlockEnd()) {
             QTextCursor cursor = textCursor();
 
-            cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::MoveAnchor);
+            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
             cursor.deleteChar();
 
             // Update cursor.
@@ -736,7 +739,7 @@ void TextEditor::killLine()
             QTextCursor cursor = textCursor();
 
             cursor.movePosition(QTextCursor::NoMove, QTextCursor::KeepAnchor);
-            cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
             cursor.removeSelectedText();
 
             // Update cursor.
@@ -753,8 +756,8 @@ void TextEditor::killCurrentLine()
 
     QTextCursor cursor = textCursor();
 
-    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
-    cursor.movePosition(QTextCursor::Down, QTextCursor::KeepAnchor);
+    cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
     cursor.removeSelectedText();
 
     setTextCursor(cursor);
@@ -1325,7 +1328,7 @@ void TextEditor::handleScrollFinish()
     jumpToLine(restoreRow, false);
 
     QTextCursor cursor = textCursor();
-    cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, restoreColumn);
 
     // Update cursor.
