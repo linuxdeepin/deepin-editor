@@ -117,6 +117,7 @@ public:
     void setSettings(Settings *settings);
     
     void copySelectedText();
+    void cutSelectedText();
     
     void setMark();
     bool unsetMark();

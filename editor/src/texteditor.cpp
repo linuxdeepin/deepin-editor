@@ -1151,7 +1151,7 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "copy")) {
         copySelectedText();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "cut")) {
-        cut();
+        cutSelectedText();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "paste")) {
         paste();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "setmark")) {
@@ -1414,6 +1414,13 @@ void TextEditor::copySelectedText()
     setTextCursor(cursor);
 }
 
+void TextEditor::cutSelectedText()
+{
+    cut();
+    
+    cursorMark = false;
+}
+
 void TextEditor::setMark()
 {
     if (cursorMark) {
@@ -1453,7 +1460,7 @@ bool TextEditor::unsetMark()
 void TextEditor::clickCutAction()
 {
     if (textCursor().hasSelection()) {
-        cut();
+        cutSelectedText();
     } else {
         cutWordUnderCursor();
     }
