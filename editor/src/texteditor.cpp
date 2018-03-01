@@ -701,6 +701,15 @@ void TextEditor::killForwardWord()
 
 void TextEditor::indentLine()
 {
+    // Stop mark if mark is set.
+    if (cursorMark) {
+        QTextCursor cursor = textCursor();
+        cursor.clearSelection();
+        setTextCursor(cursor);
+        
+        cursorMark = false;
+    }
+    
     // Save cursor column.
     int column = getCurrentColumn();
 
@@ -722,6 +731,15 @@ void TextEditor::indentLine()
 
 void TextEditor::backIndentLine()
 {
+    // Stop mark if mark is set.
+    if (cursorMark) {
+        QTextCursor cursor = textCursor();
+        cursor.clearSelection();
+        setTextCursor(cursor);
+        
+        cursorMark = false;
+    }
+    
     // Save cursor column.
     int column = getCurrentColumn();
 
