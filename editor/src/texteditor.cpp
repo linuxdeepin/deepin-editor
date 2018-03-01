@@ -412,6 +412,8 @@ void TextEditor::openNewlineBelow()
 void TextEditor::swapLineUp()
 {
     if (textCursor().hasSelection()) {
+        bool cursorAtSelectionStart = (textCursor().position() == textCursor().selectionStart());
+        
         // Get selection bound.
         int startPos = textCursor().anchor();
         int endPos = textCursor().position();
@@ -454,8 +456,13 @@ void TextEditor::swapLineUp()
         cursor.insertText(newBottom);
 
         // Reset multi-line selection status.
-        cursor.setPosition(newSelectionStartPos, QTextCursor::MoveAnchor);
-        cursor.setPosition(newSelectionEndPos, QTextCursor::KeepAnchor);
+        if (cursorAtSelectionStart) {
+            cursor.setPosition(newSelectionEndPos, QTextCursor::MoveAnchor);
+            cursor.setPosition(newSelectionStartPos, QTextCursor::KeepAnchor);
+        } else {
+            cursor.setPosition(newSelectionStartPos, QTextCursor::MoveAnchor);
+            cursor.setPosition(newSelectionEndPos, QTextCursor::KeepAnchor);
+        }
 
         // Update cursor.
         setTextCursor(cursor);
@@ -500,6 +507,8 @@ void TextEditor::swapLineUp()
 void TextEditor::swapLineDown()
 {
     if (textCursor().hasSelection()) {
+        bool cursorAtSelectionStart = (textCursor().position() == textCursor().selectionStart());
+        
         // Get selection bound.
         int startPos = textCursor().anchor();
         int endPos = textCursor().position();
@@ -544,9 +553,14 @@ void TextEditor::swapLineDown()
         int newSelectionEndPos = cursor.position();
 
         // Reset selection bound for multi-line content.
-        cursor.setPosition(newSelectionStartPos, QTextCursor::MoveAnchor);
-        cursor.setPosition(newSelectionEndPos, QTextCursor::KeepAnchor);
-
+        if (cursorAtSelectionStart) {
+            cursor.setPosition(newSelectionEndPos, QTextCursor::MoveAnchor);
+            cursor.setPosition(newSelectionStartPos, QTextCursor::KeepAnchor);
+        } else {
+            cursor.setPosition(newSelectionStartPos, QTextCursor::MoveAnchor);
+            cursor.setPosition(newSelectionEndPos, QTextCursor::KeepAnchor);
+        }
+        
         // Update cursor.
         setTextCursor(cursor);
     } else {
