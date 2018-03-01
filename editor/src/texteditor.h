@@ -119,6 +119,7 @@ public:
     void copySelectText();
     
     void setMark();
+    void unsetMark();
 
 signals:
     void clickFindAction();

@@ -383,13 +383,7 @@ void TextEditor::jumpToLine(int line, bool keepLineAtCenter)
 void TextEditor::newline()
 {
     // Stop mark if mark is set.
-    if (cursorMark) {
-        QTextCursor cursor = textCursor();
-        cursor.clearSelection();
-        setTextCursor(cursor);
-        
-        cursorMark = false;
-    }
+    unsetMark();
     
     QTextCursor cursor = textCursor();
     cursor.insertText("\n");
@@ -399,13 +393,7 @@ void TextEditor::newline()
 void TextEditor::openNewlineAbove()
 {
     // Stop mark if mark is set.
-    if (cursorMark) {
-        QTextCursor cursor = textCursor();
-        cursor.clearSelection();
-        setTextCursor(cursor);
-        
-        cursorMark = false;
-    }
+    unsetMark();
     
     moveCursor(QTextCursor::StartOfLine);
     textCursor().insertText("\n");
@@ -415,13 +403,7 @@ void TextEditor::openNewlineAbove()
 void TextEditor::openNewlineBelow()
 {
     // Stop mark if mark is set.
-    if (cursorMark) {
-        QTextCursor cursor = textCursor();
-        cursor.clearSelection();
-        setTextCursor(cursor);
-        
-        cursorMark = false;
-    }
+    unsetMark();
     
     moveCursor(QTextCursor::EndOfLine);
     textCursor().insertText("\n");
@@ -729,13 +711,7 @@ void TextEditor::killForwardWord()
 void TextEditor::indentLine()
 {
     // Stop mark if mark is set.
-    if (cursorMark) {
-        QTextCursor cursor = textCursor();
-        cursor.clearSelection();
-        setTextCursor(cursor);
-        
-        cursorMark = false;
-    }
+    unsetMark();
     
     // Save cursor column.
     int column = getCurrentColumn();
@@ -759,13 +735,7 @@ void TextEditor::indentLine()
 void TextEditor::backIndentLine()
 {
     // Stop mark if mark is set.
-    if (cursorMark) {
-        QTextCursor cursor = textCursor();
-        cursor.clearSelection();
-        setTextCursor(cursor);
-        
-        cursorMark = false;
-    }
+    unsetMark();
     
     // Save cursor column.
     int column = getCurrentColumn();
@@ -1426,6 +1396,17 @@ void TextEditor::setMark()
         cursorMark = true;
 
         qDebug() << "Mark set";
+    }
+}
+
+void TextEditor::unsetMark()
+{
+    if (cursorMark) {
+        QTextCursor cursor = textCursor();
+        cursor.clearSelection();
+        setTextCursor(cursor);
+        
+        cursorMark = false;
     }
 }
 
