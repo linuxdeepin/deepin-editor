@@ -701,7 +701,7 @@ void TextEditor::changeToEditCursor()
 
 void TextEditor::changeToWaitCursor()
 {
-    setCursorWidth(10);
+    setCursorWidth(fontMetrics().width('9'));
 }
 
 void TextEditor::convertWordCase(ConvertCase convertCase)
