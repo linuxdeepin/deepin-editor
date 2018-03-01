@@ -704,6 +704,8 @@ void TextEditor::killCurrentLine()
 
 void TextEditor::killBackwardWord()
 {
+    unsetMark();
+    
     if (textCursor().hasSelection()) {
         textCursor().removeSelectedText();
     } else {
@@ -718,6 +720,8 @@ void TextEditor::killBackwardWord()
 
 void TextEditor::killForwardWord()
 {
+    unsetMark();
+    
     if (textCursor().hasSelection()) {
         textCursor().removeSelectedText();
     } else {
