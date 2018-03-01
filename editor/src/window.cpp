@@ -184,7 +184,8 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
 
     // Apply qss theme.
     Utils::applyQss(this, "main.qss");
-    this->titlebar()->setStyleSheet(this->titlebar()->styleSheet() + "Dtk--Widget--DTitlebar {background: #202020；}");
+    titlebarStyleSheet = this->titlebar()->styleSheet();
+    changeTitlebarBackground("#202020");
 }
 
 Window::~Window()
@@ -866,4 +867,9 @@ void Window::popupPrintDialog()
                 getActiveEditor()->textEditor->print(printer);
             });
     preview.exec();
+}
+
+void Window::changeTitlebarBackground(QString color)
+{
+    this->titlebar()->setStyleSheet(QString("%1Dtk--Widget--DTitlebar {background: %2;}").arg(titlebarStyleSheet).arg(color));
 }

@@ -40,7 +40,7 @@ TabWidget::TabWidget()
 
     // Set mask color.
     QColor dropColor("#333333");
-    dropColor.setAlpha(128);
+    dropColor.setAlpha(0);
     setMaskColor(dropColor);
 
     rightClickTab = -1;
@@ -145,6 +145,10 @@ bool TabWidget::eventFilter(QObject *, QEvent *event)
                 return true;
             }
         }
+    } else if (event->type() == QEvent::DragEnter) {
+        static_cast<Window*>(this->window())->changeTitlebarBackground("#333333");
+    } else if (event->type() == QEvent::DragLeave) {
+        static_cast<Window*>(this->window())->changeTitlebarBackground("#202020");
     }
 
     return false;

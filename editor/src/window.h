@@ -88,6 +88,8 @@ public:
     void updateFontSize(int size);
     void updateTabSpaceNumber(int number);
     
+    void changeTitlebarBackground(QString color);
+    
 protected:    
     void resizeEvent(QResizeEvent* event);
     void closeEvent(QCloseEvent *event);
@@ -156,6 +158,8 @@ private:
     int remberPositionRow;
     int remberPositionColumn;
     int remberPositionScrollOffset;
+    
+    QString titlebarStyleSheet;
     
     bool windowShowFlag = false;
     
