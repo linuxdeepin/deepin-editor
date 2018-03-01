@@ -286,12 +286,24 @@ void TextEditor::moveToLineIndentation()
 
 void TextEditor::nextLine()
 {
-    moveCursor(QTextCursor::Down);
+    if (cursorMark) {
+        QTextCursor cursor = textCursor();
+        cursor.movePosition(QTextCursor::Down, QTextCursor::KeepAnchor);
+        setTextCursor(cursor);
+    } else {
+        moveCursor(QTextCursor::Down);
+    }
 }
 
 void TextEditor::prevLine()
 {
-    moveCursor(QTextCursor::Up);
+    if (cursorMark) {
+        QTextCursor cursor = textCursor();
+        cursor.movePosition(QTextCursor::Up, QTextCursor::KeepAnchor);
+        setTextCursor(cursor);
+    } else {
+        moveCursor(QTextCursor::Up);
+    }
 }
 
 void TextEditor::jumpToLine(int line, bool keepLineAtCenter)
