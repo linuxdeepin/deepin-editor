@@ -118,6 +118,7 @@ public:
     
     void copySelectedText();
     void cutSelectedText();
+    void pasteText();
     
     void setMark();
     bool unsetMark();
