@@ -69,7 +69,7 @@ QMimeData* TabWidget::createMimeDataFromTab(int index, const QStyleOptionTab &) 
     return mimeData;
 }
 
-QPixmap TabWidget::createDragPixmapFromTab(int index, const QStyleOptionTab &, QPoint *) const
+QPixmap TabWidget::createDragPixmapFromTab(int index, const QStyleOptionTab &, QPoint *offset) const
 {
     // Take editor's screenshot as drag image.
     TextEditor *textEditor = static_cast<Window*>(this->window())->getTextEditor(tabFiles[index]);
@@ -103,6 +103,10 @@ QPixmap TabWidget::createDragPixmapFromTab(int index, const QStyleOptionTab &, Q
     if (count() == 1) {
         static_cast<Window*>(this->window())->hide();
     }
+    
+    // Adjust offset.
+    offset->setX(20);
+    offset->setY(20);
 
     // Return image composited with shadow.
     QColor shadowColor = QColor("#000000");
