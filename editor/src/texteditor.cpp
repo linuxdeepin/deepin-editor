@@ -730,35 +730,36 @@ void TextEditor::killLine()
         textCursor().removeSelectedText();
     } else {
         // Get current line content.
-        QTextCursor cursor(textCursor().block());
-        cursor.movePosition(QTextCursor::StartOfBlock);
-        cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-        QString text = cursor.selectedText();
+        QTextCursor selectionCursor = textCursor();
+        selectionCursor.movePosition(QTextCursor::StartOfBlock);
+        selectionCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+        QString text = selectionCursor.selectedText();
 
-        // Cursor is at end of line.
         bool isEmptyLine = text.size() == 0;
-
+        bool isBlankLine = text.trimmed().size() == 0;
+        
+        QTextCursor cursor = textCursor();
         // Join next line if current line is empty or cursor at end of line.
         if (isEmptyLine || textCursor().atBlockEnd()) {
-            QTextCursor cursor = textCursor();
-
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
             cursor.deleteChar();
-
-            // Update cursor.
-            setTextCursor(cursor);
+        }
+        // Kill whole line if current line is blank line.
+        else if (isBlankLine && textCursor().atBlockStart()) {
+            cursor.movePosition(QTextCursor::StartOfBlock);
+            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+            cursor.removeSelectedText();
+            cursor.deleteChar();
         }
         // Otherwise kill rest content of line.
         else {
-            QTextCursor cursor = textCursor();
-
-            cursor.movePosition(QTextCursor::NoMove, QTextCursor::KeepAnchor);
+            cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
             cursor.removeSelectedText();
-
-            // Update cursor.
-            setTextCursor(cursor);
         }
+        
+        // Update cursor.
+        setTextCursor(cursor);
     }
 }
 
