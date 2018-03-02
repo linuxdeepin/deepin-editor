@@ -428,10 +428,12 @@ void TextEditor::swapLineUp()
         // Expand selection to multi-lines bound.
         QTextCursor startCursor = textCursor();
         startCursor.setPosition(startPos, QTextCursor::MoveAnchor);
+        int startCursorColumn = startCursor.columnNumber();
         startCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
 
         QTextCursor endCursor = textCursor();
         endCursor.setPosition(endPos, QTextCursor::MoveAnchor);
+        int endCursorColumn = endCursor.columnNumber();
         endCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
 
         QTextCursor cursor = textCursor();
@@ -461,10 +463,16 @@ void TextEditor::swapLineUp()
         // Reset multi-line selection status.
         if (cursorAtSelectionStart) {
             cursor.setPosition(newSelectionEndPos, QTextCursor::MoveAnchor);
+            cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+            cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, endCursorColumn);
             cursor.setPosition(newSelectionStartPos, QTextCursor::KeepAnchor);
+            cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, startCursorColumn);
         } else {
             cursor.setPosition(newSelectionStartPos, QTextCursor::MoveAnchor);
+            cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, startCursorColumn);
             cursor.setPosition(newSelectionEndPos, QTextCursor::KeepAnchor);
+            cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
+            cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, endCursorColumn);
         }
 
         // Update cursor.
@@ -523,10 +531,12 @@ void TextEditor::swapLineDown()
         // Expand selection to lines bound.
         QTextCursor startCursor = textCursor();
         startCursor.setPosition(startPos, QTextCursor::MoveAnchor);
+        int startCursorColumn = startCursor.columnNumber();
         startCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
 
         QTextCursor endCursor = textCursor();
         endCursor.setPosition(endPos, QTextCursor::MoveAnchor);
+        int endCursorColumn = endCursor.columnNumber();
         endCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
 
         QTextCursor cursor = textCursor();
@@ -558,10 +568,16 @@ void TextEditor::swapLineDown()
         // Reset selection bound for multi-line content.
         if (cursorAtSelectionStart) {
             cursor.setPosition(newSelectionEndPos, QTextCursor::MoveAnchor);
+            cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+            cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, endCursorColumn);
             cursor.setPosition(newSelectionStartPos, QTextCursor::KeepAnchor);
+            cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, startCursorColumn);
         } else {
             cursor.setPosition(newSelectionStartPos, QTextCursor::MoveAnchor);
+            cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, startCursorColumn);
             cursor.setPosition(newSelectionEndPos, QTextCursor::KeepAnchor);
+            cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
+            cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, endCursorColumn);
         }
 
         // Update cursor.
