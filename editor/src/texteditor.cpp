@@ -330,9 +330,9 @@ void TextEditor::moveToLineIndentation()
 
     // Move to first non-blank char of line.
     int column = startColumn;
-    while (column <= endColumn) {
+    while (column < endColumn) {
         QChar currentChar = toPlainText().at(std::max(cursor.position() - 1, 0));
-
+         
         if (!currentChar.isSpace()) {
             cursor.movePosition(QTextCursor::PreviousCharacter, moveMode);
             break;
