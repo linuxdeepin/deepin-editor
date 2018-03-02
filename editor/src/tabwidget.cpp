@@ -75,19 +75,40 @@ QPixmap TabWidget::createDragPixmapFromTab(int index, const QStyleOptionTab &, Q
     TextEditor *textEditor = static_cast<Window*>(this->window())->getTextEditor(tabFiles[index]);
     int width = textEditor->width();
     int height = textEditor->height();
-    QPixmap pixmap(width, height);
-    textEditor->render(&pixmap, QPoint(), QRegion(0, 0, width, height));
-    QColor shadowColor = QColor("#000000");
-    shadowColor.setAlpha(80);
-    pixmap = Utils::dropShadow(pixmap.scaled(width / 5, height / 5), 40, shadowColor, QPoint(0, 8));
+    QImage screenshotImage(width, height, QImage::Format_ARGB32_Premultiplied);
+    textEditor->render(&screenshotImage, QPoint(), QRegion(0, 0, width, height));
     
+    // Scaled image to smaller.
+    int scaledWidth = width / 5;
+    int scaledHeight = height / 5;
+    auto scaledImage = screenshotImage.scaled(scaledWidth, scaledHeight);
+    
+    // Clip screenshot image with window radius.
+    QPainter painter(&scaledImage);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    
+    QPainterPath rectPath;
+    QPainterPath roundedRectPath;
+    
+    rectPath.addRect(0, 0, scaledWidth, scaledHeight);
+    roundedRectPath.addRoundedRect(QRect(0, 0, scaledWidth, scaledHeight), 6, 6);
+    
+    rectPath -= roundedRectPath;
+    
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
+    painter.fillPath(rectPath, Qt::transparent);
+    painter.end();
+
     // Hide window when drag start, just hide if only one tab in current window.
     if (count() == 1) {
         static_cast<Window*>(this->window())->hide();
     }
 
-    // We need make editor screenshot smaller.
-    return pixmap;
+    // Return image composited with shadow.
+    QColor shadowColor = QColor("#000000");
+    shadowColor.setAlpha(80);
+    
+    return Utils::dropShadow(QPixmap::fromImage(scaledImage), 40, shadowColor, QPoint(0, 8));
 }
 
 bool TabWidget::canInsertFromMimeData(int, const QMimeData *) const

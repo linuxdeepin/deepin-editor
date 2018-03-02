@@ -136,8 +136,10 @@ QPixmap Utils::dropShadow(const QPixmap &source, qreal radius, const QColor &col
 {
     QImage shadow = dropShadow(source, radius, color);
     QPainter pa(&shadow);
+    pa.setCompositionMode(QPainter::CompositionMode_SourceOver);
     pa.drawPixmap(radius - offset.x(), radius - offset.y(), source);
     pa.end();
+    
     return QPixmap::fromImage(shadow);
 }
 
@@ -160,8 +162,9 @@ QImage Utils::dropShadow(const QPixmap &px, qreal radius, const QColor &color)
     QPainter blurPainter(&blurred);
     qt_blurImage(&blurPainter, tmp, radius, false, true);
     blurPainter.end();
-    if (color == QColor(Qt::black))
+    if (color == QColor(Qt::black)) {
         return blurred;
+    }
     tmp = blurred;
     
     // Blacken the image...
@@ -169,6 +172,7 @@ QImage Utils::dropShadow(const QPixmap &px, qreal radius, const QColor &color)
     tmpPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
     tmpPainter.fillRect(tmp.rect(), color);
     tmpPainter.end();
+    
     return tmp;
 }
 
