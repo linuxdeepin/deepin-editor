@@ -24,7 +24,7 @@
 #ifndef REPLACEBAR_H
 #define REPLACEBAR_H
 
-#include "dtextbutton.h"
+#include <QPushButton>
 #include "linebar.h"
 
 #include <QHBoxLayout>
@@ -70,10 +70,10 @@ protected:
     bool focusNextPrevChild(bool next);
     
 private:
-    DTextButton *replaceAllButton;
-    DTextButton *replaceButton;
-    DTextButton *replaceRestButton;
-    DTextButton *replaceSkipButton;
+    QPushButton *replaceAllButton;
+    QPushButton *replaceButton;
+    QPushButton *replaceRestButton;
+    QPushButton *replaceSkipButton;
     LineBar *replaceLine;
     LineBar *withLine;
     QHBoxLayout *layout;

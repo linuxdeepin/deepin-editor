@@ -54,6 +54,7 @@ signals:
 public slots:
     void handleCloseOtherTabs();
     void handleCloseTab();
+    void handleTabReleaseRequested();
     
 private:
     QAction *closeOtherTabAction;

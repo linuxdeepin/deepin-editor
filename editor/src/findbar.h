@@ -24,10 +24,10 @@
 #ifndef FINDBAR_H
 #define FINDBAR_H
 
-#include "dtextbutton.h"
 #include "linebar.h"
 
 #include <QHBoxLayout>
+#include <QPushButton>
 #include <QLabel>
 #include <QPainter>
 #include <QWidget>
@@ -64,8 +64,8 @@ protected:
     void hideEvent(QHideEvent *event);
     
 private:
-    DTextButton *findNextButton;
-    DTextButton *findPrevButton;
+    QPushButton *findNextButton;
+    QPushButton *findPrevButton;
     LineBar *editLine;
     QHBoxLayout *layout;
     QLabel *findLabel;

@@ -35,8 +35,8 @@ FindBar::FindBar(QWidget *parent) : QWidget(parent)
     layout = new QHBoxLayout(this);
     findLabel = new QLabel("Find: ");
     editLine = new LineBar();
-    findNextButton = new DTextButton("Next");
-    findPrevButton = new DTextButton("Previous");
+    findNextButton = new QPushButton("Next");
+    findPrevButton = new QPushButton("Previous");
     
     layout->addWidget(findLabel);
     layout->addWidget(editLine);
@@ -52,8 +52,8 @@ FindBar::FindBar(QWidget *parent) : QWidget(parent)
     connect(editLine, &LineBar::pressCtrlEnter, this, &FindBar::findPrev, Qt::QueuedConnection);
     connect(editLine, &LineBar::contentChanged, this, &FindBar::handleContentChanged, Qt::QueuedConnection);
     
-    connect(findNextButton, &DTextButton::clicked, this, &FindBar::findNext, Qt::QueuedConnection);
-    connect(findPrevButton, &DTextButton::clicked, this, &FindBar::findPrev, Qt::QueuedConnection);
+    connect(findNextButton, &QPushButton::clicked, this, &FindBar::findNext, Qt::QueuedConnection);
+    connect(findPrevButton, &QPushButton::clicked, this, &FindBar::findPrev, Qt::QueuedConnection);
 }
 
 bool FindBar::isFocus()

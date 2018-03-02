@@ -26,7 +26,7 @@
 
 #include <QDebug>
 
-LineBar::LineBar(DLineEdit *parent) : DLineEdit(parent)
+LineBar::LineBar(QLineEdit *parent) : QLineEdit(parent)
 {
     // Init.
     autoSaveInternal = 500;
@@ -35,7 +35,7 @@ LineBar::LineBar(DLineEdit *parent) : DLineEdit(parent)
     autoSaveTimer->setSingleShot(true);
     
     connect(autoSaveTimer, &QTimer::timeout, this, &LineBar::handleTextChangeTimer);
-    connect(this, &DLineEdit::textChanged, this, &LineBar::handleTextChanged, Qt::QueuedConnection);
+    connect(this, &QLineEdit::textChanged, this, &LineBar::handleTextChanged, Qt::QueuedConnection);
 }
 
 void LineBar::handleTextChangeTimer()
@@ -76,7 +76,7 @@ void LineBar::keyPressEvent(QKeyEvent *e)
     } else if (key == "Meta + Return") {
         pressMetaEnter();
     } else {
-        // Pass event to DLineEdit continue, otherwise you can't type anything after here. ;)
-        DLineEdit::keyPressEvent(e);
+        // Pass event to QLineEdit continue, otherwise you can't type anything after here. ;)
+        QLineEdit::keyPressEvent(e);
     }
 }

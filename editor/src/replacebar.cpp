@@ -37,10 +37,10 @@ ReplaceBar::ReplaceBar(QWidget *parent) : QWidget(parent)
     replaceLine = new LineBar();
     withLabel = new QLabel("With: ");
     withLine = new LineBar();
-    replaceButton = new DTextButton("Replace");
-    replaceSkipButton = new DTextButton("Skip");
-    replaceRestButton = new DTextButton("Replace Rest");
-    replaceAllButton = new DTextButton("Replace All");
+    replaceButton = new QPushButton("Replace");
+    replaceSkipButton = new QPushButton("Skip");
+    replaceRestButton = new QPushButton("Replace Rest");
+    replaceAllButton = new QPushButton("Replace All");
     
     layout->addWidget(replaceLabel);
     layout->addWidget(replaceLine);
@@ -74,10 +74,10 @@ ReplaceBar::ReplaceBar(QWidget *parent) : QWidget(parent)
     
     connect(replaceLine, &LineBar::contentChanged, this, &ReplaceBar::handleContentChanged, Qt::QueuedConnection);
     
-    connect(replaceButton, &DTextButton::clicked, this, &ReplaceBar::handleReplaceNext, Qt::QueuedConnection);
-    connect(replaceSkipButton, &DTextButton::clicked, this, &ReplaceBar::replaceSkip, Qt::QueuedConnection);
-    connect(replaceRestButton, &DTextButton::clicked, this, &ReplaceBar::handleReplaceRest, Qt::QueuedConnection);
-    connect(replaceAllButton, &DTextButton::clicked, this, &ReplaceBar::handleReplaceAll, Qt::QueuedConnection);
+    connect(replaceButton, &QPushButton::clicked, this, &ReplaceBar::handleReplaceNext, Qt::QueuedConnection);
+    connect(replaceSkipButton, &QPushButton::clicked, this, &ReplaceBar::replaceSkip, Qt::QueuedConnection);
+    connect(replaceRestButton, &QPushButton::clicked, this, &ReplaceBar::handleReplaceRest, Qt::QueuedConnection);
+    connect(replaceAllButton, &QPushButton::clicked, this, &ReplaceBar::handleReplaceAll, Qt::QueuedConnection);
 }
 
 bool ReplaceBar::isFocus()

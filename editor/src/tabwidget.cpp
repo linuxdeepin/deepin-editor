@@ -47,14 +47,7 @@ TabWidget::TabWidget()
     
     setFixedHeight(40);
     
-    connect(this, &TabWidget::tabDroped, this, 
-            [=] () {
-                qDebug() << "drop";
-            });
-    connect(this, &TabWidget::tabReleaseRequested, this, 
-            [=] () {
-                qDebug() << "request";
-            });
+    connect(this, &TabWidget::tabReleaseRequested, this, &TabWidget::handleTabReleaseRequested);
 }
 
 QMimeData* TabWidget::createMimeDataFromTab(int index, const QStyleOptionTab &) const
@@ -83,6 +76,11 @@ QPixmap TabWidget::createDragPixmapFromTab(int index, const QStyleOptionTab &, Q
     int height = textEditor->height();
     QPixmap pixmap(width, height);
     textEditor->render(&pixmap, QPoint(), QRegion(0, 0, width, height));
+    
+    // Hide window when drag start, just hide if only one tab in current window.
+    if (count() == 1) {
+        static_cast<Window*>(this->window())->hide();
+    }
 
     // We need make editor screenshot smaller.
     return pixmap.scaled(width / 5, height / 5);
@@ -120,7 +118,7 @@ void TabWidget::handleCloseOtherTabs()
     }
 }
 
-bool TabWidget::eventFilter(QObject *object, QEvent *event)
+bool TabWidget::eventFilter(QObject *, QEvent *event)
 {
     if (event->type() == QEvent::MouseButtonPress) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
@@ -155,21 +153,22 @@ bool TabWidget::eventFilter(QObject *object, QEvent *event)
             }
         }
     } else if (event->type() == QEvent::DragEnter) {
-        QDragEnterEvent *dragEvent = static_cast<QDragEnterEvent *>(event);
-        qDebug() << object << this << dragEvent->source()->parent();
-        
-        if (dragEvent->source()->parent() != this) {
+        if (static_cast<QDragEnterEvent *>(event)->source()->parent() != this) {
             static_cast<Window*>(this->window())->changeTitlebarBackground("#333333");
         }
     } else if (event->type() == QEvent::DragLeave) {
-        qDebug() << object << this;
-        
         static_cast<Window*>(this->window())->changeTitlebarBackground("#202020");
     } else if (event->type() == QEvent::Drop) {
-        qDebug() << "**********";
-        
         static_cast<Window*>(this->window())->changeTitlebarBackground("#202020");
     }
 
     return false;
+}
+
+void TabWidget::handleTabReleaseRequested()
+{
+    // Show window agian if tab drop failed and only one tab in current window.
+    if (count() == 1) {
+        static_cast<Window*>(this->window())->show();
+    }
 }
