@@ -735,6 +735,47 @@ void TextEditor::duplicateLine()
     }
 }
 
+void TextEditor::copyLines()
+{
+    // Record current cursor and build copy cursor.
+    QTextCursor currentCursor = textCursor();
+    QTextCursor copyCursor = textCursor();
+    
+    if (textCursor().hasSelection()) {
+        // Sort selection bound cursors.
+        int startPos = textCursor().anchor();
+        int endPos = textCursor().position();
+
+        if (startPos > endPos) {
+            std::swap(startPos, endPos);
+        }
+
+        // Selectoin multi-lines.
+        QTextCursor startCursor = textCursor();
+        startCursor.setPosition(startPos, QTextCursor::MoveAnchor);
+        startCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+
+        QTextCursor endCursor = textCursor();
+        endCursor.setPosition(endPos, QTextCursor::MoveAnchor);
+        endCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
+
+        copyCursor.setPosition(startCursor.position(), QTextCursor::MoveAnchor);
+        copyCursor.setPosition(endCursor.position(), QTextCursor::KeepAnchor);
+    } else {
+        // Selection current line.
+        copyCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+        copyCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+    }
+    
+    // Copy lines to system clipboard.
+    setTextCursor(copyCursor);
+    copySelectedText();
+    
+    // Reset cursor before copy lines.
+    copyCursor.setPosition(currentCursor.position(), QTextCursor::MoveAnchor);
+    setTextCursor(copyCursor);
+}
+
 void TextEditor::killLine()
 {
     if (unsetMark()) {
@@ -1177,6 +1218,8 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
     changeCursorWidthTimer->start(2000);
 
     QString key = Utils::getKeyshortcut(keyEvent);
+    
+    // qDebug() << key;
 
     if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "indentline")) {
         indentLine();
@@ -1248,6 +1291,8 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         setMark();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "exchangemark")) {
         exchangeMark();
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "copylines")) {
+        copyLines();
     } else {
         // Post event to window widget if key match window key list.
         for (auto option : settings->settings->group("shortcuts.window")->options()) {

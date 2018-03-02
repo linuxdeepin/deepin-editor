@@ -76,6 +76,7 @@ public:
     void scrollLineUp();
     void scrollLineDown();
     void duplicateLine();
+    void copyLines();
     
     void killLine();
     void killCurrentLine();

@@ -373,6 +373,12 @@
                             "name": "Exchange Mark",
                             "type": "shortcut",
                             "default":  "Alt+Shift+H"
+                        },
+                        {
+                            "key": "copylines",
+                            "name": "Copy Lines",
+                            "type": "shortcut",
+                            "default":  "Meta+C"
                         }
                     ]
                 },
@@ -711,6 +717,12 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Alt+Shift+H"
+                        },
+                        {
+                            "key": "copylines",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Meta+C"
                         }
                     ]
                 },
@@ -1049,6 +1061,12 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Alt+Shift+H"
+                        },
+                        {
+                            "key": "copylines",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Alt+Shift+W"
                         }
                     ]
                 },
@@ -1387,6 +1405,12 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Alt+Shift+H"
+                        },
+                        {
+                            "key": "copylines",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Meta+C"
                         }
                     ]
                 }		
