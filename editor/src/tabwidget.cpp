@@ -22,6 +22,7 @@
  */
 
 #include "tabwidget.h"
+#include "utils.h"
 #include "texteditor.h"
 #include "window.h"
 
@@ -76,6 +77,9 @@ QPixmap TabWidget::createDragPixmapFromTab(int index, const QStyleOptionTab &, Q
     int height = textEditor->height();
     QPixmap pixmap(width, height);
     textEditor->render(&pixmap, QPoint(), QRegion(0, 0, width, height));
+    QColor shadowColor = QColor("#000000");
+    shadowColor.setAlpha(80);
+    pixmap = Utils::dropShadow(pixmap.scaled(width / 5, height / 5), 40, shadowColor, QPoint(0, 8));
     
     // Hide window when drag start, just hide if only one tab in current window.
     if (count() == 1) {
@@ -83,7 +87,7 @@ QPixmap TabWidget::createDragPixmapFromTab(int index, const QStyleOptionTab &, Q
     }
 
     // We need make editor screenshot smaller.
-    return pixmap.scaled(width / 5, height / 5);
+    return pixmap;
 }
 
 bool TabWidget::canInsertFromMimeData(int, const QMimeData *) const

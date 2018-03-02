@@ -26,6 +26,7 @@
 #include <QObject>
 #include <QPainter>
 #include <QString>
+#include <QImage>
 
 class Utils : public QObject
 {
@@ -42,4 +43,6 @@ public:
     static void applyQss(QWidget *widget, QString qssName);
     static void passInputEvent(int wid);
     static void setFontSize(QPainter &painter, int textSize);
+    static QPixmap dropShadow(const QPixmap &source, qreal radius, const QColor &color, const QPoint &offset);
+    static QImage dropShadow(const QPixmap &px, qreal radius, const QColor &color);
 };

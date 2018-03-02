@@ -33,6 +33,10 @@
 #include <QString>
 #include <QWidget>
 
+QT_BEGIN_NAMESPACE
+extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
+QT_END_NAMESPACE
+
 QString Utils::getQrcPath(QString imageName)
 {
     return QString(":/image/%1").arg(imageName);
@@ -127,4 +131,45 @@ QString Utils::getKeyshortcutFromKeymap(Settings* settings, QString keyCategory,
 {
     return settings->settings->option(QString("shortcuts.%1.%2").arg(keyCategory).arg(keyName))->value().toString();
 }
+
+QPixmap Utils::dropShadow(const QPixmap &source, qreal radius, const QColor &color, const QPoint &offset)
+{
+    QImage shadow = dropShadow(source, radius, color);
+    QPainter pa(&shadow);
+    pa.drawPixmap(radius - offset.x(), radius - offset.y(), source);
+    pa.end();
+    return QPixmap::fromImage(shadow);
+}
+
+QImage Utils::dropShadow(const QPixmap &px, qreal radius, const QColor &color)
+{
+    if (px.isNull()) {
+        return QImage();
+    }
+    
+    QImage tmp(px.size() + QSize(radius * 2, radius * 2), QImage::Format_ARGB32_Premultiplied);
+    tmp.fill(0);
+    QPainter tmpPainter(&tmp);
+    tmpPainter.setCompositionMode(QPainter::CompositionMode_Source);
+    tmpPainter.drawPixmap(QPoint(radius, radius), px);
+    tmpPainter.end();
+    
+    // Blur the alpha channel.
+    QImage blurred(tmp.size(), QImage::Format_ARGB32_Premultiplied);
+    blurred.fill(0);
+    QPainter blurPainter(&blurred);
+    qt_blurImage(&blurPainter, tmp, radius, false, true);
+    blurPainter.end();
+    if (color == QColor(Qt::black))
+        return blurred;
+    tmp = blurred;
+    
+    // Blacken the image...
+    tmpPainter.begin(&tmp);
+    tmpPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
+    tmpPainter.fillRect(tmp.rect(), color);
+    tmpPainter.end();
+    return tmp;
+}
+
 
