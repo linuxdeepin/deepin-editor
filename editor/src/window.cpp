@@ -22,34 +22,21 @@
  */
 
 #include "danchors.h"
-#include "dsettingsdialog.h"
 #include "dthememanager.h"
 #include "dtoast.h"
 #include "utils.h"
 #include "window.h"
 
 #include <DSettings>
-#include <QStyle>
 #include <DSettingsOption>
 #include <DTitlebar>
 #include <QApplication>
-#include <QDateTime>
-#include <QDebug>
-#include <QDir>
 #include <QFileDialog>
-#include <QLabel>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include <QPrinter>
 #include <QScreen>
 #include <QStyleFactory>
-#include <QTextCodec>
-#include <QSvgWidget>
-#include <QTemporaryFile>
-#include <qsettingbackend.h>
-
-DTK_USE_NAMESPACE
-DWIDGET_USE_NAMESPACE
 
 Window::Window(DMainWindow *parent) : DMainWindow(parent)
 {
