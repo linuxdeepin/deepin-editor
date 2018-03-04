@@ -49,11 +49,13 @@ int main(int argc, char *argv[])
     const QString acknowledgementLink = "https://www.deepin.org/acknowledgments/deepin-editor";
 
     DApplication app(argc, argv);
+    app.setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     app.loadTranslator();
 
     app.setOrganizationName("deepin");
     app.setApplicationName(QObject::tr("deepin-editor"));
+    app.setApplicationDisplayName(QObject::tr("Deepin Editor"));
     app.setApplicationVersion("1.0");
 
     app.setProductIcon(QIcon(Utils::getQrcPath("logo_96.svg")));
