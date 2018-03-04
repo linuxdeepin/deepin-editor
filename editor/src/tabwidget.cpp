@@ -121,7 +121,7 @@ bool TabWidget::canInsertFromMimeData(int, const QMimeData *) const
     return true;
 }
 
-void TabWidget::insertFromMimeData(int, const QMimeData *source)
+void TabWidget::insertFromMimeData(int index, const QMimeData *source)
 {
     // Create new tab create drop from other deepin-editor.
     QString content = QString::fromUtf8(source->data("tabInfo"));
@@ -129,8 +129,8 @@ void TabWidget::insertFromMimeData(int, const QMimeData *source)
     QString tabName = dropContent[0];
     QString tabPath = dropContent[1];
     QString tabContent = content.remove(0, tabName.size() + tabPath.size() + 2); // 2 mean two \n char
-
-    static_cast<Window*>(this->window())->addTabWithContent(tabName, tabPath, tabContent);
+    
+    static_cast<Window*>(this->window())->addTabWithContent(tabName, tabPath, tabContent, index);
 }
 
 void TabWidget::handleCloseTab()

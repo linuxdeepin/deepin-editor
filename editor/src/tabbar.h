@@ -48,6 +48,7 @@ public:
     void activeTabWithIndex(int index);
     
     void addTab(QString filepath, QString tabName);
+    void addTabWithIndex(int index, QString filepath, QString tabName);
     void closeActiveTab();
     void closeOtherTabs();
     void closeOtherTabsExceptFile(QString filepath);

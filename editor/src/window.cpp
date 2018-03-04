@@ -223,9 +223,9 @@ void Window::addTab(QString file)
     activateWindow();
 }
 
-void Window::addTabWithContent(QString tabName, QString filepath, QString content)
+void Window::addTabWithContent(QString tabName, QString filepath, QString content, int index)
 {
-    tabbar->addTab(filepath, tabName);
+    tabbar->addTabWithIndex(index, filepath, tabName);
 
     Editor *editor = createEditor();
     editor->updatePath(filepath);

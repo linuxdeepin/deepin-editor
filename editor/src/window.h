@@ -54,7 +54,7 @@ public:
     void activeTab(int index);
     
     void addTab(QString file);
-    void addTabWithContent(QString tabName, QString filepath, QString content);
+    void addTabWithContent(QString tabName, QString filepath, QString content, int index);
     void closeTab();
     void restoreTab();
     

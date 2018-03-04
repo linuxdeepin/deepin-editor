@@ -112,7 +112,7 @@ void StartManager::openFilesInTab(QStringList files)
 
 void StartManager::createWindowFromTab(QString tabName, QString filepath, QString content)
 {
-    createWindow()->addTabWithContent(tabName, filepath, content);
+    createWindow()->addTabWithContent(tabName, filepath, content, -1);
 }
 
 Window* StartManager::createWindow(bool alwaysCenter)
