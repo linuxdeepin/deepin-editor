@@ -22,6 +22,7 @@
  */
 
 #include "replacebar.h"
+#include "utils.h"
 
 #include <QDebug>
 
@@ -41,6 +42,8 @@ ReplaceBar::ReplaceBar(QWidget *parent) : QWidget(parent)
     replaceSkipButton = new QPushButton("Skip");
     replaceRestButton = new QPushButton("Replace Rest");
     replaceAllButton = new QPushButton("Replace All");
+    closeButton = new DImageButton(Utils::getQrcPath("bar_close_noraml.svg"), Utils::getQrcPath("bar_close_hover.svg"), Utils::getQrcPath("bar_close_press.svg"));
+    closeButton->setFixedSize(16, 16);
     
     layout->addWidget(replaceLabel);
     layout->addWidget(replaceLine);
@@ -50,12 +53,14 @@ ReplaceBar::ReplaceBar(QWidget *parent) : QWidget(parent)
     layout->addWidget(replaceSkipButton);
     layout->addWidget(replaceRestButton);
     layout->addWidget(replaceAllButton);
+    layout->addWidget(closeButton);
     
     // Make button don't grab keyboard focus after click it.
     replaceButton->setFocusPolicy(Qt::NoFocus);
     replaceSkipButton->setFocusPolicy(Qt::NoFocus);
     replaceRestButton->setFocusPolicy(Qt::NoFocus);
     replaceAllButton->setFocusPolicy(Qt::NoFocus);
+    closeButton->setFocusPolicy(Qt::NoFocus);
     
     connect(replaceLine, &LineBar::pressEsc, this, &ReplaceBar::replaceCancel, Qt::QueuedConnection);
     connect(withLine, &LineBar::pressEsc, this, &ReplaceBar::replaceCancel, Qt::QueuedConnection);
@@ -78,6 +83,8 @@ ReplaceBar::ReplaceBar(QWidget *parent) : QWidget(parent)
     connect(replaceSkipButton, &QPushButton::clicked, this, &ReplaceBar::replaceSkip, Qt::QueuedConnection);
     connect(replaceRestButton, &QPushButton::clicked, this, &ReplaceBar::handleReplaceRest, Qt::QueuedConnection);
     connect(replaceAllButton, &QPushButton::clicked, this, &ReplaceBar::handleReplaceAll, Qt::QueuedConnection);
+    
+    connect(closeButton, &DImageButton::clicked, this, &ReplaceBar::replaceCancel, Qt::QueuedConnection);
 }
 
 bool ReplaceBar::isFocus()

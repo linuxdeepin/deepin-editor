@@ -22,6 +22,7 @@
  */
 
 #include "findbar.h"
+#include "utils.h"
 
 #include <QDebug>
 
@@ -37,15 +38,19 @@ FindBar::FindBar(QWidget *parent) : QWidget(parent)
     editLine = new LineBar();
     findNextButton = new QPushButton("Next");
     findPrevButton = new QPushButton("Previous");
+    closeButton = new DImageButton(Utils::getQrcPath("bar_close_noraml.svg"), Utils::getQrcPath("bar_close_hover.svg"), Utils::getQrcPath("bar_close_press.svg"));
+    closeButton->setFixedSize(16, 16);
     
     layout->addWidget(findLabel);
     layout->addWidget(editLine);
     layout->addWidget(findNextButton);
     layout->addWidget(findPrevButton);
+    layout->addWidget(closeButton);
     
     // Make button don't grab keyboard focus after click it.
     findNextButton->setFocusPolicy(Qt::NoFocus);
     findPrevButton->setFocusPolicy(Qt::NoFocus);
+    closeButton->setFocusPolicy(Qt::NoFocus);
     
     connect(editLine, &LineBar::pressEsc, this, &FindBar::findCancel, Qt::QueuedConnection);
     connect(editLine, &LineBar::pressEnter, this, &FindBar::findNext, Qt::QueuedConnection);
@@ -54,6 +59,8 @@ FindBar::FindBar(QWidget *parent) : QWidget(parent)
     
     connect(findNextButton, &QPushButton::clicked, this, &FindBar::findNext, Qt::QueuedConnection);
     connect(findPrevButton, &QPushButton::clicked, this, &FindBar::findPrev, Qt::QueuedConnection);
+    
+    connect(closeButton, &DImageButton::clicked, this, &FindBar::findCancel, Qt::QueuedConnection);
 }
 
 bool FindBar::isFocus()

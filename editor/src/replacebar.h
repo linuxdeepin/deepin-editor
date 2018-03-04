@@ -31,6 +31,7 @@
 #include <QLabel>
 #include <QPainter>
 #include <QWidget>
+#include "dimagebutton.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -74,6 +75,7 @@ private:
     QPushButton *replaceButton;
     QPushButton *replaceRestButton;
     QPushButton *replaceSkipButton;
+    DImageButton *closeButton;
     LineBar *replaceLine;
     LineBar *withLine;
     QHBoxLayout *layout;
