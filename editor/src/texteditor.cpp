@@ -1157,10 +1157,15 @@ void TextEditor::highlightKeyword(QString keyword, int position)
 void TextEditor::updateCursorKeywordSelection(int position, bool findNext)
 {
     bool findOne = setCursorKeywordSeletoin(position, findNext);
-
+    
     if (!findOne) {
         if (findNext) {
-            setCursorKeywordSeletoin(0, findNext);
+            // Clear keyword if keyword not match anything.
+            if (!setCursorKeywordSeletoin(0, findNext)) {
+                cursorKeywordSelection.cursor = textCursor();
+                keywordSelections.clear();    
+                renderAllSelections();
+            }
         } else {
             QTextCursor cursor = textCursor();
             cursor.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
