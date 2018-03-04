@@ -122,14 +122,16 @@ public:
     void pasteText();
     
     void setMark();
-    bool unsetMark();
+    void unsetMark();
+    bool tryUnsetMark();
     void exchangeMark();
-
+    
 signals:
     void clickFindAction();
     void clickReplaceAction();
     void clickJumpLineAction();
     void clickFullscreenAction();
+    void cursorMarkChanged(bool mark, QTextCursor cursor);
         
 public slots:
     void highlightCurrentLine();
@@ -153,6 +155,7 @@ public slots:
     
     void changeToEditCursor();
     void changeToWaitCursor();
+    void handleCursorMarkChanged(bool mark, QTextCursor cursor);
     
 private:
     QPropertyAnimation *scrollAnimation;
@@ -202,6 +205,7 @@ private:
     bool haveWordUnderCursor;
     
     bool cursorMark = false;
+    int markStartLine = -1;
     
     Settings *settings;
     

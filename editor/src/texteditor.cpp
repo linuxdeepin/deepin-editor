@@ -153,6 +153,9 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     connect(changeCursorWidthTimer, &QTimer::timeout, this, &TextEditor::changeToWaitCursor);
 
     changeToWaitCursor();
+    
+    // Monitor cursor mark status to update in line number area.
+    connect(this, &TextEditor::cursorMarkChanged, this, &TextEditor::handleCursorMarkChanged);
 }
 
 int TextEditor::getCurrentLine()
@@ -383,7 +386,7 @@ void TextEditor::jumpToLine(int line, bool keepLineAtCenter)
 void TextEditor::newline()
 {
     // Stop mark if mark is set.
-    unsetMark();
+    tryUnsetMark();
 
     QTextCursor cursor = textCursor();
     cursor.insertText("\n");
@@ -393,7 +396,7 @@ void TextEditor::newline()
 void TextEditor::openNewlineAbove()
 {
     // Stop mark if mark is set.
-    unsetMark();
+    tryUnsetMark();
 
     QTextCursor cursor = textCursor();
     cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
@@ -406,7 +409,7 @@ void TextEditor::openNewlineAbove()
 void TextEditor::openNewlineBelow()
 {
     // Stop mark if mark is set.
-    unsetMark();
+    tryUnsetMark();
 
     moveCursor(QTextCursor::EndOfBlock);
     textCursor().insertText("\n");
@@ -710,7 +713,7 @@ void TextEditor::duplicateLine()
         setTextCursor(cursor);
 
         // Clean mark flag anyway.
-        cursorMark = false;
+        unsetMark();
     } else {
         // Rember current line's column number.
         int column = textCursor().columnNumber();
@@ -778,7 +781,7 @@ void TextEditor::copyLines()
 
 void TextEditor::killLine()
 {
-    if (unsetMark()) {
+    if (tryUnsetMark()) {
         return;
     }
 
@@ -822,7 +825,7 @@ void TextEditor::killLine()
 
 void TextEditor::killCurrentLine()
 {
-    if (unsetMark()) {
+    if (tryUnsetMark()) {
         return;
     }
 
@@ -837,7 +840,7 @@ void TextEditor::killCurrentLine()
 
 void TextEditor::killBackwardWord()
 {
-    unsetMark();
+    tryUnsetMark();
 
     if (textCursor().hasSelection()) {
         textCursor().removeSelectedText();
@@ -853,7 +856,7 @@ void TextEditor::killBackwardWord()
 
 void TextEditor::killForwardWord()
 {
-    unsetMark();
+    tryUnsetMark();
 
     if (textCursor().hasSelection()) {
         textCursor().removeSelectedText();
@@ -870,7 +873,7 @@ void TextEditor::killForwardWord()
 void TextEditor::indentLine()
 {
     // Stop mark if mark is set.
-    unsetMark();
+    tryUnsetMark();
 
     // Save cursor column.
     int column = getCurrentColumn();
@@ -894,7 +897,7 @@ void TextEditor::indentLine()
 void TextEditor::backIndentLine()
 {
     // Stop mark if mark is set.
-    unsetMark();
+    tryUnsetMark();
 
     // Save cursor column.
     int column = getCurrentColumn();
@@ -930,28 +933,28 @@ void TextEditor::setTabSpaceNumber(int number)
 
 void TextEditor::upcaseWord()
 {
-    unsetMark();
+    tryUnsetMark();
 
     convertWordCase(UPPER);
 }
 
 void TextEditor::downcaseWord()
 {
-    unsetMark();
+    tryUnsetMark();
 
     convertWordCase(LOWER);
 }
 
 void TextEditor::capitalizeWord()
 {
-    unsetMark();
+    tryUnsetMark();
 
     convertWordCase(CAPITALIZE);
 }
 
 void TextEditor::transposeChar()
 {
-    unsetMark();
+    tryUnsetMark();
 
     QTextCursor cursor = textCursor();
     cursor.clearSelection();
@@ -982,6 +985,17 @@ void TextEditor::changeToEditCursor()
 void TextEditor::changeToWaitCursor()
 {
     setCursorWidth(fontMetrics().width('9'));
+}
+
+void TextEditor::handleCursorMarkChanged(bool mark, QTextCursor cursor)
+{
+    if (mark) {
+        markStartLine = cursor.blockNumber() + 1;
+    } else {
+        markStartLine = -1;
+    }
+    
+    lineNumberArea->update();
 }
 
 void TextEditor::convertWordCase(ConvertCase convertCase)
@@ -1326,7 +1340,11 @@ void TextEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
     Utils::setFontSize(painter, document()->defaultFont().pointSize() - 1);
     while (block.isValid() && top <= event->rect().bottom()) {
         if (block.isVisible() && bottom >= event->rect().top()) {
-            painter.setPen(QColor("#666666"));
+            if (linenumber + 1 == markStartLine) {
+                painter.setPen(QColor("#2CA7F8"));
+            } else {
+                painter.setPen(QColor("#666666"));
+            }
             painter.drawText(0,
                              top + lineNumberOffset,
                              lineNumberArea->width(),
@@ -1544,7 +1562,7 @@ void TextEditor::copySelectedText()
 {
     copy();
 
-    cursorMark = false;
+    unsetMark();
 
     QTextCursor cursor = textCursor();
     cursor.clearSelection();
@@ -1555,45 +1573,59 @@ void TextEditor::cutSelectedText()
 {
     cut();
 
-    cursorMark = false;
+    unsetMark();
 }
 
 void TextEditor::pasteText()
 {
     paste();
 
-    cursorMark = false;
+    unsetMark();
 }
 
 void TextEditor::setMark()
 {
+    bool currentMark = cursorMark;
+    bool markCursorChanged = false;
+    
     if (cursorMark) {
         if (textCursor().hasSelection()) {
+            markCursorChanged = true;
+            
             QTextCursor cursor = textCursor();
             cursor.clearSelection();
             setTextCursor(cursor);
-
-            qDebug() << "Mark set";
         } else {
             cursorMark = false;
-
-            qDebug() << "Mark unset";
         }
     } else {
         cursorMark = true;
-
-        qDebug() << "Mark set";
+    }
+    
+    if (cursorMark != currentMark || markCursorChanged) {
+        cursorMarkChanged(cursorMark, textCursor());
     }
 }
 
-bool TextEditor::unsetMark()
+void TextEditor::unsetMark()
+{
+    bool currentMark = cursorMark;
+    
+    cursorMark = false;
+
+    if (cursorMark != currentMark) {
+        cursorMarkChanged(cursorMark, textCursor());
+    }
+}
+
+bool TextEditor::tryUnsetMark()
 {
     if (cursorMark) {
         QTextCursor cursor = textCursor();
         cursor.clearSelection();
         setTextCursor(cursor);
 
-        cursorMark = false;
+        unsetMark();
 
         return true;
     } else {
