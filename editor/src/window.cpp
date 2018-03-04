@@ -22,11 +22,15 @@
  */
 
 #include "danchors.h"
+#include "wordcompletionitem.h"
 #include "dthememanager.h"
 #include "dtoast.h"
 #include "utils.h"
 #include "window.h"
 
+#include <QSqlQuery>
+#include <QSqlRecord>
+#include <QSqlError>
 #include <DSettings>
 #include <DSettingsOption>
 #include <DTitlebar>
@@ -173,6 +177,18 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     Utils::applyQss(this, "main.qss");
     titlebarStyleSheet = this->titlebar()->styleSheet();
     changeTitlebarBackground("#202020");
+    
+    // Init words database.
+    wordsDB = QSqlDatabase::addDatabase("QSQLITE");
+    wordsDB.setDatabaseName(QFileInfo("../dict/words.db").absoluteFilePath());
+
+    if (!wordsDB.open()) {
+        qDebug() << "Error: connection with database fail";
+    } else {
+        qDebug() << "Database: connection ok";
+    }
+    
+    wordCompletionWindow = new WordCompletionWindow();
 }
 
 Window::~Window()
@@ -275,11 +291,19 @@ Editor* Window::createEditor()
     editor->textEditor->setSettings(settings);
     editor->textEditor->setTabSpaceNumber(settings->settings->option("advance.editor.tab_space_number")->value().toInt());
     editor->textEditor->setFontFamily(settings->settings->option("base.font.family")->value().toString());
+    editor->textEditor->setEnglishWordsDB(wordsDB);
 
     connect(editor->textEditor, &TextEditor::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);
     connect(editor->textEditor, &TextEditor::clickReplaceAction, this, &Window::popupReplaceBar, Qt::QueuedConnection);
     connect(editor->textEditor, &TextEditor::clickJumpLineAction, this, &Window::popupJumpLineBar, Qt::QueuedConnection);
     connect(editor->textEditor, &TextEditor::clickFullscreenAction, this, &Window::toggleFullscreen, Qt::QueuedConnection);
+    connect(editor->textEditor, &TextEditor::popupCompletionWindow, this, &Window::handlePopupCompletionWindow, Qt::QueuedConnection);
+    
+    connect(editor->textEditor, &TextEditor::selectNextCompletion, this, &Window::handleSelectNextCompletion, Qt::QueuedConnection);
+    connect(editor->textEditor, &TextEditor::selectPrevCompletion, this, &Window::handleSelectPrevCompletion, Qt::QueuedConnection);
+    connect(editor->textEditor, &TextEditor::selectFirstCompletion, this, &Window::handleSelectFirstCompletion, Qt::QueuedConnection);
+    connect(editor->textEditor, &TextEditor::selectLastCompletion, this, &Window::handleSelectLastCompletion, Qt::QueuedConnection);
+    connect(editor->textEditor, &TextEditor::confirmCompletion, this, &Window::handleConfirmCompletion, Qt::QueuedConnection);
 
     return editor;
 }
@@ -859,4 +883,66 @@ void Window::popupPrintDialog()
 void Window::changeTitlebarBackground(QString color)
 {
     this->titlebar()->setStyleSheet(QString("%1Dtk--Widget--DTitlebar {background: %2;}").arg(titlebarStyleSheet).arg(color));
+}
+
+void Window::handlePopupCompletionWindow(QPoint pos, QStringList words)
+{
+    if (words.size() > 1) {
+        wordCompletionWindow->move(pos);
+        wordCompletionWindow->show();
+    
+        std::sort(std::begin(words), std::end(words),
+                  [=](QString a, QString b) {
+                      return a.size() < b.size();
+                  });
+        wordCompletionWindow->addWords(words);
+    } else {
+        wordCompletionWindow->hide();
+    }
+    
+    qDebug() << pos << words;
+}
+
+void Window::handleSelectNextCompletion()
+{
+    if (wordCompletionWindow->isVisible()) {
+        wordCompletionWindow->listview->selectNextItem();
+    }
+}
+
+void Window::handleSelectPrevCompletion()
+{
+    if (wordCompletionWindow->isVisible()) {
+        wordCompletionWindow->listview->selectPrevItem();
+    }
+}
+
+void Window::handleSelectFirstCompletion()
+{
+    if (wordCompletionWindow->isVisible()) {
+        wordCompletionWindow->listview->selectFirstItem();
+    }
+}
+
+void Window::handleSelectLastCompletion()
+{
+    if (wordCompletionWindow->isVisible()) {
+        wordCompletionWindow->listview->selectLastItem();
+    }
+}
+
+void Window::handleConfirmCompletion()
+{
+    if (wordCompletionWindow->isVisible()) {
+        auto completionItems = wordCompletionWindow->listview->getSelections();
+        
+        for (auto item : completionItems) {
+            WordCompletionItem* wordItem = static_cast<WordCompletionItem*>(item);
+            wordCompletionWindow->hide();
+            
+            getActiveEditor()->textEditor->completionWord(wordItem->name);
+            
+            break;
+        }
+    }
 }

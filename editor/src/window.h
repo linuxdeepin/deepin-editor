@@ -25,6 +25,7 @@
 #define WINDOW_H
 
 #include "ddialog.h"
+#include "wordcompletionwindow.h"
 #include "dmainwindow.h"
 #include "editor.h"
 #include "findbar.h"
@@ -39,6 +40,7 @@
 #include <QVBoxLayout>
 #include <QWidget>
 #include <dimagebutton.h>
+#include <QSqlDatabase>
 
 DWIDGET_USE_NAMESPACE
 
@@ -127,6 +129,13 @@ public slots:
     
     void popupPrintDialog();
     
+    void handlePopupCompletionWindow(QPoint pos, QStringList words);
+    void handleSelectNextCompletion();
+    void handleSelectPrevCompletion();
+    void handleSelectFirstCompletion();
+    void handleSelectLastCompletion();
+    void handleConfirmCompletion();
+    
 private:
     FindBar *findBar;
     JumpLineBar *jumpLineBar;
@@ -169,6 +178,10 @@ private:
     void showNotify(QString message);
     
     DDialog* createSaveBlankFileDialog();
+    
+    QSqlDatabase wordsDB;
+    
+    WordCompletionWindow *wordCompletionWindow;
 };
 
 #endif

@@ -379,6 +379,36 @@
                             "name": "Copy Lines",
                             "type": "shortcut",
                             "default":  "Meta+C"
+                        },
+                        {
+                            "key": "selectnextcompletion",
+                            "name": "Select Next Completion",
+                            "type": "shortcut",
+                            "default":  "Alt+,"
+                        },
+                        {
+                            "key": "selectprevcompletion",
+                            "name": "Select Previous Completion",
+                            "type": "shortcut",
+                            "default":  "Alt+."
+                        },
+                        {
+                            "key": "selectfirstcompletion",
+                            "name": "Select First Completion",
+                            "type": "shortcut",
+                            "default":  "Alt+Shift+>"
+                        },
+                        {
+                            "key": "selectlastcompletion",
+                            "name": "Select Last Completion",
+                            "type": "shortcut",
+                            "default":  "Alt+Shift+<"
+                        },
+                        {
+                            "key": "confirmcompletion",
+                            "name": "Confirm Completion",
+                            "type": "shortcut",
+                            "default":  "Alt+Return"
                         }
                     ]
                 },
@@ -723,6 +753,36 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Meta+C"
+                        },
+                        {
+                            "key": "selectnextcompletion",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Alt+,"
+                        },
+                        {
+                            "key": "selectprevcompletion",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Alt+."
+                        },
+                        {
+                            "key": "selectfirstcompletion",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Alt+Shift+>"
+                        },
+                        {
+                            "key": "selectlastcompletion",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Alt+Shift+<"
+                        },
+                        {
+                            "key": "confirmcompletion",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Alt+Return"
                         }
                     ]
                 },
@@ -1067,6 +1127,36 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Alt+Shift+W"
+                        },
+                        {
+                            "key": "selectnextcompletion",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Alt+,"
+                        },
+                        {
+                            "key": "selectprevcompletion",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Alt+."
+                        },
+                        {
+                            "key": "selectfirstcompletion",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Alt+Shift+>"
+                        },
+                        {
+                            "key": "selectlastcompletion",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Alt+Shift+<"
+                        },
+                        {
+                            "key": "confirmcompletion",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Alt+Return"
                         }
                     ]
                 },
@@ -1411,6 +1501,36 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Meta+C"
+                        },
+                        {
+                            "key": "selectnextcompletion",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Alt+,"
+                        },
+                        {
+                            "key": "selectprevcompletion",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Alt+."
+                        },
+                        {
+                            "key": "selectfirstcompletion",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Alt+Shift+>"
+                        },
+                        {
+                            "key": "selectlastcompletion",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Alt+Shift+<"
+                        },
+                        {
+                            "key": "confirmcompletion",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Alt+Return"
                         }
                     ]
                 }		

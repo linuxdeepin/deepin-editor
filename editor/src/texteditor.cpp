@@ -41,6 +41,9 @@
 #include <QScrollBar>
 #include <QStyleFactory>
 #include <QTextBlock>
+#include <QSqlQuery>
+#include <QSqlRecord>
+#include <QSqlError>
 #include <QTimer>
 
 class LineNumberArea : public QWidget
@@ -153,9 +156,14 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     connect(changeCursorWidthTimer, &QTimer::timeout, this, &TextEditor::changeToWaitCursor);
 
     changeToWaitCursor();
-    
+
     // Monitor cursor mark status to update in line number area.
     connect(this, &TextEditor::cursorMarkChanged, this, &TextEditor::handleCursorMarkChanged);
+
+    // Init english helper timer.
+    englishHelperTimer = new QTimer(this);
+    englishHelperTimer->setSingleShot(true);
+    connect(englishHelperTimer, &QTimer::timeout, this, &TextEditor::tryCompleteWord);
 }
 
 int TextEditor::getCurrentLine()
@@ -335,7 +343,7 @@ void TextEditor::moveToLineIndentation()
     int column = startColumn;
     while (column < endColumn) {
         QChar currentChar = toPlainText().at(std::max(cursor.position() - 1, 0));
-         
+
         if (!currentChar.isSpace()) {
             cursor.movePosition(QTextCursor::PreviousCharacter, moveMode);
             break;
@@ -630,7 +638,7 @@ void TextEditor::scrollLineUp()
 
         int line = getCurrentLine() + 1;
         QTextCursor lineCursor(document()->findBlockByLineNumber(line - 1)); // line - 1 because line number starts from 0
-        
+
         QTextCursor cursor = textCursor();
         cursor.setPosition(lineCursor.position(), moveMode);
         setTextCursor(cursor);
@@ -644,10 +652,10 @@ void TextEditor::scrollLineDown()
     int visibleLines = (rect().height() / cursorRect().height());
     if (scrollbar->value() + visibleLines <= getCurrentLine() + 2) {
         auto moveMode = cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
-        
+
         int line = getCurrentLine() - 1;
         QTextCursor lineCursor(document()->findBlockByLineNumber(line - 1)); // line - 1 because line number starts from 0
-        
+
         QTextCursor cursor = textCursor();
         cursor.setPosition(lineCursor.position(), moveMode);
         setTextCursor(cursor);
@@ -743,7 +751,7 @@ void TextEditor::copyLines()
     // Record current cursor and build copy cursor.
     QTextCursor currentCursor = textCursor();
     QTextCursor copyCursor = textCursor();
-    
+
     if (textCursor().hasSelection()) {
         // Sort selection bound cursors.
         int startPos = textCursor().anchor();
@@ -769,11 +777,11 @@ void TextEditor::copyLines()
         copyCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
         copyCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
     }
-    
+
     // Copy lines to system clipboard.
     setTextCursor(copyCursor);
     copySelectedText();
-    
+
     // Reset cursor before copy lines.
     copyCursor.setPosition(currentCursor.position(), QTextCursor::MoveAnchor);
     setTextCursor(copyCursor);
@@ -797,7 +805,7 @@ void TextEditor::killLine()
 
         bool isEmptyLine = text.size() == 0;
         bool isBlankLine = text.trimmed().size() == 0;
-        
+
         QTextCursor cursor = textCursor();
         // Join next line if current line is empty or cursor at end of line.
         if (isEmptyLine || textCursor().atBlockEnd()) {
@@ -817,7 +825,7 @@ void TextEditor::killLine()
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
             cursor.removeSelectedText();
         }
-        
+
         // Update cursor.
         setTextCursor(cursor);
     }
@@ -994,7 +1002,7 @@ void TextEditor::handleCursorMarkChanged(bool mark, QTextCursor cursor)
     } else {
         markStartLine = -1;
     }
-    
+
     lineNumberArea->update();
 }
 
@@ -1157,13 +1165,13 @@ void TextEditor::highlightKeyword(QString keyword, int position)
 void TextEditor::updateCursorKeywordSelection(int position, bool findNext)
 {
     bool findOne = setCursorKeywordSeletoin(position, findNext);
-    
+
     if (!findOne) {
         if (findNext) {
             // Clear keyword if keyword not match anything.
             if (!setCursorKeywordSeletoin(0, findNext)) {
                 cursorKeywordSelection.cursor = textCursor();
-                keywordSelections.clear();    
+                keywordSelections.clear();
                 renderAllSelections();
             }
         } else {
@@ -1237,7 +1245,7 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
     changeCursorWidthTimer->start(2000);
 
     QString key = Utils::getKeyshortcut(keyEvent);
-    
+
     // qDebug() << key;
 
     if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "indentline")) {
@@ -1312,6 +1320,16 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         exchangeMark();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "copylines")) {
         copyLines();
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "selectnextcompletion")) {
+        selectNextCompletion();
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "selectprevcompletion")) {
+        selectPrevCompletion();
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "selectfirstcompletion")) {
+        selectFirstCompletion();
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "selectlastcompletion")) {
+        selectLastCompletion();
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "confirmcompletion")) {
+        confirmCompletion();
     } else {
         // Post event to window widget if key match window key list.
         for (auto option : settings->settings->group("shortcuts.window")->options()) {
@@ -1419,6 +1437,11 @@ void TextEditor::highlightCurrentLine()
 void TextEditor::updateLineNumber()
 {
     lineNumberArea->setFixedWidth(QString("%1").arg(blockCount()).size() * fontMetrics().width('9') + lineNumberPaddingX * 2);
+
+    if (englishHelperTimer->isActive()) {
+        englishHelperTimer->stop();
+    }
+    englishHelperTimer->start(500);
 }
 
 void TextEditor::handleScrollFinish()
@@ -1592,11 +1615,11 @@ void TextEditor::setMark()
 {
     bool currentMark = cursorMark;
     bool markCursorChanged = false;
-    
+
     if (cursorMark) {
         if (textCursor().hasSelection()) {
             markCursorChanged = true;
-            
+
             QTextCursor cursor = textCursor();
             cursor.clearSelection();
             setTextCursor(cursor);
@@ -1606,7 +1629,7 @@ void TextEditor::setMark()
     } else {
         cursorMark = true;
     }
-    
+
     if (cursorMark != currentMark || markCursorChanged) {
         cursorMarkChanged(cursorMark, textCursor());
     }
@@ -1615,7 +1638,7 @@ void TextEditor::setMark()
 void TextEditor::unsetMark()
 {
     bool currentMark = cursorMark;
-    
+
     cursorMark = false;
 
     if (cursorMark != currentMark) {
@@ -1645,7 +1668,7 @@ void TextEditor::exchangeMark()
         int actionStartPos = textCursor().position();
         int selectionStartPos = textCursor().selectionStart();
         int selectionEndPos = textCursor().selectionEnd();
-    
+
         QTextCursor cursor = textCursor();
         if (actionStartPos == selectionStartPos) {
             cursor.setPosition(selectionStartPos, QTextCursor::MoveAnchor);
@@ -1654,7 +1677,7 @@ void TextEditor::exchangeMark()
             cursor.setPosition(selectionEndPos, QTextCursor::MoveAnchor);
             cursor.setPosition(selectionStartPos, QTextCursor::KeepAnchor);
         }
-        
+
         setTextCursor(cursor);
     }
 }
@@ -1716,4 +1739,74 @@ void TextEditor::cutWordUnderCursor()
 
     setTextCursor(highlightWordCacheCursor);
     textCursor().removeSelectedText();
+}
+
+QString TextEditor::getWordAtCursor()
+{
+    QTextCursor cursor = textCursor();
+    QChar currentChar = toPlainText().at(std::max(cursor.position() - 1, 0));
+
+    cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
+    while (!currentChar.isSpace() && cursor.position() != 0) {
+        // while (!currentChar.isSpace() && cursor.position() != 0) {
+        cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+        currentChar = toPlainText().at(std::max(cursor.position() - 1, 0));
+        
+        if (currentChar == '-') {
+            break;
+        }
+    }
+
+    return cursor.selectedText();
+}
+
+void TextEditor::tryCompleteWord()
+{
+    QString wordAtCursor = getWordAtCursor();
+    QTextCursor cursor = textCursor();
+    
+    qDebug() << wordAtCursor;
+    
+    auto rect = cursorRect(textCursor());
+    auto cursorPos = viewport()->mapToGlobal(QPoint(rect.x() + rect.width(), rect.y() + rect.height()));
+    QStringList completionList;
+
+    if (wordAtCursor != "") {
+        QSqlQuery query(wordsDB);
+        query.prepare("SELECT word FROM words WHERE word like :word");
+        query.bindValue(":word", QString("%1%%").arg(wordAtCursor));
+
+        if (query.exec()) {
+            int wordIndex = query.record().indexOf("word");
+
+            while (query.next()) {
+                completionList << query.value(wordIndex).toString();
+            }
+        } else {
+            qDebug() << "Error: " << query.lastError();
+        }
+    }
+
+    popupCompletionWindow(cursorPos, completionList);
+
+    hasCompletionWords = completionList.size() > 1;
+}
+
+void TextEditor::setEnglishWordsDB(QSqlDatabase db)
+{
+    wordsDB = db;
+}
+
+void TextEditor::completionWord(QString word)
+{
+    QString wordAtCursor = getWordAtCursor();
+    QTextCursor cursor = textCursor();
+
+    QString completionString = word.remove(0, wordAtCursor.size());
+    if (completionString.size() > 0) {
+        cursor = textCursor();
+        cursor.insertText(completionString);
+
+        setTextCursor(cursor);
+    }
 }

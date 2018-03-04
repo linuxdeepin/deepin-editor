@@ -32,6 +32,7 @@
 #include <QPaintEvent>
 #include <QPlainTextEdit>
 #include <QPropertyAnimation>
+#include <QSqlDatabase>
 
 namespace KSyntaxHighlighting {
     class SyntaxHighlighter;
@@ -126,13 +127,24 @@ public:
     bool tryUnsetMark();
     void exchangeMark();
     
+    void setEnglishWordsDB(QSqlDatabase wordsDB);
+    void completionWord(QString word);
+    QString getWordAtCursor();
+    
 signals:
     void clickFindAction();
     void clickReplaceAction();
     void clickJumpLineAction();
     void clickFullscreenAction();
     void cursorMarkChanged(bool mark, QTextCursor cursor);
-        
+    void popupCompletionWindow(QPoint pos, QStringList words);
+                                                             
+    void selectNextCompletion();
+    void selectPrevCompletion();
+    void selectFirstCompletion();
+    void selectLastCompletion();
+    void confirmCompletion();
+    
 public slots:
     void highlightCurrentLine();
     void updateLineNumber();
@@ -156,6 +168,8 @@ public slots:
     void changeToEditCursor();
     void changeToWaitCursor();
     void handleCursorMarkChanged(bool mark, QTextCursor cursor);
+    
+    void tryCompleteWord();
     
 private:
     QPropertyAnimation *scrollAnimation;
@@ -210,8 +224,13 @@ private:
     Settings *settings;
     
     QTimer* changeCursorWidthTimer;
+    QTimer* englishHelperTimer;
+    
+    QSqlDatabase wordsDB;
     
     bool setCursorKeywordSeletoin(int position, bool findNext);
+    
+    bool hasCompletionWords = false;
 };
 
 #endif

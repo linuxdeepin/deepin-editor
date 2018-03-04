@@ -23,6 +23,8 @@ HEADERS += src/window.h \
 	   src/tabbar.h \		   
 	   src/tabwidget.h \		   
 	   src/editor.h \		   
+	   src/wordcompletionwindow.h \		   
+	   src/wordcompletionitem.h \		   
 	   src/utils.h		   
 SOURCES += src/window.cpp \
            src/startmanager.cpp \		   
@@ -37,6 +39,8 @@ SOURCES += src/window.cpp \
 	   src/tabwidget.cpp \		   
 	   src/editor.cpp \		   
 	   src/utils.cpp \		   
+	   src/wordcompletionwindow.cpp \		   
+	   src/wordcompletionitem.cpp \		   
 	   src/main.cpp		   
 		   
 QT += KSyntaxHighlighting
@@ -48,6 +52,7 @@ QT += printsupport
 QT += svg
 QT += widgets
 QT += x11extras
+QT += sql
 
 QMAKE_CXXFLAGS += -g
 LIBS += -lX11 -lXext -lXtst
