@@ -26,6 +26,7 @@
 
 #include <QDebug>
 #include <QLabel>
+#include <DHiDPIHelper>
 
 Tabbar::Tabbar()
 {
@@ -33,7 +34,7 @@ Tabbar::Tabbar()
     layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
 
-    QPixmap iconPixmap = QPixmap(Utils::getQrcPath("logo_24.svg"));
+    QPixmap iconPixmap = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("logo_24.svg"));
     QLabel *iconLabel = new QLabel();
     iconLabel->setPixmap(iconPixmap);
     iconLabel->setFixedSize(24, 40);
