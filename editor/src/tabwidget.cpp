@@ -28,6 +28,8 @@
 
 #include <QDebug>
 #include <QStyleFactory>
+#include <QGuiApplication>
+#include <DPlatformWindowHandle>
 
 TabWidget::TabWidget()
 {
@@ -49,6 +51,7 @@ TabWidget::TabWidget()
     setFixedHeight(40);
     
     connect(this, &TabWidget::tabReleaseRequested, this, &TabWidget::handleTabReleaseRequested);
+    connect(this, &DTabBar::dragActionChanged, this, &TabWidget::handleDragActionChanged);    
 }
 
 QMimeData* TabWidget::createMimeDataFromTab(int index, const QStyleOptionTab &) const
@@ -199,5 +202,20 @@ void TabWidget::handleTabReleaseRequested()
     // Show window agian if tab drop failed and only one tab in current window.
     if (count() == 1) {
         static_cast<Window*>(this->window())->show();
+    }
+}
+
+void TabWidget::handleDragActionChanged(Qt::DropAction action)
+{
+    // Reset cursor to Qt::ArrowCursor if drag tab to TextEditor widget.
+    if (action == Qt::IgnoreAction) {
+        if (dragIconWindow()) {
+            QGuiApplication::changeOverrideCursor(Qt::ArrowCursor);
+            DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), true);
+        }
+    } else if (dragIconWindow()) {
+        DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), false);
+        if (QGuiApplication::overrideCursor())
+            QGuiApplication::changeOverrideCursor(QGuiApplication::overrideCursor()->shape());
     }
 }

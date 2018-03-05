@@ -53,6 +53,7 @@ public slots:
     void handleCloseOtherTabs();
     void handleCloseTab();
     void handleTabReleaseRequested();
+    void handleDragActionChanged(Qt::DropAction action);
     
 private:
     QAction *closeOtherTabAction;
