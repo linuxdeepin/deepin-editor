@@ -1753,21 +1753,25 @@ void TextEditor::cutWordUnderCursor()
 
 QString TextEditor::getWordAtCursor()
 {
-    QTextCursor cursor = textCursor();
-    QChar currentChar = toPlainText().at(std::max(cursor.position() - 1, 0));
+    if (toPlainText() == "") {
+        return "";
+    } else {
+        QTextCursor cursor = textCursor();
+        QChar currentChar = toPlainText().at(std::max(cursor.position() - 1, 0));
 
-    cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
-    while (!currentChar.isSpace() && cursor.position() != 0) {
-        // while (!currentChar.isSpace() && cursor.position() != 0) {
-        cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
-        currentChar = toPlainText().at(std::max(cursor.position() - 1, 0));
+        cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
+        while (!currentChar.isSpace() && cursor.position() != 0) {
+            // while (!currentChar.isSpace() && cursor.position() != 0) {
+            cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+            currentChar = toPlainText().at(std::max(cursor.position() - 1, 0));
         
-        if (currentChar == '-') {
-            break;
+            if (currentChar == '-') {
+                break;
+            }
         }
-    }
 
-    return cursor.selectedText();
+        return cursor.selectedText();
+    }
 }
 
 void TextEditor::tryCompleteWord()
