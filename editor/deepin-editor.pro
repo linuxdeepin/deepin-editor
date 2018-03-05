@@ -25,6 +25,7 @@ HEADERS += src/window.h \
 	   src/editor.h \		   
 	   src/wordcompletionwindow.h \		   
 	   src/wordcompletionitem.h \		   
+	   src/uncommentselection.h \		   
 	   src/utils.h		   
 SOURCES += src/window.cpp \
            src/startmanager.cpp \		   
@@ -41,6 +42,7 @@ SOURCES += src/window.cpp \
 	   src/utils.cpp \		   
 	   src/wordcompletionwindow.cpp \		   
 	   src/wordcompletionitem.cpp \		   
+	   src/uncommentselection.cpp \		   
 	   src/main.cpp		   
 		   
 QT += KSyntaxHighlighting

@@ -168,6 +168,9 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     englishHelperTimer = new QTimer(this);
     englishHelperTimer->setSingleShot(true);
     connect(englishHelperTimer, &QTimer::timeout, this, &TextEditor::tryCompleteWord);
+    
+    // Init comment.
+    commentDefinition.setStyle(Comment::CommentDefinition::CppStyle);
 }
 
 int TextEditor::getCurrentLine()
@@ -1439,6 +1442,8 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
             toggleEnglishCompleter();
         } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "togglereadonlymode")) {
             toggleReadOnlyMode();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "togglecomment")) {
+            toggleComment();
         } else {
             // Post event to window widget if key match window key list.
             for (auto option : settings->settings->group("shortcuts.window")->options()) {
@@ -1449,7 +1454,7 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
             }
 
             // Text editor handle key self.
-            QPlainTextEdit::keyPressEvent(keyEvent);
+                QPlainTextEdit::keyPressEvent(keyEvent);
         }
     }
 }
@@ -1650,6 +1655,9 @@ void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme)
 void TextEditor::loadHighlighter()
 {
     const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());
+    
+    qDebug() << def.filePath() << def.style() << def.isValid();
+    
     m_highlighter->setDefinition(def);
 }
 
@@ -1912,6 +1920,11 @@ void TextEditor::toggleReadOnlyMode()
 
         popupNotify("只读模式开启");
     }
+}
+
+void TextEditor::toggleComment()
+{
+    Comment::unCommentSelection(this, commentDefinition);
 }
 
 void TextEditor::tryCompleteWord()

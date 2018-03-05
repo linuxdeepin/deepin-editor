@@ -25,6 +25,7 @@
 #define TEXTEEDITOR_H
 
 #include "Repository"
+#include "uncommentselection.h"
 
 #include "settings.h"
 #include <QAction>
@@ -138,6 +139,8 @@ public:
     
     void toggleReadOnlyMode();
     
+    void toggleComment();
+    
 signals:
     void clickFindAction();
     void clickReplaceAction();
@@ -247,6 +250,8 @@ private:
     bool confirmCompletionFlag = false;
     bool enableEnglishCompleter = false;
     bool readOnlyMode = false;
+    
+    Comment::CommentDefinition commentDefinition;
 };
 
 #endif

@@ -427,7 +427,14 @@
                             "name": "Toggle Read Only Mode",
                             "type": "shortcut",
                             "default":  "Alt+Meta+L"
+                        },
+                        {
+                            "key": "togglecomment",
+                            "name": "Toggle Comment",
+                            "type": "shortcut",
+                            "default":  "Ctrl+/"
                         }
+			
                     ]
                 },
 		{
@@ -819,6 +826,12 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Alt+Meta+L"
+                        },
+                        {
+                            "key": "togglecomment",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Ctrl+/"
                         }
                     ]
                 },
@@ -1211,6 +1224,12 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Alt+Meta+L"
+                        },
+                        {
+                            "key": "togglecomment",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Ctrl+Shift+:"
                         }
                     ]
                 },
@@ -1603,6 +1622,12 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Alt+Meta+L"
+                        },
+                        {
+                            "key": "togglecomment",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Ctrl+/"
                         }
                     ]
                 }		
