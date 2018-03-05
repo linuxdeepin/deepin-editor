@@ -1266,6 +1266,7 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         prevLine();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "newline") || key == "Return") {
         if (static_cast<Window*>(this->window())->wordCompletionWindowIsVisible()) {
+            confirmCompletionFlag = true;
             confirmCompletion();
         } else {
             newline();
@@ -1438,12 +1439,19 @@ void TextEditor::highlightCurrentLine()
 
 void TextEditor::updateLineNumber()
 {
+    // Update line number painter.
     lineNumberArea->setFixedWidth(QString("%1").arg(blockCount()).size() * fontMetrics().width('9') + lineNumberPaddingX * 2);
 
+    // Try complete words.
     if (englishHelperTimer->isActive()) {
         englishHelperTimer->stop();
     }
-    englishHelperTimer->start(500);
+    
+    if (!confirmCompletionFlag) {
+        englishHelperTimer->start(500);
+    } else {
+        confirmCompletionFlag = false;
+    }
 }
 
 void TextEditor::handleScrollFinish()

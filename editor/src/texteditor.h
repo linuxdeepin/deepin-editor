@@ -234,6 +234,7 @@ private:
     bool setCursorKeywordSeletoin(int position, bool findNext);
     
     bool hasCompletionWords = false;
+    bool confirmCompletionFlag = false;
 };
 
 #endif
