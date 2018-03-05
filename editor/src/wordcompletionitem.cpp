@@ -30,7 +30,7 @@ bool WordCompletionItem::sameAs(DSimpleListItem *item)
     return name == (static_cast<WordCompletionItem*>(item))->name;
 }
 
-void WordCompletionItem::drawBackground(QRect rect, QPainter *painter, int index, bool isSelect, bool isHover)
+void WordCompletionItem::drawBackground(QRect rect, QPainter *painter, int, bool isSelect, bool)
 {
     QPainterPath path;
     path.addRect(QRectF(rect));
@@ -43,7 +43,7 @@ void WordCompletionItem::drawBackground(QRect rect, QPainter *painter, int index
     }
 }
 
-void WordCompletionItem::drawForeground(QRect rect, QPainter *painter, int column, int index, bool isSelect, bool isHover)
+void WordCompletionItem::drawForeground(QRect rect, QPainter *painter, int, int, bool isSelect, bool)
 {
     painter->setOpacity(1);
     if (isSelect) {
