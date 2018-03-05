@@ -29,8 +29,6 @@
 
 DWIDGET_USE_NAMESPACE
 
-typedef QPixmap (* FileScreenshotFunc) (int index);
-
 class TabWidget : public DTabBar
 {
     Q_OBJECT
