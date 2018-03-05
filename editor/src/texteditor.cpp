@@ -1097,11 +1097,12 @@ void TextEditor::setFontSize(int size)
 void TextEditor::replaceAll(QString replaceText, QString withText)
 {
     QTextCursor cursor = textCursor();
+    
     cursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
     QString text = cursor.selectedText();
 
-    cursor.insertText(text.replace(replaceText, withText));
+    cursor.insertText(text.replace(replaceText, withText, Qt::CaseInsensitive));
     cursor.clearSelection();
 
     // Update cursor.
@@ -1140,6 +1141,17 @@ void TextEditor::replaceRest(QString replaceText, QString withText)
     setTextCursor(cursor);
 
     highlightKeyword(replaceText, getPosition());
+}
+
+bool TextEditor::findKeywordForward(QString keyword)
+{
+    QTextCursor cursor = textCursor();
+    
+    bool foundOne = find(keyword);
+    
+    setTextCursor(cursor);
+    
+    return foundOne;
 }
 
 void TextEditor::removeKeywords()

@@ -99,6 +99,8 @@ public:
     void replaceNext(QString replaceText, QString withText);
     void replaceRest(QString replaceText, QString withText);
     
+    bool findKeywordForward(QString keyword);
+    
     void removeKeywords();
     void highlightKeyword(QString keyword, int position);
     void updateCursorKeywordSelection(int position, bool findNext);
