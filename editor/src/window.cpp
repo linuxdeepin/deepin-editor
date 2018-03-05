@@ -885,9 +885,14 @@ void Window::changeTitlebarBackground(QString color)
     this->titlebar()->setStyleSheet(QString("%1Dtk--Widget--DTitlebar {background: %2;}").arg(titlebarStyleSheet).arg(color));
 }
 
-void Window::handlePopupCompletionWindow(QPoint pos, QStringList words)
+bool Window::wordCompletionWindowIsVisible()
 {
-    if (words.size() > 1) {
+    return wordCompletionWindow->isVisible();
+}
+
+void Window::handlePopupCompletionWindow(QString word, QPoint pos, QStringList words)
+{
+    if (words.size() > 1 && word.size() > 3) {
         wordCompletionWindow->move(pos);
         wordCompletionWindow->show();
     

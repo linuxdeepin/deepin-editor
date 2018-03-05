@@ -137,7 +137,7 @@ signals:
     void clickJumpLineAction();
     void clickFullscreenAction();
     void cursorMarkChanged(bool mark, QTextCursor cursor);
-    void popupCompletionWindow(QPoint pos, QStringList words);
+    void popupCompletionWindow(QString word, QPoint pos, QStringList words);
                                                              
     void selectNextCompletion();
     void selectPrevCompletion();

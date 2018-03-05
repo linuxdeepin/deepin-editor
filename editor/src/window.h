@@ -92,6 +92,8 @@ public:
     
     void changeTitlebarBackground(QString color);
     
+    bool wordCompletionWindowIsVisible();
+    
 protected:    
     void resizeEvent(QResizeEvent* event);
     void closeEvent(QCloseEvent *event);
@@ -129,7 +131,7 @@ public slots:
     
     void popupPrintDialog();
     
-    void handlePopupCompletionWindow(QPoint pos, QStringList words);
+    void handlePopupCompletionWindow(QString word, QPoint pos, QStringList words);
     void handleSelectNextCompletion();
     void handleSelectPrevCompletion();
     void handleSelectFirstCompletion();

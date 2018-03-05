@@ -1264,8 +1264,12 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         nextLine();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "prevline")) {
         prevLine();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "newline")) {
-        newline();
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "newline") || key == "Return") {
+        if (static_cast<Window*>(this->window())->wordCompletionWindowIsVisible()) {
+            confirmCompletion();
+        } else {
+            newline();
+        }
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "opennewlineabove")) {
         openNewlineAbove();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "opennewlinebelow")) {
@@ -1328,8 +1332,6 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         selectFirstCompletion();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "selectlastcompletion")) {
         selectLastCompletion();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "confirmcompletion")) {
-        confirmCompletion();
     } else {
         // Post event to window widget if key match window key list.
         for (auto option : settings->settings->group("shortcuts.window")->options()) {
@@ -1786,14 +1788,14 @@ void TextEditor::tryCompleteWord()
         }
     }
 
-    popupCompletionWindow(cursorPos, completionList);
+    popupCompletionWindow(wordAtCursor, cursorPos, completionList);
 
     hasCompletionWords = completionList.size() > 1;
 }
 
 void TextEditor::focusOutEvent(QFocusEvent*)
 {
-    popupCompletionWindow(QPoint(), QStringList());
+    popupCompletionWindow("", QPoint(), QStringList());
 }
 
 void TextEditor::setEnglishWordsDB(QSqlDatabase db)

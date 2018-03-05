@@ -403,12 +403,6 @@
                             "name": "Select Last Completion",
                             "type": "shortcut",
                             "default":  "Alt+Shift+<"
-                        },
-                        {
-                            "key": "confirmcompletion",
-                            "name": "Confirm Completion",
-                            "type": "shortcut",
-                            "default":  "Alt+Return"
                         }
                     ]
                 },
@@ -777,12 +771,6 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Alt+Shift+<"
-                        },
-                        {
-                            "key": "confirmcompletion",
-			    "hide" : true,
-			    "reset" : false,
-                            "default":  "Alt+Return"
                         }
                     ]
                 },
@@ -1151,12 +1139,6 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Alt+Shift+<"
-                        },
-                        {
-                            "key": "confirmcompletion",
-			    "hide" : true,
-			    "reset" : false,
-                            "default":  "Alt+Return"
                         }
                     ]
                 },
@@ -1525,12 +1507,6 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Alt+Shift+<"
-                        },
-                        {
-                            "key": "confirmcompletion",
-			    "hide" : true,
-			    "reset" : false,
-                            "default":  "Alt+Return"
                         }
                     ]
                 }		
