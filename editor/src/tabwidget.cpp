@@ -28,10 +28,6 @@
 
 #include <QDebug>
 #include <QStyleFactory>
-#include <QApplication>
-#include "dplatformwindowhandle.h"
-
-DTK_USE_NAMESPACE
 
 TabWidget::TabWidget()
 {
@@ -53,20 +49,6 @@ TabWidget::TabWidget()
     setFixedHeight(40);
     
     connect(this, &TabWidget::tabReleaseRequested, this, &TabWidget::handleTabReleaseRequested);
-    
-    QObject::connect(this, &DTabBar::dragActionChanged, 
-                     [=] (Qt::DropAction action) {
-                         qDebug() << "---------------------" << action;
-                         if (action == Qt::IgnoreAction) {
-                             if (dragIconWindow()) {
-                                 QGuiApplication::changeOverrideCursor(Qt::ArrowCursor);
-                                 DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), true);
-                             }
-                         } else if (dragIconWindow()) {
-                             DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), false);
-                             QGuiApplication::changeOverrideCursor(*QGuiApplication::overrideCursor());
-                         }
-                     });
 }
 
 QMimeData* TabWidget::createMimeDataFromTab(int index, const QStyleOptionTab &) const
