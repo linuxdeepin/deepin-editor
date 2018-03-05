@@ -57,23 +57,6 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     connect(settings, &Settings::adjustFontSize, this, &Window::updateFontSize);
     connect(settings, &Settings::adjustTabSpaceNumber, this, &Window::updateTabSpaceNumber);
 
-    // Init window state with config.
-    auto windowState = settings->settings->option("advance.window.window_state")->value().toString();
-    if (windowState == "window_normal") {
-        QScreen *screen = QGuiApplication::primaryScreen();
-        QRect screenGeometry = screen->geometry();
-        resize(QSize(screenGeometry.width() * settings->settings->option("advance.window.window_width")->value().toDouble(),
-                     screenGeometry.height() * settings->settings->option("advance.window.window_height")->value().toDouble()));
-        
-        show();
-    } else if (windowState == "window_maximum") {
-        showMaximized();
-    } else if (windowState == "fullscreen") {
-        showFullScreen();
-    }
-    
-    windowShowFlag = true;
-
     // Init layout and editor.
     layoutWidget = new QWidget();
     this->setCentralWidget(layoutWidget);
@@ -189,6 +172,23 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     }
     
     wordCompletionWindow = new WordCompletionWindow();
+
+    // Init window state with config.
+    auto windowState = settings->settings->option("advance.window.window_state")->value().toString();
+    if (windowState == "window_normal") {
+        QScreen *screen = QGuiApplication::primaryScreen();
+        QRect screenGeometry = screen->geometry();
+        resize(QSize(screenGeometry.width() * settings->settings->option("advance.window.window_width")->value().toDouble(),
+                     screenGeometry.height() * settings->settings->option("advance.window.window_height")->value().toDouble()));
+        
+        show();
+    } else if (windowState == "window_maximum") {
+        showMaximized();
+    } else if (windowState == "fullscreen") {
+        showFullScreen();
+    }
+    
+    windowShowFlag = true;
 }
 
 Window::~Window()
