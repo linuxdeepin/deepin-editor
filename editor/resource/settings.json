@@ -273,6 +273,18 @@
                             "default":  "Meta+Shift+Down"
                         },
                         {
+                            "key": "scrollup",
+                            "name": "Scroll  Up",
+                            "type": "shortcut",
+                            "default":  "PageUp"
+                        },
+                        {
+                            "key": "scrolldown",
+                            "name": "Scroll  Down",
+                            "type": "shortcut",
+                            "default":  "PageDown"
+                        },
+                        {
                             "key": "movetoendofline",
                             "name": "Move To End Of Line",
                             "type": "shortcut",
@@ -645,6 +657,18 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Meta+Shift+Down"
+                        },
+                        {
+                            "key": "scrollup",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "PageUp"
+                        },
+                        {
+                            "key": "scrolldown",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "PageDown"
                         },
                         {
                             "key": "movetoendofline",
@@ -1022,6 +1046,18 @@
                             "default":  "Meta+Shift+K"
                         },
                         {
+                            "key": "scrollup",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Ctrl+V"
+                        },
+                        {
+                            "key": "scrolldown",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Alt+V"
+                        },
+                        {
                             "key": "movetoendofline",
 			    "hide" : true,
 			    "reset" : false,
@@ -1394,6 +1430,18 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Meta+Shift+Down"
+                        },
+                        {
+                            "key": "scrollup",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "PageUp"
+                        },
+                        {
+                            "key": "scrolldown",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "PageDown"
                         },
                         {
                             "key": "movetoendofline",

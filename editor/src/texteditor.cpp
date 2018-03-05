@@ -668,6 +668,20 @@ void TextEditor::scrollLineDown()
     scrollbar->setValue(scrollbar->value() - 1);
 }
 
+void TextEditor::scrollUp()
+{
+    QScrollBar *scrollbar = verticalScrollBar();
+
+    scrollbar->setValue(scrollbar->value() + cursorRect().height());
+}
+
+void TextEditor::scrollDown()
+{
+    QScrollBar *scrollbar = verticalScrollBar();
+
+    scrollbar->setValue(scrollbar->value() - cursorRect().height());
+}
+
 void TextEditor::duplicateLine()
 {
     if (textCursor().hasSelection()) {
@@ -1305,6 +1319,10 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         scrollLineUp();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "scrolllinedown")) {
         scrollLineDown();
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "scrollup")) {
+        scrollUp();
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "scrolldown")) {
+        scrollDown();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "movetoendofline")) {
         moveToEndOfLine();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "movetostartofline")) {

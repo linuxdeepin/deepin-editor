@@ -76,6 +76,8 @@ public:
     void swapLineUp();
     void scrollLineUp();
     void scrollLineDown();
+    void scrollUp();
+    void scrollDown();
     void duplicateLine();
     void copyLines();
     
