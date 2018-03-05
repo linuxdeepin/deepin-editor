@@ -130,6 +130,7 @@ public:
     void setEnglishWordsDB(QSqlDatabase wordsDB);
     void completionWord(QString word);
     QString getWordAtCursor();
+    void toggleEnglishCompleter();
     
 signals:
     void clickFindAction();
@@ -144,6 +145,7 @@ signals:
     void selectFirstCompletion();
     void selectLastCompletion();
     void confirmCompletion();
+    void popupNotify(QString notify);
     
 public slots:
     void highlightCurrentLine();
@@ -209,6 +211,8 @@ private:
     QAction *jumpLineAction;
     QAction *fullscreenAction;
     QAction *exitFullscreenAction;
+    QAction *enableEnglishCompleterAction;
+    QAction *disableEnglishCompleterAction;
     QAction *openInFileManagerAction;
     
     QMenu *convertCaseMenu;
@@ -235,6 +239,7 @@ private:
     
     bool hasCompletionWords = false;
     bool confirmCompletionFlag = false;
+    bool enableEnglishCompleter = false;
 };
 
 #endif

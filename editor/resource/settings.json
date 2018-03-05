@@ -403,6 +403,12 @@
                             "name": "Select Last Completion",
                             "type": "shortcut",
                             "default":  "Alt+Shift+<"
+                        },
+                        {
+                            "key": "toggleenglishcompleter",
+                            "name": "Toggle english completer",
+                            "type": "shortcut",
+                            "default":  "Alt+'"
                         }
                     ]
                 },
@@ -771,6 +777,13 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Alt+Shift+<"
+                        },
+                        {
+                            "key": "toggleenglishcompleter",
+			    "hide" : true,
+			    "reset" : false,
+                            
+                            "default":  "Alt+'"
                         }
                     ]
                 },
@@ -1139,6 +1152,12 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Alt+Shift+<"
+                        },
+                        {
+                            "key": "toggleenglishcompleter",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Alt+'"
                         }
                     ]
                 },
@@ -1507,6 +1526,12 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Alt+Shift+<"
+                        },
+                        {
+                            "key": "toggleenglishcompleter",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Alt+'"
                         }
                     ]
                 }		

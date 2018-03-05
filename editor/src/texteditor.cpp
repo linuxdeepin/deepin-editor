@@ -95,6 +95,8 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     jumpLineAction = new QAction("Jump line", this);
     fullscreenAction = new QAction("Fullscreen", this);
     exitFullscreenAction = new QAction("Exit fullscreen", this);
+    enableEnglishCompleterAction = new QAction("Enable english completer", this);
+    disableEnglishCompleterAction = new QAction("Disable english completer", this);
     openInFileManagerAction = new QAction("Open in file manager", this);
 
     connect(rightMenu, &QMenu::aboutToHide, this, &TextEditor::removeHighlightWordUnderCursor);
@@ -110,6 +112,8 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     connect(jumpLineAction, &QAction::triggered, this, &TextEditor::clickJumpLineAction);
     connect(fullscreenAction, &QAction::triggered, this, &TextEditor::clickFullscreenAction);
     connect(exitFullscreenAction, &QAction::triggered, this, &TextEditor::clickFullscreenAction);
+    connect(enableEnglishCompleterAction, &QAction::triggered, this, &TextEditor::toggleEnglishCompleter);
+    connect(disableEnglishCompleterAction, &QAction::triggered, this, &TextEditor::toggleEnglishCompleter);
     connect(openInFileManagerAction, &QAction::triggered, this, &TextEditor::clickOpenInFileManagerAction);
 
     // Init convert case sub menu.
@@ -1333,6 +1337,8 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         selectFirstCompletion();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "selectlastcompletion")) {
         selectLastCompletion();
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "toggleenglishcompleter")) {
+        toggleEnglishCompleter();
     } else {
         // Post event to window widget if key match window key list.
         for (auto option : settings->settings->group("shortcuts.window")->options()) {
@@ -1427,6 +1433,11 @@ void TextEditor::contextMenuEvent(QContextMenuEvent *event)
     } else {
         rightMenu->addAction(fullscreenAction);
     }
+    if (enableEnglishCompleter) {
+        rightMenu->addAction(disableEnglishCompleterAction);
+    } else {
+        rightMenu->addAction(enableEnglishCompleterAction);
+    }
 
     rightMenu->exec(event->globalPos());
 }
@@ -1447,7 +1458,7 @@ void TextEditor::updateLineNumber()
         englishHelperTimer->stop();
     }
     
-    if (!confirmCompletionFlag) {
+    if (enableEnglishCompleter && !confirmCompletionFlag) {
         englishHelperTimer->start(500);
     } else {
         confirmCompletionFlag = false;
@@ -1771,6 +1782,21 @@ QString TextEditor::getWordAtCursor()
         }
 
         return cursor.selectedText();
+    }
+}
+
+void TextEditor::toggleEnglishCompleter()
+{
+    if (enableEnglishCompleter) {
+        enableEnglishCompleter = false;
+        
+        popupCompletionWindow("", QPoint(), QStringList());
+        
+        popupNotify("英文助手已关闭");
+    } else {
+        enableEnglishCompleter = true;
+        
+        popupNotify("英文助手已开启");
     }
 }
 
