@@ -814,8 +814,11 @@ void Window::addBottomWidget(QWidget *widget)
 
 void Window::removeBottomWidget()
 {
-    QWidget *widget = layout->takeAt(1)->widget();
-    widget->hide();
+    auto item = layout->takeAt(1);
+    
+    if (item) {
+        item->widget()->hide();
+    }
 }
 
 void Window::removeActiveBlankTab(bool needSaveBefore)
