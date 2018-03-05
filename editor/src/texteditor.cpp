@@ -647,6 +647,7 @@ void TextEditor::scrollLineUp()
         cursor.setPosition(lineCursor.position(), moveMode);
         setTextCursor(cursor);
     }
+
     scrollbar->setValue(scrollbar->value() + 1);
 }
 
@@ -672,14 +673,38 @@ void TextEditor::scrollUp()
 {
     QScrollBar *scrollbar = verticalScrollBar();
 
-    scrollbar->setValue(scrollbar->value() + cursorRect().height());
+    int lines = rect().height() / fontMetrics().height();
+
+    scrollbar->setValue(scrollbar->value() + lines);
+
+    if (scrollbar->value() >= getCurrentLine()) {
+        auto moveMode = cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
+
+        int line = scrollbar->value();
+        QTextCursor lineCursor(document()->findBlockByLineNumber(line - 1)); // line - 1 because line number starts from 0
+
+        QTextCursor cursor = textCursor();
+        cursor.setPosition(lineCursor.position(), moveMode);
+        setTextCursor(cursor);
+    }
 }
 
 void TextEditor::scrollDown()
 {
     QScrollBar *scrollbar = verticalScrollBar();
 
-    scrollbar->setValue(scrollbar->value() - cursorRect().height());
+    int lines = rect().height() / fontMetrics().height();
+
+    scrollbar->setValue(scrollbar->value() - lines);
+
+    auto moveMode = cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
+
+    int line = scrollbar->value() + lines;
+    QTextCursor lineCursor(document()->findBlockByLineNumber(line - 1)); // line - 1 because line number starts from 0
+
+    QTextCursor cursor = textCursor();
+    cursor.setPosition(lineCursor.position(), moveMode);
+    setTextCursor(cursor);
 }
 
 void TextEditor::duplicateLine()
@@ -790,10 +815,14 @@ void TextEditor::copyLines()
 
         copyCursor.setPosition(startCursor.position(), QTextCursor::MoveAnchor);
         copyCursor.setPosition(endCursor.position(), QTextCursor::KeepAnchor);
+
+        popupNotify("已经拷贝选中行到剪切板");
     } else {
         // Selection current line.
         copyCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
         copyCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+
+        popupNotify("已经当前行到剪切板");
     }
 
     // Copy lines to system clipboard.
@@ -1111,7 +1140,7 @@ void TextEditor::setFontSize(int size)
 void TextEditor::replaceAll(QString replaceText, QString withText)
 {
     QTextCursor cursor = textCursor();
-    
+
     cursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
     QString text = cursor.selectedText();
@@ -1160,11 +1189,11 @@ void TextEditor::replaceRest(QString replaceText, QString withText)
 bool TextEditor::findKeywordForward(QString keyword)
 {
     QTextCursor cursor = textCursor();
-    
+
     bool foundOne = find(keyword);
-    
+
     setTextCursor(cursor);
-    
+
     return foundOne;
 }
 
@@ -1278,108 +1307,148 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
 
     // qDebug() << key;
 
-    if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "indentline")) {
-        indentLine();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "backindentline")) {
-        backIndentLine();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "forwardchar")) {
-        forwardChar();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "backwardchar")) {
-        backwardChar();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "forwardword")) {
-        forwardWord();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "backwardword")) {
-        backwardWord();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "nextline")) {
-        nextLine();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "prevline")) {
-        prevLine();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "newline") || key == "Return") {
-        if (static_cast<Window*>(this->window())->wordCompletionWindowIsVisible()) {
-            confirmCompletionFlag = true;
-            confirmCompletion();
-        } else {
-            newline();
+    if (readOnlyMode) {
+        if (key == "J") {
+            nextLine();
+        } else if (key == "K") {
+            prevLine();
+        } else if (key == "H") {
+            backwardChar();
+        } else if (key == "L") {
+            forwardChar();
+        } else if (key == "Space") {
+            scrollUp();
+        } else if (key == "V") {
+            scrollDown();
+        } else if (key == "F") {
+            forwardWord();
+        } else if (key == "B") {
+            backwardWord();
+        } else if (key == "A") {
+            moveToStartOfLine();
+        } else if (key == "E") {
+            moveToEndOfLine();
+        } else if (key == "M") {
+            moveToLineIndentation();
+        } else if (key == "Q") {
+            toggleReadOnlyMode();
+        } else if (key == "Shfit+J") {
+            scrollLineUp();
+        } else if (key == "Shift+K") {
+            scrollLineDown();
+        } else if (key == "P") {
+            forwardPair();
+        } else if (key == "N") {
+            backwardPair();
+        } else if (key == "Shift+:") {
+            copyLines();
         }
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "opennewlineabove")) {
-        openNewlineAbove();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "opennewlinebelow")) {
-        openNewlineBelow();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "duplicateline")) {
-        duplicateLine();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "killline")) {
-        killLine();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "killcurrentline")) {
-        killCurrentLine();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "swaplineup")) {
-        swapLineUp();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "swaplinedown")) {
-        swapLineDown();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "scrolllineup")) {
-        scrollLineUp();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "scrolllinedown")) {
-        scrollLineDown();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "scrollup")) {
-        scrollUp();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "scrolldown")) {
-        scrollDown();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "movetoendofline")) {
-        moveToEndOfLine();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "movetostartofline")) {
-        moveToStartOfLine();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "movetolineindentation")) {
-        moveToLineIndentation();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "upcaseword")) {
-        upcaseWord();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "downcaseword")) {
-        downcaseWord();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "capitalizeword")) {
-        capitalizeWord();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "killbackwardword")) {
-        killBackwardWord();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "killforwardword")) {
-        killForwardWord();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "forwardpair")) {
-        forwardPair();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "backwardpair")) {
-        backwardPair();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "transposechar")) {
-        transposeChar();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "selectall")) {
-        selectAll();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "copy")) {
-        copySelectedText();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "cut")) {
-        cutSelectedText();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "paste")) {
-        pasteText();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "setmark")) {
-        setMark();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "exchangemark")) {
-        exchangeMark();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "copylines")) {
-        copyLines();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "selectnextcompletion")) {
-        selectNextCompletion();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "selectprevcompletion")) {
-        selectPrevCompletion();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "selectfirstcompletion")) {
-        selectFirstCompletion();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "selectlastcompletion")) {
-        selectLastCompletion();
-    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "toggleenglishcompleter")) {
-        toggleEnglishCompleter();
     } else {
-        // Post event to window widget if key match window key list.
-        for (auto option : settings->settings->group("shortcuts.window")->options()) {
-            if (key == settings->settings->option(option->key())->value().toString()) {
-                keyEvent->ignore();
-                return;
+        if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "indentline")) {
+            indentLine();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "backindentline")) {
+            backIndentLine();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "forwardchar")) {
+            forwardChar();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "backwardchar")) {
+            backwardChar();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "forwardword")) {
+            forwardWord();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "backwardword")) {
+            backwardWord();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "nextline")) {
+            nextLine();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "prevline")) {
+            prevLine();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "newline") || key == "Return") {
+            if (static_cast<Window*>(this->window())->wordCompletionWindowIsVisible()) {
+                confirmCompletionFlag = true;
+                confirmCompletion();
+            } else {
+                newline();
             }
-        }
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "opennewlineabove")) {
+            openNewlineAbove();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "opennewlinebelow")) {
+            openNewlineBelow();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "duplicateline")) {
+            duplicateLine();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "killline")) {
+            killLine();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "killcurrentline")) {
+            killCurrentLine();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "swaplineup")) {
+            swapLineUp();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "swaplinedown")) {
+            swapLineDown();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "scrolllineup")) {
+            scrollLineUp();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "scrolllinedown")) {
+            scrollLineDown();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "scrollup")) {
+            scrollUp();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "scrolldown")) {
+            scrollDown();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "movetoendofline")) {
+            moveToEndOfLine();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "movetostartofline")) {
+            moveToStartOfLine();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "movetolineindentation")) {
+            moveToLineIndentation();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "upcaseword")) {
+            upcaseWord();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "downcaseword")) {
+            downcaseWord();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "capitalizeword")) {
+            capitalizeWord();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "killbackwardword")) {
+            killBackwardWord();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "killforwardword")) {
+            killForwardWord();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "forwardpair")) {
+            forwardPair();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "backwardpair")) {
+            backwardPair();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "transposechar")) {
+            transposeChar();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "selectall")) {
+            selectAll();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "copy")) {
+            copySelectedText();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "cut")) {
+            cutSelectedText();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "paste")) {
+            pasteText();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "setmark")) {
+            setMark();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "exchangemark")) {
+            exchangeMark();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "copylines")) {
+            copyLines();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "selectnextcompletion")) {
+            selectNextCompletion();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "selectprevcompletion")) {
+            selectPrevCompletion();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "selectfirstcompletion")) {
+            selectFirstCompletion();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "selectlastcompletion")) {
+            selectLastCompletion();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "toggleenglishcompleter")) {
+            toggleEnglishCompleter();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "togglereadonlymode")) {
+            toggleReadOnlyMode();
+        } else {
+            // Post event to window widget if key match window key list.
+            for (auto option : settings->settings->group("shortcuts.window")->options()) {
+                if (key == settings->settings->option(option->key())->value().toString()) {
+                    keyEvent->ignore();
+                    return;
+                }
+            }
 
-        // Text editor handle key self.
-        QPlainTextEdit::keyPressEvent(keyEvent);
+            // Text editor handle key self.
+            QPlainTextEdit::keyPressEvent(keyEvent);
+        }
     }
 }
 
@@ -1487,7 +1556,7 @@ void TextEditor::updateLineNumber()
     if (englishHelperTimer->isActive()) {
         englishHelperTimer->stop();
     }
-    
+
     if (enableEnglishCompleter && !confirmCompletionFlag) {
         englishHelperTimer->start(500);
     } else {
@@ -1805,7 +1874,7 @@ QString TextEditor::getWordAtCursor()
             // while (!currentChar.isSpace() && cursor.position() != 0) {
             cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
             currentChar = toPlainText().at(std::max(cursor.position() - 1, 0));
-        
+
             if (currentChar == '-') {
                 break;
             }
@@ -1819,14 +1888,27 @@ void TextEditor::toggleEnglishCompleter()
 {
     if (enableEnglishCompleter) {
         enableEnglishCompleter = false;
-        
+
         popupCompletionWindow("", QPoint(), QStringList());
-        
+
         popupNotify("英文助手已关闭");
     } else {
         enableEnglishCompleter = true;
-        
+
         popupNotify("英文助手已开启");
+    }
+}
+
+void TextEditor::toggleReadOnlyMode()
+{
+    if (readOnlyMode) {
+        readOnlyMode = false;
+
+        popupNotify("只读模式关闭");
+    } else {
+        readOnlyMode = true;
+
+        popupNotify("只读模式开启");
     }
 }
 
@@ -1834,9 +1916,9 @@ void TextEditor::tryCompleteWord()
 {
     QString wordAtCursor = getWordAtCursor();
     QTextCursor cursor = textCursor();
-    
+
     auto rect = cursorRect(textCursor());
-    
+
     auto cursorPos = viewport()->mapTo(static_cast<Window*>(this->window()), QPoint(rect.x() + rect.width(), rect.y() + rect.height()));
     QStringList completionList;
 

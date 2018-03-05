@@ -136,6 +136,8 @@ public:
     QString getWordAtCursor();
     void toggleEnglishCompleter();
     
+    void toggleReadOnlyMode();
+    
 signals:
     void clickFindAction();
     void clickReplaceAction();
@@ -244,6 +246,7 @@ private:
     bool hasCompletionWords = false;
     bool confirmCompletionFlag = false;
     bool enableEnglishCompleter = false;
+    bool readOnlyMode = false;
 };
 
 #endif
