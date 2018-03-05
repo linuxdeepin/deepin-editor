@@ -1342,6 +1342,8 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
             backwardPair();
         } else if (key == "Shift+:") {
             copyLines();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "togglereadonlymode")) {
+            toggleReadOnlyMode();
         }
     } else {
         if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "indentline")) {
