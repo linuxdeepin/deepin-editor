@@ -1134,7 +1134,7 @@ void TextEditor::replaceRest(QString replaceText, QString withText)
     cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
     QString text = cursor.selectedText();
 
-    cursor.insertText(text.replace(replaceText, withText));
+    cursor.insertText(text.replace(replaceText, withText, Qt::CaseInsensitive));
     cursor.clearSelection();
 
     // Update cursor.
