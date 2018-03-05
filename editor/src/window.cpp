@@ -125,6 +125,23 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
         connect(settingAction, &QAction::triggered, settings, &Settings::popupSettingsDialog);
     }
 
+    // Init window state with config.
+    // Below code must before this->titlebar()->setMenu, otherwise main menu can't display pre-build-in menu items by dtk.
+    auto windowState = settings->settings->option("advance.window.window_state")->value().toString();
+    if (windowState == "window_normal") {
+        QScreen *screen = QGuiApplication::primaryScreen();
+        QRect screenGeometry = screen->geometry();
+        resize(QSize(screenGeometry.width() * settings->settings->option("advance.window.window_width")->value().toDouble(),
+                     screenGeometry.height() * settings->settings->option("advance.window.window_height")->value().toDouble()));
+        
+        show();
+    } else if (windowState == "window_maximum") {
+        showMaximized();
+    } else if (windowState == "fullscreen") {
+        showFullScreen();
+    }
+    
+    windowShowFlag = true;
     // Init find bar.
     findBar = new FindBar();
 
@@ -171,24 +188,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
         qDebug() << "Database: connection ok";
     }
     
-    wordCompletionWindow = new WordCompletionWindow();
-
-    // Init window state with config.
-    auto windowState = settings->settings->option("advance.window.window_state")->value().toString();
-    if (windowState == "window_normal") {
-        QScreen *screen = QGuiApplication::primaryScreen();
-        QRect screenGeometry = screen->geometry();
-        resize(QSize(screenGeometry.width() * settings->settings->option("advance.window.window_width")->value().toDouble(),
-                     screenGeometry.height() * settings->settings->option("advance.window.window_height")->value().toDouble()));
-        
-        show();
-    } else if (windowState == "window_maximum") {
-        showMaximized();
-    } else if (windowState == "fullscreen") {
-        showFullScreen();
-    }
-    
-    windowShowFlag = true;
+    wordCompletionWindow = new WordCompletionWindow(this);
 }
 
 Window::~Window()
@@ -899,8 +899,6 @@ void Window::handlePopupCompletionWindow(QPoint pos, QStringList words)
     } else {
         wordCompletionWindow->hide();
     }
-    
-    qDebug() << pos << words;
 }
 
 void Window::handleSelectNextCompletion()

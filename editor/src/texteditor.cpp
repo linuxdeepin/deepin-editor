@@ -1765,10 +1765,9 @@ void TextEditor::tryCompleteWord()
     QString wordAtCursor = getWordAtCursor();
     QTextCursor cursor = textCursor();
     
-    qDebug() << wordAtCursor;
-    
     auto rect = cursorRect(textCursor());
-    auto cursorPos = viewport()->mapToGlobal(QPoint(rect.x() + rect.width(), rect.y() + rect.height()));
+    
+    auto cursorPos = viewport()->mapTo(static_cast<Window*>(this->window()), QPoint(rect.x() + rect.width(), rect.y() + rect.height()));
     QStringList completionList;
 
     if (wordAtCursor != "") {
@@ -1790,6 +1789,11 @@ void TextEditor::tryCompleteWord()
     popupCompletionWindow(cursorPos, completionList);
 
     hasCompletionWords = completionList.size() > 1;
+}
+
+void TextEditor::focusOutEvent(QFocusEvent*)
+{
+    popupCompletionWindow(QPoint(), QStringList());
 }
 
 void TextEditor::setEnglishWordsDB(QSqlDatabase db)
