@@ -82,6 +82,7 @@ public:
     void duplicateLine();
     void copyLines();
     void pasteLines();
+    void joinLines();
     
     void killLine();
     void killCurrentLine();

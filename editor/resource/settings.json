@@ -399,6 +399,12 @@
                             "default":  "Meta+X"
                         },
                         {
+                            "key": "joinlines",
+                            "name": "Join Lines",
+                            "type": "shortcut",
+                            "default":  "Ctrl+J"
+                        },
+                        {
                             "key": "selectnextcompletion",
                             "name": "Select Next Completion",
                             "type": "shortcut",
@@ -802,6 +808,12 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Meta+X"
+                        },
+                        {
+                            "key": "joinlines",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Ctrl+J"
                         },
                         {
                             "key": "selectnextcompletion",
@@ -1208,6 +1220,12 @@
                             "default":  "Ctrl+Shift+W"
                         },
                         {
+                            "key": "joinlines",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Ctrl+J"
+                        },
+                        {
                             "key": "selectnextcompletion",
 			    "hide" : true,
 			    "reset" : false,
@@ -1610,6 +1628,12 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Meta+X"
+                        },
+                        {
+                            "key": "joinlines",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Ctrl+J"
                         },
                         {
                             "key": "selectnextcompletion",

@@ -886,6 +886,54 @@ void TextEditor::pasteLines()
     setTextCursor(copyCursor);
 }
 
+void TextEditor::joinLines()
+{
+    if (textCursor().hasSelection()) {
+        // Get selection bound.
+        int startPos = textCursor().anchor();
+        int endPos = textCursor().position();
+
+        if (startPos > endPos) {
+            std::swap(startPos, endPos);
+        }
+
+        // Expand selection to multi-lines bound.
+        QTextCursor startCursor = textCursor();
+        startCursor.setPosition(startPos, QTextCursor::MoveAnchor);
+        startCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+
+        QTextCursor endCursor = textCursor();
+        endCursor.setPosition(endPos, QTextCursor::MoveAnchor);
+        endCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
+        
+        // Select multi-lines.
+        QTextCursor cursor = textCursor();
+        cursor.setPosition(startCursor.position(), QTextCursor::MoveAnchor);
+        cursor.setPosition(endCursor.position(), QTextCursor::KeepAnchor);
+
+        // Remove selected lines.
+        QString selectedLines = cursor.selectedText();
+        cursor.removeSelectedText();
+        
+        // Insert line with join actoin.
+        // Because function `selectedText' will use Unicode char U+2029 instead \n, 
+        // so we need replace Unicode char U+2029, not replace char '\n'.
+        cursor.insertText(selectedLines.replace(QChar(0x2029), " "));
+        
+        setTextCursor(cursor);
+    } else {
+        QTextCursor cursor = textCursor();
+        cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
+        cursor.insertText(" ");
+        cursor.deleteChar();
+        cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
+        
+        setTextCursor(cursor);
+    }
+    
+    tryUnsetMark();
+}
+
 void TextEditor::killLine()
 {
     if (tryUnsetMark()) {
@@ -1481,6 +1529,8 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
             copyLines();
         } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "pastelines")) {
             pasteLines();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "joinlines")) {
+            joinLines();
         } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "selectnextcompletion")) {
             selectNextCompletion();
         } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "selectprevcompletion")) {
