@@ -393,6 +393,12 @@
                             "default":  "Meta+C"
                         },
                         {
+                            "key": "pastelines",
+                            "name": "Paste Lines",
+                            "type": "shortcut",
+                            "default":  "Meta+X"
+                        },
+                        {
                             "key": "selectnextcompletion",
                             "name": "Select Next Completion",
                             "type": "shortcut",
@@ -790,6 +796,12 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Meta+C"
+                        },
+                        {
+                            "key": "pastelines",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Meta+X"
                         },
                         {
                             "key": "selectnextcompletion",
@@ -1190,6 +1202,12 @@
                             "default":  "Alt+Shift+W"
                         },
                         {
+                            "key": "pastelines",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Ctrl+Shift+W"
+                        },
+                        {
                             "key": "selectnextcompletion",
 			    "hide" : true,
 			    "reset" : false,
@@ -1586,6 +1604,12 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Meta+C"
+                        },
+                        {
+                            "key": "pastelines",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Meta+X"
                         },
                         {
                             "key": "selectnextcompletion",
