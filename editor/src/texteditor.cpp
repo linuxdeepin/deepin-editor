@@ -1288,13 +1288,35 @@ void TextEditor::replaceRest(QString replaceText, QString withText)
 
 bool TextEditor::findKeywordForward(QString keyword)
 {
-    QTextCursor cursor = textCursor();
+    if (textCursor().hasSelection()) {
+        // Get selection bound.
+        int startPos = textCursor().anchor();
+        int endPos = textCursor().position();
 
-    bool foundOne = find(keyword);
+        QTextCursor cursor = textCursor();
+        cursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+        setTextCursor(cursor);
 
-    setTextCursor(cursor);
+        bool foundOne = find(keyword);
 
-    return foundOne;
+        cursor.setPosition(endPos, QTextCursor::MoveAnchor);
+        cursor.setPosition(startPos, QTextCursor::KeepAnchor);
+        setTextCursor(cursor);
+
+        return foundOne;
+    } else {
+        QTextCursor recordCursor = textCursor();
+        
+        QTextCursor cursor = textCursor();
+        cursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+        setTextCursor(cursor);
+
+        bool foundOne = find(keyword);
+
+        setTextCursor(recordCursor);
+
+        return foundOne;
+    }
 }
 
 void TextEditor::removeKeywords()

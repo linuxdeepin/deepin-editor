@@ -126,7 +126,7 @@ public slots:
     void handleReplaceSkip();
     
     void handleRemoveSearchKeyword();
-    void handleUpdateSearchKeyword(QString file, QString keyword);
+    void handleUpdateSearchKeyword(QWidget *widget, QString file, QString keyword);
     
     void addBottomWidget(QWidget *widget);
     void removeBottomWidget();

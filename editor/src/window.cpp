@@ -154,7 +154,10 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     connect(findBar, &FindBar::findNext, this, &Window::handleFindNext, Qt::QueuedConnection);
     connect(findBar, &FindBar::findPrev, this, &Window::handleFindPrev, Qt::QueuedConnection);
     connect(findBar, &FindBar::removeSearchKeyword, this, &Window::handleRemoveSearchKeyword, Qt::QueuedConnection);
-    connect(findBar, &FindBar::updateSearchKeyword, this, &Window::handleUpdateSearchKeyword, Qt::QueuedConnection);
+    connect(findBar, &FindBar::updateSearchKeyword, this, 
+            [=] (QString file, QString keyword) {
+                handleUpdateSearchKeyword(findBar, file, keyword);
+            });
 
     // Init replace bar.
     replaceBar = new ReplaceBar();
@@ -164,7 +167,10 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     connect(replaceBar, &ReplaceBar::replaceNext, this, &Window::handleReplaceNext, Qt::QueuedConnection);
     connect(replaceBar, &ReplaceBar::replaceRest, this, &Window::handleReplaceRest, Qt::QueuedConnection);
     connect(replaceBar, &ReplaceBar::replaceSkip, this, &Window::handleReplaceSkip, Qt::QueuedConnection);
-    connect(replaceBar, &ReplaceBar::updateSearchKeyword, this, &Window::handleUpdateSearchKeyword, Qt::QueuedConnection);
+    connect(replaceBar, &ReplaceBar::updateSearchKeyword, this, 
+            [=] (QString file, QString keyword) {
+                handleUpdateSearchKeyword(replaceBar, file, keyword);
+            });
 
     // Init jump line bar.
     jumpLineBar = new JumpLineBar(this);
@@ -818,10 +824,24 @@ void Window::handleRemoveSearchKeyword()
     getActiveEditor()->textEditor->removeKeywords();
 }
 
-void Window::handleUpdateSearchKeyword(QString file, QString keyword)
+void Window::handleUpdateSearchKeyword(QWidget *widget, QString file, QString keyword)
 {
     if (file == tabbar->getActiveTabPath() && editorMap.contains(file)) {
+        // Highlight keyword in text editor.
         editorMap[file]->textEditor->highlightKeyword(keyword, editorMap[file]->textEditor->getPosition());
+        
+        // Update input widget warning status along with keyword match situation.
+        bool findKeyword = editorMap[file]->textEditor->findKeywordForward(keyword);
+        
+        auto *findBarWidget = qobject_cast<FindBar*>(widget);    
+        if (findBarWidget != nullptr) {
+            findBarWidget->setMismatchAlert(!findKeyword);
+        } else {
+            auto *replaceBarWidget = qobject_cast<ReplaceBar*>(widget);    
+            if (replaceBarWidget != nullptr) {
+                replaceBarWidget->setMismatchAlert(!findKeyword);    
+            }
+        }
     }
 }
 

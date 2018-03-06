@@ -46,6 +46,7 @@ public:
     void focus();
     
     void activeInput(QString text, QString file, int row, int column, int scrollOffset);
+    void setMismatchAlert(bool isAlert);
     
 signals:
     void backToPosition(QString file, int row, int column, int scrollOffset);

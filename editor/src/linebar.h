@@ -30,12 +30,12 @@
 
 DWIDGET_USE_NAMESPACE
 
-class LineBar : public QLineEdit
+class LineBar : public DLineEdit
 {
     Q_OBJECT
     
 public:
-    LineBar(QLineEdit *parent = 0);
+    LineBar(DLineEdit *parent = 0);
     
 public slots:
     void handleTextChangeTimer();
