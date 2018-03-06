@@ -94,6 +94,8 @@ public:
     
     bool wordCompletionWindowIsVisible();
     
+    QString getSaveFilePath();
+    
 protected:    
     void resizeEvent(QResizeEvent* event);
     void closeEvent(QCloseEvent *event);

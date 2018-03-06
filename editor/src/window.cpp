@@ -35,12 +35,17 @@
 #include <DSettingsOption>
 #include <DTitlebar>
 #include <QApplication>
-#include <QFileDialog>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include <QPrinter>
 #include <QScreen>
 #include <QStyleFactory>
+
+#ifdef DTKWIDGET_CLASS_DFileDialog
+#include <DFileDialog>
+#else
+#include <QFileDialog>
+#endif
 
 Window::Window(DMainWindow *parent) : DMainWindow(parent)
 {
@@ -339,10 +344,27 @@ void Window::openFile()
     }
 }
 
+QString Window::getSaveFilePath()
+{
+#ifdef DTKWIDGET_CLASS_DFileDialog
+    DFileDialog dialog(this, "Save File", QDir(QDir::homePath()).filePath("Blank Document.txt"), getEncodeList().join(";;"));
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.addComboBox("换行符", QStringList() << "Linux" << "Window" << "Mac OS");
+    
+    if (dialog.exec() == QDialog::Accepted) {
+        return dialog.selectedFiles().value(0);
+    } else {
+        return "";
+    }
+#else
+    return QFileDialog::getSaveFileName(this, "Save File", QDir(QDir::homePath()).filePath("Blank Document.txt"), getEncodeList().join(";;"));
+#endif
+}
+
 bool Window::saveFile()
 {
     if (QFileInfo(tabbar->getActiveTabPath()).dir().absolutePath() == blankFileDir) {
-        QString filepath = QFileDialog::getSaveFileName(this, "Save File", QDir(QDir::homePath()).filePath("Blank Document.txt"), getEncodeList().join(";;"));
+        QString filepath = getSaveFilePath();
 
         if (filepath != "") {
             QString tabPath = tabbar->getActiveTabPath();
@@ -362,7 +384,7 @@ bool Window::saveFile()
 
 void Window::saveAsFile()
 {
-    QString filepath = QFileDialog::getSaveFileName(this, "Save File", QDir(QDir::homePath()).filePath("Blank Document.txt"), getEncodeList().join(";;"));
+    QString filepath = getSaveFilePath();
     QString tabPath = tabbar->getActiveTabPath();
 
     if (filepath != "" && filepath != tabPath) {
