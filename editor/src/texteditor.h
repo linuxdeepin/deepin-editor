@@ -218,10 +218,12 @@ private:
     QAction *findAction;
     QAction *replaceAction;
     QAction *jumpLineAction;
-    QAction *fullscreenAction;
-    QAction *exitFullscreenAction;
     QAction *enableEnglishCompleterAction;
     QAction *disableEnglishCompleterAction;
+    QAction *enableReadOnlyModeAction;
+    QAction *disableReadOnlyModeAction;
+    QAction *fullscreenAction;
+    QAction *exitFullscreenAction;
     QAction *openInFileManagerAction;
     
     QMenu *convertCaseMenu;

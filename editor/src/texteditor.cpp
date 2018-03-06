@@ -93,10 +93,12 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     findAction = new QAction("Find", this);
     replaceAction = new QAction("Replace", this);
     jumpLineAction = new QAction("Jump line", this);
-    fullscreenAction = new QAction("Fullscreen", this);
-    exitFullscreenAction = new QAction("Exit fullscreen", this);
     enableEnglishCompleterAction = new QAction("Enable english completer", this);
     disableEnglishCompleterAction = new QAction("Disable english completer", this);
+    enableReadOnlyModeAction = new QAction("Turn on read only mode", this);
+    disableReadOnlyModeAction = new QAction("Turn off read only mode", this);
+    fullscreenAction = new QAction("Fullscreen", this);
+    exitFullscreenAction = new QAction("Exit fullscreen", this);
     openInFileManagerAction = new QAction("Open in file manager", this);
 
     connect(rightMenu, &QMenu::aboutToHide, this, &TextEditor::removeHighlightWordUnderCursor);
@@ -112,6 +114,8 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     connect(jumpLineAction, &QAction::triggered, this, &TextEditor::clickJumpLineAction);
     connect(fullscreenAction, &QAction::triggered, this, &TextEditor::clickFullscreenAction);
     connect(exitFullscreenAction, &QAction::triggered, this, &TextEditor::clickFullscreenAction);
+    connect(enableReadOnlyModeAction, &QAction::triggered, this, &TextEditor::toggleReadOnlyMode);
+    connect(disableReadOnlyModeAction, &QAction::triggered, this, &TextEditor::toggleReadOnlyMode);
     connect(enableEnglishCompleterAction, &QAction::triggered, this, &TextEditor::toggleEnglishCompleter);
     connect(disableEnglishCompleterAction, &QAction::triggered, this, &TextEditor::toggleEnglishCompleter);
     connect(openInFileManagerAction, &QAction::triggered, this, &TextEditor::clickOpenInFileManagerAction);
@@ -1534,15 +1538,21 @@ void TextEditor::contextMenuEvent(QContextMenuEvent *event)
     rightMenu->addMenu(convertCaseMenu);
     rightMenu->addAction(openInFileManagerAction);
     rightMenu->addSeparator();
-    if (static_cast<Window*>(this->window())->isFullScreen()) {
-        rightMenu->addAction(exitFullscreenAction);
-    } else {
-        rightMenu->addAction(fullscreenAction);
-    }
     if (enableEnglishCompleter) {
         rightMenu->addAction(disableEnglishCompleterAction);
     } else {
         rightMenu->addAction(enableEnglishCompleterAction);
+    }
+    if (readOnlyMode) {
+        rightMenu->addAction(disableReadOnlyModeAction);
+    } else {
+        rightMenu->addAction(enableReadOnlyModeAction);
+    }
+    rightMenu->addSeparator();
+    if (static_cast<Window*>(this->window())->isFullScreen()) {
+        rightMenu->addAction(exitFullscreenAction);
+    } else {
+        rightMenu->addAction(fullscreenAction);
     }
 
     rightMenu->exec(event->globalPos());
