@@ -180,5 +180,4 @@ bool ReplaceBar::focusNextPrevChild(bool)
 void ReplaceBar::setMismatchAlert(bool isAlert)
 {
     replaceLine->setAlert(isAlert);
-    replaceLine->update();
 }

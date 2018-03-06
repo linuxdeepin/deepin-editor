@@ -122,5 +122,4 @@ void FindBar::paintEvent(QPaintEvent *)
 void FindBar::setMismatchAlert(bool isAlert)
 {
     editLine->setAlert(isAlert);
-    editLine->update();
 }
