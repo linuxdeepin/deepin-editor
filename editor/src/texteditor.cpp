@@ -1781,40 +1781,43 @@ void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme)
 void TextEditor::loadHighlighter()
 {
     const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());
-
-    QString syntaxFile = QFileInfo(QString("../syntax/%1").arg(QFileInfo(def.filePath()).fileName())).absoluteFilePath();
-    QFile file(syntaxFile);
-    if (!file.open(QFile::ReadOnly)) {
-        qDebug() << "Can't open file" << syntaxFile;
-    }
-    QXmlStreamReader reader(&file);
-
-    QString singleLineComment;
-    QString multiLineCommentStart;
-    QString multiLineCommentEnd;
-    while (!reader.atEnd()) {
-        const auto token = reader.readNext();
-        if (token != QXmlStreamReader::StartElement) {
-            continue;
+    
+    if (def.filePath() != "") {
+        QString syntaxFile = QFileInfo(QString("../syntax/%1").arg(QFileInfo(def.filePath()).fileName())).absoluteFilePath();
+    
+        QFile file(syntaxFile);
+        if (!file.open(QFile::ReadOnly)) {
+            qDebug() << "Can't open file" << syntaxFile;
         }
+        QXmlStreamReader reader(&file);
 
-        if (reader.name() == "comment") {
-            if (reader.attributes().hasAttribute(QStringLiteral("name"))) {
-                QString attrName = reader.attributes().value(QStringLiteral("name")).toString();
+        QString singleLineComment;
+        QString multiLineCommentStart;
+        QString multiLineCommentEnd;
+        while (!reader.atEnd()) {
+            const auto token = reader.readNext();
+            if (token != QXmlStreamReader::StartElement) {
+                continue;
+            }
 
-                if (attrName == "singleLine") {
-                    singleLineComment = reader.attributes().value(QStringLiteral("start")).toString();
-                } else if (attrName == "multiLine") {
-                    multiLineCommentStart = reader.attributes().value(QStringLiteral("start")).toString();
-                    multiLineCommentEnd = reader.attributes().value(QStringLiteral("end")).toString();
+            if (reader.name() == "comment") {
+                if (reader.attributes().hasAttribute(QStringLiteral("name"))) {
+                    QString attrName = reader.attributes().value(QStringLiteral("name")).toString();
+
+                    if (attrName == "singleLine") {
+                        singleLineComment = reader.attributes().value(QStringLiteral("start")).toString();
+                    } else if (attrName == "multiLine") {
+                        multiLineCommentStart = reader.attributes().value(QStringLiteral("start")).toString();
+                        multiLineCommentEnd = reader.attributes().value(QStringLiteral("end")).toString();
+                    }
                 }
             }
         }
+
+        commentDefinition.setComments(QString("%1 ").arg(singleLineComment), multiLineCommentStart, multiLineCommentEnd);
+
+        m_highlighter->setDefinition(def);
     }
-
-    commentDefinition.setComments(QString("%1 ").arg(singleLineComment), multiLineCommentStart, multiLineCommentEnd);
-
-    m_highlighter->setDefinition(def);
 }
 
 bool TextEditor::highlightWordUnderMouse(QPoint pos)
