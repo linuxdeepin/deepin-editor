@@ -172,9 +172,6 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     englishHelperTimer = new QTimer(this);
     englishHelperTimer->setSingleShot(true);
     connect(englishHelperTimer, &QTimer::timeout, this, &TextEditor::tryCompleteWord);
-    
-    // Init comment.
-    commentDefinition.setStyle(Comment::CommentDefinition::CppStyle);
 }
 
 int TextEditor::getCurrentLine()
@@ -905,7 +902,7 @@ void TextEditor::joinLines()
         QTextCursor endCursor = textCursor();
         endCursor.setPosition(endPos, QTextCursor::MoveAnchor);
         endCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
-        
+
         // Select multi-lines.
         QTextCursor cursor = textCursor();
         cursor.setPosition(startCursor.position(), QTextCursor::MoveAnchor);
@@ -914,12 +911,12 @@ void TextEditor::joinLines()
         // Remove selected lines.
         QString selectedLines = cursor.selectedText();
         cursor.removeSelectedText();
-        
+
         // Insert line with join actoin.
-        // Because function `selectedText' will use Unicode char U+2029 instead \n, 
+        // Because function `selectedText' will use Unicode char U+2029 instead \n,
         // so we need replace Unicode char U+2029, not replace char '\n'.
         cursor.insertText(selectedLines.replace(QChar(0x2029), " "));
-        
+
         setTextCursor(cursor);
     } else {
         QTextCursor cursor = textCursor();
@@ -927,10 +924,10 @@ void TextEditor::joinLines()
         cursor.insertText(" ");
         cursor.deleteChar();
         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
-        
+
         setTextCursor(cursor);
     }
-    
+
     tryUnsetMark();
 }
 
@@ -1306,7 +1303,7 @@ bool TextEditor::findKeywordForward(QString keyword)
         return foundOne;
     } else {
         QTextCursor recordCursor = textCursor();
-        
+
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
         setTextCursor(cursor);
@@ -1577,7 +1574,7 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
             }
 
             // Text editor handle key self.
-                QPlainTextEdit::keyPressEvent(keyEvent);
+            QPlainTextEdit::keyPressEvent(keyEvent);
         }
     }
 }
@@ -1784,9 +1781,39 @@ void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme)
 void TextEditor::loadHighlighter()
 {
     const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());
-    
-    qDebug() << def.filePath() << def.style() << def.isValid();
-    
+
+    QString syntaxFile = QFileInfo(QString("../syntax/%1").arg(QFileInfo(def.filePath()).fileName())).absoluteFilePath();
+    QFile file(syntaxFile);
+    if (!file.open(QFile::ReadOnly)) {
+        qDebug() << "Can't open file" << syntaxFile;
+    }
+    QXmlStreamReader reader(&file);
+
+    QString singleLineComment;
+    QString multiLineCommentStart;
+    QString multiLineCommentEnd;
+    while (!reader.atEnd()) {
+        const auto token = reader.readNext();
+        if (token != QXmlStreamReader::StartElement) {
+            continue;
+        }
+
+        if (reader.name() == "comment") {
+            if (reader.attributes().hasAttribute(QStringLiteral("name"))) {
+                QString attrName = reader.attributes().value(QStringLiteral("name")).toString();
+
+                if (attrName == "singleLine") {
+                    singleLineComment = reader.attributes().value(QStringLiteral("start")).toString();
+                } else if (attrName == "multiLine") {
+                    multiLineCommentStart = reader.attributes().value(QStringLiteral("start")).toString();
+                    multiLineCommentEnd = reader.attributes().value(QStringLiteral("end")).toString();
+                }
+            }
+        }
+    }
+
+    commentDefinition.setComments(QString("%1 ").arg(singleLineComment), multiLineCommentStart, multiLineCommentEnd);
+
     m_highlighter->setDefinition(def);
 }
 

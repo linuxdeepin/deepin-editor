@@ -8,25 +8,11 @@ CommentDefinition::CommentDefinition() :
     isAfterWhiteSpaces(false)
 {}
 
-void CommentDefinition::setStyle(Style style)
+void CommentDefinition::setComments(QString singleLineComment, QString multiLineCommentStart, QString multiLineCommentEnd)
 {
-    switch (style) {
-        case CppStyle:
-            singleLine = QLatin1String("// ");
-            multiLineStart = QLatin1String("/*");
-            multiLineEnd = QLatin1String("*/");
-            break;
-        case HashStyle:
-            singleLine = QLatin1Char('#');
-            multiLineStart.clear();
-            multiLineEnd.clear();
-            break;
-        case NoStyle:
-            singleLine.clear();
-            multiLineStart.clear();
-            multiLineEnd.clear();
-            break;
-    }
+    singleLine = singleLineComment;
+    multiLineStart = multiLineCommentStart;
+    multiLineEnd = multiLineCommentEnd;
 }
 
 bool CommentDefinition::isValid() const
@@ -44,8 +30,7 @@ bool CommentDefinition::hasMultiLineStyle() const
     return !multiLineStart.isEmpty() && !multiLineEnd.isEmpty();
 }
 
-static bool isComment(const QString &text, int index,
-   const QString &commentType)
+static bool isComment(const QString &text, int index, const QString &commentType)
 {
     const int length = commentType.length();
 
@@ -112,8 +97,8 @@ void Comment::unCommentSelection(QPlainTextEdit *edit, const CommentDefinition &
         int endPos = end - endBlock.position();
         const int multiLineEndLength = definition.multiLineEnd.length();
         bool hasTrailingCharacters =
-                !endText.left(endPos).remove(definition.singleLine).trimmed().isEmpty()
-                && !endText.mid(endPos).trimmed().isEmpty();
+            !endText.left(endPos).remove(definition.singleLine).trimmed().isEmpty()
+            && !endText.mid(endPos).trimmed().isEmpty();
 
         if (endPos <= endText.length() - multiLineEndLength
             && isComment(endText, endPos, definition.multiLineEnd)) {
@@ -126,14 +111,14 @@ void Comment::unCommentSelection(QPlainTextEdit *edit, const CommentDefinition &
 
         doMultiLineStyleUncomment = hasSelStart && hasSelEnd;
         doMultiLineStyleComment = !doMultiLineStyleUncomment
-                                  && (hasLeadingCharacters
-                                      || hasTrailingCharacters
-                                      || !definition.hasSingleLineStyle());
+            && (hasLeadingCharacters
+                || hasTrailingCharacters
+                || !definition.hasSingleLineStyle());
     } else if (!hasSelection && !definition.hasSingleLineStyle()) {
 
         QString text = startBlock.text().trimmed();
         doMultiLineStyleUncomment = text.startsWith(definition.multiLineStart)
-                                    && text.endsWith(definition.multiLineEnd);
+            && text.endsWith(definition.multiLineEnd);
         doMultiLineStyleComment = !doMultiLineStyleUncomment && !text.isEmpty();
 
         start = startBlock.position();

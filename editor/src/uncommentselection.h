@@ -15,7 +15,7 @@ namespace Comment {
     CommentDefinition();
 
     enum Style { NoStyle, CppStyle, HashStyle };
-    void setStyle(Style style);
+    void setComments(QString singleLineComment, QString multiLineCommentStart, QString multiLineCommentEnd);
 
     bool isValid() const;
     bool hasSingleLineStyle() const;
