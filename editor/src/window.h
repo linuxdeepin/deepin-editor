@@ -33,6 +33,7 @@
 #include "replacebar.h"
 #include "settings.h"
 #include "tabbar.h"
+#include "dwindowmanager.h"
 
 #include <QHBoxLayout>
 #include <QResizeEvent>
@@ -43,6 +44,7 @@
 #include <QSqlDatabase>
 
 DWIDGET_USE_NAMESPACE
+DWM_USE_NAMESPACE
 
 class Window : public DMainWindow
 {
@@ -186,6 +188,8 @@ private:
     QSqlDatabase wordsDB;
     
     WordCompletionWindow *wordCompletionWindow;
+    
+    DWindowManager *windowManager;
 };
 
 #endif

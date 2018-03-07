@@ -47,6 +47,8 @@
 #include <QFileDialog>
 #endif
 
+DWM_USE_NAMESPACE
+
 Window::Window(DMainWindow *parent) : DMainWindow(parent)
 {
     // Init theme.
@@ -200,6 +202,9 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     }
     
     wordCompletionWindow = new WordCompletionWindow(this);
+    
+    // Init window manager.
+    windowManager = new DWindowManager();
 }
 
 Window::~Window()
@@ -611,10 +616,13 @@ void Window::updateTabSpaceNumber(int number)
 void Window::resizeEvent(QResizeEvent*)
 {
     if (windowShowFlag) {
-        QScreen *screen = QGuiApplication::primaryScreen();
-        QRect screenGeometry = screen->geometry();
-        settings->settings->option("advance.window.window_width")->setValue(rect().width() * 1.0 / screenGeometry.width());
-        settings->settings->option("advance.window.window_height")->setValue(rect().height() * 1.0 / screenGeometry.height());
+        auto states = windowManager->getWindowStates(winId());
+        if (!states.contains("_NET_WM_STATE_MAXIMIZED_VERT")) {
+            QScreen *screen = QGuiApplication::primaryScreen();
+            QRect screenGeometry = screen->geometry();
+            settings->settings->option("advance.window.window_width")->setValue(rect().width() * 1.0 / screenGeometry.width());
+            settings->settings->option("advance.window.window_height")->setValue(rect().height() * 1.0 / screenGeometry.height());
+        }
     }
 }
 
