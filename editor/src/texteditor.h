@@ -185,7 +185,7 @@ public slots:
     void tryCompleteWord();
     
 protected:
-    void focusOutEvent(QFocusEvent* event);    
+    void focusOutEvent(QFocusEvent* event) override;
     
 private:
     QPropertyAnimation *scrollAnimation;

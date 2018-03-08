@@ -172,6 +172,11 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     englishHelperTimer = new QTimer(this);
     englishHelperTimer->setSingleShot(true);
     connect(englishHelperTimer, &QTimer::timeout, this, &TextEditor::tryCompleteWord);
+
+    // configure content area
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    setViewportMargins(0, 0, -verticalScrollBar()->sizeHint().width(), -horizontalScrollBar()->sizeHint().height());
 }
 
 int TextEditor::getCurrentLine()
