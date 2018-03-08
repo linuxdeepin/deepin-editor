@@ -118,10 +118,9 @@ QPixmap TabWidget::createDragPixmapFromTab(int index, const QStyleOptionTab &, Q
     return Utils::dropShadow(QPixmap::fromImage(scaledImage), 40, shadowColor, QPoint(0, 8));
 }
 
-bool TabWidget::canInsertFromMimeData(int, const QMimeData *) const
+bool TabWidget::canInsertFromMimeData(int, const QMimeData *source) const
 {
-    // Any index can insert.
-    return true;
+    return source->hasFormat("tabInfo");
 }
 
 void TabWidget::insertFromMimeData(int index, const QMimeData *source)
@@ -185,7 +184,9 @@ bool TabWidget::eventFilter(QObject *, QEvent *event)
             }
         }
     } else if (event->type() == QEvent::DragEnter) {
-        if (static_cast<QDragEnterEvent *>(event)->source()->parent() != this) {
+        const QDragEnterEvent *e = static_cast<QDragEnterEvent*>(event);
+
+        if (!e->source() || e->source()->parent() != this) {
             static_cast<Window*>(this->window())->changeTitlebarBackground("#333333");
         }
     } else if (event->type() == QEvent::DragLeave) {
