@@ -1569,6 +1569,10 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
             toggleReadOnlyMode();
         } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "togglecomment")) {
             toggleComment();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "undo")) {
+            undo();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "redo")) {
+            redo();
         } else {
             // Post event to window widget if key match window key list.
             for (auto option : settings->settings->group("shortcuts.window")->options()) {

@@ -445,8 +445,19 @@
                             "name": "Toggle Comment",
                             "type": "shortcut",
                             "default":  "Ctrl+/"
+                        },
+                        {
+                            "key": "undo",
+                            "name": "Undo",
+                            "type": "shortcut",
+                            "default":  "Ctrl+U"
+                        },
+                        {
+                            "key": "redo",
+                            "name": "Redo",
+                            "type": "shortcut",
+                            "default":  "Ctrl+Y"
                         }
-			
                     ]
                 },
 		{
@@ -856,6 +867,18 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Ctrl+/"
+                        },
+                        {
+                            "key": "undo",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Ctrl+U"
+                        },
+                        {
+                            "key": "redo",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Ctrl+Y"
                         }
                     ]
                 },
@@ -1266,6 +1289,18 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Ctrl+Shift+:"
+                        },
+                        {
+                            "key": "undo",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Ctrl+/"
+                        },
+                        {
+                            "key": "redo",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Ctrl+Shift+?"
                         }
                     ]
                 },
@@ -1676,6 +1711,18 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Ctrl+/"
+                        },
+                        {
+                            "key": "undo",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Ctrl+U"
+                        },
+                        {
+                            "key": "redo",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Ctrl+Y"
                         }
                     ]
                 }		
