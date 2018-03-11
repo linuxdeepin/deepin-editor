@@ -198,7 +198,6 @@ private:
     QTextCursor highlightWordCacheCursor;
     QTextCursor wordUnderPointerCursor;
     
-    int lineNumberOffset = 2;
     int lineNumberPaddingX = 5;
     
     int restoreColumn;

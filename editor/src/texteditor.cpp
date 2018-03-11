@@ -1613,10 +1613,10 @@ void TextEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
                 painter.setPen(QColor("#666666"));
             }
             painter.drawText(0,
-                             top + lineNumberOffset,
+                             top + (blockBoundingRect(block).height() - fontMetrics().height()) / 2,
                              lineNumberArea->width(),
                              fontMetrics().height(),
-                             Qt::AlignHCenter | Qt::AlignBottom,
+                             Qt::AlignCenter,
                              QString::number(linenumber + 1));
         }
 
