@@ -1319,6 +1319,7 @@ bool TextEditor::findKeywordForward(QString keyword)
 void TextEditor::removeKeywords()
 {
     cursorKeywordSelection.cursor = textCursor();
+    cursorKeywordSelection.cursor.clearSelection();
 
     keywordSelections.clear();
 
@@ -1349,6 +1350,7 @@ void TextEditor::updateCursorKeywordSelection(int position, bool findNext)
             // Clear keyword if keyword not match anything.
             if (!setCursorKeywordSeletoin(0, findNext)) {
                 cursorKeywordSelection.cursor = textCursor();
+                
                 keywordSelections.clear();
                 renderAllSelections();
             }
