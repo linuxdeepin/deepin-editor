@@ -42,7 +42,7 @@ ReplaceBar::ReplaceBar(QWidget *parent) : QWidget(parent)
     replaceSkipButton = new QPushButton("Skip");
     replaceRestButton = new QPushButton("Replace Rest");
     replaceAllButton = new QPushButton("Replace All");
-    closeButton = new DImageButton(Utils::getQrcPath("bar_close_noraml.svg"), Utils::getQrcPath("bar_close_hover.svg"), Utils::getQrcPath("bar_close_press.svg"));
+    closeButton = new DImageButton(Utils::getQrcPath("bar_close_normal.svg"), Utils::getQrcPath("bar_close_hover.svg"), Utils::getQrcPath("bar_close_press.svg"));
     closeButton->setFixedSize(16, 16);
     
     layout->addWidget(replaceLabel);

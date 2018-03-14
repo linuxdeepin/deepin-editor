@@ -38,7 +38,7 @@ FindBar::FindBar(QWidget *parent) : QWidget(parent)
     editLine = new LineBar();
     findNextButton = new QPushButton("Next");
     findPrevButton = new QPushButton("Previous");
-    closeButton = new DImageButton(Utils::getQrcPath("bar_close_noraml.svg"), Utils::getQrcPath("bar_close_hover.svg"), Utils::getQrcPath("bar_close_press.svg"));
+    closeButton = new DImageButton(Utils::getQrcPath("bar_close_normal.svg"), Utils::getQrcPath("bar_close_hover.svg"), Utils::getQrcPath("bar_close_press.svg"));
     closeButton->setFixedSize(16, 16);
     
     layout->addWidget(findLabel);
