@@ -44,6 +44,7 @@ public:
     QPixmap createDragPixmapFromTab(int index, const QStyleOptionTab &option, QPoint *hotspot) const;
     bool canInsertFromMimeData(int index, const QMimeData *source) const;
     void insertFromMimeData(int index, const QMimeData *source);    
+    void insertFromMimeDataOnDragEnter(int index, const QMimeData *source);
                            
 signals:
     void closeTab(int index);

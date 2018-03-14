@@ -132,7 +132,24 @@ void TabWidget::insertFromMimeData(int index, const QMimeData *source)
     QString tabPath = dropContent[1];
     QString tabContent = content.remove(0, tabName.size() + tabPath.size() + 2); // 2 mean two \n char
     
-    static_cast<Window*>(this->window())->addTabWithContent(tabName, tabPath, tabContent, index);
+    Window* window = static_cast<Window*>(this->window());
+    
+    window->addTabWithContent(tabName, tabPath, tabContent, index);
+    window->activeTab(window->getTabIndex(tabPath));
+}
+
+void TabWidget::insertFromMimeDataOnDragEnter(int index, const QMimeData *source)
+{
+    QString content = QString::fromUtf8(source->data("tabInfo"));
+    QStringList dropContent = content.split("\n");
+    QString tabName = dropContent[0];
+    QString tabPath = dropContent[1];
+    QString tabContent = content.remove(0, tabName.size() + tabPath.size() + 2); // 2 mean two \n char
+    
+    Window* window = static_cast<Window*>(this->window());
+    
+    window->addTabWithContent(tabName, tabPath, tabContent, index);
+    window->activeTab(window->getTabIndex(tabPath));
 }
 
 void TabWidget::handleCloseTab()
