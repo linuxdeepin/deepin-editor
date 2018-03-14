@@ -840,14 +840,23 @@ void Window::handleUpdateSearchKeyword(QWidget *widget, QString file, QString ke
         
         // Update input widget warning status along with keyword match situation.
         bool findKeyword = editorMap[file]->textEditor->findKeywordForward(keyword);
+        bool emptyKeyword = keyword.trimmed().isEmpty();
         
         auto *findBarWidget = qobject_cast<FindBar*>(widget);    
         if (findBarWidget != nullptr) {
-            findBarWidget->setMismatchAlert(!findKeyword);
+            if (emptyKeyword) {
+                findBarWidget->setMismatchAlert(false);
+            } else {
+                findBarWidget->setMismatchAlert(!findKeyword);
+            }
         } else {
             auto *replaceBarWidget = qobject_cast<ReplaceBar*>(widget);    
             if (replaceBarWidget != nullptr) {
-                replaceBarWidget->setMismatchAlert(!findKeyword);    
+                if (emptyKeyword) {
+                    replaceBarWidget->setMismatchAlert(false);        
+                } else {
+                    replaceBarWidget->setMismatchAlert(!findKeyword);    
+                }
             }
         }
     }
