@@ -785,17 +785,25 @@ void Window::handleBackToPosition(QString file, int row, int column, int scrollO
 void Window::handleFindNext()
 {
     Editor *editor = getActiveEditor();
-
+    
+    editor->textEditor->saveMarkStatus();
+    
     editor->textEditor->updateCursorKeywordSelection(editor->textEditor->getPosition(), true);
     editor->textEditor->renderAllSelections();
+    
+    editor->textEditor->restoreMarkStatus();
 }
 
 void Window::handleFindPrev()
 {
     Editor *editor = getActiveEditor();
 
+    editor->textEditor->saveMarkStatus();
+    
     editor->textEditor->updateCursorKeywordSelection(editor->textEditor->getPosition(), false);
     editor->textEditor->renderAllSelections();
+    
+    editor->textEditor->restoreMarkStatus();
 }
 
 void Window::handleReplaceAll(QString replaceText, QString withText)

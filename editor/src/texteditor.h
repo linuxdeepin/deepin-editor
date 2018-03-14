@@ -134,6 +134,9 @@ public:
     bool tryUnsetMark();
     void exchangeMark();
     
+    void saveMarkStatus();
+    void restoreMarkStatus();
+    
     void setEnglishWordsDB(QSqlDatabase wordsDB);
     void completionWord(QString word);
     QString getWordAtCursor();
@@ -253,6 +256,9 @@ private:
     bool confirmCompletionFlag = false;
     bool enableEnglishCompleter = false;
     bool readOnlyMode = false;
+    
+    bool cursorMarkStatus = false;
+    int cursorMarkPosition = 0;
     
     Comment::CommentDefinition commentDefinition;
 };

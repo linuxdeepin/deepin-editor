@@ -1975,6 +1975,25 @@ void TextEditor::exchangeMark()
     }
 }
 
+void TextEditor::saveMarkStatus()
+{
+    cursorMarkStatus = cursorMark;
+    cursorMarkPosition = textCursor().anchor();
+}
+
+void TextEditor::restoreMarkStatus()
+{
+    if (cursorMarkStatus) {
+        QTextCursor currentCursor = textCursor();
+        
+        QTextCursor cursor = textCursor();
+        cursor.setPosition(cursorMarkPosition, QTextCursor::MoveAnchor);
+        cursor.setPosition(currentCursor.position(), QTextCursor::KeepAnchor);
+        
+        setTextCursor(cursor);
+    }
+}
+
 void TextEditor::clickCutAction()
 {
     if (textCursor().hasSelection()) {
