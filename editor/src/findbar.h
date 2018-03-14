@@ -49,8 +49,6 @@ public:
     void setMismatchAlert(bool isAlert);
     
 signals:
-    void backToPosition(QString file, int row, int column, int scrollOffset);
-    
     void findNext();
     void findPrev();
     

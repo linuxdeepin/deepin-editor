@@ -152,7 +152,6 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     // Init find bar.
     findBar = new FindBar();
 
-    connect(findBar, &FindBar::backToPosition, this, &Window::handleBackToPosition, Qt::QueuedConnection);
     connect(findBar, &FindBar::findNext, this, &Window::handleFindNext, Qt::QueuedConnection);
     connect(findBar, &FindBar::findPrev, this, &Window::handleFindPrev, Qt::QueuedConnection);
     connect(findBar, &FindBar::removeSearchKeyword, this, &Window::handleRemoveSearchKeyword, Qt::QueuedConnection);
@@ -163,7 +162,6 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
 
     // Init replace bar.
     replaceBar = new ReplaceBar();
-    connect(replaceBar, &ReplaceBar::backToPosition, this, &Window::handleBackToPosition, Qt::QueuedConnection);
     connect(replaceBar, &ReplaceBar::removeSearchKeyword, this, &Window::handleRemoveSearchKeyword, Qt::QueuedConnection);
     connect(replaceBar, &ReplaceBar::replaceAll, this, &Window::handleReplaceAll, Qt::QueuedConnection);
     connect(replaceBar, &ReplaceBar::replaceNext, this, &Window::handleReplaceNext, Qt::QueuedConnection);

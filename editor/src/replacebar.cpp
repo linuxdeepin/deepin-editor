@@ -120,8 +120,6 @@ void ReplaceBar::activeInput(QString text, QString file, int row, int column, in
 void ReplaceBar::replaceCancel()
 {
     hide();
-    
-    backToPosition(replaceFile, replaceFileRow, replaceFileColumn, replaceFileSrollOffset);
 }
 
 void ReplaceBar::handleContentChanged()

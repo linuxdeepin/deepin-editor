@@ -96,8 +96,6 @@ void FindBar::activeInput(QString text, QString file, int row, int column, int s
 void FindBar::findCancel()
 {
     hide();
-    
-    backToPosition(findFile, findFileRow, findFileColumn, findFileSrollOffset);
 }
 
 void FindBar::handleContentChanged()
