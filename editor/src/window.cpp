@@ -251,6 +251,8 @@ void Window::addTabWithContent(QString tabName, QString filepath, QString conten
     editor->textEditor->setPlainText(content);
 
     editorMap[filepath] = editor;
+    
+    editor->textEditor->loadHighlighter();
 
     showNewEditor(editor);
 }
