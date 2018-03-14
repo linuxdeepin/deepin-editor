@@ -394,7 +394,7 @@ void TextEditor::prevLine()
 
 void TextEditor::jumpToLine(int line, bool keepLineAtCenter)
 {
-    QTextCursor cursor(document()->findBlockByLineNumber(line - 1)); // line - 1 because line number starts from 0
+    QTextCursor cursor(document()->findBlockByNumber(line - 1)); // line - 1 because line number starts from 0
 
     // Update cursor.
     setTextCursor(cursor);
