@@ -1219,24 +1219,30 @@ void TextEditor::scrollToLine(int scrollOffset, int row, int column)
     scrollAnimation->start();
 }
 
-void TextEditor::setFontFamily(QString fontName)
+void TextEditor::setFontFamily(QString name)
 {
-    QFont font = document()->defaultFont();
-    font.setFixedPitch(true);
-    font.setFamily(fontName);
-    setFont(font);
+    // Update font.
+    fontName = name;
+    updateFont();
 }
 
 void TextEditor::setFontSize(int size)
 {
     // Update font.
-    QFont font = document()->defaultFont();
-    font.setFixedPitch(true);
-    font.setPointSize(size);
-    setFont(font);
-
+    fontSize = size;
+    updateFont();
+    
     // Update line number after adjust font size.
     updateLineNumber();
+}
+
+void TextEditor::updateFont()
+{
+    QFont font = document()->defaultFont();
+    font.setFixedPitch(true);
+    font.setPointSize(fontSize);
+    font.setFamily(fontName);
+    setFont(font);
 }
 
 void TextEditor::replaceAll(QString replaceText, QString withText)

@@ -99,6 +99,7 @@ public:
     
     void setFontFamily(QString fontName);
     void setFontSize(int fontSize);
+    void updateFont();
     
     void replaceAll(QString replaceText, QString withText);
     void replaceNext(QString replaceText, QString withText);
@@ -259,6 +260,9 @@ private:
     
     bool cursorMarkStatus = false;
     int cursorMarkPosition = 0;
+    
+    int fontSize;
+    QString fontName;
     
     Comment::CommentDefinition commentDefinition;
 };
