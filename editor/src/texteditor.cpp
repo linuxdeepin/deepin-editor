@@ -1136,7 +1136,12 @@ void TextEditor::changeToEditCursor()
 
 void TextEditor::changeToWaitCursor()
 {
-    setCursorWidth(fontMetrics().width('9'));
+    QTextCursor cursor = textCursor();
+    cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+    QString currentChar = cursor.selectedText();
+    
+    setCursorWidth(fontMetrics().width(currentChar));
 }
 
 void TextEditor::handleCursorMarkChanged(bool mark, QTextCursor cursor)
