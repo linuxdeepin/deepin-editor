@@ -447,6 +447,12 @@
                             "default":  "Ctrl+/"
                         },
                         {
+                            "key": "togglebullet",
+                            "name": "Toggle Bullet",
+                            "type": "shortcut",
+                            "default":  "Alt+Shift+*"
+                        },
+                        {
                             "key": "undo",
                             "name": "Undo",
                             "type": "shortcut",
@@ -867,6 +873,12 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Ctrl+/"
+                        },
+                        {
+                            "key": "togglebullet",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Alt+Shift+*"
                         },
                         {
                             "key": "undo",
@@ -1291,6 +1303,12 @@
                             "default":  "Ctrl+Shift+:"
                         },
                         {
+                            "key": "togglebullet",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Alt+Shift+*"
+                        },
+                        {
                             "key": "undo",
 			    "hide" : true,
 			    "reset" : false,
@@ -1711,6 +1729,12 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Ctrl+/"
+                        },
+                        {
+                            "key": "togglebullet",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Alt+Shift+*"
                         },
                         {
                             "key": "undo",

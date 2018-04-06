@@ -146,6 +146,7 @@ public:
     void toggleReadOnlyMode();
     
     void toggleComment();
+    void toggleBullet();
     
 signals:
     void clickFindAction();

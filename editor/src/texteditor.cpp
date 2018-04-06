@@ -1029,7 +1029,7 @@ void TextEditor::indentLine()
 
     // Save cursor column.
     int column = getCurrentColumn();
-
+    
     // If current column is not Multiples of 4, jump to 4x position before next indent.
     moveToLineIndentation();
     int indentSpace = tabSpaceNumber - (getCurrentColumn() % tabSpaceNumber);
@@ -1577,6 +1577,8 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
             toggleReadOnlyMode();
         } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "togglecomment")) {
             toggleComment();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "togglebullet")) {
+            toggleBullet();
         } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "undo")) {
             undo();
         } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "redo")) {
@@ -2120,6 +2122,66 @@ void TextEditor::toggleReadOnlyMode()
 void TextEditor::toggleComment()
 {
     Comment::unCommentSelection(this, commentDefinition);
+}
+
+void TextEditor::toggleBullet()
+{
+    QString bulletString = "* ";
+    
+    if (textCursor().hasSelection()) {
+        
+    } else {
+        QTextCursor lineBeginningCursor = textCursor();
+        
+        lineBeginningCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+        lineBeginningCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, 2);
+        
+        QString lineBeginningString = lineBeginningCursor.selectedText();
+        
+        if (lineBeginningString != bulletString) {
+            // Get line start position.
+            QTextCursor cursor = textCursor();
+            cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+            int startColumn = cursor.columnNumber();
+
+            // Get line end position.
+            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
+            int endColumn = cursor.columnNumber();
+
+            // Move to line start first.
+            cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+
+            // Move to first non-blank char of line.
+            int column = startColumn;
+            while (column < endColumn) {
+                QChar currentChar = toPlainText().at(std::max(cursor.position() - 1, 0));
+
+                if (!currentChar.isSpace()) {
+                    cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+                    break;
+                } else {
+                    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+                }
+
+                column++;
+            }
+            
+            // Remove blank string.
+            cursor.removeSelectedText();
+            
+            // Save current cursor.
+            QTextCursor currentCursor = textCursor();
+            
+            // Insert bullet.
+            cursor.insertText(bulletString);
+            setTextCursor(cursor);
+            
+            // Restore cursor.
+            setTextCursor(currentCursor);
+        } else {
+            lineBeginningCursor.removeSelectedText();
+        }
+    }
 }
 
 void TextEditor::tryCompleteWord()
