@@ -147,6 +147,7 @@ public:
     
     void toggleComment();
     void toggleBullet();
+    void toggleBulletWithLine(int line, bool addBullet);
     
 signals:
     void clickFindAction();

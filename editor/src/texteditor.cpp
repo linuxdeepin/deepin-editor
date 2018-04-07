@@ -651,7 +651,7 @@ void TextEditor::scrollLineUp()
 
     if (cursorRect().y() < 0) {
         auto moveMode = cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
-                
+
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::Down, moveMode);
         setTextCursor(cursor);
@@ -663,10 +663,10 @@ void TextEditor::scrollLineDown()
     QScrollBar *scrollbar = verticalScrollBar();
 
     scrollbar->setValue(scrollbar->value() - 1);
-    
+
     if (cursorRect().y() > rect().height() - fontMetrics().height()) {
         auto moveMode = cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
-                
+
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::Up, moveMode);
         setTextCursor(cursor);
@@ -1029,7 +1029,7 @@ void TextEditor::indentLine()
 
     // Save cursor column.
     int column = getCurrentColumn();
-    
+
     // If current column is not Multiples of 4, jump to 4x position before next indent.
     moveToLineIndentation();
     int indentSpace = tabSpaceNumber - (getCurrentColumn() % tabSpaceNumber);
@@ -1140,7 +1140,7 @@ void TextEditor::changeToWaitCursor()
     cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
     QString currentChar = cursor.selectedText();
-    
+
     setCursorWidth(fontMetrics().width(currentChar));
 }
 
@@ -1231,7 +1231,7 @@ void TextEditor::setFontSize(int size)
     // Update font.
     fontSize = size;
     updateFont();
-    
+
     // Update line number after adjust font size.
     updateLineNumber();
 }
@@ -1361,7 +1361,7 @@ void TextEditor::updateCursorKeywordSelection(int position, bool findNext)
             // Clear keyword if keyword not match anything.
             if (!setCursorKeywordSeletoin(0, findNext)) {
                 cursorKeywordSelection.cursor = textCursor();
-                
+
                 keywordSelections.clear();
                 renderAllSelections();
             }
@@ -1800,10 +1800,10 @@ void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme)
 void TextEditor::loadHighlighter()
 {
     const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());
-    
+
     if (def.filePath() != "") {
         QString syntaxFile = QFileInfo(QString("../syntax/%1").arg(QFileInfo(def.filePath()).fileName())).absoluteFilePath();
-    
+
         QFile file(syntaxFile);
         if (!file.open(QFile::ReadOnly)) {
             qDebug() << "Can't open file" << syntaxFile;
@@ -2000,11 +2000,11 @@ void TextEditor::restoreMarkStatus()
 {
     if (cursorMarkStatus) {
         QTextCursor currentCursor = textCursor();
-        
+
         QTextCursor cursor = textCursor();
         cursor.setPosition(cursorMarkPosition, QTextCursor::MoveAnchor);
         cursor.setPosition(currentCursor.position(), QTextCursor::KeepAnchor);
-        
+
         setTextCursor(cursor);
     }
 }
@@ -2126,61 +2126,118 @@ void TextEditor::toggleComment()
 
 void TextEditor::toggleBullet()
 {
+    // Save current cursor.
+    QTextCursor currentCursor = textCursor();
     QString bulletString = "* ";
-    
+
     if (textCursor().hasSelection()) {
-        
+        // Get selection bound.
+        int startPos = textCursor().anchor();
+        int endPos = textCursor().position();
+
+        if (startPos > endPos) {
+            std::swap(startPos, endPos);
+        }
+
+        QTextCursor startCursor = textCursor();
+        startCursor.setPosition(startPos, QTextCursor::MoveAnchor);
+        int startLine = startCursor.block().blockNumber();
+
+        QTextCursor endCursor = textCursor();
+        endCursor.setPosition(endPos, QTextCursor::MoveAnchor);
+        int endLine = endCursor.block().blockNumber();
+
+        // Whether remove bullet?
+        bool removeBullet = true;
+        for (int i = startLine; i <= endLine; i++) {
+            QTextCursor cursor(document()->findBlockByLineNumber(i));
+
+            cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+            cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, 2);
+
+            if (cursor.selectedText() != bulletString) {
+                removeBullet = false;
+                break;
+            }
+        }
+
+        // Add/remove bullet with selection area.
+        for (int i = startLine; i <= endLine; i++) {
+            toggleBulletWithLine(i, !removeBullet);
+        }
     } else {
         QTextCursor lineBeginningCursor = textCursor();
-        
+
         lineBeginningCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
         lineBeginningCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, 2);
-        
+
         QString lineBeginningString = lineBeginningCursor.selectedText();
-        
+
         if (lineBeginningString != bulletString) {
-            // Get line start position.
-            QTextCursor cursor = textCursor();
-            cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-            int startColumn = cursor.columnNumber();
-
-            // Get line end position.
-            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
-            int endColumn = cursor.columnNumber();
-
-            // Move to line start first.
-            cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-
-            // Move to first non-blank char of line.
-            int column = startColumn;
-            while (column < endColumn) {
-                QChar currentChar = toPlainText().at(std::max(cursor.position() - 1, 0));
-
-                if (!currentChar.isSpace()) {
-                    cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
-                    break;
-                } else {
-                    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-                }
-
-                column++;
-            }
-            
-            // Remove blank string.
-            cursor.removeSelectedText();
-            
-            // Save current cursor.
-            QTextCursor currentCursor = textCursor();
-            
-            // Insert bullet.
-            cursor.insertText(bulletString);
-            setTextCursor(cursor);
-            
-            // Restore cursor.
-            setTextCursor(currentCursor);
+            toggleBulletWithLine(textCursor().block().blockNumber(), true);
         } else {
-            lineBeginningCursor.removeSelectedText();
+            toggleBulletWithLine(textCursor().block().blockNumber(), false);
         }
+    }
+
+    // Restore cursor.
+    setTextCursor(currentCursor);
+
+    // Remove selection area anyway.
+    QTextCursor removeSelectionCursor = textCursor();
+    removeSelectionCursor.clearSelection();
+    setTextCursor(removeSelectionCursor);
+    
+    tryUnsetMark();
+}
+
+void TextEditor::toggleBulletWithLine(int line, bool addBullet)
+{
+    QString bulletString = "* ";
+
+    QTextCursor lineBeginningCursor(document()->findBlockByLineNumber(line));
+
+    lineBeginningCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+    lineBeginningCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, 2);
+
+    QString lineBeginningString = lineBeginningCursor.selectedText();
+
+    if (addBullet) {
+        // Get line start position.
+        QTextCursor cursor(document()->findBlockByLineNumber(line));
+        cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+        int startColumn = cursor.columnNumber();
+
+        // Get line end position.
+        cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
+        int endColumn = cursor.columnNumber();
+
+        // Move to line start first.
+        cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+
+        // Move to first non-blank char of line.
+        int column = startColumn;
+        while (column < endColumn) {
+            QChar currentChar = toPlainText().at(std::max(cursor.position() - 1, 0));
+
+            if (!currentChar.isSpace()) {
+                cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+                break;
+            } else {
+                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+            }
+
+            column++;
+        }
+
+        // Remove blank string.
+        cursor.removeSelectedText();
+
+        // Insert bullet.
+        cursor.insertText(bulletString);
+        setTextCursor(cursor);
+    } else {
+        lineBeginningCursor.removeSelectedText();
     }
 }
 
