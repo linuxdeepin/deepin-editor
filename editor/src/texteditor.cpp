@@ -225,24 +225,28 @@ void TextEditor::backwardChar()
 
 void TextEditor::forwardWord()
 {
+    QTextCursor cursor = textCursor();
+    
     if (cursorMark) {
-        QTextCursor cursor = textCursor();
-        cursor.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
-        setTextCursor(cursor);
+        cursor.setPosition(getNextWordPosition(cursor, QTextCursor::KeepAnchor), QTextCursor::KeepAnchor);
     } else {
-        moveCursor(QTextCursor::NextWord);
+        cursor.setPosition(getNextWordPosition(cursor, QTextCursor::MoveAnchor), QTextCursor::MoveAnchor);
     }
+    
+    setTextCursor(cursor);
 }
 
 void TextEditor::backwardWord()
 {
+    QTextCursor cursor = textCursor();
+    
     if (cursorMark) {
-        QTextCursor cursor = textCursor();
-        cursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
-        setTextCursor(cursor);
+        cursor.setPosition(getPrevWordPosition(cursor, QTextCursor::KeepAnchor), QTextCursor::KeepAnchor);
     } else {
-        moveCursor(QTextCursor::PreviousWord);
+        cursor.setPosition(getPrevWordPosition(cursor, QTextCursor::MoveAnchor), QTextCursor::MoveAnchor);
     }
+    
+    setTextCursor(cursor);
 }
 
 void TextEditor::forwardPair()
@@ -999,7 +1003,7 @@ void TextEditor::killBackwardWord()
     } else {
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
-        cursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
+        cursor.setPosition(getPrevWordPosition(cursor, QTextCursor::KeepAnchor), QTextCursor::KeepAnchor);
         cursor.removeSelectedText();
 
         setTextCursor(cursor);
@@ -1015,7 +1019,7 @@ void TextEditor::killForwardWord()
     } else {
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
-        cursor.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
+        cursor.setPosition(getNextWordPosition(cursor, QTextCursor::KeepAnchor), QTextCursor::KeepAnchor);
         cursor.removeSelectedText();
 
         setTextCursor(cursor);
@@ -1179,8 +1183,8 @@ void TextEditor::convertWordCase(ConvertCase convertCase)
 
         cursor = textCursor();
         cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
-        cursor.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
-
+        cursor.setPosition(getNextWordPosition(cursor, QTextCursor::KeepAnchor), QTextCursor::KeepAnchor);
+        
         QString text = cursor.selectedText();
         if (convertCase == UPPER) {
             cursor.insertText(text.toUpper());
@@ -2239,6 +2243,59 @@ void TextEditor::toggleBulletWithLine(int line, bool addBullet)
     } else {
         lineBeginningCursor.removeSelectedText();
     }
+}
+
+int TextEditor::getNextWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode)
+{
+    // Move next char first.
+    cursor.movePosition(QTextCursor::NextCharacter, moveMode);
+    
+    QChar currentChar = toPlainText().at(cursor.position());
+    
+    // Just to next non-space char if current char is space.
+    if (currentChar.isSpace()) {
+        while (cursor.position() < toPlainText().length() && currentChar.isSpace()) {
+            cursor.movePosition(QTextCursor::NextCharacter, moveMode);
+            currentChar = toPlainText().at(cursor.position());
+        }
+    }
+    // Just to next word-separator char.
+    else {
+        while (cursor.position() < toPlainText().length() && !atWordSeparator(cursor.position())) {
+            cursor.movePosition(QTextCursor::NextCharacter, moveMode);
+        }
+    }
+    
+    return cursor.position();
+}
+
+int TextEditor::getPrevWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode)
+{
+    // Move prev char first.
+    cursor.movePosition(QTextCursor::PreviousCharacter, moveMode);
+    
+    QChar currentChar = toPlainText().at(cursor.position());
+    
+    // Just to next non-space char if current char is space.
+    if (currentChar.isSpace()) {
+        while (cursor.position() > 0 && currentChar.isSpace()) {
+            cursor.movePosition(QTextCursor::PreviousCharacter, moveMode);
+            currentChar = toPlainText().at(cursor.position());
+        }
+    }
+    // Just to next word-separator char.
+    else {
+        while (cursor.position() > 0 && !atWordSeparator(cursor.position())) {
+            cursor.movePosition(QTextCursor::PreviousCharacter, moveMode);
+        }
+    }
+    
+    return cursor.position();
+}
+
+bool TextEditor::atWordSeparator(int position)
+{
+    return wordSepartors.contains(QString(toPlainText().at(position)));
 }
 
 void TextEditor::tryCompleteWord()

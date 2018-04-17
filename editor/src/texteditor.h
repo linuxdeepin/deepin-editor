@@ -149,6 +149,10 @@ public:
     void toggleBullet();
     void toggleBulletWithLine(int line, bool addBullet);
     
+    int getNextWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode);
+    int getPrevWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode);
+    bool atWordSeparator(int position);
+    
 signals:
     void clickFindAction();
     void clickReplaceAction();
@@ -267,6 +271,13 @@ private:
     QString fontName;
     
     Comment::CommentDefinition commentDefinition;
+    
+    QStringList wordSepartors = QStringList({
+            // English separator.
+            ".", ",", "?", "!", "@", "#", "$", ":", ";", "-", "<", ">", "[", "]", "(", ")", "{", "}", "=", "/", "+", "%", "&", "^", "*", "\"", "'", "`", "~", "|", "\\", "\n",
+            // Chinese separator.
+            "，", "。", " "
+        });
 };
 
 #endif
