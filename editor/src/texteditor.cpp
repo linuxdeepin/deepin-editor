@@ -1136,6 +1136,10 @@ void TextEditor::transposeChar()
 void TextEditor::changeToEditCursor()
 {
     setCursorWidth(2);
+    
+    // Need repaint after change to edit stauts,
+    // avoid cursor width not flash after press key.
+    repaint();
 }
 
 void TextEditor::changeToWaitCursor()
