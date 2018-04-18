@@ -93,6 +93,7 @@ public:
     void backIndentLine();
     void setTabSpaceNumber(int number);
     void convertWordCase(ConvertCase convertCase);
+    QString capitalizeText(QString text);
     
     void keepCurrentLineAtCenter();
     void scrollToLine(int scrollOffset, int row, int column);

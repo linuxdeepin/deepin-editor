@@ -1169,9 +1169,7 @@ void TextEditor::convertWordCase(ConvertCase convertCase)
         } else if (convertCase == LOWER) {
             textCursor().insertText(text.toLower());
         } else {
-            text = text.toLower();
-            text.replace(0, 1, text[0].toUpper());
-            textCursor().insertText(text);
+            textCursor().insertText(capitalizeText(text));
         }
     } else {
         QTextCursor cursor;
@@ -1191,15 +1189,28 @@ void TextEditor::convertWordCase(ConvertCase convertCase)
         } else if (convertCase == LOWER) {
             cursor.insertText(text.toLower());
         } else {
-            text = text.toLower();
-            text.replace(0, 1, text[0].toUpper());
-            cursor.insertText(text);
+            cursor.insertText(capitalizeText(text));
         }
 
         setTextCursor(cursor);
 
         haveWordUnderCursor = false;
     }
+}
+
+QString TextEditor::capitalizeText(QString text)
+{
+    QString newText = text.toLower();
+    QChar currentChar;
+    for (int i = 0; i < newText.size(); i++) {
+        currentChar = newText.at(i);
+        if (!currentChar.isSpace() && !wordSepartors.contains(QString(currentChar))) {
+            newText.replace(i, 1, currentChar.toUpper());
+            break;
+        }
+    }
+    
+    return newText;
 }
 
 void TextEditor::keepCurrentLineAtCenter()
