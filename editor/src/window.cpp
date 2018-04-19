@@ -28,6 +28,7 @@
 #include "utils.h"
 #include "window.h"
 
+#include <DSettingsGroup>
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QSqlError>
@@ -418,6 +419,53 @@ QString Window::getSaveFilePath()
 #endif
 }
 
+void Window::displayShortcuts()
+{
+    QRect rect = window()->geometry();
+    QPoint pos(rect.x() + rect.width()/2 , rect.y() + rect.height()/2);
+
+    QJsonObject shortcutObj;
+    QJsonArray jsonGroups;
+
+    QJsonObject windowJsonGroup;
+    windowJsonGroup.insert("groupName", "Window");
+    QJsonArray windowJsonItems;
+    for (auto option : settings->settings->group("shortcuts.window")->options()) {
+        QJsonObject jsonItem;
+        jsonItem.insert("name", option->name());
+        jsonItem.insert("value", option->value().toString());
+        windowJsonItems.append(jsonItem);
+    }
+    windowJsonGroup.insert("groupItems", windowJsonItems);
+    jsonGroups.append(windowJsonGroup);
+
+    QJsonObject editorJsonGroup;
+    editorJsonGroup.insert("groupName", "Editor");
+    QJsonArray editorJsonItems;
+    for (auto option : settings->settings->group("shortcuts.editor")->options()) {
+        QJsonObject jsonItem;
+        jsonItem.insert("name", option->name());
+        jsonItem.insert("value", option->value().toString());
+        editorJsonItems.append(jsonItem);
+    }
+    editorJsonGroup.insert("groupItems", editorJsonItems);
+    jsonGroups.append(editorJsonGroup);
+    
+    shortcutObj.insert("shortcut", jsonGroups);
+
+    QJsonDocument doc(shortcutObj);
+
+    QStringList shortcutString;
+    QString param1 = "-j=" + QString(doc.toJson().data());
+    QString param2 = "-p=" + QString::number(pos.x()) + "," + QString::number(pos.y());
+    shortcutString << param1 << param2;
+
+    QProcess* shortcutViewProcess = new QProcess();
+    shortcutViewProcess->startDetached("deepin-shortcut-viewer", shortcutString);
+
+    connect(shortcutViewProcess, SIGNAL(finished(int)), shortcutViewProcess, SLOT(deleteLater()));
+}
+
 bool Window::saveFile()
 {
     if (QFileInfo(tabbar->getActiveTabPath()).dir().absolutePath() == blankFileDir) {
@@ -753,6 +801,8 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
         remberPositionRestore();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "window", "escape")) {
         removeBottomWidget();
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "window", "displayshortcuts")) {
+        displayShortcuts();
     }
 }
 
@@ -797,7 +847,7 @@ void Window::handleTabReleaseRequested(QString tabName, QString filepath, int in
 void Window::handleTabCloseRequested(int index)
 {
     activeTab(index);
-    
+
     closeTab();
 }
 

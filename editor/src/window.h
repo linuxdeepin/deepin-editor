@@ -98,6 +98,8 @@ public:
     
     QString getSaveFilePath();
     
+    void displayShortcuts();
+    
 protected:    
     void resizeEvent(QResizeEvent* event);
     void closeEvent(QCloseEvent *event);

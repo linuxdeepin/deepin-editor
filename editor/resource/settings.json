@@ -157,6 +157,12 @@
                             "name": "Escape",
                             "type": "shortcut",
                             "default":  "Esc"
+                        },
+                        {
+                            "key": "displayshortcuts",
+                            "name": "Display Shortcuts",
+                            "type": "shortcut",
+                            "default":  "Ctrl+Shift+?"
                         }
                     ]
                 },
@@ -584,6 +590,12 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Esc"
+                        },
+                        {
+                            "key": "displayshortcuts",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Ctrl+Shift+?"
                         }
                     ]
                 },
@@ -1012,6 +1024,12 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Esc"
+                        },
+                        {
+                            "key": "displayshortcuts",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Ctrl+Shift+H"
                         }
                     ]
                 },
@@ -1440,6 +1458,12 @@
 			    "hide" : true,
 			    "reset" : false,
                             "default":  "Esc"
+                        },
+                        {
+                            "key": "displayshortcuts",
+			    "hide" : true,
+			    "reset" : false,
+                            "default":  "Ctrl+Shift+?"
                         }
                     ]
                 },
