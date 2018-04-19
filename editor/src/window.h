@@ -143,11 +143,14 @@ public slots:
     void handleConfirmCompletion();
     
 private:
+    DBusDaemon::dbus *autoSaveDBus;
+    
     FindBar *findBar;
     JumpLineBar *jumpLineBar;
     QMap<QString, Editor*> editorMap;
     QStackedLayout *editorLayout;
     QString blankFileDir;
+    QString readonlyFileDir;
     QVBoxLayout *layout;
     QWidget *editorWidget;
     QWidget *layoutWidget;
@@ -179,17 +182,20 @@ private:
     bool windowShowFlag = false;
     
     void removeActiveBlankTab(bool needSaveBefore=false);
+    void removeActiveReadonlyTab();
     
     void showNewEditor(Editor *editor);
     void showNotify(QString message);
     
-    DDialog* createSaveBlankFileDialog();
+    DDialog* createSaveFileDialog(QString title, QString content);
     
     QSqlDatabase wordsDB;
     
     WordCompletionWindow *wordCompletionWindow;
     
     DWindowManager *windowManager;
+    
+    QString readonlySeparator = " !_! ";
 };
 
 #endif

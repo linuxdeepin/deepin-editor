@@ -50,7 +50,6 @@ public slots:
     void handleTextChanged();
     
 private:
-    DBusDaemon::dbus *autoSaveDBus;
     QHBoxLayout *layout;
     QTimer *autoSaveTimer;
     bool saveFinish;

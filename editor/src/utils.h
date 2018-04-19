@@ -38,6 +38,7 @@ public:
     static QString getKeyshortcutFromKeymap(Settings* settings, QString keyCategory, QString keyName);
     static QString getQrcPath(QString imageName);
     static QString getQssPath(QString qssName);
+    static QString getFileContent(QString filepath);
     static bool fileExists(QString path);
     static bool fileIsWritable(QString path);
     static void applyQss(QWidget *widget, QString qssName);

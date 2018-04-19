@@ -85,6 +85,21 @@ void Utils::applyQss(QWidget *widget, QString qssName)
     file.close();
 }
 
+
+QString Utils::getFileContent(QString filepath)
+{
+    QString content;
+    
+    QFile file(filepath);
+    if (file.open(QFile::ReadOnly | QFile::Text)) {
+        content = file.readAll();
+    }
+    
+    file.close();
+    
+    return content;
+}
+
 bool Utils::fileExists(QString path) {
     QFileInfo check_file(path);
     

@@ -57,6 +57,8 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     // Init.
     installEventFilter(this);   // add event filter
     blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
+    readonlyFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("readonly-files");
+    autoSaveDBus = new DBusDaemon::dbus("com.deepin.editor.daemon", "/", QDBusConnection::systemBus(), this);
 
     // Init settings.
     settings = new Settings(this);
@@ -140,14 +142,14 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
         QRect screenGeometry = screen->geometry();
         resize(QSize(screenGeometry.width() * settings->settings->option("advance.window.window_width")->value().toDouble(),
                      screenGeometry.height() * settings->settings->option("advance.window.window_height")->value().toDouble()));
-        
+
         show();
     } else if (windowState == "window_maximum") {
         showMaximized();
     } else if (windowState == "fullscreen") {
         showFullScreen();
     }
-    
+
     windowShowFlag = true;
     // Init find bar.
     findBar = new FindBar();
@@ -155,7 +157,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     connect(findBar, &FindBar::findNext, this, &Window::handleFindNext, Qt::QueuedConnection);
     connect(findBar, &FindBar::findPrev, this, &Window::handleFindPrev, Qt::QueuedConnection);
     connect(findBar, &FindBar::removeSearchKeyword, this, &Window::handleRemoveSearchKeyword, Qt::QueuedConnection);
-    connect(findBar, &FindBar::updateSearchKeyword, this, 
+    connect(findBar, &FindBar::updateSearchKeyword, this,
             [=] (QString file, QString keyword) {
                 handleUpdateSearchKeyword(findBar, file, keyword);
             });
@@ -167,7 +169,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     connect(replaceBar, &ReplaceBar::replaceNext, this, &Window::handleReplaceNext, Qt::QueuedConnection);
     connect(replaceBar, &ReplaceBar::replaceRest, this, &Window::handleReplaceRest, Qt::QueuedConnection);
     connect(replaceBar, &ReplaceBar::replaceSkip, this, &Window::handleReplaceSkip, Qt::QueuedConnection);
-    connect(replaceBar, &ReplaceBar::updateSearchKeyword, this, 
+    connect(replaceBar, &ReplaceBar::updateSearchKeyword, this,
             [=] (QString file, QString keyword) {
                 handleUpdateSearchKeyword(replaceBar, file, keyword);
             });
@@ -188,7 +190,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     Utils::applyQss(this, "main.qss");
     titlebarStyleSheet = this->titlebar()->styleSheet();
     changeTitlebarBackground("#202020");
-    
+
     // Init words database.
     wordsDB = QSqlDatabase::addDatabase("QSQLITE");
     wordsDB.setDatabaseName(QFileInfo("../dict/words.db").absoluteFilePath());
@@ -198,9 +200,9 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     } else {
         qDebug() << "Database: connection ok";
     }
-    
+
     wordCompletionWindow = new WordCompletionWindow(this);
-    
+
     // Init window manager.
     windowManager = new DWindowManager();
 }
@@ -224,14 +226,26 @@ void Window::activeTab(int index)
 
 void Window::addTab(QString file)
 {
-    if (tabbar->getTabIndex(file) == -1) {
-        tabbar->addTab(file, QFileInfo(file).fileName());
+    QString filepath = file;
+    if (!Utils::fileIsWritable(file)) {
+        filepath = QDir(readonlyFileDir).filePath(filepath.replace(QDir().separator(), readonlySeparator));
 
-        if (!editorMap.contains(file)) {
+        if (!Utils::fileExists(filepath)) {
+            QString directory = QFileInfo(filepath).dir().absolutePath();
+            QDir().mkpath(directory);
+        }
+
+        QFile::copy(file, filepath);
+    }
+
+    if (tabbar->getTabIndex(filepath) == -1) {
+        tabbar->addTab(filepath, QFileInfo(file).fileName());
+
+        if (!editorMap.contains(filepath)) {
             Editor *editor = createEditor();
-            editor->loadFile(file);
+            editor->loadFile(filepath);
 
-            editorMap[file] = editor;
+            editorMap[filepath] = editor;
 
             showNewEditor(editor);
         }
@@ -249,7 +263,7 @@ void Window::addTabWithContent(QString tabName, QString filepath, QString conten
     editor->textEditor->setPlainText(content);
 
     editorMap[filepath] = editor;
-    
+
     editor->textEditor->loadHighlighter();
 
     showNewEditor(editor);
@@ -264,7 +278,7 @@ void Window::closeTab()
         if (content.size() == 0) {
             removeActiveBlankTab();
         } else {
-            DDialog *dialog = createSaveBlankFileDialog();
+            DDialog *dialog = createSaveFileDialog("Save dragft", "Do you need to save the draft?");
 
             connect(dialog, &DDialog::buttonClicked, this,
                     [=] (int index) {
@@ -279,6 +293,37 @@ void Window::closeTab()
                         else if (index == 2) {
                             removeActiveBlankTab(true);
                             focusActiveEditor();
+                        }
+                    });
+        }
+    } else if (QFileInfo(tabbar->getActiveTabPath()).dir().absolutePath() == readonlyFileDir) {
+        QString realpath = QFileInfo(tabbar->getActiveTabPath()).fileName().replace(readonlySeparator, QDir().separator());
+
+        QString editorContent = getActiveEditor()->textEditor->toPlainText();
+        QString fileContent = Utils::getFileContent(realpath);
+
+        if (editorContent == fileContent) {
+            removeActiveReadonlyTab();
+        } else {
+            DDialog *dialog = createSaveFileDialog("Save file", QString("Do you need to save content to %1 ?").arg(realpath));
+
+            connect(dialog, &DDialog::buttonClicked, this,
+                    [=] (int index) {
+                        dialog->hide();
+
+                        // Remove tab if user click "don't save" button.
+                        if (index == 1) {
+                            removeActiveReadonlyTab();
+                        }
+                        // Save content to file and then remove tab if user click "save" button.
+                        else if (index == 2) {
+                            bool result = autoSaveDBus->saveFile(realpath, editorContent);
+
+                            if (!result) {
+                                qDebug() << QString("Save root file %1 failed").arg(realpath);
+                            }
+
+                            removeActiveReadonlyTab();
                         }
                     });
         }
@@ -314,7 +359,7 @@ Editor* Window::createEditor()
     connect(editor->textEditor, &TextEditor::clickJumpLineAction, this, &Window::popupJumpLineBar, Qt::QueuedConnection);
     connect(editor->textEditor, &TextEditor::clickFullscreenAction, this, &Window::toggleFullscreen, Qt::QueuedConnection);
     connect(editor->textEditor, &TextEditor::popupCompletionWindow, this, &Window::handlePopupCompletionWindow, Qt::QueuedConnection);
-    
+
     connect(editor->textEditor, &TextEditor::selectNextCompletion, this, &Window::handleSelectNextCompletion, Qt::QueuedConnection);
     connect(editor->textEditor, &TextEditor::selectPrevCompletion, this, &Window::handleSelectPrevCompletion, Qt::QueuedConnection);
     connect(editor->textEditor, &TextEditor::selectFirstCompletion, this, &Window::handleSelectFirstCompletion, Qt::QueuedConnection);
@@ -361,7 +406,7 @@ QString Window::getSaveFilePath()
     DFileDialog dialog(this, "Save File", QDir(QDir::homePath()).filePath("Blank Document.txt"), getEncodeList().join(";;"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.addComboBox("换行符", QStringList() << "Linux" << "Window" << "Mac OS");
-    
+
     if (dialog.exec() == QDialog::Accepted) {
         return dialog.selectedFiles().value(0);
     } else {
@@ -386,6 +431,19 @@ bool Window::saveFile()
         } else {
             return false;
         }
+    } if (QFileInfo(tabbar->getActiveTabPath()).dir().absolutePath() == readonlyFileDir) {
+        QString realpath = QFileInfo(tabbar->getActiveTabPath()).fileName().replace(readonlySeparator, QDir().separator());
+        QString content = getActiveEditor()->textEditor->toPlainText();
+
+        bool result = autoSaveDBus->saveFile(realpath, content);
+
+        if (!result) {
+            qDebug() << QString("Save root file %1 failed").arg(realpath);
+        }
+
+        showNotify("文件已保存");
+
+        return result;
     } else {
         showNotify("文件已自动保存");
 
@@ -645,6 +703,8 @@ void Window::closeEvent(QCloseEvent *)
 
             qDebug() << QString("File %1 is empty, clean unused blank document.").arg(blankFilePath);
         }
+
+        file.close();
     }
 }
 
@@ -653,7 +713,7 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
     QString key = Utils::getKeyshortcut(keyEvent);
 
     // qDebug() << "!!!!!!!!!!!! " << key << Utils::getKeyshortcutFromKeymap(settings, "window", "selectnexttab");
-    
+
     if (key == Utils::getKeyshortcutFromKeymap(settings, "window", "addblanktab")) {
         addBlankTab();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "window", "savefile")) {
@@ -785,12 +845,12 @@ void Window::handleBackToPosition(QString file, int row, int column, int scrollO
 void Window::handleFindNext()
 {
     Editor *editor = getActiveEditor();
-    
+
     editor->textEditor->saveMarkStatus();
-    
+
     editor->textEditor->updateCursorKeywordSelection(editor->textEditor->getPosition(), true);
     editor->textEditor->renderAllSelections();
-    
+
     editor->textEditor->restoreMarkStatus();
 }
 
@@ -799,10 +859,10 @@ void Window::handleFindPrev()
     Editor *editor = getActiveEditor();
 
     editor->textEditor->saveMarkStatus();
-    
+
     editor->textEditor->updateCursorKeywordSelection(editor->textEditor->getPosition(), false);
     editor->textEditor->renderAllSelections();
-    
+
     editor->textEditor->restoreMarkStatus();
 }
 
@@ -845,12 +905,12 @@ void Window::handleUpdateSearchKeyword(QWidget *widget, QString file, QString ke
     if (file == tabbar->getActiveTabPath() && editorMap.contains(file)) {
         // Highlight keyword in text editor.
         editorMap[file]->textEditor->highlightKeyword(keyword, editorMap[file]->textEditor->getPosition());
-        
+
         // Update input widget warning status along with keyword match situation.
         bool findKeyword = editorMap[file]->textEditor->findKeywordForward(keyword);
         bool emptyKeyword = keyword.trimmed().isEmpty();
-        
-        auto *findBarWidget = qobject_cast<FindBar*>(widget);    
+
+        auto *findBarWidget = qobject_cast<FindBar*>(widget);
         if (findBarWidget != nullptr) {
             if (emptyKeyword) {
                 findBarWidget->setMismatchAlert(false);
@@ -858,12 +918,12 @@ void Window::handleUpdateSearchKeyword(QWidget *widget, QString file, QString ke
                 findBarWidget->setMismatchAlert(!findKeyword);
             }
         } else {
-            auto *replaceBarWidget = qobject_cast<ReplaceBar*>(widget);    
+            auto *replaceBarWidget = qobject_cast<ReplaceBar*>(widget);
             if (replaceBarWidget != nullptr) {
                 if (emptyKeyword) {
-                    replaceBarWidget->setMismatchAlert(false);        
+                    replaceBarWidget->setMismatchAlert(false);
                 } else {
-                    replaceBarWidget->setMismatchAlert(!findKeyword);    
+                    replaceBarWidget->setMismatchAlert(!findKeyword);
                 }
             }
         }
@@ -882,7 +942,7 @@ void Window::addBottomWidget(QWidget *widget)
 void Window::removeBottomWidget()
 {
     auto item = layout->takeAt(1);
-    
+
     if (item) {
         item->widget()->hide();
     }
@@ -909,6 +969,18 @@ void Window::removeActiveBlankTab(bool needSaveBefore)
     QFile(blankFile).remove();
 }
 
+void Window::removeActiveReadonlyTab()
+{
+    QString tabPath = tabbar->getActiveTabPath();
+    QString realpath = QFileInfo(tabPath).fileName().replace(readonlySeparator, QDir().separator());
+
+    closeFileHistory << realpath;
+    tabbar->closeActiveTab();
+    focusActiveEditor();
+
+    QFile(tabPath).remove();
+}
+
 void Window::showNewEditor(Editor *editor)
 {
     editorLayout->addWidget(editor);
@@ -927,9 +999,9 @@ void Window::showNotify(QString message)
                 height() - toast->height() - toastPaddingBottom);
 }
 
-DDialog* Window::createSaveBlankFileDialog()
+DDialog* Window::createSaveFileDialog(QString title, QString content)
 {
-    DDialog *dialog = new DDialog("Save dragft", "Do you need to save the draft?", this);
+    DDialog *dialog = new DDialog(title, content, this);
     dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
     dialog->setIcon(QIcon(Utils::getQrcPath("logo_48.svg")));
     dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
@@ -966,7 +1038,7 @@ void Window::handlePopupCompletionWindow(QString word, QPoint pos, QStringList w
     if (words.size() > 1 && word.size() > 3) {
         wordCompletionWindow->move(pos);
         wordCompletionWindow->show();
-    
+
         std::sort(std::begin(words), std::end(words),
                   [=](QString a, QString b) {
                       return a.size() < b.size();
@@ -1009,13 +1081,13 @@ void Window::handleConfirmCompletion()
 {
     if (wordCompletionWindow->isVisible()) {
         auto completionItems = wordCompletionWindow->listview->getSelections();
-        
+
         for (auto item : completionItems) {
             WordCompletionItem* wordItem = static_cast<WordCompletionItem*>(item);
             wordCompletionWindow->hide();
-            
+
             getActiveEditor()->textEditor->completionWord(wordItem->name);
-            
+
             break;
         }
     }

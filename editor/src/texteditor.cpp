@@ -1855,6 +1855,8 @@ void TextEditor::loadHighlighter()
         commentDefinition.setComments(QString("%1 ").arg(singleLineComment), multiLineCommentStart, multiLineCommentEnd);
 
         m_highlighter->setDefinition(def);
+        
+        file.close();
     }
 }
 

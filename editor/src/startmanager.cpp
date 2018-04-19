@@ -69,15 +69,25 @@ void StartManager::openFilesInTab(QStringList files)
 {
     if (files.size() == 0) {
         if (windows.size() == 0) {
-            QDir directory = QDir(QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files"));
-            QStringList blankFiles = directory.entryList(QStringList(), QDir::Files);
+            QDir blankDirectory = QDir(QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files"));
+            QStringList blankFiles = blankDirectory.entryList(QStringList(), QDir::Files);
 
+            QDir readonlyDirectory = QDir(QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("readonly-files"));
+            QStringList readonlyFiles = readonlyDirectory.entryList(QStringList(), QDir::Files);
+            
             Window *window = createWindow(true);
 
             // Open blank files of last session.
-            if (blankFiles.size() > 0) {
+            if (blankFiles.size() > 0 || readonlyFiles.size() > 0) {
                 foreach(QString blankFile, blankFiles) {
-                    window->addBlankTab(QDir(directory).filePath(blankFile));
+                    window->addBlankTab(QDir(blankDirectory).filePath(blankFile));
+                }
+                
+                foreach(QString readonlyFile, readonlyFiles) {
+                    QString readonlyFilePath = QDir(readonlyDirectory).filePath(readonlyFile);
+                    QString realpath = QFileInfo(readonlyFilePath).fileName().replace(" !_! ", QDir().separator());
+                    
+                    window->addTab(realpath);
                 }
             }
             // Just open new window with blank tab if no blank files in last session.

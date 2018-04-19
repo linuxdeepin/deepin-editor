@@ -32,7 +32,6 @@
 Editor::Editor(QWidget *parent) : QWidget(parent)
 {
     // Init.
-    autoSaveDBus = new DBusDaemon::dbus("com.deepin.editor.daemon", "/", QDBusConnection::systemBus(), this);
     autoSaveInternal = 1000;
     saveFinish = true;
 
@@ -64,6 +63,8 @@ void Editor::loadFile(QString filepath)
         
         textEditor->loadHighlighter();
     }
+    
+    file.close();
 }
 
 void Editor::saveFile()
@@ -96,14 +97,6 @@ void Editor::saveFile()
         QTextStream out(&file);
         out << textEditor->toPlainText();
         file.close();
-    }
-    // Try use dbus daemon to save file.
-    else {
-        bool result = autoSaveDBus->saveFile(textEditor->filepath, textEditor->toPlainText());
-        
-        if (!result) {
-            qDebug() << QString("Save root file %1 failed").arg(textEditor->filepath);
-        }
     }
 }
 
