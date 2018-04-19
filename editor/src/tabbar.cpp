@@ -52,7 +52,7 @@ Tabbar::Tabbar()
     connect(tabbar, &TabWidget::currentChanged, this, &Tabbar::handleCurrentIndexChanged, Qt::QueuedConnection);
     connect(tabbar, &TabWidget::tabAddRequested, this, &Tabbar::tabAddRequested, Qt::QueuedConnection);
     connect(tabbar, &TabWidget::tabBarDoubleClicked, this, &Tabbar::doubleClicked, Qt::QueuedConnection);
-    connect(tabbar, &TabWidget::tabCloseRequested, this, &Tabbar::closeTabWithIndex, Qt::QueuedConnection);
+    connect(tabbar, &TabWidget::tabCloseRequested, this, &Tabbar::tabCloseRequested, Qt::QueuedConnection);
     connect(tabbar, &TabWidget::tabDroped, this, &Tabbar::handleTabDroped, Qt::QueuedConnection);
     connect(tabbar, &TabWidget::tabMoved, this, &Tabbar::handleTabMoved, Qt::QueuedConnection);
     connect(tabbar, &TabWidget::tabReleaseRequested, this, &Tabbar::handleTabReleaseRequested, Qt::QueuedConnection);

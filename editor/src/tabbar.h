@@ -66,6 +66,7 @@ signals:
     void switchToFile(QString filepath);
     void tabAddRequested();
     void tabReleaseRequested(QString tabName, QString filepaht, int index);
+    void tabCloseRequested(int index);
                           
 public slots:
     void closeTabWithIndex(int closeIndex);

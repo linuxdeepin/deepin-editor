@@ -110,6 +110,7 @@ signals:
 public slots:
     void addBlankTab(QString blankFile="");
     void handleTabReleaseRequested(QString tabName, QString filepath, int index);
+    void handleTabCloseRequested(int index);
     
     void handleCloseFile(QString filepath);
     void handleSwitchToFile(QString filepath);

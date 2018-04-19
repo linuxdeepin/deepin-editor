@@ -96,6 +96,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
                     addBlankTab();
                 }, Qt::QueuedConnection);
         connect(tabbar, &Tabbar::tabReleaseRequested, this, &Window::handleTabReleaseRequested, Qt::QueuedConnection);
+        connect(tabbar, &Tabbar::tabCloseRequested, this, &Window::handleTabCloseRequested, Qt::QueuedConnection);
 
         menu = new QMenu();
         menu->setStyle(QStyleFactory::create("dlight"));
@@ -791,6 +792,13 @@ void Window::handleTabReleaseRequested(QString tabName, QString filepath, int in
 
     QString content = getTextEditor(filepath)->toPlainText();
     dropTabOut(tabName, filepath, content);
+}
+
+void Window::handleTabCloseRequested(int index)
+{
+    activeTab(index);
+    
+    closeTab();
 }
 
 void Window::handleCloseFile(QString filepath)
