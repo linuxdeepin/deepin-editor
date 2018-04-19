@@ -70,7 +70,7 @@ public:
     void openFile();
     bool saveFile();
     void saveAsFile();
-    void saveFileAsAnotherPath(QString fromPath, QString toPath, bool deleteOldFile=false);
+    void saveFileAsAnotherPath(QString fromPath, QString toPath, QString encode, QString newline, bool deleteOldFile=false);
     
     void decrementFontSize();
     void incrementFontSize();
@@ -96,7 +96,7 @@ public:
     
     bool wordCompletionWindowIsVisible();
     
-    QString getSaveFilePath();
+    QString getSaveFilePath(QString &encode, QString &newline);
     
     void displayShortcuts();
     

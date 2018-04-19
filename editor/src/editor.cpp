@@ -67,7 +67,7 @@ void Editor::loadFile(QString filepath)
     file.close();
 }
 
-void Editor::saveFile()
+void Editor::saveFile(QString encode, QString newline)
 {
     bool fileCreateFailed = false;
     if (!Utils::fileExists(textEditor->filepath)) {
@@ -93,9 +93,20 @@ void Editor::saveFile()
 
             return;
         }
+        
+        QRegularExpression newlineRegex("\r?\n|\r");
+        QString fileNewline;
+        if (newline == "Window") {
+            fileNewline = "\r\n";
+        } else if (newline == "Linux") {
+            fileNewline = "\n";
+        } else {
+            fileNewline = "\r";
+        }
 
         QTextStream out(&file);
-        out << textEditor->toPlainText();
+        out.setCodec(encode.toLatin1().data());
+        out << textEditor->toPlainText().replace(newlineRegex, fileNewline);
         file.close();
     }
 }
@@ -110,7 +121,7 @@ void Editor::handleTextChangeTimer()
     if (Utils::fileExists(textEditor->filepath)) {
         saveFinish = true;
 
-        saveFile();
+        saveFile("UTF-8", "Window");
     }
 }
 

@@ -402,20 +402,27 @@ void Window::openFile()
     }
 }
 
-QString Window::getSaveFilePath()
+QString Window::getSaveFilePath(QString &encode, QString &newline)
 {
+    encode = "UTF-8";
+    newline = "Window";
+    
 #ifdef DTKWIDGET_CLASS_DFileDialog
-    DFileDialog dialog(this, "Save File", QDir(QDir::homePath()).filePath("Blank Document.txt"), getEncodeList().join(";;"));
+    DFileDialog dialog(this, "Save File", QDir(QDir::homePath()).filePath("Blank Document.txt"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.addComboBox("换行符", QStringList() << "Linux" << "Window" << "Mac OS");
+    dialog.addComboBox("编码", getEncodeList());
+    dialog.addComboBox("换行符", QStringList() << "Window" << "Linux" << "Mac OS");
 
     if (dialog.exec() == QDialog::Accepted) {
+        encode = dialog.getComboBoxValue("编码");
+        newline = dialog.getComboBoxValue("换行符");
+        
         return dialog.selectedFiles().value(0);
     } else {
         return "";
     }
 #else
-    return QFileDialog::getSaveFileName(this, "Save File", QDir(QDir::homePath()).filePath("Blank Document.txt"), getEncodeList().join(";;"));
+    return QFileDialog::getSaveFileName(this, "Save File", QDir(QDir::homePath()).filePath("Blank Document.txt"));
 #endif
 }
 
@@ -469,12 +476,13 @@ void Window::displayShortcuts()
 bool Window::saveFile()
 {
     if (QFileInfo(tabbar->getActiveTabPath()).dir().absolutePath() == blankFileDir) {
-        QString filepath = getSaveFilePath();
+        QString encode, newline;
+        QString filepath = getSaveFilePath(encode, newline);
 
         if (filepath != "") {
             QString tabPath = tabbar->getActiveTabPath();
 
-            saveFileAsAnotherPath(tabPath, filepath, true);
+            saveFileAsAnotherPath(tabPath, filepath, encode, newline, true);
 
             return true;
         } else {
@@ -502,15 +510,16 @@ bool Window::saveFile()
 
 void Window::saveAsFile()
 {
-    QString filepath = getSaveFilePath();
+    QString encode, newline;
+    QString filepath = getSaveFilePath(encode, newline);
     QString tabPath = tabbar->getActiveTabPath();
-
+    
     if (filepath != "" && filepath != tabPath) {
-        saveFileAsAnotherPath(tabPath, filepath);
+        saveFileAsAnotherPath(tabPath, filepath, encode, newline);
     }
 }
 
-void Window::saveFileAsAnotherPath(QString fromPath, QString toPath, bool deleteOldFile)
+void Window::saveFileAsAnotherPath(QString fromPath, QString toPath, QString encode, QString newline, bool deleteOldFile)
 {
     if (deleteOldFile) {
         QFile(fromPath).remove();
@@ -521,7 +530,7 @@ void Window::saveFileAsAnotherPath(QString fromPath, QString toPath, bool delete
     editorMap[toPath] = editorMap.take(fromPath);
 
     editorMap[toPath]->updatePath(toPath);
-    editorMap[toPath]->saveFile();
+    editorMap[toPath]->saveFile(encode, newline);
 
     getActiveEditor()->textEditor->loadHighlighter();
 }
@@ -628,15 +637,17 @@ void Window::toggleFullscreen()
 QStringList Window::getEncodeList()
 {
     QStringList encodeList;
-    encodeList << "UTF-8";
     foreach (int mib, QTextCodec::availableMibs()) {
         QTextCodec *codec = QTextCodec::codecForMib(mib);
 
         QString encodeName = QString(codec->name()).toUpper();
-        if (encodeName != "UTF-8") {
+        if (encodeName != "UTF-8" && !encodeList.contains(encodeName)) {
             encodeList.append(encodeName);
         }
     }
+    
+    encodeList.sort();
+    encodeList.prepend("UTF-8");
 
     return encodeList;
 }

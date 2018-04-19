@@ -39,7 +39,7 @@ public:
     Editor(QWidget *parent = 0);
     
     void loadFile(QString filepath);
-    void saveFile();
+    void saveFile(QString encode, QString newline);
     
     void updatePath(QString file);
                                  
