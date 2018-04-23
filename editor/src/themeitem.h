@@ -33,7 +33,7 @@ class ThemeItem : public DSimpleListItem
     Q_OBJECT
 
 public:
-    ThemeItem(QString name);
+    ThemeItem(QString themeDir);
     
     bool sameAs(DSimpleListItem *item);
     void drawBackground(QRect rect, QPainter *painter, int index, bool isSelect, bool isHover);
@@ -41,6 +41,14 @@ public:
     
 private:
     QString themeName;
+    QString importColor;
+    QString stringColor;
+    QString builtInColor;
+    QString keywordColor;
+    QString commentColor;
+    QString functionColor;
+    QString normalColor;
+    QString backgroundColor;
 };
 
 #endif

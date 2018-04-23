@@ -25,6 +25,8 @@
 #include "utils.h"
 #include <QDebug>
 #include <QVBoxLayout>
+#include <QFileInfoList>
+#include <QDir>
 #include "themeitem.h"
 
 ThemeBar::ThemeBar(QWidget *parent) : QWidget(parent)
@@ -34,7 +36,7 @@ ThemeBar::ThemeBar(QWidget *parent) : QWidget(parent)
     
     animationDuration = 25;
     animationFrames = 10;
-    expandWidth = 250;
+    expandWidth = 280;
         
     expandTimer = new QTimer();
     connect(expandTimer, &QTimer::timeout, this, &ThemeBar::expand);
@@ -42,18 +44,19 @@ ThemeBar::ThemeBar(QWidget *parent) : QWidget(parent)
     // connect(this, &ThemeBar::focusOut, this, &ThemeBar::handleFocusOut, Qt::QueuedConnection);
     
     themeView = new ThemeView();
-    themeView->setRowHeight(130);
+    themeView->setRowHeight(110);
     
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     
     layout->addWidget(themeView);
     
-    QStringList themes;
-    themes << "Andy" << "Stewart" << "Bob" << "Dylan";
+    QStringList filters;
+    QFileInfoList themeInfos = QDir("../theme").entryInfoList(filters, QDir::Dirs | QDir::NoDotAndDotDot);
+    
     QList<DSimpleListItem*> items;
-    for (auto theme : themes) {
-        ThemeItem *item = new ThemeItem(theme);
+    for (auto themeInfo : themeInfos) {
+        ThemeItem *item = new ThemeItem(themeInfo.absoluteFilePath());
         items << item;
     }
     
