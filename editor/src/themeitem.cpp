@@ -75,8 +75,6 @@ ThemeItem::ThemeItem(QString themeDir)
     functionColor = jsonMap["text-styles"].toMap()["Function"].toMap()["text-color"].toString();
     normalColor = jsonMap["text-styles"].toMap()["Normal"].toMap()["text-color"].toString();
     backgroundColor = jsonMap["editor-colors"].toMap()["background-color"].toString();
-    
-    qDebug() << themeName << importColor << stringColor << builtInColor << keywordColor << commentColor <<  functionColor << normalColor << backgroundColor;
 }
 
 bool ThemeItem::sameAs(DSimpleListItem *item)
@@ -84,12 +82,12 @@ bool ThemeItem::sameAs(DSimpleListItem *item)
     return themeName == ((static_cast<ThemeItem*>(item)))->themeName;
 }
 
-void ThemeItem::drawBackground(QRect rect, QPainter *painter, int index, bool isSelect, bool isHover)
+void ThemeItem::drawBackground(QRect, QPainter*, int, bool, bool)
 {
 
 }
 
-void ThemeItem::drawForeground(QRect rect, QPainter *painter, int column, int index, bool isSelect, bool isHover)
+void ThemeItem::drawForeground(QRect rect, QPainter *painter, int column, int, bool isSelect, bool)
 {
     // Init opacity and font size.
     painter->setRenderHint(QPainter::Antialiasing, true);
