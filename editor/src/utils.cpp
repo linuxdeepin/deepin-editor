@@ -31,6 +31,7 @@
 #include <QFontMetrics>
 #include <QPainter>
 #include <QString>
+#include <QtMath>
 #include <QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -191,4 +192,28 @@ QImage Utils::dropShadow(const QPixmap &px, qreal radius, const QColor &color)
     return tmp;
 }
 
+qreal Utils::easeInOut(qreal x)
+{
+    return (1 - qCos(M_PI * x)) / 2;
+}
+
+qreal Utils::easeInQuad(qreal x)
+{
+    return qPow(x, 2);
+}
+
+qreal Utils::easeOutQuad(qreal x)
+{
+    return -1 * qPow(x - 1, 2) + 1;
+}
+
+qreal Utils::easeInQuint(qreal x)
+{
+    return qPow(x, 5);
+}
+
+qreal Utils::easeOutQuint(qreal x)
+{
+    return qPow(x - 1, 5) + 1;
+}
 

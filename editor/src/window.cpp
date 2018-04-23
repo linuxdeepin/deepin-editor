@@ -133,6 +133,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
         connect(saveAction, &QAction::triggered, this, &Window::saveFile);
         connect(saveAsAction, &QAction::triggered, this, &Window::saveAsFile);
         connect(printAction, &QAction::triggered, this, &Window::popupPrintDialog);
+        connect(switchThemeAction, &QAction::triggered, this, &Window::popupThemeBar);
         connect(settingAction, &QAction::triggered, settings, &Settings::popupSettingsDialog);
     }
 
@@ -187,7 +188,13 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     // Make jump line bar pop at top-right of editor.
     DAnchorsBase::setAnchor(jumpLineBar, Qt::AnchorTop, layoutWidget, Qt::AnchorTop);
     DAnchorsBase::setAnchor(jumpLineBar, Qt::AnchorRight, layoutWidget, Qt::AnchorRight);
-
+    
+    // Init theme bar.
+    themeBar = new ThemeBar(this);
+    DAnchorsBase::setAnchor(themeBar, Qt::AnchorTop, layoutWidget, Qt::AnchorTop);
+    DAnchorsBase::setAnchor(themeBar, Qt::AnchorBottom, layoutWidget, Qt::AnchorBottom);
+    DAnchorsBase::setAnchor(themeBar, Qt::AnchorRight, layoutWidget, Qt::AnchorRight);
+    
     // Apply qss theme.
     Utils::applyQss(this, "main.qss");
     titlebarStyleSheet = this->titlebar()->styleSheet();
@@ -741,6 +748,10 @@ void Window::resizeEvent(QResizeEvent*)
             settings->settings->option("advance.window.window_width")->setValue(rect().width() * 1.0 / screenGeometry.width());
             settings->settings->option("advance.window.window_height")->setValue(rect().height() * 1.0 / screenGeometry.height());
         }
+        
+        DAnchorsBase::setAnchor(themeBar, Qt::AnchorTop, layoutWidget, Qt::AnchorTop);
+        DAnchorsBase::setAnchor(themeBar, Qt::AnchorBottom, layoutWidget, Qt::AnchorBottom);
+        DAnchorsBase::setAnchor(themeBar, Qt::AnchorRight, layoutWidget, Qt::AnchorRight);
     }
 }
 
@@ -1079,6 +1090,11 @@ DDialog* Window::createSaveFileDialog(QString title, QString content)
     dialog->show();
 
     return dialog;
+}
+
+void Window::popupThemeBar()
+{
+    themeBar->popup();
 }
 
 void Window::popupPrintDialog()

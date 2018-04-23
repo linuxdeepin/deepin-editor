@@ -30,6 +30,7 @@
 #include "editor.h"
 #include "findbar.h"
 #include "jumplinebar.h"
+#include "themebar.h"
 #include "replacebar.h"
 #include "settings.h"
 #include "tabbar.h"
@@ -80,6 +81,7 @@ public:
     void popupFindBar();
     void popupReplaceBar();
     void popupJumpLineBar();
+    void popupThemeBar();
     
     void toggleFullscreen();
     
@@ -199,6 +201,8 @@ private:
     DWindowManager *windowManager;
     
     QString readonlySeparator = " !_! ";
+    
+    ThemeBar *themeBar;
 };
 
 #endif

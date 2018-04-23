@@ -46,4 +46,9 @@ public:
     static void setFontSize(QPainter &painter, int textSize);
     static QPixmap dropShadow(const QPixmap &source, qreal radius, const QColor &color, const QPoint &offset);
     static QImage dropShadow(const QPixmap &px, qreal radius, const QColor &color);
+    static qreal easeInOut(qreal x);
+    static qreal easeInQuad(qreal x);
+    static qreal easeInQuint(qreal x);
+    static qreal easeOutQuad(qreal x);
+    static qreal easeOutQuint(qreal x);
 };
