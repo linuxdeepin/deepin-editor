@@ -56,8 +56,15 @@ void ThemeItem::drawForeground(QRect rect, QPainter *painter, int column, int in
             
         painter->translate(QPointF(rect.x() + htmlPaddingLeft, rect.y() + htmlPaddingTop));
         QTextDocument td;
-        QString indentConent = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-        QString htmlConent = QString("<font size='4'><font color='%1'>#include　\"deepin.h\"</font><br/><font color='%2'>QString</font> <font color='%3'>theme()</font> <font color='%4'>{</font><br/><font color='%5'>%6// Return theme name.</font><br/><font color='%7'>%8return</font> <font color='%9'>\"amazaing\"</font><font color='%10'>;</font><br/><font color='%11'>}</font></font>").arg("#ff0000").arg("#00ffff").arg("#ffffff").arg("#666666").arg("#333333").arg(indentConent).arg("#ff00ff").arg(indentConent).arg("#ffff00").arg("#ff0000").arg("#787878");
+        QString indentConent = "&nbsp;&nbsp;&nbsp;&nbsp;";
+        QString htmlConent = QString(
+            "<font size='4'><code>"
+            "<font color='%1'>#include　\"deepin.h\"</font><br/>"
+            "<font color='%2'>QString</font> <font color='%3'>theme()</font> <font color='%4'>{</font><br/>"
+            "<font color='%5'>%6// Return theme name.</font><br/>"
+            "<font color='%7'>%8return</font> <font color='%9'>\"%10\"</font><font color='%11'>;</font><br/>"
+            "<font color='%12'>}</font>"
+            "</code></font>").arg("#ff0000").arg("#00ffff").arg("#ffffff").arg("#666666").arg("#333333").arg(indentConent).arg("#ff00ff").arg(indentConent).arg("#ffff00").arg(themeName).arg("#ff0000").arg("#787878");
         td.setHtml(htmlConent);
         td.drawContents(painter);        
     }

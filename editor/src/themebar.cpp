@@ -34,7 +34,7 @@ ThemeBar::ThemeBar(QWidget *parent) : QWidget(parent)
     
     animationDuration = 25;
     animationFrames = 10;
-    expandWidth = 210;
+    expandWidth = 250;
         
     expandTimer = new QTimer();
     connect(expandTimer, &QTimer::timeout, this, &ThemeBar::expand);
