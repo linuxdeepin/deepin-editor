@@ -286,6 +286,8 @@ private:
     QColor lineNumbersColor;
     QColor currentLineNumberColor;
     QColor regionMarkerColor;
+    QColor searchHighlightColor;
+    QColor selectionColor;
 };
 
 #endif

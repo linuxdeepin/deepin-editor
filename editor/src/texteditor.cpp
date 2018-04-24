@@ -1415,10 +1415,10 @@ void TextEditor::updateKeywordSelections(QString keyword)
         while(find(keyword)) {
             QTextEdit::ExtraSelection extra;
 
-            QPen outline(QColor("#D33D6D").lighter(120), 1, Qt::SolidLine);
+            QPen outline(selectionColor.lighter(120), 1, Qt::SolidLine);
             extra.format.setProperty(QTextFormat::OutlinePen, outline);
 
-            QBrush brush(QColor("#303030"));
+            QBrush brush(selectionColor);
             extra.format.setProperty(QTextFormat::BackgroundBrush, brush);
 
             extra.cursor = textCursor();
@@ -1760,7 +1760,7 @@ bool TextEditor::setCursorKeywordSeletoin(int position, bool findNext)
             if (keywordSelections[i].cursor.position() > position) {
                 cursorKeywordSelection.cursor = keywordSelections[i].cursor;
 
-                QBrush brush(QColor("#FF6347"));
+                QBrush brush(searchHighlightColor);
                 cursorKeywordSelection.format.setProperty(QTextFormat::BackgroundBrush, brush);
 
                 jumpToLine(keywordSelections[i].cursor.blockNumber() + 1, false);
@@ -1779,7 +1779,7 @@ bool TextEditor::setCursorKeywordSeletoin(int position, bool findNext)
             if (keywordSelections[i].cursor.position() < position) {
                 cursorKeywordSelection.cursor = keywordSelections[i].cursor;
 
-                QBrush brush(QColor("#FF6347"));
+                QBrush brush(searchHighlightColor);
                 cursorKeywordSelection.format.setProperty(QTextFormat::BackgroundBrush, brush);
 
                 jumpToLine(keywordSelections[i].cursor.blockNumber() + 1, false);
@@ -1821,6 +1821,8 @@ void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme)
     lineNumbersColor = QColor(theme.editorColor(KSyntaxHighlighting::Theme::LineNumbers));
     currentLineNumberColor = QColor(theme.editorColor(KSyntaxHighlighting::Theme::CurrentLineNumber));
     regionMarkerColor = QColor(theme.textColor(KSyntaxHighlighting::Theme::RegionMarker));
+    searchHighlightColor = QColor(theme.editorColor(KSyntaxHighlighting::Theme::SearchHighlight));
+    selectionColor = QColor(theme.editorColor(KSyntaxHighlighting::Theme::TextSelection));
 
     m_highlighter->setTheme(theme);
     m_highlighter->rehighlight();
@@ -1896,7 +1898,7 @@ bool TextEditor::highlightWordUnderMouse(QPoint pos)
         // Update highlight cursor.
         QTextEdit::ExtraSelection selection;
 
-        QColor lineColor = QColor("#660000");
+        QColor lineColor = searchHighlightColor;
 
         selection.format.setBackground(lineColor);
         selection.cursor = cursor;
