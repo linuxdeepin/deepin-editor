@@ -1192,4 +1192,8 @@ void Window::loadTheme(QString themeName)
     
     changeTitlebarBackground(backgroundColor);
     themeBar->setBackground(backgroundColor);
+    jumpLineBar->setBackground(backgroundColor);
+    replaceBar->setBackground(backgroundColor);
+    findBar->setBackground(backgroundColor);
+    tabbar->tabbar->setBackground(backgroundColor);
 }

@@ -41,6 +41,8 @@ class JumpLineBar : public QWidget
 public:
     JumpLineBar(QWidget *parent = 0);
     
+    void setBackground(QString color);
+    
 public slots:    
     void focus();
     bool isFocus();
@@ -70,6 +72,7 @@ private:
     int jumpFileScrollOffset;
     int rowBeforeJump;
     int columnBeforeJump;
+    QColor backgroundColor;
 };
 
 #endif

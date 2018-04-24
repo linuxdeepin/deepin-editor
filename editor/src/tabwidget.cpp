@@ -207,9 +207,9 @@ bool TabWidget::eventFilter(QObject *, QEvent *event)
             static_cast<Window*>(this->window())->changeTitlebarBackground("#333333");
         }
     } else if (event->type() == QEvent::DragLeave) {
-        static_cast<Window*>(this->window())->changeTitlebarBackground("#202020");
+        static_cast<Window*>(this->window())->changeTitlebarBackground(backgroundColor.name());
     } else if (event->type() == QEvent::Drop) {
-        static_cast<Window*>(this->window())->changeTitlebarBackground("#202020");
+        static_cast<Window*>(this->window())->changeTitlebarBackground(backgroundColor.name());
     }
 
     return false;
@@ -237,3 +237,9 @@ void TabWidget::handleDragActionChanged(Qt::DropAction action)
             QGuiApplication::changeOverrideCursor(QGuiApplication::overrideCursor()->shape());
     }
 }
+
+void TabWidget::setBackground(QString color)
+{
+    backgroundColor = QColor(color);
+}
+

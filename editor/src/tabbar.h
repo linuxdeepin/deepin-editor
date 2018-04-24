@@ -60,6 +60,8 @@ public:
     
     int getTabCount();
                       
+    TabWidget *tabbar;
+    
 signals:
     void closeFile(QString filepath);
     void doubleClicked();
@@ -80,7 +82,6 @@ public slots:
     
 private:
     QHBoxLayout *layout;
-    TabWidget *tabbar;
 };
 
 #endif

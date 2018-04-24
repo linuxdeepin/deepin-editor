@@ -48,6 +48,8 @@ public:
     void activeInput(QString text, QString file, int row, int column, int scrollOffset);
     void setMismatchAlert(bool isAlert);
     
+    void setBackground(QString color);
+    
 signals:
     void replaceNext(QString replaceText, QString withText);
     void replaceSkip();
@@ -86,6 +88,7 @@ private:
     int replaceFileColumn;
     int replaceFileRow;
     int replaceFileSrollOffset;
+    QColor backgroundColor;
 };
 
 #endif

@@ -114,10 +114,18 @@ void FindBar::paintEvent(QPaintEvent *)
     painter.setOpacity(1);
     QPainterPath path;
     path.addRect(rect());
-    painter.fillPath(path, QColor("#202020"));
+    painter.fillPath(path, backgroundColor);
 }
 
 void FindBar::setMismatchAlert(bool isAlert)
 {
     editLine->setAlert(isAlert);
 }
+
+void FindBar::setBackground(QString color)
+{
+    backgroundColor = QColor(color);
+    
+    repaint();
+}
+
