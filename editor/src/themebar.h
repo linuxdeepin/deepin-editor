@@ -37,6 +37,8 @@ class ThemeBar : public QWidget
 public:
     ThemeBar(QWidget *parent = 0);
     
+    void setBackground(QString color);
+    
 protected:    
     void paintEvent(QPaintEvent *);
                                   
@@ -64,6 +66,8 @@ private:
     int animationFrames;
     
     ThemeView *themeView;
+    
+    QColor backgroundColor;
 };
 
 #endif

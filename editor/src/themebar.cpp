@@ -76,7 +76,7 @@ void ThemeBar::paintEvent(QPaintEvent *)
 
     QPainterPath path;
     path.addRect(rect());
-    painter.fillPath(path, QColor("#000000"));
+    painter.fillPath(path, backgroundColor);
 }
 
 void ThemeBar::popup()
@@ -120,4 +120,11 @@ void ThemeBar::handleFocusOut()
 void ThemeBar::handleThemeChanged(DSimpleListItem* item, int, QPoint)
 {
     emit changeTheme((static_cast<ThemeItem*>(item))->themeName);
+}
+
+void ThemeBar::setBackground(QString color)
+{
+    backgroundColor = QColor(color);
+    
+    repaint();
 }

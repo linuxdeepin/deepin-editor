@@ -67,6 +67,9 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
 {
     // Init highlight theme.
     setThemeWithName("Deepin");
+    
+    // Don't draw frame around editor widget.
+    setFrameShape(QFrame::NoFrame);
 
     // Init widgets.
     lineNumberArea = new LineNumberArea(this);
@@ -1392,9 +1395,7 @@ void TextEditor::updateHighlightLineSeleciton()
 {
     QTextEdit::ExtraSelection selection;
 
-    QColor lineColor = QColor("#333333");
-
-    selection.format.setBackground(lineColor);
+    selection.format.setBackground(currentLineColor);
     selection.format.setProperty(QTextFormat::FullWidthSelection, true);
     selection.cursor = textCursor();
     selection.cursor.clearSelection();
@@ -1616,7 +1617,7 @@ void TextEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
     // Init.
     QPainter painter(lineNumberArea);
-    painter.fillRect(event->rect(), QColor("#202020"));
+    painter.fillRect(event->rect(), backgroundColor);
 
     QColor lineColor = QColor("#202020");
     lineColor.setAlphaF(0.05);
@@ -1634,7 +1635,7 @@ void TextEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
             if (linenumber + 1 == markStartLine) {
                 painter.setPen(QColor("#2CA7F8"));
             } else {
-                painter.setPen(QColor("#666666"));
+                painter.setPen(lineNumbersColor);
             }
             painter.drawText(0,
                              top,
@@ -1813,6 +1814,10 @@ void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme)
     }
     viewport()->setPalette(pal);
     viewport()->setAutoFillBackground(true);
+    
+    currentLineColor = QColor(theme.editorColor(KSyntaxHighlighting::Theme::CurrentLine));
+    backgroundColor = QColor(theme.editorColor(KSyntaxHighlighting::Theme::BackgroundColor));
+    lineNumbersColor = QColor(theme.editorColor(KSyntaxHighlighting::Theme::LineNumbers));
 
     m_highlighter->setTheme(theme);
     m_highlighter->rehighlight();

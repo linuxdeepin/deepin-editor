@@ -280,6 +280,10 @@ private:
             // Chinese separator.
             "。", "，", "？", "！", "￥", "：", "；", "《", "》", "【", "】", "（", "）", " "
         });
+    
+    QColor currentLineColor;
+    QColor backgroundColor;
+    QColor lineNumbersColor;
 };
 
 #endif
