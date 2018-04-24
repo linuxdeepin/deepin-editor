@@ -65,13 +65,8 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     QPlainTextEdit(parent),
     m_highlighter(new KSyntaxHighlighting::SyntaxHighlighter(document()))
 {
-    // Don't draw background.
-    viewport()->setAutoFillBackground(false);
-
     // Init highlight theme.
-    setTheme((palette().color(QPalette::Base).lightness() < 128)
-             ? m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme)
-             : m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
+    setThemeWithName("Deepin");
 
     // Init widgets.
     lineNumberArea = new LineNumberArea(this);
@@ -1812,14 +1807,16 @@ void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme)
 {
     auto pal = qApp->palette();
     if (theme.isValid()) {
-        pal.setColor(QPalette::Base, theme.editorColor(KSyntaxHighlighting::Theme::BackgroundColor));
-        pal.setColor(QPalette::Text, theme.textColor(KSyntaxHighlighting::Theme::Normal));
-        pal.setColor(QPalette::Highlight, theme.editorColor(KSyntaxHighlighting::Theme::TextSelection));
+        pal.setColor(QPalette::Base, QColor(theme.editorColor(KSyntaxHighlighting::Theme::BackgroundColor)));
+        pal.setColor(QPalette::Text, QColor(theme.textColor(KSyntaxHighlighting::Theme::Normal)));
+        pal.setColor(QPalette::Highlight, QColor(theme.editorColor(KSyntaxHighlighting::Theme::TextSelection)));
     }
-    setPalette(pal);
+    viewport()->setPalette(pal);
+    viewport()->setAutoFillBackground(true);
 
     m_highlighter->setTheme(theme);
     m_highlighter->rehighlight();
+
     highlightCurrentLine();
 }
 
