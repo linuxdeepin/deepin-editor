@@ -25,6 +25,8 @@
 
 #include <DSettings>
 #include <DSettingsOption>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QApplication>
 #include <QDebug>
 #include <QDir>
@@ -215,5 +217,40 @@ qreal Utils::easeInQuint(qreal x)
 qreal Utils::easeOutQuint(qreal x)
 {
     return qPow(x - 1, 5) + 1;
+}
+
+QVariantMap Utils::getThemeNodeMap(QString themeName)
+{
+    auto themeDir = QDir("../theme").filePath(themeName);
+    auto filePath = QDir(themeDir).filePath("editor.theme");
+    
+    QFile fileObject(filePath);
+    if(!fileObject.open(QIODevice::ReadOnly)){
+        qDebug()<<"Failed to open "<<filePath;
+    }
+
+    QTextStream file_text(&fileObject);
+    QString jsonString;
+    jsonString = file_text.readAll();
+    fileObject.close();
+    QByteArray jsonBytes = jsonString.toLocal8Bit();
+
+    auto jsonDocument = QJsonDocument::fromJson(jsonBytes);
+
+    if(jsonDocument.isNull()){
+        qDebug()<<"Failed to create JSON doc.";
+    }
+    
+    if(!jsonDocument.isObject()){
+        qDebug()<<"JSON is not an object.";
+    }
+
+    QJsonObject jsonObject = jsonDocument.object();
+
+    if(jsonObject.isEmpty()){
+        qDebug()<<"JSON object is empty.";
+    }
+
+    return jsonObject.toVariantMap();
 }
 

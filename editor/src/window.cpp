@@ -1186,37 +1186,8 @@ void Window::handleThemeChanged(QString themeName)
         editor->textEditor->setThemeWithName(themeName);
     }
     
-    auto themeDir = QDir("../theme").filePath(themeName);
-    auto filePath = QDir(themeDir).filePath("editor.theme");
+    QVariantMap jsonMap = Utils::getThemeNodeMap(themeName);
     
-    QFile fileObject(filePath);
-    if(!fileObject.open(QIODevice::ReadOnly)){
-        qDebug()<<"Failed to open "<<filePath;
-    }
-
-    QTextStream file_text(&fileObject);
-    QString jsonString;
-    jsonString = file_text.readAll();
-    fileObject.close();
-    QByteArray jsonBytes = jsonString.toLocal8Bit();
-
-    auto jsonDocument = QJsonDocument::fromJson(jsonBytes);
-
-    if(jsonDocument.isNull()){
-        qDebug()<<"Failed to create JSON doc.";
-    }
-    
-    if(!jsonDocument.isObject()){
-        qDebug()<<"JSON is not an object.";
-    }
-
-    QJsonObject jsonObject = jsonDocument.object();
-
-    if(jsonObject.isEmpty()){
-        qDebug()<<"JSON object is empty.";
-    }
-
-    QVariantMap jsonMap = jsonObject.toVariantMap();
     auto backgroundColor = jsonMap["editor-colors"].toMap()["background-color"].toString();
     
     changeTitlebarBackground(backgroundColor);

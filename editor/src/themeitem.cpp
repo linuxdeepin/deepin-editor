@@ -36,36 +36,7 @@ ThemeItem::ThemeItem(QString themeDir)
 {
     themeName = QFileInfo(themeDir).fileName();
 
-    auto filePath = QDir(themeDir).filePath("editor.theme");
-    
-    QFile fileObject(filePath);
-    if(!fileObject.open(QIODevice::ReadOnly)){
-        qDebug()<<"Failed to open "<<filePath;
-    }
-
-    QTextStream file_text(&fileObject);
-    QString jsonString;
-    jsonString = file_text.readAll();
-    fileObject.close();
-    QByteArray jsonBytes = jsonString.toLocal8Bit();
-
-    auto jsonDocument = QJsonDocument::fromJson(jsonBytes);
-
-    if(jsonDocument.isNull()){
-        qDebug()<<"Failed to create JSON doc.";
-    }
-    
-    if(!jsonDocument.isObject()){
-        qDebug()<<"JSON is not an object.";
-    }
-
-    QJsonObject jsonObject = jsonDocument.object();
-
-    if(jsonObject.isEmpty()){
-        qDebug()<<"JSON object is empty.";
-    }
-
-    QVariantMap jsonMap = jsonObject.toVariantMap();
+    QVariantMap jsonMap = Utils::getThemeNodeMap(themeName);
     
     importColor = jsonMap["text-styles"].toMap()["Import"].toMap()["text-color"].toString();
     stringColor = jsonMap["text-styles"].toMap()["String"].toMap()["text-color"].toString();
