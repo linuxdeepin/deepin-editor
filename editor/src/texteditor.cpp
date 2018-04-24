@@ -1633,7 +1633,7 @@ void TextEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
     while (block.isValid() && top <= event->rect().bottom()) {
         if (block.isVisible() && bottom >= event->rect().top()) {
             if (linenumber + 1 == markStartLine) {
-                painter.setPen(QColor("#2CA7F8"));
+                painter.setPen(regionMarkerColor);
             } else {
                 painter.setPen(lineNumbersColor);
             }
@@ -1810,7 +1810,8 @@ void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme)
     if (theme.isValid()) {
         pal.setColor(QPalette::Base, QColor(theme.editorColor(KSyntaxHighlighting::Theme::BackgroundColor)));
         pal.setColor(QPalette::Text, QColor(theme.textColor(KSyntaxHighlighting::Theme::Normal)));
-        pal.setColor(QPalette::Highlight, QColor(theme.editorColor(KSyntaxHighlighting::Theme::TextSelection)));
+        pal.setColor(QPalette::Highlight, QColor(theme.backgroundColor(KSyntaxHighlighting::Theme::RegionMarker)));
+        pal.setColor(QPalette::HighlightedText, QColor(theme.selectedTextColor(KSyntaxHighlighting::Theme::RegionMarker)));
     }
     viewport()->setPalette(pal);
     viewport()->setAutoFillBackground(true);
@@ -1819,6 +1820,7 @@ void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme)
     backgroundColor = QColor(theme.editorColor(KSyntaxHighlighting::Theme::BackgroundColor));
     lineNumbersColor = QColor(theme.editorColor(KSyntaxHighlighting::Theme::LineNumbers));
     currentLineNumberColor = QColor(theme.editorColor(KSyntaxHighlighting::Theme::CurrentLineNumber));
+    regionMarkerColor = QColor(theme.textColor(KSyntaxHighlighting::Theme::RegionMarker));
 
     m_highlighter->setTheme(theme);
     m_highlighter->rehighlight();
