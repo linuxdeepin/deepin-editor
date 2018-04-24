@@ -284,6 +284,7 @@ private:
     QColor currentLineColor;
     QColor backgroundColor;
     QColor lineNumbersColor;
+    QColor currentLineNumberColor;
 };
 
 #endif

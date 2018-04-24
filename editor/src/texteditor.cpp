@@ -1619,8 +1619,8 @@ void TextEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
     QPainter painter(lineNumberArea);
     painter.fillRect(event->rect(), backgroundColor);
 
-    QColor lineColor = QColor("#202020");
-    lineColor.setAlphaF(0.05);
+    QColor lineColor = currentLineNumberColor;
+    lineColor.setAlphaF(0.2);
     painter.fillRect(QRect(event->rect().x() + event->rect().width() - 1, event->rect().y(), 1, event->rect().height()), lineColor);
 
     // Update line number.
@@ -1818,6 +1818,7 @@ void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme)
     currentLineColor = QColor(theme.editorColor(KSyntaxHighlighting::Theme::CurrentLine));
     backgroundColor = QColor(theme.editorColor(KSyntaxHighlighting::Theme::BackgroundColor));
     lineNumbersColor = QColor(theme.editorColor(KSyntaxHighlighting::Theme::LineNumbers));
+    currentLineNumberColor = QColor(theme.editorColor(KSyntaxHighlighting::Theme::CurrentLineNumber));
 
     m_highlighter->setTheme(theme);
     m_highlighter->rehighlight();
