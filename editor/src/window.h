@@ -147,7 +147,7 @@ public slots:
     void handleSelectLastCompletion();
     void handleConfirmCompletion();
     
-    void handleThemeChanged(QString themeName);
+    void loadTheme(QString themeName);
     
 private:
     DBusDaemon::dbus *autoSaveDBus;

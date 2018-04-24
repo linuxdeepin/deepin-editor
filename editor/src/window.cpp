@@ -195,12 +195,12 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     DAnchorsBase::setAnchor(themeBar, Qt::AnchorBottom, layoutWidget, Qt::AnchorBottom);
     DAnchorsBase::setAnchor(themeBar, Qt::AnchorRight, layoutWidget, Qt::AnchorRight);
     
-    connect(themeBar, &ThemeBar::changeTheme, this, &Window::handleThemeChanged);
+    connect(themeBar, &ThemeBar::changeTheme, this, &Window::loadTheme);
     
     // Apply qss theme.
     Utils::applyQss(this, "main.qss");
     titlebarStyleSheet = this->titlebar()->styleSheet();
-    changeTitlebarBackground("#202020");
+    loadTheme("Deepin");
 
     // Init words database.
     wordsDB = QSqlDatabase::addDatabase("QSQLITE");
@@ -1180,7 +1180,7 @@ void Window::handleConfirmCompletion()
     }
 }
 
-void Window::handleThemeChanged(QString themeName)
+void Window::loadTheme(QString themeName)
 {
     foreach (auto editor, editorMap.values()) {
         editor->textEditor->setThemeWithName(themeName);
