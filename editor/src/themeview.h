@@ -25,6 +25,7 @@
 #define THEMEVIEW_H
 
 #include <DSimpleListView>
+#include <QEvent>
 
 DWIDGET_USE_NAMESPACE
 
@@ -34,6 +35,12 @@ class ThemeView : public DSimpleListView
 
 public:
     ThemeView();
+    
+protected:
+    bool eventFilter(QObject *, QEvent *event);
+    
+signals:
+    void focusOut();
 };
 
 #endif

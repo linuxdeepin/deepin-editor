@@ -25,6 +25,7 @@
 #define THEMEBAR_H
 
 #include <QWidget>
+#include <QGraphicsOpacityEffect>
 #include <QPainter>
 #include <QTimer>
 #include "themeview.h"
@@ -42,14 +43,21 @@ protected:
 public slots:
     void popup();
     void expand();
+    void shrink();
     void handleFocusOut();
     
 private:
     QTimer *expandTimer;
     int expandTicker;
+    
+    QTimer *shrinkTimer;
+    int shrinkTicker;
+    
+    QGraphicsOpacityEffect *opacityEffect;
+    
+    int barWidth;
     int animationDuration;
     int animationFrames;
-    int expandWidth;
     
     ThemeView *themeView;
 };

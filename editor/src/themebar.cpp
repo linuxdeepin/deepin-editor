@@ -33,41 +33,46 @@ ThemeBar::ThemeBar(QWidget *parent) : QWidget(parent)
 {
     setWindowFlags(Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
     setFixedWidth(0);
-    
+
     animationDuration = 25;
     animationFrames = 10;
-    expandWidth = 280;
-        
+    barWidth = 280;
+
     expandTimer = new QTimer();
     connect(expandTimer, &QTimer::timeout, this, &ThemeBar::expand);
-    
-    // connect(this, &ThemeBar::focusOut, this, &ThemeBar::handleFocusOut, Qt::QueuedConnection);
-    
+
+    shrinkTimer = new QTimer();
+    connect(shrinkTimer, &QTimer::timeout, this, &ThemeBar::shrink);
+
     themeView = new ThemeView();
     themeView->setRowHeight(110);
-    
+
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
-    
+
     layout->addWidget(themeView);
-    
+
     QStringList filters;
     QFileInfoList themeInfos = QDir("../theme").entryInfoList(filters, QDir::Dirs | QDir::NoDotAndDotDot);
-    
+
     QList<DSimpleListItem*> items;
     for (auto themeInfo : themeInfos) {
         ThemeItem *item = new ThemeItem(themeInfo.absoluteFilePath());
         items << item;
     }
-    
+
     themeView->addItems(items);
+    connect(themeView, &ThemeView::focusOut, this, &ThemeBar::handleFocusOut);
+
+    opacityEffect = new QGraphicsOpacityEffect(this);
+    this->setGraphicsEffect(opacityEffect);
 }
 
 void ThemeBar::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     painter.setOpacity(0.5);
-    
+
     QPainterPath path;
     path.addRect(rect());
     painter.fillPath(path, QColor("#000000"));
@@ -77,8 +82,8 @@ void ThemeBar::popup()
 {
     show();
     raise();
-    setFocus();
-    
+    themeView->setFocus();
+
     expandTicker = 0;
     expandTimer->start(animationDuration);
 }
@@ -86,14 +91,27 @@ void ThemeBar::popup()
 void ThemeBar::expand()
 {
     expandTicker++;
-    setFixedWidth(expandWidth * Utils::easeOutQuad(expandTicker * 1.0 / animationFrames));
-    
+    setFixedWidth(barWidth * Utils::easeOutQuad(expandTicker * 1.0 / animationFrames));
+    opacityEffect->setOpacity(Utils::easeOutQuad(expandTicker * 1.0 / animationFrames));
+
     if (expandTicker > animationFrames) {
         expandTimer->stop();
     }
 }
 
+void ThemeBar::shrink()
+{
+    shrinkTicker++;
+    setFixedWidth(barWidth * (1 - Utils::easeOutQuad(shrinkTicker * 1.0 / animationFrames)));
+    opacityEffect->setOpacity(1 - Utils::easeOutQuad(shrinkTicker * 1.0 / animationFrames));
+
+    if (shrinkTicker > animationFrames) {
+        shrinkTimer->stop();
+    }
+}
+
 void ThemeBar::handleFocusOut()
 {
-    qDebug() << "**************";
+    shrinkTicker = 0;
+    shrinkTimer->start(animationDuration);
 }

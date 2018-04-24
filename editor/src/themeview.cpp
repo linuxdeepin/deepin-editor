@@ -25,7 +25,16 @@
 
 ThemeView::ThemeView()
 {
-    
+    installEventFilter(this);   // add event filter
+}
+
+bool ThemeView::eventFilter(QObject *, QEvent *event)
+{
+    if (event->type() == QEvent::FocusOut) {
+        emit focusOut();
+    }
+
+    return false;
 }
 
     
