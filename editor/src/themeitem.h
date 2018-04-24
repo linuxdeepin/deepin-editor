@@ -50,6 +50,7 @@ private:
     QString functionColor;
     QString normalColor;
     QString backgroundColor;
+    QString otherColor;
 };
 
 #endif

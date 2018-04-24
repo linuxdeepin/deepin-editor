@@ -1221,6 +1221,4 @@ void Window::handleThemeChanged(QString themeName)
     
     changeTitlebarBackground(backgroundColor);
     themeBar->setBackground(backgroundColor);
-    
-    qDebug() << themeName;
 }

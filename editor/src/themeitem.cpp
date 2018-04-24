@@ -74,6 +74,7 @@ ThemeItem::ThemeItem(QString themeDir)
     commentColor = jsonMap["text-styles"].toMap()["Comment"].toMap()["text-color"].toString();
     functionColor = jsonMap["text-styles"].toMap()["Function"].toMap()["text-color"].toString();
     normalColor = jsonMap["text-styles"].toMap()["Normal"].toMap()["text-color"].toString();
+    otherColor = jsonMap["text-styles"].toMap()["Others"].toMap()["text-color"].toString();
     backgroundColor = jsonMap["editor-colors"].toMap()["background-color"].toString();
 }
 
@@ -128,12 +129,13 @@ void ThemeItem::drawForeground(QRect rect, QPainter *painter, int column, int, b
         QString indentConent = "&nbsp;&nbsp;&nbsp;&nbsp;";
         QString htmlConent = QString(
             "<font size='4'><code>"
-            "<font color='%1'>#include　\"deepin.h\"</font><br/>"
-            "<font color='%2'>QString</font> <font color='%3'>theme</font><font color='%4'>() {</font><br/>"
-            "<font color='%5'>%6// Return theme name.</font><br/>"
-            "<font color='%7'>%8return</font> <font color='%9'>\"%10\"</font><font color='%11'>;</font><br/>"
-            "<font color='%12'>}</font>"
-            "</code></font>").arg(importColor).arg(keywordColor).arg(functionColor).arg(normalColor).arg(commentColor).arg(indentConent).arg(builtInColor).arg(indentConent).arg(stringColor).arg(themeName).arg(normalColor).arg(normalColor);
+            "<font color='%1'>#include</font> "
+            "<font color='%2'>\"deepin.h\"</font><br/>"
+            "<font color='%3'>QString</font> <font color='%4'>theme</font><font color='%5'>() {</font><br/>"
+            "<font color='%6'>%7// Return theme name.</font><br/>"
+            "<font color='%8'>%9return</font> <font color='%10'>\"%11\"</font><font color='%12'>;</font><br/>"
+            "<font color='%13'>}</font>"
+            "</code></font>").arg(otherColor).arg(importColor).arg(keywordColor).arg(functionColor).arg(normalColor).arg(commentColor).arg(indentConent).arg(builtInColor).arg(indentConent).arg(stringColor).arg(themeName).arg(normalColor).arg(normalColor);
         td.setHtml(htmlConent);
         td.drawContents(painter);
         
