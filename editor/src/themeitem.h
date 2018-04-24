@@ -39,8 +39,9 @@ public:
     void drawBackground(QRect rect, QPainter *painter, int index, bool isSelect, bool isHover);
     void drawForeground(QRect rect, QPainter *painter, int column, int index, bool isSelect, bool isHover);
     
-private:
     QString themeName;
+    
+private:
     QString importColor;
     QString stringColor;
     QString builtInColor;

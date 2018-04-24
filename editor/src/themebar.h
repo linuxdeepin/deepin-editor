@@ -45,6 +45,10 @@ public slots:
     void expand();
     void shrink();
     void handleFocusOut();
+    void handleThemeChanged(DSimpleListItem* item, int columnIndex, QPoint pos);
+    
+signals:
+    void changeTheme(QString themeName);
     
 private:
     QTimer *expandTimer;

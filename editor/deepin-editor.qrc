@@ -15,4 +15,9 @@
     <file>qss/main.qss</file>
     <file>resource/settings.json</file>
   </qresource>
+  <qresource prefix="/org.kde.syntax-highlighting/themes">
+    <file alias="Breeze Dark">./theme/Breeze Dark/editor.theme</file>
+    <file alias="Deepin">./theme/Deepin/editor.theme</file>
+    <file alias="Printing">./theme/Printing/editor.theme</file>
+  </qresource>
 </RCC>

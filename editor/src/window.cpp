@@ -195,6 +195,8 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     DAnchorsBase::setAnchor(themeBar, Qt::AnchorBottom, layoutWidget, Qt::AnchorBottom);
     DAnchorsBase::setAnchor(themeBar, Qt::AnchorRight, layoutWidget, Qt::AnchorRight);
     
+    connect(themeBar, &ThemeBar::changeTheme, this, &Window::handleThemeChanged);
+    
     // Apply qss theme.
     Utils::applyQss(this, "main.qss");
     titlebarStyleSheet = this->titlebar()->styleSheet();
@@ -1176,4 +1178,13 @@ void Window::handleConfirmCompletion()
             break;
         }
     }
+}
+
+void Window::handleThemeChanged(QString themeName)
+{
+    foreach (auto editor, editorMap.values()) {
+        editor->textEditor->setThemeWithName(themeName);
+    }
+    
+    qDebug() << themeName;
 }

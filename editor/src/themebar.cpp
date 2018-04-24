@@ -63,6 +63,7 @@ ThemeBar::ThemeBar(QWidget *parent) : QWidget(parent)
 
     themeView->addItems(items);
     connect(themeView, &ThemeView::focusOut, this, &ThemeBar::handleFocusOut);
+    connect(themeView, &ThemeView::mousePressChanged, this, &ThemeBar::handleThemeChanged);
 
     opacityEffect = new QGraphicsOpacityEffect(this);
     this->setGraphicsEffect(opacityEffect);
@@ -114,4 +115,9 @@ void ThemeBar::handleFocusOut()
 {
     shrinkTicker = 0;
     shrinkTimer->start(animationDuration);
+}
+
+void ThemeBar::handleThemeChanged(DSimpleListItem* item, int, QPoint)
+{
+    emit changeTheme((static_cast<ThemeItem*>(item))->themeName);
 }

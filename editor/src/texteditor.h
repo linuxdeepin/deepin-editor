@@ -120,6 +120,7 @@ public:
     void contextMenuEvent(QContextMenuEvent *event);
                                                      
     void setTheme(const KSyntaxHighlighting::Theme &theme);
+    void setThemeWithName(QString themeName);
     void loadHighlighter();
     
     bool highlightWordUnderMouse(QPoint pos);

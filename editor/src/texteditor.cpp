@@ -1802,6 +1802,12 @@ bool TextEditor::setCursorKeywordSeletoin(int position, bool findNext)
     return false;
 }
 
+void TextEditor::setThemeWithName(QString themeName)
+{
+    const auto theme = m_repository.theme(themeName);
+    setTheme(theme);
+}
+
 void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme)
 {
     auto pal = qApp->palette();
@@ -1814,6 +1820,7 @@ void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme)
 
     m_highlighter->setTheme(theme);
     m_highlighter->rehighlight();
+    highlightCurrentLine();
 }
 
 void TextEditor::loadHighlighter()
