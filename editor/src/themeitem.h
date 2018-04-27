@@ -39,6 +39,8 @@ public:
     void drawBackground(QRect rect, QPainter *painter, int index, bool isSelect, bool isHover);
     void drawForeground(QRect rect, QPainter *painter, int column, int index, bool isSelect, bool isHover);
     
+    static bool sortByLightness(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort);
+    
     QString themeName;
     
 private:

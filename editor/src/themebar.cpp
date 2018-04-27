@@ -46,6 +46,17 @@ ThemeBar::ThemeBar(QWidget *parent) : QWidget(parent)
 
     themeView = new ThemeView();
     themeView->setRowHeight(110);
+    
+    QList<SortAlgorithm> *alorithms = new QList<SortAlgorithm>();
+    alorithms->append(&ThemeItem::sortByLightness);
+    themeView->setColumnSortingAlgorithms(alorithms, 0, true);
+    
+    // Set column to make sort list works.
+    QList<QString> titles;
+    titles << "theme";
+    QList<int> widths;
+    widths << -1;
+    themeView->setColumnTitleInfo(titles, widths, 0);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -64,7 +75,7 @@ ThemeBar::ThemeBar(QWidget *parent) : QWidget(parent)
     themeView->addItems(items);
     connect(themeView, &ThemeView::focusOut, this, &ThemeBar::handleFocusOut);
     connect(themeView, &ThemeView::mousePressChanged, this, &ThemeBar::handleThemeChanged);
-
+    
     opacityEffect = new QGraphicsOpacityEffect(this);
     this->setGraphicsEffect(opacityEffect);
 }

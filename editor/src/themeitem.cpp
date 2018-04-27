@@ -113,3 +113,13 @@ void ThemeItem::drawForeground(QRect rect, QPainter *painter, int column, int, b
         painter->restore();
     }
 }
+
+bool ThemeItem::sortByLightness(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort)
+{
+    auto lightness1 = QColor((static_cast<const ThemeItem*>(item1))->backgroundColor).lightness();
+    auto lightness2 = QColor((static_cast<const ThemeItem*>(item2))->backgroundColor).lightness();
+    
+    bool sortOrder = lightness1 < lightness2;
+    
+    return descendingSort ? sortOrder : !sortOrder;
+}
