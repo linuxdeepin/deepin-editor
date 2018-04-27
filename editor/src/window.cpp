@@ -27,6 +27,7 @@
 #include "dtoast.h"
 #include "utils.h"
 #include "window.h"
+#include "themeitem.h"
 
 #include <DSettingsGroup>
 #include <QSqlQuery>
@@ -195,6 +196,14 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     DAnchorsBase::setAnchor(themeBar, Qt::AnchorRight, layoutWidget, Qt::AnchorRight);
     
     connect(themeBar, &ThemeBar::changeTheme, this, &Window::loadTheme);
+    
+    QVariantMap jsonMap = Utils::getThemeNodeMap(themeName);
+    auto frameSelectedColor = jsonMap["app-colors"].toMap()["themebar-frame-selected"].toString();
+    auto frameNormalColor = jsonMap["app-colors"].toMap()["themebar-frame-normal"].toString();
+    
+    for (DSimpleListItem* item : themeBar->items) {
+        (static_cast<ThemeItem*>(item))->setFrameColor(frameSelectedColor, frameNormalColor);
+    }
     
     // Apply qss theme.
     Utils::applyQss(this, "main.qss");
@@ -1203,6 +1212,13 @@ void Window::loadTheme(QString name)
     findBar->setBackground(backgroundColor);
     tabbar->tabbar->setBackground(backgroundColor);
     tabbar->tabbar->setDNDColor(jsonMap["app-colors"].toMap()["tab-dnd"].toString());
+    
+    auto frameSelectedColor = jsonMap["app-colors"].toMap()["themebar-frame-selected"].toString();
+    auto frameNormalColor = jsonMap["app-colors"].toMap()["themebar-frame-normal"].toString();
+    for (DSimpleListItem* item : themeBar->items) {
+        (static_cast<ThemeItem*>(item))->setFrameColor(frameSelectedColor, frameNormalColor);
+    }
+    themeBar->themeView->repaint();
     
     settings->settings->option("base.theme.default")->setValue(name);
     themeName = name;

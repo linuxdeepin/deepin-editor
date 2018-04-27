@@ -41,6 +41,8 @@ public:
     
     static bool sortByLightness(const DSimpleListItem *item1, const DSimpleListItem *item2, bool descendingSort);
     
+    void setFrameColor(QString selectedColor, QString normalColor);
+    
     QString themeName;
     
 private:
@@ -53,6 +55,9 @@ private:
     QString normalColor;
     QString backgroundColor;
     QString otherColor;
+    
+    QString frameSelectedColor;
+    QString frameNormalColor;
 };
 
 #endif

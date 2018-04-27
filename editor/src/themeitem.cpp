@@ -79,9 +79,9 @@ void ThemeItem::drawForeground(QRect rect, QPainter *painter, int column, int, b
         
         QPen framePen;
         if (isSelect) {
-            framePen.setColor("#2CA7F8");
+            framePen.setColor(frameSelectedColor);
         } else {
-            framePen.setColor("#000000");
+            framePen.setColor(frameNormalColor);
         }
         painter->setOpacity(1);
         painter->setPen(framePen);
@@ -122,4 +122,10 @@ bool ThemeItem::sortByLightness(const DSimpleListItem *item1, const DSimpleListI
     bool sortOrder = lightness1 < lightness2;
     
     return descendingSort ? sortOrder : !sortOrder;
+}
+
+void ThemeItem::setFrameColor(QString selectedColor, QString normalColor)
+{
+    frameSelectedColor = selectedColor;
+    frameNormalColor = normalColor;
 }

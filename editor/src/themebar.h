@@ -35,9 +35,12 @@ class ThemeBar : public QWidget
     Q_OBJECT
     
 public:
-    ThemeBar(QWidget *parent = 0);
+    ThemeBar(QWidget *parent=0);
     
     void setBackground(QString color);
+    
+    ThemeView *themeView;
+    QList<DSimpleListItem*> items;
     
 protected:    
     void paintEvent(QPaintEvent *);
@@ -64,8 +67,6 @@ private:
     int barWidth;
     int animationDuration;
     int animationFrames;
-    
-    ThemeView *themeView;
     
     QColor backgroundColor;
     QColor frameLightColor = QColor("#000000");
