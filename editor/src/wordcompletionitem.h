@@ -33,7 +33,15 @@ public:
     void drawBackground(QRect rect, QPainter *painter, int index, bool isSelect, bool isHover);
     void drawForeground(QRect rect, QPainter *painter, int column, int index, bool isSelect, bool isHover);
     
+    void setColors(QString sBackgroundColor, QString sTextColor, QString nBackgroundColor, QString nTextColor);
+    
     QString name;
+    
+private:
+    QString selectedBackgroundColor;
+    QString selectedTextColor;
+    QString normalBackgroundColor;
+    QString normalTextColor;
 };	
 
 #endif

@@ -17,6 +17,7 @@ public:
     void addWords(QStringList words);
     
     DSimpleListView *listview;
+    QList<DSimpleListItem*> items;
 };	
 
 #endif

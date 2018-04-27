@@ -17,7 +17,7 @@ WordCompletionWindow::~WordCompletionWindow()
 
 void WordCompletionWindow::addWords(QStringList words)
 {
-    QList<DSimpleListItem*> items;
+    items.clear();
     for (auto word : words) {
         WordCompletionItem *item = new WordCompletionItem(word);
         items << item;

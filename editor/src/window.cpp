@@ -28,6 +28,7 @@
 #include "utils.h"
 #include "window.h"
 #include "themeitem.h"
+#include "wordcompletionitem.h"
 
 #include <DSettingsGroup>
 #include <QSqlQuery>
@@ -221,7 +222,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     }
 
     wordCompletionWindow = new WordCompletionWindow(this);
-
+    
     // Init window manager.
     windowManager = new DWindowManager();
 }
@@ -1140,6 +1141,16 @@ void Window::handlePopupCompletionWindow(QString word, QPoint pos, QStringList w
                       return a.size() < b.size();
                   });
         wordCompletionWindow->addWords(words);
+        
+        QVariantMap jsonMap = Utils::getThemeNodeMap(themeName);
+        auto selectedBackgroundColor = jsonMap["app-colors"].toMap()["english-completer-item-selected"].toString();
+        auto selectedTextColor = jsonMap["app-colors"].toMap()["english-completer-item-selected-text"].toString();
+        auto normalBackgroundColor = jsonMap["app-colors"].toMap()["english-completer-item-normal"].toString();
+        auto normalTextColor = jsonMap["app-colors"].toMap()["english-completer-item-normal-text"].toString();
+    
+        for (DSimpleListItem* item : wordCompletionWindow->items) {
+            (static_cast<WordCompletionItem*>(item))->setColors(selectedBackgroundColor, selectedTextColor, normalBackgroundColor, normalTextColor);
+        }
     } else {
         wordCompletionWindow->hide();
     }

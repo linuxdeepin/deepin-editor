@@ -177,6 +177,10 @@
 	"tab-active" : "#FF0000",
 	"tab-dnd" : "#ffffff",
 	"themebar-frame-selected" : "#00FFFF",
-	"themebar-frame-normal" : "#000000"
+	"themebar-frame-normal" : "#000000",
+	"english-completer-item-selected" : "#00FFFF",
+	"english-completer-item-normal" : "#fffff",
+	"english-completer-item-selected-text" : "#ffffff",
+	"english-completer-item-normal-text" : "#000000"
     }
 }

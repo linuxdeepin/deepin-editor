@@ -37,9 +37,9 @@ void WordCompletionItem::drawBackground(QRect rect, QPainter *painter, int, bool
     
     painter->setOpacity(1);
     if (isSelect) {
-        painter->fillPath(path, QColor("#2CA7F8"));
+        painter->fillPath(path, QColor(selectedBackgroundColor));
     } else {
-        painter->fillPath(path, QColor("#202020"));
+        painter->fillPath(path, QColor(normalBackgroundColor));
     }
 }
 
@@ -47,12 +47,20 @@ void WordCompletionItem::drawForeground(QRect rect, QPainter *painter, int, int,
 {
     painter->setOpacity(1);
     if (isSelect) {
-        painter->setPen(QPen(QColor("#FFFFFF")));    
+        painter->setPen(QPen(QColor(selectedTextColor)));    
     } else {
-        painter->setPen(QPen(QColor("#FFFFFF")));
+        painter->setPen(QPen(QColor(normalTextColor)));
     }
     
     int padding = 10;
     painter->drawText(QRect(rect.x() + padding, rect.y(), rect.width() - padding * 2, rect.height()), Qt::AlignLeft | Qt::AlignVCenter, name);
 }
 
+
+void WordCompletionItem::setColors(QString sBackgroundColor, QString sTextColor, QString nBackgroundColor, QString nTextColor)
+{
+    selectedBackgroundColor = sBackgroundColor;
+    selectedTextColor = sTextColor;
+    normalBackgroundColor = nBackgroundColor;
+    normalTextColor = nTextColor;
+}

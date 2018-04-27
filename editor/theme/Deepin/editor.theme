@@ -178,6 +178,10 @@
 	"tab-active" : "#2CA7F8",
 	"tab-dnd" : "#ffffff",
 	"themebar-frame-selected" : "#2CA7F8",
-	"themebar-frame-normal" : "#000000"
+	"themebar-frame-normal" : "#000000",
+	"english-completer-item-selected" : "#2CA7F8",
+	"english-completer-item-normal" : "#ffffff",
+	"english-completer-item-selected-text" : "#ffffff",
+	"english-completer-item-normal-text" : "#000000"
     }
 }
