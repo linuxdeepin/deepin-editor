@@ -1202,6 +1202,7 @@ void Window::loadTheme(QString themeName)
     replaceBar->setBackground(backgroundColor);
     findBar->setBackground(backgroundColor);
     tabbar->tabbar->setBackground(backgroundColor);
+    tabbar->tabbar->setDNDColor(jsonMap["app-colors"].toMap()["tab-dnd"].toString());
     
     settings->settings->option("base.theme.default")->setValue(themeName);
 }

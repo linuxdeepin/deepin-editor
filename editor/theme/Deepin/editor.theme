@@ -173,5 +173,9 @@
         "template-focused-placeholder" : "#76da98",
         "template-read-only-placeholder" : "#f6e6e6",
         "word-wrap-marker" : "#ededed"
+    },
+    "app-colors" : {
+	"tab-active" : "#2CA7F8",
+	"tab-dnd" : "#ffffff"
     }
 }

@@ -204,7 +204,7 @@ bool TabWidget::eventFilter(QObject *, QEvent *event)
         const QDragEnterEvent *e = static_cast<QDragEnterEvent*>(event);
 
         if (!e->source() || e->source()->parent() != this) {
-            static_cast<Window*>(this->window())->changeTitlebarBackground("#333333");
+            static_cast<Window*>(this->window())->changeTitlebarBackground(dndColor.name());
         }
     } else if (event->type() == QEvent::DragLeave) {
         static_cast<Window*>(this->window())->changeTitlebarBackground(backgroundColor.name());
@@ -243,3 +243,7 @@ void TabWidget::setBackground(QString color)
     backgroundColor = QColor(color);
 }
 
+void TabWidget::setDNDColor(QString color)
+{
+    dndColor = QColor(color);
+}

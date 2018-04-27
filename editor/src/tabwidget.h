@@ -47,6 +47,7 @@ public:
     void insertFromMimeDataOnDragEnter(int index, const QMimeData *source);
                            
     void setBackground(QString color);
+    void setDNDColor(QString color);
     
 signals:
     void closeTab(int index);
@@ -64,6 +65,7 @@ private:
     QMenu *menu;
     int rightClickTab;
     QColor backgroundColor;
+    QColor dndColor;
 };
 
 #endif
