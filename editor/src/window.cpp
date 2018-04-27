@@ -53,7 +53,7 @@ DWM_USE_NAMESPACE
 Window::Window(DMainWindow *parent) : DMainWindow(parent)
 {
     // Init theme.
-    DThemeManager::instance()->setTheme("dark");
+    DThemeManager::instance()->setTheme("light");
 
     // Init.
     installEventFilter(this);   // add event filter
