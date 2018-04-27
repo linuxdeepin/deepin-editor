@@ -1180,13 +1180,13 @@ void Window::handleConfirmCompletion()
     }
 }
 
-void Window::loadTheme(QString themeName)
+void Window::loadTheme(QString name)
 {
     foreach (auto editor, editorMap.values()) {
-        editor->textEditor->setThemeWithName(themeName);
+        editor->textEditor->setThemeWithName(name);
     }
     
-    QVariantMap jsonMap = Utils::getThemeNodeMap(themeName);
+    QVariantMap jsonMap = Utils::getThemeNodeMap(name);
     
     auto backgroundColor = jsonMap["editor-colors"].toMap()["background-color"].toString();
     
@@ -1204,5 +1204,6 @@ void Window::loadTheme(QString themeName)
     tabbar->tabbar->setBackground(backgroundColor);
     tabbar->tabbar->setDNDColor(jsonMap["app-colors"].toMap()["tab-dnd"].toString());
     
-    settings->settings->option("base.theme.default")->setValue(themeName);
+    settings->settings->option("base.theme.default")->setValue(name);
+    themeName = name;
 }
