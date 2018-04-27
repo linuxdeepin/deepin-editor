@@ -68,6 +68,9 @@ private:
     ThemeView *themeView;
     
     QColor backgroundColor;
+    QColor frameLightColor = QColor("#000000");
+    QColor frameDarkColor = QColor("#ffffff");
+    QColor frameColor;
 };
 
 #endif

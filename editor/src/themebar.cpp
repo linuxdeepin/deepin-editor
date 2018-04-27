@@ -75,8 +75,13 @@ void ThemeBar::paintEvent(QPaintEvent *)
     painter.setOpacity(0.5);
 
     QPainterPath path;
-    path.addRect(rect());
+    path.addRect(QRect(rect().x() + 1, rect().y(), rect().width() - 1, rect().height()));
     painter.fillPath(path, backgroundColor);
+    
+    QPainterPath framePath;
+    framePath.addRect(QRect(rect().x(), rect().y(), 1, rect().height()));
+    painter.setOpacity(0.1);
+    painter.fillPath(framePath, frameColor);
 }
 
 void ThemeBar::popup()
@@ -125,6 +130,12 @@ void ThemeBar::handleThemeChanged(DSimpleListItem* item, int, QPoint)
 void ThemeBar::setBackground(QString color)
 {
     backgroundColor = QColor(color);
+    
+    if (backgroundColor.lightness() < 128) {
+        frameColor = frameDarkColor;
+    } else {
+        frameColor = frameLightColor;
+    }
     
     repaint();
 }
