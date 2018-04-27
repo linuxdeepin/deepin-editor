@@ -46,7 +46,7 @@ Tabbar::Tabbar()
     layout->addSpacing(10);
     layout->addWidget(tabbar, 0, Qt::AlignTop);
     layout->addSpacing(70);
-
+    
     connect(tabbar, &TabWidget::closeOtherTabs, this, &Tabbar::handleCloseOtherTabs, Qt::QueuedConnection);
     connect(tabbar, &TabWidget::closeTab, this, &Tabbar::closeTabWithIndex, Qt::QueuedConnection);
     connect(tabbar, &TabWidget::currentChanged, this, &Tabbar::handleCurrentIndexChanged, Qt::QueuedConnection);
@@ -212,4 +212,11 @@ void Tabbar::handleTabReleaseRequested(int index)
 int Tabbar::getTabCount()
 {
     return tabbar->count();
+}
+
+void Tabbar::setTabActiveColor(QString color)
+{
+    QPalette pa = tabbar->palette();
+    pa.setColor(QPalette::Active, QPalette::Text, QColor(color));
+    tabbar->setPalette(pa);
 }

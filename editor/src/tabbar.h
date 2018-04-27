@@ -57,6 +57,7 @@ public:
     void selectPrevTab();
     
     void updateTabWithIndex(int index, QString filepath, QString tabName);
+    void setTabActiveColor(QString color);
     
     int getTabCount();
                       

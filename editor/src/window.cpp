@@ -1223,6 +1223,7 @@ void Window::loadTheme(QString name)
     findBar->setBackground(backgroundColor);
     tabbar->tabbar->setBackground(backgroundColor);
     tabbar->tabbar->setDNDColor(jsonMap["app-colors"].toMap()["tab-dnd"].toString());
+    tabbar->setTabActiveColor(jsonMap["app-colors"].toMap()["tab-active"].toString());
     
     auto frameSelectedColor = jsonMap["app-colors"].toMap()["themebar-frame-selected"].toString();
     auto frameNormalColor = jsonMap["app-colors"].toMap()["themebar-frame-normal"].toString();
