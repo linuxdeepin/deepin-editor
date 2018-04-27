@@ -52,9 +52,6 @@ DWM_USE_NAMESPACE
 
 Window::Window(DMainWindow *parent) : DMainWindow(parent)
 {
-    // Init theme.
-    DThemeManager::instance()->setTheme("light");
-
     // Init.
     installEventFilter(this);   // add event filter
     blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
@@ -66,7 +63,9 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     connect(settings, &Settings::adjustFont, this, &Window::updateFont);
     connect(settings, &Settings::adjustFontSize, this, &Window::updateFontSize);
     connect(settings, &Settings::adjustTabSpaceNumber, this, &Window::updateTabSpaceNumber);
-
+    
+    themeName = settings->settings->option("base.theme.default")->value().toString();
+    
     // Init layout and editor.
     layoutWidget = new QWidget();
     this->setCentralWidget(layoutWidget);
@@ -200,7 +199,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     // Apply qss theme.
     Utils::applyQss(this, "main.qss");
     titlebarStyleSheet = this->titlebar()->styleSheet();
-    loadTheme("Deepin");
+    loadTheme(themeName);
 
     // Init words database.
     wordsDB = QSqlDatabase::addDatabase("QSQLITE");
@@ -359,6 +358,7 @@ void Window::restoreTab()
 Editor* Window::createEditor()
 {
     Editor *editor = new Editor();
+    editor->textEditor->setThemeWithName(themeName);
     setFontSizeWithConfig(editor);
     editor->textEditor->setSettings(settings);
     editor->textEditor->setTabSpaceNumber(settings->settings->option("advance.editor.tab_space_number")->value().toInt());
@@ -1190,10 +1190,18 @@ void Window::loadTheme(QString themeName)
     
     auto backgroundColor = jsonMap["editor-colors"].toMap()["background-color"].toString();
     
+    if (QColor(backgroundColor).lightness() < 128) {
+        DThemeManager::instance()->setTheme("dark");
+    } else {
+        DThemeManager::instance()->setTheme("light");
+    }
+        
     changeTitlebarBackground(backgroundColor);
     themeBar->setBackground(backgroundColor);
     jumpLineBar->setBackground(backgroundColor);
     replaceBar->setBackground(backgroundColor);
     findBar->setBackground(backgroundColor);
     tabbar->tabbar->setBackground(backgroundColor);
+    
+    settings->settings->option("base.theme.default")->setValue(themeName);
 }

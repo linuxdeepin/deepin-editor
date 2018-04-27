@@ -65,9 +65,6 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     QPlainTextEdit(parent),
     m_highlighter(new KSyntaxHighlighting::SyntaxHighlighter(document()))
 {
-    // Init highlight theme.
-    setThemeWithName("Deepin");
-    
     // Don't draw frame around editor widget.
     setFrameShape(QFrame::NoFrame);
 

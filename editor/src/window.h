@@ -205,6 +205,8 @@ private:
     QString readonlySeparator = " !_! ";
     
     ThemeBar *themeBar;
+    
+    QString themeName;
 };
 
 #endif

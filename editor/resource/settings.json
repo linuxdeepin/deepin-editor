@@ -21,25 +21,37 @@
                             "default": 12
                         }
                     ]
-                }
+                },
+		{
+		    "key" : "theme",
+		    "name" : "Theme",
+		    "options" : [
+			{
+			    "key" : "default",
+			    "hide" : true,
+			    "reset" : false,
+			    "default" : "Deepin"
+			}
+		    ]
+		}
             ]
         },
         {
             "key": "shortcuts",
             "name": "Shortcuts",
             "groups": [
-		{
-		    "key" : "keymap",
-		    "name" : "Keymap",
-		    "options" : [
+                {
+                    "key" : "keymap",
+                    "name" : "Keymap",
+                    "options" : [
                         {
                             "key": "keymap",
                             "name": "Keymap",
                             "type": "combobox",
                             "default": "standard"
                         }
-		    ]
-		},
+                    ]
+                },
                 {
                     "key": "window",
                     "name": "Window",
@@ -472,1308 +484,1308 @@
                         }
                     ]
                 },
-		{
+                {
                     "key": "window_keymap_standard",
                     "name": "Standard window keymap",
-		    "hide" : true,
+                    "hide" : true,
                     "options": [
                         {
                             "key": "addblanktab",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+T"
                         },
                         {
                             "key": "savefile",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+S"
                         },
                         {
                             "key": "saveasfile",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+S"
                         },
                         {
                             "key": "selectnexttab",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Tab"
                         },
                         {
                             "key": "selectprevtab",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+Backtab"
                         },
                         {
                             "key": "closetab",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+W"
                         },
                         {
                             "key": "closeothertabs",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+W"
                         },
                         {
                             "key": "restoretab",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+T"
                         },
                         {
                             "key": "openfile",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+O"
                         },
                         {
                             "key": "incrementfontsize",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+="
                         },
                         {
                             "key": "decrementfontsize",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+-"
                         },
                         {
                             "key": "resetfontsize",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+0"
                         },
                         {
                             "key": "togglefullscreen",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "F11"
                         },
                         {
                             "key": "find",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+F"
                         },
                         {
                             "key": "replace",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+H"
                         },
                         {
                             "key": "jumptoline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+G"
                         },
                         {
                             "key": "saveposition",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+>"
                         },
                         {
                             "key": "restoreposition",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+<"
                         },
                         {
                             "key": "escape",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Esc"
                         },
                         {
                             "key": "displayshortcuts",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+?"
                         }
                     ]
                 },
-		{
+                {
                     "key": "editor_keymap_standard",
                     "name": "Standard editor keymap",
-		    "hide" : true,
+                    "hide" : true,
                     "options": [
                         {
                             "key": "indentline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Tab"
                         },
                         {
                             "key": "backindentline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Shift+Backtab"
                         },
                         {
                             "key": "forwardchar",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Right"
                         },
                         {
                             "key": "backwardchar",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Left"
                         },
                         {
                             "key": "forwardword",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+Right"
                         },
                         {
                             "key": "backwardword",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+Left"
                         },
                         {
                             "key": "nextline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Down"
                         },
                         {
                             "key": "prevline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Up"
                         },
                         {
                             "key": "newline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Enter"
                         },
                         {
                             "key": "opennewlineabove",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Enter"
                         },
                         {
                             "key": "opennewlinebelow",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+Enter"
                         },
                         {
                             "key": "duplicateline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+D"
                         },
                         {
                             "key": "killline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+K"
                         },
                         {
                             "key": "killcurrentline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+K"
                         },
                         {
                             "key": "swaplineup",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+Up"
                         },
                         {
                             "key": "swaplinedown",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+Down"
                         },
                         {
                             "key": "scrolllineup",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Meta+Shift+Up"
                         },
                         {
                             "key": "scrolllinedown",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Meta+Shift+Down"
                         },
                         {
                             "key": "scrollup",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "PageUp"
                         },
                         {
                             "key": "scrolldown",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "PageDown"
                         },
                         {
                             "key": "movetoendofline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "End"
                         },
                         {
                             "key": "movetostartofline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Home"
                         },
                         {
                             "key": "movetolineindentation",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Home"
                         },
                         {
                             "key": "upcaseword",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+U"
                         },
                         {
                             "key": "downcaseword",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+L"
                         },
                         {
                             "key": "capitalizeword",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+C"
                         },
                         {
                             "key": "killbackwardword",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+Shift+N"
                         },
                         {
                             "key": "killforwardword",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+Shift+M"
                         },
                         {
                             "key": "forwardpair",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+P"
                         },
                         {
                             "key": "backwardpair",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+N"
                         },
                         {
                             "key": "selectall",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+A"
                         },
                         {
                             "key": "copy",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+C"
                         },
                         {
                             "key": "cut",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+X"
                         },
                         {
                             "key": "paste",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+V"
                         },
                         {
                             "key": "transposechar",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+T"
                         },
                         {
                             "key": "setmark",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+H"
                         },
                         {
                             "key": "exchangemark",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+Shift+H"
                         },
                         {
                             "key": "copylines",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Meta+C"
                         },
                         {
                             "key": "pastelines",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Meta+X"
                         },
                         {
                             "key": "joinlines",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+J"
                         },
                         {
                             "key": "selectnextcompletion",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+,"
                         },
                         {
                             "key": "selectprevcompletion",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+."
                         },
                         {
                             "key": "selectfirstcompletion",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+Shift+>"
                         },
                         {
                             "key": "selectlastcompletion",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+Shift+<"
                         },
                         {
                             "key": "toggleenglishcompleter",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+'"
                         },
                         {
                             "key": "togglereadonlymode",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+Meta+L"
                         },
                         {
                             "key": "togglecomment",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+/"
                         },
                         {
                             "key": "togglebullet",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+Shift+*"
                         },
                         {
                             "key": "undo",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+U"
                         },
                         {
                             "key": "redo",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Y"
                         }
                     ]
                 },
-		{
+                {
                     "key": "window_keymap_emacs",
                     "name": "Emacs window keymap",
-		    "hide" : true,
+                    "hide" : true,
                     "options": [
                         {
                             "key": "addblanktab",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+T"
                         },
                         {
                             "key": "savefile",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+X"
                         },
                         {
                             "key": "saveasfile",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+X"
                         },
                         {
                             "key": "selectnexttab",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+8"
                         },
                         {
                             "key": "selectprevtab",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+7"
                         },
                         {
                             "key": "closetab",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+;"
                         },
                         {
                             "key": "closeothertabs",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+;"
                         },
                         {
                             "key": "restoretab",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+'"
                         },
                         {
                             "key": "openfile",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+O"
                         },
                         {
                             "key": "incrementfontsize",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+="
                         },
                         {
                             "key": "decrementfontsize",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+-"
                         },
                         {
                             "key": "resetfontsize",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+0"
                         },
                         {
                             "key": "togglefullscreen",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "F11"
                         },
                         {
                             "key": "find",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+S"
                         },
                         {
                             "key": "replace",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+Shift+%"
                         },
                         {
                             "key": "jumptoline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+G"
                         },
                         {
                             "key": "saveposition",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+>"
                         },
                         {
                             "key": "restoreposition",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+<"
                         },
                         {
                             "key": "escape",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Esc"
                         },
                         {
                             "key": "displayshortcuts",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+H"
                         }
                     ]
                 },
-		{
+                {
                     "key": "editor_keymap_emacs",
                     "name": "Emacs editor keymap",
-		    "hide" : true,
+                    "hide" : true,
                     "options": [
                         {
                             "key": "indentline",
-			    "hide" : true,
-			    "reset" : false,
-	                    "default":  "Alt+I"
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "Alt+I"
                         },
                         {
                             "key": "backindentline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+Shift+I"
                         },
                         {
                             "key": "forwardchar",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+F"
                         },
                         {
                             "key": "backwardchar",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+B"
                         },
                         {
                             "key": "forwardword",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+F"
                         },
                         {
                             "key": "backwardword",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+B"
                         },
                         {
                             "key": "nextline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+N"
                         },
                         {
                             "key": "prevline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+P"
                         },
                         {
                             "key": "newline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+M"
                         },
                         {
                             "key": "opennewlineabove",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+O"
                         },
                         {
                             "key": "opennewlinebelow",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+L"
                         },
                         {
                             "key": "duplicateline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+L"
                         },
                         {
                             "key": "killline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+K"
                         },
                         {
                             "key": "killcurrentline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+K"
                         },
                         {
                             "key": "swaplineup",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Meta+Shift+P"
                         },
                         {
                             "key": "swaplinedown",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Meta+Shift+N"
                         },
                         {
                             "key": "scrolllineup",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Meta+Shift+J"
                         },
                         {
                             "key": "scrolllinedown",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Meta+Shift+K"
                         },
                         {
                             "key": "scrollup",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+V"
                         },
                         {
                             "key": "scrolldown",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+V"
                         },
                         {
                             "key": "movetoendofline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+E"
                         },
                         {
                             "key": "movetostartofline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+A"
                         },
                         {
                             "key": "movetolineindentation",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+M"
                         },
                         {
                             "key": "upcaseword",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+U"
                         },
                         {
                             "key": "downcaseword",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+L"
                         },
                         {
                             "key": "capitalizeword",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+C"
                         },
                         {
                             "key": "killbackwardword",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+Shift+N"
                         },
                         {
                             "key": "killforwardword",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+Shift+M"
                         },
                         {
                             "key": "forwardpair",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+P"
                         },
                         {
                             "key": "backwardpair",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+N"
                         },
                         {
                             "key": "selectall",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Z"
                         },
                         {
                             "key": "copy",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+W"
                         },
                         {
                             "key": "cut",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+W"
                         },
                         {
                             "key": "paste",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Y"
                         },
                         {
                             "key": "transposechar",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+T"
                         },
                         {
                             "key": "setmark",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+H"
                         },
                         {
                             "key": "exchangemark",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+Shift+H"
                         },
                         {
                             "key": "copylines",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+Shift+W"
                         },
                         {
                             "key": "pastelines",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+W"
                         },
                         {
                             "key": "joinlines",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+J"
                         },
                         {
                             "key": "selectnextcompletion",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+,"
                         },
                         {
                             "key": "selectprevcompletion",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+."
                         },
                         {
                             "key": "selectfirstcompletion",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+Shift+>"
                         },
                         {
                             "key": "selectlastcompletion",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+Shift+<"
                         },
                         {
                             "key": "toggleenglishcompleter",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+'"
                         },
                         {
                             "key": "togglereadonlymode",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+Meta+L"
                         },
                         {
                             "key": "togglecomment",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+:"
                         },
                         {
                             "key": "togglebullet",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+Shift+*"
                         },
                         {
                             "key": "undo",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+/"
                         },
                         {
                             "key": "redo",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+?"
                         }
                     ]
                 },
-		{
+                {
                     "key": "window_keymap_customize",
                     "name": "Customize window keymap",
-		    "hide" : true,
+                    "hide" : true,
                     "options": [
                         {
                             "key": "addblanktab",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+T"
                         },
                         {
                             "key": "savefile",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+S"
                         },
                         {
                             "key": "saveasfile",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+S"
                         },
                         {
                             "key": "selectnexttab",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Tab"
                         },
                         {
                             "key": "selectprevtab",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+Backtab"
                         },
                         {
                             "key": "closetab",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+W"
                         },
                         {
                             "key": "closeothertabs",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+W"
                         },
                         {
                             "key": "restoretab",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+T"
                         },
                         {
                             "key": "openfile",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+O"
                         },
                         {
                             "key": "incrementfontsize",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+="
                         },
                         {
                             "key": "decrementfontsize",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+-"
                         },
                         {
                             "key": "resetfontsize",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+0"
                         },
                         {
                             "key": "togglefullscreen",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "F11"
                         },
                         {
                             "key": "find",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+F"
                         },
                         {
                             "key": "replace",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+H"
                         },
                         {
                             "key": "jumptoline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+G"
                         },
                         {
                             "key": "saveposition",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+>"
                         },
                         {
                             "key": "restoreposition",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+<"
                         },
                         {
                             "key": "escape",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Esc"
                         },
                         {
                             "key": "displayshortcuts",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+?"
                         }
                     ]
                 },
-		{
+                {
                     "key": "editor_keymap_customize",
                     "name": "Customize editor keymap",
-		    "hide" : true,
+                    "hide" : true,
                     "options": [
                         {
                             "key": "indentline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Tab"
                         },
                         {
                             "key": "backindentline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Shift+Backtab"
                         },
                         {
                             "key": "forwardchar",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Right"
                         },
                         {
                             "key": "backwardchar",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Left"
                         },
                         {
                             "key": "forwardword",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+Right"
                         },
                         {
                             "key": "backwardword",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+Left"
                         },
                         {
                             "key": "nextline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Down"
                         },
                         {
                             "key": "prevline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Up"
                         },
                         {
                             "key": "newline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Enter"
                         },
                         {
                             "key": "opennewlineabove",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Enter"
                         },
                         {
                             "key": "opennewlinebelow",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+Enter"
                         },
                         {
                             "key": "duplicateline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+D"
                         },
                         {
                             "key": "killline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+K"
                         },
                         {
                             "key": "killcurrentline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+K"
                         },
                         {
                             "key": "swaplineup",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+Up"
                         },
                         {
                             "key": "swaplinedown",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Shift+Down"
                         },
                         {
                             "key": "scrolllineup",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Meta+Shift+Up"
                         },
                         {
                             "key": "scrolllinedown",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Meta+Shift+Down"
                         },
                         {
                             "key": "scrollup",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "PageUp"
                         },
                         {
                             "key": "scrolldown",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "PageDown"
                         },
                         {
                             "key": "movetoendofline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "End"
                         },
                         {
                             "key": "movetostartofline",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Home"
                         },
                         {
                             "key": "movetolineindentation",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Home"
                         },
                         {
                             "key": "upcaseword",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+U"
                         },
                         {
                             "key": "downcaseword",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+L"
                         },
                         {
                             "key": "capitalizeword",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+C"
                         },
                         {
                             "key": "killbackwardword",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+Shift+N"
                         },
                         {
                             "key": "killforwardword",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+Shift+M"
                         },
                         {
                             "key": "forwardpair",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+P"
                         },
                         {
                             "key": "backwardpair",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+N"
                         },
                         {
                             "key": "selectall",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+A"
                         },
                         {
                             "key": "copy",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+C"
                         },
                         {
                             "key": "cut",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+X"
                         },
                         {
                             "key": "paste",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+V"
                         },
                         {
                             "key": "transposechar",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+T"
                         },
                         {
                             "key": "setmark",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+H"
                         },
                         {
                             "key": "exchangemark",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+Shift+H"
                         },
                         {
                             "key": "copylines",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Meta+C"
                         },
                         {
                             "key": "pastelines",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Meta+X"
                         },
                         {
                             "key": "joinlines",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+J"
                         },
                         {
                             "key": "selectnextcompletion",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+,"
                         },
                         {
                             "key": "selectprevcompletion",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+."
                         },
                         {
                             "key": "selectfirstcompletion",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+Shift+>"
                         },
                         {
                             "key": "selectlastcompletion",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+Shift+<"
                         },
                         {
                             "key": "toggleenglishcompleter",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+'"
                         },
                         {
                             "key": "togglereadonlymode",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+Meta+L"
                         },
                         {
                             "key": "togglecomment",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+/"
                         },
                         {
                             "key": "togglebullet",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Alt+Shift+*"
                         },
                         {
                             "key": "undo",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+U"
                         },
                         {
                             "key": "redo",
-			    "hide" : true,
-			    "reset" : false,
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+Y"
                         }
                     ]
-                }		
+                }
             ]
         },
         {
@@ -1790,16 +1802,16 @@
                             "type": "combobox",
                             "default": "window_normal"
                         },
-			{
+                        {
                             "key": "window_width",
                             "hide" : true,
-			    "reset" : false,
+                            "reset" : false,
                             "default": 0.6
                         },
-			{
+                        {
                             "key": "window_height",
                             "hide" : true,
-			    "reset" : false,
+                            "reset" : false,
                             "default": 0.6
                         }
                     ]
