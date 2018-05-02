@@ -9,6 +9,8 @@ WordCompletionWindow::WordCompletionWindow(QWidget *parent) : QWidget(parent)
     listview = new DSimpleListView(this);
     listview->setFixedSize(150, 200);
     listview->setRowHeight(20);
+    
+    listview->setClipRadius(0);
 }
 
 WordCompletionWindow::~WordCompletionWindow()

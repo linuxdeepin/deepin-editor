@@ -179,9 +179,10 @@
 	"tab-dnd" : "#333333",
 	"themebar-frame-selected" : "#00FFFF",
 	"themebar-frame-normal" : "#000000",
-	"english-completer-item-selected" : "#2CA7F8",
-	"english-completer-item-normal" : "#232629",
+	"english-completer-item-selected-background" : "#2CA7F8",
+	"english-completer-item-normal-background" : "#232629",
 	"english-completer-item-selected-text" : "#ffffff",
-	"english-completer-item-normal-text" : "#ffffff"
+	"english-completer-item-normal-text" : "#ffffff",
+	"english-completer-window-frame" : "#ffffff"
     }
 }

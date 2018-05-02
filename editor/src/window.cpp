@@ -65,9 +65,9 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     connect(settings, &Settings::adjustFont, this, &Window::updateFont);
     connect(settings, &Settings::adjustFontSize, this, &Window::updateFontSize);
     connect(settings, &Settings::adjustTabSpaceNumber, this, &Window::updateTabSpaceNumber);
-    
+
     themeName = settings->settings->option("base.theme.default")->value().toString();
-    
+
     // Init layout and editor.
     layoutWidget = new QWidget();
     this->setCentralWidget(layoutWidget);
@@ -189,23 +189,23 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     // Make jump line bar pop at top-right of editor.
     DAnchorsBase::setAnchor(jumpLineBar, Qt::AnchorTop, layoutWidget, Qt::AnchorTop);
     DAnchorsBase::setAnchor(jumpLineBar, Qt::AnchorRight, layoutWidget, Qt::AnchorRight);
-    
+
     // Init theme bar.
     themeBar = new ThemeBar(this);
     DAnchorsBase::setAnchor(themeBar, Qt::AnchorTop, layoutWidget, Qt::AnchorTop);
     DAnchorsBase::setAnchor(themeBar, Qt::AnchorBottom, layoutWidget, Qt::AnchorBottom);
     DAnchorsBase::setAnchor(themeBar, Qt::AnchorRight, layoutWidget, Qt::AnchorRight);
-    
+
     connect(themeBar, &ThemeBar::changeTheme, this, &Window::loadTheme);
-    
+
     QVariantMap jsonMap = Utils::getThemeNodeMap(themeName);
     auto frameSelectedColor = jsonMap["app-colors"].toMap()["themebar-frame-selected"].toString();
     auto frameNormalColor = jsonMap["app-colors"].toMap()["themebar-frame-normal"].toString();
-    
+
     for (DSimpleListItem* item : themeBar->items) {
         (static_cast<ThemeItem*>(item))->setFrameColor(frameSelectedColor, frameNormalColor);
     }
-    
+
     // Apply qss theme.
     Utils::applyQss(this, "main.qss");
     titlebarStyleSheet = this->titlebar()->styleSheet();
@@ -214,7 +214,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     // Init words database.
     wordsDB = QSqlDatabase::addDatabase("QSQLITE");
     wordsDB.setDatabaseName(WORDS_DB_FILE_PATH);
-    
+
     if (!wordsDB.open()) {
         qDebug() << "Error: connection with database fail";
     } else {
@@ -222,7 +222,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     }
 
     wordCompletionWindow = new WordCompletionWindow(this);
-    
+
     // Init window manager.
     windowManager = new DWindowManager();
 }
@@ -425,7 +425,7 @@ QString Window::getSaveFilePath(QString &encode, QString &newline)
 {
     encode = "UTF-8";
     newline = "Window";
-    
+
 #ifdef DTKWIDGET_CLASS_DFileDialog
     DFileDialog dialog(this, "Save File", QDir(QDir::homePath()).filePath("Blank Document.txt"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
@@ -435,7 +435,7 @@ QString Window::getSaveFilePath(QString &encode, QString &newline)
     if (dialog.exec() == QDialog::Accepted) {
         encode = dialog.getComboBoxValue("编码");
         newline = dialog.getComboBoxValue("换行符");
-        
+
         return dialog.selectedFiles().value(0);
     } else {
         return "";
@@ -476,7 +476,7 @@ void Window::displayShortcuts()
     }
     editorJsonGroup.insert("groupItems", editorJsonItems);
     jsonGroups.append(editorJsonGroup);
-    
+
     shortcutObj.insert("shortcut", jsonGroups);
 
     QJsonDocument doc(shortcutObj);
@@ -532,7 +532,7 @@ void Window::saveAsFile()
     QString encode, newline;
     QString filepath = getSaveFilePath(encode, newline);
     QString tabPath = tabbar->getActiveTabPath();
-    
+
     if (filepath != "" && filepath != tabPath) {
         saveFileAsAnotherPath(tabPath, filepath, encode, newline);
     }
@@ -664,7 +664,7 @@ QStringList Window::getEncodeList()
             encodeList.append(encodeName);
         }
     }
-    
+
     encodeList.sort();
     encodeList.prepend("UTF-8");
 
@@ -760,7 +760,7 @@ void Window::resizeEvent(QResizeEvent*)
             settings->settings->option("advance.window.window_width")->setValue(rect().width() * 1.0 / screenGeometry.width());
             settings->settings->option("advance.window.window_height")->setValue(rect().height() * 1.0 / screenGeometry.height());
         }
-        
+
         DAnchorsBase::setAnchor(themeBar, Qt::AnchorTop, layoutWidget, Qt::AnchorTop);
         DAnchorsBase::setAnchor(themeBar, Qt::AnchorBottom, layoutWidget, Qt::AnchorBottom);
         DAnchorsBase::setAnchor(themeBar, Qt::AnchorRight, layoutWidget, Qt::AnchorRight);
@@ -1141,16 +1141,19 @@ void Window::handlePopupCompletionWindow(QString word, QPoint pos, QStringList w
                       return a.size() < b.size();
                   });
         wordCompletionWindow->addWords(words);
-        
+
         QVariantMap jsonMap = Utils::getThemeNodeMap(themeName);
-        auto selectedBackgroundColor = jsonMap["app-colors"].toMap()["english-completer-item-selected"].toString();
+        auto selectedBackgroundColor = jsonMap["app-colors"].toMap()["english-completer-item-selected-background"].toString();
         auto selectedTextColor = jsonMap["app-colors"].toMap()["english-completer-item-selected-text"].toString();
-        auto normalBackgroundColor = jsonMap["app-colors"].toMap()["english-completer-item-normal"].toString();
+        auto normalBackgroundColor = jsonMap["app-colors"].toMap()["english-completer-item-normal-background"].toString();
         auto normalTextColor = jsonMap["app-colors"].toMap()["english-completer-item-normal-text"].toString();
-    
+        auto frameColor = jsonMap["app-colors"].toMap()["english-completer-window-frame"].toString();
+
         for (DSimpleListItem* item : wordCompletionWindow->items) {
             (static_cast<WordCompletionItem*>(item))->setColors(selectedBackgroundColor, selectedTextColor, normalBackgroundColor, normalTextColor);
         }
+        wordCompletionWindow->listview->setFrame(true, QColor(frameColor), 0.3);
+        wordCompletionWindow->listview->repaint();
     } else {
         wordCompletionWindow->hide();
     }
@@ -1205,17 +1208,17 @@ void Window::loadTheme(QString name)
     foreach (auto editor, editorMap.values()) {
         editor->textEditor->setThemeWithName(name);
     }
-    
+
     QVariantMap jsonMap = Utils::getThemeNodeMap(name);
-    
+
     auto backgroundColor = jsonMap["editor-colors"].toMap()["background-color"].toString();
-    
+
     if (QColor(backgroundColor).lightness() < 128) {
         DThemeManager::instance()->setTheme("dark");
     } else {
         DThemeManager::instance()->setTheme("light");
     }
-        
+
     changeTitlebarBackground(backgroundColor);
     themeBar->setBackground(backgroundColor);
     jumpLineBar->setBackground(backgroundColor);
@@ -1224,14 +1227,14 @@ void Window::loadTheme(QString name)
     tabbar->tabbar->setBackground(backgroundColor);
     tabbar->tabbar->setDNDColor(jsonMap["app-colors"].toMap()["tab-dnd"].toString());
     tabbar->setTabActiveColor(jsonMap["app-colors"].toMap()["tab-active"].toString());
-    
+
     auto frameSelectedColor = jsonMap["app-colors"].toMap()["themebar-frame-selected"].toString();
     auto frameNormalColor = jsonMap["app-colors"].toMap()["themebar-frame-normal"].toString();
     for (DSimpleListItem* item : themeBar->items) {
         (static_cast<ThemeItem*>(item))->setFrameColor(frameSelectedColor, frameNormalColor);
     }
     themeBar->themeView->repaint();
-    
+
     settings->settings->option("base.theme.default")->setValue(name);
     themeName = name;
 }
