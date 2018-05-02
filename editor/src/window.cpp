@@ -213,8 +213,8 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
 
     // Init words database.
     wordsDB = QSqlDatabase::addDatabase("QSQLITE");
-    wordsDB.setDatabaseName(QFileInfo("../dict/words.db").absoluteFilePath());
-
+    wordsDB.setDatabaseName(WORDS_FILE_PATH);
+    
     if (!wordsDB.open()) {
         qDebug() << "Error: connection with database fail";
     } else {
