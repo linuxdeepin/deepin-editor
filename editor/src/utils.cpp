@@ -153,6 +153,9 @@ QString Utils::getKeyshortcutFromKeymap(Settings* settings, QString keyCategory,
 QPixmap Utils::dropShadow(const QPixmap &source, qreal radius, const QColor &color, const QPoint &offset)
 {
     QImage shadow = dropShadow(source, radius, color);
+    shadow.setDevicePixelRatio(source.devicePixelRatio());
+    
+    
     QPainter pa(&shadow);
     pa.setCompositionMode(QPainter::CompositionMode_SourceOver);
     pa.drawPixmap(radius - offset.x(), radius - offset.y(), source);
@@ -167,7 +170,8 @@ QImage Utils::dropShadow(const QPixmap &px, qreal radius, const QColor &color)
         return QImage();
     }
     
-    QImage tmp(px.size() + QSize(radius * 2, radius * 2), QImage::Format_ARGB32_Premultiplied);
+    QImage tmp(px.size() * px.devicePixelRatio() + QSize(radius * 2, radius * 2), QImage::Format_ARGB32_Premultiplied);
+    tmp.setDevicePixelRatio(px.devicePixelRatio());
     tmp.fill(0);
     QPainter tmpPainter(&tmp);
     tmpPainter.setCompositionMode(QPainter::CompositionMode_Source);
@@ -175,7 +179,8 @@ QImage Utils::dropShadow(const QPixmap &px, qreal radius, const QColor &color)
     tmpPainter.end();
     
     // Blur the alpha channel.
-    QImage blurred(tmp.size(), QImage::Format_ARGB32_Premultiplied);
+    QImage blurred(tmp.size() * px.devicePixelRatio(), QImage::Format_ARGB32_Premultiplied);
+    blurred.setDevicePixelRatio(px.devicePixelRatio());
     blurred.fill(0);
     QPainter blurPainter(&blurred);
     qt_blurImage(&blurPainter, tmp, radius, false, true);

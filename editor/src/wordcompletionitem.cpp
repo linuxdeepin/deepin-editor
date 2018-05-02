@@ -17,6 +17,7 @@
 
 #include "wordcompletionitem.h"
 #include <QColor>
+#include <QDebug>
 
 DWIDGET_USE_NAMESPACE
 
@@ -53,6 +54,9 @@ void WordCompletionItem::drawForeground(QRect rect, QPainter *painter, int, int,
     }
     
     int padding = 10;
+    QFont font = painter->font();
+    font.setPointSize(12);
+    painter->setFont(font);
     painter->drawText(QRect(rect.x() + padding, rect.y(), rect.width() - padding * 2, rect.height()), Qt::AlignLeft | Qt::AlignVCenter, name);
 }
 

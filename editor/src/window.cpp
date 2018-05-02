@@ -221,7 +221,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
         qDebug() << "Database: connection ok";
     }
 
-    wordCompletionWindow = new WordCompletionWindow(this);
+    wordCompletionWindow = new WordCompletionWindow();
 
     // Init window manager.
     windowManager = new DWindowManager();

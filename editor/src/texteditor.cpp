@@ -2333,7 +2333,12 @@ void TextEditor::tryCompleteWord()
 
     auto rect = cursorRect(textCursor());
 
-    auto cursorPos = viewport()->mapTo(static_cast<Window*>(this->window()), QPoint(rect.x() + rect.width(), rect.y() + rect.height()));
+    auto cursorPos = viewport()->mapTo(static_cast<Window*>(this->window()), 
+                                       QPoint(rect.x() + rect.width(), 
+                                              rect.y() + rect.height()));
+    
+    auto windowPos = static_cast<Window*>(this->window())->mapToGlobal(QPoint(0, 0));
+    
     QStringList completionList;
 
     if (wordAtCursor != "") {
@@ -2352,7 +2357,7 @@ void TextEditor::tryCompleteWord()
         }
     }
 
-    popupCompletionWindow(wordAtCursor, cursorPos, completionList);
+    popupCompletionWindow(wordAtCursor, QPoint(windowPos.x() + cursorPos.x(), windowPos.y() + cursorPos.y()), completionList);
 
     hasCompletionWords = completionList.size() > 1;
 }

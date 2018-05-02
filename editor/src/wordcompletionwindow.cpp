@@ -4,11 +4,16 @@
 WordCompletionWindow::WordCompletionWindow(QWidget *parent) : QWidget(parent)
 {
     setWindowFlags(Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
-    setFixedSize(150, 200);
+    
+    lineHeight = 20;
+    windowWidth = 150;
+    windowHeight = 14;
+    
+    setFixedSize(windowWidth, windowHeight);
     
     listview = new DSimpleListView(this);
-    listview->setFixedSize(150, 200);
-    listview->setRowHeight(20);
+    listview->setFixedSize(windowWidth, windowHeight);
+    listview->setRowHeight(lineHeight);
     
     listview->setClipRadius(0);
 }
@@ -29,10 +34,12 @@ void WordCompletionWindow::addWords(QStringList words)
     listview->selectFirstItem();
     
     if (words.size() > 10) {
-        setFixedSize(150, 200);
-        listview->setFixedSize(150, 200);
+        windowHeight = 10 * lineHeight;
     } else {
-        setFixedSize(150, words.size() * 20);
-        listview->setFixedSize(150, words.size() * 20);
+        windowHeight = words.size() * lineHeight;
+        
     }
+    
+    setFixedSize(windowWidth, windowHeight);
+    listview->setFixedSize(windowWidth, windowHeight);
 }
