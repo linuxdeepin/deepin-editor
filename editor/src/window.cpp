@@ -797,6 +797,8 @@ void Window::closeEvent(QCloseEvent *)
 
         file.close();
     }
+    
+    emit close();
 }
 
 void Window::keyPressEvent(QKeyEvent *keyEvent)

@@ -110,6 +110,7 @@ protected:
 signals:
     void dropTabOut(QString tabName, QString filepath, QString content);
     void newWindow();
+    void close();
     
 public slots:
     void addBlankTab(QString blankFile="");

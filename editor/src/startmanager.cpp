@@ -130,6 +130,14 @@ Window* StartManager::createWindow(bool alwaysCenter)
     // Create window.
     Window *window = new Window();
     connect(window, &Window::dropTabOut, this, &StartManager::createWindowFromTab, Qt::QueuedConnection);
+    
+    // Quit application if close last window.
+    connect(window, &Window::close, this, 
+            [=]() {
+                if (windows.size() <= 1) {
+                    QApplication::quit();
+                }
+            });
 
     // Init window position.
     initWindowPosition(window, alwaysCenter);
