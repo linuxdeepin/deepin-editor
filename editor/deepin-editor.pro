@@ -71,6 +71,6 @@ binary.path = $${PREFIX}/bin/
 dict_db.files += ./dict/words.db
 dict_db.path = /usr/share/deepin-editor/
 
-DEFINES += WORDS_FILE_PATH=\\\"$${dict_db.path}/words.db\\\"
+DEFINES += WORDS_DB_FILE_PATH=\\\"$${dict_db.path}/words.db\\\"
 
 INSTALLS += binary dict_db
