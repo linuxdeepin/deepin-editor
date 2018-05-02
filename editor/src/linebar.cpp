@@ -56,10 +56,13 @@ void LineBar::handleTextChanged()
     autoSaveTimer->start(autoSaveInternal);
 }
 
-void LineBar::focusOutEvent(QFocusEvent *)
+void LineBar::focusOutEvent(QFocusEvent *e)
 {
     // Emit focus out signal.
     focusOut();
+    
+    // Throw event out avoid DLineEdit can't hide cursor after lost focus.
+    DLineEdit::focusOutEvent(e);
 }
 
 void LineBar::keyPressEvent(QKeyEvent *e)
