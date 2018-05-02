@@ -5,9 +5,9 @@ WordCompletionWindow::WordCompletionWindow(QWidget *parent) : QWidget(parent)
 {
     setWindowFlags(Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
     
-    lineHeight = 20;
+    lineHeight = 24;
     windowWidth = 150;
-    windowHeight = 14;
+    windowHeight = 0;
     
     setFixedSize(windowWidth, windowHeight);
     
