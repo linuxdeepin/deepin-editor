@@ -116,6 +116,7 @@ public:
     void renderAllSelections();
     
     void keyPressEvent(QKeyEvent *e);
+    bool eventFilter(QObject *, QEvent *event);
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     void contextMenuEvent(QContextMenuEvent *event);
                                                      
@@ -170,6 +171,8 @@ signals:
     void selectLastCompletion();
     void confirmCompletion();
     void popupNotify(QString notify);
+                                    
+    void click();
     
 public slots:
     void highlightCurrentLine();

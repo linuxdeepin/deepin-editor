@@ -388,6 +388,10 @@ Editor* Window::createEditor()
     connect(editor->textEditor, &TextEditor::selectLastCompletion, this, &Window::handleSelectLastCompletion, Qt::QueuedConnection);
     connect(editor->textEditor, &TextEditor::confirmCompletion, this, &Window::handleConfirmCompletion, Qt::QueuedConnection);
     connect(editor->textEditor, &TextEditor::popupNotify, this, &Window::showNotify, Qt::QueuedConnection);
+    
+    connect(editor->textEditor, &TextEditor::click, this, [=]() {
+            wordCompletionWindow->hide();
+        });
 
     return editor;
 }

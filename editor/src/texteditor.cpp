@@ -65,6 +65,8 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     QPlainTextEdit(parent),
     m_highlighter(new KSyntaxHighlighting::SyntaxHighlighter(document()))
 {
+    viewport()->installEventFilter(this);
+    
     // Don't draw frame around editor widget.
     setFrameShape(QFrame::NoFrame);
 
@@ -2389,4 +2391,13 @@ void TextEditor::completionWord(QString word)
 
         setTextCursor(cursor);
     }
+}
+
+bool TextEditor::eventFilter(QObject *, QEvent *event)
+{
+    if (event->type() == QEvent::MouseButtonPress) {
+        emit click();
+    }
+    
+    return false;
 }
