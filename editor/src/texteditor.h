@@ -243,6 +243,8 @@ private:
     QAction *fullscreenAction;
     QAction *exitFullscreenAction;
     QAction *openInFileManagerAction;
+    QAction *toggleCommentAction;
+    QAction *toggleBulletAction;
     
     QMenu *convertCaseMenu;
     QAction *upcaseAction;

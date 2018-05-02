@@ -97,6 +97,8 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     fullscreenAction = new QAction("Fullscreen", this);
     exitFullscreenAction = new QAction("Exit fullscreen", this);
     openInFileManagerAction = new QAction("Open in file manager", this);
+    toggleCommentAction = new QAction("Toggle comment", this);
+    toggleBulletAction = new QAction("Toggle bullet", this);
 
     connect(rightMenu, &QMenu::aboutToHide, this, &TextEditor::removeHighlightWordUnderCursor);
     connect(undoAction, &QAction::triggered, this, &TextEditor::undo);
@@ -116,6 +118,8 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     connect(enableEnglishCompleterAction, &QAction::triggered, this, &TextEditor::toggleEnglishCompleter);
     connect(disableEnglishCompleterAction, &QAction::triggered, this, &TextEditor::toggleEnglishCompleter);
     connect(openInFileManagerAction, &QAction::triggered, this, &TextEditor::clickOpenInFileManagerAction);
+    connect(toggleCommentAction, &QAction::triggered, this, &TextEditor::toggleComment);
+    connect(toggleBulletAction, &QAction::triggered, this, &TextEditor::toggleBullet);
 
     // Init convert case sub menu.
     haveWordUnderCursor = false;
@@ -1685,7 +1689,8 @@ void TextEditor::contextMenuEvent(QContextMenuEvent *event)
     rightMenu->addAction(jumpLineAction);
     rightMenu->addSeparator();
     rightMenu->addMenu(convertCaseMenu);
-    rightMenu->addAction(openInFileManagerAction);
+    rightMenu->addAction(toggleCommentAction);
+    rightMenu->addAction(toggleBulletAction);
     rightMenu->addSeparator();
     if (enableEnglishCompleter) {
         rightMenu->addAction(disableEnglishCompleterAction);
@@ -1697,6 +1702,7 @@ void TextEditor::contextMenuEvent(QContextMenuEvent *event)
     } else {
         rightMenu->addAction(enableReadOnlyModeAction);
     }
+    rightMenu->addAction(openInFileManagerAction);
     rightMenu->addSeparator();
     if (static_cast<Window*>(this->window())->isFullScreen()) {
         rightMenu->addAction(exitFullscreenAction);
