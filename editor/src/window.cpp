@@ -392,6 +392,9 @@ Editor* Window::createEditor()
     connect(editor->textEditor, &TextEditor::click, this, [=]() {
             wordCompletionWindow->hide();
         });
+    connect(editor->textEditor, &TextEditor::pressEsc, this, [=]() {
+            wordCompletionWindow->hide();
+        });
 
     return editor;
 }

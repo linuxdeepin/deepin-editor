@@ -1451,8 +1451,6 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
 
     QString key = Utils::getKeyshortcut(keyEvent);
 
-    // qDebug() << key;
-
     if (readOnlyMode) {
         if (key == "J") {
             nextLine();
@@ -1597,8 +1595,10 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
             undo();
         } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "redo")) {
             redo();
+        } else if (key == "Esc") {
+            emit pressEsc();
         } else {
-            // Post event to window widget if key match window key list.
+                // Post event to window widget if key match window key list.
             for (auto option : settings->settings->group("shortcuts.window")->options()) {
                 if (key == settings->settings->option(option->key())->value().toString()) {
                     keyEvent->ignore();
