@@ -1825,7 +1825,13 @@
                             "name": "Tab Space Number",
                             "type": "spinbutton",
                             "default": 4
-                        }
+                        },
+			{
+			    "key": "enable_english_helper",
+			    "name": "Enable english helper",
+			    "type": "checkbox",
+			    "default": false
+			}
                     ]
                 }
             ]

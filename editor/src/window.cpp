@@ -369,6 +369,7 @@ Editor* Window::createEditor()
 {
     Editor *editor = new Editor();
     editor->textEditor->setThemeWithName(themeName);
+    editor->textEditor->setEnglishCompleter(settings->settings->option("advance.editor.enable_english_helper")->value().toBool());
     setFontSizeWithConfig(editor);
     editor->textEditor->setSettings(settings);
     editor->textEditor->setTabSpaceNumber(settings->settings->option("advance.editor.tab_space_number")->value().toInt());

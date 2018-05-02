@@ -2138,6 +2138,11 @@ void TextEditor::toggleEnglishCompleter()
     }
 }
 
+void TextEditor::setEnglishCompleter(bool enable)
+{
+    enableEnglishCompleter = enable;
+}
+
 void TextEditor::toggleReadOnlyMode()
 {
     if (readOnlyMode) {

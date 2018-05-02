@@ -144,6 +144,7 @@ public:
     void completionWord(QString word);
     QString getWordAtCursor();
     void toggleEnglishCompleter();
+    void setEnglishCompleter(bool enable);
     
     void toggleReadOnlyMode();
     
