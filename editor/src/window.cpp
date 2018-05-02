@@ -1133,15 +1133,27 @@ bool Window::wordCompletionWindowIsVisible()
 void Window::handlePopupCompletionWindow(QString word, QPoint pos, QStringList words)
 {
     if (words.size() > 1 && word.size() > 3) {
+        // Adjust word completion window y coordinate if it out of screen.
+        QScreen *screen = QGuiApplication::primaryScreen();
+        QRect screenGeometry = screen->geometry();
+        
+        int wordCompletionWindowHeight = wordCompletionWindow->lineHeight * (words.size() > 10? 10 : words.size());
+        
+        if (pos.y() + wordCompletionWindowHeight > screenGeometry.height()) {
+            pos.setY(pos.y() - getActiveEditor()->textEditor->fontMetrics().height() - wordCompletionWindowHeight);
+        }
+        
         wordCompletionWindow->move(pos);
         wordCompletionWindow->show();
 
+        // Add completion words.
         std::sort(std::begin(words), std::end(words),
                   [=](QString a, QString b) {
                       return a.size() < b.size();
                   });
         wordCompletionWindow->addWords(words);
 
+        // Update theme to listview items.
         QVariantMap jsonMap = Utils::getThemeNodeMap(themeName);
         auto selectedBackgroundColor = jsonMap["app-colors"].toMap()["english-completer-item-selected-background"].toString();
         auto selectedTextColor = jsonMap["app-colors"].toMap()["english-completer-item-selected-text"].toString();

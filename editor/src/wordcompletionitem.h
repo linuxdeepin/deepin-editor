@@ -42,7 +42,6 @@ private:
     QString selectedTextColor;
     QString normalBackgroundColor;
     QString normalTextColor;
-    float screenScale;
 };	
 
 #endif

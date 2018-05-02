@@ -37,7 +37,6 @@ void WordCompletionWindow::addWords(QStringList words)
         windowHeight = 10 * lineHeight;
     } else {
         windowHeight = words.size() * lineHeight;
-        
     }
     
     setFixedSize(windowWidth, windowHeight);

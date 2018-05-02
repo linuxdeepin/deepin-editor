@@ -19,8 +19,6 @@ public:
     DSimpleListView *listview;
     QList<DSimpleListItem*> items;
     
-private:    
-    float screenScale;
     int windowWidth;
     int windowHeight;
     int lineHeight;
