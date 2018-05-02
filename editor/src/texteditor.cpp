@@ -2357,13 +2357,16 @@ void TextEditor::tryCompleteWord()
             int wordIndex = query.record().indexOf("word");
 
             while (query.next()) {
-                completionList << query.value(wordIndex).toString();
+                auto completionWord = query.value(wordIndex).toString();
+                if (completionWord != wordAtCursor) {
+                    completionList << completionWord;
+                }
             }
         } else {
             qDebug() << "Error: " << query.lastError();
         }
     }
-
+    
     popupCompletionWindow(wordAtCursor, QPoint(windowPos.x() + cursorPos.x(), windowPos.y() + cursorPos.y()), completionList);
 
     hasCompletionWords = completionList.size() > 1;
