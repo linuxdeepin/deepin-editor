@@ -64,7 +64,7 @@ ThemeBar::ThemeBar(QWidget *parent) : QWidget(parent)
     layout->addWidget(themeView);
 
     QStringList filters;
-    QFileInfoList themeInfos = QDir("../theme").entryInfoList(filters, QDir::Dirs | QDir::NoDotAndDotDot);
+    QFileInfoList themeInfos = QDir(":/theme").entryInfoList(filters, QDir::Dirs | QDir::NoDotAndDotDot);
 
     for (auto themeInfo : themeInfos) {
         ThemeItem *item = new ThemeItem(themeInfo.absoluteFilePath());

@@ -221,7 +221,7 @@ qreal Utils::easeOutQuint(qreal x)
 
 QVariantMap Utils::getThemeNodeMap(QString themeName)
 {
-    auto themeDir = QDir("../theme").filePath(themeName);
+    auto themeDir = QDir(":/theme").filePath(themeName);
     auto filePath = QDir(themeDir).filePath("editor.theme");
     
     QFile fileObject(filePath);

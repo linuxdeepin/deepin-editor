@@ -1832,7 +1832,7 @@ void TextEditor::loadHighlighter()
     const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());
 
     if (def.filePath() != "") {
-        QString syntaxFile = QFileInfo(QString("../syntax/%1").arg(QFileInfo(def.filePath()).fileName())).absoluteFilePath();
+        QString syntaxFile = QFileInfo(QString(":/syntax/%1").arg(QFileInfo(def.filePath()).fileName())).absoluteFilePath();
 
         QFile file(syntaxFile);
         if (!file.open(QFile::ReadOnly)) {
