@@ -47,11 +47,11 @@ TabWidget::TabWidget()
     setMaskColor(dropColor);
 
     rightClickTab = -1;
-    
+
     setFixedHeight(40);
-    
+
     connect(this, &TabWidget::tabReleaseRequested, this, &TabWidget::handleTabReleaseRequested);
-    connect(this, &DTabBar::dragActionChanged, this, &TabWidget::handleDragActionChanged);    
+    connect(this, &DTabBar::dragActionChanged, this, &TabWidget::handleDragActionChanged);
 }
 
 QMimeData* TabWidget::createMimeDataFromTab(int index, const QStyleOptionTab &) const
@@ -65,7 +65,7 @@ QMimeData* TabWidget::createMimeDataFromTab(int index, const QStyleOptionTab &) 
     // Add tab info in DND data.
     QMimeData *mimeData = new QMimeData;
     mimeData->setData("tabInfo", (QString("%1\n%2\n%3").arg(tabName, tabPath, tabContent)).toUtf8());
-    
+
     // Remove text/plain format, avoid drop tab text to other applications
     mimeData->removeFormat("text/plain");
 
@@ -80,24 +80,26 @@ QPixmap TabWidget::createDragPixmapFromTab(int index, const QStyleOptionTab &, Q
     int height = textEditor->height();
     QImage screenshotImage(width, height, QImage::Format_ARGB32_Premultiplied);
     textEditor->render(&screenshotImage, QPoint(), QRegion(0, 0, width, height));
-    
+
     // Scaled image to smaller.
-    int scaledWidth = width / 5;
-    int scaledHeight = height / 5;
+    auto screenScale = QString(std::getenv("QT_SCALE_FACTOR")).toInt();
+
+    int scaledWidth = width * screenScale / 5;
+    int scaledHeight = height * screenScale / 5;
     auto scaledImage = screenshotImage.scaled(scaledWidth, scaledHeight);
-    
+
     // Clip screenshot image with window radius.
     QPainter painter(&scaledImage);
     painter.setRenderHint(QPainter::Antialiasing, true);
-    
+
     QPainterPath rectPath;
     QPainterPath roundedRectPath;
-    
+
     rectPath.addRect(0, 0, scaledWidth, scaledHeight);
     roundedRectPath.addRoundedRect(QRect(0, 0, scaledWidth, scaledHeight), 6, 6);
-    
+
     rectPath -= roundedRectPath;
-    
+
     painter.setCompositionMode(QPainter::CompositionMode_Source);
     painter.fillPath(rectPath, Qt::transparent);
     painter.end();
@@ -106,7 +108,7 @@ QPixmap TabWidget::createDragPixmapFromTab(int index, const QStyleOptionTab &, Q
     if (count() == 1) {
         static_cast<Window*>(this->window())->hide();
     }
-    
+
     // Adjust offset.
     offset->setX(20);
     offset->setY(20);
@@ -114,7 +116,7 @@ QPixmap TabWidget::createDragPixmapFromTab(int index, const QStyleOptionTab &, Q
     // Return image composited with shadow.
     QColor shadowColor = QColor("#000000");
     shadowColor.setAlpha(80);
-    
+
     return Utils::dropShadow(QPixmap::fromImage(scaledImage), 40, shadowColor, QPoint(0, 8));
 }
 
@@ -131,9 +133,9 @@ void TabWidget::insertFromMimeData(int index, const QMimeData *source)
     QString tabName = dropContent[0];
     QString tabPath = dropContent[1];
     QString tabContent = content.remove(0, tabName.size() + tabPath.size() + 2); // 2 mean two \n char
-    
+
     Window* window = static_cast<Window*>(this->window());
-    
+
     window->addTabWithContent(tabName, tabPath, tabContent, index);
     window->activeTab(window->getTabIndex(tabPath));
 }
@@ -145,9 +147,9 @@ void TabWidget::insertFromMimeDataOnDragEnter(int index, const QMimeData *source
     QString tabName = dropContent[0];
     QString tabPath = dropContent[1];
     QString tabContent = content.remove(0, tabName.size() + tabPath.size() + 2); // 2 mean two \n char
-    
+
     Window* window = static_cast<Window*>(this->window());
-    
+
     window->addTabWithContent(tabName, tabPath, tabContent, index);
     window->activeTab(window->getTabIndex(tabPath));
 }
@@ -185,16 +187,16 @@ bool TabWidget::eventFilter(QObject *, QEvent *event)
             if (rightClickTab >= 0) {
                 menu = new QMenu();
                 menu->setStyle(QStyleFactory::create("dlight"));
-                
+
                 closeTabAction = new QAction("Close Tab", this);
                 closeOtherTabAction = new QAction("Close Other Tabs", this);
-                
+
                 connect(closeTabAction, &QAction::triggered, this, &TabWidget::handleCloseTab);
                 connect(closeOtherTabAction, &QAction::triggered, this, &TabWidget::handleCloseOtherTabs);
-                
+
                 menu->addAction(closeTabAction);
                 menu->addAction(closeOtherTabAction);
-                
+
                 menu->exec(this->mapToGlobal(position));
 
                 return true;
