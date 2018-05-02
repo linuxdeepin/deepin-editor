@@ -1140,7 +1140,7 @@ bool Window::wordCompletionWindowIsVisible()
 
 void Window::handlePopupCompletionWindow(QString word, QPoint pos, QStringList words)
 {
-    if (words.size() > 1 && word.size() > 3) {
+    if (words.size() >= 1 && word.size() > 2) {
         // Adjust word completion window y coordinate if it out of screen.
         QScreen *screen = QGuiApplication::primaryScreen();
         QRect screenGeometry = screen->geometry();

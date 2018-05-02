@@ -2358,6 +2358,7 @@ void TextEditor::tryCompleteWord()
 
             while (query.next()) {
                 auto completionWord = query.value(wordIndex).toString();
+                
                 if (completionWord != wordAtCursor) {
                     completionList << completionWord;
                 }
