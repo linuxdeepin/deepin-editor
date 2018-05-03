@@ -27,6 +27,7 @@ ThemeView::ThemeView()
 {
     installEventFilter(this);   // add event filter
     keepSelectWhenClickBlank(true);
+    setSingleSelect(true);
 }
 
 bool ThemeView::eventFilter(QObject *, QEvent *event)
