@@ -1142,6 +1142,18 @@ DDialog* Window::createSaveFileDialog(QString title, QString content)
 
 void Window::popupThemeBar()
 {
+    // Select current theme.
+    themeBar->themeView->clearSelections();
+    QList<DSimpleListItem*> items;
+    foreach (auto item, themeBar->items) {
+        if ((static_cast<ThemeItem*>(item))->themeName == themeName) {
+            items << item;
+            break;
+        }
+    }
+    themeBar->themeView->addSelections(items);
+    
+    // Popup theme bar.
     themeBar->popup();
 }
 
