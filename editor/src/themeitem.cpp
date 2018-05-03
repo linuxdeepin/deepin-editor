@@ -67,27 +67,37 @@ void ThemeItem::drawForeground(QRect rect, QPainter *painter, int column, int, b
     Utils::setFontSize(*painter, 12);
     
     if (column == 0) {
-        // Build path.
-        QPainterPath path;
-        path.addRoundedRect(QRect(rect.x() + 20, rect.y() + 5, rect.width() - 40, rect.height() - 10), 6, 6);
-        
-        // Draw background.
-        painter->fillPath(path, QColor(backgroundColor));
-        
         // Draw frame.
         painter->save();
         
-        QPen framePen;
+        QPainterPath framePath;
+        framePath.addRoundedRect(
+            QRect(rect.x() + itemPaddingX, 
+                  rect.y() + itemPaddingY, 
+                  rect.width() - itemPaddingX * 2, 
+                  rect.height() - itemPaddingY * 2), frameRadius, frameRadius);
+        QString frameColor;
         if (isSelect) {
-            framePen.setColor(frameSelectedColor);
+            frameColor = frameSelectedColor;
         } else {
-            framePen.setColor(frameNormalColor);
+            frameColor = frameNormalColor;
         }
         painter->setOpacity(1);
-        painter->setPen(framePen);
-        painter->drawPath(path);
+        painter->setPen(QPen(QColor(frameColor), 1));
+        painter->drawPath(framePath);
         
         painter->restore();
+        
+        // Draw background.
+        QPainterPath backgroundPath;
+        backgroundPath.addRoundedRect(
+            QRect(rect.x() + itemPaddingX,
+                  rect.y() + itemPaddingY,
+                  rect.width() - itemPaddingX * 2,
+                  rect.height() - itemPaddingY * 2), frameRadius, frameRadius);
+        
+        painter->setOpacity(0.8);
+        painter->fillPath(backgroundPath, QColor(backgroundColor));
         
         // Draw syntax highlight.
         painter->save();
@@ -95,6 +105,7 @@ void ThemeItem::drawForeground(QRect rect, QPainter *painter, int column, int, b
         int htmlPaddingLeft = 30;
         int htmlPaddingTop = 10;
 
+        painter->setOpacity(1);
         painter->translate(QPointF(rect.x() + htmlPaddingLeft, rect.y() + htmlPaddingTop));
         QTextDocument td;
         QString indentConent = "&nbsp;&nbsp;&nbsp;&nbsp;";

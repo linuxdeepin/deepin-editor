@@ -58,6 +58,10 @@ private:
     
     QString frameSelectedColor;
     QString frameNormalColor;
+    
+    int itemPaddingY = 8;
+    int itemPaddingX = 20;
+    int frameRadius = 5;
 };
 
 #endif

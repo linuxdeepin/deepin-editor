@@ -86,6 +86,7 @@ void ThemeBar::paintEvent(QPaintEvent *)
 
     QPainterPath path;
     path.addRect(QRect(rect().x() + 1, rect().y(), rect().width() - 1, rect().height()));
+    painter.setOpacity(0.8);
     painter.fillPath(path, backgroundColor);
     
     QPainterPath framePath;
