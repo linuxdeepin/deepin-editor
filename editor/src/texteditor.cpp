@@ -66,7 +66,7 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     m_highlighter(new KSyntaxHighlighting::SyntaxHighlighter(document()))
 {
     viewport()->installEventFilter(this);
-    
+
     // Don't draw frame around editor widget.
     setFrameShape(QFrame::NoFrame);
 
@@ -227,26 +227,26 @@ void TextEditor::backwardChar()
 void TextEditor::forwardWord()
 {
     QTextCursor cursor = textCursor();
-    
+
     if (cursorMark) {
         cursor.setPosition(getNextWordPosition(cursor, QTextCursor::KeepAnchor), QTextCursor::KeepAnchor);
     } else {
         cursor.setPosition(getNextWordPosition(cursor, QTextCursor::MoveAnchor), QTextCursor::MoveAnchor);
     }
-    
+
     setTextCursor(cursor);
 }
 
 void TextEditor::backwardWord()
 {
     QTextCursor cursor = textCursor();
-    
+
     if (cursorMark) {
         cursor.setPosition(getPrevWordPosition(cursor, QTextCursor::KeepAnchor), QTextCursor::KeepAnchor);
     } else {
         cursor.setPosition(getPrevWordPosition(cursor, QTextCursor::MoveAnchor), QTextCursor::MoveAnchor);
     }
-    
+
     setTextCursor(cursor);
 }
 
@@ -990,10 +990,10 @@ void TextEditor::killCurrentLine()
 
     cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-    
+
     QString text = cursor.selectedText();
     bool isBlankLine = text.trimmed().size() == 0;
-    
+
     cursor.removeSelectedText();
     if (isBlankLine) {
         cursor.deleteChar();
@@ -1144,7 +1144,7 @@ void TextEditor::transposeChar()
 void TextEditor::changeToEditCursor()
 {
     setCursorWidth(2);
-    
+
     // Need repaint after change to edit stauts,
     // avoid cursor width not flash after press key.
     repaint();
@@ -1194,7 +1194,7 @@ void TextEditor::convertWordCase(ConvertCase convertCase)
         cursor = textCursor();
         cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
         cursor.setPosition(getNextWordPosition(cursor, QTextCursor::KeepAnchor), QTextCursor::KeepAnchor);
-        
+
         QString text = cursor.selectedText();
         if (convertCase == UPPER) {
             cursor.insertText(text.toUpper());
@@ -1221,7 +1221,7 @@ QString TextEditor::capitalizeText(QString text)
             break;
         }
     }
-    
+
     return newText;
 }
 
@@ -1616,7 +1616,7 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
                     return;
                 }
             }
-            
+
             // Post event to window widget if match Alt+0 ~ Alt+9
             QRegularExpression re("^Alt\\+\\d");
             QRegularExpressionMatch match = re.match(key);
@@ -1675,15 +1675,15 @@ void TextEditor::contextMenuEvent(QContextMenuEvent *event)
 {
     rightMenu->clear();
 
-    QString wordAtCursor = getWordAtCursor();
-    
+    QString wordAtCursor = getWordAtMouse();
+
     QTextCursor selectionCursor = textCursor();
     selectionCursor.movePosition(QTextCursor::StartOfBlock);
     selectionCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
     QString text = selectionCursor.selectedText();
 
     bool isBlankLine = text.trimmed().size() == 0;
-    
+
     if (canUndo) {
         rightMenu->addAction(undoAction);
     }
@@ -1707,7 +1707,7 @@ void TextEditor::contextMenuEvent(QContextMenuEvent *event)
     if (canPaste()) {
         rightMenu->addAction(pasteAction);
     }
-    
+
     if (wordAtCursor != "") {
         rightMenu->addAction(deleteAction);
     }
@@ -1857,7 +1857,7 @@ void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme)
     }
     viewport()->setPalette(pal);
     viewport()->setAutoFillBackground(true);
-    
+
     currentLineColor = QColor(theme.editorColor(KSyntaxHighlighting::Theme::CurrentLine));
     backgroundColor = QColor(theme.editorColor(KSyntaxHighlighting::Theme::BackgroundColor));
     lineNumbersColor = QColor(theme.editorColor(KSyntaxHighlighting::Theme::LineNumbers));
@@ -1911,7 +1911,7 @@ void TextEditor::loadHighlighter()
         commentDefinition.setComments(QString("%1 ").arg(singleLineComment), multiLineCommentStart, multiLineCommentEnd);
 
         m_highlighter->setDefinition(def);
-        
+
         file.close();
     }
 }
@@ -1981,11 +1981,11 @@ void TextEditor::cutSelectedText()
 {
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(textCursor().selectedText());
-    
+
     QTextCursor cursor = textCursor();
     cursor.removeSelectedText();
     setTextCursor(cursor);
-    
+
     unsetMark();
 }
 
@@ -2110,7 +2110,7 @@ void TextEditor::clickPasteAction()
         pasteText();
     } else {
         QTextCursor cursor;
-        
+
         // Move to word cursor if have word around mouse.
         // Otherwise find nearest cursor with mouse click.
         if (highlightWordCacheCursor.position() != -1) {
@@ -2120,7 +2120,7 @@ void TextEditor::clickPasteAction()
             auto pos = mapFromGlobal(mouseClickPos);
             cursor = cursorForPosition(pos);
         }
-        
+
         setTextCursor(cursor);
 
         pasteText();
@@ -2162,6 +2162,29 @@ QString TextEditor::getWordAtCursor()
     if (toPlainText() == "") {
         return "";
     } else {
+        QTextCursor cursor = textCursor();
+        QChar currentChar = toPlainText().at(std::max(cursor.position() - 1, 0));
+
+        cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
+        while (!currentChar.isSpace() && cursor.position() != 0) {
+            // while (!currentChar.isSpace() && cursor.position() != 0) {
+            cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+            currentChar = toPlainText().at(std::max(cursor.position() - 1, 0));
+
+            if (currentChar == '-') {
+                break;
+            }
+        }
+        
+        return cursor.selectedText();
+    }
+}
+
+QString TextEditor::getWordAtMouse()
+{
+    if (toPlainText() == "") {
+        return "";
+    } else {
         auto pos = mapFromGlobal(QCursor::pos());
         QTextCursor cursor(cursorForPosition(pos));
 
@@ -2177,7 +2200,7 @@ QString TextEditor::getWordAtCursor()
             (rect.y() <= pos.y()) &&
             (pos.y() <= rect.y() + rect.height())) {
             cursor.select(QTextCursor::WordUnderCursor);
-            
+
             return cursor.selectedText();
         } else {
             return "";
@@ -2286,7 +2309,7 @@ void TextEditor::toggleBullet()
     QTextCursor removeSelectionCursor = textCursor();
     removeSelectionCursor.clearSelection();
     setTextCursor(removeSelectionCursor);
-    
+
     tryUnsetMark();
 }
 
@@ -2344,9 +2367,9 @@ int TextEditor::getNextWordPosition(QTextCursor cursor, QTextCursor::MoveMode mo
 {
     // Move next char first.
     cursor.movePosition(QTextCursor::NextCharacter, moveMode);
-    
+
     QChar currentChar = toPlainText().at(cursor.position());
-    
+
     // Just to next non-space char if current char is space.
     if (currentChar.isSpace()) {
         while (cursor.position() < toPlainText().length() && currentChar.isSpace()) {
@@ -2360,7 +2383,7 @@ int TextEditor::getNextWordPosition(QTextCursor cursor, QTextCursor::MoveMode mo
             cursor.movePosition(QTextCursor::NextCharacter, moveMode);
         }
     }
-    
+
     return cursor.position();
 }
 
@@ -2368,9 +2391,9 @@ int TextEditor::getPrevWordPosition(QTextCursor cursor, QTextCursor::MoveMode mo
 {
     // Move prev char first.
     cursor.movePosition(QTextCursor::PreviousCharacter, moveMode);
-    
+
     QChar currentChar = toPlainText().at(cursor.position());
-    
+
     // Just to next non-space char if current char is space.
     if (currentChar.isSpace()) {
         while (cursor.position() > 0 && currentChar.isSpace()) {
@@ -2384,7 +2407,7 @@ int TextEditor::getPrevWordPosition(QTextCursor cursor, QTextCursor::MoveMode mo
             cursor.movePosition(QTextCursor::PreviousCharacter, moveMode);
         }
     }
-    
+
     return cursor.position();
 }
 
@@ -2400,12 +2423,12 @@ void TextEditor::tryCompleteWord()
 
     auto rect = cursorRect(textCursor());
 
-    auto cursorPos = viewport()->mapTo(static_cast<Window*>(this->window()), 
-                                       QPoint(rect.x() + rect.width(), 
+    auto cursorPos = viewport()->mapTo(static_cast<Window*>(this->window()),
+                                       QPoint(rect.x() + rect.width(),
                                               rect.y() + rect.height()));
-    
+
     auto windowPos = static_cast<Window*>(this->window())->mapToGlobal(QPoint(0, 0));
-    
+
     QStringList completionList;
 
     if (wordAtCursor != "") {
@@ -2418,7 +2441,7 @@ void TextEditor::tryCompleteWord()
 
             while (query.next()) {
                 auto completionWord = query.value(wordIndex).toString();
-                
+
                 if (completionWord != wordAtCursor) {
                     completionList << completionWord;
                 }
@@ -2427,7 +2450,7 @@ void TextEditor::tryCompleteWord()
             qDebug() << "Error: " << query.lastError();
         }
     }
-    
+
     popupCompletionWindow(wordAtCursor, QPoint(windowPos.x() + cursorPos.x(), windowPos.y() + cursorPos.y()), completionList);
 
     hasCompletionWords = completionList.size() > 1;
@@ -2461,9 +2484,9 @@ bool TextEditor::eventFilter(QObject *, QEvent *event)
 {
     if (event->type() == QEvent::MouseButtonPress) {
         mouseClickPos = QCursor::pos();
-        
+
         emit click();
     }
-    
+
     return false;
 }

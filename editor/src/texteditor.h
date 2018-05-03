@@ -143,6 +143,7 @@ public:
     
     void setEnglishWordsDB(QSqlDatabase wordsDB);
     void completionWord(QString word);
+    QString getWordAtMouse();
     QString getWordAtCursor();
     void toggleEnglishCompleter();
     void setEnglishCompleter(bool enable);
