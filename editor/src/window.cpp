@@ -873,6 +873,22 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
         removeBottomWidget();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "window", "displayshortcuts")) {
         displayShortcuts();
+    } else {
+        // Post event to window widget if match Alt+0 ~ Alt+9
+        QRegularExpression re("^Alt\\+\\d");
+        QRegularExpressionMatch match = re.match(key);
+        if (match.hasMatch()) {
+            auto tabIndex = key.replace("Alt+", "").toInt();
+            if (tabIndex == 9) {
+                if (tabbar->tabbar->count() > 1) {
+                    activeTab(tabbar->tabbar->count() - 1);
+                }
+            } else {
+                if (tabIndex <= tabbar->tabbar->count()) {
+                    activeTab(tabIndex - 1);
+                }
+            }
+        }
     }
 }
 

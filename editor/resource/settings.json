@@ -963,13 +963,13 @@
                             "key": "selectnexttab",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Alt+8"
+                            "default":  "Ctrl+Tab"
                         },
                         {
                             "key": "selectprevtab",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Alt+7"
+                            "default":  "Ctrl+Shift+Backtab"
                         },
                         {
                             "key": "closetab",

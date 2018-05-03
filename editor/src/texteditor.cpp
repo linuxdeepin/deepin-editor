@@ -1609,12 +1609,20 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         } else if (key == "Esc") {
             emit pressEsc();
         } else {
-                // Post event to window widget if key match window key list.
+            // Post event to window widget if key match window key list.
             for (auto option : settings->settings->group("shortcuts.window")->options()) {
                 if (key == settings->settings->option(option->key())->value().toString()) {
                     keyEvent->ignore();
                     return;
                 }
+            }
+            
+            // Post event to window widget if match Alt+0 ~ Alt+9
+            QRegularExpression re("^Alt\\+\\d");
+            QRegularExpressionMatch match = re.match(key);
+            if (match.hasMatch()) {
+                keyEvent->ignore();
+                return;
             }
 
             // Text editor handle key self.
