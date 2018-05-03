@@ -990,7 +990,14 @@ void TextEditor::killCurrentLine()
 
     cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+    
+    QString text = cursor.selectedText();
+    bool isBlankLine = text.trimmed().size() == 0;
+    
     cursor.removeSelectedText();
+    if (isBlankLine) {
+        cursor.deleteChar();
+    }
 
     setTextCursor(cursor);
 }
