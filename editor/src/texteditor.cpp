@@ -2101,7 +2101,19 @@ void TextEditor::clickPasteAction()
     if (textCursor().hasSelection()) {
         pasteText();
     } else {
-        setTextCursor(highlightWordCacheCursor);
+        QTextCursor cursor;
+        
+        // Move to word cursor if have word around mouse.
+        // Otherwise find nearest cursor with mouse click.
+        if (highlightWordCacheCursor.position() != -1) {
+            cursor = textCursor();
+            cursor.setPosition(highlightWordCacheCursor.position(), QTextCursor::MoveAnchor);
+        } else {
+            auto pos = mapFromGlobal(mouseClickPos);
+            cursor = cursorForPosition(pos);
+        }
+        
+        setTextCursor(cursor);
 
         pasteText();
     }
@@ -2440,6 +2452,8 @@ void TextEditor::completionWord(QString word)
 bool TextEditor::eventFilter(QObject *, QEvent *event)
 {
     if (event->type() == QEvent::MouseButtonPress) {
+        mouseClickPos = QCursor::pos();
+        
         emit click();
     }
     

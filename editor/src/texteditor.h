@@ -295,6 +295,8 @@ private:
     QColor regionMarkerColor;
     QColor searchHighlightColor;
     QColor selectionColor;
+    
+    QPoint mouseClickPos;
 };
 
 #endif
