@@ -101,6 +101,19 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
                 }, Qt::QueuedConnection);
         connect(tabbar, &Tabbar::tabReleaseRequested, this, &Window::handleTabReleaseRequested, Qt::QueuedConnection);
         connect(tabbar, &Tabbar::tabCloseRequested, this, &Window::handleTabCloseRequested, Qt::QueuedConnection);
+        connect(tabbar->tabbar, &TabWidget::currentChanged, this, [=]() {
+                if (findBar->isVisible()) {
+                    findBar->hide();
+                }
+                
+                if (replaceBar->isVisible()) {
+                    replaceBar->hide();
+                }
+                
+                foreach (auto editor, editorMap.values()) {
+                    editor->textEditor->removeKeywords();
+                }
+            });
 
         menu = new QMenu();
         menu->setStyle(QStyleFactory::create("dlight"));
