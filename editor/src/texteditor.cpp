@@ -177,7 +177,7 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     // configure content area
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    setViewportMargins(0, 0, -verticalScrollBar()->sizeHint().width(), -horizontalScrollBar()->sizeHint().height());
+    // setViewportMargins(0, 0, -verticalScrollBar()->sizeHint().width(), -horizontalScrollBar()->sizeHint().height());
 }
 
 int TextEditor::getCurrentLine()

@@ -820,6 +820,8 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
 
     if (key == Utils::getKeyshortcutFromKeymap(settings, "window", "addblanktab")) {
         addBlankTab();
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "window", "newwindow")) {
+        newWindow();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "window", "savefile")) {
         saveFile();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "window", "saveasfile")) {

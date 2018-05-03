@@ -63,6 +63,12 @@
                             "default":  "Ctrl+T"
                         },
                         {
+                            "key": "newwindow",
+                            "name": "New window",
+                            "type": "shortcut",
+                            "default":  "Ctrl+N"
+                        },
+                        {
                             "key": "savefile",
                             "name": "Save File",
                             "type": "shortcut",
@@ -494,6 +500,12 @@
                             "hide" : true,
                             "reset" : false,
                             "default":  "Ctrl+T"
+                        },
+                        {
+                            "key": "newwindow",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "Ctrl+N"
                         },
                         {
                             "key": "savefile",
@@ -930,6 +942,12 @@
                             "default":  "Ctrl+Shift+T"
                         },
                         {
+                            "key": "newwindow",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "Ctrl+Shift+N"
+                        },
+                        {
                             "key": "savefile",
                             "hide" : true,
                             "reset" : false,
@@ -1362,6 +1380,12 @@
                             "hide" : true,
                             "reset" : false,
                             "default":  "Ctrl+T"
+                        },
+                        {
+                            "key": "newwindow",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "Ctrl+N"
                         },
                         {
                             "key": "savefile",
