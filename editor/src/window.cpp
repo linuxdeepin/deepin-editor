@@ -1130,9 +1130,10 @@ void Window::popupPrintDialog()
     preview.exec();
 }
 
-void Window::changeTitlebarBackground(QString color)
+void Window::changeTitlebarBackground(QString startColor, QString endColor)
 {
-    this->titlebar()->setStyleSheet(QString("%1Dtk--Widget--DTitlebar {background: %2;}").arg(titlebarStyleSheet).arg(color));
+    this->titlebar()->setStyleSheet(
+        QString("%1Dtk--Widget--DTitlebar {background: qlineargradient(x1: 0 y1: 0, x2: 0 y2: 1, stop: 0 rgba%2, stop: 1 rgba%3);}").arg(titlebarStyleSheet).arg(startColor).arg(endColor));
 }
 
 bool Window::wordCompletionWindowIsVisible()
@@ -1237,17 +1238,19 @@ void Window::loadTheme(QString name)
 
     if (QColor(backgroundColor).lightness() < 128) {
         DThemeManager::instance()->setTheme("dark");
+        tabbar->tabbar->setBackground(darkTabBackgroundStartColor, darkTabBackgroundEndColor);
+        changeTitlebarBackground(darkTabBackgroundStartColor, darkTabBackgroundEndColor);
     } else {
         DThemeManager::instance()->setTheme("light");
+        tabbar->tabbar->setBackground(lightTabBackgroundStartColor, lightTabBackgroundEndColor);
+        changeTitlebarBackground(lightTabBackgroundStartColor, lightTabBackgroundEndColor);
     }
 
-    changeTitlebarBackground(backgroundColor);
     themeBar->setBackground(backgroundColor);
     jumpLineBar->setBackground(backgroundColor);
     replaceBar->setBackground(backgroundColor);
     findBar->setBackground(backgroundColor);
-    tabbar->tabbar->setBackground(backgroundColor);
-    tabbar->tabbar->setDNDColor(jsonMap["app-colors"].toMap()["tab-dnd"].toString());
+    tabbar->tabbar->setDNDColor(jsonMap["app-colors"].toMap()["tab-dnd-start"].toString(), jsonMap["app-colors"].toMap()["tab-dnd-end"].toString());
     tabbar->setTabActiveColor(jsonMap["app-colors"].toMap()["tab-active"].toString());
 
     auto frameSelectedColor = jsonMap["app-colors"].toMap()["themebar-frame-selected"].toString();

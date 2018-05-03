@@ -94,7 +94,7 @@ public:
     void updateFontSize(int size);
     void updateTabSpaceNumber(int number);
     
-    void changeTitlebarBackground(QString color);
+    void changeTitlebarBackground(QString startColor, QString endColor);
     
     bool wordCompletionWindowIsVisible();
     
@@ -208,6 +208,10 @@ private:
     ThemeBar *themeBar;
     
     QString themeName;
+    QString lightTabBackgroundStartColor = "(255, 255, 255, 90%)";
+    QString lightTabBackgroundEndColor = "(248, 248, 248, 90%)";
+    QString darkTabBackgroundStartColor = "(16, 16, 16, 90%)";
+    QString darkTabBackgroundEndColor = "(16, 16, 16, 90%)";
 };
 
 #endif
