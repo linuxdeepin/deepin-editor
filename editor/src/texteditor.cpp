@@ -1943,13 +1943,19 @@ void TextEditor::setSettings(Settings *keySettings)
 
 void TextEditor::copySelectedText()
 {
-    copy();
+    QClipboard *clipboard = QApplication::clipboard();
+    clipboard->setText(textCursor().selectedText());
 }
 
 void TextEditor::cutSelectedText()
 {
-    cut();
-
+    QClipboard *clipboard = QApplication::clipboard();
+    clipboard->setText(textCursor().selectedText());
+    
+    QTextCursor cursor = textCursor();
+    cursor.removeSelectedText();
+    setTextCursor(cursor);
+    
     unsetMark();
 }
 
