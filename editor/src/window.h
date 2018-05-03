@@ -58,7 +58,7 @@ public:
     int getTabIndex(QString file);
     void activeTab(int index);
     
-    void addTab(QString file);
+    void addTab(QString file, bool activeTab=false);
     void addTabWithContent(QString tabName, QString filepath, QString content, int index);
     void closeTab();
     void restoreTab();
@@ -106,6 +106,8 @@ protected:
     void resizeEvent(QResizeEvent* event);
     void closeEvent(QCloseEvent *event);
     void keyPressEvent(QKeyEvent *keyEvent);
+    void dragEnterEvent(QDragEnterEvent *e);
+    void dropEvent(QDropEvent* event);
     
 signals:
     void dropTabOut(QString tabName, QString filepath, QString content);

@@ -56,6 +56,8 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
 {
     // Init.
     installEventFilter(this);   // add event filter
+    setAcceptDrops(true);
+    
     blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
     readonlyFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("readonly-files");
     autoSaveDBus = new DBusDaemon::dbus("com.deepin.editor.daemon", "/", QDBusConnection::systemBus(), this);
@@ -244,7 +246,7 @@ void Window::activeTab(int index)
     tabbar->activeTabWithIndex(index);
 }
 
-void Window::addTab(QString file)
+void Window::addTab(QString file, bool activeTab)
 {
     QString filepath = file;
     if (!Utils::fileIsWritable(file)) {
@@ -271,7 +273,16 @@ void Window::addTab(QString file)
         }
     }
 
+    // Activate window.
     activateWindow();
+    
+    // Active tab if activeTab is true.
+    if (activeTab) {
+        int tabIndex = tabbar->getTabIndex(filepath);
+        if (tabIndex != -1) {
+            tabbar->activeTabWithIndex(tabIndex);
+        }
+    }
 }
 
 void Window::addTabWithContent(QString tabName, QString filepath, QString content, int index)
@@ -1262,4 +1273,23 @@ void Window::loadTheme(QString name)
 
     settings->settings->option("base.theme.default")->setValue(name);
     themeName = name;
+}
+
+void Window::dragEnterEvent(QDragEnterEvent *event)
+{
+    // Accept drag event if mime type is url.
+    if (event->mimeData()->hasUrls()) {
+        event->acceptProposedAction();
+    }
+}
+
+void Window::dropEvent(QDropEvent* event)
+{
+    const QMimeData* mimeData = event->mimeData();
+ 
+    if (mimeData->hasUrls()) {
+        foreach (auto url, mimeData->urls()) {
+            addTab(url.toLocalFile(), true);
+        }
+    }
 }
