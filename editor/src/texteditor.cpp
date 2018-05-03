@@ -1667,6 +1667,15 @@ void TextEditor::contextMenuEvent(QContextMenuEvent *event)
 {
     rightMenu->clear();
 
+    QString wordAtCursor = getWordAtCursor();
+    
+    QTextCursor selectionCursor = textCursor();
+    selectionCursor.movePosition(QTextCursor::StartOfBlock);
+    selectionCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+    QString text = selectionCursor.selectedText();
+
+    bool isBlankLine = text.trimmed().size() == 0;
+    
     if (canUndo) {
         rightMenu->addAction(undoAction);
     }
@@ -1681,23 +1690,36 @@ void TextEditor::contextMenuEvent(QContextMenuEvent *event)
         // Just show copy/cut menu item when cursor rectangle contain moue pointer coordinate.
         haveWordUnderCursor = highlightWordUnderMouse(event->pos());
         if (haveWordUnderCursor) {
-            rightMenu->addAction(cutAction);
-            rightMenu->addAction(copyAction);
+            if (wordAtCursor != "") {
+                rightMenu->addAction(cutAction);
+                rightMenu->addAction(copyAction);
+            }
         }
     }
     if (canPaste()) {
         rightMenu->addAction(pasteAction);
     }
-    rightMenu->addAction(deleteAction);
-    rightMenu->addAction(selectAllAction);
+    
+    if (wordAtCursor != "") {
+        rightMenu->addAction(deleteAction);
+    }
+    if (toPlainText() != "") {
+        rightMenu->addAction(selectAllAction);
+    }
     rightMenu->addSeparator();
-    rightMenu->addAction(findAction);
-    rightMenu->addAction(replaceAction);
-    rightMenu->addAction(jumpLineAction);
-    rightMenu->addSeparator();
-    rightMenu->addMenu(convertCaseMenu);
-    rightMenu->addAction(toggleCommentAction);
-    rightMenu->addAction(toggleBulletAction);
+    if (toPlainText() != "") {
+        rightMenu->addAction(findAction);
+        rightMenu->addAction(replaceAction);
+        rightMenu->addAction(jumpLineAction);
+        rightMenu->addSeparator();
+    }
+    if (wordAtCursor != "") {
+        rightMenu->addMenu(convertCaseMenu);
+    }
+    if (toPlainText() != "" && (textCursor().hasSelection() || !isBlankLine)) {
+        rightMenu->addAction(toggleCommentAction);
+        rightMenu->addAction(toggleBulletAction);
+    }
     rightMenu->addSeparator();
     if (enableEnglishCompleter) {
         rightMenu->addAction(disableEnglishCompleterAction);
@@ -2120,21 +2142,26 @@ QString TextEditor::getWordAtCursor()
     if (toPlainText() == "") {
         return "";
     } else {
-        QTextCursor cursor = textCursor();
-        QChar currentChar = toPlainText().at(std::max(cursor.position() - 1, 0));
+        auto pos = mapFromGlobal(QCursor::pos());
+        QTextCursor cursor(cursorForPosition(pos));
 
-        cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
-        while (!currentChar.isSpace() && cursor.position() != 0) {
-            // while (!currentChar.isSpace() && cursor.position() != 0) {
-            cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
-            currentChar = toPlainText().at(std::max(cursor.position() - 1, 0));
+        // Get cursor rectangle.
+        auto rect = cursorRect(cursor);
+        int widthOffset = 10;
+        rect.setX(std::max(rect.x() - widthOffset / 2, 0));
+        rect.setWidth(rect.width() + widthOffset);
 
-            if (currentChar == '-') {
-                break;
-            }
+        // Just highlight word under pointer when cursor rectangle contain moue pointer coordinate.
+        if ((rect.x() <= pos.x()) &&
+            (pos.x() <= rect.x() + rect.width()) &&
+            (rect.y() <= pos.y()) &&
+            (pos.y() <= rect.y() + rect.height())) {
+            cursor.select(QTextCursor::WordUnderCursor);
+            
+            return cursor.selectedText();
+        } else {
+            return "";
         }
-
-        return cursor.selectedText();
     }
 }
 
