@@ -1944,12 +1944,6 @@ void TextEditor::setSettings(Settings *keySettings)
 void TextEditor::copySelectedText()
 {
     copy();
-
-    unsetMark();
-
-    QTextCursor cursor = textCursor();
-    cursor.clearSelection();
-    setTextCursor(cursor);
 }
 
 void TextEditor::cutSelectedText()
