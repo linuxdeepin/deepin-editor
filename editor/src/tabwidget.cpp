@@ -205,8 +205,9 @@ bool TabWidget::eventFilter(QObject *, QEvent *event)
         }
     } else if (event->type() == QEvent::DragEnter) {
         const QDragEnterEvent *e = static_cast<QDragEnterEvent*>(event);
-
-        if (!e->source() || e->source()->parent() != this) {
+        const QMimeData* mimeData = e->mimeData();
+        
+        if ((!e->source() || e->source()->parent() != this) && mimeData->data("tabInfo") != "") {
             static_cast<Window*>(this->window())->changeTitlebarBackground(dndStartColor, dndEndColor);
         }
     } else if (event->type() == QEvent::DragLeave) {
