@@ -126,6 +126,12 @@ void FindBar::setBackground(QString color)
 {
     backgroundColor = QColor(color);
     
+    if (QColor(backgroundColor).lightness() < 128) {
+        findLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#AAAAAA"));
+    } else {
+        findLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#000000"));
+    }
+    
     repaint();
 }
 

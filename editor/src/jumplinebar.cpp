@@ -126,6 +126,12 @@ void JumpLineBar::setBackground(QString color)
 {
     backgroundColor = QColor(color);
     
+    if (QColor(backgroundColor).lightness() < 128) {
+        label->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#AAAAAA"));
+    } else {
+        label->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#000000"));
+    }
+    
     repaint();
 }
 
