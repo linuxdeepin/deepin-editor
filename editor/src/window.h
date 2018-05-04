@@ -217,6 +217,8 @@ private:
     
     bool inCompleting = false;
     QTimer *inCompletingTimer;
+    
+    int blankFileIndex = 0;
 };
 
 #endif

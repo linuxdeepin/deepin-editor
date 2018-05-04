@@ -923,7 +923,8 @@ void Window::addBlankTab(QString blankFile)
         blankTabPath = blankFile;
     }
 
-    tabbar->addTab(blankTabPath, "Blank document");
+    blankFileIndex++;
+    tabbar->addTab(blankTabPath, QString("Blank document %1").arg(blankFileIndex));
     Editor *editor = createEditor();
     editor->updatePath(blankTabPath);
 
