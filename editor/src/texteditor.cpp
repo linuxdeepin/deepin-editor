@@ -1637,9 +1637,14 @@ void TextEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
     QPainter painter(lineNumberArea);
     painter.fillRect(event->rect(), backgroundColor);
 
-    QColor lineColor = currentLineNumberColor;
-    lineColor.setAlphaF(0.2);
-    painter.fillRect(QRect(event->rect().x() + event->rect().width() - 1, event->rect().y(), 1, event->rect().height()), lineColor);
+    QColor splitLineColor;
+    if (QColor(backgroundColor).lightness() < 128) {
+        splitLineColor = "#ffffff";
+    } else {
+        splitLineColor = "#000000";
+    }
+    splitLineColor.setAlphaF(0.05);
+    painter.fillRect(QRect(event->rect().x() + event->rect().width() - 1, event->rect().y(), 1, event->rect().height()), splitLineColor);
 
     // Update line number.
     QTextBlock block = firstVisibleBlock();
