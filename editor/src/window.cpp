@@ -83,6 +83,15 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     editorLayout->setContentsMargins(0, 0, 0, 0);
 
     layout->addWidget(editorWidget);
+    
+    inCompletingTimer = new QTimer();
+    inCompletingTimer->setSingleShot(true);
+    connect(inCompletingTimer, 
+            &QTimer::timeout, 
+            this, 
+            [=]() {
+                inCompleting = false;
+            });
 
     // Init titlebar.
     if (this->titlebar()) {
@@ -412,6 +421,11 @@ Editor* Window::createEditor()
     connect(editor->textEditor, &TextEditor::selectLastCompletion, this, &Window::handleSelectLastCompletion, Qt::QueuedConnection);
     connect(editor->textEditor, &TextEditor::confirmCompletion, this, &Window::handleConfirmCompletion, Qt::QueuedConnection);
     connect(editor->textEditor, &TextEditor::popupNotify, this, &Window::showNotify, Qt::QueuedConnection);
+    connect(editor->textEditor, &QPlainTextEdit::cursorPositionChanged, this, [=]() {
+            if (!inCompleting && wordCompletionWindow->isVisible()) {
+                wordCompletionWindow->hide();
+            }
+        });
     
     connect(editor->textEditor, &TextEditor::click, this, [=]() {
             wordCompletionWindow->hide();
@@ -1231,6 +1245,12 @@ void Window::handlePopupCompletionWindow(QString word, QPoint pos, QStringList w
         }
         wordCompletionWindow->listview->setFrame(true, QColor(frameColor), 0.3);
         wordCompletionWindow->listview->repaint();
+        
+        inCompleting = true;
+        if (inCompletingTimer->isActive()) {
+            inCompletingTimer->stop();
+        }
+        inCompletingTimer->start(2000);
     } else {
         wordCompletionWindow->hide();
     }

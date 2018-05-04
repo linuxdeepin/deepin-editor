@@ -214,6 +214,9 @@ private:
     QString lightTabBackgroundEndColor = "(248, 248, 248, 90%)";
     QString darkTabBackgroundStartColor = "(16, 16, 16, 90%)";
     QString darkTabBackgroundEndColor = "(16, 16, 16, 90%)";
+    
+    bool inCompleting = false;
+    QTimer *inCompletingTimer;
 };
 
 #endif
