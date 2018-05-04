@@ -115,6 +115,17 @@ void FindBar::paintEvent(QPaintEvent *)
     QPainterPath path;
     path.addRect(rect());
     painter.fillPath(path, backgroundColor);
+    
+    QColor splitLineColor;
+    if (backgroundColor.lightness() < 128) {
+        splitLineColor = QColor("#ffffff");
+    } else {
+        splitLineColor = QColor("#000000");
+    }
+    QPainterPath framePath;
+    framePath.addRect(QRect(rect().x(), rect().y(), rect().width(), 1));
+    painter.setOpacity(0.05);
+    painter.fillPath(framePath, splitLineColor);
 }
 
 void FindBar::setMismatchAlert(bool isAlert)
