@@ -276,6 +276,8 @@ private:
     
     bool cursorMarkStatus = false;
     int cursorMarkPosition = 0;
+    int cursorNormalWidth = 2;
+    int cursorWidthChangeDelay = 2000;
     
     int fontSize;
     QString fontName;

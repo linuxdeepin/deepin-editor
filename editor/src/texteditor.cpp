@@ -1143,7 +1143,7 @@ void TextEditor::transposeChar()
 
 void TextEditor::changeToEditCursor()
 {
-    setCursorWidth(2);
+    setCursorWidth(cursorNormalWidth);
 
     // Need repaint after change to edit stauts,
     // avoid cursor width not flash after press key.
@@ -1156,8 +1156,8 @@ void TextEditor::changeToWaitCursor()
     cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
     QString currentChar = cursor.selectedText();
-
-    setCursorWidth(fontMetrics().width(currentChar));
+    
+    setCursorWidth(std::max(cursorNormalWidth, (fontMetrics().width(currentChar))));
 }
 
 void TextEditor::handleCursorMarkChanged(bool mark, QTextCursor cursor)
@@ -1458,7 +1458,7 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
     if (changeCursorWidthTimer->isActive()) {
         changeCursorWidthTimer->stop();
     }
-    changeCursorWidthTimer->start(2000);
+    changeCursorWidthTimer->start(cursorWidthChangeDelay);
 
     QString key = Utils::getKeyshortcut(keyEvent);
 
