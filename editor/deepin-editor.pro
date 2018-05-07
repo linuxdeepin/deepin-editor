@@ -63,7 +63,7 @@ QT += x11extras
 QT += sql
 
 QMAKE_CXXFLAGS += -g
-LIBS += -lX11 -lXext -lXtst
+LIBS += -lX11 -lXext -lXtst -luchardet
 
 binary.files += $${OUT_PWD}/deepin-editor
 binary.path = $${PREFIX}/bin/

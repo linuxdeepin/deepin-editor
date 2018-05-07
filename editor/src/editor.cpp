@@ -57,8 +57,13 @@ void Editor::loadFile(QString filepath)
 {
     QFile file(filepath);
     if (file.open(QFile::ReadOnly | QFile::Text)) {
-        textEditor->setPlainText(file.readAll());
-
+        auto fileContent = file.readAll();
+        fileEncode = Utils::detectCharset(fileContent);
+        
+        QTextStream stream(&fileContent);
+        stream.setCodec(fileEncode);
+        textEditor->setPlainText(stream.readAll());
+        
         updatePath(filepath);
         
         textEditor->loadHighlighter();
@@ -121,7 +126,7 @@ void Editor::handleTextChangeTimer()
     if (Utils::fileExists(textEditor->filepath)) {
         saveFinish = true;
 
-        saveFile("UTF-8", "Window");
+        saveFile(fileEncode, "Window");
     }
 }
 

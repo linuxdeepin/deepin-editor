@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Deepin Packages Builder <packages@linuxdeepin.com>
 Build-Depends: debhelper (>= 9), qt5-qmake, qtbase5-dev, pkg-config, libdtkcore-dev,  libdtkwidget-dev, 
  libxcb-util0-dev, libxcb1-dev, libqt5x11extras5-dev, 
- libprocps-dev, libxext-dev, libxtst-dev, libpolkit-qt5-1-dev, libkf5syntaxhighlighting-dev, libdtkwm-dev
+ libprocps-dev, libxext-dev, libxtst-dev, libpolkit-qt5-1-dev, libkf5syntaxhighlighting-dev, libdtkwm-dev, libuchardet-dev
 Standards-Version: 3.9.8
 Homepage: https://www.deepin.org
 

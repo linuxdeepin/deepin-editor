@@ -54,6 +54,7 @@ private:
     QTimer *autoSaveTimer;
     bool saveFinish;
     int autoSaveInternal;
+    QByteArray fileEncode;
 };
 
 #endif

@@ -52,4 +52,5 @@ public:
     static qreal easeOutQuad(qreal x);
     static qreal easeOutQuint(qreal x);
     static QVariantMap getThemeNodeMap(QString themeName);
+    static QByteArray detectCharset(const QByteArray& str);
 };
