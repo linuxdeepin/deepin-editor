@@ -181,6 +181,12 @@
                             "name": "Display Shortcuts",
                             "type": "shortcut",
                             "default":  "Ctrl+Shift+?"
+                        },
+                        {
+                            "key": "print",
+                            "name": "Print",
+                            "type": "shortcut",
+                            "default":  "Ctrl+P"
                         }
                     ]
                 },
@@ -620,6 +626,12 @@
                             "hide" : true,
                             "reset" : false,
                             "default":  "Ctrl+Shift+?"
+                        },
+                        {
+                            "key": "print",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "Ctrl+P"
                         }
                     ]
                 },
@@ -1060,6 +1072,12 @@
                             "hide" : true,
                             "reset" : false,
                             "default":  "Ctrl+Shift+H"
+                        },
+                        {
+                            "key": "print",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "Ctrl+Shift+P"
                         }
                     ]
                 },
@@ -1500,6 +1518,12 @@
                             "hide" : true,
                             "reset" : false,
                             "default":  "Ctrl+Shift+?"
+                        },
+                        {
+                            "key": "print",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "Ctrl+P"
                         }
                     ]
                 },

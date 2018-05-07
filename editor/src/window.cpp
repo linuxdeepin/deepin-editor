@@ -887,6 +887,8 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
         removeBottomWidget();
     } else if (key == Utils::getKeyshortcutFromKeymap(settings, "window", "displayshortcuts")) {
         displayShortcuts();
+    } else if (key == Utils::getKeyshortcutFromKeymap(settings, "window", "print")) {
+        popupPrintDialog();
     } else {
         // Post event to window widget if match Alt+0 ~ Alt+9
         QRegularExpression re("^Alt\\+\\d");
