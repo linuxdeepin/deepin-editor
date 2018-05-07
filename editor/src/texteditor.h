@@ -300,6 +300,8 @@ private:
     QColor selectionColor;
     
     QPoint mouseClickPos;
+    
+    bool scrollbarLock = false;
 };
 
 #endif
