@@ -912,7 +912,7 @@ void Window::addBlankTab(QString blankFile)
 {
     QString blankTabPath;
     if (blankFile == "") {
-        blankTabPath = QDir(blankFileDir).filePath(QString("blank_file_%1").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss")));
+        blankTabPath = QDir(blankFileDir).filePath(QString("blank_file_%1").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss-zzz")));
         if (!Utils::fileExists(blankTabPath)) {
             QDir().mkpath(blankFileDir);
             if (QFile(blankTabPath).open(QIODevice::ReadWrite)) {
