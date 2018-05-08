@@ -58,7 +58,7 @@ void Editor::loadFile(QString filepath)
     QFile file(filepath);
     if (file.open(QFile::ReadOnly)) {
         auto fileContent = file.readAll();
-        fileEncode = Utils::detectCharset(fileContent);
+        auto fileEncode = Utils::getFileEncode(fileContent);
         
         QTextStream stream(&fileContent);
         stream.setCodec(fileEncode);

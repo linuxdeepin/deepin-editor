@@ -61,9 +61,10 @@ QT += svg
 QT += widgets
 QT += x11extras
 QT += sql
+QT += KCodecs
 
 QMAKE_CXXFLAGS += -g
-LIBS += -lX11 -lXext -lXtst -luchardet
+LIBS += -lX11 -lXext -lXtst
 
 binary.files += $${OUT_PWD}/deepin-editor
 binary.path = $${PREFIX}/bin/

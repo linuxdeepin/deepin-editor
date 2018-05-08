@@ -35,7 +35,8 @@
 #include <QString>
 #include <QtMath>
 #include <QWidget>
-#include <uchardet/uchardet.h>
+#include <KEncodingProber>
+#include <QTextCodec>
 
 QT_BEGIN_NAMESPACE
 extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
@@ -97,7 +98,7 @@ QString Utils::getFileContent(QString filepath)
     QFile file(filepath);
     if (file.open(QFile::ReadOnly)) {
         auto fileContent = file.readAll();
-        auto fileEncode = detectCharset(fileContent);
+        auto fileEncode = getFileEncode(fileContent);
 
         QTextStream stream(&fileContent);
         stream.setCodec(fileEncode);
@@ -107,6 +108,17 @@ QString Utils::getFileContent(QString filepath)
     file.close();
 
     return content;
+}
+
+QByteArray Utils::getFileEncode(QByteArray fileContent)
+{
+    if (QTextCodec *codecForHtml = QTextCodec::codecForHtml(fileContent, 0)) {
+        return codecForHtml->name();
+    } else {
+        KEncodingProber prober;
+        prober.feed(fileContent);
+        return prober.encoding();
+    }
 }
 
 bool Utils::fileExists(QString path) {
@@ -265,27 +277,3 @@ QVariantMap Utils::getThemeNodeMap(QString themeName)
     return jsonObject.toVariantMap();
 }
 
-QByteArray Utils::detectCharset(const QByteArray& str)
-{
-    uchardet_t handle{ uchardet_new() };
-    std::string charsetName;
-    int returnedVal{ 0 };
-
-    returnedVal = uchardet_handle_data(handle, str.constData(), str.size()); //start detecting.
-    if(returnedVal != 0){ //if less than 0, it show the recognization failed.
-        uchardet_data_end(handle);
-        uchardet_delete(handle);
-
-        return QByteArray::fromStdString(charsetName);
-    }
-
-    uchardet_data_end(handle);
-    charsetName = std::string{ uchardet_get_charset(handle) };
-    uchardet_delete(handle);
-
-    //This function promise that When is converting the target charset is ASCII.
-    const auto& facet = std::use_facet<std::ctype<char>>(std::locale{"C"});
-    facet.tolower(&charsetName[0], &charsetName[charsetName.size()]);
-
-    return QByteArray::fromStdString(charsetName);
-}
