@@ -93,27 +93,32 @@ void Utils::applyQss(QWidget *widget, QString qssName)
 QString Utils::getFileContent(QString filepath)
 {
     QString content;
-    
+
     QFile file(filepath);
-    if (file.open(QFile::ReadOnly | QFile::Text)) {
-        content = file.readAll();
+    if (file.open(QFile::ReadOnly)) {
+        auto fileContent = file.readAll();
+        auto fileEncode = detectCharset(fileContent);
+
+        QTextStream stream(&fileContent);
+        stream.setCodec(fileEncode);
+        content = stream.readAll();
     }
-    
+
     file.close();
-    
+
     return content;
 }
 
 bool Utils::fileExists(QString path) {
     QFileInfo check_file(path);
-    
+
     return check_file.exists() && check_file.isFile();
 }
 
 bool Utils::fileIsWritable(QString path)
 {
     QFileDevice::Permissions permissions = QFile(path).permissions();
-    
+
     return permissions & QFileDevice::WriteUser;
 }
 
@@ -125,24 +130,24 @@ QString Utils::getKeyshortcut(QKeyEvent *keyEvent)
         if (modifiers.testFlag(Qt::ControlModifier)) {
             keys.append("Ctrl");
         }
-        
+
         if (modifiers.testFlag(Qt::AltModifier)) {
             keys.append("Alt");
         }
-        
+
         if (modifiers.testFlag(Qt::MetaModifier)) {
             keys.append("Meta");
         }
-        
+
         if (modifiers.testFlag(Qt::ShiftModifier)) {
             keys.append("Shift");
         }
     }
-    
+
     if(keyEvent->key() !=0 && keyEvent->key() != Qt::Key_unknown){
         keys.append(QKeySequence(keyEvent->key()).toString());
     }
-    
+
     return keys.join("+");
 }
 
@@ -155,13 +160,13 @@ QPixmap Utils::dropShadow(const QPixmap &source, qreal radius, const QColor &col
 {
     QImage shadow = dropShadow(source, radius, color);
     shadow.setDevicePixelRatio(source.devicePixelRatio());
-    
-    
+
+
     QPainter pa(&shadow);
     pa.setCompositionMode(QPainter::CompositionMode_SourceOver);
     pa.drawPixmap(radius - offset.x(), radius - offset.y(), source);
     pa.end();
-    
+
     return QPixmap::fromImage(shadow);
 }
 
@@ -170,7 +175,7 @@ QImage Utils::dropShadow(const QPixmap &px, qreal radius, const QColor &color)
     if (px.isNull()) {
         return QImage();
     }
-    
+
     QImage tmp(px.size() * px.devicePixelRatio() + QSize(radius * 2, radius * 2), QImage::Format_ARGB32_Premultiplied);
     tmp.setDevicePixelRatio(px.devicePixelRatio());
     tmp.fill(0);
@@ -178,7 +183,7 @@ QImage Utils::dropShadow(const QPixmap &px, qreal radius, const QColor &color)
     tmpPainter.setCompositionMode(QPainter::CompositionMode_Source);
     tmpPainter.drawPixmap(QPoint(radius, radius), px);
     tmpPainter.end();
-    
+
     // Blur the alpha channel.
     QImage blurred(tmp.size() * px.devicePixelRatio(), QImage::Format_ARGB32_Premultiplied);
     blurred.setDevicePixelRatio(px.devicePixelRatio());
@@ -190,13 +195,13 @@ QImage Utils::dropShadow(const QPixmap &px, qreal radius, const QColor &color)
         return blurred;
     }
     tmp = blurred;
-    
+
     // Blacken the image...
     tmpPainter.begin(&tmp);
     tmpPainter.setCompositionMode(QPainter::CompositionMode_SourceIn);
     tmpPainter.fillRect(tmp.rect(), color);
     tmpPainter.end();
-    
+
     return tmp;
 }
 
@@ -229,7 +234,7 @@ QVariantMap Utils::getThemeNodeMap(QString themeName)
 {
     auto themeDir = QDir(":/theme").filePath(themeName);
     auto filePath = QDir(themeDir).filePath("editor.theme");
-    
+
     QFile fileObject(filePath);
     if(!fileObject.open(QIODevice::ReadOnly)){
         qDebug()<<"Failed to open "<<filePath;
@@ -246,7 +251,7 @@ QVariantMap Utils::getThemeNodeMap(QString themeName)
     if(jsonDocument.isNull()){
         qDebug()<<"Failed to create JSON doc.";
     }
-    
+
     if(!jsonDocument.isObject()){
         qDebug()<<"JSON is not an object.";
     }

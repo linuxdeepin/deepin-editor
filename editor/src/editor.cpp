@@ -48,7 +48,7 @@ Editor::Editor(QWidget *parent) : QWidget(parent)
     // Init auto save timer.
     autoSaveTimer = new QTimer(this);
     autoSaveTimer->setSingleShot(true);
-    
+
     connect(autoSaveTimer, &QTimer::timeout, this, &Editor::handleTextChangeTimer);
     connect(textEditor, &TextEditor::textChanged, this, &Editor::handleTextChanged, Qt::QueuedConnection);
 }
@@ -56,19 +56,19 @@ Editor::Editor(QWidget *parent) : QWidget(parent)
 void Editor::loadFile(QString filepath)
 {
     QFile file(filepath);
-    if (file.open(QFile::ReadOnly | QFile::Text)) {
+    if (file.open(QFile::ReadOnly)) {
         auto fileContent = file.readAll();
         fileEncode = Utils::detectCharset(fileContent);
-        
+
         QTextStream stream(&fileContent);
         stream.setCodec(fileEncode);
         textEditor->setPlainText(stream.readAll());
-        
+
         updatePath(filepath);
-        
+
         textEditor->loadHighlighter();
     }
-    
+
     file.close();
 }
 
@@ -77,7 +77,7 @@ void Editor::saveFile(QString encode, QString newline)
     bool fileCreateFailed = false;
     if (!Utils::fileExists(textEditor->filepath)) {
         QString directory = QFileInfo(textEditor->filepath).dir().absolutePath();
-        
+
         // Create file if filepath is not exists.
         if (Utils::fileIsWritable(directory)) {
             QDir().mkpath(directory);
@@ -93,12 +93,12 @@ void Editor::saveFile(QString encode, QString newline)
     // Try save file if file has permission.
     if (Utils::fileIsWritable(textEditor->filepath) && !fileCreateFailed) {
         QFile file(textEditor->filepath);
-        if(!file.open(QIODevice::WriteOnly | QIODevice::Text)){
+        if (!file.open(QIODevice::WriteOnly)) {
             qDebug() << "Can't write file: " << textEditor->filepath;
 
             return;
         }
-        
+
         QRegularExpression newlineRegex("\r?\n|\r");
         QString fileNewline;
         if (newline == "Window") {
@@ -110,8 +110,13 @@ void Editor::saveFile(QString encode, QString newline)
         }
 
         QTextStream out(&file);
+
         out.setCodec(encode.toLatin1().data());
+        // NOTE: Muse call 'setGenerateByteOrderMark' to insert the BOM (Byte Order Mark) before any data has been written to file.
+        // Otherwise, can't save file with given encoding.
+        out.setGenerateByteOrderMark(true);
         out << textEditor->toPlainText().replace(newlineRegex, fileNewline);
+
         file.close();
     }
 }
@@ -141,4 +146,3 @@ void Editor::handleTextChanged()
         autoSaveTimer->start(autoSaveInternal);
     }
 }
-

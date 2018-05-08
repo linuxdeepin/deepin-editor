@@ -822,7 +822,7 @@ void Window::closeEvent(QCloseEvent *)
         QString blankFilePath = QDir(directory).filePath(blankFile);
 
         QFile file(blankFilePath);
-        if (!file.open(QFile::ReadOnly | QFile::Text)) {
+        if (!file.open(QFile::ReadOnly)) {
             break;
         }
 
