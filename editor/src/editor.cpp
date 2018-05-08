@@ -59,7 +59,7 @@ void Editor::loadFile(QString filepath)
     if (file.open(QFile::ReadOnly)) {
         auto fileContent = file.readAll();
         fileEncode = Utils::detectCharset(fileContent);
-
+        
         QTextStream stream(&fileContent);
         stream.setCodec(fileEncode);
         textEditor->setPlainText(stream.readAll());
@@ -131,7 +131,11 @@ void Editor::handleTextChangeTimer()
     if (Utils::fileExists(textEditor->filepath)) {
         saveFinish = true;
 
-        saveFile(fileEncode, "Window");
+        if (fileEncode == "ascii") {
+            saveFile("UTF-8", "Window");
+        } else {
+            saveFile(fileEncode, "Window");
+        }
     }
 }
 
