@@ -38,7 +38,7 @@ FindBar::FindBar(QWidget *parent) : QWidget(parent)
     editLine = new LineBar();
     findNextButton = new QPushButton("Next");
     findPrevButton = new QPushButton("Previous");
-    closeButton = new DImageButton(Utils::getQrcPath("bar_close_normal.svg"), Utils::getQrcPath("bar_close_hover.svg"), Utils::getQrcPath("bar_close_press.svg"));
+    closeButton = new DImageButton();
     closeButton->setFixedSize(16, 16);
     
     layout->addWidget(findLabel);
@@ -139,8 +139,16 @@ void FindBar::setBackground(QString color)
     
     if (QColor(backgroundColor).lightness() < 128) {
         findLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#AAAAAA"));
+        
+        closeButton->setNormalPic(Utils::getQrcPath("bar_close_normal_dark.svg"));
+        closeButton->setHoverPic(Utils::getQrcPath("bar_close_hover_dark.svg"));
+        closeButton->setPressPic(Utils::getQrcPath("bar_close_press_dark.svg"));
     } else {
         findLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#000000"));
+        
+        closeButton->setNormalPic(Utils::getQrcPath("bar_close_normal_light.svg"));
+        closeButton->setHoverPic(Utils::getQrcPath("bar_close_hover_light.svg"));
+        closeButton->setPressPic(Utils::getQrcPath("bar_close_press_light.svg"));
     }
     
     repaint();

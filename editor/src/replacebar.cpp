@@ -42,7 +42,7 @@ ReplaceBar::ReplaceBar(QWidget *parent) : QWidget(parent)
     replaceSkipButton = new QPushButton("Skip");
     replaceRestButton = new QPushButton("Replace Rest");
     replaceAllButton = new QPushButton("Replace All");
-    closeButton = new DImageButton(Utils::getQrcPath("bar_close_normal.svg"), Utils::getQrcPath("bar_close_hover.svg"), Utils::getQrcPath("bar_close_press.svg"));
+    closeButton = new DImageButton();
     closeButton->setFixedSize(16, 16);
     
     layout->addWidget(replaceLabel);
@@ -174,9 +174,17 @@ void ReplaceBar::setBackground(QString color)
     if (QColor(backgroundColor).lightness() < 128) {
         replaceLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#AAAAAA"));
         withLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#AAAAAA"));
+        
+        closeButton->setNormalPic(Utils::getQrcPath("bar_close_normal_dark.svg"));
+        closeButton->setHoverPic(Utils::getQrcPath("bar_close_hover_dark.svg"));
+        closeButton->setPressPic(Utils::getQrcPath("bar_close_press_dark.svg"));
     } else {
         replaceLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#000000"));
         withLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#000000"));
+        
+        closeButton->setNormalPic(Utils::getQrcPath("bar_close_normal_light.svg"));
+        closeButton->setHoverPic(Utils::getQrcPath("bar_close_hover_light.svg"));
+        closeButton->setPressPic(Utils::getQrcPath("bar_close_press_light.svg"));
     }
     
     repaint();

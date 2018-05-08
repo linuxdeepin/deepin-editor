@@ -1,14 +1,11 @@
 <!DOCTYPE RCC><RCC version="1.0">
   <qresource>
-    <file>image/tab_close_normal.png</file>
-    <file>image/tab_close_hover.png</file>
-    <file>image/tab_close_press.png</file>
-    <file>image/bar_close_normal.svg</file>
-    <file>image/bar_close_hover.svg</file>
-    <file>image/bar_close_press.svg</file>
-    <file>image/tab_add_hover.png</file>
-    <file>image/tab_add_normal.png</file>
-    <file>image/tab_add_press.png</file>
+    <file>image/bar_close_normal_light.svg</file>
+    <file>image/bar_close_hover_light.svg</file>
+    <file>image/bar_close_press_light.svg</file>
+    <file>image/bar_close_normal_dark.svg</file>
+    <file>image/bar_close_hover_dark.svg</file>
+    <file>image/bar_close_press_dark.svg</file>
     <file>image/logo_96.svg</file>
     <file>image/logo_48.svg</file>
     <file>image/logo_24.svg</file>
