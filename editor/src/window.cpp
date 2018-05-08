@@ -908,6 +908,36 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
     }
 }
 
+int Window::getBlankFileIndex()
+{
+    // Get blank tab index list.
+    QList<int> tabIndexes;
+    for (int i = 0; i < tabbar->tabbar->tabFiles.size(); i++) {
+        if (QFileInfo(tabbar->tabbar->tabFiles[i]).dir().absolutePath() == blankFileDir) {
+            auto tabNameList = tabbar->tabbar->tabText(i).split("Blank document ");
+            if (tabNameList.size() > 1) {
+                tabIndexes << tabNameList[1].toInt();
+            }
+        }
+    }
+    std::sort(tabIndexes.begin(), tabIndexes.end());
+    
+    // Return 1 if no blank file exists.
+    if (tabIndexes.size() == 0) {
+        return 1;
+    }
+    
+    // Return first mismatch index as new blank file index.
+    for (int j = 0; j < tabIndexes.size(); j++) {
+        if (tabIndexes[j] != j + 1) {
+            return j + 1;
+        }
+    }
+    
+    // Last, return biggest index as blank file index.
+    return tabIndexes.size() + 1;
+}
+
 void Window::addBlankTab(QString blankFile)
 {
     QString blankTabPath;
@@ -925,7 +955,8 @@ void Window::addBlankTab(QString blankFile)
         blankTabPath = blankFile;
     }
 
-    blankFileIndex++;
+    auto blankFileIndex = getBlankFileIndex();
+    
     tabbar->addTab(blankTabPath, QString("Blank document %1").arg(blankFileIndex));
     Editor *editor = createEditor();
     editor->updatePath(blankTabPath);
