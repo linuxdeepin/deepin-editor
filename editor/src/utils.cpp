@@ -122,7 +122,6 @@ QByteArray Utils::getFileEncode(QByteArray fileContent)
         KEncodingProber prober;
         prober.feed(fileContent);
         
-        
         // Just use KEncodingProber result if confidence better than 0.5;
         if (prober.confidence() > 0.5) {
             qDebug() << "Detect with KEncodingProber successful: " << prober.encoding();
