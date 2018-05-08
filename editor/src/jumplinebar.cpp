@@ -116,9 +116,15 @@ void JumpLineBar::jumpConfirm()
 void JumpLineBar::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
-    painter.setOpacity(1);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setOpacity(0.9);
     QPainterPath path;
-    path.addRect(rect());
+    int radius = 5;
+    path.moveTo(QPointF(rect().x(), rect().y()));
+    path.lineTo(QPointF(rect().x(), rect().y() + rect().height() - radius));
+    path.arcTo(QRectF(rect().x(), rect().bottom() - radius * 2, radius * 2, radius * 2), 180, 90);
+    path.lineTo(QPointF(rect().x() + rect().width(), rect().y() + rect().height()));
+    path.lineTo(QPointF(rect().x() + rect().width(), rect().y()));
     painter.fillPath(path, backgroundColor);
 }
 
