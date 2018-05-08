@@ -60,6 +60,8 @@ void Editor::loadFile(QString filepath)
         auto fileContent = file.readAll();
         auto fileEncode = Utils::getFileEncode(fileContent);
         
+        qDebug() << QString("Detect file %1 with encoding: %2").arg(filepath).arg(QString(fileEncode));
+        
         QTextStream stream(&fileContent);
         stream.setCodec(fileEncode);
         textEditor->setPlainText(stream.readAll());

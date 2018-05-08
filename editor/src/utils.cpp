@@ -112,12 +112,27 @@ QString Utils::getFileContent(QString filepath)
 
 QByteArray Utils::getFileEncode(QByteArray fileContent)
 {
-    if (QTextCodec *codecForHtml = QTextCodec::codecForHtml(fileContent, 0)) {
+    if (QTextCodec *codecForUtf = QTextCodec::codecForUtfText(fileContent, 0)) {
+        qDebug() << "Detect with UTF clue: " << codecForUtf->name();
+        return codecForUtf->name();
+    } else if (QTextCodec *codecForHtml = QTextCodec::codecForHtml(fileContent, 0)) {
+        qDebug() << "Detect with HTML clue: " << codecForHtml->name();
         return codecForHtml->name();
     } else {
         KEncodingProber prober;
         prober.feed(fileContent);
-        return prober.encoding();
+        
+        
+        // Just use KEncodingProber result if confidence better than 0.5;
+        if (prober.confidence() > 0.5) {
+            qDebug() << "Detect with KEncodingProber successful: " << prober.encoding();
+            return prober.encoding();
+        }
+        // Last, use UTF-8
+        else {
+            qDebug() << "Detect with KEncodingProber failed, reset to UTF-8.";
+            return "UTF-8";
+        }
     }
 }
 
