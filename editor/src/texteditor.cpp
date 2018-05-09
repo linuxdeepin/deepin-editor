@@ -1853,6 +1853,8 @@ void TextEditor::handleUpdateRequest(const QRect &rect, int dy)
 
 bool TextEditor::setCursorKeywordSeletoin(int position, bool findNext)
 {
+    int offsetLines = 3;
+    
     if (findNext) {
         for (int i = 0; i < keywordSelections.size(); i++) {
             if (keywordSelections[i].cursor.position() > position) {
@@ -1861,7 +1863,7 @@ bool TextEditor::setCursorKeywordSeletoin(int position, bool findNext)
                 QBrush brush(searchHighlightColor);
                 cursorKeywordSelection.format.setProperty(QTextFormat::BackgroundBrush, brush);
 
-                jumpToLine(keywordSelections[i].cursor.blockNumber() + 1, false);
+                jumpToLine(keywordSelections[i].cursor.blockNumber() + offsetLines, false);
 
                 QTextCursor cursor = textCursor();
                 cursor.setPosition(keywordSelections[i].cursor.position());
@@ -1880,7 +1882,7 @@ bool TextEditor::setCursorKeywordSeletoin(int position, bool findNext)
                 QBrush brush(searchHighlightColor);
                 cursorKeywordSelection.format.setProperty(QTextFormat::BackgroundBrush, brush);
 
-                jumpToLine(keywordSelections[i].cursor.blockNumber() + 1, false);
+                jumpToLine(keywordSelections[i].cursor.blockNumber() + offsetLines, false);
 
                 QTextCursor cursor = textCursor();
                 cursor.setPosition(keywordSelections[i].cursor.position());
