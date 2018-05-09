@@ -63,6 +63,8 @@ public:
     void forwardPair();
     void backwardPair();
     
+    void moveToStart();
+    void moveToEnd();
     void moveToStartOfLine();
     void moveToEndOfLine();
     void moveToLineIndentation();

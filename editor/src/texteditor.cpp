@@ -332,6 +332,28 @@ void TextEditor::backwardPair()
     }
 }
 
+void TextEditor::moveToStart()
+{
+    if (cursorMark) {
+        QTextCursor cursor = textCursor();
+        cursor.movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
+        setTextCursor(cursor);
+    } else {
+        moveCursor(QTextCursor::Start);
+    }
+}
+
+void TextEditor::moveToEnd()
+{
+    if (cursorMark) {
+        QTextCursor cursor = textCursor();
+        cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+        setTextCursor(cursor);
+    } else {
+        moveCursor(QTextCursor::End);
+    }
+}
+
 void TextEditor::moveToStartOfLine()
 {
     if (cursorMark) {
@@ -1488,8 +1510,12 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
             nextLine();
         } else if (key == "K") {
             prevLine();
+        } else if (key == ",") {
+            moveToEnd();
+        } else if (key == ".") {
+            moveToStart();
         } else if (key == "H") {
-            backwardChar();
+                backwardChar();
         } else if (key == "L") {
             forwardChar();
         } else if (key == "Space") {
@@ -1571,6 +1597,10 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
             moveToEndOfLine();
         } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "movetostartofline")) {
             moveToStartOfLine();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "movetostart")) {
+            moveToStart();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "movetoend")) {
+            moveToEnd();
         } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "movetolineindentation")) {
             moveToLineIndentation();
         } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "upcaseword")) {

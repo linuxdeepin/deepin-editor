@@ -327,6 +327,18 @@
                             "default":  "Home"
                         },
                         {
+                            "key": "movetoend",
+                            "name": "Move To End Of File",
+                            "type": "shortcut",
+                            "default":  "Ctrl+End"
+                        },
+                        {
+                            "key": "movetostart",
+                            "name": "Move To Start Of File",
+                            "type": "shortcut",
+                            "default":  "Ctrl+Home"
+                        },
+                        {
                             "key": "movetolineindentation",
                             "name": "Move To Line Indentation",
                             "type": "shortcut",
@@ -771,6 +783,18 @@
                             "hide" : true,
                             "reset" : false,
                             "default":  "Home"
+                        },
+                        {
+                            "key": "movetoend",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "Ctrl+End"
+                        },
+                        {
+                            "key": "movetostart",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "Ctrl+Home"
                         },
                         {
                             "key": "movetolineindentation",
@@ -1219,6 +1243,18 @@
                             "default":  "Ctrl+A"
                         },
                         {
+                            "key": "movetoend",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "Meta+Shift+<"
+                        },
+                        {
+                            "key": "movetostart",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "Meta+Shift+>"
+                        },
+                        {
                             "key": "movetolineindentation",
                             "hide" : true,
                             "reset" : false,
@@ -1663,6 +1699,18 @@
                             "hide" : true,
                             "reset" : false,
                             "default":  "Home"
+                        },
+                        {
+                            "key": "movetoend",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "Ctrl+End"
+                        },
+                        {
+                            "key": "movetostart",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "Ctrl+Home"
                         },
                         {
                             "key": "movetolineindentation",
