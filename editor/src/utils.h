@@ -53,4 +53,5 @@ public:
     static qreal easeOutQuint(qreal x);
     static QVariantMap getThemeNodeMap(QString themeName);
     static QByteArray getFileEncode(QByteArray fileContent);
+    static bool isEditableFile(QString filepath);
 };

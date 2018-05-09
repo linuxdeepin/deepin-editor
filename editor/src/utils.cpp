@@ -26,6 +26,7 @@
 #include <DSettings>
 #include <DSettingsOption>
 #include <QJsonDocument>
+#include <QMimeDatabase>
 #include <QJsonObject>
 #include <QApplication>
 #include <QDebug>
@@ -291,3 +292,26 @@ QVariantMap Utils::getThemeNodeMap(QString themeName)
     return jsonObject.toVariantMap();
 }
 
+bool Utils::isEditableFile(QString filepath)
+{
+    auto mimeType = QMimeDatabase().mimeTypeForFile(filepath).name();
+    qDebug() << "*** " << filepath << mimeType;
+    
+    if (mimeType.startsWith("text/")) {
+        return true;  
+    } 
+    
+    QList<QString> mimeTypeWhiteList;
+    mimeTypeWhiteList << "application/json"
+                      << "application/pkix-cert"
+                      << "image/svg+xml"
+                      << "application/vnd.nokia.qt.qmakeprofile"
+                      << "application/vnd.nokia.xml.qt.resource"
+                      << "application/xml";
+    
+    if (mimeTypeWhiteList.contains(mimeType)) {
+        return true;
+    }
+    
+    return false;
+}

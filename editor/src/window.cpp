@@ -271,39 +271,44 @@ void Window::activeTab(int index)
 void Window::addTab(QString file, bool activeTab)
 {
     QString filepath = file;
-    if (!Utils::fileIsWritable(file)) {
-        filepath = QDir(readonlyFileDir).filePath(filepath.replace(QDir().separator(), readonlySeparator));
-
-        if (!Utils::fileExists(filepath)) {
-            QString directory = QFileInfo(filepath).dir().absolutePath();
-            QDir().mkpath(directory);
-        }
-
-        QFile::copy(file, filepath);
-    }
-
-    if (tabbar->getTabIndex(filepath) == -1) {
-        tabbar->addTab(filepath, QFileInfo(file).fileName());
-
-        if (!editorMap.contains(filepath)) {
-            Editor *editor = createEditor();
-            editor->loadFile(filepath);
-
-            editorMap[filepath] = editor;
-
-            showNewEditor(editor);
-        }
-    }
-
-    // Activate window.
-    activateWindow();
     
-    // Active tab if activeTab is true.
-    if (activeTab) {
-        int tabIndex = tabbar->getTabIndex(filepath);
-        if (tabIndex != -1) {
-            tabbar->activeTabWithIndex(tabIndex);
+    if (Utils::isEditableFile(filepath)) {
+        if (!Utils::fileIsWritable(file)) {
+            filepath = QDir(readonlyFileDir).filePath(filepath.replace(QDir().separator(), readonlySeparator));
+
+            if (!Utils::fileExists(filepath)) {
+                QString directory = QFileInfo(filepath).dir().absolutePath();
+                QDir().mkpath(directory);
+            }
+
+            QFile::copy(file, filepath);
         }
+
+        if (tabbar->getTabIndex(filepath) == -1) {
+            tabbar->addTab(filepath, QFileInfo(file).fileName());
+
+            if (!editorMap.contains(filepath)) {
+                Editor *editor = createEditor();
+                editor->loadFile(filepath);
+
+                editorMap[filepath] = editor;
+
+                showNewEditor(editor);
+            }
+        }
+
+        // Activate window.
+        activateWindow();
+    
+        // Active tab if activeTab is true.
+        if (activeTab) {
+            int tabIndex = tabbar->getTabIndex(filepath);
+            if (tabIndex != -1) {
+                tabbar->activeTabWithIndex(tabIndex);
+            }
+        }
+    } else {
+        showNotify(QString("%1 不是一个有效的可编辑文件").arg(QFileInfo(filepath).fileName()));
     }
 }
 
