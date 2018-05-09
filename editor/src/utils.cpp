@@ -302,17 +302,28 @@ bool Utils::isEditableFile(QString filepath)
     } 
     
     QList<QString> mimeTypeWhiteList;
-    mimeTypeWhiteList << "application/json"
-                      << "application/pkix-cert"
-                      << "image/svg+xml"
-                      << "application/vnd.nokia.qt.qmakeprofile"
-                      << "application/vnd.nokia.xml.qt.resource"
-                      << "application/x-asp"
-                      << "application/x-designer"
-                      << "application/javascript"
-                      << "application/sql"
-                      << "application/x-shellscript"
-                      << "application/xml";
+    // Please check full mime type list from: https://www.freeformatter.com/mime-types-list.html
+    mimeTypeWhiteList
+        << "application/cmd"
+        << "application/javascript"
+        << "application/json"
+        << "application/pkix-cert"
+        << "application/sql"
+        << "application/vnd.nokia.qt.qmakeprofile"
+        << "application/vnd.nokia.xml.qt.resource"
+        << "application/x-asp"
+        << "application/x-designer"
+        << "application/x-empty"
+        << "application/x-msdos-program"
+        << "application/x-pearl"
+        << "application/x-php"
+        << "application/x-shellscript"
+        << "application/x-sh"
+        << "application/x-csh"
+        << "application/x-text"
+        << "application/xml"
+        << "application/yaml"
+        << "image/svg+xml";
     
     if (mimeTypeWhiteList.contains(mimeType)) {
         return true;
