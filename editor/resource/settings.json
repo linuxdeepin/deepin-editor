@@ -198,13 +198,13 @@
                             "key": "indentline",
                             "name": "Indent Line",
                             "type": "shortcut",
-                            "default":  "Tab"
+                            "default":  "Alt+I"
                         },
                         {
                             "key": "backindentline",
                             "name": "Back Indent Line",
                             "type": "shortcut",
-                            "default":  "Shift+Backtab"
+                            "default":  "Alt+Shift+I"
                         },
                         {
                             "key": "forwardchar",
@@ -656,13 +656,13 @@
                             "key": "indentline",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Tab"
+                            "default":  "Alt+I"
                         },
                         {
                             "key": "backindentline",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Shift+Backtab"
+                            "default":  "Alt+Shift+I"
                         },
                         {
                             "key": "forwardchar",
@@ -1572,13 +1572,13 @@
                             "key": "indentline",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Tab"
+                            "default":  "Alt+I"
                         },
                         {
                             "key": "backindentline",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Shift+Backtab"
+                            "default":  "Alt+Shift+I"
                         },
                         {
                             "key": "forwardchar",
