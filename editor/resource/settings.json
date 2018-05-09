@@ -498,7 +498,7 @@
                             "key": "undo",
                             "name": "Undo",
                             "type": "shortcut",
-                            "default":  "Ctrl+U"
+                            "default":  "Ctrl+Z"
                         },
                         {
                             "key": "redo",
@@ -956,7 +956,7 @@
                             "key": "undo",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Ctrl+U"
+                            "default":  "Ctrl+Z"
                         },
                         {
                             "key": "redo",
@@ -1872,7 +1872,7 @@
                             "key": "undo",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Ctrl+U"
+                            "default":  "Ctrl+Z"
                         },
                         {
                             "key": "redo",
