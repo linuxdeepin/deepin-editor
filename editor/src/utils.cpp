@@ -308,6 +308,7 @@ bool Utils::isEditableFile(QString filepath)
                       << "application/vnd.nokia.qt.qmakeprofile"
                       << "application/vnd.nokia.xml.qt.resource"
                       << "application/x-asp"
+                      << "application/x-designer"
                       << "application/javascript"
                       << "application/sql"
                       << "application/x-shellscript"
