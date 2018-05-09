@@ -307,6 +307,11 @@ bool Utils::isEditableFile(QString filepath)
                       << "image/svg+xml"
                       << "application/vnd.nokia.qt.qmakeprofile"
                       << "application/vnd.nokia.xml.qt.resource"
+                      << "application/x-asp"
+                      << "application/javascript"
+                      << "application/javascript"
+                      << "application/sql"
+                      << "application/x-shellscript"
                       << "application/xml";
     
     if (mimeTypeWhiteList.contains(mimeType)) {
