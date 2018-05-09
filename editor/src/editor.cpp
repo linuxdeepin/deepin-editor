@@ -58,7 +58,7 @@ void Editor::loadFile(QString filepath)
     QFile file(filepath);
     if (file.open(QFile::ReadOnly)) {
         auto fileContent = file.readAll();
-        auto fileEncode = Utils::getFileEncode(fileContent);
+        fileEncode = Utils::getFileEncode(fileContent);
         
         qDebug() << QString("Detect file %1 with encoding: %2").arg(filepath).arg(QString(fileEncode));
         
@@ -118,6 +118,8 @@ void Editor::saveFile(QString encode, QString newline)
         // Otherwise, can't save file with given encoding.
         out.setGenerateByteOrderMark(true);
         out << textEditor->toPlainText().replace(newlineRegex, fileNewline);
+        
+        // qDebug() << encode << encode.toLatin1().data();
 
         file.close();
     }
@@ -133,11 +135,8 @@ void Editor::handleTextChangeTimer()
     if (Utils::fileExists(textEditor->filepath)) {
         saveFinish = true;
 
-        if (fileEncode == "ascii") {
-            saveFile("UTF-8", "Window");
-        } else {
-            saveFile(fileEncode, "Window");
-        }
+        saveFile(fileEncode == "ascii" ? "UTF-8" : fileEncode,
+                 "Window");
     }
 }
 
