@@ -309,7 +309,6 @@ bool Utils::isEditableFile(QString filepath)
                       << "application/vnd.nokia.xml.qt.resource"
                       << "application/x-asp"
                       << "application/javascript"
-                      << "application/javascript"
                       << "application/sql"
                       << "application/x-shellscript"
                       << "application/xml";
