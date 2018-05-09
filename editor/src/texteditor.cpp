@@ -1171,6 +1171,13 @@ void TextEditor::changeToWaitCursor()
     cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
     QString currentChar = cursor.selectedText();
     
+    // Convert TAB char to one single space.
+    if (currentChar == "\t") {
+        currentChar = " ";
+    }
+    
+    // qDebug() << QString("'%1'").arg(currentChar);
+    
     setCursorWidth(std::max(cursorNormalWidth, (fontMetrics().width(currentChar))));
 }
 
