@@ -33,7 +33,7 @@ class ThemeItem : public DSimpleListItem
     Q_OBJECT
 
 public:
-    ThemeItem(QString themeDir);
+    ThemeItem(QString themeDir, qreal screenScale);
     
     bool sameAs(DSimpleListItem *item);
     void drawBackground(QRect rect, QPainter *painter, int index, bool isSelect, bool isHover);
@@ -62,6 +62,8 @@ private:
     int itemPaddingY = 8;
     int itemPaddingX = 20;
     int frameRadius = 5;
+    
+    qreal screenScale;
 };
 
 #endif

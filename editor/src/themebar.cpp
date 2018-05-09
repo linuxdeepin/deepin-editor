@@ -66,8 +66,9 @@ ThemeBar::ThemeBar(QWidget *parent) : QWidget(parent)
     QStringList filters;
     QFileInfoList themeInfos = QDir(":/theme").entryInfoList(filters, QDir::Dirs | QDir::NoDotAndDotDot);
 
+    auto screenScale = this->devicePixelRatioF();
     for (auto themeInfo : themeInfos) {
-        ThemeItem *item = new ThemeItem(themeInfo.absoluteFilePath());
+        ThemeItem *item = new ThemeItem(themeInfo.absoluteFilePath(), screenScale);
         items << item;
     }
 

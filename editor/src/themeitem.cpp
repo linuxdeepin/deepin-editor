@@ -32,9 +32,10 @@
 
 DWIDGET_USE_NAMESPACE
 
-ThemeItem::ThemeItem(QString themeDir)
+ThemeItem::ThemeItem(QString themeDir, qreal scale)
 {
     themeName = QFileInfo(themeDir).fileName();
+    screenScale = scale;
 
     QVariantMap jsonMap = Utils::getThemeNodeMap(themeName);
     
@@ -102,22 +103,25 @@ void ThemeItem::drawForeground(QRect rect, QPainter *painter, int column, int, b
         // Draw syntax highlight.
         painter->save();
         
-        int htmlPaddingLeft = 30;
-        int htmlPaddingTop = 10;
+        int htmlPaddingLeft = screenScale > 1 ? 40 : 30;
+        int htmlPaddingTop = screenScale > 1 ? 16 : 14;
 
+        auto htmlFontSize = 4 / screenScale;
         painter->setOpacity(1);
-        painter->translate(QPointF(rect.x() + htmlPaddingLeft, rect.y() + htmlPaddingTop));
+        painter->translate(
+            QPointF(rect.x() + htmlPaddingLeft, 
+                    rect.y() + htmlPaddingTop));
         QTextDocument td;
         QString indentConent = "&nbsp;&nbsp;&nbsp;&nbsp;";
         QString htmlConent = QString(
-            "<font size='4'><code>"
-            "<font color='%1'>#include</font> "
-            "<font color='%2'>\"deepin.h\"</font><br/>"
-            "<font color='%3'>QString</font> <font color='%4'>theme</font><font color='%5'>() {</font><br/>"
-            "<font color='%6'>%7// Return theme name.</font><br/>"
-            "<font color='%8'>%9return</font> <font color='%10'>\"%11\"</font><font color='%12'>;</font><br/>"
-            "<font color='%13'>}</font>"
-            "</code></font>").arg(otherColor).arg(importColor).arg(keywordColor).arg(functionColor).arg(normalColor).arg(commentColor).arg(indentConent).arg(builtInColor).arg(indentConent).arg(stringColor).arg(themeName).arg(normalColor).arg(normalColor);
+            "<font size='%1'><code>"
+            "<font color='%2'>#include</font> "
+            "<font color='%3'>\"deepin.h\"</font><br/>"
+            "<font color='%4'>QString</font> <font color='%5'>theme</font><font color='%6'>() {</font><br/>"
+            "<font color='%7'>%8// Return theme name.</font><br/>"
+            "<font color='%9'>%10return</font> <font color='%11'>\"%12\"</font><font color='%13'>;</font><br/>"
+            "<font color='%14'>}</font>"
+            "</code></font>").arg(htmlFontSize).arg(otherColor).arg(importColor).arg(keywordColor).arg(functionColor).arg(normalColor).arg(commentColor).arg(indentConent).arg(builtInColor).arg(indentConent).arg(stringColor).arg(themeName).arg(normalColor).arg(normalColor);
         td.setHtml(htmlConent);
         td.drawContents(painter);
         
