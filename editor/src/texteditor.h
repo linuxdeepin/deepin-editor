@@ -83,7 +83,7 @@ public:
     void scrollDown();
     void duplicateLine();
     void copyLines();
-    void pasteLines();
+    void cutlines();
     void joinLines();
     
     void killLine();

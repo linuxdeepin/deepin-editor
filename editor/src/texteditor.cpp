@@ -884,7 +884,7 @@ void TextEditor::copyLines()
     setTextCursor(copyCursor);
 }
 
-void TextEditor::pasteLines()
+void TextEditor::cutlines()
 {
     // Record current cursor and build copy cursor.
     QTextCursor currentCursor = textCursor();
@@ -1641,8 +1641,8 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
             exchangeMark();
         } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "copylines")) {
             copyLines();
-        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "pastelines")) {
-            pasteLines();
+        } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "cutlines")) {
+            cutlines();
         } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "joinlines")) {
             joinLines();
         } else if (key == Utils::getKeyshortcutFromKeymap(settings, "editor", "selectnextcompletion")) {

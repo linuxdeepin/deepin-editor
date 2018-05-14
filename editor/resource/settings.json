@@ -435,8 +435,8 @@
                             "default":  "Meta+C"
                         },
                         {
-                            "key": "pastelines",
-                            "name": "Paste Lines",
+                            "key": "cutlines",
+                            "name": "Cut Lines",
                             "type": "shortcut",
                             "default":  "Meta+X"
                         },
@@ -893,7 +893,7 @@
                             "default":  "Meta+C"
                         },
                         {
-                            "key": "pastelines",
+                            "key": "cutlines",
                             "hide" : true,
                             "reset" : false,
                             "default":  "Meta+X"
@@ -1351,7 +1351,7 @@
                             "default":  "Alt+Shift+W"
                         },
                         {
-                            "key": "pastelines",
+                            "key": "cutlines",
                             "hide" : true,
                             "reset" : false,
                             "default":  "Ctrl+Shift+W"
@@ -1809,7 +1809,7 @@
                             "default":  "Meta+C"
                         },
                         {
-                            "key": "pastelines",
+                            "key": "cutlines",
                             "hide" : true,
                             "reset" : false,
                             "default":  "Meta+X"
