@@ -1504,6 +1504,9 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
     changeCursorWidthTimer->start(cursorWidthChangeDelay);
 
     QString key = Utils::getKeyshortcut(keyEvent);
+    
+    // Debug usage.
+    // qDebug() << key;
 
     if (readOnlyMode) {
         if (key == "J") {

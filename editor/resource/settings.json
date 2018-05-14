@@ -246,19 +246,19 @@
                             "key": "newline",
                             "name": "New Line",
                             "type": "shortcut",
-                            "default":  "Enter"
+                            "default":  "Return"
                         },
                         {
                             "key": "opennewlineabove",
                             "name": "Open New Line Above",
                             "type": "shortcut",
-                            "default":  "Ctrl+Enter"
+                            "default":  "Ctrl+Return"
                         },
                         {
                             "key": "opennewlinebelow",
                             "name": "Open New Line Below",
                             "type": "shortcut",
-                            "default":  "Ctrl+Shift+Enter"
+                            "default":  "Ctrl+Shift+Return"
                         },
                         {
                             "key": "duplicateline",
@@ -704,19 +704,19 @@
                             "key": "newline",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Enter"
+                            "default":  "Return"
                         },
                         {
                             "key": "opennewlineabove",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Ctrl+Enter"
+                            "default":  "Ctrl+Return"
                         },
                         {
                             "key": "opennewlinebelow",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Ctrl+Shift+Enter"
+                            "default":  "Ctrl+Shift+Return"
                         },
                         {
                             "key": "duplicateline",
@@ -1620,19 +1620,19 @@
                             "key": "newline",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Enter"
+                            "default":  "Return"
                         },
                         {
                             "key": "opennewlineabove",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Ctrl+Enter"
+                            "default":  "Ctrl+Return"
                         },
                         {
                             "key": "opennewlinebelow",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Ctrl+Shift+Enter"
+                            "default":  "Ctrl+Shift+Return"
                         },
                         {
                             "key": "duplicateline",
