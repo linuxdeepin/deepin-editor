@@ -122,7 +122,7 @@ public:
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     void contextMenuEvent(QContextMenuEvent *event);
                                                      
-    void setTheme(const KSyntaxHighlighting::Theme &theme);
+    void setTheme(const KSyntaxHighlighting::Theme &theme, QString themeName);
     void setThemeWithName(QString themeName);
     void loadHighlighter();
     

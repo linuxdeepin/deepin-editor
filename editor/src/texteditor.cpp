@@ -1523,7 +1523,7 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         } else if (key == ".") {
             moveToStart();
         } else if (key == "H") {
-                backwardChar();
+            backwardChar();
         } else if (key == "L") {
             forwardChar();
         } else if (key == "Space") {
@@ -1909,14 +1909,18 @@ bool TextEditor::setCursorKeywordSeletoin(int position, bool findNext)
 void TextEditor::setThemeWithName(QString themeName)
 {
     const auto theme = m_repository.theme(themeName);
-    setTheme(theme);
+    setTheme(theme, themeName);
 }
 
-void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme)
+void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme, QString themeName)
 {
+    QVariantMap jsonMap = Utils::getThemeNodeMap(themeName);
+    auto themeBackgroundColor = jsonMap["editor-colors"].toMap()["background-color"].toString();
+    auto themeCurrentLineColor = jsonMap["editor-colors"].toMap()["current-line"].toString();
+
     auto pal = qApp->palette();
     if (theme.isValid()) {
-        pal.setColor(QPalette::Base, QColor(theme.editorColor(KSyntaxHighlighting::Theme::BackgroundColor)));
+        pal.setColor(QPalette::Base, QColor(themeBackgroundColor));
         pal.setColor(QPalette::Text, QColor(theme.textColor(KSyntaxHighlighting::Theme::Normal)));
         pal.setColor(QPalette::Highlight, QColor(theme.backgroundColor(KSyntaxHighlighting::Theme::RegionMarker)));
         pal.setColor(QPalette::HighlightedText, QColor(theme.selectedTextColor(KSyntaxHighlighting::Theme::RegionMarker)));
@@ -1924,8 +1928,9 @@ void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme)
     viewport()->setPalette(pal);
     viewport()->setAutoFillBackground(true);
 
-    currentLineColor = QColor(theme.editorColor(KSyntaxHighlighting::Theme::CurrentLine));
-    backgroundColor = QColor(theme.editorColor(KSyntaxHighlighting::Theme::BackgroundColor));
+    currentLineColor = QColor(themeCurrentLineColor);
+    backgroundColor = QColor(themeBackgroundColor);
+
     lineNumbersColor = QColor(theme.editorColor(KSyntaxHighlighting::Theme::LineNumbers));
     currentLineNumberColor = QColor(theme.editorColor(KSyntaxHighlighting::Theme::CurrentLineNumber));
     regionMarkerColor = QColor(theme.textColor(KSyntaxHighlighting::Theme::RegionMarker));
