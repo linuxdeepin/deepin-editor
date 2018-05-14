@@ -342,7 +342,7 @@
                             "key": "movetolineindentation",
                             "name": "Move To Line Indentation",
                             "type": "shortcut",
-                            "default":  "Ctrl+Home"
+                            "default":  "Ctrl+M"
                         },
                         {
                             "key": "upcaseword",
@@ -800,7 +800,7 @@
                             "key": "movetolineindentation",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Ctrl+Home"
+                            "default":  "Ctrl+M"
                         },
                         {
                             "key": "upcaseword",
@@ -1716,7 +1716,7 @@
                             "key": "movetolineindentation",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Ctrl+Home"
+                            "default":  "Ctrl+M"
                         },
                         {
                             "key": "upcaseword",
