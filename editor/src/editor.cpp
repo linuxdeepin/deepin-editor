@@ -58,7 +58,7 @@ void Editor::loadFile(QString filepath)
     QFile file(filepath);
     if (file.open(QFile::ReadOnly)) {
         auto fileContent = file.readAll();
-        fileEncode = Utils::getFileEncode(fileContent);
+        fileEncode = Utils::getFileEncode(fileContent, filepath);
         
         qDebug() << QString("Detect file %1 with encoding: %2").arg(filepath).arg(QString(fileEncode));
         

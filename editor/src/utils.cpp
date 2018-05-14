@@ -100,7 +100,7 @@ QString Utils::getFileContent(QString filepath)
     QFile file(filepath);
     if (file.open(QFile::ReadOnly)) {
         auto fileContent = file.readAll();
-        auto fileEncode = getFileEncode(fileContent);
+        auto fileEncode = getFileEncode(fileContent, filepath);
 
         QTextStream stream(&fileContent);
         stream.setCodec(fileEncode);
@@ -112,20 +112,90 @@ QString Utils::getFileContent(QString filepath)
     return content;
 }
 
-QByteArray Utils::getFileEncode(const QByteArray &data)
+float codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, const QLocale::Country &country)
+{
+    qreal hep_count = 0;
+    int non_base_latin_count = 0;
+    qreal unidentification_count = 0;
+    int replacement_count = 0;
+
+    QTextDecoder decoder(codec);
+    const QString &unicode_data = decoder.toUnicode(data);
+
+    for (int i = 0; i < unicode_data.size(); ++i) {
+        const QChar &ch = unicode_data.at(i);
+
+        if (ch.unicode() > 0x7f)
+            ++non_base_latin_count;
+
+        switch (ch.script()) {
+        case QChar::Script_Hiragana:
+        case QChar::Script_Katakana:
+            hep_count += country == QLocale::Japan ? 1.2 : 0.5;
+            unidentification_count += country == QLocale::Japan ? 0 : 0.3;
+            break;
+        case QChar::Script_Han:
+            hep_count += country == QLocale::China ? 1.2 : 0.5;
+            unidentification_count += country == QLocale::China ? 0 : 0.3;
+            break;
+        case QChar::Script_Hangul:
+            hep_count += (country == QLocale::NorthKorea) || (country == QLocale::SouthKorea) ? 1.2 : 0.5;
+            unidentification_count += (country == QLocale::NorthKorea) || (country == QLocale::SouthKorea) ? 0 : 0.3;
+            break;
+        default:
+            // full-width character, emoji
+            if ((ch.unicode() >= 0xff00 && ch <= 0xffef)
+                    || (ch.unicode() >= 0x2600 && ch.unicode() <= 0x27ff)) {
+                ++hep_count;
+            } else if (ch.isSurrogate() && ch.isHighSurrogate()) {
+                ++i;
+
+                if (i < unicode_data.size()) {
+                    const QChar &next_ch = unicode_data.at(i);
+
+                    if (!next_ch.isLowSurrogate()) {
+                        --i;
+                        break;
+                    }
+
+                    uint unicode = QChar::surrogateToUcs4(ch, next_ch);
+
+                    // emoji
+                    if (unicode >= 0x1f000 && unicode <= 0x1f6ff) {
+                        hep_count += 2;
+                    }
+                }
+            } else if (ch.unicode() == QChar::ReplacementCharacter) {
+                ++replacement_count;
+            } else if (ch.unicode() > 0x7f) {
+                ++unidentification_count;
+            }
+            break;
+        }
+    }
+
+    float c = qreal(hep_count) / non_base_latin_count / 1.2;
+
+    c -= qreal(replacement_count) / non_base_latin_count;
+    c -= qreal(unidentification_count) / non_base_latin_count;
+
+    return qMax(0.0f, c);
+}
+
+QByteArray Utils::getFileEncode(const QByteArray &data, const QString &fileName)
 {
     if (QTextCodec *c = QTextCodec::codecForUtfText(data, nullptr)) {
         return c->name();
     }
 
     QMimeDatabase mime_database;
-    const QMimeType &mime_type = mime_database.mimeTypeForData(data);
+    const QMimeType &mime_type = fileName.isEmpty() ? mime_database.mimeTypeForData(data) : mime_database.mimeTypeForFileNameAndData(fileName, data);
     const QString &mimetype_name = mime_type.name();
     KEncodingProber::ProberType proberType = KEncodingProber::Universal;
 
     if (mimetype_name == QStringLiteral("application/xml")
-        || mimetype_name == QStringLiteral("text/html")
-        || mimetype_name == QStringLiteral("application/xhtml+xml")) {
+            || mimetype_name == QStringLiteral("text/html")
+            || mimetype_name == QStringLiteral("application/xhtml+xml")) {
         const QString &_data = QString::fromLatin1(data);
         QRegularExpression pattern("<\\bmeta.+\\bcharset=(?'charset'\\S+?)\\s*['\"/>]");
 
@@ -177,98 +247,71 @@ QByteArray Utils::getFileEncode(const QByteArray &data)
                 break;
             }
         }
-    }
+    } else if (mimetype_name == "text/x-python") {
+        QRegularExpression pattern("^#coding\\s*:\\s*(?'coding'\\S+)$");
+        QTextStream stream(data);
 
-    KEncodingProber prober(proberType);
+        pattern.setPatternOptions(QRegularExpression::DontCaptureOption | QRegularExpression::CaseInsensitiveOption);
+        stream.setCodec("latin1");
 
-    prober.feed(data);
+        while (!stream.atEnd()) {
+            const QString &_data = stream.readLine();
+            const QString &coding = pattern.match(_data, 0).captured("coding");
 
-    if (prober.confidence() > 0.5 || proberType != KEncodingProber::Universal) {
-        return prober.encoding();
+            if (!coding.isEmpty()) {
+                return coding.toLatin1();
+            }
+        }
     }
 
     // for CJK
-    const QList<KEncodingProber::ProberType> fallback_list {
-        KEncodingProber::ChineseSimplified,
-        KEncodingProber::ChineseTraditional,
-        KEncodingProber::Japanese,
-        KEncodingProber::Korean
+    const QList<QPair<KEncodingProber::ProberType, QLocale::Country>> fallback_list {
+        {KEncodingProber::ChineseSimplified, QLocale::China},
+        {KEncodingProber::ChineseTraditional, QLocale::China},
+        {KEncodingProber::Japanese, QLocale::Japan},
+        {KEncodingProber::Korean, QLocale::NorthKorea},
+        {proberType, QLocale::system().country()}
     };
 
+    KEncodingProber prober(proberType);
+    QTextCodec *def_codec = QTextCodec::codecForLocale();
     QByteArray encoding;
     float confidence = 0;
 
-    for (const KEncodingProber::ProberType type : fallback_list) {
-        prober.setProberType(type);
+    for (const auto i : fallback_list) {
+        prober.setProberType(i.first);
         prober.feed(data);
 
         if (QTextCodec *codec = QTextCodec::codecForName(prober.encoding())) {
-            int hep_count = 0;
-            int non_latin_count = 0;
-            int replacement_count = 0;
+            if (def_codec == codec)
+                def_codec = nullptr;
 
-            float c = prober.confidence();
-            QTextDecoder decoder(codec);
-            const QString &unicode_data = decoder.toUnicode(data);
+            float c = codecConfidenceForData(codec, data, i.second);
 
-            for (int i = 0; i < unicode_data.size(); ++i) {
-                const QChar &ch = unicode_data.at(i);
-
-                if (ch.unicode() > 0xff)
-                    ++non_latin_count;
-
-                switch (ch.script()) {
-                case QChar::Script_Hiragana:
-                case QChar::Script_Katakana:
-                case QChar::Script_Han:
-                    ++hep_count;
-                    break;
-                default:
-                    // full-width character, emoji
-                    if ((ch.unicode() >= 0xff00 && ch <= 0xffef)
-                        || (ch.unicode() >= 0x2600 && ch.unicode() <= 0x27ff)) {
-                        ++hep_count;
-                    } else if (ch.isSurrogate() && ch.isHighSurrogate()) {
-                        ++i;
-
-                        if (i < unicode_data.size()) {
-                            const QChar &next_ch = unicode_data.at(i);
-
-                            if (!next_ch.isLowSurrogate()) {
-                                --i;
-                                break;
-                            }
-
-                            uint unicode = QChar::surrogateToUcs4(ch, next_ch);
-
-                            // emoji
-                            if (unicode >= 0x1f000 && unicode <= 0x1f6ff) {
-                                hep_count += 2;
-                            }
-                        }
-                    } else if (ch.unicode() == QChar::ReplacementCharacter) {
-                        ++replacement_count;
-                    }
-                    break;
-                }
-            }
-
-            c += qreal(hep_count) / non_latin_count / 2.0;
-            c -= qreal(replacement_count) / non_latin_count;
-            c = qMax(prober.confidence(), c);
+            c = c / 2 + prober.confidence() / 2;
 
             if (c > confidence) {
                 confidence = c;
                 encoding = prober.encoding();
             }
+
+            if (i.first == KEncodingProber::ChineseTraditional && c < 0.5) {
+                // test Big5
+                c = codecConfidenceForData(QTextCodec::codecForName("Big5"), data, QLocale::China);
+
+                if (c > 0.5 && c > confidence) {
+                    confidence = c;
+                    encoding = "Big5";
+                }
+            }
         }
     }
 
-    if (confidence > 0.5)
-        return encoding;
+    if (def_codec && codecConfidenceForData(def_codec, data, QLocale::system().country()) > confidence) {
+        return def_codec->name();
+    }
 
-    // fallback
-    return QTextCodec::codecForLocale()->name();
+    return encoding;
 }
 
 bool Utils::fileExists(QString path) {
