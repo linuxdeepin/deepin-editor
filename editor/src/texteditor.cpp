@@ -287,11 +287,16 @@ void TextEditor::forwardPair()
         if (actionStartPos == selectionStartPos) {
             cursor.setPosition(selectionEndPos, QTextCursor::MoveAnchor);
             cursor.setPosition(findPos, moveMode);
-            setTextCursor(cursor);
         } else {
             cursor.setPosition(selectionStartPos, QTextCursor::MoveAnchor);
             cursor.setPosition(findPos, moveMode);
-            setTextCursor(cursor);
+        }
+        
+        setTextCursor(cursor);
+        
+        // Keep current line at visible area when find next pair.
+        if (cursorRect().top() + fontMetrics().height() >= rect().height()) {
+            scrollLineUp();
         }
     }
 }
