@@ -114,9 +114,9 @@ void Tabbar::addTabWithIndex(int index, QString filepath, QString tabName)
         index = getActiveTabIndex();
     }
     
-    tabbar->tabFiles.insert(index + 1, filepath);
-    tabbar->insertTab(index + 1, tabName);
-    tabbar->setCurrentIndex(index + 1);
+    tabbar->tabFiles.insert(index, filepath);
+    tabbar->insertTab(index, tabName);
+    tabbar->setCurrentIndex(index);
 }
 
 void Tabbar::closeActiveTab()
