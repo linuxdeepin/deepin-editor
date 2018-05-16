@@ -510,7 +510,7 @@ void Window::displayShortcuts()
     for (auto option : settings->settings->group("shortcuts.window")->options()) {
         QJsonObject jsonItem;
         jsonItem.insert("name", option->name());
-        jsonItem.insert("value", option->value().toString().replace("Meta", "Win"));
+        jsonItem.insert("value", option->value().toString().replace("Meta", "Super"));
         windowJsonItems.append(jsonItem);
     }
     windowJsonGroup.insert("groupItems", windowJsonItems);
@@ -522,7 +522,7 @@ void Window::displayShortcuts()
     for (auto option : settings->settings->group("shortcuts.editor")->options()) {
         QJsonObject jsonItem;
         jsonItem.insert("name", option->name());
-        jsonItem.insert("value", option->value().toString().replace("Meta", "Win"));
+        jsonItem.insert("value", option->value().toString().replace("Meta", "Super"));
         editorJsonItems.append(jsonItem);
     }
     editorJsonGroup.insert("groupItems", editorJsonItems);
