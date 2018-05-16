@@ -184,6 +184,11 @@ float codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, co
 
 QByteArray Utils::getFileEncode(const QByteArray &data, const QString &fileName)
 {
+    // Return UTF-8 if nothing in file.
+    if (data.isEmpty()) {
+        return "UTF-8";
+    }
+    
     if (QTextCodec *c = QTextCodec::codecForUtfText(data, nullptr)) {
         return c->name();
     }
@@ -501,6 +506,7 @@ bool Utils::isEditableFile(QString filepath)
         << "application/x-text"
         << "application/xml"
         << "application/yaml"
+        << "application/x-zerosize"
         << "image/svg+xml";
     
     if (mimeTypeWhiteList.contains(mimeType)) {
