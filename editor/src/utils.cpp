@@ -143,9 +143,11 @@ float codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, co
             unidentification_count += (country == QLocale::NorthKorea) || (country == QLocale::SouthKorea) ? 0 : 0.3;
             break;
         default:
-            // full-width character, emoji
+            // full-width character, emoji, 常用标点, 拉丁文补充1
             if ((ch.unicode() >= 0xff00 && ch <= 0xffef)
-                    || (ch.unicode() >= 0x2600 && ch.unicode() <= 0x27ff)) {
+                    || (ch.unicode() >= 0x2600 && ch.unicode() <= 0x27ff)
+                    || (ch.unicode() >= 0x2000 && ch.unicode() <= 0x206f)
+                    || (ch.unicode() >= 0x80 && ch.unicode() <= 0xff)) {
                 ++hep_count;
             } else if (ch.isSurrogate() && ch.isHighSurrogate()) {
                 ++i;
@@ -168,7 +170,9 @@ float codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, co
             } else if (ch.unicode() == QChar::ReplacementCharacter) {
                 ++replacement_count;
             } else if (ch.unicode() > 0x7f) {
-                ++unidentification_count;
+                // 因为UTF-8编码的容错性很低，所以未识别的编码只需要判断是否为 QChar::ReplacementCharacter 就能排除
+                if (codec->name() != "UTF-8")
+                    ++unidentification_count;
             }
             break;
         }
@@ -186,7 +190,7 @@ QByteArray Utils::getFileEncode(const QByteArray &data, const QString &fileName)
 {
     // Return UTF-8 if nothing in file.
     if (data.isEmpty()) {
-        return "UTF-8";
+        return QTextCodec::codecForLocale()->name();
     }
     
     if (QTextCodec *c = QTextCodec::codecForUtfText(data, nullptr)) {
@@ -287,13 +291,20 @@ QByteArray Utils::getFileEncode(const QByteArray &data, const QString &fileName)
         prober.setProberType(i.first);
         prober.feed(data);
 
+        if (prober.confidence() == 0)
+            continue;
+
         if (QTextCodec *codec = QTextCodec::codecForName(prober.encoding())) {
             if (def_codec == codec)
                 def_codec = nullptr;
 
             float c = codecConfidenceForData(codec, data, i.second);
 
-            c = c / 2 + prober.confidence() / 2;
+            if (prober.confidence() > 0.5) {
+                c = c / 2 + prober.confidence() / 2;
+            } else {
+                c = c / 3 * 2 + prober.confidence() / 3;
+            }
 
             if (c > confidence) {
                 confidence = c;
