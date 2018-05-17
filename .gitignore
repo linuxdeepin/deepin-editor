@@ -3,3 +3,8 @@ moc_*.o
 moc_*.cpp
 build/
 *.qm
+
+*.pro.user
+*.pro.user*
+*.qm
+*.autosave

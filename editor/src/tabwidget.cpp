@@ -40,6 +40,7 @@ TabWidget::TabWidget()
     setVisibleAddButton(true);
     setDragable(true);
     setStartDragDistance(20);   // set drag drop distance
+    setElideMode(Qt::ElideMiddle);
 
     // Set mask color.
     QColor dropColor("#333333");
