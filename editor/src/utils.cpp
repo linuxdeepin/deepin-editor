@@ -188,7 +188,7 @@ float codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, co
 
 QByteArray Utils::getFileEncode(const QByteArray &data, const QString &fileName)
 {
-    // Return UTF-8 if nothing in file.
+    // Return local encoding if nothing in file.
     if (data.isEmpty()) {
         return QTextCodec::codecForLocale()->name();
     }

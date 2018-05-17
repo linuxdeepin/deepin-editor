@@ -110,10 +110,6 @@ void Tabbar::addTab(QString filepath, QString tabName)
 
 void Tabbar::addTabWithIndex(int index, QString filepath, QString tabName)
 {
-    if (index == -1) {
-        index = getActiveTabIndex();
-    }
-    
     tabbar->tabFiles.insert(index, filepath);
     tabbar->insertTab(index, tabName);
     tabbar->setCurrentIndex(index);

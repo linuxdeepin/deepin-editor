@@ -314,6 +314,11 @@ void Window::addTab(QString file, bool activeTab)
 
 void Window::addTabWithContent(QString tabName, QString filepath, QString content, int index)
 {
+    // Default index is -1, we change it to right of current tab for new tab actoin in start.
+    if (index == -1) {
+        index = tabbar->getActiveTabIndex() + 1;
+    }
+    
     tabbar->addTabWithIndex(index, filepath, tabName);
 
     Editor *editor = createEditor();
