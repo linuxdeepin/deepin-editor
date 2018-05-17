@@ -1,3 +1,6 @@
+### 0.0.4 (2018-05-17)
+- Tag for archlinux.
+
 ### 0.0.3 (2018-05-14)
 - Fixed many bugs since 0.0.2
 
