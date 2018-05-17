@@ -36,7 +36,7 @@ ThemeBar::ThemeBar(QWidget *parent) : QWidget(parent)
 
     animationDuration = 25;
     animationFrames = 10;
-    barWidth = 280;
+    barWidth = 250;
 
     expandTimer = new QTimer();
     connect(expandTimer, &QTimer::timeout, this, &ThemeBar::expand);
@@ -45,7 +45,7 @@ ThemeBar::ThemeBar(QWidget *parent) : QWidget(parent)
     connect(shrinkTimer, &QTimer::timeout, this, &ThemeBar::shrink);
 
     themeView = new ThemeView();
-    themeView->setRowHeight(110);
+    themeView->setRowHeight(123);
     
     QList<SortAlgorithm> *alorithms = new QList<SortAlgorithm>();
     alorithms->append(&ThemeItem::sortByLightness);

@@ -64,6 +64,11 @@ private:
     int frameRadius = 5;
     
     qreal screenScale;
+    
+    int fontSize = 10;
+    int lineHeight = 18;
+    int renderX = 33;
+    int renderY = 15;
 };
 
 #endif
