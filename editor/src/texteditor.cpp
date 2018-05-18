@@ -1322,19 +1322,46 @@ void TextEditor::updateFont()
 
 void TextEditor::replaceAll(QString replaceText, QString withText)
 {
+    // If replace text is nothing, don't do replace action.
+    if (replaceText.size() == 0) {
+        qDebug() << "Replace text is empty.";
+        return;
+    }
+    
+    // Try get replace text in rest content.
     QTextCursor cursor = textCursor();
-
     cursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
     QString text = cursor.selectedText();
+    QString textAfterReplace = cursor.selectedText().replace(replaceText, withText, Qt::CaseInsensitive);
+    
+    // Don't move cursor if nothing need to replace in rest content.
+    if (text == textAfterReplace) {
+        qDebug() << "Nothing need replace in rest content.";
+        return;
+    }
+    
+    // If rest content can replace, variable keywordSelections must have items.
+    if (keywordSelections.size() == 0) {
+        qDebug() << "The code of TextEditor::replaceRest is wrong, need review.";
+        return;
+    }
+    
+    // Get last keyword position.
+    auto lastKeywordPosition = keywordSelections.last().cursor.position();
 
-    cursor.insertText(text.replace(replaceText, withText, Qt::CaseInsensitive));
+    // Replace file content.
+    cursor.insertText(textAfterReplace);
     cursor.clearSelection();
-
-    // Update cursor.
     setTextCursor(cursor);
 
+    // Re-highlight keywords.
     highlightKeyword(replaceText, getPosition());
+
+    // Restore last keyword position.
+    QTextCursor lastKeywordCursor = textCursor();
+    lastKeywordCursor.setPosition(lastKeywordPosition);
+    setTextCursor(lastKeywordCursor);
 }
 
 void TextEditor::replaceNext(QString replaceText, QString withText)
