@@ -149,6 +149,7 @@ public:
     QString getWordAtCursor();
     void toggleEnglishCompleter();
     void setEnglishCompleter(bool enable);
+    bool getEnglishCompleter();
     
     void toggleReadOnlyMode();
     

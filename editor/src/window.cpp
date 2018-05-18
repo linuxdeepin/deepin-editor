@@ -1304,6 +1304,10 @@ void Window::handleSelectNextCompletion()
 {
     if (wordCompletionWindow->isVisible()) {
         wordCompletionWindow->listview->selectNextItem();
+    } else {
+        if (!getActiveEditor()->textEditor->getEnglishCompleter()) {
+            showNotify("请先开启英语助手");
+        }
     }
 }
 
@@ -1311,6 +1315,10 @@ void Window::handleSelectPrevCompletion()
 {
     if (wordCompletionWindow->isVisible()) {
         wordCompletionWindow->listview->selectPrevItem();
+    } else {
+        if (!getActiveEditor()->textEditor->getEnglishCompleter()) {
+            showNotify("请先开启英语助手");
+        }
     }
 }
 
@@ -1318,6 +1326,10 @@ void Window::handleSelectFirstCompletion()
 {
     if (wordCompletionWindow->isVisible()) {
         wordCompletionWindow->listview->selectFirstItem();
+    } else {
+        if (!getActiveEditor()->textEditor->getEnglishCompleter()) {
+            showNotify("请先开启英语助手");
+        }
     }
 }
 
@@ -1325,6 +1337,10 @@ void Window::handleSelectLastCompletion()
 {
     if (wordCompletionWindow->isVisible()) {
         wordCompletionWindow->listview->selectLastItem();
+    } else {
+        if (!getActiveEditor()->textEditor->getEnglishCompleter()) {
+            showNotify("请先开启英语助手");
+        }
     }
 }
 

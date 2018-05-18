@@ -2340,6 +2340,11 @@ void TextEditor::setEnglishCompleter(bool enable)
     enableEnglishCompleter = enable;
 }
 
+bool TextEditor::getEnglishCompleter()
+{
+    return enableEnglishCompleter;
+}
+
 void TextEditor::toggleReadOnlyMode()
 {
     if (readOnlyMode) {
@@ -2355,7 +2360,13 @@ void TextEditor::toggleReadOnlyMode()
 
 void TextEditor::toggleComment()
 {
-    Comment::unCommentSelection(this, commentDefinition);
+    const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());
+
+    if (def.filePath() != "") {
+        Comment::unCommentSelection(this, commentDefinition);
+    } else {
+        popupNotify("文件不支持语法注释");
+    }
 }
 
 void TextEditor::toggleBullet()
