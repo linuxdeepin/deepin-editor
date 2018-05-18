@@ -1339,17 +1339,21 @@ void TextEditor::replaceAll(QString replaceText, QString withText)
 
 void TextEditor::replaceNext(QString replaceText, QString withText)
 {
-    QTextCursor cursor = textCursor();
+    if (cursorKeywordSelection.cursor.position() - replaceText.size() >= 0) {
+        QTextCursor cursor = textCursor();
 
-    cursor.setPosition(cursorKeywordSelection.cursor.position() - replaceText.size());
-    cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
-    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, replaceText.size());
-    cursor.insertText(withText);
+        cursor.setPosition(cursorKeywordSelection.cursor.position() - replaceText.size());
+        cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
+        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, replaceText.size());
+        cursor.insertText(withText);
 
-    // Update cursor.
-    setTextCursor(cursor);
+        // Update cursor.
+        setTextCursor(cursor);
 
-    highlightKeyword(replaceText, getPosition());
+        highlightKeyword(replaceText, getPosition());
+    } else {
+        qDebug() << "Nothing need to replace";
+    }
 }
 
 void TextEditor::replaceRest(QString replaceText, QString withText)
