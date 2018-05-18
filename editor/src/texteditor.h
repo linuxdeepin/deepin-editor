@@ -72,6 +72,8 @@ public:
     void prevLine();
     void jumpToLine(int line, bool keepLineAtCenter);
     
+    void moveCursorNoBlink(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
+    
     void newline();
     void openNewlineAbove();
     void openNewlineBelow();

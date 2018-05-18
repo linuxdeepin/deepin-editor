@@ -223,7 +223,7 @@ void TextEditor::forwardChar()
         cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
         setTextCursor(cursor);
     } else {
-        moveCursor(QTextCursor::NextCharacter);
+        moveCursorNoBlink(QTextCursor::NextCharacter);
     }
 }
 
@@ -234,7 +234,7 @@ void TextEditor::backwardChar()
         cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
         setTextCursor(cursor);
     } else {
-        moveCursor(QTextCursor::PreviousCharacter);
+        moveCursorNoBlink(QTextCursor::PreviousCharacter);
     }
 }
 
@@ -344,7 +344,7 @@ void TextEditor::moveToStart()
         cursor.movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
         setTextCursor(cursor);
     } else {
-        moveCursor(QTextCursor::Start);
+        moveCursorNoBlink(QTextCursor::Start);
     }
 }
 
@@ -355,7 +355,7 @@ void TextEditor::moveToEnd()
         cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
         setTextCursor(cursor);
     } else {
-        moveCursor(QTextCursor::End);
+        moveCursorNoBlink(QTextCursor::End);
     }
 }
 
@@ -366,7 +366,7 @@ void TextEditor::moveToStartOfLine()
         cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
         setTextCursor(cursor);
     } else {
-        moveCursor(QTextCursor::StartOfBlock);
+        moveCursorNoBlink(QTextCursor::StartOfBlock);
     }
 }
 
@@ -377,7 +377,7 @@ void TextEditor::moveToEndOfLine()
         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
         setTextCursor(cursor);
     } else {
-        moveCursor(QTextCursor::EndOfBlock);
+        moveCursorNoBlink(QTextCursor::EndOfBlock);
     }
 }
 
@@ -423,7 +423,7 @@ void TextEditor::nextLine()
         cursor.movePosition(QTextCursor::Down, QTextCursor::KeepAnchor);
         setTextCursor(cursor);
     } else {
-        moveCursor(QTextCursor::Down);
+        moveCursorNoBlink(QTextCursor::Down);
     }
 }
 
@@ -434,8 +434,17 @@ void TextEditor::prevLine()
         cursor.movePosition(QTextCursor::Up, QTextCursor::KeepAnchor);
         setTextCursor(cursor);
     } else {
-        moveCursor(QTextCursor::Up);
+        moveCursorNoBlink(QTextCursor::Up);
     }
+}
+
+void TextEditor::moveCursorNoBlink(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode)
+{
+    // Function moveCursorNoBlink will blink cursor when move cursor.
+    // But function movePosition won't, so we use movePosition to avoid that cursor link when moving cursor. 
+    QTextCursor cursor = textCursor();
+    cursor.movePosition(operation, mode);
+    setTextCursor(cursor);
 }
 
 void TextEditor::jumpToLine(int line, bool keepLineAtCenter)
@@ -478,7 +487,7 @@ void TextEditor::openNewlineBelow()
     // Stop mark if mark is set.
     tryUnsetMark();
 
-    moveCursor(QTextCursor::EndOfBlock);
+    moveCursorNoBlink(QTextCursor::EndOfBlock);
     textCursor().insertText("\n");
 }
 
@@ -1533,7 +1542,7 @@ void TextEditor::updateKeywordSelections(QString keyword)
 
     // Update selections with keyword.
     if (keyword != "") {
-        moveCursor(QTextCursor::Start);
+        moveCursorNoBlink(QTextCursor::Start);
 
         QTextDocument::FindFlags options;
         options |= QTextDocument::FindCaseSensitively;
