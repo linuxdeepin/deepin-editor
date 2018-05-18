@@ -108,6 +108,7 @@ protected:
     void keyPressEvent(QKeyEvent *keyEvent);
     void dragEnterEvent(QDragEnterEvent *e);
     void dropEvent(QDropEvent* event);
+    bool eventFilter(QObject *, QEvent *event);
     
 signals:
     void dropTabOut(QString tabName, QString filepath, QString content);

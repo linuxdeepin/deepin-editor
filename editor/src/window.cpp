@@ -1418,3 +1418,15 @@ void Window::dropEvent(QDropEvent* event)
         }
     }
 }
+
+bool Window::eventFilter(QObject *, QEvent *event)
+{
+    // Try hide word completion window when window start to move or size change.
+    if (windowShowFlag && (event->type() == QEvent::MouseMove || event->type() == QEvent::WindowStateChange)) {
+        if (wordCompletionWindowIsVisible()) {
+            wordCompletionWindow->hide();
+        }
+    }
+    
+    return false;
+}
