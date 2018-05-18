@@ -106,14 +106,20 @@ void StartManager::openFilesInTab(QStringList files)
             // Open exist tab if file has opened.
             if (info.windowIndex != -1) {
                 popupExistTabs(info);
+                
+                qDebug() << "Open " << file << " in exist tab";
             }
             // Create new window with file if haven't window exist.
             else if (windows.size() == 0) {
                 createWindow(true)->addTab(file);
+                
+                qDebug() << "Open " << file << " with new window";
             }
             // Open file tab in first window of window list.
             else {
                 windows[0]->addTab(file);
+                
+                qDebug() << "Open " << file << " in first window";
             }
 
         }
@@ -134,7 +140,14 @@ Window* StartManager::createWindow(bool alwaysCenter)
     // Quit application if close last window.
     connect(window, &Window::close, this, 
             [=]() {
-                if (windows.size() <= 1) {
+                int windowIndex = windows.indexOf(window);
+                qDebug() << "Close window " << windowIndex;
+                
+                if (windowIndex >= 0) {
+                    windows.takeAt(windowIndex);
+                }
+                
+                if (windows.size() <= 0) {
                     QApplication::quit();
                 }
             });
@@ -173,6 +186,8 @@ StartManager::FileTabInfo StartManager::getFileTabInfo(QString file)
 {
     FileTabInfo info = {-1, -1};
 
+    qDebug() << "Windows size: " << windows.size();
+    
     foreach (Window *window, windows) {
         int tabIndex = window->getTabIndex(file);
         if (tabIndex >= 0) {

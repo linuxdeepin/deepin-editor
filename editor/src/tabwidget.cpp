@@ -69,6 +69,8 @@ QMimeData* TabWidget::createMimeDataFromTab(int index, const QStyleOptionTab &) 
 
     // Remove text/plain format, avoid drop tab text to other applications
     mimeData->removeFormat("text/plain");
+    
+    qDebug() << "### createMimeDataFromTab: " << index;
 
     return mimeData;
 }
@@ -118,12 +120,16 @@ QPixmap TabWidget::createDragPixmapFromTab(int index, const QStyleOptionTab &, Q
     // Return image composited with shadow.
     QColor shadowColor = QColor("#000000");
     shadowColor.setAlpha(80);
+    
+    qDebug() << "### createDragPixmapFromTab: " << index;
 
     return Utils::dropShadow(QPixmap::fromImage(scaledImage), 40, shadowColor, QPoint(0, 8));
 }
 
-bool TabWidget::canInsertFromMimeData(int, const QMimeData *source) const
+bool TabWidget::canInsertFromMimeData(int index, const QMimeData *source) const
 {
+    qDebug() << "### canInsertFromMimeData: " << index;
+    
     return source->hasFormat("tabInfo");
 }
 
@@ -140,6 +146,8 @@ void TabWidget::insertFromMimeData(int index, const QMimeData *source)
 
     window->addTabWithContent(tabName, tabPath, tabContent, index);
     window->activeTab(window->getTabIndex(tabPath));
+    
+    qDebug() << "### insertFromMimeData: " << index;
 }
 
 void TabWidget::insertFromMimeDataOnDragEnter(int index, const QMimeData *source)
@@ -154,6 +162,8 @@ void TabWidget::insertFromMimeDataOnDragEnter(int index, const QMimeData *source
 
     window->addTabWithContent(tabName, tabPath, tabContent, index);
     window->activeTab(window->getTabIndex(tabPath));
+    
+    qDebug() << "### insertFromMimeDataOnDragEnter: " << index;
 }
 
 void TabWidget::handleCloseTab()
@@ -211,10 +221,16 @@ bool TabWidget::eventFilter(QObject *, QEvent *event)
         if ((!e->source() || e->source()->parent() != this) && mimeData->data("tabInfo") != "") {
             static_cast<Window*>(this->window())->changeTitlebarBackground(dndStartColor, dndEndColor);
         }
+        
+        qDebug() << "### eventFilter DragEnter";
     } else if (event->type() == QEvent::DragLeave) {
         static_cast<Window*>(this->window())->changeTitlebarBackground(backgroundStartColor, backgroundEndColor);
+        
+        qDebug() << "### eventFilter DragLeave";
     } else if (event->type() == QEvent::Drop) {
         static_cast<Window*>(this->window())->changeTitlebarBackground(backgroundStartColor, backgroundEndColor);
+        
+        qDebug() << "### eventFilter Drop";
     }
 
     return false;
@@ -226,6 +242,8 @@ void TabWidget::handleTabReleaseRequested()
     if (count() == 1) {
         static_cast<Window*>(this->window())->show();
     }
+    
+    qDebug() << "### handleTabReleaseRequested";
 }
 
 void TabWidget::handleDragActionChanged(Qt::DropAction action)
@@ -241,6 +259,8 @@ void TabWidget::handleDragActionChanged(Qt::DropAction action)
         if (QGuiApplication::overrideCursor())
             QGuiApplication::changeOverrideCursor(QGuiApplication::overrideCursor()->shape());
     }
+    
+    qDebug() << "### handleDragActionChanged";
 }
 
 void TabWidget::setBackground(QString startColor, QString endColor)

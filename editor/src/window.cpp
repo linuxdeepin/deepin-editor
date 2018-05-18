@@ -1008,6 +1008,8 @@ void Window::handleCloseFile(QString filepath)
 
     // Exit window after close all tabs.
     if (editorMap.count() == 0) {
+        close();
+        
         deleteLater();
     }
 }

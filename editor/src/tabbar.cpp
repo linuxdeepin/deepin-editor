@@ -168,6 +168,13 @@ void Tabbar::closeTabWithIndex(int closeIndex)
     tabbar->removeTab(closeIndex);
 
     closeFile(filepath);
+    
+    qDebug() << "Close tab with index " << closeIndex << filepath;
+
+    qDebug() << "-----------------";
+    for (int i = 0; i < tabbar->tabFiles.size(); i++) {
+        qDebug() << "tabFiles " << i << tabbar->tabFiles[i];
+    }
 }
 
 void Tabbar::handleCloseOtherTabs(int index)
