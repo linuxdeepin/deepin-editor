@@ -55,6 +55,8 @@ private:
     bool saveFinish;
     int autoSaveInternal;
     QByteArray fileEncode;
+    
+    bool hasLoadFile = false;
 };
 
 #endif

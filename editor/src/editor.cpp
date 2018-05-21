@@ -50,7 +50,7 @@ Editor::Editor(QWidget *parent) : QWidget(parent)
     autoSaveTimer->setSingleShot(true);
 
     connect(autoSaveTimer, &QTimer::timeout, this, &Editor::handleTextChangeTimer);
-    connect(textEditor, &TextEditor::textChanged, this, &Editor::handleTextChanged, Qt::QueuedConnection);
+    connect(textEditor->document(), &QTextDocument::contentsChange, this, &Editor::handleTextChanged, Qt::QueuedConnection);
 }
 
 void Editor::loadFile(QString filepath)
@@ -59,9 +59,9 @@ void Editor::loadFile(QString filepath)
     if (file.open(QFile::ReadOnly)) {
         auto fileContent = file.readAll();
         fileEncode = Utils::getFileEncode(fileContent, filepath);
-        
+
         qDebug() << QString("Detect file %1 with encoding: %2").arg(filepath).arg(QString(fileEncode));
-        
+
         QTextStream stream(&fileContent);
         stream.setCodec(fileEncode);
         textEditor->setPlainText(stream.readAll());
@@ -76,6 +76,8 @@ void Editor::loadFile(QString filepath)
 
 void Editor::saveFile(QString encode, QString newline)
 {
+    qDebug() << "Auto save: " << textEditor->filepath;
+
     bool fileCreateFailed = false;
     if (!Utils::fileExists(textEditor->filepath)) {
         QString directory = QFileInfo(textEditor->filepath).dir().absolutePath();
@@ -118,7 +120,7 @@ void Editor::saveFile(QString encode, QString newline)
         // Otherwise, can't save file with given encoding.
         out.setGenerateByteOrderMark(true);
         out << textEditor->toPlainText().replace(newlineRegex, fileNewline);
-        
+
         // qDebug() << encode << encode.toLatin1().data();
 
         file.close();
@@ -132,11 +134,15 @@ void Editor::updatePath(QString file)
 
 void Editor::handleTextChangeTimer()
 {
-    if (Utils::fileExists(textEditor->filepath)) {
+    // Change flag hasLoadFile to avoid trigger save actoin just user open a file.
+    if (!hasLoadFile) {
+        hasLoadFile = true;
+
+        qDebug() << "Don't auto save when first load file.";
+    } else if (Utils::fileExists(textEditor->filepath)) {
         saveFinish = true;
 
-        saveFile(fileEncode == "ascii" ? "UTF-8" : fileEncode,
-                 "Window");
+        saveFile(fileEncode == "ascii" ? "UTF-8" : fileEncode, "Window");
     }
 }
 
