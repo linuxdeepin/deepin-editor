@@ -177,21 +177,8 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     // configure content area
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    
-    connect(verticalScrollBar(), &QScrollBar::rangeChanged, 
-            this, 
-            [=]() {
-                if (isVisible() && !scrollbarLock) {
-                    scrollbarLock = true;
-                    auto documentHeight = (verticalScrollBar()->maximum() - verticalScrollBar()->minimum() + verticalScrollBar()->pageStep()) * fontMetrics().height();
-                    if (documentHeight > rect().height()) {
-                        setViewportMargins(0, 0, -verticalScrollBar()->sizeHint().width(), -horizontalScrollBar()->sizeHint().height());
-                    } else {
-                        setViewportMargins(0, 0, 0, 0);
-                    }
-                    scrollbarLock = false;
-                }
-            });
+
+    connect(verticalScrollBar(), &QScrollBar::rangeChanged, this, &TextEditor::adjustScrollbarMargins);
 }
 
 int TextEditor::getCurrentLine()
@@ -291,7 +278,7 @@ void TextEditor::forwardPair()
             cursor.setPosition(selectionStartPos, QTextCursor::MoveAnchor);
             cursor.setPosition(findPos, moveMode);
         }
-        
+
         setTextCursor(cursor);
     }
 }
@@ -436,7 +423,7 @@ void TextEditor::prevLine()
 void TextEditor::moveCursorNoBlink(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode)
 {
     // Function moveCursorNoBlink will blink cursor when move cursor.
-    // But function movePosition won't, so we use movePosition to avoid that cursor link when moving cursor. 
+    // But function movePosition won't, so we use movePosition to avoid that cursor link when moving cursor.
     QTextCursor cursor = textCursor();
     cursor.movePosition(operation, mode);
     setTextCursor(cursor);
@@ -1201,14 +1188,14 @@ void TextEditor::changeToWaitCursor()
     cursor.setPosition(cursor.position(), QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
     QString currentChar = cursor.selectedText();
-    
+
     // qDebug() << QString("'%1'").arg(currentChar);
-    
+
     // Convert TAB char to one single space.
     if (currentChar == "\t") {
         currentChar = " ";
     }
-    
+
     setCursorWidth(std::max(cursorNormalWidth, (fontMetrics().width(currentChar))));
 }
 
@@ -1331,26 +1318,26 @@ void TextEditor::replaceAll(QString replaceText, QString withText)
         qDebug() << "Replace text is empty.";
         return;
     }
-    
+
     // Try get replace text in rest content.
     QTextCursor cursor = textCursor();
     cursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
     QString text = cursor.selectedText();
     QString textAfterReplace = cursor.selectedText().replace(replaceText, withText, Qt::CaseInsensitive);
-    
+
     // Don't move cursor if nothing need to replace in rest content.
     if (text == textAfterReplace) {
         qDebug() << "Nothing need replace in rest content.";
         return;
     }
-    
+
     // If rest content can replace, variable keywordSelections must have items.
     if (keywordSelections.size() == 0) {
         qDebug() << "The code of TextEditor::replaceRest is wrong, need review.";
         return;
     }
-    
+
     // Get last keyword position.
     auto lastKeywordPosition = keywordSelections.last().cursor.position();
 
@@ -1394,7 +1381,7 @@ void TextEditor::replaceRest(QString replaceText, QString withText)
         qDebug() << "Replace text is empty.";
         return;
     }
-    
+
     // Try get replace text in rest content.
     QTextCursor cursor = textCursor();
     cursor.setPosition(cursorKeywordSelection.cursor.position() - replaceText.size());
@@ -1402,19 +1389,19 @@ void TextEditor::replaceRest(QString replaceText, QString withText)
     cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
     QString text = cursor.selectedText();
     QString textAfterReplace = cursor.selectedText().replace(replaceText, withText, Qt::CaseInsensitive);
-    
+
     // Don't move cursor if nothing need to replace in rest content.
     if (text == textAfterReplace) {
         qDebug() << "Nothing need replace in rest content.";
         return;
     }
-    
+
     // If rest content can replace, variable keywordSelections must have items.
     if (keywordSelections.size() == 0) {
         qDebug() << "The code of TextEditor::replaceRest is wrong, need review.";
         return;
     }
-    
+
     // Get last keyword position.
     auto lastKeywordPosition = keywordSelections.last().cursor.position();
 
@@ -1445,7 +1432,7 @@ bool TextEditor::findKeywordForward(QString keyword)
 
         QTextDocument::FindFlags options;
         options |= QTextDocument::FindCaseSensitively;
-        
+
         bool foundOne = find(keyword, options);
 
         cursor.setPosition(endPos, QTextCursor::MoveAnchor);
@@ -1462,7 +1449,7 @@ bool TextEditor::findKeywordForward(QString keyword)
 
         QTextDocument::FindFlags options;
         options |= QTextDocument::FindCaseSensitively;
-        
+
         bool foundOne = find(keyword, options);
 
         setTextCursor(recordCursor);
@@ -1541,7 +1528,7 @@ void TextEditor::updateKeywordSelections(QString keyword)
 
         QTextDocument::FindFlags options;
         options |= QTextDocument::FindCaseSensitively;
-        
+
         while(find(keyword, options)) {
             QTextEdit::ExtraSelection extra;
 
@@ -1581,7 +1568,7 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
     changeCursorWidthTimer->start(cursorWidthChangeDelay);
 
     QString key = Utils::getKeyshortcut(keyEvent);
-    
+
     // Debug usage.
     // qDebug() << key;
 
@@ -1890,7 +1877,22 @@ void TextEditor::highlightCurrentLine()
 {
     updateHighlightLineSeleciton();
     renderAllSelections();
-    
+
+    // Adjust scrollbar margins if reach last line.
+    if (getCurrentLine() == blockCount()) {
+        // Adjust y coordinate up one line height.
+        scrollbarMargin = fontMetrics().height();
+        
+        adjustScrollbarMargins();
+
+        // NOTE: do nextLine make scrollbar adjust y coordinate.
+        nextLine();
+    } else {
+        scrollbarMargin = 0;
+        
+        adjustScrollbarMargins();
+    }
+
     // Keep current line at visible area.
     if (cursorRect().top() + fontMetrics().height() >= rect().height()) {
         scrollLineUp();
@@ -1939,7 +1941,7 @@ void TextEditor::handleUpdateRequest(const QRect &rect, int dy)
 bool TextEditor::setCursorKeywordSeletoin(int position, bool findNext)
 {
     int offsetLines = 3;
-    
+
     if (findNext) {
         for (int i = 0; i < keywordSelections.size(); i++) {
             if (keywordSelections[i].cursor.position() > position) {
@@ -2323,7 +2325,7 @@ QString TextEditor::getWordAtCursor()
                 break;
             }
         }
-        
+
         return cursor.selectedText();
     }
 }
@@ -2648,4 +2650,20 @@ bool TextEditor::eventFilter(QObject *, QEvent *event)
     }
 
     return false;
+}
+
+void TextEditor::adjustScrollbarMargins()
+{
+    if (isVisible() && !scrollbarLock) {
+        scrollbarLock = true;
+        auto documentHeight = (verticalScrollBar()->maximum() - verticalScrollBar()->minimum() + verticalScrollBar()->pageStep()) * fontMetrics().height();
+
+        if (documentHeight > rect().height()) {
+            setViewportMargins(0, 0, -verticalScrollBar()->sizeHint().width(), -horizontalScrollBar()->sizeHint().height() + scrollbarMargin);
+        } else {
+            setViewportMargins(0, 0, 0, 0);
+        }
+        
+        scrollbarLock = false;
+    }
 }

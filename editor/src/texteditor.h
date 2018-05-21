@@ -207,6 +207,8 @@ public slots:
     
     void tryCompleteWord();
     
+    void adjustScrollbarMargins();
+    
 protected:
     void focusOutEvent(QFocusEvent* event) override;
     
@@ -307,6 +309,8 @@ private:
     QPoint mouseClickPos;
     
     bool scrollbarLock = false;
+    
+    int scrollbarMargin = 0;
 };
 
 #endif
