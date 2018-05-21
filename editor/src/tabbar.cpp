@@ -173,7 +173,7 @@ void Tabbar::closeTabWithIndex(int closeIndex)
 
     qDebug() << "-----------------";
     for (int i = 0; i < tabbar->tabFiles.size(); i++) {
-        qDebug() << "tabFiles " << i << tabbar->tabFiles[i];
+        qDebug() << "!!!! tabFiles " << i << tabbar->tabFiles[i];
     }
 }
 
