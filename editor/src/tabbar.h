@@ -64,7 +64,6 @@ public:
     TabWidget *tabbar;
     
 signals:
-    void closeFile(QString filepath);
     void doubleClicked();
     void switchToFile(QString filepath);
     void tabAddRequested();

@@ -162,15 +162,9 @@ void Tabbar::updateTabWithIndex(int index, QString filepath, QString tabName)
 
 void Tabbar::closeTabWithIndex(int closeIndex)
 {
-    QString filepath = tabbar->tabFiles[closeIndex];
-
-    tabbar->tabFiles.takeAt(closeIndex);
+    qDebug() << "*** closeTabWithIndex " << closeIndex;
     tabbar->removeTab(closeIndex);
-
-    closeFile(filepath);
     
-    qDebug() << "Close tab with index " << closeIndex << filepath;
-
     qDebug() << "-----------------";
     for (int i = 0; i < tabbar->tabFiles.size(); i++) {
         qDebug() << "!!!! tabFiles " << i << tabbar->tabFiles[i];

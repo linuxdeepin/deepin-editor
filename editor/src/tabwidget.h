@@ -52,12 +52,14 @@ public:
 signals:
     void closeTab(int index);
     void closeOtherTabs(int index);
+    void closeFile(QString filepath);
     
 public slots:
     void handleCloseOtherTabs();
     void handleCloseTab();
     void handleTabReleaseRequested();
     void handleDragActionChanged(Qt::DropAction action);
+    void handleTabRemoved(int index);
 
 private:
     QAction *closeOtherTabAction;

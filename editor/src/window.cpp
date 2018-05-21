@@ -103,7 +103,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
 
         connect(tabbar, &Tabbar::doubleClicked, this->titlebar(), &DTitlebar::doubleClicked, Qt::QueuedConnection);
         connect(tabbar, &Tabbar::switchToFile, this, &Window::handleSwitchToFile, Qt::QueuedConnection);
-        connect(tabbar, &Tabbar::closeFile, this, &Window::handleCloseFile, Qt::QueuedConnection);
+        connect(tabbar->tabbar, &TabWidget::closeFile, this, &Window::handleCloseFile, Qt::QueuedConnection);
         connect(tabbar, &Tabbar::tabAddRequested, this,
                 [=]() {
                     addBlankTab();
@@ -259,7 +259,7 @@ Window::~Window()
 int Window::getTabIndex(QString file)
 {
     for (int i = 0; i < tabbar->tabbar->tabFiles.size(); i++) {
-        qDebug() << "******** " << i << tabbar->tabbar->tabFiles[i];
+        qDebug() << "******** Tab " << i << tabbar->tabbar->tabFiles[i];
     }
     
     return tabbar->getTabIndex(file);

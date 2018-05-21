@@ -53,6 +53,7 @@ TabWidget::TabWidget()
 
     connect(this, &TabWidget::tabReleaseRequested, this, &TabWidget::handleTabReleaseRequested);
     connect(this, &DTabBar::dragActionChanged, this, &TabWidget::handleDragActionChanged);
+    connect(this, &DTabBar::tabIsRemoved, this, &TabWidget::handleTabRemoved);
 }
 
 QMimeData* TabWidget::createMimeDataFromTab(int index, const QStyleOptionTab &) const
@@ -273,4 +274,13 @@ void TabWidget::setDNDColor(QString startColor, QString endColor)
 {
     dndStartColor = startColor;
     dndEndColor = endColor;
+}
+
+void TabWidget::handleTabRemoved(int index)
+{
+    QString filepath = tabFiles[index];
+    
+    tabFiles.takeAt(index);
+    closeFile(filepath);
+    qDebug() << "*** Remove tab " << index;
 }
