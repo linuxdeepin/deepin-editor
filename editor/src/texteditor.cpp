@@ -467,6 +467,11 @@ void TextEditor::newline()
     QTextCursor cursor = textCursor();
     cursor.insertText("\n");
     setTextCursor(cursor);
+    
+    // Keep current line at visible area when touch last line.
+    if (cursorRect().top() + fontMetrics().height() >= rect().height()) {
+        scrollLineUp();
+    }
 }
 
 void TextEditor::openNewlineAbove()
