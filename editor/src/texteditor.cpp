@@ -293,11 +293,6 @@ void TextEditor::forwardPair()
         }
         
         setTextCursor(cursor);
-        
-        // Keep current line at visible area when find next pair.
-        if (cursorRect().top() + fontMetrics().height() >= rect().height()) {
-            scrollLineUp();
-        }
     }
 }
 
@@ -467,11 +462,6 @@ void TextEditor::newline()
     QTextCursor cursor = textCursor();
     cursor.insertText("\n");
     setTextCursor(cursor);
-    
-    // Keep current line at visible area when touch last line.
-    if (cursorRect().top() + fontMetrics().height() >= rect().height()) {
-        scrollLineUp();
-    }
 }
 
 void TextEditor::openNewlineAbove()
@@ -1900,6 +1890,11 @@ void TextEditor::highlightCurrentLine()
 {
     updateHighlightLineSeleciton();
     renderAllSelections();
+    
+    // Keep current line at visible area.
+    if (cursorRect().top() + fontMetrics().height() >= rect().height()) {
+        scrollLineUp();
+    }
 }
 
 void TextEditor::updateLineNumber()
