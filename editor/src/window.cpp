@@ -1268,6 +1268,10 @@ void Window::handlePopupCompletionWindow(QString word, QPoint pos, QStringList w
             pos.setY(pos.y() - getActiveEditor()->textEditor->fontMetrics().height() - wordCompletionWindowHeight);
         }
         
+        if (pos.x() + wordCompletionWindow->windowWidth > screenGeometry.width()) {
+            pos.setX(pos.x() - wordCompletionWindow->windowWidth);
+        }
+        
         wordCompletionWindow->move(pos);
         wordCompletionWindow->show();
 
