@@ -1,3 +1,6 @@
+### 0.0.5 (2018-05-23)
+- Tag for archlinux.
+
 ### 0.0.4 (2018-05-17)
 - Tag for archlinux.
 
