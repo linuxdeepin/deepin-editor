@@ -34,10 +34,10 @@ FindBar::FindBar(QWidget *parent) : QWidget(parent)
     
     // Init layout and widgets.
     layout = new QHBoxLayout(this);
-    findLabel = new QLabel("Find: ");
+    findLabel = new QLabel(tr("Find: "));
     editLine = new LineBar();
-    findNextButton = new QPushButton("Next");
-    findPrevButton = new QPushButton("Previous");
+    findNextButton = new QPushButton(tr("Next"));
+    findPrevButton = new QPushButton(tr("Previous"));
     closeButton = new DImageButton();
     closeButton->setFixedSize(16, 16);
     

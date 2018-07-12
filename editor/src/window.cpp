@@ -128,14 +128,14 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
         menu->setStyle(QStyleFactory::create("dlight"));
 
         // Init main menu.
-        newWindowAction = new QAction("New window", this);
-        newTabAction = new QAction("New tab", this);
-        openFileAction = new QAction("Open file", this);
-        saveAction = new QAction("Save", this);
-        saveAsAction = new QAction("Save as", this);
-        printAction = new QAction("Print", this);
-        switchThemeAction = new QAction("Switch theme", this);
-        settingAction = new QAction("Setting", this);
+        newWindowAction = new QAction(tr("New window"), this);
+        newTabAction = new QAction(tr("New tab"), this);
+        openFileAction = new QAction(tr("Open file"), this);
+        saveAction = new QAction(tr("Save"), this);
+        saveAsAction = new QAction(tr("Save as"), this);
+        printAction = new QAction(tr("Print"), this);
+        switchThemeAction = new QAction(tr("Switch theme"), this);
+        settingAction = new QAction(tr("Setting"), this);
 
         menu->addAction(newWindowAction);
         menu->addAction(newTabAction);
@@ -346,7 +346,7 @@ void Window::closeTab()
         if (content.size() == 0) {
             removeActiveBlankTab();
         } else {
-            DDialog *dialog = createSaveFileDialog("Save dragft", "Do you need to save the draft?");
+            DDialog *dialog = createSaveFileDialog(tr("Save dragft"), tr("Do you need to save the draft?"));
 
             connect(dialog, &DDialog::buttonClicked, this,
                     [=] (int index) {
@@ -373,7 +373,7 @@ void Window::closeTab()
         if (editorContent == fileContent) {
             removeActiveReadonlyTab();
         } else {
-            DDialog *dialog = createSaveFileDialog("Save file", QString("Do you need to save content to %1 ?").arg(realpath));
+            DDialog *dialog = createSaveFileDialog(tr("Save file"), tr("Do you need to save content to %1 ?").arg(realpath));
 
             connect(dialog, &DDialog::buttonClicked, this,
                     [=] (int index) {
@@ -388,7 +388,7 @@ void Window::closeTab()
                             bool result = autoSaveDBus->saveFile(realpath, editorContent);
 
                             if (!result) {
-                                qDebug() << QString("Save root file %1 failed").arg(realpath);
+                                qDebug() << tr("Save root file %1 failed").arg(realpath);
                             }
 
                             removeActiveReadonlyTab();
@@ -488,7 +488,7 @@ QString Window::getSaveFilePath(QString &encode, QString &newline)
     newline = "Window";
 
 #ifdef DTKWIDGET_CLASS_DFileDialog
-    DFileDialog dialog(this, "Save File", QDir(QDir::homePath()).filePath("Blank Document.txt"));
+    DFileDialog dialog(this, tr("Save File"), QDir(QDir::homePath()).filePath("Blank Document.txt"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.addComboBox("编码", getEncodeList());
     dialog.addComboBox("换行符", QStringList() << "Window" << "Linux" << "Mac OS");

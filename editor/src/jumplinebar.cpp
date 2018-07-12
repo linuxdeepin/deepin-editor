@@ -36,7 +36,7 @@ JumpLineBar::JumpLineBar(QWidget *parent) : QWidget(parent)
     layout = new QHBoxLayout(this);
     
     label = new QLabel();
-    label->setText("跳到行: ");
+    label->setText(tr("Go to line: "));
     editLine = new LineBar();
     
     lineValidator = new QIntValidator;

@@ -34,14 +34,14 @@ ReplaceBar::ReplaceBar(QWidget *parent) : QWidget(parent)
 
     // Init layout and widgets.
     layout = new QHBoxLayout(this);
-    replaceLabel = new QLabel("Replace: ");
+    replaceLabel = new QLabel(tr("Replace: "));
     replaceLine = new LineBar();
-    withLabel = new QLabel("With: ");
+    withLabel = new QLabel(tr("With: "));
     withLine = new LineBar();
-    replaceButton = new QPushButton("Replace");
-    replaceSkipButton = new QPushButton("Skip");
-    replaceRestButton = new QPushButton("Replace Rest");
-    replaceAllButton = new QPushButton("Replace All");
+    replaceButton = new QPushButton(tr("Replace"));
+    replaceSkipButton = new QPushButton(tr("Skip"));
+    replaceRestButton = new QPushButton(tr("Replace Rest"));
+    replaceAllButton = new QPushButton(tr("Replace All"));
     closeButton = new DImageButton();
     closeButton->setFixedSize(16, 16);
     

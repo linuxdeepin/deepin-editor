@@ -80,25 +80,25 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     // Init menu.
     rightMenu = new QMenu();
     rightMenu->setStyle(QStyleFactory::create("dlight"));
-    undoAction = new QAction("Undo", this);
-    redoAction = new QAction("Redo", this);
-    cutAction = new QAction("Cut", this);
-    copyAction = new QAction("Copy", this);
-    pasteAction = new QAction("Paste", this);
-    deleteAction = new QAction("Delete", this);
-    selectAllAction = new QAction("Select All", this);
-    findAction = new QAction("Find", this);
-    replaceAction = new QAction("Replace", this);
-    jumpLineAction = new QAction("Jump line", this);
-    enableEnglishCompleterAction = new QAction("Enable english completer", this);
-    disableEnglishCompleterAction = new QAction("Disable english completer", this);
-    enableReadOnlyModeAction = new QAction("Turn on read only mode", this);
-    disableReadOnlyModeAction = new QAction("Turn off read only mode", this);
-    fullscreenAction = new QAction("Fullscreen", this);
-    exitFullscreenAction = new QAction("Exit fullscreen", this);
-    openInFileManagerAction = new QAction("Open in file manager", this);
-    toggleCommentAction = new QAction("Toggle comment", this);
-    toggleBulletAction = new QAction("Toggle bullet", this);
+    undoAction = new QAction(tr("Undo"), this);
+    redoAction = new QAction(tr("Redo"), this);
+    cutAction = new QAction(tr("Cut"), this);
+    copyAction = new QAction(tr("Copy"), this);
+    pasteAction = new QAction(tr("Paste"), this);
+    deleteAction = new QAction(tr("Delete"), this);
+    selectAllAction = new QAction(tr("Select All"), this);
+    findAction = new QAction(tr("Find"), this);
+    replaceAction = new QAction(tr("Replace"), this);
+    jumpLineAction = new QAction(tr("Jump line"), this);
+    enableEnglishCompleterAction = new QAction(tr("Enable english completer"), this);
+    disableEnglishCompleterAction = new QAction(tr("Disable english completer"), this);
+    enableReadOnlyModeAction = new QAction(tr("Turn on read only mode"), this);
+    disableReadOnlyModeAction = new QAction(tr("Turn off read only mode"), this);
+    fullscreenAction = new QAction(tr("Fullscreen"), this);
+    exitFullscreenAction = new QAction(tr("Exit fullscreen"), this);
+    openInFileManagerAction = new QAction(tr("Open in file manager"), this);
+    toggleCommentAction = new QAction(tr("Toggle comment"), this);
+    toggleBulletAction = new QAction(tr("Toggle bullet"), this);
 
     connect(rightMenu, &QMenu::aboutToHide, this, &TextEditor::removeHighlightWordUnderCursor);
     connect(undoAction, &QAction::triggered, this, &TextEditor::undo);
@@ -123,10 +123,10 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
 
     // Init convert case sub menu.
     haveWordUnderCursor = false;
-    convertCaseMenu = new QMenu("Convert Case");
-    upcaseAction = new QAction("Upcase", this);
-    downcaseAction = new QAction("Downcase", this);
-    capitalizeAction = new QAction("Capitalize", this);
+    convertCaseMenu = new QMenu(tr("Convert Case"));
+    upcaseAction = new QAction(tr("Upcase"), this);
+    downcaseAction = new QAction(tr("Downcase"), this);
+    capitalizeAction = new QAction(tr("Capitalize"), this);
 
     convertCaseMenu->addAction(upcaseAction);
     convertCaseMenu->addAction(downcaseAction);

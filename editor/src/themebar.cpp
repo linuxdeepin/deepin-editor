@@ -53,7 +53,7 @@ ThemeBar::ThemeBar(QWidget *parent) : QWidget(parent)
     
     // Set column to make sort list works.
     QList<QString> titles;
-    titles << "theme";
+    titles << tr("theme");
     QList<int> widths;
     widths << -1;
     themeView->setColumnTitleInfo(titles, widths, 0);
