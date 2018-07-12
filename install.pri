@@ -2,6 +2,11 @@ isEmpty(PREFIX){
     PREFIX = /usr
 }
 
+# Automating generation .qm files from .ts files
+CONFIG(release, debug|release) {
+    !system($$PWD/translate_generation.sh): error("Failed to generate translation")
+}
+
 target.path = $${PREFIX}/bin/
 
 desktop_files.path = $${PREFIX}/share/applications/
