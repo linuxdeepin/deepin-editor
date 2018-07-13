@@ -104,10 +104,8 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
         connect(tabbar, &Tabbar::doubleClicked, this->titlebar(), &DTitlebar::doubleClicked, Qt::QueuedConnection);
         connect(tabbar, &Tabbar::switchToFile, this, &Window::handleSwitchToFile, Qt::QueuedConnection);
         connect(tabbar->tabbar, &TabWidget::closeFile, this, &Window::handleCloseFile, Qt::QueuedConnection);
-        connect(tabbar, &Tabbar::tabAddRequested, this,
-                [=]() {
-                    addBlankTab();
-                }, Qt::QueuedConnection);
+        connect(tabbar, &Tabbar::tabAddRequested, this, static_cast<void (Window::*)()>(&Window::addBlankTab), Qt::QueuedConnection);
+
         connect(tabbar, &Tabbar::tabReleaseRequested, this, &Window::handleTabReleaseRequested, Qt::QueuedConnection);
         connect(tabbar, &Tabbar::tabCloseRequested, this, &Window::handleTabCloseRequested, Qt::QueuedConnection);
         connect(tabbar->tabbar, &TabWidget::currentChanged, this, [=]() {
@@ -256,7 +254,7 @@ Window::~Window()
     // We don't need clean pointers because application has exit here.
 }
 
-int Window::getTabIndex(QString file)
+int Window::getTabIndex(const QString &file)
 {
     for (int i = 0; i < tabbar->tabbar->tabFiles.size(); i++) {
         qDebug() << "******** Tab " << i << tabbar->tabbar->tabFiles[i];
@@ -271,7 +269,7 @@ void Window::activeTab(int index)
     tabbar->activeTabWithIndex(index);
 }
 
-void Window::addTab(QString file, bool activeTab)
+void Window::addTab(const QString &file, bool activeTab)
 {
     QString filepath = file;
     
@@ -315,7 +313,7 @@ void Window::addTab(QString file, bool activeTab)
     }
 }
 
-void Window::addTabWithContent(QString tabName, QString filepath, QString content, int index)
+void Window::addTabWithContent(const QString &tabName, const QString &filepath, const QString &content, int index)
 {
     qDebug() << "!!!!!!!!!! editorMap contains path '" << filepath << "' " << editorMap.contains(filepath);
     
@@ -457,7 +455,7 @@ Editor* Window::getActiveEditor()
     return editorMap[tabbar->getActiveTabPath()];
 }
 
-TextEditor* Window::getTextEditor(QString filepath)
+TextEditor* Window::getTextEditor(const QString &filepath)
 {
     return editorMap[filepath]->textEditor;
 }
@@ -482,7 +480,7 @@ void Window::openFile()
     }
 }
 
-QString Window::getSaveFilePath(QString &encode, QString &newline)
+const QString Window::getSaveFilePath(QString &encode, QString &newline)
 {
     encode = "UTF-8";
     newline = "Window";
@@ -599,7 +597,7 @@ void Window::saveAsFile()
     }
 }
 
-void Window::saveFileAsAnotherPath(QString fromPath, QString toPath, QString encode, QString newline, bool deleteOldFile)
+void Window::saveFileAsAnotherPath(const QString &fromPath, const QString &toPath, const QString &encode, const QString &newline, bool deleteOldFile)
 {
     if (deleteOldFile) {
         QFile(fromPath).remove();
@@ -714,7 +712,7 @@ void Window::toggleFullscreen()
     }
 }
 
-QStringList Window::getEncodeList()
+const QStringList Window::getEncodeList()
 {
     QStringList encodeList;
     foreach (int mib, QTextCodec::availableMibs()) {
@@ -788,7 +786,7 @@ void Window::remberPositionRestore()
     }
 }
 
-void Window::updateFont(QString fontName)
+void Window::updateFont(const QString &fontName)
 {
     foreach (Editor *editor, editorMap.values()) {
         editor->textEditor->setFontFamily(fontName);
@@ -953,10 +951,10 @@ int Window::getBlankFileIndex()
     return tabIndexes.size() + 1;
 }
 
-void Window::addBlankTab(QString blankFile)
+void Window::addBlankTab(const QString &blankFile)
 {
     QString blankTabPath;
-    if (blankFile == "") {
+    if (blankFile.isEmpty()) {
         blankTabPath = QDir(blankFileDir).filePath(QString("blank_file_%1").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss-zzz")));
         if (!Utils::fileExists(blankTabPath)) {
             QDir().mkpath(blankFileDir);
@@ -976,7 +974,7 @@ void Window::addBlankTab(QString blankFile)
     Editor *editor = createEditor();
     editor->updatePath(blankTabPath);
 
-    if (blankFile != "" && Utils::fileExists(blankFile)) {
+    if (!blankFile.isEmpty() && Utils::fileExists(blankFile)) {
         editor->loadFile(blankFile);
     }
 
@@ -985,7 +983,7 @@ void Window::addBlankTab(QString blankFile)
     showNewEditor(editor);
 }
 
-void Window::handleTabReleaseRequested(QString tabName, QString filepath, int index)
+void Window::handleTabReleaseRequested(const QString &tabName, const QString &filepath, int index)
 {
     tabbar->closeTabWithIndex(index);
 
@@ -1000,7 +998,7 @@ void Window::handleTabCloseRequested(int index)
     closeTab();
 }
 
-void Window::handleCloseFile(QString filepath)
+void Window::handleCloseFile(const QString &filepath)
 {
     if (editorMap.contains(filepath)) {
         Editor *editor = editorMap[filepath];
@@ -1019,7 +1017,7 @@ void Window::handleCloseFile(QString filepath)
     }
 }
 
-void Window::handleSwitchToFile(QString filepath)
+void Window::handleSwitchToFile(const QString &filepath)
 {
     if (editorMap.contains(filepath)) {
         editorLayout->setCurrentWidget(editorMap[filepath]);
@@ -1031,7 +1029,7 @@ void Window::handleJumpLineBarExit()
     QTimer::singleShot(0, getActiveEditor()->textEditor, SLOT(setFocus()));
 }
 
-void Window::handleJumpLineBarJumpToLine(QString filepath, int line, bool focusEditor)
+void Window::handleJumpLineBarJumpToLine(const QString &filepath, int line, bool focusEditor)
 {
     if (editorMap.contains(filepath)) {
         getTextEditor(filepath)->jumpToLine(line, true);
@@ -1042,7 +1040,7 @@ void Window::handleJumpLineBarJumpToLine(QString filepath, int line, bool focusE
     }
 }
 
-void Window::handleBackToPosition(QString file, int row, int column, int scrollOffset)
+void Window::handleBackToPosition(const QString &file, int row, int column, int scrollOffset)
 {
     if (editorMap.contains(file)) {
         editorMap[file]->textEditor->scrollToLine(scrollOffset, row, column);
@@ -1075,21 +1073,21 @@ void Window::handleFindPrev()
     editor->textEditor->restoreMarkStatus();
 }
 
-void Window::handleReplaceAll(QString replaceText, QString withText)
+void Window::handleReplaceAll(const QString &replaceText, const QString &withText)
 {
     Editor *editor = getActiveEditor();
 
     editor->textEditor->replaceAll(replaceText, withText);
 }
 
-void Window::handleReplaceNext(QString replaceText, QString withText)
+void Window::handleReplaceNext(const QString &replaceText, const QString &withText)
 {
     Editor *editor = getActiveEditor();
 
     editor->textEditor->replaceNext(replaceText, withText);
 }
 
-void Window::handleReplaceRest(QString replaceText, QString withText)
+void Window::handleReplaceRest(const QString &replaceText, const QString &withText)
 {
     Editor *editor = getActiveEditor();
 
@@ -1109,7 +1107,7 @@ void Window::handleRemoveSearchKeyword()
     getActiveEditor()->textEditor->removeKeywords();
 }
 
-void Window::handleUpdateSearchKeyword(QWidget *widget, QString file, QString keyword)
+void Window::handleUpdateSearchKeyword(QWidget *widget, const QString &file, const QString &keyword)
 {
     if (file == tabbar->getActiveTabPath() && editorMap.contains(file)) {
         // Highlight keyword in text editor.
@@ -1249,7 +1247,7 @@ void Window::popupPrintDialog()
     preview.exec();
 }
 
-void Window::changeTitlebarBackground(QString startColor, QString endColor)
+void Window::changeTitlebarBackground(const QString &startColor, const QString &endColor)
 {
     this->titlebar()->setStyleSheet(
         QString("%1Dtk--Widget--DTitlebar {background: qlineargradient(x1: 0 y1: 0, x2: 0 y2: 1, stop: 0 rgba%2, stop: 1 rgba%3);}").arg(titlebarStyleSheet).arg(startColor).arg(endColor));
@@ -1260,32 +1258,34 @@ bool Window::wordCompletionWindowIsVisible()
     return wordCompletionWindow->isVisible();
 }
 
-void Window::handlePopupCompletionWindow(QString word, QPoint pos, QStringList words)
+void Window::handlePopupCompletionWindow(const QString &word, const QPoint &pos, const QStringList &words)
 {
-    if (words.size() >= 1 && word.size() > 2) {
+    QStringList wordlist = words;
+    if (wordlist.size() >= 1 && word.size() > 2) {
+        QPoint p = pos;
         // Adjust word completion window y coordinate if it out of screen.
         QScreen *screen = QGuiApplication::primaryScreen();
         QRect screenGeometry = screen->geometry();
         
-        int wordCompletionWindowHeight = wordCompletionWindow->lineHeight * (words.size() > 10? 10 : words.size());
+        int wordCompletionWindowHeight = wordCompletionWindow->lineHeight * (wordlist.size() > 10? 10 : wordlist.size());
         
         if (pos.y() + wordCompletionWindowHeight > screenGeometry.height()) {
-            pos.setY(pos.y() - getActiveEditor()->textEditor->fontMetrics().height() - wordCompletionWindowHeight);
+            p.setY(pos.y() - getActiveEditor()->textEditor->fontMetrics().height() - wordCompletionWindowHeight);
         }
         
         if (pos.x() + wordCompletionWindow->windowWidth > screenGeometry.width()) {
-            pos.setX(pos.x() - wordCompletionWindow->windowWidth);
+            p.setX(pos.x() - wordCompletionWindow->windowWidth);
         }
         
-        wordCompletionWindow->move(pos);
+        wordCompletionWindow->move(p);
         wordCompletionWindow->show();
 
         // Add completion words.
-        std::sort(std::begin(words), std::end(words),
-                  [=](QString a, QString b) {
-                      return a.size() < b.size();
-                  });
-        wordCompletionWindow->addWords(words);
+        std::sort(wordlist.begin(), wordlist.end(), [=] (const QString &a, const QString &b) {
+            return a < b;
+        });
+
+        wordCompletionWindow->addWords(wordlist);
 
         // Update theme to listview items.
         QVariantMap jsonMap = Utils::getThemeNodeMap(themeName);
@@ -1371,7 +1371,7 @@ void Window::handleConfirmCompletion()
     }
 }
 
-void Window::loadTheme(QString name)
+void Window::loadTheme(const QString &name)
 {
     foreach (auto editor, editorMap.values()) {
         editor->textEditor->setThemeWithName(name);
@@ -1438,4 +1438,9 @@ bool Window::eventFilter(QObject *, QEvent *event)
     }
     
     return false;
+}
+
+void Window::addBlankTab()
+{
+    addBlankTab("");
 }

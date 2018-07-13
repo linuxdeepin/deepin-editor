@@ -55,23 +55,23 @@ public:
     Window(DMainWindow *parent = 0);
     ~Window();
     
-    int getTabIndex(QString file);
+    int getTabIndex(const QString &file);
     void activeTab(int index);
     
-    void addTab(QString file, bool activeTab=false);
-    void addTabWithContent(QString tabName, QString filepath, QString content, int index=-1);
+    void addTab(const QString &file, bool activeTab=false);
+    void addTabWithContent(const QString &tabName, const QString &filepath, const QString &content, int index=-1);
     void closeTab();
     void restoreTab();
     
     Editor* createEditor();
     Editor* getActiveEditor();
-    TextEditor* getTextEditor(QString filepath);
+    TextEditor* getTextEditor(const QString &filepath);
     void focusActiveEditor();
     
     void openFile();
     bool saveFile();
     void saveAsFile();
-    void saveFileAsAnotherPath(QString fromPath, QString toPath, QString encode, QString newline, bool deleteOldFile=false);
+    void saveFileAsAnotherPath(const QString &fromPath, const QString &toPath, const QString &encode, const QString &newline, bool deleteOldFile=false);
     
     void decrementFontSize();
     void incrementFontSize();
@@ -85,25 +85,25 @@ public:
     
     void toggleFullscreen();
     
-    QStringList getEncodeList();
+    const QStringList getEncodeList();
     
     void remberPositionSave(bool notify=true);
     void remberPositionRestore();
     
-    void updateFont(QString fontName);
+    void updateFont(const QString &fontName);
     void updateFontSize(int size);
     void updateTabSpaceNumber(int number);
     
-    void changeTitlebarBackground(QString startColor, QString endColor);
+    void changeTitlebarBackground(const QString &startColor, const QString &endColor);
     
     bool wordCompletionWindowIsVisible();
     
-    QString getSaveFilePath(QString &encode, QString &newline);
+    const QString getSaveFilePath(QString &encode, QString &newline);
     
     void displayShortcuts();
     
 protected:    
-    void resizeEvent(QResizeEvent* event);
+    void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
     void closeEvent(QCloseEvent *event);
     void keyPressEvent(QKeyEvent *keyEvent);
     void dragEnterEvent(QDragEnterEvent *e);
@@ -116,42 +116,43 @@ signals:
     void close();
     
 public slots:
-    void addBlankTab(QString blankFile="");
-    void handleTabReleaseRequested(QString tabName, QString filepath, int index);
+    void addBlankTab();
+    void addBlankTab(const QString &blankFile);
+    void handleTabReleaseRequested(const QString &tabName, const QString &filepath, int index);
     void handleTabCloseRequested(int index);
     
-    void handleCloseFile(QString filepath);
-    void handleSwitchToFile(QString filepath);
+    void handleCloseFile(const QString &filepath);
+    void handleSwitchToFile(const QString &filepath);
     
     void handleJumpLineBarExit();
-    void handleJumpLineBarJumpToLine(QString filepath, int line, bool focusEditor);
+    void handleJumpLineBarJumpToLine(const QString &filepath, int line, bool focusEditor);
     
-    void handleBackToPosition(QString file, int row, int column, int scrollOffset);
+    void handleBackToPosition(const QString &file, int row, int column, int scrollOffset);
     
     void handleFindNext();
     void handleFindPrev();
     
-    void handleReplaceAll(QString replaceText, QString withText);
-    void handleReplaceNext(QString replaceText, QString withText);
-    void handleReplaceRest(QString replaceText, QString withText);
+    void handleReplaceAll(const QString &replaceText, const QString &withText);
+    void handleReplaceNext(const QString &replaceText, const QString &withText);
+    void handleReplaceRest(const QString &replaceText, const QString &withText);
     void handleReplaceSkip();
     
     void handleRemoveSearchKeyword();
-    void handleUpdateSearchKeyword(QWidget *widget, QString file, QString keyword);
+    void handleUpdateSearchKeyword(QWidget *widget, const QString &file, const QString &keyword);
     
     void addBottomWidget(QWidget *widget);
     void removeBottomWidget();
     
     void popupPrintDialog();
     
-    void handlePopupCompletionWindow(QString word, QPoint pos, QStringList words);
+    void handlePopupCompletionWindow(const QString &word, const QPoint &pos, const QStringList &words);
     void handleSelectNextCompletion();
     void handleSelectPrevCompletion();
     void handleSelectFirstCompletion();
     void handleSelectLastCompletion();
     void handleConfirmCompletion();
     
-    void loadTheme(QString themeName);
+    void loadTheme(const QString &themeName);
     
 private:
     DBusDaemon::dbus *autoSaveDBus;
