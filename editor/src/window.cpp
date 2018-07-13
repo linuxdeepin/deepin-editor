@@ -311,7 +311,7 @@ void Window::addTab(QString file, bool activeTab)
             }
         }
     } else {
-        showNotify(QString("%1 不是一个有效的可编辑文件").arg(QFileInfo(filepath).fileName()));
+        showNotify(tr("%1 不是一个有效的可编辑文件").arg(QFileInfo(filepath).fileName()));
     }
 }
 
@@ -578,11 +578,11 @@ bool Window::saveFile()
             qDebug() << QString("Save root file %1 failed").arg(realpath);
         }
 
-        showNotify("文件已保存");
+        showNotify(tr("文件已保存"));
 
         return result;
     } else {
-        showNotify("文件已自动保存");
+        showNotify(tr("文件已自动保存"));
 
         return true;
     }
@@ -742,7 +742,7 @@ void Window::remberPositionSave(bool notify)
     remberPositionScrollOffset = editor->textEditor->getScrollOffset();
 
     if (notify) {
-        showNotify("记住当前位置");
+        showNotify(tr("记住当前位置"));
     }
 }
 
@@ -782,7 +782,7 @@ void Window::remberPositionRestore()
                         editorMap[filepath]->textEditor->scrollToLine(scrollOffset, row, column);
                     });
             } else {
-                showNotify("记录位置的文件已经不存在了");
+                showNotify(tr("记录位置的文件已经不存在了"));
             }
         }
     }
@@ -972,7 +972,7 @@ void Window::addBlankTab(QString blankFile)
 
     auto blankFileIndex = getBlankFileIndex();
     
-    tabbar->addTab(blankTabPath, QString("Blank document %1").arg(blankFileIndex));
+    tabbar->addTab(blankTabPath, tr("Blank document %1").arg(blankFileIndex));
     Editor *editor = createEditor();
     editor->updatePath(blankTabPath);
 
@@ -1317,7 +1317,7 @@ void Window::handleSelectNextCompletion()
         wordCompletionWindow->listview->selectNextItem();
     } else {
         if (!getActiveEditor()->textEditor->getEnglishCompleter()) {
-            showNotify("请先开启英语助手");
+            showNotify(tr("请先开启英语助手"));
         }
     }
 }
@@ -1328,7 +1328,7 @@ void Window::handleSelectPrevCompletion()
         wordCompletionWindow->listview->selectPrevItem();
     } else {
         if (!getActiveEditor()->textEditor->getEnglishCompleter()) {
-            showNotify("请先开启英语助手");
+            showNotify(tr("请先开启英语助手"));
         }
     }
 }
@@ -1339,7 +1339,7 @@ void Window::handleSelectFirstCompletion()
         wordCompletionWindow->listview->selectFirstItem();
     } else {
         if (!getActiveEditor()->textEditor->getEnglishCompleter()) {
-            showNotify("请先开启英语助手");
+            showNotify(tr("请先开启英语助手"));
         }
     }
 }
@@ -1350,7 +1350,7 @@ void Window::handleSelectLastCompletion()
         wordCompletionWindow->listview->selectLastItem();
     } else {
         if (!getActiveEditor()->textEditor->getEnglishCompleter()) {
-            showNotify("请先开启英语助手");
+            showNotify(tr("请先开启英语助手"));
         }
     }
 }

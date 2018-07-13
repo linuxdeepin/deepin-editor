@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
     DApplication::loadDXcbPlugin();
 
     const char *descriptionText = QT_TRANSLATE_NOOP("MainWindow",
-                                                    "Deepin Editor是一款简单的文本编辑器");
+                                                    "Deepin Editor is a simple text editor");
     const QString acknowledgementLink = "https://www.deepin.org/acknowledgments/deepin-editor";
 
     DApplication app(argc, argv);
@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
     app.loadTranslator();
 
     app.setOrganizationName("deepin");
-    app.setApplicationName(QObject::tr("deepin-editor"));
+    app.setApplicationName("deepin-editor");
     app.setApplicationDisplayName(QObject::tr("Deepin Editor"));
     app.setApplicationVersion("1.0");
 

@@ -857,13 +857,13 @@ void TextEditor::copyLines()
         copyCursor.setPosition(startCursor.position(), QTextCursor::MoveAnchor);
         copyCursor.setPosition(endCursor.position(), QTextCursor::KeepAnchor);
 
-        popupNotify("已经拷贝选中行到剪切板");
+        popupNotify(tr("已经拷贝选中行到剪切板"));
     } else {
         // Selection current line.
         copyCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
         copyCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
 
-        popupNotify("已经拷贝当前行到剪切板");
+        popupNotify(tr("已经拷贝当前行到剪切板"));
     }
 
     // Copy lines to system clipboard.
@@ -902,13 +902,13 @@ void TextEditor::cutlines()
         copyCursor.setPosition(startCursor.position(), QTextCursor::MoveAnchor);
         copyCursor.setPosition(endCursor.position(), QTextCursor::KeepAnchor);
 
-        popupNotify("已经剪切选中行到剪切板");
+        popupNotify(tr("已经剪切选中行到剪切板"));
     } else {
         // Selection current line.
         copyCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
         copyCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
 
-        popupNotify("已经剪切当前行到剪切板");
+        popupNotify(tr("已经剪切当前行到剪切板"));
     }
 
     // Copy lines to system clipboard.
@@ -2365,11 +2365,11 @@ void TextEditor::toggleEnglishCompleter()
 
         popupCompletionWindow("", QPoint(), QStringList());
 
-        popupNotify("英文助手已关闭");
+        popupNotify(tr("英文助手已关闭"));
     } else {
         enableEnglishCompleter = true;
 
-        popupNotify("英文助手已开启");
+        popupNotify(tr("英文助手已开启"));
     }
 }
 
@@ -2388,11 +2388,11 @@ void TextEditor::toggleReadOnlyMode()
     if (readOnlyMode) {
         readOnlyMode = false;
 
-        popupNotify("只读模式关闭");
+        popupNotify(tr("只读模式关闭"));
     } else {
         readOnlyMode = true;
 
-        popupNotify("只读模式开启");
+        popupNotify(tr("只读模式开启"));
     }
 }
 
@@ -2403,7 +2403,7 @@ void TextEditor::toggleComment()
     if (def.filePath() != "") {
         Comment::unCommentSelection(this, commentDefinition);
     } else {
-        popupNotify("文件不支持语法注释");
+        popupNotify(tr("文件不支持语法注释"));
     }
 }
 
