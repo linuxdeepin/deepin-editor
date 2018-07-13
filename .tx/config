@@ -3,7 +3,7 @@ host = https://www.transifex.com
 minimum_perc = 80
 mode = developer
 
-[deepin-desktop-environment.deepin-editor]
+[deepin-editor]
 file_filter = translations/deepin-editor_<lang>.ts
 source_file = translations/deepin-editor.ts
 source_lang = en
