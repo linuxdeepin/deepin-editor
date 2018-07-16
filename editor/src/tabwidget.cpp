@@ -78,7 +78,7 @@ QMimeData* TabWidget::createMimeDataFromTab(int index, const QStyleOptionTab &) 
 
 QPixmap TabWidget::createDragPixmapFromTab(int index, const QStyleOptionTab &, QPoint *offset) const
 {
-    auto screenScale = this->devicePixelRatioF();
+    const qreal screenScale = qApp->devicePixelRatio();
 
     // Take editor's screenshot as drag image.
     TextEditor *textEditor = static_cast<Window*>(this->window())->getTextEditor(tabFiles[index]);
@@ -232,6 +232,8 @@ bool TabWidget::eventFilter(QObject *, QEvent *event)
         static_cast<Window*>(this->window())->changeTitlebarBackground(backgroundStartColor, backgroundEndColor);
         
         qDebug() << "### eventFilter Drop";
+    } else if (event->type() == QEvent::DragMove) {
+        event->accept();
     }
 
     return false;
