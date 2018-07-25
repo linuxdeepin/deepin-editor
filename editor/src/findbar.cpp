@@ -71,6 +71,7 @@ bool FindBar::isFocus()
 void FindBar::focus()
 {
     editLine->setFocus();
+    editLine->selectAll();
 }
 
 void FindBar::activeInput(QString text, QString file, int row, int column, int scrollOffset)
