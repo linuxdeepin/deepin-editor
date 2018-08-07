@@ -157,41 +157,41 @@ public slots:
 private:
     DBusDaemon::dbus *autoSaveDBus;
 
-    FindBar *findBar;
+    FindBar *m_findBar;
     JumpLineBar *jumpLineBar;
-    QMap<QString, Editor*> editorMap;
-    QStackedLayout *editorLayout;
-    QString blankFileDir;
-    QString readonlyFileDir;
-    QVBoxLayout *layout;
-    QWidget *editorWidget;
-    QWidget *layoutWidget;
-    ReplaceBar *replaceBar;
-    Settings *settings;
-    Tabbar *tabbar;
-    int fontSize;
-    int toastPaddingBottom = 100;
+    QMap<QString, Editor*> m_editorMap;
+    QStackedLayout *m_editorLayout;
+    QString m_blankFileDir;
+    QString m_readonlyFileDir;
+    QVBoxLayout *m_layout;
+    QWidget *m_editorWidget;
+    QWidget *m_layoutWidget;
+    ReplaceBar *m_replaceBar;
+    Settings *m_settings;
+    Tabbar *m_tabbar;
+    int m_fontSize;
+    int m_toastPaddingBottom = 100;
 
-    QMenu *menu;
-    QAction *newWindowAction;
-    QAction *newTabAction;
-    QAction *openFileAction;
-    QAction *saveAction;
-    QAction *saveAsAction;
-    QAction *printAction;
-    QAction *switchThemeAction;
-    QAction *settingAction;
+    QMenu *m_menu;
+    QAction *m_newWindowAction;
+    QAction *m_newTabAction;
+    QAction *m_openFileAction;
+    QAction *m_saveAction;
+    QAction *m_saveAsAction;
+    QAction *m_printAction;
+    QAction *m_switchThemeAction;
+    QAction *m_settingAction;
 
-    QStringList closeFileHistory;
+    QStringList m_closeFileHistory;
 
-    QString remberPositionFilePath;
-    int remberPositionRow;
-    int remberPositionColumn;
-    int remberPositionScrollOffset;
+    QString m_remberPositionFilePath;
+    int m_remberPositionRow;
+    int m_remberPositionColumn;
+    int m_remberPositionScrollOffset;
 
-    QString titlebarStyleSheet;
+    QString m_titlebarStyleSheet;
 
-    bool windowShowFlag = false;
+    bool m_windowShowFlag = false;
 
     void removeActiveBlankTab(bool needSaveBefore=false);
     void removeActiveReadonlyTab();
@@ -203,24 +203,24 @@ private:
 
     int getBlankFileIndex();
 
-    QSqlDatabase wordsDB;
+    QSqlDatabase m_wordsDB;
 
-    WordCompletionWindow *wordCompletionWindow;
+    WordCompletionWindow *m_wordCompletionWindow;
 
-    DWindowManager *windowManager;
+    DWindowManager *m_windowManager;
 
-    QString readonlySeparator = " !_! ";
+    QString m_readonlySeparator = " !_! ";
 
-    ThemeBar *themeBar;
+    ThemeBar *m_themeBar;
 
-    QString themeName;
-    QString lightTabBackgroundStartColor = "(255, 255, 255, 90%)";
-    QString lightTabBackgroundEndColor = "(248, 248, 248, 90%)";
-    QString darkTabBackgroundStartColor = "(16, 16, 16, 90%)";
-    QString darkTabBackgroundEndColor = "(16, 16, 16, 90%)";
+    QString m_themeName;
+    QString m_lightTabBackgroundStartColor = "(255, 255, 255, 90%)";
+    QString m_lightTabBackgroundEndColor = "(248, 248, 248, 90%)";
+    QString m_darkTabBackgroundStartColor = "(16, 16, 16, 90%)";
+    QString m_darkTabBackgroundEndColor = "(16, 16, 16, 90%)";
 
-    bool inCompleting = false;
-    QTimer *inCompletingTimer;
+    bool m_inCompleting = false;
+    QTimer *m_inCompletingTimer;
 };
 
 #endif
