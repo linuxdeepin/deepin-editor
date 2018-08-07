@@ -57,7 +57,7 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     // Init.
     installEventFilter(this);   // add event filter
     setAcceptDrops(true);
-    
+
     blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
     readonlyFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("readonly-files");
     autoSaveDBus = new DBusDaemon::dbus("com.deepin.editor.daemon", "/", QDBusConnection::systemBus(), this);
@@ -83,12 +83,12 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     editorLayout->setContentsMargins(0, 0, 0, 0);
 
     layout->addWidget(editorWidget);
-    
+
     inCompletingTimer = new QTimer();
     inCompletingTimer->setSingleShot(true);
-    connect(inCompletingTimer, 
-            &QTimer::timeout, 
-            this, 
+    connect(inCompletingTimer,
+            &QTimer::timeout,
+            this,
             [=]() {
                 inCompleting = false;
             });
@@ -112,11 +112,11 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
                 if (findBar->isVisible()) {
                     findBar->hide();
                 }
-                
+
                 if (replaceBar->isVisible()) {
                     replaceBar->hide();
                 }
-                
+
                 foreach (auto editor, editorMap.values()) {
                     editor->textEditor->removeKeywords();
                 }
@@ -259,7 +259,7 @@ int Window::getTabIndex(const QString &file)
     for (int i = 0; i < tabbar->tabbar->tabFiles.size(); i++) {
         qDebug() << "******** Tab " << i << tabbar->tabbar->tabFiles[i];
     }
-    
+
     return tabbar->getTabIndex(file);
 }
 
@@ -272,7 +272,7 @@ void Window::activeTab(int index)
 void Window::addTab(const QString &file, bool activeTab)
 {
     QString filepath = file;
-    
+
     if (Utils::isEditableFile(filepath)) {
         if (!Utils::fileIsWritable(file)) {
             filepath = QDir(readonlyFileDir).filePath(filepath.replace(QDir().separator(), readonlySeparator));
@@ -300,7 +300,7 @@ void Window::addTab(const QString &file, bool activeTab)
 
         // Activate window.
         activateWindow();
-    
+
         // Active tab if activeTab is true.
         if (activeTab) {
             int tabIndex = tabbar->getTabIndex(filepath);
@@ -316,12 +316,12 @@ void Window::addTab(const QString &file, bool activeTab)
 void Window::addTabWithContent(const QString &tabName, const QString &filepath, const QString &content, int index)
 {
     qDebug() << "!!!!!!!!!! editorMap contains path '" << filepath << "' " << editorMap.contains(filepath);
-    
+
     // Default index is -1, we change it to right of current tab for new tab actoin in start.
     if (index == -1) {
         index = tabbar->getActiveTabIndex() + 1;
     }
-    
+
     tabbar->addTabWithIndex(index, filepath, tabName);
 
     Editor *editor = createEditor();
@@ -439,7 +439,7 @@ Editor* Window::createEditor()
                 wordCompletionWindow->hide();
             }
         });
-    
+
     connect(editor->textEditor, &TextEditor::click, this, [=]() {
             wordCompletionWindow->hide();
         });
@@ -580,7 +580,8 @@ bool Window::saveFile()
 
         return result;
     } else {
-        showNotify(tr("文件已自动保存"));
+        editorMap[tabbar->getActiveTabPath()]->saveFile();
+        showNotify(tr("%1  文件已保存").arg(tabbar->getActiveTabName()));
 
         return true;
     }
@@ -848,7 +849,7 @@ void Window::closeEvent(QCloseEvent *)
 
         file.close();
     }
-    
+
     emit close();
 }
 
@@ -934,19 +935,19 @@ int Window::getBlankFileIndex()
         }
     }
     std::sort(tabIndexes.begin(), tabIndexes.end());
-    
+
     // Return 1 if no blank file exists.
     if (tabIndexes.size() == 0) {
         return 1;
     }
-    
+
     // Return first mismatch index as new blank file index.
     for (int j = 0; j < tabIndexes.size(); j++) {
         if (tabIndexes[j] != j + 1) {
             return j + 1;
         }
     }
-    
+
     // Last, return biggest index as blank file index.
     return tabIndexes.size() + 1;
 }
@@ -969,7 +970,7 @@ void Window::addBlankTab(const QString &blankFile)
     }
 
     auto blankFileIndex = getBlankFileIndex();
-    
+
     tabbar->addTab(blankTabPath, tr("Blank document %1").arg(blankFileIndex));
     Editor *editor = createEditor();
     editor->updatePath(blankTabPath);
@@ -1012,7 +1013,7 @@ void Window::handleCloseFile(const QString &filepath)
     // Exit window after close all tabs.
     if (editorMap.count() == 0) {
         close();
-        
+
         deleteLater();
     }
 }
@@ -1231,7 +1232,7 @@ void Window::popupThemeBar()
         }
     }
     themeBar->themeView->addSelections(items);
-    
+
     // Popup theme bar.
     themeBar->popup();
 }
@@ -1266,17 +1267,17 @@ void Window::handlePopupCompletionWindow(const QString &word, const QPoint &pos,
         // Adjust word completion window y coordinate if it out of screen.
         QScreen *screen = QGuiApplication::primaryScreen();
         QRect screenGeometry = screen->geometry();
-        
+
         int wordCompletionWindowHeight = wordCompletionWindow->lineHeight * (wordlist.size() > 10? 10 : wordlist.size());
-        
+
         if (pos.y() + wordCompletionWindowHeight > screenGeometry.height()) {
             p.setY(pos.y() - getActiveEditor()->textEditor->fontMetrics().height() - wordCompletionWindowHeight);
         }
-        
+
         if (pos.x() + wordCompletionWindow->windowWidth > screenGeometry.width()) {
             p.setX(pos.x() - wordCompletionWindow->windowWidth);
         }
-        
+
         wordCompletionWindow->move(p);
         wordCompletionWindow->show();
 
@@ -1300,7 +1301,7 @@ void Window::handlePopupCompletionWindow(const QString &word, const QPoint &pos,
         }
         wordCompletionWindow->listview->setFrame(true, QColor(frameColor), 0.3);
         wordCompletionWindow->listview->repaint();
-        
+
         inCompleting = true;
         if (inCompletingTimer->isActive()) {
             inCompletingTimer->stop();
@@ -1420,7 +1421,7 @@ void Window::dragEnterEvent(QDragEnterEvent *event)
 void Window::dropEvent(QDropEvent* event)
 {
     const QMimeData* mimeData = event->mimeData();
- 
+
     if (mimeData->hasUrls()) {
         foreach (auto url, mimeData->urls()) {
             addTab(url.toLocalFile(), true);
@@ -1436,7 +1437,7 @@ bool Window::eventFilter(QObject *, QEvent *event)
             wordCompletionWindow->hide();
         }
     }
-    
+
     return false;
 }
 

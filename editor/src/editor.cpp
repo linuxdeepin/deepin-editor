@@ -45,12 +45,8 @@ Editor::Editor(QWidget *parent) : QWidget(parent)
     m_layout->addWidget(textEditor->lineNumberArea);
     m_layout->addWidget(textEditor);
 
-    // Init auto save timer.
-    m_autoSaveTimer = new QTimer(this);
-    m_autoSaveTimer->setSingleShot(true);
-
-    connect(m_autoSaveTimer, &QTimer::timeout, this, &Editor::handleTextChangeTimer);
-    connect(textEditor->document(), &QTextDocument::contentsChange, this, &Editor::handleTextChanged, Qt::QueuedConnection);
+//    connect(m_autoSaveTimer, &QTimer::timeout, this, &Editor::handleTextChangeTimer);
+//    connect(textEditor->document(), &QTextDocument::contentsChange, this, &Editor::handleTextChanged, Qt::QueuedConnection);
 }
 
 void Editor::loadFile(QString filepath)
@@ -127,33 +123,12 @@ void Editor::saveFile(QString encode, QString newline)
     }
 }
 
+void Editor::saveFile()
+{
+    saveFile(m_fileEncode == "ascii" ? "UTF-8" : m_fileEncode, "Window");
+}
+
 void Editor::updatePath(QString file)
 {
     textEditor->filepath = file;
-}
-
-void Editor::handleTextChangeTimer()
-{
-    // Change flag hasLoadFile to avoid trigger save actoin just user open a file.
-    if (!m_hasLoadFile) {
-        m_hasLoadFile = true;
-
-        qDebug() << "Don't auto save when first load file.";
-    } else if (Utils::fileExists(textEditor->filepath)) {
-        m_saveFinish = true;
-
-        saveFile(m_fileEncode == "ascii" ? "UTF-8" : m_fileEncode, "Window");
-    }
-}
-
-void Editor::handleTextChanged()
-{
-    if (Utils::fileExists(textEditor->filepath)) {
-        m_saveFinish = false;
-
-        if (m_autoSaveTimer->isActive()) {
-            m_autoSaveTimer->stop();
-        }
-        m_autoSaveTimer->start(m_autoSaveInternal);
-    }
 }

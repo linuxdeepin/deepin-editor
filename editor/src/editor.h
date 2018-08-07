@@ -40,18 +40,14 @@ public:
 
     void loadFile(QString filepath);
     void saveFile(QString encode, QString newline);
+    void saveFile();
 
     void updatePath(QString file);
 
     TextEditor *textEditor;
 
-public slots:
-    void handleTextChangeTimer();
-    void handleTextChanged();
-
 private:
     QHBoxLayout *m_layout;
-    QTimer *m_autoSaveTimer;
     bool m_saveFinish;
     int m_autoSaveInternal;
     QByteArray m_fileEncode;
