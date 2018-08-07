@@ -200,13 +200,13 @@
                             "key": "indentline",
                             "name": "Indent Line",
                             "type": "shortcut",
-                            "default":  "Alt+I"
+                            "default":  "Tab"
                         },
                         {
                             "key": "backindentline",
                             "name": "Back Indent Line",
                             "type": "shortcut",
-                            "default":  "Alt+Shift+I"
+                            "default":  "Shift+Tab"
                         },
                         {
                             "key": "forwardchar",
@@ -658,13 +658,13 @@
                             "key": "indentline",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Alt+I"
+                            "default":  "Tab"
                         },
                         {
                             "key": "backindentline",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Alt+Shift+I"
+                            "default":  "Shift+Tab"
                         },
                         {
                             "key": "forwardchar",
