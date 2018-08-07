@@ -38,57 +38,57 @@ DWIDGET_USE_NAMESPACE
 class ReplaceBar : public QWidget
 {
     Q_OBJECT
-    
+
 public:
     ReplaceBar(QWidget *parent = 0);
-    
+
     bool isFocus();
     void focus();
-    
+
     void activeInput(QString text, QString file, int row, int column, int scrollOffset);
     void setMismatchAlert(bool isAlert);
-    
+
     void setBackground(QString color);
-    
+
 signals:
     void replaceNext(QString replaceText, QString withText);
     void replaceSkip();
     void replaceRest(QString replaceText, QString withText);
     void replaceAll(QString replaceText, QString withText);
-    
+
     void backToPosition(QString file, int row, int column, int scrollOffset);
-    
+
     void removeSearchKeyword();
     void updateSearchKeyword(QString file, QString keyword);
-    
+
 public slots:
     void replaceCancel();
     void handleContentChanged();
     void handleReplaceAll();
     void handleReplaceNext();
     void handleReplaceRest();
-    
+
 protected:
     void hideEvent(QHideEvent *event);
     void paintEvent(QPaintEvent *event);
     bool focusNextPrevChild(bool next);
-    
+
 private:
-    QPushButton *replaceAllButton;
-    QPushButton *replaceButton;
-    QPushButton *replaceRestButton;
-    QPushButton *replaceSkipButton;
-    DImageButton *closeButton;
-    LineBar *replaceLine;
-    LineBar *withLine;
-    QHBoxLayout *layout;
-    QLabel *replaceLabel;
-    QLabel *withLabel;
-    QString replaceFile;
-    int replaceFileColumn;
-    int replaceFileRow;
-    int replaceFileSrollOffset;
-    QColor backgroundColor;
+    QPushButton *m_replaceAllButton;
+    QPushButton *m_replaceButton;
+    QPushButton *m_replaceRestButton;
+    QPushButton *m_replaceSkipButton;
+    DImageButton *m_closeButton;
+    LineBar *m_replaceLine;
+    LineBar *m_withLine;
+    QHBoxLayout *m_layout;
+    QLabel *m_replaceLabel;
+    QLabel *m_withLabel;
+    QString m_replaceFile;
+    int m_replaceFileColumn;
+    int m_replaceFileRow;
+    int m_replaceFileSrollOffset;
+    QColor m_backgroundColor;
 };
 
 #endif

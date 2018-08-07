@@ -67,37 +67,37 @@ int main(int argc, char *argv[])
 
     // Parser input arguments.
     QCommandLineParser parser;
-    
+
     const QCommandLineOption newWindowOption("w", "Open file in new window");
     const QCommandLineOption helpOption = parser.addHelpOption();
     parser.addOption(newWindowOption);
-    
+
     parser.process(app);
-    
+
     QStringList files;
     QStringList arguments = app.arguments();
     for (int i = 1; i < arguments.size(); i++) {
         if (arguments[i] != "-w") {
             QStringList splitResult = arguments[i].split("file://");
-            
+
             QString file = "";
             if (splitResult.size() == 1) {
                 file = splitResult[0];
             } else if (splitResult.size() == 2) {
                 file = splitResult[1];
             }
-            
+
             if (Utils::fileExists(file)) {
                 files << file;
             }
         }
     }
-    
+
     bool hasWindowFlag = parser.isSet(newWindowOption);
 
     // Start.
     QDBusConnection dbus = QDBusConnection::sessionBus();
-    
+
     // Start editor process if not found any editor use DBus.
     if (dbus.registerService("com.deepin.Editor")) {
         StartManager startManager;

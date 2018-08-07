@@ -33,14 +33,14 @@ DWIDGET_USE_NAMESPACE
 class LineBar : public DLineEdit
 {
     Q_OBJECT
-    
+
 public:
     LineBar(DLineEdit *parent = 0);
-    
+
 public slots:
     void handleTextChangeTimer();
     void handleTextChanged();
-    
+
 signals:
     void contentChanged();
     void focusOut();
@@ -49,14 +49,14 @@ signals:
     void pressEnter();
     void pressEsc();
     void pressMetaEnter();
-    
+
 protected:
-    virtual void focusOutEvent(QFocusEvent *e);    
+    virtual void focusOutEvent(QFocusEvent *e);
     virtual void keyPressEvent(QKeyEvent *e);
-    
+
 private:
-    QTimer *autoSaveTimer;
-    int autoSaveInternal;
+    QTimer *m_autoSaveTimer;
+    int m_autoSaveInternal;
 };
 
 #endif

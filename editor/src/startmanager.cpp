@@ -68,7 +68,7 @@ void StartManager::openFilesInWindow(QStringList files)
 void StartManager::openFilesInTab(QStringList files)
 {
     if (files.size() == 0) {
-        if (windows.size() == 0) {
+        if (m_windows.size() == 0) {
             QDir blankDirectory = QDir(QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files"));
             QStringList blankFiles = blankDirectory.entryList(QStringList(), QDir::Files);
 
@@ -97,7 +97,7 @@ void StartManager::openFilesInTab(QStringList files)
         }
         // Just active first window if no file is need opened.
         else {
-            windows[0]->activateWindow();
+            m_windows[0]->activateWindow();
         }
     } else {
         foreach (QString file, files) {
@@ -110,14 +110,14 @@ void StartManager::openFilesInTab(QStringList files)
                 qDebug() << "Open " << file << " in exist tab";
             }
             // Create new window with file if haven't window exist.
-            else if (windows.size() == 0) {
+            else if (m_windows.size() == 0) {
                 createWindow(true)->addTab(file);
                 
                 qDebug() << "Open " << file << " with new window";
             }
             // Open file tab in first window of window list.
             else {
-                windows[0]->addTab(file);
+                m_windows[0]->addTab(file);
                 
                 qDebug() << "Open " << file << " in first window";
             }
@@ -140,14 +140,14 @@ Window* StartManager::createWindow(bool alwaysCenter)
     // Quit application if close last window.
     connect(window, &Window::close, this, 
             [=]() {
-                int windowIndex = windows.indexOf(window);
+                int windowIndex = m_windows.indexOf(window);
                 qDebug() << "Close window " << windowIndex;
                 
                 if (windowIndex >= 0) {
-                    windows.takeAt(windowIndex);
+                    m_windows.takeAt(windowIndex);
                 }
                 
-                if (windows.size() <= 0) {
+                if (m_windows.size() <= 0) {
                     QApplication::quit();
                 }
             });
@@ -161,37 +161,37 @@ Window* StartManager::createWindow(bool alwaysCenter)
             });
 
     // Append window in window list.
-    windows << window;
+    m_windows << window;
 
     return window;
 }
 
 void StartManager::initWindowPosition(Window *window, bool alwaysCenter)
 {
-    if (windows.size() == 0 || alwaysCenter) {
+    if (m_windows.size() == 0 || alwaysCenter) {
         Dtk::Widget::moveToCenter(window);
     } else {
         // Add window offset to avoid all editor window popup at same coordinate.
         int windowOffset = 50;
-        window->move(windows.size() * windowOffset, windows.size() * windowOffset);
+        window->move(m_windows.size() * windowOffset, m_windows.size() * windowOffset);
     }
 }
 
 void StartManager::popupExistTabs(FileTabInfo info)
 {
-    windows[info.windowIndex]->activeTab(info.tabIndex);
+    m_windows[info.windowIndex]->activeTab(info.tabIndex);
 }
 
 StartManager::FileTabInfo StartManager::getFileTabInfo(QString file)
 {
     FileTabInfo info = {-1, -1};
 
-    qDebug() << "Windows size: " << windows.size();
+    qDebug() << "Windows size: " << m_windows.size();
     
-    foreach (Window *window, windows) {
+    foreach (Window *window, m_windows) {
         int tabIndex = window->getTabIndex(file);
         if (tabIndex >= 0) {
-            info.windowIndex = windows.indexOf(window);
+            info.windowIndex = m_windows.indexOf(window);
             info.tabIndex = tabIndex;
             break;
         }

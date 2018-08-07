@@ -37,42 +37,42 @@ DWIDGET_USE_NAMESPACE
 class JumpLineBar : public QWidget
 {
     Q_OBJECT
-    
+
 public:
     JumpLineBar(QWidget *parent = 0);
-    
+
     void setBackground(QString color);
-    
-public slots:    
+
+public slots:
     void focus();
     bool isFocus();
-    
+
     void activeInput(QString file, int row, int column, int lineCount, int scrollOffset);
-    
+
     void handleFocusOut();
     void handleLineChanged();
-    
+
     void jumpCancel();
     void jumpConfirm();
-    
+
 signals:
     void backToPosition(QString file, int row, int column, int scrollOffset);
     void jumpToLine(QString file, int line, bool focusEditor);
     void lostFocusExit();
-    
+
 protected:
     void paintEvent(QPaintEvent *event);
-    
+
 private:
-    LineBar *editLine;
-    QHBoxLayout *layout;
-    QIntValidator *lineValidator;
-    QLabel *label;
-    QString jumpFile;
-    int jumpFileScrollOffset;
-    int rowBeforeJump;
-    int columnBeforeJump;
-    QColor backgroundColor;
+    LineBar *m_editLine;
+    QHBoxLayout *m_layout;
+    QIntValidator *m_lineValidator;
+    QLabel *m_label;
+    QString m_jumpFile;
+    int m_jumpFileScrollOffset;
+    int m_rowBeforeJump;
+    int m_columnBeforeJump;
+    QColor m_backgroundColor;
 };
 
 #endif

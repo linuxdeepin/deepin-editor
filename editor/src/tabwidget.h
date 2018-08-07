@@ -62,14 +62,14 @@ public slots:
     void handleTabRemoved(int index);
 
 private:
-    QAction *closeOtherTabAction;
-    QAction *closeTabAction;
-    QMenu *menu;
-    int rightClickTab;
-    QString backgroundStartColor;
-    QString backgroundEndColor;
-    QString dndStartColor;
-    QString dndEndColor;
+    QAction *m_closeOtherTabAction;
+    QAction *m_closeTabAction;
+    QMenu *m_menu;
+    int m_rightClickTab;
+    QString m_backgroundStartColor;
+    QString m_backgroundEndColor;
+    QString m_dndStartColor;
+    QString m_dndEndColor;
 };
 
 #endif

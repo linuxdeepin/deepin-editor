@@ -30,12 +30,12 @@ LineBar::LineBar(DLineEdit *parent) : DLineEdit(parent)
 {
     // Init.
     setClearButtonEnabled(true);
-        
-    autoSaveInternal = 500;
-    autoSaveTimer = new QTimer(this);
-    autoSaveTimer->setSingleShot(true);
-    
-    connect(autoSaveTimer, &QTimer::timeout, this, &LineBar::handleTextChangeTimer);
+
+    m_autoSaveInternal = 500;
+    m_autoSaveTimer = new QTimer(this);
+    m_autoSaveTimer->setSingleShot(true);
+
+    connect(m_autoSaveTimer, &QTimer::timeout, this, &LineBar::handleTextChangeTimer);
     connect(this, &DLineEdit::textChanged, this, &LineBar::handleTextChanged, Qt::QueuedConnection);
 }
 
@@ -48,19 +48,19 @@ void LineBar::handleTextChangeTimer()
 void LineBar::handleTextChanged()
 {
     // Stop timer if new character is typed, avoid unused timer run.
-    if (autoSaveTimer->isActive()) {
-        autoSaveTimer->stop();
+    if (m_autoSaveTimer->isActive()) {
+        m_autoSaveTimer->stop();
     }
-    
+
     // Start new timer.
-    autoSaveTimer->start(autoSaveInternal);
+    m_autoSaveTimer->start(m_autoSaveInternal);
 }
 
 void LineBar::focusOutEvent(QFocusEvent *e)
 {
     // Emit focus out signal.
     focusOut();
-    
+
     // Throw event out avoid DLineEdit can't hide cursor after lost focus.
     DLineEdit::focusOutEvent(e);
 }
@@ -68,7 +68,7 @@ void LineBar::focusOutEvent(QFocusEvent *e)
 void LineBar::keyPressEvent(QKeyEvent *e)
 {
     QString key = Utils::getKeyshortcut(e);
-    
+
     if (key == "Esc") {
         pressEsc();
     } else if (key == "Return") {

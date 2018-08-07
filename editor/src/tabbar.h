@@ -34,54 +34,54 @@ DWIDGET_USE_NAMESPACE
 class Tabbar : public QWidget
 {
     Q_OBJECT
-    
+
 public:
     Tabbar();
-    
+
     int getTabIndex(QString filepath);
     QString getTabName(int index);
     QString getTabPath(int index);
-    
+
     int getActiveTabIndex();
     QString getActiveTabName();
     QString getActiveTabPath();
     void activeTabWithIndex(int index);
-    
+
     void addTab(QString filepath, QString tabName);
     void addTabWithIndex(int index, QString filepath, QString tabName);
     void closeActiveTab();
     void closeOtherTabs();
     void closeOtherTabsExceptFile(QString filepath);
-    
+
     void selectNextTab();
     void selectPrevTab();
-    
+
     void updateTabWithIndex(int index, QString filepath, QString tabName);
     void setTabActiveColor(QString color);
-    
+
     int getTabCount();
-                      
+
     TabWidget *tabbar;
-    
+
 signals:
     void doubleClicked();
     void switchToFile(QString filepath);
     void tabAddRequested();
     void tabReleaseRequested(QString tabName, QString filepaht, int index);
     void tabCloseRequested(int index);
-                          
+
 public slots:
     void closeTabWithIndex(int closeIndex);
-    
+
     void handleCloseOtherTabs(int index);
     void handleCurrentIndexChanged(int index);
-    
+
     void handleTabDroped(int index, Qt::DropAction action, QObject *target);
     void handleTabMoved(int fromIndex, int toIndex);
     void handleTabReleaseRequested(int index);
-    
+
 private:
-    QHBoxLayout *layout;
+    QHBoxLayout *m_layout;
 };
 
 #endif

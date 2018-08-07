@@ -50,7 +50,7 @@ public slots:
     void createWindowFromTab(QString tabName, QString filepath, QString content);
     
 private:
-    QList<Window*> windows;
+    QList<Window*> m_windows;
     
     Window* createWindow(bool alwaysCenter=false);
     void initWindowPosition(Window *window, bool alwaysCenter=false);

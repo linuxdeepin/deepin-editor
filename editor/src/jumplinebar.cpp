@@ -31,85 +31,85 @@ JumpLineBar::JumpLineBar(QWidget *parent) : QWidget(parent)
     // Init.
     setWindowFlags(Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
     setFixedSize(200, 40);
-    
+
     // Init layout and widgets.
-    layout = new QHBoxLayout(this);
-    
-    label = new QLabel();
-    label->setText(tr("Go to line: "));
-    editLine = new LineBar();
-    
-    lineValidator = new QIntValidator;
-    editLine->setValidator(lineValidator);    
-    
-    layout->addWidget(label);
-    layout->addWidget(editLine);
-    
-    connect(editLine, &LineBar::pressEsc, this, &JumpLineBar::jumpCancel, Qt::QueuedConnection);
-    connect(editLine, &LineBar::pressEnter, this, &JumpLineBar::jumpConfirm, Qt::QueuedConnection);
-    connect(editLine, &LineBar::textChanged, this, &JumpLineBar::handleLineChanged, Qt::QueuedConnection);
-    connect(editLine, &LineBar::focusOut, this, &JumpLineBar::handleFocusOut, Qt::QueuedConnection);
+    m_layout = new QHBoxLayout(this);
+
+    m_label = new QLabel();
+    m_label->setText(tr("Go to line: "));
+    m_editLine = new LineBar();
+
+    m_lineValidator = new QIntValidator;
+    m_editLine->setValidator(m_lineValidator);
+
+    m_layout->addWidget(m_label);
+    m_layout->addWidget(m_editLine);
+
+    connect(m_editLine, &LineBar::pressEsc, this, &JumpLineBar::jumpCancel, Qt::QueuedConnection);
+    connect(m_editLine, &LineBar::pressEnter, this, &JumpLineBar::jumpConfirm, Qt::QueuedConnection);
+    connect(m_editLine, &LineBar::textChanged, this, &JumpLineBar::handleLineChanged, Qt::QueuedConnection);
+    connect(m_editLine, &LineBar::focusOut, this, &JumpLineBar::handleFocusOut, Qt::QueuedConnection);
 }
 
 void JumpLineBar::focus()
 {
-    editLine->setFocus();
+    m_editLine->setFocus();
 }
 
 bool JumpLineBar::isFocus()
 {
-    return editLine->hasFocus();
+    return m_editLine->hasFocus();
 }
 
 void JumpLineBar::activeInput(QString file, int row, int column, int lineCount, int scrollOffset)
 {
     // Save file info for back to line.
-    jumpFile = file;
-    rowBeforeJump = row;
-    columnBeforeJump = column;
-    jumpFileScrollOffset = scrollOffset;
-    lineValidator->setRange(1, lineCount);
-    
+    m_jumpFile = file;
+    m_rowBeforeJump = row;
+    m_columnBeforeJump = column;
+    m_jumpFileScrollOffset = scrollOffset;
+    m_lineValidator->setRange(1, lineCount);
+
     // Clear line number.
-    editLine->setText("");
-    
+    m_editLine->setText("");
+
     // Show jump line bar.
     show();
     raise();
-    
+
     // Focus default.
-    editLine->setFocus();
+    m_editLine->setFocus();
 }
 
 void JumpLineBar::handleFocusOut()
 {
     hide();
-    
+
     lostFocusExit();
 }
 
 void JumpLineBar::handleLineChanged()
 {
-    QString content = editLine->text();
+    QString content = m_editLine->text();
     if (content != "") {
-        jumpToLine(jumpFile, content.toInt(), false);
+        jumpToLine(m_jumpFile, content.toInt(), false);
     }
 }
 
 void JumpLineBar::jumpCancel()
 {
     hide();
-    
-    backToPosition(jumpFile, rowBeforeJump, columnBeforeJump, jumpFileScrollOffset);
+
+    backToPosition(m_jumpFile, m_rowBeforeJump, m_columnBeforeJump, m_jumpFileScrollOffset);
 }
 
 void JumpLineBar::jumpConfirm()
 {
     hide();
-    
-    QString content = editLine->text();
+
+    QString content = m_editLine->text();
     if (content != "") {
-        jumpToLine(jumpFile, content.toInt(), true);
+        jumpToLine(m_jumpFile, content.toInt(), true);
     }
 }
 
@@ -125,19 +125,18 @@ void JumpLineBar::paintEvent(QPaintEvent *)
     path.arcTo(QRectF(rect().x(), rect().bottom() - radius * 2, radius * 2, radius * 2), 180, 90);
     path.lineTo(QPointF(rect().x() + rect().width(), rect().y() + rect().height()));
     path.lineTo(QPointF(rect().x() + rect().width(), rect().y()));
-    painter.fillPath(path, backgroundColor);
+    painter.fillPath(path, m_backgroundColor);
 }
 
 void JumpLineBar::setBackground(QString color)
 {
-    backgroundColor = QColor(color);
-    
-    if (QColor(backgroundColor).lightness() < 128) {
-        label->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#AAAAAA"));
+    m_backgroundColor = QColor(color);
+
+    if (QColor(m_backgroundColor).lightness() < 128) {
+        m_label->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#AAAAAA"));
     } else {
-        label->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#000000"));
+        m_label->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#000000"));
     }
-    
+
     repaint();
 }
-

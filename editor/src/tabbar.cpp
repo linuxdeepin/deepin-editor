@@ -31,8 +31,8 @@
 Tabbar::Tabbar()
 {
     // Init.
-    layout = new QHBoxLayout(this);
-    layout->setContentsMargins(0, 0, 0, 0);
+    m_layout = new QHBoxLayout(this);
+    m_layout->setContentsMargins(0, 0, 0, 0);
 
     QPixmap iconPixmap = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("logo_24.svg"));
     QLabel *iconLabel = new QLabel();
@@ -41,12 +41,12 @@ Tabbar::Tabbar()
 
     tabbar = new TabWidget();
 
-    layout->addSpacing(10);
-    layout->addWidget(iconLabel, 0, Qt::AlignTop);
-    layout->addSpacing(10);
-    layout->addWidget(tabbar, 0, Qt::AlignTop);
-    layout->addSpacing(70);
-    
+    m_layout->addSpacing(10);
+    m_layout->addWidget(iconLabel, 0, Qt::AlignTop);
+    m_layout->addSpacing(10);
+    m_layout->addWidget(tabbar, 0, Qt::AlignTop);
+    m_layout->addSpacing(70);
+
     connect(tabbar, &TabWidget::closeOtherTabs, this, &Tabbar::handleCloseOtherTabs, Qt::QueuedConnection);
     connect(tabbar, &TabWidget::closeTab, this, &Tabbar::closeTabWithIndex, Qt::QueuedConnection);
     connect(tabbar, &TabWidget::currentChanged, this, &Tabbar::handleCurrentIndexChanged, Qt::QueuedConnection);
@@ -164,7 +164,7 @@ void Tabbar::closeTabWithIndex(int closeIndex)
 {
     qDebug() << "*** closeTabWithIndex " << closeIndex;
     tabbar->removeTab(closeIndex);
-    
+
     qDebug() << "-----------------";
     for (int i = 0; i < tabbar->tabFiles.size(); i++) {
         qDebug() << "!!!! tabFiles " << i << tabbar->tabFiles[i];

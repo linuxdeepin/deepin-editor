@@ -34,29 +34,29 @@
 class Editor : public QWidget
 {
     Q_OBJECT
-    
+
 public:
     Editor(QWidget *parent = 0);
-    
+
     void loadFile(QString filepath);
     void saveFile(QString encode, QString newline);
-    
+
     void updatePath(QString file);
-                                 
+
     TextEditor *textEditor;
-                          
+
 public slots:
     void handleTextChangeTimer();
     void handleTextChanged();
-    
+
 private:
-    QHBoxLayout *layout;
-    QTimer *autoSaveTimer;
-    bool saveFinish;
-    int autoSaveInternal;
-    QByteArray fileEncode;
-    
-    bool hasLoadFile = false;
+    QHBoxLayout *m_layout;
+    QTimer *m_autoSaveTimer;
+    bool m_saveFinish;
+    int m_autoSaveInternal;
+    QByteArray m_fileEncode;
+
+    bool m_hasLoadFile = false;
 };
 
 #endif

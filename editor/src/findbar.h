@@ -38,45 +38,45 @@ DWIDGET_USE_NAMESPACE
 class FindBar : public QWidget
 {
     Q_OBJECT
-    
+
 public:
     FindBar(QWidget *parent = 0);
-    
+
     bool isFocus();
     void focus();
-    
+
     void activeInput(QString text, QString file, int row, int column, int scrollOffset);
     void setMismatchAlert(bool isAlert);
-    
+
     void setBackground(QString color);
-    
+
 signals:
     void findNext();
     void findPrev();
-    
+
     void removeSearchKeyword();
     void updateSearchKeyword(QString file, QString keyword);
-    
+
 public slots:
     void findCancel();
     void handleContentChanged();
-    
+
 protected:
     void paintEvent(QPaintEvent *event);
     void hideEvent(QHideEvent *event);
-    
+
 private:
-    QPushButton *findNextButton;
-    QPushButton *findPrevButton;
-    DImageButton *closeButton;
-    LineBar *editLine;
-    QHBoxLayout *layout;
-    QLabel *findLabel;
-    QString findFile;
-    int findFileColumn;
-    int findFileRow;
-    int findFileSrollOffset;
-    QColor backgroundColor;
+    QPushButton *m_findNextButton;
+    QPushButton *m_findPrevButton;
+    DImageButton *m_closeButton;
+    LineBar *m_editLine;
+    QHBoxLayout *m_layout;
+    QLabel *m_findLabel;
+    QString m_findFile;
+    int m_findFileColumn;
+    int m_findFileRow;
+    int m_findFileSrollOffset;
+    QColor m_backgroundColor;
 };
 
 #endif

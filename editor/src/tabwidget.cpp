@@ -47,7 +47,7 @@ TabWidget::TabWidget()
     dropColor.setAlpha(0);
     setMaskColor(dropColor);
 
-    rightClickTab = -1;
+    m_rightClickTab = -1;
 
     setFixedHeight(40);
 
@@ -169,15 +169,15 @@ void TabWidget::insertFromMimeDataOnDragEnter(int index, const QMimeData *source
 
 void TabWidget::handleCloseTab()
 {
-    if (rightClickTab >= 0) {
-        closeTab(rightClickTab);
+    if (m_rightClickTab >= 0) {
+        closeTab(m_rightClickTab);
     }
 }
 
 void TabWidget::handleCloseOtherTabs()
 {
-    if (rightClickTab >= 0) {
-        closeOtherTabs(rightClickTab);
+    if (m_rightClickTab >= 0) {
+        closeOtherTabs(m_rightClickTab);
     }
 }
 
@@ -187,30 +187,30 @@ bool TabWidget::eventFilter(QObject *, QEvent *event)
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
         if (mouseEvent->button() == Qt::RightButton) {
             QPoint position = mouseEvent->pos();
-            rightClickTab = -1;
+            m_rightClickTab = -1;
 
             for (int i = 0; i < count(); i++) {
                 if (tabRect(i).contains(position)) {
-                    rightClickTab = i;
+                    m_rightClickTab = i;
                     break;
                 }
             }
 
             // Poup right menu on tab.
-            if (rightClickTab >= 0) {
-                menu = new QMenu();
-                menu->setStyle(QStyleFactory::create("dlight"));
+            if (m_rightClickTab >= 0) {
+                m_menu = new QMenu();
+                m_menu->setStyle(QStyleFactory::create("dlight"));
 
-                closeTabAction = new QAction("Close Tab", this);
-                closeOtherTabAction = new QAction("Close Other Tabs", this);
+                m_closeTabAction = new QAction("Close Tab", this);
+                m_closeOtherTabAction = new QAction("Close Other Tabs", this);
 
-                connect(closeTabAction, &QAction::triggered, this, &TabWidget::handleCloseTab);
-                connect(closeOtherTabAction, &QAction::triggered, this, &TabWidget::handleCloseOtherTabs);
+                connect(m_closeTabAction, &QAction::triggered, this, &TabWidget::handleCloseTab);
+                connect(m_closeOtherTabAction, &QAction::triggered, this, &TabWidget::handleCloseOtherTabs);
 
-                menu->addAction(closeTabAction);
-                menu->addAction(closeOtherTabAction);
+                m_menu->addAction(m_closeTabAction);
+                m_menu->addAction(m_closeOtherTabAction);
 
-                menu->exec(this->mapToGlobal(position));
+                m_menu->exec(this->mapToGlobal(position));
 
                 return true;
             }
@@ -220,16 +220,16 @@ bool TabWidget::eventFilter(QObject *, QEvent *event)
         const QMimeData* mimeData = e->mimeData();
         
         if ((!e->source() || e->source()->parent() != this) && mimeData->data("tabInfo") != "") {
-            static_cast<Window*>(this->window())->changeTitlebarBackground(dndStartColor, dndEndColor);
+            static_cast<Window*>(this->window())->changeTitlebarBackground(m_dndStartColor, m_dndEndColor);
         }
         
         qDebug() << "### eventFilter DragEnter";
     } else if (event->type() == QEvent::DragLeave) {
-        static_cast<Window*>(this->window())->changeTitlebarBackground(backgroundStartColor, backgroundEndColor);
+        static_cast<Window*>(this->window())->changeTitlebarBackground(m_backgroundStartColor, m_backgroundEndColor);
         
         qDebug() << "### eventFilter DragLeave";
     } else if (event->type() == QEvent::Drop) {
-        static_cast<Window*>(this->window())->changeTitlebarBackground(backgroundStartColor, backgroundEndColor);
+        static_cast<Window*>(this->window())->changeTitlebarBackground(m_backgroundStartColor, m_backgroundEndColor);
         
         qDebug() << "### eventFilter Drop";
     } else if (event->type() == QEvent::DragMove) {
@@ -268,14 +268,14 @@ void TabWidget::handleDragActionChanged(Qt::DropAction action)
 
 void TabWidget::setBackground(QString startColor, QString endColor)
 {
-    backgroundStartColor = startColor;
-    backgroundEndColor = endColor;
+    m_backgroundStartColor = startColor;
+    m_backgroundEndColor = endColor;
 }
 
 void TabWidget::setDNDColor(QString startColor, QString endColor)
 {
-    dndStartColor = startColor;
-    dndEndColor = endColor;
+    m_dndStartColor = startColor;
+    m_dndEndColor = endColor;
 }
 
 void TabWidget::handleTabRemoved(int index)

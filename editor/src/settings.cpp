@@ -39,10 +39,10 @@ DTK_USE_NAMESPACE
 
 Settings::Settings(QWidget *parent) : QObject(parent)
 {
-    backend = new Dtk::Core::QSettingBackend(QDir(QDir(QDir(QStandardPaths::standardLocations(QStandardPaths::ConfigLocation).first()).filePath(qApp->organizationName())).filePath(qApp->applicationName())).filePath("config.conf"));
+    m_backend = new Dtk::Core::QSettingBackend(QDir(QDir(QDir(QStandardPaths::standardLocations(QStandardPaths::ConfigLocation).first()).filePath(qApp->organizationName())).filePath(qApp->applicationName())).filePath("config.conf"));
 
     settings = Dtk::Core::DSettings::fromJsonFile(":/resource/settings.json");
-    settings->setBackend(backend);
+    settings->setBackend(m_backend);
 
     auto fontSize = settings->option("base.font.size");
     connect(fontSize, &Dtk::Core::DSettingsOption::valueChanged,
@@ -80,7 +80,7 @@ Settings::Settings(QWidget *parent) : QObject(parent)
     keymapMap.insert("keys", QStringList() << "standard" << "emacs" << "customize");
     keymapMap.insert("values", QStringList() << "Standard" << "Emacs" << "Customize");
     keymap->setData("items", keymapMap);
-    
+
     connect(keymap, &Dtk::Core::DSettingsOption::valueChanged,
             this, [=](QVariant value) {
                       // Update all key's display value with user select keymap.
@@ -92,19 +92,19 @@ Settings::Settings(QWidget *parent) : QObject(parent)
     windowStateMap.insert("keys", QStringList() << "window_normal" << "window_maximum" << "fullscreen");
     windowStateMap.insert("values", QStringList() << "Window" << "Maximum" << "Fullscreen");
     windowState->setData("items", windowStateMap);
-    
+
     connect(settings, &Dtk::Core::DSettings::valueChanged, this,
             [=] (const QString &key, const QVariant &value) {
                 // Change keymap to customize once user change any keyshortcut.
-                if (!userChangeKey && key.startsWith("shortcuts.") && key != "shortcuts.keymap.keymap" && !key.contains("_keymap_")) {
-                    userChangeKey = true;
-                    
+                if (!m_userChangeKey && key.startsWith("shortcuts.") && key != "shortcuts.keymap.keymap" && !key.contains("_keymap_")) {
+                    m_userChangeKey = true;
+
                     QString currentKeymap = settings->option("shortcuts.keymap.keymap")->value().toString();
-                    
+
                     QStringList keySplitList = key.split(".");
                     keySplitList[1] = QString("%1_keymap_customize").arg(keySplitList[1]);
                     QString customizeKey = keySplitList.join(".");
-                    
+
                     // Just update customize key user input, don't change keymap.
                     if (currentKeymap == "customize") {
                         settings->option(customizeKey)->setValue(value);
@@ -117,17 +117,17 @@ Settings::Settings(QWidget *parent) : QObject(parent)
                         settings->option(customizeKey)->setValue(value);
                         keymap->setValue("customize");
                     }
-                    
-                    userChangeKey = false;
+
+                    m_userChangeKey = false;
                 }
             });
 
-    settingsDialog = new DSettingsDialog(parent);
-    settingsDialog->setProperty("_d_dtk_theme", "light");
-    settingsDialog->setProperty("_d_QSSFilename", "DSettingsDialog");
-    DThemeManager::instance()->registerWidget(settingsDialog);
-    settingsDialog->updateSettings(settings);
-    dtkThemeWorkaround(settingsDialog, "dlight");
+    m_settingsDialog = new DSettingsDialog(parent);
+    m_settingsDialog->setProperty("_d_dtk_theme", "light");
+    m_settingsDialog->setProperty("_d_QSSFilename", "DSettingsDialog");
+    DThemeManager::instance()->registerWidget(m_settingsDialog);
+    m_settingsDialog->updateSettings(settings);
+    dtkThemeWorkaround(m_settingsDialog, "dlight");
 }
 
 Settings::~Settings()
@@ -136,7 +136,7 @@ Settings::~Settings()
 
 void Settings::popupSettingsDialog()
 {
-    settingsDialog->exec();
+    m_settingsDialog->exec();
 }
 
 // This function is workaround, it will remove after DTK fixed SettingDialog theme bug.
@@ -156,8 +156,8 @@ void Settings::dtkThemeWorkaround(QWidget *parent, const QString &theme)
 
 void Settings::updateAllKeysWithKeymap(QString keymap)
 {
-    userChangeKey = true;
-    
+    m_userChangeKey = true;
+
     for (auto option : settings->group("shortcuts.window")->options()) {
         QStringList keySplitList = option->key().split(".");
         keySplitList[1] = QString("%1_keymap_%2").arg(keySplitList[1]).arg(keymap);
@@ -169,14 +169,14 @@ void Settings::updateAllKeysWithKeymap(QString keymap)
         keySplitList[1] = QString("%1_keymap_%2").arg(keySplitList[1]).arg(keymap);
         option->setValue(settings->option(keySplitList.join("."))->value().toString());
     }
-    
-    userChangeKey = false;
+
+    m_userChangeKey = false;
 }
 
 void Settings::copyCustomizeKeysFromKeymap(QString keymap)
 {
-    userChangeKey = true;
-    
+    m_userChangeKey = true;
+
     for (auto option : settings->group("shortcuts.window_keymap_customize")->options()) {
         QStringList keySplitList = option->key().split(".");
         keySplitList[1] = QString("window_keymap_%1").arg(keymap);
@@ -188,7 +188,6 @@ void Settings::copyCustomizeKeysFromKeymap(QString keymap)
         keySplitList[1] = QString("editor_keymap_%1").arg(keymap);
         option->setValue(settings->option(keySplitList.join("."))->value().toString());
     }
-    
-    userChangeKey = false;
-}
 
+    m_userChangeKey = false;
+}

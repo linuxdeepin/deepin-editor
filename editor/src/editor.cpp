@@ -32,24 +32,24 @@
 Editor::Editor(QWidget *parent) : QWidget(parent)
 {
     // Init.
-    autoSaveInternal = 1000;
-    saveFinish = true;
+    m_autoSaveInternal = 1000;
+    m_saveFinish = true;
 
     // Init layout and widgets.
-    layout = new QHBoxLayout(this);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(0);
+    m_layout = new QHBoxLayout(this);
+    m_layout->setContentsMargins(0, 0, 0, 0);
+    m_layout->setSpacing(0);
 
     textEditor = new TextEditor;
 
-    layout->addWidget(textEditor->lineNumberArea);
-    layout->addWidget(textEditor);
+    m_layout->addWidget(textEditor->lineNumberArea);
+    m_layout->addWidget(textEditor);
 
     // Init auto save timer.
-    autoSaveTimer = new QTimer(this);
-    autoSaveTimer->setSingleShot(true);
+    m_autoSaveTimer = new QTimer(this);
+    m_autoSaveTimer->setSingleShot(true);
 
-    connect(autoSaveTimer, &QTimer::timeout, this, &Editor::handleTextChangeTimer);
+    connect(m_autoSaveTimer, &QTimer::timeout, this, &Editor::handleTextChangeTimer);
     connect(textEditor->document(), &QTextDocument::contentsChange, this, &Editor::handleTextChanged, Qt::QueuedConnection);
 }
 
@@ -58,12 +58,12 @@ void Editor::loadFile(QString filepath)
     QFile file(filepath);
     if (file.open(QFile::ReadOnly)) {
         auto fileContent = file.readAll();
-        fileEncode = Utils::getFileEncode(fileContent, filepath);
+        m_fileEncode = Utils::getFileEncode(fileContent, filepath);
 
-        qDebug() << QString("Detect file %1 with encoding: %2").arg(filepath).arg(QString(fileEncode));
+        qDebug() << QString("Detect file %1 with encoding: %2").arg(filepath).arg(QString(m_fileEncode));
 
         QTextStream stream(&fileContent);
-        stream.setCodec(fileEncode);
+        stream.setCodec(m_fileEncode);
         textEditor->setPlainText(stream.readAll());
 
         updatePath(filepath);
@@ -135,25 +135,25 @@ void Editor::updatePath(QString file)
 void Editor::handleTextChangeTimer()
 {
     // Change flag hasLoadFile to avoid trigger save actoin just user open a file.
-    if (!hasLoadFile) {
-        hasLoadFile = true;
+    if (!m_hasLoadFile) {
+        m_hasLoadFile = true;
 
         qDebug() << "Don't auto save when first load file.";
     } else if (Utils::fileExists(textEditor->filepath)) {
-        saveFinish = true;
+        m_saveFinish = true;
 
-        saveFile(fileEncode == "ascii" ? "UTF-8" : fileEncode, "Window");
+        saveFile(m_fileEncode == "ascii" ? "UTF-8" : m_fileEncode, "Window");
     }
 }
 
 void Editor::handleTextChanged()
 {
     if (Utils::fileExists(textEditor->filepath)) {
-        saveFinish = false;
+        m_saveFinish = false;
 
-        if (autoSaveTimer->isActive()) {
-            autoSaveTimer->stop();
+        if (m_autoSaveTimer->isActive()) {
+            m_autoSaveTimer->stop();
         }
-        autoSaveTimer->start(autoSaveInternal);
+        m_autoSaveTimer->start(m_autoSaveInternal);
     }
 }

@@ -19,7 +19,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #ifndef SETTINGS_H
 #define SETTINGS_H
@@ -31,37 +31,37 @@
 DWIDGET_USE_NAMESPACE
 DTK_USE_NAMESPACE
 
-class Settings : public QObject 
+class Settings : public QObject
 {
     Q_OBJECT
-    
+
 public:
     Settings(QWidget *parent = 0);
     ~Settings();
-    
+
     int defaultFontSize = 12;
     int maxFontSize = 50;
     int minFontSize = 8;
-    
+
     Dtk::Core::DSettings* settings;
-    
+
 signals:
     void adjustFont(QString name);
     void adjustFontSize(int fontSize);
     void adjustTabSpaceNumber(int number);
-        
+
 public slots:
     void popupSettingsDialog();
-    
+
 private:
-    Dtk::Core::QSettingBackend* backend;
-    DSettingsDialog* settingsDialog;
+    Dtk::Core::QSettingBackend *m_backend;
+    DSettingsDialog *m_settingsDialog;
 
     void dtkThemeWorkaround(QWidget *parent, const QString &theme);
     void updateAllKeysWithKeymap(QString keymap);
     void copyCustomizeKeysFromKeymap(QString keymap);
-    
-    bool userChangeKey = false;
+
+    bool m_userChangeKey = false;
 };
 
 #endif // SETTINGS_H

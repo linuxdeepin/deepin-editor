@@ -31,65 +31,65 @@ FindBar::FindBar(QWidget *parent) : QWidget(parent)
     // Init.
     setWindowFlags(Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
     setFixedHeight(40);
-    
+
     // Init layout and widgets.
-    layout = new QHBoxLayout(this);
-    findLabel = new QLabel(tr("Find: "));
-    editLine = new LineBar();
-    findNextButton = new QPushButton(tr("Next"));
-    findPrevButton = new QPushButton(tr("Previous"));
-    closeButton = new DImageButton();
-    closeButton->setFixedSize(16, 16);
-    
-    layout->addWidget(findLabel);
-    layout->addWidget(editLine);
-    layout->addWidget(findNextButton);
-    layout->addWidget(findPrevButton);
-    layout->addWidget(closeButton);
-    
+    m_layout = new QHBoxLayout(this);
+    m_findLabel = new QLabel(tr("Find: "));
+    m_editLine = new LineBar();
+    m_findNextButton = new QPushButton(tr("Next"));
+    m_findPrevButton = new QPushButton(tr("Previous"));
+    m_closeButton = new DImageButton();
+    m_closeButton->setFixedSize(16, 16);
+
+    m_layout->addWidget(m_findLabel);
+    m_layout->addWidget(m_editLine);
+    m_layout->addWidget(m_findNextButton);
+    m_layout->addWidget(m_findPrevButton);
+    m_layout->addWidget(m_closeButton);
+
     // Make button don't grab keyboard focus after click it.
-    findNextButton->setFocusPolicy(Qt::NoFocus);
-    findPrevButton->setFocusPolicy(Qt::NoFocus);
-    closeButton->setFocusPolicy(Qt::NoFocus);
-    
-    connect(editLine, &LineBar::pressEsc, this, &FindBar::findCancel, Qt::QueuedConnection);
-    connect(editLine, &LineBar::pressEnter, this, &FindBar::findNext, Qt::QueuedConnection);
-    connect(editLine, &LineBar::pressCtrlEnter, this, &FindBar::findPrev, Qt::QueuedConnection);
-    connect(editLine, &LineBar::contentChanged, this, &FindBar::handleContentChanged, Qt::QueuedConnection);
-    
-    connect(findNextButton, &QPushButton::clicked, this, &FindBar::findNext, Qt::QueuedConnection);
-    connect(findPrevButton, &QPushButton::clicked, this, &FindBar::findPrev, Qt::QueuedConnection);
-    
-    connect(closeButton, &DImageButton::clicked, this, &FindBar::findCancel, Qt::QueuedConnection);
+    m_findNextButton->setFocusPolicy(Qt::NoFocus);
+    m_findPrevButton->setFocusPolicy(Qt::NoFocus);
+    m_closeButton->setFocusPolicy(Qt::NoFocus);
+
+    connect(m_editLine, &LineBar::pressEsc, this, &FindBar::findCancel, Qt::QueuedConnection);
+    connect(m_editLine, &LineBar::pressEnter, this, &FindBar::findNext, Qt::QueuedConnection);
+    connect(m_editLine, &LineBar::pressCtrlEnter, this, &FindBar::findPrev, Qt::QueuedConnection);
+    connect(m_editLine, &LineBar::contentChanged, this, &FindBar::handleContentChanged, Qt::QueuedConnection);
+
+    connect(m_findNextButton, &QPushButton::clicked, this, &FindBar::findNext, Qt::QueuedConnection);
+    connect(m_findPrevButton, &QPushButton::clicked, this, &FindBar::findPrev, Qt::QueuedConnection);
+
+    connect(m_closeButton, &DImageButton::clicked, this, &FindBar::findCancel, Qt::QueuedConnection);
 }
 
 bool FindBar::isFocus()
 {
-    return editLine->hasFocus();
+    return m_editLine->hasFocus();
 }
 
 void FindBar::focus()
 {
-    editLine->setFocus();
-    editLine->selectAll();
+    m_editLine->setFocus();
+    m_editLine->selectAll();
 }
 
 void FindBar::activeInput(QString text, QString file, int row, int column, int scrollOffset)
 {
     // Try fill keyword with select text.
-    editLine->clear();
-    editLine->insert(text);
-    editLine->selectAll();
-    
+    m_editLine->clear();
+    m_editLine->insert(text);
+    m_editLine->selectAll();
+
     // Show.
     show();
-    
+
     // Save file info for back to position.
-    findFile = file;
-    findFileRow = row;
-    findFileColumn = column;
-    findFileSrollOffset = scrollOffset;
-    
+    m_findFile = file;
+    m_findFileRow = row;
+    m_findFileColumn = column;
+    m_findFileSrollOffset = scrollOffset;
+
     // Focus.
     focus();
 }
@@ -101,7 +101,7 @@ void FindBar::findCancel()
 
 void FindBar::handleContentChanged()
 {
-    updateSearchKeyword(findFile, editLine->text());
+    updateSearchKeyword(m_findFile, m_editLine->text());
 }
 
 void FindBar::hideEvent(QHideEvent *)
@@ -115,10 +115,10 @@ void FindBar::paintEvent(QPaintEvent *)
     painter.setOpacity(1);
     QPainterPath path;
     path.addRect(rect());
-    painter.fillPath(path, backgroundColor);
-    
+    painter.fillPath(path, m_backgroundColor);
+
     QColor splitLineColor;
-    if (backgroundColor.lightness() < 128) {
+    if (m_backgroundColor.lightness() < 128) {
         splitLineColor = QColor("#ffffff");
     } else {
         splitLineColor = QColor("#000000");
@@ -131,27 +131,26 @@ void FindBar::paintEvent(QPaintEvent *)
 
 void FindBar::setMismatchAlert(bool isAlert)
 {
-    editLine->setAlert(isAlert);
+    m_editLine->setAlert(isAlert);
 }
 
 void FindBar::setBackground(QString color)
 {
-    backgroundColor = QColor(color);
-    
-    if (QColor(backgroundColor).lightness() < 128) {
-        findLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#AAAAAA"));
-        
-        closeButton->setNormalPic(Utils::getQrcPath("bar_close_normal_dark.svg"));
-        closeButton->setHoverPic(Utils::getQrcPath("bar_close_hover_dark.svg"));
-        closeButton->setPressPic(Utils::getQrcPath("bar_close_press_dark.svg"));
+    m_backgroundColor = QColor(color);
+
+    if (QColor(m_backgroundColor).lightness() < 128) {
+        m_findLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#AAAAAA"));
+
+        m_closeButton->setNormalPic(Utils::getQrcPath("bar_close_normal_dark.svg"));
+        m_closeButton->setHoverPic(Utils::getQrcPath("bar_close_hover_dark.svg"));
+        m_closeButton->setPressPic(Utils::getQrcPath("bar_close_press_dark.svg"));
     } else {
-        findLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#000000"));
-        
-        closeButton->setNormalPic(Utils::getQrcPath("bar_close_normal_light.svg"));
-        closeButton->setHoverPic(Utils::getQrcPath("bar_close_hover_light.svg"));
-        closeButton->setPressPic(Utils::getQrcPath("bar_close_press_light.svg"));
+        m_findLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#000000"));
+
+        m_closeButton->setNormalPic(Utils::getQrcPath("bar_close_normal_light.svg"));
+        m_closeButton->setHoverPic(Utils::getQrcPath("bar_close_hover_light.svg"));
+        m_closeButton->setPressPic(Utils::getQrcPath("bar_close_press_light.svg"));
     }
-    
+
     repaint();
 }
-
