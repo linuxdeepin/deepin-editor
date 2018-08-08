@@ -38,8 +38,8 @@ class Editor : public QWidget
 public:
     Editor(QWidget *parent = 0);
 
-    void loadFile(QString filepath);
-    void saveFile(QString encode, QString newline);
+    void loadFile(const QString &filepath);
+    void saveFile(const QString &encode, const QString &newline);
     void saveFile();
 
     void updatePath(QString file);
@@ -47,12 +47,16 @@ public:
     TextEditor *textEditor;
 
 private:
+    void detectNewline();
+
+private:
     QHBoxLayout *m_layout;
-    bool m_saveFinish;
-    int m_autoSaveInternal;
     QByteArray m_fileEncode;
 
+    bool m_saveFinish;
+    int m_autoSaveInternal;
     bool m_hasLoadFile = false;
+    QString m_newline;
 };
 
 #endif

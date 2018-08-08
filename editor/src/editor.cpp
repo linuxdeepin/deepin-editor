@@ -34,6 +34,7 @@ Editor::Editor(QWidget *parent) : QWidget(parent)
     // Init.
     m_autoSaveInternal = 1000;
     m_saveFinish = true;
+    m_newline = "Linux";
 
     // Init layout and widgets.
     m_layout = new QHBoxLayout(this);
@@ -46,7 +47,7 @@ Editor::Editor(QWidget *parent) : QWidget(parent)
     m_layout->addWidget(textEditor);
 }
 
-void Editor::loadFile(QString filepath)
+void Editor::loadFile(const QString &filepath)
 {
     QFile file(filepath);
     if (file.open(QFile::ReadOnly)) {
@@ -60,6 +61,7 @@ void Editor::loadFile(QString filepath)
         textEditor->setPlainText(stream.readAll());
 
         updatePath(filepath);
+        detectNewline();
 
         textEditor->loadHighlighter();
     }
@@ -67,7 +69,7 @@ void Editor::loadFile(QString filepath)
     file.close();
 }
 
-void Editor::saveFile(QString encode, QString newline)
+void Editor::saveFile(const QString &encode, const QString &newline)
 {
     bool fileCreateFailed = false;
     if (!Utils::fileExists(textEditor->filepath)) {
@@ -94,14 +96,16 @@ void Editor::saveFile(QString encode, QString newline)
             return;
         }
 
+        m_newline = newline;
+
         QRegularExpression newlineRegex("\r?\n|\r");
         QString fileNewline;
-        if (newline == "Window") {
+        if (newline == "Windows") {
             fileNewline = "\r\n";
-        } else if (newline == "Linux") {
-            fileNewline = "\n";
-        } else {
+        } else if (newline == "Mac OS") {
             fileNewline = "\r";
+        } else {
+            fileNewline = "\n";
         }
 
         QTextStream out(&file);
@@ -112,7 +116,7 @@ void Editor::saveFile(QString encode, QString newline)
         out.setGenerateByteOrderMark(true);
         out << textEditor->toPlainText().replace(newlineRegex, fileNewline);
 
-        qDebug() << "saved: " << textEditor->filepath << encode;
+        qDebug() << "saved: " << textEditor->filepath << encode << newline;
 
         file.close();
     }
@@ -120,10 +124,28 @@ void Editor::saveFile(QString encode, QString newline)
 
 void Editor::saveFile()
 {
-    saveFile(m_fileEncode, "Window");
+    saveFile(m_fileEncode, m_newline);
 }
 
 void Editor::updatePath(QString file)
 {
     textEditor->filepath = file;
+    detectNewline();
+}
+
+void Editor::detectNewline()
+{
+    QFile file(textEditor->filepath);
+    file.open(QIODevice::ReadOnly);
+    QString line = file.readLine();
+
+    if (line.indexOf("\r\n") != -1) {
+        m_newline = "Windows";
+    } else if (line.indexOf("\r") != -1) {
+        m_newline = "Mac OS";
+    } else {
+        m_newline = "Linux";
+    }
+
+    file.close();
 }

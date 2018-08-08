@@ -483,13 +483,13 @@ void Window::openFile()
 const QString Window::getSaveFilePath(QString &encode, QString &newline)
 {
     encode = "UTF-8";
-    newline = "Window";
+    newline = "Linux";
 
 #ifdef DTKWIDGET_CLASS_DFileDialog
     DFileDialog dialog(this, tr("Save File"), QDir(QDir::homePath()).filePath("Blank Document.txt"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.addComboBox("编码", getEncodeList());
-    dialog.addComboBox("换行符", QStringList() << "Window" << "Linux" << "Mac OS");
+    dialog.addComboBox("换行符", QStringList() << "Linux" << "Windows" << "Mac OS");
 
     if (dialog.exec() == QDialog::Accepted) {
         encode = dialog.getComboBoxValue("编码");
@@ -594,7 +594,9 @@ void Window::saveAsFile()
     QString tabPath = m_tabbar->getActiveTabPath();
 
     if (filepath != "" && filepath != tabPath) {
-        saveFileAsAnotherPath(tabPath, filepath, encode, newline);
+        saveFileAsAnotherPath(tabPath, filepath, encode, newline, false);
+    } else if (filepath == tabPath) {
+        m_editorMap[filepath]->saveFile(encode, newline);
     }
 }
 
