@@ -472,7 +472,7 @@ void Window::focusActiveEditor()
 void Window::openFile()
 {
     QFileDialog dialog(0, QString(), QDir::homePath());
-    dialog.setFileMode(QFileDialog::AnyFile);
+    dialog.setFileMode(QFileDialog::ExistingFiles);
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
 
     if (dialog.exec()) {
@@ -488,7 +488,9 @@ const QString Window::getSaveFilePath(QString &encode, QString &newline)
     newline = "Linux";
 
 #ifdef DTKWIDGET_CLASS_DFileDialog
-    DFileDialog dialog(this, tr("Save File"), QDir(QDir::homePath()).filePath("Blank Document.txt"));
+    DFileDialog dialog(this, tr("Save File"));
+    dialog.setDirectory(QFileInfo(m_tabbar->getActiveTabPath()).dir());
+    dialog.selectFile(tr("Blank Document") + ".txt");
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.addComboBox(tr("Encoding"), getEncodeList());
     dialog.addComboBox(tr("Newline"), QStringList() << "Linux" << "Windows" << "Mac OS");
