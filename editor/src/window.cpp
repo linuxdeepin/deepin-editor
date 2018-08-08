@@ -488,12 +488,12 @@ const QString Window::getSaveFilePath(QString &encode, QString &newline)
 #ifdef DTKWIDGET_CLASS_DFileDialog
     DFileDialog dialog(this, tr("Save File"), QDir(QDir::homePath()).filePath("Blank Document.txt"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.addComboBox("编码", getEncodeList());
-    dialog.addComboBox("换行符", QStringList() << "Linux" << "Windows" << "Mac OS");
+    dialog.addComboBox(tr("Encoding"), getEncodeList());
+    dialog.addComboBox(tr("Newline"), QStringList() << "Linux" << "Windows" << "Mac OS");
 
     if (dialog.exec() == QDialog::Accepted) {
-        encode = dialog.getComboBoxValue("编码");
-        newline = dialog.getComboBoxValue("换行符");
+        encode = dialog.getComboBoxValue(tr("Encoding"));
+        newline = dialog.getComboBoxValue(tr("Newline"));
 
         return dialog.selectedFiles().value(0);
     } else {

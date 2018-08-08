@@ -2529,13 +2529,13 @@ int TextEditor::getNextWordPosition(QTextCursor cursor, QTextCursor::MoveMode mo
     // Move next char first.
     cursor.movePosition(QTextCursor::NextCharacter, moveMode);
 
-    QChar currentChar = toPlainText().at(cursor.position());
+    QChar currentChar = toPlainText().at(cursor.position() - 1);
 
     // Just to next non-space char if current char is space.
     if (currentChar.isSpace()) {
         while (cursor.position() < toPlainText().length() && currentChar.isSpace()) {
             cursor.movePosition(QTextCursor::NextCharacter, moveMode);
-            currentChar = toPlainText().at(cursor.position());
+            currentChar = toPlainText().at(cursor.position() - 1);
         }
     }
     // Just to next word-separator char.
