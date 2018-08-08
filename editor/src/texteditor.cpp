@@ -2625,6 +2625,7 @@ void TextEditor::focusOutEvent(QFocusEvent*)
 
 void TextEditor::dragEnterEvent(QDragEnterEvent *event)
 {
+    QPlainTextEdit::dragEnterEvent(event);
     qobject_cast<Window *>(this->window())->requestDragEnterEvent(event);
 }
 

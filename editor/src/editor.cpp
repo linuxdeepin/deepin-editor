@@ -113,7 +113,7 @@ void Editor::saveFile(const QString &encode, const QString &newline)
         out.setCodec(encode.toUtf8().data());
         // NOTE: Muse call 'setGenerateByteOrderMark' to insert the BOM (Byte Order Mark) before any data has been written to file.
         // Otherwise, can't save file with given encoding.
-        out.setGenerateByteOrderMark(true);
+        // out.setGenerateByteOrderMark(true);
         out << textEditor->toPlainText().replace(newlineRegex, fileNewline);
 
         qDebug() << "saved: " << textEditor->filepath << encode << newline;
