@@ -192,7 +192,7 @@ QByteArray Utils::getFileEncode(const QByteArray &data, const QString &fileName)
     if (data.isEmpty()) {
         return QTextCodec::codecForLocale()->name();
     }
-    
+
     if (QTextCodec *c = QTextCodec::codecForUtfText(data, nullptr)) {
         return c->name();
     }
@@ -490,11 +490,11 @@ bool Utils::isEditableFile(QString filepath)
 {
     auto mimeType = QMimeDatabase().mimeTypeForFile(filepath).name();
     qDebug() << "*** " << filepath << mimeType;
-    
+
     if (mimeType.startsWith("text/")) {
-        return true;  
-    } 
-    
+        return true;
+    }
+
     QList<QString> mimeTypeWhiteList;
     // Please check full mime type list from: https://www.freeformatter.com/mime-types-list.html
     mimeTypeWhiteList
@@ -506,6 +506,7 @@ bool Utils::isEditableFile(QString filepath)
         << "application/vnd.nokia.qt.qmakeprofile"
         << "application/vnd.nokia.xml.qt.resource"
         << "application/x-asp"
+        << "application/x-desktop"
         << "application/x-designer"
         << "application/x-empty"
         << "application/x-msdos-program"
@@ -515,14 +516,15 @@ bool Utils::isEditableFile(QString filepath)
         << "application/x-sh"
         << "application/x-csh"
         << "application/x-text"
+        << "application/x-yaml"
         << "application/xml"
         << "application/yaml"
         << "application/x-zerosize"
         << "image/svg+xml";
-    
+
     if (mimeTypeWhiteList.contains(mimeType)) {
         return true;
     }
-    
+
     return false;
 }

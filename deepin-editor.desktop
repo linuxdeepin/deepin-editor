@@ -1,10 +1,10 @@
 [Desktop Entry]
-Categories=System;Qt;
+Categories=Utility;TextEditor;
 Comment=Simple and easy to use deepin editor
 Exec=deepin-editor %F
 GenericName=Editor
 Icon=deepin-editor
-MimeType=text/plain;
+MimeType=text/plain;text/html;text/x-php;text/x-c;text/x-shellscript;
 Name=Deepin Editor
 Type=Application
 
