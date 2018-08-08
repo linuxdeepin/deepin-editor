@@ -210,8 +210,10 @@ public slots:
     void adjustScrollbarMargins();
     
 protected:
-    void focusOutEvent(QFocusEvent* event) override;
-    
+    void focusOutEvent(QFocusEvent *event) override;
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dropEvent(QDropEvent *event) override;
+
 private:
     QPropertyAnimation *scrollAnimation;
     

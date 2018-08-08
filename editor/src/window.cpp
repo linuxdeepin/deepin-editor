@@ -219,6 +219,8 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     DAnchorsBase::setAnchor(m_themeBar, Qt::AnchorRight, m_layoutWidget, Qt::AnchorRight);
 
     connect(m_themeBar, &ThemeBar::changeTheme, this, &Window::loadTheme);
+    connect(this, &Window::requestDragEnterEvent, this, &Window::dragEnterEvent);
+    connect(this, &Window::requestDropEvent, this, &Window::dropEvent);
 
     QVariantMap jsonMap = Utils::getThemeNodeMap(m_themeName);
     auto frameSelectedColor = jsonMap["app-colors"].toMap()["themebar-frame-selected"].toString();
@@ -1415,9 +1417,11 @@ void Window::loadTheme(const QString &name)
 void Window::dragEnterEvent(QDragEnterEvent *event)
 {
     // Accept drag event if mime type is url.
-    if (event->mimeData()->hasUrls()) {
-        event->acceptProposedAction();
-    }
+//    if (event->mimeData()->hasUrls()) {
+//        event->acceptProposedAction();
+//    }
+
+    event->accept();
 }
 
 void Window::dropEvent(QDropEvent* event)
@@ -1425,7 +1429,7 @@ void Window::dropEvent(QDropEvent* event)
     const QMimeData* mimeData = event->mimeData();
 
     if (mimeData->hasUrls()) {
-        foreach (auto url, mimeData->urls()) {
+        for (auto url : mimeData->urls()) {
             addTab(url.toLocalFile(), true);
         }
     }

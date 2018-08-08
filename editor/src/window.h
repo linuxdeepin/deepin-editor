@@ -58,8 +58,8 @@ public:
     int getTabIndex(const QString &file);
     void activeTab(int index);
 
-    void addTab(const QString &file, bool activeTab=false);
-    void addTabWithContent(const QString &tabName, const QString &filepath, const QString &content, int index=-1);
+    void addTab(const QString &file, bool activeTab = false);
+    void addTabWithContent(const QString &tabName, const QString &filepath, const QString &content, int index = -1);
     void closeTab();
     void restoreTab();
 
@@ -102,18 +102,20 @@ public:
 
     void displayShortcuts();
 
-protected:
-    void resizeEvent(QResizeEvent* event) Q_DECL_OVERRIDE;
-    void closeEvent(QCloseEvent *event);
-    void keyPressEvent(QKeyEvent *keyEvent);
-    void dragEnterEvent(QDragEnterEvent *e);
-    void dropEvent(QDropEvent* event);
-    bool eventFilter(QObject *, QEvent *event);
-
 signals:
     void dropTabOut(QString tabName, QString filepath, QString content);
+    void requestDragEnterEvent(QDragEnterEvent *);
+    void requestDropEvent(QDropEvent *);
     void newWindow();
     void close();
+
+protected:
+    void resizeEvent(QResizeEvent* event) override;
+    void closeEvent(QCloseEvent *event) override;
+    void keyPressEvent(QKeyEvent *keyEvent) override;
+    void dragEnterEvent(QDragEnterEvent *e) override;
+    void dropEvent(QDropEvent* event) override;
+    bool eventFilter(QObject *, QEvent *event) override;
 
 public slots:
     void addBlankTab();

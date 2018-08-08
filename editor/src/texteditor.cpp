@@ -44,6 +44,7 @@
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QSqlError>
+#include <QMimeData>
 #include <QTimer>
 
 class LineNumberArea : public QWidget
@@ -2620,6 +2621,22 @@ void TextEditor::tryCompleteWord()
 void TextEditor::focusOutEvent(QFocusEvent*)
 {
     popupCompletionWindow("", QPoint(), QStringList());
+}
+
+void TextEditor::dragEnterEvent(QDragEnterEvent *event)
+{
+    qobject_cast<Window *>(this->window())->requestDragEnterEvent(event);
+}
+
+void TextEditor::dropEvent(QDropEvent *event)
+{
+    const QMimeData *data = event->mimeData();
+
+    if (data->hasUrls()) {
+        qobject_cast<Window *>(this->window())->requestDropEvent(event);
+    } else if (data->hasText()) {
+        QPlainTextEdit::dropEvent(event);
+    }
 }
 
 void TextEditor::setEnglishWordsDB(QSqlDatabase db)
