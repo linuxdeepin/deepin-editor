@@ -44,9 +44,6 @@ Editor::Editor(QWidget *parent) : QWidget(parent)
 
     m_layout->addWidget(textEditor->lineNumberArea);
     m_layout->addWidget(textEditor);
-
-//    connect(m_autoSaveTimer, &QTimer::timeout, this, &Editor::handleTextChangeTimer);
-//    connect(textEditor->document(), &QTextDocument::contentsChange, this, &Editor::handleTextChanged, Qt::QueuedConnection);
 }
 
 void Editor::loadFile(QString filepath)
@@ -72,8 +69,6 @@ void Editor::loadFile(QString filepath)
 
 void Editor::saveFile(QString encode, QString newline)
 {
-    qDebug() << "Auto save: " << textEditor->filepath;
-
     bool fileCreateFailed = false;
     if (!Utils::fileExists(textEditor->filepath)) {
         QString directory = QFileInfo(textEditor->filepath).dir().absolutePath();
@@ -111,13 +106,13 @@ void Editor::saveFile(QString encode, QString newline)
 
         QTextStream out(&file);
 
-        out.setCodec(encode.toLatin1().data());
+        out.setCodec(encode.toUtf8().data());
         // NOTE: Muse call 'setGenerateByteOrderMark' to insert the BOM (Byte Order Mark) before any data has been written to file.
         // Otherwise, can't save file with given encoding.
         out.setGenerateByteOrderMark(true);
         out << textEditor->toPlainText().replace(newlineRegex, fileNewline);
 
-        // qDebug() << encode << encode.toLatin1().data();
+        qDebug() << "saved: " << textEditor->filepath << encode;
 
         file.close();
     }
@@ -125,7 +120,7 @@ void Editor::saveFile(QString encode, QString newline)
 
 void Editor::saveFile()
 {
-    saveFile(m_fileEncode == "ascii" ? "UTF-8" : m_fileEncode, "Window");
+    saveFile(m_fileEncode, "Window");
 }
 
 void Editor::updatePath(QString file)
