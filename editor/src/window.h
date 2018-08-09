@@ -177,6 +177,7 @@ private:
     QWidget *m_editorWidget;
     QWidget *m_layoutWidget;
     ReplaceBar *m_replaceBar;
+    ThemeBar *m_themeBar;
     Settings *m_settings;
     Tabbar *m_tabbar;
     int m_fontSize;
@@ -203,16 +204,11 @@ private:
 
     bool m_windowShowFlag = false;
 
-
     QSqlDatabase m_wordsDB;
-
     WordCompletionWindow *m_wordCompletionWindow;
-
     DWindowManager *m_windowManager;
 
     QString m_readonlySeparator = " !_! ";
-
-    ThemeBar *m_themeBar;
 
     QString m_themeName;
     QString m_lightTabBackgroundStartColor = "(255, 255, 255, 90%)";

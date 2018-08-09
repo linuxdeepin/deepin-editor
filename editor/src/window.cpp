@@ -57,10 +57,10 @@ Window::Window(DMainWindow *parent)
       m_findBar(new FindBar),
       m_jumpLineBar(new JumpLineBar(this)),
       m_replaceBar(new ReplaceBar),
+      m_themeBar(new ThemeBar(this)),
       m_settings(new Settings(this)),
       m_tabbar(new Tabbar),
-      m_menu(new QMenu),
-      m_themeBar(new ThemeBar(this))
+      m_menu(new QMenu)
 {
     // Init.
     installEventFilter(this);   // add event filter
@@ -93,19 +93,15 @@ Window::Window(DMainWindow *parent)
 
     m_inCompletingTimer = new QTimer();
     m_inCompletingTimer->setSingleShot(true);
-    connect(m_inCompletingTimer,
-            &QTimer::timeout,
-            this,
-            [=]() {
-                m_inCompleting = false;
-            });
+    connect(m_inCompletingTimer, &QTimer::timeout, this, [=] { m_inCompleting = false; });
 
     // Init titlebar.
     if (titlebar()) {
         // Init tabbar.
         titlebar()->setCustomWidget(m_tabbar, Qt::AlignVCenter, false);
-        titlebar()->setSeparatorVisible(true);
         titlebar()->setAutoHideOnFullscreen(true);
+        titlebar()->setSeparatorVisible(true);
+        titlebar()->setMenu(m_menu);
 
         connect(m_tabbar, &Tabbar::doubleClicked, this->titlebar(), &DTitlebar::doubleClicked, Qt::QueuedConnection);
         connect(m_tabbar, &Tabbar::switchToFile, this, &Window::handleSwitchToFile, Qt::QueuedConnection);
@@ -123,7 +119,7 @@ Window::Window(DMainWindow *parent)
                     m_replaceBar->hide();
                 }
 
-                foreach (auto editor, m_editorMap.values()) {
+                for (auto editor : m_editorMap.values()) {
                     editor->textEditor->removeKeywords();
                 }
             });
@@ -150,11 +146,10 @@ Window::Window(DMainWindow *parent)
         m_menu->addAction(m_switchThemeAction);
         m_menu->addSeparator();
         m_menu->addAction(m_settingAction);
-        this->titlebar()->setMenu(m_menu);
 
         // Apply qss theme.
         Utils::applyQss(this, "main.qss");
-        m_titlebarStyleSheet = this->titlebar()->styleSheet();
+        m_titlebarStyleSheet = titlebar()->styleSheet();
         loadTheme(m_themeName);
 
         connect(m_newWindowAction, &QAction::triggered, this, &Window::newWindow);
@@ -187,9 +182,8 @@ Window::Window(DMainWindow *parent)
     }
 
     m_windowShowFlag = true;
-    // Init find bar.
-    m_findBar = new FindBar();
 
+    // Init find bar.
     connect(m_findBar, &FindBar::findNext, this, &Window::handleFindNext, Qt::QueuedConnection);
     connect(m_findBar, &FindBar::findPrev, this, &Window::handleFindPrev, Qt::QueuedConnection);
     connect(m_findBar, &FindBar::removeSearchKeyword, this, &Window::handleRemoveSearchKeyword, Qt::QueuedConnection);
@@ -238,16 +232,16 @@ Window::Window(DMainWindow *parent)
     }
 
     // Init words database.
-    m_wordsDB = QSqlDatabase::addDatabase("QSQLITE");
-    m_wordsDB.setDatabaseName(WORDS_DB_FILE_PATH);
+    // m_wordsDB = QSqlDatabase::addDatabase("QSQLITE");
+    // m_wordsDB.setDatabaseName(WORDS_DB_FILE_PATH);
 
-    if (!m_wordsDB.open()) {
-        qDebug() << "Error: connection with database fail";
-    } else {
-        qDebug() << "Database: connection ok";
-    }
+    // if (!m_wordsDB.open()) {
+    //     qDebug() << "Error: connection with database fail";
+    // } else {
+    //     qDebug() << "Database: connection ok";
+    // }
 
-    m_wordCompletionWindow = new WordCompletionWindow();
+    // m_wordCompletionWindow = new WordCompletionWindow();
 
     // Init window manager.
     m_windowManager = new DWindowManager();
@@ -424,7 +418,7 @@ Editor* Window::createEditor()
     editor->textEditor->setSettings(m_settings);
     editor->textEditor->setTabSpaceNumber(m_settings->settings->option("advance.editor.tab_space_number")->value().toInt());
     editor->textEditor->setFontFamily(m_settings->settings->option("base.font.family")->value().toString());
-    editor->textEditor->setEnglishWordsDB(m_wordsDB);
+    // editor->textEditor->setEnglishWordsDB(m_wordsDB);
 
     connect(editor->textEditor, &TextEditor::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);
     connect(editor->textEditor, &TextEditor::clickReplaceAction, this, &Window::popupReplaceBar, Qt::QueuedConnection);
@@ -438,18 +432,18 @@ Editor* Window::createEditor()
     connect(editor->textEditor, &TextEditor::selectLastCompletion, this, &Window::handleSelectLastCompletion, Qt::QueuedConnection);
     connect(editor->textEditor, &TextEditor::confirmCompletion, this, &Window::handleConfirmCompletion, Qt::QueuedConnection);
     connect(editor->textEditor, &TextEditor::popupNotify, this, &Window::showNotify, Qt::QueuedConnection);
-    connect(editor->textEditor, &QPlainTextEdit::cursorPositionChanged, this, [=]() {
-            if (!m_inCompleting && m_wordCompletionWindow->isVisible()) {
-                m_wordCompletionWindow->hide();
-            }
-        });
+    // connect(editor->textEditor, &QPlainTextEdit::cursorPositionChanged, this, [=]() {
+    //         if (!m_inCompleting && m_wordCompletionWindow->isVisible()) {
+    //             m_wordCompletionWindow->hide();
+    //         }
+    //     });
 
-    connect(editor->textEditor, &TextEditor::click, this, [=]() {
-            m_wordCompletionWindow->hide();
-        });
-    connect(editor->textEditor, &TextEditor::pressEsc, this, [=]() {
-            m_wordCompletionWindow->hide();
-        });
+    // connect(editor->textEditor, &TextEditor::click, this, [=]() {
+    //         m_wordCompletionWindow->hide();
+    //     });
+    // connect(editor->textEditor, &TextEditor::pressEsc, this, [=]() {
+    //         m_wordCompletionWindow->hide();
+    //     });
 
     return editor;
 }
@@ -1258,126 +1252,127 @@ void Window::popupPrintDialog()
 
 void Window::changeTitlebarBackground(const QString &startColor, const QString &endColor)
 {
-    this->titlebar()->setStyleSheet(
+    titlebar()->setStyleSheet(
         QString("%1Dtk--Widget--DTitlebar {background: qlineargradient(x1: 0 y1: 0, x2: 0 y2: 1, stop: 0 rgba%2, stop: 1 rgba%3);}").arg(m_titlebarStyleSheet).arg(startColor).arg(endColor));
 }
 
 bool Window::wordCompletionWindowIsVisible()
 {
-    return m_wordCompletionWindow->isVisible();
+    // return m_wordCompletionWindow->isVisible();
+    return false;
 }
 
 void Window::handlePopupCompletionWindow(const QString &word, const QPoint &pos, const QStringList &words)
 {
-    QStringList wordlist = words;
-    if (wordlist.size() >= 1 && word.size() > 2) {
-        QPoint p = pos;
-        // Adjust word completion window y coordinate if it out of screen.
-        QScreen *screen = QGuiApplication::primaryScreen();
-        QRect screenGeometry = screen->geometry();
+    // QStringList wordlist = words;
+    // if (wordlist.size() >= 1 && word.size() > 2) {
+    //     QPoint p = pos;
+    //     // Adjust word completion window y coordinate if it out of screen.
+    //     QScreen *screen = QGuiApplication::primaryScreen();
+    //     QRect screenGeometry = screen->geometry();
 
-        int wordCompletionWindowHeight = m_wordCompletionWindow->lineHeight * (wordlist.size() > 10? 10 : wordlist.size());
+    //     int wordCompletionWindowHeight = m_wordCompletionWindow->lineHeight * (wordlist.size() > 10? 10 : wordlist.size());
 
-        if (pos.y() + wordCompletionWindowHeight > screenGeometry.height()) {
-            p.setY(pos.y() - getActiveEditor()->textEditor->fontMetrics().height() - wordCompletionWindowHeight);
-        }
+    //     if (pos.y() + wordCompletionWindowHeight > screenGeometry.height()) {
+    //         p.setY(pos.y() - getActiveEditor()->textEditor->fontMetrics().height() - wordCompletionWindowHeight);
+    //     }
 
-        if (pos.x() + m_wordCompletionWindow->windowWidth > screenGeometry.width()) {
-            p.setX(pos.x() - m_wordCompletionWindow->windowWidth);
-        }
+    //     if (pos.x() + m_wordCompletionWindow->windowWidth > screenGeometry.width()) {
+    //         p.setX(pos.x() - m_wordCompletionWindow->windowWidth);
+    //     }
 
-        m_wordCompletionWindow->move(p);
-        m_wordCompletionWindow->show();
+    //     m_wordCompletionWindow->move(p);
+    //     m_wordCompletionWindow->show();
 
-        // Add completion words.
-        std::sort(wordlist.begin(), wordlist.end(), [=] (const QString &a, const QString &b) {
-            return a < b;
-        });
+    //     // Add completion words.
+    //     std::sort(wordlist.begin(), wordlist.end(), [=] (const QString &a, const QString &b) {
+    //         return a < b;
+    //     });
 
-        m_wordCompletionWindow->addWords(wordlist);
+    //     m_wordCompletionWindow->addWords(wordlist);
 
-        // Update theme to listview items.
-        QVariantMap jsonMap = Utils::getThemeNodeMap(m_themeName);
-        auto selectedBackgroundColor = jsonMap["app-colors"].toMap()["english-completer-item-selected-background"].toString();
-        auto selectedTextColor = jsonMap["app-colors"].toMap()["english-completer-item-selected-text"].toString();
-        auto normalBackgroundColor = jsonMap["app-colors"].toMap()["english-completer-item-normal-background"].toString();
-        auto normalTextColor = jsonMap["app-colors"].toMap()["english-completer-item-normal-text"].toString();
-        auto frameColor = jsonMap["app-colors"].toMap()["english-completer-window-frame"].toString();
+    //     // Update theme to listview items.
+    //     QVariantMap jsonMap = Utils::getThemeNodeMap(m_themeName);
+    //     auto selectedBackgroundColor = jsonMap["app-colors"].toMap()["english-completer-item-selected-background"].toString();
+    //     auto selectedTextColor = jsonMap["app-colors"].toMap()["english-completer-item-selected-text"].toString();
+    //     auto normalBackgroundColor = jsonMap["app-colors"].toMap()["english-completer-item-normal-background"].toString();
+    //     auto normalTextColor = jsonMap["app-colors"].toMap()["english-completer-item-normal-text"].toString();
+    //     auto frameColor = jsonMap["app-colors"].toMap()["english-completer-window-frame"].toString();
 
-        for (DSimpleListItem* item : m_wordCompletionWindow->items) {
-            (static_cast<WordCompletionItem*>(item))->setColors(selectedBackgroundColor, selectedTextColor, normalBackgroundColor, normalTextColor);
-        }
-        m_wordCompletionWindow->listview->setFrame(true, QColor(frameColor), 0.3);
-        m_wordCompletionWindow->listview->repaint();
+    //     for (DSimpleListItem* item : m_wordCompletionWindow->items) {
+    //         (static_cast<WordCompletionItem*>(item))->setColors(selectedBackgroundColor, selectedTextColor, normalBackgroundColor, normalTextColor);
+    //     }
+    //     m_wordCompletionWindow->listview->setFrame(true, QColor(frameColor), 0.3);
+    //     m_wordCompletionWindow->listview->repaint();
 
-        m_inCompleting = true;
-        if (m_inCompletingTimer->isActive()) {
-            m_inCompletingTimer->stop();
-        }
-        m_inCompletingTimer->start(2000);
-    } else {
-        m_wordCompletionWindow->hide();
-    }
+    //     m_inCompleting = true;
+    //     if (m_inCompletingTimer->isActive()) {
+    //         m_inCompletingTimer->stop();
+    //     }
+    //     m_inCompletingTimer->start(2000);
+    // } else {
+    //     m_wordCompletionWindow->hide();
+    // }
 }
 
 void Window::handleSelectNextCompletion()
 {
-    if (m_wordCompletionWindow->isVisible()) {
-        m_wordCompletionWindow->listview->selectNextItem();
-    } else {
-        if (!getActiveEditor()->textEditor->getEnglishCompleter()) {
-            showNotify(tr("请先开启英语助手"));
-        }
-    }
+    // if (m_wordCompletionWindow->isVisible()) {
+    //     m_wordCompletionWindow->listview->selectNextItem();
+    // } else {
+    //     if (!getActiveEditor()->textEditor->getEnglishCompleter()) {
+    //         showNotify(tr("请先开启英语助手"));
+    //     }
+    // }
 }
 
 void Window::handleSelectPrevCompletion()
 {
-    if (m_wordCompletionWindow->isVisible()) {
-        m_wordCompletionWindow->listview->selectPrevItem();
-    } else {
-        if (!getActiveEditor()->textEditor->getEnglishCompleter()) {
-            showNotify(tr("请先开启英语助手"));
-        }
-    }
+    // if (m_wordCompletionWindow->isVisible()) {
+    //     m_wordCompletionWindow->listview->selectPrevItem();
+    // } else {
+    //     if (!getActiveEditor()->textEditor->getEnglishCompleter()) {
+    //         showNotify(tr("请先开启英语助手"));
+    //     }
+    // }
 }
 
 void Window::handleSelectFirstCompletion()
 {
-    if (m_wordCompletionWindow->isVisible()) {
-        m_wordCompletionWindow->listview->selectFirstItem();
-    } else {
-        if (!getActiveEditor()->textEditor->getEnglishCompleter()) {
-            showNotify(tr("请先开启英语助手"));
-        }
-    }
+    // if (m_wordCompletionWindow->isVisible()) {
+    //     m_wordCompletionWindow->listview->selectFirstItem();
+    // } else {
+    //     if (!getActiveEditor()->textEditor->getEnglishCompleter()) {
+    //         showNotify(tr("请先开启英语助手"));
+    //     }
+    // }
 }
 
 void Window::handleSelectLastCompletion()
 {
-    if (m_wordCompletionWindow->isVisible()) {
-        m_wordCompletionWindow->listview->selectLastItem();
-    } else {
-        if (!getActiveEditor()->textEditor->getEnglishCompleter()) {
-            showNotify(tr("请先开启英语助手"));
-        }
-    }
+    // if (m_wordCompletionWindow->isVisible()) {
+    //     m_wordCompletionWindow->listview->selectLastItem();
+    // } else {
+    //     if (!getActiveEditor()->textEditor->getEnglishCompleter()) {
+    //         showNotify(tr("请先开启英语助手"));
+    //     }
+    // }
 }
 
 void Window::handleConfirmCompletion()
 {
-    if (m_wordCompletionWindow->isVisible()) {
-        auto completionItems = m_wordCompletionWindow->listview->getSelections();
+    // if (m_wordCompletionWindow->isVisible()) {
+    //     auto completionItems = m_wordCompletionWindow->listview->getSelections();
 
-        for (auto item : completionItems) {
-            WordCompletionItem* wordItem = static_cast<WordCompletionItem*>(item);
-            m_wordCompletionWindow->hide();
+    //     for (auto item : completionItems) {
+    //         WordCompletionItem* wordItem = static_cast<WordCompletionItem*>(item);
+    //         m_wordCompletionWindow->hide();
 
-            getActiveEditor()->textEditor->completionWord(wordItem->name);
+    //         getActiveEditor()->textEditor->completionWord(wordItem->name);
 
-            break;
-        }
-    }
+    //         break;
+    //     }
+    // }
 }
 
 void Window::loadTheme(const QString &name)
@@ -1444,7 +1439,7 @@ bool Window::eventFilter(QObject *, QEvent *event)
     // Try hide word completion window when window start to move or size change.
     if (m_windowShowFlag && (event->type() == QEvent::MouseMove || event->type() == QEvent::WindowStateChange)) {
         if (wordCompletionWindowIsVisible()) {
-            m_wordCompletionWindow->hide();
+            // m_wordCompletionWindow->hide();
         }
     }
 
