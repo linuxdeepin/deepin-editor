@@ -74,7 +74,7 @@ void StartManager::openFilesInTab(QStringList files)
 
             QDir readonlyDirectory = QDir(QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("readonly-files"));
             QStringList readonlyFiles = readonlyDirectory.entryList(QStringList(), QDir::Files);
-            
+
             Window *window = createWindow(true);
 
             // Open blank files of last session.
@@ -82,11 +82,11 @@ void StartManager::openFilesInTab(QStringList files)
                 foreach(QString blankFile, blankFiles) {
                     window->addBlankTab(QDir(blankDirectory).filePath(blankFile));
                 }
-                
+
                 foreach(QString readonlyFile, readonlyFiles) {
                     QString readonlyFilePath = QDir(readonlyDirectory).filePath(readonlyFile);
                     QString realpath = QFileInfo(readonlyFilePath).fileName().replace(" !_! ", QDir().separator());
-                    
+
                     window->addTab(realpath);
                 }
             }
@@ -106,19 +106,19 @@ void StartManager::openFilesInTab(QStringList files)
             // Open exist tab if file has opened.
             if (info.windowIndex != -1) {
                 popupExistTabs(info);
-                
+
                 qDebug() << "Open " << file << " in exist tab";
             }
             // Create new window with file if haven't window exist.
             else if (m_windows.size() == 0) {
                 createWindow(true)->addTab(file);
-                
+
                 qDebug() << "Open " << file << " with new window";
             }
             // Open file tab in first window of window list.
             else {
                 m_windows[0]->addTab(file);
-                
+
                 qDebug() << "Open " << file << " in first window";
             }
 
@@ -136,17 +136,17 @@ Window* StartManager::createWindow(bool alwaysCenter)
     // Create window.
     Window *window = new Window();
     connect(window, &Window::dropTabOut, this, &StartManager::createWindowFromTab, Qt::QueuedConnection);
-    
+
     // Quit application if close last window.
-    connect(window, &Window::close, this, 
+    connect(window, &Window::close, this,
             [=]() {
                 int windowIndex = m_windows.indexOf(window);
                 qDebug() << "Close window " << windowIndex;
-                
+
                 if (windowIndex >= 0) {
                     m_windows.takeAt(windowIndex);
                 }
-                
+
                 if (m_windows.size() <= 0) {
                     QApplication::quit();
                 }
@@ -154,8 +154,8 @@ Window* StartManager::createWindow(bool alwaysCenter)
 
     // Init window position.
     initWindowPosition(window, alwaysCenter);
-    
-    connect(window, &Window::newWindow, this, 
+
+    connect(window, &Window::newWindow, this,
             [=] () {
                 openFilesInWindow(QStringList());
             });
@@ -187,7 +187,7 @@ StartManager::FileTabInfo StartManager::getFileTabInfo(QString file)
     FileTabInfo info = {-1, -1};
 
     qDebug() << "Windows size: " << m_windows.size();
-    
+
     foreach (Window *window, m_windows) {
         int tabIndex = window->getTabIndex(file);
         if (tabIndex >= 0) {

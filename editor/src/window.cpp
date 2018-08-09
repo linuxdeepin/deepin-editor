@@ -52,7 +52,15 @@
 
 DWM_USE_NAMESPACE
 
-Window::Window(DMainWindow *parent) : DMainWindow(parent)
+Window::Window(DMainWindow *parent)
+    : DMainWindow(parent),
+      m_findBar(new FindBar),
+      m_jumpLineBar(new JumpLineBar(this)),
+      m_replaceBar(new ReplaceBar),
+      m_settings(new Settings(this)),
+      m_tabbar(new Tabbar),
+      m_menu(new QMenu),
+      m_themeBar(new ThemeBar(this))
 {
     // Init.
     installEventFilter(this);   // add event filter
@@ -63,7 +71,6 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     autoSaveDBus = new DBusDaemon::dbus("com.deepin.editor.daemon", "/", QDBusConnection::systemBus(), this);
 
     // Init settings.
-    m_settings = new Settings(this);
     connect(m_settings, &Settings::adjustFont, this, &Window::updateFont);
     connect(m_settings, &Settings::adjustFontSize, this, &Window::updateFontSize);
     connect(m_settings, &Settings::adjustTabSpaceNumber, this, &Window::updateTabSpaceNumber);
@@ -94,12 +101,11 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
             });
 
     // Init titlebar.
-    if (this->titlebar()) {
+    if (titlebar()) {
         // Init tabbar.
-        m_tabbar = new Tabbar();
-        this->titlebar()->setCustomWidget(m_tabbar, Qt::AlignVCenter, false);
-        this->titlebar()->setSeparatorVisible(true);
-        this->titlebar()->setAutoHideOnFullscreen(true);
+        titlebar()->setCustomWidget(m_tabbar, Qt::AlignVCenter, false);
+        titlebar()->setSeparatorVisible(true);
+        titlebar()->setAutoHideOnFullscreen(true);
 
         connect(m_tabbar, &Tabbar::doubleClicked, this->titlebar(), &DTitlebar::doubleClicked, Qt::QueuedConnection);
         connect(m_tabbar, &Tabbar::switchToFile, this, &Window::handleSwitchToFile, Qt::QueuedConnection);
@@ -122,7 +128,6 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
                 }
             });
 
-        m_menu = new QMenu();
         m_menu->setStyle(QStyleFactory::create("dlight"));
 
         // Init main menu.
@@ -146,6 +151,11 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
         m_menu->addSeparator();
         m_menu->addAction(m_settingAction);
         this->titlebar()->setMenu(m_menu);
+
+        // Apply qss theme.
+        Utils::applyQss(this, "main.qss");
+        m_titlebarStyleSheet = this->titlebar()->styleSheet();
+        loadTheme(m_themeName);
 
         connect(m_newWindowAction, &QAction::triggered, this, &Window::newWindow);
         connect(m_newTabAction, &QAction::triggered, this,
@@ -189,7 +199,6 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
             });
 
     // Init replace bar.
-    m_replaceBar = new ReplaceBar();
     connect(m_replaceBar, &ReplaceBar::removeSearchKeyword, this, &Window::handleRemoveSearchKeyword, Qt::QueuedConnection);
     connect(m_replaceBar, &ReplaceBar::replaceAll, this, &Window::handleReplaceAll, Qt::QueuedConnection);
     connect(m_replaceBar, &ReplaceBar::replaceNext, this, &Window::handleReplaceNext, Qt::QueuedConnection);
@@ -201,19 +210,17 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
             });
 
     // Init jump line bar.
-    jumpLineBar = new JumpLineBar(this);
-    QTimer::singleShot(0, jumpLineBar, SLOT(hide()));
+    QTimer::singleShot(0, m_jumpLineBar, SLOT(hide()));
 
-    connect(jumpLineBar, &JumpLineBar::jumpToLine, this, &Window::handleJumpLineBarJumpToLine, Qt::QueuedConnection);
-    connect(jumpLineBar, &JumpLineBar::backToPosition, this, &Window::handleBackToPosition, Qt::QueuedConnection);
-    connect(jumpLineBar, &JumpLineBar::lostFocusExit, this, &Window::handleJumpLineBarExit, Qt::QueuedConnection);
+    connect(m_jumpLineBar, &JumpLineBar::jumpToLine, this, &Window::handleJumpLineBarJumpToLine, Qt::QueuedConnection);
+    connect(m_jumpLineBar, &JumpLineBar::backToPosition, this, &Window::handleBackToPosition, Qt::QueuedConnection);
+    connect(m_jumpLineBar, &JumpLineBar::lostFocusExit, this, &Window::handleJumpLineBarExit, Qt::QueuedConnection);
 
     // Make jump line bar pop at top-right of editor.
-    DAnchorsBase::setAnchor(jumpLineBar, Qt::AnchorTop, m_layoutWidget, Qt::AnchorTop);
-    DAnchorsBase::setAnchor(jumpLineBar, Qt::AnchorRight, m_layoutWidget, Qt::AnchorRight);
+    DAnchorsBase::setAnchor(m_jumpLineBar, Qt::AnchorTop, m_layoutWidget, Qt::AnchorTop);
+    DAnchorsBase::setAnchor(m_jumpLineBar, Qt::AnchorRight, m_layoutWidget, Qt::AnchorRight);
 
     // Init theme bar.
-    m_themeBar = new ThemeBar(this);
     DAnchorsBase::setAnchor(m_themeBar, Qt::AnchorTop, m_layoutWidget, Qt::AnchorTop);
     DAnchorsBase::setAnchor(m_themeBar, Qt::AnchorBottom, m_layoutWidget, Qt::AnchorBottom);
     DAnchorsBase::setAnchor(m_themeBar, Qt::AnchorRight, m_layoutWidget, Qt::AnchorRight);
@@ -229,11 +236,6 @@ Window::Window(DMainWindow *parent) : DMainWindow(parent)
     for (DSimpleListItem* item : m_themeBar->items) {
         (static_cast<ThemeItem*>(item))->setFrameColor(frameSelectedColor, frameNormalColor);
     }
-
-    // Apply qss theme.
-    Utils::applyQss(this, "main.qss");
-    m_titlebarStyleSheet = this->titlebar()->styleSheet();
-    loadTheme(m_themeName);
 
     // Init words database.
     m_wordsDB = QSqlDatabase::addDatabase("QSQLITE");
@@ -691,11 +693,11 @@ void Window::popupReplaceBar()
 
 void Window::popupJumpLineBar()
 {
-    if (jumpLineBar->isVisible()) {
-        if (jumpLineBar->isFocus()) {
+    if (m_jumpLineBar->isVisible()) {
+        if (m_jumpLineBar->isFocus()) {
             QTimer::singleShot(0, m_editorMap[m_tabbar->getActiveTabPath()]->textEditor, SLOT(setFocus()));
         } else {
-            jumpLineBar->focus();
+            m_jumpLineBar->focus();
         }
     } else {
         QString tabPath = m_tabbar->getActiveTabPath();
@@ -706,7 +708,7 @@ void Window::popupJumpLineBar()
         int count = editor->textEditor->blockCount();
         int scrollOffset = editor->textEditor->getScrollOffset();
 
-        jumpLineBar->activeInput(tabPath, row, column, count, scrollOffset);
+        m_jumpLineBar->activeInput(tabPath, row, column, count, scrollOffset);
     }
 }
 
@@ -1380,9 +1382,9 @@ void Window::handleConfirmCompletion()
 
 void Window::loadTheme(const QString &name)
 {
-    foreach (auto editor, m_editorMap.values()) {
-        editor->textEditor->setThemeWithName(name);
-    }
+     for (auto editor : m_editorMap.values()) {
+         editor->textEditor->setThemeWithName(name);
+     }
 
     QVariantMap jsonMap = Utils::getThemeNodeMap(name);
 
@@ -1390,30 +1392,30 @@ void Window::loadTheme(const QString &name)
 
     if (QColor(backgroundColor).lightness() < 128) {
         DThemeManager::instance()->setTheme("dark");
-        m_tabbar->tabbar->setBackground(m_darkTabBackgroundStartColor, m_darkTabBackgroundEndColor);
-        changeTitlebarBackground(m_darkTabBackgroundStartColor, m_darkTabBackgroundEndColor);
+         m_tabbar->tabbar->setBackground(m_darkTabBackgroundStartColor, m_darkTabBackgroundEndColor);
+         changeTitlebarBackground(m_darkTabBackgroundStartColor, m_darkTabBackgroundEndColor);
     } else {
-        DThemeManager::instance()->setTheme("light");
-        m_tabbar->tabbar->setBackground(m_lightTabBackgroundStartColor, m_lightTabBackgroundEndColor);
-        changeTitlebarBackground(m_lightTabBackgroundStartColor, m_lightTabBackgroundEndColor);
+         DThemeManager::instance()->setTheme("light");
+         m_tabbar->tabbar->setBackground(m_lightTabBackgroundStartColor, m_lightTabBackgroundEndColor);
+         changeTitlebarBackground(m_lightTabBackgroundStartColor, m_lightTabBackgroundEndColor);
     }
 
-    m_themeBar->setBackground(backgroundColor);
-    jumpLineBar->setBackground(backgroundColor);
-    m_replaceBar->setBackground(backgroundColor);
-    m_findBar->setBackground(backgroundColor);
-    m_tabbar->tabbar->setDNDColor(jsonMap["app-colors"].toMap()["tab-dnd-start"].toString(), jsonMap["app-colors"].toMap()["tab-dnd-end"].toString());
-    m_tabbar->setTabActiveColor(jsonMap["app-colors"].toMap()["tab-active"].toString());
+     m_themeBar->setBackground(backgroundColor);
+     m_jumpLineBar->setBackground(backgroundColor);
+     m_replaceBar->setBackground(backgroundColor);
+     m_findBar->setBackground(backgroundColor);
+     m_tabbar->tabbar->setDNDColor(jsonMap["app-colors"].toMap()["tab-dnd-start"].toString(), jsonMap["app-colors"].toMap()["tab-dnd-end"].toString());
+     m_tabbar->setTabActiveColor(jsonMap["app-colors"].toMap()["tab-active"].toString());
 
-    auto frameSelectedColor = jsonMap["app-colors"].toMap()["themebar-frame-selected"].toString();
-    auto frameNormalColor = jsonMap["app-colors"].toMap()["themebar-frame-normal"].toString();
-    for (DSimpleListItem* item : m_themeBar->items) {
-        (static_cast<ThemeItem*>(item))->setFrameColor(frameSelectedColor, frameNormalColor);
-    }
-    m_themeBar->themeView->repaint();
+     auto frameSelectedColor = jsonMap["app-colors"].toMap()["themebar-frame-selected"].toString();
+     auto frameNormalColor = jsonMap["app-colors"].toMap()["themebar-frame-normal"].toString();
+     for (DSimpleListItem* item : m_themeBar->items) {
+         (static_cast<ThemeItem*>(item))->setFrameColor(frameSelectedColor, frameNormalColor);
+     }
+     m_themeBar->themeView->repaint();
 
-    m_settings->settings->option("base.theme.default")->setValue(name);
-    m_themeName = name;
+     m_settings->settings->option("base.theme.default")->setValue(name);
+     m_themeName = name;
 }
 
 void Window::dragEnterEvent(QDragEnterEvent *event)

@@ -7,5 +7,4 @@ Icon=deepin-editor
 MimeType=text/plain;text/html;text/x-php;text/x-c;text/x-shellscript;
 Name=Deepin Editor
 Type=Application
-
-
+StartupNotify=true

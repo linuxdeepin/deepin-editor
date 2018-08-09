@@ -157,10 +157,18 @@ public slots:
     void loadTheme(const QString &themeName);
 
 private:
+    void removeActiveBlankTab(bool needSaveBefore=false);
+    void removeActiveReadonlyTab();
+    void showNewEditor(Editor *editor);
+    void showNotify(QString message);
+    DDialog* createSaveFileDialog(QString title, QString content);
+    int getBlankFileIndex();
+
+private:
     DBusDaemon::dbus *autoSaveDBus;
 
     FindBar *m_findBar;
-    JumpLineBar *jumpLineBar;
+    JumpLineBar *m_jumpLineBar;
     QMap<QString, Editor*> m_editorMap;
     QStackedLayout *m_editorLayout;
     QString m_blankFileDir;
@@ -195,15 +203,6 @@ private:
 
     bool m_windowShowFlag = false;
 
-    void removeActiveBlankTab(bool needSaveBefore=false);
-    void removeActiveReadonlyTab();
-
-    void showNewEditor(Editor *editor);
-    void showNotify(QString message);
-
-    DDialog* createSaveFileDialog(QString title, QString content);
-
-    int getBlankFileIndex();
 
     QSqlDatabase m_wordsDB;
 
