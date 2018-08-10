@@ -2638,6 +2638,7 @@ void TextEditor::dropEvent(QDropEvent *event)
     } else if (data->hasText()) {
         QPlainTextEdit::dropEvent(event);
     }
+
 }
 
 void TextEditor::setEnglishWordsDB(QSqlDatabase db)

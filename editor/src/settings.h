@@ -47,7 +47,7 @@ public:
     int maxFontSize = 50;
     int minFontSize = 8;
 
-    QPointer<DSettings> settings;
+    DSettings *settings;
 
 signals:
     void adjustFont(QString name);
@@ -60,7 +60,6 @@ private:
 
 private:
     Dtk::Core::QSettingBackend *m_backend;
-    DSettingsDialog *m_settingsDialog;
 
     QString m_configPath;
     bool m_userChangeKey = false;

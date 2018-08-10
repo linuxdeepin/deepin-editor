@@ -34,7 +34,7 @@ dbus::dbus(QObject *parent) : QObject(parent)
 {
 }
 
-bool dbus::saveFile(QString filepath, QString text) 
+bool dbus::saveFile(QString filepath, QString text, QString encoding)
 {
     if (PolicyKitHelper::instance()->checkAuthorization("com.deepin.editor.saveFile", getpid())) {
         // Create file if filepath is not exists.
@@ -56,6 +56,7 @@ bool dbus::saveFile(QString filepath, QString text)
         }
 
         QTextStream out(&file);
+        out.setCodec(encoding.toUtf8().data());
         out << text;
         file.close();
         

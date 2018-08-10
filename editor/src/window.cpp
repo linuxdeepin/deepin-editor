@@ -73,7 +73,9 @@ Window::Window(DMainWindow *parent)
       m_saveAsAction(new QAction(tr("Save as"), this)),
       m_printAction(new QAction(tr("Print"), this)),
       m_switchThemeAction(new QAction(tr("Switch theme"), this)),
-      m_settingAction(new QAction(tr("Setting"), this))
+      m_settingAction(new QAction(tr("Setting"), this)),
+      m_titlebarStyleSheet(titlebar()->styleSheet()),
+      m_themeName(m_settings->settings->option("base.theme.default")->value().toString())
 {
     // Init.
     installEventFilter(this);
@@ -87,8 +89,6 @@ Window::Window(DMainWindow *parent)
     connect(m_settings, &Settings::adjustFont, this, &Window::updateFont);
     connect(m_settings, &Settings::adjustFontSize, this, &Window::updateFontSize);
     connect(m_settings, &Settings::adjustTabSpaceNumber, this, &Window::updateTabSpaceNumber);
-
-    m_themeName = m_settings->settings->option("base.theme.default")->value().toString();
 
     // Init layout and editor.
     m_centralLayout->setMargin(0);
@@ -145,11 +145,6 @@ Window::Window(DMainWindow *parent)
         m_menu->addAction(m_switchThemeAction);
         m_menu->addSeparator();
         m_menu->addAction(m_settingAction);
-
-        // Apply qss theme.
-        Utils::applyQss(this, "main.qss");
-        m_titlebarStyleSheet = titlebar()->styleSheet();
-        loadTheme(m_themeName);
 
         connect(m_newWindowAction, &QAction::triggered, this, &Window::newWindow);
         connect(m_newTabAction, &QAction::triggered, this,
@@ -241,6 +236,11 @@ Window::Window(DMainWindow *parent)
     // }
 
     // m_wordCompletionWindow = new WordCompletionWindow();
+
+
+    // Apply qss theme.
+    Utils::applyQss(this, "main.qss");
+    loadTheme(m_themeName);
  }
 
 Window::~Window()
@@ -463,14 +463,27 @@ void Window::focusActiveEditor()
 
 void Window::openFile()
 {
-    QFileDialog dialog(0, QString(), QDir::homePath());
+    QFileDialog dialog;
     dialog.setFileMode(QFileDialog::ExistingFiles);
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
 
-    if (dialog.exec()) {
-        foreach (QString file, dialog.selectedFiles()) {
-            addTab(file);
-        }
+    // read history directory.
+    const QString historyDir = m_settings->settings->option("advance.editor.file_dialog_dir")->value().toString();
+    if (!historyDir.isEmpty()) {
+        dialog.setDirectory(historyDir);
+    }
+
+    const int mode = dialog.exec();
+
+    // save the directory string.
+    m_settings->settings->option("advance.editor.file_dialog_dir")->setValue(dialog.directoryUrl().toLocalFile());
+
+    if (mode != QDialog::Accepted) {
+        return;
+    }
+
+    for (const QString &file : dialog.selectedFiles()) {
+        addTab(file);
     }
 }
 
@@ -486,6 +499,10 @@ const QString Window::getSaveFilePath(QString &encode, QString &newline)
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.addComboBox(tr("Encoding"), getEncodeList());
     dialog.addComboBox(tr("Newline"), QStringList() << "Linux" << "Windows" << "Mac OS");
+
+    if (QFileInfo(m_tabbar->getActiveTabPath()).dir().absolutePath() != m_blankFileDir) {
+        dialog.selectFile(QFileInfo(m_tabbar->getActiveTabPath()).fileName());
+    }
 
     if (dialog.exec() == QDialog::Accepted) {
         encode = dialog.getComboBoxValue(tr("Encoding"));
@@ -1238,13 +1255,13 @@ void Window::popupSettingsDialog()
 {
     DSettingsDialog *dialog = new DSettingsDialog(this);
 
-    dialog->setProperty("_d_dtk_theme", "light");
+    dialog->setProperty("_d_dtk_theme", "dark");
     dialog->setProperty("_d_QSSFilename", "DSettingsDialog");
     DThemeManager::instance()->registerWidget(dialog);
+
     dialog->updateSettings(m_settings->settings);
     m_settings->dtkThemeWorkaround(dialog, "dlight");
 
-    dialog->updateSettings(m_settings->settings);
     dialog->exec();
     delete dialog;
     m_settings->settings->sync();
@@ -1388,9 +1405,9 @@ void Window::handleConfirmCompletion()
 
 void Window::loadTheme(const QString &name)
 {
-     for (auto editor : m_editorMap.values()) {
-         editor->textEditor->setThemeWithName(name);
-     }
+    for (auto editor : m_editorMap.values()) {
+        editor->textEditor->setThemeWithName(name);
+    }
 
     QVariantMap jsonMap = Utils::getThemeNodeMap(name);
 

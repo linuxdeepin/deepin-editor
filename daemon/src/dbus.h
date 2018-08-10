@@ -32,10 +32,10 @@ class dbus : public QObject {
     Q_CLASSINFO("D-Bus Interface","com.deepin.editor.daemon")
 
 public:
-    dbus(QObject* parent=0);
+    dbus(QObject* parent = 0);
 
 public Q_SLOTS:
-    bool saveFile(QString filepath, QString text);
+    bool saveFile(QString filepath, QString text, QString encoding = "");
 };
 
 

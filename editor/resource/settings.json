@@ -19,23 +19,23 @@
                             "name": "Font Size",
                             "type": "spinbutton",
                             "default": 12,
-			    "max": 50,
-			    "min": 8
+                            "max": 50,
+                            "min": 8
                         }
                     ]
                 },
-		{
-		    "key" : "theme",
-		    "name" : "Theme",
-		    "options" : [
-			{
-			    "key" : "default",
-			    "hide" : true,
-			    "reset" : false,
-			    "default" : "Deepin"
-			}
-		    ]
-		}
+                {
+                    "key" : "theme",
+                    "name" : "Theme",
+                    "options" : [
+                        {
+                            "key" : "default",
+                            "hide" : true,
+                            "reset" : false,
+                            "default" : "Deepin"
+                        }
+                    ]
+                }
             ]
         },
         {
@@ -1924,12 +1924,18 @@
                             "type": "spinbutton",
                             "default": 4
                         },
-			{
-			    "key": "enable_english_helper",
-			    "name": "Enable english helper",
-			    "type": "checkbox",
-			    "default": false
-			}
+                        {
+                            "key": "enable_english_helper",
+                            "name": "Enable english helper",
+                            "type": "checkbox",
+                            "default": false
+                        },
+                        {
+                            "key": "file_dialog_dir",
+                            "hide": true,
+                            "reset": false,
+                            "default": ""
+                        }
                     ]
                 }
             ]
