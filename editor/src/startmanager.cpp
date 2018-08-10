@@ -50,7 +50,7 @@ void StartManager::openFilesInWindow(QStringList files)
         window->addBlankTab();
         window->activateWindow();
     } else {
-        foreach (QString file, files) {
+        for (const QString &file : files) {
             FileTabInfo info = getFileTabInfo(file);
 
             // Open exist tab if file has opened.
@@ -100,7 +100,7 @@ void StartManager::openFilesInTab(QStringList files)
             m_windows[0]->activateWindow();
         }
     } else {
-        foreach (QString file, files) {
+        for (const QString &file : files) {
             FileTabInfo info = getFileTabInfo(file);
 
             // Open exist tab if file has opened.
@@ -188,7 +188,7 @@ StartManager::FileTabInfo StartManager::getFileTabInfo(QString file)
 
     qDebug() << "Windows size: " << m_windows.size();
 
-    foreach (Window *window, m_windows) {
+    for (Window *window : m_windows) {
         int tabIndex = window->getTabIndex(file);
         if (tabIndex >= 0) {
             info.windowIndex = m_windows.indexOf(window);

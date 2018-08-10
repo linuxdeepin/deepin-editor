@@ -34,14 +34,17 @@
 #include <QDir>
 #include <QStandardPaths>
 
-DWIDGET_USE_NAMESPACE
-DTK_USE_NAMESPACE
-
-Settings::Settings(QWidget *parent) : QObject(parent)
+Settings::Settings(QWidget *parent)
+    : QObject(parent)
 {
-    m_backend = new Dtk::Core::QSettingBackend(QDir(QDir(QDir(QStandardPaths::standardLocations(QStandardPaths::ConfigLocation).first()).filePath(qApp->organizationName())).filePath(qApp->applicationName())).filePath("config.conf"));
+    m_configPath = QString("%1/%2/%3/config.conf")
+        .arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation))
+        .arg(qApp->organizationName())
+        .arg(qApp->applicationName());
 
-    settings = Dtk::Core::DSettings::fromJsonFile(":/resource/settings.json");
+    m_backend = new QSettingBackend(m_configPath);
+
+    settings = DSettings::fromJsonFile(":/resource/settings.json");
     settings->setBackend(m_backend);
 
     auto fontSize = settings->option("base.font.size");
@@ -121,22 +124,10 @@ Settings::Settings(QWidget *parent) : QObject(parent)
                     m_userChangeKey = false;
                 }
             });
-
-    m_settingsDialog = new DSettingsDialog(parent);
-    m_settingsDialog->setProperty("_d_dtk_theme", "light");
-    m_settingsDialog->setProperty("_d_QSSFilename", "DSettingsDialog");
-    DThemeManager::instance()->registerWidget(m_settingsDialog);
-    m_settingsDialog->updateSettings(settings);
-    dtkThemeWorkaround(m_settingsDialog, "dlight");
 }
 
 Settings::~Settings()
 {
-}
-
-void Settings::popupSettingsDialog()
-{
-    m_settingsDialog->exec();
 }
 
 // This function is workaround, it will remove after DTK fixed SettingDialog theme bug.

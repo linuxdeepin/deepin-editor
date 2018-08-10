@@ -27,8 +27,10 @@
 #include "dsettingsdialog.h"
 #include <qsettingbackend.h>
 #include <QSettings>
+#include <QPointer>
 
 DWIDGET_USE_NAMESPACE
+DCORE_USE_NAMESPACE
 DTK_USE_NAMESPACE
 
 class Settings : public QObject
@@ -39,28 +41,28 @@ public:
     Settings(QWidget *parent = 0);
     ~Settings();
 
+    void dtkThemeWorkaround(QWidget *parent, const QString &theme);
+
     int defaultFontSize = 12;
     int maxFontSize = 50;
     int minFontSize = 8;
 
-    Dtk::Core::DSettings* settings;
+    QPointer<DSettings> settings;
 
 signals:
     void adjustFont(QString name);
     void adjustFontSize(int fontSize);
     void adjustTabSpaceNumber(int number);
 
-public slots:
-    void popupSettingsDialog();
+private:
+    void updateAllKeysWithKeymap(QString keymap);
+    void copyCustomizeKeysFromKeymap(QString keymap);
 
 private:
     Dtk::Core::QSettingBackend *m_backend;
     DSettingsDialog *m_settingsDialog;
 
-    void dtkThemeWorkaround(QWidget *parent, const QString &theme);
-    void updateAllKeysWithKeymap(QString keymap);
-    void copyCustomizeKeysFromKeymap(QString keymap);
-
+    QString m_configPath;
     bool m_userChangeKey = false;
 };
 

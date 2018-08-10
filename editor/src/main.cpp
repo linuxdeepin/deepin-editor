@@ -100,15 +100,15 @@ int main(int argc, char *argv[])
 
     // Start editor process if not found any editor use DBus.
     if (dbus.registerService("com.deepin.Editor")) {
-        StartManager startManager;
+        StartManager *startManager = new StartManager;
 
         if (hasWindowFlag) {
-            startManager.openFilesInWindow(files);
+            startManager->openFilesInWindow(files);
         } else {
-            startManager.openFilesInTab(files);
+            startManager->openFilesInTab(files);
         }
 
-        dbus.registerObject("/com/deepin/Editor", &startManager, QDBusConnection::ExportScriptableSlots);
+        dbus.registerObject("/com/deepin/Editor", startManager, QDBusConnection::ExportScriptableSlots);
 
         return app.exec();
     }

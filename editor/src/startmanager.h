@@ -19,7 +19,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
 #ifndef STARTMANAGER_H
 #define STARTMANAGER_H
@@ -31,31 +31,32 @@
 class StartManager : public QObject
 {
     Q_OBJECT
-    
+
     Q_CLASSINFO("D-Bus Interface", "com.deepin.Editor")
-    
+
     struct FileTabInfo
     {
         int windowIndex;
         int tabIndex;
     };
-    
+
 public:
     StartManager(QObject *parent = 0);
-                                     
+
 public slots:
     Q_SCRIPTABLE void openFilesInTab(QStringList files);
     Q_SCRIPTABLE void openFilesInWindow(QStringList files);
-    
+
     void createWindowFromTab(QString tabName, QString filepath, QString content);
-    
+
 private:
-    QList<Window*> m_windows;
-    
-    Window* createWindow(bool alwaysCenter=false);
-    void initWindowPosition(Window *window, bool alwaysCenter=false);
+    Window* createWindow(bool alwaysCenter = false);
+    void initWindowPosition(Window *window, bool alwaysCenter = false);
     void popupExistTabs(FileTabInfo info);
     FileTabInfo getFileTabInfo(QString file);
+
+private:
+    QList<Window*> m_windows;
 };
 
 #endif

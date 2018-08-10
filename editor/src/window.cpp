@@ -54,16 +54,29 @@ DWM_USE_NAMESPACE
 
 Window::Window(DMainWindow *parent)
     : DMainWindow(parent),
-      m_findBar(new FindBar),
+      m_centralWidget(new QWidget),
+      m_editorWidget(new QWidget),
+      m_editorLayout(new QStackedLayout(m_editorWidget)),
+      m_centralLayout(new QVBoxLayout(m_centralWidget)),
+      m_tabbar(new Tabbar),
       m_jumpLineBar(new JumpLineBar(this)),
       m_replaceBar(new ReplaceBar),
       m_themeBar(new ThemeBar(this)),
+      m_findBar(new FindBar),
       m_settings(new Settings(this)),
-      m_tabbar(new Tabbar),
-      m_menu(new QMenu)
+      m_windowManager(new DWindowManager),
+      m_menu(new QMenu),
+      m_newWindowAction(new QAction(tr("New window"), this)),
+      m_newTabAction(new QAction(tr("New tab"), this)),
+      m_openFileAction(new QAction(tr("Open file"), this)),
+      m_saveAction(new QAction(tr("Save"), this)),
+      m_saveAsAction(new QAction(tr("Save as"), this)),
+      m_printAction(new QAction(tr("Print"), this)),
+      m_switchThemeAction(new QAction(tr("Switch theme"), this)),
+      m_settingAction(new QAction(tr("Setting"), this))
 {
     // Init.
-    installEventFilter(this);   // add event filter
+    installEventFilter(this);
     setAcceptDrops(true);
 
     m_blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
@@ -78,32 +91,27 @@ Window::Window(DMainWindow *parent)
     m_themeName = m_settings->settings->option("base.theme.default")->value().toString();
 
     // Init layout and editor.
-    m_layoutWidget = new QWidget();
-    this->setCentralWidget(m_layoutWidget);
+    m_centralLayout->setMargin(0);
+    m_centralLayout->setSpacing(0);
 
-    m_layout = new QVBoxLayout(m_layoutWidget);
-    m_layout->setContentsMargins(0, 0, 0, 0);
-    m_layout->setSpacing(0);
+    m_editorLayout->setMargin(0);
+    m_editorLayout->setSpacing(0);
 
-    m_editorWidget = new QWidget();
-    m_editorLayout = new QStackedLayout(m_editorWidget);
-    m_editorLayout->setContentsMargins(0, 0, 0, 0);
+    m_centralLayout->addWidget(m_editorWidget);
+    setCentralWidget(m_centralWidget);
 
-    m_layout->addWidget(m_editorWidget);
-
-    m_inCompletingTimer = new QTimer();
-    m_inCompletingTimer->setSingleShot(true);
-    connect(m_inCompletingTimer, &QTimer::timeout, this, [=] { m_inCompleting = false; });
+//    m_inCompletingTimer = new QTimer();
+//    m_inCompletingTimer->setSingleShot(true);
+//    connect(m_inCompletingTimer, &QTimer::timeout, this, [=] { m_inCompleting = false; });
 
     // Init titlebar.
     if (titlebar()) {
-        // Init tabbar.
         titlebar()->setCustomWidget(m_tabbar, Qt::AlignVCenter, false);
         titlebar()->setAutoHideOnFullscreen(true);
         titlebar()->setSeparatorVisible(true);
         titlebar()->setMenu(m_menu);
 
-        connect(m_tabbar, &Tabbar::doubleClicked, this->titlebar(), &DTitlebar::doubleClicked, Qt::QueuedConnection);
+        connect(m_tabbar, &Tabbar::doubleClicked, titlebar(), &DTitlebar::doubleClicked, Qt::QueuedConnection);
         connect(m_tabbar, &Tabbar::switchToFile, this, &Window::handleSwitchToFile, Qt::QueuedConnection);
         connect(m_tabbar->tabbar, &TabWidget::closeFile, this, &Window::handleCloseFile, Qt::QueuedConnection);
         connect(m_tabbar, &Tabbar::tabAddRequested, this, static_cast<void (Window::*)()>(&Window::addBlankTab), Qt::QueuedConnection);
@@ -127,15 +135,6 @@ Window::Window(DMainWindow *parent)
         m_menu->setStyle(QStyleFactory::create("dlight"));
 
         // Init main menu.
-        m_newWindowAction = new QAction(tr("New window"), this);
-        m_newTabAction = new QAction(tr("New tab"), this);
-        m_openFileAction = new QAction(tr("Open file"), this);
-        m_saveAction = new QAction(tr("Save"), this);
-        m_saveAsAction = new QAction(tr("Save as"), this);
-        m_printAction = new QAction(tr("Print"), this);
-        m_switchThemeAction = new QAction(tr("Switch theme"), this);
-        m_settingAction = new QAction(tr("Setting"), this);
-
         m_menu->addAction(m_newWindowAction);
         m_menu->addAction(m_newTabAction);
         m_menu->addAction(m_openFileAction);
@@ -162,7 +161,7 @@ Window::Window(DMainWindow *parent)
         connect(m_saveAsAction, &QAction::triggered, this, &Window::saveAsFile);
         connect(m_printAction, &QAction::triggered, this, &Window::popupPrintDialog);
         connect(m_switchThemeAction, &QAction::triggered, this, &Window::popupThemeBar);
-        connect(m_settingAction, &QAction::triggered, m_settings, &Settings::popupSettingsDialog);
+        connect(m_settingAction, &QAction::triggered, this, &Window::popupSettingsDialog);
     }
 
     // Init window state with config.
@@ -211,13 +210,13 @@ Window::Window(DMainWindow *parent)
     connect(m_jumpLineBar, &JumpLineBar::lostFocusExit, this, &Window::handleJumpLineBarExit, Qt::QueuedConnection);
 
     // Make jump line bar pop at top-right of editor.
-    DAnchorsBase::setAnchor(m_jumpLineBar, Qt::AnchorTop, m_layoutWidget, Qt::AnchorTop);
-    DAnchorsBase::setAnchor(m_jumpLineBar, Qt::AnchorRight, m_layoutWidget, Qt::AnchorRight);
+    DAnchorsBase::setAnchor(m_jumpLineBar, Qt::AnchorTop, m_centralWidget, Qt::AnchorTop);
+    DAnchorsBase::setAnchor(m_jumpLineBar, Qt::AnchorRight, m_centralWidget, Qt::AnchorRight);
 
     // Init theme bar.
-    DAnchorsBase::setAnchor(m_themeBar, Qt::AnchorTop, m_layoutWidget, Qt::AnchorTop);
-    DAnchorsBase::setAnchor(m_themeBar, Qt::AnchorBottom, m_layoutWidget, Qt::AnchorBottom);
-    DAnchorsBase::setAnchor(m_themeBar, Qt::AnchorRight, m_layoutWidget, Qt::AnchorRight);
+    DAnchorsBase::setAnchor(m_themeBar, Qt::AnchorTop, m_centralWidget, Qt::AnchorTop);
+    DAnchorsBase::setAnchor(m_themeBar, Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
+    DAnchorsBase::setAnchor(m_themeBar, Qt::AnchorRight, m_centralWidget, Qt::AnchorRight);
 
     connect(m_themeBar, &ThemeBar::changeTheme, this, &Window::loadTheme);
     connect(this, &Window::requestDragEnterEvent, this, &Window::dragEnterEvent);
@@ -242,10 +241,7 @@ Window::Window(DMainWindow *parent)
     // }
 
     // m_wordCompletionWindow = new WordCompletionWindow();
-
-    // Init window manager.
-    m_windowManager = new DWindowManager();
-}
+ }
 
 Window::~Window()
 {
@@ -749,7 +745,6 @@ void Window::remberPositionSave(bool notify)
 
 void Window::remberPositionRestore()
 {
-
     if (m_remberPositionFilePath != "") {
         if (m_editorMap.contains(m_remberPositionFilePath)) {
             QString filepath = m_remberPositionFilePath;
@@ -823,9 +818,9 @@ void Window::resizeEvent(QResizeEvent*)
             m_settings->settings->option("advance.window.window_height")->setValue(rect().height() * 1.0 / screenGeometry.height());
         }
 
-        DAnchorsBase::setAnchor(m_themeBar, Qt::AnchorTop, m_layoutWidget, Qt::AnchorTop);
-        DAnchorsBase::setAnchor(m_themeBar, Qt::AnchorBottom, m_layoutWidget, Qt::AnchorBottom);
-        DAnchorsBase::setAnchor(m_themeBar, Qt::AnchorRight, m_layoutWidget, Qt::AnchorRight);
+        DAnchorsBase::setAnchor(m_themeBar, Qt::AnchorTop, m_centralWidget, Qt::AnchorTop);
+        DAnchorsBase::setAnchor(m_themeBar, Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
+        DAnchorsBase::setAnchor(m_themeBar, Qt::AnchorRight, m_centralWidget, Qt::AnchorRight);
     }
 }
 
@@ -1142,16 +1137,16 @@ void Window::handleUpdateSearchKeyword(QWidget *widget, const QString &file, con
 
 void Window::addBottomWidget(QWidget *widget)
 {
-    if (m_layout->count() >= 2) {
+    if (m_centralLayout->count() >= 2) {
         removeBottomWidget();
     }
 
-    m_layout->addWidget(widget);
+    m_centralLayout->addWidget(widget);
 }
 
 void Window::removeBottomWidget()
 {
-    auto item = m_layout->takeAt(1);
+    auto item = m_centralLayout->takeAt(1);
 
     if (item) {
         item->widget()->hide();
@@ -1237,6 +1232,22 @@ void Window::popupThemeBar()
 
     // Popup theme bar.
     m_themeBar->popup();
+}
+
+void Window::popupSettingsDialog()
+{
+    DSettingsDialog *dialog = new DSettingsDialog(this);
+
+    dialog->setProperty("_d_dtk_theme", "light");
+    dialog->setProperty("_d_QSSFilename", "DSettingsDialog");
+    DThemeManager::instance()->registerWidget(dialog);
+    dialog->updateSettings(m_settings->settings);
+    m_settings->dtkThemeWorkaround(dialog, "dlight");
+
+    dialog->updateSettings(m_settings->settings);
+    dialog->exec();
+    delete dialog;
+    m_settings->settings->sync();
 }
 
 void Window::popupPrintDialog()

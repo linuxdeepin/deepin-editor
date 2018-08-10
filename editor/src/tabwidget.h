@@ -32,28 +32,28 @@ DWIDGET_USE_NAMESPACE
 class TabWidget : public DTabBar
 {
     Q_OBJECT
-    
+
     bool eventFilter(QObject *, QEvent *event);
-    
+
 public:
     TabWidget();
-    
+
     QList<QString> tabFiles;
-    
+
     QMimeData *createMimeDataFromTab(int index, const QStyleOptionTab &option) const;
     QPixmap createDragPixmapFromTab(int index, const QStyleOptionTab &option, QPoint *hotspot) const;
     bool canInsertFromMimeData(int index, const QMimeData *source) const;
-    void insertFromMimeData(int index, const QMimeData *source);    
+    void insertFromMimeData(int index, const QMimeData *source);
     void insertFromMimeDataOnDragEnter(int index, const QMimeData *source);
-                           
+
     void setBackground(QString startColor, QString endColor);
     void setDNDColor(QString startColor, QString endColor);
-    
+
 signals:
     void closeTab(int index);
     void closeOtherTabs(int index);
     void closeFile(QString filepath);
-    
+
 public slots:
     void handleCloseOtherTabs();
     void handleCloseTab();

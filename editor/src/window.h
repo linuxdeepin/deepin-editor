@@ -82,12 +82,13 @@ public:
     void popupReplaceBar();
     void popupJumpLineBar();
     void popupThemeBar();
+    void popupSettingsDialog();
 
     void toggleFullscreen();
 
     const QStringList getEncodeList();
 
-    void remberPositionSave(bool notify=true);
+    void remberPositionSave(bool notify = true);
     void remberPositionRestore();
 
     void updateFont(const QString &fontName);
@@ -157,7 +158,7 @@ public slots:
     void loadTheme(const QString &themeName);
 
 private:
-    void removeActiveBlankTab(bool needSaveBefore=false);
+    void removeActiveBlankTab(bool needSaveBefore = false);
     void removeActiveReadonlyTab();
     void showNewEditor(Editor *editor);
     void showNotify(QString message);
@@ -167,21 +168,20 @@ private:
 private:
     DBusDaemon::dbus *autoSaveDBus;
 
-    FindBar *m_findBar;
-    JumpLineBar *m_jumpLineBar;
-    QMap<QString, Editor*> m_editorMap;
-    QStackedLayout *m_editorLayout;
-    QString m_blankFileDir;
-    QString m_readonlyFileDir;
-    QVBoxLayout *m_layout;
+    QWidget *m_centralWidget;
     QWidget *m_editorWidget;
-    QWidget *m_layoutWidget;
+    QStackedLayout *m_editorLayout;
+    QVBoxLayout *m_centralLayout;
+    Tabbar *m_tabbar;
+
+    JumpLineBar *m_jumpLineBar;
     ReplaceBar *m_replaceBar;
     ThemeBar *m_themeBar;
+    FindBar *m_findBar;
     Settings *m_settings;
-    Tabbar *m_tabbar;
-    int m_fontSize;
-    int m_toastPaddingBottom = 100;
+    DWindowManager *m_windowManager;
+
+    QMap<QString, Editor*> m_editorMap;
 
     QMenu *m_menu;
     QAction *m_newWindowAction;
@@ -200,13 +200,17 @@ private:
     int m_remberPositionColumn;
     int m_remberPositionScrollOffset;
 
+    QString m_blankFileDir;
+    QString m_readonlyFileDir;
+    int m_fontSize;
+    int m_toastPaddingBottom = 100;
+
     QString m_titlebarStyleSheet;
 
     bool m_windowShowFlag = false;
 
-    QSqlDatabase m_wordsDB;
-    WordCompletionWindow *m_wordCompletionWindow;
-    DWindowManager *m_windowManager;
+    // QSqlDatabase m_wordsDB;
+    // WordCompletionWindow *m_wordCompletionWindow;
 
     QString m_readonlySeparator = " !_! ";
 
@@ -216,8 +220,8 @@ private:
     QString m_darkTabBackgroundStartColor = "(16, 16, 16, 90%)";
     QString m_darkTabBackgroundEndColor = "(16, 16, 16, 90%)";
 
-    bool m_inCompleting = false;
-    QTimer *m_inCompletingTimer;
+    // bool m_inCompleting = false;
+    // QTimer *m_inCompletingTimer;
 };
 
 #endif

@@ -61,7 +61,7 @@ QMimeData* TabWidget::createMimeDataFromTab(int index, const QStyleOptionTab &) 
     // Get tab name, path, and content.
     QString tabPath = tabFiles[index];
     QString tabName = tabText(index);
-    TextEditor *textEditor = static_cast<Window*>(this->window())->getTextEditor(tabFiles[index]);
+    TextEditor *textEditor = static_cast<Window *>(window())->getTextEditor(tabFiles[index]);
     QString tabContent = textEditor->toPlainText();
 
     // Add tab info in DND data.
@@ -70,7 +70,7 @@ QMimeData* TabWidget::createMimeDataFromTab(int index, const QStyleOptionTab &) 
 
     // Remove text/plain format, avoid drop tab text to other applications
     mimeData->removeFormat("text/plain");
-    
+
     qDebug() << "### createMimeDataFromTab: " << index;
 
     return mimeData;
@@ -121,7 +121,7 @@ QPixmap TabWidget::createDragPixmapFromTab(int index, const QStyleOptionTab &, Q
     // Return image composited with shadow.
     QColor shadowColor = QColor("#000000");
     shadowColor.setAlpha(80);
-    
+
     qDebug() << "### createDragPixmapFromTab: " << index;
 
     return Utils::dropShadow(QPixmap::fromImage(scaledImage), 40, shadowColor, QPoint(0, 8));
@@ -130,7 +130,7 @@ QPixmap TabWidget::createDragPixmapFromTab(int index, const QStyleOptionTab &, Q
 bool TabWidget::canInsertFromMimeData(int index, const QMimeData *source) const
 {
     qDebug() << "### canInsertFromMimeData: " << index;
-    
+
     return source->hasFormat("tabInfo");
 }
 
@@ -147,7 +147,7 @@ void TabWidget::insertFromMimeData(int index, const QMimeData *source)
 
     window->addTabWithContent(tabName, tabPath, tabContent, index);
     window->activeTab(window->getTabIndex(tabPath));
-    
+
     qDebug() << "### insertFromMimeData: " << index;
 }
 
@@ -163,7 +163,7 @@ void TabWidget::insertFromMimeDataOnDragEnter(int index, const QMimeData *source
 
     window->addTabWithContent(tabName, tabPath, tabContent, index);
     window->activeTab(window->getTabIndex(tabPath));
-    
+
     qDebug() << "### insertFromMimeDataOnDragEnter: " << index;
 }
 
@@ -218,19 +218,19 @@ bool TabWidget::eventFilter(QObject *, QEvent *event)
     } else if (event->type() == QEvent::DragEnter) {
         const QDragEnterEvent *e = static_cast<QDragEnterEvent*>(event);
         const QMimeData* mimeData = e->mimeData();
-        
+
         if ((!e->source() || e->source()->parent() != this) && mimeData->data("tabInfo") != "") {
             static_cast<Window*>(this->window())->changeTitlebarBackground(m_dndStartColor, m_dndEndColor);
         }
-        
+
         qDebug() << "### eventFilter DragEnter";
     } else if (event->type() == QEvent::DragLeave) {
         static_cast<Window*>(this->window())->changeTitlebarBackground(m_backgroundStartColor, m_backgroundEndColor);
-        
+
         qDebug() << "### eventFilter DragLeave";
     } else if (event->type() == QEvent::Drop) {
         static_cast<Window*>(this->window())->changeTitlebarBackground(m_backgroundStartColor, m_backgroundEndColor);
-        
+
         qDebug() << "### eventFilter Drop";
     } else if (event->type() == QEvent::DragMove) {
         event->accept();
@@ -245,7 +245,7 @@ void TabWidget::handleTabReleaseRequested()
     if (count() == 1) {
         static_cast<Window*>(this->window())->show();
     }
-    
+
     qDebug() << "### handleTabReleaseRequested";
 }
 
@@ -262,7 +262,7 @@ void TabWidget::handleDragActionChanged(Qt::DropAction action)
         if (QGuiApplication::overrideCursor())
             QGuiApplication::changeOverrideCursor(QGuiApplication::overrideCursor()->shape());
     }
-    
+
     qDebug() << "### handleDragActionChanged";
 }
 
@@ -281,7 +281,7 @@ void TabWidget::setDNDColor(QString startColor, QString endColor)
 void TabWidget::handleTabRemoved(int index)
 {
     QString filepath = tabFiles[index];
-    
+
     tabFiles.takeAt(index);
     closeFile(filepath);
     qDebug() << "*** Remove tab " << index;
