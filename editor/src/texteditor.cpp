@@ -2637,7 +2637,7 @@ void TextEditor::dropEvent(QDropEvent *event)
 {
     const QMimeData *data = event->mimeData();
 
-    if (data->hasUrls()) {
+    if (data->hasUrls() && data->urls().first().isLocalFile()) {
         qobject_cast<Window *>(this->window())->requestDropEvent(event);
     } else if (data->hasText()) {
         QPlainTextEdit::dropEvent(event);

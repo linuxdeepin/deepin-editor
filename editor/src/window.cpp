@@ -497,7 +497,7 @@ const QString Window::getSaveFilePath(QString &encode, QString &newline)
     dialog.selectFile(tr("Blank Document") + ".txt");
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.addComboBox(tr("Encoding"), getEncodeList());
-    dialog.addComboBox(tr("Newline"), QStringList() << "Linux" << "Windows" << "Mac OS");
+    dialog.addComboBox(tr("Line Endings"), QStringList() << "Linux" << "Windows" << "Mac OS");
 
     if (QFileInfo(m_tabbar->getActiveTabPath()).dir().absolutePath() != m_blankFileDir) {
         dialog.selectFile(QFileInfo(m_tabbar->getActiveTabPath()).fileName());
