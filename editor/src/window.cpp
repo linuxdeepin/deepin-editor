@@ -237,11 +237,10 @@ Window::Window(DMainWindow *parent)
 
     // m_wordCompletionWindow = new WordCompletionWindow();
 
-
     // Apply qss theme.
     Utils::applyQss(this, "main.qss");
     loadTheme(m_themeName);
- }
+}
 
 Window::~Window()
 {

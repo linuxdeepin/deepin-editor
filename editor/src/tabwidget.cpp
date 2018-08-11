@@ -61,7 +61,7 @@ QMimeData* TabWidget::createMimeDataFromTab(int index, const QStyleOptionTab &) 
     // Get tab name, path, and content.
     QString tabPath = tabFiles[index];
     QString tabName = tabText(index);
-    TextEditor *textEditor = static_cast<Window *>(window())->getTextEditor(tabFiles[index]);
+    TextEditor *textEditor = static_cast<Window *>(this->window())->getTextEditor(tabFiles[index]);
     QString tabContent = textEditor->toPlainText();
 
     // Add tab info in DND data.
