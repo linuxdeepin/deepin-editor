@@ -161,11 +161,11 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     QTimer::singleShot(0, this, SLOT(setFocus()));
 
     // Init change cursor width timer.
-    m_changeCursorWidthTimer = new QTimer(this);
-    m_changeCursorWidthTimer->setSingleShot(true);
-    connect(m_changeCursorWidthTimer, &QTimer::timeout, this, &TextEditor::changeToWaitCursor);
+    // m_changeCursorWidthTimer = new QTimer(this);
+    // m_changeCursorWidthTimer->setSingleShot(true);
+    // connect(m_changeCursorWidthTimer, &QTimer::timeout, this, &TextEditor::changeToWaitCursor);
 
-    changeToWaitCursor();
+    // changeToWaitCursor();
 
     // Monitor cursor mark status to update in line number area.
     connect(this, &TextEditor::cursorMarkChanged, this, &TextEditor::handleCursorMarkChanged);
@@ -1562,11 +1562,11 @@ void TextEditor::renderAllSelections()
 void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
 {
     // Change cursor to edit status and start timer to restore to wait status.
-    changeToEditCursor();
-    if (m_changeCursorWidthTimer->isActive()) {
-        m_changeCursorWidthTimer->stop();
-    }
-    m_changeCursorWidthTimer->start(m_cursorWidthChangeDelay);
+    // changeToEditCursor();
+    // if (m_changeCursorWidthTimer->isActive()) {
+    //     m_changeCursorWidthTimer->stop();
+    // }
+    // m_changeCursorWidthTimer->start(m_cursorWidthChangeDelay);
 
     QString key = Utils::getKeyshortcut(keyEvent);
 

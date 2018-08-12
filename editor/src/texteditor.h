@@ -271,7 +271,7 @@ private:
 
     Settings *m_settings;
 
-    QTimer *m_changeCursorWidthTimer;
+    // QTimer *m_changeCursorWidthTimer;
     QTimer *m_englishHelperTimer;
 
     QSqlDatabase m_wordsDB;
