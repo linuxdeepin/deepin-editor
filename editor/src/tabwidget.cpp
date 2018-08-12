@@ -51,7 +51,7 @@ TabWidget::TabWidget()
 
     setFixedHeight(40);
 
-    connect(this, &TabWidget::tabReleaseRequested, this, &TabWidget::handleTabReleaseRequested);
+    connect(this, &DTabBar::tabReleaseRequested, this, &TabWidget::handleTabReleaseRequested);
     connect(this, &DTabBar::dragActionChanged, this, &TabWidget::handleDragActionChanged);
     connect(this, &DTabBar::tabIsRemoved, this, &TabWidget::handleTabRemoved);
 }
@@ -143,7 +143,7 @@ void TabWidget::insertFromMimeData(int index, const QMimeData *source)
     QString tabPath = dropContent[1];
     QString tabContent = content.remove(0, tabName.size() + tabPath.size() + 2); // 2 mean two \n char
 
-    Window* window = static_cast<Window*>(this->window());
+    Window* window = static_cast<Window *>(this->window());
 
     window->addTabWithContent(tabName, tabPath, tabContent, index);
     window->activeTab(window->getTabIndex(tabPath));
@@ -159,7 +159,7 @@ void TabWidget::insertFromMimeDataOnDragEnter(int index, const QMimeData *source
     QString tabPath = dropContent[1];
     QString tabContent = content.remove(0, tabName.size() + tabPath.size() + 2); // 2 mean two \n char
 
-    Window* window = static_cast<Window*>(this->window());
+    Window* window = static_cast<Window *>(this->window());
 
     window->addTabWithContent(tabName, tabPath, tabContent, index);
     window->activeTab(window->getTabIndex(tabPath));

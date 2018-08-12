@@ -401,6 +401,9 @@ void TextEditor::moveToLineIndentation()
 
 void TextEditor::nextLine()
 {
+    if (toPlainText().isEmpty())
+        return;
+
     if (m_cursorMark) {
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::Down, QTextCursor::KeepAnchor);
@@ -412,6 +415,9 @@ void TextEditor::nextLine()
 
 void TextEditor::prevLine()
 {
+    if (toPlainText().isEmpty())
+        return;
+
     if (m_cursorMark) {
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::Up, QTextCursor::KeepAnchor);
@@ -2531,6 +2537,11 @@ void TextEditor::toggleBulletWithLine(int line, bool addBullet)
 
 int TextEditor::getNextWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode)
 {
+    // FIXME(rekols): if is empty text, it will crash.
+    if (toPlainText().isEmpty()) {
+        return 0;
+    }
+
     // Move next char first.
     cursor.movePosition(QTextCursor::NextCharacter, moveMode);
 
@@ -2555,6 +2566,10 @@ int TextEditor::getNextWordPosition(QTextCursor cursor, QTextCursor::MoveMode mo
 
 int TextEditor::getPrevWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode)
 {
+    if (toPlainText().isEmpty()) {
+        return 0;
+    }
+
     // Move prev char first.
     cursor.movePosition(QTextCursor::PreviousCharacter, moveMode);
 
