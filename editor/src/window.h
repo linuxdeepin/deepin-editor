@@ -203,7 +203,6 @@ private:
     QString m_blankFileDir;
     QString m_readonlyFileDir;
     int m_fontSize;
-    int m_toastPaddingBottom = 100;
 
     QString m_titlebarStyleSheet;
 

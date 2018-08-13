@@ -39,6 +39,7 @@
 #include <QWidget>
 #include <KEncodingProber>
 #include <QTextCodec>
+#include <DToast>
 
 QT_BEGIN_NAMESPACE
 extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
@@ -527,4 +528,18 @@ bool Utils::isEditableFile(QString filepath)
     }
 
     return false;
+}
+
+void Utils::toast(QString message, QWidget *parent)
+{
+    DToast *toast = new DToast(parent);
+    int avaliableHeight = parent->height() - toast->height();
+    int toastPaddingBottom = qMin(avaliableHeight / 2, 100);
+
+    toast->setText(message);
+    toast->setIcon(QIcon(Utils::getQrcPath("logo_24.svg")));
+    toast->pop();
+
+    toast->move((parent->width() - toast->width()) / 2,
+                avaliableHeight - toastPaddingBottom);
 }

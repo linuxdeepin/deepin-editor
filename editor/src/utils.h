@@ -54,4 +54,5 @@ public:
     static QVariantMap getThemeNodeMap(QString themeName);
     static QByteArray getFileEncode(const QByteArray &data, const QString &fileName = QString());
     static bool isEditableFile(QString filepath);
+    static void toast(QString message, QWidget* parent = nullptr);
 };

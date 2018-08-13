@@ -592,8 +592,10 @@ bool Window::saveFile()
 
         return result;
     } else {
-        m_editorMap[m_tabbar->getActiveTabPath()]->saveFile();
-        showNotify(tr("%1  文件已保存").arg(m_tabbar->getActiveTabName()));
+        bool success = m_editorMap[m_tabbar->getActiveTabPath()]->saveFile();
+        if (success) {
+            showNotify(tr("%1  文件已保存").arg(m_tabbar->getActiveTabName()));
+        }
 
         return true;
     }
@@ -1210,14 +1212,7 @@ void Window::showNewEditor(Editor *editor)
 
 void Window::showNotify(QString message)
 {
-    auto toast = new DToast(this);
-
-    toast->setText(message);
-    toast->setIcon(QIcon(Utils::getQrcPath("logo_24.svg")));
-    toast->pop();
-
-    toast->move((width() - toast->width()) / 2,
-                height() - toast->height() - m_toastPaddingBottom);
+    Utils::toast(message, this);
 }
 
 DDialog* Window::createSaveFileDialog(QString title, QString content)

@@ -69,7 +69,7 @@ void Editor::loadFile(const QString &filepath)
     file.close();
 }
 
-void Editor::saveFile(const QString &encode, const QString &newline)
+bool Editor::saveFile(const QString &encode, const QString &newline)
 {
     bool fileCreateFailed = false;
     if (!Utils::fileExists(textEditor->filepath)) {
@@ -92,8 +92,8 @@ void Editor::saveFile(const QString &encode, const QString &newline)
         QFile file(textEditor->filepath);
         if (!file.open(QIODevice::WriteOnly)) {
             qDebug() << "Can't write file: " << textEditor->filepath;
-
-            return;
+            Utils::toast(tr("Can't write file: %1").arg(textEditor->filepath), this->topLevelWidget());
+            return false;
         }
 
         m_newline = newline;
@@ -119,12 +119,23 @@ void Editor::saveFile(const QString &encode, const QString &newline)
         qDebug() << "saved: " << textEditor->filepath << encode << newline;
 
         file.close();
+        return true;
     }
+
+    if (fileCreateFailed) {
+        // blumia: WARNING! Toast is NOT the correct way to tell user something goes wrong!
+        // FIXME: Tell user file no longer exist and create file at original path failed,
+        //        Let user select a new path to save the file if user want.
+        Utils::toast(tr("File %1 create failed.").arg(textEditor->filepath), this->topLevelWidget());
+        return false;
+    }
+
+    return true;
 }
 
-void Editor::saveFile()
+bool Editor::saveFile()
 {
-    saveFile(m_fileEncode, m_newline);
+    return saveFile(m_fileEncode, m_newline);
 }
 
 void Editor::updatePath(QString file)

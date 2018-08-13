@@ -39,8 +39,8 @@ public:
     Editor(QWidget *parent = 0);
 
     void loadFile(const QString &filepath);
-    void saveFile(const QString &encode, const QString &newline);
-    void saveFile();
+    bool saveFile(const QString &encode, const QString &newline);
+    bool saveFile();
 
     void updatePath(QString file);
 
