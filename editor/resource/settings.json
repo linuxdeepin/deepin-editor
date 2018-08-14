@@ -1925,12 +1925,6 @@
                             "default": 4
                         },
                         {
-                            "key": "enable_english_helper",
-                            "name": "Enable english helper",
-                            "type": "checkbox",
-                            "default": false
-                        },
-                        {
                             "key": "file_dialog_dir",
                             "hide": true,
                             "reset": false,

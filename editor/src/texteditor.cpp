@@ -1859,11 +1859,11 @@ void TextEditor::contextMenuEvent(QContextMenuEvent *event)
         m_rightMenu->addAction(m_toggleBulletAction);
     }
     m_rightMenu->addSeparator();
-    if (m_enableEnglishCompleter) {
-        m_rightMenu->addAction(m_disableEnglishCompleterAction);
-    } else {
-        m_rightMenu->addAction(m_enableEnglishCompleterAction);
-    }
+    // if (m_enableEnglishCompleter) {
+    //     m_rightMenu->addAction(m_disableEnglishCompleterAction);
+    // } else {
+    //     m_rightMenu->addAction(m_enableEnglishCompleterAction);
+    // }
     if (m_readOnlyMode) {
         m_rightMenu->addAction(m_disableReadOnlyModeAction);
     } else {

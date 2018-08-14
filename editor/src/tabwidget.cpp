@@ -170,14 +170,14 @@ void TabWidget::insertFromMimeDataOnDragEnter(int index, const QMimeData *source
 void TabWidget::handleCloseTab()
 {
     if (m_rightClickTab >= 0) {
-        closeTab(m_rightClickTab);
+        emit closeTab(m_rightClickTab);
     }
 }
 
 void TabWidget::handleCloseOtherTabs()
 {
     if (m_rightClickTab >= 0) {
-        closeOtherTabs(m_rightClickTab);
+        emit closeOtherTabs(m_rightClickTab);
     }
 }
 
@@ -283,6 +283,6 @@ void TabWidget::handleTabRemoved(int index)
     QString filepath = tabFiles[index];
 
     tabFiles.takeAt(index);
-    closeFile(filepath);
+    emit closeFile(filepath);
     qDebug() << "*** Remove tab " << index;
 }

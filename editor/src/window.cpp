@@ -408,7 +408,7 @@ Editor* Window::createEditor()
 {
     Editor *editor = new Editor();
     editor->textEditor->setThemeWithName(m_themeName);
-    editor->textEditor->setEnglishCompleter(m_settings->settings->option("advance.editor.enable_english_helper")->value().toBool());
+    // editor->textEditor->setEnglishCompleter(m_settings->settings->option("advance.editor.enable_english_helper")->value().toBool());
     setFontSizeWithConfig(editor);
     editor->textEditor->setSettings(m_settings);
     editor->textEditor->setTabSpaceNumber(m_settings->settings->option("advance.editor.tab_space_number")->value().toInt());
