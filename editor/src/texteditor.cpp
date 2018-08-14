@@ -2011,8 +2011,11 @@ void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme, QString theme
         pal.setColor(QPalette::Highlight, QColor(theme.backgroundColor(KSyntaxHighlighting::Theme::RegionMarker)));
         pal.setColor(QPalette::HighlightedText, QColor(theme.selectedTextColor(KSyntaxHighlighting::Theme::RegionMarker)));
     }
+
     viewport()->setPalette(pal);
     viewport()->setAutoFillBackground(true);
+
+    setStyleSheet(QString("QPlainTextEdit { background-color: %1; }").arg(themeBackgroundColor));
 
     m_currentLineColor = QColor(themeCurrentLineColor);
     m_backgroundColor = QColor(themeBackgroundColor);

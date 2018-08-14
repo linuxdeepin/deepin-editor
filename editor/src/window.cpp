@@ -1399,40 +1399,40 @@ void Window::handleConfirmCompletion()
 
 void Window::loadTheme(const QString &name)
 {
-    for (auto editor : m_editorMap.values()) {
-        editor->textEditor->setThemeWithName(name);
-    }
-
     QVariantMap jsonMap = Utils::getThemeNodeMap(name);
 
     auto backgroundColor = jsonMap["editor-colors"].toMap()["background-color"].toString();
 
     if (QColor(backgroundColor).lightness() < 128) {
         DThemeManager::instance()->setTheme("dark");
-         m_tabbar->tabbar->setBackground(m_darkTabBackgroundStartColor, m_darkTabBackgroundEndColor);
-         changeTitlebarBackground(m_darkTabBackgroundStartColor, m_darkTabBackgroundEndColor);
+        m_tabbar->tabbar->setBackground(m_darkTabBackgroundStartColor, m_darkTabBackgroundEndColor);
+        changeTitlebarBackground(m_darkTabBackgroundStartColor, m_darkTabBackgroundEndColor);
     } else {
-         DThemeManager::instance()->setTheme("light");
-         m_tabbar->tabbar->setBackground(m_lightTabBackgroundStartColor, m_lightTabBackgroundEndColor);
-         changeTitlebarBackground(m_lightTabBackgroundStartColor, m_lightTabBackgroundEndColor);
+        DThemeManager::instance()->setTheme("light");
+        m_tabbar->tabbar->setBackground(m_lightTabBackgroundStartColor, m_lightTabBackgroundEndColor);
+        changeTitlebarBackground(m_lightTabBackgroundStartColor, m_lightTabBackgroundEndColor);
     }
 
-     m_themeBar->setBackground(backgroundColor);
-     m_jumpLineBar->setBackground(backgroundColor);
-     m_replaceBar->setBackground(backgroundColor);
-     m_findBar->setBackground(backgroundColor);
-     m_tabbar->tabbar->setDNDColor(jsonMap["app-colors"].toMap()["tab-dnd-start"].toString(), jsonMap["app-colors"].toMap()["tab-dnd-end"].toString());
-     m_tabbar->setTabActiveColor(jsonMap["app-colors"].toMap()["tab-active"].toString());
+    for (auto editor : m_editorMap.values()) {
+        editor->textEditor->setThemeWithName(name);
+    }
 
-     auto frameSelectedColor = jsonMap["app-colors"].toMap()["themebar-frame-selected"].toString();
-     auto frameNormalColor = jsonMap["app-colors"].toMap()["themebar-frame-normal"].toString();
-     for (DSimpleListItem* item : m_themeBar->items) {
-         (static_cast<ThemeItem*>(item))->setFrameColor(frameSelectedColor, frameNormalColor);
-     }
-     m_themeBar->themeView->repaint();
+    m_themeBar->setBackground(backgroundColor);
+    m_jumpLineBar->setBackground(backgroundColor);
+    m_replaceBar->setBackground(backgroundColor);
+    m_findBar->setBackground(backgroundColor);
+    m_tabbar->tabbar->setDNDColor(jsonMap["app-colors"].toMap()["tab-dnd-start"].toString(), jsonMap["app-colors"].toMap()["tab-dnd-end"].toString());
+    m_tabbar->setTabActiveColor(jsonMap["app-colors"].toMap()["tab-active"].toString());
 
-     m_settings->settings->option("base.theme.default")->setValue(name);
-     m_themeName = name;
+    auto frameSelectedColor = jsonMap["app-colors"].toMap()["themebar-frame-selected"].toString();
+    auto frameNormalColor = jsonMap["app-colors"].toMap()["themebar-frame-normal"].toString();
+    for (DSimpleListItem* item : m_themeBar->items) {
+        (static_cast<ThemeItem*>(item))->setFrameColor(frameSelectedColor, frameNormalColor);
+    }
+    m_themeBar->themeView->repaint();
+
+    m_settings->settings->option("base.theme.default")->setValue(name);
+    m_themeName = name;
 }
 
 void Window::dragEnterEvent(QDragEnterEvent *event)
