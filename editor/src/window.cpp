@@ -330,71 +330,103 @@ void Window::addTabWithContent(const QString &tabName, const QString &filepath, 
 
 void Window::closeTab()
 {
-    if (QFileInfo(m_tabbar->getActiveTabPath()).dir().absolutePath() == m_blankFileDir) {
-        QString content = getActiveEditor()->textEditor->toPlainText();
+    const QString &filePath = m_tabbar->getActiveTabPath();
+    const bool isBlankFile = QFileInfo(filePath).dir().absolutePath() == m_blankFileDir;
 
-        // Don't save blank tab if nothing in it.
-        if (content.size() == 0) {
-            removeActiveBlankTab();
-        } else {
-            DDialog *dialog = createSaveFileDialog(tr("Save dragft"), tr("Do you need to save the draft?"));
+    if (m_editorMap[filePath]->textEditor->isTextChanged()) {
+        DDialog *dialog = createSaveFileDialog(tr("Save file"), tr("Do you need to save the file?"));
 
-            connect(dialog, &DDialog::buttonClicked, this,
-                    [=] (int index) {
-                        dialog->hide();
+        connect(dialog, &DDialog::buttonClicked, this,
+                [=] (int index) {
+                    dialog->hide();
 
-                        // Remove blank tab if user click "don't save" button.
-                        if (index == 1) {
-                            removeActiveBlankTab();
-                            focusActiveEditor();
+                    // click the "dont't save" button.
+                    if (index == 1) {
+                        m_tabbar->closeActiveTab();
+
+                        if (isBlankFile) {
+                            // remove blank file.
+                            QFile(filePath).remove();
                         }
-                        // Save blank tab as file and then remove blank tab if user click "save" button.
-                        else if (index == 2) {
-                            removeActiveBlankTab(true);
-                            focusActiveEditor();
-                        }
-                    });
-        }
-    } else if (QFileInfo(m_tabbar->getActiveTabPath()).dir().absolutePath() == m_readonlyFileDir) {
-        QString realpath = QFileInfo(m_tabbar->getActiveTabPath()).fileName().replace(m_readonlySeparator, QDir().separator());
+                    }
+                    // click the "save" button.
+                    else if (index == 2) {
+                        saveFile();
+                    }
 
-        QString editorContent = getActiveEditor()->textEditor->toPlainText();
-        QString fileContent = Utils::getFileContent(realpath);
-
-        if (editorContent == fileContent) {
-            removeActiveReadonlyTab();
-        } else {
-            DDialog *dialog = createSaveFileDialog(tr("Save file"), tr("Do you need to save content to %1 ?").arg(realpath));
-
-            connect(dialog, &DDialog::buttonClicked, this,
-                    [=] (int index) {
-                        dialog->hide();
-
-                        // Remove tab if user click "don't save" button.
-                        if (index == 1) {
-                            removeActiveReadonlyTab();
-                        }
-                        // Save content to file and then remove tab if user click "save" button.
-                        else if (index == 2) {
-                            bool result = autoSaveDBus->saveFile(realpath, editorContent);
-
-                            if (!result) {
-                                qDebug() << tr("Save root file %1 failed").arg(realpath);
-                            }
-
-                            removeActiveReadonlyTab();
-                        }
-                    });
-        }
+                    focusActiveEditor();
+                });
     } else {
-        // Record last close path.
-        m_closeFileHistory << m_tabbar->getActiveTabPath();
-
         // Close tab directly, because all file is save automatically.
         m_tabbar->closeActiveTab();
-
         focusActiveEditor();
     }
+
+    // if (QFileInfo(m_tabbar->getActiveTabPath()).dir().absolutePath() == m_blankFileDir) {
+    //     QString content = getActiveEditor()->textEditor->toPlainText();
+
+    //     // Don't save blank tab if nothing in it.
+    //     if (content.size() == 0) {
+    //         removeActiveBlankTab();
+    //     } else {
+    //         DDialog *dialog = createSaveFileDialog(tr("Save dragft"), tr("Do you need to save the draft?"));
+
+    //         connect(dialog, &DDialog::buttonClicked, this,
+    //                 [=] (int index) {
+    //                     dialog->hide();
+
+    //                     // Remove blank tab if user click "don't save" button.
+    //                     if (index == 1) {
+    //                         removeActiveBlankTab();
+    //                         focusActiveEditor();
+    //                     }
+    //                     // Save blank tab as file and then remove blank tab if user click "save" button.
+    //                     else if (index == 2) {
+    //                         removeActiveBlankTab(true);
+    //                         focusActiveEditor();
+    //                     }
+    //                 });
+    //     }
+    // } else if (QFileInfo(m_tabbar->getActiveTabPath()).dir().absolutePath() == m_readonlyFileDir) {
+    //     QString realpath = QFileInfo(m_tabbar->getActiveTabPath()).fileName().replace(m_readonlySeparator, QDir().separator());
+
+    //     QString editorContent = getActiveEditor()->textEditor->toPlainText();
+    //     QString fileContent = Utils::getFileContent(realpath);
+
+    //     if (editorContent == fileContent) {
+    //         removeActiveReadonlyTab();
+    //     } else {
+    //         DDialog *dialog = createSaveFileDialog(tr("Save file"), tr("Do you need to save content to %1 ?").arg(realpath));
+
+    //         connect(dialog, &DDialog::buttonClicked, this,
+    //                 [=] (int index) {
+    //                     dialog->hide();
+
+    //                     // Remove tab if user click "don't save" button.
+    //                     if (index == 1) {
+    //                         removeActiveReadonlyTab();
+    //                     }
+    //                     // Save content to file and then remove tab if user click "save" button.
+    //                     else if (index == 2) {
+    //                         bool result = autoSaveDBus->saveFile(realpath, editorContent);
+
+    //                         if (!result) {
+    //                             qDebug() << tr("Save root file %1 failed").arg(realpath);
+    //                         }
+
+    //                         removeActiveReadonlyTab();
+    //                     }
+    //                 });
+    //     }
+    // } else {
+    //     // Record last close path.
+    //     m_closeFileHistory << m_tabbar->getActiveTabPath();
+
+    //     // Close tab directly, because all file is save automatically.
+    //     m_tabbar->closeActiveTab();
+
+    //     focusActiveEditor();
+    // }
 }
 
 void Window::restoreTab()
@@ -578,7 +610,7 @@ bool Window::saveFile()
         } else {
             return false;
         }
-    } if (QFileInfo(m_tabbar->getActiveTabPath()).dir().absolutePath() == m_readonlyFileDir) {
+    } else if (QFileInfo(m_tabbar->getActiveTabPath()).dir().absolutePath() == m_readonlyFileDir) {
         QString realpath = QFileInfo(m_tabbar->getActiveTabPath()).fileName().replace(m_readonlySeparator, QDir().separator());
         QString content = getActiveEditor()->textEditor->toPlainText();
 
@@ -989,6 +1021,7 @@ void Window::addBlankTab(const QString &blankFile)
     m_tabbar->addTab(blankTabPath, tr("Blank document %1").arg(blankFileIndex));
     Editor *editor = createEditor();
     editor->updatePath(blankTabPath);
+    editor->textEditor->setTextChanged(false);
 
     if (!blankFile.isEmpty() && Utils::fileExists(blankFile)) {
         editor->loadFile(blankFile);

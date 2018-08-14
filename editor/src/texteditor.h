@@ -162,6 +162,8 @@ public:
     int getNextWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode);
     int getPrevWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode);
     bool atWordSeparator(int position);
+    bool isTextChanged() { return m_isTextChanged; };
+    void setTextChanged(bool changed) { m_isTextChanged = changed; };
 
 signals:
     void clickFindAction();
@@ -311,6 +313,7 @@ private:
     QPoint m_mouseClickPos;
 
     bool m_scrollbarLock = false;
+    bool m_isTextChanged = false;
 
     int m_scrollbarMargin = 0;
 };

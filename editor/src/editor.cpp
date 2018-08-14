@@ -64,6 +64,7 @@ void Editor::loadFile(const QString &filepath)
         detectNewline();
 
         textEditor->loadHighlighter();
+        textEditor->setTextChanged(false);
     }
 
     file.close();
@@ -72,6 +73,7 @@ void Editor::loadFile(const QString &filepath)
 bool Editor::saveFile(const QString &encode, const QString &newline)
 {
     bool fileCreateFailed = false;
+
     if (!Utils::fileExists(textEditor->filepath)) {
         QString directory = QFileInfo(textEditor->filepath).dir().absolutePath();
 
@@ -119,7 +121,6 @@ bool Editor::saveFile(const QString &encode, const QString &newline)
         qDebug() << "saved: " << textEditor->filepath << encode << newline;
 
         file.close();
-        return true;
     }
 
     if (fileCreateFailed) {
@@ -129,6 +130,9 @@ bool Editor::saveFile(const QString &encode, const QString &newline)
         Utils::toast(tr("File %1 create failed.").arg(textEditor->filepath), this->topLevelWidget());
         return false;
     }
+
+    // update status.
+    textEditor->setTextChanged(false);
 
     return true;
 }

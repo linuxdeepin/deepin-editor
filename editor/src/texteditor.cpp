@@ -76,6 +76,7 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
 
     connect(this, &QPlainTextEdit::updateRequest, this, &TextEditor::handleUpdateRequest);
     connect(this, &QPlainTextEdit::textChanged, this, &TextEditor::updateLineNumber, Qt::QueuedConnection);
+    connect(this, &QPlainTextEdit::textChanged, this, [=] { m_isTextChanged = true; });
     connect(this, &QPlainTextEdit::cursorPositionChanged, this, &TextEditor::highlightCurrentLine, Qt::QueuedConnection);
 
     // Init menu.
