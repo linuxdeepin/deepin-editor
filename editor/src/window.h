@@ -33,7 +33,7 @@
 #include "themebar.h"
 #include "replacebar.h"
 #include "settings.h"
-#include "tabbar.h"
+#include "titlebar.h"
 #include "dwindowmanager.h"
 
 #include <QHBoxLayout>
@@ -125,7 +125,7 @@ public slots:
     void handleTabCloseRequested(int index);
 
     void handleCloseFile(const QString &filepath);
-    void handleSwitchToFile(const QString &filepath);
+    void handleCurrentChanged(const int &index);
 
     void handleJumpLineBarExit();
     void handleJumpLineBarJumpToLine(const QString &filepath, int line, bool focusEditor);
@@ -172,7 +172,7 @@ private:
     QWidget *m_editorWidget;
     QStackedLayout *m_editorLayout;
     QVBoxLayout *m_centralLayout;
-    Tabbar *m_tabbar;
+    Titlebar *m_titleBar;
 
     JumpLineBar *m_jumpLineBar;
     ReplaceBar *m_replaceBar;
