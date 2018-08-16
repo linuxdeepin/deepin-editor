@@ -50,6 +50,7 @@ Tabbar::Tabbar()
     m_rightClickTab = -1;
 
     setFixedHeight(40);
+    setFocusPolicy(Qt::NoFocus);
 
     connect(this, &DTabBar::tabReleaseRequested, this, &Tabbar::handleTabReleaseRequested);
     connect(this, &DTabBar::dragActionChanged, this, &Tabbar::handleDragActionChanged);

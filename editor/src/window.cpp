@@ -317,7 +317,7 @@ void Window::closeTab()
     const bool isBlankFile = QFileInfo(filePath).dir().absolutePath() == m_blankFileDir;
 
     // if the editor text changes, will prompt the user to save.
-    if (m_editorMap[filePath]->textEditor->document()->isModified()) {
+    if (m_editorMap.value(filePath)->textEditor->document()->isModified()) {
         DDialog *dialog = createSaveFileDialog(tr("Save file"), tr("Do you need to save the file?"));
 
         connect(dialog, &DDialog::buttonClicked, this,
@@ -332,15 +332,17 @@ void Window::closeTab()
                             // remove blank file.
                             QFile(filePath).remove();
                         }
+
+                        handleCloseFile(filePath);
                     }
                     // click the "save" button.
                     else if (index == 2) {
                         saveFile();
                         m_titleBar->closeActiveTab();
+                        handleCloseFile(filePath);
                     }
 
                     focusActiveEditor();
-                    handleCloseFile(filePath);
                 });
 
         dialog->exec();
@@ -470,12 +472,12 @@ Editor* Window::createEditor()
 
 Editor* Window::getActiveEditor()
 {
-    return m_editorMap[m_titleBar->getActiveTabPath()];
+    return m_editorMap.value(m_titleBar->getActiveTabPath());
 }
 
 TextEditor* Window::getTextEditor(const QString &filepath)
 {
-    return m_editorMap[filepath]->textEditor;
+    return m_editorMap.value(filepath)->textEditor;
 }
 
 void Window::focusActiveEditor()
@@ -617,7 +619,7 @@ bool Window::saveFile()
 
         return result;
     } else {
-        bool success = m_editorMap[m_titleBar->getActiveTabPath()]->saveFile();
+        bool success = m_editorMap.value(m_titleBar->getActiveTabPath())->saveFile();
         if (success) {
             showNotify(tr("%1  文件已保存").arg(m_titleBar->getActiveTabName()));
         }
@@ -635,7 +637,7 @@ void Window::saveAsFile()
     if (filepath != "" && filepath != tabPath) {
         saveFileAsAnotherPath(tabPath, filepath, encode, newline, false);
     } else if (filepath == tabPath) {
-        m_editorMap[filepath]->saveFile(encode, newline);
+        m_editorMap.value(filepath)->saveFile(encode, newline);
     }
 }
 
@@ -684,7 +686,7 @@ void Window::popupFindBar()
 {
     if (m_findBar->isVisible()) {
         if (m_findBar->isFocus()) {
-            QTimer::singleShot(0, m_editorMap[m_titleBar->getActiveTabPath()]->textEditor, SLOT(setFocus()));
+            QTimer::singleShot(0, m_editorMap.value(m_titleBar->getActiveTabPath())->textEditor, SLOT(setFocus()));
         } else {
             m_findBar->focus();
         }
@@ -706,7 +708,7 @@ void Window::popupReplaceBar()
 {
     if (m_replaceBar->isVisible()) {
         if (m_replaceBar->isFocus()) {
-            QTimer::singleShot(0, m_editorMap[m_titleBar->getActiveTabPath()]->textEditor, SLOT(setFocus()));
+            QTimer::singleShot(0, m_editorMap.value(m_titleBar->getActiveTabPath())->textEditor, SLOT(setFocus()));
         } else {
             m_replaceBar->focus();
         }
@@ -728,7 +730,7 @@ void Window::popupJumpLineBar()
 {
     if (m_jumpLineBar->isVisible()) {
         if (m_jumpLineBar->isFocus()) {
-            QTimer::singleShot(0, m_editorMap[m_titleBar->getActiveTabPath()]->textEditor, SLOT(setFocus()));
+            QTimer::singleShot(0, m_editorMap.value(m_titleBar->getActiveTabPath())->textEditor, SLOT(setFocus()));
         } else {
             m_jumpLineBar->focus();
         }
@@ -802,7 +804,7 @@ void Window::remberPositionRestore()
             QTimer::singleShot(
                 0, this,
                 [=] () {
-                    m_editorMap[filepath]->textEditor->scrollToLine(scrollOffset, row, column);
+                    m_editorMap.value(filepath)->textEditor->scrollToLine(scrollOffset, row, column);
                 });
         } else {
             if (Utils::fileExists(m_remberPositionFilePath)) {
@@ -818,7 +820,7 @@ void Window::remberPositionRestore()
                 QTimer::singleShot(
                     0, this,
                     [=] () {
-                        m_editorMap[filepath]->textEditor->scrollToLine(scrollOffset, row, column);
+                        m_editorMap.value(filepath)->textEditor->scrollToLine(scrollOffset, row, column);
                     });
             } else {
                 showNotify(tr("记录位置的文件已经不存在了"));
@@ -1043,7 +1045,7 @@ void Window::handleTabCloseRequested(int index)
 void Window::handleCloseFile(const QString &filepath)
 {
     if (m_editorMap.contains(filepath)) {
-        Editor *editor = m_editorMap[filepath];
+        Editor *editor = m_editorMap.value(filepath);
 
         m_editorLayout->removeWidget(editor);
         m_editorMap.remove(filepath);
@@ -1076,7 +1078,7 @@ void Window::handleCurrentChanged(const int &index)
     const QString &filepath = m_titleBar->tabbar->tabFiles.value(index);
 
     if (m_editorMap.contains(filepath)) {
-        m_editorLayout->setCurrentWidget(m_editorMap[filepath]);
+        m_editorLayout->setCurrentWidget(m_editorMap.value(filepath));
     }
 }
 
@@ -1099,9 +1101,9 @@ void Window::handleJumpLineBarJumpToLine(const QString &filepath, int line, bool
 void Window::handleBackToPosition(const QString &file, int row, int column, int scrollOffset)
 {
     if (m_editorMap.contains(file)) {
-        m_editorMap[file]->textEditor->scrollToLine(scrollOffset, row, column);
+        m_editorMap.value(file)->textEditor->scrollToLine(scrollOffset, row, column);
 
-        QTimer::singleShot(0, m_editorMap[file]->textEditor, SLOT(setFocus()));
+        QTimer::singleShot(0, m_editorMap.value(file)->textEditor, SLOT(setFocus()));
     }
 }
 
@@ -1167,10 +1169,10 @@ void Window::handleUpdateSearchKeyword(QWidget *widget, const QString &file, con
 {
     if (file == m_titleBar->getActiveTabPath() && m_editorMap.contains(file)) {
         // Highlight keyword in text editor.
-        m_editorMap[file]->textEditor->highlightKeyword(keyword, m_editorMap[file]->textEditor->getPosition());
+        m_editorMap.value(file)->textEditor->highlightKeyword(keyword, m_editorMap.value(file)->textEditor->getPosition());
 
         // Update input widget warning status along with keyword match situation.
-        bool findKeyword = m_editorMap[file]->textEditor->findKeywordForward(keyword);
+        bool findKeyword = m_editorMap.value(file)->textEditor->findKeywordForward(keyword);
         bool emptyKeyword = keyword.trimmed().isEmpty();
 
         auto *findBarWidget = qobject_cast<FindBar*>(widget);

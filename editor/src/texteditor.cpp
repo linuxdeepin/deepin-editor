@@ -2408,11 +2408,11 @@ void TextEditor::toggleReadOnlyMode()
     if (m_readOnlyMode) {
         m_readOnlyMode = false;
 
-        popupNotify(tr("只读模式关闭"));
+        popupNotify(tr("Read-only mode is off"));
     } else {
         m_readOnlyMode = true;
 
-        popupNotify(tr("只读模式开启"));
+        popupNotify(tr("Read-only mode is on"));
     }
 }
 
@@ -2423,7 +2423,7 @@ void TextEditor::toggleComment()
     if (def.filePath() != "") {
         Comment::unCommentSelection(this, m_commentDefinition);
     } else {
-        popupNotify(tr("文件不支持语法注释"));
+        popupNotify(tr("File does not support syntax comments"));
     }
 }
 
