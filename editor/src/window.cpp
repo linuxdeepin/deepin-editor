@@ -116,7 +116,6 @@ Window::Window(DMainWindow *parent)
 
         connect(m_titleBar->tabbar, &Tabbar::tabAddRequested, this, static_cast<void (Window::*)()>(&Window::addBlankTab), Qt::QueuedConnection);
         connect(m_titleBar->tabbar, &Tabbar::tabCloseRequested, this, &Window::handleTabCloseRequested, Qt::QueuedConnection);
-        connect(m_titleBar->tabbar, &Tabbar::closeFile, this, &Window::handleCloseFile, Qt::QueuedConnection);
         connect(m_titleBar->tabbar, &Tabbar::currentChanged, this, &Window::handleCurrentChanged, Qt::QueuedConnection);
 
         m_menu->setStyle(QStyleFactory::create("dlight"));
@@ -341,6 +340,7 @@ void Window::closeTab()
                     }
 
                     focusActiveEditor();
+                    handleCloseFile(filePath);
                 });
 
         dialog->exec();
@@ -351,6 +351,7 @@ void Window::closeTab()
         // Close tab directly, because all file is save automatically.
         m_titleBar->closeActiveTab();
 
+        handleCloseFile(filePath);
         focusActiveEditor();
     }
 
@@ -1025,9 +1026,11 @@ void Window::addBlankTab(const QString &blankFile)
 
 void Window::handleTabReleaseRequested(const QString &tabName, const QString &filepath, int index)
 {
-    m_titleBar->closeTabWithIndex(index);
+    const QString content = getTextEditor(filepath)->toPlainText();
 
-    QString content = getTextEditor(filepath)->toPlainText();
+    m_titleBar->closeTabWithIndex(index);
+    handleCloseFile(filepath);
+
     emit dropTabOut(tabName, filepath, content);
 }
 
@@ -1070,7 +1073,7 @@ void Window::handleCurrentChanged(const int &index)
         editor->textEditor->removeKeywords();
     }
 
-    const QString &filepath = m_titleBar->tabbar->tabFiles.at(index);
+    const QString &filepath = m_titleBar->tabbar->tabFiles.value(index);
 
     if (m_editorMap.contains(filepath)) {
         m_editorLayout->setCurrentWidget(m_editorMap[filepath]);
