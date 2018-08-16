@@ -64,7 +64,6 @@ void Editor::loadFile(const QString &filepath)
         detectNewline();
 
         textEditor->loadHighlighter();
-        textEditor->setTextChanged(false);
     }
 
     file.close();
@@ -132,7 +131,7 @@ bool Editor::saveFile(const QString &encode, const QString &newline)
     }
 
     // update status.
-    textEditor->setTextChanged(false);
+    textEditor->setModified(false);
 
     return true;
 }

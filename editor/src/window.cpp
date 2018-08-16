@@ -318,7 +318,7 @@ void Window::closeTab()
     const bool isBlankFile = QFileInfo(filePath).dir().absolutePath() == m_blankFileDir;
 
     // if the editor text changes, will prompt the user to save.
-    if (m_editorMap[filePath]->textEditor->isTextChanged()) {
+    if (m_editorMap[filePath]->textEditor->document()->isModified()) {
         DDialog *dialog = createSaveFileDialog(tr("Save file"), tr("Do you need to save the file?"));
 
         connect(dialog, &DDialog::buttonClicked, this,
@@ -342,6 +342,8 @@ void Window::closeTab()
 
                     focusActiveEditor();
                 });
+
+        dialog->exec();
     } else {
         // Record last close path.
         m_closeFileHistory << m_titleBar->getActiveTabPath();
@@ -1011,7 +1013,6 @@ void Window::addBlankTab(const QString &blankFile)
     m_titleBar->addTab(blankTabPath, tr("Blank document %1").arg(blankFileIndex));
     Editor *editor = createEditor();
     editor->updatePath(blankTabPath);
-    editor->textEditor->setTextChanged(false);
 
     if (!blankFile.isEmpty() && Utils::fileExists(blankFile)) {
         editor->loadFile(blankFile);
@@ -1259,7 +1260,6 @@ DDialog* Window::createSaveFileDialog(QString title, QString content)
     dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
     dialog->addButton(QString(tr("Don't Save")), false, DDialog::ButtonNormal);
     dialog->addButton(QString(tr("Save")), true, DDialog::ButtonNormal);
-    dialog->show();
 
     return dialog;
 }

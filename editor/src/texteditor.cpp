@@ -76,8 +76,8 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
 
     connect(this, &QPlainTextEdit::updateRequest, this, &TextEditor::handleUpdateRequest);
     connect(this, &QPlainTextEdit::textChanged, this, &TextEditor::updateLineNumber, Qt::QueuedConnection);
-    connect(this, &QPlainTextEdit::textChanged, this, [=] { m_isTextChanged = true; });
     connect(this, &QPlainTextEdit::cursorPositionChanged, this, &TextEditor::highlightCurrentLine, Qt::QueuedConnection);
+    connect(document(), &QTextDocument::modificationChanged, this, &TextEditor::setModified);
 
     // Init menu.
     m_rightMenu = new QMenu();
@@ -2130,6 +2130,11 @@ void TextEditor::removeHighlightWordUnderCursor()
 void TextEditor::setSettings(Settings *keySettings)
 {
     m_settings = keySettings;
+}
+
+void TextEditor::setModified(bool modified)
+{
+    document()->setModified(modified);
 }
 
 void TextEditor::copySelectedText()
