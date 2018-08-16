@@ -197,7 +197,7 @@ Window::Window(DMainWindow *parent)
     DAnchorsBase::setAnchor(m_themeBar, Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
     DAnchorsBase::setAnchor(m_themeBar, Qt::AnchorRight, m_centralWidget, Qt::AnchorRight);
 
-    connect(m_themeBar, &ThemeBar::changeTheme, this, &Window::loadTheme);
+    connect(m_themeBar, &ThemeBar::changeTheme, this, &Window::themeChanged);
     connect(this, &Window::requestDragEnterEvent, this, &Window::dragEnterEvent);
     connect(this, &Window::requestDropEvent, this, &Window::dropEvent);
 
@@ -1312,6 +1312,9 @@ void Window::changeTitlebarBackground(const QString &startColor, const QString &
 {
     titlebar()->setStyleSheet(
         QString("%1Dtk--Widget--DTitlebar {background: qlineargradient(x1: 0 y1: 0, x2: 0 y2: 1, stop: 0 rgba%2, stop: 1 rgba%3);}").arg(m_titlebarStyleSheet).arg(startColor).arg(endColor));
+
+    QVariantMap jsonMap = Utils::getThemeNodeMap(m_themeName);
+    m_titleBar->setTabActiveColor(jsonMap["app-colors"].toMap()["tab-active"].toString());
 }
 
 bool Window::wordCompletionWindowIsVisible()
@@ -1435,9 +1438,10 @@ void Window::handleConfirmCompletion()
 
 void Window::loadTheme(const QString &name)
 {
-    QVariantMap jsonMap = Utils::getThemeNodeMap(name);
+    m_themeName = name;
 
-    auto backgroundColor = jsonMap["editor-colors"].toMap()["background-color"].toString();
+    QVariantMap jsonMap = Utils::getThemeNodeMap(name);
+    const QString &backgroundColor = jsonMap["editor-colors"].toMap()["background-color"].toString();
 
     if (QColor(backgroundColor).lightness() < 128) {
         DThemeManager::instance()->setTheme("dark");
@@ -1458,7 +1462,6 @@ void Window::loadTheme(const QString &name)
     m_replaceBar->setBackground(backgroundColor);
     m_findBar->setBackground(backgroundColor);
     m_titleBar->tabbar->setDNDColor(jsonMap["app-colors"].toMap()["tab-dnd-start"].toString(), jsonMap["app-colors"].toMap()["tab-dnd-end"].toString());
-    m_titleBar->setTabActiveColor(jsonMap["app-colors"].toMap()["tab-active"].toString());
 
     auto frameSelectedColor = jsonMap["app-colors"].toMap()["themebar-frame-selected"].toString();
     auto frameNormalColor = jsonMap["app-colors"].toMap()["themebar-frame-normal"].toString();
@@ -1468,7 +1471,6 @@ void Window::loadTheme(const QString &name)
     m_themeBar->themeView->repaint();
 
     m_settings->settings->option("base.theme.default")->setValue(name);
-    m_themeName = name;
 }
 
 void Window::dragEnterEvent(QDragEnterEvent *event)

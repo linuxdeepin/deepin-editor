@@ -48,6 +48,7 @@ public slots:
     Q_SCRIPTABLE void openFilesInWindow(QStringList files);
 
     void createWindowFromTab(QString tabName, QString filepath, QString content);
+    void loadTheme(const QString &themeName);
 
 private:
     Window* createWindow(bool alwaysCenter = false);

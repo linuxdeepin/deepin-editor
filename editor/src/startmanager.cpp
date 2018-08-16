@@ -131,11 +131,19 @@ void StartManager::createWindowFromTab(QString tabName, QString filepath, QStrin
     createWindow()->addTabWithContent(tabName, filepath, content);
 }
 
+void StartManager::loadTheme(const QString &themeName)
+{
+    for (Window *window : m_windows) {
+        window->loadTheme(themeName);
+    }
+}
+
 Window* StartManager::createWindow(bool alwaysCenter)
 {
     // Create window.
     Window *window = new Window();
     connect(window, &Window::dropTabOut, this, &StartManager::createWindowFromTab, Qt::QueuedConnection);
+    connect(window, &Window::themeChanged, this, &StartManager::loadTheme, Qt::QueuedConnection);
 
     // Quit application if close last window.
     connect(window, &Window::close, this,

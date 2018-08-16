@@ -105,6 +105,7 @@ public:
 
 signals:
     void dropTabOut(QString tabName, QString filepath, QString content);
+    void themeChanged(const QString themeName);
     void requestDragEnterEvent(QDragEnterEvent *);
     void requestDropEvent(QDropEvent *);
     void newWindow();
