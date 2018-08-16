@@ -175,8 +175,8 @@
     },
     "app-colors" : {
 	"tab-active" : "#FF0000",
-	"tab-dnd-start" : "(255, 0, 0, 90%)",
-	"tab-dnd-end" : "(0, 255, 0, 90%)",
+        "tab-dnd-start" : "(0, 0, 0, 10%)",
+        "tab-dnd-end" : "(0, 0, 0, 5%)",
 	"themebar-frame-selected" : "#00FFFF",
 	"themebar-frame-normal" : "#000000",
 	"english-completer-item-selected-background" : "#00FFFF",

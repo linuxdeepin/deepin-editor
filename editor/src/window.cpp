@@ -1310,8 +1310,11 @@ void Window::popupPrintDialog()
 
 void Window::changeTitlebarBackground(const QString &startColor, const QString &endColor)
 {
-    titlebar()->setStyleSheet(
-        QString("%1Dtk--Widget--DTitlebar {background: qlineargradient(x1: 0 y1: 0, x2: 0 y2: 1, stop: 0 rgba%2, stop: 1 rgba%3);}").arg(m_titlebarStyleSheet).arg(startColor).arg(endColor));
+    titlebar()->setStyleSheet(QString("%1"
+                                      "Dtk--Widget--DTitlebar {"
+                                      "background: qlineargradient(x1:0 y1:0, x2:0 y2:1,"
+                                      "stop:0 rgba%2,  stop:1 rgba%3);"
+                                      "}").arg(m_titlebarStyleSheet).arg(startColor).arg(endColor));
 
     QVariantMap jsonMap = Utils::getThemeNodeMap(m_themeName);
     m_titleBar->setTabActiveColor(jsonMap["app-colors"].toMap()["tab-active"].toString());
