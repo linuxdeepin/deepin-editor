@@ -1887,19 +1887,20 @@ void TextEditor::highlightCurrentLine()
     renderAllSelections();
 
     // Adjust scrollbar margins if reach last line.
-    if (getCurrentLine() == blockCount()) {
-        // Adjust y coordinate up one line height.
-        m_scrollbarMargin = fontMetrics().height();
+    // FIXME(rekols): Temporarily do not need this function.
+    // if (getCurrentLine() == blockCount()) {
+    //     // Adjust y coordinate up one line height.
+    //     m_scrollbarMargin = fontMetrics().height();
 
-        adjustScrollbarMargins();
+    //     adjustScrollbarMargins();
 
-        // NOTE: do nextLine make scrollbar adjust y coordinate.
-        nextLine();
-    } else {
-        m_scrollbarMargin = 0;
+    //     // NOTE: do nextLine make scrollbar adjust y coordinate.
+    //     nextLine();
+    // } else {
+    //     m_scrollbarMargin = 0;
 
-        adjustScrollbarMargins();
-    }
+    //     adjustScrollbarMargins();
+    // }
 
     // Keep current line at visible area.
     if (cursorRect().top() + fontMetrics().height() >= rect().height()) {
