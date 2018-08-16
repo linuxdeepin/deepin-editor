@@ -1790,7 +1790,7 @@ void TextEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
                              top,
                              lineNumberArea->width(),
                              blockBoundingRect(block).height(),
-                             Qt::AlignCenter,
+                             Qt::AlignTop | Qt::AlignHCenter,
                              QString::number(linenumber + 1));
         }
 
