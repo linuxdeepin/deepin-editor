@@ -1902,6 +1902,8 @@ void TextEditor::highlightCurrentLine()
     //     adjustScrollbarMargins();
     // }
 
+    adjustScrollbarMargins();
+
     // Keep current line at visible area.
     if (cursorRect().top() + fontMetrics().height() >= rect().height()) {
         scrollLineUp();
