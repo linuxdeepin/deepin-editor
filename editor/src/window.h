@@ -25,7 +25,6 @@
 #define WINDOW_H
 
 #include "ddialog.h"
-#include "wordcompletionwindow.h"
 #include "dmainwindow.h"
 #include "editor.h"
 #include "findbar.h"

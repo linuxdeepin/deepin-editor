@@ -22,13 +22,11 @@
  */
 
 #include "danchors.h"
-#include "wordcompletionitem.h"
 #include "dthememanager.h"
 #include "dtoast.h"
 #include "utils.h"
 #include "window.h"
 #include "themeitem.h"
-#include "wordcompletionitem.h"
 
 #include <DSettingsGroup>
 #include <DSettings>

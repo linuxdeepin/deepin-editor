@@ -23,8 +23,6 @@ HEADERS += src/window.h \
 	   src/titlebar.h \
 	   src/tabbar.h \
 	   src/editor.h \
-	   src/wordcompletionwindow.h \
-	   src/wordcompletionitem.h \
 	   src/themebar.h \
 	   src/themeview.h \
 	   src/themeitem.h \
@@ -44,8 +42,6 @@ SOURCES += src/window.cpp \
 	   src/tabbar.cpp \
 	   src/editor.cpp \
 	   src/utils.cpp \
-	   src/wordcompletionwindow.cpp \
-	   src/wordcompletionitem.cpp \
 	   src/themebar.cpp \
 	   src/themeview.cpp \
 	   src/themeitem.cpp \
