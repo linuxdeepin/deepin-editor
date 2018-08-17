@@ -33,7 +33,6 @@
 #include <QPaintEvent>
 #include <QPlainTextEdit>
 #include <QPropertyAnimation>
-#include <QSqlDatabase>
 
 namespace KSyntaxHighlighting {
     class SyntaxHighlighter;
@@ -146,13 +145,9 @@ public:
     void saveMarkStatus();
     void restoreMarkStatus();
 
-    void setEnglishWordsDB(QSqlDatabase wordsDB);
     void completionWord(QString word);
     QString getWordAtMouse();
     QString getWordAtCursor();
-    void toggleEnglishCompleter();
-    void setEnglishCompleter(bool enable);
-    bool getEnglishCompleter();
 
     void toggleReadOnlyMode();
 
@@ -170,15 +165,7 @@ signals:
     void clickJumpLineAction();
     void clickFullscreenAction();
     void cursorMarkChanged(bool mark, QTextCursor cursor);
-    void popupCompletionWindow(QString word, QPoint pos, QStringList words);
-
-    void selectNextCompletion();
-    void selectPrevCompletion();
-    void selectFirstCompletion();
-    void selectLastCompletion();
-    void confirmCompletion();
     void popupNotify(QString notify);
-
     void click();
     void pressEsc();
 
@@ -206,12 +193,9 @@ public slots:
     void changeToWaitCursor();
     void handleCursorMarkChanged(bool mark, QTextCursor cursor);
 
-    void tryCompleteWord();
-
     void adjustScrollbarMargins();
 
 protected:
-    void focusOutEvent(QFocusEvent *event) override;
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
 
@@ -247,8 +231,6 @@ private:
     QAction *m_findAction;
     QAction *m_replaceAction;
     QAction *m_jumpLineAction;
-    QAction *m_enableEnglishCompleterAction;
-    QAction *m_disableEnglishCompleterAction;
     QAction *m_enableReadOnlyModeAction;
     QAction *m_disableReadOnlyModeAction;
     QAction *m_fullscreenAction;
@@ -273,15 +255,9 @@ private:
     Settings *m_settings;
 
     // QTimer *m_changeCursorWidthTimer;
-    QTimer *m_englishHelperTimer;
-
-    QSqlDatabase m_wordsDB;
 
     bool setCursorKeywordSeletoin(int position, bool findNext);
 
-    bool m_hasCompletionWords = false;
-    bool m_confirmCompletionFlag = false;
-    bool m_enableEnglishCompleter = false;
     bool m_readOnlyMode = false;
 
     bool m_cursorMarkStatus = false;

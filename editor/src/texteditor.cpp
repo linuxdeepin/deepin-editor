@@ -41,9 +41,6 @@
 #include <QScrollBar>
 #include <QStyleFactory>
 #include <QTextBlock>
-#include <QSqlQuery>
-#include <QSqlRecord>
-#include <QSqlError>
 #include <QMimeData>
 #include <QTimer>
 
@@ -92,8 +89,6 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     m_findAction = new QAction(tr("Find"), this);
     m_replaceAction = new QAction(tr("Replace"), this);
     m_jumpLineAction = new QAction(tr("Jump line"), this);
-    m_enableEnglishCompleterAction = new QAction(tr("Enable english completer"), this);
-    m_disableEnglishCompleterAction = new QAction(tr("Disable english completer"), this);
     m_enableReadOnlyModeAction = new QAction(tr("Turn on read only mode"), this);
     m_disableReadOnlyModeAction = new QAction(tr("Turn off read only mode"), this);
     m_fullscreenAction = new QAction(tr("Fullscreen"), this);
@@ -117,8 +112,6 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
     connect(m_exitFullscreenAction, &QAction::triggered, this, &TextEditor::clickFullscreenAction);
     connect(m_enableReadOnlyModeAction, &QAction::triggered, this, &TextEditor::toggleReadOnlyMode);
     connect(m_disableReadOnlyModeAction, &QAction::triggered, this, &TextEditor::toggleReadOnlyMode);
-    connect(m_enableEnglishCompleterAction, &QAction::triggered, this, &TextEditor::toggleEnglishCompleter);
-    connect(m_disableEnglishCompleterAction, &QAction::triggered, this, &TextEditor::toggleEnglishCompleter);
     connect(m_openInFileManagerAction, &QAction::triggered, this, &TextEditor::clickOpenInFileManagerAction);
     connect(m_toggleCommentAction, &QAction::triggered, this, &TextEditor::toggleComment);
     connect(m_toggleBulletAction, &QAction::triggered, this, &TextEditor::toggleBullet);
@@ -170,11 +163,6 @@ TextEditor::TextEditor(QPlainTextEdit *parent) :
 
     // Monitor cursor mark status to update in line number area.
     connect(this, &TextEditor::cursorMarkChanged, this, &TextEditor::handleCursorMarkChanged);
-
-    // Init english helper timer.
-    m_englishHelperTimer = new QTimer(this);
-    m_englishHelperTimer->setSingleShot(true);
-    connect(m_englishHelperTimer, &QTimer::timeout, this, &TextEditor::tryCompleteWord);
 
     // configure content area
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
@@ -1640,12 +1628,7 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "prevline")) {
             prevLine();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "newline") || key == "Return") {
-            if (static_cast<Window*>(this->window())->wordCompletionWindowIsVisible()) {
-                m_confirmCompletionFlag = true;
-                confirmCompletion();
-            } else {
-                newline();
-            }
+            newline();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "opennewlineabove")) {
             openNewlineAbove();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "opennewlinebelow")) {
@@ -1712,16 +1695,6 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
             cutlines();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "joinlines")) {
             joinLines();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "selectnextcompletion")) {
-            selectNextCompletion();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "selectprevcompletion")) {
-            selectPrevCompletion();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "selectfirstcompletion")) {
-            selectFirstCompletion();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "selectlastcompletion")) {
-            selectLastCompletion();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "toggleenglishcompleter")) {
-            toggleEnglishCompleter();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglereadonlymode")) {
             toggleReadOnlyMode();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglecomment")) {
@@ -1860,11 +1833,6 @@ void TextEditor::contextMenuEvent(QContextMenuEvent *event)
         m_rightMenu->addAction(m_toggleBulletAction);
     }
     m_rightMenu->addSeparator();
-    // if (m_enableEnglishCompleter) {
-    //     m_rightMenu->addAction(m_disableEnglishCompleterAction);
-    // } else {
-    //     m_rightMenu->addAction(m_enableEnglishCompleterAction);
-    // }
     if (m_readOnlyMode) {
         m_rightMenu->addAction(m_disableReadOnlyModeAction);
     } else {
@@ -1914,17 +1882,6 @@ void TextEditor::updateLineNumber()
 {
     // Update line number painter.
     lineNumberArea->setFixedWidth(QString("%1").arg(blockCount()).size() * fontMetrics().width('9') + m_lineNumberPaddingX * 2);
-
-    // Try complete words.
-    if (m_englishHelperTimer->isActive()) {
-        m_englishHelperTimer->stop();
-    }
-
-    if (m_enableEnglishCompleter && !m_confirmCompletionFlag) {
-        m_englishHelperTimer->start(500);
-    } else {
-        m_confirmCompletionFlag = false;
-    }
 }
 
 void TextEditor::handleScrollFinish()
@@ -2381,31 +2338,6 @@ QString TextEditor::getWordAtMouse()
     }
 }
 
-void TextEditor::toggleEnglishCompleter()
-{
-    if (m_enableEnglishCompleter) {
-        m_enableEnglishCompleter = false;
-
-        popupCompletionWindow("", QPoint(), QStringList());
-
-        popupNotify(tr("英文助手已关闭"));
-    } else {
-        m_enableEnglishCompleter = true;
-
-        popupNotify(tr("英文助手已开启"));
-    }
-}
-
-void TextEditor::setEnglishCompleter(bool enable)
-{
-    m_enableEnglishCompleter = enable;
-}
-
-bool TextEditor::getEnglishCompleter()
-{
-    return m_enableEnglishCompleter;
-}
-
 void TextEditor::toggleReadOnlyMode()
 {
     if (m_readOnlyMode) {
@@ -2609,51 +2541,6 @@ bool TextEditor::atWordSeparator(int position)
     return m_wordSepartors.contains(QString(toPlainText().at(position)));
 }
 
-void TextEditor::tryCompleteWord()
-{
-    QString wordAtCursor = getWordAtCursor();
-    QTextCursor cursor = textCursor();
-
-    auto rect = cursorRect(textCursor());
-
-    auto cursorPos = viewport()->mapTo(static_cast<Window*>(this->window()),
-                                       QPoint(rect.x() + rect.width(),
-                                              rect.y() + rect.height()));
-
-    auto windowPos = static_cast<Window*>(this->window())->mapToGlobal(QPoint(0, 0));
-
-    QStringList completionList;
-
-    if (wordAtCursor != "") {
-        QSqlQuery query(m_wordsDB);
-        query.prepare("SELECT word FROM words WHERE word like :word");
-        query.bindValue(":word", QString("%1%%").arg(wordAtCursor));
-
-        if (query.exec()) {
-            int wordIndex = query.record().indexOf("word");
-
-            while (query.next()) {
-                auto completionWord = query.value(wordIndex).toString();
-
-                if (completionWord != wordAtCursor) {
-                    completionList << completionWord;
-                }
-            }
-        } else {
-            qDebug() << "Error: " << query.lastError();
-        }
-    }
-
-    popupCompletionWindow(wordAtCursor, QPoint(windowPos.x() + cursorPos.x(), windowPos.y() + cursorPos.y()), completionList);
-
-    m_hasCompletionWords = completionList.size() > 1;
-}
-
-void TextEditor::focusOutEvent(QFocusEvent*)
-{
-    popupCompletionWindow("", QPoint(), QStringList());
-}
-
 void TextEditor::dragEnterEvent(QDragEnterEvent *event)
 {
     QPlainTextEdit::dragEnterEvent(event);
@@ -2670,11 +2557,6 @@ void TextEditor::dropEvent(QDropEvent *event)
         QPlainTextEdit::dropEvent(event);
     }
 
-}
-
-void TextEditor::setEnglishWordsDB(QSqlDatabase db)
-{
-    m_wordsDB = db;
 }
 
 void TextEditor::completionWord(QString word)

@@ -42,7 +42,6 @@
 #include <QVBoxLayout>
 #include <QWidget>
 #include <dimagebutton.h>
-#include <QSqlDatabase>
 
 DWIDGET_USE_NAMESPACE
 DWM_USE_NAMESPACE
@@ -97,8 +96,6 @@ public:
 
     void changeTitlebarBackground(const QString &startColor, const QString &endColor);
 
-    bool wordCompletionWindowIsVisible();
-
     const QString getSaveFilePath(QString &encode, QString &newline);
 
     void displayShortcuts();
@@ -149,13 +146,6 @@ public slots:
 
     void popupPrintDialog();
 
-    void handlePopupCompletionWindow(const QString &word, const QPoint &pos, const QStringList &words);
-    void handleSelectNextCompletion();
-    void handleSelectPrevCompletion();
-    void handleSelectFirstCompletion();
-    void handleSelectLastCompletion();
-    void handleConfirmCompletion();
-
     void loadTheme(const QString &themeName);
 
 private:
@@ -182,7 +172,7 @@ private:
     Settings *m_settings;
     DWindowManager *m_windowManager;
 
-    QMap<QString, Editor*> m_editorMap;
+    QMap<QString, Editor *> m_editorMap;
 
     QMenu *m_menu;
     QAction *m_newWindowAction;
@@ -209,9 +199,6 @@ private:
 
     bool m_windowShowFlag = false;
 
-    // QSqlDatabase m_wordsDB;
-    // WordCompletionWindow *m_wordCompletionWindow;
-
     QString m_readonlySeparator = " !_! ";
 
     QString m_themeName;
@@ -219,9 +206,6 @@ private:
     QString m_lightTabBackgroundEndColor = "(248, 248, 248, 90%)";
     QString m_darkTabBackgroundStartColor = "(16, 16, 16, 90%)";
     QString m_darkTabBackgroundEndColor = "(16, 16, 16, 90%)";
-
-    // bool m_inCompleting = false;
-    // QTimer *m_inCompletingTimer;
 };
 
 #endif

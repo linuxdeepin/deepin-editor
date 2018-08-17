@@ -38,7 +38,7 @@ ThemeItem::ThemeItem(QString themeDir, qreal scale)
     screenScale = scale;
 
     QVariantMap jsonMap = Utils::getThemeNodeMap(themeName);
-    
+
     importColor = jsonMap["text-styles"].toMap()["Import"].toMap()["text-color"].toString();
     stringColor = jsonMap["text-styles"].toMap()["String"].toMap()["text-color"].toString();
     builtInColor = jsonMap["text-styles"].toMap()["BuiltIn"].toMap()["text-color"].toString();
@@ -66,16 +66,16 @@ void ThemeItem::drawForeground(QRect rect, QPainter *painter, int column, int, b
     painter->setRenderHint(QPainter::Antialiasing, true);
     painter->setOpacity(1);
     Utils::setFontSize(*painter, 12);
-    
+
     if (column == 0) {
         // Draw frame.
         painter->save();
-        
+
         QPainterPath framePath;
         framePath.addRoundedRect(
-            QRect(rect.x() + itemPaddingX, 
-                  rect.y() + itemPaddingY, 
-                  rect.width() - itemPaddingX * 2, 
+            QRect(rect.x() + itemPaddingX,
+                  rect.y() + itemPaddingY,
+                  rect.width() - itemPaddingX * 2,
                   rect.height() - itemPaddingY * 2), frameRadius, frameRadius);
         QString frameColor;
         if (isSelect) {
@@ -86,9 +86,9 @@ void ThemeItem::drawForeground(QRect rect, QPainter *painter, int column, int, b
         painter->setOpacity(1);
         painter->setPen(QPen(QColor(frameColor), 1));
         painter->drawPath(framePath);
-        
+
         painter->restore();
-        
+
         // Draw background.
         QPainterPath backgroundPath;
         backgroundPath.addRoundedRect(
@@ -96,20 +96,20 @@ void ThemeItem::drawForeground(QRect rect, QPainter *painter, int column, int, b
                   rect.y() + itemPaddingY,
                   rect.width() - itemPaddingX * 2,
                   rect.height() - itemPaddingY * 2), frameRadius, frameRadius);
-        
+
         painter->setOpacity(0.8);
         painter->fillPath(backgroundPath, QColor(backgroundColor));
-        
+
         // Draw syntax highlight.
         painter->save();
-        
+
         painter->setOpacity(1);
         QFont font = painter->font();
         font.setPointSize(fontSize);
         painter->setFont(font);
 
         QFontMetrics fm(font);
-        
+
         int includeX = renderX;
         int includeY = renderY;
         painter->setPen(QPen(QColor(otherColor)));
@@ -119,7 +119,7 @@ void ThemeItem::drawForeground(QRect rect, QPainter *painter, int column, int, b
         int headerY = includeY;
         painter->setPen(QPen(QColor(importColor)));
         painter->drawText(QRect(rect.x() + headerX, rect.y() + headerY, rect.width(), lineHeight), Qt::AlignLeft | Qt::AlignTop, "\"deepin.h\"");
-        
+
         int keywordX = includeX;
         int keywordY = includeY + lineHeight;
         painter->setPen(QPen(QColor(keywordColor)));
@@ -134,7 +134,7 @@ void ThemeItem::drawForeground(QRect rect, QPainter *painter, int column, int, b
         int functionArgY = includeY + lineHeight;
         painter->setPen(QPen(QColor(normalColor)));
         painter->drawText(QRect(rect.x() + functionArgX, rect.y() + functionArgY, rect.width(), lineHeight), Qt::AlignLeft | Qt::AlignTop, "() {");
-        
+
         int commentX = includeX + fm.width("QStr");
         int commentY = includeY + lineHeight * 2;
         painter->setPen(QPen(QColor(commentColor)));
@@ -149,7 +149,7 @@ void ThemeItem::drawForeground(QRect rect, QPainter *painter, int column, int, b
         int stringY = includeY + lineHeight * 3;
         painter->setPen(QPen(QColor(stringColor)));
         painter->drawText(QRect(rect.x() + stringX, rect.y() + stringY, rect.width(), lineHeight), Qt::AlignLeft | Qt::AlignTop, QString("\"%1\"").arg(themeName));
-        
+
         int semicolonX = includeX + fm.width("QStr") + fm.width("return ") + fm.width(QString("\"%1\"").arg(themeName));
         int semicolonY = includeY + lineHeight * 3;
         painter->setPen(QPen(QColor(normalColor)));
@@ -159,7 +159,7 @@ void ThemeItem::drawForeground(QRect rect, QPainter *painter, int column, int, b
         int bracketY = includeY + lineHeight * 4;
         painter->setPen(QPen(QColor(normalColor)));
         painter->drawText(QRect(rect.x() + bracketX, rect.y() + bracketY, rect.width(), lineHeight), Qt::AlignLeft | Qt::AlignTop, "}");
-        
+
         painter->restore();
     }
 }
@@ -168,9 +168,9 @@ bool ThemeItem::sortByLightness(const DSimpleListItem *item1, const DSimpleListI
 {
     auto lightness1 = QColor((static_cast<const ThemeItem*>(item1))->backgroundColor).lightness();
     auto lightness2 = QColor((static_cast<const ThemeItem*>(item2))->backgroundColor).lightness();
-    
+
     bool sortOrder = lightness1 < lightness2;
-    
+
     return descendingSort ? sortOrder : !sortOrder;
 }
 

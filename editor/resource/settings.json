@@ -473,12 +473,6 @@
                             "default":  "Alt+Shift+<"
                         },
                         {
-                            "key": "toggleenglishcompleter",
-                            "name": "Toggle English Completer",
-                            "type": "shortcut",
-                            "default":  "Alt+'"
-                        },
-                        {
                             "key": "togglereadonlymode",
                             "name": "Toggle Read Only Mode",
                             "type": "shortcut",
@@ -929,12 +923,6 @@
                             "hide" : true,
                             "reset" : false,
                             "default":  "Alt+Shift+<"
-                        },
-                        {
-                            "key": "toggleenglishcompleter",
-                            "hide" : true,
-                            "reset" : false,
-                            "default":  "Alt+'"
                         },
                         {
                             "key": "togglereadonlymode",
@@ -1389,12 +1377,6 @@
                             "default":  "Alt+Shift+<"
                         },
                         {
-                            "key": "toggleenglishcompleter",
-                            "hide" : true,
-                            "reset" : false,
-                            "default":  "Alt+'"
-                        },
-                        {
                             "key": "togglereadonlymode",
                             "hide" : true,
                             "reset" : false,
@@ -1845,12 +1827,6 @@
                             "hide" : true,
                             "reset" : false,
                             "default":  "Alt+Shift+<"
-                        },
-                        {
-                            "key": "toggleenglishcompleter",
-                            "hide" : true,
-                            "reset" : false,
-                            "default":  "Alt+'"
                         },
                         {
                             "key": "togglereadonlymode",

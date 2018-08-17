@@ -27,7 +27,6 @@
 #include "dbusinterface.h"
 #include "texteditor.h"
 
-#include <QSqlDatabase>
 #include <QVBoxLayout>
 #include <QWidget>
 
