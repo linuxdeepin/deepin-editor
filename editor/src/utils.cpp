@@ -536,6 +536,12 @@ void Utils::toast(QString message, QWidget *parent)
     int avaliableHeight = parent->height() - toast->height();
     int toastPaddingBottom = qMin(avaliableHeight / 2, 100);
 
+    QObject::connect(toast, &DToast::visibleChanged, parent, [toast](bool visible) {
+        if (visible == false) {
+            toast->deleteLater();
+        }
+    });
+
     toast->setText(message);
     toast->setIcon(QIcon(Utils::getQrcPath("logo_24.svg")));
     toast->pop();
