@@ -831,8 +831,6 @@ void Window::resizeEvent(QResizeEvent*)
 
 void Window::closeEvent(QCloseEvent *e)
 {
-    e->ignore();
-
     QDir directory = QDir(QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files"));
     QStringList blankFiles = directory.entryList(QStringList(), QDir::Files);
 
