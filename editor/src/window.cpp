@@ -137,6 +137,9 @@ Window::Window(DMainWindow *parent)
     // Below code must before this->titlebar()->setMenu, otherwise main menu can't display pre-build-in menu items by dtk.
     const QString &windowState = m_settings->settings->option("advance.window.window_state")->value().toString();
 
+    // window minimum size.
+    setMinimumSize(600, 400);
+
     if (windowState == "window_normal") {
         QScreen *screen = QGuiApplication::primaryScreen();
         QRect screenGeometry = screen->geometry();

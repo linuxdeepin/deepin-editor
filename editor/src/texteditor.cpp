@@ -1956,6 +1956,7 @@ bool TextEditor::setCursorKeywordSeletoin(int position, bool findNext)
 void TextEditor::setThemeWithName(QString themeName)
 {
     const auto theme = m_repository.theme(themeName);
+
     setTheme(theme, themeName);
 }
 
