@@ -537,7 +537,7 @@ void TextEditor::swapLineUp()
     } else {
         QTextCursor cursor = textCursor();
 
-        // Rember current line's column number.
+        // Remember current line's column number.
         int column = cursor.columnNumber();
 
         // Get current line content.
