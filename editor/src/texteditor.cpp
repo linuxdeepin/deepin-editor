@@ -1962,8 +1962,8 @@ void TextEditor::setThemeWithName(QString themeName)
 void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme, QString themeName)
 {
     QVariantMap jsonMap = Utils::getThemeNodeMap(themeName);
-    auto themeBackgroundColor = jsonMap["editor-colors"].toMap()["background-color"].toString();
-    auto themeCurrentLineColor = jsonMap["editor-colors"].toMap()["current-line"].toString();
+    const QString &themeBackgroundColor = jsonMap["editor-colors"].toMap()["background-color"].toString();
+    const QString &themeCurrentLineColor = jsonMap["editor-colors"].toMap()["current-line"].toString();
 
     auto pal = qApp->palette();
     if (theme.isValid()) {
@@ -1981,11 +1981,11 @@ void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme, QString theme
     m_currentLineColor = QColor(themeCurrentLineColor);
     m_backgroundColor = QColor(themeBackgroundColor);
 
-    m_lineNumbersColor = QColor(theme.editorColor(KSyntaxHighlighting::Theme::LineNumbers));
-    m_currentLineNumberColor = QColor(theme.editorColor(KSyntaxHighlighting::Theme::CurrentLineNumber));
+    m_lineNumbersColor = QColor(jsonMap["editor-colors"].toMap()["line-numbers"].toString());
+    m_currentLineNumberColor = QColor(jsonMap["editor-colors"].toMap()["current-line-number"].toString());
+    m_searchHighlightColor = QColor(jsonMap["editor-colors"].toMap()["search-highlight"].toString());
+    m_selectionColor = QColor(jsonMap["editor-colors"].toMap()["selection"].toString());
     m_regionMarkerColor = QColor(theme.textColor(KSyntaxHighlighting::Theme::RegionMarker));
-    m_searchHighlightColor = QColor(theme.editorColor(KSyntaxHighlighting::Theme::SearchHighlight));
-    m_selectionColor = QColor(theme.editorColor(KSyntaxHighlighting::Theme::TextSelection));
 
     m_highlighter->setTheme(theme);
     m_highlighter->rehighlight();
