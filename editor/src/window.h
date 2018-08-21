@@ -32,7 +32,7 @@
 #include "themebar.h"
 #include "replacebar.h"
 #include "settings.h"
-#include "titlebar.h"
+#include "tabbar.h"
 #include "dwindowmanager.h"
 
 #include <QHBoxLayout>
@@ -162,7 +162,7 @@ private:
     QWidget *m_editorWidget;
     QStackedLayout *m_editorLayout;
     QVBoxLayout *m_centralLayout;
-    Titlebar *m_titleBar;
+    Tabbar *m_tabbar;
 
     JumpLineBar *m_jumpLineBar;
     ReplaceBar *m_replaceBar;

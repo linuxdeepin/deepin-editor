@@ -20,7 +20,7 @@ HEADERS += src/window.h \
 	   src/replacebar.h \
 	   src/linebar.h \
 	   src/settings.h \
-	   src/titlebar.h \
+	   src/tabwidget.h \
 	   src/tabbar.h \
 	   src/editor.h \
 	   src/themebar.h \
@@ -38,7 +38,7 @@ SOURCES += src/window.cpp \
 	   src/replacebar.cpp \
 	   src/linebar.cpp \
 	   src/settings.cpp \
-	   src/titlebar.cpp \
+	   src/tabwidget.cpp \
 	   src/tabbar.cpp \
 	   src/editor.cpp \
 	   src/utils.cpp \

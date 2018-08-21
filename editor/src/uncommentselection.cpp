@@ -45,7 +45,6 @@ static bool isComment(const QString &text, int index, const QString &commentType
     return true;
 }
 
-
 void Comment::unCommentSelection(QPlainTextEdit *edit, const CommentDefinition &definition)
 {
     if (!definition.isValid())

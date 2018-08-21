@@ -23,239 +23,196 @@
 
 #include "tabbar.h"
 #include "utils.h"
-#include "texteditor.h"
-#include "window.h"
 
 #include <QDebug>
-#include <QStyleFactory>
-#include <QGuiApplication>
-#include <DPlatformWindowHandle>
+#include <QLabel>
+#include <DHiDPIHelper>
 
-Tabbar::Tabbar()
+Tabbar::Tabbar(QWidget *parent)
+    : QWidget(parent)
 {
     // Init.
-    installEventFilter(this);   // add event filter
-    setMovable(true);
-    setTabsClosable(true);
-    setVisibleAddButton(true);
-    setDragable(true);
-    setStartDragDistance(20);   // set drag drop distance
-    setElideMode(Qt::ElideMiddle);
+    m_layout = new QHBoxLayout(this);
+    m_layout->setContentsMargins(0, 0, 0, 0);
 
-    // Set mask color.
-    QColor dropColor("#333333");
-    dropColor.setAlpha(0);
-    setMaskColor(dropColor);
+    QPixmap iconPixmap = DHiDPIHelper::loadNxPixmap(Utils::getQrcPath("logo_24.svg"));
+    QLabel *iconLabel = new QLabel();
+    iconLabel->setPixmap(iconPixmap);
+    iconLabel->setFixedSize(24, 40);
 
-    m_rightClickTab = -1;
+    tabbar = new TabWidget;
 
-    setFixedHeight(40);
-    setFocusPolicy(Qt::NoFocus);
+    m_layout->addSpacing(10);
+    m_layout->addWidget(iconLabel, 0, Qt::AlignTop);
+    m_layout->addSpacing(10);
+    m_layout->addWidget(tabbar, 0, Qt::AlignTop);
+    m_layout->addSpacing(70);
 
-    connect(this, &DTabBar::tabReleaseRequested, this, &Tabbar::handleTabReleaseRequested);
-    connect(this, &DTabBar::dragActionChanged, this, &Tabbar::handleDragActionChanged);
+    connect(tabbar, &TabWidget::closeOtherTabs, this, &Tabbar::handleCloseOtherTabs, Qt::QueuedConnection);
+    connect(tabbar, &TabWidget::closeTab, this, &Tabbar::closeTabWithIndex, Qt::QueuedConnection);
+    connect(tabbar, &TabWidget::tabDroped, this, &Tabbar::handleTabDroped, Qt::QueuedConnection);
+    connect(tabbar, &TabWidget::tabBarDoubleClicked, this, &Tabbar::doubleClicked, Qt::QueuedConnection);
+    connect(tabbar, &TabWidget::tabMoved, this, &Tabbar::handleTabMoved, Qt::QueuedConnection);
+    connect(tabbar, &TabWidget::tabReleaseRequested, this, &Tabbar::handleTabReleaseRequested, Qt::QueuedConnection);
+
+    connect(tabbar, &TabWidget::closeTab, this, &Tabbar::closeTabWithIndex, Qt::QueuedConnection);
+    connect(tabbar, &TabWidget::closeOtherTabs, this, &Tabbar::handleCloseOtherTabs, Qt::QueuedConnection);
 }
 
-QMimeData* Tabbar::createMimeDataFromTab(int index, const QStyleOptionTab &) const
+int Tabbar::getTabIndex(QString filepath)
 {
-    // Get tab name, path, and content.
-    QString tabPath = tabFiles[index];
-    QString tabName = tabText(index);
-    TextEditor *textEditor = static_cast<Window *>(this->window())->getTextEditor(tabFiles[index]);
-    QString tabContent = textEditor->toPlainText();
-
-    // Add tab info in DND data.
-    QMimeData *mimeData = new QMimeData;
-    mimeData->setData("tabInfo", (QString("%1\n%2\n%3").arg(tabName, tabPath, tabContent)).toUtf8());
-
-    // Remove text/plain format, avoid drop tab text to other applications
-    mimeData->removeFormat("text/plain");
-
-    return mimeData;
-}
-
-QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &, QPoint *offset) const
-{
-    const qreal screenScale = qApp->devicePixelRatio();
-
-    // Take editor's screenshot as drag image.
-    TextEditor *textEditor = static_cast<Window*>(this->window())->getTextEditor(tabFiles[index]);
-    int width = textEditor->width() * screenScale;
-    int height = textEditor->height() * screenScale;
-    QImage screenshotImage(width, height, QImage::Format_ARGB32_Premultiplied);
-    screenshotImage.setDevicePixelRatio(screenScale);
-    textEditor->render(&screenshotImage, QPoint(), QRegion(0, 0, width, height));
-
-    // Scaled image to smaller.
-    int scaledWidth = width * screenScale / 5;
-    int scaledHeight = height * screenScale / 5;
-    auto scaledImage = screenshotImage.scaled(scaledWidth, scaledHeight, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-
-    // Clip screenshot image with window radius.
-    QPainter painter(&scaledImage);
-    painter.setRenderHint(QPainter::Antialiasing, true);
-
-    QPainterPath rectPath;
-    QPainterPath roundedRectPath;
-
-    rectPath.addRect(0, 0, scaledWidth, scaledHeight);
-    roundedRectPath.addRoundedRect(QRect(0, 0, scaledWidth / screenScale, scaledHeight / screenScale), 6, 6);
-
-    rectPath -= roundedRectPath;
-
-    painter.setCompositionMode(QPainter::CompositionMode_Source);
-    painter.fillPath(rectPath, Qt::transparent);
-    painter.end();
-
-    // Hide window when drag start, just hide if only one tab in current window.
-    if (count() == 1) {
-        static_cast<Window*>(this->window())->hide();
-    }
-
-    // Adjust offset.
-    offset->setX(20);
-    offset->setY(20);
-
-    // Return image composited with shadow.
-    QColor shadowColor = QColor("#000000");
-    shadowColor.setAlpha(80);
-
-    return Utils::dropShadow(QPixmap::fromImage(scaledImage), 40, shadowColor, QPoint(0, 8));
-}
-
-bool Tabbar::canInsertFromMimeData(int index, const QMimeData *source) const
-{
-    return source->hasFormat("tabInfo");
-}
-
-void Tabbar::insertFromMimeData(int index, const QMimeData *source)
-{
-    // Create new tab create drop from other deepin-editor.
-    QString content = QString::fromUtf8(source->data("tabInfo"));
-    QStringList dropContent = content.split("\n");
-    QString tabName = dropContent[0];
-    QString tabPath = dropContent[1];
-    QString tabContent = content.remove(0, tabName.size() + tabPath.size() + 2); // 2 mean two \n char
-
-    Window* window = static_cast<Window *>(this->window());
-
-    window->addTabWithContent(tabName, tabPath, tabContent, index);
-    window->activeTab(window->getTabIndex(tabPath));
-}
-
-void Tabbar::insertFromMimeDataOnDragEnter(int index, const QMimeData *source)
-{
-    QString content = QString::fromUtf8(source->data("tabInfo"));
-    QStringList dropContent = content.split("\n");
-    QString tabName = dropContent[0];
-    QString tabPath = dropContent[1];
-    QString tabContent = content.remove(0, tabName.size() + tabPath.size() + 2); // 2 mean two \n char
-
-    Window* window = static_cast<Window *>(this->window());
-
-    window->addTabWithContent(tabName, tabPath, tabContent, index);
-    window->activeTab(window->getTabIndex(tabPath));
-}
-
-void Tabbar::handleCloseTab()
-{
-    if (m_rightClickTab >= 0) {
-        emit closeTab(m_rightClickTab);
-    }
-}
-
-void Tabbar::handleCloseOtherTabs()
-{
-    if (m_rightClickTab >= 0) {
-        emit closeOtherTabs(m_rightClickTab);
-    }
-}
-
-bool Tabbar::eventFilter(QObject *, QEvent *event)
-{
-    if (event->type() == QEvent::MouseButtonPress) {
-        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
-        if (mouseEvent->button() == Qt::RightButton) {
-            QPoint position = mouseEvent->pos();
-            m_rightClickTab = -1;
-
-            for (int i = 0; i < count(); i++) {
-                if (tabRect(i).contains(position)) {
-                    m_rightClickTab = i;
-                    break;
-                }
-            }
-
-            // Poup right menu on tab.
-            if (m_rightClickTab >= 0) {
-                m_menu = new QMenu();
-                m_menu->setStyle(QStyleFactory::create("dlight"));
-
-                m_closeTabAction = new QAction("Close Tab", this);
-                m_closeOtherTabAction = new QAction("Close Other Tabs", this);
-
-                connect(m_closeTabAction, &QAction::triggered, this, &Tabbar::handleCloseTab);
-                connect(m_closeOtherTabAction, &QAction::triggered, this, &Tabbar::handleCloseOtherTabs);
-
-                m_menu->addAction(m_closeTabAction);
-                m_menu->addAction(m_closeOtherTabAction);
-
-                m_menu->exec(this->mapToGlobal(position));
-
-                return true;
-            }
+    for (int i = 0; i < tabbar->tabFiles.size(); i++) {
+        if (tabbar->tabFiles[i] == filepath) {
+            return i;
         }
-    } else if (event->type() == QEvent::DragEnter) {
-        const QDragEnterEvent *e = static_cast<QDragEnterEvent*>(event);
-        const QMimeData* mimeData = e->mimeData();
+    }
 
-        if ((!e->source() || e->source()->parent() != this) && mimeData->data("tabInfo") != "") {
-            static_cast<Window*>(this->window())->changeTitlebarBackground(m_dndStartColor, m_dndEndColor);
+    return -1;
+}
+
+QString Tabbar::getTabName(int index)
+{
+    return tabbar->tabText(index);
+}
+
+QString Tabbar::getTabPath(int index)
+{
+    return tabbar->tabFiles.value(index);
+}
+
+int Tabbar::getActiveTabIndex()
+{
+    return tabbar->currentIndex();
+}
+
+QString Tabbar::getActiveTabName()
+{
+    return tabbar->tabText(getActiveTabIndex());
+}
+
+QString Tabbar::getActiveTabPath()
+{
+    return tabbar->tabFiles.value(getActiveTabIndex());
+}
+
+void Tabbar::activeTabWithIndex(int index)
+{
+    tabbar->setCurrentIndex(index);
+}
+
+void Tabbar::addTab(QString filepath, QString tabName)
+{
+    addTabWithIndex(getActiveTabIndex() + 1, filepath, tabName);
+}
+
+void Tabbar::addTabWithIndex(int index, QString filepath, QString tabName)
+{
+    // FIXME(rekols): do not insert duplicate values.
+    if (!tabbar->tabFiles.contains(filepath)) {
+        tabbar->tabFiles.insert(index, filepath);
+    }
+
+    tabbar->insertTab(index, tabName);
+    tabbar->setCurrentIndex(index);
+    tabbar->setTabMaximumSize(index, QSize(150, 100));
+}
+
+void Tabbar::closeActiveTab()
+{
+    closeTabWithIndex(tabbar->currentIndex());
+}
+
+void Tabbar::closeOtherTabs()
+{
+    closeOtherTabsExceptFile(tabbar->tabFiles[tabbar->currentIndex()]);
+}
+
+void Tabbar::closeOtherTabsExceptFile(QString filepath)
+{
+    while (tabbar->tabFiles.size() > 1) {
+        QString firstPath = tabbar->tabFiles[0];
+        if (firstPath != filepath) {
+            closeTabWithIndex(0);
+        } else {
+            closeTabWithIndex(1);
         }
-    } else if (event->type() == QEvent::DragLeave) {
-        static_cast<Window*>(this->window())->changeTitlebarBackground(m_backgroundStartColor, m_backgroundEndColor);
-    } else if (event->type() == QEvent::Drop) {
-        static_cast<Window*>(this->window())->changeTitlebarBackground(m_backgroundStartColor, m_backgroundEndColor);
-    } else if (event->type() == QEvent::DragMove) {
-        event->accept();
-    }
-
-    return false;
-}
-
-void Tabbar::handleTabReleaseRequested()
-{
-    // Show window agian if tab drop failed and only one tab in current window.
-    if (count() == 1) {
-        static_cast<Window*>(this->window())->show();
-    }
-
-    qDebug() << "### handleTabReleaseRequested";
-}
-
-void Tabbar::handleDragActionChanged(Qt::DropAction action)
-{
-    // Reset cursor to Qt::ArrowCursor if drag tab to TextEditor widget.
-    if (action == Qt::IgnoreAction) {
-        if (dragIconWindow()) {
-            QGuiApplication::changeOverrideCursor(Qt::ArrowCursor);
-            DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), true);
-        }
-    } else if (dragIconWindow()) {
-        DPlatformWindowHandle::setDisableWindowOverrideCursor(dragIconWindow(), false);
-        if (QGuiApplication::overrideCursor())
-            QGuiApplication::changeOverrideCursor(QGuiApplication::overrideCursor()->shape());
     }
 }
 
-void Tabbar::setBackground(QString startColor, QString endColor)
+void Tabbar::selectNextTab()
 {
-    m_backgroundStartColor = startColor;
-    m_backgroundEndColor = endColor;
+    int currentIndex = tabbar->currentIndex();
+    if (currentIndex >= tabbar->count() - 1) {
+        tabbar->setCurrentIndex(0);
+    } else {
+        tabbar->setCurrentIndex(currentIndex + 1);
+    }
 }
 
-void Tabbar::setDNDColor(QString startColor, QString endColor)
+void Tabbar::selectPrevTab()
 {
-    m_dndStartColor = startColor;
-    m_dndEndColor = endColor;
+    int currentIndex = tabbar->currentIndex();
+    if (currentIndex <= 0) {
+        tabbar->setCurrentIndex(tabbar->count() - 1);
+    } else {
+        tabbar->setCurrentIndex(currentIndex - 1);
+    }
+}
+
+void Tabbar::updateTabWithIndex(int index, QString filepath, QString tabName)
+{
+    tabbar->setTabText(index, tabName);
+    tabbar->tabFiles[index] = filepath;
+}
+
+void Tabbar::closeTabWithIndex(int closeIndex)
+{
+    tabbar->removeTab(closeIndex);
+    tabbar->tabFiles.removeAt(closeIndex);
+}
+
+void Tabbar::handleCloseOtherTabs(int index)
+{
+    closeOtherTabsExceptFile(tabbar->tabFiles[index]);
+}
+
+void Tabbar::handleTabDroped(int index, Qt::DropAction, QObject *target)
+{
+    // Remove match tab if tab drop to tabbar of deepin-editor.
+    auto *tabWidget = qobject_cast<Tabbar *>(target);
+    if (tabWidget != nullptr) {
+        closeTabWithIndex(index);
+    }
+}
+
+void Tabbar::handleTabMoved(int fromIndex, int toIndex)
+{
+    tabbar->tabFiles.swap(fromIndex, toIndex);
+}
+
+void Tabbar::handleTabReleaseRequested(int index)
+{
+    // Just send tabReleaseRequested signal have two or above tabs.
+    if (tabbar->count() > 1) {
+        emit tabReleaseRequested(getTabName(index), getTabPath(index), index);
+    }
+}
+
+void Tabbar::handleTabCloseRequested(int index)
+{
+    const QString filePath = tabbar->tabFiles.value(index);
+
+    tabbar->tabFiles.takeAt(index);
+}
+
+int Tabbar::getTabCount()
+{
+    return tabbar->count();
+}
+
+void Tabbar::setTabActiveColor(QString color)
+{
+    QPalette pa = tabbar->palette();
+    pa.setColor(QPalette::Active, QPalette::Text, QColor(color));
+    tabbar->setPalette(pa);
 }

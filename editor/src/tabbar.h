@@ -21,54 +21,64 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TABBAR_H
-#define TABBAR_H
+#ifndef TITLEBAR_H
+#define TITLEBAR_H
 
-#include <DTabBar>
-#include <QMenu>
+#include "tabwidget.h"
+
+#include <QHBoxLayout>
+#include <QWidget>
 
 DWIDGET_USE_NAMESPACE
 
-class Tabbar : public DTabBar
+class Tabbar : public QWidget
 {
     Q_OBJECT
 
-    bool eventFilter(QObject *, QEvent *event);
-
 public:
-    Tabbar();
+    Tabbar(QWidget *parent = nullptr);
 
-    QList<QString> tabFiles;
+    int getTabIndex(QString filepath);
+    QString getTabName(int index);
+    QString getTabPath(int index);
 
-    QMimeData *createMimeDataFromTab(int index, const QStyleOptionTab &option) const;
-    QPixmap createDragPixmapFromTab(int index, const QStyleOptionTab &option, QPoint *hotspot) const;
-    bool canInsertFromMimeData(int index, const QMimeData *source) const;
-    void insertFromMimeData(int index, const QMimeData *source);
-    void insertFromMimeDataOnDragEnter(int index, const QMimeData *source);
+    int getActiveTabIndex();
+    QString getActiveTabName();
+    QString getActiveTabPath();
+    void activeTabWithIndex(int index);
 
-    void setBackground(QString startColor, QString endColor);
-    void setDNDColor(QString startColor, QString endColor);
+    void addTab(QString filepath, QString tabName);
+    void addTabWithIndex(int index, QString filepath, QString tabName);
+    void closeActiveTab();
+    void closeOtherTabs();
+    void closeOtherTabsExceptFile(QString filepath);
+
+    void selectNextTab();
+    void selectPrevTab();
+
+    void updateTabWithIndex(int index, QString filepath, QString tabName);
+    void setTabActiveColor(QString color);
+
+    int getTabCount();
+
+    TabWidget *tabbar;
 
 signals:
-    void closeTab(int index);
-    void closeOtherTabs(int index);
-    void closeFile(QString filepath);
+    void doubleClicked();
+    void tabReleaseRequested(QString tabName, QString filepaht, int index);
 
 public slots:
-    void handleCloseOtherTabs();
-    void handleCloseTab();
-    void handleTabReleaseRequested();
-    void handleDragActionChanged(Qt::DropAction action);
+    void closeTabWithIndex(int closeIndex);
+
+    void handleCloseOtherTabs(int index);
+
+    void handleTabDroped(int index, Qt::DropAction action, QObject *target);
+    void handleTabMoved(int fromIndex, int toIndex);
+    void handleTabReleaseRequested(int index);
+    void handleTabCloseRequested(int index);
 
 private:
-    QAction *m_closeOtherTabAction;
-    QAction *m_closeTabAction;
-    QMenu *m_menu;
-    int m_rightClickTab;
-    QString m_backgroundStartColor;
-    QString m_backgroundEndColor;
-    QString m_dndStartColor;
-    QString m_dndEndColor;
+    QHBoxLayout *m_layout;
 };
 
 #endif
