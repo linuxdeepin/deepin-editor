@@ -215,10 +215,6 @@ Window::~Window()
 
 int Window::getTabIndex(const QString &file)
 {
-    for (int i = 0; i < m_titleBar->tabbar->tabFiles.size(); i++) {
-        qDebug() << "******** Tab " << i << m_titleBar->tabbar->tabFiles[i];
-    }
-
     return m_titleBar->getTabIndex(file);
 }
 
@@ -274,7 +270,7 @@ void Window::addTab(const QString &file, bool activeTab)
 
 void Window::addTabWithContent(const QString &tabName, const QString &filepath, const QString &content, int index)
 {
-    qDebug() << "!!!!!!!!!! editorMap contains path '" << filepath << "' " << m_editorMap.contains(filepath);
+    qDebug() << "add tab with content, has " << m_editorMap.size();
 
     // Default index is -1, we change it to right of current tab for new tab actoin in start.
     if (index == -1) {

@@ -104,7 +104,11 @@ void Titlebar::addTab(QString filepath, QString tabName)
 
 void Titlebar::addTabWithIndex(int index, QString filepath, QString tabName)
 {
-    tabbar->tabFiles.insert(index, filepath);
+    // FIXME(rekols): do not insert duplicate values.
+    if (!tabbar->tabFiles.contains(filepath)) {
+        tabbar->tabFiles.insert(index, filepath);
+    }
+
     tabbar->insertTab(index, tabName);
     tabbar->setCurrentIndex(index);
     tabbar->setTabMaximumSize(index, QSize(150, 100));
@@ -160,14 +164,8 @@ void Titlebar::updateTabWithIndex(int index, QString filepath, QString tabName)
 
 void Titlebar::closeTabWithIndex(int closeIndex)
 {
-    qDebug() << "*** closeTabWithIndex " << closeIndex;
     tabbar->removeTab(closeIndex);
     tabbar->tabFiles.removeAt(closeIndex);
-
-    qDebug() << "-----------------";
-    for (int i = 0; i < tabbar->tabFiles.size(); i++) {
-        qDebug() << "!!!! tabFiles " << i << tabbar->tabFiles[i];
-    }
 }
 
 void Titlebar::handleCloseOtherTabs(int index)
