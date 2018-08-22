@@ -26,7 +26,8 @@
 
 #include <QDebug>
 
-JumpLineBar::JumpLineBar(QWidget *parent) : QWidget(parent)
+JumpLineBar::JumpLineBar(QWidget *parent)
+    : QWidget(parent)
 {
     // Init.
     setWindowFlags(Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);

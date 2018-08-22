@@ -36,7 +36,7 @@ class TabWidget : public DTabBar
     bool eventFilter(QObject *, QEvent *event);
 
 public:
-    TabWidget();
+    TabWidget(QWidget *parent = nullptr);
 
     QList<QString> tabFiles;
 

@@ -31,7 +31,8 @@
 #include <QGuiApplication>
 #include <DPlatformWindowHandle>
 
-TabWidget::TabWidget()
+TabWidget::TabWidget(QWidget *parent)
+    : DTabBar(parent)
 {
     // Init.
     installEventFilter(this);   // add event filter

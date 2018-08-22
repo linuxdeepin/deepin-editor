@@ -29,7 +29,8 @@
 #include <QDir>
 #include "themeitem.h"
 
-ThemeBar::ThemeBar(QWidget *parent) : QWidget(parent)
+ThemeBar::ThemeBar(QWidget *parent)
+    : QWidget(parent)
 {
     setWindowFlags(Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
     setFixedWidth(0);
@@ -46,11 +47,11 @@ ThemeBar::ThemeBar(QWidget *parent) : QWidget(parent)
 
     themeView = new ThemeView();
     themeView->setRowHeight(123);
-    
+
     QList<SortAlgorithm> *alorithms = new QList<SortAlgorithm>();
     alorithms->append(&ThemeItem::sortByLightness);
     themeView->setColumnSortingAlgorithms(alorithms, 0, true);
-    
+
     // Set column to make sort list works.
     QList<QString> titles;
     titles << tr("theme");
@@ -75,7 +76,7 @@ ThemeBar::ThemeBar(QWidget *parent) : QWidget(parent)
     themeView->addItems(items);
     connect(themeView, &ThemeView::focusOut, this, &ThemeBar::handleFocusOut);
     connect(themeView, &ThemeView::mousePressChanged, this, &ThemeBar::handleThemeChanged);
-    
+
     opacityEffect = new QGraphicsOpacityEffect(this);
     this->setGraphicsEffect(opacityEffect);
 }
@@ -89,7 +90,7 @@ void ThemeBar::paintEvent(QPaintEvent *)
     path.addRect(QRect(rect().x() + 1, rect().y(), rect().width() - 1, rect().height()));
     painter.setOpacity(0.8);
     painter.fillPath(path, backgroundColor);
-    
+
     QPainterPath framePath;
     framePath.addRect(QRect(rect().x(), rect().y(), 1, rect().height()));
     painter.setOpacity(0.1);
@@ -142,12 +143,12 @@ void ThemeBar::handleThemeChanged(DSimpleListItem* item, int, QPoint)
 void ThemeBar::setBackground(QString color)
 {
     backgroundColor = QColor(color);
-    
+
     if (backgroundColor.lightness() < 128) {
         frameColor = frameDarkColor;
     } else {
         frameColor = frameLightColor;
     }
-    
+
     repaint();
 }

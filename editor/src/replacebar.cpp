@@ -26,7 +26,8 @@
 
 #include <QDebug>
 
-ReplaceBar::ReplaceBar(QWidget *parent) : QWidget(parent)
+ReplaceBar::ReplaceBar(QWidget *parent)
+    : QWidget(parent)
 {
     // Init.
     setWindowFlags(Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);

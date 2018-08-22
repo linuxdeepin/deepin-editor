@@ -30,7 +30,8 @@
 
 DWIDGET_USE_NAMESPACE
 
-StartManager::StartManager(QObject *parent) : QObject(parent)
+StartManager::StartManager(QObject *parent)
+    : QObject(parent)
 {
     // Create blank directory if it not exist.
     QString blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");

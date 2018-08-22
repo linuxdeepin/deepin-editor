@@ -26,7 +26,8 @@
 
 #include <QDebug>
 
-LineBar::LineBar(DLineEdit *parent) : DLineEdit(parent)
+LineBar::LineBar(DLineEdit *parent)
+    : DLineEdit(parent)
 {
     // Init.
     setClearButtonEnabled(true);

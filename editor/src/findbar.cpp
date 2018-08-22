@@ -26,7 +26,8 @@
 
 #include <QDebug>
 
-FindBar::FindBar(QWidget *parent) : QWidget(parent)
+FindBar::FindBar(QWidget *parent)
+    : QWidget(parent)
 {
     // Init.
     setWindowFlags(Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);

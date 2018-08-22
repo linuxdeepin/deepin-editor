@@ -29,7 +29,10 @@
 #include <QDir>
 #include <QTimer>
 
-Editor::Editor(QWidget *parent) : QWidget(parent)
+Editor::Editor(QWidget *parent)
+    : QWidget(parent),
+      m_layout(new QHBoxLayout(this)),
+      textEditor(new TextEditor)
 {
     // Init.
     m_autoSaveInternal = 1000;
@@ -37,12 +40,8 @@ Editor::Editor(QWidget *parent) : QWidget(parent)
     m_newline = "Linux";
 
     // Init layout and widgets.
-    m_layout = new QHBoxLayout(this);
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->setSpacing(0);
-
-    textEditor = new TextEditor;
-
     m_layout->addWidget(textEditor->lineNumberArea);
     m_layout->addWidget(textEditor);
 }
@@ -50,6 +49,7 @@ Editor::Editor(QWidget *parent) : QWidget(parent)
 void Editor::loadFile(const QString &filepath)
 {
     QFile file(filepath);
+
     if (file.open(QFile::ReadOnly)) {
         auto fileContent = file.readAll();
         m_fileEncode = Utils::getFileEncode(fileContent, filepath);

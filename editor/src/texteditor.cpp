@@ -59,9 +59,9 @@ public:
     TextEditor *editor;
 };
 
-TextEditor::TextEditor(QPlainTextEdit *parent) :
-    QPlainTextEdit(parent),
-    m_highlighter(new KSyntaxHighlighting::SyntaxHighlighter(document()))
+TextEditor::TextEditor(QPlainTextEdit *parent)
+    : QPlainTextEdit(parent),
+      m_highlighter(new KSyntaxHighlighting::SyntaxHighlighter(document()))
 {
     viewport()->installEventFilter(this);
 
