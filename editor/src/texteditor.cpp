@@ -2542,24 +2542,6 @@ bool TextEditor::atWordSeparator(int position)
     return m_wordSepartors.contains(QString(toPlainText().at(position)));
 }
 
-void TextEditor::dragEnterEvent(QDragEnterEvent *event)
-{
-    QPlainTextEdit::dragEnterEvent(event);
-    qobject_cast<Window *>(this->window())->requestDragEnterEvent(event);
-}
-
-void TextEditor::dropEvent(QDropEvent *event)
-{
-    const QMimeData *data = event->mimeData();
-
-    if (data->hasUrls() && data->urls().first().isLocalFile()) {
-        qobject_cast<Window *>(this->window())->requestDropEvent(event);
-    } else if (data->hasText()) {
-        QPlainTextEdit::dropEvent(event);
-    }
-
-}
-
 void TextEditor::completionWord(QString word)
 {
     QString wordAtCursor = getWordAtCursor();
@@ -2598,5 +2580,33 @@ void TextEditor::adjustScrollbarMargins()
         }
 
         m_scrollbarLock = false;
+    }
+}
+
+void TextEditor::dragEnterEvent(QDragEnterEvent *event)
+{
+    QPlainTextEdit::dragEnterEvent(event);
+    qobject_cast<Window *>(this->window())->requestDragEnterEvent(event);
+}
+
+void TextEditor::dragMoveEvent(QDragMoveEvent *event)
+{
+    const QMimeData *data = event->mimeData();
+
+    if (data->hasUrls() && data->urls().first().isLocalFile()) {
+        event->acceptProposedAction();
+    } else {
+        QPlainTextEdit::dragMoveEvent(event);
+    }
+}
+
+void TextEditor::dropEvent(QDropEvent *event)
+{
+    const QMimeData *data = event->mimeData();
+
+    if (data->hasUrls() && data->urls().first().isLocalFile()) {
+        qobject_cast<Window *>(this->window())->requestDropEvent(event);
+    } else if (data->hasText()) {
+        QPlainTextEdit::dropEvent(event);
     }
 }
