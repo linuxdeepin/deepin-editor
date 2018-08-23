@@ -50,13 +50,14 @@ Tabbar::Tabbar(QWidget *parent)
 
     connect(tabbar, &TabWidget::closeOtherTabs, this, &Tabbar::handleCloseOtherTabs, Qt::QueuedConnection);
     connect(tabbar, &TabWidget::closeTab, this, &Tabbar::closeTabWithIndex, Qt::QueuedConnection);
-    connect(tabbar, &TabWidget::tabDroped, this, &Tabbar::handleTabDroped, Qt::QueuedConnection);
+
     connect(tabbar, &TabWidget::tabBarDoubleClicked, this, &Tabbar::doubleClicked, Qt::QueuedConnection);
-    connect(tabbar, &TabWidget::tabMoved, this, &Tabbar::handleTabMoved, Qt::QueuedConnection);
     connect(tabbar, &TabWidget::tabReleaseRequested, this, &Tabbar::handleTabReleaseRequested, Qt::QueuedConnection);
+    connect(tabbar, &TabWidget::tabDroped, this, &Tabbar::handleTabDroped, Qt::QueuedConnection);
+    connect(tabbar, &TabWidget::tabMoved, this, &Tabbar::handleTabMoved, Qt::QueuedConnection);
 }
 
-int Tabbar::getTabIndex(QString filepath)
+int Tabbar::getTabIndex(const QString &filepath)
 {
     for (int i = 0; i < tabbar->tabFiles.size(); i++) {
         if (tabbar->tabFiles[i] == filepath) {
@@ -97,12 +98,12 @@ void Tabbar::activeTabWithIndex(int index)
     tabbar->setCurrentIndex(index);
 }
 
-void Tabbar::addTab(QString filepath, QString tabName)
+void Tabbar::addTab(const QString &filepath, const QString &tabName)
 {
     addTabWithIndex(getActiveTabIndex() + 1, filepath, tabName);
 }
 
-void Tabbar::addTabWithIndex(int index, QString filepath, QString tabName)
+void Tabbar::addTabWithIndex(int index, const QString &filepath, const QString &tabName)
 {
     // FIXME(rekols): do not insert duplicate values.
     if (!tabbar->tabFiles.contains(filepath)) {
@@ -124,10 +125,10 @@ void Tabbar::closeOtherTabs()
     closeOtherTabsExceptFile(tabbar->tabFiles[tabbar->currentIndex()]);
 }
 
-void Tabbar::closeOtherTabsExceptFile(QString filepath)
+void Tabbar::closeOtherTabsExceptFile(const QString &filepath)
 {
     while (tabbar->tabFiles.size() > 1) {
-        QString firstPath = tabbar->tabFiles[0];
+        const QString &firstPath = tabbar->tabFiles[0];
         if (firstPath != filepath) {
             closeTabWithIndex(0);
         } else {
@@ -156,7 +157,7 @@ void Tabbar::selectPrevTab()
     }
 }
 
-void Tabbar::updateTabWithIndex(int index, QString filepath, QString tabName)
+void Tabbar::updateTabWithIndex(int index, const QString &filepath, const QString &tabName)
 {
     tabbar->setTabText(index, tabName);
     tabbar->tabFiles[index] = filepath;
@@ -165,7 +166,9 @@ void Tabbar::updateTabWithIndex(int index, QString filepath, QString tabName)
 void Tabbar::closeTabWithIndex(int closeIndex)
 {
     tabbar->removeTab(closeIndex);
-    tabbar->tabFiles.removeAt(closeIndex);
+
+    // do not remove in this place.
+    // tabbar->tabFiles.removeAt(closeIndex);
 }
 
 void Tabbar::handleCloseOtherTabs(int index)
@@ -207,7 +210,7 @@ int Tabbar::getTabCount()
     return tabbar->count();
 }
 
-void Tabbar::setTabActiveColor(QString color)
+void Tabbar::setTabActiveColor(const QString &color)
 {
     QPalette pa = tabbar->palette();
     pa.setColor(QPalette::Active, QPalette::Text, QColor(color));

@@ -38,7 +38,7 @@ class SaveFileInterface: public QDBusAbstractInterface
     Q_OBJECT
 public:
     static inline const char *staticInterfaceName() {
-        return "com.deepin.editor.daemon"; 
+        return "com.deepin.editor.daemon";
     }
 
 public:

@@ -38,7 +38,7 @@ class Tabbar : public QWidget
 public:
     Tabbar(QWidget *parent = nullptr);
 
-    int getTabIndex(QString filepath);
+    int getTabIndex(const QString &filepath);
     QString getTabName(int index);
     QString getTabPath(int index);
 
@@ -47,17 +47,17 @@ public:
     QString getActiveTabPath();
     void activeTabWithIndex(int index);
 
-    void addTab(QString filepath, QString tabName);
-    void addTabWithIndex(int index, QString filepath, QString tabName);
+    void addTab(const QString &filepath, const QString &tabName);
+    void addTabWithIndex(int index, const QString &filepath, const QString &tabName);
     void closeActiveTab();
     void closeOtherTabs();
-    void closeOtherTabsExceptFile(QString filepath);
+    void closeOtherTabsExceptFile(const QString &filepath);
 
     void selectNextTab();
     void selectPrevTab();
 
-    void updateTabWithIndex(int index, QString filepath, QString tabName);
-    void setTabActiveColor(QString color);
+    void updateTabWithIndex(int index, const QString &filepath, const QString &tabName);
+    void setTabActiveColor(const QString &color);
 
     int getTabCount();
 
@@ -65,7 +65,7 @@ public:
 
 signals:
     void doubleClicked();
-    void tabReleaseRequested(QString tabName, QString filepaht, int index);
+    void tabReleaseRequested(const QString &tabName, const QString &filepaht, int index);
 
 public slots:
     void closeTabWithIndex(int closeIndex);
