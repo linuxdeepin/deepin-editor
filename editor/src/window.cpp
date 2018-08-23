@@ -61,14 +61,6 @@ Window::Window(DMainWindow *parent)
       m_settings(new Settings(this)),
       m_windowManager(new DWindowManager),
       m_menu(new QMenu),
-      m_newWindowAction(new QAction(tr("New window"), this)),
-      m_newTabAction(new QAction(tr("New tab"), this)),
-      m_openFileAction(new QAction(tr("Open file"), this)),
-      m_saveAction(new QAction(tr("Save"), this)),
-      m_saveAsAction(new QAction(tr("Save as"), this)),
-      m_printAction(new QAction(tr("Print"), this)),
-      m_switchThemeAction(new QAction(tr("Switch theme"), this)),
-      m_settingAction(new QAction(tr("Setting"), this)),
       m_titlebarStyleSheet(titlebar()->styleSheet()),
       m_themeName(m_settings->settings->option("base.theme.default")->value().toString())
 {
@@ -97,40 +89,7 @@ Window::Window(DMainWindow *parent)
 
     // Init titlebar.
     if (titlebar()) {
-        titlebar()->setCustomWidget(m_tabbar, Qt::AlignVCenter, false);
-        titlebar()->setAutoHideOnFullscreen(true);
-        titlebar()->setSeparatorVisible(true);
-        titlebar()->setMenu(m_menu);
-
-        connect(m_tabbar, &Tabbar::doubleClicked, titlebar(), &DTitlebar::doubleClicked, Qt::QueuedConnection);
-        connect(m_tabbar, &Tabbar::tabReleaseRequested, this, &Window::handleTabReleaseRequested, Qt::QueuedConnection);
-
-        connect(m_tabbar->tabbar, &TabWidget::tabAddRequested, this, static_cast<void (Window::*)()>(&Window::addBlankTab), Qt::QueuedConnection);
-        connect(m_tabbar->tabbar, &TabWidget::tabCloseRequested, this, &Window::handleTabCloseRequested, Qt::QueuedConnection);
-        connect(m_tabbar->tabbar, &TabWidget::currentChanged, this, &Window::handleCurrentChanged, Qt::QueuedConnection);
-
-        m_menu->setStyle(QStyleFactory::create("dlight"));
-
-        // Init main menu.
-        m_menu->addAction(m_newWindowAction);
-        m_menu->addAction(m_newTabAction);
-        m_menu->addAction(m_openFileAction);
-        m_menu->addSeparator();
-        m_menu->addAction(m_saveAction);
-        m_menu->addAction(m_saveAsAction);
-        m_menu->addAction(m_printAction);
-        m_menu->addAction(m_switchThemeAction);
-        m_menu->addSeparator();
-        m_menu->addAction(m_settingAction);
-
-        connect(m_newWindowAction, &QAction::triggered, this, &Window::newWindow);
-        connect(m_newTabAction, &QAction::triggered, this, [=] () { addBlankTab(); });
-        connect(m_openFileAction, &QAction::triggered, this, &Window::openFile);
-        connect(m_saveAction, &QAction::triggered, this, &Window::saveFile);
-        connect(m_saveAsAction, &QAction::triggered, this, &Window::saveAsFile);
-        connect(m_printAction, &QAction::triggered, this, &Window::popupPrintDialog);
-        connect(m_switchThemeAction, &QAction::triggered, this, &Window::popupThemeBar);
-        connect(m_settingAction, &QAction::triggered, this, &Window::popupSettingsDialog);
+        initMenu();
     }
 
     // Init window state with config.
@@ -211,6 +170,52 @@ Window::Window(DMainWindow *parent)
 Window::~Window()
 {
     // We don't need clean pointers because application has exit here.
+}
+
+void Window::initMenu()
+{
+    QAction *newWindowAction(new QAction(tr("New window"), this));
+    QAction *newTabAction(new QAction(tr("New tab"), this));
+    QAction *openFileAction(new QAction(tr("Open file"), this));
+    QAction *saveAction(new QAction(tr("Save"), this));
+    QAction *saveAsAction(new QAction(tr("Save as"), this));
+    QAction *printAction(new QAction(tr("Print"), this));
+    QAction *switchThemeAction(new QAction(tr("Switch theme"), this));
+    QAction *settingAction(new QAction(tr("Setting"), this));
+
+    m_menu->addAction(newWindowAction);
+    m_menu->addAction(newTabAction);
+    m_menu->addAction(openFileAction);
+    m_menu->addSeparator();
+    m_menu->addAction(saveAction);
+    m_menu->addAction(saveAsAction);
+    m_menu->addAction(printAction);
+    m_menu->addAction(switchThemeAction);
+    m_menu->addSeparator();
+    m_menu->addAction(settingAction);
+
+    m_menu->setStyle(QStyleFactory::create("dlight"));
+
+    titlebar()->setCustomWidget(m_tabbar, Qt::AlignVCenter, false);
+    titlebar()->setAutoHideOnFullscreen(true);
+    titlebar()->setSeparatorVisible(true);
+    titlebar()->setMenu(m_menu);
+
+    connect(m_tabbar, &Tabbar::doubleClicked, titlebar(), &DTitlebar::doubleClicked, Qt::QueuedConnection);
+    connect(m_tabbar, &Tabbar::tabReleaseRequested, this, &Window::handleTabReleaseRequested, Qt::QueuedConnection);
+
+    connect(m_tabbar->tabbar, &TabWidget::tabAddRequested, this, static_cast<void (Window::*)()>(&Window::addBlankTab), Qt::QueuedConnection);
+    connect(m_tabbar->tabbar, &TabWidget::tabCloseRequested, this, &Window::handleTabCloseRequested, Qt::QueuedConnection);
+    connect(m_tabbar->tabbar, &TabWidget::currentChanged, this, &Window::handleCurrentChanged, Qt::QueuedConnection);
+
+    connect(newWindowAction, &QAction::triggered, this, &Window::newWindow);
+    connect(newTabAction, &QAction::triggered, this, [=] () { addBlankTab(); });
+    connect(openFileAction, &QAction::triggered, this, &Window::openFile);
+    connect(saveAction, &QAction::triggered, this, &Window::saveFile);
+    connect(saveAsAction, &QAction::triggered, this, &Window::saveAsFile);
+    connect(printAction, &QAction::triggered, this, &Window::popupPrintDialog);
+    connect(switchThemeAction, &QAction::triggered, this, &Window::popupThemeBar);
+    connect(settingAction, &QAction::triggered, this, &Window::popupSettingsDialog);
 }
 
 int Window::getTabIndex(const QString &file)
@@ -1015,7 +1020,7 @@ void Window::handleCloseFile(const QString &filepath)
     }
 
     // Exit window after close all tabs.
-    if (m_editorMap.count() == 0) {
+    if (m_editorMap.isEmpty()) {
         close();
     }
 }

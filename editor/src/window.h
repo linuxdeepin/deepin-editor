@@ -53,6 +53,8 @@ public:
     Window(DMainWindow *parent = 0);
     ~Window();
 
+    void initMenu();
+
     int getTabIndex(const QString &file);
     void activeTab(int index);
 
@@ -174,14 +176,6 @@ private:
     QMap<QString, Editor *> m_editorMap;
 
     QMenu *m_menu;
-    QAction *m_newWindowAction;
-    QAction *m_newTabAction;
-    QAction *m_openFileAction;
-    QAction *m_saveAction;
-    QAction *m_saveAsAction;
-    QAction *m_printAction;
-    QAction *m_switchThemeAction;
-    QAction *m_settingAction;
 
     QStringList m_closeFileHistory;
 
