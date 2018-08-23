@@ -1021,7 +1021,7 @@ void Window::handleCloseFile(const QString &filepath)
 
     // Exit window after close all tabs.
     if (m_editorMap.isEmpty()) {
-        close();
+        DMainWindow::close();
     }
 }
 

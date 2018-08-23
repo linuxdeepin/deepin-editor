@@ -156,7 +156,7 @@ Window* StartManager::createWindow(bool alwaysCenter)
                     m_windows.takeAt(windowIndex);
                 }
 
-                if (m_windows.size() <= 0) {
+                if (m_windows.isEmpty()) {
                     QApplication::quit();
                 }
             });
