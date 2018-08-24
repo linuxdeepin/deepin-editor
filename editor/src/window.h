@@ -33,14 +33,14 @@
 #include "replacebar.h"
 #include "settings.h"
 #include "tabbar.h"
-#include "dwindowmanager.h"
 
-#include <QHBoxLayout>
-#include <QResizeEvent>
-#include <QStackedLayout>
-#include <QVBoxLayout>
 #include <QWidget>
-#include <dimagebutton.h>
+#include <QStackedWidget>
+#include <QResizeEvent>
+#include <QVBoxLayout>
+
+#include "dwindowmanager.h"
+#include "dimagebutton.h"
 
 DWIDGET_USE_NAMESPACE
 DWM_USE_NAMESPACE
@@ -161,8 +161,7 @@ private:
     DBusDaemon::dbus *autoSaveDBus;
 
     QWidget *m_centralWidget;
-    QWidget *m_editorWidget;
-    QStackedLayout *m_editorLayout;
+    QStackedWidget *m_editorWidget;
     QVBoxLayout *m_centralLayout;
     Tabbar *m_tabbar;
 

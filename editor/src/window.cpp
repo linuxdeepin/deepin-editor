@@ -50,8 +50,7 @@ DWM_USE_NAMESPACE
 Window::Window(DMainWindow *parent)
     : DMainWindow(parent),
       m_centralWidget(new QWidget),
-      m_editorWidget(new QWidget),
-      m_editorLayout(new QStackedLayout(m_editorWidget)),
+      m_editorWidget(new QStackedWidget),
       m_centralLayout(new QVBoxLayout(m_centralWidget)),
       m_tabbar(new Tabbar),
       m_jumpLineBar(new JumpLineBar(this)),
@@ -80,9 +79,6 @@ Window::Window(DMainWindow *parent)
     // Init layout and editor.
     m_centralLayout->setMargin(0);
     m_centralLayout->setSpacing(0);
-
-    m_editorLayout->setMargin(0);
-    m_editorLayout->setSpacing(0);
 
     m_centralLayout->addWidget(m_editorWidget);
     setCentralWidget(m_centralWidget);
@@ -934,7 +930,7 @@ void Window::handleCloseFile(const QString &filepath)
     if (m_editorMap.contains(filepath)) {
         Editor *editor = m_editorMap.value(filepath);
 
-        m_editorLayout->removeWidget(editor);
+        m_editorWidget->removeWidget(editor);
         m_editorMap.remove(filepath);
 
         editor->deleteLater();
@@ -965,7 +961,7 @@ void Window::handleCurrentChanged(const int &index)
     if (m_editorMap.contains(filepath)) {
         Editor *editor = m_editorMap.value(filepath);
         editor->textEditor->setFocus();
-        m_editorLayout->setCurrentWidget(editor);
+        m_editorWidget->setCurrentWidget(editor);
     }
 }
 
@@ -1131,8 +1127,8 @@ void Window::removeActiveReadonlyTab()
 
 void Window::showNewEditor(Editor *editor)
 {
-    m_editorLayout->addWidget(editor);
-    m_editorLayout->setCurrentWidget(editor);
+    m_editorWidget->addWidget(editor);
+    m_editorWidget->setCurrentWidget(editor);
 }
 
 void Window::showNotify(QString message)
