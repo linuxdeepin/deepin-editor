@@ -31,7 +31,7 @@ FindBar::FindBar(QWidget *parent)
 {
     // Init.
     setWindowFlags(Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
-    setFixedHeight(40);
+    setFixedHeight(45);
 
     // Init layout and widgets.
     m_layout = new QHBoxLayout(this);
