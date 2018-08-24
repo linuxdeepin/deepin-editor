@@ -83,7 +83,7 @@ void FindBar::activeInput(QString text, QString file, int row, int column, int s
     m_editLine->selectAll();
 
     // Show.
-    show();
+    QWidget::show();
 
     // Save file info for back to position.
     m_findFile = file;
@@ -97,7 +97,7 @@ void FindBar::activeInput(QString text, QString file, int row, int column, int s
 
 void FindBar::findCancel()
 {
-    hide();
+    QWidget::hide();
 }
 
 void FindBar::handleContentChanged()
@@ -124,6 +124,7 @@ void FindBar::paintEvent(QPaintEvent *)
     } else {
         splitLineColor = QColor("#000000");
     }
+
     QPainterPath framePath;
     framePath.addRect(QRect(rect().x(), rect().y(), rect().width(), 1));
     painter.setOpacity(0.05);
@@ -153,5 +154,5 @@ void FindBar::setBackground(QString color)
         m_closeButton->setPressPic(Utils::getQrcPath("bar_close_press_light.svg"));
     }
 
-    repaint();
+    update();
 }

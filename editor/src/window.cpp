@@ -779,8 +779,6 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
 {
     QString key = Utils::getKeyshortcut(keyEvent);
 
-    // qDebug() << "!!!!!!!!!!!! " << key << Utils::getKeyshortcutFromKeymap(settings, "window", "selectnexttab");
-
     if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "addblanktab")) {
         addBlankTab();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "newwindow")) {
