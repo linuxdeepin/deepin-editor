@@ -57,7 +57,11 @@ TabWidget::TabWidget(QWidget *parent)
     connect(this, &DTabBar::dragActionChanged, this, &TabWidget::handleDragActionChanged);
 
     // FIXME(rekols): what? it is repaired?
-    connect(this, &DTabBar::tabIsRemoved, this, [=] (int index) { tabFiles.removeAt(index); });
+    connect(this, &DTabBar::tabIsRemoved, this,
+            [=] (int index) {
+                tabFiles.removeAt(index);
+                qDebug() << "tab is removed!!!!!!!!";
+            });
 }
 
 QMimeData* TabWidget::createMimeDataFromTab(int index, const QStyleOptionTab &) const
