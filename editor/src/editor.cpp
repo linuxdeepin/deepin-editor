@@ -54,14 +54,14 @@ void Editor::loadFile(const QString &filepath)
         auto fileContent = file.readAll();
         m_fileEncode = Utils::getFileEncode(fileContent, filepath);
 
-        qDebug() << QString("Detect file %1 with encoding: %2").arg(filepath).arg(QString(m_fileEncode));
-
         QTextStream stream(&fileContent);
         stream.setCodec(m_fileEncode);
         textEditor->setPlainText(stream.readAll());
 
         updatePath(filepath);
         detectNewline();
+
+        qDebug() << QString("Detect file %1 with encoding: %2, line endings: %3").arg(filepath).arg(QString(m_fileEncode)).arg(m_newline);
 
         textEditor->loadHighlighter();
     }

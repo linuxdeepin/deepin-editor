@@ -75,7 +75,6 @@ public slots:
     void handleTabDroped(int index, Qt::DropAction action, QObject *target);
     void handleTabMoved(int fromIndex, int toIndex);
     void handleTabReleaseRequested(int index);
-    void handleTabCloseRequested(int index);
 
 private:
     QHBoxLayout *m_layout;

@@ -232,17 +232,6 @@ void Window::activeTab(int index)
 void Window::addTab(const QString &filepath, bool activeTab)
 {
     if (Utils::isEditableFile(filepath)) {
-        // if (!Utils::fileIsWritable(file)) {
-        //     filepath = QDir(m_readonlyFileDir).filePath(filepath.replace(QDir().separator(), m_readonlySeparator));
-
-        //     if (!Utils::fileExists(filepath)) {
-        //         QString directory = QFileInfo(filepath).dir().absolutePath();
-        //         QDir().mkpath(directory);
-        //     }
-
-        //     QFile::copy(file, filepath);
-        // }
-
         if (m_tabbar->getTabIndex(filepath) == -1) {
             m_tabbar->addTab(filepath, QFileInfo(filepath).fileName());
 

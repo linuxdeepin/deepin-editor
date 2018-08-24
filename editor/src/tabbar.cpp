@@ -179,7 +179,8 @@ void Tabbar::handleCloseOtherTabs(int index)
 void Tabbar::handleTabDroped(int index, Qt::DropAction, QObject *target)
 {
     // Remove match tab if tab drop to tabbar of deepin-editor.
-    auto *tabWidget = qobject_cast<Tabbar *>(target);
+    Tabbar *tabWidget = qobject_cast<Tabbar *>(target);
+
     if (tabWidget != nullptr) {
         closeTabWithIndex(index);
     }
@@ -196,13 +197,6 @@ void Tabbar::handleTabReleaseRequested(int index)
     if (tabbar->count() > 1) {
         emit tabReleaseRequested(getTabName(index), getTabPath(index), index);
     }
-}
-
-void Tabbar::handleTabCloseRequested(int index)
-{
-    const QString filePath = tabbar->tabFiles.value(index);
-
-    tabbar->tabFiles.takeAt(index);
 }
 
 int Tabbar::getTabCount()
