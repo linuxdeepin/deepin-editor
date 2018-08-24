@@ -58,7 +58,7 @@ public:
     int getTabIndex(const QString &file);
     void activeTab(int index);
 
-    void addTab(const QString &file, bool activeTab = false);
+    void addTab(const QString &filepath, bool activeTab = false);
     void addTabWithContent(const QString &tabName, const QString &filepath, const QString &content, int index = -1);
     void closeTab();
     void restoreTab();

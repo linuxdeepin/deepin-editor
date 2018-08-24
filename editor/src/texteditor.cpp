@@ -68,6 +68,8 @@ TextEditor::TextEditor(QPlainTextEdit *parent)
     // Don't draw frame around editor widget.
     setFrameShape(QFrame::NoFrame);
 
+    setFocusPolicy(Qt::StrongFocus);
+
     // Init widgets.
     lineNumberArea = new LineNumberArea(this);
 

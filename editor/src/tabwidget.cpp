@@ -60,7 +60,6 @@ TabWidget::TabWidget(QWidget *parent)
     connect(this, &DTabBar::tabIsRemoved, this,
             [=] (int index) {
                 tabFiles.removeAt(index);
-                qDebug() << "tab is removed!!!!!!!!";
             });
 }
 
