@@ -59,13 +59,7 @@ Tabbar::Tabbar(QWidget *parent)
 
 int Tabbar::getTabIndex(const QString &filepath)
 {
-    for (int i = 0; i < tabbar->tabFiles.size(); i++) {
-        if (tabbar->tabFiles[i] == filepath) {
-            return i;
-        }
-    }
-
-    return -1;
+    return tabbar->tabFiles.indexOf(filepath);
 }
 
 QString Tabbar::getTabName(int index)
