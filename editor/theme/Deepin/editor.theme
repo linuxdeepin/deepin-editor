@@ -176,6 +176,7 @@
     },
     "app-colors" : {
         "tab-active" : "#2CA7F8",
+        "tab-background-color": "#FFFFFF",
         "tab-dnd-start" : "(0, 0, 0, 10%)",
         "tab-dnd-end" : "(0, 0, 0, 5%)",
         "themebar-frame-selected" : "#2CA7F8",

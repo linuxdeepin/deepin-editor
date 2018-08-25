@@ -1212,6 +1212,17 @@ void Window::popupPrintDialog()
     preview.exec();
 }
 
+void Window::changeTitlebarBackground(const QString &color)
+{
+    titlebar()->setStyleSheet(QString("%1"
+                                      "Dtk--Widget--DTitlebar {"
+                                      "background: %2;"
+                                      "}").arg(m_titlebarStyleSheet).arg(color));
+
+    QVariantMap jsonMap = Utils::getThemeNodeMap(m_themeName);
+    m_tabbar->setTabActiveColor(jsonMap["app-colors"].toMap()["tab-active"].toString());
+}
+
 void Window::changeTitlebarBackground(const QString &startColor, const QString &endColor)
 {
     titlebar()->setStyleSheet(QString("%1"
@@ -1230,16 +1241,17 @@ void Window::loadTheme(const QString &name)
 
     QVariantMap jsonMap = Utils::getThemeNodeMap(name);
     const QString &backgroundColor = jsonMap["editor-colors"].toMap()["background-color"].toString();
+    m_tabbarBackgroundColor = jsonMap["app-colors"].toMap()["tab-background-color"].toString();
 
-    if (QColor(backgroundColor).lightness() < 128) {
+    if (QColor(m_tabbarBackgroundColor).lightness() < 128) {
         DThemeManager::instance()->setTheme("dark");
         m_tabbar->tabbar->setBackground(m_darkTabBackgroundStartColor, m_darkTabBackgroundEndColor);
-        changeTitlebarBackground(m_darkTabBackgroundStartColor, m_darkTabBackgroundEndColor);
     } else {
         DThemeManager::instance()->setTheme("light");
         m_tabbar->tabbar->setBackground(m_lightTabBackgroundStartColor, m_lightTabBackgroundEndColor);
-        changeTitlebarBackground(m_lightTabBackgroundStartColor, m_lightTabBackgroundEndColor);
     }
+
+    changeTitlebarBackground(m_tabbarBackgroundColor);
 
     for (auto editor : m_editorMap.values()) {
         editor->textEditor->setThemeWithName(name);

@@ -1979,7 +1979,14 @@ void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme, QString theme
     viewport()->setPalette(pal);
     viewport()->setAutoFillBackground(true);
 
-    setStyleSheet(QString("QPlainTextEdit { background-color: %1; }").arg(themeBackgroundColor));
+    const QString &textColor = QColor(theme.textColor(KSyntaxHighlighting::Theme::Normal)).name();
+
+    const QString &styleSheet = QString("QPlainTextEdit {"
+                                        "background-color: %1;"
+                                        "color: %2;"
+                                        "}").arg(themeBackgroundColor, textColor);
+
+    setStyleSheet(styleSheet);
 
     m_currentLineColor = QColor(themeCurrentLineColor);
     m_backgroundColor = QColor(themeBackgroundColor);
