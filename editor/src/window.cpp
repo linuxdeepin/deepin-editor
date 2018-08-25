@@ -314,11 +314,16 @@ void Window::closeTab()
 
         dialog->exec();
     } else {
-        // Record last close path.
+        // record last close path.
         m_closeFileHistory << m_tabbar->getActiveTabPath();
 
-        // Close tab directly, because all file is save automatically.
+        // close tab directly, because all file is save automatically.
         m_tabbar->closeActiveTab();
+
+        // remove blank file.
+        if (isBlankFile) {
+            QFile::remove(filePath);
+        }
 
         handleCloseFile(filePath);
         focusActiveEditor();
