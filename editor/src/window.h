@@ -195,11 +195,6 @@ private:
     QString m_readonlySeparator = " !_! ";
 
     QString m_themeName;
-    QString m_lightTabBackgroundStartColor = "(255, 255, 255, 90%)";
-    QString m_lightTabBackgroundEndColor = "(248, 248, 248, 90%)";
-    QString m_darkTabBackgroundStartColor = "(16, 16, 16, 90%)";
-    QString m_darkTabBackgroundEndColor = "(16, 16, 16, 90%)";
-
     QString m_tabbarBackgroundColor;
 };
 

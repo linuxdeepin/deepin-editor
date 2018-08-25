@@ -1245,10 +1245,8 @@ void Window::loadTheme(const QString &name)
 
     if (QColor(m_tabbarBackgroundColor).lightness() < 128) {
         DThemeManager::instance()->setTheme("dark");
-        m_tabbar->tabbar->setBackground(m_darkTabBackgroundStartColor, m_darkTabBackgroundEndColor);
     } else {
         DThemeManager::instance()->setTheme("light");
-        m_tabbar->tabbar->setBackground(m_lightTabBackgroundStartColor, m_lightTabBackgroundEndColor);
     }
 
     changeTitlebarBackground(m_tabbarBackgroundColor);
@@ -1262,6 +1260,7 @@ void Window::loadTheme(const QString &name)
     m_replaceBar->setBackground(backgroundColor);
     m_findBar->setBackground(backgroundColor);
     m_tabbar->tabbar->setDNDColor(jsonMap["app-colors"].toMap()["tab-dnd-start"].toString(), jsonMap["app-colors"].toMap()["tab-dnd-end"].toString());
+    m_tabbar->tabbar->setBackground(m_tabbarBackgroundColor);
 
     auto frameSelectedColor = jsonMap["app-colors"].toMap()["themebar-frame-selected"].toString();
     auto frameNormalColor = jsonMap["app-colors"].toMap()["themebar-frame-normal"].toString();

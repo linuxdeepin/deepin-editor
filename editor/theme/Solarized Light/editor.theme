@@ -175,8 +175,8 @@
     "app-colors" : {
         "tab-active" : "#403513",
         "tab-background-color": "#FDF6E3",
-        "tab-dnd-start" : "(35, 38, 41, 90%)",
-        "tab-dnd-end" : "(35, 38, 41, 90%)",
+        "tab-dnd-start" : "(238, 232, 213, 90%)",
+        "tab-dnd-end" : "(238, 232, 213, 90%)",
         "themebar-frame-selected" : "#00FFFF",
 	"themebar-frame-normal" : "#000000",
 	"english-completer-item-selected-background" : "#2CA7F8",
