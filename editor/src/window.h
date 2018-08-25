@@ -53,7 +53,7 @@ public:
     Window(DMainWindow *parent = 0);
     ~Window();
 
-    void initMenu();
+    void initTitlebar();
 
     int getTabIndex(const QString &file);
     void activeTab(int index);

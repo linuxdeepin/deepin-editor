@@ -85,7 +85,7 @@ Window::Window(DMainWindow *parent)
 
     // Init titlebar.
     if (titlebar()) {
-        initMenu();
+        initTitlebar();
     }
 
     // Init window state with config.
@@ -168,7 +168,7 @@ Window::~Window()
     // We don't need clean pointers because application has exit here.
 }
 
-void Window::initMenu()
+void Window::initTitlebar()
 {
     QAction *newWindowAction(new QAction(tr("New window"), this));
     QAction *newTabAction(new QAction(tr("New tab"), this));
@@ -227,6 +227,7 @@ void Window::activeTab(int index)
 
 void Window::addTab(const QString &filepath, bool activeTab)
 {
+    // check whether it is an editable file thround mimeType.
     if (Utils::isEditableFile(filepath)) {
         if (m_tabbar->getTabIndex(filepath) == -1) {
             m_tabbar->addTab(filepath, QFileInfo(filepath).fileName());
@@ -252,14 +253,12 @@ void Window::addTab(const QString &filepath, bool activeTab)
             }
         }
     } else {
-        showNotify(tr("%1 不是一个有效的可编辑文件").arg(QFileInfo(filepath).fileName()));
+        showNotify(tr("%1 open invalid").arg(QFileInfo(filepath).fileName()));
     }
 }
 
 void Window::addTabWithContent(const QString &tabName, const QString &filepath, const QString &content, int index)
 {
-    qDebug() << "add tab with content, has " << m_editorMap.size();
-
     // Default index is -1, we change it to right of current tab for new tab actoin in start.
     if (index == -1) {
         index = m_tabbar->getActiveTabIndex() + 1;
@@ -282,35 +281,40 @@ void Window::closeTab()
 {
     const QString &filePath = m_tabbar->getActiveTabPath();
     const bool isBlankFile = QFileInfo(filePath).dir().absolutePath() == m_blankFileDir;
+    Editor *editor = m_editorMap.value(filePath);
+
+    if (!editor)  {
+        return;
+    }
 
     // if the editor text changes, will prompt the user to save.
-    if (m_editorMap.value(filePath)->textEditor->document()->isModified()) {
+    bool isModified = editor->textEditor->document()->isModified();
+    if (isModified) {
         DDialog *dialog = createSaveFileDialog(tr("Save file"), tr("Do you need to save the file?"));
 
-        connect(dialog, &DDialog::buttonClicked, this,
-                [=] (int index) {
-                    dialog->hide();
+        connect(dialog, &DDialog::buttonClicked, this, [=] (int index) {
+            dialog->hide();
 
-                    // click the "dont't save" button.
-                    if (index == 1) {
-                        m_tabbar->closeActiveTab();
+            // click the "dont't save" button.
+            if (index == 1) {
+                m_tabbar->closeActiveTab();
 
-                        if (isBlankFile) {
-                            // remove blank file.
-                            QFile(filePath).remove();
-                        }
+                if (isBlankFile) {
+                    // remove blank file.
+                    QFile(filePath).remove();
+                }
 
-                        handleCloseFile(filePath);
-                    }
-                    // click the "save" button.
-                    else if (index == 2) {
-                        saveFile();
-                        m_tabbar->closeActiveTab();
-                        handleCloseFile(filePath);
-                    }
+                handleCloseFile(filePath);
+            }
+            // click the "save" button.
+            else if (index == 2) {
+                saveFile();
+                m_tabbar->closeActiveTab();
+                handleCloseFile(filePath);
+            }
 
-                    focusActiveEditor();
-                });
+            focusActiveEditor();
+        });
 
         dialog->exec();
     } else {
@@ -341,10 +345,10 @@ Editor* Window::createEditor()
 {
     Editor *editor = new Editor();
     editor->textEditor->setThemeWithName(m_themeName);
-    setFontSizeWithConfig(editor);
     editor->textEditor->setSettings(m_settings);
     editor->textEditor->setTabSpaceNumber(m_settings->settings->option("advance.editor.tab_space_number")->value().toInt());
     editor->textEditor->setFontFamily(m_settings->settings->option("base.font.family")->value().toString());
+    setFontSizeWithConfig(editor);
 
     connect(editor->textEditor, &TextEditor::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);
     connect(editor->textEditor, &TextEditor::clickReplaceAction, this, &Window::popupReplaceBar, Qt::QueuedConnection);
@@ -477,36 +481,40 @@ void Window::displayShortcuts()
 
 bool Window::saveFile()
 {
-    if (QFileInfo(m_tabbar->getActiveTabPath()).dir().absolutePath() == m_blankFileDir) {
+    const QString &currentPath = m_tabbar->getActiveTabPath();
+    bool isBlankFile = QFileInfo(currentPath).dir().absolutePath() == m_blankFileDir;
+
+    // save root file.
+    if (!QFileInfo(currentPath).isWritable()) {
+        const QString content = getTextEditor(currentPath)->toPlainText();
+        bool saveResult = autoSaveDBus->saveFile(currentPath, content);
+
+        if (saveResult) {
+            showNotify(tr("Saved root file %1").arg(m_tabbar->getActiveTabName()));
+        } else {
+            showNotify(tr("Save root file %1 failed.").arg(m_tabbar->getActiveTabName()));
+        }
+
+        return saveResult;
+    }
+    // save blank file.
+    else if (isBlankFile) {
         QString encode, newline;
         QString filepath = getSaveFilePath(encode, newline);
 
-        if (filepath != "") {
-            QString tabPath = m_tabbar->getActiveTabPath();
-
+        if (!filepath.isEmpty()) {
+            const QString tabPath = m_tabbar->getActiveTabPath();
             saveFileAsAnotherPath(tabPath, filepath, encode, newline, true);
-
             return true;
         } else {
             return false;
         }
-    } else if (QFileInfo(m_tabbar->getActiveTabPath()).dir().absolutePath() == m_readonlyFileDir) {
-        QString realpath = QFileInfo(m_tabbar->getActiveTabPath()).fileName().replace(m_readonlySeparator, QDir().separator());
-        QString content = getActiveEditor()->textEditor->toPlainText();
-
-        bool result = autoSaveDBus->saveFile(realpath, content);
-
-        if (!result) {
-            qDebug() << QString("Save root file %1 failed").arg(realpath);
-        }
-
-        showNotify(tr("文件已保存"));
-
-        return result;
-    } else {
+    }
+    // save normal file.
+    else {
         bool success = m_editorMap.value(m_tabbar->getActiveTabPath())->saveFile();
         if (success) {
-            showNotify(tr("%1  文件已保存").arg(m_tabbar->getActiveTabName()));
+            showNotify(tr("Saved file %1").arg(m_tabbar->getActiveTabName()));
         }
 
         return true;
