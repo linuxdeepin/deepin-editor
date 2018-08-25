@@ -84,11 +84,10 @@ ThemeBar::ThemeBar(QWidget *parent)
 void ThemeBar::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
-    painter.setOpacity(0.5);
 
     QPainterPath path;
     path.addRect(QRect(rect().x() + 1, rect().y(), rect().width() - 1, rect().height()));
-    painter.setOpacity(0.8);
+    painter.setOpacity(0.9);
     painter.fillPath(path, backgroundColor);
 
     QPainterPath framePath;

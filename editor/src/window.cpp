@@ -490,6 +490,7 @@ bool Window::saveFile()
         bool saveResult = autoSaveDBus->saveFile(currentPath, content);
 
         if (saveResult) {
+            getTextEditor(currentPath)->setModified(false);
             showNotify(tr("Saved root file %1").arg(m_tabbar->getActiveTabName()));
         } else {
             showNotify(tr("Save root file %1 failed.").arg(m_tabbar->getActiveTabName()));
