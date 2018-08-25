@@ -290,5 +290,6 @@
     <file>theme/Breeze Dark/editor.theme</file>
     <file>theme/Deepin/editor.theme</file>
     <file>theme/Printing/editor.theme</file>
+    <file>theme/Solarized Light/editor.theme</file>
   </qresource>
 </RCC>

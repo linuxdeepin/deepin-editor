@@ -8,7 +8,7 @@ TARGET = deepin-editor
 CONFIG += link_pkgconfig
 CONFIG += c++11
 PKGCONFIG += xcb xcb-util dtkwidget dtkwm
-RESOURCES = deepin-editor.qrc
+RESOURCES += deepin-editor.qrc
 
 # Input
 HEADERS += src/window.h \

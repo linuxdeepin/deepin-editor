@@ -9,7 +9,6 @@
     "text-styles": {
         "Normal" : {
             "text-color" : "#000000",
-            "selected-text-color" : "#ffffff",
             "bold" : false,
             "italic" : false,
             "underline" : false,
@@ -115,9 +114,8 @@
             "selected-text-color" : "#ffffff"
         },
         "RegionMarker" : {
-            "text-color" : "#0057ae",
-            "selected-text-color" : "#00316e",
-            "background-color" : "#e0e9f8"
+            "text-color" : "#FFFFFF",
+            "background-color" : "#FF0000"
         },
         "Information" : {
             "text-color" : "#b08000",

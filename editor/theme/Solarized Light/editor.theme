@@ -1,14 +1,14 @@
 {
     "metadata" : {
         "revision" : 1,
-        "name" : "Breeze Dark",
-        "author" : "Dominik Haumann",
+        "name" : "Solarized Light",
+        "author" : "Ethan Schoonover",
         "license" : "MIT",
         "read-only" : true
     },
     "text-styles": {
         "Normal" : {
-            "text-color" : "#cfcfc2",
+            "text-color" : "#445257",
             "bold" : false,
             "italic" : false,
             "underline" : false,
@@ -115,8 +115,8 @@
             "selected-text-color" : "#94a3a4"
         },
         "RegionMarker" : {
-            "text-color" : "#2980b9",
-            "background-color" : "#153042"
+            "text-color" : "#FFFFFF",
+            "background-color" : "#586E75"
         },
         "Information" : {
             "text-color" : "#c45b00",
@@ -143,10 +143,10 @@
         }
    },
     "editor-colors": {
-        "background-color" : "#232629",
+        "background-color" : "#FDF6E3",
         "code-folding" : "#224e65",
         "bracket-matching" : "#8e44ad",
-        "current-line" : "#2A2E32",
+        "current-line" : "#EEE8D5",
         "icon-border" : "#31363b",
         "indentation-line" : "#3a3f44",
         "line-numbers" : "#7a7c7d",
@@ -161,8 +161,8 @@
         "modified-lines" : "#c04900",
         "replace-highlight" : "#808021",
         "saved-lines" : "#1c8042",
-        "search-highlight" : "#218058",
-        "selection" : "#2d5c76",
+        "search-highlight" : "#586E75",
+        "selection" : "#224659",
         "separator" : "#7a7c7d",
         "spell-checking" : "#c0392b",
         "tab-marker" : "#4d4d4d",
@@ -173,8 +173,8 @@
         "word-wrap-marker" : "#3a3f44"
     },
     "app-colors" : {
-        "tab-active" : "#00FFFF",
-        "tab-background-color": "#101010",
+        "tab-active" : "#403513",
+        "tab-background-color": "#FDF6E3",
         "tab-dnd-start" : "(35, 38, 41, 90%)",
         "tab-dnd-end" : "(35, 38, 41, 90%)",
         "themebar-frame-selected" : "#00FFFF",

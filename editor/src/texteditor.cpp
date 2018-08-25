@@ -1965,26 +1965,19 @@ void TextEditor::setThemeWithName(QString themeName)
 void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme, QString themeName)
 {
     QVariantMap jsonMap = Utils::getThemeNodeMap(themeName);
+    QVariantMap textStylesMap = jsonMap["text-styles"].toMap();
     const QString &themeBackgroundColor = jsonMap["editor-colors"].toMap()["background-color"].toString();
     const QString &themeCurrentLineColor = jsonMap["editor-colors"].toMap()["current-line"].toString();
-
-    auto pal = qApp->palette();
-    if (theme.isValid()) {
-        pal.setColor(QPalette::Base, QColor(themeBackgroundColor));
-        pal.setColor(QPalette::Text, QColor(theme.textColor(KSyntaxHighlighting::Theme::Normal)));
-        pal.setColor(QPalette::Highlight, QColor(theme.backgroundColor(KSyntaxHighlighting::Theme::RegionMarker)));
-        pal.setColor(QPalette::HighlightedText, QColor(theme.selectedTextColor(KSyntaxHighlighting::Theme::RegionMarker)));
-    }
-
-    viewport()->setPalette(pal);
-    viewport()->setAutoFillBackground(true);
-
-    const QString &textColor = QColor(theme.textColor(KSyntaxHighlighting::Theme::Normal)).name();
+    const QString textColor = textStylesMap["Normal"].toMap()["text-color"].toString();
+    const QString selectColor = textStylesMap["RegionMarker"].toMap()["text-color"].toString();
+    const QString selectBgColor = textStylesMap["RegionMarker"].toMap()["background-color"].toString();
 
     const QString &styleSheet = QString("QPlainTextEdit {"
                                         "background-color: %1;"
                                         "color: %2;"
-                                        "}").arg(themeBackgroundColor, textColor);
+                                        "selection-color: %3;"
+                                        "selection-background-color: %4;"
+                                        "}").arg(themeBackgroundColor, textColor, selectColor, selectBgColor);
 
     setStyleSheet(styleSheet);
 
@@ -1999,6 +1992,7 @@ void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme, QString theme
 
     m_highlighter->setTheme(theme);
     m_highlighter->rehighlight();
+    lineNumberArea->update();
 
     highlightCurrentLine();
 }
