@@ -766,7 +766,7 @@ void Window::resizeEvent(QResizeEvent*)
 void Window::closeEvent(QCloseEvent *e)
 {
     QDir blankDir(m_blankFileDir);
-    QStringList blankFiles = blankDir.entryList(QDir::Files);
+    QFileInfoList blankFiles = blankDir.entryInfoList(QDir::Files);
 
     // save blank content.
     for(Editor *editor : m_editorMap) {
@@ -777,15 +777,14 @@ void Window::closeEvent(QCloseEvent *e)
     }
 
     // clear blank files that have no content.
-    for (const QString &blankFile : blankFiles) {
-        QFile file(blankFile);
+    for (const QFileInfo &blankFile : blankFiles) {
+        QFile file(blankFile.absoluteFilePath());
 
-        if (!file.open(QIODevice::ReadOnly)) {
+        if (!file.open(QFile::ReadOnly)) {
             continue;
         }
 
-        QTextStream in(&file);
-        if (in.readAll().trimmed().isEmpty()) {
+        if (file.readAll().simplified().isEmpty()) {
             file.remove();
         }
 
