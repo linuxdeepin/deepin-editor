@@ -765,20 +765,27 @@ void Window::resizeEvent(QResizeEvent*)
 
 void Window::closeEvent(QCloseEvent *e)
 {
-    QDir directory = QDir(QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files"));
-    QStringList blankFiles = directory.entryList(QStringList(), QDir::Files);
+    QDir blankDir(m_blankFileDir);
+    QStringList blankFiles = blankDir.entryList(QDir::Files);
+
+    // save blank content.
+    for(Editor *editor : m_editorMap) {
+        bool isBlankFile = QFileInfo(editor->textEditor->filepath).dir().absolutePath() == m_blankFileDir;
+        if (isBlankFile) {
+            editor->saveFile();
+        }
+    }
 
     // clear blank files that have no content.
     for (const QString &blankFile : blankFiles) {
-        const QString &blankFilePath = QDir(directory).filePath(blankFile);
+        QFile file(blankFile);
 
-        QFile file(blankFilePath);
-        if (!file.open(QFile::ReadOnly)) {
+        if (!file.open(QIODevice::ReadOnly)) {
             continue;
         }
 
         QTextStream in(&file);
-        if (in.readAll().trimmed().size() == 0) {
+        if (in.readAll().trimmed().isEmpty()) {
             file.remove();
         }
 
