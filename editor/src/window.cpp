@@ -63,13 +63,17 @@ Window::Window(DMainWindow *parent)
       m_titlebarStyleSheet(titlebar()->styleSheet()),
       m_themeName(m_settings->settings->option("base.theme.default")->value().toString())
 {
+    m_blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
+    m_readonlyFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("readonly-files");
+    autoSaveDBus = new DBusDaemon::dbus("com.deepin.editor.daemon", "/", QDBusConnection::systemBus(), this);
+
     // Init.
     installEventFilter(this);
     setAcceptDrops(true);
 
-    m_blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
-    m_readonlyFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("readonly-files");
-    autoSaveDBus = new DBusDaemon::dbus("com.deepin.editor.daemon", "/", QDBusConnection::systemBus(), this);
+    // Apply qss theme.
+    Utils::applyQss(this, "main.qss");
+    loadTheme(m_themeName);
 
     // Init settings.
     connect(m_settings, &Settings::adjustFont, this, &Window::updateFont);
@@ -157,10 +161,6 @@ Window::Window(DMainWindow *parent)
     for (DSimpleListItem* item : m_themeBar->items) {
         (static_cast<ThemeItem*>(item))->setFrameColor(frameSelectedColor, frameNormalColor);
     }
-
-    // Apply qss theme.
-    Utils::applyQss(this, "main.qss");
-    loadTheme(m_themeName);
 }
 
 Window::~Window()

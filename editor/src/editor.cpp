@@ -51,12 +51,21 @@ void Editor::loadFile(const QString &filepath)
     QFile file(filepath);
 
     if (file.open(QFile::ReadOnly)) {
-        auto fileContent = file.readAll();
+        // set mouse status to wait.
+        QApplication::setOverrideCursor(Qt::WaitCursor);
+
+        // reads all remaining data from the file.
+        QByteArray fileContent = file.readAll();
+
+        // read the encode.
         m_fileEncode = Utils::getFileEncode(fileContent, filepath);
 
         QTextStream stream(&fileContent);
         stream.setCodec(m_fileEncode);
         textEditor->setPlainText(stream.readAll());
+
+        // restore mouse style.
+        QApplication::restoreOverrideCursor();
 
         updatePath(filepath);
         detectNewline();
