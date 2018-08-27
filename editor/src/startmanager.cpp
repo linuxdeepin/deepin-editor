@@ -77,9 +77,11 @@ void StartManager::openFilesInTab(QStringList files)
 
             // Open blank files of last session.
             if (!blankFiles.isEmpty()) {
-                for (const QString &blankFile : blankFiles) {
-                    QTimer::singleShot(1, [=] { window->addBlankTab(QDir(blankDirectory).filePath(blankFile)); });
-                }
+                QTimer::singleShot(50, [=] {
+                                           for (const QString &blankFile : blankFiles) {
+                                               window->addBlankTab(QDir(blankDirectory).filePath(blankFile));
+                                           }
+                                       });
             }
             // Just open new window with blank tab if no blank files in last session.
             else {
