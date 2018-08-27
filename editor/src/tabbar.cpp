@@ -173,7 +173,7 @@ void Tabbar::handleCloseOtherTabs(int index)
 void Tabbar::handleTabDroped(int index, Qt::DropAction, QObject *target)
 {
     // Remove match tab if tab drop to tabbar of deepin-editor.
-    Tabbar *tabWidget = qobject_cast<Tabbar *>(target);
+    TabWidget *tabWidget = qobject_cast<TabWidget *>(target);
 
     if (tabWidget != nullptr) {
         closeTabWithIndex(index);
