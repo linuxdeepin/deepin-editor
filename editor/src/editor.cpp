@@ -82,6 +82,8 @@ bool Editor::saveFile(const QString &encode, const QString &newline)
 {
     bool fileCreateFailed = false;
 
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+
     if (!Utils::fileExists(textEditor->filepath)) {
         QString directory = QFileInfo(textEditor->filepath).dir().absolutePath();
 
@@ -141,6 +143,8 @@ bool Editor::saveFile(const QString &encode, const QString &newline)
 
     // update status.
     textEditor->setModified(false);
+
+    QTimer::singleShot(100, [=] { QApplication::restoreOverrideCursor(); });
 
     return true;
 }
