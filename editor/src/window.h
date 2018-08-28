@@ -185,7 +185,6 @@ private:
     int m_remberPositionScrollOffset;
 
     QString m_blankFileDir;
-    QString m_readonlyFileDir;
     int m_fontSize;
 
     QString m_titlebarStyleSheet;

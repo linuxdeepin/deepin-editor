@@ -27,7 +27,8 @@ HEADERS += src/window.h \
 	   src/themeview.h \
 	   src/themeitem.h \
 	   src/uncommentselection.h \
-	   src/utils.h
+	   src/utils.h \
+           src/fileloadthread.h
 
 SOURCES += src/window.cpp \
            src/startmanager.cpp \
@@ -46,7 +47,8 @@ SOURCES += src/window.cpp \
 	   src/themeview.cpp \
 	   src/themeitem.cpp \
 	   src/uncommentselection.cpp \
-	   src/main.cpp
+	   src/main.cpp \
+           src/fileloadthread.cpp
 
 QT += KSyntaxHighlighting
 QT += core

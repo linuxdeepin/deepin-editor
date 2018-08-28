@@ -64,8 +64,6 @@ Window::Window(DMainWindow *parent)
       m_themeName(m_settings->settings->option("base.theme.default")->value().toString())
 {
     m_blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
-    m_readonlyFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("readonly-files");
-    autoSaveDBus = new DBusDaemon::dbus("com.deepin.editor.daemon", "/", QDBusConnection::systemBus(), this);
 
     // Init.
     installEventFilter(this);

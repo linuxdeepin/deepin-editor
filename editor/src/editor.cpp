@@ -23,6 +23,7 @@
 
 #include "editor.h"
 #include "utils.h"
+#include "fileloadthread.h"
 
 #include <QApplication>
 #include <QDebug>
@@ -48,34 +49,22 @@ Editor::Editor(QWidget *parent)
 
 void Editor::loadFile(const QString &filepath)
 {
-    QFile file(filepath);
+    // set mouse status to wait.
+    QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    if (file.open(QFile::ReadOnly)) {
-        // set mouse status to wait.
-        QApplication::setOverrideCursor(Qt::WaitCursor);
+    // update file path.
+    updatePath(filepath);
 
-        // reads all remaining data from the file.
-        QByteArray fileContent = file.readAll();
+    // begin to load the file.
+    FileLoadThread *thread = new FileLoadThread(filepath);
+    connect(thread, &FileLoadThread::loadFinished, this, &Editor::handleFileLoadFinished);
+    connect(thread, &FileLoadThread::finished, thread, &FileLoadThread::deleteLater);
 
-        // read the encode.
-        m_fileEncode = Utils::getFileEncode(fileContent, filepath);
+    // editing is not allowed during loading.
+    textEditor->setReadOnly(true);
 
-        QTextStream stream(&fileContent);
-        stream.setCodec(m_fileEncode);
-        textEditor->setPlainText(stream.readAll());
-
-        // restore mouse style.
-        QApplication::restoreOverrideCursor();
-
-        updatePath(filepath);
-        detectNewline();
-
-        qDebug() << QString("Detect file %1 with encoding: %2, line endings: %3").arg(filepath).arg(QString(m_fileEncode)).arg(m_newline);
-
-        textEditor->loadHighlighter();
-    }
-
-    file.close();
+    // start the thread.
+    thread->start();
 }
 
 bool Editor::saveFile(const QString &encode, const QString &newline)
@@ -175,4 +164,21 @@ void Editor::detectNewline()
     }
 
     file.close();
+}
+
+void Editor::handleFileLoadFinished(const QString &encode, QTextDocument *doc)
+{
+     QPlainTextDocumentLayout *layout = new QPlainTextDocumentLayout(doc);
+     doc->setDocumentLayout(layout);
+     textEditor->setDocument(doc);
+
+    // restore mouse style.
+    QApplication::restoreOverrideCursor();
+
+
+    // update status.
+    textEditor->setReadOnly(false);
+    textEditor->setModified(false);
+
+    // textEditor->loadHighlighter();
 }
