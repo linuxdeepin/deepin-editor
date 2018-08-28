@@ -1521,11 +1521,11 @@ void TextEditor::updateKeywordSelections(QString keyword)
     m_keywordSelections.clear();
 
     // Update selections with keyword.
-    if (keyword != "") {
+    if (!keyword.isEmpty()) {
         moveCursorNoBlink(QTextCursor::Start);
 
         QTextDocument::FindFlags options;
-        options |= QTextDocument::FindCaseSensitively;
+        options |= QTextDocument::FindWholeWords;
 
         while(find(keyword, options)) {
             QTextEdit::ExtraSelection extra;
