@@ -1990,8 +1990,8 @@ void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme, QString theme
     m_selectionColor = QColor(jsonMap["editor-colors"].toMap()["selection"].toString());
     m_regionMarkerColor = QColor(theme.textColor(KSyntaxHighlighting::Theme::RegionMarker));
 
-    // m_highlighter->setTheme(theme);
-    // m_highlighter->rehighlight();
+    m_highlighter->setTheme(theme);
+    m_highlighter->rehighlight();
     lineNumberArea->update();
 
     highlightCurrentLine();

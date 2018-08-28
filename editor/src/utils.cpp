@@ -93,7 +93,6 @@ void Utils::applyQss(QWidget *widget, QString qssName)
     file.close();
 }
 
-
 QString Utils::getFileContent(QString filepath)
 {
     QString content;
@@ -101,7 +100,7 @@ QString Utils::getFileContent(QString filepath)
     QFile file(filepath);
     if (file.open(QFile::ReadOnly)) {
         auto fileContent = file.readAll();
-        auto fileEncode = getFileEncode(fileContent, filepath);
+        auto fileEncode = detectEncode(fileContent, filepath);
 
         QTextStream stream(&fileContent);
         stream.setCodec(fileEncode);
@@ -187,7 +186,7 @@ float codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, co
     return qMax(0.0f, c);
 }
 
-QByteArray Utils::getFileEncode(const QByteArray &data, const QString &fileName)
+QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
 {
     // Return local encoding if nothing in file.
     if (data.isEmpty()) {
@@ -331,7 +330,8 @@ QByteArray Utils::getFileEncode(const QByteArray &data, const QString &fileName)
     return encoding;
 }
 
-bool Utils::fileExists(QString path) {
+bool Utils::fileExists(QString path)
+{
     QFileInfo check_file(path);
 
     return check_file.exists() && check_file.isFile();

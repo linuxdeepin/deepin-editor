@@ -43,18 +43,16 @@ void FileLoadThread::run()
 
     if (file.open(QIODevice::ReadOnly)) {
         // reads all remaining data from the file.
-        QByteArray content = file.readAll();
+        QByteArray fileContent = file.readAll();
 
         // read the encode.
-        QByteArray encode = Utils::getFileEncode(content, m_filePath);
+        QByteArray encode = Utils::detectEncode(fileContent, m_filePath);
 
-        QTextStream stream(&content);
+        QTextStream stream(&fileContent);
         stream.setCodec(encode);
 
-        QTextDocument *doc = new QTextDocument;
-        doc->moveToThread(QCoreApplication::instance()->thread());
-        doc->setPlainText(content);
+        QString content = stream.readAll();
 
-        emit loadFinished(encode, doc);
+        emit loadFinished(encode, content);
     }
 }

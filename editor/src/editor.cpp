@@ -166,19 +166,18 @@ void Editor::detectNewline()
     file.close();
 }
 
-void Editor::handleFileLoadFinished(const QString &encode, QTextDocument *doc)
+void Editor::handleFileLoadFinished(const QString &encode, const QString &content)
 {
-     QPlainTextDocumentLayout *layout = new QPlainTextDocumentLayout(doc);
-     doc->setDocumentLayout(layout);
-     textEditor->setDocument(doc);
-
     // restore mouse style.
     QApplication::restoreOverrideCursor();
 
+    // set text.
+    textEditor->document()->setPlainText(content);
 
     // update status.
     textEditor->setReadOnly(false);
     textEditor->setModified(false);
 
-    // textEditor->loadHighlighter();
+    // load highlight.
+    textEditor->loadHighlighter();
 }

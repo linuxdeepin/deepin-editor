@@ -52,7 +52,7 @@ public:
     static qreal easeOutQuad(qreal x);
     static qreal easeOutQuint(qreal x);
     static QVariantMap getThemeNodeMap(QString themeName);
-    static QByteArray getFileEncode(const QByteArray &data, const QString &fileName = QString());
+    static QByteArray detectEncode(const QByteArray &data, const QString &fileName = QString());
     static bool isEditableFile(QString filepath);
     static void toast(QString message, QWidget* parent = nullptr);
 };
