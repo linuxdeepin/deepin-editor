@@ -61,9 +61,6 @@ void Editor::loadFile(const QString &filepath)
     connect(thread, &FileLoadThread::loadFinished, this, &Editor::handleFileLoadFinished);
     connect(thread, &FileLoadThread::finished, thread, &FileLoadThread::deleteLater);
 
-    // editing is not allowed during loading.
-    textEditor->setReadOnly(true);
-
     // start the thread.
     thread->start();
 }
@@ -177,7 +174,6 @@ void Editor::handleFileLoadFinished(const QString &encode, const QString &conten
     textEditor->document()->setPlainText(content);
 
     // update status.
-    textEditor->setReadOnly(false);
     textEditor->setModified(false);
 
     // load highlight.

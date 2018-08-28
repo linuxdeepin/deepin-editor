@@ -31,4 +31,3 @@ SaveFileInterface::SaveFileInterface(const QString &service, const QString &path
 SaveFileInterface::~SaveFileInterface()
 {
 }
-
