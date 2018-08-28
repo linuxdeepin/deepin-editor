@@ -25,6 +25,7 @@
 #include "utils.h"
 #include "fileloadthread.h"
 
+#include <QCoreApplication>
 #include <QApplication>
 #include <QDebug>
 #include <QDir>
@@ -172,6 +173,7 @@ void Editor::handleFileLoadFinished(const QString &encode, const QString &conten
     QApplication::restoreOverrideCursor();
 
     // set text.
+    textEditor->document()->moveToThread(QCoreApplication::instance()->thread());
     textEditor->document()->setPlainText(content);
 
     // update status.
