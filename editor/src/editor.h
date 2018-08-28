@@ -36,6 +36,7 @@ class Editor : public QWidget
 
 public:
     Editor(QWidget *parent = 0);
+    ~Editor();
 
     void loadFile(const QString &filepath);
     bool saveFile(const QString &encode, const QString &newline);

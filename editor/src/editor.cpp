@@ -48,10 +48,15 @@ Editor::Editor(QWidget *parent)
     m_layout->addWidget(textEditor);
 }
 
+Editor::~Editor()
+{
+    delete textEditor;
+}
+
 void Editor::loadFile(const QString &filepath)
 {
     // set mouse status to wait.
-    QApplication::setOverrideCursor(Qt::WaitCursor);
+    // QApplication::setOverrideCursor(Qt::WaitCursor);
 
     // update file path.
     updatePath(filepath);
@@ -167,7 +172,7 @@ void Editor::detectNewline()
 void Editor::handleFileLoadFinished(const QString &encode, const QString &content)
 {
     // restore mouse style.
-    QApplication::restoreOverrideCursor();
+    // QApplication::restoreOverrideCursor();
 
     // set text.
     textEditor->document()->moveToThread(QCoreApplication::instance()->thread());
