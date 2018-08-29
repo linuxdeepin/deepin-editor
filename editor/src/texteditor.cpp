@@ -1300,6 +1300,13 @@ void TextEditor::setFontSize(int size)
     updateLineNumber();
 }
 
+void TextEditor::moveFirstLine()
+{
+    QTextCursor cursor = textCursor();
+    cursor.movePosition(QTextCursor::Start);
+    setTextCursor(cursor);
+}
+
 void TextEditor::updateFont()
 {
     QFont font = document()->defaultFont();
@@ -1875,9 +1882,9 @@ void TextEditor::highlightCurrentLine()
     adjustScrollbarMargins();
 
     // Keep current line at visible area.
-    if (cursorRect().top() + fontMetrics().height() >= rect().height()) {
-        scrollLineUp();
-    }
+    // if (cursorRect().top() + fontMetrics().height() >= rect().height()) {
+    //     scrollLineUp();
+    // }
 }
 
 void TextEditor::updateLineNumber()
@@ -1997,7 +2004,6 @@ void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme, QString theme
     }
 
     m_highlighter->rehighlight();
-
     lineNumberArea->update();
 
     highlightCurrentLine();

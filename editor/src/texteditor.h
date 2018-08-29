@@ -103,6 +103,7 @@ public:
 
     void setFontFamily(QString fontName);
     void setFontSize(int fontSize);
+    void moveFirstLine();
     void updateFont();
 
     void replaceAll(QString replaceText, QString withText);
@@ -153,7 +154,7 @@ public:
 
     void toggleComment();
     void toggleBullet();
-    void toggleBulletWithLine(int line, bool addBullet);
+    void toggleBulletWithLine(int tltine, bool addBullet);
 
     int getNextWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode);
     int getPrevWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode);

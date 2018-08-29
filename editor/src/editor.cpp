@@ -180,6 +180,7 @@ void Editor::handleFileLoadFinished(const QString &encode, const QString &conten
 
     // update status.
     textEditor->setModified(false);
+    textEditor->moveFirstLine();
 
     // load highlight.
     textEditor->loadHighlighter();
