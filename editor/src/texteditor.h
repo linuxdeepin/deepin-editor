@@ -196,9 +196,7 @@ public slots:
     void adjustScrollbarMargins();
 
 protected:
-    void dragEnterEvent(QDragEnterEvent *event) override;
-    void dragMoveEvent(QDragMoveEvent *event) override;
-    void dropEvent(QDropEvent *event) override;
+    void insertFromMimeData(const QMimeData *source);
 
 private:
     QPropertyAnimation *m_scrollAnimation;

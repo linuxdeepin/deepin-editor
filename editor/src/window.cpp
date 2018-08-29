@@ -149,8 +149,6 @@ Window::Window(DMainWindow *parent)
     DAnchorsBase::setAnchor(m_themeBar, Qt::AnchorRight, m_centralWidget, Qt::AnchorRight);
 
     connect(m_themeBar, &ThemeBar::changeTheme, this, &Window::themeChanged);
-    connect(this, &Window::requestDragEnterEvent, this, &Window::dragEnterEvent);
-    connect(this, &Window::requestDropEvent, this, &Window::dropEvent);
 
     QVariantMap jsonMap = Utils::getThemeNodeMap(m_themeName);
     const QString &frameSelectedColor = jsonMap["app-colors"].toMap()["themebar-frame-selected"].toString();
