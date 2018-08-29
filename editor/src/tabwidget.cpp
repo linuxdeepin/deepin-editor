@@ -235,7 +235,9 @@ void TabWidget::handleTabReleaseRequested()
 {
     // Show window agian if tab drop failed and only one tab in current window.
     if (count() == 1) {
-        static_cast<Window*>(this->window())->show();
+        Window *window = static_cast<Window *>(this->window());
+        window->move(QCursor::pos() - window->topLevelWidget()->pos());
+        window->show();
     }
 
     qDebug() << "### handleTabReleaseRequested";

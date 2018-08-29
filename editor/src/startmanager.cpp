@@ -121,7 +121,9 @@ void StartManager::openFilesInTab(QStringList files)
 
 void StartManager::createWindowFromTab(QString tabName, QString filepath, QString content)
 {
-    createWindow()->addTabWithContent(tabName, filepath, content);
+    Window *window = createWindow();
+    window->addTabWithContent(tabName, filepath, content);
+    window->move(QCursor::pos() - window->topLevelWidget()->pos());
 }
 
 void StartManager::loadTheme(const QString &themeName)
