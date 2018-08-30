@@ -22,7 +22,6 @@
 
 #include <QThread>
 
-class QTextDocument;
 class FileLoadThread : public QThread
 {
     Q_OBJECT
@@ -34,7 +33,7 @@ public:
     void run();
 
 signals:
-    void loadFinished(const QString &encode, QTextDocument *doc);
+    void loadFinished(const QString &encode, const QString &content);
 
 private:
     QString m_filePath;

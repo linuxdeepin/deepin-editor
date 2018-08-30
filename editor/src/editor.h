@@ -48,7 +48,7 @@ public:
 
 private:
     void detectNewline();
-    void handleFileLoadFinished(const QString &encode, QTextDocument *doc);
+    void handleFileLoadFinished(const QString &encode, const QString &content);
 
 private:
     QHBoxLayout *m_layout;
