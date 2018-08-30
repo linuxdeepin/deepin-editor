@@ -156,13 +156,6 @@ TextEditor::TextEditor(QPlainTextEdit *parent)
     highlightCurrentLine();
     QTimer::singleShot(0, this, SLOT(setFocus()));
 
-    // Init change cursor width timer.
-    // m_changeCursorWidthTimer = new QTimer(this);
-    // m_changeCursorWidthTimer->setSingleShot(true);
-    // connect(m_changeCursorWidthTimer, &QTimer::timeout, this, &TextEditor::changeToWaitCursor);
-
-    // changeToWaitCursor();
-
     // Monitor cursor mark status to update in line number area.
     connect(this, &TextEditor::cursorMarkChanged, this, &TextEditor::handleCursorMarkChanged);
 
@@ -1171,32 +1164,6 @@ void TextEditor::transposeChar()
     setTextCursor(cursor);
 }
 
-void TextEditor::changeToEditCursor()
-{
-    setCursorWidth(m_cursorNormalWidth);
-
-    // Need repaint after change to edit stauts,
-    // avoid cursor width not flash after press key.
-    repaint();
-}
-
-void TextEditor::changeToWaitCursor()
-{
-    QTextCursor cursor = textCursor();
-    cursor.setPosition(cursor.position(), QTextCursor::MoveAnchor);
-    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-    QString currentChar = cursor.selectedText();
-
-    // qDebug() << QString("'%1'").arg(currentChar);
-
-    // Convert TAB char to one single space.
-    if (currentChar == "\t") {
-        currentChar = " ";
-    }
-
-    setCursorWidth(std::max(m_cursorNormalWidth, (fontMetrics().width(currentChar))));
-}
-
 void TextEditor::handleCursorMarkChanged(bool mark, QTextCursor cursor)
 {
     if (mark) {
@@ -1565,17 +1532,7 @@ void TextEditor::renderAllSelections()
 
 void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
 {
-    // Change cursor to edit status and start timer to restore to wait status.
-    // changeToEditCursor();
-    // if (m_changeCursorWidthTimer->isActive()) {
-    //     m_changeCursorWidthTimer->stop();
-    // }
-    // m_changeCursorWidthTimer->start(m_cursorWidthChangeDelay);
-
-    QString key = Utils::getKeyshortcut(keyEvent);
-
-    // Debug usage.
-    // qDebug() << key;
+    const QString &key = Utils::getKeyshortcut(keyEvent);
 
     if (m_readOnlyMode) {
         if (key == "J") {

@@ -190,8 +190,6 @@ public slots:
     void capitalizeWord();
     void transposeChar();
 
-    void changeToEditCursor();
-    void changeToWaitCursor();
     void handleCursorMarkChanged(bool mark, QTextCursor cursor);
 
     void adjustScrollbarMargins();
@@ -254,15 +252,12 @@ private:
 
     Settings *m_settings;
 
-    // QTimer *m_changeCursorWidthTimer;
-
     bool setCursorKeywordSeletoin(int position, bool findNext);
 
     bool m_readOnlyMode = false;
 
     bool m_cursorMarkStatus = false;
     int m_cursorMarkPosition = 0;
-    int m_cursorNormalWidth = 2;
     int m_cursorWidthChangeDelay = 2000;
 
     int m_fontSize;

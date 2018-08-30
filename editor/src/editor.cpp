@@ -155,7 +155,11 @@ void Editor::updatePath(QString file)
 void Editor::detectNewline()
 {
     QFile file(textEditor->filepath);
-    file.open(QIODevice::ReadOnly);
+
+    if (!file.open(QIODevice::ReadOnly)) {
+        return;
+    }
+
     QString line = file.readLine();
 
     if (line.indexOf("\r\n") != -1) {
