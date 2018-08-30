@@ -173,16 +173,18 @@ void Editor::detectNewline()
     file.close();
 }
 
-void Editor::handleFileLoadFinished(const QString &encode, const QString &content)
+void Editor::handleFileLoadFinished(const QString &encode, QTextDocument *doc)
 {
     // restore mouse style.
     // QApplication::restoreOverrideCursor();
 
-    // set text.
-     textEditor->document()->moveToThread(QCoreApplication::instance()->thread());
-     textEditor->document()->setPlainText(content);
+    QFont font = textEditor->document()->defaultFont();
+    QPlainTextDocumentLayout *layout = new QPlainTextDocumentLayout(doc);
+    doc->setDocumentLayout(layout);
+    doc->setDefaultFont(font);
 
     // update status.
+    textEditor->setDocument(doc);
     textEditor->setModified(false);
     textEditor->moveFirstLine();
 

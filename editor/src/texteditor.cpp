@@ -61,7 +61,7 @@ public:
 
 TextEditor::TextEditor(QPlainTextEdit *parent)
     : QPlainTextEdit(parent),
-      m_highlighter(new KSyntaxHighlighting::SyntaxHighlighter(document()))
+      m_highlighter(new KSyntaxHighlighting::SyntaxHighlighter(this))
 {
     viewport()->installEventFilter(this);
 
@@ -1968,6 +1968,8 @@ void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme, QString theme
 
 void TextEditor::loadHighlighter()
 {
+    m_highlighter->setDocument(document());
+
     const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());
 
     if (def.filePath() != "") {

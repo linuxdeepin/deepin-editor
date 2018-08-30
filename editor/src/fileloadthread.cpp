@@ -52,7 +52,10 @@ void FileLoadThread::run()
         stream.setCodec(encode);
 
         QString content = stream.readAll();
+        QTextDocument *doc = new QTextDocument;
+        doc->moveToThread(QCoreApplication::instance()->thread());
+        doc->setPlainText(content);
 
-        emit loadFinished(encode, content);
+        emit loadFinished(encode, doc);
     }
 }
