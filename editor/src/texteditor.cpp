@@ -2569,5 +2569,5 @@ void TextEditor::insertFromMimeData(const QMimeData *source)
 
     // dragging the cursor will change
     // so need to restore the cursor
-    QApplication::restoreOverrideCursor();
+    // QApplication::restoreOverrideCursor();
 }

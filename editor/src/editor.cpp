@@ -179,8 +179,8 @@ void Editor::handleFileLoadFinished(const QString &encode, const QString &conten
     // QApplication::restoreOverrideCursor();
 
     // set text.
-     textEditor->document()->moveToThread(QCoreApplication::instance()->thread());
-     textEditor->document()->setPlainText(content);
+    textEditor->document()->moveToThread(QCoreApplication::instance()->thread());
+    textEditor->document()->setPlainText(content);
 
     // update status.
     textEditor->setModified(false);
