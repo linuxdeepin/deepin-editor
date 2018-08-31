@@ -2555,19 +2555,30 @@ void TextEditor::adjustScrollbarMargins()
     }
 }
 
-void TextEditor::insertFromMimeData(const QMimeData *source)
+void TextEditor::dragEnterEvent(QDragEnterEvent *event)
 {
-    if (source->hasUrls() && source->urls().first().isLocalFile()) {
-        for (const QUrl &url : source->urls()) {
-            qobject_cast<Window *>(this->window())->addTab(url.toLocalFile(), true);
-        }
-    } else {
-        if (source->hasText()) {
-            insertPlainText(source->text());
-        }
-    }
+    QPlainTextEdit::dragEnterEvent(event);
+    qobject_cast<Window *>(this->window())->requestDragEnterEvent(event);
+}
 
-    // dragging the cursor will change
-    // so need to restore the cursor
-    // QApplication::restoreOverrideCursor();
+void TextEditor::dragMoveEvent(QDragMoveEvent *event)
+{
+    const QMimeData *data = event->mimeData();
+
+    if (data->hasUrls() && data->urls().first().isLocalFile()) {
+        event->acceptProposedAction();
+    } else {
+        QPlainTextEdit::dragMoveEvent(event);
+    }
+}
+
+void TextEditor::dropEvent(QDropEvent *event)
+{
+    const QMimeData *data = event->mimeData();
+
+    if (data->hasUrls() && data->urls().first().isLocalFile()) {
+        qobject_cast<Window *>(this->window())->requestDropEvent(event);
+    } else if (data->hasText()) {
+        QPlainTextEdit::dropEvent(event);
+    }
 }
