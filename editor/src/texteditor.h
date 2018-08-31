@@ -115,7 +115,7 @@ public:
     void removeKeywords();
     void highlightKeyword(QString keyword, int position);
     void updateCursorKeywordSelection(int position, bool findNext);
-    void updateHighlightLineSeleciton();
+    void updateHighlightLineSelection();
     void updateKeywordSelections(QString keyword);
     void renderAllSelections();
 

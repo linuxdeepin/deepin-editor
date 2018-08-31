@@ -1437,7 +1437,7 @@ void TextEditor::removeKeywords()
 
     m_keywordSelections.clear();
 
-    updateHighlightLineSeleciton();
+    updateHighlightLineSelection();
 
     renderAllSelections();
 
@@ -1450,7 +1450,7 @@ void TextEditor::highlightKeyword(QString keyword, int position)
 
     updateCursorKeywordSelection(position, true);
 
-    updateHighlightLineSeleciton();
+    updateHighlightLineSelection();
 
     renderAllSelections();
 }
@@ -1477,7 +1477,7 @@ void TextEditor::updateCursorKeywordSelection(int position, bool findNext)
     }
 }
 
-void TextEditor::updateHighlightLineSeleciton()
+void TextEditor::updateHighlightLineSelection()
 {
     QTextEdit::ExtraSelection selection;
 
@@ -1817,7 +1817,7 @@ void TextEditor::contextMenuEvent(QContextMenuEvent *event)
 
 void TextEditor::highlightCurrentLine()
 {
-    updateHighlightLineSeleciton();
+    updateHighlightLineSelection();
     renderAllSelections();
 
     // Adjust scrollbar margins if reach last line.
