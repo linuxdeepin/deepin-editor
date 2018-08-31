@@ -285,30 +285,34 @@ void Window::closeTab()
         return;
     }
 
-    // if the editor text changes, will prompt the user to save.
+    // this property holds whether the document has been modified by the user
     bool isModified = editor->textEditor->document()->isModified();
-    if (isModified) {
+
+    // document has been modified or unsaved draft document.
+    // need to prompt whether to save.
+    if (isModified || (isBlankFile && !editor->textEditor->toPlainText().isEmpty())) {
         DDialog *dialog = createSaveFileDialog(tr("Save file"), tr("Do you need to save the file?"));
 
         connect(dialog, &DDialog::buttonClicked, this, [=] (int index) {
             dialog->hide();
 
-            // click the "dont't save" button.
+            // don't save.
             if (index == 1) {
                 m_tabbar->closeActiveTab();
 
+                // delete the draft document.
                 if (isBlankFile) {
-                    // remove blank file.
                     QFile(filePath).remove();
                 }
 
                 handleCloseFile(filePath);
             }
-            // click the "save" button.
             else if (index == 2) {
-                saveFile();
-                m_tabbar->closeActiveTab();
-                handleCloseFile(filePath);
+                // may to press CANEL button in the save dialog.
+                if (saveFile()) {
+                    m_tabbar->closeActiveTab();
+                    handleCloseFile(filePath);
+                }
             }
 
             focusActiveEditor();
