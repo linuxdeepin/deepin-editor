@@ -2565,7 +2565,7 @@ void TextEditor::dragMoveEvent(QDragMoveEvent *event)
 {
     const QMimeData *data = event->mimeData();
 
-    if (data->hasUrls() && data->urls().first().isLocalFile()) {
+    if (data->hasUrls()) {
         event->acceptProposedAction();
     } else {
         QPlainTextEdit::dragMoveEvent(event);
