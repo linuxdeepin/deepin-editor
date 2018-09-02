@@ -485,10 +485,11 @@ void Window::displayShortcuts()
 bool Window::saveFile()
 {
     const QString &currentPath = m_tabbar->getActiveTabPath();
+    const QString &currentDir = QFileInfo(currentPath).absolutePath();
     bool isBlankFile = QFileInfo(currentPath).dir().absolutePath() == m_blankFileDir;
 
     // save root file.
-    if (!Utils::fileIsHome(currentPath)) {
+    if (!QFileInfo(currentDir).isWritable()) {
         const QString content = getTextEditor(currentPath)->toPlainText();
         bool saveResult = m_rootSaveDBus->saveFile(currentPath, content);
 
@@ -518,7 +519,7 @@ bool Window::saveFile()
     else {
         bool success = m_editorMap.value(m_tabbar->getActiveTabPath())->saveFile();
         if (success) {
-            showNotify(tr("Saved file %1").arg(m_tabbar->getActiveTabName()));
+            // showNotify(tr("Saved file %1").arg(m_tabbar->getActiveTabName()));
         }
 
         return true;
