@@ -64,6 +64,7 @@ Window::Window(DMainWindow *parent)
       m_themeName(m_settings->settings->option("base.theme.default")->value().toString())
 {
     m_blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
+    m_rootSaveDBus = new DBusDaemon::dbus("com.deepin.editor.daemon", "/", QDBusConnection::systemBus(), this);
 
     // Init.
     installEventFilter(this);
@@ -487,9 +488,9 @@ bool Window::saveFile()
     bool isBlankFile = QFileInfo(currentPath).dir().absolutePath() == m_blankFileDir;
 
     // save root file.
-    if (!QFileInfo(currentPath).isWritable()) {
+    if (!Utils::fileIsHome(currentPath)) {
         const QString content = getTextEditor(currentPath)->toPlainText();
-        bool saveResult = autoSaveDBus->saveFile(currentPath, content);
+        bool saveResult = m_rootSaveDBus->saveFile(currentPath, content);
 
         if (saveResult) {
             getTextEditor(currentPath)->setModified(false);

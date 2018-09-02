@@ -344,6 +344,11 @@ bool Utils::fileIsWritable(QString path)
     return permissions & QFileDevice::WriteUser;
 }
 
+bool Utils::fileIsHome(QString path)
+{
+    return path.startsWith(QDir::homePath());
+}
+
 QString Utils::getKeyshortcut(QKeyEvent *keyEvent)
 {
     QStringList keys;

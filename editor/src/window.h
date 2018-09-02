@@ -159,7 +159,7 @@ private:
     int getBlankFileIndex();
 
 private:
-    DBusDaemon::dbus *autoSaveDBus;
+    DBusDaemon::dbus *m_rootSaveDBus;
 
     QWidget *m_centralWidget;
     QStackedWidget *m_editorWidget;

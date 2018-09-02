@@ -41,6 +41,7 @@ public:
     static QString getFileContent(QString filepath);
     static bool fileExists(QString path);
     static bool fileIsWritable(QString path);
+    static bool fileIsHome(QString path);
     static void applyQss(QWidget *widget, QString qssName);
     static void passInputEvent(int wid);
     static void setFontSize(QPainter &painter, int textSize);
