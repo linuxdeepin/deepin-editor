@@ -65,7 +65,12 @@ QT += KCodecs
 QMAKE_CXXFLAGS += -g
 LIBS += -lX11 -lXext -lXtst
 
-binary.files += $${OUT_PWD}/deepin-editor
-binary.path = $${PREFIX}/bin/
+isEmpty(BINDIR):BINDIR=/usr/bin
+isEmpty(APPDIR):APPDIR=/usr/share/applications
+isEmpty(DSRDIR):DSRDIR=/usr/share/deepin-editor
 
-INSTALLS += binary
+target.path = $$INSTROOT$$BINDIR
+desktop.path = $$INSTROOT$$APPDIR
+desktop.files = $$PWD/../deepin-editor.desktop
+
+INSTALLS += target desktop

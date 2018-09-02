@@ -11,14 +11,14 @@ PKGCONFIG += dtkwidget polkit-qt5-1
 
 # Input
 HEADERS += src/dbusadaptor.h \
-           src/dbus.h \ 
-           src/utils.h \ 
+           src/dbus.h \
+           src/utils.h \
            src/main.h \
 	   src/policykithelper.h
 SOURCES += src/dbusadaptor.cpp \
-           src/dbus.cpp \  
-           src/utils.cpp \  
-           src/main.cpp \ 
+           src/dbus.cpp \
+           src/utils.cpp \
+           src/main.cpp \
 	   src/policykithelper.cpp
 
 QT += core
@@ -26,6 +26,7 @@ QT += dbus
 
 QMAKE_CXXFLAGS += -g
 
-binary.files += $${OUT_PWD}/deepin-editor-daemon
-binary.path = $${PREFIX}/bin/
-INSTALLS += binary
+isEmpty(BINDIR):BINDIR=/usr/bin
+target.path = $$INSTROOT$$BINDIR
+
+INSTALLS += target
