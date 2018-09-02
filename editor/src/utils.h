@@ -33,27 +33,27 @@ class Utils : public QObject
     Q_OBJECT
 
 public:
-    static QSize getRenderSize(int fontSize, QString string);
-    static QString getKeyshortcut(QKeyEvent *keyEvent);
-    static QString getKeyshortcutFromKeymap(Settings* settings, QString keyCategory, QString keyName);
-    static QString getQrcPath(QString imageName);
-    static QString getQssPath(QString qssName);
-    static QString getFileContent(QString filepath);
-    static bool fileExists(QString path);
-    static bool fileIsWritable(QString path);
-    static bool fileIsHome(QString path);
-    static void applyQss(QWidget *widget, QString qssName);
-    static void passInputEvent(int wid);
+    static QString getQrcPath(const QString &imageName);
+    static QString getQssPath(const QString &qssName);
+    static QSize getRenderSize(int fontSize, const QString &string);
     static void setFontSize(QPainter &painter, int textSize);
+    static void applyQss(QWidget *widget, const QString &qssName);
+    static QString getFileContent(const QString &filepath);
+    static QString getKeyshortcut(QKeyEvent *keyEvent);
+    static QString getKeyshortcutFromKeymap(Settings* settings, const QString &keyCategory, const QString &keyName);
+    static bool fileExists(const QString &path);
+    static bool fileIsWritable(const QString &path);
+    static bool fileIsHome(const QString &path);
+    static void passInputEvent(int wid);
     static QPixmap dropShadow(const QPixmap &source, qreal radius, const QColor &color, const QPoint &offset);
     static QImage dropShadow(const QPixmap &px, qreal radius, const QColor &color);
+    static QByteArray detectEncode(const QByteArray &data, const QString &fileName = QString());
     static qreal easeInOut(qreal x);
     static qreal easeInQuad(qreal x);
     static qreal easeInQuint(qreal x);
     static qreal easeOutQuad(qreal x);
     static qreal easeOutQuint(qreal x);
-    static QVariantMap getThemeNodeMap(QString themeName);
-    static QByteArray detectEncode(const QByteArray &data, const QString &fileName = QString());
-    static bool isEditableFile(QString filepath);
-    static void toast(QString message, QWidget* parent = nullptr);
+    static QVariantMap getThemeNodeMap(const QString &themeName);
+    static bool isEditableFile(const QString &filepath);
+    static void toast(const QString &message, QWidget* parent = nullptr);
 };

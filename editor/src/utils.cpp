@@ -45,17 +45,17 @@ QT_BEGIN_NAMESPACE
 extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
 QT_END_NAMESPACE
 
-QString Utils::getQrcPath(QString imageName)
+QString Utils::getQrcPath(const QString &imageName)
 {
     return QString(":/image/%1").arg(imageName);
 }
 
-QString Utils::getQssPath(QString qssName)
+QString Utils::getQssPath(const QString &qssName)
 {
     return QString(":/qss/%1").arg(qssName);
 }
 
-QSize Utils::getRenderSize(int fontSize, QString string)
+QSize Utils::getRenderSize(int fontSize, const QString &string)
 {
     QFont font;
     font.setPointSize(fontSize);
@@ -83,7 +83,7 @@ void Utils::setFontSize(QPainter &painter, int textSize)
     painter.setFont(font);
 }
 
-void Utils::applyQss(QWidget *widget, QString qssName)
+void Utils::applyQss(QWidget *widget, const QString &qssName)
 {
     QFile file(Utils::getQssPath(qssName));
     file.open(QFile::ReadOnly);
@@ -93,7 +93,7 @@ void Utils::applyQss(QWidget *widget, QString qssName)
     file.close();
 }
 
-QString Utils::getFileContent(QString filepath)
+QString Utils::getFileContent(const QString &filepath)
 {
     QString content;
 
@@ -330,21 +330,21 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
     return encoding;
 }
 
-bool Utils::fileExists(QString path)
+bool Utils::fileExists(const QString &path)
 {
     QFileInfo check_file(path);
 
     return check_file.exists() && check_file.isFile();
 }
 
-bool Utils::fileIsWritable(QString path)
+bool Utils::fileIsWritable(const QString &path)
 {
     QFileDevice::Permissions permissions = QFile(path).permissions();
 
     return permissions & QFileDevice::WriteUser;
 }
 
-bool Utils::fileIsHome(QString path)
+bool Utils::fileIsHome(const QString &path)
 {
     return path.startsWith(QDir::homePath());
 }
@@ -378,7 +378,7 @@ QString Utils::getKeyshortcut(QKeyEvent *keyEvent)
     return keys.join("+");
 }
 
-QString Utils::getKeyshortcutFromKeymap(Settings* settings, QString keyCategory, QString keyName)
+QString Utils::getKeyshortcutFromKeymap(Settings* settings, const QString &keyCategory, const QString &keyName)
 {
     return settings->settings->option(QString("shortcuts.%1.%2").arg(keyCategory).arg(keyName))->value().toString();
 }
@@ -457,7 +457,7 @@ qreal Utils::easeOutQuint(qreal x)
     return qPow(x - 1, 5) + 1;
 }
 
-QVariantMap Utils::getThemeNodeMap(QString themeName)
+QVariantMap Utils::getThemeNodeMap(const QString &themeName)
 {
     auto themeDir = QDir(":/theme").filePath(themeName);
     auto filePath = QDir(themeDir).filePath("editor.theme");
@@ -492,7 +492,7 @@ QVariantMap Utils::getThemeNodeMap(QString themeName)
     return jsonObject.toVariantMap();
 }
 
-bool Utils::isEditableFile(QString filepath)
+bool Utils::isEditableFile(const QString &filepath)
 {
     auto mimeType = QMimeDatabase().mimeTypeForFile(filepath).name();
     qDebug() << "*** " << filepath << mimeType;
@@ -535,7 +535,7 @@ bool Utils::isEditableFile(QString filepath)
     return false;
 }
 
-void Utils::toast(QString message, QWidget *parent)
+void Utils::toast(const QString &message, QWidget *parent)
 {
     DToast *toast = new DToast(parent);
     int avaliableHeight = parent->height() - toast->height();
