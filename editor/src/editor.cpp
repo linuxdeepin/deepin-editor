@@ -73,6 +73,7 @@ void Editor::loadFile(const QString &filepath)
 bool Editor::saveFile(const QString &encode, const QString &newline)
 {
     bool fileCreateFailed = false;
+    m_fileEncode = encode.toUtf8();
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
 

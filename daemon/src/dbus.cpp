@@ -46,7 +46,7 @@ bool dbus::saveFile(QString filepath, QString text, QString encoding)
                 qDebug() << QString("File %1 not exists, create one.").arg(filepath);
             }
         }
-        
+
         // Save content to file.
         QFile file(filepath);
         if(!file.open(QIODevice::WriteOnly | QIODevice::Text)){
@@ -59,7 +59,7 @@ bool dbus::saveFile(QString filepath, QString text, QString encoding)
         out.setCodec(encoding.toUtf8().data());
         out << text;
         file.close();
-        
+
         return true;
     } else{
         return false;
