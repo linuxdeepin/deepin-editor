@@ -848,13 +848,13 @@ void TextEditor::copyLines()
         copyCursor.setPosition(startCursor.position(), QTextCursor::MoveAnchor);
         copyCursor.setPosition(endCursor.position(), QTextCursor::KeepAnchor);
 
-        popupNotify(tr("已经拷贝选中行到剪切板"));
+        // popupNotify(tr("已经拷贝选中行到剪切板"));
     } else {
         // Selection current line.
         copyCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
         copyCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
 
-        popupNotify(tr("已经拷贝当前行到剪切板"));
+        // popupNotify(tr("已经拷贝当前行到剪切板"));
     }
 
     // Copy lines to system clipboard.
@@ -893,13 +893,13 @@ void TextEditor::cutlines()
         copyCursor.setPosition(startCursor.position(), QTextCursor::MoveAnchor);
         copyCursor.setPosition(endCursor.position(), QTextCursor::KeepAnchor);
 
-        popupNotify(tr("已经剪切选中行到剪切板"));
+        // popupNotify(tr("已经剪切选中行到剪切板"));
     } else {
         // Selection current line.
         copyCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
         copyCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
 
-        popupNotify(tr("已经剪切当前行到剪切板"));
+        // popupNotify(tr("已经剪切当前行到剪切板"));
     }
 
     // Copy lines to system clipboard.

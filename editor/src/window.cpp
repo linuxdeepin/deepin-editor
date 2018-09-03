@@ -683,7 +683,7 @@ void Window::remberPositionSave(bool notify)
     m_remberPositionScrollOffset = editor->textEditor->getScrollOffset();
 
     if (notify) {
-        showNotify(tr("记住当前位置"));
+        // showNotify(tr("记住当前位置"));
     }
 }
 
@@ -722,7 +722,7 @@ void Window::remberPositionRestore()
                         m_editorMap.value(filepath)->textEditor->scrollToLine(scrollOffset, row, column);
                     });
             } else {
-                showNotify(tr("记录位置的文件已经不存在了"));
+                // showNotify(tr("记录位置的文件已经不存在了"));
             }
         }
     }
