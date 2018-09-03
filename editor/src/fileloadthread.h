@@ -33,7 +33,7 @@ public:
     void run();
 
 signals:
-    void loadFinished(const QString &encode, const QString &content);
+    void loadFinished(const QByteArray &encode, const QString &content);
 
 private:
     QString m_filePath;

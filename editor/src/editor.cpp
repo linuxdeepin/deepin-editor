@@ -173,10 +173,12 @@ void Editor::detectNewline()
     file.close();
 }
 
-void Editor::handleFileLoadFinished(const QString &encode, const QString &content)
+void Editor::handleFileLoadFinished(const QByteArray &encode, const QString &content)
 {
     // restore mouse style.
     // QApplication::restoreOverrideCursor();
+
+    m_fileEncode = encode;
 
     // set text.
     textEditor->document()->moveToThread(QCoreApplication::instance()->thread());
