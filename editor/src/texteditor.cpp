@@ -1267,13 +1267,6 @@ void TextEditor::setFontSize(int size)
     updateLineNumber();
 }
 
-void TextEditor::moveFirstLine()
-{
-    QTextCursor cursor = textCursor();
-    cursor.movePosition(QTextCursor::Start);
-    setTextCursor(cursor);
-}
-
 void TextEditor::updateFont()
 {
     QFont font = document()->defaultFont();

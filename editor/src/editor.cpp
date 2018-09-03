@@ -187,7 +187,7 @@ void Editor::handleFileLoadFinished(const QByteArray &encode, const QString &con
 
     // update status.
     textEditor->setModified(false);
-    textEditor->moveFirstLine();
+    textEditor->moveToStart();
 
     // load highlight.
     textEditor->loadHighlighter();

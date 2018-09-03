@@ -103,7 +103,6 @@ public:
 
     void setFontFamily(QString fontName);
     void setFontSize(int fontSize);
-    void moveFirstLine();
     void updateFont();
 
     void replaceAll(QString replaceText, QString withText);
