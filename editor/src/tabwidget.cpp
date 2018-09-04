@@ -71,10 +71,12 @@ QMimeData* TabWidget::createMimeDataFromTab(int index, const QStyleOptionTab &) 
     QString tabName = tabText(index);
     TextEditor *textEditor = static_cast<Window *>(this->window())->getTextEditor(tabFiles[index]);
     QString tabContent = textEditor->toPlainText();
+    int modified = (textEditor->document()->isModified()) ? 1 : 0;
 
     // Add tab info in DND data.
     QMimeData *mimeData = new QMimeData;
-    mimeData->setData("tabInfo", (QString("%1\n%2\n%3").arg(tabName, tabPath, tabContent)).toUtf8());
+    mimeData->setData("tabInfo", (QString("%1\n%2\n%3\n%4")
+                                  .arg(tabName, tabPath, QString::number(modified), tabContent)).toUtf8());
 
     // Remove text/plain format, avoid drop tab text to other applications
     mimeData->removeFormat("text/plain");
@@ -139,29 +141,43 @@ bool TabWidget::canInsertFromMimeData(int index, const QMimeData *source) const
 void TabWidget::insertFromMimeData(int index, const QMimeData *source)
 {
     // Create new tab create drop from other deepin-editor.
-    QString content = QString::fromUtf8(source->data("tabInfo"));
-    QStringList dropContent = content.split("\n");
-    QString tabName = dropContent[0];
-    QString tabPath = dropContent[1];
-    QString tabContent = content.remove(0, tabName.size() + tabPath.size() + 2); // 2 mean two \n char
+    const QString data = QString::fromUtf8(source->data("tabInfo"));
+    QStringList lines = data.split("\n");
+    const QString tabName = lines.at(0);
+    const QString tabPath = lines.at(1);
+    const QString modified = lines.at(2);
+    const bool isModified = (modified == "0") ? false : true;
 
-    Window* window = static_cast<Window *>(this->window());
+    // remove the first three rows of data.
+    lines.removeFirst();
+    lines.removeFirst();
+    lines.removeFirst();
 
-    window->addTabWithContent(tabName, tabPath, tabContent, index);
+    const QString content = lines.join("\n");
+
+    Window *window = static_cast<Window *>(this->window());
+    window->addTabWithContent(tabName, tabPath, content, isModified, index);
     window->activeTab(window->getTabIndex(tabPath));
 }
 
 void TabWidget::insertFromMimeDataOnDragEnter(int index, const QMimeData *source)
 {
-    QString content = QString::fromUtf8(source->data("tabInfo"));
-    QStringList dropContent = content.split("\n");
-    QString tabName = dropContent[0];
-    QString tabPath = dropContent[1];
-    QString tabContent = content.remove(0, tabName.size() + tabPath.size() + 2); // 2 mean two \n char
+    const QString data = QString::fromUtf8(source->data("tabInfo"));
+    QStringList lines = data.split("\n");
+    const QString tabName = lines.at(0);
+    const QString tabPath = lines.at(1);
+    const QString modified = lines.at(2);
+    const bool isModified = (modified == "0") ? false : true;
 
-    Window* window = static_cast<Window *>(this->window());
+    // remove the first three rows of data.
+    lines.removeFirst();
+    lines.removeFirst();
+    lines.removeFirst();
 
-    window->addTabWithContent(tabName, tabPath, tabContent, index);
+    const QString content = lines.join("\n");
+
+    Window *window = static_cast<Window *>(this->window());
+    window->addTabWithContent(tabName, tabPath, content, isModified, index);
     window->activeTab(window->getTabIndex(tabPath));
 }
 

@@ -119,10 +119,10 @@ void StartManager::openFilesInTab(QStringList files)
     }
 }
 
-void StartManager::createWindowFromTab(QString tabName, QString filepath, QString content)
+void StartManager::createWindowFromTab(QString tabName, QString filepath, QString content, bool isModified)
 {
     Window *window = createWindow();
-    window->addTabWithContent(tabName, filepath, content);
+    window->addTabWithContent(tabName, filepath, content, isModified);
     window->move(QCursor::pos() - window->topLevelWidget()->pos());
 }
 

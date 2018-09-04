@@ -115,8 +115,8 @@
             "selected-text-color" : "#94a3a4"
         },
         "RegionMarker" : {
-            "text-color" : "#2980b9",
-            "background-color" : "#153042"
+            "text-color" : "#FFFFFF",
+            "background-color" : "#2D5C76"
         },
         "Information" : {
             "text-color" : "#c45b00",

@@ -256,7 +256,7 @@ void Window::addTab(const QString &filepath, bool activeTab)
     }
 }
 
-void Window::addTabWithContent(const QString &tabName, const QString &filepath, const QString &content, int index)
+void Window::addTabWithContent(const QString &tabName, const QString &filepath, const QString &content, bool isModified, int index)
 {
     // Default index is -1, we change it to right of current tab for new tab actoin in start.
     if (index == -1) {
@@ -268,6 +268,7 @@ void Window::addTabWithContent(const QString &tabName, const QString &filepath, 
     Editor *editor = createEditor();
     editor->updatePath(filepath);
     editor->textEditor->setPlainText(content);
+    editor->textEditor->document()->setModified(isModified);
 
     m_editorMap[filepath] = editor;
 
@@ -933,12 +934,14 @@ void Window::addBlankTab(const QString &blankFile)
 
 void Window::handleTabReleaseRequested(const QString &tabName, const QString &filepath, int index)
 {
-    const QString content = getTextEditor(filepath)->toPlainText();
+    TextEditor *editor = getTextEditor(filepath);
+    const QString content = editor->toPlainText();
+    const bool isModified = editor->document()->isModified();
 
     m_tabbar->closeTabWithIndex(index);
     handleCloseFile(filepath);
 
-    emit dropTabOut(tabName, filepath, content);
+    emit dropTabOut(tabName, filepath, content, isModified);
 }
 
 void Window::handleTabCloseRequested(int index)

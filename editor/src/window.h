@@ -59,7 +59,11 @@ public:
     void activeTab(int index);
 
     void addTab(const QString &filepath, bool activeTab = false);
-    void addTabWithContent(const QString &tabName, const QString &filepath, const QString &content, int index = -1);
+    void addTabWithContent(const QString &tabName,
+                           const QString &filepath,
+                           const QString &content,
+                           bool isModified = false,
+                           int index = -1);
     void closeTab();
     void restoreTab();
 
@@ -103,7 +107,7 @@ public:
     void displayShortcuts();
 
 signals:
-    void dropTabOut(QString tabName, QString filepath, QString content);
+    void dropTabOut(QString tabName, QString filepath, QString content, bool isModified);
     void themeChanged(const QString themeName);
     void requestDragEnterEvent(QDragEnterEvent *);
     void requestDropEvent(QDropEvent *);

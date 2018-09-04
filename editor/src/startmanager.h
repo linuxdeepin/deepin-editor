@@ -47,7 +47,7 @@ public slots:
     Q_SCRIPTABLE void openFilesInTab(QStringList files);
     Q_SCRIPTABLE void openFilesInWindow(QStringList files);
 
-    void createWindowFromTab(QString tabName, QString filepath, QString content);
+    void createWindowFromTab(QString tabName, QString filepath, QString content, bool isModified);
     void loadTheme(const QString &themeName);
 
 private:
