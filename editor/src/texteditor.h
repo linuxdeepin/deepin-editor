@@ -281,6 +281,9 @@ private:
     QColor m_searchHighlightColor;
     QColor m_selectionColor;
 
+    QColor m_selectBgColor;
+    QColor m_selectColor;
+
     QPoint m_mouseClickPos;
 
     bool m_scrollbarLock = false;

@@ -1947,6 +1947,9 @@ void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme, QString theme
     m_selectionColor = QColor(jsonMap["editor-colors"].toMap()["selection"].toString());
     m_regionMarkerColor = QColor(theme.textColor(KSyntaxHighlighting::Theme::RegionMarker));
 
+    m_selectColor = selectColor;
+    m_selectBgColor = selectBgColor;
+
     if (QColor(m_backgroundColor).lightness() < 128) {
         m_highlighter->setTheme(m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme));
     } else {
@@ -2027,9 +2030,8 @@ bool TextEditor::highlightWordUnderMouse(QPoint pos)
         // Update highlight cursor.
         QTextEdit::ExtraSelection selection;
 
-        QColor lineColor = m_searchHighlightColor;
-
-        selection.format.setBackground(lineColor);
+        selection.format.setBackground(m_selectBgColor);
+        selection.format.setForeground(m_selectColor);
         selection.cursor = cursor;
         selection.cursor.select(QTextCursor::WordUnderCursor);
 
