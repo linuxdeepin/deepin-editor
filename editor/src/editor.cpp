@@ -75,8 +75,6 @@ bool Editor::saveFile(const QString &encode, const QString &newline)
     bool fileCreateFailed = false;
     m_fileEncode = encode.toUtf8();
 
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-
     if (!Utils::fileExists(textEditor->filepath)) {
         QString directory = QFileInfo(textEditor->filepath).dir().absolutePath();
 
@@ -97,7 +95,7 @@ bool Editor::saveFile(const QString &encode, const QString &newline)
         QFile file(textEditor->filepath);
         if (!file.open(QIODevice::WriteOnly)) {
             qDebug() << "Can't write file: " << textEditor->filepath;
-            Utils::toast(tr("Can't write file: %1").arg(textEditor->filepath), this->topLevelWidget());
+            // Utils::toast(tr("Can't write file: %1").arg(textEditor->filepath), this->topLevelWidget());
             return false;
         }
 
@@ -130,14 +128,15 @@ bool Editor::saveFile(const QString &encode, const QString &newline)
         // blumia: WARNING! Toast is NOT the correct way to tell user something goes wrong!
         // FIXME: Tell user file no longer exist and create file at original path failed,
         //        Let user select a new path to save the file if user want.
-        Utils::toast(tr("File %1 create failed.").arg(textEditor->filepath), this->topLevelWidget());
+        // Utils::toast(tr("File %1 create failed.").arg(textEditor->filepath), this->topLevelWidget());
         return false;
     }
 
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    QTimer::singleShot(100, [=] { QApplication::restoreOverrideCursor(); });
+
     // update status.
     textEditor->setModified(false);
-
-    QTimer::singleShot(100, [=] { QApplication::restoreOverrideCursor(); });
 
     return true;
 }

@@ -490,7 +490,7 @@ bool Window::saveFile()
     bool isBlankFile = QFileInfo(currentPath).dir().absolutePath() == m_blankFileDir;
 
     // save root file.
-    if (!QFileInfo(currentDir).isWritable()) {
+    if (!QFileInfo(currentDir).isWritable() && QFileInfo(currentDir).exists()) {
         const QString content = getTextEditor(currentPath)->toPlainText();
         bool saveResult = m_rootSaveDBus->saveFile(currentPath, content);
 
@@ -519,8 +519,21 @@ bool Window::saveFile()
     // save normal file.
     else {
         bool success = m_editorMap.value(m_tabbar->getActiveTabPath())->saveFile();
-        if (success) {
-            // showNotify(tr("Saved file %1").arg(m_tabbar->getActiveTabName()));
+
+        if (!success) {
+            DDialog *dialog = createSaveFileDialog(tr("Unable to save file"), tr("Do you want to save to another?"));
+
+            connect(dialog, &DDialog::buttonClicked, this, [=] (int index) {
+                                                               dialog->hide();
+
+                                                               if (index == 2) {
+                                                                   saveAsFile();
+                                                               }
+                                                           });
+
+            dialog->exec();
+        } else {
+            showNotify(tr("Saved file %1").arg(m_tabbar->getActiveTabName()));
         }
 
         return true;
