@@ -332,8 +332,10 @@ qreal Utils::easeOutQuint(qreal x)
 
 QVariantMap Utils::getThemeNodeMap(const QString &themeName)
 {
-    auto themeDir = QDir(":/theme").filePath(themeName);
-    auto filePath = QDir(themeDir).filePath("editor.theme");
+    // auto themeDir = QDir(":/theme").filePath(themeName);
+    // auto filePath = QDir(themeDir).filePath("editor.theme");
+
+    const QString filePath = QString("/usr/share/deepin-editor/themes/%1.theme").arg(themeName);
 
     QFile fileObject(filePath);
     if(!fileObject.open(QIODevice::ReadOnly)){
@@ -363,6 +365,24 @@ QVariantMap Utils::getThemeNodeMap(const QString &themeName)
     }
 
     return jsonObject.toVariantMap();
+}
+
+QVariantMap Utils::getThemeMapFromPath(const QString &filepath)
+{
+    QFile file(filepath);
+    if(!file.open(QIODevice::ReadOnly)){
+        qDebug() << "Failed to open " << filepath;
+    }
+
+    QTextStream in(&file);
+    const QString jsonStr = in.readAll();
+    file.close();
+
+    QByteArray jsonBytes = jsonStr.toLocal8Bit();
+    QJsonDocument document = QJsonDocument::fromJson(jsonBytes);
+    QJsonObject object = document.object();
+
+    return object.toVariantMap();
 }
 
 bool Utils::isEditableFile(const QString &filepath)

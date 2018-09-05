@@ -123,8 +123,8 @@ public:
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     void contextMenuEvent(QContextMenuEvent *event);
 
-    void setTheme(const KSyntaxHighlighting::Theme &theme, QString themeName);
-    void setThemeWithName(QString themeName);
+    void setThemeWithPath(const QString &path);
+    void setTheme(const KSyntaxHighlighting::Theme &theme, const QString &path);
     void loadHighlighter();
 
     bool highlightWordUnderMouse(QPoint pos);

@@ -29,10 +29,10 @@
 #include "editor.h"
 #include "findbar.h"
 #include "jumplinebar.h"
-#include "themebar.h"
 #include "replacebar.h"
 #include "settings.h"
 #include "tabbar.h"
+#include "theme_module/themepanel.h"
 
 #include <QWidget>
 #include <QStackedWidget>
@@ -152,7 +152,7 @@ public slots:
 
     void popupPrintDialog();
 
-    void loadTheme(const QString &themeName);
+    void loadTheme(const QString &path);
 
 private:
     void removeActiveBlankTab(bool needSaveBefore = false);
@@ -172,7 +172,7 @@ private:
 
     JumpLineBar *m_jumpLineBar;
     ReplaceBar *m_replaceBar;
-    ThemeBar *m_themeBar;
+    ThemePanel *m_themePanel;
     FindBar *m_findBar;
     Settings *m_settings;
     DWindowManager *m_windowManager;
@@ -197,8 +197,9 @@ private:
 
     QString m_readonlySeparator = " !_! ";
 
-    QString m_themeName;
+    QString m_themePath;
     QString m_tabbarBackgroundColor;
+    QString m_tabbarActiveColor;
 };
 
 #endif

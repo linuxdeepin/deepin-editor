@@ -1912,16 +1912,15 @@ bool TextEditor::setCursorKeywordSeletoin(int position, bool findNext)
     return false;
 }
 
-void TextEditor::setThemeWithName(QString themeName)
+void TextEditor::setThemeWithPath(const QString &path)
 {
-    const auto theme = m_repository.theme(themeName);
-
-    setTheme(theme, themeName);
+    const KSyntaxHighlighting::Theme theme = m_repository.theme("");
+    setTheme(theme, path);
 }
 
-void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme, QString themeName)
+void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme, const QString &path)
 {
-    QVariantMap jsonMap = Utils::getThemeNodeMap(themeName);
+    QVariantMap jsonMap = Utils::getThemeMapFromPath(path);
     QVariantMap textStylesMap = jsonMap["text-styles"].toMap();
     const QString &themeBackgroundColor = jsonMap["editor-colors"].toMap()["background-color"].toString();
     const QString &themeCurrentLineColor = jsonMap["editor-colors"].toMap()["current-line"].toString();

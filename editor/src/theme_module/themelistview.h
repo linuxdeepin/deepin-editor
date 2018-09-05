@@ -1,11 +1,7 @@
-/* -*- Mode: C++; indent-tabs-mode: nil; tab-width: 4 -*-
- * -*- coding: utf-8 -*-
+/*
+ * Copyright (C) 2017 ~ 2018 Deepin Technology Co., Ltd.
  *
- * Copyright (C) 2011 ~ 2018 Deepin, Inc.
- *               2011 ~ 2018 Wang Yong
- *
- * Author:     Wang Yong <wangyong@deepin.com>
- * Maintainer: Wang Yong <wangyong@deepin.com>
+ * Author:     rekols <rekols@foxmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,20 +17,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "themeview.h"
+#ifndef THEMELISTVIEW_H
+#define THEMELISTVIEW_H
 
-ThemeView::ThemeView()
+#include <QListView>
+#include <QEvent>
+
+class ThemeListView : public QListView
 {
-    installEventFilter(this);   // add event filter
-    keepSelectWhenClickBlank(true);
-    setSingleSelect(true);
-}
+    Q_OBJECT
 
-bool ThemeView::eventFilter(QObject *, QEvent *event)
-{
-    if (event->type() == QEvent::FocusOut) {
-        emit focusOut();
-    }
+public:
+    ThemeListView(QWidget *parent = nullptr);
+    ~ThemeListView();
 
-    return false;
-}
+signals:
+    void themeChanged(const QString &path);
+
+protected:
+    bool eventFilter(QObject *, QEvent *event);
+    void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+
+signals:
+    void focusOut();
+};
+
+#endif

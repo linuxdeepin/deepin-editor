@@ -26,7 +26,6 @@
 #include "dtoast.h"
 #include "utils.h"
 #include "window.h"
-#include "themeitem.h"
 
 #include <DSettingsGroup>
 #include <DSettings>
@@ -55,13 +54,13 @@ Window::Window(DMainWindow *parent)
       m_tabbar(new Tabbar),
       m_jumpLineBar(new JumpLineBar(this)),
       m_replaceBar(new ReplaceBar),
-      m_themeBar(new ThemeBar(this)),
+      m_themePanel(new ThemePanel(this)),
       m_findBar(new FindBar),
       m_settings(new Settings(this)),
       m_windowManager(new DWindowManager),
       m_menu(new QMenu),
       m_titlebarStyleSheet(titlebar()->styleSheet()),
-      m_themeName(m_settings->settings->option("base.theme.default")->value().toString())
+      m_themePath(m_settings->settings->option("base.theme.default")->value().toString())
 {
     m_blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
     m_rootSaveDBus = new DBusDaemon::dbus("com.deepin.editor.daemon", "/", QDBusConnection::systemBus(), this);
@@ -72,7 +71,7 @@ Window::Window(DMainWindow *parent)
 
     // Apply qss theme.
     Utils::applyQss(this, "main.qss");
-    loadTheme(m_themeName);
+    loadTheme(m_themePath);
 
     // Init settings.
     connect(m_settings, &Settings::adjustFont, this, &Window::updateFont);
@@ -144,22 +143,14 @@ Window::Window(DMainWindow *parent)
     DAnchorsBase::setAnchor(m_jumpLineBar, Qt::AnchorTop, m_centralWidget, Qt::AnchorTop);
     DAnchorsBase::setAnchor(m_jumpLineBar, Qt::AnchorRight, m_centralWidget, Qt::AnchorRight);
 
-    // Init theme bar.
-    DAnchorsBase::setAnchor(m_themeBar, Qt::AnchorTop, m_centralWidget, Qt::AnchorTop);
-    DAnchorsBase::setAnchor(m_themeBar, Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
-    DAnchorsBase::setAnchor(m_themeBar, Qt::AnchorRight, m_centralWidget, Qt::AnchorRight);
+    // Init theme panel.
+    DAnchorsBase::setAnchor(m_themePanel, Qt::AnchorTop, m_centralWidget, Qt::AnchorTop);
+    DAnchorsBase::setAnchor(m_themePanel, Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
+    DAnchorsBase::setAnchor(m_themePanel, Qt::AnchorRight, m_centralWidget, Qt::AnchorRight);
 
-    connect(m_themeBar, &ThemeBar::changeTheme, this, &Window::themeChanged);
+    connect(m_themePanel, &ThemePanel::themeChanged, this, &Window::themeChanged);
     connect(this, &Window::requestDragEnterEvent, this, &Window::dragEnterEvent);
     connect(this, &Window::requestDropEvent, this, &Window::dropEvent);
-
-    QVariantMap jsonMap = Utils::getThemeNodeMap(m_themeName);
-    const QString &frameSelectedColor = jsonMap["app-colors"].toMap()["themebar-frame-selected"].toString();
-    const QString &frameNormalColor = jsonMap["app-colors"].toMap()["themebar-frame-normal"].toString();
-
-    for (DSimpleListItem* item : m_themeBar->items) {
-        (static_cast<ThemeItem*>(item))->setFrameColor(frameSelectedColor, frameNormalColor);
-    }
 }
 
 Window::~Window()
@@ -194,6 +185,7 @@ void Window::initTitlebar()
     titlebar()->setCustomWidget(m_tabbar, Qt::AlignVCenter, false);
     titlebar()->setAutoHideOnFullscreen(true);
     titlebar()->setSeparatorVisible(true);
+    titlebar()->setFixedHeight(40);
     titlebar()->setMenu(m_menu);
 
     connect(m_tabbar, &Tabbar::doubleClicked, titlebar(), &DTitlebar::doubleClicked, Qt::QueuedConnection);
@@ -348,7 +340,7 @@ void Window::restoreTab()
 Editor* Window::createEditor()
 {
     Editor *editor = new Editor();
-    editor->textEditor->setThemeWithName(m_themeName);
+    editor->textEditor->setThemeWithPath(m_themePath);
     editor->textEditor->setSettings(m_settings);
     editor->textEditor->setTabSpaceNumber(m_settings->settings->option("advance.editor.tab_space_number")->value().toInt());
     editor->textEditor->setFontFamily(m_settings->settings->option("base.font.family")->value().toString());
@@ -777,9 +769,10 @@ void Window::resizeEvent(QResizeEvent*)
             m_settings->settings->option("advance.window.window_height")->setValue(rect().height() * 1.0 / screenGeometry.height());
         }
 
-        DAnchorsBase::setAnchor(m_themeBar, Qt::AnchorTop, m_centralWidget, Qt::AnchorTop);
-        DAnchorsBase::setAnchor(m_themeBar, Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
-        DAnchorsBase::setAnchor(m_themeBar, Qt::AnchorRight, m_centralWidget, Qt::AnchorRight);
+        DAnchorsBase::setAnchor(m_themePanel, Qt::AnchorTop, m_centralWidget, Qt::AnchorTop);
+        DAnchorsBase::setAnchor(m_themePanel, Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
+        DAnchorsBase::setAnchor(m_themePanel, Qt::AnchorRight, m_centralWidget, Qt::AnchorRight);
+
     }
 }
 
@@ -1189,21 +1182,8 @@ DDialog* Window::createSaveFileDialog(QString title, QString content)
 
 void Window::popupThemeBar()
 {
-    // Select current theme.
-    QList<DSimpleListItem*> items;
-    m_themeBar->themeView->clearSelections();
-
-    for (DSimpleListItem *item : m_themeBar->items) {
-        if ((static_cast<ThemeItem*>(item))->themeName == m_themeName) {
-            items << item;
-            break;
-        }
-    }
-
-    m_themeBar->themeView->addSelections(items);
-
     // Popup theme bar.
-    m_themeBar->popup();
+    m_themePanel->popup();
 }
 
 void Window::popupSettingsDialog()
@@ -1240,8 +1220,7 @@ void Window::changeTitlebarBackground(const QString &color)
                                       "background: %2;"
                                       "}").arg(m_titlebarStyleSheet).arg(color));
 
-    QVariantMap jsonMap = Utils::getThemeNodeMap(m_themeName);
-    m_tabbar->setTabActiveColor(jsonMap["app-colors"].toMap()["tab-active"].toString());
+    m_tabbar->setTabActiveColor(m_tabbarActiveColor);
 }
 
 void Window::changeTitlebarBackground(const QString &startColor, const QString &endColor)
@@ -1252,17 +1231,17 @@ void Window::changeTitlebarBackground(const QString &startColor, const QString &
                                       "stop:0 rgba%2,  stop:1 rgba%3);"
                                       "}").arg(m_titlebarStyleSheet).arg(startColor).arg(endColor));
 
-    QVariantMap jsonMap = Utils::getThemeNodeMap(m_themeName);
-    m_tabbar->setTabActiveColor(jsonMap["app-colors"].toMap()["tab-active"].toString());
+    m_tabbar->setTabActiveColor(m_tabbarActiveColor);
 }
 
-void Window::loadTheme(const QString &name)
+void Window::loadTheme(const QString &path)
 {
-    m_themeName = name;
+    m_themePath = path;
 
-    QVariantMap jsonMap = Utils::getThemeNodeMap(name);
+    QVariantMap jsonMap = Utils::getThemeMapFromPath(path);
     const QString &backgroundColor = jsonMap["editor-colors"].toMap()["background-color"].toString();
     m_tabbarBackgroundColor = jsonMap["app-colors"].toMap()["tab-background-color"].toString();
+    m_tabbarActiveColor = jsonMap["app-colors"].toMap()["tab-active"].toString();
 
     if (QColor(m_tabbarBackgroundColor).lightness() < 128) {
         DThemeManager::instance()->setTheme("dark");
@@ -1272,25 +1251,21 @@ void Window::loadTheme(const QString &name)
 
     changeTitlebarBackground(m_tabbarBackgroundColor);
 
-    for (auto editor : m_editorMap.values()) {
-        editor->textEditor->setThemeWithName(name);
+    for (Editor *editor : m_editorMap.values()) {
+        editor->textEditor->setThemeWithPath(path);
     }
 
-    m_themeBar->setBackground(backgroundColor);
+    m_themePanel->setBackground(backgroundColor);
     m_jumpLineBar->setBackground(backgroundColor);
     m_replaceBar->setBackground(backgroundColor);
     m_findBar->setBackground(backgroundColor);
     m_tabbar->tabbar->setDNDColor(jsonMap["app-colors"].toMap()["tab-dnd-start"].toString(), jsonMap["app-colors"].toMap()["tab-dnd-end"].toString());
     m_tabbar->tabbar->setBackground(m_tabbarBackgroundColor);
 
-    auto frameSelectedColor = jsonMap["app-colors"].toMap()["themebar-frame-selected"].toString();
-    auto frameNormalColor = jsonMap["app-colors"].toMap()["themebar-frame-normal"].toString();
-    for (DSimpleListItem* item : m_themeBar->items) {
-        (static_cast<ThemeItem*>(item))->setFrameColor(frameSelectedColor, frameNormalColor);
-    }
-    m_themeBar->themeView->repaint();
-
-    m_settings->settings->option("base.theme.default")->setValue(name);
+    const QString &frameSelectedColor = jsonMap["app-colors"].toMap()["themebar-frame-selected"].toString();
+    const QString &frameNormalColor = jsonMap["app-colors"].toMap()["themebar-frame-normal"].toString();
+    m_themePanel->setFrameColor(frameSelectedColor, frameNormalColor);
+    m_settings->settings->option("base.theme.default")->setValue(path);
 }
 
 void Window::dragEnterEvent(QDragEnterEvent *event)

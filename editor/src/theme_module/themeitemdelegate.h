@@ -1,11 +1,7 @@
-/* -*- Mode: C++; indent-tabs-mode: nil; tab-width: 4 -*-
- * -*- coding: utf-8 -*-
+/*
+ * Copyright (C) 2017 ~ 2018 Deepin Technology Co., Ltd.
  *
- * Copyright (C) 2011 ~ 2018 Deepin, Inc.
- *               2011 ~ 2018 Wang Yong
- *
- * Author:     Wang Yong <wangyong@deepin.com>
- * Maintainer: Wang Yong <wangyong@deepin.com>
+ * Author:     rekols <rekols@foxmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,28 +15,29 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */ 
+ */
 
-#ifndef THEMEVIEW_H
-#define THEMEVIEW_H
+#ifndef THEMEITEMDELEGATE_H
+#define THEMEITEMDELEGATE_H
 
-#include <DSimpleListView>
-#include <QEvent>
+#include <QAbstractItemDelegate>
 
-DWIDGET_USE_NAMESPACE
-
-class ThemeView : public DSimpleListView
+class ThemeItemDelegate : public QAbstractItemDelegate
 {
     Q_OBJECT
 
 public:
-    ThemeView();
-    
+    ThemeItemDelegate(QObject *parent = nullptr);
+    ~ThemeItemDelegate();
+
 protected:
-    bool eventFilter(QObject *, QEvent *event);
-    
-signals:
-    void focusOut();
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+
+private:
+    int m_itemPaddingY = 8;
+    int m_itemPaddingX = 20;
+    int m_frameRadius = 5;
 };
 
 #endif
