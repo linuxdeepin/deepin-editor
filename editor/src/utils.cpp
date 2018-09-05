@@ -393,6 +393,7 @@ bool Utils::isEditableFile(const QString &filepath)
         << "application/x-php"
         << "application/x-shellscript"
         << "application/x-sh"
+        << "application/x-theme"
         << "application/x-csh"
         << "application/x-text"
         << "application/x-yaml"
