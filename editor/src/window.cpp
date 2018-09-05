@@ -490,7 +490,7 @@ bool Window::saveFile()
     bool isBlankFile = QFileInfo(currentPath).dir().absolutePath() == m_blankFileDir;
 
     // save root file.
-    if (!QFileInfo(currentDir).isWritable() && QFileInfo(currentDir).exists()) {
+    if (!m_editorMap[currentPath]->isWritable()) {
         const QString content = getTextEditor(currentPath)->toPlainText();
         bool saveResult = m_rootSaveDBus->saveFile(currentPath, content);
 

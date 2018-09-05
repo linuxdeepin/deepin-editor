@@ -58,6 +58,8 @@ void Editor::loadFile(const QString &filepath)
     // set mouse status to wait.
     // QApplication::setOverrideCursor(Qt::WaitCursor);
 
+    m_isWritable = QFileInfo(filepath).isWritable();
+
     // update file path.
     updatePath(filepath);
 
