@@ -492,7 +492,8 @@ bool Window::saveFile()
     // save root file.
     if (!m_editorMap[currentPath]->isWritable()) {
         const QString content = getTextEditor(currentPath)->toPlainText();
-        bool saveResult = m_rootSaveDBus->saveFile(currentPath, content);
+        bool saveResult = m_rootSaveDBus->saveFile(currentPath.toUtf8(), content.toUtf8(),
+                                                   m_editorMap[currentPath]->fileEncode());
 
         if (saveResult) {
             getTextEditor(currentPath)->setModified(false);

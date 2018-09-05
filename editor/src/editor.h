@@ -44,6 +44,7 @@ public:
     bool isWritable() { return m_isWritable; }
 
     void updatePath(QString file);
+    QByteArray fileEncode() { return m_fileEncode; }
 
     TextEditor *textEditor;
 

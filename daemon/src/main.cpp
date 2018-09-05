@@ -1,11 +1,7 @@
-/* -*- Mode: C++; indent-tabs-mode: nil; tab-width: 4 -*-
- * -*- coding: utf-8 -*-
+/*
+ * Copyright (C) 2017 ~ 2018 Deepin Technology Co., Ltd.
  *
- * Copyright (C) 2011 ~ 2018 Deepin, Inc.
- *               2011 ~ 2018 Wang Yong
- *
- * Author:     Wang Yong <wangyong@deepin.com>
- * Maintainer: Wang Yong <wangyong@deepin.com>
+ * Author:     rekols <rekols@foxmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,19 +27,19 @@ int main(int argc, char **argv)
 {
     QCoreApplication app(argc, argv);
 
-    dbus *dbus1 = new dbus;
+    DBus *dbus1 = new DBus;
     new DbusAdaptor(dbus1);
 
     QDBusConnection connection = QDBusConnection::systemBus();
     if (connection.isConnected()) {
         qDebug() << "Build deepin-editor daemon success.";
     }
-    
-    if(!connection.registerService("com.deepin.editor.daemon") || !connection.registerObject("/", dbus1)){
+
+    if(!connection.registerService("com.deepin.editor.daemon") ||
+       !connection.registerObject("/", dbus1)){
         qDebug() << connection.lastError();
-        
+
         app.exit(1);
-        
         return 1;
     }
 

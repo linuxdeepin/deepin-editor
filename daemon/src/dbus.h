@@ -1,11 +1,7 @@
-/* -*- Mode: C++; indent-tabs-mode: nil; tab-width: 4 -*-
- * -*- coding: utf-8 -*-
+/*
+ * Copyright (C) 2017 ~ 2018 Deepin Technology Co., Ltd.
  *
- * Copyright (C) 2011 ~ 2018 Deepin, Inc.
- *               2011 ~ 2018 Wang Yong
- *
- * Author:     Wang Yong <wangyong@deepin.com>
- * Maintainer: Wang Yong <wangyong@deepin.com>
+ * Author:     rekols <rekols@foxmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,16 +22,16 @@
 
 #include <QtCore/QObject>
 
-class dbus : public QObject {
+class DBus : public QObject
+{
     Q_OBJECT
-
     Q_CLASSINFO("D-Bus Interface","com.deepin.editor.daemon")
 
 public:
-    dbus(QObject* parent = 0);
+    DBus(QObject* parent = nullptr);
 
 public Q_SLOTS:
-    bool saveFile(QString filepath, QString text, QString encoding = "");
+    bool saveFile(const QByteArray &path, const QByteArray &text, const QByteArray &encoding);
 };
 
 

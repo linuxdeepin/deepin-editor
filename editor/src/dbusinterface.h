@@ -46,9 +46,9 @@ public:
     ~SaveFileInterface();
 
 public Q_SLOTS: // METHODS
-    inline QDBusPendingReply<bool> saveFile(const QString &filepath, const QString &text) {
+    inline QDBusPendingReply<bool> saveFile(const QByteArray &filepath, const QByteArray &text, const QByteArray &encoding) {
         QList<QVariant> argumentList;
-        argumentList << QVariant::fromValue(filepath) << QVariant::fromValue(text);
+        argumentList << QVariant::fromValue(filepath) << QVariant::fromValue(text) << QVariant::fromValue(encoding);
         return asyncCallWithArgumentList(QStringLiteral("saveFile"), argumentList);
     }
 

@@ -30,12 +30,14 @@
 #include <QFileInfo>
 #include <QtCore/QFile>
 
-dbus::dbus(QObject *parent) : QObject(parent)
+DBus::DBus(QObject *parent) : QObject(parent)
 {
 }
 
-bool dbus::saveFile(QString filepath, QString text, QString encoding)
+bool DBus::saveFile(const QByteArray &path, const QByteArray &text, const QByteArray &encoding)
 {
+    const QString filepath = QString::fromUtf8(path);
+
     if (PolicyKitHelper::instance()->checkAuthorization("com.deepin.editor.saveFile", getpid())) {
         // Create file if filepath is not exists.
         if (!Utils::fileExists(filepath)) {
@@ -56,7 +58,7 @@ bool dbus::saveFile(QString filepath, QString text, QString encoding)
         }
 
         QTextStream out(&file);
-        out.setCodec(encoding.toUtf8().data());
+        out.setCodec(encoding);
         out << text;
         file.close();
 

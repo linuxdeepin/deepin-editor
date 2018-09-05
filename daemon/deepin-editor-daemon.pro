@@ -13,13 +13,13 @@ PKGCONFIG += dtkwidget polkit-qt5-1
 HEADERS += src/dbusadaptor.h \
            src/dbus.h \
            src/utils.h \
-           src/main.h \
-	   src/policykithelper.h
+           src/policykithelper.h
+
 SOURCES += src/dbusadaptor.cpp \
            src/dbus.cpp \
            src/utils.cpp \
            src/main.cpp \
-	   src/policykithelper.cpp
+           src/policykithelper.cpp
 
 QT += core
 QT += dbus
