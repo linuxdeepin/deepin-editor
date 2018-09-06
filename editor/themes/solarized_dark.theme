@@ -177,12 +177,7 @@
         "tab-background-color": "#00252E",
         "tab-dnd-start" : "(7, 54, 66, 90%)",
         "tab-dnd-end" : "(10, 77, 94, 90%)",
-        "themebar-frame-selected" : "#00FFFF",
-	"themebar-frame-normal" : "#000000",
-	"english-completer-item-selected-background" : "#2CA7F8",
-	"english-completer-item-normal-background" : "#232629",
-	"english-completer-item-selected-text" : "#ffffff",
-	"english-completer-item-normal-text" : "#ffffff",
-	"english-completer-window-frame" : "#ffffff"
+        "themebar-frame-selected" : "#2CA7F8",
+	"themebar-frame-normal" : "#000000"
     }
 }

@@ -178,11 +178,6 @@
         "tab-dnd-start" : "(0, 0, 0, 10%)",
         "tab-dnd-end" : "(0, 0, 0, 5%)",
         "themebar-frame-selected" : "#2CA7F8",
-        "themebar-frame-normal" : "#000000",
-        "english-completer-item-selected-background" : "#2CA7F8",
-        "english-completer-item-normal-background" : "#ffffff",
-        "english-completer-item-selected-text" : "#ffffff",
-        "english-completer-item-normal-text" : "#000000",
-        "english-completer-window-frame" : "#000000"
+        "themebar-frame-normal" : "#000000"
     }
 }

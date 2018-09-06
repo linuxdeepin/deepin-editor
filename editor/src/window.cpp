@@ -772,7 +772,6 @@ void Window::resizeEvent(QResizeEvent*)
         DAnchorsBase::setAnchor(m_themePanel, Qt::AnchorTop, m_centralWidget, Qt::AnchorTop);
         DAnchorsBase::setAnchor(m_themePanel, Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
         DAnchorsBase::setAnchor(m_themePanel, Qt::AnchorRight, m_centralWidget, Qt::AnchorRight);
-
     }
 }
 
@@ -1182,8 +1181,9 @@ DDialog* Window::createSaveFileDialog(QString title, QString content)
 
 void Window::popupThemePanel()
 {
-    m_themePanel->setSelectionTheme(m_themePath);
     m_themePanel->popup();
+
+    QTimer::singleShot(30, this, [=] { m_themePanel->setSelectionTheme(m_themePath); });
 }
 
 void Window::popupSettingsDialog()

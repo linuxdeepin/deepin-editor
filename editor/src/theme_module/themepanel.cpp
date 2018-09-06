@@ -47,7 +47,10 @@ ThemePanel::ThemePanel(QWidget *parent)
     QWidget::hide();
     connect(m_themeView, &ThemeListView::focusOut, this, &ThemePanel::hide);
     connect(m_themeView, &ThemeListView::themeChanged, this, &ThemePanel::themeChanged);
-    connect(m_themeModel, &ThemeListModel::requestCurrentIndex, m_themeView, &ThemeListView::setCurrentIndex);
+    connect(m_themeModel, &ThemeListModel::requestCurrentIndex, this, [=] (const QModelIndex &idx) {
+        m_themeView->setCurrentIndex(idx);
+        m_themeView->scrollTo(idx);
+    });
 }
 
 ThemePanel::~ThemePanel()

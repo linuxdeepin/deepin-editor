@@ -66,16 +66,16 @@ void ThemeItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
     QPainterPath framePath;
     framePath.addRoundedRect(QRect(rect.x() + paddingX, rect.y() + paddingY, rect.width() - paddingX * 2, rect.height() - paddingY * 2),
                              m_frameRadius, m_frameRadius);
-    QString frameColor;
+    QPen framePen;
 
     if (option.state & QStyle::State_Selected) {
-        frameColor = frameSelectedColor;
+        framePen = QPen(QColor(frameSelectedColor), 3);
     } else {
-        frameColor = frameNormalColor;
+        framePen = QPen(QColor(frameNormalColor), 1);
     }
 
     painter->setOpacity(1);
-    painter->setPen(QPen(QColor(frameColor), 1));
+    painter->setPen(framePen);
     painter->drawPath(framePath);
 
     // draw background.
