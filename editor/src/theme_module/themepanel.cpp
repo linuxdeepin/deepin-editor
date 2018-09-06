@@ -19,6 +19,7 @@
 
 #include "themepanel.h"
 #include "../window.h"
+#include <QPropertyAnimation>
 #include <QVBoxLayout>
 #include <QPainter>
 #include <QTimer>
@@ -26,16 +27,11 @@
 ThemePanel::ThemePanel(QWidget *parent)
     : QWidget(parent),
       m_themeView(new ThemeListView),
-      m_themeModel(new ThemeListModel),
-      m_animation(new QPropertyAnimation(this, "geometry"))
+      m_themeModel(new ThemeListModel)
 {
     // init view.
     m_themeView->setModel(m_themeModel);
     m_themeView->setItemDelegate(new ThemeItemDelegate);
-
-    // init animation.
-    m_animation->setDuration(250);
-    m_animation->setEasingCurve(QEasingCurve::OutQuad);
 
     // init layout.
     QVBoxLayout *layout = new QVBoxLayout(this);
@@ -93,19 +89,30 @@ void ThemePanel::popup()
     m_themeView->setFocus();
 
     QRect rect = geometry();
-    m_animation->setStartValue(QRect(rect.x(), rect.y(), 0, rect.height()));
-    m_animation->setEndValue(QRect(rect.x(), rect.y(), 250, rect.height()));
-    m_animation->start();
+    QPropertyAnimation *animation = new QPropertyAnimation(this, "geometry");
+    animation->setDuration(250);
+    animation->setEasingCurve(QEasingCurve::OutQuad);
+    animation->setStartValue(QRect(rect.x(), rect.y(), 0, rect.height()));
+    animation->setEndValue(QRect(rect.x(), rect.y(), 250, rect.height()));
+    animation->start();
+
+    connect(animation, &QPropertyAnimation::finished, this, &ThemePanel::popupFinished);
+    connect(animation, &QPropertyAnimation::finished, animation, &QPropertyAnimation::deleteLater);
 }
 
 void ThemePanel::hide()
 {
     QRect rect = geometry();
-    m_animation->setStartValue(QRect(rect.x(), rect.y(), 250, rect.height()));
-    m_animation->setEndValue(QRect(rect.x(), rect.y(), 0, rect.height()));
-    m_animation->start();
+    QPropertyAnimation *animation = new QPropertyAnimation(this, "geometry");
+    animation->setDuration(250);
+    animation->setEasingCurve(QEasingCurve::OutQuad);
+    animation->setStartValue(QRect(rect.x(), rect.y(), 250, rect.height()));
+    animation->setEndValue(QRect(rect.x(), rect.y(), 0, rect.height()));
+    animation->start();
 
     QTimer::singleShot(250, this, [=] { QWidget::hide(); });
+
+    connect(animation, &QPropertyAnimation::finished, animation, &QPropertyAnimation::deleteLater);
 }
 
 void ThemePanel::setFrameColor(const QString &selectedColor, const QString &normalColor)

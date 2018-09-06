@@ -21,7 +21,6 @@
 #define THEMEPANEL_H
 
 #include <QWidget>
-#include <QPropertyAnimation>
 #include "themelistview.h"
 #include "themelistmodel.h"
 #include "themeitemdelegate.h"
@@ -43,6 +42,7 @@ public:
 
 signals:
     void themeChanged(const QString &path);
+    void popupFinished();
 
 protected:
     void paintEvent(QPaintEvent *);
@@ -50,7 +50,6 @@ protected:
 private:
     ThemeListView *m_themeView;
     ThemeListModel *m_themeModel;
-    QPropertyAnimation *m_animation;
 
     QColor m_frameLightColor = QColor("#000000");
     QColor m_frameDarkColor = QColor("#FFFFFF");

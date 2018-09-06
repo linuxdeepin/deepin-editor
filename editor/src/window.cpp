@@ -201,8 +201,9 @@ void Window::initTitlebar()
     connect(saveAction, &QAction::triggered, this, &Window::saveFile);
     connect(saveAsAction, &QAction::triggered, this, &Window::saveAsFile);
     connect(printAction, &QAction::triggered, this, &Window::popupPrintDialog);
-    connect(switchThemeAction, &QAction::triggered, this, &Window::popupThemePanel);
     connect(settingAction, &QAction::triggered, this, &Window::popupSettingsDialog);
+    connect(switchThemeAction, &QAction::triggered, m_themePanel, &ThemePanel::popup);
+    connect(m_themePanel, &ThemePanel::popupFinished, [=] { m_themePanel->setSelectionTheme(m_themePath); });
 }
 
 int Window::getTabIndex(const QString &file)
@@ -1178,13 +1179,6 @@ DDialog* Window::createSaveFileDialog(QString title, QString content)
     dialog->addButton(QString(tr("Save")), true, DDialog::ButtonNormal);
 
     return dialog;
-}
-
-void Window::popupThemePanel()
-{
-    m_themePanel->popup();
-
-    QTimer::singleShot(30, this, [=] { m_themePanel->setSelectionTheme(m_themePath); });
 }
 
 void Window::popupSettingsDialog()
