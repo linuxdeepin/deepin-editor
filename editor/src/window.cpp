@@ -517,16 +517,17 @@ bool Window::saveFile()
             DDialog *dialog = createSaveFileDialog(tr("Unable to save file"), tr("Do you want to save to another?"));
 
             connect(dialog, &DDialog::buttonClicked, this, [=] (int index) {
-                                                               dialog->hide();
+                dialog->hide();
 
-                                                               if (index == 2) {
-                                                                   saveAsFile();
-                                                               }
-                                                           });
+                if (index == 2) {
+                    saveAsFile();
+                }
+            });
 
             dialog->exec();
         } else {
-            showNotify(tr("Saved file %1").arg(m_tabbar->getActiveTabName()));
+            // don't show the toast.
+            // showNotify(tr("Saved file %1").arg(m_tabbar->getActiveTabName()));
         }
 
         return true;

@@ -69,12 +69,13 @@ void ThemeItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
     QPen framePen;
 
     if (option.state & QStyle::State_Selected) {
+        painter->setOpacity(1);
         framePen = QPen(QColor(frameSelectedColor), 3);
     } else {
+        painter->setOpacity(0.3);
         framePen = QPen(QColor(frameNormalColor), 1);
     }
 
-    painter->setOpacity(1);
     painter->setPen(framePen);
     painter->drawPath(framePath);
 
