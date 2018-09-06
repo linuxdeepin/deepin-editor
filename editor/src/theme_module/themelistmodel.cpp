@@ -18,6 +18,7 @@
  */
 
 #include "themelistmodel.h"
+#include "../utils.h"
 #include <QFileInfoList>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -32,24 +33,6 @@ ThemeListModel::ThemeListModel(QObject *parent)
 
 ThemeListModel::~ThemeListModel()
 {
-}
-
-QVariantMap ThemeListModel::getMap(const QString &filePath)
-{
-    QFile file(filePath);
-    if(!file.open(QIODevice::ReadOnly)){
-        qDebug() << "Failed to open " << filePath;
-    }
-
-    QTextStream in(&file);
-    const QString jsonStr = in.readAll();
-    file.close();
-
-    QByteArray jsonBytes = jsonStr.toLocal8Bit();
-    QJsonDocument document = QJsonDocument::fromJson(jsonBytes);
-    QJsonObject object = document.object();
-
-    return object.toVariantMap();
 }
 
 void ThemeListModel::setFrameColor(const QString &selectedColor, const QString &normalColor)
@@ -92,7 +75,7 @@ void ThemeListModel::initThemes()
     QFileInfoList infoList = QDir("/usr/share/deepin-editor/themes").entryInfoList(QDir::Files | QDir::NoDotAndDotDot);
 
     for (QFileInfo info : infoList) {
-        QVariantMap jsonMap = getMap(info.filePath());
+        QVariantMap jsonMap = Utils::getThemeMapFromPath(info.filePath());
         QPair<QString, QString> pair;
         pair.first = jsonMap["metadata"].toMap()["name"].toString();
         pair.second = info.filePath();

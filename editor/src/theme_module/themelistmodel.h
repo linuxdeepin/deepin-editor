@@ -39,7 +39,6 @@ public:
     ThemeListModel(QObject *parent = nullptr);
     ~ThemeListModel();
 
-    static QVariantMap getMap(const QString &filePath);
     void setFrameColor(const QString &selectedColor, const QString &normalColor);
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;

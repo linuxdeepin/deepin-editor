@@ -19,6 +19,7 @@
 
 #include "themeitemdelegate.h"
 #include "themelistmodel.h"
+#include "../utils.h"
 #include <QPainter>
 #include <QDebug>
 
@@ -36,7 +37,7 @@ void ThemeItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
 {
     const QString &themePath = index.data(ThemeListModel::ThemePath).toString();
     const QString &themeName = index.data(ThemeListModel::ThemeName).toString();
-    QVariantMap jsonMap = ThemeListModel::getMap(themePath);
+    QVariantMap jsonMap = Utils::getThemeMapFromPath(themePath);
     const QString &importColor = jsonMap["text-styles"].toMap()["Import"].toMap()["text-color"].toString();
     const QString &stringColor = jsonMap["text-styles"].toMap()["String"].toMap()["text-color"].toString();
     const QString &builtInColor = jsonMap["text-styles"].toMap()["BuiltIn"].toMap()["text-color"].toString();

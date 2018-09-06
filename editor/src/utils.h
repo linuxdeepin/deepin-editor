@@ -53,7 +53,6 @@ public:
     static qreal easeInQuint(qreal x);
     static qreal easeOutQuad(qreal x);
     static qreal easeOutQuint(qreal x);
-    static QVariantMap getThemeNodeMap(const QString &themeName);
     static QVariantMap getThemeMapFromPath(const QString &filepath);
     static bool isEditableFile(const QString &filepath);
     static void toast(const QString &message, QWidget* parent = nullptr);

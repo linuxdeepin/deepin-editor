@@ -330,43 +330,6 @@ qreal Utils::easeOutQuint(qreal x)
     return qPow(x - 1, 5) + 1;
 }
 
-QVariantMap Utils::getThemeNodeMap(const QString &themeName)
-{
-    // auto themeDir = QDir(":/theme").filePath(themeName);
-    // auto filePath = QDir(themeDir).filePath("editor.theme");
-
-    const QString filePath = QString("/usr/share/deepin-editor/themes/%1.theme").arg(themeName);
-
-    QFile fileObject(filePath);
-    if(!fileObject.open(QIODevice::ReadOnly)){
-        qDebug()<<"Failed to open "<<filePath;
-    }
-
-    QTextStream file_text(&fileObject);
-    QString jsonString;
-    jsonString = file_text.readAll();
-    fileObject.close();
-    QByteArray jsonBytes = jsonString.toLocal8Bit();
-
-    auto jsonDocument = QJsonDocument::fromJson(jsonBytes);
-
-    if(jsonDocument.isNull()){
-        qDebug()<<"Failed to create JSON doc.";
-    }
-
-    if(!jsonDocument.isObject()){
-        qDebug()<<"JSON is not an object.";
-    }
-
-    QJsonObject jsonObject = jsonDocument.object();
-
-    if(jsonObject.isEmpty()){
-        qDebug()<<"JSON object is empty.";
-    }
-
-    return jsonObject.toVariantMap();
-}
-
 QVariantMap Utils::getThemeMapFromPath(const QString &filepath)
 {
     QFile file(filepath);
