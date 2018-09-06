@@ -40,8 +40,12 @@ public:
     ~ThemeListModel();
 
     void setFrameColor(const QString &selectedColor, const QString &normalColor);
+    void setSelection(const QString &path);
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
+
+signals:
+    void requestCurrentIndex(const QModelIndex &idx);
 
 private:
     void initThemes();

@@ -201,7 +201,7 @@ void Window::initTitlebar()
     connect(saveAction, &QAction::triggered, this, &Window::saveFile);
     connect(saveAsAction, &QAction::triggered, this, &Window::saveAsFile);
     connect(printAction, &QAction::triggered, this, &Window::popupPrintDialog);
-    connect(switchThemeAction, &QAction::triggered, m_themePanel, &ThemePanel::popup);
+    connect(switchThemeAction, &QAction::triggered, this, &Window::popupThemePanel);
     connect(settingAction, &QAction::triggered, this, &Window::popupSettingsDialog);
 }
 
@@ -1178,6 +1178,12 @@ DDialog* Window::createSaveFileDialog(QString title, QString content)
     dialog->addButton(QString(tr("Save")), true, DDialog::ButtonNormal);
 
     return dialog;
+}
+
+void Window::popupThemePanel()
+{
+    m_themePanel->setSelectionTheme(m_themePath);
+    m_themePanel->popup();
 }
 
 void Window::popupSettingsDialog()

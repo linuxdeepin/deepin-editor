@@ -85,6 +85,7 @@ public:
     void popupFindBar();
     void popupReplaceBar();
     void popupJumpLineBar();
+    void popupThemePanel();
     void popupSettingsDialog();
 
     void toggleFullscreen();

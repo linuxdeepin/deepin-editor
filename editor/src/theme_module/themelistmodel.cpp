@@ -41,6 +41,18 @@ void ThemeListModel::setFrameColor(const QString &selectedColor, const QString &
     m_frameNormalColor = normalColor;
 }
 
+void ThemeListModel::setSelection(const QString &path)
+{
+    for (auto pair : m_themes) {
+        if (path == pair.second) {
+            const int row = m_themes.indexOf(pair);
+            const QModelIndex &idx = QAbstractListModel::index(row, 0);
+            emit requestCurrentIndex(idx);
+            break;
+        }
+    }
+}
+
 int ThemeListModel::rowCount(const QModelIndex &parent) const
 {
     return m_themes.size();

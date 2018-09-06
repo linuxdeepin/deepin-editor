@@ -47,6 +47,7 @@ ThemePanel::ThemePanel(QWidget *parent)
     QWidget::hide();
     connect(m_themeView, &ThemeListView::focusOut, this, &ThemePanel::hide);
     connect(m_themeView, &ThemeListView::themeChanged, this, &ThemePanel::themeChanged);
+    connect(m_themeModel, &ThemeListModel::requestCurrentIndex, m_themeView, &ThemeListView::setCurrentIndex);
 }
 
 ThemePanel::~ThemePanel()
@@ -107,4 +108,9 @@ void ThemePanel::hide()
 void ThemePanel::setFrameColor(const QString &selectedColor, const QString &normalColor)
 {
     m_themeModel->setFrameColor(selectedColor, normalColor);
+}
+
+void ThemePanel::setSelectionTheme(const QString &path)
+{
+    m_themeModel->setSelection(path);
 }

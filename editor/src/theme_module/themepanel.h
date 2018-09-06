@@ -39,6 +39,7 @@ public:
     void hide();
 
     void setFrameColor(const QString &selectedColor, const QString &normalColor);
+    void setSelectionTheme(const QString &path);
 
 signals:
     void themeChanged(const QString &path);
