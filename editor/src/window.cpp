@@ -482,8 +482,21 @@ bool Window::saveFile()
     const QString &currentDir = QFileInfo(currentPath).absolutePath();
     bool isBlankFile = QFileInfo(currentPath).dir().absolutePath() == m_blankFileDir;
 
+    // save blank file.
+    if (isBlankFile) {
+        QString encode, newline;
+        QString filepath = getSaveFilePath(encode, newline);
+
+        if (!filepath.isEmpty()) {
+            const QString tabPath = m_tabbar->getActiveTabPath();
+            saveFileAsAnotherPath(tabPath, filepath, encode, newline, true);
+            return true;
+        } else {
+            return false;
+        }
+    }
     // save root file.
-    if (!m_editorMap[currentPath]->isWritable()) {
+    else if (!m_editorMap[currentPath]->isWritable()) {
         const QString content = getTextEditor(currentPath)->toPlainText();
         bool saveResult = m_rootSaveDBus->saveFile(currentPath.toUtf8(), content.toUtf8(),
                                                    m_editorMap[currentPath]->fileEncode());
@@ -496,19 +509,6 @@ bool Window::saveFile()
         }
 
         return saveResult;
-    }
-    // save blank file.
-    else if (isBlankFile) {
-        QString encode, newline;
-        QString filepath = getSaveFilePath(encode, newline);
-
-        if (!filepath.isEmpty()) {
-            const QString tabPath = m_tabbar->getActiveTabPath();
-            saveFileAsAnotherPath(tabPath, filepath, encode, newline, true);
-            return true;
-        } else {
-            return false;
-        }
     }
     // save normal file.
     else {
