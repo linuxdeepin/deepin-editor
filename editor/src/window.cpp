@@ -352,6 +352,7 @@ Editor* Window::createEditor()
     connect(editor->textEditor, &TextEditor::clickJumpLineAction, this, &Window::popupJumpLineBar, Qt::QueuedConnection);
     connect(editor->textEditor, &TextEditor::clickFullscreenAction, this, &Window::toggleFullscreen, Qt::QueuedConnection);
     connect(editor->textEditor, &TextEditor::popupNotify, this, &Window::showNotify, Qt::QueuedConnection);
+    connect(editor->textEditor, &TextEditor::pressEsc, this, &Window::removeBottomWidget, Qt::QueuedConnection);
 
     return editor;
 }
