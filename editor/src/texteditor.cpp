@@ -1922,40 +1922,40 @@ void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme, const QString
 {
     QVariantMap jsonMap = Utils::getThemeMapFromPath(path);
     QVariantMap textStylesMap = jsonMap["text-styles"].toMap();
-    const QString &themeBackgroundColor = jsonMap["editor-colors"].toMap()["background-color"].toString();
     const QString &themeCurrentLineColor = jsonMap["editor-colors"].toMap()["current-line"].toString();
     const QString textColor = textStylesMap["Normal"].toMap()["text-color"].toString();
-    const QString selectColor = textStylesMap["RegionMarker"].toMap()["text-color"].toString();
-    const QString selectBgColor = textStylesMap["RegionMarker"].toMap()["background-color"].toString();
+
+    m_backgroundColor = QColor(jsonMap["editor-colors"].toMap()["background-color"].toString());
+    m_currentLineColor = QColor(themeCurrentLineColor);
+    m_currentLineNumberColor = QColor(jsonMap["editor-colors"].toMap()["current-line-number"].toString());
+    m_lineNumbersColor = QColor(jsonMap["editor-colors"].toMap()["line-numbers"].toString());
+    m_regionMarkerColor = QColor(theme.textColor(KSyntaxHighlighting::Theme::RegionMarker));
+    m_searchHighlightColor = QColor(jsonMap["editor-colors"].toMap()["search-highlight"].toString());
+    m_selectBgColor = QColor(textStylesMap["RegionMarker"].toMap()["background-color"].toString());
+    m_selectColor = QColor(textStylesMap["RegionMarker"].toMap()["text-color"].toString());
+    m_selectionColor = QColor(jsonMap["editor-colors"].toMap()["selection"].toString());
 
     const QString &styleSheet = QString("QPlainTextEdit {"
                                         "background-color: %1;"
                                         "color: %2;"
                                         "selection-color: %3;"
                                         "selection-background-color: %4;"
-                                        "}").arg(themeBackgroundColor, textColor, selectColor, selectBgColor);
-
+                                        "}").arg(m_backgroundColor.name(), textColor,
+                                                 m_selectColor.name(), m_selectBgColor.name());
     setStyleSheet(styleSheet);
 
-    m_currentLineColor = QColor(themeCurrentLineColor);
-    m_backgroundColor = QColor(themeBackgroundColor);
-
-    m_lineNumbersColor = QColor(jsonMap["editor-colors"].toMap()["line-numbers"].toString());
-    m_currentLineNumberColor = QColor(jsonMap["editor-colors"].toMap()["current-line-number"].toString());
-    m_searchHighlightColor = QColor(jsonMap["editor-colors"].toMap()["search-highlight"].toString());
-    m_selectionColor = QColor(jsonMap["editor-colors"].toMap()["selection"].toString());
-    m_regionMarkerColor = QColor(theme.textColor(KSyntaxHighlighting::Theme::RegionMarker));
-
-    m_selectColor = selectColor;
-    m_selectBgColor = selectBgColor;
-
-    if (QColor(m_backgroundColor).lightness() < 128) {
+    if (m_backgroundColor.lightness() < 128) {
         m_highlighter->setTheme(m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme));
     } else {
         m_highlighter->setTheme(m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
     }
 
-    m_highlighter->rehighlight();
+    // does not support highlight do not reload
+    // when switching theme will be jammed or large files.
+    if (m_highlighted) {
+        m_highlighter->rehighlight();
+    }
+
     lineNumberArea->update();
 
     highlightCurrentLine();
@@ -1965,18 +1965,19 @@ void TextEditor::loadHighlighter()
 {
     const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());
 
-    if (def.filePath() != "") {
-        QString syntaxFile = QFileInfo(QString(":/syntax/%1").arg(QFileInfo(def.filePath()).fileName())).absoluteFilePath();
+    if (!def.filePath().isEmpty()) {
+        const QString &syntaxFile = QFileInfo(QString(":/syntax/%1").arg(QFileInfo(def.filePath()).fileName())).absoluteFilePath();
 
         QFile file(syntaxFile);
         if (!file.open(QFile::ReadOnly)) {
             qDebug() << "Can't open file" << syntaxFile;
         }
-        QXmlStreamReader reader(&file);
 
+        QXmlStreamReader reader(&file);
         QString singleLineComment;
         QString multiLineCommentStart;
         QString multiLineCommentEnd;
+
         while (!reader.atEnd()) {
             const auto token = reader.readNext();
             if (token != QXmlStreamReader::StartElement) {
@@ -2002,6 +2003,10 @@ void TextEditor::loadHighlighter()
         m_highlighter->setDefinition(def);
 
         file.close();
+
+        m_highlighted = true;
+    } else {
+        m_highlighted = false;
     }
 }
 

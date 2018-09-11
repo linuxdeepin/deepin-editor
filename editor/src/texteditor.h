@@ -286,6 +286,7 @@ private:
 
     QPoint m_mouseClickPos;
 
+    bool m_highlighted = false;
     bool m_scrollbarLock = false;
     int m_scrollbarMargin = 0;
 };
