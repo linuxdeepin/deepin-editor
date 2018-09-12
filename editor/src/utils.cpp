@@ -506,6 +506,7 @@ bool Utils::isEditableFile(const QString &filepath)
         << "application/x-theme"
         << "application/x-csh"
         << "application/x-text"
+        << "application/x-trash"
         << "application/x-yaml"
         << "application/xml"
         << "application/yaml"

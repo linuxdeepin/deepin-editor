@@ -2,6 +2,7 @@ Makefile
 moc_*.o
 moc_*.cpp
 build/
+.ccls-cache/
 *.qm
 
 *.pro.user
