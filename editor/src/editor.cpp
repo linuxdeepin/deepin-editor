@@ -59,6 +59,7 @@ void Editor::loadFile(const QString &filepath)
     // QApplication::setOverrideCursor(Qt::WaitCursor);
 
     m_isWritable = QFileInfo(filepath).isWritable();
+    m_isLoadFinished = false;
 
     // update file path.
     updatePath(filepath);
@@ -180,6 +181,7 @@ void Editor::handleFileLoadFinished(const QByteArray &encode, const QString &con
     // restore mouse style.
     // QApplication::restoreOverrideCursor();
 
+    m_isLoadFinished = true;
     m_fileEncode = encode;
 
     // set text.

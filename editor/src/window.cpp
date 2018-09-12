@@ -148,6 +148,9 @@ Window::Window(DMainWindow *parent)
     DAnchorsBase::setAnchor(m_themePanel, Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
     DAnchorsBase::setAnchor(m_themePanel, Qt::AnchorRight, m_centralWidget, Qt::AnchorRight);
 
+    // for the first time open the need be init.
+    m_themePanel->setSelectionTheme(m_themePath);
+
     connect(m_themePanel, &ThemePanel::themeChanged, this, &Window::themeChanged);
     connect(this, &Window::requestDragEnterEvent, this, &Window::dragEnterEvent);
     connect(this, &Window::requestDropEvent, this, &Window::dropEvent);
@@ -482,6 +485,13 @@ bool Window::saveFile()
     const QString &currentPath = m_tabbar->getActiveTabPath();
     const QString &currentDir = QFileInfo(currentPath).absolutePath();
     bool isBlankFile = QFileInfo(currentPath).dir().absolutePath() == m_blankFileDir;
+
+    // file not finish loadding cannot be saved
+    // otherwise you will save the content of the empty.
+    if (!m_editorMap[currentPath]->isLoadFinished()) {
+        showNotify(tr("File cannot be saved if it is not loaded."));
+        return false;
+    }
 
     // save blank file.
     if (isBlankFile) {

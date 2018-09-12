@@ -42,6 +42,7 @@ public:
     bool saveFile(const QString &encode, const QString &newline);
     bool saveFile();
     bool isWritable() { return m_isWritable; }
+    bool isLoadFinished() { return m_isLoadFinished; }
 
     void updatePath(QString file);
     QByteArray fileEncode() { return m_fileEncode; }
@@ -60,6 +61,7 @@ private:
     int m_autoSaveInternal;
     bool m_hasLoadFile = false;
     bool m_isWritable = false;
+    bool m_isLoadFinished = false;
     QString m_newline;
 };
 
