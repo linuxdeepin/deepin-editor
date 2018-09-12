@@ -279,10 +279,9 @@ private:
     QColor m_currentLineNumberColor;
     QColor m_regionMarkerColor;
     QColor m_searchHighlightColor;
+    QColor m_searchHighlightBgColor;
     QColor m_selectionColor;
-
-    QColor m_selectBgColor;
-    QColor m_selectColor;
+    QColor m_selectionBgColor;
 
     QPoint m_mouseClickPos;
 

@@ -1440,11 +1440,8 @@ void TextEditor::removeKeywords()
 void TextEditor::highlightKeyword(QString keyword, int position)
 {
     updateKeywordSelections(keyword);
-
     updateCursorKeywordSelection(position, true);
-
     updateHighlightLineSelection();
-
     renderAllSelections();
 }
 
@@ -1494,14 +1491,16 @@ void TextEditor::updateKeywordSelections(QString keyword)
         QTextDocument::FindFlags options;
         options |= QTextDocument::FindWholeWords;
 
-        while(find(keyword, options)) {
+        while (find(keyword, options)) {
             QTextEdit::ExtraSelection extra;
 
-            QPen outline(m_selectionColor.lighter(120), 1, Qt::SolidLine);
-            extra.format.setProperty(QTextFormat::OutlinePen, outline);
+            // QPen outline(m_selectionColor.lighter(150), 1, Qt::SolidLine);
+            // extra.format.setProperty(QTextFormat::OutlinePen, outline);
 
-            QBrush brush(m_selectionColor);
-            extra.format.setProperty(QTextFormat::BackgroundBrush, brush);
+            QBrush bgBrush(m_selectionBgColor);
+            QBrush fgBrush(m_selectionColor);
+            extra.format.setProperty(QTextFormat::BackgroundBrush, bgBrush);
+            extra.format.setProperty(QTextFormat::ForegroundBrush, fgBrush);
 
             extra.cursor = textCursor();
             m_keywordSelections.append(extra);
@@ -1874,8 +1873,10 @@ bool TextEditor::setCursorKeywordSeletoin(int position, bool findNext)
             if (m_keywordSelections[i].cursor.position() > position) {
                 m_cursorKeywordSelection.cursor = m_keywordSelections[i].cursor;
 
-                QBrush brush(m_searchHighlightColor);
-                m_cursorKeywordSelection.format.setProperty(QTextFormat::BackgroundBrush, brush);
+                QBrush bgBrush(m_searchHighlightBgColor);
+                QBrush fgBrush(m_searchHighlightColor);
+                m_cursorKeywordSelection.format.setProperty(QTextFormat::ForegroundBrush, fgBrush);
+                m_cursorKeywordSelection.format.setProperty(QTextFormat::BackgroundBrush, bgBrush);
 
                 jumpToLine(m_keywordSelections[i].cursor.blockNumber() + offsetLines, false);
 
@@ -1893,8 +1894,10 @@ bool TextEditor::setCursorKeywordSeletoin(int position, bool findNext)
             if (m_keywordSelections[i].cursor.position() < position) {
                 m_cursorKeywordSelection.cursor = m_keywordSelections[i].cursor;
 
-                QBrush brush(m_searchHighlightColor);
-                m_cursorKeywordSelection.format.setProperty(QTextFormat::BackgroundBrush, brush);
+                QBrush bgBrush(m_searchHighlightBgColor);
+                QBrush fgBrush(m_searchHighlightColor);
+                m_cursorKeywordSelection.format.setProperty(QTextFormat::ForegroundBrush, fgBrush);
+                m_cursorKeywordSelection.format.setProperty(QTextFormat::BackgroundBrush, bgBrush);
 
                 jumpToLine(m_keywordSelections[i].cursor.blockNumber() + offsetLines, false);
 
@@ -1930,10 +1933,10 @@ void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme, const QString
     m_currentLineNumberColor = QColor(jsonMap["editor-colors"].toMap()["current-line-number"].toString());
     m_lineNumbersColor = QColor(jsonMap["editor-colors"].toMap()["line-numbers"].toString());
     m_regionMarkerColor = QColor(theme.textColor(KSyntaxHighlighting::Theme::RegionMarker));
-    m_searchHighlightColor = QColor(jsonMap["editor-colors"].toMap()["search-highlight"].toString());
-    m_selectBgColor = QColor(textStylesMap["RegionMarker"].toMap()["background-color"].toString());
-    m_selectColor = QColor(textStylesMap["RegionMarker"].toMap()["text-color"].toString());
-    m_selectionColor = QColor(jsonMap["editor-colors"].toMap()["selection"].toString());
+    m_searchHighlightColor = QColor(jsonMap["editor-colors"].toMap()["search-highlight-color"].toString());
+    m_searchHighlightBgColor = QColor(jsonMap["editor-colors"].toMap()["search-highlight-bg-color"].toString());
+    m_selectionColor = QColor(textStylesMap["Normal"].toMap()["selected-text-color"].toString());
+    m_selectionBgColor = QColor(textStylesMap["Normal"].toMap()["selected-bg-color"].toString());
 
     const QString &styleSheet = QString("QPlainTextEdit {"
                                         "background-color: %1;"
@@ -1941,7 +1944,7 @@ void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme, const QString
                                         "selection-color: %3;"
                                         "selection-background-color: %4;"
                                         "}").arg(m_backgroundColor.name(), textColor,
-                                                 m_selectColor.name(), m_selectBgColor.name());
+                                                 m_selectionColor.name(), m_selectionBgColor.name());
     setStyleSheet(styleSheet);
 
     if (m_backgroundColor.lightness() < 128) {
@@ -1957,7 +1960,6 @@ void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme, const QString
     }
 
     lineNumberArea->update();
-
     highlightCurrentLine();
 }
 
@@ -2034,8 +2036,8 @@ bool TextEditor::highlightWordUnderMouse(QPoint pos)
         // Update highlight cursor.
         QTextEdit::ExtraSelection selection;
 
-        selection.format.setBackground(m_selectBgColor);
-        selection.format.setForeground(m_selectColor);
+        selection.format.setBackground(m_selectionBgColor);
+        selection.format.setForeground(m_selectionColor);
         selection.cursor = cursor;
         selection.cursor.select(QTextCursor::WordUnderCursor);
 
@@ -2327,7 +2329,7 @@ void TextEditor::toggleComment()
 {
     const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());
 
-    if (def.filePath() != "") {
+    if (!def.filePath().isEmpty()) {
         Comment::unCommentSelection(this, m_commentDefinition);
     } else {
         popupNotify(tr("File does not support syntax comments"));

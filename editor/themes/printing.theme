@@ -9,6 +9,8 @@
     "text-styles": {
         "Normal" : {
             "text-color" : "#000000",
+            "selected-bg-color" : "#FF0000",
+            "selected-text-color" : "#ffffff",
             "bold" : false,
             "italic" : false,
             "underline" : false,
@@ -114,8 +116,9 @@
             "selected-text-color" : "#ffffff"
         },
         "RegionMarker" : {
-            "text-color" : "#FFFFFF",
-            "background-color" : "#FF0000"
+            "text-color" : "#0057ae",
+            "selected-text-color" : "#00316e",
+            "background-color" : "#e0e9f8"
         },
         "Information" : {
             "text-color" : "#b08000",
@@ -160,7 +163,8 @@
         "modified-lines" : "#f6e6e6",
         "replace-highlight" : "#00ff00",
         "saved-lines" : "#baf8ce",
-        "search-highlight" : "#ffff00",
+        "search-highlight" : "#383838",
+        "search-highlight-bg-color" : "#ffff00",
         "selection" : "#94caef",
         "separator" : "#898887",
         "spell-checking" : "#bf0303",
@@ -172,11 +176,11 @@
         "word-wrap-marker" : "#ededed"
     },
     "app-colors" : {
-	"tab-active" : "#FF0000",
+        "tab-active" : "#FF0000",
         "tab-background-color": "#FFFFFF",
         "tab-dnd-start" : "(0, 0, 0, 10%)",
         "tab-dnd-end" : "(0, 0, 0, 5%)",
-	"themebar-frame-selected" : "#00FFFF",
-	"themebar-frame-normal" : "#000000"
+        "themebar-frame-selected" : "#00FFFF",
+        "themebar-frame-normal" : "#000000"
     }
 }
