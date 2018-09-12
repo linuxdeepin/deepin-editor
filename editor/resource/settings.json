@@ -23,18 +23,6 @@
                             "min": 8
                         }
                     ]
-                },
-                {
-                    "key" : "theme",
-                    "name" : "Theme",
-                    "options" : [
-                        {
-                            "key" : "default",
-                            "hide" : true,
-                            "reset" : false,
-                            "default" : "Deepin"
-                        }
-                    ]
                 }
             ]
         },
@@ -447,30 +435,6 @@
                             "name": "Join Lines",
                             "type": "shortcut",
                             "default":  "Ctrl+J"
-                        },
-                        {
-                            "key": "selectnextcompletion",
-                            "name": "Select Next Completion",
-                            "type": "shortcut",
-                            "default":  "Alt+,"
-                        },
-                        {
-                            "key": "selectprevcompletion",
-                            "name": "Select Previous Completion",
-                            "type": "shortcut",
-                            "default":  "Alt+."
-                        },
-                        {
-                            "key": "selectfirstcompletion",
-                            "name": "Select First Completion",
-                            "type": "shortcut",
-                            "default":  "Alt+Shift+>"
-                        },
-                        {
-                            "key": "selectlastcompletion",
-                            "name": "Select Last Completion",
-                            "type": "shortcut",
-                            "default":  "Alt+Shift+<"
                         },
                         {
                             "key": "togglereadonlymode",
@@ -1905,6 +1869,12 @@
                             "hide": true,
                             "reset": false,
                             "default": ""
+                        },
+                        {
+                            "key": "theme",
+                            "hide": true,
+                            "reset": true,
+                            "default": "/usr/share/deepin-editor/themes/deepin.theme"
                         }
                     ]
                 }

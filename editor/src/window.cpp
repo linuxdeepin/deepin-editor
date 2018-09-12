@@ -60,7 +60,7 @@ Window::Window(DMainWindow *parent)
       m_windowManager(new DWindowManager),
       m_menu(new QMenu),
       m_titlebarStyleSheet(titlebar()->styleSheet()),
-      m_themePath(m_settings->settings->option("base.theme.default")->value().toString())
+      m_themePath(m_settings->settings->option("advance.editor.theme")->value().toString())
 {
     m_blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
     m_rootSaveDBus = new DBusDaemon::dbus("com.deepin.editor.daemon", "/", QDBusConnection::systemBus(), this);
@@ -1271,7 +1271,7 @@ void Window::loadTheme(const QString &path)
     const QString &frameSelectedColor = jsonMap["app-colors"].toMap()["themebar-frame-selected"].toString();
     const QString &frameNormalColor = jsonMap["app-colors"].toMap()["themebar-frame-normal"].toString();
     m_themePanel->setFrameColor(frameSelectedColor, frameNormalColor);
-    m_settings->settings->option("base.theme.default")->setValue(path);
+    m_settings->settings->option("advance.editor.theme")->setValue(path);
 }
 
 void Window::dragEnterEvent(QDragEnterEvent *event)
