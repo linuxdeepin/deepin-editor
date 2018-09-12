@@ -1504,21 +1504,21 @@ void TextEditor::updateKeywordSelections(QString keyword)
     if (!keyword.isEmpty()) {
         moveCursorNoBlink(QTextCursor::Start);
 
-        QTextDocument::FindFlags options;
-        options |= QTextDocument::FindWholeWords;
+        QTextDocument *doc = document();
+        QTextCursor cursor(doc);
 
-        while (find(keyword, options)) {
+        cursor = doc->find(keyword, cursor, QTextDocument::FindCaseSensitively);
+
+        while (!cursor.isNull()) {
+
             QTextEdit::ExtraSelection extra;
-
-            // QPen outline(m_selectionColor.lighter(150), 1, Qt::SolidLine);
-            // extra.format.setProperty(QTextFormat::OutlinePen, outline);
-
             QBrush bgBrush(m_selectionBgColor);
             QBrush fgBrush(m_selectionColor);
             extra.format.setProperty(QTextFormat::BackgroundBrush, bgBrush);
             extra.format.setProperty(QTextFormat::ForegroundBrush, fgBrush);
+            extra.cursor = cursor;
 
-            extra.cursor = textCursor();
+            cursor = doc->find(keyword, cursor, QTextDocument::FindCaseSensitively);
             m_keywordSelections.append(extra);
         }
 
@@ -1855,7 +1855,7 @@ void TextEditor::highlightCurrentLine()
 void TextEditor::updateLineNumber()
 {
     // Update line number painter.
-    lineNumberArea->setFixedWidth(QString("%1").arg(blockCount()).size() * fontMetrics().width('9') + m_lineNumberPaddingX * 2);
+    lineNumberArea->setFixedWidth(QString("%1").arg(blockCount()).size() * fontMetrics().width("9") + m_lineNumberPaddingX * 2);
 }
 
 void TextEditor::handleScrollFinish()
