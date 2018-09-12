@@ -1057,28 +1057,36 @@ void TextEditor::killForwardWord()
     }
 }
 
-void TextEditor::indentLine()
+void TextEditor::indentText()
 {
     // Stop mark if mark is set.
     tryUnsetMark();
 
-    // Save cursor column.
-    int column = getCurrentColumn();
-
-    // If current column is not Multiples of 4, jump to 4x position before next indent.
-    moveToLineIndentation();
-    int indentSpace = m_tabSpaceNumber - (getCurrentColumn() % m_tabSpaceNumber);
-
-    // Insert spaces.
-    moveToStartOfLine();
-    QString spaces(indentSpace, ' ');
-    textCursor().insertText(spaces);
-
-    // Restore cursor column postion.
-    moveToStartOfLine();
     QTextCursor cursor = textCursor();
-    cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, column + indentSpace);
-    setTextCursor(cursor);
+
+    if (cursor.hasSelection()) {
+        QTextBlock block = document()->findBlock(cursor.selectionStart());
+        QTextBlock end = document()->findBlock(cursor.selectionEnd()).next();
+
+        cursor.beginEditBlock();
+
+        while (block != end) {
+            QString speaces(m_tabSpaceNumber, ' ');
+            cursor.setPosition(block.position());
+            cursor.insertText(speaces);
+            block = block.next();
+        }
+
+        cursor.endEditBlock();
+    } else {
+        cursor.beginEditBlock();
+
+        int indent = m_tabSpaceNumber - (cursor.positionInBlock() % m_tabSpaceNumber);
+        QString spaces(indent, ' ');
+        cursor.insertText(spaces);
+
+        cursor.endEditBlock();
+    }
 }
 
 void TextEditor::backIndentLine()
@@ -1570,7 +1578,7 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         }
     } else {
         if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "indentline")) {
-            indentLine();
+            indentText();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "backindentline")) {
             backIndentLine();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "forwardchar")) {

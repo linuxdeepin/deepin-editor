@@ -92,7 +92,7 @@ public:
     void killBackwardWord();
     void killForwardWord();
 
-    void indentLine();
+    void indentText();
     void backIndentLine();
     void setTabSpaceNumber(int number);
     void convertWordCase(ConvertCase convertCase);
