@@ -194,7 +194,7 @@
                             "key": "backindentline",
                             "name": "Back Indent Line",
                             "type": "shortcut",
-                            "default":  "Shift+Tab"
+                            "default":  "Shift+Backtab"
                         },
                         {
                             "key": "forwardchar",
@@ -622,7 +622,7 @@
                             "key": "backindentline",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Shift+Tab"
+                            "default":  "Shift+Backtab"
                         },
                         {
                             "key": "forwardchar",

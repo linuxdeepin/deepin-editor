@@ -1089,36 +1089,44 @@ void TextEditor::indentText()
     }
 }
 
-void TextEditor::backIndentLine()
+void TextEditor::unindentText()
 {
     // Stop mark if mark is set.
     tryUnsetMark();
 
-    // Save cursor column.
-    int column = getCurrentColumn();
+    QTextCursor cursor = textCursor();
+    QTextBlock block;
+    QTextBlock end;
 
-    // If current column is not Multiples of 4, jump to 4x position before back indent.
-    moveToLineIndentation();
-
-    if (getCurrentColumn() > 0) {
-        int indentSpace = getCurrentColumn() % m_tabSpaceNumber;
-        if (indentSpace == 0 && getCurrentColumn() >= m_tabSpaceNumber) {
-            indentSpace = m_tabSpaceNumber;
-        }
-
-        // Remove spaces.
-        QTextCursor deleteCursor = textCursor();
-        for (int i = 0; i < indentSpace; i++) {
-            deleteCursor.deletePreviousChar();
-        }
-        setTextCursor(deleteCursor);
-
-        // Restore cursor column postion.
-        moveToStartOfLine();
-        QTextCursor cursor = textCursor();
-        cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, column - indentSpace);
-        setTextCursor(cursor);
+    if (cursor.hasSelection()) {
+        block = document()->findBlock(cursor.selectionStart());
+        end = document()->findBlock(cursor.selectionEnd()).next();
+    } else {
+        block = cursor.block();
+        end = block.next();
     }
+
+    cursor.beginEditBlock();
+
+    while (block != end) {
+        cursor.setPosition(block.position());
+
+        if (document()->characterAt(cursor.position()) == '\t') {
+            cursor.deleteChar();
+        } else {
+            int pos = 0;
+
+            while (document()->characterAt(cursor.position()) == ' ' &&
+                   pos < m_tabSpaceNumber){
+                pos++;
+                cursor.deleteChar();
+            }
+        }
+
+        block = block.next();
+    }
+
+    cursor.endEditBlock();
 }
 
 void TextEditor::setTabSpaceNumber(int number)
@@ -1580,7 +1588,7 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "indentline")) {
             indentText();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "backindentline")) {
-            backIndentLine();
+            unindentText();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "forwardchar")) {
             forwardChar();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "backwardchar")) {

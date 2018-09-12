@@ -93,7 +93,7 @@ public:
     void killForwardWord();
 
     void indentText();
-    void backIndentLine();
+    void unindentText();
     void setTabSpaceNumber(int number);
     void convertWordCase(ConvertCase convertCase);
     QString capitalizeText(QString text);
