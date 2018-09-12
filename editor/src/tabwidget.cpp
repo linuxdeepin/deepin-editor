@@ -237,9 +237,9 @@ bool TabWidget::eventFilter(QObject *, QEvent *event)
             static_cast<Window*>(this->window())->changeTitlebarBackground(m_dndStartColor, m_dndEndColor);
         }
     } else if (event->type() == QEvent::DragLeave) {
-        static_cast<Window*>(this->window())->changeTitlebarBackground(m_backgroundColor);
+        static_cast<Window*>(this->window())->changeTitlebarBackground(m_backgroundStartColor, m_backgroundEndColor);
     } else if (event->type() == QEvent::Drop) {
-        static_cast<Window*>(this->window())->changeTitlebarBackground(m_backgroundColor);
+        static_cast<Window*>(this->window())->changeTitlebarBackground(m_backgroundStartColor, m_backgroundEndColor);
     } else if (event->type() == QEvent::DragMove) {
         event->accept();
     }
@@ -274,9 +274,11 @@ void TabWidget::handleDragActionChanged(Qt::DropAction action)
     }
 }
 
-void TabWidget::setBackground(QString color)
+
+void TabWidget::setBackground(const QString &startColor, const QString &endColor)
 {
-    m_backgroundColor = color;
+    m_backgroundStartColor = startColor;
+    m_backgroundEndColor = endColor;
 }
 
 void TabWidget::setDNDColor(QString startColor, QString endColor)

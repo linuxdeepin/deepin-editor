@@ -1246,16 +1246,18 @@ void Window::loadTheme(const QString &path)
 
     QVariantMap jsonMap = Utils::getThemeMapFromPath(path);
     const QString &backgroundColor = jsonMap["editor-colors"].toMap()["background-color"].toString();
-    m_tabbarBackgroundColor = jsonMap["app-colors"].toMap()["tab-background-color"].toString();
     m_tabbarActiveColor = jsonMap["app-colors"].toMap()["tab-active"].toString();
 
-    if (QColor(m_tabbarBackgroundColor).lightness() < 128) {
+    const QString &tabbarStartColor = jsonMap["app-colors"].toMap()["tab-background-start-color"].toString();
+    const QString &tabbarEndColor = jsonMap["app-colors"].toMap()["tab-background-end-color"].toString();
+
+    if (QColor(backgroundColor).lightness() < 128) {
         DThemeManager::instance()->setTheme("dark");
     } else {
         DThemeManager::instance()->setTheme("light");
     }
 
-    changeTitlebarBackground(m_tabbarBackgroundColor);
+    changeTitlebarBackground(tabbarStartColor, tabbarEndColor);
 
     for (Editor *editor : m_editorMap.values()) {
         editor->textEditor->setThemeWithPath(path);
@@ -1266,7 +1268,7 @@ void Window::loadTheme(const QString &path)
     m_replaceBar->setBackground(backgroundColor);
     m_findBar->setBackground(backgroundColor);
     m_tabbar->tabbar->setDNDColor(jsonMap["app-colors"].toMap()["tab-dnd-start"].toString(), jsonMap["app-colors"].toMap()["tab-dnd-end"].toString());
-    m_tabbar->tabbar->setBackground(m_tabbarBackgroundColor);
+    m_tabbar->tabbar->setBackground(tabbarStartColor, tabbarEndColor);
 
     const QString &frameSelectedColor = jsonMap["app-colors"].toMap()["themebar-frame-selected"].toString();
     const QString &frameNormalColor = jsonMap["app-colors"].toMap()["themebar-frame-normal"].toString();

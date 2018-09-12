@@ -197,7 +197,6 @@ private:
     QString m_readonlySeparator = " !_! ";
 
     QString m_themePath;
-    QString m_tabbarBackgroundColor;
     QString m_tabbarActiveColor;
 };
 
