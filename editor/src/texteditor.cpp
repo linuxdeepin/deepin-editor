@@ -1412,7 +1412,7 @@ bool TextEditor::findKeywordForward(QString keyword)
         setTextCursor(cursor);
 
         QTextDocument::FindFlags options;
-        options |= QTextDocument::FindCaseSensitively;
+        options &= QTextDocument::FindCaseSensitively;
 
         bool foundOne = find(keyword, options);
 
@@ -1429,7 +1429,7 @@ bool TextEditor::findKeywordForward(QString keyword)
         setTextCursor(cursor);
 
         QTextDocument::FindFlags options;
-        options |= QTextDocument::FindCaseSensitively;
+        options &= QTextDocument::FindCaseSensitively;
 
         bool foundOne = find(keyword, options);
 
@@ -1502,15 +1502,13 @@ void TextEditor::updateKeywordSelections(QString keyword)
 
     // Update selections with keyword.
     if (!keyword.isEmpty()) {
-        moveCursorNoBlink(QTextCursor::Start);
+        QTextCursor cursor(document());
 
-        QTextDocument *doc = document();
-        QTextCursor cursor(doc);
-
-        cursor = doc->find(keyword, cursor, QTextDocument::FindCaseSensitively);
+        QTextDocument::FindFlags flags;
+        flags &= QTextDocument::FindCaseSensitively;
+        cursor = document()->find(keyword, cursor, flags);
 
         while (!cursor.isNull()) {
-
             QTextEdit::ExtraSelection extra;
             QBrush bgBrush(m_selectionBgColor);
             QBrush fgBrush(m_selectionColor);
@@ -1518,7 +1516,7 @@ void TextEditor::updateKeywordSelections(QString keyword)
             extra.format.setProperty(QTextFormat::ForegroundBrush, fgBrush);
             extra.cursor = cursor;
 
-            cursor = doc->find(keyword, cursor, QTextDocument::FindCaseSensitively);
+            cursor = document()->find(keyword, cursor, flags);
             m_keywordSelections.append(extra);
         }
 
