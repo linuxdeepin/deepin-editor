@@ -90,9 +90,9 @@ TextEditor::TextEditor(QPlainTextEdit *parent)
     m_selectAllAction = new QAction(tr("Select All"), this);
     m_findAction = new QAction(tr("Find"), this);
     m_replaceAction = new QAction(tr("Replace"), this);
-    m_jumpLineAction = new QAction(tr("Jump line"), this);
-    m_enableReadOnlyModeAction = new QAction(tr("Turn on read only mode"), this);
-    m_disableReadOnlyModeAction = new QAction(tr("Turn off read only mode"), this);
+    m_jumpLineAction = new QAction(tr("Go to Line"), this);
+    m_enableReadOnlyModeAction = new QAction(tr("Turn on Read-Only mode"), this);
+    m_disableReadOnlyModeAction = new QAction(tr("Turn off Read-Only mode"), this);
     m_fullscreenAction = new QAction(tr("Fullscreen"), this);
     m_exitFullscreenAction = new QAction(tr("Exit fullscreen"), this);
     m_openInFileManagerAction = new QAction(tr("Open in file manager"), this);
@@ -118,9 +118,9 @@ TextEditor::TextEditor(QPlainTextEdit *parent)
 
     // Init convert case sub menu.
     m_haveWordUnderCursor = false;
-    m_convertCaseMenu = new QMenu(tr("Convert Case"));
-    m_upcaseAction = new QAction(tr("Upcase"), this);
-    m_downcaseAction = new QAction(tr("Downcase"), this);
+    m_convertCaseMenu = new QMenu(tr("Change Case"));
+    m_upcaseAction = new QAction(tr("Upper Case"), this);
+    m_downcaseAction = new QAction(tr("Lower Case"), this);
     m_capitalizeAction = new QAction(tr("Capitalize"), this);
 
     m_convertCaseMenu->addAction(m_upcaseAction);
@@ -2332,11 +2332,11 @@ void TextEditor::toggleReadOnlyMode()
     if (m_readOnlyMode) {
         m_readOnlyMode = false;
 
-        popupNotify(tr("Read-only mode is off"));
+        popupNotify(tr("Read-Only mode is off"));
     } else {
         m_readOnlyMode = true;
 
-        popupNotify(tr("Read-only mode is on"));
+        popupNotify(tr("Read-Only mode is on"));
     }
 }
 

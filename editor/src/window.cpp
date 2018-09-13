@@ -289,7 +289,7 @@ void Window::closeTab()
     // document has been modified or unsaved draft document.
     // need to prompt whether to save.
     if (isModified || (isBlankFile && !editor->textEditor->toPlainText().isEmpty())) {
-        DDialog *dialog = createSaveFileDialog(tr("Save file"), tr("Do you need to save the file?"));
+        DDialog *dialog = createSaveFileDialog(tr("Save file"), tr("Do you want to save this document?"));
 
         connect(dialog, &DDialog::buttonClicked, this, [=] (int index) {
             dialog->hide();
@@ -424,7 +424,7 @@ const QString Window::getSaveFilePath(QString &encode, QString &newline)
 
     if (dialog.exec() == QDialog::Accepted) {
         encode = dialog.getComboBoxValue(tr("Encoding"));
-        newline = dialog.getComboBoxValue(tr("Newline"));
+        newline = dialog.getComboBoxValue(tr("Line Endings"));
 
         return dialog.selectedFiles().value(0);
     } else {
@@ -1188,7 +1188,7 @@ DDialog* Window::createSaveFileDialog(QString title, QString content)
     dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
     dialog->setIcon(QIcon(Utils::getQrcPath("logo_48.svg")));
     dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
-    dialog->addButton(QString(tr("Don't Save")), false, DDialog::ButtonNormal);
+    dialog->addButton(QString(tr("Discard")), false, DDialog::ButtonNormal);
     dialog->addButton(QString(tr("Save")), true, DDialog::ButtonNormal);
 
     return dialog;

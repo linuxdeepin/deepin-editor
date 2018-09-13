@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
     DApplication::loadDXcbPlugin();
 
     const char *descriptionText = QT_TRANSLATE_NOOP("MainWindow",
-                                                    "Deepin Editor is a simple text editor");
+                                                    "Deepin Editor is a desktop text editor that supports common text editing features.");
     const QString acknowledgementLink = "https://www.deepin.org/acknowledgments/deepin-editor";
 
     DApplication app(argc, argv);
