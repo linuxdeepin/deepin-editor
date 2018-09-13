@@ -410,14 +410,16 @@ const QString Window::getSaveFilePath(QString &encode, QString &newline)
 
 #ifdef DTKWIDGET_CLASS_DFileDialog
     DFileDialog dialog(this, tr("Save File"));
-    dialog.setDirectory(QFileInfo(m_tabbar->getActiveTabPath()).dir());
-    dialog.selectFile(tr("Blank Document") + ".txt");
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.addComboBox(tr("Encoding"), getEncodeList());
     dialog.addComboBox(tr("Line Endings"), QStringList() << "Linux" << "Windows" << "Mac OS");
 
     if (QFileInfo(m_tabbar->getActiveTabPath()).dir().absolutePath() != m_blankFileDir) {
+        dialog.setDirectory(QFileInfo(m_tabbar->getActiveTabPath()).dir());
         dialog.selectFile(QFileInfo(m_tabbar->getActiveTabPath()).fileName());
+    } else {
+        dialog.setDirectory(QDir::homePath());
+        dialog.selectFile(m_tabbar->getActiveTabName() + ".txt");
     }
 
     if (dialog.exec() == QDialog::Accepted) {
@@ -429,7 +431,7 @@ const QString Window::getSaveFilePath(QString &encode, QString &newline)
         return "";
     }
 #else
-    return QFileDialog::getSaveFileName(this, "Save File", QDir(QDir::homePath()).filePath("Blank Document.txt"));
+    return QFileDialog::getSaveFileName(this, tr("Save File"), QDir(QDir::homePath()).filePath("Blank Document.txt"));
 #endif
 }
 
