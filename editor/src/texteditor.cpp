@@ -675,13 +675,13 @@ void TextEditor::scrollLineUp()
 {
     QScrollBar *scrollbar = verticalScrollBar();
 
-    scrollbar->setValue(scrollbar->value() + 1);
+    scrollbar->setValue(scrollbar->value() - 1);
 
-    if (cursorRect().y() < 0) {
+    if (cursorRect().y() > rect().height() - fontMetrics().height()) {
         auto moveMode = m_cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
 
         QTextCursor cursor = textCursor();
-        cursor.movePosition(QTextCursor::Down, moveMode);
+        cursor.movePosition(QTextCursor::Up, moveMode);
         setTextCursor(cursor);
     }
 }
@@ -690,13 +690,13 @@ void TextEditor::scrollLineDown()
 {
     QScrollBar *scrollbar = verticalScrollBar();
 
-    scrollbar->setValue(scrollbar->value() - 1);
+    scrollbar->setValue(scrollbar->value() + 1);
 
-    if (cursorRect().y() > rect().height() - fontMetrics().height()) {
+    if (cursorRect().y() < 0) {
         auto moveMode = m_cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
 
         QTextCursor cursor = textCursor();
-        cursor.movePosition(QTextCursor::Up, moveMode);
+        cursor.movePosition(QTextCursor::Down, moveMode);
         setTextCursor(cursor);
     }
 }
