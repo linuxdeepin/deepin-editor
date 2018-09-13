@@ -1948,7 +1948,7 @@ void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme, const QString
     m_currentLineColor = QColor(themeCurrentLineColor);
     m_currentLineNumberColor = QColor(jsonMap["editor-colors"].toMap()["current-line-number"].toString());
     m_lineNumbersColor = QColor(jsonMap["editor-colors"].toMap()["line-numbers"].toString());
-    m_regionMarkerColor = QColor(theme.textColor(KSyntaxHighlighting::Theme::RegionMarker));
+    m_regionMarkerColor = QColor(textStylesMap["RegionMarker"].toMap()["selected-text-color"].toString());
     m_searchHighlightColor = QColor(jsonMap["editor-colors"].toMap()["search-highlight-color"].toString());
     m_searchHighlightBgColor = QColor(jsonMap["editor-colors"].toMap()["search-highlight-bg-color"].toString());
     m_selectionColor = QColor(textStylesMap["Normal"].toMap()["selected-text-color"].toString());

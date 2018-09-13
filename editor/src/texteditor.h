@@ -38,7 +38,7 @@ namespace KSyntaxHighlighting {
     class SyntaxHighlighter;
 }
 
-enum ConvertCase {UPPER, LOWER, CAPITALIZE};
+enum ConvertCase { UPPER, LOWER, CAPITALIZE };
 
 class TextEditor : public QPlainTextEdit
 {
