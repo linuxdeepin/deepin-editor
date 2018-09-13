@@ -1796,9 +1796,15 @@ void TextEditor::contextMenuEvent(QContextMenuEvent *event)
     if (wordAtCursor != "") {
         m_rightMenu->addMenu(m_convertCaseMenu);
     }
-    if (toPlainText() != "" && (textCursor().hasSelection() || !isBlankLine)) {
+
+    // intelligent judge whether to support comments.
+    const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());
+    if (!toPlainText().isEmpty() &&
+        (textCursor().hasSelection() || !isBlankLine) &&
+        !def.filePath().isEmpty()) {
         m_rightMenu->addAction(m_toggleCommentAction);
     }
+
     m_rightMenu->addSeparator();
     if (m_readOnlyMode) {
         m_rightMenu->addAction(m_disableReadOnlyModeAction);
@@ -2341,7 +2347,8 @@ void TextEditor::toggleComment()
     if (!def.filePath().isEmpty()) {
         Comment::unCommentSelection(this, m_commentDefinition);
     } else {
-        popupNotify(tr("File does not support syntax comments"));
+        // do not need to prompt the user.
+        // popupNotify(tr("File does not support syntax comments"));
     }
 }
 
