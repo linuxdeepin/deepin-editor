@@ -150,10 +150,7 @@ public:
     QString getWordAtCursor();
 
     void toggleReadOnlyMode();
-
     void toggleComment();
-    void toggleBullet();
-    void toggleBulletWithLine(int tltine, bool addBullet);
 
     int getNextWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode);
     int getPrevWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode);
@@ -236,7 +233,6 @@ private:
     QAction *m_exitFullscreenAction;
     QAction *m_openInFileManagerAction;
     QAction *m_toggleCommentAction;
-    QAction *m_toggleBulletAction;
 
     QMenu *m_convertCaseMenu;
     QAction *m_upcaseAction;

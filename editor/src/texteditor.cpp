@@ -97,7 +97,6 @@ TextEditor::TextEditor(QPlainTextEdit *parent)
     m_exitFullscreenAction = new QAction(tr("Exit fullscreen"), this);
     m_openInFileManagerAction = new QAction(tr("Open in file manager"), this);
     m_toggleCommentAction = new QAction(tr("Toggle comment"), this);
-    m_toggleBulletAction = new QAction(tr("Toggle bullet"), this);
 
     connect(m_rightMenu, &QMenu::aboutToHide, this, &TextEditor::removeHighlightWordUnderCursor);
     connect(m_undoAction, &QAction::triggered, this, &TextEditor::undo);
@@ -116,7 +115,6 @@ TextEditor::TextEditor(QPlainTextEdit *parent)
     connect(m_disableReadOnlyModeAction, &QAction::triggered, this, &TextEditor::toggleReadOnlyMode);
     connect(m_openInFileManagerAction, &QAction::triggered, this, &TextEditor::clickOpenInFileManagerAction);
     connect(m_toggleCommentAction, &QAction::triggered, this, &TextEditor::toggleComment);
-    connect(m_toggleBulletAction, &QAction::triggered, this, &TextEditor::toggleBullet);
 
     // Init convert case sub menu.
     m_haveWordUnderCursor = false;
@@ -1671,8 +1669,6 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
             toggleReadOnlyMode();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglecomment")) {
             toggleComment();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglebullet")) {
-            toggleBullet();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "undo")) {
             undo();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "redo")) {
@@ -1802,7 +1798,6 @@ void TextEditor::contextMenuEvent(QContextMenuEvent *event)
     }
     if (toPlainText() != "" && (textCursor().hasSelection() || !isBlankLine)) {
         m_rightMenu->addAction(m_toggleCommentAction);
-        m_rightMenu->addAction(m_toggleBulletAction);
     }
     m_rightMenu->addSeparator();
     if (m_readOnlyMode) {
@@ -2347,123 +2342,6 @@ void TextEditor::toggleComment()
         Comment::unCommentSelection(this, m_commentDefinition);
     } else {
         popupNotify(tr("File does not support syntax comments"));
-    }
-}
-
-void TextEditor::toggleBullet()
-{
-    // Save current cursor.
-    QTextCursor currentCursor = textCursor();
-    QString bulletString = "* ";
-
-    if (textCursor().hasSelection()) {
-        // Get selection bound.
-        int startPos = textCursor().anchor();
-        int endPos = textCursor().position();
-
-        if (startPos > endPos) {
-            std::swap(startPos, endPos);
-        }
-
-        QTextCursor startCursor = textCursor();
-        startCursor.setPosition(startPos, QTextCursor::MoveAnchor);
-        int startLine = startCursor.block().blockNumber();
-
-        QTextCursor endCursor = textCursor();
-        endCursor.setPosition(endPos, QTextCursor::MoveAnchor);
-        int endLine = endCursor.block().blockNumber();
-
-        // Whether remove bullet?
-        bool removeBullet = true;
-        for (int i = startLine; i <= endLine; i++) {
-            QTextCursor cursor(document()->findBlockByLineNumber(i));
-
-            cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-            cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, 2);
-
-            if (cursor.selectedText() != bulletString) {
-                removeBullet = false;
-                break;
-            }
-        }
-
-        // Add/remove bullet with selection area.
-        for (int i = startLine; i <= endLine; i++) {
-            toggleBulletWithLine(i, !removeBullet);
-        }
-    } else {
-        QTextCursor lineBeginningCursor = textCursor();
-
-        lineBeginningCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-        lineBeginningCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, 2);
-
-        QString lineBeginningString = lineBeginningCursor.selectedText();
-
-        if (lineBeginningString != bulletString) {
-            toggleBulletWithLine(textCursor().block().blockNumber(), true);
-        } else {
-            toggleBulletWithLine(textCursor().block().blockNumber(), false);
-        }
-    }
-
-    // Restore cursor.
-    setTextCursor(currentCursor);
-
-    // Remove selection area anyway.
-    QTextCursor removeSelectionCursor = textCursor();
-    removeSelectionCursor.clearSelection();
-    setTextCursor(removeSelectionCursor);
-
-    tryUnsetMark();
-}
-
-void TextEditor::toggleBulletWithLine(int line, bool addBullet)
-{
-    QString bulletString = "* ";
-
-    QTextCursor lineBeginningCursor(document()->findBlockByLineNumber(line));
-
-    lineBeginningCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-    lineBeginningCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, 2);
-
-    QString lineBeginningString = lineBeginningCursor.selectedText();
-
-    if (addBullet) {
-        // Get line start position.
-        QTextCursor cursor(document()->findBlockByLineNumber(line));
-        cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-        int startColumn = cursor.columnNumber();
-
-        // Get line end position.
-        cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
-        int endColumn = cursor.columnNumber();
-
-        // Move to line start first.
-        cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-
-        // Move to first non-blank char of line.
-        int column = startColumn;
-        while (column < endColumn) {
-            QChar currentChar = toPlainText().at(std::max(cursor.position() - 1, 0));
-
-            if (!currentChar.isSpace()) {
-                cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
-                break;
-            } else {
-                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-            }
-
-            column++;
-        }
-
-        // Remove blank string.
-        cursor.removeSelectedText();
-
-        // Insert bullet.
-        cursor.insertText(bulletString);
-        setTextCursor(cursor);
-    } else {
-        lineBeginningCursor.removeSelectedText();
     }
 }
 
