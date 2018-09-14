@@ -886,14 +886,17 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
 
 int Window::getBlankFileIndex()
 {
-    // Get blank tab index list.
+    // get blank tab index list.
     QList<int> tabIndexes;
+
     for (int i = 0; i < m_tabbar->tabbar->tabFiles.size(); ++i) {
+        // find all the blank tab index number.
         if (QFileInfo(m_tabbar->tabbar->tabFiles[i]).dir().absolutePath() == m_blankFileDir) {
-            const QStringList &tabNameList = m_tabbar->tabbar->tabText(i).split(tr("Blank document"));
-            if (tabNameList.size() > 1) {
-                tabIndexes << tabNameList[1].toInt();
-            }
+            const QString tabText = m_tabbar->tabbar->tabText(i);
+            QRegularExpression reg("(\\d+)");
+            QRegularExpressionMatch match = reg.match(tabText);
+
+            tabIndexes << match.captured(1).toInt();
         }
     }
     std::sort(tabIndexes.begin(), tabIndexes.end());
