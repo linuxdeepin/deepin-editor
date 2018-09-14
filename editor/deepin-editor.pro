@@ -51,6 +51,7 @@ SOURCES += src/window.cpp \
            src/replacebar.cpp \
            src/linebar.cpp \
            src/settings.cpp \
+           src/settingsdialog.cpp \
            src/tabwidget.cpp \
            src/tabbar.cpp \
            src/editor.cpp \

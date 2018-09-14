@@ -215,8 +215,8 @@ bool TabWidget::eventFilter(QObject *, QEvent *event)
                 m_menu = new QMenu();
                 m_menu->setStyle(QStyleFactory::create("dlight"));
 
-                m_closeTabAction = new QAction("Close Tab", this);
-                m_closeOtherTabAction = new QAction("Close Other Tabs", this);
+                m_closeTabAction = new QAction(tr("Close tab"), this);
+                m_closeOtherTabAction = new QAction("Close other tabs", this);
 
                 connect(m_closeTabAction, &QAction::triggered, this, &TabWidget::handleCloseTab);
                 connect(m_closeOtherTabAction, &QAction::triggered, this, &TabWidget::handleCloseOtherTabs);

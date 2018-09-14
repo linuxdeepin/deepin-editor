@@ -147,10 +147,6 @@ TextEditor::TextEditor(QPlainTextEdit *parent)
 
     connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &TextEditor::handleScrollFinish, Qt::QueuedConnection);
 
-    // Highlight line and focus.
-    highlightCurrentLine();
-    QTimer::singleShot(0, this, SLOT(setFocus()));
-
     // Monitor cursor mark status to update in line number area.
     connect(this, &TextEditor::cursorMarkChanged, this, &TextEditor::handleCursorMarkChanged);
 

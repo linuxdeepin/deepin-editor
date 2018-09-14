@@ -92,7 +92,7 @@ Window::Window(DMainWindow *parent)
 
     // Init window state with config.
     // Below code must before this->titlebar()->setMenu, otherwise main menu can't display pre-build-in menu items by dtk.
-    const QString &windowState = m_settings->settings->option("advance.window.window_state")->value().toString();
+    const QString &windowState = m_settings->settings->option("advance.window.windowstate")->value().toString();
 
     // window minimum size.
     setMinimumSize(600, 400);
@@ -168,7 +168,7 @@ void Window::initTitlebar()
     QAction *saveAsAction(new QAction(tr("Save as"), this));
     QAction *printAction(new QAction(tr("Print"), this));
     QAction *switchThemeAction(new QAction(tr("Switch theme"), this));
-    QAction *settingAction(new QAction(tr("Setting"), this));
+    QAction *settingAction(new QAction(tr("Settings"), this));
 
     m_menu->addAction(newWindowAction);
     m_menu->addAction(newTabAction);
@@ -287,7 +287,7 @@ void Window::closeTab()
     // document has been modified or unsaved draft document.
     // need to prompt whether to save.
     if (isModified || (isBlankFile && !editor->textEditor->toPlainText().isEmpty())) {
-        DDialog *dialog = createSaveFileDialog(tr("Save file"), tr("Do you want to save this document?"));
+        DDialog *dialog = createSaveFileDialog(tr("Save File"), tr("Do you want to save this file?"));
 
         connect(dialog, &DDialog::buttonClicked, this, [=] (int index) {
             dialog->hide();
@@ -344,7 +344,7 @@ Editor* Window::createEditor()
     Editor *editor = new Editor();
     editor->textEditor->setThemeWithPath(m_themePath);
     editor->textEditor->setSettings(m_settings);
-    editor->textEditor->setTabSpaceNumber(m_settings->settings->option("advance.editor.tab_space_number")->value().toInt());
+    editor->textEditor->setTabSpaceNumber(m_settings->settings->option("advance.editor.tabspacenumber")->value().toInt());
     editor->textEditor->setFontFamily(m_settings->settings->option("base.font.family")->value().toString());
     editor->textEditor->setModified(false);
     setFontSizeWithConfig(editor);

@@ -2,7 +2,7 @@
     "groups": [
         {
             "key": "base",
-            "name": "Basic settings",
+            "name": "Basic",
             "groups": [
                 {
                     "key": "font",
@@ -48,7 +48,7 @@
                     "options": [
                         {
                             "key": "addblanktab",
-                            "name": "Add Blank Tab",
+                            "name": "New tab",
                             "type": "shortcut",
                             "default":  "Ctrl+T"
                         },
@@ -60,73 +60,73 @@
                         },
                         {
                             "key": "savefile",
-                            "name": "Save File",
+                            "name": "Save",
                             "type": "shortcut",
                             "default":  "Ctrl+S"
                         },
                         {
                             "key": "saveasfile",
-                            "name": "Save As File",
+                            "name": "Save as",
                             "type": "shortcut",
                             "default":  "Ctrl+Shift+S"
                         },
                         {
                             "key": "selectnexttab",
-                            "name": "Select Next Tab",
+                            "name": "Next tab",
                             "type": "shortcut",
                             "default":  "Ctrl+Tab"
                         },
                         {
                             "key": "selectprevtab",
-                            "name": "Select Previous Tab",
+                            "name": "Previous tab",
                             "type": "shortcut",
                             "default":  "Ctrl+Shift+Backtab"
                         },
                         {
                             "key": "closetab",
-                            "name": "Close Tab",
+                            "name": "Close tab",
                             "type": "shortcut",
                             "default":  "Ctrl+W"
                         },
                         {
                             "key": "closeothertabs",
-                            "name": "Close Other Tabs",
+                            "name": "Close other tabs",
                             "type": "shortcut",
                             "default":  "Ctrl+Shift+W"
                         },
                         {
                             "key": "restoretab",
-                            "name": "Restore Tab",
+                            "name": "Restore tab",
                             "type": "shortcut",
                             "default":  "Ctrl+Shift+T"
                         },
                         {
                             "key": "openfile",
-                            "name": "Open File",
+                            "name": "Open file",
                             "type": "shortcut",
                             "default":  "Ctrl+O"
                         },
                         {
                             "key": "incrementfontsize",
-                            "name": "Increment Font Size",
+                            "name": "Increment font size",
                             "type": "shortcut",
                             "default":  "Ctrl+="
                         },
                         {
                             "key": "decrementfontsize",
-                            "name": "Decrement Font Size",
+                            "name": "Decrement font size",
                             "type": "shortcut",
                             "default":  "Ctrl+-"
                         },
                         {
                             "key": "resetfontsize",
-                            "name": "Reset Font Size",
+                            "name": "Reset font size",
                             "type": "shortcut",
                             "default":  "Ctrl+0"
                         },
                         {
                             "key": "togglefullscreen",
-                            "name": "Toggle Fullscreen",
+                            "name": "Toggle fullscreen",
                             "type": "shortcut",
                             "default":  "F11"
                         },
@@ -144,31 +144,31 @@
                         },
                         {
                             "key": "jumptoline",
-                            "name": "Jump To Line",
+                            "name": "Go To Line",
                             "type": "shortcut",
                             "default":  "Ctrl+G"
                         },
                         {
                             "key": "saveposition",
-                            "name": "Save Position",
+                            "name": "Save cursor position",
                             "type": "shortcut",
                             "default":  "Ctrl+Shift+>"
                         },
                         {
                             "key": "restoreposition",
-                            "name": "Restore Position",
+                            "name": "Reset cursor position",
                             "type": "shortcut",
                             "default":  "Ctrl+Shift+<"
                         },
                         {
                             "key": "escape",
-                            "name": "Escape",
+                            "name": "Exit",
                             "type": "shortcut",
                             "default":  "Esc"
                         },
                         {
                             "key": "displayshortcuts",
-                            "name": "Display Shortcuts",
+                            "name": "Display shortcuts",
                             "type": "shortcut",
                             "default":  "Ctrl+Shift+?"
                         },
@@ -186,169 +186,169 @@
                     "options": [
                         {
                             "key": "indentline",
-                            "name": "Indent Line",
+                            "name": "Increase indent",
                             "type": "shortcut",
                             "default":  "Tab"
                         },
                         {
                             "key": "backindentline",
-                            "name": "Back Indent Line",
+                            "name": "Decrease indent",
                             "type": "shortcut",
                             "default":  "Shift+Backtab"
                         },
                         {
                             "key": "forwardchar",
-                            "name": "Forward Char",
+                            "name": "Forward char",
                             "type": "shortcut",
                             "default":  "Right"
                         },
                         {
                             "key": "backwardchar",
-                            "name": "Backward Char",
+                            "name": "Backward char",
                             "type": "shortcut",
                             "default":  "Left"
                         },
                         {
                             "key": "forwardword",
-                            "name": "Forward Word",
+                            "name": "Forward word",
                             "type": "shortcut",
                             "default":  "Alt+Right"
                         },
                         {
                             "key": "backwardword",
-                            "name": "Backward Word",
+                            "name": "Backward word",
                             "type": "shortcut",
                             "default":  "Alt+Left"
                         },
                         {
                             "key": "nextline",
-                            "name": "Next Line",
+                            "name": "Next line",
                             "type": "shortcut",
                             "default":  "Down"
                         },
                         {
                             "key": "prevline",
-                            "name": "Previous Line",
+                            "name": "Previous line",
                             "type": "shortcut",
                             "default":  "Up"
                         },
                         {
                             "key": "newline",
-                            "name": "New Line",
+                            "name": "New line",
                             "type": "shortcut",
                             "default":  "Return"
                         },
                         {
                             "key": "opennewlineabove",
-                            "name": "Open New Line Above",
+                            "name": "New line above",
                             "type": "shortcut",
                             "default":  "Ctrl+Return"
                         },
                         {
                             "key": "opennewlinebelow",
-                            "name": "Open New Line Below",
+                            "name": "New line below",
                             "type": "shortcut",
                             "default":  "Ctrl+Shift+Return"
                         },
                         {
                             "key": "duplicateline",
-                            "name": "Duplicate Line",
+                            "name": "Duplicate line",
                             "type": "shortcut",
                             "default":  "Ctrl+Shift+D"
                         },
                         {
                             "key": "killline",
-                            "name": "Kill Line",
+                            "name": "Delete to end of line",
                             "type": "shortcut",
                             "default":  "Ctrl+K"
                         },
                         {
                             "key": "killcurrentline",
-                            "name": "Kill Current Line",
+                            "name": "Delete current line",
                             "type": "shortcut",
                             "default":  "Ctrl+Shift+K"
                         },
                         {
                             "key": "swaplineup",
-                            "name": "Swap Line Up",
+                            "name": "Swap line up",
                             "type": "shortcut",
                             "default":  "Ctrl+Shift+Up"
                         },
                         {
                             "key": "swaplinedown",
-                            "name": "Swap Line Down",
+                            "name": "Swap line down",
                             "type": "shortcut",
                             "default":  "Ctrl+Shift+Down"
                         },
                         {
                             "key": "scrolllineup",
-                            "name": "Scroll Line Up",
+                            "name": "Scroll up one line",
                             "type": "shortcut",
                             "default":  "Meta+Shift+Up"
                         },
                         {
                             "key": "scrolllinedown",
-                            "name": "Scroll Line Down",
+                            "name": "Scroll down one line",
                             "type": "shortcut",
                             "default":  "Meta+Shift+Down"
                         },
                         {
                             "key": "scrollup",
-                            "name": "Scroll  Up",
+                            "name": "Page up",
                             "type": "shortcut",
                             "default":  "PageUp"
                         },
                         {
                             "key": "scrolldown",
-                            "name": "Scroll  Down",
+                            "name": "Page down",
                             "type": "shortcut",
                             "default":  "PageDown"
                         },
                         {
                             "key": "movetoendofline",
-                            "name": "Move To End Of Line",
+                            "name": "Move to end of line",
                             "type": "shortcut",
                             "default":  "End"
                         },
                         {
                             "key": "movetostartofline",
-                            "name": "Move To Start Of Line",
+                            "name": "Move to start of line",
                             "type": "shortcut",
                             "default":  "Home"
                         },
                         {
                             "key": "movetoend",
-                            "name": "Move To End Of File",
+                            "name": "Move to end of text",
                             "type": "shortcut",
                             "default":  "Ctrl+End"
                         },
                         {
                             "key": "movetostart",
-                            "name": "Move To Start Of File",
+                            "name": "Move to start of text",
                             "type": "shortcut",
                             "default":  "Ctrl+Home"
                         },
                         {
                             "key": "movetolineindentation",
-                            "name": "Move To Line Indentation",
+                            "name": "Move to line indentation",
                             "type": "shortcut",
                             "default":  "Ctrl+M"
                         },
                         {
                             "key": "upcaseword",
-                            "name": "Upcase Word",
+                            "name": "Upper case",
                             "type": "shortcut",
                             "default":  "Alt+U"
                         },
                         {
                             "key": "downcaseword",
-                            "name": "Downcase Word",
+                            "name": "Lower case",
                             "type": "shortcut",
                             "default":  "Alt+L"
                         },
                         {
                             "key": "capitalizeword",
-                            "name": "Capitalize Word",
+                            "name": "Capitalize",
                             "type": "shortcut",
                             "default":  "Alt+C"
                         },
@@ -366,19 +366,19 @@
                         },
                         {
                             "key": "forwardpair",
-                            "name": "Forward Pair",
+                            "name": "Forward over a pair",
                             "type": "shortcut",
                             "default":  "Alt+P"
                         },
                         {
                             "key": "backwardpair",
-                            "name": "Backward Pair",
+                            "name": "Backward over a pair",
                             "type": "shortcut",
                             "default":  "Alt+N"
                         },
                         {
                             "key": "selectall",
-                            "name": "Select All",
+                            "name": "Select all",
                             "type": "shortcut",
                             "default":  "Ctrl+A"
                         },
@@ -402,49 +402,49 @@
                         },
                         {
                             "key": "transposechar",
-                            "name": "Transpose Char",
+                            "name": "Transpose char",
                             "type": "shortcut",
                             "default":  "Alt+T"
                         },
                         {
                             "key": "setmark",
-                            "name": "Set Mark",
+                            "name": "Mark",
                             "type": "shortcut",
                             "default":  "Alt+H"
                         },
                         {
                             "key": "exchangemark",
-                            "name": "Exchange Mark",
+                            "name": "Unmark",
                             "type": "shortcut",
                             "default":  "Alt+Shift+H"
                         },
                         {
                             "key": "copylines",
-                            "name": "Copy Lines",
+                            "name": "Copy line",
                             "type": "shortcut",
                             "default":  "Meta+C"
                         },
                         {
                             "key": "cutlines",
-                            "name": "Cut Lines",
+                            "name": "Cut line",
                             "type": "shortcut",
                             "default":  "Meta+X"
                         },
                         {
                             "key": "joinlines",
-                            "name": "Join Lines",
+                            "name": "Merge lines",
                             "type": "shortcut",
                             "default":  "Ctrl+J"
                         },
                         {
                             "key": "togglereadonlymode",
-                            "name": "Toggle Read Only Mode",
+                            "name": "Read-Only mode",
                             "type": "shortcut",
                             "default":  "Alt+Meta+L"
                         },
                         {
                             "key": "togglecomment",
-                            "name": "Toggle Comment",
+                            "name": "Toggle comment",
                             "type": "shortcut",
                             "default":  "Ctrl+/"
                         },
@@ -1811,8 +1811,8 @@
                     "name": "Window",
                     "options": [
                         {
-                            "key": "window_state",
-                            "name": "Window State",
+                            "key": "windowstate",
+                            "name": "Window Size",
                             "type": "combobox",
                             "default": "window_normal"
                         },
@@ -1835,8 +1835,8 @@
                     "name": "Editor",
                     "options": [
                         {
-                            "key": "tab_space_number",
-                            "name": "Tab Space Number",
+                            "key": "tabspacenumber",
+                            "name": "Tab space",
                             "type": "spinbutton",
                             "default": 4
                         },

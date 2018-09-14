@@ -52,7 +52,7 @@ Settings::Settings(QWidget *parent)
         emit adjustFontSize(value.toInt());
     });
 
-    auto tabSpaceNumber = settings->option("advance.editor.tab_space_number");
+    auto tabSpaceNumber = settings->option("advance.editor.tabspacenumber");
     connect(tabSpaceNumber, &Dtk::Core::DSettingsOption::valueChanged, this, [=](QVariant value) {
         emit adjustTabSpaceNumber(value.toInt());
     });
@@ -78,7 +78,7 @@ Settings::Settings(QWidget *parent)
     auto keymap = settings->option("shortcuts.keymap.keymap");
     QMap<QString, QVariant> keymapMap;
     keymapMap.insert("keys", QStringList() << "standard" << "emacs" << "customize");
-    keymapMap.insert("values", QStringList() << "Standard" << "Emacs" << "Customize");
+    keymapMap.insert("values", QStringList() << tr("Standard") << "Emacs" << tr("Customize"));
     keymap->setData("items", keymapMap);
 
     connect(keymap, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
@@ -86,10 +86,10 @@ Settings::Settings(QWidget *parent)
         updateAllKeysWithKeymap(value.toString());
     });
 
-    auto windowState = settings->option("advance.window.window_state");
+    auto windowState = settings->option("advance.window.windowstate");
     QMap<QString, QVariant> windowStateMap;
     windowStateMap.insert("keys", QStringList() << "window_normal" << "window_maximum" << "fullscreen");
-    windowStateMap.insert("values", QStringList() << "Window" << "Maximum" << "Fullscreen");
+    windowStateMap.insert("values", QStringList() << tr("Window") << tr("Maximum") << tr("Fullscreen"));
     windowState->setData("items", windowStateMap);
 
     connect(settings, &Dtk::Core::DSettings::valueChanged, this, [=] (const QString &key, const QVariant &value) {
