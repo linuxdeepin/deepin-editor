@@ -49,12 +49,12 @@ Settings::Settings(QWidget *parent)
 
     auto fontSize = settings->option("base.font.size");
     connect(fontSize, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
-        adjustFontSize(value.toInt());
+        emit adjustFontSize(value.toInt());
     });
 
     auto tabSpaceNumber = settings->option("advance.editor.tab_space_number");
-    connect(fontSize, &Dtk::Core::DSettingsOption::valueChanged, this, [=](QVariant value) {
-        adjustTabSpaceNumber(value.toInt());
+    connect(tabSpaceNumber, &Dtk::Core::DSettingsOption::valueChanged, this, [=](QVariant value) {
+        emit adjustTabSpaceNumber(value.toInt());
     });
 
     QFontDatabase fontDatabase;
