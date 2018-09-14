@@ -116,10 +116,9 @@ Window::Window(DMainWindow *parent)
     connect(m_findBar, &FindBar::findNext, this, &Window::handleFindNext, Qt::QueuedConnection);
     connect(m_findBar, &FindBar::findPrev, this, &Window::handleFindPrev, Qt::QueuedConnection);
     connect(m_findBar, &FindBar::removeSearchKeyword, this, &Window::handleRemoveSearchKeyword, Qt::QueuedConnection);
-    connect(m_findBar, &FindBar::updateSearchKeyword, this,
-            [=] (QString file, QString keyword) {
-                handleUpdateSearchKeyword(m_findBar, file, keyword);
-            });
+    connect(m_findBar, &FindBar::updateSearchKeyword, this, [=] (QString file, QString keyword) {
+        handleUpdateSearchKeyword(m_findBar, file, keyword);
+    });
 
     // Init replace bar.
     connect(m_replaceBar, &ReplaceBar::removeSearchKeyword, this, &Window::handleRemoveSearchKeyword, Qt::QueuedConnection);
@@ -127,10 +126,9 @@ Window::Window(DMainWindow *parent)
     connect(m_replaceBar, &ReplaceBar::replaceNext, this, &Window::handleReplaceNext, Qt::QueuedConnection);
     connect(m_replaceBar, &ReplaceBar::replaceRest, this, &Window::handleReplaceRest, Qt::QueuedConnection);
     connect(m_replaceBar, &ReplaceBar::replaceSkip, this, &Window::handleReplaceSkip, Qt::QueuedConnection);
-    connect(m_replaceBar, &ReplaceBar::updateSearchKeyword, this,
-            [=] (QString file, QString keyword) {
-                handleUpdateSearchKeyword(m_replaceBar, file, keyword);
-            });
+    connect(m_replaceBar, &ReplaceBar::updateSearchKeyword, this, [=] (QString file, QString keyword) {
+        handleUpdateSearchKeyword(m_replaceBar, file, keyword);
+    });
 
     // Init jump line bar.
     QTimer::singleShot(0, m_jumpLineBar, SLOT(hide()));

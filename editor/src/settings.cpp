@@ -48,16 +48,14 @@ Settings::Settings(QWidget *parent)
     settings->setBackend(m_backend);
 
     auto fontSize = settings->option("base.font.size");
-    connect(fontSize, &Dtk::Core::DSettingsOption::valueChanged,
-            this, [=](QVariant value) {
-                      adjustFontSize(value.toInt());
-                  });
+    connect(fontSize, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
+        adjustFontSize(value.toInt());
+    });
 
     auto tabSpaceNumber = settings->option("advance.editor.tab_space_number");
-    connect(fontSize, &Dtk::Core::DSettingsOption::valueChanged,
-            this, [=](QVariant value) {
-                      adjustTabSpaceNumber(value.toInt());
-                  });
+    connect(fontSize, &Dtk::Core::DSettingsOption::valueChanged, this, [=](QVariant value) {
+        adjustTabSpaceNumber(value.toInt());
+    });
 
     QFontDatabase fontDatabase;
     auto fontFamliy = settings->option("base.font.family");
@@ -73,10 +71,9 @@ Settings::Settings(QWidget *parent)
         fontFamliy->setValue(QFontDatabase::systemFont(QFontDatabase::FixedFont).family());
     }
 
-    connect(fontFamliy, &Dtk::Core::DSettingsOption::valueChanged,
-            this, [=](QVariant value) {
-                      adjustFont(value.toString());
-                  });
+    connect(fontFamliy, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
+        adjustFont(value.toString());
+    });
 
     auto keymap = settings->option("shortcuts.keymap.keymap");
     QMap<QString, QVariant> keymapMap;
@@ -84,11 +81,10 @@ Settings::Settings(QWidget *parent)
     keymapMap.insert("values", QStringList() << "Standard" << "Emacs" << "Customize");
     keymap->setData("items", keymapMap);
 
-    connect(keymap, &Dtk::Core::DSettingsOption::valueChanged,
-            this, [=](QVariant value) {
-                      // Update all key's display value with user select keymap.
-                      updateAllKeysWithKeymap(value.toString());
-                  });
+    connect(keymap, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
+        // Update all key's display value with user select keymap.
+        updateAllKeysWithKeymap(value.toString());
+    });
 
     auto windowState = settings->option("advance.window.window_state");
     QMap<QString, QVariant> windowStateMap;
@@ -96,34 +92,33 @@ Settings::Settings(QWidget *parent)
     windowStateMap.insert("values", QStringList() << "Window" << "Maximum" << "Fullscreen");
     windowState->setData("items", windowStateMap);
 
-    connect(settings, &Dtk::Core::DSettings::valueChanged, this,
-            [=] (const QString &key, const QVariant &value) {
-                // Change keymap to customize once user change any keyshortcut.
-                if (!m_userChangeKey && key.startsWith("shortcuts.") && key != "shortcuts.keymap.keymap" && !key.contains("_keymap_")) {
-                    m_userChangeKey = true;
+    connect(settings, &Dtk::Core::DSettings::valueChanged, this, [=] (const QString &key, const QVariant &value) {
+        // Change keymap to customize once user change any keyshortcut.
+        if (!m_userChangeKey && key.startsWith("shortcuts.") && key != "shortcuts.keymap.keymap" && !key.contains("_keymap_")) {
+            m_userChangeKey = true;
 
-                    QString currentKeymap = settings->option("shortcuts.keymap.keymap")->value().toString();
+            QString currentKeymap = settings->option("shortcuts.keymap.keymap")->value().toString();
 
-                    QStringList keySplitList = key.split(".");
-                    keySplitList[1] = QString("%1_keymap_customize").arg(keySplitList[1]);
-                    QString customizeKey = keySplitList.join(".");
+            QStringList keySplitList = key.split(".");
+            keySplitList[1] = QString("%1_keymap_customize").arg(keySplitList[1]);
+            QString customizeKey = keySplitList.join(".");
 
-                    // Just update customize key user input, don't change keymap.
-                    if (currentKeymap == "customize") {
-                        settings->option(customizeKey)->setValue(value);
-                    }
-                    // If current kemap is not "customize".
-                    // Copy all customize keys from current keymap, and then update customize key just user input.
-                    // Then change keymap name.
-                    else {
-                        copyCustomizeKeysFromKeymap(currentKeymap);
-                        settings->option(customizeKey)->setValue(value);
-                        keymap->setValue("customize");
-                    }
+            // Just update customize key user input, don't change keymap.
+            if (currentKeymap == "customize") {
+                settings->option(customizeKey)->setValue(value);
+            }
+            // If current kemap is not "customize".
+            // Copy all customize keys from current keymap, and then update customize key just user input.
+            // Then change keymap name.
+            else {
+                copyCustomizeKeysFromKeymap(currentKeymap);
+                settings->option(customizeKey)->setValue(value);
+                keymap->setValue("customize");
+            }
 
-                    m_userChangeKey = false;
-                }
-            });
+            m_userChangeKey = false;
+        }
+    });
 }
 
 Settings::~Settings()
@@ -134,8 +129,8 @@ Settings::~Settings()
 void Settings::dtkThemeWorkaround(QWidget *parent, const QString &theme)
 {
     parent->setStyle(QStyleFactory::create(theme));
-    for (auto obj : parent->children()) {
 
+    for (auto obj : parent->children()) {
         auto w = qobject_cast<QWidget *>(obj);
         if (!w) {
             continue;

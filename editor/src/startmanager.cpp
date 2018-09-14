@@ -141,27 +141,25 @@ Window* StartManager::createWindow(bool alwaysCenter)
     connect(window, &Window::themeChanged, this, &StartManager::loadTheme, Qt::QueuedConnection);
 
     // Quit application if close last window.
-    connect(window, &Window::close, this,
-            [=]() {
-                int windowIndex = m_windows.indexOf(window);
-                qDebug() << "Close window " << windowIndex;
+    connect(window, &Window::close, this, [=] {
+        int windowIndex = m_windows.indexOf(window);
+        qDebug() << "Close window " << windowIndex;
 
-                if (windowIndex >= 0) {
-                    m_windows.takeAt(windowIndex);
-                }
+        if (windowIndex >= 0) {
+            m_windows.takeAt(windowIndex);
+        }
 
-                if (m_windows.isEmpty()) {
-                    QApplication::quit();
-                }
-            });
+        if (m_windows.isEmpty()) {
+            QApplication::quit();
+        }
+    });
 
     // Init window position.
     initWindowPosition(window, alwaysCenter);
 
-    connect(window, &Window::newWindow, this,
-            [=] () {
-                openFilesInWindow(QStringList());
-            });
+    connect(window, &Window::newWindow, this, [=] {
+        openFilesInWindow(QStringList());
+    });
 
     // Append window in window list.
     m_windows << window;
