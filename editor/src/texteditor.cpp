@@ -2445,10 +2445,13 @@ void TextEditor::adjustScrollbarMargins()
 {
     if (isVisible() && !m_scrollbarLock) {
         m_scrollbarLock = true;
-        auto documentHeight = (verticalScrollBar()->maximum() - verticalScrollBar()->minimum() + verticalScrollBar()->pageStep()) * fontMetrics().height();
+
+        int documentHeight = (verticalScrollBar()->maximum() - verticalScrollBar()->minimum() + verticalScrollBar()->pageStep())
+                             * fontMetrics().height();
 
         if (documentHeight > rect().height()) {
-            setViewportMargins(0, 0, -verticalScrollBar()->sizeHint().width(), -horizontalScrollBar()->sizeHint().height() + m_scrollbarMargin);
+            // setViewportMargins(0, 0, -verticalScrollBar()->sizeHint().width(), -horizontalScrollBar()->sizeHint().height() + m_scrollbarMargin);
+            setViewportMargins(0, 0, -verticalScrollBar()->sizeHint().width(), 0);
         } else {
             setViewportMargins(0, 0, 0, 0);
         }
