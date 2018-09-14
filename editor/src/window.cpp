@@ -1215,10 +1215,21 @@ void Window::popupPrintDialog()
 {
     QPrinter printer(QPrinter::HighResolution);
     QPrintPreviewDialog preview(&printer, this);
-    connect(&preview, &QPrintPreviewDialog::paintRequested, this,
-            [=] (QPrinter *printer) {
-                getActiveEditor()->textEditor->print(printer);
-            });
+
+    TextEditor *editor = getActiveEditor()->textEditor;
+    const QString &filePath = editor->filepath;
+    const QString &fileDir = QFileInfo(filePath).dir().absolutePath();
+
+    if (fileDir == m_blankFileDir) {
+        printer.setOutputFileName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->getActiveTabName()));
+    } else {
+        printer.setOutputFileName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
+    }
+
+    connect(&preview, &QPrintPreviewDialog::paintRequested, this, [=] (QPrinter *printer) {
+        getActiveEditor()->textEditor->print(printer);
+    });
+
     preview.exec();
 }
 
