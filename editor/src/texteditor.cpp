@@ -69,9 +69,6 @@ TextEditor::TextEditor(QPlainTextEdit *parent)
     setFrameShape(QFrame::NoFrame);
     setFocusPolicy(Qt::StrongFocus);
 
-    // set the document margin.
-    document()->setDocumentMargin(0);
-
     // Init widgets.
     lineNumberArea = new LineNumberArea(this);
 
