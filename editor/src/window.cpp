@@ -1226,6 +1226,8 @@ void Window::popupPrintDialog()
         printer.setOutputFileName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
     }
 
+    printer.setOutputFormat(QPrinter::PdfFormat);
+
     connect(&preview, &QPrintPreviewDialog::paintRequested, this, [=] (QPrinter *printer) {
         getActiveEditor()->textEditor->print(printer);
     });
