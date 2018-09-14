@@ -133,14 +133,12 @@ TextEditor::TextEditor(QPlainTextEdit *parent)
     m_canUndo = false;
     m_canRedo = false;
 
-    connect(this, &TextEditor::undoAvailable, this,
-            [=] (bool undoIsAvailable) {
-                m_canUndo = undoIsAvailable;
-            });
-    connect(this, &TextEditor::redoAvailable, this,
-            [=] (bool redoIsAvailable) {
-                m_canRedo = redoIsAvailable;
-            });
+    connect(this, &TextEditor::undoAvailable, this, [=] (bool undoIsAvailable) {
+        m_canUndo = undoIsAvailable;
+    });
+    connect(this, &TextEditor::redoAvailable, this, [=] (bool redoIsAvailable) {
+        m_canRedo = redoIsAvailable;
+    });
 
     // Init scroll animation.
     m_scrollAnimation = new QPropertyAnimation(verticalScrollBar(), "value");
@@ -1058,6 +1056,7 @@ void TextEditor::indentText()
 {
     // Stop mark if mark is set.
     tryUnsetMark();
+    hideCursorBlink();
 
     QTextCursor cursor = textCursor();
 
@@ -1084,12 +1083,15 @@ void TextEditor::indentText()
 
         cursor.endEditBlock();
     }
+
+    showCursorBlink();
 }
 
 void TextEditor::unindentText()
 {
     // Stop mark if mark is set.
     tryUnsetMark();
+    hideCursorBlink();
 
     QTextCursor cursor = textCursor();
     QTextBlock block;
@@ -1124,6 +1126,7 @@ void TextEditor::unindentText()
     }
 
     cursor.endEditBlock();
+    showCursorBlink();
 }
 
 void TextEditor::setTabSpaceNumber(int number)
@@ -2411,6 +2414,17 @@ int TextEditor::getPrevWordPosition(QTextCursor cursor, QTextCursor::MoveMode mo
 bool TextEditor::atWordSeparator(int position)
 {
     return m_wordSepartors.contains(QString(toPlainText().at(position)));
+}
+
+void TextEditor::showCursorBlink()
+{
+    // the default value on X11 is 1000 milliseconds.
+    QApplication::setCursorFlashTime(1000);
+}
+
+void TextEditor::hideCursorBlink()
+{
+    QApplication::setCursorFlashTime(0);
 }
 
 void TextEditor::completionWord(QString word)

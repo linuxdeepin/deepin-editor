@@ -71,7 +71,8 @@ public:
     void prevLine();
     void jumpToLine(int line, bool keepLineAtCenter);
 
-    void moveCursorNoBlink(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
+    void moveCursorNoBlink(QTextCursor::MoveOperation operation,
+                           QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
 
     void newline();
     void openNewlineAbove();
@@ -155,6 +156,9 @@ public:
     int getNextWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode);
     int getPrevWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode);
     bool atWordSeparator(int position);
+
+    void showCursorBlink();
+    void hideCursorBlink();
 
 signals:
     void clickFindAction();
