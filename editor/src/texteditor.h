@@ -257,7 +257,7 @@ private:
     int m_cursorMarkPosition = 0;
     int m_cursorWidthChangeDelay = 2000;
 
-    int m_fontSize;
+    int m_fontSize = 16;
     QString m_fontName;
 
     Comment::CommentDefinition m_commentDefinition;

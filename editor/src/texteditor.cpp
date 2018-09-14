@@ -162,7 +162,7 @@ TextEditor::TextEditor(QPlainTextEdit *parent)
 
     // configure content area
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     connect(verticalScrollBar(), &QScrollBar::rangeChanged, this, &TextEditor::adjustScrollbarMargins);
 }
