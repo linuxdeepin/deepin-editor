@@ -491,7 +491,7 @@ bool Window::saveFile()
 
     // file not finish loadding cannot be saved
     // otherwise you will save the content of the empty.
-    if (!m_editorMap[currentPath]->isLoadFinished()) {
+    if (!m_editorMap[currentPath]->isLoadFinished() && !isBlankFile) {
         showNotify(tr("File cannot be saved if it is not loaded."));
         return false;
     }
