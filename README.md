@@ -1,8 +1,12 @@
 # Deepin Editor
 
-Deepin Editor: simple editor for deepin.
+Deepin Editor is a desktop text editor that supports common text editing features.
 
 ## Dependencies
+
+In debian, use below command to install compile dependencies:
+
+`sudo apt install qt5-qmake qt5-default libdtkcore-dev libdtkwidget-dev libxcb-util0-dev libxcb1-dev libqt5x11extras5-dev libprocps-dev libxext-dev libxtst-dev libpolkit-qt5-1-dev libkf5syntaxhighlighting-dev libdtkwm-dev libkf5codecs-dev qttools5-dev`
 
 ## Installation
 
@@ -29,12 +33,16 @@ mkdir build
 cd build
 qmake ..
 make
-./deepin-editor 
+./deepin-editor
 ```
 
 ## Usage
 
+Below is keymap list for deepin-terminal:
+
 ## Config file
+
+configure save at: ~/.config/deepin/deepin-editor/config.conf
 
 ## Getting help
 
@@ -49,8 +57,8 @@ Any usage issues can ask for help via
 
 We encourage you to report issues and contribute changes
 
-* [Contribution guide for users](http://wiki.deepin.org/index.php?title=Contribution_Guidelines_for_Users)
-* [Contribution guide for developers](http://wiki.deepin.org/index.php?title=Contribution_Guidelines_for_Developers).
+* [Contribution guide for developers](https://github.com/linuxdeepin/developer-center/wiki/Contribution-Guidelines-for-Developers-en). (English)
+* [开发者代码贡献指南](https://github.com/linuxdeepin/developer-center/wiki/Contribution-Guidelines-for-Developers) (中文)
 
 ## License
 
