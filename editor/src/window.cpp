@@ -348,6 +348,7 @@ Editor* Window::createEditor()
     editor->textEditor->setSettings(m_settings);
     editor->textEditor->setTabSpaceNumber(m_settings->settings->option("advance.editor.tab_space_number")->value().toInt());
     editor->textEditor->setFontFamily(m_settings->settings->option("base.font.family")->value().toString());
+    editor->textEditor->setModified(false);
     setFontSizeWithConfig(editor);
 
     connect(editor->textEditor, &TextEditor::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);

@@ -65,7 +65,6 @@ TextEditor::TextEditor(QPlainTextEdit *parent)
 {
     viewport()->installEventFilter(this);
 
-
     // Don't draw frame around editor widget.
     setFrameShape(QFrame::NoFrame);
     setFocusPolicy(Qt::StrongFocus);
