@@ -8,7 +8,7 @@
     },
     "text-styles": {
         "Normal" : {
-            "text-color" : "#769099",
+            "text-color" : "#93A1A1",
             "selected-bg-color" : "#0B5366",
             "selected-text-color" : "#cfcfc2",
             "bold" : false,

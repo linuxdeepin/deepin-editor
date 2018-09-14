@@ -65,10 +65,13 @@ TextEditor::TextEditor(QPlainTextEdit *parent)
 {
     viewport()->installEventFilter(this);
 
+
     // Don't draw frame around editor widget.
     setFrameShape(QFrame::NoFrame);
-
     setFocusPolicy(Qt::StrongFocus);
+
+    // set the document margin.
+    document()->setDocumentMargin(0);
 
     // Init widgets.
     lineNumberArea = new LineNumberArea(this);
@@ -2089,7 +2092,7 @@ void TextEditor::setModified(bool modified)
 void TextEditor::copySelectedText()
 {
     // QClipboard *clipboard = QApplication::clipboard();
-    // clipboard->setText(textCursor().selectedText());
+    // clipboard->setText(textCursor().selectedText().toUtf8());
 
     QPlainTextEdit::copy();
 }
@@ -2278,7 +2281,7 @@ void TextEditor::cutWordUnderCursor()
 
 QString TextEditor::getWordAtCursor()
 {
-    if (toPlainText() == "") {
+    if (toPlainText().isEmpty()) {
         return "";
     } else {
         QTextCursor cursor = textCursor();
@@ -2301,7 +2304,7 @@ QString TextEditor::getWordAtCursor()
 
 QString TextEditor::getWordAtMouse()
 {
-    if (toPlainText() == "") {
+    if (toPlainText().isEmpty()) {
         return "";
     } else {
         auto pos = mapFromGlobal(QCursor::pos());

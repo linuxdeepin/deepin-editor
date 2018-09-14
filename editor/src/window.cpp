@@ -711,7 +711,7 @@ void Window::remberPositionSave(bool notify)
 
 void Window::remberPositionRestore()
 {
-    if (m_remberPositionFilePath != "") {
+    if (!m_remberPositionFilePath.isEmpty()) {
         if (m_editorMap.contains(m_remberPositionFilePath)) {
             QString filepath = m_remberPositionFilePath;
             int scrollOffset = m_remberPositionScrollOffset;
@@ -722,11 +722,9 @@ void Window::remberPositionRestore()
 
             activeTab(m_tabbar->getTabIndex(filepath));
 
-            QTimer::singleShot(
-                0, this,
-                [=] () {
-                    m_editorMap.value(filepath)->textEditor->scrollToLine(scrollOffset, row, column);
-                });
+            QTimer::singleShot(0, this, [=] {
+                m_editorMap.value(filepath)->textEditor->scrollToLine(scrollOffset, row, column);
+            });
         } else {
             if (Utils::fileExists(m_remberPositionFilePath)) {
                 QString filepath = m_remberPositionFilePath;
@@ -738,11 +736,9 @@ void Window::remberPositionRestore()
 
                 addTab(filepath);
 
-                QTimer::singleShot(
-                    0, this,
-                    [=] () {
-                        m_editorMap.value(filepath)->textEditor->scrollToLine(scrollOffset, row, column);
-                    });
+                QTimer::singleShot(0, this, [=] {
+                    m_editorMap.value(filepath)->textEditor->scrollToLine(scrollOffset, row, column);
+                });
             } else {
                 // showNotify(tr("记录位置的文件已经不存在了"));
             }
@@ -752,14 +748,14 @@ void Window::remberPositionRestore()
 
 void Window::updateFont(const QString &fontName)
 {
-    foreach (Editor *editor, m_editorMap.values()) {
+    for (Editor *editor : m_editorMap.values()) {
         editor->textEditor->setFontFamily(fontName);
     }
 }
 
 void Window::updateFontSize(int size)
 {
-    foreach (Editor *editor, m_editorMap.values()) {
+    for (Editor *editor : m_editorMap.values()) {
         editor->textEditor->setFontSize(size);
     }
 
@@ -768,7 +764,7 @@ void Window::updateFontSize(int size)
 
 void Window::updateTabSpaceNumber(int number)
 {
-    foreach (Editor *editor, m_editorMap.values()) {
+    for (Editor *editor : m_editorMap.values()) {
         editor->textEditor->setTabSpaceNumber(number);
     }
 }
@@ -892,9 +888,9 @@ int Window::getBlankFileIndex()
 {
     // Get blank tab index list.
     QList<int> tabIndexes;
-    for (int i = 0; i < m_tabbar->tabbar->tabFiles.size(); i++) {
+    for (int i = 0; i < m_tabbar->tabbar->tabFiles.size(); ++i) {
         if (QFileInfo(m_tabbar->tabbar->tabFiles[i]).dir().absolutePath() == m_blankFileDir) {
-            auto tabNameList = m_tabbar->tabbar->tabText(i).split("Blank document ");
+            const QStringList &tabNameList = m_tabbar->tabbar->tabText(i).split(tr("Blank document"));
             if (tabNameList.size() > 1) {
                 tabIndexes << tabNameList[1].toInt();
             }
@@ -921,8 +917,10 @@ int Window::getBlankFileIndex()
 void Window::addBlankTab(const QString &blankFile)
 {
     QString blankTabPath;
+
     if (blankFile.isEmpty()) {
-        blankTabPath = QDir(m_blankFileDir).filePath(QString("blank_file_%1").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss-zzz")));
+        const QString &fileName = QString("blank_file_%1").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd_hh-mm-ss-zzz"));
+        blankTabPath = QDir(m_blankFileDir).filePath(fileName);
 
         if (!Utils::fileExists(blankTabPath)) {
             QDir().mkpath(m_blankFileDir);
@@ -938,7 +936,7 @@ void Window::addBlankTab(const QString &blankFile)
         blankTabPath = blankFile;
     }
 
-    auto blankFileIndex = getBlankFileIndex();
+    int blankFileIndex = getBlankFileIndex();
 
     m_tabbar->addTab(blankTabPath, tr("Blank document %1").arg(blankFileIndex));
     Editor *editor = createEditor();
@@ -949,7 +947,6 @@ void Window::addBlankTab(const QString &blankFile)
     }
 
     m_editorMap[blankTabPath] = editor;
-
     showNewEditor(editor);
 }
 
