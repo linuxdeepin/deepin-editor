@@ -787,16 +787,50 @@ void Window::resizeEvent(QResizeEvent*)
 
 void Window::closeEvent(QCloseEvent *e)
 {
-    QDir blankDir(m_blankFileDir);
-    QFileInfoList blankFiles = blankDir.entryInfoList(QDir::Files);
-
-    // save blank content.
-    for(Editor *editor : m_editorMap) {
-        bool isBlankFile = QFileInfo(editor->textEditor->filepath).dir().absolutePath() == m_blankFileDir;
-        if (isBlankFile) {
+    QList<Editor *> needSaveList;
+    for (Editor *editor : m_editorMap) {
+        // save all the draft documents.
+        if (QFileInfo(editor->textEditor->filepath).dir().absolutePath() == m_blankFileDir) {
             editor->saveFile();
+            continue;
+        }
+
+        if (editor->textEditor->document()->isModified()) {
+            needSaveList << editor;
         }
     }
+
+    if (!needSaveList.isEmpty()) {
+        DDialog *dialog = new DDialog(tr("Save File"), tr("Do you want to save all the files?"), this);
+        dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
+        dialog->setIcon(QIcon(Utils::getQrcPath("logo_48.svg")));
+        dialog->addButton(QString(tr("Discard")), false, DDialog::ButtonNormal);
+        dialog->addButton(QString(tr("Save All")), true, DDialog::ButtonNormal);
+
+        connect(dialog, &DDialog::buttonClicked, this, [=] (int index) {
+            dialog->hide();
+
+            switch (index) {
+            case 0:
+                // dont't save.
+                break;
+            case 1:
+                // save all the files.
+                for (Editor *editor : needSaveList) {
+                    editor->saveFile();
+                }
+                break;
+            }
+        });
+
+        if (dialog->exec() == -1) {
+            return;
+        }
+    }
+
+    // save all draft documents.
+    QDir blankDir(m_blankFileDir);
+    QFileInfoList blankFiles = blankDir.entryInfoList(QDir::Files);
 
     // clear blank files that have no content.
     for (const QFileInfo &blankFile : blankFiles) {
