@@ -81,8 +81,6 @@ void ThemeItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
 
     // draw background.
     QPainterPath backgroundPath;
-    // backgroundPath.addRoundedRect(QRect(rect.x(), rect.y() + paddingY, rect.width(), rect.height() - paddingY * 2),
-                                  // m_frameRadius, m_frameRadius);
     backgroundPath.addRoundedRect(QRect(rect.x() + paddingX, rect.y() + paddingY, rect.width() - paddingX * 2, rect.height() - paddingY * 2),
                              m_frameRadius, m_frameRadius);
 

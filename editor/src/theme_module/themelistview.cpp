@@ -20,6 +20,8 @@
 #include "themelistview.h"
 #include "themelistmodel.h"
 #include <QScrollBar>
+#include <QApplication>
+#include <QEvent>
 
 ThemeListView::ThemeListView(QWidget *parent)
     : QListView(parent)
@@ -29,11 +31,24 @@ ThemeListView::ThemeListView(QWidget *parent)
     setVerticalScrollMode(ScrollPerPixel);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setViewportMargins(0, 0, -verticalScrollBar()->sizeHint().width(), 0);
+
+    connect(verticalScrollBar(), &QScrollBar::rangeChanged, this, &ThemeListView::adjustScrollbarMargins);
 }
 
 ThemeListView::~ThemeListView()
 {
+}
+
+void ThemeListView::adjustScrollbarMargins()
+{
+    QEvent event(QEvent::LayoutRequest);
+    QApplication::sendEvent(this, &event);
+
+    if (!verticalScrollBar()->visibleRegion().isEmpty()) {
+        setViewportMargins(0, 0, -verticalScrollBar()->sizeHint().width(), 0);
+    } else {
+        setViewportMargins(0, 0, 0, 0);
+    }
 }
 
 bool ThemeListView::eventFilter(QObject *, QEvent *event)

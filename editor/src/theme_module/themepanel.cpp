@@ -96,6 +96,7 @@ void ThemePanel::popup()
     animation->setEndValue(QRect(rect.x(), rect.y(), 250, rect.height()));
     animation->start();
 
+    connect(animation, &QPropertyAnimation::valueChanged, [=] { m_themeView->adjustScrollbarMargins(); });
     connect(animation, &QPropertyAnimation::finished, this, &ThemePanel::popupFinished);
     connect(animation, &QPropertyAnimation::finished, animation, &QPropertyAnimation::deleteLater);
 }

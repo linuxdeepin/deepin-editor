@@ -31,6 +31,8 @@ public:
     ThemeListView(QWidget *parent = nullptr);
     ~ThemeListView();
 
+    void adjustScrollbarMargins();
+
 signals:
     void themeChanged(const QString &path);
 
