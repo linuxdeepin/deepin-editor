@@ -79,6 +79,7 @@ public:
     void openNewlineBelow();
     void swapLineDown();
     void swapLineUp();
+    void moveLineDownUp(bool up);
     void scrollLineUp();
     void scrollLineDown();
     void scrollUp();
