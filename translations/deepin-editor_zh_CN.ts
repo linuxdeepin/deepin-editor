@@ -159,7 +159,7 @@
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="48"/>
         <source>Go to line</source>
-        <translation type="unfinished"/>
+        <translation>转到行</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="49"/>
@@ -189,7 +189,7 @@
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="54"/>
         <source>Editor</source>
-        <translation type="unfinished"/>
+        <translation>编辑</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="55"/>
@@ -389,12 +389,12 @@
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="94"/>
         <source>Copy line</source>
-        <translation type="unfinished"/>
+        <translation>复制行</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="95"/>
         <source>Cut line</source>
-        <translation type="unfinished"/>
+        <translation>剪切行</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="96"/>
@@ -409,7 +409,7 @@
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="98"/>
         <source>Toggle comment</source>
-        <translation type="unfinished"/>
+        <translation>切换注释</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="99"/>
@@ -424,7 +424,7 @@
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="101"/>
         <source>Advanced</source>
-        <translation type="unfinished"/>
+        <translation>高级设置</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="102"/>
@@ -485,7 +485,7 @@
     <message>
         <location filename="../editor/src/settings.cpp" line="92"/>
         <source>Normal</source>
-        <translation type="unfinished"/>
+        <translation>正常窗口</translation>
     </message>
     <message>
         <location filename="../editor/src/settings.cpp" line="92"/>
@@ -508,7 +508,7 @@
     <message>
         <location filename="../editor/src/tabwidget.cpp" line="219"/>
         <source>Close other tabs</source>
-        <translation type="unfinished"/>
+        <translation>关闭所有标签页</translation>
     </message>
 </context>
 <context>

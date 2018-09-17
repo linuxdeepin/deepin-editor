@@ -48,158 +48,158 @@
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="24"/>
         <source>Basic</source>
-        <translation type="unfinished"/>
+        <translation>Основной</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="25"/>
         <source>Font Style</source>
-        <translation type="unfinished"/>
+        <translation>Стиль Шрифта</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="26"/>
         <source>Font</source>
-        <translation type="unfinished"/>
+        <translation>Шрифт</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="27"/>
         <source>Font Size</source>
-        <translation type="unfinished"/>
+        <translation>Размер Шрифта</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="30"/>
         <location filename="../editor/src/settingsdialog.cpp" line="31"/>
         <source>Keymap</source>
-        <translation type="unfinished"/>
+        <translation>Раскладка</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="29"/>
         <source>Shortcuts</source>
-        <translation type="unfinished"/>
+        <translation>Горячие Клавиши</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="32"/>
         <source>New tab</source>
-        <translation type="unfinished"/>
+        <translation>Новая вкладка</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="33"/>
         <source>New window</source>
-        <translation type="unfinished"/>
+        <translation>Новое окно</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="34"/>
         <source>Save</source>
-        <translation type="unfinished"/>
+        <translation>Сохранить</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="35"/>
         <source>Save as</source>
-        <translation type="unfinished"/>
+        <translation>Сохранить как</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="36"/>
         <source>Next tab</source>
-        <translation type="unfinished"/>
+        <translation>Следующая вкладка</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="37"/>
         <source>Previous tab</source>
-        <translation type="unfinished"/>
+        <translation>Предыдущая вкладка</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="38"/>
         <source>Close tab</source>
-        <translation type="unfinished"/>
+        <translation>Закрыть вкладку</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="39"/>
         <source>Close other tabs</source>
-        <translation type="unfinished"/>
+        <translation>Закрыть другие вкладки</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="40"/>
         <source>Restore tab</source>
-        <translation type="unfinished"/>
+        <translation>Восстановить вкладки</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="41"/>
         <source>Open file</source>
-        <translation type="unfinished"/>
+        <translation>Открыть файл</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="42"/>
         <source>Increment font size</source>
-        <translation type="unfinished"/>
+        <translation>Увеличить размер шрифта</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="43"/>
         <source>Decrement font size</source>
-        <translation type="unfinished"/>
+        <translation>Уменьшить размер шрифта</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="44"/>
         <source>Reset font size</source>
-        <translation type="unfinished"/>
+        <translation>Сбросить размер шрифта</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="45"/>
         <source>Toggle fullscreen</source>
-        <translation type="unfinished"/>
+        <translation>Включить полноэкранный режим</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="46"/>
         <source>Find</source>
-        <translation type="unfinished"/>
+        <translation>Найти</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="47"/>
         <source>Replace</source>
-        <translation type="unfinished"/>
+        <translation>Заменить</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="48"/>
         <source>Go to line</source>
-        <translation type="unfinished"/>
+        <translation>Перейти к строке</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="49"/>
         <source>Save cursor position</source>
-        <translation type="unfinished"/>
+        <translation>Сохранить позицию курсора</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="50"/>
         <source>Reset cursor position</source>
-        <translation type="unfinished"/>
+        <translation>Сбросить позицию курсора</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="51"/>
         <source>Exit</source>
-        <translation type="unfinished"/>
+        <translation>Выйти</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="52"/>
         <source>Display shortcuts</source>
-        <translation type="unfinished"/>
+        <translation>Показать горячие клавиши</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="53"/>
         <source>Print</source>
-        <translation type="unfinished"/>
+        <translation>Печать</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="54"/>
         <source>Editor</source>
-        <translation type="unfinished"/>
+        <translation>Редактор</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="55"/>
         <source>Increase indent</source>
-        <translation type="unfinished"/>
+        <translation>Показать ярлыки</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="56"/>
         <source>Decrease indent</source>
-        <translation type="unfinished"/>
+        <translation>Уменьшить отступ</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="57"/>
@@ -209,12 +209,12 @@
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="58"/>
         <source>Backward char</source>
-        <translation type="unfinished"/>
+        <translation>Начальный символ</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="59"/>
         <source>Forward word</source>
-        <translation type="unfinished"/>
+        <translation>Начальное слово</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="60"/>

@@ -48,393 +48,393 @@
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="24"/>
         <source>Basic</source>
-        <translation type="unfinished"/>
+        <translation>Temel</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="25"/>
         <source>Font Style</source>
-        <translation type="unfinished"/>
+        <translation>Yazı Biçemi</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="26"/>
         <source>Font</source>
-        <translation type="unfinished"/>
+        <translation>Yazı Türü</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="27"/>
         <source>Font Size</source>
-        <translation type="unfinished"/>
+        <translation>Yazı Boyutu</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="30"/>
         <location filename="../editor/src/settingsdialog.cpp" line="31"/>
         <source>Keymap</source>
-        <translation type="unfinished"/>
+        <translation>Tuş Eşleşmesi</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="29"/>
         <source>Shortcuts</source>
-        <translation type="unfinished"/>
+        <translation>Kısayollar</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="32"/>
         <source>New tab</source>
-        <translation type="unfinished"/>
+        <translation>Yeni sekme</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="33"/>
         <source>New window</source>
-        <translation type="unfinished"/>
+        <translation>Yeni pencere</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="34"/>
         <source>Save</source>
-        <translation type="unfinished"/>
+        <translation>Kaydet</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="35"/>
         <source>Save as</source>
-        <translation type="unfinished"/>
+        <translation>Farklı kaydet</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="36"/>
         <source>Next tab</source>
-        <translation type="unfinished"/>
+        <translation>Sonraki sekme</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="37"/>
         <source>Previous tab</source>
-        <translation type="unfinished"/>
+        <translation>Önceki sekme</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="38"/>
         <source>Close tab</source>
-        <translation type="unfinished"/>
+        <translation>Sekmeyi kapat</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="39"/>
         <source>Close other tabs</source>
-        <translation type="unfinished"/>
+        <translation>Diğer sekmeleri kapat</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="40"/>
         <source>Restore tab</source>
-        <translation type="unfinished"/>
+        <translation>Sekmeyi geri yükle</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="41"/>
         <source>Open file</source>
-        <translation type="unfinished"/>
+        <translation>Dosya aç</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="42"/>
         <source>Increment font size</source>
-        <translation type="unfinished"/>
+        <translation>Yazı boyutunu büyüt</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="43"/>
         <source>Decrement font size</source>
-        <translation type="unfinished"/>
+        <translation>Yazı boyutunu küçült</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="44"/>
         <source>Reset font size</source>
-        <translation type="unfinished"/>
+        <translation>Yazı boyutunu sıfırla</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="45"/>
         <source>Toggle fullscreen</source>
-        <translation type="unfinished"/>
+        <translation>Tam ekranı aç/kapat</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="46"/>
         <source>Find</source>
-        <translation type="unfinished"/>
+        <translation>Bul</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="47"/>
         <source>Replace</source>
-        <translation type="unfinished"/>
+        <translation>Değiştir</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="48"/>
         <source>Go to line</source>
-        <translation type="unfinished"/>
+        <translation>Şu satıra git</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="49"/>
         <source>Save cursor position</source>
-        <translation type="unfinished"/>
+        <translation>İmleç konumunu kaydet</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="50"/>
         <source>Reset cursor position</source>
-        <translation type="unfinished"/>
+        <translation>İmleç konumunu sıfırla</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="51"/>
         <source>Exit</source>
-        <translation type="unfinished"/>
+        <translation>Çık</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="52"/>
         <source>Display shortcuts</source>
-        <translation type="unfinished"/>
+        <translation>Kısayollar görüntüle</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="53"/>
         <source>Print</source>
-        <translation type="unfinished"/>
+        <translation>Yazdır</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="54"/>
         <source>Editor</source>
-        <translation type="unfinished"/>
+        <translation>Düzenleyici</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="55"/>
         <source>Increase indent</source>
-        <translation type="unfinished"/>
+        <translation>Girintiyi arttır</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="56"/>
         <source>Decrease indent</source>
-        <translation type="unfinished"/>
+        <translation>Girintiyi azalt</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="57"/>
         <source>Forward char</source>
-        <translation type="unfinished"/>
+        <translation>Sonraki karakter</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="58"/>
         <source>Backward char</source>
-        <translation type="unfinished"/>
+        <translation>Önceki karakter</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="59"/>
         <source>Forward word</source>
-        <translation type="unfinished"/>
+        <translation>Sonraki sözcük</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="60"/>
         <source>Backward word</source>
-        <translation type="unfinished"/>
+        <translation>Önceki sözcük</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="61"/>
         <source>Next line</source>
-        <translation type="unfinished"/>
+        <translation>Sonraki satır</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="62"/>
         <source>Previous line</source>
-        <translation type="unfinished"/>
+        <translation>Önceki satır</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="63"/>
         <source>New line</source>
-        <translation type="unfinished"/>
+        <translation>Yeni satır</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="64"/>
         <source>New line above</source>
-        <translation type="unfinished"/>
+        <translation>Üste yeni satır</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="65"/>
         <source>New line below</source>
-        <translation type="unfinished"/>
+        <translation>Alta yeni satır</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="66"/>
         <source>Duplicate line</source>
-        <translation type="unfinished"/>
+        <translation>Satırı kopyala</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="67"/>
         <source>Delete to end of line</source>
-        <translation type="unfinished"/>
+        <translation>Satır sonuna kadar sil</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="68"/>
         <source>Delete current line</source>
-        <translation type="unfinished"/>
+        <translation>Geçerli satırı sil</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="69"/>
         <source>Swap line up</source>
-        <translation type="unfinished"/>
+        <translation>Üstteki satır ile değiştir</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="70"/>
         <source>Swap line down</source>
-        <translation type="unfinished"/>
+        <translation>Alttaki satır ile değiştir</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="71"/>
         <source>Scroll up one line</source>
-        <translation type="unfinished"/>
+        <translation>Bir satır yukarı kaydır</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="72"/>
         <source>Scroll down one line</source>
-        <translation type="unfinished"/>
+        <translation>Bir satır aşağı kaydır</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="73"/>
         <source>Page up</source>
-        <translation type="unfinished"/>
+        <translation>Sonraki sayfa</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="74"/>
         <source>Page down</source>
-        <translation type="unfinished"/>
+        <translation>Önceki sayfa</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="75"/>
         <source>Move to end of line</source>
-        <translation type="unfinished"/>
+        <translation>Satır sonuna git</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="76"/>
         <source>Move to start of line</source>
-        <translation type="unfinished"/>
+        <translation>Satır başına git</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="77"/>
         <source>Move to end of text</source>
-        <translation type="unfinished"/>
+        <translation>Metin sonuna git</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="78"/>
         <source>Move to start of text</source>
-        <translation type="unfinished"/>
+        <translation>Metin başına git</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="79"/>
         <source>Move to line indentation</source>
-        <translation type="unfinished"/>
+        <translation>Satır girintisine git</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="80"/>
         <source>Upper case</source>
-        <translation type="unfinished"/>
+        <translation>Büyük harf</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="81"/>
         <source>Lower case</source>
-        <translation type="unfinished"/>
+        <translation>Küçük harf</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="82"/>
         <source>Capitalize</source>
-        <translation type="unfinished"/>
+        <translation>İlk harfleri büyüt</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="83"/>
         <source>Delete backward word</source>
-        <translation type="unfinished"/>
+        <translation>Önceki sözcüğü sil</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="84"/>
         <source>Delete forward word</source>
-        <translation type="unfinished"/>
+        <translation>Sonraki sözcüğü sil</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="85"/>
         <source>Forward over a pair</source>
-        <translation type="unfinished"/>
+        <translation>Sonraki çift</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="86"/>
         <source>Backward over a pair</source>
-        <translation type="unfinished"/>
+        <translation>Önceki çift</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="87"/>
         <source>Select all</source>
-        <translation type="unfinished"/>
+        <translation>Tümünü seç</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="88"/>
         <source>Copy</source>
-        <translation type="unfinished"/>
+        <translation>Kopyala</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="89"/>
         <source>Cut</source>
-        <translation type="unfinished"/>
+        <translation>Kes</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="90"/>
         <source>Paste</source>
-        <translation type="unfinished"/>
+        <translation>Yapıştır</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="91"/>
         <source>Transpose char</source>
-        <translation type="unfinished"/>
+        <translation>Karakteri dönüştür</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="92"/>
         <source>Mark</source>
-        <translation type="unfinished"/>
+        <translation>İşaretle</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="93"/>
         <source>Unmark</source>
-        <translation type="unfinished"/>
+        <translation>İşareti kaldır</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="94"/>
         <source>Copy line</source>
-        <translation type="unfinished"/>
+        <translation>Satırı kopyala</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="95"/>
         <source>Cut line</source>
-        <translation type="unfinished"/>
+        <translation>Satırı kes</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="96"/>
         <source>Merge lines</source>
-        <translation type="unfinished"/>
+        <translation>Satırları birleştir</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="97"/>
         <source>Read-Only mode</source>
-        <translation type="unfinished"/>
+        <translation>Salt okunur kip</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="98"/>
         <source>Toggle comment</source>
-        <translation type="unfinished"/>
+        <translation>Yorumu aç/kapat</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="99"/>
         <source>Undo</source>
-        <translation type="unfinished"/>
+        <translation>Geri al</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="100"/>
         <source>Redo</source>
-        <translation type="unfinished"/>
+        <translation>Yinele</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="101"/>
         <source>Advanced</source>
-        <translation type="unfinished"/>
+        <translation>Gelişmiş</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="102"/>
         <source>Window size</source>
-        <translation type="unfinished"/>
+        <translation>Pencere boyutu</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="103"/>
         <source>Tab space</source>
-        <translation type="unfinished"/>
+        <translation>Sekme boşluğu</translation>
     </message>
 </context>
 <context>
@@ -475,27 +475,27 @@
     <message>
         <location filename="../editor/src/settings.cpp" line="81"/>
         <source>Standard</source>
-        <translation type="unfinished"/>
+        <translation>Standart</translation>
     </message>
     <message>
         <location filename="../editor/src/settings.cpp" line="81"/>
         <source>Customize</source>
-        <translation type="unfinished"/>
+        <translation>Özelleştir</translation>
     </message>
     <message>
         <location filename="../editor/src/settings.cpp" line="92"/>
         <source>Normal</source>
-        <translation type="unfinished"/>
+        <translation>Normal</translation>
     </message>
     <message>
         <location filename="../editor/src/settings.cpp" line="92"/>
         <source>Maximum</source>
-        <translation type="unfinished"/>
+        <translation>En fazla</translation>
     </message>
     <message>
         <location filename="../editor/src/settings.cpp" line="92"/>
         <source>Fullscreen</source>
-        <translation type="unfinished"/>
+        <translation>Tam ekran</translation>
     </message>
 </context>
 <context>
@@ -503,12 +503,12 @@
     <message>
         <location filename="../editor/src/tabwidget.cpp" line="218"/>
         <source>Close tab</source>
-        <translation type="unfinished"/>
+        <translation>Sekmeyi kapat</translation>
     </message>
     <message>
         <location filename="../editor/src/tabwidget.cpp" line="219"/>
         <source>Close other tabs</source>
-        <translation type="unfinished"/>
+        <translation>Diğer sekmeleri kapat</translation>
     </message>
 </context>
 <context>
@@ -670,7 +670,7 @@
     <message>
         <location filename="../editor/src/window.cpp" line="171"/>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Ayarlar</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="290"/>
@@ -683,7 +683,7 @@
     <message>
         <location filename="../editor/src/window.cpp" line="290"/>
         <source>Do you want to save this file?</source>
-        <translation type="unfinished"/>
+        <translation>Bu dosyayı kaydetmek ister misiniz?</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="413"/>
@@ -725,12 +725,12 @@
     <message>
         <location filename="../editor/src/window.cpp" line="804"/>
         <source>Do you want to save all the files?</source>
-        <translation type="unfinished"/>
+        <translation>Tüm dosyaları kaydetmek ister misiniz?</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="808"/>
         <source>Save All</source>
-        <translation type="unfinished"/>
+        <translation>Tümünü Kaydet</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="977"/>
