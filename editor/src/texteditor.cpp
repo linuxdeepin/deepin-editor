@@ -1567,6 +1567,23 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
     }
 }
 
+void TextEditor::wheelEvent(QWheelEvent *e)
+{
+    if (e->modifiers() & Qt::ControlModifier) {
+        const int deltaY = e->angleDelta().y();
+
+        if (deltaY < 0) {
+            qobject_cast<Window *>(this->window())->decrementFontSize();
+        } else {
+            qobject_cast<Window *>(this->window())->incrementFontSize();
+        }
+
+        return;
+    }
+
+    QPlainTextEdit::wheelEvent(e);
+}
+
 void TextEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
     // Init.

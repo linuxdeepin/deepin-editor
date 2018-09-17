@@ -121,6 +121,7 @@ public:
     void renderAllSelections();
 
     void keyPressEvent(QKeyEvent *e);
+    void wheelEvent(QWheelEvent *e);
     bool eventFilter(QObject *, QEvent *event);
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     void contextMenuEvent(QContextMenuEvent *event);
