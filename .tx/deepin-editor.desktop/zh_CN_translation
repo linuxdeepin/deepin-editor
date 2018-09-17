@@ -8,7 +8,10 @@ MimeType=text/english;text/plain;text/x-makefile;text/x-c++hdr;text/x-c++src;tex
 Name=Deepin Editor
 Type=Application
 StartupNotify=false
-Comment[zh_CN] = 简单好用的深度编辑器
-Icon[zh_CN] = 深度编辑器
-Name[zh_CN] = 深度编辑器
-GenericName[zh_CN] = 编辑器
+
+
+# Translations
+Comment[zh_CN]=简单好用的深度编辑器
+Icon[zh_CN]=深度编辑器
+Name[zh_CN]=深度编辑器
+GenericName[zh_CN]=编辑器

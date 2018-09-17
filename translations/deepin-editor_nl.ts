@@ -48,393 +48,400 @@
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="24"/>
         <source>Basic</source>
-        <translation type="unfinished"/>
+        <translation>Basis</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="25"/>
         <source>Font Style</source>
-        <translation type="unfinished"/>
+        <translation>Lettertypestijl</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="26"/>
         <source>Font</source>
-        <translation type="unfinished"/>
+        <translation>Lettertype</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="27"/>
         <source>Font Size</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../editor/src/settingsdialog.cpp" line="30"/>
-        <location filename="../editor/src/settingsdialog.cpp" line="31"/>
-        <source>Keymap</source>
-        <translation type="unfinished"/>
+        <translation>Lettertypegrootte</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="29"/>
+        <location filename="../editor/src/settingsdialog.cpp" line="30"/>
+        <source>Keymap</source>
+        <translation>Sneltoetsoverzicht</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/settingsdialog.cpp" line="28"/>
         <source>Shortcuts</source>
+        <translation>Sneltoetsen</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/settingsdialog.cpp" line="31"/>
+        <location filename="../editor/src/settingsdialog.cpp" line="102"/>
+        <location filename="../editor/src/window.cpp" line="448"/>
+        <source>Window</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="32"/>
         <source>New tab</source>
-        <translation type="unfinished"/>
+        <translation>Nieuw tabblad</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="33"/>
         <source>New window</source>
-        <translation type="unfinished"/>
+        <translation>Nieuw venster</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="34"/>
         <source>Save</source>
-        <translation type="unfinished"/>
+        <translation>Opslaan</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="35"/>
         <source>Save as</source>
-        <translation type="unfinished"/>
+        <translation>Opslaan als</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="36"/>
         <source>Next tab</source>
-        <translation type="unfinished"/>
+        <translation>Volgend tabblad</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="37"/>
         <source>Previous tab</source>
-        <translation type="unfinished"/>
+        <translation>Vorig tabblad</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="38"/>
         <source>Close tab</source>
-        <translation type="unfinished"/>
+        <translation>Tabblad sluiten</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="39"/>
         <source>Close other tabs</source>
-        <translation type="unfinished"/>
+        <translation>Overige tabbladen sluiten</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="40"/>
         <source>Restore tab</source>
-        <translation type="unfinished"/>
+        <translation>Tabblad herstellen</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="41"/>
         <source>Open file</source>
-        <translation type="unfinished"/>
+        <translation>Bestand openen</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="42"/>
         <source>Increment font size</source>
-        <translation type="unfinished"/>
+        <translation>Lettertype vergroten</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="43"/>
         <source>Decrement font size</source>
-        <translation type="unfinished"/>
+        <translation>Lettertype verkleinen</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="44"/>
         <source>Reset font size</source>
-        <translation type="unfinished"/>
+        <translation>Lettergrootte herstellen</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="45"/>
         <source>Toggle fullscreen</source>
-        <translation type="unfinished"/>
+        <translation>Volledig scherm in-/uitschakelen</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="46"/>
         <source>Find</source>
-        <translation type="unfinished"/>
+        <translation>Zoeken</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="47"/>
         <source>Replace</source>
-        <translation type="unfinished"/>
+        <translation>Vervangen</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="48"/>
         <source>Go to line</source>
-        <translation type="unfinished"/>
+        <translation>Ga naar regel</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="49"/>
         <source>Save cursor position</source>
-        <translation type="unfinished"/>
+        <translation>Cursorpositie opslaan</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="50"/>
         <source>Reset cursor position</source>
-        <translation type="unfinished"/>
+        <translation>Cursorpositie herstellen</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="51"/>
         <source>Exit</source>
-        <translation type="unfinished"/>
+        <translation>Afsluiten</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="52"/>
         <source>Display shortcuts</source>
-        <translation type="unfinished"/>
+        <translation>Sneltoetsen tonen</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="53"/>
         <source>Print</source>
-        <translation type="unfinished"/>
+        <translation>Afdrukken</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="54"/>
         <source>Editor</source>
-        <translation type="unfinished"/>
+        <translation>Bewerker</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="55"/>
         <source>Increase indent</source>
-        <translation type="unfinished"/>
+        <translation>Inspringing vergroten</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="56"/>
         <source>Decrease indent</source>
-        <translation type="unfinished"/>
+        <translation>Inspringing verkleinen</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="57"/>
         <source>Forward char</source>
-        <translation type="unfinished"/>
+        <translation>Teken vooruit</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="58"/>
         <source>Backward char</source>
-        <translation type="unfinished"/>
+        <translation>Teken achteruit</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="59"/>
         <source>Forward word</source>
-        <translation type="unfinished"/>
+        <translation>Woord vooruit</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="60"/>
         <source>Backward word</source>
-        <translation type="unfinished"/>
+        <translation>Woord achteruit</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="61"/>
         <source>Next line</source>
-        <translation type="unfinished"/>
+        <translation>Volgende regel</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="62"/>
         <source>Previous line</source>
-        <translation type="unfinished"/>
+        <translation>Vorige regel</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="63"/>
         <source>New line</source>
-        <translation type="unfinished"/>
+        <translation>Nieuwe regel</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="64"/>
         <source>New line above</source>
-        <translation type="unfinished"/>
+        <translation>Nieuwe regel erboven</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="65"/>
         <source>New line below</source>
-        <translation type="unfinished"/>
+        <translation>Nieuwe regel eronder</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="66"/>
         <source>Duplicate line</source>
-        <translation type="unfinished"/>
+        <translation>Regel dupliceren</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="67"/>
         <source>Delete to end of line</source>
-        <translation type="unfinished"/>
+        <translation>Wissen tot aan einde van regel</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="68"/>
         <source>Delete current line</source>
-        <translation type="unfinished"/>
+        <translation>Huidige regel wissen</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="69"/>
         <source>Swap line up</source>
-        <translation type="unfinished"/>
+        <translation>Regel omhoog verwisselen</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="70"/>
         <source>Swap line down</source>
-        <translation type="unfinished"/>
+        <translation>Regel omlaag verwisselen</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="71"/>
         <source>Scroll up one line</source>
-        <translation type="unfinished"/>
+        <translation>Eén regel omhoog scrollen</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="72"/>
         <source>Scroll down one line</source>
-        <translation type="unfinished"/>
+        <translation>Eén regel omlaag scrollen</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="73"/>
         <source>Page up</source>
-        <translation type="unfinished"/>
+        <translation>Pagina omhoog</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="74"/>
         <source>Page down</source>
-        <translation type="unfinished"/>
+        <translation>Pagina omlaag</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="75"/>
         <source>Move to end of line</source>
-        <translation type="unfinished"/>
+        <translation>Verplaatsen naar einde van regel</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="76"/>
         <source>Move to start of line</source>
-        <translation type="unfinished"/>
+        <translation>Verplaatsen naar begin van regel</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="77"/>
         <source>Move to end of text</source>
-        <translation type="unfinished"/>
+        <translation>Verplaatsen naar einde van tekst</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="78"/>
         <source>Move to start of text</source>
-        <translation type="unfinished"/>
+        <translation>Verplaatsen naar begin van tekst</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="79"/>
         <source>Move to line indentation</source>
-        <translation type="unfinished"/>
+        <translation>Verplaatsen naar regelinspringing</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="80"/>
         <source>Upper case</source>
-        <translation type="unfinished"/>
+        <translation>Hoofdletters</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="81"/>
         <source>Lower case</source>
-        <translation type="unfinished"/>
+        <translation>Kleine letters</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="82"/>
         <source>Capitalize</source>
-        <translation type="unfinished"/>
+        <translation>Omzetten naar hoofdletters</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="83"/>
         <source>Delete backward word</source>
-        <translation type="unfinished"/>
+        <translation>Woord achterwaarts wissen</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="84"/>
         <source>Delete forward word</source>
-        <translation type="unfinished"/>
+        <translation>Woord voorwaarts wissen</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="85"/>
         <source>Forward over a pair</source>
-        <translation type="unfinished"/>
+        <translation>Voorwaarts over een stel</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="86"/>
         <source>Backward over a pair</source>
-        <translation type="unfinished"/>
+        <translation>Achterwaarts over een stel</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="87"/>
         <source>Select all</source>
-        <translation type="unfinished"/>
+        <translation>Alles selecteren</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="88"/>
         <source>Copy</source>
-        <translation type="unfinished"/>
+        <translation>Kopiëren</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="89"/>
         <source>Cut</source>
-        <translation type="unfinished"/>
+        <translation>Knippen</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="90"/>
         <source>Paste</source>
-        <translation type="unfinished"/>
+        <translation>Plakken</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="91"/>
         <source>Transpose char</source>
-        <translation type="unfinished"/>
+        <translation>Teken omzetten</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="92"/>
         <source>Mark</source>
-        <translation type="unfinished"/>
+        <translation>Markeren</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="93"/>
         <source>Unmark</source>
-        <translation type="unfinished"/>
+        <translation>De-markeren</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="94"/>
         <source>Copy line</source>
-        <translation type="unfinished"/>
+        <translation>Regel kopiëren</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="95"/>
         <source>Cut line</source>
-        <translation type="unfinished"/>
+        <translation>Regel knippen</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="96"/>
         <source>Merge lines</source>
-        <translation type="unfinished"/>
+        <translation>Regels samenvoegen</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="97"/>
         <source>Read-Only mode</source>
-        <translation type="unfinished"/>
+        <translation>Alleen-lezenmodus</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="98"/>
         <source>Toggle comment</source>
-        <translation type="unfinished"/>
+        <translation>Opmerkingen tonen/verbergen</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="99"/>
         <source>Undo</source>
-        <translation type="unfinished"/>
+        <translation>Ongedaan maken</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="100"/>
         <source>Redo</source>
-        <translation type="unfinished"/>
+        <translation>Opnieuw</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="101"/>
         <source>Advanced</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../editor/src/settingsdialog.cpp" line="102"/>
-        <source>Window size</source>
-        <translation type="unfinished"/>
+        <translation>Geavanceerd</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="103"/>
+        <source>Window size</source>
+        <translation>Venstergrootte</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/settingsdialog.cpp" line="104"/>
         <source>Tab space</source>
-        <translation type="unfinished"/>
+        <translation>Tabruimte</translation>
     </message>
 </context>
 <context>
@@ -475,27 +482,27 @@
     <message>
         <location filename="../editor/src/settings.cpp" line="81"/>
         <source>Standard</source>
-        <translation type="unfinished"/>
+        <translation>Standaard</translation>
     </message>
     <message>
         <location filename="../editor/src/settings.cpp" line="81"/>
         <source>Customize</source>
-        <translation type="unfinished"/>
+        <translation>Aanpassen</translation>
     </message>
     <message>
         <location filename="../editor/src/settings.cpp" line="92"/>
         <source>Normal</source>
-        <translation type="unfinished"/>
+        <translation>Normaal</translation>
     </message>
     <message>
         <location filename="../editor/src/settings.cpp" line="92"/>
         <source>Maximum</source>
-        <translation type="unfinished"/>
+        <translation>Maximaal</translation>
     </message>
     <message>
         <location filename="../editor/src/settings.cpp" line="92"/>
         <source>Fullscreen</source>
-        <translation type="unfinished"/>
+        <translation>Volledig scherm</translation>
     </message>
 </context>
 <context>
@@ -503,12 +510,12 @@
     <message>
         <location filename="../editor/src/tabwidget.cpp" line="218"/>
         <source>Close tab</source>
-        <translation type="unfinished"/>
+        <translation>Tabblad sluiten</translation>
     </message>
     <message>
         <location filename="../editor/src/tabwidget.cpp" line="219"/>
         <source>Close other tabs</source>
-        <translation type="unfinished"/>
+        <translation>Overige tabbladen sluiten</translation>
     </message>
 </context>
 <context>
@@ -589,12 +596,12 @@
         <translation>Kleine letters</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="2333"/>
+        <location filename="../editor/src/texteditor.cpp" line="2221"/>
         <source>Read-Only mode is off</source>
         <translation>Alleen-lezenmodus is uitgeschakeld</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="2337"/>
+        <location filename="../editor/src/texteditor.cpp" line="2225"/>
         <source>Read-Only mode is on</source>
         <translation>Alleen-lezenmodus is ingeschakeld</translation>
     </message>
@@ -627,124 +634,123 @@
 <context>
     <name>Window</name>
     <message>
-        <location filename="../editor/src/window.cpp" line="164"/>
+        <location filename="../editor/src/window.cpp" line="165"/>
         <source>New window</source>
         <translation>Nieuw venster</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="165"/>
+        <location filename="../editor/src/window.cpp" line="166"/>
         <source>New tab</source>
         <translation>Nieuw tabblad</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="166"/>
+        <location filename="../editor/src/window.cpp" line="167"/>
         <source>Open file</source>
         <translation>Bestand openen</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="168"/>
+        <location filename="../editor/src/window.cpp" line="169"/>
         <source>Save as</source>
         <translation>Opslaan als</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="169"/>
+        <location filename="../editor/src/window.cpp" line="170"/>
         <source>Print</source>
         <translation>Afdrukken</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="170"/>
+        <location filename="../editor/src/window.cpp" line="171"/>
         <source>Switch theme</source>
         <translation>Thema wijzigen</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="249"/>
+        <location filename="../editor/src/window.cpp" line="251"/>
         <source>%1 open invalid</source>
         <translation>%1 is ongeldig</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="807"/>
-        <location filename="../editor/src/window.cpp" line="1224"/>
+        <location filename="../editor/src/window.cpp" line="1197"/>
         <source>Discard</source>
         <translation>Verwerpen</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="171"/>
+        <location filename="../editor/src/window.cpp" line="172"/>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Instellingen</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="290"/>
-        <location filename="../editor/src/window.cpp" line="411"/>
-        <location filename="../editor/src/window.cpp" line="433"/>
-        <location filename="../editor/src/window.cpp" line="804"/>
+        <location filename="../editor/src/window.cpp" line="292"/>
+        <location filename="../editor/src/window.cpp" line="413"/>
+        <location filename="../editor/src/window.cpp" line="435"/>
+        <location filename="../editor/src/window.cpp" line="784"/>
         <source>Save File</source>
         <translation>Bestand opslaan</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="290"/>
+        <location filename="../editor/src/window.cpp" line="292"/>
         <source>Do you want to save this file?</source>
-        <translation type="unfinished"/>
+        <translation>Wil je dit bestand opslaan?</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="413"/>
-        <location filename="../editor/src/window.cpp" line="425"/>
+        <location filename="../editor/src/window.cpp" line="415"/>
+        <location filename="../editor/src/window.cpp" line="427"/>
         <source>Encoding</source>
         <translation>Tekenreeks</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="414"/>
-        <location filename="../editor/src/window.cpp" line="426"/>
+        <location filename="../editor/src/window.cpp" line="416"/>
+        <location filename="../editor/src/window.cpp" line="428"/>
         <source>Line Endings</source>
         <translation>Regeleindes</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="493"/>
+        <location filename="../editor/src/window.cpp" line="460"/>
+        <source>Editor</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../editor/src/window.cpp" line="495"/>
         <source>File cannot be saved if it is not loaded.</source>
         <translation>Bestand kan niet worden opgeslagen als het niet geladen is.</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="518"/>
+        <location filename="../editor/src/window.cpp" line="520"/>
         <source>Saved root file %1</source>
         <translation>Root-bestand opgeslagen %1</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="520"/>
+        <location filename="../editor/src/window.cpp" line="522"/>
         <source>Save root file %1 failed.</source>
         <translation>Root-bestand  %1 opslaan mislukt.</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="530"/>
+        <location filename="../editor/src/window.cpp" line="532"/>
         <source>Unable to save file</source>
         <translation>Opslaan niet mogelijk</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="530"/>
+        <location filename="../editor/src/window.cpp" line="532"/>
         <source>Do you want to save to another?</source>
         <translation>Wil je het ergens anders opslaan?</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="804"/>
+        <location filename="../editor/src/window.cpp" line="784"/>
         <source>Do you want to save all the files?</source>
-        <translation type="unfinished"/>
+        <translation>Wil je alle bestanden opslaan?</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="808"/>
-        <source>Save All</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../editor/src/window.cpp" line="977"/>
+        <location filename="../editor/src/window.cpp" line="950"/>
         <source>Blank document %1</source>
         <translation>Leeg document %1</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="1223"/>
+        <location filename="../editor/src/window.cpp" line="1196"/>
         <source>Cancel</source>
         <translation>Annuleren</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="167"/>
-        <location filename="../editor/src/window.cpp" line="1225"/>
+        <location filename="../editor/src/window.cpp" line="168"/>
+        <location filename="../editor/src/window.cpp" line="1198"/>
         <source>Save</source>
         <translation>Opslaan</translation>
     </message>

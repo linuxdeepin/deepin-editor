@@ -66,15 +66,22 @@
         <translation>Размер Шрифта</translation>
     </message>
     <message>
+        <location filename="../editor/src/settingsdialog.cpp" line="29"/>
         <location filename="../editor/src/settingsdialog.cpp" line="30"/>
-        <location filename="../editor/src/settingsdialog.cpp" line="31"/>
         <source>Keymap</source>
         <translation>Раскладка</translation>
     </message>
     <message>
-        <location filename="../editor/src/settingsdialog.cpp" line="29"/>
+        <location filename="../editor/src/settingsdialog.cpp" line="28"/>
         <source>Shortcuts</source>
         <translation>Горячие Клавиши</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/settingsdialog.cpp" line="31"/>
+        <location filename="../editor/src/settingsdialog.cpp" line="102"/>
+        <location filename="../editor/src/window.cpp" line="448"/>
+        <source>Window</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="32"/>
@@ -204,12 +211,12 @@
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="57"/>
         <source>Forward char</source>
-        <translation type="unfinished"/>
+        <translation>Начальный символ</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="58"/>
         <source>Backward char</source>
-        <translation>Начальный символ</translation>
+        <translation>Последний символ</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="59"/>
@@ -219,222 +226,222 @@
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="60"/>
         <source>Backward word</source>
-        <translation type="unfinished"/>
+        <translation>Последнее слово</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="61"/>
         <source>Next line</source>
-        <translation type="unfinished"/>
+        <translation>Следующая строка</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="62"/>
         <source>Previous line</source>
-        <translation type="unfinished"/>
+        <translation>Предыдущая строка</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="63"/>
         <source>New line</source>
-        <translation type="unfinished"/>
+        <translation>Новая строка</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="64"/>
         <source>New line above</source>
-        <translation type="unfinished"/>
+        <translation>Новая строка выше</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="65"/>
         <source>New line below</source>
-        <translation type="unfinished"/>
+        <translation>Новая строка ниже</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="66"/>
         <source>Duplicate line</source>
-        <translation type="unfinished"/>
+        <translation>Дублированная строка</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="67"/>
         <source>Delete to end of line</source>
-        <translation type="unfinished"/>
+        <translation>Удалить конец строки</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="68"/>
         <source>Delete current line</source>
-        <translation type="unfinished"/>
+        <translation>Удалить текущую строку</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="69"/>
         <source>Swap line up</source>
-        <translation type="unfinished"/>
+        <translation>заменить верхнюю строку</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="70"/>
         <source>Swap line down</source>
-        <translation type="unfinished"/>
+        <translation>Заменить нижнюю строку</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="71"/>
         <source>Scroll up one line</source>
-        <translation type="unfinished"/>
+        <translation>Прокрутка вверх на одну строку</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="72"/>
         <source>Scroll down one line</source>
-        <translation type="unfinished"/>
+        <translation>Прокрутка вниз на одну строку</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="73"/>
         <source>Page up</source>
-        <translation type="unfinished"/>
+        <translation>Страница вверх</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="74"/>
         <source>Page down</source>
-        <translation type="unfinished"/>
+        <translation>Страница вниз</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="75"/>
         <source>Move to end of line</source>
-        <translation type="unfinished"/>
+        <translation>Переход к конецу строки</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="76"/>
         <source>Move to start of line</source>
-        <translation type="unfinished"/>
+        <translation>Переход к началу строки</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="77"/>
         <source>Move to end of text</source>
-        <translation type="unfinished"/>
+        <translation>Переход к концу текста</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="78"/>
         <source>Move to start of text</source>
-        <translation type="unfinished"/>
+        <translation>Переход к началу текста</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="79"/>
         <source>Move to line indentation</source>
-        <translation type="unfinished"/>
+        <translation>Переход к строке отступа</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="80"/>
         <source>Upper case</source>
-        <translation type="unfinished"/>
+        <translation>Верхний регистр</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="81"/>
         <source>Lower case</source>
-        <translation type="unfinished"/>
+        <translation>Нижний регистр</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="82"/>
         <source>Capitalize</source>
-        <translation type="unfinished"/>
+        <translation>Прописной</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="83"/>
         <source>Delete backward word</source>
-        <translation type="unfinished"/>
+        <translation>Удалить слово с конца</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="84"/>
         <source>Delete forward word</source>
-        <translation type="unfinished"/>
+        <translation>Удалить слово с начала</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="85"/>
         <source>Forward over a pair</source>
-        <translation type="unfinished"/>
+        <translation>Вперед по паре</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="86"/>
         <source>Backward over a pair</source>
-        <translation type="unfinished"/>
+        <translation>Назад по паре</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="87"/>
         <source>Select all</source>
-        <translation type="unfinished"/>
+        <translation>Выбрать всё</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="88"/>
         <source>Copy</source>
-        <translation type="unfinished"/>
+        <translation>Копировать</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="89"/>
         <source>Cut</source>
-        <translation type="unfinished"/>
+        <translation>Вырезать</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="90"/>
         <source>Paste</source>
-        <translation type="unfinished"/>
+        <translation>Вставить</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="91"/>
         <source>Transpose char</source>
-        <translation type="unfinished"/>
+        <translation>Переставить символ</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="92"/>
         <source>Mark</source>
-        <translation type="unfinished"/>
+        <translation>Пометить</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="93"/>
         <source>Unmark</source>
-        <translation type="unfinished"/>
+        <translation>Снять отметку</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="94"/>
         <source>Copy line</source>
-        <translation type="unfinished"/>
+        <translation>Копировать строку</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="95"/>
         <source>Cut line</source>
-        <translation type="unfinished"/>
+        <translation>Вырезать строку</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="96"/>
         <source>Merge lines</source>
-        <translation type="unfinished"/>
+        <translation>Совместить строки</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="97"/>
         <source>Read-Only mode</source>
-        <translation type="unfinished"/>
+        <translation>Режим Только Чтение</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="98"/>
         <source>Toggle comment</source>
-        <translation type="unfinished"/>
+        <translation>Переключить комментарий</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="99"/>
         <source>Undo</source>
-        <translation type="unfinished"/>
+        <translation>Отменить</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="100"/>
         <source>Redo</source>
-        <translation type="unfinished"/>
+        <translation>Готово</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="101"/>
         <source>Advanced</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../editor/src/settingsdialog.cpp" line="102"/>
-        <source>Window size</source>
-        <translation type="unfinished"/>
+        <translation>Расширенные</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="103"/>
+        <source>Window size</source>
+        <translation>Размер окна</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/settingsdialog.cpp" line="104"/>
         <source>Tab space</source>
-        <translation type="unfinished"/>
+        <translation>Область вкладок</translation>
     </message>
 </context>
 <context>
@@ -475,27 +482,27 @@
     <message>
         <location filename="../editor/src/settings.cpp" line="81"/>
         <source>Standard</source>
-        <translation type="unfinished"/>
+        <translation>Стандартный</translation>
     </message>
     <message>
         <location filename="../editor/src/settings.cpp" line="81"/>
         <source>Customize</source>
-        <translation type="unfinished"/>
+        <translation>Настроить</translation>
     </message>
     <message>
         <location filename="../editor/src/settings.cpp" line="92"/>
         <source>Normal</source>
-        <translation type="unfinished"/>
+        <translation>Обычный</translation>
     </message>
     <message>
         <location filename="../editor/src/settings.cpp" line="92"/>
         <source>Maximum</source>
-        <translation type="unfinished"/>
+        <translation>Максимум</translation>
     </message>
     <message>
         <location filename="../editor/src/settings.cpp" line="92"/>
         <source>Fullscreen</source>
-        <translation type="unfinished"/>
+        <translation>Полный экран</translation>
     </message>
 </context>
 <context>
@@ -503,12 +510,12 @@
     <message>
         <location filename="../editor/src/tabwidget.cpp" line="218"/>
         <source>Close tab</source>
-        <translation type="unfinished"/>
+        <translation>Закрыть вкладку</translation>
     </message>
     <message>
         <location filename="../editor/src/tabwidget.cpp" line="219"/>
         <source>Close other tabs</source>
-        <translation type="unfinished"/>
+        <translation>Закрыть другие вкладки</translation>
     </message>
 </context>
 <context>
@@ -589,12 +596,12 @@
         <translation>Нижний Регистр</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="2333"/>
+        <location filename="../editor/src/texteditor.cpp" line="2221"/>
         <source>Read-Only mode is off</source>
         <translation>Режим Только Чтение отключён</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="2337"/>
+        <location filename="../editor/src/texteditor.cpp" line="2225"/>
         <source>Read-Only mode is on</source>
         <translation>Режим Только Чтение включён</translation>
     </message>
@@ -627,124 +634,123 @@
 <context>
     <name>Window</name>
     <message>
-        <location filename="../editor/src/window.cpp" line="164"/>
+        <location filename="../editor/src/window.cpp" line="165"/>
         <source>New window</source>
         <translation>Новое окно</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="165"/>
+        <location filename="../editor/src/window.cpp" line="166"/>
         <source>New tab</source>
         <translation>Новая вкладка</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="166"/>
+        <location filename="../editor/src/window.cpp" line="167"/>
         <source>Open file</source>
         <translation>Открыть файл</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="168"/>
+        <location filename="../editor/src/window.cpp" line="169"/>
         <source>Save as</source>
         <translation>Сохранить как</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="169"/>
+        <location filename="../editor/src/window.cpp" line="170"/>
         <source>Print</source>
         <translation>Печать</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="170"/>
+        <location filename="../editor/src/window.cpp" line="171"/>
         <source>Switch theme</source>
         <translation>Переключить тему</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="249"/>
+        <location filename="../editor/src/window.cpp" line="251"/>
         <source>%1 open invalid</source>
         <translation>%1 ошибка открытия</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="807"/>
-        <location filename="../editor/src/window.cpp" line="1224"/>
+        <location filename="../editor/src/window.cpp" line="1197"/>
         <source>Discard</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="171"/>
+        <location filename="../editor/src/window.cpp" line="172"/>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="290"/>
-        <location filename="../editor/src/window.cpp" line="411"/>
-        <location filename="../editor/src/window.cpp" line="433"/>
-        <location filename="../editor/src/window.cpp" line="804"/>
+        <location filename="../editor/src/window.cpp" line="292"/>
+        <location filename="../editor/src/window.cpp" line="413"/>
+        <location filename="../editor/src/window.cpp" line="435"/>
+        <location filename="../editor/src/window.cpp" line="784"/>
         <source>Save File</source>
         <translation>Сохранить Файл</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="290"/>
+        <location filename="../editor/src/window.cpp" line="292"/>
         <source>Do you want to save this file?</source>
-        <translation type="unfinished"/>
+        <translation>Вы хотите сохранить этот документ?</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="413"/>
-        <location filename="../editor/src/window.cpp" line="425"/>
+        <location filename="../editor/src/window.cpp" line="415"/>
+        <location filename="../editor/src/window.cpp" line="427"/>
         <source>Encoding</source>
         <translation>Кодировка</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="414"/>
-        <location filename="../editor/src/window.cpp" line="426"/>
+        <location filename="../editor/src/window.cpp" line="416"/>
+        <location filename="../editor/src/window.cpp" line="428"/>
         <source>Line Endings</source>
         <translation>Строка Кодировки</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="493"/>
+        <location filename="../editor/src/window.cpp" line="460"/>
+        <source>Editor</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../editor/src/window.cpp" line="495"/>
         <source>File cannot be saved if it is not loaded.</source>
         <translation>Файл не может быть сохранен, если он не загружен.</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="518"/>
+        <location filename="../editor/src/window.cpp" line="520"/>
         <source>Saved root file %1</source>
         <translation>Сохраненный корневой файл %1</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="520"/>
+        <location filename="../editor/src/window.cpp" line="522"/>
         <source>Save root file %1 failed.</source>
         <translation>Сохранить корневой файл %1 не удалось</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="530"/>
+        <location filename="../editor/src/window.cpp" line="532"/>
         <source>Unable to save file</source>
         <translation>Не удалось сохранить файл</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="530"/>
+        <location filename="../editor/src/window.cpp" line="532"/>
         <source>Do you want to save to another?</source>
         <translation>Вы хотите сохранить в другой?</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="804"/>
+        <location filename="../editor/src/window.cpp" line="784"/>
         <source>Do you want to save all the files?</source>
-        <translation type="unfinished"/>
+        <translation>Вы хотите сохранить все файлы?</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="808"/>
-        <source>Save All</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../editor/src/window.cpp" line="977"/>
+        <location filename="../editor/src/window.cpp" line="950"/>
         <source>Blank document %1</source>
         <translation>Чистый документ %1</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="1223"/>
+        <location filename="../editor/src/window.cpp" line="1196"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="167"/>
-        <location filename="../editor/src/window.cpp" line="1225"/>
+        <location filename="../editor/src/window.cpp" line="168"/>
+        <location filename="../editor/src/window.cpp" line="1198"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>

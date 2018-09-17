@@ -66,15 +66,22 @@
         <translation>Yazı Boyutu</translation>
     </message>
     <message>
+        <location filename="../editor/src/settingsdialog.cpp" line="29"/>
         <location filename="../editor/src/settingsdialog.cpp" line="30"/>
-        <location filename="../editor/src/settingsdialog.cpp" line="31"/>
         <source>Keymap</source>
         <translation>Tuş Eşleşmesi</translation>
     </message>
     <message>
-        <location filename="../editor/src/settingsdialog.cpp" line="29"/>
+        <location filename="../editor/src/settingsdialog.cpp" line="28"/>
         <source>Shortcuts</source>
         <translation>Kısayollar</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/settingsdialog.cpp" line="31"/>
+        <location filename="../editor/src/settingsdialog.cpp" line="102"/>
+        <location filename="../editor/src/window.cpp" line="448"/>
+        <source>Window</source>
+        <translation>Pencere</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="32"/>
@@ -427,12 +434,12 @@
         <translation>Gelişmiş</translation>
     </message>
     <message>
-        <location filename="../editor/src/settingsdialog.cpp" line="102"/>
+        <location filename="../editor/src/settingsdialog.cpp" line="103"/>
         <source>Window size</source>
         <translation>Pencere boyutu</translation>
     </message>
     <message>
-        <location filename="../editor/src/settingsdialog.cpp" line="103"/>
+        <location filename="../editor/src/settingsdialog.cpp" line="104"/>
         <source>Tab space</source>
         <translation>Sekme boşluğu</translation>
     </message>
@@ -589,12 +596,12 @@
         <translation>Küçük Harf</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="2333"/>
+        <location filename="../editor/src/texteditor.cpp" line="2221"/>
         <source>Read-Only mode is off</source>
         <translation>Salt okunur kip kapalı</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="2337"/>
+        <location filename="../editor/src/texteditor.cpp" line="2225"/>
         <source>Read-Only mode is on</source>
         <translation>Salt okunur kip açık</translation>
     </message>
@@ -627,124 +634,123 @@
 <context>
     <name>Window</name>
     <message>
-        <location filename="../editor/src/window.cpp" line="164"/>
+        <location filename="../editor/src/window.cpp" line="165"/>
         <source>New window</source>
         <translation>Yeni pencere</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="165"/>
+        <location filename="../editor/src/window.cpp" line="166"/>
         <source>New tab</source>
         <translation>Yeni sekme</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="166"/>
+        <location filename="../editor/src/window.cpp" line="167"/>
         <source>Open file</source>
         <translation>Dosya aç</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="168"/>
+        <location filename="../editor/src/window.cpp" line="169"/>
         <source>Save as</source>
         <translation>Farklı kaydet</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="169"/>
+        <location filename="../editor/src/window.cpp" line="170"/>
         <source>Print</source>
         <translation>Yazdır</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="170"/>
+        <location filename="../editor/src/window.cpp" line="171"/>
         <source>Switch theme</source>
         <translation>Temayı değiştir</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="249"/>
+        <location filename="../editor/src/window.cpp" line="251"/>
         <source>%1 open invalid</source>
         <translation>%1 açma geçersiz</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="807"/>
-        <location filename="../editor/src/window.cpp" line="1224"/>
+        <location filename="../editor/src/window.cpp" line="1197"/>
         <source>Discard</source>
         <translation>Yoksay</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="171"/>
+        <location filename="../editor/src/window.cpp" line="172"/>
         <source>Settings</source>
         <translation>Ayarlar</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="290"/>
-        <location filename="../editor/src/window.cpp" line="411"/>
-        <location filename="../editor/src/window.cpp" line="433"/>
-        <location filename="../editor/src/window.cpp" line="804"/>
+        <location filename="../editor/src/window.cpp" line="292"/>
+        <location filename="../editor/src/window.cpp" line="413"/>
+        <location filename="../editor/src/window.cpp" line="435"/>
+        <location filename="../editor/src/window.cpp" line="784"/>
         <source>Save File</source>
         <translation>Dosyayı Kaydet</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="290"/>
+        <location filename="../editor/src/window.cpp" line="292"/>
         <source>Do you want to save this file?</source>
         <translation>Bu dosyayı kaydetmek ister misiniz?</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="413"/>
-        <location filename="../editor/src/window.cpp" line="425"/>
+        <location filename="../editor/src/window.cpp" line="415"/>
+        <location filename="../editor/src/window.cpp" line="427"/>
         <source>Encoding</source>
         <translation>Kodlama</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="414"/>
-        <location filename="../editor/src/window.cpp" line="426"/>
+        <location filename="../editor/src/window.cpp" line="416"/>
+        <location filename="../editor/src/window.cpp" line="428"/>
         <source>Line Endings</source>
         <translation>Satır Sonları</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="493"/>
+        <location filename="../editor/src/window.cpp" line="460"/>
+        <source>Editor</source>
+        <translation>Düzenleyici</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/window.cpp" line="495"/>
         <source>File cannot be saved if it is not loaded.</source>
         <translation>Dosya yüklenmemiş ise kaydedilemez.</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="518"/>
+        <location filename="../editor/src/window.cpp" line="520"/>
         <source>Saved root file %1</source>
         <translation>%1 kök dosyası kaydedildi</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="520"/>
+        <location filename="../editor/src/window.cpp" line="522"/>
         <source>Save root file %1 failed.</source>
         <translation>%1 kök dosyası kaydedilemedi.</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="530"/>
+        <location filename="../editor/src/window.cpp" line="532"/>
         <source>Unable to save file</source>
         <translation>Dosya kaydedilemedi</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="530"/>
+        <location filename="../editor/src/window.cpp" line="532"/>
         <source>Do you want to save to another?</source>
         <translation>Başka bir kayıt yapmak ister misiniz?</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="804"/>
+        <location filename="../editor/src/window.cpp" line="784"/>
         <source>Do you want to save all the files?</source>
         <translation>Tüm dosyaları kaydetmek ister misiniz?</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="808"/>
-        <source>Save All</source>
-        <translation>Tümünü Kaydet</translation>
-    </message>
-    <message>
-        <location filename="../editor/src/window.cpp" line="977"/>
+        <location filename="../editor/src/window.cpp" line="950"/>
         <source>Blank document %1</source>
         <translation>%1 belgesi boş</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="1223"/>
+        <location filename="../editor/src/window.cpp" line="1196"/>
         <source>Cancel</source>
         <translation>İptal</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="167"/>
-        <location filename="../editor/src/window.cpp" line="1225"/>
+        <location filename="../editor/src/window.cpp" line="168"/>
+        <location filename="../editor/src/window.cpp" line="1198"/>
         <source>Save</source>
         <translation>Kaydet</translation>
     </message>

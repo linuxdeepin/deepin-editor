@@ -66,15 +66,22 @@
         <translation>字号</translation>
     </message>
     <message>
+        <location filename="../editor/src/settingsdialog.cpp" line="29"/>
         <location filename="../editor/src/settingsdialog.cpp" line="30"/>
-        <location filename="../editor/src/settingsdialog.cpp" line="31"/>
         <source>Keymap</source>
         <translation>快捷键映射</translation>
     </message>
     <message>
-        <location filename="../editor/src/settingsdialog.cpp" line="29"/>
+        <location filename="../editor/src/settingsdialog.cpp" line="28"/>
         <source>Shortcuts</source>
         <translation>快捷键</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/settingsdialog.cpp" line="31"/>
+        <location filename="../editor/src/settingsdialog.cpp" line="102"/>
+        <location filename="../editor/src/window.cpp" line="448"/>
+        <source>Window</source>
+        <translation>窗口</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="32"/>
@@ -427,12 +434,12 @@
         <translation>高级设置</translation>
     </message>
     <message>
-        <location filename="../editor/src/settingsdialog.cpp" line="102"/>
+        <location filename="../editor/src/settingsdialog.cpp" line="103"/>
         <source>Window size</source>
         <translation>窗口状态</translation>
     </message>
     <message>
-        <location filename="../editor/src/settingsdialog.cpp" line="103"/>
+        <location filename="../editor/src/settingsdialog.cpp" line="104"/>
         <source>Tab space</source>
         <translation>Tab字符宽度</translation>
     </message>
@@ -589,12 +596,12 @@
         <translation>小写</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="2333"/>
+        <location filename="../editor/src/texteditor.cpp" line="2221"/>
         <source>Read-Only mode is off</source>
         <translation>只读模式已关闭</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="2337"/>
+        <location filename="../editor/src/texteditor.cpp" line="2225"/>
         <source>Read-Only mode is on</source>
         <translation>只读模式已开启</translation>
     </message>
@@ -627,124 +634,123 @@
 <context>
     <name>Window</name>
     <message>
-        <location filename="../editor/src/window.cpp" line="164"/>
+        <location filename="../editor/src/window.cpp" line="165"/>
         <source>New window</source>
         <translation>新窗口</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="165"/>
+        <location filename="../editor/src/window.cpp" line="166"/>
         <source>New tab</source>
         <translation>新标签页</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="166"/>
+        <location filename="../editor/src/window.cpp" line="167"/>
         <source>Open file</source>
         <translation>打开文件</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="168"/>
+        <location filename="../editor/src/window.cpp" line="169"/>
         <source>Save as</source>
         <translation>另存为</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="169"/>
+        <location filename="../editor/src/window.cpp" line="170"/>
         <source>Print</source>
         <translation>打印</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="170"/>
+        <location filename="../editor/src/window.cpp" line="171"/>
         <source>Switch theme</source>
         <translation>切换主题</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="249"/>
+        <location filename="../editor/src/window.cpp" line="251"/>
         <source>%1 open invalid</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="807"/>
-        <location filename="../editor/src/window.cpp" line="1224"/>
+        <location filename="../editor/src/window.cpp" line="1197"/>
         <source>Discard</source>
         <translation>不保存</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="171"/>
+        <location filename="../editor/src/window.cpp" line="172"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="290"/>
-        <location filename="../editor/src/window.cpp" line="411"/>
-        <location filename="../editor/src/window.cpp" line="433"/>
-        <location filename="../editor/src/window.cpp" line="804"/>
+        <location filename="../editor/src/window.cpp" line="292"/>
+        <location filename="../editor/src/window.cpp" line="413"/>
+        <location filename="../editor/src/window.cpp" line="435"/>
+        <location filename="../editor/src/window.cpp" line="784"/>
         <source>Save File</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="290"/>
+        <location filename="../editor/src/window.cpp" line="292"/>
         <source>Do you want to save this file?</source>
         <translation>您是否要保存此文件？</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="413"/>
-        <location filename="../editor/src/window.cpp" line="425"/>
+        <location filename="../editor/src/window.cpp" line="415"/>
+        <location filename="../editor/src/window.cpp" line="427"/>
         <source>Encoding</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="414"/>
-        <location filename="../editor/src/window.cpp" line="426"/>
+        <location filename="../editor/src/window.cpp" line="416"/>
+        <location filename="../editor/src/window.cpp" line="428"/>
         <source>Line Endings</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="493"/>
+        <location filename="../editor/src/window.cpp" line="460"/>
+        <source>Editor</source>
+        <translation>编辑</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/window.cpp" line="495"/>
         <source>File cannot be saved if it is not loaded.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="518"/>
+        <location filename="../editor/src/window.cpp" line="520"/>
         <source>Saved root file %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="520"/>
+        <location filename="../editor/src/window.cpp" line="522"/>
         <source>Save root file %1 failed.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="530"/>
+        <location filename="../editor/src/window.cpp" line="532"/>
         <source>Unable to save file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="530"/>
+        <location filename="../editor/src/window.cpp" line="532"/>
         <source>Do you want to save to another?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="804"/>
+        <location filename="../editor/src/window.cpp" line="784"/>
         <source>Do you want to save all the files?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="808"/>
-        <source>Save All</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../editor/src/window.cpp" line="977"/>
+        <location filename="../editor/src/window.cpp" line="950"/>
         <source>Blank document %1</source>
         <translation>空白文档%1</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="1223"/>
+        <location filename="../editor/src/window.cpp" line="1196"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="167"/>
-        <location filename="../editor/src/window.cpp" line="1225"/>
+        <location filename="../editor/src/window.cpp" line="168"/>
+        <location filename="../editor/src/window.cpp" line="1198"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
