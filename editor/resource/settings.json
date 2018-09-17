@@ -1838,7 +1838,9 @@
                             "key": "tabspacenumber",
                             "name": "Tab space",
                             "type": "spinbutton",
-                            "default": 4
+                            "default": 4,
+                            "min": 1,
+                            "max": 24
                         },
                         {
                             "key": "file_dialog_dir",
