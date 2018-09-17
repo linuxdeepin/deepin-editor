@@ -195,5 +195,5 @@ void Editor::handleFileLoadFinished(const QByteArray &encode, const QString &con
     textEditor->moveToStart();
 
     // load highlight.
-    QTimer::singleShot(500, this, [=] { textEditor->loadHighlighter(); });
+    QTimer::singleShot(100, this, [=] { textEditor->loadHighlighter(); });
 }
