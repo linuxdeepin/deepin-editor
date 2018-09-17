@@ -1334,6 +1334,10 @@ void TextEditor::replaceAll(QString replaceText, QString withText)
 
 void TextEditor::replaceNext(QString replaceText, QString withText)
 {
+    if (replaceText.isEmpty()) {
+        return;
+    }
+
     if (m_cursorKeywordSelection.cursor.position() - replaceText.size() >= 0) {
         QTextCursor cursor = textCursor();
 
