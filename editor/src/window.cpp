@@ -763,6 +763,8 @@ void Window::resizeEvent(QResizeEvent*)
 
 void Window::closeEvent(QCloseEvent *e)
 {
+    e->ignore();
+
     QList<Editor *> needSaveList;
     for (Editor *editor : m_editorMap) {
         // save all the draft documents.
@@ -777,29 +779,21 @@ void Window::closeEvent(QCloseEvent *e)
     }
 
     if (!needSaveList.isEmpty()) {
-        DDialog *dialog = new DDialog(tr("Save File"), tr("Do you want to save all the files?"), this);
-        dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
-        dialog->setIcon(QIcon(Utils::getQrcPath("logo_48.svg")));
-        dialog->addButton(QString(tr("Discard")), false, DDialog::ButtonNormal);
-        dialog->addButton(QString(tr("Save All")), true, DDialog::ButtonNormal);
+        DDialog *dialog = createSaveFileDialog(tr("Save File"), tr("Do you want to save all the files?"));
 
         connect(dialog, &DDialog::buttonClicked, this, [=] (int index) {
             dialog->hide();
 
-            switch (index) {
-            case 0:
-                // dont't save.
-                break;
-            case 1:
+            if (index == 2) {
                 // save all the files.
                 for (Editor *editor : needSaveList) {
                     editor->saveFile();
                 }
-                break;
             }
         });
 
-        if (dialog->exec() == -1) {
+        const int mode = dialog->exec();
+        if (mode == -1 || mode == 0) {
             return;
         }
     }
@@ -823,6 +817,7 @@ void Window::closeEvent(QCloseEvent *e)
         file.close();
     }
 
+    e->accept();
     emit close();
 }
 
