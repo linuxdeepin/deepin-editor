@@ -140,6 +140,8 @@ bool Editor::saveFile(const QString &encode, const QString &newline)
 
     // update status.
     textEditor->setModified(false);
+    m_isLoadFinished = true;
+    m_isWritable = true;
 
     return true;
 }
