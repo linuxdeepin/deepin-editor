@@ -953,13 +953,13 @@
                             "key": "closetab",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Ctrl+;"
+                            "default":  "Ctrl+C"
                         },
                         {
                             "key": "closeothertabs",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Ctrl+Shift+;"
+                            "default":  "Ctrl+Shift+C"
                         },
                         {
                             "key": "restoretab",

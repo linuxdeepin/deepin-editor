@@ -1027,11 +1027,15 @@ void TextEditor::killBackwardWord()
     if (textCursor().hasSelection()) {
         textCursor().removeSelectedText();
     } else {
-        QTextCursor cursor = textCursor();
-        cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
-        cursor.setPosition(getPrevWordPosition(cursor, QTextCursor::KeepAnchor), QTextCursor::KeepAnchor);
-        cursor.removeSelectedText();
+        //  QTextCursor cursor = textCursor();
+        //  cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
+        //  cursor.setPosition(getPrevWordPosition(cursor, QTextCursor::KeepAnchor), QTextCursor::KeepAnchor);
+        //  cursor.removeSelectedText();
+        //  setTextCursor(cursor);
 
+        QTextCursor cursor = textCursor();
+        cursor.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
+        cursor.removeSelectedText();
         setTextCursor(cursor);
     }
 }
@@ -1043,11 +1047,15 @@ void TextEditor::killForwardWord()
     if (textCursor().hasSelection()) {
         textCursor().removeSelectedText();
     } else {
-        QTextCursor cursor = textCursor();
-        cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
-        cursor.setPosition(getNextWordPosition(cursor, QTextCursor::KeepAnchor), QTextCursor::KeepAnchor);
-        cursor.removeSelectedText();
+        //  QTextCursor cursor = textCursor();
+        //  cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
+        //  cursor.setPosition(getNextWordPosition(cursor, QTextCursor::KeepAnchor), QTextCursor::KeepAnchor);
+        //  cursor.removeSelectedText();
+        //  setTextCursor(cursor);
 
+        QTextCursor cursor = textCursor();
+        cursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
+        cursor.removeSelectedText();
         setTextCursor(cursor);
     }
 }
