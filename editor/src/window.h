@@ -91,7 +91,7 @@ public:
 
     const QStringList getEncodeList();
 
-    void remberPositionSave(bool notify = true);
+    void remberPositionSave();
     void remberPositionRestore();
 
     void updateFont(const QString &fontName);

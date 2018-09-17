@@ -694,7 +694,7 @@ const QStringList Window::getEncodeList()
     return encodeList;
 }
 
-void Window::remberPositionSave(bool notify)
+void Window::remberPositionSave()
 {
     Editor *editor = getActiveEditor();
 
@@ -702,46 +702,22 @@ void Window::remberPositionSave(bool notify)
     m_remberPositionRow = editor->textEditor->getCurrentLine();
     m_remberPositionColumn = editor->textEditor->getCurrentColumn();
     m_remberPositionScrollOffset = editor->textEditor->getScrollOffset();
-
-    if (notify) {
-        // showNotify(tr("记住当前位置"));
-    }
 }
 
 void Window::remberPositionRestore()
 {
-    if (!m_remberPositionFilePath.isEmpty()) {
-        if (m_editorMap.contains(m_remberPositionFilePath)) {
-            QString filepath = m_remberPositionFilePath;
-            int scrollOffset = m_remberPositionScrollOffset;
-            int row = m_remberPositionRow;
-            int column = m_remberPositionColumn;
+    if (m_remberPositionFilePath.isEmpty()) {
+        return;
+    }
 
-            remberPositionSave(false);
+    if (m_editorMap.contains(m_remberPositionFilePath)) {
+        const QString &filePath = m_remberPositionFilePath;
+        const int &scrollOffset = m_remberPositionScrollOffset;
+        const int &row = m_remberPositionRow;
+        const int &column = m_remberPositionColumn;
 
-            activeTab(m_tabbar->getTabIndex(filepath));
-
-            QTimer::singleShot(0, this, [=] {
-                m_editorMap.value(filepath)->textEditor->scrollToLine(scrollOffset, row, column);
-            });
-        } else {
-            if (Utils::fileExists(m_remberPositionFilePath)) {
-                QString filepath = m_remberPositionFilePath;
-                int scrollOffset = m_remberPositionScrollOffset;
-                int row = m_remberPositionRow;
-                int column = m_remberPositionColumn;
-
-                remberPositionSave(false);
-
-                addTab(filepath);
-
-                QTimer::singleShot(0, this, [=] {
-                    m_editorMap.value(filepath)->textEditor->scrollToLine(scrollOffset, row, column);
-                });
-            } else {
-                // showNotify(tr("记录位置的文件已经不存在了"));
-            }
-        }
+        activeTab(m_tabbar->getTabIndex(m_remberPositionFilePath));
+        m_editorMap.value(filePath)->textEditor->scrollToLine(scrollOffset, row, column);
     }
 }
 
