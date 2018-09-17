@@ -354,13 +354,13 @@
                         },
                         {
                             "key": "killbackwardword",
-                            "name": "Kill Backward Word",
+                            "name": "Delete backward word",
                             "type": "shortcut",
                             "default":  "Alt+Shift+N"
                         },
                         {
                             "key": "killforwardword",
-                            "name": "Kill Forward Word",
+                            "name": "Delete forward word",
                             "type": "shortcut",
                             "default":  "Alt+Shift+M"
                         },
@@ -1812,7 +1812,7 @@
                     "options": [
                         {
                             "key": "windowstate",
-                            "name": "Window Size",
+                            "name": "Window size",
                             "type": "combobox",
                             "default": "window_normal"
                         },

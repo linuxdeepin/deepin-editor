@@ -29,6 +29,7 @@ void GenerateSettingTranslate()
     auto group_shortcutsName = QObject::tr("Shortcuts");
     auto shortcuts_keymapName = QObject::tr("Keymap");
     auto shortcurs_keymap_keymap = QObject::tr("Keymap");
+    auto shortcus_windowName = QObject::tr("Window");
     auto shortcuts_window_addblanktabName = QObject::tr("New tab");
     auto shortcuts_window_newwindowName = QObject::tr("New window");
     auto shortcuts_window_savefileName = QObject::tr("Save");
@@ -99,6 +100,7 @@ void GenerateSettingTranslate()
     auto shortcuts_editor_undoName = QObject::tr("Undo");
     auto shortcuts_editor_redoName = QObject::tr("Redo");
     auto group_advanceName = QObject::tr("Advanced");
+    auto advance_windowName = QObject::tr("Window");
     auto advance_window_windowstateName = QObject::tr("Window size");
     auto advance_editor_tabspacenumberName = QObject::tr("Tab space");
 }
