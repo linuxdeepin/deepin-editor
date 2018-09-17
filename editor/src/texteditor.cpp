@@ -1334,25 +1334,20 @@ void TextEditor::replaceAll(QString replaceText, QString withText)
 
 void TextEditor::replaceNext(QString replaceText, QString withText)
 {
-    if (replaceText.isEmpty()) {
+    if (replaceText.isEmpty() ||
+        !m_cursorKeywordSelection.cursor.hasSelection()) {
         return;
     }
 
-    if (m_cursorKeywordSelection.cursor.position() - replaceText.size() >= 0) {
-        QTextCursor cursor = textCursor();
+    QTextCursor cursor = textCursor();
+    cursor.setPosition(m_cursorKeywordSelection.cursor.position() - replaceText.size());
+    cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, replaceText.size());
+    cursor.insertText(withText);
 
-        cursor.setPosition(m_cursorKeywordSelection.cursor.position() - replaceText.size());
-        cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
-        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, replaceText.size());
-        cursor.insertText(withText);
-
-        // Update cursor.
-        setTextCursor(cursor);
-
-        highlightKeyword(replaceText, getPosition());
-    } else {
-        qDebug() << "Nothing need to replace";
-    }
+    // Update cursor.
+    setTextCursor(cursor);
+    highlightKeyword(replaceText, getPosition());
 }
 
 void TextEditor::replaceRest(QString replaceText, QString withText)
@@ -1478,6 +1473,7 @@ void TextEditor::updateCursorKeywordSelection(int position, bool findNext)
             QTextCursor cursor = textCursor();
             cursor.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
 
+            m_cursorKeywordSelection.cursor.clearSelection();
             setCursorKeywordSeletoin(cursor.position(), findNext);
         }
     }
