@@ -212,13 +212,13 @@
                             "key": "forwardword",
                             "name": "Forward word",
                             "type": "shortcut",
-                            "default":  "Alt+Right"
+                            "default":  "Ctrl+Right"
                         },
                         {
                             "key": "backwardword",
                             "name": "Backward word",
                             "type": "shortcut",
-                            "default":  "Alt+Left"
+                            "default":  "Ctrl+Left"
                         },
                         {
                             "key": "nextline",
@@ -634,13 +634,13 @@
                             "key": "forwardword",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Alt+Right"
+                            "default":  "Ctrl+Right"
                         },
                         {
                             "key": "backwardword",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Alt+Left"
+                            "default":  "Ctrl+Left"
                         },
                         {
                             "key": "nextline",
@@ -1526,13 +1526,13 @@
                             "key": "forwardword",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Alt+Right"
+                            "default":  "Ctrl+Right"
                         },
                         {
                             "key": "backwardword",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Alt+Left"
+                            "default":  "Ctrl+Left"
                         },
                         {
                             "key": "nextline",

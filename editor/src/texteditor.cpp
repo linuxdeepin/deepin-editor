@@ -206,9 +206,11 @@ void TextEditor::forwardWord()
     QTextCursor cursor = textCursor();
 
     if (m_cursorMark) {
-        cursor.setPosition(getNextWordPosition(cursor, QTextCursor::KeepAnchor), QTextCursor::KeepAnchor);
+        // cursor.setPosition(getNextWordPosition(cursor, QTextCursor::KeepAnchor), QTextCursor::KeepAnchor);
+        cursor.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
     } else {
-        cursor.setPosition(getNextWordPosition(cursor, QTextCursor::MoveAnchor), QTextCursor::MoveAnchor);
+        // cursor.setPosition(getNextWordPosition(cursor, QTextCursor::MoveAnchor), QTextCursor::MoveAnchor);
+        cursor.movePosition(QTextCursor::NextWord, QTextCursor::MoveAnchor);
     }
 
     setTextCursor(cursor);
@@ -219,9 +221,11 @@ void TextEditor::backwardWord()
     QTextCursor cursor = textCursor();
 
     if (m_cursorMark) {
-        cursor.setPosition(getPrevWordPosition(cursor, QTextCursor::KeepAnchor), QTextCursor::KeepAnchor);
+        // cursor.setPosition(getPrevWordPosition(cursor, QTextCursor::KeepAnchor), QTextCursor::KeepAnchor);
+        cursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
     } else {
-        cursor.setPosition(getPrevWordPosition(cursor, QTextCursor::MoveAnchor), QTextCursor::MoveAnchor);
+        // cursor.setPosition(getPrevWordPosition(cursor, QTextCursor::MoveAnchor), QTextCursor::MoveAnchor);
+        cursor.movePosition(QTextCursor::PreviousWord, QTextCursor::MoveAnchor);
     }
 
     setTextCursor(cursor);
