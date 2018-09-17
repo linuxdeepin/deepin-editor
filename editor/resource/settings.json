@@ -144,7 +144,7 @@
                         },
                         {
                             "key": "jumptoline",
-                            "name": "Go To Line",
+                            "name": "Go to line",
                             "type": "shortcut",
                             "default":  "Ctrl+G"
                         },
@@ -1804,7 +1804,7 @@
         },
         {
             "key": "advance",
-            "name": "Advance",
+            "name": "Advanced",
             "groups": [
                 {
                     "key": "window",

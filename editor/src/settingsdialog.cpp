@@ -45,12 +45,13 @@ void GenerateSettingTranslate()
     auto shortcuts_window_togglefullscreenName = QObject::tr("Toggle fullscreen");
     auto shortcuts_window_findName = QObject::tr("Find");
     auto shortcuts_window_replaceName = QObject::tr("Replace");
-    auto shortcuts_window_jumptolineName = QObject::tr("Go To Line");
+    auto shortcuts_window_jumptolineName = QObject::tr("Go to line");
     auto shortcuts_window_savepositionName = QObject::tr("Save cursor position");
     auto shortcuts_window_restorepositionName = QObject::tr("Reset cursor position");
     auto shortcuts_window_escapeName = QObject::tr("Exit");
     auto shortcuts_window_displayshortcutsName = QObject::tr("Display shortcuts");
     auto shortcuts_window_printName = QObject::tr("Print");
+    auto group_editorName = QObject::tr("Editor");
     auto shortcuts_editor_indentlineName = QObject::tr("Increase indent");
     auto shortcuts_editor_backindentlineName = QObject::tr("Decrease indent");
     auto shortcuts_editor_forwardcharName = QObject::tr("Forward char");
@@ -90,13 +91,14 @@ void GenerateSettingTranslate()
     auto shortcuts_editor_transposecharName = QObject::tr("Transpose char");
     auto shortcuts_editor_setmarkName = QObject::tr("Mark");
     auto shortcuts_editor_exchangemarkName = QObject::tr("Unmark");
-    auto shortcuts_editor_copylinesName = QObject::tr("Copy lines");
-    auto shortcuts_editor_cutlinesName = QObject::tr("Cut lines");
+    auto shortcuts_editor_copylinesName = QObject::tr("Copy line");
+    auto shortcuts_editor_cutlinesName = QObject::tr("Cut line");
     auto shortcuts_editor_joinlinesName = QObject::tr("Merge lines");
     auto shortcuts_editor_togglereadonlymodeName = QObject::tr("Read-Only mode");
-    auto shortcuts_editor_togglecommentName = QObject::tr("Read-Only mode");
+    auto shortcuts_editor_togglecommentName = QObject::tr("Toggle comment");
     auto shortcuts_editor_undoName = QObject::tr("Undo");
     auto shortcuts_editor_redoName = QObject::tr("Redo");
+    auto group_advanceName = QObject::tr("Advanced");
     auto advance_window_windowstateName = QObject::tr("Window size");
     auto advance_editor_tabspacenumberName = QObject::tr("Tab space");
 }
