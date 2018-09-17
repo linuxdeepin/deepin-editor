@@ -105,8 +105,8 @@ void Tabbar::addTabWithIndex(int index, const QString &filepath, const QString &
     }
 
     tabbar->insertTab(index, tabName);
-    tabbar->setCurrentIndex(index);
     tabbar->setTabMaximumSize(index, QSize(150, 100));
+    tabbar->setCurrentIndex(index);
 }
 
 void Tabbar::closeActiveTab()
