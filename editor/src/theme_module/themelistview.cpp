@@ -41,6 +41,10 @@ ThemeListView::~ThemeListView()
 
 void ThemeListView::adjustScrollbarMargins()
 {
+    if (!isVisible()) {
+        return;
+    }
+
     QEvent event(QEvent::LayoutRequest);
     QApplication::sendEvent(this, &event);
 

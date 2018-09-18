@@ -155,7 +155,7 @@ TextEditor::TextEditor(QPlainTextEdit *parent)
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    connect(verticalScrollBar(), &QScrollBar::rangeChanged, this, &TextEditor::adjustScrollbarMargins);
+    connect(verticalScrollBar(), &QScrollBar::rangeChanged, this, &TextEditor::adjustScrollbarMargins, Qt::QueuedConnection);
 }
 
 int TextEditor::getCurrentLine()
@@ -2312,19 +2312,17 @@ bool TextEditor::eventFilter(QObject *, QEvent *event)
 
 void TextEditor::adjustScrollbarMargins()
 {
-    if (isVisible() && !m_scrollbarLock) {
-        m_scrollbarLock = true;
+    if (!isVisible()) {
+        return;
+    }
 
-        int documentHeight = (verticalScrollBar()->maximum() - verticalScrollBar()->minimum() + verticalScrollBar()->pageStep()) * fontMetrics().height();
+    QEvent event(QEvent::LayoutRequest);
+    QApplication::sendEvent(this, &event);
 
-        if (documentHeight > rect().height()) {
-            // setViewportMargins(0, 0, -verticalScrollBar()->sizeHint().width(), -horizontalScrollBar()->sizeHint().height() + m_scrollbarMargin);
-            setViewportMargins(0, 0, -verticalScrollBar()->sizeHint().width(), 0);
-        } else {
-            setViewportMargins(0, 0, 0, 0);
-        }
-
-        m_scrollbarLock = false;
+    if (!verticalScrollBar()->visibleRegion().isEmpty()) {
+        setViewportMargins(0, 0, -verticalScrollBar()->sizeHint().width(), 0);
+    } else {
+        setViewportMargins(0, 0, 0, 0);
     }
 }
 

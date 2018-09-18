@@ -1324,6 +1324,11 @@ void Window::loadTheme(const QString &path)
         editor->textEditor->setThemeWithPath(path);
     }
 
+    // set background.
+    QPalette palette = this->palette();
+    palette.setColor(QPalette::Background, QColor(backgroundColor));
+    setPalette(palette);
+
     m_themePanel->setBackground(backgroundColor);
     m_jumpLineBar->setBackground(backgroundColor);
     m_replaceBar->setBackground(backgroundColor);
