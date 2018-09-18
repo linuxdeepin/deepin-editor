@@ -77,8 +77,6 @@ public:
     void newline();
     void openNewlineAbove();
     void openNewlineBelow();
-    void swapLineDown();
-    void swapLineUp();
     void moveLineDownUp(bool up);
     void scrollLineUp();
     void scrollLineDown();
@@ -107,7 +105,7 @@ public:
     void setFontSize(int fontSize);
     void updateFont();
 
-    void replaceAll(QString replaceText, QString withText);
+    void replaceAll(const QString &replaceText, const QString &withText);
     void replaceNext(QString replaceText, QString withText);
     void replaceRest(QString replaceText, QString withText);
 

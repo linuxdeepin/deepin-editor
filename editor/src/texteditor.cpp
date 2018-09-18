@@ -460,16 +460,6 @@ void TextEditor::openNewlineBelow()
     textCursor().insertText("\n");
 }
 
-void TextEditor::swapLineUp()
-{
-    moveLineDownUp(true);
-}
-
-void TextEditor::swapLineDown()
-{
-    moveLineDownUp(false);
-}
-
 void TextEditor::moveLineDownUp(bool up)
 {
     QTextCursor cursor = textCursor();
@@ -1160,48 +1150,31 @@ void TextEditor::updateFont()
     setFont(font);
 }
 
-void TextEditor::replaceAll(QString replaceText, QString withText)
+void TextEditor::replaceAll(const QString &replaceText, const QString &withText)
 {
-    // If replace text is nothing, don't do replace action.
-    if (replaceText.size() == 0) {
-        qDebug() << "Replace text is empty.";
+    if (replaceText.isEmpty() || withText.isEmpty()) {
         return;
     }
 
-    // Try get replace text in rest content.
+    QTextDocument::FindFlags flags;
+    flags &= QTextDocument::FindCaseSensitively;
+
     QTextCursor cursor = textCursor();
-    cursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
-    cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
-    QString text = cursor.selectedText();
-    QString textAfterReplace = cursor.selectedText().replace(replaceText, withText, Qt::CaseInsensitive);
+    cursor.movePosition(QTextCursor::Start);
+    cursor.beginEditBlock();
 
-    // Don't move cursor if nothing need to replace in rest content.
-    if (text == textAfterReplace) {
-        qDebug() << "Nothing need replace in rest content.";
-        return;
+    forever {
+        cursor = document()->find(replaceText, cursor, flags);
+
+        if (!cursor.isNull()) {
+            cursor.insertText(withText);
+        } else {
+            break;
+        }
     }
 
-    // If rest content can replace, variable keywordSelections must have items.
-    if (m_keywordSelections.size() == 0) {
-        qDebug() << "The code of TextEditor::replaceRest is wrong, need review.";
-        return;
-    }
-
-    // Get last keyword position.
-    auto lastKeywordPosition = m_keywordSelections.last().cursor.position();
-
-    // Replace file content.
-    cursor.insertText(textAfterReplace);
-    cursor.clearSelection();
+    cursor.endEditBlock();
     setTextCursor(cursor);
-
-    // Re-highlight keywords.
-    highlightKeyword(replaceText, getPosition());
-
-    // Restore last keyword position.
-    QTextCursor lastKeywordCursor = textCursor();
-    lastKeywordCursor.setPosition(lastKeywordPosition);
-    setTextCursor(lastKeywordCursor);
 }
 
 void TextEditor::replaceNext(QString replaceText, QString withText)
@@ -1480,9 +1453,9 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "killcurrentline")) {
             killCurrentLine();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "swaplineup")) {
-            swapLineUp();
+            moveLineDownUp(true);
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "swaplinedown")) {
-            swapLineDown();
+            moveLineDownUp(false);
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "scrolllineup")) {
             scrollLineUp();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "scrolllinedown")) {
@@ -1540,9 +1513,9 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglecomment")) {
             toggleComment();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "undo")) {
-            undo();
+            QPlainTextEdit::undo();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "redo")) {
-            redo();
+            QPlainTextEdit::redo();
         } else if (key == "Esc") {
             emit pressEsc();
         } else {

@@ -28,7 +28,7 @@ void GenerateSettingTranslate()
     auto group_shortcutsName = QObject::tr("Shortcuts");
     auto shortcuts_keymapName = QObject::tr("Keymap");
     auto shortcurs_keymap_keymap = QObject::tr("Keymap");
-    auto shortcus_windowName = QObject::tr("Window");
+    auto shortcuts_windowName = QObject::tr("Window");
     auto shortcuts_window_addblanktabName = QObject::tr("New tab");
     auto shortcuts_window_newwindowName = QObject::tr("New window");
     auto shortcuts_window_savefileName = QObject::tr("Save");
