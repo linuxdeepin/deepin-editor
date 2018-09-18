@@ -445,11 +445,11 @@ void Window::displayShortcuts()
     QJsonArray jsonGroups;
 
     QJsonObject windowJsonGroup;
-    windowJsonGroup.insert("groupName", "Window");
+    windowJsonGroup.insert("groupName", QObject::tr("Window"));
     QJsonArray windowJsonItems;
     for (auto option : m_settings->settings->group("shortcuts.window")->options()) {
         QJsonObject jsonItem;
-        jsonItem.insert("name", option->name());
+        jsonItem.insert("name", QObject::tr(option->name().toUtf8().data()));
         jsonItem.insert("value", option->value().toString().replace("Meta", "Super"));
         windowJsonItems.append(jsonItem);
     }
@@ -457,11 +457,11 @@ void Window::displayShortcuts()
     jsonGroups.append(windowJsonGroup);
 
     QJsonObject editorJsonGroup;
-    editorJsonGroup.insert("groupName", "Editor");
+    editorJsonGroup.insert("groupName", tr("Editor"));
     QJsonArray editorJsonItems;
     for (auto option : m_settings->settings->group("shortcuts.editor")->options()) {
         QJsonObject jsonItem;
-        jsonItem.insert("name", option->name());
+        jsonItem.insert("name", QObject::tr(option->name().toUtf8().data()));
         jsonItem.insert("value", option->value().toString().replace("Meta", "Super"));
         editorJsonItems.append(jsonItem);
     }
