@@ -195,6 +195,7 @@ void Window::initTitlebar()
 
     connect(m_tabbar->tabbar, &TabWidget::tabAddRequested, this, static_cast<void (Window::*)()>(&Window::addBlankTab), Qt::QueuedConnection);
     connect(m_tabbar->tabbar, &TabWidget::tabCloseRequested, this, &Window::handleTabCloseRequested, Qt::QueuedConnection);
+    connect(m_tabbar->tabbar, &TabWidget::closeTab, this, &Window::handleTabCloseRequested, Qt::QueuedConnection);
     connect(m_tabbar->tabbar, &TabWidget::currentChanged, this, &Window::handleCurrentChanged, Qt::QueuedConnection);
 
     connect(newWindowAction, &QAction::triggered, this, &Window::newWindow);

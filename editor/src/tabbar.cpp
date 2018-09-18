@@ -49,8 +49,6 @@ Tabbar::Tabbar(QWidget *parent)
     m_layout->addSpacing(70);
 
     connect(tabbar, &TabWidget::closeOtherTabs, this, &Tabbar::handleCloseOtherTabs, Qt::QueuedConnection);
-    connect(tabbar, &TabWidget::closeTab, this, &Tabbar::closeTabWithIndex, Qt::QueuedConnection);
-
     connect(tabbar, &TabWidget::tabBarDoubleClicked, this, &Tabbar::doubleClicked, Qt::QueuedConnection);
     connect(tabbar, &TabWidget::tabReleaseRequested, this, &Tabbar::handleTabReleaseRequested, Qt::QueuedConnection);
     connect(tabbar, &TabWidget::tabDroped, this, &Tabbar::handleTabDroped, Qt::QueuedConnection);
