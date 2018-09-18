@@ -607,7 +607,7 @@ void Window::popupFindBar()
 {
     if (m_findBar->isVisible()) {
         if (m_findBar->isFocus()) {
-            QTimer::singleShot(0, m_editorMap.value(m_tabbar->getActiveTabPath())->textEditor, SLOT(setFocus()));
+            m_editorMap.value(m_tabbar->getActiveTabPath())->textEditor->setFocus();
         } else {
             m_findBar->focus();
         }
@@ -622,6 +622,8 @@ void Window::popupFindBar()
         int scrollOffset = editor->textEditor->getScrollOffset();
 
         m_findBar->activeInput(text, tabPath, row, column, scrollOffset);
+
+        QTimer::singleShot(10, this, [=] { m_findBar->focus(); });
     }
 }
 
@@ -629,7 +631,7 @@ void Window::popupReplaceBar()
 {
     if (m_replaceBar->isVisible()) {
         if (m_replaceBar->isFocus()) {
-            QTimer::singleShot(0, m_editorMap.value(m_tabbar->getActiveTabPath())->textEditor, SLOT(setFocus()));
+            m_editorMap.value(m_tabbar->getActiveTabPath())->textEditor->setFocus();
         } else {
             m_replaceBar->focus();
         }
@@ -644,6 +646,8 @@ void Window::popupReplaceBar()
         int scrollOffset = editor->textEditor->getScrollOffset();
 
         m_replaceBar->activeInput(text, tabPath, row, column, scrollOffset);
+
+        QTimer::singleShot(10, this, [=] { m_replaceBar->focus(); });
     }
 }
 
