@@ -25,7 +25,6 @@ void GenerateSettingTranslate()
     auto base_fontName = QObject::tr("Font Style");
     auto base_font_familyName = QObject::tr("Font");
     auto base_font_sizeName = QObject::tr("Font Size");
-
     auto group_shortcutsName = QObject::tr("Shortcuts");
     auto shortcuts_keymapName = QObject::tr("Keymap");
     auto shortcurs_keymap_keymap = QObject::tr("Keymap");

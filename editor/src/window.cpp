@@ -60,7 +60,8 @@ Window::Window(DMainWindow *parent)
       m_windowManager(new DWindowManager),
       m_menu(new QMenu),
       m_titlebarStyleSheet(titlebar()->styleSheet()),
-      m_themePath(m_settings->settings->option("advance.editor.theme")->value().toString())
+      m_themePath(m_settings->settings->option("advance.editor.theme")->value().toString()),
+      m_windowShowFlag(true)
 {
     m_blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
     m_rootSaveDBus = new DBusDaemon::dbus("com.deepin.editor.daemon", "/", QDBusConnection::systemBus(), this);
@@ -97,20 +98,20 @@ Window::Window(DMainWindow *parent)
     // window minimum size.
     setMinimumSize(600, 400);
 
-    if (windowState == "window_normal") {
-        QScreen *screen = QGuiApplication::primaryScreen();
-        QRect screenGeometry = screen->geometry();
+    // resize window size.
+    QScreen *screen = QGuiApplication::primaryScreen();
+    QRect screenGeometry = screen->geometry();
 
-        resize(QSize(screenGeometry.width() * m_settings->settings->option("advance.window.window_width")->value().toDouble(),
-                     screenGeometry.height() * m_settings->settings->option("advance.window.window_height")->value().toDouble()));
-        show();
-    } else if (windowState == "window_maximum") {
+    resize(QSize(screenGeometry.width() * m_settings->settings->option("advance.window.window_width")->value().toDouble(),
+                 screenGeometry.height() * m_settings->settings->option("advance.window.window_height")->value().toDouble()));
+    show();
+
+    // init window state.
+    if (windowState == "window_maximum") {
         showMaximized();
     } else if (windowState == "fullscreen") {
         showFullScreen();
     }
-
-    m_windowShowFlag = true;
 
     // Init find bar.
     connect(m_findBar, &FindBar::findNext, this, &Window::handleFindNext, Qt::QueuedConnection);
@@ -747,7 +748,7 @@ void Window::updateTabSpaceNumber(int number)
 void Window::resizeEvent(QResizeEvent*)
 {
     if (m_windowShowFlag) {
-        auto states = m_windowManager->getWindowStates(winId());
+        QStringList states = m_windowManager->getWindowStates(winId());
         if (!states.contains("_NET_WM_STATE_MAXIMIZED_VERT")) {
             QScreen *screen = QGuiApplication::primaryScreen();
             QRect screenGeometry = screen->geometry();
