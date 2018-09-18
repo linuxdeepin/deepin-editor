@@ -157,6 +157,8 @@ void Tabbar::updateTabWithIndex(int index, const QString &filepath, const QStrin
 
 void Tabbar::closeTabWithIndex(int closeIndex)
 {
+    emit requestHistorySaved(tabbar->tabFiles.at(closeIndex), closeIndex);
+
     tabbar->removeTab(closeIndex);
 
     // do not remove in this place.

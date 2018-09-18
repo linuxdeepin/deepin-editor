@@ -193,6 +193,12 @@ void Window::initTitlebar()
     connect(m_tabbar, &Tabbar::doubleClicked, titlebar(), &DTitlebar::doubleClicked, Qt::QueuedConnection);
     connect(m_tabbar, &Tabbar::tabReleaseRequested, this, &Window::handleTabReleaseRequested, Qt::QueuedConnection);
 
+    connect(m_tabbar, &Tabbar::requestHistorySaved, this, [=] (const QString &filePath, int index) {
+        if (!m_closeFileHistory.contains(filePath)) {
+            m_closeFileHistory << filePath;
+        }
+    });
+
     connect(m_tabbar->tabbar, &TabWidget::tabAddRequested, this, static_cast<void (Window::*)()>(&Window::addBlankTab), Qt::QueuedConnection);
     connect(m_tabbar->tabbar, &TabWidget::tabCloseRequested, this, &Window::handleTabCloseRequested, Qt::QueuedConnection);
     connect(m_tabbar->tabbar, &TabWidget::closeTab, this, &Window::handleTabCloseRequested, Qt::QueuedConnection);

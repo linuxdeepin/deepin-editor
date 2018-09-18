@@ -66,6 +66,7 @@ public:
 signals:
     void doubleClicked();
     void tabReleaseRequested(const QString &tabName, const QString &filepaht, int index);
+    void requestHistorySaved(const QString &filePath, int index);
 
 public slots:
     void closeTabWithIndex(int closeIndex);
