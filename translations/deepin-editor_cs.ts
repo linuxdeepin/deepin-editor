@@ -1,20 +1,20 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="nl" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="cs" version="2.1">
 <context>
     <name>FindBar</name>
     <message>
         <location filename="../editor/src/findbar.cpp" line="38"/>
         <source>Find: </source>
-        <translation>Zoeken:</translation>
+        <translation>Najít:</translation>
     </message>
     <message>
         <location filename="../editor/src/findbar.cpp" line="40"/>
         <source>Next</source>
-        <translation>Volgende</translation>
+        <translation>Další</translation>
     </message>
     <message>
         <location filename="../editor/src/findbar.cpp" line="41"/>
         <source>Previous</source>
-        <translation>Vorige</translation>
+        <translation>Předchozí</translation>
     </message>
 </context>
 <context>
@@ -22,7 +22,7 @@
     <message>
         <location filename="../editor/src/jumplinebar.cpp" line="40"/>
         <source>Go to Line: </source>
-        <translation>Ga naar regel:</translation>
+        <translation>Jít na řádek:</translation>
     </message>
 </context>
 <context>
@@ -30,12 +30,12 @@
     <message>
         <location filename="../editor/src/main.cpp" line="47"/>
         <source>Deepin Editor is a desktop text editor that supports common text editing features.</source>
-        <translation>Deepin Bewerker is een tekstbewerkingsprogramma met ondersteuning voor vele bewerkfuncties.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../editor/src/main.cpp" line="62"/>
         <source>Deepin Editor</source>
-        <translation>Deepin Bewerker</translation>
+        <translation>Editor</translation>
     </message>
 </context>
 <context>
@@ -43,405 +43,405 @@
     <message>
         <location filename="../editor/src/main.cpp" line="58"/>
         <source>Deepin Editor</source>
-        <translation>Deepin Bewerker</translation>
+        <translation>Editor</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="24"/>
         <source>Basic</source>
-        <translation>Basis</translation>
+        <translation>Základní</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="25"/>
         <source>Font Style</source>
-        <translation>Lettertypestijl</translation>
+        <translation>Styl písma</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="26"/>
         <source>Font</source>
-        <translation>Lettertype</translation>
+        <translation>Písmo</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="27"/>
         <source>Font Size</source>
-        <translation>Lettertypegrootte</translation>
+        <translation>Velikost písma</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="29"/>
         <location filename="../editor/src/settingsdialog.cpp" line="30"/>
         <source>Keymap</source>
-        <translation>Sneltoetsoverzicht</translation>
+        <translation>Přiřazení kláves</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="28"/>
         <source>Shortcuts</source>
-        <translation>Sneltoetsen</translation>
+        <translation>Klávesové zkratky</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="31"/>
         <location filename="../editor/src/settingsdialog.cpp" line="102"/>
         <location filename="../editor/src/window.cpp" line="458"/>
         <source>Window</source>
-        <translation>Venster</translation>
+        <translation>Okno</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="32"/>
         <source>New tab</source>
-        <translation>Nieuw tabblad</translation>
+        <translation>Nová karta</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="33"/>
         <source>New window</source>
-        <translation>Nieuw venster</translation>
+        <translation>Nové okno</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="34"/>
         <source>Save</source>
-        <translation>Opslaan</translation>
+        <translation>Uložit</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="35"/>
         <source>Save as</source>
-        <translation>Opslaan als</translation>
+        <translation>Uložit jako</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="36"/>
         <source>Next tab</source>
-        <translation>Volgend tabblad</translation>
+        <translation>Další karta</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="37"/>
         <source>Previous tab</source>
-        <translation>Vorig tabblad</translation>
+        <translation>Předchozí karta</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="38"/>
         <source>Close tab</source>
-        <translation>Tabblad sluiten</translation>
+        <translation>Zavřít kartu</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="39"/>
         <source>Close other tabs</source>
-        <translation>Overige tabbladen sluiten</translation>
+        <translation>Zavřít ostatní karty</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="40"/>
         <source>Restore tab</source>
-        <translation>Tabblad herstellen</translation>
+        <translation>Obnovit kartu</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="41"/>
         <source>Open file</source>
-        <translation>Bestand openen</translation>
+        <translation>Otevřít soubor</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="42"/>
         <source>Increment font size</source>
-        <translation>Lettertype vergroten</translation>
+        <translation>Přírůstek velikosti písma</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="43"/>
         <source>Decrement font size</source>
-        <translation>Lettertype verkleinen</translation>
+        <translation>Úbytek velikosti písma</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="44"/>
         <source>Reset font size</source>
-        <translation>Lettergrootte herstellen</translation>
+        <translation>Vrátit velikost písma na výchozí</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="45"/>
         <source>Toggle fullscreen</source>
-        <translation>Volledig scherm in-/uitschakelen</translation>
+        <translation>Přepnout na celou obrazovku</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="46"/>
         <source>Find</source>
-        <translation>Zoeken</translation>
+        <translation>Najít</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="47"/>
         <source>Replace</source>
-        <translation>Vervangen</translation>
+        <translation>Nahradit</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="48"/>
         <source>Go to line</source>
-        <translation>Ga naar regel</translation>
+        <translation>Jít na řádek</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="49"/>
         <source>Save cursor position</source>
-        <translation>Cursorpositie opslaan</translation>
+        <translation>Uložit polohu ukazovátka</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="50"/>
         <source>Reset cursor position</source>
-        <translation>Cursorpositie herstellen</translation>
+        <translation>Vrátit polohu ukazovátka na výchozí</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="51"/>
         <source>Exit</source>
-        <translation>Afsluiten</translation>
+        <translation>Ukončit</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="52"/>
         <source>Display shortcuts</source>
-        <translation>Sneltoetsen tonen</translation>
+        <translation>Zobrazit klávesové zkratky</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="53"/>
         <source>Print</source>
-        <translation>Afdrukken</translation>
+        <translation>Tisk</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="54"/>
         <source>Editor</source>
-        <translation>Bewerker</translation>
+        <translation>Editor</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="55"/>
         <source>Increase indent</source>
-        <translation>Inspringing vergroten</translation>
+        <translation>Zvětšit odsazení</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="56"/>
         <source>Decrease indent</source>
-        <translation>Inspringing verkleinen</translation>
+        <translation>Zmenšit odsazení</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="57"/>
         <source>Forward char</source>
-        <translation>Teken vooruit</translation>
+        <translation>O znak dopředu</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="58"/>
         <source>Backward char</source>
-        <translation>Teken achteruit</translation>
+        <translation>O znak dozadu</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="59"/>
         <source>Forward word</source>
-        <translation>Woord vooruit</translation>
+        <translation>O slovo dopředu</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="60"/>
         <source>Backward word</source>
-        <translation>Woord achteruit</translation>
+        <translation>O slovo dozadu</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="61"/>
         <source>Next line</source>
-        <translation>Volgende regel</translation>
+        <translation>Další řádek</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="62"/>
         <source>Previous line</source>
-        <translation>Vorige regel</translation>
+        <translation>Předchozí řádek</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="63"/>
         <source>New line</source>
-        <translation>Nieuwe regel</translation>
+        <translation>Nový řádek</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="64"/>
         <source>New line above</source>
-        <translation>Nieuwe regel erboven</translation>
+        <translation>Nový řádek nad</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="65"/>
         <source>New line below</source>
-        <translation>Nieuwe regel eronder</translation>
+        <translation>Nový řádek pod</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="66"/>
         <source>Duplicate line</source>
-        <translation>Regel dupliceren</translation>
+        <translation>Zdvojit řádek</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="67"/>
         <source>Delete to end of line</source>
-        <translation>Wissen tot aan einde van regel</translation>
+        <translation>Smazat po konec řádku</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="68"/>
         <source>Delete current line</source>
-        <translation>Huidige regel wissen</translation>
+        <translation>Smazat nynější řádek</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="69"/>
         <source>Swap line up</source>
-        <translation>Regel omhoog verwisselen</translation>
+        <translation>Vyměnit řádek nahoru</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="70"/>
         <source>Swap line down</source>
-        <translation>Regel omlaag verwisselen</translation>
+        <translation>Vyměnit řádek dolů</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="71"/>
         <source>Scroll up one line</source>
-        <translation>Eén regel omhoog scrollen</translation>
+        <translation>Projíždět o řádek nahoru</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="72"/>
         <source>Scroll down one line</source>
-        <translation>Eén regel omlaag scrollen</translation>
+        <translation>Projíždět o řádek dolů</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="73"/>
         <source>Page up</source>
-        <translation>Pagina omhoog</translation>
+        <translation>O stranu nahoru</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="74"/>
         <source>Page down</source>
-        <translation>Pagina omlaag</translation>
+        <translation>O stranu dolů</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="75"/>
         <source>Move to end of line</source>
-        <translation>Verplaatsen naar einde van regel</translation>
+        <translation>Přesunout na konec řádku</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="76"/>
         <source>Move to start of line</source>
-        <translation>Verplaatsen naar begin van regel</translation>
+        <translation>Přesunout na začátek řádku</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="77"/>
         <source>Move to end of text</source>
-        <translation>Verplaatsen naar einde van tekst</translation>
+        <translation>Přesunout na konec textu</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="78"/>
         <source>Move to start of text</source>
-        <translation>Verplaatsen naar begin van tekst</translation>
+        <translation>Přesunout na začátek textu</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="79"/>
         <source>Move to line indentation</source>
-        <translation>Verplaatsen naar regelinspringing</translation>
+        <translation>Přesunout na odsazení řádku</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="80"/>
         <source>Upper case</source>
-        <translation>Hoofdletters</translation>
+        <translation>Velká písmena</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="81"/>
         <source>Lower case</source>
-        <translation>Kleine letters</translation>
+        <translation>Malá písmena</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="82"/>
         <source>Capitalize</source>
-        <translation>Omzetten naar hoofdletters</translation>
+        <translation>Kapitalizovat</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="83"/>
         <source>Delete backward word</source>
-        <translation>Woord achterwaarts wissen</translation>
+        <translation>Smazat slovo dozadu</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="84"/>
         <source>Delete forward word</source>
-        <translation>Woord voorwaarts wissen</translation>
+        <translation>Smazat slovo dopředu</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="85"/>
         <source>Forward over a pair</source>
-        <translation>Voorwaarts over een stel</translation>
+        <translation>Dopředu přes dvojici</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="86"/>
         <source>Backward over a pair</source>
-        <translation>Achterwaarts over een stel</translation>
+        <translation>Dozadu přes dvojici</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="87"/>
         <source>Select all</source>
-        <translation>Alles selecteren</translation>
+        <translation>Vybrat vše</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="88"/>
         <source>Copy</source>
-        <translation>Kopiëren</translation>
+        <translation>Kopírovat</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="89"/>
         <source>Cut</source>
-        <translation>Knippen</translation>
+        <translation>Vyjmout</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="90"/>
         <source>Paste</source>
-        <translation>Plakken</translation>
+        <translation>Vložit</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="91"/>
         <source>Transpose char</source>
-        <translation>Teken omzetten</translation>
+        <translation>Přemístit znak</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="92"/>
         <source>Mark</source>
-        <translation>Markeren</translation>
+        <translation>Označit</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="93"/>
         <source>Unmark</source>
-        <translation>De-markeren</translation>
+        <translation>Odznačit</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="94"/>
         <source>Copy line</source>
-        <translation>Regel kopiëren</translation>
+        <translation>Kopírovat řádek</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="95"/>
         <source>Cut line</source>
-        <translation>Regel knippen</translation>
+        <translation>Vyjmout řádek</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="96"/>
         <source>Merge lines</source>
-        <translation>Regels samenvoegen</translation>
+        <translation>Sloučit řádky</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="97"/>
         <source>Read-Only mode</source>
-        <translation>Alleen-lezenmodus</translation>
+        <translation>Režim pouze pro čtení</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="98"/>
         <source>Toggle comment</source>
-        <translation>Opmerkingen tonen/verbergen</translation>
+        <translation>Přepnout poznámku</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="99"/>
         <source>Undo</source>
-        <translation>Ongedaan maken</translation>
+        <translation>Zpět</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="100"/>
         <source>Redo</source>
-        <translation>Opnieuw</translation>
+        <translation>Znovu</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="101"/>
         <source>Advanced</source>
-        <translation>Geavanceerd</translation>
+        <translation>Pokročilé</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="103"/>
         <source>Window size</source>
-        <translation>Venstergrootte</translation>
+        <translation>Velikost okna</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="104"/>
         <source>Tab space</source>
-        <translation>Tabruimte</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -449,32 +449,32 @@
     <message>
         <location filename="../editor/src/replacebar.cpp" line="38"/>
         <source>Replace: </source>
-        <translation>Vervangen:</translation>
+        <translation>Nahradit:</translation>
     </message>
     <message>
         <location filename="../editor/src/replacebar.cpp" line="40"/>
         <source>With: </source>
-        <translation>Door:</translation>
+        <translation>Pomocí:</translation>
     </message>
     <message>
         <location filename="../editor/src/replacebar.cpp" line="42"/>
         <source>Replace</source>
-        <translation>Vervangen</translation>
+        <translation>Nahradit</translation>
     </message>
     <message>
         <location filename="../editor/src/replacebar.cpp" line="43"/>
         <source>Skip</source>
-        <translation>Overslaan</translation>
+        <translation>Přeskočit</translation>
     </message>
     <message>
         <location filename="../editor/src/replacebar.cpp" line="44"/>
         <source>Replace Rest</source>
-        <translation>Overige vervangen</translation>
+        <translation>Nahradit zbytek</translation>
     </message>
     <message>
         <location filename="../editor/src/replacebar.cpp" line="45"/>
         <source>Replace All</source>
-        <translation>Alles vervangen</translation>
+        <translation>Nahradit vše</translation>
     </message>
 </context>
 <context>
@@ -482,27 +482,27 @@
     <message>
         <location filename="../editor/src/settings.cpp" line="81"/>
         <source>Standard</source>
-        <translation>Standaard</translation>
+        <translation>Standardní</translation>
     </message>
     <message>
         <location filename="../editor/src/settings.cpp" line="81"/>
         <source>Customize</source>
-        <translation>Aanpassen</translation>
+        <translation>Přizpůsobit</translation>
     </message>
     <message>
         <location filename="../editor/src/settings.cpp" line="92"/>
         <source>Normal</source>
-        <translation>Normaal</translation>
+        <translation>Normální</translation>
     </message>
     <message>
         <location filename="../editor/src/settings.cpp" line="92"/>
         <source>Maximum</source>
-        <translation>Maximaal</translation>
+        <translation>Největší</translation>
     </message>
     <message>
         <location filename="../editor/src/settings.cpp" line="92"/>
         <source>Fullscreen</source>
-        <translation>Volledig scherm</translation>
+        <translation>Na celou obrazovku</translation>
     </message>
 </context>
 <context>
@@ -510,12 +510,12 @@
     <message>
         <location filename="../editor/src/tabwidget.cpp" line="218"/>
         <source>Close tab</source>
-        <translation>Tabblad sluiten</translation>
+        <translation>Zavřít kartu</translation>
     </message>
     <message>
         <location filename="../editor/src/tabwidget.cpp" line="219"/>
         <source>Close other tabs</source>
-        <translation>Overige tabbladen sluiten</translation>
+        <translation>Zavřít ostatní karty</translation>
     </message>
 </context>
 <context>
@@ -523,112 +523,112 @@
     <message>
         <location filename="../editor/src/texteditor.cpp" line="84"/>
         <source>Undo</source>
-        <translation>Ongedaan maken</translation>
+        <translation>Zpět</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="85"/>
         <source>Redo</source>
-        <translation>Opnieuw</translation>
+        <translation>Znovu</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="86"/>
         <source>Cut</source>
-        <translation>Knippen</translation>
+        <translation>Vyjmout</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="87"/>
         <source>Copy</source>
-        <translation>Kopiëren</translation>
+        <translation>Kopírovat</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="88"/>
         <source>Paste</source>
-        <translation>Plakken</translation>
+        <translation>Vložit</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="89"/>
         <source>Delete</source>
-        <translation>Verwijderen</translation>
+        <translation>Smazat</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="90"/>
         <source>Select All</source>
-        <translation>Alles selecteren</translation>
+        <translation>Vybrat vše</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="91"/>
         <source>Find</source>
-        <translation>Zoeken</translation>
+        <translation>Najít</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="92"/>
         <source>Replace</source>
-        <translation>Vervangen</translation>
+        <translation>Nahradit</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="93"/>
         <source>Go to Line</source>
-        <translation>Ga naar regel</translation>
+        <translation>Jít na řádek</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="94"/>
         <source>Turn on Read-Only mode</source>
-        <translation>Alleen-lezenmodus inschakelen</translation>
+        <translation>Zapnout režim pouze pro čtení</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="95"/>
         <source>Turn off Read-Only mode</source>
-        <translation>Alleen-lezenmodus uitschakelen</translation>
+        <translation>Vypnout režim pouze pro čtení</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="121"/>
         <source>Change Case</source>
-        <translation>Hoofdletter/kleine letters</translation>
+        <translation>Změnit velikost písmen</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="122"/>
         <source>Upper Case</source>
-        <translation>Hoofdletters</translation>
+        <translation>Velká písmena</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="123"/>
         <source>Lower Case</source>
-        <translation>Kleine letters</translation>
+        <translation>Malá písmena</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="2195"/>
         <source>Read-Only mode is off</source>
-        <translation>Alleen-lezenmodus is uitgeschakeld</translation>
+        <translation>Režim pouze pro čtení je vypnut</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="2199"/>
         <source>Read-Only mode is on</source>
-        <translation>Alleen-lezenmodus is ingeschakeld</translation>
+        <translation>Režim pouze pro čtení je zapnut</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="96"/>
         <source>Fullscreen</source>
-        <translation>Volledig scherm</translation>
+        <translation>Na celou obrazovku</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="97"/>
         <source>Exit fullscreen</source>
-        <translation>Volledig scherm verlaten</translation>
+        <translation>Opustit zobrazení na celou obrazovku</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="98"/>
         <source>Open in file manager</source>
-        <translation>Openen in bestandsbeheerder</translation>
+        <translation>Otevřít ve správci souborů</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="99"/>
         <source>Toggle comment</source>
-        <translation>Opmerkingen tonen/verbergen</translation>
+        <translation>Přepnout poznámku</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="124"/>
         <source>Capitalize</source>
-        <translation>Omzetten naar hoofdletters</translation>
+        <translation>Kapitalizovat</translation>
     </message>
 </context>
 <context>
@@ -636,32 +636,32 @@
     <message>
         <location filename="../editor/src/window.cpp" line="165"/>
         <source>New window</source>
-        <translation>Nieuw venster</translation>
+        <translation>Nové okno</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="166"/>
         <source>New tab</source>
-        <translation>Nieuw tabblad</translation>
+        <translation>Nová karta</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="167"/>
         <source>Open file</source>
-        <translation>Bestand openen</translation>
+        <translation>Otevřít soubor</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="169"/>
         <source>Save as</source>
-        <translation>Opslaan als</translation>
+        <translation>Uložit jako</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="170"/>
         <source>Print</source>
-        <translation>Afdrukken</translation>
+        <translation>Tisk</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="171"/>
         <source>Switch theme</source>
-        <translation>Thema wijzigen</translation>
+        <translation>Přepnout vzhled</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="575"/>
@@ -671,17 +671,17 @@
     <message>
         <location filename="../editor/src/window.cpp" line="1231"/>
         <source>Discard</source>
-        <translation>Verwerpen</translation>
+        <translation>Zahodit</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="172"/>
         <source>Settings</source>
-        <translation>Instellingen</translation>
+        <translation>Nastavení</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="251"/>
         <source>Invalid file: %1</source>
-        <translation>Ongeldig bestand: %1</translation>
+        <translation>Neplatný soubor: %1</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="292"/>
@@ -689,65 +689,65 @@
         <location filename="../editor/src/window.cpp" line="435"/>
         <location filename="../editor/src/window.cpp" line="818"/>
         <source>Save File</source>
-        <translation>Bestand opslaan</translation>
+        <translation>Uložit soubor</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="292"/>
         <source>Do you want to save this file?</source>
-        <translation>Wil je dit bestand opslaan?</translation>
+        <translation>Chcete uložit tento soubor?</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="415"/>
         <location filename="../editor/src/window.cpp" line="427"/>
         <source>Encoding</source>
-        <translation>Tekenreeks</translation>
+        <translation>Kódování</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="416"/>
         <location filename="../editor/src/window.cpp" line="428"/>
         <source>Line Endings</source>
-        <translation>Regeleindes</translation>
+        <translation>Konce řádků</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="489"/>
         <source>Editor</source>
-        <translation>Bewerker</translation>
+        <translation>Editor</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="526"/>
         <source>File cannot be saved when loading</source>
-        <translation>Bestand kan niet worden opgeslagen tijdens laden</translation>
+        <translation>Soubor nelze uložit během nahrávání</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="563"/>
         <source>Unable to save the file</source>
-        <translation>Opslaan niet mogelijk</translation>
+        <translation>Nelze uložit soubor</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="563"/>
         <source>Do you want to save as another?</source>
-        <translation>Wil je het als een ander bestand opslaan?</translation>
+        <translation>Chcete uložit jako jiný?</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="818"/>
         <source>Do you want to save all the files?</source>
-        <translation>Wil je alle bestanden opslaan?</translation>
+        <translation>Chcete uložit všechny tyto soubory?</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="984"/>
         <source>Blank document %1</source>
-        <translation>Leeg document %1</translation>
+        <translation>Prázdný dokument %1</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="1230"/>
         <source>Cancel</source>
-        <translation>Annuleren</translation>
+        <translation>Zrušit</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="168"/>
         <location filename="../editor/src/window.cpp" line="1232"/>
         <source>Save</source>
-        <translation>Opslaan</translation>
+        <translation>Uložit</translation>
     </message>
 </context>
 </TS>
