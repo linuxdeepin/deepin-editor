@@ -79,9 +79,9 @@
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="31"/>
         <location filename="../editor/src/settingsdialog.cpp" line="102"/>
-        <location filename="../editor/src/window.cpp" line="448"/>
+        <location filename="../editor/src/window.cpp" line="458"/>
         <source>Window</source>
-        <translation type="unfinished"/>
+        <translation>Vindue</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="32"/>
@@ -146,7 +146,7 @@
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="44"/>
         <source>Reset font size</source>
-        <translation type="unfinished"/>
+        <translation>Nulstil skriftstørrelse</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="45"/>
@@ -171,12 +171,12 @@
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="49"/>
         <source>Save cursor position</source>
-        <translation type="unfinished"/>
+        <translation>Gem markørplacering</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="50"/>
         <source>Reset cursor position</source>
-        <translation type="unfinished"/>
+        <translation>Nulstil markørplacering</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="51"/>
@@ -186,7 +186,7 @@
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="52"/>
         <source>Display shortcuts</source>
-        <translation type="unfinished"/>
+        <translation>Vis genveje</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="53"/>
@@ -521,112 +521,112 @@
 <context>
     <name>TextEditor</name>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="83"/>
+        <location filename="../editor/src/texteditor.cpp" line="84"/>
         <source>Undo</source>
         <translation>Fortryd</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="84"/>
+        <location filename="../editor/src/texteditor.cpp" line="85"/>
         <source>Redo</source>
         <translation>Omgør</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="85"/>
+        <location filename="../editor/src/texteditor.cpp" line="86"/>
         <source>Cut</source>
         <translation>Klip</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="86"/>
+        <location filename="../editor/src/texteditor.cpp" line="87"/>
         <source>Copy</source>
         <translation>Kopiér</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="87"/>
+        <location filename="../editor/src/texteditor.cpp" line="88"/>
         <source>Paste</source>
         <translation>Indsæt</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="88"/>
+        <location filename="../editor/src/texteditor.cpp" line="89"/>
         <source>Delete</source>
         <translation>Slet</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="89"/>
+        <location filename="../editor/src/texteditor.cpp" line="90"/>
         <source>Select All</source>
         <translation>Markér alt</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="90"/>
+        <location filename="../editor/src/texteditor.cpp" line="91"/>
         <source>Find</source>
         <translation>Find</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="91"/>
+        <location filename="../editor/src/texteditor.cpp" line="92"/>
         <source>Replace</source>
         <translation>Erstat</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="92"/>
+        <location filename="../editor/src/texteditor.cpp" line="93"/>
         <source>Go to Line</source>
         <translation>Gå til linje</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="93"/>
+        <location filename="../editor/src/texteditor.cpp" line="94"/>
         <source>Turn on Read-Only mode</source>
         <translation>Aktivér skrivebeskyttet tilstand</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="94"/>
+        <location filename="../editor/src/texteditor.cpp" line="95"/>
         <source>Turn off Read-Only mode</source>
         <translation>Deaktivér skrivebeskyttet tilstand</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="120"/>
+        <location filename="../editor/src/texteditor.cpp" line="121"/>
         <source>Change Case</source>
         <translation>Skift store/små bogstaver</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="121"/>
+        <location filename="../editor/src/texteditor.cpp" line="122"/>
         <source>Upper Case</source>
         <translation>Store bogstaver</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="122"/>
+        <location filename="../editor/src/texteditor.cpp" line="123"/>
         <source>Lower Case</source>
         <translation>Små bogstaver</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="2221"/>
+        <location filename="../editor/src/texteditor.cpp" line="2195"/>
         <source>Read-Only mode is off</source>
         <translation>Skrivebeskyttet tilstand er deaktiveret</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="2225"/>
+        <location filename="../editor/src/texteditor.cpp" line="2199"/>
         <source>Read-Only mode is on</source>
         <translation>Skrivebeskyttet tilstand er aktiveret</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="95"/>
+        <location filename="../editor/src/texteditor.cpp" line="96"/>
         <source>Fullscreen</source>
         <translation>Fuldskærm</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="96"/>
+        <location filename="../editor/src/texteditor.cpp" line="97"/>
         <source>Exit fullscreen</source>
         <translation>Afslut fuldskærm</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="97"/>
+        <location filename="../editor/src/texteditor.cpp" line="98"/>
         <source>Open in file manager</source>
         <translation>Åbn i filhåndtering</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="98"/>
+        <location filename="../editor/src/texteditor.cpp" line="99"/>
         <source>Toggle comment</source>
         <translation>Kommentar til/fra</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="123"/>
+        <location filename="../editor/src/texteditor.cpp" line="124"/>
         <source>Capitalize</source>
         <translation>Stort begyndelsesbogstav</translation>
     </message>
@@ -664,12 +664,12 @@
         <translation>Skift tema</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="251"/>
-        <source>%1 open invalid</source>
-        <translation>%1 åbning ugyldig</translation>
+        <location filename="../editor/src/window.cpp" line="575"/>
+        <source>Saved successfully</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="1197"/>
+        <location filename="../editor/src/window.cpp" line="1231"/>
         <source>Discard</source>
         <translation>Forkast</translation>
     </message>
@@ -679,10 +679,15 @@
         <translation>Indstillinger</translation>
     </message>
     <message>
+        <location filename="../editor/src/window.cpp" line="251"/>
+        <source>Invalid file: %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../editor/src/window.cpp" line="292"/>
         <location filename="../editor/src/window.cpp" line="413"/>
         <location filename="../editor/src/window.cpp" line="435"/>
-        <location filename="../editor/src/window.cpp" line="784"/>
+        <location filename="../editor/src/window.cpp" line="818"/>
         <source>Save File</source>
         <translation>Gem fil</translation>
     </message>
@@ -704,53 +709,43 @@
         <translation>Linjeskift</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="460"/>
+        <location filename="../editor/src/window.cpp" line="489"/>
         <source>Editor</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="495"/>
-        <source>File cannot be saved if it is not loaded.</source>
-        <translation>Filen kan ikke gemmes hvis ikke den er indlæst.</translation>
+        <location filename="../editor/src/window.cpp" line="526"/>
+        <source>File cannot be saved when loading</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="520"/>
-        <source>Saved root file %1</source>
-        <translation>Gemte rodfilen %1</translation>
-    </message>
-    <message>
-        <location filename="../editor/src/window.cpp" line="522"/>
-        <source>Save root file %1 failed.</source>
-        <translation>Kunne ikke gemme rodfilen %1.</translation>
-    </message>
-    <message>
-        <location filename="../editor/src/window.cpp" line="532"/>
-        <source>Unable to save file</source>
+        <location filename="../editor/src/window.cpp" line="563"/>
+        <source>Unable to save the file</source>
         <translation>Kan ikke gemme filen</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="532"/>
-        <source>Do you want to save to another?</source>
+        <location filename="../editor/src/window.cpp" line="563"/>
+        <source>Do you want to save as another?</source>
         <translation>Vil du gemme til en anden?</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="784"/>
+        <location filename="../editor/src/window.cpp" line="818"/>
         <source>Do you want to save all the files?</source>
         <translation>Vil du gemme alle filerne?</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="950"/>
+        <location filename="../editor/src/window.cpp" line="984"/>
         <source>Blank document %1</source>
         <translation>Tomt dokument %1</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="1196"/>
+        <location filename="../editor/src/window.cpp" line="1230"/>
         <source>Cancel</source>
         <translation>Annuller</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="168"/>
-        <location filename="../editor/src/window.cpp" line="1198"/>
+        <location filename="../editor/src/window.cpp" line="1232"/>
         <source>Save</source>
         <translation>Gem</translation>
     </message>

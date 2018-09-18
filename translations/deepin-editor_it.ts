@@ -1,20 +1,20 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="nl" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="it" version="2.1">
 <context>
     <name>FindBar</name>
     <message>
         <location filename="../editor/src/findbar.cpp" line="38"/>
         <source>Find: </source>
-        <translation>Zoeken:</translation>
+        <translation>Trova: </translation>
     </message>
     <message>
         <location filename="../editor/src/findbar.cpp" line="40"/>
         <source>Next</source>
-        <translation>Volgende</translation>
+        <translation>Prossima</translation>
     </message>
     <message>
         <location filename="../editor/src/findbar.cpp" line="41"/>
         <source>Previous</source>
-        <translation>Vorige</translation>
+        <translation>Precedente</translation>
     </message>
 </context>
 <context>
@@ -22,7 +22,7 @@
     <message>
         <location filename="../editor/src/jumplinebar.cpp" line="40"/>
         <source>Go to Line: </source>
-        <translation>Ga naar regel:</translation>
+        <translation>Vai alla linea: </translation>
     </message>
 </context>
 <context>
@@ -30,12 +30,12 @@
     <message>
         <location filename="../editor/src/main.cpp" line="47"/>
         <source>Deepin Editor is a desktop text editor that supports common text editing features.</source>
-        <translation>Deepin Bewerker is een tekstbewerkingsprogramma met ondersteuning voor vele bewerkfuncties.</translation>
+        <translation>Deepin Editor è un editor di testo che supporta le più comuni funzioni di modifica testuale.</translation>
     </message>
     <message>
         <location filename="../editor/src/main.cpp" line="62"/>
         <source>Deepin Editor</source>
-        <translation>Deepin Bewerker</translation>
+        <translation>Deepin Editor</translation>
     </message>
 </context>
 <context>
@@ -43,405 +43,405 @@
     <message>
         <location filename="../editor/src/main.cpp" line="58"/>
         <source>Deepin Editor</source>
-        <translation>Deepin Bewerker</translation>
+        <translation>Deepin Editor</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="24"/>
         <source>Basic</source>
-        <translation>Basis</translation>
+        <translation>Base</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="25"/>
         <source>Font Style</source>
-        <translation>Lettertypestijl</translation>
+        <translation>Stile Font</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="26"/>
         <source>Font</source>
-        <translation>Lettertype</translation>
+        <translation>Font</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="27"/>
         <source>Font Size</source>
-        <translation>Lettertypegrootte</translation>
+        <translation>Dimensione Font</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="29"/>
         <location filename="../editor/src/settingsdialog.cpp" line="30"/>
         <source>Keymap</source>
-        <translation>Sneltoetsoverzicht</translation>
+        <translation>Mappa caratteri</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="28"/>
         <source>Shortcuts</source>
-        <translation>Sneltoetsen</translation>
+        <translation>Scorciatoie</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="31"/>
         <location filename="../editor/src/settingsdialog.cpp" line="102"/>
         <location filename="../editor/src/window.cpp" line="458"/>
         <source>Window</source>
-        <translation>Venster</translation>
+        <translation>Finestra</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="32"/>
         <source>New tab</source>
-        <translation>Nieuw tabblad</translation>
+        <translation>Nuova scheda</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="33"/>
         <source>New window</source>
-        <translation>Nieuw venster</translation>
+        <translation>Nuova finestra</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="34"/>
         <source>Save</source>
-        <translation>Opslaan</translation>
+        <translation>Salva</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="35"/>
         <source>Save as</source>
-        <translation>Opslaan als</translation>
+        <translation>Salva con nome</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="36"/>
         <source>Next tab</source>
-        <translation>Volgend tabblad</translation>
+        <translation>Prossima scheda</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="37"/>
         <source>Previous tab</source>
-        <translation>Vorig tabblad</translation>
+        <translation>Scheda precedente</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="38"/>
         <source>Close tab</source>
-        <translation>Tabblad sluiten</translation>
+        <translation>Chiudi scheda</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="39"/>
         <source>Close other tabs</source>
-        <translation>Overige tabbladen sluiten</translation>
+        <translation>Chiudi le altre schede</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="40"/>
         <source>Restore tab</source>
-        <translation>Tabblad herstellen</translation>
+        <translation>Ripristina scheda</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="41"/>
         <source>Open file</source>
-        <translation>Bestand openen</translation>
+        <translation>Apri file</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="42"/>
         <source>Increment font size</source>
-        <translation>Lettertype vergroten</translation>
+        <translation>Aumenta dimensione font</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="43"/>
         <source>Decrement font size</source>
-        <translation>Lettertype verkleinen</translation>
+        <translation>Diminuisci dimensione font</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="44"/>
         <source>Reset font size</source>
-        <translation>Lettergrootte herstellen</translation>
+        <translation>Ripristina dimensione font</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="45"/>
         <source>Toggle fullscreen</source>
-        <translation>Volledig scherm in-/uitschakelen</translation>
+        <translation>Passa a schermo intero</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="46"/>
         <source>Find</source>
-        <translation>Zoeken</translation>
+        <translation>Trova</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="47"/>
         <source>Replace</source>
-        <translation>Vervangen</translation>
+        <translation>Sostituisci</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="48"/>
         <source>Go to line</source>
-        <translation>Ga naar regel</translation>
+        <translation>Vai alla linea</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="49"/>
         <source>Save cursor position</source>
-        <translation>Cursorpositie opslaan</translation>
+        <translation>Salva la posizione del cursore</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="50"/>
         <source>Reset cursor position</source>
-        <translation>Cursorpositie herstellen</translation>
+        <translation>Ripristina la posizione del cursore</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="51"/>
         <source>Exit</source>
-        <translation>Afsluiten</translation>
+        <translation>Esci</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="52"/>
         <source>Display shortcuts</source>
-        <translation>Sneltoetsen tonen</translation>
+        <translation>Mostra scorciatoie</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="53"/>
         <source>Print</source>
-        <translation>Afdrukken</translation>
+        <translation>Stampa</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="54"/>
         <source>Editor</source>
-        <translation>Bewerker</translation>
+        <translation>Editor</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="55"/>
         <source>Increase indent</source>
-        <translation>Inspringing vergroten</translation>
+        <translation>Aumenta il rientro</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="56"/>
         <source>Decrease indent</source>
-        <translation>Inspringing verkleinen</translation>
+        <translation>Diminuisci il rientro</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="57"/>
         <source>Forward char</source>
-        <translation>Teken vooruit</translation>
+        <translation>Carattere successivo</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="58"/>
         <source>Backward char</source>
-        <translation>Teken achteruit</translation>
+        <translation>Carattere precedente</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="59"/>
         <source>Forward word</source>
-        <translation>Woord vooruit</translation>
+        <translation>Parola successiva</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="60"/>
         <source>Backward word</source>
-        <translation>Woord achteruit</translation>
+        <translation>Parola precedente</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="61"/>
         <source>Next line</source>
-        <translation>Volgende regel</translation>
+        <translation>Prossima linea</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="62"/>
         <source>Previous line</source>
-        <translation>Vorige regel</translation>
+        <translation>Linea precedente</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="63"/>
         <source>New line</source>
-        <translation>Nieuwe regel</translation>
+        <translation>Nuova riga</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="64"/>
         <source>New line above</source>
-        <translation>Nieuwe regel erboven</translation>
+        <translation>Nuova riga sopra</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="65"/>
         <source>New line below</source>
-        <translation>Nieuwe regel eronder</translation>
+        <translation>Nuova riga sotto</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="66"/>
         <source>Duplicate line</source>
-        <translation>Regel dupliceren</translation>
+        <translation>Duplica riga</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="67"/>
         <source>Delete to end of line</source>
-        <translation>Wissen tot aan einde van regel</translation>
+        <translation>Elimina dalla fine della riga</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="68"/>
         <source>Delete current line</source>
-        <translation>Huidige regel wissen</translation>
+        <translation>Elimina riga corrente</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="69"/>
         <source>Swap line up</source>
-        <translation>Regel omhoog verwisselen</translation>
+        <translation>Inverti riga superiore</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="70"/>
         <source>Swap line down</source>
-        <translation>Regel omlaag verwisselen</translation>
+        <translation>Inverti riga inferiore</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="71"/>
         <source>Scroll up one line</source>
-        <translation>Eén regel omhoog scrollen</translation>
+        <translation>Passa alla riga sopra</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="72"/>
         <source>Scroll down one line</source>
-        <translation>Eén regel omlaag scrollen</translation>
+        <translation>Passa alla riga sotto</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="73"/>
         <source>Page up</source>
-        <translation>Pagina omhoog</translation>
+        <translation>Pagina su</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="74"/>
         <source>Page down</source>
-        <translation>Pagina omlaag</translation>
+        <translation>Pagina giu</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="75"/>
         <source>Move to end of line</source>
-        <translation>Verplaatsen naar einde van regel</translation>
+        <translation>Muovi alla fine della riga</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="76"/>
         <source>Move to start of line</source>
-        <translation>Verplaatsen naar begin van regel</translation>
+        <translation>Muovi all&apos;inizio della riga</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="77"/>
         <source>Move to end of text</source>
-        <translation>Verplaatsen naar einde van tekst</translation>
+        <translation>Muovi alla fine del testo</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="78"/>
         <source>Move to start of text</source>
-        <translation>Verplaatsen naar begin van tekst</translation>
+        <translation>Muovi all&apos;inizio del testo</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="79"/>
         <source>Move to line indentation</source>
-        <translation>Verplaatsen naar regelinspringing</translation>
+        <translation>Muovi al rientro di riga</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="80"/>
         <source>Upper case</source>
-        <translation>Hoofdletters</translation>
+        <translation>Lettere maiuscole</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="81"/>
         <source>Lower case</source>
-        <translation>Kleine letters</translation>
+        <translation>Lettere minuscole</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="82"/>
         <source>Capitalize</source>
-        <translation>Omzetten naar hoofdletters</translation>
+        <translation>Maiuscola</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="83"/>
         <source>Delete backward word</source>
-        <translation>Woord achterwaarts wissen</translation>
+        <translation>Elimina parola precedente</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="84"/>
         <source>Delete forward word</source>
-        <translation>Woord voorwaarts wissen</translation>
+        <translation>Elimina parola successiva</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="85"/>
         <source>Forward over a pair</source>
-        <translation>Voorwaarts over een stel</translation>
+        <translation>Avanti paritario</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="86"/>
         <source>Backward over a pair</source>
-        <translation>Achterwaarts over een stel</translation>
+        <translation>Indietro paritario</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="87"/>
         <source>Select all</source>
-        <translation>Alles selecteren</translation>
+        <translation>Seleziona tutto</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="88"/>
         <source>Copy</source>
-        <translation>Kopiëren</translation>
+        <translation>Copia</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="89"/>
         <source>Cut</source>
-        <translation>Knippen</translation>
+        <translation>Taglia</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="90"/>
         <source>Paste</source>
-        <translation>Plakken</translation>
+        <translation>Incolla</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="91"/>
         <source>Transpose char</source>
-        <translation>Teken omzetten</translation>
+        <translation>Trasponi caratteri</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="92"/>
         <source>Mark</source>
-        <translation>Markeren</translation>
+        <translation>Evidenzia</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="93"/>
         <source>Unmark</source>
-        <translation>De-markeren</translation>
+        <translation>Non in evidenza</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="94"/>
         <source>Copy line</source>
-        <translation>Regel kopiëren</translation>
+        <translation>Copia riga</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="95"/>
         <source>Cut line</source>
-        <translation>Regel knippen</translation>
+        <translation>Taglia riga</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="96"/>
         <source>Merge lines</source>
-        <translation>Regels samenvoegen</translation>
+        <translation>Unisci righe</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="97"/>
         <source>Read-Only mode</source>
-        <translation>Alleen-lezenmodus</translation>
+        <translation>Modalità sola lettura</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="98"/>
         <source>Toggle comment</source>
-        <translation>Opmerkingen tonen/verbergen</translation>
+        <translation>Commento</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="99"/>
         <source>Undo</source>
-        <translation>Ongedaan maken</translation>
+        <translation>Annulla</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="100"/>
         <source>Redo</source>
-        <translation>Opnieuw</translation>
+        <translation>Riapplica</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="101"/>
         <source>Advanced</source>
-        <translation>Geavanceerd</translation>
+        <translation>Avanzate</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="103"/>
         <source>Window size</source>
-        <translation>Venstergrootte</translation>
+        <translation>Dimensione finestra</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="104"/>
         <source>Tab space</source>
-        <translation>Tabruimte</translation>
+        <translation>Tab spaziatura</translation>
     </message>
 </context>
 <context>
@@ -449,32 +449,32 @@
     <message>
         <location filename="../editor/src/replacebar.cpp" line="38"/>
         <source>Replace: </source>
-        <translation>Vervangen:</translation>
+        <translation>Sostituisci: </translation>
     </message>
     <message>
         <location filename="../editor/src/replacebar.cpp" line="40"/>
         <source>With: </source>
-        <translation>Door:</translation>
+        <translation>Con: </translation>
     </message>
     <message>
         <location filename="../editor/src/replacebar.cpp" line="42"/>
         <source>Replace</source>
-        <translation>Vervangen</translation>
+        <translation>Sostituisci</translation>
     </message>
     <message>
         <location filename="../editor/src/replacebar.cpp" line="43"/>
         <source>Skip</source>
-        <translation>Overslaan</translation>
+        <translation>Salta</translation>
     </message>
     <message>
         <location filename="../editor/src/replacebar.cpp" line="44"/>
         <source>Replace Rest</source>
-        <translation>Overige vervangen</translation>
+        <translation>Sostituisci il resto</translation>
     </message>
     <message>
         <location filename="../editor/src/replacebar.cpp" line="45"/>
         <source>Replace All</source>
-        <translation>Alles vervangen</translation>
+        <translation>Sostituisci tutto</translation>
     </message>
 </context>
 <context>
@@ -482,27 +482,27 @@
     <message>
         <location filename="../editor/src/settings.cpp" line="81"/>
         <source>Standard</source>
-        <translation>Standaard</translation>
+        <translation>Standard</translation>
     </message>
     <message>
         <location filename="../editor/src/settings.cpp" line="81"/>
         <source>Customize</source>
-        <translation>Aanpassen</translation>
+        <translation>Personalizzato</translation>
     </message>
     <message>
         <location filename="../editor/src/settings.cpp" line="92"/>
         <source>Normal</source>
-        <translation>Normaal</translation>
+        <translation>Normale</translation>
     </message>
     <message>
         <location filename="../editor/src/settings.cpp" line="92"/>
         <source>Maximum</source>
-        <translation>Maximaal</translation>
+        <translation>Massimo</translation>
     </message>
     <message>
         <location filename="../editor/src/settings.cpp" line="92"/>
         <source>Fullscreen</source>
-        <translation>Volledig scherm</translation>
+        <translation>Pieno schermo</translation>
     </message>
 </context>
 <context>
@@ -510,12 +510,12 @@
     <message>
         <location filename="../editor/src/tabwidget.cpp" line="218"/>
         <source>Close tab</source>
-        <translation>Tabblad sluiten</translation>
+        <translation>Chiudi scheda</translation>
     </message>
     <message>
         <location filename="../editor/src/tabwidget.cpp" line="219"/>
         <source>Close other tabs</source>
-        <translation>Overige tabbladen sluiten</translation>
+        <translation>Chiudi altre schede</translation>
     </message>
 </context>
 <context>
@@ -523,112 +523,112 @@
     <message>
         <location filename="../editor/src/texteditor.cpp" line="84"/>
         <source>Undo</source>
-        <translation>Ongedaan maken</translation>
+        <translation>Annulla</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="85"/>
         <source>Redo</source>
-        <translation>Opnieuw</translation>
+        <translation>Riapplica</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="86"/>
         <source>Cut</source>
-        <translation>Knippen</translation>
+        <translation>Taglia</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="87"/>
         <source>Copy</source>
-        <translation>Kopiëren</translation>
+        <translation>Copia</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="88"/>
         <source>Paste</source>
-        <translation>Plakken</translation>
+        <translation>Incolla</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="89"/>
         <source>Delete</source>
-        <translation>Verwijderen</translation>
+        <translation>Elimina</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="90"/>
         <source>Select All</source>
-        <translation>Alles selecteren</translation>
+        <translation>Seleziona tutto</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="91"/>
         <source>Find</source>
-        <translation>Zoeken</translation>
+        <translation>Trova</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="92"/>
         <source>Replace</source>
-        <translation>Vervangen</translation>
+        <translation>Sostituisci</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="93"/>
         <source>Go to Line</source>
-        <translation>Ga naar regel</translation>
+        <translation>Vai alla linea</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="94"/>
         <source>Turn on Read-Only mode</source>
-        <translation>Alleen-lezenmodus inschakelen</translation>
+        <translation>Attiva modalità sola lettura</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="95"/>
         <source>Turn off Read-Only mode</source>
-        <translation>Alleen-lezenmodus uitschakelen</translation>
+        <translation>Disattiva modalità sola lettura</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="121"/>
         <source>Change Case</source>
-        <translation>Hoofdletter/kleine letters</translation>
+        <translation>Cambia caratteri</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="122"/>
         <source>Upper Case</source>
-        <translation>Hoofdletters</translation>
+        <translation>Maiuscolo</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="123"/>
         <source>Lower Case</source>
-        <translation>Kleine letters</translation>
+        <translation>Minuscolo</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="2195"/>
         <source>Read-Only mode is off</source>
-        <translation>Alleen-lezenmodus is uitgeschakeld</translation>
+        <translation>La modalità sola lettura è disattivata</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="2199"/>
         <source>Read-Only mode is on</source>
-        <translation>Alleen-lezenmodus is ingeschakeld</translation>
+        <translation>La modalità sola lettura è attiva</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="96"/>
         <source>Fullscreen</source>
-        <translation>Volledig scherm</translation>
+        <translation>Pieno schermo</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="97"/>
         <source>Exit fullscreen</source>
-        <translation>Volledig scherm verlaten</translation>
+        <translation>Esci dal fullscreen</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="98"/>
         <source>Open in file manager</source>
-        <translation>Openen in bestandsbeheerder</translation>
+        <translation>Apri nel file manager</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="99"/>
         <source>Toggle comment</source>
-        <translation>Opmerkingen tonen/verbergen</translation>
+        <translation>Commento</translation>
     </message>
     <message>
         <location filename="../editor/src/texteditor.cpp" line="124"/>
         <source>Capitalize</source>
-        <translation>Omzetten naar hoofdletters</translation>
+        <translation>Maiuscolo</translation>
     </message>
 </context>
 <context>
@@ -636,52 +636,52 @@
     <message>
         <location filename="../editor/src/window.cpp" line="165"/>
         <source>New window</source>
-        <translation>Nieuw venster</translation>
+        <translation>Nuova finestra</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="166"/>
         <source>New tab</source>
-        <translation>Nieuw tabblad</translation>
+        <translation>Nuova scheda</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="167"/>
         <source>Open file</source>
-        <translation>Bestand openen</translation>
+        <translation>Apri file</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="169"/>
         <source>Save as</source>
-        <translation>Opslaan als</translation>
+        <translation>Salva con nome</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="170"/>
         <source>Print</source>
-        <translation>Afdrukken</translation>
+        <translation>Stampa</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="171"/>
         <source>Switch theme</source>
-        <translation>Thema wijzigen</translation>
+        <translation>Cambia tema</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="575"/>
         <source>Saved successfully</source>
-        <translation type="unfinished"/>
+        <translation>Salvato con successo</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="1231"/>
         <source>Discard</source>
-        <translation>Verwerpen</translation>
+        <translation>Annulla</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="172"/>
         <source>Settings</source>
-        <translation>Instellingen</translation>
+        <translation>Impostazioni</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="251"/>
         <source>Invalid file: %1</source>
-        <translation>Ongeldig bestand: %1</translation>
+        <translation>File non valido: %1</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="292"/>
@@ -689,65 +689,65 @@
         <location filename="../editor/src/window.cpp" line="435"/>
         <location filename="../editor/src/window.cpp" line="818"/>
         <source>Save File</source>
-        <translation>Bestand opslaan</translation>
+        <translation>Salva file</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="292"/>
         <source>Do you want to save this file?</source>
-        <translation>Wil je dit bestand opslaan?</translation>
+        <translation>Desideri salvare questo file?</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="415"/>
         <location filename="../editor/src/window.cpp" line="427"/>
         <source>Encoding</source>
-        <translation>Tekenreeks</translation>
+        <translation>Codifica</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="416"/>
         <location filename="../editor/src/window.cpp" line="428"/>
         <source>Line Endings</source>
-        <translation>Regeleindes</translation>
+        <translation>Fine delle righe</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="489"/>
         <source>Editor</source>
-        <translation>Bewerker</translation>
+        <translation>Editor</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="526"/>
         <source>File cannot be saved when loading</source>
-        <translation>Bestand kan niet worden opgeslagen tijdens laden</translation>
+        <translation>Il file non può esser salvato durante il caricamento</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="563"/>
         <source>Unable to save the file</source>
-        <translation>Opslaan niet mogelijk</translation>
+        <translation>Impossibile salvare questo file</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="563"/>
         <source>Do you want to save as another?</source>
-        <translation>Wil je het als een ander bestand opslaan?</translation>
+        <translation>Desideri salvarlo in altro modo?</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="818"/>
         <source>Do you want to save all the files?</source>
-        <translation>Wil je alle bestanden opslaan?</translation>
+        <translation>Desideri salvare tutti i file?</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="984"/>
         <source>Blank document %1</source>
-        <translation>Leeg document %1</translation>
+        <translation>Documento vuoto %1</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="1230"/>
         <source>Cancel</source>
-        <translation>Annuleren</translation>
+        <translation>Annulla</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="168"/>
         <location filename="../editor/src/window.cpp" line="1232"/>
         <source>Save</source>
-        <translation>Opslaan</translation>
+        <translation>Salva</translation>
     </message>
 </context>
 </TS>

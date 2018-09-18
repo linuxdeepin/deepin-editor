@@ -1,0 +1,17 @@
+[Desktop Entry]
+Categories=Utility;TextEditor;
+Comment=Simple and easy to use deepin editor
+Exec=deepin-editor %F
+GenericName=Editor
+Icon=deepin-editor
+MimeType=text/english;text/plain;text/x-makefile;text/x-c++hdr;text/x-c++src;text/x-chdr;text/x-csrc;text/x-java;text/x-moc;text/x-pascal;text/x-tcl;text/x-tex;application/x-shellscript;text/x-c;text/x-c++;
+Name=Deepin Editor
+Type=Application
+StartupNotify=false
+
+
+# Translations
+Comment[lt]=Paprastas ir lengvas naudoti deepin redaktorius
+Icon[lt]=deepin-editor
+Name[lt]=Deepin redaktorius
+GenericName[lt]=Redaktorius

@@ -48,120 +48,120 @@
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="24"/>
         <source>Basic</source>
-        <translation type="unfinished"/>
+        <translation>Básico</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="25"/>
         <source>Font Style</source>
-        <translation type="unfinished"/>
+        <translation>Estilo de fonte</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="26"/>
         <source>Font</source>
-        <translation type="unfinished"/>
+        <translation>Fonte</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="27"/>
         <source>Font Size</source>
-        <translation type="unfinished"/>
+        <translation>Tamanho da fonte</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="29"/>
         <location filename="../editor/src/settingsdialog.cpp" line="30"/>
         <source>Keymap</source>
-        <translation type="unfinished"/>
+        <translation>Atalhos de teclado</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="28"/>
         <source>Shortcuts</source>
-        <translation type="unfinished"/>
+        <translation>Atalhos</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="31"/>
         <location filename="../editor/src/settingsdialog.cpp" line="102"/>
-        <location filename="../editor/src/window.cpp" line="448"/>
+        <location filename="../editor/src/window.cpp" line="458"/>
         <source>Window</source>
-        <translation type="unfinished"/>
+        <translation>Janela</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="32"/>
         <source>New tab</source>
-        <translation type="unfinished"/>
+        <translation>Nova aba</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="33"/>
         <source>New window</source>
-        <translation type="unfinished"/>
+        <translation>Nova Janela</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="34"/>
         <source>Save</source>
-        <translation type="unfinished"/>
+        <translation>Salvar</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="35"/>
         <source>Save as</source>
-        <translation type="unfinished"/>
+        <translation>Salvar como</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="36"/>
         <source>Next tab</source>
-        <translation type="unfinished"/>
+        <translation>Próxima aba</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="37"/>
         <source>Previous tab</source>
-        <translation type="unfinished"/>
+        <translation>Aba anterior</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="38"/>
         <source>Close tab</source>
-        <translation type="unfinished"/>
+        <translation>Fechar aba</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="39"/>
         <source>Close other tabs</source>
-        <translation type="unfinished"/>
+        <translation>Fechar outras abas</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="40"/>
         <source>Restore tab</source>
-        <translation type="unfinished"/>
+        <translation>Restaurar abas</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="41"/>
         <source>Open file</source>
-        <translation type="unfinished"/>
+        <translation>Abrir arquivo</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="42"/>
         <source>Increment font size</source>
-        <translation type="unfinished"/>
+        <translation>Aumentar tamanho da fonte</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="43"/>
         <source>Decrement font size</source>
-        <translation type="unfinished"/>
+        <translation>Diminuir tamanho da fonte</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="44"/>
         <source>Reset font size</source>
-        <translation type="unfinished"/>
+        <translation>Restaurar tamanho da fonte</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="45"/>
         <source>Toggle fullscreen</source>
-        <translation type="unfinished"/>
+        <translation>Alternar para o modo tela cheia</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="46"/>
         <source>Find</source>
-        <translation type="unfinished"/>
+        <translation>Encontrar</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="47"/>
         <source>Replace</source>
-        <translation type="unfinished"/>
+        <translation>Substituir</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="48"/>
@@ -521,112 +521,112 @@
 <context>
     <name>TextEditor</name>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="83"/>
+        <location filename="../editor/src/texteditor.cpp" line="84"/>
         <source>Undo</source>
         <translation>Desfazer</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="84"/>
+        <location filename="../editor/src/texteditor.cpp" line="85"/>
         <source>Redo</source>
         <translation>Refazer</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="85"/>
+        <location filename="../editor/src/texteditor.cpp" line="86"/>
         <source>Cut</source>
         <translation>Cortar</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="86"/>
+        <location filename="../editor/src/texteditor.cpp" line="87"/>
         <source>Copy</source>
         <translation>Copiar</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="87"/>
+        <location filename="../editor/src/texteditor.cpp" line="88"/>
         <source>Paste</source>
         <translation>Colar</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="88"/>
+        <location filename="../editor/src/texteditor.cpp" line="89"/>
         <source>Delete</source>
         <translation>Excluir</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="89"/>
+        <location filename="../editor/src/texteditor.cpp" line="90"/>
         <source>Select All</source>
         <translation>Selecionar Tudo</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="90"/>
+        <location filename="../editor/src/texteditor.cpp" line="91"/>
         <source>Find</source>
         <translation>Encontrar</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="91"/>
+        <location filename="../editor/src/texteditor.cpp" line="92"/>
         <source>Replace</source>
         <translation>Substituir</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="92"/>
+        <location filename="../editor/src/texteditor.cpp" line="93"/>
         <source>Go to Line</source>
         <translation>Ir à linha</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="93"/>
+        <location filename="../editor/src/texteditor.cpp" line="94"/>
         <source>Turn on Read-Only mode</source>
         <translation>Ativar modo Somente leitura</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="94"/>
+        <location filename="../editor/src/texteditor.cpp" line="95"/>
         <source>Turn off Read-Only mode</source>
         <translation>Desativar modo Somente leitura</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="120"/>
+        <location filename="../editor/src/texteditor.cpp" line="121"/>
         <source>Change Case</source>
         <translation>Mudar Caixa</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="121"/>
+        <location filename="../editor/src/texteditor.cpp" line="122"/>
         <source>Upper Case</source>
         <translation>Caixa Alta</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="122"/>
+        <location filename="../editor/src/texteditor.cpp" line="123"/>
         <source>Lower Case</source>
         <translation>Caixa Baixa</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="2221"/>
+        <location filename="../editor/src/texteditor.cpp" line="2195"/>
         <source>Read-Only mode is off</source>
         <translation>Modo Somente Leitura está desativado</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="2225"/>
+        <location filename="../editor/src/texteditor.cpp" line="2199"/>
         <source>Read-Only mode is on</source>
         <translation>Modo Somente Leitura está ativado</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="95"/>
+        <location filename="../editor/src/texteditor.cpp" line="96"/>
         <source>Fullscreen</source>
         <translation>Tela Cheia</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="96"/>
+        <location filename="../editor/src/texteditor.cpp" line="97"/>
         <source>Exit fullscreen</source>
         <translation>Sair da tela cheia</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="97"/>
+        <location filename="../editor/src/texteditor.cpp" line="98"/>
         <source>Open in file manager</source>
         <translation>Abrir gerenciador de arquivos</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="98"/>
+        <location filename="../editor/src/texteditor.cpp" line="99"/>
         <source>Toggle comment</source>
         <translation>Alternar comentário</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="123"/>
+        <location filename="../editor/src/texteditor.cpp" line="124"/>
         <source>Capitalize</source>
         <translation>Colocar em letras maiúsculas</translation>
     </message>
@@ -664,25 +664,30 @@
         <translation>Mudar tema</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="251"/>
-        <source>%1 open invalid</source>
-        <translation>%1 abertura inválida</translation>
+        <location filename="../editor/src/window.cpp" line="575"/>
+        <source>Saved successfully</source>
+        <translation>Salvo com sucesso</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="1197"/>
+        <location filename="../editor/src/window.cpp" line="1231"/>
         <source>Discard</source>
         <translation>Descartar</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="172"/>
         <source>Settings</source>
+        <translation>Configurações</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/window.cpp" line="251"/>
+        <source>Invalid file: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="292"/>
         <location filename="../editor/src/window.cpp" line="413"/>
         <location filename="../editor/src/window.cpp" line="435"/>
-        <location filename="../editor/src/window.cpp" line="784"/>
+        <location filename="../editor/src/window.cpp" line="818"/>
         <source>Save File</source>
         <translation>Salvar Arquivo</translation>
     </message>
@@ -704,53 +709,43 @@
         <translation>Terminações de linha</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="460"/>
+        <location filename="../editor/src/window.cpp" line="489"/>
         <source>Editor</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="495"/>
-        <source>File cannot be saved if it is not loaded.</source>
-        <translation>O arquivo não pode ser salvo se não estiver carregado.</translation>
+        <location filename="../editor/src/window.cpp" line="526"/>
+        <source>File cannot be saved when loading</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="520"/>
-        <source>Saved root file %1</source>
-        <translation>Arquivo raiz salvo %1</translation>
+        <location filename="../editor/src/window.cpp" line="563"/>
+        <source>Unable to save the file</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="522"/>
-        <source>Save root file %1 failed.</source>
-        <translation>Arquivo raiz  %1 falhou ao salvar.</translation>
+        <location filename="../editor/src/window.cpp" line="563"/>
+        <source>Do you want to save as another?</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="532"/>
-        <source>Unable to save file</source>
-        <translation>Não é possível salvar o arquivo</translation>
-    </message>
-    <message>
-        <location filename="../editor/src/window.cpp" line="532"/>
-        <source>Do you want to save to another?</source>
-        <translation>Quer salvar com outro nome?</translation>
-    </message>
-    <message>
-        <location filename="../editor/src/window.cpp" line="784"/>
+        <location filename="../editor/src/window.cpp" line="818"/>
         <source>Do you want to save all the files?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="950"/>
+        <location filename="../editor/src/window.cpp" line="984"/>
         <source>Blank document %1</source>
         <translation>Documento em branco %1</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="1196"/>
+        <location filename="../editor/src/window.cpp" line="1230"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="168"/>
-        <location filename="../editor/src/window.cpp" line="1198"/>
+        <location filename="../editor/src/window.cpp" line="1232"/>
         <source>Save</source>
         <translation>Salvar</translation>
     </message>
