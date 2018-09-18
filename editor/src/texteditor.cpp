@@ -29,6 +29,7 @@
 #include "SyntaxHighlighter"
 #include "Theme"
 
+#include <QTextDocumentFragment>
 #include <DDesktopServices>
 #include <QApplication>
 #include <DSettingsGroup>
@@ -1974,22 +1975,18 @@ void TextEditor::setModified(bool modified)
 
 void TextEditor::copySelectedText()
 {
-    // QClipboard *clipboard = QApplication::clipboard();
-    // clipboard->setText(textCursor().selectedText().toUtf8());
-
-    QPlainTextEdit::copy();
+    QClipboard *clipboard = QApplication::clipboard();
+    clipboard->setText(textCursor().selection().toPlainText());
 }
 
 void TextEditor::cutSelectedText()
 {
-    // QClipboard *clipboard = QApplication::clipboard();
-    // clipboard->setText(textCursor().selectedText());
+    QClipboard *clipboard = QApplication::clipboard();
+    clipboard->setText(textCursor().selection().toPlainText());
 
-    // QTextCursor cursor = textCursor();
-    // cursor.removeSelectedText();
-    // setTextCursor(cursor);
-
-    QPlainTextEdit::cut();
+    QTextCursor cursor = textCursor();
+    cursor.removeSelectedText();
+    setTextCursor(cursor);
 
     unsetMark();
 }
