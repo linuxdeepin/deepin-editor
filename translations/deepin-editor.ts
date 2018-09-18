@@ -666,7 +666,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="1232"/>
+        <location filename="../editor/src/window.cpp" line="575"/>
+        <source>Saved successfully</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../editor/src/window.cpp" line="1231"/>
         <source>Discard</source>
         <translation type="unfinished"></translation>
     </message>
@@ -684,7 +689,7 @@
         <location filename="../editor/src/window.cpp" line="292"/>
         <location filename="../editor/src/window.cpp" line="413"/>
         <location filename="../editor/src/window.cpp" line="435"/>
-        <location filename="../editor/src/window.cpp" line="819"/>
+        <location filename="../editor/src/window.cpp" line="818"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
@@ -726,28 +731,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="576"/>
-        <source>Saved file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../editor/src/window.cpp" line="819"/>
+        <location filename="../editor/src/window.cpp" line="818"/>
         <source>Do you want to save all the files?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="985"/>
+        <location filename="../editor/src/window.cpp" line="984"/>
         <source>Blank document %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="1231"/>
+        <location filename="../editor/src/window.cpp" line="1230"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="168"/>
-        <location filename="../editor/src/window.cpp" line="1233"/>
+        <location filename="../editor/src/window.cpp" line="1232"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>

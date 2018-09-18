@@ -572,8 +572,7 @@ bool Window::saveFile()
 
             dialog->exec();
         } else {
-            // don't show the toast.
-            showNotify(tr("Saved file"));
+            showNotify(tr("Saved successfully"));
         }
 
         return true;
