@@ -106,8 +106,8 @@ public:
     void updateFont();
 
     void replaceAll(const QString &replaceText, const QString &withText);
-    void replaceNext(QString replaceText, QString withText);
-    void replaceRest(QString replaceText, QString withText);
+    void replaceNext(const QString &replaceText, const QString &withText);
+    void replaceRest(const QString &replaceText, const QString &withText);
 
     bool findKeywordForward(QString keyword);
 

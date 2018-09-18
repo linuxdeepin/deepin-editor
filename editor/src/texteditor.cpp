@@ -1161,9 +1161,11 @@ void TextEditor::replaceAll(const QString &replaceText, const QString &withText)
 
     QTextCursor cursor = textCursor();
     cursor.movePosition(QTextCursor::Start);
-    cursor.beginEditBlock();
 
-    forever {
+    QTextCursor startCursor = textCursor();
+    startCursor.beginEditBlock();
+
+    while (1) {
         cursor = document()->find(replaceText, cursor, flags);
 
         if (!cursor.isNull()) {
@@ -1173,14 +1175,16 @@ void TextEditor::replaceAll(const QString &replaceText, const QString &withText)
         }
     }
 
-    cursor.endEditBlock();
-    setTextCursor(cursor);
+    startCursor.endEditBlock();
+    setTextCursor(startCursor);
 }
 
-void TextEditor::replaceNext(QString replaceText, QString withText)
+void TextEditor::replaceNext(const QString &replaceText, const QString &withText)
 {
     if (replaceText.isEmpty() ||
         !m_cursorKeywordSelection.cursor.hasSelection()) {
+        // 无限替换的根源
+        highlightKeyword(replaceText, getPosition());
         return;
     }
 
@@ -1195,7 +1199,7 @@ void TextEditor::replaceNext(QString replaceText, QString withText)
     highlightKeyword(replaceText, getPosition());
 }
 
-void TextEditor::replaceRest(QString replaceText, QString withText)
+void TextEditor::replaceRest(const QString &replaceText, const QString &withText)
 {
     // If replace text is nothing, don't do replace action.
     if (replaceText.size() == 0) {
