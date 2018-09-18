@@ -8,3 +8,8 @@ file_filter = translations/deepin-editor_<lang>.ts
 source_file = translations/deepin-editor.ts
 source_lang = en
 type = QT
+
+[deepin-editor.desktop]
+source_file = deepin-editor.desktop
+source_lang = en
+type = DESKTOP
