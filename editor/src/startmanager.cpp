@@ -68,8 +68,8 @@ void StartManager::openFilesInWindow(QStringList files)
 
 void StartManager::openFilesInTab(QStringList files)
 {
-    if (files.size() == 0) {
-        if (m_windows.size() == 0) {
+    if (files.isEmpty()) {
+        if (m_windows.isEmpty()) {
             QDir blankDirectory = QDir(QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files"));
             QStringList blankFiles = blankDirectory.entryList(QStringList(), QDir::Files);
 
@@ -90,7 +90,9 @@ void StartManager::openFilesInTab(QStringList files)
         }
         // Just active first window if no file is need opened.
         else {
-            m_windows[0]->activateWindow();
+            // m_windows[0]->activateWindow();
+            Window *window = createWindow();
+            window->addBlankTab();
         }
     } else {
         for (const QString &file : files) {
