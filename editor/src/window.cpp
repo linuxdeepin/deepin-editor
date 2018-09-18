@@ -248,7 +248,7 @@ void Window::addTab(const QString &filepath, bool activeTab)
             }
         }
     } else {
-        showNotify(tr("%1 open invalid").arg(QFileInfo(filepath).fileName()));
+        showNotify(tr("Invalid file: %1").arg(QFileInfo(filepath).fileName()));
     }
 }
 
@@ -492,7 +492,7 @@ bool Window::saveFile()
     // file not finish loadding cannot be saved
     // otherwise you will save the content of the empty.
     if (!m_editorMap[currentPath]->isLoadFinished() && !isBlankFile) {
-        showNotify(tr("File cannot be saved if it is not loaded."));
+        showNotify(tr("File cannot be saved when loading"));
         return false;
     }
 
@@ -517,9 +517,9 @@ bool Window::saveFile()
 
         if (saveResult) {
             getTextEditor(currentPath)->setModified(false);
-            showNotify(tr("Saved root file %1").arg(m_tabbar->getActiveTabName()));
+            showNotify(QString("Saved root file %1").arg(m_tabbar->getActiveTabName()));
         } else {
-            showNotify(tr("Save root file %1 failed.").arg(m_tabbar->getActiveTabName()));
+            showNotify(QString("Save root file %1 failed.").arg(m_tabbar->getActiveTabName()));
         }
 
         return saveResult;
@@ -529,7 +529,7 @@ bool Window::saveFile()
         bool success = m_editorMap.value(m_tabbar->getActiveTabPath())->saveFile();
 
         if (!success) {
-            DDialog *dialog = createSaveFileDialog(tr("Unable to save file"), tr("Do you want to save to another?"));
+            DDialog *dialog = createSaveFileDialog(tr("Unable to save the file"), tr("Do you want to save as another?"));
 
             connect(dialog, &DDialog::buttonClicked, this, [=] (int index) {
                 dialog->hide();

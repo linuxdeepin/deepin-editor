@@ -523,112 +523,112 @@
 <context>
     <name>TextEditor</name>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="83"/>
+        <location filename="../editor/src/texteditor.cpp" line="84"/>
         <source>Undo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="84"/>
+        <location filename="../editor/src/texteditor.cpp" line="85"/>
         <source>Redo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="85"/>
+        <location filename="../editor/src/texteditor.cpp" line="86"/>
         <source>Cut</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="86"/>
+        <location filename="../editor/src/texteditor.cpp" line="87"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="87"/>
+        <location filename="../editor/src/texteditor.cpp" line="88"/>
         <source>Paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="88"/>
+        <location filename="../editor/src/texteditor.cpp" line="89"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="89"/>
+        <location filename="../editor/src/texteditor.cpp" line="90"/>
         <source>Select All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="90"/>
+        <location filename="../editor/src/texteditor.cpp" line="91"/>
         <source>Find</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="91"/>
+        <location filename="../editor/src/texteditor.cpp" line="92"/>
         <source>Replace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="92"/>
+        <location filename="../editor/src/texteditor.cpp" line="93"/>
         <source>Go to Line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="93"/>
+        <location filename="../editor/src/texteditor.cpp" line="94"/>
         <source>Turn on Read-Only mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="94"/>
+        <location filename="../editor/src/texteditor.cpp" line="95"/>
         <source>Turn off Read-Only mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="120"/>
+        <location filename="../editor/src/texteditor.cpp" line="121"/>
         <source>Change Case</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="121"/>
+        <location filename="../editor/src/texteditor.cpp" line="122"/>
         <source>Upper Case</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="122"/>
+        <location filename="../editor/src/texteditor.cpp" line="123"/>
         <source>Lower Case</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="2221"/>
+        <location filename="../editor/src/texteditor.cpp" line="2218"/>
         <source>Read-Only mode is off</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="2225"/>
+        <location filename="../editor/src/texteditor.cpp" line="2222"/>
         <source>Read-Only mode is on</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="95"/>
+        <location filename="../editor/src/texteditor.cpp" line="96"/>
         <source>Fullscreen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="96"/>
+        <location filename="../editor/src/texteditor.cpp" line="97"/>
         <source>Exit fullscreen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="97"/>
+        <location filename="../editor/src/texteditor.cpp" line="98"/>
         <source>Open in file manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="98"/>
+        <location filename="../editor/src/texteditor.cpp" line="99"/>
         <source>Toggle comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="123"/>
+        <location filename="../editor/src/texteditor.cpp" line="124"/>
         <source>Capitalize</source>
         <translation type="unfinished"></translation>
     </message>
@@ -666,11 +666,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="251"/>
-        <source>%1 open invalid</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../editor/src/window.cpp" line="1197"/>
         <source>Discard</source>
         <translation type="unfinished"></translation>
@@ -678,6 +673,11 @@
     <message>
         <location filename="../editor/src/window.cpp" line="172"/>
         <source>Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../editor/src/window.cpp" line="251"/>
+        <source>Invalid file: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -712,27 +712,17 @@
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="495"/>
-        <source>File cannot be saved if it is not loaded.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../editor/src/window.cpp" line="520"/>
-        <source>Saved root file %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../editor/src/window.cpp" line="522"/>
-        <source>Save root file %1 failed.</source>
+        <source>File cannot be saved when loading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="532"/>
-        <source>Unable to save file</source>
+        <source>Unable to save the file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="532"/>
-        <source>Do you want to save to another?</source>
+        <source>Do you want to save as another?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
