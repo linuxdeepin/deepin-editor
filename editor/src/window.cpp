@@ -439,7 +439,17 @@ const QString Window::getSaveFilePath(QString &encode, QString &newline)
 void Window::displayShortcuts()
 {
     QRect rect = window()->geometry();
-    QPoint pos(rect.x() + rect.width()/2 , rect.y() + rect.height()/2);
+    QPoint pos(rect.x() + rect.width() / 2,
+               rect.y() + rect.height() / 2);
+
+    QStringList windowKeymaps;
+    windowKeymaps << "addblanktab" << "newwindow" << "savefile"
+                  << "saveasfile" << "selectnexttab" << "selectprevtab"
+                  << "closetab" << "closeothertabs" << "restoretab"
+                  << "openfile" << "incrementfontsize" << "decrementfontsize"
+                  << "resetfontsize" << "togglefullscreen" << "find" << "replace"
+                  << "jumptoline" << "saveposition" << "restoreposition"
+                  << "escape" << "displayshortcuts" << "print";
 
     QJsonObject shortcutObj;
     QJsonArray jsonGroups;
@@ -447,19 +457,40 @@ void Window::displayShortcuts()
     QJsonObject windowJsonGroup;
     windowJsonGroup.insert("groupName", QObject::tr("Window"));
     QJsonArray windowJsonItems;
-    for (auto option : m_settings->settings->group("shortcuts.window")->options()) {
+
+    for (const QString &keymap : windowKeymaps) {
+        auto option = m_settings->settings->group("shortcuts.window")->option(QString("shortcuts.window.%1").arg(keymap));
         QJsonObject jsonItem;
         jsonItem.insert("name", QObject::tr(option->name().toUtf8().data()));
         jsonItem.insert("value", option->value().toString().replace("Meta", "Super"));
         windowJsonItems.append(jsonItem);
     }
+
     windowJsonGroup.insert("groupItems", windowJsonItems);
     jsonGroups.append(windowJsonGroup);
+
+    QStringList editorKeymaps;
+    editorKeymaps << "indentline" << "backindentline" << "forwardchar"
+                  << "backwardchar" << "forwardword" << "backwardword"
+                  << "nextline" << "prevline" << "newline" << "opennewlineabove"
+                  << "opennewlinebelow" << "duplicateline" << "killline"
+                  << "killcurrentline" << "swaplineup" << "swaplinedown"
+                  << "scrolllineup" << "scrolllinedown" << "scrollup"
+                  << "scrolldown" << "movetoendofline" << "movetostartofline"
+                  << "movetoend" << "movetostart" << "movetolineindentation"
+                  << "upcaseword" << "downcaseword" << "capitalizeword"
+                  << "killbackwardword" << "killforwardword" << "forwardpair"
+                  << "backwardpair" << "selectall" << "copy" << "cut"
+                  << "paste" << "transposechar" << "setmark" << "exchangemark"
+                  << "copylines" << "cutlines" << "joinlines" << "togglereadonlymode"
+                  << "togglecomment" << "undo" << "redo";
 
     QJsonObject editorJsonGroup;
     editorJsonGroup.insert("groupName", tr("Editor"));
     QJsonArray editorJsonItems;
-    for (auto option : m_settings->settings->group("shortcuts.editor")->options()) {
+
+    for (const QString &keymap : editorKeymaps) {
+        auto option = m_settings->settings->group("shortcuts.editor")->option(QString("shortcuts.editor.%1").arg(keymap));
         QJsonObject jsonItem;
         jsonItem.insert("name", QObject::tr(option->name().toUtf8().data()));
         jsonItem.insert("value", option->value().toString().replace("Meta", "Super"));
@@ -542,7 +573,7 @@ bool Window::saveFile()
             dialog->exec();
         } else {
             // don't show the toast.
-            // showNotify(tr("Saved file %1").arg(m_tabbar->getActiveTabName()));
+            showNotify(tr("Saved file"));
         }
 
         return true;
