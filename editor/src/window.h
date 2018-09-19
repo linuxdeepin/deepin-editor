@@ -26,7 +26,7 @@
 
 #include "ddialog.h"
 #include "dmainwindow.h"
-#include "editor.h"
+#include "editorbuffer.h"
 #include "findbar.h"
 #include "jumplinebar.h"
 #include "replacebar.h"
@@ -67,8 +67,8 @@ public:
     void closeTab();
     void restoreTab();
 
-    Editor* createEditor();
-    Editor* getActiveEditor();
+    EditorBuffer* createEditor();
+    EditorBuffer* getActiveEditor();
     TextEditor* getTextEditor(const QString &filepath);
     void focusActiveEditor();
 
@@ -80,7 +80,7 @@ public:
     void decrementFontSize();
     void incrementFontSize();
     void resetFontSize();
-    void setFontSizeWithConfig(Editor *editor);
+    void setFontSizeWithConfig(EditorBuffer *editor);
 
     void popupFindBar();
     void popupReplaceBar();
@@ -156,7 +156,7 @@ public slots:
 private:
     void removeActiveBlankTab(bool needSaveBefore = false);
     void removeActiveReadonlyTab();
-    void showNewEditor(Editor *editor);
+    void showNewEditor(EditorBuffer *buffer);
     void showNotify(const QString &message);
     DDialog* createSaveFileDialog(QString title, QString content);
     int getBlankFileIndex();
@@ -176,7 +176,7 @@ private:
     Settings *m_settings;
     DWindowManager *m_windowManager;
 
-    QMap<QString, Editor *> m_editorMap;
+    QMap<QString, EditorBuffer *> m_editorMap;
 
     QMenu *m_menu;
 

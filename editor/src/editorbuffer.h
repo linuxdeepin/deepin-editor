@@ -1,11 +1,7 @@
-/* -*- Mode: C++; indent-tabs-mode: nil; tab-width: 4 -*-
- * -*- coding: utf-8 -*-
+/*
+ * Copyright (C) 2017 ~ 2018 Deepin Technology Co., Ltd.
  *
- * Copyright (C) 2011 ~ 2018 Deepin, Inc.
- *               2011 ~ 2018 Wang Yong
- *
- * Author:     Wang Yong <wangyong@deepin.com>
- * Maintainer: Wang Yong <wangyong@deepin.com>
+ * Author:     rekols <rekols@foxmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,8 +17,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef EDITOR_H
-#define EDITOR_H
+#ifndef EDITORBUFFER_H
+#define EDITORBUFFER_H
 
 #include "dbusinterface.h"
 #include "texteditor.h"
@@ -30,24 +26,23 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
-class Editor : public QWidget
+class EditorBuffer : public QWidget
 {
     Q_OBJECT
 
 public:
-    Editor(QWidget *parent = 0);
-    ~Editor();
+    EditorBuffer(QWidget *parent = 0);
+    ~EditorBuffer();
 
-    void loadFile(const QString &filepath);
+    void openFile(const QString &filepath);
     bool saveFile(const QString &encode, const QString &newline);
     bool saveFile();
-    bool isWritable() { return m_isWritable; }
-    bool isLoadFinished() { return m_isLoadFinished; }
-
-    void updatePath(QString file);
+    void updatePath(const QString &file);
     QByteArray fileEncode() { return m_fileEncode; }
+    bool isLoadFinished() { return m_isLoadFinished; }
+    bool isWritable() { return m_isWritable; }
 
-    TextEditor *textEditor;
+    TextEditor *textEditor() { return m_textEditor; }
 
 private:
     void detectNewline();
@@ -55,6 +50,7 @@ private:
 
 private:
     QHBoxLayout *m_layout;
+    TextEditor *m_textEditor;
     QByteArray m_fileEncode;
 
     bool m_saveFinish;

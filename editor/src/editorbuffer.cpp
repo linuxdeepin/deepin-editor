@@ -1,11 +1,7 @@
-/* -*- Mode: C++; indent-tabs-mode: nil; tab-width: 4 -*-
- * -*- coding: utf-8 -*-
+/*
+ * Copyright (C) 2017 ~ 2018 Deepin Technology Co., Ltd.
  *
- * Copyright (C) 2011 ~ 2018 Deepin, Inc.
- *               2011 ~ 2018 Wang Yong
- *
- * Author:     Wang Yong <wangyong@deepin.com>
- * Maintainer: Wang Yong <wangyong@deepin.com>
+ * Author:     rekols <rekols@foxmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "editor.h"
+#include "editorbuffer.h"
 #include "utils.h"
 #include "window.h"
 #include "fileloadthread.h"
@@ -32,10 +28,10 @@
 #include <QDir>
 #include <QTimer>
 
-Editor::Editor(QWidget *parent)
+EditorBuffer::EditorBuffer(QWidget *parent)
     : QWidget(parent),
       m_layout(new QHBoxLayout(this)),
-      textEditor(new TextEditor)
+      m_textEditor(new TextEditor)
 {
     // Init.
     m_autoSaveInternal = 1000;
@@ -45,20 +41,17 @@ Editor::Editor(QWidget *parent)
     // Init layout and widgets.
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->setSpacing(0);
-    m_layout->addWidget(textEditor->lineNumberArea);
-    m_layout->addWidget(textEditor);
+    m_layout->addWidget(m_textEditor->lineNumberArea);
+    m_layout->addWidget(m_textEditor);
 }
 
-Editor::~Editor()
+EditorBuffer::~EditorBuffer()
 {
-    delete textEditor;
+    delete m_textEditor;
 }
 
-void Editor::loadFile(const QString &filepath)
+void EditorBuffer::openFile(const QString &filepath)
 {
-    // set mouse status to wait.
-    // QApplication::setOverrideCursor(Qt::WaitCursor);
-
     // update file path.
     updatePath(filepath);
 
@@ -77,26 +70,26 @@ void Editor::loadFile(const QString &filepath)
 
     // begin to load the file.
     FileLoadThread *thread = new FileLoadThread(filepath);
-    connect(thread, &FileLoadThread::loadFinished, this, &Editor::handleFileLoadFinished);
+    connect(thread, &FileLoadThread::loadFinished, this, &EditorBuffer::handleFileLoadFinished);
     connect(thread, &FileLoadThread::finished, thread, &FileLoadThread::deleteLater);
 
     // start the thread.
     thread->start();
 }
 
-bool Editor::saveFile(const QString &encode, const QString &newline)
+bool EditorBuffer::saveFile(const QString &encode, const QString &newline)
 {
     bool fileCreateFailed = false;
     m_fileEncode = encode.toUtf8();
 
-    if (!Utils::fileExists(textEditor->filepath)) {
-        QString directory = QFileInfo(textEditor->filepath).dir().absolutePath();
+    if (!Utils::fileExists(m_textEditor->filepath)) {
+        QString directory = QFileInfo(m_textEditor->filepath).dir().absolutePath();
 
         // Create file if filepath is not exists.
         if (Utils::fileIsWritable(directory)) {
             QDir().mkpath(directory);
-            if (QFile(textEditor->filepath).open(QIODevice::ReadWrite)) {
-                qDebug() << QString("File %1 not exists, create one.").arg(textEditor->filepath);
+            if (QFile(m_textEditor->filepath).open(QIODevice::ReadWrite)) {
+                qDebug() << QString("File %1 not exists, create one.").arg(m_textEditor->filepath);
             }
         } else {
             // Make flag fileCreateFailed with 'true' if no permission to create.
@@ -105,11 +98,11 @@ bool Editor::saveFile(const QString &encode, const QString &newline)
     }
 
     // Try save file if file has permission.
-    if (Utils::fileIsWritable(textEditor->filepath) && !fileCreateFailed) {
-        QFile file(textEditor->filepath);
+    if (Utils::fileIsWritable(m_textEditor->filepath) && !fileCreateFailed) {
+        QFile file(m_textEditor->filepath);
         if (!file.open(QIODevice::WriteOnly)) {
-            qDebug() << "Can't write file: " << textEditor->filepath;
-            // Utils::toast(tr("Can't write file: %1").arg(textEditor->filepath), this->topLevelWidget());
+            qDebug() << "Can't write file: " << m_textEditor->filepath;
+            // Utils::toast(tr("Can't write file: %1").arg(m_textEditor->filepath), this->topLevelWidget());
             return false;
         }
 
@@ -131,9 +124,9 @@ bool Editor::saveFile(const QString &encode, const QString &newline)
         // NOTE: Muse call 'setGenerateByteOrderMark' to insert the BOM (Byte Order Mark) before any data has been written to file.
         // Otherwise, can't save file with given encoding.
         // out.setGenerateByteOrderMark(true);
-        out << textEditor->toPlainText().replace(newlineRegex, fileNewline);
+        out << m_textEditor->toPlainText().replace(newlineRegex, fileNewline);
 
-        qDebug() << "saved: " << textEditor->filepath << encode << newline;
+        qDebug() << "saved: " << m_textEditor->filepath << encode << newline;
 
         file.close();
     }
@@ -142,7 +135,7 @@ bool Editor::saveFile(const QString &encode, const QString &newline)
         // blumia: WARNING! Toast is NOT the correct way to tell user something goes wrong!
         // FIXME: Tell user file no longer exist and create file at original path failed,
         //        Let user select a new path to save the file if user want.
-        // Utils::toast(tr("File %1 create failed.").arg(textEditor->filepath), this->topLevelWidget());
+        // Utils::toast(tr("File %1 create failed.").arg(m_textEditor->filepath), this->topLevelWidget());
         return false;
     }
 
@@ -150,27 +143,27 @@ bool Editor::saveFile(const QString &encode, const QString &newline)
     QTimer::singleShot(100, [=] { QApplication::restoreOverrideCursor(); });
 
     // update status.
-    textEditor->setModified(false);
+    m_textEditor->setModified(false);
     m_isLoadFinished = true;
     m_isWritable = true;
 
     return true;
 }
 
-bool Editor::saveFile()
+bool EditorBuffer::saveFile()
 {
     return saveFile(m_fileEncode, m_newline);
 }
 
-void Editor::updatePath(QString file)
+void EditorBuffer::updatePath(const QString &file)
 {
-    textEditor->filepath = file;
+    m_textEditor->filepath = file;
     detectNewline();
 }
 
-void Editor::detectNewline()
+void EditorBuffer::detectNewline()
 {
-    QFile file(textEditor->filepath);
+    QFile file(m_textEditor->filepath);
 
     if (!file.open(QIODevice::ReadOnly)) {
         return;
@@ -189,7 +182,7 @@ void Editor::detectNewline()
     file.close();
 }
 
-void Editor::handleFileLoadFinished(const QByteArray &encode, const QString &content)
+void EditorBuffer::handleFileLoadFinished(const QByteArray &encode, const QString &content)
 {
     // restore mouse style.
     // QApplication::restoreOverrideCursor();
@@ -198,13 +191,13 @@ void Editor::handleFileLoadFinished(const QByteArray &encode, const QString &con
     m_fileEncode = encode;
 
     // set text.
-    textEditor->document()->moveToThread(QCoreApplication::instance()->thread());
-    textEditor->document()->setPlainText(content);
+    m_textEditor->document()->moveToThread(QCoreApplication::instance()->thread());
+    m_textEditor->document()->setPlainText(content);
 
     // update status.
-    textEditor->setModified(false);
-    textEditor->moveToStart();
+    m_textEditor->setModified(false);
+    m_textEditor->moveToStart();
 
     // load highlight.
-    QTimer::singleShot(100, this, [=] { textEditor->loadHighlighter(); });
+    QTimer::singleShot(100, this, [=] { m_textEditor->loadHighlighter(); });
 }

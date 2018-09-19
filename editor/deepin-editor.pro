@@ -33,7 +33,7 @@ HEADERS += src/window.h \
            src/settings.h \
            src/tabwidget.h \
            src/tabbar.h \
-           src/editor.h \
+           src/editorbuffer.h \
            src/uncommentselection.h \
            src/utils.h \
            src/fileloadthread.h \
@@ -54,7 +54,7 @@ SOURCES += src/window.cpp \
            src/settingsdialog.cpp \
            src/tabwidget.cpp \
            src/tabbar.cpp \
-           src/editor.cpp \
+           src/editorbuffer.cpp \
            src/utils.cpp \
            src/uncommentselection.cpp \
            src/main.cpp \
