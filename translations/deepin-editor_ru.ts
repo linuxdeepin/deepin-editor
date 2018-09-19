@@ -79,7 +79,7 @@
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="31"/>
         <location filename="../editor/src/settingsdialog.cpp" line="102"/>
-        <location filename="../editor/src/window.cpp" line="458"/>
+        <location filename="../editor/src/window.cpp" line="464"/>
         <source>Window</source>
         <translation>Окно</translation>
     </message>
@@ -596,12 +596,12 @@
         <translation>Нижний Регистр</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="2195"/>
+        <location filename="../editor/src/texteditor.cpp" line="2179"/>
         <source>Read-Only mode is off</source>
         <translation>Режим Только Чтение отключён</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="2199"/>
+        <location filename="../editor/src/texteditor.cpp" line="2183"/>
         <source>Read-Only mode is on</source>
         <translation>Режим Только Чтение включён</translation>
     </message>
@@ -664,12 +664,12 @@
         <translation>Переключить тему</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="575"/>
+        <location filename="../editor/src/window.cpp" line="581"/>
         <source>Saved successfully</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="1231"/>
+        <location filename="../editor/src/window.cpp" line="1237"/>
         <source>Discard</source>
         <translation>Отмена</translation>
     </message>
@@ -679,73 +679,73 @@
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="251"/>
+        <location filename="../editor/src/window.cpp" line="257"/>
         <source>Invalid file: %1</source>
         <translation>Недопустимый файл: %1</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="292"/>
-        <location filename="../editor/src/window.cpp" line="413"/>
-        <location filename="../editor/src/window.cpp" line="435"/>
-        <location filename="../editor/src/window.cpp" line="818"/>
+        <location filename="../editor/src/window.cpp" line="298"/>
+        <location filename="../editor/src/window.cpp" line="419"/>
+        <location filename="../editor/src/window.cpp" line="441"/>
+        <location filename="../editor/src/window.cpp" line="824"/>
         <source>Save File</source>
         <translation>Сохранить Файл</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="292"/>
+        <location filename="../editor/src/window.cpp" line="298"/>
         <source>Do you want to save this file?</source>
         <translation>Вы хотите сохранить этот документ?</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="415"/>
-        <location filename="../editor/src/window.cpp" line="427"/>
+        <location filename="../editor/src/window.cpp" line="421"/>
+        <location filename="../editor/src/window.cpp" line="433"/>
         <source>Encoding</source>
         <translation>Кодировка</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="416"/>
-        <location filename="../editor/src/window.cpp" line="428"/>
+        <location filename="../editor/src/window.cpp" line="422"/>
+        <location filename="../editor/src/window.cpp" line="434"/>
         <source>Line Endings</source>
         <translation>Строка Кодировки</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="489"/>
+        <location filename="../editor/src/window.cpp" line="495"/>
         <source>Editor</source>
         <translation>Редактор</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="526"/>
+        <location filename="../editor/src/window.cpp" line="532"/>
         <source>File cannot be saved when loading</source>
         <translation>Файл не может быть сохранен, если он загружен.</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="563"/>
+        <location filename="../editor/src/window.cpp" line="569"/>
         <source>Unable to save the file</source>
         <translation>Не удалось сохранить файл</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="563"/>
+        <location filename="../editor/src/window.cpp" line="569"/>
         <source>Do you want to save as another?</source>
         <translation>Вы хотите сохранить как другой?</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="818"/>
+        <location filename="../editor/src/window.cpp" line="824"/>
         <source>Do you want to save all the files?</source>
         <translation>Вы хотите сохранить все файлы?</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="984"/>
+        <location filename="../editor/src/window.cpp" line="990"/>
         <source>Blank document %1</source>
         <translation>Чистый документ %1</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="1230"/>
+        <location filename="../editor/src/window.cpp" line="1236"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="168"/>
-        <location filename="../editor/src/window.cpp" line="1232"/>
+        <location filename="../editor/src/window.cpp" line="1238"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
