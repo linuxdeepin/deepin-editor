@@ -1202,46 +1202,30 @@ void TextEditor::replaceNext(const QString &replaceText, const QString &withText
 void TextEditor::replaceRest(const QString &replaceText, const QString &withText)
 {
     // If replace text is nothing, don't do replace action.
-    if (replaceText.size() == 0) {
-        qDebug() << "Replace text is empty.";
+    if (replaceText.isEmpty()) {
         return;
     }
 
-    // Try get replace text in rest content.
+    QTextDocument::FindFlags flags;
+    flags &= QTextDocument::FindCaseSensitively;
+
     QTextCursor cursor = textCursor();
-    cursor.setPosition(m_cursorKeywordSelection.cursor.position() - replaceText.size());
-    cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
-    cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
-    QString text = cursor.selectedText();
-    QString textAfterReplace = cursor.selectedText().replace(replaceText, withText, Qt::CaseInsensitive);
 
-    // Don't move cursor if nothing need to replace in rest content.
-    if (text == textAfterReplace) {
-        qDebug() << "Nothing need replace in rest content.";
-        return;
+    QTextCursor startCursor = textCursor();
+    startCursor.beginEditBlock();
+
+    while (1) {
+        cursor = document()->find(replaceText, cursor, flags);
+
+        if (!cursor.isNull()) {
+            cursor.insertText(withText);
+        } else {
+            break;
+        }
     }
 
-    // If rest content can replace, variable keywordSelections must have items.
-    if (m_keywordSelections.size() == 0) {
-        qDebug() << "The code of TextEditor::replaceRest is wrong, need review.";
-        return;
-    }
-
-    // Get last keyword position.
-    auto lastKeywordPosition = m_keywordSelections.last().cursor.position();
-
-    // Replace file content.
-    cursor.insertText(textAfterReplace);
-    cursor.clearSelection();
-    setTextCursor(cursor);
-
-    // Re-highlight keywords.
-    highlightKeyword(replaceText, getPosition());
-
-    // Restore last keyword position.
-    QTextCursor lastKeywordCursor = textCursor();
-    lastKeywordCursor.setPosition(lastKeywordPosition);
-    setTextCursor(lastKeywordCursor);
+    startCursor.endEditBlock();
+    setTextCursor(startCursor);
 }
 
 bool TextEditor::findKeywordForward(QString keyword)
