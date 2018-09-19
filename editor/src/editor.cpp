@@ -23,6 +23,7 @@
 
 #include "editor.h"
 #include "utils.h"
+#include "window.h"
 #include "fileloadthread.h"
 
 #include <QCoreApplication>
@@ -58,11 +59,21 @@ void Editor::loadFile(const QString &filepath)
     // set mouse status to wait.
     // QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    m_isWritable = QFileInfo(filepath).isWritable();
-    m_isLoadFinished = false;
-
     // update file path.
     updatePath(filepath);
+
+    QFile file(filepath);
+    if (!file.open(QIODevice::ReadOnly)) {
+        QTimer::singleShot(100, this, [=] {
+            Utils::toast(QString(tr("You do not have permission to open %1")).arg(filepath),
+                         this->topLevelWidget());
+        });
+
+        return;
+    }
+
+    m_isWritable = QFileInfo(filepath).isWritable();
+    m_isLoadFinished = false;
 
     // begin to load the file.
     FileLoadThread *thread = new FileLoadThread(filepath);

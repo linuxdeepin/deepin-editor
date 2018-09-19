@@ -157,7 +157,7 @@ private:
     void removeActiveBlankTab(bool needSaveBefore = false);
     void removeActiveReadonlyTab();
     void showNewEditor(Editor *editor);
-    void showNotify(QString message);
+    void showNotify(const QString &message);
     DDialog* createSaveFileDialog(QString title, QString content);
     int getBlankFileIndex();
 

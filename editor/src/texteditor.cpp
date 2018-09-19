@@ -1801,14 +1801,14 @@ void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme, const QString
     m_selectionColor = QColor(textStylesMap["Normal"].toMap()["selected-text-color"].toString());
     m_selectionBgColor = QColor(textStylesMap["Normal"].toMap()["selected-bg-color"].toString());
 
-    const QString &styleSheet = QString("QPlainTextEdit {"
-                                        "background-color: %1;"
-                                        "color: %2;"
-                                        "selection-color: %3;"
-                                        "selection-background-color: %4;"
-                                        "}").arg(m_backgroundColor.name(), textColor,
-                                                 m_selectionColor.name(), m_selectionBgColor.name());
-    setStyleSheet(styleSheet);
+    QPalette palette = this->palette();
+    palette.setColor(QPalette::Text, textColor);
+    palette.setColor(QPalette::Base, m_backgroundColor);
+    palette.setColor(QPalette::Highlight, m_selectionBgColor);
+    palette.setColor(QPalette::HighlightedText, m_selectionColor);
+
+    viewport()->setPalette(palette);
+    this->setPalette(palette);
 
     if (m_backgroundColor.lightness() < 128) {
         m_highlighter->setTheme(m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme));

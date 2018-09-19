@@ -527,7 +527,7 @@ void Utils::toast(const QString &message, QWidget *parent)
     int avaliableHeight = parent->height() - toast->height();
     int toastPaddingBottom = qMin(avaliableHeight / 2, 100);
 
-    QObject::connect(toast, &DToast::visibleChanged, parent, [toast](bool visible) {
+    QObject::connect(toast, &DToast::visibleChanged, parent, [toast] (bool visible) {
         if (visible == false) {
             toast->deleteLater();
         }

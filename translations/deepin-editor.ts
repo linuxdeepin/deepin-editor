@@ -2,6 +2,14 @@
 <!DOCTYPE TS>
 <TS version="2.1">
 <context>
+    <name>Editor</name>
+    <message>
+        <location filename="../editor/src/editor.cpp" line="68"/>
+        <source>You do not have permission to open %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>FindBar</name>
     <message>
         <location filename="../editor/src/findbar.cpp" line="38"/>
@@ -666,12 +674,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="581"/>
+        <location filename="../editor/src/window.cpp" line="584"/>
         <source>Saved successfully</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="1237"/>
+        <location filename="../editor/src/window.cpp" line="1240"/>
         <source>Discard</source>
         <translation type="unfinished"></translation>
     </message>
@@ -689,7 +697,7 @@
         <location filename="../editor/src/window.cpp" line="298"/>
         <location filename="../editor/src/window.cpp" line="419"/>
         <location filename="../editor/src/window.cpp" line="441"/>
-        <location filename="../editor/src/window.cpp" line="824"/>
+        <location filename="../editor/src/window.cpp" line="827"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
@@ -721,33 +729,38 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="569"/>
+        <location filename="../editor/src/window.cpp" line="551"/>
+        <source>You do not have permission to save %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../editor/src/window.cpp" line="572"/>
         <source>Unable to save the file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="569"/>
+        <location filename="../editor/src/window.cpp" line="572"/>
         <source>Do you want to save as another?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="824"/>
+        <location filename="../editor/src/window.cpp" line="827"/>
         <source>Do you want to save all the files?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="990"/>
+        <location filename="../editor/src/window.cpp" line="993"/>
         <source>Blank document %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="1236"/>
+        <location filename="../editor/src/window.cpp" line="1239"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="168"/>
-        <location filename="../editor/src/window.cpp" line="1238"/>
+        <location filename="../editor/src/window.cpp" line="1241"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>

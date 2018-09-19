@@ -61,7 +61,7 @@ private:
     int m_autoSaveInternal;
     bool m_hasLoadFile = false;
     bool m_isWritable = false;
-    bool m_isLoadFinished = false;
+    bool m_isLoadFinished = true;
     QString m_newline;
 };
 

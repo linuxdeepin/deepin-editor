@@ -548,6 +548,9 @@ bool Window::saveFile()
     }
     // save root file.
     else if (!m_editorMap[currentPath]->isWritable()) {
+        showNotify(QString(tr("You do not have permission to save %1")).arg(m_tabbar->getActiveTabName()));
+        return false;
+
         const QString content = getTextEditor(currentPath)->toPlainText();
         bool saveResult = m_rootSaveDBus->saveFile(currentPath.toUtf8(), content.toUtf8(),
                                                    m_editorMap[currentPath]->fileEncode());
@@ -1223,7 +1226,7 @@ void Window::showNewEditor(Editor *editor)
     m_editorWidget->setCurrentWidget(editor);
 }
 
-void Window::showNotify(QString message)
+void Window::showNotify(const QString &message)
 {
     Utils::toast(message, this);
 }
