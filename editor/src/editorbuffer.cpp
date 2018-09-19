@@ -19,7 +19,6 @@
 
 #include "editorbuffer.h"
 #include "utils.h"
-#include "window.h"
 #include "fileloadthread.h"
 
 #include <QCoreApplication>
@@ -54,16 +53,6 @@ void EditorBuffer::openFile(const QString &filepath)
 {
     // update file path.
     updatePath(filepath);
-
-    QFile file(filepath);
-    if (!file.open(QIODevice::ReadOnly)) {
-        QTimer::singleShot(100, this, [=] {
-            Utils::toast(QString(tr("You do not have permission to open %1")).arg(filepath),
-                         this->topLevelWidget());
-        });
-
-        return;
-    }
 
     m_isWritable = QFileInfo(filepath).isWritable();
     m_isLoadFinished = false;

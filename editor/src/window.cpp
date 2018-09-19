@@ -230,6 +230,14 @@ void Window::addTab(const QString &filepath, bool activeTab)
 {
     // check whether it is an editable file thround mimeType.
     if (Utils::isEditableFile(filepath)) {
+
+        // check if have permission to read the file.
+        QFile file(filepath);
+        if (!file.open(QIODevice::ReadOnly)) {
+            showNotify(QString(tr("You do not have permission to open %1")).arg(filepath));
+            return;
+        }
+
         if (m_tabbar->getTabIndex(filepath) == -1) {
             m_tabbar->addTab(filepath, QFileInfo(filepath).fileName());
 
