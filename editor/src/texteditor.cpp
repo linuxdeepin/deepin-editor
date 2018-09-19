@@ -884,7 +884,7 @@ void TextEditor::killBackwardWord()
         //  setTextCursor(cursor);
 
         QTextCursor cursor = textCursor();
-        cursor.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
+        cursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
         cursor.removeSelectedText();
         setTextCursor(cursor);
     }
@@ -904,7 +904,7 @@ void TextEditor::killForwardWord()
         //  setTextCursor(cursor);
 
         QTextCursor cursor = textCursor();
-        cursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
+        cursor.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
         cursor.removeSelectedText();
         setTextCursor(cursor);
     }
