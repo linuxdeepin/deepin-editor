@@ -1152,7 +1152,7 @@ void TextEditor::updateFont()
 
 void TextEditor::replaceAll(const QString &replaceText, const QString &withText)
 {
-    if (replaceText.isEmpty() || withText.isEmpty()) {
+    if (replaceText.isEmpty()) {
         return;
     }
 
