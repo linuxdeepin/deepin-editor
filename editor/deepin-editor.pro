@@ -77,9 +77,9 @@ desktop.files = $$PWD/../deepin-editor.desktop
 
 themes.path = $$DSRDIR/themes
 themes.files += themes/deepin.theme
-themes.files += themes/printing.theme
 themes.files += themes/breeze_dark.theme
 themes.files += themes/solarized_dark.theme
 themes.files += themes/solarized_light.theme
+themes.files += themes/atom_dark.theme
 
 INSTALLS += target desktop themes
