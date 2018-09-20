@@ -1013,7 +1013,7 @@
                             "key": "jumptoline",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Ctrl+G"
+                            "default":  "Alt+G"
                         },
                         {
                             "key": "saveposition",
@@ -1031,7 +1031,7 @@
                             "key": "escape",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Esc"
+                            "default":  "Ctrl+G"
                         },
                         {
                             "key": "displayshortcuts",

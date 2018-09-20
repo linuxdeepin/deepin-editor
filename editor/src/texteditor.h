@@ -92,6 +92,7 @@ public:
     void killBackwardWord();
     void killForwardWord();
 
+    void escape();
     void indentText();
     void unindentText();
     void setTabSpaceNumber(int number);

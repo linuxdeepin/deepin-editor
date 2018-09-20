@@ -924,6 +924,13 @@ void TextEditor::killForwardWord()
     }
 }
 
+void TextEditor::escape()
+{
+    emit pressEsc();
+
+    tryUnsetMark();
+}
+
 void TextEditor::indentText()
 {
     // Stop mark if mark is set.
@@ -1518,8 +1525,8 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
             QPlainTextEdit::undo();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "redo")) {
             QPlainTextEdit::redo();
-        } else if (key == "Esc") {
-            emit pressEsc();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "escape")) {
+            escape();
         } else {
             // Post event to window widget if key match window key list.
             for (auto option : m_settings->settings->group("shortcuts.window")->options()) {
@@ -1953,6 +1960,7 @@ void TextEditor::copySelectedText()
 {
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(textCursor().selection().toPlainText());
+    tryUnsetMark();
 }
 
 void TextEditor::cutSelectedText()
