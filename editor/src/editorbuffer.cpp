@@ -121,15 +121,12 @@ bool EditorBuffer::saveFile(const QString &encode, const QString &newline)
     }
 
     if (fileCreateFailed) {
-        // blumia: WARNING! Toast is NOT the correct way to tell user something goes wrong!
-        // FIXME: Tell user file no longer exist and create file at original path failed,
-        //        Let user select a new path to save the file if user want.
-        // Utils::toast(tr("File %1 create failed.").arg(m_textEditor->filepath), this->topLevelWidget());
         return false;
     }
 
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    QTimer::singleShot(100, [=] { QApplication::restoreOverrideCursor(); });
+    // not needed for now.
+    // QApplication::setOverrideCursor(Qt::WaitCursor);
+    // QTimer::singleShot(100, [=] { QApplication::restoreOverrideCursor(); });
 
     // update status.
     m_textEditor->setModified(false);

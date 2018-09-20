@@ -65,6 +65,10 @@ TextEditor::TextEditor(QPlainTextEdit *parent)
       m_highlighter(new KSyntaxHighlighting::SyntaxHighlighter(document()))
 {
     viewport()->installEventFilter(this);
+    viewport()->setCursor(Qt::IBeamCursor);
+
+    setWordWrapMode(QTextOption::WordWrap);
+    setLineWrapMode(WidgetWidth);
 
     // Don't draw frame around editor widget.
     setFrameShape(QFrame::NoFrame);
@@ -156,6 +160,16 @@ TextEditor::TextEditor(QPlainTextEdit *parent)
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     connect(verticalScrollBar(), &QScrollBar::rangeChanged, this, &TextEditor::adjustScrollbarMargins, Qt::QueuedConnection);
+
+    // Don't blink the cursor when selecting text
+    // Recover blink when not selecting text.
+    connect(this, &TextEditor::selectionChanged, this, [=] {
+        if (textCursor().hasSelection()) {
+            hideCursorBlink();
+        } else {
+            showCursorBlink();
+        }
+    });
 }
 
 int TextEditor::getCurrentLine()
@@ -2297,10 +2311,6 @@ bool TextEditor::eventFilter(QObject *, QEvent *event)
 
 void TextEditor::adjustScrollbarMargins()
 {
-    if (!isVisible()) {
-        return;
-    }
-
     QEvent event(QEvent::LayoutRequest);
     QApplication::sendEvent(this, &event);
 
