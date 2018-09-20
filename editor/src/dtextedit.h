@@ -201,6 +201,9 @@ protected:
     void dropEvent(QDropEvent *event) override;
 
 private:
+    bool setCursorKeywordSeletoin(int position, bool findNext);
+
+private:
     QPropertyAnimation *m_scrollAnimation;
 
     QList<QTextEdit::ExtraSelection> m_keywordSelections;
@@ -254,10 +257,7 @@ private:
 
     Settings *m_settings;
 
-    bool setCursorKeywordSeletoin(int position, bool findNext);
-
     bool m_readOnlyMode = false;
-
     bool m_cursorMarkStatus = false;
     int m_cursorMarkPosition = 0;
     int m_cursorWidthChangeDelay = 2000;

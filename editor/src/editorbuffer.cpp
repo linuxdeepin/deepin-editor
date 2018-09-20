@@ -23,9 +23,10 @@
 
 #include <QCoreApplication>
 #include <QApplication>
+#include <QSaveFile>
 #include <QDebug>
-#include <QDir>
 #include <QTimer>
+#include <QDir>
 
 EditorBuffer::EditorBuffer(QWidget *parent)
     : QWidget(parent),
@@ -68,72 +69,64 @@ void EditorBuffer::openFile(const QString &filepath)
 
 bool EditorBuffer::saveFile(const QString &encode, const QString &newline)
 {
-    bool fileCreateFailed = false;
     m_fileEncode = encode.toUtf8();
+    m_newline = newline;
 
-    if (!Utils::fileExists(m_textEditor->filepath)) {
-        QString directory = QFileInfo(m_textEditor->filepath).dir().absolutePath();
+    // use QSaveFile for safely save files.
+    QSaveFile saveFile(m_textEditor->filepath);
+    saveFile.setDirectWriteFallback(true);
 
-        // Create file if filepath is not exists.
-        if (Utils::fileIsWritable(directory)) {
-            QDir().mkpath(directory);
-            if (QFile(m_textEditor->filepath).open(QIODevice::ReadWrite)) {
-                qDebug() << QString("File %1 not exists, create one.").arg(m_textEditor->filepath);
-            }
-        } else {
-            // Make flag fileCreateFailed with 'true' if no permission to create.
-            fileCreateFailed = true;
-        }
-    }
-
-    // Try save file if file has permission.
-    if (Utils::fileIsWritable(m_textEditor->filepath) && !fileCreateFailed) {
-        QFile file(m_textEditor->filepath);
-        if (!file.open(QIODevice::WriteOnly)) {
-            qDebug() << "Can't write file: " << m_textEditor->filepath;
-            // Utils::toast(tr("Can't write file: %1").arg(m_textEditor->filepath), this->topLevelWidget());
-            return false;
-        }
-
-        m_newline = newline;
-
-        QRegularExpression newlineRegex("\r?\n|\r");
-        QString fileNewline;
-        if (newline == "Windows") {
-            fileNewline = "\r\n";
-        } else if (newline == "Mac OS") {
-            fileNewline = "\r";
-        } else {
-            fileNewline = "\n";
-        }
-
-        QTextStream out(&file);
-
-        out.setCodec(encode.toUtf8().data());
-        // NOTE: Muse call 'setGenerateByteOrderMark' to insert the BOM (Byte Order Mark) before any data has been written to file.
-        // Otherwise, can't save file with given encoding.
-        // out.setGenerateByteOrderMark(true);
-        out << m_textEditor->toPlainText().replace(newlineRegex, fileNewline);
-
-        qDebug() << "saved: " << m_textEditor->filepath << encode << newline;
-
-        file.close();
-    }
-
-    if (fileCreateFailed) {
+    if (!saveFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         return false;
     }
 
-    // not needed for now.
-    // QApplication::setOverrideCursor(Qt::WaitCursor);
-    // QTimer::singleShot(100, [=] { QApplication::restoreOverrideCursor(); });
+    QFile file(m_textEditor->filepath);
+    if (!file.open(QIODevice::WriteOnly)) {
+        return false;
+    }
+
+    QRegularExpression newlineRegex("\r?\n|\r");
+    QString fileNewline;
+    if (newline == "Windows") {
+        fileNewline = "\r\n";
+    } else if (newline == "Mac OS") {
+        fileNewline = "\r";
+    } else {
+        fileNewline = "\n";
+    }
+
+    QTextStream stream(&file);
+    stream.setCodec(encode.toUtf8().data());
+    stream << m_textEditor->toPlainText().replace(newlineRegex, fileNewline);
+
+    // flush stream.
+    stream.flush();
+
+    // close and delete file.
+    file.close();
+
+    // flush file.
+    if (!saveFile.flush()) {
+        return false;
+    }
+
+    // did save work?
+    // only finalize if stream status == OK
+    bool ok = (stream.status() == QTextStream::Ok);
 
     // update status.
-    m_textEditor->setModified(false);
-    m_isLoadFinished = true;
-    m_isWritable = true;
+    if (ok) {
+        m_textEditor->setModified(false);
+        m_isLoadFinished = true;
+        m_isWritable = true;
+    }
 
-    return true;
+    qDebug() << "Saved file:" << m_textEditor->filepath
+             << "with codec:" << m_fileEncode
+             << "Line Endings:" << m_newline
+             << "State:" << ok;
+
+    return ok;
 }
 
 bool EditorBuffer::saveFile()
