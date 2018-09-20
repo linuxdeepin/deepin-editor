@@ -475,44 +475,45 @@ QVariantMap Utils::getThemeMapFromPath(const QString &filepath)
     return object.toVariantMap();
 }
 
-bool Utils::isEditableFile(const QString &filepath)
+bool Utils::isMimeTypeSupport(const QString &filepath)
 {
     auto mimeType = QMimeDatabase().mimeTypeForFile(filepath).name();
-    qDebug() << "*** " << filepath << mimeType;
+    qDebug() << "detect mime type: " << filepath << mimeType;
 
     if (mimeType.startsWith("text/")) {
         return true;
     }
 
-    QList<QString> mimeTypeWhiteList;
     // Please check full mime type list from: https://www.freeformatter.com/mime-types-list.html
-    mimeTypeWhiteList
-        << "application/cmd"
-        << "application/javascript"
-        << "application/json"
-        << "application/pkix-cert"
-        << "application/sql"
-        << "application/vnd.nokia.qt.qmakeprofile"
-        << "application/vnd.nokia.xml.qt.resource"
-        << "application/x-desktop"
-        << "application/x-designer"
-        << "application/x-empty"
-        << "application/x-msdos-program"
-        << "application/x-pearl"
-        << "application/x-php"
-        << "application/x-shellscript"
-        << "application/x-sh"
-        << "application/x-theme"
-        << "application/x-csh"
-        << "application/x-asp"
-        << "application/x-subrip"
-        << "application/x-text"
-        << "application/x-trash"
-        << "application/x-yaml"
-        << "application/xml"
-        << "application/yaml"
-        << "application/x-zerosize"
-        << "image/svg+xml";
+    QStringList mimeTypeWhiteList;
+    mimeTypeWhiteList << "application/cmd"
+                      << "application/javascript"
+                      << "application/json"
+                      << "application/pkix-cert"
+                      << "application/octet-stream"
+                      << "application/sql"
+                      << "application/vnd.nokia.qt.qmakeprofile"
+                      << "application/vnd.nokia.xml.qt.resource"
+                      << "application/x-desktop"
+                      << "application/x-designer"
+                      << "application/x-empty"
+                      << "application/x-msdos-program"
+                      << "application/x-pearl"
+                      << "application/x-php"
+                      << "application/x-shellscript"
+                      << "application/x-sh"
+                      << "application/x-theme"
+                      << "application/x-cue"
+                      << "application/x-csh"
+                      << "application/x-asp"
+                      << "application/x-subrip"
+                      << "application/x-text"
+                      << "application/x-trash"
+                      << "application/x-yaml"
+                      << "application/xml"
+                      << "application/yaml"
+                      << "application/x-zerosize"
+                      << "image/svg+xml";
 
     if (mimeTypeWhiteList.contains(mimeType)) {
         return true;

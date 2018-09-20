@@ -24,6 +24,7 @@
 #include "startmanager.h"
 #include "utils.h"
 #include "window.h"
+#include "urlinfo.h"
 
 #include <DApplication>
 #include <DMainWindow>
@@ -50,47 +51,30 @@ int main(int argc, char *argv[])
 
     DApplication app(argc, argv);
     app.setAttribute(Qt::AA_UseHighDpiPixmaps);
-
     app.loadTranslator();
-
     app.setOrganizationName("deepin");
     app.setApplicationName("deepin-editor");
     app.setApplicationDisplayName(QObject::tr("Deepin Editor"));
     app.setApplicationVersion(DApplication::buildVersion("1.0"));
-
     app.setProductIcon(QIcon(Utils::getQrcPath("logo_96.svg")));
+    app.setWindowIcon(QIcon(Utils::getQrcPath("logo_96.svg")));
     app.setProductName(DApplication::translate("MainWindow", "Deepin Editor"));
     app.setApplicationDescription(DApplication::translate("MainWindow", descriptionText) + "\n");
     app.setApplicationAcknowledgementPage(acknowledgementLink);
 
-    app.setWindowIcon(QIcon(Utils::getQrcPath("logo_96.svg")));
-
     // Parser input arguments.
     QCommandLineParser parser;
-
     const QCommandLineOption newWindowOption("w", "Open file in new window");
     const QCommandLineOption helpOption = parser.addHelpOption();
     parser.addOption(newWindowOption);
-
     parser.process(app);
 
-    QStringList files;
-    QStringList arguments = app.arguments();
-    for (int i = 1; i < arguments.size(); i++) {
-        if (arguments[i] != "-w") {
-            QStringList splitResult = arguments[i].split("file://");
+    QStringList urls;
+    QStringList arguments = parser.positionalArguments();
 
-            QString file = "";
-            if (splitResult.size() == 1) {
-                file = splitResult[0];
-            } else if (splitResult.size() == 2) {
-                file = splitResult[1];
-            }
-
-            if (Utils::fileExists(file)) {
-                files << file;
-            }
-        }
+    for (const QString &path : arguments) {
+        UrlInfo info(path);
+        urls << info.url.toLocalFile();
     }
 
     bool hasWindowFlag = parser.isSet(newWindowOption);
@@ -103,9 +87,9 @@ int main(int argc, char *argv[])
         StartManager *startManager = new StartManager;
 
         if (hasWindowFlag) {
-            startManager->openFilesInWindow(files);
+            startManager->openFilesInWindow(urls);
         } else {
-            startManager->openFilesInTab(files);
+            startManager->openFilesInTab(urls);
         }
 
         dbus.registerObject("/com/deepin/Editor", startManager, QDBusConnection::ExportScriptableSlots);
@@ -119,12 +103,13 @@ int main(int argc, char *argv[])
                                     "com.deepin.Editor",
                                     QDBusConnection::sessionBus());
 
-        QList<QVariant> arg;
-        arg << files;
+        QList<QVariant> args;
+        args << urls;
+
         if (hasWindowFlag) {
-            notification.callWithArgumentList(QDBus::AutoDetect, "openFilesInWindow", arg);
+            notification.callWithArgumentList(QDBus::AutoDetect, "openFilesInWindow", args);
         } else {
-            notification.callWithArgumentList(QDBus::AutoDetect, "openFilesInTab", arg);
+            notification.callWithArgumentList(QDBus::AutoDetect, "openFilesInTab", args);
         }
     }
 

@@ -229,8 +229,7 @@ void Window::activeTab(int index)
 void Window::addTab(const QString &filepath, bool activeTab)
 {
     // check whether it is an editable file thround mimeType.
-    if (Utils::isEditableFile(filepath)) {
-
+    if (Utils::isMimeTypeSupport(filepath)) {
         // check if have permission to read the file.
         QFile file(filepath);
         if (!file.open(QIODevice::ReadOnly)) {

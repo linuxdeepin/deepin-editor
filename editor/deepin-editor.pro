@@ -36,6 +36,7 @@ HEADERS += src/window.h \
            src/editorbuffer.h \
            src/uncommentselection.h \
            src/utils.h \
+           src/urlinfo.h \
            src/fileloadthread.h \
            src/theme_module/themepanel.h \
            src/theme_module/themelistview.h \
