@@ -94,4 +94,15 @@ void ThemeListModel::initThemes()
 
         m_themes << pair;
     }
+
+    std::sort(m_themes.begin(), m_themes.end(),
+              [=] (QPair<QString, QString> &a, QPair<QString, QString> &b) {
+                  QVariantMap firstMap = Utils::getThemeMapFromPath(a.second);
+                  QVariantMap secondMap = Utils::getThemeMapFromPath(b.second);
+
+                  const QString &firstColor = firstMap["editor-colors"].toMap()["background-color"].toString();
+                  const QString &secondColor = secondMap["editor-colors"].toMap()["background-color"].toString();
+
+                  return QColor(firstColor).lightness() < QColor(secondColor).lightness();
+              });
 }
