@@ -25,7 +25,7 @@ RESOURCES += deepin-editor.qrc
 HEADERS += src/window.h \
            src/startmanager.h \
            src/dbusinterface.h \
-           src/texteditor.h \
+           src/dtextedit.h \
            src/jumplinebar.h \
            src/findbar.h \
            src/replacebar.h \
@@ -46,7 +46,7 @@ HEADERS += src/window.h \
 SOURCES += src/window.cpp \
            src/startmanager.cpp \
            src/dbusinterface.cpp \
-           src/texteditor.cpp \
+           src/dtextedit.cpp \
            src/jumplinebar.cpp \
            src/findbar.cpp \
            src/replacebar.cpp \

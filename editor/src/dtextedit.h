@@ -21,8 +21,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TEXTEEDITOR_H
-#define TEXTEEDITOR_H
+#ifndef DTEXTEDIT_H
+#define DTEXTEDIT_H
 
 #include "Repository"
 #include "uncommentselection.h"
@@ -40,12 +40,12 @@ namespace KSyntaxHighlighting {
 
 enum ConvertCase { UPPER, LOWER, CAPITALIZE };
 
-class TextEditor : public QPlainTextEdit
+class DTextEdit : public QPlainTextEdit
 {
     Q_OBJECT
 
 public:
-    TextEditor(QPlainTextEdit *parent = 0);
+    DTextEdit(QPlainTextEdit *parent = 0);
 
     QWidget *lineNumberArea;
     QString filepath;

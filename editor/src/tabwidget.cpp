@@ -23,7 +23,7 @@
 
 #include "tabwidget.h"
 #include "utils.h"
-#include "texteditor.h"
+#include "dtextedit.h"
 #include "window.h"
 
 #include <QDebug>
@@ -69,7 +69,7 @@ QMimeData* TabWidget::createMimeDataFromTab(int index, const QStyleOptionTab &) 
     // Get tab name, path, and content.
     QString tabPath = tabFiles[index];
     QString tabName = tabText(index);
-    TextEditor *textEditor = static_cast<Window *>(this->window())->getTextEditor(tabFiles[index]);
+    DTextEdit *textEditor = static_cast<Window *>(this->window())->getTextEditor(tabFiles[index]);
     QString tabContent = textEditor->toPlainText();
     int modified = (textEditor->document()->isModified()) ? 1 : 0;
 
@@ -89,7 +89,7 @@ QPixmap TabWidget::createDragPixmapFromTab(int index, const QStyleOptionTab &, Q
     const qreal screenScale = qApp->devicePixelRatio();
 
     // Take editor's screenshot as drag image.
-    TextEditor *textEditor = static_cast<Window*>(this->window())->getTextEditor(tabFiles[index]);
+    DTextEdit *textEditor = static_cast<Window*>(this->window())->getTextEditor(tabFiles[index]);
     int width = textEditor->width() * screenScale;
     int height = textEditor->height() * screenScale;
     QImage screenshotImage(width, height, QImage::Format_ARGB32_Premultiplied);

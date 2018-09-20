@@ -21,7 +21,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "texteditor.h"
+#include "dtextedit.h"
 #include "utils.h"
 #include "window.h"
 
@@ -48,7 +48,7 @@
 class LineNumberArea : public QWidget
 {
 public:
-    LineNumberArea(TextEditor *editor)
+    LineNumberArea(DTextEdit *editor)
         : QWidget(editor),
           editor(editor) {
     }
@@ -57,10 +57,10 @@ public:
         editor->lineNumberAreaPaintEvent(event);
     }
 
-    TextEditor *editor;
+    DTextEdit *editor;
 };
 
-TextEditor::TextEditor(QPlainTextEdit *parent)
+DTextEdit::DTextEdit(QPlainTextEdit *parent)
     : QPlainTextEdit(parent),
       m_highlighter(new KSyntaxHighlighting::SyntaxHighlighter(document()))
 {
@@ -77,10 +77,10 @@ TextEditor::TextEditor(QPlainTextEdit *parent)
     // Init widgets.
     lineNumberArea = new LineNumberArea(this);
 
-    connect(this, &QPlainTextEdit::updateRequest, this, &TextEditor::handleUpdateRequest);
-    connect(this, &QPlainTextEdit::textChanged, this, &TextEditor::updateLineNumber, Qt::QueuedConnection);
-    connect(this, &QPlainTextEdit::cursorPositionChanged, this, &TextEditor::highlightCurrentLine, Qt::QueuedConnection);
-    connect(document(), &QTextDocument::modificationChanged, this, &TextEditor::setModified);
+    connect(this, &QPlainTextEdit::updateRequest, this, &DTextEdit::handleUpdateRequest);
+    connect(this, &QPlainTextEdit::textChanged, this, &DTextEdit::updateLineNumber, Qt::QueuedConnection);
+    connect(this, &QPlainTextEdit::cursorPositionChanged, this, &DTextEdit::highlightCurrentLine, Qt::QueuedConnection);
+    connect(document(), &QTextDocument::modificationChanged, this, &DTextEdit::setModified);
 
     // Init menu.
     m_rightMenu = new QMenu();
@@ -102,23 +102,23 @@ TextEditor::TextEditor(QPlainTextEdit *parent)
     m_openInFileManagerAction = new QAction(tr("Open in file manager"), this);
     m_toggleCommentAction = new QAction(tr("Toggle comment"), this);
 
-    connect(m_rightMenu, &QMenu::aboutToHide, this, &TextEditor::removeHighlightWordUnderCursor);
-    connect(m_undoAction, &QAction::triggered, this, &TextEditor::undo);
-    connect(m_redoAction, &QAction::triggered, this, &TextEditor::redo);
-    connect(m_cutAction, &QAction::triggered, this, &TextEditor::clickCutAction);
-    connect(m_copyAction, &QAction::triggered, this, &TextEditor::clickCopyAction);
-    connect(m_pasteAction, &QAction::triggered, this, &TextEditor::clickPasteAction);
-    connect(m_deleteAction, &QAction::triggered, this, &TextEditor::clickDeleteAction);
-    connect(m_selectAllAction, &QAction::triggered, this, &TextEditor::selectAll);
-    connect(m_findAction, &QAction::triggered, this, &TextEditor::clickFindAction);
-    connect(m_replaceAction, &QAction::triggered, this, &TextEditor::clickReplaceAction);
-    connect(m_jumpLineAction, &QAction::triggered, this, &TextEditor::clickJumpLineAction);
-    connect(m_fullscreenAction, &QAction::triggered, this, &TextEditor::clickFullscreenAction);
-    connect(m_exitFullscreenAction, &QAction::triggered, this, &TextEditor::clickFullscreenAction);
-    connect(m_enableReadOnlyModeAction, &QAction::triggered, this, &TextEditor::toggleReadOnlyMode);
-    connect(m_disableReadOnlyModeAction, &QAction::triggered, this, &TextEditor::toggleReadOnlyMode);
-    connect(m_openInFileManagerAction, &QAction::triggered, this, &TextEditor::clickOpenInFileManagerAction);
-    connect(m_toggleCommentAction, &QAction::triggered, this, &TextEditor::toggleComment);
+    connect(m_rightMenu, &QMenu::aboutToHide, this, &DTextEdit::removeHighlightWordUnderCursor);
+    connect(m_undoAction, &QAction::triggered, this, &DTextEdit::undo);
+    connect(m_redoAction, &QAction::triggered, this, &DTextEdit::redo);
+    connect(m_cutAction, &QAction::triggered, this, &DTextEdit::clickCutAction);
+    connect(m_copyAction, &QAction::triggered, this, &DTextEdit::clickCopyAction);
+    connect(m_pasteAction, &QAction::triggered, this, &DTextEdit::clickPasteAction);
+    connect(m_deleteAction, &QAction::triggered, this, &DTextEdit::clickDeleteAction);
+    connect(m_selectAllAction, &QAction::triggered, this, &DTextEdit::selectAll);
+    connect(m_findAction, &QAction::triggered, this, &DTextEdit::clickFindAction);
+    connect(m_replaceAction, &QAction::triggered, this, &DTextEdit::clickReplaceAction);
+    connect(m_jumpLineAction, &QAction::triggered, this, &DTextEdit::clickJumpLineAction);
+    connect(m_fullscreenAction, &QAction::triggered, this, &DTextEdit::clickFullscreenAction);
+    connect(m_exitFullscreenAction, &QAction::triggered, this, &DTextEdit::clickFullscreenAction);
+    connect(m_enableReadOnlyModeAction, &QAction::triggered, this, &DTextEdit::toggleReadOnlyMode);
+    connect(m_disableReadOnlyModeAction, &QAction::triggered, this, &DTextEdit::toggleReadOnlyMode);
+    connect(m_openInFileManagerAction, &QAction::triggered, this, &DTextEdit::clickOpenInFileManagerAction);
+    connect(m_toggleCommentAction, &QAction::triggered, this, &DTextEdit::toggleComment);
 
     // Init convert case sub menu.
     m_haveWordUnderCursor = false;
@@ -131,17 +131,17 @@ TextEditor::TextEditor(QPlainTextEdit *parent)
     m_convertCaseMenu->addAction(m_downcaseAction);
     m_convertCaseMenu->addAction(m_capitalizeAction);
 
-    connect(m_upcaseAction, &QAction::triggered, this, &TextEditor::upcaseWord);
-    connect(m_downcaseAction, &QAction::triggered, this, &TextEditor::downcaseWord);
-    connect(m_capitalizeAction, &QAction::triggered, this, &TextEditor::capitalizeWord);
+    connect(m_upcaseAction, &QAction::triggered, this, &DTextEdit::upcaseWord);
+    connect(m_downcaseAction, &QAction::triggered, this, &DTextEdit::downcaseWord);
+    connect(m_capitalizeAction, &QAction::triggered, this, &DTextEdit::capitalizeWord);
 
     m_canUndo = false;
     m_canRedo = false;
 
-    connect(this, &TextEditor::undoAvailable, this, [=] (bool undoIsAvailable) {
+    connect(this, &DTextEdit::undoAvailable, this, [=] (bool undoIsAvailable) {
         m_canUndo = undoIsAvailable;
     });
-    connect(this, &TextEditor::redoAvailable, this, [=] (bool redoIsAvailable) {
+    connect(this, &DTextEdit::redoAvailable, this, [=] (bool redoIsAvailable) {
         m_canRedo = redoIsAvailable;
     });
 
@@ -150,20 +150,20 @@ TextEditor::TextEditor(QPlainTextEdit *parent)
     m_scrollAnimation->setEasingCurve(QEasingCurve::InOutExpo);
     m_scrollAnimation->setDuration(300);
 
-    connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &TextEditor::handleScrollFinish, Qt::QueuedConnection);
+    connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &DTextEdit::handleScrollFinish, Qt::QueuedConnection);
 
     // Monitor cursor mark status to update in line number area.
-    connect(this, &TextEditor::cursorMarkChanged, this, &TextEditor::handleCursorMarkChanged);
+    connect(this, &DTextEdit::cursorMarkChanged, this, &DTextEdit::handleCursorMarkChanged);
 
     // configure content area
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    connect(verticalScrollBar(), &QScrollBar::rangeChanged, this, &TextEditor::adjustScrollbarMargins, Qt::QueuedConnection);
+    connect(verticalScrollBar(), &QScrollBar::rangeChanged, this, &DTextEdit::adjustScrollbarMargins, Qt::QueuedConnection);
 
     // Don't blink the cursor when selecting text
     // Recover blink when not selecting text.
-    connect(this, &TextEditor::selectionChanged, this, [=] {
+    connect(this, &DTextEdit::selectionChanged, this, [=] {
         if (textCursor().hasSelection()) {
             hideCursorBlink();
         } else {
@@ -172,29 +172,29 @@ TextEditor::TextEditor(QPlainTextEdit *parent)
     });
 }
 
-int TextEditor::getCurrentLine()
+int DTextEdit::getCurrentLine()
 {
     return textCursor().blockNumber() + 1;
 }
 
-int TextEditor::getCurrentColumn()
+int DTextEdit::getCurrentColumn()
 {
     return textCursor().columnNumber();
 }
 
-int TextEditor::getPosition()
+int DTextEdit::getPosition()
 {
     return textCursor().position();
 }
 
-int TextEditor::getScrollOffset()
+int DTextEdit::getScrollOffset()
 {
     QScrollBar *scrollbar = verticalScrollBar();
 
     return scrollbar->value();
 }
 
-void TextEditor::forwardChar()
+void DTextEdit::forwardChar()
 {
     if (m_cursorMark) {
         QTextCursor cursor = textCursor();
@@ -205,7 +205,7 @@ void TextEditor::forwardChar()
     }
 }
 
-void TextEditor::backwardChar()
+void DTextEdit::backwardChar()
 {
     if (m_cursorMark) {
         QTextCursor cursor = textCursor();
@@ -216,7 +216,7 @@ void TextEditor::backwardChar()
     }
 }
 
-void TextEditor::forwardWord()
+void DTextEdit::forwardWord()
 {
     QTextCursor cursor = textCursor();
 
@@ -231,7 +231,7 @@ void TextEditor::forwardWord()
     setTextCursor(cursor);
 }
 
-void TextEditor::backwardWord()
+void DTextEdit::backwardWord()
 {
     QTextCursor cursor = textCursor();
 
@@ -246,7 +246,7 @@ void TextEditor::backwardWord()
     setTextCursor(cursor);
 }
 
-void TextEditor::forwardPair()
+void DTextEdit::forwardPair()
 {
     // Record cursor and seleciton position before move cursor.
     int actionStartPos = textCursor().position();
@@ -278,7 +278,7 @@ void TextEditor::forwardPair()
     }
 }
 
-void TextEditor::backwardPair()
+void DTextEdit::backwardPair()
 {
     // Record cursor and seleciton position before move cursor.
     int actionStartPos = textCursor().position();
@@ -314,7 +314,7 @@ void TextEditor::backwardPair()
     }
 }
 
-void TextEditor::moveToStart()
+void DTextEdit::moveToStart()
 {
     if (m_cursorMark) {
         QTextCursor cursor = textCursor();
@@ -325,7 +325,7 @@ void TextEditor::moveToStart()
     }
 }
 
-void TextEditor::moveToEnd()
+void DTextEdit::moveToEnd()
 {
     if (m_cursorMark) {
         QTextCursor cursor = textCursor();
@@ -336,7 +336,7 @@ void TextEditor::moveToEnd()
     }
 }
 
-void TextEditor::moveToStartOfLine()
+void DTextEdit::moveToStartOfLine()
 {
     if (m_cursorMark) {
         QTextCursor cursor = textCursor();
@@ -347,7 +347,7 @@ void TextEditor::moveToStartOfLine()
     }
 }
 
-void TextEditor::moveToEndOfLine()
+void DTextEdit::moveToEndOfLine()
 {
     if (m_cursorMark) {
         QTextCursor cursor = textCursor();
@@ -358,7 +358,7 @@ void TextEditor::moveToEndOfLine()
     }
 }
 
-void TextEditor::moveToLineIndentation()
+void DTextEdit::moveToLineIndentation()
 {
     // Init cursor and move type.
     QTextCursor cursor = textCursor();
@@ -393,7 +393,7 @@ void TextEditor::moveToLineIndentation()
     setTextCursor(cursor);
 }
 
-void TextEditor::nextLine()
+void DTextEdit::nextLine()
 {
     if (toPlainText().isEmpty())
         return;
@@ -407,7 +407,7 @@ void TextEditor::nextLine()
     }
 }
 
-void TextEditor::prevLine()
+void DTextEdit::prevLine()
 {
     if (toPlainText().isEmpty())
         return;
@@ -421,7 +421,7 @@ void TextEditor::prevLine()
     }
 }
 
-void TextEditor::moveCursorNoBlink(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode)
+void DTextEdit::moveCursorNoBlink(QTextCursor::MoveOperation operation, QTextCursor::MoveMode mode)
 {
     // Function moveCursorNoBlink will blink cursor when move cursor.
     // But function movePosition won't, so we use movePosition to avoid that cursor link when moving cursor.
@@ -430,7 +430,7 @@ void TextEditor::moveCursorNoBlink(QTextCursor::MoveOperation operation, QTextCu
     setTextCursor(cursor);
 }
 
-void TextEditor::jumpToLine(int line, bool keepLineAtCenter)
+void DTextEdit::jumpToLine(int line, bool keepLineAtCenter)
 {
     QTextCursor cursor(document()->findBlockByNumber(line - 1)); // line - 1 because line number starts from 0
 
@@ -442,7 +442,7 @@ void TextEditor::jumpToLine(int line, bool keepLineAtCenter)
     }
 }
 
-void TextEditor::newline()
+void DTextEdit::newline()
 {
     // Stop mark if mark is set.
     tryUnsetMark();
@@ -452,7 +452,7 @@ void TextEditor::newline()
     setTextCursor(cursor);
 }
 
-void TextEditor::openNewlineAbove()
+void DTextEdit::openNewlineAbove()
 {
     // Stop mark if mark is set.
     tryUnsetMark();
@@ -465,7 +465,7 @@ void TextEditor::openNewlineAbove()
     setTextCursor(cursor);
 }
 
-void TextEditor::openNewlineBelow()
+void DTextEdit::openNewlineBelow()
 {
     // Stop mark if mark is set.
     tryUnsetMark();
@@ -474,7 +474,7 @@ void TextEditor::openNewlineBelow()
     textCursor().insertText("\n");
 }
 
-void TextEditor::moveLineDownUp(bool up)
+void DTextEdit::moveLineDownUp(bool up)
 {
     QTextCursor cursor = textCursor();
     QTextCursor move = cursor;
@@ -530,7 +530,7 @@ void TextEditor::moveLineDownUp(bool up)
     setTextCursor(move);
 }
 
-void TextEditor::scrollLineUp()
+void DTextEdit::scrollLineUp()
 {
     QScrollBar *scrollbar = verticalScrollBar();
 
@@ -545,7 +545,7 @@ void TextEditor::scrollLineUp()
     }
 }
 
-void TextEditor::scrollLineDown()
+void DTextEdit::scrollLineDown()
 {
     QScrollBar *scrollbar = verticalScrollBar();
 
@@ -560,7 +560,7 @@ void TextEditor::scrollLineDown()
     }
 }
 
-void TextEditor::scrollUp()
+void DTextEdit::scrollUp()
 {
     QScrollBar *scrollbar = verticalScrollBar();
 
@@ -580,7 +580,7 @@ void TextEditor::scrollUp()
     }
 }
 
-void TextEditor::scrollDown()
+void DTextEdit::scrollDown()
 {
     QScrollBar *scrollbar = verticalScrollBar();
 
@@ -598,7 +598,7 @@ void TextEditor::scrollDown()
     setTextCursor(cursor);
 }
 
-void TextEditor::duplicateLine()
+void DTextEdit::duplicateLine()
 {
     if (textCursor().hasSelection()) {
         bool cursorAtSelectionStart = (textCursor().position() == textCursor().selectionStart());
@@ -680,7 +680,7 @@ void TextEditor::duplicateLine()
     }
 }
 
-void TextEditor::copyLines()
+void DTextEdit::copyLines()
 {
     // Record current cursor and build copy cursor.
     QTextCursor currentCursor = textCursor();
@@ -725,7 +725,7 @@ void TextEditor::copyLines()
     setTextCursor(copyCursor);
 }
 
-void TextEditor::cutlines()
+void DTextEdit::cutlines()
 {
     // Record current cursor and build copy cursor.
     QTextCursor currentCursor = textCursor();
@@ -770,7 +770,7 @@ void TextEditor::cutlines()
     setTextCursor(copyCursor);
 }
 
-void TextEditor::joinLines()
+void DTextEdit::joinLines()
 {
     if (textCursor().hasSelection()) {
         // Get selection bound.
@@ -818,7 +818,7 @@ void TextEditor::joinLines()
     tryUnsetMark();
 }
 
-void TextEditor::killLine()
+void DTextEdit::killLine()
 {
     if (tryUnsetMark()) {
         return;
@@ -862,7 +862,7 @@ void TextEditor::killLine()
     }
 }
 
-void TextEditor::killCurrentLine()
+void DTextEdit::killCurrentLine()
 {
     if (tryUnsetMark()) {
         return;
@@ -884,7 +884,7 @@ void TextEditor::killCurrentLine()
     setTextCursor(cursor);
 }
 
-void TextEditor::killBackwardWord()
+void DTextEdit::killBackwardWord()
 {
     tryUnsetMark();
 
@@ -904,7 +904,7 @@ void TextEditor::killBackwardWord()
     }
 }
 
-void TextEditor::killForwardWord()
+void DTextEdit::killForwardWord()
 {
     tryUnsetMark();
 
@@ -924,14 +924,14 @@ void TextEditor::killForwardWord()
     }
 }
 
-void TextEditor::escape()
+void DTextEdit::escape()
 {
     emit pressEsc();
 
     tryUnsetMark();
 }
 
-void TextEditor::indentText()
+void DTextEdit::indentText()
 {
     // Stop mark if mark is set.
     tryUnsetMark();
@@ -966,7 +966,7 @@ void TextEditor::indentText()
     showCursorBlink();
 }
 
-void TextEditor::unindentText()
+void DTextEdit::unindentText()
 {
     // Stop mark if mark is set.
     tryUnsetMark();
@@ -1008,33 +1008,33 @@ void TextEditor::unindentText()
     showCursorBlink();
 }
 
-void TextEditor::setTabSpaceNumber(int number)
+void DTextEdit::setTabSpaceNumber(int number)
 {
     m_tabSpaceNumber = number;
 }
 
-void TextEditor::upcaseWord()
+void DTextEdit::upcaseWord()
 {
     tryUnsetMark();
 
     convertWordCase(UPPER);
 }
 
-void TextEditor::downcaseWord()
+void DTextEdit::downcaseWord()
 {
     tryUnsetMark();
 
     convertWordCase(LOWER);
 }
 
-void TextEditor::capitalizeWord()
+void DTextEdit::capitalizeWord()
 {
     tryUnsetMark();
 
     convertWordCase(CAPITALIZE);
 }
 
-void TextEditor::transposeChar()
+void DTextEdit::transposeChar()
 {
     tryUnsetMark();
 
@@ -1059,7 +1059,7 @@ void TextEditor::transposeChar()
     setTextCursor(cursor);
 }
 
-void TextEditor::handleCursorMarkChanged(bool mark, QTextCursor cursor)
+void DTextEdit::handleCursorMarkChanged(bool mark, QTextCursor cursor)
 {
     if (mark) {
         m_markStartLine = cursor.blockNumber() + 1;
@@ -1070,7 +1070,7 @@ void TextEditor::handleCursorMarkChanged(bool mark, QTextCursor cursor)
     lineNumberArea->update();
 }
 
-void TextEditor::convertWordCase(ConvertCase convertCase)
+void DTextEdit::convertWordCase(ConvertCase convertCase)
 {
     if (textCursor().hasSelection()) {
         QString text = textCursor().selectedText();
@@ -1109,7 +1109,7 @@ void TextEditor::convertWordCase(ConvertCase convertCase)
     }
 }
 
-QString TextEditor::capitalizeText(QString text)
+QString DTextEdit::capitalizeText(QString text)
 {
     QString newText = text.toLower();
     QChar currentChar;
@@ -1124,7 +1124,7 @@ QString TextEditor::capitalizeText(QString text)
     return newText;
 }
 
-void TextEditor::keepCurrentLineAtCenter()
+void DTextEdit::keepCurrentLineAtCenter()
 {
     QScrollBar *scrollbar = verticalScrollBar();
 
@@ -1133,7 +1133,7 @@ void TextEditor::keepCurrentLineAtCenter()
     scrollbar->setValue(scrollbar->value() + currentLine - halfEditorLines);
 }
 
-void TextEditor::scrollToLine(int scrollOffset, int row, int column)
+void DTextEdit::scrollToLine(int scrollOffset, int row, int column)
 {
     // Save cursor postion.
     m_restoreRow = row;
@@ -1145,14 +1145,14 @@ void TextEditor::scrollToLine(int scrollOffset, int row, int column)
     m_scrollAnimation->start();
 }
 
-void TextEditor::setFontFamily(QString name)
+void DTextEdit::setFontFamily(QString name)
 {
     // Update font.
     m_fontName = name;
     updateFont();
 }
 
-void TextEditor::setFontSize(int size)
+void DTextEdit::setFontSize(int size)
 {
     // Update font.
     m_fontSize = size;
@@ -1162,7 +1162,7 @@ void TextEditor::setFontSize(int size)
     updateLineNumber();
 }
 
-void TextEditor::updateFont()
+void DTextEdit::updateFont()
 {
     QFont font = document()->defaultFont();
     font.setFixedPitch(true);
@@ -1171,7 +1171,7 @@ void TextEditor::updateFont()
     setFont(font);
 }
 
-void TextEditor::replaceAll(const QString &replaceText, const QString &withText)
+void DTextEdit::replaceAll(const QString &replaceText, const QString &withText)
 {
     if (replaceText.isEmpty()) {
         return;
@@ -1200,7 +1200,7 @@ void TextEditor::replaceAll(const QString &replaceText, const QString &withText)
     setTextCursor(startCursor);
 }
 
-void TextEditor::replaceNext(const QString &replaceText, const QString &withText)
+void DTextEdit::replaceNext(const QString &replaceText, const QString &withText)
 {
     if (replaceText.isEmpty() ||
         !m_cursorKeywordSelection.cursor.hasSelection()) {
@@ -1220,7 +1220,7 @@ void TextEditor::replaceNext(const QString &replaceText, const QString &withText
     highlightKeyword(replaceText, getPosition());
 }
 
-void TextEditor::replaceRest(const QString &replaceText, const QString &withText)
+void DTextEdit::replaceRest(const QString &replaceText, const QString &withText)
 {
     // If replace text is nothing, don't do replace action.
     if (replaceText.isEmpty()) {
@@ -1249,7 +1249,7 @@ void TextEditor::replaceRest(const QString &replaceText, const QString &withText
     setTextCursor(startCursor);
 }
 
-bool TextEditor::findKeywordForward(QString keyword)
+bool DTextEdit::findKeywordForward(QString keyword)
 {
     if (textCursor().hasSelection()) {
         // Get selection bound.
@@ -1288,7 +1288,7 @@ bool TextEditor::findKeywordForward(QString keyword)
     }
 }
 
-void TextEditor::removeKeywords()
+void DTextEdit::removeKeywords()
 {
     m_cursorKeywordSelection.cursor = textCursor();
     m_cursorKeywordSelection.cursor.clearSelection();
@@ -1302,7 +1302,7 @@ void TextEditor::removeKeywords()
     setFocus();
 }
 
-void TextEditor::highlightKeyword(QString keyword, int position)
+void DTextEdit::highlightKeyword(QString keyword, int position)
 {
     updateKeywordSelections(keyword);
     updateCursorKeywordSelection(position, true);
@@ -1310,7 +1310,7 @@ void TextEditor::highlightKeyword(QString keyword, int position)
     renderAllSelections();
 }
 
-void TextEditor::updateCursorKeywordSelection(int position, bool findNext)
+void DTextEdit::updateCursorKeywordSelection(int position, bool findNext)
 {
     bool findOne = setCursorKeywordSeletoin(position, findNext);
 
@@ -1333,7 +1333,7 @@ void TextEditor::updateCursorKeywordSelection(int position, bool findNext)
     }
 }
 
-void TextEditor::updateHighlightLineSelection()
+void DTextEdit::updateHighlightLineSelection()
 {
     QTextEdit::ExtraSelection selection;
 
@@ -1345,7 +1345,7 @@ void TextEditor::updateHighlightLineSelection()
     m_currentLineSelection = selection;
 }
 
-void TextEditor::updateKeywordSelections(QString keyword)
+void DTextEdit::updateKeywordSelections(QString keyword)
 {
     // Clear keyword selections first.
     m_keywordSelections.clear();
@@ -1374,7 +1374,7 @@ void TextEditor::updateKeywordSelections(QString keyword)
     }
 }
 
-void TextEditor::renderAllSelections()
+void DTextEdit::renderAllSelections()
 {
     QList<QTextEdit::ExtraSelection> selections;
 
@@ -1386,7 +1386,7 @@ void TextEditor::renderAllSelections()
     setExtraSelections(selections);
 }
 
-void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
+void DTextEdit::keyPressEvent(QKeyEvent *keyEvent)
 {
     const QString &key = Utils::getKeyshortcut(keyEvent);
 
@@ -1550,7 +1550,7 @@ void TextEditor::keyPressEvent(QKeyEvent *keyEvent)
     }
 }
 
-void TextEditor::wheelEvent(QWheelEvent *e)
+void DTextEdit::wheelEvent(QWheelEvent *e)
 {
     if (e->modifiers() & Qt::ControlModifier) {
         const int deltaY = e->angleDelta().y();
@@ -1567,7 +1567,7 @@ void TextEditor::wheelEvent(QWheelEvent *e)
     QPlainTextEdit::wheelEvent(e);
 }
 
-void TextEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
+void DTextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
     // Init.
     QPainter painter(lineNumberArea);
@@ -1613,7 +1613,7 @@ void TextEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
     }
 }
 
-void TextEditor::contextMenuEvent(QContextMenuEvent *event)
+void DTextEdit::contextMenuEvent(QContextMenuEvent *event)
 {
     m_rightMenu->clear();
 
@@ -1692,7 +1692,7 @@ void TextEditor::contextMenuEvent(QContextMenuEvent *event)
     m_rightMenu->exec(event->globalPos());
 }
 
-void TextEditor::highlightCurrentLine()
+void DTextEdit::highlightCurrentLine()
 {
     updateHighlightLineSelection();
     renderAllSelections();
@@ -1721,13 +1721,13 @@ void TextEditor::highlightCurrentLine()
     // }
 }
 
-void TextEditor::updateLineNumber()
+void DTextEdit::updateLineNumber()
 {
     // Update line number painter.
     lineNumberArea->setFixedWidth(QString("%1").arg(blockCount()).size() * fontMetrics().width("9") + m_lineNumberPaddingX * 2);
 }
 
-void TextEditor::handleScrollFinish()
+void DTextEdit::handleScrollFinish()
 {
     // Restore cursor postion.
     jumpToLine(m_restoreRow, false);
@@ -1740,7 +1740,7 @@ void TextEditor::handleScrollFinish()
     setTextCursor(cursor);
 }
 
-void TextEditor::handleUpdateRequest(const QRect &rect, int dy)
+void DTextEdit::handleUpdateRequest(const QRect &rect, int dy)
 {
     if (dy) {
         lineNumberArea->scroll(0, dy);
@@ -1749,7 +1749,7 @@ void TextEditor::handleUpdateRequest(const QRect &rect, int dy)
     }
 }
 
-bool TextEditor::setCursorKeywordSeletoin(int position, bool findNext)
+bool DTextEdit::setCursorKeywordSeletoin(int position, bool findNext)
 {
     int offsetLines = 3;
 
@@ -1800,13 +1800,13 @@ bool TextEditor::setCursorKeywordSeletoin(int position, bool findNext)
     return false;
 }
 
-void TextEditor::setThemeWithPath(const QString &path)
+void DTextEdit::setThemeWithPath(const QString &path)
 {
     const KSyntaxHighlighting::Theme theme = m_repository.theme("");
     setTheme(theme, path);
 }
 
-void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme, const QString &path)
+void DTextEdit::setTheme(const KSyntaxHighlighting::Theme &theme, const QString &path)
 {
     QVariantMap jsonMap = Utils::getThemeMapFromPath(path);
     QVariantMap textStylesMap = jsonMap["text-styles"].toMap();
@@ -1848,7 +1848,7 @@ void TextEditor::setTheme(const KSyntaxHighlighting::Theme &theme, const QString
     highlightCurrentLine();
 }
 
-void TextEditor::loadHighlighter()
+void DTextEdit::loadHighlighter()
 {
     const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());
 
@@ -1897,7 +1897,7 @@ void TextEditor::loadHighlighter()
     }
 }
 
-bool TextEditor::highlightWordUnderMouse(QPoint pos)
+bool DTextEdit::highlightWordUnderMouse(QPoint pos)
 {
     // Get cursor match mouse pointer coordinate, but cursor maybe not under mouse pointer.
     QTextCursor cursor(cursorForPosition(pos));
@@ -1936,7 +1936,7 @@ bool TextEditor::highlightWordUnderMouse(QPoint pos)
     }
 }
 
-void TextEditor::removeHighlightWordUnderCursor()
+void DTextEdit::removeHighlightWordUnderCursor()
 {
     m_highlightWordCacheCursor = m_wordUnderCursorSelection.cursor;
 
@@ -1946,24 +1946,24 @@ void TextEditor::removeHighlightWordUnderCursor()
     renderAllSelections();
 }
 
-void TextEditor::setSettings(Settings *keySettings)
+void DTextEdit::setSettings(Settings *keySettings)
 {
     m_settings = keySettings;
 }
 
-void TextEditor::setModified(bool modified)
+void DTextEdit::setModified(bool modified)
 {
     document()->setModified(modified);
 }
 
-void TextEditor::copySelectedText()
+void DTextEdit::copySelectedText()
 {
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(textCursor().selection().toPlainText());
     tryUnsetMark();
 }
 
-void TextEditor::cutSelectedText()
+void DTextEdit::cutSelectedText()
 {
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(textCursor().selection().toPlainText());
@@ -1975,14 +1975,14 @@ void TextEditor::cutSelectedText()
     unsetMark();
 }
 
-void TextEditor::pasteText()
+void DTextEdit::pasteText()
 {
     QPlainTextEdit::paste();
 
     unsetMark();
 }
 
-void TextEditor::setMark()
+void DTextEdit::setMark()
 {
     bool currentMark = m_cursorMark;
     bool markCursorChanged = false;
@@ -2006,7 +2006,7 @@ void TextEditor::setMark()
     }
 }
 
-void TextEditor::unsetMark()
+void DTextEdit::unsetMark()
 {
     bool currentMark = m_cursorMark;
 
@@ -2017,7 +2017,7 @@ void TextEditor::unsetMark()
     }
 }
 
-bool TextEditor::tryUnsetMark()
+bool DTextEdit::tryUnsetMark()
 {
     if (m_cursorMark) {
         QTextCursor cursor = textCursor();
@@ -2032,7 +2032,7 @@ bool TextEditor::tryUnsetMark()
     }
 }
 
-void TextEditor::exchangeMark()
+void DTextEdit::exchangeMark()
 {
     if (textCursor().hasSelection()) {
         // Record cursor and seleciton position before move cursor.
@@ -2053,13 +2053,13 @@ void TextEditor::exchangeMark()
     }
 }
 
-void TextEditor::saveMarkStatus()
+void DTextEdit::saveMarkStatus()
 {
     m_cursorMarkStatus = m_cursorMark;
     m_cursorMarkPosition = textCursor().anchor();
 }
 
-void TextEditor::restoreMarkStatus()
+void DTextEdit::restoreMarkStatus()
 {
     if (m_cursorMarkStatus) {
         QTextCursor currentCursor = textCursor();
@@ -2072,7 +2072,7 @@ void TextEditor::restoreMarkStatus()
     }
 }
 
-void TextEditor::clickCutAction()
+void DTextEdit::clickCutAction()
 {
     if (textCursor().hasSelection()) {
         cutSelectedText();
@@ -2081,7 +2081,7 @@ void TextEditor::clickCutAction()
     }
 }
 
-void TextEditor::clickCopyAction()
+void DTextEdit::clickCopyAction()
 {
     if (textCursor().hasSelection()) {
         copySelectedText();
@@ -2090,7 +2090,7 @@ void TextEditor::clickCopyAction()
     }
 }
 
-void TextEditor::clickPasteAction()
+void DTextEdit::clickPasteAction()
 {
     if (textCursor().hasSelection()) {
         pasteText();
@@ -2113,7 +2113,7 @@ void TextEditor::clickPasteAction()
     }
 }
 
-void TextEditor::clickDeleteAction()
+void DTextEdit::clickDeleteAction()
 {
     if (textCursor().hasSelection()) {
         textCursor().removeSelectedText();
@@ -2123,18 +2123,18 @@ void TextEditor::clickDeleteAction()
     }
 }
 
-void TextEditor::clickOpenInFileManagerAction()
+void DTextEdit::clickOpenInFileManagerAction()
 {
     DDesktopServices::showFileItem(filepath);
 }
 
-void TextEditor::copyWordUnderCursor()
+void DTextEdit::copyWordUnderCursor()
 {
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(m_highlightWordCacheCursor.selectedText());
 }
 
-void TextEditor::cutWordUnderCursor()
+void DTextEdit::cutWordUnderCursor()
 {
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(m_highlightWordCacheCursor.selectedText());
@@ -2143,7 +2143,7 @@ void TextEditor::cutWordUnderCursor()
     textCursor().removeSelectedText();
 }
 
-QString TextEditor::getWordAtCursor()
+QString DTextEdit::getWordAtCursor()
 {
     if (toPlainText().isEmpty()) {
         return "";
@@ -2166,7 +2166,7 @@ QString TextEditor::getWordAtCursor()
     }
 }
 
-QString TextEditor::getWordAtMouse()
+QString DTextEdit::getWordAtMouse()
 {
     if (toPlainText().isEmpty()) {
         return "";
@@ -2194,7 +2194,7 @@ QString TextEditor::getWordAtMouse()
     }
 }
 
-void TextEditor::toggleReadOnlyMode()
+void DTextEdit::toggleReadOnlyMode()
 {
     if (m_readOnlyMode) {
         m_readOnlyMode = false;
@@ -2207,7 +2207,7 @@ void TextEditor::toggleReadOnlyMode()
     }
 }
 
-void TextEditor::toggleComment()
+void DTextEdit::toggleComment()
 {
     const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());
 
@@ -2219,7 +2219,7 @@ void TextEditor::toggleComment()
     }
 }
 
-int TextEditor::getNextWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode)
+int DTextEdit::getNextWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode)
 {
     // FIXME(rekols): if is empty text, it will crash.
     if (toPlainText().isEmpty()) {
@@ -2248,7 +2248,7 @@ int TextEditor::getNextWordPosition(QTextCursor cursor, QTextCursor::MoveMode mo
     return cursor.position();
 }
 
-int TextEditor::getPrevWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode)
+int DTextEdit::getPrevWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode)
 {
     if (toPlainText().isEmpty()) {
         return 0;
@@ -2276,23 +2276,23 @@ int TextEditor::getPrevWordPosition(QTextCursor cursor, QTextCursor::MoveMode mo
     return cursor.position();
 }
 
-bool TextEditor::atWordSeparator(int position)
+bool DTextEdit::atWordSeparator(int position)
 {
     return m_wordSepartors.contains(QString(toPlainText().at(position)));
 }
 
-void TextEditor::showCursorBlink()
+void DTextEdit::showCursorBlink()
 {
     // the default value on X11 is 1000 milliseconds.
     QApplication::setCursorFlashTime(1000);
 }
 
-void TextEditor::hideCursorBlink()
+void DTextEdit::hideCursorBlink()
 {
     QApplication::setCursorFlashTime(0);
 }
 
-void TextEditor::completionWord(QString word)
+void DTextEdit::completionWord(QString word)
 {
     QString wordAtCursor = getWordAtCursor();
     QTextCursor cursor = textCursor();
@@ -2306,7 +2306,7 @@ void TextEditor::completionWord(QString word)
     }
 }
 
-bool TextEditor::eventFilter(QObject *, QEvent *event)
+bool DTextEdit::eventFilter(QObject *, QEvent *event)
 {
     if (event->type() == QEvent::MouseButtonPress) {
         m_mouseClickPos = QCursor::pos();
@@ -2317,7 +2317,7 @@ bool TextEditor::eventFilter(QObject *, QEvent *event)
     return false;
 }
 
-void TextEditor::adjustScrollbarMargins()
+void DTextEdit::adjustScrollbarMargins()
 {
     QEvent event(QEvent::LayoutRequest);
     QApplication::sendEvent(this, &event);
@@ -2329,13 +2329,13 @@ void TextEditor::adjustScrollbarMargins()
     }
 }
 
-void TextEditor::dragEnterEvent(QDragEnterEvent *event)
+void DTextEdit::dragEnterEvent(QDragEnterEvent *event)
 {
     QPlainTextEdit::dragEnterEvent(event);
     qobject_cast<Window *>(this->window())->requestDragEnterEvent(event);
 }
 
-void TextEditor::dragMoveEvent(QDragMoveEvent *event)
+void DTextEdit::dragMoveEvent(QDragMoveEvent *event)
 {
     const QMimeData *data = event->mimeData();
 
@@ -2346,7 +2346,7 @@ void TextEditor::dragMoveEvent(QDragMoveEvent *event)
     }
 }
 
-void TextEditor::dropEvent(QDropEvent *event)
+void DTextEdit::dropEvent(QDropEvent *event)
 {
     const QMimeData *data = event->mimeData();
 

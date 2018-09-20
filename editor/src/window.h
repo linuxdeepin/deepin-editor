@@ -69,7 +69,7 @@ public:
 
     EditorBuffer* createEditor();
     EditorBuffer* getActiveEditor();
-    TextEditor* getTextEditor(const QString &filepath);
+    DTextEdit* getTextEditor(const QString &filepath);
     void focusActiveEditor();
 
     void openFile();

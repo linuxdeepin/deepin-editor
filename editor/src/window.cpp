@@ -364,12 +364,12 @@ EditorBuffer* Window::createEditor()
     buffer->textEditor()->setModified(false);
     setFontSizeWithConfig(buffer);
 
-    connect(buffer->textEditor(), &TextEditor::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);
-    connect(buffer->textEditor(), &TextEditor::clickReplaceAction, this, &Window::popupReplaceBar, Qt::QueuedConnection);
-    connect(buffer->textEditor(), &TextEditor::clickJumpLineAction, this, &Window::popupJumpLineBar, Qt::QueuedConnection);
-    connect(buffer->textEditor(), &TextEditor::clickFullscreenAction, this, &Window::toggleFullscreen, Qt::QueuedConnection);
-    connect(buffer->textEditor(), &TextEditor::popupNotify, this, &Window::showNotify, Qt::QueuedConnection);
-    connect(buffer->textEditor(), &TextEditor::pressEsc, this, &Window::removeBottomWidget, Qt::QueuedConnection);
+    connect(buffer->textEditor(), &DTextEdit::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);
+    connect(buffer->textEditor(), &DTextEdit::clickReplaceAction, this, &Window::popupReplaceBar, Qt::QueuedConnection);
+    connect(buffer->textEditor(), &DTextEdit::clickJumpLineAction, this, &Window::popupJumpLineBar, Qt::QueuedConnection);
+    connect(buffer->textEditor(), &DTextEdit::clickFullscreenAction, this, &Window::toggleFullscreen, Qt::QueuedConnection);
+    connect(buffer->textEditor(), &DTextEdit::popupNotify, this, &Window::showNotify, Qt::QueuedConnection);
+    connect(buffer->textEditor(), &DTextEdit::pressEsc, this, &Window::removeBottomWidget, Qt::QueuedConnection);
 
     return buffer;
 }
@@ -379,7 +379,7 @@ EditorBuffer* Window::getActiveEditor()
     return m_editorMap.value(m_tabbar->getActiveTabPath());
 }
 
-TextEditor* Window::getTextEditor(const QString &filepath)
+DTextEdit* Window::getTextEditor(const QString &filepath)
 {
     return m_editorMap.value(filepath)->textEditor();
 }
@@ -1011,7 +1011,7 @@ void Window::addBlankTab(const QString &blankFile)
 
 void Window::handleTabReleaseRequested(const QString &tabName, const QString &filepath, int index)
 {
-    TextEditor *buffer = getTextEditor(filepath);
+    DTextEdit *buffer = getTextEditor(filepath);
     const QString content = buffer->toPlainText();
     const bool isModified = buffer->document()->isModified();
 
@@ -1271,7 +1271,7 @@ void Window::popupPrintDialog()
     QPrinter printer(QPrinter::HighResolution);
     QPrintPreviewDialog preview(&printer, this);
 
-    TextEditor *buffer = getActiveEditor()->textEditor();
+    DTextEdit *buffer = getActiveEditor()->textEditor();
     const QString &filePath = buffer->filepath;
     const QString &fileDir = QFileInfo(filePath).dir().absolutePath();
 

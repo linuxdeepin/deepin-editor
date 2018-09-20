@@ -21,7 +21,7 @@
 #define EDITORBUFFER_H
 
 #include "dbusinterface.h"
-#include "texteditor.h"
+#include "dtextedit.h"
 
 #include <QVBoxLayout>
 #include <QWidget>
@@ -42,7 +42,7 @@ public:
     bool isLoadFinished() { return m_isLoadFinished; }
     bool isWritable() { return m_isWritable; }
 
-    TextEditor *textEditor() { return m_textEditor; }
+    DTextEdit *textEditor() { return m_textEditor; }
 
 private:
     void detectNewline();
@@ -50,7 +50,7 @@ private:
 
 private:
     QHBoxLayout *m_layout;
-    TextEditor *m_textEditor;
+    DTextEdit *m_textEditor;
     QByteArray m_fileEncode;
 
     bool m_saveFinish;

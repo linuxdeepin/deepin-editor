@@ -30,7 +30,7 @@
 EditorBuffer::EditorBuffer(QWidget *parent)
     : QWidget(parent),
       m_layout(new QHBoxLayout(this)),
-      m_textEditor(new TextEditor)
+      m_textEditor(new DTextEdit)
 {
     // Init.
     m_autoSaveInternal = 1000;
