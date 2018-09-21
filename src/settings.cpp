@@ -44,7 +44,7 @@ Settings::Settings(QWidget *parent)
 
     m_backend = new QSettingBackend(m_configPath);
 
-    settings = DSettings::fromJsonFile(":/resource/settings.json");
+    settings = DSettings::fromJsonFile(":/resources/settings.json");
     settings->setBackend(m_backend);
 
     auto fontSize = settings->option("base.font.size");

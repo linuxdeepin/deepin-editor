@@ -32,7 +32,7 @@
 #include "replacebar.h"
 #include "settings.h"
 #include "tabbar.h"
-#include "theme_module/themepanel.h"
+#include "themewidgets/themepanel.h"
 
 #include <QWidget>
 #include <QStackedWidget>

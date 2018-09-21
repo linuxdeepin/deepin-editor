@@ -47,7 +47,7 @@ QT_END_NAMESPACE
 
 QString Utils::getQrcPath(const QString &imageName)
 {
-    return QString(":/image/%1").arg(imageName);
+    return QString(":/images/%1").arg(imageName);
 }
 
 QString Utils::getQssPath(const QString &qssName)

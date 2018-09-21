@@ -2,5 +2,5 @@ TEMPLATE = subdirs
 
 include(install.pri)
 
-SUBDIRS +=  editor/deepin-editor.pro \
+SUBDIRS +=  src/deepin-editor.pro \
             daemon/deepin-editor-daemon.pro \
