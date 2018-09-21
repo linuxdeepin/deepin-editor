@@ -79,7 +79,7 @@
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="31"/>
         <location filename="../editor/src/settingsdialog.cpp" line="102"/>
-        <location filename="../editor/src/window.cpp" line="464"/>
+        <location filename="../editor/src/window.cpp" line="472"/>
         <source>Window</source>
         <translation>Вікно</translation>
     </message>
@@ -521,112 +521,112 @@
 <context>
     <name>TextEditor</name>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="84"/>
+        <location filename="../editor/src/texteditor.cpp" line="88"/>
         <source>Undo</source>
         <translation>Скасувати</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="85"/>
+        <location filename="../editor/src/texteditor.cpp" line="89"/>
         <source>Redo</source>
         <translation>Повторити</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="86"/>
+        <location filename="../editor/src/texteditor.cpp" line="90"/>
         <source>Cut</source>
         <translation>Вирізати</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="87"/>
+        <location filename="../editor/src/texteditor.cpp" line="91"/>
         <source>Copy</source>
         <translation>Копіювати</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="88"/>
+        <location filename="../editor/src/texteditor.cpp" line="92"/>
         <source>Paste</source>
         <translation>Вставити</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="89"/>
+        <location filename="../editor/src/texteditor.cpp" line="93"/>
         <source>Delete</source>
         <translation>Вилучити</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="90"/>
+        <location filename="../editor/src/texteditor.cpp" line="94"/>
         <source>Select All</source>
         <translation>Позначити усе</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="91"/>
+        <location filename="../editor/src/texteditor.cpp" line="95"/>
         <source>Find</source>
         <translation>Знайти</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="92"/>
+        <location filename="../editor/src/texteditor.cpp" line="96"/>
         <source>Replace</source>
         <translation>Замінити</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="93"/>
+        <location filename="../editor/src/texteditor.cpp" line="97"/>
         <source>Go to Line</source>
         <translation>Перейти до рядка</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="94"/>
+        <location filename="../editor/src/texteditor.cpp" line="98"/>
         <source>Turn on Read-Only mode</source>
         <translation>Увімкнути режим лише читання</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="95"/>
+        <location filename="../editor/src/texteditor.cpp" line="99"/>
         <source>Turn off Read-Only mode</source>
         <translation>Вимкнути режим лише читання</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="121"/>
+        <location filename="../editor/src/texteditor.cpp" line="125"/>
         <source>Change Case</source>
         <translation>Змінити регістр</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="122"/>
+        <location filename="../editor/src/texteditor.cpp" line="126"/>
         <source>Upper Case</source>
         <translation>Верхній регістр</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="123"/>
+        <location filename="../editor/src/texteditor.cpp" line="127"/>
         <source>Lower Case</source>
         <translation>Нижній регістр</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="2179"/>
+        <location filename="../editor/src/texteditor.cpp" line="2194"/>
         <source>Read-Only mode is off</source>
         <translation>Режим лише читання вимкнено</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="2183"/>
+        <location filename="../editor/src/texteditor.cpp" line="2198"/>
         <source>Read-Only mode is on</source>
         <translation>Режим лише читання увімкнено</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="96"/>
+        <location filename="../editor/src/texteditor.cpp" line="100"/>
         <source>Fullscreen</source>
         <translation>На увесь екран</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="97"/>
+        <location filename="../editor/src/texteditor.cpp" line="101"/>
         <source>Exit fullscreen</source>
         <translation>Вийти з повноекранного режиму</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="98"/>
+        <location filename="../editor/src/texteditor.cpp" line="102"/>
         <source>Open in file manager</source>
         <translation>Відкрити у програмі для керування файлами</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="99"/>
+        <location filename="../editor/src/texteditor.cpp" line="103"/>
         <source>Toggle comment</source>
         <translation>Додати/Зняти коментування</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="124"/>
+        <location filename="../editor/src/texteditor.cpp" line="128"/>
         <source>Capitalize</source>
         <translation>Великі перші літери</translation>
     </message>
@@ -664,12 +664,12 @@
         <translation>Перемкнути тему</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="581"/>
+        <location filename="../editor/src/window.cpp" line="592"/>
         <source>Saved successfully</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="1237"/>
+        <location filename="../editor/src/window.cpp" line="1248"/>
         <source>Discard</source>
         <translation>Відкинути</translation>
     </message>
@@ -679,73 +679,83 @@
         <translation>Параметри</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="257"/>
+        <location filename="../editor/src/window.cpp" line="237"/>
+        <source>You do not have permission to open %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../editor/src/window.cpp" line="265"/>
         <source>Invalid file: %1</source>
         <translation>Некоректний файл: %1</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="298"/>
-        <location filename="../editor/src/window.cpp" line="419"/>
-        <location filename="../editor/src/window.cpp" line="441"/>
-        <location filename="../editor/src/window.cpp" line="824"/>
+        <location filename="../editor/src/window.cpp" line="306"/>
+        <location filename="../editor/src/window.cpp" line="427"/>
+        <location filename="../editor/src/window.cpp" line="449"/>
+        <location filename="../editor/src/window.cpp" line="835"/>
         <source>Save File</source>
         <translation>Зберегти файл</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="298"/>
+        <location filename="../editor/src/window.cpp" line="306"/>
         <source>Do you want to save this file?</source>
         <translation>Хочете зберегти цей файл?</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="421"/>
-        <location filename="../editor/src/window.cpp" line="433"/>
+        <location filename="../editor/src/window.cpp" line="429"/>
+        <location filename="../editor/src/window.cpp" line="441"/>
         <source>Encoding</source>
         <translation>Кодування</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="422"/>
-        <location filename="../editor/src/window.cpp" line="434"/>
+        <location filename="../editor/src/window.cpp" line="430"/>
+        <location filename="../editor/src/window.cpp" line="442"/>
         <source>Line Endings</source>
         <translation>Завершення рядків</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="495"/>
+        <location filename="../editor/src/window.cpp" line="503"/>
         <source>Editor</source>
         <translation>Редактор</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="532"/>
+        <location filename="../editor/src/window.cpp" line="540"/>
         <source>File cannot be saved when loading</source>
         <translation>Файл не можна зберегти під час завантаження</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="569"/>
+        <location filename="../editor/src/window.cpp" line="559"/>
+        <source>You do not have permission to save %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../editor/src/window.cpp" line="580"/>
         <source>Unable to save the file</source>
         <translation>Неможливо зберегти файл</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="569"/>
+        <location filename="../editor/src/window.cpp" line="580"/>
         <source>Do you want to save as another?</source>
         <translation>Хочете зберегти із іншою назвою?</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="824"/>
+        <location filename="../editor/src/window.cpp" line="835"/>
         <source>Do you want to save all the files?</source>
         <translation>Хочете зберегти усі файли?</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="990"/>
+        <location filename="../editor/src/window.cpp" line="1001"/>
         <source>Blank document %1</source>
         <translation>Порожній документ %1</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="1236"/>
+        <location filename="../editor/src/window.cpp" line="1247"/>
         <source>Cancel</source>
         <translation>Скасувати</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="168"/>
-        <location filename="../editor/src/window.cpp" line="1238"/>
+        <location filename="../editor/src/window.cpp" line="1249"/>
         <source>Save</source>
         <translation>Зберегти</translation>
     </message>

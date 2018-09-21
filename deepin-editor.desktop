@@ -68,3 +68,7 @@ Comment[de] = Einfacher, leicht zu bedienender Texteditor für deepin.
 Icon[de] = deepin-editor
 Name[de] = Deepin Editor
 GenericName[de] = Editor
+Comment[tr] = Deepin Düzenleyici uygulamasını kullanmak basit ve kolaydır
+Icon[tr] = deepin-duzenleyici
+Name[tr] = Deepin Düzenleyici
+GenericName[tr] = Düzenleyici

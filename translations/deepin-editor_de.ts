@@ -79,7 +79,7 @@
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="31"/>
         <location filename="../editor/src/settingsdialog.cpp" line="102"/>
-        <location filename="../editor/src/window.cpp" line="464"/>
+        <location filename="../editor/src/window.cpp" line="472"/>
         <source>Window</source>
         <translation>Fenster</translation>
     </message>
@@ -521,112 +521,112 @@
 <context>
     <name>TextEditor</name>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="84"/>
+        <location filename="../editor/src/texteditor.cpp" line="88"/>
         <source>Undo</source>
         <translation>Rückgängig</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="85"/>
+        <location filename="../editor/src/texteditor.cpp" line="89"/>
         <source>Redo</source>
         <translation>Wiederholen</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="86"/>
+        <location filename="../editor/src/texteditor.cpp" line="90"/>
         <source>Cut</source>
         <translation>Ausschneiden</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="87"/>
+        <location filename="../editor/src/texteditor.cpp" line="91"/>
         <source>Copy</source>
         <translation>Kopieren</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="88"/>
+        <location filename="../editor/src/texteditor.cpp" line="92"/>
         <source>Paste</source>
         <translation>Einfügen</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="89"/>
+        <location filename="../editor/src/texteditor.cpp" line="93"/>
         <source>Delete</source>
         <translation>Entfernen</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="90"/>
+        <location filename="../editor/src/texteditor.cpp" line="94"/>
         <source>Select All</source>
         <translation>Alles auswählen</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="91"/>
+        <location filename="../editor/src/texteditor.cpp" line="95"/>
         <source>Find</source>
         <translation>Suchen</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="92"/>
+        <location filename="../editor/src/texteditor.cpp" line="96"/>
         <source>Replace</source>
         <translation>Ersetzen</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="93"/>
+        <location filename="../editor/src/texteditor.cpp" line="97"/>
         <source>Go to Line</source>
         <translation>Gehe zu Zeile</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="94"/>
+        <location filename="../editor/src/texteditor.cpp" line="98"/>
         <source>Turn on Read-Only mode</source>
         <translation>Nur-Lesen-Modus aktivieren</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="95"/>
+        <location filename="../editor/src/texteditor.cpp" line="99"/>
         <source>Turn off Read-Only mode</source>
         <translation>Nur-Lesen-Modus deaktivieren</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="121"/>
+        <location filename="../editor/src/texteditor.cpp" line="125"/>
         <source>Change Case</source>
         <translation>Groß-/Kleinschreibung ändern</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="122"/>
+        <location filename="../editor/src/texteditor.cpp" line="126"/>
         <source>Upper Case</source>
         <translation>Großbuchstaben</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="123"/>
+        <location filename="../editor/src/texteditor.cpp" line="127"/>
         <source>Lower Case</source>
         <translation>Kleinbuchstaben</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="2179"/>
+        <location filename="../editor/src/texteditor.cpp" line="2194"/>
         <source>Read-Only mode is off</source>
         <translation>Nur-Lesen ist deaktiviert</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="2183"/>
+        <location filename="../editor/src/texteditor.cpp" line="2198"/>
         <source>Read-Only mode is on</source>
         <translation>Nur-Lesen ist aktiviert</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="96"/>
+        <location filename="../editor/src/texteditor.cpp" line="100"/>
         <source>Fullscreen</source>
         <translation>Vollbild</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="97"/>
+        <location filename="../editor/src/texteditor.cpp" line="101"/>
         <source>Exit fullscreen</source>
         <translation>Vollbild beenden</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="98"/>
+        <location filename="../editor/src/texteditor.cpp" line="102"/>
         <source>Open in file manager</source>
         <translation>In Dateimanager öffnen</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="99"/>
+        <location filename="../editor/src/texteditor.cpp" line="103"/>
         <source>Toggle comment</source>
         <translation>Ein-/Auskommentieren</translation>
     </message>
     <message>
-        <location filename="../editor/src/texteditor.cpp" line="124"/>
+        <location filename="../editor/src/texteditor.cpp" line="128"/>
         <source>Capitalize</source>
         <translation>Großschreibung</translation>
     </message>
@@ -664,12 +664,12 @@
         <translation>Theme wechseln</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="581"/>
+        <location filename="../editor/src/window.cpp" line="592"/>
         <source>Saved successfully</source>
         <translation>Erfolgreich gespeichert</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="1237"/>
+        <location filename="../editor/src/window.cpp" line="1248"/>
         <source>Discard</source>
         <translation>Verwerfen</translation>
     </message>
@@ -679,73 +679,83 @@
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="257"/>
+        <location filename="../editor/src/window.cpp" line="237"/>
+        <source>You do not have permission to open %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../editor/src/window.cpp" line="265"/>
         <source>Invalid file: %1</source>
         <translation>Ungültige Datei: %1</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="298"/>
-        <location filename="../editor/src/window.cpp" line="419"/>
-        <location filename="../editor/src/window.cpp" line="441"/>
-        <location filename="../editor/src/window.cpp" line="824"/>
+        <location filename="../editor/src/window.cpp" line="306"/>
+        <location filename="../editor/src/window.cpp" line="427"/>
+        <location filename="../editor/src/window.cpp" line="449"/>
+        <location filename="../editor/src/window.cpp" line="835"/>
         <source>Save File</source>
         <translation>Datei speichern</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="298"/>
+        <location filename="../editor/src/window.cpp" line="306"/>
         <source>Do you want to save this file?</source>
         <translation>Wollen Sie diese Datei speichern?</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="421"/>
-        <location filename="../editor/src/window.cpp" line="433"/>
+        <location filename="../editor/src/window.cpp" line="429"/>
+        <location filename="../editor/src/window.cpp" line="441"/>
         <source>Encoding</source>
         <translation>Encodierung</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="422"/>
-        <location filename="../editor/src/window.cpp" line="434"/>
+        <location filename="../editor/src/window.cpp" line="430"/>
+        <location filename="../editor/src/window.cpp" line="442"/>
         <source>Line Endings</source>
         <translation>Zeilenenden</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="495"/>
+        <location filename="../editor/src/window.cpp" line="503"/>
         <source>Editor</source>
         <translation>Editor</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="532"/>
+        <location filename="../editor/src/window.cpp" line="540"/>
         <source>File cannot be saved when loading</source>
         <translation>Datei kann während des Ladevorgangs nicht gespeichert werden</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="569"/>
+        <location filename="../editor/src/window.cpp" line="559"/>
+        <source>You do not have permission to save %1</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../editor/src/window.cpp" line="580"/>
         <source>Unable to save the file</source>
         <translation>Datei konnte nicht gespeichert werden</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="569"/>
+        <location filename="../editor/src/window.cpp" line="580"/>
         <source>Do you want to save as another?</source>
         <translation>Wollen Sie die Datei unter anderem Namen speichern?</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="824"/>
+        <location filename="../editor/src/window.cpp" line="835"/>
         <source>Do you want to save all the files?</source>
         <translation>Wollen Sie alle Dateien speichern?</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="990"/>
+        <location filename="../editor/src/window.cpp" line="1001"/>
         <source>Blank document %1</source>
         <translation>Leeres Dokument %1</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="1236"/>
+        <location filename="../editor/src/window.cpp" line="1247"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="168"/>
-        <location filename="../editor/src/window.cpp" line="1238"/>
+        <location filename="../editor/src/window.cpp" line="1249"/>
         <source>Save</source>
         <translation>Speichern</translation>
     </message>
