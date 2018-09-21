@@ -21,11 +21,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "window.h"
+#include "toolbar.h"
 #include "danchors.h"
 #include "dthememanager.h"
 #include "dtoast.h"
 #include "utils.h"
-#include "window.h"
 
 #include <DSettingsGroup>
 #include <DSettings>
@@ -185,25 +186,30 @@ void Window::initTitlebar()
     m_menu->setStyle(QStyleFactory::create("dlight"));
     m_menu->setMinimumWidth(150);
 
-    titlebar()->setCustomWidget(m_tabbar, Qt::AlignVCenter, false);
+    ToolBar *toolBar = new ToolBar;
+    toolBar->setTabbar(m_tabbar);
+
+    titlebar()->setCustomWidget(toolBar, Qt::AlignVCenter, false);
     titlebar()->setAutoHideOnFullscreen(true);
     titlebar()->setSeparatorVisible(true);
     titlebar()->setFixedHeight(40);
     titlebar()->setMenu(m_menu);
 
-    connect(m_tabbar, &Tabbar::doubleClicked, titlebar(), &DTitlebar::doubleClicked, Qt::QueuedConnection);
-    connect(m_tabbar, &Tabbar::tabReleaseRequested, this, &Window::handleTabReleaseRequested, Qt::QueuedConnection);
+    connect(m_tabbar, &DTabBar::tabBarDoubleClicked, titlebar(), &DTitlebar::doubleClicked, Qt::QueuedConnection);
 
-    connect(m_tabbar, &Tabbar::requestHistorySaved, this, [=] (const QString &filePath, int index) {
+    connect(m_tabbar, &Tabbar::requestHistorySaved, this, [=] (const QString &filePath) {
+        if (QFileInfo(filePath).dir().absolutePath() == m_blankFileDir) {
+            return;
+        }
+
         if (!m_closeFileHistory.contains(filePath)) {
             m_closeFileHistory << filePath;
         }
     });
 
-    connect(m_tabbar->tabbar, &TabWidget::tabAddRequested, this, static_cast<void (Window::*)()>(&Window::addBlankTab), Qt::QueuedConnection);
-    connect(m_tabbar->tabbar, &TabWidget::tabCloseRequested, this, &Window::handleTabCloseRequested, Qt::QueuedConnection);
-    connect(m_tabbar->tabbar, &TabWidget::closeTab, this, &Window::handleTabCloseRequested, Qt::QueuedConnection);
-    connect(m_tabbar->tabbar, &TabWidget::currentChanged, this, &Window::handleCurrentChanged, Qt::QueuedConnection);
+    connect(m_tabbar, &DTabBar::tabCloseRequested, this, &Window::handleTabCloseRequested, Qt::QueuedConnection);
+    connect(m_tabbar, &DTabBar::tabAddRequested, this, static_cast<void (Window::*)()>(&Window::addBlankTab), Qt::QueuedConnection);
+    connect(m_tabbar, &DTabBar::currentChanged, this, &Window::handleCurrentChanged, Qt::QueuedConnection);
 
     connect(newWindowAction, &QAction::triggered, this, &Window::newWindow);
     connect(newTabAction, &QAction::triggered, this, [=] () { addBlankTab(); });
@@ -218,13 +224,13 @@ void Window::initTitlebar()
 
 int Window::getTabIndex(const QString &file)
 {
-    return m_tabbar->getTabIndex(file);
+    return m_tabbar->indexOf(file);
 }
 
 void Window::activeTab(int index)
 {
-    activateWindow();
-    m_tabbar->activeTabWithIndex(index);
+    DMainWindow::activateWindow();
+    m_tabbar->setCurrentIndex(index);
 }
 
 void Window::addTab(const QString &filepath, bool activeTab)
@@ -238,7 +244,7 @@ void Window::addTab(const QString &filepath, bool activeTab)
             return;
         }
 
-        if (m_tabbar->getTabIndex(filepath) == -1) {
+        if (m_tabbar->indexOf(filepath) == -1) {
             m_tabbar->addTab(filepath, QFileInfo(filepath).fileName());
 
             if (!m_editorMap.contains(filepath)) {
@@ -256,9 +262,9 @@ void Window::addTab(const QString &filepath, bool activeTab)
 
         // Active tab if activeTab is true.
         if (activeTab) {
-            int tabIndex = m_tabbar->getTabIndex(filepath);
+            int tabIndex = m_tabbar->indexOf(filepath);
             if (tabIndex != -1) {
-                m_tabbar->activeTabWithIndex(tabIndex);
+                m_tabbar->setCurrentIndex(tabIndex);
             }
         }
     } else {
@@ -266,30 +272,22 @@ void Window::addTab(const QString &filepath, bool activeTab)
     }
 }
 
-void Window::addTabWithContent(const QString &tabName, const QString &filepath, const QString &content, bool isModified, int index)
+void Window::addTabWithBuffer(EditorBuffer *buffer, const QString &filepath, const QString &tabName, int index)
 {
-    // Default index is -1, we change it to right of current tab for new tab actoin in start.
     if (index == -1) {
-        index = m_tabbar->getActiveTabIndex() + 1;
+        index = m_tabbar->currentIndex() + 1;
     }
 
     m_tabbar->addTabWithIndex(index, filepath, tabName);
-
-    EditorBuffer *buffer = createEditor();
-    buffer->updatePath(filepath);
-    buffer->textEditor()->setPlainText(content);
-    buffer->textEditor()->document()->setModified(isModified);
-
     m_editorMap[filepath] = buffer;
-
-    buffer->textEditor()->loadHighlighter();
+    buffer->updatePath(filepath);
 
     showNewEditor(buffer);
 }
 
 void Window::closeTab()
 {
-    const QString &filePath = m_tabbar->getActiveTabPath();
+    const QString &filePath = m_tabbar->currentPath();
     const bool isBlankFile = QFileInfo(filePath).dir().absolutePath() == m_blankFileDir;
     EditorBuffer *buffer = m_editorMap.value(filePath);
 
@@ -310,20 +308,20 @@ void Window::closeTab()
 
             // don't save.
             if (index == 1) {
-                m_tabbar->closeActiveTab();
+                m_tabbar->closeCurrentTab();
 
                 // delete the draft document.
                 if (isBlankFile) {
                     QFile(filePath).remove();
                 }
 
-                handleCloseFile(filePath);
+                removeBuffer(filePath, true);
             }
             else if (index == 2) {
                 // may to press CANEL button in the save dialog.
                 if (saveFile()) {
-                    m_tabbar->closeActiveTab();
-                    handleCloseFile(filePath);
+                    m_tabbar->closeCurrentTab();
+                    removeBuffer(filePath, true);
                 }
             }
 
@@ -333,17 +331,17 @@ void Window::closeTab()
         dialog->exec();
     } else {
         // record last close path.
-        m_closeFileHistory << m_tabbar->getActiveTabPath();
+        m_closeFileHistory << m_tabbar->currentPath();
 
         // close tab directly, because all file is save automatically.
-        m_tabbar->closeActiveTab();
+        m_tabbar->closeCurrentTab();
 
         // remove blank file.
         if (isBlankFile) {
             QFile::remove(filePath);
         }
 
-        handleCloseFile(filePath);
+        removeBuffer(filePath, true);
         focusActiveEditor();
     }
 }
@@ -375,9 +373,14 @@ EditorBuffer* Window::createEditor()
     return buffer;
 }
 
-EditorBuffer* Window::getActiveEditor()
+EditorBuffer* Window::currentBuffer()
 {
-    return m_editorMap.value(m_tabbar->getActiveTabPath());
+    return m_editorMap.value(m_tabbar->currentPath());
+}
+
+EditorBuffer* Window::buffer(const QString &filePath)
+{
+    return m_editorMap.value(filePath);
 }
 
 DTextEdit* Window::getTextEditor(const QString &filepath)
@@ -387,8 +390,27 @@ DTextEdit* Window::getTextEditor(const QString &filepath)
 
 void Window::focusActiveEditor()
 {
-    if (m_tabbar->getTabCount() > 0) {
-        getActiveEditor()->textEditor()->setFocus();
+    if (m_tabbar->count() > 0) {
+        currentBuffer()->textEditor()->setFocus();
+    }
+}
+
+void Window::removeBuffer(const QString &filePath, bool isDelete)
+{
+    if (m_editorMap.contains(filePath)) {
+        EditorBuffer *buffer = m_editorMap.value(filePath);
+
+        m_editorWidget->removeWidget(buffer);
+        m_editorMap.remove(filePath);
+
+        if (isDelete) {
+            buffer->deleteLater();
+        }
+    }
+
+    // Exit window after close all tabs.
+    if (m_editorMap.isEmpty()) {
+        DMainWindow::close();
     }
 }
 
@@ -429,12 +451,12 @@ const QString Window::getSaveFilePath(QString &encode, QString &newline)
     dialog.addComboBox(tr("Encoding"), getEncodeList());
     dialog.addComboBox(tr("Line Endings"), QStringList() << "Linux" << "Windows" << "Mac OS");
 
-    if (QFileInfo(m_tabbar->getActiveTabPath()).dir().absolutePath() != m_blankFileDir) {
-        dialog.setDirectory(QFileInfo(m_tabbar->getActiveTabPath()).dir());
-        dialog.selectFile(QFileInfo(m_tabbar->getActiveTabPath()).fileName());
+    if (QFileInfo(m_tabbar->currentPath()).dir().absolutePath() != m_blankFileDir) {
+        dialog.setDirectory(QFileInfo(m_tabbar->currentPath()).dir());
+        dialog.selectFile(QFileInfo(m_tabbar->currentPath()).fileName());
     } else {
         dialog.setDirectory(QDir::homePath());
-        dialog.selectFile(m_tabbar->getActiveTabName() + ".txt");
+        dialog.selectFile(m_tabbar->currentName() + ".txt");
     }
 
     if (dialog.exec() == QDialog::Accepted) {
@@ -530,7 +552,7 @@ void Window::displayShortcuts()
 
 bool Window::saveFile()
 {
-    const QString &currentPath = m_tabbar->getActiveTabPath();
+    const QString &currentPath = m_tabbar->currentPath();
     const QString &currentDir = QFileInfo(currentPath).absolutePath();
     bool isBlankFile = QFileInfo(currentPath).dir().absolutePath() == m_blankFileDir;
 
@@ -547,7 +569,7 @@ bool Window::saveFile()
         QString filepath = getSaveFilePath(encode, newline);
 
         if (!filepath.isEmpty()) {
-            const QString tabPath = m_tabbar->getActiveTabPath();
+            const QString tabPath = m_tabbar->currentPath();
             saveFileAsAnotherPath(tabPath, filepath, encode, newline, true);
             return true;
         } else {
@@ -556,7 +578,7 @@ bool Window::saveFile()
     }
     // save root file.
     else if (!m_editorMap[currentPath]->isWritable()) {
-        showNotify(QString(tr("You do not have permission to save %1")).arg(m_tabbar->getActiveTabName()));
+        showNotify(QString(tr("You do not have permission to save %1")).arg(m_tabbar->currentName()));
         return false;
 
         const QString content = getTextEditor(currentPath)->toPlainText();
@@ -565,16 +587,16 @@ bool Window::saveFile()
 
         if (saveResult) {
             getTextEditor(currentPath)->setModified(false);
-            showNotify(QString("Saved root file %1").arg(m_tabbar->getActiveTabName()));
+            showNotify(QString("Saved root file %1").arg(m_tabbar->currentName()));
         } else {
-            showNotify(QString("Save root file %1 failed.").arg(m_tabbar->getActiveTabName()));
+            showNotify(QString("Save root file %1 failed.").arg(m_tabbar->currentName()));
         }
 
         return saveResult;
     }
     // save normal file.
     else {
-        bool success = m_editorMap.value(m_tabbar->getActiveTabPath())->saveFile();
+        bool success = m_editorMap.value(m_tabbar->currentPath())->saveFile();
 
         if (!success) {
             DDialog *dialog = createSaveFileDialog(tr("Unable to save the file"), tr("Do you want to save as another?"));
@@ -600,7 +622,7 @@ void Window::saveAsFile()
 {
     QString encode, newline;
     QString filepath = getSaveFilePath(encode, newline);
-    QString tabPath = m_tabbar->getActiveTabPath();
+    QString tabPath = m_tabbar->currentPath();
 
     if (filepath != "" && filepath != tabPath) {
         saveFileAsAnotherPath(tabPath, filepath, encode, newline, false);
@@ -615,14 +637,14 @@ void Window::saveFileAsAnotherPath(const QString &fromPath, const QString &toPat
         QFile(fromPath).remove();
     }
 
-    m_tabbar->updateTabWithIndex(m_tabbar->getActiveTabIndex(), toPath, QFileInfo(toPath).fileName());
+    m_tabbar->updateTab(m_tabbar->currentIndex(), toPath, QFileInfo(toPath).fileName());
 
     m_editorMap[toPath] = m_editorMap.take(fromPath);
 
     m_editorMap[toPath]->updatePath(toPath);
     m_editorMap[toPath]->saveFile(encode, newline);
 
-    getActiveEditor()->textEditor()->loadHighlighter();
+    currentBuffer()->textEditor()->loadHighlighter();
 }
 
 void Window::decrementFontSize()
@@ -654,15 +676,15 @@ void Window::popupFindBar()
 {
     if (m_findBar->isVisible()) {
         if (m_findBar->isFocus()) {
-            m_editorMap.value(m_tabbar->getActiveTabPath())->textEditor()->setFocus();
+            m_editorMap.value(m_tabbar->currentPath())->textEditor()->setFocus();
         } else {
             m_findBar->focus();
         }
     } else {
         addBottomWidget(m_findBar);
 
-        QString tabPath = m_tabbar->getActiveTabPath();
-        EditorBuffer *buffer = getActiveEditor();
+        QString tabPath = m_tabbar->currentPath();
+        EditorBuffer *buffer = currentBuffer();
         QString text = buffer->textEditor()->textCursor().selectedText();
         int row = buffer->textEditor()->getCurrentLine();
         int column = buffer->textEditor()->getCurrentColumn();
@@ -678,15 +700,15 @@ void Window::popupReplaceBar()
 {
     if (m_replaceBar->isVisible()) {
         if (m_replaceBar->isFocus()) {
-            m_editorMap.value(m_tabbar->getActiveTabPath())->textEditor()->setFocus();
+            m_editorMap.value(m_tabbar->currentPath())->textEditor()->setFocus();
         } else {
             m_replaceBar->focus();
         }
     } else {
         addBottomWidget(m_replaceBar);
 
-        QString tabPath = m_tabbar->getActiveTabPath();
-        EditorBuffer *buffer = getActiveEditor();
+        QString tabPath = m_tabbar->currentPath();
+        EditorBuffer *buffer = currentBuffer();
         QString text = buffer->textEditor()->textCursor().selectedText();
         int row = buffer->textEditor()->getCurrentLine();
         int column = buffer->textEditor()->getCurrentColumn();
@@ -702,13 +724,13 @@ void Window::popupJumpLineBar()
 {
     if (m_jumpLineBar->isVisible()) {
         if (m_jumpLineBar->isFocus()) {
-            QTimer::singleShot(0, m_editorMap.value(m_tabbar->getActiveTabPath())->textEditor(), SLOT(setFocus()));
+            QTimer::singleShot(0, m_editorMap.value(m_tabbar->currentPath())->textEditor(), SLOT(setFocus()));
         } else {
             m_jumpLineBar->focus();
         }
     } else {
-        QString tabPath = m_tabbar->getActiveTabPath();
-        EditorBuffer *buffer = getActiveEditor();
+        QString tabPath = m_tabbar->currentPath();
+        EditorBuffer *buffer = currentBuffer();
         QString text = buffer->textEditor()->textCursor().selectedText();
         int row = buffer->textEditor()->getCurrentLine();
         int column = buffer->textEditor()->getCurrentColumn();
@@ -749,9 +771,9 @@ const QStringList Window::getEncodeList()
 
 void Window::remberPositionSave()
 {
-    EditorBuffer *buffer = getActiveEditor();
+    EditorBuffer *buffer = currentBuffer();
 
-    m_remberPositionFilePath = m_tabbar->getActiveTabPath();
+    m_remberPositionFilePath = m_tabbar->currentPath();
     m_remberPositionRow = buffer->textEditor()->getCurrentLine();
     m_remberPositionColumn = buffer->textEditor()->getCurrentColumn();
     m_remberPositionScrollOffset = buffer->textEditor()->getScrollOffset();
@@ -769,7 +791,7 @@ void Window::remberPositionRestore()
         const int &row = m_remberPositionRow;
         const int &column = m_remberPositionColumn;
 
-        activeTab(m_tabbar->getTabIndex(m_remberPositionFilePath));
+        activeTab(m_tabbar->indexOf(m_remberPositionFilePath));
         m_editorMap.value(filePath)->textEditor()->scrollToLine(scrollOffset, row, column);
     }
 }
@@ -887,9 +909,9 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "saveasfile")) {
         saveAsFile();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "selectnexttab")) {
-        m_tabbar->selectNextTab();
+        m_tabbar->nextTab();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "selectprevtab")) {
-        m_tabbar->selectPrevTab();
+        m_tabbar->previousTab();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "closetab")) {
         closeTab();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "restoretab")) {
@@ -929,11 +951,11 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
         if (match.hasMatch()) {
             auto tabIndex = key.replace("Alt+", "").toInt();
             if (tabIndex == 9) {
-                if (m_tabbar->tabbar->count() > 1) {
-                    activeTab(m_tabbar->tabbar->count() - 1);
+                if (m_tabbar->count() > 1) {
+                    activeTab(m_tabbar->count() - 1);
                 }
             } else {
-                if (tabIndex <= m_tabbar->tabbar->count()) {
+                if (tabIndex <= m_tabbar->count()) {
                     activeTab(tabIndex - 1);
                 }
             }
@@ -946,10 +968,11 @@ int Window::getBlankFileIndex()
     // get blank tab index list.
     QList<int> tabIndexes;
 
-    for (int i = 0; i < m_tabbar->tabbar->tabFiles.size(); ++i) {
+    // tabFiles.size()
+    for (int i = 0; i < m_tabbar->count(); ++i) {
         // find all the blank tab index number.
-        if (QFileInfo(m_tabbar->tabbar->tabFiles[i]).dir().absolutePath() == m_blankFileDir) {
-            const QString tabText = m_tabbar->tabbar->tabText(i);
+        if (QFileInfo(m_tabbar->fileAt(i)).dir().absolutePath() == m_blankFileDir) {
+            const QString tabText = m_tabbar->textAt(i);
             QRegularExpression reg("(\\d+)");
             QRegularExpressionMatch match = reg.match(tabText);
 
@@ -1010,39 +1033,10 @@ void Window::addBlankTab(const QString &blankFile)
     showNewEditor(buffer);
 }
 
-void Window::handleTabReleaseRequested(const QString &tabName, const QString &filepath, int index)
-{
-    DTextEdit *buffer = getTextEditor(filepath);
-    const QString content = buffer->toPlainText();
-    const bool isModified = buffer->document()->isModified();
-
-    m_tabbar->closeTabWithIndex(index);
-    handleCloseFile(filepath);
-
-    emit dropTabOut(tabName, filepath, content, isModified);
-}
-
 void Window::handleTabCloseRequested(int index)
 {
     activeTab(index);
     closeTab();
-}
-
-void Window::handleCloseFile(const QString &filepath)
-{
-    if (m_editorMap.contains(filepath)) {
-        EditorBuffer *buffer = m_editorMap.value(filepath);
-
-        m_editorWidget->removeWidget(buffer);
-        m_editorMap.remove(filepath);
-
-        buffer->deleteLater();
-    }
-
-    // Exit window after close all tabs.
-    if (m_editorMap.isEmpty()) {
-        DMainWindow::close();
-    }
 }
 
 void Window::handleCurrentChanged(const int &index)
@@ -1059,7 +1053,7 @@ void Window::handleCurrentChanged(const int &index)
         buffer->textEditor()->removeKeywords();
     }
 
-    const QString &filepath = m_tabbar->tabbar->tabFiles.value(index);
+    const QString &filepath = m_tabbar->fileAt(index);
 
     if (m_editorMap.contains(filepath)) {
         EditorBuffer *buffer = m_editorMap.value(filepath);
@@ -1070,7 +1064,7 @@ void Window::handleCurrentChanged(const int &index)
 
 void Window::handleJumpLineBarExit()
 {
-    QTimer::singleShot(0, getActiveEditor()->textEditor(), SLOT(setFocus()));
+    QTimer::singleShot(0, currentBuffer()->textEditor(), SLOT(setFocus()));
 }
 
 void Window::handleJumpLineBarJumpToLine(const QString &filepath, int line, bool focusEditor)
@@ -1095,7 +1089,7 @@ void Window::handleBackToPosition(const QString &file, int row, int column, int 
 
 void Window::handleFindNext()
 {
-    EditorBuffer *buffer = getActiveEditor();
+    EditorBuffer *buffer = currentBuffer();
 
     buffer->textEditor()->saveMarkStatus();
     buffer->textEditor()->updateCursorKeywordSelection(buffer->textEditor()->getPosition(), true);
@@ -1105,7 +1099,7 @@ void Window::handleFindNext()
 
 void Window::handleFindPrev()
 {
-    EditorBuffer *buffer = getActiveEditor();
+    EditorBuffer *buffer = currentBuffer();
 
     buffer->textEditor()->saveMarkStatus();
     buffer->textEditor()->updateCursorKeywordSelection(buffer->textEditor()->getPosition(), false);
@@ -1115,28 +1109,28 @@ void Window::handleFindPrev()
 
 void Window::handleReplaceAll(const QString &replaceText, const QString &withText)
 {
-    EditorBuffer *buffer = getActiveEditor();
+    EditorBuffer *buffer = currentBuffer();
 
     buffer->textEditor()->replaceAll(replaceText, withText);
 }
 
 void Window::handleReplaceNext(const QString &replaceText, const QString &withText)
 {
-    EditorBuffer *buffer = getActiveEditor();
+    EditorBuffer *buffer = currentBuffer();
 
     buffer->textEditor()->replaceNext(replaceText, withText);
 }
 
 void Window::handleReplaceRest(const QString &replaceText, const QString &withText)
 {
-    EditorBuffer *buffer = getActiveEditor();
+    EditorBuffer *buffer = currentBuffer();
 
     buffer->textEditor()->replaceRest(replaceText, withText);
 }
 
 void Window::handleReplaceSkip()
 {
-    EditorBuffer *buffer = getActiveEditor();
+    EditorBuffer *buffer = currentBuffer();
 
     buffer->textEditor()->updateCursorKeywordSelection(buffer->textEditor()->getPosition(), true);
     buffer->textEditor()->renderAllSelections();
@@ -1144,12 +1138,12 @@ void Window::handleReplaceSkip()
 
 void Window::handleRemoveSearchKeyword()
 {
-    getActiveEditor()->textEditor()->removeKeywords();
+    currentBuffer()->textEditor()->removeKeywords();
 }
 
 void Window::handleUpdateSearchKeyword(QWidget *widget, const QString &file, const QString &keyword)
 {
-    if (file == m_tabbar->getActiveTabPath() && m_editorMap.contains(file)) {
+    if (file == m_tabbar->currentPath() && m_editorMap.contains(file)) {
         // Highlight keyword in text editor.
         m_editorMap.value(file)->textEditor()->highlightKeyword(keyword, m_editorMap.value(file)->textEditor()->getPosition());
 
@@ -1197,7 +1191,7 @@ void Window::removeBottomWidget()
 
 void Window::removeActiveBlankTab(bool needSaveBefore)
 {
-    QString blankFile = m_tabbar->getActiveTabPath();
+    QString blankFile = m_tabbar->currentPath();
 
     if (needSaveBefore) {
         if (!saveFile()) {
@@ -1206,11 +1200,11 @@ void Window::removeActiveBlankTab(bool needSaveBefore)
         }
 
         // Record last close path.
-        m_closeFileHistory << m_tabbar->getActiveTabPath();
+        m_closeFileHistory << m_tabbar->currentPath();
     }
 
     // Close current tab.
-    m_tabbar->closeActiveTab();
+    m_tabbar->closeCurrentTab();
 
     // Remove blank file from blank file directory.
     QFile(blankFile).remove();
@@ -1218,11 +1212,11 @@ void Window::removeActiveBlankTab(bool needSaveBefore)
 
 void Window::removeActiveReadonlyTab()
 {
-    QString tabPath = m_tabbar->getActiveTabPath();
+    QString tabPath = m_tabbar->currentPath();
     QString realpath = QFileInfo(tabPath).fileName().replace(m_readonlySeparator, QDir().separator());
 
     m_closeFileHistory << realpath;
-    m_tabbar->closeActiveTab();
+    m_tabbar->closeCurrentTab();
     focusActiveEditor();
 
     QFile(tabPath).remove();
@@ -1272,12 +1266,12 @@ void Window::popupPrintDialog()
     QPrinter printer(QPrinter::HighResolution);
     QPrintPreviewDialog preview(&printer, this);
 
-    DTextEdit *buffer = getActiveEditor()->textEditor();
+    DTextEdit *buffer = currentBuffer()->textEditor();
     const QString &filePath = buffer->filepath;
     const QString &fileDir = QFileInfo(filePath).dir().absolutePath();
 
     if (fileDir == m_blankFileDir) {
-        printer.setOutputFileName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->getActiveTabName()));
+        printer.setOutputFileName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
     } else {
         printer.setOutputFileName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
     }
@@ -1285,7 +1279,7 @@ void Window::popupPrintDialog()
     printer.setOutputFormat(QPrinter::PdfFormat);
 
     connect(&preview, &QPrintPreviewDialog::paintRequested, this, [=] (QPrinter *printer) {
-        getActiveEditor()->textEditor()->print(printer);
+        currentBuffer()->textEditor()->print(printer);
     });
 
     preview.exec();
@@ -1309,7 +1303,7 @@ void Window::changeTitlebarBackground(const QString &startColor, const QString &
                                       "stop:0 rgba%2,  stop:1 rgba%3);"
                                       "}").arg(m_titlebarStyleSheet).arg(startColor).arg(endColor));
 
-    m_tabbar->setTabActiveColor(m_tabbarActiveColor);
+     m_tabbar->setTabActiveColor(m_tabbarActiveColor);
 }
 
 void Window::loadTheme(const QString &path)
@@ -1344,8 +1338,8 @@ void Window::loadTheme(const QString &path)
     m_jumpLineBar->setBackground(backgroundColor);
     m_replaceBar->setBackground(backgroundColor);
     m_findBar->setBackground(backgroundColor);
-    m_tabbar->tabbar->setDNDColor(jsonMap["app-colors"].toMap()["tab-dnd-start"].toString(), jsonMap["app-colors"].toMap()["tab-dnd-end"].toString());
-    m_tabbar->tabbar->setBackground(tabbarStartColor, tabbarEndColor);
+    m_tabbar->setBackground(tabbarStartColor, tabbarEndColor);
+    m_tabbar->setDNDColor(jsonMap["app-colors"].toMap()["tab-dnd-start"].toString(), jsonMap["app-colors"].toMap()["tab-dnd-end"].toString());
 
     const QString &frameSelectedColor = jsonMap["app-colors"].toMap()["themebar-frame-selected"].toString();
     const QString &frameNormalColor = jsonMap["app-colors"].toMap()["themebar-frame-normal"].toString();

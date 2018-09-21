@@ -30,6 +30,17 @@
 
 DWIDGET_USE_NAMESPACE
 
+StartManager *StartManager::m_instance = nullptr;
+
+StartManager *StartManager::instance()
+{
+    if (m_instance == nullptr) {
+        m_instance = new StartManager;
+    }
+
+    return m_instance;
+}
+
 StartManager::StartManager(QObject *parent)
     : QObject(parent)
 {
@@ -121,10 +132,11 @@ void StartManager::openFilesInTab(QStringList files)
     }
 }
 
-void StartManager::createWindowFromTab(QString tabName, QString filepath, QString content, bool isModified)
+
+void StartManager::createWindowFromBuffer(const QString &tabName, const QString &filePath, EditorBuffer *buffer)
 {
     Window *window = createWindow();
-    window->addTabWithContent(tabName, filepath, content, isModified);
+    window->addTabWithBuffer(buffer, filePath, tabName);
     window->move(QCursor::pos() - window->topLevelWidget()->pos());
 }
 
@@ -138,8 +150,7 @@ void StartManager::loadTheme(const QString &themeName)
 Window* StartManager::createWindow(bool alwaysCenter)
 {
     // Create window.
-    Window *window = new Window();
-    connect(window, &Window::dropTabOut, this, &StartManager::createWindowFromTab, Qt::QueuedConnection);
+    Window *window = new Window;
     connect(window, &Window::themeChanged, this, &StartManager::loadTheme, Qt::QueuedConnection);
 
     // Quit application if close last window.

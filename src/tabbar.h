@@ -1,11 +1,7 @@
-/* -*- Mode: C++; indent-tabs-mode: nil; tab-width: 4 -*-
- * -*- coding: utf-8 -*-
+/*
+ * Copyright (C) 2017 ~ 2018 Deepin Technology Co., Ltd.
  *
- * Copyright (C) 2011 ~ 2018 Deepin, Inc.
- *               2011 ~ 2018 Wang Yong
- *
- * Author:     Wang Yong <wangyong@deepin.com>
- * Maintainer: Wang Yong <wangyong@deepin.com>
+ * Author:     rekols <rekols@foxmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,64 +17,65 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TITLEBAR_H
-#define TITLEBAR_H
+#ifndef TABBAR_H
+#define TABBAR_H
 
-#include "tabwidget.h"
-
-#include <QHBoxLayout>
-#include <QWidget>
+#include <DTabBar>
 
 DWIDGET_USE_NAMESPACE
 
-class Tabbar : public QWidget
+class Tabbar : public DTabBar
 {
     Q_OBJECT
 
 public:
     Tabbar(QWidget *parent = nullptr);
+    ~Tabbar();
 
-    int getTabIndex(const QString &filepath);
-    QString getTabName(int index);
-    QString getTabPath(int index);
-
-    int getActiveTabIndex();
-    QString getActiveTabName();
-    QString getActiveTabPath();
-    void activeTabWithIndex(int index);
-
-    void addTab(const QString &filepath, const QString &tabName);
-    void addTabWithIndex(int index, const QString &filepath, const QString &tabName);
-    void closeActiveTab();
+    void addTab(const QString &filePath, const QString &tabName);
+    void addTabWithIndex(int index, const QString &filePath, const QString &tabName);
+    void closeTab(int index);
+    void closeCurrentTab();
     void closeOtherTabs();
-    void closeOtherTabsExceptFile(const QString &filepath);
+    void closeOtherTabsExceptFile(const QString &filePath);
+    void updateTab(int index, const QString &filePath, const QString &tabName);
+    void previousTab();
+    void nextTab();
 
-    void selectNextTab();
-    void selectPrevTab();
+    int indexOf(const QString &filePath);
 
-    void updateTabWithIndex(int index, const QString &filepath, const QString &tabName);
+    QString currentName() const;
+    QString currentPath() const;
+    QString fileAt(int index) const;
+    QString textAt(int index) const;
+
     void setTabActiveColor(const QString &color);
-
-    int getTabCount();
-
-    TabWidget *tabbar;
+    void setBackground(const QString &startColor, const QString &endColor);
+    void setDNDColor(const QString &startColor, const QString &endColor);
 
 signals:
-    void doubleClicked();
-    void tabReleaseRequested(const QString &tabName, const QString &filepaht, int index);
-    void requestHistorySaved(const QString &filePath, int index);
+    void requestHistorySaved(const QString &filePath);
 
-public slots:
-    void closeTabWithIndex(int closeIndex);
-
-    void handleCloseOtherTabs(int index);
-
-    void handleTabDroped(int index, Qt::DropAction action, QObject *target);
-    void handleTabMoved(int fromIndex, int toIndex);
-    void handleTabReleaseRequested(int index);
+protected:
+    QPixmap createDragPixmapFromTab(int index, const QStyleOptionTab &option, QPoint *hotspot) const;
+    QMimeData *createMimeDataFromTab(int index, const QStyleOptionTab &option) const;
+    void insertFromMimeDataOnDragEnter(int index, const QMimeData *source);
+    void insertFromMimeData(int index, const QMimeData *source);
+    bool canInsertFromMimeData(int index, const QMimeData *source) const;
+    void handleDragActionChanged(Qt::DropAction action);
+    bool eventFilter(QObject *, QEvent *event);
 
 private:
-    QHBoxLayout *m_layout;
+    void handleTabMoved(int fromIndex, int toIndex);
+    void handleTabReleased(int index);
+    void handleTabDroped(int index, Qt::DropAction, QObject *target);
+
+private:
+    QStringList m_tabPaths;
+    QString m_backgroundStartColor;
+    QString m_backgroundEndColor;
+    QString m_dndStartColor;
+    QString m_dndEndColor;
 };
 
 #endif

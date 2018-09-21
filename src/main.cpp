@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
 
     // Start editor process if not found any editor use DBus.
     if (dbus.registerService("com.deepin.Editor")) {
-        StartManager *startManager = new StartManager;
+        StartManager *startManager = StartManager::instance();
 
         if (hasWindowFlag) {
             startManager->openFilesInWindow(urls);

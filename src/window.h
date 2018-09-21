@@ -59,18 +59,17 @@ public:
     void activeTab(int index);
 
     void addTab(const QString &filepath, bool activeTab = false);
-    void addTabWithContent(const QString &tabName,
-                           const QString &filepath,
-                           const QString &content,
-                           bool isModified = false,
-                           int index = -1);
+    void addTabWithBuffer(EditorBuffer *buffer, const QString &filepath,
+                          const QString &tabName, int index = -1);
     void closeTab();
     void restoreTab();
 
     EditorBuffer* createEditor();
-    EditorBuffer* getActiveEditor();
+    EditorBuffer* currentBuffer();
+    EditorBuffer* buffer(const QString &filePath);
     DTextEdit* getTextEditor(const QString &filepath);
     void focusActiveEditor();
+    void removeBuffer(const QString &filePath, bool isDelete = false);
 
     void openFile();
     bool saveFile();
@@ -106,7 +105,6 @@ public:
     void displayShortcuts();
 
 signals:
-    void dropTabOut(QString tabName, QString filepath, QString content, bool isModified);
     void themeChanged(const QString themeName);
     void requestDragEnterEvent(QDragEnterEvent *);
     void requestDropEvent(QDropEvent *);
@@ -124,10 +122,7 @@ protected:
 public slots:
     void addBlankTab();
     void addBlankTab(const QString &blankFile);
-    void handleTabReleaseRequested(const QString &tabName, const QString &filepath, int index);
     void handleTabCloseRequested(int index);
-
-    void handleCloseFile(const QString &filepath);
     void handleCurrentChanged(const int &index);
 
     void handleJumpLineBarExit();

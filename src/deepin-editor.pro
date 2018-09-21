@@ -31,8 +31,8 @@ HEADERS += window.h \
            replacebar.h \
            linebar.h \
            settings.h \
-           tabwidget.h \
            tabbar.h \
+           toolbar.h \
            editorbuffer.h \
            uncommentselection.h \
            utils.h \
@@ -53,8 +53,8 @@ SOURCES += window.cpp \
            linebar.cpp \
            settings.cpp \
            settingsdialog.cpp \
-           tabwidget.cpp \
            tabbar.cpp \
+           toolbar.cpp \
            editorbuffer.cpp \
            utils.cpp \
            uncommentselection.cpp \

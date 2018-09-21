@@ -25,6 +25,7 @@
 #define STARTMANAGER_H
 
 #include "window.h"
+#include "editorbuffer.h"
 
 #include <QObject>
 
@@ -41,22 +42,23 @@ class StartManager : public QObject
     };
 
 public:
+    static StartManager* instance();
     StartManager(QObject *parent = 0);
 
 public slots:
     Q_SCRIPTABLE void openFilesInTab(QStringList files);
     Q_SCRIPTABLE void openFilesInWindow(QStringList files);
 
-    void createWindowFromTab(QString tabName, QString filepath, QString content, bool isModified);
+    void createWindowFromBuffer(const QString &tabName, const QString &filePath, EditorBuffer *buffer);
     void loadTheme(const QString &themeName);
 
-private:
     Window* createWindow(bool alwaysCenter = false);
     void initWindowPosition(Window *window, bool alwaysCenter = false);
     void popupExistTabs(FileTabInfo info);
     FileTabInfo getFileTabInfo(QString file);
 
 private:
+    static StartManager *m_instance;
     QList<Window*> m_windows;
 };
 
