@@ -1,5 +1,118 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="lt" version="2.1">
 <context>
+    <name>DTextEdit</name>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="88"/>
+        <source>Undo</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="89"/>
+        <source>Redo</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="90"/>
+        <source>Cut</source>
+        <translation>Iškirpti</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="91"/>
+        <source>Copy</source>
+        <translation>Kopijuoti</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="92"/>
+        <source>Paste</source>
+        <translation>Įdėti</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="93"/>
+        <source>Delete</source>
+        <translation>Ištrinti</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="94"/>
+        <source>Select All</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="95"/>
+        <source>Find</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="96"/>
+        <source>Replace</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="97"/>
+        <source>Go to Line</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="98"/>
+        <source>Turn on Read-Only mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="99"/>
+        <source>Turn off Read-Only mode</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="100"/>
+        <source>Fullscreen</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="101"/>
+        <source>Exit fullscreen</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="102"/>
+        <source>Open in file manager</source>
+        <translation>Atverti failų tvarkytuvėje</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="103"/>
+        <source>Toggle comment</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="125"/>
+        <source>Change Case</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="126"/>
+        <source>Upper Case</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="127"/>
+        <source>Lower Case</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="128"/>
+        <source>Capitalize</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="2202"/>
+        <source>Read-Only mode is off</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="2206"/>
+        <source>Read-Only mode is on</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>FindBar</name>
     <message>
         <location filename="../editor/src/findbar.cpp" line="38"/>
@@ -28,12 +141,12 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../editor/src/main.cpp" line="47"/>
+        <location filename="../editor/src/main.cpp" line="48"/>
         <source>Deepin Editor is a desktop text editor that supports common text editing features.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../editor/src/main.cpp" line="62"/>
+        <location filename="../editor/src/main.cpp" line="61"/>
         <source>Deepin Editor</source>
         <translation>Deepin redaktorius</translation>
     </message>
@@ -41,7 +154,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../editor/src/main.cpp" line="58"/>
+        <location filename="../editor/src/main.cpp" line="57"/>
         <source>Deepin Editor</source>
         <translation>Deepin redaktorius</translation>
     </message>
@@ -79,7 +192,7 @@
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="31"/>
         <location filename="../editor/src/settingsdialog.cpp" line="102"/>
-        <location filename="../editor/src/window.cpp" line="472"/>
+        <location filename="../editor/src/window.cpp" line="471"/>
         <source>Window</source>
         <translation type="unfinished"/>
     </message>
@@ -196,7 +309,7 @@
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="54"/>
         <source>Editor</source>
-        <translation type="unfinished"/>
+        <translation>Redaktorius</translation>
     </message>
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="55"/>
@@ -519,119 +632,6 @@
     </message>
 </context>
 <context>
-    <name>TextEditor</name>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="88"/>
-        <source>Undo</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="89"/>
-        <source>Redo</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="90"/>
-        <source>Cut</source>
-        <translation>Iškirpti</translation>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="91"/>
-        <source>Copy</source>
-        <translation>Kopijuoti</translation>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="92"/>
-        <source>Paste</source>
-        <translation>Įdėti</translation>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="93"/>
-        <source>Delete</source>
-        <translation>Ištrinti</translation>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="94"/>
-        <source>Select All</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="95"/>
-        <source>Find</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="96"/>
-        <source>Replace</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="97"/>
-        <source>Go to Line</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="98"/>
-        <source>Turn on Read-Only mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="99"/>
-        <source>Turn off Read-Only mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="125"/>
-        <source>Change Case</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="126"/>
-        <source>Upper Case</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="127"/>
-        <source>Lower Case</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="2194"/>
-        <source>Read-Only mode is off</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="2198"/>
-        <source>Read-Only mode is on</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="100"/>
-        <source>Fullscreen</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="101"/>
-        <source>Exit fullscreen</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="102"/>
-        <source>Open in file manager</source>
-        <translation>Atverti failų tvarkytuvėje</translation>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="103"/>
-        <source>Toggle comment</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="128"/>
-        <source>Capitalize</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
     <name>Window</name>
     <message>
         <location filename="../editor/src/window.cpp" line="165"/>
@@ -651,7 +651,7 @@
     <message>
         <location filename="../editor/src/window.cpp" line="169"/>
         <source>Save as</source>
-        <translation type="unfinished"/>
+        <translation>Įrašyti kaip</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="170"/>
@@ -664,12 +664,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="592"/>
+        <location filename="../editor/src/window.cpp" line="591"/>
         <source>Saved successfully</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="1248"/>
+        <location filename="../editor/src/window.cpp" line="1247"/>
         <source>Discard</source>
         <translation type="unfinished"/>
     </message>
@@ -679,83 +679,83 @@
         <translation>Nustatymai</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="237"/>
+        <location filename="../editor/src/window.cpp" line="236"/>
         <source>You do not have permission to open %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="265"/>
+        <location filename="../editor/src/window.cpp" line="264"/>
         <source>Invalid file: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="306"/>
-        <location filename="../editor/src/window.cpp" line="427"/>
-        <location filename="../editor/src/window.cpp" line="449"/>
-        <location filename="../editor/src/window.cpp" line="835"/>
+        <location filename="../editor/src/window.cpp" line="305"/>
+        <location filename="../editor/src/window.cpp" line="426"/>
+        <location filename="../editor/src/window.cpp" line="448"/>
+        <location filename="../editor/src/window.cpp" line="834"/>
         <source>Save File</source>
         <translation>Įrašyti failą</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="306"/>
+        <location filename="../editor/src/window.cpp" line="305"/>
         <source>Do you want to save this file?</source>
         <translation>Ar norite įrašyti šį failą?</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="429"/>
-        <location filename="../editor/src/window.cpp" line="441"/>
+        <location filename="../editor/src/window.cpp" line="428"/>
+        <location filename="../editor/src/window.cpp" line="440"/>
         <source>Encoding</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="430"/>
-        <location filename="../editor/src/window.cpp" line="442"/>
+        <location filename="../editor/src/window.cpp" line="429"/>
+        <location filename="../editor/src/window.cpp" line="441"/>
         <source>Line Endings</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="503"/>
+        <location filename="../editor/src/window.cpp" line="502"/>
         <source>Editor</source>
-        <translation type="unfinished"/>
+        <translation>Redaktorius</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="540"/>
+        <location filename="../editor/src/window.cpp" line="539"/>
         <source>File cannot be saved when loading</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="559"/>
+        <location filename="../editor/src/window.cpp" line="558"/>
         <source>You do not have permission to save %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="580"/>
+        <location filename="../editor/src/window.cpp" line="579"/>
         <source>Unable to save the file</source>
         <translation>Nepavyko įrašyti failo</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="580"/>
+        <location filename="../editor/src/window.cpp" line="579"/>
         <source>Do you want to save as another?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="835"/>
+        <location filename="../editor/src/window.cpp" line="834"/>
         <source>Do you want to save all the files?</source>
         <translation>Ar norite įrašyti visus failus?</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="1001"/>
+        <location filename="../editor/src/window.cpp" line="1000"/>
         <source>Blank document %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="1247"/>
+        <location filename="../editor/src/window.cpp" line="1246"/>
         <source>Cancel</source>
         <translation>Atsisakyti</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="168"/>
-        <location filename="../editor/src/window.cpp" line="1249"/>
+        <location filename="../editor/src/window.cpp" line="1248"/>
         <source>Save</source>
         <translation>Įrašyti</translation>
     </message>

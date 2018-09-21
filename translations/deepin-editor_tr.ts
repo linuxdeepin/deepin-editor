@@ -1,5 +1,118 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="tr" version="2.1">
 <context>
+    <name>DTextEdit</name>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="88"/>
+        <source>Undo</source>
+        <translation>Geri al</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="89"/>
+        <source>Redo</source>
+        <translation>Yinele</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="90"/>
+        <source>Cut</source>
+        <translation>Kes</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="91"/>
+        <source>Copy</source>
+        <translation>Kopyala</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="92"/>
+        <source>Paste</source>
+        <translation>Yapıştır</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="93"/>
+        <source>Delete</source>
+        <translation>Sil</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="94"/>
+        <source>Select All</source>
+        <translation>Tümünü Seç</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="95"/>
+        <source>Find</source>
+        <translation>Bul</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="96"/>
+        <source>Replace</source>
+        <translation>Değiştir</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="97"/>
+        <source>Go to Line</source>
+        <translation>Şu Satıra Git</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="98"/>
+        <source>Turn on Read-Only mode</source>
+        <translation>Salt Okunur Kipi Aç</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="99"/>
+        <source>Turn off Read-Only mode</source>
+        <translation>Salt Okunur Kipi Kapat</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="100"/>
+        <source>Fullscreen</source>
+        <translation>Tam ekran</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="101"/>
+        <source>Exit fullscreen</source>
+        <translation>Tam Ekrandan Çık</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="102"/>
+        <source>Open in file manager</source>
+        <translation>Dosya yöneticisinde aç</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="103"/>
+        <source>Toggle comment</source>
+        <translation>Yorumu aç/kapat</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="125"/>
+        <source>Change Case</source>
+        <translation>Büyük Küçük Harfi Değiştir</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="126"/>
+        <source>Upper Case</source>
+        <translation>Büyük Harf</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="127"/>
+        <source>Lower Case</source>
+        <translation>Küçük Harf</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="128"/>
+        <source>Capitalize</source>
+        <translation>İlk harfleri büyüt</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="2202"/>
+        <source>Read-Only mode is off</source>
+        <translation>Salt okunur kip kapalı</translation>
+    </message>
+    <message>
+        <location filename="../editor/src/dtextedit.cpp" line="2206"/>
+        <source>Read-Only mode is on</source>
+        <translation>Salt okunur kip açık</translation>
+    </message>
+</context>
+<context>
     <name>FindBar</name>
     <message>
         <location filename="../editor/src/findbar.cpp" line="38"/>
@@ -28,12 +141,12 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../editor/src/main.cpp" line="47"/>
+        <location filename="../editor/src/main.cpp" line="48"/>
         <source>Deepin Editor is a desktop text editor that supports common text editing features.</source>
         <translation>Deepin Editor genel metin düzenleme özelliklerini destekleyen bir masaüstü metin düzenleyicisidir.</translation>
     </message>
     <message>
-        <location filename="../editor/src/main.cpp" line="62"/>
+        <location filename="../editor/src/main.cpp" line="61"/>
         <source>Deepin Editor</source>
         <translation>Deepin Editör</translation>
     </message>
@@ -41,7 +154,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../editor/src/main.cpp" line="58"/>
+        <location filename="../editor/src/main.cpp" line="57"/>
         <source>Deepin Editor</source>
         <translation>Deepin Editör</translation>
     </message>
@@ -79,7 +192,7 @@
     <message>
         <location filename="../editor/src/settingsdialog.cpp" line="31"/>
         <location filename="../editor/src/settingsdialog.cpp" line="102"/>
-        <location filename="../editor/src/window.cpp" line="472"/>
+        <location filename="../editor/src/window.cpp" line="471"/>
         <source>Window</source>
         <translation>Pencere</translation>
     </message>
@@ -519,119 +632,6 @@
     </message>
 </context>
 <context>
-    <name>TextEditor</name>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="88"/>
-        <source>Undo</source>
-        <translation>Geri Al</translation>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="89"/>
-        <source>Redo</source>
-        <translation>Yenile</translation>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="90"/>
-        <source>Cut</source>
-        <translation>Kes</translation>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="91"/>
-        <source>Copy</source>
-        <translation>Kopyala</translation>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="92"/>
-        <source>Paste</source>
-        <translation>Yapıştır</translation>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="93"/>
-        <source>Delete</source>
-        <translation>Sil</translation>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="94"/>
-        <source>Select All</source>
-        <translation>Tümünü Seç</translation>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="95"/>
-        <source>Find</source>
-        <translation>Bul</translation>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="96"/>
-        <source>Replace</source>
-        <translation>Değiştir</translation>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="97"/>
-        <source>Go to Line</source>
-        <translation>Şu Satıra Git</translation>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="98"/>
-        <source>Turn on Read-Only mode</source>
-        <translation>Salt Okunur Kipi Aç</translation>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="99"/>
-        <source>Turn off Read-Only mode</source>
-        <translation>Salt Okunur Kipi Kapat</translation>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="125"/>
-        <source>Change Case</source>
-        <translation>Büyük Küçük Harfi Değiştir</translation>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="126"/>
-        <source>Upper Case</source>
-        <translation>Büyük Harf</translation>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="127"/>
-        <source>Lower Case</source>
-        <translation>Küçük Harf</translation>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="2194"/>
-        <source>Read-Only mode is off</source>
-        <translation>Salt okunur kip kapalı</translation>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="2198"/>
-        <source>Read-Only mode is on</source>
-        <translation>Salt okunur kip açık</translation>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="100"/>
-        <source>Fullscreen</source>
-        <translation>Tam Ekran</translation>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="101"/>
-        <source>Exit fullscreen</source>
-        <translation>Tam Ekrandan Çık</translation>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="102"/>
-        <source>Open in file manager</source>
-        <translation>Dosya yöneticisinde aç</translation>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="103"/>
-        <source>Toggle comment</source>
-        <translation>Yorumları aç/kapat</translation>
-    </message>
-    <message>
-        <location filename="../editor/src/texteditor.cpp" line="128"/>
-        <source>Capitalize</source>
-        <translation>Büyüt</translation>
-    </message>
-</context>
-<context>
     <name>Window</name>
     <message>
         <location filename="../editor/src/window.cpp" line="165"/>
@@ -664,12 +664,12 @@
         <translation>Temayı değiştir</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="592"/>
+        <location filename="../editor/src/window.cpp" line="591"/>
         <source>Saved successfully</source>
         <translation>Kaydedildi</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="1248"/>
+        <location filename="../editor/src/window.cpp" line="1247"/>
         <source>Discard</source>
         <translation>Yoksay</translation>
     </message>
@@ -679,83 +679,83 @@
         <translation>Ayarlar</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="237"/>
+        <location filename="../editor/src/window.cpp" line="236"/>
         <source>You do not have permission to open %1</source>
         <translation>%1 dosyasını açma izniniz yok</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="265"/>
+        <location filename="../editor/src/window.cpp" line="264"/>
         <source>Invalid file: %1</source>
         <translation>Dosya geçersiz: %1</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="306"/>
-        <location filename="../editor/src/window.cpp" line="427"/>
-        <location filename="../editor/src/window.cpp" line="449"/>
-        <location filename="../editor/src/window.cpp" line="835"/>
+        <location filename="../editor/src/window.cpp" line="305"/>
+        <location filename="../editor/src/window.cpp" line="426"/>
+        <location filename="../editor/src/window.cpp" line="448"/>
+        <location filename="../editor/src/window.cpp" line="834"/>
         <source>Save File</source>
         <translation>Dosyayı Kaydet</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="306"/>
+        <location filename="../editor/src/window.cpp" line="305"/>
         <source>Do you want to save this file?</source>
         <translation>Bu dosyayı kaydetmek ister misiniz?</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="429"/>
-        <location filename="../editor/src/window.cpp" line="441"/>
+        <location filename="../editor/src/window.cpp" line="428"/>
+        <location filename="../editor/src/window.cpp" line="440"/>
         <source>Encoding</source>
         <translation>Kodlama</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="430"/>
-        <location filename="../editor/src/window.cpp" line="442"/>
+        <location filename="../editor/src/window.cpp" line="429"/>
+        <location filename="../editor/src/window.cpp" line="441"/>
         <source>Line Endings</source>
         <translation>Satır Sonları</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="503"/>
+        <location filename="../editor/src/window.cpp" line="502"/>
         <source>Editor</source>
         <translation>Düzenleyici</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="540"/>
+        <location filename="../editor/src/window.cpp" line="539"/>
         <source>File cannot be saved when loading</source>
         <translation>Yükleme sırasında dosya kaydedilemez</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="559"/>
+        <location filename="../editor/src/window.cpp" line="558"/>
         <source>You do not have permission to save %1</source>
         <translation>%1 dosyasını kaydetme izniniz yok</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="580"/>
+        <location filename="../editor/src/window.cpp" line="579"/>
         <source>Unable to save the file</source>
         <translation>Dosya kaydedilemedi</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="580"/>
+        <location filename="../editor/src/window.cpp" line="579"/>
         <source>Do you want to save as another?</source>
         <translation>Farklı kaydetmek ister misiniz?</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="835"/>
+        <location filename="../editor/src/window.cpp" line="834"/>
         <source>Do you want to save all the files?</source>
         <translation>Tüm dosyaları kaydetmek ister misiniz?</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="1001"/>
+        <location filename="../editor/src/window.cpp" line="1000"/>
         <source>Blank document %1</source>
         <translation>%1 belgesi boş</translation>
     </message>
     <message>
-        <location filename="../editor/src/window.cpp" line="1247"/>
+        <location filename="../editor/src/window.cpp" line="1246"/>
         <source>Cancel</source>
         <translation>İptal</translation>
     </message>
     <message>
         <location filename="../editor/src/window.cpp" line="168"/>
-        <location filename="../editor/src/window.cpp" line="1249"/>
+        <location filename="../editor/src/window.cpp" line="1248"/>
         <source>Save</source>
         <translation>Kaydet</translation>
     </message>
