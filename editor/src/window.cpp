@@ -183,6 +183,7 @@ void Window::initTitlebar()
     m_menu->addAction(settingAction);
 
     m_menu->setStyle(QStyleFactory::create("dlight"));
+    m_menu->setMinimumWidth(150);
 
     titlebar()->setCustomWidget(m_tabbar, Qt::AlignVCenter, false);
     titlebar()->setAutoHideOnFullscreen(true);
