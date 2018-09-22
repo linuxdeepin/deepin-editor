@@ -2,10 +2,9 @@
  * -*- coding: utf-8 -*-
  *
  * Copyright (C) 2011 ~ 2018 Deepin, Inc.
- *               2011 ~ 2018 Wang Yong
  *
  * Author:     Wang Yong <wangyong@deepin.com>
- * Maintainer: Wang Yong <wangyong@deepin.com>
+ * Maintainer: Rekols    <rekols@foxmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -63,13 +62,15 @@ QSize Utils::getRenderSize(int fontSize, const QString &string)
 
     int width = 0;
     int height = 0;
-    foreach (auto line, string.split("\n")) {
+
+    for (const QString &line : string.split("\n")) {
         int lineWidth = fm.width(line);
         int lineHeight = fm.height();
 
         if (lineWidth > width) {
             width = lineWidth;
         }
+
         height += lineHeight;
     }
 
@@ -91,25 +92,6 @@ void Utils::applyQss(QWidget *widget, const QString &qssName)
     QString stylesheet = filetext.readAll();
     widget->setStyleSheet(stylesheet);
     file.close();
-}
-
-QString Utils::getFileContent(const QString &filepath)
-{
-    QString content;
-
-    QFile file(filepath);
-    if (file.open(QFile::ReadOnly)) {
-        auto fileContent = file.readAll();
-        auto fileEncode = detectEncode(fileContent, filepath);
-
-        QTextStream stream(&fileContent);
-        stream.setCodec(fileEncode);
-        content = stream.readAll();
-    }
-
-    file.close();
-
-    return content;
 }
 
 float codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, const QLocale::Country &country)
@@ -387,7 +369,6 @@ QPixmap Utils::dropShadow(const QPixmap &source, qreal radius, const QColor &col
 {
     QImage shadow = dropShadow(source, radius, color);
     shadow.setDevicePixelRatio(source.devicePixelRatio());
-
 
     QPainter pa(&shadow);
     pa.setCompositionMode(QPainter::CompositionMode_SourceOver);

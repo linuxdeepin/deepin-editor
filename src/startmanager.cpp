@@ -2,10 +2,9 @@
  * -*- coding: utf-8 -*-
  *
  * Copyright (C) 2011 ~ 2018 Deepin, Inc.
- *               2011 ~ 2018 Wang Yong
  *
  * Author:     Wang Yong <wangyong@deepin.com>
- * Maintainer: Wang Yong <wangyong@deepin.com>
+ * Maintainer: Rekols    <rekols@foxmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -182,7 +181,7 @@ Window* StartManager::createWindow(bool alwaysCenter)
 
 void StartManager::initWindowPosition(Window *window, bool alwaysCenter)
 {
-    if (m_windows.size() == 0 || alwaysCenter) {
+    if (m_windows.isEmpty() || alwaysCenter) {
         Dtk::Widget::moveToCenter(window);
     } else {
         // Add window offset to avoid all editor window popup at same coordinate.

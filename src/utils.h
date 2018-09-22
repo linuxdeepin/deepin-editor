@@ -2,10 +2,9 @@
  * -*- coding: utf-8 -*-
  *
  * Copyright (C) 2011 ~ 2018 Deepin, Inc.
- *               2011 ~ 2018 Wang Yong
  *
  * Author:     Wang Yong <wangyong@deepin.com>
- * Maintainer: Wang Yong <wangyong@deepin.com>
+ * Maintainer: Rekols    <rekols@foxmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,7 +37,6 @@ public:
     static QSize getRenderSize(int fontSize, const QString &string);
     static void setFontSize(QPainter &painter, int textSize);
     static void applyQss(QWidget *widget, const QString &qssName);
-    static QString getFileContent(const QString &filepath);
     static QString getKeyshortcut(QKeyEvent *keyEvent);
     static QString getKeyshortcutFromKeymap(Settings* settings, const QString &keyCategory, const QString &keyName);
     static bool fileExists(const QString &path);
