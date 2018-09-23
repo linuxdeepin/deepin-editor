@@ -1623,7 +1623,50 @@ void DTextEdit::contextMenuEvent(QContextMenuEvent *event)
     selectionCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
     QString text = selectionCursor.selectedText();
 
-    bool isBlankLine = text.trimmed().size() == 0;
+    // syntax selection
+    QActionGroup *hlActionGroup = new QActionGroup(m_rightMenu);
+    hlActionGroup->setExclusive(true);
+
+    QMenu *hlGroupMenu = m_rightMenu->addMenu(tr("Syntax"));
+    QAction *noHlAction = hlGroupMenu->addAction(tr("None"));
+
+    noHlAction->setCheckable(true);
+    hlActionGroup->addAction(noHlAction);
+    noHlAction->setChecked(!m_highlighter->definition().isValid());
+
+    QMenu *hlSubMenu = nullptr;
+    QString currentGroup;
+
+    for (const auto &def : m_repository.definitions()) {
+        if (def.isHidden()) {
+            continue;
+        }
+
+        if (currentGroup != def.section()) {
+            currentGroup = def.section();
+            hlSubMenu = hlGroupMenu->addMenu(def.translatedSection());
+        }
+
+        Q_ASSERT(hlSubMenu);
+        auto action = hlSubMenu->addAction(def.translatedName());
+        action->setCheckable(true);
+        action->setData(def.name());
+        hlActionGroup->addAction(action);
+
+        if (def.name() == m_highlighter->definition().name()) {
+            action->setChecked(true);
+        }
+    }
+
+    connect(hlActionGroup, &QActionGroup::triggered, this, [this] (QAction *action) {
+        const auto defName = action->data().toString();
+        const auto def = m_repository.definitionForName(defName);
+        m_highlighter->setDefinition(def);
+    });
+
+    // init base.
+
+    bool isBlankLine = text.trimmed().isEmpty();
 
     if (m_canUndo) {
         m_rightMenu->addAction(m_undoAction);
@@ -1639,7 +1682,7 @@ void DTextEdit::contextMenuEvent(QContextMenuEvent *event)
         // Just show copy/cut menu item when cursor rectangle contain moue pointer coordinate.
         m_haveWordUnderCursor = highlightWordUnderMouse(event->pos());
         if (m_haveWordUnderCursor) {
-            if (wordAtCursor != "") {
+            if (!wordAtCursor.isEmpty()) {
                 m_rightMenu->addAction(m_cutAction);
                 m_rightMenu->addAction(m_copyAction);
             }
@@ -1649,20 +1692,20 @@ void DTextEdit::contextMenuEvent(QContextMenuEvent *event)
         m_rightMenu->addAction(m_pasteAction);
     }
 
-    if (wordAtCursor != "") {
+    if (!wordAtCursor.isEmpty()) {
         m_rightMenu->addAction(m_deleteAction);
     }
-    if (toPlainText() != "") {
+    if (!toPlainText().isEmpty()) {
         m_rightMenu->addAction(m_selectAllAction);
     }
     m_rightMenu->addSeparator();
-    if (toPlainText() != "") {
+    if (!toPlainText().isEmpty()) {
         m_rightMenu->addAction(m_findAction);
         m_rightMenu->addAction(m_replaceAction);
         m_rightMenu->addAction(m_jumpLineAction);
         m_rightMenu->addSeparator();
     }
-    if (wordAtCursor != "") {
+    if (!wordAtCursor.isEmpty()) {
         m_rightMenu->addMenu(m_convertCaseMenu);
     }
 
