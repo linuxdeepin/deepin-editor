@@ -24,12 +24,15 @@
 #include "startmanager.h"
 
 #include <QApplication>
+#include <QStyleFactory>
 #include <QGuiApplication>
 #include <DPlatformWindowHandle>
 
 Tabbar::Tabbar(QWidget *parent)
     : DTabBar(parent)
 {
+    m_rightClickTab = -1;
+
     installEventFilter(this);
 
     setMovable(true);
@@ -44,19 +47,12 @@ Tabbar::Tabbar(QWidget *parent)
 
     // set mask color.
     QColor dropColor("#333333");
-    dropColor.setAlpha(0);
+    dropColor.setAlpha(1);
     setMaskColor(dropColor);
-
-    connect(this, &DTabBar::tabIsRemoved, this, [=] (int index) {
-        const QString filePath = m_tabPaths.at(index);
-        Window *window = static_cast<Window *>(this->window());
-
-        m_tabPaths.removeAt(index);
-        window->removeBuffer(filePath, false);
-    });
 
     connect(this, &DTabBar::tabMoved, this, &Tabbar::handleTabMoved);
     connect(this, &DTabBar::tabDroped, this, &Tabbar::handleTabDroped);
+    connect(this, &DTabBar::tabIsRemoved, this, &Tabbar::handleTabIsRemoved);
     connect(this, &DTabBar::tabReleaseRequested, this, &Tabbar::handleTabReleased);
     connect(this, &DTabBar::dragActionChanged, this, &Tabbar::handleDragActionChanged);
 }
@@ -289,7 +285,46 @@ void Tabbar::handleDragActionChanged(Qt::DropAction action)
 
 bool Tabbar::eventFilter(QObject *, QEvent *event)
 {
-    if (event->type() == QEvent::DragEnter) {
+    if (event->type() == QEvent::MouseButtonPress) {
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
+
+        if (mouseEvent->button() == Qt::RightButton) {
+            QPoint position = mouseEvent->pos();
+            m_rightClickTab = -1;
+
+            for (int i = 0; i < count(); i++) {
+                if (tabRect(i).contains(position)) {
+                    m_rightClickTab = i;
+                    break;
+                }
+            }
+
+            // popup right menu on tab.
+            if (m_rightClickTab >= 0) {
+                m_rightMenu = new QMenu;
+                m_rightMenu->setStyle(QStyleFactory::create("dlight"));
+
+                m_closeTabAction = new QAction(tr("Close tab"), this);
+                m_closeOtherTabAction = new QAction(tr("Close other tabs"), this);
+
+                connect(m_closeTabAction, &QAction::triggered, this, [=] {
+                    Q_EMIT tabCloseRequested(m_rightClickTab);
+                });
+
+                connect(m_closeOtherTabAction, &QAction::triggered, this, [=] {
+                    closeOtherTabsExceptFile(fileAt(m_rightClickTab));
+                });
+
+                m_rightMenu->addAction(m_closeTabAction);
+                m_rightMenu->addAction(m_closeOtherTabAction);
+
+                m_rightMenu->exec(mapToGlobal(position));
+
+                return true;
+            }
+        }
+
+    } else if (event->type() == QEvent::DragEnter) {
         const QDragEnterEvent *e = static_cast<QDragEnterEvent*>(event);
         const QMimeData* mimeData = e->mimeData();
 
@@ -326,6 +361,15 @@ void Tabbar::handleTabReleased(int index)
 
     // remove buffer from window, not delete.
     window->removeBuffer(tabPath, false);
+}
+
+void Tabbar::handleTabIsRemoved(int index)
+{
+    const QString filePath = m_tabPaths.at(index);
+    Window *window = static_cast<Window *>(this->window());
+
+    m_tabPaths.removeAt(index);
+    window->removeBuffer(filePath, false);
 }
 
 void Tabbar::handleTabDroped(int index, Qt::DropAction, QObject *target)

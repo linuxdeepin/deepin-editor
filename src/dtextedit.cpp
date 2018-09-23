@@ -1723,7 +1723,10 @@ void DTextEdit::highlightCurrentLine()
 void DTextEdit::updateLineNumber()
 {
     // Update line number painter.
-    lineNumberArea->setFixedWidth(QString("%1").arg(blockCount()).size() * fontMetrics().width("9") + m_lineNumberPaddingX * 2);
+
+    int blockSize = QString::number(blockCount()).size();
+
+    lineNumberArea->setFixedWidth(blockSize * fontMetrics().width('9') + m_lineNumberPaddingX * 4);
 }
 
 void DTextEdit::handleScrollFinish()

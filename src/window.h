@@ -170,7 +170,7 @@ private:
     Settings *m_settings;
     DWindowManager *m_windowManager;
 
-    QMap<QString, EditorBuffer *> m_editorMap;
+    QMap<QString, EditorBuffer *> m_buffers;
 
     QMenu *m_menu;
 

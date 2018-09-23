@@ -21,6 +21,7 @@
 #define TABBAR_H
 
 #include <DTabBar>
+#include <QMenu>
 
 DWIDGET_USE_NAMESPACE
 
@@ -68,6 +69,7 @@ protected:
 private:
     void handleTabMoved(int fromIndex, int toIndex);
     void handleTabReleased(int index);
+    void handleTabIsRemoved(int index);
     void handleTabDroped(int index, Qt::DropAction, QObject *target);
 
 private:
@@ -76,6 +78,11 @@ private:
     QString m_backgroundEndColor;
     QString m_dndStartColor;
     QString m_dndEndColor;
+
+    QAction *m_closeOtherTabAction;
+    QAction *m_closeTabAction;
+    QMenu *m_rightMenu;
+    int m_rightClickTab;
 };
 
 #endif
