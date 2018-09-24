@@ -63,9 +63,9 @@ DTextEdit::DTextEdit(QPlainTextEdit *parent)
     : QPlainTextEdit(parent),
       m_highlighter(new KSyntaxHighlighting::SyntaxHighlighter(document()))
 {
-    viewport()->installEventFilter(this);
-    viewport()->setCursor(Qt::IBeamCursor);
+    lineNumberArea = new LineNumberArea(this);
 
+    viewport()->installEventFilter(this);
     setWordWrapMode(QTextOption::WordWrap);
     setLineWrapMode(WidgetWidth);
 
@@ -74,8 +74,6 @@ DTextEdit::DTextEdit(QPlainTextEdit *parent)
     setFocusPolicy(Qt::StrongFocus);
 
     // Init widgets.
-    lineNumberArea = new LineNumberArea(this);
-
     connect(this, &QPlainTextEdit::updateRequest, this, &DTextEdit::handleUpdateRequest);
     connect(this, &QPlainTextEdit::textChanged, this, &DTextEdit::updateLineNumber, Qt::QueuedConnection);
     connect(this, &QPlainTextEdit::cursorPositionChanged, this, &DTextEdit::highlightCurrentLine, Qt::QueuedConnection);
@@ -1623,49 +1621,7 @@ void DTextEdit::contextMenuEvent(QContextMenuEvent *event)
     selectionCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
     QString text = selectionCursor.selectedText();
 
-    // syntax selection
-    QActionGroup *hlActionGroup = new QActionGroup(m_rightMenu);
-    hlActionGroup->setExclusive(true);
-
-    QMenu *hlGroupMenu = m_rightMenu->addMenu(tr("Syntax"));
-    QAction *noHlAction = hlGroupMenu->addAction(tr("None"));
-
-    noHlAction->setCheckable(true);
-    hlActionGroup->addAction(noHlAction);
-    noHlAction->setChecked(!m_highlighter->definition().isValid());
-
-    QMenu *hlSubMenu = nullptr;
-    QString currentGroup;
-
-    for (const auto &def : m_repository.definitions()) {
-        if (def.isHidden()) {
-            continue;
-        }
-
-        if (currentGroup != def.section()) {
-            currentGroup = def.section();
-            hlSubMenu = hlGroupMenu->addMenu(def.translatedSection());
-        }
-
-        Q_ASSERT(hlSubMenu);
-        auto action = hlSubMenu->addAction(def.translatedName());
-        action->setCheckable(true);
-        action->setData(def.name());
-        hlActionGroup->addAction(action);
-
-        if (def.name() == m_highlighter->definition().name()) {
-            action->setChecked(true);
-        }
-    }
-
-    connect(hlActionGroup, &QActionGroup::triggered, this, [this] (QAction *action) {
-        const auto defName = action->data().toString();
-        const auto def = m_repository.definitionForName(defName);
-        m_highlighter->setDefinition(def);
-    });
-
     // init base.
-
     bool isBlankLine = text.trimmed().isEmpty();
 
     if (m_canUndo) {
@@ -1708,6 +1664,47 @@ void DTextEdit::contextMenuEvent(QContextMenuEvent *event)
     if (!wordAtCursor.isEmpty()) {
         m_rightMenu->addMenu(m_convertCaseMenu);
     }
+
+    // syntax selection
+    QActionGroup *hlActionGroup = new QActionGroup(m_rightMenu);
+    hlActionGroup->setExclusive(true);
+
+    QMenu *hlGroupMenu = m_rightMenu->addMenu(tr("Syntax"));
+    QAction *noHlAction = hlGroupMenu->addAction(tr("None"));
+
+    noHlAction->setCheckable(true);
+    hlActionGroup->addAction(noHlAction);
+    noHlAction->setChecked(!m_highlighter->definition().isValid());
+
+    QMenu *hlSubMenu = nullptr;
+    QString currentGroup;
+
+    for (const auto &def : m_repository.definitions()) {
+        if (def.isHidden()) {
+            continue;
+        }
+
+        if (currentGroup != def.section()) {
+            currentGroup = def.section();
+            hlSubMenu = hlGroupMenu->addMenu(def.translatedSection());
+        }
+
+        Q_ASSERT(hlSubMenu);
+        auto action = hlSubMenu->addAction(def.translatedName());
+        action->setCheckable(true);
+        action->setData(def.name());
+        hlActionGroup->addAction(action);
+
+        if (def.name() == m_highlighter->definition().name()) {
+            action->setChecked(true);
+        }
+    }
+
+    connect(hlActionGroup, &QActionGroup::triggered, this, [this] (QAction *action) {
+        const auto defName = action->data().toString();
+        const auto def = m_repository.definitionForName(defName);
+        m_highlighter->setDefinition(def);
+    });
 
     // intelligent judge whether to support comments.
     const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());
