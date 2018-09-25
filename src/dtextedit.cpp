@@ -1599,7 +1599,7 @@ void DTextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
                 painter.setPen(m_lineNumbersColor);
             }
             painter.drawText(0,
-                             top,
+                             top + 2,
                              lineNumberArea->width(),
                              blockBoundingRect(block).height(),
                              Qt::AlignTop | Qt::AlignHCenter,
@@ -1673,7 +1673,7 @@ void DTextEdit::contextMenuEvent(QContextMenuEvent *event)
     QActionGroup *hlActionGroup = new QActionGroup(m_rightMenu);
     hlActionGroup->setExclusive(true);
 
-    QMenu *hlGroupMenu = m_rightMenu->addMenu(tr("Syntax"));
+    QMenu *hlGroupMenu = m_rightMenu->addMenu(tr("Highlight"));
     QAction *noHlAction = hlGroupMenu->addAction(tr("None"));
 
     noHlAction->setCheckable(true);
