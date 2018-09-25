@@ -1428,6 +1428,10 @@ void DTextEdit::keyPressEvent(QKeyEvent *keyEvent)
             copyLines();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglereadonlymode")) {
             toggleReadOnlyMode();
+        } else {
+            // If press another key
+            // the main window does not receive
+            keyEvent->ignore();
         }
     } else {
         if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "indentline")) {
@@ -2379,6 +2383,10 @@ void DTextEdit::dragEnterEvent(QDragEnterEvent *event)
 
 void DTextEdit::dragMoveEvent(QDragMoveEvent *event)
 {
+    if (m_readOnlyMode) {
+        return;
+    }
+
     const QMimeData *data = event->mimeData();
 
     if (data->hasUrls()) {
@@ -2394,7 +2402,7 @@ void DTextEdit::dropEvent(QDropEvent *event)
 
     if (data->hasUrls() && data->urls().first().isLocalFile()) {
         qobject_cast<Window *>(this->window())->requestDropEvent(event);
-    } else if (data->hasText()) {
+    } else if (data->hasText() && !m_readOnlyMode) {
         QPlainTextEdit::dropEvent(event);
     }
 }
