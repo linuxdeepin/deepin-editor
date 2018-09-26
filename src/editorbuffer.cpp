@@ -20,6 +20,7 @@
 #include "editorbuffer.h"
 #include "utils.h"
 #include "fileloadthread.h"
+#include <unistd.h>
 
 #include <QCoreApplication>
 #include <QApplication>
@@ -109,6 +110,9 @@ bool EditorBuffer::saveFile(const QString &encode, const QString &newline)
     if (!saveFile.flush()) {
         return false;
     }
+
+    // ensure that the file is written to disk
+    fsync(saveFile.handle());
 
     // did save work?
     // only finalize if stream status == OK
