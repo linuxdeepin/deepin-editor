@@ -32,7 +32,7 @@
 EditorBuffer::EditorBuffer(QWidget *parent)
     : QWidget(parent),
       m_layout(new QHBoxLayout(this)),
-      m_textEditor(new DTextEdit)
+      m_textEdit(new DTextEdit)
 {
     // Init.
     m_autoSaveInternal = 1000;
@@ -42,13 +42,13 @@ EditorBuffer::EditorBuffer(QWidget *parent)
     // Init layout and widgets.
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->setSpacing(0);
-    m_layout->addWidget(m_textEditor->lineNumberArea);
-    m_layout->addWidget(m_textEditor);
+    m_layout->addWidget(m_textEdit->lineNumberArea);
+    m_layout->addWidget(m_textEdit);
 }
 
 EditorBuffer::~EditorBuffer()
 {
-    delete m_textEditor;
+    delete m_textEdit;
 }
 
 void EditorBuffer::openFile(const QString &filepath)
@@ -74,14 +74,14 @@ bool EditorBuffer::saveFile(const QString &encode, const QString &newline)
     m_newline = newline;
 
     // use QSaveFile for safely save files.
-    QSaveFile saveFile(m_textEditor->filepath);
+    QSaveFile saveFile(m_textEdit->filepath);
     saveFile.setDirectWriteFallback(true);
 
     if (!saveFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         return false;
     }
 
-    QFile file(m_textEditor->filepath);
+    QFile file(m_textEdit->filepath);
     if (!file.open(QIODevice::WriteOnly)) {
         return false;
     }
@@ -98,7 +98,7 @@ bool EditorBuffer::saveFile(const QString &encode, const QString &newline)
 
     QTextStream stream(&file);
     stream.setCodec(encode.toUtf8().data());
-    stream << m_textEditor->toPlainText().replace(newlineRegex, fileNewline);
+    stream << m_textEdit->toPlainText().replace(newlineRegex, fileNewline);
 
     // flush stream.
     stream.flush();
@@ -120,12 +120,12 @@ bool EditorBuffer::saveFile(const QString &encode, const QString &newline)
 
     // update status.
     if (ok) {
-        m_textEditor->setModified(false);
+        m_textEdit->setModified(false);
         m_isLoadFinished = true;
         m_isWritable = true;
     }
 
-    qDebug() << "Saved file:" << m_textEditor->filepath
+    qDebug() << "Saved file:" << m_textEdit->filepath
              << "with codec:" << m_fileEncode
              << "Line Endings:" << m_newline
              << "State:" << ok;
@@ -140,13 +140,13 @@ bool EditorBuffer::saveFile()
 
 void EditorBuffer::updatePath(const QString &file)
 {
-    m_textEditor->filepath = file;
+    m_textEdit->filepath = file;
     detectNewline();
 }
 
 void EditorBuffer::detectNewline()
 {
-    QFile file(m_textEditor->filepath);
+    QFile file(m_textEdit->filepath);
 
     if (!file.open(QIODevice::ReadOnly)) {
         return;
@@ -174,13 +174,15 @@ void EditorBuffer::handleFileLoadFinished(const QByteArray &encode, const QStrin
     m_fileEncode = encode;
 
     // set text.
-    m_textEditor->document()->moveToThread(QCoreApplication::instance()->thread());
-    m_textEditor->document()->setPlainText(content);
+    m_textEdit->blockSignals(true);
+    m_textEdit->setPlainText(content);
+    m_textEdit->blockSignals(false);
 
     // update status.
-    m_textEditor->setModified(false);
-    m_textEditor->moveToStart();
+    m_textEdit->setModified(false);
+    m_textEdit->updateLineNumber();
+    m_textEdit->moveToStart();
 
     // load highlight.
-    QTimer::singleShot(100, this, [=] { m_textEditor->loadHighlighter(); });
+    QTimer::singleShot(100, this, [=] { m_textEdit->loadHighlighter(); });
 }

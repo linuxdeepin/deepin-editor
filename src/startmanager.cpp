@@ -117,7 +117,8 @@ void StartManager::openFilesInTab(QStringList files)
             }
             // Create new window with file if haven't window exist.
             else if (m_windows.size() == 0) {
-                createWindow(true)->addTab(file);
+                Window *window = createWindow(true);
+                QTimer::singleShot(50, [=] { window->addTab(file); });
 
                 qDebug() << "Open " << file << " with new window";
             }

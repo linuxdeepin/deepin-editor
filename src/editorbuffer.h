@@ -42,7 +42,7 @@ public:
     bool isLoadFinished() { return m_isLoadFinished; }
     bool isWritable() { return m_isWritable; }
 
-    DTextEdit *textEditor() { return m_textEditor; }
+    DTextEdit *textEditor() { return m_textEdit; }
 
 private:
     void detectNewline();
@@ -50,7 +50,7 @@ private:
 
 private:
     QHBoxLayout *m_layout;
-    DTextEdit *m_textEditor;
+    DTextEdit *m_textEdit;
     QByteArray m_fileEncode;
 
     bool m_saveFinish;

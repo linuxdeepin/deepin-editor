@@ -46,8 +46,11 @@ void FileLoadThread::run()
         // reads all remaining data from the file.
         QByteArray fileContent = file.readAll();
 
+        QByteArray detectArray = fileContent;
+        detectArray.truncate(fileContent.size() / 10);
+
         // read the encode.
-        QByteArray encode = Utils::detectEncode(fileContent, m_filePath);
+        QByteArray encode = Utils::detectEncode(detectArray, m_filePath);
 
         QTextStream stream(&fileContent);
         stream.setCodec(encode);
