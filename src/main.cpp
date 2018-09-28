@@ -21,6 +21,7 @@
  */
 
 #include "startmanager.h"
+#include "environments.h"
 #include "utils.h"
 #include "window.h"
 #include "urlinfo.h"
@@ -54,7 +55,7 @@ int main(int argc, char *argv[])
     app.setOrganizationName("deepin");
     app.setApplicationName("deepin-editor");
     app.setApplicationDisplayName(QObject::tr("Deepin Editor"));
-    app.setApplicationVersion(DApplication::buildVersion("1.0"));
+    app.setApplicationVersion(VERSION);
     app.setProductIcon(QIcon(Utils::getQrcPath("logo_96.svg")));
     app.setWindowIcon(QIcon(Utils::getQrcPath("logo_96.svg")));
     app.setProductName(DApplication::translate("MainWindow", "Deepin Editor"));

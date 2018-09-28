@@ -23,7 +23,7 @@
 #ifndef DTEXTEDIT_H
 #define DTEXTEDIT_H
 
-#include "Repository"
+#include <KF5/KSyntaxHighlighting/repository.h>
 #include "uncommentselection.h"
 
 #include "settings.h"

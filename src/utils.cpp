@@ -185,8 +185,8 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
     KEncodingProber::ProberType proberType = KEncodingProber::Universal;
 
     if (mimetype_name == QStringLiteral("application/xml")
-            || mimetype_name == QStringLiteral("text/html")
-            || mimetype_name == QStringLiteral("application/xhtml+xml")) {
+        || mimetype_name == QStringLiteral("text/html")
+        || mimetype_name == QStringLiteral("application/xhtml+xml")) {
         const QString &_data = QString::fromLatin1(data);
         QRegularExpression pattern("<\\bmeta.+\\bcharset=(?'charset'\\S+?)\\s*['\"/>]");
 

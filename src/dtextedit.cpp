@@ -24,9 +24,9 @@
 #include "utils.h"
 #include "window.h"
 
-#include "Definition"
-#include "SyntaxHighlighter"
-#include "Theme"
+#include <KF5/KSyntaxHighlighting/definition.h>
+#include <KF5/KSyntaxHighlighting/syntaxhighlighter.h>
+#include <KF5/KSyntaxHighlighting/theme.h>
 
 #include <QTextDocumentFragment>
 #include <DDesktopServices>
