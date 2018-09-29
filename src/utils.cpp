@@ -458,7 +458,7 @@ QVariantMap Utils::getThemeMapFromPath(const QString &filepath)
 
 bool Utils::isMimeTypeSupport(const QString &filepath)
 {
-    auto mimeType = QMimeDatabase().mimeTypeForFile(filepath).name();
+    QString mimeType = QMimeDatabase().mimeTypeForFile(filepath).name();
     qDebug() << "detect mime type: " << filepath << mimeType;
 
     if (mimeType.startsWith("text/")) {

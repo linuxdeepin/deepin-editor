@@ -170,6 +170,8 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QString
     // restore mouse style.
     // QApplication::restoreOverrideCursor();
 
+    qDebug() << "load finished: " << m_textEdit->filepath << ", " << encode;
+
     m_isLoadFinished = true;
     m_fileEncode = encode;
 

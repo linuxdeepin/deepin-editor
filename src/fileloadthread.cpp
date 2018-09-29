@@ -45,9 +45,12 @@ void FileLoadThread::run()
     if (file.open(QIODevice::ReadOnly)) {
         // reads all remaining data from the file.
         QByteArray fileContent = file.readAll();
-
         QByteArray detectArray = fileContent;
-        detectArray.truncate(fileContent.size() / 10);
+
+        if (fileContent.size() > 1000) {
+            // use fixed byte detection encoding.
+            detectArray.truncate(1000);
+        }
 
         // read the encode.
         QByteArray encode = Utils::detectEncode(detectArray, m_filePath);
