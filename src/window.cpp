@@ -59,12 +59,12 @@ Window::Window(DMainWindow *parent)
       m_settings(new Settings(this)),
       m_windowManager(new DWindowManager),
       m_menu(new QMenu),
-      m_titlebarStyleSheet(titlebar()->styleSheet()),
-      m_themePath(m_settings->settings->option("advance.editor.theme")->value().toString()),
-      m_windowShowFlag(true)
+      m_titlebarStyleSheet(titlebar()->styleSheet())
 {
     m_blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
+    m_themePath = m_settings->settings->option("advance.editor.theme")->value().toString();
     m_rootSaveDBus = new DBusDaemon::dbus("com.deepin.editor.daemon", "/", QDBusConnection::systemBus(), this);
+    m_windowShowFlag = true;
 
     // Init.
     installEventFilter(this);
@@ -246,13 +246,13 @@ void Window::addTab(const QString &filepath, bool activeTab)
         if (m_tabbar->indexOf(filepath) == -1) {
             m_tabbar->addTab(filepath, QFileInfo(filepath).fileName());
 
-            if (!m_buffers.contains(filepath)) {
-                EditorBuffer *buffer = createEditor();
-                buffer->openFile(filepath);
+            if (!m_wrappers.contains(filepath)) {
+                EditWrapper *wrapper = createEditor();
+                wrapper->openFile(filepath);
 
-                m_buffers[filepath] = buffer;
+                m_wrappers[filepath] = wrapper;
 
-                showNewEditor(buffer);
+                showNewEditor(wrapper);
             }
         }
 
@@ -271,35 +271,35 @@ void Window::addTab(const QString &filepath, bool activeTab)
     }
 }
 
-void Window::addTabWithBuffer(EditorBuffer *buffer, const QString &filepath, const QString &tabName, int index)
+void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, const QString &tabName, int index)
 {
     if (index == -1) {
         index = m_tabbar->currentIndex() + 1;
     }
 
     m_tabbar->addTabWithIndex(index, filepath, tabName);
-    m_buffers[filepath] = buffer;
-    buffer->updatePath(filepath);
+    m_wrappers[filepath] = wrapper;
+    wrapper->updatePath(filepath);
 
-    showNewEditor(buffer);
+    showNewEditor(wrapper);
 }
 
 void Window::closeTab()
 {
     const QString &filePath = m_tabbar->currentPath();
     const bool isBlankFile = QFileInfo(filePath).dir().absolutePath() == m_blankFileDir;
-    EditorBuffer *buffer = m_buffers.value(filePath);
+    EditWrapper *wrapper = m_wrappers.value(filePath);
 
-    if (!buffer)  {
+    if (!wrapper)  {
         return;
     }
 
     // this property holds whether the document has been modified by the user
-    bool isModified = buffer->textEditor()->document()->isModified();
+    bool isModified = wrapper->textEditor()->document()->isModified();
 
     // document has been modified or unsaved draft document.
     // need to prompt whether to save.
-    if (isModified || (isBlankFile && !buffer->textEditor()->toPlainText().isEmpty())) {
+    if (isModified || (isBlankFile && !wrapper->textEditor()->toPlainText().isEmpty())) {
         DDialog *dialog = createSaveFileDialog(tr("Save File"), tr("Do you want to save this file?"));
 
         connect(dialog, &DDialog::buttonClicked, this, [=] (int index) {
@@ -314,13 +314,13 @@ void Window::closeTab()
                     QFile(filePath).remove();
                 }
 
-                removeBuffer(filePath, true);
+                removeWrapper(filePath, true);
             }
             else if (index == 2) {
                 // may to press CANEL button in the save dialog.
                 if (saveFile()) {
                     m_tabbar->closeCurrentTab();
-                    removeBuffer(filePath, true);
+                    removeWrapper(filePath, true);
                 }
             }
 
@@ -340,7 +340,7 @@ void Window::closeTab()
             QFile::remove(filePath);
         }
 
-        removeBuffer(filePath, true);
+        removeWrapper(filePath, true);
         focusActiveEditor();
     }
 }
@@ -352,63 +352,63 @@ void Window::restoreTab()
     }
 }
 
-EditorBuffer* Window::createEditor()
+EditWrapper* Window::createEditor()
 {
-    EditorBuffer *buffer = new EditorBuffer();
-    buffer->textEditor()->setThemeWithPath(m_themePath);
-    buffer->textEditor()->setSettings(m_settings);
-    buffer->textEditor()->setTabSpaceNumber(m_settings->settings->option("advance.editor.tabspacenumber")->value().toInt());
-    buffer->textEditor()->setFontFamily(m_settings->settings->option("base.font.family")->value().toString());
-    buffer->textEditor()->setModified(false);
-    setFontSizeWithConfig(buffer);
+    EditWrapper *wrapper = new EditWrapper();
+    wrapper->textEditor()->setThemeWithPath(m_themePath);
+    wrapper->textEditor()->setSettings(m_settings);
+    wrapper->textEditor()->setTabSpaceNumber(m_settings->settings->option("advance.editor.tabspacenumber")->value().toInt());
+    wrapper->textEditor()->setFontFamily(m_settings->settings->option("base.font.family")->value().toString());
+    wrapper->textEditor()->setModified(false);
+    setFontSizeWithConfig(wrapper);
 
-    connect(buffer->textEditor(), &DTextEdit::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);
-    connect(buffer->textEditor(), &DTextEdit::clickReplaceAction, this, &Window::popupReplaceBar, Qt::QueuedConnection);
-    connect(buffer->textEditor(), &DTextEdit::clickJumpLineAction, this, &Window::popupJumpLineBar, Qt::QueuedConnection);
-    connect(buffer->textEditor(), &DTextEdit::clickFullscreenAction, this, &Window::toggleFullscreen, Qt::QueuedConnection);
-    connect(buffer->textEditor(), &DTextEdit::popupNotify, this, &Window::showNotify, Qt::QueuedConnection);
-    connect(buffer->textEditor(), &DTextEdit::pressEsc, this, &Window::removeBottomWidget, Qt::QueuedConnection);
+    connect(wrapper->textEditor(), &DTextEdit::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);
+    connect(wrapper->textEditor(), &DTextEdit::clickReplaceAction, this, &Window::popupReplaceBar, Qt::QueuedConnection);
+    connect(wrapper->textEditor(), &DTextEdit::clickJumpLineAction, this, &Window::popupJumpLineBar, Qt::QueuedConnection);
+    connect(wrapper->textEditor(), &DTextEdit::clickFullscreenAction, this, &Window::toggleFullscreen, Qt::QueuedConnection);
+    connect(wrapper->textEditor(), &DTextEdit::popupNotify, this, &Window::showNotify, Qt::QueuedConnection);
+    connect(wrapper->textEditor(), &DTextEdit::pressEsc, this, &Window::removeBottomWidget, Qt::QueuedConnection);
 
-    return buffer;
+    return wrapper;
 }
 
-EditorBuffer* Window::currentBuffer()
+EditWrapper* Window::currentWrapper()
 {
-    return m_buffers.value(m_tabbar->currentPath());
+    return m_wrappers.value(m_tabbar->currentPath());
 }
 
-EditorBuffer* Window::buffer(const QString &filePath)
+EditWrapper* Window::wrapper(const QString &filePath)
 {
-    return m_buffers.value(filePath);
+    return m_wrappers.value(filePath);
 }
 
 DTextEdit* Window::getTextEditor(const QString &filepath)
 {
-    return m_buffers.value(filepath)->textEditor();
+    return m_wrappers.value(filepath)->textEditor();
 }
 
 void Window::focusActiveEditor()
 {
     if (m_tabbar->count() > 0) {
-        currentBuffer()->textEditor()->setFocus();
+        currentWrapper()->textEditor()->setFocus();
     }
 }
 
-void Window::removeBuffer(const QString &filePath, bool isDelete)
+void Window::removeWrapper(const QString &filePath, bool isDelete)
 {
-    if (m_buffers.contains(filePath)) {
-        EditorBuffer *buffer = m_buffers.value(filePath);
+    if (m_wrappers.contains(filePath)) {
+        EditWrapper *wrapper = m_wrappers.value(filePath);
 
-        m_editorWidget->removeWidget(buffer);
-        m_buffers.remove(filePath);
+        m_editorWidget->removeWidget(wrapper);
+        m_wrappers.remove(filePath);
 
         if (isDelete) {
-            buffer->deleteLater();
+            wrapper->deleteLater();
         }
     }
 
     // Exit window after close all tabs.
-    if (m_buffers.isEmpty()) {
+    if (m_wrappers.isEmpty()) {
         DMainWindow::close();
     }
 }
@@ -557,7 +557,7 @@ bool Window::saveFile()
 
     // file not finish loadding cannot be saved
     // otherwise you will save the content of the empty.
-    if (!m_buffers[currentPath]->isLoadFinished() && !isBlankFile) {
+    if (!m_wrappers[currentPath]->isLoadFinished() && !isBlankFile) {
         showNotify(tr("File cannot be saved when loading"));
         return false;
     }
@@ -576,13 +576,13 @@ bool Window::saveFile()
         }
     }
     // save root file.
-    else if (!m_buffers[currentPath]->isWritable()) {
+    else if (!m_wrappers[currentPath]->isWritable()) {
         showNotify(QString(tr("You do not have permission to save %1")).arg(m_tabbar->currentName()));
         return false;
 
         const QString content = getTextEditor(currentPath)->toPlainText();
         bool saveResult = m_rootSaveDBus->saveFile(currentPath.toUtf8(), content.toUtf8(),
-                                                   m_buffers[currentPath]->fileEncode());
+                                                   m_wrappers[currentPath]->fileEncode());
 
         if (saveResult) {
             getTextEditor(currentPath)->setModified(false);
@@ -595,7 +595,7 @@ bool Window::saveFile()
     }
     // save normal file.
     else {
-        bool success = m_buffers.value(m_tabbar->currentPath())->saveFile();
+        bool success = m_wrappers.value(m_tabbar->currentPath())->saveFile();
 
         if (!success) {
             DDialog *dialog = createSaveFileDialog(tr("Unable to save the file"), tr("Do you want to save as another?"));
@@ -626,7 +626,7 @@ void Window::saveAsFile()
     if (filepath != "" && filepath != tabPath) {
         saveFileAsAnotherPath(tabPath, filepath, encode, newline, false);
     } else if (filepath == tabPath) {
-        m_buffers.value(filepath)->saveFile(encode, newline);
+        m_wrappers.value(filepath)->saveFile(encode, newline);
     }
 }
 
@@ -638,12 +638,12 @@ void Window::saveFileAsAnotherPath(const QString &fromPath, const QString &toPat
 
     m_tabbar->updateTab(m_tabbar->currentIndex(), toPath, QFileInfo(toPath).fileName());
 
-    m_buffers[toPath] = m_buffers.take(fromPath);
+    m_wrappers[toPath] = m_wrappers.take(fromPath);
 
-    m_buffers[toPath]->updatePath(toPath);
-    m_buffers[toPath]->saveFile(encode, newline);
+    m_wrappers[toPath]->updatePath(toPath);
+    m_wrappers[toPath]->saveFile(encode, newline);
 
-    currentBuffer()->textEditor()->loadHighlighter();
+    currentWrapper()->textEditor()->loadHighlighter();
 }
 
 void Window::decrementFontSize()
@@ -663,10 +663,10 @@ void Window::resetFontSize()
     m_settings->settings->option("base.font.size")->setValue(m_settings->defaultFontSize);
 }
 
-void Window::setFontSizeWithConfig(EditorBuffer *buffer)
+void Window::setFontSizeWithConfig(EditWrapper *wrapper)
 {
     int size = m_settings->settings->option("base.font.size")->value().toInt();
-    buffer->textEditor()->setFontSize(size);
+    wrapper->textEditor()->setFontSize(size);
 
     m_fontSize = size;
 }
@@ -675,7 +675,7 @@ void Window::popupFindBar()
 {
     if (m_findBar->isVisible()) {
         if (m_findBar->isFocus()) {
-            m_buffers.value(m_tabbar->currentPath())->textEditor()->setFocus();
+            m_wrappers.value(m_tabbar->currentPath())->textEditor()->setFocus();
         } else {
             m_findBar->focus();
         }
@@ -683,11 +683,11 @@ void Window::popupFindBar()
         addBottomWidget(m_findBar);
 
         QString tabPath = m_tabbar->currentPath();
-        EditorBuffer *buffer = currentBuffer();
-        QString text = buffer->textEditor()->textCursor().selectedText();
-        int row = buffer->textEditor()->getCurrentLine();
-        int column = buffer->textEditor()->getCurrentColumn();
-        int scrollOffset = buffer->textEditor()->getScrollOffset();
+        EditWrapper *wrapper = currentWrapper();
+        QString text = wrapper->textEditor()->textCursor().selectedText();
+        int row = wrapper->textEditor()->getCurrentLine();
+        int column = wrapper->textEditor()->getCurrentColumn();
+        int scrollOffset = wrapper->textEditor()->getScrollOffset();
 
         m_findBar->activeInput(text, tabPath, row, column, scrollOffset);
 
@@ -699,7 +699,7 @@ void Window::popupReplaceBar()
 {
     if (m_replaceBar->isVisible()) {
         if (m_replaceBar->isFocus()) {
-            m_buffers.value(m_tabbar->currentPath())->textEditor()->setFocus();
+            m_wrappers.value(m_tabbar->currentPath())->textEditor()->setFocus();
         } else {
             m_replaceBar->focus();
         }
@@ -707,11 +707,11 @@ void Window::popupReplaceBar()
         addBottomWidget(m_replaceBar);
 
         QString tabPath = m_tabbar->currentPath();
-        EditorBuffer *buffer = currentBuffer();
-        QString text = buffer->textEditor()->textCursor().selectedText();
-        int row = buffer->textEditor()->getCurrentLine();
-        int column = buffer->textEditor()->getCurrentColumn();
-        int scrollOffset = buffer->textEditor()->getScrollOffset();
+        EditWrapper *wrapper = currentWrapper();
+        QString text = wrapper->textEditor()->textCursor().selectedText();
+        int row = wrapper->textEditor()->getCurrentLine();
+        int column = wrapper->textEditor()->getCurrentColumn();
+        int scrollOffset = wrapper->textEditor()->getScrollOffset();
 
         m_replaceBar->activeInput(text, tabPath, row, column, scrollOffset);
 
@@ -723,18 +723,18 @@ void Window::popupJumpLineBar()
 {
     if (m_jumpLineBar->isVisible()) {
         if (m_jumpLineBar->isFocus()) {
-            QTimer::singleShot(0, m_buffers.value(m_tabbar->currentPath())->textEditor(), SLOT(setFocus()));
+            QTimer::singleShot(0, m_wrappers.value(m_tabbar->currentPath())->textEditor(), SLOT(setFocus()));
         } else {
             m_jumpLineBar->focus();
         }
     } else {
         QString tabPath = m_tabbar->currentPath();
-        EditorBuffer *buffer = currentBuffer();
-        QString text = buffer->textEditor()->textCursor().selectedText();
-        int row = buffer->textEditor()->getCurrentLine();
-        int column = buffer->textEditor()->getCurrentColumn();
-        int count = buffer->textEditor()->blockCount();
-        int scrollOffset = buffer->textEditor()->getScrollOffset();
+        EditWrapper *wrapper = currentWrapper();
+        QString text = wrapper->textEditor()->textCursor().selectedText();
+        int row = wrapper->textEditor()->getCurrentLine();
+        int column = wrapper->textEditor()->getCurrentColumn();
+        int count = wrapper->textEditor()->blockCount();
+        int scrollOffset = wrapper->textEditor()->getScrollOffset();
 
         m_jumpLineBar->activeInput(tabPath, row, column, count, scrollOffset);
     }
@@ -770,12 +770,12 @@ const QStringList Window::getEncodeList()
 
 void Window::remberPositionSave()
 {
-    EditorBuffer *buffer = currentBuffer();
+    EditWrapper *wrapper = currentWrapper();
 
     m_remberPositionFilePath = m_tabbar->currentPath();
-    m_remberPositionRow = buffer->textEditor()->getCurrentLine();
-    m_remberPositionColumn = buffer->textEditor()->getCurrentColumn();
-    m_remberPositionScrollOffset = buffer->textEditor()->getScrollOffset();
+    m_remberPositionRow = wrapper->textEditor()->getCurrentLine();
+    m_remberPositionColumn = wrapper->textEditor()->getCurrentColumn();
+    m_remberPositionScrollOffset = wrapper->textEditor()->getScrollOffset();
 }
 
 void Window::remberPositionRestore()
@@ -784,28 +784,28 @@ void Window::remberPositionRestore()
         return;
     }
 
-    if (m_buffers.contains(m_remberPositionFilePath)) {
+    if (m_wrappers.contains(m_remberPositionFilePath)) {
         const QString &filePath = m_remberPositionFilePath;
         const int &scrollOffset = m_remberPositionScrollOffset;
         const int &row = m_remberPositionRow;
         const int &column = m_remberPositionColumn;
 
         activeTab(m_tabbar->indexOf(m_remberPositionFilePath));
-        m_buffers.value(filePath)->textEditor()->scrollToLine(scrollOffset, row, column);
+        m_wrappers.value(filePath)->textEditor()->scrollToLine(scrollOffset, row, column);
     }
 }
 
 void Window::updateFont(const QString &fontName)
 {
-    for (EditorBuffer *buffer : m_buffers.values()) {
-        buffer->textEditor()->setFontFamily(fontName);
+    for (EditWrapper *wrapper : m_wrappers.values()) {
+        wrapper->textEditor()->setFontFamily(fontName);
     }
 }
 
 void Window::updateFontSize(int size)
 {
-    for (EditorBuffer *buffer : m_buffers.values()) {
-        buffer->textEditor()->setFontSize(size);
+    for (EditWrapper *wrapper : m_wrappers.values()) {
+        wrapper->textEditor()->setFontSize(size);
     }
 
     m_fontSize = size;
@@ -813,8 +813,8 @@ void Window::updateFontSize(int size)
 
 void Window::updateTabSpaceNumber(int number)
 {
-    for (EditorBuffer *buffer : m_buffers.values()) {
-        buffer->textEditor()->setTabSpaceNumber(number);
+    for (EditWrapper *wrapper : m_wrappers.values()) {
+        wrapper->textEditor()->setTabSpaceNumber(number);
     }
 }
 
@@ -839,16 +839,16 @@ void Window::closeEvent(QCloseEvent *e)
 {
     e->ignore();
 
-    QList<EditorBuffer *> needSaveList;
-    for (EditorBuffer *buffer : m_buffers) {
+    QList<EditWrapper *> needSaveList;
+    for (EditWrapper *wrapper : m_wrappers) {
         // save all the draft documents.
-        if (QFileInfo(buffer->textEditor()->filepath).dir().absolutePath() == m_blankFileDir) {
-            buffer->saveFile();
+        if (QFileInfo(wrapper->textEditor()->filepath).dir().absolutePath() == m_blankFileDir) {
+            wrapper->saveFile();
             continue;
         }
 
-        if (buffer->textEditor()->document()->isModified()) {
-            needSaveList << buffer;
+        if (wrapper->textEditor()->document()->isModified()) {
+            needSaveList << wrapper;
         }
     }
 
@@ -860,8 +860,8 @@ void Window::closeEvent(QCloseEvent *e)
 
             if (index == 2) {
                 // save all the files.
-                for (EditorBuffer *buffer : needSaveList) {
-                    buffer->saveFile();
+                for (EditWrapper *wrapper : needSaveList) {
+                    wrapper->saveFile();
                 }
             }
         });
@@ -1021,15 +1021,15 @@ void Window::addBlankTab(const QString &blankFile)
     int blankFileIndex = getBlankFileIndex();
 
     m_tabbar->addTab(blankTabPath, tr("Blank document %1").arg(blankFileIndex));
-    EditorBuffer *buffer = createEditor();
-    buffer->updatePath(blankTabPath);
+    EditWrapper *wrapper = createEditor();
+    wrapper->updatePath(blankTabPath);
 
     if (!blankFile.isEmpty() && Utils::fileExists(blankFile)) {
-        buffer->openFile(blankFile);
+        wrapper->openFile(blankFile);
     }
 
-    m_buffers[blankTabPath] = buffer;
-    showNewEditor(buffer);
+    m_wrappers[blankTabPath] = wrapper;
+    showNewEditor(wrapper);
 }
 
 void Window::handleTabCloseRequested(int index)
@@ -1048,27 +1048,27 @@ void Window::handleCurrentChanged(const int &index)
         m_replaceBar->hide();
     }
 
-    for (auto buffer : m_buffers.values()) {
-        buffer->textEditor()->removeKeywords();
+    for (auto wrapper : m_wrappers.values()) {
+        wrapper->textEditor()->removeKeywords();
     }
 
     const QString &filepath = m_tabbar->fileAt(index);
 
-    if (m_buffers.contains(filepath)) {
-        EditorBuffer *buffer = m_buffers.value(filepath);
-        buffer->textEditor()->setFocus();
-        m_editorWidget->setCurrentWidget(buffer);
+    if (m_wrappers.contains(filepath)) {
+        EditWrapper *wrapper = m_wrappers.value(filepath);
+        wrapper->textEditor()->setFocus();
+        m_editorWidget->setCurrentWidget(wrapper);
     }
 }
 
 void Window::handleJumpLineBarExit()
 {
-    QTimer::singleShot(0, currentBuffer()->textEditor(), SLOT(setFocus()));
+    QTimer::singleShot(0, currentWrapper()->textEditor(), SLOT(setFocus()));
 }
 
 void Window::handleJumpLineBarJumpToLine(const QString &filepath, int line, bool focusEditor)
 {
-    if (m_buffers.contains(filepath)) {
+    if (m_wrappers.contains(filepath)) {
         getTextEditor(filepath)->jumpToLine(line, true);
 
         if (focusEditor) {
@@ -1079,75 +1079,75 @@ void Window::handleJumpLineBarJumpToLine(const QString &filepath, int line, bool
 
 void Window::handleBackToPosition(const QString &file, int row, int column, int scrollOffset)
 {
-    if (m_buffers.contains(file)) {
-        m_buffers.value(file)->textEditor()->scrollToLine(scrollOffset, row, column);
+    if (m_wrappers.contains(file)) {
+        m_wrappers.value(file)->textEditor()->scrollToLine(scrollOffset, row, column);
 
-        QTimer::singleShot(0, m_buffers.value(file)->textEditor(), SLOT(setFocus()));
+        QTimer::singleShot(0, m_wrappers.value(file)->textEditor(), SLOT(setFocus()));
     }
 }
 
 void Window::handleFindNext()
 {
-    EditorBuffer *buffer = currentBuffer();
+    EditWrapper *wrapper = currentWrapper();
 
-    buffer->textEditor()->saveMarkStatus();
-    buffer->textEditor()->updateCursorKeywordSelection(buffer->textEditor()->getPosition(), true);
-    buffer->textEditor()->renderAllSelections();
-    buffer->textEditor()->restoreMarkStatus();
+    wrapper->textEditor()->saveMarkStatus();
+    wrapper->textEditor()->updateCursorKeywordSelection(wrapper->textEditor()->getPosition(), true);
+    wrapper->textEditor()->renderAllSelections();
+    wrapper->textEditor()->restoreMarkStatus();
 }
 
 void Window::handleFindPrev()
 {
-    EditorBuffer *buffer = currentBuffer();
+    EditWrapper *wrapper = currentWrapper();
 
-    buffer->textEditor()->saveMarkStatus();
-    buffer->textEditor()->updateCursorKeywordSelection(buffer->textEditor()->getPosition(), false);
-    buffer->textEditor()->renderAllSelections();
-    buffer->textEditor()->restoreMarkStatus();
+    wrapper->textEditor()->saveMarkStatus();
+    wrapper->textEditor()->updateCursorKeywordSelection(wrapper->textEditor()->getPosition(), false);
+    wrapper->textEditor()->renderAllSelections();
+    wrapper->textEditor()->restoreMarkStatus();
 }
 
 void Window::handleReplaceAll(const QString &replaceText, const QString &withText)
 {
-    EditorBuffer *buffer = currentBuffer();
+    EditWrapper *wrapper = currentWrapper();
 
-    buffer->textEditor()->replaceAll(replaceText, withText);
+    wrapper->textEditor()->replaceAll(replaceText, withText);
 }
 
 void Window::handleReplaceNext(const QString &replaceText, const QString &withText)
 {
-    EditorBuffer *buffer = currentBuffer();
+    EditWrapper *wrapper = currentWrapper();
 
-    buffer->textEditor()->replaceNext(replaceText, withText);
+    wrapper->textEditor()->replaceNext(replaceText, withText);
 }
 
 void Window::handleReplaceRest(const QString &replaceText, const QString &withText)
 {
-    EditorBuffer *buffer = currentBuffer();
+    EditWrapper *wrapper = currentWrapper();
 
-    buffer->textEditor()->replaceRest(replaceText, withText);
+    wrapper->textEditor()->replaceRest(replaceText, withText);
 }
 
 void Window::handleReplaceSkip()
 {
-    EditorBuffer *buffer = currentBuffer();
+    EditWrapper *wrapper = currentWrapper();
 
-    buffer->textEditor()->updateCursorKeywordSelection(buffer->textEditor()->getPosition(), true);
-    buffer->textEditor()->renderAllSelections();
+    wrapper->textEditor()->updateCursorKeywordSelection(wrapper->textEditor()->getPosition(), true);
+    wrapper->textEditor()->renderAllSelections();
 }
 
 void Window::handleRemoveSearchKeyword()
 {
-    currentBuffer()->textEditor()->removeKeywords();
+    currentWrapper()->textEditor()->removeKeywords();
 }
 
 void Window::handleUpdateSearchKeyword(QWidget *widget, const QString &file, const QString &keyword)
 {
-    if (file == m_tabbar->currentPath() && m_buffers.contains(file)) {
+    if (file == m_tabbar->currentPath() && m_wrappers.contains(file)) {
         // Highlight keyword in text editor.
-        m_buffers.value(file)->textEditor()->highlightKeyword(keyword, m_buffers.value(file)->textEditor()->getPosition());
+        m_wrappers.value(file)->textEditor()->highlightKeyword(keyword, m_wrappers.value(file)->textEditor()->getPosition());
 
         // Update input widget warning status along with keyword match situation.
-        bool findKeyword = m_buffers.value(file)->textEditor()->findKeywordForward(keyword);
+        bool findKeyword = m_wrappers.value(file)->textEditor()->findKeywordForward(keyword);
         bool emptyKeyword = keyword.trimmed().isEmpty();
 
         auto *findBarWidget = qobject_cast<FindBar*>(widget);
@@ -1221,10 +1221,10 @@ void Window::removeActiveReadonlyTab()
     QFile(tabPath).remove();
 }
 
-void Window::showNewEditor(EditorBuffer *buffer)
+void Window::showNewEditor(EditWrapper *wrapper)
 {
-    m_editorWidget->addWidget(buffer);
-    m_editorWidget->setCurrentWidget(buffer);
+    m_editorWidget->addWidget(wrapper);
+    m_editorWidget->setCurrentWidget(wrapper);
 }
 
 void Window::showNotify(const QString &message)
@@ -1265,8 +1265,8 @@ void Window::popupPrintDialog()
     QPrinter printer(QPrinter::HighResolution);
     QPrintPreviewDialog preview(&printer, this);
 
-    DTextEdit *buffer = currentBuffer()->textEditor();
-    const QString &filePath = buffer->filepath;
+    DTextEdit *wrapper = currentWrapper()->textEditor();
+    const QString &filePath = wrapper->filepath;
     const QString &fileDir = QFileInfo(filePath).dir().absolutePath();
 
     if (fileDir == m_blankFileDir) {
@@ -1278,7 +1278,7 @@ void Window::popupPrintDialog()
     printer.setOutputFormat(QPrinter::PdfFormat);
 
     connect(&preview, &QPrintPreviewDialog::paintRequested, this, [=] (QPrinter *printer) {
-        currentBuffer()->textEditor()->print(printer);
+        currentWrapper()->textEditor()->print(printer);
     });
 
     preview.exec();
@@ -1324,8 +1324,8 @@ void Window::loadTheme(const QString &path)
 
     changeTitlebarBackground(tabbarStartColor, tabbarEndColor);
 
-    for (EditorBuffer *buffer : m_buffers.values()) {
-        buffer->textEditor()->setThemeWithPath(path);
+    for (EditWrapper *wrapper : m_wrappers.values()) {
+        wrapper->textEditor()->setThemeWithPath(path);
     }
 
     // set background.

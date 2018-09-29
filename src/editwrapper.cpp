@@ -17,7 +17,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "editorbuffer.h"
+#include "editwrapper.h"
 #include "utils.h"
 #include "fileloadthread.h"
 #include <unistd.h>
@@ -29,7 +29,7 @@
 #include <QTimer>
 #include <QDir>
 
-EditorBuffer::EditorBuffer(QWidget *parent)
+EditWrapper::EditWrapper(QWidget *parent)
     : QWidget(parent),
       m_layout(new QHBoxLayout(this)),
       m_textEdit(new DTextEdit)
@@ -46,12 +46,12 @@ EditorBuffer::EditorBuffer(QWidget *parent)
     m_layout->addWidget(m_textEdit);
 }
 
-EditorBuffer::~EditorBuffer()
+EditWrapper::~EditWrapper()
 {
     delete m_textEdit;
 }
 
-void EditorBuffer::openFile(const QString &filepath)
+void EditWrapper::openFile(const QString &filepath)
 {
     // update file path.
     updatePath(filepath);
@@ -61,14 +61,14 @@ void EditorBuffer::openFile(const QString &filepath)
 
     // begin to load the file.
     FileLoadThread *thread = new FileLoadThread(filepath);
-    connect(thread, &FileLoadThread::loadFinished, this, &EditorBuffer::handleFileLoadFinished);
+    connect(thread, &FileLoadThread::loadFinished, this, &EditWrapper::handleFileLoadFinished);
     connect(thread, &FileLoadThread::finished, thread, &FileLoadThread::deleteLater);
 
     // start the thread.
     thread->start();
 }
 
-bool EditorBuffer::saveFile(const QString &encode, const QString &newline)
+bool EditWrapper::saveFile(const QString &encode, const QString &newline)
 {
     m_fileEncode = encode.toUtf8();
     m_newline = newline;
@@ -133,18 +133,18 @@ bool EditorBuffer::saveFile(const QString &encode, const QString &newline)
     return ok;
 }
 
-bool EditorBuffer::saveFile()
+bool EditWrapper::saveFile()
 {
     return saveFile(m_fileEncode, m_newline);
 }
 
-void EditorBuffer::updatePath(const QString &file)
+void EditWrapper::updatePath(const QString &file)
 {
     m_textEdit->filepath = file;
     detectNewline();
 }
 
-void EditorBuffer::detectNewline()
+void EditWrapper::detectNewline()
 {
     QFile file(m_textEdit->filepath);
 
@@ -165,7 +165,7 @@ void EditorBuffer::detectNewline()
     file.close();
 }
 
-void EditorBuffer::handleFileLoadFinished(const QByteArray &encode, const QString &content)
+void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QString &content)
 {
     // restore mouse style.
     // QApplication::restoreOverrideCursor();

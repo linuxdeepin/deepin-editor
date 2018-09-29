@@ -20,7 +20,7 @@
 #include "tabbar.h"
 #include "window.h"
 #include "utils.h"
-#include "editorbuffer.h"
+#include "editwrapper.h"
 #include "startmanager.h"
 
 #include <QApplication>
@@ -231,11 +231,11 @@ QMimeData* Tabbar::createMimeDataFromTab(int index, const QStyleOptionTab &optio
     const QString tabName = textAt(index);
 
     Window *window = static_cast<Window *>(this->window());
-    EditorBuffer *buffer = window->buffer(fileAt(index));
+    EditWrapper *wrapper = window->wrapper(fileAt(index));
     QMimeData *mimeData = new QMimeData;
 
     mimeData->setData("dedit/tabbar", tabName.toUtf8());
-    mimeData->setUserData(0, (QObjectUserData *)buffer);
+    mimeData->setUserData(0, (QObjectUserData *)wrapper);
     mimeData->removeFormat("text/plain");
 
     return mimeData;
@@ -245,10 +245,10 @@ void Tabbar::insertFromMimeDataOnDragEnter(int index, const QMimeData *source)
 {
     const QString tabName = QString::fromUtf8(source->data("dedit/tabbar"));
 
-    EditorBuffer *buffer = (EditorBuffer *)source->userData(0);
+    EditWrapper *wrapper = (EditWrapper *)source->userData(0);
     Window *window = static_cast<Window *>(this->window());
 
-    window->addTabWithBuffer(buffer, buffer->textEditor()->filepath, tabName, index);
+    window->addTabWithWrapper(wrapper, wrapper->textEditor()->filepath, tabName, index);
     window->focusActiveEditor();
 }
 
@@ -256,10 +256,10 @@ void Tabbar::insertFromMimeData(int index, const QMimeData *source)
 {
     const QString tabName = QString::fromUtf8(source->data("dedit/tabbar"));
 
-    EditorBuffer *buffer = (EditorBuffer *)source->userData(0);
+    EditWrapper *wrapper = (EditWrapper *)source->userData(0);
     Window *window = static_cast<Window *>(this->window());
 
-    window->addTabWithBuffer(buffer, buffer->textEditor()->filepath, tabName, index);
+    window->addTabWithWrapper(wrapper, wrapper->textEditor()->filepath, tabName, index);
     window->focusActiveEditor();
 }
 
@@ -354,13 +354,13 @@ void Tabbar::handleTabReleased(int index)
     const QString tabName = textAt(index);
 
     Window *window = static_cast<Window *>(this->window());
-    EditorBuffer *buffer = window->buffer(tabPath);
-    StartManager::instance()->createWindowFromBuffer(tabName, tabPath, buffer);
+    EditWrapper *wrapper = window->wrapper(tabPath);
+    StartManager::instance()->createWindowFromWrapper(tabName, tabPath, wrapper);
 
     closeTab(index);
 
-    // remove buffer from window, not delete.
-    window->removeBuffer(tabPath, false);
+    // remove wrapper from window, not delete.
+    window->removeWrapper(tabPath, false);
 }
 
 void Tabbar::handleTabIsRemoved(int index)
@@ -369,7 +369,7 @@ void Tabbar::handleTabIsRemoved(int index)
     Window *window = static_cast<Window *>(this->window());
 
     m_tabPaths.removeAt(index);
-    window->removeBuffer(filePath, false);
+    window->removeWrapper(filePath, false);
 }
 
 void Tabbar::handleTabDroped(int index, Qt::DropAction, QObject *target)

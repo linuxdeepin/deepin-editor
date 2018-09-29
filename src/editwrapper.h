@@ -26,13 +26,13 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
-class EditorBuffer : public QWidget
+class EditWrapper : public QWidget
 {
     Q_OBJECT
 
 public:
-    EditorBuffer(QWidget *parent = 0);
-    ~EditorBuffer();
+    EditWrapper(QWidget *parent = 0);
+    ~EditWrapper();
 
     void openFile(const QString &filepath);
     bool saveFile(const QString &encode, const QString &newline);

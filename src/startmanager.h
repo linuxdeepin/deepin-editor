@@ -24,7 +24,7 @@
 #define STARTMANAGER_H
 
 #include "window.h"
-#include "editorbuffer.h"
+#include "editwrapper.h"
 
 #include <QObject>
 
@@ -48,7 +48,7 @@ public slots:
     Q_SCRIPTABLE void openFilesInTab(QStringList files);
     Q_SCRIPTABLE void openFilesInWindow(QStringList files);
 
-    void createWindowFromBuffer(const QString &tabName, const QString &filePath, EditorBuffer *buffer);
+    void createWindowFromWrapper(const QString &tabName, const QString &filePath, EditWrapper *buffer);
     void loadTheme(const QString &themeName);
 
     Window* createWindow(bool alwaysCenter = false);

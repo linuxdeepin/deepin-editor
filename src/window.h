@@ -25,7 +25,7 @@
 
 #include "ddialog.h"
 #include "dmainwindow.h"
-#include "editorbuffer.h"
+#include "editwrapper.h"
 #include "findbar.h"
 #include "jumplinebar.h"
 #include "replacebar.h"
@@ -58,17 +58,17 @@ public:
     void activeTab(int index);
 
     void addTab(const QString &filepath, bool activeTab = false);
-    void addTabWithBuffer(EditorBuffer *buffer, const QString &filepath,
+    void addTabWithWrapper(EditWrapper *wrapper, const QString &filepath,
                           const QString &tabName, int index = -1);
     void closeTab();
     void restoreTab();
 
-    EditorBuffer* createEditor();
-    EditorBuffer* currentBuffer();
-    EditorBuffer* buffer(const QString &filePath);
+    EditWrapper* createEditor();
+    EditWrapper* currentWrapper();
+    EditWrapper* wrapper(const QString &filePath);
     DTextEdit* getTextEditor(const QString &filepath);
     void focusActiveEditor();
-    void removeBuffer(const QString &filePath, bool isDelete = false);
+    void removeWrapper(const QString &filePath, bool isDelete = false);
 
     void openFile();
     bool saveFile();
@@ -78,7 +78,7 @@ public:
     void decrementFontSize();
     void incrementFontSize();
     void resetFontSize();
-    void setFontSizeWithConfig(EditorBuffer *editor);
+    void setFontSizeWithConfig(EditWrapper *editor);
 
     void popupFindBar();
     void popupReplaceBar();
@@ -150,7 +150,7 @@ public slots:
 private:
     void removeActiveBlankTab(bool needSaveBefore = false);
     void removeActiveReadonlyTab();
-    void showNewEditor(EditorBuffer *buffer);
+    void showNewEditor(EditWrapper *wrapper);
     void showNotify(const QString &message);
     DDialog* createSaveFileDialog(QString title, QString content);
     int getBlankFileIndex();
@@ -170,7 +170,7 @@ private:
     Settings *m_settings;
     DWindowManager *m_windowManager;
 
-    QMap<QString, EditorBuffer *> m_buffers;
+    QMap<QString, EditWrapper *> m_wrappers;
 
     QMenu *m_menu;
 
