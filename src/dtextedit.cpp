@@ -66,8 +66,6 @@ DTextEdit::DTextEdit(QPlainTextEdit *parent)
     lineNumberArea = new LineNumberArea(this);
 
     viewport()->installEventFilter(this);
-    setWordWrapMode(QTextOption::WordWrap);
-    setLineWrapMode(WidgetWidth);
 
     // Don't draw frame around editor widget.
     setFrameShape(QFrame::NoFrame);
