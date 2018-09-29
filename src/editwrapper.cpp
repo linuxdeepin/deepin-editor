@@ -176,13 +176,10 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QString
     m_fileEncode = encode;
 
     // set text.
-    m_textEdit->blockSignals(true);
     m_textEdit->setPlainText(content);
-    m_textEdit->blockSignals(false);
 
     // update status.
     m_textEdit->setModified(false);
-    m_textEdit->updateLineNumber();
     m_textEdit->moveToStart();
 
     // load highlight.
