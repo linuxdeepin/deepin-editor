@@ -2,112 +2,122 @@
 <context>
     <name>DTextEdit</name>
     <message>
-        <location filename="../src/dtextedit.cpp" line="87"/>
+        <location filename="../src/dtextedit.cpp" line="85"/>
         <source>Undo</source>
         <translation>Скасувати</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="88"/>
+        <location filename="../src/dtextedit.cpp" line="86"/>
         <source>Redo</source>
         <translation>Повторити</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="89"/>
+        <location filename="../src/dtextedit.cpp" line="87"/>
         <source>Cut</source>
         <translation>Вирізати</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="90"/>
+        <location filename="../src/dtextedit.cpp" line="88"/>
         <source>Copy</source>
         <translation>Копіювати</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="91"/>
+        <location filename="../src/dtextedit.cpp" line="89"/>
         <source>Paste</source>
         <translation>Вставити</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="92"/>
+        <location filename="../src/dtextedit.cpp" line="90"/>
         <source>Delete</source>
         <translation>Вилучити</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="93"/>
+        <location filename="../src/dtextedit.cpp" line="91"/>
         <source>Select All</source>
         <translation>Позначити усе</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="94"/>
+        <location filename="../src/dtextedit.cpp" line="92"/>
         <source>Find</source>
         <translation>Знайти</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="95"/>
+        <location filename="../src/dtextedit.cpp" line="93"/>
         <source>Replace</source>
         <translation>Замінити</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="96"/>
+        <location filename="../src/dtextedit.cpp" line="94"/>
         <source>Go to Line</source>
         <translation>Перейти до рядка</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="97"/>
+        <location filename="../src/dtextedit.cpp" line="95"/>
         <source>Turn on Read-Only mode</source>
         <translation>Увімкнути режим лише читання</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="98"/>
+        <location filename="../src/dtextedit.cpp" line="96"/>
         <source>Turn off Read-Only mode</source>
         <translation>Вимкнути режим лише читання</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="99"/>
+        <location filename="../src/dtextedit.cpp" line="97"/>
         <source>Fullscreen</source>
         <translation>На увесь екран</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="100"/>
+        <location filename="../src/dtextedit.cpp" line="98"/>
         <source>Exit fullscreen</source>
         <translation>Вийти з повноекранного режиму</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="101"/>
+        <location filename="../src/dtextedit.cpp" line="99"/>
         <source>Open in file manager</source>
         <translation>Відкрити у програмі для керування файлами</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="102"/>
+        <location filename="../src/dtextedit.cpp" line="100"/>
         <source>Toggle comment</source>
         <translation>Додати/Зняти коментування</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="124"/>
+        <location filename="../src/dtextedit.cpp" line="122"/>
         <source>Change Case</source>
         <translation>Змінити регістр</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="125"/>
+        <location filename="../src/dtextedit.cpp" line="123"/>
         <source>Upper Case</source>
         <translation>Верхній регістр</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="126"/>
+        <location filename="../src/dtextedit.cpp" line="124"/>
         <source>Lower Case</source>
         <translation>Нижній регістр</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="127"/>
+        <location filename="../src/dtextedit.cpp" line="125"/>
         <source>Capitalize</source>
         <translation>Великі перші літери</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="2204"/>
+        <location filename="../src/dtextedit.cpp" line="1676"/>
+        <source>Highlight</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="1677"/>
+        <source>None</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="2248"/>
         <source>Read-Only mode is off</source>
         <translation>Режим лише читання вимкнено</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="2208"/>
+        <location filename="../src/dtextedit.cpp" line="2252"/>
         <source>Read-Only mode is on</source>
         <translation>Режим лише читання увімкнено</translation>
     </message>
@@ -141,12 +151,12 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/main.cpp" line="47"/>
+        <location filename="../src/main.cpp" line="48"/>
         <source>Deepin Editor is a desktop text editor that supports common text editing features.</source>
         <translation>Редактор Deepin — графічний текстовий редактор із типовими можливостями щодо редагування тексту.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="60"/>
+        <location filename="../src/main.cpp" line="61"/>
         <source>Deepin Editor</source>
         <translation>Редактор Deepin</translation>
     </message>
@@ -154,7 +164,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/main.cpp" line="56"/>
+        <location filename="../src/main.cpp" line="57"/>
         <source>Deepin Editor</source>
         <translation>Редактор Deepin</translation>
     </message>

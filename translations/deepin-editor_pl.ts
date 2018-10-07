@@ -2,112 +2,122 @@
 <context>
     <name>DTextEdit</name>
     <message>
-        <location filename="../src/dtextedit.cpp" line="87"/>
+        <location filename="../src/dtextedit.cpp" line="85"/>
         <source>Undo</source>
         <translation>Wstecz</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="88"/>
+        <location filename="../src/dtextedit.cpp" line="86"/>
         <source>Redo</source>
         <translation>Ponów</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="89"/>
+        <location filename="../src/dtextedit.cpp" line="87"/>
         <source>Cut</source>
         <translation>Wytnij</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="90"/>
+        <location filename="../src/dtextedit.cpp" line="88"/>
         <source>Copy</source>
         <translation>Kopiuj</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="91"/>
+        <location filename="../src/dtextedit.cpp" line="89"/>
         <source>Paste</source>
         <translation>Wklej</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="92"/>
+        <location filename="../src/dtextedit.cpp" line="90"/>
         <source>Delete</source>
         <translation>Usuń</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="93"/>
+        <location filename="../src/dtextedit.cpp" line="91"/>
         <source>Select All</source>
         <translation>Zaznacz wszystkie</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="94"/>
+        <location filename="../src/dtextedit.cpp" line="92"/>
         <source>Find</source>
         <translation>Znajdź</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="95"/>
+        <location filename="../src/dtextedit.cpp" line="93"/>
         <source>Replace</source>
         <translation>Zamień</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="96"/>
+        <location filename="../src/dtextedit.cpp" line="94"/>
         <source>Go to Line</source>
         <translation>Przejdź do wiersza</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="97"/>
+        <location filename="../src/dtextedit.cpp" line="95"/>
         <source>Turn on Read-Only mode</source>
         <translation>Przejdź do trybu tylko odczytu</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="98"/>
+        <location filename="../src/dtextedit.cpp" line="96"/>
         <source>Turn off Read-Only mode</source>
         <translation>Wyjdź z trybu tylko odczytu</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="99"/>
+        <location filename="../src/dtextedit.cpp" line="97"/>
         <source>Fullscreen</source>
         <translation>Pełny ekran</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="100"/>
+        <location filename="../src/dtextedit.cpp" line="98"/>
         <source>Exit fullscreen</source>
         <translation>Wyłącz pełny ekran</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="101"/>
+        <location filename="../src/dtextedit.cpp" line="99"/>
         <source>Open in file manager</source>
         <translation>Otwórz w menedżerze plików</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="102"/>
+        <location filename="../src/dtextedit.cpp" line="100"/>
         <source>Toggle comment</source>
         <translation>Przełącz komentarze</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="124"/>
+        <location filename="../src/dtextedit.cpp" line="122"/>
         <source>Change Case</source>
         <translation>Zmień wielkość znaków</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="125"/>
+        <location filename="../src/dtextedit.cpp" line="123"/>
         <source>Upper Case</source>
         <translation>Wielkie litery</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="126"/>
+        <location filename="../src/dtextedit.cpp" line="124"/>
         <source>Lower Case</source>
         <translation>Małe litery</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="127"/>
+        <location filename="../src/dtextedit.cpp" line="125"/>
         <source>Capitalize</source>
         <translation>Wielka litera</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="2204"/>
+        <location filename="../src/dtextedit.cpp" line="1676"/>
+        <source>Highlight</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="1677"/>
+        <source>None</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="2248"/>
         <source>Read-Only mode is off</source>
         <translation>Tryb tylko odczutu jest wyłączony</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="2208"/>
+        <location filename="../src/dtextedit.cpp" line="2252"/>
         <source>Read-Only mode is on</source>
         <translation>Tryb tylko odczutu jest włączony</translation>
     </message>
@@ -141,12 +151,12 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/main.cpp" line="47"/>
+        <location filename="../src/main.cpp" line="48"/>
         <source>Deepin Editor is a desktop text editor that supports common text editing features.</source>
         <translation>Edytor Deepin to pulpitowy edytor tekstu, który obsługuje najpopularniejsze funkcje edycji tekstu.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="60"/>
+        <location filename="../src/main.cpp" line="61"/>
         <source>Deepin Editor</source>
         <translation>Edytor Deepin</translation>
     </message>
@@ -154,7 +164,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/main.cpp" line="56"/>
+        <location filename="../src/main.cpp" line="57"/>
         <source>Deepin Editor</source>
         <translation>Edytor Deepin</translation>
     </message>
