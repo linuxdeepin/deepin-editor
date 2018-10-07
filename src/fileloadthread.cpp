@@ -47,9 +47,9 @@ void FileLoadThread::run()
         QByteArray fileContent = file.readAll();
         QByteArray detectArray = fileContent;
 
-        if (fileContent.size() > 1000) {
+        if (fileContent.size() > 10000) {
             // use fixed byte detection encoding.
-            detectArray.truncate(1000);
+            detectArray.truncate(10000);
         }
 
         // read the encode.
