@@ -29,6 +29,8 @@
 #include <DApplication>
 #include <DMainWindow>
 #include <DWidgetUtil>
+#include <DLog>
+
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QDBusConnection>
@@ -60,6 +62,9 @@ int main(int argc, char *argv[])
     app.setProductName(DApplication::translate("MainWindow", "Deepin Editor"));
     app.setApplicationDescription(DApplication::translate("MainWindow", descriptionText) + "\n");
     app.setApplicationAcknowledgementPage(acknowledgementLink);
+
+    Dtk::Core::DLogManager::registerConsoleAppender();
+    Dtk::Core::DLogManager::registerFileAppender();
 
     // Parser input arguments.
     QCommandLineParser parser;
