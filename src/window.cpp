@@ -278,8 +278,6 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
     }
 
     // wrapper may be from anther window pointer.
-    wrapper->textEditor()->disconnect();
-
     // reconnect signal.
     connect(wrapper->textEditor(), &DTextEdit::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &DTextEdit::clickReplaceAction, this, &Window::popupReplaceBar, Qt::QueuedConnection);
@@ -417,6 +415,9 @@ void Window::removeWrapper(const QString &filePath, bool isDelete)
         if (isDelete) {
             wrapper->deleteLater();
         }
+
+        // remove all signals on this connection.
+        disconnect(wrapper->textEditor(), 0, this, 0);
     }
 
     // Exit window after close all tabs.
