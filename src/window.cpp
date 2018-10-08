@@ -468,7 +468,8 @@ void Window::saveAs(const QString &filepath)
     dialog.setDirectory(QDir::homePath());
     dialog.selectFile(m_tabbar->textAt(m_tabbar->indexOf(filepath)) + ".txt");
 
-    if (dialog.exec() == QDialog::Accepted) {
+    int mode = dialog.exec();
+    if (mode == QDialog::Accepted) {
         const QString encode = dialog.getComboBoxValue(tr("Encoding"));
         const QString newline = dialog.getComboBoxValue(tr("Line Endings"));
         const QString newpath = dialog.selectedFiles().value(0);
@@ -481,12 +482,20 @@ void Window::saveAs(const QString &filepath)
     }
 #else
     QString fileName = m_tabbar->textAt(m_tabbar->indexOf(filepath) + ".txt");
-    QString newpath = QFileDialog::getSaveFileName(this, tr("SaveFile"), QDir(QDir::homePath()).filePath(fileName));
+    QFileDialog dialog(this, tr("Save File"));
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.setDirectory(QDir::homePath());
+    dialog.selectFile(fileName + ".txt");
 
-    if (!newpath.isEmpty()) {
-        EditWrapper *wrapper = m_wrappers[filepath];
-        wrapper->updatePath(newpath);
-        wrapper->saveFile("UTF-8", "Linux");
+    int mode = dialog.exec();
+
+    if (mode == QDialog::Accepted) {
+        const QString newpath = dialog.selectedFiles().first();
+        if (wrapper.contains(newpath)) {
+            EditWrapper *wrapper = m_wrappers[filepath];
+            wrapper->updatePath(newpath);
+            wrapper->saveFile("UTF-8", "Linux");
+        }
     }
 #endif
 }
@@ -1100,8 +1109,12 @@ void Window::handleTabsClosed(const QStringList &tabList)
     for (const QString &path : tabList) {
         if (m_wrappers.contains(path)) {
             EditWrapper *wrapper = m_wrappers.value(path);
+            bool isBlankFile = QFileInfo(path).dir().absolutePath() == m_blankFileDir;
+            bool isContentEmpty = wrapper->textEditor()->toPlainText().isEmpty();
+            bool isModified = wrapper->textEditor()->document()->isModified();
 
-            if (wrapper->textEditor()->document()->isModified()) {
+            if ( (isBlankFile && !isContentEmpty) ||
+                 (!isBlankFile && isModified)) {
                 needSaveList << wrapper;
             }
         }
@@ -1111,7 +1124,7 @@ void Window::handleTabsClosed(const QStringList &tabList)
     if (!needSaveList.isEmpty()) {
         DDialog *dialog = createSaveFileDialog(tr("Save File"), tr("Do you want to save all the files?"));
 
-        connect(dialog, &DDialog::buttonClicked, this, [=] (int index) {
+        connect(dialog, &DDialog::buttonClicked, this, [&] (int index) {
             dialog->hide();
 
             // 1: don't save.
