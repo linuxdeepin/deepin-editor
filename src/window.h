@@ -147,7 +147,6 @@ public slots:
 
     void loadTheme(const QString &path);
 
-private:
     void removeActiveBlankTab(bool needSaveBefore = false);
     void removeActiveReadonlyTab();
     void showNewEditor(EditWrapper *wrapper);

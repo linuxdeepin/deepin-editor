@@ -277,6 +277,18 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
         index = m_tabbar->currentIndex() + 1;
     }
 
+    // wrapper may be from anther window pointer.
+    wrapper->textEditor()->disconnect();
+
+    // reconnect signal.
+    connect(wrapper->textEditor(), &DTextEdit::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);
+    connect(wrapper->textEditor(), &DTextEdit::clickReplaceAction, this, &Window::popupReplaceBar, Qt::QueuedConnection);
+    connect(wrapper->textEditor(), &DTextEdit::clickJumpLineAction, this, &Window::popupJumpLineBar, Qt::QueuedConnection);
+    connect(wrapper->textEditor(), &DTextEdit::clickFullscreenAction, this, &Window::toggleFullscreen, Qt::QueuedConnection);
+    connect(wrapper->textEditor(), &DTextEdit::popupNotify, this, &Window::showNotify, Qt::QueuedConnection);
+    connect(wrapper->textEditor(), &DTextEdit::pressEsc, this, &Window::removeBottomWidget, Qt::QueuedConnection);
+
+    // add wrapper to this window.
     m_tabbar->addTabWithIndex(index, filepath, tabName);
     m_wrappers[filepath] = wrapper;
     wrapper->updatePath(filepath);
