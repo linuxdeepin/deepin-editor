@@ -57,7 +57,6 @@ int main(int argc, char *argv[])
     app.setApplicationDisplayName(QObject::tr("Deepin Editor"));
     app.setApplicationVersion(VERSION);
     app.setProductIcon(QIcon(Utils::getQrcPath("logo_96.svg")));
-    app.setWindowIcon(QIcon(Utils::getQrcPath("logo_96.svg")));
     app.setProductName(DApplication::translate("MainWindow", "Deepin Editor"));
     app.setApplicationDescription(DApplication::translate("MainWindow", descriptionText) + "\n");
     app.setApplicationAcknowledgementPage(acknowledgementLink);

@@ -56,6 +56,7 @@ public:
 
 signals:
     void requestHistorySaved(const QString &filePath);
+    void closeTabs(const QStringList pathList);
 
 protected:
     QPixmap createDragPixmapFromTab(int index, const QStyleOptionTab &option, QPoint *hotspot) const;

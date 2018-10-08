@@ -97,15 +97,15 @@ void Tabbar::closeOtherTabs()
 
 void Tabbar::closeOtherTabsExceptFile(const QString &filePath)
 {
-    while (m_tabPaths.size() > 1) {
-        const QString &firstPath = m_tabPaths.at(0);
+    QStringList closePathList;
 
-        if (firstPath != filePath) {
-            closeTab(0);
-        } else {
-            closeTab(1);
+    for (const QString &path : m_tabPaths) {
+        if (filePath != path) {
+            closePathList << path;
         }
     }
+
+    emit closeTabs(closePathList);
 }
 
 void Tabbar::updateTab(int index, const QString &filePath, const QString &tabName)

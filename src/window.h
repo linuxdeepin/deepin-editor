@@ -99,6 +99,7 @@ public:
     void changeTitlebarBackground(const QString &color);
     void changeTitlebarBackground(const QString &startColor, const QString &endColor);
 
+    void saveAs(const QString &filepath);
     const QString getSaveFilePath(QString &encode, QString &newline);
 
     void displayShortcuts();
@@ -122,6 +123,7 @@ public slots:
     void addBlankTab();
     void addBlankTab(const QString &blankFile);
     void handleTabCloseRequested(int index);
+    void handleTabsClosed(const QStringList &tabList);
     void handleCurrentChanged(const int &index);
 
     void handleJumpLineBarExit();

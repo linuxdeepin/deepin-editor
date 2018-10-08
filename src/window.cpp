@@ -84,6 +84,7 @@ Window::Window(DMainWindow *parent)
     m_centralLayout->setSpacing(0);
 
     m_centralLayout->addWidget(m_editorWidget);
+    setWindowIcon(QIcon::fromTheme("deepin-editor"));
     setCentralWidget(m_centralWidget);
 
     // Init titlebar.
@@ -196,6 +197,7 @@ void Window::initTitlebar()
 
     connect(m_tabbar, &DTabBar::tabBarDoubleClicked, titlebar(), &DTitlebar::doubleClicked, Qt::QueuedConnection);
 
+    connect(m_tabbar, &Tabbar::closeTabs, this, &Window::handleTabsClosed, Qt::QueuedConnection);
     connect(m_tabbar, &Tabbar::requestHistorySaved, this, [=] (const QString &filePath) {
         if (QFileInfo(filePath).dir().absolutePath() == m_blankFileDir) {
             return;
@@ -450,6 +452,43 @@ void Window::openFile()
     for (const QString &file : dialog.selectedFiles()) {
         addTab(file);
     }
+}
+
+void Window::saveAs(const QString &filepath)
+{
+    if (!m_wrappers.contains(filepath)) {
+        return;
+    }
+
+#ifdef DTKWIDGET_CLASS_DFileDialog
+    DFileDialog dialog(this, tr("Save File"));
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.addComboBox(tr("Encoding"), getEncodeList());
+    dialog.addComboBox(tr("Line Endings"), QStringList() << "Linux" << "Windows" << "Mac OS");
+    dialog.setDirectory(QDir::homePath());
+    dialog.selectFile(m_tabbar->textAt(m_tabbar->indexOf(filepath)) + ".txt");
+
+    if (dialog.exec() == QDialog::Accepted) {
+        const QString encode = dialog.getComboBoxValue(tr("Encoding"));
+        const QString newline = dialog.getComboBoxValue(tr("Line Endings"));
+        const QString newpath = dialog.selectedFiles().value(0);
+
+        if (!filepath.isEmpty()) {
+            EditWrapper *wrapper = m_wrappers[filepath];
+            wrapper->updatePath(newpath);
+            wrapper->saveFile(encode, newline);
+        }
+    }
+#else
+    QString fileName = m_tabbar->textAt(m_tabbar->indexOf(filepath) + ".txt");
+    QString newpath = QFileDialog::getSaveFileName(this, tr("SaveFile"), QDir(QDir::homePath()).filePath(fileName));
+
+    if (!newpath.isEmpty()) {
+        EditWrapper *wrapper = m_wrappers[filepath];
+        wrapper->updatePath(newpath);
+        wrapper->saveFile("UTF-8", "Linux");
+    }
+#endif
 }
 
 const QString Window::getSaveFilePath(QString &encode, QString &newline)
@@ -1049,6 +1088,68 @@ void Window::handleTabCloseRequested(int index)
 {
     activeTab(index);
     closeTab();
+}
+
+void Window::handleTabsClosed(const QStringList &tabList)
+{
+    if (tabList.isEmpty()) {
+        return;
+    }
+
+    QList<EditWrapper *> needSaveList;
+    for (const QString &path : tabList) {
+        if (m_wrappers.contains(path)) {
+            EditWrapper *wrapper = m_wrappers.value(path);
+
+            if (wrapper->textEditor()->document()->isModified()) {
+                needSaveList << wrapper;
+            }
+        }
+    }
+
+    // popup save file dialog.
+    if (!needSaveList.isEmpty()) {
+        DDialog *dialog = createSaveFileDialog(tr("Save File"), tr("Do you want to save all the files?"));
+
+        connect(dialog, &DDialog::buttonClicked, this, [=] (int index) {
+            dialog->hide();
+
+            // 1: don't save.
+            // 2: save
+            if (index == 1) {
+                // need delete all draft documents.
+                for (EditWrapper *wrapper : needSaveList) {
+                    if (QFileInfo(wrapper->textEditor()->filepath).dir().absolutePath() == m_blankFileDir) {
+                        QFile::remove(wrapper->textEditor()->filepath);
+                    }
+                }
+
+            } else if (index == 2) {
+                for (EditWrapper *wrapper : needSaveList) {
+                    QString path = wrapper->textEditor()->filepath;
+                    if (QFileInfo(path).dir().absolutePath() == m_blankFileDir) {
+                        saveAs(path);
+                        QFile::remove(path);
+                    } else {
+                        wrapper->saveFile();
+                    }
+                }
+            }
+        });
+
+        int mode = dialog->exec();
+        // click cancel button.
+        if (mode == -1 || mode == 0) {
+            return;
+        }
+    }
+
+    // close tabs.
+    for (const QString &path : tabList) {
+        if (m_wrappers.contains(path)) {
+            m_tabbar->closeTab(m_tabbar->indexOf(path));
+        }
+    }
 }
 
 void Window::handleCurrentChanged(const int &index)
