@@ -23,6 +23,7 @@
 #include "startmanager.h"
 
 #include <DApplication>
+#include <QDesktopWidget>
 #include <DWidgetUtil>
 #include <QDebug>
 #include <QScreen>
@@ -56,9 +57,8 @@ StartManager::StartManager(QObject *parent)
 void StartManager::openFilesInWindow(QStringList files)
 {
     // Open window with blank tab if no files need open.
-    if (files.size() == 0) {
+    if (files.isEmpty()) {
         Window *window = createWindow();
-
         window->addBlankTab();
         window->activateWindow();
     } else {
@@ -103,6 +103,7 @@ void StartManager::openFilesInTab(QStringList files)
         else {
             // m_windows[0]->activateWindow();
             Window *window = createWindow();
+            window->activateWindow();
             window->addBlankTab();
         }
     } else {
@@ -187,8 +188,9 @@ void StartManager::initWindowPosition(Window *window, bool alwaysCenter)
         Dtk::Widget::moveToCenter(window);
     } else {
         // Add window offset to avoid all editor window popup at same coordinate.
-        int windowOffset = 50;
-        window->move(m_windows.size() * windowOffset, m_windows.size() * windowOffset);
+        int windowOffset = m_windows.size() * 50;
+        QRect screenGeometry = qApp->desktop()->screenGeometry(QCursor::pos());
+        window->move(screenGeometry.x() + windowOffset, screenGeometry.y() + windowOffset);
     }
 }
 

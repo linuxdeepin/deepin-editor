@@ -963,7 +963,7 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
     if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "addblanktab")) {
         addBlankTab();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "newwindow")) {
-        newWindow();
+        emit newWindow();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "savefile")) {
         saveFile();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "saveasfile")) {
