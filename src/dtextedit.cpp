@@ -1426,6 +1426,8 @@ void DTextEdit::keyPressEvent(QKeyEvent *keyEvent)
             copyLines();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglereadonlymode")) {
             toggleReadOnlyMode();
+        } else if (key == "Shift+/" && keyEvent->modifiers() == Qt::ControlModifier) {
+            keyEvent->ignore();
         } else {
             // If press another key
             // the main window does not receive
