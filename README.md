@@ -38,7 +38,7 @@ make
 
 ## Usage
 
-Below is keymap list for deepin-terminal:
+Below is keymap list for deepin-editor:
 
 ## Config file
 
