@@ -2406,3 +2406,10 @@ void DTextEdit::dropEvent(QDropEvent *event)
         QPlainTextEdit::dropEvent(event);
     }
 }
+
+void DTextEdit::inputMethodEvent(QInputMethodEvent *e)
+{
+    if (!m_readOnlyMode) {
+        QPlainTextEdit::inputMethodEvent(e);
+    }
+}

@@ -198,6 +198,7 @@ protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dragMoveEvent(QDragMoveEvent *event) override;
     void dropEvent(QDropEvent *event) override;
+    void inputMethodEvent(QInputMethodEvent *e) override;
 
 private:
     bool setCursorKeywordSeletoin(int position, bool findNext);
