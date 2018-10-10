@@ -1,3 +1,35 @@
+<a name="1.0"></a>
+## 1.0 (2018-10-10)
+
+
+#### Bug Fixes
+
+*   multi-screen new window position is incorrect. ([f34ef80c](https://github.com/linuxdeepin/deepin-editor/commit/f34ef80c0842d331fad95cba6dd58eada2a0e379))
+*   cannot preview shortcuts in read-only mode ([507edc2e](https://github.com/linuxdeepin/deepin-editor/commit/507edc2ed09063100fd01379a527b552ab1e81b6))
+*   optimize close tabs func. ([e1e573b0](https://github.com/linuxdeepin/deepin-editor/commit/e1e573b08921c06cf2cfef0f3fd3debf317f6736))
+*   no translation files included ([a6231c42](https://github.com/linuxdeepin/deepin-editor/commit/a6231c4210ea99fa7b0b17c5dcf161242271b02b))
+*   tab drag out only disconnect the window siganl. ([da27ede7](https://github.com/linuxdeepin/deepin-editor/commit/da27ede799af5f05ec34be11b69debad8badc158))
+*   drag tab to anther window signal is incorrect. ([08c5b927](https://github.com/linuxdeepin/deepin-editor/commit/08c5b92764a92a6949fddd1036e12f4e1cd3599b))
+*   no highlight current line ([a3391be5](https://github.com/linuxdeepin/deepin-editor/commit/a3391be5be423701c2abd7d4b1ac265aae34d33c))
+*   use fixed byte detection encoding. ([a0dd1cb5](https://github.com/linuxdeepin/deepin-editor/commit/a0dd1cb51fc48ee03a7bc61b03b6c86f7a1b0181))
+*   ensure that the file is written to disk ([a036a13b](https://github.com/linuxdeepin/deepin-editor/commit/a036a13b77a47b5175272037b22c07059b6100e8))
+*   line number padding. ([ed30c88b](https://github.com/linuxdeepin/deepin-editor/commit/ed30c88b0cd8b8e2ed30772b0db0da16a50d216a))
+*   read-only mode cannot drag text. ([a3e4398b](https://github.com/linuxdeepin/deepin-editor/commit/a3e4398b60628db9db2e03177fa5c83ea10a1082))
+* **menu:**
+  *  change the highlight order ([1e90cbcc](https://github.com/linuxdeepin/deepin-editor/commit/1e90cbcc9a52df537fcf0fdf2c1677bde4d436f9))
+  *  set minimum width ([47a0b06d](https://github.com/linuxdeepin/deepin-editor/commit/47a0b06d76289e7a06d591b8b46a3301db3b48d1))
+
+#### Features
+
+*   add abbreviated name. ([3250f36c](https://github.com/linuxdeepin/deepin-editor/commit/3250f36c6bc2980599a58565008436e24628cd22))
+*   close tabs prompted to save the file. ([e54bdc99](https://github.com/linuxdeepin/deepin-editor/commit/e54bdc99de05210a16bcc0b002999d2469e42b65))
+*   optimize file loading speed. ([286db0fc](https://github.com/linuxdeepin/deepin-editor/commit/286db0fc8092dcd6098ed8dc27430e2339c3fb41))
+*   use cmake ([a56c06fb](https://github.com/linuxdeepin/deepin-editor/commit/a56c06fb04bf8d48d0aa28cd49b407641a0b2470))
+*   add highlight right option ([501f7795](https://github.com/linuxdeepin/deepin-editor/commit/501f77958ccc62050dc1c756b9272355e5191f61))
+* **tabbar:**  add right menu. ([053ec629](https://github.com/linuxdeepin/deepin-editor/commit/053ec62953415ebc912712abd7dd4e69e10d8b69))
+
+
+
 <a name="0.5"></a>
 ## 0.5 (2018-09-21)
 
