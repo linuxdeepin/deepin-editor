@@ -1,3 +1,13 @@
+<a name="1.1"></a>
+## 1.1 (2018-10-11)
+
+
+#### Bug Fixes
+
+*   fix: input text can be read-only mode. ([fe4e93f](https://github.com/linuxdeepin/deepin-editor/commit/7e690af0fbda19735e4790e40adfe381f382aa57))
+
+
+
 <a name="1.0"></a>
 ## 1.0 (2018-10-10)
 
