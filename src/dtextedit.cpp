@@ -2226,7 +2226,7 @@ QString DTextEdit::getWordAtMouse()
         rect.setX(std::max(rect.x() - widthOffset / 2, 0));
         rect.setWidth(rect.width() + widthOffset);
 
-        // Just highlight word under pointer when cursor rectangle contain moue pointer coordinate.
+        // Just highlight word under pointer when cursor rectangle contain mouse pointer coordinate.
         if ((rect.x() <= pos.x()) &&
             (pos.x() <= rect.x() + rect.width()) &&
             (rect.y() <= pos.y()) &&
