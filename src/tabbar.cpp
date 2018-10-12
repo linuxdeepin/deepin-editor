@@ -377,9 +377,10 @@ void Tabbar::handleTabDroped(int index, Qt::DropAction, QObject *target)
     Tabbar *tabbar = qobject_cast<Tabbar *>(target);
 
     if (tabbar == nullptr) {
-        QWidget *window = this->window();
+        Window *window = static_cast<Window *>(this->window());
+        window->move(QCursor::pos() - window->topLevelWidget()->pos());
         window->show();
-        //window->move(QCursor::pos() - window->topLevelWidget()->pos());
+        window->activateWindow();
     } else {
         closeTab(index);
     }
