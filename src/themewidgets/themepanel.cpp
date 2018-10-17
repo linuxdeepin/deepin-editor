@@ -91,7 +91,7 @@ void ThemePanel::popup()
     QRect rect = geometry();
     QPropertyAnimation *animation = new QPropertyAnimation(this, "geometry");
     animation->setDuration(250);
-    animation->setEasingCurve(QEasingCurve::OutQuad);
+    animation->setEasingCurve(QEasingCurve::InOutCubic);
     animation->setStartValue(QRect(rect.x(), rect.y(), 0, rect.height()));
     animation->setEndValue(QRect(rect.x(), rect.y(), 250, rect.height()));
     animation->start();
@@ -106,7 +106,7 @@ void ThemePanel::hide()
     QRect rect = geometry();
     QPropertyAnimation *animation = new QPropertyAnimation(this, "geometry");
     animation->setDuration(250);
-    animation->setEasingCurve(QEasingCurve::OutQuad);
+    animation->setEasingCurve(QEasingCurve::InOutCubic);
     animation->setStartValue(QRect(rect.x(), rect.y(), 250, rect.height()));
     animation->setEndValue(QRect(rect.x(), rect.y(), 0, rect.height()));
     animation->start();
