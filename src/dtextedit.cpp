@@ -1693,7 +1693,10 @@ void DTextEdit::contextMenuEvent(QContextMenuEvent *event)
             hlSubMenu = hlGroupMenu->addMenu(def.translatedSection());
         }
 
-        Q_ASSERT(hlSubMenu);
+        if (!hlSubMenu) {
+            continue;
+        }
+
         auto action = hlSubMenu->addAction(def.translatedName());
         action->setCheckable(true);
         action->setData(def.name());
