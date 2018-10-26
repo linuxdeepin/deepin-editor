@@ -111,8 +111,7 @@ void ThemePanel::hide()
     animation->setEndValue(QRect(rect.x(), rect.y(), 0, rect.height()));
     animation->start();
 
-    QTimer::singleShot(250, this, [=] { QWidget::hide(); });
-
+    connect(animation, &QPropertyAnimation::finished, [=] { QWidget::hide(); });
     connect(animation, &QPropertyAnimation::finished, animation, &QPropertyAnimation::deleteLater);
 }
 

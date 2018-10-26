@@ -466,8 +466,8 @@ bool Utils::isMimeTypeSupport(const QString &filepath)
     }
 
     // Please check full mime type list from: https://www.freeformatter.com/mime-types-list.html
-    QStringList mimeTypeWhiteList;
-    mimeTypeWhiteList << "application/cmd"
+    QStringList textMimeTypes;
+    textMimeTypes << "application/cmd"
                       << "application/javascript"
                       << "application/json"
                       << "application/pkix-cert"
@@ -494,9 +494,12 @@ bool Utils::isMimeTypeSupport(const QString &filepath)
                       << "application/xml"
                       << "application/yaml"
                       << "application/x-zerosize"
-                      << "image/svg+xml";
+                      << "image/svg+xml"
+                      << "application/x-perl"
+                      << "application/x-ruby"
+                      << "model/vrml";
 
-    if (mimeTypeWhiteList.contains(mimeType)) {
+    if (textMimeTypes.contains(mimeType)) {
         return true;
     }
 
