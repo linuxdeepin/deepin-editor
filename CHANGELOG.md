@@ -1,3 +1,20 @@
+<a name="1.1.1"></a>
+## 1.1.1 (2018-10-26)
+
+
+#### Features
+
+*   update mime type. ([b0e5c0a5](https://github.com/linuxdeepin/deepin-editor/commit/b0e5c0a55d64363fc234fd7f25fb466419b60adf))
+* **theme_panel:**  modify the animation easing curve. ([f81a04e3](https://github.com/linuxdeepin/deepin-editor/commit/f81a04e355f1ca47d649786975c0cc27628d9f3d))
+
+#### Bug Fixes
+
+*   right menu under arch crashes. ([f08c9e26](https://github.com/linuxdeepin/deepin-editor/commit/f08c9e26a3fe538e3ad896974a55086919b2ed06))
+*   drag and drop the window is not activated. ([a199cec2](https://github.com/linuxdeepin/deepin-editor/commit/a199cec2f4207a11fb57cda9bbfcf94e783e6a47))
+*   a typo ([ea615971](https://github.com/linuxdeepin/deepin-editor/commit/ea615971c279e6d075f9671ddd18422ffea594a5))
+
+
+
 <a name="1.1"></a>
 ## 1.1 (2018-10-11)
 
