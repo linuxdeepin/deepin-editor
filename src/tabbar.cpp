@@ -249,6 +249,10 @@ void Tabbar::insertFromMimeDataOnDragEnter(int index, const QMimeData *source)
     EditWrapper *wrapper = static_cast<EditWrapper *>(pVar.value<void *>());
     Window *window = static_cast<Window *>(this->window());
 
+    if (!wrapper) {
+        return;
+    }
+
     window->addTabWithWrapper(wrapper, wrapper->textEditor()->filepath, tabName, index);
     window->focusActiveEditor();
 }
@@ -260,6 +264,10 @@ void Tabbar::insertFromMimeData(int index, const QMimeData *source)
     QVariant pVar = source->property("wrapper");
     EditWrapper *wrapper = static_cast<EditWrapper *>(pVar.value<void *>());
     Window *window = static_cast<Window *>(this->window());
+
+    if (!wrapper) {
+        return;
+    }
 
     window->addTabWithWrapper(wrapper, wrapper->textEditor()->filepath, tabName, index);
     window->focusActiveEditor();
