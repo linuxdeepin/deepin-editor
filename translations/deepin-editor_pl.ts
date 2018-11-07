@@ -104,12 +104,12 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="1676"/>
         <source>Highlight</source>
-        <translation type="unfinished"/>
+        <translation>Podświetlenie</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="1677"/>
         <source>None</source>
-        <translation type="unfinished"/>
+        <translation>Brak</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2248"/>
@@ -334,22 +334,22 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="57"/>
         <source>Forward char</source>
-        <translation type="unfinished"/>
+        <translation>Następny znak</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="58"/>
         <source>Backward char</source>
-        <translation type="unfinished"/>
+        <translation>Poprzedni znak</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="59"/>
         <source>Forward word</source>
-        <translation type="unfinished"/>
+        <translation>Następne słowo</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="60"/>
         <source>Backward word</source>
-        <translation type="unfinished"/>
+        <translation>Poprzednie słowo</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="61"/>
@@ -364,32 +364,32 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="63"/>
         <source>New line</source>
-        <translation>Nowa linia</translation>
+        <translation>Nowy wiersz</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="64"/>
         <source>New line above</source>
-        <translation>Nowa linia powyżej</translation>
+        <translation>Nowy wiersz powyżej</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="65"/>
         <source>New line below</source>
-        <translation>Nowa linia poniżej</translation>
+        <translation>Nowy wiersz poniżej</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="66"/>
         <source>Duplicate line</source>
-        <translation>Powiel linię</translation>
+        <translation>Powiel wiersz</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="67"/>
         <source>Delete to end of line</source>
-        <translation>Usuń do końca linii</translation>
+        <translation>Usuń do końca wiersza</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="68"/>
         <source>Delete current line</source>
-        <translation>Usuń bieżącą linię</translation>
+        <translation>Usuń bieżący wiersz</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="69"/>
@@ -464,12 +464,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="83"/>
         <source>Delete backward word</source>
-        <translation type="unfinished"/>
+        <translation>Usuń poprzedzające słowo</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="84"/>
         <source>Delete forward word</source>
-        <translation type="unfinished"/>
+        <translation>Usuń następujące słowo</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="85"/>
@@ -519,7 +519,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="94"/>
         <source>Copy line</source>
-        <translation>Kopiuj linię</translation>
+        <translation>Kopiuj wiersz</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="95"/>
@@ -633,12 +633,12 @@
     <message>
         <location filename="../src/tabbar.cpp" line="307"/>
         <source>Close tab</source>
-        <translation type="unfinished"/>
+        <translation>Zamknij kartę</translation>
     </message>
     <message>
         <location filename="../src/tabbar.cpp" line="308"/>
         <source>Close other tabs</source>
-        <translation type="unfinished"/>
+        <translation>Zamknij pozostałe karty</translation>
     </message>
 </context>
 <context>
@@ -691,7 +691,7 @@
     <message>
         <location filename="../src/window.cpp" line="242"/>
         <source>You do not have permission to open %1</source>
-        <translation type="unfinished"/>
+        <translation>Nie posiadasz uprawnień do otwarcia %1</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="270"/>
@@ -736,7 +736,7 @@
     <message>
         <location filename="../src/window.cpp" line="580"/>
         <source>You do not have permission to save %1</source>
-        <translation type="unfinished"/>
+        <translation>Nie posiadasz uprawnień do zapisania %1</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="601"/>

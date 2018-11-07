@@ -4,12 +4,12 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="85"/>
         <source>Undo</source>
-        <translation type="unfinished"/>
+        <translation>Опозови</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="86"/>
         <source>Redo</source>
-        <translation type="unfinished"/>
+        <translation>Обнови</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="87"/>
@@ -54,12 +54,12 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="95"/>
         <source>Turn on Read-Only mode</source>
-        <translation type="unfinished"/>
+        <translation>Укључи режим само за читање</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="96"/>
         <source>Turn off Read-Only mode</source>
-        <translation type="unfinished"/>
+        <translation>Искључи режим само за читање</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="97"/>
@@ -109,7 +109,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="1677"/>
         <source>None</source>
-        <translation type="unfinished"/>
+        <translation>Ништа</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2248"/>
@@ -137,7 +137,7 @@
     <message>
         <location filename="../src/findbar.cpp" line="40"/>
         <source>Previous</source>
-        <translation type="unfinished"/>
+        <translation>Претходно</translation>
     </message>
 </context>
 <context>
@@ -158,7 +158,7 @@
     <message>
         <location filename="../src/main.cpp" line="61"/>
         <source>Deepin Editor</source>
-        <translation type="unfinished"/>
+        <translation>Дипин Уредник</translation>
     </message>
 </context>
 <context>
@@ -166,17 +166,17 @@
     <message>
         <location filename="../src/main.cpp" line="57"/>
         <source>Deepin Editor</source>
-        <translation type="unfinished"/>
+        <translation>Дипин Уредник</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="24"/>
         <source>Basic</source>
-        <translation type="unfinished"/>
+        <translation>Основно</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="25"/>
         <source>Font Style</source>
-        <translation type="unfinished"/>
+        <translation>Стил фонта</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="26"/>
@@ -249,7 +249,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="40"/>
         <source>Restore tab</source>
-        <translation type="unfinished"/>
+        <translation>Обнови картицу</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="41"/>
@@ -319,7 +319,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="54"/>
         <source>Editor</source>
-        <translation type="unfinished"/>
+        <translation>Уредник</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="55"/>
@@ -544,12 +544,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="99"/>
         <source>Undo</source>
-        <translation type="unfinished"/>
+        <translation>Опозови</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="100"/>
         <source>Redo</source>
-        <translation type="unfinished"/>
+        <translation>Обнови</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="101"/>

@@ -104,12 +104,12 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="1676"/>
         <source>Highlight</source>
-        <translation type="unfinished"/>
+        <translation>Realçar</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="1677"/>
         <source>None</source>
-        <translation type="unfinished"/>
+        <translation>Nenhum</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2248"/>
@@ -153,12 +153,12 @@
     <message>
         <location filename="../src/main.cpp" line="48"/>
         <source>Deepin Editor is a desktop text editor that supports common text editing features.</source>
-        <translation>O Editor Deepin é um editor de texto que suporta funcionalidade comuns de edição de texto.</translation>
+        <translation>O Deepin Editor é um editor de texto que suporta funcionalidade comuns de edição de texto.</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="61"/>
         <source>Deepin Editor</source>
-        <translation>Editor Deepin</translation>
+        <translation>Deepin Editor</translation>
     </message>
 </context>
 <context>
@@ -166,7 +166,7 @@
     <message>
         <location filename="../src/main.cpp" line="57"/>
         <source>Deepin Editor</source>
-        <translation>Editor Deepin</translation>
+        <translation>Deepin Editor</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="24"/>
@@ -309,262 +309,262 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="52"/>
         <source>Display shortcuts</source>
-        <translation type="unfinished"/>
+        <translation>Mostrar atalhos</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="53"/>
         <source>Print</source>
-        <translation type="unfinished"/>
+        <translation>Imprimir</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="54"/>
         <source>Editor</source>
-        <translation type="unfinished"/>
+        <translation>Editor</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="55"/>
         <source>Increase indent</source>
-        <translation type="unfinished"/>
+        <translation>Aumentar indentação</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="56"/>
         <source>Decrease indent</source>
-        <translation type="unfinished"/>
+        <translation>Diminuir indentação</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="57"/>
         <source>Forward char</source>
-        <translation type="unfinished"/>
+        <translation>Avançar caractére</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="58"/>
         <source>Backward char</source>
-        <translation type="unfinished"/>
+        <translation>Recuar caractére</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="59"/>
         <source>Forward word</source>
-        <translation type="unfinished"/>
+        <translation>Avançar palavra</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="60"/>
         <source>Backward word</source>
-        <translation type="unfinished"/>
+        <translation>Recuar palavra</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="61"/>
         <source>Next line</source>
-        <translation type="unfinished"/>
+        <translation>Linha seguinte</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="62"/>
         <source>Previous line</source>
-        <translation type="unfinished"/>
+        <translation>Linha anterior</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="63"/>
         <source>New line</source>
-        <translation type="unfinished"/>
+        <translation>Nova linha</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="64"/>
         <source>New line above</source>
-        <translation type="unfinished"/>
+        <translation>Nova linha acima</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="65"/>
         <source>New line below</source>
-        <translation type="unfinished"/>
+        <translation>Nova linha abaixo</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="66"/>
         <source>Duplicate line</source>
-        <translation type="unfinished"/>
+        <translation>Duplicar linha</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="67"/>
         <source>Delete to end of line</source>
-        <translation type="unfinished"/>
+        <translation>Eliminar até ao fim da linha</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="68"/>
         <source>Delete current line</source>
-        <translation type="unfinished"/>
+        <translation>Eliminar esta linha</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="69"/>
         <source>Swap line up</source>
-        <translation type="unfinished"/>
+        <translation>Trocar para linha acima</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="70"/>
         <source>Swap line down</source>
-        <translation type="unfinished"/>
+        <translation>Trocar para linha abaixo</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="71"/>
         <source>Scroll up one line</source>
-        <translation type="unfinished"/>
+        <translation>Rolar uma linha para cima</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="72"/>
         <source>Scroll down one line</source>
-        <translation type="unfinished"/>
+        <translation>Rolar uma linha para baixo</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="73"/>
         <source>Page up</source>
-        <translation type="unfinished"/>
+        <translation>Página acima</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="74"/>
         <source>Page down</source>
-        <translation type="unfinished"/>
+        <translation>Página abaixo</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="75"/>
         <source>Move to end of line</source>
-        <translation type="unfinished"/>
+        <translation>Mover para o fim da linha</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="76"/>
         <source>Move to start of line</source>
-        <translation type="unfinished"/>
+        <translation>Mover para o início da linha</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="77"/>
         <source>Move to end of text</source>
-        <translation type="unfinished"/>
+        <translation>Mover para o fim do texto</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="78"/>
         <source>Move to start of text</source>
-        <translation type="unfinished"/>
+        <translation>Mover para o início do texto</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="79"/>
         <source>Move to line indentation</source>
-        <translation type="unfinished"/>
+        <translation>Mover para indentação da linha</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="80"/>
         <source>Upper case</source>
-        <translation type="unfinished"/>
+        <translation>Maiúsculas</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="81"/>
         <source>Lower case</source>
-        <translation type="unfinished"/>
+        <translation>Minúsculas</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="82"/>
         <source>Capitalize</source>
-        <translation type="unfinished"/>
+        <translation>Capitalizar</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="83"/>
         <source>Delete backward word</source>
-        <translation type="unfinished"/>
+        <translation>Eliminar palavra anterior</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="84"/>
         <source>Delete forward word</source>
-        <translation type="unfinished"/>
+        <translation>Eliminar palavra seguinte</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="85"/>
         <source>Forward over a pair</source>
-        <translation type="unfinished"/>
+        <translation>Avançar em pares</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="86"/>
         <source>Backward over a pair</source>
-        <translation type="unfinished"/>
+        <translation>Recuar em pares</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="87"/>
         <source>Select all</source>
-        <translation type="unfinished"/>
+        <translation>Selecionar tudo</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="88"/>
         <source>Copy</source>
-        <translation type="unfinished"/>
+        <translation>Copiar</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="89"/>
         <source>Cut</source>
-        <translation type="unfinished"/>
+        <translation>Cortar</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="90"/>
         <source>Paste</source>
-        <translation type="unfinished"/>
+        <translation>Colar</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="91"/>
         <source>Transpose char</source>
-        <translation type="unfinished"/>
+        <translation>Transpor caractére</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="92"/>
         <source>Mark</source>
-        <translation type="unfinished"/>
+        <translation>Marcar</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="93"/>
         <source>Unmark</source>
-        <translation type="unfinished"/>
+        <translation>Desmarcar</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="94"/>
         <source>Copy line</source>
-        <translation type="unfinished"/>
+        <translation>Copiar linha</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="95"/>
         <source>Cut line</source>
-        <translation type="unfinished"/>
+        <translation>Cortar linha</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="96"/>
         <source>Merge lines</source>
-        <translation type="unfinished"/>
+        <translation>Juntar linhas</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="97"/>
         <source>Read-Only mode</source>
-        <translation type="unfinished"/>
+        <translation>Modo de Apenas-Leitura</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="98"/>
         <source>Toggle comment</source>
-        <translation type="unfinished"/>
+        <translation>Ativar/Desativar comentário</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="99"/>
         <source>Undo</source>
-        <translation type="unfinished"/>
+        <translation>Desfazer</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="100"/>
         <source>Redo</source>
-        <translation type="unfinished"/>
+        <translation>Refazer</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="101"/>
         <source>Advanced</source>
-        <translation type="unfinished"/>
+        <translation>Avançado</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="103"/>
         <source>Window size</source>
-        <translation type="unfinished"/>
+        <translation>Tamanho da janela</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="104"/>
         <source>Tab space</source>
-        <translation type="unfinished"/>
+        <translation>Espaço da tabulação</translation>
     </message>
 </context>
 <context>
@@ -572,32 +572,32 @@
     <message>
         <location filename="../src/replacebar.cpp" line="37"/>
         <source>Replace: </source>
-        <translation type="unfinished"/>
+        <translation>Substituir:</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="39"/>
         <source>With: </source>
-        <translation type="unfinished"/>
+        <translation>Com:</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="41"/>
         <source>Replace</source>
-        <translation type="unfinished"/>
+        <translation>Substituir</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="42"/>
         <source>Skip</source>
-        <translation type="unfinished"/>
+        <translation>Ignorar</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="43"/>
         <source>Replace Rest</source>
-        <translation type="unfinished"/>
+        <translation>Substituir Restantes</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="44"/>
         <source>Replace All</source>
-        <translation type="unfinished"/>
+        <translation>Substituir Todos</translation>
     </message>
 </context>
 <context>
@@ -605,27 +605,27 @@
     <message>
         <location filename="../src/settings.cpp" line="80"/>
         <source>Standard</source>
-        <translation type="unfinished"/>
+        <translation>Padrão</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="80"/>
         <source>Customize</source>
-        <translation type="unfinished"/>
+        <translation>Personalizar</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="91"/>
         <source>Normal</source>
-        <translation type="unfinished"/>
+        <translation>Normal</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="91"/>
         <source>Maximum</source>
-        <translation type="unfinished"/>
+        <translation>Máximo</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="91"/>
         <source>Fullscreen</source>
-        <translation type="unfinished"/>
+        <translation>Ecrã Inteiro</translation>
     </message>
 </context>
 <context>
@@ -633,12 +633,12 @@
     <message>
         <location filename="../src/tabbar.cpp" line="307"/>
         <source>Close tab</source>
-        <translation type="unfinished"/>
+        <translation>Fechar separador</translation>
     </message>
     <message>
         <location filename="../src/tabbar.cpp" line="308"/>
         <source>Close other tabs</source>
-        <translation type="unfinished"/>
+        <translation>Fechar outros separadores</translation>
     </message>
 </context>
 <context>
@@ -646,57 +646,57 @@
     <message>
         <location filename="../src/window.cpp" line="165"/>
         <source>New window</source>
-        <translation type="unfinished"/>
+        <translation>Nova janela</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="166"/>
         <source>New tab</source>
-        <translation type="unfinished"/>
+        <translation>Novo separador</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="167"/>
         <source>Open file</source>
-        <translation type="unfinished"/>
+        <translation>Abrir ficheiro</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="169"/>
         <source>Save as</source>
-        <translation type="unfinished"/>
+        <translation>Guardar como</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="170"/>
         <source>Print</source>
-        <translation type="unfinished"/>
+        <translation>Imprimir</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="171"/>
         <source>Switch theme</source>
-        <translation type="unfinished"/>
+        <translation>Alterar tema</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="613"/>
         <source>Saved successfully</source>
-        <translation type="unfinished"/>
+        <translation>Gravado com sucesso</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1241"/>
         <source>Discard</source>
-        <translation type="unfinished"/>
+        <translation>Descartar</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="172"/>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Definições</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="242"/>
         <source>You do not have permission to open %1</source>
-        <translation type="unfinished"/>
+        <translation>Não possui permissões para abrir %1</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="270"/>
         <source>Invalid file: %1</source>
-        <translation type="unfinished"/>
+        <translation>Ficheiro inválido: %1</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="303"/>
@@ -704,70 +704,70 @@
         <location filename="../src/window.cpp" line="470"/>
         <location filename="../src/window.cpp" line="856"/>
         <source>Save File</source>
-        <translation type="unfinished"/>
+        <translation>Guardar Ficheiro</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="303"/>
         <source>Do you want to save this file?</source>
-        <translation type="unfinished"/>
+        <translation>Quer guardar este ficheiro?</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="450"/>
         <location filename="../src/window.cpp" line="462"/>
         <source>Encoding</source>
-        <translation type="unfinished"/>
+        <translation>Codificação</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="451"/>
         <location filename="../src/window.cpp" line="463"/>
         <source>Line Endings</source>
-        <translation type="unfinished"/>
+        <translation>Terminações de linha</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="524"/>
         <source>Editor</source>
-        <translation type="unfinished"/>
+        <translation>Editor</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="561"/>
         <source>File cannot be saved when loading</source>
-        <translation type="unfinished"/>
+        <translation>O ficheiro não pode ser guardado enquanto está a ser carregado</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="580"/>
         <source>You do not have permission to save %1</source>
-        <translation type="unfinished"/>
+        <translation>Não possui permissões para guardar %1</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="601"/>
         <source>Unable to save the file</source>
-        <translation type="unfinished"/>
+        <translation>Impossível guardar o ficheiro</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="601"/>
         <source>Do you want to save as another?</source>
-        <translation type="unfinished"/>
+        <translation>Quer guardar como outro?</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="856"/>
         <source>Do you want to save all the files?</source>
-        <translation type="unfinished"/>
+        <translation>Quer guardar todos os ficheiros?</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1023"/>
         <source>Blank document %1</source>
-        <translation type="unfinished"/>
+        <translation>Documento em branco %1</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1240"/>
         <source>Cancel</source>
-        <translation type="unfinished"/>
+        <translation>Cancelar</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="168"/>
         <location filename="../src/window.cpp" line="1242"/>
         <source>Save</source>
-        <translation type="unfinished"/>
+        <translation>Guardar</translation>
     </message>
 </context>
 </TS>

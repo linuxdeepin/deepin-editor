@@ -94,7 +94,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="124"/>
         <source>Lower Case</source>
-        <translation>Minúscula</translation>
+        <translation>Minúsculas</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="125"/>
@@ -104,12 +104,12 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="1676"/>
         <source>Highlight</source>
-        <translation type="unfinished"/>
+        <translation>Resaltar</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="1677"/>
         <source>None</source>
-        <translation type="unfinished"/>
+        <translation>Ninguno</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2248"/>
@@ -153,7 +153,7 @@
     <message>
         <location filename="../src/main.cpp" line="48"/>
         <source>Deepin Editor is a desktop text editor that supports common text editing features.</source>
-        <translation>Editor Deepin es un editor de texto de escritorio que admite funciones comunes de la edición textual.</translation>
+        <translation>Editor Deepin es un editor de texto para escritorio que admite funciones frecuentes en la edición textual.</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="61"/>
@@ -633,12 +633,12 @@
     <message>
         <location filename="../src/tabbar.cpp" line="307"/>
         <source>Close tab</source>
-        <translation type="unfinished"/>
+        <translation>Cerrar pestaña</translation>
     </message>
     <message>
         <location filename="../src/tabbar.cpp" line="308"/>
         <source>Close other tabs</source>
-        <translation type="unfinished"/>
+        <translation>Cerrar otras pestañas</translation>
     </message>
 </context>
 <context>

@@ -104,12 +104,12 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="1676"/>
         <source>Highlight</source>
-        <translation type="unfinished"/>
+        <translation>Hervorheben</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="1677"/>
         <source>None</source>
-        <translation type="unfinished"/>
+        <translation>Keines</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2248"/>

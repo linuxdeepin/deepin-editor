@@ -79,7 +79,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="100"/>
         <source>Toggle comment</source>
-        <translation>Yorumları Aç/Kapat</translation>
+        <translation>Açıklama simgesini koy/kaldır</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="122"/>
@@ -153,12 +153,12 @@
     <message>
         <location filename="../src/main.cpp" line="48"/>
         <source>Deepin Editor is a desktop text editor that supports common text editing features.</source>
-        <translation>Deepin Editor genel metin düzenleme özelliklerini destekleyen bir masaüstü metin düzenleyicisidir.</translation>
+        <translation>Deepin Düzenleyici genel metin düzenleme özelliklerini destekleyen bir masaüstü metin düzenleyicisidir.</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="61"/>
         <source>Deepin Editor</source>
-        <translation>Deepin Editör</translation>
+        <translation>Deepin Düzenleyici</translation>
     </message>
 </context>
 <context>
@@ -166,7 +166,7 @@
     <message>
         <location filename="../src/main.cpp" line="57"/>
         <source>Deepin Editor</source>
-        <translation>Deepin Editör</translation>
+        <translation>Deepin Düzenleyici</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="24"/>
@@ -324,12 +324,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="55"/>
         <source>Increase indent</source>
-        <translation>Girintiyi arttır</translation>
+        <translation>Girinti düzeyini arttır</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="56"/>
         <source>Decrease indent</source>
-        <translation>Girintiyi azalt</translation>
+        <translation>Girinti düzeyini azalt</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="57"/>
@@ -539,7 +539,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="98"/>
         <source>Toggle comment</source>
-        <translation>Yorumu aç/kapat</translation>
+        <translation>Açıklama simgesini koy/kaldır</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="99"/>
@@ -592,7 +592,7 @@
     <message>
         <location filename="../src/replacebar.cpp" line="43"/>
         <source>Replace Rest</source>
-        <translation>Kalanını Değiştir</translation>
+        <translation>Geri Kalanları Değiştir</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="44"/>
@@ -681,7 +681,7 @@
     <message>
         <location filename="../src/window.cpp" line="1241"/>
         <source>Discard</source>
-        <translation>Yoksay</translation>
+        <translation>Yok Say</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="172"/>

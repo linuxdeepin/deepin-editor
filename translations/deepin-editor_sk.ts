@@ -279,12 +279,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="46"/>
         <source>Find</source>
-        <translation type="unfinished"/>
+        <translation>Vyhľadať</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="47"/>
         <source>Replace</source>
-        <translation type="unfinished"/>
+        <translation>Nahradiť</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="48"/>
@@ -304,7 +304,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="51"/>
         <source>Exit</source>
-        <translation type="unfinished"/>
+        <translation>Odísť</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="52"/>
@@ -314,7 +314,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="53"/>
         <source>Print</source>
-        <translation type="unfinished"/>
+        <translation>Tlač</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="54"/>
@@ -484,22 +484,22 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="87"/>
         <source>Select all</source>
-        <translation type="unfinished"/>
+        <translation>Vybrať všetko</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="88"/>
         <source>Copy</source>
-        <translation type="unfinished"/>
+        <translation>Kopírovať</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="89"/>
         <source>Cut</source>
-        <translation type="unfinished"/>
+        <translation>Vystrihnúť</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="90"/>
         <source>Paste</source>
-        <translation type="unfinished"/>
+        <translation>Prilepiť</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="91"/>
@@ -554,7 +554,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="101"/>
         <source>Advanced</source>
-        <translation type="unfinished"/>
+        <translation>Pokročilé</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="103"/>
@@ -587,7 +587,7 @@
     <message>
         <location filename="../src/replacebar.cpp" line="42"/>
         <source>Skip</source>
-        <translation type="unfinished"/>
+        <translation>Preskočiť</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="43"/>
@@ -666,7 +666,7 @@
     <message>
         <location filename="../src/window.cpp" line="170"/>
         <source>Print</source>
-        <translation type="unfinished"/>
+        <translation>Tlač</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="171"/>
@@ -686,7 +686,7 @@
     <message>
         <location filename="../src/window.cpp" line="172"/>
         <source>Settings</source>
-        <translation type="unfinished"/>
+        <translation>Nastavenia</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="242"/>
@@ -761,13 +761,13 @@
     <message>
         <location filename="../src/window.cpp" line="1240"/>
         <source>Cancel</source>
-        <translation type="unfinished"/>
+        <translation>Zrušiť</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="168"/>
         <location filename="../src/window.cpp" line="1242"/>
         <source>Save</source>
-        <translation type="unfinished"/>
+        <translation>Uložiť</translation>
     </message>
 </context>
 </TS>

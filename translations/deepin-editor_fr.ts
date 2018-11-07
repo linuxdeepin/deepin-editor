@@ -1,125 +1,125 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="cs" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="fr" version="2.1">
 <context>
     <name>DTextEdit</name>
     <message>
         <location filename="../src/dtextedit.cpp" line="85"/>
         <source>Undo</source>
-        <translation>Zpět</translation>
+        <translation>Annuler</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="86"/>
         <source>Redo</source>
-        <translation>Znovu</translation>
+        <translation>Répéter</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="87"/>
         <source>Cut</source>
-        <translation>Vyjmout</translation>
+        <translation>Couper</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="88"/>
         <source>Copy</source>
-        <translation>Kopírovat</translation>
+        <translation>Copier</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="89"/>
         <source>Paste</source>
-        <translation>Vložit</translation>
+        <translation>Coller</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="90"/>
         <source>Delete</source>
-        <translation>Smazat</translation>
+        <translation>Supprimer</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="91"/>
         <source>Select All</source>
-        <translation>Vybrat vše</translation>
+        <translation>Tout sélectionner</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="92"/>
         <source>Find</source>
-        <translation>Najít</translation>
+        <translation>Rechercher</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="93"/>
         <source>Replace</source>
-        <translation>Nahradit</translation>
+        <translation>Remplacer</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="94"/>
         <source>Go to Line</source>
-        <translation>Jít na řádek</translation>
+        <translation>Aller à la ligne</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="95"/>
         <source>Turn on Read-Only mode</source>
-        <translation>Zapnout režim pouze pro čtení</translation>
+        <translation>Activer le mode lecture seule</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="96"/>
         <source>Turn off Read-Only mode</source>
-        <translation>Vypnout režim pouze pro čtení</translation>
+        <translation>Désactiver le mode lecture seule</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="97"/>
         <source>Fullscreen</source>
-        <translation>Na celou obrazovku</translation>
+        <translation>Plein écran</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="98"/>
         <source>Exit fullscreen</source>
-        <translation>Opustit zobrazení na celou obrazovku</translation>
+        <translation>Quitter le mode Plein écran</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="99"/>
         <source>Open in file manager</source>
-        <translation>Otevřít ve správci souborů</translation>
+        <translation>Ouvrir dans l&apos;Explorateur de Fichiers</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="100"/>
         <source>Toggle comment</source>
-        <translation>Přepnout poznámku</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="122"/>
         <source>Change Case</source>
-        <translation>Změnit velikost písmen</translation>
+        <translation>Changer la casse</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="123"/>
         <source>Upper Case</source>
-        <translation>Velká písmena</translation>
+        <translation>Mettre en majuscules</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="124"/>
         <source>Lower Case</source>
-        <translation>Malá písmena</translation>
+        <translation>Mettre en minuscules</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="125"/>
         <source>Capitalize</source>
-        <translation>Kapitalizovat</translation>
+        <translation>Mettre en lettres capitales</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="1676"/>
         <source>Highlight</source>
-        <translation>Zvýraznění</translation>
+        <translation>Surligner</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="1677"/>
         <source>None</source>
-        <translation>Žádné</translation>
+        <translation>Aucun</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2248"/>
         <source>Read-Only mode is off</source>
-        <translation>Režim pouze pro čtení je vypnut</translation>
+        <translation>Le mode lecture seule est désactivé</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2252"/>
         <source>Read-Only mode is on</source>
-        <translation>Režim pouze pro čtení je zapnut</translation>
+        <translation>Le mode lecture seule est activé</translation>
     </message>
 </context>
 <context>
@@ -127,17 +127,17 @@
     <message>
         <location filename="../src/findbar.cpp" line="37"/>
         <source>Find: </source>
-        <translation>Najít:</translation>
+        <translation>Trouvé :</translation>
     </message>
     <message>
         <location filename="../src/findbar.cpp" line="39"/>
         <source>Next</source>
-        <translation>Další</translation>
+        <translation>Suivant</translation>
     </message>
     <message>
         <location filename="../src/findbar.cpp" line="40"/>
         <source>Previous</source>
-        <translation>Předchozí</translation>
+        <translation>Précédent</translation>
     </message>
 </context>
 <context>
@@ -145,7 +145,7 @@
     <message>
         <location filename="../src/jumplinebar.cpp" line="39"/>
         <source>Go to Line: </source>
-        <translation>Jít na řádek:</translation>
+        <translation>Aller à la ligne :</translation>
     </message>
 </context>
 <context>
@@ -153,12 +153,12 @@
     <message>
         <location filename="../src/main.cpp" line="48"/>
         <source>Deepin Editor is a desktop text editor that supports common text editing features.</source>
-        <translation>Editor textu podporující funkce úprav textu.</translation>
+        <translation>Deepin Editor est un éditeur de texte de bureau qui prend en charge la plupart des fonctions d&apos;édition de texte.</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="61"/>
         <source>Deepin Editor</source>
-        <translation>Editor</translation>
+        <translation>Deepin Editor</translation>
     </message>
 </context>
 <context>
@@ -166,405 +166,405 @@
     <message>
         <location filename="../src/main.cpp" line="57"/>
         <source>Deepin Editor</source>
-        <translation>Editor</translation>
+        <translation>Deepin Editor</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="24"/>
         <source>Basic</source>
-        <translation>Základní</translation>
+        <translation>Basique</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="25"/>
         <source>Font Style</source>
-        <translation>Styl písma</translation>
+        <translation>Style d&apos;écriture</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="26"/>
         <source>Font</source>
-        <translation>Písmo</translation>
+        <translation>Police</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="27"/>
         <source>Font Size</source>
-        <translation>Velikost písma</translation>
+        <translation>Taille de police</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="29"/>
         <location filename="../src/settingsdialog.cpp" line="30"/>
         <source>Keymap</source>
-        <translation>Přiřazení kláves</translation>
+        <translation>Préréglage</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="28"/>
         <source>Shortcuts</source>
-        <translation>Klávesové zkratky</translation>
+        <translation>Raccourcis</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="31"/>
         <location filename="../src/settingsdialog.cpp" line="102"/>
         <location filename="../src/window.cpp" line="493"/>
         <source>Window</source>
-        <translation>Okno</translation>
+        <translation>Fenêtre</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="32"/>
         <source>New tab</source>
-        <translation>Nová karta</translation>
+        <translation>Nouvel onglet</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="33"/>
         <source>New window</source>
-        <translation>Nové okno</translation>
+        <translation>Nouvelle fenêtre</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="34"/>
         <source>Save</source>
-        <translation>Uložit</translation>
+        <translation>Enregistrer</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="35"/>
         <source>Save as</source>
-        <translation>Uložit jako</translation>
+        <translation>Enregistrer sous</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="36"/>
         <source>Next tab</source>
-        <translation>Další karta</translation>
+        <translation>Onglet suivant</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="37"/>
         <source>Previous tab</source>
-        <translation>Předchozí karta</translation>
+        <translation>Onglet précédent</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="38"/>
         <source>Close tab</source>
-        <translation>Zavřít kartu</translation>
+        <translation>Fermer l&apos;onglet</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="39"/>
         <source>Close other tabs</source>
-        <translation>Zavřít ostatní karty</translation>
+        <translation>Fermer les autres onglets</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="40"/>
         <source>Restore tab</source>
-        <translation>Obnovit kartu</translation>
+        <translation>Restaurer l&apos;onglet</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="41"/>
         <source>Open file</source>
-        <translation>Otevřít soubor</translation>
+        <translation>Ouvrir un fichier</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="42"/>
         <source>Increment font size</source>
-        <translation>Přírůstek velikosti písma</translation>
+        <translation>Incrémenter la taille de la police</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="43"/>
         <source>Decrement font size</source>
-        <translation>Úbytek velikosti písma</translation>
+        <translation>Décrémenter la taille de la police</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="44"/>
         <source>Reset font size</source>
-        <translation>Vrátit velikost písma na výchozí</translation>
+        <translation>Réinitialiser la taille de la police </translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="45"/>
         <source>Toggle fullscreen</source>
-        <translation>Přepnout na celou obrazovku</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="46"/>
         <source>Find</source>
-        <translation>Najít</translation>
+        <translation>Rechercher</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="47"/>
         <source>Replace</source>
-        <translation>Nahradit</translation>
+        <translation>Remplacer</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="48"/>
         <source>Go to line</source>
-        <translation>Jít na řádek</translation>
+        <translation>Aller à la ligne</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="49"/>
         <source>Save cursor position</source>
-        <translation>Uložit polohu ukazovátka</translation>
+        <translation>Sauvegarder la position du curseur</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="50"/>
         <source>Reset cursor position</source>
-        <translation>Vrátit polohu ukazovátka na výchozí</translation>
+        <translation>Réinitialiser la position du curseur</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="51"/>
         <source>Exit</source>
-        <translation>Ukončit</translation>
+        <translation>Quitter</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="52"/>
         <source>Display shortcuts</source>
-        <translation>Zobrazit klávesové zkratky</translation>
+        <translation>Afficher les raccourcis</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="53"/>
         <source>Print</source>
-        <translation>Tisk</translation>
+        <translation>Imprimer</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="54"/>
         <source>Editor</source>
-        <translation>Editor</translation>
+        <translation>Éditeur</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="55"/>
         <source>Increase indent</source>
-        <translation>Zvětšit odsazení</translation>
+        <translation>Augmenter l&apos;indentation</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="56"/>
         <source>Decrease indent</source>
-        <translation>Zmenšit odsazení</translation>
+        <translation>Diminuer l&apos;indentation</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="57"/>
         <source>Forward char</source>
-        <translation>O znak dopředu</translation>
+        <translation>Caractère suivant</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="58"/>
         <source>Backward char</source>
-        <translation>O znak dozadu</translation>
+        <translation>Caractère précédent</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="59"/>
         <source>Forward word</source>
-        <translation>O slovo dopředu</translation>
+        <translation>Mot suivant</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="60"/>
         <source>Backward word</source>
-        <translation>O slovo dozadu</translation>
+        <translation>Mot précédent</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="61"/>
         <source>Next line</source>
-        <translation>Další řádek</translation>
+        <translation>Ligne suivante</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="62"/>
         <source>Previous line</source>
-        <translation>Předchozí řádek</translation>
+        <translation>Ligne précédente</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="63"/>
         <source>New line</source>
-        <translation>Nový řádek</translation>
+        <translation>Nouvelle ligne</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="64"/>
         <source>New line above</source>
-        <translation>Nový řádek nad</translation>
+        <translation>Nouvelle ligne au dessus</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="65"/>
         <source>New line below</source>
-        <translation>Nový řádek pod</translation>
+        <translation>Nouvelle ligne en dessous</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="66"/>
         <source>Duplicate line</source>
-        <translation>Zdvojit řádek</translation>
+        <translation>Dupliquer la ligne</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="67"/>
         <source>Delete to end of line</source>
-        <translation>Smazat po konec řádku</translation>
+        <translation>Supprimer jusqu&apos;à la fin de la ligne</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="68"/>
         <source>Delete current line</source>
-        <translation>Smazat nynější řádek</translation>
+        <translation>Supprimer la ligne actuelle</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="69"/>
         <source>Swap line up</source>
-        <translation>Vyměnit řádek nahoru</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="70"/>
         <source>Swap line down</source>
-        <translation>Vyměnit řádek dolů</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="71"/>
         <source>Scroll up one line</source>
-        <translation>Projíždět o řádek nahoru</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="72"/>
         <source>Scroll down one line</source>
-        <translation>Projíždět o řádek dolů</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="73"/>
         <source>Page up</source>
-        <translation>O stranu nahoru</translation>
+        <translation>Page suivante</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="74"/>
         <source>Page down</source>
-        <translation>O stranu dolů</translation>
+        <translation>Page précédente </translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="75"/>
         <source>Move to end of line</source>
-        <translation>Přesunout na konec řádku</translation>
+        <translation>Déplacer à la fin de la ligne</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="76"/>
         <source>Move to start of line</source>
-        <translation>Přesunout na začátek řádku</translation>
+        <translation>Déplacer au début de la ligne</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="77"/>
         <source>Move to end of text</source>
-        <translation>Přesunout na konec textu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="78"/>
         <source>Move to start of text</source>
-        <translation>Přesunout na začátek textu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="79"/>
         <source>Move to line indentation</source>
-        <translation>Přesunout na odsazení řádku</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="80"/>
         <source>Upper case</source>
-        <translation>Velká písmena</translation>
+        <translation>Majuscule</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="81"/>
         <source>Lower case</source>
-        <translation>Malá písmena</translation>
+        <translation>Minuscule</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="82"/>
         <source>Capitalize</source>
-        <translation>Kapitalizovat</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="83"/>
         <source>Delete backward word</source>
-        <translation>Smazat slovo dozadu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="84"/>
         <source>Delete forward word</source>
-        <translation>Smazat slovo dopředu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="85"/>
         <source>Forward over a pair</source>
-        <translation>Dopředu přes dvojici</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="86"/>
         <source>Backward over a pair</source>
-        <translation>Dozadu přes dvojici</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="87"/>
         <source>Select all</source>
-        <translation>Vybrat vše</translation>
+        <translation>Tout sélectionner</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="88"/>
         <source>Copy</source>
-        <translation>Kopírovat</translation>
+        <translation>Copier</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="89"/>
         <source>Cut</source>
-        <translation>Vyjmout</translation>
+        <translation>Couper</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="90"/>
         <source>Paste</source>
-        <translation>Vložit</translation>
+        <translation>Coller</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="91"/>
         <source>Transpose char</source>
-        <translation>Přemístit znak</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="92"/>
         <source>Mark</source>
-        <translation>Označit</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="93"/>
         <source>Unmark</source>
-        <translation>Odznačit</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="94"/>
         <source>Copy line</source>
-        <translation>Kopírovat řádek</translation>
+        <translation>Copier la ligne</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="95"/>
         <source>Cut line</source>
-        <translation>Vyjmout řádek</translation>
+        <translation>Couper la ligne</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="96"/>
         <source>Merge lines</source>
-        <translation>Sloučit řádky</translation>
+        <translation>Fusionner les lignes</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="97"/>
         <source>Read-Only mode</source>
-        <translation>Režim pouze pro čtení</translation>
+        <translation>Mode lecture seule</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="98"/>
         <source>Toggle comment</source>
-        <translation>Přepnout poznámku</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="99"/>
         <source>Undo</source>
-        <translation>Zpět</translation>
+        <translation>Annuler</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="100"/>
         <source>Redo</source>
-        <translation>Znovu</translation>
+        <translation>Rétablir</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="101"/>
         <source>Advanced</source>
-        <translation>Pokročilé</translation>
+        <translation>Avancé</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="103"/>
         <source>Window size</source>
-        <translation>Velikost okna</translation>
+        <translation>Taille de la fenêtre</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="104"/>
         <source>Tab space</source>
-        <translation>Mezera tabulátoru</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -572,32 +572,32 @@
     <message>
         <location filename="../src/replacebar.cpp" line="37"/>
         <source>Replace: </source>
-        <translation>Nahradit:</translation>
+        <translation>Remplacer:</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="39"/>
         <source>With: </source>
-        <translation>Pomocí:</translation>
+        <translation>Avec:</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="41"/>
         <source>Replace</source>
-        <translation>Nahradit</translation>
+        <translation>Remplacer</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="42"/>
         <source>Skip</source>
-        <translation>Přeskočit</translation>
+        <translation>Passer</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="43"/>
         <source>Replace Rest</source>
-        <translation>Nahradit zbytek</translation>
+        <translation>Remplacer la suite</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="44"/>
         <source>Replace All</source>
-        <translation>Nahradit vše</translation>
+        <translation>Tout remplacer</translation>
     </message>
 </context>
 <context>
@@ -605,27 +605,27 @@
     <message>
         <location filename="../src/settings.cpp" line="80"/>
         <source>Standard</source>
-        <translation>Standardní</translation>
+        <translation>Standard</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="80"/>
         <source>Customize</source>
-        <translation>Přizpůsobit</translation>
+        <translation>Personnaliser </translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="91"/>
         <source>Normal</source>
-        <translation>Normální</translation>
+        <translation>Normal </translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="91"/>
         <source>Maximum</source>
-        <translation>Největší</translation>
+        <translation>Maximum</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="91"/>
         <source>Fullscreen</source>
-        <translation>Na celou obrazovku</translation>
+        <translation>Plein écran</translation>
     </message>
 </context>
 <context>
@@ -633,12 +633,12 @@
     <message>
         <location filename="../src/tabbar.cpp" line="307"/>
         <source>Close tab</source>
-        <translation>Zavřít kartu</translation>
+        <translation>Fermer l&apos;onglet</translation>
     </message>
     <message>
         <location filename="../src/tabbar.cpp" line="308"/>
         <source>Close other tabs</source>
-        <translation>Zavřít ostatní karty</translation>
+        <translation>Fermer les autres onglets </translation>
     </message>
 </context>
 <context>
@@ -646,57 +646,57 @@
     <message>
         <location filename="../src/window.cpp" line="165"/>
         <source>New window</source>
-        <translation>Nové okno</translation>
+        <translation>Nouvelle fenêtre</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="166"/>
         <source>New tab</source>
-        <translation>Nová karta</translation>
+        <translation>Nouvel onglet</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="167"/>
         <source>Open file</source>
-        <translation>Otevřít soubor</translation>
+        <translation>Ouvrir un fichier</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="169"/>
         <source>Save as</source>
-        <translation>Uložit jako</translation>
+        <translation>Enregistrer sous</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="170"/>
         <source>Print</source>
-        <translation>Tisk</translation>
+        <translation>Imprimer</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="171"/>
         <source>Switch theme</source>
-        <translation>Přepnout vzhled</translation>
+        <translation>Changer de thème </translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="613"/>
         <source>Saved successfully</source>
-        <translation>Uloženo úspěšně</translation>
+        <translation>Enregistré avec succès </translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1241"/>
         <source>Discard</source>
-        <translation>Zahodit</translation>
+        <translation>Ignorer</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="172"/>
         <source>Settings</source>
-        <translation>Nastavení</translation>
+        <translation>Paramètre </translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="242"/>
         <source>You do not have permission to open %1</source>
-        <translation>Nemáte oprávnění pro otevření %1</translation>
+        <translation>Vous n&apos;avez pas la permission d&apos;ouvrir %1</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="270"/>
         <source>Invalid file: %1</source>
-        <translation>Neplatný soubor: %1</translation>
+        <translation>Fichier invalide: %1</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="303"/>
@@ -704,70 +704,70 @@
         <location filename="../src/window.cpp" line="470"/>
         <location filename="../src/window.cpp" line="856"/>
         <source>Save File</source>
-        <translation>Uložit soubor</translation>
+        <translation>Sauvegarder le fichier</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="303"/>
         <source>Do you want to save this file?</source>
-        <translation>Chcete uložit tento soubor?</translation>
+        <translation>Voulez vous enregistrer ce fichier ?</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="450"/>
         <location filename="../src/window.cpp" line="462"/>
         <source>Encoding</source>
-        <translation>Kódování</translation>
+        <translation>Encodage</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="451"/>
         <location filename="../src/window.cpp" line="463"/>
         <source>Line Endings</source>
-        <translation>Konce řádků</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/window.cpp" line="524"/>
         <source>Editor</source>
-        <translation>Editor</translation>
+        <translation>Éditeur</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="561"/>
         <source>File cannot be saved when loading</source>
-        <translation>Soubor nelze uložit během nahrávání</translation>
+        <translation>Le fichier ne peut pas être sauvegardé pendant le chargement</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="580"/>
         <source>You do not have permission to save %1</source>
-        <translation>Nemáte oprávnění pro uložení %1</translation>
+        <translation>Vous n&apos;avez pas la permission de sauvegarder %1</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="601"/>
         <source>Unable to save the file</source>
-        <translation>Nelze uložit soubor</translation>
+        <translation>Impossible de sauvegarder le fichier</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="601"/>
         <source>Do you want to save as another?</source>
-        <translation>Chcete uložit jako jiný?</translation>
+        <translation>Voulez vous enregistrer sous ?</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="856"/>
         <source>Do you want to save all the files?</source>
-        <translation>Chcete uložit všechny tyto soubory?</translation>
+        <translation>Voulez vous enregistrer tous les fichiers</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1023"/>
         <source>Blank document %1</source>
-        <translation>Prázdný dokument %1</translation>
+        <translation>Document vide %1</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1240"/>
         <source>Cancel</source>
-        <translation>Zrušit</translation>
+        <translation>Annuler</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="168"/>
         <location filename="../src/window.cpp" line="1242"/>
         <source>Save</source>
-        <translation>Uložit</translation>
+        <translation>Enregistrer </translation>
     </message>
 </context>
 </TS>

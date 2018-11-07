@@ -49,17 +49,17 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="94"/>
         <source>Go to Line</source>
-        <translation type="unfinished"/>
+        <translation>Ugrás megadott sorra</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="95"/>
         <source>Turn on Read-Only mode</source>
-        <translation type="unfinished"/>
+        <translation>Csak olvasható mód bekapcsolása</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="96"/>
         <source>Turn off Read-Only mode</source>
-        <translation type="unfinished"/>
+        <translation>Csak olvasható mód kikapcsolása</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="97"/>
@@ -114,12 +114,12 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="2248"/>
         <source>Read-Only mode is off</source>
-        <translation type="unfinished"/>
+        <translation>Csak olvasható mód kikapcsolva</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2252"/>
         <source>Read-Only mode is on</source>
-        <translation type="unfinished"/>
+        <translation>Csak olvasható mód bekapcsolva</translation>
     </message>
 </context>
 <context>
@@ -145,7 +145,7 @@
     <message>
         <location filename="../src/jumplinebar.cpp" line="39"/>
         <source>Go to Line: </source>
-        <translation type="unfinished"/>
+        <translation>Ugrás megadott sorra:</translation>
     </message>
 </context>
 <context>
@@ -171,7 +171,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="24"/>
         <source>Basic</source>
-        <translation type="unfinished"/>
+        <translation>Alap</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="25"/>
@@ -289,17 +289,17 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="48"/>
         <source>Go to line</source>
-        <translation type="unfinished"/>
+        <translation>Ugrás megadott sorra</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="49"/>
         <source>Save cursor position</source>
-        <translation type="unfinished"/>
+        <translation>Kurzor pozíciójának mentése</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="50"/>
         <source>Reset cursor position</source>
-        <translation type="unfinished"/>
+        <translation>Kurzor pozíciójának visszaállítása</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="51"/>
@@ -369,12 +369,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="64"/>
         <source>New line above</source>
-        <translation type="unfinished"/>
+        <translation>Új sor felülre</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="65"/>
         <source>New line below</source>
-        <translation type="unfinished"/>
+        <translation>Új sor alulra</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="66"/>
@@ -384,7 +384,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="67"/>
         <source>Delete to end of line</source>
-        <translation type="unfinished"/>
+        <translation>Sorvég törlése</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="68"/>
@@ -414,32 +414,32 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="73"/>
         <source>Page up</source>
-        <translation type="unfinished"/>
+        <translation>Lapozás felfelé</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="74"/>
         <source>Page down</source>
-        <translation type="unfinished"/>
+        <translation>Lapozás lefelé</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="75"/>
         <source>Move to end of line</source>
-        <translation type="unfinished"/>
+        <translation>Ugrás a sor végére</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="76"/>
         <source>Move to start of line</source>
-        <translation type="unfinished"/>
+        <translation>Ugrás a sor elejére</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="77"/>
         <source>Move to end of text</source>
-        <translation type="unfinished"/>
+        <translation>Ugrás a szöveg végére</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="78"/>
         <source>Move to start of text</source>
-        <translation type="unfinished"/>
+        <translation>Ugrás a szöveg elejére</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="79"/>
@@ -509,12 +509,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="92"/>
         <source>Mark</source>
-        <translation type="unfinished"/>
+        <translation>Jelölés</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="93"/>
         <source>Unmark</source>
-        <translation type="unfinished"/>
+        <translation>Jelölés törlése</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="94"/>
@@ -534,12 +534,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="97"/>
         <source>Read-Only mode</source>
-        <translation type="unfinished"/>
+        <translation>Csak olvasható mód</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="98"/>
         <source>Toggle comment</source>
-        <translation type="unfinished"/>
+        <translation>Komment bekapcsolása</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="99"/>
@@ -554,7 +554,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="101"/>
         <source>Advanced</source>
-        <translation type="unfinished"/>
+        <translation>Speciális</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="103"/>
@@ -564,7 +564,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="104"/>
         <source>Tab space</source>
-        <translation type="unfinished"/>
+        <translation>Tabulátorméret</translation>
     </message>
 </context>
 <context>
@@ -592,7 +592,7 @@
     <message>
         <location filename="../src/replacebar.cpp" line="43"/>
         <source>Replace Rest</source>
-        <translation type="unfinished"/>
+        <translation>Mindegyik cseréje</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="44"/>
@@ -605,12 +605,12 @@
     <message>
         <location filename="../src/settings.cpp" line="80"/>
         <source>Standard</source>
-        <translation type="unfinished"/>
+        <translation>Standard</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="80"/>
         <source>Customize</source>
-        <translation type="unfinished"/>
+        <translation>Testreszabás</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="91"/>
