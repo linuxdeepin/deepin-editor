@@ -1,3 +1,18 @@
+<a name="1.1.2"></a>
+##  1.1.2 (2018-11-13)
+
+
+#### Bug Fixes
+
+*   drag and drop crash under loongson. ([0dc5d62c](https://github.com/linuxdeepin/deepin-editor/commit/0dc5d62c300e102cf62d397e7163d8223b6a21af))
+*   icon is incorrect ([f395cacc](https://github.com/linuxdeepin/deepin-editor/commit/f395caccf146e47ae38bf368e7cb9ae1429f8c35))
+
+#### Features
+
+*   add two mime types. ([14d1860e](https://github.com/linuxdeepin/deepin-editor/commit/14d1860e05db1052738f6bf1d41bf77f983be7ba))
+
+
+
 <a name="1.1.1"></a>
 ## 1.1.1 (2018-10-26)
 
