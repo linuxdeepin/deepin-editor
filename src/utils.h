@@ -53,5 +53,6 @@ public:
     static qreal easeOutQuint(qreal x);
     static QVariantMap getThemeMapFromPath(const QString &filepath);
     static bool isMimeTypeSupport(const QString &filepath);
+    static bool isDraftFile(const QString &filepath);
     static void toast(const QString &message, QWidget* parent = nullptr);
 };

@@ -29,6 +29,10 @@
 #include <QTimer>
 #include <QDir>
 
+#include "drecentmanager.h"
+
+DCORE_USE_NAMESPACE
+
 EditWrapper::EditWrapper(QWidget *parent)
     : QWidget(parent),
       m_layout(new QHBoxLayout(this)),
@@ -172,8 +176,16 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QString
 
     qDebug() << "load finished: " << m_textEdit->filepath << ", " << encode;
 
+    if (!Utils::isDraftFile(m_textEdit->filepath)) {
+        DRecentData data;
+        data.appName = "Deepin Editor";
+        data.appExec = "deepin-editor";
+        DRecentManager::addItem(m_textEdit->filepath, data);
+    }
+
     m_isLoadFinished = true;
     m_fileEncode = encode;
+
 
     // set text.
     m_textEdit->setPlainText(content);

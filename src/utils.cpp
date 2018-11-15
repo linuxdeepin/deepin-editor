@@ -36,6 +36,7 @@
 #include <QString>
 #include <QtMath>
 #include <QWidget>
+#include <QStandardPaths>
 #include <KEncodingProber>
 #include <QTextCodec>
 #include <DToast>
@@ -506,6 +507,15 @@ bool Utils::isMimeTypeSupport(const QString &filepath)
     }
 
     return false;
+}
+
+bool Utils::isDraftFile(const QString &filepath)
+{
+    QString draftDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first())
+                                                                            .filePath("blank-files");
+    QString dir = QFileInfo(filepath).dir().absolutePath();
+
+    return draftDir == dir;
 }
 
 void Utils::toast(const QString &message, QWidget *parent)
