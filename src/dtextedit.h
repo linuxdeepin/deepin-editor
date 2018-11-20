@@ -166,6 +166,7 @@ signals:
     void clickJumpLineAction();
     void clickFullscreenAction();
     void cursorMarkChanged(bool mark, QTextCursor cursor);
+    void modificationChanged(const QString &path, bool isModified);
     void popupNotify(QString notify);
     void click();
     void pressEsc();

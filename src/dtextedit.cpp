@@ -2003,6 +2003,8 @@ void DTextEdit::setSettings(Settings *keySettings)
 void DTextEdit::setModified(bool modified)
 {
     document()->setModified(modified);
+
+    emit modificationChanged(filepath, modified);
 }
 
 void DTextEdit::copySelectedText()
