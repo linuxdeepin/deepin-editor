@@ -1,100 +1,100 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="sr" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ar" version="2.1">
 <context>
     <name>DTextEdit</name>
     <message>
         <location filename="../src/dtextedit.cpp" line="85"/>
         <source>Undo</source>
-        <translation>Опозови</translation>
+        <translation>تراجع</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="86"/>
         <source>Redo</source>
-        <translation>Обнови</translation>
+        <translation>اعد</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="87"/>
         <source>Cut</source>
-        <translation>Исеци</translation>
+        <translation>قص</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="88"/>
         <source>Copy</source>
-        <translation>Копирај</translation>
+        <translation>نسخ</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="89"/>
         <source>Paste</source>
-        <translation>Убаци</translation>
+        <translation>لصق</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="90"/>
         <source>Delete</source>
-        <translation>Обриши</translation>
+        <translation>حذف</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="91"/>
         <source>Select All</source>
-        <translation>Одабери све</translation>
+        <translation>تحديد الكل</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="92"/>
         <source>Find</source>
-        <translation>Пронађи</translation>
+        <translation>بحث</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="93"/>
         <source>Replace</source>
-        <translation>Замени</translation>
+        <translation>استبدل</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="94"/>
         <source>Go to Line</source>
-        <translation>Иди на ред</translation>
+        <translation>انتثقال الى سطر</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="95"/>
         <source>Turn on Read-Only mode</source>
-        <translation>Укључи режим за читање</translation>
+        <translation>قم بتشغيل وضع القراءة فقط</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="96"/>
         <source>Turn off Read-Only mode</source>
-        <translation>Искључи режим за читање</translation>
+        <translation>قم بإيقاف تشغيل وضع القراءة فقط</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="97"/>
         <source>Fullscreen</source>
-        <translation>Цео екран</translation>
+        <translation>ملئ الشاشة</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="98"/>
         <source>Exit fullscreen</source>
-        <translation>Напусти цео екран</translation>
+        <translation>الخروج من وضع ملئ للشاشة</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="99"/>
         <source>Open in file manager</source>
-        <translation>Отвори у управнику података</translation>
+        <translation>فتح الملف في مستكشف الملفات</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="100"/>
         <source>Toggle comment</source>
-        <translation type="unfinished"/>
+        <translation>تبديل التعليق</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="122"/>
         <source>Change Case</source>
-        <translation type="unfinished"/>
+        <translation>تغيير الخانة</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="123"/>
         <source>Upper Case</source>
-        <translation type="unfinished"/>
+        <translation>الأحرف الكبيرة</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="124"/>
         <source>Lower Case</source>
-        <translation type="unfinished"/>
+        <translation>أحرف صغيرة</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="125"/>
@@ -104,22 +104,22 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="1676"/>
         <source>Highlight</source>
-        <translation type="unfinished"/>
+        <translation>التركيز</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="1677"/>
         <source>None</source>
-        <translation>Ништа</translation>
+        <translation>لا شيء</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2248"/>
         <source>Read-Only mode is off</source>
-        <translation>Режим за читање је искључен</translation>
+        <translation>وضع القراءة فقط متوقف</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2252"/>
         <source>Read-Only mode is on</source>
-        <translation>Режим за читање је укључен</translation>
+        <translation>وضع القراءة فقط قيد التشغيل</translation>
     </message>
 </context>
 <context>
@@ -127,17 +127,17 @@
     <message>
         <location filename="../src/findbar.cpp" line="37"/>
         <source>Find: </source>
-        <translation>Пронађи</translation>
+        <translation>بحث :</translation>
     </message>
     <message>
         <location filename="../src/findbar.cpp" line="39"/>
         <source>Next</source>
-        <translation>Следеће</translation>
+        <translation>التالي</translation>
     </message>
     <message>
         <location filename="../src/findbar.cpp" line="40"/>
         <source>Previous</source>
-        <translation>Претходно</translation>
+        <translation>السابق</translation>
     </message>
 </context>
 <context>
@@ -145,7 +145,7 @@
     <message>
         <location filename="../src/jumplinebar.cpp" line="39"/>
         <source>Go to Line: </source>
-        <translation>Иди на ред:</translation>
+        <translation>انتثقال الى سطر</translation>
     </message>
 </context>
 <context>
@@ -153,12 +153,12 @@
     <message>
         <location filename="../src/main.cpp" line="48"/>
         <source>Deepin Editor is a desktop text editor that supports common text editing features.</source>
-        <translation>Дипин Уредник је уређивач текста за рачунаре који подржава стандардне уређивачке функције.</translation>
+        <translation>محرر ديبن هو محرر نصوص مكتبي يدعم ميزات تحرير النص الشائعة.</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="61"/>
         <source>Deepin Editor</source>
-        <translation>Дипин Уредник</translation>
+        <translation>محرر ديبين</translation>
     </message>
 </context>
 <context>
@@ -166,280 +166,280 @@
     <message>
         <location filename="../src/main.cpp" line="57"/>
         <source>Deepin Editor</source>
-        <translation>Дипин Уредник</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="24"/>
         <source>Basic</source>
-        <translation>Основно</translation>
+        <translation>بسيط</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="25"/>
         <source>Font Style</source>
-        <translation>Стил фонта</translation>
+        <translation>نوع الخط</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="26"/>
         <source>Font</source>
-        <translation>Фонт</translation>
+        <translation>الخط</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="27"/>
         <source>Font Size</source>
-        <translation>Величина фонта</translation>
+        <translation>حجم الخط</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="29"/>
         <location filename="../src/settingsdialog.cpp" line="30"/>
         <source>Keymap</source>
-        <translation>Мапа тастера</translation>
+        <translation>خارطة المفاتيح</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="28"/>
         <source>Shortcuts</source>
-        <translation>Пречице</translation>
+        <translation>الاختصارات</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="31"/>
         <location filename="../src/settingsdialog.cpp" line="102"/>
         <location filename="../src/window.cpp" line="493"/>
         <source>Window</source>
-        <translation>Прозор</translation>
+        <translation>النافذة</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="32"/>
         <source>New tab</source>
-        <translation>Нова картица</translation>
+        <translation>لسان جديد</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="33"/>
         <source>New window</source>
-        <translation>Нови прозор</translation>
+        <translation>نافذة جديدة</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="34"/>
         <source>Save</source>
-        <translation>Сачувај</translation>
+        <translation>حفظ</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="35"/>
         <source>Save as</source>
-        <translation>Сачувај као</translation>
+        <translation>حفظ باسم</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="36"/>
         <source>Next tab</source>
-        <translation>Следећа картица</translation>
+        <translation>اللسان التالي</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="37"/>
         <source>Previous tab</source>
-        <translation>Претходна картица</translation>
+        <translation>اللسان السابق</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="38"/>
         <source>Close tab</source>
-        <translation>Затвори картицу</translation>
+        <translation>اغلق اللسان</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="39"/>
         <source>Close other tabs</source>
-        <translation>Затвори остале картице</translation>
+        <translation>اغلق الالسنة الاخرى</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="40"/>
         <source>Restore tab</source>
-        <translation>Обнови картицу</translation>
+        <translation>استعادة الالسنة</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="41"/>
         <source>Open file</source>
-        <translation>Отвори датотеку</translation>
+        <translation>فتح الملف</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="42"/>
         <source>Increment font size</source>
-        <translation type="unfinished"/>
+        <translation>زيادة حجم الخط</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="43"/>
         <source>Decrement font size</source>
-        <translation type="unfinished"/>
+        <translation>انقص حجم الخط</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="44"/>
         <source>Reset font size</source>
-        <translation>Врати величину фонта</translation>
+        <translation>إعادة تعيين حجم الخط</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="45"/>
         <source>Toggle fullscreen</source>
-        <translation type="unfinished"/>
+        <translation>تبديل ملء الشاشة </translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="46"/>
         <source>Find</source>
-        <translation>Пронађи</translation>
+        <translation>بحث</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="47"/>
         <source>Replace</source>
-        <translation>Замени</translation>
+        <translation>استبدل</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="48"/>
         <source>Go to line</source>
-        <translation>Иди на ред</translation>
+        <translation>انتقال الى سطر</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="49"/>
         <source>Save cursor position</source>
-        <translation>Сачувај позицију показивача</translation>
+        <translation>حفظ موضع المؤشر</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="50"/>
         <source>Reset cursor position</source>
-        <translation type="unfinished"/>
+        <translation>إعادة ضبط موضع المؤشر</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="51"/>
         <source>Exit</source>
-        <translation>Изађи</translation>
+        <translation>خروج</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="52"/>
         <source>Display shortcuts</source>
-        <translation>Прикажи пречице</translation>
+        <translation>عرض الاختصارات</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="53"/>
         <source>Print</source>
-        <translation>Штампај</translation>
+        <translation>اطبع</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="54"/>
         <source>Editor</source>
-        <translation>Уређивач</translation>
+        <translation>المحرر</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="55"/>
         <source>Increase indent</source>
-        <translation type="unfinished"/>
+        <translation>زيادة المسافة البادئة</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="56"/>
         <source>Decrease indent</source>
-        <translation type="unfinished"/>
+        <translation>اخفظ المسافة البادئة</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="57"/>
         <source>Forward char</source>
-        <translation type="unfinished"/>
+        <translation>الحرف للأمام</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="58"/>
         <source>Backward char</source>
-        <translation type="unfinished"/>
+        <translation>الحرف للأمام</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="59"/>
         <source>Forward word</source>
-        <translation type="unfinished"/>
+        <translation>الكلمة إلى الأمام</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="60"/>
         <source>Backward word</source>
-        <translation type="unfinished"/>
+        <translation>الكلمة إلى الخلف</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="61"/>
         <source>Next line</source>
-        <translation>Следећи ред</translation>
+        <translation>السطر التالي</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="62"/>
         <source>Previous line</source>
-        <translation>Претходни ред</translation>
+        <translation>السطر السابق</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="63"/>
         <source>New line</source>
-        <translation>Нови ред</translation>
+        <translation>سطر جديد</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="64"/>
         <source>New line above</source>
-        <translation>Нови ред изнад</translation>
+        <translation>سطر جديد اعلاه</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="65"/>
         <source>New line below</source>
-        <translation>Нови ред испод</translation>
+        <translation>سطر جديد اسفل</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="66"/>
         <source>Duplicate line</source>
-        <translation type="unfinished"/>
+        <translation>مضاعفة السطر</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="67"/>
         <source>Delete to end of line</source>
-        <translation type="unfinished"/>
+        <translation>حذف إلى نهاية السطر</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="68"/>
         <source>Delete current line</source>
-        <translation>Обриши тренутни ред</translation>
+        <translation>حذف السطر الحالي</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="69"/>
         <source>Swap line up</source>
-        <translation type="unfinished"/>
+        <translation>مبادلة خط للاعلى</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="70"/>
         <source>Swap line down</source>
-        <translation type="unfinished"/>
+        <translation>مبادلة خط للاسفل</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="71"/>
         <source>Scroll up one line</source>
-        <translation type="unfinished"/>
+        <translation>انتقل لأعلى سطر واحد</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="72"/>
         <source>Scroll down one line</source>
-        <translation type="unfinished"/>
+        <translation>انتقل للاسفل سطر واحد</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="73"/>
         <source>Page up</source>
-        <translation type="unfinished"/>
+        <translation>صفحة للاعلى</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="74"/>
         <source>Page down</source>
-        <translation type="unfinished"/>
+        <translation>صفحة للاسفل</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="75"/>
         <source>Move to end of line</source>
-        <translation>Иди на крај реда</translation>
+        <translation>انتقال الى نهاية الخط</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="76"/>
         <source>Move to start of line</source>
-        <translation>Иди на почетак реда</translation>
+        <translation>انتقال الى بداية الخط</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="77"/>
         <source>Move to end of text</source>
-        <translation>Иди на крај текста</translation>
+        <translation>الانتقال إلى نهاية النص</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="78"/>
         <source>Move to start of text</source>
-        <translation>Иди на почетак текста</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="79"/>
@@ -449,12 +449,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="80"/>
         <source>Upper case</source>
-        <translation>Велика слова</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="81"/>
         <source>Lower case</source>
-        <translation>Мала слова</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="82"/>
@@ -484,22 +484,22 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="87"/>
         <source>Select all</source>
-        <translation>Одабери све</translation>
+        <translation>تحديد الكل</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="88"/>
         <source>Copy</source>
-        <translation>Копирај</translation>
+        <translation>نسخ</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="89"/>
         <source>Cut</source>
-        <translation>Исеци</translation>
+        <translation>قص</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="90"/>
         <source>Paste</source>
-        <translation>Убаци</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="91"/>
@@ -519,22 +519,22 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="94"/>
         <source>Copy line</source>
-        <translation>Копирај ред</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="95"/>
         <source>Cut line</source>
-        <translation>Исеци ред</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="96"/>
         <source>Merge lines</source>
-        <translation>Сједини редове</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="97"/>
         <source>Read-Only mode</source>
-        <translation>Режим за читање</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="98"/>
@@ -544,27 +544,27 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="99"/>
         <source>Undo</source>
-        <translation>Опозови</translation>
+        <translation>تراجع</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="100"/>
         <source>Redo</source>
-        <translation>Обнови</translation>
+        <translation>اعد</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="101"/>
         <source>Advanced</source>
-        <translation>Напредно</translation>
+        <translation>متثدم</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="103"/>
         <source>Window size</source>
-        <translation>Величина прозора</translation>
+        <translation>حجم النافذة</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="104"/>
         <source>Tab space</source>
-        <translation type="unfinished"/>
+        <translation>مسافة الازاحة</translation>
     </message>
 </context>
 <context>
@@ -572,22 +572,22 @@
     <message>
         <location filename="../src/replacebar.cpp" line="37"/>
         <source>Replace: </source>
-        <translation>Замени:</translation>
+        <translation>استبدل</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="39"/>
         <source>With: </source>
-        <translation>Са: </translation>
+        <translation>مع :</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="41"/>
         <source>Replace</source>
-        <translation>Замени</translation>
+        <translation>استبدل</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="42"/>
         <source>Skip</source>
-        <translation>Прескочи</translation>
+        <translation>تخطي</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="43"/>
@@ -597,7 +597,7 @@
     <message>
         <location filename="../src/replacebar.cpp" line="44"/>
         <source>Replace All</source>
-        <translation>Замени све</translation>
+        <translation>استبدل الكل</translation>
     </message>
 </context>
 <context>
@@ -605,27 +605,27 @@
     <message>
         <location filename="../src/settings.cpp" line="80"/>
         <source>Standard</source>
-        <translation>Стандардно</translation>
+        <translation>قياسي</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="80"/>
         <source>Customize</source>
-        <translation>Прилагоди</translation>
+        <translation>معدل</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="91"/>
         <source>Normal</source>
-        <translation type="unfinished"/>
+        <translation>عادي</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="91"/>
         <source>Maximum</source>
-        <translation>Максимум</translation>
+        <translation>أقصى</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="91"/>
         <source>Fullscreen</source>
-        <translation>Цео екран</translation>
+        <translation>ملئ الشاشة</translation>
     </message>
 </context>
 <context>
@@ -633,12 +633,12 @@
     <message>
         <location filename="../src/tabbar.cpp" line="307"/>
         <source>Close tab</source>
-        <translation>Затвори картицу</translation>
+        <translation>اغلق اللسان</translation>
     </message>
     <message>
         <location filename="../src/tabbar.cpp" line="308"/>
         <source>Close other tabs</source>
-        <translation>Затвори остале картице</translation>
+        <translation>اغلق الالسنة الاخرى</translation>
     </message>
 </context>
 <context>
@@ -646,57 +646,57 @@
     <message>
         <location filename="../src/window.cpp" line="165"/>
         <source>New window</source>
-        <translation>Нови прозор</translation>
+        <translation>نافذة جديدة</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="166"/>
         <source>New tab</source>
-        <translation>Нова картица</translation>
+        <translation>لسان جديد</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="167"/>
         <source>Open file</source>
-        <translation>Отвори датотеку</translation>
+        <translation>فتح الملف</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="169"/>
         <source>Save as</source>
-        <translation>Сачувај као</translation>
+        <translation>حفظ باسم</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="170"/>
         <source>Print</source>
-        <translation>Штампај</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/window.cpp" line="171"/>
         <source>Switch theme</source>
-        <translation>Промени тему</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/window.cpp" line="613"/>
         <source>Saved successfully</source>
-        <translation>Успешно сачувано</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1241"/>
         <source>Discard</source>
-        <translation>Одбаци</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/window.cpp" line="172"/>
         <source>Settings</source>
-        <translation>Подешавања</translation>
+        <translation>اعدادات</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="242"/>
         <source>You do not have permission to open %1</source>
-        <translation>Немате дозволу да отворите %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/window.cpp" line="270"/>
         <source>Invalid file: %1</source>
-        <translation>Неважећа датотека: %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/window.cpp" line="303"/>
@@ -704,29 +704,29 @@
         <location filename="../src/window.cpp" line="470"/>
         <location filename="../src/window.cpp" line="856"/>
         <source>Save File</source>
-        <translation>Сачувај датотеку</translation>
+        <translation>حفظ الملف</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="303"/>
         <source>Do you want to save this file?</source>
-        <translation>Да ли желите да сачувате ову датотеку?</translation>
+        <translation>هل تريد حفظ هذا الملف؟</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="450"/>
         <location filename="../src/window.cpp" line="462"/>
         <source>Encoding</source>
-        <translation>Кодирање</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/window.cpp" line="451"/>
         <location filename="../src/window.cpp" line="463"/>
         <source>Line Endings</source>
-        <translation>Крајеви редова</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/window.cpp" line="524"/>
         <source>Editor</source>
-        <translation>Уређивач</translation>
+        <translation>محرر</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="561"/>
@@ -736,7 +736,7 @@
     <message>
         <location filename="../src/window.cpp" line="580"/>
         <source>You do not have permission to save %1</source>
-        <translation>Немате дозволу да сачувате %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/window.cpp" line="601"/>
@@ -751,23 +751,23 @@
     <message>
         <location filename="../src/window.cpp" line="856"/>
         <source>Do you want to save all the files?</source>
-        <translation>Да ли желите да сачувате све датотеке?</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1023"/>
         <source>Blank document %1</source>
-        <translation>Празан документ %1</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1240"/>
         <source>Cancel</source>
-        <translation>Откажи</translation>
+        <translation>الغ</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="168"/>
         <location filename="../src/window.cpp" line="1242"/>
         <source>Save</source>
-        <translation>Сачувај</translation>
+        <translation>حفظ</translation>
     </message>
 </context>
 </TS>
