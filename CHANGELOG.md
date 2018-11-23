@@ -1,3 +1,20 @@
+<a name=""></a>
+##  1.1.3 (2018-11-23)
+
+
+#### Bug Fixes
+
+*   update ts config. ([408b97e2](https://github.com/linuxdeepin/deepin-editor/commit/408b97e240e0131fd75178a6f5fa2b708ec46c02))
+
+#### Features
+
+*   support overwrite mode. ([bc57fd98](https://github.com/linuxdeepin/deepin-editor/commit/bc57fd98307cc8af61189006d2086b402c466ad5))
+*   support the recent file spec. ([122722b8](https://github.com/linuxdeepin/deepin-editor/commit/122722b8e86e54c5beec49cc91f26c2cae6f5bde))
+* **desktop:**  add generic name. ([d29ccc06](https://github.com/linuxdeepin/deepin-editor/commit/d29ccc06988393467a8dba82c0978493f40ad12d))
+* **tabbar:**  add document modification status. ([8fbdf34c](https://github.com/linuxdeepin/deepin-editor/commit/8fbdf34ce4c9988271129786d13dfe910b839166))
+
+
+
 <a name="1.1.2"></a>
 ##  1.1.2 (2018-11-13)
 
