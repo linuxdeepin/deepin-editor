@@ -1381,9 +1381,9 @@ void DTextEdit::renderAllSelections()
     setExtraSelections(selections);
 }
 
-void DTextEdit::keyPressEvent(QKeyEvent *keyEvent)
+void DTextEdit::keyPressEvent(QKeyEvent *e)
 {
-    const QString &key = Utils::getKeyshortcut(keyEvent);
+    const QString &key = Utils::getKeyshortcut(e);
 
     if (m_readOnlyMode) {
         if (key == "J") {
@@ -1426,12 +1426,12 @@ void DTextEdit::keyPressEvent(QKeyEvent *keyEvent)
             copyLines();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglereadonlymode")) {
             toggleReadOnlyMode();
-        } else if (key == "Shift+/" && keyEvent->modifiers() == Qt::ControlModifier) {
-            keyEvent->ignore();
+        } else if (key == "Shift+/" && e->modifiers() == Qt::ControlModifier) {
+            e->ignore();
         } else {
             // If press another key
             // the main window does not receive
-            keyEvent->ignore();
+            e->ignore();
         }
     } else {
         if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "indentline")) {
@@ -1528,11 +1528,17 @@ void DTextEdit::keyPressEvent(QKeyEvent *keyEvent)
             QPlainTextEdit::redo();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "escape")) {
             escape();
+        } else if (e->key() == Qt::Key_Insert) {
+            if (e->modifiers() == Qt::NoModifier) {
+                setOverwriteMode(!overwriteMode());
+                update();
+                e->accept();
+            }
         } else {
             // Post event to window widget if key match window key list.
             for (auto option : m_settings->settings->group("shortcuts.window")->options()) {
                 if (key == m_settings->settings->option(option->key())->value().toString()) {
-                    keyEvent->ignore();
+                    e->ignore();
                     return;
                 }
             }
@@ -1541,12 +1547,12 @@ void DTextEdit::keyPressEvent(QKeyEvent *keyEvent)
             QRegularExpression re("^Alt\\+\\d");
             QRegularExpressionMatch match = re.match(key);
             if (match.hasMatch()) {
-                keyEvent->ignore();
+                e->ignore();
                 return;
             }
 
             // Text editor handle key self.
-            QPlainTextEdit::keyPressEvent(keyEvent);
+            QPlainTextEdit::keyPressEvent(e);
         }
     }
 }
