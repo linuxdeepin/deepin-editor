@@ -10,3 +10,42 @@ StartupNotify=false
 Type=Application
 X-Deepin-Vendor=deepin
 
+# Translations:
+# Do not manually modify!
+Comment[ast]=Un editor cenciellu y fácil d'usar
+Comment[ca]=Editor Deepin, simple i fàcil d'utilitzar
+Comment[de]=Einfacher, leicht zu bedienender Texteditor für deepin.
+Comment[it]=E' semplice utilizzare deepin Editor
+Comment[lt]=Paprastas ir lengvas naudoti deepin redaktorius
+Comment[nl]=Eenvoudig te gebruiken tekstbewerker
+Comment[pt_BR]=Editor deepin simples e fácil de usar
+Comment[ru]=Простой и легкий в использовании редактор deepin
+Comment[sk]=Jednuducho a ľahko použiteľný deepin editor
+Comment[sr]=Једноставан и лак за употребу Дипинов уредник
+Comment[tr]=Basit ve kullanımı kolay deepin düzenleyicisi
+Comment[zh_CN]=简单好用的深度编辑器
+GenericName[ast]=Editor
+GenericName[ca]=Editor
+GenericName[de]=Editor
+GenericName[it]=Editor
+GenericName[lt]=Redaktorius
+GenericName[nl]=Bewerker
+GenericName[pt_BR]=Editor
+GenericName[ru]=Редактор
+GenericName[sk]=Editor
+GenericName[sr]=Уредник
+GenericName[tr]=Düzenleyici
+GenericName[zh_CN]=编辑器
+Name[ast]=Deepin Editor
+Name[ca]=Editor del Deepin
+Name[de]=Deepin Editor
+Name[it]=Deepin Editor
+Name[lt]=Deepin redaktorius
+Name[nl]=Deepin Bewerker
+Name[pt_BR]=Editor Deepin
+Name[ru]=Редактор Deepin
+Name[sk]=Deepin Editor
+Name[sr]=Дипин Уредник
+Name[tr]=Deepin Düzenleyici
+Name[zh_CN]=深度编辑器
+
