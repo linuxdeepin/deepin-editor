@@ -46,6 +46,7 @@ public:
     static QPixmap dropShadow(const QPixmap &source, qreal radius, const QColor &color, const QPoint &offset);
     static QImage dropShadow(const QPixmap &px, qreal radius, const QColor &color);
     static QByteArray detectEncode(const QByteArray &data, const QString &fileName = QString());
+    static QByteArray getEncode(const QByteArray &data);
     static qreal easeInOut(qreal x);
     static qreal easeInQuad(qreal x);
     static qreal easeInQuint(qreal x);

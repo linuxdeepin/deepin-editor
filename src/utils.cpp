@@ -313,6 +313,29 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
     return encoding;
 }
 
+QByteArray Utils::getEncode(const QByteArray &data)
+{
+    // try to get HTML header encoding.
+    if (QTextCodec *codecForHtml = QTextCodec::codecForHtml(data, nullptr)) {
+        return codecForHtml->name();
+    }
+
+    QTextCodec *codec = nullptr;
+    KEncodingProber prober(KEncodingProber::Universal);
+    prober.feed(data.constData(), data.size());
+
+    // we found codec with some confidence ?
+    if (prober.confidence() > 0.5) {
+        codec = QTextCodec::codecForName(prober.encoding());
+    }
+
+    if (!codec) {
+        return QByteArray();
+    }
+
+    return codec->name();
+}
+
 bool Utils::fileExists(const QString &path)
 {
     QFileInfo check_file(path);
