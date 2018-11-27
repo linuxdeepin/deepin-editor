@@ -152,7 +152,7 @@ DTextEdit::DTextEdit(QPlainTextEdit *parent)
 
     // configure content area
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    // setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     connect(verticalScrollBar(), &QScrollBar::rangeChanged, this, &DTextEdit::adjustScrollbarMargins, Qt::QueuedConnection);
 
@@ -1999,6 +1999,14 @@ void DTextEdit::removeHighlightWordUnderCursor()
     m_wordUnderCursorSelection = selection;
 
     renderAllSelections();
+}
+
+void DTextEdit::setWordWrapMode(QTextOption::WrapMode policy)
+{
+    setHorizontalScrollBarPolicy(policy == QTextOption::WordWrap ? Qt::ScrollBarAlwaysOff
+                                                                 : Qt::ScrollBarAlwaysOn);
+
+    QPlainTextEdit::setWordWrapMode(policy);
 }
 
 void DTextEdit::setSettings(Settings *keySettings)

@@ -131,6 +131,7 @@ public:
     bool highlightWordUnderMouse(QPoint pos);
     void removeHighlightWordUnderCursor();
 
+    void setWordWrapMode(QTextOption::WrapMode policy);
     void setSettings(Settings *settings);
     void setModified(bool modified);
 

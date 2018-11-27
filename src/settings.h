@@ -52,6 +52,7 @@ signals:
     void adjustFont(QString name);
     void adjustFontSize(int fontSize);
     void adjustTabSpaceNumber(int number);
+    void adjustWordWrap(bool enable);
 
 private:
     void updateAllKeysWithKeymap(QString keymap);

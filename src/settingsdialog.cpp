@@ -102,4 +102,6 @@ void GenerateSettingTranslate()
     auto advance_windowName = QObject::tr("Window");
     auto advance_window_windowstateName = QObject::tr("Window size");
     auto advance_editor_tabspacenumberName = QObject::tr("Tab space");
+
+    auto base_font_wordwrapText = QObject::tr("Word Wrap");
 }

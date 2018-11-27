@@ -21,6 +21,13 @@
                             "default": 12,
                             "max": 50,
                             "min": 8
+                        },
+                        {
+                            "key": "wordwrap",
+                            "name": "",
+                            "type": "checkbox",
+                            "text": "Word Wrap",
+                            "default": "true"
                         }
                     ]
                 }

@@ -46,6 +46,11 @@ Settings::Settings(QWidget *parent)
     settings = DSettings::fromJsonFile(":/resources/settings.json");
     settings->setBackend(m_backend);
 
+    auto wordWrap = settings->option("base.font.wordwrap");
+    connect(wordWrap, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
+        emit adjustWordWrap(value.toBool());
+    });
+
     auto fontSize = settings->option("base.font.size");
     connect(fontSize, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
         emit adjustFontSize(value.toInt());

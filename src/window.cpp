@@ -78,6 +78,12 @@ Window::Window(DMainWindow *parent)
     connect(m_settings, &Settings::adjustFont, this, &Window::updateFont);
     connect(m_settings, &Settings::adjustFontSize, this, &Window::updateFontSize);
     connect(m_settings, &Settings::adjustTabSpaceNumber, this, &Window::updateTabSpaceNumber);
+    connect(m_settings, &Settings::adjustWordWrap, this, [=] (bool enable) {
+        for (EditWrapper *wrapper : m_wrappers.values()) {
+            DTextEdit *textedit = wrapper->textEditor();
+            textedit->setWordWrapMode(enable ? QTextOption::WordWrap : QTextOption::NoWrap);
+        }
+    });
 
     // Init layout and editor.
     m_centralLayout->setMargin(0);
@@ -367,11 +373,13 @@ void Window::restoreTab()
 EditWrapper* Window::createEditor()
 {
     EditWrapper *wrapper = new EditWrapper();
+    bool wordWrap = m_settings->settings->option("base.font.wordwrap")->value().toBool();
     wrapper->textEditor()->setThemeWithPath(m_themePath);
     wrapper->textEditor()->setSettings(m_settings);
     wrapper->textEditor()->setTabSpaceNumber(m_settings->settings->option("advance.editor.tabspacenumber")->value().toInt());
     wrapper->textEditor()->setFontFamily(m_settings->settings->option("base.font.family")->value().toString());
     wrapper->textEditor()->setModified(false);
+    wrapper->textEditor()->setWordWrapMode(wordWrap ? QTextOption::WordWrap : QTextOption::NoWrap);
     setFontSizeWithConfig(wrapper);
 
     connect(wrapper->textEditor(), &DTextEdit::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);
