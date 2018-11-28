@@ -10,7 +10,7 @@ In debian, use below command to install compile dependencies:
 
 ## Installation
 
-~~ * Build auto save daemon ~~
+~~Build auto save daemon~~
 
 ```
 sudo cp com.deepin.editor.policy /usr/share/polkit-1/actions
