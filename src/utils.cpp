@@ -95,7 +95,7 @@ void Utils::applyQss(QWidget *widget, const QString &qssName)
     file.close();
 }
 
-float codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, const QLocale::Country &country)
+static float codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, const QLocale::Country &country)
 {
     qreal hep_count = 0;
     int non_base_latin_count = 0;
@@ -114,16 +114,20 @@ float codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, co
         switch (ch.script()) {
         case QChar::Script_Hiragana:
         case QChar::Script_Katakana:
-            hep_count += country == QLocale::Japan ? 1.2 : 0.5;
-            unidentification_count += country == QLocale::Japan ? 0 : 0.3;
+            hep_count += (country == QLocale::Japan) ? 1.2 : 0.5;
+            unidentification_count += (country == QLocale::Japan) ? 0 : 0.3;
             break;
         case QChar::Script_Han:
-            hep_count += country == QLocale::China ? 1.2 : 0.5;
-            unidentification_count += country == QLocale::China ? 0 : 0.3;
+            hep_count += (country == QLocale::China) ? 1.2 : 0.5;
+            unidentification_count += (country == QLocale::China) ? 0 : 0.3;
             break;
         case QChar::Script_Hangul:
             hep_count += (country == QLocale::NorthKorea) || (country == QLocale::SouthKorea) ? 1.2 : 0.5;
             unidentification_count += (country == QLocale::NorthKorea) || (country == QLocale::SouthKorea) ? 0 : 0.3;
+            break;
+        case QChar::Script_Cyrillic:
+            hep_count += (country == QLocale::Russia) ? 1.2 : 0.5;
+            unidentification_count += (country == QLocale::Russia) ? 0 : 0.3;
             break;
         default:
             // full-width character, emoji, 常用标点, 拉丁文补充1
@@ -258,11 +262,12 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
 
     // for CJK
     const QList<QPair<KEncodingProber::ProberType, QLocale::Country>> fallback_list {
-        {KEncodingProber::ChineseSimplified, QLocale::China},
-        {KEncodingProber::ChineseTraditional, QLocale::China},
-        {KEncodingProber::Japanese, QLocale::Japan},
-        {KEncodingProber::Korean, QLocale::NorthKorea},
-        {proberType, QLocale::system().country()}
+        { KEncodingProber::ChineseSimplified, QLocale::China },
+        { KEncodingProber::ChineseTraditional, QLocale::China },
+        { KEncodingProber::Japanese, QLocale::Japan },
+        { KEncodingProber::Korean, QLocale::NorthKorea },
+        { KEncodingProber::Cyrillic, QLocale::Russia },
+        { proberType, QLocale::system().country() }
     };
 
     KEncodingProber prober(proberType);
