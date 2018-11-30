@@ -244,9 +244,11 @@ void Window::addTab(const QString &filepath, bool activeTab)
 {
     // check whether it is an editable file thround mimeType.
     if (Utils::isMimeTypeSupport(filepath)) {
-        // check if have permission to read the file.
         QFile file(filepath);
-        if (!file.open(QIODevice::ReadOnly)) {
+        QFileInfo fileInfo(filepath);
+
+        // check if have permission to read the file.
+        if (fileInfo.exists() && !file.open(QIODevice::ReadOnly)) {
             showNotify(QString(tr("You do not have permission to open %1")).arg(filepath));
             return;
         }
@@ -642,14 +644,35 @@ bool Window::saveFile()
 {
     const QString &currentPath = m_tabbar->currentPath();
     const QString &currentDir = QFileInfo(currentPath).absolutePath();
-    bool isBlankFile = QFileInfo(currentPath).dir().absolutePath() == m_blankFileDir;
+    const QFileInfo fileInfo(currentPath);
+    bool isBlankFile = fileInfo.dir().absolutePath() == m_blankFileDir;
+
+    QFile temporaryBuffer(currentPath);
+    if (!temporaryBuffer.open(QIODevice::WriteOnly)) {
+        showNotify(QString(tr("You do not have permission to save %1")).arg(m_tabbar->currentName()));
+        temporaryBuffer.close();
+        return false;
+
+        const QString content = getTextEditor(currentPath)->toPlainText();
+        bool saveResult = m_rootSaveDBus->saveFile(currentPath.toUtf8(), content.toUtf8(),
+                                                   m_wrappers[currentPath]->fileEncode());
+        if (saveResult) {
+            getTextEditor(currentPath)->setModified(false);
+            showNotify(QString("Saved root file %1").arg(m_tabbar->currentName()));
+        } else {
+            showNotify(QString("Save root file %1 failed.").arg(m_tabbar->currentName()));
+        }
+        return saveResult;
+    }
+
+    temporaryBuffer.close();
 
     // file not finish loadding cannot be saved
     // otherwise you will save the content of the empty.
-    if (!m_wrappers[currentPath]->isLoadFinished() && !isBlankFile) {
-        showNotify(tr("File cannot be saved when loading"));
-        return false;
-    }
+    // if (!m_wrappers[currentPath]->isLoadFinished() && !isBlankFile) {
+    //     showNotify(tr("File cannot be saved when loading"));
+    //     return false;
+    // }
 
     // save blank file.
     if (isBlankFile) {
@@ -663,24 +686,6 @@ bool Window::saveFile()
         } else {
             return false;
         }
-    }
-    // save root file.
-    else if (!m_wrappers[currentPath]->isWritable()) {
-        showNotify(QString(tr("You do not have permission to save %1")).arg(m_tabbar->currentName()));
-        return false;
-
-        const QString content = getTextEditor(currentPath)->toPlainText();
-        bool saveResult = m_rootSaveDBus->saveFile(currentPath.toUtf8(), content.toUtf8(),
-                                                   m_wrappers[currentPath]->fileEncode());
-
-        if (saveResult) {
-            getTextEditor(currentPath)->setModified(false);
-            showNotify(QString("Saved root file %1").arg(m_tabbar->currentName()));
-        } else {
-            showNotify(QString("Save root file %1 failed.").arg(m_tabbar->currentName()));
-        }
-
-        return saveResult;
     }
     // save normal file.
     else {

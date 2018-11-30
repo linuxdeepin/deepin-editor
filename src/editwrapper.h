@@ -40,7 +40,6 @@ public:
     void updatePath(const QString &file);
     QByteArray fileEncode() { return m_fileEncode; }
     bool isLoadFinished() { return m_isLoadFinished; }
-    bool isWritable() { return m_isWritable; }
 
     DTextEdit *textEditor() { return m_textEdit; }
 
@@ -56,7 +55,6 @@ private:
     bool m_saveFinish;
     int m_autoSaveInternal;
     bool m_hasLoadFile = false;
-    bool m_isWritable = false;
     bool m_isLoadFinished = true;
     QString m_newline;
 };

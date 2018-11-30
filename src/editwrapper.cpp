@@ -60,7 +60,6 @@ void EditWrapper::openFile(const QString &filepath)
     // update file path.
     updatePath(filepath);
 
-    m_isWritable = QFileInfo(filepath).isWritable();
     m_isLoadFinished = false;
 
     // begin to load the file.
@@ -126,7 +125,6 @@ bool EditWrapper::saveFile(const QString &encode, const QString &newline)
     if (ok) {
         m_textEdit->setModified(false);
         m_isLoadFinished = true;
-        m_isWritable = true;
     }
 
     qDebug() << "Saved file:" << m_textEdit->filepath
@@ -185,7 +183,6 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QString
 
     m_isLoadFinished = true;
     m_fileEncode = encode;
-
 
     // set text.
     m_textEdit->setPlainText(content);
