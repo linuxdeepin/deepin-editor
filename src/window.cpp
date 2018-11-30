@@ -219,7 +219,7 @@ void Window::initTitlebar()
     connect(m_tabbar, &DTabBar::currentChanged, this, &Window::handleCurrentChanged, Qt::QueuedConnection);
 
     connect(newWindowAction, &QAction::triggered, this, &Window::newWindow);
-    connect(newTabAction, &QAction::triggered, this, [=] () { addBlankTab(); });
+    connect(newTabAction, &QAction::triggered, this, static_cast<void (Window::*)()>(&Window::addBlankTab));
     connect(openFileAction, &QAction::triggered, this, &Window::openFile);
     connect(saveAction, &QAction::triggered, this, &Window::saveFile);
     connect(saveAsAction, &QAction::triggered, this, &Window::saveAsFile);
@@ -484,98 +484,6 @@ void Window::openFile()
     }
 }
 
-void Window::saveAs(const QString &filepath)
-{
-    if (!m_wrappers.contains(filepath)) {
-        return;
-    }
-
-#ifdef DTKWIDGET_CLASS_DFileDialog
-    DFileDialog dialog(this, tr("Save File"));
-    dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.addComboBox(tr("Encoding"), getEncodeList());
-    dialog.addComboBox(tr("Line Endings"), QStringList() << "Linux" << "Windows" << "Mac OS");
-    dialog.setDirectory(QDir::homePath());
-    dialog.selectFile(m_tabbar->textAt(m_tabbar->indexOf(filepath)) + ".txt");
-
-    int mode = dialog.exec();
-    if (mode == QDialog::Accepted) {
-        const QString encode = dialog.getComboBoxValue(tr("Encoding"));
-        const QString endOfLine = dialog.getComboBoxValue(tr("Line Endings"));
-        const QString newpath = dialog.selectedFiles().value(0);
-
-        if (!filepath.isEmpty()) {
-            EditWrapper *wrapper = m_wrappers.value(filepath);
-            EditWrapper::EndOfLineMode eol = EditWrapper::eolUnix;
-
-            if (endOfLine == "Windows") {
-                eol = EditWrapper::eolDos;
-            } else if (endOfLine == "Mac OS") {
-                eol = EditWrapper::eolMac;
-            }
-
-            wrapper->updatePath(newpath);
-            wrapper->setEndOfLineMode(eol);
-            wrapper->saveFile(encode);
-        }
-    }
-#else
-    QString fileName = m_tabbar->textAt(m_tabbar->indexOf(filepath) + ".txt");
-    QFileDialog dialog(this, tr("Save File"));
-    dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.setDirectory(QDir::homePath());
-    dialog.selectFile(fileName + ".txt");
-
-    int mode = dialog.exec();
-
-    if (mode == QDialog::Accepted) {
-        const QString newpath = dialog.selectedFiles().first();
-        if (wrapper.contains(newpath)) {
-            EditWrapper *wrapper = m_wrappers[filepath];
-            wrapper->updatePath(newpath);
-            wrapper->saveFile("UTF-8");
-        }
-    }
-#endif
-}
-
-const QString Window::getSaveFilePath(QString &encode, EditWrapper::EndOfLineMode &eol)
-{
-    encode = "UTF-8";
-
-#ifdef DTKWIDGET_CLASS_DFileDialog
-    DFileDialog dialog(this, tr("Save File"));
-    dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.addComboBox(tr("Encoding"), getEncodeList());
-    dialog.addComboBox(tr("Line Endings"), QStringList() << "Linux" << "Windows" << "Mac OS");
-
-    if (QFileInfo(m_tabbar->currentPath()).dir().absolutePath() != m_blankFileDir) {
-        dialog.setDirectory(QFileInfo(m_tabbar->currentPath()).dir());
-        dialog.selectFile(QFileInfo(m_tabbar->currentPath()).fileName());
-    } else {
-        dialog.setDirectory(QDir::homePath());
-        dialog.selectFile(m_tabbar->currentName() + ".txt");
-    }
-
-    if (dialog.exec() == QDialog::Accepted) {
-        const QString &endOfLine = dialog.getComboBoxValue(tr("Line Endings"));
-        const QString &path = dialog.selectedFiles().value(0);
-         if (endOfLine == "Windows") {
-            eol = EditWrapper::eolDos;
-         } else if (endOfLine == "Mac OS") {
-            eol = EditWrapper::eolMac;
-         }
-
-        encode = dialog.getComboBoxValue(tr("Encoding"));
-        return path;
-    } else {
-        return "";
-    }
-#else
-    return QFileDialog::getSaveFileName(this, tr("Save File"), QDir(QDir::homePath()).filePath("Blank Document.txt"));
-#endif
-}
-
 void Window::displayShortcuts()
 {
     QRect rect = window()->geometry();
@@ -690,17 +598,7 @@ bool Window::saveFile()
 
     // save blank file.
     if (isBlankFile) {
-        QString encode;
-        EditWrapper::EndOfLineMode eol = EditWrapper::eolUnix;
-        QString filepath = getSaveFilePath(encode, eol);
-
-        if (!filepath.isEmpty()) {
-            const QString tabPath = m_tabbar->currentPath();
-            saveFileAsAnotherPath(tabPath, filepath, encode, eol, true);
-            return true;
-        } else {
-            return false;
-        }
+        saveAsFile();
     }
     // save normal file.
     else {
@@ -721,39 +619,62 @@ bool Window::saveFile()
         } else {
             showNotify(tr("Saved successfully"));
         }
-
-        return true;
     }
+
+    return true;
 }
 
 void Window::saveAsFile()
 {
-    QString encode;
-    EditWrapper::EndOfLineMode eol = EditWrapper::eolUnix;
-    QString filepath = getSaveFilePath(encode, eol);
-    QString tabPath = m_tabbar->currentPath();
+    QString filePath = m_tabbar->currentPath();
+    EditWrapper *wrapper = m_wrappers.value(filePath);
+    bool isDraft = Utils::isDraftFile(filePath);
+    QFileInfo fileInfo(filePath);
 
-    if (!filepath.isEmpty() && filepath != tabPath) {
-        saveFileAsAnotherPath(tabPath, filepath, encode, eol, false);
-    } else if (filepath == tabPath) {
-        m_wrappers.value(filepath)->setEndOfLineMode(eol);
-        m_wrappers.value(filepath)->saveFile(encode);
+    if (!wrapper)
+        return;
+
+    DFileDialog dialog(this, tr("Save File"));
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.addComboBox(tr("Encoding"), getEncodeList());
+    dialog.addComboBox(tr("Line Endings"), QStringList() << "Linux" << "Windows" << "Mac OS");
+    dialog.setDirectory(QDir::homePath());
+
+    if (isDraft) {
+        dialog.selectFile(m_tabbar->currentName() + ".txt");
+    } else {
+        dialog.setDirectory(fileInfo.dir());
+        dialog.selectFile(fileInfo.fileName());
     }
-}
 
-void Window::saveFileAsAnotherPath(const QString &fromPath, const QString &toPath, const QString &encode, EditWrapper::EndOfLineMode eol, bool deleteOldFile)
-{
-    if (deleteOldFile) {
-        QFile(fromPath).remove();
+    int mode = dialog.exec();
+    if (mode == QDialog::Accepted) {
+        const QString encode = dialog.getComboBoxValue(tr("Encoding"));
+        const QString endOfLine = dialog.getComboBoxValue(tr("Line Endings"));
+        const QString newFilePath = dialog.selectedFiles().value(0);
+        const QFileInfo newFileInfo(newFilePath);
+        EditWrapper::EndOfLineMode eol = EditWrapper::eolUnix;
+
+        if (endOfLine == "Windows") {
+            eol = EditWrapper::eolDos;
+        } else if (endOfLine == "Mac OS") {
+            eol = EditWrapper::eolMac;
+        }
+
+        if (isDraft) {
+            QFile(filePath).remove();
+            m_tabbar->updateTab(m_tabbar->currentIndex(), newFilePath, newFileInfo.fileName());
+            m_wrappers[newFilePath] = m_wrappers.take(filePath);
+            m_wrappers[newFilePath]->updatePath(newFilePath);
+            m_wrappers[newFilePath]->saveFile();
+
+            currentWrapper()->textEditor()->loadHighlighter();
+        } else {
+            wrapper->updatePath(newFilePath);
+            wrapper->setEndOfLineMode(eol);
+            wrapper->saveFile();
+        }
     }
-
-    m_tabbar->updateTab(m_tabbar->currentIndex(), toPath, QFileInfo(toPath).fileName());
-    m_wrappers[toPath] = m_wrappers.take(fromPath);
-    m_wrappers[toPath]->updatePath(toPath);
-    m_wrappers[toPath]->setEndOfLineMode(eol);
-    m_wrappers[toPath]->saveFile(encode);
-
-    currentWrapper()->textEditor()->loadHighlighter();
 }
 
 void Window::decrementFontSize()
@@ -1188,10 +1109,9 @@ void Window::handleTabsClosed(const QStringList &tabList)
 
             } else if (index == 2) {
                 for (EditWrapper *wrapper : needSaveList) {
-                    QString path = wrapper->textEditor()->filepath;
-                    if (QFileInfo(path).dir().absolutePath() == m_blankFileDir) {
-                        saveAs(path);
-                        QFile::remove(path);
+                    const QString &path = wrapper->textEditor()->filepath;
+                    if (Utils::isDraftFile(path)) {
+                        saveAsFile();
                     } else {
                         wrapper->saveFile();
                     }

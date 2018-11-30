@@ -73,7 +73,6 @@ public:
     void openFile();
     bool saveFile();
     void saveAsFile();
-    void saveFileAsAnotherPath(const QString &fromPath, const QString &toPath, const QString &encode, EditWrapper::EndOfLineMode eol, bool deleteOldFile=false);
 
     void decrementFontSize();
     void incrementFontSize();
@@ -98,9 +97,6 @@ public:
 
     void changeTitlebarBackground(const QString &color);
     void changeTitlebarBackground(const QString &startColor, const QString &endColor);
-
-    void saveAs(const QString &filepath);
-    const QString getSaveFilePath(QString &encode, EditWrapper::EndOfLineMode &eol);
 
     void displayShortcuts();
 
