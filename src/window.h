@@ -72,7 +72,7 @@ public:
 
     void openFile();
     bool saveFile();
-    void saveAsFile();
+    bool saveAsFile();
 
     void decrementFontSize();
     void incrementFontSize();
@@ -149,8 +149,9 @@ public slots:
     void removeActiveReadonlyTab();
     void showNewEditor(EditWrapper *wrapper);
     void showNotify(const QString &message);
-    DDialog* createSaveFileDialog(QString title, QString content);
     int getBlankFileIndex();
+
+    DDialog *createDialog(const QString &title, const QString &content);
 
 private:
     DBusDaemon::dbus *m_rootSaveDBus;

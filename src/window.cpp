@@ -320,7 +320,7 @@ void Window::closeTab()
     // document has been modified or unsaved draft document.
     // need to prompt whether to save.
     if (isModified || (isBlankFile && !wrapper->textEditor()->toPlainText().isEmpty())) {
-        DDialog *dialog = createSaveFileDialog(tr("Save File"), tr("Do you want to save this file?"));
+        DDialog *dialog = createDialog(tr("Save File"), tr("Do you want to save this file?"));
 
         connect(dialog, &DDialog::buttonClicked, this, [=] (int index) {
             dialog->hide();
@@ -597,14 +597,14 @@ bool Window::saveFile()
 
     // save blank file.
     if (isBlankFile) {
-        saveAsFile();
+        return saveAsFile();
     }
     // save normal file.
     else {
         bool success = m_wrappers.value(m_tabbar->currentPath())->saveFile();
 
         if (!success) {
-            DDialog *dialog = createSaveFileDialog(tr("Unable to save the file"), tr("Do you want to save as another?"));
+            DDialog *dialog = createDialog(tr("Unable to save the file"), tr("Do you want to save as another?"));
 
             connect(dialog, &DDialog::buttonClicked, this, [=] (int index) {
                 dialog->hide();
@@ -623,7 +623,7 @@ bool Window::saveFile()
     return true;
 }
 
-void Window::saveAsFile()
+bool Window::saveAsFile()
 {
     QString filePath = m_tabbar->currentPath();
     EditWrapper *wrapper = m_wrappers.value(filePath);
@@ -631,7 +631,7 @@ void Window::saveAsFile()
     QFileInfo fileInfo(filePath);
 
     if (!wrapper)
-        return;
+        return false;
 
     DFileDialog dialog(this, tr("Save File"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
@@ -668,7 +668,6 @@ void Window::saveAsFile()
             m_wrappers[newFilePath]->updatePath(newFilePath);
             m_wrappers[newFilePath]->setEndOfLineMode(eol);
             m_wrappers[newFilePath]->saveFile();
-
             currentWrapper()->textEditor()->loadHighlighter();
         } else {
             wrapper->setTextCodec(QTextCodec::codecForName(encode));
@@ -676,7 +675,11 @@ void Window::saveAsFile()
             wrapper->updatePath(newFilePath);
             wrapper->saveFile();
         }
+    } else {
+        return false;
     }
+
+    return true;
 }
 
 void Window::decrementFontSize()
@@ -886,7 +889,7 @@ void Window::closeEvent(QCloseEvent *e)
     }
 
     if (!needSaveList.isEmpty()) {
-        DDialog *dialog = createSaveFileDialog(tr("Save File"), tr("Do you want to save all the files?"));
+        DDialog *dialog = createDialog(tr("Save File"), tr("Do you want to save all the files?"));
 
         connect(dialog, &DDialog::buttonClicked, this, [=] (int index) {
             dialog->hide();
@@ -1094,7 +1097,7 @@ void Window::handleTabsClosed(const QStringList &tabList)
 
     // popup save file dialog.
     if (!needSaveList.isEmpty()) {
-        DDialog *dialog = createSaveFileDialog(tr("Save File"), tr("Do you want to save all the files?"));
+        DDialog *dialog = createDialog(tr("Save File"), tr("Do you want to save all the files?"));
 
         connect(dialog, &DDialog::buttonClicked, this, [&] (int index) {
             dialog->hide();
@@ -1330,7 +1333,7 @@ void Window::showNotify(const QString &message)
     Utils::toast(message, this);
 }
 
-DDialog* Window::createSaveFileDialog(QString title, QString content)
+DDialog* Window::createDialog(const QString &title, const QString &content)
 {
     DDialog *dialog = new DDialog(title, content, this);
     dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
