@@ -43,14 +43,13 @@ public:
     ~EditWrapper();
 
     void openFile(const QString &filepath);
-    bool saveFile(const QString &encode);
     bool saveFile();
     void updatePath(const QString &file);
-    QByteArray fileEncode() { return m_fileEncode; }
     bool isLoadFinished() { return m_isLoadFinished; }
 
     EndOfLineMode endOfLineMode();
     void setEndOfLineMode(EndOfLineMode eol);
+    void setTextCodec(QTextCodec *codec);
 
     DTextEdit *textEditor() { return m_textEdit; }
 
@@ -61,13 +60,13 @@ private:
 private:
     QHBoxLayout *m_layout;
     DTextEdit *m_textEdit;
-    QByteArray m_fileEncode;
 
     bool m_saveFinish;
     bool m_hasLoadFile;
     bool m_isLoadFinished;
 
     EndOfLineMode m_endOfLineMode;
+    QTextCodec *m_textCodec;
 };
 
 #endif

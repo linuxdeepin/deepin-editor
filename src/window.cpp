@@ -576,8 +576,7 @@ bool Window::saveFile()
         return false;
 
         const QString content = getTextEditor(currentPath)->toPlainText();
-        bool saveResult = m_rootSaveDBus->saveFile(currentPath.toUtf8(), content.toUtf8(),
-                                                   m_wrappers[currentPath]->fileEncode());
+        bool saveResult = m_rootSaveDBus->saveFile(currentPath.toUtf8(), content.toUtf8(), "");
         if (saveResult) {
             getTextEditor(currentPath)->setModified(false);
             showNotify(QString("Saved root file %1").arg(m_tabbar->currentName()));
@@ -649,7 +648,7 @@ void Window::saveAsFile()
 
     int mode = dialog.exec();
     if (mode == QDialog::Accepted) {
-        const QString encode = dialog.getComboBoxValue(tr("Encoding"));
+        const QByteArray encode = dialog.getComboBoxValue(tr("Encoding")).toUtf8();
         const QString endOfLine = dialog.getComboBoxValue(tr("Line Endings"));
         const QString newFilePath = dialog.selectedFiles().value(0);
         const QFileInfo newFileInfo(newFilePath);
@@ -665,13 +664,16 @@ void Window::saveAsFile()
             QFile(filePath).remove();
             m_tabbar->updateTab(m_tabbar->currentIndex(), newFilePath, newFileInfo.fileName());
             m_wrappers[newFilePath] = m_wrappers.take(filePath);
+            m_wrappers[newFilePath]->setTextCodec(QTextCodec::codecForName(encode));
             m_wrappers[newFilePath]->updatePath(newFilePath);
+            m_wrappers[newFilePath]->setEndOfLineMode(eol);
             m_wrappers[newFilePath]->saveFile();
 
             currentWrapper()->textEditor()->loadHighlighter();
         } else {
-            wrapper->updatePath(newFilePath);
+            wrapper->setTextCodec(QTextCodec::codecForName(encode));
             wrapper->setEndOfLineMode(eol);
+            wrapper->updatePath(newFilePath);
             wrapper->saveFile();
         }
     }

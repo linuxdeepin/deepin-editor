@@ -40,7 +40,8 @@ EditWrapper::EditWrapper(QWidget *parent)
       m_saveFinish(true),
       m_hasLoadFile(false),
       m_isLoadFinished(true),
-      m_endOfLineMode(eolUnix)
+      m_endOfLineMode(eolUnix),
+      m_textCodec(QTextCodec::codecForName("UTF-8"))
 {
     // Init layout and widgets.
     m_layout->setContentsMargins(0, 0, 0, 0);
@@ -71,10 +72,8 @@ void EditWrapper::openFile(const QString &filepath)
     thread->start();
 }
 
-bool EditWrapper::saveFile(const QString &encode)
+bool EditWrapper::saveFile()
 {
-    m_fileEncode = encode.toUtf8();
-
     // use QSaveFile for safely save files.
     QSaveFile saveFile(m_textEdit->filepath);
     saveFile.setDirectWriteFallback(true);
@@ -97,7 +96,7 @@ bool EditWrapper::saveFile(const QString &encode)
     }
 
     QTextStream stream(&file);
-    stream.setCodec(encode.toUtf8().data());
+    stream.setCodec(m_textCodec);
     stream << m_textEdit->toPlainText().replace(eolRegex, eol);
 
     // flush stream.
@@ -125,16 +124,11 @@ bool EditWrapper::saveFile(const QString &encode)
     }
 
     qDebug() << "Saved file:" << m_textEdit->filepath
-             << "with codec:" << m_fileEncode
+             << "with codec:" << m_textCodec->name()
              << "Line Endings:" << m_endOfLineMode
              << "State:" << ok;
 
     return ok;
-}
-
-bool EditWrapper::saveFile()
-{
-    return saveFile(m_fileEncode);
 }
 
 void EditWrapper::updatePath(const QString &file)
@@ -151,6 +145,13 @@ EditWrapper::EndOfLineMode EditWrapper::endOfLineMode()
 void EditWrapper::setEndOfLineMode(EndOfLineMode eol)
 {
     m_endOfLineMode = eol;
+}
+
+void EditWrapper::setTextCodec(QTextCodec *codec)
+{
+    m_textCodec = codec;
+
+    // TODO: enforce bom for some encodings
 }
 
 void EditWrapper::detectEndOfLine()
@@ -188,7 +189,7 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QString
     }
 
     m_isLoadFinished = true;
-    m_fileEncode = encode;
+    m_textCodec = QTextCodec::codecForName(encode);
 
     // set text.
     m_textEdit->setPlainText(content);
