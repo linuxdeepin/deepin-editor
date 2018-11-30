@@ -36,13 +36,12 @@ DCORE_USE_NAMESPACE
 EditWrapper::EditWrapper(QWidget *parent)
     : QWidget(parent),
       m_layout(new QHBoxLayout(this)),
-      m_textEdit(new DTextEdit)
+      m_textEdit(new DTextEdit),
+      m_saveFinish(true),
+      m_hasLoadFile(false),
+      m_isLoadFinished(true),
+      m_endOfLineMode(eolUnix)
 {
-    // Init.
-    m_autoSaveInternal = 1000;
-    m_saveFinish = true;
-    m_newline = "Linux";
-
     // Init layout and widgets.
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->setSpacing(0);
@@ -59,6 +58,7 @@ void EditWrapper::openFile(const QString &filepath)
 {
     // update file path.
     updatePath(filepath);
+    detectEndOfLine();
 
     m_isLoadFinished = false;
 
@@ -71,10 +71,9 @@ void EditWrapper::openFile(const QString &filepath)
     thread->start();
 }
 
-bool EditWrapper::saveFile(const QString &encode, const QString &newline)
+bool EditWrapper::saveFile(const QString &encode)
 {
     m_fileEncode = encode.toUtf8();
-    m_newline = newline;
 
     // use QSaveFile for safely save files.
     QSaveFile saveFile(m_textEdit->filepath);
@@ -89,19 +88,17 @@ bool EditWrapper::saveFile(const QString &encode, const QString &newline)
         return false;
     }
 
-    QRegularExpression newlineRegex("\r?\n|\r");
-    QString fileNewline;
-    if (newline == "Windows") {
-        fileNewline = "\r\n";
-    } else if (newline == "Mac OS") {
-        fileNewline = "\r";
-    } else {
-        fileNewline = "\n";
+    QRegularExpression eolRegex("\r?\n|\r");
+    QString eol = QStringLiteral("\n");
+    if (m_endOfLineMode == eolDos) {
+        eol = QStringLiteral("\r\n");
+    } else if (m_endOfLineMode == eolMac) {
+        eol = QStringLiteral("\r");
     }
 
     QTextStream stream(&file);
     stream.setCodec(encode.toUtf8().data());
-    stream << m_textEdit->toPlainText().replace(newlineRegex, fileNewline);
+    stream << m_textEdit->toPlainText().replace(eolRegex, eol);
 
     // flush stream.
     stream.flush();
@@ -129,7 +126,7 @@ bool EditWrapper::saveFile(const QString &encode, const QString &newline)
 
     qDebug() << "Saved file:" << m_textEdit->filepath
              << "with codec:" << m_fileEncode
-             << "Line Endings:" << m_newline
+             << "Line Endings:" << m_endOfLineMode
              << "State:" << ok;
 
     return ok;
@@ -137,16 +134,26 @@ bool EditWrapper::saveFile(const QString &encode, const QString &newline)
 
 bool EditWrapper::saveFile()
 {
-    return saveFile(m_fileEncode, m_newline);
+    return saveFile(m_fileEncode);
 }
 
 void EditWrapper::updatePath(const QString &file)
 {
     m_textEdit->filepath = file;
-    detectNewline();
+    // detectEndOfLine();
 }
 
-void EditWrapper::detectNewline()
+EditWrapper::EndOfLineMode EditWrapper::endOfLineMode()
+{
+    return m_endOfLineMode;
+}
+
+void EditWrapper::setEndOfLineMode(EndOfLineMode eol)
+{
+    m_endOfLineMode = eol;
+}
+
+void EditWrapper::detectEndOfLine()
 {
     QFile file(m_textEdit->filepath);
 
@@ -154,14 +161,13 @@ void EditWrapper::detectNewline()
         return;
     }
 
-    QString line = file.readLine();
-
+    QByteArray line = file.readLine();
     if (line.indexOf("\r\n") != -1) {
-        m_newline = "Windows";
+        m_endOfLineMode = eolDos;
     } else if (line.indexOf("\r") != -1) {
-        m_newline = "Mac OS";
+        m_endOfLineMode = eolMac;
     } else {
-        m_newline = "Linux";
+        m_endOfLineMode = eolUnix;
     }
 
     file.close();
@@ -172,7 +178,7 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QString
     // restore mouse style.
     // QApplication::restoreOverrideCursor();
 
-    qDebug() << "load finished: " << m_textEdit->filepath << ", " << encode;
+    qDebug() << "load finished: " << m_textEdit->filepath << ", " << encode << "endOfLine: " << m_endOfLineMode;
 
     if (!Utils::isDraftFile(m_textEdit->filepath)) {
         DRecentData data;

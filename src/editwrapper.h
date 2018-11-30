@@ -31,20 +31,31 @@ class EditWrapper : public QWidget
     Q_OBJECT
 
 public:
+    // end of line mode.
+    enum EndOfLineMode {
+        eolUnknown = -1,
+        eolUnix = 0,
+        eolDos = 1,
+        eolMac = 2
+    };
+
     EditWrapper(QWidget *parent = 0);
     ~EditWrapper();
 
     void openFile(const QString &filepath);
-    bool saveFile(const QString &encode, const QString &newline);
+    bool saveFile(const QString &encode);
     bool saveFile();
     void updatePath(const QString &file);
     QByteArray fileEncode() { return m_fileEncode; }
     bool isLoadFinished() { return m_isLoadFinished; }
 
+    EndOfLineMode endOfLineMode();
+    void setEndOfLineMode(EndOfLineMode eol);
+
     DTextEdit *textEditor() { return m_textEdit; }
 
 private:
-    void detectNewline();
+    void detectEndOfLine();
     void handleFileLoadFinished(const QByteArray &encode, const QString &content);
 
 private:
@@ -53,10 +64,10 @@ private:
     QByteArray m_fileEncode;
 
     bool m_saveFinish;
-    int m_autoSaveInternal;
-    bool m_hasLoadFile = false;
-    bool m_isLoadFinished = true;
-    QString m_newline;
+    bool m_hasLoadFile;
+    bool m_isLoadFinished;
+
+    EndOfLineMode m_endOfLineMode;
 };
 
 #endif
