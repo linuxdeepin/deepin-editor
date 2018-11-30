@@ -59,7 +59,7 @@ public:
 
     void addTab(const QString &filepath, bool activeTab = false);
     void addTabWithWrapper(EditWrapper *wrapper, const QString &filepath,
-                          const QString &tabName, int index = -1);
+                           const QString &tabName, int index = -1);
     void closeTab();
     void restoreTab();
 
@@ -83,6 +83,7 @@ public:
     void popupReplaceBar();
     void popupJumpLineBar();
     void popupSettingsDialog();
+    void popupPrintDialog();
 
     void toggleFullscreen();
 
@@ -106,14 +107,6 @@ signals:
     void requestDropEvent(QDropEvent *);
     void newWindow();
     void close();
-
-protected:
-    void resizeEvent(QResizeEvent* event) override;
-    void closeEvent(QCloseEvent *event) override;
-    void keyPressEvent(QKeyEvent *keyEvent) override;
-    void dragEnterEvent(QDragEnterEvent *e) override;
-    void dropEvent(QDropEvent* event) override;
-    bool eventFilter(QObject *, QEvent *event) override;
 
 public slots:
     void addBlankTab();
@@ -141,17 +134,21 @@ public slots:
     void addBottomWidget(QWidget *widget);
     void removeBottomWidget();
 
-    void popupPrintDialog();
-
     void loadTheme(const QString &path);
 
-    void removeActiveBlankTab(bool needSaveBefore = false);
-    void removeActiveReadonlyTab();
     void showNewEditor(EditWrapper *wrapper);
     void showNotify(const QString &message);
     int getBlankFileIndex();
 
     DDialog *createDialog(const QString &title, const QString &content);
+
+protected:
+    void resizeEvent(QResizeEvent* event) override;
+    void closeEvent(QCloseEvent *event) override;
+    void keyPressEvent(QKeyEvent *keyEvent) override;
+    void dragEnterEvent(QDragEnterEvent *e) override;
+    void dropEvent(QDropEvent* event) override;
+    bool eventFilter(QObject *, QEvent *event) override;
 
 private:
     DBusDaemon::dbus *m_rootSaveDBus;
@@ -185,8 +182,6 @@ private:
     QString m_titlebarStyleSheet;
 
     bool m_windowShowFlag = false;
-
-    QString m_readonlySeparator = " !_! ";
 
     QString m_themePath;
     QString m_tabbarActiveColor;

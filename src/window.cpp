@@ -484,84 +484,6 @@ void Window::openFile()
     }
 }
 
-void Window::displayShortcuts()
-{
-    QRect rect = window()->geometry();
-    QPoint pos(rect.x() + rect.width() / 2,
-               rect.y() + rect.height() / 2);
-
-    QStringList windowKeymaps;
-    windowKeymaps << "addblanktab" << "newwindow" << "savefile"
-                  << "saveasfile" << "selectnexttab" << "selectprevtab"
-                  << "closetab" << "closeothertabs" << "restoretab"
-                  << "openfile" << "incrementfontsize" << "decrementfontsize"
-                  << "resetfontsize" << "togglefullscreen" << "find" << "replace"
-                  << "jumptoline" << "saveposition" << "restoreposition"
-                  << "escape" << "displayshortcuts" << "print";
-
-    QJsonObject shortcutObj;
-    QJsonArray jsonGroups;
-
-    QJsonObject windowJsonGroup;
-    windowJsonGroup.insert("groupName", QObject::tr("Window"));
-    QJsonArray windowJsonItems;
-
-    for (const QString &keymap : windowKeymaps) {
-        auto option = m_settings->settings->group("shortcuts.window")->option(QString("shortcuts.window.%1").arg(keymap));
-        QJsonObject jsonItem;
-        jsonItem.insert("name", QObject::tr(option->name().toUtf8().data()));
-        jsonItem.insert("value", option->value().toString().replace("Meta", "Super"));
-        windowJsonItems.append(jsonItem);
-    }
-
-    windowJsonGroup.insert("groupItems", windowJsonItems);
-    jsonGroups.append(windowJsonGroup);
-
-    QStringList editorKeymaps;
-    editorKeymaps << "indentline" << "backindentline" << "forwardchar"
-                  << "backwardchar" << "forwardword" << "backwardword"
-                  << "nextline" << "prevline" << "newline" << "opennewlineabove"
-                  << "opennewlinebelow" << "duplicateline" << "killline"
-                  << "killcurrentline" << "swaplineup" << "swaplinedown"
-                  << "scrolllineup" << "scrolllinedown" << "scrollup"
-                  << "scrolldown" << "movetoendofline" << "movetostartofline"
-                  << "movetoend" << "movetostart" << "movetolineindentation"
-                  << "upcaseword" << "downcaseword" << "capitalizeword"
-                  << "killbackwardword" << "killforwardword" << "forwardpair"
-                  << "backwardpair" << "selectall" << "copy" << "cut"
-                  << "paste" << "transposechar" << "setmark" << "exchangemark"
-                  << "copylines" << "cutlines" << "joinlines" << "togglereadonlymode"
-                  << "togglecomment" << "undo" << "redo";
-
-    QJsonObject editorJsonGroup;
-    editorJsonGroup.insert("groupName", tr("Editor"));
-    QJsonArray editorJsonItems;
-
-    for (const QString &keymap : editorKeymaps) {
-        auto option = m_settings->settings->group("shortcuts.editor")->option(QString("shortcuts.editor.%1").arg(keymap));
-        QJsonObject jsonItem;
-        jsonItem.insert("name", QObject::tr(option->name().toUtf8().data()));
-        jsonItem.insert("value", option->value().toString().replace("Meta", "Super"));
-        editorJsonItems.append(jsonItem);
-    }
-    editorJsonGroup.insert("groupItems", editorJsonItems);
-    jsonGroups.append(editorJsonGroup);
-
-    shortcutObj.insert("shortcut", jsonGroups);
-
-    QJsonDocument doc(shortcutObj);
-
-    QStringList shortcutString;
-    QString param1 = "-j=" + QString(doc.toJson().data());
-    QString param2 = "-p=" + QString::number(pos.x()) + "," + QString::number(pos.y());
-    shortcutString << param1 << param2;
-
-    QProcess* shortcutViewProcess = new QProcess();
-    shortcutViewProcess->startDetached("deepin-shortcut-viewer", shortcutString);
-
-    connect(shortcutViewProcess, SIGNAL(finished(int)), shortcutViewProcess, SLOT(deleteLater()));
-}
-
 bool Window::saveFile()
 {
     const QString &currentPath = m_tabbar->currentPath();
@@ -622,6 +544,7 @@ bool Window::saveFile()
 
     return true;
 }
+
 
 bool Window::saveAsFile()
 {
@@ -707,6 +630,7 @@ void Window::setFontSizeWithConfig(EditWrapper *wrapper)
     m_fontSize = size;
 }
 
+
 void Window::popupFindBar()
 {
     if (m_findBar->isVisible()) {
@@ -774,6 +698,46 @@ void Window::popupJumpLineBar()
 
         m_jumpLineBar->activeInput(tabPath, row, column, count, scrollOffset);
     }
+}
+
+void Window::popupSettingsDialog()
+{
+    DSettingsDialog *dialog = new DSettingsDialog(this);
+
+    dialog->setProperty("_d_dtk_theme", "dark");
+    dialog->setProperty("_d_QSSFilename", "DSettingsDialog");
+    DThemeManager::instance()->registerWidget(dialog);
+
+    dialog->updateSettings(m_settings->settings);
+    m_settings->dtkThemeWorkaround(dialog, "dlight");
+
+    dialog->exec();
+    delete dialog;
+    m_settings->settings->sync();
+}
+
+void Window::popupPrintDialog()
+{
+    QPrinter printer(QPrinter::HighResolution);
+    QPrintPreviewDialog preview(&printer, this);
+
+    DTextEdit *wrapper = currentWrapper()->textEditor();
+    const QString &filePath = wrapper->filepath;
+    const QString &fileDir = QFileInfo(filePath).dir().absolutePath();
+
+    if (fileDir == m_blankFileDir) {
+        printer.setOutputFileName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
+    } else {
+        printer.setOutputFileName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
+    }
+
+    printer.setOutputFormat(QPrinter::PdfFormat);
+
+    connect(&preview, &QPrintPreviewDialog::paintRequested, this, [=] (QPrinter *printer) {
+        currentWrapper()->textEditor()->print(printer);
+    });
+
+    preview.exec();
 }
 
 void Window::toggleFullscreen()
@@ -854,182 +818,108 @@ void Window::updateTabSpaceNumber(int number)
     }
 }
 
-void Window::resizeEvent(QResizeEvent*)
+void Window::changeTitlebarBackground(const QString &color)
 {
-    if (m_windowShowFlag) {
-        QStringList states = m_windowManager->getWindowStates(winId());
-        if (!states.contains("_NET_WM_STATE_MAXIMIZED_VERT")) {
-            QScreen *screen = QGuiApplication::primaryScreen();
-            QRect screenGeometry = screen->geometry();
-            m_settings->settings->option("advance.window.window_width")->setValue(rect().width() * 1.0 / screenGeometry.width());
-            m_settings->settings->option("advance.window.window_height")->setValue(rect().height() * 1.0 / screenGeometry.height());
-        }
+    titlebar()->setStyleSheet(QString("%1"
+                                      "Dtk--Widget--DTitlebar {"
+                                      "background: %2;"
+                                      "}").arg(m_titlebarStyleSheet).arg(color));
 
-        DAnchorsBase::setAnchor(m_themePanel, Qt::AnchorTop, m_centralWidget, Qt::AnchorTop);
-        DAnchorsBase::setAnchor(m_themePanel, Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
-        DAnchorsBase::setAnchor(m_themePanel, Qt::AnchorRight, m_centralWidget, Qt::AnchorRight);
-    }
+    m_tabbar->setTabActiveColor(m_tabbarActiveColor);
 }
 
-void Window::closeEvent(QCloseEvent *e)
+void Window::changeTitlebarBackground(const QString &startColor, const QString &endColor)
 {
-    e->ignore();
+    titlebar()->setStyleSheet(QString("%1"
+                                      "Dtk--Widget--DTitlebar {"
+                                      "background: qlineargradient(x1:0 y1:0, x2:0 y2:1,"
+                                      "stop:0 rgba%2,  stop:1 rgba%3);"
+                                      "}").arg(m_titlebarStyleSheet).arg(startColor).arg(endColor));
 
-    QList<EditWrapper *> needSaveList;
-    for (EditWrapper *wrapper : m_wrappers) {
-        // save all the draft documents.
-        if (QFileInfo(wrapper->textEditor()->filepath).dir().absolutePath() == m_blankFileDir) {
-            wrapper->saveFile();
-            continue;
-        }
-
-        if (wrapper->textEditor()->document()->isModified()) {
-            needSaveList << wrapper;
-        }
-    }
-
-    if (!needSaveList.isEmpty()) {
-        DDialog *dialog = createDialog(tr("Save File"), tr("Do you want to save all the files?"));
-
-        connect(dialog, &DDialog::buttonClicked, this, [=] (int index) {
-            dialog->hide();
-
-            if (index == 2) {
-                // save all the files.
-                for (EditWrapper *wrapper : needSaveList) {
-                    wrapper->saveFile();
-                }
-            }
-        });
-
-        const int mode = dialog->exec();
-        if (mode == -1 || mode == 0) {
-            return;
-        }
-    }
-
-    // save all draft documents.
-    QDir blankDir(m_blankFileDir);
-    QFileInfoList blankFiles = blankDir.entryInfoList(QDir::Files);
-
-    // clear blank files that have no content.
-    for (const QFileInfo &blankFile : blankFiles) {
-        QFile file(blankFile.absoluteFilePath());
-
-        if (!file.open(QFile::ReadOnly)) {
-            continue;
-        }
-
-        if (file.readAll().simplified().isEmpty()) {
-            file.remove();
-        }
-
-        file.close();
-    }
-
-    e->accept();
-    emit close();
+     m_tabbar->setTabActiveColor(m_tabbarActiveColor);
 }
 
-void Window::keyPressEvent(QKeyEvent *keyEvent)
+void Window::displayShortcuts()
 {
-    QString key = Utils::getKeyshortcut(keyEvent);
+    QRect rect = window()->geometry();
+    QPoint pos(rect.x() + rect.width() / 2,
+               rect.y() + rect.height() / 2);
 
-    if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "addblanktab")) {
-        addBlankTab();
-    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "newwindow")) {
-        emit newWindow();
-    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "savefile")) {
-        saveFile();
-    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "saveasfile")) {
-        saveAsFile();
-    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "selectnexttab")) {
-        m_tabbar->nextTab();
-    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "selectprevtab")) {
-        m_tabbar->previousTab();
-    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "closetab")) {
-        closeTab();
-    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "restoretab")) {
-        restoreTab();
-    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "closeothertabs")) {
-        m_tabbar->closeOtherTabs();
-    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "openfile")) {
-        openFile();
-    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "incrementfontsize")) {
-        incrementFontSize();
-    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "decrementfontsize")) {
-        decrementFontSize();
-    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "resetfontsize")) {
-        resetFontSize();
-    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "togglefullscreen")) {
-        toggleFullscreen();
-    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "find")) {
-        popupFindBar();
-    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "replace")) {
-        popupReplaceBar();
-    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "jumptoline")) {
-        popupJumpLineBar();
-    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "saveposition")) {
-        remberPositionSave();
-    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "restoreposition")) {
-        remberPositionRestore();
-    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "escape")) {
-        removeBottomWidget();
-    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "displayshortcuts")) {
-        displayShortcuts();
-    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "print")) {
-        popupPrintDialog();
-    } else {
-        // Post event to window widget if match Alt+0 ~ Alt+9
-        QRegularExpression re("^Alt\\+\\d");
-        QRegularExpressionMatch match = re.match(key);
-        if (match.hasMatch()) {
-            auto tabIndex = key.replace("Alt+", "").toInt();
-            if (tabIndex == 9) {
-                if (m_tabbar->count() > 1) {
-                    activeTab(m_tabbar->count() - 1);
-                }
-            } else {
-                if (tabIndex <= m_tabbar->count()) {
-                    activeTab(tabIndex - 1);
-                }
-            }
-        }
+    QStringList windowKeymaps;
+    windowKeymaps << "addblanktab" << "newwindow" << "savefile"
+                  << "saveasfile" << "selectnexttab" << "selectprevtab"
+                  << "closetab" << "closeothertabs" << "restoretab"
+                  << "openfile" << "incrementfontsize" << "decrementfontsize"
+                  << "resetfontsize" << "togglefullscreen" << "find" << "replace"
+                  << "jumptoline" << "saveposition" << "restoreposition"
+                  << "escape" << "displayshortcuts" << "print";
+
+    QJsonObject shortcutObj;
+    QJsonArray jsonGroups;
+
+    QJsonObject windowJsonGroup;
+    windowJsonGroup.insert("groupName", QObject::tr("Window"));
+    QJsonArray windowJsonItems;
+
+    for (const QString &keymap : windowKeymaps) {
+        auto option = m_settings->settings->group("shortcuts.window")->option(QString("shortcuts.window.%1").arg(keymap));
+        QJsonObject jsonItem;
+        jsonItem.insert("name", QObject::tr(option->name().toUtf8().data()));
+        jsonItem.insert("value", option->value().toString().replace("Meta", "Super"));
+        windowJsonItems.append(jsonItem);
     }
+
+    windowJsonGroup.insert("groupItems", windowJsonItems);
+    jsonGroups.append(windowJsonGroup);
+
+    QStringList editorKeymaps;
+    editorKeymaps << "indentline" << "backindentline" << "forwardchar"
+                  << "backwardchar" << "forwardword" << "backwardword"
+                  << "nextline" << "prevline" << "newline" << "opennewlineabove"
+                  << "opennewlinebelow" << "duplicateline" << "killline"
+                  << "killcurrentline" << "swaplineup" << "swaplinedown"
+                  << "scrolllineup" << "scrolllinedown" << "scrollup"
+                  << "scrolldown" << "movetoendofline" << "movetostartofline"
+                  << "movetoend" << "movetostart" << "movetolineindentation"
+                  << "upcaseword" << "downcaseword" << "capitalizeword"
+                  << "killbackwardword" << "killforwardword" << "forwardpair"
+                  << "backwardpair" << "selectall" << "copy" << "cut"
+                  << "paste" << "transposechar" << "setmark" << "exchangemark"
+                  << "copylines" << "cutlines" << "joinlines" << "togglereadonlymode"
+                  << "togglecomment" << "undo" << "redo";
+
+    QJsonObject editorJsonGroup;
+    editorJsonGroup.insert("groupName", tr("Editor"));
+    QJsonArray editorJsonItems;
+
+    for (const QString &keymap : editorKeymaps) {
+        auto option = m_settings->settings->group("shortcuts.editor")->option(QString("shortcuts.editor.%1").arg(keymap));
+        QJsonObject jsonItem;
+        jsonItem.insert("name", QObject::tr(option->name().toUtf8().data()));
+        jsonItem.insert("value", option->value().toString().replace("Meta", "Super"));
+        editorJsonItems.append(jsonItem);
+    }
+    editorJsonGroup.insert("groupItems", editorJsonItems);
+    jsonGroups.append(editorJsonGroup);
+
+    shortcutObj.insert("shortcut", jsonGroups);
+
+    QJsonDocument doc(shortcutObj);
+
+    QStringList shortcutString;
+    QString param1 = "-j=" + QString(doc.toJson().data());
+    QString param2 = "-p=" + QString::number(pos.x()) + "," + QString::number(pos.y());
+    shortcutString << param1 << param2;
+
+    QProcess* shortcutViewProcess = new QProcess();
+    shortcutViewProcess->startDetached("deepin-shortcut-viewer", shortcutString);
+
+    connect(shortcutViewProcess, SIGNAL(finished(int)), shortcutViewProcess, SLOT(deleteLater()));
 }
 
-int Window::getBlankFileIndex()
+void Window::addBlankTab()
 {
-    // get blank tab index list.
-    QList<int> tabIndexes;
-
-    // tabFiles.size()
-    for (int i = 0; i < m_tabbar->count(); ++i) {
-        // find all the blank tab index number.
-        if (QFileInfo(m_tabbar->fileAt(i)).dir().absolutePath() == m_blankFileDir) {
-            const QString tabText = m_tabbar->textAt(i);
-            QRegularExpression reg("(\\d+)");
-            QRegularExpressionMatch match = reg.match(tabText);
-
-            tabIndexes << match.captured(1).toInt();
-        }
-    }
-    std::sort(tabIndexes.begin(), tabIndexes.end());
-
-    // Return 1 if no blank file exists.
-    if (tabIndexes.size() == 0) {
-        return 1;
-    }
-
-    // Return first mismatch index as new blank file index.
-    for (int j = 0; j < tabIndexes.size(); j++) {
-        if (tabIndexes[j] != j + 1) {
-            return j + 1;
-        }
-    }
-
-    // Last, return biggest index as blank file index.
-    return tabIndexes.size() + 1;
+    addBlankTab("");
 }
 
 void Window::addBlankTab(const QString &blankFile)
@@ -1207,6 +1097,7 @@ void Window::handleFindPrev()
     wrapper->textEditor()->restoreMarkStatus();
 }
 
+
 void Window::handleReplaceAll(const QString &replaceText, const QString &withText)
 {
     EditWrapper *wrapper = currentWrapper();
@@ -1289,123 +1180,6 @@ void Window::removeBottomWidget()
     }
 }
 
-void Window::removeActiveBlankTab(bool needSaveBefore)
-{
-    QString blankFile = m_tabbar->currentPath();
-
-    if (needSaveBefore) {
-        if (!saveFile()) {
-            // Do nothing if need save but last user not select save file anyway.
-            return;
-        }
-
-        // Record last close path.
-        m_closeFileHistory << m_tabbar->currentPath();
-    }
-
-    // Close current tab.
-    m_tabbar->closeCurrentTab();
-
-    // Remove blank file from blank file directory.
-    QFile(blankFile).remove();
-}
-
-void Window::removeActiveReadonlyTab()
-{
-    QString tabPath = m_tabbar->currentPath();
-    QString realpath = QFileInfo(tabPath).fileName().replace(m_readonlySeparator, QDir().separator());
-
-    m_closeFileHistory << realpath;
-    m_tabbar->closeCurrentTab();
-    focusActiveEditor();
-
-    QFile(tabPath).remove();
-}
-
-void Window::showNewEditor(EditWrapper *wrapper)
-{
-    m_editorWidget->addWidget(wrapper);
-    m_editorWidget->setCurrentWidget(wrapper);
-}
-
-void Window::showNotify(const QString &message)
-{
-    Utils::toast(message, this);
-}
-
-DDialog* Window::createDialog(const QString &title, const QString &content)
-{
-    DDialog *dialog = new DDialog(title, content, this);
-    dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
-    dialog->setIcon(QIcon(Utils::getQrcPath("logo_48.svg")));
-    dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
-    dialog->addButton(QString(tr("Discard")), false, DDialog::ButtonNormal);
-    dialog->addButton(QString(tr("Save")), true, DDialog::ButtonNormal);
-
-    return dialog;
-}
-
-void Window::popupSettingsDialog()
-{
-    DSettingsDialog *dialog = new DSettingsDialog(this);
-
-    dialog->setProperty("_d_dtk_theme", "dark");
-    dialog->setProperty("_d_QSSFilename", "DSettingsDialog");
-    DThemeManager::instance()->registerWidget(dialog);
-
-    dialog->updateSettings(m_settings->settings);
-    m_settings->dtkThemeWorkaround(dialog, "dlight");
-
-    dialog->exec();
-    delete dialog;
-    m_settings->settings->sync();
-}
-
-void Window::popupPrintDialog()
-{
-    QPrinter printer(QPrinter::HighResolution);
-    QPrintPreviewDialog preview(&printer, this);
-
-    DTextEdit *wrapper = currentWrapper()->textEditor();
-    const QString &filePath = wrapper->filepath;
-    const QString &fileDir = QFileInfo(filePath).dir().absolutePath();
-
-    if (fileDir == m_blankFileDir) {
-        printer.setOutputFileName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
-    } else {
-        printer.setOutputFileName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
-    }
-
-    printer.setOutputFormat(QPrinter::PdfFormat);
-
-    connect(&preview, &QPrintPreviewDialog::paintRequested, this, [=] (QPrinter *printer) {
-        currentWrapper()->textEditor()->print(printer);
-    });
-
-    preview.exec();
-}
-
-void Window::changeTitlebarBackground(const QString &color)
-{
-    titlebar()->setStyleSheet(QString("%1"
-                                      "Dtk--Widget--DTitlebar {"
-                                      "background: %2;"
-                                      "}").arg(m_titlebarStyleSheet).arg(color));
-
-    m_tabbar->setTabActiveColor(m_tabbarActiveColor);
-}
-
-void Window::changeTitlebarBackground(const QString &startColor, const QString &endColor)
-{
-    titlebar()->setStyleSheet(QString("%1"
-                                      "Dtk--Widget--DTitlebar {"
-                                      "background: qlineargradient(x1:0 y1:0, x2:0 y2:1,"
-                                      "stop:0 rgba%2,  stop:1 rgba%3);"
-                                      "}").arg(m_titlebarStyleSheet).arg(startColor).arg(endColor));
-
-     m_tabbar->setTabActiveColor(m_tabbarActiveColor);
-}
-
 void Window::loadTheme(const QString &path)
 {
     m_themePath = path;
@@ -1447,6 +1221,207 @@ void Window::loadTheme(const QString &path)
     m_settings->settings->option("advance.editor.theme")->setValue(path);
 }
 
+void Window::showNewEditor(EditWrapper *wrapper)
+{
+    m_editorWidget->addWidget(wrapper);
+    m_editorWidget->setCurrentWidget(wrapper);
+}
+
+void Window::showNotify(const QString &message)
+{
+    Utils::toast(message, this);
+}
+
+int Window::getBlankFileIndex()
+{
+    // get blank tab index list.
+    QList<int> tabIndexes;
+
+    // tabFiles.size()
+    for (int i = 0; i < m_tabbar->count(); ++i) {
+        // find all the blank tab index number.
+        if (QFileInfo(m_tabbar->fileAt(i)).dir().absolutePath() == m_blankFileDir) {
+            const QString tabText = m_tabbar->textAt(i);
+            QRegularExpression reg("(\\d+)");
+            QRegularExpressionMatch match = reg.match(tabText);
+
+            tabIndexes << match.captured(1).toInt();
+        }
+    }
+    std::sort(tabIndexes.begin(), tabIndexes.end());
+
+    // Return 1 if no blank file exists.
+    if (tabIndexes.size() == 0) {
+        return 1;
+    }
+
+    // Return first mismatch index as new blank file index.
+    for (int j = 0; j < tabIndexes.size(); j++) {
+        if (tabIndexes[j] != j + 1) {
+            return j + 1;
+        }
+    }
+
+    // Last, return biggest index as blank file index.
+    return tabIndexes.size() + 1;
+}
+
+DDialog* Window::createDialog(const QString &title, const QString &content)
+{
+    DDialog *dialog = new DDialog(title, content, this);
+    dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
+    dialog->setIcon(QIcon(Utils::getQrcPath("logo_48.svg")));
+    dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
+    dialog->addButton(QString(tr("Discard")), false, DDialog::ButtonNormal);
+    dialog->addButton(QString(tr("Save")), true, DDialog::ButtonNormal);
+
+    return dialog;
+}
+
+void Window::resizeEvent(QResizeEvent*)
+{
+    if (m_windowShowFlag) {
+        QStringList states = m_windowManager->getWindowStates(winId());
+        if (!states.contains("_NET_WM_STATE_MAXIMIZED_VERT")) {
+            QScreen *screen = QGuiApplication::primaryScreen();
+            QRect screenGeometry = screen->geometry();
+            m_settings->settings->option("advance.window.window_width")->setValue(rect().width() * 1.0 / screenGeometry.width());
+            m_settings->settings->option("advance.window.window_height")->setValue(rect().height() * 1.0 / screenGeometry.height());
+        }
+
+        DAnchorsBase::setAnchor(m_themePanel, Qt::AnchorTop, m_centralWidget, Qt::AnchorTop);
+        DAnchorsBase::setAnchor(m_themePanel, Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
+        DAnchorsBase::setAnchor(m_themePanel, Qt::AnchorRight, m_centralWidget, Qt::AnchorRight);
+    }
+}
+
+void Window::closeEvent(QCloseEvent *e)
+{
+    e->ignore();
+
+    QList<EditWrapper *> needSaveList;
+    for (EditWrapper *wrapper : m_wrappers) {
+        // save all the draft documents.
+        if (QFileInfo(wrapper->textEditor()->filepath).dir().absolutePath() == m_blankFileDir) {
+            wrapper->saveFile();
+            continue;
+        }
+
+        if (wrapper->textEditor()->document()->isModified()) {
+            needSaveList << wrapper;
+        }
+    }
+
+    if (!needSaveList.isEmpty()) {
+        DDialog *dialog = createDialog(tr("Save File"), tr("Do you want to save all the files?"));
+
+        connect(dialog, &DDialog::buttonClicked, this, [=] (int index) {
+            dialog->hide();
+
+            if (index == 2) {
+                // save all the files.
+                for (EditWrapper *wrapper : needSaveList) {
+                    wrapper->saveFile();
+                }
+            }
+        });
+
+        const int mode = dialog->exec();
+        if (mode == -1 || mode == 0) {
+            return;
+        }
+    }
+
+    // save all draft documents.
+    QDir blankDir(m_blankFileDir);
+    QFileInfoList blankFiles = blankDir.entryInfoList(QDir::Files);
+
+    // clear blank files that have no content.
+    for (const QFileInfo &blankFile : blankFiles) {
+        QFile file(blankFile.absoluteFilePath());
+
+        if (!file.open(QFile::ReadOnly)) {
+            continue;
+        }
+
+        if (file.readAll().simplified().isEmpty()) {
+            file.remove();
+        }
+
+        file.close();
+    }
+
+    e->accept();
+    emit close();
+}
+
+void Window::keyPressEvent(QKeyEvent *keyEvent)
+{
+    QString key = Utils::getKeyshortcut(keyEvent);
+
+    if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "addblanktab")) {
+        addBlankTab();
+    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "newwindow")) {
+        emit newWindow();
+    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "savefile")) {
+        saveFile();
+    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "saveasfile")) {
+        saveAsFile();
+    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "selectnexttab")) {
+        m_tabbar->nextTab();
+    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "selectprevtab")) {
+        m_tabbar->previousTab();
+    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "closetab")) {
+        closeTab();
+    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "restoretab")) {
+        restoreTab();
+    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "closeothertabs")) {
+        m_tabbar->closeOtherTabs();
+    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "openfile")) {
+        openFile();
+    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "incrementfontsize")) {
+        incrementFontSize();
+    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "decrementfontsize")) {
+        decrementFontSize();
+    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "resetfontsize")) {
+        resetFontSize();
+    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "togglefullscreen")) {
+        toggleFullscreen();
+    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "find")) {
+        popupFindBar();
+    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "replace")) {
+        popupReplaceBar();
+    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "jumptoline")) {
+        popupJumpLineBar();
+    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "saveposition")) {
+        remberPositionSave();
+    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "restoreposition")) {
+        remberPositionRestore();
+    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "escape")) {
+        removeBottomWidget();
+    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "displayshortcuts")) {
+        displayShortcuts();
+    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "print")) {
+        popupPrintDialog();
+    } else {
+        // Post event to window widget if match Alt+0 ~ Alt+9
+        QRegularExpression re("^Alt\\+\\d");
+        QRegularExpressionMatch match = re.match(key);
+        if (match.hasMatch()) {
+            auto tabIndex = key.replace("Alt+", "").toInt();
+            if (tabIndex == 9) {
+                if (m_tabbar->count() > 1) {
+                    activeTab(m_tabbar->count() - 1);
+                }
+            } else {
+                if (tabIndex <= m_tabbar->count()) {
+                    activeTab(tabIndex - 1);
+                }
+            }
+        }
+    }
+}
+
 void Window::dragEnterEvent(QDragEnterEvent *event)
 {
     // Accept drag event if mime type is url.
@@ -1471,9 +1446,4 @@ bool Window::eventFilter(QObject *, QEvent *event)
     }
 
     return false;
-}
-
-void Window::addBlankTab()
-{
-    addBlankTab("");
 }
