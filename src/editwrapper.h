@@ -60,13 +60,10 @@ private:
 private:
     QHBoxLayout *m_layout;
     DTextEdit *m_textEdit;
-
-    bool m_saveFinish;
-    bool m_hasLoadFile;
-    bool m_isLoadFinished;
-
-    EndOfLineMode m_endOfLineMode;
     QTextCodec *m_textCodec;
+    EndOfLineMode m_endOfLineMode;
+
+    bool m_isLoadFinished;
 };
 
 #endif

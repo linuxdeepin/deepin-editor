@@ -37,11 +37,9 @@ EditWrapper::EditWrapper(QWidget *parent)
     : QWidget(parent),
       m_layout(new QHBoxLayout(this)),
       m_textEdit(new DTextEdit),
-      m_saveFinish(true),
-      m_hasLoadFile(false),
-      m_isLoadFinished(true),
+      m_textCodec(QTextCodec::codecForName("UTF-8")),
       m_endOfLineMode(eolUnix),
-      m_textCodec(QTextCodec::codecForName("UTF-8"))
+      m_isLoadFinished(true)
 {
     // Init layout and widgets.
     m_layout->setContentsMargins(0, 0, 0, 0);

@@ -244,14 +244,32 @@ void Window::addTab(const QString &filepath, bool activeTab)
 {
     // check whether it is an editable file thround mimeType.
     if (Utils::isMimeTypeSupport(filepath)) {
-        QFile file(filepath);
-        QFileInfo fileInfo(filepath);
+        const QString &curPath = m_tabbar->currentPath();
+        const QFileInfo fileInfo(filepath);
+        EditWrapper *curWrapper = currentWrapper();
+
+        // if the current page is a draft file and is empty
+        // no need to create a new tab.
+        if (curWrapper->textEditor()->toPlainText().isEmpty() &&
+            Utils::isDraftFile(curPath)) {
+
+            QFile(curPath).remove();
+            m_tabbar->updateTab(m_tabbar->currentIndex(), filepath, fileInfo.fileName());
+            m_wrappers[filepath] = m_wrappers.take(curPath);
+            m_wrappers[filepath]->updatePath(filepath);
+            m_wrappers[filepath]->openFile(filepath);
+
+            return;
+        }
 
         // check if have permission to read the file.
+        QFile file(filepath);
         if (fileInfo.exists() && !file.open(QIODevice::ReadOnly)) {
+            file.close();
             showNotify(QString(tr("You do not have permission to open %1")).arg(filepath));
             return;
         }
+        file.close();
 
         if (m_tabbar->indexOf(filepath) == -1) {
             m_tabbar->addTab(filepath, QFileInfo(filepath).fileName());
@@ -544,7 +562,6 @@ bool Window::saveFile()
 
     return true;
 }
-
 
 bool Window::saveAsFile()
 {
