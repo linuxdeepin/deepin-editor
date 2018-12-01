@@ -84,6 +84,7 @@ public:
     void popupJumpLineBar();
     void popupSettingsDialog();
     void popupPrintDialog();
+    void popupThemePanel();
 
     void toggleFullscreen();
 

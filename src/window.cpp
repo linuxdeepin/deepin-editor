@@ -225,8 +225,7 @@ void Window::initTitlebar()
     connect(saveAsAction, &QAction::triggered, this, &Window::saveAsFile);
     connect(printAction, &QAction::triggered, this, &Window::popupPrintDialog);
     connect(settingAction, &QAction::triggered, this, &Window::popupSettingsDialog);
-    connect(switchThemeAction, &QAction::triggered, m_themePanel, &ThemePanel::popup);
-    connect(m_themePanel, &ThemePanel::popupFinished, [=] { m_themePanel->setSelectionTheme(m_themePath); });
+    connect(switchThemeAction, &QAction::triggered, this, &Window::popupThemePanel);
 }
 
 int Window::getTabIndex(const QString &file)
@@ -755,6 +754,12 @@ void Window::popupPrintDialog()
     });
 
     preview.exec();
+}
+
+void Window::popupThemePanel()
+{
+    m_themePanel->setSelectionTheme(m_themePath);
+    m_themePanel->popup();
 }
 
 void Window::toggleFullscreen()

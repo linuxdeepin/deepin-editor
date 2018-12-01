@@ -40,6 +40,8 @@ ThemePanel::ThemePanel(QWidget *parent)
     layout->setMargin(0);
     layout->setSpacing(0);
 
+    setFixedWidth(250);
+
     QWidget::hide();
     connect(m_themeView, &ThemeListView::focusOut, this, &ThemePanel::hide);
     connect(m_themeView, &ThemeListView::themeChanged, this, &ThemePanel::themeChanged);
@@ -89,26 +91,28 @@ void ThemePanel::popup()
     m_themeView->setFocus();
 
     QRect rect = geometry();
+    QRect parentRect = parentWidget()->topLevelWidget()->geometry();
     QPropertyAnimation *animation = new QPropertyAnimation(this, "geometry");
     animation->setDuration(250);
-    animation->setEasingCurve(QEasingCurve::InOutCubic);
-    animation->setStartValue(QRect(rect.x(), rect.y(), 0, rect.height()));
-    animation->setEndValue(QRect(rect.x(), rect.y(), 250, rect.height()));
+    animation->setEasingCurve(QEasingCurve::OutQuad);
+    animation->setStartValue(QRect(parentRect.width(), rect.y(), rect.width(), rect.height()));
+    animation->setEndValue(QRect(parentRect.width() - rect.width(), rect.y(), rect.width(), rect.height()));
     animation->start();
 
     connect(animation, &QPropertyAnimation::valueChanged, [=] { m_themeView->adjustScrollbarMargins(); });
-    connect(animation, &QPropertyAnimation::finished, this, &ThemePanel::popupFinished);
     connect(animation, &QPropertyAnimation::finished, animation, &QPropertyAnimation::deleteLater);
 }
 
 void ThemePanel::hide()
 {
     QRect rect = geometry();
+    QRect parentRect = parentWidget()->topLevelWidget()->geometry();
     QPropertyAnimation *animation = new QPropertyAnimation(this, "geometry");
     animation->setDuration(250);
-    animation->setEasingCurve(QEasingCurve::InOutCubic);
-    animation->setStartValue(QRect(rect.x(), rect.y(), 250, rect.height()));
-    animation->setEndValue(QRect(rect.x(), rect.y(), 0, rect.height()));
+    animation->setEasingCurve(QEasingCurve::OutQuad);
+    animation->setStartValue(QRect(parentRect.width() - rect.width(), rect.y(), rect.width(), rect.height()));
+    animation->setEndValue(QRect(parentRect.width(), rect.y(), rect.width(), rect.height()));
+
     animation->start();
 
     connect(animation, &QPropertyAnimation::finished, [=] { QWidget::hide(); });

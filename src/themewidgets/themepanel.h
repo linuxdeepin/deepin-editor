@@ -42,7 +42,6 @@ public:
 
 signals:
     void themeChanged(const QString &path);
-    void popupFinished();
 
 protected:
     void paintEvent(QPaintEvent *);

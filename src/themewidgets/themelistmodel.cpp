@@ -68,13 +68,10 @@ QVariant ThemeListModel::data(const QModelIndex &index, int role) const
     switch (role) {
     case ThemeName:
         return name;
-
     case ThemePath:
-        return m_themes.at(r).second;
-
+        return path;
     case FrameNormalColor:
         return m_frameNormalColor;
-
     case FrameSelectedColor:
         return m_frameSelectedColor;
     }
