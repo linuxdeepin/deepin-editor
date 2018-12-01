@@ -38,11 +38,7 @@
 #include <QResizeEvent>
 #include <QVBoxLayout>
 
-#include "dwindowmanager.h"
-#include "dimagebutton.h"
-
 DWIDGET_USE_NAMESPACE
-DWM_USE_NAMESPACE
 
 class Window : public DMainWindow
 {
@@ -149,7 +145,6 @@ protected:
     void keyPressEvent(QKeyEvent *keyEvent) override;
     void dragEnterEvent(QDragEnterEvent *e) override;
     void dropEvent(QDropEvent* event) override;
-    bool eventFilter(QObject *, QEvent *event) override;
 
 private:
     DBusDaemon::dbus *m_rootSaveDBus;
@@ -164,7 +159,6 @@ private:
     ThemePanel *m_themePanel;
     FindBar *m_findBar;
     Settings *m_settings;
-    DWindowManager *m_windowManager;
 
     QMap<QString, EditWrapper *> m_wrappers;
 
@@ -181,8 +175,6 @@ private:
     int m_fontSize = 0;
 
     QString m_titlebarStyleSheet;
-
-    bool m_windowShowFlag = false;
 
     QString m_themePath;
     QString m_tabbarActiveColor;

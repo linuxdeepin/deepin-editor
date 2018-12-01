@@ -25,6 +25,7 @@
 #include "themelistmodel.h"
 #include "themeitemdelegate.h"
 
+class Window;
 class ThemePanel : public QWidget
 {
     Q_OBJECT
@@ -49,6 +50,7 @@ protected:
 private:
     ThemeListView *m_themeView;
     ThemeListModel *m_themeModel;
+    Window *m_window;
 
     QColor m_frameLightColor = QColor("#000000");
     QColor m_frameDarkColor = QColor("#FFFFFF");

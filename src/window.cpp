@@ -44,8 +44,6 @@
 #include <QFileDialog>
 #endif
 
-DWM_USE_NAMESPACE
-
 Window::Window(DMainWindow *parent)
     : DMainWindow(parent),
       m_centralWidget(new QWidget),
@@ -57,14 +55,12 @@ Window::Window(DMainWindow *parent)
       m_themePanel(new ThemePanel(this)),
       m_findBar(new FindBar),
       m_settings(new Settings(this)),
-      m_windowManager(new DWindowManager),
       m_menu(new QMenu),
       m_titlebarStyleSheet(titlebar()->styleSheet())
 {
     m_blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
     m_themePath = m_settings->settings->option("advance.editor.theme")->value().toString();
     m_rootSaveDBus = new DBusDaemon::dbus("com.deepin.editor.daemon", "/", QDBusConnection::systemBus(), this);
-    m_windowShowFlag = true;
 
     // Init.
     installEventFilter(this);
@@ -1300,21 +1296,23 @@ DDialog* Window::createDialog(const QString &title, const QString &content)
     return dialog;
 }
 
-void Window::resizeEvent(QResizeEvent*)
+void Window::resizeEvent(QResizeEvent *e)
 {
-    if (m_windowShowFlag) {
-        QStringList states = m_windowManager->getWindowStates(winId());
-        if (!states.contains("_NET_WM_STATE_MAXIMIZED_VERT")) {
-            QScreen *screen = QGuiApplication::primaryScreen();
-            QRect screenGeometry = screen->geometry();
-            m_settings->settings->option("advance.window.window_width")->setValue(rect().width() * 1.0 / screenGeometry.width());
-            m_settings->settings->option("advance.window.window_height")->setValue(rect().height() * 1.0 / screenGeometry.height());
-        }
-
-        DAnchorsBase::setAnchor(m_themePanel, Qt::AnchorTop, m_centralWidget, Qt::AnchorTop);
-        DAnchorsBase::setAnchor(m_themePanel, Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
-        DAnchorsBase::setAnchor(m_themePanel, Qt::AnchorRight, m_centralWidget, Qt::AnchorRight);
+    if (m_themePanel->isVisible()) {
+        int offset = isFullScreen() ? 0 : titlebar()->geometry().bottom();
+        QRect themePanelRect(0, offset, 250, height() - offset);
+        themePanelRect.moveRight(rect().right());
+        m_themePanel->setGeometry(themePanelRect);
     }
+
+    if (!isMaximized() && !isFullScreen()) {
+        QScreen *screen = QApplication::primaryScreen();
+        QRect screenGeometry = screen->geometry();
+        m_settings->settings->option("advance.window.window_width")->setValue(rect().width() * 1.0 / screenGeometry.width());
+        m_settings->settings->option("advance.window.window_height")->setValue(rect().height() * 1.0 / screenGeometry.height());
+    }
+
+    DMainWindow::resizeEvent(e);
 }
 
 void Window::closeEvent(QCloseEvent *e)
@@ -1459,13 +1457,4 @@ void Window::dropEvent(QDropEvent* event)
             addTab(url.toLocalFile(), true);
         }
     }
-}
-
-bool Window::eventFilter(QObject *, QEvent *event)
-{
-    // Try hide word completion window when window start to move or size change.
-    if (m_windowShowFlag && (event->type() == QEvent::MouseMove || event->type() == QEvent::WindowStateChange)) {
-    }
-
-    return false;
 }

@@ -37,7 +37,6 @@ find_package(Qt5Concurrent REQUIRED)
 find_package(Qt5PrintSupport REQUIRED)
 find_package(DtkWidget REQUIRED)
 find_package(DtkCore REQUIRED)
-find_package(DtkWm REQUIRED)
 find_package(KF5SyntaxHighlighting)
 find_package(KF5Codecs)
 
@@ -46,7 +45,6 @@ add_executable(deepin-editor ${SRCS} src/deepin-editor.qrc)
 target_include_directories(deepin-editor PUBLIC ${DtkWidget_INCLUDE_DIRS} ${OBJECT_BINARY_DIR})
 target_link_libraries(deepin-editor
     ${DtkWidget_LIBRARIES}
-    ${DtkWm_LIBRARIES}
     ${DtkCore_LIBRARIES}
     ${Qt5Widgets_LIBRARIES}
     ${Qt5DBus_LIBRARIES}
