@@ -44,6 +44,23 @@
 #include <QMimeData>
 #include <QTimer>
 
+static inline bool isModifier(QKeyEvent *e)
+{
+    if (!e) {
+        return false;
+    }
+
+    switch (e->key()) {
+    case Qt::Key_Shift:
+    case Qt::Key_Control:
+    case Qt::Key_Meta:
+    case Qt::Key_Alt:
+        return true;
+    default:
+        return false;
+    }
+}
+
 class LineNumberArea : public QWidget
 {
 public:
@@ -66,10 +83,12 @@ DTextEdit::DTextEdit(QPlainTextEdit *parent)
     lineNumberArea = new LineNumberArea(this);
 
     viewport()->installEventFilter(this);
+    viewport()->setCursor(Qt::IBeamCursor);
 
     // Don't draw frame around editor widget.
     setFrameShape(QFrame::NoFrame);
     setFocusPolicy(Qt::StrongFocus);
+    setMouseTracking(true);
 
     // Init widgets.
     connect(this, &QPlainTextEdit::updateRequest, this, &DTextEdit::handleUpdateRequest);
@@ -1381,8 +1400,25 @@ void DTextEdit::renderAllSelections()
     setExtraSelections(selections);
 }
 
+void DTextEdit::mouseMoveEvent(QMouseEvent *e)
+{
+    // other apps will override their own cursor when opened
+    // so they need to be restored.
+    QApplication::restoreOverrideCursor();
+
+    if (viewport()->cursor().shape() != Qt::IBeamCursor) {
+        viewport()->setCursor(Qt::IBeamCursor);
+    }
+
+    QPlainTextEdit::mouseMoveEvent(e);
+}
+
 void DTextEdit::keyPressEvent(QKeyEvent *e)
 {
+    if (!isModifier(e)) {
+        viewport()->setCursor(Qt::BlankCursor);
+    }
+
     const QString &key = Utils::getKeyshortcut(e);
 
     if (m_readOnlyMode) {

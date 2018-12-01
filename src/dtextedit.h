@@ -118,6 +118,7 @@ public:
     void updateKeywordSelections(QString keyword);
     void renderAllSelections();
 
+    void mouseMoveEvent(QMouseEvent *e);
     void keyPressEvent(QKeyEvent *e);
     void wheelEvent(QWheelEvent *e);
     bool eventFilter(QObject *, QEvent *event);
