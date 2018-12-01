@@ -1299,8 +1299,8 @@ DDialog* Window::createDialog(const QString &title, const QString &content)
 void Window::resizeEvent(QResizeEvent *e)
 {
     if (m_themePanel->isVisible()) {
-        int offset = isFullScreen() ? 0 : titlebar()->geometry().bottom();
-        QRect themePanelRect(0, offset, 250, height() - offset);
+        int yOffset = isFullScreen() ? 0 : titlebar()->height();
+        QRect themePanelRect(0, yOffset, 250, height() - yOffset);
         themePanelRect.moveRight(rect().right());
         m_themePanel->setGeometry(themePanelRect);
     }
