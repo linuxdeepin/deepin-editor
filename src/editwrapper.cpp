@@ -25,6 +25,7 @@
 #include <QCoreApplication>
 #include <QApplication>
 #include <QSaveFile>
+#include <QScrollBar>
 #include <QDebug>
 #include <QTimer>
 #include <QDir>
@@ -143,24 +144,28 @@ void EditWrapper::refresh()
     }
 
     QFile file(filePath());
-    int curPos = m_textEdit->textCursor().position();
-    m_textEdit->setPlainText(QString());
 
     if (file.open(QIODevice::ReadOnly)) {
         QTextStream out(&file);
         out.setCodec(m_textCodec);
         QString content = out.readAll();
+        int curPos = m_textEdit->textCursor().position();
+        int yoffset = m_textEdit->verticalScrollBar()->value();
+        int xoffset = m_textEdit->horizontalScrollBar()->value();
 
+        m_textEdit->setPlainText(QString());
         m_textEdit->setUpdatesEnabled(false);
         m_textEdit->setPlainText(content);
         m_textEdit->setModified(false);
 
         QTextCursor textcur = m_textEdit->textCursor();
         textcur.setPosition(curPos);
-        m_textEdit->setTextCursor(textcur);
 
         QTimer::singleShot(50, this, [=] {
             m_textEdit->setUpdatesEnabled(true);
+            m_textEdit->setTextCursor(textcur);
+            m_textEdit->verticalScrollBar()->setValue(yoffset);
+            m_textEdit->horizontalScrollBar()->setValue(xoffset);
         });
 
         file.close();
