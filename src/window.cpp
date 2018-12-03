@@ -247,7 +247,12 @@ void Window::addTab(const QString &filepath, bool activeTab)
     if (Utils::isMimeTypeSupport(filepath)) {
         const QString &curPath = m_tabbar->currentPath();
         const QFileInfo fileInfo(filepath);
+        QString tabName = fileInfo.fileName();
         EditWrapper *curWrapper = currentWrapper();
+
+        if (!fileInfo.isWritable() && fileInfo.isReadable()) {
+            tabName += QString(" (%1)").arg(tr("Read-Only"));
+        }
 
         if (curWrapper) {
             // if the current page is a draft file and is empty
@@ -256,7 +261,7 @@ void Window::addTab(const QString &filepath, bool activeTab)
                 Utils::isDraftFile(curPath)) {
 
                 QFile(curPath).remove();
-                m_tabbar->updateTab(m_tabbar->currentIndex(), filepath, fileInfo.fileName());
+                m_tabbar->updateTab(m_tabbar->currentIndex(), filepath, tabName);
                 m_wrappers[filepath] = m_wrappers.take(curPath);
                 m_wrappers[filepath]->updatePath(filepath);
                 m_wrappers[filepath]->openFile(filepath);
@@ -275,7 +280,7 @@ void Window::addTab(const QString &filepath, bool activeTab)
         file.close();
 
         if (m_tabbar->indexOf(filepath) == -1) {
-            m_tabbar->addTab(filepath, QFileInfo(filepath).fileName());
+            m_tabbar->addTab(filepath, tabName);
 
             if (!m_wrappers.contains(filepath)) {
                 EditWrapper *wrapper = createEditor();
@@ -514,7 +519,7 @@ bool Window::saveFile()
 
     QFile temporaryBuffer(currentPath);
     if (!temporaryBuffer.open(QIODevice::WriteOnly)) {
-        showNotify(QString(tr("You do not have permission to save %1")).arg(m_tabbar->currentName()));
+        showNotify(QString(tr("You do not have permission to save %1")).arg(fileInfo.fileName()));
         temporaryBuffer.close();
         return false;
 
