@@ -173,11 +173,15 @@ void Window::initTitlebar()
     QAction *printAction(new QAction(tr("Print"), this));
     QAction *switchThemeAction(new QAction(tr("Switch theme"), this));
     QAction *settingAction(new QAction(tr("Settings"), this));
+    QAction *findAction(new QAction(QApplication::translate("DTextEdit", "Find"), this));
+    QAction *replaceAction(new QAction(QApplication::translate("DTextEdit", "Replace"), this));
 
     m_menu->addAction(newWindowAction);
     m_menu->addAction(newTabAction);
     m_menu->addAction(openFileAction);
     m_menu->addSeparator();
+    m_menu->addAction(findAction);
+    m_menu->addAction(replaceAction);
     m_menu->addAction(saveAction);
     m_menu->addAction(saveAsAction);
     m_menu->addAction(printAction);
@@ -217,6 +221,8 @@ void Window::initTitlebar()
     connect(newWindowAction, &QAction::triggered, this, &Window::newWindow);
     connect(newTabAction, &QAction::triggered, this, static_cast<void (Window::*)()>(&Window::addBlankTab));
     connect(openFileAction, &QAction::triggered, this, &Window::openFile);
+    connect(findAction, &QAction::triggered, this, &Window::popupFindBar);
+    connect(replaceAction, &QAction::triggered, this, &Window::popupReplaceBar);
     connect(saveAction, &QAction::triggered, this, &Window::saveFile);
     connect(saveAsAction, &QAction::triggered, this, &Window::saveAsFile);
     connect(printAction, &QAction::triggered, this, &Window::popupPrintDialog);
