@@ -135,6 +135,38 @@ void EditWrapper::updatePath(const QString &file)
     // detectEndOfLine();
 }
 
+void EditWrapper::refresh()
+{
+    if (filePath().isEmpty() ||
+        Utils::isDraftFile(filePath())) {
+        return;
+    }
+
+    QFile file(filePath());
+    int curPos = m_textEdit->textCursor().position();
+    m_textEdit->setPlainText(QString());
+
+    if (file.open(QIODevice::ReadOnly)) {
+        QTextStream out(&file);
+        out.setCodec(m_textCodec);
+        QString content = out.readAll();
+
+        m_textEdit->setUpdatesEnabled(false);
+        m_textEdit->setPlainText(content);
+        m_textEdit->setModified(false);
+
+        QTextCursor textcur = m_textEdit->textCursor();
+        textcur.setPosition(curPos);
+        m_textEdit->setTextCursor(textcur);
+
+        QTimer::singleShot(50, this, [=] {
+            m_textEdit->setUpdatesEnabled(true);
+        });
+
+        file.close();
+    }
+}
+
 EditWrapper::EndOfLineMode EditWrapper::endOfLineMode()
 {
     return m_endOfLineMode;

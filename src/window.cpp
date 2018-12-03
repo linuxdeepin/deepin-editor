@@ -1388,9 +1388,9 @@ void Window::closeEvent(QCloseEvent *e)
     emit close();
 }
 
-void Window::keyPressEvent(QKeyEvent *keyEvent)
+void Window::keyPressEvent(QKeyEvent *e)
 {
-    QString key = Utils::getKeyshortcut(keyEvent);
+    QString key = Utils::getKeyshortcut(e);
 
     if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "addblanktab")) {
         addBlankTab();
@@ -1436,6 +1436,8 @@ void Window::keyPressEvent(QKeyEvent *keyEvent)
         displayShortcuts();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "print")) {
         popupPrintDialog();
+    } else if (e->key() == Qt::Key_F5) {
+        currentWrapper()->refresh();
     } else {
         // Post event to window widget if match Alt+0 ~ Alt+9
         QRegularExpression re("^Alt\\+\\d");

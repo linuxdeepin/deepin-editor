@@ -45,12 +45,14 @@ public:
     void openFile(const QString &filepath);
     bool saveFile();
     void updatePath(const QString &file);
+    void refresh();
     bool isLoadFinished() { return m_isLoadFinished; }
 
     EndOfLineMode endOfLineMode();
     void setEndOfLineMode(EndOfLineMode eol);
     void setTextCodec(QTextCodec *codec);
 
+    QString filePath() { return m_textEdit->filepath; }
     DTextEdit *textEditor() { return m_textEdit; }
 
 private:

@@ -1415,9 +1415,9 @@ void DTextEdit::mouseMoveEvent(QMouseEvent *e)
 
 void DTextEdit::keyPressEvent(QKeyEvent *e)
 {
-    if (!isModifier(e)) {
-        viewport()->setCursor(Qt::BlankCursor);
-    }
+    // if (!isModifier(e)) {
+    //     viewport()->setCursor(Qt::BlankCursor);
+    // }
 
     const QString &key = Utils::getKeyshortcut(e);
 
