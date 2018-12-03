@@ -258,6 +258,9 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
                 return coding.toLatin1();
             }
         }
+    } else if (mimetype_name == "application/x-desktop") {
+        // desktop entry files are encoded in UTF-8.
+        return QByteArray("UTF-8");
     }
 
     // for CJK
