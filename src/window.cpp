@@ -249,18 +249,20 @@ void Window::addTab(const QString &filepath, bool activeTab)
         const QFileInfo fileInfo(filepath);
         EditWrapper *curWrapper = currentWrapper();
 
-        // if the current page is a draft file and is empty
-        // no need to create a new tab.
-        if (curWrapper->textEditor()->toPlainText().isEmpty() &&
-            Utils::isDraftFile(curPath)) {
+        if (curWrapper) {
+            // if the current page is a draft file and is empty
+            // no need to create a new tab.
+            if (curWrapper->textEditor()->toPlainText().isEmpty() &&
+                Utils::isDraftFile(curPath)) {
 
-            QFile(curPath).remove();
-            m_tabbar->updateTab(m_tabbar->currentIndex(), filepath, fileInfo.fileName());
-            m_wrappers[filepath] = m_wrappers.take(curPath);
-            m_wrappers[filepath]->updatePath(filepath);
-            m_wrappers[filepath]->openFile(filepath);
+                QFile(curPath).remove();
+                m_tabbar->updateTab(m_tabbar->currentIndex(), filepath, fileInfo.fileName());
+                m_wrappers[filepath] = m_wrappers.take(curPath);
+                m_wrappers[filepath]->updatePath(filepath);
+                m_wrappers[filepath]->openFile(filepath);
 
-            return;
+                return;
+            }
         }
 
         // check if have permission to read the file.
