@@ -294,7 +294,6 @@ private:
 
     bool m_highlighted = false;
 
-    QMap<QChar, QTextCursor> m_brackets;
     QTextCharFormat m_bracketMatchFormat;
 };
 

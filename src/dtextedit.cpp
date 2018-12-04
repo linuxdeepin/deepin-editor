@@ -1908,17 +1908,9 @@ void DTextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &clos
     QTextCursor cursor = textCursor();
     int position = cursor.position();
 
+    QTextCursor bracketBeginCursor;
+    QTextCursor bracketEndCursor;
     cursor.clearSelection();
-
-    if (!m_brackets.contains(openChar)) {
-        m_brackets[openChar] = QTextCursor();
-    }
-    if (!m_brackets.contains(closeChar)) {
-        m_brackets[closeChar] = QTextCursor();
-    }
-
-    QTextCursor bracketBeginCursor = m_brackets[openChar];
-    QTextCursor bracketEndCursor = m_brackets[closeChar];
 
     if (!bracketBeginCursor.isNull() || !bracketEndCursor.isNull()) {
         bracketBeginCursor.setCharFormat(QTextCharFormat());
@@ -1993,9 +1985,6 @@ void DTextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &clos
         m_bracketsSelections.clear();
         m_bracketsSelections << startExtra << endExtra;
     }
-
-    m_brackets[openChar] = bracketBeginCursor;
-    m_brackets[closeChar] = bracketEndCursor;
 }
 
 void DTextEdit::setThemeWithPath(const QString &path)
