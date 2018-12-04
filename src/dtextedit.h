@@ -212,6 +212,7 @@ private:
     QPropertyAnimation *m_scrollAnimation;
 
     QList<QTextEdit::ExtraSelection> m_keywordSelections;
+    QList<QTextEdit::ExtraSelection> m_bracketsSelections;
     QTextEdit::ExtraSelection m_currentLineSelection;
     QTextEdit::ExtraSelection m_cursorKeywordSelection;
     QTextEdit::ExtraSelection m_wordUnderCursorSelection;

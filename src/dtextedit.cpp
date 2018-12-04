@@ -97,8 +97,7 @@ DTextEdit::DTextEdit(QPlainTextEdit *parent)
     // Init widgets.
     connect(this, &QPlainTextEdit::updateRequest, this, &DTextEdit::handleUpdateRequest);
     connect(this, &QPlainTextEdit::textChanged, this, &DTextEdit::updateLineNumber, Qt::QueuedConnection);
-    connect(this, &QPlainTextEdit::cursorPositionChanged, this, &DTextEdit::highlightCurrentLine);
-    connect(this, &QPlainTextEdit::cursorPositionChanged, this, &DTextEdit::cursorPositionChanged);
+    connect(this, &QPlainTextEdit::cursorPositionChanged, this, &DTextEdit::cursorPositionChanged, Qt::QueuedConnection);
     connect(document(), &QTextDocument::modificationChanged, this, &DTextEdit::setModified);
 
     // Init menu.
@@ -1401,6 +1400,7 @@ void DTextEdit::renderAllSelections()
     selections.append(m_keywordSelections);
     selections.append(m_cursorKeywordSelection);
     selections.append(m_wordUnderCursorSelection);
+    selections.append(m_bracketsSelections);
 
     setExtraSelections(selections);
 }
@@ -1898,9 +1898,12 @@ bool DTextEdit::setCursorKeywordSeletoin(int position, bool findNext)
 
 void DTextEdit::cursorPositionChanged()
 {
+    updateHighlightLineSelection();
+    m_bracketsSelections.clear();
     updateHighlightBrackets('(', ')');
     updateHighlightBrackets('{', '}');
     updateHighlightBrackets('[', ']');
+    renderAllSelections();
 }
 
 void DTextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &closeChar)
@@ -1976,23 +1979,27 @@ void DTextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &clos
                     bracketEndCursor = QTextCursor(doc);
                     bracketEndCursor.setPosition(position);
                     bracketEndCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-                    bracketEndCursor.setCharFormat(m_bracketMatchFormat);
                     break;
                 }
             }
 
             forward ? position++ : position--;
         }
-        bracketBeginCursor.setCharFormat(m_bracketMatchFormat);
+
+        QTextEdit::ExtraSelection startExtra;
+        startExtra.cursor = bracketBeginCursor;
+        startExtra.format = m_bracketMatchFormat;
+
+        QTextEdit::ExtraSelection endExtra;
+        endExtra.cursor = bracketEndCursor;
+        endExtra.format = m_bracketMatchFormat;
+
+        m_bracketsSelections.clear();
+        m_bracketsSelections << startExtra << endExtra;
     }
 
     m_brackets[openChar] = bracketBeginCursor;
     m_brackets[closeChar] = bracketEndCursor;
-
-    QTextEdit::ExtraSelection extra;
-    extra.format = m_bracketMatchFormat;
-    extra.cursor = cursor;
-    setExtraSelections(QList<QTextEdit::ExtraSelection>() << extra);
 }
 
 void DTextEdit::setThemeWithPath(const QString &path)
