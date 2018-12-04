@@ -39,15 +39,18 @@ namespace KSyntaxHighlighting {
 
 enum ConvertCase { UPPER, LOWER, CAPITALIZE };
 
+class EditWrapper;
 class DTextEdit : public QPlainTextEdit
 {
     Q_OBJECT
 
 public:
-    DTextEdit(QPlainTextEdit *parent = 0);
+    DTextEdit(QPlainTextEdit *parent = nullptr);
 
     QWidget *lineNumberArea;
     QString filepath;
+
+    void setWrapper(EditWrapper *);
 
     int getCurrentLine();
     int getCurrentColumn();
@@ -209,6 +212,7 @@ private:
     void updateHighlightBrackets(const QChar &openChar, const QChar &closeChar);
 
 private:
+    EditWrapper *m_wrapper;
     QPropertyAnimation *m_scrollAnimation;
 
     QList<QTextEdit::ExtraSelection> m_keywordSelections;

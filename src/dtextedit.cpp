@@ -23,6 +23,8 @@
 #include "dtextedit.h"
 #include "utils.h"
 #include "window.h"
+#include "editwrapper.h"
+#include "widgets/bottombar.h"
 
 #include <KF5/KSyntaxHighlighting/definition.h>
 #include <KF5/KSyntaxHighlighting/syntaxhighlighter.h>
@@ -78,6 +80,7 @@ public:
 
 DTextEdit::DTextEdit(QPlainTextEdit *parent)
     : QPlainTextEdit(parent),
+      m_wrapper(nullptr),
       m_highlighter(new KSyntaxHighlighting::SyntaxHighlighter(document()))
 {
     lineNumberArea = new LineNumberArea(this);
@@ -184,6 +187,11 @@ DTextEdit::DTextEdit(QPlainTextEdit *parent)
             showCursorBlink();
         }
     });
+}
+
+void DTextEdit::setWrapper(EditWrapper *w)
+{
+    m_wrapper = w;
 }
 
 int DTextEdit::getCurrentLine()
@@ -1900,6 +1908,12 @@ void DTextEdit::cursorPositionChanged()
     updateHighlightBrackets('{', '}');
     updateHighlightBrackets('[', ']');
     renderAllSelections();
+
+    if (m_wrapper) {
+        QTextCursor cursor = textCursor();
+        m_wrapper->bottomBar()->updatePosition(cursor.blockNumber() + 1,
+                                               cursor.columnNumber() + 1);
+    }
 }
 
 void DTextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &closeChar)
@@ -2027,6 +2041,13 @@ void DTextEdit::setTheme(const KSyntaxHighlighting::Theme &theme, const QString 
         m_highlighter->setTheme(m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme));
     } else {
         m_highlighter->setTheme(m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
+    }
+
+    if (m_wrapper) {
+        QPalette palette = m_wrapper->bottomBar()->palette();
+        palette.setColor(QPalette::Background, m_backgroundColor);
+        palette.setColor(QPalette::Text, Qt::red);
+        m_wrapper->bottomBar()->setPalette(palette);
     }
 
     // does not support highlight do not reload

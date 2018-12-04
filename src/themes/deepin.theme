@@ -150,7 +150,7 @@
         "code-folding" : "#94caef",
         "bracket-match-bg" : "#ffff00",
         "bracket-match-fg" : "#000000",
-        "current-line" : "#f8f7f6",
+        "current-line" : "#F2F2F2",
         "icon-border" : "#f0f0f0",
         "indentation-line" : "#d2d2d2",
         "line-numbers" : "#a0a0a0",

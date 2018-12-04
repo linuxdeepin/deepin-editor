@@ -31,7 +31,7 @@
 #include "replacebar.h"
 #include "settings.h"
 #include "tabbar.h"
-#include "themewidgets/themepanel.h"
+#include "thememodule/themepanel.h"
 
 #include <QWidget>
 #include <QStackedWidget>

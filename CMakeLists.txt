@@ -27,7 +27,8 @@ configure_file(src/environments.h.in environments.h @ONLY)
 
 # Sources files
 file(GLOB SRCS "src/*.h" "src/*.cpp"
-               "src/themewidgets/*.h" "src/themewidgets/*.cpp")
+               "src/thememodule/*.h" "src/thememodule/*.cpp"
+               "src/widgets/*.h" "src/widgets/*.cpp")
 
 # Find the library
 find_package(PkgConfig REQUIRED)

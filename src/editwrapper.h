@@ -22,6 +22,7 @@
 
 #include "dbusinterface.h"
 #include "dtextedit.h"
+#include "widgets/bottombar.h"
 
 #include <QVBoxLayout>
 #include <QWidget>
@@ -52,6 +53,7 @@ public:
     void setEndOfLineMode(EndOfLineMode eol);
     void setTextCodec(QTextCodec *codec);
 
+    BottomBar *bottomBar() { return m_bottomBar; }
     QString filePath() { return m_textEdit->filepath; }
     DTextEdit *textEditor() { return m_textEdit; }
 
@@ -62,6 +64,7 @@ private:
 private:
     QHBoxLayout *m_layout;
     DTextEdit *m_textEdit;
+    BottomBar *m_bottomBar;
     QTextCodec *m_textCodec;
     EndOfLineMode m_endOfLineMode;
 

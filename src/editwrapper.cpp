@@ -36,8 +36,9 @@ DCORE_USE_NAMESPACE
 
 EditWrapper::EditWrapper(QWidget *parent)
     : QWidget(parent),
-      m_layout(new QHBoxLayout(this)),
+      m_layout(new QHBoxLayout),
       m_textEdit(new DTextEdit),
+      m_bottomBar(new BottomBar),
       m_textCodec(QTextCodec::codecForName("UTF-8")),
       m_endOfLineMode(eolUnix),
       m_isLoadFinished(true)
@@ -47,6 +48,15 @@ EditWrapper::EditWrapper(QWidget *parent)
     m_layout->setSpacing(0);
     m_layout->addWidget(m_textEdit->lineNumberArea);
     m_layout->addWidget(m_textEdit);
+
+    m_textEdit->setWrapper(this);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout->addLayout(m_layout);
+    mainLayout->addWidget(m_bottomBar);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
+    mainLayout->setSpacing(0);
+    setLayout(mainLayout);
 }
 
 EditWrapper::~EditWrapper()
