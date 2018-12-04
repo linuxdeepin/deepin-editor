@@ -82,10 +82,6 @@ DTextEdit::DTextEdit(QPlainTextEdit *parent)
 {
     lineNumberArea = new LineNumberArea(this);
 
-    m_bracketMatchFormat = currentCharFormat();
-    m_bracketMatchFormat.setBackground(Qt::yellow);
-    m_bracketMatchFormat.setForeground(Qt::black);
-
     viewport()->installEventFilter(this);
     viewport()->setCursor(Qt::IBeamCursor);
 
@@ -2024,6 +2020,10 @@ void DTextEdit::setTheme(const KSyntaxHighlighting::Theme &theme, const QString 
     m_searchHighlightBgColor = QColor(jsonMap["editor-colors"].toMap()["search-highlight-bg-color"].toString());
     m_selectionColor = QColor(textStylesMap["Normal"].toMap()["selected-text-color"].toString());
     m_selectionBgColor = QColor(textStylesMap["Normal"].toMap()["selected-bg-color"].toString());
+
+    m_bracketMatchFormat = currentCharFormat();
+    m_bracketMatchFormat.setForeground(QColor(jsonMap["editor-colors"].toMap()["bracket-match-fg"].toString()));
+    m_bracketMatchFormat.setBackground(QColor(jsonMap["editor-colors"].toMap()["bracket-match-bg"].toString()));
 
     const QString &styleSheet = QString("QPlainTextEdit {"
                                         "background-color: %1;"

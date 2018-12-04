@@ -148,7 +148,8 @@
     "editor-colors": {
         "background-color" : "#ffffff",
         "code-folding" : "#94caef",
-        "bracket-matching" : "#ffff00",
+        "bracket-match-bg" : "#ffff00",
+        "bracket-match-fg" : "#000000",
         "current-line" : "#f8f7f6",
         "icon-border" : "#f0f0f0",
         "indentation-line" : "#d2d2d2",
