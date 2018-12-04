@@ -67,7 +67,8 @@ void BottomBar::setEncodeName(const QString &name)
 
 void BottomBar::handleEncodeChanged(const QString &name)
 {
-    qDebug() << name;
+    QFontMetrics fm(m_encodeComboBox->font());
+    m_encodeComboBox->setFixedWidth(fm.width(name) + 30);
     m_wrapper->setTextCodec(QTextCodec::codecForName(name.toUtf8()));
     m_wrapper->refresh();
 }
