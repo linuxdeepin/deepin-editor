@@ -173,8 +173,8 @@ DTextEdit::DTextEdit(QPlainTextEdit *parent)
     connect(this, &DTextEdit::cursorMarkChanged, this, &DTextEdit::handleCursorMarkChanged);
 
     // configure content area
-    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    // setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
     connect(verticalScrollBar(), &QScrollBar::rangeChanged, this, &DTextEdit::adjustScrollbarMargins, Qt::QueuedConnection);
 
@@ -1167,6 +1167,11 @@ void DTextEdit::scrollToLine(int scrollOffset, int row, int column)
     m_scrollAnimation->start();
 }
 
+void DTextEdit::setLineWrapMode(bool enable)
+{
+    QPlainTextEdit::setLineWrapMode(enable ? QPlainTextEdit::WidgetWidth : QPlainTextEdit::NoWrap);
+}
+
 void DTextEdit::setFontFamily(QString name)
 {
     // Update font.
@@ -2156,14 +2161,6 @@ void DTextEdit::removeHighlightWordUnderCursor()
     m_wordUnderCursorSelection = selection;
 
     renderAllSelections();
-}
-
-void DTextEdit::setWordWrapMode(QTextOption::WrapMode policy)
-{
-    setHorizontalScrollBarPolicy(policy == QTextOption::WordWrap ? Qt::ScrollBarAlwaysOff
-                                                                 : Qt::ScrollBarAlwaysOn);
-
-    QPlainTextEdit::setWordWrapMode(policy);
 }
 
 void DTextEdit::setSettings(Settings *keySettings)

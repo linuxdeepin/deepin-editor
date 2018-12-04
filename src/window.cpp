@@ -77,7 +77,7 @@ Window::Window(DMainWindow *parent)
     connect(m_settings, &Settings::adjustWordWrap, this, [=] (bool enable) {
         for (EditWrapper *wrapper : m_wrappers.values()) {
             DTextEdit *textedit = wrapper->textEditor();
-            textedit->setWordWrapMode(enable ? QTextOption::WordWrap : QTextOption::NoWrap);
+            textedit->setLineWrapMode(enable);
         }
     });
 
@@ -408,7 +408,7 @@ EditWrapper* Window::createEditor()
     wrapper->textEditor()->setTabSpaceNumber(m_settings->settings->option("advance.editor.tabspacenumber")->value().toInt());
     wrapper->textEditor()->setFontFamily(m_settings->settings->option("base.font.family")->value().toString());
     wrapper->textEditor()->setModified(false);
-    wrapper->textEditor()->setWordWrapMode(wordWrap ? QTextOption::WordWrap : QTextOption::NoWrap);
+    wrapper->textEditor()->setLineWrapMode(wordWrap);
     setFontSizeWithConfig(wrapper);
 
     connect(wrapper->textEditor(), &DTextEdit::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);

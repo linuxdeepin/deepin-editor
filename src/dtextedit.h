@@ -104,6 +104,7 @@ public:
     void keepCurrentLineAtCenter();
     void scrollToLine(int scrollOffset, int row, int column);
 
+    void setLineWrapMode(bool enable);
     void setFontFamily(QString fontName);
     void setFontSize(int fontSize);
     void updateFont();
@@ -135,7 +136,6 @@ public:
     bool highlightWordUnderMouse(QPoint pos);
     void removeHighlightWordUnderCursor();
 
-    void setWordWrapMode(QTextOption::WrapMode policy);
     void setSettings(Settings *settings);
     void setModified(bool modified);
 
