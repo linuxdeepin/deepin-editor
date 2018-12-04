@@ -205,6 +205,8 @@ protected:
 
 private:
     bool setCursorKeywordSeletoin(int position, bool findNext);
+    void cursorPositionChanged();
+    void updateHighlightBrackets(const QChar &openChar, const QChar &closeChar);
 
 private:
     QPropertyAnimation *m_scrollAnimation;
@@ -290,6 +292,9 @@ private:
     QPoint m_mouseClickPos;
 
     bool m_highlighted = false;
+
+    QMap<QChar, QTextCursor> m_brackets;
+    QTextCharFormat m_bracketMatchFormat;
 };
 
 #endif

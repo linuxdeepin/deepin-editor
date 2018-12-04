@@ -82,6 +82,10 @@ DTextEdit::DTextEdit(QPlainTextEdit *parent)
 {
     lineNumberArea = new LineNumberArea(this);
 
+    m_bracketMatchFormat = currentCharFormat();
+    m_bracketMatchFormat.setBackground(Qt::yellow);
+    m_bracketMatchFormat.setForeground(Qt::black);
+
     viewport()->installEventFilter(this);
     viewport()->setCursor(Qt::IBeamCursor);
 
@@ -93,7 +97,8 @@ DTextEdit::DTextEdit(QPlainTextEdit *parent)
     // Init widgets.
     connect(this, &QPlainTextEdit::updateRequest, this, &DTextEdit::handleUpdateRequest);
     connect(this, &QPlainTextEdit::textChanged, this, &DTextEdit::updateLineNumber, Qt::QueuedConnection);
-    connect(this, &QPlainTextEdit::cursorPositionChanged, this, &DTextEdit::highlightCurrentLine, Qt::QueuedConnection);
+    connect(this, &QPlainTextEdit::cursorPositionChanged, this, &DTextEdit::highlightCurrentLine);
+    connect(this, &QPlainTextEdit::cursorPositionChanged, this, &DTextEdit::cursorPositionChanged);
     connect(document(), &QTextDocument::modificationChanged, this, &DTextEdit::setModified);
 
     // Init menu.
@@ -1889,6 +1894,105 @@ bool DTextEdit::setCursorKeywordSeletoin(int position, bool findNext)
     }
 
     return false;
+}
+
+void DTextEdit::cursorPositionChanged()
+{
+    updateHighlightBrackets('(', ')');
+    updateHighlightBrackets('{', '}');
+    updateHighlightBrackets('[', ']');
+}
+
+void DTextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &closeChar)
+{
+    QTextDocument *doc = document();
+    QTextCursor cursor = textCursor();
+    int position = cursor.position();
+
+    cursor.clearSelection();
+
+    if (!m_brackets.contains(openChar)) {
+        m_brackets[openChar] = QTextCursor();
+    }
+    if (!m_brackets.contains(closeChar)) {
+        m_brackets[closeChar] = QTextCursor();
+    }
+
+    QTextCursor bracketBeginCursor = m_brackets[openChar];
+    QTextCursor bracketEndCursor = m_brackets[closeChar];
+
+    if (!bracketBeginCursor.isNull() || !bracketEndCursor.isNull()) {
+        bracketBeginCursor.setCharFormat(QTextCharFormat());
+        bracketEndCursor.setCharFormat(QTextCharFormat());
+        bracketBeginCursor = bracketEndCursor = QTextCursor();
+    }
+
+    bool forward;
+    QChar begin, end;
+
+    if (doc->characterAt(position) == openChar ||
+        doc->characterAt(position) == closeChar ||
+        doc->characterAt(position - 1) == openChar ||
+        doc->characterAt(position - 1) == closeChar)
+    {
+        forward = doc->characterAt(position) == openChar ||
+                  doc->characterAt(position - 1) == openChar;
+
+        if (forward) {
+            if (doc->characterAt(position) == openChar) {
+                position++;
+            } else {
+                cursor.setPosition(position - 1);
+            }
+
+            begin = openChar;
+            end = closeChar;
+        } else {
+            if (doc->characterAt(position) == closeChar) {
+                cursor.setPosition(position + 1);
+                position -= 1;
+            } else {
+                position -= 2;
+            }
+
+            begin = closeChar;
+            end = openChar;
+        }
+
+        bracketBeginCursor = cursor;
+        bracketBeginCursor.movePosition(forward ? QTextCursor::NextCharacter : QTextCursor::PreviousCharacter,
+                                        QTextCursor::KeepAnchor);
+
+        int braceDepth = 1;
+        QChar c;
+
+        while (!(c = doc->characterAt(position)).isNull()) {
+            if (c == begin) {
+                braceDepth++;
+            } else if (c == end) {
+                braceDepth--;
+
+                if (!braceDepth) {
+                    bracketEndCursor = QTextCursor(doc);
+                    bracketEndCursor.setPosition(position);
+                    bracketEndCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+                    bracketEndCursor.setCharFormat(m_bracketMatchFormat);
+                    break;
+                }
+            }
+
+            forward ? position++ : position--;
+        }
+        bracketBeginCursor.setCharFormat(m_bracketMatchFormat);
+    }
+
+    m_brackets[openChar] = bracketBeginCursor;
+    m_brackets[closeChar] = bracketEndCursor;
+
+    QTextEdit::ExtraSelection extra;
+    extra.format = m_bracketMatchFormat;
+    extra.cursor = cursor;
+    setExtraSelections(QList<QTextEdit::ExtraSelection>() << extra);
 }
 
 void DTextEdit::setThemeWithPath(const QString &path)
