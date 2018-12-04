@@ -418,10 +418,6 @@ EditWrapper* Window::createEditor()
     connect(wrapper->textEditor(), &DTextEdit::pressEsc, this, &Window::removeBottomWidget, Qt::QueuedConnection);
 
     connect(wrapper->textEditor(), &DTextEdit::modificationChanged, this, [=] (const QString &path, bool isModified) {
-        if (Utils::isDraftFile(path)) {
-            return;
-        }
-
         int tabIndex = m_tabbar->indexOf(path);
         QString tabName = m_tabbar->textAt(tabIndex);
 
