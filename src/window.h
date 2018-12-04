@@ -84,8 +84,6 @@ public:
 
     void toggleFullscreen();
 
-    const QStringList getEncodeList();
-
     void remberPositionSave();
     void remberPositionRestore();
 

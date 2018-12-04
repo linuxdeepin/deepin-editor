@@ -421,11 +421,10 @@ EditWrapper* Window::createEditor()
     connect(wrapper->textEditor(), &DTextEdit::modificationChanged, this, [=] (const QString &path, bool isModified) {
         int tabIndex = m_tabbar->indexOf(path);
         QString tabName = m_tabbar->textAt(tabIndex);
+        QRegularExpression reg("(.+)[^*]");
+        QRegularExpressionMatch match = reg.match(tabName);
 
-        // remove '*'
-        if (tabName.at(tabName.size() - 1) == '*') {
-            tabName.chop(1);
-        }
+        tabName = match.captured(0);
 
         if (isModified) {
             tabName.append('*');
@@ -585,7 +584,9 @@ bool Window::saveAsFile()
     dialog.setDirectory(QDir::homePath());
 
     if (isDraft) {
-        dialog.selectFile(m_tabbar->currentName() + ".txt");
+        QRegularExpression reg("(.+)[^*]");
+        QRegularExpressionMatch match = reg.match(m_tabbar->currentName());
+        dialog.selectFile(match.captured(0) + ".txt");
     } else {
         dialog.setDirectory(fileInfo.dir());
         dialog.selectFile(fileInfo.fileName());
@@ -775,25 +776,6 @@ void Window::toggleFullscreen()
     }  else {
         showFullScreen();
     }
-}
-
-const QStringList Window::getEncodeList()
-{
-    QStringList encodeList;
-
-    for (int mib : QTextCodec::availableMibs()) {
-        QTextCodec *codec = QTextCodec::codecForMib(mib);
-        QString encodeName = QString(codec->name()).toUpper();
-
-        if (encodeName != "UTF-8" && !encodeList.contains(encodeName)) {
-            encodeList.append(encodeName);
-        }
-    }
-
-    encodeList.sort();
-    encodeList.prepend("UTF-8");
-
-    return encodeList;
 }
 
 void Window::remberPositionSave()
