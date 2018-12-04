@@ -22,7 +22,9 @@
 
 #include <QWidget>
 #include <QLabel>
+#include <QComboBox>
 
+class EditWrapper;
 class BottomBar : public QWidget
 {
     Q_OBJECT
@@ -32,12 +34,18 @@ public:
     ~BottomBar();
 
     void updatePosition(int row, int column);
+    void setEncodeName(const QString &name);
+
+private:
+    void handleEncodeChanged(const QString &name);
 
 protected:
     void paintEvent(QPaintEvent *);
 
 private:
+    EditWrapper *m_wrapper;
     QLabel *m_positionLabel;
+    QComboBox *m_encodeComboBox;
     QString m_rowStr;
     QString m_columnStr;
 };

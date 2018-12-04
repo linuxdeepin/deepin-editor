@@ -580,7 +580,7 @@ bool Window::saveAsFile()
 
     DFileDialog dialog(this, tr("Save File"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.addComboBox(tr("Encoding"), getEncodeList());
+    dialog.addComboBox(tr("Encoding"), Utils::getEncodeList());
     dialog.addComboBox(tr("Line Endings"), QStringList() << "Linux" << "Windows" << "Mac OS");
     dialog.setDirectory(QDir::homePath());
 

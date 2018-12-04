@@ -18,13 +18,18 @@
  */
 
 #include "bottombar.h"
+#include "../utils.h"
+#include "../editwrapper.h"
 #include <QLabel>
 #include <QPainter>
 #include <QHBoxLayout>
+#include <QMenu>
 
 BottomBar::BottomBar(QWidget *parent)
     : QWidget(parent),
+      m_wrapper(static_cast<EditWrapper *>(parent)),
       m_positionLabel(new QLabel),
+      m_encodeComboBox(new QComboBox),
       m_rowStr(tr("Row")),
       m_columnStr(tr("Column"))
 {
@@ -33,8 +38,16 @@ BottomBar::BottomBar(QWidget *parent)
     layout->addWidget(m_positionLabel);
 
     m_positionLabel->setText(QString("Row %1 , Column %1").arg(0));
+    m_encodeComboBox->setMaximumWidth(100);
+    m_encodeComboBox->addItems(Utils::getEncodeList());
+    m_encodeComboBox->setFocusPolicy(Qt::NoFocus);
+
+    layout->addStretch();
+    layout->addWidget(m_encodeComboBox);
 
     setFixedHeight(30);
+
+    connect(m_encodeComboBox, &QComboBox::currentTextChanged, this, &BottomBar::handleEncodeChanged);
 }
 
 BottomBar::~BottomBar()
@@ -44,7 +57,19 @@ BottomBar::~BottomBar()
 void BottomBar::updatePosition(int row, int column)
 {
     m_positionLabel->setText(QString("%1 %2 , %3 %4").arg(m_rowStr, QString::number(row),
-                                                         m_columnStr, QString::number(column)));
+                                                          m_columnStr, QString::number(column)));
+}
+
+void BottomBar::setEncodeName(const QString &name)
+{
+    m_encodeComboBox->setCurrentText(name);
+}
+
+void BottomBar::handleEncodeChanged(const QString &name)
+{
+    qDebug() << name;
+    m_wrapper->setTextCodec(QTextCodec::codecForName(name.toUtf8()));
+    m_wrapper->refresh();
 }
 
 void BottomBar::paintEvent(QPaintEvent *e)

@@ -568,3 +568,22 @@ void Utils::toast(const QString &message, QWidget *parent)
     toast->move((parent->width() - toast->width()) / 2,
                 avaliableHeight - toastPaddingBottom);
 }
+
+const QStringList Utils::getEncodeList()
+{
+    QStringList encodeList;
+
+    for (int mib : QTextCodec::availableMibs()) {
+        QTextCodec *codec = QTextCodec::codecForMib(mib);
+        QString encodeName = QString(codec->name()).toUpper();
+
+        if (encodeName != "UTF-8" && !encodeList.contains(encodeName)) {
+            encodeList.append(encodeName);
+        }
+    }
+
+    encodeList.sort();
+    encodeList.prepend("UTF-8");
+
+    return encodeList;
+}

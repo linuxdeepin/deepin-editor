@@ -38,7 +38,7 @@ EditWrapper::EditWrapper(QWidget *parent)
     : QWidget(parent),
       m_layout(new QHBoxLayout),
       m_textEdit(new DTextEdit),
-      m_bottomBar(new BottomBar),
+      m_bottomBar(new BottomBar(this)),
       m_textCodec(QTextCodec::codecForName("UTF-8")),
       m_endOfLineMode(eolUnix),
       m_isLoadFinished(true)
@@ -148,9 +148,12 @@ void EditWrapper::updatePath(const QString &file)
 
 void EditWrapper::refresh()
 {
-    if (filePath().isEmpty() ||
-        Utils::isDraftFile(filePath())) {
+    if (filePath().isEmpty()) {
         return;
+    }
+
+    if (Utils::isDraftFile(filePath())) {
+        saveFile();
     }
 
     QFile file(filePath());
@@ -242,6 +245,8 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QString
     // update status.
     m_textEdit->setModified(false);
     m_textEdit->moveToStart();
+
+    m_bottomBar->setEncodeName(m_textCodec->name());
 
     // load highlight.
     QTimer::singleShot(100, this, [=] { m_textEdit->loadHighlighter(); });
