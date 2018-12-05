@@ -113,7 +113,7 @@ public:
     void replaceNext(const QString &replaceText, const QString &withText);
     void replaceRest(const QString &replaceText, const QString &withText);
 
-    bool findKeywordForward(QString keyword);
+    bool findKeywordForward(const QString &keyword);
 
     void removeKeywords();
     void highlightKeyword(QString keyword, int position);
@@ -289,8 +289,6 @@ private:
     QColor m_lineNumbersColor;
     QColor m_currentLineNumberColor;
     QColor m_regionMarkerColor;
-    QColor m_searchHighlightColor;
-    QColor m_searchHighlightBgColor;
     QColor m_selectionColor;
     QColor m_selectionBgColor;
 
@@ -299,6 +297,8 @@ private:
     bool m_highlighted = false;
 
     QTextCharFormat m_bracketMatchFormat;
+    QTextCharFormat m_findMatchFormat;
+    QTextCharFormat m_findHighlightFormat;
 };
 
 #endif

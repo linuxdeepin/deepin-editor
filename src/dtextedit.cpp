@@ -1276,7 +1276,7 @@ void DTextEdit::replaceRest(const QString &replaceText, const QString &withText)
     setTextCursor(startCursor);
 }
 
-bool DTextEdit::findKeywordForward(QString keyword)
+bool DTextEdit::findKeywordForward(const QString &keyword)
 {
     if (textCursor().hasSelection()) {
         // Get selection bound.
@@ -1387,10 +1387,7 @@ void DTextEdit::updateKeywordSelections(QString keyword)
 
         while (!cursor.isNull()) {
             QTextEdit::ExtraSelection extra;
-            QBrush bgBrush(m_selectionBgColor);
-            QBrush fgBrush(m_selectionColor);
-            extra.format.setProperty(QTextFormat::BackgroundBrush, bgBrush);
-            extra.format.setProperty(QTextFormat::ForegroundBrush, fgBrush);
+            extra.format = m_findMatchFormat;
             extra.cursor = cursor;
 
             cursor = document()->find(keyword, cursor, flags);
@@ -1863,11 +1860,6 @@ bool DTextEdit::setCursorKeywordSeletoin(int position, bool findNext)
             if (m_keywordSelections[i].cursor.position() > position) {
                 m_cursorKeywordSelection.cursor = m_keywordSelections[i].cursor;
 
-                QBrush bgBrush(m_searchHighlightBgColor);
-                QBrush fgBrush(m_searchHighlightColor);
-                m_cursorKeywordSelection.format.setProperty(QTextFormat::ForegroundBrush, fgBrush);
-                m_cursorKeywordSelection.format.setProperty(QTextFormat::BackgroundBrush, bgBrush);
-
                 jumpToLine(m_keywordSelections[i].cursor.blockNumber() + offsetLines, false);
 
                 QTextCursor cursor = textCursor();
@@ -1883,11 +1875,6 @@ bool DTextEdit::setCursorKeywordSeletoin(int position, bool findNext)
         for (int i = m_keywordSelections.size() - 1; i >= 0; i--) {
             if (m_keywordSelections[i].cursor.position() < position) {
                 m_cursorKeywordSelection.cursor = m_keywordSelections[i].cursor;
-
-                QBrush bgBrush(m_searchHighlightBgColor);
-                QBrush fgBrush(m_searchHighlightColor);
-                m_cursorKeywordSelection.format.setProperty(QTextFormat::ForegroundBrush, fgBrush);
-                m_cursorKeywordSelection.format.setProperty(QTextFormat::BackgroundBrush, bgBrush);
 
                 jumpToLine(m_keywordSelections[i].cursor.blockNumber() + offsetLines, false);
 
@@ -2024,14 +2011,21 @@ void DTextEdit::setTheme(const KSyntaxHighlighting::Theme &theme, const QString 
     m_currentLineNumberColor = QColor(jsonMap["editor-colors"].toMap()["current-line-number"].toString());
     m_lineNumbersColor = QColor(jsonMap["editor-colors"].toMap()["line-numbers"].toString());
     m_regionMarkerColor = QColor(textStylesMap["RegionMarker"].toMap()["selected-text-color"].toString());
-    m_searchHighlightColor = QColor(jsonMap["editor-colors"].toMap()["search-highlight-color"].toString());
-    m_searchHighlightBgColor = QColor(jsonMap["editor-colors"].toMap()["search-highlight-bg-color"].toString());
     m_selectionColor = QColor(textStylesMap["Normal"].toMap()["selected-text-color"].toString());
     m_selectionBgColor = QColor(textStylesMap["Normal"].toMap()["selected-bg-color"].toString());
 
     m_bracketMatchFormat = currentCharFormat();
     m_bracketMatchFormat.setForeground(QColor(jsonMap["editor-colors"].toMap()["bracket-match-fg"].toString()));
     m_bracketMatchFormat.setBackground(QColor(jsonMap["editor-colors"].toMap()["bracket-match-bg"].toString()));
+
+    m_findMatchFormat = currentCharFormat();
+    m_findMatchFormat.setBackground(QColor(jsonMap["editor-colors"].toMap()["find-match-background"].toString()));
+    m_findMatchFormat.setForeground(QColor(jsonMap["editor-colors"].toMap()["find-match-foreground"].toString()));
+
+    const QString findHighlightBgColor = jsonMap["editor-colors"].toMap()["find-highlight-background"].toString();
+    const QString findHighlightFgColor = jsonMap["editor-colors"].toMap()["find-highlight-foreground"].toString();
+    m_cursorKeywordSelection.format.setProperty(QTextFormat::BackgroundBrush, QBrush(QColor(findHighlightBgColor)));
+    m_cursorKeywordSelection.format.setProperty(QTextFormat::ForegroundBrush, QBrush(QColor(findHighlightFgColor)));
 
     const QString &styleSheet = QString("QPlainTextEdit {"
                                         "background-color: %1;"
@@ -2048,6 +2042,7 @@ void DTextEdit::setTheme(const KSyntaxHighlighting::Theme &theme, const QString 
         m_highlighter->setTheme(m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
     }
 
+    // TODO
     if (m_wrapper) {
         QPalette palette = m_wrapper->bottomBar()->palette();
         palette.setColor(QPalette::Background, m_backgroundColor);
