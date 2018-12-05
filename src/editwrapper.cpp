@@ -148,12 +148,8 @@ void EditWrapper::updatePath(const QString &file)
 
 void EditWrapper::refresh()
 {
-    if (filePath().isEmpty()) {
+    if (filePath().isEmpty() || Utils::isDraftFile(filePath())) {
         return;
-    }
-
-    if (Utils::isDraftFile(filePath())) {
-        saveFile();
     }
 
     QFile file(filePath());
@@ -198,6 +194,31 @@ void EditWrapper::setEndOfLineMode(EndOfLineMode eol)
 void EditWrapper::setTextCodec(QTextCodec *codec)
 {
     m_textCodec = codec;
+
+    QFile file(filePath());
+    int curPos = m_textEdit->textCursor().position();
+    int yoffset = m_textEdit->verticalScrollBar()->value();
+    int xoffset = m_textEdit->horizontalScrollBar()->value();
+    m_textEdit->setPlainText(QString());
+
+    if (file.open(QIODevice::ReadOnly)) {
+        QTextStream out(&file);
+        out.setCodec(codec);
+        QString content = out.readAll();
+
+        m_textEdit->setUpdatesEnabled(false);
+        m_textEdit->setPlainText(content);
+        m_textEdit->setModified(false);
+
+        QTextCursor textcur = m_textEdit->textCursor();
+        textcur.setPosition(curPos);
+        m_textEdit->setTextCursor(textcur);
+        m_textEdit->verticalScrollBar()->setValue(yoffset);
+        m_textEdit->horizontalScrollBar()->setValue(xoffset);
+        m_textEdit->setUpdatesEnabled(true);
+
+        file.close();
+    }
 
     // TODO: enforce bom for some encodings
 }
