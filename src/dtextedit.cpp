@@ -1230,14 +1230,14 @@ void DTextEdit::replaceAll(const QString &replaceText, const QString &withText)
 void DTextEdit::replaceNext(const QString &replaceText, const QString &withText)
 {
     if (replaceText.isEmpty() ||
-        !m_cursorKeywordSelection.cursor.hasSelection()) {
+        !m_findHighlightSelection.cursor.hasSelection()) {
         // 无限替换的根源
         highlightKeyword(replaceText, getPosition());
         return;
     }
 
     QTextCursor cursor = textCursor();
-    cursor.setPosition(m_cursorKeywordSelection.cursor.position() - replaceText.size());
+    cursor.setPosition(m_findHighlightSelection.cursor.position() - replaceText.size());
     cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, replaceText.size());
     cursor.insertText(withText);
@@ -1317,10 +1317,10 @@ bool DTextEdit::findKeywordForward(const QString &keyword)
 
 void DTextEdit::removeKeywords()
 {
-    m_cursorKeywordSelection.cursor = textCursor();
-    m_cursorKeywordSelection.cursor.clearSelection();
+    m_findHighlightSelection.cursor = textCursor();
+    m_findHighlightSelection.cursor.clearSelection();
 
-    m_keywordSelections.clear();
+    m_findMatchSelections.clear();
 
     updateHighlightLineSelection();
 
@@ -1345,16 +1345,16 @@ void DTextEdit::updateCursorKeywordSelection(int position, bool findNext)
         if (findNext) {
             // Clear keyword if keyword not match anything.
             if (!setCursorKeywordSeletoin(0, findNext)) {
-                m_cursorKeywordSelection.cursor = textCursor();
+                m_findHighlightSelection.cursor = textCursor();
 
-                m_keywordSelections.clear();
+                m_findMatchSelections.clear();
                 renderAllSelections();
             }
         } else {
             QTextCursor cursor = textCursor();
             cursor.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
 
-            m_cursorKeywordSelection.cursor.clearSelection();
+            m_findHighlightSelection.cursor.clearSelection();
             setCursorKeywordSeletoin(cursor.position(), findNext);
         }
     }
@@ -1375,7 +1375,7 @@ void DTextEdit::updateHighlightLineSelection()
 void DTextEdit::updateKeywordSelections(QString keyword)
 {
     // Clear keyword selections first.
-    m_keywordSelections.clear();
+    m_findMatchSelections.clear();
 
     // Update selections with keyword.
     if (!keyword.isEmpty()) {
@@ -1391,10 +1391,10 @@ void DTextEdit::updateKeywordSelections(QString keyword)
             extra.cursor = cursor;
 
             cursor = document()->find(keyword, cursor, flags);
-            m_keywordSelections.append(extra);
+            m_findMatchSelections.append(extra);
         }
 
-        setExtraSelections(m_keywordSelections);
+        setExtraSelections(m_findMatchSelections);
     }
 }
 
@@ -1402,11 +1402,16 @@ void DTextEdit::renderAllSelections()
 {
     QList<QTextEdit::ExtraSelection> selections;
 
-    selections.append(m_currentLineSelection);
-    selections.append(m_keywordSelections);
-    selections.append(m_cursorKeywordSelection);
-    selections.append(m_wordUnderCursorSelection);
-    selections.append(m_bracketsSelections);
+    for (auto findMatch : m_findMatchSelections) {
+        findMatch.format = m_findMatchFormat;
+        selections << findMatch;
+    }
+
+    selections << m_currentLineSelection;
+    selections << m_findHighlightSelection;
+    selections << m_wordUnderCursorSelection;
+    selections << m_beginBracketSelection;
+    selections << m_endBracketSelection;
 
     setExtraSelections(selections);
 }
@@ -1856,14 +1861,14 @@ bool DTextEdit::setCursorKeywordSeletoin(int position, bool findNext)
     int offsetLines = 3;
 
     if (findNext) {
-        for (int i = 0; i < m_keywordSelections.size(); i++) {
-            if (m_keywordSelections[i].cursor.position() > position) {
-                m_cursorKeywordSelection.cursor = m_keywordSelections[i].cursor;
+        for (int i = 0; i < m_findMatchSelections.size(); i++) {
+            if (m_findMatchSelections[i].cursor.position() > position) {
+                m_findHighlightSelection.cursor = m_findMatchSelections[i].cursor;
 
-                jumpToLine(m_keywordSelections[i].cursor.blockNumber() + offsetLines, false);
+                jumpToLine(m_findMatchSelections[i].cursor.blockNumber() + offsetLines, false);
 
                 QTextCursor cursor = textCursor();
-                cursor.setPosition(m_keywordSelections[i].cursor.position());
+                cursor.setPosition(m_findMatchSelections[i].cursor.position());
 
                 // Update cursor.
                 setTextCursor(cursor);
@@ -1872,14 +1877,14 @@ bool DTextEdit::setCursorKeywordSeletoin(int position, bool findNext)
             }
         }
     } else {
-        for (int i = m_keywordSelections.size() - 1; i >= 0; i--) {
-            if (m_keywordSelections[i].cursor.position() < position) {
-                m_cursorKeywordSelection.cursor = m_keywordSelections[i].cursor;
+        for (int i = m_findMatchSelections.size() - 1; i >= 0; i--) {
+            if (m_findMatchSelections[i].cursor.position() < position) {
+                m_findHighlightSelection.cursor = m_findMatchSelections[i].cursor;
 
-                jumpToLine(m_keywordSelections[i].cursor.blockNumber() + offsetLines, false);
+                jumpToLine(m_findMatchSelections[i].cursor.blockNumber() + offsetLines, false);
 
                 QTextCursor cursor = textCursor();
-                cursor.setPosition(m_keywordSelections[i].cursor.position());
+                cursor.setPosition(m_findMatchSelections[i].cursor.position());
 
                 // Update cursor.
                 setTextCursor(cursor);
@@ -1894,8 +1899,10 @@ bool DTextEdit::setCursorKeywordSeletoin(int position, bool findNext)
 
 void DTextEdit::cursorPositionChanged()
 {
+    m_beginBracketSelection = QTextEdit::ExtraSelection();
+    m_endBracketSelection = QTextEdit::ExtraSelection();
+
     updateHighlightLineSelection();
-    m_bracketsSelections.clear();
     updateHighlightBrackets('(', ')');
     updateHighlightBrackets('{', '}');
     updateHighlightBrackets('[', ']');
@@ -1980,16 +1987,11 @@ void DTextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &clos
             forward ? position++ : position--;
         }
 
-        QTextEdit::ExtraSelection startExtra;
-        startExtra.cursor = bracketBeginCursor;
-        startExtra.format = m_bracketMatchFormat;
+        m_beginBracketSelection.cursor = bracketBeginCursor;
+        m_beginBracketSelection.format = m_bracketMatchFormat;
 
-        QTextEdit::ExtraSelection endExtra;
-        endExtra.cursor = bracketEndCursor;
-        endExtra.format = m_bracketMatchFormat;
-
-        m_bracketsSelections.clear();
-        m_bracketsSelections << startExtra << endExtra;
+        m_endBracketSelection.cursor = bracketEndCursor;
+        m_endBracketSelection.format = m_bracketMatchFormat;
     }
 }
 
@@ -2018,14 +2020,19 @@ void DTextEdit::setTheme(const KSyntaxHighlighting::Theme &theme, const QString 
     m_bracketMatchFormat.setForeground(QColor(jsonMap["editor-colors"].toMap()["bracket-match-fg"].toString()));
     m_bracketMatchFormat.setBackground(QColor(jsonMap["editor-colors"].toMap()["bracket-match-bg"].toString()));
 
+    const QString findMatchBgColor = jsonMap["editor-colors"].toMap()["find-match-background"].toString();
+    const QString findMatchFgColor = jsonMap["editor-colors"].toMap()["find-match-foreground"].toString();
     m_findMatchFormat = currentCharFormat();
-    m_findMatchFormat.setBackground(QColor(jsonMap["editor-colors"].toMap()["find-match-background"].toString()));
-    m_findMatchFormat.setForeground(QColor(jsonMap["editor-colors"].toMap()["find-match-foreground"].toString()));
+    m_findMatchFormat.setBackground(QColor(findMatchBgColor));
+    m_findMatchFormat.setForeground(QColor(findMatchFgColor));
 
     const QString findHighlightBgColor = jsonMap["editor-colors"].toMap()["find-highlight-background"].toString();
     const QString findHighlightFgColor = jsonMap["editor-colors"].toMap()["find-highlight-foreground"].toString();
-    m_cursorKeywordSelection.format.setProperty(QTextFormat::BackgroundBrush, QBrush(QColor(findHighlightBgColor)));
-    m_cursorKeywordSelection.format.setProperty(QTextFormat::ForegroundBrush, QBrush(QColor(findHighlightFgColor)));
+    m_findHighlightSelection.format.setProperty(QTextFormat::BackgroundBrush, QBrush(QColor(findHighlightBgColor)));
+    m_findHighlightSelection.format.setProperty(QTextFormat::ForegroundBrush, QBrush(QColor(findHighlightFgColor)));
+
+    m_beginBracketSelection.format = m_bracketMatchFormat;
+    m_endBracketSelection.format = m_bracketMatchFormat;
 
     const QString &styleSheet = QString("QPlainTextEdit {"
                                         "background-color: %1;"
@@ -2065,7 +2072,8 @@ void DTextEdit::loadHighlighter()
     const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());
 
     if (!def.filePath().isEmpty()) {
-        const QString &syntaxFile = QFileInfo(QString(":/syntax/%1").arg(QFileInfo(def.filePath()).fileName())).absoluteFilePath();
+        const QString &syntaxFile = QFileInfo(QString(":/syntax/%1")
+                                              .arg(QFileInfo(def.filePath()).fileName())).absoluteFilePath();
 
         QFile file(syntaxFile);
         if (!file.open(QFile::ReadOnly)) {

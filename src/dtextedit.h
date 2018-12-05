@@ -215,10 +215,11 @@ private:
     EditWrapper *m_wrapper;
     QPropertyAnimation *m_scrollAnimation;
 
-    QList<QTextEdit::ExtraSelection> m_keywordSelections;
-    QList<QTextEdit::ExtraSelection> m_bracketsSelections;
+    QList<QTextEdit::ExtraSelection> m_findMatchSelections;
+    QTextEdit::ExtraSelection m_beginBracketSelection;
+    QTextEdit::ExtraSelection m_endBracketSelection;
     QTextEdit::ExtraSelection m_currentLineSelection;
-    QTextEdit::ExtraSelection m_cursorKeywordSelection;
+    QTextEdit::ExtraSelection m_findHighlightSelection;
     QTextEdit::ExtraSelection m_wordUnderCursorSelection;
 
     QTextCursor m_highlightWordCacheCursor;
