@@ -35,6 +35,7 @@ public:
 
     void updatePosition(int row, int column);
     void setEncodeName(const QString &name);
+    void setPalette(const QPalette &palette);
 
 private:
     void handleEncodeChanged(const QString &name);

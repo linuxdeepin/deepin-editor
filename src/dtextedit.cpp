@@ -2051,7 +2051,7 @@ void DTextEdit::setTheme(const KSyntaxHighlighting::Theme &theme, const QString 
     if (m_wrapper) {
         QPalette palette = m_wrapper->bottomBar()->palette();
         palette.setColor(QPalette::Background, m_backgroundColor);
-        palette.setColor(QPalette::Text, Qt::red);
+        palette.setColor(QPalette::Text, textColor);
         m_wrapper->bottomBar()->setPalette(palette);
     }
 

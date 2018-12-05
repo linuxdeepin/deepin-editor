@@ -65,6 +65,14 @@ void BottomBar::setEncodeName(const QString &name)
     m_encodeComboBox->setCurrentText(name);
 }
 
+void BottomBar::setPalette(const QPalette &palette)
+{
+    m_positionLabel->setStyleSheet(QString("QLabel { color: %1; }").
+                                   arg(palette.color(QPalette::Text).name()));
+
+    QWidget::setPalette(palette);
+}
+
 void BottomBar::handleEncodeChanged(const QString &name)
 {
     QFontMetrics fm(m_encodeComboBox->font());
