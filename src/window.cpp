@@ -765,6 +765,7 @@ void Window::popupPrintDialog()
 
 void Window::popupThemePanel()
 {
+    updateThemePanelGeomerty();
     m_themePanel->setSelectionTheme(m_themePath);
     m_themePanel->popup();
 }
@@ -1288,13 +1289,18 @@ DDialog* Window::createDialog(const QString &title, const QString &content)
     return dialog;
 }
 
+void Window::updateThemePanelGeomerty()
+{
+    int yOffset = isFullScreen() ? 0 : titlebar()->height();
+    QRect themePanelRect(0, yOffset, 250, height() - yOffset);
+    themePanelRect.moveRight(rect().right());
+    m_themePanel->setGeometry(themePanelRect);
+}
+
 void Window::resizeEvent(QResizeEvent *e)
 {
     if (m_themePanel->isVisible()) {
-        int yOffset = isFullScreen() ? 0 : titlebar()->height();
-        QRect themePanelRect(0, yOffset, 250, height() - yOffset);
-        themePanelRect.moveRight(rect().right());
-        m_themePanel->setGeometry(themePanelRect);
+        updateThemePanelGeomerty();
     }
 
     if (!isMaximized() && !isFullScreen()) {

@@ -137,6 +137,9 @@ public slots:
 
     DDialog *createDialog(const QString &title, const QString &content);
 
+private:
+    void updateThemePanelGeomerty();
+
 protected:
     void resizeEvent(QResizeEvent* event) override;
     void closeEvent(QCloseEvent *event) override;
