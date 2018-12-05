@@ -56,6 +56,11 @@ Settings::Settings(QWidget *parent)
         emit adjustFontSize(value.toInt());
     });
 
+    auto theme = settings->option("advance.editor.theme");
+    connect(theme, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
+        emit themeChanged(value.toString());
+    });
+
     auto tabSpaceNumber = settings->option("advance.editor.tabspacenumber");
     connect(tabSpaceNumber, &Dtk::Core::DSettingsOption::valueChanged, this, [=](QVariant value) {
         emit adjustTabSpaceNumber(value.toInt());

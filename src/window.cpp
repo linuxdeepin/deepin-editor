@@ -74,6 +74,7 @@ Window::Window(DMainWindow *parent)
     connect(m_settings, &Settings::adjustFont, this, &Window::updateFont);
     connect(m_settings, &Settings::adjustFontSize, this, &Window::updateFontSize);
     connect(m_settings, &Settings::adjustTabSpaceNumber, this, &Window::updateTabSpaceNumber);
+    connect(m_settings, &Settings::themeChanged, this, &Window::loadTheme);
     connect(m_settings, &Settings::adjustWordWrap, this, [=] (bool enable) {
         for (EditWrapper *wrapper : m_wrappers.values()) {
             DTextEdit *textedit = wrapper->textEditor();
@@ -1193,6 +1194,11 @@ void Window::removeBottomWidget()
 
 void Window::loadTheme(const QString &path)
 {
+    QFileInfo fileInfo(path);
+    if (!fileInfo.exists()) {
+        return;
+    }
+
     m_themePath = path;
 
     QVariantMap jsonMap = Utils::getThemeMapFromPath(path);
