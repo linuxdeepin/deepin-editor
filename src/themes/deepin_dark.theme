@@ -1,8 +1,8 @@
 {
     "metadata" : {
         "revision" : 1,
-        "name" : "Breeze Dark",
-        "author" : "Dominik Haumann",
+        "name" : "Deepin Dark",
+        "author" : "Rekols",
         "license" : "MIT",
         "read-only" : true
     },
@@ -180,7 +180,7 @@
         "word-wrap-marker" : "#3a3f44"
     },
     "app-colors" : {
-        "tab-active" : "#00FFFF",
+        "tab-active" : "#2CA7F8",
         "tab-background-start-color" : "(20, 21, 23, 90%)",
         "tab-background-end-color" : "(20, 21, 23, 90%)",
         "tab-dnd-start" : "(35, 38, 41, 90%)",
