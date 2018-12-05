@@ -37,7 +37,8 @@ BottomBar::BottomBar(QWidget *parent)
     layout->setContentsMargins(10, 1, 5, 0);
     layout->addWidget(m_positionLabel);
 
-    m_positionLabel->setText(QString("Row %1 , Column %1").arg(0));
+    m_positionLabel->setText(QString("%1 %2 , %3 %4").arg(m_rowStr, "0",
+                                                          m_columnStr, "0"));
     m_encodeComboBox->setMaximumWidth(100);
     m_encodeComboBox->addItems(Utils::getEncodeList());
     m_encodeComboBox->setFocusPolicy(Qt::NoFocus);
