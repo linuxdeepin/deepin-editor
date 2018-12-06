@@ -57,4 +57,5 @@ public:
     static bool isDraftFile(const QString &filepath);
     static void toast(const QString &message, QWidget* parent = nullptr);
     static const QStringList getEncodeList();
+    static QPixmap renderSVG(const QString &filePath, const QSize &size);
 };

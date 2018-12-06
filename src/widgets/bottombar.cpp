@@ -29,7 +29,7 @@ BottomBar::BottomBar(QWidget *parent)
     : QWidget(parent),
       m_wrapper(static_cast<EditWrapper *>(parent)),
       m_positionLabel(new QLabel),
-      m_encodeComboBox(new QComboBox),
+      m_encodeMenu(new DDropdownMenu),
       m_rowStr(tr("Row")),
       m_columnStr(tr("Column"))
 {
@@ -39,16 +39,14 @@ BottomBar::BottomBar(QWidget *parent)
 
     m_positionLabel->setText(QString("%1 %2 , %3 %4").arg(m_rowStr, "0",
                                                           m_columnStr, "0"));
-    m_encodeComboBox->setMaximumWidth(100);
-    m_encodeComboBox->addItems(Utils::getEncodeList());
-    m_encodeComboBox->setFocusPolicy(Qt::NoFocus);
+    m_encodeMenu->addActions(Utils::getEncodeList());
 
     layout->addStretch();
-    layout->addWidget(m_encodeComboBox);
+    layout->addWidget(m_encodeMenu);
 
     setFixedHeight(30);
 
-    connect(m_encodeComboBox, &QComboBox::currentTextChanged, this, &BottomBar::handleEncodeChanged);
+    connect(m_encodeMenu, &DDropdownMenu::currentTextChanged, this, &BottomBar::handleEncodeChanged);
 }
 
 BottomBar::~BottomBar()
@@ -62,8 +60,8 @@ void BottomBar::updatePosition(int row, int column)
 }
 
 void BottomBar::setEncodeName(const QString &name)
-{
-    m_encodeComboBox->setCurrentText(name);
+{    
+    m_encodeMenu->setCurrentText(name);
 }
 
 void BottomBar::setPalette(const QPalette &palette)
@@ -71,13 +69,17 @@ void BottomBar::setPalette(const QPalette &palette)
     m_positionLabel->setStyleSheet(QString("QLabel { color: %1; }").
                                    arg(palette.color(QPalette::Text).name()));
 
+    if (palette.color(QPalette::Background).lightness() < 128) {
+        m_encodeMenu->setTheme("dark");
+    } else {
+        m_encodeMenu->setTheme("light");
+    }
+
     QWidget::setPalette(palette);
 }
 
 void BottomBar::handleEncodeChanged(const QString &name)
 {
-    QFontMetrics fm(m_encodeComboBox->font());
-    m_encodeComboBox->setFixedWidth(fm.width(name) + 30);
     m_wrapper->setTextCodec(QTextCodec::codecForName(name.toUtf8()));
 }
 

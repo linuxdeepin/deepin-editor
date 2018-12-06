@@ -40,6 +40,7 @@
 #include <KEncodingProber>
 #include <QTextCodec>
 #include <DToast>
+#include <QImageReader>
 
 QT_BEGIN_NAMESPACE
 extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
@@ -586,4 +587,23 @@ const QStringList Utils::getEncodeList()
     encodeList.prepend("UTF-8");
 
     return encodeList;
+}
+
+QPixmap Utils::renderSVG(const QString &filePath, const QSize &size)
+{
+    QImageReader reader;
+    QPixmap pixmap;
+
+    reader.setFileName(filePath);
+
+    if (reader.canRead()) {
+        const qreal ratio = qApp->devicePixelRatio();
+        reader.setScaledSize(size * ratio);
+        pixmap = QPixmap::fromImage(reader.read());
+        pixmap.setDevicePixelRatio(ratio);
+    } else {
+        pixmap.load(filePath);
+    }
+
+    return pixmap;
 }

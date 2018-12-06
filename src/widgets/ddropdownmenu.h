@@ -17,38 +17,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BOTTOMBAR_H
-#define BOTTOMBAR_H
+#ifndef DDROPDOWNMENU_H
+#define DDROPDOWNMENU_H
 
-#include <QWidget>
+#include <QFrame>
+#include <QMenu>
 #include <QLabel>
-#include "ddropdownmenu.h"
 
-class EditWrapper;
-class BottomBar : public QWidget
+class DDropdownMenu : public QFrame
 {
     Q_OBJECT
 
 public:
-    BottomBar(QWidget *parent = nullptr);
-    ~BottomBar();
+    DDropdownMenu(QWidget *parent = nullptr);
+    ~DDropdownMenu();
 
-    void updatePosition(int row, int column);
-    void setEncodeName(const QString &name);
-    void setPalette(const QPalette &palette);
+    QList<QAction *> actions() const;
 
-private:
-    void handleEncodeChanged(const QString &name);
+    QAction *addAction(const QString &text);
+    void addActions(QStringList list);
+    void setCurrentAction(QAction *action);
+    void setCurrentText(const QString &text);
+    void setText(const QString &text);
+
+    void setTheme(const QString &theme);
+
+signals:
+    void requestContextMenu();
+    void triggered(QAction *action);
+    void currentTextChanged(const QString &text);
 
 protected:
-    void paintEvent(QPaintEvent *);
+    void mouseReleaseEvent(QMouseEvent *e);
 
 private:
-    EditWrapper *m_wrapper;
-    QLabel *m_positionLabel;
-    DDropdownMenu *m_encodeMenu;
-    QString m_rowStr;
-    QString m_columnStr;
+    QMenu *m_menu;
+    QLabel *m_text;
+    QLabel *m_arrowLabel;
 };
 
 #endif
