@@ -59,6 +59,7 @@ public:
 
 private:
     void detectEndOfLine();
+    void handleCursorModeChanged(DTextEdit::CursorMode mode);
     void handleFileLoadFinished(const QByteArray &encode, const QString &content);
 
 private:

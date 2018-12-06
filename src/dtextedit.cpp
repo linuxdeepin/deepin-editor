@@ -167,6 +167,8 @@ DTextEdit::DTextEdit(QPlainTextEdit *parent)
     m_scrollAnimation->setEasingCurve(QEasingCurve::InOutExpo);
     m_scrollAnimation->setDuration(300);
 
+    m_cursorMode = Insert;
+
     connect(m_scrollAnimation, &QPropertyAnimation::finished, this, &DTextEdit::handleScrollFinish, Qt::QueuedConnection);
 
     // Monitor cursor mark status to update in line number area.
@@ -1585,6 +1587,9 @@ void DTextEdit::keyPressEvent(QKeyEvent *e)
                 setOverwriteMode(!overwriteMode());
                 update();
                 e->accept();
+
+                m_cursorMode = overwriteMode() ? Overwrite : Insert;
+                emit cursorModeChanged(m_cursorMode);
             }
         } else {
             // Post event to window widget if key match window key list.
@@ -2422,13 +2427,19 @@ QString DTextEdit::getWordAtMouse()
 void DTextEdit::toggleReadOnlyMode()
 {
     if (m_readOnlyMode) {
-        m_readOnlyMode = false;
+        if (m_cursorMode == Overwrite) {
+            emit cursorModeChanged(Overwrite);
+        } else {
+            emit cursorModeChanged(Insert);
+        }
 
+        m_readOnlyMode = false;
         popupNotify(tr("Read-Only mode is off"));
     } else {
         m_readOnlyMode = true;
 
         popupNotify(tr("Read-Only mode is on"));
+        emit cursorModeChanged(Readonly);
     }
 }
 

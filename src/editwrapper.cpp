@@ -57,6 +57,8 @@ EditWrapper::EditWrapper(QWidget *parent)
     mainLayout->setContentsMargins(0, 0, 0, 0);
     mainLayout->setSpacing(0);
     setLayout(mainLayout);
+
+    connect(m_textEdit, &DTextEdit::cursorModeChanged, this, &EditWrapper::handleCursorModeChanged);
 }
 
 EditWrapper::~EditWrapper()
@@ -241,6 +243,23 @@ void EditWrapper::detectEndOfLine()
     }
 
     file.close();
+}
+
+void EditWrapper::handleCursorModeChanged(DTextEdit::CursorMode mode)
+{
+    switch (mode) {
+    case DTextEdit::Insert:
+        m_bottomBar->setCursorStatus(tr("INSERT"));
+        break;
+    case DTextEdit::Overwrite:
+        m_bottomBar->setCursorStatus(tr("OVERWRITE"));
+        break;
+    case DTextEdit::Readonly:
+        m_bottomBar->setCursorStatus(tr("R/O"));
+        break;
+    default:
+        break;
+    }
 }
 
 void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QString &content)

@@ -35,6 +35,7 @@ public:
 
     void updatePosition(int row, int column);
     void setEncodeName(const QString &name);
+    void setCursorStatus(const QString &text);
     void setPalette(const QPalette &palette);
 
 private:
@@ -46,6 +47,7 @@ protected:
 private:
     EditWrapper *m_wrapper;
     QLabel *m_positionLabel;
+    QLabel *m_cursorStatus;
     DDropdownMenu *m_encodeMenu;
     QString m_rowStr;
     QString m_columnStr;

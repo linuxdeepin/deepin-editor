@@ -45,6 +45,12 @@ class DTextEdit : public QPlainTextEdit
     Q_OBJECT
 
 public:
+    enum CursorMode {
+        Insert,
+        Overwrite,
+        Readonly
+    };
+
     DTextEdit(QPlainTextEdit *parent = nullptr);
 
     QWidget *lineNumberArea;
@@ -172,6 +178,7 @@ signals:
     void clickFullscreenAction();
     void cursorMarkChanged(bool mark, QTextCursor cursor);
     void modificationChanged(const QString &path, bool isModified);
+    void cursorModeChanged(CursorMode mode);
     void popupNotify(QString notify);
     void click();
     void pressEsc();
@@ -300,6 +307,7 @@ private:
     QTextCharFormat m_bracketMatchFormat;
     QTextCharFormat m_findMatchFormat;
     QTextCharFormat m_findHighlightFormat;
+    CursorMode m_cursorMode;
 };
 
 #endif

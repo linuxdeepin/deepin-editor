@@ -29,6 +29,7 @@ BottomBar::BottomBar(QWidget *parent)
     : QWidget(parent),
       m_wrapper(static_cast<EditWrapper *>(parent)),
       m_positionLabel(new QLabel),
+      m_cursorStatus(new QLabel),
       m_encodeMenu(new DDropdownMenu),
       m_rowStr(tr("Row")),
       m_columnStr(tr("Column"))
@@ -37,12 +38,14 @@ BottomBar::BottomBar(QWidget *parent)
     layout->setContentsMargins(10, 1, 5, 0);
     layout->addWidget(m_positionLabel);
 
-    m_positionLabel->setText(QString("%1 %2 , %3 %4").arg(m_rowStr, "0",
-                                                          m_columnStr, "0"));
+    m_cursorStatus->setText(qApp->translate("EditWrapper", "INSERT"));
+    m_positionLabel->setText(QString("%1 %2 , %3 %4").arg(m_rowStr, "1",
+                                                          m_columnStr, "1"));
     m_encodeMenu->addActions(Utils::getEncodeList());
     m_encodeMenu->setCurrentText("UTF-8");
 
     layout->addStretch();
+    layout->addWidget(m_cursorStatus);
     layout->addWidget(m_encodeMenu);
 
     setFixedHeight(30);
@@ -63,6 +66,11 @@ void BottomBar::updatePosition(int row, int column)
 void BottomBar::setEncodeName(const QString &name)
 {
     m_encodeMenu->setCurrentText(name);
+}
+
+void BottomBar::setCursorStatus(const QString &text)
+{
+    m_cursorStatus->setText(text);
 }
 
 void BottomBar::setPalette(const QPalette &palette)
