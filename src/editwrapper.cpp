@@ -49,6 +49,7 @@ EditWrapper::EditWrapper(QWidget *parent)
     m_layout->addWidget(m_textEdit->lineNumberArea);
     m_layout->addWidget(m_textEdit);
 
+    m_bottomBar->setHighlightMenu(m_textEdit->getHighlightMenu());
     m_textEdit->setWrapper(this);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
@@ -59,6 +60,7 @@ EditWrapper::EditWrapper(QWidget *parent)
     setLayout(mainLayout);
 
     connect(m_textEdit, &DTextEdit::cursorModeChanged, this, &EditWrapper::handleCursorModeChanged);
+    connect(m_textEdit, &DTextEdit::hightlightChanged, this, &EditWrapper::handleHightlightChanged);
 }
 
 EditWrapper::~EditWrapper()
@@ -260,6 +262,11 @@ void EditWrapper::handleCursorModeChanged(DTextEdit::CursorMode mode)
     default:
         break;
     }
+}
+
+void EditWrapper::handleHightlightChanged(const QString &name)
+{
+    m_bottomBar->setHightlightName(name);
 }
 
 void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QString &content)

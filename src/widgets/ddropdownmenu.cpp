@@ -29,16 +29,18 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
       m_arrowLabel(new QLabel)
 {
     QHBoxLayout *layout = new QHBoxLayout(this);
-    layout->setContentsMargins(15, 0, 15, 0);
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
 
     m_arrowLabel->setFixedSize(9, 5);
     QPixmap arrowPixmap = Utils::renderSVG(":/images/dropdown_arrow_light.svg", QSize(9, 5));
     m_arrowLabel->setPixmap(arrowPixmap);
 
+    layout->addStretch();
     layout->addWidget(m_text, 0, Qt::AlignHCenter);
     layout->addSpacing(5);
     layout->addWidget(m_arrowLabel);
+    layout->addStretch();
 
     connect(m_menu, &QMenu::triggered, this, [=] (QAction *action) {
         setText(action->text());
@@ -107,11 +109,26 @@ void DDropdownMenu::setCurrentText(const QString &text)
     }
 }
 
+void DDropdownMenu::setCurrentTextOnly(const QString &text)
+{
+    setText(text);
+}
+
 void DDropdownMenu::setText(const QString &text)
 {
-    QFontMetrics fm(font());
     m_text->setText(text);
-    setFixedWidth(fm.width(text) + 50);
+
+    QFontMetrics fm(font());
+    setFixedWidth(fm.width(text) + 40);
+}
+
+void DDropdownMenu::setMenu(QMenu *menu)
+{
+    if (m_menu) {
+        delete m_menu;
+    }
+
+    m_menu = menu;
 }
 
 void DDropdownMenu::setTheme(const QString &theme)

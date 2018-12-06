@@ -128,6 +128,8 @@ public:
     void updateKeywordSelections(QString keyword);
     void renderAllSelections();
 
+    QMenu *getHighlightMenu();
+
     void mouseMoveEvent(QMouseEvent *e);
     void keyPressEvent(QKeyEvent *e);
     void wheelEvent(QWheelEvent *e);
@@ -179,6 +181,7 @@ signals:
     void cursorMarkChanged(bool mark, QTextCursor cursor);
     void modificationChanged(const QString &path, bool isModified);
     void cursorModeChanged(CursorMode mode);
+    void hightlightChanged(const QString &name);
     void popupNotify(QString notify);
     void click();
     void pressEsc();
@@ -308,6 +311,9 @@ private:
     QTextCharFormat m_findMatchFormat;
     QTextCharFormat m_findHighlightFormat;
     CursorMode m_cursorMode;
+
+    QMenu *m_hlGroupMenu;
+    QActionGroup *m_hlActionGroup;
 };
 
 #endif

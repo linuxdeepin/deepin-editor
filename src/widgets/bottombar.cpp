@@ -31,11 +31,12 @@ BottomBar::BottomBar(QWidget *parent)
       m_positionLabel(new QLabel),
       m_cursorStatus(new QLabel),
       m_encodeMenu(new DDropdownMenu),
+      m_highlightMenu(new DDropdownMenu),
       m_rowStr(tr("Row")),
       m_columnStr(tr("Column"))
 {
     QHBoxLayout *layout = new QHBoxLayout(this);
-    layout->setContentsMargins(10, 1, 5, 0);
+    layout->setContentsMargins(10, 1, 10, 0);
     layout->addWidget(m_positionLabel);
 
     m_cursorStatus->setText(qApp->translate("EditWrapper", "INSERT"));
@@ -43,10 +44,12 @@ BottomBar::BottomBar(QWidget *parent)
                                                           m_columnStr, "1"));
     m_encodeMenu->addActions(Utils::getEncodeList());
     m_encodeMenu->setCurrentText("UTF-8");
+    m_highlightMenu->setCurrentTextOnly(qApp->translate("DTextEdit", "None"));
 
     layout->addStretch();
     layout->addWidget(m_cursorStatus);
     layout->addWidget(m_encodeMenu);
+    layout->addWidget(m_highlightMenu);
 
     setFixedHeight(30);
 
@@ -73,16 +76,24 @@ void BottomBar::setCursorStatus(const QString &text)
     m_cursorStatus->setText(text);
 }
 
+void BottomBar::setHighlightMenu(QMenu *menu)
+{
+    m_highlightMenu->setMenu(menu);
+}
+
+void BottomBar::setHightlightName(const QString &name)
+{
+    m_highlightMenu->setCurrentTextOnly(name);
+}
+
 void BottomBar::setPalette(const QPalette &palette)
 {
     m_positionLabel->setStyleSheet(QString("QLabel { color: %1; }").
                                    arg(palette.color(QPalette::Text).name()));
 
-    if (palette.color(QPalette::Background).lightness() < 128) {
-        m_encodeMenu->setTheme("dark");
-    } else {
-        m_encodeMenu->setTheme("light");
-    }
+    QString theme = (palette.color(QPalette::Background).lightness() < 128) ? "dark" : "light";
+    m_encodeMenu->setTheme(theme);
+    m_highlightMenu->setTheme(theme);
 
     QWidget::setPalette(palette);
 }

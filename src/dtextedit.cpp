@@ -189,6 +189,52 @@ DTextEdit::DTextEdit(QPlainTextEdit *parent)
             showCursorBlink();
         }
     });
+
+    // syntax selection
+
+    m_hlGroupMenu = new QMenu;
+    QAction *noHlAction = m_hlGroupMenu->addAction(tr("None"));
+
+    m_hlActionGroup = new QActionGroup(m_hlGroupMenu);
+    m_hlActionGroup->setExclusive(true);
+
+    noHlAction->setCheckable(true);
+    m_hlActionGroup->addAction(noHlAction);
+    noHlAction->setChecked(!m_highlighter->definition().isValid());
+
+    QMenu *hlSubMenu = nullptr;
+    QString currentGroup;
+
+    for (const auto &def : m_repository.definitions()) {
+        if (def.isHidden()) {
+            continue;
+        }
+
+        if (currentGroup != def.section()) {
+            currentGroup = def.section();
+            hlSubMenu = m_hlGroupMenu->addMenu(def.translatedSection());
+        }
+
+        if (!hlSubMenu) {
+            continue;
+        }
+
+        auto action = hlSubMenu->addAction(def.translatedName());
+        action->setCheckable(true);
+        action->setData(def.name());
+        m_hlActionGroup->addAction(action);
+
+        if (def.name() == m_highlighter->definition().name()) {
+            action->setChecked(true);
+        }
+    }
+
+    connect(m_hlActionGroup, &QActionGroup::triggered, this, [this] (QAction *action) {
+        const auto defName = action->data().toString();
+        const auto def = m_repository.definitionForName(defName);
+        m_highlighter->setDefinition(def);
+        emit hightlightChanged(action->text());
+    });
 }
 
 void DTextEdit::setWrapper(EditWrapper *w)
@@ -1418,6 +1464,11 @@ void DTextEdit::renderAllSelections()
     setExtraSelections(selections);
 }
 
+QMenu *DTextEdit::getHighlightMenu()
+{
+    return m_hlGroupMenu;
+}
+
 void DTextEdit::mouseMoveEvent(QMouseEvent *e)
 {
     // other apps will override their own cursor when opened
@@ -1731,50 +1782,6 @@ void DTextEdit::contextMenuEvent(QContextMenuEvent *event)
     if (!wordAtCursor.isEmpty()) {
         m_rightMenu->addMenu(m_convertCaseMenu);
     }
-
-    // syntax selection
-    QActionGroup *hlActionGroup = new QActionGroup(m_rightMenu);
-    hlActionGroup->setExclusive(true);
-
-    QMenu *hlGroupMenu = m_rightMenu->addMenu(tr("Highlight"));
-    QAction *noHlAction = hlGroupMenu->addAction(tr("None"));
-
-    noHlAction->setCheckable(true);
-    hlActionGroup->addAction(noHlAction);
-    noHlAction->setChecked(!m_highlighter->definition().isValid());
-
-    QMenu *hlSubMenu = nullptr;
-    QString currentGroup;
-
-    for (const auto &def : m_repository.definitions()) {
-        if (def.isHidden()) {
-            continue;
-        }
-
-        if (currentGroup != def.section()) {
-            currentGroup = def.section();
-            hlSubMenu = hlGroupMenu->addMenu(def.translatedSection());
-        }
-
-        if (!hlSubMenu) {
-            continue;
-        }
-
-        auto action = hlSubMenu->addAction(def.translatedName());
-        action->setCheckable(true);
-        action->setData(def.name());
-        hlActionGroup->addAction(action);
-
-        if (def.name() == m_highlighter->definition().name()) {
-            action->setChecked(true);
-        }
-    }
-
-    connect(hlActionGroup, &QActionGroup::triggered, this, [this] (QAction *action) {
-        const auto defName = action->data().toString();
-        const auto def = m_repository.definitionForName(defName);
-        m_highlighter->setDefinition(def);
-    });
 
     // intelligent judge whether to support comments.
     const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());
@@ -2120,6 +2127,15 @@ void DTextEdit::loadHighlighter()
         file.close();
 
         m_highlighted = true;
+
+        // init action.
+        for (QAction *action : m_hlActionGroup->actions()) {
+            if (action->text() == def.name()) {
+                action->setChecked(true);
+                emit hightlightChanged(action->text());
+            }
+        }
+
     } else {
         m_highlighted = false;
     }

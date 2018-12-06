@@ -38,8 +38,10 @@ public:
     void addActions(QStringList list);
     void setCurrentAction(QAction *action);
     void setCurrentText(const QString &text);
+    void setCurrentTextOnly(const QString &text);
     void setText(const QString &text);
 
+    void setMenu(QMenu *menu);
     void setTheme(const QString &theme);
 
 signals:
