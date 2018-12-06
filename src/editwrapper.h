@@ -66,8 +66,8 @@ private:
     DTextEdit *m_textEdit;
     BottomBar *m_bottomBar;
     QTextCodec *m_textCodec;
-    EndOfLineMode m_endOfLineMode;
 
+    EndOfLineMode m_endOfLineMode;
     bool m_isLoadFinished;
 };
 

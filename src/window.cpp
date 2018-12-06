@@ -1257,7 +1257,8 @@ int Window::getBlankFileIndex()
     // tabFiles.size()
     for (int i = 0; i < m_tabbar->count(); ++i) {
         // find all the blank tab index number.
-        if (QFileInfo(m_tabbar->fileAt(i)).dir().absolutePath() == m_blankFileDir) {
+        QFileInfo fileInfo(m_tabbar->fileAt(i));
+        if (fileInfo.dir().absolutePath() == m_blankFileDir) {
             const QString tabText = m_tabbar->textAt(i);
             QRegularExpression reg("(\\d+)");
             QRegularExpressionMatch match = reg.match(tabText);

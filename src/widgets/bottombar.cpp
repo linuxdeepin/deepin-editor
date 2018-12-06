@@ -40,6 +40,7 @@ BottomBar::BottomBar(QWidget *parent)
     m_positionLabel->setText(QString("%1 %2 , %3 %4").arg(m_rowStr, "0",
                                                           m_columnStr, "0"));
     m_encodeMenu->addActions(Utils::getEncodeList());
+    m_encodeMenu->setCurrentText("UTF-8");
 
     layout->addStretch();
     layout->addWidget(m_encodeMenu);
@@ -60,7 +61,7 @@ void BottomBar::updatePosition(int row, int column)
 }
 
 void BottomBar::setEncodeName(const QString &name)
-{    
+{
     m_encodeMenu->setCurrentText(name);
 }
 
