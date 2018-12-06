@@ -1987,11 +1987,14 @@ void DTextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &clos
             forward ? position++ : position--;
         }
 
-        m_beginBracketSelection.cursor = bracketBeginCursor;
-        m_beginBracketSelection.format = m_bracketMatchFormat;
+        // cannot find the end bracket to not need to highlight.
+        if (!bracketEndCursor.isNull()) {
+            m_beginBracketSelection.cursor = bracketBeginCursor;
+            m_beginBracketSelection.format = m_bracketMatchFormat;
 
-        m_endBracketSelection.cursor = bracketEndCursor;
-        m_endBracketSelection.format = m_bracketMatchFormat;
+            m_endBracketSelection.cursor = bracketEndCursor;
+            m_endBracketSelection.format = m_bracketMatchFormat;
+        }
     }
 }
 
