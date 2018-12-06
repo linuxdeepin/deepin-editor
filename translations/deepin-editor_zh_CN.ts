@@ -217,7 +217,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="106"/>
         <source>Word Wrap</source>
-        <translation>word wrap</translation>
+        <translation>自动换行</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="871"/>

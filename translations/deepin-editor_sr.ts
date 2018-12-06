@@ -4,12 +4,12 @@
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="33"/>
         <source>Row</source>
-        <translation type="unfinished"/>
+        <translation>Ред</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="34"/>
         <source>Column</source>
-        <translation type="unfinished"/>
+        <translation>Колона</translation>
     </message>
 </context>
 <context>
@@ -479,7 +479,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="82"/>
         <source>Capitalize</source>
-        <translation type="unfinished"/>
+        <translation>Почетна велика</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="83"/>

@@ -4,12 +4,12 @@
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="33"/>
         <source>Row</source>
-        <translation type="unfinished"/>
+        <translation>Fila</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="34"/>
         <source>Column</source>
-        <translation type="unfinished"/>
+        <translation>Columna</translation>
     </message>
 </context>
 <context>
@@ -217,7 +217,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="106"/>
         <source>Word Wrap</source>
-        <translation type="unfinished"/>
+        <translation>Ajust de paraules</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="871"/>
@@ -696,7 +696,7 @@
     <message>
         <location filename="../src/window.cpp" line="254"/>
         <source>Read-Only</source>
-        <translation type="unfinished"/>
+        <translation>Només de lectura</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="563"/>
