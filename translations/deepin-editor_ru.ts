@@ -2,12 +2,12 @@
 <context>
     <name>BottomBar</name>
     <message>
-        <location filename="../src/widgets/bottombar.cpp" line="33"/>
+        <location filename="../src/widgets/bottombar.cpp" line="34"/>
         <source>Row</source>
         <translation>Строка</translation>
     </message>
     <message>
-        <location filename="../src/widgets/bottombar.cpp" line="34"/>
+        <location filename="../src/widgets/bottombar.cpp" line="35"/>
         <source>Column</source>
         <translation>Столбец</translation>
     </message>
@@ -50,13 +50,13 @@
         <translation>Выбрать Всё</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="176"/>
+        <location filename="../src/window.cpp" line="177"/>
         <location filename="../src/dtextedit.cpp" line="112"/>
         <source>Find</source>
         <translation>Найти</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="177"/>
+        <location filename="../src/window.cpp" line="178"/>
         <location filename="../src/dtextedit.cpp" line="113"/>
         <source>Replace</source>
         <translation>Заменить</translation>
@@ -117,24 +117,43 @@
         <translation>Прописной</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="1732"/>
+        <location filename="../src/dtextedit.cpp" line="1739"/>
         <source>Highlight</source>
         <translation>Выделить</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="1733"/>
+        <location filename="../src/dtextedit.cpp" line="1740"/>
         <source>None</source>
         <translation>Ничего</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="2421"/>
+        <location filename="../src/dtextedit.cpp" line="2437"/>
         <source>Read-Only mode is off</source>
         <translation>Режим Только Чтение отключён</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="2425"/>
+        <location filename="../src/dtextedit.cpp" line="2441"/>
         <source>Read-Only mode is on</source>
         <translation>Режим Только Чтение включён</translation>
+    </message>
+</context>
+<context>
+    <name>EditWrapper</name>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="252"/>
+        <location filename="../src/widgets/bottombar.cpp" line="41"/>
+        <source>INSERT</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="255"/>
+        <source>OVERWRITE</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="258"/>
+        <source>R/O</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -220,7 +239,7 @@
         <translation>Перенос Слова</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="871"/>
+        <location filename="../src/window.cpp" line="873"/>
         <location filename="../src/settingsdialog.cpp" line="31"/>
         <location filename="../src/settingsdialog.cpp" line="102"/>
         <source>Window</source>
@@ -623,27 +642,27 @@
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../src/settings.cpp" line="85"/>
+        <location filename="../src/settings.cpp" line="90"/>
         <source>Standard</source>
         <translation>Стандартный</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="85"/>
+        <location filename="../src/settings.cpp" line="90"/>
         <source>Customize</source>
         <translation>Настроить</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="96"/>
+        <location filename="../src/settings.cpp" line="101"/>
         <source>Normal</source>
         <translation>Обычный</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="96"/>
+        <location filename="../src/settings.cpp" line="101"/>
         <source>Maximum</source>
         <translation>Максимум</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="96"/>
+        <location filename="../src/settings.cpp" line="101"/>
         <source>Fullscreen</source>
         <translation>Полный экран</translation>
     </message>
@@ -664,129 +683,129 @@
 <context>
     <name>Window</name>
     <message>
-        <location filename="../src/window.cpp" line="168"/>
+        <location filename="../src/window.cpp" line="169"/>
         <source>New window</source>
         <translation>Новое окно</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="169"/>
+        <location filename="../src/window.cpp" line="170"/>
         <source>New tab</source>
         <translation>Новая вкладка</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="170"/>
+        <location filename="../src/window.cpp" line="171"/>
         <source>Open file</source>
         <translation>Открыть файл</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="172"/>
+        <location filename="../src/window.cpp" line="173"/>
         <source>Save as</source>
         <translation>Сохранить как</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="173"/>
+        <location filename="../src/window.cpp" line="174"/>
         <source>Print</source>
         <translation>Печать</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="174"/>
+        <location filename="../src/window.cpp" line="175"/>
         <source>Switch theme</source>
         <translation>Переключить тему</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="254"/>
+        <location filename="../src/window.cpp" line="255"/>
         <source>Read-Only</source>
         <translation>Только Чтение</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="563"/>
+        <location filename="../src/window.cpp" line="564"/>
         <source>Saved successfully</source>
         <translation>Успешно сохранено</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1285"/>
+        <location filename="../src/window.cpp" line="1293"/>
         <source>Discard</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="175"/>
+        <location filename="../src/window.cpp" line="176"/>
         <source>Settings</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="277"/>
+        <location filename="../src/window.cpp" line="278"/>
         <source>You do not have permission to open %1</source>
         <translation>Вы не имеете разрешения на открытие %1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="306"/>
+        <location filename="../src/window.cpp" line="307"/>
         <source>Invalid file: %1</source>
         <translation>Недопустимый файл: %1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="349"/>
-        <location filename="../src/window.cpp" line="580"/>
-        <location filename="../src/window.cpp" line="1000"/>
-        <location filename="../src/window.cpp" line="1328"/>
+        <location filename="../src/window.cpp" line="350"/>
+        <location filename="../src/window.cpp" line="581"/>
+        <location filename="../src/window.cpp" line="1002"/>
+        <location filename="../src/window.cpp" line="1341"/>
         <source>Save File</source>
         <translation>Сохранить Файл</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="349"/>
+        <location filename="../src/window.cpp" line="350"/>
         <source>Do you want to save this file?</source>
         <translation>Вы хотите сохранить этот документ?</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="582"/>
-        <location filename="../src/window.cpp" line="597"/>
+        <location filename="../src/window.cpp" line="583"/>
+        <location filename="../src/window.cpp" line="598"/>
         <source>Encoding</source>
         <translation>Кодировка</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="583"/>
-        <location filename="../src/window.cpp" line="598"/>
+        <location filename="../src/window.cpp" line="584"/>
+        <location filename="../src/window.cpp" line="599"/>
         <source>Line Endings</source>
         <translation>Строка Кодировки</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="902"/>
+        <location filename="../src/window.cpp" line="904"/>
         <source>Editor</source>
         <translation>Редактор</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="518"/>
+        <location filename="../src/window.cpp" line="519"/>
         <source>You do not have permission to save %1</source>
         <translation>Вы не имеете разрешения на сохранение %1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="551"/>
+        <location filename="../src/window.cpp" line="552"/>
         <source>Unable to save the file</source>
         <translation>Не удалось сохранить файл</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="551"/>
+        <location filename="../src/window.cpp" line="552"/>
         <source>Do you want to save as another?</source>
         <translation>Вы хотите сохранить как другой?</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1000"/>
-        <location filename="../src/window.cpp" line="1328"/>
+        <location filename="../src/window.cpp" line="1002"/>
+        <location filename="../src/window.cpp" line="1341"/>
         <source>Do you want to save all the files?</source>
         <translation>Вы хотите сохранить все файлы?</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="959"/>
+        <location filename="../src/window.cpp" line="961"/>
         <source>Blank document %1</source>
         <translation>Чистый документ %1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1284"/>
+        <location filename="../src/window.cpp" line="1292"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="171"/>
-        <location filename="../src/window.cpp" line="1286"/>
+        <location filename="../src/window.cpp" line="172"/>
+        <location filename="../src/window.cpp" line="1294"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
