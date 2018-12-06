@@ -1450,16 +1450,17 @@ void DTextEdit::renderAllSelections()
 {
     QList<QTextEdit::ExtraSelection> selections;
 
-    for (auto findMatch : m_findMatchSelections) {
-        findMatch.format = m_findMatchFormat;
-        selections << findMatch;
-    }
+//    for (auto findMatch : m_findMatchSelections) {
+//        findMatch.format = m_findMatchFormat;
+//        selections.append(findMatch);
+//    }
 
-    selections << m_currentLineSelection;
-    selections << m_findHighlightSelection;
-    selections << m_wordUnderCursorSelection;
-    selections << m_beginBracketSelection;
-    selections << m_endBracketSelection;
+    selections.append(m_currentLineSelection);
+    selections.append(m_findMatchSelections);
+    selections.append(m_findHighlightSelection);
+    selections.append(m_wordUnderCursorSelection);
+    selections.append(m_beginBracketSelection);
+    selections.append(m_endBracketSelection);
 
     setExtraSelections(selections);
 }
