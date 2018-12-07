@@ -50,8 +50,11 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     });
 
     connect(this, &DDropdownMenu::requestContextMenu, this, [=] {
-        auto center = this->mapToGlobal(this->rect().topLeft());
-        center.setY(center.y() + this->height() + 5);
+        QPoint center = this->mapToGlobal(this->rect().center());
+        int menuHeight = m_menu->sizeHint().height();
+        int menuWidth = m_menu->sizeHint().width();
+        center.setY(center.y() - menuHeight - this->rect().height() / 2);
+        center.setX(center.x() - menuWidth / 2);
         m_menu->move(center);
         m_menu->exec();
     });

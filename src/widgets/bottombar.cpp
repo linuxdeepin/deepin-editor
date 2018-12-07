@@ -51,7 +51,7 @@ BottomBar::BottomBar(QWidget *parent)
     layout->addWidget(m_encodeMenu);
     layout->addWidget(m_highlightMenu);
 
-    setFixedHeight(30);
+    setFixedHeight(32);
 
     connect(m_encodeMenu, &DDropdownMenu::currentTextChanged, this, &BottomBar::handleEncodeChanged);
 }
