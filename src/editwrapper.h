@@ -23,6 +23,7 @@
 #include "dbusinterface.h"
 #include "dtextedit.h"
 #include "widgets/bottombar.h"
+#include "widgets/toast.h"
 
 #include <QVBoxLayout>
 #include <QWidget>
@@ -38,6 +39,11 @@ public:
         eolUnix = 0,
         eolDos = 1,
         eolMac = 2
+    };
+
+    struct FileStateItem {
+        QDateTime modified;
+        QFile::Permissions permissions;
     };
 
     EditWrapper(QWidget *parent = 0);
@@ -56,6 +62,11 @@ public:
     BottomBar *bottomBar() { return m_bottomBar; }
     QString filePath() { return m_textEdit->filepath; }
     DTextEdit *textEditor() { return m_textEdit; }
+    bool toastVisible() { return m_toast->isVisible(); }
+    void hideToast();
+
+    void checkForReload();
+    void initToastPosition();
 
 private:
     void detectEndOfLine();
@@ -71,6 +82,8 @@ private:
 
     EndOfLineMode m_endOfLineMode;
     bool m_isLoadFinished;
+    QDateTime m_modified;
+    Toast *m_toast;
 };
 
 #endif

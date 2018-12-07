@@ -146,6 +146,7 @@ protected:
     void keyPressEvent(QKeyEvent *keyEvent) override;
     void dragEnterEvent(QDragEnterEvent *e) override;
     void dropEvent(QDropEvent* event) override;
+    bool eventFilter(QObject *obj, QEvent *e) override;
 
 private:
     DBusDaemon::dbus *m_rootSaveDBus;

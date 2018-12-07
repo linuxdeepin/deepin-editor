@@ -17,9 +17,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "widgets/toast.h"
+#include "fileloadthread.h"
 #include "editwrapper.h"
 #include "utils.h"
-#include "fileloadthread.h"
 #include <unistd.h>
 
 #include <QCoreApplication>
@@ -41,7 +42,8 @@ EditWrapper::EditWrapper(QWidget *parent)
       m_bottomBar(new BottomBar(this)),
       m_textCodec(QTextCodec::codecForName("UTF-8")),
       m_endOfLineMode(eolUnix),
-      m_isLoadFinished(true)
+      m_isLoadFinished(true),
+      m_toast(new Toast(this))
 {
     // Init layout and widgets.
     m_layout->setContentsMargins(0, 0, 0, 0);
@@ -59,13 +61,24 @@ EditWrapper::EditWrapper(QWidget *parent)
     mainLayout->setSpacing(0);
     setLayout(mainLayout);
 
+    m_toast->setOnlyShow(true);
+    m_toast->setText(tr("File has changed on disk. Reload?"));
+    m_toast->setIcon(":/images/logo_24.svg");
+    m_toast->adjustSize();
+
     connect(m_textEdit, &DTextEdit::cursorModeChanged, this, &EditWrapper::handleCursorModeChanged);
     connect(m_textEdit, &DTextEdit::hightlightChanged, this, &EditWrapper::handleHightlightChanged);
+    connect(m_toast, &Toast::reloadBtnClicked, this, &EditWrapper::refresh);
+    connect(m_toast, &Toast::closeBtnClicked, this, [=] {
+        QFileInfo fi(filePath());
+        m_modified = fi.lastModified();
+    });
 }
 
 EditWrapper::~EditWrapper()
 {
     delete m_textEdit;
+    delete m_toast;
 }
 
 void EditWrapper::openFile(const QString &filepath)
@@ -126,6 +139,9 @@ bool EditWrapper::saveFile()
     // ensure that the file is written to disk
     fsync(saveFile.handle());
 
+    QFileInfo fi(filePath());
+    m_modified = fi.lastModified();
+
     // did save work?
     // only finalize if stream status == OK
     bool ok = (stream.status() == QTextStream::Ok);
@@ -146,8 +162,11 @@ bool EditWrapper::saveFile()
 
 void EditWrapper::updatePath(const QString &file)
 {
+    QFileInfo fi(file);
+    m_modified = fi.lastModified();
+
     m_textEdit->filepath = file;
-    // detectEndOfLine();
+    detectEndOfLine();
 }
 
 void EditWrapper::refresh()
@@ -176,6 +195,9 @@ void EditWrapper::refresh()
         m_textEdit->setTextCursor(textcur);
         m_textEdit->verticalScrollBar()->setValue(yoffset);
         m_textEdit->horizontalScrollBar()->setValue(xoffset);
+
+        QFileInfo fi(filePath());
+        m_modified = fi.lastModified();
 
         QTimer::singleShot(50, this, [=] {
             m_textEdit->setUpdatesEnabled(true);
@@ -225,6 +247,34 @@ void EditWrapper::setTextCodec(QTextCodec *codec)
     }
 
     // TODO: enforce bom for some encodings
+}
+
+void EditWrapper::hideToast()
+{
+    if (m_toast->isVisible()) {
+        m_toast->hideAnimation();
+    }
+}
+
+void EditWrapper::checkForReload()
+{
+    QFileInfo fi(filePath());
+
+    if (fi.exists() && fi.lastModified() != m_modified) {
+        if (!m_toast->isVisible()) {
+            initToastPosition();
+            m_toast->showAnimation();
+        }
+    }
+}
+
+void EditWrapper::initToastPosition()
+{
+    int avaliableHeight = this->height() - m_toast->height() + m_bottomBar->height();
+    int toastPaddingBottom = qMin(avaliableHeight / 2, 100);
+
+    m_toast->move((this->width() - m_toast->width()) / 2,
+                  avaliableHeight - toastPaddingBottom);
 }
 
 void EditWrapper::detectEndOfLine()

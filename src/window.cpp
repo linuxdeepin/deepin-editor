@@ -37,6 +37,7 @@
 #include <QPrinter>
 #include <QScreen>
 #include <QStyleFactory>
+#include <QEvent>
 
 #ifdef DTKWIDGET_CLASS_DFileDialog
 #include <DFileDialog>
@@ -63,7 +64,8 @@ Window::Window(DMainWindow *parent)
     m_rootSaveDBus = new DBusDaemon::dbus("com.deepin.editor.daemon", "/", QDBusConnection::systemBus(), this);
 
     // Init.
-    installEventFilter(this);
+    // installEventFilter(this);
+    qApp->installEventFilter(this);
     setAcceptDrops(true);
 
     // Apply qss theme.
@@ -563,6 +565,7 @@ bool Window::saveFile()
 
             dialog->exec();
         } else {
+            currentWrapper()->hideToast();
             showNotify(tr("Saved successfully"));
         }
     }
@@ -1466,4 +1469,13 @@ void Window::dropEvent(QDropEvent* event)
             addTab(url.toLocalFile(), true);
         }
     }
+}
+
+bool Window::eventFilter(QObject *obj, QEvent *e)
+{
+    if (obj == qApp && e->type() == QEvent::ApplicationStateChange) {
+        currentWrapper()->checkForReload();
+    }
+
+    return false;
 }

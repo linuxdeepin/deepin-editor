@@ -21,6 +21,7 @@
  */
 
 #include "utils.h"
+#include "widgets/toast.h"
 
 #include <DSettings>
 #include <DSettingsOption>
@@ -39,7 +40,6 @@
 #include <QStandardPaths>
 #include <KEncodingProber>
 #include <QTextCodec>
-#include <DToast>
 #include <QImageReader>
 
 QT_BEGIN_NAMESPACE
@@ -552,18 +552,18 @@ bool Utils::isDraftFile(const QString &filepath)
 
 void Utils::toast(const QString &message, QWidget *parent)
 {
-    DToast *toast = new DToast(parent);
+    Toast *toast = new Toast(parent);
     int avaliableHeight = parent->height() - toast->height();
     int toastPaddingBottom = qMin(avaliableHeight / 2, 100);
 
-    QObject::connect(toast, &DToast::visibleChanged, parent, [toast] (bool visible) {
+    QObject::connect(toast, &Toast::visibleChanged, parent, [toast] (bool visible) {
         if (visible == false) {
             toast->deleteLater();
         }
     });
 
     toast->setText(message);
-    toast->setIcon(QIcon(Utils::getQrcPath("logo_24.svg")));
+    toast->setIcon(Utils::getQrcPath("logo_24.svg"));
     toast->pop();
 
     toast->move((parent->width() - toast->width()) / 2,
