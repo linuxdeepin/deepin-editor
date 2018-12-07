@@ -329,6 +329,7 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
     wrapper->updatePath(filepath);
 
     showNewEditor(wrapper);
+    wrapper->textEditor()->setThemeWithPath(m_themePath);
 }
 
 void Window::closeTab()

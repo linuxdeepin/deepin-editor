@@ -148,8 +148,8 @@
     "editor-colors": {
         "background-color" : "#002B36",
         "code-folding" : "#224e65",
-        "bracket-match-bg" : "#ffff00",
-        "bracket-match-fg" : "#000000",
+        "bracket-match-bg" : "#586E75",
+        "bracket-match-fg" : "#AFBFBF",
         "current-line" : "#073642",
         "icon-border" : "#31363b",
         "indentation-line" : "#3a3f44",
@@ -185,7 +185,7 @@
         "tab-background-end-color" : "(0, 37, 46, 90%)",
         "tab-dnd-start" : "(7, 54, 66, 90%)",
         "tab-dnd-end" : "(10, 77, 94, 90%)",
-        "themebar-frame-selected" : "#2CA7F8",
+        "themebar-frame-selected" : "#93A1A1",
         "themebar-frame-normal" : "#FFFFFF"
     }
 }
