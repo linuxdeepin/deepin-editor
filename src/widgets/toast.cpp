@@ -204,4 +204,3 @@ void Toast::hideEvent(QHideEvent *e)
     emit visibleChanged(false);
     QFrame::hideEvent(e);
 }
-
