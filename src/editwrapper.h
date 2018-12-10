@@ -74,6 +74,9 @@ private:
     void handleHightlightChanged(const QString &name);
     void handleFileLoadFinished(const QByteArray &encode, const QString &content);
 
+protected:
+    void resizeEvent(QResizeEvent *);
+
 private:
     QHBoxLayout *m_layout;
     DTextEdit *m_textEdit;

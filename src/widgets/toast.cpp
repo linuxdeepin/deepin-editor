@@ -38,6 +38,7 @@ Toast::Toast(QWidget *parent)
 
     m_layout->addWidget(m_iconLabel);
     m_layout->addWidget(m_textLabel);
+    m_layout->addStretch();
 
     m_effect = new DGraphicsGlowEffect(this);
     m_effect->setBlurRadius(20.0);

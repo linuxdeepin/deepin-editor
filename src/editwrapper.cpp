@@ -63,8 +63,7 @@ EditWrapper::EditWrapper(QWidget *parent)
 
     m_toast->setOnlyShow(true);
     m_toast->setText(tr("File has changed on disk. Reload?"));
-    m_toast->setIcon(":/images/logo_24.svg");
-    m_toast->adjustSize();
+    m_toast->setIcon(":/images/warning.svg");
 
     connect(m_textEdit, &DTextEdit::cursorModeChanged, this, &EditWrapper::handleCursorModeChanged);
     connect(m_textEdit, &DTextEdit::hightlightChanged, this, &EditWrapper::handleHightlightChanged);
@@ -271,8 +270,10 @@ void EditWrapper::checkForReload()
 void EditWrapper::initToastPosition()
 {
     int avaliableHeight = this->height() - m_toast->height() + m_bottomBar->height();
-    int toastPaddingBottom = qMin(avaliableHeight / 2, 100);
 
+    int toastPaddingBottom = qMin(avaliableHeight / 2, 100);
+    m_toast->adjustSize();
+    m_toast->setFixedWidth(this->width() / 2);
     m_toast->move((this->width() - m_toast->width()) / 2,
                   avaliableHeight - toastPaddingBottom);
 }
@@ -347,4 +348,11 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QString
 
     // load highlight.
     QTimer::singleShot(100, this, [=] { m_textEdit->loadHighlighter(); });
+}
+
+void EditWrapper::resizeEvent(QResizeEvent *e)
+{
+    initToastPosition();
+
+    QWidget::resizeEvent(e);
 }
