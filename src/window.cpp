@@ -259,8 +259,9 @@ void Window::addTab(const QString &filepath, bool activeTab)
             // if the current page is a draft file and is empty
             // no need to create a new tab.
             if (curWrapper->textEditor()->toPlainText().isEmpty() &&
-                Utils::isDraftFile(curPath)) {
-
+                m_wrappers.keys().contains(filepath) &&
+                Utils::isDraftFile(curPath))
+            {
                 QFile(curPath).remove();
                 m_tabbar->updateTab(m_tabbar->currentIndex(), filepath, tabName);
                 m_wrappers[filepath] = m_wrappers.take(curPath);
