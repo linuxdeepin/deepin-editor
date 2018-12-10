@@ -1474,7 +1474,9 @@ void Window::dropEvent(QDropEvent* event)
 bool Window::eventFilter(QObject *obj, QEvent *e)
 {
     if (obj == qApp && e->type() == QEvent::ApplicationStateChange) {
-        currentWrapper()->checkForReload();
+        if (currentWrapper()) {
+            currentWrapper()->checkForReload();
+        }
     }
 
     return false;
