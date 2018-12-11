@@ -1,4 +1,21 @@
 <a name=""></a>
+##  1.2.0 (2018-12-11)
+
+
+#### Features
+
+*   monitor file modification. ([9dbde37d](https://github.com/linuxdeepin/deepin-editor/commit/9dbde37d7b8605401ad6c535e09c9e67e2a7abf6))
+* **settings_dialog:**  support for preview fonts. ([f49315ca](https://github.com/linuxdeepin/deepin-editor/commit/f49315ca991bde6547c16f5c6cf221721f8f45aa))
+
+#### Bug Fixes
+
+*   check reload crash. ([4eb94e7b](https://github.com/linuxdeepin/deepin-editor/commit/4eb94e7b605175dc69dc233f6894c03625dd4bb1))
+*   open duplicates. ([04ca82d2](https://github.com/linuxdeepin/deepin-editor/commit/04ca82d21f27290844cbde7431ea855c08b826f8))
+* **toast:**  adjust position when resize. ([4523ea74](https://github.com/linuxdeepin/deepin-editor/commit/4523ea7476690a238c17c0788d474d3652b6af6a))
+
+
+
+<a name=""></a>
 ## 1.10 (2018-12-07)
 
 
