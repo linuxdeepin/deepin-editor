@@ -2,12 +2,12 @@
 <context>
     <name>BottomBar</name>
     <message>
-        <location filename="../src/widgets/bottombar.cpp" line="34"/>
+        <location filename="../src/widgets/bottombar.cpp" line="35"/>
         <source>Row</source>
         <translation>Baris</translation>
     </message>
     <message>
-        <location filename="../src/widgets/bottombar.cpp" line="35"/>
+        <location filename="../src/widgets/bottombar.cpp" line="36"/>
         <source>Column</source>
         <translation>Lajur</translation>
     </message>
@@ -50,13 +50,13 @@
         <translation>Pilih Semua</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="177"/>
+        <location filename="../src/window.cpp" line="179"/>
         <location filename="../src/dtextedit.cpp" line="112"/>
         <source>Find</source>
         <translation>Cari</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="178"/>
+        <location filename="../src/window.cpp" line="180"/>
         <location filename="../src/dtextedit.cpp" line="113"/>
         <source>Replace</source>
         <translation>Ganti</translation>
@@ -117,22 +117,18 @@
         <translation>Huruf Besarkan</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="1739"/>
-        <source>Highlight</source>
-        <translation>Sorot</translation>
-    </message>
-    <message>
-        <location filename="../src/dtextedit.cpp" line="1740"/>
+        <location filename="../src/dtextedit.cpp" line="196"/>
+        <location filename="../src/widgets/bottombar.cpp" line="47"/>
         <source>None</source>
         <translation>Tiada</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="2437"/>
+        <location filename="../src/dtextedit.cpp" line="2454"/>
         <source>Read-Only mode is off</source>
         <translation>Mod Baca-Sahaja dimatikan</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="2441"/>
+        <location filename="../src/dtextedit.cpp" line="2458"/>
         <source>Read-Only mode is on</source>
         <translation>Mod Baca-Sahaja dihidupkan</translation>
     </message>
@@ -140,18 +136,23 @@
 <context>
     <name>EditWrapper</name>
     <message>
-        <location filename="../src/editwrapper.cpp" line="252"/>
-        <location filename="../src/widgets/bottombar.cpp" line="41"/>
+        <location filename="../src/editwrapper.cpp" line="65"/>
+        <source>File has changed on disk. Reload?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="305"/>
+        <location filename="../src/widgets/bottombar.cpp" line="42"/>
         <source>INSERT</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="255"/>
+        <location filename="../src/editwrapper.cpp" line="308"/>
         <source>OVERWRITE</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="258"/>
+        <location filename="../src/editwrapper.cpp" line="311"/>
         <source>R/O</source>
         <translation type="unfinished"/>
     </message>
@@ -239,7 +240,7 @@
         <translation>Lilit Perkataan</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="873"/>
+        <location filename="../src/window.cpp" line="878"/>
         <location filename="../src/settingsdialog.cpp" line="31"/>
         <location filename="../src/settingsdialog.cpp" line="102"/>
         <source>Window</source>
@@ -681,131 +682,139 @@
     </message>
 </context>
 <context>
+    <name>Toast</name>
+    <message>
+        <location filename="../src/widgets/toast.cpp" line="37"/>
+        <source>Reload</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Window</name>
     <message>
-        <location filename="../src/window.cpp" line="169"/>
+        <location filename="../src/window.cpp" line="171"/>
         <source>New window</source>
         <translation>Tetingkap baharu</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="170"/>
+        <location filename="../src/window.cpp" line="172"/>
         <source>New tab</source>
         <translation>Tab baharu</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="171"/>
+        <location filename="../src/window.cpp" line="173"/>
         <source>Open file</source>
         <translation>Buka fail</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="173"/>
+        <location filename="../src/window.cpp" line="175"/>
         <source>Save as</source>
         <translation>Simpan sebagai</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="174"/>
+        <location filename="../src/window.cpp" line="176"/>
         <source>Print</source>
         <translation>etak</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="175"/>
+        <location filename="../src/window.cpp" line="177"/>
         <source>Switch theme</source>
         <translation>Tukar tema</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="255"/>
+        <location filename="../src/window.cpp" line="257"/>
         <source>Read-Only</source>
         <translation>Baca-Sahaja</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="564"/>
+        <location filename="../src/window.cpp" line="569"/>
         <source>Saved successfully</source>
         <translation>Berjaya disimpan</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1293"/>
+        <location filename="../src/window.cpp" line="1298"/>
         <source>Discard</source>
         <translation>Singkir</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="176"/>
+        <location filename="../src/window.cpp" line="178"/>
         <source>Settings</source>
         <translation>Tetapan</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="278"/>
+        <location filename="../src/window.cpp" line="281"/>
         <source>You do not have permission to open %1</source>
         <translation>Anda tidak mempunyai keizinan untuk membuka %1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="307"/>
+        <location filename="../src/window.cpp" line="310"/>
         <source>Invalid file: %1</source>
         <translation>Fail tidak sah: %1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="350"/>
-        <location filename="../src/window.cpp" line="581"/>
-        <location filename="../src/window.cpp" line="1002"/>
-        <location filename="../src/window.cpp" line="1341"/>
+        <location filename="../src/window.cpp" line="354"/>
+        <location filename="../src/window.cpp" line="586"/>
+        <location filename="../src/window.cpp" line="1007"/>
+        <location filename="../src/window.cpp" line="1346"/>
         <source>Save File</source>
         <translation>Simpan Fail</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="350"/>
+        <location filename="../src/window.cpp" line="354"/>
         <source>Do you want to save this file?</source>
         <translation>Anda mahu menyimpan fail ini?</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="583"/>
-        <location filename="../src/window.cpp" line="598"/>
+        <location filename="../src/window.cpp" line="588"/>
+        <location filename="../src/window.cpp" line="603"/>
         <source>Encoding</source>
         <translation>Pengekodan</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="584"/>
-        <location filename="../src/window.cpp" line="599"/>
+        <location filename="../src/window.cpp" line="589"/>
+        <location filename="../src/window.cpp" line="604"/>
         <source>Line Endings</source>
         <translation>Penghujunh Baris</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="904"/>
+        <location filename="../src/window.cpp" line="909"/>
         <source>Editor</source>
         <translation>Penyunting</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="519"/>
+        <location filename="../src/window.cpp" line="523"/>
         <source>You do not have permission to save %1</source>
         <translation>Anda tidak mempunyai keizinan untuk menyimpan %1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="552"/>
+        <location filename="../src/window.cpp" line="556"/>
         <source>Unable to save the file</source>
         <translation>Tidak boleh menyimpan fail</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="552"/>
+        <location filename="../src/window.cpp" line="556"/>
         <source>Do you want to save as another?</source>
         <translation>Anda mahu menyimpan sebagai yang lain?</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1002"/>
-        <location filename="../src/window.cpp" line="1341"/>
+        <location filename="../src/window.cpp" line="1007"/>
+        <location filename="../src/window.cpp" line="1346"/>
         <source>Do you want to save all the files?</source>
         <translation>Anda mahu menyimpan semua fail?</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="961"/>
+        <location filename="../src/window.cpp" line="966"/>
         <source>Blank document %1</source>
         <translation>Dokumen kosong %1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1292"/>
+        <location filename="../src/window.cpp" line="1297"/>
         <source>Cancel</source>
         <translation>Batal</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="172"/>
-        <location filename="../src/window.cpp" line="1294"/>
+        <location filename="../src/window.cpp" line="174"/>
+        <location filename="../src/window.cpp" line="1299"/>
         <source>Save</source>
         <translation>Simpan</translation>
     </message>
