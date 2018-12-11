@@ -11,7 +11,7 @@
                         {
                             "key": "family",
                             "name": "Font",
-                            "type": "combobox",
+                            "type": "fontcombobox",
                             "default": "Noto Mono"
                         },
                         {

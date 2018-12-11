@@ -23,12 +23,15 @@
 #include "settings.h"
 
 #include "dthememanager.h"
+#include "fontitemdelegate.h"
 #include <DSettings>
 #include <DSettingsGroup>
+#include <DSettingsWidgetFactory>
 #include <DSettingsOption>
 #include <QStyleFactory>
 #include <QFontDatabase>
 #include <QApplication>
+#include <QComboBox>
 #include <QDebug>
 #include <QDir>
 #include <QStandardPaths>
@@ -66,20 +69,7 @@ Settings::Settings(QWidget *parent)
         emit adjustTabSpaceNumber(value.toInt());
     });
 
-    QFontDatabase fontDatabase;
     auto fontFamliy = settings->option("base.font.family");
-    QMap<QString, QVariant> fontDatas;
-
-    QStringList values = fontDatabase.families();
-    QStringList keys = values;
-    fontDatas.insert("keys", keys);
-    fontDatas.insert("values", values);
-    fontFamliy->setData("items", fontDatas);
-
-    if (fontFamliy->value().toString().isEmpty()) {
-        fontFamliy->setValue(QFontDatabase::systemFont(QFontDatabase::FixedFont).family());
-    }
-
     connect(fontFamliy, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
         adjustFont(value.toString());
     });
@@ -147,6 +137,36 @@ void Settings::dtkThemeWorkaround(QWidget *parent, const QString &theme)
 
         dtkThemeWorkaround(w, theme);
     }
+}
+
+QWidget *Settings::createFontComBoBoxHandle(QObject *obj)
+{
+    auto option = qobject_cast<DTK_CORE_NAMESPACE::DSettingsOption *>(obj);
+
+    QComboBox *comboBox = new QComboBox;
+    QWidget *optionWidget = DSettingsWidgetFactory::createTwoColumWidget(option, comboBox);
+
+    QFontDatabase fontDatabase;
+    comboBox->addItems(fontDatabase.families());
+    comboBox->setItemDelegate(new FontItemDelegate);
+    comboBox->setFixedSize(240, 25);
+
+    if (option->value().toString().isEmpty()) {
+        option->setValue(QFontDatabase::systemFont(QFontDatabase::FixedFont).family());
+    }
+
+    // init.
+    comboBox->setCurrentText(option->value().toString());
+
+    connect(option, &DSettingsOption::valueChanged, [=] (QVariant var) {
+        comboBox->setCurrentText(var.toString());
+    });
+
+    option->connect(comboBox, &QComboBox::currentTextChanged, [=] (const QString &text) {
+        option->setValue(text);
+    });
+
+    return optionWidget;
 }
 
 void Settings::updateAllKeysWithKeymap(QString keymap)

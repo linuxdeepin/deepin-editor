@@ -41,6 +41,7 @@ public:
     ~Settings();
 
     void dtkThemeWorkaround(QWidget *parent, const QString &theme);
+    static QWidget *createFontComBoBoxHandle(QObject *obj);
 
     int defaultFontSize = 12;
     int maxFontSize = 50;
