@@ -27,6 +27,7 @@
 #include <QApplication>
 #include <QSaveFile>
 #include <QScrollBar>
+#include <QScroller>
 #include <QDebug>
 #include <QTimer>
 #include <QDir>
@@ -53,6 +54,8 @@ EditWrapper::EditWrapper(QWidget *parent)
 
     m_bottomBar->setHighlightMenu(m_textEdit->getHighlightMenu());
     m_textEdit->setWrapper(this);
+
+    QScroller::grabGesture(m_textEdit, QScroller::TouchGesture);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addLayout(m_layout);

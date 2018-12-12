@@ -20,6 +20,7 @@
 #include "themepanel.h"
 #include "../window.h"
 #include <QPropertyAnimation>
+#include <QScroller>
 #include <QVBoxLayout>
 #include <QPainter>
 #include <QTimer>
@@ -33,6 +34,8 @@ ThemePanel::ThemePanel(QWidget *parent)
     // init view.
     m_themeView->setModel(m_themeModel);
     m_themeView->setItemDelegate(new ThemeItemDelegate);
+
+    QScroller::grabGesture(m_themeView, QScroller::TouchGesture);
 
     // init layout.
     QVBoxLayout *layout = new QVBoxLayout(this);
