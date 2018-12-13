@@ -18,6 +18,7 @@
  */
 
 #include "toast.h"
+#include <QApplication>
 
 Toast::Toast(QWidget *parent)
     : QFrame(parent)
@@ -35,6 +36,7 @@ Toast::Toast(QWidget *parent)
     m_textLabel = new QLabel;
 
     m_reloadBtn = new QPushButton(tr("Reload"));
+    m_saveAsBtn = new QPushButton(qApp->translate("Window", "Save as"));
 
     m_layout->addWidget(m_iconLabel);
     m_layout->addWidget(m_textLabel);
@@ -49,9 +51,15 @@ Toast::Toast(QWidget *parent)
 
     setTheme(DThemeManager::instance()->theme());
     connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &Toast::setTheme);
+
     connect(m_reloadBtn, &QPushButton::clicked, this, [=] {
         hideAnimation();
         emit reloadBtnClicked();
+    });
+
+    connect(m_saveAsBtn, &QPushButton::clicked, this, [=] {
+        hideAnimation();
+        emit saveAsBtnClicked();
     });
 }
 
@@ -82,7 +90,6 @@ void Toast::pop()
     connect(m_animation, &QPropertyAnimation::finished, this, [=] {
         hide();
         m_animation->deleteLater();
-        m_animation = nullptr;
     });
 }
 
@@ -93,7 +100,6 @@ void Toast::pack()
     if (m_animation) {
         m_animation->stop();
         m_animation->deleteLater();
-        m_animation = nullptr;
     }
 }
 
@@ -105,6 +111,7 @@ void Toast::setOnlyShow(bool onlyshow)
         m_closeBtn = new DImageButton;
         m_closeBtn->setFixedSize(14, 14);
         m_layout->addWidget(m_reloadBtn);
+        m_layout->addWidget(m_saveAsBtn);
         m_layout->addWidget(m_closeBtn);
         initCloseBtn(DThemeManager::instance()->theme());
 
@@ -146,16 +153,27 @@ void Toast::showAnimation()
 void Toast::hideAnimation()
 {
     QPropertyAnimation *animation = new QPropertyAnimation(this, "opacity");
-    animation->setDuration(500);
+    animation->setDuration(400);
     animation->setStartValue(1.0);
     animation->setKeyValueAt(0.8, 0.4);
     animation->setEndValue(0);
     animation->start();
 
     connect(animation, &QPropertyAnimation::finished, this, [=] {
-        animation->deleteLater();
         QWidget::hide();
+        animation->deleteLater();
     });
+}
+
+void Toast::setReloadState(bool enable)
+{
+    if (enable) {
+        m_reloadBtn->setVisible(true);
+        m_saveAsBtn->setVisible(false);
+    } else {
+        m_reloadBtn->setVisible(false);
+        m_saveAsBtn->setVisible(true);
+    }
 }
 
 void Toast::setTheme(QString theme)

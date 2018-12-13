@@ -68,6 +68,9 @@ public:
     void checkForReload();
     void initToastPosition();
 
+signals:
+    void requestSaveAs();
+
 private:
     void detectEndOfLine();
     void handleCursorModeChanged(DTextEdit::CursorMode mode);

@@ -423,6 +423,7 @@ EditWrapper* Window::createEditor()
     connect(wrapper->textEditor(), &DTextEdit::clickFullscreenAction, this, &Window::toggleFullscreen, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &DTextEdit::popupNotify, this, &Window::showNotify, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &DTextEdit::pressEsc, this, &Window::removeBottomWidget, Qt::QueuedConnection);
+    connect(wrapper, &EditWrapper::requestSaveAs, this, &Window::saveAsFile);
 
     connect(wrapper->textEditor(), &DTextEdit::modificationChanged, this, [=] (const QString &path, bool isModified) {
         int tabIndex = m_tabbar->indexOf(path);

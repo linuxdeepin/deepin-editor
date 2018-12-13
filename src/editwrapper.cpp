@@ -65,7 +65,6 @@ EditWrapper::EditWrapper(QWidget *parent)
     setLayout(mainLayout);
 
     m_toast->setOnlyShow(true);
-    m_toast->setText(tr("File has changed on disk. Reload?"));
     m_toast->setIcon(":/images/warning.svg");
 
     connect(m_textEdit, &DTextEdit::cursorModeChanged, this, &EditWrapper::handleCursorModeChanged);
@@ -75,6 +74,8 @@ EditWrapper::EditWrapper(QWidget *parent)
         QFileInfo fi(filePath());
         m_modified = fi.lastModified();
     });
+
+    connect(m_toast, &Toast::saveAsBtnClicked, this, &EditWrapper::requestSaveAs);
 }
 
 EditWrapper::~EditWrapper()
@@ -268,12 +269,19 @@ void EditWrapper::checkForReload()
 
     QFileInfo fi(filePath());
 
-    if (fi.exists() && fi.lastModified() != m_modified) {
-        if (!m_toast->isVisible()) {
-            initToastPosition();
-            m_toast->showAnimation();
-        }
+    if (fi.lastModified() == m_modified || m_toast->isVisible())
+        return;
+
+    if (fi.exists()) {
+        m_toast->setText(tr("File has changed on disk. Reload?"));
+        m_toast->setReloadState(true);
+    } else {
+        m_toast->setText(tr("File removed on the disk. Save it now?"));
+        m_toast->setReloadState(false);
     }
+
+    initToastPosition();
+    m_toast->showAnimation();
 }
 
 void EditWrapper::initToastPosition()

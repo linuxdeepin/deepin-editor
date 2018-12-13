@@ -54,10 +54,13 @@ public:
     void showAnimation();
     void hideAnimation();
 
+    void setReloadState(bool enable);
+
 signals:
     void visibleChanged(bool visible);
     void reloadBtnClicked();
     void closeBtnClicked();
+    void saveAsBtnClicked();
 
 private:
     void setTheme(QString theme);
@@ -81,6 +84,7 @@ private:
     DGraphicsGlowEffect *m_effect = nullptr;
     DImageButton *m_closeBtn;
     QPushButton *m_reloadBtn;
+    QPushButton *m_saveAsBtn;
 };
 
 #endif
