@@ -219,9 +219,12 @@ void EditWrapper::setEndOfLineMode(EndOfLineMode eol)
     m_endOfLineMode = eol;
 }
 
-void EditWrapper::setTextCodec(QTextCodec *codec)
+void EditWrapper::setTextCodec(QTextCodec *codec, bool reload)
 {
     m_textCodec = codec;
+
+    if (!reload)
+        return;
 
     QFile file(filePath());
     int curPos = m_textEdit->textCursor().position();

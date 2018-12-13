@@ -57,7 +57,7 @@ public:
 
     EndOfLineMode endOfLineMode();
     void setEndOfLineMode(EndOfLineMode eol);
-    void setTextCodec(QTextCodec *codec);
+    void setTextCodec(QTextCodec *codec, bool reload = false);
 
     BottomBar *bottomBar() { return m_bottomBar; }
     QString filePath() { return m_textEdit->filepath; }

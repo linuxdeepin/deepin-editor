@@ -615,19 +615,15 @@ bool Window::saveAsFile()
 
         if (isDraft) {
             QFile(filePath).remove();
-            m_tabbar->updateTab(m_tabbar->currentIndex(), newFilePath, newFileInfo.fileName());
-            m_wrappers[newFilePath] = m_wrappers.take(filePath);
-            m_wrappers[newFilePath]->setTextCodec(QTextCodec::codecForName(encode));
-            m_wrappers[newFilePath]->updatePath(newFilePath);
-            m_wrappers[newFilePath]->setEndOfLineMode(eol);
-            m_wrappers[newFilePath]->saveFile();
-            currentWrapper()->textEditor()->loadHighlighter();
-        } else {
-            wrapper->setTextCodec(QTextCodec::codecForName(encode));
-            wrapper->setEndOfLineMode(eol);
-            wrapper->updatePath(newFilePath);
-            wrapper->saveFile();
         }
+
+        m_tabbar->updateTab(m_tabbar->currentIndex(), newFilePath, newFileInfo.fileName());
+        m_wrappers[newFilePath] = m_wrappers.take(filePath);
+        m_wrappers[newFilePath]->setTextCodec(QTextCodec::codecForName(encode));
+        m_wrappers[newFilePath]->updatePath(newFilePath);
+        m_wrappers[newFilePath]->setEndOfLineMode(eol);
+        m_wrappers[newFilePath]->saveFile();
+        currentWrapper()->textEditor()->loadHighlighter();
     } else {
         return false;
     }
