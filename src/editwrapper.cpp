@@ -260,6 +260,9 @@ void EditWrapper::hideToast()
 
 void EditWrapper::checkForReload()
 {
+    if (Utils::isDraftFile(m_textEdit->filepath))
+        return;
+
     QFileInfo fi(filePath());
 
     if (fi.exists() && fi.lastModified() != m_modified) {
