@@ -1,4 +1,14 @@
 <a name=""></a>
+##  1.2.3 (2018-12-14)
+
+
+#### Bug Fixes
+
+*   reconnect save as signal ([68e7dd0a](https://github.com/linuxdeepin/deepin-editor/commit/68e7dd0a1b9edf3c80ed0e059dc0490d52ccfe41))
+
+
+
+<a name=""></a>
 ##  1.2.2 (2018-12-14)
 
 
