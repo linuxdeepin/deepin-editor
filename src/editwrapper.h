@@ -90,6 +90,8 @@ private:
     bool m_isLoadFinished;
     QDateTime m_modified;
     Toast *m_toast;
+
+    bool m_isRefreshing;
 };
 
 #endif

@@ -44,7 +44,8 @@ EditWrapper::EditWrapper(QWidget *parent)
       m_textCodec(QTextCodec::codecForName("UTF-8")),
       m_endOfLineMode(eolUnix),
       m_isLoadFinished(true),
-      m_toast(new Toast(this))
+      m_toast(new Toast(this)),
+      m_isRefreshing(false)
 {
     // Init layout and widgets.
     m_layout->setContentsMargins(0, 0, 0, 0);
@@ -174,7 +175,7 @@ void EditWrapper::updatePath(const QString &file)
 
 void EditWrapper::refresh()
 {
-    if (filePath().isEmpty() || Utils::isDraftFile(filePath())) {
+    if (filePath().isEmpty() || Utils::isDraftFile(filePath()) || m_isRefreshing) {
         return;
     }
 
@@ -182,14 +183,15 @@ void EditWrapper::refresh()
     int curPos = m_textEdit->textCursor().position();
     int yoffset = m_textEdit->verticalScrollBar()->value();
     int xoffset = m_textEdit->horizontalScrollBar()->value();
-    m_textEdit->setPlainText(QString());
 
     if (file.open(QIODevice::ReadOnly)) {
+        m_isRefreshing = true;
+
         QTextStream out(&file);
         out.setCodec(m_textCodec);
         QString content = out.readAll();
 
-        m_textEdit->setUpdatesEnabled(false);
+        m_textEdit->setPlainText(QString());
         m_textEdit->setPlainText(content);
         m_textEdit->setModified(false);
 
@@ -202,11 +204,17 @@ void EditWrapper::refresh()
         QFileInfo fi(filePath());
         m_modified = fi.lastModified();
 
-        QTimer::singleShot(50, this, [=] {
-            m_textEdit->setUpdatesEnabled(true);
-        });
-
         file.close();
+        m_toast->hideAnimation();
+
+        m_textEdit->setUpdatesEnabled(false);
+
+        QTimer::singleShot(10, this, [=] {
+            m_textEdit->setUpdatesEnabled(true);
+            m_isRefreshing = false;
+        });
+    } else {
+        m_isRefreshing = false;
     }
 }
 
@@ -227,30 +235,7 @@ void EditWrapper::setTextCodec(QTextCodec *codec, bool reload)
     if (!reload)
         return;
 
-    QFile file(filePath());
-    int curPos = m_textEdit->textCursor().position();
-    int yoffset = m_textEdit->verticalScrollBar()->value();
-    int xoffset = m_textEdit->horizontalScrollBar()->value();
-    m_textEdit->setPlainText(QString());
-
-    if (file.open(QIODevice::ReadOnly)) {
-        QTextStream out(&file);
-        out.setCodec(codec);
-        QString content = out.readAll();
-
-        m_textEdit->setUpdatesEnabled(false);
-        m_textEdit->setPlainText(content);
-        m_textEdit->setModified(false);
-
-        QTextCursor textcur = m_textEdit->textCursor();
-        textcur.setPosition(curPos);
-        m_textEdit->setTextCursor(textcur);
-        m_textEdit->verticalScrollBar()->setValue(yoffset);
-        m_textEdit->horizontalScrollBar()->setValue(xoffset);
-        m_textEdit->setUpdatesEnabled(true);
-
-        file.close();
-    }
+    refresh();
 
     // TODO: enforce bom for some encodings
 }
