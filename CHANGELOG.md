@@ -1,4 +1,21 @@
 <a name=""></a>
+##  1.2.2 (2018-12-14)
+
+
+#### Bug Fixes
+
+*   hide toast after refresh. ([c2b07f4f](https://github.com/linuxdeepin/deepin-editor/commit/c2b07f4f09bf50154ce33d930aa668309bf70d6a))
+*   save as file will be lost. ([b54f1c5f](https://github.com/linuxdeepin/deepin-editor/commit/b54f1c5fa994ad3bd1fbbf65e047c36a1b9cdcb2))
+*   draft file does not check reload. ([95e74191](https://github.com/linuxdeepin/deepin-editor/commit/95e7419176f2728f8d7780382b3aaa743528437e))
+
+#### Features
+
+*   monitor file removed. ([27c6b2ea](https://github.com/linuxdeepin/deepin-editor/commit/27c6b2ea9cfc8aec4cb905c584df56d8c502d346))
+*   support touch gesture. ([4160be0d](https://github.com/linuxdeepin/deepin-editor/commit/4160be0d46f4c2ce0a318d75fdb3e5632ff9ab00))
+
+
+
+<a name=""></a>
 ##  1.2.1 (2018-12-11)
 
 
