@@ -327,6 +327,9 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
     connect(wrapper->textEditor(), &DTextEdit::popupNotify, this, &Window::showNotify, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &DTextEdit::pressEsc, this, &Window::removeBottomWidget, Qt::QueuedConnection);
 
+    wrapper->disconnect();
+    connect(wrapper, &EditWrapper::requestSaveAs, this, &Window::saveAsFile);
+
     // add wrapper to this window.
     m_tabbar->addTabWithIndex(index, filepath, tabName);
     m_wrappers[filepath] = wrapper;
