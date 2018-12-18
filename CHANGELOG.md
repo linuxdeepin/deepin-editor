@@ -1,4 +1,18 @@
 <a name=""></a>
+##  1.2.4 (2018-12-18)
+
+
+#### Features
+
+* **tabbar:**  change read-only attribute. ([df24648c](https://github.com/linuxdeepin/deepin-editor/commit/df24648c0ddaf3a0370a20605cbf84f7ff4adaba))
+
+#### Bug Fixes
+
+*   save as crash. ([b7b50838](https://github.com/linuxdeepin/deepin-editor/commit/b7b508389b8f7431ba959d6dd831198a4a5b37e7))
+
+
+
+<a name=""></a>
 ##  1.2.3 (2018-12-14)
 
 
