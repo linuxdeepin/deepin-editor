@@ -622,12 +622,16 @@ bool Window::saveAsFile()
         }
 
         m_tabbar->updateTab(m_tabbar->currentIndex(), newFilePath, newFileInfo.fileName());
-        m_wrappers[newFilePath] = m_wrappers.take(filePath);
-        m_wrappers[newFilePath]->setTextCodec(QTextCodec::codecForName(encode));
-        m_wrappers[newFilePath]->updatePath(newFilePath);
-        m_wrappers[newFilePath]->setEndOfLineMode(eol);
-        m_wrappers[newFilePath]->saveFile();
-        currentWrapper()->textEditor()->loadHighlighter();
+
+        wrapper->setTextCodec(QTextCodec::codecForName(encode));
+        wrapper->updatePath(newFilePath);
+        wrapper->setEndOfLineMode(eol);
+        wrapper->saveFile();
+
+        m_wrappers.remove(filePath);
+        m_wrappers.insert(newFilePath, wrapper);
+
+        wrapper->textEditor()->loadHighlighter();
     } else {
         return false;
     }
