@@ -598,7 +598,7 @@ bool Window::saveAsFile()
     dialog.setDirectory(QDir::homePath());
 
     if (isDraft) {
-        QRegularExpression reg("(.+)[^*]");
+        QRegularExpression reg("[^*](.+)");
         QRegularExpressionMatch match = reg.match(m_tabbar->currentName());
         dialog.selectFile(match.captured(0) + ".txt");
     } else {
