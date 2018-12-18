@@ -138,7 +138,9 @@ public slots:
     DDialog *createDialog(const QString &title, const QString &content);
 
 private:
+    void handleFocusWindowChanged(QWindow *w);
     void updateThemePanelGeomerty();
+    void checkTabbarForReload();
 
 protected:
     void resizeEvent(QResizeEvent* event) override;
@@ -146,7 +148,6 @@ protected:
     void keyPressEvent(QKeyEvent *keyEvent) override;
     void dragEnterEvent(QDragEnterEvent *e) override;
     void dropEvent(QDropEvent* event) override;
-    bool eventFilter(QObject *obj, QEvent *e) override;
 
 private:
     DBusDaemon::dbus *m_rootSaveDBus;

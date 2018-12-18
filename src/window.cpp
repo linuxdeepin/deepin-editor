@@ -40,6 +40,9 @@
 #include <QStyleFactory>
 #include <QEvent>
 
+#include <QGuiApplication>
+#include <QWindow>
+
 #ifdef DTKWIDGET_CLASS_DFileDialog
 #include <DFileDialog>
 #else
@@ -65,8 +68,6 @@ Window::Window(DMainWindow *parent)
     m_rootSaveDBus = new DBusDaemon::dbus("com.deepin.editor.daemon", "/", QDBusConnection::systemBus(), this);
 
     // Init.
-    // installEventFilter(this);
-    qApp->installEventFilter(this);
     setAcceptDrops(true);
 
     // Apply qss theme.
@@ -160,6 +161,8 @@ Window::Window(DMainWindow *parent)
     connect(m_themePanel, &ThemePanel::themeChanged, this, &Window::themeChanged);
     connect(this, &Window::requestDragEnterEvent, this, &Window::dragEnterEvent);
     connect(this, &Window::requestDropEvent, this, &Window::dropEvent);
+
+    connect(qApp, &QGuiApplication::focusWindowChanged, this, &Window::handleFocusWindowChanged);
 }
 
 Window::~Window()
@@ -1307,12 +1310,36 @@ DDialog* Window::createDialog(const QString &title, const QString &content)
     return dialog;
 }
 
+void Window::handleFocusWindowChanged(QWindow *w)
+{
+    if (windowHandle() != w || !currentWrapper() || !isActiveWindow()) {
+        return;
+    }
+
+    currentWrapper()->checkForReload();
+    checkTabbarForReload();
+}
+
 void Window::updateThemePanelGeomerty()
 {
     int yOffset = isFullScreen() ? 0 : titlebar()->height();
     QRect themePanelRect(0, yOffset, 250, height() - yOffset);
     themePanelRect.moveRight(rect().right());
     m_themePanel->setGeometry(themePanelRect);
+}
+
+void Window::checkTabbarForReload()
+{
+    QFileInfo fi(m_tabbar->currentPath());
+    QString tabName = m_tabbar->currentName();
+    QString readOnlyStr = QString(" (%1)").arg(tr("Read-Only"));
+    tabName.remove(readOnlyStr);
+
+    if (fi.exists() && !fi.isWritable()) {
+        tabName.append(readOnlyStr);
+    }
+
+    m_tabbar->setTabText(m_tabbar->currentIndex(), tabName);
 }
 
 void Window::resizeEvent(QResizeEvent *e)
@@ -1475,26 +1502,4 @@ void Window::dropEvent(QDropEvent* event)
             addTab(url.toLocalFile(), true);
         }
     }
-}
-
-bool Window::eventFilter(QObject *obj, QEvent *e)
-{
-    if (obj == qApp && e->type() == QEvent::ApplicationStateChange) {
-        if (currentWrapper()) {
-            currentWrapper()->checkForReload();
-
-            QFileInfo fi(m_tabbar->currentPath());
-            QString tabName = m_tabbar->currentName();
-            QString readOnlyStr = QString(" (%1)").arg(tr("Read-Only"));
-            tabName.remove(readOnlyStr);
-
-            if (!fi.isWritable()) {
-                tabName.append(readOnlyStr);
-            }
-
-            m_tabbar->setTabText(m_tabbar->currentIndex(), tabName);
-        }
-    }
-
-    return false;
 }
