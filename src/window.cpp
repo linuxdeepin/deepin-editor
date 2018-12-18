@@ -431,13 +431,13 @@ EditWrapper* Window::createEditor()
     connect(wrapper->textEditor(), &DTextEdit::modificationChanged, this, [=] (const QString &path, bool isModified) {
         int tabIndex = m_tabbar->indexOf(path);
         QString tabName = m_tabbar->textAt(tabIndex);
-        QRegularExpression reg("(.+)[^*]");
+        QRegularExpression reg("[^*](.+)");
         QRegularExpressionMatch match = reg.match(tabName);
 
         tabName = match.captured(0);
 
         if (isModified) {
-            tabName.append('*');
+            tabName.prepend('*');
         }
 
         m_tabbar->setTabText(tabIndex, tabName);
@@ -1478,6 +1478,17 @@ bool Window::eventFilter(QObject *obj, QEvent *e)
     if (obj == qApp && e->type() == QEvent::ApplicationStateChange) {
         if (currentWrapper()) {
             currentWrapper()->checkForReload();
+
+            QFileInfo fi(m_tabbar->currentPath());
+            QString tabName = m_tabbar->currentName();
+            QString readOnlyStr = QString(" (%1)").arg(tr("Read-Only"));
+            tabName.remove(readOnlyStr);
+
+            if (!fi.isWritable()) {
+                tabName.append(readOnlyStr);
+            }
+
+            m_tabbar->setTabText(m_tabbar->currentIndex(), tabName);
         }
     }
 
