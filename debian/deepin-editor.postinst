@@ -1,4 +1,3 @@
 #! /bin/bash
 
 rm -rf /usr/share/deepin-editor/themes/breeze_dark.theme
-ln -s -f /usr/bin/deepin-editor /usr/bin/dedit

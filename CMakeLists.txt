@@ -58,6 +58,8 @@ target_link_libraries(deepin-editor
 
 set(CMAKE_INSTALL_PREFIX /usr)
 
+add_subdirectory("dedit")
+
 # Install qm files
 file(GLOB QM_FILES "translations/*.qm")
 install(FILES ${QM_FILES}
