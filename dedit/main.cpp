@@ -17,12 +17,23 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <iostream>
 #include <stdio.h>
+
+#define PATH "/usr/bin/deepin-editor"
 
 int main(int argc, char *argv[])
 {
     FILE *fp;
-    fp = popen("/usr/bin/deepin-editor", "r");
+
+    std::string command = PATH;
+    command.push_back(' ');
+    for (int i = 1; i < argc; ++i) {
+        command.append(argv[i]);
+        command.push_back(' ');
+    }
+
+    fp = popen(command.c_str(), "r");
     pclose(fp);
 
     return 0;
