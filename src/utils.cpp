@@ -512,6 +512,7 @@ bool Utils::isMimeTypeSupport(const QString &filepath)
                       << "application/pkix-cert"
                       << "application/octet-stream"
                       << "application/sql"
+                      << "application/vnd.apple.mpegurl"
                       << "application/vnd.nokia.qt.qmakeprofile"
                       << "application/vnd.nokia.xml.qt.resource"
                       << "application/x-desktop"
