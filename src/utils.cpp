@@ -539,6 +539,7 @@ bool Utils::isMimeTypeSupport(const QString &filepath)
                       << "image/svg+xml"
                       << "application/x-perl"
                       << "application/x-ruby"
+                      << "application/x-mpegURL"
                       << "model/vrml";
 
     if (textMimeTypes.contains(mimeType)) {
