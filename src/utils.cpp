@@ -177,8 +177,6 @@ static float codecConfidenceForData(const QTextCodec *codec, const QByteArray &d
     c -= qreal(replacement_count) / non_base_latin_count;
     c -= qreal(unidentification_count) / non_base_latin_count;
 
-    qDebug() << replacement_count << unidentification_count << non_base_latin_count;
-
     return qMax(0.0f, c);
 }
 
