@@ -62,15 +62,29 @@ void ThemeItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
     int paddingX = 15;
     int paddingY = 8;
 
+    // draw background.
+    QPainterPath backgroundPath;
+    backgroundPath.addRoundedRect(QRect(rect.x() + paddingX,
+                                        rect.y() + paddingY,
+                                        rect.width() - paddingX * 2,
+                                        rect.height() - paddingY * 2),
+                             m_frameRadius, m_frameRadius);
+
+    painter->setOpacity(0.8);
+    painter->fillPath(backgroundPath, QColor(backgroundColor));
+
     // draw frame.
     QPainterPath framePath;
-    framePath.addRoundedRect(QRect(rect.x() + paddingX, rect.y() + paddingY, rect.width() - paddingX * 2, rect.height() - paddingY * 2),
+    framePath.addRoundedRect(QRect(rect.x() + paddingX,
+                                   rect.y() + paddingY,
+                                   rect.width() - paddingX * 2,
+                                   rect.height() - paddingY * 2),
                              m_frameRadius, m_frameRadius);
     QPen framePen;
 
     if (option.state & QStyle::State_Selected) {
         painter->setOpacity(1);
-        framePen = QPen(QColor(frameSelectedColor), 3);
+        framePen = QPen(QColor(frameSelectedColor), 2);
     } else {
         painter->setOpacity(0.3);
         framePen = QPen(QColor(frameNormalColor), 1);
@@ -78,14 +92,6 @@ void ThemeItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
 
     painter->setPen(framePen);
     painter->drawPath(framePath);
-
-    // draw background.
-    QPainterPath backgroundPath;
-    backgroundPath.addRoundedRect(QRect(rect.x() + paddingX, rect.y() + paddingY, rect.width() - paddingX * 2, rect.height() - paddingY * 2),
-                             m_frameRadius, m_frameRadius);
-
-    painter->setOpacity(0.8);
-    painter->fillPath(backgroundPath, QColor(backgroundColor));
 
     // draw syntax highlight.
     painter->setOpacity(1);
