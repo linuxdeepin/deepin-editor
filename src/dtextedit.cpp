@@ -1470,219 +1470,6 @@ QMenu *DTextEdit::getHighlightMenu()
     return m_hlGroupMenu;
 }
 
-void DTextEdit::mouseMoveEvent(QMouseEvent *e)
-{
-    // other apps will override their own cursor when opened
-    // so they need to be restored.
-    QApplication::restoreOverrideCursor();
-
-    if (viewport()->cursor().shape() != Qt::IBeamCursor) {
-        viewport()->setCursor(Qt::IBeamCursor);
-    }
-
-    QPlainTextEdit::mouseMoveEvent(e);
-}
-
-void DTextEdit::keyPressEvent(QKeyEvent *e)
-{
-    // if (!isModifier(e)) {
-    //     viewport()->setCursor(Qt::BlankCursor);
-    // }
-
-    const QString &key = Utils::getKeyshortcut(e);
-
-    if (m_readOnlyMode) {
-        if (key == "J") {
-            nextLine();
-        } else if (key == "K") {
-            prevLine();
-        } else if (key == ",") {
-            moveToEnd();
-        } else if (key == ".") {
-            moveToStart();
-        } else if (key == "H") {
-            backwardChar();
-        } else if (key == "L") {
-            forwardChar();
-        } else if (key == "Space") {
-            scrollUp();
-        } else if (key == "V") {
-            scrollDown();
-        } else if (key == "F") {
-            forwardWord();
-        } else if (key == "B") {
-            backwardWord();
-        } else if (key == "A") {
-            moveToStartOfLine();
-        } else if (key == "E") {
-            moveToEndOfLine();
-        } else if (key == "M") {
-            moveToLineIndentation();
-        } else if (key == "Q") {
-            toggleReadOnlyMode();
-        } else if (key == "Shfit+J") {
-            scrollLineUp();
-        } else if (key == "Shift+K") {
-            scrollLineDown();
-        } else if (key == "P") {
-            forwardPair();
-        } else if (key == "N") {
-            backwardPair();
-        } else if (key == "Shift+:") {
-            copyLines();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglereadonlymode")) {
-            toggleReadOnlyMode();
-        } else if (key == "Shift+/" && e->modifiers() == Qt::ControlModifier) {
-            e->ignore();
-        } else {
-            // If press another key
-            // the main window does not receive
-            e->ignore();
-        }
-    } else {
-        if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "indentline")) {
-            indentText();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "backindentline")) {
-            unindentText();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "forwardchar")) {
-            forwardChar();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "backwardchar")) {
-            backwardChar();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "forwardword")) {
-            forwardWord();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "backwardword")) {
-            backwardWord();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "nextline")) {
-            nextLine();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "prevline")) {
-            prevLine();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "newline") || key == "Return") {
-            newline();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "opennewlineabove")) {
-            openNewlineAbove();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "opennewlinebelow")) {
-            openNewlineBelow();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "duplicateline")) {
-            duplicateLine();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "killline")) {
-            killLine();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "killcurrentline")) {
-            killCurrentLine();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "swaplineup")) {
-            moveLineDownUp(true);
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "swaplinedown")) {
-            moveLineDownUp(false);
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "scrolllineup")) {
-            scrollLineUp();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "scrolllinedown")) {
-            scrollLineDown();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "scrollup")) {
-            scrollUp();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "scrolldown")) {
-            scrollDown();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "movetoendofline")) {
-            moveToEndOfLine();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "movetostartofline")) {
-            moveToStartOfLine();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "movetostart")) {
-            moveToStart();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "movetoend")) {
-            moveToEnd();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "movetolineindentation")) {
-            moveToLineIndentation();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "upcaseword")) {
-            upcaseWord();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "downcaseword")) {
-            downcaseWord();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "capitalizeword")) {
-            capitalizeWord();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "killbackwardword")) {
-            killBackwardWord();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "killforwardword")) {
-            killForwardWord();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "forwardpair")) {
-            forwardPair();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "backwardpair")) {
-            backwardPair();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "transposechar")) {
-            transposeChar();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "selectall")) {
-            selectAll();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "copy")) {
-            copySelectedText();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "cut")) {
-            cutSelectedText();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "paste")) {
-            pasteText();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "setmark")) {
-            setMark();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "exchangemark")) {
-            exchangeMark();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "copylines")) {
-            copyLines();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "cutlines")) {
-            cutlines();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "joinlines")) {
-            joinLines();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglereadonlymode")) {
-            toggleReadOnlyMode();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglecomment")) {
-            toggleComment();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "undo")) {
-            QPlainTextEdit::undo();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "redo")) {
-            QPlainTextEdit::redo();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "escape")) {
-            escape();
-        } else if (e->key() == Qt::Key_Insert) {
-            if (e->modifiers() == Qt::NoModifier) {
-                setOverwriteMode(!overwriteMode());
-                update();
-                e->accept();
-
-                m_cursorMode = overwriteMode() ? Overwrite : Insert;
-                emit cursorModeChanged(m_cursorMode);
-            }
-        } else {
-            // Post event to window widget if key match window key list.
-            for (auto option : m_settings->settings->group("shortcuts.window")->options()) {
-                if (key == m_settings->settings->option(option->key())->value().toString()) {
-                    e->ignore();
-                    return;
-                }
-            }
-
-            // Post event to window widget if match Alt+0 ~ Alt+9
-            QRegularExpression re("^Alt\\+\\d");
-            QRegularExpressionMatch match = re.match(key);
-            if (match.hasMatch()) {
-                e->ignore();
-                return;
-            }
-
-            // Text editor handle key self.
-            QPlainTextEdit::keyPressEvent(e);
-        }
-    }
-}
-
-void DTextEdit::wheelEvent(QWheelEvent *e)
-{
-    if (e->modifiers() & Qt::ControlModifier) {
-        const int deltaY = e->angleDelta().y();
-
-        if (deltaY < 0) {
-            qobject_cast<Window *>(this->window())->decrementFontSize();
-        } else {
-            qobject_cast<Window *>(this->window())->incrementFontSize();
-        }
-
-        return;
-    }
-
-    QPlainTextEdit::wheelEvent(e);
-}
-
 void DTextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
     // Init.
@@ -1727,115 +1514,6 @@ void DTextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
 
         ++linenumber;
     }
-}
-
-void DTextEdit::contextMenuEvent(QContextMenuEvent *event)
-{
-    m_rightMenu->clear();
-
-    QString wordAtCursor = getWordAtMouse();
-
-    QTextCursor selectionCursor = textCursor();
-    selectionCursor.movePosition(QTextCursor::StartOfBlock);
-    selectionCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-    QString text = selectionCursor.selectedText();
-
-    // init base.
-    bool isBlankLine = text.trimmed().isEmpty();
-
-    if (m_canUndo) {
-        m_rightMenu->addAction(m_undoAction);
-    }
-    if (m_canRedo) {
-        m_rightMenu->addAction(m_redoAction);
-    }
-    m_rightMenu->addSeparator();
-    if (textCursor().hasSelection()) {
-        m_rightMenu->addAction(m_cutAction);
-        m_rightMenu->addAction(m_copyAction);
-    } else {
-        // Just show copy/cut menu item when cursor rectangle contain moue pointer coordinate.
-        m_haveWordUnderCursor = highlightWordUnderMouse(event->pos());
-        if (m_haveWordUnderCursor) {
-            if (!wordAtCursor.isEmpty()) {
-                m_rightMenu->addAction(m_cutAction);
-                m_rightMenu->addAction(m_copyAction);
-            }
-        }
-    }
-    if (canPaste()) {
-        m_rightMenu->addAction(m_pasteAction);
-    }
-
-    if (!wordAtCursor.isEmpty()) {
-        m_rightMenu->addAction(m_deleteAction);
-    }
-    if (!toPlainText().isEmpty()) {
-        m_rightMenu->addAction(m_selectAllAction);
-    }
-    m_rightMenu->addSeparator();
-    if (!toPlainText().isEmpty()) {
-        m_rightMenu->addAction(m_findAction);
-        m_rightMenu->addAction(m_replaceAction);
-        m_rightMenu->addAction(m_jumpLineAction);
-        m_rightMenu->addSeparator();
-    }
-    if (!wordAtCursor.isEmpty()) {
-        m_rightMenu->addMenu(m_convertCaseMenu);
-    }
-
-    // intelligent judge whether to support comments.
-    const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());
-    if (!toPlainText().isEmpty() &&
-        (textCursor().hasSelection() || !isBlankLine) &&
-        !def.filePath().isEmpty()) {
-        m_rightMenu->addAction(m_toggleCommentAction);
-    }
-
-    m_rightMenu->addSeparator();
-    if (m_readOnlyMode) {
-        m_rightMenu->addAction(m_disableReadOnlyModeAction);
-    } else {
-        m_rightMenu->addAction(m_enableReadOnlyModeAction);
-    }
-    m_rightMenu->addAction(m_openInFileManagerAction);
-    m_rightMenu->addSeparator();
-    if (static_cast<Window*>(this->window())->isFullScreen()) {
-        m_rightMenu->addAction(m_exitFullscreenAction);
-    } else {
-        m_rightMenu->addAction(m_fullscreenAction);
-    }
-
-    m_rightMenu->exec(event->globalPos());
-}
-
-void DTextEdit::highlightCurrentLine()
-{
-    updateHighlightLineSelection();
-    renderAllSelections();
-
-    // Adjust scrollbar margins if reach last line.
-    // FIXME(rekols): Temporarily do not need this function.
-    // if (getCurrentLine() == blockCount()) {
-    //     // Adjust y coordinate up one line height.
-    //     m_scrollbarMargin = fontMetrics().height();
-
-    //     adjustScrollbarMargins();
-
-    //     // NOTE: do nextLine make scrollbar adjust y coordinate.
-    //     nextLine();
-    // } else {
-    //     m_scrollbarMargin = 0;
-
-    //     adjustScrollbarMargins();
-    // }
-
-    adjustScrollbarMargins();
-
-    // Keep current line at visible area.
-    // if (cursorRect().top() + fontMetrics().height() >= rect().height()) {
-    //     scrollLineUp();
-    // }
 }
 
 void DTextEdit::updateLineNumber()
@@ -2619,4 +2297,327 @@ void DTextEdit::inputMethodEvent(QInputMethodEvent *e)
     if (!m_readOnlyMode) {
         QPlainTextEdit::inputMethodEvent(e);
     }
+}
+
+
+void DTextEdit::mouseMoveEvent(QMouseEvent *e)
+{
+    // other apps will override their own cursor when opened
+    // so they need to be restored.
+    QApplication::restoreOverrideCursor();
+
+    if (viewport()->cursor().shape() != Qt::IBeamCursor) {
+        viewport()->setCursor(Qt::IBeamCursor);
+    }
+
+    QPlainTextEdit::mouseMoveEvent(e);
+}
+
+void DTextEdit::keyPressEvent(QKeyEvent *e)
+{
+    // if (!isModifier(e)) {
+    //     viewport()->setCursor(Qt::BlankCursor);
+    // }
+
+    const QString &key = Utils::getKeyshortcut(e);
+
+    if (m_readOnlyMode) {
+        if (key == "J") {
+            nextLine();
+        } else if (key == "K") {
+            prevLine();
+        } else if (key == ",") {
+            moveToEnd();
+        } else if (key == ".") {
+            moveToStart();
+        } else if (key == "H") {
+            backwardChar();
+        } else if (key == "L") {
+            forwardChar();
+        } else if (key == "Space") {
+            scrollUp();
+        } else if (key == "V") {
+            scrollDown();
+        } else if (key == "F") {
+            forwardWord();
+        } else if (key == "B") {
+            backwardWord();
+        } else if (key == "A") {
+            moveToStartOfLine();
+        } else if (key == "E") {
+            moveToEndOfLine();
+        } else if (key == "M") {
+            moveToLineIndentation();
+        } else if (key == "Q") {
+            toggleReadOnlyMode();
+        } else if (key == "Shfit+J") {
+            scrollLineUp();
+        } else if (key == "Shift+K") {
+            scrollLineDown();
+        } else if (key == "P") {
+            forwardPair();
+        } else if (key == "N") {
+            backwardPair();
+        } else if (key == "Shift+:") {
+            copyLines();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglereadonlymode")) {
+            toggleReadOnlyMode();
+        } else if (key == "Shift+/" && e->modifiers() == Qt::ControlModifier) {
+            e->ignore();
+        } else {
+            // If press another key
+            // the main window does not receive
+            e->ignore();
+        }
+    } else {
+        if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "indentline")) {
+            indentText();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "backindentline")) {
+            unindentText();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "forwardchar")) {
+            forwardChar();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "backwardchar")) {
+            backwardChar();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "forwardword")) {
+            forwardWord();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "backwardword")) {
+            backwardWord();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "nextline")) {
+            nextLine();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "prevline")) {
+            prevLine();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "newline") || key == "Return") {
+            newline();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "opennewlineabove")) {
+            openNewlineAbove();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "opennewlinebelow")) {
+            openNewlineBelow();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "duplicateline")) {
+            duplicateLine();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "killline")) {
+            killLine();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "killcurrentline")) {
+            killCurrentLine();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "swaplineup")) {
+            moveLineDownUp(true);
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "swaplinedown")) {
+            moveLineDownUp(false);
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "scrolllineup")) {
+            scrollLineUp();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "scrolllinedown")) {
+            scrollLineDown();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "scrollup")) {
+            scrollUp();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "scrolldown")) {
+            scrollDown();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "movetoendofline")) {
+            moveToEndOfLine();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "movetostartofline")) {
+            moveToStartOfLine();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "movetostart")) {
+            moveToStart();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "movetoend")) {
+            moveToEnd();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "movetolineindentation")) {
+            moveToLineIndentation();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "upcaseword")) {
+            upcaseWord();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "downcaseword")) {
+            downcaseWord();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "capitalizeword")) {
+            capitalizeWord();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "killbackwardword")) {
+            killBackwardWord();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "killforwardword")) {
+            killForwardWord();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "forwardpair")) {
+            forwardPair();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "backwardpair")) {
+            backwardPair();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "transposechar")) {
+            transposeChar();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "selectall")) {
+            selectAll();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "copy")) {
+            copySelectedText();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "cut")) {
+            cutSelectedText();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "paste")) {
+            pasteText();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "setmark")) {
+            setMark();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "exchangemark")) {
+            exchangeMark();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "copylines")) {
+            copyLines();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "cutlines")) {
+            cutlines();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "joinlines")) {
+            joinLines();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglereadonlymode")) {
+            toggleReadOnlyMode();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglecomment")) {
+            toggleComment();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "undo")) {
+            QPlainTextEdit::undo();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "redo")) {
+            QPlainTextEdit::redo();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "escape")) {
+            escape();
+        } else if (e->key() == Qt::Key_Insert) {
+            if (e->modifiers() == Qt::NoModifier) {
+                setOverwriteMode(!overwriteMode());
+                update();
+                e->accept();
+
+                m_cursorMode = overwriteMode() ? Overwrite : Insert;
+                emit cursorModeChanged(m_cursorMode);
+            }
+        } else {
+            // Post event to window widget if key match window key list.
+            for (auto option : m_settings->settings->group("shortcuts.window")->options()) {
+                if (key == m_settings->settings->option(option->key())->value().toString()) {
+                    e->ignore();
+                    return;
+                }
+            }
+
+            // Post event to window widget if match Alt+0 ~ Alt+9
+            QRegularExpression re("^Alt\\+\\d");
+            QRegularExpressionMatch match = re.match(key);
+            if (match.hasMatch()) {
+                e->ignore();
+                return;
+            }
+
+            // Text editor handle key self.
+            QPlainTextEdit::keyPressEvent(e);
+        }
+    }
+}
+
+void DTextEdit::wheelEvent(QWheelEvent *e)
+{
+    if (e->modifiers() & Qt::ControlModifier) {
+        const int deltaY = e->angleDelta().y();
+
+        if (deltaY < 0) {
+            qobject_cast<Window *>(this->window())->decrementFontSize();
+        } else {
+            qobject_cast<Window *>(this->window())->incrementFontSize();
+        }
+
+        return;
+    }
+
+    QPlainTextEdit::wheelEvent(e);
+}
+
+void DTextEdit::contextMenuEvent(QContextMenuEvent *event)
+{
+    m_rightMenu->clear();
+
+    QString wordAtCursor = getWordAtMouse();
+
+    QTextCursor selectionCursor = textCursor();
+    selectionCursor.movePosition(QTextCursor::StartOfBlock);
+    selectionCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+    QString text = selectionCursor.selectedText();
+
+    // init base.
+    bool isBlankLine = text.trimmed().isEmpty();
+
+    if (m_canUndo) {
+        m_rightMenu->addAction(m_undoAction);
+    }
+    if (m_canRedo) {
+        m_rightMenu->addAction(m_redoAction);
+    }
+    m_rightMenu->addSeparator();
+    if (textCursor().hasSelection()) {
+        m_rightMenu->addAction(m_cutAction);
+        m_rightMenu->addAction(m_copyAction);
+    } else {
+        // Just show copy/cut menu item when cursor rectangle contain moue pointer coordinate.
+        m_haveWordUnderCursor = highlightWordUnderMouse(event->pos());
+        if (m_haveWordUnderCursor) {
+            if (!wordAtCursor.isEmpty()) {
+                m_rightMenu->addAction(m_cutAction);
+                m_rightMenu->addAction(m_copyAction);
+            }
+        }
+    }
+    if (canPaste()) {
+        m_rightMenu->addAction(m_pasteAction);
+    }
+
+    if (!wordAtCursor.isEmpty()) {
+        m_rightMenu->addAction(m_deleteAction);
+    }
+    if (!toPlainText().isEmpty()) {
+        m_rightMenu->addAction(m_selectAllAction);
+    }
+    m_rightMenu->addSeparator();
+    if (!toPlainText().isEmpty()) {
+        m_rightMenu->addAction(m_findAction);
+        m_rightMenu->addAction(m_replaceAction);
+        m_rightMenu->addAction(m_jumpLineAction);
+        m_rightMenu->addSeparator();
+    }
+    if (!wordAtCursor.isEmpty()) {
+        m_rightMenu->addMenu(m_convertCaseMenu);
+    }
+
+    // intelligent judge whether to support comments.
+    const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());
+    if (!toPlainText().isEmpty() &&
+        (textCursor().hasSelection() || !isBlankLine) &&
+        !def.filePath().isEmpty()) {
+        m_rightMenu->addAction(m_toggleCommentAction);
+    }
+
+    m_rightMenu->addSeparator();
+    if (m_readOnlyMode) {
+        m_rightMenu->addAction(m_disableReadOnlyModeAction);
+    } else {
+        m_rightMenu->addAction(m_enableReadOnlyModeAction);
+    }
+    m_rightMenu->addAction(m_openInFileManagerAction);
+    m_rightMenu->addSeparator();
+    if (static_cast<Window*>(this->window())->isFullScreen()) {
+        m_rightMenu->addAction(m_exitFullscreenAction);
+    } else {
+        m_rightMenu->addAction(m_fullscreenAction);
+    }
+
+    m_rightMenu->exec(event->globalPos());
+}
+
+void DTextEdit::highlightCurrentLine()
+{
+    updateHighlightLineSelection();
+    renderAllSelections();
+
+    // Adjust scrollbar margins if reach last line.
+    // FIXME(rekols): Temporarily do not need this function.
+    // if (getCurrentLine() == blockCount()) {
+    //     // Adjust y coordinate up one line height.
+    //     m_scrollbarMargin = fontMetrics().height();
+
+    //     adjustScrollbarMargins();
+
+    //     // NOTE: do nextLine make scrollbar adjust y coordinate.
+    //     nextLine();
+    // } else {
+    //     m_scrollbarMargin = 0;
+
+    //     adjustScrollbarMargins();
+    // }
+
+    adjustScrollbarMargins();
+
+    // Keep current line at visible area.
+    // if (cursorRect().top() + fontMetrics().height() >= rect().height()) {
+    //     scrollLineUp();
+    // }
 }

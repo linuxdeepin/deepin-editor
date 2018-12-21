@@ -130,12 +130,7 @@ public:
 
     QMenu *getHighlightMenu();
 
-    void mouseMoveEvent(QMouseEvent *e);
-    void keyPressEvent(QKeyEvent *e);
-    void wheelEvent(QWheelEvent *e);
-    bool eventFilter(QObject *, QEvent *event);
     void lineNumberAreaPaintEvent(QPaintEvent *event);
-    void contextMenuEvent(QContextMenuEvent *event);
 
     void setThemeWithPath(const QString &path);
     void setTheme(const KSyntaxHighlighting::Theme &theme, const QString &path);
@@ -215,6 +210,12 @@ protected:
     void dragMoveEvent(QDragMoveEvent *event) override;
     void dropEvent(QDropEvent *event) override;
     void inputMethodEvent(QInputMethodEvent *e) override;
+
+    void mouseMoveEvent(QMouseEvent *e) override;
+    void keyPressEvent(QKeyEvent *e) override;
+    void wheelEvent(QWheelEvent *e) override;
+    bool eventFilter(QObject *, QEvent *event) override;
+    void contextMenuEvent(QContextMenuEvent *event) override;
 
 private:
     bool setCursorKeywordSeletoin(int position, bool findNext);

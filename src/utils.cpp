@@ -309,8 +309,6 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
                 encoding = prober.encoding();
             }
 
-            qDebug() << c << confidence << prober.encoding();
-
             if (i.first == KEncodingProber::ChineseTraditional && c < 0.5) {
                 // test Big5
                 c = codecConfidenceForData(QTextCodec::codecForName("Big5"), data, QLocale::China);
