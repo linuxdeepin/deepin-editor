@@ -51,7 +51,7 @@ public:
         Readonly
     };
 
-    DTextEdit(QPlainTextEdit *parent = nullptr);
+    DTextEdit(QWidget *parent = nullptr);
 
     QWidget *lineNumberArea;
     QString filepath;

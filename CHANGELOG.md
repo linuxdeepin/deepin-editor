@@ -1,4 +1,22 @@
 <a name=""></a>
+##  1.2.5 (2018-12-21)
+
+
+#### Bug Fixes
+
+*   support m3u8 file open ([2af2d49c](https://github.com/linuxdeepin/deepin-editor/commit/2af2d49c2ad279313db00d412d674d8e24e03fee))
+*   dedit args. ([db75ba6b](https://github.com/linuxdeepin/deepin-editor/commit/db75ba6b5824fa962d32d6a3cd18d17d42623e74))
+*   save as file name format. ([e2a07a4c](https://github.com/linuxdeepin/deepin-editor/commit/e2a07a4cf73a509fac68bc2dafc70b31a6befe5f))
+
+#### Features
+
+*   support for application/x-mpegURL. ([a31ab8d0](https://github.com/linuxdeepin/deepin-editor/commit/a31ab8d03eb98dac58f1873dc4555ef1a1caa1d3))
+*   support for devanagari. ([865b2921](https://github.com/linuxdeepin/deepin-editor/commit/865b2921b804cbbd20e1400b5906500ce580aeaa))
+*   add dedit ([c282e683](https://github.com/linuxdeepin/deepin-editor/commit/c282e683b19f87c886ed75033688e7382540618c))
+
+
+
+<a name=""></a>
 ##  1.2.4 (2018-12-18)
 
 

@@ -78,7 +78,7 @@ public:
     DTextEdit *editor;
 };
 
-DTextEdit::DTextEdit(QPlainTextEdit *parent)
+DTextEdit::DTextEdit(QWidget *parent)
     : QPlainTextEdit(parent),
       m_wrapper(nullptr),
       m_highlighter(new KSyntaxHighlighting::SyntaxHighlighter(document()))

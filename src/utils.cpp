@@ -177,6 +177,8 @@ static float codecConfidenceForData(const QTextCodec *codec, const QByteArray &d
     c -= qreal(replacement_count) / non_base_latin_count;
     c -= qreal(unidentification_count) / non_base_latin_count;
 
+    qDebug() << replacement_count << unidentification_count << non_base_latin_count;
+
     return qMax(0.0f, c);
 }
 
@@ -308,6 +310,8 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
                 confidence = c;
                 encoding = prober.encoding();
             }
+
+            qDebug() << c << confidence << prober.encoding();
 
             if (i.first == KEncodingProber::ChineseTraditional && c < 0.5) {
                 // test Big5
