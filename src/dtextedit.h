@@ -211,6 +211,7 @@ protected:
     void dropEvent(QDropEvent *event) override;
     void inputMethodEvent(QInputMethodEvent *e) override;
 
+    void mousePressEvent(QMouseEvent *e) override;
     void mouseMoveEvent(QMouseEvent *e) override;
     void keyPressEvent(QKeyEvent *e) override;
     void wheelEvent(QWheelEvent *e) override;
@@ -315,6 +316,10 @@ private:
 
     QMenu *m_hlGroupMenu;
     QActionGroup *m_hlActionGroup;
+
+    QPoint m_lastTouchBeginPos;
+    QPointer<QTimer> m_updateEnableSelectionByMouseTimer;
+    int m_touchTapDistance = -1;
 };
 
 #endif

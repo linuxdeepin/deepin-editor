@@ -40,11 +40,15 @@
 #include <QFileInfo>
 #include <QDebug>
 #include <QPainter>
+#include <QScroller>
 #include <QScrollBar>
 #include <QStyleFactory>
 #include <QTextBlock>
 #include <QMimeData>
 #include <QTimer>
+
+#include <private/qguiapplication_p.h>
+#include <qpa/qplatformtheme.h>
 
 static inline bool isModifier(QKeyEvent *e)
 {
@@ -84,6 +88,12 @@ DTextEdit::DTextEdit(QWidget *parent)
       m_highlighter(new KSyntaxHighlighting::SyntaxHighlighter(document()))
 {
     lineNumberArea = new LineNumberArea(this);
+
+#if QT_VERSION < QT_VERSION_CHECK(5,9,0)
+    m_touchTapDistance = 15;
+#else
+    m_touchTapDistance = QGuiApplicationPrivate::platformTheme()->themeHint(QPlatformTheme::TouchDoubleTapDistance).toInt();
+#endif
 
     viewport()->installEventFilter(this);
     viewport()->setCursor(Qt::IBeamCursor);
@@ -2299,9 +2309,62 @@ void DTextEdit::inputMethodEvent(QInputMethodEvent *e)
     }
 }
 
+void DTextEdit::mousePressEvent(QMouseEvent *e)
+{
+    if (e->source() == Qt::MouseEventSynthesizedByQt) {
+        m_lastTouchBeginPos = e->pos();
+
+        if (QScroller::hasScroller(this)) {
+            QScroller::scroller(this)->deleteLater();
+        }
+
+        if (m_updateEnableSelectionByMouseTimer) {
+            m_updateEnableSelectionByMouseTimer->stop();
+        } else {
+            m_updateEnableSelectionByMouseTimer = new QTimer(this);
+            m_updateEnableSelectionByMouseTimer->setSingleShot(true);
+
+            static QObject *theme_settings = reinterpret_cast<QObject*>(qvariant_cast<quintptr>(qApp->property("_d_theme_settings_object")));
+            QVariant touchFlickBeginMoveDelay;
+
+            if (theme_settings) {
+                touchFlickBeginMoveDelay = theme_settings->property("touchFlickBeginMoveDelay");
+            }
+
+            m_updateEnableSelectionByMouseTimer->setInterval(touchFlickBeginMoveDelay.isValid() ? touchFlickBeginMoveDelay.toInt() : 300);
+
+            connect(m_updateEnableSelectionByMouseTimer, &QTimer::timeout, m_updateEnableSelectionByMouseTimer, &QTimer::deleteLater);
+        }
+
+        m_updateEnableSelectionByMouseTimer->start();
+    }
+
+    QPlainTextEdit::mousePressEvent(e);
+}
 
 void DTextEdit::mouseMoveEvent(QMouseEvent *e)
 {
+    if (e->source() == Qt::MouseEventSynthesizedByQt) {
+        if (QScroller::hasScroller(this))
+            return;
+
+        if (m_updateEnableSelectionByMouseTimer
+                && m_updateEnableSelectionByMouseTimer->isActive()) {
+            const QPoint difference_pos = e->pos() - m_lastTouchBeginPos;
+
+            if (std::abs(difference_pos.x()) > m_touchTapDistance
+                    || std::abs(difference_pos.y()) > m_touchTapDistance) {
+                QScroller::grabGesture(this);
+                QScroller *scroller = QScroller::scroller(this);
+
+                scroller->handleInput(QScroller::InputPress, e->localPos(), e->timestamp());
+                scroller->handleInput(QScroller::InputMove, e->localPos(), e->timestamp());
+            }
+
+            return;
+        }
+    }
+
     // other apps will override their own cursor when opened
     // so they need to be restored.
     QApplication::restoreOverrideCursor();
