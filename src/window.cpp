@@ -275,6 +275,10 @@ void Window::addTab(const QString &filepath, bool activeTab)
                 m_wrappers[filepath]->openFile(filepath);
 
                 return;
+            } else {
+                if (m_tabbar->indexOf(filepath) != -1) {
+                    m_tabbar->setCurrentIndex(m_tabbar->indexOf(filepath));
+                }
             }
         }
 
