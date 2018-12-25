@@ -30,6 +30,7 @@
 #include <KF5/KSyntaxHighlighting/syntaxhighlighter.h>
 #include <KF5/KSyntaxHighlighting/theme.h>
 
+#include <QAbstractTextDocumentLayout>
 #include <QTextDocumentFragment>
 #include <DDesktopServices>
 #include <QApplication>
@@ -83,7 +84,7 @@ public:
 };
 
 DTextEdit::DTextEdit(QWidget *parent)
-    : QPlainTextEdit(parent),
+    : QTextEdit(parent),
       m_wrapper(nullptr),
       m_highlighter(new KSyntaxHighlighting::SyntaxHighlighter(document()))
 {
@@ -104,9 +105,9 @@ DTextEdit::DTextEdit(QWidget *parent)
     setMouseTracking(true);
 
     // Init widgets.
-    connect(this, &QPlainTextEdit::updateRequest, this, &DTextEdit::handleUpdateRequest);
-    connect(this, &QPlainTextEdit::textChanged, this, &DTextEdit::updateLineNumber, Qt::QueuedConnection);
-    connect(this, &QPlainTextEdit::cursorPositionChanged, this, &DTextEdit::cursorPositionChanged, Qt::QueuedConnection);
+    connect(this->verticalScrollBar(), &QScrollBar::valueChanged, this, &DTextEdit::updateLineNumber);
+    connect(this, &QTextEdit::textChanged, this, &DTextEdit::updateLineNumber);
+    connect(this, &QTextEdit::cursorPositionChanged, this, &DTextEdit::cursorPositionChanged);
     connect(document(), &QTextDocument::modificationChanged, this, &DTextEdit::setModified);
 
     // Init menu.
@@ -392,6 +393,16 @@ void DTextEdit::backwardPair()
             setTextCursor(cursor);
         }
     }
+}
+
+int DTextEdit::blockCount() const
+{
+    return document()->blockCount();
+}
+
+QTextBlock DTextEdit::firstVisibleBlock()
+{
+    return document()->findBlockByLineNumber(getFirstVisibleBlockId());
 }
 
 void DTextEdit::moveToStart()
@@ -1227,7 +1238,7 @@ void DTextEdit::scrollToLine(int scrollOffset, int row, int column)
 
 void DTextEdit::setLineWrapMode(bool enable)
 {
-    QPlainTextEdit::setLineWrapMode(enable ? QPlainTextEdit::WidgetWidth : QPlainTextEdit::NoWrap);
+    QTextEdit::setLineWrapMode(enable ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
 }
 
 void DTextEdit::setFontFamily(QString name)
@@ -1498,8 +1509,9 @@ void DTextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
 
     // Update line number.
     QTextBlock block = firstVisibleBlock();
-    int top = (int) blockBoundingGeometry(block).translated(contentOffset()).top();
-    int bottom = top + (int) blockBoundingRect(block).height();
+    int top = viewport()->geometry().top();
+    int blockHeight = document()->documentLayout()->blockBoundingRect(block).height();
+    int bottom = top + blockHeight;
     int linenumber = block.blockNumber();
 
     Utils::setFontSize(painter, document()->defaultFont().pointSize() - 2);
@@ -1513,14 +1525,14 @@ void DTextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
             painter.drawText(0,
                              top + 2,
                              lineNumberArea->width(),
-                             blockBoundingRect(block).height(),
+                             blockHeight,
                              Qt::AlignTop | Qt::AlignHCenter,
                              QString::number(linenumber + 1));
         }
 
         block = block.next();
         top = bottom;
-        bottom = top + (int) blockBoundingRect(block).height();
+        bottom = top + blockHeight;
 
         ++linenumber;
     }
@@ -1533,6 +1545,7 @@ void DTextEdit::updateLineNumber()
     int blockSize = QString::number(blockCount()).size();
 
     lineNumberArea->setFixedWidth(blockSize * fontMetrics().width('9') + m_lineNumberPaddingX * 4);
+    lineNumberArea->update();
 }
 
 void DTextEdit::handleScrollFinish()
@@ -1546,15 +1559,6 @@ void DTextEdit::handleScrollFinish()
 
     // Update cursor.
     setTextCursor(cursor);
-}
-
-void DTextEdit::handleUpdateRequest(const QRect &rect, int dy)
-{
-    if (dy) {
-        lineNumberArea->scroll(0, dy);
-    } else {
-        lineNumberArea->update(0, rect.y(), lineNumberArea->width(), rect.height());
-    }
 }
 
 bool DTextEdit::setCursorKeywordSeletoin(int position, bool findNext)
@@ -1699,6 +1703,34 @@ void DTextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &clos
     }
 }
 
+int DTextEdit::getFirstVisibleBlockId() const
+{
+    // Detect the first block for which bounding rect - once translated
+    // in absolute coordinated - is contained by the editor's text area
+
+    // Costly way of doing but since "blockBoundingGeometry(...)" doesn't
+    // exists for "QTextEdit"...
+
+    QTextCursor curs = QTextCursor(this->document());
+    curs.movePosition(QTextCursor::Start);
+    for (int i=0; i < this->document()->blockCount(); ++i) {
+        QTextBlock block = curs.block();
+
+        QRect r1 = this->viewport()->geometry();
+        QRect r2 = this->document()->documentLayout()->blockBoundingRect(block).translated(
+                    this->viewport()->geometry().x(), this->viewport()->geometry().y() - (
+                        this->verticalScrollBar()->sliderPosition())).toRect();
+
+        if (r1.contains(r2, true)) {
+            return i;
+        }
+
+        curs.movePosition(QTextCursor::NextBlock);
+    }
+
+    return 0;
+}
+
 void DTextEdit::setThemeWithPath(const QString &path)
 {
     const KSyntaxHighlighting::Theme theme = m_repository.theme("");
@@ -1738,7 +1770,7 @@ void DTextEdit::setTheme(const KSyntaxHighlighting::Theme &theme, const QString 
     m_beginBracketSelection.format = m_bracketMatchFormat;
     m_endBracketSelection.format = m_bracketMatchFormat;
 
-    const QString &styleSheet = QString("QPlainTextEdit {"
+    const QString &styleSheet = QString("QTextEdit {"
                                         "background-color: %1;"
                                         "color: %2;"
                                         "selection-color: %3;"
@@ -1912,7 +1944,7 @@ void DTextEdit::cutSelectedText()
 
 void DTextEdit::pasteText()
 {
-    QPlainTextEdit::paste();
+    QTextEdit::paste();
 
     unsetMark();
 }
@@ -2272,7 +2304,7 @@ void DTextEdit::adjustScrollbarMargins()
 
 void DTextEdit::dragEnterEvent(QDragEnterEvent *event)
 {
-    QPlainTextEdit::dragEnterEvent(event);
+    QTextEdit::dragEnterEvent(event);
     qobject_cast<Window *>(this->window())->requestDragEnterEvent(event);
 }
 
@@ -2287,7 +2319,7 @@ void DTextEdit::dragMoveEvent(QDragMoveEvent *event)
     if (data->hasUrls()) {
         event->acceptProposedAction();
     } else {
-        QPlainTextEdit::dragMoveEvent(event);
+        QTextEdit::dragMoveEvent(event);
     }
 }
 
@@ -2298,14 +2330,14 @@ void DTextEdit::dropEvent(QDropEvent *event)
     if (data->hasUrls() && data->urls().first().isLocalFile()) {
         qobject_cast<Window *>(this->window())->requestDropEvent(event);
     } else if (data->hasText() && !m_readOnlyMode) {
-        QPlainTextEdit::dropEvent(event);
+        QTextEdit::dropEvent(event);
     }
 }
 
 void DTextEdit::inputMethodEvent(QInputMethodEvent *e)
 {
     if (!m_readOnlyMode) {
-        QPlainTextEdit::inputMethodEvent(e);
+        QTextEdit::inputMethodEvent(e);
     }
 }
 
@@ -2339,7 +2371,7 @@ void DTextEdit::mousePressEvent(QMouseEvent *e)
         m_updateEnableSelectionByMouseTimer->start();
     }
 
-    QPlainTextEdit::mousePressEvent(e);
+    QTextEdit::mousePressEvent(e);
 }
 
 void DTextEdit::mouseMoveEvent(QMouseEvent *e)
@@ -2373,7 +2405,7 @@ void DTextEdit::mouseMoveEvent(QMouseEvent *e)
         viewport()->setCursor(Qt::IBeamCursor);
     }
 
-    QPlainTextEdit::mouseMoveEvent(e);
+    QTextEdit::mouseMoveEvent(e);
 }
 
 void DTextEdit::keyPressEvent(QKeyEvent *e)
@@ -2522,9 +2554,9 @@ void DTextEdit::keyPressEvent(QKeyEvent *e)
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglecomment")) {
             toggleComment();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "undo")) {
-            QPlainTextEdit::undo();
+            QTextEdit::undo();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "redo")) {
-            QPlainTextEdit::redo();
+            QTextEdit::redo();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "escape")) {
             escape();
         } else if (e->key() == Qt::Key_Insert) {
@@ -2554,7 +2586,7 @@ void DTextEdit::keyPressEvent(QKeyEvent *e)
             }
 
             // Text editor handle key self.
-            QPlainTextEdit::keyPressEvent(e);
+            QTextEdit::keyPressEvent(e);
         }
     }
 }
@@ -2573,7 +2605,7 @@ void DTextEdit::wheelEvent(QWheelEvent *e)
         return;
     }
 
-    QPlainTextEdit::wheelEvent(e);
+    QTextEdit::wheelEvent(e);
 }
 
 void DTextEdit::contextMenuEvent(QContextMenuEvent *event)

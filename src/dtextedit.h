@@ -30,7 +30,7 @@
 #include <QAction>
 #include <QMenu>
 #include <QPaintEvent>
-#include <QPlainTextEdit>
+#include <QTextEdit>
 #include <QPropertyAnimation>
 
 namespace KSyntaxHighlighting {
@@ -40,7 +40,7 @@ namespace KSyntaxHighlighting {
 enum ConvertCase { UPPER, LOWER, CAPITALIZE };
 
 class EditWrapper;
-class DTextEdit : public QPlainTextEdit
+class DTextEdit : public QTextEdit
 {
     Q_OBJECT
 
@@ -69,6 +69,9 @@ public:
     void backwardWord();
     void forwardPair();
     void backwardPair();
+
+    int blockCount() const;
+    QTextBlock firstVisibleBlock();
 
     void moveToStart();
     void moveToEnd();
@@ -185,7 +188,6 @@ public slots:
     void highlightCurrentLine();
     void updateLineNumber();
     void handleScrollFinish();
-    void handleUpdateRequest(const QRect &rect, int dy);
 
     void clickCutAction();
     void clickCopyAction();
@@ -222,6 +224,7 @@ private:
     bool setCursorKeywordSeletoin(int position, bool findNext);
     void cursorPositionChanged();
     void updateHighlightBrackets(const QChar &openChar, const QChar &closeChar);
+    int getFirstVisibleBlockId() const;
 
 private:
     EditWrapper *m_wrapper;

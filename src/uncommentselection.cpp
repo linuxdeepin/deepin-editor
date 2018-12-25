@@ -1,5 +1,5 @@
 #include "uncommentselection.h"
-#include <QPlainTextEdit>
+#include <QTextEdit>
 #include <QTextBlock>
 
 using namespace Comment;
@@ -45,7 +45,7 @@ static bool isComment(const QString &text, int index, const QString &commentType
     return true;
 }
 
-void Comment::unCommentSelection(QPlainTextEdit *edit, const CommentDefinition &definition)
+void Comment::unCommentSelection(QTextEdit *edit, const CommentDefinition &definition)
 {
     if (!definition.isValid())
         return;

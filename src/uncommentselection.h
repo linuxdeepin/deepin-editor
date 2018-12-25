@@ -5,7 +5,7 @@
 #include <QString>
 
 QT_BEGIN_NAMESPACE
-class QPlainTextEdit;
+class QTextEdit;
 QT_END_NAMESPACE
 
 namespace Comment {
@@ -29,7 +29,7 @@ namespace Comment {
     };
 
     COMMENT_EXPORT
-    void unCommentSelection(QPlainTextEdit *edit,
+    void unCommentSelection(QTextEdit *edit,
                         const CommentDefinition &definiton = CommentDefinition());
 
 }
