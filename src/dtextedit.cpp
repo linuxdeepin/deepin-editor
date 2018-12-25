@@ -68,21 +68,6 @@ static inline bool isModifier(QKeyEvent *e)
     }
 }
 
-class LineNumberArea : public QWidget
-{
-public:
-    LineNumberArea(DTextEdit *editor)
-        : QWidget(editor),
-          editor(editor) {
-    }
-
-    void paintEvent(QPaintEvent *event) {
-        editor->lineNumberAreaPaintEvent(event);
-    }
-
-    DTextEdit *editor;
-};
-
 DTextEdit::DTextEdit(QWidget *parent)
     : QTextEdit(parent),
       m_wrapper(nullptr),
@@ -252,6 +237,20 @@ DTextEdit::DTextEdit(QWidget *parent)
 void DTextEdit::setWrapper(EditWrapper *w)
 {
     m_wrapper = w;
+}
+
+int DTextEdit::lineNumberAreaWidth()
+{
+    int digits = 1;
+    int max = qMax(1, this->document()->blockCount());
+    while (max >= 10) {
+        max /= 10;
+        ++digits;
+    }
+
+    int space = 13 +  fontMetrics().width(QLatin1Char('9')) * (digits);
+
+    return space;
 }
 
 int DTextEdit::getCurrentLine()
@@ -1494,7 +1493,6 @@ QMenu *DTextEdit::getHighlightMenu()
 
 void DTextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
-    // Init.
     QPainter painter(lineNumberArea);
     painter.fillRect(event->rect(), m_backgroundColor);
 
@@ -1508,34 +1506,48 @@ void DTextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
     painter.fillRect(QRect(event->rect().x() + event->rect().width() - 1,
                            event->rect().y(), 1, event->rect().height()), splitLineColor);
 
-    // Update line number.
-    QTextBlock block = firstVisibleBlock();
-    int top = viewport()->geometry().top();
-    int blockHeight = document()->documentLayout()->blockBoundingRect(block).height();
-    int bottom = top + blockHeight;
-    int linenumber = block.blockNumber();
+    int blockNumber = getFirstVisibleBlockId();
+    QTextBlock block = document()->findBlockByNumber(blockNumber);
+    QTextBlock prev_block = (blockNumber > 0) ? document()->findBlockByNumber(blockNumber-1) : block;
+    int translate_y = (blockNumber > 0) ? -verticalScrollBar()->sliderPosition() : 0;
+
+    int top = this->viewport()->geometry().top();
+
+    // Adjust text position according to the previous "non entirely visible" block
+    // if applicable. Also takes in consideration the document's margin offset.
+    int additional_margin;
+    if (blockNumber == 0)
+        // Simply adjust to document's margin
+        additional_margin = document()->documentMargin() -1 - this->verticalScrollBar()->sliderPosition();
+    else
+        // Getting the height of the visible part of the previous "non entirely visible" block
+        additional_margin = document()->documentLayout()->blockBoundingRect(prev_block)
+                .translated(0, translate_y).intersected(this->viewport()->geometry()).height();
+
+    // Shift the starting point
+    top += additional_margin;
+
+    int bottom = top + document()->documentLayout()->blockBoundingRect(block).height();
 
     Utils::setFontSize(painter, document()->defaultFont().pointSize() - 2);
+    // Draw the numbers (displaying the current line number in green)
     while (block.isValid() && top <= event->rect().bottom()) {
         if (block.isVisible() && bottom >= event->rect().top()) {
-            if (linenumber + 1 == m_markStartLine) {
+            if (blockNumber + 1 == m_markStartLine) {
                 painter.setPen(m_regionMarkerColor);
             } else {
                 painter.setPen(m_lineNumbersColor);
             }
-            painter.drawText(0,
-                             top + 2,
-                             lineNumberArea->width(),
-                             blockHeight,
-                             Qt::AlignTop | Qt::AlignHCenter,
-                             QString::number(linenumber + 1));
+
+            painter.drawText(0, top,
+                             lineNumberArea->width(), fontMetrics().height(),
+                             Qt::AlignTop | Qt::AlignHCenter, QString::number(blockNumber + 1));
         }
 
         block = block.next();
         top = bottom;
-        bottom = top + blockHeight;
-
-        ++linenumber;
+        bottom = top + document()->documentLayout()->blockBoundingRect(block).height();
+        ++blockNumber;
     }
 }
 

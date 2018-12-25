@@ -25,6 +25,7 @@
 
 #include <KF5/KSyntaxHighlighting/repository.h>
 #include "uncommentselection.h"
+#include "linenumberarea.h"
 
 #include "settings.h"
 #include <QAction>
@@ -57,6 +58,8 @@ public:
     QString filepath;
 
     void setWrapper(EditWrapper *);
+
+    int lineNumberAreaWidth();
 
     int getCurrentLine();
     int getCurrentColumn();
