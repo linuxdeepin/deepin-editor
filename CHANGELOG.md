@@ -1,4 +1,21 @@
 <a name=""></a>
+##  1.2.6 (2019-01-03)
+
+
+#### Features
+
+*   support x-wine-extension-ini ([a71e1415](https://github.com/linuxdeepin/deepin-editor/commit/a71e141553ab4308eb13fdb0cc7fe9e90d1096d7))
+* **textedit:**  optimized touch screen. ([b0bed762](https://github.com/linuxdeepin/deepin-editor/commit/b0bed7621d6676d95d80063ddf2259c79e449991))
+
+#### Bug Fixes
+
+*   open current file. ([b3fec2c8](https://github.com/linuxdeepin/deepin-editor/commit/b3fec2c8154618753df9b2517bc58e08280acfd1))
+*   do not accept rich text. ([5bbdea90](https://github.com/linuxdeepin/deepin-editor/commit/5bbdea905e5f7d418b60ad27178bffa0ab4b01ab))
+* **themepanel:**  optimize the selected effect. ([e4e04f20](https://github.com/linuxdeepin/deepin-editor/commit/e4e04f20408445dabde9aee2012cdf75937c7e19))
+
+
+
+<a name=""></a>
 ##  1.2.5 (2018-12-21)
 
 
