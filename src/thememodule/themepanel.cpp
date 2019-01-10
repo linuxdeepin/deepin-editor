@@ -103,7 +103,7 @@ void ThemePanel::popup()
     animation->setEndValue(QRect(windowRect.width() - rect.width(), rect.y(), rect.width(), rect.height()));
     animation->start();
 
-    connect(animation, &QPropertyAnimation::valueChanged, [=] { m_themeView->adjustScrollbarMargins(); });
+    connect(animation, &QPropertyAnimation::valueChanged, this, [=] { m_themeView->adjustScrollbarMargins(); });
     connect(animation, &QPropertyAnimation::finished, animation, &QPropertyAnimation::deleteLater);
 }
 

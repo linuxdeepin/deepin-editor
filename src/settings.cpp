@@ -158,11 +158,11 @@ QWidget *Settings::createFontComBoBoxHandle(QObject *obj)
     // init.
     comboBox->setCurrentText(option->value().toString());
 
-    connect(option, &DSettingsOption::valueChanged, [=] (QVariant var) {
+    connect(option, &DSettingsOption::valueChanged, comboBox, [=] (QVariant var) {
         comboBox->setCurrentText(var.toString());
     });
 
-    option->connect(comboBox, &QComboBox::currentTextChanged, [=] (const QString &text) {
+    option->connect(comboBox, &QComboBox::currentTextChanged, option, [=] (const QString &text) {
         option->setValue(text);
     });
 
