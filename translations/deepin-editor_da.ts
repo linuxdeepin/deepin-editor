@@ -138,12 +138,12 @@
     <message>
         <location filename="../src/editwrapper.cpp" line="276"/>
         <source>File has changed on disk. Reload?</source>
-        <translation type="unfinished"/>
+        <translation>Filen er blevet ændret på disken. Genindlæs?</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="279"/>
         <source>File removed on the disk. Save it now?</source>
-        <translation type="unfinished"/>
+        <translation>Filen er fjernet fra disken. Gem den nu?</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="322"/>
@@ -691,7 +691,7 @@
     <message>
         <location filename="../src/widgets/toast.cpp" line="38"/>
         <source>Reload</source>
-        <translation type="unfinished"/>
+        <translation>Genindlæs</translation>
     </message>
 </context>
 <context>

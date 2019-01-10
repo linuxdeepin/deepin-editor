@@ -554,7 +554,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="92"/>
         <source>Mark</source>
-        <translation type="unfinished"/>
+        <translation>Обележи</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="93"/>

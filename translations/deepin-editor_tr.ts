@@ -143,7 +143,7 @@
     <message>
         <location filename="../src/editwrapper.cpp" line="279"/>
         <source>File removed on the disk. Save it now?</source>
-        <translation type="unfinished"/>
+        <translation>Dosya diskten silinmiş. Şimdi kaydetmek ister misiniz?</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="322"/>

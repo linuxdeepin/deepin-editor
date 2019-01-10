@@ -4,12 +4,12 @@
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="35"/>
         <source>Row</source>
-        <translation type="unfinished"/>
+        <translation>Wiersz</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="36"/>
         <source>Column</source>
-        <translation type="unfinished"/>
+        <translation>Kolumna</translation>
     </message>
 </context>
 <context>
@@ -138,28 +138,28 @@
     <message>
         <location filename="../src/editwrapper.cpp" line="276"/>
         <source>File has changed on disk. Reload?</source>
-        <translation type="unfinished"/>
+        <translation>Plik został zmieniony na dysku. Wczytać go ponownie?</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="279"/>
         <source>File removed on the disk. Save it now?</source>
-        <translation type="unfinished"/>
+        <translation>Plik został usunięty z dysku. Zapisać go teraz?</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="322"/>
         <location filename="../src/widgets/bottombar.cpp" line="42"/>
         <source>INSERT</source>
-        <translation type="unfinished"/>
+        <translation>WSTAWIANIE</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="325"/>
         <source>OVERWRITE</source>
-        <translation type="unfinished"/>
+        <translation>NADPISYWANIE</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="328"/>
         <source>R/O</source>
-        <translation type="unfinished"/>
+        <translation>TYLKO DO ODCZYTU</translation>
     </message>
 </context>
 <context>
@@ -242,7 +242,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="106"/>
         <source>Word Wrap</source>
-        <translation type="unfinished"/>
+        <translation>Zawijanie wierszy</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="877"/>
@@ -439,22 +439,22 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="69"/>
         <source>Swap line up</source>
-        <translation>Zamień linię w górę</translation>
+        <translation>Zamień wiersz z powyższym</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="70"/>
         <source>Swap line down</source>
-        <translation>Zamień linię w dół</translation>
+        <translation>Zamień wiersz z poniższym</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="71"/>
         <source>Scroll up one line</source>
-        <translation>Przewiń jedną linię do góry</translation>
+        <translation>Przewiń jeden wiersz do góry</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="72"/>
         <source>Scroll down one line</source>
-        <translation>Przewiń jedną linię w dół</translation>
+        <translation>Przewiń jeden wiersz w dół</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="73"/>
@@ -469,12 +469,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="75"/>
         <source>Move to end of line</source>
-        <translation>Przejdź do końca linii</translation>
+        <translation>Przejdź do końca wiersza</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="76"/>
         <source>Move to start of line</source>
-        <translation>Przejdź do początku linii</translation>
+        <translation>Przejdź do początku wiersza</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="77"/>
@@ -489,7 +489,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="79"/>
         <source>Move to line indentation</source>
-        <translation>Przejdź do wcięcia</translation>
+        <translation>Przejdź do wcięcia wiersza</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="80"/>
@@ -569,12 +569,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="95"/>
         <source>Cut line</source>
-        <translation>Wytnij linię</translation>
+        <translation>Wytnij wiersz</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="96"/>
         <source>Merge lines</source>
-        <translation>Połącz linie</translation>
+        <translation>Połącz wiersze</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="97"/>
@@ -691,7 +691,7 @@
     <message>
         <location filename="../src/widgets/toast.cpp" line="38"/>
         <source>Reload</source>
-        <translation type="unfinished"/>
+        <translation>Wczytaj ponownie</translation>
     </message>
 </context>
 <context>
@@ -730,7 +730,7 @@
     <message>
         <location filename="../src/window.cpp" line="258"/>
         <source>Read-Only</source>
-        <translation type="unfinished"/>
+        <translation>Tylko do odczytu</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="571"/>

@@ -4,12 +4,12 @@
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="35"/>
         <source>Row</source>
-        <translation type="unfinished"/>
+        <translation>Řádek</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="36"/>
         <source>Column</source>
-        <translation type="unfinished"/>
+        <translation>Sloupec</translation>
     </message>
 </context>
 <context>
@@ -138,23 +138,23 @@
     <message>
         <location filename="../src/editwrapper.cpp" line="276"/>
         <source>File has changed on disk. Reload?</source>
-        <translation type="unfinished"/>
+        <translation>Soubor na disku byl změněn. Nahrát znovu?</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="279"/>
         <source>File removed on the disk. Save it now?</source>
-        <translation type="unfinished"/>
+        <translation>Soubor na disku byl odstraněn. Uložit jej nyní?</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="322"/>
         <location filename="../src/widgets/bottombar.cpp" line="42"/>
         <source>INSERT</source>
-        <translation type="unfinished"/>
+        <translation>VLOŽIT</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="325"/>
         <source>OVERWRITE</source>
-        <translation type="unfinished"/>
+        <translation>PŘEPSAT</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="328"/>
@@ -242,7 +242,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="106"/>
         <source>Word Wrap</source>
-        <translation type="unfinished"/>
+        <translation>Zalamování slov</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="877"/>
@@ -691,7 +691,7 @@
     <message>
         <location filename="../src/widgets/toast.cpp" line="38"/>
         <source>Reload</source>
-        <translation type="unfinished"/>
+        <translation>Nahrát znovu</translation>
     </message>
 </context>
 <context>
@@ -730,7 +730,7 @@
     <message>
         <location filename="../src/window.cpp" line="258"/>
         <source>Read-Only</source>
-        <translation type="unfinished"/>
+        <translation>Pouze pro čtení</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="571"/>

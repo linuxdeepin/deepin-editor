@@ -22,7 +22,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="106"/>
         <source>Redo</source>
-        <translation>Répéter</translation>
+        <translation>Rétablir</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="107"/>
@@ -89,7 +89,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="119"/>
         <source>Open in file manager</source>
-        <translation>Ouvrir dans l&apos;Explorateur de Fichiers</translation>
+        <translation>Ouvrir dans l&apos;explorateur de fichiers</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="120"/>
@@ -99,7 +99,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="142"/>
         <source>Change Case</source>
-        <translation>Changer la casse</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="143"/>
@@ -114,7 +114,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="145"/>
         <source>Capitalize</source>
-        <translation>Mettre en lettres capitales</translation>
+        <translation>Mettre en majuscules</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="196"/>
@@ -167,7 +167,7 @@
     <message>
         <location filename="../src/findbar.cpp" line="37"/>
         <source>Find: </source>
-        <translation>Trouvé :</translation>
+        <translation>Trouvé:</translation>
     </message>
     <message>
         <location filename="../src/findbar.cpp" line="39"/>
@@ -193,12 +193,12 @@
     <message>
         <location filename="../src/main.cpp" line="50"/>
         <source>Deepin Editor is a desktop text editor that supports common text editing features.</source>
-        <translation>Deepin Editor est un éditeur de texte de bureau qui prend en charge la plupart des fonctions d&apos;édition de texte.</translation>
+        <translation>Deepin Editeur est un éditeur de texte de bureau qui prend en charge la plupart des fonctions d&apos;édition de texte.</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="62"/>
         <source>Deepin Editor</source>
-        <translation>Deepin Editor</translation>
+        <translation>Deepin Editeur</translation>
     </message>
 </context>
 <context>
@@ -206,7 +206,7 @@
     <message>
         <location filename="../src/main.cpp" line="59"/>
         <source>Deepin Editor</source>
-        <translation>Deepin Editor</translation>
+        <translation>Deepin Editeur</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="24"/>
@@ -304,17 +304,17 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="42"/>
         <source>Increment font size</source>
-        <translation>Incrémenter la taille de la police</translation>
+        <translation>Augmenter la taille de police</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="43"/>
         <source>Decrement font size</source>
-        <translation>Décrémenter la taille de la police</translation>
+        <translation>Diminuer la taille de police</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="44"/>
         <source>Reset font size</source>
-        <translation>Réinitialiser la taille de la police </translation>
+        <translation>Réinitialiser la taille de police </translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="45"/>
@@ -369,12 +369,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="55"/>
         <source>Increase indent</source>
-        <translation>Augmenter l&apos;indentation</translation>
+        <translation>Augmenter espace</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="56"/>
         <source>Decrease indent</source>
-        <translation>Diminuer l&apos;indentation</translation>
+        <translation>Diminuer espace</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="57"/>
@@ -806,7 +806,7 @@
         <location filename="../src/window.cpp" line="1006"/>
         <location filename="../src/window.cpp" line="1345"/>
         <source>Do you want to save all the files?</source>
-        <translation>Voulez vous enregistrer tous les fichiers</translation>
+        <translation>Voulez vous enregistrer tous les fichiers ?</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="965"/>

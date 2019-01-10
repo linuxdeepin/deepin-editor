@@ -138,28 +138,28 @@
     <message>
         <location filename="../src/editwrapper.cpp" line="276"/>
         <source>File has changed on disk. Reload?</source>
-        <translation type="unfinished"/>
+        <translation>Fail telah berubah di dalam cakera. Muat semula?</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="279"/>
         <source>File removed on the disk. Save it now?</source>
-        <translation type="unfinished"/>
+        <translation>Fail dalam cakera telah dibuang. Simpan ia sekarang?</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="322"/>
         <location filename="../src/widgets/bottombar.cpp" line="42"/>
         <source>INSERT</source>
-        <translation type="unfinished"/>
+        <translation>SISIP</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="325"/>
         <source>OVERWRITE</source>
-        <translation type="unfinished"/>
+        <translation>TULISGANTI</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="328"/>
         <source>R/O</source>
-        <translation type="unfinished"/>
+        <translation>R/O</translation>
     </message>
 </context>
 <context>
@@ -691,7 +691,7 @@
     <message>
         <location filename="../src/widgets/toast.cpp" line="38"/>
         <source>Reload</source>
-        <translation type="unfinished"/>
+        <translation>Muat Semula</translation>
     </message>
 </context>
 <context>
@@ -720,7 +720,7 @@
     <message>
         <location filename="../src/window.cpp" line="177"/>
         <source>Print</source>
-        <translation>etak</translation>
+        <translation>Cetak</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="178"/>
@@ -780,7 +780,7 @@
         <location filename="../src/window.cpp" line="591"/>
         <location filename="../src/window.cpp" line="606"/>
         <source>Line Endings</source>
-        <translation>Penghujunh Baris</translation>
+        <translation>Penghujung Baris</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="908"/>

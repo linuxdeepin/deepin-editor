@@ -59,12 +59,12 @@
         <location filename="../src/window.cpp" line="181"/>
         <location filename="../src/dtextedit.cpp" line="113"/>
         <source>Replace</source>
-        <translation type="unfinished"/>
+        <translation>Pakeisti</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="114"/>
         <source>Go to Line</source>
-        <translation type="unfinished"/>
+        <translation>Pereiti į eilutę</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="115"/>
@@ -683,7 +683,7 @@
     <message>
         <location filename="../src/tabbar.cpp" line="318"/>
         <source>Close other tabs</source>
-        <translation type="unfinished"/>
+        <translation>Užverti kitas korteles</translation>
     </message>
 </context>
 <context>
@@ -691,7 +691,7 @@
     <message>
         <location filename="../src/widgets/toast.cpp" line="38"/>
         <source>Reload</source>
-        <translation type="unfinished"/>
+        <translation>Įkelti iš naujo</translation>
     </message>
 </context>
 <context>
@@ -730,7 +730,7 @@
     <message>
         <location filename="../src/window.cpp" line="258"/>
         <source>Read-Only</source>
-        <translation type="unfinished"/>
+        <translation>Tik skaitymui</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="571"/>
@@ -800,7 +800,7 @@
     <message>
         <location filename="../src/window.cpp" line="558"/>
         <source>Do you want to save as another?</source>
-        <translation type="unfinished"/>
+        <translation>Ar norite įrašyti kaip kitą?</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1006"/>

@@ -138,28 +138,28 @@
     <message>
         <location filename="../src/editwrapper.cpp" line="276"/>
         <source>File has changed on disk. Reload?</source>
-        <translation type="unfinished"/>
+        <translation>El archivo ha cambiado en el disco. ¿Recargar?</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="279"/>
         <source>File removed on the disk. Save it now?</source>
-        <translation type="unfinished"/>
+        <translation>Archivo eliminado en el disco. ¿Desea guardarlo?</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="322"/>
         <location filename="../src/widgets/bottombar.cpp" line="42"/>
         <source>INSERT</source>
-        <translation type="unfinished"/>
+        <translation>INSERTAR</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="325"/>
         <source>OVERWRITE</source>
-        <translation type="unfinished"/>
+        <translation>SOBRESCRIBIR</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="328"/>
         <source>R/O</source>
-        <translation type="unfinished"/>
+        <translation>R/O</translation>
     </message>
 </context>
 <context>
@@ -691,7 +691,7 @@
     <message>
         <location filename="../src/widgets/toast.cpp" line="38"/>
         <source>Reload</source>
-        <translation type="unfinished"/>
+        <translation>Recargar</translation>
     </message>
 </context>
 <context>

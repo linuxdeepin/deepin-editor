@@ -4,12 +4,12 @@
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="35"/>
         <source>Row</source>
-        <translation type="unfinished"/>
+        <translation>Zeile</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="36"/>
         <source>Column</source>
-        <translation type="unfinished"/>
+        <translation>Spalte</translation>
     </message>
 </context>
 <context>
@@ -138,28 +138,28 @@
     <message>
         <location filename="../src/editwrapper.cpp" line="276"/>
         <source>File has changed on disk. Reload?</source>
-        <translation type="unfinished"/>
+        <translation>Die Datei wurde verändert.. Soll die Datei neu geladen werden?</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="279"/>
         <source>File removed on the disk. Save it now?</source>
-        <translation type="unfinished"/>
+        <translation>Die Datei wurde von der Festplatte entfernt. Soll die Datei jetzt gespeichert werden. </translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="322"/>
         <location filename="../src/widgets/bottombar.cpp" line="42"/>
         <source>INSERT</source>
-        <translation type="unfinished"/>
+        <translation>EINFÜGEN</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="325"/>
         <source>OVERWRITE</source>
-        <translation type="unfinished"/>
+        <translation>ÜBERSCHREIBEN</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="328"/>
         <source>R/O</source>
-        <translation type="unfinished"/>
+        <translation>R/O</translation>
     </message>
 </context>
 <context>
@@ -177,7 +177,7 @@
     <message>
         <location filename="../src/findbar.cpp" line="40"/>
         <source>Previous</source>
-        <translation>Voriges</translation>
+        <translation>Vorheriges</translation>
     </message>
 </context>
 <context>
@@ -242,7 +242,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="106"/>
         <source>Word Wrap</source>
-        <translation type="unfinished"/>
+        <translation>Zeilenumbruch</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="877"/>
@@ -319,7 +319,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="45"/>
         <source>Toggle fullscreen</source>
-        <translation>Vollbildmodus umschalten</translation>
+        <translation>Vollbildmodus einschalten/ausschalten</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="46"/>
@@ -691,7 +691,7 @@
     <message>
         <location filename="../src/widgets/toast.cpp" line="38"/>
         <source>Reload</source>
-        <translation type="unfinished"/>
+        <translation>Neu laden</translation>
     </message>
 </context>
 <context>
@@ -730,7 +730,7 @@
     <message>
         <location filename="../src/window.cpp" line="258"/>
         <source>Read-Only</source>
-        <translation type="unfinished"/>
+        <translation>Nur Lesen</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="571"/>
@@ -774,7 +774,7 @@
         <location filename="../src/window.cpp" line="590"/>
         <location filename="../src/window.cpp" line="605"/>
         <source>Encoding</source>
-        <translation>Encodierung</translation>
+        <translation>Kodierung</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="591"/>
