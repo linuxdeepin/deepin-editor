@@ -1,3 +1,13 @@
+<a name="1.2.6.1"></a>
+## 1.2.6.1 (2019-01-10)
+
+
+#### Bug Fixes
+
+*   disconnect when object got destroyed ([7fe6c1ef](https://github.com/linuxdeepin/deepin-editor/commit/7fe6c1efb56ce6294b3c5728eb9e1e8d0f4589c2))
+
+
+
 <a name=""></a>
 ##  1.2.6 (2019-01-03)
 
