@@ -1,3 +1,13 @@
+<a name="1.2.6.2"></a>
+## 1.2.6.2 (2019-01-15)
+
+
+#### Bug Fixes
+
+*   chinese garbled ([75f76e68](https://github.com/linuxdeepin/deepin-editor/commit/75f76e68ced88d58a9ade66b974c835ea5cf3001))
+
+
+
 <a name="1.2.6.1"></a>
 ## 1.2.6.1 (2019-01-10)
 
