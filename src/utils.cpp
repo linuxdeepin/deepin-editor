@@ -183,7 +183,7 @@ static float codecConfidenceForData(const QTextCodec *codec, const QByteArray &d
 
 QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
 {
-    // return local encoding if nothing in file.
+    // Return local encoding if nothing in file.
     if (data.isEmpty()) {
         return QTextCodec::codecForLocale()->name();
     }
@@ -198,8 +198,8 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
     KEncodingProber::ProberType proberType = KEncodingProber::Universal;
 
     if (mimetype_name == QStringLiteral("application/xml")
-        || mimetype_name == QStringLiteral("text/html")
-        || mimetype_name == QStringLiteral("application/xhtml+xml")) {
+            || mimetype_name == QStringLiteral("text/html")
+            || mimetype_name == QStringLiteral("application/xhtml+xml")) {
         const QString &_data = QString::fromLatin1(data);
         QRegularExpression pattern("<\\bmeta.+\\bcharset=(?'charset'\\S+?)\\s*['\"/>]");
 
@@ -266,59 +266,75 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
                 return coding.toLatin1();
             }
         }
-    } else if (mimetype_name == "application/x-desktop") {
-        // desktop entry files are encoded in UTF-8.
-        return QByteArray("UTF-8");
     }
 
     // for CJK
     const QList<QPair<KEncodingProber::ProberType, QLocale::Country>> fallback_list {
-        { KEncodingProber::ChineseSimplified, QLocale::China },
-        { KEncodingProber::ChineseTraditional, QLocale::China },
-        { KEncodingProber::Japanese, QLocale::Japan },
-        { KEncodingProber::Korean, QLocale::NorthKorea },
-        { KEncodingProber::Cyrillic, QLocale::Russia },
-        { proberType, QLocale::system().country() }
+        {KEncodingProber::ChineseSimplified, QLocale::China},
+        {KEncodingProber::ChineseTraditional, QLocale::China},
+        {KEncodingProber::Japanese, QLocale::Japan},
+        {KEncodingProber::Korean, QLocale::NorthKorea},
+        {KEncodingProber::Cyrillic, QLocale::Russia},
+        {KEncodingProber::Greek, QLocale::Greece},
+        {proberType, QLocale::system().country()}
     };
 
     KEncodingProber prober(proberType);
+    prober.feed(data);
+    float pre_confidence = prober.confidence();
+    QByteArray pre_encoding = prober.encoding();
+
     QTextCodec *def_codec = QTextCodec::codecForLocale();
     QByteArray encoding;
     float confidence = 0;
 
-    for (const auto i : fallback_list) {
+    for (auto i : fallback_list) {
         prober.setProberType(i.first);
         prober.feed(data);
 
-        if (prober.confidence() == 0)
-            continue;
+        float prober_confidence = prober.confidence();
+        QByteArray prober_encoding = prober.encoding();
 
-        if (QTextCodec *codec = QTextCodec::codecForName(prober.encoding())) {
+        if (i.first != proberType && qFuzzyIsNull(prober_confidence)) {
+            prober_confidence = pre_confidence;
+            prober_encoding = pre_encoding;
+        }
+
+confidence:
+        if (QTextCodec *codec = QTextCodec::codecForName(prober_encoding)) {
             if (def_codec == codec)
                 def_codec = nullptr;
 
             float c = codecConfidenceForData(codec, data, i.second);
 
-            if (prober.confidence() > 0.5) {
-                c = c / 2 + prober.confidence() / 2;
+            if (prober_confidence > 0.5) {
+                c = c / 2 + prober_confidence / 2;
             } else {
-                c = c / 3 * 2 + prober.confidence() / 3;
+                c = c / 3 * 2 + prober_confidence / 3;
             }
 
             if (c > confidence) {
                 confidence = c;
-                encoding = prober.encoding();
+                encoding = prober_encoding;
             }
 
             if (i.first == KEncodingProber::ChineseTraditional && c < 0.5) {
                 // test Big5
-                c = codecConfidenceForData(QTextCodec::codecForName("Big5"), data, QLocale::China);
+                c = codecConfidenceForData(QTextCodec::codecForName("Big5"), data, i.second);
 
                 if (c > 0.5 && c > confidence) {
                     confidence = c;
                     encoding = "Big5";
                 }
             }
+        }
+
+        if (i.first != proberType) {
+            // 使用 proberType 类型探测出的结果结合此国家再次做编码检查
+            i.first = proberType;
+            prober_confidence = pre_confidence;
+            prober_encoding = pre_encoding;
+            goto confidence;
         }
     }
 
