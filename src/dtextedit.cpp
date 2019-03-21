@@ -1102,6 +1102,8 @@ void DTextEdit::unindentText()
 void DTextEdit::setTabSpaceNumber(int number)
 {
     m_tabSpaceNumber = number;
+    updateFont();
+    updateLineNumber();
 }
 
 void DTextEdit::upcaseWord()
@@ -1246,6 +1248,7 @@ void DTextEdit::setFontFamily(QString name)
     // Update font.
     m_fontName = name;
     updateFont();
+    updateLineNumber();
 }
 
 void DTextEdit::setFontSize(int size)
@@ -1265,6 +1268,7 @@ void DTextEdit::updateFont()
     font.setPointSize(m_fontSize);
     font.setFamily(m_fontName);
     setFont(font);
+    setTabStopWidth(m_tabSpaceNumber * QFontMetrics(font).width(' '));
 }
 
 void DTextEdit::replaceAll(const QString &replaceText, const QString &withText)
