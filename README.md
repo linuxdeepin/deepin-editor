@@ -6,7 +6,7 @@ Deepin Editor is a desktop text editor that supports common text editing feature
 
 In debian, use below command to install compile dependencies:
 
-`sudo apt install cmake libqt5widgets5 libdtkcore-dev libdtkwidget-dev qt5-default libpolkit-qt5-1-dev libkf5syntaxhighlighting-dev libkf5codecs-dev qttools5-dev-tools`
+`sudo apt install cmake libqt5widgets5 libdtkcore-dev libdtkwidget-dev qt5-default libpolkit-qt5-1-dev libkf5syntaxhighlighting-dev libkf5codecs-dev qttools5-dev-tools qtbase5-private-dev`
 
 ## Installation
 
@@ -28,10 +28,10 @@ sudo ./deepin-editor-daemon
 * Build editor
 
 ```
-cd ./editor
+cd ./deepin-editor
 mkdir build
 cd build
-qmake ..
+cmake ..
 make
 ./deepin-editor
 ```
