@@ -74,6 +74,7 @@ public:
     void backwardPair();
 
     int blockCount() const;
+    int characterCount() const;
     QTextBlock firstVisibleBlock();
 
     void moveToStart();
@@ -190,6 +191,7 @@ signals:
 public slots:
     void highlightCurrentLine();
     void updateLineNumber();
+    void updateWordCount();
     void handleScrollFinish();
 
     void clickCutAction();

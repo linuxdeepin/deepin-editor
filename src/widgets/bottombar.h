@@ -34,6 +34,7 @@ public:
     ~BottomBar();
 
     void updatePosition(int row, int column);
+    void updateWordCount(int charactorCount);
     void setEncodeName(const QString &name);
     void setCursorStatus(const QString &text);
     void setHighlightMenu(QMenu *menu);
@@ -49,11 +50,13 @@ protected:
 private:
     EditWrapper *m_wrapper;
     QLabel *m_positionLabel;
+    QLabel *m_charCountLabel;
     QLabel *m_cursorStatus;
     DDropdownMenu *m_encodeMenu;
     DDropdownMenu *m_highlightMenu;
     QString m_rowStr;
     QString m_columnStr;
+    QString m_chrCountStr;
 };
 
 #endif
