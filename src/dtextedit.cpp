@@ -92,7 +92,10 @@ DTextEdit::DTextEdit(QWidget *parent)
 
     // Init widgets.
     connect(this->verticalScrollBar(), &QScrollBar::valueChanged, this, &DTextEdit::updateLineNumber);
-    connect(this, &QTextEdit::textChanged, this, &DTextEdit::updateLineNumber);
+    connect(this, &QTextEdit::textChanged, this, [this]() {
+        updateLineNumber();
+        updateWordCount();
+    });
     connect(this, &QTextEdit::cursorPositionChanged, this, &DTextEdit::cursorPositionChanged);
     connect(document(), &QTextDocument::modificationChanged, this, &DTextEdit::setModified);
 
@@ -398,6 +401,11 @@ void DTextEdit::backwardPair()
 int DTextEdit::blockCount() const
 {
     return document()->blockCount();
+}
+
+int DTextEdit::characterCount() const
+{
+    return document()->characterCount();
 }
 
 QTextBlock DTextEdit::firstVisibleBlock()
@@ -1563,6 +1571,11 @@ void DTextEdit::updateLineNumber()
 
     lineNumberArea->setFixedWidth(blockSize * fontMetrics().width('9') + m_lineNumberPaddingX * 4);
     lineNumberArea->update();
+}
+
+void DTextEdit::updateWordCount()
+{
+    m_wrapper->bottomBar()->updateWordCount(characterCount());
 }
 
 void DTextEdit::handleScrollFinish()

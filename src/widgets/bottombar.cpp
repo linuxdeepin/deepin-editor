@@ -29,19 +29,23 @@ BottomBar::BottomBar(QWidget *parent)
     : QWidget(parent),
       m_wrapper(static_cast<EditWrapper *>(parent)),
       m_positionLabel(new QLabel),
+      m_charCountLabel(new QLabel),
       m_cursorStatus(new QLabel),
       m_encodeMenu(new DDropdownMenu),
       m_highlightMenu(new DDropdownMenu),
       m_rowStr(tr("Row")),
-      m_columnStr(tr("Column"))
+      m_columnStr(tr("Column")),
+      m_chrCountStr(tr("Characters %1"))
 {
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setContentsMargins(10, 1, 10, 0);
     layout->addWidget(m_positionLabel);
+    layout->addWidget(m_charCountLabel);
 
     m_cursorStatus->setText(qApp->translate("EditWrapper", "INSERT"));
     m_positionLabel->setText(QString("%1 %2 , %3 %4").arg(m_rowStr, "1",
                                                           m_columnStr, "1"));
+    m_charCountLabel->setText(m_chrCountStr.arg("..."));
     m_encodeMenu->addActions(Utils::getEncodeList());
     m_encodeMenu->setCurrentText("UTF-8");
     m_highlightMenu->setCurrentTextOnly(qApp->translate("DTextEdit", "None"));
@@ -66,6 +70,11 @@ void BottomBar::updatePosition(int row, int column)
                                                           m_columnStr, QString::number(column)));
 }
 
+void BottomBar::updateWordCount(int charactorCount)
+{
+    m_charCountLabel->setText(m_chrCountStr.arg(QString::number(charactorCount)));
+}
+
 void BottomBar::setEncodeName(const QString &name)
 {
     m_encodeMenu->setCurrentText(name);
@@ -88,7 +97,9 @@ void BottomBar::setHightlightName(const QString &name)
 
 void BottomBar::setPalette(const QPalette &palette)
 {
-    m_positionLabel->setStyleSheet(QString("QLabel { color: %1; }").
+    m_positionLabel->setStyleSheet(QString("QLabel { color: %1; margin-right: 10px; }").
+                                   arg(palette.color(QPalette::Text).name()));
+    m_charCountLabel->setStyleSheet(QString("QLabel { color: %1; }").
                                    arg(palette.color(QPalette::Text).name()));
 
     QString theme = (palette.color(QPalette::Background).lightness() < 128) ? "dark" : "light";
@@ -103,7 +114,7 @@ void BottomBar::handleEncodeChanged(const QString &name)
     m_wrapper->setTextCodec(QTextCodec::codecForName(name.toUtf8()), true);
 }
 
-void BottomBar::paintEvent(QPaintEvent *e)
+void BottomBar::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
     painter.setOpacity(1);
