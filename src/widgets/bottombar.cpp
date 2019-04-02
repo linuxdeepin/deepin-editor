@@ -35,7 +35,7 @@ BottomBar::BottomBar(QWidget *parent)
       m_highlightMenu(new DDropdownMenu),
       m_rowStr(tr("Row")),
       m_columnStr(tr("Column")),
-      m_chrCountStr(tr("%1 chars"))
+      m_chrCountStr(tr("Characters %1"))
 {
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setContentsMargins(10, 1, 10, 0);
