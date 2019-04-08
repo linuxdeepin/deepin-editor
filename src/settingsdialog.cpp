@@ -39,8 +39,8 @@ void GenerateSettingTranslate()
     auto shortcuts_window_closeothertabsName = QObject::tr("Close other tabs");
     auto shortcuts_window_restoretabName = QObject::tr("Restore tab");
     auto shortcuts_window_openfileName = QObject::tr("Open file");
-    auto shortcuts_window_incrementfontsizeName = QObject::tr("Increment font size");
-    auto shortcuts_window_decrementfontsizeName = QObject::tr("Decrement font size");
+    auto shortcuts_window_incrementfontsizeName = QObject::tr("Increase font size");
+    auto shortcuts_window_decrementfontsizeName = QObject::tr("Decrease font size");
     auto shortcuts_window_resetfontsizeName = QObject::tr("Reset font size");
     auto shortcuts_window_togglefullscreenName = QObject::tr("Toggle fullscreen");
     auto shortcuts_window_findName = QObject::tr("Find");
@@ -54,8 +54,8 @@ void GenerateSettingTranslate()
     auto group_editorName = QObject::tr("Editor");
     auto shortcuts_editor_indentlineName = QObject::tr("Increase indent");
     auto shortcuts_editor_backindentlineName = QObject::tr("Decrease indent");
-    auto shortcuts_editor_forwardcharName = QObject::tr("Forward char");
-    auto shortcuts_editor_backwardcharName = QObject::tr("Backward char");
+    auto shortcuts_editor_forwardcharName = QObject::tr("Forward character");
+    auto shortcuts_editor_backwardcharName = QObject::tr("Backward character");
     auto shortcuts_editor_forwardwordName = QObject::tr("Forward word");
     auto shortcuts_editor_backwarwordName = QObject::tr("Backward word");
     auto shortcuts_editor_nextlineName = QObject::tr("Next line");
@@ -88,7 +88,7 @@ void GenerateSettingTranslate()
     auto shortcuts_editor_copyName = QObject::tr("Copy");
     auto shortcuts_editor_cutName = QObject::tr("Cut");
     auto shortcuts_editor_pasteName = QObject::tr("Paste");
-    auto shortcuts_editor_transposecharName = QObject::tr("Transpose char");
+    auto shortcuts_editor_transposecharName = QObject::tr("Transpose character");
     auto shortcuts_editor_setmarkName = QObject::tr("Mark");
     auto shortcuts_editor_exchangemarkName = QObject::tr("Unmark");
     auto shortcuts_editor_copylinesName = QObject::tr("Copy line");
@@ -101,7 +101,7 @@ void GenerateSettingTranslate()
     auto group_advanceName = QObject::tr("Advanced");
     auto advance_windowName = QObject::tr("Window");
     auto advance_window_windowstateName = QObject::tr("Window size");
-    auto advance_editor_tabspacenumberName = QObject::tr("Tab space");
+    auto advance_editor_tabspacenumberName = QObject::tr("Tab width");
 
     auto base_font_wordwrapText = QObject::tr("Word Wrap");
 }
