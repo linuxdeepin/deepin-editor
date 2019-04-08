@@ -116,7 +116,7 @@ DTextEdit::DTextEdit(QWidget *parent)
     m_disableReadOnlyModeAction = new QAction(tr("Turn off Read-Only mode"), this);
     m_fullscreenAction = new QAction(tr("Fullscreen"), this);
     m_exitFullscreenAction = new QAction(tr("Exit fullscreen"), this);
-    m_openInFileManagerAction = new QAction(tr("Open in file manager"), this);
+    m_openInFileManagerAction = new QAction(tr("Display in file manager"), this);
     m_toggleCommentAction = new QAction(tr("Toggle comment"), this);
 
     connect(m_rightMenu, &QMenu::aboutToHide, this, &DTextEdit::removeHighlightWordUnderCursor);
