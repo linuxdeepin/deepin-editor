@@ -1,3 +1,17 @@
+<a name="1.2.6.4"></a>
+## 1.2.6.4 (2019-04-08)
+
+
+#### Features
+
+*   display word count from status bar (#37) ([af90d45f](https://github.com/linuxdeepin/deepin-editor/commit/af90d45ff61bffd9bad4f52a2a625b1dc034a532))
+
+#### Bug Fixes
+
+*   reduce minimum window size (#38) ([9e514d19](https://github.com/linuxdeepin/deepin-editor/commit/9e514d1950e682ff27f63c1f9045f92a49fcf936))
+
+
+
 <a name="1.2.7"></a>
 ## 1.2.7 (2019-03-27)
 
