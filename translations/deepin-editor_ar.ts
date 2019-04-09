@@ -2,13 +2,18 @@
 <context>
     <name>BottomBar</name>
     <message>
-        <location filename="../src/widgets/bottombar.cpp" line="35"/>
+        <location filename="../src/widgets/bottombar.cpp" line="36"/>
         <source>Row</source>
-        <translation type="unfinished"/>
+        <translation>صف</translation>
     </message>
     <message>
-        <location filename="../src/widgets/bottombar.cpp" line="36"/>
+        <location filename="../src/widgets/bottombar.cpp" line="37"/>
         <source>Column</source>
+        <translation>عمود</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/bottombar.cpp" line="38"/>
+        <source>Characters %1</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -22,7 +27,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="106"/>
         <source>Redo</source>
-        <translation>اعد</translation>
+        <translation>أعد</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="107"/>
@@ -32,74 +37,74 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="108"/>
         <source>Copy</source>
-        <translation>نسخ</translation>
+        <translation>انسخ</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="109"/>
         <source>Paste</source>
-        <translation>لصق</translation>
+        <translation>ألصق</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="110"/>
         <source>Delete</source>
-        <translation>حذف</translation>
+        <translation>احذف</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="111"/>
         <source>Select All</source>
-        <translation>تحديد الكل</translation>
+        <translation>اختر الكل</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="180"/>
         <location filename="../src/dtextedit.cpp" line="112"/>
+        <location filename="../src/window.cpp" line="183"/>
         <source>Find</source>
-        <translation>بحث</translation>
+        <translation>ابحث</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="181"/>
         <location filename="../src/dtextedit.cpp" line="113"/>
+        <location filename="../src/window.cpp" line="184"/>
         <source>Replace</source>
         <translation>استبدل</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="114"/>
         <source>Go to Line</source>
-        <translation>انتثقال الى سطر</translation>
+        <translation>انتقل إلى سطر</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="115"/>
         <source>Turn on Read-Only mode</source>
-        <translation>قم بتشغيل وضع القراءة فقط</translation>
+        <translation>شغِّل وضع القراءة فقط</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="116"/>
         <source>Turn off Read-Only mode</source>
-        <translation>قم بإيقاف تشغيل وضع القراءة فقط</translation>
+        <translation>أوقف وضع القراءة فقط</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="117"/>
         <source>Fullscreen</source>
-        <translation>ملئ الشاشة</translation>
+        <translation>ملء الشاشة</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="118"/>
         <source>Exit fullscreen</source>
-        <translation>الخروج من وضع ملئ للشاشة</translation>
+        <translation>اخرج من وضع ملء للشاشة</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="119"/>
-        <source>Open in file manager</source>
-        <translation>فتح الملف في مستكشف الملفات</translation>
+        <source>Display in file manager</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="120"/>
         <source>Toggle comment</source>
-        <translation>تبديل التعليق</translation>
+        <translation>بدِّل التعليق</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="142"/>
         <source>Change Case</source>
-        <translation>تغيير الخانة</translation>
+        <translation>غيِّر الخانة</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="143"/>
@@ -118,17 +123,17 @@
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="196"/>
-        <location filename="../src/widgets/bottombar.cpp" line="47"/>
+        <location filename="../src/widgets/bottombar.cpp" line="51"/>
         <source>None</source>
         <translation>لا شيء</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="2454"/>
+        <location filename="../src/dtextedit.cpp" line="2204"/>
         <source>Read-Only mode is off</source>
         <translation>وضع القراءة فقط متوقف</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="2458"/>
+        <location filename="../src/dtextedit.cpp" line="2208"/>
         <source>Read-Only mode is on</source>
         <translation>وضع القراءة فقط قيد التشغيل</translation>
     </message>
@@ -136,30 +141,30 @@
 <context>
     <name>EditWrapper</name>
     <message>
-        <location filename="../src/editwrapper.cpp" line="276"/>
+        <location filename="../src/editwrapper.cpp" line="259"/>
         <source>File has changed on disk. Reload?</source>
-        <translation type="unfinished"/>
+        <translation>الملف الذي في القرص قد عُدِّل. أعيد التحميل؟</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="279"/>
+        <location filename="../src/editwrapper.cpp" line="262"/>
         <source>File removed on the disk. Save it now?</source>
-        <translation type="unfinished"/>
+        <translation>الملف الذي في القرص قد حُذِف. أحفظه الآن؟</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="322"/>
-        <location filename="../src/widgets/bottombar.cpp" line="42"/>
+        <location filename="../src/editwrapper.cpp" line="305"/>
+        <location filename="../src/widgets/bottombar.cpp" line="45"/>
         <source>INSERT</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="325"/>
+        <location filename="../src/editwrapper.cpp" line="308"/>
         <source>OVERWRITE</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="328"/>
+        <location filename="../src/editwrapper.cpp" line="311"/>
         <source>R/O</source>
-        <translation type="unfinished"/>
+        <translation>قراءة</translation>
     </message>
 </context>
 <context>
@@ -185,7 +190,7 @@
     <message>
         <location filename="../src/jumplinebar.cpp" line="39"/>
         <source>Go to Line: </source>
-        <translation>انتثقال الى سطر</translation>
+        <translation>انتقل إلى السطر:</translation>
     </message>
 </context>
 <context>
@@ -193,7 +198,7 @@
     <message>
         <location filename="../src/main.cpp" line="50"/>
         <source>Deepin Editor is a desktop text editor that supports common text editing features.</source>
-        <translation>محرر ديبن هو محرر نصوص مكتبي يدعم ميزات تحرير النص الشائعة.</translation>
+        <translation>محرر ديبين هو محرر نصوص مكتبي يدعم ميزات تحرير النص الشائعة.</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="62"/>
@@ -206,7 +211,7 @@
     <message>
         <location filename="../src/main.cpp" line="59"/>
         <source>Deepin Editor</source>
-        <translation type="unfinished"/>
+        <translation>محرر ديبين</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="24"/>
@@ -240,14 +245,44 @@
         <translation>الاختصارات</translation>
     </message>
     <message>
+        <location filename="../src/settingsdialog.cpp" line="42"/>
+        <source>Increase font size</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="43"/>
+        <source>Decrease font size</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="57"/>
+        <source>Forward character</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="58"/>
+        <source>Backward character</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="91"/>
+        <source>Transpose character</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="104"/>
+        <source>Tab width</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../src/settingsdialog.cpp" line="106"/>
         <source>Word Wrap</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="877"/>
         <location filename="../src/settingsdialog.cpp" line="31"/>
         <location filename="../src/settingsdialog.cpp" line="102"/>
+        <location filename="../src/window.cpp" line="891"/>
         <source>Window</source>
         <translation>النافذة</translation>
     </message>
@@ -264,12 +299,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="34"/>
         <source>Save</source>
-        <translation>حفظ</translation>
+        <translation>احفظ</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="35"/>
         <source>Save as</source>
-        <translation>حفظ باسم</translation>
+        <translation>احفظ باسم</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="36"/>
@@ -284,37 +319,27 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="38"/>
         <source>Close tab</source>
-        <translation>اغلق اللسان</translation>
+        <translation>أغلق اللسان</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="39"/>
         <source>Close other tabs</source>
-        <translation>اغلق الالسنة الاخرى</translation>
+        <translation>أغلق الألسنة الأخرى</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="40"/>
         <source>Restore tab</source>
-        <translation>استعادة الالسنة</translation>
+        <translation>استعد الألسنة</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="41"/>
         <source>Open file</source>
-        <translation>فتح الملف</translation>
-    </message>
-    <message>
-        <location filename="../src/settingsdialog.cpp" line="42"/>
-        <source>Increment font size</source>
-        <translation>زيادة حجم الخط</translation>
-    </message>
-    <message>
-        <location filename="../src/settingsdialog.cpp" line="43"/>
-        <source>Decrement font size</source>
-        <translation>انقص حجم الخط</translation>
+        <translation>افتح الملف</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="44"/>
         <source>Reset font size</source>
-        <translation>إعادة تعيين حجم الخط</translation>
+        <translation>صفِّر حجم الخط</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="45"/>
@@ -324,7 +349,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="46"/>
         <source>Find</source>
-        <translation>بحث</translation>
+        <translation>ابحث</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="47"/>
@@ -334,27 +359,27 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="48"/>
         <source>Go to line</source>
-        <translation>انتقال الى سطر</translation>
+        <translation>انتقل إلى سطر</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="49"/>
         <source>Save cursor position</source>
-        <translation>حفظ موضع المؤشر</translation>
+        <translation>احفظ موضع المؤشر</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="50"/>
         <source>Reset cursor position</source>
-        <translation>إعادة ضبط موضع المؤشر</translation>
+        <translation>صفِّر موضع المؤشر</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="51"/>
         <source>Exit</source>
-        <translation>خروج</translation>
+        <translation>اخرج</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="52"/>
         <source>Display shortcuts</source>
-        <translation>عرض الاختصارات</translation>
+        <translation>اعرض الاختصارات</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="53"/>
@@ -369,32 +394,22 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="55"/>
         <source>Increase indent</source>
-        <translation>زيادة المسافة البادئة</translation>
+        <translation>زد المسافة البادئة</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="56"/>
         <source>Decrease indent</source>
-        <translation>اخفظ المسافة البادئة</translation>
-    </message>
-    <message>
-        <location filename="../src/settingsdialog.cpp" line="57"/>
-        <source>Forward char</source>
-        <translation>الحرف للأمام</translation>
-    </message>
-    <message>
-        <location filename="../src/settingsdialog.cpp" line="58"/>
-        <source>Backward char</source>
-        <translation>الحرف للأمام</translation>
+        <translation>أنقص المسافة البادئة</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="59"/>
         <source>Forward word</source>
-        <translation>الكلمة إلى الأمام</translation>
+        <translation>كلمة إلى الأمام</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="60"/>
         <source>Backward word</source>
-        <translation>الكلمة إلى الخلف</translation>
+        <translation>كلمة إلى الخلف</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="61"/>
@@ -414,77 +429,77 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="64"/>
         <source>New line above</source>
-        <translation>سطر جديد اعلاه</translation>
+        <translation>سطر جديد أعلى</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="65"/>
         <source>New line below</source>
-        <translation>سطر جديد اسفل</translation>
+        <translation>سطر جديد أسفل</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="66"/>
         <source>Duplicate line</source>
-        <translation>مضاعفة السطر</translation>
+        <translation>ضاعف السطر</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="67"/>
         <source>Delete to end of line</source>
-        <translation>حذف إلى نهاية السطر</translation>
+        <translation>احذف إلى نهاية السطر</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="68"/>
         <source>Delete current line</source>
-        <translation>حذف السطر الحالي</translation>
+        <translation>احذف السطر الحالي</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="69"/>
         <source>Swap line up</source>
-        <translation>مبادلة خط للاعلى</translation>
+        <translation>بادل سطرًا للأعلى</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="70"/>
         <source>Swap line down</source>
-        <translation>مبادلة خط للاسفل</translation>
+        <translation>بادل سطرًا للأسفل</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="71"/>
         <source>Scroll up one line</source>
-        <translation>انتقل لأعلى سطر واحد</translation>
+        <translation>انتقل لأعلى سطرًا واحدًا</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="72"/>
         <source>Scroll down one line</source>
-        <translation>انتقل للاسفل سطر واحد</translation>
+        <translation>انتقل لأسفل سطرًا واحدًا</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="73"/>
         <source>Page up</source>
-        <translation>صفحة للاعلى</translation>
+        <translation>صفحة لأعلى</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="74"/>
         <source>Page down</source>
-        <translation>صفحة للاسفل</translation>
+        <translation>صفحة لأسفل</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="75"/>
         <source>Move to end of line</source>
-        <translation>انتقال الى نهاية الخط</translation>
+        <translation>انتقل الى نهاية السطر</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="76"/>
         <source>Move to start of line</source>
-        <translation>انتقال الى بداية الخط</translation>
+        <translation>انتقل الى بداية السطر</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="77"/>
         <source>Move to end of text</source>
-        <translation>الانتقال إلى نهاية النص</translation>
+        <translation>انتقل إلى نهاية النص</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="78"/>
         <source>Move to start of text</source>
-        <translation type="unfinished"/>
+        <translation>انتقل إلى أول النص</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="79"/>
@@ -529,12 +544,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="87"/>
         <source>Select all</source>
-        <translation>تحديد الكل</translation>
+        <translation>اختر الكل</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="88"/>
         <source>Copy</source>
-        <translation>نسخ</translation>
+        <translation>انسخ</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="89"/>
@@ -544,12 +559,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="90"/>
         <source>Paste</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/settingsdialog.cpp" line="91"/>
-        <source>Transpose char</source>
-        <translation type="unfinished"/>
+        <translation>ألصق</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="92"/>
@@ -564,12 +574,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="94"/>
         <source>Copy line</source>
-        <translation type="unfinished"/>
+        <translation>انسخ السطر</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="95"/>
         <source>Cut line</source>
-        <translation type="unfinished"/>
+        <translation>قص السطر</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="96"/>
@@ -579,7 +589,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="97"/>
         <source>Read-Only mode</source>
-        <translation type="unfinished"/>
+        <translation>وضع القراءة فقط</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="98"/>
@@ -594,22 +604,17 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="100"/>
         <source>Redo</source>
-        <translation>اعد</translation>
+        <translation>أعد</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="101"/>
         <source>Advanced</source>
-        <translation>متثدم</translation>
+        <translation>متقدم</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="103"/>
         <source>Window size</source>
         <translation>حجم النافذة</translation>
-    </message>
-    <message>
-        <location filename="../src/settingsdialog.cpp" line="104"/>
-        <source>Tab space</source>
-        <translation>مسافة الازاحة</translation>
     </message>
 </context>
 <context>
@@ -637,7 +642,7 @@
     <message>
         <location filename="../src/replacebar.cpp" line="43"/>
         <source>Replace Rest</source>
-        <translation type="unfinished"/>
+        <translation>استبدل الباقي</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="44"/>
@@ -670,7 +675,7 @@
     <message>
         <location filename="../src/settings.cpp" line="91"/>
         <source>Fullscreen</source>
-        <translation>ملئ الشاشة</translation>
+        <translation>ملء الشاشة</translation>
     </message>
 </context>
 <context>
@@ -678,12 +683,12 @@
     <message>
         <location filename="../src/tabbar.cpp" line="317"/>
         <source>Close tab</source>
-        <translation>اغلق اللسان</translation>
+        <translation>أغلق اللسان</translation>
     </message>
     <message>
         <location filename="../src/tabbar.cpp" line="318"/>
         <source>Close other tabs</source>
-        <translation>اغلق الالسنة الاخرى</translation>
+        <translation>أغلق الألسنة الأخرى</translation>
     </message>
 </context>
 <context>
@@ -691,138 +696,139 @@
     <message>
         <location filename="../src/widgets/toast.cpp" line="38"/>
         <source>Reload</source>
-        <translation type="unfinished"/>
+        <translation>أعد التحميل</translation>
     </message>
 </context>
 <context>
     <name>Window</name>
     <message>
-        <location filename="../src/window.cpp" line="172"/>
+        <location filename="../src/window.cpp" line="175"/>
         <source>New window</source>
         <translation>نافذة جديدة</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="173"/>
+        <location filename="../src/window.cpp" line="176"/>
         <source>New tab</source>
         <translation>لسان جديد</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="174"/>
-        <source>Open file</source>
-        <translation>فتح الملف</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="176"/>
-        <location filename="../src/widgets/toast.cpp" line="39"/>
-        <source>Save as</source>
-        <translation>حفظ باسم</translation>
-    </message>
-    <message>
         <location filename="../src/window.cpp" line="177"/>
+        <source>Open file</source>
+        <translation>افتح ملفا</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/toast.cpp" line="39"/>
+        <location filename="../src/window.cpp" line="179"/>
+        <source>Save as</source>
+        <translation>احفظ باسم</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="180"/>
         <source>Print</source>
-        <translation type="unfinished"/>
+        <translation>اطبع</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="178"/>
+        <location filename="../src/window.cpp" line="181"/>
         <source>Switch theme</source>
-        <translation type="unfinished"/>
+        <translation>غيِّر السمة</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="258"/>
+        <location filename="../src/window.cpp" line="261"/>
+        <location filename="../src/window.cpp" line="1339"/>
         <source>Read-Only</source>
-        <translation type="unfinished"/>
+        <translation>للقراءة فقط</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="571"/>
+        <location filename="../src/window.cpp" line="581"/>
         <source>Saved successfully</source>
-        <translation type="unfinished"/>
+        <translation>حُفِظ بنجاح</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1297"/>
+        <location filename="../src/window.cpp" line="1311"/>
         <source>Discard</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="179"/>
+        <location filename="../src/window.cpp" line="182"/>
         <source>Settings</source>
-        <translation>اعدادات</translation>
+        <translation>إعدادات</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="282"/>
+        <location filename="../src/window.cpp" line="289"/>
         <source>You do not have permission to open %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="311"/>
+        <location filename="../src/window.cpp" line="318"/>
         <source>Invalid file: %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="355"/>
-        <location filename="../src/window.cpp" line="588"/>
-        <location filename="../src/window.cpp" line="1006"/>
-        <location filename="../src/window.cpp" line="1345"/>
+        <location filename="../src/window.cpp" line="365"/>
+        <location filename="../src/window.cpp" line="598"/>
+        <location filename="../src/window.cpp" line="1020"/>
+        <location filename="../src/window.cpp" line="1383"/>
         <source>Save File</source>
         <translation>حفظ الملف</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="355"/>
+        <location filename="../src/window.cpp" line="365"/>
         <source>Do you want to save this file?</source>
         <translation>هل تريد حفظ هذا الملف؟</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="590"/>
-        <location filename="../src/window.cpp" line="605"/>
+        <location filename="../src/window.cpp" line="600"/>
+        <location filename="../src/window.cpp" line="615"/>
         <source>Encoding</source>
-        <translation type="unfinished"/>
+        <translation>الترميز</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="591"/>
-        <location filename="../src/window.cpp" line="606"/>
+        <location filename="../src/window.cpp" line="601"/>
+        <location filename="../src/window.cpp" line="616"/>
         <source>Line Endings</source>
-        <translation type="unfinished"/>
+        <translation>نهايات السطور</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="908"/>
+        <location filename="../src/window.cpp" line="922"/>
         <source>Editor</source>
         <translation>محرر</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="525"/>
+        <location filename="../src/window.cpp" line="535"/>
         <source>You do not have permission to save %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="558"/>
+        <location filename="../src/window.cpp" line="568"/>
         <source>Unable to save the file</source>
-        <translation type="unfinished"/>
+        <translation>تعذر حفظ الملف</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="558"/>
+        <location filename="../src/window.cpp" line="568"/>
         <source>Do you want to save as another?</source>
-        <translation type="unfinished"/>
+        <translation>أتريد حفظه باسم آخر؟</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1006"/>
-        <location filename="../src/window.cpp" line="1345"/>
+        <location filename="../src/window.cpp" line="1020"/>
+        <location filename="../src/window.cpp" line="1383"/>
         <source>Do you want to save all the files?</source>
-        <translation type="unfinished"/>
+        <translation>أتريد حفظ كل الملفات؟</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="965"/>
+        <location filename="../src/window.cpp" line="979"/>
         <source>Blank document %1</source>
-        <translation type="unfinished"/>
+        <translation>مستند فارغ %1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1296"/>
+        <location filename="../src/window.cpp" line="1310"/>
         <source>Cancel</source>
-        <translation>الغ</translation>
+        <translation>ألغ</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="175"/>
-        <location filename="../src/window.cpp" line="1298"/>
+        <location filename="../src/window.cpp" line="178"/>
+        <location filename="../src/window.cpp" line="1312"/>
         <source>Save</source>
-        <translation>حفظ</translation>
+        <translation>احفظ</translation>
     </message>
 </context>
 </TS>
