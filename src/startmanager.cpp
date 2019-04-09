@@ -125,7 +125,9 @@ void StartManager::openFilesInTab(QStringList files)
             }
             // Open file tab in first window of window list.
             else {
-                m_windows[0]->addTab(file);
+                Window *window = m_windows[0];
+                window->addTab(file);
+                window->activateWindow();
 
                 qDebug() << "Open " << file << " in first window";
             }
@@ -196,7 +198,9 @@ void StartManager::initWindowPosition(Window *window, bool alwaysCenter)
 
 void StartManager::popupExistTabs(FileTabInfo info)
 {
-    m_windows[info.windowIndex]->activeTab(info.tabIndex);
+    Window *window = m_windows[info.windowIndex];
+    window->activeTab(info.tabIndex);
+    window->activateWindow();
 }
 
 StartManager::FileTabInfo StartManager::getFileTabInfo(QString file)
