@@ -10,3 +10,5 @@ build/
 *.qm
 *.autosave
 *.txt.user
+
+.vscode/*
