@@ -2,14 +2,19 @@
 <context>
     <name>BottomBar</name>
     <message>
-        <location filename="../src/widgets/bottombar.cpp" line="35"/>
+        <location filename="../src/widgets/bottombar.cpp" line="36"/>
         <source>Row</source>
         <translation>Ред</translation>
     </message>
     <message>
-        <location filename="../src/widgets/bottombar.cpp" line="36"/>
+        <location filename="../src/widgets/bottombar.cpp" line="37"/>
         <source>Column</source>
         <translation>Колона</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/bottombar.cpp" line="38"/>
+        <source>Characters %1</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -47,17 +52,17 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="111"/>
         <source>Select All</source>
-        <translation>Одабери све</translation>
+        <translation>Изабери све</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="180"/>
         <location filename="../src/dtextedit.cpp" line="112"/>
+        <location filename="../src/window.cpp" line="183"/>
         <source>Find</source>
-        <translation>Пронађи</translation>
+        <translation>Тражи</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="181"/>
         <location filename="../src/dtextedit.cpp" line="113"/>
+        <location filename="../src/window.cpp" line="184"/>
         <source>Replace</source>
         <translation>Замени</translation>
     </message>
@@ -69,12 +74,12 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="115"/>
         <source>Turn on Read-Only mode</source>
-        <translation>Укључи режим за читање</translation>
+        <translation>Укључи режим Само-Читање</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="116"/>
         <source>Turn off Read-Only mode</source>
-        <translation>Искључи режим за читање</translation>
+        <translation>Искључи режим Само-Читање</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="117"/>
@@ -88,13 +93,13 @@
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="119"/>
-        <source>Open in file manager</source>
-        <translation>Отвори у управнику података</translation>
+        <source>Display in file manager</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="120"/>
         <source>Toggle comment</source>
-        <translation type="unfinished"/>
+        <translation>Прекидач коментара</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="142"/>
@@ -118,48 +123,48 @@
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="196"/>
-        <location filename="../src/widgets/bottombar.cpp" line="47"/>
+        <location filename="../src/widgets/bottombar.cpp" line="51"/>
         <source>None</source>
         <translation>Ништа</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="2454"/>
+        <location filename="../src/dtextedit.cpp" line="2204"/>
         <source>Read-Only mode is off</source>
-        <translation>Режим за читање је искључен</translation>
+        <translation>Режим Само-Читање је искључен</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="2458"/>
+        <location filename="../src/dtextedit.cpp" line="2208"/>
         <source>Read-Only mode is on</source>
-        <translation>Режим за читање је укључен</translation>
+        <translation>Режим Само-Читање је укључен</translation>
     </message>
 </context>
 <context>
     <name>EditWrapper</name>
     <message>
-        <location filename="../src/editwrapper.cpp" line="276"/>
+        <location filename="../src/editwrapper.cpp" line="259"/>
         <source>File has changed on disk. Reload?</source>
-        <translation type="unfinished"/>
+        <translation>Датотека је промењена на диску. Поново учитати?</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="279"/>
+        <location filename="../src/editwrapper.cpp" line="262"/>
         <source>File removed on the disk. Save it now?</source>
-        <translation type="unfinished"/>
+        <translation>Датотека је уклоњена са диска. Сачувајте је сад?</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="322"/>
-        <location filename="../src/widgets/bottombar.cpp" line="42"/>
+        <location filename="../src/editwrapper.cpp" line="305"/>
+        <location filename="../src/widgets/bottombar.cpp" line="45"/>
         <source>INSERT</source>
-        <translation type="unfinished"/>
+        <translation>УМЕТНИ</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="325"/>
+        <location filename="../src/editwrapper.cpp" line="308"/>
         <source>OVERWRITE</source>
-        <translation type="unfinished"/>
+        <translation>ПРЕПИШИ</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="328"/>
+        <location filename="../src/editwrapper.cpp" line="311"/>
         <source>R/O</source>
-        <translation type="unfinished"/>
+        <translation>С/Ч</translation>
     </message>
 </context>
 <context>
@@ -167,7 +172,7 @@
     <message>
         <location filename="../src/findbar.cpp" line="37"/>
         <source>Find: </source>
-        <translation>Пронађи</translation>
+        <translation>Тражи:</translation>
     </message>
     <message>
         <location filename="../src/findbar.cpp" line="39"/>
@@ -240,14 +245,44 @@
         <translation>Пречице</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="106"/>
-        <source>Word Wrap</source>
+        <location filename="../src/settingsdialog.cpp" line="42"/>
+        <source>Increase font size</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="877"/>
+        <location filename="../src/settingsdialog.cpp" line="43"/>
+        <source>Decrease font size</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="57"/>
+        <source>Forward character</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="58"/>
+        <source>Backward character</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="91"/>
+        <source>Transpose character</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="104"/>
+        <source>Tab width</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="106"/>
+        <source>Word Wrap</source>
+        <translation>Преламање редова</translation>
+    </message>
+    <message>
         <location filename="../src/settingsdialog.cpp" line="31"/>
         <location filename="../src/settingsdialog.cpp" line="102"/>
+        <location filename="../src/window.cpp" line="891"/>
         <source>Window</source>
         <translation>Прозор</translation>
     </message>
@@ -302,16 +337,6 @@
         <translation>Отвори датотеку</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="42"/>
-        <source>Increment font size</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/settingsdialog.cpp" line="43"/>
-        <source>Decrement font size</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../src/settingsdialog.cpp" line="44"/>
         <source>Reset font size</source>
         <translation>Врати величину фонта</translation>
@@ -319,12 +344,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="45"/>
         <source>Toggle fullscreen</source>
-        <translation type="unfinished"/>
+        <translation>Цео екран</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="46"/>
         <source>Find</source>
-        <translation>Пронађи</translation>
+        <translation>Тражи</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="47"/>
@@ -369,32 +394,22 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="55"/>
         <source>Increase indent</source>
-        <translation type="unfinished"/>
+        <translation>Повећеј увученост</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="56"/>
         <source>Decrease indent</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/settingsdialog.cpp" line="57"/>
-        <source>Forward char</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/settingsdialog.cpp" line="58"/>
-        <source>Backward char</source>
-        <translation type="unfinished"/>
+        <translation>Смањи увученост</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="59"/>
         <source>Forward word</source>
-        <translation type="unfinished"/>
+        <translation>Реч унапред</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="60"/>
         <source>Backward word</source>
-        <translation type="unfinished"/>
+        <translation>Реч уназад</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="61"/>
@@ -424,12 +439,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="66"/>
         <source>Duplicate line</source>
-        <translation type="unfinished"/>
+        <translation>Дуплирај ред</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="67"/>
         <source>Delete to end of line</source>
-        <translation type="unfinished"/>
+        <translation>Обриши до краја реда</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="68"/>
@@ -439,32 +454,32 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="69"/>
         <source>Swap line up</source>
-        <translation type="unfinished"/>
+        <translation>Замени са редом изнад</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="70"/>
         <source>Swap line down</source>
-        <translation type="unfinished"/>
+        <translation>Замени са редом испод</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="71"/>
         <source>Scroll up one line</source>
-        <translation type="unfinished"/>
+        <translation>Клизај један ред горе</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="72"/>
         <source>Scroll down one line</source>
-        <translation type="unfinished"/>
+        <translation>Клизај један ред доле</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="73"/>
         <source>Page up</source>
-        <translation type="unfinished"/>
+        <translation>Page up</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="74"/>
         <source>Page down</source>
-        <translation type="unfinished"/>
+        <translation>Page down</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="75"/>
@@ -489,7 +504,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="79"/>
         <source>Move to line indentation</source>
-        <translation type="unfinished"/>
+        <translation>Помери до увучености реда</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="80"/>
@@ -509,27 +524,27 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="83"/>
         <source>Delete backward word</source>
-        <translation type="unfinished"/>
+        <translation>Брисање речи уназад</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="84"/>
         <source>Delete forward word</source>
-        <translation type="unfinished"/>
+        <translation>Брисање речи унапред</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="85"/>
         <source>Forward over a pair</source>
-        <translation type="unfinished"/>
+        <translation>Напред преко пара</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="86"/>
         <source>Backward over a pair</source>
-        <translation type="unfinished"/>
+        <translation>Назад преко пара</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="87"/>
         <source>Select all</source>
-        <translation>Одабери све</translation>
+        <translation>Изабери све</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="88"/>
@@ -547,11 +562,6 @@
         <translation>Убаци</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="91"/>
-        <source>Transpose char</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../src/settingsdialog.cpp" line="92"/>
         <source>Mark</source>
         <translation>Обележи</translation>
@@ -559,7 +569,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="93"/>
         <source>Unmark</source>
-        <translation type="unfinished"/>
+        <translation>Обриши обележивач</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="94"/>
@@ -579,12 +589,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="97"/>
         <source>Read-Only mode</source>
-        <translation>Режим за читање</translation>
+        <translation>Режим Само-Читање</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="98"/>
         <source>Toggle comment</source>
-        <translation type="unfinished"/>
+        <translation>Пркидач коментара</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="99"/>
@@ -605,11 +615,6 @@
         <location filename="../src/settingsdialog.cpp" line="103"/>
         <source>Window size</source>
         <translation>Величина прозора</translation>
-    </message>
-    <message>
-        <location filename="../src/settingsdialog.cpp" line="104"/>
-        <source>Tab space</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -637,7 +642,7 @@
     <message>
         <location filename="../src/replacebar.cpp" line="43"/>
         <source>Replace Rest</source>
-        <translation type="unfinished"/>
+        <translation>Замени остатак</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="44"/>
@@ -660,7 +665,7 @@
     <message>
         <location filename="../src/settings.cpp" line="91"/>
         <source>Normal</source>
-        <translation type="unfinished"/>
+        <translation>Нормална</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="91"/>
@@ -691,136 +696,137 @@
     <message>
         <location filename="../src/widgets/toast.cpp" line="38"/>
         <source>Reload</source>
-        <translation type="unfinished"/>
+        <translation>Поново учитај</translation>
     </message>
 </context>
 <context>
     <name>Window</name>
     <message>
-        <location filename="../src/window.cpp" line="172"/>
+        <location filename="../src/window.cpp" line="175"/>
         <source>New window</source>
         <translation>Нови прозор</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="173"/>
+        <location filename="../src/window.cpp" line="176"/>
         <source>New tab</source>
         <translation>Нова картица</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="174"/>
+        <location filename="../src/window.cpp" line="177"/>
         <source>Open file</source>
         <translation>Отвори датотеку</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="176"/>
         <location filename="../src/widgets/toast.cpp" line="39"/>
+        <location filename="../src/window.cpp" line="179"/>
         <source>Save as</source>
         <translation>Сачувај као</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="177"/>
+        <location filename="../src/window.cpp" line="180"/>
         <source>Print</source>
         <translation>Штампај</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="178"/>
+        <location filename="../src/window.cpp" line="181"/>
         <source>Switch theme</source>
         <translation>Промени тему</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="258"/>
+        <location filename="../src/window.cpp" line="261"/>
+        <location filename="../src/window.cpp" line="1339"/>
         <source>Read-Only</source>
-        <translation type="unfinished"/>
+        <translation>Само-Чтање</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="571"/>
+        <location filename="../src/window.cpp" line="581"/>
         <source>Saved successfully</source>
         <translation>Успешно сачувано</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1297"/>
+        <location filename="../src/window.cpp" line="1311"/>
         <source>Discard</source>
         <translation>Одбаци</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="179"/>
+        <location filename="../src/window.cpp" line="182"/>
         <source>Settings</source>
         <translation>Подешавања</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="282"/>
+        <location filename="../src/window.cpp" line="289"/>
         <source>You do not have permission to open %1</source>
         <translation>Немате дозволу да отворите %1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="311"/>
+        <location filename="../src/window.cpp" line="318"/>
         <source>Invalid file: %1</source>
         <translation>Неважећа датотека: %1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="355"/>
-        <location filename="../src/window.cpp" line="588"/>
-        <location filename="../src/window.cpp" line="1006"/>
-        <location filename="../src/window.cpp" line="1345"/>
+        <location filename="../src/window.cpp" line="365"/>
+        <location filename="../src/window.cpp" line="598"/>
+        <location filename="../src/window.cpp" line="1020"/>
+        <location filename="../src/window.cpp" line="1383"/>
         <source>Save File</source>
         <translation>Сачувај датотеку</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="355"/>
+        <location filename="../src/window.cpp" line="365"/>
         <source>Do you want to save this file?</source>
         <translation>Да ли желите да сачувате ову датотеку?</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="590"/>
-        <location filename="../src/window.cpp" line="605"/>
+        <location filename="../src/window.cpp" line="600"/>
+        <location filename="../src/window.cpp" line="615"/>
         <source>Encoding</source>
         <translation>Кодирање</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="591"/>
-        <location filename="../src/window.cpp" line="606"/>
+        <location filename="../src/window.cpp" line="601"/>
+        <location filename="../src/window.cpp" line="616"/>
         <source>Line Endings</source>
         <translation>Крајеви редова</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="908"/>
+        <location filename="../src/window.cpp" line="922"/>
         <source>Editor</source>
         <translation>Уређивач</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="525"/>
+        <location filename="../src/window.cpp" line="535"/>
         <source>You do not have permission to save %1</source>
         <translation>Немате дозволу да сачувате %1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="558"/>
+        <location filename="../src/window.cpp" line="568"/>
         <source>Unable to save the file</source>
-        <translation type="unfinished"/>
+        <translation>Нисам успео да сачувам датотеку</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="558"/>
+        <location filename="../src/window.cpp" line="568"/>
         <source>Do you want to save as another?</source>
-        <translation type="unfinished"/>
+        <translation>Желите ли да сачувате као друго?</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1006"/>
-        <location filename="../src/window.cpp" line="1345"/>
+        <location filename="../src/window.cpp" line="1020"/>
+        <location filename="../src/window.cpp" line="1383"/>
         <source>Do you want to save all the files?</source>
         <translation>Да ли желите да сачувате све датотеке?</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="965"/>
+        <location filename="../src/window.cpp" line="979"/>
         <source>Blank document %1</source>
         <translation>Празан документ %1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1296"/>
+        <location filename="../src/window.cpp" line="1310"/>
         <source>Cancel</source>
         <translation>Откажи</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="175"/>
-        <location filename="../src/window.cpp" line="1298"/>
+        <location filename="../src/window.cpp" line="178"/>
+        <location filename="../src/window.cpp" line="1312"/>
         <source>Save</source>
         <translation>Сачувај</translation>
     </message>
