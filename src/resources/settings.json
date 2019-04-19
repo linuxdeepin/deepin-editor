@@ -115,13 +115,13 @@
                         },
                         {
                             "key": "incrementfontsize",
-                            "name": "Increment font size",
+                            "name": "Increase font size",
                             "type": "shortcut",
                             "default":  "Ctrl+="
                         },
                         {
                             "key": "decrementfontsize",
-                            "name": "Decrement font size",
+                            "name": "Decrease font size",
                             "type": "shortcut",
                             "default":  "Ctrl+-"
                         },
@@ -205,13 +205,13 @@
                         },
                         {
                             "key": "forwardchar",
-                            "name": "Forward char",
+                            "name": "Forward character",
                             "type": "shortcut",
                             "default":  "Right"
                         },
                         {
                             "key": "backwardchar",
-                            "name": "Backward char",
+                            "name": "Backward character",
                             "type": "shortcut",
                             "default":  "Left"
                         },
@@ -409,7 +409,7 @@
                         },
                         {
                             "key": "transposechar",
-                            "name": "Transpose char",
+                            "name": "Transpose character",
                             "type": "shortcut",
                             "default":  "Alt+T"
                         },
@@ -1843,7 +1843,7 @@
                     "options": [
                         {
                             "key": "tabspacenumber",
-                            "name": "Tab space",
+                            "name": "Tab width",
                             "type": "spinbutton",
                             "default": 4,
                             "min": 1,
