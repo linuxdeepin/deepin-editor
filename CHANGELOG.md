@@ -1,3 +1,13 @@
+<a name="1.2.7.3"></a>
+## 1.2.7.3 (2019-04-19)
+
+
+#### Bug Fixes
+
+*   activate window when opening files ([437e8d72](https://github.com/linuxdeepin/deepin-editor/commit/437e8d72470343a9249a6b41312cc0bebd836abb))
+
+
+
 <a name="1.2.7.2"></a>
 ## 1.2.7.2 (2019-04-10)
 
