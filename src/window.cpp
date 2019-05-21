@@ -504,7 +504,7 @@ void Window::openFile()
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
 
     // read history directory.
-    const QString historyDirStr = m_settings->settings->option("advance.editor.file_dialog_dir")->value().toString();
+    QString historyDirStr = m_settings->settings->option("advance.editor.file_dialog_dir")->value().toString();
     if (historyDirStr.isEmpty()) {
         historyDirStr = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     }
