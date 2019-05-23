@@ -1,3 +1,17 @@
+<a name="1.2.8"></a>
+## 1.2.8 (2019-05-23)
+
+
+#### Bug Fixes
+
+*   no longer designate clang++ as compiler ([36022f04](https://github.com/linuxdeepin/deepin-editor/commit/36022f046dd44f4f681019636ecd216d111da284))
+
+#### Features
+
+*   set default open dir as QStandardPaths::DocumentsLocation ([69ed1ded](https://github.com/linuxdeepin/deepin-editor/commit/69ed1dedf6dda48162efb09dddf18cf87d3a68a0))
+
+
+
 <a name="1.2.7.3"></a>
 ## 1.2.7.3 (2019-04-19)
 
