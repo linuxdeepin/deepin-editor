@@ -111,7 +111,7 @@ void BottomBar::setPalette(const QPalette &palette)
 
 void BottomBar::handleEncodeChanged(const QString &name)
 {
-    m_wrapper->setTextCodec(QTextCodec::codecForName(name.toUtf8()), true);
+    m_wrapper->setTextCodec(name.toUtf8(), true);
 }
 
 void BottomBar::paintEvent(QPaintEvent *)

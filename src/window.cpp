@@ -636,7 +636,7 @@ bool Window::saveAsFile()
 
         m_tabbar->updateTab(m_tabbar->currentIndex(), newFilePath, newFileInfo.fileName());
 
-        wrapper->setTextCodec(QTextCodec::codecForName(encode));
+        wrapper->setTextCodec(encode);
         wrapper->updatePath(newFilePath);
         wrapper->setEndOfLineMode(eol);
         wrapper->saveFile();

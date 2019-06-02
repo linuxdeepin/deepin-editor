@@ -238,6 +238,18 @@ void EditWrapper::setTextCodec(QTextCodec *codec, bool reload)
     // TODO: enforce bom for some encodings
 }
 
+void EditWrapper::setTextCodec(QByteArray encodeName, bool reload)
+{
+    QTextCodec* codec = QTextCodec::codecForName(encodeName);
+
+    if (!codec) {
+        qWarning() << "Codec for" << encodeName << "not found! Fallback to UTF-8";
+        codec = QTextCodec::codecForName("UTF-8");
+    }
+
+    setTextCodec(codec);
+}
+
 void EditWrapper::hideToast()
 {
     if (m_toast->isVisible()) {
@@ -335,7 +347,7 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QString
     }
 
     m_isLoadFinished = true;
-    m_textCodec = QTextCodec::codecForName(encode);
+    setTextCodec(encode);
 
     // set text.
     m_textEdit->setPlainText(content);
