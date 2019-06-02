@@ -2286,8 +2286,8 @@ bool DTextEdit::atWordSeparator(int position)
 
 void DTextEdit::showCursorBlink()
 {
-    // the default value on X11 is 1000 milliseconds.
-    QApplication::setCursorFlashTime(1000);
+    // -1 表示恢复Qt的默认值
+    QApplication::setCursorFlashTime(-1);
 }
 
 void DTextEdit::hideCursorBlink()
