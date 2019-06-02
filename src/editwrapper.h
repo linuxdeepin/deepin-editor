@@ -57,7 +57,7 @@ public:
 
     EndOfLineMode endOfLineMode();
     void setEndOfLineMode(EndOfLineMode eol);
-    void setTextCodec(QTextCodec *codec, bool reload = false);
+    void setTextCodec(QByteArray encodeName, bool reload = false);
 
     BottomBar *bottomBar() { return m_bottomBar; }
     QString filePath() { return m_textEdit->filepath; }
@@ -76,6 +76,7 @@ private:
     void handleCursorModeChanged(DTextEdit::CursorMode mode);
     void handleHightlightChanged(const QString &name);
     void handleFileLoadFinished(const QByteArray &encode, const QString &content);
+    void setTextCodec(QTextCodec *codec, bool reload = false);
 
 protected:
     void resizeEvent(QResizeEvent *);
