@@ -127,6 +127,7 @@ void StartManager::openFilesInTab(QStringList files)
             else {
                 Window *window = m_windows[0];
                 window->addTab(file);
+                window->showNormal();
                 window->activateWindow();
 
                 qDebug() << "Open " << file << " in first window";
@@ -199,6 +200,7 @@ void StartManager::initWindowPosition(Window *window, bool alwaysCenter)
 void StartManager::popupExistTabs(FileTabInfo info)
 {
     Window *window = m_windows[info.windowIndex];
+    window->showNormal();
     window->activeTab(info.tabIndex);
     window->activateWindow();
 }
