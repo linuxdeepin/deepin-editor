@@ -1,3 +1,15 @@
+<a name="1.2.9"></a>
+## 1.2.9 (2019-06-11)
+
+
+#### Bug Fixes
+
+*   should call showNormal() to raise window ([39d9bc12](https://github.com/linuxdeepin/deepin-editor/commit/39d9bc1248803b93cfe6f23cdf51490eb9bb156c))
+*   do not overwrite the cursorFlashTime of QGuiApplication ([ed5700d5](https://github.com/linuxdeepin/deepin-editor/commit/ed5700d5410f87f09e89c97c8340967145931fcc))
+*   crash if DDE file select dialog is not available to use ([4db075d0](https://github.com/linuxdeepin/deepin-editor/commit/4db075d0cb347f1092045ccb6015f11fdff4f6d2))
+
+
+
 <a name="1.2.8"></a>
 ## 1.2.8 (2019-05-23)
 
