@@ -14,7 +14,7 @@
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="38"/>
         <source>Characters %1</source>
-        <translation type="unfinished"/>
+        <translation>क्यारेक्टर% 1</translation>
     </message>
 </context>
 <context>
@@ -94,7 +94,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="119"/>
         <source>Display in file manager</source>
-        <translation type="unfinished"/>
+        <translation>फाईल प्रबन्धकमा प्रदर्शन गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="120"/>
@@ -247,32 +247,32 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="42"/>
         <source>Increase font size</source>
-        <translation type="unfinished"/>
+        <translation>फन्ट साइज बढाउनुहोस्</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="43"/>
         <source>Decrease font size</source>
-        <translation type="unfinished"/>
+        <translation>फन्ट साइज घटाउनुहोस्</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="57"/>
         <source>Forward character</source>
-        <translation type="unfinished"/>
+        <translation>फर्वार्ड क्यारेक्टर</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="58"/>
         <source>Backward character</source>
-        <translation type="unfinished"/>
+        <translation>पछाडि क्यारेक्टर</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="91"/>
         <source>Transpose character</source>
-        <translation type="unfinished"/>
+        <translation>रूपान्तरण अक्षर</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="104"/>
         <source>Tab width</source>
-        <translation type="unfinished"/>
+        <translation>ट्याब चौडाइ</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="106"/>

@@ -14,7 +14,7 @@
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="38"/>
         <source>Characters %1</source>
-        <translation type="unfinished"/>
+        <translation>%1 Karakter</translation>
     </message>
 </context>
 <context>
@@ -94,7 +94,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="119"/>
         <source>Display in file manager</source>
-        <translation type="unfinished"/>
+        <translation>Dosya Yöneticisinde Görüntüle</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="120"/>
@@ -226,7 +226,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="26"/>
         <source>Font</source>
-        <translation>Yazı Türü</translation>
+        <translation>Yazı Tipi</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="27"/>
@@ -247,32 +247,32 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="42"/>
         <source>Increase font size</source>
-        <translation type="unfinished"/>
+        <translation>Yazı boyutunu büyüt</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="43"/>
         <source>Decrease font size</source>
-        <translation type="unfinished"/>
+        <translation>Yazı boyutunu küçült</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="57"/>
         <source>Forward character</source>
-        <translation type="unfinished"/>
+        <translation>Sonraki karakter</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="58"/>
         <source>Backward character</source>
-        <translation type="unfinished"/>
+        <translation>Önceki karakter</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="91"/>
         <source>Transpose character</source>
-        <translation type="unfinished"/>
+        <translation>Karakteri dönüştür</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="104"/>
         <source>Tab width</source>
-        <translation type="unfinished"/>
+        <translation>Sekme genişliği</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="106"/>
@@ -746,7 +746,7 @@
     <message>
         <location filename="../src/window.cpp" line="1311"/>
         <source>Discard</source>
-        <translation>Yok Say</translation>
+        <translation>Yoksay</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="182"/>

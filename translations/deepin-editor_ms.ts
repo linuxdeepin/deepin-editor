@@ -14,7 +14,7 @@
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="38"/>
         <source>Characters %1</source>
-        <translation type="unfinished"/>
+        <translation>Aksara %1</translation>
     </message>
 </context>
 <context>
@@ -94,7 +94,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="119"/>
         <source>Display in file manager</source>
-        <translation type="unfinished"/>
+        <translation>Papar dalam pengurus fail</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="120"/>
@@ -247,32 +247,32 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="42"/>
         <source>Increase font size</source>
-        <translation type="unfinished"/>
+        <translation>Tingkatkan saiz fon</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="43"/>
         <source>Decrease font size</source>
-        <translation type="unfinished"/>
+        <translation>Kurangkan saiz fon</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="57"/>
         <source>Forward character</source>
-        <translation type="unfinished"/>
+        <translation>Maju aksara</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="58"/>
         <source>Backward character</source>
-        <translation type="unfinished"/>
+        <translation>Undur aksara</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="91"/>
         <source>Transpose character</source>
-        <translation type="unfinished"/>
+        <translation>Transposisi aksara</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="104"/>
         <source>Tab width</source>
-        <translation type="unfinished"/>
+        <translation>Lebar tab</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="106"/>
