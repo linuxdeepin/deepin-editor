@@ -14,7 +14,7 @@
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="38"/>
         <source>Characters %1</source>
-        <translation type="unfinished"/>
+        <translation>Znakov %1</translation>
     </message>
 </context>
 <context>
@@ -94,7 +94,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="119"/>
         <source>Display in file manager</source>
-        <translation type="unfinished"/>
+        <translation>Zobraziť v zložke</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="120"/>
@@ -104,22 +104,22 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="142"/>
         <source>Change Case</source>
-        <translation type="unfinished"/>
+        <translation>Zmeniť veľkosť</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="143"/>
         <source>Upper Case</source>
-        <translation type="unfinished"/>
+        <translation>Veľké písmo</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="144"/>
         <source>Lower Case</source>
-        <translation type="unfinished"/>
+        <translation>Malé písmo</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="145"/>
         <source>Capitalize</source>
-        <translation type="unfinished"/>
+        <translation>Kapitálky</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="196"/>
@@ -130,12 +130,12 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="2204"/>
         <source>Read-Only mode is off</source>
-        <translation type="unfinished"/>
+        <translation>Mód iba-čítanie je vypnutý</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2208"/>
         <source>Read-Only mode is on</source>
-        <translation type="unfinished"/>
+        <translation>Mód iba-čítanie je zapnutý</translation>
     </message>
 </context>
 <context>
@@ -143,28 +143,28 @@
     <message>
         <location filename="../src/editwrapper.cpp" line="259"/>
         <source>File has changed on disk. Reload?</source>
-        <translation type="unfinished"/>
+        <translation>Súbor bol zmenený na disku. Obnoviť?</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="262"/>
         <source>File removed on the disk. Save it now?</source>
-        <translation type="unfinished"/>
+        <translation>Súbor bol odstránený na disku. Uložiť ho znova?</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="305"/>
         <location filename="../src/widgets/bottombar.cpp" line="45"/>
         <source>INSERT</source>
-        <translation type="unfinished"/>
+        <translation>VLOŽIŤ</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="308"/>
         <source>OVERWRITE</source>
-        <translation type="unfinished"/>
+        <translation>PREPÍSAŤ</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="311"/>
         <source>R/O</source>
-        <translation type="unfinished"/>
+        <translation>R/O</translation>
     </message>
 </context>
 <context>
@@ -344,7 +344,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="45"/>
         <source>Toggle fullscreen</source>
-        <translation type="unfinished"/>
+        <translation>Na celú obrazovku</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="46"/>
@@ -622,7 +622,7 @@
     <message>
         <location filename="../src/replacebar.cpp" line="37"/>
         <source>Replace: </source>
-        <translation type="unfinished"/>
+        <translation>Nahradiť:</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="39"/>
@@ -632,7 +632,7 @@
     <message>
         <location filename="../src/replacebar.cpp" line="41"/>
         <source>Replace</source>
-        <translation type="unfinished"/>
+        <translation>Nahradiť</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="42"/>
@@ -720,7 +720,7 @@
         <location filename="../src/widgets/toast.cpp" line="39"/>
         <location filename="../src/window.cpp" line="179"/>
         <source>Save as</source>
-        <translation type="unfinished"/>
+        <translation>Uložiť ako</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="180"/>

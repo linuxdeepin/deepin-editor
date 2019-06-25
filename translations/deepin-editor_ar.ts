@@ -154,7 +154,7 @@
         <location filename="../src/editwrapper.cpp" line="305"/>
         <location filename="../src/widgets/bottombar.cpp" line="45"/>
         <source>INSERT</source>
-        <translation type="unfinished"/>
+        <translation>إدخال</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="308"/>

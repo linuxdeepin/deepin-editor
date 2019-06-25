@@ -4,17 +4,17 @@
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="36"/>
         <source>Row</source>
-        <translation type="unfinished"/>
+        <translation>行</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="37"/>
         <source>Column</source>
-        <translation type="unfinished"/>
+        <translation>列</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="38"/>
         <source>Characters %1</source>
-        <translation type="unfinished"/>
+        <translation>%1文字</translation>
     </message>
 </context>
 <context>
@@ -58,7 +58,7 @@
         <location filename="../src/dtextedit.cpp" line="112"/>
         <location filename="../src/window.cpp" line="183"/>
         <source>Find</source>
-        <translation type="unfinished"/>
+        <translation>検索</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="113"/>
@@ -74,17 +74,17 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="115"/>
         <source>Turn on Read-Only mode</source>
-        <translation type="unfinished"/>
+        <translation>読み取り専用モードに入る</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="116"/>
         <source>Turn off Read-Only mode</source>
-        <translation type="unfinished"/>
+        <translation>読み取り専用モードを終了</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="117"/>
         <source>Fullscreen</source>
-        <translation type="unfinished"/>
+        <translation>全画面表示</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="118"/>
@@ -94,12 +94,12 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="119"/>
         <source>Display in file manager</source>
-        <translation type="unfinished"/>
+        <translation>ファイルマネージャーで表示</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="120"/>
         <source>Toggle comment</source>
-        <translation type="unfinished"/>
+        <translation>コメント切替</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="142"/>
@@ -125,7 +125,7 @@
         <location filename="../src/dtextedit.cpp" line="196"/>
         <location filename="../src/widgets/bottombar.cpp" line="51"/>
         <source>None</source>
-        <translation type="unfinished"/>
+        <translation>なし</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2204"/>
@@ -154,12 +154,12 @@
         <location filename="../src/editwrapper.cpp" line="305"/>
         <location filename="../src/widgets/bottombar.cpp" line="45"/>
         <source>INSERT</source>
-        <translation type="unfinished"/>
+        <translation>挿入</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="308"/>
         <source>OVERWRITE</source>
-        <translation type="unfinished"/>
+        <translation>上書き</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="311"/>
@@ -172,7 +172,7 @@
     <message>
         <location filename="../src/findbar.cpp" line="37"/>
         <source>Find: </source>
-        <translation type="unfinished"/>
+        <translation>検索:</translation>
     </message>
     <message>
         <location filename="../src/findbar.cpp" line="39"/>
@@ -221,7 +221,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="25"/>
         <source>Font Style</source>
-        <translation type="unfinished"/>
+        <translation>フォントスタイル</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="26"/>
@@ -231,18 +231,18 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="27"/>
         <source>Font Size</source>
-        <translation type="unfinished"/>
+        <translation>フォントサイズ</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="29"/>
         <location filename="../src/settingsdialog.cpp" line="30"/>
         <source>Keymap</source>
-        <translation type="unfinished"/>
+        <translation>キーマップ</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="28"/>
         <source>Shortcuts</source>
-        <translation type="unfinished"/>
+        <translation>ショートカット</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="42"/>
@@ -272,12 +272,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="104"/>
         <source>Tab width</source>
-        <translation type="unfinished"/>
+        <translation>タブ幅</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="106"/>
         <source>Word Wrap</source>
-        <translation type="unfinished"/>
+        <translation>折返し</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="31"/>
@@ -304,7 +304,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="35"/>
         <source>Save as</source>
-        <translation type="unfinished"/>
+        <translation>名前をつけて保存</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="36"/>
@@ -319,17 +319,17 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="38"/>
         <source>Close tab</source>
-        <translation type="unfinished"/>
+        <translation>タブを閉じる</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="39"/>
         <source>Close other tabs</source>
-        <translation type="unfinished"/>
+        <translation>他のタブを閉じる</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="40"/>
         <source>Restore tab</source>
-        <translation type="unfinished"/>
+        <translation>タブを復元</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="41"/>
@@ -339,22 +339,22 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="44"/>
         <source>Reset font size</source>
-        <translation type="unfinished"/>
+        <translation>フォントサイズをリセット</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="45"/>
         <source>Toggle fullscreen</source>
-        <translation type="unfinished"/>
+        <translation>フルスクリーン切替</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="46"/>
         <source>Find</source>
-        <translation type="unfinished"/>
+        <translation>検索</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="47"/>
         <source>Replace</source>
-        <translation>置き換え</translation>
+        <translation>置換</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="48"/>
@@ -364,12 +364,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="49"/>
         <source>Save cursor position</source>
-        <translation type="unfinished"/>
+        <translation>カーソル位置を保存</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="50"/>
         <source>Reset cursor position</source>
-        <translation type="unfinished"/>
+        <translation>カーソル位置をリセット</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="51"/>
@@ -379,17 +379,17 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="52"/>
         <source>Display shortcuts</source>
-        <translation type="unfinished"/>
+        <translation>ショートカットを表示</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="53"/>
         <source>Print</source>
-        <translation type="unfinished"/>
+        <translation>印刷</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="54"/>
         <source>Editor</source>
-        <translation type="unfinished"/>
+        <translation>エディター</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="55"/>
@@ -484,22 +484,22 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="75"/>
         <source>Move to end of line</source>
-        <translation type="unfinished"/>
+        <translation>行の最後へ移動</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="76"/>
         <source>Move to start of line</source>
-        <translation type="unfinished"/>
+        <translation>行の最初へ移動</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="77"/>
         <source>Move to end of text</source>
-        <translation type="unfinished"/>
+        <translation>テキストの最後へ移動</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="78"/>
         <source>Move to start of text</source>
-        <translation type="unfinished"/>
+        <translation>テキストの最初へ移動</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="79"/>
@@ -574,12 +574,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="94"/>
         <source>Copy line</source>
-        <translation type="unfinished"/>
+        <translation>行をコピー</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="95"/>
         <source>Cut line</source>
-        <translation type="unfinished"/>
+        <translation>行をカット</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="96"/>
@@ -594,7 +594,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="98"/>
         <source>Toggle comment</source>
-        <translation type="unfinished"/>
+        <translation>コメント切替</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="99"/>
@@ -609,12 +609,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="101"/>
         <source>Advanced</source>
-        <translation type="unfinished"/>
+        <translation>高度な設定</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="103"/>
         <source>Window size</source>
-        <translation type="unfinished"/>
+        <translation>ウインドウサイズ</translation>
     </message>
 </context>
 <context>
@@ -622,7 +622,7 @@
     <message>
         <location filename="../src/replacebar.cpp" line="37"/>
         <source>Replace: </source>
-        <translation type="unfinished"/>
+        <translation>置換:</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="39"/>
@@ -647,7 +647,7 @@
     <message>
         <location filename="../src/replacebar.cpp" line="44"/>
         <source>Replace All</source>
-        <translation type="unfinished"/>
+        <translation>すべて置換</translation>
     </message>
 </context>
 <context>
@@ -660,17 +660,17 @@
     <message>
         <location filename="../src/settings.cpp" line="80"/>
         <source>Customize</source>
-        <translation type="unfinished"/>
+        <translation>カスタマイズ</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="91"/>
         <source>Normal</source>
-        <translation type="unfinished"/>
+        <translation>標準</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="91"/>
         <source>Maximum</source>
-        <translation type="unfinished"/>
+        <translation>最大化</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="91"/>
@@ -683,12 +683,12 @@
     <message>
         <location filename="../src/tabbar.cpp" line="317"/>
         <source>Close tab</source>
-        <translation type="unfinished"/>
+        <translation>タブを閉じる</translation>
     </message>
     <message>
         <location filename="../src/tabbar.cpp" line="318"/>
         <source>Close other tabs</source>
-        <translation type="unfinished"/>
+        <translation>他のタブを閉じる</translation>
     </message>
 </context>
 <context>
@@ -696,7 +696,7 @@
     <message>
         <location filename="../src/widgets/toast.cpp" line="38"/>
         <source>Reload</source>
-        <translation type="unfinished"/>
+        <translation>再読込み</translation>
     </message>
 </context>
 <context>
@@ -714,23 +714,23 @@
     <message>
         <location filename="../src/window.cpp" line="177"/>
         <source>Open file</source>
-        <translation type="unfinished"/>
+        <translation>ファイルを開く</translation>
     </message>
     <message>
         <location filename="../src/widgets/toast.cpp" line="39"/>
         <location filename="../src/window.cpp" line="179"/>
         <source>Save as</source>
-        <translation type="unfinished"/>
+        <translation>名前をつけて保存</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="180"/>
         <source>Print</source>
-        <translation type="unfinished"/>
+        <translation>印刷</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="181"/>
         <source>Switch theme</source>
-        <translation type="unfinished"/>
+        <translation>テーマ切替</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="261"/>
@@ -746,7 +746,7 @@
     <message>
         <location filename="../src/window.cpp" line="1311"/>
         <source>Discard</source>
-        <translation type="unfinished"/>
+        <translation>破棄</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="182"/>
@@ -756,12 +756,12 @@
     <message>
         <location filename="../src/window.cpp" line="289"/>
         <source>You do not have permission to open %1</source>
-        <translation type="unfinished"/>
+        <translation>%1を開く権限がありません</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="318"/>
         <source>Invalid file: %1</source>
-        <translation type="unfinished"/>
+        <translation>無効なファイル: %1</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="365"/>
@@ -780,23 +780,23 @@
         <location filename="../src/window.cpp" line="600"/>
         <location filename="../src/window.cpp" line="615"/>
         <source>Encoding</source>
-        <translation type="unfinished"/>
+        <translation>エンコーディング</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="601"/>
         <location filename="../src/window.cpp" line="616"/>
         <source>Line Endings</source>
-        <translation type="unfinished"/>
+        <translation>改行文字</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="922"/>
         <source>Editor</source>
-        <translation type="unfinished"/>
+        <translation>エディター</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="535"/>
         <source>You do not have permission to save %1</source>
-        <translation type="unfinished"/>
+        <translation>%1を保存する権限がありません</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="568"/>
@@ -806,7 +806,7 @@
     <message>
         <location filename="../src/window.cpp" line="568"/>
         <source>Do you want to save as another?</source>
-        <translation type="unfinished"/>
+        <translation>他の名前で保存しますか？</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1020"/>
@@ -817,7 +817,7 @@
     <message>
         <location filename="../src/window.cpp" line="979"/>
         <source>Blank document %1</source>
-        <translation type="unfinished"/>
+        <translation>空のドキュメント %1</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1310"/>
