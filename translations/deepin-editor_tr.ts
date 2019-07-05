@@ -84,17 +84,17 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="117"/>
         <source>Fullscreen</source>
-        <translation>Tam Ekran</translation>
+        <translation>Tam ekran</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="118"/>
         <source>Exit fullscreen</source>
-        <translation>Tam Ekrandan Çık</translation>
+        <translation>Tam ekrandan çık</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="119"/>
         <source>Display in file manager</source>
-        <translation>Dosya Yöneticisinde Görüntüle</translation>
+        <translation>Dosya yöneticisinde görüntüle</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="120"/>
@@ -221,7 +221,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="25"/>
         <source>Font Style</source>
-        <translation>Yazı Biçemi</translation>
+        <translation>Yazı Biçimi</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="26"/>
@@ -374,7 +374,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="51"/>
         <source>Exit</source>
-        <translation>Çık</translation>
+        <translation>Çıkış</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="52"/>
@@ -696,7 +696,7 @@
     <message>
         <location filename="../src/widgets/toast.cpp" line="38"/>
         <source>Reload</source>
-        <translation>Yeniden Yükle</translation>
+        <translation>Tekrar yükle</translation>
     </message>
 </context>
 <context>

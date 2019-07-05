@@ -89,7 +89,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="118"/>
         <source>Exit fullscreen</source>
-        <translation>Quitter le mode Plein écran</translation>
+        <translation>Quitter le mode plein écran</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="119"/>
@@ -148,7 +148,7 @@
     <message>
         <location filename="../src/editwrapper.cpp" line="262"/>
         <source>File removed on the disk. Save it now?</source>
-        <translation>Fichier supprimé du disque. L&apos;enregistrer maintenant?</translation>
+        <translation>Fichier supprimé du disque. L&apos;enregistrer maintenant ?</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="305"/>
@@ -172,7 +172,7 @@
     <message>
         <location filename="../src/findbar.cpp" line="37"/>
         <source>Find: </source>
-        <translation>Trouvé:</translation>
+        <translation>Trouvé :</translation>
     </message>
     <message>
         <location filename="../src/findbar.cpp" line="39"/>
@@ -198,12 +198,12 @@
     <message>
         <location filename="../src/main.cpp" line="50"/>
         <source>Deepin Editor is a desktop text editor that supports common text editing features.</source>
-        <translation>Deepin Editeur est un éditeur de texte de bureau qui prend en charge la plupart des fonctions d&apos;édition de texte.</translation>
+        <translation>Deepin Editor est un éditeur de texte de bureau qui prend en charge la plupart des fonctions d&apos;édition de texte.</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="62"/>
         <source>Deepin Editor</source>
-        <translation>Deepin Editeur</translation>
+        <translation>Éditeur Deepin</translation>
     </message>
 </context>
 <context>
@@ -211,7 +211,7 @@
     <message>
         <location filename="../src/main.cpp" line="59"/>
         <source>Deepin Editor</source>
-        <translation>Deepin Editeur</translation>
+        <translation>Éditeur Deepin</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="24"/>
@@ -761,7 +761,7 @@
     <message>
         <location filename="../src/window.cpp" line="318"/>
         <source>Invalid file: %1</source>
-        <translation>Fichier invalide: %1</translation>
+        <translation>Fichier invalide : %1</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="365"/>
