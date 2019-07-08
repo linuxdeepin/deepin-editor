@@ -119,7 +119,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="145"/>
         <source>Capitalize</source>
-        <translation>Suuret-kirjaimet</translation>
+        <translation>Suuretkirjaimet</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="196"/>
@@ -203,7 +203,7 @@
     <message>
         <location filename="../src/main.cpp" line="62"/>
         <source>Deepin Editor</source>
-        <translation>Deepin Editor</translation>
+        <translation>Deepin Editori</translation>
     </message>
 </context>
 <context>
@@ -211,7 +211,7 @@
     <message>
         <location filename="../src/main.cpp" line="59"/>
         <source>Deepin Editor</source>
-        <translation>Deepin Editor</translation>
+        <translation>Deepin Editori</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="24"/>
