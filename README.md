@@ -42,13 +42,14 @@ Below is keymap list for deepin-editor:
 
 ## Config file
 
-configure save at: ~/.config/deepin/deepin-editor/config.conf
+Configuration file can be found at `~/.config/deepin/deepin-editor/config.conf`
 
 ## Getting help
 
 Any usage issues can ask for help via
 
 * [Gitter](https://gitter.im/orgs/linuxdeepin/rooms)
+* [Developer Center](https://github.com/linuxdeepin/developer-center)
 * [IRC channel](https://webchat.freenode.net/?channels=deepin)
 * [Forum](https://bbs.deepin.org)
 * [WiKi](http://wiki.deepin.org/)
