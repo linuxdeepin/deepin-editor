@@ -68,6 +68,9 @@ public:
     void checkForReload();
     void initToastPosition();
 
+    //add by guoshaoyu
+    BottomBar *m_bottomBar;
+
 signals:
     void requestSaveAs();
 
@@ -84,7 +87,8 @@ protected:
 private:
     QHBoxLayout *m_layout;
     DTextEdit *m_textEdit;
-    BottomBar *m_bottomBar;
+    //modify guoshaoyu
+    //BottomBar *m_bottomBar;
     QTextCodec *m_textCodec;
 
     EndOfLineMode m_endOfLineMode;

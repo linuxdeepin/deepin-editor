@@ -32,10 +32,13 @@ ToolBar::ToolBar(QWidget *parent)
     QPixmap iconPixmap = DHiDPIHelper::loadNxPixmap(":/images/logo_24.svg");
     QLabel *iconLabel = new QLabel;
     iconLabel->setPixmap(iconPixmap);
-    iconLabel->setFixedSize(24, 40);
+    //modify by guoshaoyu
+    iconLabel->setFixedSize(32, 32);
 
     m_layout->addSpacing(10);
-    m_layout->addWidget(iconLabel, 0, Qt::AlignTop);
+    //modify by guoshaoyu
+    m_layout->addWidget(iconLabel);
+    //m_layout->addWidget(iconLabel, 10, Qt::AlignTop);
     m_layout->addSpacing(10);
 }
 

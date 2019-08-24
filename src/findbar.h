@@ -31,6 +31,7 @@
 #include <QPainter>
 #include <QWidget>
 #include "dimagebutton.h"
+#include <QColor>
 
 DWIDGET_USE_NAMESPACE
 
@@ -55,6 +56,9 @@ signals:
 
     void removeSearchKeyword();
     void updateSearchKeyword(QString file, QString keyword);
+
+    //add guoshao
+    void sigFindbarCancel();
 
 public slots:
     void findCancel();

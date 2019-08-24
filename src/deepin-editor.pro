@@ -33,15 +33,22 @@ HEADERS += window.h \
            settings.h \
            tabbar.h \
            toolbar.h \
-           editorbuffer.h \
+           #editorbuffer.h \
+           linenumberarea.h \
+           editwrapper.h \
            uncommentselection.h \
            utils.h \
            urlinfo.h \
            fileloadthread.h \
-           themewidgets/themepanel.h \
-           themewidgets/themelistview.h \
-           themewidgets/themeitemdelegate.h \
-           themewidgets/themelistmodel.h
+           widgets/ddropdownmenu.h \
+           widgets/bottombar.h \
+           widgets/toast.h \
+           thememodule/themelistmodel.h \
+           thememodule/themeitemdelegate.h \
+           thememodule/themepanel.h \
+           thememodule/themelistview.h \
+           environments.h \
+           fontitemdelegate.h
 
 SOURCES += window.cpp \
            startmanager.cpp \
@@ -55,15 +62,21 @@ SOURCES += window.cpp \
            settingsdialog.cpp \
            tabbar.cpp \
            toolbar.cpp \
-           editorbuffer.cpp \
+           #editorbuffer.cpp \
+           linenumberarea.cpp \
+           editwrapper.cpp \
            utils.cpp \
            uncommentselection.cpp \
            main.cpp \
            fileloadthread.cpp \
-           themewidgets/themepanel.cpp \
-           themewidgets/themelistview.cpp \
-           themewidgets/themeitemdelegate.cpp \
-           themewidgets/themelistmodel.cpp
+           widgets/ddropdownmenu.cpp \
+           widgets/toast.cpp \
+           widgets/bottombar.cpp \
+           thememodule/themeitemdelegate.cpp \
+           thememodule/themepanel.cpp \
+           thememodule/themelistmodel.cpp \
+           thememodule/themelistview.cpp \
+           fontitemdelegate.cpp
 
 QMAKE_CXXFLAGS += -g
 LIBS += -lX11 -lXext -lXtst
@@ -84,3 +97,6 @@ themes.files += themes/solarized_light.theme
 themes.files += themes/atom_dark.theme
 
 INSTALLS += target desktop themes
+
+DISTFILES += \
+    themes/deepin_dark.theme

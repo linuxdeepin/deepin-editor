@@ -34,7 +34,8 @@ FindBar::FindBar(QWidget *parent)
 
     // Init layout and widgets.
     m_layout = new QHBoxLayout(this);
-    m_findLabel = new QLabel(tr("Find: "));
+    //modify by guoshaoyu
+    m_findLabel = new QLabel(tr("Find"));
     m_editLine = new LineBar();
     m_findNextButton = new QPushButton(tr("Next"));
     m_findPrevButton = new QPushButton(tr("Previous"));
@@ -97,6 +98,8 @@ void FindBar::activeInput(QString text, QString file, int row, int column, int s
 void FindBar::findCancel()
 {
     QWidget::hide();
+    //add by guoshaoyu
+    emit sigFindbarCancel();
 }
 
 void FindBar::handleContentChanged()
@@ -117,17 +120,18 @@ void FindBar::paintEvent(QPaintEvent *)
     path.addRect(rect());
     painter.fillPath(path, m_backgroundColor);
 
-    QColor splitLineColor;
-    if (m_backgroundColor.lightness() < 128) {
-        splitLineColor = QColor("#ffffff");
-    } else {
-        splitLineColor = QColor("#000000");
-    }
+    //modify by guoshaoyu
+//    QColor splitLineColor;
+//    if (m_backgroundColor.lightness() < 128) {
+//        splitLineColor = QColor("#ffffff");
+//    } else {
+//        splitLineColor = QColor("#000000");
+//    }
 
-    QPainterPath framePath;
-    framePath.addRect(QRect(rect().x(), rect().y(), rect().width(), 1));
-    painter.setOpacity(0.05);
-    painter.fillPath(framePath, splitLineColor);
+//    QPainterPath framePath;
+//    framePath.addRect(QRect(rect().x(), rect().y(), rect().width(), 1));
+//    painter.setOpacity(0.05);
+//    painter.fillPath(framePath, splitLineColor);
 }
 
 void FindBar::setMismatchAlert(bool isAlert)
@@ -140,13 +144,13 @@ void FindBar::setBackground(QString color)
     m_backgroundColor = QColor(color);
 
     if (QColor(m_backgroundColor).lightness() < 128) {
-        m_findLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#AAAAAA"));
+        //m_findLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#AAAAAA"));
 
         m_closeButton->setNormalPic(Utils::getQrcPath("bar_close_normal_dark.svg"));
         m_closeButton->setHoverPic(Utils::getQrcPath("bar_close_hover_dark.svg"));
         m_closeButton->setPressPic(Utils::getQrcPath("bar_close_press_dark.svg"));
     } else {
-        m_findLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#000000"));
+        //m_findLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#000000"));
 
         m_closeButton->setNormalPic(Utils::getQrcPath("bar_close_normal_light.svg"));
         m_closeButton->setHoverPic(Utils::getQrcPath("bar_close_hover_light.svg"));

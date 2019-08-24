@@ -32,6 +32,8 @@
 #include <DSettings>
 #include <DSettingsOption>
 #include <DTitlebar>
+#include <DAnchors>
+
 #include <QApplication>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
@@ -58,7 +60,7 @@ Window::Window(DMainWindow *parent)
       m_jumpLineBar(new JumpLineBar(this)),
       m_replaceBar(new ReplaceBar),
       m_themePanel(new ThemePanel(this)),
-      m_findBar(new FindBar),
+      m_findBar(new FindBar(this)),
       m_settings(new Settings(this)),
       m_menu(new QMenu),
       m_titlebarStyleSheet(titlebar()->styleSheet())
@@ -128,6 +130,7 @@ Window::Window(DMainWindow *parent)
     connect(m_findBar, &FindBar::updateSearchKeyword, this, [=] (QString file, QString keyword) {
         handleUpdateSearchKeyword(m_findBar, file, keyword);
     });
+    connect(m_findBar, &FindBar::sigFindbarCancel, this, &Window::slotFindbarCancel, Qt::QueuedConnection);
 
     // Init replace bar.
     connect(m_replaceBar, &ReplaceBar::removeSearchKeyword, this, &Window::handleRemoveSearchKeyword, Qt::QueuedConnection);
@@ -149,6 +152,13 @@ Window::Window(DMainWindow *parent)
     // Make jump line bar pop at top-right of editor.
     DAnchorsBase::setAnchor(m_jumpLineBar, Qt::AnchorTop, m_centralWidget, Qt::AnchorTop);
     DAnchorsBase::setAnchor(m_jumpLineBar, Qt::AnchorRight, m_centralWidget, Qt::AnchorRight);
+
+    //add by guoshaoyu
+    DAnchors<FindBar> anchors_findbar(m_findBar);
+    anchors_findbar.setAnchor(Qt::AnchorBottom, this, Qt::AnchorBottom);
+    anchors_findbar.setAnchor(Qt::AnchorHorizontalCenter, this, Qt::AnchorHorizontalCenter);
+    anchors_findbar.setBottomMargin(10);
+    m_findBar->raise();
 
     // Init theme panel.
     DAnchorsBase::setAnchor(m_themePanel, Qt::AnchorTop, m_centralWidget, Qt::AnchorTop);
@@ -687,10 +697,21 @@ void Window::popupFindBar()
             m_findBar->focus();
         }
     } else {
-        addBottomWidget(m_findBar);
+        //modify by guoshaoyu
+        //addBottomWidget(m_findBar);
 
         QString tabPath = m_tabbar->currentPath();
         EditWrapper *wrapper = currentWrapper();
+
+        //add by guoshaoyu
+        if (wrapper->isVisible()) {
+            wrapper->m_bottomBar->hide();
+        }
+        if (m_replaceBar->isVisible()) {
+            m_replaceBar->hide();
+        }
+        m_findBar->show();
+
         QString text = wrapper->textEditor()->textCursor().selectedText();
         int row = wrapper->textEditor()->getCurrentLine();
         int column = wrapper->textEditor()->getCurrentColumn();
@@ -711,10 +732,16 @@ void Window::popupReplaceBar()
             m_replaceBar->focus();
         }
     } else {
+        //add by guoshaoyu
+        EditWrapper *wrapper = currentWrapper();
+        if (m_findBar->isVisible()) {
+            m_findBar->hide();
+            wrapper->m_bottomBar->show();
+        }
+
         addBottomWidget(m_replaceBar);
 
         QString tabPath = m_tabbar->currentPath();
-        EditWrapper *wrapper = currentWrapper();
         QString text = wrapper->textEditor()->textCursor().selectedText();
         int row = wrapper->textEditor()->getCurrentLine();
         int column = wrapper->textEditor()->getCurrentColumn();
@@ -1133,6 +1160,15 @@ void Window::handleFindPrev()
     wrapper->textEditor()->restoreMarkStatus();
 }
 
+//add by guoshaoyu
+void Window::slotFindbarCancel()
+{
+    EditWrapper *wrapper = currentWrapper();
+    if (wrapper->bottomBar()->isHidden())
+    {
+        wrapper->bottomBar()->show();
+    }
+}
 
 void Window::handleReplaceAll(const QString &replaceText, const QString &withText)
 {
@@ -1364,6 +1400,9 @@ void Window::resizeEvent(QResizeEvent *e)
         m_settings->settings->option("advance.window.window_width")->setValue(rect().width() * 1.0 / screenGeometry.width());
         m_settings->settings->option("advance.window.window_height")->setValue(rect().height() * 1.0 / screenGeometry.height());
     }
+
+    //add by guoshaoyu
+    m_findBar->resize(width() - 20, m_findBar->height());
 
     DMainWindow::resizeEvent(e);
 }
