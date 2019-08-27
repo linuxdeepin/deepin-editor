@@ -21,7 +21,6 @@
  */
 
 #include "window.h"
-#include "toolbar.h"
 #include "danchors.h"
 #include "dthememanager.h"
 #include "dtoast.h"
@@ -199,10 +198,11 @@ void Window::initTitlebar()
     m_menu->setStyle(QStyleFactory::create("dlight"));
     m_menu->setMinimumWidth(150);
 
-    ToolBar *toolBar = new ToolBar;
-    toolBar->setTabbar(m_tabbar);
-
-    titlebar()->setCustomWidget(toolBar, Qt::AlignVCenter, false);
+    QPixmap iconPixmap = DHiDPIHelper::loadNxPixmap(":/images/logo_24.svg");
+    QIcon fallback(iconPixmap);
+    titlebar()->setIcon(QIcon::fromTheme("deepin-editor", fallback));
+//    titlebar()->addWidget(m_tabbar, Qt::AlignLeft);
+    titlebar()->setCustomWidget(m_tabbar, Qt::AlignVCenter, false);
     titlebar()->setAutoHideOnFullscreen(true);
     titlebar()->setSeparatorVisible(true);
     titlebar()->setFixedHeight(40);
