@@ -44,8 +44,9 @@ FindBar::FindBar(QWidget *parent)
 
     m_layout->addWidget(m_findLabel);
     m_layout->addWidget(m_editLine);
-    m_layout->addWidget(m_findNextButton);
+    //modify by guoshaoyu
     m_layout->addWidget(m_findPrevButton);
+    m_layout->addWidget(m_findNextButton);
     m_layout->addWidget(m_closeButton);
 
     // Make button don't grab keyboard focus after click it.

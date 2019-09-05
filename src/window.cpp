@@ -212,11 +212,13 @@ void Window::initTitlebar()
     ToolBar *toolBar = new ToolBar;
     toolBar->setTabbar(m_tabbar);
 
-    titlebar()->setCustomWidget(toolBar, Qt::AlignVCenter, false);
+    titlebar()->setCustomWidget(toolBar, false);
     titlebar()->setAutoHideOnFullscreen(true);
     titlebar()->setSeparatorVisible(true);
     titlebar()->setFixedHeight(40);
     titlebar()->setMenu(m_menu);
+    //add by guoshaoyu
+    titlebar()->setIcon(QIcon(":/images/logo_24.svg"));
 
     connect(m_tabbar, &DTabBar::tabBarDoubleClicked, titlebar(), &DTitlebar::doubleClicked, Qt::QueuedConnection);
 
@@ -781,7 +783,8 @@ void Window::popupSettingsDialog()
     dialog->widgetFactory()->registerWidget("fontcombobox", Settings::createFontComBoBoxHandle);
     dialog->setProperty("_d_dtk_theme", "dark");
     dialog->setProperty("_d_QSSFilename", "DSettingsDialog");
-    DThemeManager::instance()->registerWidget(dialog);
+    //modify by guoshaoyu
+//    DThemeManager::instance()->registerWidget(dialog);
 
     dialog->updateSettings(m_settings->settings);
     m_settings->dtkThemeWorkaround(dialog, "dlight");
@@ -1268,11 +1271,12 @@ void Window::loadTheme(const QString &path)
     const QString &tabbarStartColor = jsonMap["app-colors"].toMap()["tab-background-start-color"].toString();
     const QString &tabbarEndColor = jsonMap["app-colors"].toMap()["tab-background-end-color"].toString();
 
-    if (QColor(backgroundColor).lightness() < 128) {
-        DThemeManager::instance()->setTheme("dark");
-    } else {
-        DThemeManager::instance()->setTheme("light");
-    }
+    //modify by guoshaoyu
+//    if (QColor(backgroundColor).lightness() < 128) {
+//        DThemeManager::instance()->setTheme("dark");
+//    } else {
+//        DThemeManager::instance()->setTheme("light");
+//    }
 
     changeTitlebarBackground(tabbarStartColor, tabbarEndColor);
 

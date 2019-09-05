@@ -66,6 +66,9 @@ int main(int argc, char *argv[])
     Dtk::Core::DLogManager::registerConsoleAppender();
     Dtk::Core::DLogManager::registerFileAppender();
 
+    //add by guoshaoyu
+    app.setStyle("chameleon");
+
     // Parser input arguments.
     QCommandLineParser parser;
     const QCommandLineOption newWindowOption("w", "Open file in new window");

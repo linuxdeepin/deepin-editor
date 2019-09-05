@@ -29,17 +29,17 @@ ToolBar::ToolBar(QWidget *parent)
 {
     m_layout->setContentsMargins(0, 0, 0, 0);
 
-    QPixmap iconPixmap = DHiDPIHelper::loadNxPixmap(":/images/logo_24.svg");
-    QLabel *iconLabel = new QLabel;
-    iconLabel->setPixmap(iconPixmap);
     //modify by guoshaoyu
-    iconLabel->setFixedSize(32, 32);
+//    QPixmap iconPixmap = DHiDPIHelper::loadNxPixmap(":/images/logo_24.svg");
+//    QLabel *iconLabel = new QLabel;
+//    iconLabel->setPixmap(iconPixmap);
+//    iconLabel->setFixedSize(32, 32);
 
-    m_layout->addSpacing(10);
     //modify by guoshaoyu
-    m_layout->addWidget(iconLabel);
-    //m_layout->addWidget(iconLabel, 10, Qt::AlignTop);
-    m_layout->addSpacing(10);
+//    m_layout->addSpacing(10);
+//    m_layout->addWidget(iconLabel);
+//    m_layout->addWidget(iconLabel, 10, Qt::AlignTop);
+//    m_layout->addSpacing(10);
 }
 
 ToolBar::~ToolBar()
