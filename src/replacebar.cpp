@@ -42,8 +42,8 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     m_replaceSkipButton = new QPushButton(tr("Skip"));
     m_replaceRestButton = new QPushButton(tr("Replace Rest"));
     m_replaceAllButton = new QPushButton(tr("Replace All"));
-    m_closeButton = new DImageButton();
-    m_closeButton->setFixedSize(16, 16);
+    m_closeButton = new DIconButton(DStyle::SP_CloseButton);
+    m_closeButton->setFixedSize(20, 20);
 
     m_layout->addWidget(m_replaceLabel);
     m_layout->addWidget(m_replaceLine);
@@ -84,7 +84,7 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     connect(m_replaceRestButton, &QPushButton::clicked, this, &ReplaceBar::handleReplaceRest, Qt::QueuedConnection);
     connect(m_replaceAllButton, &QPushButton::clicked, this, &ReplaceBar::handleReplaceAll, Qt::QueuedConnection);
 
-    connect(m_closeButton, &DImageButton::clicked, this, &ReplaceBar::replaceCancel, Qt::QueuedConnection);
+    connect(m_closeButton, &DIconButton::clicked, this, &ReplaceBar::replaceCancel, Qt::QueuedConnection);
 }
 
 bool ReplaceBar::isFocus()
@@ -171,20 +171,21 @@ void ReplaceBar::setBackground(QString color)
 {
     m_backgroundColor = QColor(color);
 
+    DPalette paReplaceLabel = DApplicationHelper::instance()->palette(m_replaceLabel);
+    DPalette paWithLabel    = DApplicationHelper::instance()->palette(m_withLabel);
+    paReplaceLabel.setColor(DPalette::Background, QColor(color));
+    paWithLabel.setColor(DPalette::Background, QColor(color));
+
     if (QColor(m_backgroundColor).lightness() < 128) {
-        m_replaceLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#AAAAAA"));
-        m_withLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#AAAAAA"));
-
-        m_closeButton->setNormalPic(Utils::getQrcPath("bar_close_normal_dark.svg"));
-        m_closeButton->setHoverPic(Utils::getQrcPath("bar_close_hover_dark.svg"));
-        m_closeButton->setPressPic(Utils::getQrcPath("bar_close_press_dark.svg"));
+        //m_replaceLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#AAAAAA"));
+        //m_withLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#AAAAAA"));
+        paReplaceLabel.setColor(DPalette::WindowText, QColor("#AAAAAA"));
+        paWithLabel.setColor(DPalette::WindowText, QColor("#AAAAAA"));
     } else {
-        m_replaceLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#000000"));
-        m_withLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#000000"));
-
-        m_closeButton->setNormalPic(Utils::getQrcPath("bar_close_normal_light.svg"));
-        m_closeButton->setHoverPic(Utils::getQrcPath("bar_close_hover_light.svg"));
-        m_closeButton->setPressPic(Utils::getQrcPath("bar_close_press_light.svg"));
+        //m_replaceLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#000000"));
+        //m_withLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#000000"));
+        paReplaceLabel.setColor(DPalette::WindowText, QColor("#000000"));
+        paWithLabel.setColor(DPalette::WindowText, QColor("#000000"));
     }
 
     repaint();

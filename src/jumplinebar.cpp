@@ -26,14 +26,13 @@
 #include <QDebug>
 
 JumpLineBar::JumpLineBar(QWidget *parent)
-    : QWidget(parent)
+    : DFloatingWidget(parent)
 {
     // Init.
-    setWindowFlags(Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
-    setFixedSize(200, 40);
+    setFixedSize(200, 90);
 
     // Init layout and widgets.
-    m_layout = new QHBoxLayout(this);
+    m_layout = new QHBoxLayout();
 
     m_label = new QLabel();
     m_label->setText(tr("Go to Line: "));
@@ -44,6 +43,7 @@ JumpLineBar::JumpLineBar(QWidget *parent)
 
     m_layout->addWidget(m_label);
     m_layout->addWidget(m_editLine);
+    this->setLayout(m_layout);
 
     connect(m_editLine, &LineBar::pressEsc, this, &JumpLineBar::jumpCancel, Qt::QueuedConnection);
     connect(m_editLine, &LineBar::pressEnter, this, &JumpLineBar::jumpConfirm, Qt::QueuedConnection);
@@ -113,30 +113,3 @@ void JumpLineBar::jumpConfirm()
     }
 }
 
-void JumpLineBar::paintEvent(QPaintEvent *)
-{
-    QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing, true);
-    painter.setOpacity(0.9);
-    QPainterPath path;
-    int radius = 5;
-    path.moveTo(QPointF(rect().x(), rect().y()));
-    path.lineTo(QPointF(rect().x(), rect().y() + rect().height() - radius));
-    path.arcTo(QRectF(rect().x(), rect().bottom() - radius * 2, radius * 2, radius * 2), 180, 90);
-    path.lineTo(QPointF(rect().x() + rect().width(), rect().y() + rect().height()));
-    path.lineTo(QPointF(rect().x() + rect().width(), rect().y()));
-    painter.fillPath(path, m_backgroundColor);
-}
-
-void JumpLineBar::setBackground(QString color)
-{
-    m_backgroundColor = QColor(color);
-
-    if (QColor(m_backgroundColor).lightness() < 128) {
-        m_label->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#AAAAAA"));
-    } else {
-        m_label->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#000000"));
-    }
-
-    repaint();
-}

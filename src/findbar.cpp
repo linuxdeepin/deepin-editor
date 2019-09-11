@@ -26,28 +26,28 @@
 #include <QDebug>
 
 FindBar::FindBar(QWidget *parent)
-    : QWidget(parent)
+    : DFloatingWidget(parent)
 {
     // Init.
     setWindowFlags(Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
-    setFixedHeight(45);
+    setFixedHeight(100);
 
     // Init layout and widgets.
-    m_layout = new QHBoxLayout(this);
-    //modify by guoshaoyu
+    m_layout = new QHBoxLayout();
+    m_layout->setMargin(12);
     m_findLabel = new QLabel(tr("Find"));
     m_editLine = new LineBar();
     m_findNextButton = new QPushButton(tr("Next"));
     m_findPrevButton = new QPushButton(tr("Previous"));
-    m_closeButton = new DImageButton();
-    m_closeButton->setFixedSize(16, 16);
+    m_closeButton = new DIconButton(DStyle::SP_CloseButton);
+    m_closeButton->setFixedSize(20, 20);
 
     m_layout->addWidget(m_findLabel);
     m_layout->addWidget(m_editLine);
-    //modify by guoshaoyu
     m_layout->addWidget(m_findPrevButton);
     m_layout->addWidget(m_findNextButton);
     m_layout->addWidget(m_closeButton);
+    this->setLayout(m_layout);
 
     // Make button don't grab keyboard focus after click it.
     m_findNextButton->setFocusPolicy(Qt::NoFocus);
@@ -62,7 +62,7 @@ FindBar::FindBar(QWidget *parent)
     connect(m_findNextButton, &QPushButton::clicked, this, &FindBar::findNext, Qt::QueuedConnection);
     connect(m_findPrevButton, &QPushButton::clicked, this, &FindBar::findPrev, Qt::QueuedConnection);
 
-    connect(m_closeButton, &DImageButton::clicked, this, &FindBar::findCancel, Qt::QueuedConnection);
+    connect(m_closeButton, &DIconButton::clicked, this, &FindBar::findCancel, Qt::QueuedConnection);
 }
 
 bool FindBar::isFocus()
@@ -113,50 +113,7 @@ void FindBar::hideEvent(QHideEvent *)
     removeSearchKeyword();
 }
 
-void FindBar::paintEvent(QPaintEvent *)
-{
-    QPainter painter(this);
-    painter.setOpacity(1);
-    QPainterPath path;
-    path.addRect(rect());
-    painter.fillPath(path, m_backgroundColor);
-
-    //modify by guoshaoyu
-//    QColor splitLineColor;
-//    if (m_backgroundColor.lightness() < 128) {
-//        splitLineColor = QColor("#ffffff");
-//    } else {
-//        splitLineColor = QColor("#000000");
-//    }
-
-//    QPainterPath framePath;
-//    framePath.addRect(QRect(rect().x(), rect().y(), rect().width(), 1));
-//    painter.setOpacity(0.05);
-//    painter.fillPath(framePath, splitLineColor);
-}
-
 void FindBar::setMismatchAlert(bool isAlert)
 {
     m_editLine->setAlert(isAlert);
-}
-
-void FindBar::setBackground(QString color)
-{
-    m_backgroundColor = QColor(color);
-
-    if (QColor(m_backgroundColor).lightness() < 128) {
-        //m_findLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#AAAAAA"));
-
-        m_closeButton->setNormalPic(Utils::getQrcPath("bar_close_normal_dark.svg"));
-        m_closeButton->setHoverPic(Utils::getQrcPath("bar_close_hover_dark.svg"));
-        m_closeButton->setPressPic(Utils::getQrcPath("bar_close_press_dark.svg"));
-    } else {
-        //m_findLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#000000"));
-
-        m_closeButton->setNormalPic(Utils::getQrcPath("bar_close_normal_light.svg"));
-        m_closeButton->setHoverPic(Utils::getQrcPath("bar_close_hover_light.svg"));
-        m_closeButton->setPressPic(Utils::getQrcPath("bar_close_press_light.svg"));
-    }
-
-    update();
 }

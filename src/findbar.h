@@ -32,10 +32,16 @@
 #include <QWidget>
 #include "dimagebutton.h"
 #include <QColor>
+#include <DIconButton>
+#include <DApplicationHelper>
+#include <DFloatingWidget>
+
+//add by guoshaoyu
+#include <DPalette>
 
 DWIDGET_USE_NAMESPACE
 
-class FindBar : public QWidget
+class FindBar : public DFloatingWidget
 {
     Q_OBJECT
 
@@ -47,8 +53,6 @@ public:
 
     void activeInput(QString text, QString file, int row, int column, int scrollOffset);
     void setMismatchAlert(bool isAlert);
-
-    void setBackground(QString color);
 
 signals:
     void findNext();
@@ -65,13 +69,12 @@ public slots:
     void handleContentChanged();
 
 protected:
-    void paintEvent(QPaintEvent *event);
-    void hideEvent(QHideEvent *event);
+    void hideEvent(QHideEvent *event) override;
 
 private:
     QPushButton *m_findNextButton;
     QPushButton *m_findPrevButton;
-    DImageButton *m_closeButton;
+    DIconButton *m_closeButton;
     LineBar *m_editLine;
     QHBoxLayout *m_layout;
     QLabel *m_findLabel;

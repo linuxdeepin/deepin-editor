@@ -23,6 +23,7 @@
 #include <QWidget>
 #include <QLabel>
 #include "ddropdownmenu.h"
+#include <DApplicationHelper>
 
 class EditWrapper;
 class BottomBar : public QWidget

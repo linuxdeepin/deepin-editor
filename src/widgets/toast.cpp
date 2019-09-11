@@ -49,9 +49,6 @@ Toast::Toast(QWidget *parent)
     setGraphicsEffect(m_effect);
     hide();
 
-    setTheme(DThemeManager::instance()->theme());
-    connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &Toast::setTheme);
-
     connect(m_reloadBtn, &QPushButton::clicked, this, [=] {
         hideAnimation();
         emit reloadBtnClicked();
@@ -113,9 +110,7 @@ void Toast::setOnlyShow(bool onlyshow)
         m_layout->addWidget(m_reloadBtn);
         m_layout->addWidget(m_saveAsBtn);
         m_layout->addWidget(m_closeBtn);
-        initCloseBtn(DThemeManager::instance()->theme());
 
-        connect(DThemeManager::instance(), &DThemeManager::themeChanged, this, &Toast::initCloseBtn);
         connect(m_closeBtn, &DImageButton::clicked, this, &Toast::hideAnimation);
         connect(m_closeBtn, &DImageButton::clicked, this, &Toast::closeBtnClicked);
     }
@@ -178,19 +173,19 @@ void Toast::setReloadState(bool enable)
 
 void Toast::setTheme(QString theme)
 {
-    if (theme == "light") {
-        setStyleSheet("Toast {"
-                      "background: rgba(255,255,255,100%);"
-                      "border: 1px solid rgba(0,0,0,10%);"
-                      "border-radius: 4px;"
-                      "}");
-    } else {
-        setStyleSheet("Toast {"
-                      "background: rgba(49,49,49,100%);"
-                      "border: 1px solid rgba(0,0,0,30%);"
-                      "border-radius: 4px;"
-                      "}");
-    }
+//    if (theme == "light") {
+//        setStyleSheet("Toast {"
+//                      "background: rgba(255,255,255,100%);"
+//                      "border: 1px solid rgba(0,0,0,10%);"
+//                      "border-radius: 4px;"
+//                      "}");
+//    } else {
+//        setStyleSheet("Toast {"
+//                      "background: rgba(49,49,49,100%);"
+//                      "border: 1px solid rgba(0,0,0,30%);"
+//                      "border-radius: 4px;"
+//                      "}");
+//    }
 }
 
 qreal Toast::opacity() const

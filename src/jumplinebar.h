@@ -30,17 +30,17 @@
 #include <QLabel>
 #include <QPainter>
 #include <QWidget>
+#include <DApplicationHelper>
+#include <DFloatingWidget>
 
 DWIDGET_USE_NAMESPACE
 
-class JumpLineBar : public QWidget
+class JumpLineBar : public DFloatingWidget
 {
     Q_OBJECT
 
 public:
     JumpLineBar(QWidget *parent = 0);
-
-    void setBackground(QString color);
 
 public slots:
     void focus();
@@ -60,7 +60,6 @@ signals:
     void lostFocusExit();
 
 protected:
-    void paintEvent(QPaintEvent *event);
 
 private:
     LineBar *m_editLine;

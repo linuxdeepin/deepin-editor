@@ -40,6 +40,7 @@ BottomBar::BottomBar(QWidget *parent)
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setContentsMargins(10, 1, 10, 0);
     layout->addWidget(m_positionLabel);
+    layout->addSpacing(10);
     layout->addWidget(m_charCountLabel);
 
     m_cursorStatus->setText(qApp->translate("EditWrapper", "INSERT"));
@@ -97,10 +98,13 @@ void BottomBar::setHightlightName(const QString &name)
 
 void BottomBar::setPalette(const QPalette &palette)
 {
-    m_positionLabel->setStyleSheet(QString("QLabel { color: %1; margin-right: 10px; }").
-                                   arg(palette.color(QPalette::Text).name()));
-    m_charCountLabel->setStyleSheet(QString("QLabel { color: %1; }").
-                                   arg(palette.color(QPalette::Text).name()));
+
+    DPalette paPositionLabel  = DApplicationHelper::instance()->palette(m_positionLabel);
+    DPalette paCharCountLabel = DApplicationHelper::instance()->palette(m_charCountLabel);
+    paPositionLabel.setColor(DPalette::WindowText, QColor(palette.color(QPalette::Text).name()));
+    paCharCountLabel.setColor(DPalette::WindowText, QColor(palette.color(QPalette::Text).name()));
+    m_positionLabel->setPalette(paPositionLabel);
+    m_charCountLabel->setPalette(paCharCountLabel);
 
     QString theme = (palette.color(QPalette::Background).lightness() < 128) ? "dark" : "light";
     m_encodeMenu->setTheme(theme);

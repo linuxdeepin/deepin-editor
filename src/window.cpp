@@ -73,7 +73,7 @@ Window::Window(DMainWindow *parent)
     setAcceptDrops(true);
 
     // Apply qss theme.
-    Utils::applyQss(this, "main.qss");
+    //Utils::applyQss(this, "main.qss");
     loadTheme(m_themePath);
 
     // Init settings.
@@ -157,7 +157,7 @@ Window::Window(DMainWindow *parent)
     DAnchors<FindBar> anchors_findbar(m_findBar);
     anchors_findbar.setAnchor(Qt::AnchorBottom, this, Qt::AnchorBottom);
     anchors_findbar.setAnchor(Qt::AnchorHorizontalCenter, this, Qt::AnchorHorizontalCenter);
-    anchors_findbar.setBottomMargin(10);
+    anchors_findbar.setBottomMargin(0);
     m_findBar->raise();
 
     // Init theme panel.
@@ -886,23 +886,23 @@ void Window::updateTabSpaceNumber(int number)
 
 void Window::changeTitlebarBackground(const QString &color)
 {
-    titlebar()->setStyleSheet(QString("%1"
-                                      "Dtk--Widget--DTitlebar {"
-                                      "background: %2;"
-                                      "}").arg(m_titlebarStyleSheet).arg(color));
+//    titlebar()->setStyleSheet(QString("%1"
+//                                      "Dtk--Widget--DTitlebar {"
+//                                      "background: %2;"
+//                                      "}").arg(m_titlebarStyleSheet).arg(color));
 
-    m_tabbar->setTabActiveColor(m_tabbarActiveColor);
+//    m_tabbar->setTabActiveColor(m_tabbarActiveColor);
 }
 
 void Window::changeTitlebarBackground(const QString &startColor, const QString &endColor)
 {
-    titlebar()->setStyleSheet(QString("%1"
-                                      "Dtk--Widget--DTitlebar {"
-                                      "background: qlineargradient(x1:0 y1:0, x2:0 y2:1,"
-                                      "stop:0 rgba%2,  stop:1 rgba%3);"
-                                      "}").arg(m_titlebarStyleSheet).arg(startColor).arg(endColor));
+//    titlebar()->setStyleSheet(QString("%1"
+//                                      "Dtk--Widget--DTitlebar {"
+//                                      "background: qlineargradient(x1:0 y1:0, x2:0 y2:1,"
+//                                      "stop:0 rgba%2,  stop:1 rgba%3);"
+//                                      "}").arg(m_titlebarStyleSheet).arg(startColor).arg(endColor));
 
-     m_tabbar->setTabActiveColor(m_tabbarActiveColor);
+//     m_tabbar->setTabActiveColor(m_tabbarActiveColor);
 }
 
 void Window::displayShortcuts()
@@ -1285,14 +1285,12 @@ void Window::loadTheme(const QString &path)
     }
 
     // set background.
-    QPalette palette = this->palette();
-    palette.setColor(QPalette::Background, QColor(backgroundColor));
-    setPalette(palette);
+//    QPalette palette = this->palette();
+//    palette.setColor(QPalette::Background, QColor(backgroundColor));
+//    setPalette(palette);
 
     m_themePanel->setBackground(backgroundColor);
-    m_jumpLineBar->setBackground(backgroundColor);
     m_replaceBar->setBackground(backgroundColor);
-    m_findBar->setBackground(backgroundColor);
     m_tabbar->setBackground(tabbarStartColor, tabbarEndColor);
     m_tabbar->setDNDColor(jsonMap["app-colors"].toMap()["tab-dnd-start"].toString(), jsonMap["app-colors"].toMap()["tab-dnd-end"].toString());
 
@@ -1406,7 +1404,7 @@ void Window::resizeEvent(QResizeEvent *e)
     }
 
     //add by guoshaoyu
-    m_findBar->resize(width() - 20, m_findBar->height());
+    m_findBar->resize(width(), m_findBar->height());
 
     DMainWindow::resizeEvent(e);
 }
