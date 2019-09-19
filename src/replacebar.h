@@ -33,10 +33,11 @@
 #include "dimagebutton.h"
 #include <DIconButton>
 #include <DApplicationHelper>
+#include <DFloatingWidget>
 
 DWIDGET_USE_NAMESPACE
 
-class ReplaceBar : public QWidget
+class ReplaceBar : public DFloatingWidget
 {
     Q_OBJECT
 
@@ -49,8 +50,6 @@ public:
     void activeInput(QString text, QString file, int row, int column, int scrollOffset);
     void setMismatchAlert(bool isAlert);
 
-    void setBackground(QString color);
-
 signals:
     void replaceNext(QString replaceText, QString withText);
     void replaceSkip();
@@ -62,8 +61,10 @@ signals:
     void removeSearchKeyword();
     void updateSearchKeyword(QString file, QString keyword);
 
+    void sigReplacebarClose();
+
 public slots:
-    void replaceCancel();
+    void replaceClose();
     void handleContentChanged();
     void handleReplaceAll();
     void handleReplaceNext();
@@ -71,7 +72,6 @@ public slots:
 
 protected:
     void hideEvent(QHideEvent *event);
-    void paintEvent(QPaintEvent *event);
     bool focusNextPrevChild(bool next);
 
 private:

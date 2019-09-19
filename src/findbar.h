@@ -62,7 +62,7 @@ signals:
     void updateSearchKeyword(QString file, QString keyword);
 
     //add guoshao
-    void sigFindbarCancel();
+    void sigFindbarClose();
 
 public slots:
     void findCancel();

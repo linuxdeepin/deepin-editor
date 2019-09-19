@@ -118,7 +118,8 @@ public slots:
     void handleFindNext();
     void handleFindPrev();
     //add by guoshaoyu
-    void slotFindbarCancel();
+    void slotFindbarClose();
+    void slotReplacebarClose();
 
     void handleReplaceAll(const QString &replaceText, const QString &withText);
     void handleReplaceNext(const QString &replaceText, const QString &withText);

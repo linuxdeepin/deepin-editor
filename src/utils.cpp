@@ -25,6 +25,7 @@
 
 #include <DSettings>
 #include <DSettingsOption>
+#include <DMessageManager>
 #include <QRegularExpression>
 #include <QJsonDocument>
 #include <QMimeDatabase>
@@ -578,22 +579,7 @@ bool Utils::isDraftFile(const QString &filepath)
 
 void Utils::toast(const QString &message, QWidget *parent)
 {
-    Toast *toast = new Toast(parent);
-    int avaliableHeight = parent->height() - toast->height();
-    int toastPaddingBottom = qMin(avaliableHeight / 2, 100);
 
-    QObject::connect(toast, &Toast::visibleChanged, parent, [toast] (bool visible) {
-        if (visible == false) {
-            toast->deleteLater();
-        }
-    });
-
-    toast->setText(message);
-    toast->setIcon(Utils::getQrcPath("logo_24.svg"));
-    toast->pop();
-
-    toast->move((parent->width() - toast->width()) / 2,
-                avaliableHeight - toastPaddingBottom);
 }
 
 const QStringList Utils::getEncodeList()

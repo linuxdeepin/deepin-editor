@@ -44,8 +44,8 @@ EditWrapper::EditWrapper(QWidget *parent)
       m_textCodec(QTextCodec::codecForName("UTF-8")),
       m_endOfLineMode(eolUnix),
       m_isLoadFinished(true),
-      m_toast(new Toast(this)),
-      m_isRefreshing(false)
+      m_isRefreshing(false),
+      m_waringNotices(new WarningNotices)
 {
     // Init layout and widgets.
     m_layout->setContentsMargins(0, 0, 0, 0);
@@ -63,24 +63,23 @@ EditWrapper::EditWrapper(QWidget *parent)
     mainLayout->setSpacing(0);
     setLayout(mainLayout);
 
-    m_toast->setOnlyShow(true);
-    m_toast->setIcon(":/images/warning.svg");
-
     connect(m_textEdit, &DTextEdit::cursorModeChanged, this, &EditWrapper::handleCursorModeChanged);
     connect(m_textEdit, &DTextEdit::hightlightChanged, this, &EditWrapper::handleHightlightChanged);
-    connect(m_toast, &Toast::reloadBtnClicked, this, &EditWrapper::refresh);
-    connect(m_toast, &Toast::closeBtnClicked, this, [=] {
+
+    connect(m_waringNotices, &WarningNotices::closeButtonClicked, m_waringNotices, &WarningNotices::closeBtnClicked);
+    connect(m_waringNotices, &WarningNotices::reloadBtnClicked, this, &EditWrapper::refresh);
+    connect(m_waringNotices, &WarningNotices::closeBtnClicked, this, [=] {
         QFileInfo fi(filePath());
         m_modified = fi.lastModified();
     });
 
-    connect(m_toast, &Toast::saveAsBtnClicked, this, &EditWrapper::requestSaveAs);
+    connect(m_waringNotices, &WarningNotices::saveAsBtnClicked, this, &EditWrapper::requestSaveAs);
 }
 
 EditWrapper::~EditWrapper()
 {
     delete m_textEdit;
-    delete m_toast;
+    delete m_waringNotices;
 }
 
 void EditWrapper::openFile(const QString &filepath)
@@ -203,7 +202,7 @@ void EditWrapper::refresh()
         m_modified = fi.lastModified();
 
         file.close();
-        m_toast->hideAnimation();
+        m_waringNotices->hide();
 
         m_textEdit->setUpdatesEnabled(false);
 
@@ -250,10 +249,11 @@ void EditWrapper::setTextCodec(QByteArray encodeName, bool reload)
     setTextCodec(codec);
 }
 
-void EditWrapper::hideToast()
+void EditWrapper::hideWarningNotices()
 {
-    if (m_toast->isVisible()) {
-        m_toast->hideAnimation();
+
+    if (m_waringNotices->isVisible()) {
+        m_waringNotices->hide();
     }
 }
 
@@ -264,30 +264,18 @@ void EditWrapper::checkForReload()
 
     QFileInfo fi(filePath());
 
-    if (fi.lastModified() == m_modified || m_toast->isVisible())
+    if (fi.lastModified() == m_modified || m_waringNotices->isVisible())
         return;
 
     if (fi.exists()) {
-        m_toast->setText(tr("File has changed on disk. Reload?"));
-        m_toast->setReloadState(true);
+        m_waringNotices->setMessage(tr("File has changed on disk. Reload?"));
+        m_waringNotices->setReloadBtn();
     } else {
-        m_toast->setText(tr("File removed on the disk. Save it now?"));
-        m_toast->setReloadState(false);
+        m_waringNotices->setMessage(tr("File removed on the disk. Save it now?"));
+        m_waringNotices->setSaveAsBtn();
     }
 
-    initToastPosition();
-    m_toast->showAnimation();
-}
-
-void EditWrapper::initToastPosition()
-{
-    int avaliableHeight = this->height() - m_toast->height() + m_bottomBar->height();
-
-    int toastPaddingBottom = qMin(avaliableHeight / 2, 100);
-    m_toast->adjustSize();
-    m_toast->setFixedWidth(this->width() / 2);
-    m_toast->move((this->width() - m_toast->width()) / 2,
-                  avaliableHeight - toastPaddingBottom);
+    DMessageManager::instance()->sendMessage(window(), m_waringNotices);
 }
 
 void EditWrapper::detectEndOfLine()
@@ -364,7 +352,6 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QString
 
 void EditWrapper::resizeEvent(QResizeEvent *e)
 {
-    initToastPosition();
 
     QWidget::resizeEvent(e);
 }

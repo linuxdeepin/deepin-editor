@@ -26,6 +26,8 @@
 #include <QPainter>
 #include <QString>
 #include <QImage>
+#include <DMainWindow>
+#include <QIcon>
 
 class Utils : public QObject
 {

@@ -58,7 +58,7 @@ Window::Window(DMainWindow *parent)
       m_centralLayout(new QVBoxLayout(m_centralWidget)),
       m_tabbar(new Tabbar),
       m_jumpLineBar(new JumpLineBar(this)),
-      m_replaceBar(new ReplaceBar),
+      m_replaceBar(new ReplaceBar(this)),
       m_themePanel(new ThemePanel(this)),
       m_findBar(new FindBar(this)),
       m_settings(new Settings(this)),
@@ -130,7 +130,7 @@ Window::Window(DMainWindow *parent)
     connect(m_findBar, &FindBar::updateSearchKeyword, this, [=] (QString file, QString keyword) {
         handleUpdateSearchKeyword(m_findBar, file, keyword);
     });
-    connect(m_findBar, &FindBar::sigFindbarCancel, this, &Window::slotFindbarCancel, Qt::QueuedConnection);
+    connect(m_findBar, &FindBar::sigFindbarClose, this, &Window::slotFindbarClose, Qt::QueuedConnection);
 
     // Init replace bar.
     connect(m_replaceBar, &ReplaceBar::removeSearchKeyword, this, &Window::handleRemoveSearchKeyword, Qt::QueuedConnection);
@@ -141,6 +141,7 @@ Window::Window(DMainWindow *parent)
     connect(m_replaceBar, &ReplaceBar::updateSearchKeyword, this, [=] (QString file, QString keyword) {
         handleUpdateSearchKeyword(m_replaceBar, file, keyword);
     });
+    connect(m_replaceBar, &ReplaceBar::sigReplacebarClose, this, &Window::slotReplacebarClose, Qt::QueuedConnection);
 
     // Init jump line bar.
     QTimer::singleShot(0, m_jumpLineBar, SLOT(hide()));
@@ -159,6 +160,13 @@ Window::Window(DMainWindow *parent)
     anchors_findbar.setAnchor(Qt::AnchorHorizontalCenter, this, Qt::AnchorHorizontalCenter);
     anchors_findbar.setBottomMargin(0);
     m_findBar->raise();
+
+    //add by guoshaoyu
+    DAnchors<ReplaceBar> anchors_replaceBar(m_replaceBar);
+    anchors_replaceBar.setAnchor(Qt::AnchorBottom, this, Qt::AnchorBottom);
+    anchors_replaceBar.setAnchor(Qt::AnchorHorizontalCenter, this, Qt::AnchorHorizontalCenter);
+    anchors_replaceBar.setBottomMargin(0);
+    anchors_replaceBar->raise();
 
     // Init theme panel.
     DAnchorsBase::setAnchor(m_themePanel, Qt::AnchorTop, m_centralWidget, Qt::AnchorTop);
@@ -595,7 +603,7 @@ bool Window::saveFile()
 
             dialog->exec();
         } else {
-            currentWrapper()->hideToast();
+            currentWrapper()->hideWarningNotices();
             showNotify(tr("Saved successfully"));
         }
     }
@@ -736,12 +744,14 @@ void Window::popupReplaceBar()
     } else {
         //add by guoshaoyu
         EditWrapper *wrapper = currentWrapper();
+        if (wrapper->isVisible()) {
+            wrapper->m_bottomBar->hide();
+        }
         if (m_findBar->isVisible()) {
             m_findBar->hide();
-            wrapper->m_bottomBar->show();
         }
-
-        addBottomWidget(m_replaceBar);
+        m_replaceBar->show();
+        //addBottomWidget(m_replaceBar);
 
         QString tabPath = m_tabbar->currentPath();
         QString text = wrapper->textEditor()->textCursor().selectedText();
@@ -1164,7 +1174,16 @@ void Window::handleFindPrev()
 }
 
 //add by guoshaoyu
-void Window::slotFindbarCancel()
+void Window::slotFindbarClose()
+{
+    EditWrapper *wrapper = currentWrapper();
+    if (wrapper->bottomBar()->isHidden())
+    {
+        wrapper->bottomBar()->show();
+    }
+}
+
+void Window::slotReplacebarClose()
 {
     EditWrapper *wrapper = currentWrapper();
     if (wrapper->bottomBar()->isHidden())
@@ -1284,13 +1303,7 @@ void Window::loadTheme(const QString &path)
         wrapper->textEditor()->setThemeWithPath(path);
     }
 
-    // set background.
-//    QPalette palette = this->palette();
-//    palette.setColor(QPalette::Background, QColor(backgroundColor));
-//    setPalette(palette);
-
     m_themePanel->setBackground(backgroundColor);
-    m_replaceBar->setBackground(backgroundColor);
     m_tabbar->setBackground(tabbarStartColor, tabbarEndColor);
     m_tabbar->setDNDColor(jsonMap["app-colors"].toMap()["tab-dnd-start"].toString(), jsonMap["app-colors"].toMap()["tab-dnd-end"].toString());
 
@@ -1308,7 +1321,7 @@ void Window::showNewEditor(EditWrapper *wrapper)
 
 void Window::showNotify(const QString &message)
 {
-    Utils::toast(message, this);
+    DMainWindow::sendMessage(QIcon(":/images/logo_24.svg"), message);
 }
 
 int Window::getBlankFileIndex()
@@ -1405,6 +1418,7 @@ void Window::resizeEvent(QResizeEvent *e)
 
     //add by guoshaoyu
     m_findBar->resize(width(), m_findBar->height());
+    m_replaceBar->resize(width(), m_replaceBar->height());
 
     DMainWindow::resizeEvent(e);
 }

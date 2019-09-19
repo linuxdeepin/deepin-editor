@@ -48,7 +48,8 @@ HEADERS += window.h \
            thememodule/themepanel.h \
            thememodule/themelistview.h \
            environments.h \
-           fontitemdelegate.h
+           fontitemdelegate.h \
+    	   warningnotices.h
 
 SOURCES += window.cpp \
            startmanager.cpp \
@@ -76,7 +77,9 @@ SOURCES += window.cpp \
            thememodule/themepanel.cpp \
            thememodule/themelistmodel.cpp \
            thememodule/themelistview.cpp \
-           fontitemdelegate.cpp
+           fontitemdelegate.cpp \
+    	   warningnotices.cpp
+
 
 QMAKE_CXXFLAGS += -g
 LIBS += -lX11 -lXext -lXtst
@@ -99,4 +102,5 @@ themes.files += themes/atom_dark.theme
 INSTALLS += target desktop themes
 
 DISTFILES += \
-    themes/deepin_dark.theme
+    themes/deepin_dark.theme \
+    images/warning.svg

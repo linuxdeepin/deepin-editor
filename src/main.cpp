@@ -39,6 +39,7 @@
 #include <QDesktopWidget>
 #include <QScreen>
 #include <iostream>
+#include <DApplicationSettings>
 
 DWIDGET_USE_NAMESPACE
 
@@ -63,11 +64,12 @@ int main(int argc, char *argv[])
     app.setApplicationDescription(DApplication::translate("MainWindow", descriptionText) + "\n");
     app.setApplicationAcknowledgementPage(acknowledgementLink);
 
+    //save theme
+    DApplicationSettings savetheme;
+
     Dtk::Core::DLogManager::registerConsoleAppender();
     Dtk::Core::DLogManager::registerFileAppender();
 
-    //add by guoshaoyu
-    app.setStyle("chameleon");
 
     // Parser input arguments.
     QCommandLineParser parser;

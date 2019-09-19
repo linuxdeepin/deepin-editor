@@ -29,12 +29,10 @@ FindBar::FindBar(QWidget *parent)
     : DFloatingWidget(parent)
 {
     // Init.
-    setWindowFlags(Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
-    setFixedHeight(100);
+    setFixedHeight(68);
 
     // Init layout and widgets.
     m_layout = new QHBoxLayout();
-    m_layout->setMargin(12);
     m_findLabel = new QLabel(tr("Find"));
     m_editLine = new LineBar();
     m_findNextButton = new QPushButton(tr("Next"));
@@ -100,7 +98,7 @@ void FindBar::findCancel()
 {
     QWidget::hide();
     //add by guoshaoyu
-    emit sigFindbarCancel();
+    emit sigFindbarClose();
 }
 
 void FindBar::handleContentChanged()

@@ -23,10 +23,13 @@
 #include "dbusinterface.h"
 #include "dtextedit.h"
 #include "widgets/bottombar.h"
-#include "widgets/toast.h"
+#include "warningnotices.h"
 
 #include <QVBoxLayout>
 #include <QWidget>
+#include <DMessageManager>
+#include <DFloatingMessage>
+
 
 class EditWrapper : public QWidget
 {
@@ -62,8 +65,7 @@ public:
     BottomBar *bottomBar() { return m_bottomBar; }
     QString filePath() { return m_textEdit->filepath; }
     DTextEdit *textEditor() { return m_textEdit; }
-    bool toastVisible() { return m_toast->isVisible(); }
-    void hideToast();
+    void hideWarningNotices();
 
     void checkForReload();
     void initToastPosition();
@@ -94,9 +96,9 @@ private:
     EndOfLineMode m_endOfLineMode;
     bool m_isLoadFinished;
     QDateTime m_modified;
-    Toast *m_toast;
 
     bool m_isRefreshing;
+    WarningNotices *m_waringNotices;
 };
 
 #endif

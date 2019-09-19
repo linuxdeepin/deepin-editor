@@ -26,17 +26,16 @@
 #include <QDebug>
 
 ReplaceBar::ReplaceBar(QWidget *parent)
-    : QWidget(parent)
+    : DFloatingWidget(parent)
 {
     // Init.
-    setWindowFlags(Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
-    setFixedHeight(45);
+    setFixedHeight(68);
 
     // Init layout and widgets.
     m_layout = new QHBoxLayout(this);
-    m_replaceLabel = new QLabel(tr("Replace: "));
+    m_replaceLabel = new QLabel(tr("Replace"));
     m_replaceLine = new LineBar();
-    m_withLabel = new QLabel(tr("With: "));
+    m_withLabel = new QLabel(tr("With"));
     m_withLine = new LineBar();
     m_replaceButton = new QPushButton(tr("Replace"));
     m_replaceSkipButton = new QPushButton(tr("Skip"));
@@ -62,8 +61,8 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     m_replaceAllButton->setFocusPolicy(Qt::NoFocus);
     m_closeButton->setFocusPolicy(Qt::NoFocus);
 
-    connect(m_replaceLine, &LineBar::pressEsc, this, &ReplaceBar::replaceCancel, Qt::QueuedConnection);
-    connect(m_withLine, &LineBar::pressEsc, this, &ReplaceBar::replaceCancel, Qt::QueuedConnection);
+    connect(m_replaceLine, &LineBar::pressEsc, this, &ReplaceBar::replaceClose, Qt::QueuedConnection);
+    connect(m_withLine, &LineBar::pressEsc, this, &ReplaceBar::replaceClose, Qt::QueuedConnection);
 
     connect(m_replaceLine, &LineBar::pressEnter, this, &ReplaceBar::handleReplaceNext, Qt::QueuedConnection);
     connect(m_withLine, &LineBar::pressEnter, this, &ReplaceBar::handleReplaceNext, Qt::QueuedConnection);
@@ -84,7 +83,7 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     connect(m_replaceRestButton, &QPushButton::clicked, this, &ReplaceBar::handleReplaceRest, Qt::QueuedConnection);
     connect(m_replaceAllButton, &QPushButton::clicked, this, &ReplaceBar::handleReplaceAll, Qt::QueuedConnection);
 
-    connect(m_closeButton, &DIconButton::clicked, this, &ReplaceBar::replaceCancel, Qt::QueuedConnection);
+    connect(m_closeButton, &DIconButton::clicked, this, &ReplaceBar::replaceClose, Qt::QueuedConnection);
 }
 
 bool ReplaceBar::isFocus()
@@ -117,9 +116,10 @@ void ReplaceBar::activeInput(QString text, QString file, int row, int column, in
     focus();
 }
 
-void ReplaceBar::replaceCancel()
+void ReplaceBar::replaceClose()
 {
     hide();
+    emit sigReplacebarClose();
 }
 
 void ReplaceBar::handleContentChanged()
@@ -145,50 +145,6 @@ void ReplaceBar::handleReplaceAll()
 void ReplaceBar::hideEvent(QHideEvent *)
 {
     removeSearchKeyword();
-}
-
-void ReplaceBar::paintEvent(QPaintEvent *)
-{
-    QPainter painter(this);
-    painter.setOpacity(1);
-    QPainterPath path;
-    path.addRect(rect());
-    painter.fillPath(path, m_backgroundColor);
-
-    QColor splitLineColor;
-    if (m_backgroundColor.lightness() < 128) {
-        splitLineColor = QColor("#ffffff");
-    } else {
-        splitLineColor = QColor("#000000");
-    }
-    QPainterPath framePath;
-    framePath.addRect(QRect(rect().x(), rect().y(), rect().width(), 1));
-    painter.setOpacity(0.05);
-    painter.fillPath(framePath, splitLineColor);
-}
-
-void ReplaceBar::setBackground(QString color)
-{
-    m_backgroundColor = QColor(color);
-
-    DPalette paReplaceLabel = DApplicationHelper::instance()->palette(m_replaceLabel);
-    DPalette paWithLabel    = DApplicationHelper::instance()->palette(m_withLabel);
-    paReplaceLabel.setColor(DPalette::Background, QColor(color));
-    paWithLabel.setColor(DPalette::Background, QColor(color));
-
-    if (QColor(m_backgroundColor).lightness() < 128) {
-        //m_replaceLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#AAAAAA"));
-        //m_withLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#AAAAAA"));
-        paReplaceLabel.setColor(DPalette::WindowText, QColor("#AAAAAA"));
-        paWithLabel.setColor(DPalette::WindowText, QColor("#AAAAAA"));
-    } else {
-        //m_replaceLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#000000"));
-        //m_withLabel->setStyleSheet(QString("QLabel { background-color: %1; color: %2; }").arg(color).arg("#000000"));
-        paReplaceLabel.setColor(DPalette::WindowText, QColor("#000000"));
-        paWithLabel.setColor(DPalette::WindowText, QColor("#000000"));
-    }
-
-    repaint();
 }
 
 bool ReplaceBar::focusNextPrevChild(bool)
