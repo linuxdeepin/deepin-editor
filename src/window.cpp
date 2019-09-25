@@ -181,6 +181,7 @@ Window::Window(DMainWindow *parent)
     connect(this, &Window::requestDropEvent, this, &Window::dropEvent);
 
     connect(qApp, &QGuiApplication::focusWindowChanged, this, &Window::handleFocusWindowChanged);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &Window::slotLoadContentTheme);
 }
 
 Window::~Window()
@@ -210,7 +211,7 @@ void Window::initTitlebar()
     m_menu->addAction(saveAction);
     m_menu->addAction(saveAsAction);
     m_menu->addAction(printAction);
-    m_menu->addAction(switchThemeAction);
+    //m_menu->addAction(switchThemeAction);
     m_menu->addSeparator();
     m_menu->addAction(settingAction);
 
@@ -223,7 +224,7 @@ void Window::initTitlebar()
     titlebar()->setCustomWidget(toolBar, false);
     titlebar()->setAutoHideOnFullscreen(true);
     titlebar()->setSeparatorVisible(true);
-    titlebar()->setFixedHeight(40);
+    titlebar()->setFixedHeight(50);
     titlebar()->setMenu(m_menu);
     //add by guoshaoyu
     titlebar()->setIcon(QIcon(":/images/logo_24.svg"));
@@ -1297,7 +1298,7 @@ void Window::loadTheme(const QString &path)
 //        DThemeManager::instance()->setTheme("light");
 //    }
 
-    changeTitlebarBackground(tabbarStartColor, tabbarEndColor);
+    //changeTitlebarBackground(tabbarStartColor, tabbarEndColor);
 
     for (EditWrapper *wrapper : m_wrappers.values()) {
         wrapper->textEditor()->setThemeWithPath(path);
@@ -1369,6 +1370,19 @@ DDialog* Window::createDialog(const QString &title, const QString &content)
     dialog->addButton(QString(tr("Save")), true, DDialog::ButtonNormal);
 
     return dialog;
+}
+
+void Window::slotLoadContentTheme(DGuiApplicationHelper::ColorType themeType)
+{
+    qDebug() << "themeType:" << themeType;
+    if(themeType == DGuiApplicationHelper::ColorType::LightType)
+    {
+        loadTheme("/usr/share/deepin-editor/themes/deepin.theme");
+    }
+    else if(themeType == DGuiApplicationHelper::ColorType::DarkType)
+    {
+        loadTheme("/usr/share/deepin-editor/themes/deepin_dark.theme");
+    }
 }
 
 void Window::handleFocusWindowChanged(QWindow *w)

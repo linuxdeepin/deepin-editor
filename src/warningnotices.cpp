@@ -9,6 +9,10 @@ WarningNotices::WarningNotices(MessageType notifyType)
     m_reloadBtn = new QPushButton(tr("Reload"));
     m_saveAsBtn = new QPushButton(qApp->translate("Window", "Save as"));
 
+    m_reloadBtn->setFixedSize(80, 36);
+    m_saveAsBtn->setFixedSize(80, 36);
+    this->setFixedWidth(600);
+
     connect(m_reloadBtn, &QPushButton::clicked, this, [=] {
         this->hide();
         emit reloadBtnClicked();

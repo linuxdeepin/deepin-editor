@@ -36,9 +36,9 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     QPixmap arrowPixmap = Utils::renderSVG(":/images/dropdown_arrow_light.svg", QSize(9, 5));
     m_arrowLabel->setPixmap(arrowPixmap);
 
-    layout->addStretch();
+    //layout->addStretch();
     layout->addWidget(m_text, 0, Qt::AlignHCenter);
-    layout->addSpacing(5);
+    layout->addSpacing(10);
     layout->addWidget(m_arrowLabel);
     layout->addStretch();
 

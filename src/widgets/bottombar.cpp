@@ -20,10 +20,13 @@
 #include "bottombar.h"
 #include "../utils.h"
 #include "../editwrapper.h"
+
 #include <QLabel>
 #include <QPainter>
 #include <QHBoxLayout>
 #include <QMenu>
+
+#include <DVerticalLine>
 
 BottomBar::BottomBar(QWidget *parent)
     : QWidget(parent),
@@ -51,9 +54,17 @@ BottomBar::BottomBar(QWidget *parent)
     m_encodeMenu->setCurrentText("UTF-8");
     m_highlightMenu->setCurrentTextOnly(qApp->translate("DTextEdit", "None"));
 
+    DVerticalLine *pVerticalLine1 = new DVerticalLine();
+    DVerticalLine *pVerticalLine2 = new DVerticalLine();
+    pVerticalLine1->setFixedSize(1, 15);
+    pVerticalLine2->setFixedSize(1, 15);
+
     layout->addStretch();
     layout->addWidget(m_cursorStatus);
+    layout->addSpacing(10);
+    layout->addWidget(pVerticalLine1);
     layout->addWidget(m_encodeMenu);
+    layout->addWidget(pVerticalLine2);
     layout->addWidget(m_highlightMenu);
 
     setFixedHeight(32);
@@ -98,13 +109,22 @@ void BottomBar::setHightlightName(const QString &name)
 
 void BottomBar::setPalette(const QPalette &palette)
 {
-
     DPalette paPositionLabel  = DApplicationHelper::instance()->palette(m_positionLabel);
     DPalette paCharCountLabel = DApplicationHelper::instance()->palette(m_charCountLabel);
+    DPalette paCursorStatus = DApplicationHelper::instance()->palette(m_cursorStatus);
+    DPalette paEncodeMenu = DApplicationHelper::instance()->palette(m_encodeMenu);
+    DPalette paHighlightMenu = DApplicationHelper::instance()->palette(m_highlightMenu);
     paPositionLabel.setColor(DPalette::WindowText, QColor(palette.color(QPalette::Text).name()));
     paCharCountLabel.setColor(DPalette::WindowText, QColor(palette.color(QPalette::Text).name()));
+    paCursorStatus.setColor(DPalette::WindowText, QColor(palette.color(QPalette::Text).name()));
+    paEncodeMenu.setColor(DPalette::WindowText, QColor(palette.color(QPalette::Text).name()));
+    paHighlightMenu.setColor(DPalette::WindowText, QColor(palette.color(QPalette::Text).name()));
     m_positionLabel->setPalette(paPositionLabel);
     m_charCountLabel->setPalette(paCharCountLabel);
+    m_cursorStatus->setPalette(paCursorStatus);
+    m_encodeMenu->setPalette(paEncodeMenu);
+    m_highlightMenu->setPalette(paHighlightMenu);
+
 
     QString theme = (palette.color(QPalette::Background).lightness() < 128) ? "dark" : "light";
     m_encodeMenu->setTheme(theme);

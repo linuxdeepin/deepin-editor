@@ -37,6 +37,7 @@
 #include <QStackedWidget>
 #include <QResizeEvent>
 #include <QVBoxLayout>
+#include <DGuiApplicationHelper>
 
 DWIDGET_USE_NAMESPACE
 
@@ -139,6 +140,8 @@ public slots:
     int getBlankFileIndex();
 
     DDialog *createDialog(const QString &title, const QString &content);
+
+    void slotLoadContentTheme(DGuiApplicationHelper::ColorType themeType);
 
 private:
     void handleFocusWindowChanged(QWindow *w);
