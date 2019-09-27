@@ -1322,7 +1322,7 @@ void Window::showNewEditor(EditWrapper *wrapper)
 
 void Window::showNotify(const QString &message)
 {
-    DMainWindow::sendMessage(QIcon(":/images/logo_24.svg"), message);
+    DMainWindow::sendMessage(QIcon(":/images/ok.svg"), message);
 }
 
 int Window::getBlankFileIndex()

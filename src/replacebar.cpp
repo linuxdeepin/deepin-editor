@@ -33,16 +33,21 @@ ReplaceBar::ReplaceBar(QWidget *parent)
 
     // Init layout and widgets.
     m_layout = new QHBoxLayout(this);
+    m_layout->setContentsMargins(10, 0, 10, 0);
     m_replaceLabel = new QLabel(tr("Replace"));
     m_replaceLine = new LineBar();
     m_withLabel = new QLabel(tr("With"));
     m_withLine = new LineBar();
     m_replaceButton = new QPushButton(tr("Replace"));
+    m_replaceButton->setFixedWidth(66);
     m_replaceSkipButton = new QPushButton(tr("Skip"));
+    m_replaceSkipButton->setFixedWidth(66);
     m_replaceRestButton = new QPushButton(tr("Replace Rest"));
+    m_replaceRestButton->setFixedWidth(80);
     m_replaceAllButton = new QPushButton(tr("Replace All"));
+    m_replaceAllButton->setFixedWidth(80);
     m_closeButton = new DIconButton(DStyle::SP_CloseButton);
-    m_closeButton->setFixedSize(20, 20);
+    m_closeButton->setFixedSize(25, 25);
 
     m_layout->addWidget(m_replaceLabel);
     m_layout->addWidget(m_replaceLine);
@@ -99,9 +104,9 @@ void ReplaceBar::focus()
 void ReplaceBar::activeInput(QString text, QString file, int row, int column, int scrollOffset)
 {
     // Try fill keyword with select text.
-    m_replaceLine->clear();
-    m_replaceLine->insert(text);
-    m_replaceLine->selectAll();
+    m_replaceLine->lineEdit()->clear();
+    m_replaceLine->lineEdit()->insert(text);
+    m_replaceLine->lineEdit()->selectAll();
 
     // Show.
     show();

@@ -35,10 +35,13 @@ FindBar::FindBar(QWidget *parent)
     m_layout = new QHBoxLayout();
     m_findLabel = new QLabel(tr("Find"));
     m_editLine = new LineBar();
-    m_findNextButton = new QPushButton(tr("Next"));
     m_findPrevButton = new QPushButton(tr("Previous"));
+    m_findPrevButton->setFixedWidth(80);
+    m_findNextButton = new QPushButton(tr("Next"));
+    m_findNextButton->setFixedWidth(80);
     m_closeButton = new DIconButton(DStyle::SP_CloseButton);
-    m_closeButton->setFixedSize(20, 20);
+    m_closeButton->setFixedSize(25, 25);
+    m_layout->setContentsMargins(10, 0, 10, 0);
 
     m_layout->addWidget(m_findLabel);
     m_layout->addWidget(m_editLine);
@@ -71,15 +74,15 @@ bool FindBar::isFocus()
 void FindBar::focus()
 {
     m_editLine->setFocus();
-    m_editLine->selectAll();
+    m_editLine->lineEdit()->selectAll();
 }
 
 void FindBar::activeInput(QString text, QString file, int row, int column, int scrollOffset)
 {
     // Try fill keyword with select text.
-    m_editLine->clear();
-    m_editLine->insert(text);
-    m_editLine->selectAll();
+    m_editLine->lineEdit()->clear();
+    m_editLine->lineEdit()->insert(text);
+    m_editLine->lineEdit()->selectAll();
 
     // Show.
     QWidget::show();

@@ -29,17 +29,19 @@ JumpLineBar::JumpLineBar(QWidget *parent)
     : DFloatingWidget(parent)
 {
     // Init.
-    setFixedSize(200, 68);
+    setFixedSize(190, 68);
 
     // Init layout and widgets.
     m_layout = new QHBoxLayout();
+    m_layout->setContentsMargins(10, 0, 10, 0);
 
     m_label = new QLabel();
     m_label->setText(tr("Go to Line: "));
     m_editLine = new LineBar();
+    m_editLine->lineEdit()->setFixedWidth(91);
 
     m_lineValidator = new QIntValidator;
-    m_editLine->setValidator(m_lineValidator);
+    m_editLine->lineEdit()->setValidator(m_lineValidator);
 
     m_layout->addWidget(m_label);
     m_layout->addWidget(m_editLine);
@@ -53,12 +55,12 @@ JumpLineBar::JumpLineBar(QWidget *parent)
 
 void JumpLineBar::focus()
 {
-    m_editLine->setFocus();
+    m_editLine->lineEdit()->setFocus();
 }
 
 bool JumpLineBar::isFocus()
 {
-    return m_editLine->hasFocus();
+    return m_editLine->lineEdit()->hasFocus();
 }
 
 void JumpLineBar::activeInput(QString file, int row, int column, int lineCount, int scrollOffset)
@@ -71,14 +73,14 @@ void JumpLineBar::activeInput(QString file, int row, int column, int lineCount, 
     m_lineValidator->setRange(1, lineCount);
 
     // Clear line number.
-    m_editLine->setText("");
+    m_editLine->lineEdit()->setText("");
 
     // Show jump line bar.
     show();
     raise();
 
     // Focus default.
-    m_editLine->setFocus();
+    m_editLine->lineEdit()->setFocus();
 }
 
 void JumpLineBar::handleFocusOut()
@@ -90,7 +92,7 @@ void JumpLineBar::handleFocusOut()
 
 void JumpLineBar::handleLineChanged()
 {
-    QString content = m_editLine->text();
+    QString content = m_editLine->lineEdit()->text();
     if (content != "") {
         jumpToLine(m_jumpFile, content.toInt(), false);
     }
@@ -107,7 +109,7 @@ void JumpLineBar::jumpConfirm()
 {
     hide();
 
-    QString content = m_editLine->text();
+    QString content = m_editLine->lineEdit()->text();
     if (content != "") {
         jumpToLine(m_jumpFile, content.toInt(), true);
     }
