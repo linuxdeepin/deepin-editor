@@ -30,7 +30,6 @@
 #include <DMessageManager>
 #include <DFloatingMessage>
 
-
 class EditWrapper : public QWidget
 {
     Q_OBJECT
@@ -70,8 +69,12 @@ public:
     void checkForReload();
     void initToastPosition();
 
+    void showNotify(const QString &message);
+
     //add by guoshaoyu
     BottomBar *m_bottomBar;
+    bool getTextChangeFlag();
+    void setTextChangeFlag(bool bFlag);
 
 signals:
     void requestSaveAs();
@@ -99,6 +102,10 @@ private:
 
     bool m_isRefreshing;
     WarningNotices *m_waringNotices;
+    bool m_bTextChange = true;
+
+public slots:
+    void slotTextChange();
 };
 
 #endif

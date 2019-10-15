@@ -151,21 +151,28 @@ Window::Window(DMainWindow *parent)
     connect(m_jumpLineBar, &JumpLineBar::lostFocusExit, this, &Window::handleJumpLineBarExit, Qt::QueuedConnection);
 
     // Make jump line bar pop at top-right of editor.
-    DAnchorsBase::setAnchor(m_jumpLineBar, Qt::AnchorTop, m_centralWidget, Qt::AnchorTop);
-    DAnchorsBase::setAnchor(m_jumpLineBar, Qt::AnchorRight, m_centralWidget, Qt::AnchorRight);
+    //DAnchorsBase::setAnchor(m_jumpLineBar, Qt::AnchorTop, m_centralWidget, Qt::AnchorTop);
+    //DAnchorsBase::setAnchor(m_jumpLineBar, Qt::AnchorRight, m_centralWidget, Qt::AnchorRight);
+
+    DAnchors<JumpLineBar> anchors_jumpLineBar(m_jumpLineBar);
+    anchors_jumpLineBar.setAnchor(Qt::AnchorTop, m_centralWidget, Qt::AnchorTop);
+    anchors_jumpLineBar.setAnchor(Qt::AnchorRight, m_centralWidget, Qt::AnchorRight);
+    anchors_jumpLineBar.setTopMargin(5);
+    anchors_jumpLineBar.setRightMargin(5);
+    m_jumpLineBar->raise();
 
     //add by guoshaoyu
     DAnchors<FindBar> anchors_findbar(m_findBar);
     anchors_findbar.setAnchor(Qt::AnchorBottom, this, Qt::AnchorBottom);
     anchors_findbar.setAnchor(Qt::AnchorHorizontalCenter, this, Qt::AnchorHorizontalCenter);
-    anchors_findbar.setBottomMargin(0);
+    anchors_findbar.setBottomMargin(5);
     m_findBar->raise();
 
     //add by guoshaoyu
     DAnchors<ReplaceBar> anchors_replaceBar(m_replaceBar);
     anchors_replaceBar.setAnchor(Qt::AnchorBottom, this, Qt::AnchorBottom);
     anchors_replaceBar.setAnchor(Qt::AnchorHorizontalCenter, this, Qt::AnchorHorizontalCenter);
-    anchors_replaceBar.setBottomMargin(0);
+    anchors_replaceBar.setBottomMargin(5);
     anchors_replaceBar->raise();
 
     // Init theme panel.
@@ -226,8 +233,8 @@ void Window::initTitlebar()
     titlebar()->setSeparatorVisible(true);
     titlebar()->setFixedHeight(50);
     titlebar()->setMenu(m_menu);
-    //add by guoshaoyu
-    titlebar()->setIcon(QIcon(":/images/logo_24.svg"));
+    //titlebar()->setIcon(QIcon(":/images/logo_24.svg"));
+    titlebar()->setIcon(QIcon::fromTheme("deepin-editor"));
 
     connect(m_tabbar, &DTabBar::tabBarDoubleClicked, titlebar(), &DTitlebar::doubleClicked, Qt::QueuedConnection);
 
@@ -605,7 +612,11 @@ bool Window::saveFile()
             dialog->exec();
         } else {
             currentWrapper()->hideWarningNotices();
-            showNotify(tr("Saved successfully"));
+            if (m_wrappers.value(m_tabbar->currentPath())->getTextChangeFlag() == true) {
+                showNotify(tr("Saved successfully"));
+                m_wrappers.value(m_tabbar->currentPath())->setTextChangeFlag(false);
+            }
+
         }
     }
 
@@ -1282,6 +1293,7 @@ void Window::loadTheme(const QString &path)
         return;
     }
 
+
     m_themePath = path;
 
     QVariantMap jsonMap = Utils::getThemeMapFromPath(path);
@@ -1322,7 +1334,8 @@ void Window::showNewEditor(EditWrapper *wrapper)
 
 void Window::showNotify(const QString &message)
 {
-    DMainWindow::sendMessage(QIcon(":/images/ok.svg"), message);
+    //DMainWindow::sendMessage(QIcon(":/images/ok.svg"), message);
+    currentWrapper()->showNotify(message);
 }
 
 int Window::getBlankFileIndex()
@@ -1431,8 +1444,8 @@ void Window::resizeEvent(QResizeEvent *e)
     }
 
     //add by guoshaoyu
-    m_findBar->resize(width(), m_findBar->height());
-    m_replaceBar->resize(width(), m_replaceBar->height());
+    m_findBar->resize(width() - 10, m_findBar->height());
+    m_replaceBar->resize(width() - 10, m_replaceBar->height());
 
     DMainWindow::resizeEvent(e);
 }

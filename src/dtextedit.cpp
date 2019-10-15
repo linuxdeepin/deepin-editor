@@ -80,6 +80,7 @@ DTextEdit::DTextEdit(QWidget *parent)
 #else
     m_touchTapDistance = QGuiApplicationPrivate::platformTheme()->themeHint(QPlatformTheme::TouchDoubleTapDistance).toInt();
 #endif
+    m_fontLineNumberArea.setFamily("SourceHanSansSC-Normal");
 
     viewport()->installEventFilter(this);
     viewport()->setCursor(Qt::IBeamCursor);
@@ -1506,17 +1507,19 @@ QMenu *DTextEdit::getHighlightMenu()
 void DTextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
     QPainter painter(lineNumberArea);
-    painter.fillRect(event->rect(), m_backgroundColor);
+    //painter.fillRect(event->rect(), m_backgroundColor);
 
-    QColor splitLineColor;
+    QColor lineNumberAreaBackgroundColor;
     if (QColor(m_backgroundColor).lightness() < 128) {
-        splitLineColor = "#ffffff";
+        lineNumberAreaBackgroundColor = QColor("#ffffff");
+        lineNumberAreaBackgroundColor.setAlphaF(0.03);
+        m_lineNumbersColor.setAlphaF(0.15);
     } else {
-        splitLineColor = "#000000";
+        lineNumberAreaBackgroundColor = QColor("#000000");
+        lineNumberAreaBackgroundColor.setAlphaF(0.03);
+        m_lineNumbersColor.setAlphaF(0.3);
     }
-    splitLineColor.setAlphaF(0.05);
-    painter.fillRect(QRect(event->rect().x() + event->rect().width() - 1,
-                           event->rect().y(), 1, event->rect().height()), splitLineColor);
+    painter.fillRect(event->rect(), lineNumberAreaBackgroundColor);
 
     int blockNumber = getFirstVisibleBlockId();
     QTextBlock block = document()->findBlockByNumber(blockNumber);
@@ -1551,9 +1554,11 @@ void DTextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
                 painter.setPen(m_lineNumbersColor);
             }
 
+            m_fontLineNumberArea.setPointSize(currentFont().pointSize() - 1);
+            painter.setFont(m_fontLineNumberArea);
             painter.drawText(0, top,
                              lineNumberArea->width(), fontMetrics().height(),
-                             Qt::AlignTop | Qt::AlignHCenter, QString::number(blockNumber + 1));
+                             Qt::AlignVCenter | Qt::AlignHCenter, QString::number(blockNumber + 1));
         }
 
         block = block.next();

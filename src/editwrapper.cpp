@@ -65,6 +65,7 @@ EditWrapper::EditWrapper(QWidget *parent)
 
     connect(m_textEdit, &DTextEdit::cursorModeChanged, this, &EditWrapper::handleCursorModeChanged);
     connect(m_textEdit, &DTextEdit::hightlightChanged, this, &EditWrapper::handleHightlightChanged);
+    connect(m_textEdit, &DTextEdit::textChanged, this, &EditWrapper::slotTextChange);
 
     connect(m_waringNotices, &WarningNotices::closeButtonClicked, m_waringNotices, &WarningNotices::closeBtnClicked);
     connect(m_waringNotices, &WarningNotices::reloadBtnClicked, this, &EditWrapper::refresh);
@@ -275,7 +276,26 @@ void EditWrapper::checkForReload()
         m_waringNotices->setSaveAsBtn();
     }
 
-    DMessageManager::instance()->sendMessage(window(), m_waringNotices);
+    DMessageManager::instance()->sendMessage(m_textEdit, m_waringNotices);
+}
+
+void EditWrapper::showNotify(const QString &message)
+{
+    //DFloatingMessage
+    //DMainWindow::sendMessage(QIcon(":/images/ok.svg"), message);
+    //DMessageManager::sendMessage(QIcon(":/images/ok.svg"), message);
+
+    DMessageManager::instance()->sendMessage(m_textEdit, QIcon(":/images/ok.svg"), message);
+}
+
+bool EditWrapper::getTextChangeFlag()
+{
+    return m_bTextChange;
+}
+
+void EditWrapper::setTextChangeFlag(bool bFlag)
+{
+    m_bTextChange = bFlag;
 }
 
 void EditWrapper::detectEndOfLine()
@@ -354,4 +374,10 @@ void EditWrapper::resizeEvent(QResizeEvent *e)
 {
 
     QWidget::resizeEvent(e);
+}
+
+void EditWrapper::slotTextChange()
+{
+    m_bTextChange = true;
+    qDebug() << "In function [" << __FUNCTION__ << "]. m_bTextChange = " << m_bTextChange;
 }

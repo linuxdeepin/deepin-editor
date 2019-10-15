@@ -33,6 +33,7 @@
 #include <QPaintEvent>
 #include <QTextEdit>
 #include <QPropertyAnimation>
+#include <QFont>
 
 namespace KSyntaxHighlighting {
     class SyntaxHighlighter;
@@ -328,6 +329,8 @@ private:
     QPoint m_lastTouchBeginPos;
     QPointer<QTimer> m_updateEnableSelectionByMouseTimer;
     int m_touchTapDistance = -1;
+
+    QFont m_fontLineNumberArea;
 };
 
 #endif

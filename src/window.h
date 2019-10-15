@@ -38,6 +38,7 @@
 #include <QResizeEvent>
 #include <QVBoxLayout>
 #include <DGuiApplicationHelper>
+#include <DMessageManager>
 
 DWIDGET_USE_NAMESPACE
 

@@ -29,19 +29,32 @@ FindBar::FindBar(QWidget *parent)
     : DFloatingWidget(parent)
 {
     // Init.
-    setFixedHeight(68);
+    //setWindowFlags(Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
+    setFixedHeight(58);
 
     // Init layout and widgets.
+
     m_layout = new QHBoxLayout();
+    m_layout->setSpacing(7);
     m_findLabel = new QLabel(tr("Find"));
+    m_findLabel->setMinimumHeight(36);
     m_editLine = new LineBar();
+    m_editLine->lineEdit()->setMinimumHeight(36);
     m_findPrevButton = new QPushButton(tr("Previous"));
-    m_findPrevButton->setFixedWidth(80);
+    m_findPrevButton->setFixedSize(80, 36);
     m_findNextButton = new QPushButton(tr("Next"));
-    m_findNextButton->setFixedWidth(80);
+    m_findNextButton->setFixedSize(80, 36);
     m_closeButton = new DIconButton(DStyle::SP_CloseButton);
     m_closeButton->setFixedSize(25, 25);
-    m_layout->setContentsMargins(10, 0, 10, 0);
+    m_layout->setContentsMargins(10, 4, 10, 4);
+
+    QFont font;
+    font.setFamily("SourceHanSansSC-Medium");
+    font.setPixelSize(14);
+    m_findLabel->setFont(font);
+    m_editLine->lineEdit()->setFont(font);
+    m_findPrevButton->setFont(font);
+    m_findNextButton->setFont(font);
 
     m_layout->addWidget(m_findLabel);
     m_layout->addWidget(m_editLine);

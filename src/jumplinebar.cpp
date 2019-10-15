@@ -29,19 +29,27 @@ JumpLineBar::JumpLineBar(QWidget *parent)
     : DFloatingWidget(parent)
 {
     // Init.
-    setFixedSize(190, 68);
+    setFixedSize(180, 58);
 
     // Init layout and widgets.
     m_layout = new QHBoxLayout();
-    m_layout->setContentsMargins(10, 0, 10, 0);
+    m_layout->setContentsMargins(10, 4, 4, 4);
 
     m_label = new QLabel();
+    m_label->setMinimumHeight(37);
+    m_layout->setSpacing(0);
     m_label->setText(tr("Go to Line: "));
     m_editLine = new LineBar();
-    m_editLine->lineEdit()->setFixedWidth(91);
+    m_editLine->lineEdit()->setFixedSize(99, 37);
 
     m_lineValidator = new QIntValidator;
     m_editLine->lineEdit()->setValidator(m_lineValidator);
+
+    QFont font;
+    font.setFamily("SourceHanSansSC-Medium");
+    font.setPixelSize(13);
+    m_label->setFont(font);
+    m_editLine->lineEdit()->setFont(font);
 
     m_layout->addWidget(m_label);
     m_layout->addWidget(m_editLine);

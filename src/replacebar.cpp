@@ -29,25 +29,46 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     : DFloatingWidget(parent)
 {
     // Init.
-    setFixedHeight(68);
+    setFixedHeight(58);
 
     // Init layout and widgets.
-    m_layout = new QHBoxLayout(this);
-    m_layout->setContentsMargins(10, 0, 10, 0);
+    m_layout = new QHBoxLayout();
+    m_layout->setSpacing(7);
+    m_layout->setContentsMargins(10, 4, 10, 4);
     m_replaceLabel = new QLabel(tr("Replace"));
+    m_replaceLabel->setMinimumHeight(36);
     m_replaceLine = new LineBar();
+    m_replaceLine->lineEdit()->setMinimumHeight(36);
     m_withLabel = new QLabel(tr("With"));
+    m_withLabel->setMinimumHeight(36);
     m_withLine = new LineBar();
+    m_withLine->lineEdit()->setMinimumHeight(36);
     m_replaceButton = new QPushButton(tr("Replace"));
-    m_replaceButton->setFixedWidth(66);
+    m_replaceButton->setMinimumWidth(66);
+    m_replaceButton->setMinimumHeight(36);
     m_replaceSkipButton = new QPushButton(tr("Skip"));
-    m_replaceSkipButton->setFixedWidth(66);
+    m_replaceSkipButton->setMinimumWidth(66);
+    m_replaceSkipButton->setMinimumHeight(36);
     m_replaceRestButton = new QPushButton(tr("Replace Rest"));
-    m_replaceRestButton->setFixedWidth(80);
+    m_replaceRestButton->setMinimumWidth(80);
+    m_replaceRestButton->setMinimumHeight(36);
     m_replaceAllButton = new QPushButton(tr("Replace All"));
-    m_replaceAllButton->setFixedWidth(80);
+    m_replaceAllButton->setMinimumWidth(80);
+    m_replaceAllButton->setMinimumHeight(36);
     m_closeButton = new DIconButton(DStyle::SP_CloseButton);
     m_closeButton->setFixedSize(25, 25);
+
+    QFont font;
+    font.setFamily("SourceHanSansSC-Medium");
+    font.setPixelSize(14);
+    m_replaceLabel->setFont(font);
+    m_replaceLine->lineEdit()->setFont(font);
+    m_withLabel->setFont(font);
+    m_withLine->lineEdit()->setFont(font);
+    m_replaceButton->setFont(font);
+    m_replaceSkipButton->setFont(font);
+    m_replaceRestButton->setFont(font);
+    m_replaceAllButton->setFont(font);
 
     m_layout->addWidget(m_replaceLabel);
     m_layout->addWidget(m_replaceLine);
@@ -58,6 +79,7 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     m_layout->addWidget(m_replaceRestButton);
     m_layout->addWidget(m_replaceAllButton);
     m_layout->addWidget(m_closeButton);
+    this->setLayout(m_layout);
 
     // Make button don't grab keyboard focus after click it.
     m_replaceButton->setFocusPolicy(Qt::NoFocus);

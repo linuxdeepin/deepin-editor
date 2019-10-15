@@ -6,11 +6,13 @@ WarningNotices::WarningNotices(MessageType notifyType)
 {
 
     setIcon(QIcon(":/images/warning.svg"));
+    m_pLayout = new QHBoxLayout();
+    m_pLayout->setContentsMargins(10, 0, 10, 0);
     m_reloadBtn = new QPushButton(tr("Reload"));
     m_saveAsBtn = new QPushButton(qApp->translate("Window", "Save as"));
     m_reloadBtn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_saveAsBtn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    this->setFixedSize(620, 70);
+    this->setFixedSize(606, 60);
 
     connect(m_reloadBtn, &QPushButton::clicked, this, [=] {
         this->hide();

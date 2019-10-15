@@ -40,14 +40,24 @@ BottomBar::BottomBar(QWidget *parent)
       m_columnStr(tr("Column")),
       m_chrCountStr(tr("Characters %1"))
 {
+    QFont font;
+    font.setFamily("SourceHanSansSC-Normal");
+    font.setPixelSize(11);
+    m_positionLabel->setFont(font);
+    m_charCountLabel->setFont(font);
+    m_cursorStatus->setFont(font);
+    m_encodeMenu->setFont(font);
+    m_highlightMenu->setFont(font);
+
     QHBoxLayout *layout = new QHBoxLayout(this);
-    layout->setContentsMargins(10, 1, 10, 0);
+    layout->setContentsMargins(29, 1, 10, 0);
     layout->addWidget(m_positionLabel);
-    layout->addSpacing(10);
+    layout->addStretch();
+    layout->addSpacing(110);
     layout->addWidget(m_charCountLabel);
 
     m_cursorStatus->setText(qApp->translate("EditWrapper", "INSERT"));
-    m_positionLabel->setText(QString("%1 %2 , %3 %4").arg(m_rowStr, "1",
+    m_positionLabel->setText(QString("%1 %2  %3 %4").arg(m_rowStr, "1",
                                                           m_columnStr, "1"));
     m_charCountLabel->setText(m_chrCountStr.arg("..."));
     m_encodeMenu->addActions(Utils::getEncodeList());
@@ -78,7 +88,7 @@ BottomBar::~BottomBar()
 
 void BottomBar::updatePosition(int row, int column)
 {
-    m_positionLabel->setText(QString("%1 %2 , %3 %4").arg(m_rowStr, QString::number(row),
+    m_positionLabel->setText(QString("%1 %2  %3 %4").arg(m_rowStr, QString::number(row),
                                                           m_columnStr, QString::number(column)));
 }
 
@@ -114,17 +124,26 @@ void BottomBar::setPalette(const QPalette &palette)
     DPalette paCursorStatus = DApplicationHelper::instance()->palette(m_cursorStatus);
     DPalette paEncodeMenu = DApplicationHelper::instance()->palette(m_encodeMenu);
     DPalette paHighlightMenu = DApplicationHelper::instance()->palette(m_highlightMenu);
-    paPositionLabel.setColor(DPalette::WindowText, QColor(palette.color(QPalette::Text).name()));
-    paCharCountLabel.setColor(DPalette::WindowText, QColor(palette.color(QPalette::Text).name()));
-    paCursorStatus.setColor(DPalette::WindowText, QColor(palette.color(QPalette::Text).name()));
-    paEncodeMenu.setColor(DPalette::WindowText, QColor(palette.color(QPalette::Text).name()));
-    paHighlightMenu.setColor(DPalette::WindowText, QColor(palette.color(QPalette::Text).name()));
+
+    QColor colorFont;
+    if(palette.color((QPalette::Background)).lightness() < 128) {
+        colorFont = QColor("#526A7F");
+    }
+    else {
+        colorFont = QColor("#6D7C88");
+    }
+
+    //QColor(palette.color(QPalette::Text).name())
+    paPositionLabel.setColor(DPalette::WindowText, colorFont);
+    paCharCountLabel.setColor(DPalette::WindowText, colorFont);
+    paCursorStatus.setColor(DPalette::WindowText, colorFont);
+    paEncodeMenu.setColor(DPalette::WindowText, colorFont);
+    paHighlightMenu.setColor(DPalette::WindowText, colorFont);
     m_positionLabel->setPalette(paPositionLabel);
     m_charCountLabel->setPalette(paCharCountLabel);
     m_cursorStatus->setPalette(paCursorStatus);
     m_encodeMenu->setPalette(paEncodeMenu);
     m_highlightMenu->setPalette(paHighlightMenu);
-
 
     QString theme = (palette.color(QPalette::Background).lightness() < 128) ? "dark" : "light";
     m_encodeMenu->setTheme(theme);
@@ -144,9 +163,18 @@ void BottomBar::paintEvent(QPaintEvent *)
     painter.setOpacity(1);
 
     QColor backgroundColor = palette().color(QPalette::Background);
+    QColor bottombarBackgroundColor;
+    QColor fontColor;
+    if (backgroundColor.lightness() < 128) {
+        bottombarBackgroundColor = QColor("#1e1e1e");
+        fontColor = QColor("#6D7C88");
+    } else {
+        bottombarBackgroundColor = QColor("#ffffff");
+        fontColor = QColor("#526A7F");
+    }
     QPainterPath path;
     path.addRect(rect());
-    painter.fillPath(path, backgroundColor);
+    painter.fillPath(path, bottombarBackgroundColor);
 
     QColor splitLineColor;
     if (backgroundColor.lightness() < 128) {

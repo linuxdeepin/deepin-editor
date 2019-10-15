@@ -4,6 +4,7 @@
 #include <QApplication>
 #include <DFloatingMessage>
 #include <QPushButton>
+#include <QHBoxLayout>
 
 DWIDGET_USE_NAMESPACE
 
@@ -27,6 +28,7 @@ public slots:
 private:
     QPushButton *m_reloadBtn;
     QPushButton *m_saveAsBtn;
+    QHBoxLayout *m_pLayout;
 };
 
 #endif // WARNINGNOTICES_H
