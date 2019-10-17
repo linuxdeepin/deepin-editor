@@ -5,6 +5,7 @@
 #include <DFloatingMessage>
 #include <QPushButton>
 #include <QHBoxLayout>
+#include <QFont>
 
 DWIDGET_USE_NAMESPACE
 

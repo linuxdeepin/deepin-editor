@@ -127,10 +127,10 @@ void BottomBar::setPalette(const QPalette &palette)
 
     QColor colorFont;
     if(palette.color((QPalette::Background)).lightness() < 128) {
-        colorFont = QColor("#526A7F");
+        colorFont = QColor("#6D7C88");
     }
     else {
-        colorFont = QColor("#6D7C88");
+        colorFont = QColor("#526A7F");
     }
 
     //QColor(palette.color(QPalette::Text).name())
@@ -166,10 +166,12 @@ void BottomBar::paintEvent(QPaintEvent *)
     QColor bottombarBackgroundColor;
     QColor fontColor;
     if (backgroundColor.lightness() < 128) {
-        bottombarBackgroundColor = QColor("#1e1e1e");
+        bottombarBackgroundColor = QColor("#202020");
+        bottombarBackgroundColor.setAlphaF(0.7);
         fontColor = QColor("#6D7C88");
     } else {
         bottombarBackgroundColor = QColor("#ffffff");
+        bottombarBackgroundColor.setAlphaF(0.7);
         fontColor = QColor("#526A7F");
     }
     QPainterPath path;
@@ -179,12 +181,16 @@ void BottomBar::paintEvent(QPaintEvent *)
     QColor splitLineColor;
     if (backgroundColor.lightness() < 128) {
         splitLineColor = QColor("#ffffff");
+        splitLineColor.setAlphaF(0.5);
     } else {
         splitLineColor = QColor("#000000");
+        splitLineColor.setAlphaF(0.5);
     }
 
     QPainterPath framePath;
     framePath.addRect(QRect(rect().x(), rect().y(), rect().width(), 1));
     painter.setOpacity(0.1);
     painter.fillPath(framePath, splitLineColor);
+
+    painter.setPen(fontColor);
 }

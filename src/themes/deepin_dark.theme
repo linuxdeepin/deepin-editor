@@ -146,14 +146,14 @@
         }
    },
     "editor-colors": {
-        "background-color" : "#232629",
+        "background-color" : "#252525",
         "code-folding" : "#224e65",
         "bracket-match-bg" : "#045998",
         "bracket-match-fg" : "#FFFFFF",
         "current-line" : "#2A2E32",
         "icon-border" : "#31363b",
         "indentation-line" : "#3a3f44",
-        "line-numbers" : "#7a7c7d",
+        "line-numbers" : "#ffffff",
         "current-line-number" : "#a5a6a8",
         "mark-bookmark" : "#0404bf",
         "mark-breakpoint-active" : "#8b0607",

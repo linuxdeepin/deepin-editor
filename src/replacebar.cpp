@@ -34,7 +34,7 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     // Init layout and widgets.
     m_layout = new QHBoxLayout();
     m_layout->setSpacing(7);
-    m_layout->setContentsMargins(10, 4, 10, 4);
+    m_layout->setContentsMargins(16, 4, 11, 4);
     m_replaceLabel = new QLabel(tr("Replace"));
     m_replaceLabel->setMinimumHeight(36);
     m_replaceLine = new LineBar();
