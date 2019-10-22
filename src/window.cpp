@@ -57,7 +57,7 @@ Window::Window(DMainWindow *parent)
       m_editorWidget(new QStackedWidget),
       m_centralLayout(new QVBoxLayout(m_centralWidget)),
       m_tabbar(new Tabbar),
-      m_jumpLineBar(new JumpLineBar(this)),
+      m_jumpLineBar(new JumpLineBar()),
       m_replaceBar(new ReplaceBar(this)),
       m_themePanel(new ThemePanel(this)),
       m_findBar(new FindBar(this)),
@@ -145,6 +145,7 @@ Window::Window(DMainWindow *parent)
 
     // Init jump line bar.
     QTimer::singleShot(0, m_jumpLineBar, SLOT(hide()));
+    m_jumpLineBar->setParent(this);
 
     connect(m_jumpLineBar, &JumpLineBar::jumpToLine, this, &Window::handleJumpLineBarJumpToLine, Qt::QueuedConnection);
     connect(m_jumpLineBar, &JumpLineBar::backToPosition, this, &Window::handleBackToPosition, Qt::QueuedConnection);
