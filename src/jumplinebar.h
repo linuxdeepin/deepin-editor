@@ -40,7 +40,7 @@ class JumpLineBar : public DFloatingWidget
     Q_OBJECT
 
 public:
-    JumpLineBar(QWidget *parent = 0);
+    JumpLineBar(DFloatingWidget *parent = 0);
 
 public slots:
     void focus();
@@ -53,6 +53,8 @@ public slots:
 
     void jumpCancel();
     void jumpConfirm();
+
+    void slotFocusChanged(bool bFocus);
 
 signals:
     void backToPosition(QString file, int row, int column, int scrollOffset);

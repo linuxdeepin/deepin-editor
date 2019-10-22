@@ -25,7 +25,7 @@
 
 #include <QDebug>
 
-JumpLineBar::JumpLineBar(QWidget *parent)
+JumpLineBar::JumpLineBar(DFloatingWidget *parent)
     : DFloatingWidget(parent)
 {
     // Init.
@@ -34,13 +34,13 @@ JumpLineBar::JumpLineBar(QWidget *parent)
     // Init layout and widgets.
     m_layout = new QHBoxLayout();
     m_layout->setContentsMargins(10, 4, 4, 4);
+    m_layout->setSpacing(0);
 
     m_label = new QLabel();
     m_label->setMinimumHeight(37);
-    m_layout->setSpacing(0);
     m_label->setText(tr("Go to Line: "));
     m_editLine = new LineBar();
-    m_editLine->lineEdit()->setFixedSize(99, 37);
+    m_editLine->lineEdit()->setFixedSize(96, 37);
 
     m_lineValidator = new QIntValidator;
     m_editLine->lineEdit()->setValidator(m_lineValidator);
@@ -59,6 +59,7 @@ JumpLineBar::JumpLineBar(QWidget *parent)
     connect(m_editLine, &LineBar::pressEnter, this, &JumpLineBar::jumpConfirm, Qt::QueuedConnection);
     connect(m_editLine, &LineBar::textChanged, this, &JumpLineBar::handleLineChanged, Qt::QueuedConnection);
     connect(m_editLine, &LineBar::focusOut, this, &JumpLineBar::handleFocusOut, Qt::QueuedConnection);
+    connect(m_editLine, &LineBar::focusChanged, this, &JumpLineBar::slotFocusChanged, Qt::QueuedConnection);
 }
 
 void JumpLineBar::focus()
@@ -120,6 +121,15 @@ void JumpLineBar::jumpConfirm()
     QString content = m_editLine->lineEdit()->text();
     if (content != "") {
         jumpToLine(m_jumpFile, content.toInt(), true);
+    }
+}
+
+void JumpLineBar::slotFocusChanged(bool bFocus)
+{
+    if (bFocus == false) {
+        hide();
+
+        lostFocusExit();
     }
 }
 

@@ -39,6 +39,7 @@
 #include <QVBoxLayout>
 #include <DGuiApplicationHelper>
 #include <DMessageManager>
+#include <DGuiApplicationHelper>
 
 DWIDGET_USE_NAMESPACE
 
@@ -143,6 +144,7 @@ public slots:
     DDialog *createDialog(const QString &title, const QString &content);
 
     void slotLoadContentTheme(DGuiApplicationHelper::ColorType themeType);
+    void slotSettingResetTheme(const QString &path);
 
 private:
     void handleFocusWindowChanged(QWindow *w);

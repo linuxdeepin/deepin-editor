@@ -80,7 +80,7 @@ Window::Window(DMainWindow *parent)
     connect(m_settings, &Settings::adjustFont, this, &Window::updateFont);
     connect(m_settings, &Settings::adjustFontSize, this, &Window::updateFontSize);
     connect(m_settings, &Settings::adjustTabSpaceNumber, this, &Window::updateTabSpaceNumber);
-    connect(m_settings, &Settings::themeChanged, this, &Window::loadTheme);
+    connect(m_settings, &Settings::themeChanged, this, &Window::slotSettingResetTheme);
     connect(m_settings, &Settings::adjustWordWrap, this, [=] (bool enable) {
         for (EditWrapper *wrapper : m_wrappers.values()) {
             DTextEdit *textedit = wrapper->textEditor();
@@ -106,7 +106,7 @@ Window::Window(DMainWindow *parent)
     const QString &windowState = m_settings->settings->option("advance.window.windowstate")->value().toString();
 
     // window minimum size.
-    setMinimumSize(450, 250);
+    setMinimumSize(800, 500);
 
     // resize window size.
     QScreen *screen = QGuiApplication::primaryScreen();
@@ -161,17 +161,17 @@ Window::Window(DMainWindow *parent)
     anchors_jumpLineBar.setRightMargin(5);
     m_jumpLineBar->raise();
 
-    //add by guoshaoyu
+    // Init findbar panel.
     DAnchors<FindBar> anchors_findbar(m_findBar);
-    anchors_findbar.setAnchor(Qt::AnchorBottom, this, Qt::AnchorBottom);
-    anchors_findbar.setAnchor(Qt::AnchorHorizontalCenter, this, Qt::AnchorHorizontalCenter);
+    anchors_findbar.setAnchor(Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
+    anchors_findbar.setAnchor(Qt::AnchorHorizontalCenter, m_centralWidget, Qt::AnchorHorizontalCenter);
     anchors_findbar.setBottomMargin(5);
     m_findBar->raise();
 
-    //add by guoshaoyu
+    // Init replaceBar panel.
     DAnchors<ReplaceBar> anchors_replaceBar(m_replaceBar);
-    anchors_replaceBar.setAnchor(Qt::AnchorBottom, this, Qt::AnchorBottom);
-    anchors_replaceBar.setAnchor(Qt::AnchorHorizontalCenter, this, Qt::AnchorHorizontalCenter);
+    anchors_replaceBar.setAnchor(Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
+    anchors_replaceBar.setAnchor(Qt::AnchorHorizontalCenter, m_centralWidget, Qt::AnchorHorizontalCenter);
     anchors_replaceBar.setBottomMargin(5);
     anchors_replaceBar->raise();
 
@@ -1396,6 +1396,17 @@ void Window::slotLoadContentTheme(DGuiApplicationHelper::ColorType themeType)
     {
         loadTheme("/usr/share/deepin-editor/themes/deepin_dark.theme");
     }
+}
+
+void Window::slotSettingResetTheme(const QString &path)
+{
+
+    QString strDefaultTheme = "/usr/share/deepin-editor/themes/deepin.theme";
+    if (path == strDefaultTheme) {
+        DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::LightType);
+    }
+
+    loadTheme(path);
 }
 
 void Window::handleFocusWindowChanged(QWindow *w)
