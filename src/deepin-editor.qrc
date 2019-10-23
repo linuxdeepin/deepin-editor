@@ -18,6 +18,7 @@
     <file>images/logo_48.svg</file>
     <file>images/logo_24.svg</file>
     <file>images/warning.svg</file>
+    <file>images/ok.svg</file>
     <file>qss/main.qss</file>
     <file>resources/settings.json</file>
   </qresource>
