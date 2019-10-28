@@ -48,6 +48,6 @@ ToolBar::~ToolBar()
 
 void ToolBar::setTabbar(QWidget *w)
 {
-    m_layout->addWidget(w, 0, Qt::AlignTop);
+    m_layout->addWidget(w, 0);
     m_layout->addSpacing(70);
 }

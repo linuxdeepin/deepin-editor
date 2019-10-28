@@ -9,7 +9,7 @@ WarningNotices::WarningNotices(MessageType notifyType)
     font.setFamily("SourceHanSansSC-Medium");
     this->setFont(font);
 
-    this->setContentsMargins(7, 0, 11, 20);
+    this->setContentsMargins(7, 7, 7, 7);
 
     setIcon(QIcon(":/images/warning.svg"));
     m_reloadBtn = new QPushButton(tr("Reload"));
@@ -18,7 +18,6 @@ WarningNotices::WarningNotices(MessageType notifyType)
     m_saveAsBtn->setFixedSize(80, 36);
     m_reloadBtn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_saveAsBtn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    this->setFixedSize(606, 60);
 
     connect(m_reloadBtn, &QPushButton::clicked, this, [=] {
         this->hide();

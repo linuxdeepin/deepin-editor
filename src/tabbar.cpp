@@ -43,7 +43,6 @@ Tabbar::Tabbar(QWidget *parent)
     setElideMode(Qt::ElideMiddle);
 
     setFocusPolicy(Qt::NoFocus);
-    setFixedHeight(40);
 
     // set mask color.
     QColor dropColor("#333333");

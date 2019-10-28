@@ -232,7 +232,6 @@ void Window::initTitlebar()
     titlebar()->setCustomWidget(toolBar, false);
     titlebar()->setAutoHideOnFullscreen(true);
     titlebar()->setSeparatorVisible(true);
-    titlebar()->setFixedHeight(50);
     titlebar()->setMenu(m_menu);
     //titlebar()->setIcon(QIcon(":/images/logo_24.svg"));
     titlebar()->setIcon(QIcon::fromTheme("deepin-editor"));
