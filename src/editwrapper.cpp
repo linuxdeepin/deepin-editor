@@ -230,7 +230,7 @@ void EditWrapper::setTextCodec(QTextCodec *codec, bool reload)
 {
     m_textCodec = codec;
 
-    if (!reload)
+    if (reload == false)
         return;
 
     refresh();
@@ -247,7 +247,7 @@ void EditWrapper::setTextCodec(QByteArray encodeName, bool reload)
         codec = QTextCodec::codecForName("UTF-8");
     }
 
-    setTextCodec(codec);
+    setTextCodec(codec, reload);
 }
 
 void EditWrapper::hideWarningNotices()
@@ -358,6 +358,7 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QString
     setTextCodec(encode);
 
     // set text.
+    m_textEdit->loadHighlighter();
     m_textEdit->setPlainText(content);
 
     // update status.
@@ -367,7 +368,7 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QString
     m_bottomBar->setEncodeName(m_textCodec->name());
 
     // load highlight.
-    QTimer::singleShot(100, this, [=] { m_textEdit->loadHighlighter(); });
+    //QTimer::singleShot(100, this, [=] { m_textEdit->loadHighlighter(); });
 }
 
 void EditWrapper::resizeEvent(QResizeEvent *e)

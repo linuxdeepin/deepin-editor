@@ -1830,9 +1830,12 @@ void DTextEdit::setTheme(const KSyntaxHighlighting::Theme &theme, const QString 
 
     // does not support highlight do not reload
     // when switching theme will be jammed or large files.
+    QString backupTxt = this->toPlainText();
+    this->setPlainText("");
     if (m_highlighted) {
         m_highlighter->rehighlight();
     }
+    this->setPlainText(backupTxt);
 
     lineNumberArea->update();
     highlightCurrentLine();

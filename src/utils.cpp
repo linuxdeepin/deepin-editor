@@ -275,9 +275,9 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
         {KEncodingProber::ChineseTraditional, QLocale::China},
         {KEncodingProber::Japanese, QLocale::Japan},
         {KEncodingProber::Korean, QLocale::NorthKorea},
-        {KEncodingProber::Cyrillic, QLocale::Russia},
-        {KEncodingProber::Greek, QLocale::Greece},
-        {proberType, QLocale::system().country()}
+        //{KEncodingProber::Cyrillic, QLocale::Russia},
+        //{KEncodingProber::Greek, QLocale::Greece},
+        //{proberType, QLocale::system().country()}
     };
 
     KEncodingProber prober(proberType);

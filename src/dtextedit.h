@@ -34,6 +34,7 @@
 #include <QTextEdit>
 #include <QPropertyAnimation>
 #include <QFont>
+#include <DApplicationHelper>
 
 namespace KSyntaxHighlighting {
     class SyntaxHighlighter;
