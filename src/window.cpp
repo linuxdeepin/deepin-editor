@@ -113,7 +113,7 @@ Window::Window(DMainWindow *parent)
     QRect screenGeometry = screen->geometry();
 
     resize(QSize(screenGeometry.width() * m_settings->settings->option("advance.window.window_width")->value().toDouble(),
-                 screenGeometry.height() * m_settings->settings->option("advance.window.window_height")->value().toDouble()));
+                screenGeometry.height() * m_settings->settings->option("advance.window.window_height")->value().toDouble()));
     show();
 
     // init window state.
@@ -150,6 +150,7 @@ Window::Window(DMainWindow *parent)
     connect(m_jumpLineBar, &JumpLineBar::jumpToLine, this, &Window::handleJumpLineBarJumpToLine, Qt::QueuedConnection);
     connect(m_jumpLineBar, &JumpLineBar::backToPosition, this, &Window::handleBackToPosition, Qt::QueuedConnection);
     connect(m_jumpLineBar, &JumpLineBar::lostFocusExit, this, &Window::handleJumpLineBarExit, Qt::QueuedConnection);
+
 
     // Make jump line bar pop at top-right of editor.
     //DAnchorsBase::setAnchor(m_jumpLineBar, Qt::AnchorTop, m_centralWidget, Qt::AnchorTop);
@@ -1406,7 +1407,7 @@ void Window::slotSettingResetTheme(const QString &path)
         DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::LightType);
     }
 
-    loadTheme(path);
+    //loadTheme(path);
 }
 
 void Window::handleFocusWindowChanged(QWindow *w)

@@ -179,8 +179,6 @@ DTextEdit::DTextEdit(QWidget *parent)
     setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
-    connect(verticalScrollBar(), &QScrollBar::rangeChanged, this, &DTextEdit::adjustScrollbarMargins, Qt::QueuedConnection);
-
     // Don't blink the cursor when selecting text
     // Recover blink when not selecting text.
     connect(this, &DTextEdit::selectionChanged, this, [=] {
@@ -1830,12 +1828,17 @@ void DTextEdit::setTheme(const KSyntaxHighlighting::Theme &theme, const QString 
 
     // does not support highlight do not reload
     // when switching theme will be jammed or large files.
-    QString backupTxt = this->toPlainText();
-    this->setPlainText("");
+    int iVerticalScrollValue = getScrollOffset();
+    int iHorizontalScrollVaule = horizontalScrollBar()->value();
+    getScrollOffset();
+    QString backupTxt = toPlainText();
+    setPlainText("");
     if (m_highlighted) {
         m_highlighter->rehighlight();
     }
-    this->setPlainText(backupTxt);
+    setPlainText(backupTxt);
+    verticalScrollBar()->setSliderPosition(iVerticalScrollValue);
+    horizontalScrollBar()->setSliderPosition(iHorizontalScrollVaule);
 
     lineNumberArea->update();
     highlightCurrentLine();
@@ -2328,18 +2331,6 @@ bool DTextEdit::eventFilter(QObject *, QEvent *event)
     return false;
 }
 
-void DTextEdit::adjustScrollbarMargins()
-{
-    QEvent event(QEvent::LayoutRequest);
-    QApplication::sendEvent(this, &event);
-
-    if (!verticalScrollBar()->visibleRegion().isEmpty()) {
-        setViewportMargins(0, 0, -verticalScrollBar()->sizeHint().width(), 0);
-    } else {
-        setViewportMargins(0, 0, 0, 0);
-    }
-}
-
 void DTextEdit::dragEnterEvent(QDragEnterEvent *event)
 {
     QTextEdit::dragEnterEvent(event);
@@ -2730,27 +2721,4 @@ void DTextEdit::highlightCurrentLine()
 {
     updateHighlightLineSelection();
     renderAllSelections();
-
-    // Adjust scrollbar margins if reach last line.
-    // FIXME(rekols): Temporarily do not need this function.
-    // if (getCurrentLine() == blockCount()) {
-    //     // Adjust y coordinate up one line height.
-    //     m_scrollbarMargin = fontMetrics().height();
-
-    //     adjustScrollbarMargins();
-
-    //     // NOTE: do nextLine make scrollbar adjust y coordinate.
-    //     nextLine();
-    // } else {
-    //     m_scrollbarMargin = 0;
-
-    //     adjustScrollbarMargins();
-    // }
-
-    adjustScrollbarMargins();
-
-    // Keep current line at visible area.
-    // if (cursorRect().top() + fontMetrics().height() >= rect().height()) {
-    //     scrollLineUp();
-    // }
 }

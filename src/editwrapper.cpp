@@ -380,5 +380,4 @@ void EditWrapper::resizeEvent(QResizeEvent *e)
 void EditWrapper::slotTextChange()
 {
     m_bTextChange = true;
-    qDebug() << "In function [" << __FUNCTION__ << "]. m_bTextChange = " << m_bTextChange;
 }

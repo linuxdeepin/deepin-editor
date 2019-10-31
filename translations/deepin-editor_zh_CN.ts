@@ -192,7 +192,8 @@
     <message>
         <location filename="../src/jumplinebar.cpp" line="38"/>
         <source>Go to Line: </source>
-        <translation>跳到行：</translation>
+        <translatorcomment>跳到行:</translatorcomment>
+        <translation>跳到行:</translation>
     </message>
 </context>
 <context>
@@ -622,23 +623,19 @@
 <context>
     <name>ReplaceBar</name>
     <message>
-        <source>Replace: </source>
-        <translation type="vanished">查找：</translation>
-    </message>
-    <message>
-        <source>With: </source>
-        <translation type="vanished">替换为：</translation>
-    </message>
-    <message>
         <location filename="../src/replacebar.cpp" line="36"/>
-        <location filename="../src/replacebar.cpp" line="40"/>
-        <source>Replace</source>
-        <translation>替换</translation>
+        <source>Find</source>
+        <translation>查找</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="38"/>
         <source>With</source>
         <translation>替换为</translation>
+    </message>
+    <message>
+        <location filename="../src/replacebar.cpp" line="40"/>
+        <source>Replace</source>
+        <translation>替换</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="41"/>
