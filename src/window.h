@@ -90,6 +90,8 @@ public:
     void updateFont(const QString &fontName);
     void updateFontSize(int size);
     void updateTabSpaceNumber(int number);
+    void updateUseTab(bool useTab);
+    void updateAutoIndent(bool autoIndent);
 
     void changeTitlebarBackground(const QString &color);
     void changeTitlebarBackground(const QString &startColor, const QString &endColor);

@@ -53,6 +53,8 @@ signals:
     void adjustFont(QString name);
     void adjustFontSize(int fontSize);
     void adjustTabSpaceNumber(int number);
+    void adjustUseTab(bool useTab);
+    void adjustAutoIndent(bool autoIndent);
     void adjustWordWrap(bool enable);
     void themeChanged(const QString &theme);
 

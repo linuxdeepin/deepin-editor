@@ -541,13 +541,42 @@ void DTextEdit::jumpToLine(int line, bool keepLineAtCenter)
     }
 }
 
+void DTextEdit::autoIndent(QTextCursor& cursor)
+{
+    auto curBlock = cursor.block().text();
+    auto *indentEndIter = std::find_if_not(curBlock.begin(), curBlock.end(), [](QChar &c) {
+        return c == '\t' || c == ' ';
+    });
+    auto indentEndPos = indentEndIter - curBlock.begin();
+    auto curIndent = curBlock.midRef(0, static_cast<int>(indentEndPos));
+    int curIndentSize = 0;
+    for (const auto &c : curIndent) {
+        if (c == '\t')
+            curIndentSize += m_tabSpaceNumber;
+        else
+            curIndentSize++;
+    }
+
+    QString newIndent;
+    if (m_useTab)
+        newIndent = QString(curIndentSize / m_tabSpaceNumber, '\t');
+    else
+        newIndent = QString(curIndentSize, ' ');
+    cursor.insertText("\n" + newIndent);
+}
+
 void DTextEdit::newline()
 {
     // Stop mark if mark is set.
     tryUnsetMark();
 
     QTextCursor cursor = textCursor();
-    cursor.insertText("\n");
+
+    if (!m_autoIndent)
+        cursor.insertText("\n");
+    else
+        autoIndent(cursor);
+
     setTextCursor(cursor);
 }
 
@@ -1045,9 +1074,11 @@ void DTextEdit::indentText()
         cursor.beginEditBlock();
 
         while (block != end) {
-            QString speaces(m_tabSpaceNumber, ' ');
+            QString indentStr = "\t";
+            if (!m_useTab)
+                indentStr = QString(m_tabSpaceNumber, ' ');
             cursor.setPosition(block.position());
-            cursor.insertText(speaces);
+            cursor.insertText(indentStr);
             block = block.next();
         }
 
@@ -1055,9 +1086,12 @@ void DTextEdit::indentText()
     } else {
         cursor.beginEditBlock();
 
-        int indent = m_tabSpaceNumber - (cursor.positionInBlock() % m_tabSpaceNumber);
-        QString spaces(indent, ' ');
-        cursor.insertText(spaces);
+        QString indentStr = "\t";
+        if (!m_useTab) {
+            int indent = m_tabSpaceNumber - (cursor.positionInBlock() % m_tabSpaceNumber);
+            indentStr = QString(indent, ' ');
+        }
+        cursor.insertText(indentStr);
 
         cursor.endEditBlock();
     }
@@ -1112,6 +1146,16 @@ void DTextEdit::setTabSpaceNumber(int number)
     m_tabSpaceNumber = number;
     updateFont();
     updateLineNumber();
+}
+
+void DTextEdit::setUseTab(bool useTab)
+{
+    m_useTab = useTab;
+}
+
+void DTextEdit::setAutoIndent(bool autoIndent)
+{
+    m_autoIndent = autoIndent;
 }
 
 void DTextEdit::upcaseWord()

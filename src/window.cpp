@@ -77,6 +77,8 @@ Window::Window(DMainWindow *parent)
     connect(m_settings, &Settings::adjustFont, this, &Window::updateFont);
     connect(m_settings, &Settings::adjustFontSize, this, &Window::updateFontSize);
     connect(m_settings, &Settings::adjustTabSpaceNumber, this, &Window::updateTabSpaceNumber);
+    connect(m_settings, &Settings::adjustUseTab, this, &Window::updateUseTab);
+    connect(m_settings, &Settings::adjustAutoIndent, this, &Window::updateAutoIndent);
     connect(m_settings, &Settings::themeChanged, this, &Window::loadTheme);
     connect(m_settings, &Settings::adjustWordWrap, this, [=] (bool enable) {
         for (EditWrapper *wrapper : m_wrappers.values()) {
@@ -422,6 +424,8 @@ EditWrapper* Window::createEditor()
     wrapper->textEditor()->setThemeWithPath(m_themePath);
     wrapper->textEditor()->setSettings(m_settings);
     wrapper->textEditor()->setTabSpaceNumber(m_settings->settings->option("advance.editor.tabspacenumber")->value().toInt());
+    wrapper->textEditor()->setUseTab(m_settings->settings->option("advance.editor.usetab")->value().toBool());
+    wrapper->textEditor()->setAutoIndent(m_settings->settings->option("advance.editor.autoindent")->value().toBool());
     wrapper->textEditor()->setFontFamily(m_settings->settings->option("base.font.family")->value().toString());
     wrapper->textEditor()->setModified(false);
     wrapper->textEditor()->setLineWrapMode(wordWrap);
@@ -851,6 +855,20 @@ void Window::updateTabSpaceNumber(int number)
 {
     for (EditWrapper *wrapper : m_wrappers.values()) {
         wrapper->textEditor()->setTabSpaceNumber(number);
+    }
+}
+
+void Window::updateUseTab(bool useTab)
+{
+    for (EditWrapper *wrapper : m_wrappers.values()) {
+        wrapper->textEditor()->setUseTab(useTab);
+    }
+}
+
+void Window::updateAutoIndent(bool autoIndent)
+{
+    for (EditWrapper *wrapper : m_wrappers.values()) {
+        wrapper->textEditor()->setAutoIndent(autoIndent);
     }
 }
 

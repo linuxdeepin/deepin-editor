@@ -1850,6 +1850,20 @@
                             "max": 24
                         },
                         {
+                            "key": "usetab",
+                            "name": "",
+                            "type": "checkbox",
+                            "text": "Use tab instead of spaces",
+                            "default": "false"
+                        },
+                        {
+                            "key": "autoindent",
+                            "name": "",
+                            "type": "checkbox",
+                            "text": "Auto-indent",
+                            "default": "true"
+                        },
+                        {
                             "key": "file_dialog_dir",
                             "hide": true,
                             "reset": false,

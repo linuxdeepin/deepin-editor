@@ -89,6 +89,7 @@ public:
     void moveCursorNoBlink(QTextCursor::MoveOperation operation,
                            QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
 
+    void autoIndent(QTextCursor& cursor);
     void newline();
     void openNewlineAbove();
     void openNewlineBelow();
@@ -111,6 +112,8 @@ public:
     void indentText();
     void unindentText();
     void setTabSpaceNumber(int number);
+    void setUseTab(bool useTab);
+    void setAutoIndent(bool autoIndent);
     void convertWordCase(ConvertCase convertCase);
     QString capitalizeText(QString text);
 
@@ -251,6 +254,8 @@ private:
     int m_restoreRow;
 
     int m_tabSpaceNumber = 4;
+    bool m_useTab = false;
+    bool m_autoIndent = true;
 
     KSyntaxHighlighting::Repository m_repository;
     KSyntaxHighlighting::SyntaxHighlighter *m_highlighter;

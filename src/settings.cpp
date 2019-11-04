@@ -69,6 +69,16 @@ Settings::Settings(QWidget *parent)
         emit adjustTabSpaceNumber(value.toInt());
     });
 
+    auto useTab = settings->option("advance.editor.usetab");
+    connect(useTab, &Dtk::Core::DSettingsOption::valueChanged, this, [=](QVariant value) {
+        emit adjustUseTab(value.toBool());
+    });
+
+    auto autoIndent = settings->option("advance.editor.autoindent");
+    connect(autoIndent, &Dtk::Core::DSettingsOption::valueChanged, this, [=](QVariant value) {
+        emit adjustAutoIndent(value.toBool());
+    });
+
     auto fontFamliy = settings->option("base.font.family");
     connect(fontFamliy, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
         adjustFont(value.toString());
