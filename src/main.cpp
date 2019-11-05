@@ -63,7 +63,8 @@ int main(int argc, char *argv[])
     app.setApplicationName("deepin-editor");
     app.setApplicationDisplayName(QObject::tr("Deepin Editor"));
     app.setApplicationVersion(VERSION);
-    app.setProductIcon(QIcon(Utils::getQrcPath("logo_96.svg")));
+    //app.setProductIcon(QIcon(Utils::getQrcPath("logo_96.svg")));
+    app.setProductIcon(QIcon::fromTheme("deepin-editor"));
     app.setProductName(DApplication::translate("MainWindow", "Deepin Editor"));
     app.setApplicationDescription(DApplication::translate("MainWindow", descriptionText) + "\n");
     app.setApplicationAcknowledgementPage(acknowledgementLink);

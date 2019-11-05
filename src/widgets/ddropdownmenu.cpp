@@ -34,6 +34,7 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
 
     m_arrowLabel->setFixedSize(9, 5);
     QPixmap arrowPixmap = Utils::renderSVG(":/images/dropdown_arrow_light.svg", QSize(9, 5));
+    arrowPixmap.setDevicePixelRatio(devicePixelRatioF());
     m_arrowLabel->setPixmap(arrowPixmap);
 
     //layout->addStretch();
@@ -138,6 +139,7 @@ void DDropdownMenu::setTheme(const QString &theme)
 {
     QString arrowSvgPath = QString(":/images/dropdown_arrow_%1.svg").arg(theme);
     QPixmap arrowPixmap = Utils::renderSVG(arrowSvgPath, QSize(9, 5));
+    arrowPixmap.setDevicePixelRatio(devicePixelRatioF());
     m_arrowLabel->setPixmap(arrowPixmap);
 }
 

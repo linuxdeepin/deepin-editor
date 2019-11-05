@@ -82,12 +82,12 @@ FindBar::FindBar(QWidget *parent)
 
 bool FindBar::isFocus()
 {
-    return m_editLine->hasFocus();
+    return m_editLine->lineEdit()->hasFocus();
 }
 
 void FindBar::focus()
 {
-    m_editLine->setFocus();
+    m_editLine->lineEdit()->setFocus();
     m_editLine->lineEdit()->selectAll();
 }
 
@@ -120,7 +120,7 @@ void FindBar::findCancel()
 
 void FindBar::handleContentChanged()
 {
-    updateSearchKeyword(m_findFile, m_editLine->text());
+    updateSearchKeyword(m_findFile, m_editLine->lineEdit()->text());
 }
 
 void FindBar::hideEvent(QHideEvent *)

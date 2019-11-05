@@ -224,17 +224,13 @@ void Window::initTitlebar()
     m_menu->addSeparator();
     m_menu->addAction(settingAction);
 
-    m_menu->setStyle(QStyleFactory::create("dlight"));
     m_menu->setMinimumWidth(150);
 
-    ToolBar *toolBar = new ToolBar;
-    toolBar->setTabbar(m_tabbar);
+    titlebar()->addWidget(m_tabbar);
 
-    titlebar()->setCustomWidget(toolBar, false);
-    titlebar()->setAutoHideOnFullscreen(true);
-    titlebar()->setSeparatorVisible(true);
+    titlebar()->setCustomWidget(m_tabbar, false);
+    titlebar()->setSeparatorVisible(false);
     titlebar()->setMenu(m_menu);
-    //titlebar()->setIcon(QIcon(":/images/logo_24.svg"));
     titlebar()->setIcon(QIcon::fromTheme("deepin-editor"));
 
     connect(m_tabbar, &DTabBar::tabBarDoubleClicked, titlebar(), &DTitlebar::doubleClicked, Qt::QueuedConnection);
@@ -685,6 +681,65 @@ bool Window::saveAsFile()
     return true;
 }
 
+bool Window::saveAsOtherTabFile(EditWrapper *wrapper)
+{
+    QString filePath = wrapper->textEditor()->filepath;
+    bool isDraft = Utils::isDraftFile(filePath);
+    QFileInfo fileInfo(filePath);
+    int index = m_tabbar->indexOf(filePath);
+    QString strTabText = m_tabbar->tabText(index);
+
+    if (!wrapper)
+        return false;
+
+    DFileDialog dialog(this, tr("Save File"));
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.addComboBox(tr("Encoding"), Utils::getEncodeList());
+    dialog.addComboBox(tr("Line Endings"), QStringList() << "Linux" << "Windows" << "Mac OS");
+    dialog.setDirectory(QDir::homePath());
+
+    if (isDraft) {
+        QRegularExpression reg("[^*](.+)");
+        QRegularExpressionMatch match = reg.match(strTabText);
+        dialog.selectFile(match.captured(0) + ".txt");
+    } else {
+        dialog.setDirectory(fileInfo.dir());
+        dialog.selectFile(fileInfo.fileName());
+    }
+
+    int mode = dialog.exec();
+    if (mode == QDialog::Accepted) {
+        const QByteArray encode = dialog.getComboBoxValue(tr("Encoding")).toUtf8();
+        const QString endOfLine = dialog.getComboBoxValue(tr("Line Endings"));
+        const QString newFilePath = dialog.selectedFiles().value(0);
+        const QFileInfo newFileInfo(newFilePath);
+        EditWrapper::EndOfLineMode eol = EditWrapper::eolUnix;
+
+        if (endOfLine == "Windows") {
+            eol = EditWrapper::eolDos;
+        } else if (endOfLine == "Mac OS") {
+            eol = EditWrapper::eolMac;
+        }
+
+        if (isDraft) {
+            QFile(filePath).remove();
+        }
+
+        //m_tabbar->updateTab(m_tabbar->currentIndex(), newFilePath, newFileInfo.fileName());
+
+        wrapper->setTextCodec(encode);
+        wrapper->updatePath(newFilePath);
+        wrapper->setEndOfLineMode(eol);
+        wrapper->saveFile();
+
+        wrapper->textEditor()->loadHighlighter();
+    } else {
+        return false;
+    }
+
+    return true;
+}
+
 void Window::decrementFontSize()
 {
     int size = std::max(m_fontSize - 1, m_settings->minFontSize);
@@ -1053,7 +1108,7 @@ void Window::handleTabCloseRequested(int index)
     closeTab();
 }
 
-void Window::handleTabsClosed(const QStringList &tabList)
+void Window::handleTabsClosed(QStringList tabList)
 {
     if (tabList.isEmpty()) {
         return;
@@ -1095,7 +1150,20 @@ void Window::handleTabsClosed(const QStringList &tabList)
                 for (EditWrapper *wrapper : needSaveList) {
                     const QString &path = wrapper->textEditor()->filepath;
                     if (Utils::isDraftFile(path)) {
-                        saveAsFile();
+                        //saveAsFile();
+
+                        bool bRet = saveAsOtherTabFile(wrapper);
+                        if (bRet == false) {
+                            for (int i = 0; i < tabList.count(); i++)
+                            {
+                                if (tabList.at(i) == m_wrappers.key(wrapper))
+                                {
+                                    tabList.removeAt(i);
+                                    break;
+                                }
+                            }
+                        }
+
                     } else {
                         wrapper->saveFile();
                     }

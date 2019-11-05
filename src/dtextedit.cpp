@@ -1510,8 +1510,9 @@ void DTextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
     QColor lineNumberAreaBackgroundColor;
     if (QColor(m_backgroundColor).lightness() < 128) {
         lineNumberAreaBackgroundColor = QColor("#ffffff");
-        lineNumberAreaBackgroundColor.setAlphaF(0.03);
-        m_lineNumbersColor.setAlphaF(0.15);
+        lineNumberAreaBackgroundColor.setAlphaF(0.01);
+
+        m_lineNumbersColor.setAlphaF(0.2);
     } else {
         lineNumberAreaBackgroundColor = QColor("#000000");
         lineNumberAreaBackgroundColor.setAlphaF(0.03);

@@ -72,6 +72,7 @@ public:
     void openFile();
     bool saveFile();
     bool saveAsFile();
+    bool saveAsOtherTabFile(EditWrapper *wrapper);
 
     void decrementFontSize();
     void incrementFontSize();
@@ -110,7 +111,7 @@ public slots:
     void addBlankTab();
     void addBlankTab(const QString &blankFile);
     void handleTabCloseRequested(int index);
-    void handleTabsClosed(const QStringList &tabList);
+    void handleTabsClosed(QStringList tabList);
     void handleCurrentChanged(const int &index);
 
     void handleJumpLineBarExit();

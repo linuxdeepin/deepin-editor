@@ -121,7 +121,7 @@ bool ReplaceBar::isFocus()
 
 void ReplaceBar::focus()
 {
-    m_replaceLine->setFocus();
+    m_replaceLine->lineEdit()->setFocus();
 }
 
 void ReplaceBar::activeInput(QString text, QString file, int row, int column, int scrollOffset)
@@ -152,22 +152,22 @@ void ReplaceBar::replaceClose()
 
 void ReplaceBar::handleContentChanged()
 {
-    updateSearchKeyword(m_replaceFile, m_replaceLine->text());
+    updateSearchKeyword(m_replaceFile, m_replaceLine->lineEdit()->text());
 }
 
 void ReplaceBar::handleReplaceNext()
 {
-    replaceNext(m_replaceLine->text(), m_withLine->text());
+    replaceNext(m_replaceLine->lineEdit()->text(), m_withLine->lineEdit()->text());
 }
 
 void ReplaceBar::handleReplaceRest()
 {
-    replaceRest(m_replaceLine->text(), m_withLine->text());
+    replaceRest(m_replaceLine->lineEdit()->text(), m_withLine->lineEdit()->text());
 }
 
 void ReplaceBar::handleReplaceAll()
 {
-    replaceAll(m_replaceLine->text(), m_withLine->text());
+    replaceAll(m_replaceLine->lineEdit()->text(), m_withLine->lineEdit()->text());
 }
 
 void ReplaceBar::hideEvent(QHideEvent *)
@@ -181,11 +181,11 @@ bool ReplaceBar::focusNextPrevChild(bool)
     auto *editWidget = qobject_cast<LineBar*>(focusWidget());
     if (editWidget != nullptr) {
         if (editWidget == m_replaceLine) {
-            m_withLine->setFocus();
+            m_withLine->lineEdit()->setFocus();
 
             return true;
         } else if (editWidget == m_withLine) {
-            m_replaceLine->setFocus();
+            m_replaceLine->lineEdit()->setFocus();
 
             return true;
         }
