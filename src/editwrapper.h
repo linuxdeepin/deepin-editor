@@ -63,7 +63,7 @@ public:
 
     BottomBar *bottomBar() { return m_bottomBar; }
     QString filePath() { return m_textEdit->filepath; }
-    DTextEdit *textEditor() { return m_textEdit; }
+    TextEdit *textEditor() { return m_textEdit; }
     void hideWarningNotices();
 
     void checkForReload();
@@ -81,7 +81,7 @@ signals:
 
 private:
     void detectEndOfLine();
-    void handleCursorModeChanged(DTextEdit::CursorMode mode);
+    void handleCursorModeChanged(TextEdit::CursorMode mode);
     void handleHightlightChanged(const QString &name);
     void handleFileLoadFinished(const QByteArray &encode, const QString &content);
     void setTextCodec(QTextCodec *codec, bool reload = false);
@@ -91,7 +91,7 @@ protected:
 
 private:
     QHBoxLayout *m_layout;
-    DTextEdit *m_textEdit;
+    TextEdit *m_textEdit;
     //modify guoshaoyu
     //BottomBar *m_bottomBar;
     QTextCodec *m_textCodec;

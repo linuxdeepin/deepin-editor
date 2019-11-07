@@ -31,7 +31,6 @@
 #include <QDebug>
 #include <QTimer>
 #include <QDir>
-
 #include "drecentmanager.h"
 
 DCORE_USE_NAMESPACE
@@ -39,7 +38,7 @@ DCORE_USE_NAMESPACE
 EditWrapper::EditWrapper(QWidget *parent)
     : QWidget(parent),
       m_layout(new QHBoxLayout),
-      m_textEdit(new DTextEdit),
+      m_textEdit(new TextEdit),
       m_bottomBar(new BottomBar(this)),
       m_textCodec(QTextCodec::codecForName("UTF-8")),
       m_endOfLineMode(eolUnix),
@@ -63,9 +62,9 @@ EditWrapper::EditWrapper(QWidget *parent)
     mainLayout->setSpacing(0);
     setLayout(mainLayout);
 
-    connect(m_textEdit, &DTextEdit::cursorModeChanged, this, &EditWrapper::handleCursorModeChanged);
-    connect(m_textEdit, &DTextEdit::hightlightChanged, this, &EditWrapper::handleHightlightChanged);
-    connect(m_textEdit, &DTextEdit::textChanged, this, &EditWrapper::slotTextChange);
+    connect(m_textEdit, &TextEdit::cursorModeChanged, this, &EditWrapper::handleCursorModeChanged);
+    connect(m_textEdit, &TextEdit::hightlightChanged, this, &EditWrapper::handleHightlightChanged);
+    connect(m_textEdit, &TextEdit::textChanged, this, &EditWrapper::slotTextChange);
 
     connect(m_waringNotices, &WarningNotices::closeButtonClicked, m_waringNotices, &WarningNotices::closeBtnClicked);
     connect(m_waringNotices, &WarningNotices::reloadBtnClicked, this, &EditWrapper::refresh);
@@ -268,7 +267,7 @@ void EditWrapper::checkForReload()
     if (fi.lastModified() == m_modified || m_waringNotices->isVisible())
         return;
 
-    if (fi.exists()) {
+    if (fi.exists() && fi.lastModified() != m_modified) {
         m_waringNotices->setMessage(tr("File has changed on disk. Reload?"));
         m_waringNotices->setReloadBtn();
     } else {
@@ -318,16 +317,16 @@ void EditWrapper::detectEndOfLine()
     file.close();
 }
 
-void EditWrapper::handleCursorModeChanged(DTextEdit::CursorMode mode)
+void EditWrapper::handleCursorModeChanged(TextEdit::CursorMode mode)
 {
     switch (mode) {
-    case DTextEdit::Insert:
+    case TextEdit::Insert:
         m_bottomBar->setCursorStatus(tr("INSERT"));
         break;
-    case DTextEdit::Overwrite:
+    case TextEdit::Overwrite:
         m_bottomBar->setCursorStatus(tr("OVERWRITE"));
         break;
-    case DTextEdit::Readonly:
+    case TextEdit::Readonly:
         m_bottomBar->setCursorStatus(tr("R/O"));
         break;
     default:

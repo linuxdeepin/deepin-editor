@@ -20,8 +20,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DTEXTEDIT_H
-#define DTEXTEDIT_H
+#ifndef TEXTEDIT_H
+#define TEXTEDIT_H
 
 #include <KF5/KSyntaxHighlighting/repository.h>
 #include "uncommentselection.h"
@@ -29,9 +29,9 @@
 
 #include "settings.h"
 #include <QAction>
-#include <QMenu>
+#include <DMenu>
 #include <QPaintEvent>
-#include <QTextEdit>
+#include <DTextEdit>
 #include <QPropertyAnimation>
 #include <QFont>
 #include <DApplicationHelper>
@@ -43,7 +43,7 @@ namespace KSyntaxHighlighting {
 enum ConvertCase { UPPER, LOWER, CAPITALIZE };
 
 class EditWrapper;
-class DTextEdit : public QTextEdit
+class TextEdit : public DTextEdit
 {
     Q_OBJECT
 
@@ -54,7 +54,7 @@ public:
         Readonly
     };
 
-    DTextEdit(QWidget *parent = nullptr);
+    TextEdit(QWidget *parent = nullptr);
 
     QWidget *lineNumberArea;
     QString filepath;
@@ -137,7 +137,7 @@ public:
     void updateKeywordSelections(QString keyword);
     void renderAllSelections();
 
-    QMenu *getHighlightMenu();
+    DMenu *getHighlightMenu();
 
     void lineNumberAreaPaintEvent(QPaintEvent *event);
 
@@ -176,6 +176,8 @@ public:
 
     void showCursorBlink();
     void hideCursorBlink();
+
+    void setReadOnlyPermission(bool permission);
 
 signals:
     void clickFindAction();
@@ -255,7 +257,7 @@ private:
     KSyntaxHighlighting::Repository m_repository;
     KSyntaxHighlighting::SyntaxHighlighter *m_highlighter;
 
-    QMenu *m_rightMenu;
+    DMenu *m_rightMenu;
     QAction *m_undoAction;
     QAction *m_redoAction;
     QAction *m_cutAction;
@@ -273,7 +275,7 @@ private:
     QAction *m_openInFileManagerAction;
     QAction *m_toggleCommentAction;
 
-    QMenu *m_convertCaseMenu;
+    DMenu *m_convertCaseMenu;
     QAction *m_upcaseAction;
     QAction *m_downcaseAction;
     QAction *m_capitalizeAction;
@@ -292,6 +294,7 @@ private:
     bool m_cursorMarkStatus = false;
     int m_cursorMarkPosition = 0;
     int m_cursorWidthChangeDelay = 2000;
+    bool m_bReadOnlyPermission = false;
 
     int m_fontSize = 16;
     QString m_fontName;
@@ -322,7 +325,7 @@ private:
     QTextCharFormat m_findHighlightFormat;
     CursorMode m_cursorMode;
 
-    QMenu *m_hlGroupMenu;
+    DMenu *m_hlGroupMenu;
     QActionGroup *m_hlActionGroup;
 
     QPoint m_lastTouchBeginPos;

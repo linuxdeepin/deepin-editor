@@ -62,7 +62,7 @@ Window::Window(DMainWindow *parent)
       m_themePanel(new ThemePanel(this)),
       m_findBar(new FindBar(this)),
       m_settings(new Settings(this)),
-      m_menu(new QMenu),
+      m_menu(new DMenu),
       m_titlebarStyleSheet(titlebar()->styleSheet())
 {
     m_blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
@@ -83,7 +83,7 @@ Window::Window(DMainWindow *parent)
     connect(m_settings, &Settings::themeChanged, this, &Window::slotSettingResetTheme);
     connect(m_settings, &Settings::adjustWordWrap, this, [=] (bool enable) {
         for (EditWrapper *wrapper : m_wrappers.values()) {
-            DTextEdit *textedit = wrapper->textEditor();
+            TextEdit *textedit = wrapper->textEditor();
             textedit->setLineWrapMode(enable);
         }
     });
@@ -208,8 +208,8 @@ void Window::initTitlebar()
     QAction *printAction(new QAction(tr("Print"), this));
     QAction *switchThemeAction(new QAction(tr("Switch theme"), this));
     QAction *settingAction(new QAction(tr("Settings"), this));
-    QAction *findAction(new QAction(QApplication::translate("DTextEdit", "Find"), this));
-    QAction *replaceAction(new QAction(QApplication::translate("DTextEdit", "Replace"), this));
+    QAction *findAction(new QAction(QApplication::translate("TextEdit", "Find"), this));
+    QAction *replaceAction(new QAction(QApplication::translate("TextEdit", "Replace"), this));
 
     m_menu->addAction(newWindowAction);
     m_menu->addAction(newTabAction);
@@ -352,12 +352,12 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
 
     // wrapper may be from anther window pointer.
     // reconnect signal.
-    connect(wrapper->textEditor(), &DTextEdit::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);
-    connect(wrapper->textEditor(), &DTextEdit::clickReplaceAction, this, &Window::popupReplaceBar, Qt::QueuedConnection);
-    connect(wrapper->textEditor(), &DTextEdit::clickJumpLineAction, this, &Window::popupJumpLineBar, Qt::QueuedConnection);
-    connect(wrapper->textEditor(), &DTextEdit::clickFullscreenAction, this, &Window::toggleFullscreen, Qt::QueuedConnection);
-    connect(wrapper->textEditor(), &DTextEdit::popupNotify, this, &Window::showNotify, Qt::QueuedConnection);
-    connect(wrapper->textEditor(), &DTextEdit::pressEsc, this, &Window::removeBottomWidget, Qt::QueuedConnection);
+    connect(wrapper->textEditor(), &TextEdit::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);
+    connect(wrapper->textEditor(), &TextEdit::clickReplaceAction, this, &Window::popupReplaceBar, Qt::QueuedConnection);
+    connect(wrapper->textEditor(), &TextEdit::clickJumpLineAction, this, &Window::popupJumpLineBar, Qt::QueuedConnection);
+    connect(wrapper->textEditor(), &TextEdit::clickFullscreenAction, this, &Window::toggleFullscreen, Qt::QueuedConnection);
+    connect(wrapper->textEditor(), &TextEdit::popupNotify, this, &Window::showNotify, Qt::QueuedConnection);
+    connect(wrapper->textEditor(), &TextEdit::pressEsc, this, &Window::removeBottomWidget, Qt::QueuedConnection);
 
     wrapper->disconnect();
     connect(wrapper, &EditWrapper::requestSaveAs, this, &Window::saveAsFile);
@@ -452,15 +452,15 @@ EditWrapper* Window::createEditor()
     wrapper->textEditor()->setLineWrapMode(wordWrap);
     setFontSizeWithConfig(wrapper);
 
-    connect(wrapper->textEditor(), &DTextEdit::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);
-    connect(wrapper->textEditor(), &DTextEdit::clickReplaceAction, this, &Window::popupReplaceBar, Qt::QueuedConnection);
-    connect(wrapper->textEditor(), &DTextEdit::clickJumpLineAction, this, &Window::popupJumpLineBar, Qt::QueuedConnection);
-    connect(wrapper->textEditor(), &DTextEdit::clickFullscreenAction, this, &Window::toggleFullscreen, Qt::QueuedConnection);
-    connect(wrapper->textEditor(), &DTextEdit::popupNotify, this, &Window::showNotify, Qt::QueuedConnection);
-    connect(wrapper->textEditor(), &DTextEdit::pressEsc, this, &Window::removeBottomWidget, Qt::QueuedConnection);
+    connect(wrapper->textEditor(), &TextEdit::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);
+    connect(wrapper->textEditor(), &TextEdit::clickReplaceAction, this, &Window::popupReplaceBar, Qt::QueuedConnection);
+    connect(wrapper->textEditor(), &TextEdit::clickJumpLineAction, this, &Window::popupJumpLineBar, Qt::QueuedConnection);
+    connect(wrapper->textEditor(), &TextEdit::clickFullscreenAction, this, &Window::toggleFullscreen, Qt::QueuedConnection);
+    connect(wrapper->textEditor(), &TextEdit::popupNotify, this, &Window::showNotify, Qt::QueuedConnection);
+    connect(wrapper->textEditor(), &TextEdit::pressEsc, this, &Window::removeBottomWidget, Qt::QueuedConnection);
     connect(wrapper, &EditWrapper::requestSaveAs, this, &Window::saveAsFile);
 
-    connect(wrapper->textEditor(), &DTextEdit::modificationChanged, this, [=] (const QString &path, bool isModified) {
+    connect(wrapper->textEditor(), &TextEdit::modificationChanged, this, [=] (const QString &path, bool isModified) {
         int tabIndex = m_tabbar->indexOf(path);
         QString tabName = m_tabbar->textAt(tabIndex);
         QRegularExpression reg("[^*](.+)");
@@ -488,7 +488,7 @@ EditWrapper* Window::wrapper(const QString &filePath)
     return m_wrappers.value(filePath);
 }
 
-DTextEdit* Window::getTextEditor(const QString &filepath)
+TextEdit* Window::getTextEditor(const QString &filepath)
 {
     return m_wrappers.value(filepath)->textEditor();
 }
@@ -865,7 +865,7 @@ void Window::popupSettingsDialog()
 //    DThemeManager::instance()->registerWidget(dialog);
 
     dialog->updateSettings(m_settings->settings);
-    m_settings->dtkThemeWorkaround(dialog, "dlight");
+    //m_settings->dtkThemeWorkaround(dialog, "dlight");
 
     dialog->exec();
     delete dialog;
@@ -877,7 +877,7 @@ void Window::popupPrintDialog()
     QPrinter printer(QPrinter::HighResolution);
     QPrintPreviewDialog preview(&printer, this);
 
-    DTextEdit *wrapper = currentWrapper()->textEditor();
+    TextEdit *wrapper = currentWrapper()->textEditor();
     const QString &filePath = wrapper->filepath;
     const QString &fileDir = QFileInfo(filePath).dir().absolutePath();
 
@@ -1446,7 +1446,7 @@ DDialog* Window::createDialog(const QString &title, const QString &content)
 {
     DDialog *dialog = new DDialog(title, content, this);
     dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
-    dialog->setIcon(QIcon(Utils::getQrcPath("logo_48.svg")));
+    dialog->setIcon(QIcon::fromTheme("deepin-editor"));
     dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
     dialog->addButton(QString(tr("Discard")), false, DDialog::ButtonNormal);
     dialog->addButton(QString(tr("Save")), true, DDialog::ButtonNormal);
@@ -1456,7 +1456,6 @@ DDialog* Window::createDialog(const QString &title, const QString &content)
 
 void Window::slotLoadContentTheme(DGuiApplicationHelper::ColorType themeType)
 {
-    qDebug() << "themeType:" << themeType;
     if(themeType == DGuiApplicationHelper::ColorType::LightType)
     {
         loadTheme("/usr/share/deepin-editor/themes/deepin.theme");
@@ -1503,8 +1502,13 @@ void Window::checkTabbarForReload()
     QString readOnlyStr = QString(" (%1)").arg(tr("Read-Only"));
     tabName.remove(readOnlyStr);
 
+    EditWrapper *wrapper = m_wrappers.value(m_tabbar->currentPath());
     if (fi.exists() && !fi.isWritable()) {
         tabName.append(readOnlyStr);
+        wrapper->textEditor()->setReadOnlyPermission(true);
+    }
+    else {
+        wrapper->textEditor()->setReadOnlyPermission(false);
     }
 
     m_tabbar->setTabText(m_tabbar->currentIndex(), tabName);

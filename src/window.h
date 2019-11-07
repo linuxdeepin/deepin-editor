@@ -65,7 +65,7 @@ public:
     EditWrapper* createEditor();
     EditWrapper* currentWrapper();
     EditWrapper* wrapper(const QString &filePath);
-    DTextEdit* getTextEditor(const QString &filepath);
+    TextEdit* getTextEditor(const QString &filepath);
     void focusActiveEditor();
     void removeWrapper(const QString &filePath, bool isDelete = false);
 
@@ -175,7 +175,7 @@ private:
 
     QMap<QString, EditWrapper *> m_wrappers;
 
-    QMenu *m_menu;
+    DMenu *m_menu;
 
     QStringList m_closeFileHistory;
 

@@ -24,7 +24,7 @@
 #include <QLabel>
 #include <QPainter>
 #include <QHBoxLayout>
-#include <QMenu>
+#include <DMenu>
 
 #include <DVerticalLine>
 
@@ -107,7 +107,7 @@ void BottomBar::setCursorStatus(const QString &text)
     m_cursorStatus->setText(text);
 }
 
-void BottomBar::setHighlightMenu(QMenu *menu)
+void BottomBar::setHighlightMenu(DMenu *menu)
 {
     m_highlightMenu->setMenu(menu);
 }

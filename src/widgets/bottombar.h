@@ -38,7 +38,7 @@ public:
     void updateWordCount(int charactorCount);
     void setEncodeName(const QString &name);
     void setCursorStatus(const QString &text);
-    void setHighlightMenu(QMenu *menu);
+    void setHighlightMenu(DMenu *menu);
     void setHightlightName(const QString &name);
     void setPalette(const QPalette &palette);
 

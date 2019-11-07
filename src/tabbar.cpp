@@ -183,7 +183,7 @@ QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option
 {
     const qreal ratio = qApp->devicePixelRatio();
 
-    DTextEdit *textEdit = static_cast<Window *>(this->window())->getTextEditor(fileAt(index));
+    TextEdit *textEdit = static_cast<Window *>(this->window())->getTextEditor(fileAt(index));
     int width = textEdit->width() * ratio;
     int height = textEdit->height() * ratio;
     QImage screenshotImage(width, height, QImage::Format_ARGB32_Premultiplied);
@@ -310,8 +310,8 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
 
             // popup right menu on tab.
             if (m_rightClickTab >= 0) {
-                m_rightMenu = new QMenu;
-                m_rightMenu->setStyle(QStyleFactory::create("dlight"));
+                m_rightMenu = new DMenu;
+                //m_rightMenu->setStyle(QStyleFactory::create("dlight"));
 
                 m_closeTabAction = new QAction(tr("Close tab"), this);
                 m_closeOtherTabAction = new QAction(tr("Close other tabs"), this);

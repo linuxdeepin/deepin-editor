@@ -24,7 +24,7 @@
 
 DDropdownMenu::DDropdownMenu(QWidget *parent)
     : QFrame(parent),
-      m_menu(new QMenu),
+      m_menu(new DMenu),
       m_text(new QLabel("undefined")),
       m_arrowLabel(new QLabel)
 {
@@ -43,7 +43,7 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     layout->addWidget(m_arrowLabel);
     layout->addStretch();
 
-    connect(m_menu, &QMenu::triggered, this, [=] (QAction *action) {
+    connect(m_menu, &DMenu::triggered, this, [=] (QAction *action) {
         setText(action->text());
         setCurrentAction(action);
         Q_EMIT this->triggered(action);
@@ -126,7 +126,7 @@ void DDropdownMenu::setText(const QString &text)
     setFixedWidth(fm.width(text) + 40);
 }
 
-void DDropdownMenu::setMenu(QMenu *menu)
+void DDropdownMenu::setMenu(DMenu *menu)
 {
     if (m_menu) {
         delete m_menu;

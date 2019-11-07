@@ -21,8 +21,10 @@
 #define DDROPDOWNMENU_H
 
 #include <QFrame>
-#include <QMenu>
+#include <DMenu>
 #include <QLabel>
+
+DWIDGET_USE_NAMESPACE
 
 class DDropdownMenu : public QFrame
 {
@@ -41,7 +43,7 @@ public:
     void setCurrentTextOnly(const QString &text);
     void setText(const QString &text);
 
-    void setMenu(QMenu *menu);
+    void setMenu(DMenu *menu);
     void setTheme(const QString &theme);
 
 signals:
@@ -53,7 +55,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent *e);
 
 private:
-    QMenu *m_menu;
+    DMenu *m_menu;
     QLabel *m_text;
     QLabel *m_arrowLabel;
 };

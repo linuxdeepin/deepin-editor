@@ -20,7 +20,7 @@
 #include "linenumberarea.h"
 #include "dtextedit.h"
 
-LineNumberArea::LineNumberArea(DTextEdit *textEdit)
+LineNumberArea::LineNumberArea(TextEdit *textEdit)
 {
     m_textEdit = textEdit;
 }

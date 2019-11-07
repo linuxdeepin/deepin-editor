@@ -21,7 +21,7 @@
 #define TABBAR_H
 
 #include <DTabBar>
-#include <QMenu>
+#include <DMenu>
 
 DWIDGET_USE_NAMESPACE
 
@@ -82,7 +82,7 @@ private:
 
     QAction *m_closeOtherTabAction;
     QAction *m_closeTabAction;
-    QMenu *m_rightMenu;
+    DMenu *m_rightMenu;
     int m_rightClickTab;
 };
 

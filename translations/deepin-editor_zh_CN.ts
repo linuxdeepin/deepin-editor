@@ -20,7 +20,7 @@
     </message>
 </context>
 <context>
-    <name>DTextEdit</name>
+    <name>TextEdit</name>
     <message>
         <location filename="../src/dtextedit.cpp" line="105"/>
         <source>Undo</source>
@@ -139,6 +139,11 @@
         <source>Read-Only mode is on</source>
         <translation>只读模式已开启</translation>
     </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="2493"/>
+        <source>Read-Only mode cannot be edited</source>
+        <translation>只读模式无法编辑</translation>
+    </message>
 </context>
 <context>
     <name>EditWrapper</name>
@@ -206,7 +211,7 @@
     <message>
         <location filename="../src/main.cpp" line="63"/>
         <source>Deepin Editor</source>
-        <translation>深度编辑器</translation>
+        <translation>编辑器</translation>
     </message>
 </context>
 <context>
@@ -214,7 +219,7 @@
     <message>
         <location filename="../src/main.cpp" line="60"/>
         <source>Deepin Editor</source>
-        <translation>深度编辑器</translation>
+        <translation>编辑器</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="24"/>
