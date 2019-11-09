@@ -62,7 +62,7 @@ BottomBar::BottomBar(QWidget *parent)
     m_charCountLabel->setText(m_chrCountStr.arg("..."));
     m_encodeMenu->addActions(Utils::getEncodeList());
     m_encodeMenu->setCurrentText("UTF-8");
-    m_highlightMenu->setCurrentTextOnly(qApp->translate("DTextEdit", "None"));
+    m_highlightMenu->setCurrentTextOnly(qApp->translate("TextEdit", "None"));
 
     DVerticalLine *pVerticalLine1 = new DVerticalLine();
     DVerticalLine *pVerticalLine2 = new DVerticalLine();

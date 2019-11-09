@@ -49,14 +49,19 @@ Settings::Settings(QWidget *parent)
     settings = DSettings::fromJsonFile(":/resources/settings.json");
     settings->setBackend(m_backend);
 
-    auto wordWrap = settings->option("base.font.wordwrap");
-    connect(wordWrap, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
-        emit adjustWordWrap(value.toBool());
+    auto fontFamliy = settings->option("base.font.family");
+    connect(fontFamliy, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
+        emit adjustFont(value.toString());
     });
 
     auto fontSize = settings->option("base.font.size");
     connect(fontSize, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
         emit adjustFontSize(value.toInt());
+    });
+
+    auto wordWrap = settings->option("base.font.wordwrap");
+    connect(wordWrap, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
+        emit adjustWordWrap(value.toBool());
     });
 
     auto theme = settings->option("advance.editor.theme");
@@ -67,11 +72,6 @@ Settings::Settings(QWidget *parent)
     auto tabSpaceNumber = settings->option("advance.editor.tabspacenumber");
     connect(tabSpaceNumber, &Dtk::Core::DSettingsOption::valueChanged, this, [=](QVariant value) {
         emit adjustTabSpaceNumber(value.toInt());
-    });
-
-    auto fontFamliy = settings->option("base.font.family");
-    connect(fontFamliy, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
-        adjustFont(value.toString());
     });
 
     auto keymap = settings->option("shortcuts.keymap.keymap");
@@ -139,17 +139,19 @@ void Settings::dtkThemeWorkaround(QWidget *parent, const QString &theme)
     }
 }
 
-QWidget *Settings::createFontComBoBoxHandle(QObject *obj)
+//QWidget *Settings::createFontComBoBoxHandle(QObject *obj)
+QPair<QWidget*, QWidget*> Settings::createFontComBoBoxHandle(QObject *obj)
 {
     auto option = qobject_cast<DTK_CORE_NAMESPACE::DSettingsOption *>(obj);
 
     QComboBox *comboBox = new QComboBox;
-    QWidget *optionWidget = DSettingsWidgetFactory::createTwoColumWidget(option, comboBox);
+    //QWidget *optionWidget = DSettingsWidgetFactory::createTwoColumWidget(option, comboBox);
+    QPair<QWidget*, QWidget*> optionWidget = DSettingsWidgetFactory::createStandardItem("fontcombobox", option, comboBox);
 
     QFontDatabase fontDatabase;
     comboBox->addItems(fontDatabase.families());
-    comboBox->setItemDelegate(new FontItemDelegate);
-    comboBox->setFixedSize(240, 25);
+    //comboBox->setItemDelegate(new FontItemDelegate);
+    //comboBox->setFixedSize(240, 36);
 
     if (option->value().toString().isEmpty()) {
         option->setValue(QFontDatabase::systemFont(QFontDatabase::FixedFont).family());

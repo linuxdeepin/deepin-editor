@@ -233,19 +233,23 @@
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="26"/>
-        <source>Font</source>
-        <translation>字体</translation>
+        <source>Font:</source>
+        <translation>字体：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="27"/>
-        <source>Font Size</source>
-        <translation>字号</translation>
+        <source>Font Size:</source>
+        <translation>字号：</translation> 
     </message>
-    <message>
+    <message> 
         <location filename="../src/settingsdialog.cpp" line="29"/>
-        <location filename="../src/settingsdialog.cpp" line="30"/>
         <source>Keymap</source>
         <translation>快捷键映射</translation>
+    </message>
+    <message> 
+        <location filename="../src/settingsdialog.cpp" line="30"/>
+        <source>Keymap:</source>
+        <translation>快捷键映射：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="28"/>
@@ -254,33 +258,33 @@
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="42"/>
-        <source>Increase font size</source>
-        <translation>放大字号</translation>
+        <source>Increase font size:</source>
+        <translation>放大字号：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="43"/>
-        <source>Decrease font size</source>
-        <translation>缩小字号</translation>
+        <source>Decrease font size:</source>
+        <translation>缩小字号：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="57"/>
-        <source>Forward character</source>
-        <translation>右移一个字符</translation>
+        <source>Forward character:</source>
+        <translation>右移一个字符：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="58"/>
-        <source>Backward character</source>
-        <translation>左移一个字符</translation>
+        <source>Backward character:</source>
+        <translation>左移一个字符：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="91"/>
-        <source>Transpose character</source>
-        <translation>调换字符</translation>
+        <source>Transpose character:</source>
+        <translation>调换字符：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="104"/>
-        <source>Tab width</source>
-        <translation>Tab字符宽度</translation>
+        <source>Tab width:</source>
+        <translation>Tab字符宽度：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="106"/>
@@ -296,103 +300,103 @@
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="32"/>
-        <source>New tab</source>
-        <translation>新标签页</translation>
+        <source>New tab:</source>
+        <translation>新标签页：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="33"/>
-        <source>New window</source>
-        <translation>新窗口</translation>
+        <source>New window:</source>
+        <translation>新窗口：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="34"/>
-        <source>Save</source>
-        <translation>保存</translation>
+        <source>Save:</source>
+        <translation>保存：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="35"/>
-        <source>Save as</source>
-        <translation>另存为</translation>
+        <source>Save as:</source>
+        <translation>另存为：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="36"/>
-        <source>Next tab</source>
-        <translation>下一个标签页</translation>
+        <source>Next tab:</source>
+        <translation>下一个标签页：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="37"/>
-        <source>Previous tab</source>
-        <translation>上一个标签页</translation>
+        <source>Previous tab:</source>
+        <translation>上一个标签页：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="38"/>
-        <source>Close tab</source>
-        <translation>关闭标签页</translation>
+        <source>Close tab:</source>
+        <translation>关闭标签页：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="39"/>
-        <source>Close other tabs</source>
-        <translation>关闭其他标签页</translation>
+        <source>Close other tabs:</source>
+        <translation>关闭其他标签页：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="40"/>
-        <source>Restore tab</source>
-        <translation>恢复标签页</translation>
+        <source>Restore tab:</source>
+        <translation>恢复标签页：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="41"/>
-        <source>Open file</source>
-        <translation>打开文件</translation>
+        <source>Open file:</source>
+        <translation>打开文件：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="44"/>
-        <source>Reset font size</source>
-        <translation>还原字号</translation>
+        <source>Reset font size:</source>
+        <translation>还原字号：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="45"/>
-        <source>Toggle fullscreen</source>
-        <translation>切换全屏</translation>
+        <source>Toggle fullscreen:</source>
+        <translation>切换全屏：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="46"/>
-        <source>Find</source>
-        <translation>查找</translation>
+        <source>Find:</source>
+        <translation>查找：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="47"/>
-        <source>Replace</source>
-        <translation>替换</translation>
+        <source>Replace:</source>
+        <translation>替换：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="48"/>
-        <source>Go to line</source>
-        <translation>跳到行</translation>
+        <source>Go to line:</source>
+        <translation>跳到行：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="49"/>
-        <source>Save cursor position</source>
-        <translation>保存光标位置</translation>
+        <source>Save cursor position:</source>
+        <translation>保存光标位置：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="50"/>
-        <source>Reset cursor position</source>
-        <translation>跳转到保存光标位置</translation>
+        <source>Reset cursor position:</source>
+        <translation>跳转到保存光标位置：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="51"/>
-        <source>Exit</source>
-        <translation>退出</translation>
+        <source>Exit:</source>
+        <translation>退出：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="52"/>
-        <source>Display shortcuts</source>
-        <translation>显示快捷键</translation>
+        <source>Display shortcuts:</source>
+        <translation>显示快捷键：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="53"/>
-        <source>Print</source>
-        <translation>打印</translation>
+        <source>Print:</source>
+        <translation>打印：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="54"/>
@@ -401,218 +405,218 @@
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="55"/>
-        <source>Increase indent</source>
-        <translation>增加缩进</translation>
+        <source>Increase indent:</source>
+        <translation>增加缩进：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="56"/>
-        <source>Decrease indent</source>
-        <translation>减少缩进</translation>
+        <source>Decrease indent:</source>
+        <translation>减少缩进：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="59"/>
-        <source>Forward word</source>
-        <translation>右移一个词</translation>
+        <source>Forward word:</source>
+        <translation>右移一个词：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="60"/>
-        <source>Backward word</source>
-        <translation>左移一个词</translation>
+        <source>Backward word:</source>
+        <translation>左移一个词：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="61"/>
-        <source>Next line</source>
-        <translation>下一行</translation>
+        <source>Next line:</source>
+        <translation>下一行：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="62"/>
-        <source>Previous line</source>
-        <translation>上一行</translation>
+        <source>Previous line:</source>
+        <translation>上一行：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="63"/>
-        <source>New line</source>
-        <translation>换行</translation>
+        <source>New line:</source>
+        <translation>换行：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="64"/>
-        <source>New line above</source>
-        <translation>向上插入一行</translation>
+        <source>New line above:</source>
+        <translation>向上插入一行：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="65"/>
-        <source>New line below</source>
-        <translation>向下插入一行</translation>
+        <source>New line below:</source>
+        <translation>向下插入一行：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="66"/>
-        <source>Duplicate line</source>
-        <translation>复制并粘贴当前行</translation>
+        <source>Duplicate line:</source>
+        <translation>复制并粘贴当前行：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="67"/>
-        <source>Delete to end of line</source>
-        <translation>删除到行尾</translation>
+        <source>Delete to end of line:</source>
+        <translation>删除到行尾：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="68"/>
-        <source>Delete current line</source>
-        <translation>删除当前行</translation>
+        <source>Delete current line:</source>
+        <translation>删除当前行：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="69"/>
-        <source>Swap line up</source>
-        <translation>上移一行</translation>
+        <source>Swap line up:</source>
+        <translation>上移一行：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="70"/>
-        <source>Swap line down</source>
-        <translation>下移一行</translation>
+        <source>Swap line down:</source>
+        <translation>下移一行：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="71"/>
-        <source>Scroll up one line</source>
-        <translation>向上滚动一行</translation>
+        <source>Scroll up one line:</source>
+        <translation>向上滚动一行：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="72"/>
-        <source>Scroll down one line</source>
-        <translation>向下滚动一行</translation>
+        <source>Scroll down one line:</source>
+        <translation>向下滚动一行：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="73"/>
-        <source>Page up</source>
-        <translation>向上滚动一页</translation>
+        <source>Page up:</source>
+        <translation>向上滚动一页：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="74"/>
-        <source>Page down</source>
-        <translation>向下滚动一页</translation>
+        <source>Page down:</source>
+        <translation>向下滚动一页：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="75"/>
-        <source>Move to end of line</source>
-        <translation>移动到行尾</translation>
+        <source>Move to end of line:</source>
+        <translation>移动到行尾：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="76"/>
-        <source>Move to start of line</source>
-        <translation>移动到行头</translation>
+        <source>Move to start of line:</source>
+        <translation>移动到行头：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="77"/>
-        <source>Move to end of text</source>
-        <translation>移动到文本结尾</translation>
+        <source>Move to end of text:</source>
+        <translation>移动到文本结尾：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="78"/>
-        <source>Move to start of text</source>
-        <translation>移动到文本开头</translation>
+        <source>Move to start of text:</source>
+        <translation>移动到文本开头：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="79"/>
-        <source>Move to line indentation</source>
-        <translation>移动到行缩进</translation>
+        <source>Move to line indentation:</source>
+        <translation>移动到行缩进：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="80"/>
-        <source>Upper case</source>
-        <translation>转换为大写</translation>
+        <source>Upper case:</source>
+        <translation>转换为大写：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="81"/>
-        <source>Lower case</source>
-        <translation>转换为小写</translation>
+        <source>Lower case:</source>
+        <translation>转换为小写：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="82"/>
-        <source>Capitalize</source>
-        <translation>首字母大写</translation>
+        <source>Capitalize:</source>
+        <translation>首字母大写：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="83"/>
-        <source>Delete backward word</source>
-        <translation>向左删除一个词</translation>
+        <source>Delete backward word:</source>
+        <translation>向左删除一个词：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="84"/>
-        <source>Delete forward word</source>
-        <translation>向右删除一个词</translation>
+        <source>Delete forward word:</source>
+        <translation>向右删除一个词：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="85"/>
-        <source>Forward over a pair</source>
-        <translation>向右匹配</translation>
+        <source>Forward over a pair:</source>
+        <translation>向右匹配：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="86"/>
-        <source>Backward over a pair</source>
-        <translation>向左匹配</translation>
+        <source>Backward over a pair:</source>
+        <translation>向左匹配：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="87"/>
-        <source>Select all</source>
-        <translation>全选</translation>
+        <source>Select all:</source>
+        <translation>全选：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="88"/>
-        <source>Copy</source>
-        <translation>复制</translation>
+        <source>Copy:</source>
+        <translation>复制：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="89"/>
-        <source>Cut</source>
-        <translation>剪切</translation>
+        <source>Cut:</source>
+        <translation>剪切：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="90"/>
-        <source>Paste</source>
-        <translation>粘贴</translation>
+        <source>Paste:</source>
+        <translation>粘贴：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="92"/>
-        <source>Mark</source>
-        <translation>设置标记</translation>
+        <source>Mark:</source>
+        <translation>设置标记：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="93"/>
-        <source>Unmark</source>
-        <translation>取消标记</translation>
+        <source>Unmark:</source>
+        <translation>取消标记：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="94"/>
-        <source>Copy line</source>
-        <translation>复制行</translation>
+        <source>Copy line:</source>
+        <translation>复制行：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="95"/>
-        <source>Cut line</source>
-        <translation>剪切行</translation>
+        <source>Cut line:</source>
+        <translation>剪切行：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="96"/>
-        <source>Merge lines</source>
-        <translation>合并行</translation>
+        <source>Merge lines:</source>
+        <translation>合并行：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="97"/>
-        <source>Read-Only mode</source>
-        <translation>切换到只读模式</translation>
+        <source>Read-Only mode:</source>
+        <translation>切换到只读模式：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="98"/>
-        <source>Toggle comment</source>
-        <translation>切换注释</translation>
+        <source>Toggle comment:</source>
+        <translation>切换注释：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="99"/>
-        <source>Undo</source>
-        <translation>撤销</translation>
+        <source>Undo:</source>
+        <translation>撤销：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="100"/>
-        <source>Redo</source>
-        <translation>重做</translation>
+        <source>Redo:</source>
+        <translation>重做：</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="101"/>
@@ -621,8 +625,8 @@
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="103"/>
-        <source>Window size</source>
-        <translation>窗口状态</translation>
+        <source>Window size:</source>
+        <translation>窗口状态：</translation>
     </message>
 </context>
 <context>

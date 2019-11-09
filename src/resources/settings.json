@@ -24,7 +24,7 @@
                         },
                         {
                             "key": "wordwrap",
-                            "name": "",
+                            "name": "Word Wrap",
                             "type": "checkbox",
                             "text": "Word Wrap",
                             "default": "true"
@@ -43,7 +43,7 @@
                     "options" : [
                         {
                             "key": "keymap",
-                            "name": "Keymap",
+                            "name": "Keymap:",
                             "type": "combobox",
                             "default": "standard"
                         }
