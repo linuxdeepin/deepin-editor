@@ -146,7 +146,7 @@ QPair<QWidget*, QWidget*> Settings::createFontComBoBoxHandle(QObject *obj)
 
     QComboBox *comboBox = new QComboBox;
     //QWidget *optionWidget = DSettingsWidgetFactory::createTwoColumWidget(option, comboBox);
-    QPair<QWidget*, QWidget*> optionWidget = DSettingsWidgetFactory::createStandardItem("fontcombobox", option, comboBox);
+    QPair<QWidget*, QWidget*> optionWidget = DSettingsWidgetFactory::createStandardItem(QByteArray(), option, comboBox);
 
     QFontDatabase fontDatabase;
     comboBox->addItems(fontDatabase.families());
