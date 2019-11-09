@@ -4,10 +4,10 @@
 WarningNotices::WarningNotices(MessageType notifyType)
     : DFloatingMessage(notifyType)
 {
-    QFont font;
-    font.setPixelSize(14);
-    font.setFamily("SourceHanSansSC-Medium");
-    this->setFont(font);
+    //QFont font;
+    //font.setPixelSize(14);
+    //font.setFamily("SourceHanSansSC-Medium");
+    //this->setFont(font);
 
     this->setContentsMargins(7, 7, 7, 7);
 

@@ -59,17 +59,17 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     m_closeButton->setFlat(true);
     m_closeButton->setFixedSize(25, 25);
 
-    QFont font;
-    font.setFamily("SourceHanSansSC-Medium");
-    font.setPixelSize(14);
-    m_replaceLabel->setFont(font);
-    m_replaceLine->lineEdit()->setFont(font);
-    m_withLabel->setFont(font);
-    m_withLine->lineEdit()->setFont(font);
-    m_replaceButton->setFont(font);
-    m_replaceSkipButton->setFont(font);
-    m_replaceRestButton->setFont(font);
-    m_replaceAllButton->setFont(font);
+//    QFont font;
+//    font.setFamily("SourceHanSansSC-Medium");
+//    font.setPixelSize(14);
+//    m_replaceLabel->setFont(font);
+//    m_replaceLine->lineEdit()->setFont(font);
+//    m_withLabel->setFont(font);
+//    m_withLine->lineEdit()->setFont(font);
+//    m_replaceButton->setFont(font);
+//    m_replaceSkipButton->setFont(font);
+//    m_replaceRestButton->setFont(font);
+//    m_replaceAllButton->setFont(font);
 
     m_layout->addWidget(m_replaceLabel);
     m_layout->addWidget(m_replaceLine);

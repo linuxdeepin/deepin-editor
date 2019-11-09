@@ -205,8 +205,8 @@
     <name>MainWindow</name>
     <message>
         <location filename="../src/main.cpp" line="51"/>
-        <source>Deepin Editor is a desktop text editor that supports common text editing features.</source>
-        <translation>深度编辑器是一款桌面文本编辑器，支持常见的文本编辑功能。</translation>
+        <source>Editor is a desktop text editor that supports common text editing features.</source>
+        <translation>编辑器是一款桌面文本编辑器，支持常见的文本编辑功能。</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="63"/>

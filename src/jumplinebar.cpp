@@ -45,11 +45,11 @@ JumpLineBar::JumpLineBar(DFloatingWidget *parent)
     m_lineValidator = new QIntValidator;
     m_editLine->lineEdit()->setValidator(m_lineValidator);
 
-    QFont font;
-    font.setFamily("SourceHanSansSC-Medium");
-    font.setPixelSize(13);
-    m_label->setFont(font);
-    m_editLine->lineEdit()->setFont(font);
+//    QFont font;
+//    font.setFamily("SourceHanSansSC-Medium");
+//    font.setPixelSize(13);
+//    m_label->setFont(font);
+//    m_editLine->lineEdit()->setFont(font);
 
     m_layout->addWidget(m_label);
     m_layout->addWidget(m_editLine);

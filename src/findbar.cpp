@@ -49,13 +49,13 @@ FindBar::FindBar(QWidget *parent)
     m_closeButton->setFixedSize(25, 25);
     m_layout->setContentsMargins(16, 4, 11, 4);
 
-    QFont font;
-    font.setFamily("SourceHanSansSC-Medium");
-    font.setPixelSize(14);
-    m_findLabel->setFont(font);
-    m_editLine->lineEdit()->setFont(font);
-    m_findPrevButton->setFont(font);
-    m_findNextButton->setFont(font);
+//    QFont font;
+//    font.setFamily("SourceHanSansSC-Medium");
+//    font.setPixelSize(14);
+//    m_findLabel->setFont(font);
+//    m_editLine->lineEdit()->setFont(font);
+//    m_findPrevButton->setFont(font);
+//    m_findNextButton->setFont(font);
 
     m_layout->addWidget(m_findLabel);
     m_layout->addWidget(m_editLine);
