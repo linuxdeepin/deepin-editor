@@ -130,6 +130,26 @@
         <translation>无</translation>
     </message>
     <message>
+        <location filename="../src/dtextedit.cpp" line="808"/>
+        <source>The selected row has been copied to the clipboard</source>
+        <translation>已经复制选中行到剪切板</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="814"/>
+        <source>The current row has been copied to the clipboard</source>
+        <translation>已经复制当前行到剪切板</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="853"/>
+        <source>The selected row has been clipped to the clipping board</source>
+        <translation>已经剪切选中行到剪切板</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="859"/>
+        <source>The current row has been sheared to the shears</source>
+        <translation>已经剪切当前行到剪切板</translation>
+    </message>
+    <message>
         <location filename="../src/dtextedit.cpp" line="2204"/>
         <source>Read-Only mode is off</source>
         <translation>只读模式已关闭</translation>
@@ -850,6 +870,11 @@
         <location filename="../src/window.cpp" line="1370"/>
         <source>Save</source>
         <translation>保存</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="937"/>
+        <source>Remember the current location</source>
+        <translation>记住当前位置</translation>
     </message>
 </context>
 </TS>

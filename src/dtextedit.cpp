@@ -805,13 +805,13 @@ void TextEdit::copyLines()
         copyCursor.setPosition(startCursor.position(), QTextCursor::MoveAnchor);
         copyCursor.setPosition(endCursor.position(), QTextCursor::KeepAnchor);
 
-        // popupNotify(tr("已经拷贝选中行到剪切板"));
+        popupNotify(tr("The selected row has been copied to the clipboard"));
     } else {
         // Selection current line.
         copyCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
         copyCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
 
-        // popupNotify(tr("已经拷贝当前行到剪切板"));
+        popupNotify(tr("The current row has been copied to the clipboard"));
     }
 
     // Copy lines to system clipboard.
@@ -850,13 +850,13 @@ void TextEdit::cutlines()
         copyCursor.setPosition(startCursor.position(), QTextCursor::MoveAnchor);
         copyCursor.setPosition(endCursor.position(), QTextCursor::KeepAnchor);
 
-        // popupNotify(tr("已经剪切选中行到剪切板"));
+        popupNotify(tr("The selected row has been clipped to the clipping board"));
     } else {
         // Selection current line.
         copyCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
         copyCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
 
-        // popupNotify(tr("已经剪切当前行到剪切板"));
+        popupNotify(tr("The current row has been sheared to the shears"));
     }
 
     // Copy lines to system clipboard.
@@ -987,7 +987,7 @@ void TextEdit::killBackwardWord()
     tryUnsetMark();
 
     if (textCursor().hasSelection()) {
-        textCursor().removeSelectedText();
+        //textCursor().removeSelectedText();
     } else {
         //  QTextCursor cursor = textCursor();
         //  cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
@@ -1007,7 +1007,7 @@ void TextEdit::killForwardWord()
     tryUnsetMark();
 
     if (textCursor().hasSelection()) {
-        textCursor().removeSelectedText();
+        //textCursor().removeSelectedText();
     } else {
         //  QTextCursor cursor = textCursor();
         //  cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);

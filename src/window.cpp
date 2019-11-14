@@ -434,8 +434,15 @@ void Window::closeTab()
 
 void Window::restoreTab()
 {
-    if (m_closeFileHistory.size() > 0) {
-        addTab(m_closeFileHistory.takeLast()) ;
+    if (m_closeFileHistory.size() > 0)
+    {
+        bool bRet = Utils::isDraftFile(m_tabbar->currentPath());
+        if(bRet == true)
+        {
+            return;
+        }
+
+        addTab(m_closeFileHistory.takeLast());
     }
 }
 
@@ -920,6 +927,8 @@ void Window::remberPositionSave()
     m_remberPositionRow = wrapper->textEditor()->getCurrentLine();
     m_remberPositionColumn = wrapper->textEditor()->getCurrentColumn();
     m_remberPositionScrollOffset = wrapper->textEditor()->getScrollOffset();
+
+    currentWrapper()->showNotify(tr("Remember the current location"));
 }
 
 void Window::remberPositionRestore()
