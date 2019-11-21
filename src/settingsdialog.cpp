@@ -42,6 +42,7 @@ void GenerateSettingTranslate()
     auto shortcuts_window_incrementfontsizeName = QObject::tr("Increase font size:");
     auto shortcuts_window_decrementfontsizeName = QObject::tr("Decrease font size:");
     auto shortcuts_window_resetfontsizeName = QObject::tr("Reset font size:");
+    auto shortcuts_window_windowMaximizing = QObject::tr("Window maximizing:");
     auto shortcuts_window_togglefullscreenName = QObject::tr("Toggle fullscreen:");
     auto shortcuts_window_findName = QObject::tr("Find:");
     auto shortcuts_window_replaceName = QObject::tr("Replace:");

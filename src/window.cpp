@@ -417,7 +417,10 @@ void Window::closeTab()
         dialog->exec();
     } else {
         // record last close path.
-        m_closeFileHistory << m_tabbar->currentPath();
+        bool bRet = Utils::isDraftFile(m_tabbar->currentPath());
+        if (bRet == false) {
+            m_closeFileHistory << m_tabbar->currentPath();
+        }
 
         // close tab directly, because all file is save automatically.
         m_tabbar->closeCurrentTab();
@@ -434,14 +437,7 @@ void Window::closeTab()
 
 void Window::restoreTab()
 {
-    if (m_closeFileHistory.size() > 0)
-    {
-        bool bRet = Utils::isDraftFile(m_tabbar->currentPath());
-        if(bRet == true)
-        {
-            return;
-        }
-
+    if (m_closeFileHistory.size() > 0) {
         addTab(m_closeFileHistory.takeLast());
     }
 }
@@ -910,6 +906,16 @@ void Window::popupThemePanel()
     m_themePanel->popup();
 }
 
+void Window::windowMaximizing()
+{
+    if (isMaximized()) {
+        showNormal();
+    }  else {
+        //setWindowState(Qt::WindowMaximized);
+        showMaximized();
+    }
+}
+
 void Window::toggleFullscreen()
 {
     if (isFullScreen()) {
@@ -1003,7 +1009,7 @@ void Window::displayShortcuts()
                   << "saveasfile" << "selectnexttab" << "selectprevtab"
                   << "closetab" << "closeothertabs" << "restoretab"
                   << "openfile" << "incrementfontsize" << "decrementfontsize"
-                  << "resetfontsize" << "togglefullscreen" << "find" << "replace"
+                  << "resetfontsize" << "windowmaximizing" << "togglefullscreen" << "find" << "replace"
                   << "jumptoline" << "saveposition" << "restoreposition"
                   << "escape" << "displayshortcuts" << "print";
 
@@ -1633,6 +1639,8 @@ void Window::keyPressEvent(QKeyEvent *e)
         decrementFontSize();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "resetfontsize")) {
         resetFontSize();
+    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "windowmaximizing")) {
+        windowMaximizing();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "togglefullscreen")) {
         toggleFullscreen();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "find")) {

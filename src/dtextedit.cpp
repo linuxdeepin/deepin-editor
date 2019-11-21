@@ -2044,6 +2044,8 @@ bool TextEdit::tryUnsetMark()
 
 void TextEdit::exchangeMark()
 {
+    unsetMark();
+
     if (textCursor().hasSelection()) {
         // Record cursor and seleciton position before move cursor.
         int actionStartPos = textCursor().position();

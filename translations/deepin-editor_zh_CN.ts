@@ -375,6 +375,11 @@
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="45"/>
+        <source>Window maximizing:</source>
+        <translation>窗口最大化：</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="45"/>
         <source>Toggle fullscreen:</source>
         <translation>切换全屏：</translation>
     </message>

@@ -42,12 +42,18 @@ BottomBar::BottomBar(QWidget *parent)
 {
     QFont font;
     font.setFamily("SourceHanSansSC-Normal");
-    font.setPixelSize(11);
+    //font.setPixelSize(11);
     m_positionLabel->setFont(font);
     m_charCountLabel->setFont(font);
     m_cursorStatus->setFont(font);
     m_encodeMenu->setFont(font);
     m_highlightMenu->setFont(font);
+
+    DFontSizeManager::instance()->bind(m_positionLabel, DFontSizeManager::T9);
+    DFontSizeManager::instance()->bind(m_charCountLabel, DFontSizeManager::T9);
+    DFontSizeManager::instance()->bind(m_cursorStatus, DFontSizeManager::T9);
+    DFontSizeManager::instance()->bind(m_encodeMenu, DFontSizeManager::T9);
+    DFontSizeManager::instance()->bind(m_highlightMenu, DFontSizeManager::T9);
 
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setContentsMargins(29, 1, 10, 0);
