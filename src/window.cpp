@@ -1382,7 +1382,7 @@ void Window::loadTheme(const QString &path)
 
     QVariantMap jsonMap = Utils::getThemeMapFromPath(path);
     const QString &backgroundColor = jsonMap["editor-colors"].toMap()["background-color"].toString();
-    m_tabbarActiveColor = jsonMap["app-colors"].toMap()["tab-active"].toString();
+    //m_tabbarActiveColor = jsonMap["app-colors"].toMap()["tab-active"].toString();
 
     const QString &tabbarStartColor = jsonMap["app-colors"].toMap()["tab-background-start-color"].toString();
     const QString &tabbarEndColor = jsonMap["app-colors"].toMap()["tab-background-end-color"].toString();
@@ -1471,25 +1471,42 @@ DDialog* Window::createDialog(const QString &title, const QString &content)
 
 void Window::slotLoadContentTheme(DGuiApplicationHelper::ColorType themeType)
 {
-    if(themeType == DGuiApplicationHelper::ColorType::LightType)
-    {
+    if (themeType == DGuiApplicationHelper::ColorType::LightType) {
         loadTheme("/usr/share/deepin-editor/themes/deepin.theme");
+        if (DGuiApplicationHelper::instance()->paletteType() == DGuiApplicationHelper::ColorType::UnknownType) {
+            DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::ColorType::UnknownType);
+        }
     }
-    else if(themeType == DGuiApplicationHelper::ColorType::DarkType)
-    {
+    else if (themeType == DGuiApplicationHelper::ColorType::DarkType) {
         loadTheme("/usr/share/deepin-editor/themes/deepin_dark.theme");
+        if (DGuiApplicationHelper::instance()->paletteType() == DGuiApplicationHelper::ColorType::UnknownType) {
+            DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::ColorType::UnknownType);
+        }
     }
 }
 
 void Window::slotSettingResetTheme(const QString &path)
 {
+    QString strLightTheme = "/usr/share/deepin-editor/themes/deepin.theme";
+    QString strDarkTheme = "/usr/share/deepin-editor/themes/deepin_dark.theme";
 
-    QString strDefaultTheme = "/usr/share/deepin-editor/themes/deepin.theme";
-    if (path == strDefaultTheme) {
-        DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::LightType);
+    if (path == strLightTheme) {
+        if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
+            return;
+        }
+        else {
+            DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::LightType);
+            //DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::LightType);
+        }
+    } else if (path == strDarkTheme) {
+        if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType) {
+            return;
+        }
+        else {
+            DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::DarkType);
+            //DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::DarkType);
+        }
     }
-
-    //loadTheme(path);
 }
 
 void Window::handleFocusWindowChanged(QWindow *w)

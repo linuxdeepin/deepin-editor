@@ -2639,7 +2639,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             QTextEdit::redo();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "escape")) {
             escape();
-        } else if (e->key() == Qt::Key_Insert) {
+        } else if (e->key() == Qt::Key_Insert && key != "Shift+Ins") {
             if (e->modifiers() == Qt::NoModifier) {
                 setOverwriteMode(!overwriteMode());
                 update();
