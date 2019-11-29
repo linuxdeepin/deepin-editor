@@ -572,6 +572,7 @@ bool Utils::isDraftFile(const QString &filepath)
 {
     QString draftDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first())
                                                                             .filePath("blank-files");
+
     QString dir = QFileInfo(filepath).dir().absolutePath();
 
     return draftDir == dir;

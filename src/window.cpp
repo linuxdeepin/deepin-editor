@@ -106,7 +106,7 @@ Window::Window(DMainWindow *parent)
     const QString &windowState = m_settings->settings->option("advance.window.windowstate")->value().toString();
 
     // window minimum size.
-    setMinimumSize(800, 500);
+    setMinimumSize(1000, 600);
 
     // resize window size.
     QScreen *screen = QGuiApplication::primaryScreen();

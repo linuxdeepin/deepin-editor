@@ -44,11 +44,6 @@ Tabbar::Tabbar(QWidget *parent)
 
     setFocusPolicy(Qt::NoFocus);
 
-    // set mask color.
-    QColor dropColor("#333333");
-    dropColor.setAlpha(1);
-    setMaskColor(dropColor);
-
     connect(this, &DTabBar::tabMoved, this, &Tabbar::handleTabMoved);
     connect(this, &DTabBar::tabDroped, this, &Tabbar::handleTabDroped);
     connect(this, &DTabBar::tabIsRemoved, this, &Tabbar::handleTabIsRemoved);
@@ -219,7 +214,7 @@ QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option
     hotspot->setX(20);
     hotspot->setY(20);
 
-    QColor shadowColor = QColor("#000000");
+    QColor shadowColor = QColor(palette().color(QPalette::BrightText));
     shadowColor.setAlpha(80);
 
     return Utils::dropShadow(QPixmap::fromImage(scaledImage), 40, shadowColor, QPoint(0, 8));

@@ -40,7 +40,7 @@ JumpLineBar::JumpLineBar(DFloatingWidget *parent)
     m_label->setMinimumHeight(37);
     m_label->setText(tr("Go to Line: "));
     m_editLine = new LineBar();
-    m_editLine->lineEdit()->setFixedSize(96, 37);
+    //m_editLine->lineEdit()->setFixedSize(96, 37);
 
     m_lineValidator = new QIntValidator;
     m_editLine->lineEdit()->setValidator(m_lineValidator);

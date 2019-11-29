@@ -22,6 +22,7 @@
 
 #include <QWidget>
 #include <QLabel>
+#include <DLabel>
 #include "ddropdownmenu.h"
 #include <DApplicationHelper>
 #include <DFontSizeManager>
@@ -51,9 +52,9 @@ protected:
 
 private:
     EditWrapper *m_wrapper;
-    QLabel *m_positionLabel;
-    QLabel *m_charCountLabel;
-    QLabel *m_cursorStatus;
+    DLabel *m_positionLabel;
+    DLabel *m_charCountLabel;
+    DLabel *m_cursorStatus;
     DDropdownMenu *m_encodeMenu;
     DDropdownMenu *m_highlightMenu;
     QString m_rowStr;
