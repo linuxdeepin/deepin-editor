@@ -349,6 +349,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../src/settingsdialog.cpp" line="45"/>
+        <source>Help</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/settingsdialog.cpp" line="46"/>
         <source>Find</source>
         <translation type="unfinished"></translation>

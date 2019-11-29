@@ -144,6 +144,12 @@
                             "default":  "F11"
                         },
                         {
+                            "key": "help",
+                            "name": "Help",
+                            "type": "shortcut",
+                            "default":  "F1"
+                        },
+                        {
                             "key": "find",
                             "name": "Find",
                             "type": "shortcut",
@@ -569,6 +575,12 @@
                             "hide" : true,
                             "reset" : false,
                             "default":  "F11"
+                        },
+                        {
+                            "key": "help",
+                            "hide": true,
+                            "reset": false,
+                            "default":  "F1"
                         },
                         {
                             "key": "find",
@@ -1023,6 +1035,12 @@
                             "default":  "F11"
                         },
                         {
+                            "key": "help",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "F1"
+                        },
+                        {
                             "key": "find",
                             "hide" : true,
                             "reset" : false,
@@ -1473,6 +1491,12 @@
                             "hide" : true,
                             "reset" : false,
                             "default":  "F11"
+                        },
+                        {
+                            "key": "help",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "F1"
                         },
                         {
                             "key": "find",

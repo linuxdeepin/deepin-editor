@@ -385,6 +385,11 @@
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="46"/>
+        <source>Help</source>
+        <translation>帮助</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="46"/>
         <source>Find</source>
         <translation>查找</translation>
     </message>
@@ -416,7 +421,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="52"/>
         <source>Display shortcuts</source>
-        <translation>显示快捷键</translation>
+        <translation>显示快捷键预览</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="53"/>

@@ -1009,7 +1009,7 @@ void Window::displayShortcuts()
                   << "saveasfile" << "selectnexttab" << "selectprevtab"
                   << "closetab" << "closeothertabs" << "restoretab"
                   << "openfile" << "incrementfontsize" << "decrementfontsize"
-                  << "resetfontsize" << "windowmaximizing" << "togglefullscreen" << "find" << "replace"
+                  << "resetfontsize" << "togglefullscreen" << "help" << "find" << "replace"
                   << "jumptoline" << "saveposition" << "restoreposition"
                   << "escape" << "displayshortcuts" << "print";
 
