@@ -122,9 +122,24 @@ bool EditWrapper::saveFile()
         eol = QStringLiteral("\r");
     }
 
+    //auto append new line char to end of file when file's format is Linux/MacOS
+    QString fileContent = m_textEdit->toPlainText();
+    if (m_endOfLineMode == eolUnix) {
+        if (!fileContent.endsWith("\n"))
+        {
+            fileContent = fileContent.append(QChar('\n'));
+        }
+    }
+    else if (m_endOfLineMode == eolMac) {
+        if (!fileContent.endsWith("\r"))
+        {
+            fileContent = fileContent.append(QChar('\r'));
+        }
+    }
+
     QTextStream stream(&file);
     stream.setCodec(m_textCodec);
-    stream << m_textEdit->toPlainText().replace(eolRegex, eol);
+    stream << fileContent.replace(eolRegex, eol);
 
     // flush stream.
     stream.flush();
