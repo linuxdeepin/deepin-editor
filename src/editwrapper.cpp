@@ -130,6 +130,13 @@ bool EditWrapper::saveFile()
             fileContent = fileContent.append(QChar('\n'));
         }
     }
+    else if (m_endOfLineMode == eolDos)
+    {
+        if (!fileContent.endsWith("\r\n"))
+        {
+            fileContent = fileContent.append(QChar('\r')).append(QChar('\n'));
+        }
+    }
     else if (m_endOfLineMode == eolMac) {
         if (!fileContent.endsWith("\r"))
         {
