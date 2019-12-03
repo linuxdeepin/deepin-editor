@@ -801,6 +801,7 @@
     </message>
     <message>
         <location filename="../src/window.cpp" line="199"/>
+        <location filename="../src/window.cpp" line="1096"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
@@ -869,6 +870,11 @@
         <location filename="../src/window.cpp" line="1025"/>
         <source>Blank document %1</source>
         <translation>空白文档%1</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="1096"/>
+        <source>Setup</source>
+        <translation>设置</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1368"/>

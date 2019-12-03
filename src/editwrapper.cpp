@@ -305,8 +305,11 @@ void EditWrapper::showNotify(const QString &message)
     //DFloatingMessage
     //DMainWindow::sendMessage(QIcon(":/images/ok.svg"), message);
     //DMessageManager::sendMessage(QIcon(":/images/ok.svg"), message);
-
-    DMessageManager::instance()->sendMessage(m_textEdit, QIcon(":/images/ok.svg"), message);
+    if (m_textEdit->getReadOnlyPermission() == true || m_textEdit->getReadOnlyMode() == true) {
+        DMessageManager::instance()->sendMessage(m_textEdit, QIcon(":/images/warning.svg"), message);
+    } else {
+        DMessageManager::instance()->sendMessage(m_textEdit, QIcon(":/images/ok.svg"), message);
+    }
 }
 
 bool EditWrapper::getTextChangeFlag()

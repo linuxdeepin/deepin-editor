@@ -2353,6 +2353,16 @@ void TextEdit::setReadOnlyPermission(bool permission)
 
 }
 
+bool TextEdit::getReadOnlyPermission()
+{
+    return m_bReadOnlyPermission;
+}
+
+bool TextEdit::getReadOnlyMode()
+{
+    return m_readOnlyMode;
+}
+
 void TextEdit::completionWord(QString word)
 {
     QString wordAtCursor = getWordAtCursor();

@@ -321,11 +321,16 @@ void Window::addTab(const QString &filepath, bool activeTab)
 
             if (!m_wrappers.contains(filepath)) {
                 EditWrapper *wrapper = createEditor();
+
                 wrapper->openFile(filepath);
 
                 m_wrappers[filepath] = wrapper;
 
                 showNewEditor(wrapper);
+
+                if (!fileInfo.isWritable() && fileInfo.isReadable()) {
+                    wrapper->textEditor()->setReadOnlyPermission(true);
+                }
             }
         }
 
@@ -1004,14 +1009,15 @@ void Window::displayShortcuts()
     QPoint pos(rect.x() + rect.width() / 2,
                rect.y() + rect.height() / 2);
 
+    //窗体快捷键
     QStringList windowKeymaps;
     windowKeymaps << "addblanktab" << "newwindow" << "savefile"
                   << "saveasfile" << "selectnexttab" << "selectprevtab"
                   << "closetab" << "closeothertabs" << "restoretab"
                   << "openfile" << "incrementfontsize" << "decrementfontsize"
-                  << "resetfontsize" << "togglefullscreen" << "help" << "find" << "replace"
+                  << "resetfontsize" << "togglefullscreen" << "find" << "replace"
                   << "jumptoline" << "saveposition" << "restoreposition"
-                  << "escape" << "displayshortcuts" << "print";
+                  << "escape" << "print";
 
     QJsonObject shortcutObj;
     QJsonArray jsonGroups;
@@ -1024,13 +1030,24 @@ void Window::displayShortcuts()
         auto option = m_settings->settings->group("shortcuts.window")->option(QString("shortcuts.window.%1").arg(keymap));
         QJsonObject jsonItem;
         jsonItem.insert("name", QObject::tr(option->name().toUtf8().data()));
-        jsonItem.insert("value", option->value().toString().replace("Meta", "Super"));
+        if (keymap != "incrementfontsize" && keymap != "decrementfontsize") {
+            jsonItem.insert("value", option->value().toString().replace("Meta", "Super"));
+        } else if (keymap == "incrementfontsize") {
+            QString strIncrementfontValue = QString(tr("Ctrl+'+'"));
+            jsonItem.insert("value", strIncrementfontValue.replace("Meta", "Super"));
+        }
+        else if (keymap == "decrementfontsize" && option->value().toString() == "Ctrl+-") {
+            QString strDecrementfontValue = QString(tr("Ctrl+'-'"));
+            jsonItem.insert("value", strDecrementfontValue.replace("Meta", "Super"));
+        }
+
         windowJsonItems.append(jsonItem);
     }
 
     windowJsonGroup.insert("groupItems", windowJsonItems);
     jsonGroups.append(windowJsonGroup);
 
+    //编辑快捷键
     QStringList editorKeymaps;
     editorKeymaps << "indentline" << "backindentline" << "forwardchar"
                   << "backwardchar" << "forwardword" << "backwardword"
@@ -1060,6 +1077,24 @@ void Window::displayShortcuts()
     }
     editorJsonGroup.insert("groupItems", editorJsonItems);
     jsonGroups.append(editorJsonGroup);
+
+    //设置快捷键
+    QStringList setupKeymaps;
+    setupKeymaps << "help" << "displayshortcuts";
+
+    QJsonObject setupJsonGroup;
+    setupJsonGroup.insert("groupName", tr("Settings"));
+    QJsonArray setupJsonItems;
+
+    for (const QString &keymap : setupKeymaps) {
+        auto option = m_settings->settings->group("shortcuts.window")->option(QString("shortcuts.window.%1").arg(keymap));
+        QJsonObject jsonItem;
+        jsonItem.insert("name", QObject::tr(option->name().toUtf8().data()));
+        jsonItem.insert("value", option->value().toString().replace("Meta", "Super"));
+        setupJsonItems.append(jsonItem);
+    }
+    setupJsonGroup.insert("groupItems", setupJsonItems);
+    jsonGroups.append(setupJsonGroup);
 
     shortcutObj.insert("shortcut", jsonGroups);
 

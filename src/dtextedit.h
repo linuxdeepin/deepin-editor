@@ -178,6 +178,8 @@ public:
     void hideCursorBlink();
 
     void setReadOnlyPermission(bool permission);
+    bool getReadOnlyPermission();
+    bool getReadOnlyMode();
 
 signals:
     void clickFindAction();
