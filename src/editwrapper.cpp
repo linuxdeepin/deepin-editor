@@ -194,7 +194,10 @@ void EditWrapper::updatePath(const QString &file)
 
 void EditWrapper::refresh()
 {
-    if (filePath().isEmpty() || Utils::isDraftFile(filePath()) || m_isRefreshing) {
+//    if (filePath().isEmpty() || Utils::isDraftFile(filePath()) || m_isRefreshing) {
+//        return;
+//    }
+    if (filePath().isEmpty() || m_isRefreshing) {
         return;
     }
 
@@ -206,13 +209,19 @@ void EditWrapper::refresh()
     if (file.open(QIODevice::ReadOnly)) {
         m_isRefreshing = true;
 
-        QTextStream out(&file);
-        out.setCodec(m_textCodec);
-        QString content = out.readAll();
+//        QTextStream out(&file);
+//        out.setCodec(m_textCodec);
+//        QString content = out.readAll();
+        QString contentB = m_textEdit->toPlainText();
+        QTextStream in(contentB.toUtf8());
+        in.setCodec(m_textCodec);
+        QString content;
+        in >> content;
 
         m_textEdit->setPlainText(QString());
         m_textEdit->setPlainText(content);
-        m_textEdit->setModified(false);
+        //m_textEdit->setModified(false);
+        m_textEdit->setModified(true);
 
         QTextCursor textcur = m_textEdit->textCursor();
         textcur.setPosition(curPos);
