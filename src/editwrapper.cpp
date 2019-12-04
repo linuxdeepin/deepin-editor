@@ -215,8 +215,8 @@ void EditWrapper::refresh()
         QString contentB = m_textEdit->toPlainText();
         QTextStream in(contentB.toUtf8());
         in.setCodec(m_textCodec);
-        QString content;
-        in >> content;
+        QString content = in.readAll();
+        //in >> content;
 
         m_textEdit->setPlainText(QString());
         m_textEdit->setPlainText(content);
