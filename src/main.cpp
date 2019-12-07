@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
     DApplication::loadDXcbPlugin();
 
     const char *descriptionText = QT_TRANSLATE_NOOP("MainWindow",
-                                                    "Editor is a desktop text editor that supports common text editing features.");
+                                                    "Text editor is a full-featured tool for viewing and editing plain text.");
     const QString acknowledgementLink = "https://www.deepin.org/original/deepin-editor/";
 
     DApplication app(argc, argv);
@@ -59,10 +59,10 @@ int main(int argc, char *argv[])
     app.loadTranslator();
     app.setOrganizationName("deepin");
     app.setApplicationName("deepin-editor");
-    app.setApplicationDisplayName(QObject::tr("Deepin Editor"));
+    app.setApplicationDisplayName(QObject::tr("Text Editor"));
     app.setApplicationVersion(VERSION);
     app.setProductIcon(QIcon::fromTheme("deepin-editor"));
-    app.setProductName(DApplication::translate("MainWindow", "Deepin Editor"));
+    app.setProductName(DApplication::translate("MainWindow", "Text Editor"));
     app.setApplicationDescription(DApplication::translate("MainWindow", descriptionText) + "\n");
     app.setApplicationAcknowledgementPage(acknowledgementLink);
 

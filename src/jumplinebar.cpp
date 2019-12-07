@@ -29,7 +29,7 @@ JumpLineBar::JumpLineBar(DFloatingWidget *parent)
     : DFloatingWidget(parent)
 {
     // Init.
-    setFixedSize(180, 58);
+    setFixedSize(200, 58);
 
     // Init layout and widgets.
     m_layout = new QHBoxLayout();
