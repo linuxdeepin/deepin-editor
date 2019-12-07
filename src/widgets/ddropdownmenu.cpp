@@ -105,10 +105,13 @@ void DDropdownMenu::setCurrentAction(QAction *action)
 
 void DDropdownMenu::setCurrentText(const QString &text)
 {
+    QString strCodecName = text;
+    strCodecName = strCodecName.toUpper();
     for (QAction *action : m_menu->actions()) {
-        if (action->text() == text) {
+        if (action->text() == strCodecName) {
             setCurrentAction(action);
-            setText(text);
+            setText(strCodecName);
+            break;
         }
     }
 }

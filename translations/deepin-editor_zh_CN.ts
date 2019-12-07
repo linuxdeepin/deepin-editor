@@ -225,21 +225,21 @@
     <name>MainWindow</name>
     <message>
         <location filename="../src/main.cpp" line="51"/>
-        <source>Editor is a desktop text editor that supports common text editing features.</source>
-        <translation>编辑器是一款桌面文本编辑器，支持常见的文本编辑功能。</translation>
+        <source>Text editor is a full-featured tool for viewing and editing plain text.</source>
+        <translation>文本编辑器是一款用来编写和查看文本文件的软件工具。</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="63"/>
-        <source>Deepin Editor</source>
-        <translation>编辑器</translation>
+        <source>Text Editor</source>
+        <translation>文本编辑器</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <location filename="../src/main.cpp" line="60"/>
-        <source>Deepin Editor</source>
-        <translation>编辑器</translation>
+        <source>Text Editor</source>
+        <translation>文本编辑器</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="24"/>
@@ -288,12 +288,12 @@
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="57"/>
-        <source>Forward character</source>
+        <source>Forward char</source>
         <translation>右移一个字符</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="58"/>
-        <source>Backward character</source>
+        <source>Backward char</source>
         <translation>左移一个字符</translation>
     </message>
     <message>
@@ -303,7 +303,7 @@
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="104"/>
-        <source>Tab width</source>
+        <source>Tab space</source>
         <translation>Tab字符宽度</translation>
     </message>
     <message>
@@ -381,7 +381,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="45"/>
         <source>Toggle fullscreen</source>
-        <translation>切换全屏</translation>
+        <translation>切换到全屏</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="46"/>
@@ -411,7 +411,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="50"/>
         <source>Reset cursor position</source>
-        <translation>跳转到保存光标位置</translation>
+        <translation>重置光标位置</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="51"/>
@@ -663,7 +663,7 @@
     <name>ReplaceBar</name>
     <message>
         <location filename="../src/replacebar.cpp" line="36"/>
-        <source>Find</source>
+        <source>Replace</source>
         <translation>查找</translation>
     </message>
     <message>

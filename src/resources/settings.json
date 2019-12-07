@@ -217,13 +217,13 @@
                         },
                         {
                             "key": "forwardchar",
-                            "name": "Forward character",
+                            "name": "Forward char",
                             "type": "shortcut",
                             "default":  "Right"
                         },
                         {
                             "key": "backwardchar",
-                            "name": "Backward character",
+                            "name": "Backward char",
                             "type": "shortcut",
                             "default":  "Left"
                         },
@@ -1891,7 +1891,7 @@
                     "options": [
                         {
                             "key": "tabspacenumber",
-                            "name": "Tab width",
+                            "name": "Tab space",
                             "type": "spinbutton",
                             "default": 4,
                             "min": 1,

@@ -26,6 +26,7 @@
 #include <QTextStream>
 #include <QFile>
 #include <QDebug>
+#include <QTextCodec>
 
 FileLoadThread::FileLoadThread(const QString &filepath, QObject *parent)
     : QThread(parent),

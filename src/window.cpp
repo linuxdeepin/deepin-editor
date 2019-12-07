@@ -1499,7 +1499,7 @@ DDialog* Window::createDialog(const QString &title, const QString &content)
     dialog->setIcon(QIcon::fromTheme("deepin-editor"));
     dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
     dialog->addButton(QString(tr("Discard")), false, DDialog::ButtonNormal);
-    dialog->addButton(QString(tr("Save")), true, DDialog::ButtonNormal);
+    dialog->addButton(QString(tr("Save")), true, DDialog::ButtonRecommend);
 
     return dialog;
 }

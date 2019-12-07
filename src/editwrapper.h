@@ -29,6 +29,7 @@
 #include <QWidget>
 #include <DMessageManager>
 #include <DFloatingMessage>
+#include <QByteArray>
 
 class EditWrapper : public QWidget
 {

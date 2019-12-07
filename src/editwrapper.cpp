@@ -212,15 +212,15 @@ void EditWrapper::refresh()
 //        QTextStream out(&file);
 //        out.setCodec(m_textCodec);
 //        QString content = out.readAll();
+
         QString contentB = m_textEdit->toPlainText();
-        QTextStream in(contentB.toUtf8());
+        QTextStream in(contentB.toLatin1());
         in.setCodec(m_textCodec);
         QString content = in.readAll();
         //in >> content;
 
         m_textEdit->setPlainText(QString());
         m_textEdit->setPlainText(content);
-        //m_textEdit->setModified(false);
         m_textEdit->setModified(true);
 
         QTextCursor textcur = m_textEdit->textCursor();
@@ -234,6 +234,8 @@ void EditWrapper::refresh()
 
         file.close();
         m_waringNotices->hide();
+
+        fsync(file.handle());
 
         m_textEdit->setUpdatesEnabled(false);
 

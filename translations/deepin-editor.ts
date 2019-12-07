@@ -199,12 +199,12 @@
     <name>MainWindow</name>
     <message>
         <location filename="../src/main.cpp" line="50"/>
-        <source>Deepin Editor is a desktop text editor that supports common text editing features.</source>
+        <source>Text editor is a full-featured tool for viewing and editing plain text.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="62"/>
-        <source>Deepin Editor</source>
+        <source>Text Editor</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -212,7 +212,7 @@
     <name>QObject</name>
     <message>
         <location filename="../src/main.cpp" line="59"/>
-        <source>Deepin Editor</source>
+        <source>Text Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -258,12 +258,12 @@
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="57"/>
-        <source>Forward character</source>
+        <source>Forward char</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="58"/>
-        <source>Backward character</source>
+        <source>Backward char</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -273,7 +273,7 @@
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="104"/>
-        <source>Tab width</source>
+        <source>Tab space</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -628,12 +628,12 @@
     <name>ReplaceBar</name>
     <message>
         <location filename="../src/replacebar.cpp" line="37"/>
-        <source>Replace: </source>
+        <source>Replace</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="39"/>
-        <source>With: </source>
+        <source>With</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
