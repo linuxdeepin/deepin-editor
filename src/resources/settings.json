@@ -315,13 +315,13 @@
                             "key": "scrollup",
                             "name": "Page up",
                             "type": "shortcut",
-                            "default":  "PageUp"
+                            "default":  "PgUp"
                         },
                         {
                             "key": "scrolldown",
                             "name": "Page down",
                             "type": "shortcut",
-                            "default":  "PageDown"
+                            "default":  "PgDown"
                         },
                         {
                             "key": "movetoendofline",
@@ -749,13 +749,13 @@
                             "key": "scrollup",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "PageUp"
+                            "default":  "PgUp"
                         },
                         {
                             "key": "scrolldown",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "PageDown"
+                            "default":  "PgDown"
                         },
                         {
                             "key": "movetoendofline",
@@ -1665,13 +1665,13 @@
                             "key": "scrollup",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "PageUp"
+                            "default":  "PgUp"
                         },
                         {
                             "key": "scrolldown",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "PageDown"
+                            "default":  "PgDown"
                         },
                         {
                             "key": "movetoendofline",
