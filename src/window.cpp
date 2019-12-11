@@ -166,14 +166,14 @@ Window::Window(DMainWindow *parent)
     // Init findbar panel.
     DAnchors<FindBar> anchors_findbar(m_findBar);
     anchors_findbar.setAnchor(Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
-    anchors_findbar.setAnchor(Qt::AnchorHorizontalCenter, m_centralWidget, Qt::AnchorHorizontalCenter);
+    //anchors_findbar.setAnchor(Qt::AnchorHorizontalCenter, m_centralWidget, Qt::AnchorHorizontalCenter);
     anchors_findbar.setBottomMargin(5);
     m_findBar->raise();
 
     // Init replaceBar panel.
     DAnchors<ReplaceBar> anchors_replaceBar(m_replaceBar);
     anchors_replaceBar.setAnchor(Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
-    anchors_replaceBar.setAnchor(Qt::AnchorHorizontalCenter, m_centralWidget, Qt::AnchorHorizontalCenter);
+    //anchors_replaceBar.setAnchor(Qt::AnchorHorizontalCenter, m_centralWidget, Qt::AnchorHorizontalCenter);
     anchors_replaceBar.setBottomMargin(5);
     anchors_replaceBar->raise();
 
