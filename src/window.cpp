@@ -44,6 +44,7 @@
 
 #include <QGuiApplication>
 #include <QWindow>
+#include <DWidgetUtil>
 
 #ifdef DTKWIDGET_CLASS_DFileDialog
 #include <DFileDialog>
@@ -114,6 +115,7 @@ Window::Window(DMainWindow *parent)
 
     resize(QSize(screenGeometry.width() * m_settings->settings->option("advance.window.window_width")->value().toDouble(),
                 screenGeometry.height() * m_settings->settings->option("advance.window.window_height")->value().toDouble()));
+    Dtk::Widget::moveToCenter(this);
     show();
 
     // init window state.

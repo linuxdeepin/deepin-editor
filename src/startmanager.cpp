@@ -188,7 +188,7 @@ Window* StartManager::createWindow(bool alwaysCenter)
 void StartManager::initWindowPosition(Window *window, bool alwaysCenter)
 {
     if (m_windows.isEmpty() || alwaysCenter) {
-        Dtk::Widget::moveToCenter(window);
+        //Dtk::Widget::moveToCenter(window);
     } else {
         // Add window offset to avoid all editor window popup at same coordinate.
         int windowOffset = m_windows.size() * 50;
