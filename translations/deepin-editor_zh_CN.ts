@@ -663,16 +663,16 @@
     <name>ReplaceBar</name>
     <message>
         <location filename="../src/replacebar.cpp" line="36"/>
-        <source>Replace</source>
+        <source>Find</source>
         <translation>查找</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="38"/>
-        <source>With</source>
+        <source>Replace With</source>
         <translation>替换为</translation>
     </message>
     <message>
-        <location filename="../src/replacebar.cpp" line="40"/>
+        <location filename="../src/replacebar.cpp" line="46"/>
         <source>Replace</source>
         <translation>替换</translation>
     </message>

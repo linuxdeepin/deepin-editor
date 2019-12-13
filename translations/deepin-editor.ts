@@ -628,12 +628,12 @@
     <name>ReplaceBar</name>
     <message>
         <location filename="../src/replacebar.cpp" line="37"/>
-        <source>Replace</source>
+        <source>Find</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="39"/>
-        <source>With</source>
+        <source>Replace With</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

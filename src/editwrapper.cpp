@@ -206,22 +206,116 @@ void EditWrapper::refresh()
     int yoffset = m_textEdit->verticalScrollBar()->value();
     int xoffset = m_textEdit->horizontalScrollBar()->value();
 
+    //如果文件有被修改了
+    if (m_textEdit->document()->isModified()) {
+        //int code = DMessageBox::warning(this, "当前有未保存的文件", "是否要先进行保存", QMessageBox::Cancel, QMessageBox::Save);
+        DDialog *dialog = new DDialog(tr("保存"), tr("当前有未保存的文件，是否要先进行保存"), this);
+        dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
+        dialog->setIcon(QIcon::fromTheme("deepin-editor"));
+        dialog->addButton(QString(tr("取消")), false, DDialog::ButtonNormal);
+        dialog->addButton(QString(tr("保存")), true, DDialog::ButtonRecommend);
+
+        connect(dialog, &DDialog::buttonClicked, this, [=] (int index) {
+            dialog->hide();
+
+            // 如果用户放弃了这次操作
+            if (index == 0) {
+                qDebug() << "m_BeforeEncodeName:" << m_BeforeEncodeName;
+                m_bottomBar->setEncodeName(QString(m_BeforeEncodeName));
+                return;
+            }
+            else if (index == 1) {
+
+                bool isDraft = Utils::isDraftFile(m_textEdit->filepath);
+                //如果是临时标签文件
+                if (isDraft == true) {
+                    //如果临时文件内容为空则不做操作
+                    if (m_textEdit->toPlainText() == "") {
+                        return;
+                    }
+
+                    const QString &new_file = DFileDialog::getSaveFileName(this, "请选择文件保存位置", QDir::homePath(), "*.txt");
+                    if (new_file.isEmpty())
+                        return;
+
+                    QFile qfile(new_file);
+
+                    if (!qfile.open(QFile::WriteOnly)) {
+                        return;
+                    }
+
+                    // 以切换前的编码保存内容到文件
+                    qDebug() << "write m_BeforeEncodeName:" << m_BeforeEncodeName;
+                    if (m_BeforeEncodeName.isNull()) {
+                        QString str = "UTF-8";
+                        m_BeforeEncodeName = str.toLocal8Bit();
+                    }
+                    qfile.write(QTextCodec::codecForName(m_BeforeEncodeName)->fromUnicode(m_textEdit->toPlainText()));
+                    qfile.close();
+
+                    QString strOldFilePath = m_textEdit->filepath;
+                    if (isDraft) {
+                        QFile(m_textEdit->filepath).remove();
+                        this->updatePath(new_file);
+                    }
+
+                    // 重新读取文件
+                    readFile(new_file);
+
+                    emit sigCodecSaveFile(strOldFilePath, new_file);
+                    //m_textEdit->setModified(false);
+                    //m_textEdit->document()->setModified(false);
+                    //m_isLoadFinished = true;
+                }
+                //如果是已经存在的文件
+                else {
+                    QFile qfile(m_textEdit->filepath);
+                    if (!qfile.open(QFile::WriteOnly)) {
+                        return;
+                    }
+
+                    // 以切换前的编码保存内容到文件
+                    qfile.write(QTextCodec::codecForName(m_BeforeEncodeName)->fromUnicode(m_textEdit->toPlainText()));
+                    qfile.close();
+
+                    // 重新读取文件
+                    readFile(m_textEdit->filepath);
+                }
+            }
+        });
+
+        dialog->exec();
+    }
+    else {
+        readFile(m_textEdit->filepath);
+    }
+
     if (file.open(QIODevice::ReadOnly)) {
         m_isRefreshing = true;
 
-//        QTextStream out(&file);
-//        out.setCodec(m_textCodec);
-//        QString content = out.readAll();
+        //QTextStream out(&file);
+        //out.setCodec(m_textCodec);
+        //QString content = out.readAll();
 
-        QString contentB = m_textEdit->toPlainText();
-        QTextStream in(contentB.toLatin1());
-        in.setCodec(m_textCodec);
-        QString content = in.readAll();
+        //设置编码方法1
+        //const QString strContent = m_textEdit->toPlainText();
+        //QTextStream streamContent(strContent.toLocal8Bit());
+        //streamContent.setCodec(m_textCodec);
+        //QString content = streamContent.readAll();
         //in >> content;
 
-        m_textEdit->setPlainText(QString());
-        m_textEdit->setPlainText(content);
-        m_textEdit->setModified(true);
+        //设置编码 方法2
+//        const QString strContent = m_textEdit->toPlainText();
+//        qDebug() << "get strContent:" << strContent;
+//        QByteArray byteContent = m_textCodec->fromUnicode(strContent);
+//        QTextStream streamContent(byteContent);
+//        streamContent.setCodec(m_textCodec);
+//        QString content = streamContent.readAll();
+
+//        m_textEdit->setPlainText(QString());
+//        qDebug() << "set content:" << content;
+//        m_textEdit->setPlainText(content);
+        m_textEdit->setModified(false);
 
         QTextCursor textcur = m_textEdit->textCursor();
         textcur.setPosition(curPos);
@@ -246,6 +340,80 @@ void EditWrapper::refresh()
     } else {
         m_isRefreshing = false;
     }
+}
+
+bool EditWrapper::saveDraftFile()
+{
+    const QString &new_file = DFileDialog::getSaveFileName(this, "请选择文件保存位置", QDir::homePath(), "*.txt");
+    if (new_file.isEmpty())
+        return false;
+
+    QFile qfile(new_file);
+
+    if (!qfile.open(QFile::WriteOnly)) {
+        return false;
+    }
+
+    // 以新的编码保存内容到文件
+    qfile.write(QTextCodec::codecForName(m_textCodec->name())->fromUnicode(m_textEdit->toPlainText()));
+    qfile.close();
+
+    QFile(m_textEdit->filepath).remove();
+    this->updatePath(new_file);
+
+    return true;
+}
+
+void EditWrapper::readFile(const QString &filePath)
+{
+    QByteArray data;
+    QFile qfile(filePath);
+    // 重新读取文件
+    if (data.isEmpty()) {
+        if (!qfile.open(QFile::ReadOnly)) {
+            return;
+        }
+
+        data = qfile.readAll();
+        qfile.close();
+    }
+
+    if  (data.isEmpty()) {
+        return;
+    }
+
+    // 使用新的编码重新加载文件
+    // 获取当前用户选择使用的编码
+    QTextCodec *codec = QTextCodec::codecForName(m_textCodec->name());
+    QTextDecoder *decoder = codec->makeDecoder();
+    const QString &text = decoder->toUnicode(data);
+
+    // 判断是否出错
+    if (decoder->hasFailure()) {
+        DDialog *dialogWarning = new DDialog(tr("警示"), tr("使用此编码加载文件出错，如果强制使用，可能会导致文件内容发生改变"), this);
+        dialogWarning->setWindowFlags(dialogWarning->windowFlags() | Qt::WindowStaysOnTopHint);
+        dialogWarning->setIcon(QIcon::fromTheme("deepin-editor"));
+        dialogWarning->addButton(QString(tr("取消")), false, DDialog::ButtonNormal);
+        dialogWarning->addButton(QString(tr("确定")), true, DDialog::ButtonRecommend);
+
+        connect(dialogWarning, &DDialog::buttonClicked, this, [=] (int index) {
+            qDebug() << "index:" << index;
+            // 如果用户放弃了这次操作
+            if (index == 0) {
+                // 恢复到旧的编码
+                //QSignalBlocker blocker(ui->comboBox); // 禁用信号通知
+                //Q_UNUSED(blocker)
+                //ui->comboBox->setCurrentText(m_currentCodec);
+                m_bottomBar->setEncodeName(m_BeforeEncodeName);
+                return;
+            }
+        });
+
+        dialogWarning->exec();
+    }
+
+    m_BeforeEncodeName = m_textCodec->name();
+    m_textEdit->setPlainText(text);
 }
 
 EditWrapper::EndOfLineMode EditWrapper::endOfLineMode()
@@ -390,6 +558,11 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QString
     }
 
     m_isLoadFinished = true;
+    m_BeforeEncodeName = encode;
+    if (m_BeforeEncodeName.isEmpty()) {
+        QString str = "UTF-8";
+        m_BeforeEncodeName = str.toLocal8Bit();
+    }
     setTextCodec(encode);
 
     // set text.

@@ -30,6 +30,10 @@
 #include <DMessageManager>
 #include <DFloatingMessage>
 #include <QByteArray>
+#include <QTextCodec>
+#include <DDialog>
+#include <DMessageBox>
+#include <DFileDialog>
 
 class EditWrapper : public QWidget
 {
@@ -79,6 +83,7 @@ public:
 
 signals:
     void requestSaveAs();
+    void sigCodecSaveFile(const QString &strOldFilePath, const QString &strNewFilePath);
 
 private:
     void detectEndOfLine();
@@ -86,6 +91,10 @@ private:
     void handleHightlightChanged(const QString &name);
     void handleFileLoadFinished(const QByteArray &encode, const QString &content);
     void setTextCodec(QTextCodec *codec, bool reload = false);
+
+    int GetCorrectUnicode1(const QByteArray &ba);
+    bool saveDraftFile();
+    void readFile(const QString &filePath);
 
 protected:
     void resizeEvent(QResizeEvent *);
@@ -104,6 +113,7 @@ private:
     bool m_isRefreshing;
     WarningNotices *m_waringNotices;
     bool m_bTextChange = true;
+    QByteArray m_BeforeEncodeName {"UTF-8"};
 
 public slots:
     void slotTextChange();

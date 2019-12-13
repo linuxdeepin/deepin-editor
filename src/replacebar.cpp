@@ -35,11 +35,11 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     m_layout = new QHBoxLayout();
     m_layout->setSpacing(7);
     m_layout->setContentsMargins(16, 4, 11, 4);
-    m_replaceLabel = new QLabel(tr("Replace"));
+    m_replaceLabel = new QLabel(tr("Find"));
     m_replaceLabel->setMinimumHeight(36);
     m_replaceLine = new LineBar();
     m_replaceLine->lineEdit()->setMinimumHeight(36);
-    m_withLabel = new QLabel(tr("With"));
+    m_withLabel = new QLabel(tr("Replace With"));
     m_withLabel->setMinimumHeight(36);
     m_withLine = new LineBar();
     m_withLine->lineEdit()->setMinimumHeight(36);
@@ -57,7 +57,7 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     m_replaceAllButton->setMinimumHeight(36);
     m_closeButton = new DIconButton(DStyle::SP_CloseButton);
     m_closeButton->setFlat(true);
-    m_closeButton->setFixedSize(25, 25);
+    m_closeButton->setIconSize(QSize(30, 30));
 
     m_layout->addWidget(m_replaceLabel);
     m_layout->addWidget(m_replaceLine);

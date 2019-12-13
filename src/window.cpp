@@ -485,6 +485,29 @@ EditWrapper* Window::createEditor()
         m_tabbar->setTabText(tabIndex, tabName);
     });
 
+    connect(wrapper,  &EditWrapper::sigCodecSaveFile, this, [=](QString strOldFilePath, QString strNewFilePath) {
+        int tabIndex = m_tabbar->indexOf(strOldFilePath);
+        //QString tabName = m_tabbar->textAt(tabIndex);
+        //QRegularExpression reg("[^*](.+)");
+        //QRegularExpressionMatch match = reg.match(tabName);
+
+        //tabName = match.captured(0);
+
+        EditWrapper *wrapper = m_wrappers.value(strOldFilePath);
+        m_tabbar->updateTab(tabIndex, strNewFilePath, QFileInfo(strNewFilePath).fileName());
+
+        wrapper->updatePath(strNewFilePath);
+        //wrapper->setEndOfLineMode(eol);
+        //wrapper->saveFile();
+
+        m_wrappers.remove(strOldFilePath);
+        m_wrappers.insert(strNewFilePath, wrapper);
+
+        wrapper->textEditor()->loadHighlighter();
+
+        //m_tabbar->setTabText(tabIndex, QFileInfo(strNewFilePath).fileName());
+    });
+
     return wrapper;
 }
 
@@ -1597,8 +1620,8 @@ void Window::resizeEvent(QResizeEvent *e)
     }
 
     //add by guoshaoyu
-    m_findBar->resize(width() - 10, m_findBar->height());
-    m_replaceBar->resize(width() - 10, m_replaceBar->height());
+    m_findBar->resize(width(), m_findBar->height());
+    m_replaceBar->resize(width(), m_replaceBar->height());
 
     DMainWindow::resizeEvent(e);
 }
