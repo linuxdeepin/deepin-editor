@@ -58,6 +58,7 @@ public:
 
     void openFile(const QString &filepath);
     bool saveFile();
+    bool saveAsFile(const QString &newFilePath);
     void updatePath(const QString &file);
     void refresh();
     bool isLoadFinished() { return m_isLoadFinished; }

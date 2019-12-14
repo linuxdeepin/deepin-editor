@@ -99,6 +99,91 @@ void EditWrapper::openFile(const QString &filepath)
     thread->start();
 }
 
+bool EditWrapper::saveAsFile(const QString &newFilePath)
+{
+    // use QSaveFile for safely save files.
+    QSaveFile saveFile(newFilePath);
+    saveFile.setDirectWriteFallback(true);
+
+    if (!saveFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        return false;
+    }
+
+    QFile file(newFilePath);
+    if (!file.open(QIODevice::WriteOnly)) {
+        return false;
+    }
+
+    QRegularExpression eolRegex("\r?\n|\r");
+    QString eol = QStringLiteral("\n");
+    if (m_endOfLineMode == eolDos) {
+        eol = QStringLiteral("\r\n");
+    } else if (m_endOfLineMode == eolMac) {
+        eol = QStringLiteral("\r");
+    }
+
+    //auto append new line char to end of file when file's format is Linux/MacOS
+    QString fileContent = m_textEdit->toPlainText();
+
+    if (m_endOfLineMode == eolUnix) {
+        if (!fileContent.endsWith("\n"))
+        {
+            fileContent = fileContent.append(QChar('\n'));
+        }
+    }
+    else if (m_endOfLineMode == eolDos)
+    {
+        if (!fileContent.endsWith("\r\n"))
+        {
+            fileContent = fileContent.append(QChar('\r')).append(QChar('\n'));
+        }
+    }
+    else if (m_endOfLineMode == eolMac) {
+        if (!fileContent.endsWith("\r"))
+        {
+            fileContent = fileContent.append(QChar('\r'));
+        }
+    }
+
+    QTextStream stream(&file);
+    stream.setCodec(m_textCodec);
+    stream << fileContent.replace(eolRegex, eol);
+
+    //flush stream.
+    stream.flush();
+
+    // close and delete file.
+    file.close();
+
+    // flush file.
+    if (!saveFile.flush()) {
+        return false;
+    }
+
+    // ensure that the file is written to disk
+    fsync(saveFile.handle());
+
+    QFileInfo fi(filePath());
+    m_modified = fi.lastModified();
+
+    // did save work?
+    // only finalize if stream status == OK
+    bool ok = (stream.status() == QTextStream::Ok);
+
+    // update status.
+    if (ok) {
+        //m_textEdit->setModified(false);
+        //m_isLoadFinished = true;
+    }
+
+    qDebug() << "Saved file:" << m_textEdit->filepath
+             << "with codec:" << m_textCodec->name()
+             << "Line Endings:" << m_endOfLineMode
+             << "State:" << ok;
+
+    return ok;
+}
+
 bool EditWrapper::saveFile()
 {
     // use QSaveFile for safely save files.
@@ -124,6 +209,7 @@ bool EditWrapper::saveFile()
 
     //auto append new line char to end of file when file's format is Linux/MacOS
     QString fileContent = m_textEdit->toPlainText();
+
     if (m_endOfLineMode == eolUnix) {
         if (!fileContent.endsWith("\n"))
         {
@@ -148,7 +234,9 @@ bool EditWrapper::saveFile()
     stream.setCodec(m_textCodec);
     stream << fileContent.replace(eolRegex, eol);
 
-    // flush stream.
+    qDebug() << "saveFile stream.codec()->name():" << stream.codec()->name();
+
+    //flush stream.
     stream.flush();
 
     // close and delete file.
@@ -315,7 +403,7 @@ void EditWrapper::refresh()
 //        m_textEdit->setPlainText(QString());
 //        qDebug() << "set content:" << content;
 //        m_textEdit->setPlainText(content);
-        m_textEdit->setModified(false);
+        //m_textEdit->setModified(false);
 
         QTextCursor textcur = m_textEdit->textCursor();
         textcur.setPosition(curPos);

@@ -72,6 +72,8 @@ public:
     void openFile();
     bool saveFile();
     bool saveAsFile();
+    QString saveAsFileToDisk();
+    QString saveBlankFileToDisk();
     bool saveAsOtherTabFile(EditWrapper *wrapper);
 
     void decrementFontSize();
@@ -122,7 +124,6 @@ public slots:
 
     void handleFindNext();
     void handleFindPrev();
-    //add by guoshaoyu
     void slotFindbarClose();
     void slotReplacebarClose();
 
