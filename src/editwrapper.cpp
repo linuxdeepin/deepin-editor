@@ -349,6 +349,7 @@ void EditWrapper::refresh()
 
                     // 重新读取文件
                     readFile(new_file);
+                    m_bTextChange = false;
 
                     emit sigCodecSaveFile(strOldFilePath, new_file);
                     //m_textEdit->setModified(false);
@@ -368,6 +369,7 @@ void EditWrapper::refresh()
 
                     // 重新读取文件
                     readFile(m_textEdit->filepath);
+                    m_bTextChange = false;
                 }
             }
         });
@@ -376,6 +378,7 @@ void EditWrapper::refresh()
     }
     else {
         readFile(m_textEdit->filepath);
+        m_bTextChange = false;
     }
 
     if (file.open(QIODevice::ReadOnly)) {

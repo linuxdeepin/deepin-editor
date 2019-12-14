@@ -1409,7 +1409,6 @@ void Window::handleFindPrev()
     wrapper->textEditor()->restoreMarkStatus();
 }
 
-//add by guoshaoyu
 void Window::slotFindbarClose()
 {
     EditWrapper *wrapper = currentWrapper();
@@ -1516,7 +1515,6 @@ void Window::loadTheme(const QString &path)
     if (!fileInfo.exists()) {
         return;
     }
-
 
     m_themePath = path;
 
