@@ -467,6 +467,8 @@ void EditWrapper::readFile(const QString &filePath)
 {
     QByteArray data;
     QFile qfile(filePath);
+    m_bIsContinue = true;
+
     // 重新读取文件
     if (data.isEmpty()) {
         if (!qfile.open(QFile::ReadOnly)) {
@@ -495,6 +497,17 @@ void EditWrapper::readFile(const QString &filePath)
         dialogWarning->addButton(QString(tr("取消")), false, DDialog::ButtonNormal);
         dialogWarning->addButton(QString(tr("确定")), true, DDialog::ButtonRecommend);
 
+        // 如果用户按关闭按钮放弃了这次操作
+        connect(dialogWarning, &DDialog::closed, this, [=] {
+            // 恢复到旧的编码
+            //QSignalBlocker blocker(ui->comboBox); // 禁用信号通知
+            //Q_UNUSED(blocker)
+            //ui->comboBox->setCurrentText(m_currentCodec);
+            m_bottomBar->setEncodeName(m_BeforeEncodeName);
+            m_bIsContinue = false;
+            return;
+        });
+
         connect(dialogWarning, &DDialog::buttonClicked, this, [=] (int index) {
             qDebug() << "index:" << index;
             // 如果用户放弃了这次操作
@@ -504,6 +517,7 @@ void EditWrapper::readFile(const QString &filePath)
                 //Q_UNUSED(blocker)
                 //ui->comboBox->setCurrentText(m_currentCodec);
                 m_bottomBar->setEncodeName(m_BeforeEncodeName);
+                m_bIsContinue = false;
                 return;
             }
         });
@@ -511,6 +525,9 @@ void EditWrapper::readFile(const QString &filePath)
         dialogWarning->exec();
     }
 
+    if (m_bIsContinue == false) {
+        return;
+    }
     m_BeforeEncodeName = m_textCodec->name();
     m_textEdit->setPlainText(text);
 }

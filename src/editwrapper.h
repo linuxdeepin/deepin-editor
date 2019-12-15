@@ -115,6 +115,7 @@ private:
     WarningNotices *m_waringNotices;
     bool m_bTextChange = true;
     QByteArray m_BeforeEncodeName {"UTF-8"};
+    bool m_bIsContinue;
 
 public slots:
     void slotTextChange();
