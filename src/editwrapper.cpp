@@ -310,6 +310,7 @@ void EditWrapper::refresh()
             if (index == 0) {
                 qDebug() << "m_BeforeEncodeName:" << m_BeforeEncodeName;
                 m_bottomBar->setEncodeName(QString(m_BeforeEncodeName));
+                m_textCodec = QTextCodec::codecForName(m_BeforeEncodeName);
                 return;
             }
             else if (index == 1) {
