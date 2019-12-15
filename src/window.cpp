@@ -718,7 +718,7 @@ QString Window::saveAsFileToDisk()
         //wrapper->setTextCodec(encode);
         //wrapper->updatePath(newFilePath);
         //wrapper->setEndOfLineMode(eol);
-        wrapper->saveAsFile(newFilePath);
+        wrapper->saveAsFile(newFilePath, encode);
 
         //m_wrappers.remove(filePath);
         //m_wrappers.insert(newFilePath, wrapper);

@@ -99,8 +99,9 @@ void EditWrapper::openFile(const QString &filepath)
     thread->start();
 }
 
-bool EditWrapper::saveAsFile(const QString &newFilePath)
+bool EditWrapper::saveAsFile(const QString &newFilePath, QByteArray encodeName)
 {
+    QTextCodec *pSaveAsFileCodec = QTextCodec::codecForName(encodeName);
     // use QSaveFile for safely save files.
     QSaveFile saveFile(newFilePath);
     saveFile.setDirectWriteFallback(true);
@@ -146,7 +147,7 @@ bool EditWrapper::saveAsFile(const QString &newFilePath)
     }
 
     QTextStream stream(&file);
-    stream.setCodec(m_textCodec);
+    stream.setCodec(pSaveAsFileCodec);
     stream << fileContent.replace(eolRegex, eol);
 
     //flush stream.
@@ -177,7 +178,7 @@ bool EditWrapper::saveAsFile(const QString &newFilePath)
     }
 
     qDebug() << "Saved file:" << m_textEdit->filepath
-             << "with codec:" << m_textCodec->name()
+             << "with codec:" << pSaveAsFileCodec->name()
              << "Line Endings:" << m_endOfLineMode
              << "State:" << ok;
 
@@ -303,12 +304,18 @@ void EditWrapper::refresh()
         dialog->addButton(QString(tr("取消")), false, DDialog::ButtonNormal);
         dialog->addButton(QString(tr("保存")), true, DDialog::ButtonRecommend);
 
+        //如果用户直接按关闭按钮
+        connect(dialog, &DDialog::closed, this, [=] {
+            m_bottomBar->setEncodeName(QString(m_BeforeEncodeName));
+            m_textCodec = QTextCodec::codecForName(m_BeforeEncodeName);
+            return;
+        });
+
         connect(dialog, &DDialog::buttonClicked, this, [=] (int index) {
             dialog->hide();
 
             // 如果用户放弃了这次操作
             if (index == 0) {
-                qDebug() << "m_BeforeEncodeName:" << m_BeforeEncodeName;
                 m_bottomBar->setEncodeName(QString(m_BeforeEncodeName));
                 m_textCodec = QTextCodec::codecForName(m_BeforeEncodeName);
                 return;
