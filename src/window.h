@@ -52,6 +52,7 @@ public:
     ~Window();
 
     void initTitlebar();
+    bool checkBlockShutdown();
 
     int getTabIndex(const QString &file);
     void activeTab(int index);
@@ -109,6 +110,7 @@ signals:
     void requestDropEvent(QDropEvent *);
     void newWindow();
     void close();
+    void sigJudgeBlockShutdown();
 
 public slots:
     void addBlankTab();

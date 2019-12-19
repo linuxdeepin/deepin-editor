@@ -264,6 +264,21 @@ void Window::initTitlebar()
     connect(switchThemeAction, &QAction::triggered, this, &Window::popupThemePanel);
 }
 
+bool Window::checkBlockShutdown()
+{
+    qDebug() << "Enter function [" << __FUNCTION__ << "].";
+    //判断是否有未保存的tab项
+    for (int i = 0; i < m_tabbar->count(); i++) {
+        qDebug() << "m_tabbar->textAt(i):" << m_tabbar->textAt(i);
+        //如果有未保存的tab项，return true阻塞系统关机
+        if (m_tabbar->textAt(i).at(0) == '*') {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 int Window::getTabIndex(const QString &file)
 {
     return m_tabbar->indexOf(file);
@@ -365,6 +380,46 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
     connect(wrapper->textEditor(), &TextEdit::clickFullscreenAction, this, &Window::toggleFullscreen, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::popupNotify, this, &Window::showNotify, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::pressEsc, this, &Window::removeBottomWidget, Qt::QueuedConnection);
+
+    connect(wrapper->textEditor(), &TextEdit::modificationChanged, this, [=] (const QString &path, bool isModified) {
+        int tabIndex = m_tabbar->indexOf(path);
+        QString tabName = m_tabbar->textAt(tabIndex);
+        QRegularExpression reg("[^*](.+)");
+        QRegularExpressionMatch match = reg.match(tabName);
+
+        tabName = match.captured(0);
+
+        if (isModified) {
+            tabName.prepend('*');
+        }
+
+        m_tabbar->setTabText(tabIndex, tabName);
+        //判断是否需要阻塞系统关机
+        emit sigJudgeBlockShutdown();
+    });
+
+    connect(wrapper,  &EditWrapper::sigCodecSaveFile, this, [=](QString strOldFilePath, QString strNewFilePath) {
+        int tabIndex = m_tabbar->indexOf(strOldFilePath);
+        //QString tabName = m_tabbar->textAt(tabIndex);
+        //QRegularExpression reg("[^*](.+)");
+        //QRegularExpressionMatch match = reg.match(tabName);
+
+        //tabName = match.captured(0);
+
+        EditWrapper *wrapper = m_wrappers.value(strOldFilePath);
+        m_tabbar->updateTab(tabIndex, strNewFilePath, QFileInfo(strNewFilePath).fileName());
+
+        wrapper->updatePath(strNewFilePath);
+        //wrapper->setEndOfLineMode(eol);
+        //wrapper->saveFile();
+
+        m_wrappers.remove(strOldFilePath);
+        m_wrappers.insert(strNewFilePath, wrapper);
+
+        wrapper->textEditor()->loadHighlighter();
+
+        //m_tabbar->setTabText(tabIndex, QFileInfo(strNewFilePath).fileName());
+    });
 
     wrapper->disconnect();
     connect(wrapper, &EditWrapper::requestSaveAs, this, &Window::saveAsFile);
@@ -483,6 +538,8 @@ EditWrapper* Window::createEditor()
         }
 
         m_tabbar->setTabText(tabIndex, tabName);
+        //判断是否需要阻塞系统关机
+        emit sigJudgeBlockShutdown();
     });
 
     connect(wrapper,  &EditWrapper::sigCodecSaveFile, this, [=](QString strOldFilePath, QString strNewFilePath) {
@@ -1682,6 +1739,8 @@ void Window::checkTabbarForReload()
     }
 
     m_tabbar->setTabText(m_tabbar->currentIndex(), tabName);
+    //判断是否需要阻塞系统关机
+    emit sigJudgeBlockShutdown();
 }
 
 void Window::resizeEvent(QResizeEvent *e)

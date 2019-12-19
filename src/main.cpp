@@ -71,7 +71,6 @@ int main(int argc, char *argv[])
 
     Dtk::Core::DLogManager::registerConsoleAppender();
     Dtk::Core::DLogManager::registerFileAppender();
-	
 
     // Parser input arguments.
     QCommandLineParser parser;

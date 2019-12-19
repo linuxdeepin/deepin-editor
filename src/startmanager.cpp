@@ -45,6 +45,7 @@ StartManager::StartManager(QObject *parent)
     : QObject(parent)
 {
     // Create blank directory if it not exist.
+    initBlockShutdown();
     QString blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
 
     if (!QFileInfo(blankFileDir).exists()) {
@@ -157,6 +158,7 @@ Window* StartManager::createWindow(bool alwaysCenter)
     // Create window.
     Window *window = new Window;
     connect(window, &Window::themeChanged, this, &StartManager::loadTheme, Qt::QueuedConnection);
+    connect(window, &Window::sigJudgeBlockShutdown, this, &StartManager::slotCheckUnsaveTab, Qt::QueuedConnection);
 
     // Quit application if close last window.
     connect(window, &Window::close, this, [=] {
@@ -221,4 +223,50 @@ StartManager::FileTabInfo StartManager::getFileTabInfo(QString file)
     }
 
     return info;
+}
+
+void StartManager::initBlockShutdown() {
+    if (m_reply.value().isValid()) {
+        qDebug() << "m_reply.value().isValid():" << m_reply.value().isValid();
+        return;
+    }
+
+    m_pLoginManager = new QDBusInterface("org.freedesktop.login1",
+                                         "/org/freedesktop/login1",
+                                         "org.freedesktop.login1.Manager",
+                                         QDBusConnection::systemBus());
+
+    m_arg << QString("shutdown:sleep:")             // what
+        << qApp->applicationDisplayName()           // who
+        << QObject::tr("Files are being processed") // why
+        << QString("block");                        // mode
+
+    int fd = -1;
+    m_reply = m_pLoginManager->callWithArgumentList(QDBus::Block, "Inhibit", m_arg);
+    if (m_reply.isValid()) {
+        fd = m_reply.value().fileDescriptor();
+    }
+}
+
+void StartManager::slotCheckUnsaveTab() {
+    for (Window *pWindow : m_windows) {
+    //如果返回true，则表示有未保存的tab项，则阻塞系统关机
+        bool bRet = pWindow->checkBlockShutdown();
+        if (bRet == true) {
+            m_reply = m_pLoginManager->callWithArgumentList(QDBus::Block, "Inhibit", m_arg);
+            if (m_reply.isValid()) {
+              qDebug() << "Block shutdown.";
+            }
+
+            return;
+        }
+    }
+
+    //如果for结束则表示没有发现未保存的tab项，则放开阻塞关机
+    if (m_reply.isValid()) {
+        QDBusReply<QDBusUnixFileDescriptor> tmp = m_reply;
+        m_reply = QDBusReply<QDBusUnixFileDescriptor>();
+        //m_pLoginManager->callWithArgumentList(QDBus::NoBlock, "Inhibit", m_arg);
+        qDebug() << "Nublock shutdown.";
+    }
 }
