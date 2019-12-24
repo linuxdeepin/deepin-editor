@@ -29,13 +29,11 @@ ToolBar::ToolBar(QWidget *parent)
 {
     m_layout->setContentsMargins(0, 0, 0, 0);
 
-    //modify by guoshaoyu
 //    QPixmap iconPixmap = DHiDPIHelper::loadNxPixmap(":/images/logo_24.svg");
 //    QLabel *iconLabel = new QLabel;
 //    iconLabel->setPixmap(iconPixmap);
 //    iconLabel->setFixedSize(32, 32);
 
-    //modify by guoshaoyu
 //    m_layout->addSpacing(10);
 //    m_layout->addWidget(iconLabel);
 //    m_layout->addWidget(iconLabel, 10, Qt::AlignTop);

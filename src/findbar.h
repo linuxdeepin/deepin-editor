@@ -36,7 +36,6 @@
 #include <DApplicationHelper>
 #include <DFloatingWidget>
 
-//add by guoshaoyu
 #include <DPalette>
 
 DWIDGET_USE_NAMESPACE

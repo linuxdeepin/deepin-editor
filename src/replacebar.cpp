@@ -29,6 +29,7 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     : DFloatingWidget(parent)
 {
     // Init.
+    hide();
     setFixedHeight(58);
 
     // Init layout and widgets.

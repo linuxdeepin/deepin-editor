@@ -170,14 +170,14 @@ Window::Window(DMainWindow *parent)
     anchors_findbar.setAnchor(Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
     //anchors_findbar.setAnchor(Qt::AnchorHorizontalCenter, m_centralWidget, Qt::AnchorHorizontalCenter);
     anchors_findbar.setBottomMargin(5);
-    m_findBar->raise();
+    //m_findBar->raise();
 
     // Init replaceBar panel.
     DAnchors<ReplaceBar> anchors_replaceBar(m_replaceBar);
     anchors_replaceBar.setAnchor(Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
     //anchors_replaceBar.setAnchor(Qt::AnchorHorizontalCenter, m_centralWidget, Qt::AnchorHorizontalCenter);
     anchors_replaceBar.setBottomMargin(5);
-    anchors_replaceBar->raise();
+    //m_replaceBar->raise();
 
     // Init theme panel.
     DAnchorsBase::setAnchor(m_themePanel, Qt::AnchorTop, m_centralWidget, Qt::AnchorTop);
@@ -270,6 +270,9 @@ bool Window::checkBlockShutdown()
     //判断是否有未保存的tab项
     for (int i = 0; i < m_tabbar->count(); i++) {
         qDebug() << "m_tabbar->textAt(i):" << m_tabbar->textAt(i);
+        if (m_tabbar->textAt(i).isNull()) {
+            return false;
+        }
         //如果有未保存的tab项，return true阻塞系统关机
         if (m_tabbar->textAt(i).at(0) == '*') {
             return true;
@@ -528,7 +531,7 @@ EditWrapper* Window::createEditor()
     connect(wrapper->textEditor(), &TextEdit::modificationChanged, this, [=] (const QString &path, bool isModified) {
         int tabIndex = m_tabbar->indexOf(path);
         QString tabName = m_tabbar->textAt(tabIndex);
-        QRegularExpression reg("[^*](.+)");
+        QRegularExpression reg("[^*](.*)");
         QRegularExpressionMatch match = reg.match(tabName);
 
         tabName = match.captured(0);
@@ -945,19 +948,18 @@ void Window::popupFindBar()
             m_findBar->focus();
         }
     } else {
-        //modify by guoshaoyu
         //addBottomWidget(m_findBar);
 
         QString tabPath = m_tabbar->currentPath();
         EditWrapper *wrapper = currentWrapper();
 
-        //add by guoshaoyu
         if (wrapper->isVisible()) {
             wrapper->m_bottomBar->hide();
         }
         if (m_replaceBar->isVisible()) {
             m_replaceBar->hide();
         }
+        m_findBar->raise();
         m_findBar->show();
 
         QString text = wrapper->textEditor()->textCursor().selectedText();
@@ -980,7 +982,6 @@ void Window::popupReplaceBar()
             m_replaceBar->focus();
         }
     } else {
-        //add by guoshaoyu
         EditWrapper *wrapper = currentWrapper();
         if (wrapper->isVisible()) {
             wrapper->m_bottomBar->hide();
@@ -988,6 +989,7 @@ void Window::popupReplaceBar()
         if (m_findBar->isVisible()) {
             m_findBar->hide();
         }
+        m_replaceBar->raise();
         m_replaceBar->show();
         //addBottomWidget(m_replaceBar);
 
@@ -1031,7 +1033,6 @@ void Window::popupSettingsDialog()
     dialog->widgetFactory()->registerWidget("fontcombobox", Settings::createFontComBoBoxHandle);
     //dialog->setProperty("_d_dtk_theme", "dark");
     //dialog->setProperty("_d_QSSFilename", "DSettingsDialog");
-    //modify by guoshaoyu
 //    DThemeManager::instance()->registerWidget(dialog);
 
     dialog->updateSettings(m_settings->settings);
@@ -1582,7 +1583,6 @@ void Window::loadTheme(const QString &path)
     const QString &tabbarStartColor = jsonMap["app-colors"].toMap()["tab-background-start-color"].toString();
     const QString &tabbarEndColor = jsonMap["app-colors"].toMap()["tab-background-end-color"].toString();
 
-    //modify by guoshaoyu
 //    if (QColor(backgroundColor).lightness() < 128) {
 //        DThemeManager::instance()->setTheme("dark");
 //    } else {
@@ -1614,6 +1614,10 @@ void Window::showNewEditor(EditWrapper *wrapper)
 void Window::showNotify(const QString &message)
 {
     //DMainWindow::sendMessage(QIcon(":/images/ok.svg"), message);
+    //如果是第一次打开编辑器，需要创建一个空白编辑显示框窗体
+    if (currentWrapper() == nullptr) {
+        this->addBlankTab();
+    }
     currentWrapper()->showNotify(message);
 }
 
@@ -1756,7 +1760,6 @@ void Window::resizeEvent(QResizeEvent *e)
         m_settings->settings->option("advance.window.window_height")->setValue(rect().height() * 1.0 / screenGeometry.height());
     }
 
-    //add by guoshaoyu
     m_findBar->resize(width(), m_findBar->height());
     m_replaceBar->resize(width(), m_replaceBar->height());
 

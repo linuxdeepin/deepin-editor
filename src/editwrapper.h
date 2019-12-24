@@ -77,7 +77,6 @@ public:
 
     void showNotify(const QString &message);
 
-    //add by guoshaoyu
     BottomBar *m_bottomBar;
     bool getTextChangeFlag();
     void setTextChangeFlag(bool bFlag);
@@ -103,7 +102,6 @@ protected:
 private:
     QHBoxLayout *m_layout;
     TextEdit *m_textEdit;
-    //modify guoshaoyu
     //BottomBar *m_bottomBar;
     QTextCodec *m_textCodec;
 
