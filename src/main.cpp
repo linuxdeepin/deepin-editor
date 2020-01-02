@@ -50,8 +50,8 @@ int main(int argc, char *argv[])
     // Init DTK.
     DApplication::loadDXcbPlugin();
 
-    const char *descriptionText = QT_TRANSLATE_NOOP("MainWindow",
-                                                    "Text editor is a full-featured tool for viewing and editing plain text.");
+    const char *descriptionText = QT_TRANSLATE_NOOP(
+        "MainWindow", "Text Editor is a powerful tool for viewing and editing text files.");
     const QString acknowledgementLink = "https://www.deepin.org/original/deepin-editor/";
 
     DApplication app(argc, argv);

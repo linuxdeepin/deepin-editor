@@ -225,7 +225,7 @@
     <name>MainWindow</name>
     <message>
         <location filename="../src/main.cpp" line="51"/>
-        <source>Text editor is a full-featured tool for viewing and editing plain text.</source>
+        <source>Text Editor is a powerful tool for viewing and editing text files.</source>
         <translation>文本编辑器是一款用来编写和查看文本文件的软件工具。</translation>
     </message>
     <message>
@@ -288,12 +288,12 @@
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="57"/>
-        <source>Forward char</source>
+        <source>Forward character</source>
         <translation>右移一个字符</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="58"/>
-        <source>Backward char</source>
+        <source>Backward character</source>
         <translation>左移一个字符</translation>
     </message>
     <message>
@@ -303,7 +303,7 @@
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="104"/>
-        <source>Tab space</source>
+        <source>Tab width</source>
         <translation>Tab字符宽度</translation>
     </message>
     <message>

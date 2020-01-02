@@ -56,8 +56,8 @@ void GenerateSettingTranslate()
     auto group_editorName = QObject::tr("Editor");
     auto shortcuts_editor_indentlineName = QObject::tr("Increase indent");
     auto shortcuts_editor_backindentlineName = QObject::tr("Decrease indent");
-    auto shortcuts_editor_forwardcharName = QObject::tr("Forward char");
-    auto shortcuts_editor_backwardcharName = QObject::tr("Backward char");
+    auto shortcuts_editor_forwardcharName = QObject::tr("Forward character");
+    auto shortcuts_editor_backwardcharName = QObject::tr("Backward character");
     auto shortcuts_editor_forwardwordName = QObject::tr("Forward word");
     auto shortcuts_editor_backwarwordName = QObject::tr("Backward word");
     auto shortcuts_editor_nextlineName = QObject::tr("Next line");
@@ -103,7 +103,7 @@ void GenerateSettingTranslate()
     auto group_advanceName = QObject::tr("Advanced");
     auto advance_windowName = QObject::tr("Window");
     auto advance_window_windowstateName = QObject::tr("Window size");
-    auto advance_editor_tabspacenumberName = QObject::tr("Tab space");
+    auto advance_editor_tabspacenumberName = QObject::tr("Tab width");
 
     auto base_font_wordwrapText = QObject::tr("Word Wrap");
 }
