@@ -193,6 +193,46 @@
         <source>R/O</source>
         <translation>只读</translation>
     </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="300"/>
+        <source>There are currently unsaved files. Do you want to save them first</source>
+        <translation>当前有未保存的文件，是否要先进行保存</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="303"/>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="332"/>
+        <source>Save</source>
+        <translation>保存</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="304"/>
+        <source>Save</source>
+        <translation>保存</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="445"/>
+        <source>Save</source>
+        <translation>保存</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="493"/>
+        <source>There is an error loading the file with this encoding. If forced, the contents of the file may be changed</source>
+        <translation>使用此编码加载文件出错，如果强制使用，可能会导致文件内容发生改变</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="496"/>
+        <source>Cancel</source>
+        <translation>取消</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="497"/>
+        <source>Determine</source>
+        <translation>确定</translation>
+    </message>
 </context>
 <context>
     <name>FindBar</name>

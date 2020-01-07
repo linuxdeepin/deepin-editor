@@ -130,6 +130,26 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../src/dtextedit.cpp" line="808"/>
+        <source>The selected row has been copied to the clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="814"/>
+        <source>The current row has been copied to the clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="853"/>
+        <source>The selected row has been clipped to the clipping board</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="859"/>
+        <source>The current row has been sheared to the shears</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/dtextedit.cpp" line="2204"/>
         <source>Read-Only mode is off</source>
         <translation type="unfinished"></translation>
@@ -137,6 +157,11 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="2208"/>
         <source>Read-Only mode is on</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="2493"/>
+        <source>Read-Only mode cannot be edited</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -166,6 +191,46 @@
     <message>
         <location filename="../src/editwrapper.cpp" line="311"/>
         <source>R/O</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="300"/>
+        <source>There are currently unsaved files. Do you want to save them first</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="303"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="332"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="304"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="445"/>
+        <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="493"/>
+        <source>There is an error loading the file with this encoding. If forced, the contents of the file may be changed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="496"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="497"/>
+        <source>Determine</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

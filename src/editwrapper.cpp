@@ -297,12 +297,11 @@ void EditWrapper::refresh()
 
     //如果文件有被修改了
     if (m_textEdit->document()->isModified()) {
-        //int code = DMessageBox::warning(this, "当前有未保存的文件", "是否要先进行保存", QMessageBox::Cancel, QMessageBox::Save);
-        DDialog *dialog = new DDialog(tr("保存"), tr("当前有未保存的文件，是否要先进行保存"), this);
+        DDialog *dialog = new DDialog("", tr("There are currently unsaved files. Do you want to save them first"), this);
         dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
         dialog->setIcon(QIcon::fromTheme("deepin-editor"));
-        dialog->addButton(QString(tr("取消")), false, DDialog::ButtonNormal);
-        dialog->addButton(QString(tr("保存")), true, DDialog::ButtonRecommend);
+        dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
+        dialog->addButton(QString(tr("Save")), true, DDialog::ButtonRecommend);
 
         //如果用户直接按关闭按钮
         connect(dialog, &DDialog::closed, this, [=] {
@@ -330,7 +329,7 @@ void EditWrapper::refresh()
                         return;
                     }
 
-                    const QString &new_file = DFileDialog::getSaveFileName(this, "请选择文件保存位置", QDir::homePath(), "*.txt");
+                    const QString &new_file = DFileDialog::getSaveFileName(this, tr("Save"), QDir::homePath(), "*.txt");
                     if (new_file.isEmpty())
                         return;
 
@@ -443,7 +442,7 @@ void EditWrapper::refresh()
 
 bool EditWrapper::saveDraftFile()
 {
-    const QString &new_file = DFileDialog::getSaveFileName(this, "请选择文件保存位置", QDir::homePath(), "*.txt");
+    const QString &new_file = DFileDialog::getSaveFileName(this, tr("Save"), QDir::homePath(), "*.txt");
     if (new_file.isEmpty())
         return false;
 
@@ -491,11 +490,11 @@ void EditWrapper::readFile(const QString &filePath)
 
     // 判断是否出错
     if (decoder->hasFailure()) {
-        DDialog *dialogWarning = new DDialog(tr("警示"), tr("使用此编码加载文件出错，如果强制使用，可能会导致文件内容发生改变"), this);
+        DDialog *dialogWarning = new DDialog("", tr("There is an error loading the file with this encoding. If forced, the contents of the file may be changed"), this);
         dialogWarning->setWindowFlags(dialogWarning->windowFlags() | Qt::WindowStaysOnTopHint);
         dialogWarning->setIcon(QIcon::fromTheme("deepin-editor"));
-        dialogWarning->addButton(QString(tr("取消")), false, DDialog::ButtonNormal);
-        dialogWarning->addButton(QString(tr("确定")), true, DDialog::ButtonRecommend);
+        dialogWarning->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
+        dialogWarning->addButton(QString(tr("Determine")), true, DDialog::ButtonRecommend);
 
         // 如果用户按关闭按钮放弃了这次操作
         connect(dialogWarning, &DDialog::closed, this, [=] {
