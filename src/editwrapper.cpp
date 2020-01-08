@@ -297,7 +297,7 @@ void EditWrapper::refresh()
 
     //如果文件有被修改了
     if (m_textEdit->document()->isModified()) {
-        DDialog *dialog = new DDialog("", tr("There are currently unsaved files. Do you want to save them first"), this);
+        DDialog *dialog = new DDialog("", tr("Encoding changed. Do you want to save the file now?"), this);
         dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
         dialog->setIcon(QIcon::fromTheme("deepin-editor"));
         dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
@@ -490,11 +490,11 @@ void EditWrapper::readFile(const QString &filePath)
 
     // 判断是否出错
     if (decoder->hasFailure()) {
-        DDialog *dialogWarning = new DDialog("", tr("There is an error loading the file with this encoding. If forced, the contents of the file may be changed"), this);
+        DDialog *dialogWarning = new DDialog("", tr("There are errors when using this encoding. If continue, the file contents may be changed"), this);
         dialogWarning->setWindowFlags(dialogWarning->windowFlags() | Qt::WindowStaysOnTopHint);
         dialogWarning->setIcon(QIcon::fromTheme("deepin-editor"));
         dialogWarning->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
-        dialogWarning->addButton(QString(tr("Determine")), true, DDialog::ButtonRecommend);
+        dialogWarning->addButton(QString(tr("Continue")), true, DDialog::ButtonRecommend);
 
         // 如果用户按关闭按钮放弃了这次操作
         connect(dialogWarning, &DDialog::closed, this, [=] {

@@ -805,13 +805,13 @@ void TextEdit::copyLines()
         copyCursor.setPosition(startCursor.position(), QTextCursor::MoveAnchor);
         copyCursor.setPosition(endCursor.position(), QTextCursor::KeepAnchor);
 
-        popupNotify(tr("The selected row has been copied to the clipboard"));
+        popupNotify(tr("Selected line(s) copied"));
     } else {
         // Selection current line.
         copyCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
         copyCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
 
-        popupNotify(tr("The current row has been copied to the clipboard"));
+        popupNotify(tr("Current line copied"));
     }
 
     // Copy lines to system clipboard.
@@ -850,13 +850,13 @@ void TextEdit::cutlines()
         copyCursor.setPosition(startCursor.position(), QTextCursor::MoveAnchor);
         copyCursor.setPosition(endCursor.position(), QTextCursor::KeepAnchor);
 
-        popupNotify(tr("The selected row has been clipped to the clipping board"));
+        popupNotify(tr("Selected line(s) clipped"));
     } else {
         // Selection current line.
         copyCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
         copyCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
 
-        popupNotify(tr("The current row has been sheared to the shears"));
+        popupNotify(tr("Current line clipped"));
     }
 
     // Copy lines to system clipboard.
@@ -1365,7 +1365,7 @@ bool TextEdit::findKeywordForward(const QString &keyword)
 
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
-        setTextCursor(cursor);
+        //setTextCursor(cursor);
 
         QTextDocument::FindFlags options;
         options &= QTextDocument::FindCaseSensitively;
@@ -1374,7 +1374,7 @@ bool TextEdit::findKeywordForward(const QString &keyword)
 
         cursor.setPosition(endPos, QTextCursor::MoveAnchor);
         cursor.setPosition(startPos, QTextCursor::KeepAnchor);
-        setTextCursor(cursor);
+        //setTextCursor(cursor);
 
         return foundOne;
     } else {
@@ -1382,14 +1382,14 @@ bool TextEdit::findKeywordForward(const QString &keyword)
 
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
-        setTextCursor(cursor);
+        //setTextCursor(cursor);
 
         QTextDocument::FindFlags options;
         options &= QTextDocument::FindCaseSensitively;
 
         bool foundOne = find(keyword, options);
 
-        setTextCursor(recordCursor);
+        //setTextCursor(recordCursor);
 
         return foundOne;
     }
@@ -2547,7 +2547,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         } else if (key == "Shift+/" && e->modifiers() == Qt::ControlModifier) {
             e->ignore();
         } else if (e->modifiers() == Qt::NoModifier || e->modifiers() == Qt::KeypadModifier) {
-            popupNotify(tr("Read-Only mode cannot be edited"));
+            popupNotify(tr("Read-Only mode is on"));
         } else {
             // If press another key
             // the main window does not receive

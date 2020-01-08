@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_CN">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
 <context>
     <name>BottomBar</name>
     <message>
@@ -58,13 +56,13 @@
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="112"/>
-        <location filename="../src/window.cpp" line="200"/>
+        <location filename="../src/window.cpp" line="183"/>
         <source>Find</source>
         <translation>查找</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="113"/>
-        <location filename="../src/window.cpp" line="201"/>
+        <location filename="../src/window.cpp" line="184"/>
         <source>Replace</source>
         <translation>替换</translation>
     </message>
@@ -125,29 +123,29 @@
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="196"/>
-        <location filename="../src/widgets/bottombar.cpp" line="52"/>
+        <location filename="../src/widgets/bottombar.cpp" line="51"/>
         <source>None</source>
         <translation>无</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="808"/>
-        <source>The selected row has been copied to the clipboard</source>
-        <translation>已经复制选中行到剪切板</translation>
+        <source>Selected line(s) copied</source>
+        <translation>已复制选中行到剪贴板</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="814"/>
-        <source>The current row has been copied to the clipboard</source>
-        <translation>已经复制当前行到剪切板</translation>
+        <source>Current line copied</source>
+        <translation>已复制当前行到剪贴板</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="853"/>
-        <source>The selected row has been clipped to the clipping board</source>
-        <translation>已经剪切选中行到剪切板</translation>
+        <source>Selected line(s) clipped</source>
+        <translation>已剪切选中行到剪贴板</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="859"/>
-        <source>The current row has been sheared to the shears</source>
-        <translation>已经剪切当前行到剪切板</translation>
+        <source>Current line clipped</source>
+        <translation>已剪切当前行到剪贴板</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2204"/>
@@ -161,8 +159,8 @@
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2493"/>
-        <source>Read-Only mode cannot be edited</source>
-        <translation>只读模式无法编辑</translation>
+        <source>Read-Only mode is on</source>
+        <translation>只读模式已开启</translation>
     </message>
 </context>
 <context>
@@ -195,8 +193,8 @@
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="300"/>
-        <source>There are currently unsaved files. Do you want to save them first</source>
-        <translation>当前有未保存的文件，是否要先进行保存</translation>
+        <source>Encoding changed. Do you want to save the file now?</source>
+        <translation>文件编码已更改，是否先进行保存？</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="303"/>
@@ -220,7 +218,7 @@
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="493"/>
-        <source>There is an error loading the file with this encoding. If forced, the contents of the file may be changed</source>
+        <source>There are errors when using this encoding. If continue, the file contents may be changed</source>
         <translation>使用此编码加载文件出错，如果强制使用，可能会导致文件内容发生改变</translation>
     </message>
     <message>
@@ -230,8 +228,8 @@
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="497"/>
-        <source>Determine</source>
-        <translation>确定</translation>
+        <source>Continue</source>
+        <translation>继续</translation>
     </message>
 </context>
 <context>
@@ -255,10 +253,9 @@
 <context>
     <name>JumpLineBar</name>
     <message>
-        <location filename="../src/jumplinebar.cpp" line="38"/>
+        <location filename="../src/jumplinebar.cpp" line="39"/>
         <source>Go to Line: </source>
-        <translatorcomment>跳到行:</translatorcomment>
-        <translation>跳到行:</translation>
+        <translation>跳到行：</translation>
     </message>
 </context>
 <context>
@@ -266,7 +263,7 @@
     <message>
         <location filename="../src/main.cpp" line="51"/>
         <source>Text Editor is a powerful tool for viewing and editing text files.</source>
-        <translation>文本编辑器是一款用来编写和查看文本文件的软件工具。</translation>
+        <translation>文本编辑器是一款用来查看和编辑文本文件的工具。</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="63"/>
@@ -299,14 +296,10 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="27"/>
         <source>Font Size</source>
-        <translation>字号</translation> 
+        <translation>字号</translation>
     </message>
-    <message> 
+    <message>
         <location filename="../src/settingsdialog.cpp" line="29"/>
-        <source>Keymap</source>
-        <translation>快捷键映射</translation>
-    </message>
-    <message> 
         <location filename="../src/settingsdialog.cpp" line="30"/>
         <source>Keymap</source>
         <translation>快捷键映射</translation>
@@ -421,7 +414,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="45"/>
         <source>Toggle fullscreen</source>
-        <translation>切换到全屏</translation>
+        <translation>切换全屏</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="46"/>
@@ -451,7 +444,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="50"/>
         <source>Reset cursor position</source>
-        <translation>重置光标位置</translation>
+        <translation>跳转到保存光标位置</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="51"/>
@@ -461,7 +454,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="52"/>
         <source>Display shortcuts</source>
-        <translation>显示快捷键预览</translation>
+        <translation>显示快捷键</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="53"/>
@@ -702,32 +695,32 @@
 <context>
     <name>ReplaceBar</name>
     <message>
-        <location filename="../src/replacebar.cpp" line="36"/>
+        <location filename="../src/replacebar.cpp" line="37"/>
         <source>Find</source>
         <translation>查找</translation>
     </message>
     <message>
-        <location filename="../src/replacebar.cpp" line="38"/>
+        <location filename="../src/replacebar.cpp" line="39"/>
         <source>Replace With</source>
         <translation>替换为</translation>
     </message>
     <message>
-        <location filename="../src/replacebar.cpp" line="46"/>
+        <location filename="../src/replacebar.cpp" line="47"/>
         <source>Replace</source>
         <translation>替换</translation>
     </message>
     <message>
-        <location filename="../src/replacebar.cpp" line="41"/>
+        <location filename="../src/replacebar.cpp" line="42"/>
         <source>Skip</source>
         <translation>跳过</translation>
     </message>
     <message>
-        <location filename="../src/replacebar.cpp" line="42"/>
+        <location filename="../src/replacebar.cpp" line="43"/>
         <source>Replace Rest</source>
         <translation>剩余替换</translation>
     </message>
     <message>
-        <location filename="../src/replacebar.cpp" line="43"/>
+        <location filename="../src/replacebar.cpp" line="44"/>
         <source>Replace All</source>
         <translation>全部替换</translation>
     </message>
@@ -774,14 +767,6 @@
     </message>
 </context>
 <context>
-    <name>Toast</name>
-    <message>
-        <location filename="../src/widgets/toast.cpp" line="41"/>
-        <source>Reload</source>
-        <translation>重新载入</translation>
-    </message>
-</context>
-<context>
     <name>WarningNotices</name>
     <message>
         <location filename="../src/warningnotices.cpp" line="9"/>
@@ -807,8 +792,6 @@
         <translation>打开文件</translation>
     </message>
     <message>
-        <location filename="../src/warningnotices.cpp" line="10"/>
-        <location filename="../src/widgets/toast.cpp" line="42"/>
         <location filename="../src/window.cpp" line="196"/>
         <source>Save as</source>
         <translation>另存为</translation>
@@ -856,10 +839,7 @@
         <translation>无效文件：%1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="384"/>
-        <location filename="../src/window.cpp" line="623"/>
-        <location filename="../src/window.cpp" line="1066"/>
-        <location filename="../src/window.cpp" line="1445"/>
+        <location filename="../src/window.cpp" line="739"/>
         <source>Save File</source>
         <translation>保存</translation>
     </message>
@@ -891,12 +871,7 @@
         <translation>您没有权限保存%1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="593"/>
-        <source>Unable to save the file</source>
-        <translation>无法保存文件</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="593"/>
+        <location filename="../src/window.cpp" line="568"/>
         <source>Do you want to save as another?</source>
         <translation>您是否要另存为其他文件？</translation>
     </message>
@@ -912,12 +887,7 @@
         <translation>空白文档%1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1096"/>
-        <source>Setup</source>
-        <translation>设置</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="1368"/>
+        <location filename="../src/window.cpp" line="1310"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>

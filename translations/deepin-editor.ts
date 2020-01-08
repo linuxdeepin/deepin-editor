@@ -131,22 +131,22 @@
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="808"/>
-        <source>The selected row has been copied to the clipboard</source>
+        <source>Selected line(s) copied</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="814"/>
-        <source>The current row has been copied to the clipboard</source>
+        <source>Current line copied</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="853"/>
-        <source>The selected row has been clipped to the clipping board</source>
+        <source>Selected line(s) clipped</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="859"/>
-        <source>The current row has been sheared to the shears</source>
+        <source>Current line clipped</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -161,7 +161,7 @@
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2493"/>
-        <source>Read-Only mode cannot be edited</source>
+        <source>Read-Only mode is on</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -195,7 +195,7 @@
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="300"/>
-        <source>There are currently unsaved files. Do you want to save them first</source>
+        <source>Encoding changed. Do you want to save the file now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -220,7 +220,7 @@
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="493"/>
-        <source>There is an error loading the file with this encoding. If forced, the contents of the file may be changed</source>
+        <source>There are errors when using this encoding. If continue, the file contents may be changed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -230,7 +230,7 @@
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="497"/>
-        <source>Determine</source>
+        <source>Continue</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -406,6 +406,11 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="44"/>
         <source>Reset font size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="45"/>
+        <source>Window maximizing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -764,9 +769,9 @@
     </message>
 </context>
 <context>
-    <name>Toast</name>
+    <name>WarningNotices</name>
     <message>
-        <location filename="../src/widgets/toast.cpp" line="38"/>
+        <location filename="../src/warningnotices.cpp" line="9"/>
         <source>Reload</source>
         <translation type="unfinished"></translation>
     </message>
@@ -789,7 +794,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/toast.cpp" line="39"/>
         <location filename="../src/window.cpp" line="179"/>
         <source>Save as</source>
         <translation type="unfinished"></translation>
@@ -822,6 +826,7 @@
     </message>
     <message>
         <location filename="../src/window.cpp" line="182"/>
+        <location filename="../src/window.cpp" line="1249"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -836,10 +841,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="365"/>
-        <location filename="../src/window.cpp" line="598"/>
-        <location filename="../src/window.cpp" line="1020"/>
-        <location filename="../src/window.cpp" line="1383"/>
+        <location filename="../src/window.cpp" line="739"/>
         <source>Save File</source>
         <translation type="unfinished"></translation>
     </message>
@@ -861,18 +863,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="922"/>
+        <location filename="../src/window.cpp" line="1231"/>
         <source>Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="535"/>
         <source>You do not have permission to save %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="568"/>
-        <source>Unable to save the file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -900,6 +897,11 @@
         <location filename="../src/window.cpp" line="178"/>
         <location filename="../src/window.cpp" line="1312"/>
         <source>Save</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="1105"/>
+        <source>Remember the current location</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
