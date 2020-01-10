@@ -26,12 +26,12 @@
 #include <QDebug>
 
 FindBar::FindBar(QWidget *parent)
-    : DFloatingWidget(parent)
+    : DAbstractDialog(parent)
 {
     // Init.
     //setWindowFlags(Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
     hide();
-    setFixedHeight(58);
+    setFixedHeight(48);
 
     // Init layout and widgets.
 

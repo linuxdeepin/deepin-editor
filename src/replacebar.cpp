@@ -26,11 +26,11 @@
 #include <QDebug>
 
 ReplaceBar::ReplaceBar(QWidget *parent)
-    : DFloatingWidget(parent)
+    : DAbstractDialog(parent)
 {
     // Init.
     hide();
-    setFixedHeight(58);
+    setFixedHeight(48);
 
     // Init layout and widgets.
     m_layout = new QHBoxLayout();

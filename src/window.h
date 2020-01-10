@@ -89,7 +89,6 @@ public:
     void popupPrintDialog();
     void popupThemePanel();
 
-    void windowMaximizing();
     void toggleFullscreen();
 
     void remberPositionSave();

@@ -166,17 +166,17 @@ Window::Window(DMainWindow *parent)
     m_jumpLineBar->raise();
 
     // Init findbar panel.
-    DAnchors<FindBar> anchors_findbar(m_findBar);
-    anchors_findbar.setAnchor(Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
+    //static DAnchors<FindBar> anchors_findbar(m_findBar);
+    //anchors_findbar.setAnchor(Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
     //anchors_findbar.setAnchor(Qt::AnchorHorizontalCenter, m_centralWidget, Qt::AnchorHorizontalCenter);
-    anchors_findbar.setBottomMargin(5);
+    //anchors_findbar.setBottomMargin(5);
     //m_findBar->raise();
 
     // Init replaceBar panel.
-    DAnchors<ReplaceBar> anchors_replaceBar(m_replaceBar);
-    anchors_replaceBar.setAnchor(Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
+    //DAnchors<ReplaceBar> anchors_replaceBar(m_replaceBar);
+    //anchors_replaceBar.setAnchor(Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
     //anchors_replaceBar.setAnchor(Qt::AnchorHorizontalCenter, m_centralWidget, Qt::AnchorHorizontalCenter);
-    anchors_replaceBar.setBottomMargin(5);
+    //anchors_replaceBar.setBottomMargin(5);
     //m_replaceBar->raise();
 
     // Init theme panel.
@@ -960,6 +960,7 @@ void Window::popupFindBar()
             m_replaceBar->hide();
         }
         m_findBar->raise();
+        m_findBar->move(mapToGlobal(QPoint(10, height() - 60)));
         m_findBar->show();
 
         QString text = wrapper->textEditor()->textCursor().selectedText();
@@ -990,6 +991,7 @@ void Window::popupReplaceBar()
             m_findBar->hide();
         }
         m_replaceBar->raise();
+        m_replaceBar->move(mapToGlobal(QPoint(10, height() - 60)));
         m_replaceBar->show();
         //addBottomWidget(m_replaceBar);
 
@@ -1074,16 +1076,6 @@ void Window::popupThemePanel()
     m_themePanel->popup();
 }
 
-void Window::windowMaximizing()
-{
-    if (isMaximized()) {
-        showNormal();
-    }  else {
-        //setWindowState(Qt::WindowMaximized);
-        showMaximized();
-    }
-}
-
 void Window::toggleFullscreen()
 {
     if (isFullScreen()) {
@@ -1102,7 +1094,7 @@ void Window::remberPositionSave()
     m_remberPositionColumn = wrapper->textEditor()->getCurrentColumn();
     m_remberPositionScrollOffset = wrapper->textEditor()->getScrollOffset();
 
-    currentWrapper()->showNotify(tr("Remember the current location"));
+    //currentWrapper()->showNotify(tr("Remember the current location"));
 }
 
 void Window::remberPositionRestore()
@@ -1303,7 +1295,7 @@ void Window::addBlankTab(const QString &blankFile)
 
     int blankFileIndex = getBlankFileIndex();
 
-    m_tabbar->addTab(blankTabPath, tr("Blank document %1").arg(blankFileIndex));
+    m_tabbar->addTab(blankTabPath, tr("Untitled %1").arg(blankFileIndex));
     EditWrapper *wrapper = createEditor();
     wrapper->updatePath(blankTabPath);
 
@@ -1760,8 +1752,8 @@ void Window::resizeEvent(QResizeEvent *e)
         m_settings->settings->option("advance.window.window_height")->setValue(rect().height() * 1.0 / screenGeometry.height());
     }
 
-    m_findBar->resize(width(), m_findBar->height());
-    m_replaceBar->resize(width(), m_replaceBar->height());
+    m_findBar->resize(width() - 20, m_findBar->height());
+    m_replaceBar->resize(width() - 20, m_replaceBar->height());
 
     DMainWindow::resizeEvent(e);
 }
@@ -1856,9 +1848,7 @@ void Window::keyPressEvent(QKeyEvent *e)
         decrementFontSize();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "resetfontsize")) {
         resetFontSize();
-    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "windowmaximizing")) {
-        windowMaximizing();
-    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "togglefullscreen")) {
+    }  else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "togglefullscreen")) {
         toggleFullscreen();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "find")) {
         popupFindBar();

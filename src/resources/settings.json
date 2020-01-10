@@ -132,12 +132,6 @@
                             "default":  "Ctrl+0"
                         },
                         {
-                            "key": "windowmaximizing",
-                            "name": "Window maximizing",
-                            "type": "shortcut",
-                            "default":  "Ctrl+Alt+F"
-                        },
-                        {
                             "key": "togglefullscreen",
                             "name": "Toggle fullscreen",
                             "type": "shortcut",
@@ -563,12 +557,6 @@
                             "hide" : true,
                             "reset" : false,
                             "default":  "Ctrl+0"
-                        },
-                        {
-                            "key": "windowmaximizing",
-                            "hide": true,
-                            "reset": false,
-                            "default":  "Ctrl+Alt+F"
                         },
                         {
                             "key": "togglefullscreen",
@@ -1023,12 +1011,6 @@
                             "default":  "Ctrl+0"
                         },
                         {
-                            "key": "windowmaximizing",
-                            "hide": true,
-                            "reset": false,
-                            "default":  "Ctrl+Alt+F"
-                        },
-                        {
                             "key": "togglefullscreen",
                             "hide" : true,
                             "reset" : false,
@@ -1479,12 +1461,6 @@
                             "hide" : true,
                             "reset" : false,
                             "default":  "Ctrl+0"
-                        },
-                        {
-                            "key": "windowmaximizing",
-                            "hide": true,
-                            "reset": false,
-                            "default":  "Ctrl+Alt+F"
                         },
                         {
                             "key": "togglefullscreen",

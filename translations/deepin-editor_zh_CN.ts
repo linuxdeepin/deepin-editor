@@ -408,11 +408,6 @@
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="45"/>
-        <source>Window maximizing</source>
-        <translation>窗口最大化</translation>
-    </message>
-    <message>
-        <location filename="../src/settingsdialog.cpp" line="45"/>
         <source>Toggle fullscreen</source>
         <translation>切换全屏</translation>
     </message>
@@ -882,9 +877,9 @@
         <translation>您是否要保存所有文件？</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1025"/>
-        <source>Blank document %1</source>
-        <translation>空白文档%1</translation>
+        <location filename="../src/window.cpp" line="979"/>
+        <source>Untitled %1</source>
+        <translation>未命名文档%1</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1310"/>
@@ -896,11 +891,6 @@
         <location filename="../src/window.cpp" line="1370"/>
         <source>Save</source>
         <translation>保存</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="937"/>
-        <source>Remember the current location</source>
-        <translation>记住当前位置</translation>
     </message>
 </context>
 </TS>

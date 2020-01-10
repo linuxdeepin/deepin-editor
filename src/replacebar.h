@@ -34,10 +34,11 @@
 #include <DIconButton>
 #include <DApplicationHelper>
 #include <DFloatingWidget>
+#include <DAbstractDialog>
 
 DWIDGET_USE_NAMESPACE
 
-class ReplaceBar : public DFloatingWidget
+class ReplaceBar : public DAbstractDialog
 {
     Q_OBJECT
 

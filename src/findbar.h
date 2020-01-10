@@ -37,10 +37,11 @@
 #include <DFloatingWidget>
 
 #include <DPalette>
+#include <DAbstractDialog>
 
 DWIDGET_USE_NAMESPACE
 
-class FindBar : public DFloatingWidget
+class FindBar : public DAbstractDialog
 {
     Q_OBJECT
 
