@@ -1818,6 +1818,25 @@ void Window::closeEvent(QCloseEvent *e)
     emit close();
 }
 
+void Window::hideEvent(QHideEvent *event)
+{
+    //如果查找浮窗正显示着，则隐藏
+    if (m_findBar->isVisible()) {
+        m_findBar->hide();
+        if (currentWrapper()->isVisible()) {
+            currentWrapper()->m_bottomBar->show();
+        }
+    }
+
+    //如果替换浮窗正显示着，则隐藏
+    if (m_replaceBar->isVisible()) {
+        m_replaceBar->hide();
+        if (currentWrapper()->isVisible()) {
+            currentWrapper()->m_bottomBar->show();
+        }
+    }
+}
+
 void Window::keyPressEvent(QKeyEvent *e)
 {
     QString key = Utils::getKeyshortcut(e);
