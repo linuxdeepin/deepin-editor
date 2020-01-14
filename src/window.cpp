@@ -109,12 +109,9 @@ Window::Window(DMainWindow *parent)
     // window minimum size.
     setMinimumSize(1000, 600);
 
-    // resize window size.
-    QScreen *screen = QGuiApplication::primaryScreen();
-    QRect screenGeometry = screen->geometry();
-
-    resize(QSize(screenGeometry.width() * m_settings->settings->option("advance.window.window_width")->value().toDouble(),
-                screenGeometry.height() * m_settings->settings->option("advance.window.window_height")->value().toDouble()));
+	// resize window size.
+    resize(QSize(m_settings->settings->option("advance.window.window_width")->value().toDouble(),
+                m_settings->settings->option("advance.window.window_height")->value().toDouble()));
     Dtk::Widget::moveToCenter(this);
     show();
 
@@ -1747,10 +1744,8 @@ void Window::resizeEvent(QResizeEvent *e)
     }
 
     if (!isMaximized() && !isFullScreen()) {
-        QScreen *screen = QApplication::primaryScreen();
-        QRect screenGeometry = screen->geometry();
-        m_settings->settings->option("advance.window.window_width")->setValue(rect().width() * 1.0 / screenGeometry.width());
-        m_settings->settings->option("advance.window.window_height")->setValue(rect().height() * 1.0 / screenGeometry.height());
+        m_settings->settings->option("advance.window.window_width")->setValue(rect().width());
+        m_settings->settings->option("advance.window.window_height")->setValue(rect().height());
     }
 
     m_findBar->resize(width() - 20, m_findBar->height());
