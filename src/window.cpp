@@ -1514,12 +1514,13 @@ void Window::handleRemoveSearchKeyword()
 void Window::handleUpdateSearchKeyword(QWidget *widget, const QString &file, const QString &keyword)
 {
     if (file == m_tabbar->currentPath() && m_wrappers.contains(file)) {
-        // Highlight keyword in text editor.
-        m_wrappers.value(file)->textEditor()->highlightKeyword(keyword, m_wrappers.value(file)->textEditor()->getPosition());
 
         // Update input widget warning status along with keyword match situation.
         bool findKeyword = m_wrappers.value(file)->textEditor()->findKeywordForward(keyword);
         bool emptyKeyword = keyword.trimmed().isEmpty();
+
+        // Highlight keyword in text editor.
+        m_wrappers.value(file)->textEditor()->highlightKeyword(keyword, m_wrappers.value(file)->textEditor()->getPosition());
 
         auto *findBarWidget = qobject_cast<FindBar*>(widget);
         if (findBarWidget != nullptr) {
