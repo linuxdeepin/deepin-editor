@@ -10,4 +10,4 @@ Package: deepin-editor
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: dtk based text editor
- Advanced text editor based on dtk.
+ Text Editor is a powerful tool for viewing and editing text files.
