@@ -131,10 +131,10 @@ public:
     bool findKeywordForward(const QString &keyword);
 
     void removeKeywords();
-    void highlightKeyword(QString keyword, int position);
+    bool highlightKeyword(QString keyword, int position);
     void updateCursorKeywordSelection(int position, bool findNext);
     void updateHighlightLineSelection();
-    void updateKeywordSelections(QString keyword);
+    bool updateKeywordSelections(QString keyword);
     void renderAllSelections();
 
     DMenu *getHighlightMenu();

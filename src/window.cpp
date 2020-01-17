@@ -1513,11 +1513,9 @@ void Window::handleUpdateSearchKeyword(QWidget *widget, const QString &file, con
     if (file == m_tabbar->currentPath() && m_wrappers.contains(file)) {
 
         // Update input widget warning status along with keyword match situation.
-        bool findKeyword = m_wrappers.value(file)->textEditor()->findKeywordForward(keyword);
+        bool findKeyword = m_wrappers.value(file)->textEditor()->highlightKeyword(keyword, m_wrappers.value(file)->textEditor()->getPosition());
+    //    bool findKeyword = m_wrappers.value(file)->textEditor()->findKeywordForward(keyword);
         bool emptyKeyword = keyword.trimmed().isEmpty();
-
-        // Highlight keyword in text editor.
-        m_wrappers.value(file)->textEditor()->highlightKeyword(keyword, m_wrappers.value(file)->textEditor()->getPosition());
 
         auto *findBarWidget = qobject_cast<FindBar*>(widget);
         if (findBarWidget != nullptr) {

@@ -1409,12 +1409,13 @@ void TextEdit::removeKeywords()
     setFocus();
 }
 
-void TextEdit::highlightKeyword(QString keyword, int position)
+bool TextEdit::highlightKeyword(QString keyword, int position)
 {
-    updateKeywordSelections(keyword);
+    bool yes = updateKeywordSelections(keyword);
     updateCursorKeywordSelection(position, true);
     updateHighlightLineSelection();
     renderAllSelections();
+    return yes;
 }
 
 void TextEdit::updateCursorKeywordSelection(int position, bool findNext)
@@ -1452,7 +1453,7 @@ void TextEdit::updateHighlightLineSelection()
     m_currentLineSelection = selection;
 }
 
-void TextEdit::updateKeywordSelections(QString keyword)
+bool TextEdit::updateKeywordSelections(QString keyword)
 {
     // Clear keyword selections first.
     m_findMatchSelections.clear();
@@ -1465,6 +1466,10 @@ void TextEdit::updateKeywordSelections(QString keyword)
         flags &= QTextDocument::FindCaseSensitively;
         cursor = document()->find(keyword, cursor, flags);
 
+        if(cursor.isNull())
+        {
+            return false;
+        }
         while (!cursor.isNull()) {
             QTextEdit::ExtraSelection extra;
             extra.format = m_findMatchFormat;
@@ -1475,7 +1480,9 @@ void TextEdit::updateKeywordSelections(QString keyword)
         }
 
         setExtraSelections(m_findMatchSelections);
+        return true;
     }
+    return false;
 }
 
 void TextEdit::renderAllSelections()
