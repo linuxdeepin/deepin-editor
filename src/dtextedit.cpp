@@ -179,6 +179,8 @@ TextEdit::TextEdit(QWidget *parent)
     setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
+    connect(verticalScrollBar(), &QScrollBar::rangeChanged, this, &TextEdit::adjustScrollbarMargins, Qt::QueuedConnection);
+
     // Don't blink the cursor when selecting text
     // Recover blink when not selecting text.
     connect(this, &TextEdit::selectionChanged, this, [=] {
@@ -2395,6 +2397,21 @@ bool TextEdit::eventFilter(QObject *, QEvent *event)
     return false;
 }
 
+void TextEdit::adjustScrollbarMargins()
+{
+    QEvent event(QEvent::LayoutRequest);
+    QApplication::sendEvent(this, &event);
+
+    QMargins margins = viewportMargins();
+    setViewportMargins(0, 0, 0, 0);
+    setViewportMargins(margins);
+    //if (!verticalScrollBar()->visibleRegion().isEmpty()) {
+    //    setViewportMargins(0, 0, -verticalScrollBar()->sizeHint().width(), 0);
+    //} else {
+    //    setViewportMargins(0, 0, 4, 0);
+    //}
+}
+
 void TextEdit::dragEnterEvent(QDragEnterEvent *event)
 {
     QTextEdit::dragEnterEvent(event);
@@ -2809,4 +2826,5 @@ void TextEdit::highlightCurrentLine()
 {
     updateHighlightLineSelection();
     renderAllSelections();
+    //adjustScrollbarMargins();
 }

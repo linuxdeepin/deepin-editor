@@ -216,6 +216,8 @@ public slots:
 
     void handleCursorMarkChanged(bool mark, QTextCursor cursor);
 
+    void adjustScrollbarMargins();
+
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dragMoveEvent(QDragMoveEvent *event) override;
