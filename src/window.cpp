@@ -1408,6 +1408,10 @@ void Window::handleCurrentChanged(const int &index)
         wrapper->textEditor()->setFocus();
         m_editorWidget->setCurrentWidget(wrapper);
     }
+
+    if (currentWrapper()->isVisible()) {
+        currentWrapper()->m_bottomBar->show();
+    }
 }
 
 void Window::handleJumpLineBarExit()

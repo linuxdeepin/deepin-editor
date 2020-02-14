@@ -128,7 +128,7 @@ void StartManager::openFilesInTab(QStringList files)
             else {
                 Window *window = m_windows[0];
                 window->addTab(file);
-                window->showNormal();
+                //window->showNormal();
                 window->activateWindow();
 
                 qDebug() << "Open " << file << " in first window";
