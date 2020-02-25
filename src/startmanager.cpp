@@ -236,7 +236,7 @@ void StartManager::initBlockShutdown() {
                                          "org.freedesktop.login1.Manager",
                                          QDBusConnection::systemBus());
 
-    m_arg << QString("shutdown:sleep:")             // what
+    m_arg /*<< QString("shutdown:sleep:")      */       // what
         << qApp->applicationDisplayName()           // who
         << QObject::tr("Files are being processed") // why
         << QString("block");                        // mode
