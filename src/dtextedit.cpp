@@ -2405,11 +2405,11 @@ void TextEdit::adjustScrollbarMargins()
     QMargins margins = viewportMargins();
     setViewportMargins(0, 0, 0, 0);
     setViewportMargins(margins);
-    //if (!verticalScrollBar()->visibleRegion().isEmpty()) {
-    //    setViewportMargins(0, 0, -verticalScrollBar()->sizeHint().width(), 0);
-    //} else {
-    //    setViewportMargins(0, 0, 4, 0);
-    //}
+    if (!verticalScrollBar()->visibleRegion().isEmpty()) {
+        setViewportMargins(0, 0, -verticalScrollBar()->sizeHint().width(), 0);
+    } else {
+        setViewportMargins(0, 0, 4, 0);
+    }
 }
 
 void TextEdit::dragEnterEvent(QDragEnterEvent *event)
