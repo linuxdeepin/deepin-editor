@@ -1409,7 +1409,8 @@ void Window::handleCurrentChanged(const int &index)
         m_editorWidget->setCurrentWidget(wrapper);
     }
 
-    if (currentWrapper()->isVisible()) {
+   if(currentWrapper()!=nullptr&&currentWrapper()->isVisible()){
+  //  if (currentWrapper()!=nullptr) {
         currentWrapper()->m_bottomBar->show();
     }
 }
