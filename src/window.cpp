@@ -1052,8 +1052,10 @@ void Window::popupPrintDialog()
 
     if (fileDir == m_blankFileDir) {
         printer.setOutputFileName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
+        printer.setDocName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
     } else {
         printer.setOutputFileName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
+        printer.setDocName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
     }
 
     printer.setOutputFormat(QPrinter::PdfFormat);
