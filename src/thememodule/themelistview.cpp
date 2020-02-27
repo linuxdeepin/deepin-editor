@@ -49,9 +49,9 @@ void ThemeListView::adjustScrollbarMargins()
     QApplication::sendEvent(this, &event);
 
     if (!verticalScrollBar()->visibleRegion().isEmpty()) {
-        setViewportMargins(0, 0, -verticalScrollBar()->sizeHint().width(), 0);
+        setViewportMargins(0, 0,5, 0);
     } else {
-        setViewportMargins(0, 0, 0, 0);
+        setViewportMargins(0, 0, 5, 0);
     }
 }
 

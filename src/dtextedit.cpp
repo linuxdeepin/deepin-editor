@@ -2403,12 +2403,13 @@ void TextEdit::adjustScrollbarMargins()
     QApplication::sendEvent(this, &event);
 
     QMargins margins = viewportMargins();
-    setViewportMargins(0, 0, 0, 0);
+    setViewportMargins(0, 0, 5, 0);
     setViewportMargins(margins);
     if (!verticalScrollBar()->visibleRegion().isEmpty()) {
-        setViewportMargins(0, 0, -verticalScrollBar()->sizeHint().width(), 0);
+        setViewportMargins(0, 0, 5, 0);        //-verticalScrollBar()->sizeHint().width()  原本的第三个参数
+        //setViewportMargins(0, 0, -verticalScrollBar()->sizeHint().width(), 0);
     } else {
-        setViewportMargins(0, 0, 4, 0);
+        setViewportMargins(0, 0, 5, 0);
     }
 }
 
