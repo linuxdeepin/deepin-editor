@@ -238,7 +238,7 @@ void StartManager::initBlockShutdown() {
 
     m_arg << QString("shutdown")             // what
         << qApp->applicationDisplayName()           // who
-        << QObject::tr("Files are being processed") // why
+        << QObject::tr("文件未保存") // why
         << QString("block");                        // mode
 
     int fd = -1;
