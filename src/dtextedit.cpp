@@ -1499,7 +1499,7 @@ void TextEdit::renderAllSelections()
     selections.append(m_currentLineSelection);
     selections.append(m_findMatchSelections);
     selections.append(m_findHighlightSelection);
-    selections.append(m_wordUnderCursorSelection);
+    //selections.append(m_wordUnderCursorSelection);
     selections.append(m_beginBracketSelection);
     selections.append(m_endBracketSelection);
 
@@ -1943,7 +1943,7 @@ bool TextEdit::highlightWordUnderMouse(QPoint pos)
         selection.cursor = cursor;
         selection.cursor.select(QTextCursor::WordUnderCursor);
 
-        m_wordUnderCursorSelection = selection;
+        //m_wordUnderCursorSelection = selection;
 
         renderAllSelections();
 
@@ -1955,10 +1955,10 @@ bool TextEdit::highlightWordUnderMouse(QPoint pos)
 
 void TextEdit::removeHighlightWordUnderCursor()
 {
-    m_highlightWordCacheCursor = m_wordUnderCursorSelection.cursor;
+    //m_highlightWordCacheCursor = m_wordUnderCursorSelection.cursor;
 
     QTextEdit::ExtraSelection selection;
-    m_wordUnderCursorSelection = selection;
+    //m_wordUnderCursorSelection = selection;
 
     renderAllSelections();
 }
@@ -2113,25 +2113,26 @@ void TextEdit::clickCopyAction()
 
 void TextEdit::clickPasteAction()
 {
-    if (textCursor().hasSelection()) {
-        pasteText();
-    } else {
-        QTextCursor cursor;
+//    if (textCursor().hasSelection()) {
+//        pasteText();
+//    } else {
+//        QTextCursor cursor;
 
-        // Move to word cursor if have word around mouse.
-        // Otherwise find nearest cursor with mouse click.
-        if (m_highlightWordCacheCursor.position() != -1) {
-            cursor = textCursor();
-            cursor.setPosition(m_highlightWordCacheCursor.position(), QTextCursor::MoveAnchor);
-        } else {
-            auto pos = mapFromGlobal(m_mouseClickPos);
-            cursor = cursorForPosition(pos);
-        }
+//        // Move to word cursor if have word around mouse.
+//        // Otherwise find nearest cursor with mouse click.
+//        if (m_highlightWordCacheCursor.position() != -1) {
+//            cursor = textCursor();
+//            cursor.setPosition(m_highlightWordCacheCursor.position(), QTextCursor::MoveAnchor);
+//        } else {
+//            auto pos = mapFromGlobal(m_mouseClickPos);
+//            cursor = cursorForPosition(pos);
+//        }
 
-        setTextCursor(cursor);
+//        setTextCursor(cursor);
 
-        pasteText();
-    }
+//        pasteText();
+//    }
+    pasteText();
 }
 
 void TextEdit::clickDeleteAction()
