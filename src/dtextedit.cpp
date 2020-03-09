@@ -119,6 +119,8 @@ TextEdit::TextEdit(QWidget *parent)
     m_exitFullscreenAction = new QAction(tr("Exit fullscreen"), this);
     m_openInFileManagerAction = new QAction(tr("Display in file manager"), this);
     m_toggleCommentAction = new QAction(tr("Toggle comment"), this);
+    m_voiceReadingAction = new QAction(tr("Text to Speech"),this);
+    m_dictationAction = new QAction(tr("Speech to Text"),this);
 
     connect(m_rightMenu, &DMenu::aboutToHide, this, &TextEdit::removeHighlightWordUnderCursor);
     connect(m_undoAction, &QAction::triggered, this, &TextEdit::undo);
@@ -137,6 +139,9 @@ TextEdit::TextEdit(QWidget *parent)
     connect(m_disableReadOnlyModeAction, &QAction::triggered, this, &TextEdit::toggleReadOnlyMode);
     connect(m_openInFileManagerAction, &QAction::triggered, this, &TextEdit::clickOpenInFileManagerAction);
     connect(m_toggleCommentAction, &QAction::triggered, this, &TextEdit::toggleComment);
+    connect(m_voiceReadingAction, &QAction::triggered, this, &TextEdit::slot_voiceReading);
+    connect(m_dictationAction, &QAction::triggered, this, &TextEdit::slot_dictation);
+
 
     // Init convert case sub menu.
     m_haveWordUnderCursor = false;
@@ -2165,6 +2170,16 @@ void TextEdit::cutWordUnderCursor()
     textCursor().removeSelectedText();
 }
 
+void TextEdit::slot_voiceReading()
+{
+    QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.TextToSpeech");
+}
+
+void TextEdit::slot_dictation()
+{
+    QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.SpeechToText");
+}
+
 QString TextEdit::getWordAtCursor()
 {
     if (toPlainText().isEmpty()) {
@@ -2819,6 +2834,13 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
         m_rightMenu->addAction(m_exitFullscreenAction);
     } else {
         m_rightMenu->addAction(m_fullscreenAction);
+    }
+    m_rightMenu->addAction(m_voiceReadingAction);
+    m_voiceReadingAction->setEnabled(false);
+    m_rightMenu->addAction(m_dictationAction);
+    if (textCursor().hasSelection())
+    {
+        m_voiceReadingAction->setEnabled(true);
     }
 
     m_rightMenu->exec(event->globalPos());

@@ -209,6 +209,9 @@ public slots:
     void copyWordUnderCursor();
     void cutWordUnderCursor();
 
+    void slot_voiceReading();
+    void slot_dictation();
+
     void upcaseWord();
     void downcaseWord();
     void capitalizeWord();
@@ -278,6 +281,8 @@ private:
     QAction *m_exitFullscreenAction;
     QAction *m_openInFileManagerAction;
     QAction *m_toggleCommentAction;
+    QAction *m_voiceReadingAction;
+    QAction *m_dictationAction;
 
     DMenu *m_convertCaseMenu;
     QAction *m_upcaseAction;
