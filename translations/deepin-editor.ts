@@ -102,6 +102,16 @@
         <translation>Toggle comment</translation>
     </message>
     <message>
+        <location filename="../src/dtextedit.cpp" line="121"/>
+        <source>Text to Speech</source>
+        <translation>Text to Speech</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="122"/>
+        <source>Speech to Text</source>
+        <translation>Speech to Text</translation>
+    </message>
+    <message>
         <location filename="../src/dtextedit.cpp" line="142"/>
         <source>Change Case</source>
         <translation>Change Case</translation>
@@ -248,6 +258,14 @@
         <location filename="../src/findbar.cpp" line="40"/>
         <source>Previous</source>
         <translation>Previous</translation>
+    </message>
+</context>
+<context>
+    <name>StartManager</name>
+    <message>
+        <location filename="../src/startmanager.cpp" line="241"/>
+        <source>File not saved</source>
+        <translation>File not saved</translation>
     </message>
 </context>
 <context>
