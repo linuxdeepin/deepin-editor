@@ -2837,11 +2837,33 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
     }
     m_rightMenu->addAction(m_voiceReadingAction);
     m_voiceReadingAction->setEnabled(false);
-    m_rightMenu->addAction(m_dictationAction);
-    if (textCursor().hasSelection())
+    bool voiceReadingState = false;
+    QDBusMessage voiceReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
+                                                      "/aiassistant/tts",
+                                                      "com.iflytek.aiassistant.tts",
+                                                      "getTTSEnable");
+
+    QDBusReply<bool> voiceReadingStateRet = QDBusConnection::sessionBus().call(voiceReadingMsg, QDBus::BlockWithGui);
+    if (voiceReadingStateRet.isValid()) {
+        voiceReadingState = voiceReadingStateRet.value();
+    }
+    if (textCursor().hasSelection()&&voiceReadingState)
     {
         m_voiceReadingAction->setEnabled(true);
     }
+
+    m_rightMenu->addAction(m_dictationAction);
+    bool dictationState = false;
+    QDBusMessage dictationMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
+                                                      "/aiassistant/iat",
+                                                      "com.iflytek.aiassistant.iat",
+                                                      "getIatEnable");
+
+    QDBusReply<bool> dictationStateRet = QDBusConnection::sessionBus().call(dictationMsg, QDBus::BlockWithGui);
+    if (dictationStateRet.isValid()) {
+        dictationState = dictationStateRet.value();
+    }
+    m_dictationAction->setEnabled(dictationState);
 
     m_rightMenu->exec(event->globalPos());
 }
