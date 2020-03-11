@@ -2835,6 +2835,7 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
     } else {
         m_rightMenu->addAction(m_fullscreenAction);
     }
+
     m_rightMenu->addAction(m_voiceReadingAction);
     m_voiceReadingAction->setEnabled(false);
     bool voiceReadingState = false;
