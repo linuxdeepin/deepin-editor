@@ -150,6 +150,8 @@ public slots:
     void slotLoadContentTheme(DGuiApplicationHelper::ColorType themeType);
     void slotSettingResetTheme(const QString &path);
 
+    void slot_saveReadingPath();
+
 private:
     void handleFocusWindowChanged(QWindow *w);
     void updateThemePanelGeomerty();
@@ -195,6 +197,7 @@ private:
 
     QString m_themePath;
     QString m_tabbarActiveColor;
+    QString m_reading_path;
 };
 
 #endif

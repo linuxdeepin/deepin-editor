@@ -434,6 +434,21 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
 
 void Window::closeTab()
 {
+    bool state = true ;
+    QDBusMessage msg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
+                                                      "/aiassistant/tts",
+                                                      "com.iflytek.aiassistant.tts",
+                                                      "isTTSInWorking");
+    QDBusReply<bool> ret = QDBusConnection::sessionBus().call(msg, QDBus::BlockWithGui);
+    if (ret.isValid()) {
+        state = ret.value();
+    }
+
+    if(m_reading_path==m_tabbar->currentPath()&&state)
+    {
+        QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.TextToSpeech");
+    }
+
     const QString &filePath = m_tabbar->currentPath();
     const bool isBlankFile = QFileInfo(filePath).dir().absolutePath() == m_blankFileDir;
     EditWrapper *wrapper = m_wrappers.value(filePath);
@@ -516,6 +531,7 @@ EditWrapper* Window::createEditor()
     wrapper->textEditor()->setLineWrapMode(wordWrap);
     setFontSizeWithConfig(wrapper);
 
+    connect(wrapper->textEditor(), &TextEdit::signal_readingPath, this, &Window::slot_saveReadingPath, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::clickReplaceAction, this, &Window::popupReplaceBar, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::clickJumpLineAction, this, &Window::popupJumpLineBar, Qt::QueuedConnection);
@@ -1700,6 +1716,11 @@ void Window::slotSettingResetTheme(const QString &path)
             //DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::DarkType);
         }
     }
+}
+
+void Window::slot_saveReadingPath()
+{
+    m_reading_path = m_tabbar->currentPath();       //每次调用语音朗读记录正在朗读的页面，关闭的时候停止朗读
 }
 
 void Window::handleFocusWindowChanged(QWindow *w)

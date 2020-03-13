@@ -2173,6 +2173,7 @@ void TextEdit::cutWordUnderCursor()
 void TextEdit::slot_voiceReading()
 {
     QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.TextToSpeech");
+    emit signal_readingPath();
 }
 
 void TextEdit::slot_dictation()

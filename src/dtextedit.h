@@ -193,6 +193,7 @@ signals:
     void popupNotify(QString notify);
     void click();
     void pressEsc();
+    void signal_readingPath();
 
 public slots:
     void highlightCurrentLine();
