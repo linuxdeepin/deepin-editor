@@ -1762,8 +1762,21 @@ void Window::closeEvent(QCloseEvent *e)
 {
     e->ignore();
 
+    bool state = true ;
+    QDBusMessage msg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
+                                                      "/aiassistant/tts",
+                                                      "com.iflytek.aiassistant.tts",
+                                                      "isTTSInWorking");
+    QDBusReply<bool> ret = QDBusConnection::sessionBus().call(msg, QDBus::BlockWithGui);
+    if (ret.isValid()) {
+        state = ret.value();
+    }
     //关闭朗读
-    QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.TextToSpeech");
+    if(state)
+    {
+        QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.TextToSpeech");
+    }
+
 
     QList<EditWrapper *> needSaveList;
     for (EditWrapper *wrapper : m_wrappers) {
