@@ -261,14 +261,6 @@
     </message>
 </context>
 <context>
-    <name>StartManager</name>
-    <message>
-        <location filename="../src/startmanager.cpp" line="241"/>
-        <source>File not saved</source>
-        <translation>File not saved</translation>
-    </message>
-</context>
-<context>
     <name>JumpLineBar</name>
     <message>
         <location filename="../src/jumplinebar.cpp" line="39"/>
@@ -291,6 +283,11 @@
 </context>
 <context>
     <name>QObject</name>
+    <message>
+        <location filename="../src/startmanager.cpp" line="241"/>
+        <source>File not saved</source>
+        <translation>File not saved</translation>
+    </message>
     <message>
         <location filename="../src/main.cpp" line="59"/>
         <source>Text Editor</source>

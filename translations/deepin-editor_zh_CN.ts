@@ -284,6 +284,11 @@
 <context>
     <name>QObject</name>
     <message>
+        <location filename="../src/startmanager.cpp" line="241"/>
+        <source>File not saved</source>
+        <translation>文件未保存</translation>
+    </message>
+    <message>
         <location filename="../src/main.cpp" line="60"/>
         <source>Text Editor</source>
         <translation>文本编辑器</translation>
@@ -695,14 +700,6 @@
         <location filename="../src/settingsdialog.cpp" line="103"/>
         <source>Window size</source>
         <translation>窗口状态</translation>
-    </message>
-</context>
-<context>
-    <name>StartManager</name>
-    <message>
-        <location filename="../src/startmanager.cpp" line="241"/>
-        <source>File not saved</source>
-        <translation>文件未保存</translation>
     </message>
 </context>
 <context>
