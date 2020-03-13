@@ -622,9 +622,9 @@ void Window::removeWrapper(const QString &filePath, bool isDelete)
     }
 
     // Exit window after close all tabs.
-    if (m_wrappers.isEmpty()) {
-        DMainWindow::close();
-    }
+//    if (m_wrappers.isEmpty()) {
+//        DMainWindow::close();
+//    }
 }
 
 void Window::openFile()
