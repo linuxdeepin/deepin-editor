@@ -444,7 +444,7 @@ void Window::closeTab()
         state = ret.value();
     }
 
-    if(m_reading_path==m_tabbar->currentPath()&&state)
+    if(state&&m_reading_list.contains(currentWrapper()->textEditor()))
     {
         QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.TextToSpeech");
     }
@@ -1720,7 +1720,8 @@ void Window::slotSettingResetTheme(const QString &path)
 
 void Window::slot_saveReadingPath()
 {
-    m_reading_path = m_tabbar->currentPath();       //每次调用语音朗读记录正在朗读的页面，关闭的时候停止朗读
+    m_reading_list.clear();
+    m_reading_list.append(currentWrapper()->textEditor());
 }
 
 void Window::handleFocusWindowChanged(QWindow *w)
@@ -1797,7 +1798,6 @@ void Window::closeEvent(QCloseEvent *e)
     {
         QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.TextToSpeech");
     }
-
 
     QList<EditWrapper *> needSaveList;
     for (EditWrapper *wrapper : m_wrappers) {

@@ -197,7 +197,7 @@ private:
 
     QString m_themePath;
     QString m_tabbarActiveColor;
-    QString m_reading_path;
+    QList <TextEdit *> m_reading_list;
 };
 
 #endif
