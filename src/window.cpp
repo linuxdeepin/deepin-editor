@@ -434,19 +434,19 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
 
 void Window::closeTab()
 {
-    bool state = true ;
-    QDBusMessage msg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
-                                                      "/aiassistant/tts",
-                                                      "com.iflytek.aiassistant.tts",
-                                                      "isTTSInWorking");
-    QDBusReply<bool> ret = QDBusConnection::sessionBus().call(msg, QDBus::BlockWithGui);
-    if (ret.isValid()) {
-        state = ret.value();
-    }
+//    bool state = true ;
+//    QDBusMessage msg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
+//                                                      "/aiassistant/tts",
+//                                                      "com.iflytek.aiassistant.tts",
+//                                                      "isTTSInWorking");
+//    QDBusReply<bool> ret = QDBusConnection::sessionBus().call(msg, QDBus::Block);
+//    if (ret.isValid()) {
+//        state = ret.value();
+//    }
 
-    if(state&&m_reading_list.contains(currentWrapper()->textEditor()))
+    if(m_reading_list.contains(currentWrapper()->textEditor()))
     {
-        QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.TextToSpeech");
+        QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
     }
 
     const QString &filePath = m_tabbar->currentPath();
@@ -1784,20 +1784,21 @@ void Window::closeEvent(QCloseEvent *e)
 {
     e->ignore();
 
-    bool state = true ;
-    QDBusMessage msg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
-                                                      "/aiassistant/tts",
-                                                      "com.iflytek.aiassistant.tts",
-                                                      "isTTSInWorking");
-    QDBusReply<bool> ret = QDBusConnection::sessionBus().call(msg, QDBus::BlockWithGui);
-    if (ret.isValid()) {
-        state = ret.value();
-    }
-    //关闭朗读
-    if(state)
-    {
-        QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.TextToSpeech");
-    }
+//    bool state = true ;
+//    QDBusMessage msg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
+//                                                      "/aiassistant/tts",
+//                                                      "com.iflytek.aiassistant.tts",
+//                                                      "isTTSInWorking");
+//    QDBusReply<bool> ret = QDBusConnection::sessionBus().call(msg, QDBus::BlockWithGui);
+//    if (ret.isValid()) {
+//        state = ret.value();
+//    }
+//    //关闭朗读
+//    if(state)
+//    {
+//        QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
+//    }
+    QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
 
     QList<EditWrapper *> needSaveList;
     for (EditWrapper *wrapper : m_wrappers) {
