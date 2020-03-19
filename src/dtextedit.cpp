@@ -2787,8 +2787,7 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
             m_rightMenu->addAction(m_pasteAction);
         }
     }
-
-    if (!wordAtCursor.isEmpty()) {
+    if (textCursor().hasSelection()) {
         if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
             m_rightMenu->addAction(m_deleteAction);
         }
