@@ -622,9 +622,9 @@ void Window::removeWrapper(const QString &filePath, bool isDelete)
     }
 
     // Exit window after close all tabs.
-//    if (m_wrappers.isEmpty()) {
-//        DMainWindow::close();
-//    }
+    if (m_wrappers.isEmpty()) {
+        DMainWindow::close();
+    }
 }
 
 void Window::openFile()
@@ -1108,7 +1108,7 @@ void Window::remberPositionSave()
     m_remberPositionColumn = wrapper->textEditor()->getCurrentColumn();
     m_remberPositionScrollOffset = wrapper->textEditor()->getScrollOffset();
 
-    //currentWrapper()->showNotify(tr("Remember the current location"));
+    currentWrapper()->showNotify(tr("Remember the current location"));
 }
 
 void Window::remberPositionRestore()
@@ -1784,20 +1784,6 @@ void Window::closeEvent(QCloseEvent *e)
 {
     e->ignore();
 
-//    bool state = true ;
-//    QDBusMessage msg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
-//                                                      "/aiassistant/tts",
-//                                                      "com.iflytek.aiassistant.tts",
-//                                                      "isTTSInWorking");
-//    QDBusReply<bool> ret = QDBusConnection::sessionBus().call(msg, QDBus::BlockWithGui);
-//    if (ret.isValid()) {
-//        state = ret.value();
-//    }
-//    //关闭朗读
-//    if(state)
-//    {
-//        QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
-//    }
     QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
 
     QList<EditWrapper *> needSaveList;
