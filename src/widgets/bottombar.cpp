@@ -100,7 +100,7 @@ void BottomBar::updatePosition(int row, int column)
 
 void BottomBar::updateWordCount(int charactorCount)
 {
-    m_charCountLabel->setText(m_chrCountStr.arg(QString::number(charactorCount)));
+    m_charCountLabel->setText(m_chrCountStr.arg(QString::number(charactorCount-1)));
 }
 
 void BottomBar::setEncodeName(const QString &name)
