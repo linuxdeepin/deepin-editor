@@ -1108,7 +1108,7 @@ void Window::remberPositionSave()
     m_remberPositionColumn = wrapper->textEditor()->getCurrentColumn();
     m_remberPositionScrollOffset = wrapper->textEditor()->getScrollOffset();
 
-    currentWrapper()->showNotify(tr("Remember the current location"));
+    currentWrapper()->showNotify(tr("Current location remembered"));
 }
 
 void Window::remberPositionRestore()

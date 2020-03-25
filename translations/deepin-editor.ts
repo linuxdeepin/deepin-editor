@@ -897,6 +897,11 @@
         <translation>Untitled %1</translation>
     </message>
     <message>
+        <location filename="../src/window.cpp" line="1121"/>
+        <source>Current location remembered</source>
+        <translation>Current location remembered</translation>
+    </message>
+    <message>
         <location filename="../src/window.cpp" line="1310"/>
         <source>Cancel</source>
         <translation>Cancel</translation>
