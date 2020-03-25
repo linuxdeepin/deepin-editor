@@ -102,6 +102,16 @@
         <translation>Perjungti komentarą</translation>
     </message>
     <message>
+        <location filename="../src/dtextedit.cpp" line="121"/>
+        <source>Text to Speech</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="122"/>
+        <source>Speech to Text</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../src/dtextedit.cpp" line="142"/>
         <source>Change Case</source>
         <translation>Keisti raidžių dydį</translation>
@@ -128,12 +138,37 @@
         <translation>Nėra</translation>
     </message>
     <message>
+        <location filename="../src/dtextedit.cpp" line="808"/>
+        <source>Selected line(s) copied</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="814"/>
+        <source>Current line copied</source>
+        <translation>Dabartinė eilutė nukopijuota</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="853"/>
+        <source>Selected line(s) clipped</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="859"/>
+        <source>Current line clipped</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../src/dtextedit.cpp" line="2204"/>
         <source>Read-Only mode is off</source>
         <translation>Tik skaitymo veiksena yra išjungta</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2208"/>
+        <source>Read-Only mode is on</source>
+        <translation>Tik skaitymo veiksena yra įjungta</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="2493"/>
         <source>Read-Only mode is on</source>
         <translation>Tik skaitymo veiksena yra įjungta</translation>
     </message>
@@ -166,6 +201,46 @@
         <source>R/O</source>
         <translation>TIK SKAITYMUI</translation>
     </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="300"/>
+        <source>Encoding changed. Do you want to save the file now?</source>
+        <translation>Pasikeitė koduotė. Ar norite dabar įrašyti failą?</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="303"/>
+        <source>Cancel</source>
+        <translation>Atsisakyti</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="332"/>
+        <source>Save</source>
+        <translation>Įrašyti</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="304"/>
+        <source>Save</source>
+        <translation>Įrašyti</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="445"/>
+        <source>Save</source>
+        <translation>Įrašyti</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="493"/>
+        <source>There are errors when using this encoding. If continue, the file contents may be changed</source>
+        <translation>Naudojant šią koduotę, atsirado klaidų. Jei tęsite, failo turinys gali pasikeisti</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="496"/>
+        <source>Cancel</source>
+        <translation>Atsisakyti</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="497"/>
+        <source>Continue</source>
+        <translation>Tęsti</translation>
+    </message>
 </context>
 <context>
     <name>FindBar</name>
@@ -197,21 +272,26 @@
     <name>MainWindow</name>
     <message>
         <location filename="../src/main.cpp" line="50"/>
-        <source>Deepin Editor is a desktop text editor that supports common text editing features.</source>
-        <translation>Deepin redaktorius yra darbalaukio tekstų redaktorius, kuris palaiko įprastas tekstų redagavimo ypatybes.</translation>
+        <source>Text Editor is a powerful tool for viewing and editing text files.</source>
+        <translation>Tekstų redaktorius yra galingas įrankis, skirtas rodyti ir redaguoti tekstinius failus.</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="62"/>
-        <source>Deepin Editor</source>
-        <translation>Deepin redaktorius</translation>
+        <source>Text Editor</source>
+        <translation>Tekstų redaktorius</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
+        <location filename="../src/startmanager.cpp" line="241"/>
+        <source>File not saved</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../src/main.cpp" line="59"/>
-        <source>Deepin Editor</source>
-        <translation>Deepin redaktorius</translation>
+        <source>Text Editor</source>
+        <translation>Tekstų redaktorius</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="24"/>
@@ -345,6 +425,11 @@
         <location filename="../src/settingsdialog.cpp" line="45"/>
         <source>Toggle fullscreen</source>
         <translation>Perjungti visą ekraną</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="45"/>
+        <source>Help</source>
+        <translation>Žinynas</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="46"/>
@@ -621,13 +706,13 @@
     <name>ReplaceBar</name>
     <message>
         <location filename="../src/replacebar.cpp" line="37"/>
-        <source>Replace: </source>
-        <translation>Pakeisti: </translation>
+        <source>Find</source>
+        <translation>Rasti</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="39"/>
-        <source>With: </source>
-        <translation>Kuo: </translation>
+        <source>Replace With</source>
+        <translation>Kuo pakeisti</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="41"/>
@@ -692,9 +777,9 @@
     </message>
 </context>
 <context>
-    <name>Toast</name>
+    <name>WarningNotices</name>
     <message>
-        <location filename="../src/widgets/toast.cpp" line="38"/>
+        <location filename="../src/warningnotices.cpp" line="9"/>
         <source>Reload</source>
         <translation>Įkelti iš naujo</translation>
     </message>
@@ -717,7 +802,6 @@
         <translation>Atverti failą</translation>
     </message>
     <message>
-        <location filename="../src/widgets/toast.cpp" line="39"/>
         <location filename="../src/window.cpp" line="179"/>
         <source>Save as</source>
         <translation>Įrašyti kaip</translation>
@@ -750,6 +834,7 @@
     </message>
     <message>
         <location filename="../src/window.cpp" line="182"/>
+        <location filename="../src/window.cpp" line="1249"/>
         <source>Settings</source>
         <translation>Nustatymai</translation>
     </message>
@@ -764,10 +849,7 @@
         <translation>Neteisingas failas: %1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="365"/>
-        <location filename="../src/window.cpp" line="598"/>
-        <location filename="../src/window.cpp" line="1020"/>
-        <location filename="../src/window.cpp" line="1383"/>
+        <location filename="../src/window.cpp" line="739"/>
         <source>Save File</source>
         <translation>Įrašyti failą</translation>
     </message>
@@ -789,7 +871,7 @@
         <translation>Eilučių pabaigos</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="922"/>
+        <location filename="../src/window.cpp" line="1231"/>
         <source>Editor</source>
         <translation>Redaktorius</translation>
     </message>
@@ -797,11 +879,6 @@
         <location filename="../src/window.cpp" line="535"/>
         <source>You do not have permission to save %1</source>
         <translation>Jūs neturite leidimo įrašyti %1</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="568"/>
-        <source>Unable to save the file</source>
-        <translation>Nepavyko įrašyti failo</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="568"/>
@@ -816,8 +893,13 @@
     </message>
     <message>
         <location filename="../src/window.cpp" line="979"/>
-        <source>Blank document %1</source>
-        <translation>Tuščias dokumentas %1</translation>
+        <source>Untitled %1</source>
+        <translation>Be pavadinimo %1</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="1121"/>
+        <source>Current location remembered</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1310"/>

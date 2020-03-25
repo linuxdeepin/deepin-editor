@@ -102,6 +102,16 @@
         <translation>Togol ulasan</translation>
     </message>
     <message>
+        <location filename="../src/dtextedit.cpp" line="121"/>
+        <source>Text to Speech</source>
+        <translation>Teks ke Pertuturan</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="122"/>
+        <source>Speech to Text</source>
+        <translation>Pertuturan ke Teks</translation>
+    </message>
+    <message>
         <location filename="../src/dtextedit.cpp" line="142"/>
         <source>Change Case</source>
         <translation>Ubah Kata</translation>
@@ -128,12 +138,37 @@
         <translation>Tiada</translation>
     </message>
     <message>
+        <location filename="../src/dtextedit.cpp" line="808"/>
+        <source>Selected line(s) copied</source>
+        <translation>Baris terpilih disalin</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="814"/>
+        <source>Current line copied</source>
+        <translation>Baris semasa disalin</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="853"/>
+        <source>Selected line(s) clipped</source>
+        <translation>Baris terpilih dikerat</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="859"/>
+        <source>Current line clipped</source>
+        <translation>Baris semasa dikerat</translation>
+    </message>
+    <message>
         <location filename="../src/dtextedit.cpp" line="2204"/>
         <source>Read-Only mode is off</source>
         <translation>Mod Baca-Sahaja dimatikan</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2208"/>
+        <source>Read-Only mode is on</source>
+        <translation>Mod Baca-Sahaja dihidupkan</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="2493"/>
         <source>Read-Only mode is on</source>
         <translation>Mod Baca-Sahaja dihidupkan</translation>
     </message>
@@ -166,6 +201,46 @@
         <source>R/O</source>
         <translation>R/O</translation>
     </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="300"/>
+        <source>Encoding changed. Do you want to save the file now?</source>
+        <translation>Pengekodan berubah. Anda mahu menyimpan fail sekarang?</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="303"/>
+        <source>Cancel</source>
+        <translation>Batal</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="332"/>
+        <source>Save</source>
+        <translation>Simpan</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="304"/>
+        <source>Save</source>
+        <translation>Simpan</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="445"/>
+        <source>Save</source>
+        <translation>Simpan</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="493"/>
+        <source>There are errors when using this encoding. If continue, the file contents may be changed</source>
+        <translation>Terdapat ralat ketika menggunakan pengekodan ini. Jika diteruskan, kandungan fail mungkin berubah</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="496"/>
+        <source>Cancel</source>
+        <translation>Batal</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="497"/>
+        <source>Continue</source>
+        <translation>Teruskan</translation>
+    </message>
 </context>
 <context>
     <name>FindBar</name>
@@ -197,21 +272,26 @@
     <name>MainWindow</name>
     <message>
         <location filename="../src/main.cpp" line="50"/>
-        <source>Deepin Editor is a desktop text editor that supports common text editing features.</source>
-        <translation>Penyunting Deepin ialah penyunting teks desktop yang menyokong fitur-fitur penyuntingan teks.</translation>
+        <source>Text Editor is a powerful tool for viewing and editing text files.</source>
+        <translation>Penyunting Teks ialah sebuah alat melihat dan menyunting fail teks yang hebat.</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="62"/>
-        <source>Deepin Editor</source>
-        <translation>Penyunting Deepin</translation>
+        <source>Text Editor</source>
+        <translation>Penyunting Teks</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
+        <location filename="../src/startmanager.cpp" line="241"/>
+        <source>File not saved</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../src/main.cpp" line="59"/>
-        <source>Deepin Editor</source>
-        <translation>Penyunting Deepin</translation>
+        <source>Text Editor</source>
+        <translation>Penyunting Teks</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="24"/>
@@ -257,12 +337,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="57"/>
         <source>Forward character</source>
-        <translation>Maju aksara</translation>
+        <translation>Aksara maju</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="58"/>
         <source>Backward character</source>
-        <translation>Undur aksara</translation>
+        <translation>Aksara undur</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="91"/>
@@ -345,6 +425,11 @@
         <location filename="../src/settingsdialog.cpp" line="45"/>
         <source>Toggle fullscreen</source>
         <translation>Togol skrin penuh</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="45"/>
+        <source>Help</source>
+        <translation>Bantuan</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="46"/>
@@ -621,13 +706,13 @@
     <name>ReplaceBar</name>
     <message>
         <location filename="../src/replacebar.cpp" line="37"/>
-        <source>Replace: </source>
-        <translation>Ganti:</translation>
+        <source>Find</source>
+        <translation>Cari</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="39"/>
-        <source>With: </source>
-        <translation>Dengan:</translation>
+        <source>Replace With</source>
+        <translation>Ganti Dengan</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="41"/>
@@ -692,9 +777,9 @@
     </message>
 </context>
 <context>
-    <name>Toast</name>
+    <name>WarningNotices</name>
     <message>
-        <location filename="../src/widgets/toast.cpp" line="38"/>
+        <location filename="../src/warningnotices.cpp" line="9"/>
         <source>Reload</source>
         <translation>Muat Semula</translation>
     </message>
@@ -717,7 +802,6 @@
         <translation>Buka fail</translation>
     </message>
     <message>
-        <location filename="../src/widgets/toast.cpp" line="39"/>
         <location filename="../src/window.cpp" line="179"/>
         <source>Save as</source>
         <translation>Simpan sebagai</translation>
@@ -750,6 +834,7 @@
     </message>
     <message>
         <location filename="../src/window.cpp" line="182"/>
+        <location filename="../src/window.cpp" line="1249"/>
         <source>Settings</source>
         <translation>Tetapan</translation>
     </message>
@@ -764,10 +849,7 @@
         <translation>Fail tidak sah: %1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="365"/>
-        <location filename="../src/window.cpp" line="598"/>
-        <location filename="../src/window.cpp" line="1020"/>
-        <location filename="../src/window.cpp" line="1383"/>
+        <location filename="../src/window.cpp" line="739"/>
         <source>Save File</source>
         <translation>Simpan Fail</translation>
     </message>
@@ -789,7 +871,7 @@
         <translation>Penghujung Baris</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="922"/>
+        <location filename="../src/window.cpp" line="1231"/>
         <source>Editor</source>
         <translation>Penyunting</translation>
     </message>
@@ -797,11 +879,6 @@
         <location filename="../src/window.cpp" line="535"/>
         <source>You do not have permission to save %1</source>
         <translation>Anda tidak mempunyai keizinan untuk menyimpan %1</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="568"/>
-        <source>Unable to save the file</source>
-        <translation>Tidak boleh menyimpan fail</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="568"/>
@@ -816,8 +893,13 @@
     </message>
     <message>
         <location filename="../src/window.cpp" line="979"/>
-        <source>Blank document %1</source>
-        <translation>Dokumen kosong %1</translation>
+        <source>Untitled %1</source>
+        <translation>%1 Tidak Bertajuk</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="1121"/>
+        <source>Current location remembered</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1310"/>
