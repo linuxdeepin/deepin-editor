@@ -246,8 +246,8 @@
     <name>FindBar</name>
     <message>
         <location filename="../src/findbar.cpp" line="37"/>
-        <source>Find: </source>
-        <translation>查找：</translation>
+        <source>Find</source>
+        <translation>查找</translation>
     </message>
     <message>
         <location filename="../src/findbar.cpp" line="39"/>
