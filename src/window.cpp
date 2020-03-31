@@ -697,6 +697,9 @@ bool Window::saveFile()
         //return saveAsFile();
 
         const QString &new_path = saveBlankFileToDisk();
+        if(new_path.isEmpty()){
+            return false;
+        }
         if (!new_path.isEmpty()) {
             QFileInfo info(new_path);
             // 为空文件更新保存后的标签名称，以及其对应的文件路径
@@ -838,6 +841,13 @@ QString Window::saveBlankFileToDisk()
         const QString newFilePath = dialog.selectedFiles().value(0);
         //const QFileInfo newFileInfo(newFilePath);
         EditWrapper::EndOfLineMode eol = EditWrapper::eolUnix;
+
+        QString strSaveFileName = dialog.selectedFiles().value(0);
+        QFileInfo fileInnfo(strSaveFileName);
+        if(strSaveFileName.length()>255){
+           // DMessageManager::instance()->sendMessage(this, QIcon(":/images/warning.svg"), QString(tr("File name is too long to save")));
+            return QString();
+        }
 
         if (endOfLine == "Windows") {
             eol = EditWrapper::eolDos;
