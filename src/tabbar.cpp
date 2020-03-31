@@ -311,6 +311,10 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
                 m_closeTabAction = new QAction(tr("Close tab"), this);
                 m_closeOtherTabAction = new QAction(tr("Close other tabs"), this);
 
+                if(m_tabPaths.length()<2)
+                {
+                    m_closeOtherTabAction->setEnabled(false);
+                }
                 connect(m_closeTabAction, &QAction::triggered, this, [=] {
                     Q_EMIT tabCloseRequested(m_rightClickTab);
                 });
