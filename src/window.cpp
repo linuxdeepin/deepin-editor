@@ -842,13 +842,6 @@ QString Window::saveBlankFileToDisk()
         //const QFileInfo newFileInfo(newFilePath);
         EditWrapper::EndOfLineMode eol = EditWrapper::eolUnix;
 
-        QString strSaveFileName = dialog.selectedFiles().value(0);
-        QFileInfo fileInnfo(strSaveFileName);
-        if(strSaveFileName.length()>255){
-           // DMessageManager::instance()->sendMessage(this, QIcon(":/images/warning.svg"), QString(tr("File name is too long to save")));
-            return QString();
-        }
-
         if (endOfLine == "Windows") {
             eol = EditWrapper::eolDos;
         } else if (endOfLine == "Mac OS") {
