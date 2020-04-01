@@ -112,6 +112,11 @@
         <translation>语音听写</translation>
     </message>
     <message>
+        <location filename="../src/dtextedit.cpp" line="123"/>
+        <source>Translate</source>
+        <translation>文本翻译</translation>
+    </message>
+    <message>
         <location filename="../src/dtextedit.cpp" line="142"/>
         <source>Change Case</source>
         <translation>切换大小写</translation>

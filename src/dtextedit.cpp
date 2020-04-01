@@ -121,6 +121,7 @@ TextEdit::TextEdit(QWidget *parent)
     m_toggleCommentAction = new QAction(tr("Toggle comment"), this);
     m_voiceReadingAction = new QAction(tr("Text to Speech"),this);
     m_dictationAction = new QAction(tr("Speech to Text"),this);
+    m_translateAction = new QAction(tr("Translate"),this);
 
     connect(m_rightMenu, &DMenu::aboutToHide, this, &TextEdit::removeHighlightWordUnderCursor);
     connect(m_undoAction, &QAction::triggered, this, &TextEdit::undo);
@@ -141,6 +142,7 @@ TextEdit::TextEdit(QWidget *parent)
     connect(m_toggleCommentAction, &QAction::triggered, this, &TextEdit::toggleComment);
     connect(m_voiceReadingAction, &QAction::triggered, this, &TextEdit::slot_voiceReading);
     connect(m_dictationAction, &QAction::triggered, this, &TextEdit::slot_dictation);
+    connect(m_translateAction, &QAction::triggered, this, &TextEdit::slot_translate);
 
 
     // Init convert case sub menu.
@@ -2181,6 +2183,11 @@ void TextEdit::slot_dictation()
     QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.SpeechToText");
 }
 
+void TextEdit::slot_translate()
+{
+    QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.TextToTranslate");
+}
+
 QString TextEdit::getWordAtCursor()
 {
     if (toPlainText().isEmpty()) {
@@ -2848,8 +2855,7 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
     if (voiceReadingStateRet.isValid()) {
         voiceReadingState = voiceReadingStateRet.value();
     }
-    if (textCursor().hasSelection()&&voiceReadingState)
-    {
+    if (textCursor().hasSelection()&&voiceReadingState) {
         m_voiceReadingAction->setEnabled(true);
     }
 
@@ -2865,6 +2871,12 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
         dictationState = dictationStateRet.value();
     }
     m_dictationAction->setEnabled(dictationState);
+
+    m_rightMenu->addAction(m_translateAction);
+    m_translateAction->setEnabled(false);
+    if(textCursor().hasSelection()){
+        m_translateAction->setEnabled(true);
+    }
 
     m_rightMenu->exec(event->globalPos());
 }

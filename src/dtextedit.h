@@ -212,6 +212,7 @@ public slots:
 
     void slot_voiceReading();
     void slot_dictation();
+    void slot_translate();
 
     void upcaseWord();
     void downcaseWord();
@@ -284,6 +285,7 @@ private:
     QAction *m_toggleCommentAction;
     QAction *m_voiceReadingAction;
     QAction *m_dictationAction;
+    QAction *m_translateAction;
 
     DMenu *m_convertCaseMenu;
     QAction *m_upcaseAction;

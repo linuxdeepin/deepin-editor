@@ -112,6 +112,11 @@
         <translation>Speech to Text</translation>
     </message>
     <message>
+        <location filename="../src/dtextedit.cpp" line="123"/>
+        <source>Translate</source>
+        <translation>Translate</translation>
+    </message>
+    <message>
         <location filename="../src/dtextedit.cpp" line="142"/>
         <source>Change Case</source>
         <translation>Change Case</translation>
