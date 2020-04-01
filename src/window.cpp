@@ -1024,6 +1024,10 @@ void Window::popupReplaceBar()
 
 void Window::popupJumpLineBar()
 {
+    EditWrapper *curWrapper = currentWrapper();
+    if(curWrapper->textEditor()->toPlainText().isEmpty()){
+        return;
+    }
     if (m_jumpLineBar->isVisible()) {
         if (m_jumpLineBar->isFocus()) {
             QTimer::singleShot(0, m_wrappers.value(m_tabbar->currentPath())->textEditor(), SLOT(setFocus()));
