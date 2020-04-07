@@ -2874,8 +2874,18 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
 
     m_rightMenu->addAction(m_translateAction);
     m_translateAction->setEnabled(false);
-    if(textCursor().hasSelection()){
-        m_translateAction->setEnabled(true);
+    bool translateState = false;
+    QDBusMessage translateReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
+                                                      "/aiassistant/trans",
+                                                      "com.iflytek.aiassistant.trans",
+                                                      "getTransEnable");
+
+    QDBusReply<bool> translateStateRet = QDBusConnection::sessionBus().call(translateReadingMsg, QDBus::BlockWithGui);
+    if (translateStateRet.isValid()) {
+        translateState = translateStateRet.value();
+    }
+    if (textCursor().hasSelection()&&translateState) {
+        m_translateAction->setEnabled(translateState);
     }
 
     m_rightMenu->exec(event->globalPos());
