@@ -18,7 +18,7 @@
     </message>
 </context>
 <context>
-    <name>DTextEdit</name>
+    <name>TextEdit</name>
     <message>
         <location filename="../src/dtextedit.cpp" line="105"/>
         <source>Undo</source>
@@ -110,6 +110,11 @@
         <location filename="../src/dtextedit.cpp" line="122"/>
         <source>Speech to Text</source>
         <translation>Voz em Texto</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="123"/>
+        <source>Translate</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="142"/>
@@ -273,12 +278,12 @@
     <message>
         <location filename="../src/main.cpp" line="50"/>
         <source>Text Editor is a powerful tool for viewing and editing text files.</source>
-        <translation>O Editor de Texto é uma ferramenta poderosa para visualizar e editar arquivos de texto.</translation>
+        <translation>O Editor de Textos é uma ferramenta poderosa para visualizar e editar arquivos de texto.</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="62"/>
         <source>Text Editor</source>
-        <translation>Editor de Texto</translation>
+        <translation>Editor de Textos</translation>
     </message>
 </context>
 <context>
@@ -286,12 +291,12 @@
     <message>
         <location filename="../src/startmanager.cpp" line="241"/>
         <source>File not saved</source>
-        <translation type="unfinished"/>
+        <translation>Arquivo não salvo</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="59"/>
         <source>Text Editor</source>
-        <translation>Editor de Texto</translation>
+        <translation>Editor de Textos</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="24"/>
@@ -474,7 +479,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="54"/>
         <source>Editor</source>
-        <translation>Editor de Texto</translation>
+        <translation>Editor de Textos</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="55"/>
@@ -873,7 +878,7 @@
     <message>
         <location filename="../src/window.cpp" line="1231"/>
         <source>Editor</source>
-        <translation>Editor de Texto</translation>
+        <translation>Editor de Textos</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="535"/>
@@ -899,7 +904,7 @@
     <message>
         <location filename="../src/window.cpp" line="1121"/>
         <source>Current location remembered</source>
-        <translation type="unfinished"/>
+        <translation>Lembrar o local atual</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1310"/>

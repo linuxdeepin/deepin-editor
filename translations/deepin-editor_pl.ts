@@ -18,7 +18,7 @@
     </message>
 </context>
 <context>
-    <name>DTextEdit</name>
+    <name>TextEdit</name>
     <message>
         <location filename="../src/dtextedit.cpp" line="105"/>
         <source>Undo</source>
@@ -109,6 +109,11 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="122"/>
         <source>Speech to Text</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="123"/>
+        <source>Translate</source>
         <translation type="unfinished"/>
     </message>
     <message>

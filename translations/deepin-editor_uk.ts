@@ -18,7 +18,7 @@
     </message>
 </context>
 <context>
-    <name>DTextEdit</name>
+    <name>TextEdit</name>
     <message>
         <location filename="../src/dtextedit.cpp" line="105"/>
         <source>Undo</source>
@@ -110,6 +110,11 @@
         <location filename="../src/dtextedit.cpp" line="122"/>
         <source>Speech to Text</source>
         <translation>Перетворення звуку на текст</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="123"/>
+        <source>Translate</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="142"/>
@@ -246,8 +251,8 @@
     <name>FindBar</name>
     <message>
         <location filename="../src/findbar.cpp" line="37"/>
-        <source>Find: </source>
-        <translation>Шукати:</translation>
+        <source>Find</source>
+        <translation>Шукати</translation>
     </message>
     <message>
         <location filename="../src/findbar.cpp" line="39"/>

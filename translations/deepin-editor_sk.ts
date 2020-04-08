@@ -18,7 +18,7 @@
     </message>
 </context>
 <context>
-    <name>DTextEdit</name>
+    <name>TextEdit</name>
     <message>
         <location filename="../src/dtextedit.cpp" line="105"/>
         <source>Undo</source>
@@ -69,7 +69,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="114"/>
         <source>Go to Line</source>
-        <translation>Ísť na riadok</translation>
+        <translation>?sť na riadok</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="115"/>
@@ -125,17 +125,17 @@
         <location filename="../src/dtextedit.cpp" line="196"/>
         <location filename="../src/widgets/bottombar.cpp" line="51"/>
         <source>None</source>
-        <translation>Nič</translation>
+        <translation>Ni?</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2204"/>
         <source>Read-Only mode is off</source>
-        <translation>Mód iba-čítanie je vypnutý</translation>
+        <translation>Mód iba-?ítanie je vypnutý</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2208"/>
         <source>Read-Only mode is on</source>
-        <translation>Mód iba-čítanie je zapnutý</translation>
+        <translation>Mód iba-?ítanie je zapnutý</translation>
     </message>
 </context>
 <context>
@@ -159,7 +159,7 @@
     <message>
         <location filename="../src/editwrapper.cpp" line="308"/>
         <source>OVERWRITE</source>
-        <translation>PREPÍSAŤ</translation>
+        <translation>PREP?SAŤ</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="311"/>
@@ -177,7 +177,7 @@
     <message>
         <location filename="../src/findbar.cpp" line="39"/>
         <source>Next</source>
-        <translation>Ďaľší</translation>
+        <translation>?aľší</translation>
     </message>
     <message>
         <location filename="../src/findbar.cpp" line="40"/>
@@ -190,7 +190,7 @@
     <message>
         <location filename="../src/jumplinebar.cpp" line="39"/>
         <source>Go to Line: </source>
-        <translation>Choď na riadok:</translation>
+        <translation>Cho? na riadok:</translation>
     </message>
 </context>
 <context>
@@ -221,7 +221,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="25"/>
         <source>Font Style</source>
-        <translation>Štýl písma</translation>
+        <translation>?týl písma</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="26"/>
@@ -384,7 +384,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="53"/>
         <source>Print</source>
-        <translation>Tlač</translation>
+        <translation>Tla?</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="54"/>
@@ -609,7 +609,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="101"/>
         <source>Advanced</source>
-        <translation>Pokročilé</translation>
+        <translation>Pokro?ilé</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="103"/>
@@ -637,7 +637,7 @@
     <message>
         <location filename="../src/replacebar.cpp" line="42"/>
         <source>Skip</source>
-        <translation>Preskočiť</translation>
+        <translation>Presko?iť</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="43"/>
@@ -725,7 +725,7 @@
     <message>
         <location filename="../src/window.cpp" line="180"/>
         <source>Print</source>
-        <translation>Tlač</translation>
+        <translation>Tla?</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="181"/>

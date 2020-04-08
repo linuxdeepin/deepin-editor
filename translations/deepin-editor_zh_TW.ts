@@ -18,7 +18,7 @@
     </message>
 </context>
 <context>
-    <name>DTextEdit</name>
+    <name>TextEdit</name>
     <message>
         <location filename="../src/dtextedit.cpp" line="105"/>
         <source>Undo</source>
@@ -110,6 +110,11 @@
         <location filename="../src/dtextedit.cpp" line="122"/>
         <source>Speech to Text</source>
         <translation>語音聽寫</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="123"/>
+        <source>Translate</source>
+        <translation>文字翻譯</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="142"/>
@@ -246,8 +251,8 @@
     <name>FindBar</name>
     <message>
         <location filename="../src/findbar.cpp" line="37"/>
-        <source>Find: </source>
-        <translation>尋找：</translation>
+        <source>Find</source>
+        <translation>尋找</translation>
     </message>
     <message>
         <location filename="../src/findbar.cpp" line="39"/>
@@ -286,7 +291,7 @@
     <message>
         <location filename="../src/startmanager.cpp" line="241"/>
         <source>File not saved</source>
-        <translation type="unfinished"/>
+        <translation>文件未儲存</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="59"/>
@@ -899,7 +904,7 @@
     <message>
         <location filename="../src/window.cpp" line="1121"/>
         <source>Current location remembered</source>
-        <translation type="unfinished"/>
+        <translation>已記住目前位置</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1310"/>

@@ -1,20 +1,20 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ms" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="fa" version="2.1">
 <context>
     <name>BottomBar</name>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="36"/>
         <source>Row</source>
-        <translation>Baris</translation>
+        <translation>سطر</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="37"/>
         <source>Column</source>
-        <translation>Lajur</translation>
+        <translation>ستون</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="38"/>
         <source>Characters %1</source>
-        <translation>Aksara %1</translation>
+        <translation>کاراکتر %1</translation>
     </message>
 </context>
 <context>
@@ -22,94 +22,94 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="105"/>
         <source>Undo</source>
-        <translation>Buat Asal</translation>
+        <translation>واچیدن</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="106"/>
         <source>Redo</source>
-        <translation>Buat Semula</translation>
+        <translation>مجدد</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="107"/>
         <source>Cut</source>
-        <translation>Potong</translation>
+        <translation>بریدن</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="108"/>
         <source>Copy</source>
-        <translation>Salin</translation>
+        <translation>کپی</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="109"/>
         <source>Paste</source>
-        <translation>Tampal</translation>
+        <translation>چسباندن</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="110"/>
         <source>Delete</source>
-        <translation>Padam</translation>
+        <translation>حذف</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="111"/>
         <source>Select All</source>
-        <translation>Pilih Semua</translation>
+        <translation>انتخاب همه</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="112"/>
         <location filename="../src/window.cpp" line="183"/>
         <source>Find</source>
-        <translation>Cari</translation>
+        <translation>یافتن</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="113"/>
         <location filename="../src/window.cpp" line="184"/>
         <source>Replace</source>
-        <translation>Ganti</translation>
+        <translation>جایگزین</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="114"/>
         <source>Go to Line</source>
-        <translation>Pergi ke Baris</translation>
+        <translation>برو به خط</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="115"/>
         <source>Turn on Read-Only mode</source>
-        <translation>Hidupkan mod Baca-Sahaja</translation>
+        <translation>روشن کردن حالت فقط خواندن</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="116"/>
         <source>Turn off Read-Only mode</source>
-        <translation>Matikan mod Baca-Sahaja</translation>
+        <translation>خاموش کردن حالت فقط خواندن</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="117"/>
         <source>Fullscreen</source>
-        <translation>Skrin Penuh</translation>
+        <translation>تمام صفحه</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="118"/>
         <source>Exit fullscreen</source>
-        <translation>Keluar dari skrin penuh</translation>
+        <translation>خروج از تمام صفحه</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="119"/>
         <source>Display in file manager</source>
-        <translation>Papar dalam pengurus fail</translation>
+        <translation>نمایش در مدیریت کننده فایل</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="120"/>
         <source>Toggle comment</source>
-        <translation>Togol ulasan</translation>
+        <translation>ضامن نظر</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="121"/>
         <source>Text to Speech</source>
-        <translation>Teks ke Pertuturan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="122"/>
         <source>Speech to Text</source>
-        <translation>Pertuturan ke Teks</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="123"/>
@@ -119,63 +119,63 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="142"/>
         <source>Change Case</source>
-        <translation>Ubah Kata</translation>
+        <translation>تغییر حالت</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="143"/>
         <source>Upper Case</source>
-        <translation>Huruf Besar</translation>
+        <translation>حالت بزرگ</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="144"/>
         <source>Lower Case</source>
-        <translation>Huruf Kecil</translation>
+        <translation>حالت کوچک</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="145"/>
         <source>Capitalize</source>
-        <translation>Huruf Besarkan</translation>
+        <translation>درشت نوشتن</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="196"/>
         <location filename="../src/widgets/bottombar.cpp" line="51"/>
         <source>None</source>
-        <translation>Tiada</translation>
+        <translation>هیچ یک</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="808"/>
         <source>Selected line(s) copied</source>
-        <translation>Baris terpilih disalin</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="814"/>
         <source>Current line copied</source>
-        <translation>Baris semasa disalin</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="853"/>
         <source>Selected line(s) clipped</source>
-        <translation>Baris terpilih dikerat</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="859"/>
         <source>Current line clipped</source>
-        <translation>Baris semasa dikerat</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2204"/>
         <source>Read-Only mode is off</source>
-        <translation>Mod Baca-Sahaja dimatikan</translation>
+        <translation>حالت فقط خواندن خاموش است</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2208"/>
         <source>Read-Only mode is on</source>
-        <translation>Mod Baca-Sahaja dihidupkan</translation>
+        <translation>حالت فقط خواندن روشن است</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2493"/>
         <source>Read-Only mode is on</source>
-        <translation>Mod Baca-Sahaja dihidupkan</translation>
+        <translation>حالت فقط خواندن روشن است</translation>
     </message>
 </context>
 <context>
@@ -183,23 +183,23 @@
     <message>
         <location filename="../src/editwrapper.cpp" line="259"/>
         <source>File has changed on disk. Reload?</source>
-        <translation>Fail telah berubah di dalam cakera. Muat semula?</translation>
+        <translation>فایل روی دیسک تغییر کرده است. بارگیری مجدد شود؟</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="262"/>
         <source>File removed on the disk. Save it now?</source>
-        <translation>Fail dalam cakera telah dibuang. Simpan ia sekarang?</translation>
+        <translation>فایل بر روی دیسک حذف شد. اکنون آن را ذخیره می کنید؟</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="305"/>
         <location filename="../src/widgets/bottombar.cpp" line="45"/>
         <source>INSERT</source>
-        <translation>SISIP</translation>
+        <translation>الحاق</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="308"/>
         <source>OVERWRITE</source>
-        <translation>TULISGANTI</translation>
+        <translation>بازنویسی</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="311"/>
@@ -209,42 +209,42 @@
     <message>
         <location filename="../src/editwrapper.cpp" line="300"/>
         <source>Encoding changed. Do you want to save the file now?</source>
-        <translation>Pengekodan berubah. Anda mahu menyimpan fail sekarang?</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="303"/>
         <source>Cancel</source>
-        <translation>Batal</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="332"/>
         <source>Save</source>
-        <translation>Simpan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="304"/>
         <source>Save</source>
-        <translation>Simpan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="445"/>
         <source>Save</source>
-        <translation>Simpan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="493"/>
         <source>There are errors when using this encoding. If continue, the file contents may be changed</source>
-        <translation>Terdapat ralat ketika menggunakan pengekodan ini. Jika diteruskan, kandungan fail mungkin berubah</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="496"/>
         <source>Cancel</source>
-        <translation>Batal</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="497"/>
         <source>Continue</source>
-        <translation>Teruskan</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -252,17 +252,17 @@
     <message>
         <location filename="../src/findbar.cpp" line="37"/>
         <source>Find: </source>
-        <translation>Cari:</translation>
+        <translation>یافتن:</translation>
     </message>
     <message>
         <location filename="../src/findbar.cpp" line="39"/>
         <source>Next</source>
-        <translation>Berikutnya</translation>
+        <translation>بعدی</translation>
     </message>
     <message>
         <location filename="../src/findbar.cpp" line="40"/>
         <source>Previous</source>
-        <translation>Terdahulu</translation>
+        <translation>قبلی</translation>
     </message>
 </context>
 <context>
@@ -270,7 +270,7 @@
     <message>
         <location filename="../src/jumplinebar.cpp" line="39"/>
         <source>Go to Line: </source>
-        <translation>Pergi ke Baris:</translation>
+        <translation>برو به خط:</translation>
     </message>
 </context>
 <context>
@@ -278,12 +278,12 @@
     <message>
         <location filename="../src/main.cpp" line="50"/>
         <source>Text Editor is a powerful tool for viewing and editing text files.</source>
-        <translation>Penyunting Teks ialah sebuah alat melihat dan menyunting fail teks yang hebat.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/main.cpp" line="62"/>
         <source>Text Editor</source>
-        <translation>Penyunting Teks</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -291,420 +291,420 @@
     <message>
         <location filename="../src/startmanager.cpp" line="241"/>
         <source>File not saved</source>
-        <translation>Fail tidak disimpan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/main.cpp" line="59"/>
         <source>Text Editor</source>
-        <translation>Penyunting Teks</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="24"/>
         <source>Basic</source>
-        <translation>Asas</translation>
+        <translation>ابتدایی</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="25"/>
         <source>Font Style</source>
-        <translation>Gaya Fon</translation>
+        <translation>سبک فونت</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="26"/>
         <source>Font</source>
-        <translation>Fon</translation>
+        <translation>فونت</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="27"/>
         <source>Font Size</source>
-        <translation>Saiz Fon</translation>
+        <translation>اندازه فونت</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="29"/>
         <location filename="../src/settingsdialog.cpp" line="30"/>
         <source>Keymap</source>
-        <translation>Peta Kunci</translation>
+        <translation>نقشه کلید</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="28"/>
         <source>Shortcuts</source>
-        <translation>Pintasan</translation>
+        <translation>میانبرها</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="42"/>
         <source>Increase font size</source>
-        <translation>Tingkatkan saiz fon</translation>
+        <translation>افزایش اندازه فونت</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="43"/>
         <source>Decrease font size</source>
-        <translation>Kurangkan saiz fon</translation>
+        <translation>کاهش اندازه فونت</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="57"/>
         <source>Forward character</source>
-        <translation>Aksara maju</translation>
+        <translation>کاراکتر جلو</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="58"/>
         <source>Backward character</source>
-        <translation>Aksara undur</translation>
+        <translation>کاراکتر عقب</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="91"/>
         <source>Transpose character</source>
-        <translation>Transposisi aksara</translation>
+        <translation>انتقال کاراکتر</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="104"/>
         <source>Tab width</source>
-        <translation>Lebar tab</translation>
+        <translation>عرض زبانه</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="106"/>
         <source>Word Wrap</source>
-        <translation>Lilit Perkataan</translation>
+        <translation>بسته بندی کلمه</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="31"/>
         <location filename="../src/settingsdialog.cpp" line="102"/>
         <location filename="../src/window.cpp" line="891"/>
         <source>Window</source>
-        <translation>Tetingkap</translation>
+        <translation>پنجره</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="32"/>
         <source>New tab</source>
-        <translation>Tab baharu</translation>
+        <translation>زبانه جدید</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="33"/>
         <source>New window</source>
-        <translation>Tetingkap baharu</translation>
+        <translation>پنجره جدید</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="34"/>
         <source>Save</source>
-        <translation>Simpan</translation>
+        <translation>ذخیره</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="35"/>
         <source>Save as</source>
-        <translation>Simpan sebagai</translation>
+        <translation>ذخیره به عنوان</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="36"/>
         <source>Next tab</source>
-        <translation>Tab berikutnya</translation>
+        <translation>زبانه بعدی</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="37"/>
         <source>Previous tab</source>
-        <translation>Tab terdahulu</translation>
+        <translation>زبانه قبلی</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="38"/>
         <source>Close tab</source>
-        <translation>Tutup tab</translation>
+        <translation>بستن زبانه</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="39"/>
         <source>Close other tabs</source>
-        <translation>Tutup tab lain</translation>
+        <translation>بستن بقیه زبانه ها</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="40"/>
         <source>Restore tab</source>
-        <translation>Pulihkan tab</translation>
+        <translation>بازیابی زبانه</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="41"/>
         <source>Open file</source>
-        <translation>Buka fail</translation>
+        <translation>باز کردن فایل</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="44"/>
         <source>Reset font size</source>
-        <translation>Tetap semula saiz fon</translation>
+        <translation>تنظیم مجدد اندازه فونت</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="45"/>
         <source>Toggle fullscreen</source>
-        <translation>Togol skrin penuh</translation>
+        <translation>ضامن تمام صفحه</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="45"/>
         <source>Help</source>
-        <translation>Bantuan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="46"/>
         <source>Find</source>
-        <translation>Cari</translation>
+        <translation>یافتن</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="47"/>
         <source>Replace</source>
-        <translation>Ganti</translation>
+        <translation>جایگزین</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="48"/>
         <source>Go to line</source>
-        <translation>Pergi ke baris</translation>
+        <translation>برو به خط</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="49"/>
         <source>Save cursor position</source>
-        <translation>Simpan kedudukan kursor</translation>
+        <translation>ذخیره موقعیت مکان نما </translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="50"/>
         <source>Reset cursor position</source>
-        <translation>Tetap semula kedudukan kursor</translation>
+        <translation>تنظیم مجدد موقعیت مکان نما</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="51"/>
         <source>Exit</source>
-        <translation>Keluar</translation>
+        <translation>خروج</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="52"/>
         <source>Display shortcuts</source>
-        <translation>Papar pintasan</translation>
+        <translation>نمایش میانبرها</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="53"/>
         <source>Print</source>
-        <translation>Cetak</translation>
+        <translation>چاپ</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="54"/>
         <source>Editor</source>
-        <translation>Penyunting</translation>
+        <translation>ویرایشگر</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="55"/>
         <source>Increase indent</source>
-        <translation>Tingkatkan inden</translation>
+        <translation>افزایش تورفتگی </translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="56"/>
         <source>Decrease indent</source>
-        <translation>Kurangkan inden</translation>
+        <translation>کاهش تورفتگی</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="59"/>
         <source>Forward word</source>
-        <translation>Maju perkataan</translation>
+        <translation>کلمه جلو</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="60"/>
         <source>Backward word</source>
-        <translation>Undur perkataan</translation>
+        <translation>کلمه عقب</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="61"/>
         <source>Next line</source>
-        <translation>Baris berikutnya</translation>
+        <translation>خط بعدی</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="62"/>
         <source>Previous line</source>
-        <translation>Baris terdahulu</translation>
+        <translation>خط قبلی</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="63"/>
         <source>New line</source>
-        <translation>Baris baharu</translation>
+        <translation>خط جدید</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="64"/>
         <source>New line above</source>
-        <translation>Baris baharu di atas</translation>
+        <translation>خط جدید بالا</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="65"/>
         <source>New line below</source>
-        <translation>Baris baharu di bawah</translation>
+        <translation>خط جدید پایین</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="66"/>
         <source>Duplicate line</source>
-        <translation>Gandakan baris</translation>
+        <translation>تکثیر خط</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="67"/>
         <source>Delete to end of line</source>
-        <translation>Padam ke penghujung baris</translation>
+        <translation>حذف تا انتهای خط</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="68"/>
         <source>Delete current line</source>
-        <translation>Padam baris semasa</translation>
+        <translation>حذف خط فعلی</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="69"/>
         <source>Swap line up</source>
-        <translation>Silih baris ke atas</translation>
+        <translation>تعویض خط بالا</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="70"/>
         <source>Swap line down</source>
-        <translation>Silih baris ke bawah</translation>
+        <translation>تعویض خط پایین</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="71"/>
         <source>Scroll up one line</source>
-        <translation>Tatal ke atas satu baris</translation>
+        <translation>پیمایش به یک خط بالا</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="72"/>
         <source>Scroll down one line</source>
-        <translation>Tatal ke bawah satu baris</translation>
+        <translation>پیمایش به یک خط پایین</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="73"/>
         <source>Page up</source>
-        <translation>Halaman ke atas</translation>
+        <translation>Page up</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="74"/>
         <source>Page down</source>
-        <translation>Halaman ke bawah</translation>
+        <translation>Page down</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="75"/>
         <source>Move to end of line</source>
-        <translation>Gerak ke penghujung baris</translation>
+        <translation>حرکت به انتهای خط</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="76"/>
         <source>Move to start of line</source>
-        <translation>Gerak ke permulaan baris</translation>
+        <translation>حرکت به ابتدای خط</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="77"/>
         <source>Move to end of text</source>
-        <translation>Gerak ke penghujung teks</translation>
+        <translation>انتقال به انتهای متن</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="78"/>
         <source>Move to start of text</source>
-        <translation>Gerak ke permulaan teks</translation>
+        <translation>انتقال به ابتدای متن</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="79"/>
         <source>Move to line indentation</source>
-        <translation>Alih ke indentasi baris</translation>
+        <translation>انتقال به تورفتگی متن</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="80"/>
         <source>Upper case</source>
-        <translation>Huruf besar</translation>
+        <translation>حالت بزرگ</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="81"/>
         <source>Lower case</source>
-        <translation>Huruf kecil</translation>
+        <translation>حالت کوچک</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="82"/>
         <source>Capitalize</source>
-        <translation>Huruf Besarkan</translation>
+        <translation>درشت نوشتن</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="83"/>
         <source>Delete backward word</source>
-        <translation>Padam perkataan mengundur</translation>
+        <translation>حذف کلمه عقب</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="84"/>
         <source>Delete forward word</source>
-        <translation>Padam perkataan ke hadapan</translation>
+        <translation>حذف کلمه جلو</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="85"/>
         <source>Forward over a pair</source>
-        <translation>Majukan melangkaui pasangan</translation>
+        <translation>جلو یک جفت</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="86"/>
         <source>Backward over a pair</source>
-        <translation>Undur melangkaui pasangan</translation>
+        <translation>عقب یک جفت</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="87"/>
         <source>Select all</source>
-        <translation>Pilih semua</translation>
+        <translation>انتخاب همه</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="88"/>
         <source>Copy</source>
-        <translation>Salin</translation>
+        <translation>کپی</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="89"/>
         <source>Cut</source>
-        <translation>Potong</translation>
+        <translation>بریدن</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="90"/>
         <source>Paste</source>
-        <translation>Tampal</translation>
+        <translation>چسباندن</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="92"/>
         <source>Mark</source>
-        <translation>Tanda</translation>
+        <translation>علامت</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="93"/>
         <source>Unmark</source>
-        <translation>Nyahtanda</translation>
+        <translation>بدون علامت</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="94"/>
         <source>Copy line</source>
-        <translation>Salin baris</translation>
+        <translation>کپی خط</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="95"/>
         <source>Cut line</source>
-        <translation>Potong baris</translation>
+        <translation>برش خط</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="96"/>
         <source>Merge lines</source>
-        <translation>Gabung baris</translation>
+        <translation>ادغام خطوط</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="97"/>
         <source>Read-Only mode</source>
-        <translation>Mod Baca-Sahaja</translation>
+        <translation>حالت فقط خواندن</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="98"/>
         <source>Toggle comment</source>
-        <translation>Togol ulasan</translation>
+        <translation>ضامن نظر</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="99"/>
         <source>Undo</source>
-        <translation>Buat Asal</translation>
+        <translation>واچیدن</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="100"/>
         <source>Redo</source>
-        <translation>Buat Semula</translation>
+        <translation>مجدد</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="101"/>
         <source>Advanced</source>
-        <translation>Lanjutan</translation>
+        <translation>پیشرفته</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="103"/>
         <source>Window size</source>
-        <translation>Saiz tetingkap</translation>
+        <translation>اندازه پنجره</translation>
     </message>
 </context>
 <context>
@@ -712,32 +712,32 @@
     <message>
         <location filename="../src/replacebar.cpp" line="37"/>
         <source>Find</source>
-        <translation>Cari</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="39"/>
         <source>Replace With</source>
-        <translation>Ganti Dengan</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="41"/>
         <source>Replace</source>
-        <translation>Ganti</translation>
+        <translation>جایگزین</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="42"/>
         <source>Skip</source>
-        <translation>Langkau</translation>
+        <translation>پرش</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="43"/>
         <source>Replace Rest</source>
-        <translation>Ganti Selebihnya</translation>
+        <translation>جایگزینی بقیه</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="44"/>
         <source>Replace All</source>
-        <translation>Ganti Semua</translation>
+        <translation>جایگزینی همه</translation>
     </message>
 </context>
 <context>
@@ -745,27 +745,27 @@
     <message>
         <location filename="../src/settings.cpp" line="80"/>
         <source>Standard</source>
-        <translation>Piawai</translation>
+        <translation>استاندارد</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="80"/>
         <source>Customize</source>
-        <translation>Suai</translation>
+        <translation>شخصی سازی</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="91"/>
         <source>Normal</source>
-        <translation>Biasa</translation>
+        <translation>طبیعی</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="91"/>
         <source>Maximum</source>
-        <translation>Maksimum</translation>
+        <translation>بیشترین</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="91"/>
         <source>Fullscreen</source>
-        <translation>Skrin Penuh</translation>
+        <translation>تمام صفحه</translation>
     </message>
 </context>
 <context>
@@ -773,12 +773,12 @@
     <message>
         <location filename="../src/tabbar.cpp" line="317"/>
         <source>Close tab</source>
-        <translation>Tutup tab</translation>
+        <translation>بستن زبانه</translation>
     </message>
     <message>
         <location filename="../src/tabbar.cpp" line="318"/>
         <source>Close other tabs</source>
-        <translation>Tutup tab lain</translation>
+        <translation>بستن بقیه زبانه ها</translation>
     </message>
 </context>
 <context>
@@ -786,7 +786,7 @@
     <message>
         <location filename="../src/warningnotices.cpp" line="9"/>
         <source>Reload</source>
-        <translation>Muat Semula</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -794,128 +794,128 @@
     <message>
         <location filename="../src/window.cpp" line="175"/>
         <source>New window</source>
-        <translation>Tetingkap baharu</translation>
+        <translation>پنجره جدید</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="176"/>
         <source>New tab</source>
-        <translation>Tab baharu</translation>
+        <translation>زبانه جدید</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="177"/>
         <source>Open file</source>
-        <translation>Buka fail</translation>
+        <translation>باز کردن فایل</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="179"/>
         <source>Save as</source>
-        <translation>Simpan sebagai</translation>
+        <translation>ذخیره به عنوان</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="180"/>
         <source>Print</source>
-        <translation>Cetak</translation>
+        <translation>چاپ</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="181"/>
         <source>Switch theme</source>
-        <translation>Tukar tema</translation>
+        <translation>تغییر تم</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="261"/>
         <location filename="../src/window.cpp" line="1339"/>
         <source>Read-Only</source>
-        <translation>Baca-Sahaja</translation>
+        <translation>فقط خواندنی</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="581"/>
         <source>Saved successfully</source>
-        <translation>Berjaya disimpan</translation>
+        <translation>با موفقیت ذخیره شد</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1311"/>
         <source>Discard</source>
-        <translation>Singkir</translation>
+        <translation>دور انداختن</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="182"/>
         <location filename="../src/window.cpp" line="1249"/>
         <source>Settings</source>
-        <translation>Tetapan</translation>
+        <translation>تنظیمات</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="289"/>
         <source>You do not have permission to open %1</source>
-        <translation>Anda tidak mempunyai keizinan untuk membuka %1</translation>
+        <translation>شما اجازه باز کردن %1 را ندارید</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="318"/>
         <source>Invalid file: %1</source>
-        <translation>Fail tidak sah: %1</translation>
+        <translation>فایل نامعتبر: %1</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="739"/>
         <source>Save File</source>
-        <translation>Simpan Fail</translation>
+        <translation>ذخیره فایل</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="365"/>
         <source>Do you want to save this file?</source>
-        <translation>Anda mahu menyimpan fail ini?</translation>
+        <translation>آیا می خواهید این فایل را ذخیره کنید؟</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="600"/>
         <location filename="../src/window.cpp" line="615"/>
         <source>Encoding</source>
-        <translation>Pengekodan</translation>
+        <translation>رمزگذاری</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="601"/>
         <location filename="../src/window.cpp" line="616"/>
         <source>Line Endings</source>
-        <translation>Penghujung Baris</translation>
+        <translation>خط پایان</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1231"/>
         <source>Editor</source>
-        <translation>Penyunting</translation>
+        <translation>ویرایشگر</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="535"/>
         <source>You do not have permission to save %1</source>
-        <translation>Anda tidak mempunyai keizinan untuk menyimpan %1</translation>
+        <translation>شما اجازه ذخیره %1 را ندارید</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="568"/>
         <source>Do you want to save as another?</source>
-        <translation>Anda mahu menyimpan sebagai yang lain?</translation>
+        <translation>آیا می خواهید با عنوان دیگری ذخیره کنید؟</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1020"/>
         <location filename="../src/window.cpp" line="1383"/>
         <source>Do you want to save all the files?</source>
-        <translation>Anda mahu menyimpan semua fail?</translation>
+        <translation>آیا می خواهید تمام فایل ها را ذخیره کنید؟</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="979"/>
         <source>Untitled %1</source>
-        <translation>%1 Tidak Bertajuk</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1121"/>
         <source>Current location remembered</source>
-        <translation>Lokasi semasa diingati</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1310"/>
         <source>Cancel</source>
-        <translation>Batal</translation>
+        <translation>لغو</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="178"/>
         <location filename="../src/window.cpp" line="1312"/>
         <source>Save</source>
-        <translation>Simpan</translation>
+        <translation>ذخیره</translation>
     </message>
 </context>
 </TS>

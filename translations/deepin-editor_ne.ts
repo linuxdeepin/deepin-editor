@@ -18,7 +18,7 @@
     </message>
 </context>
 <context>
-    <name>DTextEdit</name>
+    <name>TextEdit</name>
     <message>
         <location filename="../src/dtextedit.cpp" line="105"/>
         <source>Undo</source>
@@ -104,11 +104,16 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="121"/>
         <source>Text to Speech</source>
-        <translation type="unfinished"/>
+        <translation>टेक्स्ट तु स्पीच </translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="122"/>
         <source>Speech to Text</source>
+        <translation>स्पीच  तु  टेक्स्ट </translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="123"/>
+        <source>Translate</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -140,22 +145,22 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="808"/>
         <source>Selected line(s) copied</source>
-        <translation type="unfinished"/>
+        <translation>चयनित लाइन (हरू) प्रतिलिपि गरियो</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="814"/>
         <source>Current line copied</source>
-        <translation type="unfinished"/>
+        <translation>हालको लाइन प्रतिलिपि गरियो</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="853"/>
         <source>Selected line(s) clipped</source>
-        <translation type="unfinished"/>
+        <translation>चयनित लाइन (हरू) क्लिप गरियो</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="859"/>
         <source>Current line clipped</source>
-        <translation type="unfinished"/>
+        <translation>हालको लाइन क्लिप गरियो</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2204"/>
@@ -204,42 +209,42 @@
     <message>
         <location filename="../src/editwrapper.cpp" line="300"/>
         <source>Encoding changed. Do you want to save the file now?</source>
-        <translation type="unfinished"/>
+        <translation>एन्कोडिंग परिवर्तन भयो। के तपाईं अब फाईल बचत गर्न चाहानुहुन्छ?</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="303"/>
         <source>Cancel</source>
-        <translation type="unfinished"/>
+        <translation>रद्द गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="332"/>
         <source>Save</source>
-        <translation type="unfinished"/>
+        <translation>सुरक्षित गर्नु</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="304"/>
         <source>Save</source>
-        <translation type="unfinished"/>
+        <translation>सुरक्षित गर्नु</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="445"/>
         <source>Save</source>
-        <translation type="unfinished"/>
+        <translation>सुरक्षित गर्नु</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="493"/>
         <source>There are errors when using this encoding. If continue, the file contents may be changed</source>
-        <translation type="unfinished"/>
+        <translation>त्यहाँ ईन्कोडि this प्रयोग गर्दा त्रुटिहरू छन्। यदि जारी भने, फाइल सामग्री परिवर्तन गर्न सकिन्छ</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="496"/>
         <source>Cancel</source>
-        <translation type="unfinished"/>
+        <translation>रद्द गर्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="497"/>
         <source>Continue</source>
-        <translation type="unfinished"/>
+        <translation>Continue</translation>
     </message>
 </context>
 <context>
@@ -273,12 +278,12 @@
     <message>
         <location filename="../src/main.cpp" line="50"/>
         <source>Text Editor is a powerful tool for viewing and editing text files.</source>
-        <translation type="unfinished"/>
+        <translation>पाठ सम्पादक हेर्न र सम्पादन गर्न पाठ फाइलहरू एक शक्तिशाली उपकरण हो।</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="62"/>
         <source>Text Editor</source>
-        <translation type="unfinished"/>
+        <translation>पाठ सम्पादक</translation>
     </message>
 </context>
 <context>
@@ -286,12 +291,12 @@
     <message>
         <location filename="../src/startmanager.cpp" line="241"/>
         <source>File not saved</source>
-        <translation type="unfinished"/>
+        <translation>फाइल बचत भएन</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="59"/>
         <source>Text Editor</source>
-        <translation type="unfinished"/>
+        <translation>पाठ सम्पादक</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="24"/>
@@ -429,7 +434,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="45"/>
         <source>Help</source>
-        <translation type="unfinished"/>
+        <translation>मद्दत</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="46"/>
@@ -707,12 +712,12 @@
     <message>
         <location filename="../src/replacebar.cpp" line="37"/>
         <source>Find</source>
-        <translation type="unfinished"/>
+        <translation>खोज्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="39"/>
         <source>Replace With</source>
-        <translation type="unfinished"/>
+        <translation> संग बदल्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="41"/>
@@ -781,7 +786,7 @@
     <message>
         <location filename="../src/warningnotices.cpp" line="9"/>
         <source>Reload</source>
-        <translation type="unfinished"/>
+        <translation>पुन: लोड गर्नुहोस्</translation>
     </message>
 </context>
 <context>
@@ -894,12 +899,12 @@
     <message>
         <location filename="../src/window.cpp" line="979"/>
         <source>Untitled %1</source>
-        <translation type="unfinished"/>
+        <translation>शीर्षकविहिन% 1</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1121"/>
         <source>Current location remembered</source>
-        <translation type="unfinished"/>
+        <translation>हालको स्थान सम्झियो</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1310"/>

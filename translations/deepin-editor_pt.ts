@@ -18,7 +18,7 @@
     </message>
 </context>
 <context>
-    <name>DTextEdit</name>
+    <name>TextEdit</name>
     <message>
         <location filename="../src/dtextedit.cpp" line="105"/>
         <source>Undo</source>
@@ -104,12 +104,17 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="121"/>
         <source>Text to Speech</source>
-        <translation>Escreva para falar</translation>
+        <translation>Texto para voz</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="122"/>
         <source>Speech to Text</source>
         <translation>Falar para escrever</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="123"/>
+        <source>Translate</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="142"/>
@@ -129,7 +134,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="145"/>
         <source>Capitalize</source>
-        <translation>Colocar em maiúscula</translation>
+        <translation>Maiúsculas</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="196"/>
@@ -160,17 +165,17 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="2204"/>
         <source>Read-Only mode is off</source>
-        <translation>Modo de Apenas-Leitura está desligado</translation>
+        <translation>O modo de Apenas-Leitura está desligado</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2208"/>
         <source>Read-Only mode is on</source>
-        <translation>Modo de Apenas-Leitura está ligado</translation>
+        <translation>O modo de Apenas-Leitura está ligado</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2493"/>
         <source>Read-Only mode is on</source>
-        <translation>Modo de Apenas-Leitura está ligado</translation>
+        <translation>O modo de Apenas-Leitura está ligado</translation>
     </message>
 </context>
 <context>
@@ -199,7 +204,7 @@
     <message>
         <location filename="../src/editwrapper.cpp" line="311"/>
         <source>R/O</source>
-        <translation>R/O</translation>
+        <translation>A/L</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="300"/>
@@ -265,7 +270,7 @@
     <message>
         <location filename="../src/jumplinebar.cpp" line="39"/>
         <source>Go to Line: </source>
-        <translation>Ir para Linha:</translation>
+        <translation>Ir para linha:</translation>
     </message>
 </context>
 <context>
@@ -286,7 +291,7 @@
     <message>
         <location filename="../src/startmanager.cpp" line="241"/>
         <source>File not saved</source>
-        <translation type="unfinished"/>
+        <translation>Ficheiro não guardado</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="59"/>
@@ -301,7 +306,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="25"/>
         <source>Font Style</source>
-        <translation>Estilo de Fonte</translation>
+        <translation>Estilo de fonte</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="26"/>
@@ -311,18 +316,18 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="27"/>
         <source>Font Size</source>
-        <translation>Tamanho da Fonte</translation>
+        <translation>Tamanho da fonte</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="29"/>
         <location filename="../src/settingsdialog.cpp" line="30"/>
         <source>Keymap</source>
-        <translation>Esquema de Teclado</translation>
+        <translation>Esquema de teclado</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="28"/>
         <source>Shortcuts</source>
-        <translation>Teclas de Atalho</translation>
+        <translation>Teclas de atalho</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="42"/>
@@ -337,17 +342,17 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="57"/>
         <source>Forward character</source>
-        <translation>Avançar carácter</translation>
+        <translation>Avançar caracter</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="58"/>
         <source>Backward character</source>
-        <translation>Recuar carácter</translation>
+        <translation>Recuar caracter</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="91"/>
         <source>Transpose character</source>
-        <translation>Transpor carácter</translation>
+        <translation>Transpor caracter</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="104"/>
@@ -604,7 +609,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="82"/>
         <source>Capitalize</source>
-        <translation>Capitalizar</translation>
+        <translation>Maiúsculas</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="83"/>
@@ -727,12 +732,12 @@
     <message>
         <location filename="../src/replacebar.cpp" line="43"/>
         <source>Replace Rest</source>
-        <translation>Substituir Restantes</translation>
+        <translation>Substituir restantes</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="44"/>
         <source>Replace All</source>
-        <translation>Substituir Todos</translation>
+        <translation>Substituir todos</translation>
     </message>
 </context>
 <context>
@@ -740,7 +745,7 @@
     <message>
         <location filename="../src/settings.cpp" line="80"/>
         <source>Standard</source>
-        <translation>Padrão</translation>
+        <translation>Predefinição</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="80"/>
@@ -820,7 +825,7 @@
         <location filename="../src/window.cpp" line="261"/>
         <location filename="../src/window.cpp" line="1339"/>
         <source>Read-Only</source>
-        <translation>Apenas leitura</translation>
+        <translation>Apenas-Leitura</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="581"/>
@@ -851,7 +856,7 @@
     <message>
         <location filename="../src/window.cpp" line="739"/>
         <source>Save File</source>
-        <translation>Guardar Ficheiro</translation>
+        <translation>Guardar ficheiro</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="365"/>
@@ -899,7 +904,7 @@
     <message>
         <location filename="../src/window.cpp" line="1121"/>
         <source>Current location remembered</source>
-        <translation type="unfinished"/>
+        <translation>Localização atual memorizada</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1310"/>

@@ -18,7 +18,7 @@
     </message>
 </context>
 <context>
-    <name>DTextEdit</name>
+    <name>TextEdit</name>
     <message>
         <location filename="../src/dtextedit.cpp" line="105"/>
         <source>Undo</source>
@@ -104,11 +104,16 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="121"/>
         <source>Text to Speech</source>
-        <translation type="unfinished"/>
+        <translation>النص إلى الكلام</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="122"/>
         <source>Speech to Text</source>
+        <translation>الكلام إلى النص</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="123"/>
+        <source>Translate</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -140,22 +145,22 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="808"/>
         <source>Selected line(s) copied</source>
-        <translation type="unfinished"/>
+        <translation>تم نسخ الخط (الخطوط) المحدد</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="814"/>
         <source>Current line copied</source>
-        <translation type="unfinished"/>
+        <translation>تم نسخ السطر الحالي</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="853"/>
         <source>Selected line(s) clipped</source>
-        <translation type="unfinished"/>
+        <translation>تم قص الخط (الخطوط) المحدد</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="859"/>
         <source>Current line clipped</source>
-        <translation type="unfinished"/>
+        <translation>تم قص الخط المحدد</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2204"/>
@@ -204,7 +209,7 @@
     <message>
         <location filename="../src/editwrapper.cpp" line="300"/>
         <source>Encoding changed. Do you want to save the file now?</source>
-        <translation type="unfinished"/>
+        <translation>تم تغيير الترميز. هل تريد حفظ الملف الآن؟</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="303"/>
@@ -229,7 +234,7 @@
     <message>
         <location filename="../src/editwrapper.cpp" line="493"/>
         <source>There are errors when using this encoding. If continue, the file contents may be changed</source>
-        <translation type="unfinished"/>
+        <translation>هناك أخطاء عند استخدام هذا الترميز. في حالة المتابعة ، قد يتم تغيير محتويات الملف</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="496"/>
@@ -273,7 +278,7 @@
     <message>
         <location filename="../src/main.cpp" line="50"/>
         <source>Text Editor is a powerful tool for viewing and editing text files.</source>
-        <translation type="unfinished"/>
+        <translation>محرر النصوص هو أداة قوية لعرض وتحرير الملفات النصية.</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="62"/>
@@ -286,7 +291,7 @@
     <message>
         <location filename="../src/startmanager.cpp" line="241"/>
         <source>File not saved</source>
-        <translation type="unfinished"/>
+        <translation>لم يتم حفظ الملف</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="59"/>
@@ -899,7 +904,7 @@
     <message>
         <location filename="../src/window.cpp" line="1121"/>
         <source>Current location remembered</source>
-        <translation type="unfinished"/>
+        <translation>تم تذكر المكان الحالي</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1310"/>

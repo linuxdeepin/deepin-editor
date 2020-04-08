@@ -18,7 +18,7 @@
     </message>
 </context>
 <context>
-    <name>DTextEdit</name>
+    <name>TextEdit</name>
     <message>
         <location filename="../src/dtextedit.cpp" line="105"/>
         <source>Undo</source>
@@ -112,6 +112,11 @@
         <translation>Řeč na text</translation>
     </message>
     <message>
+        <location filename="../src/dtextedit.cpp" line="123"/>
+        <source>Translate</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../src/dtextedit.cpp" line="142"/>
         <source>Change Case</source>
         <translation>Změnit velikost písmen</translation>
@@ -129,7 +134,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="145"/>
         <source>Capitalize</source>
-        <translation>Kapitalizovat</translation>
+        <translation>Vše velkými písmeny</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="196"/>
@@ -145,7 +150,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="814"/>
         <source>Current line copied</source>
-        <translation>Nynější řádek zkopírován</translation>
+        <translation>Stávající řádek zkopírován</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="853"/>
@@ -155,7 +160,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="859"/>
         <source>Current line clipped</source>
-        <translation>Nynější řádek zkrácen</translation>
+        <translation>Stávající řádek zkrácen</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2204"/>
@@ -178,12 +183,12 @@
     <message>
         <location filename="../src/editwrapper.cpp" line="259"/>
         <source>File has changed on disk. Reload?</source>
-        <translation>Soubor na disku byl změněn. Nahrát znovu?</translation>
+        <translation>Soubor byl mezitím na disku změněn. Načíst znovu?</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="262"/>
         <source>File removed on the disk. Save it now?</source>
-        <translation>Soubor na disku byl odstraněn. Uložit jej nyní?</translation>
+        <translation>Soubor byl mezitím na disku odstraněn. Uložit ho nyní?</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="305"/>
@@ -286,7 +291,7 @@
     <message>
         <location filename="../src/startmanager.cpp" line="241"/>
         <source>File not saved</source>
-        <translation type="unfinished"/>
+        <translation>Soubor neuložen</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="59"/>
@@ -454,7 +459,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="50"/>
         <source>Reset cursor position</source>
-        <translation>Vrátit polohu ukazovátka na výchozí</translation>
+        <translation>Vrátit polohu kurzoru na výchozí</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="51"/>
@@ -559,12 +564,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="73"/>
         <source>Page up</source>
-        <translation>O stranu nahoru</translation>
+        <translation>O stránku nahoru</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="74"/>
         <source>Page down</source>
-        <translation>O stranu dolů</translation>
+        <translation>O stránku dolů</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="75"/>
@@ -604,7 +609,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="82"/>
         <source>Capitalize</source>
-        <translation>Kapitalizovat</translation>
+        <translation>Vše velkými písmeny</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="83"/>
@@ -614,7 +619,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="84"/>
         <source>Delete forward word</source>
-        <translation>Smazat slovo dopředu</translation>
+        <translation>Smazat slovo před kurzorem</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="85"/>
@@ -712,7 +717,7 @@
     <message>
         <location filename="../src/replacebar.cpp" line="39"/>
         <source>Replace With</source>
-        <translation>Nahradit</translation>
+        <translation>Nahradit za</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="41"/>
@@ -781,7 +786,7 @@
     <message>
         <location filename="../src/warningnotices.cpp" line="9"/>
         <source>Reload</source>
-        <translation>Nahrát znovu</translation>
+        <translation>Načíst znovu</translation>
     </message>
 </context>
 <context>
@@ -825,7 +830,7 @@
     <message>
         <location filename="../src/window.cpp" line="581"/>
         <source>Saved successfully</source>
-        <translation>Uloženo úspěšně</translation>
+        <translation>Úspěšně uloženo</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1311"/>
@@ -856,7 +861,7 @@
     <message>
         <location filename="../src/window.cpp" line="365"/>
         <source>Do you want to save this file?</source>
-        <translation>Chcete uložit tento soubor?</translation>
+        <translation>Chcete tento soubor uložit?</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="600"/>
@@ -899,7 +904,7 @@
     <message>
         <location filename="../src/window.cpp" line="1121"/>
         <source>Current location remembered</source>
-        <translation type="unfinished"/>
+        <translation>Stávající pozice zapamatována</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1310"/>
