@@ -108,11 +108,16 @@
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="122"/>
+        <source>Stop reading</source>
+        <translation>停止朗读</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="123"/>
         <source>Speech to Text</source>
         <translation>语音听写</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="123"/>
+        <location filename="../src/dtextedit.cpp" line="124"/>
         <source>Translate</source>
         <translation>文本翻译</translation>
     </message>

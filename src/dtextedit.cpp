@@ -120,6 +120,7 @@ TextEdit::TextEdit(QWidget *parent)
     m_openInFileManagerAction = new QAction(tr("Display in file manager"), this);
     m_toggleCommentAction = new QAction(tr("Toggle comment"), this);
     m_voiceReadingAction = new QAction(tr("Text to Speech"),this);
+    m_stopReadingAction = new QAction(tr("Stop reading"),this);
     m_dictationAction = new QAction(tr("Speech to Text"),this);
     m_translateAction = new QAction(tr("Translate"),this);
 
@@ -141,6 +142,7 @@ TextEdit::TextEdit(QWidget *parent)
     connect(m_openInFileManagerAction, &QAction::triggered, this, &TextEdit::clickOpenInFileManagerAction);
     connect(m_toggleCommentAction, &QAction::triggered, this, &TextEdit::toggleComment);
     connect(m_voiceReadingAction, &QAction::triggered, this, &TextEdit::slot_voiceReading);
+    connect(m_stopReadingAction, &QAction::triggered, this, &TextEdit::slot_stopReading);
     connect(m_dictationAction, &QAction::triggered, this, &TextEdit::slot_dictation);
     connect(m_translateAction, &QAction::triggered, this, &TextEdit::slot_translate);
 
@@ -2178,6 +2180,13 @@ void TextEdit::slot_voiceReading()
     emit signal_readingPath();
 }
 
+void TextEdit::slot_stopReading()
+{
+
+    QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
+}
+
+
 void TextEdit::slot_dictation()
 {
     QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.SpeechToText");
@@ -2843,8 +2852,27 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
         m_rightMenu->addAction(m_fullscreenAction);
     }
 
-    m_rightMenu->addAction(m_voiceReadingAction);
-    m_voiceReadingAction->setEnabled(false);
+    bool stopReadingState = false;
+    QDBusMessage stopReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
+                                                      "/aiassistant/tts",
+                                                      "com.iflytek.aiassistant.tts",
+                                                      "isTTSInWorking");
+
+    QDBusReply<bool> stopReadingStateRet = QDBusConnection::sessionBus().call(stopReadingMsg, QDBus::BlockWithGui);
+    if (stopReadingStateRet.isValid()) {
+        stopReadingState = stopReadingStateRet.value();
+    }
+    if(!stopReadingState){
+        m_rightMenu->addAction(m_voiceReadingAction);
+        m_voiceReadingAction->setEnabled(false);
+    }
+    else {
+        m_rightMenu->removeAction(m_voiceReadingAction);
+        m_rightMenu->addAction(m_stopReadingAction);
+	}
+
+
+
     bool voiceReadingState = false;
     QDBusMessage voiceReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
                                                       "/aiassistant/tts",

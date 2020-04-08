@@ -211,6 +211,7 @@ public slots:
     void cutWordUnderCursor();
 
     void slot_voiceReading();
+    void slot_stopReading();
     void slot_dictation();
     void slot_translate();
 
@@ -284,6 +285,7 @@ private:
     QAction *m_openInFileManagerAction;
     QAction *m_toggleCommentAction;
     QAction *m_voiceReadingAction;
+    QAction *m_stopReadingAction;
     QAction *m_dictationAction;
     QAction *m_translateAction;
 
