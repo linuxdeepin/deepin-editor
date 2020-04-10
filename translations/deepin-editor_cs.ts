@@ -107,6 +107,11 @@
         <translation>Text na řeč</translation>
     </message>
     <message>
+        <location filename="../src/dtextedit.cpp" line="121"/>
+        <source>Stop reading</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../src/dtextedit.cpp" line="122"/>
         <source>Speech to Text</source>
         <translation>Řeč na text</translation>
@@ -114,7 +119,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="123"/>
         <source>Translate</source>
-        <translation type="unfinished"/>
+        <translation>Přeložit</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="142"/>
@@ -251,8 +256,8 @@
     <name>FindBar</name>
     <message>
         <location filename="../src/findbar.cpp" line="37"/>
-        <source>Find: </source>
-        <translation>Najít:</translation>
+        <source>Find</source>
+        <translation>Najít</translation>
     </message>
     <message>
         <location filename="../src/findbar.cpp" line="39"/>

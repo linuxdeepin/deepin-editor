@@ -107,6 +107,11 @@
         <translation>Da testo a voce</translation>
     </message>
     <message>
+        <location filename="../src/dtextedit.cpp" line="121"/>
+        <source>Stop reading</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../src/dtextedit.cpp" line="122"/>
         <source>Speech to Text</source>
         <translation>Da voce a testo</translation>
@@ -114,7 +119,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="123"/>
         <source>Translate</source>
-        <translation type="unfinished"/>
+        <translation>Traduci</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="142"/>
@@ -209,7 +214,7 @@
     <message>
         <location filename="../src/editwrapper.cpp" line="300"/>
         <source>Encoding changed. Do you want to save the file now?</source>
-        <translation> 
+        <translation> 
 La codifica è cambiata. Vuoi salvare il file ora?</translation>
     </message>
     <message>
@@ -252,8 +257,8 @@ La codifica è cambiata. Vuoi salvare il file ora?</translation>
     <name>FindBar</name>
     <message>
         <location filename="../src/findbar.cpp" line="37"/>
-        <source>Find: </source>
-        <translation>Trova: </translation>
+        <source>Find</source>
+        <translation>Trova</translation>
     </message>
     <message>
         <location filename="../src/findbar.cpp" line="39"/>

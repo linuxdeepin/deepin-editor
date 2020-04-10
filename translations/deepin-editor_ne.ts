@@ -58,7 +58,7 @@
         <location filename="../src/dtextedit.cpp" line="112"/>
         <location filename="../src/window.cpp" line="183"/>
         <source>Find</source>
-        <translation>खोज्नुहोस</translation>
+        <translation>खोज्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="113"/>
@@ -105,6 +105,11 @@
         <location filename="../src/dtextedit.cpp" line="121"/>
         <source>Text to Speech</source>
         <translation>टेक्स्ट तु स्पीच </translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="121"/>
+        <source>Stop reading</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="122"/>
@@ -251,8 +256,8 @@
     <name>FindBar</name>
     <message>
         <location filename="../src/findbar.cpp" line="37"/>
-        <source>Find: </source>
-        <translation>खोज्नुहोस</translation>
+        <source>Find</source>
+        <translation>खोज्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/findbar.cpp" line="39"/>

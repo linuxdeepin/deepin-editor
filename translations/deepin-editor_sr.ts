@@ -107,6 +107,11 @@
         <translation>Текст у говор</translation>
     </message>
     <message>
+        <location filename="../src/dtextedit.cpp" line="121"/>
+        <source>Stop reading</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../src/dtextedit.cpp" line="122"/>
         <source>Speech to Text</source>
         <translation>Говор у текст</translation>
@@ -114,7 +119,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="123"/>
         <source>Translate</source>
-        <translation type="unfinished"/>
+        <translation>Преведи</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="142"/>

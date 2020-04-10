@@ -107,6 +107,11 @@
         <translation>語音朗讀</translation>
     </message>
     <message>
+        <location filename="../src/dtextedit.cpp" line="121"/>
+        <source>Stop reading</source>
+        <translation>停止朗讀</translation>
+    </message>
+    <message>
         <location filename="../src/dtextedit.cpp" line="122"/>
         <source>Speech to Text</source>
         <translation>語音聽寫</translation>

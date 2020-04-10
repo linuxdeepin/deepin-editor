@@ -107,6 +107,11 @@
         <translation>Texto a voz</translation>
     </message>
     <message>
+        <location filename="../src/dtextedit.cpp" line="121"/>
+        <source>Stop reading</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../src/dtextedit.cpp" line="122"/>
         <source>Speech to Text</source>
         <translation>Voz a texto</translation>
@@ -114,7 +119,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="123"/>
         <source>Translate</source>
-        <translation type="unfinished"/>
+        <translation>Traducir</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="142"/>
@@ -251,7 +256,7 @@
     <name>FindBar</name>
     <message>
         <location filename="../src/findbar.cpp" line="37"/>
-        <source>Find: </source>
+        <source>Find</source>
         <translation>Buscar</translation>
     </message>
     <message>

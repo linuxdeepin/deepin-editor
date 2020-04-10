@@ -42,7 +42,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="109"/>
         <source>Paste</source>
-        <translation>Yapı?tır</translation>
+        <translation>Yapıştır</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="110"/>
@@ -64,12 +64,12 @@
         <location filename="../src/dtextedit.cpp" line="113"/>
         <location filename="../src/window.cpp" line="184"/>
         <source>Replace</source>
-        <translation>De?i?tir</translation>
+        <translation>Değiştir</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="114"/>
         <source>Go to Line</source>
-        <translation>?u Satıra Git</translation>
+        <translation>Şu Satıra Git</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="115"/>
@@ -104,22 +104,27 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="121"/>
         <source>Text to Speech</source>
-        <translation>Yazıdan Konu?maya</translation>
+        <translation>Yazıdan Konuşmaya</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="121"/>
+        <source>Stop reading</source>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="122"/>
         <source>Speech to Text</source>
-        <translation>Konu?madan Yazıya</translation>
+        <translation>Konuşmadan Yazıya</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="123"/>
         <source>Translate</source>
-        <translation>?eviri</translation>
+        <translation>Çeviri</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="142"/>
         <source>Change Case</source>
-        <translation>Büyük Küçük Harfi De?i?tir</translation>
+        <translation>Büyük Küçük Harfi Değiştir</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="143"/>
@@ -183,12 +188,12 @@
     <message>
         <location filename="../src/editwrapper.cpp" line="259"/>
         <source>File has changed on disk. Reload?</source>
-        <translation>Disk üzerindeki dosya de?i?mi?. Yeniden yüklensin mi?</translation>
+        <translation>Disk üzerindeki dosya değişmiş. Yeniden yüklensin mi?</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="262"/>
         <source>File removed on the disk. Save it now?</source>
-        <translation>Dosya diskten silinmi?. ?imdi kaydetmek ister misiniz?</translation>
+        <translation>Dosya diskten silinmiş. Şimdi kaydetmek ister misiniz?</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="305"/>
@@ -199,7 +204,7 @@
     <message>
         <location filename="../src/editwrapper.cpp" line="308"/>
         <source>OVERWRITE</source>
-        <translation>?ZERİNE YAZ</translation>
+        <translation>ÜZERİNE YAZ</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="311"/>
@@ -209,7 +214,7 @@
     <message>
         <location filename="../src/editwrapper.cpp" line="300"/>
         <source>Encoding changed. Do you want to save the file now?</source>
-        <translation>Kodlama de?i?ti. Dosyayı ?imdi kaydetmek istiyor musunuz?</translation>
+        <translation>Kodlama değişti. Dosyayı şimdi kaydetmek istiyor musunuz?</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="303"/>
@@ -234,7 +239,7 @@
     <message>
         <location filename="../src/editwrapper.cpp" line="493"/>
         <source>There are errors when using this encoding. If continue, the file contents may be changed</source>
-        <translation>Bu kodlamada hatalar var. Devam edilirse, dosya içeri?i de?i?tirilebilir.</translation>
+        <translation>Bu kodlamada hatalar var. Devam edilirse, dosya içeriği değiştirilebilir.</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="496"/>
@@ -262,7 +267,7 @@
     <message>
         <location filename="../src/findbar.cpp" line="40"/>
         <source>Previous</source>
-        <translation>?nceki</translation>
+        <translation>Önceki</translation>
     </message>
 </context>
 <context>
@@ -270,7 +275,7 @@
     <message>
         <location filename="../src/jumplinebar.cpp" line="39"/>
         <source>Go to Line: </source>
-        <translation>?u Satıra Git:</translation>
+        <translation>Şu Satıra Git:</translation>
     </message>
 </context>
 <context>
@@ -322,7 +327,7 @@
         <location filename="../src/settingsdialog.cpp" line="29"/>
         <location filename="../src/settingsdialog.cpp" line="30"/>
         <source>Keymap</source>
-        <translation>Tu? E?le?mesi</translation>
+        <translation>Tuş Eşleşmesi</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="28"/>
@@ -347,17 +352,17 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="58"/>
         <source>Backward character</source>
-        <translation>?nceki karakter</translation>
+        <translation>Önceki karakter</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="91"/>
         <source>Transpose character</source>
-        <translation>Karakteri dönü?tür</translation>
+        <translation>Karakteri dönüştür</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="104"/>
         <source>Tab width</source>
-        <translation>Sekme geni?li?i</translation>
+        <translation>Sekme genişliği</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="106"/>
@@ -399,7 +404,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="37"/>
         <source>Previous tab</source>
-        <translation>?nceki sekme</translation>
+        <translation>Önceki sekme</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="38"/>
@@ -409,7 +414,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="39"/>
         <source>Close other tabs</source>
-        <translation>Di?er sekmeleri kapat</translation>
+        <translation>Diğer sekmeleri kapat</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="40"/>
@@ -444,12 +449,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="47"/>
         <source>Replace</source>
-        <translation>De?i?tir</translation>
+        <translation>Değiştir</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="48"/>
         <source>Go to line</source>
-        <translation>?u satıra git</translation>
+        <translation>Şu satıra git</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="49"/>
@@ -464,7 +469,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="51"/>
         <source>Exit</source>
-        <translation>?ıkı?</translation>
+        <translation>Çıkış</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="52"/>
@@ -499,7 +504,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="60"/>
         <source>Backward word</source>
-        <translation>?nceki sözcük</translation>
+        <translation>Önceki sözcük</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="61"/>
@@ -509,7 +514,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="62"/>
         <source>Previous line</source>
-        <translation>?nceki satır</translation>
+        <translation>Önceki satır</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="63"/>
@@ -519,7 +524,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="64"/>
         <source>New line above</source>
-        <translation>?ste yeni satır</translation>
+        <translation>Üste yeni satır</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="65"/>
@@ -544,12 +549,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="69"/>
         <source>Swap line up</source>
-        <translation>?stteki satır ile de?i?tir</translation>
+        <translation>Üstteki satır ile değiştir</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="70"/>
         <source>Swap line down</source>
-        <translation>Alttaki satır ile de?i?tir</translation>
+        <translation>Alttaki satır ile değiştir</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="71"/>
@@ -559,7 +564,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="72"/>
         <source>Scroll down one line</source>
-        <translation>Bir satır a?a?ı kaydır</translation>
+        <translation>Bir satır aşağı kaydır</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="73"/>
@@ -579,7 +584,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="76"/>
         <source>Move to start of line</source>
-        <translation>Satır ba?ına git</translation>
+        <translation>Satır başına git</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="77"/>
@@ -589,7 +594,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="78"/>
         <source>Move to start of text</source>
-        <translation>Metnin ba?ına git</translation>
+        <translation>Metnin başına git</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="79"/>
@@ -614,12 +619,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="83"/>
         <source>Delete backward word</source>
-        <translation>?nceki sözcü?ü sil</translation>
+        <translation>Önceki sözcüğü sil</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="84"/>
         <source>Delete forward word</source>
-        <translation>Sonraki sözcü?ü sil</translation>
+        <translation>Sonraki sözcüğü sil</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="85"/>
@@ -629,7 +634,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="86"/>
         <source>Backward over a pair</source>
-        <translation>?nceki çift</translation>
+        <translation>Önceki çift</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="87"/>
@@ -649,17 +654,17 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="90"/>
         <source>Paste</source>
-        <translation>Yapı?tır</translation>
+        <translation>Yapıştır</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="92"/>
         <source>Mark</source>
-        <translation>İ?aretle</translation>
+        <translation>İşaretle</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="93"/>
         <source>Unmark</source>
-        <translation>İ?areti kaldır</translation>
+        <translation>İşareti kaldır</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="94"/>
@@ -674,7 +679,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="96"/>
         <source>Merge lines</source>
-        <translation>Satırları birle?tir</translation>
+        <translation>Satırları birleştir</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="97"/>
@@ -699,7 +704,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="101"/>
         <source>Advanced</source>
-        <translation>Geli?mi?</translation>
+        <translation>Gelişmiş</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="103"/>
@@ -717,12 +722,12 @@
     <message>
         <location filename="../src/replacebar.cpp" line="39"/>
         <source>Replace With</source>
-        <translation>?ununla De?i?tir</translation>
+        <translation>Şununla Değiştir</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="41"/>
         <source>Replace</source>
-        <translation>De?i?tir</translation>
+        <translation>Değiştir</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="42"/>
@@ -732,12 +737,12 @@
     <message>
         <location filename="../src/replacebar.cpp" line="43"/>
         <source>Replace Rest</source>
-        <translation>Geri Kalanları De?i?tir</translation>
+        <translation>Geri Kalanları Değiştir</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="44"/>
         <source>Replace All</source>
-        <translation>Tümünü De?i?tir</translation>
+        <translation>Tümünü Değiştir</translation>
     </message>
 </context>
 <context>
@@ -750,7 +755,7 @@
     <message>
         <location filename="../src/settings.cpp" line="80"/>
         <source>Customize</source>
-        <translation>?zelle?tir</translation>
+        <translation>Özelleştir</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="91"/>
@@ -778,7 +783,7 @@
     <message>
         <location filename="../src/tabbar.cpp" line="318"/>
         <source>Close other tabs</source>
-        <translation>Di?er sekmeleri kapat</translation>
+        <translation>Diğer sekmeleri kapat</translation>
     </message>
 </context>
 <context>
@@ -819,7 +824,7 @@
     <message>
         <location filename="../src/window.cpp" line="181"/>
         <source>Switch theme</source>
-        <translation>Temayı de?i?tir</translation>
+        <translation>Temayı değiştir</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="261"/>
@@ -830,7 +835,7 @@
     <message>
         <location filename="../src/window.cpp" line="581"/>
         <source>Saved successfully</source>
-        <translation>Ba?arıyla kaydedildi</translation>
+        <translation>Başarıyla kaydedildi</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1311"/>
@@ -899,7 +904,7 @@
     <message>
         <location filename="../src/window.cpp" line="979"/>
         <source>Untitled %1</source>
-        <translation>Ba?lıksız %1</translation>
+        <translation>Başlıksız %1</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1121"/>

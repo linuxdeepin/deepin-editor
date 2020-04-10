@@ -107,17 +107,17 @@
         <translation>语音朗读</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="122"/>
+        <location filename="../src/dtextedit.cpp" line="121"/>
         <source>Stop reading</source>
         <translation>停止朗读</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="123"/>
+        <location filename="../src/dtextedit.cpp" line="122"/>
         <source>Speech to Text</source>
         <translation>语音听写</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="124"/>
+        <location filename="../src/dtextedit.cpp" line="123"/>
         <source>Translate</source>
         <translation>文本翻译</translation>
     </message>

@@ -107,6 +107,11 @@
         <translation>텍스트 음성 변환</translation>
     </message>
     <message>
+        <location filename="../src/dtextedit.cpp" line="121"/>
+        <source>Stop reading</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../src/dtextedit.cpp" line="122"/>
         <source>Speech to Text</source>
         <translation>음성 텍스트 변환</translation>
@@ -251,8 +256,8 @@
     <name>FindBar</name>
     <message>
         <location filename="../src/findbar.cpp" line="37"/>
-        <source>Find: </source>
-        <translation>찾기:</translation>
+        <source>Find</source>
+        <translation>찾기</translation>
     </message>
     <message>
         <location filename="../src/findbar.cpp" line="39"/>
