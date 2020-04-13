@@ -2290,6 +2290,11 @@ void TextEdit::toggleReadOnlyMode()
 
 void TextEdit::toggleComment()
 {
+    if (m_readOnlyMode) {
+        popupNotify(tr("Read-Only mode is on"));
+        return;
+    }
+
     const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());
 
     if (!def.filePath().isEmpty()) {
