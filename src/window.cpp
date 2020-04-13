@@ -1781,9 +1781,9 @@ void Window::resizeEvent(QResizeEvent *e)
         m_settings->settings->option("advance.window.window_height")->setValue(rect().height());
     }
 
-    m_findBar->resize(width() - 10, m_findBar->height());
+    m_findBar->resize(width() - 20, m_findBar->height());
     m_findBar->move(mapToGlobal(QPoint(10, height() - 60)));
-    m_replaceBar->resize(width() - 10, m_replaceBar->height());
+    m_replaceBar->resize(width() - 20, m_replaceBar->height());
     m_replaceBar->move(mapToGlobal(QPoint(10, height() - 60)));
 
     DMainWindow::resizeEvent(e);
