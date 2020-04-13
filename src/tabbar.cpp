@@ -39,7 +39,7 @@ Tabbar::Tabbar(QWidget *parent)
     setTabsClosable(true);
     setVisibleAddButton(true);
     setDragable(true);
-    setStartDragDistance(40);
+   // setStartDragDistance(40);
     setElideMode(Qt::ElideMiddle);
 
     setFocusPolicy(Qt::NoFocus);
