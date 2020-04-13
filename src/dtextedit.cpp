@@ -1292,6 +1292,10 @@ void TextEdit::updateFont()
 
 void TextEdit::replaceAll(const QString &replaceText, const QString &withText)
 {
+    if (m_readOnlyMode){
+        return;
+    }
+
     if (replaceText.isEmpty()) {
         return;
     }
@@ -1321,6 +1325,10 @@ void TextEdit::replaceAll(const QString &replaceText, const QString &withText)
 
 void TextEdit::replaceNext(const QString &replaceText, const QString &withText)
 {
+    if (m_readOnlyMode){
+        return;
+    }
+
     if (replaceText.isEmpty() ||
         !m_findHighlightSelection.cursor.hasSelection()) {
         // 无限替换的根源
@@ -1341,6 +1349,10 @@ void TextEdit::replaceNext(const QString &replaceText, const QString &withText)
 
 void TextEdit::replaceRest(const QString &replaceText, const QString &withText)
 {
+    if (m_readOnlyMode){
+        return;
+    }
+
     // If replace text is nothing, don't do replace action.
     if (replaceText.isEmpty()) {
         return;
@@ -1432,6 +1444,10 @@ bool TextEdit::highlightKeyword(QString keyword, int position)
 
 void TextEdit::updateCursorKeywordSelection(int position, bool findNext)
 {
+    if (m_readOnlyMode){
+        return;
+    }
+
     bool findOne = setCursorKeywordSeletoin(position, findNext);
 
     if (!findOne) {
@@ -1499,6 +1515,10 @@ bool TextEdit::updateKeywordSelections(QString keyword)
 
 void TextEdit::renderAllSelections()
 {
+    if (m_readOnlyMode){
+        return;
+    }
+
     QList<QTextEdit::ExtraSelection> selections;
 
 //    for (auto findMatch : m_findMatchSelections) {
