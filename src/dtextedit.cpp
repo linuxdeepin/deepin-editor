@@ -2632,6 +2632,10 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             toggleReadOnlyMode();
         } else if (key == "Shift+/" && e->modifiers() == Qt::ControlModifier) {
             e->ignore();
+        } else if (e->key() == Qt::Key_Control || e->key() == Qt::Key_Shift) {
+            e->ignore();
+        } else if (e->key() == Qt::Key_F11 || e->key() == Qt::Key_F5) {
+            e->ignore();
         } else if (e->modifiers() == Qt::NoModifier || e->modifiers() == Qt::KeypadModifier) {
             popupNotify(tr("Read-Only mode is on"));
         } else {
@@ -2707,8 +2711,6 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             backwardPair();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "transposechar")) {
             transposeChar();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "selectall")) {
-            selectAll();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "copy")) {
             copySelectedText();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "cut")) {
@@ -2762,9 +2764,14 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             }
 
             // Text editor handle key self.
-            QTextEdit::keyPressEvent(e);
         }
     }
+
+    if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "selectall")) {
+        selectAll();
+    }
+
+    QTextEdit::keyPressEvent(e);
 }
 
 void TextEdit::wheelEvent(QWheelEvent *e)
