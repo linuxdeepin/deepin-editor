@@ -2868,6 +2868,12 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
         (textCursor().hasSelection() || !isBlankLine) &&
         !def.filePath().isEmpty()) {
         m_rightMenu->addAction(m_toggleCommentAction);
+
+        if (m_readOnlyMode == true) {
+            m_toggleCommentAction->setEnabled(false);
+        } else {
+            m_toggleCommentAction->setEnabled(true);
+        }
     }
 
     m_rightMenu->addSeparator();
