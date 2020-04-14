@@ -2280,10 +2280,12 @@ void TextEdit::toggleReadOnlyMode()
 
         m_readOnlyMode = false;
         popupNotify(tr("Read-Only mode is off"));
+        emit signal_enableSaveFile();
     } else {
         m_readOnlyMode = true;
 
         popupNotify(tr("Read-Only mode is on"));
+        emit signal_banSaveFile();
         emit cursorModeChanged(Readonly);
     }
 }

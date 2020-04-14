@@ -151,6 +151,8 @@ public slots:
     void slotSettingResetTheme(const QString &path);
 
     void slot_saveReadingPath();
+    void slot_enableSaveFile();
+    void slot_banSaveFile();
 
 private:
     void handleFocusWindowChanged(QWindow *w);
@@ -198,6 +200,7 @@ private:
     QString m_themePath;
     QString m_tabbarActiveColor;
     QList <TextEdit *> m_reading_list;
+    QAction *saveAction;
 };
 
 #endif
