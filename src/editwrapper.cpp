@@ -602,7 +602,7 @@ void EditWrapper::showNotify(const QString &message)
     if (m_textEdit->getReadOnlyPermission() == true || m_textEdit->getReadOnlyMode() == true) {
         DMessageManager::instance()->sendMessage(m_textEdit, QIcon(":/images/warning.svg"), message);
     } else {
-        DMessageManager::instance()->sendMessage(m_textEdit, QIcon(":/images/ok.svg"), message);
+        DMessageManager::instance()->sendMessage(m_textEdit, QIcon(":images/warning.svg"), message);
     }
 }
 
