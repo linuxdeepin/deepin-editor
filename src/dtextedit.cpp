@@ -2625,7 +2625,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             backwardPair();
         } else if (key == "Shift+:") {
             copyLines();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglereadonlymode")
+        } else if ((key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglereadonlymode") || key=="Alt+Meta+L")
                    && m_bReadOnlyPermission == false) {
             toggleReadOnlyMode();
         } else if (key == "Shift+/" && e->modifiers() == Qt::ControlModifier) {
@@ -2723,7 +2723,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             cutlines();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "joinlines")) {
             joinLines();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglereadonlymode")) {
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglereadonlymode")|| key=="Alt+Meta+L") {
             toggleReadOnlyMode();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglecomment")) {
             toggleComment();
