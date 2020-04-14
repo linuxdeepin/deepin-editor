@@ -975,7 +975,7 @@ void Window::popupFindBar()
             m_replaceBar->hide();
         }
         m_findBar->raise();
-        m_findBar->move(mapToGlobal(QPoint(10, height() - 60)));
+        m_findBar->move(mapToGlobal(QPoint(10, height() - 58)));
         m_findBar->show();
 
         QString text = wrapper->textEditor()->textCursor().selectedText();
@@ -1006,7 +1006,7 @@ void Window::popupReplaceBar()
             m_findBar->hide();
         }
         m_replaceBar->raise();
-        m_replaceBar->move(mapToGlobal(QPoint(10, height() - 60)));
+        m_replaceBar->move(mapToGlobal(QPoint(10, height() - 58)));
         m_replaceBar->show();
         //addBottomWidget(m_replaceBar);
 
@@ -1782,9 +1782,9 @@ void Window::resizeEvent(QResizeEvent *e)
     }
 
     m_findBar->resize(width() - 20, m_findBar->height());
-    m_findBar->move(mapToGlobal(QPoint(10, height() - 60)));
+    m_findBar->move(mapToGlobal(QPoint(10, height() - 58)));
     m_replaceBar->resize(width() - 20, m_replaceBar->height());
-    m_replaceBar->move(mapToGlobal(QPoint(10, height() - 60)));
+    m_replaceBar->move(mapToGlobal(QPoint(10, height() - 58)));
 
     DMainWindow::resizeEvent(e);
 }
