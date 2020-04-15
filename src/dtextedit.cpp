@@ -2764,6 +2764,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             }
 
             // Text editor handle key self.
+            QTextEdit::keyPressEvent(e);
         }
     }
 
@@ -2771,7 +2772,6 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         selectAll();
     }
 
-    QTextEdit::keyPressEvent(e);
 }
 
 void TextEdit::wheelEvent(QWheelEvent *e)
