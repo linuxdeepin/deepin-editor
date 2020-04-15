@@ -961,6 +961,12 @@ void Window::setFontSizeWithConfig(EditWrapper *wrapper)
 
 void Window::popupFindBar()
 {
+    EditWrapper *curWrapper = currentWrapper();
+
+    if(curWrapper->textEditor()->toPlainText().isEmpty()){
+        return;
+    }
+
     if (m_findBar->isVisible()) {
         if (m_findBar->isFocus()) {
             m_wrappers.value(m_tabbar->currentPath())->textEditor()->setFocus();
@@ -996,6 +1002,12 @@ void Window::popupFindBar()
 
 void Window::popupReplaceBar()
 {
+    EditWrapper *curWrapper = currentWrapper();
+
+    if(curWrapper->textEditor()->toPlainText().isEmpty()){
+        return;
+    }
+
     if (m_replaceBar->isVisible()) {
         if (m_replaceBar->isFocus()) {
             m_wrappers.value(m_tabbar->currentPath())->textEditor()->setFocus();
