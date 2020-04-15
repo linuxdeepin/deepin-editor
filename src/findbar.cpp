@@ -67,7 +67,11 @@ FindBar::FindBar(QWidget *parent)
     connect(m_editLine, &LineBar::pressCtrlEnter, this, &FindBar::findPrev, Qt::QueuedConnection);
     connect(m_editLine, &LineBar::returnPressed, this, &FindBar::handleContentChanged, Qt::QueuedConnection);
 
-    connect(m_findNextButton, &QPushButton::clicked, this, &FindBar::findNext, Qt::QueuedConnection);
+    connect(m_findNextButton, &QPushButton::clicked, this, &FindBar::handleContentChanged, Qt::QueuedConnection);
+    //connect(m_findNextButton, &QPushButton::clicked, this, &FindBar::findNext, Qt::QueuedConnection);
+
+    connect(m_findPrevButton, &QPushButton::clicked, this, &FindBar::handleContentChanged, Qt::QueuedConnection);   //这三行代码很烂，但是避免了更改方法
+    connect(m_findPrevButton, &QPushButton::clicked, this, &FindBar::findPrev, Qt::QueuedConnection);
     connect(m_findPrevButton, &QPushButton::clicked, this, &FindBar::findPrev, Qt::QueuedConnection);
 
     connect(m_closeButton, &DIconButton::clicked, this, &FindBar::findCancel, Qt::QueuedConnection);
