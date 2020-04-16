@@ -67,6 +67,7 @@ signals:
 public slots:
     void findCancel();
     void handleContentChanged();
+    void slot_ifClearSearchWord();
 
 protected:
     void hideEvent(QHideEvent *event) override;

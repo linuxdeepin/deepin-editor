@@ -31,7 +31,7 @@ LineBar::LineBar(DLineEdit *parent)
     // Init.
     setClearButtonEnabled(true);
 
-    m_autoSaveInternal = 500;
+    m_autoSaveInternal = 50;
     m_autoSaveTimer = new QTimer(this);
     m_autoSaveTimer->setSingleShot(true);
 

@@ -66,6 +66,7 @@ FindBar::FindBar(QWidget *parent)
  //   connect(m_editLine, &LineBar::pressEnter, this, &FindBar::findNext, Qt::QueuedConnection);            //Shielded by Hengbo ,for new demand. 20200220
     connect(m_editLine, &LineBar::pressCtrlEnter, this, &FindBar::findPrev, Qt::QueuedConnection);
     connect(m_editLine, &LineBar::returnPressed, this, &FindBar::handleContentChanged, Qt::QueuedConnection);
+    connect(m_editLine, &LineBar::contentChanged, this, &FindBar::slot_ifClearSearchWord, Qt::QueuedConnection);
 
     connect(m_findNextButton, &QPushButton::clicked, this, &FindBar::handleContentChanged, Qt::QueuedConnection);
     //connect(m_findNextButton, &QPushButton::clicked, this, &FindBar::findNext, Qt::QueuedConnection);
@@ -117,6 +118,14 @@ void FindBar::findCancel()
 void FindBar::handleContentChanged()
 {
     updateSearchKeyword(m_findFile, m_editLine->lineEdit()->text());
+}
+
+void FindBar::slot_ifClearSearchWord()
+{
+    if(m_editLine->lineEdit()->text() == nullptr)
+    {
+        updateSearchKeyword(m_findFile, m_editLine->lineEdit()->text());
+    }
 }
 
 void FindBar::hideEvent(QHideEvent *)
