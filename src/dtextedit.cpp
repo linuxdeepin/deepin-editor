@@ -2817,15 +2817,15 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
         m_rightMenu->addAction(m_copyAction);
     } else {
         // Just show copy/cut menu item when cursor rectangle contain moue pointer coordinate.
-        m_haveWordUnderCursor = highlightWordUnderMouse(event->pos());
-        if (m_haveWordUnderCursor) {
-            if (!wordAtCursor.isEmpty()) {
-                if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
-                    m_rightMenu->addAction(m_cutAction);
-                }
-                m_rightMenu->addAction(m_copyAction);
-            }
-        }
+//        m_haveWordUnderCursor = highlightWordUnderMouse(event->pos());
+//        if (m_haveWordUnderCursor) {
+//            if (!wordAtCursor.isEmpty()) {
+//                if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {k
+//                    m_rightMenu->addAction(m_cutAction);
+//                }
+//                m_rightMenu->addAction(m_copyAction);
+//            }
+//        }
     }
     if (canPaste()) {
         if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
