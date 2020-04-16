@@ -361,6 +361,9 @@ void Window::addTab(const QString &filepath, bool activeTab)
             }
         }
     } else {
+    if (currentWrapper() == nullptr) {
+        this->addBlankTab();
+    }
         DMessageManager::instance()->sendMessage(currentWrapper()->textEditor(), QIcon(":/images/warning.svg")
                                                  , tr("Invalid file: %1").arg(QFileInfo(filepath).fileName()));
         //showNotify(tr("Invalid file: %1").arg(QFileInfo(filepath).fileName()));
