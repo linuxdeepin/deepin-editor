@@ -2711,8 +2711,6 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             backwardPair();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "transposechar")) {
             transposeChar();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "copy")) {
-            copySelectedText();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "cut")) {
             cutSelectedText();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "paste")) {
@@ -2770,6 +2768,12 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
 
     if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "selectall")) {
         selectAll();
+    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "copy")) {
+        copySelectedText();
+    } else {
+        // If press another key
+        // the main window does not receive
+        e->ignore();
     }
 
 }
