@@ -1001,8 +1001,14 @@ void Window::popupFindBar()
 void Window::popupReplaceBar()
 {
     EditWrapper *curWrapper = currentWrapper();
+    bool bIsReadOnly = curWrapper->textEditor()->getReadOnlyMode();
 
-    if(curWrapper->textEditor()->toPlainText().isEmpty()){
+    if(bIsReadOnly) {
+        showNotify(tr("Read-Only mode is on"));
+        return;
+    }
+
+    if(curWrapper->textEditor()->toPlainText().isEmpty()) {
         return;
     }
 
