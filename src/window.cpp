@@ -201,7 +201,7 @@ void Window::initTitlebar()
     QAction *newWindowAction(new QAction(tr("New window"), this));
     QAction *newTabAction(new QAction(tr("New tab"), this));
     QAction *openFileAction(new QAction(tr("Open file"), this));
-    saveAction = new QAction(tr("Save"), this);         //因为特殊原因把这个action改成了成员变量
+    QAction *saveAction(new QAction(tr("Save"), this));         
     QAction *saveAsAction(new QAction(tr("Save as"), this));
     QAction *printAction(new QAction(tr("Print"), this));
     QAction *switchThemeAction(new QAction(tr("Switch theme"), this));
@@ -534,8 +534,6 @@ EditWrapper* Window::createEditor()
     setFontSizeWithConfig(wrapper);
 
     connect(wrapper->textEditor(), &TextEdit::signal_readingPath, this, &Window::slot_saveReadingPath, Qt::QueuedConnection);
-    connect(wrapper->textEditor(), &TextEdit::signal_banSaveFile, this, &Window::slot_banSaveFile, Qt::QueuedConnection);
-    connect(wrapper->textEditor(), &TextEdit::signal_enableSaveFile, this, &Window::slot_enableSaveFile, Qt::QueuedConnection);
 
     connect(wrapper->textEditor(), &TextEdit::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::clickReplaceAction, this, &Window::popupReplaceBar, Qt::QueuedConnection);
@@ -1746,16 +1744,6 @@ void Window::slot_saveReadingPath()
 {
     m_reading_list.clear();
     m_reading_list.append(currentWrapper()->textEditor());
-}
-
-void Window::slot_enableSaveFile()
-{
-    saveAction->setEnabled(true);
-}
-
-void Window::slot_banSaveFile()
-{
-    saveAction->setEnabled(false);
 }
 
 void Window::handleFocusWindowChanged(QWindow *w)

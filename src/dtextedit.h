@@ -195,9 +195,6 @@ signals:
     void pressEsc();
     void signal_readingPath();
 
-    void signal_banSaveFile();
-    void signal_enableSaveFile();
-
 public slots:
     void highlightCurrentLine();
     void updateLineNumber();
