@@ -922,5 +922,10 @@
         <source>Save</source>
         <translation>保存</translation>
     </message>
+    <message>
+        <location filename="../src/window.cpp" line="1009"/>
+        <source>Read-Only mode is on</source>
+        <translation>只读模式已开启</translation>
+    </message>
 </context>
 </TS>
