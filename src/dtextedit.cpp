@@ -1444,10 +1444,6 @@ bool TextEdit::highlightKeyword(QString keyword, int position)
 
 void TextEdit::updateCursorKeywordSelection(int position, bool findNext)
 {
-    if (m_readOnlyMode){
-        return;
-    }
-
     bool findOne = setCursorKeywordSeletoin(position, findNext);
 
     if (!findOne) {
@@ -1515,10 +1511,6 @@ bool TextEdit::updateKeywordSelections(QString keyword)
 
 void TextEdit::renderAllSelections()
 {
-    if (m_readOnlyMode){
-        return;
-    }
-
     QList<QTextEdit::ExtraSelection> selections;
 
 //    for (auto findMatch : m_findMatchSelections) {
