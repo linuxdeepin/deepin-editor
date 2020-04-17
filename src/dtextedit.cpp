@@ -2850,10 +2850,12 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
         m_rightMenu->addAction(m_jumpLineAction);
         m_rightMenu->addSeparator();
     }
-    if (!wordAtCursor.isEmpty()) {
-        if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
+    if(textCursor().hasSelection()){
+        if(m_bReadOnlyPermission == false &&m_readOnlyMode == false){
             m_rightMenu->addMenu(m_convertCaseMenu);
         }
+    } else {
+        m_convertCaseMenu->hide();
     }
 
     // intelligent judge whether to support comments.
