@@ -2939,14 +2939,11 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
         if (dictationStateRet.isValid()) {
             dictationState = dictationStateRet.value();
         }
-
-        if (m_readOnlyMode == true){
+        m_dictationAction->setEnabled(dictationState);
+        if(m_readOnlyMode){
             m_dictationAction->setEnabled(false);
         }
-        else {
-            m_dictationAction->setEnabled(true);
-        }
-
+		
         m_rightMenu->addAction(m_translateAction);
         m_translateAction->setEnabled(false);
         bool translateState = false;
