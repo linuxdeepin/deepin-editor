@@ -305,7 +305,9 @@ void Window::addTab(const QString &filepath, bool activeTab)
         if (curWrapper) {
             // if the current page is a draft file and is empty
             // no need to create a new tab.
-            if (curWrapper->textEditor()->toPlainText().isEmpty() &&
+            //（上述要求已更改，打开文件不覆盖空文档）
+            //（因此注释了以下代码）
+/*            if (curWrapper->textEditor()->toPlainText().isEmpty() &&
                 !m_wrappers.keys().contains(filepath) &&
                 Utils::isDraftFile(curPath))
             {
@@ -316,10 +318,10 @@ void Window::addTab(const QString &filepath, bool activeTab)
                 m_wrappers[filepath]->openFile(filepath);
 
                 return;
-            } else {
-                if (m_tabbar->indexOf(filepath) != -1) {
-                    m_tabbar->setCurrentIndex(m_tabbar->indexOf(filepath));
-                }
+            } else {*/
+            if (m_tabbar->indexOf(filepath) != -1) {
+                m_tabbar->setCurrentIndex(m_tabbar->indexOf(filepath));
+//                }
             }
         }
 
