@@ -2271,10 +2271,12 @@ void TextEdit::toggleReadOnlyMode()
         }
 
         m_readOnlyMode = false;
+        setReadOnly(false);
         popupNotify(tr("Read-Only mode is off"));
     } else {
         m_readOnlyMode = true;
 
+        setReadOnly(true);
         popupNotify(tr("Read-Only mode is on"));
         emit cursorModeChanged(Readonly);
     }
