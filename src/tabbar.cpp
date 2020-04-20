@@ -27,6 +27,7 @@
 #include <QStyleFactory>
 #include <QGuiApplication>
 #include <DPlatformWindowHandle>
+#include <DWindowManagerHelper>
 
 Tabbar::Tabbar(QWidget *parent)
     : DTabBar(parent)
@@ -190,21 +191,12 @@ QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option
     int scaledHeight = height * ratio / 5;
     auto scaledImage = screenshotImage.scaled(scaledWidth, scaledHeight, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
+    QImage backgroundImage(scaledWidth + 10, scaledHeight + 10, QImage::Format_ARGB32_Premultiplied);
+    backgroundImage.fill(QColor(palette().color(QPalette::Base)));
     // clip screenshot image with window radius.
-    QPainter painter(&scaledImage);
+    QPainter painter(&backgroundImage);
+    painter.drawImage(5,5,scaledImage);
     painter.setRenderHint(QPainter::Antialiasing, true);
-
-    QPainterPath rectPath;
-    QPainterPath roundedRectPath;
-
-    rectPath.addRect(0, 0, scaledWidth, scaledHeight);
-    roundedRectPath.addRoundedRect(QRect(0, 0, scaledWidth / ratio, scaledHeight / ratio), 6, 6);
-
-    rectPath -= roundedRectPath;
-
-    painter.setCompositionMode(QPainter::CompositionMode_Source);
-    painter.fillPath(rectPath, Qt::transparent);
-    painter.end();
 
     if (count() == 1) {
         this->window()->hide();
@@ -214,10 +206,32 @@ QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option
     hotspot->setX(20);
     hotspot->setY(20);
 
-    QColor shadowColor = QColor(palette().color(QPalette::BrightText));
-    shadowColor.setAlpha(80);
+    QPainterPath rectPath;
 
-    return Utils::dropShadow(QPixmap::fromImage(scaledImage), 40, shadowColor, QPoint(0, 8));
+    if(DWindowManagerHelper::instance()->hasComposite())
+    {
+        QPainterPath roundedRectPath;
+
+        rectPath.addRect(0, 0, scaledWidth + 10, scaledHeight + 10);
+        roundedRectPath.addRoundedRect(QRect(0, 0, scaledWidth / ratio + 10, scaledHeight / ratio + 10), 6, 6);
+
+        rectPath -= roundedRectPath;
+
+        painter.setCompositionMode(QPainter::CompositionMode_Source);
+        painter.fillPath(rectPath, Qt::transparent);
+
+        QColor shadowColor = QColor(palette().color(QPalette::BrightText));
+        shadowColor.setAlpha(80);
+
+        painter.end();
+
+        return Utils::dropShadow(QPixmap::fromImage(backgroundImage), 5, shadowColor, QPoint(0, 0));
+    } else {
+          painter.end();
+
+          return QPixmap::fromImage(backgroundImage);
+    }
+
 }
 
 QMimeData* Tabbar::createMimeDataFromTab(int index, const QStyleOptionTab &option) const
