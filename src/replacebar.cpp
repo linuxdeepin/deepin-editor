@@ -116,6 +116,7 @@ void ReplaceBar::focus()
 void ReplaceBar::activeInput(QString text, QString file, int row, int column, int scrollOffset)
 {
     // Try fill keyword with select text.
+    m_withLine->lineEdit()->clear();
     m_replaceLine->lineEdit()->clear();
     m_replaceLine->lineEdit()->insert(text);
     m_replaceLine->lineEdit()->selectAll();
