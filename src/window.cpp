@@ -470,7 +470,7 @@ void Window::closeTab()
     // document has been modified or unsaved draft document.
     // need to prompt whether to save.
     if (isModified || (isBlankFile && !wrapper->textEditor()->toPlainText().isEmpty())) {
-        DDialog *dialog = createDialog("", tr("Do you want to save this file?"));
+        DDialog *dialog = createDialog(tr("Do you want to save this file?"), "");
 
         connect(dialog, &DDialog::buttonClicked, this, [=] (int index) {
             dialog->hide();
@@ -719,7 +719,7 @@ bool Window::saveFile()
         bool success = m_wrappers.value(m_tabbar->currentPath())->saveFile();
 
         if (!success) {
-            DDialog *dialog = createDialog("", tr("Do you want to save as another?"));
+            DDialog *dialog = createDialog(tr("Do you want to save as another?"), "");
 
             connect(dialog, &DDialog::buttonClicked, this, [=] (int index) {
                 dialog->hide();
@@ -1383,7 +1383,7 @@ void Window::handleTabsClosed(QStringList tabList)
 
     // popup save file dialog.
     if (!needSaveList.isEmpty()) {
-        DDialog *dialog = createDialog("", tr("Do you want to save all the files?"));
+        DDialog *dialog = createDialog(tr("Do you want to save all the files?"), "");
 
         connect(dialog, &DDialog::buttonClicked, this, [&] (int index) {
             dialog->hide();
@@ -1701,7 +1701,7 @@ int Window::getBlankFileIndex()
 
 DDialog* Window::createDialog(const QString &title, const QString &content)
 {
-    DDialog *dialog = new DDialog("", content, this);
+    DDialog *dialog = new DDialog(title,content, this);
     dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
     dialog->setIcon(QIcon::fromTheme("deepin-editor"));
     dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
@@ -1835,7 +1835,7 @@ void Window::closeEvent(QCloseEvent *e)
     }
 
     if (!needSaveList.isEmpty()) {
-        DDialog *dialog = createDialog("", tr("Do you want to save all the files?"));
+        DDialog *dialog = createDialog(tr("Do you want to save all the files?"), "");
 
         connect(dialog, &DDialog::buttonClicked, this, [=] (int index) {
             dialog->hide();
