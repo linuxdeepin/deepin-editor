@@ -971,6 +971,7 @@ void Window::popupFindBar()
     }
 
     if (m_findBar->isVisible()) {
+        m_findBar->move(QPoint(10, height() - 58));
         if (m_findBar->isFocus()) {
             m_wrappers.value(m_tabbar->currentPath())->textEditor()->setFocus();
         } else {
@@ -1019,6 +1020,7 @@ void Window::popupReplaceBar()
     }
 
     if (m_replaceBar->isVisible()) {
+        m_replaceBar->move(QPoint(10, height() - 58));
         if (m_replaceBar->isFocus()) {
             m_wrappers.value(m_tabbar->currentPath())->textEditor()->setFocus();
         } else {
