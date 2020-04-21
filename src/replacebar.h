@@ -38,7 +38,7 @@
 
 DWIDGET_USE_NAMESPACE
 
-class ReplaceBar : public DAbstractDialog
+class ReplaceBar : public DFloatingWidget
 {
     Q_OBJECT
 
@@ -74,6 +74,8 @@ public slots:
 protected:
     void hideEvent(QHideEvent *event);
     bool focusNextPrevChild(bool next);
+    void mousePressEvent(QMouseEvent *event) ;
+    void mouseMoveEvent(QMouseEvent *event) ;
 
 private:
     QPushButton *m_replaceAllButton;
@@ -91,6 +93,8 @@ private:
     int m_replaceFileRow;
     int m_replaceFileSrollOffset;
     QColor m_backgroundColor;
+
+    QPoint last;
 };
 
 #endif

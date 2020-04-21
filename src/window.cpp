@@ -162,18 +162,18 @@ Window::Window(DMainWindow *parent)
     m_jumpLineBar->raise();
 
     // Init findbar panel.
-    //static DAnchors<FindBar> anchors_findbar(m_findBar);
-    //anchors_findbar.setAnchor(Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
-    //anchors_findbar.setAnchor(Qt::AnchorHorizontalCenter, m_centralWidget, Qt::AnchorHorizontalCenter);
-    //anchors_findbar.setBottomMargin(5);
-    //m_findBar->raise();
+    static DAnchors<FindBar> anchors_findbar(m_findBar);
+    anchors_findbar.setAnchor(Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
+    anchors_findbar.setAnchor(Qt::AnchorHorizontalCenter, m_centralWidget, Qt::AnchorHorizontalCenter);
+    anchors_findbar.setBottomMargin(5);
+    m_findBar->raise();
 
     // Init replaceBar panel.
-    //DAnchors<ReplaceBar> anchors_replaceBar(m_replaceBar);
-    //anchors_replaceBar.setAnchor(Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
-    //anchors_replaceBar.setAnchor(Qt::AnchorHorizontalCenter, m_centralWidget, Qt::AnchorHorizontalCenter);
-    //anchors_replaceBar.setBottomMargin(5);
-    //m_replaceBar->raise();
+    DAnchors<ReplaceBar> anchors_replaceBar(m_replaceBar);
+    anchors_replaceBar.setAnchor(Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
+    anchors_replaceBar.setAnchor(Qt::AnchorHorizontalCenter, m_centralWidget, Qt::AnchorHorizontalCenter);
+    anchors_replaceBar.setBottomMargin(5);
+    m_replaceBar->raise();
 
     // Init theme panel.
     DAnchorsBase::setAnchor(m_themePanel, Qt::AnchorTop, m_centralWidget, Qt::AnchorTop);
@@ -983,13 +983,14 @@ void Window::popupFindBar()
         EditWrapper *wrapper = currentWrapper();
 
         if (wrapper->isVisible()) {
-            wrapper->m_bottomBar->hide();
+          //  wrapper->m_bottomBar->hide();
         }
         if (m_replaceBar->isVisible()) {
             m_replaceBar->hide();
         }
         m_findBar->raise();
-        m_findBar->move(mapToGlobal(QPoint(10, height() - 58)));
+
+        m_findBar->move(QPoint(10, height() - 58));
         m_findBar->show();
 
         QString text = wrapper->textEditor()->textCursor().selectedText();
@@ -1026,13 +1027,13 @@ void Window::popupReplaceBar()
     } else {
         EditWrapper *wrapper = currentWrapper();
         if (wrapper->isVisible()) {
-            wrapper->m_bottomBar->hide();
+           // wrapper->m_bottomBar->hide();
         }
         if (m_findBar->isVisible()) {
             m_findBar->hide();
         }
         m_replaceBar->raise();
-        m_replaceBar->move(mapToGlobal(QPoint(10, height() - 58)));
+        m_replaceBar->move(QPoint(10, height() - 58));
         m_replaceBar->show();
         //addBottomWidget(m_replaceBar);
 
@@ -1808,9 +1809,9 @@ void Window::resizeEvent(QResizeEvent *e)
     }
 
     m_findBar->resize(width() - 20, m_findBar->height());
-    m_findBar->move(mapToGlobal(QPoint(10, height() - 58)));
+    m_findBar->move(QPoint(10, height() - 58));
     m_replaceBar->resize(width() - 20, m_replaceBar->height());
-    m_replaceBar->move(mapToGlobal(QPoint(10, height() - 58)));
+    m_replaceBar->move(QPoint(10, height() - 58));
 
     DMainWindow::resizeEvent(e);
 }

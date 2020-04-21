@@ -26,12 +26,12 @@
 #include <QDebug>
 
 FindBar::FindBar(QWidget *parent)
-    : DAbstractDialog(parent)
+    : DFloatingWidget(parent)
 {
     // Init.
     //setWindowFlags(Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
     hide();
-    setFixedHeight(48);
+    setFixedHeight(58);
 
     // Init layout and widgets.
 
@@ -126,6 +126,23 @@ void FindBar::slot_ifClearSearchWord()
     {
         updateSearchKeyword(m_findFile, m_editLine->lineEdit()->text());
     }
+}
+
+void FindBar::mousePressEvent(QMouseEvent *event)
+{
+    last = event->globalPos();
+}
+
+void FindBar::mouseMoveEvent(QMouseEvent *event)
+{
+    if(event->buttons()== Qt::LeftButton)
+    {
+        QPoint newpos = event->globalPos();
+        QPoint upleft = mapToParent(newpos - last); //计算距原位置的偏移
+        move(upleft);
+        last = newpos; //更新原位置到最新的位置
+    }
+
 }
 
 void FindBar::hideEvent(QHideEvent *)

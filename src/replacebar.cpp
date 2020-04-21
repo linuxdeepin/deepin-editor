@@ -26,11 +26,11 @@
 #include <QDebug>
 
 ReplaceBar::ReplaceBar(QWidget *parent)
-    : DAbstractDialog(parent)
+    :  DFloatingWidget(parent)
 {
     // Init.
     hide();
-    setFixedHeight(48);
+    setFixedHeight(58);
 
     // Init layout and widgets.
     m_layout = new QHBoxLayout();
@@ -182,6 +182,23 @@ bool ReplaceBar::focusNextPrevChild(bool)
     }
 
     return false;
+}
+
+void ReplaceBar::mousePressEvent(QMouseEvent *event)
+{
+    last = event->globalPos();
+}
+
+void ReplaceBar::mouseMoveEvent(QMouseEvent *event)
+{
+    if(event->buttons()== Qt::LeftButton)
+    {
+        QPoint newpos = event->globalPos();
+        QPoint upleft = mapToParent(newpos - last); //计算距原位置的偏移
+        move(upleft);
+        last = newpos; //更新原位置到最新的位置
+    }
+
 }
 
 void ReplaceBar::setMismatchAlert(bool isAlert)

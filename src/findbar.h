@@ -35,13 +35,16 @@
 #include <DIconButton>
 #include <DApplicationHelper>
 #include <DFloatingWidget>
+#include<QMouseEvent>
+#include<qmouseeventtransition.h>
+#include<QMouseEventTransition>
 
 #include <DPalette>
 #include <DAbstractDialog>
 
 DWIDGET_USE_NAMESPACE
 
-class FindBar : public DAbstractDialog
+class FindBar : public DFloatingWidget
 {
     Q_OBJECT
 
@@ -70,6 +73,8 @@ public slots:
     void slot_ifClearSearchWord();
 
 protected:
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
     void hideEvent(QHideEvent *event) override;
 
 private:
@@ -84,6 +89,8 @@ private:
     int m_findFileRow;
     int m_findFileSrollOffset;
     QColor m_backgroundColor;
+
+    QPoint last;
 };
 
 #endif
