@@ -2425,6 +2425,13 @@ bool TextEdit::getReadOnlyMode()
     return m_readOnlyMode;
 }
 
+void TextEdit::hideRightMenu()
+{
+    //arm平台全屏然后恢复窗口，右键菜单不会消失，所以加了这个函数
+    if(m_rightMenu)
+    m_rightMenu->hide();
+}
+
 void TextEdit::completionWord(QString word)
 {
     QString wordAtCursor = getWordAtCursor();

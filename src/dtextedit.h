@@ -181,6 +181,8 @@ public:
     bool getReadOnlyPermission();
     bool getReadOnlyMode();
 
+    void hideRightMenu();
+
 signals:
     void clickFindAction();
     void clickReplaceAction();

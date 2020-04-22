@@ -1815,6 +1815,14 @@ void Window::resizeEvent(QResizeEvent *e)
     m_replaceBar->resize(width() - 20, m_replaceBar->height());
     m_replaceBar->move(QPoint(10, height() - 58));
 
+
+    if(!(m_tabbar->currentPath()==""))
+    {
+        EditWrapper *wrapper = m_wrappers.value(m_tabbar->currentPath());
+        wrapper->textEditor()->hideRightMenu();
+    }
+
+
     DMainWindow::resizeEvent(e);
 }
 
