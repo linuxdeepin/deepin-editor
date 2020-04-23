@@ -2769,12 +2769,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         selectAll();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "copy")) {
         copySelectedText();
-    } else {
-        // If press another key
-        // the main window does not receive
-        e->ignore();
-    }
-
+    } 
 }
 
 void TextEdit::wheelEvent(QWheelEvent *e)
