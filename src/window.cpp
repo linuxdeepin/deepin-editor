@@ -1259,7 +1259,7 @@ void Window::displayShortcuts()
         if (keymap != "incrementfontsize" && keymap != "decrementfontsize") {
             jsonItem.insert("value", option->value().toString().replace("Meta", "Super"));
         } else if (keymap == "incrementfontsize") {
-            QString strIncrementfontValue = QString(tr("Ctrl+'+'"));
+            QString strIncrementfontValue = QString(tr("Ctrl+'='"));
             jsonItem.insert("value", strIncrementfontValue.replace("Meta", "Super"));
         }
         else if (keymap == "decrementfontsize" && option->value().toString() == "Ctrl+-") {
