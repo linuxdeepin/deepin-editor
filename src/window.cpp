@@ -528,32 +528,21 @@ void Window::restoreTab()
 void Window::clearBlack()
 {
     //赛迪方要求不能出现以下字符，但是编码库中存在，所以手动去掉
-    handleReplaceAll("\uE768","");
-    handleReplaceAll("\uE769","");
-    handleReplaceAll("\uE76A","");
-    handleReplaceAll("\uE76B","");
-    handleReplaceAll("\uE76D","");
-    handleReplaceAll("\uE76E","");
-    handleReplaceAll("\uE76F","");
+    QStringList shouldBeEmpty;
+    shouldBeEmpty<<"\uE768"<<"\uE769"<<"\uE76A"<<"\uE76B"<<"\uE76D"<<"\uE76E"<<"\uE76F"<<"\uE766"<<"\uE767"<<"\uE770"
+                   <<"\uE771"<<"\uE777"<<"\uE778"<<"\uE779"<<"\uE77A"<<"\uE77B"<<"\uE77C"<<"\uE77D"<<"\uE77E"<<"\uE77F"<<"\uE7FE"<<"\uE7FF"
+                     <<"\uE801"<<"\uE802"<<"\uE803"<<"\uE804"<<"\uE805"<<"\uE806"<<"\uE807"<<"\uE808"<<"\uE809"<<"\uE80A"<<"\uE80B"<<"\uE80C"<<"\uE80D"<<"\uE80E"
+                       <<"\uE80F"<<"\uE800"<<"\uE7D3"<<"\uE7D4"<<"\uE7D5"<<"\uE7D6"<<"\uE7D7"<<"\uE7D8"<<"\uE7D9"<<"\uE7DA"<<"\uE7DB"<<"\uE7DC"<<"\uE7DD"
+                         <<"\uE7DE"<<"\uE7DF"<<"\uE7E0"<<"\uE7E1"<<"\uE7CD"<<"\uE7CE"<<"\uE7CF"<<"\uE7D0"<<"\uE7D1"<<"\uE7D2"<<"\uE7AF"<<"\uE7B0"<<"\uE7B1"<<"\uE7B2"
+                           <<"\uE7B3"<<"\uE7B4"<<"\uE7B5"<<"\uE7B6"<<"\uE7B7"<<"\uE7B8"<<"\uE7B9"<<"\uE7BA"<<"\uE7BB"<<"\uE7A0"<<"\uE7A1"<<"\uE7A2"<<"\uE7A3"<<"\uE7A4"
+                             <<"\uE7A5"<<"\uE7A6"<<"\uE7A7"<<"\uE7A8"<<"\uE7A9"<<"\uE7AA"<<"\uE7AB"<<"\uE7AC"<<"\uE7AD"<<"\uE7AE"<<"\uE797"<<"\uE798"<<"\uE799"<<"\uE79A"
+                               <<"\uE79B"<<"\uE79C"<<"\uE79D"<<"\uE79E"<<"\uE79F"<<"\uE780"<<"\uE781"<<"\uE782"<<"\uE783"<<"\uE784"<<"\uE772"<<"\uE773"<<"\uE774"<<"\uE775"
+                              <<"\uE776"<<"\uE78D"<<"\uE78E"<<"\uE78F"<<"\uE790"<<"\uE791"<<"\uE792"<<"\uE793"<<"\uE796";
 
-    handleReplaceAll("\uE766","");
-    handleReplaceAll("\uE767","");
-    handleReplaceAll("\uE770","");
-    handleReplaceAll("\uE771","");
+     for (const QString &ohuo : shouldBeEmpty) {
+     handleReplaceAll(ohuo,"");
+     }
 
-    handleReplaceAll("\uE777","");
-    handleReplaceAll("\uE778","");
-    handleReplaceAll("\uE779","");
-    handleReplaceAll("\uE77A","");
-
-    handleReplaceAll("\uE77B","");
-    handleReplaceAll("\uE77C","");
-    handleReplaceAll("\uE77D","");
-    handleReplaceAll("\uE77E","");
-
-    handleReplaceAll("\uE77F","");
-    handleReplaceAll("\uE7FE","");
-    handleReplaceAll("\uE7FF","");
 }
 
 EditWrapper* Window::createEditor()
