@@ -66,6 +66,7 @@ void Tabbar::addTabWithIndex(int index, const QString &filePath, const QString &
     // FIXME(rekols): do not insert duplicate values.
     if (!m_tabPaths.contains(filePath)) {
         m_tabPaths.insert(index, filePath);
+        writeTabPaths();
     }
 
     DTabBar::insertTab(index, tabName);
@@ -178,8 +179,9 @@ void Tabbar::setDNDColor(const QString &startColor, const QString &endColor)
 QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option, QPoint *hotspot) const
 {
     const qreal ratio = qApp->devicePixelRatio();
-
-    TextEdit *textEdit = static_cast<Window *>(this->window())->getTextEditor(fileAt(index));
+    Window *window = static_cast<Window *>(this->window());
+    QStringList tabPathList = readTabPaths();
+    TextEdit *textEdit = window->getTextEditor(tabPathList.value(index));
     int width = textEdit->width() * ratio;
     int height = textEdit->height() * ratio;
     QImage screenshotImage(width, height, QImage::Format_ARGB32_Premultiplied);
@@ -239,7 +241,8 @@ QMimeData* Tabbar::createMimeDataFromTab(int index, const QStyleOptionTab &optio
     const QString tabName = textAt(index);
 
     Window *window = static_cast<Window *>(this->window());
-    EditWrapper *wrapper = window->wrapper(fileAt(index));
+    QStringList tabPathList = readTabPaths();
+    EditWrapper *wrapper = window->wrapper(tabPathList.value(index));
     QMimeData *mimeData = new QMimeData;
 
     mimeData->setProperty("wrapper", QVariant::fromValue(static_cast<void *>(wrapper)));
@@ -390,6 +393,8 @@ void Tabbar::handleTabIsRemoved(int index)
     Window *window = static_cast<Window *>(this->window());
 
     m_tabPaths.removeAt(index);
+    writeTabPaths();
+
     window->removeWrapper(filePath, false);
 }
 
@@ -404,5 +409,45 @@ void Tabbar::handleTabDroped(int index, Qt::DropAction, QObject *target)
         window->activateWindow();
     } else {
         closeTab(index);
+    }
+}
+
+QStringList Tabbar::readTabPaths() const
+{
+    Window *window = static_cast<Window *>(this->window());
+    QString qstrId =  QString::number(window->winId());
+    QString path = QDir::currentPath();
+    QFile file(path + "/" + qstrId + "tabPaths.txt");
+    QStringList tabPaths;
+    if(!file.open(QIODevice::ReadOnly)){
+        return tabPaths;
+    }
+    QTextStream stream(&file);
+
+    while (!stream.atEnd()) {
+        tabPaths.push_back(stream.readLine());
+    }
+    file.close();
+    return tabPaths;
+}
+
+void Tabbar::writeTabPaths()
+{
+    Window *window = static_cast<Window *>(this->window());
+    QString qstrId =  QString::number(window->winId());
+    QString path = QDir::currentPath();
+    QFile file(path + "/" + qstrId + "tabPaths.txt");
+    if (!file.open(QIODevice::WriteOnly)) {
+        return;
+    }
+    QTextStream stream(&file);
+
+    if (m_tabPaths.isEmpty()) {
+        file.remove();
+    } else {
+        foreach (auto path,m_tabPaths) {
+            stream << path + "\n";
+        }
+        file.close();
     }
 }

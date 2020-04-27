@@ -170,6 +170,10 @@ Window* StartManager::createWindow(bool alwaysCenter)
         }
 
         if (m_windows.isEmpty()) {
+            QString path = QDir::currentPath();
+            QString qstrId = QString::number(window->winId());
+            QFile file(path + "/" + qstrId + "tabPaths.txt");
+            file.remove();
             QApplication::quit();
         }
     });

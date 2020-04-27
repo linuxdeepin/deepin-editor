@@ -72,7 +72,8 @@ private:
     void handleTabReleased(int index);
     void handleTabIsRemoved(int index);
     void handleTabDroped(int index, Qt::DropAction, QObject *target);
-
+    QStringList readTabPaths() const;
+    void writeTabPaths();
 private:
     QStringList m_tabPaths;
     QString m_backgroundStartColor;
