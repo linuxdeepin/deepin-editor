@@ -525,6 +525,37 @@ void Window::restoreTab()
     }
 }
 
+void Window::clearBlack()
+{
+    //赛迪方要求不能出现以下字符，但是编码库中存在，所以手动去掉
+    handleReplaceAll("\uE768","");
+    handleReplaceAll("\uE769","");
+    handleReplaceAll("\uE76A","");
+    handleReplaceAll("\uE76B","");
+    handleReplaceAll("\uE76D","");
+    handleReplaceAll("\uE76E","");
+    handleReplaceAll("\uE76F","");
+
+    handleReplaceAll("\uE766","");
+    handleReplaceAll("\uE767","");
+    handleReplaceAll("\uE770","");
+    handleReplaceAll("\uE771","");
+
+    handleReplaceAll("\uE777","");
+    handleReplaceAll("\uE778","");
+    handleReplaceAll("\uE779","");
+    handleReplaceAll("\uE77A","");
+
+    handleReplaceAll("\uE77B","");
+    handleReplaceAll("\uE77C","");
+    handleReplaceAll("\uE77D","");
+    handleReplaceAll("\uE77E","");
+
+    handleReplaceAll("\uE77F","");
+    handleReplaceAll("\uE7FE","");
+    handleReplaceAll("\uE7FF","");
+}
+
 EditWrapper* Window::createEditor()
 {
     EditWrapper *wrapper = new EditWrapper();
@@ -547,6 +578,7 @@ EditWrapper* Window::createEditor()
     connect(wrapper->textEditor(), &TextEdit::popupNotify, this, &Window::showNotify, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::pressEsc, this, &Window::removeBottomWidget, Qt::QueuedConnection);
     connect(wrapper, &EditWrapper::requestSaveAs, this, &Window::saveAsFile);
+    connect(wrapper->textEditor(), &TextEdit::signal_clearBlack, this, &Window::clearBlack,Qt::QueuedConnection);
 
     connect(wrapper->textEditor(), &TextEdit::modificationChanged, this, [=] (const QString &path, bool isModified) {
         int tabIndex = m_tabbar->indexOf(path);

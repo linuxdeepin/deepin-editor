@@ -89,14 +89,15 @@ void EditWrapper::openFile(const QString &filepath)
     detectEndOfLine();
 
     m_isLoadFinished = false;
+    handleFileLoadFinished(filePath());
 
     // begin to load the file.
-    FileLoadThread *thread = new FileLoadThread(filepath);
-    connect(thread, &FileLoadThread::loadFinished, this, &EditWrapper::handleFileLoadFinished);
-    connect(thread, &FileLoadThread::finished, thread, &FileLoadThread::deleteLater);
+//    FileLoadThread *thread = new FileLoadThread(filepath);
+//    connect(thread, &FileLoadThread::loadFinished, this, &EditWrapper::handleFileLoadFinished);
+//    connect(thread, &FileLoadThread::finished, thread, &FileLoadThread::deleteLater);
 
-    // start the thread.
-    thread->start();
+//    // start the thread.
+//    thread->start();
 }
 
 bool EditWrapper::saveAsFile(const QString &newFilePath, QByteArray encodeName)
@@ -658,10 +659,26 @@ void EditWrapper::handleHightlightChanged(const QString &name)
     m_bottomBar->setHightlightName(name);
 }
 
-void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QString &content)
+void EditWrapper::handleFileLoadFinished(const QString &filepath)
 {
     // restore mouse style.
     // QApplication::restoreOverrideCursor();
+    QFile file(filepath);
+    if (file.open(QIODevice::ReadOnly)) {
+        QByteArray fileContent = file.readAll();
+
+        // read the encode.
+        QByteArray encode = Utils::detectEncode(fileContent);
+        if(encode =="Big5")
+        {
+            encode="gb18030";
+        }
+
+        qDebug()<<encode;
+        QTextStream stream(&fileContent);
+        stream.setCodec(encode);
+
+        QString content = stream.readAll();
 
     qDebug() << "load finished: " << m_textEdit->filepath << ", " << encode << "endOfLine: " << m_endOfLineMode;
 
@@ -683,6 +700,7 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QString
     // set text.
     m_textEdit->loadHighlighter();
     m_textEdit->setPlainText(content);
+    m_textEdit->clearBlack();
 
     // update status.
     m_textEdit->setModified(false);
@@ -692,6 +710,7 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QString
 
     // load highlight.
     //QTimer::singleShot(100, this, [=] { m_textEdit->loadHighlighter(); });
+    }
 }
 
 void EditWrapper::resizeEvent(QResizeEvent *e)

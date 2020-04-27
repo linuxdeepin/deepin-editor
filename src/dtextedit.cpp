@@ -2432,6 +2432,11 @@ void TextEdit::hideRightMenu()
     m_rightMenu->hide();
 }
 
+void TextEdit::clearBlack()
+{
+    emit signal_clearBlack();
+}
+
 void TextEdit::completionWord(QString word)
 {
     QString wordAtCursor = getWordAtCursor();

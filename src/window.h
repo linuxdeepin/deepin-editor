@@ -63,6 +63,8 @@ public:
     void closeTab();
     void restoreTab();
 
+    void clearBlack();
+
     EditWrapper* createEditor();
     EditWrapper* currentWrapper();
     EditWrapper* wrapper(const QString &filePath);

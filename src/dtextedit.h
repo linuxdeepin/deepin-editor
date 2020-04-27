@@ -183,6 +183,8 @@ public:
 
     void hideRightMenu();
 
+    void clearBlack();
+
 signals:
     void clickFindAction();
     void clickReplaceAction();
@@ -196,6 +198,10 @@ signals:
     void click();
     void pressEsc();
     void signal_readingPath();
+
+    void signal_clearBlack();
+
+
 
 public slots:
     void highlightCurrentLine();
