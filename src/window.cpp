@@ -537,10 +537,13 @@ void Window::clearBlack()
                            <<"\uE7B3"<<"\uE7B4"<<"\uE7B5"<<"\uE7B6"<<"\uE7B7"<<"\uE7B8"<<"\uE7B9"<<"\uE7BA"<<"\uE7BB"<<"\uE7A0"<<"\uE7A1"<<"\uE7A2"<<"\uE7A3"<<"\uE7A4"
                              <<"\uE7A5"<<"\uE7A6"<<"\uE7A7"<<"\uE7A8"<<"\uE7A9"<<"\uE7AA"<<"\uE7AB"<<"\uE7AC"<<"\uE7AD"<<"\uE7AE"<<"\uE797"<<"\uE798"<<"\uE799"<<"\uE79A"
                                <<"\uE79B"<<"\uE79C"<<"\uE79D"<<"\uE79E"<<"\uE79F"<<"\uE780"<<"\uE781"<<"\uE782"<<"\uE783"<<"\uE784"<<"\uE772"<<"\uE773"<<"\uE774"<<"\uE775"
-                              <<"\uE776"<<"\uE78D"<<"\uE78E"<<"\uE78F"<<"\uE790"<<"\uE791"<<"\uE792"<<"\uE793"<<"\uE796";
+                              <<"\uE776"<<"\uE78D"<<"\uE78E"<<"\uE78F"<<"\uE790"<<"\uE791"<<"\uE792"<<"\uE793"<<"\uE796"
+                             <<"\uE7BC"<<"\uE7BD"<<"\uE7BE"<<"\uE7BF"<<"\uE7C0"<<"\uE7C1"<<"\uE7C2"<<"\uE7C3"<<"\uE7C4"
+                               <<"\uE7C5"<<"\uE7C6"<<"\uE7E3"<<"\uE7E4"<<"\uE7E5"<<"\uE7E6"<<"〾⿰⿱⿲⿳⿴⿵"<<"\uE7F4"<<"\uE7F5"<<"\uE7F6"
+                                    <<"\uE7F7"<<"\uE7F8"<<"\uE7F9"<<"\uE7FA"<<"\uE7FB"<<"\uE7FC"<<"⿶⿷⿸⿹⿺⿻"<<"\uE7FD";
 
      for (const QString &ohuo : shouldBeEmpty) {
-     handleReplaceAll(ohuo,"");
+     handleReplaceAll(ohuo," ");
      }
 
 }
