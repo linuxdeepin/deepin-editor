@@ -170,10 +170,18 @@ Window* StartManager::createWindow(bool alwaysCenter)
         }
 
         if (m_windows.isEmpty()) {
-            QString path = QDir::currentPath();
-            QString qstrId = QString::number(window->winId());
-            QFile file(path + "/" + qstrId + "tabPaths.txt");
-            file.remove();
+            QDir path = QDir::currentPath();
+            if (!path.exists()) {
+                return ;
+            }
+            path.setFilter(QDir::Files);
+            QStringList nameList = path.entryList();
+            foreach (auto name, nameList) {
+                if (name.contains("tabPaths.txt")) {
+                    QFile file(name);
+                    file.remove();
+                }
+            }
             QApplication::quit();
         }
     });

@@ -86,11 +86,14 @@ signals:
     void sigCodecSaveFile(const QString &strOldFilePath, const QString &strNewFilePath);
     void signal_clearBlack();
 
+public slots:
+    void onFileClosed();
+
 private:
     void detectEndOfLine();
     void handleCursorModeChanged(TextEdit::CursorMode mode);
     void handleHightlightChanged(const QString &name);
-    void handleFileLoadFinished(const QString &filepath);
+    void handleFileLoadFinished(const QByteArray &encode,const QString &content);
     void setTextCodec(QTextCodec *codec, bool reload = false);
 
     int GetCorrectUnicode1(const QByteArray &ba);
