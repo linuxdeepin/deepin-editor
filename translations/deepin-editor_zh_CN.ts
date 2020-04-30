@@ -782,6 +782,26 @@
     </message>
     <message>
         <location filename="../src/tabbar.cpp" line="318"/>
+        <source>More ways to close</source>
+        <translation>更多关闭方式</translation>
+    </message>
+  <message>
+        <location filename="../src/tabbar.cpp" line="318"/>
+        <source>Close left tabs</source>
+        <translation>关闭左侧所有标签页</translation>
+    </message>
+ <message>
+        <location filename="../src/tabbar.cpp" line="318"/>
+        <source>Close right tabs</source>
+        <translation>关闭右侧所有标签页</translation>
+    </message>
+<message>
+        <location filename="../src/tabbar.cpp" line="318"/>
+        <source>Close unchange tabs</source>
+        <translation>关闭未修改的标签页</translation>
+    </message>
+    <message>
+        <location filename="../src/tabbar.cpp" line="318"/>
         <source>Close other tabs</source>
         <translation>关闭其他标签页</translation>
     </message>

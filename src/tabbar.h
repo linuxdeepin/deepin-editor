@@ -53,6 +53,8 @@ public:
     void setTabActiveColor(const QString &color);
     void setBackground(const QString &startColor, const QString &endColor);
     void setDNDColor(const QString &startColor, const QString &endColor);
+    void showTabs();
+
 
 signals:
     void requestHistorySaved(const QString &filePath);
@@ -83,7 +85,11 @@ private:
 
     QAction *m_closeOtherTabAction;
     QAction *m_closeTabAction;
-    DMenu *m_rightMenu;
+    QAction *m_closeLeftTabAction;
+    QAction *m_closeRightTabAction;
+    QAction *m_closeAllunModifiedTabAction;
+    DMenu   *m_rightMenu;
+    DMenu   *m_moreWaysCloseMenu;
     int m_rightClickTab;
 };
 

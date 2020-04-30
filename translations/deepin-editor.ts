@@ -782,6 +782,26 @@
     </message>
     <message>
         <location filename="../src/tabbar.cpp" line="318"/>
+        <source>More ways to close</source>
+        <translation>More ways to close</translation>
+    </message>
+  <message>
+        <location filename="../src/tabbar.cpp" line="318"/>
+        <source>Close left tabs</source>
+        <translation>Close left tabs</translation>
+    </message>
+  <message>
+        <location filename="../src/tabbar.cpp" line="318"/>
+        <source>Close right tabs</source>
+        <translation>Close right tabs</translation>
+    </message>
+  <message>
+        <location filename="../src/tabbar.cpp" line="318"/>
+        <source>Close unchange tabs</source>
+        <translation>Close unchange tabs</translation>
+    </message>
+    <message>
+        <location filename="../src/tabbar.cpp" line="318"/>
         <source>Close other tabs</source>
         <translation>Close other tabs</translation>
     </message>

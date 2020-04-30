@@ -327,10 +327,22 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
 
                 m_closeTabAction = new QAction(tr("Close tab"), this);
                 m_closeOtherTabAction = new QAction(tr("Close other tabs"), this);
+                m_moreWaysCloseMenu = new DMenu(tr("More ways to close"),this);
+                m_closeLeftTabAction = new QAction(tr("Close left tabs"),this);
+                m_closeRightTabAction = new QAction(tr("Close right tabs"),this);
+                m_closeAllunModifiedTabAction = new QAction(tr("Close unchange tabs"),this);
+
+                m_moreWaysCloseMenu->addAction(m_closeLeftTabAction);
+                m_moreWaysCloseMenu->addAction(m_closeRightTabAction);
+                m_moreWaysCloseMenu->addAction(m_closeAllunModifiedTabAction);
 
                 if(m_tabPaths.length()<2) {
                     m_closeOtherTabAction->setEnabled(false);
+                    m_closeLeftTabAction->setEnabled(false);
+                    m_closeRightTabAction->setEnabled(false);
                 }
+
+                showTabs();
                 connect(m_closeTabAction, &QAction::triggered, this, [=] {
                     Q_EMIT tabCloseRequested(m_rightClickTab);
                 });
@@ -339,8 +351,45 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
                     closeOtherTabsExceptFile(fileAt(m_rightClickTab));
                 });
 
+                connect(m_closeLeftTabAction, &QAction::triggered,this,[=]{
+                    int currentIndex = DTabBar::currentIndex();
+                    if(currentIndex>=0) {
+                        for (int i=0;i<currentIndex;i++) {
+                            closeTab(0);
+                        }
+                    }
+                });
+
+                connect(m_closeRightTabAction,&QAction::triggered,this,[=]{
+                    int currentIndex = DTabBar::currentIndex();
+                    int count = DTabBar::count();
+                    if(currentIndex>=0){
+                        for (int i=count;i>currentIndex;i--) {
+                            closeTab(currentIndex+1);
+                        }
+                    }
+                });
+
+                connect(m_closeAllunModifiedTabAction,&QAction::triggered,this,[=] {
+                    Window *window = static_cast<Window *>(this->window());//确定在哪个窗口关闭
+//                    for (int i=0;i<m_tabPaths.count();i++) {
+//                        EditWrapper *wrapper = window->wrapper(m_tabPaths.value(i));
+//                        if (!wrapper->textEditor()->document()->isModified()){
+//                            closeTab(this->indexOf(m_tabPaths.value(i)));
+//                        }
+//                    }
+                                        for ( auto path : m_tabPaths) {
+                                            EditWrapper *wrapper = window->wrapper(path);//路径获取文件
+                                            if (!wrapper->textEditor()->document()->isModified()){
+                                                closeTab(this->indexOf(path));
+                                            }
+                                        }
+
+                });
+
                 m_rightMenu->addAction(m_closeTabAction);
                 m_rightMenu->addAction(m_closeOtherTabAction);
+                m_rightMenu->addMenu(m_moreWaysCloseMenu);
 
                 m_rightMenu->exec(mapToGlobal(position));
 
@@ -370,6 +419,16 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
 void Tabbar::handleTabMoved(int fromIndex, int toIndex)
 {
     m_tabPaths.swap(fromIndex, toIndex);
+}
+void Tabbar::showTabs()
+{
+    int currentIndex  =  DTabBar::currentIndex();
+    if (currentIndex<=0)  {
+        m_closeLeftTabAction->setEnabled(false);
+    }
+    if (currentIndex >= DTabBar::count() - 1) {
+        m_closeRightTabAction->setEnabled(false);
+    }
 }
 
 void Tabbar::handleTabReleased(int index)
