@@ -38,6 +38,10 @@ public:
     void closeTab(int index);
     void closeCurrentTab();
     void closeOtherTabs();
+
+    void closeLeftTabs(const QString &filePath);
+    void closeRightTabs(const QString &filePath);
+
     void closeOtherTabsExceptFile(const QString &filePath);
     void updateTab(int index, const QString &filePath, const QString &tabName);
     void previousTab();

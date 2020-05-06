@@ -104,6 +104,39 @@ void Tabbar::closeOtherTabsExceptFile(const QString &filePath)
     emit closeTabs(closePathList);
 }
 
+void Tabbar::closeLeftTabs(const QString &filePath)
+{
+    QStringList closePathList;
+
+    for (const QString &path :m_tabPaths) {
+        if(filePath == path) {
+            break;
+        }
+        closePathList << path;
+    }
+    emit closeTabs(closePathList);
+
+}
+
+void Tabbar::closeRightTabs(const QString &filePath)
+{
+
+    QStringList closePathlist;
+
+
+    for (int i=m_tabPaths.count()-1;i >= 0;i--) {
+        m_tabPaths.value(i);
+
+        if(filePath == m_tabPaths.value(i)) {
+            break;
+        }
+        closePathlist << m_tabPaths.value(i);
+    }
+    emit closeTabs(closePathlist);
+
+
+}
+
 void Tabbar::updateTab(int index, const QString &filePath, const QString &tabName)
 {
     DTabBar::setTabText(index, tabName);
@@ -352,22 +385,24 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
                 });
 
                 connect(m_closeLeftTabAction, &QAction::triggered,this,[=]{
-                    int currentIndex = DTabBar::currentIndex();
-                    if(currentIndex>=0) {
-                        for (int i=0;i<currentIndex;i++) {
-                            closeTab(0);
-                        }
-                    }
+                    closeLeftTabs(fileAt(m_rightClickTab));
+//                    int currentIndex = DTabBar::currentIndex();
+//                    if(currentIndex>=0) {
+//                        for (int i=0;i<currentIndex;i++) {
+//                            closeTab(0);
+//                        }
+//                    }
                 });
 
                 connect(m_closeRightTabAction,&QAction::triggered,this,[=]{
-                    int currentIndex = DTabBar::currentIndex();
-                    int count = DTabBar::count();
-                    if(currentIndex>=0){
-                        for (int i=count;i>currentIndex;i--) {
-                            closeTab(currentIndex+1);
-                        }
-                    }
+                    closeRightTabs(fileAt(m_rightClickTab));
+//                    int currentIndex = DTabBar::currentIndex();
+//                    int count = DTabBar::count();
+//                    if(currentIndex>=0){
+//                        for (int i=count;i>currentIndex;i--) {
+//                            closeTab(currentIndex+1);
+//                        }
+//                    }
                 });
 
                 connect(m_closeAllunModifiedTabAction,&QAction::triggered,this,[=] {
