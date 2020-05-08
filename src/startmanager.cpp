@@ -59,6 +59,8 @@ void StartManager::openFilesInWindow(QStringList files)
 {
     // Open window with blank tab if no files need open.
     if (files.isEmpty()) {
+        if (m_windows.count() >= 20)
+            return;
         Window *window = createWindow();
         window->addBlankTab();
         window->activateWindow();
