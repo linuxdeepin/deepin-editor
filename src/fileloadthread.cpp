@@ -45,7 +45,7 @@ void FileLoadThread::run()
 
     if (file.open(QIODevice::ReadOnly)) {
         // reads all remaining data from the file.
-        QByteArray fileContent = file.read(1024);
+        QByteArray fileContent = file.readAll();
 
         // read the encode.
         QByteArray encode = Utils::detectEncode(fileContent);
@@ -54,31 +54,12 @@ void FileLoadThread::run()
             encode="gb18030";
         }
         file.close();
-        if (file.open(QIODevice::ReadOnly))
-        {
-            QTextStream stream(&file);
+        if (file.open(QIODevice::ReadOnly)) {
+            QTextStream stream(&fileContent);
             stream.setCodec(encode);
-            QString content;
-            int nLines = 5000;
-            while (!stream.atEnd()) {
-                for (int i = 0;i < nLines;i++) {
-                    if (stream.atEnd()) {
-                        break;
-                    }
-//                    if (fileContent.indexOf("\r\n") != -1) {
-//                        content += stream.readLine() + "\r\n";
-//                    } else if (fileContent.indexOf("\r") != -1) {
-//                        content += stream.readLine() + "\r";
-//                    } else {
-                    if (i == nLines - 1) {
-                        content += stream.readLine();
-                    } else {
-                        content += stream.readLine() + "\n";
-                    }
-                }
-                emit loadFinished(encode, content);
-                content.clear();
-                msleep(500);
+            QString content = stream.readAll();
+
+            emit loadFinished(encode, content);
             }
 
             file.close();
@@ -88,8 +69,4 @@ void FileLoadThread::run()
             file.close();
         }
 
-    }
-    else {
-        file.close();
-    }
 }

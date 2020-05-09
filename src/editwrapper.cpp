@@ -686,7 +686,7 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QString 
 
     // set text.
     m_textEdit->loadHighlighter();
-    m_textEdit->append(content);
+    m_textEdit->setPlainText(content);
 //    m_textEdit->clearBlack();
 
     // update status.
