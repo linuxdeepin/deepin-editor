@@ -48,7 +48,7 @@ public slots:
     Q_SCRIPTABLE void openFilesInTab(QStringList files);
     Q_SCRIPTABLE void openFilesInWindow(QStringList files);
 
-    void createWindowFromWrapper(const QString &tabName, const QString &filePath, EditWrapper *buffer);
+    void createWindowFromWrapper(const QString &tabName, const QString &filePath, EditWrapper *buffer, bool isModifyed);
     void loadTheme(const QString &themeName);
 
     Window* createWindow(bool alwaysCenter = false);

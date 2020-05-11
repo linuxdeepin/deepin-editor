@@ -473,7 +473,7 @@ void Tabbar::handleTabReleased(int index)
 
     Window *window = static_cast<Window *>(this->window());
     EditWrapper *wrapper = window->wrapper(tabPath);
-    StartManager::instance()->createWindowFromWrapper(tabName, tabPath, wrapper);
+    StartManager::instance()->createWindowFromWrapper(tabName, tabPath, wrapper, wrapper->textEditor()->document()->isModified());
 
     closeTab(index);
 

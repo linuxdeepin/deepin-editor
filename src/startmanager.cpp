@@ -141,10 +141,11 @@ void StartManager::openFilesInTab(QStringList files)
 }
 
 
-void StartManager::createWindowFromWrapper(const QString &tabName, const QString &filePath, EditWrapper *buffer)
+void StartManager::createWindowFromWrapper(const QString &tabName, const QString &filePath, EditWrapper *buffer, bool isModifyed)
 {
     Window *window = createWindow();
     window->addTabWithWrapper(buffer, filePath, tabName);
+    window->currentWrapper()->textEditor()->setModified(isModifyed);
     window->move(QCursor::pos() - window->topLevelWidget()->pos());
 }
 
