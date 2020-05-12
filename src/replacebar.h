@@ -74,8 +74,6 @@ public slots:
 protected:
     void hideEvent(QHideEvent *event);
     bool focusNextPrevChild(bool next);
-    void mousePressEvent(QMouseEvent *event) ;
-    void mouseMoveEvent(QMouseEvent *event) ;
 
 private:
     QPushButton *m_replaceAllButton;

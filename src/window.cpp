@@ -165,14 +165,16 @@ Window::Window(DMainWindow *parent)
     static DAnchors<FindBar> anchors_findbar(m_findBar);
     anchors_findbar.setAnchor(Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
     anchors_findbar.setAnchor(Qt::AnchorHorizontalCenter, m_centralWidget, Qt::AnchorHorizontalCenter);
-    anchors_findbar.setBottomMargin(5);
+    //anchors_findbar.setBottomMargin(5);
+    m_findBar->move(QPoint(10, height() - 58));
     m_findBar->raise();
 
     // Init replaceBar panel.
     DAnchors<ReplaceBar> anchors_replaceBar(m_replaceBar);
     anchors_replaceBar.setAnchor(Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
     anchors_replaceBar.setAnchor(Qt::AnchorHorizontalCenter, m_centralWidget, Qt::AnchorHorizontalCenter);
-    anchors_replaceBar.setBottomMargin(5);
+    //anchors_replaceBar.setBottomMargin(5);
+    m_replaceBar->move(QPoint(10, height() - 58));
     m_replaceBar->raise();
 
     // Init theme panel.
@@ -989,6 +991,7 @@ void Window::setFontSizeWithConfig(EditWrapper *wrapper)
 void Window::popupFindBar()
 {
     EditWrapper *curWrapper = currentWrapper();
+    currentWrapper()->bottomBar()->updateSize(60);
 
     if (curWrapper->textEditor()->toPlainText().isEmpty()) {
         return;
@@ -1032,6 +1035,7 @@ void Window::popupFindBar()
 void Window::popupReplaceBar()
 {
     EditWrapper *curWrapper = currentWrapper();
+    currentWrapper()->bottomBar()->updateSize(60);
     bool bIsReadOnly = curWrapper->textEditor()->getReadOnlyMode();
 
     if (bIsReadOnly) {
@@ -1464,6 +1468,7 @@ void Window::handleTabsClosed(QStringList tabList)
 
 void Window::handleCurrentChanged(const int &index)
 {
+    currentWrapper()->bottomBar()->updateSize(32);
     if (m_findBar->isVisible()) {
         m_findBar->hide();
     }
@@ -1541,6 +1546,7 @@ void Window::slotFindbarClose()
     if (wrapper->bottomBar()->isHidden()) {
         wrapper->bottomBar()->show();
     }
+    wrapper->bottomBar()->updateSize(32);
 }
 
 void Window::slotReplacebarClose()

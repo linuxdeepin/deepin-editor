@@ -73,8 +73,6 @@ public slots:
     void slot_ifClearSearchWord();
 
 protected:
-    void mousePressEvent(QMouseEvent *event) override;
-    void mouseMoveEvent(QMouseEvent *event) override;
     void hideEvent(QHideEvent *event) override;
 
 private:

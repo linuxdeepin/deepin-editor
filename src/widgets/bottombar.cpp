@@ -158,6 +158,11 @@ void BottomBar::setPalette(const QPalette &palette)
     QWidget::setPalette(palette);
 }
 
+void BottomBar::updateSize(int size)
+{
+    setFixedHeight(size);
+}
+
 void BottomBar::handleEncodeChanged(const QString &name)
 {
     m_wrapper->setTextCodec(name.toLocal8Bit(), true);
