@@ -938,6 +938,24 @@
                             "default":  "Ctrl+Z"
                         },
                         {
+                            "key": "switchbookmark",
+                            "name": "Switch bookmark",
+                            "type": "shortcut",
+                            "default":  "Ctrl+F2"
+                        },
+                        {
+                            "key": "movetoprebookmark",
+                            "name": "Move to previous bookmark",
+                            "type": "shortcut",
+                            "default":  "F2"
+                        },
+                        {
+                            "key": "movetonextbookmark",
+                            "name": "Move to next bookmark",
+                            "type": "shortcut",
+                            "default":  "Shift+F2"
+                        },
+                        {
                             "key": "redo",
                             "hide" : true,
                             "reset" : false,
@@ -1390,6 +1408,24 @@
                             "default":  "Ctrl+/"
                         },
                         {
+                            "key": "switchbookmark",
+                            "name": "Switch bookmark",
+                            "type": "shortcut",
+                            "default":  "Ctrl+F2"
+                        },
+                        {
+                            "key": "movetoprebookmark",
+                            "name": "Move to previous bookmark",
+                            "type": "shortcut",
+                            "default":  "F2"
+                        },
+                        {
+                            "key": "movetonextbookmark",
+                            "name": "Move to next bookmark",
+                            "type": "shortcut",
+                            "default":  "Shift+F2"
+                        },
+                        {
                             "key": "redo",
                             "hide" : true,
                             "reset" : false,
@@ -1840,6 +1876,24 @@
                             "hide" : true,
                             "reset" : false,
                             "default":  "Ctrl+Z"
+                        },
+                        {
+                            "key": "switchbookmark",
+                            "name": "Switch bookmark",
+                            "type": "shortcut",
+                            "default":  "Ctrl+F2"
+                        },
+                        {
+                            "key": "movetoprebookmark",
+                            "name": "Move to previous bookmark",
+                            "type": "shortcut",
+                            "default":  "F2"
+                        },
+                        {
+                            "key": "movetonextbookmark",
+                            "name": "Move to next bookmark",
+                            "type": "shortcut",
+                            "default":  "Shift+F2"
                         },
                         {
                             "key": "redo",
