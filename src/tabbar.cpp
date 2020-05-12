@@ -427,7 +427,10 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
 
                 m_rightMenu->addAction(m_closeTabAction);
                 m_rightMenu->addAction(m_closeOtherTabAction);
-                m_rightMenu->addMenu(m_moreWaysCloseMenu);
+                //yanyuhan 只有一个标签页时不显示更多方式关闭
+                if(m_tabPaths.size() > 1) {
+                    m_rightMenu->addMenu(m_moreWaysCloseMenu);
+                }
 
                 m_rightMenu->exec(mapToGlobal(position));
 
