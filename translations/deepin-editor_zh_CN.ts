@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="zh_CN">
 <context>
     <name>BottomBar</name>
     <message>
@@ -202,11 +204,6 @@
         <source>Read-Only mode is on</source>
         <translation>只读模式已开启</translation>
     </message>
-    <message>
-        <location filename="../src/dtextedit.cpp" line="2493"/>
-        <source>Read-Only mode is on</source>
-        <translation>只读模式已开启</translation>
-    </message>
 </context>
 <context>
     <name>EditWrapper</name>
@@ -252,24 +249,9 @@
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="304"/>
-        <source>Save</source>
-        <translation>保存</translation>
-    </message>
-    <message>
-        <location filename="../src/editwrapper.cpp" line="445"/>
-        <source>Save</source>
-        <translation>保存</translation>
-    </message>
-    <message>
         <location filename="../src/editwrapper.cpp" line="493"/>
         <source>There are errors when using this encoding. If continue, the file contents may be changed</source>
         <translation>使用此编码加载文件出错，如果强制使用，可能会导致文件内容发生改变</translation>
-    </message>
-    <message>
-        <location filename="../src/editwrapper.cpp" line="496"/>
-        <source>Cancel</source>
-        <translation>取消</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="497"/>
@@ -825,20 +807,20 @@
         <source>More ways to close</source>
         <translation>更多关闭方式</translation>
     </message>
-  <message>
+    <message>
         <location filename="../src/tabbar.cpp" line="318"/>
         <source>Close left tabs</source>
         <translation>关闭左侧所有标签页</translation>
     </message>
- <message>
+    <message>
         <location filename="../src/tabbar.cpp" line="318"/>
         <source>Close right tabs</source>
         <translation>关闭右侧所有标签页</translation>
     </message>
-<message>
+    <message>
         <location filename="../src/tabbar.cpp" line="318"/>
         <source>Close unchange tabs</source>
-        <translation>关闭未修改的标签页</translation>
+        <translation type="unfinished">关闭所有未修改标签页</translation>
     </message>
     <message>
         <location filename="../src/tabbar.cpp" line="318"/>
