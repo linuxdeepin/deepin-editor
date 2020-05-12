@@ -279,6 +279,7 @@ QMimeData* Tabbar::createMimeDataFromTab(int index, const QStyleOptionTab &optio
     QMimeData *mimeData = new QMimeData;
 
     mimeData->setProperty("wrapper", QVariant::fromValue(static_cast<void *>(wrapper)));
+    mimeData->setProperty("isModified", wrapper->textEditor()->document()->isModified());
     mimeData->setData("dedit/tabbar", tabName.toUtf8());
     mimeData->removeFormat("text/plain");
 
@@ -298,6 +299,7 @@ void Tabbar::insertFromMimeDataOnDragEnter(int index, const QMimeData *source)
     }
 
     window->addTabWithWrapper(wrapper, wrapper->textEditor()->filepath, tabName, index);
+    window->currentWrapper()->textEditor()->setModified(source->property("isModified").toBool());
     window->focusActiveEditor();
 }
 
@@ -314,6 +316,7 @@ void Tabbar::insertFromMimeData(int index, const QMimeData *source)
     }
 
     window->addTabWithWrapper(wrapper, wrapper->textEditor()->filepath, tabName, index);
+    window->currentWrapper()->textEditor()->setModified(source->property("isModified").toBool());
     window->focusActiveEditor();
 }
 
