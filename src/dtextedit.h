@@ -42,6 +42,7 @@ namespace KSyntaxHighlighting {
 
 enum ConvertCase { UPPER, LOWER, CAPITALIZE };
 
+class leftareaoftextedit;
 class EditWrapper;
 class TextEdit : public DTextEdit
 {
@@ -56,7 +57,8 @@ public:
 
     TextEdit(QWidget *parent = nullptr);
 
-    QWidget *lineNumberArea;
+    LineNumberArea *lineNumberArea;
+    leftareaoftextedit *m_pLeftAreaWidget;
     QString filepath;
 
     void setWrapper(EditWrapper *);
@@ -185,6 +187,12 @@ public:
 
     void clearBlack();
 
+    void bookMarkAreaPaintEvent(QPaintEvent *event);
+    int getLineFromPoint(const QPoint &point);
+    void addOrDeleteBookMark();
+    void moveToPreviousBookMark();
+    void moveToNextBookMark();
+
 signals:
     void clickFindAction();
     void clickReplaceAction();
@@ -214,6 +222,11 @@ public slots:
     void clickPasteAction();
     void clickDeleteAction();
     void clickOpenInFileManagerAction();
+    void onAddBookMark();
+    void onCancelBookMark();
+    void onMoveToPreviousBookMark();
+    void onMoveToNextBookMark();
+    void onClearBookMark();
 
     void copyWordUnderCursor();
     void cutWordUnderCursor();
@@ -242,7 +255,7 @@ protected:
     void mouseMoveEvent(QMouseEvent *e) override;
     void keyPressEvent(QKeyEvent *e) override;
     void wheelEvent(QWheelEvent *e) override;
-    bool eventFilter(QObject *, QEvent *event) override;
+    bool eventFilter(QObject *object, QEvent *event) override;
     void contextMenuEvent(QContextMenuEvent *event) override;
 
 private:
@@ -296,6 +309,11 @@ private:
     QAction *m_stopReadingAction;
     QAction *m_dictationAction;
     QAction *m_translateAction;
+    QAction *m_addBookMarkAction;
+    QAction *m_cancelBookMarkAction;
+    QAction *m_clearBookMarkAction;
+    QAction *m_preBookMarkAction;
+    QAction *m_nextBookMarkAction;
 
     DMenu *m_convertCaseMenu;
     QAction *m_upcaseAction;
@@ -339,6 +357,7 @@ private:
     QColor m_selectionBgColor;
 
     QPoint m_mouseClickPos;
+    QPoint m_menuPos;
 
     bool m_highlighted = false;
 
@@ -355,6 +374,8 @@ private:
     int m_touchTapDistance = -1;
 
     QFont m_fontLineNumberArea;
+    QList<int> m_listBookmark;
+    int m_nLines;
 };
 
 #endif

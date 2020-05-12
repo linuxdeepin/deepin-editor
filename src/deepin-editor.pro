@@ -49,7 +49,9 @@ HEADERS += window.h \
            thememodule/themelistview.h \
            environments.h \
            fontitemdelegate.h \
-    	   warningnotices.h
+    	   warningnotices.h \
+    leftareaoftextedit.h \
+    bookmarkwidget.h \
 
 SOURCES += window.cpp \
            startmanager.cpp \
@@ -78,7 +80,9 @@ SOURCES += window.cpp \
            thememodule/themelistmodel.cpp \
            thememodule/themelistview.cpp \
            fontitemdelegate.cpp \
-    	   warningnotices.cpp
+    	   warningnotices.cpp \
+    leftareaoftextedit.cpp \
+    bookmarkwidget.cpp \
 
 
 QMAKE_CXXFLAGS += -g

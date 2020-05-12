@@ -1294,7 +1294,8 @@ void Window::displayShortcuts()
                   << "backwardpair" << "selectall" << "copy" << "cut"
                   << "paste" << "transposechar" << "setmark" << "exchangemark"
                   << "copylines" << "cutlines" << "joinlines" << "togglereadonlymode"
-                  << "togglecomment" << "undo" << "redo";
+                  << "togglecomment" << "undo" << "redo" << "switchbookmark" << "movetoprebookmark"
+                  << "movetonextbookmark";
 
     QJsonObject editorJsonGroup;
     editorJsonGroup.insert("groupName", tr("Editor"));

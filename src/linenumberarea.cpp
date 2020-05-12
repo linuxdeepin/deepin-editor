@@ -19,10 +19,13 @@
 
 #include "linenumberarea.h"
 #include "dtextedit.h"
+#include "leftareaoftextedit.h"
+#include <QDebug>
 
-LineNumberArea::LineNumberArea(TextEdit *textEdit)
+LineNumberArea::LineNumberArea(leftareaoftextedit *leftAreaWidget)
 {
-    m_textEdit = textEdit;
+    m_leftAreaWidget = leftAreaWidget;
+    //m_textEdit = textEdit;
 }
 
 LineNumberArea::~LineNumberArea()
@@ -31,10 +34,12 @@ LineNumberArea::~LineNumberArea()
 
 void LineNumberArea::paintEvent(QPaintEvent *e)
 {
-    m_textEdit->lineNumberAreaPaintEvent(e);
+    qDebug() << "LineNumberArea::paintEvent ";
+    m_leftAreaWidget->lineNumberAreaPaintEvent(e);
+    //m_textEdit->lineNumberAreaPaintEvent(e);
 }
 
 QSize LineNumberArea::sizeHint() const
 {
-    return QSize(m_textEdit->lineNumberAreaWidth(), 0);
+    return QSize(m_leftAreaWidget->lineNumberAreaWidth(), 0);
 }

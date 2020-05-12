@@ -22,20 +22,21 @@
 
 #include <QWidget>
 
+class leftareaoftextedit;
 class TextEdit;
 class LineNumberArea : public QWidget
 {
     Q_OBJECT
 
 public:
-    LineNumberArea(TextEdit *textEdit);
-    ~LineNumberArea();
+    LineNumberArea(leftareaoftextedit *leftAreaWidget);
+    ~LineNumberArea() override;
 
     void paintEvent(QPaintEvent *e) override;
     QSize sizeHint() const;
 
 private:
-    TextEdit *m_textEdit;
+    leftareaoftextedit *m_leftAreaWidget;
 };
 
 #endif

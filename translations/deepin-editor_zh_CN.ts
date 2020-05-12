@@ -117,7 +117,32 @@
         <translation>语音听写</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="123"/>
+        <location filename="../src/dtextedit.cpp" line="132"/>
+        <source>Add bookmark</source>
+        <translation>加入书签</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="133"/>
+        <source>Cancel bookmark</source>
+        <translation>取消书签</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="134"/>
+        <source>Previous bookmark</source>
+        <translation>上一个书签</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="135"/>
+        <source>Next bookmark</source>
+        <translation>下一个书签</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="136"/>
+        <source>Clear bookmark</source>
+        <translation>清除所有书签</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="132"/>
         <source>Translate</source>
         <translation>文本翻译</translation>
     </message>
@@ -697,17 +722,32 @@
         <translation>撤销</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="100"/>
+        <location filename="../src/settingsdialog.cpp" line="101"/>
         <source>Redo</source>
         <translation>重做</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="101"/>
+        <location filename="../src/settingsdialog.cpp" line="102"/>
+        <source>Switch bookmark</source>
+        <translation>切换书签</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="103"/>
+        <source>Move to previous bookmark</source>
+        <translation>移动到上一个书签</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="104"/>
+        <source>Move to next bookmark</source>
+        <translation>移动到下一个书签</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="105"/>
         <source>Advanced</source>
         <translation>高级设置</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="103"/>
+        <location filename="../src/settingsdialog.cpp" line="106"/>
         <source>Window size</source>
         <translation>窗口状态</translation>
     </message>

@@ -22,6 +22,7 @@
 #include "editwrapper.h"
 #include "utils.h"
 #include <unistd.h>
+#include "leftareaoftextedit.h"
 
 #include <QCoreApplication>
 #include <QApplication>
@@ -49,7 +50,7 @@ EditWrapper::EditWrapper(QWidget *parent)
     // Init layout and widgets.
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->setSpacing(0);
-    m_layout->addWidget(m_textEdit->lineNumberArea);
+    m_layout->addWidget(m_textEdit->m_pLeftAreaWidget);
     m_layout->addWidget(m_textEdit);
 
     m_bottomBar->setHighlightMenu(m_textEdit->getHighlightMenu());

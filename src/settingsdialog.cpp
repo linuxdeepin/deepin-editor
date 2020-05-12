@@ -99,6 +99,9 @@ void GenerateSettingTranslate()
     auto shortcuts_editor_togglecommentName = QObject::tr("Toggle comment");
     auto shortcuts_editor_undoName = QObject::tr("Undo");
     auto shortcuts_editor_redoName = QObject::tr("Redo");
+    auto shortcuts_editor_switchbookmarkName = QObject::tr("Switch bookmark");
+    auto shortcuts_editor_movetoprebookmarkName = QObject::tr("Move to previous bookmark");
+    auto shortcuts_editor_movetonextbookmarkName = QObject::tr("Move to next bookmark");
     auto group_advanceName = QObject::tr("Advanced");
     auto advance_windowName = QObject::tr("Window");
     auto advance_window_windowstateName = QObject::tr("Window size");

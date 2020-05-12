@@ -25,6 +25,8 @@
 #include "window.h"
 #include "editwrapper.h"
 #include "widgets/bottombar.h"
+#include "leftareaoftextedit.h"
+#include "bookmarkwidget.h"
 
 #include <KF5/KSyntaxHighlighting/definition.h>
 #include <KF5/KSyntaxHighlighting/syntaxhighlighter.h>
@@ -74,7 +76,9 @@ TextEdit::TextEdit(QWidget *parent)
       m_wrapper(nullptr),
      m_highlighter(new KSyntaxHighlighting::SyntaxHighlighter(document()))
 {
-    lineNumberArea = new LineNumberArea(this);
+    //lineNumberArea = new LineNumberArea(m_pLeftAreaWidget);
+    m_pLeftAreaWidget = new leftareaoftextedit(this);
+    lineNumberArea = m_pLeftAreaWidget->m_linenumberarea;
 
 #if QT_VERSION < QT_VERSION_CHECK(5,9,0)
     m_touchTapDistance = 15;
@@ -84,6 +88,7 @@ TextEdit::TextEdit(QWidget *parent)
     m_fontLineNumberArea.setFamily("SourceHanSansSC-Normal");
 
     viewport()->installEventFilter(this);
+    m_pLeftAreaWidget->m_bookMarkArea->installEventFilter(this);
     viewport()->setCursor(Qt::IBeamCursor);
 
     // Don't draw frame around editor widget.
@@ -124,6 +129,11 @@ TextEdit::TextEdit(QWidget *parent)
     m_stopReadingAction = new QAction(tr("Stop reading"),this);
     m_dictationAction = new QAction(tr("Speech to Text"),this);
     m_translateAction = new QAction(tr("Translate"),this);
+    m_addBookMarkAction = new QAction(tr("Add bookmark"),this);
+    m_cancelBookMarkAction = new QAction(tr("Cancel bookmark"),this);
+    m_preBookMarkAction = new QAction(tr("Previous bookmark"),this);
+    m_nextBookMarkAction = new QAction(tr("Next bookmark"),this);
+    m_clearBookMarkAction = new QAction(tr("Clear bookmark"),this);
 
     connect(m_rightMenu, &DMenu::aboutToHide, this, &TextEdit::removeHighlightWordUnderCursor);
     connect(m_undoAction, &QAction::triggered, this, &TextEdit::undo);
@@ -146,6 +156,11 @@ TextEdit::TextEdit(QWidget *parent)
     connect(m_stopReadingAction, &QAction::triggered, this, &TextEdit::slot_stopReading);
     connect(m_dictationAction, &QAction::triggered, this, &TextEdit::slot_dictation);
     connect(m_translateAction, &QAction::triggered, this, &TextEdit::slot_translate);
+    connect(m_addBookMarkAction, &QAction::triggered, this, &TextEdit::onAddBookMark);
+    connect(m_cancelBookMarkAction, &QAction::triggered, this, &TextEdit::onCancelBookMark);
+    connect(m_preBookMarkAction, &QAction::triggered, this, &TextEdit::onMoveToPreviousBookMark);
+    connect(m_nextBookMarkAction, &QAction::triggered, this, &TextEdit::onMoveToNextBookMark);
+    connect(m_clearBookMarkAction, &QAction::triggered, this, &TextEdit::onClearBookMark);
 
 
     // Init convert case sub menu.
@@ -262,7 +277,7 @@ int TextEdit::lineNumberAreaWidth()
         ++digits;
     }
 
-    int space = 13 +  fontMetrics().width(QLatin1Char('9')) * (digits);
+    int space = 13 +  fontMetrics().width(QLatin1Char('9')) * (digits) + 40;
 
     return space;
 }
@@ -426,6 +441,7 @@ QTextBlock TextEdit::firstVisibleBlock()
 
 void TextEdit::moveToStart()
 {
+    verticalScrollBar()->setValue(0);
     if (m_cursorMark) {
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
@@ -543,7 +559,7 @@ void TextEdit::moveCursorNoBlink(QTextCursor::MoveOperation operation, QTextCurs
 void TextEdit::jumpToLine(int line, bool keepLineAtCenter)
 {
     QTextCursor cursor(document()->findBlockByNumber(line - 1)); // line - 1 because line number starts from 0
-
+    verticalScrollBar()->setValue(fontMetrics().height() * line - height());
     // Update cursor.
     setTextCursor(cursor);
 
@@ -1180,6 +1196,7 @@ void TextEdit::handleCursorMarkChanged(bool mark, QTextCursor cursor)
     }
 
     lineNumberArea->update();
+    m_pLeftAreaWidget->m_bookMarkArea->update();
 }
 
 void TextEdit::convertWordCase(ConvertCase convertCase)
@@ -1587,7 +1604,7 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
             m_fontLineNumberArea.setPointSize(currentFont().pointSize() - 1);
             painter.setFont(m_fontLineNumberArea);
             painter.drawText(0, top,
-                             lineNumberArea->width(), fontMetrics().height(),
+                             lineNumberArea->width(), document()->documentLayout()->blockBoundingRect(block).height(),
                              Qt::AlignVCenter | Qt::AlignHCenter, QString::number(blockNumber + 1));
         }
 
@@ -1600,11 +1617,42 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
 
 void TextEdit::updateLineNumber()
 {
+    if(m_nLines != blockCount())
+    {
+        QTextCursor cursor = textCursor();
+        int nAddorDeleteLine = 0;
+        if (m_nLines > blockCount()) {
+            nAddorDeleteLine = cursor.blockNumber() + 2;
+
+            if (m_listBookmark.contains(nAddorDeleteLine)) {
+                m_listBookmark.removeOne(nAddorDeleteLine);
+            }
+
+            foreach (auto line, m_listBookmark) {
+                qDebug() << line << nAddorDeleteLine;
+                if (nAddorDeleteLine < line) {
+                    m_listBookmark.replace(m_listBookmark.indexOf(line),line - 1);
+                }
+            }
+        } else {
+            nAddorDeleteLine = cursor.blockNumber();
+
+            foreach (auto line, m_listBookmark) {
+                qDebug() << line << nAddorDeleteLine;
+                if (nAddorDeleteLine < line) {
+                    m_listBookmark.replace(m_listBookmark.indexOf(line),line + 1);
+                }
+            }
+        }
+    }
+    m_nLines = blockCount();
     // Update line number painter.
 
     int blockSize = QString::number(blockCount()).size();
 
-    lineNumberArea->setFixedWidth(blockSize * fontMetrics().width('9') + m_lineNumberPaddingX * 4);
+    m_pLeftAreaWidget->setFixedWidth(23 + blockSize * fontMetrics().width('9') + m_lineNumberPaddingX * 4);
+
+    m_pLeftAreaWidget->m_bookMarkArea->update();
     lineNumberArea->update();
 }
 
@@ -1874,6 +1922,7 @@ void TextEdit::setTheme(const KSyntaxHighlighting::Theme &theme, const QString &
     horizontalScrollBar()->setSliderPosition(iHorizontalScrollVaule);
 
     lineNumberArea->update();
+    m_pLeftAreaWidget->m_bookMarkArea->update();
     highlightCurrentLine();
 }
 
@@ -2172,6 +2221,53 @@ void TextEdit::clickOpenInFileManagerAction()
     DDesktopServices::showFileItem(filepath);
 }
 
+void TextEdit::onAddBookMark()
+{
+    addOrDeleteBookMark();
+}
+
+void TextEdit::onCancelBookMark()
+{
+    addOrDeleteBookMark();
+}
+
+void TextEdit::onMoveToPreviousBookMark()
+{
+    int line = getLineFromPoint(m_mouseClickPos);
+    int index = m_listBookmark.indexOf(line);
+
+    if (index == 0)
+    {
+       jumpToLine(m_listBookmark.last(),true);
+    } else {
+       jumpToLine(m_listBookmark.value(index - 1),true);
+    }
+}
+
+void TextEdit::onMoveToNextBookMark()
+{
+    int line = getLineFromPoint(m_mouseClickPos);
+    int index = m_listBookmark.indexOf(line);
+
+    if(index == -1 && !m_listBookmark.isEmpty())
+    {
+        jumpToLine(m_listBookmark.last(),false);
+    }
+
+    if (index == m_listBookmark.count() - 1)
+    {
+       jumpToLine(m_listBookmark.first(),false);
+    } else {
+       jumpToLine(m_listBookmark.value(index + 1),false);
+    }
+}
+
+void TextEdit::onClearBookMark()
+{
+    m_listBookmark.clear();
+    m_pLeftAreaWidget->m_bookMarkArea->update();
+}
+
 void TextEdit::copyWordUnderCursor()
 {
     QClipboard *clipboard = QApplication::clipboard();
@@ -2437,6 +2533,207 @@ void TextEdit::clearBlack()
     emit signal_clearBlack();
 }
 
+void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
+{
+    bookmarkwidget *bookMarkArea = m_pLeftAreaWidget->m_bookMarkArea;
+    QPainter painter(bookMarkArea);
+    QColor lineNumberAreaBackgroundColor;
+    if (QColor(m_backgroundColor).lightness() < 128) {
+        lineNumberAreaBackgroundColor = palette().brightText().color();
+        lineNumberAreaBackgroundColor.setAlphaF(0.01);
+
+        m_lineNumbersColor.setAlphaF(0.2);
+    } else {
+        lineNumberAreaBackgroundColor = palette().brightText().color();
+        lineNumberAreaBackgroundColor.setAlphaF(0.03);
+        m_lineNumbersColor.setAlphaF(0.3);
+    }
+    painter.fillRect(event->rect(), lineNumberAreaBackgroundColor);
+
+    int blockNumber = getFirstVisibleBlockId();
+    QTextBlock block = document()->findBlockByNumber(blockNumber);
+    QTextBlock prev_block = (blockNumber > 0) ? document()->findBlockByNumber(blockNumber-1) : block;
+    int translate_y = (blockNumber > 0) ? -verticalScrollBar()->sliderPosition() : 0;
+
+    int top = this->viewport()->geometry().top();
+
+    // Adjust text position according to the previous "non entirely visible" block
+    // if applicable. Also takes in consideration the document's margin offset.
+    int additional_margin;
+    if (blockNumber == 0)
+        // Simply adjust to document's margin
+        additional_margin = document()->documentMargin() -1 - this->verticalScrollBar()->sliderPosition();
+    else
+        // Getting the height of the visible part of the previous "non entirely visible" block
+        additional_margin = document()->documentLayout()->blockBoundingRect(prev_block)
+                .translated(0, translate_y).intersected(this->viewport()->geometry()).height();
+
+    // Shift the starting point
+    top += additional_margin;
+
+    int frontLine = 0;//滚动条滚过的行
+    int linesHeight = verticalScrollBar()->value();//滚动条滚过的行高
+    block = document()->findBlockByNumber(0);//第一行文本块
+
+    while (linesHeight > 0) {
+        linesHeight -= document()->documentLayout()->blockBoundingRect(block).height();
+        block = block.next();
+        frontLine++;
+    }
+
+    QTextBlock lineBlock;//第几行文本块
+    QImage image(":/images/bookmark.svg");
+    QImage scaleImage;
+    int startLine = 0;//当前可见区域开始行号
+    int startPoint = 0;//当前可见区域开始位置
+    int imageTop = 0;//图片绘制位置
+    double nBookmarkLineHeight = document()->documentLayout()->blockBoundingRect(block).height();
+
+    foreach (auto line, m_listBookmark) {
+        lineBlock = document()->findBlockByNumber(line - 1);
+        if (nBookmarkLineHeight > document()->documentLayout()->blockBoundingRect(lineBlock).height()) {
+            nBookmarkLineHeight = document()->documentLayout()->blockBoundingRect(lineBlock).height();
+        }
+    }
+
+    foreach (auto line, m_listBookmark) {
+        startLine = frontLine + 1;
+
+        if (line < startLine) {
+
+        } else {
+            startPoint = top;
+
+            while (line - startLine > 0) {
+                lineBlock = document()->findBlockByNumber(startLine - 1);
+                startPoint += document()->documentLayout()->blockBoundingRect(lineBlock).height();
+                startLine++;
+            }
+
+            if(line > 0)
+            {
+                lineBlock = document()->findBlockByNumber(line - 1);
+                if(document()->documentLayout()->blockBoundingRect(lineBlock).height() > image.height())
+                {
+                    imageTop = startPoint + (document()->documentLayout()->blockBoundingRect(lineBlock).height() - image.height())/2;
+                    scaleImage = image;
+                } else {
+                    imageTop = startPoint/* + (image.height() - document()->documentLayout()->blockBoundingRect(lineBlock).height())/2*/;
+
+                    double scale = /*document()->documentLayout()->blockBoundingRect(lineBlock).height()*/nBookmarkLineHeight/image.height();
+                    int nScaleWidth = scale*image.height()*image.height()/image.width();
+                    scaleImage = image.scaled(scale*image.height(),nScaleWidth);
+                }
+
+                painter.drawImage(10,imageTop,scaleImage);
+            }
+        }
+    }
+}
+
+int TextEdit::getLineFromPoint(const QPoint &point)
+{
+    int blockNumber = getFirstVisibleBlockId();
+    QTextBlock block = document()->findBlockByNumber(blockNumber);
+    QTextBlock prev_block = (blockNumber > 0) ? document()->findBlockByNumber(blockNumber-1) : block;
+    int translate_y = (blockNumber > 0) ? -verticalScrollBar()->sliderPosition() : 0;
+
+    int top = this->viewport()->geometry().top();
+
+    // Adjust text position according to the previous "non entirely visible" block
+    // if applicable. Also takes in consideration the document's margin offset.
+    int additional_margin;
+    if (blockNumber == 0)
+        // Simply adjust to documeline - 1nt's margin
+        additional_margin = document()->documentMargin() -1 - this->verticalScrollBar()->sliderPosition();
+    else
+        // Getting the height of the visible part of the previous "non entirely visible" block
+        additional_margin = document()->documentLayout()->blockBoundingRect(prev_block)
+                .translated(0, translate_y).intersected(this->viewport()->geometry()).height();
+
+    // Shift the starting point
+    top += additional_margin;
+
+    //计算行号
+    int linesHeight = verticalScrollBar()->value();//滚动条滚过的行高
+    int frontLine = 0;//滚动条滚过的行
+    block = document()->findBlockByNumber(0);//第一行文本块
+
+    while (linesHeight > 0) {
+
+        linesHeight -= document()->documentLayout()->blockBoundingRect(block).height();
+        block = block.next();
+        frontLine++;
+    }
+
+    int cursorPoint = point.y() - top;//鼠标点击位置 - 起始位置
+    int line = 0;//当前可见区域第几行
+    block = document()->findBlockByNumber(blockNumber);//当前可见区域第一个文本块
+
+    while (cursorPoint >= 0) {
+        cursorPoint -= document()->documentLayout()->blockBoundingRect(block).height();
+        block = block.next();
+        line++;
+    }
+
+    return line + frontLine;
+}
+
+void TextEdit::addOrDeleteBookMark()
+{
+    int line = getLineFromPoint(m_mouseClickPos);
+
+    if (line == blockCount()) {
+         return;
+    }
+
+    if (m_listBookmark.contains(line)) {
+        m_listBookmark.removeOne(line);
+    } else {
+        m_listBookmark.push_back(line);
+    }
+
+    m_pLeftAreaWidget->m_bookMarkArea->update();
+}
+
+void TextEdit::moveToPreviousBookMark()
+{
+    int line = getCurrentLine();
+    int index = m_listBookmark.indexOf(line);
+
+    if(index == -1 && !m_listBookmark.isEmpty())
+    {
+        jumpToLine(m_listBookmark.first(),false);
+        return;
+    }
+
+    if (index == 0)
+    {
+       jumpToLine(m_listBookmark.last(),false);
+    } else {
+       jumpToLine(m_listBookmark.value(index - 1),false);
+    }
+}
+
+void TextEdit::moveToNextBookMark()
+{
+    int line = getCurrentLine();
+    int index = m_listBookmark.indexOf(line);
+
+    if(index == -1 && !m_listBookmark.isEmpty())
+    {
+        jumpToLine(m_listBookmark.first(),false);
+        return;
+    }
+
+    if (index == m_listBookmark.count() - 1)
+    {
+       jumpToLine(m_listBookmark.first(),false);
+    } else {
+       jumpToLine(m_listBookmark.value(index + 1),false);
+    }
+}
+
 void TextEdit::completionWord(QString word)
 {
     QString wordAtCursor = getWordAtCursor();
@@ -2451,12 +2748,39 @@ void TextEdit::completionWord(QString word)
     }
 }
 
-bool TextEdit::eventFilter(QObject *, QEvent *event)
+bool TextEdit::eventFilter(QObject *object, QEvent *event)
 {
     if (event->type() == QEvent::MouseButtonPress) {
-        m_mouseClickPos = QCursor::pos();
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+        m_mouseClickPos = mouseEvent->pos();
 
         emit click();
+
+        if (object == m_pLeftAreaWidget->m_bookMarkArea) {
+            m_mouseClickPos = mouseEvent->pos();
+            if (mouseEvent->button() == Qt::RightButton) {
+                m_rightMenu->clear();
+                int line = getLineFromPoint(mouseEvent->pos());
+                if (m_listBookmark.contains(line)) {
+                    m_rightMenu->addAction(m_cancelBookMarkAction);
+                    if (m_listBookmark.count() > 1) {
+                        m_rightMenu->addAction(m_preBookMarkAction);
+                        m_rightMenu->addAction(m_nextBookMarkAction);
+                    }
+                } else {
+                    m_rightMenu->addAction(m_addBookMarkAction);
+                }
+
+                if (!m_listBookmark.isEmpty()) {
+                    m_rightMenu->addAction(m_clearBookMarkAction);
+                }
+
+                m_rightMenu->exec(mouseEvent->globalPos());
+
+            } else {
+                addOrDeleteBookMark();
+            }
+        }
     }
 
     return false;
@@ -2737,6 +3061,12 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             QTextEdit::undo();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "redo")) {
             QTextEdit::redo();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "switchbookmark")) {
+            addOrDeleteBookMark();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "movetoprebookmark")) {
+            moveToPreviousBookMark();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "movetonextbookmark")) {
+            moveToNextBookMark();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "escape")) {
             escape();
         } else if (e->key() == Qt::Key_Insert && key != "Shift+Ins") {
@@ -2799,7 +3129,7 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
     m_rightMenu->clear();
 
     QString wordAtCursor = getWordAtMouse();
-
+    m_mouseClickPos = event->pos();
     QTextCursor selectionCursor = textCursor();
     selectionCursor.movePosition(QTextCursor::StartOfBlock);
     selectionCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
