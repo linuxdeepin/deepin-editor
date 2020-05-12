@@ -1469,7 +1469,6 @@ void Window::handleTabsClosed(QStringList tabList)
 
 void Window::handleCurrentChanged(const int &index)
 {
-    currentWrapper()->bottomBar()->updateSize(32);
     if (m_findBar->isVisible()) {
         m_findBar->hide();
     }
@@ -1493,6 +1492,7 @@ void Window::handleCurrentChanged(const int &index)
     if (currentWrapper() != nullptr && currentWrapper()->isVisible()) {
         //  if (currentWrapper()!=nullptr) {
         currentWrapper()->m_bottomBar->show();
+         currentWrapper()->m_bottomBar->updateSize(32);
     }
 }
 
