@@ -165,16 +165,16 @@ Window::Window(DMainWindow *parent)
     static DAnchors<FindBar> anchors_findbar(m_findBar);
     anchors_findbar.setAnchor(Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
     anchors_findbar.setAnchor(Qt::AnchorHorizontalCenter, m_centralWidget, Qt::AnchorHorizontalCenter);
-    //anchors_findbar.setBottomMargin(5);
-    m_findBar->move(QPoint(10, height() - 58));
+    anchors_findbar.setBottomMargin(1);
+    //m_findBar->move(QPoint(10, height() - 5));
     m_findBar->raise();
 
     // Init replaceBar panel.
     DAnchors<ReplaceBar> anchors_replaceBar(m_replaceBar);
     anchors_replaceBar.setAnchor(Qt::AnchorBottom, m_centralWidget, Qt::AnchorBottom);
     anchors_replaceBar.setAnchor(Qt::AnchorHorizontalCenter, m_centralWidget, Qt::AnchorHorizontalCenter);
-    //anchors_replaceBar.setBottomMargin(5);
-    m_replaceBar->move(QPoint(10, height() - 58));
+    anchors_replaceBar.setBottomMargin(1);
+    //m_replaceBar->move(QPoint(10, height() - 57));
     m_replaceBar->raise();
 
     // Init theme panel.
@@ -991,14 +991,14 @@ void Window::setFontSizeWithConfig(EditWrapper *wrapper)
 void Window::popupFindBar()
 {
     EditWrapper *curWrapper = currentWrapper();
-    currentWrapper()->bottomBar()->updateSize(60);
+    currentWrapper()->bottomBar()->updateSize(59);
 
     if (curWrapper->textEditor()->toPlainText().isEmpty()) {
         return;
     }
 
     if (m_findBar->isVisible()) {
-        m_findBar->move(QPoint(10, height() - 58));
+        m_findBar->move(QPoint(10, height() - 59));
         if (m_findBar->isFocus()) {
             m_wrappers.value(m_tabbar->currentPath())->textEditor()->setFocus();
         } else {
@@ -1018,7 +1018,7 @@ void Window::popupFindBar()
         }
         m_findBar->raise();
 
-        m_findBar->move(QPoint(10, height() - 58));
+        m_findBar->move(QPoint(10, height() - 59));
         m_findBar->show();
 
         QString text = wrapper->textEditor()->textCursor().selectedText();
@@ -1035,7 +1035,7 @@ void Window::popupFindBar()
 void Window::popupReplaceBar()
 {
     EditWrapper *curWrapper = currentWrapper();
-    currentWrapper()->bottomBar()->updateSize(60);
+    currentWrapper()->bottomBar()->updateSize(59);
     bool bIsReadOnly = curWrapper->textEditor()->getReadOnlyMode();
 
     if (bIsReadOnly) {
@@ -1048,7 +1048,7 @@ void Window::popupReplaceBar()
     }
 
     if (m_replaceBar->isVisible()) {
-        m_replaceBar->move(QPoint(10, height() - 58));
+        m_replaceBar->move(QPoint(10, height() - 59));
         if (m_replaceBar->isFocus()) {
             m_wrappers.value(m_tabbar->currentPath())->textEditor()->setFocus();
         } else {
@@ -1063,7 +1063,7 @@ void Window::popupReplaceBar()
             m_findBar->hide();
         }
         m_replaceBar->raise();
-        m_replaceBar->move(QPoint(10, height() - 58));
+        m_replaceBar->move(QPoint(10, height() - 59));
         m_replaceBar->show();
         //addBottomWidget(m_replaceBar);
 
@@ -1556,6 +1556,7 @@ void Window::slotReplacebarClose()
     if (wrapper->bottomBar()->isHidden()) {
         wrapper->bottomBar()->show();
     }
+    wrapper->bottomBar()->updateSize(32);
 }
 
 void Window::handleReplaceAll(const QString &replaceText, const QString &withText)
@@ -1833,9 +1834,9 @@ void Window::resizeEvent(QResizeEvent *e)
     }
 
     m_findBar->resize(width() - 20, m_findBar->height());
-    m_findBar->move(QPoint(10, height() - 58));
+    m_findBar->move(QPoint(10, height() - 59));
     m_replaceBar->resize(width() - 20, m_replaceBar->height());
-    m_replaceBar->move(QPoint(10, height() - 58));
+    m_replaceBar->move(QPoint(10, height() - 59));
 
 
     if (!(m_tabbar->currentPath() == "")) {
@@ -1913,7 +1914,7 @@ void Window::hideEvent(QHideEvent *event)
 {
     //如果查找浮窗正显示着，则隐藏
     if (m_findBar->isVisible()) {
-        m_findBar->hide();
+       // m_findBar->hide();
         if (currentWrapper()->isVisible()) {
             currentWrapper()->m_bottomBar->show();
         }
@@ -1921,7 +1922,7 @@ void Window::hideEvent(QHideEvent *event)
 
     //如果替换浮窗正显示着，则隐藏
     if (m_replaceBar->isVisible()) {
-        m_replaceBar->hide();
+      //  m_replaceBar->hide();
         if (currentWrapper()->isVisible()) {
             currentWrapper()->m_bottomBar->show();
         }
