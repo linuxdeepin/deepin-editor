@@ -2673,9 +2673,13 @@ int TextEdit::getLineFromPoint(const QPoint &point)
     while (cursorPoint >= 0) {
         cursorPoint -= document()->documentLayout()->blockBoundingRect(block).height();
         block = block.next();
+        if(line + frontLine > blockCount())
+        {
+            line++;
+            return line + frontLine;;
+        }
         line++;
     }
-
     return line + frontLine;
 }
 
@@ -2683,7 +2687,7 @@ void TextEdit::addOrDeleteBookMark()
 {
     int line = getLineFromPoint(m_mouseClickPos);
 
-    if (line == blockCount()) {
+    if (line > blockCount()) {
          return;
     }
 
