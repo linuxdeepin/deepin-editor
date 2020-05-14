@@ -1930,6 +1930,13 @@
                             "hide" : true,
                             "reset" : false,
                             "default": 0.6
+                        },
+                        {
+                            "key": "showlinenumber",
+                            "name": "Show line number",
+                            "type": "checkbox",
+                            "text": "Show Line Number",
+                            "default": "true"
                         }
                     ]
                 },
