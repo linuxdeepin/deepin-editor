@@ -27,6 +27,7 @@
 #include "widgets/bottombar.h"
 #include "leftareaoftextedit.h"
 #include "bookmarkwidget.h"
+#include "codeflodarea.h"
 
 #include <KF5/KSyntaxHighlighting/definition.h>
 #include <KF5/KSyntaxHighlighting/syntaxhighlighter.h>
@@ -89,6 +90,7 @@ TextEdit::TextEdit(QWidget *parent)
 
     viewport()->installEventFilter(this);
     m_pLeftAreaWidget->m_bookMarkArea->installEventFilter(this);
+    m_pLeftAreaWidget->m_flodArea->installEventFilter(this);
     viewport()->setCursor(Qt::IBeamCursor);
 
     // Don't draw frame around editor widget.
@@ -134,6 +136,10 @@ TextEdit::TextEdit(QWidget *parent)
     m_preBookMarkAction = new QAction(tr("Previous bookmark"),this);
     m_nextBookMarkAction = new QAction(tr("Next bookmark"),this);
     m_clearBookMarkAction = new QAction(tr("Clear bookmark"),this);
+    m_flodAllLevel = new QAction(tr("Flod all Level"), this);
+    m_flodCurrentLevel = new QAction(tr("Flod current Level"), this);
+    m_unflodAllLevel = new QAction(tr("Unflod all Level"), this);
+    m_unflodCurrentLevel = new QAction(tr("Unflod Current Level"), this);
 
     connect(m_rightMenu, &DMenu::aboutToHide, this, &TextEdit::removeHighlightWordUnderCursor);
     connect(m_undoAction, &QAction::triggered, this, &TextEdit::undo);
@@ -161,6 +167,18 @@ TextEdit::TextEdit(QWidget *parent)
     connect(m_preBookMarkAction, &QAction::triggered, this, &TextEdit::onMoveToPreviousBookMark);
     connect(m_nextBookMarkAction, &QAction::triggered, this, &TextEdit::onMoveToNextBookMark);
     connect(m_clearBookMarkAction, &QAction::triggered, this, &TextEdit::onClearBookMark);
+    connect(m_flodAllLevel, &QAction::triggered, this, [ = ] {
+        flodOrUnflodAllLevel(true);
+    });
+    connect(m_unflodAllLevel, &QAction::triggered, this, [ = ] {
+        flodOrUnflodAllLevel(false);
+    });
+    connect(m_flodCurrentLevel, &QAction::triggered, this, [ = ] {
+        flodOrUnflodCurrentLevel(true);
+    });
+    connect(m_unflodCurrentLevel, &QAction::triggered, this, [ = ] {
+        flodOrUnflodCurrentLevel(false);
+    });
 
 
     // Init convert case sub menu.
@@ -1615,6 +1633,68 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
     }
 }
 
+void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
+{
+    m_listFlodFlag.clear();
+    QPainter painter(m_pLeftAreaWidget->m_flodArea);
+    int blockNumber = getFirstVisibleBlockId();
+    QTextBlock block = document()->findBlockByNumber(blockNumber);
+    QTextBlock prev_block = (blockNumber > 0) ? document()->findBlockByNumber(blockNumber - 1) : block;
+    int translate_y = (blockNumber > 0) ? -verticalScrollBar()->sliderPosition() : 0;
+
+    int top = this->viewport()->geometry().top();
+    int additional_margin;
+    if (blockNumber == 0)
+        // Simply adjust to document's margin
+        additional_margin = document()->documentMargin() - 1 - this->verticalScrollBar()->sliderPosition();
+    else
+        // Getting the height of the visible part of the previous "non entirely visible" block
+        additional_margin = document()->documentLayout()->blockBoundingRect(prev_block)
+                            .translated(0, translate_y).intersected(this->viewport()->geometry()).height();
+
+    // Shift the starting point
+    top += additional_margin;
+
+    DGuiApplicationHelper *guiAppHelp = DGuiApplicationHelper::instance();
+
+    QString theme  = "";
+    if (guiAppHelp->themeType() == DGuiApplicationHelper::ColorType::DarkType) {  //暗色主题
+        theme = "d";
+    } else {  //浅色主题
+        theme = "l";
+    }
+    QString unflodImagePath = ":/images/d-" + theme + ".svg";
+    QString flodImagePath = ":/images/u-" + theme + ".svg";
+    QImage Unfoldimage(unflodImagePath);
+    QImage foldimage(flodImagePath);
+    int bottom = top + document()->documentLayout()->blockBoundingRect(block).height();
+    while (block.isValid() && top <= event->rect().bottom()) {
+        if (block.isVisible() && bottom >= event->rect().top()) {
+
+            if (document()->findBlockByNumber(blockNumber + 1).text().contains("{")) {
+                if (document()->findBlockByNumber(blockNumber + 1).isVisible()) {
+                    qDebug() << "<<<<<<<width:" << m_pLeftAreaWidget->m_flodArea->width();
+                    painter.drawImage(0, top, foldimage);
+                } else {
+                    painter.drawImage(0, top, Unfoldimage);
+                }
+                m_listFlodFlag.push_back(blockNumber);
+            }
+        }
+
+        block = block.next();
+        top = bottom;
+        bottom = top + document()->documentLayout()->blockBoundingRect(block).height();
+        ++blockNumber;
+    }
+
+}
+
+void TextEdit::setCodeFlodFlagVisable(bool isVisable)
+{
+    m_pLeftAreaWidget->m_flodArea->setVisible(isVisable);
+}
+
 void TextEdit::updateLineNumber()
 {
     if(m_nLines != blockCount())
@@ -1656,6 +1736,7 @@ void TextEdit::updateLineNumber()
 
     m_pLeftAreaWidget->m_bookMarkArea->update();
     lineNumberArea->update();
+    m_pLeftAreaWidget->m_flodArea->update();
 }
 
 void TextEdit::updateWordCount()
@@ -1844,6 +1925,33 @@ int TextEdit::getFirstVisibleBlockId() const
     }
 
     return 0;
+}
+
+void TextEdit::getNeedControlLine(int line, bool isVisable)
+{
+    int iLine = line ;
+    QTextBlock block = document()->findBlockByNumber(iLine);
+
+    //记录存在的括号数量
+    int existSubbrackets = 1;
+    bool isFirst = true;
+    while (block.isValid()) {
+        if (block.text().contains("{") && !isFirst) {
+            existSubbrackets ++;
+        } else if (block.text().contains("}") && existSubbrackets != 0) {
+            existSubbrackets --;
+        }
+        if (block.text().contains("}") && existSubbrackets == 0) {
+            block.setVisible(isVisable);
+            break;
+        }
+        if (isFirst)
+            isFirst = false;
+        block.setVisible(isVisable);
+        iLine++;
+        block = block.next();
+        viewport()->adjustSize();
+    }
 }
 
 void TextEdit::setThemeWithPath(const QString &path)
@@ -2740,6 +2848,29 @@ void TextEdit::moveToNextBookMark()
     }
 }
 
+void TextEdit::flodOrUnflodAllLevel(bool isFlod)
+{
+    foreach (auto line, m_listFlodFlag) {
+        if (document()->findBlockByNumber(line + 1).isVisible() == isFlod) {
+            getNeedControlLine(line + 1, !isFlod);
+        }
+    }
+    viewport()->update();
+    m_pLeftAreaWidget->m_flodArea->update();
+    document()->adjustSize();
+
+}
+
+void TextEdit::flodOrUnflodCurrentLevel(bool isFlod)
+{
+    int line = getLineFromPoint(m_mouseClickPos);
+    getNeedControlLine(line, !isFlod);
+    m_pLeftAreaWidget->m_flodArea->update();
+    viewport()->update();
+    document()->adjustSize();
+
+}
+
 void TextEdit::completionWord(QString word)
 {
     QString wordAtCursor = getWordAtCursor();
@@ -2786,6 +2917,38 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
             } else {
                 addOrDeleteBookMark();
             }
+        } else if (object == m_pLeftAreaWidget->m_flodArea) {
+            if (mouseEvent->button() == Qt::LeftButton) {
+                int line = getLineFromPoint(mouseEvent->pos());
+                if (document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line).text().contains("{")) {
+                    getNeedControlLine(line, false);
+                } else if (!document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line).text().contains("{")) {
+                    getNeedControlLine(line, true);
+                }
+                m_pLeftAreaWidget->m_flodArea->update();
+                viewport()->update();
+                document()->adjustSize();
+            } else {
+                m_mouseClickPos = mouseEvent->pos();
+                m_rightMenu->clear();
+                int line = getLineFromPoint(mouseEvent->pos());
+                if (m_listFlodFlag.contains(line - 1)) {
+                    m_rightMenu->addAction(m_flodAllLevel);
+                    m_rightMenu->addAction(m_unflodAllLevel);
+                    m_rightMenu->addAction(m_flodCurrentLevel);
+                    m_rightMenu->addAction(m_unflodCurrentLevel);
+                }
+                if (document()->findBlockByNumber(line).isVisible()) {
+                    m_unflodCurrentLevel->setEnabled(false);
+                    m_flodCurrentLevel->setEnabled(true);
+                } else {
+                    m_unflodCurrentLevel->setEnabled(true);
+                    m_flodCurrentLevel->setEnabled(false);
+                }
+                m_rightMenu->exec(mouseEvent->globalPos());
+            }
+
+
         }
     }
 

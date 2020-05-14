@@ -93,6 +93,12 @@ Window::Window(DMainWindow *parent)
            wrapper->setLineNumberShow(bIsShow);
        }
     });
+    connect(m_settings, &Settings::showCodeFlodFlag, this, [ = ](bool enable) {
+        for (EditWrapper *wrapper : m_wrappers.values()) {
+            TextEdit *textedit = wrapper->textEditor();
+            textedit->setCodeFlodFlagVisable(enable);
+        }
+    });
 
     // Init layout and editor.
     m_centralLayout->setMargin(0);

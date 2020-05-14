@@ -294,5 +294,9 @@
         <file>syntax/zonnon.xml</file>
         <file>syntax/zsh.xml</file>
         <file>images/bookmark.svg</file>
+        <file>images/u-d.svg</file>
+        <file>images/u-l.svg</file>
+        <file>images/d-d.svg</file>
+        <file>images/d-l.svg</file>
     </qresource>
 </RCC>

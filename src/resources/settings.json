@@ -30,6 +30,20 @@
                             "default": "true"
                         }
                     ]
+                },
+                {
+                    "key":"display",
+                    "name":"DISPLAY STYLE",
+                    "options":[
+                        {
+                            "key":"codeflod",
+                            "name":"CODE FLOD",
+                            "type":"checkbox",
+                            "text":"Code Flod Flag",
+                            "default":"false"
+                        }
+
+                    ]
                 }
             ]
         },

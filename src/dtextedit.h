@@ -142,7 +142,8 @@ public:
     DMenu *getHighlightMenu();
 
     void lineNumberAreaPaintEvent(QPaintEvent *event);
-
+    void codeFLodAreaPaintEvent(QPaintEvent *event);
+    void setCodeFlodFlagVisable(bool isVisable);
     void setThemeWithPath(const QString &path);
     void setTheme(const KSyntaxHighlighting::Theme &theme, const QString &path);
     void loadHighlighter();
@@ -192,6 +193,8 @@ public:
     void addOrDeleteBookMark();
     void moveToPreviousBookMark();
     void moveToNextBookMark();
+    void flodOrUnflodAllLevel(bool isFlod);
+    void flodOrUnflodCurrentLevel(bool isFlod);
 
 signals:
     void clickFindAction();
@@ -263,6 +266,7 @@ private:
     void cursorPositionChanged();
     void updateHighlightBrackets(const QChar &openChar, const QChar &closeChar);
     int getFirstVisibleBlockId() const;
+    void getNeedControlLine(int line, bool isVisable);
 
 private:
     EditWrapper *m_wrapper;
@@ -314,6 +318,10 @@ private:
     QAction *m_clearBookMarkAction;
     QAction *m_preBookMarkAction;
     QAction *m_nextBookMarkAction;
+    QAction *m_flodAllLevel;
+    QAction *m_unflodAllLevel;
+    QAction *m_flodCurrentLevel;
+    QAction *m_unflodCurrentLevel;
 
     DMenu *m_convertCaseMenu;
     QAction *m_upcaseAction;
@@ -376,6 +384,8 @@ private:
     QFont m_fontLineNumberArea;
     QList<int> m_listBookmark;
     int m_nLines;
+
+    QList<int> m_listFlodFlag;
 };
 
 #endif
