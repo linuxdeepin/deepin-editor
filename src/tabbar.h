@@ -72,6 +72,8 @@ protected:
     bool canInsertFromMimeData(int index, const QMimeData *source) const;
     void handleDragActionChanged(Qt::DropAction action);
     bool eventFilter(QObject *, QEvent *event);
+protected:
+    void mousePressEvent(QMouseEvent *e);
 
 private:
     void handleTabMoved(int fromIndex, int toIndex);

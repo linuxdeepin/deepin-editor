@@ -460,6 +460,14 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
     return false;
 }
 
+void Tabbar::mousePressEvent(QMouseEvent *e)
+{
+    if(e->button()==Qt::MidButton)
+    {
+        emit tabCloseRequested(tabAt(QPoint(e->x(), e->y())));
+    }
+}
+
 void Tabbar::handleTabMoved(int fromIndex, int toIndex)
 {
     m_tabPaths.swap(fromIndex, toIndex);
