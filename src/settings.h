@@ -56,6 +56,7 @@ signals:
     void adjustTabSpaceNumber(int number);
     void adjustWordWrap(bool enable);
     void themeChanged(const QString &theme);
+    void setLineNumberShow(bool bIsShow);
 
 private:
     void updateAllKeysWithKeymap(QString keymap);

@@ -32,12 +32,12 @@ leftareaoftextedit::leftareaoftextedit(TextEdit *textEdit)
     m_flodArea->setContentsMargins(0,0,0,0);
     m_linenumberarea->setContentsMargins(0,0,0,0);
     m_bookMarkArea->setFixedWidth(23);
-    //m_flodArea->setFixedWidth(23);
-    //m_bookMarkArea->setMinimumWidth(20);
-    //m_flodArea->setMinimumWidth(20);
+//    m_flodArea->setFixedWidth(23);
+//    m_bookMarkArea->setMinimumWidth(20);
+//    m_flodArea->setMinimumWidth(20);
     hLayout->addWidget(m_bookMarkArea);
     hLayout->addWidget(m_linenumberarea);
-    hLayout->addWidget(m_flodArea);
+//    hLayout->addWidget(m_flodArea);
     hLayout->setContentsMargins(0,0,0,0);
     hLayout->setSpacing(0);
     this->setLayout(hLayout);
@@ -91,4 +91,5 @@ void leftareaoftextedit::bookMarkAreaPaintEvent(QPaintEvent *event)
 //QSize leftareaoftextedit::sizeHint() const
 //{
 //    //return QSize(m_textEdit->lineNumberAreaWidth(), 0);
+// //   return QSize(m_bookMarkArea->width() + m_linenumberarea->width(), 0);
 //}

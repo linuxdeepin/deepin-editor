@@ -373,6 +373,11 @@
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="106"/>
+        <source>Show Line Number</source>
+        <translation>显示行号</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="106"/>
         <source>Word Wrap</source>
         <translation>自动换行</translation>
     </message>
@@ -820,7 +825,7 @@
     <message>
         <location filename="../src/tabbar.cpp" line="318"/>
         <source>Close unchange tabs</source>
-        <translation type="unfinished">关闭所有未修改标签页</translation>
+        <translation>关闭所有未修改标签页</translation>
     </message>
     <message>
         <location filename="../src/tabbar.cpp" line="318"/>

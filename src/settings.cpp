@@ -118,6 +118,11 @@ Settings::Settings(QWidget *parent)
             m_userChangeKey = false;
         }
     });
+
+    auto showLineNumber = settings->option("advance.window.showlinenumber");
+    connect(showLineNumber,&Dtk::Core::DSettingsOption::valueChanged,this,[=] (QVariant value){
+        emit setLineNumberShow(value.toBool());
+    });
 }
 
 Settings::~Settings()

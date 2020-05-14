@@ -88,6 +88,11 @@ Window::Window(DMainWindow *parent)
             textedit->setLineWrapMode(enable);
         }
     });
+    connect(m_settings,&Settings::setLineNumberShow,this,[=] (bool bIsShow) {
+       for(EditWrapper *wrapper : m_wrappers.values()) {
+           wrapper->setLineNumberShow(bIsShow);
+       }
+    });
 
     // Init layout and editor.
     m_centralLayout->setMargin(0);
@@ -561,6 +566,7 @@ EditWrapper *Window::createEditor()
     wrapper->textEditor()->setFontFamily(m_settings->settings->option("base.font.family")->value().toString());
     wrapper->textEditor()->setModified(false);
     wrapper->textEditor()->setLineWrapMode(wordWrap);
+//    wrapper->setLineNumberShow(m_settings->settings->option("advance.window.showlinenumber")->value().toBool());
     setFontSizeWithConfig(wrapper);
 
     connect(wrapper->textEditor(), &TextEdit::signal_readingPath, this, &Window::slot_saveReadingPath, Qt::QueuedConnection);
@@ -1682,6 +1688,8 @@ void Window::showNewEditor(EditWrapper *wrapper)
 {
     m_editorWidget->addWidget(wrapper);
     m_editorWidget->setCurrentWidget(wrapper);
+    //yanyuhan 设置行号显示
+    wrapper->setLineNumberShow(m_settings->settings->option("advance.window.showlinenumber")->value().toBool());
 }
 
 void Window::showNotify(const QString &message)
