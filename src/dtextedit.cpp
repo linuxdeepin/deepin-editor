@@ -1650,7 +1650,9 @@ void TextEdit::updateLineNumber()
 
     int blockSize = QString::number(blockCount()).size();
 
-    m_pLeftAreaWidget->setFixedWidth(23 + blockSize * fontMetrics().width('9') + m_lineNumberPaddingX * 4);
+//    m_pLeftAreaWidget->setFixedWidth(23 + blockSize * fontMetrics().width('9') + m_lineNumberPaddingX * 4);
+
+    m_pLeftAreaWidget->setFixedWidth(blockSize * fontMetrics().width('9') + m_lineNumberPaddingX * 4);
 
     m_pLeftAreaWidget->m_bookMarkArea->update();
     lineNumberArea->update();
