@@ -189,6 +189,9 @@ public:
 
     void clearBlack();
 
+    void flodOrUnflodAllLevel(bool isFlod);
+    void flodOrUnflodCurrentLevel(bool isFlod);
+
     //书签功能相关
     void bookMarkAreaPaintEvent(QPaintEvent *event);
     int getLineFromPoint(const QPoint &point);
