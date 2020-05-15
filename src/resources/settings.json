@@ -473,13 +473,13 @@
                             "key": "togglecomment",
                             "name": "Toggle comment",
                             "type": "shortcut",
-                            "default":  "Ctrl+/"
+                            "default":  "Alt+A"
                         },
                         {
-                            "key": "undo",
-                            "name": "Undo",
+                            "key": "removecomment",
+                            "name": "Remove comment",
                             "type": "shortcut",
-                            "default":  "Ctrl+Z"
+                            "default":  "Alt+Z"
                         },
                         {
                             "key": "switchbookmark",
@@ -943,13 +943,13 @@
                             "key": "togglecomment",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Ctrl+/"
+                            "default":  "Alt+A"
                         },
                         {
-                            "key": "undo",
+                            "key": "removecomment",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Ctrl+Z"
+                            "default":  "Alt+Z"
                         },
                         {
                             "key": "switchbookmark",
@@ -1416,10 +1416,10 @@
                             "default":  "Ctrl+Shift+:"
                         },
                         {
-                            "key": "undo",
+                            "key": "removecomment",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Ctrl+/"
+                            "default":  "Ctrl+Shift+;"
                         },
                         {
                             "key": "switchbookmark",
@@ -1883,13 +1883,13 @@
                             "key": "togglecomment",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Ctrl+/"
+                            "default":  "Alt+A"
                         },
                         {
-                            "key": "undo",
+                            "key": "removecomment",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Ctrl+Z"
+                            "default":  "Alt+Z"
                         },
                         {
                             "key": "switchbookmark",
