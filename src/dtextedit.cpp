@@ -2488,7 +2488,7 @@ void TextEdit::toggleReadOnlyMode()
     }
 }
 
-void TextEdit::toggleComment()
+void TextEdit::toggleComment(bool sister)
 {
     if (m_readOnlyMode) {
         popupNotify(tr("Read-Only mode is on"));
@@ -2496,9 +2496,16 @@ void TextEdit::toggleComment()
     }
 
     const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());
+    qDebug()<<"文件的名字"<<def.name();                  //Java ,C++,HTML,
+    QString name= def.name();
 
     if (!def.filePath().isEmpty()) {
-        Comment::unCommentSelection(this, m_commentDefinition);
+        if(sister){
+        Comment::setComment(this, m_commentDefinition,name);
+        }
+        else {
+        Comment::removeComment(this, m_commentDefinition,name);
+        }
     } else {
         // do not need to prompt the user.
         // popupNotify(tr("File does not support syntax comments"));
@@ -3225,7 +3232,9 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglereadonlymode")|| key=="Alt+Meta+L") {
             toggleReadOnlyMode();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglecomment")) {
-            toggleComment();
+            toggleComment(true);
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "removecomment")) {
+            toggleComment(false);
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "undo")) {
             QTextEdit::undo();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "redo")) {

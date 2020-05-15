@@ -101,7 +101,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="120"/>
         <source>Toggle comment</source>
-        <translation>切换注释</translation>
+        <translation>添加注释</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="121"/>
@@ -701,7 +701,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="98"/>
         <source>Toggle comment</source>
-        <translation>切换注释</translation>
+        <translation>添加注释</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="99"/>
+        <source>Remove comment</source>
+        <translation>取消注释</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="99"/>

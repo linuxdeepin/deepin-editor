@@ -171,7 +171,7 @@ public:
     QString getWordAtCursor();
 
     void toggleReadOnlyMode();
-    void toggleComment();
+    void toggleComment(bool sister);
 
     int getNextWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode);
     int getPrevWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode);

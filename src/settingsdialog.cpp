@@ -97,6 +97,7 @@ void GenerateSettingTranslate()
     auto shortcuts_editor_joinlinesName = QObject::tr("Merge lines");
     auto shortcuts_editor_togglereadonlymodeName = QObject::tr("Read-Only mode");
     auto shortcuts_editor_togglecommentName = QObject::tr("Toggle comment");
+    auto shortcuts_editor_removecommentName = QObject::tr("Remove comment");
     auto shortcuts_editor_undoName = QObject::tr("Undo");
     auto shortcuts_editor_redoName = QObject::tr("Redo");
     auto shortcuts_editor_switchbookmarkName = QObject::tr("Switch bookmark");
