@@ -491,6 +491,7 @@ void Window::closeTab()
 
             // don't save.
             if (index == 1) {
+                removeWrapper(filePath, true);
                 m_tabbar->closeCurrentTab();
 
                 // delete the draft document.
@@ -498,12 +499,12 @@ void Window::closeTab()
                     QFile(filePath).remove();
                 }
 
-                removeWrapper(filePath, true);
+//                removeWrapper(filePath, true);
             } else if (index == 2) {
                 // may to press CANEL button in the save dialog.
                 if (saveFile()) {
-                    m_tabbar->closeCurrentTab();
                     removeWrapper(filePath, true);
+                    m_tabbar->closeCurrentTab();                  
                 }
             }
 
@@ -519,6 +520,7 @@ void Window::closeTab()
         }
 
         // close tab directly, because all file is save automatically.
+        removeWrapper(filePath, true);
         m_tabbar->closeCurrentTab();
 
         // remove blank file.
@@ -526,7 +528,7 @@ void Window::closeTab()
             QFile::remove(filePath);
         }
 
-        removeWrapper(filePath, true);
+//        removeWrapper(filePath, true);
         focusActiveEditor();
     }
 }
@@ -1872,12 +1874,20 @@ void Window::closeEvent(QCloseEvent *e)
     for (EditWrapper *wrapper : m_wrappers) {
         // save all the draft documents.
         if (QFileInfo(wrapper->textEditor()->filepath).dir().absolutePath() == m_blankFileDir) {
-            wrapper->saveFile();
+            if (wrapper->saveFile()) {
+                wrapper->deleteLater();
+                // remove all signals on this connection.
+                disconnect(wrapper->textEditor(), 0, this, 0);
+            }
             continue;
         }
 
         if (wrapper->textEditor()->document()->isModified()) {
             needSaveList << wrapper;
+        } else {
+            wrapper->deleteLater();
+            // remove all signals on this connection.
+            disconnect(wrapper->textEditor(), 0, this, 0);
         }
     }
 
@@ -1887,10 +1897,20 @@ void Window::closeEvent(QCloseEvent *e)
         connect(dialog, &DDialog::buttonClicked, this, [ = ](int index) {
             dialog->hide();
 
-            if (index == 2) {
-                // save all the files.
-                for (EditWrapper *wrapper : needSaveList) {
-                    wrapper->saveFile();
+            for (EditWrapper *wrapper : needSaveList) {
+                if (index == 2) {
+                    // save files.
+                    if (wrapper->saveFile()) {
+//                        wrapper->deleteLater();
+                        // remove all signals on this connection.
+                        disconnect(wrapper->textEditor(), 0, this, 0);
+                        delete wrapper;
+                    }
+                } else {
+//                    wrapper->deleteLater();
+                    // remove all signals on this connection.
+                    disconnect(wrapper->textEditor(), 0, this, 0);
+                    delete wrapper;
                 }
             }
         });

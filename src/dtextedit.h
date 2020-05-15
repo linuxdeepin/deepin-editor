@@ -56,6 +56,7 @@ public:
     };
 
     TextEdit(QWidget *parent = nullptr);
+    ~TextEdit() override;
 
     LineNumberArea *lineNumberArea;
     leftareaoftextedit *m_pLeftAreaWidget;
@@ -188,13 +189,17 @@ public:
 
     void clearBlack();
 
+    //书签功能相关
     void bookMarkAreaPaintEvent(QPaintEvent *event);
     int getLineFromPoint(const QPoint &point);
     void addOrDeleteBookMark();
     void moveToPreviousBookMark();
     void moveToNextBookMark();
-    void flodOrUnflodAllLevel(bool isFlod);
-    void flodOrUnflodCurrentLevel(bool isFlod);
+    void setIsFileOpen();
+    QStringList readHistoryRecord();
+    QStringList readHistoryRecordofBookmark();
+    QStringList readHistoryRecordofFilePath();
+    void writeHistoryRecord();
 
 signals:
     void clickFindAction();

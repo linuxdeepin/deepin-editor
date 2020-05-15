@@ -89,6 +89,7 @@ void EditWrapper::openFile(const QString &filepath)
     updatePath(filepath);
     detectEndOfLine();
 
+    m_textEdit->setIsFileOpen();
     m_isLoadFinished = false;
 
     // begin to load the file.
