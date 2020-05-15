@@ -482,6 +482,12 @@
                             "default":  "Alt+Z"
                         },
                         {
+                            "key": "undo",
+                            "name": "Undo",
+                            "type": "shortcut",
+                            "default":  "Ctrl+Z"
+                        },
+                        {
                             "key": "switchbookmark",
                             "name": "Switch bookmark",
                             "type": "shortcut",
@@ -950,6 +956,12 @@
                             "hide" : true,
                             "reset" : false,
                             "default":  "Alt+Z"
+                        },
+                        {
+                            "key": "undo",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "Ctrl+Z"
                         },
                         {
                             "key": "switchbookmark",
@@ -1422,6 +1434,12 @@
                             "default":  "Ctrl+Shift+;"
                         },
                         {
+                            "key": "undo",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "Ctrl+/"
+                        },
+                        {
                             "key": "switchbookmark",
                             "name": "Switch bookmark",
                             "type": "shortcut",
@@ -1890,6 +1908,12 @@
                             "hide" : true,
                             "reset" : false,
                             "default":  "Alt+Z"
+                        },
+                        {
+                            "key": "undo",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "Ctrl+Z"
                         },
                         {
                             "key": "switchbookmark",
