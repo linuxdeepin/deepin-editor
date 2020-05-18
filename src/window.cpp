@@ -567,7 +567,7 @@ EditWrapper *Window::createEditor()
 {
     EditWrapper *wrapper = new EditWrapper();
     bool wordWrap = m_settings->settings->option("base.font.wordwrap")->value().toBool();
-    wrapper->textEditor()->m_pIsShowCodeFoldArea = m_settings->settings->option("base.display.codeflod")->value().toBool();
+    wrapper->textEditor()->m_pIsShowCodeFoldArea = m_settings->settings->option("advance.window.codeflod")->value().toBool();
 
     wrapper->textEditor()->setThemeWithPath(m_themePath);
     wrapper->textEditor()->setSettings(m_settings);
@@ -1699,7 +1699,7 @@ void Window::showNewEditor(EditWrapper *wrapper)
     m_editorWidget->setCurrentWidget(wrapper);
     //yanyuhan 设置行号显示
     wrapper->setLineNumberShow(m_settings->settings->option("advance.window.showlinenumber")->value().toBool());
-    wrapper->textEditor()->setCodeFlodFlagVisable(m_settings->settings->option("base.display.codeflod")->value().toBool(),true);
+    wrapper->textEditor()->setCodeFlodFlagVisable(m_settings->settings->option("advance.window.codeflod")->value().toBool(), true);
 }
 
 void Window::showNotify(const QString &message)

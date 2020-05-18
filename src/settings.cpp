@@ -64,7 +64,7 @@ Settings::Settings(QWidget *parent)
         emit adjustWordWrap(value.toBool());
     });
 
-    auto codeFlod = settings->option("base.display.codeflod");
+    auto codeFlod = settings->option("advance.window.codeflod");
     connect(codeFlod, &Dtk::Core::DSettingsOption::valueChanged, this, [ = ](QVariant value) {
         emit showCodeFlodFlag(value.toBool());
     });

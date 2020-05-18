@@ -206,7 +206,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="31"/>
         <location filename="../src/settingsdialog.cpp" line="107"/>
-        <location filename="../src/window.cpp" line="1273"/>
+        <location filename="../src/window.cpp" line="1274"/>
         <source>Window</source>
         <translation>窗口</translation>
     </message>
@@ -856,14 +856,14 @@
         <translation>已剪切当前行到剪贴板</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="2484"/>
+        <location filename="../src/dtextedit.cpp" line="2506"/>
         <source>Read-Only mode is off</source>
         <translation>只读模式已关闭</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="2489"/>
-        <location filename="../src/dtextedit.cpp" line="2497"/>
-        <location filename="../src/dtextedit.cpp" line="3251"/>
+        <location filename="../src/dtextedit.cpp" line="2511"/>
+        <location filename="../src/dtextedit.cpp" line="2519"/>
+        <location filename="../src/dtextedit.cpp" line="3273"/>
         <source>Read-Only mode is on</source>
         <translation>只读模式已开启</translation>
     </message>
@@ -920,33 +920,33 @@
     </message>
     <message>
         <location filename="../src/window.cpp" line="317"/>
-        <location filename="../src/window.cpp" line="1825"/>
+        <location filename="../src/window.cpp" line="1827"/>
         <source>Read-Only</source>
         <translation>只读</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="776"/>
+        <location filename="../src/window.cpp" line="777"/>
         <source>Saved successfully</source>
         <translation>文件已保存</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1283"/>
+        <location filename="../src/window.cpp" line="1284"/>
         <source>Ctrl+&apos;=&apos;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1286"/>
+        <location filename="../src/window.cpp" line="1287"/>
         <source>Ctrl+&apos;-&apos;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1754"/>
+        <location filename="../src/window.cpp" line="1756"/>
         <source>Discard</source>
         <translation>不保存</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="221"/>
-        <location filename="../src/window.cpp" line="1333"/>
+        <location filename="../src/window.cpp" line="1334"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
@@ -961,9 +961,9 @@
         <translation>无效文件：%1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="802"/>
-        <location filename="../src/window.cpp" line="870"/>
-        <location filename="../src/window.cpp" line="931"/>
+        <location filename="../src/window.cpp" line="803"/>
+        <location filename="../src/window.cpp" line="871"/>
+        <location filename="../src/window.cpp" line="932"/>
         <source>Save File</source>
         <translation>保存</translation>
     </message>
@@ -973,69 +973,69 @@
         <translation>您是否要保存此文件？</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="804"/>
-        <location filename="../src/window.cpp" line="819"/>
-        <location filename="../src/window.cpp" line="872"/>
-        <location filename="../src/window.cpp" line="887"/>
-        <location filename="../src/window.cpp" line="933"/>
-        <location filename="../src/window.cpp" line="948"/>
-        <source>Encoding</source>
-        <translation>编码</translation>
-    </message>
-    <message>
         <location filename="../src/window.cpp" line="805"/>
         <location filename="../src/window.cpp" line="820"/>
         <location filename="../src/window.cpp" line="873"/>
         <location filename="../src/window.cpp" line="888"/>
         <location filename="../src/window.cpp" line="934"/>
         <location filename="../src/window.cpp" line="949"/>
+        <source>Encoding</source>
+        <translation>编码</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="806"/>
+        <location filename="../src/window.cpp" line="821"/>
+        <location filename="../src/window.cpp" line="874"/>
+        <location filename="../src/window.cpp" line="889"/>
+        <location filename="../src/window.cpp" line="935"/>
+        <location filename="../src/window.cpp" line="950"/>
         <source>Line Endings</source>
         <translation>换行符</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1315"/>
+        <location filename="../src/window.cpp" line="1316"/>
         <source>Editor</source>
         <translation>编辑</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="719"/>
+        <location filename="../src/window.cpp" line="720"/>
         <source>You do not have permission to save %1</source>
         <translation>您没有权限保存%1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="762"/>
+        <location filename="../src/window.cpp" line="763"/>
         <source>Do you want to save as another?</source>
         <translation>您是否要另存为其他文件？</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1431"/>
-        <location filename="../src/window.cpp" line="1895"/>
+        <location filename="../src/window.cpp" line="1432"/>
+        <location filename="../src/window.cpp" line="1897"/>
         <source>Do you want to save all the files?</source>
         <translation>您是否要保存所有文件？</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1390"/>
+        <location filename="../src/window.cpp" line="1391"/>
         <source>Untitled %1</source>
         <translation>未命名文档%1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1189"/>
+        <location filename="../src/window.cpp" line="1190"/>
         <source>Current location remembered</source>
         <translation>已记住当前位置</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1753"/>
+        <location filename="../src/window.cpp" line="1755"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="217"/>
-        <location filename="../src/window.cpp" line="1755"/>
+        <location filename="../src/window.cpp" line="1757"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1056"/>
+        <location filename="../src/window.cpp" line="1057"/>
         <source>Read-Only mode is on</source>
         <translation>只读模式已开启</translation>
     </message>
