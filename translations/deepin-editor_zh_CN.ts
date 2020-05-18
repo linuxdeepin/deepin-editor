@@ -762,7 +762,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="134"/>
         <source>Add bookmark</source>
-        <translation>加入书签</translation>
+        <translation>添加书签</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="135"/>
