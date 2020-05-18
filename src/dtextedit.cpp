@@ -1301,7 +1301,6 @@ void TextEdit::setLineWrapMode(bool enable)
 {
     QTextEdit::setLineWrapMode(enable ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
     m_pLeftAreaWidget->m_linenumberarea->update();
-    m_pLeftAreaWidget->m_linenumberarea->repaint();
     m_pLeftAreaWidget->m_flodArea->update();
     m_pLeftAreaWidget->m_bookMarkArea->update();
 }
