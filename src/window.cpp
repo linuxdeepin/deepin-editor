@@ -1698,6 +1698,7 @@ void Window::showNewEditor(EditWrapper *wrapper)
     m_editorWidget->setCurrentWidget(wrapper);
     //yanyuhan 设置行号显示
     wrapper->setLineNumberShow(m_settings->settings->option("advance.window.showlinenumber")->value().toBool());
+    wrapper->textEditor()->setCodeFlodFlagVisable(m_settings->settings->option("base.display.codeflod")->value().toBool(),true);
 }
 
 void Window::showNotify(const QString &message)

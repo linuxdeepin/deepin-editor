@@ -144,7 +144,7 @@ public:
 
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     void codeFLodAreaPaintEvent(QPaintEvent *event);
-    void setCodeFlodFlagVisable(bool isVisable);
+    void setCodeFlodFlagVisable(bool isVisable,bool bIsFirstOpen = false);
     void setThemeWithPath(const QString &path);
     void setTheme(const KSyntaxHighlighting::Theme &theme, const QString &path);
     void loadHighlighter();

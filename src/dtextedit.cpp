@@ -1695,9 +1695,22 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
 
 }
 
-void TextEdit::setCodeFlodFlagVisable(bool isVisable)
+void TextEdit::setCodeFlodFlagVisable(bool isVisable,bool bIsFirstOpen)
 {
-    m_pLeftAreaWidget->m_flodArea->setVisible(isVisable);
+   int leftAreaWidth = m_pLeftAreaWidget->width();
+   int flodAreaWidth = m_pLeftAreaWidget->m_flodArea->width();
+//    qDebug()<<"leftAreaWidth = "<<leftAreaWidth;
+//    qDebug()<<"flodAreaWidth = "<<flodAreaWidth;
+   if(isVisable && !bIsFirstOpen) {
+       m_pLeftAreaWidget->setFixedWidth(leftAreaWidth+flodAreaWidth);
+//        qDebug()<<"isVisable = "<<isVisable;
+//        qDebug()<<"-----------------------leftAreaWidth = "<<m_pLeftAreaWidget->width();
+   } else {
+       m_pLeftAreaWidget->setFixedWidth(leftAreaWidth - flodAreaWidth);
+//        qDebug()<<"isVisable = "<<isVisable;
+//        qDebug()<<"-----------------------leftAreaWidth = "<<m_pLeftAreaWidget->width();
+   }
+   m_pLeftAreaWidget->m_flodArea->setVisible(isVisable);
 }
 
 void TextEdit::updateLineNumber()
@@ -1733,9 +1746,9 @@ void TextEdit::updateLineNumber()
 
     int blockSize = QString::number(blockCount()).size();
 
-//    m_pLeftAreaWidget->setFixedWidth(23 + blockSize * fontMetrics().width('9') + m_lineNumberPaddingX * 4);
+    m_pLeftAreaWidget->setFixedWidth(23 + blockSize * fontMetrics().width('9') + m_lineNumberPaddingX * 4);
 
-    m_pLeftAreaWidget->setFixedWidth(blockSize * fontMetrics().width('9') + m_lineNumberPaddingX * 4);
+//    m_pLeftAreaWidget->setFixedWidth(blockSize * fontMetrics().width('9') + m_lineNumberPaddingX * 4);
 
     m_pLeftAreaWidget->m_bookMarkArea->update();
     lineNumberArea->update();
