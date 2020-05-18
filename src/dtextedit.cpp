@@ -1628,7 +1628,7 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
             painter.setFont(m_fontLineNumberArea);
             painter.drawText(0, top,
                              lineNumberArea->width(), document()->documentLayout()->blockBoundingRect(block).height(),
-                             Qt::AlignVCenter | Qt::AlignHCenter, QString::number(blockNumber + 1));
+                             /*Qt::AlignVCenter |*/ Qt::AlignHCenter, QString::number(blockNumber + 1));
         }
 
         block = block.next();
