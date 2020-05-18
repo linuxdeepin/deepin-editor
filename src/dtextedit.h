@@ -204,6 +204,8 @@ public:
     QStringList readHistoryRecordofFilePath();
     void writeHistoryRecord();
 
+    bool m_pIsShowCodeFoldArea;
+
 signals:
     void clickFindAction();
     void clickReplaceAction();

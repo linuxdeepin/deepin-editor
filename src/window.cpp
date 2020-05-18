@@ -567,6 +567,7 @@ EditWrapper *Window::createEditor()
 {
     EditWrapper *wrapper = new EditWrapper();
     bool wordWrap = m_settings->settings->option("base.font.wordwrap")->value().toBool();
+    wrapper->textEditor()->m_pIsShowCodeFoldArea = m_settings->settings->option("base.display.codeflod")->value().toBool();
 
     wrapper->textEditor()->setThemeWithPath(m_themePath);
     wrapper->textEditor()->setSettings(m_settings);
