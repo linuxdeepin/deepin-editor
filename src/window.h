@@ -49,7 +49,7 @@ class Window : public DMainWindow
 
 public:
     Window(DMainWindow *parent = 0);
-    ~Window();
+    ~Window() override;
 
     void initTitlebar();
     bool checkBlockShutdown();

@@ -208,6 +208,8 @@ public:
     void isMarkAllLine(bool isMark, QString strColor = "");
     void cancleLastMark();
     void markSelectWord();
+	
+pubilic:
 	bool m_pIsShowCodeFoldArea;
 signals:
     void clickFindAction();
@@ -422,6 +424,7 @@ private:
     QFont m_fontLineNumberArea;
     QList<int> m_listBookmark;
     int m_nLines;
+    bool m_bIsFileOpen;
 
     QList<int> m_listFlodFlag;
 };

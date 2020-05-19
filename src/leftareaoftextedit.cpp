@@ -35,7 +35,7 @@ leftareaoftextedit::leftareaoftextedit(TextEdit *textEdit)
     m_bookMarkArea->setFixedWidth(23);
     m_flodArea->setFixedWidth(23);
     //m_bookMarkArea->setMinimumWidth(20);
-    m_flodArea->setMinimumWidth(20);
+//    m_flodArea->setMinimumWidth(20);
     hLayout->addWidget(m_bookMarkArea);
     hLayout->addWidget(m_linenumberarea);
     hLayout->addWidget(m_flodArea);

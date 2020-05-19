@@ -577,6 +577,7 @@ EditWrapper *Window::createEditor()
     wrapper->textEditor()->setLineWrapMode(wordWrap);
 //    wrapper->setLineNumberShow(m_settings->settings->option("advance.window.showlinenumber")->value().toBool());
     setFontSizeWithConfig(wrapper);
+    wrapper->textEditor()->updateLineNumber();
 
     connect(wrapper->textEditor(), &TextEdit::signal_readingPath, this, &Window::slot_saveReadingPath, Qt::QueuedConnection);
 

@@ -82,6 +82,7 @@ TextEdit::TextEdit(QWidget *parent)
       m_wrapper(nullptr),
      m_highlighter(new KSyntaxHighlighting::SyntaxHighlighter(document()))
 {
+    m_bIsFileOpen = false;
     //lineNumberArea = new LineNumberArea(m_pLeftAreaWidget);
     m_pLeftAreaWidget = new leftareaoftextedit(this);
     lineNumberArea = m_pLeftAreaWidget->m_linenumberarea;
@@ -2797,6 +2798,31 @@ void TextEdit::clearBlack()
 
 void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
 {
+    if (m_bIsFileOpen) {
+        QStringList bookmarkList = readHistoryRecordofBookmark();
+        QStringList filePathList = readHistoryRecordofFilePath();
+        QList<int> linesList;
+        QString qstrPath = "[" + filepath + "]";
+
+        if (filePathList.contains(qstrPath)) {
+            int index = 1;
+            QString qstrLines = bookmarkList.value(filePathList.indexOf(qstrPath));
+
+            for (int i = 0;i < qstrLines.count();i++) {
+                if(qstrLines.at(i) == "," || qstrLines.at(i) ==")") {
+                    linesList << qstrLines.mid(index,i - index).toInt();
+                    index = i + 1;
+                }
+            }
+        }
+
+        foreach (auto line, linesList) {
+
+            m_listBookmark << line;
+        }
+        m_bIsFileOpen = false;
+    }
+
     bookmarkwidget *bookMarkArea = m_pLeftAreaWidget->m_bookMarkArea;
     QPainter painter(bookMarkArea);
     QColor lineNumberAreaBackgroundColor;
@@ -2849,8 +2875,9 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
     int startLine = 0;//当前可见区域开始行号
     int startPoint = 0;//当前可见区域开始位置
     int imageTop = 0;//图片绘制位置
-    double nBookmarkLineHeight = document()->documentLayout()->blockBoundingRect(block).height();
-
+    int fontHeight = fontMetrics().height();
+    double nBookmarkLineHeight = fontHeight;
+    qDebug() << "bookMarkAreaPaintEvent" << m_listBookmark;
     foreach (auto line, m_listBookmark) {
         lineBlock = document()->findBlockByNumber(line - 1);
         if (nBookmarkLineHeight > document()->documentLayout()->blockBoundingRect(lineBlock).height()) {
@@ -2875,19 +2902,27 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
             if(line > 0)
             {
                 lineBlock = document()->findBlockByNumber(line - 1);
-                if(document()->documentLayout()->blockBoundingRect(lineBlock).height() > image.height())
+                if(fontHeight > image.height())
                 {
-                    imageTop = startPoint + (document()->documentLayout()->blockBoundingRect(lineBlock).height() - image.height())/2;
+
+                    if (document()->documentLayout()->blockBoundingRect(lineBlock).height() > 1.5*fontHeight) {
+
+                        imageTop = startPoint + qFabs(fontHeight - image.height())/2;
+                    }
+                    else {
+
+                        imageTop = startPoint + (document()->documentLayout()->blockBoundingRect(lineBlock).height() - image.height())/2;
+                    }
+
                     scaleImage = image;
                 } else {
                     imageTop = startPoint/* + (image.height() - document()->documentLayout()->blockBoundingRect(lineBlock).height())/2*/;
-
-                    double scale = /*document()->documentLayout()->blockBoundingRect(lineBlock).height()*/nBookmarkLineHeight/image.height();
-                    int nScaleWidth = scale*image.height()*image.height()/image.width();
+                    double scale = nBookmarkLineHeight/image.height();
+                    double nScaleWidth = scale*image.height()*image.height()/image.width();
                     scaleImage = image.scaled(scale*image.height(),nScaleWidth);
                 }
 
-                painter.drawImage(10,imageTop,scaleImage);
+                painter.drawImage(5,imageTop,scaleImage);
             }
         }
     }
@@ -3025,26 +3060,7 @@ void TextEdit::flodOrUnflodCurrentLevel(bool isFlod)
 
 void TextEdit::setIsFileOpen()
 {
-    QStringList bookmarkList = readHistoryRecordofBookmark();
-    QStringList filePathList = readHistoryRecordofFilePath();
-    QList<int> linesList;
-    QString qstrPath = "[" + filepath + "]";
-
-    if (filePathList.contains(qstrPath)) {
-        int index = 1;
-        QString qstrLines = bookmarkList.value(filePathList.indexOf(qstrPath));
-
-        for (int i = 0;i < qstrLines.count();i++) {
-            if(qstrLines.at(i) == "," || qstrLines.at(i) ==")") {
-                linesList << qstrLines.mid(index,i - index).toInt();
-                index = i + 1;
-            }
-        }
-    }
-
-    foreach (auto line, linesList) {
-        m_listBookmark << line - 1;
-    }
+    m_bIsFileOpen = true;
 }
 
 QStringList TextEdit::readHistoryRecord()
