@@ -203,9 +203,12 @@ public:
     QStringList readHistoryRecordofBookmark();
     QStringList readHistoryRecordofFilePath();
     void writeHistoryRecord();
-
-    bool m_pIsShowCodeFoldArea;
-
+ 
+    void isMarkCurrentLine(bool isMark, QString strColor = "");
+    void isMarkAllLine(bool isMark, QString strColor = "");
+    void cancleLastMark();
+    void markSelectWord();
+	bool m_pIsShowCodeFoldArea;
 signals:
     void clickFindAction();
     void clickReplaceAction();
@@ -288,6 +291,8 @@ private:
     QTextEdit::ExtraSelection m_currentLineSelection;
     QTextEdit::ExtraSelection m_findHighlightSelection;
     QTextEdit::ExtraSelection m_wordUnderCursorSelection;
+    QList<QTextEdit::ExtraSelection> m_wordMarkSelections;
+    QTextEdit::ExtraSelection m_markAllSelection;
 
     QTextCursor m_highlightWordCacheCursor;
     QTextCursor m_wordUnderPointerCursor;
@@ -336,8 +341,21 @@ private:
     //yanyuhan
      //颜色标记、折叠/展开、书签、列编辑、设置注释、取消注释;
  //    QAction *m_colorMarkAction;
-     DMenu *m_colormarkMenu;
      DMenu *m_collapseExpandMenu;
+    DMenu *m_markCurrentLine;
+    DMenu *m_markAllLine;
+    QAction *m_cancleMarkCurrentLine;
+    QAction *m_cancleMarkAllLine;
+    QAction *m_cancleLastMark;
+    QAction *m_actionStyleOne;
+    QAction *m_actionStyleTwo;
+    QAction *m_actionStyleThree;
+    QAction *m_actionStyleFour;
+
+    QAction *m_actionAllStyleOne;
+    QAction *m_actionAllStyleTwo;
+    QAction *m_actionAllStyleThree;
+    QAction *m_actionAllStyleFour;
  //    QAction *m_bookmarkAction;
      QAction *m_columnEditACtion;
      QAction *m_addComment;

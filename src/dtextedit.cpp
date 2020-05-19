@@ -55,6 +55,11 @@
 #include <private/qguiapplication_p.h>
 #include <qpa/qplatformtheme.h>
 
+#define STYLE_COLOR_1 "#FFA503"
+#define STYLE_COLOR_2 "#FF1C49"
+#define STYLE_COLOR_3 "#9023FC"
+#define STYLE_COLOR_4 "#05EA6B"
+
 static inline bool isModifier(QKeyEvent *e)
 {
     if (!e) {
@@ -145,15 +150,32 @@ TextEdit::TextEdit(QWidget *parent)
     //yanyuhan
     //颜色标记、折叠/展开、书签、列编辑、设置注释、取消注释;
     //点击颜色标记菜单，显示二级菜单，包括：标记所在行、清除上次标记、清除标记、标记所有;
-    m_colormarkMenu = new DMenu(tr("Color mark"),this);
-    QAction *markLine = new QAction(tr("Mark this line"));
-    QAction *clearMarkBefor = new QAction(tr("Clear before mark"));
-    QAction *clearMark = new QAction(tr("Clear mark"));
-    QAction *markAll = new QAction(tr("Mark all"));
-    m_colormarkMenu->addAction(markLine);
-    m_colormarkMenu->addAction(clearMarkBefor);
-    m_colormarkMenu->addAction(clearMark);
-    m_colormarkMenu->addAction(markAll);
+    m_markAllLine = new DMenu(tr("Mark All Line"), this);
+    m_markCurrentLine = new DMenu(tr("Mark Current Line"), this);
+    m_cancleMarkAllLine = new QAction(tr("Cancle Mark All Line"), this);
+    m_cancleMarkCurrentLine = new QAction(tr("Cancle Mark Current Line"), this);
+    m_cancleLastMark = new QAction(tr("Cancle last Mark"), this);
+
+    m_actionStyleOne = new QAction(tr("Style One"), this);
+    m_actionStyleTwo = new QAction(tr("Style Two"), this);
+    m_actionStyleThree = new QAction(tr("Style Three"), this);
+    m_actionStyleFour = new QAction(tr("Style Four"), this);
+
+    m_actionAllStyleOne = new QAction(tr("Style One"), this);
+    m_actionAllStyleTwo = new QAction(tr("Style Two"), this);
+    m_actionAllStyleThree = new QAction(tr("Style Three"), this);
+    m_actionAllStyleFour = new QAction(tr("Style Four"), this);
+
+    m_markAllLine->addAction(m_actionAllStyleOne);
+    m_markAllLine->addAction(m_actionAllStyleTwo);
+    m_markAllLine->addAction(m_actionAllStyleThree);
+    m_markAllLine->addAction(m_actionAllStyleFour);
+
+    m_markCurrentLine->addAction(m_actionStyleOne);
+    m_markCurrentLine->addAction(m_actionStyleTwo);
+    m_markCurrentLine->addAction(m_actionStyleThree);
+    m_markCurrentLine->addAction(m_actionStyleFour);
+
     //点击折叠/展开菜单，显示二级菜单;包括：折叠所有层次、展开所有层次、折叠当前层次、展开当前层次。
     m_collapseExpandMenu = new DMenu(tr("Collapse/Expand"),this);
     QAction *collapseAll = new QAction(tr("Collapse all"));
@@ -214,6 +236,48 @@ TextEdit::TextEdit(QWidget *parent)
     connect(m_unflodCurrentLevel, &QAction::triggered, this, [ = ] {
         flodOrUnflodCurrentLevel(false);
     });
+    connect(m_markCurrentLine, &DMenu::triggered, this, [ = ](QAction * pAction) {
+        QString strColor;
+        if (pAction == m_actionStyleOne) {
+            strColor = STYLE_COLOR_1;
+        } else if (pAction == m_actionStyleTwo) {
+            strColor = STYLE_COLOR_2;
+        } else if (pAction == m_actionStyleThree) {
+            strColor = STYLE_COLOR_3;
+        } else if (pAction == m_actionStyleFour) {
+            strColor = STYLE_COLOR_4;
+        }
+        isMarkCurrentLine(true, strColor);
+        renderAllSelections();
+    });
+    connect(m_cancleMarkCurrentLine, &QAction::triggered, this, [ = ] {
+        isMarkCurrentLine(false);
+        renderAllSelections();
+    });
+
+    connect(m_markAllLine, &DMenu::triggered, this, [ = ](QAction * pAction) {
+        QString strColor;
+        if (pAction == m_actionAllStyleOne) {
+            strColor = STYLE_COLOR_1;
+        } else if (pAction == m_actionAllStyleTwo) {
+            strColor = STYLE_COLOR_2;
+        } else if (pAction == m_actionAllStyleThree) {
+            strColor = STYLE_COLOR_3;
+        } else if (pAction == m_actionAllStyleFour) {
+            strColor = STYLE_COLOR_4;
+        }
+        isMarkAllLine(true, strColor);
+        renderAllSelections();
+    });
+    connect(m_cancleMarkAllLine, &QAction::triggered, this, [ = ] {
+        isMarkAllLine(false);
+        renderAllSelections();
+    });
+    connect(m_cancleLastMark, &QAction::triggered, this, [ = ] {
+        cancleLastMark();
+        renderAllSelections();
+    });
+
 
     // Init convert case sub menu.
     m_haveWordUnderCursor = false;
@@ -1596,11 +1660,14 @@ void TextEdit::renderAllSelections()
 //    }
 
     selections.append(m_currentLineSelection);
+    selections.append(m_wordMarkSelections); selections.append(m_markAllSelection);
     selections.append(m_findMatchSelections);
     selections.append(m_findHighlightSelection);
     //selections.append(m_wordUnderCursorSelection);
     selections.append(m_beginBracketSelection);
     selections.append(m_endBracketSelection);
+    selections.append(m_markAllSelection);
+
 
     setExtraSelections(selections);
 }
@@ -3044,6 +3111,76 @@ void TextEdit::writeHistoryRecord()
     }
 }
 
+void TextEdit::isMarkCurrentLine(bool isMark, QString strColor)
+{
+    qDebug() << ">>>>>>>>>>>>>>>>>>>current";
+    if (isMark) {
+        QTextEdit::ExtraSelection selection;
+        selection.format.setBackground(QColor(strColor));
+        QTextCursor tmpCursor(document());
+        QTextDocument::FindFlags flags;
+        flags &= QTextDocument::FindCaseSensitively;
+        tmpCursor = document()->find(textCursor().selectedText(), textCursor().position() - textCursor().selectedText().length(), flags);
+        selection.cursor = tmpCursor;
+        m_wordMarkSelections.append(selection);
+
+
+    } else {
+        m_wordMarkSelections.removeLast();
+        updateHighlightLineSelection();
+    }
+
+
+}
+
+void TextEdit::isMarkAllLine(bool isMark, QString strColor)
+{
+    qDebug() << ">>>>>>>>>>>>>>>>>>>all";
+    m_wordMarkSelections.clear();
+    if (isMark) {
+        QTextEdit::ExtraSelection selection;
+
+        selection.format.setBackground(QColor(strColor));
+        selection.cursor = textCursor();
+        selection.cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+        selection.cursor.select(QTextCursor::Document);
+        m_markAllSelection = selection;
+    } else {
+        QTextEdit::ExtraSelection selection;
+        selection.format.setBackground(QColor(strColor));
+        selection.cursor = textCursor();
+        selection.cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+        selection.cursor.clearSelection();
+        m_markAllSelection = selection;
+    }
+
+
+}
+
+void TextEdit::cancleLastMark()
+{
+    if (m_wordMarkSelections.size() <= 1)
+        return;
+    m_wordMarkSelections.removeAt(m_wordMarkSelections.size() - 2);
+    updateHighlightLineSelection();
+}
+
+void TextEdit::markSelectWord()
+{
+    bool isFind  = false;
+    for (int i = 0 ; i < m_wordMarkSelections.size(); ++i) {
+        if (m_wordMarkSelections.at(i).cursor == textCursor()) {
+            isFind = true;
+            m_wordMarkSelections.removeAt(i);
+            renderAllSelections();
+            break;
+        }
+    }
+    if (!isFind) {
+        isMarkCurrentLine(true, STYLE_COLOR_1);
+        renderAllSelections();
+    }
+}
 void TextEdit::completionWord(QString word)
 {
     QString wordAtCursor = getWordAtCursor();
@@ -3448,7 +3585,9 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         selectAll();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "copy")) {
         copySelectedText();
-    } 
+    } else if (key == "Ctrl+F6") {
+        markSelectWord();
+    }
 }
 
 void TextEdit::wheelEvent(QWheelEvent *e)
@@ -3657,6 +3796,17 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
 //    m_rightMenu->addMenu(m_colormarkMenu);          //标记功能
 //    m_rightMenu->addAction(m_columnEditACtion);           //列编辑模式
 
+    m_rightMenu->addSeparator();
+    m_rightMenu->addMenu(m_markAllLine);
+    m_rightMenu->addAction(m_cancleMarkAllLine);
+
+    if (textCursor().hasSelection()) {
+        m_rightMenu->addMenu(m_markCurrentLine);
+        m_rightMenu->addAction(m_cancleMarkCurrentLine);
+    }
+    if (m_wordMarkSelections.size() > 1) {
+        m_rightMenu->addAction(m_cancleLastMark);
+    }
     m_rightMenu->exec(event->globalPos());
 }
 
