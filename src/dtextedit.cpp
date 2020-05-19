@@ -1746,6 +1746,22 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
 {
     m_listFlodFlag.clear();
     QPainter painter(m_pLeftAreaWidget->m_flodArea);
+
+    QColor codeFlodAreaBackgroundColor;
+    if (QColor(m_backgroundColor).lightness() < 128) {
+        codeFlodAreaBackgroundColor = palette().brightText().color();
+        codeFlodAreaBackgroundColor.setAlphaF(0.01);
+
+        m_lineNumbersColor.setAlphaF(0.2);
+    } else {
+        codeFlodAreaBackgroundColor = palette().brightText().color();
+        codeFlodAreaBackgroundColor.setAlphaF(0.03);
+        m_lineNumbersColor.setAlphaF(0.3);
+    }
+    painter.fillRect(event->rect(), codeFlodAreaBackgroundColor);
+
+
+
     int blockNumber = getFirstVisibleBlockId();
     QTextBlock block = document()->findBlockByNumber(blockNumber);
     QTextBlock prev_block = (blockNumber > 0) ? document()->findBlockByNumber(blockNumber - 1) : block;
