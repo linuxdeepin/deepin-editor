@@ -209,7 +209,7 @@ public:
     void cancleLastMark();
     void markSelectWord();
 	
-pubilic:
+public:
 	bool m_pIsShowCodeFoldArea;
 signals:
     void clickFindAction();
