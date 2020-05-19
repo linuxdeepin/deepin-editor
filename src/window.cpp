@@ -1007,11 +1007,10 @@ void Window::setFontSizeWithConfig(EditWrapper *wrapper)
 void Window::popupFindBar()
 {
     EditWrapper *curWrapper = currentWrapper();
-    currentWrapper()->bottomBar()->updateSize(59);
-
     if (curWrapper->textEditor()->toPlainText().isEmpty()) {
         return;
     }
+	currentWrapper()->bottomBar()->updateSize(59);
 
     if (m_findBar->isVisible()) {
         m_findBar->move(QPoint(10, height() - 59));
@@ -1051,7 +1050,6 @@ void Window::popupFindBar()
 void Window::popupReplaceBar()
 {
     EditWrapper *curWrapper = currentWrapper();
-    currentWrapper()->bottomBar()->updateSize(59);
     bool bIsReadOnly = curWrapper->textEditor()->getReadOnlyMode();
 
     if (bIsReadOnly) {
@@ -1062,6 +1060,7 @@ void Window::popupReplaceBar()
     if (curWrapper->textEditor()->toPlainText().isEmpty()) {
         return;
     }
+	currentWrapper()->bottomBar()->updateSize(59);
 
     if (m_replaceBar->isVisible()) {
         m_replaceBar->move(QPoint(10, height() - 59));
