@@ -745,6 +745,16 @@
         <translation>添加注释</translation>
     </message>
     <message>
+        <location filename="../src/dtextedit.cpp" line="129"/>
+        <source>Add comment</source>
+        <translation>添加注释</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="129"/>
+        <source>Cancel comment</source>
+        <translation>取消注释</translation>
+    </message>
+    <message>
         <location filename="../src/dtextedit.cpp" line="130"/>
         <source>Text to Speech</source>
         <translation>语音朗读</translation>
