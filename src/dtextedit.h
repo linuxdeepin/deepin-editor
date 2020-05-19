@@ -333,6 +333,16 @@ private:
     QAction *m_flodCurrentLevel;
     QAction *m_unflodCurrentLevel;
 
+    //yanyuhan
+     //颜色标记、折叠/展开、书签、列编辑、设置注释、取消注释;
+ //    QAction *m_colorMarkAction;
+     DMenu *m_colormarkMenu;
+     DMenu *m_collapseExpandMenu;
+ //    QAction *m_bookmarkAction;
+     QAction *m_columnEditACtion;
+     QAction *m_addComment;
+     QAction *m_cancelComment;
+
     DMenu *m_convertCaseMenu;
     QAction *m_upcaseAction;
     QAction *m_downcaseAction;

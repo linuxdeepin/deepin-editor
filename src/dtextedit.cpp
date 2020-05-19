@@ -141,6 +141,35 @@ TextEdit::TextEdit(QWidget *parent)
     m_unflodAllLevel = new QAction(tr("Unflod all Level"), this);
     m_unflodCurrentLevel = new QAction(tr("Unflod Current Level"), this);
 
+//    setAddRigetMenu();
+    //yanyuhan
+    //颜色标记、折叠/展开、书签、列编辑、设置注释、取消注释;
+    //点击颜色标记菜单，显示二级菜单，包括：标记所在行、清除上次标记、清除标记、标记所有;
+    m_colormarkMenu = new DMenu(tr("Color mark"),this);
+    QAction *markLine = new QAction(tr("Mark this line"));
+    QAction *clearMarkBefor = new QAction(tr("Clear before mark"));
+    QAction *clearMark = new QAction(tr("Clear mark"));
+    QAction *markAll = new QAction(tr("Mark all"));
+    m_colormarkMenu->addAction(markLine);
+    m_colormarkMenu->addAction(clearMarkBefor);
+    m_colormarkMenu->addAction(clearMark);
+    m_colormarkMenu->addAction(markAll);
+    //点击折叠/展开菜单，显示二级菜单;包括：折叠所有层次、展开所有层次、折叠当前层次、展开当前层次。
+    m_collapseExpandMenu = new DMenu(tr("Collapse/Expand"),this);
+    QAction *collapseAll = new QAction(tr("Collapse all"));
+    QAction *expandAll = new QAction(tr("Expand all"));
+    QAction *collapseThis = new QAction(tr("Collapse this"));
+    QAction *expandThis = new QAction(tr("Expand this"));
+    m_collapseExpandMenu->addAction(collapseAll);
+    m_collapseExpandMenu->addAction(expandAll);
+    m_collapseExpandMenu->addAction(collapseThis);
+    m_collapseExpandMenu->addAction(expandThis);
+
+    m_columnEditACtion = new QAction(tr("Column edit"),this);
+    m_columnEditACtion->setCheckable(true);
+    m_addComment = new QAction(tr("Add comment"),this);
+    m_cancelComment = new QAction(tr("Cancel comment"),this);
+
     connect(m_rightMenu, &DMenu::aboutToHide, this, &TextEdit::removeHighlightWordUnderCursor);
     connect(m_undoAction, &QAction::triggered, this, &TextEdit::undo);
     connect(m_redoAction, &QAction::triggered, this, &TextEdit::redo);
@@ -157,7 +186,13 @@ TextEdit::TextEdit(QWidget *parent)
     connect(m_enableReadOnlyModeAction, &QAction::triggered, this, &TextEdit::toggleReadOnlyMode);
     connect(m_disableReadOnlyModeAction, &QAction::triggered, this, &TextEdit::toggleReadOnlyMode);
     connect(m_openInFileManagerAction, &QAction::triggered, this, &TextEdit::clickOpenInFileManagerAction);
-    connect(m_toggleCommentAction, &QAction::triggered, this, &TextEdit::toggleComment);
+ //   connect(m_toggleCommentAction, &QAction::triggered, this, &TextEdit::toggleComment);
+    connect(m_addComment,&QAction::triggered,this,[=] {
+        toggleComment(true);
+    });
+    connect(m_cancelComment,&QAction::triggered,this,[=] {
+        toggleComment(false);
+    });
     connect(m_voiceReadingAction, &QAction::triggered, this, &TextEdit::slot_voiceReading);
     connect(m_stopReadingAction, &QAction::triggered, this, &TextEdit::slot_stopReading);
     connect(m_dictationAction, &QAction::triggered, this, &TextEdit::slot_dictation);
@@ -179,7 +214,6 @@ TextEdit::TextEdit(QWidget *parent)
     connect(m_unflodCurrentLevel, &QAction::triggered, this, [ = ] {
         flodOrUnflodCurrentLevel(false);
     });
-
 
     // Init convert case sub menu.
     m_haveWordUnderCursor = false;
@@ -3512,12 +3546,23 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
     if (!toPlainText().isEmpty() &&
         (textCursor().hasSelection() || !isBlankLine) &&
         !def.filePath().isEmpty()) {
-        m_rightMenu->addAction(m_toggleCommentAction);
+//        m_rightMenu->addAction(m_toggleCommentAction);
+
+        //yanyuhan 折叠、代码注释（有代码选中时增加注释选项显示）
+//        m_rightMenu->addMenu(m_collapseExpandMenu);             //折叠展开
+        if(textCursor().hasSelection()) {
+            m_rightMenu->addAction(m_addComment);
+        }
+        m_rightMenu->addAction(m_cancelComment);
 
         if (m_readOnlyMode == true) {
-            m_toggleCommentAction->setEnabled(false);
+//            m_toggleCommentAction->setEnabled(false);
+            m_addComment->setEnabled(false);
+            m_cancelComment->setEnabled(false);
         } else {
-            m_toggleCommentAction->setEnabled(true);
+//            m_toggleCommentAction->setEnabled(true);
+            m_addComment->setEnabled(true);
+            m_cancelComment->setEnabled(true);
         }
     }
 
@@ -3607,6 +3652,10 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
             m_translateAction->setEnabled(translateState);
         }
     }
+
+    //yanyuhan
+//    m_rightMenu->addMenu(m_colormarkMenu);          //标记功能
+//    m_rightMenu->addAction(m_columnEditACtion);           //列编辑模式
 
     m_rightMenu->exec(event->globalPos());
 }
