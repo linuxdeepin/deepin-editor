@@ -28,6 +28,21 @@
                             "type": "checkbox",
                             "text": "Word Wrap",
                             "default": "true"
+                        },
+                        {
+
+                            "key":"codeflod",
+                            "name":"CODE FLOD",
+                            "type":"checkbox",
+                            "text":"Code Flod Flag",
+                            "default":"false"
+                        },
+                        {
+                            "key": "showlinenumber",
+                            "name": "Show line number",
+                            "type": "checkbox",
+                            "text": "Show Line Number",
+                            "default": "true"
                         }
                     ]
                 }
@@ -1954,21 +1969,6 @@
                             "hide" : true,
                             "reset" : false,
                             "default": 0.6
-                        },
-                        {
-                            "key": "showlinenumber",
-                            "name": "Show line number",
-                            "type": "checkbox",
-                            "text": "Show Line Number",
-                            "default": "true"
-                        },
-                        {
-
-                            "key":"codeflod",
-                            "name":"CODE FLOD",
-                            "type":"checkbox",
-                            "text":"Code Flod Flag",
-                            "default":"false"
                         }
                     ]
                 },

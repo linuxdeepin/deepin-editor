@@ -109,6 +109,6 @@ void GenerateSettingTranslate()
     auto advance_editor_tabspacenumberName = QObject::tr("Tab width");
 
     auto base_font_wordwrapText = QObject::tr("Word Wrap");
-    auto advance_window_codeflod = QObject::tr("Code Flod Flag");
-    auto advance_window_showLineNumber = QObject::tr("Show Line Number");
+    auto base_font_codeflod = QObject::tr("Code Flod Flag");
+    auto base_font_showLineNumber = QObject::tr("Show Line Number");
 }

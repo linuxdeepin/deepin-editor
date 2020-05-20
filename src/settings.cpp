@@ -64,7 +64,7 @@ Settings::Settings(QWidget *parent)
         emit adjustWordWrap(value.toBool());
     });
 
-    auto codeFlod = settings->option("advance.window.codeflod");
+    auto codeFlod = settings->option("base.font.codeflod");
     connect(codeFlod, &Dtk::Core::DSettingsOption::valueChanged, this, [ = ](QVariant value) {
         emit showCodeFlodFlag(value.toBool());
     });
@@ -124,7 +124,7 @@ Settings::Settings(QWidget *parent)
         }
     });
 
-    auto showLineNumber = settings->option("advance.window.showlinenumber");
+    auto showLineNumber = settings->option("base.font.showlinenumber");
     connect(showLineNumber,&Dtk::Core::DSettingsOption::valueChanged,this,[=] (QVariant value){
         emit setLineNumberShow(value.toBool());
     });

@@ -567,7 +567,7 @@ EditWrapper *Window::createEditor()
 {
     EditWrapper *wrapper = new EditWrapper();
     bool wordWrap = m_settings->settings->option("base.font.wordwrap")->value().toBool();
-    wrapper->textEditor()->m_pIsShowCodeFoldArea = m_settings->settings->option("advance.window.codeflod")->value().toBool();
+    wrapper->textEditor()->m_pIsShowCodeFoldArea = m_settings->settings->option("base.font.codeflod")->value().toBool();
 
     wrapper->textEditor()->setThemeWithPath(m_themePath);
     wrapper->textEditor()->setSettings(m_settings);
@@ -575,7 +575,7 @@ EditWrapper *Window::createEditor()
     wrapper->textEditor()->setFontFamily(m_settings->settings->option("base.font.family")->value().toString());
     wrapper->textEditor()->setModified(false);
     wrapper->textEditor()->setLineWrapMode(wordWrap);
-//    wrapper->setLineNumberShow(m_settings->settings->option("advance.window.showlinenumber")->value().toBool());
+//    wrapper->setLineNumberShow(m_settings->settings->option("base.font.showlinenumber")->value().toBool());
     setFontSizeWithConfig(wrapper);
     wrapper->textEditor()->updateLineNumber();
 
@@ -1699,8 +1699,8 @@ void Window::showNewEditor(EditWrapper *wrapper)
     m_editorWidget->addWidget(wrapper);
     m_editorWidget->setCurrentWidget(wrapper);
     //yanyuhan 设置行号显示
-    wrapper->setLineNumberShow(m_settings->settings->option("advance.window.showlinenumber")->value().toBool());
-    wrapper->textEditor()->setCodeFlodFlagVisable(m_settings->settings->option("advance.window.codeflod")->value().toBool(), true);
+    wrapper->setLineNumberShow(m_settings->settings->option("base.font.showlinenumber")->value().toBool());
+    wrapper->textEditor()->setCodeFlodFlagVisable(m_settings->settings->option("base.font.codeflod")->value().toBool(), true);
 }
 
 void Window::showNotify(const QString &message)
