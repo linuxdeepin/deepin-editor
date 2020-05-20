@@ -3140,6 +3140,8 @@ void TextEdit::writeHistoryRecord()
             history.remove(historyList.first());
             m_settings->settings->option("advance.editor.browsing_history_file")->setValue(filePathandBookmarkLine + ")}" + history);
         }
+    } else {
+        m_settings->settings->option("advance.editor.browsing_history_file")->setValue(history);
     }
 }
 

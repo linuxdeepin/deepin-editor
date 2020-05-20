@@ -419,6 +419,7 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
                                         for ( auto path : m_tabPaths) {
                                             EditWrapper *wrapper = window->wrapper(path);//路径获取文件
                                             if (!wrapper->textEditor()->document()->isModified()){
+                                                window->removeWrapper(path,true);
                                                 closeTab(this->indexOf(path));
                                             }
                                         }

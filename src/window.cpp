@@ -1477,6 +1477,7 @@ void Window::handleTabsClosed(QStringList tabList)
     // close tabs.
     for (const QString &path : tabList) {
         if (m_wrappers.contains(path)) {
+            removeWrapper(path, true);
             m_tabbar->closeTab(m_tabbar->indexOf(path));
         }
     }
