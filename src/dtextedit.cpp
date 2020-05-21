@@ -3270,6 +3270,8 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                     getNeedControlLine(line, true);
                 }
                 m_pLeftAreaWidget->m_flodArea->update();
+                m_pLeftAreaWidget->m_linenumberarea->update();
+                m_pLeftAreaWidget->m_bookMarkArea->update();
                 viewport()->update();
                 document()->adjustSize();
             } else {
