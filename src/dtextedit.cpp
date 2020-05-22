@@ -151,6 +151,7 @@ TextEdit::TextEdit(QWidget *parent)
     //yanyuhan
     //颜色标记、折叠/展开、书签、列编辑、设置注释、取消注释;
     //点击颜色标记菜单，显示二级菜单，包括：标记所在行、清除上次标记、清除标记、标记所有;
+    m_colorMarkMenu = new DMenu(tr("Color Mark"),this);
     m_markAllLine = new DMenu(tr("Mark All Line"), this);
     m_markCurrentLine = new DMenu(tr("Mark Current Line"), this);
     m_cancleMarkAllLine = new QAction(tr("Cancle Mark All Line"), this);
@@ -3838,17 +3839,33 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
 //    m_rightMenu->addMenu(m_colormarkMenu);          //标记功能
 //    m_rightMenu->addAction(m_columnEditACtion);           //列编辑模式
 
-    m_rightMenu->addSeparator();
-    m_rightMenu->addMenu(m_markAllLine);
-    m_rightMenu->addAction(m_cancleMarkAllLine);
 
-    if (textCursor().hasSelection()) {
-        m_rightMenu->addMenu(m_markCurrentLine);
-        m_rightMenu->addAction(m_cancleMarkCurrentLine);
-    }
+//    m_rightMenu->addSeparator();
+//    m_rightMenu->addMenu(m_markAllLine);
+//    m_rightMenu->addAction(m_cancleMarkAllLine);
+
+//    if (textCursor().hasSelection()) {
+//        m_rightMenu->addMenu(m_markCurrentLine);
+//        m_rightMenu->addAction(m_cancleMarkCurrentLine);
+//    }
+//    if (m_wordMarkSelections.size() > 1) {
+//        m_rightMenu->addAction(m_cancleLastMark);
+//    }
+    m_rightMenu->addSeparator();
+    m_rightMenu->addMenu(m_colorMarkMenu);
+    m_colorMarkMenu->clear();
+    m_colorMarkMenu->addMenu(m_markCurrentLine);
     if (m_wordMarkSelections.size() > 1) {
-        m_rightMenu->addAction(m_cancleLastMark);
+        m_colorMarkMenu->addAction(m_cancleLastMark);
     }
+    m_colorMarkMenu->addAction(m_cancleMarkAllLine);
+    m_colorMarkMenu->addMenu(m_markAllLine);
+
+//    if (textCursor().hasSelection()) {
+//        m_colorMarkMenu->addMenu(m_markCurrentLine);
+//        m_colorMarkMenu->addAction(m_cancleMarkCurrentLine);
+//    }
+
     m_rightMenu->exec(event->globalPos());
 }
 
