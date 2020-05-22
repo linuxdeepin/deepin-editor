@@ -2909,6 +2909,7 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
             if(line > 0)
             {
                 lineBlock = document()->findBlockByNumber(line - 1);
+                qDebug()<<"fontHeight = "<<fontHeight <<"image.height() = "<<image.height();
                 if(fontHeight > image.height())
                 {
 
@@ -2922,8 +2923,8 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
                     }
 
                     scaleImage = image;
-                } else {
-                    imageTop = startPoint/* + (image.height() - document()->documentLayout()->blockBoundingRect(lineBlock).height())/2*/;
+                } else {         
+                    imageTop = startPoint + (document()->documentLayout()->blockBoundingRect(lineBlock).height() - image.height())/2;
                     double scale = nBookmarkLineHeight/image.height();
                     double nScaleWidth = scale*image.height()*image.height()/image.width();
                     scaleImage = image.scaled(scale*image.height(),nScaleWidth);
