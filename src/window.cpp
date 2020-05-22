@@ -503,7 +503,6 @@ void Window::closeTab()
             } else if (index == 2) {
                 // may to press CANEL button in the save dialog.
                 if (saveFile()) {
-                    removeWrapper(filePath, true);
                     m_tabbar->closeCurrentTab();                  
                 }
             }
@@ -755,6 +754,7 @@ bool Window::saveFile()
             // 为空文件更新保存后的标签名称，以及其对应的文件路径
             m_tabbar->updateTab(m_tabbar->currentIndex(), new_path, info.fileName());
         }
+        removeWrapper(new_path, true);
     }
     // save normal file.
     else {
@@ -778,7 +778,7 @@ bool Window::saveFile()
                 showNotify(tr("Saved successfully"));
                 m_wrappers.value(m_tabbar->currentPath())->setTextChangeFlag(false);
             }
-
+            removeWrapper(m_tabbar->currentPath(), true);
         }
     }
 
