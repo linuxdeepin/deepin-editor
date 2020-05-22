@@ -778,7 +778,6 @@ bool Window::saveFile()
                 showNotify(tr("Saved successfully"));
                 m_wrappers.value(m_tabbar->currentPath())->setTextChangeFlag(false);
             }
-            removeWrapper(m_tabbar->currentPath(), true);
         }
     }
 
