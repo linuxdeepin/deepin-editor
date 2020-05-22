@@ -428,6 +428,7 @@ private:
     bool m_bIsFileOpen;
 
     QList<int> m_listFlodFlag;
+    QList<int> m_listFlodIconPos;
 };
 
 #endif

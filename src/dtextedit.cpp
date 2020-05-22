@@ -1749,6 +1749,7 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
 void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
 {
     m_listFlodFlag.clear();
+    m_listFlodIconPos.clear();
     QPainter painter(m_pLeftAreaWidget->m_flodArea);
 
     QColor codeFlodAreaBackgroundColor;
@@ -1800,16 +1801,25 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
     QImage foldimage(flodImagePath);
     int bottom = top + document()->documentLayout()->blockBoundingRect(block).height();
     while (block.isValid() && top <= event->rect().bottom()) {
-        if (block.isVisible() && bottom >= event->rect().top()) {
-
-            if (document()->findBlockByNumber(blockNumber + 1).text().contains("{")) {
-                if (document()->findBlockByNumber(blockNumber + 1).isVisible()) {
-                    qDebug() << "<<<<<<<width:" << m_pLeftAreaWidget->m_flodArea->width();
-                    painter.drawImage(0, top, foldimage);
+        if (/*block.isVisible() && */bottom >= event->rect().top()) {
+            if (document()->findBlockByNumber(blockNumber).text().contains("{")) {
+                if (document()->findBlockByNumber(blockNumber).text().trimmed().startsWith("{")) {
+                    if (document()->findBlockByNumber(blockNumber).isVisible()) {
+                        painter.drawImage(0, top - document()->documentLayout()->blockBoundingRect(block).height(), foldimage);
+                    } else {
+                        painter.drawImage(0, top - document()->documentLayout()->blockBoundingRect(block.previous()).height(), Unfoldimage);
+                    }
+                    m_listFlodFlag.push_back(blockNumber);
+                    m_listFlodIconPos.append(blockNumber - 1);
                 } else {
-                    painter.drawImage(0, top, Unfoldimage);
+                    if (document()->findBlockByNumber(blockNumber + 1).isVisible()) {
+                        painter.drawImage(0, top, foldimage);
+                    } else {
+                        painter.drawImage(0, top, Unfoldimage);
+                    }
+                    m_listFlodIconPos.append(blockNumber);
                 }
-                m_listFlodFlag.push_back(blockNumber);
+
             }
         }
 
@@ -2080,27 +2090,49 @@ int TextEdit::getFirstVisibleBlockId() const
 
 void TextEdit::getNeedControlLine(int line, bool isVisable)
 {
-    int iLine = line ;
+    int iLine = line;
+    bool isFirstLine = true;
     QTextBlock block = document()->findBlockByNumber(iLine);
+    int existLeftSubbrackets = 0, existRightSubbrackets = 0;
 
-    //记录存在的括号数量
-    int existSubbrackets = 1;
-    bool isFirst = true;
     while (block.isValid()) {
-        if (block.text().contains("{") && !isFirst) {
-            existSubbrackets ++;
-        } else if (block.text().contains("}") && existSubbrackets != 0) {
-            existSubbrackets --;
+
+        if (block.text().contains("{") && !block.text().contains("}")) {
+            existLeftSubbrackets ++;
+        } else if (block.text().contains("}") && !block.text().contains("{")) {
+            existRightSubbrackets ++;
+        } else if (block.text().contains("}") && block.text().contains("{")) {
+            for (int i = 0 ; i < block.text().size() ; ++i) {
+                if (block.text().at(i) == "{") {
+                    existLeftSubbrackets++;
+                } else if (block.text().at(i) == "}" && !isFirstLine) {
+                    existRightSubbrackets++;
+                }
+                if (existLeftSubbrackets == existRightSubbrackets &&
+                        existLeftSubbrackets != 0) {
+                    break;
+                }
+            }
         }
-        if (block.text().contains("}") && existSubbrackets == 0) {
+
+        if (existLeftSubbrackets == existRightSubbrackets &&
+                existLeftSubbrackets != 0) {
+            if (!block.text().contains("{")) {
+                block.setVisible(isVisable);
+                break;
+            } else {
+                block.setVisible(true);
+                break;
+            }
+        }
+        if (isFirstLine) {
+            isFirstLine = false;
+            block.setVisible(true);
+        } else {
             block.setVisible(isVisable);
-            break;
         }
-        if (isFirst)
-            isFirst = false;
-        block.setVisible(isVisable);
-        iLine++;
         block = block.next();
+        iLine++;
         viewport()->adjustSize();
     }
 }
@@ -3046,8 +3078,8 @@ void TextEdit::moveToNextBookMark()
 void TextEdit::flodOrUnflodAllLevel(bool isFlod)
 {
     foreach (auto line, m_listFlodFlag) {
-        if (document()->findBlockByNumber(line + 1).isVisible() == isFlod) {
-            getNeedControlLine(line + 1, !isFlod);
+        if (document()->findBlockByNumber(line).isVisible() == isFlod) {
+            getNeedControlLine(line - 1, !isFlod);
         }
     }
     viewport()->update();
@@ -3059,7 +3091,7 @@ void TextEdit::flodOrUnflodAllLevel(bool isFlod)
 void TextEdit::flodOrUnflodCurrentLevel(bool isFlod)
 {
     int line = getLineFromPoint(m_mouseClickPos);
-    getNeedControlLine(line, !isFlod);
+    getNeedControlLine(line - 1, !isFlod);
     m_pLeftAreaWidget->m_flodArea->update();
     viewport()->update();
     document()->adjustSize();
@@ -3155,7 +3187,6 @@ void TextEdit::writeHistoryRecord()
 
 void TextEdit::isMarkCurrentLine(bool isMark, QString strColor)
 {
-    qDebug() << ">>>>>>>>>>>>>>>>>>>current";
     if (isMark) {
         QTextEdit::ExtraSelection selection;
         selection.format.setBackground(QColor(strColor));
@@ -3177,7 +3208,6 @@ void TextEdit::isMarkCurrentLine(bool isMark, QString strColor)
 
 void TextEdit::isMarkAllLine(bool isMark, QString strColor)
 {
-    qDebug() << ">>>>>>>>>>>>>>>>>>>all";
     m_wordMarkSelections.clear();
     if (isMark) {
         QTextEdit::ExtraSelection selection;
@@ -3272,10 +3302,21 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
         } else if (object == m_pLeftAreaWidget->m_flodArea) {
             if (mouseEvent->button() == Qt::LeftButton) {
                 int line = getLineFromPoint(mouseEvent->pos());
-                if (document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line).text().contains("{")) {
-                    getNeedControlLine(line, false);
-                } else if (!document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line).text().contains("{")) {
-                    getNeedControlLine(line, true);
+                if (document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line).text().contains("{")
+                        && document()->findBlockByNumber(line).text().trimmed().startsWith("{")) {
+                    getNeedControlLine(line - 1, false);
+                } else if (!document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line).text().contains("{")
+                           && document()->findBlockByNumber(line).text().trimmed().startsWith("{")) {
+                    getNeedControlLine(line - 1, true);
+                }
+
+                if (document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line - 1).text().contains("{")
+                        && !document()->findBlockByNumber(line - 1).text().trimmed().startsWith("{")) {
+                    getNeedControlLine(line - 1, false);
+
+                } else if (!document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line - 1).text().contains("{")
+                           && !document()->findBlockByNumber(line - 1).text().trimmed().startsWith("{")) {
+                    getNeedControlLine(line - 1, true);
                 }
                 m_pLeftAreaWidget->m_flodArea->update();
                 m_pLeftAreaWidget->m_linenumberarea->update();
@@ -3286,7 +3327,7 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                 m_mouseClickPos = mouseEvent->pos();
                 m_rightMenu->clear();
                 int line = getLineFromPoint(mouseEvent->pos());
-                if (m_listFlodFlag.contains(line - 1)) {
+                if (m_listFlodIconPos.contains(line - 1)) {
                     m_rightMenu->addAction(m_flodAllLevel);
                     m_rightMenu->addAction(m_unflodAllLevel);
                     m_rightMenu->addAction(m_flodCurrentLevel);
