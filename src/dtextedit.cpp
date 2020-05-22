@@ -1708,13 +1708,15 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
     int additional_margin;
     if (blockNumber == 0)
         // Simply adjust to document's margin
-        additional_margin = document()->documentMargin() -1 - this->verticalScrollBar()->sliderPosition();
+  //      additional_margin = document()->documentMargin() -1 - this->verticalScrollBar()->sliderPosition();
+        additional_margin = document()->documentMargin() - this->verticalScrollBar()->sliderPosition();
     else
         // Getting the height of the visible part of the previous "non entirely visible" block
-        additional_margin = document()->documentLayout()->blockBoundingRect(prev_block)
+        additional_margin = document()->documentLayout()->blockBoundingRect(prev_block).toRect()
                 .translated(0, translate_y).intersected(this->viewport()->geometry()).height();
 
     // Shift the starting point
+    additional_margin -= 2;
     top += additional_margin;
 
     int bottom = top + document()->documentLayout()->blockBoundingRect(block).height();
@@ -1772,13 +1774,15 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
     int additional_margin;
     if (blockNumber == 0)
         // Simply adjust to document's margin
-        additional_margin = document()->documentMargin() - 1 - this->verticalScrollBar()->sliderPosition();
+   //     additional_margin = document()->documentMargin() - 1 - this->verticalScrollBar()->sliderPosition();
+        additional_margin = document()->documentMargin() - this->verticalScrollBar()->sliderPosition();
     else
         // Getting the height of the visible part of the previous "non entirely visible" block
-        additional_margin = document()->documentLayout()->blockBoundingRect(prev_block)
+        additional_margin = document()->documentLayout()->blockBoundingRect(prev_block).toRect()
                             .translated(0, translate_y).intersected(this->viewport()->geometry()).height();
 
     // Shift the starting point
+    additional_margin += 3;
     top += additional_margin;
 
     DGuiApplicationHelper *guiAppHelp = DGuiApplicationHelper::instance();
@@ -2850,13 +2854,15 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
     int additional_margin;
     if (blockNumber == 0)
         // Simply adjust to document's margin
-        additional_margin = document()->documentMargin() -1 - this->verticalScrollBar()->sliderPosition();
+    //    additional_margin = document()->documentMargin() -1 - this->verticalScrollBar()->sliderPosition();
+        additional_margin = document()->documentMargin() - this->verticalScrollBar()->sliderPosition();
     else
         // Getting the height of the visible part of the previous "non entirely visible" block
-        additional_margin = document()->documentLayout()->blockBoundingRect(prev_block)
+        additional_margin = document()->documentLayout()->blockBoundingRect(prev_block).toRect()
                 .translated(0, translate_y).intersected(this->viewport()->geometry()).height();
 
     // Shift the starting point
+    additional_margin += 1;
     top += additional_margin;
 
     int frontLine = 0;//滚动条滚过的行
