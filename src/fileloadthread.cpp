@@ -49,12 +49,24 @@ void FileLoadThread::run()
 
         // read the encode.
         QByteArray encode = Utils::detectEncode(fileContent);
+        if(encode =="Big5")
+        {
+            encode="gb18030";
+        }
+        file.close();
+        if (file.open(QIODevice::ReadOnly)) {
+            QTextStream stream(&fileContent);
+            stream.setCodec(encode);
+            QString content = stream.readAll();
 
-        QTextStream stream(&fileContent);
-        stream.setCodec(encode);
+            emit loadFinished(encode, content);
+            }
 
-        QString content = stream.readAll();
+            file.close();
+            emit toTellFileClosed();
+        }
+        else {
+            file.close();
+        }
 
-        emit loadFinished(encode, content);
-    }
 }

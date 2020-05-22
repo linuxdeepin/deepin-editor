@@ -18,7 +18,7 @@
     </message>
 </context>
 <context>
-    <name>DTextEdit</name>
+    <name>TextEdit</name>
     <message>
         <location filename="../src/dtextedit.cpp" line="105"/>
         <source>Undo</source>
@@ -58,7 +58,7 @@
         <location filename="../src/dtextedit.cpp" line="112"/>
         <location filename="../src/window.cpp" line="183"/>
         <source>Find</source>
-        <translation>खोज्नुहोस</translation>
+        <translation>खोज्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="113"/>
@@ -102,6 +102,26 @@
         <translation>टिप्पणी टगल गर्नुहोस्</translation>
     </message>
     <message>
+        <location filename="../src/dtextedit.cpp" line="121"/>
+        <source>Text to Speech</source>
+        <translation>टेक्स्ट तु स्पीच </translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="121"/>
+        <source>Stop reading</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="122"/>
+        <source>Speech to Text</source>
+        <translation>स्पीच  तु  टेक्स्ट </translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="123"/>
+        <source>Translate</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
         <location filename="../src/dtextedit.cpp" line="142"/>
         <source>Change Case</source>
         <translation>केस परिवर्तन गर्नुहोस्</translation>
@@ -128,12 +148,37 @@
         <translation>कुनै पनि होइन</translation>
     </message>
     <message>
+        <location filename="../src/dtextedit.cpp" line="808"/>
+        <source>Selected line(s) copied</source>
+        <translation>चयनित लाइन (हरू) प्रतिलिपि गरियो</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="814"/>
+        <source>Current line copied</source>
+        <translation>हालको लाइन प्रतिलिपि गरियो</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="853"/>
+        <source>Selected line(s) clipped</source>
+        <translation>चयनित लाइन (हरू) क्लिप गरियो</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="859"/>
+        <source>Current line clipped</source>
+        <translation>हालको लाइन क्लिप गरियो</translation>
+    </message>
+    <message>
         <location filename="../src/dtextedit.cpp" line="2204"/>
         <source>Read-Only mode is off</source>
         <translation>पढ्ने मात्र मोड बन्द छ</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2208"/>
+        <source>Read-Only mode is on</source>
+        <translation>पढ्ने मात्र मोड चालू छ</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="2493"/>
         <source>Read-Only mode is on</source>
         <translation>पढ्ने मात्र मोड चालू छ</translation>
     </message>
@@ -166,13 +211,53 @@
         <source>R/O</source>
         <translation>आर / ओ</translation>
     </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="300"/>
+        <source>Encoding changed. Do you want to save the file now?</source>
+        <translation>एन्कोडिंग परिवर्तन भयो। के तपाईं अब फाईल बचत गर्न चाहानुहुन्छ?</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="303"/>
+        <source>Cancel</source>
+        <translation>रद्द गर्नुहोस्</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="332"/>
+        <source>Save</source>
+        <translation>सुरक्षित गर्नु</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="304"/>
+        <source>Save</source>
+        <translation>सुरक्षित गर्नु</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="445"/>
+        <source>Save</source>
+        <translation>सुरक्षित गर्नु</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="493"/>
+        <source>There are errors when using this encoding. If continue, the file contents may be changed</source>
+        <translation>त्यहाँ ईन्कोडि this प्रयोग गर्दा त्रुटिहरू छन्। यदि जारी भने, फाइल सामग्री परिवर्तन गर्न सकिन्छ</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="496"/>
+        <source>Cancel</source>
+        <translation>रद्द गर्नुहोस्</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="497"/>
+        <source>Continue</source>
+        <translation>Continue</translation>
+    </message>
 </context>
 <context>
     <name>FindBar</name>
     <message>
         <location filename="../src/findbar.cpp" line="37"/>
-        <source>Find: </source>
-        <translation>खोज्नुहोस</translation>
+        <source>Find</source>
+        <translation>खोज्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/findbar.cpp" line="39"/>
@@ -197,21 +282,26 @@
     <name>MainWindow</name>
     <message>
         <location filename="../src/main.cpp" line="50"/>
-        <source>Deepin Editor is a desktop text editor that supports common text editing features.</source>
-        <translation>डिपिन सम्पादक एक डेस्कटप पाठ सम्पादक हो जसले सामान्य पाठ सम्पादन सुविधाहरू समर्थन गर्दछ।</translation>
+        <source>Text Editor is a powerful tool for viewing and editing text files.</source>
+        <translation>पाठ सम्पादक हेर्न र सम्पादन गर्न पाठ फाइलहरू एक शक्तिशाली उपकरण हो।</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="62"/>
-        <source>Deepin Editor</source>
-        <translation>डिपिन संपादक </translation>
+        <source>Text Editor</source>
+        <translation>पाठ सम्पादक</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
+        <location filename="../src/startmanager.cpp" line="241"/>
+        <source>File not saved</source>
+        <translation>फाइल बचत भएन</translation>
+    </message>
+    <message>
         <location filename="../src/main.cpp" line="59"/>
-        <source>Deepin Editor</source>
-        <translation>डिपिन संपादक </translation>
+        <source>Text Editor</source>
+        <translation>पाठ सम्पादक</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="24"/>
@@ -345,6 +435,11 @@
         <location filename="../src/settingsdialog.cpp" line="45"/>
         <source>Toggle fullscreen</source>
         <translation>पूरा स्क्रिन टगल गर्नुहोस्</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="45"/>
+        <source>Help</source>
+        <translation>मद्दत</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="46"/>
@@ -621,13 +716,13 @@
     <name>ReplaceBar</name>
     <message>
         <location filename="../src/replacebar.cpp" line="37"/>
-        <source>Replace: </source>
-        <translation>बदल्नुहोस्</translation>
+        <source>Find</source>
+        <translation>खोज्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="39"/>
-        <source>With: </source>
-        <translation>सित</translation>
+        <source>Replace With</source>
+        <translation> संग बदल्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="41"/>
@@ -692,9 +787,9 @@
     </message>
 </context>
 <context>
-    <name>Toast</name>
+    <name>WarningNotices</name>
     <message>
-        <location filename="../src/widgets/toast.cpp" line="38"/>
+        <location filename="../src/warningnotices.cpp" line="9"/>
         <source>Reload</source>
         <translation>पुन: लोड गर्नुहोस्</translation>
     </message>
@@ -717,7 +812,6 @@
         <translation>फाईल खोल्नुहोस्</translation>
     </message>
     <message>
-        <location filename="../src/widgets/toast.cpp" line="39"/>
         <location filename="../src/window.cpp" line="179"/>
         <source>Save as</source>
         <translation>यसरी राख</translation>
@@ -750,6 +844,7 @@
     </message>
     <message>
         <location filename="../src/window.cpp" line="182"/>
+        <location filename="../src/window.cpp" line="1249"/>
         <source>Settings</source>
         <translation>सेटिङ्हरू</translation>
     </message>
@@ -764,10 +859,7 @@
         <translation>अमान्य फाइल:% 1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="365"/>
-        <location filename="../src/window.cpp" line="598"/>
-        <location filename="../src/window.cpp" line="1020"/>
-        <location filename="../src/window.cpp" line="1383"/>
+        <location filename="../src/window.cpp" line="739"/>
         <source>Save File</source>
         <translation>फाइल सुरक्षित गर्नु</translation>
     </message>
@@ -789,7 +881,7 @@
         <translation>रेखा समाप्ति</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="922"/>
+        <location filename="../src/window.cpp" line="1231"/>
         <source>Editor</source>
         <translation>संपादक</translation>
     </message>
@@ -797,11 +889,6 @@
         <location filename="../src/window.cpp" line="535"/>
         <source>You do not have permission to save %1</source>
         <translation>तपाईंसँग% 1 सुरक्षित गर्न अनुमति छैन</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="568"/>
-        <source>Unable to save the file</source>
-        <translation>फाइल सुरक्षित गर्न असमर्थ</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="568"/>
@@ -816,8 +903,13 @@
     </message>
     <message>
         <location filename="../src/window.cpp" line="979"/>
-        <source>Blank document %1</source>
-        <translation>खाली कागजात% 1</translation>
+        <source>Untitled %1</source>
+        <translation>शीर्षकविहिन% 1</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="1121"/>
+        <source>Current location remembered</source>
+        <translation>हालको स्थान सम्झियो</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1310"/>

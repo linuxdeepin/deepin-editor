@@ -18,7 +18,7 @@
     </message>
 </context>
 <context>
-    <name>DTextEdit</name>
+    <name>TextEdit</name>
     <message>
         <location filename="../src/dtextedit.cpp" line="105"/>
         <source>Undo</source>
@@ -102,6 +102,26 @@
         <translation>Přepnout poznámku</translation>
     </message>
     <message>
+        <location filename="../src/dtextedit.cpp" line="121"/>
+        <source>Text to Speech</source>
+        <translation>Text na řeč</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="121"/>
+        <source>Stop reading</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="122"/>
+        <source>Speech to Text</source>
+        <translation>Řeč na text</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="123"/>
+        <source>Translate</source>
+        <translation>Přeložit</translation>
+    </message>
+    <message>
         <location filename="../src/dtextedit.cpp" line="142"/>
         <source>Change Case</source>
         <translation>Změnit velikost písmen</translation>
@@ -119,13 +139,33 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="145"/>
         <source>Capitalize</source>
-        <translation>Kapitalizovat</translation>
+        <translation>Vše velkými písmeny</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="196"/>
         <location filename="../src/widgets/bottombar.cpp" line="51"/>
         <source>None</source>
         <translation>Žádné</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="808"/>
+        <source>Selected line(s) copied</source>
+        <translation>Vybraný řádek (řádky) zkopírován</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="814"/>
+        <source>Current line copied</source>
+        <translation>Stávající řádek zkopírován</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="853"/>
+        <source>Selected line(s) clipped</source>
+        <translation>Vybraný řádek (řádky) zkrácen</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="859"/>
+        <source>Current line clipped</source>
+        <translation>Stávající řádek zkrácen</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2204"/>
@@ -137,18 +177,23 @@
         <source>Read-Only mode is on</source>
         <translation>Režim pouze pro čtení je zapnut</translation>
     </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="2493"/>
+        <source>Read-Only mode is on</source>
+        <translation>Režim pouze pro čtení je zapnut</translation>
+    </message>
 </context>
 <context>
     <name>EditWrapper</name>
     <message>
         <location filename="../src/editwrapper.cpp" line="259"/>
         <source>File has changed on disk. Reload?</source>
-        <translation>Soubor na disku byl změněn. Nahrát znovu?</translation>
+        <translation>Soubor byl mezitím na disku změněn. Načíst znovu?</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="262"/>
         <source>File removed on the disk. Save it now?</source>
-        <translation>Soubor na disku byl odstraněn. Uložit jej nyní?</translation>
+        <translation>Soubor byl mezitím na disku odstraněn. Uložit ho nyní?</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="305"/>
@@ -166,13 +211,53 @@
         <source>R/O</source>
         <translation>Pouze pro čtení</translation>
     </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="300"/>
+        <source>Encoding changed. Do you want to save the file now?</source>
+        <translation>Kódování změněno. Chcete tento soubor uložit nyní?</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="303"/>
+        <source>Cancel</source>
+        <translation>Zrušit</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="332"/>
+        <source>Save</source>
+        <translation>Uložit</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="304"/>
+        <source>Save</source>
+        <translation>Uložit</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="445"/>
+        <source>Save</source>
+        <translation>Uložit</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="493"/>
+        <source>There are errors when using this encoding. If continue, the file contents may be changed</source>
+        <translation>Při použití tohoto kódování se vyskytly chyby. Pokud se bude pokračovat, obsah souboru může být změněn</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="496"/>
+        <source>Cancel</source>
+        <translation>Zrušit</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="497"/>
+        <source>Continue</source>
+        <translation>Pokračovat</translation>
+    </message>
 </context>
 <context>
     <name>FindBar</name>
     <message>
         <location filename="../src/findbar.cpp" line="37"/>
-        <source>Find: </source>
-        <translation>Najít:</translation>
+        <source>Find</source>
+        <translation>Najít</translation>
     </message>
     <message>
         <location filename="../src/findbar.cpp" line="39"/>
@@ -197,21 +282,26 @@
     <name>MainWindow</name>
     <message>
         <location filename="../src/main.cpp" line="50"/>
-        <source>Deepin Editor is a desktop text editor that supports common text editing features.</source>
-        <translation>Editor textu podporující funkce úprav textu.</translation>
+        <source>Text Editor is a powerful tool for viewing and editing text files.</source>
+        <translation>Textový editor je schopný nástroj na prohlížení a upravování textových souborů.</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="62"/>
-        <source>Deepin Editor</source>
-        <translation>Editor</translation>
+        <source>Text Editor</source>
+        <translation>Textový editor</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
+        <location filename="../src/startmanager.cpp" line="241"/>
+        <source>File not saved</source>
+        <translation>Soubor neuložen</translation>
+    </message>
+    <message>
         <location filename="../src/main.cpp" line="59"/>
-        <source>Deepin Editor</source>
-        <translation>Editor</translation>
+        <source>Text Editor</source>
+        <translation>Textový editor</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="24"/>
@@ -347,6 +437,11 @@
         <translation>Přepnout na celou obrazovku</translation>
     </message>
     <message>
+        <location filename="../src/settingsdialog.cpp" line="45"/>
+        <source>Help</source>
+        <translation>Nápověda</translation>
+    </message>
+    <message>
         <location filename="../src/settingsdialog.cpp" line="46"/>
         <source>Find</source>
         <translation>Najít</translation>
@@ -369,7 +464,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="50"/>
         <source>Reset cursor position</source>
-        <translation>Vrátit polohu ukazovátka na výchozí</translation>
+        <translation>Vrátit polohu kurzoru na výchozí</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="51"/>
@@ -474,12 +569,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="73"/>
         <source>Page up</source>
-        <translation>O stranu nahoru</translation>
+        <translation>O stránku nahoru</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="74"/>
         <source>Page down</source>
-        <translation>O stranu dolů</translation>
+        <translation>O stránku dolů</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="75"/>
@@ -519,7 +614,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="82"/>
         <source>Capitalize</source>
-        <translation>Kapitalizovat</translation>
+        <translation>Vše velkými písmeny</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="83"/>
@@ -529,7 +624,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="84"/>
         <source>Delete forward word</source>
-        <translation>Smazat slovo dopředu</translation>
+        <translation>Smazat slovo před kurzorem</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="85"/>
@@ -621,13 +716,13 @@
     <name>ReplaceBar</name>
     <message>
         <location filename="../src/replacebar.cpp" line="37"/>
-        <source>Replace: </source>
-        <translation>Nahradit:</translation>
+        <source>Find</source>
+        <translation>Najít</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="39"/>
-        <source>With: </source>
-        <translation>Pomocí:</translation>
+        <source>Replace With</source>
+        <translation>Nahradit za</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="41"/>
@@ -692,11 +787,11 @@
     </message>
 </context>
 <context>
-    <name>Toast</name>
+    <name>WarningNotices</name>
     <message>
-        <location filename="../src/widgets/toast.cpp" line="38"/>
+        <location filename="../src/warningnotices.cpp" line="9"/>
         <source>Reload</source>
-        <translation>Nahrát znovu</translation>
+        <translation>Načíst znovu</translation>
     </message>
 </context>
 <context>
@@ -717,7 +812,6 @@
         <translation>Otevřít soubor</translation>
     </message>
     <message>
-        <location filename="../src/widgets/toast.cpp" line="39"/>
         <location filename="../src/window.cpp" line="179"/>
         <source>Save as</source>
         <translation>Uložit jako</translation>
@@ -741,7 +835,7 @@
     <message>
         <location filename="../src/window.cpp" line="581"/>
         <source>Saved successfully</source>
-        <translation>Uloženo úspěšně</translation>
+        <translation>Úspěšně uloženo</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1311"/>
@@ -750,6 +844,7 @@
     </message>
     <message>
         <location filename="../src/window.cpp" line="182"/>
+        <location filename="../src/window.cpp" line="1249"/>
         <source>Settings</source>
         <translation>Nastavení</translation>
     </message>
@@ -764,17 +859,14 @@
         <translation>Neplatný soubor: %1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="365"/>
-        <location filename="../src/window.cpp" line="598"/>
-        <location filename="../src/window.cpp" line="1020"/>
-        <location filename="../src/window.cpp" line="1383"/>
+        <location filename="../src/window.cpp" line="739"/>
         <source>Save File</source>
         <translation>Uložit soubor</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="365"/>
         <source>Do you want to save this file?</source>
-        <translation>Chcete uložit tento soubor?</translation>
+        <translation>Chcete tento soubor uložit?</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="600"/>
@@ -789,7 +881,7 @@
         <translation>Konce řádků</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="922"/>
+        <location filename="../src/window.cpp" line="1231"/>
         <source>Editor</source>
         <translation>Editor</translation>
     </message>
@@ -797,11 +889,6 @@
         <location filename="../src/window.cpp" line="535"/>
         <source>You do not have permission to save %1</source>
         <translation>Nemáte oprávnění pro uložení %1</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="568"/>
-        <source>Unable to save the file</source>
-        <translation>Nelze uložit soubor</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="568"/>
@@ -816,8 +903,13 @@
     </message>
     <message>
         <location filename="../src/window.cpp" line="979"/>
-        <source>Blank document %1</source>
-        <translation>Prázdný dokument %1</translation>
+        <source>Untitled %1</source>
+        <translation>Bez názvu %1</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="1121"/>
+        <source>Current location remembered</source>
+        <translation>Stávající pozice zapamatována</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1310"/>

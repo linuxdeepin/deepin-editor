@@ -22,6 +22,7 @@
 
 #include <DTabBar>
 #include <DMenu>
+#include<QMouseEvent>
 
 DWIDGET_USE_NAMESPACE
 
@@ -38,6 +39,10 @@ public:
     void closeTab(int index);
     void closeCurrentTab();
     void closeOtherTabs();
+
+    void closeLeftTabs(const QString &filePath);
+    void closeRightTabs(const QString &filePath);
+
     void closeOtherTabsExceptFile(const QString &filePath);
     void updateTab(int index, const QString &filePath, const QString &tabName);
     void previousTab();
@@ -53,6 +58,8 @@ public:
     void setTabActiveColor(const QString &color);
     void setBackground(const QString &startColor, const QString &endColor);
     void setDNDColor(const QString &startColor, const QString &endColor);
+    void showTabs();
+
 
 signals:
     void requestHistorySaved(const QString &filePath);
@@ -66,13 +73,16 @@ protected:
     bool canInsertFromMimeData(int index, const QMimeData *source) const;
     void handleDragActionChanged(Qt::DropAction action);
     bool eventFilter(QObject *, QEvent *event);
+protected:
+    void mousePressEvent(QMouseEvent *e);
 
 private:
     void handleTabMoved(int fromIndex, int toIndex);
     void handleTabReleased(int index);
     void handleTabIsRemoved(int index);
     void handleTabDroped(int index, Qt::DropAction, QObject *target);
-
+    QStringList readTabPaths() const;
+    void writeTabPaths();
 private:
     QStringList m_tabPaths;
     QString m_backgroundStartColor;
@@ -82,7 +92,11 @@ private:
 
     QAction *m_closeOtherTabAction;
     QAction *m_closeTabAction;
-    DMenu *m_rightMenu;
+    QAction *m_closeLeftTabAction;
+    QAction *m_closeRightTabAction;
+    QAction *m_closeAllunModifiedTabAction;
+    DMenu   *m_rightMenu;
+    DMenu   *m_moreWaysCloseMenu;
     int m_rightClickTab;
 };
 

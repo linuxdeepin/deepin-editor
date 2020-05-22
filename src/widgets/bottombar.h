@@ -43,6 +43,7 @@ public:
     void setHighlightMenu(DMenu *menu);
     void setHightlightName(const QString &name);
     void setPalette(const QPalette &palette);
+    void updateSize(int size);
 
 private:
     void handleEncodeChanged(const QString &name);

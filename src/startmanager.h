@@ -48,7 +48,7 @@ public slots:
     Q_SCRIPTABLE void openFilesInTab(QStringList files);
     Q_SCRIPTABLE void openFilesInWindow(QStringList files);
 
-    void createWindowFromWrapper(const QString &tabName, const QString &filePath, EditWrapper *buffer);
+    void createWindowFromWrapper(const QString &tabName, const QString &filePath, EditWrapper *buffer, bool isModifyed);
     void loadTheme(const QString &themeName);
 
     Window* createWindow(bool alwaysCenter = false);
@@ -56,9 +56,17 @@ public slots:
     void popupExistTabs(FileTabInfo info);
     FileTabInfo getFileTabInfo(QString file);
 
+    void slotCheckUnsaveTab();
+
 private:
     static StartManager *m_instance;
     QList<Window*> m_windows;
+
+    QDBusReply<QDBusUnixFileDescriptor> m_reply;
+    QDBusInterface *m_pLoginManager = nullptr;
+    QList<QVariant> m_arg;
+
+    void initBlockShutdown();
 };
 
 #endif

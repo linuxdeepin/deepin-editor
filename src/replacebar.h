@@ -34,6 +34,7 @@
 #include <DIconButton>
 #include <DApplicationHelper>
 #include <DFloatingWidget>
+#include <DAbstractDialog>
 
 DWIDGET_USE_NAMESPACE
 
@@ -90,6 +91,8 @@ private:
     int m_replaceFileRow;
     int m_replaceFileSrollOffset;
     QColor m_backgroundColor;
+
+    QPoint last;
 };
 
 #endif

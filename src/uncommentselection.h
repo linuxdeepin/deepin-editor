@@ -3,6 +3,7 @@
 #include "comment_global.h"
 
 #include <QString>
+#include<QtDebug>
 
 QT_BEGIN_NAMESPACE
 class QTextEdit;
@@ -31,5 +32,9 @@ namespace Comment {
     COMMENT_EXPORT
     void unCommentSelection(QTextEdit *edit,
                         const CommentDefinition &definiton = CommentDefinition());
+    void setComment(QTextEdit *edit,
+                    const CommentDefinition &definiton = CommentDefinition(),QString name="");
 
+    void removeComment(QTextEdit *edit,
+                       const CommentDefinition &definiton = CommentDefinition(),QString name="");
 }

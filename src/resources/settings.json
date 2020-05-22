@@ -132,12 +132,6 @@
                             "default":  "Ctrl+0"
                         },
                         {
-                            "key": "windowmaximizing",
-                            "name": "Window maximizing",
-                            "type": "shortcut",
-                            "default":  "Ctrl+Alt+F"
-                        },
-                        {
                             "key": "togglefullscreen",
                             "name": "Toggle fullscreen",
                             "type": "shortcut",
@@ -217,13 +211,13 @@
                         },
                         {
                             "key": "forwardchar",
-                            "name": "Forward char",
+                            "name": "Forward character",
                             "type": "shortcut",
                             "default":  "Right"
                         },
                         {
                             "key": "backwardchar",
-                            "name": "Backward char",
+                            "name": "Backward character",
                             "type": "shortcut",
                             "default":  "Left"
                         },
@@ -465,13 +459,37 @@
                             "key": "togglecomment",
                             "name": "Toggle comment",
                             "type": "shortcut",
-                            "default":  "Ctrl+/"
+                            "default":  "Alt+A"
+                        },
+                        {
+                            "key": "removecomment",
+                            "name": "Remove comment",
+                            "type": "shortcut",
+                            "default":  "Alt+Z"
                         },
                         {
                             "key": "undo",
                             "name": "Undo",
                             "type": "shortcut",
                             "default":  "Ctrl+Z"
+                        },
+                        {
+                            "key": "switchbookmark",
+                            "name": "Switch bookmark",
+                            "type": "shortcut",
+                            "default":  "Ctrl+F2"
+                        },
+                        {
+                            "key": "movetoprebookmark",
+                            "name": "Move to previous bookmark",
+                            "type": "shortcut",
+                            "default":  "F2"
+                        },
+                        {
+                            "key": "movetonextbookmark",
+                            "name": "Move to next bookmark",
+                            "type": "shortcut",
+                            "default":  "Shift+F2"
                         },
                         {
                             "key": "redo",
@@ -563,12 +581,6 @@
                             "hide" : true,
                             "reset" : false,
                             "default":  "Ctrl+0"
-                        },
-                        {
-                            "key": "windowmaximizing",
-                            "hide": true,
-                            "reset": false,
-                            "default":  "Ctrl+Alt+F"
                         },
                         {
                             "key": "togglefullscreen",
@@ -923,13 +935,37 @@
                             "key": "togglecomment",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Ctrl+/"
+                            "default":  "Alt+A"
+                        },
+                        {
+                            "key": "removecomment",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "Alt+Z"
                         },
                         {
                             "key": "undo",
                             "hide" : true,
                             "reset" : false,
                             "default":  "Ctrl+Z"
+                        },
+                        {
+                            "key": "switchbookmark",
+                            "name": "Switch bookmark",
+                            "type": "shortcut",
+                            "default":  "Ctrl+F2"
+                        },
+                        {
+                            "key": "movetoprebookmark",
+                            "name": "Move to previous bookmark",
+                            "type": "shortcut",
+                            "default":  "F2"
+                        },
+                        {
+                            "key": "movetonextbookmark",
+                            "name": "Move to next bookmark",
+                            "type": "shortcut",
+                            "default":  "Shift+F2"
                         },
                         {
                             "key": "redo",
@@ -1021,12 +1057,6 @@
                             "hide" : true,
                             "reset" : false,
                             "default":  "Ctrl+0"
-                        },
-                        {
-                            "key": "windowmaximizing",
-                            "hide": true,
-                            "reset": false,
-                            "default":  "Ctrl+Alt+F"
                         },
                         {
                             "key": "togglefullscreen",
@@ -1384,10 +1414,34 @@
                             "default":  "Ctrl+Shift+:"
                         },
                         {
+                            "key": "removecomment",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "Ctrl+Shift+;"
+                        },
+                        {
                             "key": "undo",
                             "hide" : true,
                             "reset" : false,
                             "default":  "Ctrl+/"
+                        },
+                        {
+                            "key": "switchbookmark",
+                            "name": "Switch bookmark",
+                            "type": "shortcut",
+                            "default":  "Ctrl+F2"
+                        },
+                        {
+                            "key": "movetoprebookmark",
+                            "name": "Move to previous bookmark",
+                            "type": "shortcut",
+                            "default":  "F2"
+                        },
+                        {
+                            "key": "movetonextbookmark",
+                            "name": "Move to next bookmark",
+                            "type": "shortcut",
+                            "default":  "Shift+F2"
                         },
                         {
                             "key": "redo",
@@ -1479,12 +1533,6 @@
                             "hide" : true,
                             "reset" : false,
                             "default":  "Ctrl+0"
-                        },
-                        {
-                            "key": "windowmaximizing",
-                            "hide": true,
-                            "reset": false,
-                            "default":  "Ctrl+Alt+F"
                         },
                         {
                             "key": "togglefullscreen",
@@ -1839,13 +1887,37 @@
                             "key": "togglecomment",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Ctrl+/"
+                            "default":  "Alt+A"
+                        },
+                        {
+                            "key": "removecomment",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "Alt+Z"
                         },
                         {
                             "key": "undo",
                             "hide" : true,
                             "reset" : false,
                             "default":  "Ctrl+Z"
+                        },
+                        {
+                            "key": "switchbookmark",
+                            "name": "Switch bookmark",
+                            "type": "shortcut",
+                            "default":  "Ctrl+F2"
+                        },
+                        {
+                            "key": "movetoprebookmark",
+                            "name": "Move to previous bookmark",
+                            "type": "shortcut",
+                            "default":  "F2"
+                        },
+                        {
+                            "key": "movetonextbookmark",
+                            "name": "Move to next bookmark",
+                            "type": "shortcut",
+                            "default":  "Shift+F2"
                         },
                         {
                             "key": "redo",
@@ -1882,6 +1954,21 @@
                             "hide" : true,
                             "reset" : false,
                             "default": 0.6
+                        },
+                        {
+                            "key": "showlinenumber",
+                            "name": "Show line number",
+                            "type": "checkbox",
+                            "text": "Show Line Number",
+                            "default": "true"
+                        },
+                        {
+
+                            "key":"codeflod",
+                            "name":"CODE FLOD",
+                            "type":"checkbox",
+                            "text":"Code Flod Flag",
+                            "default":"false"
                         }
                     ]
                 },
@@ -1891,7 +1978,7 @@
                     "options": [
                         {
                             "key": "tabspacenumber",
-                            "name": "Tab space",
+                            "name": "Tab width",
                             "type": "spinbutton",
                             "default": 4,
                             "min": 1,
@@ -1899,6 +1986,12 @@
                         },
                         {
                             "key": "file_dialog_dir",
+                            "hide": true,
+                            "reset": false,
+                            "default": ""
+                        },
+                        {
+                            "key": "browsing_history_file",
                             "hide": true,
                             "reset": false,
                             "default": ""

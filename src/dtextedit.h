@@ -42,6 +42,7 @@ namespace KSyntaxHighlighting {
 
 enum ConvertCase { UPPER, LOWER, CAPITALIZE };
 
+class leftareaoftextedit;
 class EditWrapper;
 class TextEdit : public DTextEdit
 {
@@ -55,8 +56,11 @@ public:
     };
 
     TextEdit(QWidget *parent = nullptr);
+    ~TextEdit() override;
 
-    QWidget *lineNumberArea;
+    LineNumberArea *lineNumberArea;
+    leftareaoftextedit *m_pLeftAreaWidget;
+    bool m_pIsShowCodeFoldArea;
     QString filepath;
 
     void setWrapper(EditWrapper *);
@@ -131,16 +135,17 @@ public:
     bool findKeywordForward(const QString &keyword);
 
     void removeKeywords();
-    void highlightKeyword(QString keyword, int position);
+    bool highlightKeyword(QString keyword, int position);
     void updateCursorKeywordSelection(int position, bool findNext);
     void updateHighlightLineSelection();
-    void updateKeywordSelections(QString keyword);
+    bool updateKeywordSelections(QString keyword);
     void renderAllSelections();
 
     DMenu *getHighlightMenu();
 
     void lineNumberAreaPaintEvent(QPaintEvent *event);
-
+    void codeFLodAreaPaintEvent(QPaintEvent *event);
+    void setCodeFlodFlagVisable(bool isVisable,bool bIsFirstOpen = false);
     void setThemeWithPath(const QString &path);
     void setTheme(const KSyntaxHighlighting::Theme &theme, const QString &path);
     void loadHighlighter();
@@ -168,7 +173,7 @@ public:
     QString getWordAtCursor();
 
     void toggleReadOnlyMode();
-    void toggleComment();
+    void toggleComment(bool sister);
 
     int getNextWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode);
     int getPrevWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode);
@@ -181,6 +186,25 @@ public:
     bool getReadOnlyPermission();
     bool getReadOnlyMode();
 
+    void hideRightMenu();
+
+    void clearBlack();
+
+    void flodOrUnflodAllLevel(bool isFlod);
+    void flodOrUnflodCurrentLevel(bool isFlod);
+
+    //书签功能相关
+    void bookMarkAreaPaintEvent(QPaintEvent *event);
+    int getLineFromPoint(const QPoint &point);
+    void addOrDeleteBookMark();
+    void moveToPreviousBookMark();
+    void moveToNextBookMark();
+    void setIsFileOpen();
+    QStringList readHistoryRecord();
+    QStringList readHistoryRecordofBookmark();
+    QStringList readHistoryRecordofFilePath();
+    void writeHistoryRecord();
+ 
 signals:
     void clickFindAction();
     void clickReplaceAction();
@@ -193,6 +217,11 @@ signals:
     void popupNotify(QString notify);
     void click();
     void pressEsc();
+    void signal_readingPath();
+
+    void signal_clearBlack();
+
+
 
 public slots:
     void highlightCurrentLine();
@@ -205,9 +234,19 @@ public slots:
     void clickPasteAction();
     void clickDeleteAction();
     void clickOpenInFileManagerAction();
+    void onAddBookMark();
+    void onCancelBookMark();
+    void onMoveToPreviousBookMark();
+    void onMoveToNextBookMark();
+    void onClearBookMark();
 
     void copyWordUnderCursor();
     void cutWordUnderCursor();
+
+    void slot_voiceReading();
+    void slot_stopReading();
+    void slot_dictation();
+    void slot_translate();
 
     void upcaseWord();
     void downcaseWord();
@@ -215,6 +254,8 @@ public slots:
     void transposeChar();
 
     void handleCursorMarkChanged(bool mark, QTextCursor cursor);
+
+    void adjustScrollbarMargins();
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
@@ -226,7 +267,7 @@ protected:
     void mouseMoveEvent(QMouseEvent *e) override;
     void keyPressEvent(QKeyEvent *e) override;
     void wheelEvent(QWheelEvent *e) override;
-    bool eventFilter(QObject *, QEvent *event) override;
+    bool eventFilter(QObject *object, QEvent *event) override;
     void contextMenuEvent(QContextMenuEvent *event) override;
 
 private:
@@ -234,6 +275,7 @@ private:
     void cursorPositionChanged();
     void updateHighlightBrackets(const QChar &openChar, const QChar &closeChar);
     int getFirstVisibleBlockId() const;
+    void getNeedControlLine(int line, bool isVisable);
 
 private:
     EditWrapper *m_wrapper;
@@ -244,7 +286,7 @@ private:
     QTextEdit::ExtraSelection m_endBracketSelection;
     QTextEdit::ExtraSelection m_currentLineSelection;
     QTextEdit::ExtraSelection m_findHighlightSelection;
-    QTextEdit::ExtraSelection m_wordUnderCursorSelection;
+    QTextEdit::ExtraSelection m_wordUnderCursorSelection;;
 
     QTextCursor m_highlightWordCacheCursor;
     QTextCursor m_wordUnderPointerCursor;
@@ -276,6 +318,27 @@ private:
     QAction *m_exitFullscreenAction;
     QAction *m_openInFileManagerAction;
     QAction *m_toggleCommentAction;
+    QAction *m_voiceReadingAction;
+    QAction *m_stopReadingAction;
+    QAction *m_dictationAction;
+    QAction *m_translateAction;
+    QAction *m_addBookMarkAction;
+    QAction *m_cancelBookMarkAction;
+    QAction *m_clearBookMarkAction;
+    QAction *m_preBookMarkAction;
+    QAction *m_nextBookMarkAction;
+    QAction *m_flodAllLevel;
+    QAction *m_unflodAllLevel;
+    QAction *m_flodCurrentLevel;
+    QAction *m_unflodCurrentLevel;
+
+    //yanyuhan
+     //颜色标记、折叠/展开、书签、列编辑、设置注释、取消注释;
+     DMenu *m_collapseExpandMenu;
+ //    QAction *m_bookmarkAction;
+     QAction *m_columnEditACtion;
+     QAction *m_addComment;
+     QAction *m_cancelComment;
 
     DMenu *m_convertCaseMenu;
     QAction *m_upcaseAction;
@@ -319,6 +382,7 @@ private:
     QColor m_selectionBgColor;
 
     QPoint m_mouseClickPos;
+    QPoint m_menuPos;
 
     bool m_highlighted = false;
 
@@ -335,6 +399,11 @@ private:
     int m_touchTapDistance = -1;
 
     QFont m_fontLineNumberArea;
+    QList<int> m_listBookmark;
+    int m_nLines;
+    bool m_bIsFileOpen;
+
+    QList<int> m_listFlodFlag;
 };
 
 #endif

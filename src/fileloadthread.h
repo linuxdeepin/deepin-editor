@@ -34,6 +34,7 @@ public:
 
 signals:
     void loadFinished(const QByteArray &encode, const QString &content);
+    void toTellFileClosed();
 
 private:
     QString m_filePath;

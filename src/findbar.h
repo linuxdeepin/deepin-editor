@@ -35,9 +35,12 @@
 #include <DIconButton>
 #include <DApplicationHelper>
 #include <DFloatingWidget>
+#include<QMouseEvent>
+#include<qmouseeventtransition.h>
+#include<QMouseEventTransition>
 
-//add by guoshaoyu
 #include <DPalette>
+#include <DAbstractDialog>
 
 DWIDGET_USE_NAMESPACE
 
@@ -67,6 +70,7 @@ signals:
 public slots:
     void findCancel();
     void handleContentChanged();
+    void slot_ifClearSearchWord();
 
 protected:
     void hideEvent(QHideEvent *event) override;
@@ -83,6 +87,8 @@ private:
     int m_findFileRow;
     int m_findFileSrollOffset;
     QColor m_backgroundColor;
+
+    QPoint last;
 };
 
 #endif

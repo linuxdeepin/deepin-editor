@@ -45,6 +45,7 @@ StartManager::StartManager(QObject *parent)
     : QObject(parent)
 {
     // Create blank directory if it not exist.
+    initBlockShutdown();
     QString blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
 
     if (!QFileInfo(blankFileDir).exists()) {
@@ -58,6 +59,8 @@ void StartManager::openFilesInWindow(QStringList files)
 {
     // Open window with blank tab if no files need open.
     if (files.isEmpty()) {
+        if (m_windows.count() >= 20)
+            return;
         Window *window = createWindow();
         window->addBlankTab();
         window->activateWindow();
@@ -127,7 +130,7 @@ void StartManager::openFilesInTab(QStringList files)
             else {
                 Window *window = m_windows[0];
                 window->addTab(file);
-                window->showNormal();
+                //window->showNormal();
                 window->activateWindow();
 
                 qDebug() << "Open " << file << " in first window";
@@ -138,10 +141,11 @@ void StartManager::openFilesInTab(QStringList files)
 }
 
 
-void StartManager::createWindowFromWrapper(const QString &tabName, const QString &filePath, EditWrapper *buffer)
+void StartManager::createWindowFromWrapper(const QString &tabName, const QString &filePath, EditWrapper *buffer, bool isModifyed)
 {
     Window *window = createWindow();
     window->addTabWithWrapper(buffer, filePath, tabName);
+    window->currentWrapper()->textEditor()->setModified(isModifyed);
     window->move(QCursor::pos() - window->topLevelWidget()->pos());
 }
 
@@ -157,6 +161,7 @@ Window* StartManager::createWindow(bool alwaysCenter)
     // Create window.
     Window *window = new Window;
     connect(window, &Window::themeChanged, this, &StartManager::loadTheme, Qt::QueuedConnection);
+    connect(window, &Window::sigJudgeBlockShutdown, this, &StartManager::slotCheckUnsaveTab, Qt::QueuedConnection);
 
     // Quit application if close last window.
     connect(window, &Window::close, this, [=] {
@@ -168,6 +173,18 @@ Window* StartManager::createWindow(bool alwaysCenter)
         }
 
         if (m_windows.isEmpty()) {
+            QDir path = QDir::currentPath();
+            if (!path.exists()) {
+                return ;
+            }
+            path.setFilter(QDir::Files);
+            QStringList nameList = path.entryList();
+            foreach (auto name, nameList) {
+                if (name.contains("tabPaths.txt")) {
+                    QFile file(name);
+                    file.remove();
+                }
+            }
             QApplication::quit();
         }
     });
@@ -188,7 +205,7 @@ Window* StartManager::createWindow(bool alwaysCenter)
 void StartManager::initWindowPosition(Window *window, bool alwaysCenter)
 {
     if (m_windows.isEmpty() || alwaysCenter) {
-        Dtk::Widget::moveToCenter(window);
+        //Dtk::Widget::moveToCenter(window);
     } else {
         // Add window offset to avoid all editor window popup at same coordinate.
         int windowOffset = m_windows.size() * 50;
@@ -221,4 +238,50 @@ StartManager::FileTabInfo StartManager::getFileTabInfo(QString file)
     }
 
     return info;
+}
+
+void StartManager::initBlockShutdown() {
+    if (m_reply.value().isValid()) {
+        qDebug() << "m_reply.value().isValid():" << m_reply.value().isValid();
+        return;
+    }
+
+    m_pLoginManager = new QDBusInterface("org.freedesktop.login1",
+                                         "/org/freedesktop/login1",
+                                         "org.freedesktop.login1.Manager",
+                                         QDBusConnection::systemBus());
+
+    m_arg << QString("shutdown")             // what
+        << qApp->applicationDisplayName()           // who
+        << QObject::tr("File not saved") // why
+        << QString("block");                        // mode
+
+    int fd = -1;
+    m_reply = m_pLoginManager->callWithArgumentList(QDBus::Block, "Inhibit", m_arg);
+    if (m_reply.isValid()) {
+        fd = m_reply.value().fileDescriptor();
+    }
+}
+
+void StartManager::slotCheckUnsaveTab() {
+    for (Window *pWindow : m_windows) {
+    //如果返回true，则表示有未保存的tab项，则阻塞系统关机
+        bool bRet = pWindow->checkBlockShutdown();
+        if (bRet == true) {
+            m_reply = m_pLoginManager->callWithArgumentList(QDBus::Block, "Inhibit", m_arg);
+            if (m_reply.isValid()) {
+              qDebug() << "Block shutdown.";
+            }
+
+            return;
+        }
+    }
+
+    //如果for结束则表示没有发现未保存的tab项，则放开阻塞关机
+    if (m_reply.isValid()) {
+        QDBusReply<QDBusUnixFileDescriptor> tmp = m_reply;
+        m_reply = QDBusReply<QDBusUnixFileDescriptor>();
+        //m_pLoginManager->callWithArgumentList(QDBus::NoBlock, "Inhibit", m_arg);
+        qDebug() << "Nublock shutdown.";
+    }
 }

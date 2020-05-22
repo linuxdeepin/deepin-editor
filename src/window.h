@@ -49,9 +49,10 @@ class Window : public DMainWindow
 
 public:
     Window(DMainWindow *parent = 0);
-    ~Window();
+    ~Window() override;
 
     void initTitlebar();
+    bool checkBlockShutdown();
 
     int getTabIndex(const QString &file);
     void activeTab(int index);
@@ -61,6 +62,8 @@ public:
                            const QString &tabName, int index = -1);
     void closeTab();
     void restoreTab();
+
+    void clearBlack();
 
     EditWrapper* createEditor();
     EditWrapper* currentWrapper();
@@ -72,6 +75,8 @@ public:
     void openFile();
     bool saveFile();
     bool saveAsFile();
+    QString saveAsFileToDisk();
+    QString saveBlankFileToDisk();
     bool saveAsOtherTabFile(EditWrapper *wrapper);
 
     void decrementFontSize();
@@ -86,7 +91,6 @@ public:
     void popupPrintDialog();
     void popupThemePanel();
 
-    void windowMaximizing();
     void toggleFullscreen();
 
     void remberPositionSave();
@@ -107,6 +111,7 @@ signals:
     void requestDropEvent(QDropEvent *);
     void newWindow();
     void close();
+    void sigJudgeBlockShutdown();
 
 public slots:
     void addBlankTab();
@@ -122,7 +127,6 @@ public slots:
 
     void handleFindNext();
     void handleFindPrev();
-    //add by guoshaoyu
     void slotFindbarClose();
     void slotReplacebarClose();
 
@@ -148,6 +152,8 @@ public slots:
     void slotLoadContentTheme(DGuiApplicationHelper::ColorType themeType);
     void slotSettingResetTheme(const QString &path);
 
+    void slot_saveReadingPath();
+
 private:
     void handleFocusWindowChanged(QWindow *w);
     void updateThemePanelGeomerty();
@@ -156,6 +162,7 @@ private:
 protected:
     void resizeEvent(QResizeEvent* event) override;
     void closeEvent(QCloseEvent *event) override;
+    void hideEvent(QHideEvent *event) override;
     void keyPressEvent(QKeyEvent *keyEvent) override;
     void dragEnterEvent(QDragEnterEvent *e) override;
     void dropEvent(QDropEvent* event) override;
@@ -192,6 +199,7 @@ private:
 
     QString m_themePath;
     QString m_tabbarActiveColor;
+    QList <TextEdit *> m_reading_list;
 };
 
 #endif

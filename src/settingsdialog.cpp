@@ -42,7 +42,6 @@ void GenerateSettingTranslate()
     auto shortcuts_window_incrementfontsizeName = QObject::tr("Increase font size");
     auto shortcuts_window_decrementfontsizeName = QObject::tr("Decrease font size");
     auto shortcuts_window_resetfontsizeName = QObject::tr("Reset font size");
-    auto shortcuts_window_windowMaximizing = QObject::tr("Window maximizing");
     auto shortcuts_window_help = QObject::tr("Help");
     auto shortcuts_window_togglefullscreenName = QObject::tr("Toggle fullscreen");
     auto shortcuts_window_findName = QObject::tr("Find");
@@ -56,8 +55,8 @@ void GenerateSettingTranslate()
     auto group_editorName = QObject::tr("Editor");
     auto shortcuts_editor_indentlineName = QObject::tr("Increase indent");
     auto shortcuts_editor_backindentlineName = QObject::tr("Decrease indent");
-    auto shortcuts_editor_forwardcharName = QObject::tr("Forward char");
-    auto shortcuts_editor_backwardcharName = QObject::tr("Backward char");
+    auto shortcuts_editor_forwardcharName = QObject::tr("Forward character");
+    auto shortcuts_editor_backwardcharName = QObject::tr("Backward character");
     auto shortcuts_editor_forwardwordName = QObject::tr("Forward word");
     auto shortcuts_editor_backwarwordName = QObject::tr("Backward word");
     auto shortcuts_editor_nextlineName = QObject::tr("Next line");
@@ -98,12 +97,18 @@ void GenerateSettingTranslate()
     auto shortcuts_editor_joinlinesName = QObject::tr("Merge lines");
     auto shortcuts_editor_togglereadonlymodeName = QObject::tr("Read-Only mode");
     auto shortcuts_editor_togglecommentName = QObject::tr("Toggle comment");
+    auto shortcuts_editor_removecommentName = QObject::tr("Remove comment");
     auto shortcuts_editor_undoName = QObject::tr("Undo");
     auto shortcuts_editor_redoName = QObject::tr("Redo");
+    auto shortcuts_editor_switchbookmarkName = QObject::tr("Switch bookmark");
+    auto shortcuts_editor_movetoprebookmarkName = QObject::tr("Move to previous bookmark");
+    auto shortcuts_editor_movetonextbookmarkName = QObject::tr("Move to next bookmark");
     auto group_advanceName = QObject::tr("Advanced");
     auto advance_windowName = QObject::tr("Window");
     auto advance_window_windowstateName = QObject::tr("Window size");
-    auto advance_editor_tabspacenumberName = QObject::tr("Tab space");
+    auto advance_editor_tabspacenumberName = QObject::tr("Tab width");
 
     auto base_font_wordwrapText = QObject::tr("Word Wrap");
+    auto advance_window_codeflod = QObject::tr("Code Flod Flag");
+    auto advance_window_showLineNumber = QObject::tr("Show Line Number");
 }

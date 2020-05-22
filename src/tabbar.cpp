@@ -27,6 +27,7 @@
 #include <QStyleFactory>
 #include <QGuiApplication>
 #include <DPlatformWindowHandle>
+#include <DWindowManagerHelper>
 
 Tabbar::Tabbar(QWidget *parent)
     : DTabBar(parent)
@@ -39,7 +40,7 @@ Tabbar::Tabbar(QWidget *parent)
     setTabsClosable(true);
     setVisibleAddButton(true);
     setDragable(true);
-    setStartDragDistance(40);
+   // setStartDragDistance(40);
     setElideMode(Qt::ElideMiddle);
 
     setFocusPolicy(Qt::NoFocus);
@@ -65,6 +66,7 @@ void Tabbar::addTabWithIndex(int index, const QString &filePath, const QString &
     // FIXME(rekols): do not insert duplicate values.
     if (!m_tabPaths.contains(filePath)) {
         m_tabPaths.insert(index, filePath);
+        writeTabPaths();
     }
 
     DTabBar::insertTab(index, tabName);
@@ -100,6 +102,39 @@ void Tabbar::closeOtherTabsExceptFile(const QString &filePath)
     }
 
     emit closeTabs(closePathList);
+}
+
+void Tabbar::closeLeftTabs(const QString &filePath)
+{
+    QStringList closePathList;
+
+    for (const QString &path :m_tabPaths) {
+        if(filePath == path) {
+            break;
+        }
+        closePathList << path;
+    }
+    emit closeTabs(closePathList);
+
+}
+
+void Tabbar::closeRightTabs(const QString &filePath)
+{
+
+    QStringList closePathlist;
+
+
+    for (int i=m_tabPaths.count()-1;i >= 0;i--) {
+        m_tabPaths.value(i);
+
+        if(filePath == m_tabPaths.value(i)) {
+            break;
+        }
+        closePathlist << m_tabPaths.value(i);
+    }
+    emit closeTabs(closePathlist);
+
+
 }
 
 void Tabbar::updateTab(int index, const QString &filePath, const QString &tabName)
@@ -177,8 +212,9 @@ void Tabbar::setDNDColor(const QString &startColor, const QString &endColor)
 QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option, QPoint *hotspot) const
 {
     const qreal ratio = qApp->devicePixelRatio();
-
-    TextEdit *textEdit = static_cast<Window *>(this->window())->getTextEditor(fileAt(index));
+    Window *window = static_cast<Window *>(this->window());
+    QStringList tabPathList = readTabPaths();
+    TextEdit *textEdit = window->getTextEditor(tabPathList.value(index));
     int width = textEdit->width() * ratio;
     int height = textEdit->height() * ratio;
     QImage screenshotImage(width, height, QImage::Format_ARGB32_Premultiplied);
@@ -190,21 +226,12 @@ QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option
     int scaledHeight = height * ratio / 5;
     auto scaledImage = screenshotImage.scaled(scaledWidth, scaledHeight, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
+    QImage backgroundImage(scaledWidth + 10, scaledHeight + 10, QImage::Format_ARGB32_Premultiplied);
+    backgroundImage.fill(QColor(palette().color(QPalette::Base)));
     // clip screenshot image with window radius.
-    QPainter painter(&scaledImage);
+    QPainter painter(&backgroundImage);
+    painter.drawImage(5,5,scaledImage);
     painter.setRenderHint(QPainter::Antialiasing, true);
-
-    QPainterPath rectPath;
-    QPainterPath roundedRectPath;
-
-    rectPath.addRect(0, 0, scaledWidth, scaledHeight);
-    roundedRectPath.addRoundedRect(QRect(0, 0, scaledWidth / ratio, scaledHeight / ratio), 6, 6);
-
-    rectPath -= roundedRectPath;
-
-    painter.setCompositionMode(QPainter::CompositionMode_Source);
-    painter.fillPath(rectPath, Qt::transparent);
-    painter.end();
 
     if (count() == 1) {
         this->window()->hide();
@@ -214,10 +241,32 @@ QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option
     hotspot->setX(20);
     hotspot->setY(20);
 
-    QColor shadowColor = QColor(palette().color(QPalette::BrightText));
-    shadowColor.setAlpha(80);
+    QPainterPath rectPath;
 
-    return Utils::dropShadow(QPixmap::fromImage(scaledImage), 40, shadowColor, QPoint(0, 8));
+    if(DWindowManagerHelper::instance()->hasComposite())
+    {
+        QPainterPath roundedRectPath;
+
+        rectPath.addRect(0, 0, scaledWidth + 10, scaledHeight + 10);
+        roundedRectPath.addRoundedRect(QRect(0, 0, scaledWidth / ratio + 10, scaledHeight / ratio + 10), 6, 6);
+
+        rectPath -= roundedRectPath;
+
+        painter.setCompositionMode(QPainter::CompositionMode_Source);
+        painter.fillPath(rectPath, Qt::transparent);
+
+        QColor shadowColor = QColor(palette().color(QPalette::BrightText));
+        shadowColor.setAlpha(80);
+
+        painter.end();
+
+        return Utils::dropShadow(QPixmap::fromImage(backgroundImage), 5, shadowColor, QPoint(0, 0));
+    } else {
+          painter.end();
+
+          return QPixmap::fromImage(backgroundImage);
+    }
+
 }
 
 QMimeData* Tabbar::createMimeDataFromTab(int index, const QStyleOptionTab &option) const
@@ -225,10 +274,12 @@ QMimeData* Tabbar::createMimeDataFromTab(int index, const QStyleOptionTab &optio
     const QString tabName = textAt(index);
 
     Window *window = static_cast<Window *>(this->window());
-    EditWrapper *wrapper = window->wrapper(fileAt(index));
+    QStringList tabPathList = readTabPaths();
+    EditWrapper *wrapper = window->wrapper(tabPathList.value(index));
     QMimeData *mimeData = new QMimeData;
 
     mimeData->setProperty("wrapper", QVariant::fromValue(static_cast<void *>(wrapper)));
+    mimeData->setProperty("isModified", wrapper->textEditor()->document()->isModified());
     mimeData->setData("dedit/tabbar", tabName.toUtf8());
     mimeData->removeFormat("text/plain");
 
@@ -248,6 +299,7 @@ void Tabbar::insertFromMimeDataOnDragEnter(int index, const QMimeData *source)
     }
 
     window->addTabWithWrapper(wrapper, wrapper->textEditor()->filepath, tabName, index);
+    window->currentWrapper()->textEditor()->setModified(source->property("isModified").toBool());
     window->focusActiveEditor();
 }
 
@@ -264,6 +316,7 @@ void Tabbar::insertFromMimeData(int index, const QMimeData *source)
     }
 
     window->addTabWithWrapper(wrapper, wrapper->textEditor()->filepath, tabName, index);
+    window->currentWrapper()->textEditor()->setModified(source->property("isModified").toBool());
     window->focusActiveEditor();
 }
 
@@ -310,7 +363,22 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
 
                 m_closeTabAction = new QAction(tr("Close tab"), this);
                 m_closeOtherTabAction = new QAction(tr("Close other tabs"), this);
+                m_moreWaysCloseMenu = new DMenu(tr("More ways to close"),this);
+                m_closeLeftTabAction = new QAction(tr("Close left tabs"),this);
+                m_closeRightTabAction = new QAction(tr("Close right tabs"),this);
+                m_closeAllunModifiedTabAction = new QAction(tr("Close unchange tabs"),this);
 
+                m_moreWaysCloseMenu->addAction(m_closeLeftTabAction);
+                m_moreWaysCloseMenu->addAction(m_closeRightTabAction);
+                m_moreWaysCloseMenu->addAction(m_closeAllunModifiedTabAction);
+
+                if(m_tabPaths.length()<2) {
+                    m_closeOtherTabAction->setEnabled(false);
+                    m_closeLeftTabAction->setEnabled(false);
+                    m_closeRightTabAction->setEnabled(false);
+                }
+
+                showTabs();
                 connect(m_closeTabAction, &QAction::triggered, this, [=] {
                     Q_EMIT tabCloseRequested(m_rightClickTab);
                 });
@@ -319,8 +387,53 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
                     closeOtherTabsExceptFile(fileAt(m_rightClickTab));
                 });
 
+                connect(m_closeLeftTabAction, &QAction::triggered,this,[=]{
+                    closeLeftTabs(fileAt(m_rightClickTab));
+//                    int currentIndex = DTabBar::currentIndex();
+//                    if(currentIndex>=0) {
+//                        for (int i=0;i<currentIndex;i++) {
+//                            closeTab(0);
+//                        }
+//                    }
+                });
+
+                connect(m_closeRightTabAction,&QAction::triggered,this,[=]{
+                    closeRightTabs(fileAt(m_rightClickTab));
+//                    int currentIndex = DTabBar::currentIndex();
+//                    int count = DTabBar::count();
+//                    if(currentIndex>=0){
+//                        for (int i=count;i>currentIndex;i--) {
+//                            closeTab(currentIndex+1);
+//                        }
+//                    }
+                });
+
+                connect(m_closeAllunModifiedTabAction,&QAction::triggered,this,[=] {
+                    Window *window = static_cast<Window *>(this->window());//确定在哪个窗口关闭
+//                    for (int i=0;i<m_tabPaths.count();i++) {
+//                        EditWrapper *wrapper = window->wrapper(m_tabPaths.value(i));
+//                        if (!wrapper->textEditor()->document()->isModified()){
+//                            closeTab(this->indexOf(m_tabPaths.value(i)));
+//                        }
+//                    }
+                                        for ( auto path : m_tabPaths) {
+                                            EditWrapper *wrapper = window->wrapper(path);//路径获取文件
+                                            if (!wrapper->textEditor()->document()->isModified()){
+                                                closeTab(this->indexOf(path));
+                                            }
+                                        }
+
+                });
+
                 m_rightMenu->addAction(m_closeTabAction);
                 m_rightMenu->addAction(m_closeOtherTabAction);
+                m_rightMenu->addMenu(m_moreWaysCloseMenu);
+                //yanyuhan 只有一个标签页时不显示更多方式关闭
+                if(m_tabPaths.size() > 1) {
+                    m_moreWaysCloseMenu->setEnabled(true);
+                } else {
+                    m_moreWaysCloseMenu->setEnabled(false);
+                }
 
                 m_rightMenu->exec(mapToGlobal(position));
 
@@ -347,9 +460,27 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
     return false;
 }
 
+void Tabbar::mousePressEvent(QMouseEvent *e)
+{
+    if(e->button()==Qt::MidButton)
+    {
+        emit tabCloseRequested(tabAt(QPoint(e->x(), e->y())));
+    }
+}
+
 void Tabbar::handleTabMoved(int fromIndex, int toIndex)
 {
     m_tabPaths.swap(fromIndex, toIndex);
+}
+void Tabbar::showTabs()
+{
+    int currentIndex  =  DTabBar::currentIndex();
+    if (currentIndex<=0)  {
+        m_closeLeftTabAction->setEnabled(false);
+    }
+    if (currentIndex >= DTabBar::count() - 1) {
+        m_closeRightTabAction->setEnabled(false);
+    }
 }
 
 void Tabbar::handleTabReleased(int index)
@@ -359,7 +490,7 @@ void Tabbar::handleTabReleased(int index)
 
     Window *window = static_cast<Window *>(this->window());
     EditWrapper *wrapper = window->wrapper(tabPath);
-    StartManager::instance()->createWindowFromWrapper(tabName, tabPath, wrapper);
+    StartManager::instance()->createWindowFromWrapper(tabName, tabPath, wrapper, wrapper->textEditor()->document()->isModified());
 
     closeTab(index);
 
@@ -373,6 +504,8 @@ void Tabbar::handleTabIsRemoved(int index)
     Window *window = static_cast<Window *>(this->window());
 
     m_tabPaths.removeAt(index);
+    writeTabPaths();
+
     window->removeWrapper(filePath, false);
 }
 
@@ -387,5 +520,45 @@ void Tabbar::handleTabDroped(int index, Qt::DropAction, QObject *target)
         window->activateWindow();
     } else {
         closeTab(index);
+    }
+}
+
+QStringList Tabbar::readTabPaths() const
+{
+    Window *window = static_cast<Window *>(this->window());
+    QString qstrId =  QString::number(window->winId());
+    QString path = QDir::currentPath();
+    QFile file(path + "/" + qstrId + "tabPaths.txt");
+    QStringList tabPaths;
+    if(!file.open(QIODevice::ReadOnly)){
+        return tabPaths;
+    }
+    QTextStream stream(&file);
+
+    while (!stream.atEnd()) {
+        tabPaths.push_back(stream.readLine());
+    }
+    file.close();
+    return tabPaths;
+}
+
+void Tabbar::writeTabPaths()
+{
+    Window *window = static_cast<Window *>(this->window());
+    QString qstrId =  QString::number(window->winId());
+    QString path = QDir::currentPath();
+    QFile file(path + "/" + qstrId + "tabPaths.txt");
+    if (!file.open(QIODevice::WriteOnly)) {
+        return;
+    }
+    QTextStream stream(&file);
+
+    if (m_tabPaths.isEmpty()) {
+        file.remove();
+    } else {
+        foreach (auto path,m_tabPaths) {
+            stream << path + "\n";
+        }
+        file.close();
     }
 }

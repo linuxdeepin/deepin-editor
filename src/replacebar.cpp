@@ -26,20 +26,21 @@
 #include <QDebug>
 
 ReplaceBar::ReplaceBar(QWidget *parent)
-    : DFloatingWidget(parent)
+    :  DFloatingWidget(parent)
 {
     // Init.
+    hide();
     setFixedHeight(58);
 
     // Init layout and widgets.
     m_layout = new QHBoxLayout();
     m_layout->setSpacing(7);
     m_layout->setContentsMargins(16, 4, 11, 4);
-    m_replaceLabel = new QLabel(tr("Replace"));
+    m_replaceLabel = new QLabel(tr("Find"));
     m_replaceLabel->setMinimumHeight(36);
     m_replaceLine = new LineBar();
     m_replaceLine->lineEdit()->setMinimumHeight(36);
-    m_withLabel = new QLabel(tr("With"));
+    m_withLabel = new QLabel(tr("Replace With"));
     m_withLabel->setMinimumHeight(36);
     m_withLine = new LineBar();
     m_withLine->lineEdit()->setMinimumHeight(36);
@@ -57,7 +58,7 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     m_replaceAllButton->setMinimumHeight(36);
     m_closeButton = new DIconButton(DStyle::SP_CloseButton);
     m_closeButton->setFlat(true);
-    m_closeButton->setFixedSize(25, 25);
+    m_closeButton->setIconSize(QSize(30, 30));
 
     m_layout->addWidget(m_replaceLabel);
     m_layout->addWidget(m_replaceLine);
@@ -80,8 +81,8 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     connect(m_replaceLine, &LineBar::pressEsc, this, &ReplaceBar::replaceClose, Qt::QueuedConnection);
     connect(m_withLine, &LineBar::pressEsc, this, &ReplaceBar::replaceClose, Qt::QueuedConnection);
 
-    connect(m_replaceLine, &LineBar::pressEnter, this, &ReplaceBar::handleReplaceNext, Qt::QueuedConnection);
-    connect(m_withLine, &LineBar::pressEnter, this, &ReplaceBar::handleReplaceNext, Qt::QueuedConnection);
+    //connect(m_replaceLine, &LineBar::pressEnter, this, &ReplaceBar::handleReplaceNext, Qt::QueuedConnection);         //Shielded by Hengbo for new demand.
+    connect(m_withLine, &LineBar::returnPressed, this, &ReplaceBar::handleReplaceNext, Qt::QueuedConnection);
 
     connect(m_replaceLine, &LineBar::pressCtrlEnter, this, &ReplaceBar::replaceSkip, Qt::QueuedConnection);
     connect(m_withLine, &LineBar::pressCtrlEnter, this, &ReplaceBar::replaceSkip, Qt::QueuedConnection);
@@ -92,7 +93,7 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     connect(m_replaceLine, &LineBar::pressMetaEnter, this, &ReplaceBar::handleReplaceAll, Qt::QueuedConnection);
     connect(m_withLine, &LineBar::pressMetaEnter, this, &ReplaceBar::handleReplaceAll, Qt::QueuedConnection);
 
-    connect(m_replaceLine, &LineBar::contentChanged, this, &ReplaceBar::handleContentChanged, Qt::QueuedConnection);
+    connect(m_replaceLine, &LineBar::returnPressed, this, &ReplaceBar::handleContentChanged, Qt::QueuedConnection);
 
     connect(m_replaceButton, &QPushButton::clicked, this, &ReplaceBar::handleReplaceNext, Qt::QueuedConnection);
     connect(m_replaceSkipButton, &QPushButton::clicked, this, &ReplaceBar::replaceSkip, Qt::QueuedConnection);
@@ -115,6 +116,7 @@ void ReplaceBar::focus()
 void ReplaceBar::activeInput(QString text, QString file, int row, int column, int scrollOffset)
 {
     // Try fill keyword with select text.
+    m_withLine->lineEdit()->clear();
     m_replaceLine->lineEdit()->clear();
     m_replaceLine->lineEdit()->insert(text);
     m_replaceLine->lineEdit()->selectAll();

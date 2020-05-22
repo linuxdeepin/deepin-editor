@@ -100,7 +100,7 @@ void BottomBar::updatePosition(int row, int column)
 
 void BottomBar::updateWordCount(int charactorCount)
 {
-    m_charCountLabel->setText(m_chrCountStr.arg(QString::number(charactorCount)));
+    m_charCountLabel->setText(m_chrCountStr.arg(QString::number(charactorCount-1)));
 }
 
 void BottomBar::setEncodeName(const QString &name)
@@ -158,9 +158,14 @@ void BottomBar::setPalette(const QPalette &palette)
     QWidget::setPalette(palette);
 }
 
+void BottomBar::updateSize(int size)
+{
+    setFixedHeight(size);
+}
+
 void BottomBar::handleEncodeChanged(const QString &name)
 {
-    m_wrapper->setTextCodec(name.toUtf8(), true);
+    m_wrapper->setTextCodec(name.toLocal8Bit(), true);
 }
 
 void BottomBar::paintEvent(QPaintEvent *)

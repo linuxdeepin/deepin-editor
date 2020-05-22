@@ -30,6 +30,7 @@ FindBar::FindBar(QWidget *parent)
 {
     // Init.
     //setWindowFlags(Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
+    hide();
     setFixedHeight(58);
 
     // Init layout and widgets.
@@ -45,8 +46,8 @@ FindBar::FindBar(QWidget *parent)
     m_findNextButton = new QPushButton(tr("Next"));
     m_findNextButton->setFixedSize(80, 36);
     m_closeButton = new DIconButton(DStyle::SP_CloseButton);
+    m_closeButton->setIconSize(QSize(30, 30));
     m_closeButton->setFlat(true);
-    m_closeButton->setFixedSize(25, 25);
     m_layout->setContentsMargins(16, 4, 11, 4);
 
     m_layout->addWidget(m_findLabel);
@@ -62,11 +63,16 @@ FindBar::FindBar(QWidget *parent)
     m_closeButton->setFocusPolicy(Qt::NoFocus);
 
     connect(m_editLine, &LineBar::pressEsc, this, &FindBar::findCancel, Qt::QueuedConnection);
-    connect(m_editLine, &LineBar::pressEnter, this, &FindBar::findNext, Qt::QueuedConnection);
+ //   connect(m_editLine, &LineBar::pressEnter, this, &FindBar::findNext, Qt::QueuedConnection);            //Shielded by Hengbo ,for new demand. 20200220
     connect(m_editLine, &LineBar::pressCtrlEnter, this, &FindBar::findPrev, Qt::QueuedConnection);
-    connect(m_editLine, &LineBar::contentChanged, this, &FindBar::handleContentChanged, Qt::QueuedConnection);
+    connect(m_editLine, &LineBar::returnPressed, this, &FindBar::handleContentChanged, Qt::QueuedConnection);
+    connect(m_editLine, &LineBar::contentChanged, this, &FindBar::slot_ifClearSearchWord, Qt::QueuedConnection);
 
-    connect(m_findNextButton, &QPushButton::clicked, this, &FindBar::findNext, Qt::QueuedConnection);
+    connect(m_findNextButton, &QPushButton::clicked, this, &FindBar::handleContentChanged, Qt::QueuedConnection);
+    //connect(m_findNextButton, &QPushButton::clicked, this, &FindBar::findNext, Qt::QueuedConnection);
+
+    connect(m_findPrevButton, &QPushButton::clicked, this, &FindBar::handleContentChanged, Qt::QueuedConnection);   //这三行代码很烂，但是避免了更改方法
+    connect(m_findPrevButton, &QPushButton::clicked, this, &FindBar::findPrev, Qt::QueuedConnection);
     connect(m_findPrevButton, &QPushButton::clicked, this, &FindBar::findPrev, Qt::QueuedConnection);
 
     connect(m_closeButton, &DIconButton::clicked, this, &FindBar::findCancel, Qt::QueuedConnection);
@@ -112,6 +118,14 @@ void FindBar::findCancel()
 void FindBar::handleContentChanged()
 {
     updateSearchKeyword(m_findFile, m_editLine->lineEdit()->text());
+}
+
+void FindBar::slot_ifClearSearchWord()
+{
+    if(m_editLine->lineEdit()->text() == nullptr)
+    {
+        updateSearchKeyword(m_findFile, m_editLine->lineEdit()->text());
+    }
 }
 
 void FindBar::hideEvent(QHideEvent *)
