@@ -3206,17 +3206,15 @@ void TextEdit::isMarkCurrentLine(bool isMark, QString strColor)
         QTextCursor tmpCursor(document());
         QTextDocument::FindFlags flags;
         flags &= QTextDocument::FindCaseSensitively;
-        tmpCursor = document()->find(textCursor().selectedText(), textCursor().position() - textCursor().selectedText().length(), flags);
+//        tmpCursor = document()->find(textCursor().selectedText(), textCursor().position() - textCursor().selectedText().length(), flags);
+        selection.format.setProperty(QTextFormat::FullWidthSelection,true);
+        tmpCursor = this->textCursor();
         selection.cursor = tmpCursor;
         m_wordMarkSelections.append(selection);
-
-
     } else {
         m_wordMarkSelections.removeLast();
         updateHighlightLineSelection();
     }
-
-
 }
 
 void TextEdit::isMarkAllLine(bool isMark, QString strColor)
