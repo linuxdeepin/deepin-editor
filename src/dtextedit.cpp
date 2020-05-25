@@ -1698,7 +1698,12 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
     painter.fillRect(event->rect(), lineNumberAreaBackgroundColor);
 
     int blockNumber = getFirstVisibleBlockId();
+    if(blockNumber > 0) {        //多绘制上面一行的行号
+        blockNumber--;
+    }
+//    blockNumber = 0;
     QTextBlock block = document()->findBlockByNumber(blockNumber);
+
     QTextBlock prev_block = (blockNumber > 0) ? document()->findBlockByNumber(blockNumber-1) : block;
     int translate_y = (blockNumber > 0) ? -verticalScrollBar()->sliderPosition() : 0;
 
@@ -1707,20 +1712,29 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
     // Adjust text position according to the previous "non entirely visible" block
     // if applicable. Also takes in consideration the document's margin offset.
     int additional_margin;
-    if (blockNumber == 0)
+    if (blockNumber == 0) {
         // Simply adjust to document's margin
   //      additional_margin = document()->documentMargin() -1 - this->verticalScrollBar()->sliderPosition();
         additional_margin = document()->documentMargin() - this->verticalScrollBar()->sliderPosition();
-    else
+    }
+    else {
         // Getting the height of the visible part of the previous "non entirely visible" block
+//        additional_margin = document()->documentLayout()->blockBoundingRect(prev_block).toRect()
+//                .translated(0, translate_y).intersected(this->viewport()->geometry()).height();
         additional_margin = document()->documentLayout()->blockBoundingRect(prev_block).toRect()
-                .translated(0, translate_y).intersected(this->viewport()->geometry()).height();
+                .translated(0, translate_y).bottom();          //不比较，直接从上一行的底边开始绘制，即多绘制一行的行号
+    }
 
     // Shift the starting point
     additional_margin -= 2;
+
     top += additional_margin;
 
     int bottom = top + document()->documentLayout()->blockBoundingRect(block).height();
+
+
+//    int bottom1 = top + document()->documentLayout()->blockBoundingRect(block).toRect().height();
+//    qDebug()<<"bottom1 = "<<bottom1;
 
     Utils::setFontSize(painter, document()->defaultFont().pointSize() - 2);
     // Draw the numbers (displaying the current line number in green)
