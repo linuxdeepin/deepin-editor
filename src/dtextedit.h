@@ -40,6 +40,11 @@ namespace KSyntaxHighlighting {
     class SyntaxHighlighter;
 }
 
+const QString STYLE_COLOR_1 = "#FFA503";
+const QString STYLE_COLOR_2 = "#FF1C49";
+const QString STYLE_COLOR_3 = "#9023FC";
+const QString STYLE_COLOR_4 = "#05EA6B";
+
 enum ConvertCase { UPPER, LOWER, CAPITALIZE };
 
 class leftareaoftextedit;
