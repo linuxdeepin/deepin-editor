@@ -1655,21 +1655,21 @@ bool TextEdit::updateKeywordSelections(QString keyword)
 void TextEdit::renderAllSelections()
 {
     QList<QTextEdit::ExtraSelection> selections;
+//    setExtraSelections(selections);
 
 //    for (auto findMatch : m_findMatchSelections) {
 //        findMatch.format = m_findMatchFormat;
 //        selections.append(findMatch);
 //    }
-
     selections.append(m_currentLineSelection);
-    selections.append(m_wordMarkSelections); selections.append(m_markAllSelection);
+    selections.append(m_wordMarkSelections);
+    selections.append(m_markAllSelection);
     selections.append(m_findMatchSelections);
     selections.append(m_findHighlightSelection);
-    //selections.append(m_wordUnderCursorSelection);
+    selections.append(m_wordUnderCursorSelection);
     selections.append(m_beginBracketSelection);
     selections.append(m_endBracketSelection);
-    selections.append(m_markAllSelection);
-
+//    selections.append(m_markAllSelection);
 
     setExtraSelections(selections);
 }
@@ -2159,7 +2159,6 @@ void TextEdit::setThemeWithPath(const QString &path)
 
 void TextEdit::setTheme(const KSyntaxHighlighting::Theme &theme, const QString &path)
 {
-
     QVariantMap jsonMap = Utils::getThemeMapFromPath(path);
     QVariantMap textStylesMap = jsonMap["text-styles"].toMap();
     const QString &themeCurrentLineColor = jsonMap["editor-colors"].toMap()["current-line"].toString();
@@ -2219,17 +2218,18 @@ void TextEdit::setTheme(const KSyntaxHighlighting::Theme &theme, const QString &
     int iVerticalScrollValue = getScrollOffset();
     int iHorizontalScrollVaule = horizontalScrollBar()->value();
     getScrollOffset();
-    QString backupTxt = toPlainText();
-    setPlainText("");
+//    QString backupTxt = toPlainText();
+//    setPlainText("");
     if (m_highlighted) {
         m_highlighter->rehighlight();
     }
-    setPlainText(backupTxt);
+//    setPlainText(backupTxt);
     verticalScrollBar()->setSliderPosition(iVerticalScrollValue);
     horizontalScrollBar()->setSliderPosition(iHorizontalScrollVaule);
 
     lineNumberArea->update();
     m_pLeftAreaWidget->m_bookMarkArea->update();
+
     highlightCurrentLine();
 }
 
@@ -3204,8 +3204,8 @@ void TextEdit::isMarkCurrentLine(bool isMark, QString strColor)
         QTextEdit::ExtraSelection selection;
         selection.format.setBackground(QColor(strColor));
         QTextCursor tmpCursor(document());
-        QTextDocument::FindFlags flags;
-        flags &= QTextDocument::FindCaseSensitively;
+//        QTextDocument::FindFlags flags;
+//        flags &= QTextDocument::FindCaseSensitively;
 //        tmpCursor = document()->find(textCursor().selectedText(), textCursor().position() - textCursor().selectedText().length(), flags);
         selection.format.setProperty(QTextFormat::FullWidthSelection,true);
         tmpCursor = this->textCursor();
@@ -3236,8 +3236,6 @@ void TextEdit::isMarkAllLine(bool isMark, QString strColor)
         selection.cursor.clearSelection();
         m_markAllSelection = selection;
     }
-
-
 }
 
 void TextEdit::cancleLastMark()
