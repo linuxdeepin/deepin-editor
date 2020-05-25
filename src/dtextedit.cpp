@@ -3130,8 +3130,6 @@ QStringList TextEdit::readHistoryRecord()
         nRightPosition = history.indexOf("}",nRightPosition + 1);
     }
 
-    nLeftPosition = history.indexOf(filepath);
-    nRightPosition = history.indexOf("}",nLeftPosition);
     return historyList;
 }
 
@@ -3188,7 +3186,8 @@ void TextEdit::writeHistoryRecord()
 
         filePathandBookmarkLine.remove(filePathandBookmarkLine.count() - 1,1);
 
-        if (historyList.count() < 5) {
+        if (historyList.count() <= 5) {
+//            qDebug() << "writeHistoryRecord()" <<  filePathandBookmarkLine + ")}" + history;
             m_settings->settings->option("advance.editor.browsing_history_file")->setValue(filePathandBookmarkLine + ")}" + history);
         } else {
             history.remove(historyList.first());

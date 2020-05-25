@@ -663,11 +663,13 @@ void Window::removeWrapper(const QString &filePath, bool isDelete)
         m_wrappers.remove(filePath);
 
         if (isDelete) {
-            wrapper->deleteLater();
+            //wrapper->deleteLater();
+            disconnect(wrapper->textEditor(), 0, this, 0);
+            delete wrapper;
         }
 
         // remove all signals on this connection.
-        disconnect(wrapper->textEditor(), 0, this, 0);
+        //disconnect(wrapper->textEditor(), 0, this, 0);
     }
 
     // Exit window after close all tabs.
@@ -1877,9 +1879,10 @@ void Window::closeEvent(QCloseEvent *e)
         // save all the draft documents.
         if (QFileInfo(wrapper->textEditor()->filepath).dir().absolutePath() == m_blankFileDir) {
             if (wrapper->saveFile()) {
-                wrapper->deleteLater();
+                //wrapper->deleteLater();
                 // remove all signals on this connection.
                 disconnect(wrapper->textEditor(), 0, this, 0);
+                delete wrapper;
             }
             continue;
         }
@@ -1887,9 +1890,10 @@ void Window::closeEvent(QCloseEvent *e)
         if (wrapper->textEditor()->document()->isModified()) {
             needSaveList << wrapper;
         } else {
-            wrapper->deleteLater();
+            //wrapper->deleteLater();
             // remove all signals on this connection.
             disconnect(wrapper->textEditor(), 0, this, 0);
+            delete wrapper;
         }
     }
 
