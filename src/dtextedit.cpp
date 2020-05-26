@@ -2963,11 +2963,11 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
                 } else {         
                     if (document()->documentLayout()->blockBoundingRect(lineBlock).height() > 1.5*fontHeight) {
 
-                        imageTop = startPoint + (fontHeight - image.height())/2;
+                        imageTop = startPoint - qFabs(fontHeight - image.height())/2;
                     }
                     else {
 
-                        imageTop = startPoint + (document()->documentLayout()->blockBoundingRect(lineBlock).height() - image.height())/2;
+                        imageTop = startPoint - qFabs(document()->documentLayout()->blockBoundingRect(lineBlock).height() - image.height())/2;
                     }
 
                     //imageTop = startPoint + qFabs(document()->documentLayout()->blockBoundingRect(lineBlock).height() - image.height())/2;
@@ -3240,8 +3240,20 @@ void TextEdit::isMarkCurrentLine(bool isMark, QString strColor)
         m_wordMarkSelections.append(selection);
 
     } else {
-        m_wordMarkSelections.removeLast();
-        updateHighlightLineSelection();
+//        m_wordMarkSelections.removeLast();
+//        updateHighlightLineSelection();
+        for (int i = 0 ; i < m_wordMarkSelections.size(); ++i) {
+            QTextCursor curson = m_wordMarkSelections.at(i).cursor;
+            curson.movePosition(QTextCursor::EndOfLine);
+            QTextCursor currentCurson = textCursor();
+            currentCurson.movePosition(QTextCursor::EndOfLine);
+     //       if (m_wordMarkSelections.at(i).cursor == textCursor()) {
+            if(curson == currentCurson) {
+                m_wordMarkSelections.removeAt(i);
+//                renderAllSelections();
+                break;
+            }
+        }
     }
 }
 
@@ -3278,7 +3290,12 @@ void TextEdit::markSelectWord()
 {
     bool isFind  = false;
     for (int i = 0 ; i < m_wordMarkSelections.size(); ++i) {
-        if (m_wordMarkSelections.at(i).cursor == textCursor()) {
+        QTextCursor curson = m_wordMarkSelections.at(i).cursor;
+        curson.movePosition(QTextCursor::EndOfLine);
+        QTextCursor currentCurson = textCursor();
+        currentCurson.movePosition(QTextCursor::EndOfLine);
+ //       if (m_wordMarkSelections.at(i).cursor == textCursor()) {
+        if(curson == currentCurson) {
             isFind = true;
             m_wordMarkSelections.removeAt(i);
             renderAllSelections();
@@ -3811,9 +3828,8 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
 
         //yanyuhan 折叠、代码注释（有代码选中时增加注释选项显示）
 //        m_rightMenu->addMenu(m_collapseExpandMenu);             //折叠展开
-        if(textCursor().hasSelection()) {
-            m_rightMenu->addAction(m_addComment);
-        }
+
+        m_rightMenu->addAction(m_addComment);
         m_rightMenu->addAction(m_cancelComment);
 
         if (m_readOnlyMode == true) {

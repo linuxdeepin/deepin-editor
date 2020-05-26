@@ -2017,9 +2017,9 @@ void Window::keyPressEvent(QKeyEvent *e)
         displayShortcuts();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "print")) {
         popupPrintDialog();
-    } else if (e->key() == Qt::Key_F5) {
+    } /*else if (e->key() == Qt::Key_F5) {
         currentWrapper()->refresh();
-    } else {
+    }*/ else {
         // Post event to window widget if match Alt+0 ~ Alt+9
         QRegularExpression re("^Alt\\+\\d");
         QRegularExpressionMatch match = re.match(key);
