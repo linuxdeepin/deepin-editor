@@ -2905,10 +2905,10 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
     int imageTop = 0;//图片绘制位置
     int fontHeight = fontMetrics().height();
     double nBookmarkLineHeight = fontHeight;
-    qDebug() << "bookMarkAreaPaintEvent" << m_listBookmark;
+
     foreach (auto line, m_listBookmark) {
 
-        if (line == 0) {
+        if (line <= 0) {
             line = 1;
         }
 
@@ -2920,7 +2920,7 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
 
     foreach (auto line, m_listBookmark) {
 
-        if (line == 0) {
+        if (line <= 0) {
             line = 1;
         }
 
@@ -2940,7 +2940,6 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
             if(line > 0)
             {
                 lineBlock = document()->findBlockByNumber(line - 1);
-                qDebug()<<"fontHeight = "<<fontHeight <<"image.height() = "<<image.height();
                 if(fontHeight > image.height())
                 {
 
@@ -3189,6 +3188,10 @@ void TextEdit::writeHistoryRecord()
         QString filePathandBookmarkLine = "{[" + filepath + "](";
 
         foreach (auto line, m_listBookmark) {
+            if (line <= 0) {
+                line = 1;
+            }
+
             filePathandBookmarkLine += QString::number(line) + ",";
         }
 
