@@ -3280,9 +3280,9 @@ void TextEdit::isMarkAllLine(bool isMark, QString strColor)
 
 void TextEdit::cancleLastMark()
 {
-    if (m_wordMarkSelections.size() <= 1)
+    if (m_wordMarkSelections.size() < 1)
         return;
-    m_wordMarkSelections.removeAt(m_wordMarkSelections.size() - 2);
+    m_wordMarkSelections.removeAt(m_wordMarkSelections.size() - 1);
     updateHighlightLineSelection();
 }
 
@@ -3950,7 +3950,7 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
     m_rightMenu->addMenu(m_colorMarkMenu);
     m_colorMarkMenu->clear();
     m_colorMarkMenu->addMenu(m_markCurrentLine);
-    if (m_wordMarkSelections.size() > 1) {
+    if (m_wordMarkSelections.size() > 0) {
         m_colorMarkMenu->addAction(m_cancleLastMark);
     }
     m_colorMarkMenu->addAction(m_cancleMarkAllLine);
