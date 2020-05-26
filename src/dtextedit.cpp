@@ -1662,8 +1662,8 @@ void TextEdit::renderAllSelections()
 //        selections.append(findMatch);
 //    }
     selections.append(m_currentLineSelection);
-    selections.append(m_wordMarkSelections);
     selections.append(m_markAllSelection);
+    selections.append(m_wordMarkSelections);
     selections.append(m_findMatchSelections);
     selections.append(m_findHighlightSelection);
     selections.append(m_wordUnderCursorSelection);
@@ -3222,6 +3222,7 @@ void TextEdit::isMarkCurrentLine(bool isMark, QString strColor)
         tmpCursor = this->textCursor();
         selection.cursor = tmpCursor;
         m_wordMarkSelections.append(selection);
+
     } else {
         m_wordMarkSelections.removeLast();
         updateHighlightLineSelection();
