@@ -1399,6 +1399,7 @@ void TextEdit::scrollToLine(int scrollOffset, int row, int column)
 
 void TextEdit::setLineWrapMode(bool enable)
 {
+    this->setWordWrapMode(QTextOption::WrapAnywhere);
     QTextEdit::setLineWrapMode(enable ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
     m_pLeftAreaWidget->m_linenumberarea->update();
     m_pLeftAreaWidget->m_flodArea->update();
@@ -1726,7 +1727,7 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
     }
 
     // Shift the starting point
-    additional_margin -= 2;
+    //additional_margin -= 2;
 
     top += additional_margin;
 
@@ -1748,9 +1749,19 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
 
             m_fontLineNumberArea.setPointSize(currentFont().pointSize() - 1);
             painter.setFont(m_fontLineNumberArea);
-            painter.drawText(0, top,
-                             lineNumberArea->width(), document()->documentLayout()->blockBoundingRect(block).height(),
-                             /*Qt::AlignVCenter |*/ Qt::AlignHCenter, QString::number(blockNumber + 1));
+
+            if (fontMetrics().height() *1.5 > document()->documentLayout()->blockBoundingRect(block).height()
+                    && document()->documentLayout()->blockBoundingRect(block).height() > fontMetrics().height()) {
+
+                painter.drawText(0, top,
+                                 lineNumberArea->width(), document()->documentLayout()->blockBoundingRect(block).height(),
+                                 Qt::AlignVCenter | Qt::AlignHCenter, QString::number(blockNumber + 1));
+                qDebug() << ".........." << document()->documentLayout()->blockBoundingRect(block).width();
+            } else {
+                painter.drawText(0, top,
+                                 lineNumberArea->width(), document()->documentLayout()->blockBoundingRect(block).height(),
+                                 /*Qt::AlignVCenter |*/ Qt::AlignHCenter, QString::number(blockNumber + 1));
+            }
         }
 
         block = block.next();
@@ -2884,7 +2895,7 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
                 .translated(0, translate_y).intersected(this->viewport()->geometry()).height();
 
     // Shift the starting point
-    additional_margin += 1;
+    additional_margin += 3;
     top += additional_margin;
 
     int frontLine = 0;//滚动条滚过的行
@@ -2909,7 +2920,7 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
     foreach (auto line, m_listBookmark) {
 
         if (line <= 0) {
-            line = 1;
+            m_listBookmark.replace(m_listBookmark.indexOf(line),1);
         }
 
         lineBlock = document()->findBlockByNumber(line - 1);
@@ -2919,10 +2930,6 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
     }
 
     foreach (auto line, m_listBookmark) {
-
-        if (line <= 0) {
-            line = 1;
-        }
 
         startLine = frontLine + 1;
 
@@ -2949,12 +2956,21 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
                     }
                     else {
 
-                        imageTop = startPoint + (document()->documentLayout()->blockBoundingRect(lineBlock).height() - image.height())/2;
+                        imageTop = startPoint + qFabs(document()->documentLayout()->blockBoundingRect(lineBlock).height() - image.height())/2;
                     }
 
                     scaleImage = image;
                 } else {         
-                    imageTop = startPoint + (document()->documentLayout()->blockBoundingRect(lineBlock).height() - image.height())/2;
+                    if (document()->documentLayout()->blockBoundingRect(lineBlock).height() > 1.5*fontHeight) {
+
+                        imageTop = startPoint + (fontHeight - image.height())/2;
+                    }
+                    else {
+
+                        imageTop = startPoint + (document()->documentLayout()->blockBoundingRect(lineBlock).height() - image.height())/2;
+                    }
+
+                    //imageTop = startPoint + qFabs(document()->documentLayout()->blockBoundingRect(lineBlock).height() - image.height())/2;
                     double scale = nBookmarkLineHeight/image.height();
                     double nScaleWidth = scale*image.height()*image.height()/image.width();
                     scaleImage = image.scaled(scale*image.height(),nScaleWidth);
