@@ -383,14 +383,27 @@ TextEdit::TextEdit(QWidget *parent)
     connect(m_hlActionGroup, &QActionGroup::triggered, this, [this] (QAction *action) {
         const auto defName = action->data().toString();
         const auto def = m_repository.definitionForName(defName);
-        m_highlighter->setDefinition(def);
-        emit hightlightChanged(action->text());
+
+        if (m_highlighter == nullptr) {
+            m_highlighter = new KSyntaxHighlighting::SyntaxHighlighter(document());
+        }
+
+        if (!def.isValid()) {
+            emit hightlightChanged(action->text());
+            delete m_highlighter;
+            m_highlighter = nullptr;
+        } else {
+            m_highlighter->setDefinition(def);
+            emit hightlightChanged(action->text());
+        }
+
     });
 }
 
 TextEdit::~TextEdit()
 {
     writeHistoryRecord();
+    delete m_highlighter;
 }
 
 void TextEdit::setWrapper(EditWrapper *w)
@@ -2192,10 +2205,13 @@ void TextEdit::setTheme(const KSyntaxHighlighting::Theme &theme, const QString &
                                                  m_selectionColor.name(), m_selectionBgColor.name());
     setStyleSheet(styleSheet);
 
-    if (m_backgroundColor.lightness() < 128) {
-        m_highlighter->setTheme(m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme));
-    } else {
-        m_highlighter->setTheme(m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
+    if (m_highlighter != nullptr) {
+        if (m_backgroundColor.lightness() < 128) {
+
+            m_highlighter->setTheme(m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme));
+        } else {
+            m_highlighter->setTheme(m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
+        }
     }
 
     // TODO
@@ -2228,6 +2244,9 @@ void TextEdit::setTheme(const KSyntaxHighlighting::Theme &theme, const QString &
 
 void TextEdit::loadHighlighter()
 {
+    if (m_highlighter == nullptr) {
+        m_highlighter = new KSyntaxHighlighting::SyntaxHighlighter(document());
+    }
     const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());
 
     if (!def.filePath().isEmpty()) {
@@ -2281,6 +2300,8 @@ void TextEdit::loadHighlighter()
         }
 
     } else {
+        delete m_highlighter;
+        m_highlighter = nullptr;
         m_highlighted = false;
     }
 }
