@@ -84,6 +84,7 @@ TextEdit::TextEdit(QWidget *parent)
      m_highlighter(new KSyntaxHighlighting::SyntaxHighlighter(document()))
 {
     m_bIsFileOpen = false;
+    m_nLines = 0;
     //lineNumberArea = new LineNumberArea(m_pLeftAreaWidget);
     m_pLeftAreaWidget = new leftareaoftextedit(this);
     lineNumberArea = m_pLeftAreaWidget->m_linenumberarea;
@@ -110,6 +111,8 @@ TextEdit::TextEdit(QWidget *parent)
     // Init widgets.
     connect(this->verticalScrollBar(), &QScrollBar::valueChanged, this, &TextEdit::updateLineNumber);
     connect(this, &QTextEdit::textChanged, this, [this]() {
+
+        checkBookmarkLineMove();
         updateLineNumber();
         updateWordCount();
     });
@@ -1886,33 +1889,6 @@ void TextEdit::setCodeFlodFlagVisable(bool isVisable,bool bIsFirstOpen)
 
 void TextEdit::updateLineNumber()
 {
-    if(m_nLines != blockCount())
-    {
-        QTextCursor cursor = textCursor();
-        int nAddorDeleteLine = 0;
-        if (m_nLines > blockCount()) {
-            nAddorDeleteLine = cursor.blockNumber() + 2;
-
-            if (m_listBookmark.contains(nAddorDeleteLine)) {
-                m_listBookmark.removeOne(nAddorDeleteLine);
-            }
-
-            foreach (auto line, m_listBookmark) {
-                if (nAddorDeleteLine < line) {
-                    m_listBookmark.replace(m_listBookmark.indexOf(line),line - 1);
-                }
-            }
-        } else {
-            nAddorDeleteLine = cursor.blockNumber();
-
-            foreach (auto line, m_listBookmark) {
-                if (nAddorDeleteLine < line) {
-                    m_listBookmark.replace(m_listBookmark.indexOf(line),line + 1);
-                }
-            }
-        }
-    }
-    m_nLines = blockCount();
     // Update line number painter.
 
     int blockSize = QString::number(blockCount()).size();
@@ -3099,6 +3075,42 @@ void TextEdit::moveToNextBookMark()
     }
 }
 
+void TextEdit::checkBookmarkLineMove()
+{
+    if (m_nLines == 0) {
+        m_nLines = blockCount();
+        return;
+    }
+
+    if(m_nLines != blockCount())
+    {
+        QTextCursor cursor = textCursor();
+        int nAddorDeleteLine = 0;
+        if (m_nLines > blockCount()) {
+            nAddorDeleteLine = cursor.blockNumber() + 2;
+
+            if (m_listBookmark.contains(nAddorDeleteLine)) {
+                m_listBookmark.removeOne(nAddorDeleteLine);
+            }
+
+            foreach (const auto line, m_listBookmark) {
+                if (nAddorDeleteLine < line) {
+                    m_listBookmark.replace(m_listBookmark.indexOf(line),line - 1);
+                }
+            }
+        } else {
+            nAddorDeleteLine = cursor.blockNumber();
+
+            foreach (const auto line, m_listBookmark) {
+                if (nAddorDeleteLine < line) {
+                    m_listBookmark.replace(m_listBookmark.indexOf(line),line + 1);
+                }
+            }
+        }
+    }
+    m_nLines = blockCount();
+}
+
 void TextEdit::flodOrUnflodAllLevel(bool isFlod)
 {
     foreach (auto line, m_listFlodFlag) {
@@ -3226,11 +3238,8 @@ void TextEdit::setIsFileOpen()
 
     foreach (const auto line, linesList) {
 
-        m_listBookmark << line - 1;
+        m_listBookmark << line;
     }
-
-    qDebug() << "bookMarkAreaPaintEvent1111" << m_listBookmark;
-    m_bIsFileOpen = false;
 }
 
 QStringList TextEdit::readHistoryRecord()
