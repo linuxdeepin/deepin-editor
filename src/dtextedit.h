@@ -249,6 +249,8 @@ public slots:
     void clickPasteAction();
     void clickDeleteAction();
     void clickOpenInFileManagerAction();
+
+    //书签右键菜单功能
     void onAddBookMark();
     void onCancelBookMark();
     void onMoveToPreviousBookMark();

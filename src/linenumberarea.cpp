@@ -34,7 +34,7 @@ LineNumberArea::~LineNumberArea()
 
 void LineNumberArea::paintEvent(QPaintEvent *e)
 {
-    qDebug() << "LineNumberArea::paintEvent ";
+    //qDebug() << "LineNumberArea::paintEvent ";
     m_leftAreaWidget->lineNumberAreaPaintEvent(e);
     //m_textEdit->lineNumberAreaPaintEvent(e);
 }

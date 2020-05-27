@@ -2565,6 +2565,7 @@ void TextEdit::onMoveToNextBookMark()
 void TextEdit::onClearBookMark()
 {
     m_listBookmark.clear();
+    qDebug() << "ClearBookMark:" << m_listBookmark;
     m_pLeftAreaWidget->m_bookMarkArea->update();
 }
 
@@ -2965,6 +2966,7 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
                 }
 
                 painter.drawImage(5,imageTop,scaleImage);
+                qDebug() << "bookMarkAreaPaint:" << line;
             }
         }
     }
@@ -3032,8 +3034,10 @@ void TextEdit::addOrDeleteBookMark()
 
     if (m_listBookmark.contains(line)) {
         m_listBookmark.removeOne(line);
+        qDebug() << "DeleteBookMark:" << line << m_listBookmark;
     } else {
         m_listBookmark.push_back(line);
+        qDebug() << "AddBookMark:" << line << m_listBookmark;
     }
 
     m_pLeftAreaWidget->m_bookMarkArea->update();
@@ -3455,6 +3459,7 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                 m_rightMenu->exec(mouseEvent->globalPos());
 
             } else {
+                qDebug() << "bookMarkAreaClicked:" << mouseEvent->pos();
                 addOrDeleteBookMark();
             }
         } else if (object == m_pLeftAreaWidget->m_flodArea) {

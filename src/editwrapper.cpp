@@ -180,10 +180,10 @@ bool EditWrapper::saveAsFile(const QString &newFilePath, QByteArray encodeName)
         //m_isLoadFinished = true;
     }
 
-    qDebug() << "Saved file:" << m_textEdit->filepath
-             << "with codec:" << pSaveAsFileCodec->name()
-             << "Line Endings:" << m_endOfLineMode
-             << "State:" << ok;
+//    qDebug() << "Saved file:" << m_textEdit->filepath
+//             << "with codec:" << pSaveAsFileCodec->name()
+//             << "Line Endings:" << m_endOfLineMode
+//             << "State:" << ok;
 
     return ok;
 }
@@ -238,7 +238,7 @@ bool EditWrapper::saveFile()
     stream.setCodec(m_textCodec);
     stream << fileContent.replace(eolRegex, eol);
 
-    qDebug() << "saveFile stream.codec()->name():" << stream.codec()->name();
+//    qDebug() << "saveFile stream.codec()->name():" << stream.codec()->name();
 
     //flush stream.
     stream.flush();
@@ -267,10 +267,10 @@ bool EditWrapper::saveFile()
         m_isLoadFinished = true;
     }
 
-    qDebug() << "Saved file:" << m_textEdit->filepath
-             << "with codec:" << m_textCodec->name()
-             << "Line Endings:" << m_endOfLineMode
-             << "State:" << ok;
+//    qDebug() << "Saved file:" << m_textEdit->filepath
+//             << "with codec:" << m_textCodec->name()
+//             << "Line Endings:" << m_endOfLineMode
+//             << "State:" << ok;
 
     return ok;
 }

@@ -51,7 +51,7 @@ StartManager::StartManager(QObject *parent)
     if (!QFileInfo(blankFileDir).exists()) {
         QDir().mkpath(blankFileDir);
 
-        qDebug() << "Create blank file dir: " << blankFileDir;
+        //qDebug() << "Create blank file dir: " << blankFileDir;
     }
 }
 
@@ -117,14 +117,14 @@ void StartManager::openFilesInTab(QStringList files)
             if (info.windowIndex != -1) {
                 popupExistTabs(info);
 
-                qDebug() << "Open " << file << " in exist tab";
+                //qDebug() << "Open " << file << " in exist tab";
             }
             // Create new window with file if haven't window exist.
             else if (m_windows.size() == 0) {
                 Window *window = createWindow(true);
                 QTimer::singleShot(50, [=] { window->addTab(file); });
 
-                qDebug() << "Open " << file << " with new window";
+                //qDebug() << "Open " << file << " with new window";
             }
             // Open file tab in first window of window list.
             else {
@@ -133,7 +133,7 @@ void StartManager::openFilesInTab(QStringList files)
                 //window->showNormal();
                 window->activateWindow();
 
-                qDebug() << "Open " << file << " in first window";
+                //qDebug() << "Open " << file << " in first window";
             }
 
         }
@@ -166,7 +166,7 @@ Window* StartManager::createWindow(bool alwaysCenter)
     // Quit application if close last window.
     connect(window, &Window::close, this, [=] {
         int windowIndex = m_windows.indexOf(window);
-        qDebug() << "Close window " << windowIndex;
+        //qDebug() << "Close window " << windowIndex;
 
         if (windowIndex >= 0) {
             m_windows.takeAt(windowIndex);
@@ -226,7 +226,7 @@ StartManager::FileTabInfo StartManager::getFileTabInfo(QString file)
 {
     FileTabInfo info = {-1, -1};
 
-    qDebug() << "Windows size: " << m_windows.size();
+    //qDebug() << "Windows size: " << m_windows.size();
 
     for (Window *window : m_windows) {
         int tabIndex = window->getTabIndex(file);
@@ -242,7 +242,7 @@ StartManager::FileTabInfo StartManager::getFileTabInfo(QString file)
 
 void StartManager::initBlockShutdown() {
     if (m_reply.value().isValid()) {
-        qDebug() << "m_reply.value().isValid():" << m_reply.value().isValid();
+        //qDebug() << "m_reply.value().isValid():" << m_reply.value().isValid();
         return;
     }
 
@@ -270,7 +270,7 @@ void StartManager::slotCheckUnsaveTab() {
         if (bRet == true) {
             m_reply = m_pLoginManager->callWithArgumentList(QDBus::Block, "Inhibit", m_arg);
             if (m_reply.isValid()) {
-              qDebug() << "Block shutdown.";
+              //qDebug() << "Block shutdown.";
             }
 
             return;
@@ -282,6 +282,6 @@ void StartManager::slotCheckUnsaveTab() {
         QDBusReply<QDBusUnixFileDescriptor> tmp = m_reply;
         m_reply = QDBusReply<QDBusUnixFileDescriptor>();
         //m_pLoginManager->callWithArgumentList(QDBus::NoBlock, "Inhibit", m_arg);
-        qDebug() << "Nublock shutdown.";
+        //qDebug() << "Nublock shutdown.";
     }
 }

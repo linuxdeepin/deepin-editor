@@ -277,10 +277,10 @@ void Window::initTitlebar()
 
 bool Window::checkBlockShutdown()
 {
-    qDebug() << "Enter function [" << __FUNCTION__ << "].";
+//    qDebug() << "Enter function [" << __FUNCTION__ << "].";
     //判断是否有未保存的tab项
     for (int i = 0; i < m_tabbar->count(); i++) {
-        qDebug() << "m_tabbar->textAt(i):" << m_tabbar->textAt(i);
+//        qDebug() << "m_tabbar->textAt(i):" << m_tabbar->textAt(i);
         if (m_tabbar->textAt(i).isNull()) {
             return false;
         }
@@ -1377,9 +1377,9 @@ void Window::addBlankTab(const QString &blankFile)
             QDir().mkpath(m_blankFileDir);
 
             if (QFile(blankTabPath).open(QIODevice::ReadWrite)) {
-                qDebug() << "Create blank file: " << blankTabPath;
+                //qDebug() << "Create blank file: " << blankTabPath;
             } else {
-                qDebug() << "Can't create blank file: " << blankTabPath;
+                //qDebug() << "Can't create blank file: " << blankTabPath;
             }
         }
 
@@ -1511,6 +1511,7 @@ void Window::handleCurrentChanged(const int &index)
         currentWrapper()->m_bottomBar->show();
          currentWrapper()->m_bottomBar->updateSize(32);
     }
+    qDebug() << "tabbarChanged:" << filepath;
 }
 
 void Window::handleJumpLineBarExit()
