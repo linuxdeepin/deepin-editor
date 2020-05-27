@@ -47,6 +47,7 @@ const QString STYLE_COLOR_4 = "#05EA6B";
 
 enum ConvertCase { UPPER, LOWER, CAPITALIZE };
 
+class ShowFlodCodeWidget;
 class leftareaoftextedit;
 class EditWrapper;
 class TextEdit : public DTextEdit
@@ -196,6 +197,8 @@ public:
 
     void flodOrUnflodAllLevel(bool isFlod);
     void flodOrUnflodCurrentLevel(bool isFlod);
+    QString getHideRowContent(int iLine);
+    int getLinePosByLineNum(int iLine);
 
     //书签功能相关
     void bookMarkAreaPaintEvent(QPaintEvent *event);
@@ -373,6 +376,8 @@ private:
     QAction *m_upcaseAction;
     QAction *m_downcaseAction;
     QAction *m_capitalizeAction;
+
+    ShowFlodCodeWidget  *m_foldCodeShow;
 
     bool m_canUndo;
     bool m_canRedo;

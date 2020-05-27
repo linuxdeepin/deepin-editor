@@ -28,6 +28,7 @@
 #include "leftareaoftextedit.h"
 #include "bookmarkwidget.h"
 #include "codeflodarea.h"
+#include "showflodcodewidget.h"
 
 #include <KF5/KSyntaxHighlighting/definition.h>
 #include <KF5/KSyntaxHighlighting/syntaxhighlighter.h>
@@ -94,6 +95,7 @@ TextEdit::TextEdit(QWidget *parent)
 #endif
     m_fontLineNumberArea.setFamily("SourceHanSansSC-Normal");
 
+    m_pLeftAreaWidget->m_flodArea->setAttribute(Qt::WA_Hover, true); //开启悬停事件
     viewport()->installEventFilter(this);
     m_pLeftAreaWidget->m_bookMarkArea->installEventFilter(this);
     m_pLeftAreaWidget->m_flodArea->installEventFilter(this);
@@ -113,6 +115,9 @@ TextEdit::TextEdit(QWidget *parent)
     });
     connect(this, &QTextEdit::cursorPositionChanged, this, &TextEdit::cursorPositionChanged);
     connect(document(), &QTextDocument::modificationChanged, this, &TextEdit::setModified);
+
+    m_foldCodeShow = new ShowFlodCodeWidget(this);
+    m_foldCodeShow->setVisible(false);
 
     // Init menu.
     m_rightMenu = new DMenu();
@@ -1838,9 +1843,11 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                     m_listFlodIconPos.append(blockNumber - 1);
                 } else {
                     if (document()->findBlockByNumber(blockNumber + 1).isVisible()) {
-                        painter.drawImage(0, top, foldimage);
+                        if (document()->findBlockByNumber(blockNumber).isVisible())
+                            painter.drawImage(0, top, foldimage);
                     } else {
-                        painter.drawImage(0, top, Unfoldimage);
+                        if (document()->findBlockByNumber(blockNumber).isVisible())
+                            painter.drawImage(0, top, Unfoldimage);
                     }
                     m_listFlodIconPos.append(blockNumber);
                 }
@@ -3115,6 +3122,89 @@ void TextEdit::flodOrUnflodCurrentLevel(bool isFlod)
 
 }
 
+QString TextEdit::getHideRowContent(int iLine)
+{
+    QString resultText;
+    bool isFirstLine = true;
+    QTextBlock block = document()->findBlockByNumber(iLine);
+    int existLeftSubbrackets = 0, existRightSubbrackets = 0;
+
+    while (block.isValid()) {
+        if (block.text().contains("{") && !block.text().contains("}")) {
+            existLeftSubbrackets ++;
+        } else if (block.text().contains("}") && !block.text().contains("{")) {
+            existRightSubbrackets ++;
+        } else if (block.text().contains("}") && block.text().contains("{")) {
+            for (int i = 0 ; i < block.text().size() ; ++i) {
+                if (block.text().at(i) == "{") {
+                    existLeftSubbrackets++;
+                } else if (block.text().at(i) == "}" && !isFirstLine) {
+                    existRightSubbrackets++;
+                }
+                if (existLeftSubbrackets == existRightSubbrackets &&
+                        existLeftSubbrackets != 0) {
+                    break;
+                }
+            }
+        }
+
+        if (existLeftSubbrackets == existRightSubbrackets &&
+                existLeftSubbrackets != 0) {
+            if (!block.text().contains("{")) {
+                m_foldCodeShow->appendText(block.text());
+                break;
+            } else {
+                break;
+            }
+        }
+        if (isFirstLine) {
+            isFirstLine = false;
+        } else {
+            m_foldCodeShow->appendText(block.text());
+        }
+        block = block.next();
+        iLine++;
+    }
+
+    return  resultText;
+
+}
+
+int TextEdit::getLinePosByLineNum(int iLine)
+{
+    int blockNumber = getFirstVisibleBlockId();
+    QTextBlock block = document()->findBlockByNumber(blockNumber);
+    QTextBlock prev_block = (blockNumber > 0) ? document()->findBlockByNumber(blockNumber - 1) : block;
+    int translate_y = (blockNumber > 0) ? -verticalScrollBar()->sliderPosition() : 0;
+
+    int top = this->viewport()->geometry().top();
+    int additional_margin;
+    if (blockNumber == 0)
+        // Simply adjust to document's margin
+        //     additional_margin = document()->documentMargin() - 1 - this->verticalScrollBar()->sliderPosition();
+        additional_margin = document()->documentMargin() - this->verticalScrollBar()->sliderPosition();
+    else
+        // Getting the height of the visible part of the previous "non entirely visible" block
+        additional_margin = document()->documentLayout()->blockBoundingRect(prev_block).toRect()
+                            .translated(0, translate_y).intersected(this->viewport()->geometry()).height();
+
+    // Shift the starting point
+    additional_margin += 3;
+    top += additional_margin;
+
+    int bottom = top + document()->documentLayout()->blockBoundingRect(block).height();
+    while (block.isValid()) {
+        if (blockNumber == iLine)
+            return top;
+        block = block.next();
+        top = bottom;
+        bottom = top + document()->documentLayout()->blockBoundingRect(block).height();
+        ++blockNumber;
+    }
+
+
+}
+
 void TextEdit::setIsFileOpen()
 {
     QStringList bookmarkList = readHistoryRecordofBookmark();
@@ -3402,6 +3492,31 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
 
 
         }
+    } else if (event->type() == QEvent::HoverMove) {
+        if (object == m_pLeftAreaWidget->m_flodArea) {
+            QHoverEvent *hoverEvent = static_cast<QHoverEvent *>(event);
+
+            int line = getLineFromPoint(hoverEvent->pos());
+
+            if (m_listFlodIconPos.contains(line - 1)) {
+                if (!document()->findBlockByNumber(line).isVisible()) {
+                    m_foldCodeShow->clear();
+                    getHideRowContent(line - 1);
+                    m_foldCodeShow->show();
+                    m_foldCodeShow->move(0, getLinePosByLineNum(line - 1) + 5);
+
+                }
+            } else {
+                m_foldCodeShow->hide();
+
+            }
+        }
+
+    } else if (event->type() == QEvent::HoverLeave) {
+        if (object == m_pLeftAreaWidget->m_flodArea) {
+            m_foldCodeShow->hide();
+        }
+
     }
 
     return false;
