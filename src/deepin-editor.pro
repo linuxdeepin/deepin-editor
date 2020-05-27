@@ -52,7 +52,8 @@ HEADERS += window.h \
     	   warningnotices.h \
     bookmarkwidget.h \
     leftareaoftextedit.h \
-    codeflodarea.h
+    codeflodarea.h \
+    showflodcodewidget.h
 
 SOURCES += window.cpp \
            startmanager.cpp \
@@ -84,7 +85,8 @@ SOURCES += window.cpp \
     	   warningnotices.cpp \
     bookmarkwidget.cpp \
     leftareaoftextedit.cpp \
-    codeflodarea.cpp
+    codeflodarea.cpp \
+    showflodcodewidget.cpp
 
 
 QMAKE_CXXFLAGS += -g
