@@ -2947,6 +2947,9 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
             if(line > 0)
             {
                 lineBlock = document()->findBlockByNumber(line - 1);
+                if (!lineBlock.isVisible()) {
+                    continue;
+                }
                 if(fontHeight > image.height())
                 {
 
