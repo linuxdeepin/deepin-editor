@@ -83,7 +83,6 @@ TextEdit::TextEdit(QWidget *parent)
       m_wrapper(nullptr),
      m_highlighter(new KSyntaxHighlighting::SyntaxHighlighter(document()))
 {
-    m_bIsFileOpen = false;
     m_nLines = 0;
     //lineNumberArea = new LineNumberArea(m_pLeftAreaWidget);
     m_pLeftAreaWidget = new leftareaoftextedit(this);
