@@ -2721,6 +2721,9 @@ int TextEdit::getNextWordPosition(QTextCursor cursor, QTextCursor::MoveMode move
             cursor.movePosition(QTextCursor::NextCharacter, moveMode);
             currentChar = toPlainText().at(cursor.position() - 1);
         }
+        while (cursor.position() < toPlainText().length() && !atWordSeparator(cursor.position())) {
+            cursor.movePosition(QTextCursor::NextCharacter, moveMode);
+        }
     }
     // Just to next word-separator char.
     else {
