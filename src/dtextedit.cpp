@@ -84,6 +84,7 @@ TextEdit::TextEdit(QWidget *parent)
      m_highlighter(new KSyntaxHighlighting::SyntaxHighlighter(document()))
 {
     m_nLines = 0;
+    m_bIsFileOpen = false;
     //lineNumberArea = new LineNumberArea(m_pLeftAreaWidget);
     m_pLeftAreaWidget = new leftareaoftextedit(this);
     lineNumberArea = m_pLeftAreaWidget->m_linenumberarea;
@@ -111,7 +112,10 @@ TextEdit::TextEdit(QWidget *parent)
     connect(this->verticalScrollBar(), &QScrollBar::valueChanged, this, &TextEdit::updateLineNumber);
     connect(this, &QTextEdit::textChanged, this, [this]() {
 
-        checkBookmarkLineMove();
+        if (!m_bIsFileOpen) {
+            checkBookmarkLineMove();
+        }
+
         updateLineNumber();
         updateWordCount();
     });
@@ -3104,11 +3108,6 @@ void TextEdit::moveToNextBookMark()
 
 void TextEdit::checkBookmarkLineMove()
 {
-    if (m_nLines == 0) {
-        m_nLines = blockCount();
-        return;
-    }
-
     if(m_nLines != blockCount())
     {
         QTextCursor cursor = textCursor();
@@ -3123,6 +3122,7 @@ void TextEdit::checkBookmarkLineMove()
             foreach (const auto line, m_listBookmark) {
                 if (nAddorDeleteLine < line) {
                     m_listBookmark.replace(m_listBookmark.indexOf(line),line - 1);
+                    qDebug() << "DeleteLine" << m_listBookmark << m_nLines;
                 }
             }
         } else {
@@ -3131,6 +3131,7 @@ void TextEdit::checkBookmarkLineMove()
             foreach (const auto line, m_listBookmark) {
                 if (nAddorDeleteLine < line) {
                     m_listBookmark.replace(m_listBookmark.indexOf(line),line + 1);
+                    qDebug() << "AddLine" << m_listBookmark << m_nLines;
                 }
             }
         }
@@ -3246,6 +3247,7 @@ int TextEdit::getLinePosByLineNum(int iLine)
 
 void TextEdit::setIsFileOpen()
 {
+    m_bIsFileOpen = true;
     QStringList bookmarkList = readHistoryRecordofBookmark();
     QStringList filePathList = readHistoryRecordofFilePath();
     QList<int> linesList;
@@ -3267,6 +3269,12 @@ void TextEdit::setIsFileOpen()
 
         m_listBookmark << line;
     }
+}
+
+void TextEdit::setTextFinished()
+{
+    m_bIsFileOpen = false;
+    m_nLines = blockCount();
 }
 
 QStringList TextEdit::readHistoryRecord()
@@ -3346,7 +3354,7 @@ void TextEdit::writeHistoryRecord()
 //            qDebug() << "writeHistoryRecord()" <<  filePathandBookmarkLine + ")}" + history;
             m_settings->settings->option("advance.editor.browsing_history_file")->setValue(filePathandBookmarkLine + ")}" + history);
         } else {
-            history.remove(historyList.first());
+            history.remove(historyList.last());
             m_settings->settings->option("advance.editor.browsing_history_file")->setValue(filePathandBookmarkLine + ")}" + history);
         }
     } else {

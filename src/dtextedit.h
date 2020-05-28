@@ -208,6 +208,7 @@ public:
     void moveToNextBookMark();
     void checkBookmarkLineMove();
     void setIsFileOpen();
+    void setTextFinished();
     QStringList readHistoryRecord();
     QStringList readHistoryRecordofBookmark();
     QStringList readHistoryRecordofFilePath();
@@ -438,6 +439,7 @@ private:
     QFont m_fontLineNumberArea;
     QList<int> m_listBookmark;
     int m_nLines;
+    bool m_bIsFileOpen;
 
     QList<int> m_listFlodFlag;
     QList<int> m_listFlodIconPos;
