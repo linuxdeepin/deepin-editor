@@ -836,39 +836,36 @@ void TextEdit::scrollLineDown()
 void TextEdit::scrollUp()
 {
     QScrollBar *scrollbar = verticalScrollBar();
+    scrollbar->setValue(scrollbar->value() - scrollbar->pageStep());
+    int lines = this->height() / fontMetrics().height();
 
-    int lines = rect().height() / fontMetrics().height();
-
-    scrollbar->setValue(scrollbar->value() + lines);
-
-    if (scrollbar->value() >= getCurrentLine()) {
-        auto moveMode = m_cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
-
-        int line = scrollbar->value();
-        QTextCursor lineCursor(document()->findBlockByLineNumber(line - 1)); // line - 1 because line number starts from 0
-
-        QTextCursor cursor = textCursor();
-        cursor.setPosition(lineCursor.position(), moveMode);
-        setTextCursor(cursor);
-    }
+    auto moveMode = m_cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
+    QTextCursor lineCursor(document()->findBlockByLineNumber(getCurrentLine() - lines));
+    QTextCursor cursor = textCursor();
+    cursor.setPosition(lineCursor.position(), moveMode);
+    setTextCursor(cursor);
 }
 
 void TextEdit::scrollDown()
 {
     QScrollBar *scrollbar = verticalScrollBar();
-
-    int lines = rect().height() / fontMetrics().height();
-
-    scrollbar->setValue(scrollbar->value() - lines);
+    scrollbar->setValue(scrollbar->value() + scrollbar->pageStep());
+    int lines = this->height() / fontMetrics().height();
 
     auto moveMode = m_cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
-
-    int line = scrollbar->value() + lines;
-    QTextCursor lineCursor(document()->findBlockByLineNumber(line - 1)); // line - 1 because line number starts from 0
-
+    int tem = document()->blockCount();
+    if(getCurrentLine() + lines <=tem ){
+    QTextCursor lineCursor(document()->findBlockByLineNumber(getCurrentLine() + lines));
     QTextCursor cursor = textCursor();
     cursor.setPosition(lineCursor.position(), moveMode);
     setTextCursor(cursor);
+}
+    else {
+        QTextCursor lineCursor(document()->findBlockByLineNumber(tem));
+        QTextCursor cursor = textCursor();
+        cursor.setPosition(lineCursor.position(), moveMode);
+        setTextCursor(cursor);
+    }
 }
 
 void TextEdit::duplicateLine()
