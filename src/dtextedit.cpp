@@ -59,7 +59,7 @@
 #define STYLE_COLOR_1 "#FFA503"
 #define STYLE_COLOR_2 "#FF1C49"
 #define STYLE_COLOR_3 "#9023FC"
-#define STYLE_COLOR_4 "#05EA6B"
+#define STYLE_COLOR_4 "#3468FF"
 
 static inline bool isModifier(QKeyEvent *e)
 {
