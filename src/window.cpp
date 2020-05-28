@@ -756,7 +756,6 @@ bool Window::saveFile()
             // 为空文件更新保存后的标签名称，以及其对应的文件路径
             m_tabbar->updateTab(m_tabbar->currentIndex(), new_path, info.fileName());
         }
-        removeWrapper(new_path, true);
     }
     // save normal file.
     else {
