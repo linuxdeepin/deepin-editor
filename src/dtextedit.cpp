@@ -1848,25 +1848,58 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
     QString flodImagePath = ":/images/u-" + theme + ".svg";
     QImage Unfoldimage(unflodImagePath);
     QImage foldimage(flodImagePath);
+    QImage scaleFoldImage;
+    QImage scaleunFoldImage;
+    int imageTop = 0;//图片绘制位置
+    int fontHeight = fontMetrics().height();
+    double nfoldImageHeight = fontHeight;
+
     int bottom = top + document()->documentLayout()->blockBoundingRect(block).height();
     while (block.isValid() && top <= event->rect().bottom()) {
         if (/*block.isVisible() && */bottom >= event->rect().top()) {
             if (document()->findBlockByNumber(blockNumber).text().contains("{")) {
+                if (fontHeight > foldimage.height()) {
+
+                    if (document()->documentLayout()->blockBoundingRect(block).height() > 1.5 * fontHeight) {
+
+                        imageTop = top + qFabs(fontHeight - foldimage.height()) / 2;
+                    } else {
+
+                        imageTop = top + qFabs(document()->documentLayout()->blockBoundingRect(block).height() - foldimage.height()) / 2;
+                    }
+
+                    scaleFoldImage = foldimage;
+                    scaleunFoldImage = Unfoldimage;
+                } else {
+                    if (document()->documentLayout()->blockBoundingRect(block).height() > 1.5 * fontHeight) {
+
+                        imageTop = top - qFabs(fontHeight - foldimage.height()) / 2;
+                    } else {
+
+                        imageTop = top - qFabs(document()->documentLayout()->blockBoundingRect(block).height() - foldimage.height()) / 2;
+                    }
+
+                    //imageTop = startPoint + qFabs(document()->documentLayout()->blockBoundingRect(lineBlock).height() - image.height())/2;
+                    double scale = nfoldImageHeight / foldimage.height();
+                    double nScaleWidth = scale * foldimage.height() * foldimage.height() / foldimage.width();
+                    scaleFoldImage = foldimage.scaled(scale * foldimage.height(), nScaleWidth);
+                    scaleunFoldImage = Unfoldimage.scaled(scale * Unfoldimage.height(), nScaleWidth);
+                }
                 if (document()->findBlockByNumber(blockNumber).text().trimmed().startsWith("{")) {
                     if (document()->findBlockByNumber(blockNumber).isVisible()) {
-                        painter.drawImage(0, top - document()->documentLayout()->blockBoundingRect(block).height(), foldimage);
+                        painter.drawImage(5, imageTop - document()->documentLayout()->blockBoundingRect(block).height(), scaleFoldImage);
                     } else {
-                        painter.drawImage(0, top - document()->documentLayout()->blockBoundingRect(block.previous()).height(), Unfoldimage);
+                        painter.drawImage(5, imageTop - document()->documentLayout()->blockBoundingRect(block.previous()).height(), scaleunFoldImage);
                     }
                     m_listFlodFlag.push_back(blockNumber);
                     m_listFlodIconPos.append(blockNumber - 1);
                 } else {
                     if (document()->findBlockByNumber(blockNumber + 1).isVisible()) {
                         if (document()->findBlockByNumber(blockNumber).isVisible())
-                            painter.drawImage(0, top, foldimage);
+                            painter.drawImage(5, imageTop, scaleFoldImage);
                     } else {
                         if (document()->findBlockByNumber(blockNumber).isVisible())
-                            painter.drawImage(0, top, Unfoldimage);
+                            painter.drawImage(5, imageTop, scaleunFoldImage);
                     }
                     m_listFlodIconPos.append(blockNumber);
                 }
@@ -2928,17 +2961,17 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
     int fontHeight = fontMetrics().height();
     double nBookmarkLineHeight = fontHeight;
 
-    foreach (auto line, m_listBookmark) {
+//    foreach (auto line, m_listBookmark) {
 
-        if (line <= 0) {
-            m_listBookmark.replace(m_listBookmark.indexOf(line),1);
-        }
+//        if (line <= 0) {
+//            m_listBookmark.replace(m_listBookmark.indexOf(line),1);
+//        }
 
-        lineBlock = document()->findBlockByNumber(line - 1);
-        if (nBookmarkLineHeight > document()->documentLayout()->blockBoundingRect(lineBlock).height()) {
-            nBookmarkLineHeight = document()->documentLayout()->blockBoundingRect(lineBlock).height();
-        }
-    }
+//        lineBlock = document()->findBlockByNumber(line - 1);
+//        if (nBookmarkLineHeight > document()->documentLayout()->blockBoundingRect(lineBlock).height()) {
+//            nBookmarkLineHeight = document()->documentLayout()->blockBoundingRect(lineBlock).height();
+//        }
+//    }
 
     foreach (auto line, m_listBookmark) {
 
