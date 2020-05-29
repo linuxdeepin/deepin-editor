@@ -1856,23 +1856,23 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
             if (document()->findBlockByNumber(blockNumber).text().contains("{")) {
                 if (fontHeight > foldimage.height()) {
 
-                    if (document()->documentLayout()->blockBoundingRect(block).height() > 1.5 * fontHeight) {
+                    if (document()->documentLayout()->blockBoundingRect(block.previous()).height() > 1.5 * fontHeight) {
 
                         imageTop = top + qFabs(fontHeight - foldimage.height()) / 2;
                     } else {
 
-                        imageTop = top + qFabs(document()->documentLayout()->blockBoundingRect(block).height() - foldimage.height()) / 2;
+                        imageTop = top + qFabs(document()->documentLayout()->blockBoundingRect(block.previous()).height() - foldimage.height()) / 2;
                     }
 
                     scaleFoldImage = foldimage;
                     scaleunFoldImage = Unfoldimage;
                 } else {
-                    if (document()->documentLayout()->blockBoundingRect(block).height() > 1.5 * fontHeight) {
+                    if (document()->documentLayout()->blockBoundingRect(block.previous()).height() > 1.5 * fontHeight) {
 
                         imageTop = top - qFabs(fontHeight - foldimage.height()) / 2;
                     } else {
 
-                        imageTop = top - qFabs(document()->documentLayout()->blockBoundingRect(block).height() - foldimage.height()) / 2;
+                        imageTop = top - qFabs(document()->documentLayout()->blockBoundingRect(block.previous()).height() - foldimage.height()) / 2;
                     }
 
                     //imageTop = startPoint + qFabs(document()->documentLayout()->blockBoundingRect(lineBlock).height() - image.height())/2;
@@ -1882,8 +1882,9 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                     scaleunFoldImage = Unfoldimage.scaled(scale * Unfoldimage.height(), nScaleWidth);
                 }
                 if (document()->findBlockByNumber(blockNumber).text().trimmed().startsWith("{")) {
+
                     if (document()->findBlockByNumber(blockNumber).isVisible()) {
-                        painter.drawImage(5, imageTop - document()->documentLayout()->blockBoundingRect(block).height(), scaleFoldImage);
+                        painter.drawImage(5, imageTop - document()->documentLayout()->blockBoundingRect(block.previous()).height(), scaleFoldImage);
                     } else {
                         painter.drawImage(5, imageTop - document()->documentLayout()->blockBoundingRect(block.previous()).height(), scaleunFoldImage);
                     }
