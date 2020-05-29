@@ -5,8 +5,10 @@ ShowFlodCodeWidget::ShowFlodCodeWidget(DWidget *parent)
 {
     QVBoxLayout *pMainLayout = new QVBoxLayout(this);
     m_pDArrowRectangle = new DFrame(this);
+    m_pDArrowRectangle->setFrameRounded(true);
     QVBoxLayout *pSubLayout = new QVBoxLayout(this);
     m_pContentEdit = new DTextEdit(this);
+    m_pContentEdit->setWordWrapMode(QTextOption::WordWrap);
     pSubLayout->addWidget(m_pContentEdit);
     m_pDArrowRectangle->setLayout(pSubLayout);
     pMainLayout->addWidget(m_pDArrowRectangle);
@@ -32,7 +34,7 @@ void ShowFlodCodeWidget::textAreaChanged()
     QTextDocument *document = m_pContentEdit->document();
     document->adjustSize();
     if (document) {
-        int newwidth = document->size().width() + 10;//10
+        int newwidth = document->size().width() + 20;//10
         int newheight = document->size().height() + 20;//20
         if (newwidth != m_pContentEdit->width()) {
             m_pContentEdit->setFixedWidth(newwidth);
@@ -42,6 +44,7 @@ void ShowFlodCodeWidget::textAreaChanged()
             m_pContentEdit->setFixedHeight(newheight);
 
         }
+        this->resize(m_pContentEdit->width() + 35, m_pContentEdit->height() + 35);
 
     }
 

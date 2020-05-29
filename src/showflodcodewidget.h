@@ -16,7 +16,7 @@ public:
     ~ShowFlodCodeWidget();
     void appendText(QString strText);
     void clear();
-private slots:
+public slots:
     void textAreaChanged();
 
 private:
