@@ -3004,7 +3004,7 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
                     }
 
                     scaleImage = image;
-                } else {         
+                } else {
                     if (document()->documentLayout()->blockBoundingRect(lineBlock).height() > 1.5*fontHeight) {
 
                         imageTop = startPoint - qFabs(fontHeight - image.height())/2;
@@ -3396,15 +3396,34 @@ void TextEdit::isMarkCurrentLine(bool isMark, QString strColor)
 {
     if (isMark) {
         QTextEdit::ExtraSelection selection;
+//        selection.format.setBackground(QColor(strColor));
+//        QTextCursor tmpCursor(document());
+////        QTextDocument::FindFlags flags;
+////        flags &= QTextDocument::FindCaseSensitively;
+////        tmpCursor = document()->find(textCursor().selectedText(), textCursor().position() - textCursor().selectedText().length(), flags);
+////        selection.format.setProperty(QTextFormat::FullWidthSelection,true);
+
+
+//        tmpCursor = this->textCursor();
+
+//        tmpCursor.setKeepPositionOnInsert(true);
+//        selection.cursor = tmpCursor;
+
+//        this->textCursor().select(QTextCursor::WordUnderCursor);
+
+        QTextCursor startCursor = textCursor();
         selection.format.setBackground(QColor(strColor));
-        QTextCursor tmpCursor(document());
-//        QTextDocument::FindFlags flags;
-//        flags &= QTextDocument::FindCaseSensitively;
-//        tmpCursor = document()->find(textCursor().selectedText(), textCursor().position() - textCursor().selectedText().length(), flags);
-        selection.format.setProperty(QTextFormat::FullWidthSelection,true);
-        tmpCursor = this->textCursor();
+        QTextCursor tmpCursor = this->textCursor();
+        if(!tmpCursor.hasSelection()) {
+            tmpCursor.movePosition(QTextCursor::StartOfLine,QTextCursor::MoveAnchor);
+            tmpCursor.movePosition(QTextCursor::EndOfLine,QTextCursor::KeepAnchor);
+
+            setTextCursor(tmpCursor);
+        }
+
         selection.cursor = tmpCursor;
         m_wordMarkSelections.append(selection);
+        setTextCursor(startCursor);
 
     } else {
 //        m_wordMarkSelections.removeLast();
@@ -4105,7 +4124,7 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
         if(m_readOnlyMode){
             m_dictationAction->setEnabled(false);
         }
-		
+
         m_rightMenu->addAction(m_translateAction);
         m_translateAction->setEnabled(false);
         bool translateState = false;
@@ -4139,15 +4158,17 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
 //    if (m_wordMarkSelections.size() > 1) {
 //        m_rightMenu->addAction(m_cancleLastMark);
 //    }
-    m_rightMenu->addSeparator();
-    m_rightMenu->addMenu(m_colorMarkMenu);
-    m_colorMarkMenu->clear();
-    m_colorMarkMenu->addMenu(m_markCurrentLine);
-    if (m_wordMarkSelections.size() > 0) {
-        m_colorMarkMenu->addAction(m_cancleLastMark);
+    if(! this->document()->isEmpty()) {
+        m_rightMenu->addSeparator();
+        m_rightMenu->addMenu(m_colorMarkMenu);
+        m_colorMarkMenu->clear();
+        m_colorMarkMenu->addMenu(m_markCurrentLine);
+        if (m_wordMarkSelections.size() > 0) {
+            m_colorMarkMenu->addAction(m_cancleLastMark);
+        }
+        m_colorMarkMenu->addAction(m_cancleMarkAllLine);
+        m_colorMarkMenu->addMenu(m_markAllLine);
     }
-    m_colorMarkMenu->addAction(m_cancleMarkAllLine);
-    m_colorMarkMenu->addMenu(m_markAllLine);
 
 //    if (textCursor().hasSelection()) {
 //        m_colorMarkMenu->addMenu(m_markCurrentLine);
