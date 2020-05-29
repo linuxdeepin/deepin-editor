@@ -1771,8 +1771,7 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
             m_fontLineNumberArea.setPointSize(currentFont().pointSize() - 1);
             painter.setFont(m_fontLineNumberArea);
 
-            if (fontMetrics().height() *1.5 > document()->documentLayout()->blockBoundingRect(block).height()
-                    && document()->documentLayout()->blockBoundingRect(block).height() > fontMetrics().height()) {
+            if (fontMetrics().height() *1.5 > document()->documentLayout()->blockBoundingRect(block).height()) {
 
                 painter.drawText(0, top,
                                  lineNumberArea->width(), document()->documentLayout()->blockBoundingRect(block).height(),
