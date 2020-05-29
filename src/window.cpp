@@ -503,6 +503,7 @@ void Window::closeTab()
             } else if (index == 2) {
                 // may to press CANEL button in the save dialog.
                 if (saveFile()) {
+                    removeWrapper(filePath, true);
                     m_tabbar->closeCurrentTab();                  
                 }
             }
