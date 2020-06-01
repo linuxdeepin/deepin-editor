@@ -1879,22 +1879,12 @@ void Window::closeEvent(QCloseEvent *e)
     for (EditWrapper *wrapper : m_wrappers) {
         // save all the draft documents.
         if (QFileInfo(wrapper->textEditor()->filepath).dir().absolutePath() == m_blankFileDir) {
-            if (wrapper->saveFile()) {
-                //wrapper->deleteLater();
-                // remove all signals on this connection.
-                disconnect(wrapper->textEditor(), 0, this, 0);
-                delete wrapper;
-            }
+            wrapper->saveFile();
             continue;
         }
 
         if (wrapper->textEditor()->document()->isModified()) {
             needSaveList << wrapper;
-        } else {
-            //wrapper->deleteLater();
-            // remove all signals on this connection.
-            disconnect(wrapper->textEditor(), 0, this, 0);
-            delete wrapper;
         }
     }
 
@@ -1904,18 +1894,25 @@ void Window::closeEvent(QCloseEvent *e)
         connect(dialog, &DDialog::buttonClicked, this, [ = ](int index) {
             dialog->hide();
 
-            for (EditWrapper *wrapper : needSaveList) {
-                if (index == 2) {
-                    // save files.
-                    if (wrapper->saveFile()) {
-//                        wrapper->deleteLater();
-                        // remove all signals on this connection.
+            if (index == 2) {
+                // save files.
+                for (EditWrapper *wrapper : m_wrappers) {
+
+                    if (!wrapper->textEditor()->document()->isModified()) {
                         disconnect(wrapper->textEditor(), 0, this, 0);
                         delete wrapper;
+                    } else {
+                        if (wrapper->saveFile()) {
+                            //wrapper->deleteLater();
+                            // remove all signals on this connection.
+                            disconnect(wrapper->textEditor(), 0, this, 0);
+                            delete wrapper;
+                        }
                     }
-                } else {
-//                    wrapper->deleteLater();
-                    // remove all signals on this connection.
+                }
+
+            } else if (index == 1){
+                for (EditWrapper *wrapper : m_wrappers) {
                     disconnect(wrapper->textEditor(), 0, this, 0);
                     delete wrapper;
                 }
