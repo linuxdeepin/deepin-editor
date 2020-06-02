@@ -65,7 +65,8 @@ BottomBar::BottomBar(QWidget *parent)
     m_cursorStatus->setText(qApp->translate("EditWrapper", "INSERT"));
     m_positionLabel->setText(QString("%1 %2  %3 %4").arg(m_rowStr, "1",
                                                           m_columnStr, "1"));
-    m_charCountLabel->setText(m_chrCountStr.arg("..."));
+//    m_charCountLabel->setText(m_chrCountStr.arg("..."));
+    m_charCountLabel->setText(m_chrCountStr.arg("0"));
     m_encodeMenu->addActions(Utils::getEncodeList());
     m_encodeMenu->setCurrentText("UTF-8");
     m_highlightMenu->setCurrentTextOnly(qApp->translate("TextEdit", "None"));
