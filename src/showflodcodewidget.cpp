@@ -35,7 +35,7 @@ void ShowFlodCodeWidget::textAreaChanged()
     document->adjustSize();
     if (document) {
         int newwidth = document->size().width() + 20;//10
-        int newheight = document->size().height() + 20;//20
+        int newheight = document->size().height();
         if (newwidth != m_pContentEdit->width()) {
             m_pContentEdit->setFixedWidth(newwidth);
 
