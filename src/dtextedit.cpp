@@ -2836,43 +2836,61 @@ void TextEdit::hideCursorBlink()
 
 void TextEdit::setReadOnlyPermission(bool permission)
 {
-    if (m_bReadOnlyPermission == true)
-    {
+    if(m_bReadOnlyPermission){
         m_bReadOnlyPermission = permission;
-        if (m_bReadOnlyPermission == true)
-        {
-            if(m_readOnlyMode == false)
-            {
-                m_readOnlyMode = true;
-            }
+        m_readOnlyMode = permission;
+    }
+    else if(!m_bReadOnlyPermission){
+        m_bReadOnlyPermission = permission;
+        if(permission)
+            m_readOnlyMode = permission;
+    }
 
-            emit cursorModeChanged(Readonly);
-        }
-        else
-        {
-            if(m_readOnlyMode == true)
-            {
-                m_readOnlyMode = false;
-            }
-            emit cursorModeChanged(Insert);
-        }
+    if(permission){
+        setReadOnly(permission);
+        emit cursorModeChanged(Readonly);
     }
-    else if (m_bReadOnlyPermission == false)
-    {
-        m_bReadOnlyPermission = permission;
-        if (m_bReadOnlyPermission == true)
-        {
-            if(m_readOnlyMode == false)
-            {
-                m_readOnlyMode = true;
-            }
-            emit cursorModeChanged(Readonly);
-        }
-        else
-        {
-            //emit cursorModeChanged(Insert);
-        }
+    else if(m_bReadOnlyPermission){
+        emit cursorModeChanged(Insert);
     }
+
+//    if (m_bReadOnlyPermission == true)
+//    {
+//        m_bReadOnlyPermission = permission;
+//        if (m_bReadOnlyPermission == true)
+//        {
+//            if(m_readOnlyMode == false)
+//            {
+//                m_readOnlyMode = true;
+//            }
+
+//            emit cursorModeChanged(Readonly);
+//        }
+//        else
+//        {
+//            if(m_readOnlyMode == true)
+//            {
+//                m_readOnlyMode = false;
+//            }
+//            emit cursorModeChanged(Insert);
+//        }
+//    }
+//    else if (m_bReadOnlyPermission == false)
+//    {
+//        m_bReadOnlyPermission = permission;
+//        if (m_bReadOnlyPermission == true)
+//        {
+//            if(m_readOnlyMode == false)
+//            {
+//                m_readOnlyMode = true;
+//            }
+//            emit cursorModeChanged(Readonly);
+//        }
+//        else
+//        {
+//            //emit cursorModeChanged(Insert);
+//        }
+//    }
 
 
 }
