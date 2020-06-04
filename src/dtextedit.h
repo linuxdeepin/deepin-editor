@@ -220,6 +220,8 @@ public:
     void isMarkAllLine(bool isMark, QString strColor = "");
     void cancleLastMark();
     void markSelectWord();
+
+    bool bIsSetLineNumberWidth = true;
 	
 public:
 	bool m_pIsShowCodeFoldArea;
@@ -442,7 +444,6 @@ private:
     QList<int> m_listBookmark;
     int m_nLines;
     bool m_bIsFileOpen;
-    bool m_pIsFirstSetLeftAreaWidth = true;
 
     QList<int> m_listFlodFlag;
     QList<int> m_listFlodIconPos;
