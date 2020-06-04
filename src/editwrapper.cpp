@@ -714,17 +714,19 @@ void EditWrapper::slotTextChange()
 }
 
 //yanyuhan
-void EditWrapper::setLineNumberShow(bool bIsShow)
+void EditWrapper::setLineNumberShow(bool bIsShow ,bool bIsFirstShow)
 {
-    if(bIsShow) {
+    if(bIsShow && !bIsFirstShow) {
         int lineNumberAreaWidth = m_textEdit->lineNumberArea->width();
         int leftAreaWidth = m_textEdit->m_pLeftAreaWidget->width();
         m_textEdit->lineNumberArea->show();
         m_textEdit->m_pLeftAreaWidget->setFixedWidth(leftAreaWidth + lineNumberAreaWidth);
-    } else {
+
+    } else if(!bIsShow) {
         int lineNumberAreaWidth = m_textEdit->lineNumberArea->width();
         int leftAreaWidth = m_textEdit->m_pLeftAreaWidget->width();
         m_textEdit->lineNumberArea->hide();
         m_textEdit->m_pLeftAreaWidget->setFixedWidth(leftAreaWidth - lineNumberAreaWidth);
+
     }
 }

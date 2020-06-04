@@ -575,7 +575,6 @@ EditWrapper *Window::createEditor()
     wrapper->textEditor()->setFontFamily(m_settings->settings->option("base.font.family")->value().toString());
     wrapper->textEditor()->setModified(false);
     wrapper->textEditor()->setLineWrapMode(wordWrap);
-//    wrapper->setLineNumberShow(m_settings->settings->option("base.font.showlinenumber")->value().toBool());
     setFontSizeWithConfig(wrapper);
     wrapper->textEditor()->updateLineNumber();
 
@@ -1701,7 +1700,7 @@ void Window::showNewEditor(EditWrapper *wrapper)
     m_editorWidget->addWidget(wrapper);
     m_editorWidget->setCurrentWidget(wrapper);
     //yanyuhan 设置行号显示
-    wrapper->setLineNumberShow(m_settings->settings->option("base.font.showlinenumber")->value().toBool());
+    wrapper->setLineNumberShow(m_settings->settings->option("base.font.showlinenumber")->value().toBool(),true);
     wrapper->textEditor()->setCodeFlodFlagVisable(m_settings->settings->option("base.font.codeflod")->value().toBool(), true);
 }
 

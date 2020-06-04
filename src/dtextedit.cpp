@@ -26,8 +26,7 @@
 #include "editwrapper.h"
 #include "widgets/bottombar.h"
 #include "leftareaoftextedit.h"
-#include "bookmarkwidget.h"
-#include "codeflodarea.h"
+
 #include "showflodcodewidget.h"
 
 #include <KF5/KSyntaxHighlighting/definition.h>
@@ -1943,10 +1942,13 @@ void TextEdit::updateLineNumber()
 
 //    m_pLeftAreaWidget->setFixedWidth(blockSize * fontMetrics().width('9') + m_lineNumberPaddingX * 4);
 
-    if(m_pIsShowCodeFoldArea) {
-        m_pLeftAreaWidget->setFixedWidth(23 + blockSize * fontMetrics().width('9') + m_lineNumberPaddingX * 4);
-    } else {
-        m_pLeftAreaWidget->setFixedWidth(blockSize * fontMetrics().width('9') + m_lineNumberPaddingX * 4);
+    if(m_pIsFirstSetLeftAreaWidth) {
+        if(m_pIsShowCodeFoldArea) {
+            m_pLeftAreaWidget->setFixedWidth(23 + blockSize * fontMetrics().width('9') + m_lineNumberPaddingX * 4);
+        } else {
+            m_pLeftAreaWidget->setFixedWidth(blockSize * fontMetrics().width('9') + m_lineNumberPaddingX * 4);
+        }
+        m_pIsFirstSetLeftAreaWidth = false;
     }
 
     m_pLeftAreaWidget->m_bookMarkArea->update();

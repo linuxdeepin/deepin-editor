@@ -1,4 +1,4 @@
-/* -*- Mode: C++; indent-tabs-mode: nil; tab-width: 4 -*-
+ /* -*- Mode: C++; indent-tabs-mode: nil; tab-width: 4 -*-
  * -*- coding: utf-8 -*-
  *
  * Copyright (C) 2011 ~ 2018 Deepin, Inc.
@@ -26,6 +26,8 @@
 #include <KF5/KSyntaxHighlighting/repository.h>
 #include "uncommentselection.h"
 #include "linenumberarea.h"
+#include "bookmarkwidget.h"
+#include "codeflodarea.h"
 
 #include "settings.h"
 #include <QAction>
@@ -440,6 +442,7 @@ private:
     QList<int> m_listBookmark;
     int m_nLines;
     bool m_bIsFileOpen;
+    bool m_pIsFirstSetLeftAreaWidth = true;
 
     QList<int> m_listFlodFlag;
     QList<int> m_listFlodIconPos;

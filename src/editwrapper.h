@@ -80,7 +80,7 @@ public:
     BottomBar *m_bottomBar;
     bool getTextChangeFlag();
     void setTextChangeFlag(bool bFlag);
-    void setLineNumberShow(bool bIsShow);
+    void setLineNumberShow(bool bIsShow,bool bIsFirstShow = false);
 
 signals:
     void requestSaveAs();
