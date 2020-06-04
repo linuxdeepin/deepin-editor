@@ -3567,6 +3567,7 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                 addOrDeleteBookMark();
             }
         } else if (object == m_pLeftAreaWidget->m_flodArea) {
+            m_foldCodeShow->hide();
             if (mouseEvent->button() == Qt::LeftButton) {
                 int line = getLineFromPoint(mouseEvent->pos());
                 if (document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line).text().contains("{")
