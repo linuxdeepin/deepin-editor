@@ -467,6 +467,7 @@ void Tabbar::mousePressEvent(QMouseEvent *e)
     {
         emit tabCloseRequested(tabAt(QPoint(e->x(), e->y())));
     }
+    DTabBar::mousePressEvent(e);
 }
 
 void Tabbar::handleTabMoved(int fromIndex, int toIndex)
