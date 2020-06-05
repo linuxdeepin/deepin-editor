@@ -2943,6 +2943,9 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
     painter.fillRect(event->rect(), lineNumberAreaBackgroundColor);
 
     int blockNumber = getFirstVisibleBlockId();
+    if(blockNumber > 0) {
+        blockNumber -= 1;
+    }
     QTextBlock block = document()->findBlockByNumber(blockNumber);
     QTextBlock prev_block = (blockNumber > 0) ? document()->findBlockByNumber(blockNumber-1) : block;
     int translate_y = (blockNumber > 0) ? -verticalScrollBar()->sliderPosition() : 0;
@@ -2958,22 +2961,14 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
         additional_margin = document()->documentMargin() - this->verticalScrollBar()->sliderPosition();
     else
         // Getting the height of the visible part of the previous "non entirely visible" block
-        additional_margin = document()->documentLayout()->blockBoundingRect(prev_block).toRect()
-                .translated(0, translate_y).intersected(this->viewport()->geometry()).height();
+//        additional_margin = document()->documentLayout()->blockBoundingRect(prev_block).toRect()
+//                .translated(0, translate_y).intersected(this->viewport()->geometry()).height();
+
+        additional_margin = document()->documentLayout()->blockBoundingRect(prev_block).toRect().translated(0, translate_y).bottom();
 
     // Shift the starting point
     additional_margin += 3;
     top += additional_margin;
-
-    int frontLine = 0;//滚动条滚过的行
-    int linesHeight = verticalScrollBar()->value();//滚动条滚过的行高
-    block = document()->findBlockByNumber(0);//第一行文本块
-
-    while (linesHeight > 0) {
-        linesHeight -= document()->documentLayout()->blockBoundingRect(block).height();
-        block = block.next();
-        frontLine++;
-    }
 
     QTextBlock lineBlock;//第几行文本块
     QImage image(":/images/bookmark.svg");
@@ -2998,7 +2993,7 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
 
     foreach (auto line, m_listBookmark) {
 
-        startLine = frontLine + 1;
+        startLine = blockNumber + 1;
 
         if (line < startLine) {
 
@@ -3056,6 +3051,10 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
 int TextEdit::getLineFromPoint(const QPoint &point)
 {
     int blockNumber = getFirstVisibleBlockId();
+    if(blockNumber > 0)
+    {
+        blockNumber -= 1;
+    }
     QTextBlock block = document()->findBlockByNumber(blockNumber);
     QTextBlock prev_block = (blockNumber > 0) ? document()->findBlockByNumber(blockNumber-1) : block;
     int translate_y = (blockNumber > 0) ? -verticalScrollBar()->sliderPosition() : 0;
@@ -3070,23 +3069,13 @@ int TextEdit::getLineFromPoint(const QPoint &point)
         additional_margin = document()->documentMargin() -1 - this->verticalScrollBar()->sliderPosition();
     else
         // Getting the height of the visible part of the previous "non entirely visible" block
-        additional_margin = document()->documentLayout()->blockBoundingRect(prev_block)
-                .translated(0, translate_y).intersected(this->viewport()->geometry()).height();
+//        additional_margin = document()->documentLayout()->blockBoundingRect(prev_block).toRect()
+//                .translated(0, translate_y).intersected(this->viewport()->geometry()).height();
+        additional_margin = document()->documentLayout()->blockBoundingRect(prev_block).toRect()
+                .translated(0, translate_y).bottom();
 
     // Shift the starting point
     top += additional_margin;
-
-    //计算行号
-    int linesHeight = verticalScrollBar()->value();//滚动条滚过的行高
-    int frontLine = 0;//滚动条滚过的行
-    block = document()->findBlockByNumber(0);//第一行文本块
-
-    while (linesHeight > 0) {
-
-        linesHeight -= document()->documentLayout()->blockBoundingRect(block).height();
-        block = block.next();
-        frontLine++;
-    }
 
     int cursorPoint = point.y() - top;//鼠标点击位置 - 起始位置
     int line = 0;//当前可见区域第几行
@@ -3095,14 +3084,14 @@ int TextEdit::getLineFromPoint(const QPoint &point)
     while (cursorPoint >= 0) {
         cursorPoint -= document()->documentLayout()->blockBoundingRect(block).height();
         block = block.next();
-        if(line + frontLine > blockCount())
+        if(line + blockNumber > blockCount())
         {
-            line++;
-            return line + frontLine;;
+            //line++;
+            return line + blockNumber;;
         }
         line++;
     }
-    return line + frontLine;
+    return line + blockNumber;
 }
 
 void TextEdit::addOrDeleteBookMark()
