@@ -59,6 +59,7 @@
 #define STYLE_COLOR_2 "#FF1C49"
 #define STYLE_COLOR_3 "#9023FC"
 #define STYLE_COLOR_4 "#3468FF"
+#define FOLD_HIGHLIGHT_COLOR "#0081FF"
 
 static inline bool isModifier(QKeyEvent *e)
 {
@@ -1690,6 +1691,7 @@ void TextEdit::renderAllSelections()
     selections.append(m_wordUnderCursorSelection);
     selections.append(m_beginBracketSelection);
     selections.append(m_endBracketSelection);
+    selections.append(m_markFoldHighLightSelections);
 //    selections.append(m_markAllSelection);
 
     setExtraSelections(selections);
@@ -3207,9 +3209,8 @@ void TextEdit::flodOrUnflodCurrentLevel(bool isFlod)
 
 }
 
-QString TextEdit::getHideRowContent(int iLine)
+void TextEdit::getHideRowContent(int iLine)
 {
-    QString resultText;
     bool isFirstLine = true;
     QTextBlock block = document()->findBlockByNumber(iLine);
     int existLeftSubbrackets = 0, existRightSubbrackets = 0;
@@ -3250,9 +3251,44 @@ QString TextEdit::getHideRowContent(int iLine)
         block = block.next();
         iLine++;
     }
+}
 
-    return  resultText;
+int TextEdit::getHighLightRowContentLineNum(int iLine)
+{
+    bool isFirstLine = true;
+    QTextBlock block = document()->findBlockByNumber(iLine);
+    int existLeftSubbrackets = 0, existRightSubbrackets = 0;
+    while (block.isValid()) {
+        if (block.text().contains("{") && !block.text().contains("}")) {
+            existLeftSubbrackets ++;
+        } else if (block.text().contains("}") && !block.text().contains("{")) {
+            existRightSubbrackets ++;
+        } else if (block.text().contains("}") && block.text().contains("{")) {
+            for (int i = 0 ; i < block.text().size() ; ++i) {
+                if (block.text().at(i) == "{") {
+                    existLeftSubbrackets++;
+                } else if (block.text().at(i) == "}" && !isFirstLine) {
+                    existRightSubbrackets++;
+                }
+                if (existLeftSubbrackets == existRightSubbrackets &&
+                        existLeftSubbrackets != 0) {
+                    break;
+                }
+            }
+        }
 
+        if (existLeftSubbrackets == existRightSubbrackets &&
+                existLeftSubbrackets != 0) {
+            if (!block.text().contains("{")) {
+                break;
+            } else {
+                break;
+            }
+        }
+        block = block.next();
+        iLine++;
+    }
+    return  iLine;
 }
 
 int TextEdit::getLinePosByLineNum(int iLine)
@@ -3559,6 +3595,8 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
             m_foldCodeShow->hide();
             if (mouseEvent->button() == Qt::LeftButton) {
                 int line = getLineFromPoint(mouseEvent->pos());
+                m_markFoldHighLightSelections.clear();
+                renderAllSelections();
                 if (document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line).text().contains("{")
                         && document()->findBlockByNumber(line).text().trimmed().startsWith("{")) {
                     getNeedControlLine(line - 1, false);
@@ -3614,17 +3652,40 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                     getHideRowContent(line - 1);
                     m_foldCodeShow->show();
                     m_foldCodeShow->move(0, getLinePosByLineNum(line - 1) + 5);
+                } else {
+                    QTextCursor previousCursor = textCursor();
+                    int ivalue =  this->verticalScrollBar()->value();
+                    int iLine =  getHighLightRowContentLineNum(line - 1);
+                    
+                    QTextEdit::ExtraSelection selection;
+
+                    selection.format.setBackground(QColor(FOLD_HIGHLIGHT_COLOR));
+                    selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+                    QTextBlock startblock = document()->findBlockByNumber(line);
+                    QTextCursor beginCursor(startblock);
+                    beginCursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+                    beginCursor.movePosition(QTextCursor::Down, QTextCursor::KeepAnchor, iLine - line + 1);
+                    //beginCursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+                    setTextCursor(beginCursor);
+                    selection.cursor = textCursor();
+                    m_markFoldHighLightSelections.push_back(selection);
+
+                    renderAllSelections();
+                    setTextCursor(QTextCursor(document()->findBlockByNumber(line - 1)));
+                    this->verticalScrollBar()->setValue(ivalue);
 
                 }
             } else {
+                m_markFoldHighLightSelections.clear();
                 m_foldCodeShow->hide();
-
+                renderAllSelections();
             }
         }
-
     } else if (event->type() == QEvent::HoverLeave) {
         if (object == m_pLeftAreaWidget->m_flodArea) {
+            m_markFoldHighLightSelections.clear();
             m_foldCodeShow->hide();
+            renderAllSelections();
         }
 
     }

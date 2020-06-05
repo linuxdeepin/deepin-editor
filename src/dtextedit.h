@@ -199,7 +199,8 @@ public:
 
     void flodOrUnflodAllLevel(bool isFlod);
     void flodOrUnflodCurrentLevel(bool isFlod);
-    QString getHideRowContent(int iLine);
+    void getHideRowContent(int iLine);
+    int getHighLightRowContentLineNum(int iLine);
     int getLinePosByLineNum(int iLine);
 
     //书签功能相关
@@ -311,6 +312,7 @@ private:
     QTextEdit::ExtraSelection m_wordUnderCursorSelection;
     QList<QTextEdit::ExtraSelection> m_wordMarkSelections;
     QTextEdit::ExtraSelection m_markAllSelection;
+    QList<QTextEdit::ExtraSelection> m_markFoldHighLightSelections;
 
     QTextCursor m_highlightWordCacheCursor;
     QTextCursor m_wordUnderPointerCursor;
