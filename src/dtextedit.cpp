@@ -1794,6 +1794,7 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
 
 void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
 {
+
     m_listFlodFlag.clear();
     m_listFlodIconPos.clear();
     QPainter painter(m_pLeftAreaWidget->m_flodArea);
@@ -1810,8 +1811,6 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
         m_lineNumbersColor.setAlphaF(0.3);
     }
     painter.fillRect(event->rect(), codeFlodAreaBackgroundColor);
-
-
 
     int blockNumber = getFirstVisibleBlockId();
     QTextBlock block = document()->findBlockByNumber(blockNumber);
@@ -3024,7 +3023,6 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
                 }
                 if(fontHeight > image.height())
                 {
-
                     if (document()->documentLayout()->blockBoundingRect(lineBlock).height() > 1.5*fontHeight) {
 
                         imageTop = startPoint + qFabs(fontHeight - image.height())/2;
@@ -3035,24 +3033,29 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
                     }
 
                     scaleImage = image;
+                } else if(fontHeight >= 0.8*image.height()) {
+                    imageTop = startPoint;
+                    double scale = nBookmarkLineHeight/image.height();
+                    double nScaleWidth = scale*image.width();
+                    scaleImage = image.scaled(scale*image.height(),nScaleWidth);
                 } else {
-                    if (document()->documentLayout()->blockBoundingRect(lineBlock).height() > 1.5*fontHeight) {
 
+                    if (document()->documentLayout()->blockBoundingRect(lineBlock).height() > 1.5*fontHeight) {
                         imageTop = startPoint - qFabs(fontHeight - image.height())/2;
                     }
                     else {
-
                         imageTop = startPoint - qFabs(document()->documentLayout()->blockBoundingRect(lineBlock).height() - image.height())/2;
                     }
 
-                    //imageTop = startPoint + qFabs(document()->documentLayout()->blockBoundingRect(lineBlock).height() - image.height())/2;
+//                    imageTop = startPoint + qFabs(document()->documentLayout()->blockBoundingRect(lineBlock).height() - image.height())/2;
+
                     double scale = nBookmarkLineHeight/image.height();
-                    double nScaleWidth = scale*image.height()*image.height()/image.width();
+                    double nScaleWidth = scale*image.width();
                     scaleImage = image.scaled(scale*image.height(),nScaleWidth);
                 }
 
                 painter.drawImage(5,imageTop,scaleImage);
-                qDebug() << "bookMarkAreaPaint:" << line;
+
             }
         }
     }
