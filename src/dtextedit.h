@@ -299,7 +299,7 @@ private:
     void cursorPositionChanged();
     void updateHighlightBrackets(const QChar &openChar, const QChar &closeChar);
     int getFirstVisibleBlockId() const;
-    void getNeedControlLine(int line, bool isVisable);
+    void getNeedControlLine(int line, bool isVisable, int iInitnum = 0, bool isFirstLine = true);
 
 private:
     EditWrapper *m_wrapper;

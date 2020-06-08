@@ -1863,8 +1863,15 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
 
                         imageTop = top + qFabs(fontHeight - foldimage.height()) / 2;
                     } else {
-
-                        imageTop = top + qFabs(document()->documentLayout()->blockBoundingRect(block.previous()).height() - foldimage.height()) / 2;
+                        int blockHeight = 0;
+                        while (block.isValid()) {
+                            if (block.isVisible()) {
+                                blockHeight = document()->documentLayout()->blockBoundingRect(block).height();
+                                break;
+                            }
+                            block = block.next();
+                        }
+                        imageTop = top + qFabs(blockHeight - foldimage.height()) / 2;
                     }
 
                     scaleFoldImage = foldimage;
@@ -1884,7 +1891,7 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                     scaleFoldImage = foldimage.scaled(scale * foldimage.height(), nScaleWidth);
                     scaleunFoldImage = Unfoldimage.scaled(scale * Unfoldimage.height(), nScaleWidth);
                 }
-                if (document()->findBlockByNumber(blockNumber).text().trimmed().startsWith("{")) {
+                if (document()->findBlockByNumber(blockNumber).text().trimmed().startsWith("{") && blockNumber != 0) {
 
                     if (document()->findBlockByNumber(blockNumber).isVisible()) {
                         painter.drawImage(5, imageTop - document()->documentLayout()->blockBoundingRect(block.previous()).height(), scaleFoldImage);
@@ -2154,12 +2161,11 @@ int TextEdit::getFirstVisibleBlockId() const
     return 0;
 }
 
-void TextEdit::getNeedControlLine(int line, bool isVisable)
+void TextEdit::getNeedControlLine(int line, bool isVisable, int iInitnum, bool isFirstLine)
 {
     int iLine = line;
-    bool isFirstLine = true;
     QTextBlock block = document()->findBlockByNumber(iLine);
-    int existLeftSubbrackets = 0, existRightSubbrackets = 0;
+    int existLeftSubbrackets = iInitnum, existRightSubbrackets = 0;
 
     while (block.isValid()) {
 
@@ -3638,6 +3644,16 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                            && !document()->findBlockByNumber(line - 1).text().trimmed().startsWith("{")) {
                     getNeedControlLine(line - 1, true);
                 }
+
+                if (document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line - 1).text().contains("{")
+                        && document()->findBlockByNumber(line - 1).text().trimmed().startsWith("{")) {
+                    getNeedControlLine(line, false, 1, false);
+
+                } else if (!document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line - 1).text().contains("{")
+                           && document()->findBlockByNumber(line - 1).text().trimmed().startsWith("{")) {
+                    getNeedControlLine(line, true, 1, false);
+                }
+
                 m_pLeftAreaWidget->m_flodArea->update();
                 m_pLeftAreaWidget->m_linenumberarea->update();
                 m_pLeftAreaWidget->m_bookMarkArea->update();
