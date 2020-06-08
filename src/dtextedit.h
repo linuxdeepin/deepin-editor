@@ -200,8 +200,9 @@ public:
     void flodOrUnflodAllLevel(bool isFlod);
     void flodOrUnflodCurrentLevel(bool isFlod);
     void getHideRowContent(int iLine);
-    int getHighLightRowContentLineNum(int iLine);
-    int getLinePosByLineNum(int iLine);
+    bool isNeedShowFoldIcon(QTextBlock block);
+    int  getHighLightRowContentLineNum(int iLine);
+    int  getLinePosByLineNum(int iLine);
 
     //书签功能相关
     void bookMarkAreaPaintEvent(QPaintEvent *event);

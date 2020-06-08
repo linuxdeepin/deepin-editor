@@ -1854,7 +1854,9 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
     int bottom = top + document()->documentLayout()->blockBoundingRect(block).height();
     while (block.isValid() && top <= event->rect().bottom()) {
         if (/*block.isVisible() && */bottom >= event->rect().top()) {
-            if (document()->findBlockByNumber(blockNumber).text().contains("{")) {
+            if (document()->findBlockByNumber(blockNumber).text().contains("{") &&
+                    !document()->findBlockByNumber(blockNumber).text().trimmed().startsWith("//") &&
+                    isNeedShowFoldIcon(document()->findBlockByNumber(blockNumber))) {
                 if (fontHeight > foldimage.height()) {
 
                     if (document()->documentLayout()->blockBoundingRect(block.previous()).height() > 1.5 * fontHeight) {
@@ -3251,6 +3253,29 @@ void TextEdit::getHideRowContent(int iLine)
         block = block.next();
         iLine++;
     }
+}
+
+bool TextEdit::isNeedShowFoldIcon(QTextBlock block)
+{
+    QString blockText = block.text();
+    bool hasFindLeft = false; // 是否已经找到当前行第一个左括号
+    int rightNum = 0, leftNum = 0;//右括号数目、左括号数目
+    for (int i = 0 ; i < blockText.count(); ++i) {
+        if (blockText.at(i) == "}" && hasFindLeft) {
+            rightNum++;
+        } else if (blockText.at(i) == "{") {
+            if (!hasFindLeft)
+                hasFindLeft = true;
+            leftNum++;
+        }
+    }
+
+    if (rightNum == leftNum) {
+        return  false;
+    } else {
+        return  true;
+    }
+
 }
 
 int TextEdit::getHighLightRowContentLineNum(int iLine)
