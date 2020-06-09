@@ -4315,6 +4315,8 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             moveToPreviousBookMark();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "movetonextbookmark")) {
             moveToNextBookMark();
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "mark")) {
+            markSelectWord();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "escape")) {
             escape();
         } else if (e->key() == Qt::Key_Insert && key != "Shift+Ins") {
@@ -4352,8 +4354,6 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         selectAll();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "copy")) {
         copySelectedText();
-    } else if (key == "Ctrl+F6") {
-        markSelectWord();
     }
 }
 

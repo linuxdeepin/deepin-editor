@@ -511,7 +511,14 @@
                             "name": "Redo",
                             "type": "shortcut",
                             "default":  "Ctrl+Y"
+                        },
+                        {
+                            "key": "mark",
+                            "name": "Mark",
+                            "type": "shortcut",
+                            "default":  "Ctrl+F6"
                         }
+
                     ]
                 },
                 {
@@ -987,6 +994,12 @@
                             "hide" : true,
                             "reset" : false,
                             "default":  "Ctrl+Y"
+                        },
+                        {
+                            "key": "mark",
+                            "name": "Mark",
+                            "type": "shortcut",
+                            "default":  "Ctrl+F6"
                         }
                     ]
                 },
@@ -1463,6 +1476,12 @@
                             "hide" : true,
                             "reset" : false,
                             "default":  "Ctrl+Shift+?"
+                        },
+                        {
+                            "key": "mark",
+                            "name": "Mark",
+                            "type": "shortcut",
+                            "default":  "Ctrl+F6"
                         }
                     ]
                 },
@@ -1939,6 +1958,12 @@
                             "hide" : true,
                             "reset" : false,
                             "default":  "Ctrl+Y"
+                        },
+                        {
+                            "key": "mark",
+                            "name": "Mark",
+                            "type": "shortcut",
+                            "default":  "Ctrl+F6"
                         }
                     ]
                 }
