@@ -225,6 +225,7 @@ public:
     void updateMark(int from, int charsRemoved, int charsAdded);
 	
 public:
+    bool bIsSetLineNumberWidth = true;
 	bool m_pIsShowCodeFoldArea;
 signals:
     void clickFindAction();

@@ -1776,7 +1776,7 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
                 painter.drawText(0, top,
                                  lineNumberArea->width(), document()->documentLayout()->blockBoundingRect(block).height(),
                                  Qt::AlignVCenter | Qt::AlignHCenter, QString::number(blockNumber + 1));
-                qDebug() << ".........." << document()->documentLayout()->blockBoundingRect(block).width();
+               // qDebug() << ".........." << document()->documentLayout()->blockBoundingRect(block).width();
             } else {
                 painter.drawText(0, top,
                                  lineNumberArea->width(), document()->documentLayout()->blockBoundingRect(block).height(),
