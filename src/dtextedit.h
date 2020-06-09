@@ -220,10 +220,9 @@ public:
  
     void isMarkCurrentLine(bool isMark, QString strColor = "");
     void isMarkAllLine(bool isMark, QString strColor = "");
-    void cancleLastMark();
+    void cancelLastMark();
     void markSelectWord();
-
-    bool bIsSetLineNumberWidth = true;
+    void updateMark(int from, int charsRemoved, int charsAdded);
 	
 public:
 	bool m_pIsShowCodeFoldArea;
@@ -280,6 +279,10 @@ public slots:
     void handleCursorMarkChanged(bool mark, QTextCursor cursor);
 
     void adjustScrollbarMargins();
+    bool containsExtraSelection(QList<QTextEdit::ExtraSelection> listSelections, QTextEdit::ExtraSelection selection);
+    void appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSelections
+                              ,QTextEdit::ExtraSelection selection,QString strColor
+                              ,QList<QTextEdit::ExtraSelection> *listSelections);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
@@ -312,6 +315,7 @@ private:
     QTextEdit::ExtraSelection m_findHighlightSelection;
     QTextEdit::ExtraSelection m_wordUnderCursorSelection;
     QList<QTextEdit::ExtraSelection> m_wordMarkSelections;
+    QMap<int,QList<QTextEdit::ExtraSelection>> m_mapWordMarkSelections;
     QTextEdit::ExtraSelection m_markAllSelection;
     QList<QTextEdit::ExtraSelection> m_markFoldHighLightSelections;
 
