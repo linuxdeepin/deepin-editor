@@ -3021,37 +3021,21 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
                 if (!lineBlock.isVisible()) {
                     continue;
                 }
-                if(fontHeight > image.height())
-                {
-                    if (document()->documentLayout()->blockBoundingRect(lineBlock).height() > 1.5*fontHeight) {
 
-                        imageTop = startPoint + qFabs(fontHeight - image.height())/2;
-                    }
-                    else {
-
-                        imageTop = startPoint + qFabs(document()->documentLayout()->blockBoundingRect(lineBlock).height() - image.height())/2;
-                    }
-
+                if(fontHeight > image.height()) {
                     scaleImage = image;
-                } else if(fontHeight >= 0.8*image.height()) {
-                    imageTop = startPoint;
-                    double scale = nBookmarkLineHeight/image.height();
-                    double nScaleWidth = scale*image.width();
-                    scaleImage = image.scaled(scale*image.height(),nScaleWidth);
                 } else {
-
-                    if (document()->documentLayout()->blockBoundingRect(lineBlock).height() > 1.5*fontHeight) {
-                        imageTop = startPoint - qFabs(fontHeight - image.height())/2;
-                    }
-                    else {
-                        imageTop = startPoint - qFabs(document()->documentLayout()->blockBoundingRect(lineBlock).height() - image.height())/2;
-                    }
-
-//                    imageTop = startPoint + qFabs(document()->documentLayout()->blockBoundingRect(lineBlock).height() - image.height())/2;
-
                     double scale = nBookmarkLineHeight/image.height();
-                    double nScaleWidth = scale*image.width();
-                    scaleImage = image.scaled(scale*image.height(),nScaleWidth);
+                    int nScaleWidth = static_cast<int>(scale*image.width());
+                    scaleImage = image.scaled(static_cast<int>(scale*image.height()),nScaleWidth);
+                }
+                if(scaleImage.height() > 0.8 * image.height()) {
+                    imageTop = startPoint - 2 + (document()->documentLayout()->blockBoundingRect(lineBlock).toRect().height() - scaleImage.height())/2;
+                } else {
+                    imageTop = startPoint - 3 + (document()->documentLayout()->blockBoundingRect(lineBlock).toRect().height() - scaleImage.height())/2;
+                }
+                if(document()->documentLayout()->blockBoundingRect(lineBlock).height() > 1.5*fontHeight) {
+                    imageTop = startPoint + static_cast<int>(qFabs(fontHeight - scaleImage.height())/2);
                 }
 
                 painter.drawImage(5,imageTop,scaleImage);
