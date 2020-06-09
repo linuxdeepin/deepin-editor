@@ -1850,74 +1850,74 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
     double nfoldImageHeight = fontHeight;
 
     int bottom = top + document()->documentLayout()->blockBoundingRect(block).height();
-    while (block.isValid() && top <= event->rect().bottom()) {
-        if (/*block.isVisible() && */bottom >= event->rect().top()) {
-            if (document()->findBlockByNumber(blockNumber).text().contains("{") &&
-                    !document()->findBlockByNumber(blockNumber).text().trimmed().startsWith("//") &&
-                    isNeedShowFoldIcon(document()->findBlockByNumber(blockNumber))) {
-                if (fontHeight > foldimage.height()) {
 
-                    if (document()->documentLayout()->blockBoundingRect(block.previous()).height() > 1.5 * fontHeight) {
+    for (int iBlockCount = blockNumber ; iBlockCount < document()->blockCount(); ++iBlockCount) {
+        if (block.isValid() && top <= event->rect().bottom()) {
+            if (block.isVisible() && bottom >= event->rect().top()) {
+                if (block.text().contains("{") &&
+                        !block.text().trimmed().startsWith("//") &&
+                        isNeedShowFoldIcon(block)) {
+                    if (fontHeight > foldimage.height()) {
 
-                        imageTop = top + qFabs(fontHeight - foldimage.height()) / 2;
-                    } else {
-                        int blockHeight = 0;
-                        while (block.isValid()) {
-                            if (block.isVisible()) {
-                                blockHeight = document()->documentLayout()->blockBoundingRect(block).height();
-                                break;
+                        if (document()->documentLayout()->blockBoundingRect(block.previous()).height() > 1.5 * fontHeight) {
+                            imageTop = top + qFabs(fontHeight - foldimage.height()) / 2;
+                        } else {
+                            int blockHeight = 0;
+                            while (block.isValid()) {
+                                if (block.isVisible()) {
+                                    blockHeight = document()->documentLayout()->blockBoundingRect(block).height();
+                                    break;
+                                }
+                                block = block.next();
                             }
-                            block = block.next();
+                            imageTop = top + qFabs(blockHeight - foldimage.height()) / 2;
                         }
-                        imageTop = top + qFabs(blockHeight - foldimage.height()) / 2;
-                    }
 
-                    scaleFoldImage = foldimage;
-                    scaleunFoldImage = Unfoldimage;
-                } else {
-                    if (document()->documentLayout()->blockBoundingRect(block.previous()).height() > 1.5 * fontHeight) {
-
-                        imageTop = top - qFabs(fontHeight - foldimage.height()) / 2;
+                        scaleFoldImage = foldimage;
+                        scaleunFoldImage = Unfoldimage;
                     } else {
+                        if (document()->documentLayout()->blockBoundingRect(block.previous()).height() > 1.5 * fontHeight) {
 
-                        imageTop = top - qFabs(document()->documentLayout()->blockBoundingRect(block.previous()).height() - foldimage.height()) / 2;
+                            imageTop = top - qFabs(fontHeight - foldimage.height()) / 2;
+                        } else {
+
+                            imageTop = top - qFabs(document()->documentLayout()->blockBoundingRect(block.previous()).height() - foldimage.height()) / 2;
+                        }
+
+                        //imageTop = startPoint + qFabs(document()->documentLayout()->blockBoundingRect(lineBlock).height() - image.height())/2;
+                        double scale = nfoldImageHeight / foldimage.height();
+                        double nScaleWidth = scale * foldimage.height() * foldimage.height() / foldimage.width();
+                        scaleFoldImage = foldimage.scaled(scale * foldimage.height(), nScaleWidth);
+                        scaleunFoldImage = Unfoldimage.scaled(scale * Unfoldimage.height(), nScaleWidth);
+                    }
+                    if (block.text().trimmed().startsWith("{") && blockNumber != 0) {
+
+                        if (block.isVisible()) {
+                            painter.drawImage(5, imageTop - document()->documentLayout()->blockBoundingRect(block.previous()).height(), scaleFoldImage);
+                        } else {
+                            painter.drawImage(5, imageTop - document()->documentLayout()->blockBoundingRect(block.previous()).height(), scaleunFoldImage);
+                        }
+                        m_listFlodFlag.push_back(blockNumber);
+                        m_listFlodIconPos.append(blockNumber - 1);
+                    } else {
+                        if (block.next().isVisible()) {
+                            if (block.isVisible())
+                                painter.drawImage(5, imageTop, scaleFoldImage);
+                        } else {
+                            if (block.isVisible())
+                                painter.drawImage(5, imageTop, scaleunFoldImage);
+                        }
+                        m_listFlodIconPos.append(blockNumber);
                     }
 
-                    //imageTop = startPoint + qFabs(document()->documentLayout()->blockBoundingRect(lineBlock).height() - image.height())/2;
-                    double scale = nfoldImageHeight / foldimage.height();
-                    double nScaleWidth = scale * foldimage.height() * foldimage.height() / foldimage.width();
-                    scaleFoldImage = foldimage.scaled(scale * foldimage.height(), nScaleWidth);
-                    scaleunFoldImage = Unfoldimage.scaled(scale * Unfoldimage.height(), nScaleWidth);
                 }
-                if (document()->findBlockByNumber(blockNumber).text().trimmed().startsWith("{") && blockNumber != 0) {
-
-                    if (document()->findBlockByNumber(blockNumber).isVisible()) {
-                        painter.drawImage(5, imageTop - document()->documentLayout()->blockBoundingRect(block.previous()).height(), scaleFoldImage);
-                    } else {
-                        painter.drawImage(5, imageTop - document()->documentLayout()->blockBoundingRect(block.previous()).height(), scaleunFoldImage);
-                    }
-                    m_listFlodFlag.push_back(blockNumber);
-                    m_listFlodIconPos.append(blockNumber - 1);
-                } else {
-                    if (document()->findBlockByNumber(blockNumber + 1).isVisible()) {
-                        if (document()->findBlockByNumber(blockNumber).isVisible())
-                            painter.drawImage(5, imageTop, scaleFoldImage);
-                    } else {
-                        if (document()->findBlockByNumber(blockNumber).isVisible())
-                            painter.drawImage(5, imageTop, scaleunFoldImage);
-                    }
-                    m_listFlodIconPos.append(blockNumber);
-                }
-
             }
+            block = document()->findBlockByNumber(iBlockCount + 1);
+            top = bottom;
+            bottom = top + document()->documentLayout()->blockBoundingRect(block).height();
+            ++blockNumber;
         }
-
-        block = block.next();
-        top = bottom;
-        bottom = top + document()->documentLayout()->blockBoundingRect(block).height();
-        ++blockNumber;
     }
-
 }
 
 void TextEdit::setCodeFlodFlagVisable(bool isVisable,bool bIsFirstOpen)
@@ -1965,7 +1965,6 @@ void TextEdit::updateLineNumber()
         int lineNumberWidth = lineNumberArea->width();
         m_pLeftAreaWidget->setFixedWidth(leftAreaWidth - lineNumberWidth);
     }
-
     m_pLeftAreaWidget->m_bookMarkArea->update();
     lineNumberArea->update();
     m_pLeftAreaWidget->m_flodArea->update();
@@ -3302,6 +3301,9 @@ int TextEdit::getHighLightRowContentLineNum(int iLine)
                 break;
             }
         }
+        if (isFirstLine) {
+            isFirstLine = false;
+        }
         block = block.next();
         iLine++;
     }
@@ -3776,12 +3778,11 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                            && document()->findBlockByNumber(line - 1).text().trimmed().startsWith("{")) {
                     getNeedControlLine(line, true, 1, false);
                 }
-
+                document()->adjustSize();
+                viewport()->update();
                 m_pLeftAreaWidget->m_flodArea->update();
                 m_pLeftAreaWidget->m_linenumberarea->update();
                 m_pLeftAreaWidget->m_bookMarkArea->update();
-                viewport()->update();
-                document()->adjustSize();
             } else {
                 m_mouseClickPos = mouseEvent->pos();
                 m_rightMenu->clear();
@@ -3806,10 +3807,10 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
         }
     } else if (event->type() == QEvent::HoverMove) {
         if (object == m_pLeftAreaWidget->m_flodArea) {
+            m_markFoldHighLightSelections.clear();
+            renderAllSelections();
             QHoverEvent *hoverEvent = static_cast<QHoverEvent *>(event);
-
             int line = getLineFromPoint(hoverEvent->pos());
-
             if (m_listFlodIconPos.contains(line - 1)) {
                 if (!document()->findBlockByNumber(line).isVisible()) {
                     m_foldCodeShow->clear();
@@ -3820,7 +3821,6 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                     QTextCursor previousCursor = textCursor();
                     int ivalue =  this->verticalScrollBar()->value();
                     int iLine =  getHighLightRowContentLineNum(line - 1);
-                    
                     QTextEdit::ExtraSelection selection;
 
                     selection.format.setBackground(QColor(FOLD_HIGHLIGHT_COLOR));
@@ -3840,9 +3840,7 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
 
                 }
             } else {
-                m_markFoldHighLightSelections.clear();
                 m_foldCodeShow->hide();
-                renderAllSelections();
             }
         }
     } else if (event->type() == QEvent::HoverLeave) {
