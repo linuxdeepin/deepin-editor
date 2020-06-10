@@ -1861,17 +1861,18 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
 
     for (int iBlockCount = blockNumber ; iBlockCount < document()->blockCount(); ++iBlockCount) {
         if (block.isValid() && top <= event->rect().bottom()) {
-            if (block.isVisible() && bottom >= event->rect().top()) {
+            if (/*block.isVisible() &&*/ bottom >= event->rect().top()) {
                 if (block.text().contains("{") &&
                         !block.text().trimmed().startsWith("//") &&
                         isNeedShowFoldIcon(block)) {
                     int blockHeight = 0;
-                    while (block.isValid()) {
-                        if (block.isVisible()) {
-                            blockHeight = document()->documentLayout()->blockBoundingRect(block).height();
+                    QTextBlock tmpblock = block;
+                    while (tmpblock.isValid()) {
+                        if (tmpblock.isVisible()) {
+                            blockHeight = document()->documentLayout()->blockBoundingRect(tmpblock).height();
                             break;
                         }
-                        block = block.next();
+                        tmpblock = tmpblock.next();
                     }
                     if (fontHeight > foldimage.height()) {
                         if (blockHeight > 1.5 * fontHeight) {
