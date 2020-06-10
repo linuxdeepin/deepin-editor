@@ -35,7 +35,7 @@
                             "name":"CODE FLOD",
                             "type":"checkbox",
                             "text":"Code Flod Flag",
-                            "default":"false"
+                            "default":"true"
                         },
                         {
                             "key": "showlinenumber",
