@@ -115,7 +115,6 @@ TextEdit::TextEdit(QWidget *parent)
         if (!m_bIsFileOpen) {
             checkBookmarkLineMove();
         }
-        qDebug()<<"textChanged";
         updateLineNumber();
         updateWordCount();
     });
