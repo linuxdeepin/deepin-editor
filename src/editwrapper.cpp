@@ -729,4 +729,5 @@ void EditWrapper::setLineNumberShow(bool bIsShow ,bool bIsFirstShow)
         m_textEdit->m_pLeftAreaWidget->setFixedWidth(leftAreaWidth - lineNumberAreaWidth);
     }
     m_textEdit->bIsSetLineNumberWidth = bIsShow;
+    m_textEdit->updateLineNumber();
 }
