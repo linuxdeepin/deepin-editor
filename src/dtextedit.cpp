@@ -835,11 +835,9 @@ void TextEdit::scrollLineDown()
 void TextEdit::scrollUp()
 {
     QScrollBar *scrollbar = verticalScrollBar();
-    scrollbar->setValue(scrollbar->value() - scrollbar->pageStep());
-    int lines = this->height() / fontMetrics().height();
-
+    scrollbar->setValue(scrollbar->value()-scrollbar->pageStep());
     auto moveMode = m_cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
-    QTextCursor lineCursor(document()->findBlockByLineNumber(getCurrentLine() - lines));
+    QTextCursor lineCursor(document()->findBlockByLineNumber(this->getFirstVisibleBlockId()));
     QTextCursor cursor = textCursor();
     cursor.setPosition(lineCursor.position(), moveMode);
     setTextCursor(cursor);
@@ -848,22 +846,32 @@ void TextEdit::scrollUp()
 void TextEdit::scrollDown()
 {
     QScrollBar *scrollbar = verticalScrollBar();
-    scrollbar->setValue(scrollbar->value() + scrollbar->pageStep());
+    scrollbar->setValue(scrollbar->value()+scrollbar->pageStep());
     int lines = this->height() / fontMetrics().height();
 
     auto moveMode = m_cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
     int tem = document()->blockCount();
-    if(getCurrentLine() + lines <=tem ){
-    QTextCursor lineCursor(document()->findBlockByLineNumber(getCurrentLine() + lines));
+
+    if(this->getFirstVisibleBlockId() + lines <tem ){
+    QTextCursor lineCursor(document()->findBlockByLineNumber(this->getFirstVisibleBlockId()-1));
     QTextCursor cursor = textCursor();
     cursor.setPosition(lineCursor.position(), moveMode);
     setTextCursor(cursor);
-}
-    else {
-        QTextCursor lineCursor(document()->findBlockByLineNumber(tem));
-        QTextCursor cursor = textCursor();
-        cursor.setPosition(lineCursor.position(), moveMode);
-        setTextCursor(cursor);
+    }
+    else {              //如果文本结尾部分不足一页
+        if((getCurrentLine()+lines)>tem)
+        {
+            QTextCursor lineCursor(document()->findBlockByLineNumber(tem-1));
+            QTextCursor cursor = textCursor();
+            cursor.setPosition(lineCursor.position(), moveMode);
+            setTextCursor(cursor);
+        }
+        else {
+            QTextCursor lineCursor(document()->findBlockByLineNumber(getCurrentLine()+lines-1));
+            QTextCursor cursor = textCursor();
+            cursor.setPosition(lineCursor.position(), moveMode);
+            setTextCursor(cursor);
+        }
     }
 }
 
