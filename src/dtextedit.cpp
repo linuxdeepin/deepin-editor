@@ -1857,31 +1857,31 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                 if (block.text().contains("{") &&
                         !block.text().trimmed().startsWith("//") &&
                         isNeedShowFoldIcon(block)) {
+                    int blockHeight = 0;
+                    while (block.isValid()) {
+                        if (block.isVisible()) {
+                            blockHeight = document()->documentLayout()->blockBoundingRect(block).height();
+                            break;
+                        }
+                        block = block.next();
+                    }
                     if (fontHeight > foldimage.height()) {
-
-                        if (document()->documentLayout()->blockBoundingRect(block.previous()).height() > 1.5 * fontHeight) {
+                        if (blockHeight > 1.5 * fontHeight) {
                             imageTop = top + qFabs(fontHeight - foldimage.height()) / 2;
                         } else {
-                            int blockHeight = 0;
-                            while (block.isValid()) {
-                                if (block.isVisible()) {
-                                    blockHeight = document()->documentLayout()->blockBoundingRect(block).height();
-                                    break;
-                                }
-                                block = block.next();
-                            }
+
                             imageTop = top + qFabs(blockHeight - foldimage.height()) / 2;
                         }
 
                         scaleFoldImage = foldimage;
                         scaleunFoldImage = Unfoldimage;
                     } else {
-                        if (document()->documentLayout()->blockBoundingRect(block.previous()).height() > 1.5 * fontHeight) {
+                        if (blockHeight > 1.5 * fontHeight) {
 
                             imageTop = top - qFabs(fontHeight - foldimage.height()) / 2;
                         } else {
 
-                            imageTop = top - qFabs(document()->documentLayout()->blockBoundingRect(block.previous()).height() - foldimage.height()) / 2;
+                            imageTop = top - qFabs(blockHeight - foldimage.height()) / 2;
                         }
 
                         //imageTop = startPoint + qFabs(document()->documentLayout()->blockBoundingRect(lineBlock).height() - image.height())/2;
@@ -1893,9 +1893,9 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                     if (block.text().trimmed().startsWith("{") && blockNumber != 0) {
 
                         if (block.isVisible()) {
-                            painter.drawImage(5, imageTop - document()->documentLayout()->blockBoundingRect(block.previous()).height(), scaleFoldImage);
+                            painter.drawImage(5, imageTop - blockHeight, scaleFoldImage);
                         } else {
-                            painter.drawImage(5, imageTop - document()->documentLayout()->blockBoundingRect(block.previous()).height(), scaleunFoldImage);
+                            painter.drawImage(5, imageTop - blockHeight, scaleunFoldImage);
                         }
                         m_listFlodFlag.push_back(blockNumber);
                         m_listFlodIconPos.append(blockNumber - 1);
