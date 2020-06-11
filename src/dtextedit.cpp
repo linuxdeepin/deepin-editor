@@ -1865,7 +1865,7 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                         !block.text().trimmed().startsWith("//") &&
                         isNeedShowFoldIcon(block)) {
                     int blockHeight = 0;
-                    QTextBlock tmpblock = block;
+                    QTextBlock tmpblock = document()->findBlockByNumber(0);;
                     while (tmpblock.isValid()) {
                         if (tmpblock.isVisible()) {
                             blockHeight = document()->documentLayout()->blockBoundingRect(tmpblock).height();
@@ -3831,11 +3831,21 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
 
                     selection.format.setBackground(QColor(FOLD_HIGHLIGHT_COLOR));
                     selection.format.setProperty(QTextFormat::FullWidthSelection, true);
-                    QTextBlock startblock = document()->findBlockByNumber(line);
+                    QTextBlock startblock;
+                    if (line == 1 && document()->findBlockByNumber(0).text().trimmed().startsWith("{")) {
+                        startblock = document()->findBlockByNumber(line - 1);
+                    } else {
+                        startblock = document()->findBlockByNumber(line);
+                    }
                     QTextCursor beginCursor(startblock);
                     beginCursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
-                    beginCursor.movePosition(QTextCursor::Down, QTextCursor::KeepAnchor, iLine - line + 1);
-                    //beginCursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+                    if (line == 1 && document()->findBlockByNumber(0).text().trimmed().startsWith("{")) {
+                        beginCursor.movePosition(QTextCursor::Down, QTextCursor::KeepAnchor, iLine - line + 2);
+                    } else {
+                        beginCursor.movePosition(QTextCursor::Down, QTextCursor::KeepAnchor, iLine - line + 1);
+                    }
+                    if (iLine == document()->blockCount() - 1)
+                        beginCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
                     setTextCursor(beginCursor);
                     selection.cursor = textCursor();
                     m_markFoldHighLightSelections.push_back(selection);
