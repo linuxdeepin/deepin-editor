@@ -2292,6 +2292,7 @@ void TextEdit::setTheme(const KSyntaxHighlighting::Theme &theme, const QString &
     if (m_highlighted) {
         m_highlighter->rehighlight();
     }
+
 //    setPlainText(backupTxt);
     verticalScrollBar()->setSliderPosition(iVerticalScrollValue);
     horizontalScrollBar()->setSliderPosition(iHorizontalScrollVaule);
@@ -3441,6 +3442,7 @@ QStringList TextEdit::readHistoryRecordofFilePath()
 
 void TextEdit::writeHistoryRecord()
 {
+    qDebug() << "writeHistoryRecord";
     QString history = m_settings->settings->option("advance.editor.browsing_history_file")->value().toString();
     QStringList historyList = readHistoryRecord();
 
@@ -3623,6 +3625,13 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
 {
     Q_UNUSED(charsRemoved);
 
+    if (m_readOnlyMode) {
+        textCursor().setPosition(from, QTextCursor::MoveAnchor);
+        textCursor().setPosition(from + charsAdded, QTextCursor::KeepAnchor);
+        textCursor().removeSelectedText();
+    }
+
+    qDebug() << ":::::::::::::" << from << charsAdded;
     if (m_bIsFileOpen) {
         return;
     }

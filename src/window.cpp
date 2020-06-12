@@ -666,6 +666,7 @@ void Window::removeWrapper(const QString &filePath, bool isDelete)
             //wrapper->deleteLater();
             disconnect(wrapper->textEditor(), 0, this, 0);
             delete wrapper;
+            wrapper = nullptr;
         }
 
         // remove all signals on this connection.
@@ -1921,6 +1922,11 @@ void Window::closeEvent(QCloseEvent *e)
         const int mode = dialog->exec();
         if (mode == -1 || mode == 0) {
             return;
+        }
+    } else {
+        for (EditWrapper *wrapper : m_wrappers) {
+            disconnect(wrapper->textEditor(), 0, this, 0);
+            delete wrapper;
         }
     }
 
