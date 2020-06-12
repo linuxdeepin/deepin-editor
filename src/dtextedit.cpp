@@ -2149,17 +2149,18 @@ int TextEdit::getFirstVisibleBlockId() const
     curs.movePosition(QTextCursor::Start);
     for (int i=0; i < this->document()->blockCount(); ++i) {
         QTextBlock block = curs.block();
+        if (block.isVisible()) {
+            QRect r1 = this->viewport()->geometry();
+            QRect r2 = this->document()->documentLayout()->blockBoundingRect(block).translated(
+                           this->viewport()->geometry().x(), this->viewport()->geometry().y() - (
+                               this->verticalScrollBar()->sliderPosition())).toRect();
 
-        QRect r1 = this->viewport()->geometry();
-        QRect r2 = this->document()->documentLayout()->blockBoundingRect(block).translated(
-                    this->viewport()->geometry().x(), this->viewport()->geometry().y() - (
-                        this->verticalScrollBar()->sliderPosition())).toRect();
-
-        r2.setWidth(0);        //只通过高度判断是否包含在当前界面
-        if (r1.contains(r2, true)) {
-            return i;
+            r2.setWidth(0);        //只通过高度判断是否包含在当前界面
+            if (r1.contains(r2, true)) {
+                return i;
+            }
+            curs.movePosition(QTextCursor::NextBlock);
         }
-        curs.movePosition(QTextCursor::NextBlock);
     }
 
     return 0;
