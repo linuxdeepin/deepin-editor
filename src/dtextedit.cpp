@@ -86,11 +86,9 @@ TextEdit::TextEdit(QWidget *parent)
 {
     m_nLines = 0;
     m_bIsFileOpen = false;
-    m_qstrPreeditString = "";
     m_qstrCommitString = "";
     m_bIsInputMethod = false;
     //lineNumberArea = new LineNumberArea(m_pLeftAreaWidget);
-    m_pLineEdit = new QLineEdit;
     m_pLeftAreaWidget = new leftareaoftextedit(this);
     lineNumberArea = m_pLeftAreaWidget->m_linenumberarea;
 
@@ -101,9 +99,8 @@ TextEdit::TextEdit(QWidget *parent)
 #endif
     m_fontLineNumberArea.setFamily("SourceHanSansSC-Normal");
 
-    m_pLeftAreaWidget->m_flodArea->setAttribute(Qt::WA_Hover, true); //开启悬停事件  
+    m_pLeftAreaWidget->m_flodArea->setAttribute(Qt::WA_Hover, true); //开启悬停事件
     viewport()->installEventFilter(this);
-    //installEventFilter(this);
     m_pLeftAreaWidget->m_bookMarkArea->installEventFilter(this);
     m_pLeftAreaWidget->m_flodArea->installEventFilter(this);
     viewport()->setCursor(Qt::IBeamCursor);
@@ -113,7 +110,6 @@ TextEdit::TextEdit(QWidget *parent)
     setFocusPolicy(Qt::StrongFocus);
     setMouseTracking(true);
     setAcceptRichText(false);
-//    setAttribute(Qt::WA_InputMethodEnabled,true);
 
     // Init widgets.
     connect(this->verticalScrollBar(), &QScrollBar::valueChanged, this, &TextEdit::updateLineNumber);
