@@ -568,7 +568,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="114"/>
         <source>Color Mark</source>
-        <translation>设置/取消颜色标记</translation>
+        <translation>添加/取消颜色标记</translation>
     </message>
 </context>
 <context>
@@ -910,7 +910,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="170"/>
         <source>Mark</source>
-        <translation>标记</translation>
+        <translation>添加标记</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="300"/>
