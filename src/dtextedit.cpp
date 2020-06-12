@@ -164,10 +164,10 @@ TextEdit::TextEdit(QWidget *parent)
 //    setAddRigetMenu();
     //yanyuhan
     //颜色标记、折叠/展开、书签、列编辑、设置注释、取消注释;
-    //点击颜色标记菜单，显示二级菜单，包括：标记所在行、清除上次标记、清除标记、标记所有;
+    //点击颜色标记菜单，显示二级菜单，包括：标记、清除上次标记、清除标记、标记所有;
     m_colorMarkMenu = new DMenu(tr("Color Mark"),this);
     m_markAllLine = new DMenu(tr("Mark All Line"), this);
-    m_markCurrentLine = new DMenu(tr("Mark Current Line"), this);
+    m_markCurrentLine = new DMenu(tr("Mark"), this);
     m_cancleMarkAllLine = new QAction(tr("Cancle Mark All Line"), this);
     m_cancleMarkCurrentLine = new QAction(tr("Cancle Mark Current Line"), this);
     m_cancleLastMark = new QAction(tr("Cancle last Mark"), this);
@@ -4025,18 +4025,21 @@ void TextEdit::appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSel
                 bIsContains = true;
                 selection.format.setBackground(QColor(strColor));
 
-                if (wordMarkSelections.value(i).format != selection.format) {
-                    for (int j = 0;j < wordMarkSelections.count();j++) {
-                        if (m_wordMarkSelections.value(j).cursor == wordMarkSelections.value(i).cursor
-                                && m_wordMarkSelections.value(j).format == wordMarkSelections.value(i).format) {
-                            m_wordMarkSelections.removeAt(j);
-                            break;
-                        }
+                for (int j = 0;j < wordMarkSelections.count();j++) {
+                    if (m_wordMarkSelections.value(j).cursor == wordMarkSelections.value(i).cursor
+                            && m_wordMarkSelections.value(j).format == wordMarkSelections.value(i).format) {
+                        m_wordMarkSelections.removeAt(j);
+                        break;
                     }
-                    m_wordMarkSelections.append(selection);
+                }
+
+                m_wordMarkSelections.append(selection);
+
+                if (wordMarkSelections.value(i).format != selection.format) {                   
 
                     QList<QTextEdit::ExtraSelection> selecList;
                     bool bIsFind = false;
+
                     for (int j = 0;j < m_mapWordMarkSelections.count();j++) {
                         auto list = m_mapWordMarkSelections.value(j);
                         for (int k = 0;k < list.count();k++) {
@@ -4055,8 +4058,10 @@ void TextEdit::appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSel
                             break;
                         }
                     }
-                    listSelections->append(selection);
                 }
+
+                listSelections->append(selection);
+
             } else if (nWordMarkSelectionEnd < nSelectionEnd && nWordMarkSelectionStart < nSelectionStart
                        && nWordMarkSelectionEnd > nSelectionStart) {
                 bIsContains = true;

@@ -514,7 +514,7 @@
                         },
                         {
                             "key": "mark",
-                            "name": "Mark",
+                            "name": "Color Mark",
                             "type": "shortcut",
                             "default":  "Ctrl+F6"
                         }
@@ -973,20 +973,20 @@
                         },
                         {
                             "key": "switchbookmark",
-                            "name": "Switch bookmark",
-                            "type": "shortcut",
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+F2"
                         },
                         {
                             "key": "movetoprebookmark",
-                            "name": "Move to previous bookmark",
-                            "type": "shortcut",
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "F2"
                         },
                         {
                             "key": "movetonextbookmark",
-                            "name": "Move to next bookmark",
-                            "type": "shortcut",
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Shift+F2"
                         },
                         {
@@ -997,8 +997,8 @@
                         },
                         {
                             "key": "mark",
-                            "name": "Mark",
-                            "type": "shortcut",
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+F6"
                         }
                     ]
@@ -1455,20 +1455,20 @@
                         },
                         {
                             "key": "switchbookmark",
-                            "name": "Switch bookmark",
-                            "type": "shortcut",
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+F2"
                         },
                         {
                             "key": "movetoprebookmark",
-                            "name": "Move to previous bookmark",
-                            "type": "shortcut",
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "F2"
                         },
                         {
                             "key": "movetonextbookmark",
-                            "name": "Move to next bookmark",
-                            "type": "shortcut",
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Shift+F2"
                         },
                         {
@@ -1479,8 +1479,8 @@
                         },
                         {
                             "key": "mark",
-                            "name": "Mark",
-                            "type": "shortcut",
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+F6"
                         }
                     ]
@@ -1937,20 +1937,20 @@
                         },
                         {
                             "key": "switchbookmark",
-                            "name": "Switch bookmark",
-                            "type": "shortcut",
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+F2"
                         },
                         {
                             "key": "movetoprebookmark",
-                            "name": "Move to previous bookmark",
-                            "type": "shortcut",
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "F2"
                         },
                         {
                             "key": "movetonextbookmark",
-                            "name": "Move to next bookmark",
-                            "type": "shortcut",
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Shift+F2"
                         },
                         {
@@ -1961,8 +1961,8 @@
                         },
                         {
                             "key": "mark",
-                            "name": "Mark",
-                            "type": "shortcut",
+                            "hide" : true,
+                            "reset" : false,
                             "default":  "Ctrl+F6"
                         }
                     ]
