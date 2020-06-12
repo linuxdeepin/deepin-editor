@@ -34,6 +34,7 @@
 #include <DMenu>
 #include <QPaintEvent>
 #include <DTextEdit>
+#include <QLineEdit>
 #include <QPropertyAnimation>
 #include <QFont>
 #include <DApplicationHelper>
@@ -455,6 +456,8 @@ private:
 
     QList<int> m_listFlodFlag;
     QList<int> m_listFlodIconPos;
+    QString m_qstrCommitString;
+    bool m_bIsInputMethod;
 };
 
 #endif

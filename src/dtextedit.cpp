@@ -35,6 +35,7 @@
 
 #include <QAbstractTextDocumentLayout>
 #include <QTextDocumentFragment>
+#include <QInputMethodEvent>
 #include <DDesktopServices>
 #include <QApplication>
 #include <DSettingsGroup>
@@ -50,7 +51,7 @@
 #include <QTextBlock>
 #include <QMimeData>
 #include <QTimer>
-#include<DSysInfo>
+#include <DSysInfo>
 
 #include <private/qguiapplication_p.h>
 #include <qpa/qplatformtheme.h>
@@ -85,7 +86,11 @@ TextEdit::TextEdit(QWidget *parent)
 {
     m_nLines = 0;
     m_bIsFileOpen = false;
+    m_qstrPreeditString = "";
+    m_qstrCommitString = "";
+    m_bIsInputMethod = false;
     //lineNumberArea = new LineNumberArea(m_pLeftAreaWidget);
+    m_pLineEdit = new QLineEdit;
     m_pLeftAreaWidget = new leftareaoftextedit(this);
     lineNumberArea = m_pLeftAreaWidget->m_linenumberarea;
 
@@ -96,8 +101,9 @@ TextEdit::TextEdit(QWidget *parent)
 #endif
     m_fontLineNumberArea.setFamily("SourceHanSansSC-Normal");
 
-    m_pLeftAreaWidget->m_flodArea->setAttribute(Qt::WA_Hover, true); //开启悬停事件
+    m_pLeftAreaWidget->m_flodArea->setAttribute(Qt::WA_Hover, true); //开启悬停事件  
     viewport()->installEventFilter(this);
+    //installEventFilter(this);
     m_pLeftAreaWidget->m_bookMarkArea->installEventFilter(this);
     m_pLeftAreaWidget->m_flodArea->installEventFilter(this);
     viewport()->setCursor(Qt::IBeamCursor);
@@ -107,6 +113,7 @@ TextEdit::TextEdit(QWidget *parent)
     setFocusPolicy(Qt::StrongFocus);
     setMouseTracking(true);
     setAcceptRichText(false);
+//    setAttribute(Qt::WA_InputMethodEnabled,true);
 
     // Init widgets.
     connect(this->verticalScrollBar(), &QScrollBar::valueChanged, this, &TextEdit::updateLineNumber);
@@ -3677,12 +3684,21 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
                     }
                 }
                 break;
-            } else if (nCurrentPos == nEndPos){
+
+            } else if (nCurrentPos == nEndPos) {
                 m_wordMarkSelections.removeAt(i);
                 selection.format.setBackground(strColor);
                 selection.cursor = textCursor();
-                selection.cursor.setPosition(nStartPos, QTextCursor::MoveAnchor);
-                selection.cursor.setPosition(from, QTextCursor::KeepAnchor);
+
+                if (m_bIsInputMethod) {
+                    selection.cursor.setPosition(nStartPos, QTextCursor::MoveAnchor);
+                    selection.cursor.setPosition(nEndPos - m_qstrCommitString.count(), QTextCursor::KeepAnchor);
+                    m_bIsInputMethod = false;
+                } else {
+                    selection.cursor.setPosition(nStartPos, QTextCursor::MoveAnchor);
+                    selection.cursor.setPosition(from, QTextCursor::KeepAnchor);
+                }
+
                 m_wordMarkSelections.insert(i,selection);
 
                 bool bIsFind = false;
@@ -3870,9 +3886,7 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
             m_foldCodeShow->hide();
             renderAllSelections();
         }
-
     }
-
     return false;
 }
 
@@ -4103,7 +4117,9 @@ void TextEdit::dropEvent(QDropEvent *event)
 
 void TextEdit::inputMethodEvent(QInputMethodEvent *e)
 {
-    if (!m_readOnlyMode) {
+    m_bIsInputMethod = true;
+    m_qstrCommitString = e->commitString();
+    if (!m_readOnlyMode && e->commitString() != "") {
         QTextEdit::inputMethodEvent(e);
     }
 }
