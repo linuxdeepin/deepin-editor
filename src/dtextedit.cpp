@@ -3194,8 +3194,10 @@ void TextEdit::flodOrUnflodAllLevel(bool isFlod)
             getNeedControlLine(line - 1, !isFlod);
         }
     }
-    viewport()->update();
     m_pLeftAreaWidget->m_flodArea->update();
+    lineNumberArea->update();
+    m_pLeftAreaWidget->m_bookMarkArea->update();
+    viewport()->update();
     document()->adjustSize();
 
 }
@@ -3205,6 +3207,8 @@ void TextEdit::flodOrUnflodCurrentLevel(bool isFlod)
     int line = getLineFromPoint(m_mouseClickPos);
     getNeedControlLine(line - 1, !isFlod);
     m_pLeftAreaWidget->m_flodArea->update();
+    lineNumberArea->update();
+    m_pLeftAreaWidget->m_bookMarkArea->update();
     viewport()->update();
     document()->adjustSize();
 
