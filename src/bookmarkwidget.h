@@ -26,9 +26,10 @@ class bookmarkwidget : public QWidget
 public:
     bookmarkwidget(leftareaoftextedit *leftAreaWidget);
     ~bookmarkwidget() override;
+
 protected:
     void paintEvent(QPaintEvent *event) override;
-//    void mousePressEvent(QMouseEvent *event) override;
+
 private:
     leftareaoftextedit *m_leftAreaWidget;
 };

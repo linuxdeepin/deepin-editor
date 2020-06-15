@@ -100,6 +100,7 @@ TextEdit::TextEdit(QWidget *parent)
     m_fontLineNumberArea.setFamily("SourceHanSansSC-Normal");
 
     m_pLeftAreaWidget->m_flodArea->setAttribute(Qt::WA_Hover, true); //开启悬停事件
+    m_pLeftAreaWidget->m_bookMarkArea->setAttribute(Qt::WA_Hover, true);
     viewport()->installEventFilter(this);
     m_pLeftAreaWidget->m_bookMarkArea->installEventFilter(this);
     m_pLeftAreaWidget->m_flodArea->installEventFilter(this);
@@ -2989,14 +2990,8 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
     additional_margin += 3;
     top += additional_margin;
 
-    QTextBlock lineBlock;//第几行文本块
-    QImage image(":/images/bookmark.svg");
-    QImage scaleImage;
-    int startLine = 0;//当前可见区域开始行号
-    int startPoint = 0;//当前可见区域开始位置
-    int imageTop = 0;//图片绘制位置
-    int fontHeight = fontMetrics().height();
-    double nBookmarkLineHeight = fontHeight;
+
+    QImage image;
 
 //    foreach (auto line, m_listBookmark) {
 
@@ -3010,14 +3005,39 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
 //        }
 //    }
 
-    foreach (auto line, m_listBookmark) {
+    if (!m_listBookmark.contains(m_nBookMarkHoverLine) && m_nBookMarkHoverLine != -1) {
+        if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::ColorType::DarkType) {
+            image = QImage(":/images/like_hover_dark.svg");
+        } else {
+            image = QImage(":/images/like_hover_light.svg");
+        }
+        QList<int> list;
+        list << m_nBookMarkHoverLine;
+
+        if (m_nBookMarkHoverLine <= blockCount()) {
+            drawBookmark(blockNumber,top,list,image);
+            m_nBookMarkHoverLine = -1;
+        }
+    }
+
+    image = QImage(":/images/bookmark.svg");
+    drawBookmark(blockNumber,top,m_listBookmark,image);
+}
+
+void TextEdit::drawBookmark(int blockNumber, int startPoint, const QList<int> &listBookmark, const QImage &image)
+{
+    int startLine = 0;//当前可见区域开始行号
+    int imageTop = 0;//图片绘制位置
+    QTextBlock lineBlock;//第几行文本块
+    QImage scaleImage;
+    int fontHeight = fontMetrics().height();
+    QPainter painter(m_pLeftAreaWidget->m_bookMarkArea);
+
+    foreach (auto line, listBookmark) {
 
         startLine = blockNumber + 1;
 
-        if (line < startLine) {
-
-        } else {
-            startPoint = top;
+        if (line >= startLine) {
 
             while (line - startLine > 0) {
                 lineBlock = document()->findBlockByNumber(startLine - 1);
@@ -3025,9 +3045,10 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
                 startLine++;
             }
 
+            lineBlock = document()->findBlockByNumber(line - 1);
+
             if(line > 0)
             {
-                lineBlock = document()->findBlockByNumber(line - 1);
                 if (!lineBlock.isVisible()) {
                     continue;
                 }
@@ -3035,7 +3056,7 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
                 if(fontHeight > image.height()) {
                     scaleImage = image;
                 } else {
-                    double scale = nBookmarkLineHeight/image.height();
+                    double scale = fontHeight/image.height();
                     int nScaleWidth = static_cast<int>(scale*image.width());
                     scaleImage = image.scaled(static_cast<int>(scale*image.height()),nScaleWidth);
                 }
@@ -3838,11 +3859,18 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
 
         }
     } else if (event->type() == QEvent::HoverMove) {
+        QHoverEvent *hoverEvent = static_cast<QHoverEvent *>(event);
+        int line = getLineFromPoint(hoverEvent->pos());
+
+        if (object == m_pLeftAreaWidget->m_bookMarkArea) {
+            m_nBookMarkHoverLine = line;
+            m_pLeftAreaWidget->m_bookMarkArea->update();
+        }
+
         if (object == m_pLeftAreaWidget->m_flodArea) {
             m_markFoldHighLightSelections.clear();
-            renderAllSelections();
-            QHoverEvent *hoverEvent = static_cast<QHoverEvent *>(event);
-            int line = getLineFromPoint(hoverEvent->pos());
+            renderAllSelections();         
+
             if (m_listFlodIconPos.contains(line - 1)) {
                 if (!document()->findBlockByNumber(line).isVisible()) {
                     m_foldCodeShow->clear();
@@ -3886,6 +3914,10 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
             }
         }
     } else if (event->type() == QEvent::HoverLeave) {
+        if (object == m_pLeftAreaWidget->m_bookMarkArea) {
+            m_nBookMarkHoverLine = -1;
+        }
+
         if (object == m_pLeftAreaWidget->m_flodArea) {
             m_markFoldHighLightSelections.clear();
             m_foldCodeShow->hide();

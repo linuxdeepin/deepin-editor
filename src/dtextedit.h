@@ -207,6 +207,7 @@ public:
 
     //书签功能相关
     void bookMarkAreaPaintEvent(QPaintEvent *event);
+    void drawBookmark(int blockNumber, int startPoint ,const QList<int> &listBookmark, const QImage &image);
     int getLineFromPoint(const QPoint &point);
     void addOrDeleteBookMark();
     void moveToPreviousBookMark();
@@ -451,6 +452,7 @@ private:
 
     QFont m_fontLineNumberArea;
     QList<int> m_listBookmark;
+    int m_nBookMarkHoverLine = -1;
     int m_nLines;
     bool m_bIsFileOpen;
 

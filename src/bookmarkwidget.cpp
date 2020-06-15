@@ -32,8 +32,3 @@ void bookmarkwidget::paintEvent(QPaintEvent *event)
 {
     m_leftAreaWidget->bookMarkAreaPaintEvent(event);
 }
-
-//void bookmarkwidget::mousePressEvent(QMouseEvent *event)
-//{
-//    return QWidget::mousePressEvent(event);
-//}

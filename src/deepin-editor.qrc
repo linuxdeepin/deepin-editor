@@ -298,5 +298,7 @@
         <file>images/u-l.svg</file>
         <file>images/d-d.svg</file>
         <file>images/d-l.svg</file>
+        <file>images/like_hover_light.svg</file>
+        <file>images/like_hover_dark.svg</file>
     </qresource>
 </RCC>
