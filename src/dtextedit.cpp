@@ -1863,6 +1863,11 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
     int bottom = top + document()->documentLayout()->blockBoundingRect(block).height();
 
     for (int iBlockCount = blockNumber ; iBlockCount < document()->blockCount(); ++iBlockCount) {
+        if (block.text().trimmed().startsWith("{") && blockNumber != 0) {
+            m_listFlodFlag.append(blockNumber - 1);
+        } else {
+            m_listFlodFlag.append(blockNumber);
+        }
         if (block.isValid() && top <= event->rect().bottom()) {
             if (/*block.isVisible() &&*/ bottom >= event->rect().top()) {
                 if (block.text().contains("{") &&
@@ -1909,7 +1914,7 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                         } else {
                             painter.drawImage(5, imageTop - blockHeight, scaleunFoldImage);
                         }
-                        m_listFlodFlag.push_back(blockNumber);
+
                         m_listFlodIconPos.append(blockNumber - 1);
                     } else {
                         if (block.next().isVisible()) {
@@ -1927,8 +1932,8 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
             block = document()->findBlockByNumber(iBlockCount + 1);
             top = bottom;
             bottom = top + document()->documentLayout()->blockBoundingRect(block).height();
-            ++blockNumber;
         }
+        ++blockNumber;
     }
 }
 
@@ -2177,6 +2182,27 @@ void TextEdit::getNeedControlLine(int line, bool isVisable, int iInitnum, bool i
     int existLeftSubbrackets = iInitnum, existRightSubbrackets = 0;
 
     while (block.isValid()) {
+        //去掉注释里面的括号
+        if (block.text().contains("//")) {
+            QString tmpText = block.text().split("//")[1];
+            for (int i = 0 ; i < tmpText.size(); ++i) {
+                if (tmpText[i] == "}")
+                    existRightSubbrackets--;
+                if (tmpText[i] == "{")
+                    existLeftSubbrackets--;
+            }
+        }
+        //去掉字符串里面的括号
+//        if (block.text().contains("\"")) {
+//            QString tmpText = block.text().split("\"")[1];
+//            qDebug() << ">>>>>>>>>>>>>>>>size" << block.text().split("\"").size();
+//            for (int i = 0 ; i < tmpText.size(); ++i) {
+//                if (tmpText[i] == "}")
+//                    existRightSubbrackets--;
+//                if (tmpText[i] == "{")
+//                    existLeftSubbrackets--;
+//            }
+//        }
 
         if (block.text().contains("{") && !block.text().contains("}")) {
             existLeftSubbrackets ++;
@@ -3215,8 +3241,22 @@ void TextEdit::checkBookmarkLineMove()
 void TextEdit::flodOrUnflodAllLevel(bool isFlod)
 {
     foreach (auto line, m_listFlodFlag) {
-        if (document()->findBlockByNumber(line).isVisible() == isFlod) {
-            getNeedControlLine(line - 1, !isFlod);
+        if (document()->findBlockByNumber(line + 1).isVisible() == isFlod) {
+
+            if (document()->findBlockByNumber(line + 1).text().contains("{")
+                    && document()->findBlockByNumber(line + 1).text().trimmed().startsWith("{")) {
+                getNeedControlLine(line, !isFlod);
+            }
+            if (document()->findBlockByNumber(line).text().contains("{")
+                    && !document()->findBlockByNumber(line).text().trimmed().startsWith("{")) {
+                getNeedControlLine(line, !isFlod);
+
+            }
+            if (document()->findBlockByNumber(line).text().contains("{")
+                    && document()->findBlockByNumber(line).text().trimmed().startsWith("{")) {
+                getNeedControlLine(line + 1, !isFlod, 1, false);
+
+            }
         }
     }
     m_pLeftAreaWidget->m_flodArea->update();
@@ -3868,8 +3908,9 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
 
         if (object == m_pLeftAreaWidget->m_flodArea) {
             m_markFoldHighLightSelections.clear();
-            renderAllSelections();         
-
+            renderAllSelections();
+            QHoverEvent *hoverEvent = static_cast<QHoverEvent *>(event);
+            int line = getLineFromPoint(hoverEvent->pos());
             if (m_listFlodIconPos.contains(line - 1)) {
                 if (!document()->findBlockByNumber(line).isVisible()) {
                     m_foldCodeShow->clear();
