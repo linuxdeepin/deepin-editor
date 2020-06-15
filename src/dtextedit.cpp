@@ -3508,8 +3508,8 @@ void TextEdit::isMarkCurrentLine(bool isMark, QString strColor)
 
         selection.cursor = textCursor();
         if(! this->textCursor().hasSelection()) {
-            selection.cursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
-            selection.cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+            selection.cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+            selection.cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
         }
 
         QString markText = "" ,currentMarkText = textCursor().selection().toPlainText();
@@ -3652,7 +3652,6 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
         textCursor().removeSelectedText();
     }
 
-    qDebug() << ":::::::::::::" << from << charsAdded;
     if (m_bIsFileOpen) {
         return;
     }
