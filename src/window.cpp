@@ -1117,6 +1117,8 @@ void Window::popupJumpLineBar()
         int scrollOffset = wrapper->textEditor()->getScrollOffset();
 
         m_jumpLineBar->activeInput(tabPath, row, column, count, scrollOffset);
+        m_jumpLineBar->show();
+        m_jumpLineBar->focus();
     }
 }
 
@@ -1516,7 +1518,9 @@ void Window::handleCurrentChanged(const int &index)
 
 void Window::handleJumpLineBarExit()
 {
-    QTimer::singleShot(0, currentWrapper()->textEditor(), SLOT(setFocus()));
+    if(m_jumpLineBar)
+        m_jumpLineBar->hide();
+    //QTimer::singleShot(0, currentWrapper()->textEditor(), SLOT(setFocus()));
 }
 
 void Window::handleJumpLineBarJumpToLine(const QString &filepath, int line, bool focusEditor)
