@@ -1610,7 +1610,9 @@ void TextEdit::removeKeywords()
 
 bool TextEdit::highlightKeyword(QString keyword, int position)
 {
-    bool yes = updateKeywordSelections(keyword);
+    m_findMatchSelections.clear();
+    bool yes = updateKeywordSelections(keyword,m_findMatchFormat,&m_findMatchSelections);
+    setExtraSelections(m_findMatchSelections);
     updateCursorKeywordSelection(position, true);
     updateHighlightLineSelection();
     renderAllSelections();
@@ -1652,33 +1654,28 @@ void TextEdit::updateHighlightLineSelection()
     m_currentLineSelection = selection;
 }
 
-bool TextEdit::updateKeywordSelections(QString keyword)
+bool TextEdit::updateKeywordSelections(QString keyword,QTextCharFormat charFormat,QList<QTextEdit::ExtraSelection> *listSelection)
 {
     // Clear keyword selections first.
-    m_findMatchSelections.clear();
+    listSelection->clear();
 
     // Update selections with keyword.
     if (!keyword.isEmpty()) {
         QTextCursor cursor(document());
-
         QTextDocument::FindFlags flags;
-        flags &= QTextDocument::FindCaseSensitively;
-        cursor = document()->find(keyword, cursor, flags);
-
+        flags = QTextDocument::FindCaseSensitively;
+        QTextEdit::ExtraSelection extra;
+        extra.format = charFormat;
+        cursor = document()->find(keyword, cursor, flags/* | QTextDocument::FindBackward*/);
         if(cursor.isNull())
         {
             return false;
         }
-        while (!cursor.isNull()) {
-            QTextEdit::ExtraSelection extra;
-            extra.format = m_findMatchFormat;
+        while (!cursor.isNull()) { 
             extra.cursor = cursor;
-
+            listSelection->append(extra);
             cursor = document()->find(keyword, cursor, flags);
-            m_findMatchSelections.append(extra);
         }
-
-        setExtraSelections(m_findMatchSelections);
         return true;
     }
     return false;
@@ -2973,6 +2970,10 @@ void TextEdit::clearBlack()
 
 void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
 {
+    if (m_nBookMarkHoverLine > blockCount()) {
+        return;
+    }
+
     bookmarkwidget *bookMarkArea = m_pLeftAreaWidget->m_bookMarkArea;
     QPainter painter(bookMarkArea);
     QColor lineNumberAreaBackgroundColor;
@@ -3016,54 +3017,31 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
     additional_margin += 3;
     top += additional_margin;
 
-
+    QTextBlock lineBlock;//第几行文本块
     QImage image;
-
-//    foreach (auto line, m_listBookmark) {
-
-//        if (line <= 0) {
-//            m_listBookmark.replace(m_listBookmark.indexOf(line),1);
-//        }
-
-//        lineBlock = document()->findBlockByNumber(line - 1);
-//        if (nBookmarkLineHeight > document()->documentLayout()->blockBoundingRect(lineBlock).height()) {
-//            nBookmarkLineHeight = document()->documentLayout()->blockBoundingRect(lineBlock).height();
-//        }
-//    }
+    QImage scaleImage;
+    int startLine = 0;//当前可见区域开始行号
+    int startPoint = 0;//当前可见区域开始位置
+    int imageTop = 0;//图片绘制位置
+    int fontHeight = fontMetrics().height();
+    double nBookmarkLineHeight = fontHeight;
+    QList<int> list = m_listBookmark;
+    bool bIsContains = false;
 
     if (!m_listBookmark.contains(m_nBookMarkHoverLine) && m_nBookMarkHoverLine != -1) {
-        if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::ColorType::DarkType) {
-            image = QImage(":/images/like_hover_dark.svg");
-        } else {
-            image = QImage(":/images/like_hover_light.svg");
-        }
-        QList<int> list;
         list << m_nBookMarkHoverLine;
-
-        if (m_nBookMarkHoverLine <= blockCount()) {
-            drawBookmark(blockNumber,top,list,image);
-            m_nBookMarkHoverLine = -1;
-        }
+    } else {
+        bIsContains = true;
     }
 
-    image = QImage(":/images/bookmark.svg");
-    drawBookmark(blockNumber,top,m_listBookmark,image);
-}
-
-void TextEdit::drawBookmark(int blockNumber, int startPoint, const QList<int> &listBookmark, const QImage &image)
-{
-    int startLine = 0;//当前可见区域开始行号
-    int imageTop = 0;//图片绘制位置
-    QTextBlock lineBlock;//第几行文本块
-    QImage scaleImage;
-    int fontHeight = fontMetrics().height();
-    QPainter painter(m_pLeftAreaWidget->m_bookMarkArea);
-
-    foreach (auto line, listBookmark) {
+    foreach (auto line, list) {
 
         startLine = blockNumber + 1;
 
-        if (line >= startLine) {
+        if (line < startLine) {
+
+        } else {
+            startPoint = top;
 
             while (line - startLine > 0) {
                 lineBlock = document()->findBlockByNumber(startLine - 1);
@@ -3071,10 +3049,19 @@ void TextEdit::drawBookmark(int blockNumber, int startPoint, const QList<int> &l
                 startLine++;
             }
 
-            lineBlock = document()->findBlockByNumber(line - 1);
+            if (line == m_nBookMarkHoverLine && !bIsContains) {
+                if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::ColorType::DarkType) {
+                    image = QImage(":/images/like_hover_dark.svg");
+                } else {
+                    image = QImage(":/images/like_hover_light.svg");
+                }
+            } else {
+                image = QImage(":/images/bookmark.svg");
+            }
 
             if(line > 0)
             {
+                lineBlock = document()->findBlockByNumber(line - 1);
                 if (!lineBlock.isVisible()) {
                     continue;
                 }
@@ -3082,7 +3069,7 @@ void TextEdit::drawBookmark(int blockNumber, int startPoint, const QList<int> &l
                 if(fontHeight > image.height()) {
                     scaleImage = image;
                 } else {
-                    double scale = fontHeight/image.height();
+                    double scale = nBookmarkLineHeight/image.height();
                     int nScaleWidth = static_cast<int>(scale*image.width());
                     scaleImage = image.scaled(static_cast<int>(scale*image.height()),nScaleWidth);
                 }
@@ -3611,16 +3598,42 @@ void TextEdit::isMarkCurrentLine(bool isMark, QString strColor)
 
 void TextEdit::isMarkAllLine(bool isMark, QString strColor)
 {
-    m_wordMarkSelections.clear();
-    m_mapWordMarkSelections.clear();
     if (isMark) {
-        QTextEdit::ExtraSelection selection;
+        if (this->textCursor().hasSelection()) {
+            QList<QTextEdit::ExtraSelection> wordMarkSelections = m_wordMarkSelections;
+            QList<QTextEdit::ExtraSelection> listExtraSelection;
+            QTextEdit::ExtraSelection  extraSelection;
+            QTextCharFormat format;
+            format.setBackground(QColor(strColor));
+            extraSelection.cursor = textCursor();
+            extraSelection.format = format;
+            if (!updateKeywordSelections(textCursor().selection().toPlainText(),format,&listExtraSelection)) {
+                isMarkCurrentLine(true,strColor);
+            } else {
+                m_wordMarkSelections.append(listExtraSelection);
+            }
 
-        selection.format.setBackground(QColor(strColor));
-        selection.cursor = textCursor();
-        selection.cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
-        selection.cursor.select(QTextCursor::Document);
-        m_markAllSelection = selection;
+//            appendExtraSelection(wordMarkSelections,extraSelection,strColor,&listExtraSelection);
+//
+
+//            for (int i = 0;i < m_wordMarkSelections.count();i++) {
+//                if (m_wordMarkSelections.value(i).cursor.selectedText().contains(textCursor().selectedText())) {
+//                    QList<QTextEdit::ExtraSelection> wordMarkSelections = m_wordMarkSelections;
+//                    //appendExtraSelection(wordMarkSelections,m_wordMarkSelections.value(i),)
+//                }
+//            }
+            m_mapWordMarkSelections.insert(m_mapWordMarkSelections.count(),listExtraSelection);
+        } else {
+            m_wordMarkSelections.clear();
+            m_mapWordMarkSelections.clear();
+            QTextEdit::ExtraSelection selection;
+
+            selection.format.setBackground(QColor(strColor));
+            selection.cursor = textCursor();
+            selection.cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+            selection.cursor.select(QTextCursor::Document);
+            m_markAllSelection = selection;
+        }
     } else {
         QTextEdit::ExtraSelection selection;
         selection.format.setBackground(QColor(strColor));

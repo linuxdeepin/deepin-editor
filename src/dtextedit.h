@@ -146,7 +146,7 @@ public:
     bool highlightKeyword(QString keyword, int position);
     void updateCursorKeywordSelection(int position, bool findNext);
     void updateHighlightLineSelection();
-    bool updateKeywordSelections(QString keyword);
+    bool updateKeywordSelections(QString keyword,QTextCharFormat charFormat,QList<QTextEdit::ExtraSelection> *listSelection);
     void renderAllSelections();
 
     DMenu *getHighlightMenu();
@@ -207,7 +207,6 @@ public:
 
     //书签功能相关
     void bookMarkAreaPaintEvent(QPaintEvent *event);
-    void drawBookmark(int blockNumber, int startPoint ,const QList<int> &listBookmark, const QImage &image);
     int getLineFromPoint(const QPoint &point);
     void addOrDeleteBookMark();
     void moveToPreviousBookMark();

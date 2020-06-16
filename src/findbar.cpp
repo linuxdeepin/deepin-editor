@@ -124,7 +124,7 @@ void FindBar::slot_ifClearSearchWord()
 {
     if(m_editLine->lineEdit()->text() == nullptr)
     {
-        updateSearchKeyword(m_findFile, m_editLine->lineEdit()->text());
+        updateSearchKeyword(m_findFile, m_editLine->lineEdit()->placeholderText());
     }
 }
 
