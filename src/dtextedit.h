@@ -218,16 +218,16 @@ public:
     QStringList readHistoryRecordofBookmark();
     QStringList readHistoryRecordofFilePath();
     void writeHistoryRecord();
- 
+
     void isMarkCurrentLine(bool isMark, QString strColor = "");
     void isMarkAllLine(bool isMark, QString strColor = "");
     void cancelLastMark();
     void markSelectWord();
     void updateMark(int from, int charsRemoved, int charsAdded);
-	
+
 public:
     bool bIsSetLineNumberWidth = true;
-	bool m_pIsShowCodeFoldArea;
+    bool m_pIsShowCodeFoldArea;
 signals:
     void clickFindAction();
     void clickReplaceAction();
