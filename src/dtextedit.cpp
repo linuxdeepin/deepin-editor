@@ -2778,12 +2778,12 @@ void TextEdit::toggleReadOnlyMode()
 
         m_readOnlyMode = false;
         setReadOnly(false);
-        setSpeechToTextEnabled(true);
+        //setSpeechToTextEnabled(true); //此函数在shuttle上编译报错
         popupNotify(tr("Read-Only mode is off"));
     } else {
         m_readOnlyMode = true;
         setReadOnly(true);
-        setSpeechToTextEnabled(false);
+        //setSpeechToTextEnabled(false);
         popupNotify(tr("Read-Only mode is on"));
         emit cursorModeChanged(Readonly);
     }
