@@ -3699,11 +3699,11 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
 {
     Q_UNUSED(charsRemoved);
 
-//    if (m_readOnlyMode) {
-//        textCursor().setPosition(from, QTextCursor::MoveAnchor);
-//        textCursor().setPosition(from + charsAdded, QTextCursor::KeepAnchor);
-//        textCursor().removeSelectedText();
-//    }
+    if (m_readOnlyMode) {
+        textCursor().setPosition(from, QTextCursor::MoveAnchor);
+        textCursor().setPosition(from + charsAdded, QTextCursor::KeepAnchor);
+        textCursor().removeSelectedText();
+    }
 
     if (m_bIsFileOpen) {
         return;
