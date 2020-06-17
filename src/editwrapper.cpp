@@ -80,7 +80,7 @@ EditWrapper::EditWrapper(QWidget *parent)
 EditWrapper::~EditWrapper()
 {
     delete m_textEdit;
-    delete m_waringNotices;
+    //delete m_waringNotices;
 }
 
 void EditWrapper::openFile(const QString &filepath)
