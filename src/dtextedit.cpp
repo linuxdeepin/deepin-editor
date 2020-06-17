@@ -1867,6 +1867,7 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
         }
         if (block.isValid() && top <= event->rect().bottom()) {
             if (/*block.isVisible() &&*/ bottom >= event->rect().top()) {
+                //判定是否包含左括号、是否整行是注释，isNeedShowFoldIcon该函数是为了做判定当前行是否包含成对的括号，如果包括，则不显示折叠标志
                 if (block.text().contains("{") &&
                         !block.text().trimmed().startsWith("//") &&
                         isNeedShowFoldIcon(block)) {
@@ -2172,6 +2173,7 @@ int TextEdit::getFirstVisibleBlockId() const
     return 0;
 }
 
+//line 开始处理的行号  isvisable是否折叠  iInitnum左括号默认开始计算的数量  isFirstLine是否是第一行，因为第一行默认不折叠
 void TextEdit::getNeedControlLine(int line, bool isVisable, int iInitnum, bool isFirstLine)
 {
     int iLine = line;
@@ -2200,7 +2202,7 @@ void TextEdit::getNeedControlLine(int line, bool isVisable, int iInitnum, bool i
 //                    existLeftSubbrackets--;
 //            }
 //        }
-
+        //计算左右括号对应的数量
         if (block.text().contains("{") && !block.text().contains("}")) {
             existLeftSubbrackets ++;
         } else if (block.text().contains("}") && !block.text().contains("{")) {
@@ -2219,6 +2221,7 @@ void TextEdit::getNeedControlLine(int line, bool isVisable, int iInitnum, bool i
             }
         }
 
+        //左右括号数量相等时，则视为找到需要折叠的代码块
         if (existLeftSubbrackets == existRightSubbrackets &&
                 existLeftSubbrackets != 0) {
             if (!block.text().contains("{")) {
@@ -3854,6 +3857,7 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                 int line = getLineFromPoint(mouseEvent->pos());
                 m_markFoldHighLightSelections.clear();
                 renderAllSelections();
+                //判断下一行是否可见，并且下一行是以左括号开头的（类似c++文件中的函数定义的书写）则是从该行开始做折叠处理，但该行不隐藏
                 if (document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line).text().contains("{")
                         && document()->findBlockByNumber(line).text().trimmed().startsWith("{")) {
                     getNeedControlLine(line - 1, false);
@@ -3862,6 +3866,7 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                     getNeedControlLine(line - 1, true);
                 }
 
+                //判断下一行是否可见，左括号存在于该行（类似c++文件中的if else 书写），但不是左括号开头的，则是从该行开始做折叠处理，但该行不隐藏
                 if (document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line - 1).text().contains("{")
                         && !document()->findBlockByNumber(line - 1).text().trimmed().startsWith("{")) {
                     getNeedControlLine(line - 1, false);
@@ -3871,6 +3876,7 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                     getNeedControlLine(line - 1, true);
                 }
 
+                //判断下一行是否可见，左括号存在于该行（类似文件中的json文件书写，第一行就存在左括号开头的现象），且是左括号开头的，则是从下一行开始做折叠处理
                 if (document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line - 1).text().contains("{")
                         && document()->findBlockByNumber(line - 1).text().trimmed().startsWith("{")) {
                     getNeedControlLine(line, false, 1, false);

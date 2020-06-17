@@ -455,7 +455,9 @@ private:
     int m_nLines;
     bool m_bIsFileOpen;
 
+    //存储所有有折叠标记的位置，包含不可见区域
     QList<int> m_listFlodFlag;
+    //包含当前可见区域的标志
     QList<int> m_listFlodIconPos;
     QString m_qstrCommitString;
     bool m_bIsInputMethod;
