@@ -121,7 +121,7 @@ void JumpLineBar::jumpConfirm()
 void JumpLineBar::slotFocusChanged(bool bFocus)
 {
     if (bFocus == false) {
-        hide();
+        //hide();
 
         lostFocusExit();
     }

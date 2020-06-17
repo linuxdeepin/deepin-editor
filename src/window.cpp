@@ -154,7 +154,8 @@ Window::Window(DMainWindow *parent)
     connect(m_replaceBar, &ReplaceBar::sigReplacebarClose, this, &Window::slotReplacebarClose, Qt::QueuedConnection);
 
     // Init jump line bar.
-    QTimer::singleShot(0, m_jumpLineBar, SLOT(hide()));
+    //QTimer::singleShot(0, m_jumpLineBar, SLOT(hide()));
+    m_jumpLineBar->hide();
     m_jumpLineBar->setParent(this);
 
     connect(m_jumpLineBar, &JumpLineBar::jumpToLine, this, &Window::handleJumpLineBarJumpToLine, Qt::QueuedConnection);
@@ -1101,25 +1102,43 @@ void Window::popupJumpLineBar()
     if (curWrapper->textEditor()->toPlainText().isEmpty()) {
         return;
     }
-    if (m_jumpLineBar->isVisible()) {
-        if (m_jumpLineBar->isFocus()) {
-            QTimer::singleShot(0, m_wrappers.value(m_tabbar->currentPath())->textEditor(), SLOT(setFocus()));
-        } else {
-            m_jumpLineBar->focus();
-        }
-    } else {
-        QString tabPath = m_tabbar->currentPath();
-        EditWrapper *wrapper = currentWrapper();
-        QString text = wrapper->textEditor()->textCursor().selectedText();
-        int row = wrapper->textEditor()->getCurrentLine();
-        int column = wrapper->textEditor()->getCurrentColumn();
-        int count = wrapper->textEditor()->blockCount();
-        int scrollOffset = wrapper->textEditor()->getScrollOffset();
-
-        m_jumpLineBar->activeInput(tabPath, row, column, count, scrollOffset);
-        m_jumpLineBar->show();
-        m_jumpLineBar->focus();
+    if(m_jumpLineBar->isVisible())
+    {
+        m_jumpLineBar->hide();
+        return;
     }
+    QString tabPath = m_tabbar->currentPath();
+    EditWrapper *wrapper = currentWrapper();
+    QString text = wrapper->textEditor()->textCursor().selectedText();
+    int row = wrapper->textEditor()->getCurrentLine();
+    int column = wrapper->textEditor()->getCurrentColumn();
+    int count = wrapper->textEditor()->blockCount();
+    int scrollOffset = wrapper->textEditor()->getScrollOffset();
+    m_jumpLineBar->activeInput(tabPath, row, column, count, scrollOffset);
+    m_jumpLineBar->show();
+    m_jumpLineBar->raise();
+    //m_jumpLineBar->focus();
+
+
+//    if (m_jumpLineBar->isVisible()) {
+//        if (m_jumpLineBar->isFocus()) {
+//            //QTimer::singleShot(0, m_wrappers.value(m_tabbar->currentPath())->textEditor(), SLOT(setFocus()));
+//        } else {
+//            m_jumpLineBar->focus();
+//        }
+//    } else {
+//        QString tabPath = m_tabbar->currentPath();
+//        EditWrapper *wrapper = currentWrapper();
+//        QString text = wrapper->textEditor()->textCursor().selectedText();
+//        int row = wrapper->textEditor()->getCurrentLine();
+//        int column = wrapper->textEditor()->getCurrentColumn();
+//        int count = wrapper->textEditor()->blockCount();
+//        int scrollOffset = wrapper->textEditor()->getScrollOffset();
+
+//        m_jumpLineBar->activeInput(tabPath, row, column, count, scrollOffset);
+//        m_jumpLineBar->show();
+//        m_jumpLineBar->focus();
+//    }
 }
 
 void Window::popupSettingsDialog()
@@ -1495,6 +1514,9 @@ void Window::handleCurrentChanged(const int &index)
     if (m_replaceBar->isVisible()) {
         m_replaceBar->hide();
     }
+    if (m_jumpLineBar->isVisible()) {
+        m_jumpLineBar->hide();
+    }
 
     for (auto wrapper : m_wrappers.values()) {
         wrapper->textEditor()->removeKeywords();
@@ -1518,9 +1540,9 @@ void Window::handleCurrentChanged(const int &index)
 
 void Window::handleJumpLineBarExit()
 {
-    if(m_jumpLineBar)
-        m_jumpLineBar->hide();
-    //QTimer::singleShot(0, currentWrapper()->textEditor(), SLOT(setFocus()));
+   // if(m_jumpLineBar)
+      //  m_jumpLineBar->hide();
+    QTimer::singleShot(0, currentWrapper()->textEditor(), SLOT(setFocus()));
 }
 
 void Window::handleJumpLineBarJumpToLine(const QString &filepath, int line, bool focusEditor)
@@ -1539,7 +1561,7 @@ void Window::handleBackToPosition(const QString &file, int row, int column, int 
     if (m_wrappers.contains(file)) {
         m_wrappers.value(file)->textEditor()->scrollToLine(scrollOffset, row, column);
 
-        QTimer::singleShot(0, m_wrappers.value(file)->textEditor(), SLOT(setFocus()));
+        //QTimer::singleShot(0, m_wrappers.value(file)->textEditor(), SLOT(setFocus()));
     }
 }
 
