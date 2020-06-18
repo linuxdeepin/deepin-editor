@@ -451,7 +451,7 @@ private:
 
     QFont m_fontLineNumberArea;
     QList<int> m_listBookmark;
-    int m_nBookMarkHoverLine = -1;
+    int m_nBookMarkHoverLine;
     int m_nLines;
     bool m_bIsFileOpen;
 

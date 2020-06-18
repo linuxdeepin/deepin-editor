@@ -85,6 +85,7 @@ TextEdit::TextEdit(QWidget *parent)
      m_highlighter(new KSyntaxHighlighting::SyntaxHighlighter(document()))
 {
     m_nLines = 0;
+    m_nBookMarkHoverLine = -1;
     m_bIsFileOpen = false;
     m_qstrCommitString = "";
     m_bIsInputMethod = false;
@@ -3405,7 +3406,7 @@ int TextEdit::getLinePosByLineNum(int iLine)
         bottom = top + document()->documentLayout()->blockBoundingRect(block).height();
         ++blockNumber;
     }
-
+    return -1;
 }
 
 void TextEdit::setIsFileOpen()
@@ -3414,16 +3415,18 @@ void TextEdit::setIsFileOpen()
     QStringList bookmarkList = readHistoryRecordofBookmark();
     QStringList filePathList = readHistoryRecordofFilePath();
     QList<int> linesList;
-    QString qstrPath = "[" + filepath + "]";
+    QString qstrPath = "*[" + filepath + "]*";
 
     if (filePathList.contains(qstrPath)) {
-        int index = 1;
+        int index = 2;
         QString qstrLines = bookmarkList.value(filePathList.indexOf(qstrPath));
-
-        for (int i = 0;i < qstrLines.count();i++) {
-            if(qstrLines.at(i) == "," || qstrLines.at(i) ==")") {
+        QString sign;
+        for (int i = 0;i < qstrLines.count()-1;i++) {
+            sign = qstrLines.at(i);
+            sign.append(qstrLines.at(i + 1));
+            if(sign == ",*" || sign ==")*") {
                 linesList << qstrLines.mid(index,i - index).toInt();
-                index = i + 1;
+                index = i + 2;
             }
         }
     }
@@ -3444,13 +3447,13 @@ QStringList TextEdit::readHistoryRecord()
 {
     QString history = m_settings->settings->option("advance.editor.browsing_history_file")->value().toString();
     QStringList historyList;
-    int nLeftPosition = history.indexOf("{");
-    int nRightPosition = history.indexOf("}");
+    int nLeftPosition = history.indexOf("*{");
+    int nRightPosition = history.indexOf("}*");
 
     while (nLeftPosition != -1) {
-        historyList << history.mid(nLeftPosition,nRightPosition + 1 - nLeftPosition);
-        nLeftPosition = history.indexOf("{",nLeftPosition + 1);
-        nRightPosition = history.indexOf("}",nRightPosition + 1);
+        historyList << history.mid(nLeftPosition,nRightPosition + 2 - nLeftPosition);
+        nLeftPosition = history.indexOf("*{",nLeftPosition + 2);
+        nRightPosition = history.indexOf("}*",nRightPosition + 2);
     }
 
     return historyList;
@@ -3460,13 +3463,13 @@ QStringList TextEdit::readHistoryRecordofBookmark()
 {
     QString history = m_settings->settings->option("advance.editor.browsing_history_file")->value().toString();
     QStringList bookmarkList;
-    int nLeftPosition = history.indexOf("(");
-    int nRightPosition = history.indexOf(")");
+    int nLeftPosition = history.indexOf("*(");
+    int nRightPosition = history.indexOf(")*");
 
     while (nLeftPosition != -1) {
-        bookmarkList << history.mid(nLeftPosition,nRightPosition + 1 - nLeftPosition);
-        nLeftPosition = history.indexOf("(",nLeftPosition + 1);
-        nRightPosition = history.indexOf(")",nRightPosition + 1);
+        bookmarkList << history.mid(nLeftPosition,nRightPosition + 2 - nLeftPosition);
+        nLeftPosition = history.indexOf("*(",nLeftPosition + 2);
+        nRightPosition = history.indexOf(")*",nRightPosition + 2);
     }
 
     return bookmarkList;
@@ -3476,13 +3479,13 @@ QStringList TextEdit::readHistoryRecordofFilePath()
 {
     QString history = m_settings->settings->option("advance.editor.browsing_history_file")->value().toString();
     QStringList filePathList;
-    int nLeftPosition = history.indexOf("[");
-    int nRightPosition = history.indexOf("]");
+    int nLeftPosition = history.indexOf("*[");
+    int nRightPosition = history.indexOf("]*");
 
     while (nLeftPosition != -1) {
-        filePathList << history.mid(nLeftPosition,nRightPosition + 1 - nLeftPosition);
-        nLeftPosition = history.indexOf("[",nLeftPosition + 1);
-        nRightPosition = history.indexOf("]",nRightPosition + 1);
+        filePathList << history.mid(nLeftPosition,nRightPosition + 2 - nLeftPosition);
+        nLeftPosition = history.indexOf("*[",nLeftPosition + 2);
+        nRightPosition = history.indexOf("]*",nRightPosition + 2);
     }
 
     return filePathList;
@@ -3495,31 +3498,31 @@ void TextEdit::writeHistoryRecord()
     QStringList historyList = readHistoryRecord();
 
     int nLeftPosition = history.indexOf(filepath);
-    int nRightPosition = history.indexOf("}",nLeftPosition);
+    int nRightPosition = history.indexOf("}*",nLeftPosition);
     if (history.contains(filepath)) {
-        history.remove(nLeftPosition - 2,nRightPosition + 3 - nLeftPosition);
+        history.remove(nLeftPosition - 4,nRightPosition + 6 - nLeftPosition);
     }
 
     if (!m_listBookmark.isEmpty()) {
 
-        QString filePathandBookmarkLine = "{[" + filepath + "](";
+        QString filePathandBookmarkLine = "*{*[" + filepath + "]**(";
 
         foreach (auto line, m_listBookmark) {
             if (line <= 0) {
                 line = 1;
             }
 
-            filePathandBookmarkLine += QString::number(line) + ",";
+            filePathandBookmarkLine += QString::number(line) + ",*";
         }
 
-        filePathandBookmarkLine.remove(filePathandBookmarkLine.count() - 1,1);
+        filePathandBookmarkLine.remove(filePathandBookmarkLine.count() - 2,2);
 
         if (historyList.count() <= 5) {
 //            qDebug() << "writeHistoryRecord()" <<  filePathandBookmarkLine + ")}" + history;
-            m_settings->settings->option("advance.editor.browsing_history_file")->setValue(filePathandBookmarkLine + ")}" + history);
+            m_settings->settings->option("advance.editor.browsing_history_file")->setValue(filePathandBookmarkLine + ")*}*" + history);
         } else {
             history.remove(historyList.last());
-            m_settings->settings->option("advance.editor.browsing_history_file")->setValue(filePathandBookmarkLine + ")}" + history);
+            m_settings->settings->option("advance.editor.browsing_history_file")->setValue(filePathandBookmarkLine + ")*}*" + history);
         }
     } else {
         m_settings->settings->option("advance.editor.browsing_history_file")->setValue(history);
@@ -3703,6 +3706,10 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
         textCursor().setPosition(from, QTextCursor::MoveAnchor);
         textCursor().setPosition(from + charsAdded, QTextCursor::KeepAnchor);
         textCursor().removeSelectedText();
+    }
+
+    if (from == 0) {
+        return;
     }
 
     if (m_bIsFileOpen) {
