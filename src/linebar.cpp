@@ -36,6 +36,7 @@ LineBar::LineBar(DLineEdit *parent)
     m_autoSaveTimer->setSingleShot(true);
 
     connect(m_autoSaveTimer, &QTimer::timeout, this, &LineBar::handleTextChangeTimer);
+    connect(this, &DLineEdit::textEdited, this, &LineBar::sendText, Qt::QueuedConnection);
     connect(this, &DLineEdit::textChanged, this, &LineBar::handleTextChanged, Qt::QueuedConnection);
 }
 
@@ -54,6 +55,12 @@ void LineBar::handleTextChanged()
 
     // Start new timer.
     m_autoSaveTimer->start(m_autoSaveInternal);
+}
+
+void LineBar::sendText(QString t)
+{
+    qDebug()<<"ppppppttttt"<<t;
+    emit signal_sentText(t);
 }
 
 void LineBar::focusOutEvent(QFocusEvent *e)

@@ -56,6 +56,7 @@ public:
 
     void activeInput(QString text, QString file, int row, int column, int scrollOffset);
     void setMismatchAlert(bool isAlert);
+    void receiveText(QString t);
 
 signals:
     void findNext();
@@ -87,6 +88,7 @@ private:
     int m_findFileRow;
     int m_findFileSrollOffset;
     QColor m_backgroundColor;
+    QString m_receivedText = " ";
 
     QPoint last;
 };

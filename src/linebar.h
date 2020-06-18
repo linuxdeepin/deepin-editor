@@ -39,6 +39,7 @@ public:
 public slots:
     void handleTextChangeTimer();
     void handleTextChanged();
+    void sendText(QString t);
 
 signals:
     void contentChanged();
@@ -48,6 +49,7 @@ signals:
     void pressEnter();
     void pressEsc();
     void pressMetaEnter();
+    void signal_sentText(QString t);
 
 protected:
     virtual void focusOutEvent(QFocusEvent *e);
