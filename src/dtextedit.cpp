@@ -3708,10 +3708,6 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
         textCursor().removeSelectedText();
     }
 
-    if (from == 0) {
-        return;
-    }
-
     if (m_bIsFileOpen) {
         return;
     }
@@ -3735,17 +3731,32 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
                 selection.format.setBackground(strColor);
                 selection.cursor = textCursor();
 
-                selection.cursor.setPosition(nStartPos, QTextCursor::MoveAnchor);
-                selection.cursor.setPosition(from, QTextCursor::KeepAnchor);
-                m_wordMarkSelections.insert(i,selection);
-
                 QTextEdit::ExtraSelection preSelection;
-                preSelection.cursor = selection.cursor;
-                preSelection.format = selection.format;
+                if (m_bIsInputMethod) {
+                    selection.cursor.setPosition(nStartPos, QTextCursor::MoveAnchor);
+                    selection.cursor.setPosition(nCurrentPos - m_qstrCommitString.count(), QTextCursor::KeepAnchor);
+                    m_wordMarkSelections.insert(i,selection);
 
-                selection.cursor.setPosition(nCurrentPos, QTextCursor::MoveAnchor);
-                selection.cursor.setPosition(nEndPos, QTextCursor::KeepAnchor);
-                m_wordMarkSelections.insert(i + 1,selection);
+                    preSelection.cursor = selection.cursor;
+                    preSelection.format = selection.format;
+
+                    selection.cursor.setPosition(nCurrentPos, QTextCursor::MoveAnchor);
+                    selection.cursor.setPosition(nEndPos, QTextCursor::KeepAnchor);
+                    m_wordMarkSelections.insert(i + 1,selection);
+
+                    m_bIsInputMethod = false;
+                } else {
+                    selection.cursor.setPosition(nStartPos, QTextCursor::MoveAnchor);
+                    selection.cursor.setPosition(from, QTextCursor::KeepAnchor);
+                    m_wordMarkSelections.insert(i,selection);
+
+                    preSelection.cursor = selection.cursor;
+                    preSelection.format = selection.format;
+
+                    selection.cursor.setPosition(nCurrentPos, QTextCursor::MoveAnchor);
+                    selection.cursor.setPosition(nEndPos, QTextCursor::KeepAnchor);
+                    m_wordMarkSelections.insert(i + 1,selection);
+                }
 
                 bool bIsFind = false;
                 for (int j = 0;j < m_mapWordMarkSelections.count();j++) {
