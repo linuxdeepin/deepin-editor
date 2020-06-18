@@ -1008,33 +1008,29 @@ void Window::setFontSizeWithConfig(EditWrapper *wrapper)
 
 void Window::popupFindBar()
 {
-    EditWrapper *curWrapper = currentWrapper();
-    if (curWrapper->textEditor()->toPlainText().isEmpty()) {
-        return;
-    }
-	currentWrapper()->bottomBar()->updateSize(59);
 
-    if (m_findBar->isVisible()) {
-        m_findBar->move(QPoint(10, height() - 59));
-        if (m_findBar->isFocus()) {
-            m_wrappers.value(m_tabbar->currentPath())->textEditor()->setFocus();
-        } else {
-            m_findBar->focus();
-        }
-    } else {
+
+//    if (m_findBar->isVisible()) {
+//        m_findBar->move(QPoint(10, height() - 59));
+//        if (m_findBar->isFocus()) {
+//            m_wrappers.value(m_tabbar->currentPath())->textEditor()->setFocus();
+//        } else {
+//            m_findBar->focus();
+//        }
+//    } else {
         //addBottomWidget(m_findBar);
 
         QString tabPath = m_tabbar->currentPath();
         EditWrapper *wrapper = currentWrapper();
-
-        if (wrapper->isVisible()) {
-            //  wrapper->m_bottomBar->hide();
+        if (wrapper->textEditor()->toPlainText().isEmpty()) {
+            return;
         }
+        currentWrapper()->bottomBar()->updateSize(59);
+
         if (m_replaceBar->isVisible()) {
             m_replaceBar->hide();
         }
         m_findBar->raise();
-
         m_findBar->move(QPoint(10, height() - 59));
         m_findBar->show();
 
@@ -1046,7 +1042,7 @@ void Window::popupFindBar()
         m_findBar->activeInput(text, tabPath, row, column, scrollOffset);
 
         QTimer::singleShot(10, this, [ = ] { m_findBar->focus(); });
-    }
+   // }
 }
 
 void Window::popupReplaceBar()
@@ -1064,18 +1060,7 @@ void Window::popupReplaceBar()
     }
 	currentWrapper()->bottomBar()->updateSize(59);
 
-    if (m_replaceBar->isVisible()) {
-        m_replaceBar->move(QPoint(10, height() - 59));
-        if (m_replaceBar->isFocus()) {
-            m_wrappers.value(m_tabbar->currentPath())->textEditor()->setFocus();
-        } else {
-            m_replaceBar->focus();
-        }
-    } else {
         EditWrapper *wrapper = currentWrapper();
-        if (wrapper->isVisible()) {
-            // wrapper->m_bottomBar->hide();
-        }
         if (m_findBar->isVisible()) {
             m_findBar->hide();
         }
@@ -1093,7 +1078,7 @@ void Window::popupReplaceBar()
         m_replaceBar->activeInput(text, tabPath, row, column, scrollOffset);
 
         QTimer::singleShot(10, this, [ = ] { m_replaceBar->focus(); });
-    }
+
 }
 
 void Window::popupJumpLineBar()
