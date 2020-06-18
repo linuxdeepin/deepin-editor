@@ -3146,6 +3146,7 @@ void TextEdit::addOrDeleteBookMark()
 
     if (m_listBookmark.contains(line)) {
         m_listBookmark.removeOne(line);
+        m_nBookMarkHoverLine = -1;
         qDebug() << "DeleteBookMark:" << line << m_listBookmark;
     } else {
         m_listBookmark.push_back(line);
@@ -3865,7 +3866,6 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                 }
 
                 m_rightMenu->exec(mouseEvent->globalPos());
-
             } else {
                 qDebug() << "bookMarkAreaClicked:" << mouseEvent->pos();
                 addOrDeleteBookMark();
