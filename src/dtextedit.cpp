@@ -3625,15 +3625,60 @@ void TextEdit::isMarkAllLine(bool isMark, QString strColor)
                 }
             }
         } else {
-            m_wordMarkSelections.clear();
-            m_mapWordMarkSelections.clear();
+//            m_wordMarkSelections.clear();
+//            m_mapWordMarkSelections.clear();
             QTextEdit::ExtraSelection selection;
+            QTextEdit::ExtraSelection currentSelection;
+            QList<QTextEdit::ExtraSelection> listSelections;
+            QList<QTextEdit::ExtraSelection> wordMarkSelections = m_wordMarkSelections;
 
             selection.format.setBackground(QColor(strColor));
             selection.cursor = textCursor();
-            selection.cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
-            selection.cursor.select(QTextCursor::Document);
-            m_markAllSelection = selection;
+            currentSelection.cursor = textCursor();
+            currentSelection.cursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+            currentSelection.cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+//            selection.cursor.select(QTextCursor::Document);
+
+            QString markText = "" ,currentMarkText = currentSelection.cursor.selection().toPlainText();
+            int pos = currentMarkText.indexOf("\n");
+
+            if (pos != -1) {
+                selection.cursor.setPosition(currentSelection.cursor.selectionStart(), QTextCursor::MoveAnchor);
+                selection.cursor.setPosition(currentSelection.cursor.selectionStart() + pos, QTextCursor::KeepAnchor);
+
+                if (selection.cursor.selectedText() != "") {
+                    appendExtraSelection(wordMarkSelections,selection,strColor,&listSelections);
+                }
+
+                while (pos != -1) {
+                       selection.cursor.setPosition(currentSelection.cursor.selectionStart() + pos + 1, QTextCursor::MoveAnchor);
+                       pos = currentMarkText.indexOf("\n",pos + 1);
+                       if(pos == -1)
+                       {
+                           break;
+                       }
+
+                       selection.cursor.setPosition(currentSelection.cursor.selectionStart() + pos, QTextCursor::KeepAnchor);
+
+                       if (selection.cursor.selectedText() != "") {
+                           wordMarkSelections = m_wordMarkSelections;
+                           appendExtraSelection(wordMarkSelections,selection,strColor,&listSelections);
+                       }
+
+                }
+                selection.cursor.setPosition(currentSelection.cursor.selectionEnd(), QTextCursor::KeepAnchor);
+            }
+
+            if (selection.cursor.selectedText() != "") {
+                wordMarkSelections = m_wordMarkSelections;
+                appendExtraSelection(wordMarkSelections,selection,strColor,&listSelections);
+            }
+
+            if (!listSelections.isEmpty()) {
+                m_mapWordMarkSelections.insert(m_mapWordMarkSelections.count(),listSelections);
+            }
+
+//            m_markAllSelection = selection;
         }
     } else {
         m_wordMarkSelections.clear();
