@@ -69,6 +69,9 @@ add_subdirectory("dedit")
 file(GLOB QM_FILES "translations/*.qm")
 install(FILES ${QM_FILES}
         DESTINATION share/deepin-editor/translations)
+install(FILES ${APP_ICONPATH} DESTINATION share/icons/hicolor/scalable/apps/)
+install(FILES src/images/deepin-editor.svg
+        DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps/)
 
 install(TARGETS deepin-editor DESTINATION bin)
 install(FILES deepin-editor.desktop DESTINATION share/applications)
