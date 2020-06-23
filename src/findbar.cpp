@@ -121,8 +121,8 @@ void FindBar::slot_ifClearSearchWord()
     //因为搜索更改为按下enter,所以使用这个函数在点击"x"时清除;
     if(m_editLine->lineEdit()->text() == nullptr)
     {
-        updateSearchKeyword(m_findFile, m_receivedText);
-        updateSearchKeyword(m_findFile, "");
+//        updateSearchKeyword(m_findFile, m_receivedText);
+//        updateSearchKeyword(m_findFile, "");
     }
 }
 
