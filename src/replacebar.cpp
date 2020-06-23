@@ -136,6 +136,7 @@ void ReplaceBar::activeInput(QString text, QString file, int row, int column, in
 
 void ReplaceBar::replaceClose()
 {
+    searched=false;
     hide();
     emit sigReplacebarClose();
 }
@@ -147,7 +148,10 @@ void ReplaceBar::handleContentChanged()
 
 void ReplaceBar::handleReplaceNext()
 {
+    if(!searched)
+    updateSearchKeyword(m_replaceFile, m_replaceLine->lineEdit()->text());
     replaceNext(m_replaceLine->lineEdit()->text(), m_withLine->lineEdit()->text());
+    searched=true;
 }
 
 void ReplaceBar::handleReplaceRest()

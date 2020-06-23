@@ -91,6 +91,7 @@ private:
     int m_replaceFileRow;
     int m_replaceFileSrollOffset;
     QColor m_backgroundColor;
+    bool searched = false;
 
     QPoint last;
 };
