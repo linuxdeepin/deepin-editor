@@ -1397,11 +1397,23 @@ QString TextEdit::capitalizeText(QString text)
 {
     QString newText = text.toLower();
     QChar currentChar;
+    QChar nextChar;
+    if(!newText.at(0).isSpace())
+    {
+        newText.replace(0, 1, newText.at(0).toUpper());
+    }
+
     for (int i = 0; i < newText.size(); i++) {
         currentChar = newText.at(i);
-        if (!currentChar.isSpace() && !m_wordSepartors.contains(QString(currentChar))) {
-            newText.replace(i, 1, currentChar.toUpper());
-            break;
+        if(i+1<newText.size())
+        nextChar = newText.at(i+1);
+//        if (!currentChar.isSpace() && !m_wordSepartors.contains(QString(currentChar))&&nextChar.isSpace()) {
+//            newText.replace(i, 1, currentChar.toUpper());
+//            //break;
+//        }
+        if(currentChar.isSpace()&&!nextChar.isSpace())
+        {
+            newText.replace(i+1, 1, nextChar.toUpper());
         }
     }
 
