@@ -589,6 +589,7 @@ EditWrapper *Window::createEditor()
     connect(wrapper->textEditor(), &TextEdit::pressEsc, this, &Window::removeBottomWidget, Qt::QueuedConnection);
     connect(wrapper, &EditWrapper::requestSaveAs, this, &Window::saveAsFile);
     connect(wrapper->textEditor(), &TextEdit::signal_clearBlack, this, &Window::clearBlack, Qt::QueuedConnection);
+    connect(wrapper->textEditor(), &TextEdit::textChanged, this, &Window::updateJumpLineBar, Qt::QueuedConnection);
 
     connect(wrapper->textEditor(), &TextEdit::modificationChanged, this, [ = ](const QString & path, bool isModified) {
         int tabIndex = m_tabbar->indexOf(path);
@@ -1092,17 +1093,10 @@ void Window::popupJumpLineBar()
         m_jumpLineBar->hide();
         return;
     }
-    QString tabPath = m_tabbar->currentPath();
-    EditWrapper *wrapper = currentWrapper();
-    QString text = wrapper->textEditor()->textCursor().selectedText();
-    int row = wrapper->textEditor()->getCurrentLine();
-    int column = wrapper->textEditor()->getCurrentColumn();
-    int count = wrapper->textEditor()->blockCount();
-    int scrollOffset = wrapper->textEditor()->getScrollOffset();
-    m_jumpLineBar->activeInput(tabPath, row, column, count, scrollOffset);
+    updateJumpLineBar();
     m_jumpLineBar->show();
     m_jumpLineBar->raise();
-    //m_jumpLineBar->focus();
+    m_jumpLineBar->focus();
 
 
 //    if (m_jumpLineBar->isVisible()) {
@@ -1123,7 +1117,23 @@ void Window::popupJumpLineBar()
 //        m_jumpLineBar->activeInput(tabPath, row, column, count, scrollOffset);
 //        m_jumpLineBar->show();
 //        m_jumpLineBar->focus();
-//    }
+    //    }
+}
+
+void Window::updateJumpLineBar()
+{
+    if(m_jumpLineBar->isVisible())
+    {
+        QString tabPath = m_tabbar->currentPath();
+        EditWrapper *wrapper = currentWrapper();
+        QString text = wrapper->textEditor()->textCursor().selectedText();
+        int row = wrapper->textEditor()->getCurrentLine();
+        int column = wrapper->textEditor()->getCurrentColumn();
+        int count = wrapper->textEditor()->blockCount();
+        qDebug()<<count;
+        int scrollOffset = wrapper->textEditor()->getScrollOffset();
+        m_jumpLineBar->activeInput(tabPath, row, column, count, scrollOffset);
+    }
 }
 
 void Window::popupSettingsDialog()

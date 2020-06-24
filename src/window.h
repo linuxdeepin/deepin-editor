@@ -87,6 +87,7 @@ public:
     void popupFindBar();
     void popupReplaceBar();
     void popupJumpLineBar();
+    void updateJumpLineBar();
     void popupSettingsDialog();
     void popupPrintDialog();
     void popupThemePanel();
