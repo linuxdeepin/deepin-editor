@@ -431,9 +431,7 @@ int TextEdit::lineNumberAreaWidth()
         ++digits;
     }
 
-    int space = 13 +  fontMetrics().width(QLatin1Char('9')) * (digits) + 40;
-
-    return space;
+    return 13 + fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits + 40;
 }
 
 int TextEdit::getCurrentLine()
