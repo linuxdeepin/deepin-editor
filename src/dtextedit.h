@@ -454,6 +454,7 @@ private:
     int m_nBookMarkHoverLine;
     int m_nLines;
     bool m_bIsFileOpen;
+    bool m_bIsShortCut;
 
     //存储所有有折叠标记的位置，包含不可见区域
     QList<int> m_listFlodFlag;

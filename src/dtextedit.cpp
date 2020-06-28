@@ -88,6 +88,7 @@ TextEdit::TextEdit(QWidget *parent)
     m_nBookMarkHoverLine = -1;
     m_bIsFileOpen = false;
     m_qstrCommitString = "";
+    m_bIsShortCut = false;
     m_bIsInputMethod = false;
     //lineNumberArea = new LineNumberArea(m_pLeftAreaWidget);
     m_pLeftAreaWidget = new leftareaoftextedit(this);
@@ -3152,7 +3153,13 @@ int TextEdit::getLineFromPoint(const QPoint &point)
 
 void TextEdit::addOrDeleteBookMark()
 {
-    int line = getLineFromPoint(m_mouseClickPos);
+    int line = 0;
+    if (m_bIsShortCut) {
+        line = getCurrentLine();
+        m_bIsShortCut = false;
+    } else {
+        line = getLineFromPoint(m_mouseClickPos);
+    }
 
     if (line > blockCount()) {
          return;
@@ -4634,6 +4641,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "redo")) {
             QTextEdit::redo();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "switchbookmark")) {
+            m_bIsShortCut = true;
             addOrDeleteBookMark();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "movetoprebookmark")) {
             moveToPreviousBookMark();
