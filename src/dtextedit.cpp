@@ -3177,7 +3177,7 @@ void TextEdit::moveToPreviousBookMark()
 
     if(index == -1 && !m_listBookmark.isEmpty())
     {
-        jumpToLine(m_listBookmark.first(),false);
+        jumpToLine(m_listBookmark.last(),false);
         return;
     }
 
