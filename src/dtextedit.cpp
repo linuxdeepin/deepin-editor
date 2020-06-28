@@ -2454,6 +2454,8 @@ void TextEdit::removeHighlightWordUnderCursor()
     //m_wordUnderCursorSelection = selection;
 
     renderAllSelections();
+    m_nBookMarkHoverLine = -1;
+    m_pLeftAreaWidget->m_bookMarkArea->update();
 }
 
 void TextEdit::setSettings(Settings *keySettings)
