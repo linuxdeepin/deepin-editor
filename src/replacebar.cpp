@@ -166,6 +166,7 @@ void ReplaceBar::handleReplaceAll()
 
 void ReplaceBar::hideEvent(QHideEvent *)
 {
+    searched=false;
     removeSearchKeyword();
 }
 
