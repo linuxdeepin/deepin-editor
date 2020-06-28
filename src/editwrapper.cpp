@@ -79,7 +79,7 @@ EditWrapper::EditWrapper(QWidget *parent)
 
 EditWrapper::~EditWrapper()
 {
-    delete m_textEdit;
+    //delete m_textEdit;
     //delete m_waringNotices;
 }
 

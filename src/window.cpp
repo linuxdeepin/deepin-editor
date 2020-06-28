@@ -667,8 +667,8 @@ void Window::removeWrapper(const QString &filePath, bool isDelete)
         if (isDelete) {
             //wrapper->deleteLater();
             disconnect(wrapper->textEditor(), 0, this, 0);
-            delete wrapper;
-            wrapper = nullptr;
+            //delete wrapper;
+            //wrapper = nullptr;
         }
 
         // remove all signals on this connection.
@@ -1923,13 +1923,13 @@ void Window::closeEvent(QCloseEvent *e)
 
                     if (!wrapper->textEditor()->document()->isModified()) {
                         disconnect(wrapper->textEditor(), 0, this, 0);
-                        delete wrapper;
+                        //delete wrapper;
                     } else {
                         if (wrapper->saveFile()) {
                             //wrapper->deleteLater();
                             // remove all signals on this connection.
                             disconnect(wrapper->textEditor(), 0, this, 0);
-                            delete wrapper;
+                            //delete wrapper;
                         }
                     }
                 }
@@ -1937,7 +1937,7 @@ void Window::closeEvent(QCloseEvent *e)
             } else if (index == 1){
                 for (EditWrapper *wrapper : m_wrappers) {
                     disconnect(wrapper->textEditor(), 0, this, 0);
-                    delete wrapper;
+                    //delete wrapper;
                 }
             }
         });
@@ -1949,7 +1949,7 @@ void Window::closeEvent(QCloseEvent *e)
     } else {
         for (EditWrapper *wrapper : m_wrappers) {
             disconnect(wrapper->textEditor(), 0, this, 0);
-            delete wrapper;
+            //delete wrapper;
         }
     }
 

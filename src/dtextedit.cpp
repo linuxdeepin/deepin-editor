@@ -397,8 +397,8 @@ TextEdit::TextEdit(QWidget *parent)
         }
         if (!def.isValid()) {
             emit hightlightChanged(action->text());
-            delete m_highlighter;
-            m_highlighter = nullptr;
+            //delete m_highlighter;
+            //m_highlighter = nullptr;
         } else {
             m_highlighter->setDefinition(def);
             emit hightlightChanged(action->text());
@@ -2401,8 +2401,8 @@ void TextEdit::loadHighlighter()
         }
 
     } else {
-        delete m_highlighter;
-        m_highlighter = nullptr;
+        //delete m_highlighter;
+       // m_highlighter = nullptr;
         m_highlighted = false;
     }
 }
