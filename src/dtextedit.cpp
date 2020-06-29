@@ -3454,8 +3454,9 @@ void TextEdit::setIsFileOpen()
     }
 
     foreach (const auto line, linesList) {
-
-        m_listBookmark << line;
+        if (line <= blockCount()) {
+            m_listBookmark << line;
+        }
     }
 }
 
