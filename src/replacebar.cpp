@@ -193,3 +193,8 @@ void ReplaceBar::setMismatchAlert(bool isAlert)
 {
     m_replaceLine->setAlert(isAlert);
 }
+
+void ReplaceBar::setsearched(bool _)
+{
+    searched = _;
+}

@@ -1048,6 +1048,7 @@ void Window::popupFindBar()
 
 void Window::popupReplaceBar()
 {
+    m_replaceBar->setsearched(false);
     EditWrapper *curWrapper = currentWrapper();
     bool bIsReadOnly = curWrapper->textEditor()->getReadOnlyMode();
 
