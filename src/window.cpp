@@ -636,7 +636,12 @@ EditWrapper *Window::createEditor()
 
 EditWrapper *Window::currentWrapper()
 {
-    return m_wrappers.value(m_tabbar->currentPath());
+    if (m_wrappers.contains(m_tabbar->currentPath())) {
+       return m_wrappers.value(m_tabbar->currentPath());
+
+    } else {
+       return nullptr;
+    }
 }
 
 EditWrapper *Window::wrapper(const QString &filePath)
@@ -667,8 +672,8 @@ void Window::removeWrapper(const QString &filePath, bool isDelete)
         if (isDelete) {
             //wrapper->deleteLater();
             disconnect(wrapper->textEditor(), 0, this, 0);
-            //delete wrapper;
-            //wrapper = nullptr;
+            delete wrapper;
+            wrapper = nullptr;
         }
 
         // remove all signals on this connection.
@@ -1631,7 +1636,9 @@ void Window::handleReplaceSkip()
 
 void Window::handleRemoveSearchKeyword()
 {
-    currentWrapper()->textEditor()->removeKeywords();
+    if (currentWrapper() != nullptr) {
+        currentWrapper()->textEditor()->removeKeywords();
+    }
 }
 
 void Window::handleUpdateSearchKeyword(QWidget *widget, const QString &file, const QString &keyword)
@@ -1923,13 +1930,13 @@ void Window::closeEvent(QCloseEvent *e)
 
                     if (!wrapper->textEditor()->document()->isModified()) {
                         disconnect(wrapper->textEditor(), 0, this, 0);
-                        //delete wrapper;
+                        delete wrapper;
                     } else {
                         if (wrapper->saveFile()) {
                             //wrapper->deleteLater();
                             // remove all signals on this connection.
                             disconnect(wrapper->textEditor(), 0, this, 0);
-                            //delete wrapper;
+                            delete wrapper;
                         }
                     }
                 }
@@ -1937,7 +1944,7 @@ void Window::closeEvent(QCloseEvent *e)
             } else if (index == 1){
                 for (EditWrapper *wrapper : m_wrappers) {
                     disconnect(wrapper->textEditor(), 0, this, 0);
-                    //delete wrapper;
+                    delete wrapper;
                 }
             }
         });
@@ -1949,7 +1956,7 @@ void Window::closeEvent(QCloseEvent *e)
     } else {
         for (EditWrapper *wrapper : m_wrappers) {
             disconnect(wrapper->textEditor(), 0, this, 0);
-            //delete wrapper;
+            delete wrapper;
         }
     }
 
@@ -1981,7 +1988,7 @@ void Window::hideEvent(QHideEvent *event)
     //如果查找浮窗正显示着，则隐藏
     if (m_findBar->isVisible()) {
        // m_findBar->hide();
-        if (currentWrapper()->isVisible()) {
+        if (currentWrapper() != nullptr) {
             currentWrapper()->m_bottomBar->show();
         }
     }
@@ -1989,7 +1996,7 @@ void Window::hideEvent(QHideEvent *event)
     //如果替换浮窗正显示着，则隐藏
     if (m_replaceBar->isVisible()) {
       //  m_replaceBar->hide();
-        if (currentWrapper()->isVisible()) {
+        if (currentWrapper() != nullptr) {
             currentWrapper()->m_bottomBar->show();
         }
     }

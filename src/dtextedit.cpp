@@ -398,8 +398,8 @@ TextEdit::TextEdit(QWidget *parent)
         }
         if (!def.isValid()) {
             emit hightlightChanged(action->text());
-            //delete m_highlighter;
-            //m_highlighter = nullptr;
+            delete m_highlighter;
+            m_highlighter = nullptr;
         } else {
             m_highlighter->setDefinition(def);
             emit hightlightChanged(action->text());
@@ -2402,8 +2402,8 @@ void TextEdit::loadHighlighter()
         }
 
     } else {
-        //delete m_highlighter;
-       // m_highlighter = nullptr;
+        delete m_highlighter;
+        m_highlighter = nullptr;
         m_highlighted = false;
     }
 }
@@ -3434,6 +3434,14 @@ int TextEdit::getLinePosByLineNum(int iLine)
 void TextEdit::setIsFileOpen()
 {
     m_bIsFileOpen = true;
+
+}
+
+void TextEdit::setTextFinished()
+{
+    m_bIsFileOpen = false;
+    m_nLines = blockCount();
+
     QStringList bookmarkList = readHistoryRecordofBookmark();
     QStringList filePathList = readHistoryRecordofFilePath();
     QList<int> linesList;
@@ -3454,16 +3462,11 @@ void TextEdit::setIsFileOpen()
     }
 
     foreach (const auto line, linesList) {
-        if (line <= blockCount()) {
+        if (line <= document()->blockCount()) {
             m_listBookmark << line;
         }
     }
-}
-
-void TextEdit::setTextFinished()
-{
-    m_bIsFileOpen = false;
-    m_nLines = blockCount();
+//    qDebug() << m_listBookmark << document()->blockCount();
 }
 
 QStringList TextEdit::readHistoryRecord()
