@@ -3949,31 +3949,36 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                 if (document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line).text().contains("{")
                         && document()->findBlockByNumber(line).text().trimmed().startsWith("{")) {
                     getNeedControlLine(line - 1, false);
+                    document()->adjustSize();
                 } else if (!document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line).text().contains("{")
                            && document()->findBlockByNumber(line).text().trimmed().startsWith("{")) {
                     getNeedControlLine(line - 1, true);
+                    document()->adjustSize();
                 }
 
                 //判断下一行是否可见，左括号存在于该行（类似c++文件中的if else 书写），但不是左括号开头的，则是从该行开始做折叠处理，但该行不隐藏
                 if (document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line - 1).text().contains("{")
                         && !document()->findBlockByNumber(line - 1).text().trimmed().startsWith("{")) {
                     getNeedControlLine(line - 1, false);
+                    document()->adjustSize();
 
                 } else if (!document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line - 1).text().contains("{")
                            && !document()->findBlockByNumber(line - 1).text().trimmed().startsWith("{")) {
                     getNeedControlLine(line - 1, true);
+                    document()->adjustSize();
                 }
 
                 //判断下一行是否可见，左括号存在于该行（类似文件中的json文件书写，第一行就存在左括号开头的现象），且是左括号开头的，则是从下一行开始做折叠处理
                 if (document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line - 1).text().contains("{")
                         && document()->findBlockByNumber(line - 1).text().trimmed().startsWith("{")) {
                     getNeedControlLine(line, false, 1, false);
+                    document()->adjustSize();
 
                 } else if (!document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line - 1).text().contains("{")
                            && document()->findBlockByNumber(line - 1).text().trimmed().startsWith("{")) {
                     getNeedControlLine(line, true, 1, false);
+                    document()->adjustSize();
                 }
-                document()->adjustSize();
                 viewport()->update();
                 m_pLeftAreaWidget->m_flodArea->update();
                 m_pLeftAreaWidget->m_linenumberarea->update();
