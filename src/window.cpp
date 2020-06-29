@@ -1511,8 +1511,12 @@ void Window::handleCurrentChanged(const int &index)
     for (auto wrapper : m_wrappers.values()) {
         wrapper->textEditor()->removeKeywords();
     }
-    currentWrapper()->checkForReload();
-    checkTabbarForReload();
+
+    if(currentWrapper())
+    {
+        currentWrapper()->checkForReload();
+        checkTabbarForReload();
+    }
 
     const QString &filepath = m_tabbar->fileAt(index);
 
