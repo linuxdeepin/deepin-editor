@@ -3770,10 +3770,11 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
 {
     Q_UNUSED(charsRemoved);
 
-    if (m_readOnlyMode) {
-        if(charsAdded > 0) {
-            textCursor().deletePreviousChar();
-        }
+   if (m_readOnlyMode) {
+//        if(charsAdded > 0) {
+//            textCursor().deletePreviousChar();
+//        }
+        undo();
         return;
     }
 
