@@ -57,6 +57,7 @@ signals:
     void replaceSkip();
     void replaceRest(QString replaceText, QString withText);
     void replaceAll(QString replaceText, QString withText);
+    void beforeReplace(QString _);
 
     void backToPosition(QString file, int row, int column, int scrollOffset);
 

@@ -1518,15 +1518,15 @@ void TextEdit::replaceNext(const QString &replaceText, const QString &withText)
         return;
     }
 
-    if (replaceText.isEmpty() ||
-        !m_findHighlightSelection.cursor.hasSelection()) {
-        // 无限替换的根源
-        highlightKeyword(replaceText, getPosition());
-        return;
-    }
-
+//    if (replaceText.isEmpty() ||
+//        !m_findHighlightSelection.cursor.hasSelection()) {
+//        // 无限替换的根源
+//        highlightKeyword(replaceText, getPosition());
+//        return;
+//    }
     QTextCursor cursor = textCursor();
-    cursor.setPosition(m_findHighlightSelection.cursor.position() - replaceText.size());
+    //cursor.setPosition(m_findHighlightSelection.cursor.position() - replaceText.size());
+    cursor.setPosition(m_findHighlightSelection.cursor.selectionStart());
     cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, replaceText.size());
     cursor.insertText(withText);
@@ -1567,6 +1567,14 @@ void TextEdit::replaceRest(const QString &replaceText, const QString &withText)
 
     startCursor.endEditBlock();
     setTextCursor(startCursor);
+}
+
+void TextEdit::beforeReplace(QString _)
+{
+    if (_.isEmpty() ||
+        !m_findHighlightSelection.cursor.hasSelection()) {
+        highlightKeyword(_, getPosition()-1);
+    }
 }
 
 bool TextEdit::findKeywordForward(const QString &keyword)

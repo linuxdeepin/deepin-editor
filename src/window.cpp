@@ -144,6 +144,8 @@ Window::Window(DMainWindow *parent)
 
     // Init replace bar.
     connect(m_replaceBar, &ReplaceBar::removeSearchKeyword, this, &Window::handleRemoveSearchKeyword, Qt::QueuedConnection);
+
+    connect(m_replaceBar, &ReplaceBar::beforeReplace,this, &Window::slot_beforeReplace, Qt::QueuedConnection);
     connect(m_replaceBar, &ReplaceBar::replaceAll, this, &Window::handleReplaceAll, Qt::QueuedConnection);
     connect(m_replaceBar, &ReplaceBar::replaceNext, this, &Window::handleReplaceNext, Qt::QueuedConnection);
     connect(m_replaceBar, &ReplaceBar::replaceRest, this, &Window::handleReplaceRest, Qt::QueuedConnection);
@@ -1835,6 +1837,11 @@ void Window::slot_saveReadingPath()
 {
     m_reading_list.clear();
     m_reading_list.append(currentWrapper()->textEditor());
+}
+
+void Window::slot_beforeReplace(QString _)
+{
+    currentWrapper()->textEditor()->beforeReplace(_);
 }
 
 void Window::handleFocusWindowChanged(QWindow *w)

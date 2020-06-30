@@ -139,6 +139,7 @@ public:
     void replaceAll(const QString &replaceText, const QString &withText);
     void replaceNext(const QString &replaceText, const QString &withText);
     void replaceRest(const QString &replaceText, const QString &withText);
+    void beforeReplace(QString _);
 
     bool findKeywordForward(const QString &keyword);
 
