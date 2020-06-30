@@ -57,6 +57,8 @@ public:
     void activeInput(QString text, QString file, int row, int column, int scrollOffset);
     void setMismatchAlert(bool isAlert);
     void receiveText(QString t);
+    void setSearched(bool _);
+    void findPreClicked();
 
 signals:
     void findNext();
@@ -89,6 +91,7 @@ private:
     int m_findFileSrollOffset;
     QColor m_backgroundColor;
     QString m_receivedText = " ";
+    bool searched = false;
 
     QPoint last;
 };

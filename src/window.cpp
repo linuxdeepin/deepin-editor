@@ -1025,7 +1025,7 @@ void Window::popupFindBar()
 //        }
 //    } else {
         //addBottomWidget(m_findBar);
-
+        m_findBar->setSearched(false);
         QString tabPath = m_tabbar->currentPath();
         EditWrapper *wrapper = currentWrapper();
         if (wrapper->textEditor()->toPlainText().isEmpty()) {
