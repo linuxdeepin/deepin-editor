@@ -1531,7 +1531,7 @@ void Window::handleCurrentChanged(const int &index)
         m_editorWidget->setCurrentWidget(wrapper);
     }
 
-    if (currentWrapper() != nullptr && currentWrapper()->isVisible()) {
+    if (currentWrapper() != nullptr) {
         //  if (currentWrapper()!=nullptr) {
         currentWrapper()->m_bottomBar->show();
          currentWrapper()->m_bottomBar->updateSize(32);
@@ -1543,7 +1543,9 @@ void Window::handleJumpLineBarExit()
 {
    // if(m_jumpLineBar)
       //  m_jumpLineBar->hide();
-    QTimer::singleShot(0, currentWrapper()->textEditor(), SLOT(setFocus()));
+    if (currentWrapper() != nullptr) {
+        QTimer::singleShot(0, currentWrapper()->textEditor(), SLOT(setFocus()));
+    }
 }
 
 void Window::handleJumpLineBarJumpToLine(const QString &filepath, int line, bool focusEditor)
@@ -1906,7 +1908,8 @@ void Window::closeEvent(QCloseEvent *e)
     QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
 
     QList<EditWrapper *> needSaveList;
-    for (EditWrapper *wrapper : m_wrappers) {
+    QMap<QString, EditWrapper *> wrappers = m_wrappers;
+    for (EditWrapper *wrapper : wrappers) {
         // save all the draft documents.
         if (QFileInfo(wrapper->textEditor()->filepath).dir().absolutePath() == m_blankFileDir) {
             wrapper->saveFile();
@@ -1926,15 +1929,17 @@ void Window::closeEvent(QCloseEvent *e)
 
             if (index == 2) {
                 // save files.
-                for (EditWrapper *wrapper : m_wrappers) {
+                for (EditWrapper *wrapper : wrappers) {
 
                     if (!wrapper->textEditor()->document()->isModified()) {
+                        m_wrappers.remove(wrapper->filePath());
                         disconnect(wrapper->textEditor(), 0, this, 0);
                         delete wrapper;
                     } else {
                         if (wrapper->saveFile()) {
                             //wrapper->deleteLater();
                             // remove all signals on this connection.
+                            m_wrappers.remove(wrapper->filePath());
                             disconnect(wrapper->textEditor(), 0, this, 0);
                             delete wrapper;
                         }
@@ -1942,7 +1947,8 @@ void Window::closeEvent(QCloseEvent *e)
                 }
 
             } else if (index == 1){
-                for (EditWrapper *wrapper : m_wrappers) {
+                for (EditWrapper *wrapper : wrappers) {
+                    m_wrappers.remove(wrapper->filePath());
                     disconnect(wrapper->textEditor(), 0, this, 0);
                     delete wrapper;
                 }
@@ -1954,7 +1960,8 @@ void Window::closeEvent(QCloseEvent *e)
             return;
         }
     } else {
-        for (EditWrapper *wrapper : m_wrappers) {
+        for (EditWrapper *wrapper : wrappers) {
+            m_wrappers.remove(wrapper->filePath());
             disconnect(wrapper->textEditor(), 0, this, 0);
             delete wrapper;
         }

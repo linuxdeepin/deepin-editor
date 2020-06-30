@@ -3438,7 +3438,6 @@ int TextEdit::getLinePosByLineNum(int iLine)
 void TextEdit::setIsFileOpen()
 {
     m_bIsFileOpen = true;
-
 }
 
 void TextEdit::setTextFinished()
