@@ -1518,12 +1518,11 @@ void TextEdit::replaceNext(const QString &replaceText, const QString &withText)
         return;
     }
 
-//    if (replaceText.isEmpty() ||
-//        !m_findHighlightSelection.cursor.hasSelection()) {
-//        // 无限替换的根源
-//        highlightKeyword(replaceText, getPosition());
-//        return;
-//    }
+    if (replaceText.isEmpty() ||
+        !m_findHighlightSelection.cursor.hasSelection()) {
+        // 无限替换的根源
+        return;
+    }
     QTextCursor cursor = textCursor();
     //cursor.setPosition(m_findHighlightSelection.cursor.position() - replaceText.size());
     if(m_cursorStart!=-1)
