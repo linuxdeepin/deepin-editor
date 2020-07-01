@@ -1526,7 +1526,14 @@ void TextEdit::replaceNext(const QString &replaceText, const QString &withText)
 //    }
     QTextCursor cursor = textCursor();
     //cursor.setPosition(m_findHighlightSelection.cursor.position() - replaceText.size());
-    cursor.setPosition(m_findHighlightSelection.cursor.selectionStart());
+    if(m_cursorStart!=-1)
+    {
+        cursor.setPosition(m_cursorStart);
+        m_cursorStart=-1;
+    }
+    else {
+        cursor.setPosition(m_findHighlightSelection.cursor.selectionStart());
+    }
     cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, replaceText.size());
     cursor.insertText(withText);
@@ -1573,7 +1580,7 @@ void TextEdit::beforeReplace(QString _)
 {
     if (_.isEmpty() ||
         !m_findHighlightSelection.cursor.hasSelection()) {
-        highlightKeyword(_, getPosition()-1);
+        highlightKeyword(_, getPosition());
     }
 }
 
@@ -3906,6 +3913,11 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
         }
     }
     renderAllSelections();
+}
+
+void TextEdit::setCursorStart(int _)
+{
+    m_cursorStart = _;
 }
 void TextEdit::completionWord(QString word)
 {

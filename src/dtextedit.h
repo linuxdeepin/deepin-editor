@@ -225,6 +225,7 @@ public:
     void cancelLastMark();
     void markSelectWord();
     void updateMark(int from, int charsRemoved, int charsAdded);
+    void setCursorStart(int _);
 
 public:
     bool bIsSetLineNumberWidth = true;
@@ -463,6 +464,7 @@ private:
     QList<int> m_listFlodIconPos;
     QString m_qstrCommitString;
     bool m_bIsInputMethod;
+    int m_cursorStart=-1;
 };
 
 #endif

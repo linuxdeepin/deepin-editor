@@ -1055,9 +1055,17 @@ void Window::popupFindBar()
 
 void Window::popupReplaceBar()
 {
+    QTextCursor cursor = currentWrapper()->textEditor()->textCursor();
+
     m_replaceBar->setsearched(false);
     EditWrapper *curWrapper = currentWrapper();
     bool bIsReadOnly = curWrapper->textEditor()->getReadOnlyMode();
+
+    if(cursor.hasSelection())
+    {
+        currentWrapper()->textEditor()->setCursorStart(cursor.selectionStart());
+    }
+
 
     if (bIsReadOnly) {
         showNotify(tr("Read-Only mode is on"));
