@@ -254,7 +254,7 @@ void StartManager::initBlockShutdown() {
     m_arg << QString("shutdown")             // what
         << qApp->applicationDisplayName()           // who
         << QObject::tr("File not saved") // why
-        << QString("block");                        // mode
+        << QString("delay");                        // mode
 
     int fd = -1;
     m_reply = m_pLoginManager->callWithArgumentList(QDBus::Block, "Inhibit", m_arg);
