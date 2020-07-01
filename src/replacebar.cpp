@@ -78,6 +78,8 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     m_replaceAllButton->setFocusPolicy(Qt::NoFocus);
     m_closeButton->setFocusPolicy(Qt::NoFocus);
 
+    connect(m_replaceLine, &LineBar::signal_sentText, this, &ReplaceBar::change, Qt::QueuedConnection);
+
     connect(m_replaceLine, &LineBar::pressEsc, this, &ReplaceBar::replaceClose, Qt::QueuedConnection);
     connect(m_withLine, &LineBar::pressEsc, this, &ReplaceBar::replaceClose, Qt::QueuedConnection);
 
@@ -197,4 +199,9 @@ void ReplaceBar::setMismatchAlert(bool isAlert)
 void ReplaceBar::setsearched(bool _)
 {
     searched = _;
+}
+
+void ReplaceBar::change()
+{
+    searched=false;
 }

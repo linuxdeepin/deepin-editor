@@ -67,6 +67,7 @@ signals:
     void sigReplacebarClose();
 
 public slots:
+    void change();
     void replaceClose();
     void handleContentChanged();
     void handleReplaceAll();
