@@ -2820,6 +2820,7 @@ void TextEdit::toggleReadOnlyMode()
         m_readOnlyMode = true;
         setReadOnly(true);
         //setSpeechToTextEnabled(false);
+        document()->clearUndoRedoStacks();
         popupNotify(tr("Read-Only mode is on"));
         emit cursorModeChanged(Readonly);
     }
@@ -3806,8 +3807,9 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
     if (m_readOnlyMode) {
 //         if(charsAdded > 0) {
 //             textCursor().deletePreviousChar();
-//         }
-         return;
+//
+        undo();
+        return;
     }
 
     if (m_bIsFileOpen) {
