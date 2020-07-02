@@ -3823,6 +3823,7 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
 
     if (charsRemoved > 0) {
         QList<int> listRemoveItem;
+
         for (int i = 0;i < wordMarkSelections.count();i++) {
 
             nEndPos = wordMarkSelections.value(i).cursor.selectionEnd();
@@ -3833,11 +3834,12 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
                     listRemoveItem.append(i);
                 }
             } else {
-                if (nCurrentPos == nStartPos) {
+                if (wordMarkSelections.value(i).cursor.selection().toPlainText().isEmpty()) {
                     m_wordMarkSelections.removeAt(i);
                 }
             }
         }
+
         for (int j = 0;j < listRemoveItem.count();j++) {
             m_wordMarkSelections.removeAt(listRemoveItem.value(j) - j);
         }
