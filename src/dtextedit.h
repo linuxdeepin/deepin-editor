@@ -467,6 +467,8 @@ private:
     QString m_qstrCommitString;
     bool m_bIsInputMethod;
     int m_nSelectEndLine;
+    int m_nSelectStart;
+    int m_nSelectEnd;
 
     int m_cursorStart=-1;    
 };

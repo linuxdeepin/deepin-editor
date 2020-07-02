@@ -3590,9 +3590,9 @@ void TextEdit::isMarkCurrentLine(bool isMark, QString strColor)
         QTextEdit::ExtraSelection selection;
         QList<QTextEdit::ExtraSelection> listSelections;
         QList<QTextEdit::ExtraSelection> wordMarkSelections = m_wordMarkSelections;
-
         selection.cursor = textCursor();
-        if(! this->textCursor().hasSelection()) {
+
+        if(!this->textCursor().hasSelection()) {
             selection.cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
             selection.cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
         }
@@ -3609,22 +3609,23 @@ void TextEdit::isMarkCurrentLine(bool isMark, QString strColor)
             }
 
             while (pos != -1) {
-                   selection.cursor.setPosition(textCursor().selectionStart() + pos + 1, QTextCursor::MoveAnchor);
-                   pos = currentMarkText.indexOf("\n",pos + 1);
-                   if(pos == -1)
-                   {
-                       break;
-                   }
+                selection.cursor.setPosition(textCursor().selectionStart() + pos + 1, QTextCursor::MoveAnchor);
+                pos = currentMarkText.indexOf("\n",pos + 1);
 
-                   selection.cursor.setPosition(textCursor().selectionStart() + pos, QTextCursor::KeepAnchor);
+                if(pos == -1)
+                {
+                    break;
+                }
 
-                   if (selection.cursor.selectedText() != "") {
-                       wordMarkSelections = m_wordMarkSelections;
-                       appendExtraSelection(wordMarkSelections,selection,strColor,&listSelections);
-                   }
+                selection.cursor.setPosition(textCursor().selectionStart() + pos, QTextCursor::KeepAnchor);
+
+                if (selection.cursor.selectedText() != "") {
+                    wordMarkSelections = m_wordMarkSelections;
+                    appendExtraSelection(wordMarkSelections,selection,strColor,&listSelections);
+                }
 
             }
-            selection.cursor.setPosition(textCursor().selectionEnd(), QTextCursor::KeepAnchor);           
+            selection.cursor.setPosition(textCursor().selectionEnd(), QTextCursor::KeepAnchor);
         }
 
         if (selection.cursor.selectedText() != "") {
@@ -3800,13 +3801,13 @@ void TextEdit::markSelectWord()
 
 void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
 {
-    Q_UNUSED(charsRemoved);
+//    Q_UNUSED(charsRemoved);
 
-   if (m_readOnlyMode) {
-//        if(charsAdded > 0) {
-//            textCursor().deletePreviousChar();
-//        }
-        return;
+    if (m_readOnlyMode) {
+//         if(charsAdded > 0) {
+//             textCursor().deletePreviousChar();
+//         }
+         return;
     }
 
     if (m_bIsFileOpen) {
@@ -3819,9 +3820,31 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
     QList<QTextEdit::ExtraSelection> wordMarkSelections = m_wordMarkSelections;
     QColor strColor;
     nCurrentPos = textCursor().position();
-    if (charsAdded > 0) {
+
+    if (charsRemoved > 0) {
+        QList<int> listRemoveItem;
         for (int i = 0;i < wordMarkSelections.count();i++) {
 
+            nEndPos = wordMarkSelections.value(i).cursor.selectionEnd();
+            nStartPos = wordMarkSelections.value(i).cursor.selectionStart();
+            strColor = wordMarkSelections.value(i).format.background().color();
+            if (m_nSelectEndLine != -1) {
+                if (m_nSelectStart <= nStartPos && m_nSelectEnd >= nEndPos) {
+                    listRemoveItem.append(i);
+                }
+            } else {
+                if (nCurrentPos == nStartPos) {
+                    m_wordMarkSelections.removeAt(i);
+                }
+            }
+        }
+        for (int j = 0;j < listRemoveItem.count();j++) {
+            m_wordMarkSelections.removeAt(listRemoveItem.value(j) - j);
+        }
+    }
+
+    if (charsAdded > 0) {
+        for (int i = 0;i < wordMarkSelections.count();i++) {
             nEndPos = wordMarkSelections.value(i).cursor.selectionEnd();
             nStartPos = wordMarkSelections.value(i).cursor.selectionStart();
             strColor = wordMarkSelections.value(i).format.background().color();
@@ -4423,6 +4446,8 @@ void TextEdit::appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSel
 void TextEdit::onSelectionArea()
 {
     if (textCursor().hasSelection()) {
+        m_nSelectStart = textCursor().selectionStart();
+        m_nSelectEnd = textCursor().selectionEnd();
         m_nSelectEndLine = document()->findBlock(textCursor().selectionEnd()).blockNumber() + 1;
     } else {
         m_nSelectEndLine = -1;
