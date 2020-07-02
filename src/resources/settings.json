@@ -510,7 +510,7 @@
                             "key": "redo",
                             "name": "Redo",
                             "type": "shortcut",
-                            "default":  "Ctrl+Y"
+                            "default":  "Ctrl+Shift+Z"
                         },
                         {
                             "key": "mark",
@@ -993,7 +993,7 @@
                             "key": "redo",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Ctrl+Y"
+                            "default":  "Ctrl+Shift+Z"
                         },
                         {
                             "key": "mark",
@@ -1367,7 +1367,7 @@
                             "key": "paste",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Ctrl+Y"
+                            "default":  "Ctrl+Shift+Z"
                         },
                         {
                             "key": "transposechar",
@@ -1957,7 +1957,7 @@
                             "key": "redo",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Ctrl+Y"
+                            "default":  "Ctrl+Shift+Z"
                         },
                         {
                             "key": "mark",
