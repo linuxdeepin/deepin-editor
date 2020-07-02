@@ -212,7 +212,7 @@ public:
     void addOrDeleteBookMark();
     void moveToPreviousBookMark();
     void moveToNextBookMark();
-    void checkBookmarkLineMove();
+    void checkBookmarkLineMove(int from, int charsRemoved, int charsAdded);
     void setIsFileOpen();
     void setTextFinished();
     QStringList readHistoryRecord();
@@ -287,6 +287,7 @@ public slots:
     void appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSelections
                               ,QTextEdit::ExtraSelection selection,QString strColor
                               ,QList<QTextEdit::ExtraSelection> *listSelections);
+    void onSelectionArea();
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
@@ -462,9 +463,12 @@ private:
     QList<int> m_listFlodFlag;
     //包含当前可见区域的标志
     QList<int> m_listFlodIconPos;
+
     QString m_qstrCommitString;
     bool m_bIsInputMethod;
-    int m_cursorStart=-1;
+    int m_nSelectEndLine;
+
+    int m_cursorStart=-1;    
 };
 
 #endif

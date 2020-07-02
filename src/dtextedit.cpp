@@ -118,15 +118,17 @@ TextEdit::TextEdit(QWidget *parent)
     connect(this->verticalScrollBar(), &QScrollBar::valueChanged, this, &TextEdit::updateLineNumber);
     connect(this, &QTextEdit::textChanged, this, [this]() {
 
-        if (!m_bIsFileOpen) {
-            checkBookmarkLineMove();
-        }
+//        if (!m_bIsFileOpen) {
+//            checkBookmarkLineMove();
+//        }
         updateLineNumber();
         updateWordCount();
     });
     connect(this, &QTextEdit::cursorPositionChanged, this, &TextEdit::cursorPositionChanged);
+    connect(this, &QTextEdit::selectionChanged, this, &TextEdit::onSelectionArea);
     connect(document(), &QTextDocument::modificationChanged, this, &TextEdit::setModified);
     connect(document(), &QTextDocument::contentsChange, this, &TextEdit::updateMark);
+    connect(document(), &QTextDocument::contentsChange, this, &TextEdit::checkBookmarkLineMove);
 
     m_foldCodeShow = new ShowFlodCodeWidget(this);
     m_foldCodeShow->setVisible(false);
@@ -2086,8 +2088,8 @@ void TextEdit::cursorPositionChanged()
     updateHighlightBrackets('[', ']');
     renderAllSelections();
 
+    QTextCursor cursor = textCursor();
     if (m_wrapper) {
-        QTextCursor cursor = textCursor();
         m_wrapper->bottomBar()->updatePosition(cursor.blockNumber() + 1,
                                                cursor.columnNumber() + 1);
     }
@@ -3233,32 +3235,42 @@ void TextEdit::moveToNextBookMark()
     }
 }
 
-void TextEdit::checkBookmarkLineMove()
+void TextEdit::checkBookmarkLineMove(int from, int charsRemoved, int charsAdded)
 {
+    Q_UNUSED(charsRemoved);
+    Q_UNUSED(charsAdded);
+
+    if (m_bIsFileOpen) {
+        return;
+    }
+
     if(m_nLines != blockCount())
     {
         QTextCursor cursor = textCursor();
-        int nAddorDeleteLine = 0;
+        int nAddorDeleteLine = document()->findBlock(from).blockNumber() + 1;
+        int currLine = textCursor().blockNumber() + 1;
+
         if (m_nLines > blockCount()) {
-            nAddorDeleteLine = cursor.blockNumber() + 2;
-
-            if (m_listBookmark.contains(nAddorDeleteLine)) {
-                m_listBookmark.removeOne(nAddorDeleteLine);
-            }
-
             foreach (const auto line, m_listBookmark) {
-                if (nAddorDeleteLine < line) {
-                    m_listBookmark.replace(m_listBookmark.indexOf(line),line - 1);
-                    qDebug() << "DeleteLine" << m_listBookmark << m_nLines;
+                if (m_nSelectEndLine != -1) {
+                    if (nAddorDeleteLine < line && line <= m_nSelectEndLine) {
+                        m_listBookmark.removeOne(line);
+                    } else if (line > m_nSelectEndLine) {
+                        m_listBookmark.replace(m_listBookmark.indexOf(line),line - m_nSelectEndLine + nAddorDeleteLine);
+                    }
+                } else {
+                    if (line == currLine + 1) {
+                        m_listBookmark.removeOne(currLine + 1);
+                    } else if (line > currLine + 1) {
+                        m_listBookmark.replace(m_listBookmark.indexOf(line),line  - m_nLines + blockCount());
+                    }
                 }
             }
         } else {
-            nAddorDeleteLine = cursor.blockNumber();
-
             foreach (const auto line, m_listBookmark) {
+
                 if (nAddorDeleteLine < line) {
-                    m_listBookmark.replace(m_listBookmark.indexOf(line),line + 1);
-                    qDebug() << "AddLine" << m_listBookmark << m_nLines;
+                    m_listBookmark.replace(m_listBookmark.indexOf(line),line + blockCount() - m_nLines);
                 }
             }
         }
@@ -4405,6 +4417,15 @@ void TextEdit::appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSel
         selection.format.setBackground(QColor(strColor));
         m_wordMarkSelections.append(selection);
         listSelections->append(selection);
+    }
+}
+
+void TextEdit::onSelectionArea()
+{
+    if (textCursor().hasSelection()) {
+        m_nSelectEndLine = document()->findBlock(textCursor().selectionEnd()).blockNumber() + 1;
+    } else {
+        m_nSelectEndLine = -1;
     }
 }
 
