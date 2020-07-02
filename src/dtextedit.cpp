@@ -3794,7 +3794,6 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
 //        if(charsAdded > 0) {
 //            textCursor().deletePreviousChar();
 //        }
-        undo();
         return;
     }
 
