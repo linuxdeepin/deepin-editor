@@ -1514,7 +1514,7 @@ void TextEdit::replaceAll(const QString &replaceText, const QString &withText)
     setTextCursor(startCursor);
 }
 
-void TextEdit::replaceNext(const QString &replaceText, const QString &withText)
+void TextEdit::replaceNext(const QString &replaceText, const QString &withText, bool isRepalce)
 {
     if (m_readOnlyMode){
         return;
@@ -1537,10 +1537,13 @@ void TextEdit::replaceNext(const QString &replaceText, const QString &withText)
     }
     cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, replaceText.size());
-    cursor.insertText(withText);
 
-    // Update cursor.
-    setTextCursor(cursor);
+    if (isRepalce) {
+        cursor.insertText(withText);
+        setTextCursor(cursor);
+    }
+
+    // Update cursor.    
     highlightKeyword(replaceText, getPosition());
 }
 
@@ -4647,7 +4650,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             nextLine();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "prevline")) {
             prevLine();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "newline") || key == "Return") {
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "newline")/* || key == "Return"*/) {
             newline();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "opennewlineabove")) {
             openNewlineAbove();

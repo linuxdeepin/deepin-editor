@@ -1624,11 +1624,11 @@ void Window::handleReplaceAll(const QString &replaceText, const QString &withTex
     wrapper->textEditor()->replaceAll(replaceText, withText);
 }
 
-void Window::handleReplaceNext(const QString &replaceText, const QString &withText)
+void Window::handleReplaceNext(const QString &replaceText, const QString &withText, bool isRepalce)
 {
     EditWrapper *wrapper = currentWrapper();
 
-    wrapper->textEditor()->replaceNext(replaceText, withText);
+    wrapper->textEditor()->replaceNext(replaceText, withText ,isRepalce);
 }
 
 void Window::handleReplaceRest(const QString &replaceText, const QString &withText)

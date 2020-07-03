@@ -31,7 +31,7 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     // Init.
     hide();
     setFixedHeight(58);
-
+    oldReplaceText = "";
     // Init layout and widgets.
     m_layout = new QHBoxLayout();
     m_layout->setSpacing(7);
@@ -138,7 +138,7 @@ void ReplaceBar::activeInput(QString text, QString file, int row, int column, in
 
 void ReplaceBar::replaceClose()
 {
-    searched=false;
+    searched = false;
     hide();
     emit sigReplacebarClose();
 }
@@ -150,10 +150,24 @@ void ReplaceBar::handleContentChanged()
 
 void ReplaceBar::handleReplaceNext()
 {
-    if(!searched)
-    emit beforeReplace(m_replaceLine->lineEdit()->text());
-    replaceNext(m_replaceLine->lineEdit()->text(), m_withLine->lineEdit()->text());
-    searched=true;
+    if (!searched) {
+        emit beforeReplace(m_replaceLine->lineEdit()->text());
+    }
+
+    if (!m_bIsFirstSearch) {
+        replaceNext(m_replaceLine->lineEdit()->text(), m_withLine->lineEdit()->text(),true);
+    } else {
+        if (oldReplaceText == m_replaceLine->lineEdit()->text()) {
+            replaceNext(m_replaceLine->lineEdit()->text(), m_withLine->lineEdit()->text(),true);
+        } else {
+            replaceNext(m_replaceLine->lineEdit()->text(), m_withLine->lineEdit()->text(),false);
+        }
+    }
+
+    oldReplaceText = m_replaceLine->lineEdit()->text();
+    m_bIsFirstSearch = true;
+    searched = true;
+
 }
 
 void ReplaceBar::handleReplaceRest()
@@ -201,7 +215,7 @@ void ReplaceBar::setsearched(bool _)
     searched = _;
 }
 
-void ReplaceBar::change()
+void ReplaceBar::change(QString text)
 {
-    searched=false;
+    searched = false;
 }

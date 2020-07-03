@@ -132,7 +132,7 @@ public slots:
     void slotReplacebarClose();
 
     void handleReplaceAll(const QString &replaceText, const QString &withText);
-    void handleReplaceNext(const QString &replaceText, const QString &withText);
+    void handleReplaceNext(const QString &replaceText, const QString &withText , bool isRepalce);
     void handleReplaceRest(const QString &replaceText, const QString &withText);
     void handleReplaceSkip();
 

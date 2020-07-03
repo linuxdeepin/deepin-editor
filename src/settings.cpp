@@ -119,7 +119,6 @@ Settings::Settings(QWidget *parent)
                 settings->option(customizeKey)->setValue(value);
                 keymap->setValue("customize");
             }
-
             m_userChangeKey = false;
         }
     });
