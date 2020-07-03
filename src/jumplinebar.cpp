@@ -29,7 +29,7 @@ JumpLineBar::JumpLineBar(DFloatingWidget *parent)
     : DFloatingWidget(parent)
 {
     // Init.
-    setFixedSize(200, 58);
+    setFixedSize(nJumpLineBarWidth, nJumpLineBarHeight);
 
     // Init layout and widgets.
     m_layout = new QHBoxLayout();
@@ -73,7 +73,8 @@ void JumpLineBar::activeInput(QString file, int row, int column, int lineCount, 
     m_rowBeforeJump = row;
     m_columnBeforeJump = column;
     m_jumpFileScrollOffset = scrollOffset;
-    m_lineValidator->setRange(1, lineCount);
+    m_lineValidator->setRange(1, lineCount);    
+    setFixedSize(nJumpLineBarWidth + QString::number(lineCount).size() * fontMetrics().width('9'),nJumpLineBarHeight);
 
     // Clear line number.
     m_editLine->lineEdit()->setText("");
