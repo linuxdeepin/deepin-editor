@@ -47,10 +47,13 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     layout->addStretch();
 
     connect(m_menu, &DMenu::triggered, this, [=](QAction *action) {
-        setText(action->text());
-        setCurrentAction(action);
-        Q_EMIT this->triggered(action);
-        Q_EMIT this->currentTextChanged(action->text());
+        //编码内容改变触发内容改变和信号发射 梁卫东 2020.7.7
+        if (m_text->text() != action->text()) {
+            setText(action->text());
+            setCurrentAction(action);
+            Q_EMIT this->triggered(action);
+            Q_EMIT this->currentTextChanged(action->text());
+        }
     });
 
     connect(this, &DDropdownMenu::requestContextMenu, this, [=] {
