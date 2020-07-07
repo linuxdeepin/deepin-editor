@@ -264,19 +264,19 @@
                             "key": "newline",
                             "name": "New line",
                             "type": "shortcut",
-                            "default":  "Return"
+                            "default":  "Enter"
                         },
                         {
                             "key": "opennewlineabove",
                             "name": "New line above",
                             "type": "shortcut",
-                            "default":  "Ctrl+Return"
+                            "default":  "Ctrl+Enter"
                         },
                         {
                             "key": "opennewlinebelow",
                             "name": "New line below",
                             "type": "shortcut",
-                            "default":  "Ctrl+Shift+Return"
+                            "default":  "Ctrl+Shift+Enter"
                         },
                         {
                             "key": "duplicateline",
@@ -468,7 +468,7 @@
                             "key": "togglereadonlymode",
                             "name": "Read-Only mode",
                             "type": "shortcut",
-                            "default":  "Alt+Meta+L"
+                            "default":  "Meta+Alt+L"
                         },
                         {
                             "key": "togglecomment",
@@ -723,19 +723,19 @@
                             "key": "newline",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Return"
+                            "default":  "Enter"
                         },
                         {
                             "key": "opennewlineabove",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Ctrl+Return"
+                            "default":  "Ctrl+Enter"
                         },
                         {
                             "key": "opennewlinebelow",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Ctrl+Shift+Return"
+                            "default":  "Ctrl+Shift+Enter"
                         },
                         {
                             "key": "duplicateline",
@@ -951,7 +951,7 @@
                             "key": "togglereadonlymode",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Alt+Meta+L"
+                            "default":  "Meta+Alt+L"
                         },
                         {
                             "key": "togglecomment",
@@ -1433,7 +1433,7 @@
                             "key": "togglereadonlymode",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Alt+Meta+L"
+                            "default":  "Meta+Alt+L"
                         },
                         {
                             "key": "togglecomment",
@@ -1687,19 +1687,19 @@
                             "key": "newline",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Return"
+                            "default":  "Enter"
                         },
                         {
                             "key": "opennewlineabove",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Ctrl+Return"
+                            "default":  "Ctrl+Enter"
                         },
                         {
                             "key": "opennewlinebelow",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Ctrl+Shift+Return"
+                            "default":  "Ctrl+Shift+Enter"
                         },
                         {
                             "key": "duplicateline",
@@ -1915,7 +1915,7 @@
                             "key": "togglereadonlymode",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Alt+Meta+L"
+                            "default":  "Meta+Alt+L"
                         },
                         {
                             "key": "togglecomment",
