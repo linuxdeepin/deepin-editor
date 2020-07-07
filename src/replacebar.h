@@ -53,7 +53,7 @@ public:
     void setsearched(bool _);
 
 signals:
-    void replaceNext(QString replaceText, QString withText , bool isRepalce);
+    void replaceNext(QString replaceText, QString withText);
     void replaceSkip();
     void replaceRest(QString replaceText, QString withText);
     void replaceAll(QString replaceText, QString withText);
@@ -67,7 +67,7 @@ signals:
     void sigReplacebarClose();
 
 public slots:
-    void change(QString text);
+    void change();
     void replaceClose();
     void handleContentChanged();
     void handleReplaceAll();
@@ -97,8 +97,6 @@ private:
     bool searched = false;
 
     QPoint last;
-    QString oldReplaceText;
-    bool m_bIsFirstSearch = false;
 };
 
 #endif

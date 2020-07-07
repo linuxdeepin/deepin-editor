@@ -29,6 +29,7 @@
 
 #include "showflodcodewidget.h"
 
+
 #include <KF5/KSyntaxHighlighting/definition.h>
 #include <KF5/KSyntaxHighlighting/syntaxhighlighter.h>
 #include <KF5/KSyntaxHighlighting/theme.h>
@@ -1514,7 +1515,7 @@ void TextEdit::replaceAll(const QString &replaceText, const QString &withText)
     setTextCursor(startCursor);
 }
 
-void TextEdit::replaceNext(const QString &replaceText, const QString &withText, bool isRepalce)
+void TextEdit::replaceNext(const QString &replaceText, const QString &withText)
 {
     if (m_readOnlyMode){
         return;
@@ -1537,13 +1538,10 @@ void TextEdit::replaceNext(const QString &replaceText, const QString &withText, 
     }
     cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, replaceText.size());
+    cursor.insertText(withText);
 
-    if (isRepalce) {
-        cursor.insertText(withText);
-        setTextCursor(cursor);
-    }
-
-    // Update cursor.    
+    // Update cursor.
+    setTextCursor(cursor);
     highlightKeyword(replaceText, getPosition());
 }
 
@@ -4650,7 +4648,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             nextLine();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "prevline")) {
             prevLine();
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "newline")/* || key == "Return"*/) {
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "newline") || key == "Return") {
             newline();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "opennewlineabove")) {
             openNewlineAbove();

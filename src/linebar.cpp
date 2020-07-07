@@ -59,7 +59,7 @@ void LineBar::handleTextChanged()
 
 void LineBar::sendText(QString t)
 {
-//    qDebug()<<"ppppppttttt"<<t;
+    qDebug()<<"ppppppttttt"<<t;
     emit signal_sentText(t);
 }
 

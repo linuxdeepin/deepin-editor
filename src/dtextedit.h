@@ -137,7 +137,7 @@ public:
     void updateFont();
 
     void replaceAll(const QString &replaceText, const QString &withText);
-    void replaceNext(const QString &replaceText, const QString &withText , bool isRepalce);
+    void replaceNext(const QString &replaceText, const QString &withText);
     void replaceRest(const QString &replaceText, const QString &withText);
     void beforeReplace(QString _);
 
