@@ -150,8 +150,12 @@ void ReplaceBar::handleContentChanged()
 
 void ReplaceBar::handleReplaceNext()
 {
+    qDebug()<<m_replaceLine->lineEdit()->text()<<m_withLine->lineEdit()->text();
     if(!searched)
-    emit beforeReplace(m_replaceLine->lineEdit()->text());
+    {
+        emit removeSearchKeyword();
+        emit beforeReplace(m_replaceLine->lineEdit()->text());
+    }
     replaceNext(m_replaceLine->lineEdit()->text(), m_withLine->lineEdit()->text());
     searched=true;
 }
