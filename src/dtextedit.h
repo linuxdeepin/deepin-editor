@@ -139,6 +139,7 @@ public:
     void replaceAll(const QString &replaceText, const QString &withText);
     void replaceNext(const QString &replaceText, const QString &withText);
     void replaceRest(const QString &replaceText, const QString &withText);
+    void beforeReplace(QString _);
 
     bool findKeywordForward(const QString &keyword);
 
@@ -211,7 +212,7 @@ public:
     void addOrDeleteBookMark();
     void moveToPreviousBookMark();
     void moveToNextBookMark();
-    void checkBookmarkLineMove();
+    void checkBookmarkLineMove(int from, int charsRemoved, int charsAdded);
     void setIsFileOpen();
     void setTextFinished();
     QStringList readHistoryRecord();
@@ -224,6 +225,7 @@ public:
     void cancelLastMark();
     void markSelectWord();
     void updateMark(int from, int charsRemoved, int charsAdded);
+    void setCursorStart(int _);
 
 public:
     bool bIsSetLineNumberWidth = true;
@@ -285,6 +287,7 @@ public slots:
     void appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSelections
                               ,QTextEdit::ExtraSelection selection,QString strColor
                               ,QList<QTextEdit::ExtraSelection> *listSelections);
+    void onSelectionArea();
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
@@ -454,13 +457,20 @@ private:
     int m_nBookMarkHoverLine;
     int m_nLines;
     bool m_bIsFileOpen;
+    bool m_bIsShortCut;
 
     //存储所有有折叠标记的位置，包含不可见区域
     QList<int> m_listFlodFlag;
     //包含当前可见区域的标志
     QList<int> m_listFlodIconPos;
+
     QString m_qstrCommitString;
     bool m_bIsInputMethod;
+    int m_nSelectEndLine;
+    int m_nSelectStart;
+    int m_nSelectEnd;
+
+    int m_cursorStart=-1;    
 };
 
 #endif

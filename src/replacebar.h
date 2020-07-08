@@ -50,12 +50,14 @@ public:
 
     void activeInput(QString text, QString file, int row, int column, int scrollOffset);
     void setMismatchAlert(bool isAlert);
+    void setsearched(bool _);
 
 signals:
     void replaceNext(QString replaceText, QString withText);
     void replaceSkip();
     void replaceRest(QString replaceText, QString withText);
     void replaceAll(QString replaceText, QString withText);
+    void beforeReplace(QString _);
 
     void backToPosition(QString file, int row, int column, int scrollOffset);
 
@@ -65,6 +67,7 @@ signals:
     void sigReplacebarClose();
 
 public slots:
+    void change();
     void replaceClose();
     void handleContentChanged();
     void handleReplaceAll();

@@ -68,8 +68,10 @@ FindBar::FindBar(QWidget *parent)
     connect(m_editLine, &LineBar::returnPressed, this, &FindBar::handleContentChanged, Qt::QueuedConnection);
     connect(m_editLine, &LineBar::signal_sentText, this, &FindBar::receiveText, Qt::QueuedConnection);
     connect(m_editLine, &LineBar::contentChanged, this, &FindBar::slot_ifClearSearchWord, Qt::QueuedConnection);
-    connect(m_findNextButton, &QPushButton::clicked, this, &FindBar::findNext, Qt::QueuedConnection);
-    connect(m_findPrevButton, &QPushButton::clicked, this, &FindBar::findPrev, Qt::QueuedConnection);
+
+    connect(m_findNextButton, &QPushButton::clicked,  this,&FindBar::handleContentChanged, Qt::QueuedConnection);
+    connect(m_findPrevButton, &QPushButton::clicked, this, &FindBar::findPreClicked, Qt::QueuedConnection);
+    //connect(m_findPrevButton, &QPushButton::clicked, this, &FindBar::findPrev, Qt::QueuedConnection);
 
     connect(m_closeButton, &DIconButton::clicked, this, &FindBar::findCancel, Qt::QueuedConnection);
 }
@@ -121,8 +123,8 @@ void FindBar::slot_ifClearSearchWord()
     //因为搜索更改为按下enter,所以使用这个函数在点击"x"时清除;
     if(m_editLine->lineEdit()->text() == nullptr)
     {
-//        updateSearchKeyword(m_findFile, m_receivedText);
-//        updateSearchKeyword(m_findFile, "");
+   //     updateSearchKeyword(m_findFile, m_receivedText);
+   //     updateSearchKeyword(m_findFile, "");
     }
 }
 
@@ -141,5 +143,22 @@ void FindBar::receiveText(QString t)
     if(t!="")
     {
         m_receivedText = t;
+    }
+}
+
+void FindBar::setSearched(bool _)
+{
+    searched = _;
+}
+
+void FindBar::findPreClicked()
+{
+    if(!searched){
+        updateSearchKeyword(m_findFile, m_editLine->lineEdit()->text());
+        emit findPrev();
+        searched = true;
+    }
+    else {
+        emit findPrev();
     }
 }

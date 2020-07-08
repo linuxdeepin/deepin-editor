@@ -154,6 +154,7 @@ public slots:
     void slotSettingResetTheme(const QString &path);
 
     void slot_saveReadingPath();
+    void slot_beforeReplace(QString _);
 
 private:
     void handleFocusWindowChanged(QWindow *w);

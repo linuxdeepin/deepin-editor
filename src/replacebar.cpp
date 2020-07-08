@@ -78,6 +78,8 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     m_replaceAllButton->setFocusPolicy(Qt::NoFocus);
     m_closeButton->setFocusPolicy(Qt::NoFocus);
 
+    connect(m_replaceLine, &LineBar::signal_sentText, this, &ReplaceBar::change, Qt::QueuedConnection);
+
     connect(m_replaceLine, &LineBar::pressEsc, this, &ReplaceBar::replaceClose, Qt::QueuedConnection);
     connect(m_withLine, &LineBar::pressEsc, this, &ReplaceBar::replaceClose, Qt::QueuedConnection);
 
@@ -148,8 +150,12 @@ void ReplaceBar::handleContentChanged()
 
 void ReplaceBar::handleReplaceNext()
 {
+    qDebug()<<m_replaceLine->lineEdit()->text()<<m_withLine->lineEdit()->text();
     if(!searched)
-    updateSearchKeyword(m_replaceFile, m_replaceLine->lineEdit()->text());
+    {
+        emit removeSearchKeyword();
+        emit beforeReplace(m_replaceLine->lineEdit()->text());
+    }
     replaceNext(m_replaceLine->lineEdit()->text(), m_withLine->lineEdit()->text());
     searched=true;
 }
@@ -166,6 +172,7 @@ void ReplaceBar::handleReplaceAll()
 
 void ReplaceBar::hideEvent(QHideEvent *)
 {
+    searched=false;
     removeSearchKeyword();
 }
 
@@ -191,4 +198,14 @@ bool ReplaceBar::focusNextPrevChild(bool)
 void ReplaceBar::setMismatchAlert(bool isAlert)
 {
     m_replaceLine->setAlert(isAlert);
+}
+
+void ReplaceBar::setsearched(bool _)
+{
+    searched = _;
+}
+
+void ReplaceBar::change()
+{
+    searched=false;
 }

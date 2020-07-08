@@ -144,6 +144,8 @@ Window::Window(DMainWindow *parent)
 
     // Init replace bar.
     connect(m_replaceBar, &ReplaceBar::removeSearchKeyword, this, &Window::handleRemoveSearchKeyword, Qt::QueuedConnection);
+
+    connect(m_replaceBar, &ReplaceBar::beforeReplace,this, &Window::slot_beforeReplace, Qt::QueuedConnection);
     connect(m_replaceBar, &ReplaceBar::replaceAll, this, &Window::handleReplaceAll, Qt::QueuedConnection);
     connect(m_replaceBar, &ReplaceBar::replaceNext, this, &Window::handleReplaceNext, Qt::QueuedConnection);
     connect(m_replaceBar, &ReplaceBar::replaceRest, this, &Window::handleReplaceRest, Qt::QueuedConnection);
@@ -636,7 +638,12 @@ EditWrapper *Window::createEditor()
 
 EditWrapper *Window::currentWrapper()
 {
-    return m_wrappers.value(m_tabbar->currentPath());
+    if (m_wrappers.contains(m_tabbar->currentPath())) {
+       return m_wrappers.value(m_tabbar->currentPath());
+
+    } else {
+       return nullptr;
+    }
 }
 
 EditWrapper *Window::wrapper(const QString &filePath)
@@ -1020,7 +1027,7 @@ void Window::popupFindBar()
 //        }
 //    } else {
         //addBottomWidget(m_findBar);
-
+        m_findBar->setSearched(false);
         QString tabPath = m_tabbar->currentPath();
         EditWrapper *wrapper = currentWrapper();
         if (wrapper->textEditor()->toPlainText().isEmpty()) {
@@ -1048,8 +1055,17 @@ void Window::popupFindBar()
 
 void Window::popupReplaceBar()
 {
+    QTextCursor cursor = currentWrapper()->textEditor()->textCursor();
+
+    m_replaceBar->setsearched(false);
     EditWrapper *curWrapper = currentWrapper();
     bool bIsReadOnly = curWrapper->textEditor()->getReadOnlyMode();
+
+    if(cursor.hasSelection())
+    {
+        currentWrapper()->textEditor()->setCursorStart(cursor.selectionStart());
+    }
+
 
     if (bIsReadOnly) {
         showNotify(tr("Read-Only mode is on"));
@@ -1093,31 +1109,26 @@ void Window::popupJumpLineBar()
         m_jumpLineBar->hide();
         return;
     }
-    updateJumpLineBar();
-    m_jumpLineBar->show();
-    m_jumpLineBar->raise();
-    m_jumpLineBar->focus();
 
+    if (m_jumpLineBar->isVisible()) {
+        if (m_jumpLineBar->isFocus()) {
+            //QTimer::singleShot(0, m_wrappers.value(m_tabbar->currentPath())->textEditor(), SLOT(setFocus()));
+        } else {
+            m_jumpLineBar->focus();
+        }
+    } else {
+        QString tabPath = m_tabbar->currentPath();
+        EditWrapper *wrapper = currentWrapper();
+        QString text = wrapper->textEditor()->textCursor().selectedText();
+        int row = wrapper->textEditor()->getCurrentLine();
+        int column = wrapper->textEditor()->getCurrentColumn();
+        int count = wrapper->textEditor()->blockCount();
+        int scrollOffset = wrapper->textEditor()->getScrollOffset();
 
-//    if (m_jumpLineBar->isVisible()) {
-//        if (m_jumpLineBar->isFocus()) {
-//            //QTimer::singleShot(0, m_wrappers.value(m_tabbar->currentPath())->textEditor(), SLOT(setFocus()));
-//        } else {
-//            m_jumpLineBar->focus();
-//        }
-//    } else {
-//        QString tabPath = m_tabbar->currentPath();
-//        EditWrapper *wrapper = currentWrapper();
-//        QString text = wrapper->textEditor()->textCursor().selectedText();
-//        int row = wrapper->textEditor()->getCurrentLine();
-//        int column = wrapper->textEditor()->getCurrentColumn();
-//        int count = wrapper->textEditor()->blockCount();
-//        int scrollOffset = wrapper->textEditor()->getScrollOffset();
-
-//        m_jumpLineBar->activeInput(tabPath, row, column, count, scrollOffset);
-//        m_jumpLineBar->show();
-//        m_jumpLineBar->focus();
-    //    }
+        m_jumpLineBar->activeInput(tabPath, row, column, count, scrollOffset);
+        m_jumpLineBar->show();
+        m_jumpLineBar->focus();
+        }
 }
 
 void Window::updateJumpLineBar()
@@ -1130,7 +1141,6 @@ void Window::updateJumpLineBar()
         int row = wrapper->textEditor()->getCurrentLine();
         int column = wrapper->textEditor()->getCurrentColumn();
         int count = wrapper->textEditor()->blockCount();
-        qDebug()<<count;
         int scrollOffset = wrapper->textEditor()->getScrollOffset();
         m_jumpLineBar->activeInput(tabPath, row, column, count, scrollOffset);
     }
@@ -1516,8 +1526,12 @@ void Window::handleCurrentChanged(const int &index)
     for (auto wrapper : m_wrappers.values()) {
         wrapper->textEditor()->removeKeywords();
     }
-    currentWrapper()->checkForReload();
-    checkTabbarForReload();
+
+    if(currentWrapper())
+    {
+        currentWrapper()->checkForReload();
+        checkTabbarForReload();
+    }
 
     const QString &filepath = m_tabbar->fileAt(index);
 
@@ -1527,7 +1541,7 @@ void Window::handleCurrentChanged(const int &index)
         m_editorWidget->setCurrentWidget(wrapper);
     }
 
-    if (currentWrapper() != nullptr && currentWrapper()->isVisible()) {
+    if (currentWrapper() != nullptr) {
         //  if (currentWrapper()!=nullptr) {
         currentWrapper()->m_bottomBar->show();
          currentWrapper()->m_bottomBar->updateSize(32);
@@ -1539,11 +1553,14 @@ void Window::handleJumpLineBarExit()
 {
    // if(m_jumpLineBar)
       //  m_jumpLineBar->hide();
-    QTimer::singleShot(0, currentWrapper()->textEditor(), SLOT(setFocus()));
+    if (currentWrapper() != nullptr) {
+        QTimer::singleShot(0, currentWrapper()->textEditor(), SLOT(setFocus()));
+    }
 }
 
 void Window::handleJumpLineBarJumpToLine(const QString &filepath, int line, bool focusEditor)
 {
+
     if (m_wrappers.contains(filepath)) {
         getTextEditor(filepath)->jumpToLine(line, true);
 
@@ -1631,7 +1648,9 @@ void Window::handleReplaceSkip()
 
 void Window::handleRemoveSearchKeyword()
 {
-    currentWrapper()->textEditor()->removeKeywords();
+    if (currentWrapper() != nullptr) {
+        currentWrapper()->textEditor()->removeKeywords();
+    }
 }
 
 void Window::handleUpdateSearchKeyword(QWidget *widget, const QString &file, const QString &keyword)
@@ -1828,6 +1847,11 @@ void Window::slot_saveReadingPath()
     m_reading_list.append(currentWrapper()->textEditor());
 }
 
+void Window::slot_beforeReplace(QString _)
+{
+    currentWrapper()->textEditor()->beforeReplace(_);
+}
+
 void Window::handleFocusWindowChanged(QWindow *w)
 {
     if (windowHandle() != w || !currentWrapper() || !isActiveWindow()) {
@@ -1899,7 +1923,8 @@ void Window::closeEvent(QCloseEvent *e)
     QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
 
     QList<EditWrapper *> needSaveList;
-    for (EditWrapper *wrapper : m_wrappers) {
+    QMap<QString, EditWrapper *> wrappers = m_wrappers;
+    for (EditWrapper *wrapper : wrappers) {
         // save all the draft documents.
         if (QFileInfo(wrapper->textEditor()->filepath).dir().absolutePath() == m_blankFileDir) {
             wrapper->saveFile();
@@ -1919,15 +1944,17 @@ void Window::closeEvent(QCloseEvent *e)
 
             if (index == 2) {
                 // save files.
-                for (EditWrapper *wrapper : m_wrappers) {
+                for (EditWrapper *wrapper : wrappers) {
 
                     if (!wrapper->textEditor()->document()->isModified()) {
+                        m_wrappers.remove(wrapper->filePath());
                         disconnect(wrapper->textEditor(), 0, this, 0);
                         delete wrapper;
                     } else {
                         if (wrapper->saveFile()) {
                             //wrapper->deleteLater();
                             // remove all signals on this connection.
+                            m_wrappers.remove(wrapper->filePath());
                             disconnect(wrapper->textEditor(), 0, this, 0);
                             delete wrapper;
                         }
@@ -1935,7 +1962,8 @@ void Window::closeEvent(QCloseEvent *e)
                 }
 
             } else if (index == 1){
-                for (EditWrapper *wrapper : m_wrappers) {
+                for (EditWrapper *wrapper : wrappers) {
+                    m_wrappers.remove(wrapper->filePath());
                     disconnect(wrapper->textEditor(), 0, this, 0);
                     delete wrapper;
                 }
@@ -1947,7 +1975,8 @@ void Window::closeEvent(QCloseEvent *e)
             return;
         }
     } else {
-        for (EditWrapper *wrapper : m_wrappers) {
+        for (EditWrapper *wrapper : wrappers) {
+            m_wrappers.remove(wrapper->filePath());
             disconnect(wrapper->textEditor(), 0, this, 0);
             delete wrapper;
         }
@@ -1981,7 +2010,7 @@ void Window::hideEvent(QHideEvent *event)
     //如果查找浮窗正显示着，则隐藏
     if (m_findBar->isVisible()) {
        // m_findBar->hide();
-        if (currentWrapper()->isVisible()) {
+        if (currentWrapper() != nullptr) {
             currentWrapper()->m_bottomBar->show();
         }
     }
@@ -1989,7 +2018,7 @@ void Window::hideEvent(QHideEvent *event)
     //如果替换浮窗正显示着，则隐藏
     if (m_replaceBar->isVisible()) {
       //  m_replaceBar->hide();
-        if (currentWrapper()->isVisible()) {
+        if (currentWrapper() != nullptr) {
             currentWrapper()->m_bottomBar->show();
         }
     }

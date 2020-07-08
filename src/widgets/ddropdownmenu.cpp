@@ -18,16 +18,19 @@
  */
 
 #include "ddropdownmenu.h"
-#include "../utils.h"
 #include <QHBoxLayout>
 #include <QMouseEvent>
+#include "../utils.h"
 
 DDropdownMenu::DDropdownMenu(QWidget *parent)
-    : QFrame(parent),
-      m_menu(new DMenu),
-      m_text(new QLabel("undefined")),
-      m_arrowLabel(new QLabel)
+    : QFrame(parent)
+    , m_menu(new DMenu)
+    , m_text(new QLabel("undefined"))
+    , m_arrowLabel(new QLabel)
 {
+    //设置界面大小根据内容大小自适应 梁卫东 2020.7.7
+    m_text->setScaledContents(true);
+
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
@@ -37,17 +40,20 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     arrowPixmap.setDevicePixelRatio(devicePixelRatioF());
     m_arrowLabel->setPixmap(arrowPixmap);
 
-    //layout->addStretch();
+    // layout->addStretch();
     layout->addWidget(m_text, 0, Qt::AlignHCenter);
     layout->addSpacing(10);
     layout->addWidget(m_arrowLabel);
     layout->addStretch();
 
-    connect(m_menu, &DMenu::triggered, this, [=] (QAction *action) {
-        setText(action->text());
-        setCurrentAction(action);
-        Q_EMIT this->triggered(action);
-        Q_EMIT this->currentTextChanged(action->text());
+    connect(m_menu, &DMenu::triggered, this, [=](QAction *action) {
+        //编码内容改变触发内容改变和信号发射 梁卫东 2020.7.7
+        if (m_text->text() != action->text()) {
+            setText(action->text());
+            setCurrentAction(action);
+            Q_EMIT this->triggered(action);
+            Q_EMIT this->currentTextChanged(action->text());
+        }
     });
 
     connect(this, &DDropdownMenu::requestContextMenu, this, [=] {
@@ -61,9 +67,7 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     });
 }
 
-DDropdownMenu::~DDropdownMenu()
-{
-}
+DDropdownMenu::~DDropdownMenu() {}
 
 QList<QAction *> DDropdownMenu::actions() const
 {
