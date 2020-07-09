@@ -1030,6 +1030,12 @@ void Window::popupFindBar()
         m_findBar->setSearched(false);
         QString tabPath = m_tabbar->currentPath();
         EditWrapper *wrapper = currentWrapper();
+
+
+        if (currentWrapper() == nullptr) {
+            return;
+        }
+
         if (wrapper->textEditor()->toPlainText().isEmpty()) {
             return;
         }
@@ -1055,6 +1061,10 @@ void Window::popupFindBar()
 
 void Window::popupReplaceBar()
 {
+    if (currentWrapper() == nullptr) {
+        return;
+    }
+
     QTextCursor cursor = currentWrapper()->textEditor()->textCursor();
 
     m_replaceBar->setsearched(false);
@@ -1101,6 +1111,11 @@ void Window::popupReplaceBar()
 void Window::popupJumpLineBar()
 {
     EditWrapper *curWrapper = currentWrapper();
+
+    if(curWrapper == nullptr) {
+        return;
+    }
+
     if (curWrapper->textEditor()->toPlainText().isEmpty()) {
         return;
     }
