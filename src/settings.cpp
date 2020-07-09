@@ -36,6 +36,7 @@
 #include <QDir>
 #include <QStandardPaths>
 
+Settings *Settings::m_setting = nullptr;
 Settings::Settings(QWidget *parent)
     : QObject(parent)
 {
@@ -97,6 +98,7 @@ Settings::Settings(QWidget *parent)
     windowState->setData("items", windowStateMap);
 
     connect(settings, &Dtk::Core::DSettings::valueChanged, this, [=] (const QString &key, const QVariant &value) {
+
         // Change keymap to customize once user change any keyshortcut.
         if (!m_userChangeKey && key.startsWith("shortcuts.") && key != "shortcuts.keymap.keymap" && !key.contains("_keymap_")) {
             m_userChangeKey = true;
@@ -119,7 +121,6 @@ Settings::Settings(QWidget *parent)
                 settings->option(customizeKey)->setValue(value);
                 keymap->setValue("customize");
             }
-
             m_userChangeKey = false;
         }
     });
@@ -132,6 +133,11 @@ Settings::Settings(QWidget *parent)
 
 Settings::~Settings()
 {
+}
+
+void Settings::setSettingDialog(DSettingsDialog *settingsDialog)
+{
+    m_pSettingsDialog = settingsDialog;
 }
 
 // This function is workaround, it will remove after DTK fixed SettingDialog theme bug.
@@ -181,6 +187,180 @@ QPair<QWidget*, QWidget*> Settings::createFontComBoBoxHandle(QObject *obj)
     return optionWidget;
 }
 
+QPair<QWidget *, QWidget *> Settings::createKeySequenceEditHandle(QObject *obj)
+{
+    auto option = qobject_cast<DTK_CORE_NAMESPACE::DSettingsOption *>(obj);
+    KeySequenceEdit *shortCutLineEdit = new KeySequenceEdit(option);
+    shortCutLineEdit->ShortcutDirection(Qt::AlignLeft);
+    if (option->value().toString().isEmpty()) {
+        //option->setValue();
+    }
+
+    // init.
+    shortCutLineEdit->setKeySequence(QKeySequence(option->value().toString()));
+    QPair<QWidget*, QWidget*> optionWidget = DSettingsWidgetFactory::createStandardItem(QByteArray(), option, shortCutLineEdit);
+
+    option->connect(shortCutLineEdit, &DKeySequenceEdit::editingFinished, [ = ](const QKeySequence & sequence) {
+
+        QString checkName = option->key();
+        QString reason;
+        bool bIsConflicts = false;
+        auto keymap = instance()->settings->option("shortcuts.keymap.keymap");
+        QStringList keySplitList = option->key().split(".");
+        keySplitList[1] = QString("%1_keymap_%2").arg(keySplitList[1]).arg(keymap->value().toString());
+
+        if (!instance()->checkShortcutValid(checkName,sequence.toString(),reason,bIsConflicts)) {
+            instance()->m_pDialog = instance()->createDialog(reason,"",bIsConflicts);
+            instance()->m_pDialog->exec();
+            shortCutLineEdit->setKeySequence(QKeySequence(instance()->settings->value(keySplitList.join(".")).toString()));
+            keymap->setValue("emacs");
+            keymap->setValue("customize");
+            return;
+        }
+
+        bool bIsCustomize = false;
+        QString conflictsKeys;
+        QString originalKeys;
+
+        if (keymap->value().toString() != "customize") {
+            instance()->m_userChangeKey = true;
+
+            for (auto option : instance()->settings->group("shortcuts.window_keymap_customize")->options()) {
+                QStringList keySplitList = option->key().split(".");
+                keySplitList[1] = QString("window_keymap_%1").arg(keymap->value().toString());
+
+                if (option->value().toString() == sequence.toString()) {
+
+                    if (checkName.contains(keySplitList.last())) {
+                        keymap->setValue("customize");
+                        return;
+                    } else {
+                        bIsConflicts = true;
+                        keySplitList[1] = QString("window_keymap_%1").arg("customize");
+                        conflictsKeys = keySplitList.join(".");
+                    }
+                }
+            }
+
+            for (auto option : instance()->settings->group("shortcuts.editor_keymap_customize")->options()) {
+                QStringList keySplitList = option->key().split(".");
+                keySplitList[1] = QString("editor_keymap_%1").arg(keymap->value().toString());
+
+                if (option->value().toString() == sequence.toString()) {
+
+                    if (checkName.contains(keySplitList.last())) {
+                        keymap->setValue("customize");
+                        return;
+                    } else {
+                        bIsConflicts = true;
+                        keySplitList[1] = QString("editor_keymap_%1").arg("customize");
+                        conflictsKeys = keySplitList.join(".");
+                    }
+                }
+            }
+
+            instance()->m_userChangeKey = false;
+        }  else {
+            bIsCustomize = true;
+            instance()->m_userChangeKey = true;
+            for (auto option : instance()->settings->group("shortcuts.window_keymap_customize")->options()) {
+                QStringList keySplitList = option->key().split(".");
+                keySplitList[1] = QString("window_keymap_%1").arg(keymap->value().toString());
+
+                if (option->value().toString() == sequence.toString()) {
+
+                    if (checkName.contains(keySplitList.last())) {
+                        return;
+                    } else {
+                        bIsConflicts = true;
+                        conflictsKeys = keySplitList.join(".");
+                    }
+                }
+            }
+
+            for (auto option : instance()->settings->group("shortcuts.editor_keymap_customize")->options()) {
+                QStringList keySplitList = option->key().split(".");
+                keySplitList[1] = QString("editor_keymap_%1").arg(keymap->value().toString());
+
+                if (option->value().toString() == sequence.toString()) {
+
+                    if (checkName.contains(keySplitList.last())) {
+                        return;
+                    } else {
+                        bIsConflicts = true;
+                        conflictsKeys = keySplitList.join(".");
+                    }
+                }
+            }
+            instance()->m_userChangeKey = false;
+        }
+
+        keySplitList = option->key().split(".");
+        keySplitList[1] = QString("%1_keymap_%2").arg(keySplitList[1]).arg(keymap->value().toString());
+        QString style = QString("<span style=\"color: rgba(255, 87, 54, 1);\">[%1]</span>").arg(sequence.toString());
+
+        if (bIsConflicts) {
+            instance()->m_pDialog = instance()->createDialog(tr("This shortcut key conflicts with %1, click add to make this shortcut key take effect immediately").arg(style),"",bIsConflicts);
+            int mode = instance()->m_pDialog->exec();
+
+            // click cancel button.
+            if (mode == -1 || mode == 0) {
+                shortCutLineEdit->setKeySequence(QKeySequence(instance()->settings->value(keySplitList.join(".")).toString()));
+                keymap->setValue("emacs");
+                keymap->setValue("customize");
+                return;
+            } else {
+                keySplitList = option->key().split(".");
+                keySplitList[1] = QString("%1_keymap_customize").arg(keySplitList[1]);
+
+                if (!bIsCustomize) {
+                    instance()->settings->option(keySplitList.join("."))->setValue(sequence.toString());
+                    instance()->settings->option(conflictsKeys)->setValue("");
+                    shortCutLineEdit->setKeySequence(QKeySequence(instance()->settings->value(checkName).toString()));
+                } else {
+                    instance()->settings->option(keySplitList.join("."))->setValue(sequence.toString());
+                    instance()->settings->option(conflictsKeys)->setValue("");
+                }
+                keymap->setValue("emacs");
+                keymap->setValue("customize");
+                return;
+            }
+        }
+
+        if (!bIsCustomize) {
+            keySplitList = option->key().split(".");
+            keySplitList[1] = QString("%1_keymap_customize").arg(keySplitList[1]);
+            instance()->settings->option(keySplitList.join("."))->setValue(sequence.toString());
+        } else {
+            instance()->settings->option(keySplitList.join("."))->setValue(sequence.toString());
+        }
+
+        keymap->setValue("customize");
+    });
+
+    // 配置修改
+    option->connect(option, &DTK_CORE_NAMESPACE::DSettingsOption::valueChanged, shortCutLineEdit, [ = ](const QVariant & value) {
+        QString keyseq = value.toString();
+
+        if (keyseq.isEmpty()) {
+            shortCutLineEdit->clear();
+            return;
+        }
+
+        shortCutLineEdit->setKeySequence(QKeySequence(keyseq));
+    });
+
+    return optionWidget;
+}
+
+Settings *Settings::instance()
+{
+    if (m_setting == nullptr) {
+        m_setting = new Settings;
+    }
+    return m_setting;
+}
+
 void Settings::updateAllKeysWithKeymap(QString keymap)
 {
     m_userChangeKey = true;
@@ -217,4 +397,66 @@ void Settings::copyCustomizeKeysFromKeymap(QString keymap)
     }
 
     m_userChangeKey = false;
+}
+
+bool Settings::checkShortcutValid(const QString &Name, const QString &Key, QString &Reason ,bool &bIsConflicts)
+{
+    Q_UNUSED(Name);
+
+    QString style = QString("<span style=\"color: rgba(255, 87, 54, 1);\">[%1]</span>").arg(Key);
+    // 单键
+    if (Key.count("+") == 0) {
+        //F1-F12是允许的，这个正则不够精确，但是没关系。
+        QRegExp regexp("^F[0-9]{1,2}$");
+        if (!Key.contains(regexp)) {
+            Reason = tr("%1 is invalid shortcut key, please reset").arg(style);
+            bIsConflicts = false;
+            return  false;
+        }
+    }
+    // 小键盘单键都不允许
+    QRegExp regexpNum("^Num+.*");
+    if (Key.contains(regexpNum)) {
+        Reason = tr("%1 is invalid shortcut key, please reset").arg(style);
+        bIsConflicts = false;
+        return  false;
+    }
+
+//    // 与设置里的快捷键冲突检测
+//    if (isShortcutConflict(Name, Key)) {
+//        Reason = tr("This shortcut key conflicts with %1, click add to make this shortcut key take effect immediately").arg(style);
+//        bIsConflicts = true;
+//        return  false;
+//    }
+
+//    bIsConflicts = true;
+    return true;
+}
+
+bool Settings::isShortcutConflict(const QString &Name, const QString &Key)
+{
+    for (QString tmpKey : settings->keys()) {
+        if (settings->value(tmpKey).toString() == Key/* && tmpKey.contains("customize")*/) {
+            if (Name != tmpKey) {
+                return  true;
+            }
+        }
+    }
+    return  false;
+}
+
+DDialog *Settings::createDialog(const QString &title, const QString &content, const bool &bIsConflicts)
+{
+    DDialog *dialog = new DDialog(title,content, m_pSettingsDialog);
+    dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
+    dialog->setIcon(QIcon::fromTheme("deepin-editor"));
+
+    if (bIsConflicts) {
+        dialog->addButton(QString(tr("Cancel")), true, DDialog::ButtonNormal);
+        dialog->addButton(QString(tr("replace")), false, DDialog::ButtonRecommend);
+    } else {
+        dialog->addButton(QString(tr("Cancel")), true, DDialog::ButtonRecommend);
+    }
+
+    return dialog;
 }

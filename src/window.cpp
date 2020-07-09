@@ -62,27 +62,26 @@ Window::Window(DMainWindow *parent)
       m_replaceBar(new ReplaceBar(this)),
       m_themePanel(new ThemePanel(this)),
       m_findBar(new FindBar(this)),
-      m_settings(new Settings(this)),
       m_menu(new DMenu),
       m_titlebarStyleSheet(titlebar()->styleSheet())
 {
     m_blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
-    m_themePath = m_settings->settings->option("advance.editor.theme")->value().toString();
+    m_themePath = Settings::instance()->settings->option("advance.editor.theme")->value().toString();
     m_rootSaveDBus = new DBusDaemon::dbus("com.deepin.editor.daemon", "/", QDBusConnection::systemBus(), this);
 
     // Init.
     setAcceptDrops(true);
-
+    m_settings = Settings::instance();
     // Apply qss theme.
     //Utils::applyQss(this, "main.qss");
     loadTheme(m_themePath);
 
     // Init settings.
-    connect(m_settings, &Settings::adjustFont, this, &Window::updateFont);
-    connect(m_settings, &Settings::adjustFontSize, this, &Window::updateFontSize);
-    connect(m_settings, &Settings::adjustTabSpaceNumber, this, &Window::updateTabSpaceNumber);
-    connect(m_settings, &Settings::themeChanged, this, &Window::slotSettingResetTheme);
-    connect(m_settings, &Settings::adjustWordWrap, this, [ = ](bool enable) {
+    connect(Settings::instance(), &Settings::adjustFont, this, &Window::updateFont);
+    connect(Settings::instance(), &Settings::adjustFontSize, this, &Window::updateFontSize);
+    connect(Settings::instance(), &Settings::adjustTabSpaceNumber, this, &Window::updateTabSpaceNumber);
+    connect(Settings::instance(), &Settings::themeChanged, this, &Window::slotSettingResetTheme);
+    connect(Settings::instance(), &Settings::adjustWordWrap, this, [ = ](bool enable) {
         for (EditWrapper *wrapper : m_wrappers.values()) {
             TextEdit *textedit = wrapper->textEditor();
             textedit->setLineWrapMode(enable);
@@ -115,14 +114,14 @@ Window::Window(DMainWindow *parent)
 
     // Init window state with config.
     // Below code must before this->titlebar()->setMenu, otherwise main menu can't display pre-build-in menu items by dtk.
-    const QString &windowState = m_settings->settings->option("advance.window.windowstate")->value().toString();
+    const QString &windowState = Settings::instance()->settings->option("advance.window.windowstate")->value().toString();
 
     // window minimum size.
     setMinimumSize(1000, 600);
 
     // resize window size.
-    resize(QSize(m_settings->settings->option("advance.window.window_width")->value().toDouble(),
-                 m_settings->settings->option("advance.window.window_height")->value().toDouble()));
+    resize(QSize(Settings::instance()->settings->option("advance.window.window_width")->value().toDouble(),
+                 Settings::instance()->settings->option("advance.window.window_height")->value().toDouble()));
     Dtk::Widget::moveToCenter(this);
     show();
 
@@ -1166,6 +1165,9 @@ void Window::popupSettingsDialog()
     DSettingsDialog *dialog = new DSettingsDialog(this);
 
     dialog->widgetFactory()->registerWidget("fontcombobox", Settings::createFontComBoBoxHandle);
+    //QPair<QWidget*, QWidget*> Settings = m_settings->createKeySequenceEditHandle(new QObject());
+    dialog->widgetFactory()->registerWidget("keySequenceEdit",Settings::createKeySequenceEditHandle);
+    m_settings->setSettingDialog(dialog);
     //dialog->setProperty("_d_dtk_theme", "dark");
     //dialog->setProperty("_d_QSSFilename", "DSettingsDialog");
 //    DThemeManager::instance()->registerWidget(dialog);
