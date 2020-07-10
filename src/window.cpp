@@ -396,6 +396,9 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
         index = m_tabbar->currentIndex() + 1;
     }
 
+    //disconnect wrapper与上window popupNotify信号与槽 梁卫东 2020.7.10
+    disconnect(wrapper->textEditor(), &TextEdit::popupNotify, nullptr,nullptr);
+
     // wrapper may be from anther window pointer.
     // reconnect signal.
     connect(wrapper->textEditor(), &TextEdit::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);
@@ -444,8 +447,8 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
 
         //m_tabbar->setTabText(tabIndex, QFileInfo(strNewFilePath).fileName());
     });
-
-    wrapper->disconnect();
+    //此处disconnect 无效
+    //wrapper->disconnect();
     connect(wrapper, &EditWrapper::requestSaveAs, this, &Window::saveAsFile);
 
     // add wrapper to this window.
