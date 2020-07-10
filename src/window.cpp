@@ -395,6 +395,11 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
         index = m_tabbar->currentIndex() + 1;
     }
 
+//    //disconnect wrapper与上window popupNotify信号与槽 梁卫东 2020.7.10
+//    disconnect(wrapper->textEditor(), &TextEdit::popupNotify, nullptr,nullptr);
+
+    //这里会重复连接信号和槽，先全部取消
+    disconnect(wrapper->textEditor(),nullptr,nullptr,nullptr);
     // wrapper may be from anther window pointer.
     // reconnect signal.
     connect(wrapper->textEditor(), &TextEdit::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);
@@ -443,8 +448,8 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
 
         //m_tabbar->setTabText(tabIndex, QFileInfo(strNewFilePath).fileName());
     });
-
-    wrapper->disconnect();
+    //此处disconnect 无效
+    //wrapper->disconnect();
     connect(wrapper, &EditWrapper::requestSaveAs, this, &Window::saveAsFile);
 
     // add wrapper to this window.
@@ -639,7 +644,6 @@ EditWrapper *Window::currentWrapper()
 {
     if (m_wrappers.contains(m_tabbar->currentPath())) {
        return m_wrappers.value(m_tabbar->currentPath());
-
     } else {
        return nullptr;
     }
@@ -647,17 +651,28 @@ EditWrapper *Window::currentWrapper()
 
 EditWrapper *Window::wrapper(const QString &filePath)
 {
-    return m_wrappers.value(filePath);
+    if (m_wrappers.contains(filePath)) {
+       return m_wrappers.value(filePath);     
+    } else {
+       return nullptr;
+    }
 }
 
 TextEdit *Window::getTextEditor(const QString &filepath)
 {
-    return m_wrappers.value(filepath)->textEditor();
+    if (m_wrappers.contains(filepath)) {
+       return m_wrappers.value(filepath)->textEditor();
+    } else {
+       return nullptr;
+    }
 }
 
 void Window::focusActiveEditor()
 {
     if (m_tabbar->count() > 0) {
+        if (currentWrapper() == nullptr) {
+            return;
+        }
         currentWrapper()->textEditor()->setFocus();
     }
 }
@@ -668,6 +683,7 @@ void Window::removeWrapper(const QString &filePath, bool isDelete)
         EditWrapper *wrapper = m_wrappers.value(filePath);
 
         m_editorWidget->removeWidget(wrapper);
+        //
         m_wrappers.remove(filePath);
 
         if (isDelete) {
@@ -1541,7 +1557,7 @@ void Window::handleCurrentChanged(const int &index)
     }
 
     for (auto wrapper : m_wrappers.values()) {
-        wrapper->textEditor()->removeKeywords();
+         wrapper->textEditor()->removeKeywords();
     }
 
     if(currentWrapper())
