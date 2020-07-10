@@ -442,7 +442,7 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
         //wrapper->setEndOfLineMode(eol);
         //wrapper->saveFile();
 
-        //m_wrappers.remove(strOldFilePath);
+        m_wrappers.remove(strOldFilePath);
         m_wrappers.insert(strNewFilePath, wrapper);
 
         wrapper->textEditor()->loadHighlighter();
@@ -630,7 +630,7 @@ EditWrapper *Window::createEditor()
         //wrapper->setEndOfLineMode(eol);
         //wrapper->saveFile();
 
-        //m_wrappers.remove(strOldFilePath);
+        m_wrappers.remove(strOldFilePath);
         m_wrappers.insert(strNewFilePath, wrapper);
 
         wrapper->textEditor()->loadHighlighter();
@@ -685,7 +685,7 @@ void Window::removeWrapper(const QString &filePath, bool isDelete)
 
         m_editorWidget->removeWidget(wrapper);
         //
-        //m_wrappers.remove(filePath);
+        m_wrappers.remove(filePath);
 
         if (isDelete) {
             //wrapper->deleteLater();
@@ -935,7 +935,7 @@ QString Window::saveBlankFileToDisk()
         wrapper->setEndOfLineMode(eol);
         wrapper->saveFile();
 
-        //m_wrappers.remove(filePath);
+        m_wrappers.remove(filePath);
         m_wrappers.insert(newFilePath, wrapper);
 
         wrapper->textEditor()->loadHighlighter();
@@ -1540,7 +1540,7 @@ void Window::handleCurrentChanged(const int &index)
     }
 
     for (auto wrapper : m_wrappers.values()) {
-        wrapper->textEditor()->removeKeywords();
+         wrapper->textEditor()->removeKeywords();
     }
 
     if(currentWrapper())
@@ -1963,14 +1963,14 @@ void Window::closeEvent(QCloseEvent *e)
                 for (EditWrapper *wrapper : wrappers) {
 
                     if (!wrapper->textEditor()->document()->isModified()) {
-                        //m_wrappers.remove(wrapper->filePath());
+                        m_wrappers.remove(wrapper->filePath());
                         disconnect(wrapper->textEditor(), 0, this, 0);
                         delete wrapper;
                     } else {
                         if (wrapper->saveFile()) {
                             //wrapper->deleteLater();
                             // remove all signals on this connection.
-                            //m_wrappers.remove(wrapper->filePath());
+                            m_wrappers.remove(wrapper->filePath());
                             disconnect(wrapper->textEditor(), 0, this, 0);
                             delete wrapper;
                         }
@@ -1979,7 +1979,7 @@ void Window::closeEvent(QCloseEvent *e)
 
             } else if (index == 1){
                 for (EditWrapper *wrapper : wrappers) {
-                    //m_wrappers.remove(wrapper->filePath());
+                    m_wrappers.remove(wrapper->filePath());
                     disconnect(wrapper->textEditor(), 0, this, 0);
                     delete wrapper;
                 }
@@ -1992,7 +1992,7 @@ void Window::closeEvent(QCloseEvent *e)
         }
     } else {
         for (EditWrapper *wrapper : wrappers) {
-            //m_wrappers.remove(wrapper->filePath());
+            m_wrappers.remove(wrapper->filePath());
             disconnect(wrapper->textEditor(), 0, this, 0);
             delete wrapper;
         }

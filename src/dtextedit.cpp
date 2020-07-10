@@ -1625,6 +1625,7 @@ bool TextEdit::findKeywordForward(const QString &keyword)
 
 void TextEdit::removeKeywords()
 {
+
     m_findHighlightSelection.cursor = textCursor();
     m_findHighlightSelection.cursor.clearSelection();
 
