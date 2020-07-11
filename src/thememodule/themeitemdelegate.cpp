@@ -103,7 +103,7 @@ void ThemeItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
     painter->setPen(QPen(QColor(otherColor)));
     painter->drawText(QRect(rect.x() + includeX, rect.y() + includeY, rect.width(), lineHeight), Qt::AlignLeft | Qt::AlignTop, "#include");
 
-    int headerX = includeX + fm.width("#include ");
+    int headerX = includeX + fm.horizontalAdvance("#include ");
     int headerY = includeY;
     painter->setPen(QPen(QColor(importColor)));
     painter->drawText(QRect(rect.x() + headerX, rect.y() + headerY, rect.width(), lineHeight), Qt::AlignLeft | Qt::AlignTop, "\"deepin.h\"");
@@ -113,32 +113,32 @@ void ThemeItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
     painter->setPen(QPen(QColor(keywordColor)));
     painter->drawText(QRect(rect.x() + keywordX, rect.y() + keywordY, rect.width(), lineHeight), Qt::AlignLeft | Qt::AlignTop, "QString");
 
-    int functionX = includeX + fm.width("QString ");
+    int functionX = includeX + fm.horizontalAdvance("QString ");
     int functionY = includeY + lineHeight;
     painter->setPen(QPen(QColor(functionColor)));
     painter->drawText(QRect(rect.x() + functionX, rect.y() + functionY, rect.width(), lineHeight), Qt::AlignLeft | Qt::AlignTop, "theme");
 
-    int functionArgX = includeX + fm.width("QString theme");
+    int functionArgX = includeX + fm.horizontalAdvance("QString theme");
     int functionArgY = includeY + lineHeight;
     painter->setPen(QPen(QColor(normalColor)));
     painter->drawText(QRect(rect.x() + functionArgX, rect.y() + functionArgY, rect.width(), lineHeight), Qt::AlignLeft | Qt::AlignTop, "() {");
 
-    int commentX = includeX + fm.width("QStr");
+    int commentX = includeX + fm.horizontalAdvance("QStr");
     int commentY = includeY + lineHeight * 2;
     painter->setPen(QPen(QColor(commentColor)));
     painter->drawText(QRect(rect.x() + commentX, rect.y() + commentY, rect.width(), lineHeight), Qt::AlignLeft | Qt::AlignTop, "// Return theme name.");
 
-    int builtInX = includeX + fm.width("QStr");
+    int builtInX = includeX + fm.horizontalAdvance("QStr");
     int builtInY = includeY + lineHeight * 3;
     painter->setPen(QPen(QColor(builtInColor)));
     painter->drawText(QRect(rect.x() + builtInX, rect.y() + builtInY, rect.width(), lineHeight), Qt::AlignLeft | Qt::AlignTop, "return");
 
-    int stringX = includeX + fm.width("QStr") + fm.width("return ");
+    int stringX = includeX + fm.horizontalAdvance("QStr") + fm.horizontalAdvance("return ");
     int stringY = includeY + lineHeight * 3;
     painter->setPen(QPen(QColor(stringColor)));
     painter->drawText(QRect(rect.x() + stringX, rect.y() + stringY, rect.width(), lineHeight), Qt::AlignLeft | Qt::AlignTop, QString("\"%1\"").arg(themeName));
 
-    int semicolonX = includeX + fm.width("QStr") + fm.width("return ") + fm.width(QString("\"%1\"").arg(themeName));
+    int semicolonX = includeX + fm.horizontalAdvance("QStr") + fm.horizontalAdvance("return ") + fm.horizontalAdvance(QString("\"%1\"").arg(themeName));
     int semicolonY = includeY + lineHeight * 3;
     painter->setPen(QPen(QColor(normalColor)));
     painter->drawText(QRect(rect.x() + semicolonX, rect.y() + semicolonY, rect.width(), lineHeight), Qt::AlignLeft | Qt::AlignTop, ";");

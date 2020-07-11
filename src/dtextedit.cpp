@@ -1477,7 +1477,7 @@ void TextEdit::updateFont()
     font.setPointSize(m_fontSize);
     font.setFamily(m_fontName);
     setFont(font);
-    setTabStopWidth(m_tabSpaceNumber * QFontMetrics(font).width(' '));
+    setTabStopWidth(m_tabSpaceNumber * QFontMetrics(font).horizontalAdvance(' '));
 }
 
 void TextEdit::replaceAll(const QString &replaceText, const QString &withText)
@@ -2002,15 +2002,15 @@ void TextEdit::updateLineNumber()
 
     if(m_pIsShowCodeFoldArea) {
 //        m_pLeftAreaWidget->setFixedWidth(23 + blockSize * fontMetrics().width('9') + m_lineNumberPaddingX * 4);
-        m_pLeftAreaWidget->setFixedWidth(23 + blockSize * fontMetrics().width('9') + m_pLeftAreaWidget->m_bookMarkArea->width());
+        m_pLeftAreaWidget->setFixedWidth(23 + blockSize * fontMetrics().horizontalAdvance('9') + m_pLeftAreaWidget->m_bookMarkArea->width());
     } else {
 //        m_pLeftAreaWidget->setFixedWidth(blockSize * fontMetrics().width('9') + m_lineNumberPaddingX * 4);
-        m_pLeftAreaWidget->setFixedWidth(blockSize * fontMetrics().width('9') + m_pLeftAreaWidget->m_bookMarkArea->width());
+        m_pLeftAreaWidget->setFixedWidth(blockSize * fontMetrics().horizontalAdvance('9') + m_pLeftAreaWidget->m_bookMarkArea->width());
     }
 
     if(!bIsSetLineNumberWidth) {
         int leftAreaWidth = m_pLeftAreaWidget->width();
-        m_pLeftAreaWidget->setFixedWidth(leftAreaWidth - blockSize * fontMetrics().width('9'));
+        m_pLeftAreaWidget->setFixedWidth(leftAreaWidth - blockSize * fontMetrics().horizontalAdvance('9'));
     }
     m_pLeftAreaWidget->m_bookMarkArea->update();
     lineNumberArea->update();

@@ -74,7 +74,7 @@ void JumpLineBar::activeInput(QString file, int row, int column, int lineCount, 
     m_columnBeforeJump = column;
     m_jumpFileScrollOffset = scrollOffset;
     m_lineValidator->setRange(1, lineCount);    
-    setFixedSize(nJumpLineBarWidth + QString::number(lineCount).size() * fontMetrics().width('9'),nJumpLineBarHeight);
+    setFixedSize(nJumpLineBarWidth + QString::number(lineCount).size() * fontMetrics().horizontalAdvance('9'),nJumpLineBarHeight);
 
     // Clear line number.
     m_editLine->lineEdit()->setText("");
