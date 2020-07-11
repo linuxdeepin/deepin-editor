@@ -67,7 +67,7 @@ QSize Utils::getRenderSize(int fontSize, const QString &string)
     int height = 0;
 
     for (const QString &line : string.split("\n")) {
-        int lineWidth = fm.width(line);
+        int lineWidth = fm.horizontalAdvance(line);
         int lineHeight = fm.height();
 
         if (lineWidth > width) {
