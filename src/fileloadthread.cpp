@@ -53,10 +53,7 @@ void FileLoadThread::run()
         {
             encode="UTF-8";
         }
-        if(encode =="Big5")
-        {
-            encode="gb18030";
-        }
+
         file.close();
         if (file.open(QIODevice::ReadOnly)) {
             QTextStream stream(&fileContent);
