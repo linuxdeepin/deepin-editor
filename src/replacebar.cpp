@@ -72,11 +72,11 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     this->setLayout(m_layout);
 
     // Make button don't grab keyboard focus after click it.
-    m_replaceButton->setFocusPolicy(Qt::NoFocus);
-    m_replaceSkipButton->setFocusPolicy(Qt::NoFocus);
-    m_replaceRestButton->setFocusPolicy(Qt::NoFocus);
-    m_replaceAllButton->setFocusPolicy(Qt::NoFocus);
-    m_closeButton->setFocusPolicy(Qt::NoFocus);
+//    m_replaceButton->setFocusPolicy(Qt::NoFocus);
+//    m_replaceSkipButton->setFocusPolicy(Qt::NoFocus);
+//    m_replaceRestButton->setFocusPolicy(Qt::NoFocus);
+//    m_replaceAllButton->setFocusPolicy(Qt::NoFocus);
+//    m_closeButton->setFocusPolicy(Qt::NoFocus);
 
     connect(m_replaceLine, &LineBar::signal_sentText, this, &ReplaceBar::change, Qt::QueuedConnection);
 
@@ -193,6 +193,19 @@ bool ReplaceBar::focusNextPrevChild(bool)
     }
 
     return false;
+}
+
+void ReplaceBar::keyPressEvent(QKeyEvent *e)
+{
+    const QString &key = Utils::getKeyshortcut(e);
+    qDebug() << "key" << key;
+    if(m_closeButton->hasFocus()&&key=="Tab")
+    {
+        m_replaceLine->lineEdit()->setFocus();
+    }
+    else{
+        DFloatingWidget::keyPressEvent(e);
+    }
 }
 
 void ReplaceBar::setMismatchAlert(bool isAlert)
