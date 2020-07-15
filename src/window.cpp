@@ -98,6 +98,16 @@ Window::Window(DMainWindow *parent)
             textedit->setCodeFlodFlagVisable(enable);
         }
     });
+    connect(m_settings, &Settings::changeWindowSize, this, [ = ](QString mode) {
+        if(mode=="fullscreen"){
+            this->showFullScreen();
+        } else if (mode=="window_maximum") {
+            this->showMaximized();
+        }
+        else {
+            this->showNormal();
+        }
+    });
 
     // Init layout and editor.
     m_centralLayout->setMargin(0);

@@ -64,6 +64,7 @@ signals:
     void showCodeFlodFlag(bool enable);
     void themeChanged(const QString &theme);
     void setLineNumberShow(bool bIsShow);
+    void changeWindowSize(QString mode);
 
 private:
     void updateAllKeysWithKeymap(QString keymap);

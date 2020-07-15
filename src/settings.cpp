@@ -92,6 +92,9 @@ Settings::Settings(QWidget *parent)
     });
 
     auto windowState = settings->option("advance.window.windowstate");
+    connect(windowState, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
+        emit changeWindowSize(value.toString());
+    });
     QMap<QString, QVariant> windowStateMap;
     windowStateMap.insert("keys", QStringList() << "window_normal" << "window_maximum" << "fullscreen");
     windowStateMap.insert("values", QStringList() << tr("Normal") << tr("Maximum") << tr("Fullscreen"));
