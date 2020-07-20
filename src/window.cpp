@@ -596,6 +596,7 @@ EditWrapper *Window::createEditor()
     wrapper->textEditor()->updateLineNumber();
 
     connect(wrapper->textEditor(), &TextEdit::signal_readingPath, this, &Window::slot_saveReadingPath, Qt::QueuedConnection);
+    connect(wrapper->textEditor(), &TextEdit::signal_setTitleFocus, this, &Window::slot_setTitleFocus, Qt::QueuedConnection);
 
     connect(wrapper->textEditor(), &TextEdit::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::clickReplaceAction, this, &Window::popupReplaceBar, Qt::QueuedConnection);
@@ -1893,6 +1894,12 @@ void Window::slot_saveReadingPath()
 void Window::slot_beforeReplace(QString _)
 {
     currentWrapper()->textEditor()->beforeReplace(_);
+}
+
+void Window::slot_setTitleFocus()
+{
+    titlebar()->setFocusPolicy(Qt::TabFocus);
+    titlebar()->setFocus(Qt::MouseFocusReason);
 }
 
 void Window::handleFocusWindowChanged(QWindow *w)

@@ -155,6 +155,7 @@ public slots:
 
     void slot_saveReadingPath();
     void slot_beforeReplace(QString _);
+    void slot_setTitleFocus();
 
 private:
     void handleFocusWindowChanged(QWindow *w);

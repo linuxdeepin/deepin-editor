@@ -245,6 +245,7 @@ signals:
     void signal_readingPath();
 
     void signal_clearBlack();
+    void signal_setTitleFocus();
 
 
 

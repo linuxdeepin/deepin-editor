@@ -4639,7 +4639,11 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
     // }
 
     const QString &key = Utils::getKeyshortcut(e);
-//    qDebug() << "key" << key;
+
+    if(key=="Esc")      //按下esc的时候,光标退出编辑区，切换至标题栏
+    {
+        emit signal_setTitleFocus();
+    }
     if (m_readOnlyMode || m_bReadOnlyPermission) {
         if (key == "J") {
             nextLine();
