@@ -49,7 +49,7 @@ void FileLoadThread::run()
 
         // read the encode.
         QByteArray encode = Utils::detectEncode(fileContent);
-        if(encode =="gb18030"||encode =="windows-1251")
+        if(encode =="gb18030"||encode =="windows-1251"||encode =="Big5")
         {
             encode="UTF-8";
         }
