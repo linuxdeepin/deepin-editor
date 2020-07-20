@@ -102,6 +102,7 @@ Window::Window(DMainWindow *parent)
         if(mode=="fullscreen"){
             this->showFullScreen();
         } else if (mode=="window_maximum") {
+            this->showNormal();
             this->showMaximized();
         }
         else {
