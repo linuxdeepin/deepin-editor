@@ -376,10 +376,10 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
 
                 m_closeTabAction = new QAction(tr("Close tab"), this);
                 m_closeOtherTabAction = new QAction(tr("Close other tabs"), this);
-                m_moreWaysCloseMenu = new DMenu(tr("More ways to close"),this);
-                m_closeLeftTabAction = new QAction(tr("Close left tabs"),this);
-                m_closeRightTabAction = new QAction(tr("Close right tabs"),this);
-                m_closeAllunModifiedTabAction = new QAction(tr("Close unchange tabs"),this);
+                m_moreWaysCloseMenu = new DMenu(tr("More options"),this);
+                m_closeLeftTabAction = new QAction(tr("Close tabs to the left"),this);
+                m_closeRightTabAction = new QAction(tr("Close tabs to the right"),this);
+                m_closeAllunModifiedTabAction = new QAction(tr("Close unmodified tabs"),this);
 
                 m_moreWaysCloseMenu->addAction(m_closeLeftTabAction);
                 m_moreWaysCloseMenu->addAction(m_closeRightTabAction);

@@ -171,22 +171,22 @@ TextEdit::TextEdit(QWidget *parent)
     //yanyuhan
     //颜色标记、折叠/展开、书签、列编辑、设置注释、取消注释;
     //点击颜色标记菜单，显示二级菜单，包括：标记、清除上次标记、清除标记、标记所有;
-    m_colorMarkMenu = new DMenu(tr("Color Mark"),this);
-    m_markAllLine = new DMenu(tr("Mark All Line"), this);
+    m_colorMarkMenu = new DMenu(tr("Mark up"),this);
+    m_markAllLine = new DMenu(tr("Mark All"), this);
     m_markCurrentLine = new DMenu(tr("Mark"), this);
-    m_cancleMarkAllLine = new QAction(tr("Cancle Mark All Line"), this);
+    m_cancleMarkAllLine = new QAction(tr("Clear All Marks"), this);
     m_cancleMarkCurrentLine = new QAction(tr("Cancle Mark Current Line"), this);
-    m_cancleLastMark = new QAction(tr("Cancle last Mark"), this);
+    m_cancleLastMark = new QAction(tr("Clear Last Mark"), this);
 
-    m_actionStyleOne = new QAction(tr("Style One"), this);
-    m_actionStyleTwo = new QAction(tr("Style Two"), this);
-    m_actionStyleThree = new QAction(tr("Style Three"), this);
-    m_actionStyleFour = new QAction(tr("Style Four"), this);
+    m_actionStyleOne = new QAction(tr("Style 1"), this);
+    m_actionStyleTwo = new QAction(tr("Style 2"), this);
+    m_actionStyleThree = new QAction(tr("Style 3"), this);
+    m_actionStyleFour = new QAction(tr("Style 4"), this);
 
-    m_actionAllStyleOne = new QAction(tr("Style One"), this);
-    m_actionAllStyleTwo = new QAction(tr("Style Two"), this);
-    m_actionAllStyleThree = new QAction(tr("Style Three"), this);
-    m_actionAllStyleFour = new QAction(tr("Style Four"), this);
+    m_actionAllStyleOne = new QAction(tr("Style 1"), this);
+    m_actionAllStyleTwo = new QAction(tr("Style 2"), this);
+    m_actionAllStyleThree = new QAction(tr("Style 3"), this);
+    m_actionAllStyleFour = new QAction(tr("Style 4"), this);
 
     m_markAllLine->addAction(m_actionAllStyleOne);
     m_markAllLine->addAction(m_actionAllStyleTwo);

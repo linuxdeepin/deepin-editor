@@ -111,5 +111,5 @@ void GenerateSettingTranslate()
     auto base_font_wordwrapText = QObject::tr("Word Wrap");
     auto base_font_codeflod = QObject::tr("Code Flod Flag");
     auto base_font_showLineNumber = QObject::tr("Show Line Number");
-    auto shortcuts_editor_markName = QObject::tr("Color Mark");
+    auto shortcuts_editor_markName = QObject::tr("Mark up");
 }

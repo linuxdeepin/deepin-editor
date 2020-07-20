@@ -514,7 +514,7 @@
                         },
                         {
                             "key": "mark",
-                            "name": "Color Mark",
+                            "name": "Mark up",
                             "type": "keySequenceEdit",
                             "default":  "Ctrl+F6"
                         }
