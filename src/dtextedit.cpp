@@ -4098,14 +4098,14 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                 }
 
                 //判断下一行是否可见，左括号存在于该行（类似文件中的json文件书写，第一行就存在左括号开头的现象），且是左括号开头的，则是从下一行开始做折叠处理
-                if (document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line - 1).text().contains("{")
-                        && document()->findBlockByNumber(line - 1).text().trimmed().startsWith("{")) {
-                    getNeedControlLine(line, false, 1, false);
+                if (document()->findBlockByNumber(line).isVisible() &&( document()->findBlockByNumber(line - 1).text().contains("{")
+                        && document()->findBlockByNumber(line - 1).text().trimmed().startsWith("{"))) {
+                    getNeedControlLine(line-1, false, 1, false);
                     document()->adjustSize();
 
                 } else if (!document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line - 1).text().contains("{")
                            && document()->findBlockByNumber(line - 1).text().trimmed().startsWith("{")) {
-                    getNeedControlLine(line, true, 1, false);
+                    getNeedControlLine(line-1, true, 1, false);
                     document()->adjustSize();
                 }
                 viewport()->update();
