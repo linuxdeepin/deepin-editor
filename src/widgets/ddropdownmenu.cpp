@@ -20,16 +20,18 @@
 #include "ddropdownmenu.h"
 #include <QHBoxLayout>
 #include <QMouseEvent>
+#include <DApplication>
 #include "../utils.h"
 
 DDropdownMenu::DDropdownMenu(QWidget *parent)
     : QFrame(parent)
     , m_menu(new DMenu)
     , m_text(new QLabel("undefined"))
-    , m_arrowLabel(new QLabel)
+    , m_arrowLabel(new QLabel())
 {
     //设置界面大小根据内容大小自适应 梁卫东 2020.7.7
     m_text->setScaledContents(true);
+    connect(qApp,&DApplication::fontChanged,this,&DDropdownMenu::OnFontChangedSlot);
 
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -128,7 +130,6 @@ void DDropdownMenu::setCurrentTextOnly(const QString &text)
 void DDropdownMenu::setText(const QString &text)
 {
     m_text->setText(text);
-
     QFontMetrics fm(font());
     setFixedWidth(fm.width(text) + 40);
 }
@@ -148,6 +149,13 @@ void DDropdownMenu::setTheme(const QString &theme)
     QPixmap arrowPixmap = Utils::renderSVG(arrowSvgPath, QSize(9, 5));
     arrowPixmap.setDevicePixelRatio(devicePixelRatioF());
     m_arrowLabel->setPixmap(arrowPixmap);
+}
+
+void DDropdownMenu::OnFontChangedSlot(const QFont &font)
+{
+    QFontMetrics fm(font);
+    //m_text->setText(m_text->text());
+    setFixedWidth(m_text->width()+40);
 }
 
 void DDropdownMenu::mouseReleaseEvent(QMouseEvent *e)

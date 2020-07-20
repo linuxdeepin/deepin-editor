@@ -23,6 +23,7 @@
 #include <QFrame>
 #include <DMenu>
 #include <QLabel>
+#include <QEvent>
 
 DWIDGET_USE_NAMESPACE
 
@@ -46,6 +47,10 @@ public:
     void setMenu(DMenu *menu);
     void setTheme(const QString &theme);
 
+public slots:
+    //字体大小跟随系统变化
+    void OnFontChangedSlot(const QFont &font);
+
 signals:
     void requestContextMenu();
     void triggered(QAction *action);
@@ -53,7 +58,6 @@ signals:
 
 protected:
     void mouseReleaseEvent(QMouseEvent *e);
-
 private:
     DMenu *m_menu;
     QLabel *m_text;
