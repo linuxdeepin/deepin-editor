@@ -58,9 +58,9 @@ FindBar::FindBar(QWidget *parent)
     this->setLayout(m_layout);
 
     // Make button don't grab keyboard focus after click it.
-    m_findNextButton->setFocusPolicy(Qt::NoFocus);
-    m_findPrevButton->setFocusPolicy(Qt::NoFocus);
-    m_closeButton->setFocusPolicy(Qt::NoFocus);
+//    m_findNextButton->setFocusPolicy(Qt::NoFocus);
+//    m_findPrevButton->setFocusPolicy(Qt::NoFocus);
+//    m_closeButton->setFocusPolicy(Qt::NoFocus);
 
     connect(m_editLine, &LineBar::pressEsc, this, &FindBar::findCancel, Qt::QueuedConnection);
  //   connect(m_editLine, &LineBar::pressEnter, this, &FindBar::findNext, Qt::QueuedConnection);            //Shielded by Hengbo ,for new demand. 20200220
@@ -131,6 +131,23 @@ void FindBar::slot_ifClearSearchWord()
 void FindBar::hideEvent(QHideEvent *)
 {
     removeSearchKeyword();
+}
+
+bool FindBar::focusNextPrevChild(bool next)
+{
+    return false;
+}
+
+void FindBar::keyPressEvent(QKeyEvent *e)
+{
+    const QString &key = Utils::getKeyshortcut(e);
+    if(m_closeButton->hasFocus()&&key=="Tab")
+    {
+        m_editLine->lineEdit()->setFocus();
+    }
+    else{
+        DFloatingWidget::keyPressEvent(e);
+    }
 }
 
 void FindBar::setMismatchAlert(bool isAlert)
