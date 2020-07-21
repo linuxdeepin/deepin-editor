@@ -166,3 +166,12 @@ void DDropdownMenu::mouseReleaseEvent(QMouseEvent *e)
 
     QFrame::mouseReleaseEvent(e);
 }
+
+void DDropdownMenu::keyPressEvent(QKeyEvent *e)
+{
+    QString key = Utils::getKeyshortcut(e);
+    if(key=="Enter")        //按下enter展开列表
+    {
+        Q_EMIT requestContextMenu();
+    }
+}

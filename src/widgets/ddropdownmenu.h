@@ -58,6 +58,7 @@ signals:
 
 protected:
     void mouseReleaseEvent(QMouseEvent *e);
+    void keyPressEvent(QKeyEvent *e);
 private:
     DMenu *m_menu;
     QLabel *m_text;
