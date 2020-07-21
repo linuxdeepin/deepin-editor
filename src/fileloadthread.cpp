@@ -49,18 +49,19 @@ void FileLoadThread::run()
 
         // read the encode.
         QByteArray encode = Utils::detectEncode(fileContent);
-        if(encode =="gb18030"||encode =="windows-1251"||encode =="Big5")
-        {
-            encode="UTF-8";
+        QByteArray encodeArray = encode;
+
+        if (m_pathList.contains(m_filePath)) {
+            encodeArray = m_codeList.value(m_pathList.indexOf(m_filePath)).toUtf8();
         }
 
         file.close();
         if (file.open(QIODevice::ReadOnly)) {
             QTextStream stream(&fileContent);
-            stream.setCodec(encode);
+            stream.setCodec(encodeArray);
             QString content = stream.readAll();
 
-            emit loadFinished(encode, content);
+            emit loadFinished(encodeArray, content);
             }
 
             file.close();
@@ -70,4 +71,10 @@ void FileLoadThread::run()
             file.close();
         }
 
+}
+
+void FileLoadThread::setEncodeInfo(QStringList pathList,QStringList codeList)
+{
+    m_pathList = pathList;
+    m_codeList = codeList;
 }

@@ -215,9 +215,9 @@ public:
     void checkBookmarkLineMove(int from, int charsRemoved, int charsAdded);
     void setIsFileOpen();
     void setTextFinished();
-    QStringList readHistoryRecord();
+    QStringList readHistoryRecord(QString key);
     QStringList readHistoryRecordofBookmark();
-    QStringList readHistoryRecordofFilePath();
+    QStringList readHistoryRecordofFilePath(QString key);
     void writeHistoryRecord();
 
     void isMarkCurrentLine(bool isMark, QString strColor = "");
@@ -226,6 +226,10 @@ public:
     void markSelectWord();
     void updateMark(int from, int charsRemoved, int charsAdded);
     void setCursorStart(int _);
+
+    void setTextCode(QString encode);
+    void writeEncodeHistoryRecord();
+    QStringList readEncodeHistoryRecord();
 
 public:
     bool bIsSetLineNumberWidth = true;
@@ -471,7 +475,8 @@ private:
     int m_nSelectStart;
     int m_nSelectEnd;
 
-    int m_cursorStart=-1;    
+    int m_cursorStart=-1;
+    QString m_textEncode;
 };
 
 #endif

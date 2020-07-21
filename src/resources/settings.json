@@ -2020,6 +2020,12 @@
                             "hide": true,
                             "reset": false,
                             "default": ""
+                        },                       
+                        {
+                            "key": "browsing_encode_history",
+                            "hide": true,
+                            "reset": false,
+                            "default": ""
                         },
                         {
                             "key": "theme",

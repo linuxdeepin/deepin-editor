@@ -111,6 +111,7 @@ void BottomBar::updateWordCount(int charactorCount)
 void BottomBar::setEncodeName(const QString &name)
 {
     m_encodeMenu->setCurrentText(name);
+    m_wrapper->textEditor()->setTextCode(name);
 }
 
 void BottomBar::setCursorStatus(const QString &text)
@@ -171,6 +172,7 @@ void BottomBar::updateSize(int size)
 void BottomBar::handleEncodeChanged(const QString &name)
 {
     m_wrapper->setTextCodec(name.toLocal8Bit(), true);
+    m_wrapper->textEditor()->setTextCode(name.toLocal8Bit());
 }
 
 void BottomBar::paintEvent(QPaintEvent *)

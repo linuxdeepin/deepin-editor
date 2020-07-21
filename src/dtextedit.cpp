@@ -414,6 +414,7 @@ TextEdit::TextEdit(QWidget *parent)
 TextEdit::~TextEdit()
 {
     writeHistoryRecord();
+    writeEncodeHistoryRecord();
     delete m_highlighter;
 }
 
@@ -3539,9 +3540,9 @@ void TextEdit::setTextFinished()
     m_nLines = blockCount();
 
     QStringList bookmarkList = readHistoryRecordofBookmark();
-    QStringList filePathList = readHistoryRecordofFilePath();
+    QStringList filePathList = readHistoryRecordofFilePath("advance.editor.browsing_history_file");
     QList<int> linesList;
-    QString qstrPath = "*[" + filepath + "]*";
+    QString qstrPath = filepath;
 
     if (filePathList.contains(qstrPath)) {
         int index = 2;
@@ -3565,9 +3566,9 @@ void TextEdit::setTextFinished()
 //    qDebug() << m_listBookmark << document()->blockCount();
 }
 
-QStringList TextEdit::readHistoryRecord()
+QStringList TextEdit::readHistoryRecord(QString key)
 {
-    QString history = m_settings->settings->option("advance.editor.browsing_history_file")->value().toString();
+    QString history = m_settings->settings->option(key)->value().toString();
     QStringList historyList;
     int nLeftPosition = history.indexOf("*{");
     int nRightPosition = history.indexOf("}*");
@@ -3597,15 +3598,15 @@ QStringList TextEdit::readHistoryRecordofBookmark()
     return bookmarkList;
 }
 
-QStringList TextEdit::readHistoryRecordofFilePath()
+QStringList TextEdit::readHistoryRecordofFilePath(QString key)
 {
-    QString history = m_settings->settings->option("advance.editor.browsing_history_file")->value().toString();
+    QString history = m_settings->settings->option(key)->value().toString();
     QStringList filePathList;
     int nLeftPosition = history.indexOf("*[");
     int nRightPosition = history.indexOf("]*");
 
     while (nLeftPosition != -1) {
-        filePathList << history.mid(nLeftPosition,nRightPosition + 2 - nLeftPosition);
+        filePathList << history.mid(nLeftPosition + 2,nRightPosition - 2 - nLeftPosition);
         nLeftPosition = history.indexOf("*[",nLeftPosition + 2);
         nRightPosition = history.indexOf("]*",nRightPosition + 2);
     }
@@ -3615,9 +3616,9 @@ QStringList TextEdit::readHistoryRecordofFilePath()
 
 void TextEdit::writeHistoryRecord()
 {
-    qDebug() << "writeHistoryRecord";
+//    qDebug() << "writeHistoryRecord";
     QString history = m_settings->settings->option("advance.editor.browsing_history_file")->value().toString();
-    QStringList historyList = readHistoryRecord();
+    QStringList historyList = readHistoryRecord("advance.editor.browsing_history_file");
 
     int nLeftPosition = history.indexOf(filepath);
     int nRightPosition = history.indexOf("}*",nLeftPosition);
@@ -3649,6 +3650,49 @@ void TextEdit::writeHistoryRecord()
     } else {
         m_settings->settings->option("advance.editor.browsing_history_file")->setValue(history);
     }
+}
+
+void TextEdit::writeEncodeHistoryRecord()
+{
+    qDebug() << "writeHistoryRecord";
+    QString history = m_settings->settings->option("advance.editor.browsing_encode_history")->value().toString();
+
+    QStringList pathList = readHistoryRecordofFilePath("advance.editor.browsing_encode_history");
+
+    foreach (auto path, pathList) {
+        QFileInfo f(path);
+        if (!f.isFile()) {
+            int nLeftPosition = history.indexOf(path);
+            int nRightPosition = history.indexOf("}*",nLeftPosition);
+            history.remove(nLeftPosition - 4,nRightPosition + 6 - nLeftPosition);
+        }
+    }
+
+    int nLeftPosition = history.indexOf(filepath);
+    int nRightPosition = history.indexOf("}*",nLeftPosition);
+
+    if (history.contains(filepath)) {
+        history.remove(nLeftPosition - 4,nRightPosition + 6 - nLeftPosition);
+    }
+
+    QString encodeHistory = history + "*{*[" + filepath + "]*" + m_textEncode + "}*";
+    m_settings->settings->option("advance.editor.browsing_encode_history")->setValue(encodeHistory);
+}
+
+QStringList TextEdit::readEncodeHistoryRecord()
+{
+    QString history = m_settings->settings->option("advance.editor.browsing_encode_history")->value().toString();
+    QStringList filePathList;
+    int nLeftPosition = history.indexOf("]*");
+    int nRightPosition = history.indexOf("}*");
+
+    while (nLeftPosition != -1) {
+        filePathList << history.mid(nLeftPosition + 2,nRightPosition - 2 - nLeftPosition);
+        nLeftPosition = history.indexOf("]*",nLeftPosition + 2);
+        nRightPosition = history.indexOf("}*",nRightPosition + 2);
+    }
+
+    return filePathList;
 }
 
 void TextEdit::isMarkCurrentLine(bool isMark, QString strColor)
@@ -4021,6 +4065,11 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
 void TextEdit::setCursorStart(int _)
 {
     m_cursorStart = _;
+}
+
+void TextEdit::setTextCode(QString encode)
+{
+    m_textEncode = encode;
 }
 void TextEdit::completionWord(QString word)
 {

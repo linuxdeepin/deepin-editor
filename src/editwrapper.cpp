@@ -98,6 +98,9 @@ void EditWrapper::openFile(const QString &filepath)
     connect(thread, &FileLoadThread::toTellFileClosed, this, &EditWrapper::onFileClosed);
     connect(thread, &FileLoadThread::finished, thread, &FileLoadThread::deleteLater);
 
+    QStringList encodeList = textEditor()->readEncodeHistoryRecord();
+    QStringList filepathList = textEditor()->readHistoryRecordofFilePath("advance.editor.browsing_encode_history");
+    thread->setEncodeInfo(filepathList,encodeList);
 //    // start the thread.
     thread->start();
 }
@@ -547,7 +550,6 @@ void EditWrapper::setEndOfLineMode(EndOfLineMode eol)
 void EditWrapper::setTextCodec(QTextCodec *codec, bool reload)
 {
     m_textCodec = codec;
-
     if (reload == false)
         return;
 
@@ -679,11 +681,13 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QString 
     }
 
     m_isLoadFinished = true;
+
     m_BeforeEncodeName = encode;
     if (m_BeforeEncodeName.isEmpty()) {
         QString str = "UTF-8";
         m_BeforeEncodeName = str.toLocal8Bit();
     }
+
     setTextCodec(encode);
 
     // set text.
