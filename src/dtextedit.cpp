@@ -1898,6 +1898,7 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
     int bottom = top + document()->documentLayout()->blockBoundingRect(block).height();
 
     for (int iBlockCount = blockNumber ; iBlockCount < document()->blockCount(); ++iBlockCount) {
+        //注释代码 行单个"{" 折叠标志显示当前行
 //        if (block.text().trimmed().startsWith("{") && blockNumber != 0) {
 //            m_listFlodFlag.append(blockNumber - 1);
 //        } else {
@@ -1907,7 +1908,7 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
 
         if (block.isValid() && top <= event->rect().bottom()) {
             if (/*block.isVisible() &&*/ bottom >= event->rect().top()) {
-                //判定是否包含左括号、是否整行是注释，isNeedShowFoldIcon该函数是为了做判定当前行是否包含成对的括号，如果包括，则不显示折叠标志
+                //判定是否包含注释代码左括号、是否整行是注释，isNeedShowFoldIcon该函数是为了做判定当前行是否包含成对的括号，如果包括，则不显示折叠标志
                 if (block.text().contains("{") &&
                         !block.text().trimmed().startsWith("//") &&
                         isNeedShowFoldIcon(block)) {
@@ -1945,7 +1946,7 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                         scaleFoldImage = foldimage.scaled(scale * foldimage.height(), nScaleWidth);
                         scaleunFoldImage = Unfoldimage.scaled(scale * Unfoldimage.height(), nScaleWidth);
                     }
-
+                       //注释代码 行单个"{" 折叠标志显示当前行
 //                    if (block.text().trimmed().startsWith("{") && blockNumber != 0) {
 
 //                        if (block.isVisible()) {
@@ -2230,7 +2231,7 @@ void TextEdit::getNeedControlLine(int line, bool isVisable, int iInitnum, bool i
          curBlock = curBlock.next();
      }
 
-     //获取左括弧最后位置
+    //获取左括弧最后位置
     int position = curBlock.position();
     int offset = curBlock.text().lastIndexOf('{');
     position += offset;
@@ -2244,7 +2245,7 @@ void TextEdit::getNeedControlLine(int line, bool isVisable, int iInitnum, bool i
 
     //左括弧光标 右括弧光标
     QTextCursor bracketBeginCursor= cursor;
-    QTextCursor bracketEndCursor = QTextCursor();
+    QTextCursor bracketEndCursor = cursor;
     bracketBeginCursor.movePosition(QTextCursor::NextCharacter,QTextCursor::KeepAnchor);
 
    //获取最后右括弧光标
@@ -2267,6 +2268,9 @@ void TextEdit::getNeedControlLine(int line, bool isVisable, int iInitnum, bool i
        }
        position++;
    }
+
+   //如果左右"{" "}"在同一行不折叠
+    if(endBlock == curBlock) return;
 
     //遍历最后右括弧文本块 设置块隐藏或显示
     while(beginBlock != endBlock){
@@ -3349,7 +3353,7 @@ void TextEdit::getHideRowContent(int iLine)
 
     //左括弧光标 右括弧光标
     QTextCursor bracketBeginCursor= cursor;
-    QTextCursor bracketEndCursor = QTextCursor();
+    QTextCursor bracketEndCursor = cursor;
     bracketBeginCursor.movePosition(QTextCursor::NextCharacter,QTextCursor::KeepAnchor);
 
    //获取最后右括弧光标
@@ -3372,6 +3376,9 @@ void TextEdit::getHideRowContent(int iLine)
        }
        position++;
    }
+
+   //如果左右"{" "}"在同一行不折叠
+    if(endBlock == curBlock) return;
 
     //遍历最后右括弧文本块 设置块隐藏或显示
     while(beginBlock != endBlock){
@@ -3447,7 +3454,6 @@ bool TextEdit::isNeedShowFoldIcon(QTextBlock block)
     } else {
         return  true;
     }
-
 }
 
 int TextEdit::getHighLightRowContentLineNum(int iLine)
@@ -3484,7 +3490,7 @@ int TextEdit::getHighLightRowContentLineNum(int iLine)
 
     //左括弧光标 右括弧光标
     QTextCursor bracketBeginCursor= cursor;
-    QTextCursor bracketEndCursor = QTextCursor();
+    QTextCursor bracketEndCursor = cursor;
     bracketBeginCursor.movePosition(QTextCursor::NextCharacter,QTextCursor::KeepAnchor);
 
    //获取最后右括弧光标
@@ -3508,6 +3514,10 @@ int TextEdit::getHighLightRowContentLineNum(int iLine)
        }
        position++;
    }
+
+
+   //如果左右"{" "}"在同一行不折叠
+    if(endBlock == curBlock) return 0;
 
    while(beginBlock != endBlock)
    {
@@ -4230,6 +4240,7 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                 m_pLeftAreaWidget->m_bookMarkArea->update();
 
                 this->setLineWrapMode(curMode);
+                viewport()->update();
             } else {
                 m_mouseClickPos = mouseEvent->pos();
                 m_rightMenu->clear();
@@ -4277,6 +4288,8 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                     int ivalue =  this->verticalScrollBar()->value();
                     int iLine =  getHighLightRowContentLineNum(line-1);
 
+                    if(line == iLine)   return false;
+
                     QTextEdit::ExtraSelection selection;
 
                     selection.format.setBackground(QColor(FOLD_HIGHLIGHT_COLOR));
@@ -4289,7 +4302,9 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                         startblock = document()->findBlockByNumber(line);
                     }
 
+
                     QTextCursor beginCursor(startblock);
+
 
                     beginCursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
                     if (line == 1 && document()->findBlockByNumber(0).text().trimmed().startsWith("{")) {
