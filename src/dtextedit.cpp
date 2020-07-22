@@ -1698,19 +1698,22 @@ bool TextEdit::updateKeywordSelections(QString keyword,QTextCharFormat charForma
     if (!keyword.isEmpty()) {
         QTextCursor cursor(document());
         QTextDocument::FindFlags flags;
-        flags = QTextDocument::FindCaseSensitively;
+        //flags &= QTextDocument::FindCaseSensitively;
         QTextEdit::ExtraSelection extra;
         extra.format = charFormat;
         cursor = document()->find(keyword, cursor, flags);
+
         if(cursor.isNull())
         {
             return false;
         }
-        while (!cursor.isNull()) { 
+
+        while (!cursor.isNull()) {
             extra.cursor = cursor;
             listSelection->append(extra);
             cursor = document()->find(keyword, cursor, flags);
         }
+
         return true;
     }
     return false;
