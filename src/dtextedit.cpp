@@ -2273,7 +2273,7 @@ void TextEdit::getNeedControlLine(int line, bool isVisable, int iInitnum, bool i
     if(endBlock == curBlock) return;
 
     //遍历最后右括弧文本块 设置块隐藏或显示
-    while(beginBlock != endBlock){
+    while(beginBlock != endBlock && !begin.isNull()){
       if(beginBlock.isValid()){
         beginBlock.setVisible(isVisable);
       }
@@ -3381,7 +3381,7 @@ void TextEdit::getHideRowContent(int iLine)
     if(endBlock == curBlock) return;
 
     //遍历最后右括弧文本块 设置块隐藏或显示
-    while(beginBlock != endBlock){
+    while(beginBlock != endBlock && !begin.isNull()){
       if(beginBlock.isValid()){
          m_foldCodeShow->appendText(beginBlock.text());
       }
@@ -3519,7 +3519,7 @@ int TextEdit::getHighLightRowContentLineNum(int iLine)
    //如果左右"{" "}"在同一行不折叠
     if(endBlock == curBlock) return 0;
 
-   while(beginBlock != endBlock)
+   while(beginBlock != endBlock && !begin.isNull())
    {
        iLine++;
        beginBlock = beginBlock.next();
@@ -4334,6 +4334,7 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
     } else if (event->type() == QEvent::HoverLeave) {
         if (object == m_pLeftAreaWidget->m_bookMarkArea) {
             m_nBookMarkHoverLine = -1;
+            m_pLeftAreaWidget->m_bookMarkArea->update();
             return true;
         }
         else if (object == m_pLeftAreaWidget->m_flodArea) {
