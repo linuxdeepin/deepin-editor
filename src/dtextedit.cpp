@@ -2270,23 +2270,24 @@ void TextEdit::getNeedControlLine(int line, bool isVisable, int iInitnum, bool i
        position++;
    }
 
-   //如果左右"{" "}"在同一行不折叠
-    if(endBlock == curBlock) return;
+   //没有找到匹配左右括弧 //如果左右"{" "}"在同一行不折叠
+   if(braceDepth != 0 || endBlock == curBlock) return;
+   else{
+       //遍历最后右括弧文本块 设置块隐藏或显示
+       while(beginBlock != endBlock && beginBlock.isValid()){
+         if(beginBlock.isValid()){
+           beginBlock.setVisible(isVisable);
+         }
+         viewport()->adjustSize();
+         beginBlock = beginBlock.next();
+       }
 
-    //遍历最后右括弧文本块 设置块隐藏或显示
-    while(beginBlock != endBlock && beginBlock.isValid()){
-      if(beginBlock.isValid()){
-        beginBlock.setVisible(isVisable);
-      }
-      viewport()->adjustSize();
-      beginBlock = beginBlock.next();
-    }
-
-    //最后一行显示或隐藏,或者下行就包含"}"
-    if(beginBlock.isValid() && beginBlock == endBlock){
-       endBlock.setVisible(isVisable);
-       viewport()->adjustSize();
-    }
+       //最后一行显示或隐藏,或者下行就包含"}"
+       if(beginBlock.isValid() && beginBlock == endBlock){
+          endBlock.setVisible(isVisable);
+          viewport()->adjustSize();
+       }
+   }
 }
 
 void TextEdit::setThemeWithPath(const QString &path)
@@ -3385,17 +3386,18 @@ void TextEdit::getHideRowContent(int iLine)
        position++;
    }
 
-   //如果左右"{" "}"在同一行不折叠
-    if(endBlock == curBlock) return;
-
-    //遍历最后右括弧文本块 设置块隐藏或显示
-    while(beginBlock != endBlock && beginBlock.isValid()){
-      if(beginBlock.isValid()){
-         m_foldCodeShow->appendText(beginBlock.text());
-      }
-      beginBlock = beginBlock.next();
+   //左右括弧没有匹配到 如果左右"{" "}"在同一行不折叠
+    if(braceDepth!=0 ||endBlock == curBlock) return;
+    else {
+        //遍历最后右括弧文本块 设置块隐藏或显示
+        while(beginBlock != endBlock && beginBlock.isValid()){
+          if(beginBlock.isValid()){
+             m_foldCodeShow->appendText(beginBlock.text());
+          }
+          beginBlock = beginBlock.next();
+        }
+        m_foldCodeShow->appendText(endBlock.text());
     }
-    m_foldCodeShow->appendText(endBlock.text());
 
 #else
     bool isFirstLine = true;
@@ -3524,17 +3526,19 @@ int TextEdit::getHighLightRowContentLineNum(int iLine)
    }
 
 
-   //如果左右"{" "}"在同一行不折叠
-    if(endBlock == curBlock) return 0;
+   //左右括弧没有匹配 如果左右"{" "}"在同一行不折叠 不作处理
+    if(0 != braceDepth || endBlock == curBlock) return iLine;
+    else{
+        while(beginBlock != endBlock && beginBlock.isValid())
+        {
+            iLine++;
+            beginBlock = beginBlock.next();
+        }
 
-   while(beginBlock != endBlock && beginBlock.isValid())
-   {
-       iLine++;
-       beginBlock = beginBlock.next();
-   }
+        iLine++;
+        return iLine;
+    }
 
-   iLine++;
-   return iLine;
 #else
 
     bool isFirstLine = true;
@@ -4296,7 +4300,7 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                     int ivalue =  this->verticalScrollBar()->value();
                     int iLine =  getHighLightRowContentLineNum(line-1);
 
-                    if(line == iLine)   return false;
+                    if(line-1 == iLine)   return false;
 
                     QTextEdit::ExtraSelection selection;
 
