@@ -69,7 +69,7 @@ signals:
 private:
     void updateAllKeysWithKeymap(QString keymap);
     void copyCustomizeKeysFromKeymap(QString keymap);
-    bool checkShortcutValid(const QString &Name, const QString &Key, QString &Reason, bool &bIsConflicts);
+    bool checkShortcutValid(const QString &Name, QString Key, QString &Reason, bool &bIsConflicts);
     bool isShortcutConflict(const QString &Name, const QString &Key);
     DDialog *createDialog(const QString &title, const QString &content, const bool &bIsConflicts);
 

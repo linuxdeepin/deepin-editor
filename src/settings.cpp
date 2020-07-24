@@ -300,8 +300,15 @@ QPair<QWidget *, QWidget *> Settings::createKeySequenceEditHandle(QObject *obj)
 
         keySplitList = option->key().split(".");
         keySplitList[1] = QString("%1_keymap_%2").arg(keySplitList[1]).arg(keymap->value().toString());
-        QString style = QString("<span style=\"color: rgba(255, 87, 54, 1);\">[%1]</span>").arg(sequence.toString());
+        QString qstrSequence = sequence.toString();
 
+        if (sequence.toString().contains("<")) {
+            qstrSequence.replace(qstrSequence.indexOf("<"),1,"&lt;");
+        }
+
+        QString style = QString("<span style=\"color: rgba(255, 87, 54, 1);\">[%1]</span>").arg(qstrSequence);
+
+        qDebug() << "style" << style;
         if (bIsConflicts) {
             instance()->m_pDialog = instance()->createDialog(tr("This shortcut key conflicts with %1, click add to make this shortcut key take effect immediately").arg(style),"",bIsConflicts);
             int mode = instance()->m_pDialog->exec();
@@ -402,9 +409,13 @@ void Settings::copyCustomizeKeysFromKeymap(QString keymap)
     m_userChangeKey = false;
 }
 
-bool Settings::checkShortcutValid(const QString &Name, const QString &Key, QString &Reason ,bool &bIsConflicts)
+bool Settings::checkShortcutValid(const QString &Name,QString Key, QString &Reason ,bool &bIsConflicts)
 {
     Q_UNUSED(Name);
+
+    if (Key.contains("<")) {
+        Key.replace(Key.indexOf("<"),1,"&lt;");
+    }
 
     QString style = QString("<span style=\"color: rgba(255, 87, 54, 1);\">[%1]</span>").arg(Key);
     // 单键
