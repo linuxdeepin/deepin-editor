@@ -1903,6 +1903,7 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
 //            m_listFlodFlag.append(blockNumber - 1);
 //        } else {
             m_listFlodFlag.append(blockNumber);
+            qDebug()<< "Block "<<blockNumber;
 //        }
 
 
@@ -2273,12 +2274,18 @@ void TextEdit::getNeedControlLine(int line, bool isVisable, int iInitnum, bool i
     if(endBlock == curBlock) return;
 
     //遍历最后右括弧文本块 设置块隐藏或显示
-    while(beginBlock != endBlock && !begin.isNull()){
+    while(beginBlock != endBlock && beginBlock.isValid()){
       if(beginBlock.isValid()){
         beginBlock.setVisible(isVisable);
       }
       viewport()->adjustSize();
       beginBlock = beginBlock.next();
+    }
+
+    //最后一行显示或隐藏,或者下行就包含"}"
+    if(beginBlock.isValid() && beginBlock == endBlock){
+       endBlock.setVisible(isVisable);
+       viewport()->adjustSize();
     }
 }
 
@@ -3286,30 +3293,31 @@ void TextEdit::checkBookmarkLineMove(int from, int charsRemoved, int charsAdded)
 void TextEdit::flodOrUnflodAllLevel(bool isFlod)
 {
     foreach (auto line, m_listFlodFlag) {
-        if (document()->findBlockByNumber(line + 1).isVisible() == isFlod) {
+        if (document()->findBlockByNumber(line).isVisible() == isFlod) {
 
-            if (document()->findBlockByNumber(line + 1).text().contains("{")
-                    && document()->findBlockByNumber(line + 1).text().trimmed().startsWith("{")) {
-                getNeedControlLine(line, !isFlod);
-            }
-            if (document()->findBlockByNumber(line).text().contains("{")
-                    && !document()->findBlockByNumber(line).text().trimmed().startsWith("{")) {
-                getNeedControlLine(line, !isFlod);
+            if(document()->findBlockByNumber(line).text().contains("{"))  getNeedControlLine(line, !isFlod,0,true);
+            else  getNeedControlLine(line-1, !isFlod,0,true);
+            //判断下一行是否可见，并且下一行是以左括号开头的（类似c++文件中的函数定义的书写）则是从该行开始做折叠处理，但该行不隐藏
+//            if (document()->findBlockByNumber(line).text().contains("{") && document()->findBlockByNumber(line).text().trimmed().startsWith("{")) {
+//                getNeedControlLine(line, !isFlod,0,true);
+//            }
+            //判断下一行是否可见，左括号存在于该行（类似c++文件中的if else 书写），但不是左括号开头的，则是从该行开始做折叠处理，但该行不隐藏
+//            if (document()->findBlockByNumber(line).text().contains("{") && !document()->findBlockByNumber(line).text().trimmed().startsWith("{")) {
+//                getNeedControlLine(line, !isFlod,0,true);
+//            }
 
-            }
-            if (document()->findBlockByNumber(line).text().contains("{")
-                    && document()->findBlockByNumber(line).text().trimmed().startsWith("{")) {
-                getNeedControlLine(line + 1, !isFlod, 1, false);
-
-            }
+            //判断下一行是否可见，左括号存在于该行（类似文件中的json文件书写，第一行就存在左括号开头的现象），且是左括号开头的，则是从下一行开始做折叠处理
+//            if (document()->findBlockByNumber(line).text().contains("{") && document()->findBlockByNumber(line).text().trimmed().startsWith("{")) {
+//                getNeedControlLine(line-1, !isFlod, 1, false);
+//            }
         }
     }
+
     m_pLeftAreaWidget->m_flodArea->update();
     lineNumberArea->update();
     m_pLeftAreaWidget->m_bookMarkArea->update();
     viewport()->update();
     document()->adjustSize();
-
 }
 
 void TextEdit::flodOrUnflodCurrentLevel(bool isFlod)
@@ -3381,7 +3389,7 @@ void TextEdit::getHideRowContent(int iLine)
     if(endBlock == curBlock) return;
 
     //遍历最后右括弧文本块 设置块隐藏或显示
-    while(beginBlock != endBlock && !begin.isNull()){
+    while(beginBlock != endBlock && beginBlock.isValid()){
       if(beginBlock.isValid()){
          m_foldCodeShow->appendText(beginBlock.text());
       }
@@ -3519,7 +3527,7 @@ int TextEdit::getHighLightRowContentLineNum(int iLine)
    //如果左右"{" "}"在同一行不折叠
     if(endBlock == curBlock) return 0;
 
-   while(beginBlock != endBlock && !begin.isNull())
+   while(beginBlock != endBlock && beginBlock.isValid())
    {
        iLine++;
        beginBlock = beginBlock.next();
