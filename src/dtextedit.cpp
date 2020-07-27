@@ -152,30 +152,30 @@ TextEdit::TextEdit(QWidget *parent)
     m_fullscreenAction = new QAction(tr("Fullscreen"), this);
     m_exitFullscreenAction = new QAction(tr("Exit fullscreen"), this);
     m_openInFileManagerAction = new QAction(tr("Display in file manager"), this);
-    m_toggleCommentAction = new QAction(tr("Toggle comment"), this);
+    m_toggleCommentAction = new QAction(tr("Add comment"), this);
     m_voiceReadingAction = new QAction(tr("Text to Speech"),this);
     m_stopReadingAction = new QAction(tr("Stop reading"),this);
     m_dictationAction = new QAction(tr("Speech to Text"),this);
     m_translateAction = new QAction(tr("Translate"),this);
     m_addBookMarkAction = new QAction(tr("Add bookmark"),this);
-    m_cancelBookMarkAction = new QAction(tr("Cancel bookmark"),this);
+    m_cancelBookMarkAction = new QAction(tr("Remove Bookmark"),this);
     m_preBookMarkAction = new QAction(tr("Previous bookmark"),this);
     m_nextBookMarkAction = new QAction(tr("Next bookmark"),this);
-    m_clearBookMarkAction = new QAction(tr("Clear bookmark"),this);
-    m_flodAllLevel = new QAction(tr("Flod all Level"), this);
-    m_flodCurrentLevel = new QAction(tr("Flod current Level"), this);
-    m_unflodAllLevel = new QAction(tr("Unflod all Level"), this);
-    m_unflodCurrentLevel = new QAction(tr("Unflod Current Level"), this);
+    m_clearBookMarkAction = new QAction(tr("Remove All Bookmarks"),this);
+    m_flodAllLevel = new QAction(tr("Fold All"), this);
+    m_flodCurrentLevel = new QAction(tr("Fold Current Level"), this);
+    m_unflodAllLevel = new QAction(tr("Unfold All"), this);
+    m_unflodCurrentLevel = new QAction(tr("Unfold Current Level"), this);
 
 //    setAddRigetMenu();
     //yanyuhan
     //颜色标记、折叠/展开、书签、列编辑、设置注释、取消注释;
     //点击颜色标记菜单，显示二级菜单，包括：标记、清除上次标记、清除标记、标记所有;
-    m_colorMarkMenu = new DMenu(tr("Mark up"),this);
+    m_colorMarkMenu = new DMenu(tr("Color mark"),this);
     m_markAllLine = new DMenu(tr("Mark All"), this);
     m_markCurrentLine = new DMenu(tr("Mark"), this);
     m_cancleMarkAllLine = new QAction(tr("Clear All Marks"), this);
-    m_cancleMarkCurrentLine = new QAction(tr("Cancle Mark Current Line"), this);
+    //m_cancleMarkCurrentLine = new QAction(tr("Cancle Mark Current Line"), this);
     m_cancleLastMark = new QAction(tr("Clear Last Mark"), this);
 
     m_actionStyleOne = new QAction(tr("Style 1"), this);
@@ -199,20 +199,20 @@ TextEdit::TextEdit(QWidget *parent)
     m_markCurrentLine->addAction(m_actionStyleFour);
 
     //点击折叠/展开菜单，显示二级菜单;包括：折叠所有层次、展开所有层次、折叠当前层次、展开当前层次。
-    m_collapseExpandMenu = new DMenu(tr("Collapse/Expand"),this);
-    QAction *collapseAll = new QAction(tr("Collapse all"));
-    QAction *expandAll = new QAction(tr("Expand all"));
-    QAction *collapseThis = new QAction(tr("Collapse this"));
-    QAction *expandThis = new QAction(tr("Expand this"));
-    m_collapseExpandMenu->addAction(collapseAll);
-    m_collapseExpandMenu->addAction(expandAll);
-    m_collapseExpandMenu->addAction(collapseThis);
-    m_collapseExpandMenu->addAction(expandThis);
+//    m_collapseExpandMenu = new DMenu(tr("Collapse/Expand"),this);
+//    QAction *collapseAll = new QAction(tr("Collapse all"));
+//    QAction *expandAll = new QAction(tr("Expand all"));
+//    QAction *collapseThis = new QAction(tr("Collapse this"));
+//    QAction *expandThis = new QAction(tr("Expand this"));
+//    m_collapseExpandMenu->addAction(collapseAll);
+//    m_collapseExpandMenu->addAction(expandAll);
+//    m_collapseExpandMenu->addAction(collapseThis);
+//    m_collapseExpandMenu->addAction(expandThis);
 
-    m_columnEditACtion = new QAction(tr("Column edit"),this);
+    m_columnEditACtion = new QAction(tr("Column Mode"),this);
     m_columnEditACtion->setCheckable(true);
     m_addComment = new QAction(tr("Add comment"),this);
-    m_cancelComment = new QAction(tr("Cancel comment"),this);
+    m_cancelComment = new QAction(tr("Remove Comment"),this);
 
     connect(m_rightMenu, &DMenu::aboutToHide, this, &TextEdit::removeHighlightWordUnderCursor);
     connect(m_undoAction, &QAction::triggered, this, &TextEdit::undo);

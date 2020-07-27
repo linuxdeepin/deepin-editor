@@ -190,12 +190,12 @@
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="112"/>
-        <source>Code Flod Flag</source>
-        <translation>代码折叠标志</translation>
+        <source>Code folding flag</source>
+        <translation>显示代码折叠标志</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="113"/>
-        <source>Show Line Number</source>
+        <source>Show line numbers</source>
         <translation>显示行号</translation>
     </message>
     <message>
@@ -522,7 +522,7 @@
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="99"/>
-        <source>Toggle comment</source>
+        <source>Add comment</source>
         <translation>添加注释</translation>
     </message>
     <message>
@@ -542,8 +542,8 @@
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="103"/>
-        <source>Switch bookmark</source>
-        <translation>切换书签</translation>
+        <source>Add/Remove bookmark</source>
+        <translation>添加/清除书签</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="104"/>
@@ -567,7 +567,7 @@
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="114"/>
-        <source>Mark up</source>
+        <source>Color mark</source>
         <translation>添加/取消颜色标记</translation>
     </message>
     <message>
@@ -637,14 +637,14 @@
     </message>
     <message>
         <location filename="../src/settings.cpp" line="306"/>
-        <source>This shortcut key conflicts with %1, click add to make this shortcut key take effect immediately</source>
-        <translation>此快捷键与%1冲突，点击添加使这个快捷键立即生效</translation>
+        <source>This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately</source>
+        <translation>此快捷键与%1冲突，点击替换使这个快捷键立即生效</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="415"/>
         <location filename="../src/settings.cpp" line="423"/>
-        <source>%1 is invalid shortcut key, please reset</source>
-        <translation>%1为无效快捷键，请重新设置</translation>
+        <source>%1 is invalid</source>
+        <translation>此快捷键%1无效</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="458"/>
@@ -654,7 +654,7 @@
     </message>
     <message>
         <location filename="../src/settings.cpp" line="459"/>
-        <source>replace</source>
+        <source>Replace</source>
         <translation>替换</translation>
     </message>
 </context>
@@ -684,22 +684,6 @@
         <location filename="../src/tabbar.cpp" line="382"/>
         <source>Close unmodified tabs</source>
         <translation>关闭所有未修改标签页</translation>
-    </message>
-    <message>
-        <source>More ways to close</source>
-        <translation type="vanished">更多关闭方式</translation>
-    </message>
-    <message>
-        <source>Close left tabs</source>
-        <translation type="vanished">关闭左侧所有标签页</translation>
-    </message>
-    <message>
-        <source>Close right tabs</source>
-        <translation type="vanished">关闭右侧所有标签页</translation>
-    </message>
-    <message>
-        <source>Close unchange tabs</source>
-        <translation type="vanished">关闭所有未修改标签页</translation>
     </message>
     <message>
         <location filename="../src/tabbar.cpp" line="378"/>
@@ -788,7 +772,7 @@
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="155"/>
-        <source>Toggle comment</source>
+        <source>Add comment</source>
         <translation>添加注释</translation>
     </message>
     <message>
@@ -806,11 +790,6 @@
     <message>
         <source>Cancle Mark All Line</source>
         <translation type="vanished">清除标记</translation>
-    </message>
-    <message>
-        <location filename="../src/dtextedit.cpp" line="178"/>
-        <source>Cancle Mark Current Line</source>
-        <translation></translation>
     </message>
     <message>
         <source>Cancle last Mark</source>
@@ -833,34 +812,9 @@
         <translation type="vanished">格式四</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="202"/>
-        <source>Collapse/Expand</source>
-        <translation>折叠/展开</translation>
-    </message>
-    <message>
-        <location filename="../src/dtextedit.cpp" line="203"/>
-        <source>Collapse all</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/dtextedit.cpp" line="204"/>
-        <source>Expand all</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/dtextedit.cpp" line="205"/>
-        <source>Collapse this</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../src/dtextedit.cpp" line="206"/>
-        <source>Expand this</source>
-        <translation></translation>
-    </message>
-    <message>
         <location filename="../src/dtextedit.cpp" line="212"/>
-        <source>Column edit</source>
-        <translation></translation>
+        <source>Column Mode</source>
+        <translation>列编辑模式</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="214"/>
@@ -869,7 +823,7 @@
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="215"/>
-        <source>Cancel comment</source>
+        <source>Remove Comment</source>
         <translation>取消注释</translation>
     </message>
     <message>
@@ -894,8 +848,8 @@
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="161"/>
-        <source>Cancel bookmark</source>
-        <translation>取消书签</translation>
+        <source>Remove Bookmark</source>
+        <translation>清除书签</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="162"/>
@@ -909,7 +863,7 @@
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="164"/>
-        <source>Clear bookmark</source>
+        <source>Remove All Bookmarks</source>
         <translation>清除所有书签</translation>
     </message>
     <message>
@@ -919,27 +873,27 @@
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="165"/>
-        <source>Flod all Level</source>
+        <source>Fold All</source>
         <translation>折叠所有层次</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="166"/>
-        <source>Flod current Level</source>
+        <source>Fold Current Level</source>
         <translation>折叠当前层次</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="167"/>
-        <source>Unflod all Level</source>
+        <source>Unfold All</source>
         <translation>展开所有层次</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="168"/>
-        <source>Unflod Current Level</source>
+        <source>Unfold Current Level</source>
         <translation>展开当前层次</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="174"/>
-        <source>Mark up</source>
+        <source>Color mark</source>
         <translation>颜色标记</translation>
     </message>
     <message>
