@@ -191,7 +191,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="111"/>
         <source>Word Wrap</source>
-        <translation>Word Wrap</translation>
+        <translation>Word wrap</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="31"/>
@@ -839,7 +839,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="174"/>
         <source>Color mark</source>
-        <translation>Color mark</translation>
+        <translation>Color Mark</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="175"/>
