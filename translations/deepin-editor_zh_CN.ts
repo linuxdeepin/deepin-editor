@@ -200,7 +200,7 @@
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="111"/>
-        <source>Word Wrap</source>
+        <source>Word wrap</source>
         <translation>自动换行</translation>
     </message>
     <message>
@@ -570,10 +570,6 @@
         <source>Color mark</source>
         <translation>添加/取消颜色标记</translation>
     </message>
-    <message>
-        <source>Color Mark</source>
-        <translation type="vanished">添加/取消颜色标记</translation>
-    </message>
 </context>
 <context>
     <name>ReplaceBar</name>
@@ -772,12 +768,8 @@
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="155"/>
-        <source>Add comment</source>
+        <source>Add Comment</source>
         <translation>添加注释</translation>
-    </message>
-    <message>
-        <source>Color Mark</source>
-        <translation type="vanished">颜色标记</translation>
     </message>
     <message>
         <source>Mark All Line</source>
@@ -818,7 +810,7 @@
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="214"/>
-        <source>Add comment</source>
+        <source>Add Comment</source>
         <translation>添加注释</translation>
     </message>
     <message>
@@ -893,7 +885,7 @@
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="174"/>
-        <source>Color mark</source>
+        <source>Color Mark</source>
         <translation>颜色标记</translation>
     </message>
     <message>

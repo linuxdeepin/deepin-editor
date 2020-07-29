@@ -152,7 +152,7 @@ TextEdit::TextEdit(QWidget *parent)
     m_fullscreenAction = new QAction(tr("Fullscreen"), this);
     m_exitFullscreenAction = new QAction(tr("Exit fullscreen"), this);
     m_openInFileManagerAction = new QAction(tr("Display in file manager"), this);
-    m_toggleCommentAction = new QAction(tr("Add comment"), this);
+    m_toggleCommentAction = new QAction(tr("Add Comment"), this);
     m_voiceReadingAction = new QAction(tr("Text to Speech"),this);
     m_stopReadingAction = new QAction(tr("Stop reading"),this);
     m_dictationAction = new QAction(tr("Speech to Text"),this);
@@ -171,7 +171,7 @@ TextEdit::TextEdit(QWidget *parent)
     //yanyuhan
     //颜色标记、折叠/展开、书签、列编辑、设置注释、取消注释;
     //点击颜色标记菜单，显示二级菜单，包括：标记、清除上次标记、清除标记、标记所有;
-    m_colorMarkMenu = new DMenu(tr("Color mark"),this);
+    m_colorMarkMenu = new DMenu(tr("Color Mark"),this);
     m_markAllLine = new DMenu(tr("Mark All"), this);
     m_markCurrentLine = new DMenu(tr("Mark"), this);
     m_cancleMarkAllLine = new QAction(tr("Clear All Marks"), this);
@@ -211,7 +211,7 @@ TextEdit::TextEdit(QWidget *parent)
 
     m_columnEditACtion = new QAction(tr("Column Mode"),this);
     m_columnEditACtion->setCheckable(true);
-    m_addComment = new QAction(tr("Add comment"),this);
+    m_addComment = new QAction(tr("Add Comment"),this);
     m_cancelComment = new QAction(tr("Remove Comment"),this);
 
     connect(m_rightMenu, &DMenu::aboutToHide, this, &TextEdit::removeHighlightWordUnderCursor);
@@ -272,10 +272,10 @@ TextEdit::TextEdit(QWidget *parent)
         isMarkCurrentLine(true, strColor);
         renderAllSelections();
     });
-    connect(m_cancleMarkCurrentLine, &QAction::triggered, this, [ = ] {
-        isMarkCurrentLine(false);
-        renderAllSelections();
-    });
+//    connect(m_cancleMarkCurrentLine, &QAction::triggered, this, [ = ] {
+//        isMarkCurrentLine(false);
+//        renderAllSelections();
+//    });
 
     connect(m_markAllLine, &DMenu::triggered, this, [ = ](QAction * pAction) {
         QString strColor;

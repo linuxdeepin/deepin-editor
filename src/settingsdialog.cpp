@@ -108,7 +108,7 @@ void GenerateSettingTranslate()
     auto advance_window_windowstateName = QObject::tr("Window size");
     auto advance_editor_tabspacenumberName = QObject::tr("Tab width");
 
-    auto base_font_wordwrapText = QObject::tr("Word Wrap");
+    auto base_font_wordwrapText = QObject::tr("Word wrap");
     auto base_font_codeflod = QObject::tr("Code folding flag");
     auto base_font_showLineNumber = QObject::tr("Show line numbers");
     auto shortcuts_editor_markName = QObject::tr("Color mark");
