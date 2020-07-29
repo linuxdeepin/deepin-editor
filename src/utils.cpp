@@ -528,6 +528,9 @@ bool Utils::isMimeTypeSupport(const QString &filepath)
         return true;
     }
 
+    if(filepath.endsWith("pub")){
+        return true;
+    }
     // Please check full mime type list from: https://www.freeformatter.com/mime-types-list.html
     QStringList textMimeTypes;
     textMimeTypes << "application/cmd"
