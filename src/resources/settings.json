@@ -26,7 +26,7 @@
                             "key": "wordwrap",
                             "name": "Word Wrap",
                             "type": "checkbox",
-                            "text": "Word Wrap",
+                            "text": "Word wrap",
                             "default": "true"
                         },
                         {
@@ -34,14 +34,14 @@
                             "key":"codeflod",
                             "name":"CODE FLOD",
                             "type":"checkbox",
-                            "text":"Code Flod Flag",
+                            "text":"Code folding flag",
                             "default":"true"
                         },
                         {
                             "key": "showlinenumber",
                             "name": "Show line number",
                             "type": "checkbox",
-                            "text": "Show Line Number",
+                            "text": "Show line numbers",
                             "default": "true"
                         }
                     ]
@@ -472,7 +472,7 @@
                         },
                         {
                             "key": "togglecomment",
-                            "name": "Toggle comment",
+                            "name": "Add comment",
                             "type": "keySequenceEdit",
                             "default":  "Alt+A"
                         },
@@ -490,7 +490,7 @@
                         },
                         {
                             "key": "switchbookmark",
-                            "name": "Switch bookmark",
+                            "name": "Add/Remove bookmark",
                             "type": "keySequenceEdit",
                             "default":  "Ctrl+F2"
                         },
@@ -514,7 +514,7 @@
                         },
                         {
                             "key": "mark",
-                            "name": "Mark up",
+                            "name": "Color mark",
                             "type": "keySequenceEdit",
                             "default":  "Ctrl+F6"
                         }

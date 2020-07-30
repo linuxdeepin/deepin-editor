@@ -152,30 +152,30 @@ TextEdit::TextEdit(QWidget *parent)
     m_fullscreenAction = new QAction(tr("Fullscreen"), this);
     m_exitFullscreenAction = new QAction(tr("Exit fullscreen"), this);
     m_openInFileManagerAction = new QAction(tr("Display in file manager"), this);
-    m_toggleCommentAction = new QAction(tr("Toggle comment"), this);
+    m_toggleCommentAction = new QAction(tr("Add Comment"), this);
     m_voiceReadingAction = new QAction(tr("Text to Speech"),this);
     m_stopReadingAction = new QAction(tr("Stop reading"),this);
     m_dictationAction = new QAction(tr("Speech to Text"),this);
     m_translateAction = new QAction(tr("Translate"),this);
     m_addBookMarkAction = new QAction(tr("Add bookmark"),this);
-    m_cancelBookMarkAction = new QAction(tr("Cancel bookmark"),this);
+    m_cancelBookMarkAction = new QAction(tr("Remove Bookmark"),this);
     m_preBookMarkAction = new QAction(tr("Previous bookmark"),this);
     m_nextBookMarkAction = new QAction(tr("Next bookmark"),this);
-    m_clearBookMarkAction = new QAction(tr("Clear bookmark"),this);
-    m_flodAllLevel = new QAction(tr("Flod all Level"), this);
-    m_flodCurrentLevel = new QAction(tr("Flod current Level"), this);
-    m_unflodAllLevel = new QAction(tr("Unflod all Level"), this);
-    m_unflodCurrentLevel = new QAction(tr("Unflod Current Level"), this);
+    m_clearBookMarkAction = new QAction(tr("Remove All Bookmarks"),this);
+    m_flodAllLevel = new QAction(tr("Fold All"), this);
+    m_flodCurrentLevel = new QAction(tr("Fold Current Level"), this);
+    m_unflodAllLevel = new QAction(tr("Unfold All"), this);
+    m_unflodCurrentLevel = new QAction(tr("Unfold Current Level"), this);
 
 //    setAddRigetMenu();
     //yanyuhan
     //颜色标记、折叠/展开、书签、列编辑、设置注释、取消注释;
     //点击颜色标记菜单，显示二级菜单，包括：标记、清除上次标记、清除标记、标记所有;
-    m_colorMarkMenu = new DMenu(tr("Mark up"),this);
+    m_colorMarkMenu = new DMenu(tr("Color Mark"),this);
     m_markAllLine = new DMenu(tr("Mark All"), this);
     m_markCurrentLine = new DMenu(tr("Mark"), this);
     m_cancleMarkAllLine = new QAction(tr("Clear All Marks"), this);
-    m_cancleMarkCurrentLine = new QAction(tr("Cancle Mark Current Line"), this);
+    //m_cancleMarkCurrentLine = new QAction(tr("Cancle Mark Current Line"), this);
     m_cancleLastMark = new QAction(tr("Clear Last Mark"), this);
 
     m_actionStyleOne = new QAction(tr("Style 1"), this);
@@ -199,20 +199,20 @@ TextEdit::TextEdit(QWidget *parent)
     m_markCurrentLine->addAction(m_actionStyleFour);
 
     //点击折叠/展开菜单，显示二级菜单;包括：折叠所有层次、展开所有层次、折叠当前层次、展开当前层次。
-    m_collapseExpandMenu = new DMenu(tr("Collapse/Expand"),this);
-    QAction *collapseAll = new QAction(tr("Collapse all"));
-    QAction *expandAll = new QAction(tr("Expand all"));
-    QAction *collapseThis = new QAction(tr("Collapse this"));
-    QAction *expandThis = new QAction(tr("Expand this"));
-    m_collapseExpandMenu->addAction(collapseAll);
-    m_collapseExpandMenu->addAction(expandAll);
-    m_collapseExpandMenu->addAction(collapseThis);
-    m_collapseExpandMenu->addAction(expandThis);
+//    m_collapseExpandMenu = new DMenu(tr("Collapse/Expand"),this);
+//    QAction *collapseAll = new QAction(tr("Collapse all"));
+//    QAction *expandAll = new QAction(tr("Expand all"));
+//    QAction *collapseThis = new QAction(tr("Collapse this"));
+//    QAction *expandThis = new QAction(tr("Expand this"));
+//    m_collapseExpandMenu->addAction(collapseAll);
+//    m_collapseExpandMenu->addAction(expandAll);
+//    m_collapseExpandMenu->addAction(collapseThis);
+//    m_collapseExpandMenu->addAction(expandThis);
 
-    m_columnEditACtion = new QAction(tr("Column edit"),this);
+    m_columnEditACtion = new QAction(tr("Column Mode"),this);
     m_columnEditACtion->setCheckable(true);
-    m_addComment = new QAction(tr("Add comment"),this);
-    m_cancelComment = new QAction(tr("Cancel comment"),this);
+    m_addComment = new QAction(tr("Add Comment"),this);
+    m_cancelComment = new QAction(tr("Remove Comment"),this);
 
     connect(m_rightMenu, &DMenu::aboutToHide, this, &TextEdit::removeHighlightWordUnderCursor);
     connect(m_undoAction, &QAction::triggered, this, &TextEdit::undo);
@@ -272,10 +272,10 @@ TextEdit::TextEdit(QWidget *parent)
         isMarkCurrentLine(true, strColor);
         renderAllSelections();
     });
-    connect(m_cancleMarkCurrentLine, &QAction::triggered, this, [ = ] {
-        isMarkCurrentLine(false);
-        renderAllSelections();
-    });
+//    connect(m_cancleMarkCurrentLine, &QAction::triggered, this, [ = ] {
+//        isMarkCurrentLine(false);
+//        renderAllSelections();
+//    });
 
     connect(m_markAllLine, &DMenu::triggered, this, [ = ](QAction * pAction) {
         QString strColor;
@@ -1903,7 +1903,7 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
 //            m_listFlodFlag.append(blockNumber - 1);
 //        } else {
             m_listFlodFlag.append(blockNumber);
-            qDebug()<< "Block "<<blockNumber;
+            //qDebug()<< "Block "<<blockNumber;
 //        }
 
 
@@ -2217,7 +2217,7 @@ int TextEdit::getFirstVisibleBlockId() const
 }
 
 //line 开始处理的行号  isvisable是否折叠  iInitnum左括号默认开始计算的数量  isFirstLine是否是第一行，因为第一行默认不折叠
-void TextEdit::getNeedControlLine(int line, bool isVisable, int iInitnum, bool isFirstLine)
+void TextEdit::getNeedControlLine(int line, bool isVisable)
 {
     QTextDocument *doc = document();
 
@@ -2270,9 +2270,19 @@ void TextEdit::getNeedControlLine(int line, bool isVisable, int iInitnum, bool i
        position++;
    }
 
-   //没有找到匹配左右括弧 //如果左右"{" "}"在同一行不折叠
-   if(braceDepth != 0 || endBlock == curBlock) return;
-   else{
+    //没有找到右括弧折叠左括弧后面所有行
+   if(braceDepth != 0){
+       //遍历最后右括弧文本块 设置块隐藏或显示
+       while(beginBlock.isValid()){
+         beginBlock.setVisible(isVisable);
+         viewport()->adjustSize();
+         beginBlock = beginBlock.next();
+       }
+
+       //没有找到匹配左右括弧 //如果左右"{" "}"在同一行不折叠
+   }else if(braceDepth != 0 || endBlock == curBlock){
+        return;
+   } else{
        //遍历最后右括弧文本块 设置块隐藏或显示
        while(beginBlock != endBlock && beginBlock.isValid()){
          if(beginBlock.isValid()){
@@ -3296,21 +3306,10 @@ void TextEdit::flodOrUnflodAllLevel(bool isFlod)
     foreach (auto line, m_listFlodFlag) {
         if (document()->findBlockByNumber(line).isVisible() == isFlod) {
 
-            if(document()->findBlockByNumber(line).text().contains("{"))  getNeedControlLine(line, !isFlod,0,true);
-            else  getNeedControlLine(line-1, !isFlod,0,true);
-            //判断下一行是否可见，并且下一行是以左括号开头的（类似c++文件中的函数定义的书写）则是从该行开始做折叠处理，但该行不隐藏
-//            if (document()->findBlockByNumber(line).text().contains("{") && document()->findBlockByNumber(line).text().trimmed().startsWith("{")) {
-//                getNeedControlLine(line, !isFlod,0,true);
-//            }
-            //判断下一行是否可见，左括号存在于该行（类似c++文件中的if else 书写），但不是左括号开头的，则是从该行开始做折叠处理，但该行不隐藏
-//            if (document()->findBlockByNumber(line).text().contains("{") && !document()->findBlockByNumber(line).text().trimmed().startsWith("{")) {
-//                getNeedControlLine(line, !isFlod,0,true);
-//            }
-
-            //判断下一行是否可见，左括号存在于该行（类似文件中的json文件书写，第一行就存在左括号开头的现象），且是左括号开头的，则是从下一行开始做折叠处理
-//            if (document()->findBlockByNumber(line).text().contains("{") && document()->findBlockByNumber(line).text().trimmed().startsWith("{")) {
-//                getNeedControlLine(line-1, !isFlod, 1, false);
-//            }
+            if(document()->findBlockByNumber(line).text().contains("{"))
+                getNeedControlLine(line, !isFlod);
+            else
+                getNeedControlLine(line-1, !isFlod);
         }
     }
 
@@ -4209,39 +4208,32 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                 int line = getLineFromPoint(mouseEvent->pos());
                 m_markFoldHighLightSelections.clear();
                 renderAllSelections();
-                //判断下一行是否可见，并且下一行是以左括号开头的（类似c++文件中的函数定义的书写）则是从该行开始做折叠处理，但该行不隐藏
-                if (document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line).text().contains("{")
-                        && document()->findBlockByNumber(line).text().trimmed().startsWith("{")) {
-                    getNeedControlLine(line - 1, false,0,true);
+
+                //qDebug()<<line<<document()->findBlockByNumber(line).text()<<document()->findBlockByLineNumber(line).text();
+                qDebug()<<line-1<<document()->findBlockByNumber(line-1).text()<<document()->findBlockByLineNumber(line-1).text();
+
+                // 当前行　line-1 判断下行是否隐藏
+                if(document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line-1).text().contains("{")){
+                    getNeedControlLine(line - 1, false);
                     document()->adjustSize();
-                } else if (!document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line).text().contains("{")
-                           && document()->findBlockByNumber(line).text().trimmed().startsWith("{")) {
-                    getNeedControlLine(line - 1, true,0,true);
+
+                }else if (!document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line-1).text().contains("{")){
+                    getNeedControlLine(line - 1, true);
                     document()->adjustSize();
                 }
 
-                //判断下一行是否可见，左括号存在于该行（类似c++文件中的if else 书写），但不是左括号开头的，则是从该行开始做折叠处理，但该行不隐藏
-                if (document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line - 1).text().contains("{")
-                        && !document()->findBlockByNumber(line - 1).text().trimmed().startsWith("{")) {
-                    getNeedControlLine(line - 1, false,0,true);
-                    document()->adjustSize();
-                } else if (!document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line - 1).text().contains("{")
-                           && !document()->findBlockByNumber(line - 1).text().trimmed().startsWith("{")) {
-                    getNeedControlLine(line - 1, true,0,true);
-                    document()->adjustSize();
-                }
 
-                //判断下一行是否可见，左括号存在于该行（类似文件中的json文件书写，第一行就存在左括号开头的现象），且是左括号开头的，则是从下一行开始做折叠处理
-                if (document()->findBlockByNumber(line).isVisible() &&( document()->findBlockByNumber(line - 1).text().contains("{")
-                        && document()->findBlockByNumber(line - 1).text().trimmed().startsWith("{"))) {
-                    getNeedControlLine(line-1, false, 1, false);
-                    document()->adjustSize();
+                //document()->lineCount()
+                //如果是最后一行｛　也要折叠
+//                if(document()->findBlockByNumber(line).isValid() && document()->findBlockByNumber(line-1).text().contains("{")){
+//                    getNeedControlLine(line - 1, false);
+//                    document()->adjustSize();
+//                }else if(document()->findBlockByNumber(line).isValid() && document()->findBlockByNumber(line-1).text().contains("{")){
+//                    getNeedControlLine(line - 1, true);
+//                    document()->adjustSize();
+//                }
 
-                } else if (!document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line - 1).text().contains("{")
-                           && document()->findBlockByNumber(line - 1).text().trimmed().startsWith("{")) {
-                    getNeedControlLine(line-1, true, 1, false);
-                    document()->adjustSize();
-                }
+
                 //折叠时出现点击光标选择行变短
                 QTextEdit::LineWrapMode curMode= this->lineWrapMode();
                 QTextEdit::LineWrapMode WrapMode = curMode ==  QTextEdit::NoWrap?  QTextEdit::WidgetWidth :  QTextEdit::NoWrap;          this->setWordWrapMode(QTextOption::WrapAnywhere);

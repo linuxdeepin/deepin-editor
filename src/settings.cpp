@@ -310,7 +310,7 @@ QPair<QWidget *, QWidget *> Settings::createKeySequenceEditHandle(QObject *obj)
 
         qDebug() << "style" << style;
         if (bIsConflicts) {
-            instance()->m_pDialog = instance()->createDialog(tr("This shortcut key conflicts with %1, click add to make this shortcut key take effect immediately").arg(style),"",bIsConflicts);
+            instance()->m_pDialog = instance()->createDialog(tr("This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately").arg(style),"",bIsConflicts);
             int mode = instance()->m_pDialog->exec();
 
             // click cancel button.
@@ -423,7 +423,7 @@ bool Settings::checkShortcutValid(const QString &Name,QString Key, QString &Reas
         //F1-F12是允许的，这个正则不够精确，但是没关系。
         QRegExp regexp("^F[0-9]{1,2}$");
         if (!Key.contains(regexp)) {
-            Reason = tr("%1 is invalid shortcut key, please reset").arg(style);
+            Reason = tr("%1 is invalid").arg(style);
             bIsConflicts = false;
             return  false;
         }
@@ -431,7 +431,7 @@ bool Settings::checkShortcutValid(const QString &Name,QString Key, QString &Reas
     // 小键盘单键都不允许
     QRegExp regexpNum("^Num+.*");
     if (Key.contains(regexpNum)) {
-        Reason = tr("%1 is invalid shortcut key, please reset").arg(style);
+        Reason = tr("%1 is invalid").arg(style);
         bIsConflicts = false;
         return  false;
     }
@@ -467,7 +467,7 @@ DDialog *Settings::createDialog(const QString &title, const QString &content, co
 
     if (bIsConflicts) {
         dialog->addButton(QString(tr("Cancel")), true, DDialog::ButtonNormal);
-        dialog->addButton(QString(tr("replace")), false, DDialog::ButtonRecommend);
+        dialog->addButton(QString(tr("Replace")), false, DDialog::ButtonRecommend);
     } else {
         dialog->addButton(QString(tr("Cancel")), true, DDialog::ButtonRecommend);
     }

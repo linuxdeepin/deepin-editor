@@ -190,8 +190,8 @@
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="111"/>
-        <source>Word Wrap</source>
-        <translation>Word Wrap</translation>
+        <source>Word wrap</source>
+        <translation>Word wrap</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="31"/>
@@ -512,8 +512,8 @@
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="99"/>
-        <source>Toggle comment</source>
-        <translation>Toggle comment</translation>
+        <source>Add comment</source>
+        <translation>Add comment</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="100"/>
@@ -532,8 +532,8 @@
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="103"/>
-        <source>Switch bookmark</source>
-        <translation>Switch bookmark</translation>
+        <source>Add/Remove bookmark</source>
+        <translation>Add/Remove bookmark</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="104"/>
@@ -557,18 +557,18 @@
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="112"/>
-        <source>Code Flod Flag</source>
-        <translation>Code flod flag</translation>
+        <source>Code folding flag</source>
+        <translation>Code folding flag</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="113"/>
-        <source>Show Line Number</source>
-        <translation>Show line number</translation>
+        <source>Show line numbers</source>
+        <translation>Show line numbers</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="114"/>
-        <source>Mark up</source>
-        <translation>Mark up</translation>
+        <source>Color mark</source>
+        <translation>Color mark</translation>
     </message>
 </context>
 <context>
@@ -633,14 +633,14 @@
     </message>
     <message>
         <location filename="../src/settings.cpp" line="306"/>
-        <source>This shortcut key conflicts with %1, click add to make this shortcut key take effect immediately</source>
-        <translation>This shortcut key conflicts with %1, click add to make this shortcut key take effect immediately</translation>
+        <source>This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately</source>
+        <translation>This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="415"/>
         <location filename="../src/settings.cpp" line="423"/>
-        <source>%1 is invalid shortcut key, please reset</source>
-        <translation>%1 is invalid shortcut key, please reset</translation>
+        <source>%1 is invalid</source>
+        <translation>%1 is invalid</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="458"/>
@@ -650,8 +650,8 @@
     </message>
     <message>
         <location filename="../src/settings.cpp" line="459"/>
-        <source>replace</source>
-        <translation>replace</translation>
+        <source>Replace</source>
+        <translation>Replace</translation>
     </message>
 </context>
 <context>
@@ -680,22 +680,6 @@
         <location filename="../src/tabbar.cpp" line="382"/>
         <source>Close unmodified tabs</source>
         <translation>Close unmodified tabs</translation>
-    </message>
-    <message>
-        <source>More ways to close</source>
-        <translation type="vanished">More ways to close</translation>
-    </message>
-    <message>
-        <source>Close left tabs</source>
-        <translation type="vanished">Close left tabs</translation>
-    </message>
-    <message>
-        <source>Close right tabs</source>
-        <translation type="vanished">Close right tabs</translation>
-    </message>
-    <message>
-        <source>Close unchange tabs</source>
-        <translation type="vanished">Close unchange tabs</translation>
     </message>
     <message>
         <location filename="../src/tabbar.cpp" line="378"/>
@@ -784,8 +768,8 @@
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="155"/>
-        <source>Toggle comment</source>
-        <translation>Toggle comment</translation>
+        <source>Add Comment</source>
+        <translation>Add Comment</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="156"/>
@@ -814,8 +798,8 @@
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="161"/>
-        <source>Cancel bookmark</source>
-        <translation>Cancel Bookmark</translation>
+        <source>Remove Bookmark</source>
+        <translation>Remove Bookmark</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="162"/>
@@ -829,33 +813,33 @@
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="164"/>
-        <source>Clear bookmark</source>
-        <translation>Clear Bookmark</translation>
+        <source>Remove All Bookmarks</source>
+        <translation>Remove All Bookmarks</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="165"/>
-        <source>Flod all Level</source>
-        <translation>Flod All Level</translation>
+        <source>Fold All</source>
+        <translation>Fold All</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="166"/>
-        <source>Flod current Level</source>
-        <translation>Flod Current Level</translation>
+        <source>Fold Current Level</source>
+        <translation>Fold Current Level</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="167"/>
-        <source>Unflod all Level</source>
-        <translation>Unflod All Level</translation>
+        <source>Unfold All</source>
+        <translation>Unfold All</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="168"/>
-        <source>Unflod Current Level</source>
-        <translation>Unflod Current Level</translation>
+        <source>Unfold Current Level</source>
+        <translation>Unfold Current Level</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="174"/>
-        <source>Mark up</source>
-        <translation>Mark up</translation>
+        <source>Color Mark</source>
+        <translation>Color Mark</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="175"/>
@@ -871,11 +855,6 @@
         <location filename="../src/dtextedit.cpp" line="177"/>
         <source>Clear All Marks</source>
         <translation>Clear All Marks</translation>
-    </message>
-    <message>
-        <location filename="../src/dtextedit.cpp" line="178"/>
-        <source>Cancle Mark Current Line</source>
-        <translation>Cancle Mark Current Line</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="179"/>
@@ -907,34 +886,9 @@
         <translation>Style 4</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="202"/>
-        <source>Collapse/Expand</source>
-        <translation>Collapse/Expand</translation>
-    </message>
-    <message>
-        <location filename="../src/dtextedit.cpp" line="203"/>
-        <source>Collapse all</source>
-        <translation>Collapse All</translation>
-    </message>
-    <message>
-        <location filename="../src/dtextedit.cpp" line="204"/>
-        <source>Expand all</source>
-        <translation>Expand All</translation>
-    </message>
-    <message>
-        <location filename="../src/dtextedit.cpp" line="205"/>
-        <source>Collapse this</source>
-        <translation>Collapse This</translation>
-    </message>
-    <message>
-        <location filename="../src/dtextedit.cpp" line="206"/>
-        <source>Expand this</source>
-        <translation>Expand This</translation>
-    </message>
-    <message>
         <location filename="../src/dtextedit.cpp" line="212"/>
-        <source>Column edit</source>
-        <translation>Column Edit</translation>
+        <source>Column Mode</source>
+        <translation>Column Mode</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="214"/>
@@ -943,8 +897,8 @@
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="215"/>
-        <source>Cancel comment</source>
-        <translation>Cancel Comment</translation>
+        <source>Remove Comment</source>
+        <translation>Remove Comment</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="306"/>
@@ -1069,7 +1023,7 @@
     <message>
         <location filename="../src/window.cpp" line="1108"/>
         <source>Read-Only mode is on</source>
-        <translation>Read-Only Mode is on</translation>
+        <translation>Read-Only mode is on</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1356"/>
