@@ -150,7 +150,6 @@ void ReplaceBar::handleContentChanged()
 
 void ReplaceBar::handleReplaceNext()
 {
-    qDebug()<<m_replaceLine->lineEdit()->text()<<m_withLine->lineEdit()->text();
     if(!searched)
     {
         emit removeSearchKeyword();
@@ -198,13 +197,31 @@ bool ReplaceBar::focusNextPrevChild(bool)
 void ReplaceBar::keyPressEvent(QKeyEvent *e)
 {
     const QString &key = Utils::getKeyshortcut(e);
-    qDebug() << "key" << key;
     if(m_closeButton->hasFocus()&&key=="Tab")
     {
         m_replaceLine->lineEdit()->setFocus();
     }
     else{
         DFloatingWidget::keyPressEvent(e);
+    }
+    if(key=="Enter")
+    {
+        if(m_replaceAllButton->hasFocus())
+        {
+            m_replaceAllButton->click();
+        }
+        if(m_replaceButton->hasFocus())
+        {
+            m_replaceButton->click();
+        }
+        if(m_replaceRestButton->hasFocus())
+        {
+            m_replaceRestButton->click();
+        }
+        if(m_replaceSkipButton->hasFocus())
+        {
+            m_replaceSkipButton->click();
+        }
     }
 }
 

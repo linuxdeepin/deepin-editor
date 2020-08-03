@@ -148,6 +148,17 @@ void FindBar::keyPressEvent(QKeyEvent *e)
     else{
         DFloatingWidget::keyPressEvent(e);
     }
+    if(key=="Enter")
+    {
+        if(m_findPrevButton->hasFocus())
+        {
+            m_findPrevButton->click();
+        }
+        if(m_findNextButton->hasFocus())
+        {
+            m_findNextButton->click();
+        }
+    }
 }
 
 void FindBar::setMismatchAlert(bool isAlert)
