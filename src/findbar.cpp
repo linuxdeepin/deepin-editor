@@ -157,6 +157,7 @@ void FindBar::setMismatchAlert(bool isAlert)
 
 void FindBar::receiveText(QString t)
 {
+    searched=false;
     if(t!="")
     {
         m_receivedText = t;
