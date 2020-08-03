@@ -880,7 +880,19 @@ QString Window::saveAsFileToDisk()
         //wrapper->setTextCodec(encode);
         //wrapper->updatePath(newFilePath);
         //wrapper->setEndOfLineMode(eol);
-        wrapper->saveAsFile(newFilePath, encode);
+        wrapper->updatePath(newFilePath);
+        wrapper->setEndOfLineMode(eol);
+        wrapper->saveFile();
+
+        m_wrappers.remove(filePath);
+        m_wrappers.insert(newFilePath, wrapper);
+
+        wrapper->textEditor()->loadHighlighter();
+
+        QFileInfo info(newFilePath);
+        m_tabbar->updateTab(m_tabbar->currentIndex(), newFilePath, info.fileName());
+
+        //wrapper->saveAsFile(newFilePath, encode);
 
         //m_wrappers.remove(filePath);
         //m_wrappers.insert(newFilePath, wrapper);
