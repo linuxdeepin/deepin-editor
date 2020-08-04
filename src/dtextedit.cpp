@@ -1675,18 +1675,13 @@ void TextEdit::updateCursorKeywordSelection(int position, bool findNext)
 
 void TextEdit::updateHighlightLineSelection()
 {
-    if(m_readOnlyMode){
-        //selection.format.setProperty(QTextFormat::FullWidthSelection, false);
-    }
-    else {
-        QTextEdit::ExtraSelection selection;
+    QTextEdit::ExtraSelection selection;
 
-        selection.format.setBackground(m_currentLineColor);
-        selection.format.setProperty(QTextFormat::FullWidthSelection, true);
-        selection.cursor = textCursor();
-        selection.cursor.clearSelection();
-        m_currentLineSelection = selection;
-    }
+    selection.format.setBackground(m_currentLineColor);
+    selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+    selection.cursor = textCursor();
+    selection.cursor.clearSelection();
+    m_currentLineSelection = selection;
 }
 
 bool TextEdit::updateKeywordSelections(QString keyword,QTextCharFormat charFormat,QList<QTextEdit::ExtraSelection> *listSelection)
@@ -2835,13 +2830,15 @@ void TextEdit::toggleReadOnlyMode()
 
         m_readOnlyMode = false;
         setReadOnly(false);
+        updateHighlightLineSelection();
         //setSpeechToTextEnabled(true); //此函数在shuttle上编译报错
         popupNotify(tr("Read-Only mode is off"));
-    } else {
+    } else {//
         m_readOnlyMode = true;
         setReadOnly(true);
         //setSpeechToTextEnabled(false);
         document()->clearUndoRedoStacks();
+        updateHighlightLineSelection();
         popupNotify(tr("Read-Only mode is on"));
         emit cursorModeChanged(Readonly);
     }
