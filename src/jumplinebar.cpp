@@ -105,8 +105,8 @@ void JumpLineBar::handleLineChanged()
 void JumpLineBar::jumpCancel()
 {
     hide();
-
-    backToPosition(m_jumpFile, m_rowBeforeJump, m_columnBeforeJump, m_jumpFileScrollOffset);
+    //注释　跳行时按esc键光标不让跳到初始就在当前位置
+    //backToPosition(m_jumpFile, m_rowBeforeJump, m_columnBeforeJump, m_jumpFileScrollOffset);
 }
 
 void JumpLineBar::jumpConfirm()
