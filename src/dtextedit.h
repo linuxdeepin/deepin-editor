@@ -131,7 +131,7 @@ public:
     void keepCurrentLineAtCenter();
     void scrollToLine(int scrollOffset, int row, int column);
 
-    void setLineWrapMode(bool enable);
+    void setLineWrapMode(bool enable, bool bIsJumpBarEnable = false);
     void setFontFamily(QString fontName);
     void setFontSize(int fontSize);
     void updateFont();
@@ -475,6 +475,7 @@ private:
 
     int m_cursorStart=-1;
     QString m_textEncode;
+    int m_nJumpLine;
 };
 
 #endif

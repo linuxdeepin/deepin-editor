@@ -719,6 +719,7 @@ void TextEdit::jumpToLine(int line, bool keepLineAtCenter)
     if (keepLineAtCenter) {
         keepCurrentLineAtCenter();
     }
+    m_nJumpLine = line;
 }
 
 void TextEdit::newline()
@@ -1444,13 +1445,17 @@ void TextEdit::scrollToLine(int scrollOffset, int row, int column)
     m_scrollAnimation->start();
 }
 
-void TextEdit::setLineWrapMode(bool enable)
+void TextEdit::setLineWrapMode(bool enable, bool bIsJumpBarEnable)
 {
     this->setWordWrapMode(QTextOption::WrapAnywhere);
     QTextEdit::setLineWrapMode(enable ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
     m_pLeftAreaWidget->m_linenumberarea->update();
     m_pLeftAreaWidget->m_flodArea->update();
     m_pLeftAreaWidget->m_bookMarkArea->update();
+
+    if (bIsJumpBarEnable) {
+        jumpToLine(m_nJumpLine,true);
+    }
 }
 
 void TextEdit::setFontFamily(QString name)
