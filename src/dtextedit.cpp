@@ -3322,12 +3322,21 @@ void TextEdit::flodOrUnflodAllLevel(bool isFlod)
          }
     }
 
+    //折叠时出现点击光标选择行变短
+    QTextEdit::LineWrapMode curMode= this->lineWrapMode();
+    QTextEdit::LineWrapMode WrapMode = curMode ==  QTextEdit::NoWrap?  QTextEdit::WidgetWidth :  QTextEdit::NoWrap;
+    this->setWordWrapMode(QTextOption::WrapAnywhere);
+    this->setLineWrapMode(WrapMode);
+
     m_pLeftAreaWidget->m_flodArea->update();
     lineNumberArea->update();
     m_pLeftAreaWidget->m_bookMarkArea->update();
 
     viewport()->update();
     document()->adjustSize();
+
+    this->setLineWrapMode(curMode);
+    viewport()->update();
 }
 
 void TextEdit::flodOrUnflodCurrentLevel(bool isFlod)
