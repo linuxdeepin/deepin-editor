@@ -1446,11 +1446,13 @@ void TextEdit::scrollToLine(int scrollOffset, int row, int column)
 
 void TextEdit::setLineWrapMode(bool enable)
 {
+    QTextCursor cursor = textCursor();
     this->setWordWrapMode(QTextOption::WrapAnywhere);
     QTextEdit::setLineWrapMode(enable ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
     m_pLeftAreaWidget->m_linenumberarea->update();
     m_pLeftAreaWidget->m_flodArea->update();
     m_pLeftAreaWidget->m_bookMarkArea->update();
+    setTextCursor(cursor);
 }
 
 void TextEdit::setFontFamily(QString name)
@@ -3380,9 +3382,9 @@ void TextEdit::getHideRowContent(int iLine)
        position++;
    }
 
+
     //左右括弧没有匹配到
     if(braceDepth != 0){
-
         //遍历最后右括弧文本块 设置块隐藏或显示
         while(beginBlock.isValid()){
            m_foldCodeShow->appendText(beginBlock.text());
@@ -3431,7 +3433,6 @@ bool TextEdit::isNeedShowFoldIcon(QTextBlock block)
 int TextEdit::getHighLightRowContentLineNum(int iLine)
 {
 
-#if 1
     bool isFirstLine = true;
     if(iLine == 0) isFirstLine = true;
     else isFirstLine = false;
@@ -3487,10 +3488,18 @@ int TextEdit::getHighLightRowContentLineNum(int iLine)
        position++;
    }
 
-
-   //左右括弧没有匹配 如果左右"{" "}"在同一行不折叠 不作处理
-    if(0 != braceDepth || endBlock == curBlock) return iLine;
-    else{
+   //左右括弧没有匹配到
+   if(braceDepth != 0){
+       //遍历最后右括弧文本块 设置块隐藏或显示
+       while(beginBlock.isValid()){
+          iLine++;
+          beginBlock = beginBlock.next();
+       }
+       return iLine;
+     //如果左右"{" "}"在同一行不折叠
+   } else if(0 != braceDepth || endBlock == curBlock) {
+       return iLine;
+   }else{
         while(beginBlock != endBlock && beginBlock.isValid())
         {
             iLine++;
@@ -3500,48 +3509,6 @@ int TextEdit::getHighLightRowContentLineNum(int iLine)
         iLine++;
         return iLine;
     }
-
-#else
-
-    bool isFirstLine = true;
-    QTextBlock block = document()->findBlockByNumber(iLine);
-    int existLeftSubbrackets = 0, existRightSubbrackets = 0;
-    while (block.isValid()) {
-        if (block.text().contains("{") && !block.text().contains("}")) {
-            existLeftSubbrackets ++;
-        } else if (block.text().contains("}") && !block.text().contains("{")) {
-            existRightSubbrackets ++;
-        } else if (block.text().contains("}") && block.text().contains("{")) {
-            for (int i = 0 ; i < block.text().size() ; ++i) {
-                if (block.text().at(i) == "{") {
-                    existLeftSubbrackets++;
-                } else if (block.text().at(i) == "}" && !isFirstLine) {
-                    existRightSubbrackets++;
-                }
-                if (existLeftSubbrackets == existRightSubbrackets &&
-                        existLeftSubbrackets != 0) {
-                    break;
-                }
-            }
-        }
-
-        if (existLeftSubbrackets == existRightSubbrackets &&
-                existLeftSubbrackets != 0) {
-            if (!block.text().contains("{")) {
-                break;
-            } else {
-                break;
-            }
-        }
-        if (isFirstLine) {
-            isFirstLine = false;
-        }
-        block = block.next();
-        iLine++;
-    }
-    return  iLine;
-
-#endif
 }
 
 int TextEdit::getLinePosByLineNum(int iLine)
@@ -4287,7 +4254,7 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                     m_markFoldHighLightSelections.push_back(selection);
 
                     renderAllSelections();
-                    setTextCursor(QTextCursor(document()->findBlockByNumber(line - 1)));
+                    setTextCursor(QTextCursor(document()->findBlockByNumber(line-1)));
                     this->verticalScrollBar()->setValue(ivalue);
 
                 }
