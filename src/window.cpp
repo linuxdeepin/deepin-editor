@@ -1603,7 +1603,7 @@ void Window::handleCurrentChanged(const int &index)
         currentWrapper()->m_bottomBar->show();
          currentWrapper()->m_bottomBar->updateSize(32);
     }
-    qDebug() << "tabbarChanged:" << filepath;
+    //qDebug() << "tabbarChanged:" << filepath;
 }
 
 void Window::handleJumpLineBarExit()

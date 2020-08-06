@@ -81,9 +81,11 @@ private:
     void handleTabReleased(int index);
     void handleTabIsRemoved(int index);
     void handleTabDroped(int index, Qt::DropAction, QObject *target);
+    void onTabDrapStart();
 
 private:
     QStringList m_tabPaths;
+    QStringList m_listOldTabPath;
     QString m_backgroundStartColor;
     QString m_backgroundEndColor;
     QString m_dndStartColor;
