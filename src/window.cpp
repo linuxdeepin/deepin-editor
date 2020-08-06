@@ -1663,6 +1663,7 @@ void Window::slotFindbarClose()
         wrapper->bottomBar()->show();
     }
     wrapper->bottomBar()->updateSize(32);
+    currentWrapper()->textEditor()->setFocus();
 }
 
 void Window::slotReplacebarClose()
@@ -1672,6 +1673,7 @@ void Window::slotReplacebarClose()
         wrapper->bottomBar()->show();
     }
     wrapper->bottomBar()->updateSize(32);
+    currentWrapper()->textEditor()->setFocus();
 }
 
 void Window::handleReplaceAll(const QString &replaceText, const QString &withText)

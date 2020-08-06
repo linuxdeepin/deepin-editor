@@ -1641,7 +1641,7 @@ void TextEdit::removeKeywords()
 
     renderAllSelections();
 
-    setFocus();
+    //setFocus();
 }
 
 bool TextEdit::highlightKeyword(QString keyword, int position)
