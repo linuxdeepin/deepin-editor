@@ -3304,19 +3304,28 @@ void TextEdit::checkBookmarkLineMove(int from, int charsRemoved, int charsAdded)
 
 void TextEdit::flodOrUnflodAllLevel(bool isFlod)
 {
-    foreach (auto line, m_listFlodFlag) {
-        if (document()->findBlockByNumber(line).isVisible() == isFlod) {
+    //折叠
+    if(isFlod){
+          foreach (auto line, m_listFlodFlag) {
+              if (document()->findBlockByNumber(line).text().contains("{") && document()->findBlockByNumber(line).isVisible())
+               getNeedControlLine(line, false);
+           }
+     //展开
+    }else{
+        foreach (auto line, m_listFlodFlag) {
 
-            if(document()->findBlockByNumber(line).text().contains("{"))
-                getNeedControlLine(line, !isFlod);
-            else
-                getNeedControlLine(line-1, !isFlod);
-        }
+            if((document()->findBlockByNumber(line).text().contains("{") \
+                && !document()->findBlockByNumber(line+1).isVisible()) \
+                    ||(m_listFlodFlag.last() == line && !document()->findBlockByNumber(line).isVisible())){
+                getNeedControlLine(line, true);
+            }
+         }
     }
 
     m_pLeftAreaWidget->m_flodArea->update();
     lineNumberArea->update();
     m_pLeftAreaWidget->m_bookMarkArea->update();
+
     viewport()->update();
     document()->adjustSize();
 }
