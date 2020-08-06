@@ -712,14 +712,13 @@ void TextEdit::moveCursorNoBlink(QTextCursor::MoveOperation operation, QTextCurs
 void TextEdit::jumpToLine(int line, bool keepLineAtCenter)
 {
     QTextCursor cursor(document()->findBlockByNumber(line - 1)); // line - 1 because line number starts from 0
-    verticalScrollBar()->setValue(fontMetrics().height() * line - height());
+    //verticalScrollBar()->setValue(fontMetrics().height() * line - height());
     // Update cursor.
     setTextCursor(cursor);
 
     if (keepLineAtCenter) {
         keepCurrentLineAtCenter();
     }
-    m_nJumpLine = line;
 }
 
 void TextEdit::newline()
@@ -1445,17 +1444,15 @@ void TextEdit::scrollToLine(int scrollOffset, int row, int column)
     m_scrollAnimation->start();
 }
 
-void TextEdit::setLineWrapMode(bool enable, bool bIsJumpBarEnable)
+void TextEdit::setLineWrapMode(bool enable)
 {
+    int nJumpLine = textCursor().blockNumber() + 1;
     this->setWordWrapMode(QTextOption::WrapAnywhere);
     QTextEdit::setLineWrapMode(enable ? QTextEdit::WidgetWidth : QTextEdit::NoWrap);
     m_pLeftAreaWidget->m_linenumberarea->update();
     m_pLeftAreaWidget->m_flodArea->update();
     m_pLeftAreaWidget->m_bookMarkArea->update();
-
-    if (bIsJumpBarEnable) {
-        jumpToLine(m_nJumpLine,true);
-    }
+    jumpToLine(nJumpLine,false);
 }
 
 void TextEdit::setFontFamily(QString name)

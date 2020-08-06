@@ -84,7 +84,7 @@ Window::Window(DMainWindow *parent)
     connect(Settings::instance(), &Settings::adjustWordWrap, this, [ = ](bool enable) {
         for (EditWrapper *wrapper : m_wrappers.values()) {
             TextEdit *textedit = wrapper->textEditor();
-            textedit->setLineWrapMode(enable,m_jumpLineBar->isEnabled());
+            textedit->setLineWrapMode(enable);
         }
     });
     connect(m_settings,&Settings::setLineNumberShow,this,[=] (bool bIsShow) {
@@ -592,7 +592,7 @@ EditWrapper *Window::createEditor()
     wrapper->textEditor()->setTabSpaceNumber(m_settings->settings->option("advance.editor.tabspacenumber")->value().toInt());
     wrapper->textEditor()->setFontFamily(m_settings->settings->option("base.font.family")->value().toString());
     wrapper->textEditor()->setModified(false);
-    wrapper->textEditor()->setLineWrapMode(wordWrap,m_jumpLineBar);
+    wrapper->textEditor()->setLineWrapMode(wordWrap);
     setFontSizeWithConfig(wrapper);
     wrapper->textEditor()->updateLineNumber();
 
