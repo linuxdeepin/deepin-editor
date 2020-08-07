@@ -195,6 +195,7 @@ QPair<QWidget *, QWidget *> Settings::createKeySequenceEditHandle(QObject *obj)
     auto option = qobject_cast<DTK_CORE_NAMESPACE::DSettingsOption *>(obj);
     KeySequenceEdit *shortCutLineEdit = new KeySequenceEdit(option);
     shortCutLineEdit->ShortcutDirection(Qt::AlignLeft);
+    shortCutLineEdit->setFocusPolicy(Qt::StrongFocus);
     if (option->value().toString().isEmpty()) {
         //option->setValue();
     }
