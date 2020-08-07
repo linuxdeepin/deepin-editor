@@ -4738,6 +4738,220 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
     //     viewport()->setCursor(Qt::BlankCursor);
     // }
 
+    // alt+m 弹出编辑器右键菜单
+
+    if(e->modifiers() == Qt::AltModifier && !e->text().compare(QString("m"),Qt::CaseInsensitive)){
+
+        m_rightMenu->clear();
+        QString wordAtCursor = getWordAtMouse();
+        QTextCursor selectionCursor = textCursor();
+        selectionCursor.movePosition(QTextCursor::StartOfBlock);
+        selectionCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+        QString text = selectionCursor.selectedText();
+
+        // init base.
+        bool isBlankLine = text.trimmed().isEmpty();
+
+        if (m_canUndo && m_bReadOnlyPermission == false && m_readOnlyMode == false) {
+            m_rightMenu->addAction(m_undoAction);
+        }
+
+        if (m_canRedo && m_bReadOnlyPermission == false && m_readOnlyMode == false) {
+            m_rightMenu->addAction(m_redoAction);
+        }
+
+        m_rightMenu->addSeparator();
+        if (textCursor().hasSelection()) {
+            if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
+                m_rightMenu->addAction(m_cutAction);
+            }
+            m_rightMenu->addAction(m_copyAction);
+        }
+
+
+        if (canPaste()) {
+            if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
+                m_rightMenu->addAction(m_pasteAction);
+            }
+        }
+
+        if (textCursor().hasSelection()) {
+            if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
+                m_rightMenu->addAction(m_deleteAction);
+            }
+
+        }
+
+        if (!toPlainText().isEmpty()) {
+            m_rightMenu->addAction(m_selectAllAction);
+        }
+        m_rightMenu->addSeparator();
+
+        if (!toPlainText().isEmpty()) {
+            m_rightMenu->addAction(m_findAction);
+            if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
+                m_rightMenu->addAction(m_replaceAction);
+            }
+            m_rightMenu->addAction(m_jumpLineAction);
+            m_rightMenu->addSeparator();
+        }
+        if(textCursor().hasSelection()){
+            if(m_bReadOnlyPermission == false &&m_readOnlyMode == false){
+                m_rightMenu->addMenu(m_convertCaseMenu);
+            }
+        } else {
+            m_convertCaseMenu->hide();
+        }
+
+        // intelligent judge whether to support comments.
+        const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());
+        if (!toPlainText().isEmpty() &&
+            (textCursor().hasSelection() || !isBlankLine) &&
+            !def.filePath().isEmpty()) {
+    //        m_rightMenu->addAction(m_toggleCommentAction);
+
+            //yanyuhan 折叠、代码注释（有代码选中时增加注释选项显示）
+    //        m_rightMenu->addMenu(m_collapseExpandMenu);             //折叠展开
+
+            m_rightMenu->addAction(m_addComment);
+            m_rightMenu->addAction(m_cancelComment);
+
+            if (m_readOnlyMode == true) {
+                m_addComment->setEnabled(false);
+                m_cancelComment->setEnabled(false);
+            } else {
+                m_addComment->setEnabled(true);
+                m_cancelComment->setEnabled(true);
+            }
+        }
+
+        m_rightMenu->addSeparator();
+        if (m_bReadOnlyPermission == false) {
+            if (m_readOnlyMode) {
+                m_rightMenu->addAction(m_disableReadOnlyModeAction);
+            } else {
+                m_rightMenu->addAction(m_enableReadOnlyModeAction);
+            }
+        }
+
+        m_rightMenu->addAction(m_openInFileManagerAction);
+        m_rightMenu->addSeparator();
+        if (static_cast<Window*>(this->window())->isFullScreen()) {
+            m_rightMenu->addAction(m_exitFullscreenAction);
+        } else {
+            m_rightMenu->addAction(m_fullscreenAction);
+        }
+
+        bool b_Ret = DSysInfo::isCommunityEdition();
+        if(!b_Ret){
+            bool stopReadingState = false;
+            QDBusMessage stopReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
+                                                              "/aiassistant/tts",
+                                                              "com.iflytek.aiassistant.tts",
+                                                              "isTTSInWorking");
+
+            QDBusReply<bool> stopReadingStateRet = QDBusConnection::sessionBus().call(stopReadingMsg, QDBus::BlockWithGui);
+            if (stopReadingStateRet.isValid()) {
+                stopReadingState = stopReadingStateRet.value();
+            }
+            if(!stopReadingState){
+                m_rightMenu->addAction(m_voiceReadingAction);
+                m_voiceReadingAction->setEnabled(false);
+            }
+            else {
+                m_rightMenu->removeAction(m_voiceReadingAction);
+                m_rightMenu->addAction(m_stopReadingAction);
+            }
+            bool voiceReadingState = false;
+            QDBusMessage voiceReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
+                                                              "/aiassistant/tts",
+                                                              "com.iflytek.aiassistant.tts",
+                                                              "getTTSEnable");
+
+            QDBusReply<bool> voiceReadingStateRet = QDBusConnection::sessionBus().call(voiceReadingMsg, QDBus::BlockWithGui);
+            if (voiceReadingStateRet.isValid()) {
+                voiceReadingState = voiceReadingStateRet.value();
+            }
+            if (textCursor().hasSelection()&&voiceReadingState) {
+                m_voiceReadingAction->setEnabled(true);
+            }
+
+            m_rightMenu->addAction(m_dictationAction);
+            bool dictationState = false;
+            QDBusMessage dictationMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
+                                                              "/aiassistant/iat",
+                                                              "com.iflytek.aiassistant.iat",
+                                                              "getIatEnable");
+
+            QDBusReply<bool> dictationStateRet = QDBusConnection::sessionBus().call(dictationMsg, QDBus::BlockWithGui);
+            if (dictationStateRet.isValid()) {
+                dictationState = dictationStateRet.value();
+            }
+            m_dictationAction->setEnabled(dictationState);
+            if(m_readOnlyMode){
+                m_dictationAction->setEnabled(false);
+            }
+
+            m_rightMenu->addAction(m_translateAction);
+            m_translateAction->setEnabled(false);
+            bool translateState = false;
+            QDBusMessage translateReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
+                                                              "/aiassistant/trans",
+                                                              "com.iflytek.aiassistant.trans",
+                                                              "getTransEnable");
+
+            QDBusReply<bool> translateStateRet = QDBusConnection::sessionBus().call(translateReadingMsg, QDBus::BlockWithGui);
+            if (translateStateRet.isValid()) {
+                translateState = translateStateRet.value();
+            }
+            if (textCursor().hasSelection()&&translateState) {
+                m_translateAction->setEnabled(translateState);
+            }
+        }
+
+        //yanyuhan
+    //    m_rightMenu->addMenu(m_colormarkMenu);          //标记功能
+    //    m_rightMenu->addAction(m_columnEditACtion);           //列编辑模式
+
+
+    //    m_rightMenu->addSeparator();
+    //    m_rightMenu->addMenu(m_markAllLine);
+    //    m_rightMenu->addAction(m_cancleMarkAllLine);
+
+    //    if (textCursor().hasSelection()) {
+    //        m_rightMenu->addMenu(m_markCurrentLine);
+    //        m_rightMenu->addAction(m_cancleMarkCurrentLine);
+    //    }
+    //    if (m_wordMarkSelections.size() > 1) {
+    //        m_rightMenu->addAction(m_cancleLastMark);
+    //    }
+        if(! this->document()->isEmpty()) {
+
+            m_colorMarkMenu->clear();
+            m_colorMarkMenu->addMenu(m_markCurrentLine);
+            if (m_wordMarkSelections.size() > 0) {
+                m_colorMarkMenu->addAction(m_cancleLastMark);
+            }
+            m_colorMarkMenu->addAction(m_cancleMarkAllLine);
+            m_colorMarkMenu->addMenu(m_markAllLine);
+
+            m_rightMenu->addSeparator();
+            m_rightMenu->addMenu(m_colorMarkMenu);
+        }
+
+    //    if (textCursor().hasSelection()) {
+    //        m_colorMarkMenu->addMenu(m_markCurrentLine);
+    //        m_colorMarkMenu->addAction(m_cancleMarkCurrentLine);
+    //    }
+
+
+       m_rightMenu->exec(mapToGlobal(cursorRect().bottomRight()));
+
+        return;
+    }
+
+
+
     const QString &key = Utils::getKeyshortcut(e);
 
     if(key=="Esc")      //按下esc的时候,光标退出编辑区，切换至标题栏
