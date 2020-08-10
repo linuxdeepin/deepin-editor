@@ -49,9 +49,6 @@ BottomBar::BottomBar(QWidget *parent)
     m_encodeMenu->setFont(font);
     m_highlightMenu->setFont(font);
 
-    this->setFocusPolicy(Qt::StrongFocus);      //底部栏增加tab切换焦点
-    m_encodeMenu->setFocusPolicy(Qt::StrongFocus);
-    m_highlightMenu->setFocusPolicy(Qt::StrongFocus);
 
     DFontSizeManager::instance()->bind(m_positionLabel, DFontSizeManager::T9);
     DFontSizeManager::instance()->bind(m_charCountLabel, DFontSizeManager::T9);
@@ -88,9 +85,15 @@ BottomBar::BottomBar(QWidget *parent)
     layout->addWidget(pVerticalLine2);
     layout->addWidget(m_highlightMenu);
 
+    m_encodeMenu->setFixedHeight(30);
     setFixedHeight(32);
 
     connect(m_encodeMenu, &DDropdownMenu::currentTextChanged, this, &BottomBar::handleEncodeChanged);
+
+
+    m_encodeMenu->setFocusPolicy(Qt::TabFocus);
+    m_highlightMenu->setFocusPolicy(Qt::TabFocus);
+    setTabOrder(m_encodeMenu,m_highlightMenu);
 }
 
 BottomBar::~BottomBar()

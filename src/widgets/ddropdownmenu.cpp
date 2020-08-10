@@ -25,32 +25,34 @@
 
 DDropdownMenu::DDropdownMenu(QWidget *parent)
     : QFrame(parent)
+    , m_pToolButton(new DToolButton(parent))
     , m_menu(new DMenu)
-    , m_text(new QLabel("undefined"))
-    , m_arrowLabel(new QLabel())
 {
-    //设置界面大小根据内容大小自适应 梁卫东 2020.7.7
-    m_text->setScaledContents(true);
-    connect(qApp,&DApplication::fontChanged,this,&DDropdownMenu::OnFontChangedSlot);
+    //设置toobutton属性
+    m_pToolButton->setFocusPolicy(Qt::StrongFocus);
+    m_pToolButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    m_pToolButton->setArrowType(Qt::NoArrow);
+    m_pToolButton->setFixedHeight(30);
+    m_pToolButton->installEventFilter(this);
+    //    m_pToolButton->setPopupMode(QToolButton::DelayedPopup);
+    //    m_pToolButton->setMenu(m_menu);
 
-    QHBoxLayout *layout = new QHBoxLayout(this);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(0);
-
-    m_arrowLabel->setFixedSize(9, 5);
+    //设置图标
     QPixmap arrowPixmap = Utils::renderSVG(":/images/dropdown_arrow_light.svg", QSize(9, 5));
     arrowPixmap.setDevicePixelRatio(devicePixelRatioF());
-    m_arrowLabel->setPixmap(arrowPixmap);
+    m_pToolButton->setIcon(QIcon(arrowPixmap));
+    m_pToolButton->setIconSize(QSize(9,5));
 
-    // layout->addStretch();
-    layout->addWidget(m_text, 0, Qt::AlignHCenter);
-    layout->addSpacing(10);
-    layout->addWidget(m_arrowLabel);
-    layout->addStretch();
+
+    //添加布局
+    QHBoxLayout *layout = new QHBoxLayout();
+    layout->addWidget(m_pToolButton);
+    layout->setContentsMargins(0,0,0,0);
+    this->setLayout(layout);
 
     connect(m_menu, &DMenu::triggered, this, [=](QAction *action) {
         //编码内容改变触发内容改变和信号发射 梁卫东 2020.7.7
-        if (m_text->text() != action->text()) {
+        if (m_pToolButton->text() != action->text()) {
             Q_EMIT this->triggered(action);
             Q_EMIT this->currentTextChanged(action->text());
         }
@@ -66,7 +68,13 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
         center.setX(center.x() - menuWidth / 2);
         m_menu->move(center);
         m_menu->exec();
+        //显示菜单　清除焦点
+        m_pToolButton->clearFocus();
     });
+
+    //设置字体自适应大小
+    //设置界面大小根据内容大小自适应 梁卫东 2020.7.7
+      connect(qApp,&DApplication::fontChanged,this,&DDropdownMenu::OnFontChangedSlot);
 }
 
 DDropdownMenu::~DDropdownMenu() {}
@@ -100,7 +108,7 @@ void DDropdownMenu::setCurrentAction(QAction *action)
             action->setChecked(false);
         }
 
-        m_text->setText(action->text());
+        m_pToolButton->setText(action->text());
         action->setChecked(true);
     } else {
         for (QAction *action : m_menu->actions()) {
@@ -129,7 +137,7 @@ void DDropdownMenu::setCurrentTextOnly(const QString &text)
 
 void DDropdownMenu::setText(const QString &text)
 {
-    m_text->setText(text);
+    m_pToolButton->setText(text);
     QFontMetrics fm(font());
     setFixedWidth(fm.width(text) + 40);
 }
@@ -148,30 +156,42 @@ void DDropdownMenu::setTheme(const QString &theme)
     QString arrowSvgPath = QString(":/images/dropdown_arrow_%1.svg").arg(theme);
     QPixmap arrowPixmap = Utils::renderSVG(arrowSvgPath, QSize(9, 5));
     arrowPixmap.setDevicePixelRatio(devicePixelRatioF());
-    m_arrowLabel->setPixmap(arrowPixmap);
+    //m_arrowLabel->setPixmap(arrowPixmap);
+    m_pToolButton->setIcon(QIcon(arrowPixmap));
+    m_pToolButton->setIconSize(QSize(9, 5));
 }
 
 void DDropdownMenu::OnFontChangedSlot(const QFont &font)
 {
     QFontMetrics fm(font);
-    //m_text->setText(m_text->text());
-    setFixedWidth(m_text->width()+40);
+    setFixedWidth(m_pToolButton->width()+40);
 }
 
-void DDropdownMenu::mouseReleaseEvent(QMouseEvent *e)
+
+bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
 {
-    if (e->button() == Qt::LeftButton) {
-        Q_EMIT requestContextMenu();
+
+    if(object == m_pToolButton){
+        if(event->type() == QEvent::KeyPress){
+            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+            QString key = Utils::getKeyshortcut(keyEvent);
+            if(key=="Enter")        //按下enter展开列表
+            {
+                Q_EMIT requestContextMenu();
+                return true;
+            }
+            return false;
+        }
+
+        if(event->type() == QEvent::MouseButtonRelease){
+             QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
+            if(mouseEvent->button() == Qt::LeftButton){
+                Q_EMIT requestContextMenu();
+                return true;
+            }
+             return false;
+        }
     }
 
-    QFrame::mouseReleaseEvent(e);
-}
-
-void DDropdownMenu::keyPressEvent(QKeyEvent *e)
-{
-    QString key = Utils::getKeyshortcut(e);
-    if(key=="Enter")        //按下enter展开列表
-    {
-        Q_EMIT requestContextMenu();
-    }
+    return QFrame::eventFilter(object,event);
 }

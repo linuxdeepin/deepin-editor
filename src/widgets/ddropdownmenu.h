@@ -24,6 +24,7 @@
 #include <DMenu>
 #include <QLabel>
 #include <QEvent>
+#include <DToolButton>
 
 DWIDGET_USE_NAMESPACE
 
@@ -57,12 +58,10 @@ signals:
     void currentTextChanged(const QString &text);
 
 protected:
-    void mouseReleaseEvent(QMouseEvent *e);
-    void keyPressEvent(QKeyEvent *e);
+    bool eventFilter(QObject *object, QEvent *event);
 private:
-    DMenu *m_menu;
-    QLabel *m_text;
-    QLabel *m_arrowLabel;
+    DToolButton *m_pToolButton = nullptr;
+    DMenu *m_menu = nullptr;
 };
 
 #endif
