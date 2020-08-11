@@ -90,9 +90,6 @@ BottomBar::BottomBar(QWidget *parent)
 
     connect(m_encodeMenu, &DDropdownMenu::currentTextChanged, this, &BottomBar::handleEncodeChanged);
 
-
-    m_encodeMenu->setFocusPolicy(Qt::TabFocus);
-    m_highlightMenu->setFocusPolicy(Qt::TabFocus);
     setTabOrder(m_encodeMenu,m_highlightMenu);
 }
 
