@@ -1201,16 +1201,21 @@ void Window::popupJumpLineBar()
 
 void Window::updateJumpLineBar()
 {
+    EditWrapper *wrapper = currentWrapper();
     if(m_jumpLineBar->isVisible())
     {
         QString tabPath = m_tabbar->currentPath();
-        EditWrapper *wrapper = currentWrapper();
         QString text = wrapper->textEditor()->textCursor().selectedText();
         int row = wrapper->textEditor()->getCurrentLine();
         int column = wrapper->textEditor()->getCurrentColumn();
         int count = wrapper->textEditor()->blockCount();
         int scrollOffset = wrapper->textEditor()->getScrollOffset();
         m_jumpLineBar->activeInput(tabPath, row, column, count, scrollOffset);
+    }
+    if(!wrapper->textEditor()->ifHasHighlight())
+    {
+        m_findBar->setSearched(false);
+        m_replaceBar->setsearched(false);
     }
 }
 

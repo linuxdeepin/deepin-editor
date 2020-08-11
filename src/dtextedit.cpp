@@ -3566,6 +3566,11 @@ int TextEdit::getLinePosByLineNum(int iLine)
     return -1;
 }
 
+bool TextEdit::ifHasHighlight()
+{
+     return m_findHighlightSelection.cursor.hasSelection();
+}
+
 void TextEdit::setIsFileOpen()
 {
     m_bIsFileOpen = true;

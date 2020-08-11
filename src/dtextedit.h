@@ -204,6 +204,7 @@ public:
     bool isNeedShowFoldIcon(QTextBlock block);
     int  getHighLightRowContentLineNum(int iLine);
     int  getLinePosByLineNum(int iLine);
+    bool ifHasHighlight();
 
     //书签功能相关
     void bookMarkAreaPaintEvent(QPaintEvent *event);
