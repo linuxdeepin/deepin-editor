@@ -1969,7 +1969,7 @@ void Window::checkTabbarForReload()
         wrapper->textEditor()->setReadOnlyPermission(false);
     }
 
-    m_tabbar->setTabText(m_tabbar->currentIndex(), tabName);
+    //m_tabbar->setTabText(m_tabbar->currentIndex(), tabName);
     //判断是否需要阻塞系统关机
     emit sigJudgeBlockShutdown();
 }
