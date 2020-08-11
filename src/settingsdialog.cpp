@@ -39,8 +39,8 @@ void GenerateSettingTranslate()
     auto shortcuts_window_closeothertabsName = QObject::tr("Close other tabs");
     auto shortcuts_window_restoretabName = QObject::tr("Restore tab");
     auto shortcuts_window_openfileName = QObject::tr("Open file");
-    auto shortcuts_window_incrementfontsizeName = QObject::tr("Increase font size");
-    auto shortcuts_window_decrementfontsizeName = QObject::tr("Decrease font size");
+    auto shortcuts_window_incrementfontsizeName = QObject::tr("Increment font size");
+    auto shortcuts_window_decrementfontsizeName = QObject::tr("Decrement font size");
     auto shortcuts_window_resetfontsizeName = QObject::tr("Reset font size");
     auto shortcuts_window_help = QObject::tr("Help");
     auto shortcuts_window_togglefullscreenName = QObject::tr("Toggle fullscreen");
@@ -53,8 +53,8 @@ void GenerateSettingTranslate()
     auto shortcuts_window_displayshortcutsName = QObject::tr("Display shortcuts");
     auto shortcuts_window_printName = QObject::tr("Print");
     auto group_editorName = QObject::tr("Editor");
-    auto shortcuts_editor_indentlineName = QObject::tr("Increase indent");
-    auto shortcuts_editor_backindentlineName = QObject::tr("Decrease indent");
+    auto shortcuts_editor_indentlineName = QObject::tr("Increment indent");
+    auto shortcuts_editor_backindentlineName = QObject::tr("Decrement indent");
     auto shortcuts_editor_forwardcharName = QObject::tr("Forward character");
     auto shortcuts_editor_backwardcharName = QObject::tr("Backward character");
     auto shortcuts_editor_forwardwordName = QObject::tr("Forward word");
