@@ -1610,10 +1610,22 @@ void Window::handleCurrentChanged(const int &index)
     }
 
     const QString &filepath = m_tabbar->fileAt(index);
+    bool bIsContains = false;
 
     if (m_wrappers.contains(filepath)) {
         EditWrapper *wrapper = m_wrappers.value(filepath);
         wrapper->textEditor()->setFocus();
+
+        for (int i = 0;i < m_editorWidget->count();i++) {
+            if (m_editorWidget->widget(i) == wrapper) {
+                bIsContains = true;
+            }
+        }
+
+        if (!bIsContains) {
+            m_editorWidget->addWidget(wrapper);
+        }
+
         m_editorWidget->setCurrentWidget(wrapper);
     }
 

@@ -288,6 +288,8 @@ QMimeData* Tabbar::createMimeDataFromTab(int index, const QStyleOptionTab &optio
     mimeData->setData("dedit/tabbar", tabName.toUtf8());
     mimeData->removeFormat("text/plain");
 
+//    window->closeTab();
+//    window->removeWrapper(fileAt(index));
     return mimeData;
 }
 
@@ -296,11 +298,12 @@ void Tabbar::insertFromMimeDataOnDragEnter(int index, const QMimeData *source)
     if (source == nullptr) {
         return;
     }
-
+    //qDebug() << "insertFromMimeDataOnDragEnter";
     const QString tabName = QString::fromUtf8(source->data("dedit/tabbar"));
     QVariant pVar = source->property("wrapper");
     EditWrapper *wrapper = static_cast<EditWrapper *>(pVar.value<void *>());
     Window *window = static_cast<Window *>(this->window());
+//    EditWrapper *wrapper = window->addTab();
 
     if (!wrapper) {
         return;
@@ -318,7 +321,7 @@ void Tabbar::insertFromMimeData(int index, const QMimeData *source)
     if (source == nullptr) {
         return;
     }
-
+    //qDebug() << "insertFromMimeData";
     const QString tabName = QString::fromUtf8(source->data("dedit/tabbar"));
     QVariant pVar = source->property("wrapper");
     EditWrapper *wrapper = static_cast<EditWrapper *>(pVar.value<void *>());
@@ -505,14 +508,17 @@ void Tabbar::showTabs()
 
 void Tabbar::handleTabReleased(int index)
 {
-    const QString tabPath = fileAt(index);
-    const QString tabName = textAt(index);
 
+    QString path = m_listOldTabPath.value(index);
+    int newIndex = m_tabPaths.indexOf(path);
+    const QString tabPath = fileAt(newIndex);
+    const QString tabName = textAt(newIndex);
+    //qDebug() << "handleTabReleased" << index << newIndex;
     Window *window = static_cast<Window *>(this->window());
     EditWrapper *wrapper = window->wrapper(tabPath);
     StartManager::instance()->createWindowFromWrapper(tabName, tabPath, wrapper, wrapper->textEditor()->document()->isModified());
 
-    closeTab(index);
+    closeTab(newIndex);
     //qDebug() << "closeTab(index);" << index;
     // remove wrapper from window, not delete.
     window->removeWrapper(tabPath, false);
@@ -520,9 +526,10 @@ void Tabbar::handleTabReleased(int index)
 
 void Tabbar::handleTabIsRemoved(int index)
 {   
-    //qDebug() << "handleTabIsRemoved";
+//    QString path = m_listOldTabPath.value(index);
+//    int newIndex = m_tabPaths.indexOf(path);
+    //qDebug() << "handleTabIsRemoved" << index;
     const QString filePath = m_tabPaths.at(index);
-    QString sss = filePath;
     Window *window = static_cast<Window *>(this->window());
 
     m_tabPaths.removeAt(index);
@@ -532,7 +539,7 @@ void Tabbar::handleTabIsRemoved(int index)
 
 void Tabbar::handleTabDroped(int index, Qt::DropAction, QObject *target)
 {
-//    qDebug() << "handleTabDroped";
+    //qDebug() << "handleTabDroped";
     Tabbar *tabbar = qobject_cast<Tabbar *>(target);
 
     if (tabbar == nullptr) {
@@ -543,6 +550,7 @@ void Tabbar::handleTabDroped(int index, Qt::DropAction, QObject *target)
     } else {
         QString path = m_listOldTabPath.value(index);
         int newIndex = m_tabPaths.indexOf(path);
+        //qDebug() << "newIndex" << newIndex;
         closeTab(newIndex);
     }
 }
