@@ -309,9 +309,13 @@ QPair<QWidget *, QWidget *> Settings::createKeySequenceEditHandle(QObject *obj)
 
         QString style = QString("<span style=\"color: rgba(255, 87, 54, 1);\">[%1]</span>").arg(qstrSequence);
 
-        qDebug() << "style" << style;
-        if (bIsConflicts) {
-            instance()->m_pDialog = instance()->createDialog(tr("This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately").arg(style),"",bIsConflicts);
+        if (bIsConflicts || sequence.toString() == "Alt+M") {
+            if (sequence.toString() == "Alt+M") {
+                instance()->m_pDialog = instance()->createDialog(tr("This shortcut conflicts with system shortcut %1").arg(style),"",bIsConflicts);
+            } else {
+                instance()->m_pDialog = instance()->createDialog(tr("This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately").arg(style),"",bIsConflicts);
+            }
+
             int mode = instance()->m_pDialog->exec();
 
             // click cancel button.

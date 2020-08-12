@@ -130,13 +130,13 @@
                         },
                         {
                             "key": "incrementfontsize",
-                            "name": "Increase font size",
+                            "name": "Increment font size",
                             "type": "keySequenceEdit",
                             "default":  "Ctrl+="
                         },
                         {
                             "key": "decrementfontsize",
-                            "name": "Decrease font size",
+                            "name": "Decrement font size",
                             "type": "keySequenceEdit",
                             "default":  "Ctrl+-"
                         },
@@ -214,13 +214,13 @@
                     "options": [
                         {
                             "key": "indentline",
-                            "name": "Increase indent",
+                            "name": "Increment indent",
                             "type": "keySequenceEdit",
                             "default":  "Tab"
                         },
                         {
                             "key": "backindentline",
-                            "name": "Decrease indent",
+                            "name": "Decrement indent",
                             "type": "keySequenceEdit",
                             "default":  "Shift+Backtab"
                         },
