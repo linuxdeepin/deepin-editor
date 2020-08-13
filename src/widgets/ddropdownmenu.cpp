@@ -26,6 +26,7 @@
 #include "../settings.h"
 #include <DSettingsOption>
 #include <QDebug>
+#include <DFontSizeManager>
 
 #define COLOR1 "#1f1c1b"
 #define COLOR2 "#cfcfc2"
@@ -38,7 +39,7 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
 {
     //设置toobutton属性
     m_pToolButton->setFocusPolicy(Qt::StrongFocus);
-    m_pToolButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    m_pToolButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
     m_pToolButton->setArrowType(Qt::NoArrow);
     m_pToolButton->setFixedHeight(30);
     m_pToolButton->installEventFilter(this);
@@ -49,7 +50,6 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     m_arrowPixmap = arrowPixmap;
     m_pToolButton->setIcon(createIcon());
 
-
     /*
     "text-styles": {
         "Normal" : {
@@ -59,7 +59,6 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
      QString themePath = Settings::instance()->settings->option("advance.editor.theme")->value().toString();
      QVariantMap jsonMap = Utils::getThemeMapFromPath(themePath);
      m_textColor = jsonMap["text-styles"].toMap()["Normal"].toMap()["text-color"].toString();
-
 
     //添加布局
     QHBoxLayout *layout = new QHBoxLayout();
@@ -86,7 +85,7 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
         m_menu->move(center);
         m_menu->exec();
         //显示菜单　清除焦点
-        m_pToolButton->clearFocus();
+        //m_pToolButton->setFocus();
     });
 
     //设置字体自适应大小
@@ -190,21 +189,25 @@ void DDropdownMenu::setTheme(const QString &theme)
 QIcon DDropdownMenu::createIcon()
 {
     //height 30    width QFontMetrics fm(font()) fm.width(text)+40;
-    int h = 30;
-    int w = QFontMetrics(m_font).width(m_text)+20;
-    setFixedWidth(w+40);
-    m_pToolButton->setIconSize(QSize(w,h));
+    int fontWidth = QFontMetrics(m_font).width(m_text)+20;
+    int fontHeight = QFontMetrics(m_font).height();
 
-    QPixmap icon(w,h);
+    int iconW = fontWidth+20;
+    int iconH = 30;
+
+    setFixedWidth(iconW);
+
+    m_pToolButton->setIconSize(QSize(iconW,iconH));
+
+    QPixmap icon(iconW,iconH);
     icon.fill(Qt::transparent);
 
     QPainter painter(&icon);
     painter.setFont(m_font);
     painter.setPen(QColor(m_textColor));
-//    QTextOption opt;
-//    opt.setAlignment(Qt::AlignCenter);
-    painter.drawText(0,20,m_text);
-    painter.drawPixmap(w-9,h/2,9,5,m_arrowPixmap,0,0,9,5);
+
+    painter.drawText(QRect(10,(iconH-fontHeight)/2,fontWidth,fontHeight),m_text);
+    painter.drawPixmap(QRect(fontWidth,(iconH-5)/2,9,5),m_arrowPixmap,m_arrowPixmap.rect());
 
     painter.end();
     return icon;

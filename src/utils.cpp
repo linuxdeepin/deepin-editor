@@ -629,3 +629,17 @@ QPixmap Utils::renderSVG(const QString &filePath, const QSize &size)
 
     return pixmap;
 }
+
+QList<QColor> Utils::getHiglightColorList()
+{
+    QList<QColor> listColor;
+    listColor.append(QColor("#FFA503"));
+    listColor.append(QColor("#FF1C49"));
+    listColor.append(QColor("#9023FC"));
+    listColor.append(QColor("#3468FF"));
+    listColor.append(QColor("#00C7E1"));
+    listColor.append(QColor("#05EA6B"));
+    listColor.append(QColor("#FEF144"));
+    listColor.append(QColor("#D5D5D1"));
+    return listColor;
+}

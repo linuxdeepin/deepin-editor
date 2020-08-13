@@ -38,6 +38,8 @@
 #include <QPropertyAnimation>
 #include <QFont>
 #include <DApplicationHelper>
+#include "widgets/ColorSelectWdg.h"
+
 
 namespace KSyntaxHighlighting {
     class SyntaxHighlighter;
@@ -382,15 +384,22 @@ private:
     QAction *m_cancleMarkCurrentLine;
     QAction *m_cancleMarkAllLine;
     QAction *m_cancleLastMark;
-    QAction *m_actionStyleOne;
-    QAction *m_actionStyleTwo;
-    QAction *m_actionStyleThree;
-    QAction *m_actionStyleFour;
 
-    QAction *m_actionAllStyleOne;
-    QAction *m_actionAllStyleTwo;
-    QAction *m_actionAllStyleThree;
-    QAction *m_actionAllStyleFour;
+    //颜色选择控件替换下面action 1 2 3 4
+    QWidgetAction *m_actionColorStyles;
+//    QAction *m_actionStyleOne;
+//    QAction *m_actionStyleTwo;
+//    QAction *m_actionStyleThree;
+//    QAction *m_actionStyleFour;
+
+     //颜色选择控件替换下面action 1 2 3 4
+    QWidgetAction *m_actionAllColorStyles;
+//    QAction *m_actionAllStyleOne;
+//    QAction *m_actionAllStyleTwo;
+//    QAction *m_actionAllStyleThree;
+//    QAction *m_actionAllStyleFour;
+
+
  //    QAction *m_bookmarkAction;
      QAction *m_columnEditACtion;
      QAction *m_addComment;
