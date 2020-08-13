@@ -3919,7 +3919,9 @@ void TextEdit::markSelectWord()
         }
     }
     if (!isFind) {
-        isMarkCurrentLine(true, STYLE_COLOR_1);
+        //添加快捷键标记颜色
+        ColorSelectWdg* pColorSelectWdg= static_cast<ColorSelectWdg*>(m_actionColorStyles->defaultWidget());
+        isMarkCurrentLine(true,pColorSelectWdg->getDefaultColor().name());
         renderAllSelections();
     }
 }

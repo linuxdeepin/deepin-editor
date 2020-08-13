@@ -149,6 +149,11 @@ void ColorSelectWdg::setTheme(const QString &theme)
     }
 }
 
+QColor ColorSelectWdg::getDefaultColor()
+{
+    return m_defaultColor;
+}
+
 bool ColorSelectWdg::eventFilter(QObject *object, QEvent *event)
 {
     if(object == m_pLabel){

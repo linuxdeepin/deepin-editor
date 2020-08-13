@@ -48,6 +48,7 @@ class ColorSelectWdg: public DWidget
 public:
     explicit ColorSelectWdg(QString text,QWidget *parent = nullptr);
     void setTheme(const QString &theme);
+    QColor getDefaultColor();
 signals:
     void sigColorSelected(bool bSelect,QColor color);
 private:
