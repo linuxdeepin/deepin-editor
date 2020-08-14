@@ -349,7 +349,7 @@ QPair<QWidget *, QWidget *> Settings::createKeySequenceEditHandle(QObject *obj)
         } else {
             instance()->settings->option(keySplitList.join("."))->setValue(sequence.toString());
         }
-
+        keymap->setValue("emacs");
         keymap->setValue("customize");
     });
 
