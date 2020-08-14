@@ -92,6 +92,14 @@ Window::Window(DMainWindow *parent)
            wrapper->setLineNumberShow(bIsShow);
        }
     });
+
+    //添加显示空白符 梁卫东　２０２０－０８－１４　１５：２６：３２
+    connect(m_settings,&Settings::showBlankCharacter,this,[=] (bool bIsShow) {
+       for(EditWrapper *wrapper : m_wrappers.values()) {
+           wrapper->setShowBlankCharacter(bIsShow);
+       }
+    });
+
     connect(m_settings, &Settings::showCodeFlodFlag, this, [ = ](bool enable) {
         for (EditWrapper *wrapper : m_wrappers.values()) {
             TextEdit *textedit = wrapper->textEditor();
@@ -1229,7 +1237,7 @@ void Window::popupSettingsDialog()
     m_settings->setSettingDialog(dialog);
     //dialog->setProperty("_d_dtk_theme", "dark");
     //dialog->setProperty("_d_QSSFilename", "DSettingsDialog");
-//    DThemeManager::instance()->registerWidget(dialog);
+    //DThemeManager::instance()->registerWidget(dialog);
 
     dialog->updateSettings(m_settings->settings);
     //m_settings->dtkThemeWorkaround(dialog, "dlight");

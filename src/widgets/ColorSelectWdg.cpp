@@ -79,8 +79,10 @@ void ColorLabel::mousePressEvent(QMouseEvent *e)
 
 ColorSelectWdg::ColorSelectWdg(QString text,QWidget *parent):DWidget (parent),m_text(text)
 {
+    setFocusPolicy(Qt::NoFocus);
     setMouseTracking(true);
-    setFixedHeight(60);
+    if(!text.isEmpty())setFixedHeight(60);
+    else setFixedHeight(35);
     initWidget();
 }
 
@@ -90,13 +92,16 @@ void ColorSelectWdg::initWidget()
     QHBoxLayout *pHLayout1 = new QHBoxLayout();
     QHBoxLayout *pHLayout2 = new QHBoxLayout();
 
-    m_pButton = new DPushButton(m_text,this);
-    m_pButton->setMinimumSize(80,25);
-    m_pButton->setFlat(true);
-    connect(m_pButton,&QPushButton::clicked,this,[this](){
-        //发送选择信号
-        emit this->sigColorSelected(true,m_defaultColor);
-    });
+    if(!m_text.isEmpty()){
+        m_pButton = new DPushButton(m_text,this);
+        m_pButton->setMinimumSize(80,25);
+        m_pButton->setFlat(true);
+        connect(m_pButton,&QPushButton::clicked,this,[this](){
+            //发送选择信号
+            emit this->sigColorSelected(true,m_defaultColor);
+        });
+    }
+
 
     QList<QColor> colors = Utils::getHiglightColorList();
     for (int i = 0;i<colors.size();i++) {
@@ -125,16 +130,20 @@ void ColorSelectWdg::initWidget()
         });
     }
 
-    pHLayout1->addWidget(m_pButton);
-    pHLayout1->addSpacerItem(new QSpacerItem(100,25,QSizePolicy::Expanding,QSizePolicy::Preferred));
+    if(!m_text.isEmpty()){
+        pHLayout1->addWidget(m_pButton);
+        pHLayout1->addSpacerItem(new QSpacerItem(100,25,QSizePolicy::Expanding,QSizePolicy::Preferred));
 
-    pHLayout1->setContentsMargins(20,1,0,0);
-    pHLayout2->setContentsMargins(5,2,5,2);
+        pHLayout1->setContentsMargins(20,1,0,0);
+        pHLayout2->setContentsMargins(5,2,5,2);
 
-    pMainLayout->addLayout(pHLayout1);
-    pMainLayout->addLayout(pHLayout2);
-    pMainLayout->setContentsMargins(0,0,0,0);
-    this->setLayout(pMainLayout);
+        pMainLayout->addLayout(pHLayout1);
+        pMainLayout->addLayout(pHLayout2);
+        pMainLayout->setContentsMargins(0,0,0,0);
+        this->setLayout(pMainLayout);
+    }else {
+        this->setLayout(pHLayout2);
+    }
 }
 
 

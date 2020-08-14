@@ -180,19 +180,24 @@ TextEdit::TextEdit(QWidget *parent)
 
 
     //添加当前颜色选择控件　梁卫东
-    ColorSelectWdg* pColorsSelectWdg= new ColorSelectWdg(tr("Mark"),this);
+
+    ColorSelectWdg* pColorsSelectWdg= new ColorSelectWdg(/*tr("Mark")*/QString(),this);
     connect(pColorsSelectWdg, &ColorSelectWdg::sigColorSelected, this, [this](bool bSelected, QColor color) {
 
         isMarkCurrentLine(bSelected, color.name());
         renderAllSelections();
     });
-
     m_actionColorStyles = new QWidgetAction(this);
     m_actionColorStyles->setDefaultWidget(pColorsSelectWdg);
 
+    m_markCurrentAct = new QAction(tr("Mark"), this);
+    connect(m_markCurrentAct, &QAction::triggered, this,[this,pColorsSelectWdg](){
+        isMarkCurrentLine(true, pColorsSelectWdg->getDefaultColor().name());
+        renderAllSelections();
+    });
 
     //添加全部颜色选择控件　梁卫东
-    ColorSelectWdg* pColorsAllSelectWdg= new ColorSelectWdg(tr("Mark All"),this);
+    ColorSelectWdg* pColorsAllSelectWdg= new ColorSelectWdg(/*tr("Mark All")*/QString(),this);
     connect(pColorsAllSelectWdg, &ColorSelectWdg::sigColorSelected, this, [this](bool bSelected, QColor color) {
         isMarkAllLine(bSelected, color.name());
         renderAllSelections();
@@ -201,6 +206,12 @@ TextEdit::TextEdit(QWidget *parent)
     m_actionAllColorStyles = new QWidgetAction(this);
     m_actionAllColorStyles->setDefaultWidget(pColorsAllSelectWdg);
 
+
+    m_markAllAct = new QAction(tr("Mark All"), this);
+    connect(m_markAllAct, &QAction::triggered, this,[this,pColorsAllSelectWdg](){
+        isMarkAllLine(true, pColorsAllSelectWdg->getDefaultColor().name());
+        renderAllSelections();
+    });
 
     //点击折叠/展开菜单，显示二级菜单;包括：折叠所有层次、展开所有层次、折叠当前层次、展开当前层次。
 //    m_collapseExpandMenu = new DMenu(tr("Collapse/Expand"),this);
@@ -4892,8 +4903,10 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         if(!this->document()->isEmpty()) {
 
             m_colorMarkMenu->clear();
+            m_colorMarkMenu->addAction(m_markCurrentAct);
             m_colorMarkMenu->addAction(m_actionColorStyles);
             m_colorMarkMenu->addSeparator();
+            m_colorMarkMenu->addAction(m_markAllAct);
             m_colorMarkMenu->addAction(m_actionAllColorStyles);
             m_colorMarkMenu->addSeparator();
 
@@ -5321,9 +5334,10 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
     if(! this->document()->isEmpty()) {
 
         m_colorMarkMenu->clear();
+        m_colorMarkMenu->addAction(m_markCurrentAct);
         m_colorMarkMenu->addAction(m_actionColorStyles);
         m_colorMarkMenu->addSeparator();
-
+        m_colorMarkMenu->addAction(m_markAllAct);
         m_colorMarkMenu->addAction(m_actionAllColorStyles);
         m_colorMarkMenu->addSeparator();
 

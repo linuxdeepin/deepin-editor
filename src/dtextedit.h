@@ -379,14 +379,15 @@ private:
  //    QAction *m_colorMarkAction;
     DMenu *m_collapseExpandMenu;
     DMenu *m_colorMarkMenu;
-    DMenu *m_markCurrentLine;
-    DMenu *m_markAllLine;
+//    DMenu *m_markCurrentLine;
+//    DMenu *m_markAllLine;
     QAction *m_cancleMarkCurrentLine;
     QAction *m_cancleMarkAllLine;
     QAction *m_cancleLastMark;
 
     //颜色选择控件替换下面action 1 2 3 4
     QWidgetAction *m_actionColorStyles;
+    QAction *m_markCurrentAct;
 //    QAction *m_actionStyleOne;
 //    QAction *m_actionStyleTwo;
 //    QAction *m_actionStyleThree;
@@ -394,6 +395,7 @@ private:
 
      //颜色选择控件替换下面action 1 2 3 4
     QWidgetAction *m_actionAllColorStyles;
+    QAction *m_markAllAct;
 //    QAction *m_actionAllStyleOne;
 //    QAction *m_actionAllStyleTwo;
 //    QAction *m_actionAllStyleThree;

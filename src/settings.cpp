@@ -70,6 +70,12 @@ Settings::Settings(QWidget *parent)
         emit showCodeFlodFlag(value.toBool());
     });
 
+    //添加显示空白符　梁卫东
+    auto blankCharacter = settings->option("base.font.showblankcharacter");
+    connect(blankCharacter, &Dtk::Core::DSettingsOption::valueChanged, this, [ = ](QVariant value) {
+        emit showBlankCharacter(value.toBool());
+    });
+
     auto theme = settings->option("advance.editor.theme");
     connect(theme, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
         emit themeChanged(value.toString());

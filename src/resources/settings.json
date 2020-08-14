@@ -43,6 +43,13 @@
                             "type": "checkbox",
                             "text": "Show line numbers",
                             "default": "true"
+                        },
+                        {
+                            "key": "showblankcharacter",
+                            "name": "Show blank character",
+                            "type": "checkbox",
+                            "text": "Show blank characters",
+                            "default": "false"
                         }
                     ]
                 }

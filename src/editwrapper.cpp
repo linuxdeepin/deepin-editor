@@ -735,3 +735,25 @@ void EditWrapper::setLineNumberShow(bool bIsShow ,bool bIsFirstShow)
     m_textEdit->bIsSetLineNumberWidth = bIsShow;
     m_textEdit->updateLineNumber();
 }
+
+//显示空白符
+void EditWrapper::setShowBlankCharacter(bool ok)
+{
+    if(ok){
+        QTextOption opts = m_textEdit->document()->defaultTextOption();
+        QTextOption::Flags flag = opts.flags();
+        flag |= QTextOption::ShowTabsAndSpaces;
+        flag |= QTextOption::ShowLineAndParagraphSeparators;
+//        flag |= QTextOption::AddSpaceForLineAndParagraphSeparators;
+        opts.setFlags(flag);
+        m_textEdit->document()->setDefaultTextOption(opts);
+    }else {
+        QTextOption opts = m_textEdit->document()->defaultTextOption();
+        QTextOption::Flags flag = opts.flags();
+        flag &= ~QTextOption::ShowTabsAndSpaces;
+        flag &= ~QTextOption::ShowLineAndParagraphSeparators;
+//        flag &= ~QTextOption::AddSpaceForLineAndParagraphSeparators;
+        opts.setFlags(flag);
+        m_textEdit->document()->setDefaultTextOption(opts);
+    }
+}
