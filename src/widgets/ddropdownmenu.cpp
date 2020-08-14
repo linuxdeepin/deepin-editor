@@ -27,9 +27,8 @@
 #include <DSettingsOption>
 #include <QDebug>
 #include <DFontSizeManager>
-
-#define COLOR1 "#1f1c1b"
-#define COLOR2 "#cfcfc2"
+#include <DLabel>
+#include <DApplicationHelper>
 using namespace Dtk::Core;
 
 DDropdownMenu::DDropdownMenu(QWidget *parent)
@@ -50,17 +49,19 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     m_arrowPixmap = arrowPixmap;
     m_pToolButton->setIcon(createIcon());
 
-    /*
-    "text-styles": {
-        "Normal" : {
-            "text-color" : "#1f1c1b",
-    */
      //获取文本颜色
      QString themePath = Settings::instance()->settings->option("advance.editor.theme")->value().toString();
      QVariantMap jsonMap = Utils::getThemeMapFromPath(themePath);
      m_textColor = jsonMap["text-styles"].toMap()["Normal"].toMap()["text-color"].toString();
+     m_backgroundColor = jsonMap["editor-colors"].toMap()["background-color"].toString();
 
-    //添加布局
+     //设置字体
+     int fontsize =DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T9);
+     m_font.setPixelSize(fontsize);
+     m_font.setFamily("SourceHanSansSC-Normal");
+
+
+     //添加布局
     QHBoxLayout *layout = new QHBoxLayout();
     layout->addWidget(m_pToolButton);
     layout->setContentsMargins(0,0,0,0);
@@ -174,12 +175,11 @@ void DDropdownMenu::setTheme(const QString &theme)
     QPixmap arrowPixmap = Utils::renderSVG(arrowSvgPath, QSize(9, 5));
     arrowPixmap.setDevicePixelRatio(devicePixelRatioF());
 
-    //获取主题颜色
-    if(theme == "light") {
-        m_textColor = "#1f1c1b";
-    }else if(theme == "dark"){
-        m_textColor ="#cfcfc2";
-    }
+    //获取文本颜色
+    QString themePath = Settings::instance()->settings->option("advance.editor.theme")->value().toString();
+    QVariantMap jsonMap = Utils::getThemeMapFromPath(themePath);
+    m_textColor = jsonMap["text-styles"].toMap()["Normal"].toMap()["text-color"].toString();
+    m_backgroundColor = jsonMap["editor-colors"].toMap()["background-color"].toString();
 
     m_arrowPixmap = arrowSvgPath;
     m_pToolButton->setIcon(createIcon());
@@ -188,24 +188,35 @@ void DDropdownMenu::setTheme(const QString &theme)
 
 QIcon DDropdownMenu::createIcon()
 {
+    //根据字体大小设置icon大小
     //height 30    width QFontMetrics fm(font()) fm.width(text)+40;
     int fontWidth = QFontMetrics(m_font).width(m_text)+20;
     int fontHeight = QFontMetrics(m_font).height();
-
     int iconW = fontWidth+20;
     int iconH = 30;
-
     setFixedWidth(iconW);
-
     m_pToolButton->setIconSize(QSize(iconW,iconH));
 
     QPixmap icon(iconW,iconH);
     icon.fill(Qt::transparent);
 
+    //获取文本字体颜色
+    QColor textColor;
+    DLabel label;
+    label.setFont(m_font);
+    DPalette dpalette  = DApplicationHelper::instance()->palette(&label);
+    textColor = dpalette.textTips().color();
+//    if(label.palette().color((QPalette::Background)).lightness() < 128) {
+//        textColor = dpalette.textTips().color();
+//    }
+//    else {
+//        textColor = dpalette.textTips().color();
+//    }
+
+
     QPainter painter(&icon);
     painter.setFont(m_font);
-    painter.setPen(QColor(m_textColor));
-
+    painter.setPen(textColor);
     painter.drawText(QRect(10,(iconH-fontHeight)/2,fontWidth,fontHeight),m_text);
     painter.drawPixmap(QRect(fontWidth,(iconH-5)/2,9,5),m_arrowPixmap,m_arrowPixmap.rect());
 
@@ -216,6 +227,8 @@ QIcon DDropdownMenu::createIcon()
 void DDropdownMenu::OnFontChangedSlot(const QFont &font)
 {
     m_font = font;
+    int fontsize =DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T9);
+    m_font.setPixelSize(fontsize);
     m_pToolButton->setIcon(createIcon());
 }
 

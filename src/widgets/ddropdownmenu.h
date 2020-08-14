@@ -72,6 +72,7 @@ private:
     QString m_text;
     QFont m_font;
     QString m_textColor;
+    QString m_backgroundColor;
 };
 
 #endif
