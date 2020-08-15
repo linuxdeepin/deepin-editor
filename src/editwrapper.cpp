@@ -693,6 +693,7 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QString 
     // set text.
     m_textEdit->loadHighlighter();
     m_textEdit->setPlainText(content);
+    saveFile();     //打开文件的时候保存一下文件,不影响功能,为了消除一个bug,切换编码的时候文件显示被更改*,实际上未更改
     m_textEdit->setTextFinished();
 //    m_textEdit->clearBlack();
 
