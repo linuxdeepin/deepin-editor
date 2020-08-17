@@ -744,7 +744,7 @@ void EditWrapper::setShowBlankCharacter(bool ok)
         QTextOption opts = m_textEdit->document()->defaultTextOption();
         QTextOption::Flags flag = opts.flags();
         flag |= QTextOption::ShowTabsAndSpaces;
-        flag |= QTextOption::ShowLineAndParagraphSeparators;
+//        flag |= QTextOption::ShowLineAndParagraphSeparators;
 //        flag |= QTextOption::AddSpaceForLineAndParagraphSeparators;
         opts.setFlags(flag);
         m_textEdit->document()->setDefaultTextOption(opts);
@@ -752,7 +752,7 @@ void EditWrapper::setShowBlankCharacter(bool ok)
         QTextOption opts = m_textEdit->document()->defaultTextOption();
         QTextOption::Flags flag = opts.flags();
         flag &= ~QTextOption::ShowTabsAndSpaces;
-        flag &= ~QTextOption::ShowLineAndParagraphSeparators;
+//        flag &= ~QTextOption::ShowLineAndParagraphSeparators;
 //        flag &= ~QTextOption::AddSpaceForLineAndParagraphSeparators;
         opts.setFlags(flag);
         m_textEdit->document()->setDefaultTextOption(opts);

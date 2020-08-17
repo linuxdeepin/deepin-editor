@@ -1840,6 +1840,9 @@ void Window::showNewEditor(EditWrapper *wrapper)
 {
     m_editorWidget->addWidget(wrapper);
     m_editorWidget->setCurrentWidget(wrapper);
+
+    //设置显示空白符　梁卫东
+    wrapper->setShowBlankCharacter(m_settings->settings->option("base.font.showblankcharacter")->value().toBool());
     //yanyuhan 设置行号显示
     wrapper->setLineNumberShow(m_settings->settings->option("base.font.showlinenumber")->value().toBool(),true);
     wrapper->textEditor()->setCodeFlodFlagVisable(m_settings->settings->option("base.font.codeflod")->value().toBool(), true);
