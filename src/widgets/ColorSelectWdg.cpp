@@ -3,7 +3,7 @@
 #include "../utils.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include "settings.h"
+#include "../settings.h"
 #include <DSettingsOption>
 #include <DFontSizeManager>
 
