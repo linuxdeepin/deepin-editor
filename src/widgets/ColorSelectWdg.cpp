@@ -1,6 +1,6 @@
 #include "ColorSelectWdg.h"
 #include <QPainter>
-#include "utils.h"
+#include "../utils.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include "settings.h"
