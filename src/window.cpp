@@ -224,6 +224,8 @@ Window::Window(DMainWindow *parent)
     connect(qApp, &QGuiApplication::focusWindowChanged, this, &Window::handleFocusWindowChanged);
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &Window::slotLoadContentTheme);
 
+    Utils::clearChildrenFocus(m_tabbar);//使用此函数把tabbar的组件焦点去掉(左右箭头不能focus)
+
     DIconButton *addButton = m_tabbar->findChild<DIconButton *>("AddButton");
     addButton->setFocusPolicy(Qt::TabFocus);
     DIconButton *optionBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowOptionButton");

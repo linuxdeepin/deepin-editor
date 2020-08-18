@@ -61,4 +61,5 @@ public:
     static const QStringList getEncodeList();
     static QPixmap renderSVG(const QString &filePath, const QSize &size);
     static QList<QColor> getHiglightColorList();
+    static void clearChildrenFocus(QObject *objParent);
 };
