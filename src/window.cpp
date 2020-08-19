@@ -87,6 +87,7 @@ Window::Window(DMainWindow *parent)
             textedit->setLineWrapMode(enable);
         }
     });
+
     connect(m_settings,&Settings::setLineNumberShow,this,[=] (bool bIsShow) {
        for(EditWrapper *wrapper : m_wrappers.values()) {
            wrapper->setLineNumberShow(bIsShow);
@@ -419,7 +420,7 @@ void Window::addTab(const QString &filepath, bool activeTab)
         if (currentWrapper() == nullptr) {
             this->addBlankTab();
         }
-        DMessageManager::instance()->sendMessage(currentWrapper()->textEditor(), QIcon(":/images/warning.svg")
+        DMessageManager::instance()->sendMessage(m_editorWidget->currentWidget(), QIcon(":/images/warning.svg")
                                                  , tr("Invalid file: %1").arg(QFileInfo(filepath).fileName()));
         //showNotify(tr("Invalid file: %1").arg(QFileInfo(filepath).fileName()));
     }
@@ -2214,8 +2215,26 @@ void Window::dropEvent(QDropEvent *event)
     const QMimeData *mimeData = event->mimeData();
 
     if (mimeData->hasUrls()) {
+        QStringList supportfileNames;
+        QStringList otherfiles;
         for (auto url : mimeData->urls()) {
-            addTab(url.toLocalFile(), true);
+            QString file = url.toLocalFile();
+            if(Utils::isMimeTypeSupport(file))
+            {
+                supportfileNames.append(file);
+            }else {
+                otherfiles.append(file);
+            }
+        }
+
+        //先添加支持的文件
+        foreach (QString var, supportfileNames) {
+            addTab(var, true);
+        }
+
+        //后添加不支持文件　在最后编辑页面显示
+        foreach (QString var, otherfiles) {
+            addTab(var, true);
         }
     }
 }
