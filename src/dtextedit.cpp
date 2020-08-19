@@ -4921,9 +4921,15 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             m_rightMenu->addMenu(m_colorMarkMenu);
         }
 
-       m_rightMenu->exec(mapToGlobal(cursorRect().bottomRight()));
+       QPoint pos = cursorRect().bottomRight();
+       //当全选大文本 坐标超出屏幕外显示不了 梁卫东　２０２０－０８－１９　１０：２３：２９
+       if(pos.y()> this->rect().height()) {
+           pos.setY((this->rect().height())/2);
+           pos.setX((this->rect().width())/2);
+       }
 
-        return;
+       m_rightMenu->exec(mapToGlobal(pos));
+       return;
     }
 
 
