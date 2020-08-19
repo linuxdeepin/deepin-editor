@@ -220,20 +220,20 @@ bool EditWrapper::saveFile()
     if (m_endOfLineMode == eolUnix) {
         if (!fileContent.endsWith("\n"))
         {
-            fileContent = fileContent.append(QChar('\n'));
+            //fileContent = fileContent.append(QChar('\n'));
         }
     }
     else if (m_endOfLineMode == eolDos)
     {
         if (!fileContent.endsWith("\r\n"))
         {
-            fileContent = fileContent.append(QChar('\r')).append(QChar('\n'));
+            //fileContent = fileContent.append(QChar('\r')).append(QChar('\n'));
         }
     }
     else if (m_endOfLineMode == eolMac) {
         if (!fileContent.endsWith("\r"))
         {
-            fileContent = fileContent.append(QChar('\r'));
+            //fileContent = fileContent.append(QChar('\r'));
         }
     }
 
