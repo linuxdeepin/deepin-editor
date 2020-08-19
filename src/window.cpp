@@ -1099,9 +1099,9 @@ void Window::popupFindBar()
             return;
         }
 
-        if (wrapper->textEditor()->toPlainText().isEmpty()) {
-            return;
-        }
+//        if (wrapper->textEditor()->toPlainText().isEmpty()) {
+//            return;
+//        }
         currentWrapper()->bottomBar()->updateSize(59);
 
         if (m_replaceBar->isVisible()) {
@@ -1145,9 +1145,10 @@ void Window::popupReplaceBar()
         return;
     }
 
-    if (curWrapper->textEditor()->toPlainText().isEmpty()) {
-        return;
-    }
+//    if (curWrapper->textEditor()->toPlainText().isEmpty()) {
+//        return;
+//    }
+
 	currentWrapper()->bottomBar()->updateSize(59);
 
         EditWrapper *wrapper = currentWrapper();
