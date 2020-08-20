@@ -48,7 +48,6 @@ int main(int argc, char *argv[])
     using namespace Dtk::Core;
 
     // Init DTK.
-    DApplication::loadDXcbPlugin();
 
     const char *descriptionText = QT_TRANSLATE_NOOP(
         "MainWindow", "Text Editor is a powerful tool for viewing and editing text files.");
