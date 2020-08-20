@@ -58,7 +58,7 @@ public slots:
     void OnFontChangedSlot(const QFont &font);
 
 signals:
-    void requestContextMenu();
+    void requestContextMenu(bool bClicked = false);
     void triggered(QAction *action);
     void currentTextChanged(const QString &text);
 

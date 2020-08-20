@@ -77,7 +77,7 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
         setCurrentAction(action);
     });
 
-    connect(this, &DDropdownMenu::requestContextMenu, this, [=] {
+    connect(this, &DDropdownMenu::requestContextMenu, this, [=] (bool bClicked){
         QPoint center = this->mapToGlobal(this->rect().center());
         int menuHeight = m_menu->sizeHint().height();
         int menuWidth = m_menu->sizeHint().width();
@@ -85,8 +85,10 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
         center.setX(center.x() - menuWidth / 2);
         m_menu->move(center);
         m_menu->exec();
-        //显示菜单　清除焦点
-        //m_pToolButton->setFocus();
+        if(bClicked){
+            //如果鼠标点击清除ｆｏｃｕｓ
+            m_pToolButton->clearFocus();
+        }
     });
 
     //设置字体自适应大小
@@ -111,11 +113,16 @@ QAction *DDropdownMenu::addAction(const QString &text)
 
 void DDropdownMenu::addActions(QStringList list)
 {
-    for (QString text : list) {
-        QAction *action = m_menu->addAction(text);
-        action->setCheckable(true);
-        setText(action->text());
+    for (int i =0;i<list.size();i++) {
+
+      //if(i == 0) m_menu->addSeparator();
+     // if(i == list.size() -1) m_menu->addSeparator();
+
+      QAction *action = m_menu->addAction(list[i]);
+      action->setCheckable(true);
     }
+
+    //setText(list.last());
 }
 
 void DDropdownMenu::setCurrentAction(QAction *action)
@@ -124,8 +131,7 @@ void DDropdownMenu::setCurrentAction(QAction *action)
         for (QAction *action : m_menu->actions()) {
             action->setChecked(false);
         }
-        m_text = action->text();
-        m_pToolButton->setIcon(createIcon());
+        setText(action->text());
         action->setChecked(true);
     } else {
         for (QAction *action : m_menu->actions()) {
@@ -141,7 +147,6 @@ void DDropdownMenu::setCurrentText(const QString &text)
     for (QAction *action : m_menu->actions()) {
         if (action->text() == strCodecName) {
             setCurrentAction(action);
-            setText(strCodecName);
             break;
         }
     }
@@ -242,7 +247,7 @@ bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
             QString key = Utils::getKeyshortcut(keyEvent);
             if(key=="Enter")        //按下enter展开列表
             {
-                Q_EMIT requestContextMenu();
+                Q_EMIT requestContextMenu(false);
                 return true;
             }
             return false;
@@ -251,11 +256,12 @@ bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
         if(event->type() == QEvent::MouseButtonRelease){
              QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
             if(mouseEvent->button() == Qt::LeftButton){
-                Q_EMIT requestContextMenu();
+                Q_EMIT requestContextMenu(true);
                 return true;
             }
              return false;
         }
+
     }
 
     return QFrame::eventFilter(object,event);

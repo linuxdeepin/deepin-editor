@@ -173,6 +173,7 @@ void BottomBar::handleEncodeChanged(const QString &name)
 {
     m_wrapper->setTextCodec(name.toLocal8Bit(), true);
     m_wrapper->textEditor()->setTextCode(name.toLocal8Bit());
+    m_wrapper->textEditor()->setFocus();
 }
 
 void BottomBar::paintEvent(QPaintEvent *)
