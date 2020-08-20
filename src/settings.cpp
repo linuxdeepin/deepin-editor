@@ -243,7 +243,7 @@ QPair<QWidget *, QWidget *> Settings::createKeySequenceEditHandle(QObject *obj)
 
                     if (checkName.contains(keySplitList.last())) {
                         keymap->setValue("customize");
-                        return;
+                        //return;
                     } else {
                         bIsConflicts = true;
                         keySplitList[1] = QString("window_keymap_%1").arg("customize");
@@ -260,7 +260,7 @@ QPair<QWidget *, QWidget *> Settings::createKeySequenceEditHandle(QObject *obj)
 
                     if (checkName.contains(keySplitList.last())) {
                         keymap->setValue("customize");
-                        return;
+                        //return;
                     } else {
                         bIsConflicts = true;
                         keySplitList[1] = QString("editor_keymap_%1").arg("customize");
@@ -280,7 +280,7 @@ QPair<QWidget *, QWidget *> Settings::createKeySequenceEditHandle(QObject *obj)
                 if (option->value().toString() == sequence.toString()) {
 
                     if (checkName.contains(keySplitList.last())) {
-                        return;
+                        //return;
                     } else {
                         bIsConflicts = true;
                         conflictsKeys = keySplitList.join(".");
@@ -295,7 +295,7 @@ QPair<QWidget *, QWidget *> Settings::createKeySequenceEditHandle(QObject *obj)
                 if (option->value().toString() == sequence.toString()) {
 
                     if (checkName.contains(keySplitList.last())) {
-                        return;
+                        //return;
                     } else {
                         bIsConflicts = true;
                         conflictsKeys = keySplitList.join(".");
