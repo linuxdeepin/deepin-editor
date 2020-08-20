@@ -4150,8 +4150,10 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                 m_markFoldHighLightSelections.clear();
                 renderAllSelections();
 
+
                 // 当前行line-1 判断下行line是否隐藏
-                if(document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line-1).text().contains("{")){
+                if(document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line-1).text().contains("{") && !document()->findBlockByNumber(line-1).text().trimmed().startsWith("//")){
+
                     getNeedControlLine(line - 1, false);
                     document()->adjustSize();
 
@@ -4167,7 +4169,7 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                     this->setLineWrapMode(curMode);
                     viewport()->update();
 
-                }else if (!document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line-1).text().contains("{")){
+                }else if (!document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line-1).text().contains("{") && !document()->findBlockByNumber(line-1).text().trimmed().startsWith("//")){
                     getNeedControlLine(line - 1, true);
                     document()->adjustSize();
 
@@ -4617,6 +4619,8 @@ void TextEdit::onSelectionArea()
 void TextEdit::dragEnterEvent(QDragEnterEvent *event)
 {
     QTextEdit::dragEnterEvent(event);
+
+
     qobject_cast<Window *>(this->window())->requestDragEnterEvent(event);
 }
 
