@@ -29,10 +29,15 @@
 #include <DDialog>
 #include <QSettings>
 #include <QPointer>
-
+#include <QKeyEvent>
+#include <QDebug>
+#include <DApplication>
+#include <QLabel>
+#include <QPushButton>
 DWIDGET_USE_NAMESPACE
 DCORE_USE_NAMESPACE
 DTK_USE_NAMESPACE
+
 
 class Settings : public QObject
 {
@@ -91,11 +96,41 @@ public:
     KeySequenceEdit(DTK_CORE_NAMESPACE::DSettingsOption *opt, QWidget *parent = nullptr): DKeySequenceEdit(parent)
     {
         m_poption = opt;
+        this->installEventFilter(this);
     }
     DTK_CORE_NAMESPACE::DSettingsOption *option()
     {
         return m_poption;
     }
+protected:
+
+    inline bool eventFilter(QObject*o,QEvent*e)
+    {
+        //设置界面　回车键和空格键　切换输入 梁卫东　２０２０－０８－２１　１６：２８：３１
+        if(o == this){
+            if(e->type() == QEvent::KeyPress){
+                QKeyEvent* keyEvent = static_cast<QKeyEvent*>(e);
+                //qDebug()<<keyEvent->text()<<keyEvent->key();
+
+                if(keyEvent->key()== Qt::Key_Return || keyEvent->key() == Qt::Key_Space){
+                    QRect rect = this->rect();
+                    QList<QLabel*> childern = findChildren<QLabel*>();
+
+                    for (int i =0; i< childern.size();i++) {
+                        QPoint pos(25,rect.height()/2);
+
+                        QMouseEvent event0(QEvent::MouseButtonPress, pos, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
+                        DApplication::sendEvent(childern[i], &event0);
+
+                    }
+                     return true;
+                }
+            }
+        }
+
+        return DKeySequenceEdit::eventFilter(o,e);
+    }
+
 private:
     DTK_CORE_NAMESPACE::DSettingsOption *m_poption = nullptr;
 };
