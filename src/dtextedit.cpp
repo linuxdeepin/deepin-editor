@@ -1868,8 +1868,9 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
     } else {  //浅色主题
         theme = "l";
     }
-    QString unflodImagePath = ":/images/d-" + theme + ".svg";
-    QString flodImagePath = ":/images/u-" + theme + ".svg";
+
+    QString flodImagePath = ":/images/d-" + theme + ".svg";
+    QString unflodImagePath = ":/images/u-" + theme + ".svg";
     QImage Unfoldimage(unflodImagePath);
     QImage foldimage(flodImagePath);
     QImage scaleFoldImage;
