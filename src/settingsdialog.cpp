@@ -53,8 +53,8 @@ void GenerateSettingTranslate()
     auto shortcuts_window_displayshortcutsName = QObject::tr("Display shortcuts");
     auto shortcuts_window_printName = QObject::tr("Print");
     auto group_editorName = QObject::tr("Editor");
-    auto shortcuts_editor_indentlineName = QObject::tr("Increment indent");
-    auto shortcuts_editor_backindentlineName = QObject::tr("Decrement indent");
+    auto shortcuts_editor_indentlineName = QObject::tr("Increase indent");
+    auto shortcuts_editor_backindentlineName = QObject::tr("Decrease indent");
     auto shortcuts_editor_forwardcharName = QObject::tr("Forward character");
     auto shortcuts_editor_backwardcharName = QObject::tr("Backward character");
     auto shortcuts_editor_forwardwordName = QObject::tr("Forward word");

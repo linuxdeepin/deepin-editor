@@ -434,7 +434,7 @@ bool Settings::checkShortcutValid(const QString &Name,QString Key, QString &Reas
         //F1-F12是允许的，这个正则不够精确，但是没关系。
         QRegExp regexp("^F[0-9]{1,2}$");
         if (!Key.contains(regexp)) {
-            Reason = tr("%1 is invalid").arg(style);
+            Reason = tr("The shortcut %1 is invalid, please set another one.").arg(style);
             bIsConflicts = false;
             return  false;
         }
@@ -442,7 +442,7 @@ bool Settings::checkShortcutValid(const QString &Name,QString Key, QString &Reas
     // 小键盘单键都不允许
     QRegExp regexpNum("^Num+.*");
     if (Key.contains(regexpNum)) {
-        Reason = tr("%1 is invalid").arg(style);
+        Reason = tr("The shortcut %1 is invalid, please set another one.").arg(style);
         bIsConflicts = false;
         return  false;
     }
@@ -480,7 +480,7 @@ DDialog *Settings::createDialog(const QString &title, const QString &content, co
         dialog->addButton(QString(tr("Cancel")), true, DDialog::ButtonNormal);
         dialog->addButton(QString(tr("Replace")), false, DDialog::ButtonRecommend);
     } else {
-        dialog->addButton(QString(tr("Cancel")), true, DDialog::ButtonRecommend);
+        dialog->addButton(QString(tr("OK")), true, DDialog::ButtonRecommend);
     }
 
     return dialog;

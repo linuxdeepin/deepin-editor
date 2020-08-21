@@ -221,13 +221,13 @@
                     "options": [
                         {
                             "key": "indentline",
-                            "name": "Increment indent",
+                            "name": "Increase indent",
                             "type": "keySequenceEdit",
                             "default":  "Tab"
                         },
                         {
                             "key": "backindentline",
-                            "name": "Decrement indent",
+                            "name": "Decrease indent",
                             "type": "keySequenceEdit",
                             "default":  "Shift+Backtab"
                         },
