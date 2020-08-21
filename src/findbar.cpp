@@ -130,7 +130,8 @@ void FindBar::slot_ifClearSearchWord()
 
 void FindBar::hideEvent(QHideEvent *)
 {
-    removeSearchKeyword();
+    //保留查询标记
+    //removeSearchKeyword();
 }
 
 bool FindBar::focusNextPrevChild(bool next)
