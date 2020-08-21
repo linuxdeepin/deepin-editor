@@ -105,6 +105,7 @@ public:
     void changeTitlebarBackground(const QString &startColor, const QString &endColor);
 
     void displayShortcuts();
+    void fingerZoom(QString name, QString direction, int fingers);
 
 signals:
     void themeChanged(const QString themeName);

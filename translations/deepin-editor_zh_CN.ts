@@ -70,7 +70,7 @@
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="653"/>
-        <location filename="../src/widgets/bottombar.cpp" line="66"/>
+        <location filename="../src/widgets/bottombar.cpp" line="67"/>
         <source>INSERT</source>
         <translation>插入</translation>
     </message>
@@ -638,8 +638,12 @@
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="114"/>
+        <source>Show whitespaces and tabs</source>
+        <translation>显示空白字符/制表符</translation>
+    </message>
+    <message>
         <source>Show blank characters</source>
-        <translation>显示空白符号</translation>
+        <translation type="vanished">显示空白符号</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="115"/>
@@ -1117,7 +1121,7 @@
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="343"/>
-        <location filename="../src/widgets/bottombar.cpp" line="73"/>
+        <location filename="../src/widgets/bottombar.cpp" line="74"/>
         <source>None</source>
         <translation>无</translation>
     </message>

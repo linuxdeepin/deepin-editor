@@ -60,7 +60,8 @@ BottomBar::BottomBar(QWidget *parent)
     layout->setContentsMargins(29, 1, 10, 0);
     layout->addWidget(m_positionLabel);
     layout->addStretch();
-    layout->addSpacing(110);
+    //layout->addSpacing(110);
+    layout->addSpacerItem(new QSpacerItem(110,20,QSizePolicy::Expanding,QSizePolicy::Fixed));
     layout->addWidget(m_charCountLabel);
 
     m_cursorStatus->setText(qApp->translate("EditWrapper", "INSERT"));

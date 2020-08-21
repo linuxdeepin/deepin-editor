@@ -70,7 +70,7 @@ void ColorLabel::paintEvent(QPaintEvent *event)
 void ColorLabel::mousePressEvent(QMouseEvent *e)
 {
     //没有选择点击有效
-    if(e->button() == Qt::LeftButton && !m_bSelected){
+    if(e->button() == Qt::LeftButton){
        m_bSelected = true;
        update();
        emit sigColorClicked(m_bSelected,m_color);
@@ -130,6 +130,8 @@ void ColorSelectWdg::initWidget()
         });
     }
 
+
+
     if(!m_text.isEmpty()){
         pHLayout1->addWidget(m_pButton);
         pHLayout1->addSpacerItem(new QSpacerItem(100,25,QSizePolicy::Expanding,QSizePolicy::Preferred));
@@ -142,6 +144,7 @@ void ColorSelectWdg::initWidget()
         pMainLayout->setContentsMargins(0,0,0,0);
         this->setLayout(pMainLayout);
     }else {
+        pHLayout2->setContentsMargins(8+m_labelWidth,0,8+m_labelWidth,0);
         this->setLayout(pHLayout2);
     }
 }

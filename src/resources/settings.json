@@ -46,9 +46,9 @@
                         },
                         {
                             "key": "showblankcharacter",
-                            "name": "Show blank character",
+                            "name": "Show whitespaces and tabs",
                             "type": "checkbox",
-                            "text": "Show blank characters",
+                            "text": "Show whitespaces and tabs",
                             "default": "false"
                         }
                     ]

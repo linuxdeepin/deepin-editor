@@ -180,12 +180,12 @@ TextEdit::TextEdit(QWidget *parent)
 
 
     //添加当前颜色选择控件　梁卫东
-
     ColorSelectWdg* pColorsSelectWdg= new ColorSelectWdg(/*tr("Mark")*/QString(),this);
     connect(pColorsSelectWdg, &ColorSelectWdg::sigColorSelected, this, [this](bool bSelected, QColor color) {
 
         isMarkCurrentLine(bSelected, color.name());
         renderAllSelections();
+        m_rightMenu->close();//选择颜色关闭菜单　梁卫东　２０２０－０８－２１　０９：３４：５３
     });
     m_actionColorStyles = new QWidgetAction(this);
     m_actionColorStyles->setDefaultWidget(pColorsSelectWdg);
@@ -201,6 +201,7 @@ TextEdit::TextEdit(QWidget *parent)
     connect(pColorsAllSelectWdg, &ColorSelectWdg::sigColorSelected, this, [this](bool bSelected, QColor color) {
         isMarkAllLine(bSelected, color.name());
         renderAllSelections();
+        m_rightMenu->close();//选择颜色关闭菜单　梁卫东　２０２０－０８－２１　０９：３４：５３
     });
 
     m_actionAllColorStyles = new QWidgetAction(this);
@@ -1868,8 +1869,9 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
     } else {  //浅色主题
         theme = "l";
     }
-    QString unflodImagePath = ":/images/d-" + theme + ".svg";
-    QString flodImagePath = ":/images/u-" + theme + ".svg";
+
+    QString flodImagePath = ":/images/d-" + theme + ".svg";
+    QString unflodImagePath = ":/images/u-" + theme + ".svg";
     QImage Unfoldimage(unflodImagePath);
     QImage foldimage(flodImagePath);
     QImage scaleFoldImage;

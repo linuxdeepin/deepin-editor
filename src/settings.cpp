@@ -200,6 +200,7 @@ QPair<QWidget *, QWidget *> Settings::createKeySequenceEditHandle(QObject *obj)
 {
     auto option = qobject_cast<DTK_CORE_NAMESPACE::DSettingsOption *>(obj);
     KeySequenceEdit *shortCutLineEdit = new KeySequenceEdit(option);
+
     shortCutLineEdit->ShortcutDirection(Qt::AlignLeft);
     shortCutLineEdit->setFocusPolicy(Qt::StrongFocus);
     if (option->value().toString().isEmpty()) {
@@ -211,6 +212,9 @@ QPair<QWidget *, QWidget *> Settings::createKeySequenceEditHandle(QObject *obj)
     QPair<QWidget*, QWidget*> optionWidget = DSettingsWidgetFactory::createStandardItem(QByteArray(), option, shortCutLineEdit);
 
     option->connect(shortCutLineEdit, &DKeySequenceEdit::editingFinished, [ = ](const QKeySequence & sequence) {
+
+        if(sequence.toString()== "Enter") qDebug()<<"==========Enter";
+
 
         QString checkName = option->key();
         QString reason;
