@@ -45,6 +45,9 @@ public:
     StartManager(QObject *parent = 0);
     void setDragEnter(bool bIsDragEnter);
 
+signals:
+    void touchPadEventSignal(QString name, QString direction, int fingers);
+
 public slots:
     Q_SCRIPTABLE void openFilesInTab(QStringList files);
     Q_SCRIPTABLE void openFilesInWindow(QStringList files);

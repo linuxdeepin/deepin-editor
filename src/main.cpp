@@ -103,6 +103,7 @@ int main(int argc, char *argv[])
         }
 
         dbus.registerObject("/com/deepin/Editor", startManager, QDBusConnection::ExportScriptableSlots);
+        dbus.systemBus().connect("com.deepin.daemon.Gesture", "/com/deepin/daemon/Gesture", "com.deepin.daemon.Gesture", "Event", StartManager::instance(), SIGNAL(touchPadEventSignal(QString, QString, int)));
 
         return app.exec();
     }
