@@ -383,15 +383,22 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
 
         if (mouseEvent->button() == Qt::RightButton) {
-            QPoint position = mouseEvent->pos();
-            m_rightClickTab = -1;
 
-            for (int i = 0; i < count(); i++) {
-                if (tabRect(i).contains(position)) {
-                    m_rightClickTab = i;
-                    break;
-                }
-            }
+
+            QPoint position = mouseEvent->pos();
+            m_rightClickTab = this->tabAt(position);
+            int indexCount = this->count();
+
+//            m_rightClickTab = -1;
+
+//            for (int i = 0; i < count(); i++) {
+//                if (tabRect(i).contains(position)) {
+//                    m_rightClickTab = i;
+//                    break;
+//                }
+//            }
+
+
 
             // popup right menu on tab.
             if (m_rightClickTab >= 0) {
@@ -415,7 +422,28 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
                     m_closeRightTabAction->setEnabled(false);
                 }
 
-                showTabs();
+
+                //优化tab菜单显示　梁卫东
+                if(m_rightClickTab == 0 && indexCount ==1){
+                    m_closeLeftTabAction->setEnabled(false);
+                    m_closeRightTabAction->setEnabled(false);
+                }else if (m_rightClickTab == 0 && indexCount > 1) {
+                    m_closeLeftTabAction->setEnabled(false);
+                    m_closeRightTabAction->setEnabled(true);
+                }else if (m_rightClickTab ==indexCount -1 && indexCount == 1) {
+                    m_closeLeftTabAction->setEnabled(false);
+                    m_closeRightTabAction->setEnabled(false);
+                }else if (m_rightClickTab ==indexCount -1 && indexCount > 1) {
+                    m_closeLeftTabAction->setEnabled(true);
+                    m_closeRightTabAction->setEnabled(false);
+                }else {
+                    m_closeLeftTabAction->setEnabled(true);
+                    m_closeRightTabAction->setEnabled(true);
+                }
+
+                //showTabs();
+
+
                 connect(m_closeTabAction, &QAction::triggered, this, [=] {
                     Q_EMIT tabCloseRequested(m_rightClickTab);
                 });
@@ -504,6 +532,17 @@ void Tabbar::mousePressEvent(QMouseEvent *e)
     {
         emit tabCloseRequested(tabAt(QPoint(e->x(), e->y())));
     }
+
+//    if(e->button() == Qt::RightButton)
+//    {
+//        setCurrentIndex(tabAt(QPoint(e->x(), e->y())));
+
+//        //QPoint pos(25,rect.height()/2);
+////        qDebug()<<"right button"<<e->pos();
+////        QMouseEvent event0(QEvent::MouseButtonPress, e->pos(), Qt::RightButton, Qt::RightButton, Qt::NoModifier);
+////        DApplication::sendEvent(this, &event0);
+//    }
+
     DTabBar::mousePressEvent(e);
 }
 
