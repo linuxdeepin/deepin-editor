@@ -54,7 +54,8 @@ HEADERS += window.h \
     leftareaoftextedit.h \
     codeflodarea.h \
     showflodcodewidget.h \
-    widgets/ColorSelectWdg.h
+    widgets/ColorSelectWdg.h \
+    editorapplication.h
 
 SOURCES += window.cpp \
            startmanager.cpp \
@@ -88,7 +89,8 @@ SOURCES += window.cpp \
     leftareaoftextedit.cpp \
     codeflodarea.cpp \
     showflodcodewidget.cpp \
-    widgets/ColorSelectWdg.cpp
+    widgets/ColorSelectWdg.cpp \
+    editorapplication.cpp
 
 
 QMAKE_CXXFLAGS += -g

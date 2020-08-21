@@ -40,6 +40,7 @@
 #include <QScreen>
 #include <iostream>
 #include <DApplicationSettings>
+#include<editorapplication.h>
 
 DWIDGET_USE_NAMESPACE
 
@@ -53,17 +54,17 @@ int main(int argc, char *argv[])
         "MainWindow", "Text Editor is a powerful tool for viewing and editing text files.");
     const QString acknowledgementLink = "https://www.deepin.org/original/deepin-editor/";
 
-    DApplication app(argc, argv);
-    app.setAttribute(Qt::AA_UseHighDpiPixmaps);
-    app.loadTranslator();
-    app.setOrganizationName("deepin");
-    app.setApplicationName("deepin-editor");
-    app.setApplicationDisplayName(QObject::tr("Text Editor"));
-    app.setApplicationVersion(VERSION);
-    app.setProductIcon(QIcon::fromTheme("deepin-editor"));
-    app.setProductName(DApplication::translate("MainWindow", "Text Editor"));
-    app.setApplicationDescription(DApplication::translate("MainWindow", descriptionText) + "\n");
-    app.setApplicationAcknowledgementPage(acknowledgementLink);
+    EditorApplication app(argc, argv);
+//    app.setAttribute(Qt::AA_UseHighDpiPixmaps);
+//    app.loadTranslator();
+//    app.setOrganizationName("deepin");
+//    app.setApplicationName("deepin-editor");
+//    app.setApplicationDisplayName(QObject::tr("Text Editor"));
+//    app.setApplicationVersion(VERSION);
+//    app.setProductIcon(QIcon::fromTheme("deepin-editor"));
+//    app.setProductName(DApplication::translate("MainWindow", "Text Editor"));
+//    app.setApplicationDescription(DApplication::translate("MainWindow", descriptionText) + "\n");
+//    app.setApplicationAcknowledgementPage(acknowledgementLink);
 
     //save theme
     DApplicationSettings savetheme;
