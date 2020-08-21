@@ -40,7 +40,7 @@
 #include <QScreen>
 #include <iostream>
 #include <DApplicationSettings>
-#include<editorapplication.h>
+#include"editorapplication.h"
 
 DWIDGET_USE_NAMESPACE
 
