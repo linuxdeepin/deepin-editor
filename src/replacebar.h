@@ -25,7 +25,6 @@
 
 #include <QPushButton>
 #include "linebar.h"
-
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPainter>
@@ -77,6 +76,7 @@ public slots:
 protected:
     void hideEvent(QHideEvent *event);
     bool focusNextPrevChild(bool next);
+    void keyPressEvent(QKeyEvent *e);
 
 private:
     QPushButton *m_replaceAllButton;

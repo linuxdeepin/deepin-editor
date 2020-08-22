@@ -23,6 +23,9 @@
 #include <QFrame>
 #include <DMenu>
 #include <QLabel>
+#include <QEvent>
+#include <DToolButton>
+#include <QPalette>
 
 DWIDGET_USE_NAMESPACE
 
@@ -46,18 +49,30 @@ public:
     void setMenu(DMenu *menu);
     void setTheme(const QString &theme);
 
+
+private:
+    //创建文字ICON
+    QIcon createIcon();
+public slots:
+    //字体大小跟随系统变化
+    void OnFontChangedSlot(const QFont &font);
+
 signals:
     void requestContextMenu();
     void triggered(QAction *action);
     void currentTextChanged(const QString &text);
 
 protected:
-    void mouseReleaseEvent(QMouseEvent *e);
-
+    //按键事件　鼠标释放弹出菜单
+    bool eventFilter(QObject *object, QEvent *event);
 private:
-    DMenu *m_menu;
-    QLabel *m_text;
-    QLabel *m_arrowLabel;
+    DToolButton *m_pToolButton = nullptr;
+    DMenu *m_menu = nullptr;
+    QPixmap m_arrowPixmap;
+    QString m_text;
+    QFont m_font;
+    QString m_textColor;
+    QString m_backgroundColor;
 };
 
 #endif

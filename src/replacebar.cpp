@@ -72,11 +72,11 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     this->setLayout(m_layout);
 
     // Make button don't grab keyboard focus after click it.
-    m_replaceButton->setFocusPolicy(Qt::NoFocus);
-    m_replaceSkipButton->setFocusPolicy(Qt::NoFocus);
-    m_replaceRestButton->setFocusPolicy(Qt::NoFocus);
-    m_replaceAllButton->setFocusPolicy(Qt::NoFocus);
-    m_closeButton->setFocusPolicy(Qt::NoFocus);
+//    m_replaceButton->setFocusPolicy(Qt::NoFocus);
+//    m_replaceSkipButton->setFocusPolicy(Qt::NoFocus);
+//    m_replaceRestButton->setFocusPolicy(Qt::NoFocus);
+//    m_replaceAllButton->setFocusPolicy(Qt::NoFocus);
+//    m_closeButton->setFocusPolicy(Qt::NoFocus);
 
     connect(m_replaceLine, &LineBar::signal_sentText, this, &ReplaceBar::change, Qt::QueuedConnection);
 
@@ -150,7 +150,6 @@ void ReplaceBar::handleContentChanged()
 
 void ReplaceBar::handleReplaceNext()
 {
-    qDebug()<<m_replaceLine->lineEdit()->text()<<m_withLine->lineEdit()->text();
     if(!searched)
     {
         emit removeSearchKeyword();
@@ -193,6 +192,42 @@ bool ReplaceBar::focusNextPrevChild(bool)
     }
 
     return false;
+}
+
+void ReplaceBar::keyPressEvent(QKeyEvent *e)
+{
+    const QString &key = Utils::getKeyshortcut(e);
+    if(key=="Esc")
+    {
+        QWidget::hide();
+        emit sigReplacebarClose();
+    }
+    if(m_closeButton->hasFocus()&&key=="Tab")
+    {
+        m_replaceLine->lineEdit()->setFocus();
+    }
+    else{
+        DFloatingWidget::keyPressEvent(e);
+    }
+    if(key=="Enter")
+    {
+        if(m_replaceAllButton->hasFocus())
+        {
+            m_replaceAllButton->click();
+        }
+        if(m_replaceButton->hasFocus())
+        {
+            m_replaceButton->click();
+        }
+        if(m_replaceRestButton->hasFocus())
+        {
+            m_replaceRestButton->click();
+        }
+        if(m_replaceSkipButton->hasFocus())
+        {
+            m_replaceSkipButton->click();
+        }
+    }
 }
 
 void ReplaceBar::setMismatchAlert(bool isAlert)

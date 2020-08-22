@@ -39,8 +39,8 @@ void GenerateSettingTranslate()
     auto shortcuts_window_closeothertabsName = QObject::tr("Close other tabs");
     auto shortcuts_window_restoretabName = QObject::tr("Restore tab");
     auto shortcuts_window_openfileName = QObject::tr("Open file");
-    auto shortcuts_window_incrementfontsizeName = QObject::tr("Increase font size");
-    auto shortcuts_window_decrementfontsizeName = QObject::tr("Decrease font size");
+    auto shortcuts_window_incrementfontsizeName = QObject::tr("Increment font size");
+    auto shortcuts_window_decrementfontsizeName = QObject::tr("Decrement font size");
     auto shortcuts_window_resetfontsizeName = QObject::tr("Reset font size");
     auto shortcuts_window_help = QObject::tr("Help");
     auto shortcuts_window_togglefullscreenName = QObject::tr("Toggle fullscreen");
@@ -53,8 +53,8 @@ void GenerateSettingTranslate()
     auto shortcuts_window_displayshortcutsName = QObject::tr("Display shortcuts");
     auto shortcuts_window_printName = QObject::tr("Print");
     auto group_editorName = QObject::tr("Editor");
-    auto shortcuts_editor_indentlineName = QObject::tr("Increase indent");
-    auto shortcuts_editor_backindentlineName = QObject::tr("Decrease indent");
+    auto shortcuts_editor_indentlineName = QObject::tr("Increment indent");
+    auto shortcuts_editor_backindentlineName = QObject::tr("Decrement indent");
     auto shortcuts_editor_forwardcharName = QObject::tr("Forward character");
     auto shortcuts_editor_backwardcharName = QObject::tr("Backward character");
     auto shortcuts_editor_forwardwordName = QObject::tr("Forward word");
@@ -96,11 +96,11 @@ void GenerateSettingTranslate()
     auto shortcuts_editor_cutlinesName = QObject::tr("Cut line");
     auto shortcuts_editor_joinlinesName = QObject::tr("Merge lines");
     auto shortcuts_editor_togglereadonlymodeName = QObject::tr("Read-Only mode");
-    auto shortcuts_editor_togglecommentName = QObject::tr("Toggle comment");
+    auto shortcuts_editor_togglecommentName = QObject::tr("Add comment");
     auto shortcuts_editor_removecommentName = QObject::tr("Remove comment");
     auto shortcuts_editor_undoName = QObject::tr("Undo");
     auto shortcuts_editor_redoName = QObject::tr("Redo");
-    auto shortcuts_editor_switchbookmarkName = QObject::tr("Switch bookmark");
+    auto shortcuts_editor_switchbookmarkName = QObject::tr("Add/Remove bookmark");
     auto shortcuts_editor_movetoprebookmarkName = QObject::tr("Move to previous bookmark");
     auto shortcuts_editor_movetonextbookmarkName = QObject::tr("Move to next bookmark");
     auto group_advanceName = QObject::tr("Advanced");
@@ -108,8 +108,9 @@ void GenerateSettingTranslate()
     auto advance_window_windowstateName = QObject::tr("Window size");
     auto advance_editor_tabspacenumberName = QObject::tr("Tab width");
 
-    auto base_font_wordwrapText = QObject::tr("Word Wrap");
-    auto base_font_codeflod = QObject::tr("Code Flod Flag");
-    auto base_font_showLineNumber = QObject::tr("Show Line Number");
-    auto shortcuts_editor_markName = QObject::tr("Color Mark");
+    auto base_font_wordwrapText = QObject::tr("Word wrap");
+    auto base_font_codeflod = QObject::tr("Code folding flag");
+    auto base_font_showLineNumber = QObject::tr("Show line numbers");
+    auto showblankcharacter = QObject::tr("Show blank characters");
+    auto shortcuts_editor_markName = QObject::tr("Color mark");
 }

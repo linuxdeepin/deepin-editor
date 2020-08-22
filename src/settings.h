@@ -25,6 +25,8 @@
 
 #include "dsettingsdialog.h"
 #include <qsettingbackend.h>
+#include <DKeySequenceEdit>
+#include <DDialog>
 #include <QSettings>
 #include <QPointer>
 
@@ -43,6 +45,10 @@ public:
     void dtkThemeWorkaround(QWidget *parent, const QString &theme);
     //static QWidget *createFontComBoBoxHandle(QObject *obj);
     static QPair<QWidget*, QWidget*> createFontComBoBoxHandle(QObject *obj);
+    static QPair<QWidget*, QWidget*> createKeySequenceEditHandle(QObject *obj);
+    static Settings* instance();
+
+    void setSettingDialog(DSettingsDialog *settingsDialog);
 
     int defaultFontSize = 12;
     int maxFontSize = 50;
@@ -56,18 +62,42 @@ signals:
     void adjustTabSpaceNumber(int number);
     void adjustWordWrap(bool enable);
     void showCodeFlodFlag(bool enable);
+    void showBlankCharacter(bool enable);
     void themeChanged(const QString &theme);
     void setLineNumberShow(bool bIsShow);
+    void changeWindowSize(QString mode);
 
 private:
     void updateAllKeysWithKeymap(QString keymap);
     void copyCustomizeKeysFromKeymap(QString keymap);
+    bool checkShortcutValid(const QString &Name, QString Key, QString &Reason, bool &bIsConflicts);
+    bool isShortcutConflict(const QString &Name, const QString &Key);
+    DDialog *createDialog(const QString &title, const QString &content, const bool &bIsConflicts);
 
 private:
     Dtk::Core::QSettingBackend *m_backend;
 
     QString m_configPath;
     bool m_userChangeKey = false;
+    DSettingsDialog *m_pSettingsDialog;
+    static Settings* m_setting;
+    DKeySequenceEdit *m_shortCutLineEdit;
+    DDialog *m_pDialog;
+};
+
+class KeySequenceEdit : public DKeySequenceEdit
+{
+public:
+    KeySequenceEdit(DTK_CORE_NAMESPACE::DSettingsOption *opt, QWidget *parent = nullptr): DKeySequenceEdit(parent)
+    {
+        m_poption = opt;
+    }
+    DTK_CORE_NAMESPACE::DSettingsOption *option()
+    {
+        return m_poption;
+    }
+private:
+    DTK_CORE_NAMESPACE::DSettingsOption *m_poption = nullptr;
 };
 
 #endif // SETTINGS_H

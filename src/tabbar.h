@@ -22,10 +22,11 @@
 
 #include <DTabBar>
 #include <DMenu>
-#include<QMouseEvent>
+#include <QMouseEvent>
 
 DWIDGET_USE_NAMESPACE
 
+class EditWrapper;
 class Tabbar : public DTabBar
 {
     Q_OBJECT
@@ -71,7 +72,6 @@ protected:
     void insertFromMimeDataOnDragEnter(int index, const QMimeData *source);
     void insertFromMimeData(int index, const QMimeData *source);
     bool canInsertFromMimeData(int index, const QMimeData *source) const;
-    void handleDragActionChanged(Qt::DropAction action);
     bool eventFilter(QObject *, QEvent *event);
 protected:
     void mousePressEvent(QMouseEvent *e);
@@ -81,10 +81,12 @@ private:
     void handleTabReleased(int index);
     void handleTabIsRemoved(int index);
     void handleTabDroped(int index, Qt::DropAction, QObject *target);
-    QStringList readTabPaths() const;
-    void writeTabPaths();
+    void handleDragActionChanged(Qt::DropAction action);
+    void onTabDrapStart();
+
 private:
     QStringList m_tabPaths;
+    QStringList m_listOldTabPath;
     QString m_backgroundStartColor;
     QString m_backgroundEndColor;
     QString m_dndStartColor;
@@ -98,6 +100,11 @@ private:
     DMenu   *m_rightMenu;
     DMenu   *m_moreWaysCloseMenu;
     int m_rightClickTab;
+    bool m_bIsDragEnter;
+    int m_nDragIndex;
+    QString m_qstrDragName;
+    QString m_qstrDragPath;
+    EditWrapper *m_pWrapper = nullptr;
 };
 
 #endif

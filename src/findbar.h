@@ -77,6 +77,8 @@ public slots:
 
 protected:
     void hideEvent(QHideEvent *event) override;
+    bool focusNextPrevChild(bool next) override;
+    void keyPressEvent(QKeyEvent *e) override;
 
 private:
     QPushButton *m_findNextButton;

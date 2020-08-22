@@ -81,11 +81,10 @@ public:
     bool getTextChangeFlag();
     void setTextChangeFlag(bool bFlag);
     void setLineNumberShow(bool bIsShow,bool bIsFirstShow = false);
-
+    void setShowBlankCharacter(bool ok);
 signals:
     void requestSaveAs();
     void sigCodecSaveFile(const QString &strOldFilePath, const QString &strNewFilePath);
-    void signal_clearBlack();
 
 public slots:
     void onFileClosed();

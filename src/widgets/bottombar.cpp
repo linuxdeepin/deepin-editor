@@ -49,6 +49,7 @@ BottomBar::BottomBar(QWidget *parent)
     m_encodeMenu->setFont(font);
     m_highlightMenu->setFont(font);
 
+
     DFontSizeManager::instance()->bind(m_positionLabel, DFontSizeManager::T9);
     DFontSizeManager::instance()->bind(m_charCountLabel, DFontSizeManager::T9);
     DFontSizeManager::instance()->bind(m_cursorStatus, DFontSizeManager::T9);
@@ -84,9 +85,12 @@ BottomBar::BottomBar(QWidget *parent)
     layout->addWidget(pVerticalLine2);
     layout->addWidget(m_highlightMenu);
 
+    m_encodeMenu->setFixedHeight(30);
     setFixedHeight(32);
 
     connect(m_encodeMenu, &DDropdownMenu::currentTextChanged, this, &BottomBar::handleEncodeChanged);
+
+    setTabOrder(m_encodeMenu,m_highlightMenu);
 }
 
 BottomBar::~BottomBar()
@@ -107,6 +111,7 @@ void BottomBar::updateWordCount(int charactorCount)
 void BottomBar::setEncodeName(const QString &name)
 {
     m_encodeMenu->setCurrentText(name);
+    m_wrapper->textEditor()->setTextCode(name);
 }
 
 void BottomBar::setCursorStatus(const QString &text)
@@ -167,6 +172,7 @@ void BottomBar::updateSize(int size)
 void BottomBar::handleEncodeChanged(const QString &name)
 {
     m_wrapper->setTextCodec(name.toLocal8Bit(), true);
+    m_wrapper->textEditor()->setTextCode(name.toLocal8Bit());
 }
 
 void BottomBar::paintEvent(QPaintEvent *)

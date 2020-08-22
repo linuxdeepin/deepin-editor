@@ -38,6 +38,8 @@
 #include <QPropertyAnimation>
 #include <QFont>
 #include <DApplicationHelper>
+#include "widgets/ColorSelectWdg.h"
+
 
 namespace KSyntaxHighlighting {
     class SyntaxHighlighter;
@@ -198,13 +200,13 @@ public:
     void hideRightMenu();
 
     void clearBlack();
-
     void flodOrUnflodAllLevel(bool isFlod);
     void flodOrUnflodCurrentLevel(bool isFlod);
     void getHideRowContent(int iLine);
     bool isNeedShowFoldIcon(QTextBlock block);
     int  getHighLightRowContentLineNum(int iLine);
     int  getLinePosByLineNum(int iLine);
+    bool ifHasHighlight();
 
     //书签功能相关
     void bookMarkAreaPaintEvent(QPaintEvent *event);
@@ -215,9 +217,9 @@ public:
     void checkBookmarkLineMove(int from, int charsRemoved, int charsAdded);
     void setIsFileOpen();
     void setTextFinished();
-    QStringList readHistoryRecord();
+    QStringList readHistoryRecord(QString key);
     QStringList readHistoryRecordofBookmark();
-    QStringList readHistoryRecordofFilePath();
+    QStringList readHistoryRecordofFilePath(QString key);
     void writeHistoryRecord();
 
     void isMarkCurrentLine(bool isMark, QString strColor = "");
@@ -226,6 +228,10 @@ public:
     void markSelectWord();
     void updateMark(int from, int charsRemoved, int charsAdded);
     void setCursorStart(int _);
+
+    void setTextCode(QString encode);
+    void writeEncodeHistoryRecord();
+    QStringList readEncodeHistoryRecord();
 
 public:
     bool bIsSetLineNumberWidth = true;
@@ -240,11 +246,11 @@ signals:
     void cursorModeChanged(CursorMode mode);
     void hightlightChanged(const QString &name);
     void popupNotify(QString notify);
-    void click();
     void pressEsc();
     void signal_readingPath();
 
     void signal_clearBlack();
+    void signal_setTitleFocus();
 
 
 
@@ -307,7 +313,7 @@ private:
     void cursorPositionChanged();
     void updateHighlightBrackets(const QChar &openChar, const QChar &closeChar);
     int getFirstVisibleBlockId() const;
-    void getNeedControlLine(int line, bool isVisable, int iInitnum = 0, bool isFirstLine = true);
+    void getNeedControlLine(int line, bool isVisable);
 
 private:
     EditWrapper *m_wrapper;
@@ -373,20 +379,29 @@ private:
  //    QAction *m_colorMarkAction;
     DMenu *m_collapseExpandMenu;
     DMenu *m_colorMarkMenu;
-    DMenu *m_markCurrentLine;
-    DMenu *m_markAllLine;
+//    DMenu *m_markCurrentLine;
+//    DMenu *m_markAllLine;
     QAction *m_cancleMarkCurrentLine;
     QAction *m_cancleMarkAllLine;
     QAction *m_cancleLastMark;
-    QAction *m_actionStyleOne;
-    QAction *m_actionStyleTwo;
-    QAction *m_actionStyleThree;
-    QAction *m_actionStyleFour;
 
-    QAction *m_actionAllStyleOne;
-    QAction *m_actionAllStyleTwo;
-    QAction *m_actionAllStyleThree;
-    QAction *m_actionAllStyleFour;
+    //颜色选择控件替换下面action 1 2 3 4
+    QWidgetAction *m_actionColorStyles;
+    QAction *m_markCurrentAct;
+//    QAction *m_actionStyleOne;
+//    QAction *m_actionStyleTwo;
+//    QAction *m_actionStyleThree;
+//    QAction *m_actionStyleFour;
+
+     //颜色选择控件替换下面action 1 2 3 4
+    QWidgetAction *m_actionAllColorStyles;
+    QAction *m_markAllAct;
+//    QAction *m_actionAllStyleOne;
+//    QAction *m_actionAllStyleTwo;
+//    QAction *m_actionAllStyleThree;
+//    QAction *m_actionAllStyleFour;
+
+
  //    QAction *m_bookmarkAction;
      QAction *m_columnEditACtion;
      QAction *m_addComment;
@@ -470,7 +485,8 @@ private:
     int m_nSelectStart;
     int m_nSelectEnd;
 
-    int m_cursorStart=-1;    
+    int m_cursorStart=-1;
+    QString m_textEncode;
 };
 
 #endif

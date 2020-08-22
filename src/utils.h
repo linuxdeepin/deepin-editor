@@ -60,4 +60,13 @@ public:
     static void toast(const QString &message, QWidget* parent = nullptr);
     static const QStringList getEncodeList();
     static QPixmap renderSVG(const QString &filePath, const QSize &size);
+    static QList<QColor> getHiglightColorList();
+    /*******************************************************************************
+     1. @函数:    clearChildrenFocus
+     2. @作者:    n014361 王培利
+     3. @日期:    2020-05-08
+     4. @说明:    清空控件内部所有子控件的焦点获取
+            安全考虑，不要全局使用．仅在个别控件中使用
+    *******************************************************************************/
+    static void clearChildrenFocus(QObject *objParent);
 };

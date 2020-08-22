@@ -528,6 +528,9 @@ bool Utils::isMimeTypeSupport(const QString &filepath)
         return true;
     }
 
+    if(filepath.endsWith("pub")){
+        return true;
+    }
     // Please check full mime type list from: https://www.freeformatter.com/mime-types-list.html
     QStringList textMimeTypes;
     textMimeTypes << "application/cmd"
@@ -625,4 +628,42 @@ QPixmap Utils::renderSVG(const QString &filePath, const QSize &size)
     }
 
     return pixmap;
+}
+
+QList<QColor> Utils::getHiglightColorList()
+{
+    QList<QColor> listColor;
+    listColor.append(QColor("#FFA503"));
+    listColor.append(QColor("#FF1C49"));
+    listColor.append(QColor("#9023FC"));
+    listColor.append(QColor("#3468FF"));
+    listColor.append(QColor("#00C7E1"));
+    listColor.append(QColor("#05EA6B"));
+    listColor.append(QColor("#FEF144"));
+    listColor.append(QColor("#D5D5D1"));
+    return listColor;
+}
+
+void Utils::clearChildrenFocus(QObject *objParent)
+{
+    // 可以获取焦点的控件名称列表
+    QStringList foucswidgetlist;
+    //foucswidgetlist << "QLineEdit" << TERM_WIDGET_NAME;
+
+    //qDebug() << "checkChildrenFocus start" << objParent->children().size();
+    for (QObject *obj : objParent->children()) {
+        if (!obj->isWidgetType()) {
+            continue;
+        }
+        QWidget *widget = static_cast<QWidget *>(obj);
+        if (Qt::NoFocus != widget->focusPolicy()) {
+            //qDebug() << widget << widget->focusPolicy() << widget->metaObject()->className();
+            if (!foucswidgetlist.contains(widget->metaObject()->className())) {
+                widget->setFocusPolicy(Qt::NoFocus);
+            }
+        }
+        clearChildrenFocus(obj);
+    }
+
+    //qDebug() << "checkChildrenFocus over" << objParent->children().size();
 }
