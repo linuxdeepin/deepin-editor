@@ -18,7 +18,6 @@ EditorApplication::EditorApplication(int &argc, char *argv[]) : DApplication(arg
     setProductName(DApplication::translate("MainWindow", "Text Editor"));
     setApplicationDescription(DApplication::translate("MainWindow", descriptionText) + "\n");
     setApplicationAcknowledgementPage(acknowledgementLink);
-
     setQuitOnLastWindowClosed(false);
 }
 

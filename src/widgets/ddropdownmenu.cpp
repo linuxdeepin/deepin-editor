@@ -49,16 +49,16 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     m_arrowPixmap = arrowPixmap;
     m_pToolButton->setIcon(createIcon());
 
-     //获取文本颜色
-     QString themePath = Settings::instance()->settings->option("advance.editor.theme")->value().toString();
-     QVariantMap jsonMap = Utils::getThemeMapFromPath(themePath);
-     m_textColor = jsonMap["text-styles"].toMap()["Normal"].toMap()["text-color"].toString();
-     m_backgroundColor = jsonMap["editor-colors"].toMap()["background-color"].toString();
+    //获取文本颜色
+    QString themePath = Settings::instance()->settings->option("advance.editor.theme")->value().toString();
+    QVariantMap jsonMap = Utils::getThemeMapFromPath(themePath);
+    m_textColor = jsonMap["text-styles"].toMap()["Normal"].toMap()["text-color"].toString();
+    m_backgroundColor = jsonMap["editor-colors"].toMap()["background-color"].toString();
 
-     //设置字体
-     int fontsize =DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T9);
-     m_font.setPixelSize(fontsize);
-     m_font.setFamily("SourceHanSansSC-Normal");
+    //设置字体
+    int fontsize =DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T9);
+    m_font.setPixelSize(fontsize);
+    m_font.setFamily("SourceHanSansSC-Normal");
 
 
      //添加布局
