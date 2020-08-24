@@ -39,6 +39,7 @@
 #include <QFont>
 #include <DApplicationHelper>
 #include<QtDBus>
+#include<QGestureEvent>
 #include "widgets/ColorSelectWdg.h"
 
 
@@ -298,6 +299,8 @@ public slots:
     void fingerZoom(QString name, QString direction, int fingers);
 
 protected:
+    bool event(QEvent* evt) override;   //触摸屏event事件
+
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dragMoveEvent(QDragMoveEvent *event) override;
     void dropEvent(QDropEvent *event) override;
@@ -317,6 +320,13 @@ private:
     int getFirstVisibleBlockId() const;
     void getNeedControlLine(int line, bool isVisable);
 
+    //触摸屏功能函数
+    bool gestureEvent(QGestureEvent *event);
+    void tapGestureTriggered(QTapGesture*);
+    void tapAndHoldGestureTriggered(QTapAndHoldGesture*);
+    void panTriggered(QPanGesture*);
+    void pinchTriggered(QPinchGesture*);
+    void swipeTriggered(QSwipeGesture*);
 private:
     EditWrapper *m_wrapper;
     QPropertyAnimation *m_scrollAnimation;
@@ -381,8 +391,6 @@ private:
  //    QAction *m_colorMarkAction;
     DMenu *m_collapseExpandMenu;
     DMenu *m_colorMarkMenu;
-//    DMenu *m_markCurrentLine;
-//    DMenu *m_markAllLine;
     QAction *m_cancleMarkCurrentLine;
     QAction *m_cancleMarkAllLine;
     QAction *m_cancleLastMark;
@@ -390,24 +398,14 @@ private:
     //颜色选择控件替换下面action 1 2 3 4
     QWidgetAction *m_actionColorStyles;
     QAction *m_markCurrentAct;
-//    QAction *m_actionStyleOne;
-//    QAction *m_actionStyleTwo;
-//    QAction *m_actionStyleThree;
-//    QAction *m_actionStyleFour;
 
      //颜色选择控件替换下面action 1 2 3 4
     QWidgetAction *m_actionAllColorStyles;
     QAction *m_markAllAct;
-//    QAction *m_actionAllStyleOne;
-//    QAction *m_actionAllStyleTwo;
-//    QAction *m_actionAllStyleThree;
-//    QAction *m_actionAllStyleFour;
 
-
- //    QAction *m_bookmarkAction;
-     QAction *m_columnEditACtion;
-     QAction *m_addComment;
-     QAction *m_cancelComment;
+    QAction *m_columnEditACtion;
+    QAction *m_addComment;
+    QAction *m_cancelComment;
 
     DMenu *m_convertCaseMenu;
     QAction *m_upcaseAction;
@@ -489,6 +487,22 @@ private:
 
     int m_cursorStart=-1;
     QString m_textEncode;
-};
 
+    //触摸屏
+    enum GestureAction{
+        GA_null,
+        GA_tap,
+        GA_slide,
+        GA_pinch,
+        GA_hold,
+        GA_pan,
+        GA_swipe
+    };
+
+    qreal m_scaleFactor = 1;
+    qreal m_currentStepScaleFactor = 1;
+    qint64 m_tapBeginTime = 0;
+    Qt::GestureState m_tapStatus = Qt::NoGesture;
+    GestureAction m_gestureAction = GA_null;
+};
 #endif

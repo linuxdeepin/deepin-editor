@@ -52,6 +52,7 @@
 #include <QTextBlock>
 #include <QMimeData>
 #include <QTimer>
+#include <QGesture>
 #include <DSysInfo>
 
 #include <private/qguiapplication_p.h>
@@ -114,6 +115,12 @@ TextEdit::TextEdit(QWidget *parent)
     setFocusPolicy(Qt::StrongFocus);
     setMouseTracking(true);
     setAcceptRichText(false);
+
+    grabGesture(Qt::TapGesture);
+    grabGesture(Qt::TapAndHoldGesture);
+    grabGesture(Qt::SwipeGesture);
+    grabGesture(Qt::PanGesture);
+    grabGesture(Qt::PinchGesture);
 
     // Init widgets.
     connect(this->verticalScrollBar(), &QScrollBar::valueChanged, this, &TextEdit::updateLineNumber);
@@ -2287,6 +2294,164 @@ void TextEdit::getNeedControlLine(int line, bool isVisable)
           viewport()->adjustSize();
        }
    }
+}
+
+bool TextEdit::event(QEvent *event)
+{
+    if (event->type() == QEvent::Gesture)
+        return gestureEvent(static_cast<QGestureEvent*>(event));
+    return QTextEdit::event(event);
+}
+
+bool TextEdit::gestureEvent(QGestureEvent *event)
+{
+    if (QGesture *tap = event->gesture(Qt::TapGesture))
+        tapGestureTriggered(static_cast<QTapGesture *>(tap));
+    if (QGesture *tapAndHold = event->gesture(Qt::TapAndHoldGesture))
+        tapAndHoldGestureTriggered(static_cast<QTapAndHoldGesture *>(tapAndHold));
+      if (QGesture *pan = event->gesture(Qt::PanGesture))
+        panTriggered(static_cast<QPanGesture *>(pan));
+    if (QGesture *pinch = event->gesture(Qt::PinchGesture))
+        pinchTriggered(static_cast<QPinchGesture *>(pinch));
+   // qDebug()<<event<<"this is for test";
+//    if (QGesture *swipe = event->gesture(Qt::SwipeGesture))
+//      //  swipeTriggered(static_cast<QSwipeGesture *>(swipe));
+
+    return true;
+}
+
+void TextEdit::tapGestureTriggered(QTapGesture *tap)
+{
+    //单指点击函数
+    switch (tap->state()) {
+    case Qt::GestureStarted:
+    {
+        m_gestureAction = GA_tap;
+        m_tapBeginTime = QDateTime::currentDateTime().toMSecsSinceEpoch();
+        break;
+    }
+    case Qt::GestureUpdated:
+    {
+        break;
+    }
+    case Qt::GestureCanceled:
+    {
+        //根据时间长短区分轻触滑动
+//        qint64 timeSpace = QDateTime::currentDateTime().toMSecsSinceEpoch() - m_tapBeginTime;
+//        if(timeSpace < TAP_MOVE_DELAY || m_slideContinue){
+//            m_slideContinue = false;
+//            m_gestureAction = GA_slide;
+//            qDebug() << "slide start" << timeSpace;
+//        } else {
+//            qDebug() << "null start" << timeSpace;
+//            m_gestureAction = GA_null;
+//        }
+        break;
+    }
+    case Qt::GestureFinished:
+    {
+        m_gestureAction = GA_null;
+        break;
+    }
+    default:
+    {
+        Q_ASSERT(false);
+        break;
+    }
+    }
+}
+
+void TextEdit::tapAndHoldGestureTriggered(QTapAndHoldGesture *tapAndHold)
+{
+    //单指长按
+    switch (tapAndHold->state()) {
+    case Qt::GestureStarted:
+        m_gestureAction = GA_hold;
+        break;
+    case Qt::GestureUpdated:
+        Q_ASSERT(false);
+        break;
+    case Qt::GestureCanceled:
+        Q_ASSERT(false);
+        break;
+    case Qt::GestureFinished:
+        m_gestureAction = GA_null;
+        break;
+    default:
+        Q_ASSERT(false);
+        break;
+    }
+}
+
+void TextEdit::panTriggered(QPanGesture *pan)
+{
+    //两指平移
+}
+
+void TextEdit::pinchTriggered(QPinchGesture *pinch)
+{
+    //两指拉伸   -----缩放or放大
+    switch (pinch->state()) {
+    case Qt::GestureStarted:
+    {
+        m_gestureAction = GA_pinch;
+        if(static_cast<int>(m_scaleFactor) != m_fontSize){
+            m_scaleFactor =m_fontSize;
+        }
+        break;
+    }
+    case Qt::GestureUpdated:
+    {
+        QPinchGesture::ChangeFlags changeFlags = pinch->changeFlags();
+        if (changeFlags & QPinchGesture::ScaleFactorChanged) {
+            m_currentStepScaleFactor = pinch->totalScaleFactor();
+        }
+        break;
+    }
+    case Qt::GestureCanceled:
+    {
+        Q_ASSERT(false);
+        break;
+    }
+    case Qt::GestureFinished:
+    {
+        m_gestureAction = GA_null;
+        m_scaleFactor *= m_currentStepScaleFactor;
+        m_currentStepScaleFactor = 1;
+        break;
+    }
+    default:
+    {
+        Q_ASSERT(false);
+        break;
+    }
+    }//switch
+
+    //QFont font = getVTFont();
+    int size = static_cast<int>(m_scaleFactor*m_currentStepScaleFactor);
+    setFontSize(size);
+}
+
+void TextEdit::swipeTriggered(QSwipeGesture *swipe)
+{
+    //三指滑动
+    switch (swipe->state()) {
+    case Qt::GestureStarted:
+        m_gestureAction = GA_swipe;
+        break;
+    case Qt::GestureUpdated:
+        break;
+    case Qt::GestureCanceled:
+        m_gestureAction = GA_null;
+        break;
+    case Qt::GestureFinished:
+        Q_ASSERT(false);
+        break;
+    default:
+        Q_ASSERT(false);
+        break;
+    }
+
 }
 
 void TextEdit::setThemeWithPath(const QString &path)
@@ -4625,8 +4790,6 @@ void TextEdit::onSelectionArea()
 
 void TextEdit::fingerZoom(QString name, QString direction, int fingers)
 {
-        qDebug() << __FUNCTION__;
-        qDebug() << name << direction << fingers;
         // 当前窗口被激活,且有焦点
         if (hasFocus()) {
             if (name == "pinch" && fingers == 2) {
