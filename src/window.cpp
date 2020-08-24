@@ -26,7 +26,6 @@
 #include "dthememanager.h"
 #include "dtoast.h"
 #include "utils.h"
-#include"startmanager.h"
 
 #include <DSettingsWidgetFactory>
 #include <DSettingsGroup>
@@ -76,8 +75,6 @@ Window::Window(DMainWindow *parent)
     // Apply qss theme.
     //Utils::applyQss(this, "main.qss");
     loadTheme(m_themePath);
-
-    connect(StartManager::instance(), &StartManager::touchPadEventSignal, this, &Window::fingerZoom);
 
     // Init settings.
     connect(Settings::instance(), &Settings::adjustFont, this, &Window::updateFont);
@@ -1475,24 +1472,6 @@ void Window::displayShortcuts()
     shortcutViewProcess->startDetached("deepin-shortcut-viewer", shortcutString);
 
     connect(shortcutViewProcess, SIGNAL(finished(int)), shortcutViewProcess, SLOT(deleteLater()));
-}
-
-void Window::fingerZoom(QString name, QString direction, int fingers)
-{
-    qDebug() << __FUNCTION__;
-    qDebug() << name << direction << fingers;
-    // 当前窗口被激活,且有焦点
-    if (isActiveWindow() && hasFocus()) {
-        if (name == "pinch" && fingers == 2) {
-            if (direction == "in") {
-                // 捏合 in是手指捏合的方向 向内缩小
-                currentWrapper()->textEditor()->zoomOut();  // zoom out 缩小
-            } else if (direction == "out") {
-                // 捏合 out是手指捏合的方向 向外放大
-                currentWrapper()->textEditor()->zoomIn();   // zoom in 放大
-            }
-        }
-    }
 }
 
 void Window::addBlankTab()

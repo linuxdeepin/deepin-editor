@@ -131,6 +131,11 @@ TextEdit::TextEdit(QWidget *parent)
     connect(document(), &QTextDocument::contentsChange, this, &TextEdit::updateMark);
     connect(document(), &QTextDocument::contentsChange, this, &TextEdit::checkBookmarkLineMove);
 
+    QDBusConnection dbus = QDBusConnection::sessionBus();
+    dbus.systemBus().connect("com.deepin.daemon.Gesture",
+                                               "/com/deepin/daemon/Gesture", "com.deepin.daemon.Gesture",
+                                               "Event",
+                                               this, SLOT(fingerZoom(QString, QString, int)));
     m_foldCodeShow = new ShowFlodCodeWidget(this);
     m_foldCodeShow->setVisible(false);
 
@@ -4616,6 +4621,24 @@ void TextEdit::onSelectionArea()
     } else {
         m_nSelectEndLine = -1;
     }
+}
+
+void TextEdit::fingerZoom(QString name, QString direction, int fingers)
+{
+        qDebug() << __FUNCTION__;
+        qDebug() << name << direction << fingers;
+        // 当前窗口被激活,且有焦点
+        if (hasFocus()) {
+            if (name == "pinch" && fingers == 2) {
+                if (direction == "in") {
+                    // 捏合 in是手指捏合的方向 向内缩小
+                    zoomOut();  // zoom out 缩小
+                } else if (direction == "out") {
+                    // 捏合 out是手指捏合的方向 向外放大
+                    zoomIn();   // zoom in 放大
+                }
+            }
+        }
 }
 
 void TextEdit::dragEnterEvent(QDragEnterEvent *event)

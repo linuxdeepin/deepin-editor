@@ -38,6 +38,7 @@
 #include <QPropertyAnimation>
 #include <QFont>
 #include <DApplicationHelper>
+#include<QtDBus>
 #include "widgets/ColorSelectWdg.h"
 
 
@@ -294,6 +295,7 @@ public slots:
                               ,QTextEdit::ExtraSelection selection,QString strColor
                               ,QList<QTextEdit::ExtraSelection> *listSelections);
     void onSelectionArea();
+    void fingerZoom(QString name, QString direction, int fingers);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;

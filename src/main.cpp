@@ -20,7 +20,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "startmanager.h"
 #include "environments.h"
 #include "utils.h"
 #include "window.h"
@@ -91,7 +90,6 @@ int main(int argc, char *argv[])
 
     // Start.
     QDBusConnection dbus = QDBusConnection::sessionBus();
-
     // Start editor process if not found any editor use DBus.
     if (dbus.registerService("com.deepin.Editor")) {
         StartManager *startManager = StartManager::instance();
@@ -103,7 +101,6 @@ int main(int argc, char *argv[])
         }
 
         dbus.registerObject("/com/deepin/Editor", startManager, QDBusConnection::ExportScriptableSlots);
-        dbus.systemBus().connect("com.deepin.daemon.Gesture", "/com/deepin/daemon/Gesture", "com.deepin.daemon.Gesture", "Event", StartManager::instance(), SIGNAL(touchPadEventSignal(QString, QString, int)));
 
         return app.exec();
     }
