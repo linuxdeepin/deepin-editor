@@ -52,11 +52,13 @@
 #include <QTextBlock>
 #include <QMimeData>
 #include <QTimer>
+#include <QStyleHints>
 #include <QGesture>
 #include <DSysInfo>
 
 #include <private/qguiapplication_p.h>
 #include <qpa/qplatformtheme.h>
+#include <QStyleFactory>
 
 #define STYLE_COLOR_1 "#FFA503"
 #define STYLE_COLOR_2 "#FF1C49"
@@ -115,6 +117,11 @@ TextEdit::TextEdit(QWidget *parent)
     setFocusPolicy(Qt::StrongFocus);
     setMouseTracking(true);
     setAcceptRichText(false);
+
+    m_timer = new QTimer(this);
+    connect(m_timer,SIGNAL(timeout()),this,SLOT(onTimeout()));
+    m_timer->setInterval(QGuiApplication::styleHints()->cursorFlashTime()/2);
+    m_timer->start();
 
     grabGesture(Qt::TapGesture);
     grabGesture(Qt::TapAndHoldGesture);
@@ -4111,12 +4118,70 @@ void TextEdit::markSelectWord()
 
 void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
 {
-//    Q_UNUSED(charsRemoved);
+    if (m_bIsAltMod) {
+        QTextCursor cur = textCursor();
+        QString insertChar,removeChar;
+        int nIncrement = 0;
 
+        if (m_bIsInputMethod) {
+            QRect rect = fontMetrics().boundingRect(m_qstrCommitString);
+            if (cursorRect().height() < rect.height()) {
+                nIncrement += rect.height() - cursorRect().height();
+            }
+            QPoint point;
+            //qDebug() << "cursorForPosition" << rect.height() << cursorRect().height();
+            for (int i = 0; i < m_listStartPoint.count(); i++) {
+                    point = QPoint(m_listStartPoint.value(i).x(),m_listStartPoint.value(i).y() + nIncrement*(i+1));
+
+                cur = cursorForPosition(point);
+                qDebug() << "cursorForPosition" << cur.position() << m_listStartPoint.value(i) << point;
+                if (cur.position() != textCursor().position() - m_qstrCommitString.count() && cur.position() != textCursor().position()) {
+                    cur.insertText(m_qstrCommitString);
+                }
+            }
+
+            m_mouseMoveStart = QPoint(cursorRect(textCursor()).x(),m_listStartPoint.first().y() + nIncrement);
+            m_mouseMoveEnd = QPoint(cursorRect(textCursor()).x(),m_listStartPoint.last().y() + nIncrement*m_listStartPoint.count());
+        } else {
+            if (charsAdded > 0) {
+                cur.setPosition(from, QTextCursor::MoveAnchor);
+                cur.setPosition(from + charsAdded, QTextCursor::KeepAnchor);
+                insertChar = cur.selection().toPlainText();
+
+                for (int i = 0; i < m_listStartPoint.count(); i++) {
+                    cur = cursorForPosition(m_listStartPoint.value(i));
+                    if (cur.position() != textCursor().position() - charsAdded && cur.position() != textCursor().position()) {
+                        cur.insertText(insertChar);
+                    }
+                }
+
+                m_mouseMoveStart = QPoint(cursorRect(textCursor()).x(),m_listStartPoint.first().y());
+                m_mouseMoveEnd = QPoint(cursorRect(textCursor()).x(),m_listStartPoint.last().y());
+            }
+
+            if (charsRemoved > 0) {
+
+                QPoint point;
+                for (int i = 0;i < m_listStartPoint.count();i++) {
+                    point = QPoint(m_listStartPoint.value(i).x(),m_listStartPoint.value(i).y() - nIncrement*(i+1));
+                    cur = cursorForPosition(point);
+                    cur.setPosition(cur.position(), QTextCursor::MoveAnchor);
+                    cur.setPosition(cur.position() - charsRemoved, QTextCursor::KeepAnchor);
+                    removeChar = cur.selection().toPlainText();
+                    if (cur.position() != textCursor().position() - removeChar.count()) {
+                        //cur.removeSelectedText();
+                    }
+                }
+                if (!m_listStartPoint.isEmpty()) {
+                    m_mouseMoveStart = QPoint(cursorRect(textCursor()).x(),m_listStartPoint.first().y() - nIncrement);
+                    m_mouseMoveEnd = QPoint(cursorRect(textCursor()).x(),m_listStartPoint.last().y() - nIncrement*m_listStartPoint.count());
+                }
+            }
+        }
+        m_bIsInputMethod = false;
+        return;
+    }
     if (m_readOnlyMode) {
-//         if(charsAdded > 0) {
-//             textCursor().deletePreviousChar();
-//
         undo();
         return;
     }
@@ -4804,6 +4869,12 @@ void TextEdit::fingerZoom(QString name, QString direction, int fingers)
         }
 }
 
+void TextEdit::onTimeout()
+{
+    m_bIsTimeout = true;
+    update();
+}
+
 void TextEdit::dragEnterEvent(QDragEnterEvent *event)
 {
     QTextEdit::dragEnterEvent(event);
@@ -4849,6 +4920,7 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
 
 void TextEdit::mousePressEvent(QMouseEvent *e)
 {
+    m_mouseMoveStart = e->pos();
     if (e->source() == Qt::MouseEventSynthesizedByQt) {
         m_lastTouchBeginPos = e->pos();
 
@@ -4878,6 +4950,27 @@ void TextEdit::mousePressEvent(QMouseEvent *e)
     }
 
     QTextEdit::mousePressEvent(e);
+    if (e->modifiers() == Qt::AltModifier) {
+        m_bIsAltMod = true;
+        setCursorWidth(0);
+        m_bIsMousePress = true;
+        qDebug() << "m_mouseMoveStart" << cursorRect(textCursor()).width();
+    } else {
+        if (m_bIsAltMod) {
+            m_bIsAltMod = false;
+            setCursorWidth(1);
+            m_altModSelections.clear();
+        }
+    }
+}
+
+void TextEdit::mouseReleaseEvent(QMouseEvent *e)
+{
+    QTextEdit::mouseReleaseEvent(e);
+
+    if (e->modifiers() == Qt::AltModifier) {
+        m_bIsMousePress = false;
+    }
 }
 
 void TextEdit::mouseMoveEvent(QMouseEvent *e)
@@ -4912,6 +5005,45 @@ void TextEdit::mouseMoveEvent(QMouseEvent *e)
     }
 
     QTextEdit::mouseMoveEvent(e);
+
+    if (e->modifiers() == Qt::AltModifier && m_bIsMousePress) {
+        QList<ExtraSelection> listSelection;
+        ExtraSelection selection;
+        QTextCharFormat format;
+        QPalette palette;
+        QTextCursor cursor = textCursor();
+        format.setBackground(QColor(SELECT_HIGHLIGHT_COLOR));
+        format.setForeground(palette.highlightedText());
+        cursor.clearSelection();
+        //setTextCursor(cursor);
+        setTextCursor(cursor);
+        int startLine = getLineFromPoint(m_mouseMoveStart);
+        int endLine = getLineFromPoint(e->pos());
+        int cursorHeight = cursorRect(textCursor()).height();
+
+        if (startLine > endLine) {
+            cursorHeight = -cursorHeight;
+        }
+
+        int line =  static_cast<int>(qFabs(startLine - endLine));
+        QPoint moveStart = m_mouseMoveStart;
+        m_altModSelections.clear();
+
+        for (int i = 0;i <= line;i++) {
+            QTextCursor cursorMove = cursorForPosition(moveStart);
+            QTextCursor cursorMove1 = cursorForPosition(QPoint(e->pos().x(),moveStart.y()));
+            moveStart = QPoint(moveStart.x(),moveStart.y() + cursorHeight);
+
+            cursor.setPosition(cursorMove.position(),QTextCursor::MoveAnchor);
+            cursor.setPosition(cursorMove1.position(),QTextCursor::KeepAnchor);
+            selection.cursor = cursor;
+            selection.format = format;
+            m_altModSelections << selection;
+        }
+        m_mouseMoveEnd = e->pos();
+        document()->clearUndoRedoStacks();
+        update();
+    }
 }
 
 void TextEdit::keyPressEvent(QKeyEvent *e)
@@ -5124,9 +5256,16 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
        return;
     }
 
-
-
     const QString &key = Utils::getKeyshortcut(e);
+
+    if(key=="Backspace"&&m_bIsAltMod)
+    {
+        for(int i=0;i<=m_redoCount;i++)
+        {
+            undo();
+        }
+        return;
+    }
 
     if(key=="Esc")      //按下esc的时候,光标退出编辑区，切换至标题栏
     {
@@ -5552,6 +5691,69 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
     }
 
     m_rightMenu->exec(event->globalPos());
+}
+
+void TextEdit::paintEvent(QPaintEvent *e)
+{
+    if (e->rect() != viewport()->rect() && m_bIsAltMod) {
+        m_timer->start();
+        return QTextEdit::paintEvent(e);
+    }
+    QTextEdit::paintEvent(e);
+    bool bIsEmpty = true;
+    setExtraSelections(m_altModSelections);
+    QColor lineColor = palette().text().color();
+    QColor backgrColor = palette().background().color();
+
+    if (m_bIsAltMod && !m_bIsLinePaint) {
+
+        QPainter painter(viewport());
+        QLine line;
+        painter.setPen(lineColor);
+
+        QList<QPoint> listStartPoint;
+        QList<QPoint> listEndPoint;
+        int startLine = getLineFromPoint(m_mouseMoveStart);
+        int endLine = getLineFromPoint(m_mouseMoveEnd);
+        int cursorHeight = cursorRect(textCursor()).height();
+        int nLine = static_cast<int>(qFabs(startLine - endLine));
+        m_redoCount = nLine;
+        QPoint moveStart = m_mouseMoveStart;
+        //qDebug()<<startLine<<endLine<<cursorHeight<<nLine<<m_bIsAltMod;
+
+        if (startLine > endLine) {
+            moveStart = QPoint(m_mouseMoveStart.x(),m_mouseMoveEnd.y());
+        }
+
+        for (auto selection : m_altModSelections) {
+            if (!selection.cursor.selection().toPlainText().isEmpty()) {
+                bIsEmpty = false;
+            }
+        }
+        m_listStartPoint.clear();
+
+        for (int i = 0;i <= nLine;i++) {
+            QTextCursor cursorMove = cursorForPosition(moveStart);
+            QTextCursor cursorMove1 = cursorForPosition(QPoint(m_mouseMoveEnd.x(),moveStart.y()));
+
+            m_listStartPoint << moveStart;
+            moveStart = QPoint(moveStart.x(),moveStart.y() + cursorHeight);
+            listEndPoint << QPoint(cursorRect(cursorMove1).x(),cursorRect(cursorMove1).y());
+
+            if (bIsEmpty) {
+                line = QLine(QPoint(cursorRect(cursorMove).x(),cursorRect(cursorMove).y()),QPoint(cursorRect(cursorMove).x(),cursorRect(cursorMove1).y() + cursorHeight));
+            } else {
+                line = QLine(QPoint(cursorRect(cursorMove1).x(),cursorRect(cursorMove).y()),QPoint(cursorRect(cursorMove1).x(),cursorRect(cursorMove1).y() + cursorHeight));
+            }
+
+            painter.drawLine(line);
+
+            for (int i = 0; i < m_listStartPoint.count(); ++i) {
+                QTextCursor curso = cursorForPosition(m_listStartPoint.value(i));
+            }
+        }
+    }
+    m_bIsLinePaint = !m_bIsLinePaint;
 }
 
 void TextEdit::highlightCurrentLine()
