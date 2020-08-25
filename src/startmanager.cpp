@@ -162,9 +162,10 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
     window->currentWrapper()->textEditor()->setModified(isModifyed);
     window->setMinimumSize(Tabbar::sm_pDragPixmap->rect().size());
 
-    QPoint pos = QCursor::pos() - window->topLevelWidget()->pos();
+    QRect rect = window->rect();
+    QPoint pos = QCursor::pos() ;/*- window->topLevelWidget()->pos();*/
     QRect startRect(pos, Tabbar::sm_pDragPixmap->rect().size());
-    QRect endRect(pos,window->rect().size());
+    QRect endRect(pos-QPoint(rect.width()/2,rect.height()/2),window->rect().size());
 
     window->move(pos);
     window->show();
@@ -178,15 +179,17 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
 #endif
     //添加编辑窗口drop动态显示效果　梁卫东　２０２０－０８－２５　０９：５４：５７
     QPropertyAnimation *geometry = new QPropertyAnimation(window, "geometry");
-    geometry->setDuration(400);
+    geometry->setDuration(200);
     geometry->setStartValue(startRect);
-    geometry->setEndValue(endRect);
-
+    geometry->setEndValue(endRect);  
+    geometry->setEasingCurve(QEasingCurve::InCubic);
+    //OutCubic InCubic
     QPropertyAnimation *Opacity = new QPropertyAnimation(this, "windowOpacity");
     connect(Opacity,&QPropertyAnimation::finished,Opacity,&QPropertyAnimation::deleteLater);
-    Opacity->setDuration(400);
+    Opacity->setDuration(200);
     Opacity->setStartValue(1.0);
     Opacity->setEndValue(0);
+    Opacity->setEasingCurve(QEasingCurve::InCirc);
 
     QParallelAnimationGroup *group = new QParallelAnimationGroup;
     connect(group,&QParallelAnimationGroup::finished,geometry,[window,geometry,Opacity,group](){

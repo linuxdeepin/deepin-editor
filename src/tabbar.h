@@ -74,6 +74,11 @@ protected:
     void insertFromMimeData(int index, const QMimeData *source);
     bool canInsertFromMimeData(int index, const QMimeData *source) const;
     bool eventFilter(QObject *, QEvent *event);
+
+    void dragEnterEvent(QDragEnterEvent *e);
+    void dragLeaveEvent(QDragLeaveEvent *e);
+    void dragMoveEvent(QDragMoveEvent *e);
+    void dropEvent(QDropEvent *e);
 protected:
     void mousePressEvent(QMouseEvent *e);
 
