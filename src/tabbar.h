@@ -23,6 +23,7 @@
 #include <DTabBar>
 #include <DMenu>
 #include <QMouseEvent>
+#include <DScrollBar>
 
 DWIDGET_USE_NAMESPACE
 
@@ -105,6 +106,8 @@ private:
     QString m_qstrDragName;
     QString m_qstrDragPath;
     EditWrapper *m_pWrapper = nullptr;
+public:
+    static QPixmap *sm_pDragPixmap;
 };
 
 #endif

@@ -132,25 +132,12 @@ Window::Window(DMainWindow *parent)
         initTitlebar();
     }
 
-    // Init window state with config.
-    // Below code must before this->titlebar()->setMenu, otherwise main menu can't display pre-build-in menu items by dtk.
-    const QString &windowState = Settings::instance()->settings->option("advance.window.windowstate")->value().toString();
-
     // window minimum size.
     setMinimumSize(1000, 600);
 
     // resize window size.
     resize(QSize(Settings::instance()->settings->option("advance.window.window_width")->value().toDouble(),
                  Settings::instance()->settings->option("advance.window.window_height")->value().toDouble()));
-    Dtk::Widget::moveToCenter(this);
-    show();
-
-    // init window state.
-    if (windowState == "window_maximum") {
-        showMaximized();
-    } else if (windowState == "fullscreen") {
-        showFullScreen();
-    }
 
     // Init find bar.
     connect(m_findBar, &FindBar::findNext, this, &Window::handleFindNext, Qt::QueuedConnection);
@@ -246,6 +233,23 @@ Window::Window(DMainWindow *parent)
 Window::~Window()
 {
     // We don't need clean pointers because application has exit here.
+}
+
+void Window::showCenterWindow()
+{
+    // Init window state with config.
+    // Below code must before this->titlebar()->setMenu, otherwise main menu can't display pre-build-in menu items by dtk.
+    const QString &windowState = Settings::instance()->settings->option("advance.window.windowstate")->value().toString();
+
+    Dtk::Widget::moveToCenter(this);
+    show();
+
+    // init window state.
+    if (windowState == "window_maximum") {
+        showMaximized();
+    } else if (windowState == "fullscreen") {
+        showFullScreen();
+    }
 }
 
 void Window::initTitlebar()

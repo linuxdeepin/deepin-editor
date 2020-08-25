@@ -27,6 +27,7 @@
 #include <DWidgetUtil>
 #include <QDebug>
 #include <QScreen>
+#include <QPropertyAnimation>
 
 DWIDGET_USE_NAMESPACE
 
@@ -68,6 +69,7 @@ void StartManager::openFilesInWindow(QStringList files)
         if (m_windows.count() >= 20)
             return;
         Window *window = createWindow();
+        window->showCenterWindow();
         window->addBlankTab();
         window->activateWindow();
     } else {
@@ -80,7 +82,9 @@ void StartManager::openFilesInWindow(QStringList files)
             }
             // Add new tab in current window.
             else {
-                createWindow()->addTab(file);
+                Window* window = createWindow();
+                window->showCenterWindow();
+                window->addTab(file);
             }
         }
     }
@@ -94,6 +98,7 @@ void StartManager::openFilesInTab(QStringList files)
             QStringList blankFiles = blankDirectory.entryList(QStringList(), QDir::Files);
 
             Window *window = createWindow(true);
+            window->showCenterWindow();
 
             // Open blank files of last session.
             if (!blankFiles.isEmpty()) {
@@ -128,6 +133,7 @@ void StartManager::openFilesInTab(QStringList files)
             // Create new window with file if haven't window exist.
             else if (m_windows.size() == 0) {
                 Window *window = createWindow(true);
+                window->showCenterWindow();
                 QTimer::singleShot(50, [=] { window->addTab(file); });
 
                 //qDebug() << "Open " << file << " with new window";
@@ -149,10 +155,52 @@ void StartManager::openFilesInTab(QStringList files)
 
 void StartManager::createWindowFromWrapper(const QString &tabName, const QString &filePath, EditWrapper *buffer, bool isModifyed)
 {
+
     Window *window = createWindow();
+    //window->showCenterWindow();
     window->addTabWithWrapper(buffer, filePath, tabName);
     window->currentWrapper()->textEditor()->setModified(isModifyed);
-    window->move(QCursor::pos() - window->topLevelWidget()->pos());
+    window->setMinimumSize(Tabbar::sm_pDragPixmap->rect().size());
+
+    QPoint pos = QCursor::pos() - window->topLevelWidget()->pos();
+    QRect startRect(pos, Tabbar::sm_pDragPixmap->rect().size());
+    QRect endRect(pos,window->rect().size());
+
+    window->move(pos);
+    window->show();
+#if 0
+    // window->setFixedSize(Tabbar::sm_pDragPixmap->rect().size());
+    QLabel *pLab = new QLabel();
+    //pLab->resize(Tabbar::sm_pDragPixmap->rect().size());
+    pLab->move(pos);
+    pLab->setPixmap(*Tabbar::sm_pDragPixmap);
+    pLab->show();
+#endif
+    //添加编辑窗口drop动态显示效果　梁卫东　２０２０－０８－２５　０９：５４：５７
+    QPropertyAnimation *geometry = new QPropertyAnimation(window, "geometry");
+    geometry->setDuration(400);
+    geometry->setStartValue(startRect);
+    geometry->setEndValue(endRect);
+
+    QPropertyAnimation *Opacity = new QPropertyAnimation(this, "windowOpacity");
+    connect(Opacity,&QPropertyAnimation::finished,Opacity,&QPropertyAnimation::deleteLater);
+    Opacity->setDuration(400);
+    Opacity->setStartValue(1.0);
+    Opacity->setEndValue(0);
+
+    QParallelAnimationGroup *group = new QParallelAnimationGroup;
+    connect(group,&QParallelAnimationGroup::finished,geometry,[window,geometry,Opacity,group](){
+        // window minimum size.
+        window->setMinimumSize(1000, 600);
+        geometry->deleteLater();
+        Opacity->deleteLater();
+        group->deleteLater();
+    });
+
+    group->addAnimation(geometry);
+    group->addAnimation(Opacity);
+
+    group->start();
 }
 
 void StartManager::loadTheme(const QString &themeName)

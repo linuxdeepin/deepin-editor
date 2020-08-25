@@ -51,6 +51,7 @@ public:
     Window(DMainWindow *parent = 0);
     ~Window() override;
 
+    void showCenterWindow();
     void initTitlebar();
     bool checkBlockShutdown();
 

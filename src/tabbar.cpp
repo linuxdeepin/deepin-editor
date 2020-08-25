@@ -28,6 +28,9 @@
 #include <QGuiApplication>
 #include <DPlatformWindowHandle>
 #include <DWindowManagerHelper>
+#include <QPixmap>
+
+QPixmap* Tabbar::sm_pDragPixmap = nullptr;
 
 Tabbar::Tabbar(QWidget *parent)
     : DTabBar(parent)
@@ -260,12 +263,14 @@ QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option
         shadowColor.setAlpha(80);
 
         painter.end();
-
+        if(sm_pDragPixmap) delete sm_pDragPixmap;
+        sm_pDragPixmap = new QPixmap(Utils::dropShadow(QPixmap::fromImage(backgroundImage), 5, shadowColor, QPoint(0, 0)));
         return Utils::dropShadow(QPixmap::fromImage(backgroundImage), 5, shadowColor, QPoint(0, 0));
     } else {
-          painter.end();
-
-          return QPixmap::fromImage(backgroundImage);
+        painter.end();
+        if(sm_pDragPixmap) delete sm_pDragPixmap;
+        sm_pDragPixmap = new QPixmap(QPixmap::fromImage(backgroundImage));
+        return QPixmap::fromImage(backgroundImage);
     }
 
 }
