@@ -242,8 +242,8 @@ QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option
     }
 
     // adjust offset.
-    hotspot->setX(20);
-    hotspot->setY(20);
+    hotspot->setX(scaledWidth/2);
+    hotspot->setY(scaledHeight/2);
 
     QPainterPath rectPath;
 
@@ -531,22 +531,36 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
     return false;
 }
 
+void Tabbar::dragEnterEvent(QDragEnterEvent *e)
+{
+    qDebug()<<"============dragEnterEvent";
+    DTabBar::dragEnterEvent(e);
+}
+
+void Tabbar::dragLeaveEvent(QDragLeaveEvent *e)
+{
+    qDebug()<<"============dragLeaveEvent";
+     DTabBar::dragLeaveEvent(e);
+}
+
+void Tabbar::dragMoveEvent(QDragMoveEvent *e)
+{
+    qDebug()<<"============dragMoveEvent";
+    DTabBar::dragMoveEvent(e);
+}
+
+void Tabbar::dropEvent(QDropEvent *e)
+{
+    qDebug()<<"============dropEvent";
+    DTabBar::dropEvent(e);
+}
+
 void Tabbar::mousePressEvent(QMouseEvent *e)
 {
     if(e->button()==Qt::MidButton)
     {
         emit tabCloseRequested(tabAt(QPoint(e->x(), e->y())));
     }
-
-//    if(e->button() == Qt::RightButton)
-//    {
-//        setCurrentIndex(tabAt(QPoint(e->x(), e->y())));
-
-//        //QPoint pos(25,rect.height()/2);
-////        qDebug()<<"right button"<<e->pos();
-////        QMouseEvent event0(QEvent::MouseButtonPress, e->pos(), Qt::RightButton, Qt::RightButton, Qt::NoModifier);
-////        DApplication::sendEvent(this, &event0);
-//    }
 
     DTabBar::mousePressEvent(e);
 }
