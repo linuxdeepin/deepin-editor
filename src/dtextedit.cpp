@@ -2306,8 +2306,8 @@ void TextEdit::getNeedControlLine(int line, bool isVisable)
 bool TextEdit::event(QEvent *event)
 {
     if (event->type() == QEvent::Gesture)
-        return gestureEvent(static_cast<QGestureEvent*>(event));
-    return QTextEdit::event(event);
+      gestureEvent(static_cast<QGestureEvent*>(event));
+    return DTextEdit::event(event);
 }
 
 bool TextEdit::gestureEvent(QGestureEvent *event)
@@ -3468,14 +3468,13 @@ void TextEdit::flodOrUnflodAllLevel(bool isFlod)
 {
     //折叠
     if(isFlod){
-          foreach (auto line, m_listFlodFlag) {
+          for (int line = 0;line< document()->lineCount();line++) {
               if (document()->findBlockByNumber(line).text().contains("{") && document()->findBlockByNumber(line).isVisible())
                getNeedControlLine(line, false);
            }
      //展开
     }else{
-        foreach (auto line, m_listFlodFlag) {
-
+        for (int line = 0;line< document()->lineCount();line++) {
             if((document()->findBlockByNumber(line).text().contains("{") \
                 && !document()->findBlockByNumber(line+1).isVisible()) \
                     ||(m_listFlodFlag.last() == line && !document()->findBlockByNumber(line).isVisible())){
@@ -5754,6 +5753,7 @@ void TextEdit::paintEvent(QPaintEvent *e)
         }
     }
     m_bIsLinePaint = !m_bIsLinePaint;
+    //QTextEdit::paintEvent(e);
 }
 
 void TextEdit::highlightCurrentLine()

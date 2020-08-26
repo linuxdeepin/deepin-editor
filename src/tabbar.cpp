@@ -73,8 +73,9 @@ void Tabbar::addTabWithIndex(int index, const QString &filePath, const QString &
  //   if (!m_tabPaths.contains(filePath)) {
         m_tabPaths.insert(index, filePath);
 //    }
-
-    DTabBar::insertTab(index, tabName);
+    //除去空白符 梁卫东 ２０２０－０８－２６　１４：４９：１５
+    QString trimmedName =tabName.simplified();
+    DTabBar::insertTab(index, trimmedName);
     DTabBar::setTabMaximumSize(index, QSize(300, 100));
     DTabBar::setCurrentIndex(index);
 }

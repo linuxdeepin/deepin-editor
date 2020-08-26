@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
 
     bool hasWindowFlag = parser.isSet(newWindowOption);
 
-    // Start.
+    // Start.a阿萨所少时诵诗书所所撒奥奥奥奥奥奥奥奥奥奥所
     QDBusConnection dbus = QDBusConnection::sessionBus();
     // Start editor process if not found any editor use DBus.
     if (dbus.registerService("com.deepin.Editor")) {
