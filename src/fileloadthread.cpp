@@ -45,7 +45,8 @@ void FileLoadThread::run()
 
     if (file.open(QIODevice::ReadOnly)) {
         // reads all remaining data from the file.
-        QByteArray fileContent = file.readAll();
+        QByteArray fileContentAll = file.readAll();
+        QByteArray fileContent = file.read(1024);
 
         // read the encode.
         QByteArray encode = Utils::detectEncode(fileContent);
@@ -57,7 +58,7 @@ void FileLoadThread::run()
 
         file.close();
         if (file.open(QIODevice::ReadOnly)) {
-            QTextStream stream(&fileContent);
+            QTextStream stream(&fileContentAll);
             stream.setCodec(encodeArray);
             QString content = stream.readAll();
 

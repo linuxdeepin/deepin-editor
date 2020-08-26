@@ -79,6 +79,7 @@ protected:
     void dragLeaveEvent(QDragLeaveEvent *e);
     void dragMoveEvent(QDragMoveEvent *e);
     void dropEvent(QDropEvent *e);
+    QSize tabSizeHint(int index) const;
 protected:
     void mousePressEvent(QMouseEvent *e);
 

@@ -102,6 +102,7 @@ void EditWrapper::openFile(const QString &filepath)
     QStringList filepathList = textEditor()->readHistoryRecordofFilePath("advance.editor.browsing_encode_history");
     thread->setEncodeInfo(filepathList,encodeList);
 //    // start the thread.
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     thread->start();
 }
 
@@ -694,8 +695,9 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QString 
     m_textEdit->loadHighlighter();
     m_textEdit->setPlainText(content);
     m_textEdit->setTextFinished();
-//    m_textEdit->clearBlack();
 
+//    m_textEdit->clearBlack();
+    QApplication::restoreOverrideCursor();
     // update status.
     m_textEdit->setModified(false);
 //    m_textEdit->moveToStart();

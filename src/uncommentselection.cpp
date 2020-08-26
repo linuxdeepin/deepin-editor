@@ -1,5 +1,5 @@
 #include "uncommentselection.h"
-#include <QTextEdit>
+#include <QPlainTextEdit>
 #include <QTextBlock>
 
 using namespace Comment;
@@ -45,7 +45,7 @@ static bool isComment(const QString &text, int index, const QString &commentType
     return true;
 }
 
-void Comment::unCommentSelection(QTextEdit *edit, const CommentDefinition &definition)
+void Comment::unCommentSelection(QPlainTextEdit *edit, const CommentDefinition &definition)
 {
     if (!definition.isValid())
         return;
@@ -213,7 +213,7 @@ void Comment::unCommentSelection(QTextEdit *edit, const CommentDefinition &defin
     }
 }
 
-void Comment::removeComment(QTextEdit *edit, const CommentDefinition &definition,QString name)
+void Comment::removeComment(QPlainTextEdit *edit, const CommentDefinition &definition,QString name)
 {
     int tmp = 0;//备注偏移量，判断备注标记后面有没有空格
     //此函数是删除了unCommentSelection()的if-else的comment分支得来的
@@ -418,7 +418,7 @@ void Comment::removeComment(QTextEdit *edit, const CommentDefinition &definition
 }
 
 
-void Comment::setComment(QTextEdit *edit, const CommentDefinition &definiton,QString name)
+void Comment::setComment(QPlainTextEdit *edit, const CommentDefinition &definiton,QString name)
 {
     //此函数是删除了unCommentSelection()的if-else的uncomment分支得来的
     if (!definiton.isValid())

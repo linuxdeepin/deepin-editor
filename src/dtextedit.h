@@ -33,7 +33,7 @@
 #include <QAction>
 #include <DMenu>
 #include <QPaintEvent>
-#include <DTextEdit>
+#include <DPlainTextEdit>
 #include <QLineEdit>
 #include <QPropertyAnimation>
 #include <QFont>
@@ -59,7 +59,7 @@ enum ConvertCase { UPPER, LOWER, CAPITALIZE };
 class ShowFlodCodeWidget;
 class leftareaoftextedit;
 class EditWrapper;
-class TextEdit : public DTextEdit
+class TextEdit : public DPlainTextEdit
 {
     Q_OBJECT
 

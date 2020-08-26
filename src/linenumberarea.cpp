@@ -25,6 +25,7 @@
 LineNumberArea::LineNumberArea(leftareaoftextedit *leftAreaWidget)
 {
     m_leftAreaWidget = leftAreaWidget;
+    setContentsMargins(0,0,0,0);
     //m_textEdit = textEdit;
 }
 
