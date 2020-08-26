@@ -5701,7 +5701,7 @@ void TextEdit::paintEvent(QPaintEvent *e)
     }
     QTextEdit::paintEvent(e);
     bool bIsEmpty = true;
-    setExtraSelections(m_altModSelections);
+    //setExtraSelections(m_altModSelections);
     QColor lineColor = palette().text().color();
     QColor backgrColor = palette().background().color();
 
