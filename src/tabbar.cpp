@@ -74,9 +74,10 @@ void Tabbar::addTabWithIndex(int index, const QString &filePath, const QString &
         m_tabPaths.insert(index, filePath);
 //    }
     //除去空白符 梁卫东 ２０２０－０８－２６　１４：４９：１５
-    QString trimmedName =tabName.simplified();
+    QString trimmedName = tabName.simplified();
     DTabBar::insertTab(index, trimmedName);
-    DTabBar::setTabMaximumSize(index, QSize(300, 100));
+    DTabBar::setTabMinimumSize(index, QSize(110, 40));
+    DTabBar::setTabMaximumSize(index, QSize(160, 40));
     DTabBar::setCurrentIndex(index);
 }
 
@@ -564,6 +565,13 @@ void Tabbar::mousePressEvent(QMouseEvent *e)
     }
 
     DTabBar::mousePressEvent(e);
+}
+
+QSize Tabbar::tabSizeHint(int index) const
+{
+    //Q_UNUSED(index)
+    //return QSize(160,100);
+    return DTabBar::tabSizeHint(index);
 }
 
 void Tabbar::handleTabMoved(int fromIndex, int toIndex)
