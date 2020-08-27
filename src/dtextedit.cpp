@@ -2383,13 +2383,29 @@ void TextEdit::getNeedControlLine(int line, bool isVisable)
 
 bool TextEdit::event(QEvent *event)
 {
+    switch (event->type()) {
+    case QEvent::TouchBegin:
+    case QEvent::TouchUpdate:
+    case QEvent::TouchEnd:
+    {
+        QTouchEvent *touchEvent = static_cast<QTouchEvent *>(event);
+        QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->touchPoints();
+        if (touchPoints.count() == 3)
+        {
+            slot_translate();
+        }
+        return true;
+    }
+    default:break;
+    }
+
     if (event->type() == QEvent::Gesture)
       gestureEvent(static_cast<QGestureEvent*>(event));
     return DPlainTextEdit::event(event);
 }
 
 bool TextEdit::gestureEvent(QGestureEvent *event)
-{
+{    
     if (QGesture *tap = event->gesture(Qt::TapGesture))
         tapGestureTriggered(static_cast<QTapGesture *>(tap));
     if (QGesture *tapAndHold = event->gesture(Qt::TapAndHoldGesture))
@@ -2399,8 +2415,8 @@ bool TextEdit::gestureEvent(QGestureEvent *event)
     if (QGesture *pinch = event->gesture(Qt::PinchGesture))
         pinchTriggered(static_cast<QPinchGesture *>(pinch));
    // qDebug()<<event<<"this is for test";
-//    if (QGesture *swipe = event->gesture(Qt::SwipeGesture))
-//      //  swipeTriggered(static_cast<QSwipeGesture *>(swipe));
+    if (QGesture *swipe = event->gesture(Qt::SwipeGesture))
+        swipeTriggered(static_cast<QSwipeGesture *>(swipe));
 
     return true;
 }
@@ -2471,6 +2487,21 @@ void TextEdit::tapAndHoldGestureTriggered(QTapAndHoldGesture *tapAndHold)
 void TextEdit::panTriggered(QPanGesture *pan)
 {
     //两指平移
+    switch (pan->state()) {
+    case Qt::GestureStarted:
+        m_gestureAction = GA_pan;
+        break;
+    case Qt::GestureUpdated:
+        break;
+    case Qt::GestureCanceled:
+        break;
+    case Qt::GestureFinished:
+        m_gestureAction = GA_null;
+        break;
+    default:
+        Q_ASSERT(false);
+        break;
+    }
 }
 
 void TextEdit::pinchTriggered(QPinchGesture *pinch)
@@ -2519,23 +2550,24 @@ void TextEdit::pinchTriggered(QPinchGesture *pinch)
 
 void TextEdit::swipeTriggered(QSwipeGesture *swipe)
 {
+    qDebug()<<"三指滑动";
     //三指滑动
-    switch (swipe->state()) {
-    case Qt::GestureStarted:
-        m_gestureAction = GA_swipe;
-        break;
-    case Qt::GestureUpdated:
-        break;
-    case Qt::GestureCanceled:
-        m_gestureAction = GA_null;
-        break;
-    case Qt::GestureFinished:
-        Q_ASSERT(false);
-        break;
-    default:
-        Q_ASSERT(false);
-        break;
-    }
+//    switch (swipe->state()) {
+//    case Qt::GestureStarted:
+//        m_gestureAction = GA_swipe;
+//        break;
+//    case Qt::GestureUpdated:
+//        break;
+//    case Qt::GestureCanceled:
+//        m_gestureAction = GA_null;
+//        break;
+//    case Qt::GestureFinished:
+//        Q_ASSERT(false);
+//        break;
+//    default:
+//        Q_ASSERT(false);
+//        break;
+//    }
 
 }
 
