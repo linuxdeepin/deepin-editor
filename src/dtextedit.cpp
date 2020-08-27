@@ -1897,7 +1897,6 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
 
 void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
 {
-
     m_listFlodFlag.clear();
     m_listFlodIconPos.clear();
     QPainter painter(m_pLeftAreaWidget->m_flodArea);
@@ -2383,22 +2382,6 @@ void TextEdit::getNeedControlLine(int line, bool isVisable)
 
 bool TextEdit::event(QEvent *event)
 {
-    switch (event->type()) {
-    case QEvent::TouchBegin:
-    case QEvent::TouchUpdate:
-    case QEvent::TouchEnd:
-    {
-        QTouchEvent *touchEvent = static_cast<QTouchEvent *>(event);
-        QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->touchPoints();
-        if (touchPoints.count() == 3)
-        {
-            slot_translate();
-        }
-        return true;
-    }
-    default:break;
-    }
-
     if (event->type() == QEvent::Gesture)
       gestureEvent(static_cast<QGestureEvent*>(event));
     return DPlainTextEdit::event(event);
@@ -2545,6 +2528,10 @@ void TextEdit::pinchTriggered(QPinchGesture *pinch)
 
     //QFont font = getVTFont();
     int size = static_cast<int>(m_scaleFactor*m_currentStepScaleFactor);
+    if(size<8)
+        size=8;
+    if(size>50)
+        size=50;
     setFontSize(size);
 }
 
@@ -4323,6 +4310,23 @@ void TextEdit::completionWord(QString word)
 
 bool TextEdit::eventFilter(QObject *object, QEvent *event)
 {
+    switch (event->type()) {
+    case QEvent::TouchBegin:
+    case QEvent::TouchUpdate:
+    case QEvent::TouchEnd:
+    {
+        QTouchEvent *touchEvent = static_cast<QTouchEvent *>(event);
+        QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->touchPoints();
+        QMouseEvent *event2 = static_cast<QMouseEvent *>(event);
+        DPlainTextEdit::mousePressEvent(event2);
+        if (touchPoints.count() == 3)
+        {
+            slot_translate();
+        }
+        break;
+    }
+    default:break;
+    }
     if (event->type() == QEvent::MouseButtonPress) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         m_mouseClickPos = mouseEvent->pos();
