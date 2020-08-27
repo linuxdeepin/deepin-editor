@@ -106,9 +106,17 @@ protected:
 
     inline bool eventFilter(QObject*o,QEvent*e)
     {
+        static bool isEnableEdit = true;     // true 可以Enter进入编辑状态 false 此时Enter为快捷键输入
+        // 焦点进入快捷键编辑
+        if (e->type() == QEvent::FocusOut) {
+            // 焦点出去后,可以Enter进入编辑状态
+            isEnableEdit = true;
+        }
+
+
         //设置界面　回车键和空格键　切换输入 梁卫东　２０２０－０８－２１　１６：２８：３１
         if(o == this){
-            if(e->type() == QEvent::KeyPress){
+            if(e->type() == QEvent::KeyPress&&isEnableEdit){
                 QKeyEvent* keyEvent = static_cast<QKeyEvent*>(e);
                 //qDebug()<<keyEvent->text()<<keyEvent->key();
 
@@ -123,7 +131,8 @@ protected:
                         DApplication::sendEvent(childern[i], &event0);
 
                     }
-                     return true;
+                    isEnableEdit=false;
+                    return true;
                 }
             }
         }
