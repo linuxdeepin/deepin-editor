@@ -84,11 +84,7 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
         center.setY(center.y() - menuHeight - this->rect().height() / 2);
         center.setX(center.x() - menuWidth / 2);
         m_menu->move(center);
-        for (QAction *action : m_menu->actions()) {
-            if (action->text() == m_text) {
-                m_menu->setActiveAction(action);
-            }
-        }
+        m_menu->setActiveAction(m_menu->actions().at(0));
         m_menu->exec();
         if(bClicked){
             //如果鼠标点击清除ｆｏｃｕｓ
