@@ -42,8 +42,6 @@
 #include<QGestureEvent>
 #include "widgets/ColorSelectWdg.h"
 
-#include <QProxyStyle>
-
 namespace KSyntaxHighlighting {
     class SyntaxHighlighter;
 }
@@ -52,7 +50,6 @@ const QString STYLE_COLOR_1 = "#FFA503";
 const QString STYLE_COLOR_2 = "#FF1C49";
 const QString STYLE_COLOR_3 = "#9023FC";
 const QString STYLE_COLOR_4 = "#05EA6B";
-const QString SELECT_HIGHLIGHT_COLOR = "#2CA7F8";
 
 enum ConvertCase { UPPER, LOWER, CAPITALIZE };
 
@@ -299,7 +296,6 @@ public slots:
                               ,QList<QTextEdit::ExtraSelection> *listSelections);
     void onSelectionArea();
     void fingerZoom(QString name, QString direction, int fingers);
-    void onTimeout();
 
 protected:
     bool event(QEvent* evt) override;   //触摸屏event事件
@@ -310,13 +306,11 @@ protected:
     void inputMethodEvent(QInputMethodEvent *e) override;
 
     void mousePressEvent(QMouseEvent *e) override;
-    void mouseReleaseEvent(QMouseEvent *e) override;
     void mouseMoveEvent(QMouseEvent *e) override;
     void keyPressEvent(QKeyEvent *e) override;
     void wheelEvent(QWheelEvent *e) override;
     bool eventFilter(QObject *object, QEvent *event) override;
     void contextMenuEvent(QContextMenuEvent *event) override;
-    void paintEvent(QPaintEvent *e) override;
 
 private:
     bool setCursorKeywordSeletoin(int position, bool findNext);
@@ -509,17 +503,5 @@ private:
     qint64 m_tapBeginTime = 0;
     Qt::GestureState m_tapStatus = Qt::NoGesture;
     GestureAction m_gestureAction = GA_null;
-
-    //列编辑
-    QList<QTextEdit::ExtraSelection> m_altModSelections;
-    QTimer *m_timer;
-    int m_redoCount = 0;
-    bool m_bIsAltMod=false;
-    bool m_bIsMousePress=false;
-    bool m_bIsLinePaint=false;
-    bool m_bIsTimeout=false;
-    QPoint m_mouseMoveStart;
-    QPoint m_mouseMoveEnd;
-    QList<QPoint> m_listStartPoint;
 };
 #endif
