@@ -2532,7 +2532,10 @@ void TextEdit::pinchTriggered(QPinchGesture *pinch)
         size=8;
     if(size>50)
         size=50;
+    //根据移动距离设置字体大小
     setFontSize(size);
+    //同步设置界面字体栏数值
+    qobject_cast<Window *>(this->window())->changeSettingDialogComboxFontNumber(size);
 }
 
 void TextEdit::swipeTriggered(QSwipeGesture *swipe)

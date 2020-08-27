@@ -1074,6 +1074,11 @@ bool Window::saveAsOtherTabFile(EditWrapper *wrapper)
     return true;
 }
 
+void Window::changeSettingDialogComboxFontNumber(int fontNumber)
+{
+    m_settings->settings->option("base.font.size")->setValue(fontNumber);
+}
+
 void Window::decrementFontSize()
 {
     int size = std::max(m_fontSize - 1, m_settings->minFontSize);

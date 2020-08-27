@@ -80,6 +80,7 @@ public:
     QString saveBlankFileToDisk();
     bool saveAsOtherTabFile(EditWrapper *wrapper);
 
+    void changeSettingDialogComboxFontNumber(int fontNumber);
     void decrementFontSize();
     void incrementFontSize();
     void resetFontSize();
