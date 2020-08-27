@@ -771,8 +771,26 @@ void Window::openFile()
         return;
     }
 
+    QStringList supportfileNames;
+    QStringList otherfiles;
     for (const QString &file : dialog.selectedFiles()) {
-        addTab(file);
+
+        if(Utils::isMimeTypeSupport(file))
+        {
+            supportfileNames.append(file);
+        }else {
+            otherfiles.append(file);
+        }
+
+        //先添加支持的文件
+    }
+    foreach (QString var, supportfileNames) {
+        addTab(var, true);
+    }
+
+    //后添加不支持文件　在最后编辑页面显示
+    foreach (QString var, otherfiles) {
+        addTab(var, true);
     }
 }
 
@@ -2020,13 +2038,6 @@ void Window::resizeEvent(QResizeEvent *e)
     m_findBar->move(QPoint(10, height() - 59));
     m_replaceBar->resize(width() - 20, m_replaceBar->height());
     m_replaceBar->move(QPoint(10, height() - 59));
-
-
-    if (!(m_tabbar->currentPath() == "")) {
-        EditWrapper *wrapper = m_wrappers.value(m_tabbar->currentPath());
-        wrapper->textEditor()->hideRightMenu();
-    }
-
 
     DMainWindow::resizeEvent(e);
 }
