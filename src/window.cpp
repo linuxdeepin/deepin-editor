@@ -440,7 +440,13 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
 //    disconnect(wrapper->textEditor(), &TextEdit::popupNotify, nullptr,nullptr);
 
     //这里会重复连接信号和槽，先全部取消
-    disconnect(wrapper->textEditor(),nullptr,nullptr,nullptr);
+    QDBusConnection dbus = QDBusConnection::sessionBus();
+    dbus.systemBus().disconnect("com.deepin.daemon.Gesture",
+                                "/com/deepin/daemon/Gesture", "com.deepin.daemon.Gesture",
+                                "Event",
+                                wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
+    wrapper->textEditor()->disconnect();
+    //disconnect(wrapper->textEditor(),nullptr,wrapper->parent(),nullptr);
     // wrapper may be from anther window pointer.
     // reconnect signal.
     connect(wrapper->textEditor(), &TextEdit::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);
@@ -449,6 +455,11 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
     connect(wrapper->textEditor(), &TextEdit::clickFullscreenAction, this, &Window::toggleFullscreen, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::popupNotify, this, &Window::showNotify, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::pressEsc, this, &Window::removeBottomWidget, Qt::QueuedConnection);
+
+    dbus.systemBus().connect("com.deepin.daemon.Gesture",
+                                "/com/deepin/daemon/Gesture", "com.deepin.daemon.Gesture",
+                                "Event",
+                                wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
 
     connect(wrapper->textEditor(), &TextEdit::modificationChanged, this, [ = ](const QString & path, bool isModified) {
         int tabIndex = m_tabbar->indexOf(path);
@@ -466,6 +477,11 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
         //判断是否需要阻塞系统关机
         emit sigJudgeBlockShutdown();
     });
+
+//    dbus.systemBus().connect("com.deepin.daemon.Gesture",
+//                                "/com/deepin/daemon/Gesture", "com.deepin.daemon.Gesture",
+//                                "Event",
+//                                wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
 
     connect(wrapper,  &EditWrapper::sigCodecSaveFile, this, [ = ](QString strOldFilePath, QString strNewFilePath) {
         int tabIndex = m_tabbar->indexOf(strOldFilePath);
@@ -2044,6 +2060,11 @@ void Window::resizeEvent(QResizeEvent *e)
     m_replaceBar->resize(width() - 20, m_replaceBar->height());
     m_replaceBar->move(QPoint(10, height() - 59));
 
+//    if (!(m_tabbar->currentPath() == "")) {
+//        EditWrapper *wrapper = m_wrappers.value(m_tabbar->currentPath());
+//        wrapper->textEditor()->hideRightMenu();
+//    }
+
     DMainWindow::resizeEvent(e);
 }
 
@@ -2132,6 +2153,7 @@ void Window::closeEvent(QCloseEvent *e)
         file.close();
     }
 
+    disconnect(m_settings,nullptr,this,nullptr);
     e->accept();
     emit close();
 }
@@ -2147,12 +2169,12 @@ void Window::hideEvent(QHideEvent *event)
     }
 
     //如果替换浮窗正显示着，则隐藏
-    if (m_replaceBar->isVisible()) {
-      //  m_replaceBar->hide();
-        if (currentWrapper() != nullptr) {
-            currentWrapper()->m_bottomBar->show();
-        }
-    }
+//    if (m_replaceBar->isVisible()) {
+//      //  m_replaceBar->hide();
+//        if (currentWrapper() != nullptr) {
+//            currentWrapper()->m_bottomBar->show();
+//        }
+//    }
 }
 
 void Window::keyPressEvent(QKeyEvent *e)
