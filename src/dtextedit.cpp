@@ -53,7 +53,9 @@
 #include <QMimeData>
 #include <QTimer>
 #include <QGesture>
+#include <QStyleHints>
 #include <DSysInfo>
+#include <QStyleFactory>
 
 #include <private/qguiapplication_p.h>
 #include <qpa/qplatformtheme.h>
@@ -117,6 +119,11 @@ TextEdit::TextEdit(QWidget *parent)
     setContentsMargins(0,0,0,0);
 //    document()->setDocumentMargin(1);
  //   setAcceptRichText(false);
+    m_timer = new QTimer(this);
+    connect(m_timer,SIGNAL(timeout()),this,SLOT(onTimeout()));
+    m_timer->setInterval(QGuiApplication::styleHints()->cursorFlashTime()/2);
+    m_timer->start();
+
 
     grabGesture(Qt::TapGesture);
     grabGesture(Qt::TapAndHoldGesture);
@@ -3924,6 +3931,13 @@ QStringList TextEdit::readEncodeHistoryRecord()
     return filePathList;
 }
 
+void TextEdit::onTimeout()
+{
+    m_bIsTimeout = true;
+    update();
+}
+
+
 void TextEdit::isMarkCurrentLine(bool isMark, QString strColor)
 {
     if (isMark) {
@@ -4891,6 +4905,7 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
 
 void TextEdit::mousePressEvent(QMouseEvent *e)
 {
+    m_mouseMoveStart = e->pos();
     if (e->source() == Qt::MouseEventSynthesizedByQt) {
         m_lastTouchBeginPos = e->pos();
 
@@ -4920,7 +4935,30 @@ void TextEdit::mousePressEvent(QMouseEvent *e)
     }
 
     QPlainTextEdit::mousePressEvent(e);
+    if (e->modifiers() == Qt::AltModifier) {
+        m_bIsAltMod = true;
+        setCursorWidth(0);
+        m_bIsMousePress = true;
+        qDebug() << "m_mouseMoveStart" << cursorRect(textCursor()).width();
+    } else {
+        if (m_bIsAltMod) {
+            m_bIsAltMod = false;
+            setCursorWidth(1);
+            m_altModSelections.clear();
+        }
+    }
+
 }
+
+void TextEdit::mouseReleaseEvent(QMouseEvent *e)
+{
+    QPlainTextEdit::mouseReleaseEvent(e);
+
+    if (e->modifiers() == Qt::AltModifier) {
+        m_bIsMousePress = false;
+    }
+}
+
 
 void TextEdit::mouseMoveEvent(QMouseEvent *e)
 {
@@ -4954,6 +4992,45 @@ void TextEdit::mouseMoveEvent(QMouseEvent *e)
     }
 
     QPlainTextEdit::mouseMoveEvent(e);
+    if (e->modifiers() == Qt::AltModifier && m_bIsMousePress) {
+        QList<QTextEdit::ExtraSelection> listSelection;
+        QTextEdit::ExtraSelection selection;
+        QTextCharFormat format;
+        QPalette palette;
+        QTextCursor cursor = textCursor();
+        format.setBackground(QColor(SELECT_HIGHLIGHT_COLOR));
+        format.setForeground(palette.highlightedText());
+        cursor.clearSelection();
+        //setTextCursor(cursor);
+        setTextCursor(cursor);
+        int startLine = getLineFromPoint(m_mouseMoveStart);
+        int endLine = getLineFromPoint(e->pos());
+        int cursorHeight = cursorRect(textCursor()).height();
+
+        if (startLine > endLine) {
+            cursorHeight = -cursorHeight;
+        }
+
+        int line =  static_cast<int>(qFabs(startLine - endLine));
+        QPoint moveStart = m_mouseMoveStart;
+        m_altModSelections.clear();
+
+        for (int i = 0;i <= line;i++) {
+            QTextCursor cursorMove = cursorForPosition(moveStart);
+            QTextCursor cursorMove1 = cursorForPosition(QPoint(e->pos().x(),moveStart.y()));
+            moveStart = QPoint(moveStart.x(),moveStart.y() + cursorHeight);
+
+            cursor.setPosition(cursorMove.position(),QTextCursor::MoveAnchor);
+            cursor.setPosition(cursorMove1.position(),QTextCursor::KeepAnchor);
+            selection.cursor = cursor;
+            selection.format = format;
+            m_altModSelections << selection;
+        }
+        m_mouseMoveEnd = e->pos();
+        document()->clearUndoRedoStacks();
+        update();
+    }
+
 }
 
 void TextEdit::keyPressEvent(QKeyEvent *e)
@@ -4961,8 +5038,39 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
     // if (!isModifier(e)) {
     //     viewport()->setCursor(Qt::BlankCursor);
     // }
-
+    const QString &key = Utils::getKeyshortcut(e);
     // alt+m 弹出编辑器右键菜单
+    if(m_bIsAltMod)
+    {
+        if(key=="Backspace")
+        {
+            for(auto sel:m_altModSelections)
+            {
+                if(sel.cursor.hasSelection())
+                {
+                    sel.cursor.removeSelectedText();
+                }
+                else {
+                    sel.cursor.deletePreviousChar();
+                }
+            }
+            return;
+        }
+        for(auto sel:m_altModSelections)
+        {
+            if(sel.cursor.hasSelection())
+            {
+                sel.cursor.removeSelectedText();
+                sel.cursor.insertText(e->text());
+            }
+            else {
+             //   if(sel.cursor.PreviousCharacter)
+                sel.cursor.insertText(e->text());
+                    qDebug()<<sel.cursor.PreviousCharacter;
+            }
+        }
+        return ;
+    }
 
     if(e->modifiers() == Qt::AltModifier && !e->text().compare(QString("m"),Qt::CaseInsensitive)){
 
@@ -5165,8 +5273,14 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
        m_rightMenu->exec(mapToGlobal(pos));
        return;
     }
-
-    const QString &key = Utils::getKeyshortcut(e);
+    if(key=="Backspace"&&m_bIsAltMod)
+    {
+        for(int i=0;i<=m_redoCount;i++)
+        {
+            undo();
+        }
+        return;
+    }
 
     if(key=="Esc")      //按下esc的时候,光标退出编辑区，切换至标题栏
     {
@@ -5592,6 +5706,71 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
     }
 
     m_rightMenu->exec(event->globalPos());
+}
+
+void TextEdit::paintEvent(QPaintEvent *e)
+{
+    if (e->rect() != viewport()->rect() && m_bIsAltMod) {
+        m_timer->start();
+        return QPlainTextEdit::paintEvent(e);
+    }
+    QPlainTextEdit::paintEvent(e);
+    bool bIsEmpty = true;
+    if(m_bIsAltMod)
+    setExtraSelections(m_altModSelections);
+    QColor lineColor = palette().text().color();
+    QColor backgrColor = palette().background().color();
+
+    if (m_bIsAltMod && !m_bIsLinePaint) {
+
+        QPainter painter(viewport());
+        QLine line;
+        painter.setPen(lineColor);
+
+        QList<QPoint> listStartPoint;
+        QList<QPoint> listEndPoint;
+        int startLine = getLineFromPoint(m_mouseMoveStart);
+        int endLine = getLineFromPoint(m_mouseMoveEnd);
+        int cursorHeight = cursorRect(textCursor()).height();
+        int nLine = static_cast<int>(qFabs(startLine - endLine));
+        m_redoCount = nLine;
+        QPoint moveStart = m_mouseMoveStart;
+        //qDebug()<<startLine<<endLine<<cursorHeight<<nLine<<m_bIsAltMod;
+
+        if (startLine > endLine) {
+            moveStart = QPoint(m_mouseMoveStart.x(),m_mouseMoveEnd.y());
+        }
+
+        for (auto selection : m_altModSelections) {
+            if (!selection.cursor.selection().toPlainText().isEmpty()) {
+                bIsEmpty = false;
+            }
+        }
+        m_listStartPoint.clear();
+
+        for (int i = 0;i <= nLine;i++) {
+            QTextCursor cursorMove = cursorForPosition(moveStart);
+            QTextCursor cursorMove1 = cursorForPosition(QPoint(m_mouseMoveEnd.x(),moveStart.y()));
+
+            m_listStartPoint << moveStart;
+            moveStart = QPoint(moveStart.x(),moveStart.y() + cursorHeight);
+            listEndPoint << QPoint(cursorRect(cursorMove1).x(),cursorRect(cursorMove1).y());
+
+            if (bIsEmpty) {
+                line = QLine(QPoint(cursorRect(cursorMove).x(),cursorRect(cursorMove).y()),QPoint(cursorRect(cursorMove).x(),cursorRect(cursorMove1).y() + cursorHeight));
+            } else {
+                line = QLine(QPoint(cursorRect(cursorMove1).x(),cursorRect(cursorMove).y()),QPoint(cursorRect(cursorMove1).x(),cursorRect(cursorMove1).y() + cursorHeight));
+            }
+
+            painter.drawLine(line);
+
+            for (int i = 0; i < m_listStartPoint.count(); ++i) {
+                QTextCursor curso = cursorForPosition(m_listStartPoint.value(i));
+            }
+        }
+    }
+    m_bIsLinePaint = !m_bIsLinePaint;
+    //QTextEdit::paintEvent(e);
 }
 
 void TextEdit::highlightCurrentLine()
