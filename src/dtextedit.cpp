@@ -1964,13 +1964,7 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
 
     for (int iBlockCount = blockNumber ; iBlockCount < document()->blockCount(); ++iBlockCount) {
         //注释代码 行单个"{" 折叠标志显示当前行
-//        if (block.text().trimmed().startsWith("{") && blockNumber != 0) {
-//            m_listFlodFlag.append(blockNumber - 1);
-//        } else {
-            m_listFlodFlag.append(blockNumber);
-            //qDebug()<< "Block "<<blockNumber;
-//        }
-
+        m_listFlodFlag.append(blockNumber);
 
         if (block.isValid() && top <= event->rect().bottom()) {
             if (/*block.isVisible() &&*/ bottom >= event->rect().top()) {
@@ -2009,20 +2003,10 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                         //imageTop = startPoint + qFabs(document()->documentLayout()->blockBoundingRect(lineBlock).height() - image.height())/2;
                         double scale = nfoldImageHeight / foldimage.height();
                         double nScaleWidth = scale * foldimage.height() * foldimage.height() / foldimage.width();
-                        scaleFoldImage = foldimage.scaled(scale * foldimage.height(), nScaleWidth);
-                        scaleunFoldImage = Unfoldimage.scaled(scale * Unfoldimage.height(), nScaleWidth);
+                        scaleFoldImage = foldimage.scaled(scale * foldimage.height(), nScaleWidth,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+                        scaleunFoldImage = Unfoldimage.scaled(scale * Unfoldimage.height(), nScaleWidth,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
                     }
                        //注释代码 行单个"{" 折叠标志显示当前行
-//                    if (block.text().trimmed().startsWith("{") && blockNumber != 0) {
-
-//                        if (block.isVisible()) {
-//                            painter.drawImage(5, imageTop - blockHeight, scaleFoldImage);
-//                        } else {
-//                            painter.drawImage(5, imageTop - blockHeight, scaleunFoldImage);
-//                        }
-
-//                        m_listFlodIconPos.append(blockNumber-1);
-//                    } else {
                         if (block.next().isVisible()) {
                             if (block.isVisible())
                                 painter.drawImage(5, imageTop - static_cast<int>(document()->documentMargin()), scaleFoldImage);
@@ -2031,8 +2015,6 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                                 painter.drawImage(5, imageTop - static_cast<int>(document()->documentMargin()), scaleunFoldImage);
                         }
                         m_listFlodIconPos.append(blockNumber);
-                   // }
-
                 }
             }
             block = document()->findBlockByNumber(iBlockCount + 1);
