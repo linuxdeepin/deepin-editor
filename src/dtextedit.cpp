@@ -1743,6 +1743,7 @@ void TextEdit::renderAllSelections()
     selections.append(m_beginBracketSelection);
     selections.append(m_endBracketSelection);
     selections.append(m_markFoldHighLightSelections);
+    selections.append(m_altModSelections);
 //    selections.append(m_markAllSelection);
 
     setExtraSelections(selections);
@@ -5016,10 +5017,10 @@ void TextEdit::mouseMoveEvent(QMouseEvent *e)
         int maxColumn = startColumn > column ? startColumn : column;
         int minRow = startRow < row ? startRow : row;
         int maxRow = startRow > row ? startRow : row;
-//        qDebug()<<"min========================:"<<minRow<<minColumn;
-//        qDebug()<<"max========================:"<<maxRow<<maxColumn;
-//        qDebug()<<"m_altStartTextCursor=======:"<<startRow<<startColumn;
-//        qDebug()<<"moveCursor=================:"<<row<<column;
+        qDebug()<<"min========================:"<<minRow<<minColumn;
+        qDebug()<<"max========================:"<<maxRow<<maxColumn;
+        qDebug()<<"m_altStartTextCursor=======:"<<startRow<<startColumn;
+        qDebug()<<"moveCursor=================:"<<row<<column;
 
         QTextCharFormat format;
         QPalette palette;
@@ -5045,6 +5046,7 @@ void TextEdit::mouseMoveEvent(QMouseEvent *e)
 
                 m_altModSelections << selection;
         }
+        renderAllSelections();
         document()->clearUndoRedoStacks();
         update();
     }
@@ -5073,6 +5075,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             }
             return;
         }
+
         for(auto sel:m_altModSelections)
         {
             if(sel.cursor.hasSelection())
@@ -5726,7 +5729,7 @@ void TextEdit::paintEvent(QPaintEvent *e)
 
     if (m_bIsAltMod /*&& m_bIsMousePress*/ && !m_altModSelections.isEmpty()) {
 
-        setExtraSelections(m_altModSelections);
+        //setExtraSelections(m_altModSelections);
         QTextCursor textCursor = this->textCursor();
         int cursorWidth = this->cursorWidth();
         int cursorHeight = this->cursorRect().height();
