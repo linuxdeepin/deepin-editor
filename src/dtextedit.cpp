@@ -122,7 +122,7 @@ TextEdit::TextEdit(QWidget *parent)
     m_timer = new QTimer(this);
     connect(m_timer,SIGNAL(timeout()),this,SLOT(onTimeout()));
     m_timer->setInterval(QGuiApplication::styleHints()->cursorFlashTime()/2);
-    m_timer->start();
+    //m_timer->start();
 
 
     grabGesture(Qt::TapGesture);
@@ -1964,7 +1964,13 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
 
     for (int iBlockCount = blockNumber ; iBlockCount < document()->blockCount(); ++iBlockCount) {
         //注释代码 行单个"{" 折叠标志显示当前行
-        m_listFlodFlag.append(blockNumber);
+//        if (block.text().trimmed().startsWith("{") && blockNumber != 0) {
+//            m_listFlodFlag.append(blockNumber - 1);
+//        } else {
+            m_listFlodFlag.append(blockNumber);
+            //qDebug()<< "Block "<<blockNumber;
+//        }
+
 
         if (block.isValid() && top <= event->rect().bottom()) {
             if (/*block.isVisible() &&*/ bottom >= event->rect().top()) {
@@ -2003,10 +2009,20 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                         //imageTop = startPoint + qFabs(document()->documentLayout()->blockBoundingRect(lineBlock).height() - image.height())/2;
                         double scale = nfoldImageHeight / foldimage.height();
                         double nScaleWidth = scale * foldimage.height() * foldimage.height() / foldimage.width();
-                        scaleFoldImage = foldimage.scaled(scale * foldimage.height(), nScaleWidth,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
-                        scaleunFoldImage = Unfoldimage.scaled(scale * Unfoldimage.height(), nScaleWidth,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+                        scaleFoldImage = foldimage.scaled(scale * foldimage.height(), nScaleWidth);
+                        scaleunFoldImage = Unfoldimage.scaled(scale * Unfoldimage.height(), nScaleWidth);
                     }
                        //注释代码 行单个"{" 折叠标志显示当前行
+//                    if (block.text().trimmed().startsWith("{") && blockNumber != 0) {
+
+//                        if (block.isVisible()) {
+//                            painter.drawImage(5, imageTop - blockHeight, scaleFoldImage);
+//                        } else {
+//                            painter.drawImage(5, imageTop - blockHeight, scaleunFoldImage);
+//                        }
+
+//                        m_listFlodIconPos.append(blockNumber-1);
+//                    } else {
                         if (block.next().isVisible()) {
                             if (block.isVisible())
                                 painter.drawImage(5, imageTop - static_cast<int>(document()->documentMargin()), scaleFoldImage);
@@ -2015,6 +2031,8 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                                 painter.drawImage(5, imageTop - static_cast<int>(document()->documentMargin()), scaleunFoldImage);
                         }
                         m_listFlodIconPos.append(blockNumber);
+                   // }
+
                 }
             }
             block = document()->findBlockByNumber(iBlockCount + 1);
@@ -3915,8 +3933,10 @@ QStringList TextEdit::readEncodeHistoryRecord()
 
 void TextEdit::onTimeout()
 {
+    m_timer->stop();
     m_bIsTimeout = true;
     update();
+    m_timer->stop();
 }
 
 
@@ -4916,29 +4936,39 @@ void TextEdit::mousePressEvent(QMouseEvent *e)
         m_updateEnableSelectionByMouseTimer->start();
     }
 
-    QPlainTextEdit::mousePressEvent(e);
-    if (e->modifiers() == Qt::AltModifier) {
-        m_bIsAltMod = true;
-        setCursorWidth(0);
-        m_bIsMousePress = true;
-        qDebug() << "m_mouseMoveStart" << cursorRect(textCursor()).width();
-    } else {
-        if (m_bIsAltMod) {
-            m_bIsAltMod = false;
-            setCursorWidth(1);
-            m_altModSelections.clear();
-        }
+    if (e->modifiers() == Qt::AltModifier){
+       m_bIsMousePress = true;
+       m_bIsAltMod = true;
+       //鼠标点击位置为光标位置 　获取光标行列位置
+       QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(e);
+       m_altStartTextCursor = this->cursorForPosition(mouseEvent->pos());
+       m_altStartTextCursor.clearSelection();
+       this->setTextCursor(m_altStartTextCursor);
+       m_altModSelections.clear();
+//       this->setCursorWidth(0);
+       //update();
+    }else {
+        m_bIsMousePress = false;
+        m_bIsAltMod = false;
+        m_altModSelections.clear();
+//       this->setCursorWidth(1);
+//        update();
     }
 
+    QPlainTextEdit::mousePressEvent(e);
 }
 
 void TextEdit::mouseReleaseEvent(QMouseEvent *e)
 {
-    QPlainTextEdit::mouseReleaseEvent(e);
 
     if (e->modifiers() == Qt::AltModifier) {
         m_bIsMousePress = false;
+    }else {
+        m_bIsMousePress = false;
+        m_bIsAltMod = false;
     }
+
+    QPlainTextEdit::mouseReleaseEvent(e);
 }
 
 
@@ -4974,45 +5004,47 @@ void TextEdit::mouseMoveEvent(QMouseEvent *e)
     }
 
     QPlainTextEdit::mouseMoveEvent(e);
+
     if (e->modifiers() == Qt::AltModifier && m_bIsMousePress) {
-        QList<QTextEdit::ExtraSelection> listSelection;
-        QTextEdit::ExtraSelection selection;
+        m_altModSelections.clear();
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(e);
+        QTextCursor moveCursor = this->cursorForPosition(mouseEvent->pos());
+
+        int column = moveCursor.positionInBlock();
+        int row = moveCursor.blockNumber();
+
+        int startColumn = m_altStartTextCursor.positionInBlock();
+        int startRow = m_altStartTextCursor.blockNumber();
+
+        int minColumn = startColumn < column ? startColumn : column;
+        int maxColumn = startColumn > column ? startColumn : column;
+        int minRow = startRow < row ? startRow : row;
+        int maxRow = startRow > row ? startRow : row;
+//        qDebug()<<"min========================:"<<minRow<<minColumn;
+//        qDebug()<<"max========================:"<<maxRow<<maxColumn;
+//        qDebug()<<"m_altStartTextCursor=======:"<<startRow<<startColumn;
+//        qDebug()<<"moveCursor=================:"<<row<<column;
+
         QTextCharFormat format;
         QPalette palette;
-        QTextCursor cursor = textCursor();
+
         format.setBackground(QColor(SELECT_HIGHLIGHT_COLOR));
         format.setForeground(palette.highlightedText());
-        cursor.clearSelection();
-        //setTextCursor(cursor);
-        setTextCursor(cursor);
-        int startLine = getLineFromPoint(m_mouseMoveStart);
-        int endLine = getLineFromPoint(e->pos());
-        int cursorHeight = cursorRect(textCursor()).height();
 
-        if (startLine > endLine) {
-            cursorHeight = -cursorHeight;
+        for (int iRow = minRow;iRow <= maxRow; iRow++) {
+            QTextBlock block = document()->findBlockByNumber(iRow);
+                QTextEdit::ExtraSelection selection;
+                selection.format = format;
+                selection.cursor = textCursor();
+                selection.cursor.clearSelection();
+                setTextCursor(selection.cursor);
+                selection.cursor.setPosition(block.position()+minColumn,QTextCursor::MoveAnchor);
+                selection.cursor.setPosition(block.position()+maxColumn,QTextCursor::KeepAnchor);
+                m_altModSelections << selection;
         }
-
-        int line =  static_cast<int>(qFabs(startLine - endLine));
-        QPoint moveStart = m_mouseMoveStart;
-        m_altModSelections.clear();
-
-        for (int i = 0;i <= line;i++) {
-            QTextCursor cursorMove = cursorForPosition(moveStart);
-            QTextCursor cursorMove1 = cursorForPosition(QPoint(e->pos().x(),moveStart.y()));
-            moveStart = QPoint(moveStart.x(),moveStart.y() + cursorHeight);
-
-            cursor.setPosition(cursorMove.position(),QTextCursor::MoveAnchor);
-            cursor.setPosition(cursorMove1.position(),QTextCursor::KeepAnchor);
-            selection.cursor = cursor;
-            selection.format = format;
-            m_altModSelections << selection;
-        }
-        m_mouseMoveEnd = e->pos();
         document()->clearUndoRedoStacks();
         update();
     }
-
 }
 
 void TextEdit::keyPressEvent(QKeyEvent *e)
@@ -5254,14 +5286,6 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
 
        m_rightMenu->exec(mapToGlobal(pos));
        return;
-    }
-    if(key=="Backspace"&&m_bIsAltMod)
-    {
-        for(int i=0;i<=m_redoCount;i++)
-        {
-            undo();
-        }
-        return;
     }
 
     if(key=="Esc")      //按下esc的时候,光标退出编辑区，切换至标题栏
@@ -5692,67 +5716,37 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
 
 void TextEdit::paintEvent(QPaintEvent *e)
 {
-    if (e->rect() != viewport()->rect() && m_bIsAltMod) {
-        m_timer->start();
-        return QPlainTextEdit::paintEvent(e);
-    }
     QPlainTextEdit::paintEvent(e);
-    bool bIsEmpty = true;
-    if(m_bIsAltMod)
-    setExtraSelections(m_altModSelections);
+
     QColor lineColor = palette().text().color();
     QColor backgrColor = palette().background().color();
 
-    if (m_bIsAltMod && !m_bIsLinePaint) {
+    if (m_bIsAltMod && m_bIsMousePress && !m_altModSelections.isEmpty()) {
 
+        setExtraSelections(m_altModSelections);
+        QTextCursor textCursor = this->textCursor();
+        int cursorWidth = this->cursorWidth();
+        int cursorHeight = this->cursorRect().height();
+
+        int cursoColumn = textCursor.positionInBlock();
         QPainter painter(viewport());
-        QLine line;
-        painter.setPen(lineColor);
+        QPen pen;
+        pen.setColor(lineColor);
+        pen.setWidth(cursorWidth);
+        painter.setPen(pen);
 
-        QList<QPoint> listStartPoint;
-        QList<QPoint> listEndPoint;
-        int startLine = getLineFromPoint(m_mouseMoveStart);
-        int endLine = getLineFromPoint(m_mouseMoveEnd);
-        int cursorHeight = cursorRect(textCursor()).height();
-        int nLine = static_cast<int>(qFabs(startLine - endLine));
-        m_redoCount = nLine;
-        QPoint moveStart = m_mouseMoveStart;
-        //qDebug()<<startLine<<endLine<<cursorHeight<<nLine<<m_bIsAltMod;
-
-        if (startLine > endLine) {
-            moveStart = QPoint(m_mouseMoveStart.x(),m_mouseMoveEnd.y());
-        }
-
-        for (auto selection : m_altModSelections) {
-            if (!selection.cursor.selection().toPlainText().isEmpty()) {
-                bIsEmpty = false;
-            }
-        }
-        m_listStartPoint.clear();
-
-        for (int i = 0;i <= nLine;i++) {
-            QTextCursor cursorMove = cursorForPosition(moveStart);
-            QTextCursor cursorMove1 = cursorForPosition(QPoint(m_mouseMoveEnd.x(),moveStart.y()));
-
-            m_listStartPoint << moveStart;
-            moveStart = QPoint(moveStart.x(),moveStart.y() + cursorHeight);
-            listEndPoint << QPoint(cursorRect(cursorMove1).x(),cursorRect(cursorMove1).y());
-
-            if (bIsEmpty) {
-                line = QLine(QPoint(cursorRect(cursorMove).x(),cursorRect(cursorMove).y()),QPoint(cursorRect(cursorMove).x(),cursorRect(cursorMove1).y() + cursorHeight));
-            } else {
-                line = QLine(QPoint(cursorRect(cursorMove1).x(),cursorRect(cursorMove).y()),QPoint(cursorRect(cursorMove1).x(),cursorRect(cursorMove1).y() + cursorHeight));
-            }
-
-            painter.drawLine(line);
-
-            for (int i = 0; i < m_listStartPoint.count(); ++i) {
-                QTextCursor curso = cursorForPosition(m_listStartPoint.value(i));
+        QList<int> rowList;
+        for (int i = 0 ; i < m_altModSelections.size();i++) {
+            if(m_altModSelections[i].cursor.positionInBlock() == cursoColumn){
+                int row = m_altModSelections[i].cursor.blockNumber();
+                if(!rowList.contains(row)) {
+                 rowList<<row;
+                 QRect textCursorRect = this->cursorRect(m_altModSelections[i].cursor);
+                 painter.drawRect(textCursorRect);
+                }
             }
         }
     }
-    m_bIsLinePaint = !m_bIsLinePaint;
-    //QTextEdit::paintEvent(e);
 }
 
 void TextEdit::highlightCurrentLine()

@@ -1,4 +1,4 @@
- /* -*- Mode: C++; indent-tabs-mode: nil; tab-width: 4 -*-
+﻿ /* -*- Mode: C++; indent-tabs-mode: nil; tab-width: 4 -*-
  * -*- coding: utf-8 -*-
  *
  * Copyright (C) 2011 ~ 2018 Deepin, Inc.
@@ -42,6 +42,9 @@
 #include<QGestureEvent>
 #include <QProxyStyle>
 #include "widgets/ColorSelectWdg.h"
+#include <DTextEdit>
+
+
 
 namespace KSyntaxHighlighting {
     class SyntaxHighlighter;
@@ -254,7 +257,6 @@ signals:
 
     void signal_clearBlack();
     void signal_setTitleFocus();
-
 
 
 public slots:
@@ -511,6 +513,8 @@ private:
     GestureAction m_gestureAction = GA_null;
 
     QList<QTextEdit::ExtraSelection> m_altModSelections;
+    QList<int> m_listRows;//文本光标位置
+    QTextCursor m_altStartTextCursor;
     QTimer *m_timer;
     int m_redoCount = 0;
     bool m_bIsAltMod=false;
