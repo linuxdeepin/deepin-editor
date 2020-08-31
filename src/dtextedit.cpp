@@ -4945,14 +4945,10 @@ void TextEdit::mousePressEvent(QMouseEvent *e)
        m_altStartTextCursor.clearSelection();
        this->setTextCursor(m_altStartTextCursor);
        m_altModSelections.clear();
-//       this->setCursorWidth(0);
-       //update();
     }else {
         m_bIsMousePress = false;
         m_bIsAltMod = false;
         m_altModSelections.clear();
-//       this->setCursorWidth(1);
-//        update();
     }
 
     QPlainTextEdit::mousePressEvent(e);
@@ -5039,7 +5035,14 @@ void TextEdit::mouseMoveEvent(QMouseEvent *e)
                 selection.cursor.clearSelection();
                 setTextCursor(selection.cursor);
                 selection.cursor.setPosition(block.position()+minColumn,QTextCursor::MoveAnchor);
-                selection.cursor.setPosition(block.position()+maxColumn,QTextCursor::KeepAnchor);
+
+                int length = block.text().size();
+                if(maxColumn < length){
+                    selection.cursor.setPosition(block.position()+maxColumn,QTextCursor::KeepAnchor);
+                }else {
+                    selection.cursor.setPosition(block.position()+length,QTextCursor::KeepAnchor);
+                }
+
                 m_altModSelections << selection;
         }
         document()->clearUndoRedoStacks();
@@ -5721,7 +5724,7 @@ void TextEdit::paintEvent(QPaintEvent *e)
     QColor lineColor = palette().text().color();
     QColor backgrColor = palette().background().color();
 
-    if (m_bIsAltMod && m_bIsMousePress && !m_altModSelections.isEmpty()) {
+    if (m_bIsAltMod /*&& m_bIsMousePress*/ && !m_altModSelections.isEmpty()) {
 
         setExtraSelections(m_altModSelections);
         QTextCursor textCursor = this->textCursor();
