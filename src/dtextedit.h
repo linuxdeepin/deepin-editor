@@ -318,6 +318,8 @@ protected:
     void paintEvent(QPaintEvent *e) override;
 
 private:
+    //去除"*{*" "*}*" "*{*}*"跳过当做普通文本处理不折叠　梁卫东２０２０－０９－０１　１７：１６：４１
+    bool blockContainStrBrackets(int line);
     bool setCursorKeywordSeletoin(int position, bool findNext);
     void cursorPositionChanged();
     void updateHighlightBrackets(const QChar &openChar, const QChar &closeChar);

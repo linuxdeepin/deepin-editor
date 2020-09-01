@@ -1976,7 +1976,12 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
         if (block.isValid() && top <= event->rect().bottom()) {
             if (/*block.isVisible() &&*/ bottom >= event->rect().top()) {
                 //判定是否包含注释代码左括号、是否整行是注释，isNeedShowFoldIcon该函数是为了做判定当前行是否包含成对的括号，如果包括，则不显示折叠标志
-                if (block.text().contains("{") &&
+
+               //获取行数文本块 出去字符串判断　梁卫东２０２０年０９月０１日１７：１６：１７
+               QString text = block.text();
+               QRegExp regExp("^\"*\"&");
+               QString curText = text.remove(regExp);
+                if (curText.contains("{") &&
                         !block.text().trimmed().startsWith("//") &&
                         isNeedShowFoldIcon(block)) {
                     int blockHeight = 0;
@@ -3502,16 +3507,15 @@ void TextEdit::flodOrUnflodAllLevel(bool isFlod)
 {
     //折叠
     if(isFlod){
-          for (int line = 0;line< document()->lineCount();line++) {
-              if (document()->findBlockByNumber(line).text().contains("{") && document()->findBlockByNumber(line).isVisible())
+
+          for (int line = 0;line< document()->blockCount();line++) {
+              if (blockContainStrBrackets(line) && document()->findBlockByNumber(line).isVisible()&& !document()->findBlockByNumber(line).text().trimmed().startsWith("//"))
                getNeedControlLine(line, false);
            }
      //展开
     }else{
-        for (int line = 0;line< document()->lineCount();line++) {
-            if((document()->findBlockByNumber(line).text().contains("{") \
-                && !document()->findBlockByNumber(line+1).isVisible()) \
-                    ||(m_listFlodFlag.last() == line && !document()->findBlockByNumber(line).isVisible())){
+        for (int line = 0;line< document()->blockCount();line++) {
+            if(blockContainStrBrackets(line) && !document()->findBlockByNumber(line+1).isVisible()&& !document()->findBlockByNumber(line).text().trimmed().startsWith("//")){
                 getNeedControlLine(line, true);
             }
          }
@@ -5808,6 +5812,20 @@ void TextEdit::paintEvent(QPaintEvent *e)
                 }
            // }
         }
+    }
+}
+
+bool TextEdit::blockContainStrBrackets(int line)
+{
+    //获取行数文本块
+    QTextBlock curBlock = document()->findBlockByNumber(line);
+    QString text = curBlock.text();
+    QRegExp regExp("^\"*\"&");
+    if(text.contains(regExp)){
+        QString curText = text.remove(regExp);
+        return curText.contains("{");
+    }else {
+        return text.contains("{");
     }
 }
 
