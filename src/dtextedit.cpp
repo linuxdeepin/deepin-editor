@@ -119,9 +119,9 @@ TextEdit::TextEdit(QWidget *parent)
     setContentsMargins(0,0,0,0);
 //    document()->setDocumentMargin(1);
  //   setAcceptRichText(false);
-    m_timer = new QTimer(this);
-    connect(m_timer,SIGNAL(timeout()),this,SLOT(onTimeout()));
-    m_timer->setInterval(QGuiApplication::styleHints()->cursorFlashTime()/2);
+    //m_timer = new QTimer(this);
+    //connect(m_timer,SIGNAL(timeout()),this,SLOT(onTimeout()));
+    //m_timer->setInterval(QGuiApplication::styleHints()->cursorFlashTime()/2);
     //m_timer->start();
 
 
@@ -3932,13 +3932,6 @@ QStringList TextEdit::readEncodeHistoryRecord()
     return filePathList;
 }
 
-void TextEdit::onTimeout()
-{
-    m_timer->stop();
-    m_bIsTimeout = true;
-    update();
-    m_timer->stop();
-}
 
 
 void TextEdit::isMarkCurrentLine(bool isMark, QString strColor)
@@ -4908,7 +4901,6 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
 
 void TextEdit::mousePressEvent(QMouseEvent *e)
 {
-    m_mouseMoveStart = e->pos();
     if (e->source() == Qt::MouseEventSynthesizedByQt) {
         m_lastTouchBeginPos = e->pos();
 
@@ -4937,8 +4929,7 @@ void TextEdit::mousePressEvent(QMouseEvent *e)
         m_updateEnableSelectionByMouseTimer->start();
     }
 
-    if (e->modifiers() == Qt::AltModifier){
-       m_bIsMousePress = true;
+    if (e->modifiers() == Qt::AltModifier){     
        m_bIsAltMod = true;
        //鼠标点击位置为光标位置 　获取光标行列位置
        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(e);
@@ -4947,25 +4938,11 @@ void TextEdit::mousePressEvent(QMouseEvent *e)
        this->setTextCursor(m_altStartTextCursor);
        m_altModSelections.clear();
     }else {
-        m_bIsMousePress = false;
         m_bIsAltMod = false;
         m_altModSelections.clear();
     }
 
     QPlainTextEdit::mousePressEvent(e);
-}
-
-void TextEdit::mouseReleaseEvent(QMouseEvent *e)
-{
-
-    if (e->modifiers() == Qt::AltModifier) {
-        m_bIsMousePress = false;
-    }else {
-        m_bIsMousePress = false;
-        m_bIsAltMod = false;
-    }
-
-    QPlainTextEdit::mouseReleaseEvent(e);
 }
 
 
@@ -5002,13 +4979,15 @@ void TextEdit::mouseMoveEvent(QMouseEvent *e)
 
     QPlainTextEdit::mouseMoveEvent(e);
 
-    if (e->modifiers() == Qt::AltModifier && m_bIsMousePress) {
+    if (e->modifiers() == Qt::AltModifier && m_bIsAltMod) {
         m_altModSelections.clear();
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(e);
-        QTextCursor moveCursor = this->cursorForPosition(mouseEvent->pos());
 
-        int column = moveCursor.positionInBlock();
-        int row = moveCursor.blockNumber();
+        QPoint curPos =mouseEvent->pos();
+        m_altEndTextCursor = this->cursorForPosition(curPos);
+
+        int column = m_altEndTextCursor.positionInBlock();
+        int row = m_altEndTextCursor.blockNumber();
 
         int startColumn = m_altStartTextCursor.positionInBlock();
         int startRow = m_altStartTextCursor.blockNumber();
@@ -5017,35 +4996,56 @@ void TextEdit::mouseMoveEvent(QMouseEvent *e)
         int maxColumn = startColumn > column ? startColumn : column;
         int minRow = startRow < row ? startRow : row;
         int maxRow = startRow > row ? startRow : row;
-        qDebug()<<"min========================:"<<minRow<<minColumn;
-        qDebug()<<"max========================:"<<maxRow<<maxColumn;
-        qDebug()<<"m_altStartTextCursor=======:"<<startRow<<startColumn;
-        qDebug()<<"moveCursor=================:"<<row<<column;
+//        qDebug()<<"min========================:"<<minRow<<minColumn;
+//        qDebug()<<"max========================:"<<maxRow<<maxColumn;
+//        qDebug()<<mouseEvent->pos();
+//        qDebug()<<"begin pos:row="<<startRow<<" column="<<startColumn;
+//        qDebug()<<"Move  pos:row="<<row<<" column="<<column;
 
         QTextCharFormat format;
         QPalette palette;
-
         format.setBackground(QColor(SELECT_HIGHLIGHT_COLOR));
         format.setForeground(palette.highlightedText());
 
         for (int iRow = minRow;iRow <= maxRow; iRow++) {
             QTextBlock block = document()->findBlockByNumber(iRow);
-                QTextEdit::ExtraSelection selection;
-                selection.format = format;
-                selection.cursor = textCursor();
-                selection.cursor.clearSelection();
-                setTextCursor(selection.cursor);
-                selection.cursor.setPosition(block.position()+minColumn,QTextCursor::MoveAnchor);
+            QTextCursor cursor(block);
+            cursor.movePosition(QTextCursor::EndOfBlock,QTextCursor::MoveAnchor);
 
-                int length = block.text().size();
-                if(maxColumn < length){
-                    selection.cursor.setPosition(block.position()+maxColumn,QTextCursor::KeepAnchor);
-                }else {
-                    selection.cursor.setPosition(block.position()+length,QTextCursor::KeepAnchor);
-                }
+            QPoint blockTailPos = this->cursorRect(cursor).bottomRight();
 
-                m_altModSelections << selection;
+            //位置从0开始
+            int length = block.text().length();
+
+            //鼠标x坐标大于当前块最后字符位置　遍历获取最大块长度
+            if(curPos.x() >= blockTailPos.x()  && length > maxColumn){
+                  maxColumn = length;
+            }
         }
+
+
+        for (int iRow = minRow;iRow <= maxRow; iRow++) {
+            QTextBlock block = document()->findBlockByNumber(iRow);
+            int length = block.text().size();
+
+            if(length < minColumn) continue;
+
+            QTextEdit::ExtraSelection selection;
+            QTextCursor cursor = this->textCursor();
+            cursor.clearSelection();
+            setTextCursor(cursor);
+            cursor.setPosition(block.position()+minColumn,QTextCursor::MoveAnchor);
+            if(length < maxColumn){
+               cursor.setPosition(block.position()+length,QTextCursor::KeepAnchor);
+            }else {
+               cursor.setPosition(block.position()+maxColumn,QTextCursor::KeepAnchor);
+            }
+
+            selection.cursor = cursor;
+            selection.format = format;
+            m_altModSelections<<selection;
+        }
+
         renderAllSelections();
         document()->clearUndoRedoStacks();
         update();
@@ -5727,13 +5727,10 @@ void TextEdit::paintEvent(QPaintEvent *e)
     QColor lineColor = palette().text().color();
     QColor backgrColor = palette().background().color();
 
-    if (m_bIsAltMod /*&& m_bIsMousePress*/ && !m_altModSelections.isEmpty()) {
+    if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
 
-        //setExtraSelections(m_altModSelections);
         QTextCursor textCursor = this->textCursor();
         int cursorWidth = this->cursorWidth();
-        int cursorHeight = this->cursorRect().height();
-
         int cursoColumn = textCursor.positionInBlock();
         QPainter painter(viewport());
         QPen pen;
@@ -5743,14 +5740,14 @@ void TextEdit::paintEvent(QPaintEvent *e)
 
         QList<int> rowList;
         for (int i = 0 ; i < m_altModSelections.size();i++) {
-            if(m_altModSelections[i].cursor.positionInBlock() == cursoColumn){
+            //if(m_altModSelections[i].cursor.positionInBlock() == cursoColumn){
                 int row = m_altModSelections[i].cursor.blockNumber();
                 if(!rowList.contains(row)) {
                  rowList<<row;
                  QRect textCursorRect = this->cursorRect(m_altModSelections[i].cursor);
                  painter.drawRect(textCursorRect);
                 }
-            }
+           // }
         }
     }
 }

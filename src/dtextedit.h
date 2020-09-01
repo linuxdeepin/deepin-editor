@@ -260,8 +260,6 @@ signals:
 
 
 public slots:
-    void onTimeout();
-
     void highlightCurrentLine();
     void updateLineNumber();
     void updateWordCount();
@@ -312,7 +310,6 @@ protected:
     void inputMethodEvent(QInputMethodEvent *e) override;
 
     void mousePressEvent(QMouseEvent *e) override;
-    void mouseReleaseEvent(QMouseEvent *e) override;
     void mouseMoveEvent(QMouseEvent *e) override;
     void keyPressEvent(QKeyEvent *e) override;
     void wheelEvent(QWheelEvent *e) override;
@@ -513,17 +510,9 @@ private:
     GestureAction m_gestureAction = GA_null;
 
     QList<QTextEdit::ExtraSelection> m_altModSelections;
-    QList<int> m_listRows;//文本光标位置
-    QTextCursor m_altStartTextCursor;
-    QTimer *m_timer;
-    int m_redoCount = 0;
+    QTextCursor m_altStartTextCursor;//开始按住alt鼠标点击光标位置
+    QTextCursor m_altEndTextCursor;//结束按住alt鼠标点击光标位置
     bool m_bIsAltMod=false;
-    bool m_bIsMousePress=false;
-    bool m_bIsLinePaint=false;
-    bool m_bIsTimeout=false;
-    QPoint m_mouseMoveStart;
-    QPoint m_mouseMoveEnd;
-    QList<QPoint> m_listStartPoint;
-
+    int m_redoCount = 0;
 };
 #endif
