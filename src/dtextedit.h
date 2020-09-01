@@ -514,5 +514,6 @@ private:
     QTextCursor m_altEndTextCursor;//结束按住alt鼠标点击光标位置
     bool m_bIsAltMod=false;
     int m_redoCount = 0;
+    QStringList m_pastText;
 };
 #endif

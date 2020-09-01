@@ -5058,39 +5058,98 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
     //     viewport()->setCursor(Qt::BlankCursor);
     // }
     const QString &key = Utils::getKeyshortcut(e);
-    // alt+m 弹出编辑器右键菜单
-    if(m_bIsAltMod)
-    {
-        if(key=="Backspace")
-        {
-            for(auto sel:m_altModSelections)
-            {
-                if(sel.cursor.hasSelection())
-                {
-                    sel.cursor.removeSelectedText();
-                }
-                else {
-                    sel.cursor.deletePreviousChar();
-                }
-            }
-            return;
-        }
 
-        for(auto sel:m_altModSelections)
-        {
-            if(sel.cursor.hasSelection())
-            {
-                sel.cursor.removeSelectedText();
-                sel.cursor.insertText(e->text());
-            }
-            else {
-             //   if(sel.cursor.PreviousCharacter)
-                sel.cursor.insertText(e->text());
-                    qDebug()<<sel.cursor.PreviousCharacter;
-            }
-        }
-        return ;
-    }
+    if(m_bIsAltMod)
+       {
+           if(key=="Backspace")
+           {
+               for(auto sel:m_altModSelections)
+               {
+                   if(sel.cursor.hasSelection())
+                   {
+                       sel.cursor.removeSelectedText();
+                   }
+                   else {
+                       sel.cursor.deletePreviousChar();
+                   }
+               }
+               return;
+           }
+           if(e->key()==16777249) //ctrl键
+           {
+               e->ignore();
+               return;
+           }
+           if(key=="Ctrl+C")
+           {
+               qDebug()<<"i can paste";
+               m_pastText.clear();
+
+               for(auto sel:m_altModSelections)
+               {
+                   m_pastText<<sel.cursor.selectedText();
+               }
+
+               QString pasteText = m_pastText.join("\n");
+               QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
+               clipboard->setText(pasteText);
+               return;
+           }
+           if(key=="Ctrl+V")
+           {
+               QClipboard *clipboard = QApplication::clipboard();
+               QString originalText = clipboard->text();
+
+               qDebug()<<originalText<<"列粘贴文本";
+               for(auto sel:m_altModSelections)
+               {
+               if(sel.cursor.hasSelection())
+               {
+                   sel.cursor.removeSelectedText();
+               }
+
+               }
+               qDebug()<<m_pastText.length()<<m_altModSelections.length();
+
+               if(m_pastText.length()==m_altModSelections.length())
+               {
+                    for(int i=0;i<m_pastText.length();i++)
+                    {
+                        m_altModSelections[i].cursor.insertText(m_pastText[i]);
+                    }
+               }
+               else {
+                   m_altModSelections[0].cursor.insertText(originalText);
+               }
+               return;
+           }
+           if(key=="Ctrl+Z")
+           {
+               for(int i=0;i<=m_altModSelections.length();i++)
+               undo();
+               return;
+           }
+           if(key=="Ctrl+Y")
+           {
+               for(int i=0;i<=m_altModSelections.length();i++)
+               redo();
+               return;
+           }
+
+           for(auto sel:m_altModSelections)
+           {
+               if(sel.cursor.hasSelection())
+               {
+                   sel.cursor.removeSelectedText();
+                   sel.cursor.insertText(e->text());
+               }
+               else {
+                   sel.cursor.insertText(e->text());
+               }
+           }
+           return ;
+       }
+    // alt+m 弹出编辑器右键菜单
 
     if(e->modifiers() == Qt::AltModifier && !e->text().compare(QString("m"),Qt::CaseInsensitive)){
 
