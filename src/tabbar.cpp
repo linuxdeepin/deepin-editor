@@ -76,7 +76,7 @@ void Tabbar::addTabWithIndex(int index, const QString &filePath, const QString &
     //除去空白符 梁卫东 ２０２０－０８－２６　１４：４９：１５
     QString trimmedName = tabName.simplified();
     DTabBar::insertTab(index, trimmedName);
-    DTabBar::setTabMinimumSize(index, QSize(110, 40));
+    DTabBar::setTabMinimumSize(index, QSize(160, 40));
     DTabBar::setTabMaximumSize(index, QSize(160, 40));
     DTabBar::setCurrentIndex(index);
 }
@@ -572,6 +572,37 @@ QSize Tabbar::tabSizeHint(int index) const
     //Q_UNUSED(index)
     //return QSize(160,100);
     return DTabBar::tabSizeHint(index);
+}
+
+void Tabbar::tabLayoutChange()
+{
+    int nWidthSum = 0;
+
+    for (int i = 0;i < m_tabPaths.count();i++) {
+        nWidthSum += this->tabRect(i).width();
+    }
+
+    for (int i = 0;i < m_tabPaths.count();i++) {
+        if (nWidthSum > rect().width()) {
+            int nWidth = 110;
+
+            if (tabRect(0).width() > 110) {
+                nWidth = rect().width()/m_tabPaths.count();
+            }
+
+            DTabBar::setTabMinimumSize(i, QSize(nWidth, 40));
+            DTabBar::setTabMaximumSize(i, QSize(nWidth, 40));
+        } else {
+            int nWidth = 160;
+
+            if (tabRect(0).width() < 160) {
+                nWidth = rect().width()/m_tabPaths.count();
+            }
+
+            DTabBar::setTabMinimumSize(i, QSize(nWidth, 40));
+            DTabBar::setTabMaximumSize(i, QSize(nWidth, 40));
+        }
+    }
 }
 
 void Tabbar::handleTabMoved(int fromIndex, int toIndex)
