@@ -78,7 +78,7 @@ Settings::Settings(QWidget *parent)
 
     auto theme = settings->option("advance.editor.theme");
     connect(theme, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
-        emit themeChanged(value.toString());
+        //emit themeChanged(value.toString());
     });
 
     auto tabSpaceNumber = settings->option("advance.editor.tabspacenumber");
