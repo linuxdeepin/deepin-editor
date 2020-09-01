@@ -5333,10 +5333,10 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
 
             if (m_wordMarkSelections.size() > 0) {
                 m_colorMarkMenu->addAction(m_cancleLastMark);
-                m_colorMarkMenu->addSeparator();
-            }
-            m_colorMarkMenu->addAction(m_cancleMarkAllLine);
 
+                m_colorMarkMenu->addSeparator();
+                m_colorMarkMenu->addAction(m_cancleMarkAllLine);
+            }
 
             m_rightMenu->addSeparator();
             m_rightMenu->addMenu(m_colorMarkMenu);
@@ -5766,11 +5766,11 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
 
         if (m_wordMarkSelections.size() > 0) {
             m_colorMarkMenu->addAction(m_cancleLastMark);
+            m_colorMarkMenu->addAction(m_cancleMarkAllLine);
             m_colorMarkMenu->addSeparator();
         }
-        m_colorMarkMenu->addAction(m_cancleMarkAllLine);
-        m_colorMarkMenu->addSeparator();
 
+        m_colorMarkMenu->addSeparator();
 
         m_rightMenu->addSeparator();
         m_rightMenu->addMenu(m_colorMarkMenu);
