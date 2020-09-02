@@ -994,6 +994,11 @@
         <translation>取消注释</translation>
     </message>
     <message>
+        <location filename="../src/dtextedit.cpp" line="230"/>
+        <source>Press ALT and click lines to edit in column mode</source>
+        <translation>请使用ALT+鼠标点选切换列编辑模式</translation>
+    </message>
+    <message>
         <location filename="../src/dtextedit.cpp" line="156"/>
         <source>Text to Speech</source>
         <translation>语音朗读</translation>

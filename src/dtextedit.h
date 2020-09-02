@@ -382,6 +382,8 @@ private:
     QAction *m_stopReadingAction;
     QAction *m_dictationAction;
     QAction *m_translateAction;
+    QAction *m_columnEditAction;
+
     QAction *m_addBookMarkAction;
     QAction *m_cancelBookMarkAction;
     QAction *m_clearBookMarkAction;
