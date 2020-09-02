@@ -34,6 +34,8 @@
 #include <DApplication>
 #include <QLabel>
 #include <QPushButton>
+
+
 DWIDGET_USE_NAMESPACE
 DCORE_USE_NAMESPACE
 DTK_USE_NAMESPACE
@@ -93,7 +95,7 @@ private:
 class KeySequenceEdit : public DKeySequenceEdit
 {
 public:
-    KeySequenceEdit(DTK_CORE_NAMESPACE::DSettingsOption *opt, QWidget *parent = nullptr): DKeySequenceEdit(parent)
+    inline KeySequenceEdit(DTK_CORE_NAMESPACE::DSettingsOption *opt, QWidget *parent = nullptr): DKeySequenceEdit(parent)
     {
         m_poption = opt;
         this->installEventFilter(this);
@@ -106,21 +108,18 @@ protected:
 
     inline bool eventFilter(QObject*o,QEvent*e)
     {
-        static bool isEnableEdit = true;     // true 可以Enter进入编辑状态 false 此时Enter为快捷键输入
-        // 焦点进入快捷键编辑
-        if (e->type() == QEvent::FocusOut) {
-            // 焦点出去后,可以Enter进入编辑状态
-            isEnableEdit = true;
-        }
-
-
         //设置界面　回车键和空格键　切换输入 梁卫东　２０２０－０８－２１　１６：２８：３１
         if(o == this){
-            if(e->type() == QEvent::KeyPress&&isEnableEdit){
+            if(e->type() == QEvent::KeyPress){
                 QKeyEvent* keyEvent = static_cast<QKeyEvent*>(e);
                 //qDebug()<<keyEvent->text()<<keyEvent->key();
 
-                if(keyEvent->key()== Qt::Key_Return || keyEvent->key() == Qt::Key_Space){
+               //判断是否包含组合键　梁卫东　２０２０－０９－０２　１５：０３：５６
+                Qt::KeyboardModifiers modifiers = keyEvent->modifiers();
+                bool bHasModifier = (modifiers & Qt::ShiftModifier ||modifiers & Qt::ControlModifier || modifiers & Qt::AltModifier);
+
+
+                if(!bHasModifier && (keyEvent->key()== Qt::Key_Return || keyEvent->key() == Qt::Key_Space)){
                     QRect rect = this->rect();
                     QList<QLabel*> childern = findChildren<QLabel*>();
 
@@ -129,9 +128,7 @@ protected:
 
                         QMouseEvent event0(QEvent::MouseButtonPress, pos, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
                         DApplication::sendEvent(childern[i], &event0);
-
                     }
-                    isEnableEdit=false;
                     return true;
                 }
             }
