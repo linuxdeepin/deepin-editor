@@ -213,21 +213,6 @@ Window::Window(DMainWindow *parent)
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &Window::slotLoadContentTheme);
 
     Utils::clearChildrenFocus(m_tabbar);//使用此函数把tabbar的组件焦点去掉(左右箭头不能focus)
-
-    DIconButton *addButton = m_tabbar->findChild<DIconButton *>("AddButton");
-    addButton->setFocusPolicy(Qt::TabFocus);
-    DIconButton *optionBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowOptionButton");
-    optionBtn->setFocusPolicy(Qt::TabFocus);
-    DIconButton *minBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowMinButton");
-    minBtn->setFocusPolicy(Qt::TabFocus);
-    DIconButton *maxBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowMaxButton");
-    maxBtn->setFocusPolicy(Qt::TabFocus);
-    DIconButton *closeBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowCloseButton");
-    closeBtn->setFocusPolicy(Qt::TabFocus);
-    QWidget::setTabOrder(addButton, optionBtn);
-    QWidget::setTabOrder(optionBtn, minBtn);
-    QWidget::setTabOrder(minBtn, maxBtn);
-    QWidget::setTabOrder(maxBtn, closeBtn);
 }
 
 Window::~Window()
@@ -288,6 +273,16 @@ void Window::initTitlebar()
     titlebar()->setIcon(QIcon::fromTheme("deepin-editor"));
 
     titlebar()->setFocusPolicy(Qt::NoFocus);         //设置titlebar无焦点，点击titlebar时光标不移动
+    DIconButton *addButton = m_tabbar->findChild<DIconButton *>("AddButton");
+    addButton->setFocusPolicy(Qt::NoFocus);
+    DIconButton *optionBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowOptionButton");
+    optionBtn->setFocusPolicy(Qt::NoFocus);
+    DIconButton *minBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowMinButton");
+    minBtn->setFocusPolicy(Qt::NoFocus);
+    DIconButton *maxBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowMaxButton");
+    maxBtn->setFocusPolicy(Qt::NoFocus);
+    DIconButton *closeBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowCloseButton");
+    closeBtn->setFocusPolicy(Qt::NoFocus);
 
     connect(m_tabbar, &DTabBar::tabBarDoubleClicked, titlebar(), &DTitlebar::doubleClicked, Qt::QueuedConnection);
 
@@ -455,6 +450,7 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
     connect(wrapper->textEditor(), &TextEdit::clickFullscreenAction, this, &Window::toggleFullscreen, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::popupNotify, this, &Window::showNotify, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::pressEsc, this, &Window::removeBottomWidget, Qt::QueuedConnection);
+    connect(wrapper->textEditor(), &TextEdit::signal_setTitleFocus, this, &Window::slot_setTitleFocus, Qt::QueuedConnection);
 
     dbus.systemBus().connect("com.deepin.daemon.Gesture",
                                 "/com/deepin/daemon/Gesture", "com.deepin.daemon.Gesture",
@@ -2004,6 +2000,20 @@ void Window::slot_setTitleFocus()
 {
     titlebar()->setFocusPolicy(Qt::TabFocus);
     titlebar()->setFocus(Qt::MouseFocusReason);
+    DIconButton *addButton = m_tabbar->findChild<DIconButton *>("AddButton");
+    addButton->setFocusPolicy(Qt::TabFocus);
+    DIconButton *optionBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowOptionButton");
+    optionBtn->setFocusPolicy(Qt::TabFocus);
+    DIconButton *minBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowMinButton");
+    minBtn->setFocusPolicy(Qt::TabFocus);
+    DIconButton *maxBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowMaxButton");
+    maxBtn->setFocusPolicy(Qt::TabFocus);
+    DIconButton *closeBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowCloseButton");
+    closeBtn->setFocusPolicy(Qt::TabFocus);
+    QWidget::setTabOrder(addButton, optionBtn);
+    QWidget::setTabOrder(optionBtn, minBtn);
+    QWidget::setTabOrder(minBtn, maxBtn);
+    QWidget::setTabOrder(maxBtn, closeBtn);
 }
 
 void Window::handleFocusWindowChanged(QWindow *w)
