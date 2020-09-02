@@ -4853,10 +4853,10 @@ void TextEdit::fingerZoom(QString name, QString direction, int fingers)
             if (name == "pinch" && fingers == 2) {
                 if (direction == "in") {
                     // 捏合 in是手指捏合的方向 向内缩小
-                    zoomOut();  // zoom out 缩小
+                    qobject_cast<Window *>(this->window())->decrementFontSize();
                 } else if (direction == "out") {
                     // 捏合 out是手指捏合的方向 向外放大
-                    zoomIn();   // zoom in 放大
+                    qobject_cast<Window *>(this->window())->incrementFontSize();
                 }
             }
         }
