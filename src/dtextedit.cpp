@@ -1962,6 +1962,8 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
     QString unflodImagePath = ":/images/u-" + theme + ".svg";
     QImage Unfoldimage(unflodImagePath);
     QImage foldimage(flodImagePath);
+    QPixmap scaleFoldPixmap;
+    QPixmap scaleunFoldPixmap;
     QImage scaleFoldImage;
     QImage scaleunFoldImage;
     int imageTop = 0;//图片绘制位置
@@ -2008,8 +2010,12 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                             imageTop = top + qFabs(blockHeight - foldimage.height()) / 2;
                         }
 
-                        scaleFoldImage = foldimage;
-                        scaleunFoldImage = Unfoldimage;
+                        //scaleFoldImage = foldimage;
+                        //scaleunFoldImage = Unfoldimage;
+                        scaleFoldPixmap = Utils::renderSVG(flodImagePath, QSize(foldimage.height(), foldimage.width()));
+                        scaleFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
+                        scaleunFoldPixmap = Utils::renderSVG(unflodImagePath, QSize(foldimage.height(), foldimage.width()));
+                        scaleunFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
                     } else {
                         if (blockHeight > 1.5 * fontHeight) {
 
@@ -2022,8 +2028,12 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                         //imageTop = startPoint + qFabs(document()->documentLayout()->blockBoundingRect(lineBlock).height() - image.height())/2;
                         double scale = nfoldImageHeight / foldimage.height();
                         double nScaleWidth = scale * foldimage.height() * foldimage.height() / foldimage.width();
-                        scaleFoldImage = foldimage.scaled(scale * foldimage.height(), nScaleWidth);
-                        scaleunFoldImage = Unfoldimage.scaled(scale * Unfoldimage.height(), nScaleWidth);
+                        //scaleFoldImage = foldimage.scaled(scale * foldimage.height(), nScaleWidth);
+                        //scaleunFoldImage = Unfoldimage.scaled(scale * Unfoldimage.height(), nScaleWidth);
+                        scaleFoldPixmap = Utils::renderSVG(flodImagePath, QSize(static_cast<int>(foldimage.height()*scale), static_cast<int>(nScaleWidth)));
+                        scaleFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
+                        scaleunFoldPixmap = Utils::renderSVG(unflodImagePath, QSize(static_cast<int>(foldimage.height()*scale), static_cast<int>(nScaleWidth)));
+                        scaleunFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
                     }
                        //注释代码 行单个"{" 折叠标志显示当前行
 //                    if (block.text().trimmed().startsWith("{") && blockNumber != 0) {
@@ -2036,12 +2046,15 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
 
 //                        m_listFlodIconPos.append(blockNumber-1);
 //                    } else {
+
+
+
                         if (block.next().isVisible()) {
                             if (block.isVisible())
-                                painter.drawImage(5, imageTop - static_cast<int>(document()->documentMargin()), scaleFoldImage);
+                                painter.drawPixmap(5, imageTop - static_cast<int>(document()->documentMargin()), scaleFoldPixmap);
                         } else {
                             if (block.isVisible())
-                                painter.drawImage(5, imageTop - static_cast<int>(document()->documentMargin()), scaleunFoldImage);
+                                painter.drawPixmap(5, imageTop - static_cast<int>(document()->documentMargin()), scaleunFoldPixmap);
                         }
                         m_listFlodIconPos.append(blockNumber);
                    // }
@@ -3335,7 +3348,9 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
 
     QTextBlock lineBlock;//第几行文本块
     QImage image;
-    QImage scaleImage;
+//    QImage scaleImage;
+    QPixmap scalePixmap;
+    QString pixmapPath;
 //    int startPoint = 0;//当前可见区域开始位置
     int imageTop = 0;//图片绘制位置
     int fontHeight = fontMetrics().height();
@@ -3356,12 +3371,15 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
         cur.setPosition(lineBlock.position(),QTextCursor::MoveAnchor);
         if (line == m_nBookMarkHoverLine && !bIsContains) {
             if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::ColorType::DarkType) {
+                pixmapPath = ":/images/like_hover_dark.svg";
                 image = QImage(":/images/like_hover_dark.svg");
             } else {
                 image = QImage(":/images/like_hover_light.svg");
+                pixmapPath = ":/images/like_hover_light.svg";
             }
         } else {
             image = QImage(":/images/bookmark.svg");
+            pixmapPath = ":/images/bookmark.svg";
         }
 
         if(line > 0)
@@ -3372,14 +3390,18 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
             }
 
             if(fontHeight > image.height()) {
-                scaleImage = image;
+//                scaleImage = image;
+                scalePixmap = Utils::renderSVG(pixmapPath, QSize(image.height(), image.width()));
+                scalePixmap.setDevicePixelRatio(devicePixelRatioF());
             } else {
                 double scale = nBookmarkLineHeight/image.height();
                 int nScaleWidth = static_cast<int>(scale*image.width());
-                scaleImage = image.scaled(static_cast<int>(scale*image.height()),nScaleWidth);
+                scalePixmap = Utils::renderSVG(pixmapPath, QSize(static_cast<int>(scale*image.height()),nScaleWidth));
+                scalePixmap.setDevicePixelRatio(devicePixelRatioF());
+//                scaleImage = image.scaled(static_cast<int>(scale*image.height()),nScaleWidth);
             }
 
-            imageTop = cursorRect(cur).y() + (cursorRect(cur).height() - scaleImage.height())/2;
+            imageTop = cursorRect(cur).y() + (cursorRect(cur).height() - scalePixmap.height())/2;
 //            if(scaleImage.height() > 0.8 * image.height()) {
 //                imageTop = startPoint - 2 + (document()->documentLayout()->blockBoundingRect(lineBlock).toRect().height() - scaleImage.height())/2;
 //            } else {
@@ -3389,7 +3411,7 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
 //                imageTop = startPoint + static_cast<int>(qFabs(fontHeight - scaleImage.height())/2);
 //            }
 
-            painter.drawImage(5,imageTop,scaleImage);
+            painter.drawPixmap(5,imageTop,scalePixmap);
 
         }
      }
@@ -5152,10 +5174,22 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
                if(sel.cursor.hasSelection())
                {
                    sel.cursor.removeSelectedText();
-                   sel.cursor.insertText(e->text());
+
+                   if (m_bIsInputMethod) {
+                       sel.cursor.insertText(m_qstrCommitString);
+                   } else {
+                       sel.cursor.insertText(e->text());
+                   }
+
+                   m_bIsInputMethod = false;
                }
                else {
-                   sel.cursor.insertText(e->text());
+                   if (m_bIsInputMethod) {
+                       sel.cursor.insertText(m_qstrCommitString);
+                   } else {
+                       sel.cursor.insertText(e->text());
+                   }
+                   m_bIsInputMethod = false;
                }
            }
            return ;
