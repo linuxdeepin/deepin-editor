@@ -263,7 +263,7 @@ signals:
 
     void signal_clearBlack();
     void signal_setTitleFocus();
-
+    void toTellInputModEdit(QString input);
 
 public slots:
     void highlightCurrentLine();
@@ -306,6 +306,7 @@ public slots:
                               ,QList<QTextEdit::ExtraSelection> *listSelections);
     void onSelectionArea();
     void fingerZoom(QString name, QString direction, int fingers);
+    void onInputModEdit(QString input);
 
 protected:
     bool event(QEvent* evt) override;   //触摸屏event事件

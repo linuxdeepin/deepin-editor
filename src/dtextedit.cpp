@@ -147,6 +147,7 @@ TextEdit::TextEdit(QWidget *parent)
     connect(document(), &QTextDocument::modificationChanged, this, &TextEdit::setModified);
     connect(document(), &QTextDocument::contentsChange, this, &TextEdit::updateMark);
     connect(document(), &QTextDocument::contentsChange, this, &TextEdit::checkBookmarkLineMove);
+    connect(this, &TextEdit::toTellInputModEdit,this,&TextEdit::onInputModEdit);
 
     QDBusConnection dbus = QDBusConnection::sessionBus();
     dbus.systemBus().connect("com.deepin.daemon.Gesture",
@@ -292,19 +293,15 @@ TextEdit::TextEdit(QWidget *parent)
     connect(m_clearBookMarkAction, &QAction::triggered, this, &TextEdit::onClearBookMark);
     connect(m_flodAllLevel, &QAction::triggered, this, [ = ] {
         flodOrUnflodAllLevel(true);
-        m_pLeftAreaWidget->m_flodArea->update();
     });
     connect(m_unflodAllLevel, &QAction::triggered, this, [ = ] {
         flodOrUnflodAllLevel(false);
-        m_pLeftAreaWidget->m_flodArea->update();
     });
     connect(m_flodCurrentLevel, &QAction::triggered, this, [ = ] {
         flodOrUnflodCurrentLevel(true);
-        m_pLeftAreaWidget->m_flodArea->update();
     });
     connect(m_unflodCurrentLevel, &QAction::triggered, this, [ = ] {
         flodOrUnflodCurrentLevel(false);
-        m_pLeftAreaWidget->m_flodArea->update();
     });
 
     connect(m_cancleMarkAllLine, &QAction::triggered, this, [ = ] {
@@ -4046,13 +4043,13 @@ void TextEdit::columnDelete()
 
 void TextEdit::columnUndo()
 {
-    for(int i=0;i<=m_altModSelections.length();i++)
+//    for(int i=0;i<=m_altModSelections.length();i++)
     undo();
 }
 
 void TextEdit::columnRedo()
 {
-    for(int i=0;i<=m_altModSelections.length();i++)
+//    for(int i=0;i<=m_altModSelections.length();i++)
     redo();
 }
 
@@ -4276,7 +4273,7 @@ void TextEdit::markSelectWord()
 }
 
 void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
-{
+{    
     if (m_readOnlyMode) {
         undo();
         return;
@@ -4982,6 +4979,24 @@ void TextEdit::fingerZoom(QString name, QString direction, int fingers)
         }
 }
 
+void TextEdit::onInputModEdit(QString input)
+{
+    textCursor().beginEditBlock();
+
+    for (auto sel:m_altModSelections) {
+        if(sel.cursor.hasSelection())
+        {
+            sel.cursor.removeSelectedText();
+            sel.cursor.insertText(input);
+        }
+        else {
+            sel.cursor.insertText(input);
+        }
+    }
+
+    textCursor().endEditBlock();
+}
+
 void TextEdit::dragEnterEvent(QDragEnterEvent *event)
 {
     QPlainTextEdit::dragEnterEvent(event);
@@ -5018,9 +5033,16 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
 {
     m_bIsInputMethod = true;
     m_qstrCommitString = e->commitString();
+
     if (!m_readOnlyMode && e->commitString() != "") {
+
+        if (m_bIsAltMod) {
+            emit toTellInputModEdit(m_qstrCommitString);
+            return;
+        }
+
         QPlainTextEdit::inputMethodEvent(e);
-    }
+    }  
 }
 
 void TextEdit::mousePressEvent(QMouseEvent *e)
@@ -5217,57 +5239,49 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             e->ignore();
             return;
         }
-        if(key=="Ctrl+C")
+        if(key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "copy"))
         {
             columnCopy();
             return;
         }
-        if(key=="Ctrl+V")
+        if(key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "paste"))
         {
             columnPaste();
             return;
         }
-        if(key=="Ctrl+Z")
+        if(key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "undo"))
         {
             columnUndo();
             return;
         }
-        if(key=="Ctrl+Y")
+        if(key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "redo"))
         {
             columnRedo();
             return;
         }
-        if(key=="Ctrl+X")
+        if(key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "cut"))
         {
             columnCut();
             return;
         }
 
-           for(auto sel:m_altModSelections)
-           {
-               if(sel.cursor.hasSelection())
-               {
-                   sel.cursor.removeSelectedText();
+        textCursor().beginEditBlock();
 
-                   if (m_bIsInputMethod) {
-                       sel.cursor.insertText(m_qstrCommitString);
-                   } else {
-                       sel.cursor.insertText(e->text());
-                   }
+        for(auto sel:m_altModSelections)
+        {
+            if(sel.cursor.hasSelection())
+            {
+                sel.cursor.removeSelectedText();
+                sel.cursor.insertText(e->text());
+            }
+            else {
+                sel.cursor.insertText(e->text());
+            }
+        }
 
-                   m_bIsInputMethod = false;
-               }
-               else {
-                   if (m_bIsInputMethod) {
-                       sel.cursor.insertText(m_qstrCommitString);
-                   } else {
-                       sel.cursor.insertText(e->text());
-                   }
-                   m_bIsInputMethod = false;
-               }
-           }
-           return ;
-       }
+        textCursor().endEditBlock();
+        return ;
+    }
     // alt+m 弹出编辑器右键菜单
 
     if(e->modifiers() == Qt::AltModifier && !e->text().compare(QString("m"),Qt::CaseInsensitive)){
