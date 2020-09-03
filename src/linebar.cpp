@@ -75,19 +75,20 @@ void LineBar::focusOutEvent(QFocusEvent *e)
 void LineBar::keyPressEvent(QKeyEvent *e)
 {
     QString key = Utils::getKeyshortcut(e);
+    Qt::KeyboardModifiers modifiers = e->modifiers();
 
-    if (key == "Esc") {
+     if (key == "Esc") {
         pressEsc();
-    } else if (key == "Return") {
-        pressEnter();
-    } else if (key == "Ctrl + Return") {
+     }else if(modifiers == Qt::ControlModifier && e->text() == "\r"){
         pressCtrlEnter();
-    } else if (key == "Alt + Return") {
+     }else if(modifiers == Qt::AltModifier && e->text() == "\r"){
         pressAltEnter();
-    } else if (key == "Meta + Return") {
-        pressMetaEnter();
-    } else {
-        // Pass event to DLineEdit continue, otherwise you can't type anything after here. ;)
+     }else if(modifiers == Qt::MetaModifier && e->text() == "\r"){
+       pressMetaEnter();
+     }else if(modifiers == Qt::NoModifier && e->text() == "\r"){
+        pressEnter();
+     }else {
+       // Pass event to DLineEdit continue, otherwise you can't type anything after here. ;)
         DLineEdit::keyPressEvent(e);
-    }
+     }
 }

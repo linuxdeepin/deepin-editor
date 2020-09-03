@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+#include "utils.h"
 #include "settings.h"
 
 #include "dthememanager.h"
@@ -315,6 +315,10 @@ QPair<QWidget *, QWidget *> Settings::createKeySequenceEditHandle(QObject *obj)
 
         if (sequence.toString().contains("<")) {
             qstrSequence.replace(qstrSequence.indexOf("<"),1,"&lt;");
+        }
+
+        if(sequence.toString().contains("Return")) {
+            qstrSequence.replace(qstrSequence.indexOf("Return"),6,"Enter");
         }
 
         QString style = QString("<span style=\"color: rgba(255, 87, 54, 1);\">[%1]</span>").arg(qstrSequence);
