@@ -80,8 +80,6 @@ protected:
     void dragMoveEvent(QDragMoveEvent *e);
     void dropEvent(QDropEvent *e);
     QSize tabSizeHint(int index) const;
-    void tabLayoutChange();
-
 protected:
     void mousePressEvent(QMouseEvent *e);
 

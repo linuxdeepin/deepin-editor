@@ -70,14 +70,12 @@ void Tabbar::addTabWithIndex(int index, const QString &filePath, const QString &
 {
     // FIXME(rekols): do not insert duplicate values.
 
- //   if (!m_tabPaths.contains(filePath)) {
+    // if (!m_tabPaths.contains(filePath)) {
         m_tabPaths.insert(index, filePath);
-//    }
+    // }
     //除去空白符 梁卫东 ２０２０－０８－２６　１４：４９：１５
     QString trimmedName = tabName.simplified();
     DTabBar::insertTab(index, trimmedName);
-    DTabBar::setTabMinimumSize(index, QSize(160, 40));
-    DTabBar::setTabMaximumSize(index, QSize(160, 40));
     DTabBar::setCurrentIndex(index);
 }
 
@@ -569,40 +567,25 @@ void Tabbar::mousePressEvent(QMouseEvent *e)
 
 QSize Tabbar::tabSizeHint(int index) const
 {
-    //Q_UNUSED(index)
-    //return QSize(160,100);
-    return DTabBar::tabSizeHint(index);
-}
 
-void Tabbar::tabLayoutChange()
-{
-    int nWidthSum = 0;
+    if(index >= 0)
+    {
+        int total = this->width();
 
-    for (int i = 0;i < m_tabPaths.count();i++) {
-        nWidthSum += this->tabRect(i).width();
-    }
+        //计算每个tab平均宽度 返回　100到160
+        int aveargeWidth = 160;
+        aveargeWidth = total / DTabBar::count();
 
-    for (int i = 0;i < m_tabPaths.count();i++) {
-        if (nWidthSum > rect().width()) {
-            int nWidth = 110;
-
-            if (tabRect(0).width() > 110) {
-                nWidth = rect().width()/m_tabPaths.count();
-            }
-
-            DTabBar::setTabMinimumSize(i, QSize(nWidth, 40));
-            DTabBar::setTabMaximumSize(i, QSize(nWidth, 40));
-        } else {
-            int nWidth = 160;
-
-            if (tabRect(0).width() < 160) {
-                nWidth = rect().width()/m_tabPaths.count();
-            }
-
-            DTabBar::setTabMinimumSize(i, QSize(nWidth, 40));
-            DTabBar::setTabMaximumSize(i, QSize(nWidth, 40));
+        if(aveargeWidth > 160){
+           aveargeWidth = 160;
+        }else if (aveargeWidth < 110) {
+            aveargeWidth = 110;
         }
+
+        return QSize(aveargeWidth,40);
     }
+
+    return DTabBar::tabSizeHint(index);
 }
 
 void Tabbar::handleTabMoved(int fromIndex, int toIndex)
