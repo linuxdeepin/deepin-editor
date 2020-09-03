@@ -2170,6 +2170,12 @@ void Window::closeEvent(QCloseEvent *e)
 
 void Window::hideEvent(QHideEvent *event)
 {
+    if(this->isVisible())
+    {
+        if (currentWrapper() != nullptr) {
+            currentWrapper()->textEditor()->setFocus();
+        }
+    }
     //如果查找浮窗正显示着，则隐藏
     if (m_findBar->isVisible()) {
        // m_findBar->hide();
