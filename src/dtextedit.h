@@ -317,6 +317,7 @@ protected:
 
     void mousePressEvent(QMouseEvent *e) override;
     void mouseMoveEvent(QMouseEvent *e) override;
+    void mouseReleaseEvent(QMouseEvent *e) override;
     void keyPressEvent(QKeyEvent *e) override;
     void wheelEvent(QWheelEvent *e) override;
     bool eventFilter(QObject *object, QEvent *event) override;
@@ -525,5 +526,11 @@ private:
     int m_redoCount = 0;
     QStringList m_pastText;
     bool m_hasColumnSelection= false;
+
+    //鼠标事件的位置
+    int m_startX = 0;
+    int m_startY = 0;
+    int m_endX = 0;
+    int m_endY = 0;
 };
 #endif

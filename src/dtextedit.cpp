@@ -5025,6 +5025,10 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
 
 void TextEdit::mousePressEvent(QMouseEvent *e)
 {
+    if (Qt::MouseEventSynthesizedByQt == e->source()) {
+        m_startY = e->y();
+    }
+
     if (e->source() == Qt::MouseEventSynthesizedByQt) {
         m_lastTouchBeginPos = e->pos();
 
@@ -5075,6 +5079,10 @@ void TextEdit::mousePressEvent(QMouseEvent *e)
 
 void TextEdit::mouseMoveEvent(QMouseEvent *e)
 {
+    if (Qt::MouseEventSynthesizedByQt == e->source()) {
+        m_endY = e->y();
+    }
+
     if (e->source() == Qt::MouseEventSynthesizedByQt) {
         if (QScroller::hasScroller(this))
             return;
@@ -5177,6 +5185,17 @@ void TextEdit::mouseMoveEvent(QMouseEvent *e)
         document()->clearUndoRedoStacks();
         update();
     }
+}
+
+void TextEdit::mouseReleaseEvent(QMouseEvent *e)
+{
+    int i = m_endY - m_startY;
+    if (Qt::MouseEventSynthesizedByQt == e->source()
+            &&( i > 10&&this->verticalScrollBar()->value()!=0)) {
+        e->accept();
+        return;
+    }
+    return QPlainTextEdit::mouseReleaseEvent(e);
 }
 
 void TextEdit::keyPressEvent(QKeyEvent *e)
