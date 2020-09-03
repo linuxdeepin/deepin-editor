@@ -4965,6 +4965,10 @@ void TextEdit::onSelectionArea()
 
 void TextEdit::fingerZoom(QString name, QString direction, int fingers)
 {
+    if(name=="tap"&&fingers==3)
+    {
+        slot_translate();
+    }
         // 当前窗口被激活,且有焦点
         if (hasFocus()) {
             if (name == "pinch" && fingers == 2) {
