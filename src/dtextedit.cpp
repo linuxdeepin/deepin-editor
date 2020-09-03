@@ -254,8 +254,8 @@ TextEdit::TextEdit(QWidget *parent)
     m_cancelComment = new QAction(tr("Remove Comment"),this);
 
     connect(m_rightMenu, &DMenu::aboutToHide, this, &TextEdit::removeHighlightWordUnderCursor);
-    connect(m_undoAction, &QAction::triggered, this, &TextEdit::undo);
-    connect(m_redoAction, &QAction::triggered, this, &TextEdit::redo);
+    connect(m_undoAction, &QAction::triggered, this, &TextEdit::columnUndo);
+    connect(m_redoAction, &QAction::triggered, this, &TextEdit::columnRedo);
     connect(m_cutAction, &QAction::triggered, this, &TextEdit::clickCutAction);
     connect(m_copyAction, &QAction::triggered, this, &TextEdit::clickCopyAction);
     connect(m_pasteAction, &QAction::triggered, this, &TextEdit::clickPasteAction);
@@ -2916,19 +2916,29 @@ void TextEdit::restoreMarkStatus()
 
 void TextEdit::clickCutAction()
 {
-    if (textCursor().hasSelection()) {
-        cutSelectedText();
-    } else {
-        cutWordUnderCursor();
+    if(m_bIsAltMod)
+    {
+        columnCut();
+    }
+    else {
+        if (textCursor().hasSelection()) {
+            cutSelectedText();
+        } else {
+            cutWordUnderCursor();
+        }
     }
 }
 
 void TextEdit::clickCopyAction()
 {
-    if (textCursor().hasSelection()) {
-        copySelectedText();
-    } else {
-        copyWordUnderCursor();
+    if(m_bIsAltMod)
+        columnCopy();
+    else {
+        if (textCursor().hasSelection()) {
+            copySelectedText();
+        } else {
+            copyWordUnderCursor();
+        }
     }
 }
 
@@ -2953,16 +2963,28 @@ void TextEdit::clickPasteAction()
 
 //        pasteText();
 //    }
-    pasteText();
+    if(m_bIsAltMod)
+    {
+        columnPaste();
+    }
+    else {
+            pasteText();
+    }
 }
 
 void TextEdit::clickDeleteAction()
 {
-    if (textCursor().hasSelection()) {
-        textCursor().removeSelectedText();
-    } else {
-        setTextCursor(m_highlightWordCacheCursor);
-        textCursor().removeSelectedText();
+    if(m_bIsAltMod)
+    {
+        columnDelete();
+    }
+    else {
+        if (textCursor().hasSelection()) {
+            textCursor().removeSelectedText();
+        } else {
+            setTextCursor(m_highlightWordCacheCursor);
+            textCursor().removeSelectedText();
+        }
     }
 }
 
@@ -3952,6 +3974,87 @@ QStringList TextEdit::readEncodeHistoryRecord()
     }
 
     return filePathList;
+}
+
+void TextEdit::columnCopy()
+{
+    m_pastText.clear();
+
+    for(auto sel:m_altModSelections)
+    {
+        m_pastText<<sel.cursor.selectedText();
+    }
+
+    QString pasteText = m_pastText.join("\n");
+    QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
+    clipboard->setText(pasteText);
+}
+
+void TextEdit::columnPaste()
+{
+    QClipboard *clipboard = QApplication::clipboard();
+    QString originalText = clipboard->text();
+
+    for(auto sel:m_altModSelections)
+    {
+    if(sel.cursor.hasSelection())
+    {
+        sel.cursor.removeSelectedText();
+    }
+
+    }
+
+    if(m_pastText.length()==m_altModSelections.length())
+    {
+         for(int i=0;i<m_pastText.length();i++)
+         {
+             m_altModSelections[i].cursor.insertText(m_pastText[i]);
+         }
+    }
+    else {
+        m_altModSelections[0].cursor.insertText(originalText);
+    }
+}
+
+void TextEdit::columnCut()
+{
+    m_pastText.clear();
+
+    for(auto sel:m_altModSelections)
+    {
+        m_pastText<<sel.cursor.selectedText();
+        sel.cursor.removeSelectedText();
+    }
+
+    QString pasteText = m_pastText.join("\n");
+    QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
+    clipboard->setText(pasteText);
+}
+
+void TextEdit::columnDelete()
+{
+    for(auto sel:m_altModSelections)
+    {
+        if(sel.cursor.hasSelection())
+        {
+            sel.cursor.removeSelectedText();
+        }
+        else {
+            sel.cursor.deletePreviousChar();
+        }
+    }
+}
+
+void TextEdit::columnUndo()
+{
+    for(int i=0;i<=m_altModSelections.length();i++)
+    undo();
+}
+
+void TextEdit::columnRedo()
+{
+    for(int i=0;i<=m_altModSelections.length();i++)
+    redo();
 }
 
 
@@ -4960,8 +5063,11 @@ void TextEdit::mousePressEvent(QMouseEvent *e)
        this->setTextCursor(m_altStartTextCursor);
        m_altModSelections.clear();
     }else {
-        m_bIsAltMod = false;
-        m_altModSelections.clear();
+        if(e->button()!=2)  //右键,调用右键菜单时候不能清空
+        {
+            m_bIsAltMod = false;
+            m_altModSelections.clear();
+        }
     }
 
     QPlainTextEdit::mousePressEvent(e);
@@ -5082,81 +5188,42 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
     const QString &key = Utils::getKeyshortcut(e);
 
     if(m_bIsAltMod)
-       {
-           if(key=="Backspace")
-           {
-               for(auto sel:m_altModSelections)
-               {
-                   if(sel.cursor.hasSelection())
-                   {
-                       sel.cursor.removeSelectedText();
-                   }
-                   else {
-                       sel.cursor.deletePreviousChar();
-                   }
-               }
-               return;
-           }
-           if(e->key()==16777249) //ctrl键
-           {
-               e->ignore();
-               return;
-           }
-           if(key=="Ctrl+C")
-           {
-               qDebug()<<"i can paste";
-               m_pastText.clear();
-
-               for(auto sel:m_altModSelections)
-               {
-                   m_pastText<<sel.cursor.selectedText();
-               }
-
-               QString pasteText = m_pastText.join("\n");
-               QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
-               clipboard->setText(pasteText);
-               return;
-           }
-           if(key=="Ctrl+V")
-           {
-               QClipboard *clipboard = QApplication::clipboard();
-               QString originalText = clipboard->text();
-
-               qDebug()<<originalText<<"列粘贴文本";
-               for(auto sel:m_altModSelections)
-               {
-               if(sel.cursor.hasSelection())
-               {
-                   sel.cursor.removeSelectedText();
-               }
-
-               }
-               qDebug()<<m_pastText.length()<<m_altModSelections.length();
-
-               if(m_pastText.length()==m_altModSelections.length())
-               {
-                    for(int i=0;i<m_pastText.length();i++)
-                    {
-                        m_altModSelections[i].cursor.insertText(m_pastText[i]);
-                    }
-               }
-               else {
-                   m_altModSelections[0].cursor.insertText(originalText);
-               }
-               return;
-           }
-           if(key=="Ctrl+Z")
-           {
-               for(int i=0;i<=m_altModSelections.length();i++)
-               undo();
-               return;
-           }
-           if(key=="Ctrl+Y")
-           {
-               for(int i=0;i<=m_altModSelections.length();i++)
-               redo();
-               return;
-           }
+    {
+        if(key=="Backspace")
+        {
+            columnDelete();
+            return;
+        }
+        if(e->key()==16777249) //ctrl键
+        {
+            e->ignore();
+            return;
+        }
+        if(key=="Ctrl+C")
+        {
+            columnCopy();
+            return;
+        }
+        if(key=="Ctrl+V")
+        {
+            columnPaste();
+            return;
+        }
+        if(key=="Ctrl+Z")
+        {
+            columnUndo();
+            return;
+        }
+        if(key=="Ctrl+Y")
+        {
+            columnRedo();
+            return;
+        }
+        if(key=="Ctrl+X")
+        {
+            columnCut();
+            return;
+        }
 
            for(auto sel:m_altModSelections)
            {
@@ -5206,7 +5273,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         }
 
         m_rightMenu->addSeparator();
-        if (textCursor().hasSelection()) {
+        if (textCursor().hasSelection()||m_hasColumnSelection) {
             if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
                 m_rightMenu->addAction(m_cutAction);
             }
@@ -5220,7 +5287,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             }
         }
 
-        if (textCursor().hasSelection()) {
+        if (textCursor().hasSelection()||m_hasColumnSelection) {
             if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
                 m_rightMenu->addAction(m_deleteAction);
             }
@@ -5317,7 +5384,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             if (voiceReadingStateRet.isValid()) {
                 voiceReadingState = voiceReadingStateRet.value();
             }
-            if (textCursor().hasSelection()&&voiceReadingState) {
+            if ((textCursor().hasSelection()&&voiceReadingState)||m_hasColumnSelection) {
                 m_voiceReadingAction->setEnabled(true);
             }
 
@@ -5349,7 +5416,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             if (translateStateRet.isValid()) {
                 translateState = translateStateRet.value();
             }
-            if (textCursor().hasSelection()&&translateState) {
+            if ((textCursor().hasSelection()&&translateState)||m_hasColumnSelection) {
                 m_translateAction->setEnabled(translateState);
             }
         }
@@ -5627,7 +5694,7 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
     }
 
     m_rightMenu->addSeparator();
-    if (textCursor().hasSelection()) {
+    if (textCursor().hasSelection()||m_hasColumnSelection) {
         if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
             m_rightMenu->addAction(m_cutAction);
         }
@@ -5649,7 +5716,7 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
             m_rightMenu->addAction(m_pasteAction);
         }
     }
-    if (textCursor().hasSelection()) {
+    if (textCursor().hasSelection()||m_hasColumnSelection) {
         if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
             m_rightMenu->addAction(m_deleteAction);
         }
@@ -5668,7 +5735,7 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
         m_rightMenu->addAction(m_jumpLineAction);
         m_rightMenu->addSeparator();
     }
-    if(textCursor().hasSelection()){
+    if(textCursor().hasSelection()||m_hasColumnSelection){
         if(m_bReadOnlyPermission == false &&m_readOnlyMode == false){
             m_rightMenu->addMenu(m_convertCaseMenu);
         }
@@ -5817,6 +5884,21 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
 void TextEdit::paintEvent(QPaintEvent *e)
 {
     QPlainTextEdit::paintEvent(e);
+
+    if(m_altModSelections.length()>0)
+    {
+        for(auto sel:m_altModSelections)
+        {
+            if(sel.cursor.hasSelection())
+            {
+                m_hasColumnSelection = true;
+                break;
+            }
+            else {
+                m_hasColumnSelection = false;
+            }
+        }
+    }
 
     QColor lineColor = palette().text().color();
     QColor backgrColor = palette().background().color();

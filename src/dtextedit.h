@@ -238,6 +238,12 @@ public:
     void setTextCode(QString encode);
     void writeEncodeHistoryRecord();
     QStringList readEncodeHistoryRecord();
+    void columnCopy();
+    void columnPaste();
+    void columnCut();
+    void columnDelete();
+    void columnUndo();
+    void columnRedo();
 
 public:
     bool bIsSetLineNumberWidth = true;
@@ -519,5 +525,6 @@ private:
     bool m_bIsAltMod=false;
     int m_redoCount = 0;
     QStringList m_pastText;
+    bool m_hasColumnSelection= false;
 };
 #endif
