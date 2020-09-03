@@ -2004,19 +2004,25 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
            QString text = block.text();
            QRegExp regExp("^\"*\"&");
            QString curText = text.remove(regExp);
-           if (curText.contains("{") &&
-                   !block.text().trimmed().startsWith("//") &&
-                   isNeedShowFoldIcon(block)) {
-               //int blockHeight = 0;
-//               QTextBlock tmpblock = document()->findBlockByNumber(0);;
 
-//               while (tmpblock.isValid()) {
-//                   if (tmpblock.isVisible()) {
-//                       //blockHeight = document()->documentLayout()->blockBoundingRect(tmpblock).height();
-//                       break;
-//                   }
-//                   tmpblock = tmpblock.next();
-//               }
+           //不同类型文件注释符号不同 梁卫东　２０２０－０９－０３　１７：２８：４５
+           bool bHasCommnent = false;
+           QString multiLineCommentMark;
+           QString singleLineCommentMark;
+
+           if(m_commentDefinition.isValid()){
+                multiLineCommentMark = m_commentDefinition.multiLineStart.trimmed();
+                singleLineCommentMark = m_commentDefinition.singleLine.trimmed();
+                //判断是否包含单行或多行注释
+                if(!multiLineCommentMark.isEmpty()) bHasCommnent = block.text().trimmed().startsWith(multiLineCommentMark);
+                if(!singleLineCommentMark.isEmpty()) bHasCommnent = block.text().trimmed().startsWith(singleLineCommentMark);
+           }else {
+                bHasCommnent = false;
+           }
+
+
+           //添加注释判断 存在不显示折叠标志　不存在显示折叠标准　梁卫东　２０２０年０９月０３日１７：２８：５０
+           if (curText.contains("{") && isNeedShowFoldIcon(block) && !bHasCommnent) {
 
                cur.setPosition(block.position(),QTextCursor::MoveAnchor);
 
