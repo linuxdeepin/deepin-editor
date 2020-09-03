@@ -417,7 +417,6 @@ private:
     QWidgetAction *m_actionAllColorStyles;
     QAction *m_markAllAct;
 
-    QAction *m_columnEditACtion;
     QAction *m_addComment;
     QAction *m_cancelComment;
 

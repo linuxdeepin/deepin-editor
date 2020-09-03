@@ -179,7 +179,7 @@ TextEdit::TextEdit(QWidget *parent)
     m_stopReadingAction = new QAction(tr("Stop reading"),this);
     m_dictationAction = new QAction(tr("Speech to Text"),this);
     m_translateAction = new QAction(tr("Translate"),this);
-    m_columnEditACtion = new QAction(tr("Column Mode"),this);
+    m_columnEditAction = new QAction(tr("Column Mode"),this);
     m_addBookMarkAction = new QAction(tr("Add bookmark"),this);
     m_cancelBookMarkAction = new QAction(tr("Remove Bookmark"),this);
     m_preBookMarkAction = new QAction(tr("Previous bookmark"),this);
@@ -248,8 +248,7 @@ TextEdit::TextEdit(QWidget *parent)
 //    m_collapseExpandMenu->addAction(collapseThis);
 //    m_collapseExpandMenu->addAction(expandThis);
 
-    m_columnEditACtion = new QAction(tr("Column Mode"),this);
-    m_columnEditACtion->setCheckable(true);
+    m_columnEditAction = new QAction(tr("Column Mode"),this);
     m_addComment = new QAction(tr("Add Comment"),this);
     m_cancelComment = new QAction(tr("Remove Comment"),this);
 
@@ -280,7 +279,7 @@ TextEdit::TextEdit(QWidget *parent)
     connect(m_stopReadingAction, &QAction::triggered, this, &TextEdit::slot_stopReading);
     connect(m_dictationAction, &QAction::triggered, this, &TextEdit::slot_dictation);
     connect(m_translateAction, &QAction::triggered, this, &TextEdit::slot_translate);
-    connect(m_columnEditACtion,&QAction::triggered,this,[=] {
+    connect(m_columnEditAction,&QAction::triggered,this,[=] {
         //toggleComment(true); todo
         DMessageManager::instance()->sendMessage(this, QIcon(":/images/ok.svg")
                                                  , tr("Press ALT and click lines to edit in column mode"));
@@ -5874,7 +5873,7 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
         m_colorMarkMenu->addSeparator();
 
         m_rightMenu->addSeparator();
-        m_rightMenu->addAction(m_columnEditACtion);
+        m_rightMenu->addAction(m_columnEditAction);
         m_rightMenu->addMenu(m_colorMarkMenu);
     }
 
