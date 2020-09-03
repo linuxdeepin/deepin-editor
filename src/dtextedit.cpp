@@ -1931,23 +1931,23 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
 
     int blockNumber = getFirstVisibleBlockId();
     QTextBlock block = document()->findBlockByNumber(blockNumber);
-    QTextBlock prev_block = (blockNumber > 0) ? document()->findBlockByNumber(blockNumber - 1) : block;
-    int translate_y = (blockNumber > 0) ? -verticalScrollBar()->sliderPosition() : 0;
+//    QTextBlock prev_block = (blockNumber > 0) ? document()->findBlockByNumber(blockNumber - 1) : block;
+//    int translate_y = (blockNumber > 0) ? -verticalScrollBar()->sliderPosition() : 0;
 
-    int top = this->viewport()->geometry().top();
-    int additional_margin;
-    if (blockNumber == 0)
-        // Simply adjust to document's margin
-   //     additional_margin = document()->documentMargin() - 1 - this->verticalScrollBar()->sliderPosition();
-        additional_margin = document()->documentMargin() - this->verticalScrollBar()->sliderPosition();
-    else
-        // Getting the height of the visible part of the previous "non entirely visible" block
-        additional_margin = document()->documentLayout()->blockBoundingRect(prev_block).toRect()
-                            .translated(0, translate_y).intersected(this->viewport()->geometry()).height();
+//    int top = this->viewport()->geometry().top();
+//    int additional_margin;
+//    if (blockNumber == 0)
+//        // Simply adjust to document's margin
+//   //     additional_margin = document()->documentMargin() - 1 - this->verticalScrollBar()->sliderPosition();
+//        additional_margin = document()->documentMargin() - this->verticalScrollBar()->sliderPosition();
+//    else
+//        // Getting the height of the visible part of the previous "non entirely visible" block
+//        additional_margin = document()->documentLayout()->blockBoundingRect(prev_block).toRect()
+//                            .translated(0, translate_y).intersected(this->viewport()->geometry()).height();
 
-    // Shift the starting point
-    additional_margin += 3;
-    top += additional_margin;
+//    // Shift the starting point
+//    additional_margin += 3;
+//    top += additional_margin;
 
     DGuiApplicationHelper *guiAppHelp = DGuiApplicationHelper::instance();
 
@@ -1970,102 +1970,93 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
     int fontHeight = fontMetrics().height();
     double nfoldImageHeight = fontHeight;
 
-    int bottom = top + document()->documentLayout()->blockBoundingRect(block).height();
+//    int bottom = top + document()->documentLayout()->blockBoundingRect(block).height();
 
-    for (int iBlockCount = blockNumber ; iBlockCount < document()->blockCount(); ++iBlockCount) {
+    QPoint endPoint;
+
+    if (verticalScrollBar()->maximum() > 0)
+    {
+        endPoint = QPointF(0,height() + height()/verticalScrollBar()->maximum()*verticalScrollBar()->value()).toPoint();
+    }
+
+    QTextCursor cur = cursorForPosition(endPoint);
+    QTextBlock endBlock = cur.block();
+    int nPageLine = endBlock.blockNumber();
+    int nStartLine = block.blockNumber();
+//    int oldPos = -1;
+
+    if (verticalScrollBar()->maximum() == 0) {
+        nPageLine = blockCount() - 1;
+    }
+
+    cur = textCursor();
+    for (int i = nStartLine;i <= nPageLine;i++) {
+
+    }
+    for (int iBlockCount = blockNumber ; iBlockCount < nPageLine; ++iBlockCount) {
         //注释代码 行单个"{" 折叠标志显示当前行
 //        if (block.text().trimmed().startsWith("{") && blockNumber != 0) {
 //            m_listFlodFlag.append(blockNumber - 1);
 //        } else {
-            m_listFlodFlag.append(blockNumber);
+//            m_listFlodFlag.append(blockNumber);
             //qDebug()<< "Block "<<blockNumber;
 //        }
 
-
-        if (block.isValid() && top <= event->rect().bottom()) {
-            if (/*block.isVisible() &&*/ bottom >= event->rect().top()) {
+            if (block.isVisible()) {
                 //判定是否包含注释代码左括号、是否整行是注释，isNeedShowFoldIcon该函数是为了做判定当前行是否包含成对的括号，如果包括，则不显示折叠标志
 
                //获取行数文本块 出去字符串判断　梁卫东２０２０年０９月０１日１７：１６：１７
                QString text = block.text();
                QRegExp regExp("^\"*\"&");
                QString curText = text.remove(regExp);
-                if (curText.contains("{") &&
-                        !block.text().trimmed().startsWith("//") &&
-                        isNeedShowFoldIcon(block)) {
-                    int blockHeight = 0;
-                    QTextBlock tmpblock = document()->findBlockByNumber(0);;
-                    while (tmpblock.isValid()) {
-                        if (tmpblock.isVisible()) {
-                            blockHeight = document()->documentLayout()->blockBoundingRect(tmpblock).height();
-                            break;
-                        }
-                        tmpblock = tmpblock.next();
-                    }
-                    if (fontHeight > foldimage.height()) {
-                        if (blockHeight > 1.5 * fontHeight) {
-                            imageTop = top + qFabs(fontHeight - foldimage.height()) / 2;
-                        } else {
+               if (curText.contains("{") &&
+                       !block.text().trimmed().startsWith("//") &&
+                       isNeedShowFoldIcon(block)) {
+                   int blockHeight = 0;
+                   QTextBlock tmpblock = document()->findBlockByNumber(0);;
+                   while (tmpblock.isValid()) {
+                       if (tmpblock.isVisible()) {
+                           blockHeight = document()->documentLayout()->blockBoundingRect(tmpblock).height();
+                           break;
+                       }
+                       tmpblock = tmpblock.next();
+                   }
 
-                            imageTop = top + qFabs(blockHeight - foldimage.height()) / 2;
-                        }
+                   cur.setPosition(block.position(),QTextCursor::MoveAnchor);
 
-                        //scaleFoldImage = foldimage;
-                        //scaleunFoldImage = Unfoldimage;
-                        scaleFoldPixmap = Utils::renderSVG(flodImagePath, QSize(foldimage.height(), foldimage.width()));
-                        scaleFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
-                        scaleunFoldPixmap = Utils::renderSVG(unflodImagePath, QSize(foldimage.height(), foldimage.width()));
-                        scaleunFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
-                    } else {
-                        if (blockHeight > 1.5 * fontHeight) {
+                   if(fontHeight > foldimage.height()) {
+       //                scaleImage = image;
+                       scaleFoldPixmap = Utils::renderSVG(flodImagePath, QSize(foldimage.height(), foldimage.width()));
+                       scaleFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
+                       scaleunFoldPixmap = Utils::renderSVG(unflodImagePath, QSize(foldimage.height(), foldimage.width()));
+                       scaleunFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
+                   } else {
+                       double scale = nfoldImageHeight / foldimage.height();
+                       double nScaleWidth = scale * foldimage.height() * foldimage.height() / foldimage.width();
+                       //scaleFoldImage = foldimage.scaled(scale * foldimage.height(), nScaleWidth);
+                       //scaleunFoldImage = Unfoldimage.scaled(scale * Unfoldimage.height(), nScaleWidth);
+                       scaleFoldPixmap = Utils::renderSVG(flodImagePath, QSize(static_cast<int>(foldimage.height()*scale), static_cast<int>(nScaleWidth)));
+                       scaleFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
+                       scaleunFoldPixmap = Utils::renderSVG(unflodImagePath, QSize(static_cast<int>(foldimage.height()*scale), static_cast<int>(nScaleWidth)));
+                       scaleunFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
+                   }
 
-                            imageTop = top - qFabs(fontHeight - foldimage.height()) / 2;
-                        } else {
+                       if (block.next().isVisible()) {
+                           if (block.isVisible()) {
+                               imageTop = cursorRect(cur).y() + (cursorRect(cur).height() - scaleFoldPixmap.height())/2;
+                               painter.drawPixmap(5, imageTop/* - static_cast<int>(document()->documentMargin())*/, scaleFoldPixmap);
+                           }
+                       } else {
+                           if (block.isVisible()) {
+                               imageTop = cursorRect(cur).y() + (cursorRect(cur).height() - scaleunFoldPixmap.height())/2;
+                               painter.drawPixmap(5, imageTop/* - static_cast<int>(document()->documentMargin())*/, scaleunFoldPixmap);
+                           }
+                       }
+                       m_listFlodIconPos.append(block.blockNumber());
 
-                            imageTop = top - qFabs(blockHeight - foldimage.height()) / 2;
-                        }
-
-                        //imageTop = startPoint + qFabs(document()->documentLayout()->blockBoundingRect(lineBlock).height() - image.height())/2;
-                        double scale = nfoldImageHeight / foldimage.height();
-                        double nScaleWidth = scale * foldimage.height() * foldimage.height() / foldimage.width();
-                        //scaleFoldImage = foldimage.scaled(scale * foldimage.height(), nScaleWidth);
-                        //scaleunFoldImage = Unfoldimage.scaled(scale * Unfoldimage.height(), nScaleWidth);
-                        scaleFoldPixmap = Utils::renderSVG(flodImagePath, QSize(static_cast<int>(foldimage.height()*scale), static_cast<int>(nScaleWidth)));
-                        scaleFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
-                        scaleunFoldPixmap = Utils::renderSVG(unflodImagePath, QSize(static_cast<int>(foldimage.height()*scale), static_cast<int>(nScaleWidth)));
-                        scaleunFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
-                    }
-                       //注释代码 行单个"{" 折叠标志显示当前行
-//                    if (block.text().trimmed().startsWith("{") && blockNumber != 0) {
-
-//                        if (block.isVisible()) {
-//                            painter.drawImage(5, imageTop - blockHeight, scaleFoldImage);
-//                        } else {
-//                            painter.drawImage(5, imageTop - blockHeight, scaleunFoldImage);
-//                        }
-
-//                        m_listFlodIconPos.append(blockNumber-1);
-//                    } else {
-
-
-
-                        if (block.next().isVisible()) {
-                            if (block.isVisible())
-                                painter.drawPixmap(5, imageTop - static_cast<int>(document()->documentMargin()), scaleFoldPixmap);
-                        } else {
-                            if (block.isVisible())
-                                painter.drawPixmap(5, imageTop - static_cast<int>(document()->documentMargin()), scaleunFoldPixmap);
-                        }
-                        m_listFlodIconPos.append(blockNumber);
-                   // }
-
-                }
+               }
+               block = block.next();
             }
-            block = document()->findBlockByNumber(iBlockCount + 1);
-            top = bottom;
-            bottom = top + document()->documentLayout()->blockBoundingRect(block).height();
-        }
-        ++blockNumber;
     }
 }
 
