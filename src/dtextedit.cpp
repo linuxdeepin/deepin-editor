@@ -293,15 +293,19 @@ TextEdit::TextEdit(QWidget *parent)
     connect(m_clearBookMarkAction, &QAction::triggered, this, &TextEdit::onClearBookMark);
     connect(m_flodAllLevel, &QAction::triggered, this, [ = ] {
         flodOrUnflodAllLevel(true);
+        m_pLeftAreaWidget->m_flodArea->update();
     });
     connect(m_unflodAllLevel, &QAction::triggered, this, [ = ] {
         flodOrUnflodAllLevel(false);
+        m_pLeftAreaWidget->m_flodArea->update();
     });
     connect(m_flodCurrentLevel, &QAction::triggered, this, [ = ] {
         flodOrUnflodCurrentLevel(true);
+        m_pLeftAreaWidget->m_flodArea->update();
     });
     connect(m_unflodCurrentLevel, &QAction::triggered, this, [ = ] {
         flodOrUnflodCurrentLevel(false);
+        m_pLeftAreaWidget->m_flodArea->update();
     });
 
     connect(m_cancleMarkAllLine, &QAction::triggered, this, [ = ] {
@@ -1830,7 +1834,6 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
     QTextBlock endBlock = cur.block();
     int nPageLine = endBlock.blockNumber();
     int nStartLine = block.blockNumber();
-    int oldPos = -1;
 
     if (verticalScrollBar()->maximum() == 0) {
         nPageLine = blockCount() - 1;
@@ -1927,8 +1930,8 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
         codeFlodAreaBackgroundColor.setAlphaF(0.03);
         m_lineNumbersColor.setAlphaF(0.3);
     }
-    painter.fillRect(event->rect(), codeFlodAreaBackgroundColor);
 
+    painter.fillRect(event->rect(), codeFlodAreaBackgroundColor);
     int blockNumber = getFirstVisibleBlockId();
     QTextBlock block = document()->findBlockByNumber(blockNumber);
 //    QTextBlock prev_block = (blockNumber > 0) ? document()->findBlockByNumber(blockNumber - 1) : block;
@@ -1950,8 +1953,8 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
 //    top += additional_margin;
 
     DGuiApplicationHelper *guiAppHelp = DGuiApplicationHelper::instance();
-
     QString theme  = "";
+
     if (guiAppHelp->themeType() == DGuiApplicationHelper::ColorType::DarkType) {  //暗色主题
         theme = "d";
     } else {  //浅色主题
@@ -1982,18 +1985,14 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
     QTextCursor cur = cursorForPosition(endPoint);
     QTextBlock endBlock = cur.block();
     int nPageLine = endBlock.blockNumber();
-    int nStartLine = block.blockNumber();
-//    int oldPos = -1;
 
     if (verticalScrollBar()->maximum() == 0) {
         nPageLine = blockCount() - 1;
     }
 
     cur = textCursor();
-    for (int i = nStartLine;i <= nPageLine;i++) {
 
-    }
-    for (int iBlockCount = blockNumber ; iBlockCount < nPageLine; ++iBlockCount) {
+    for (int iBlockCount = blockNumber ; iBlockCount <= nPageLine; ++iBlockCount) {
         //注释代码 行单个"{" 折叠标志显示当前行
 //        if (block.text().trimmed().startsWith("{") && blockNumber != 0) {
 //            m_listFlodFlag.append(blockNumber - 1);
@@ -2002,61 +2001,60 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
             //qDebug()<< "Block "<<blockNumber;
 //        }
 
-            if (block.isVisible()) {
-                //判定是否包含注释代码左括号、是否整行是注释，isNeedShowFoldIcon该函数是为了做判定当前行是否包含成对的括号，如果包括，则不显示折叠标志
+        if (block.isVisible()) {
+            //判定是否包含注释代码左括号、是否整行是注释，isNeedShowFoldIcon该函数是为了做判定当前行是否包含成对的括号，如果包括，则不显示折叠标志
 
-               //获取行数文本块 出去字符串判断　梁卫东２０２０年０９月０１日１７：１６：１７
-               QString text = block.text();
-               QRegExp regExp("^\"*\"&");
-               QString curText = text.remove(regExp);
-               if (curText.contains("{") &&
-                       !block.text().trimmed().startsWith("//") &&
-                       isNeedShowFoldIcon(block)) {
-                   int blockHeight = 0;
-                   QTextBlock tmpblock = document()->findBlockByNumber(0);;
-                   while (tmpblock.isValid()) {
-                       if (tmpblock.isVisible()) {
-                           blockHeight = document()->documentLayout()->blockBoundingRect(tmpblock).height();
-                           break;
-                       }
-                       tmpblock = tmpblock.next();
-                   }
+           //获取行数文本块 出去字符串判断　梁卫东２０２０年０９月０１日１７：１６：１７
+           QString text = block.text();
+           QRegExp regExp("^\"*\"&");
+           QString curText = text.remove(regExp);
+           if (curText.contains("{") &&
+                   !block.text().trimmed().startsWith("//") &&
+                   isNeedShowFoldIcon(block)) {
+               //int blockHeight = 0;
+//               QTextBlock tmpblock = document()->findBlockByNumber(0);;
 
-                   cur.setPosition(block.position(),QTextCursor::MoveAnchor);
+//               while (tmpblock.isValid()) {
+//                   if (tmpblock.isVisible()) {
+//                       //blockHeight = document()->documentLayout()->blockBoundingRect(tmpblock).height();
+//                       break;
+//                   }
+//                   tmpblock = tmpblock.next();
+//               }
 
-                   if(fontHeight > foldimage.height()) {
-       //                scaleImage = image;
-                       scaleFoldPixmap = Utils::renderSVG(flodImagePath, QSize(foldimage.height(), foldimage.width()));
-                       scaleFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
-                       scaleunFoldPixmap = Utils::renderSVG(unflodImagePath, QSize(foldimage.height(), foldimage.width()));
-                       scaleunFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
-                   } else {
-                       double scale = nfoldImageHeight / foldimage.height();
-                       double nScaleWidth = scale * foldimage.height() * foldimage.height() / foldimage.width();
-                       //scaleFoldImage = foldimage.scaled(scale * foldimage.height(), nScaleWidth);
-                       //scaleunFoldImage = Unfoldimage.scaled(scale * Unfoldimage.height(), nScaleWidth);
-                       scaleFoldPixmap = Utils::renderSVG(flodImagePath, QSize(static_cast<int>(foldimage.height()*scale), static_cast<int>(nScaleWidth)));
-                       scaleFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
-                       scaleunFoldPixmap = Utils::renderSVG(unflodImagePath, QSize(static_cast<int>(foldimage.height()*scale), static_cast<int>(nScaleWidth)));
-                       scaleunFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
-                   }
+               cur.setPosition(block.position(),QTextCursor::MoveAnchor);
 
-                       if (block.next().isVisible()) {
-                           if (block.isVisible()) {
-                               imageTop = cursorRect(cur).y() + (cursorRect(cur).height() - scaleFoldPixmap.height())/2;
-                               painter.drawPixmap(5, imageTop/* - static_cast<int>(document()->documentMargin())*/, scaleFoldPixmap);
-                           }
-                       } else {
-                           if (block.isVisible()) {
-                               imageTop = cursorRect(cur).y() + (cursorRect(cur).height() - scaleunFoldPixmap.height())/2;
-                               painter.drawPixmap(5, imageTop/* - static_cast<int>(document()->documentMargin())*/, scaleunFoldPixmap);
-                           }
-                       }
-                       m_listFlodIconPos.append(block.blockNumber());
-
+               if(fontHeight > foldimage.height()) {
+                   scaleFoldPixmap = Utils::renderSVG(flodImagePath, QSize(foldimage.height(), foldimage.width()));
+                   scaleFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
+                   scaleunFoldPixmap = Utils::renderSVG(unflodImagePath, QSize(foldimage.height(), foldimage.width()));
+                   scaleunFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
+               } else {
+                   double scale = nfoldImageHeight / foldimage.height();
+                   double nScaleWidth = scale * foldimage.height() * foldimage.height() / foldimage.width();
+                   scaleFoldPixmap = Utils::renderSVG(flodImagePath, QSize(static_cast<int>(foldimage.height()*scale), static_cast<int>(nScaleWidth)));
+                   scaleFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
+                   scaleunFoldPixmap = Utils::renderSVG(unflodImagePath, QSize(static_cast<int>(foldimage.height()*scale), static_cast<int>(nScaleWidth)));
+                   scaleunFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
                }
-               block = block.next();
-            }
+
+               if (block.next().isVisible()) {
+                   if (block.isVisible()) {
+                       imageTop = cursorRect(cur).y() + (cursorRect(cur).height() - scaleFoldPixmap.height())/2;
+                       painter.drawPixmap(5, imageTop/* - static_cast<int>(document()->documentMargin())*/, scaleFoldPixmap);
+                   }
+               } else {
+                   if (block.isVisible()) {
+                       imageTop = cursorRect(cur).y() + (cursorRect(cur).height() - scaleunFoldPixmap.height())/2;
+                       painter.drawPixmap(5, imageTop/* - static_cast<int>(document()->documentMargin())*/, scaleunFoldPixmap);
+                   }
+               }
+
+               m_listFlodIconPos.append(block.blockNumber());
+           }
+        }
+
+        block = block.next();
     }
 }
 
