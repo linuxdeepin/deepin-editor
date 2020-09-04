@@ -144,6 +144,13 @@ void StartManager::openFilesInTab(QStringList files)
                 window->addTab(file);
                 //window->showNormal();
                 window->activateWindow();
+                QDBusMessage active = QDBusMessage::createMethodCall("com.deepin.dde.daemon.Dock",
+                                                                          "/com/deepin/dde/daemon/Dock",
+                                                                          "com.deepin.dde.daemon.Dock",
+                                                                          "ActivateWindow");
+
+                active<<window->winId();
+                 QDBusConnection::sessionBus().call(active, QDBus::BlockWithGui);
 
                 //qDebug() << "Open " << file << " in first window";
             }
