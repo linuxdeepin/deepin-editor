@@ -531,29 +531,6 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
     return false;
 }
 
-void Tabbar::dragEnterEvent(QDragEnterEvent *e)
-{
-    qDebug()<<"============dragEnterEvent";
-    DTabBar::dragEnterEvent(e);
-}
-
-void Tabbar::dragLeaveEvent(QDragLeaveEvent *e)
-{
-    qDebug()<<"============dragLeaveEvent";
-     DTabBar::dragLeaveEvent(e);
-}
-
-void Tabbar::dragMoveEvent(QDragMoveEvent *e)
-{
-    qDebug()<<"============dragMoveEvent";
-    DTabBar::dragMoveEvent(e);
-}
-
-void Tabbar::dropEvent(QDropEvent *e)
-{
-    qDebug()<<"============dropEvent";
-    DTabBar::dropEvent(e);
-}
 
 void Tabbar::mousePressEvent(QMouseEvent *e)
 {
@@ -608,6 +585,7 @@ void Tabbar::showTabs()
 
 void Tabbar::handleTabReleased(int index)
 {
+    if(index == -1) index = 0;
     QString path = m_listOldTabPath.value(index);
     int newIndex = m_tabPaths.indexOf(path);
     const QString tabPath = fileAt(newIndex);

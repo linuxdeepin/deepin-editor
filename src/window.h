@@ -40,7 +40,7 @@
 #include <DGuiApplicationHelper>
 #include <DMessageManager>
 #include <DGuiApplicationHelper>
-#include <dprintpreviewdialog.h>
+#include <qprintpreviewdialog.h>
 
 DWIDGET_USE_NAMESPACE
 
