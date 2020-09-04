@@ -69,7 +69,7 @@ void StartManager::openFilesInWindow(QStringList files)
         if (m_windows.count() >= 20)
             return;
         Window *window = createWindow();
-        window->showCenterWindow();
+        window->showCenterWindow(true);
         window->addBlankTab();
         window->activateWindow();
     } else {
@@ -83,7 +83,7 @@ void StartManager::openFilesInWindow(QStringList files)
             // Add new tab in current window.
             else {
                 Window* window = createWindow();
-                window->showCenterWindow();
+                window->showCenterWindow(true);
                 window->addTab(file);
             }
         }
@@ -98,7 +98,7 @@ void StartManager::openFilesInTab(QStringList files)
             QStringList blankFiles = blankDirectory.entryList(QStringList(), QDir::Files);
 
             Window *window = createWindow(true);
-            window->showCenterWindow();
+            window->showCenterWindow(true);
 
             // Open blank files of last session.
             if (!blankFiles.isEmpty()) {
@@ -133,7 +133,7 @@ void StartManager::openFilesInTab(QStringList files)
             // Create new window with file if haven't window exist.
             else if (m_windows.size() == 0) {
                 Window *window = createWindow(true);
-                window->showCenterWindow();
+                window->showCenterWindow(true);
                 QTimer::singleShot(50, [=] { window->addTab(file); });
 
                 //qDebug() << "Open " << file << " with new window";
@@ -194,7 +194,8 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
     QParallelAnimationGroup *group = new QParallelAnimationGroup;
     connect(group,&QParallelAnimationGroup::finished,geometry,[window,geometry,Opacity,group](){
         // window minimum size.
-        window->setMinimumSize(1000, 600);
+        //window->setMinimumSize(1000, 600);
+        window->showCenterWindow(false);
         geometry->deleteLater();
         Opacity->deleteLater();
         group->deleteLater();

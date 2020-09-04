@@ -40,7 +40,7 @@
 #include <DGuiApplicationHelper>
 #include <DMessageManager>
 #include <DGuiApplicationHelper>
-#include<dprintpreviewdialog.h>
+#include <dprintpreviewdialog.h>
 
 DWIDGET_USE_NAMESPACE
 
@@ -52,7 +52,7 @@ public:
     Window(DMainWindow *parent = 0);
     ~Window() override;
 
-    void showCenterWindow();
+    void showCenterWindow(bool bIsCenter);
     void initTitlebar();
     bool checkBlockShutdown();
 

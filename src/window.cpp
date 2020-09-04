@@ -220,14 +220,16 @@ Window::~Window()
     // We don't need clean pointers because application has exit here.
 }
 
-void Window::showCenterWindow()
+void Window::showCenterWindow(bool bIsCenter)
 {
     // Init window state with config.
     // Below code must before this->titlebar()->setMenu, otherwise main menu can't display pre-build-in menu items by dtk.
     const QString &windowState = Settings::instance()->settings->option("advance.window.windowstate")->value().toString();
 
-    Dtk::Widget::moveToCenter(this);
-    show();
+    if (bIsCenter) {
+        Dtk::Widget::moveToCenter(this);
+        show();
+    }
 
     // init window state.
     if (windowState == "window_maximum") {
