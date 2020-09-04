@@ -2,6 +2,13 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="en">
 <context>
+    <name>BookMarkWidget</name>
+    <message>
+        <source>Add bookmark</source>
+        <translation type="obsolete">Add bookmark</translation>
+    </message>
+</context>
+<context>
     <name>BottomBar</name>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="39"/>
@@ -95,6 +102,17 @@
     </message>
 </context>
 <context>
+    <name>FindWidget</name>
+    <message>
+        <source>Next</source>
+        <translation type="obsolete">Next</translation>
+    </message>
+    <message>
+        <source>Previous</source>
+        <translation type="obsolete">Previous</translation>
+    </message>
+</context>
+<context>
     <name>JumpLineBar</name>
     <message>
         <location filename="../src/jumplinebar.cpp" line="41"/>
@@ -113,6 +131,13 @@
         <location filename="../src/main.cpp" line="65"/>
         <source>Text Editor</source>
         <translation>Text Editor</translation>
+    </message>
+</context>
+<context>
+    <name>NoteMenu</name>
+    <message>
+        <source>Copy</source>
+        <translation type="obsolete">Copy</translation>
     </message>
 </context>
 <context>
@@ -327,14 +352,6 @@
         <location filename="../src/settingsdialog.cpp" line="57"/>
         <source>Decrease indent</source>
         <translation>Decrease indent</translation>
-    </message>
-    <message>
-        <source>Increment indent</source>
-        <translation type="vanished">Increment indent</translation>
-    </message>
-    <message>
-        <source>Decrement indent</source>
-        <translation type="vanished">Decrement indent</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="60"/>
@@ -584,7 +601,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="114"/>
         <source>Show blank characters</source>
-        <translation type="unfinished"></translation>
+        <translation>Show whitespaces</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="115"/>
@@ -623,6 +640,21 @@
         <location filename="../src/replacebar.cpp" line="56"/>
         <source>Replace All</source>
         <translation>Replace All</translation>
+    </message>
+</context>
+<context>
+    <name>SaveDialog</name>
+    <message>
+        <source>Cancel</source>
+        <translation type="obsolete">Cancel</translation>
+    </message>
+    <message>
+        <source>Discard</source>
+        <translation type="obsolete">Discard</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="obsolete">Save</translation>
     </message>
 </context>
 <context>
@@ -685,7 +717,78 @@
     <message>
         <location filename="../src/settings.cpp" line="483"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
+    </message>
+</context>
+<context>
+    <name>ShortCutShow</name>
+    <message>
+        <source>Settings</source>
+        <translation type="obsolete">Settings</translation>
+    </message>
+    <message>
+        <source>Exit</source>
+        <translation type="obsolete">Exit</translation>
+    </message>
+    <message>
+        <source>Help</source>
+        <translation type="obsolete">Help</translation>
+    </message>
+    <message>
+        <source>Page up</source>
+        <translation type="obsolete">Page up</translation>
+    </message>
+    <message>
+        <source>Page down</source>
+        <translation type="obsolete">Page down</translation>
+    </message>
+    <message>
+        <source>Save as</source>
+        <translation type="obsolete">Save as</translation>
+    </message>
+    <message>
+        <source>Print</source>
+        <translation type="obsolete">Print</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="obsolete">Save</translation>
+    </message>
+    <message>
+        <source>Add bookmark</source>
+        <translation type="obsolete">Add bookmark</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="obsolete">Delete</translation>
+    </message>
+    <message>
+        <source>Fullscreen</source>
+        <translation type="obsolete">Fullscreen</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="obsolete">Copy</translation>
+    </message>
+    <message>
+        <source>Cut</source>
+        <translation type="obsolete">Cut</translation>
+    </message>
+    <message>
+        <source>Paste</source>
+        <translation type="obsolete">Paste</translation>
+    </message>
+    <message>
+        <source>Undo</source>
+        <translation type="obsolete">Undo</translation>
+    </message>
+    <message>
+        <source>Select all</source>
+        <translation type="obsolete">Select all</translation>
+    </message>
+    <message>
+        <source>Display shortcuts</source>
+        <translation type="obsolete">Display shortcuts</translation>
     </message>
 </context>
 <context>
@@ -805,6 +908,21 @@
         <location filename="../src/dtextedit.cpp" line="229"/>
         <source>Add Comment</source>
         <translation>Add Comment</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="227"/>
+        <source>Column Mode</source>
+        <translation>Column Mode</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="230"/>
+        <source>Remove Comment</source>
+        <translation>Remove Comment</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="230"/>
+        <source>Press ALT and click lines to edit in column mode</source>
+        <translation>Press ALT and click lines to edit in column mode</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="156"/>
