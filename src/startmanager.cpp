@@ -143,16 +143,8 @@ void StartManager::openFilesInTab(QStringList files)
                 Window *window = m_windows[0];
                 window->addTab(file);
                 //window->showNormal();
+                window->setWindowState(Qt::WindowActive);
                 window->activateWindow();
-                QDBusMessage active = QDBusMessage::createMethodCall("com.deepin.dde.daemon.Dock",
-                                                                          "/com/deepin/dde/daemon/Dock",
-                                                                          "com.deepin.dde.daemon.Dock",
-                                                                          "ActivateWindow");
-
-                active<<window->winId();
-                 QDBusConnection::sessionBus().call(active, QDBus::BlockWithGui);
-
-                //qDebug() << "Open " << file << " in first window";
             }
 
         }
@@ -282,15 +274,9 @@ void StartManager::initWindowPosition(Window *window, bool alwaysCenter)
 void StartManager::popupExistTabs(FileTabInfo info)
 {
     Window *window = m_windows[info.windowIndex];
-    QDBusMessage active = QDBusMessage::createMethodCall("com.deepin.dde.daemon.Dock",
-                                                              "/com/deepin/dde/daemon/Dock",
-                                                              "com.deepin.dde.daemon.Dock",
-                                                              "ActivateWindow");
-
-    active<<window->winId();
-     QDBusConnection::sessionBus().call(active, QDBus::BlockWithGui);
     window->showNormal();
     window->activeTab(info.tabIndex);
+    window->setWindowState(Qt::WindowActive);
     window->activateWindow();
 }
 
