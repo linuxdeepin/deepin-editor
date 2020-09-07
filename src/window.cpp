@@ -133,7 +133,7 @@ Window::Window(DMainWindow *parent)
     }
 
     // window minimum size.
-    setMinimumSize(1000, 600);
+    setMinimumSize(500, 300);
 
     // resize window size.
     resize(QSize(Settings::instance()->settings->option("advance.window.window_width")->value().toDouble(),
