@@ -111,8 +111,6 @@ void JumpLineBar::jumpCancel()
 
 void JumpLineBar::jumpConfirm()
 {
-    hide();
-
     QString content = m_editLine->lineEdit()->text();
     if (content != "") {
         jumpToLine(m_jumpFile, content.toInt(), true);
