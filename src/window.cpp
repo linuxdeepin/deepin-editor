@@ -275,12 +275,22 @@ void Window::initTitlebar()
     titlebar()->setIcon(QIcon::fromTheme("deepin-editor"));
 
     titlebar()->setFocusPolicy(Qt::NoFocus);         //设置titlebar无焦点，点击titlebar时光标不移动
+   // titlebar()->findChild<DIconButton *>;
+
+    QList<DIconButton*> childern = titlebar()->findChildren<DIconButton*>();
+    for(int i =0;i<childern.size();i++)
+    {
+        qDebug()<<childern[i];
+    }
+
     DIconButton *addButton = m_tabbar->findChild<DIconButton *>("AddButton");
     addButton->setFocusPolicy(Qt::NoFocus);
     DIconButton *optionBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowOptionButton");
     optionBtn->setFocusPolicy(Qt::NoFocus);
     DIconButton *minBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowMinButton");
     minBtn->setFocusPolicy(Qt::NoFocus);
+    DIconButton *quitFullBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowQuitFullscreenButton");
+    quitFullBtn->setFocusPolicy(Qt::NoFocus);
     DIconButton *maxBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowMaxButton");
     maxBtn->setFocusPolicy(Qt::NoFocus);
     DIconButton *closeBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowCloseButton");
@@ -2008,13 +2018,17 @@ void Window::slot_setTitleFocus()
     optionBtn->setFocusPolicy(Qt::TabFocus);
     DIconButton *minBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowMinButton");
     minBtn->setFocusPolicy(Qt::TabFocus);
+
+    DIconButton *quitFullBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowQuitFullscreenButton");
+    quitFullBtn->setFocusPolicy(Qt::TabFocus);
     DIconButton *maxBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowMaxButton");
     maxBtn->setFocusPolicy(Qt::TabFocus);
     DIconButton *closeBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowCloseButton");
     closeBtn->setFocusPolicy(Qt::TabFocus);
     QWidget::setTabOrder(addButton, optionBtn);
     QWidget::setTabOrder(optionBtn, minBtn);
-    QWidget::setTabOrder(minBtn, maxBtn);
+    QWidget::setTabOrder(minBtn, quitFullBtn);
+    QWidget::setTabOrder(quitFullBtn, maxBtn);
     QWidget::setTabOrder(maxBtn, closeBtn);
 }
 
@@ -2226,7 +2240,18 @@ void Window::keyPressEvent(QKeyEvent *e)
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "resetfontsize")) {
         resetFontSize();
     }  else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "togglefullscreen")) {
-        toggleFullscreen();
+        DIconButton *minBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowMinButton");
+        DIconButton *quitFullBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowQuitFullscreenButton");
+        quitFullBtn->setFocusPolicy(Qt::TabFocus);
+        DIconButton *maxBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowMaxButton");
+        if(minBtn->hasFocus()||maxBtn->hasFocus())
+        {
+            toggleFullscreen();
+            quitFullBtn->setFocus();
+        }
+        else {
+            toggleFullscreen();
+        }
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "find")) {
         popupFindBar();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "replace")) {
