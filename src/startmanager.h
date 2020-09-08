@@ -26,7 +26,13 @@
 #include "window.h"
 #include "editwrapper.h"
 
+#include <com_deepin_dde_daemon_dock.h>
+#include <com_deepin_dde_daemon_dock_entry.h>
 #include <QObject>
+
+using Dock          = com::deepin::dde::daemon::Dock;
+using Entry         = com::deepin::dde::daemon::dock::Entry;
+
 
 class StartManager : public QObject
 {
@@ -44,6 +50,7 @@ public:
     static StartManager* instance();
     StartManager(QObject *parent = 0);
     void setDragEnter(bool bIsDragEnter);
+    bool ifKlu();
 
 public slots:
     Q_SCRIPTABLE void openFilesInTab(QStringList files);
@@ -70,6 +77,9 @@ private:
     bool m_bIsDragEnter;
 
     void initBlockShutdown();
+    QDBusPendingReply<QDBusUnixFileDescriptor> m_inhibitReply;
+    QScopedPointer<Dock> m_pDock;
+    QScopedPointer<Entry> m_pEntry;
 };
 
 #endif

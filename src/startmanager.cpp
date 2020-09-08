@@ -62,6 +62,20 @@ void StartManager::setDragEnter(bool bIsDragEnter)
     m_bIsDragEnter = bIsDragEnter;
 }
 
+bool StartManager::ifKlu()
+{
+    auto e = QProcessEnvironment::systemEnvironment();
+    QString XDG_SESSION_TYPE = e.value(QStringLiteral("XDG_SESSION_TYPE"));
+    QString WAYLAND_DISPLAY = e.value(QStringLiteral("WAYLAND_DISPLAY"));
+
+    if (XDG_SESSION_TYPE == QLatin1String("wayland") || WAYLAND_DISPLAY.contains(QLatin1String("wayland"), Qt::CaseInsensitive)){
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
 void StartManager::openFilesInWindow(QStringList files)
 {
     // Open window with blank tab if no files need open.
@@ -142,7 +156,6 @@ void StartManager::openFilesInTab(QStringList files)
             else {
                 Window *window = m_windows[0];
                 window->addTab(file);
-                //window->showNormal();
                 window->setWindowState(Qt::WindowActive);
                 window->activateWindow();
             }
@@ -180,7 +193,7 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
     QPropertyAnimation *geometry = new QPropertyAnimation(window, "geometry");
     geometry->setDuration(200);
     geometry->setStartValue(startRect);
-    geometry->setEndValue(endRect);  
+    geometry->setEndValue(endRect);
     geometry->setEasingCurve(QEasingCurve::InCubic);
     //OutCubic InCubic
     QPropertyAnimation *Opacity = new QPropertyAnimation(this, "windowOpacity");
@@ -315,9 +328,9 @@ void StartManager::initBlockShutdown() {
                                          QDBusConnection::systemBus());
 
     m_arg << QString("shutdown")             // what
-        << qApp->applicationDisplayName()           // who
-        << QObject::tr("File not saved") // why
-        << QString("delay");                        // mode
+          << qApp->applicationDisplayName()           // who
+          << QObject::tr("File not saved") // why
+          << QString("delay");                        // mode
 
     int fd = -1;
     m_reply = m_pLoginManager->callWithArgumentList(QDBus::Block, "Inhibit", m_arg);
@@ -328,12 +341,12 @@ void StartManager::initBlockShutdown() {
 
 void StartManager::slotCheckUnsaveTab() {
     for (Window *pWindow : m_windows) {
-    //如果返回true，则表示有未保存的tab项，则阻塞系统关机
+        //如果返回true，则表示有未保存的tab项，则阻塞系统关机
         bool bRet = pWindow->checkBlockShutdown();
         if (bRet == true) {
             m_reply = m_pLoginManager->callWithArgumentList(QDBus::Block, "Inhibit", m_arg);
             if (m_reply.isValid()) {
-              //qDebug() << "Block shutdown.";
+                //qDebug() << "Block shutdown.";
             }
 
             return;
