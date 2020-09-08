@@ -43,6 +43,7 @@ find_package(DtkWidget REQUIRED)
 find_package(DtkCore REQUIRED)
 find_package(KF5SyntaxHighlighting)
 find_package(KF5Codecs)
+find_package(DFrameworkdbus REQUIRED)
 
 include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 
@@ -56,6 +57,7 @@ target_link_libraries(deepin-editor
     ${Qt5DBus_LIBRARIES}
     ${Qt5PrintSupport_LIBRARIES}
     ${Qt5Concurrent_LIBRARIES}
+    ${DFrameworkdbus_LIBRARIES}
 
     KF5::Codecs
     KF5::SyntaxHighlighting
