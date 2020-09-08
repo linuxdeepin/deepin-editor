@@ -260,7 +260,10 @@ TextEdit::TextEdit(QWidget *parent)
     connect(m_copyAction, &QAction::triggered, this, &TextEdit::clickCopyAction);
     connect(m_pasteAction, &QAction::triggered, this, &TextEdit::clickPasteAction);
     connect(m_deleteAction, &QAction::triggered, this, &TextEdit::clickDeleteAction);
-    connect(m_selectAllAction, &QAction::triggered, this, &TextEdit::selectAll);
+    connect(m_selectAllAction,&QAction::triggered,this,[=] {
+        m_bIsAltMod =false;
+        selectAll();
+    });
     connect(m_findAction, &QAction::triggered, this, &TextEdit::clickFindAction);
     connect(m_replaceAction, &QAction::triggered, this, &TextEdit::clickReplaceAction);
     connect(m_jumpLineAction, &QAction::triggered, this, &TextEdit::clickJumpLineAction);
@@ -5249,6 +5252,11 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             e->ignore();
             return;
         }
+        if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "selectall")) {
+            m_bIsAltMod = false;
+            selectAll();
+            return;
+        }
         if(key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "copy"))
         {
             columnCopy();
@@ -5690,6 +5698,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
     }
 
     if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "selectall")) {
+        m_bIsAltMod = false;
         selectAll();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "copy")) {
         copySelectedText();
