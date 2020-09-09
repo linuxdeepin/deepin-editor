@@ -69,7 +69,7 @@ FindBar::FindBar(QWidget *parent)
     connect(m_editLine, &LineBar::signal_sentText, this, &FindBar::receiveText, Qt::QueuedConnection);
     connect(m_editLine, &LineBar::contentChanged, this, &FindBar::slot_ifClearSearchWord, Qt::QueuedConnection);
 
-    connect(m_findNextButton, &QPushButton::clicked,  this,&FindBar::handleContentChanged, Qt::QueuedConnection);
+    connect(m_findNextButton, &QPushButton::clicked,  this,&FindBar::findNext, Qt::QueuedConnection);
     connect(m_findPrevButton, &QPushButton::clicked, this, &FindBar::findPreClicked, Qt::QueuedConnection);
     //connect(m_findPrevButton, &QPushButton::clicked, this, &FindBar::findPrev, Qt::QueuedConnection);
 

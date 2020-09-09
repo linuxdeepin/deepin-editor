@@ -94,9 +94,8 @@ TextEdit::TextEdit(QWidget *parent)
     m_qstrCommitString = "";
     m_bIsShortCut = false;
     m_bIsInputMethod = false;
-    //lineNumberArea = new LineNumberArea(m_pLeftAreaWidget);
     m_pLeftAreaWidget = new leftareaoftextedit(this);
-    lineNumberArea = m_pLeftAreaWidget->m_linenumberarea;
+
 
 #if QT_VERSION < QT_VERSION_CHECK(5,9,0)
     m_touchTapDistance = 15;
@@ -1369,7 +1368,7 @@ void TextEdit::handleCursorMarkChanged(bool mark, QTextCursor cursor)
         m_markStartLine = -1;
     }
 
-    lineNumberArea->update();
+    m_pLeftAreaWidget->m_linenumberarea->update();
     m_pLeftAreaWidget->m_bookMarkArea->update();
 }
 
@@ -1766,7 +1765,7 @@ DMenu *TextEdit::getHighlightMenu()
 
 void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
-    QPainter painter(lineNumberArea);
+    QPainter painter(m_pLeftAreaWidget->m_linenumberarea);
     //painter.fillRect(event->rect(), m_backgroundColor);
 
     QColor lineNumberAreaBackgroundColor;
@@ -1853,7 +1852,7 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
 
         if (block.isVisible()) {
             painter.drawText(0, cursorRect(cur).y(),
-                             lineNumberArea->width(), cursorRect(cur).height() - static_cast<int>(document()->documentMargin()),
+                             m_pLeftAreaWidget->m_linenumberarea->width(), cursorRect(cur).height() - static_cast<int>(document()->documentMargin()),
                              Qt::AlignVCenter | Qt::AlignHCenter, QString::number(block.blockNumber() + 1));
         }
 
@@ -2107,7 +2106,7 @@ void TextEdit::updateLineNumber()
         m_pLeftAreaWidget->setFixedWidth(leftAreaWidth - blockSize * fontMetrics().width('9'));
     }
     m_pLeftAreaWidget->m_bookMarkArea->update();
-    lineNumberArea->update();
+    m_pLeftAreaWidget->m_linenumberarea->update();
     m_pLeftAreaWidget->m_flodArea->update();
 }
 
@@ -2670,7 +2669,7 @@ void TextEdit::setTheme(const KSyntaxHighlighting::Theme &theme, const QString &
     verticalScrollBar()->setSliderPosition(iVerticalScrollValue);
     horizontalScrollBar()->setSliderPosition(iHorizontalScrollVaule);
 
-    lineNumberArea->update();
+    m_pLeftAreaWidget->m_linenumberarea->update();
     m_pLeftAreaWidget->m_bookMarkArea->update();
 
     highlightCurrentLine();
@@ -3575,7 +3574,7 @@ void TextEdit::flodOrUnflodAllLevel(bool isFlod)
     this->setLineWrapMode(WrapMode);
 
     m_pLeftAreaWidget->m_flodArea->update();
-    lineNumberArea->update();
+    m_pLeftAreaWidget->m_linenumberarea->update();
     m_pLeftAreaWidget->m_bookMarkArea->update();
 
     viewport()->update();
@@ -3590,7 +3589,7 @@ void TextEdit::flodOrUnflodCurrentLevel(bool isFlod)
     int line = getLineFromPoint(m_mouseClickPos);
     getNeedControlLine(line - 1, !isFlod);
     m_pLeftAreaWidget->m_flodArea->update();
-    lineNumberArea->update();
+    m_pLeftAreaWidget->m_linenumberarea->update();
     m_pLeftAreaWidget->m_bookMarkArea->update();
     viewport()->update();
     document()->adjustSize();
@@ -4062,6 +4061,15 @@ void TextEdit::columnRedo()
 {
 //    for(int i=0;i<=m_altModSelections.length();i++)
     redo();
+}
+
+void TextEdit::updateLeftAreaWidget()
+{
+    if(m_pLeftAreaWidget){
+        m_pLeftAreaWidget->m_linenumberarea->update();
+        m_pLeftAreaWidget->m_bookMarkArea->update();
+        m_pLeftAreaWidget->m_flodArea->update();
+    }
 }
 
 

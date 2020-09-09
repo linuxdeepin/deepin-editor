@@ -561,11 +561,10 @@ void Tabbar::dropEvent(QDropEvent *e)
 
            QRect startRect = QRect(cursorPos,sm_pDragPixmap->size());
            QRect endRect =   QRect(QCursor::pos(),QSize(0,0));
-           //添加编辑窗口drop动态显示效果　梁卫东　２０２０－０８－２５　０９：５４：５７
            QPropertyAnimation *geometry = new QPropertyAnimation(pLabel, "geometry");
            connect(geometry,&QPropertyAnimation::finished,pLabel,&DLabel::deleteLater);
            connect(geometry,&QPropertyAnimation::finished,geometry,&QPropertyAnimation::deleteLater);
-           geometry->setDuration(200);
+           geometry->setDuration(100);
            geometry->setStartValue(startRect);
            geometry->setEndValue(endRect);
            geometry->setEasingCurve(QEasingCurve::InCubic);

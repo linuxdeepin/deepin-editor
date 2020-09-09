@@ -1738,6 +1738,7 @@ void Window::handleFindNext()
     wrapper->textEditor()->updateCursorKeywordSelection(wrapper->textEditor()->getPosition(), true);
     wrapper->textEditor()->renderAllSelections();
     wrapper->textEditor()->restoreMarkStatus();
+    wrapper->textEditor()->updateLineNumber();
 }
 
 void Window::handleFindPrev()
@@ -1748,6 +1749,7 @@ void Window::handleFindPrev()
     wrapper->textEditor()->updateCursorKeywordSelection(wrapper->textEditor()->getPosition(), false);
     wrapper->textEditor()->renderAllSelections();
     wrapper->textEditor()->restoreMarkStatus();
+    wrapper->textEditor()->updateLineNumber();
 }
 
 void Window::slotFindbarClose()
@@ -1833,6 +1835,8 @@ void Window::handleUpdateSearchKeyword(QWidget *widget, const QString &file, con
             }
         }
     }
+    EditWrapper *wrapper = currentWrapper();
+    wrapper->textEditor()->updateLineNumber();
 }
 
 void Window::addBottomWidget(QWidget *widget)

@@ -74,13 +74,7 @@ public:
 
     TextEdit(QWidget *parent = nullptr);
     ~TextEdit() override;
-
-    LineNumberArea *lineNumberArea;
-    leftareaoftextedit *m_pLeftAreaWidget;
-    QString filepath;
-
     void setWrapper(EditWrapper *);
-
     int lineNumberAreaWidth();
 
     int getCurrentLine();
@@ -245,9 +239,6 @@ public:
     void columnUndo();
     void columnRedo();
 
-public:
-    bool bIsSetLineNumberWidth = true;
-    bool m_pIsShowCodeFoldArea;
 signals:
     void clickFindAction();
     void clickReplaceAction();
@@ -266,6 +257,8 @@ signals:
     void toTellInputModEdit(QString input);
 
 public slots:
+    //跟新左边区域界面　梁卫东　２０２０－０９－０９　１３：５３：５８
+    void updateLeftAreaWidget();
     void highlightCurrentLine();
     void updateLineNumber();
     void updateWordCount();
@@ -341,6 +334,11 @@ private:
     void panTriggered(QPanGesture*);
     void pinchTriggered(QPinchGesture*);
     void swipeTriggered(QSwipeGesture*);
+
+public:
+    bool bIsSetLineNumberWidth = true;
+    bool m_pIsShowCodeFoldArea;
+
 private:
     EditWrapper *m_wrapper;
     QPropertyAnimation *m_scrollAnimation;
@@ -533,5 +531,8 @@ private:
     int m_startY = 0;
     int m_endX = 0;
     int m_endY = 0;
+public:
+    leftareaoftextedit *m_pLeftAreaWidget;
+    QString filepath;
 };
 #endif
