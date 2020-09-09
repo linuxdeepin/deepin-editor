@@ -76,9 +76,8 @@ protected:
     bool eventFilter(QObject *, QEvent *event);
 
     QSize tabSizeHint(int index) const;
-protected:
     void mousePressEvent(QMouseEvent *e);
-
+    void dropEvent(QDropEvent *e);
 private:
     void handleTabMoved(int fromIndex, int toIndex);
     void handleTabReleased(int index);

@@ -29,6 +29,7 @@
 #include <DPlatformWindowHandle>
 #include <DWindowManagerHelper>
 #include <QPixmap>
+#include <DFrame>
 
 QPixmap* Tabbar::sm_pDragPixmap = nullptr;
 
@@ -272,7 +273,10 @@ QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option
         sm_pDragPixmap = new QPixmap(QPixmap::fromImage(backgroundImage));
         return QPixmap::fromImage(backgroundImage);
     }
-
+//   QPixmap backgroundImage = DTabBar::createDragPixmapFromTab(index,option,hotspot);
+//    if(sm_pDragPixmap) delete sm_pDragPixmap;
+//    sm_pDragPixmap = new QPixmap(backgroundImage);
+//    return backgroundImage;
 }
 
 QMimeData* Tabbar::createMimeDataFromTab(int index, const QStyleOptionTab &option) const
@@ -350,6 +354,7 @@ bool Tabbar::canInsertFromMimeData(int index, const QMimeData *source) const
 
 void Tabbar::handleDragActionChanged(Qt::DropAction action)
 {
+    qDebug()<<"=======handleDragActionChanged:"<<action;
     if (action == Qt::CopyAction) {
 //        qDebug() << "IgnoreAction";
         Window *window = static_cast<Window *>(this->window());
@@ -531,7 +536,6 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
     return false;
 }
 
-
 void Tabbar::mousePressEvent(QMouseEvent *e)
 {
     if(e->button()==Qt::MidButton)
@@ -540,6 +544,36 @@ void Tabbar::mousePressEvent(QMouseEvent *e)
     }
 
     DTabBar::mousePressEvent(e);
+}
+
+void Tabbar::dropEvent(QDropEvent *e)
+{
+    if(e->dropAction() == Qt::CopyAction && e->mimeData()->hasFormat("dedit/tabbar"))
+    {
+        if(sm_pDragPixmap){
+           QPoint cursorPos = QCursor::pos() - QPoint(sm_pDragPixmap->width()/2,20);
+           DLabel * pLabel = new DLabel();
+           pLabel->setWindowFlags(Qt::FramelessWindowHint);
+           pLabel->move(cursorPos);
+           pLabel->setPixmap(*sm_pDragPixmap);
+           pLabel->setMaximumSize(sm_pDragPixmap->size());
+           pLabel->show();
+
+           QRect startRect = QRect(cursorPos,sm_pDragPixmap->size());
+           QRect endRect =   QRect(QCursor::pos(),QSize(0,0));
+           //添加编辑窗口drop动态显示效果　梁卫东　２０２０－０８－２５　０９：５４：５７
+           QPropertyAnimation *geometry = new QPropertyAnimation(pLabel, "geometry");
+           connect(geometry,&QPropertyAnimation::finished,pLabel,&DLabel::deleteLater);
+           connect(geometry,&QPropertyAnimation::finished,geometry,&QPropertyAnimation::deleteLater);
+           geometry->setDuration(200);
+           geometry->setStartValue(startRect);
+           geometry->setEndValue(endRect);
+           geometry->setEasingCurve(QEasingCurve::InCubic);
+           geometry->start();
+        }
+    }
+
+    DTabBar::dropEvent(e);
 }
 
 QSize Tabbar::tabSizeHint(int index) const
@@ -611,9 +645,9 @@ void Tabbar::handleTabIsRemoved(int index)
     window->removeWrapper(filePath, false);
 }
 
-void Tabbar::handleTabDroped(int index, Qt::DropAction, QObject *target)
+void Tabbar::handleTabDroped(int index, Qt::DropAction action, QObject *target)
 {
-//    qDebug() << "handleTabDroped";
+    qDebug() << "======handleTabDroped"<<index<<action<<target;
     Tabbar *tabbar = qobject_cast<Tabbar *>(target);
     m_pWrapper = nullptr;
 
