@@ -4170,8 +4170,9 @@ void TextEdit::isMarkAllLine(bool isMark, QString strColor)
                 }
             }
         } else {
-//            m_wordMarkSelections.clear();
-//            m_mapWordMarkSelections.clear();
+            m_wordMarkSelections.clear();
+            m_mapWordMarkSelections.clear();
+
             QTextEdit::ExtraSelection selection;
             QTextEdit::ExtraSelection currentSelection;
             QList<QTextEdit::ExtraSelection> listSelections;
