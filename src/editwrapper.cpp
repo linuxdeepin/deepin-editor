@@ -67,9 +67,9 @@ EditWrapper::EditWrapper(QWidget *parent)
     connect(m_textEdit, &TextEdit::hightlightChanged, this, &EditWrapper::handleHightlightChanged);
     connect(m_textEdit, &TextEdit::textChanged, this, &EditWrapper::slotTextChange);
 
-    connect(m_waringNotices, &WarningNotices::closeButtonClicked, m_waringNotices, &WarningNotices::closeBtnClicked);
+    //connect(m_waringNotices, &WarningNotices::closeButtonClicked, m_waringNotices, &WarningNotices::closeBtnClicked);
     connect(m_waringNotices, &WarningNotices::reloadBtnClicked, this, &EditWrapper::refresh);
-    connect(m_waringNotices, &WarningNotices::closeBtnClicked, this, [=] {
+    connect(m_waringNotices, &WarningNotices::closeButtonClicked, this, [=] {
         QFileInfo fi(filePath());
         m_modified = fi.lastModified();
     });
@@ -597,6 +597,7 @@ void EditWrapper::checkForReload()
         m_waringNotices->setSaveAsBtn();
     }
 
+    m_waringNotices->show();
     DMessageManager::instance()->sendMessage(m_textEdit, m_waringNotices);
 }
 

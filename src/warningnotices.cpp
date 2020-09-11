@@ -38,10 +38,20 @@ WarningNotices::~WarningNotices()
 
 void WarningNotices::setReloadBtn()
 {
+    if (!m_reloadBtn->isVisible()) {
+        m_reloadBtn->setVisible(true);
+    }
+
+    m_saveAsBtn->setVisible(false);
     setWidget(m_reloadBtn);
 }
 
 void WarningNotices::setSaveAsBtn()
 {
+    if (!m_saveAsBtn->isVisible()) {
+        m_saveAsBtn->setVisible(true);
+    }
+
+    m_reloadBtn->setVisible(false);
     setWidget(m_saveAsBtn);
 }
