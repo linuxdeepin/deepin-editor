@@ -233,25 +233,25 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
     geometry->setEndValue(endRect);
     geometry->setEasingCurve(QEasingCurve::InCubic);
     //OutCubic InCubic
-    QPropertyAnimation *Opacity = new QPropertyAnimation(this, "windowOpacity");
-    connect(Opacity,&QPropertyAnimation::finished,Opacity,&QPropertyAnimation::deleteLater);
-    Opacity->setDuration(200);
-    Opacity->setStartValue(1.0);
-    Opacity->setEndValue(0);
-    Opacity->setEasingCurve(QEasingCurve::InCirc);
+//    QPropertyAnimation *Opacity = new QPropertyAnimation(this, "windowOpacity");
+//    connect(Opacity,&QPropertyAnimation::finished,Opacity,&QPropertyAnimation::deleteLater);
+//    Opacity->setDuration(200);
+//    Opacity->setStartValue(1.0);
+//    Opacity->setEndValue(0);
+//    Opacity->setEasingCurve(QEasingCurve::InCirc);
 
     QParallelAnimationGroup *group = new QParallelAnimationGroup;
-    connect(group,&QParallelAnimationGroup::finished,geometry,[window,geometry,Opacity,group](){
+    connect(group,&QParallelAnimationGroup::finished,geometry,[window,geometry,/*Opacity,*/group](){
         // window minimum size.
         //window->setMinimumSize(1000, 600);
         window->showCenterWindow(false);
         geometry->deleteLater();
-        Opacity->deleteLater();
+       // Opacity->deleteLater();
         group->deleteLater();
     });
 
     group->addAnimation(geometry);
-    group->addAnimation(Opacity);
+   // group->addAnimation(Opacity);
 
     group->start();
 }

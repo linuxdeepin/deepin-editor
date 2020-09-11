@@ -4517,9 +4517,25 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                 m_markFoldHighLightSelections.clear();
                 renderAllSelections();
 
+                //不同类型文件注释符号不同 梁卫东　２０２０－０９－０３　１７：２８：４５
+                bool bHasCommnent = false;
+                QString multiLineCommentMark;
+                QString singleLineCommentMark;
+
+                if(m_commentDefinition.isValid()){
+                     multiLineCommentMark = m_commentDefinition.multiLineStart.trimmed();
+                     singleLineCommentMark = m_commentDefinition.singleLine.trimmed();
+                     //qDebug()<<"CommentMark:"<<multiLineCommentMark<<singleLineCommentMark;
+                     //判断是否包含单行或多行注释
+                     if(!multiLineCommentMark.isEmpty()) bHasCommnent = document()->findBlockByNumber(line-1).text().trimmed().startsWith(multiLineCommentMark);
+                     if(!singleLineCommentMark.isEmpty()) bHasCommnent = document()->findBlockByNumber(line-1).text().trimmed().startsWith(singleLineCommentMark);
+                }else {
+                     bHasCommnent = false;
+                }
+
 
                 // 当前行line-1 判断下行line是否隐藏
-                if(document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line-1).text().contains("{") && !document()->findBlockByNumber(line-1).text().trimmed().startsWith("//")){
+                if(document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line-1).text().contains("{") && !bHasCommnent){
 
                     getNeedControlLine(line - 1, false);
                     document()->adjustSize();
@@ -4536,7 +4552,7 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                     this->setLineWrapMode(curMode);
                     viewport()->update();
 
-                }else if (!document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line-1).text().contains("{") && !document()->findBlockByNumber(line-1).text().trimmed().startsWith("//")){
+                }else if (!document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line-1).text().contains("{") && !bHasCommnent){
                     getNeedControlLine(line - 1, true);
                     document()->adjustSize();
 
