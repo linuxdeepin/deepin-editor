@@ -723,15 +723,15 @@ void EditWrapper::slotTextChange()
 void EditWrapper::setLineNumberShow(bool bIsShow ,bool bIsFirstShow)
 {
     if(bIsShow && !bIsFirstShow) {
-        int lineNumberAreaWidth = m_textEdit->lineNumberArea->width();
+        int lineNumberAreaWidth = m_textEdit->m_pLeftAreaWidget->m_linenumberarea->width();
         int leftAreaWidth = m_textEdit->m_pLeftAreaWidget->width();
-        m_textEdit->lineNumberArea->show();
+        m_textEdit->m_pLeftAreaWidget->m_linenumberarea->show();
         m_textEdit->m_pLeftAreaWidget->setFixedWidth(leftAreaWidth + lineNumberAreaWidth);
 
     } else if(!bIsShow) {
-        int lineNumberAreaWidth = m_textEdit->lineNumberArea->width();
+        int lineNumberAreaWidth = m_textEdit->m_pLeftAreaWidget->m_linenumberarea->width();
         int leftAreaWidth = m_textEdit->m_pLeftAreaWidget->width();
-        m_textEdit->lineNumberArea->hide();
+        m_textEdit->m_pLeftAreaWidget->m_linenumberarea->hide();
         m_textEdit->m_pLeftAreaWidget->setFixedWidth(leftAreaWidth - lineNumberAreaWidth);
     }
     m_textEdit->bIsSetLineNumberWidth = bIsShow;
