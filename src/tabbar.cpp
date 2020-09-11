@@ -354,7 +354,6 @@ bool Tabbar::canInsertFromMimeData(int index, const QMimeData *source) const
 
 void Tabbar::handleDragActionChanged(Qt::DropAction action)
 {
-    qDebug()<<"=======handleDragActionChanged:"<<action;
     if (action == Qt::CopyAction) {
 //        qDebug() << "IgnoreAction";
         Window *window = static_cast<Window *>(this->window());
@@ -586,9 +585,9 @@ QSize Tabbar::tabSizeHint(int index) const
         int aveargeWidth = 160;
         aveargeWidth = total / DTabBar::count();
 
-        if(aveargeWidth > 160){
+        if(aveargeWidth >=160){
            aveargeWidth = 160;
-        }else if (aveargeWidth < 110) {
+        }else if (aveargeWidth <= 110) {
             aveargeWidth = 110;
         }
 
@@ -596,6 +595,18 @@ QSize Tabbar::tabSizeHint(int index) const
     }
 
     return DTabBar::tabSizeHint(index);
+}
+
+QSize Tabbar::minimumTabSizeHint(int index) const
+{
+    Q_UNUSED(index)
+    return QSize(110,40);
+}
+
+QSize Tabbar::maximumTabSizeHint(int index) const
+{
+    Q_UNUSED(index)
+    return QSize(160,40);
 }
 
 void Tabbar::handleTabMoved(int fromIndex, int toIndex)
@@ -624,6 +635,7 @@ void Tabbar::handleTabReleased(int index)
     const QString tabPath = fileAt(newIndex);
     const QString tabName = textAt(newIndex);
 //    qDebug() << "handleTabReleased" << index << newIndex;
+
     Window *window = static_cast<Window *>(this->window());
     EditWrapper *wrapper = window->wrapper(tabPath);
     StartManager::instance()->createWindowFromWrapper(tabName, tabPath, wrapper, wrapper->textEditor()->document()->isModified());
@@ -646,7 +658,7 @@ void Tabbar::handleTabIsRemoved(int index)
 
 void Tabbar::handleTabDroped(int index, Qt::DropAction action, QObject *target)
 {
-    qDebug() << "======handleTabDroped"<<index<<action<<target;
+
     Tabbar *tabbar = qobject_cast<Tabbar *>(target);
     m_pWrapper = nullptr;
 
