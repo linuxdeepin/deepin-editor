@@ -224,7 +224,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="32"/>
         <source>New tab</source>
-        <translation>建立新分頁</translation>
+        <translation>建立新標籤頁</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="33"/>
@@ -244,27 +244,27 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="36"/>
         <source>Next tab</source>
-        <translation>下一個分頁</translation>
+        <translation>下一個標籤頁</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="37"/>
         <source>Previous tab</source>
-        <translation>上一個分頁</translation>
+        <translation>上一個標籤頁</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="38"/>
         <source>Close tab</source>
-        <translation>關閉分頁</translation>
+        <translation>關閉標籤頁</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="39"/>
         <source>Close other tabs</source>
-        <translation>關閉其他分頁</translation>
+        <translation>關閉其他標籤頁</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="40"/>
         <source>Restore tab</source>
-        <translation>還原分頁</translation>
+        <translation>還原標籤頁</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="41"/>
@@ -794,7 +794,7 @@
     <message>
         <location filename="../src/tabbar.cpp" line="401"/>
         <source>Close tab</source>
-        <translation>關閉分頁</translation>
+        <translation>關閉標籤頁</translation>
     </message>
     <message>
         <location filename="../src/tabbar.cpp" line="403"/>
@@ -819,7 +819,7 @@
     <message>
         <location filename="../src/tabbar.cpp" line="402"/>
         <source>Close other tabs</source>
-        <translation>關閉其他分頁</translation>
+        <translation>關閉其他標籤頁</translation>
     </message>
 </context>
 <context>
@@ -1127,7 +1127,7 @@
     <message>
         <location filename="../src/window.cpp" line="254"/>
         <source>New tab</source>
-        <translation>建立新分頁</translation>
+        <translation>建立新標籤頁</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="255"/>

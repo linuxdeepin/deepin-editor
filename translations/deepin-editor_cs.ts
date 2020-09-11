@@ -274,12 +274,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="42"/>
         <source>Increment font size</source>
-        <translation>Přírůstek velikosti písma</translation>
+        <translation>Zvětšit velikost písma</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="43"/>
         <source>Decrement font size</source>
-        <translation>Úbytek velikosti písma</translation>
+        <translation>Zmenšit velikost písma</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="44"/>
@@ -599,7 +599,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="114"/>
         <source>Show blank characters</source>
-        <translation type="unfinished"/>
+        <translation>Zobrazit prázdné znaky</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="115"/>
@@ -685,7 +685,7 @@
     <message>
         <location filename="../src/settings.cpp" line="320"/>
         <source>This shortcut conflicts with system shortcut %1</source>
-        <translation type="unfinished"/>
+        <translation>Tato zkratka je v konfliktu se systémovou %1</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="322"/>
@@ -696,7 +696,7 @@
         <location filename="../src/settings.cpp" line="437"/>
         <location filename="../src/settings.cpp" line="445"/>
         <source>The shortcut %1 is invalid, please set another one.</source>
-        <translation type="unfinished"/>
+        <translation>Zkratka %1 není platná – prosím nastavte jinou.</translation>
     </message>
     <message>
         <source>%1 is invalid</source>
@@ -715,7 +715,7 @@
     <message>
         <location filename="../src/settings.cpp" line="483"/>
         <source>OK</source>
-        <translation type="unfinished"/>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -920,7 +920,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="230"/>
         <source>Press ALT and click lines to edit in column mode</source>
-        <translation type="unfinished"/>
+        <translation>Pro upravování ve sloupcovém režimu stiskněte ALT a klikejte na řádky</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="156"/>

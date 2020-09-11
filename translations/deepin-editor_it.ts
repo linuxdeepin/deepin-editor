@@ -601,7 +601,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <message>
         <location filename="../src/settingsdialog.cpp" line="114"/>
         <source>Show blank characters</source>
-        <translation type="unfinished"/>
+        <translation>Mostra spazi bianchi</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="115"/>
@@ -687,7 +687,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <message>
         <location filename="../src/settings.cpp" line="320"/>
         <source>This shortcut conflicts with system shortcut %1</source>
-        <translation type="unfinished"/>
+        <translation>Questa scorciatoia è in conflitto con la scorciatoia di sistema %1</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="322"/>
@@ -698,7 +698,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
         <location filename="../src/settings.cpp" line="437"/>
         <location filename="../src/settings.cpp" line="445"/>
         <source>The shortcut %1 is invalid, please set another one.</source>
-        <translation type="unfinished"/>
+        <translation>La scorciatoia %1 non è valida, inseriscine una nuova.</translation>
     </message>
     <message>
         <source>%1 is invalid</source>
@@ -717,7 +717,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <message>
         <location filename="../src/settings.cpp" line="483"/>
         <source>OK</source>
-        <translation type="unfinished"/>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -922,7 +922,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <message>
         <location filename="../src/dtextedit.cpp" line="230"/>
         <source>Press ALT and click lines to edit in column mode</source>
-        <translation type="unfinished"/>
+        <translation>Premi ALT e clicca sulle linee per editare in modalità colonna</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="156"/>

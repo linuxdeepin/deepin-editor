@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="hu" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ug" version="2.1">
 <context>
     <name>BookMarkWidget</name>
     <message>
@@ -11,17 +11,17 @@
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="39"/>
         <source>Row</source>
-        <translation>Sor</translation>
+        <translation>قۇر</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="40"/>
         <source>Column</source>
-        <translation>Oszlop</translation>
+        <translation>قاتار</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="41"/>
         <source>Characters %1</source>
-        <translation>%1 karakter</translation>
+        <translation>ھەرپ-بەلگە سانى %1</translation>
     </message>
 </context>
 <context>
@@ -29,56 +29,56 @@
     <message>
         <location filename="../src/editwrapper.cpp" line="592"/>
         <source>File has changed on disk. Reload?</source>
-        <translation>A fájl megváltozott a lemezen. Újból betöltöd?</translation>
+        <translation>دىسكىدىكى ئەسلى ھۆججەت ئۆزگەرتىلدى، قايتا يۈكلىمەكچىمۇ؟</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="595"/>
         <source>File removed on the disk. Save it now?</source>
-        <translation>A fájl törlődött a lemezről. Elmented most?</translation>
+        <translation>دىسكىدىكى ئەسلى ھۆججەت ئۆچۈرۈلدى، قايتا ساقلىماقچىمۇ؟</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="653"/>
         <location filename="../src/widgets/bottombar.cpp" line="66"/>
         <source>INSERT</source>
-        <translation>BESZÚRÁS</translation>
+        <translation>كىرگۈزۈش</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="656"/>
         <source>OVERWRITE</source>
-        <translation>FELÜLÍRÁS</translation>
+        <translation>باستۇرۇش</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="659"/>
         <source>R/O</source>
-        <translation>Írásvédett</translation>
+        <translation>پەقەت ئوقۇش</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="306"/>
         <source>Encoding changed. Do you want to save the file now?</source>
-        <translation>A kódolás megváltozott. El akarja menteni a fájlt most?</translation>
+        <translation>ھۆججەت كودلاش ئۇسۇلى ئۆزگەرتىلدى، ئۇنى ئاۋۋال ساقلىماقچىمۇ؟</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="309"/>
         <location filename="../src/editwrapper.cpp" line="502"/>
         <source>Cancel</source>
-        <translation>Mégsem</translation>
+        <translation>بىكار قىلىش</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="310"/>
         <location filename="../src/editwrapper.cpp" line="338"/>
         <location filename="../src/editwrapper.cpp" line="451"/>
         <source>Save</source>
-        <translation>Mentés</translation>
+        <translation>ساقلاش</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="499"/>
         <source>There are errors when using this encoding. If continue, the file contents may be changed</source>
-        <translation>Ezen kódolás használatakor hibák lehetnek. Ha folytatja, a fájl tartalma megváltozhat</translation>
+        <translation>بۇ كود بىلەن ھۆججەتنى يۈكلىگەندە خاتالىق كۆرۈلدى، ئەگەر زورلۇق بىلەن ئىشلىتىلسە، ھۆججەتنىڭ مەزمۇنى ئۆزگىرىپ كېتىشى مۇمكىن</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="503"/>
         <source>Continue</source>
-        <translation>Folytatás</translation>
+        <translation>داۋاملاشتۇرۇش</translation>
     </message>
 </context>
 <context>
@@ -86,17 +86,17 @@
     <message>
         <location filename="../src/findbar.cpp" line="40"/>
         <source>Find</source>
-        <translation>Keresés</translation>
+        <translation>ئىزدەش</translation>
     </message>
     <message>
         <location filename="../src/findbar.cpp" line="46"/>
         <source>Next</source>
-        <translation>Következő</translation>
+        <translation>كېيىنكىسى</translation>
     </message>
     <message>
         <location filename="../src/findbar.cpp" line="44"/>
         <source>Previous</source>
-        <translation>Előző</translation>
+        <translation>ئالدىنقىسى</translation>
     </message>
 </context>
 <context>
@@ -115,7 +115,7 @@
     <message>
         <location filename="../src/jumplinebar.cpp" line="41"/>
         <source>Go to Line: </source>
-        <translation>Ugrás megadott sorra:</translation>
+        <translation>سەكرەش:</translation>
     </message>
 </context>
 <context>
@@ -123,12 +123,12 @@
     <message>
         <location filename="../src/main.cpp" line="53"/>
         <source>Text Editor is a powerful tool for viewing and editing text files.</source>
-        <translation>A szövegszerkesztő egy hatékony eszköz a szöveges fájlok megtekintésére és szerkesztésére.</translation>
+        <translation>تېكىست تەھرىرلىگۈچ تېكىست ھۆججەتلىرىنى كۆرۈش ۋە تەھرىرلەش قورالىدۇر.</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="65"/>
         <source>Text Editor</source>
-        <translation>Szövegszerkesztő</translation>
+        <translation>تېكىست تەھرىرلىگۈچ</translation>
     </message>
 </context>
 <context>
@@ -143,468 +143,468 @@
     <message>
         <location filename="../src/startmanager.cpp" line="267"/>
         <source>File not saved</source>
-        <translation>A fájl nincs elmentve</translation>
+        <translation>ھۆججەت ساقلانمىغان</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="62"/>
         <source>Text Editor</source>
-        <translation>Szövegszerkesztő</translation>
+        <translation>تېكىست تەھرىرلىگۈچ</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="24"/>
         <source>Basic</source>
-        <translation>Alap</translation>
+        <translation>ئاساسىي تەڭشەكلەر</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="25"/>
         <source>Font Style</source>
-        <translation>Betűstílus</translation>
+        <translation>خەت شەكلى ھالىتى</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="26"/>
         <source>Font</source>
-        <translation>Betűtípus</translation>
+        <translation>خەت شەكلى</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="27"/>
         <source>Font Size</source>
-        <translation>Betűméret</translation>
+        <translation>خەت نومۇرى</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="29"/>
         <location filename="../src/settingsdialog.cpp" line="30"/>
         <source>Keymap</source>
-        <translation>Karakterkiosztás</translation>
+        <translation>تېزلەتمە كۆرۈنسۇن</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="28"/>
         <source>Shortcuts</source>
-        <translation>Parancsikonok</translation>
+        <translation>تېزلەتمە</translation>
     </message>
     <message>
         <source>Increase font size</source>
-        <translation type="vanished">Betűméret növelése</translation>
+        <translation type="vanished">خەت نومۇرىنى چوڭايتىش</translation>
     </message>
     <message>
         <source>Decrease font size</source>
-        <translation type="vanished">Betűméret csökkentése</translation>
+        <translation type="vanished">خەت نومۇرىنى كىچىكلىتىش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="58"/>
         <source>Forward character</source>
-        <translation>Előre karakter</translation>
+        <translation>ئوڭغا بىر ھەرپ-بەلگە سۈرۈلسۇن</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="59"/>
         <source>Backward character</source>
-        <translation>Vissza karakter</translation>
+        <translation>سولغا بىر ھەرپ-بەلگە سۈرۈلسۇن</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="92"/>
         <source>Transpose character</source>
-        <translation>Karakter átalakítás</translation>
+        <translation>ھەرپ-بەلگە ئالماشتۇرۇش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="109"/>
         <source>Tab width</source>
-        <translation>Tabulátor szélesség</translation>
+        <translation>Tab ھەرپ-بەلگىسىنىڭ كەڭلىكى</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="111"/>
         <source>Word wrap</source>
-        <translation>Sortörés</translation>
+        <translation>قۇر ئاپتوماتىك ئالماشسۇن</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="31"/>
         <location filename="../src/settingsdialog.cpp" line="107"/>
         <location filename="../src/window.cpp" line="1389"/>
         <source>Window</source>
-        <translation>Ablak</translation>
+        <translation>كۆزنەك</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="32"/>
         <source>New tab</source>
-        <translation>Új lap</translation>
+        <translation>يېڭى خەتكۈچ</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="33"/>
         <source>New window</source>
-        <translation>Új ablak</translation>
+        <translation>يېڭى كۆزنەك</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="34"/>
         <source>Save</source>
-        <translation>Mentés</translation>
+        <translation>ساقلاش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="35"/>
         <source>Save as</source>
-        <translation>Mentés másként</translation>
+        <translation>باشقا ساقلاش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="36"/>
         <source>Next tab</source>
-        <translation>Következő lap</translation>
+        <translation>كېيىنكى خەتكۈچ</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="37"/>
         <source>Previous tab</source>
-        <translation>Előző lap</translation>
+        <translation>ئالدىنقى خەتكۈچ</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="38"/>
         <source>Close tab</source>
-        <translation>Lap bezárása</translation>
+        <translation>خەتكۈچنى تاقاش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="39"/>
         <source>Close other tabs</source>
-        <translation>Többi lap bezárása</translation>
+        <translation>باشقا خەتكۈچنى تاقاش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="40"/>
         <source>Restore tab</source>
-        <translation>Lap visszaállítása</translation>
+        <translation>خەتكۈچنى ئەسلگە كەلتۈرۈش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="41"/>
         <source>Open file</source>
-        <translation>Fájl megnyitása</translation>
+        <translation>ئېچىش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="42"/>
         <source>Increment font size</source>
-        <translation>Betűméret növelése</translation>
+        <translation>خەت نومۇرىنى چوڭايتىش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="43"/>
         <source>Decrement font size</source>
-        <translation>Betűméret csökkentése</translation>
+        <translation>خەت نومۇرىنى كىچىكلىتىش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="44"/>
         <source>Reset font size</source>
-        <translation>Betűméret visszaállítása</translation>
+        <translation>خەت نومۇرىنى ئەسلىگە قايتۇرۇش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="46"/>
         <source>Toggle fullscreen</source>
-        <translation>Teljes képernyős mód</translation>
+        <translation>پۈتۈن ئېكرانغا ئالماشتۇرۇش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="45"/>
         <source>Help</source>
-        <translation>Segítség</translation>
+        <translation>ياردەم</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="47"/>
         <source>Find</source>
-        <translation>Keresés</translation>
+        <translation>ئىزدەش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="48"/>
         <source>Replace</source>
-        <translation>Csere</translation>
+        <translation>ئالماشتۇرۇش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="49"/>
         <source>Go to line</source>
-        <translation>Ugrás megadott sorra</translation>
+        <translation>سەكرەش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="50"/>
         <source>Save cursor position</source>
-        <translation>Kurzor pozíciójának mentése</translation>
+        <translation>نۇر بەلگىسىنىڭ ئورنىنى ساقلاش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="51"/>
         <source>Reset cursor position</source>
-        <translation>Kurzor pozíciójának visszaállítása</translation>
+        <translation>نۇر بەلگىسى ساقلانغان ئورۇنغا سەكرىسۇن</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="52"/>
         <source>Exit</source>
-        <translation>Kilépés</translation>
+        <translation>چېكىنىش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="53"/>
         <source>Display shortcuts</source>
-        <translation>Kijelző parancsikonok</translation>
+        <translation>تېزلەتمە كۆرۈنسۇن</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="54"/>
         <source>Print</source>
-        <translation>Nyomtatás</translation>
+        <translation>بېسىش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="55"/>
         <source>Editor</source>
-        <translation>Szerkesztő</translation>
+        <translation>تەھرىرلەش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="56"/>
         <source>Increase indent</source>
-        <translation>Behúzás növelése</translation>
+        <translation>قۇر بېشىنى قىسقارتىش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="57"/>
         <source>Decrease indent</source>
-        <translation>Behúzás csökkentése</translation>
+        <translation>قۇر بېسىنى كېڭەيتىش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="60"/>
         <source>Forward word</source>
-        <translation>Szó előre</translation>
+        <translation>ئوڭغا بىر سۆز يۆتكەلسۇن</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="61"/>
         <source>Backward word</source>
-        <translation>Szó hátra</translation>
+        <translation>سولغا بىر سۆز يۆتكەلسۇن</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="62"/>
         <source>Next line</source>
-        <translation>Következő sor</translation>
+        <translation>كېيىنكى قۇر</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="63"/>
         <source>Previous line</source>
-        <translation>Előző sor</translation>
+        <translation>ئالدىنقى قۇر</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="64"/>
         <source>New line</source>
-        <translation>Új sor</translation>
+        <translation>قۇر ئالمىشىش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="65"/>
         <source>New line above</source>
-        <translation>Új sor felülre</translation>
+        <translation>ئۈستىگە بىر قۇر قوشۇش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="66"/>
         <source>New line below</source>
-        <translation>Új sor alulra</translation>
+        <translation>ئاستىغا بىر قۇر قوشۇش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="67"/>
         <source>Duplicate line</source>
-        <translation>Sor duplikálása</translation>
+        <translation>ھازىرقى ئورۇنغا كۆچۈرۈش ۋە چاپلاش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="68"/>
         <source>Delete to end of line</source>
-        <translation>Sorvég törlése</translation>
+        <translation>قۇر ئاخىرىغىچە ئۆچۈرۈش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="69"/>
         <source>Delete current line</source>
-        <translation>Aktuális sor törlése</translation>
+        <translation>بۇ قۇرنى ئۆچۈرۈش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="70"/>
         <source>Swap line up</source>
-        <translation>Sor cseréje felfelé</translation>
+        <translation>ئۈستىگە بىر قۇر يۆتكەش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="71"/>
         <source>Swap line down</source>
-        <translation>Sor cseréje lefelé</translation>
+        <translation>ئاستىغا بىر قۇر يۆتكەش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="72"/>
         <source>Scroll up one line</source>
-        <translation>Egy sorral felfelé</translation>
+        <translation>ئۈستىگە بىر قۇر سىيرىش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="73"/>
         <source>Scroll down one line</source>
-        <translation>Egy sorral lefelé</translation>
+        <translation>ئاستىغا بىر قۇر سىيرىش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="74"/>
         <source>Page up</source>
-        <translation>Lapozás felfelé</translation>
+        <translation>ئۈستىگە بىر بەت سىيرىش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="75"/>
         <source>Page down</source>
-        <translation>Lapozás lefelé</translation>
+        <translation>ئاستىغا بىر بەت سىيرىش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="76"/>
         <source>Move to end of line</source>
-        <translation>Ugrás a sor végére</translation>
+        <translation>قۇر ئاخىرىغا يۆتكەش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="77"/>
         <source>Move to start of line</source>
-        <translation>Ugrás a sor elejére</translation>
+        <translation>قۇر بېشىغا يۆتكەش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="78"/>
         <source>Move to end of text</source>
-        <translation>Ugrás a szöveg végére</translation>
+        <translation>تېكىست ئاخىرىغا يۆتكەش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="79"/>
         <source>Move to start of text</source>
-        <translation>Ugrás a szöveg elejére</translation>
+        <translation>تېكىست بېشىغا يۆتكەش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="80"/>
         <source>Move to line indentation</source>
-        <translation>Ugrás a sorbehúzáshoz</translation>
+        <translation>قۇر قىسقارغۇچە يۆتكەش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="81"/>
         <source>Upper case</source>
-        <translation>Nagybetű</translation>
+        <translation>چوڭ يېزىلىشقا ئالماشتۇرۇش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="82"/>
         <source>Lower case</source>
-        <translation>Kisbetű</translation>
+        <translation>كىچىك يېزىلىشقا ئالماشتۇرۇش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="83"/>
         <source>Capitalize</source>
-        <translation>Kapitalizálás</translation>
+        <translation>1-ھەرپ چوڭ يېزىلسۇن</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="84"/>
         <source>Delete backward word</source>
-        <translation>Szó törlése vissza</translation>
+        <translation>سولغا بىر خەت ئۆچۈرسۇن</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="85"/>
         <source>Delete forward word</source>
-        <translation>Szó törlése előre</translation>
+        <translation>ئوڭغا بىر خەت ئۆچۈرسۇن</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="86"/>
         <source>Forward over a pair</source>
-        <translation>Előre kettővel</translation>
+        <translation>ئوڭغا ماسلاشسۇن</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="87"/>
         <source>Backward over a pair</source>
-        <translation>Vissza kettővel</translation>
+        <translation>سولغا ماسلاشسۇن</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="88"/>
         <source>Select all</source>
-        <translation>Összes kijelölése</translation>
+        <translation>ھەممىسى</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="89"/>
         <source>Copy</source>
-        <translation>Másolás</translation>
+        <translation>كۆچۈرۈش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="90"/>
         <source>Cut</source>
-        <translation>Kivágás</translation>
+        <translation>كېسىش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="91"/>
         <source>Paste</source>
-        <translation>Beillesztés</translation>
+        <translation>چاپلاش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="93"/>
         <source>Mark</source>
-        <translation>Jelölés</translation>
+        <translation>بەلگە قويۇش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="94"/>
         <source>Unmark</source>
-        <translation>Jelölés törlése</translation>
+        <translation>بەلگىنى ئېلىۋېتىش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="95"/>
         <source>Copy line</source>
-        <translation>Sor másolása</translation>
+        <translation>قۇرنى كۆچۈرۈش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="96"/>
         <source>Cut line</source>
-        <translation>Sor kivágása</translation>
+        <translation>قۇرنى كېسىۋېلىش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="97"/>
         <source>Merge lines</source>
-        <translation>Sorok összefűzése</translation>
+        <translation>قۇرنى قوشۇۋېتىش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="98"/>
         <source>Read-Only mode</source>
-        <translation>Csak olvasható mód</translation>
+        <translation>پەقەت ئوقۇيدىغان قىلىش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="99"/>
         <source>Add comment</source>
-        <translation>Megjegyzés hozzáadása</translation>
+        <translation>ئىزاھات قوشۇش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="100"/>
         <source>Remove comment</source>
-        <translation>Megjegyzés eltávolítása</translation>
+        <translation>ئىزاھاتنى بىكار قىلىش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="101"/>
         <source>Undo</source>
-        <translation>Visszavonás</translation>
+        <translation>ئەمەلدىن قالدۇرۇش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="102"/>
         <source>Redo</source>
-        <translation>Újra</translation>
+        <translation>قايتا</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="103"/>
         <source>Add/Remove bookmark</source>
-        <translation>Könyvjelző hozzáadása/eltávolítása</translation>
+        <translation>خەتكۈچ قوشۇش/چىقىرىۋېتىش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="104"/>
         <source>Move to previous bookmark</source>
-        <translation>Ugrás az előző könyvjelzőre</translation>
+        <translation>ئالدىنقى خەتكۈچ</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="105"/>
         <source>Move to next bookmark</source>
-        <translation>Ugrás a következő könyvjelzőre</translation>
+        <translation>كېيىنكى خەتكۈچ</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="106"/>
         <source>Advanced</source>
-        <translation>Speciális</translation>
+        <translation>ئالىي تەڭشەك</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="108"/>
         <source>Window size</source>
-        <translation>Ablakméret</translation>
+        <translation>كۆزنەك ھالىتى</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="112"/>
         <source>Code folding flag</source>
-        <translation>Kód hajtogatási zászló</translation>
+        <translation>كود قاتلىۋەتكەن بەلگىلەرنى كۆرسىتىش</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="113"/>
         <source>Show line numbers</source>
-        <translation>Sorok számának mutatása</translation>
+        <translation>قۇر نومۇرى كۆرۈنسۇن</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="114"/>
         <source>Show blank characters</source>
-        <translation>Szóközök mutatása</translation>
+        <translation>بوش ھەرپ-بەلگىلەر كۆرۈنسۇن</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="115"/>
         <source>Color mark</source>
-        <translation>Színes jelölő</translation>
+        <translation>رەڭ بەلگىسى</translation>
     </message>
 </context>
 <context>
@@ -612,32 +612,32 @@
     <message>
         <location filename="../src/replacebar.cpp" line="39"/>
         <source>Find</source>
-        <translation>Találat</translation>
+        <translation>ئىزدەش</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="43"/>
         <source>Replace With</source>
-        <translation>Csrélje</translation>
+        <translation>غا ئالماشتۇرۇش</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="47"/>
         <source>Replace</source>
-        <translation>Csere</translation>
+        <translation>ئالماشتۇرۇش</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="50"/>
         <source>Skip</source>
-        <translation>Átugrás</translation>
+        <translation>ئاتلاش</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="53"/>
         <source>Replace Rest</source>
-        <translation>Mindegyik cseréje</translation>
+        <translation>قالغانلىرىنى ئالماشتۇرۇش</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="56"/>
         <source>Replace All</source>
-        <translation>Összes cseréje</translation>
+        <translation>ھەممىنى ئالماشتۇرۇش</translation>
     </message>
 </context>
 <context>
@@ -660,62 +660,62 @@
     <message>
         <location filename="../src/settings.cpp" line="92"/>
         <source>Standard</source>
-        <translation>Standard</translation>
+        <translation>ئۆلچەملىك</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="92"/>
         <source>Customize</source>
-        <translation>Testreszabás</translation>
+        <translation>بەلگىلەش</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="106"/>
         <source>Normal</source>
-        <translation>Normál</translation>
+        <translation>نورمال كۆزنەك</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="106"/>
         <source>Maximum</source>
-        <translation>Maximum</translation>
+        <translation>كىچىكلىتىش</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="106"/>
         <source>Fullscreen</source>
-        <translation>Teljes képernyő</translation>
+        <translation>پۈتۈن ئېكران</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="320"/>
         <source>This shortcut conflicts with system shortcut %1</source>
-        <translation>Ez a parancsikon ütközik a %1 rendszerikonnal</translation>
+        <translation>بۇ تېزلەتمە سىستېما تېزلەتمىسى %1 بىلەن توقۇنۇشىدۇ</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="322"/>
         <source>This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately</source>
-        <translation>Ez a parancsikon ütközik a következővel: %1, kattintson a Csere gombra a parancsikon azonnali működtetéséhez</translation>
+        <translation>بۇ تېزلەتمە %1 بىلەن توقۇنۇشىدۇ، ئالماشتۇرۇشنى بېسىپ بۇ تېزلەتمنى ئۈنۈملۈك قىلىڭ</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="437"/>
         <location filename="../src/settings.cpp" line="445"/>
         <source>The shortcut %1 is invalid, please set another one.</source>
-        <translation>A %1 parancsikon érvénytelen, kérjük állítson be egy másikat.</translation>
+        <translation>%1 ئۈنۈمسىز، قايتا بەلگىلەڭ</translation>
     </message>
     <message>
         <source>%1 is invalid</source>
-        <translation type="vanished">%1 érvénytelen</translation>
+        <translation type="vanished">بۇ تېزلەتمە %1 ئۈنۈمسىز</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="480"/>
         <source>Cancel</source>
-        <translation>Mégsem</translation>
+        <translation>بىكار قىلىش</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="481"/>
         <source>Replace</source>
-        <translation>Csere</translation>
+        <translation>ئالماشتۇرۇش</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="483"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation>ھەئە</translation>
     </message>
 </context>
 <context>
@@ -794,32 +794,32 @@
     <message>
         <location filename="../src/tabbar.cpp" line="401"/>
         <source>Close tab</source>
-        <translation>Lap bezárása</translation>
+        <translation>خەتكۈچنى تاقاش</translation>
     </message>
     <message>
         <location filename="../src/tabbar.cpp" line="403"/>
         <source>More options</source>
-        <translation>További beállítások</translation>
+        <translation>تېخىمۇ كۆپ تاقاش ئۇسۇلى</translation>
     </message>
     <message>
         <location filename="../src/tabbar.cpp" line="404"/>
         <source>Close tabs to the left</source>
-        <translation>Fülek balra zárása</translation>
+        <translation>سولدىكى بارلىق خەتكۈچنى تاقاش</translation>
     </message>
     <message>
         <location filename="../src/tabbar.cpp" line="405"/>
         <source>Close tabs to the right</source>
-        <translation>Fülek jobbra zárása</translation>
+        <translation>ئوڭدىكى بارلىق خەتكۈچنى تاقاش</translation>
     </message>
     <message>
         <location filename="../src/tabbar.cpp" line="406"/>
         <source>Close unmodified tabs</source>
-        <translation>Módosítatlan fülek bezárása</translation>
+        <translation>ئۆزگەرتىلمىگەن بارلىق خەتكۈچنى تاقاش</translation>
     </message>
     <message>
         <location filename="../src/tabbar.cpp" line="402"/>
         <source>Close other tabs</source>
-        <translation>Többi lap bezárása</translation>
+        <translation>باشقا خەتكۈچنى تاقاش</translation>
     </message>
 </context>
 <context>
@@ -827,278 +827,278 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="140"/>
         <source>Undo</source>
-        <translation>Visszavonás</translation>
+        <translation>ئەمەلدىن قالدۇرۇش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="141"/>
         <source>Redo</source>
-        <translation>Újra</translation>
+        <translation>قايتا</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="142"/>
         <source>Cut</source>
-        <translation>Kivágás</translation>
+        <translation>چاپلاش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="143"/>
         <source>Copy</source>
-        <translation>Másolás</translation>
+        <translation>كۆچۈرۈش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="144"/>
         <source>Paste</source>
-        <translation>Beillesztés</translation>
+        <translation>چاپلاش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="145"/>
         <source>Delete</source>
-        <translation>Törlés</translation>
+        <translation>ئۆچۈرۈش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="146"/>
         <source>Select All</source>
-        <translation>Összes kijelölése</translation>
+        <translation>ھەممىنى</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="147"/>
         <location filename="../src/window.cpp" line="261"/>
         <source>Find</source>
-        <translation>Keresés</translation>
+        <translation>ئىزدەش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="148"/>
         <location filename="../src/window.cpp" line="262"/>
         <source>Replace</source>
-        <translation>Csere</translation>
+        <translation>ئالماشتۇرۇش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="149"/>
         <source>Go to Line</source>
-        <translation>Ugrás megadott sorra</translation>
+        <translation>سەكرەش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="150"/>
         <source>Turn on Read-Only mode</source>
-        <translation>Csak olvasható mód bekapcsolása</translation>
+        <translation>پەقەت ئوقۇيدىغان ھالەتنى ئېچىش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="151"/>
         <source>Turn off Read-Only mode</source>
-        <translation>Csak olvasható mód kikapcsolása</translation>
+        <translation>پەقەت ئوقۇيدىغان ھالەتنى تاقاش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="152"/>
         <source>Fullscreen</source>
-        <translation>Teljes képernyő</translation>
+        <translation>پۈتۈن ئېكران</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="153"/>
         <source>Exit fullscreen</source>
-        <translation>Kilépés a teljes képernyőből</translation>
+        <translation>پۈتۈن ئېكراندىن چېكىنىش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="154"/>
         <source>Display in file manager</source>
-        <translation>Megjelenítés a fájlkezelőben</translation>
+        <translation>ھۆججەت باشقۇرغۇچتا كۆرسىتىش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="155"/>
         <location filename="../src/dtextedit.cpp" line="229"/>
         <source>Add Comment</source>
-        <translation>Megjegyzés hozzáadása</translation>
+        <translation>ئىزاھات قوشۇش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="227"/>
         <source>Column Mode</source>
-        <translation>Oszlop mód</translation>
+        <translation>ئىستون تەھرىرلەش ھالىتى</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="230"/>
         <source>Remove Comment</source>
-        <translation>Megjegyzés eltávolítása</translation>
+        <translation>ئىزاھاتنى بىكار قىلىش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="230"/>
         <source>Press ALT and click lines to edit in column mode</source>
-        <translation>Nyomja meg az ALT gombot, és kattintson a sorokra az oszlop módban történő szerkesztéshez</translation>
+        <translation>ئىستون تەھرىرلەش ھالىتىنى ئالماشتۇرۇش ئۈچۈن ALT   بىلەن مائۇسنى ئىشلىتىڭ</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="156"/>
         <source>Text to Speech</source>
-        <translation>Szövegből beszéd</translation>
+        <translation>تېكىستنى ئاۋازغا ئايلاندۇرۇش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="157"/>
         <source>Stop reading</source>
-        <translation>Olvasás megállítása</translation>
+        <translation>ئوقۇشنى توختىتىش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="158"/>
         <source>Speech to Text</source>
-        <translation>Beszédből szöveg</translation>
+        <translation>ئاۋازنى تېكىستكە ئايلاندۇرۇش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="159"/>
         <source>Translate</source>
-        <translation>Fordítás</translation>
+        <translation>تەرجىمان</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="160"/>
         <source>Add bookmark</source>
-        <translation>Könyvjelző hozzáadása</translation>
+        <translation>خەتكۈچ قوشۇش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="161"/>
         <source>Remove Bookmark</source>
-        <translation>Könyvjelző eltávolítása</translation>
+        <translation>خەتكۈچ چىقىرىۋېتىش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="162"/>
         <source>Previous bookmark</source>
-        <translation>Előző könyvjelző</translation>
+        <translation>ئالدىنقى خەتكۈچ</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="163"/>
         <source>Next bookmark</source>
-        <translation>Következő könyvjelző</translation>
+        <translation>كېيىنكى خەتكۈچ</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="164"/>
         <source>Remove All Bookmarks</source>
-        <translation>Összes könyvjelző eltávolítása</translation>
+        <translation>بارلىق خەتكۈچنى چىقىرىۋېتىش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="165"/>
         <source>Fold All</source>
-        <translation>Összes hajtogatása</translation>
+        <translation>بارلىق قاتلامنى قاتلاش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="166"/>
         <source>Fold Current Level</source>
-        <translation>Jelenlegi szint hajtogatása</translation>
+        <translation>ھازىرقى قاتلامنى قاتلاش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="167"/>
         <source>Unfold All</source>
-        <translation>Összes kihajtogatása</translation>
+        <translation>بارلىق قاتلامنى ئېچىش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="168"/>
         <source>Unfold Current Level</source>
-        <translation>Jelenlegi szint kihajtogatása</translation>
+        <translation>ھازىرقى قاتلامنى ئېچىش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="174"/>
         <source>Color Mark</source>
-        <translation>Színes jelölő</translation>
+        <translation>رەڭ بەلگىسى</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="210"/>
         <source>Mark All</source>
-        <translation>Összes jelölése</translation>
+        <translation>ھەممىسىگە بەلگە قويۇش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="193"/>
         <source>Mark</source>
-        <translation>Jelölés</translation>
+        <translation>بەلگە قويۇش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="177"/>
         <source>Clear All Marks</source>
-        <translation>Összes jelölő törlése</translation>
+        <translation>بارلىق بەلگىلەرنى چىقىرىۋېتىش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="179"/>
         <source>Clear Last Mark</source>
-        <translation>Utolsó jelölés törlése</translation>
+        <translation>ئالدىنقى بەلگىنى چىقىرىۋېتىش</translation>
     </message>
     <message>
         <source>Style 1</source>
-        <translation type="vanished">Stílus 1</translation>
+        <translation type="vanished">ئۇسلۇب 1</translation>
     </message>
     <message>
         <source>Style 2</source>
-        <translation type="vanished">Stílus 2</translation>
+        <translation type="vanished">ئۇسلۇب 2</translation>
     </message>
     <message>
         <source>Style 3</source>
-        <translation type="vanished">Stílus 3</translation>
+        <translation type="vanished">ئۇسلۇب 3</translation>
     </message>
     <message>
         <source>Style 4</source>
-        <translation type="vanished">Stílus 4</translation>
+        <translation type="vanished">ئۇسلۇب 4</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="227"/>
         <source>Column Mode</source>
-        <translation>Oszlop mód</translation>
+        <translation>ئىستون تەھرىرلەش ھالىتى</translation>
     </message>
     <message>
         <source>Add comment</source>
-        <translation type="vanished">Megjegyzés hozzáadása</translation>
+        <translation type="vanished">ئىزاھات قوشۇش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="230"/>
         <source>Remove Comment</source>
-        <translation>Megjegyzés eltávolítása</translation>
+        <translation>ئىزاھاتنى بىكار قىلىش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="289"/>
         <source>Change Case</source>
-        <translation>Kis/nagybetű váltása</translation>
+        <translation>چوڭ-كىچىك يېزىلىشىنى ئالماشتۇرۇش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="290"/>
         <source>Upper Case</source>
-        <translation>Nagybetű</translation>
+        <translation>چوڭ يېزىلىش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="291"/>
         <source>Lower Case</source>
-        <translation>Kisbetű</translation>
+        <translation>كىچىك يېزىلىش</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="292"/>
         <source>Capitalize</source>
-        <translation>Kapitalizálás</translation>
+        <translation>1-ھەرپ چوڭ يېزىلسۇن</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="343"/>
         <location filename="../src/widgets/bottombar.cpp" line="73"/>
         <source>None</source>
-        <translation>Semmi</translation>
+        <translation>يوق</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="977"/>
         <source>Selected line(s) copied</source>
-        <translation>A kijelölt sor(ok) átmásolva</translation>
+        <translation>تاللانغان قۇر چاپلاش تاختىسىغا كۆچۈرۈلدى</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="983"/>
         <source>Current line copied</source>
-        <translation>A jelenlegi sor átmásolva</translation>
+        <translation>نۆۋەتتىكى قۇر چاپلاش تاختىسىغا كۆچۈرۈلدى</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="1022"/>
         <source>Selected line(s) clipped</source>
-        <translation>A kijelölt sor(ok) kivágva</translation>
+        <translation>تاللانغان قۇر چاپلاش تاختىسىغا كېسىلدى</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="1028"/>
         <source>Current line clipped</source>
-        <translation>A jelenlegi sor kivágva</translation>
+        <translation>نۆۋەتتىكى قۇر چاپلاش تاختىسىغا كېسىلدى</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2823"/>
         <source>Read-Only mode is off</source>
-        <translation>Csak olvasható mód kikapcsolva</translation>
+        <translation>پەقەت ئوقۇيدىغان ھالەت تاقالدى</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2830"/>
         <location filename="../src/dtextedit.cpp" line="2838"/>
         <location filename="../src/dtextedit.cpp" line="4996"/>
         <source>Read-Only mode is on</source>
-        <translation>Csak olvasható mód bekapcsolva</translation>
+        <translation>پەقەت ئوقۇيدىغان ھالەتنى ئېچىلدى</translation>
     </message>
 </context>
 <context>
@@ -1106,7 +1106,7 @@
     <message>
         <location filename="../src/widgets/toast.cpp" line="38"/>
         <source>Reload</source>
-        <translation>Újratöltés</translation>
+        <translation>قايتا كىرگۈزۈڭ</translation>
     </message>
 </context>
 <context>
@@ -1114,7 +1114,7 @@
     <message>
         <location filename="../src/warningnotices.cpp" line="15"/>
         <source>Reload</source>
-        <translation>Újratöltés</translation>
+        <translation>قايتا كىرگۈزۈڭ</translation>
     </message>
 </context>
 <context>
@@ -1122,50 +1122,50 @@
     <message>
         <location filename="../src/window.cpp" line="253"/>
         <source>New window</source>
-        <translation>Új ablak</translation>
+        <translation>يېڭى كۆزنەك</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="254"/>
         <source>New tab</source>
-        <translation>Új lap</translation>
+        <translation>يېڭى خەتكۈچ</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="255"/>
         <source>Open file</source>
-        <translation>Fájl megnyitása</translation>
+        <translation>ئېچىش</translation>
     </message>
     <message>
         <location filename="../src/warningnotices.cpp" line="17"/>
         <location filename="../src/widgets/toast.cpp" line="39"/>
         <location filename="../src/window.cpp" line="257"/>
         <source>Save as</source>
-        <translation>Mentés másként</translation>
+        <translation>باشقا ساقلاش</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="258"/>
         <source>Print</source>
-        <translation>Nyomtatás</translation>
+        <translation>بېسىش</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="259"/>
         <source>Switch theme</source>
-        <translation>Téma váltása</translation>
+        <translation>ئۇسلۇب ئالماشتۇرۇش</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="356"/>
         <location filename="../src/window.cpp" line="1988"/>
         <source>Read-Only</source>
-        <translation>Csak olvasható</translation>
+        <translation>پەقەت ئوقۇيدىغان قىلىش</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="841"/>
         <source>Saved successfully</source>
-        <translation>Mentés sikeres</translation>
+        <translation>ھۆججەت ساقلاندى</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1145"/>
         <source>Read-Only mode is on</source>
-        <translation>Csak olvasható mód bekapcsolva</translation>
+        <translation>پەقەت ئوقۇيدىغان ھالەتنى ئېچىلدى</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1399"/>
@@ -1180,35 +1180,35 @@
     <message>
         <location filename="../src/window.cpp" line="1906"/>
         <source>Discard</source>
-        <translation>Elvet</translation>
+        <translation>ساقلىمايمەن</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="260"/>
         <location filename="../src/window.cpp" line="1449"/>
         <source>Settings</source>
-        <translation>Beállítások</translation>
+        <translation>تەڭشەك</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="386"/>
         <source>You do not have permission to open %1</source>
-        <translation>Nincs engedélye %1 megnyitásához</translation>
+        <translation>%1نى ئېچىش ھوقۇقىڭىز يوق</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="424"/>
         <source>Invalid file: %1</source>
-        <translation>Érvénytelen fájl: %1</translation>
+        <translation>ئۈنۈمسىز ھۆججەت: %1</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="866"/>
         <location filename="../src/window.cpp" line="946"/>
         <location filename="../src/window.cpp" line="1007"/>
         <source>Save File</source>
-        <translation>Fájl mentése</translation>
+        <translation>ساقلاش</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="531"/>
         <source>Do you want to save this file?</source>
-        <translation>Kívánja menteni ezt a fájlt?</translation>
+        <translation>بۇ ھۆججەتنى ساقلامسىز؟</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="868"/>
@@ -1218,7 +1218,7 @@
         <location filename="../src/window.cpp" line="1009"/>
         <location filename="../src/window.cpp" line="1024"/>
         <source>Encoding</source>
-        <translation>Kódolás</translation>
+        <translation>كودلاش</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="869"/>
@@ -1228,49 +1228,49 @@
         <location filename="../src/window.cpp" line="1010"/>
         <location filename="../src/window.cpp" line="1025"/>
         <source>Line Endings</source>
-        <translation>Sorvégek</translation>
+        <translation>قۇر تاشلاش بەلگىسى</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1431"/>
         <source>Editor</source>
-        <translation>Szerkesztő</translation>
+        <translation>تەھرىرلەش</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="784"/>
         <source>You do not have permission to save %1</source>
-        <translation>Nincs engedélye %1 mentéséhez</translation>
+        <translation>%1نى ساقلاش ھوقۇقىڭىز يوق</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="827"/>
         <source>Do you want to save as another?</source>
-        <translation>Kívánja másként menteni?</translation>
+        <translation>باشقا ھۆججەتلەرنى باشقىدىن ساقلامسىز؟</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1547"/>
         <location filename="../src/window.cpp" line="2051"/>
         <source>Do you want to save all the files?</source>
-        <translation>Kívánja menteni az összes fájlt?</translation>
+        <translation>بارلىق ھۆججەتلەرنى ساقلامسىز؟</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1506"/>
         <source>Untitled %1</source>
-        <translation>Cím nélküli %1</translation>
+        <translation>%1نىڭ نامىنى ئۆزگەتىش</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1305"/>
         <source>Current location remembered</source>
-        <translation>A jelenlegi helyre emlékezve</translation>
+        <translation>نۆۋەتتىكى ئورۇن ئەستە ساقلاندى</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1905"/>
         <source>Cancel</source>
-        <translation>Mégsem</translation>
+        <translation>بىكار قىلىش</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="256"/>
         <location filename="../src/window.cpp" line="1907"/>
         <source>Save</source>
-        <translation>Mentés</translation>
+        <translation>ساقلاش</translation>
     </message>
 </context>
 </TS>

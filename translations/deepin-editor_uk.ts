@@ -599,7 +599,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="114"/>
         <source>Show blank characters</source>
-        <translation type="unfinished"/>
+        <translation>Показувати пробіли</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="115"/>
@@ -685,7 +685,7 @@
     <message>
         <location filename="../src/settings.cpp" line="320"/>
         <source>This shortcut conflicts with system shortcut %1</source>
-        <translation type="unfinished"/>
+        <translation>Це клавіатурне скорочення конфліктує із загальносистемним скороченням %1</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="322"/>
@@ -696,7 +696,7 @@
         <location filename="../src/settings.cpp" line="437"/>
         <location filename="../src/settings.cpp" line="445"/>
         <source>The shortcut %1 is invalid, please set another one.</source>
-        <translation type="unfinished"/>
+        <translation>Скорочення %1 є некоректним. Будь ласка, встановіть інше.</translation>
     </message>
     <message>
         <source>%1 is invalid</source>
@@ -715,7 +715,7 @@
     <message>
         <location filename="../src/settings.cpp" line="483"/>
         <source>OK</source>
-        <translation type="unfinished"/>
+        <translation>Гаразд</translation>
     </message>
 </context>
 <context>
@@ -920,7 +920,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="230"/>
         <source>Press ALT and click lines to edit in column mode</source>
-        <translation type="unfinished"/>
+        <translation>Натисніть клавішу Alt і клацайте на рядках, щоб редагувати текст у режимі стовпчиків</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="156"/>

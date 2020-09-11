@@ -1,11 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="en">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.1">
 <context>
     <name>BookMarkWidget</name>
     <message>
         <source>Add bookmark</source>
-        <translation type="obsolete">Add bookmark</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -105,11 +103,11 @@
     <name>FindWidget</name>
     <message>
         <source>Next</source>
-        <translation type="obsolete">Next</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Previous</source>
-        <translation type="obsolete">Previous</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -137,7 +135,7 @@
     <name>NoteMenu</name>
     <message>
         <source>Copy</source>
-        <translation type="obsolete">Copy</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -646,15 +644,15 @@
     <name>SaveDialog</name>
     <message>
         <source>Cancel</source>
-        <translation type="obsolete">Cancel</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Discard</source>
-        <translation type="obsolete">Discard</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Save</source>
-        <translation type="obsolete">Save</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -698,7 +696,7 @@
         <location filename="../src/settings.cpp" line="437"/>
         <location filename="../src/settings.cpp" line="445"/>
         <source>The shortcut %1 is invalid, please set another one.</source>
-        <translation type="unfinished"></translation>
+        <translation>The shortcut %1 is invalid, please set another one.</translation>
     </message>
     <message>
         <source>%1 is invalid</source>
@@ -724,71 +722,71 @@
     <name>ShortCutShow</name>
     <message>
         <source>Settings</source>
-        <translation type="obsolete">Settings</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Exit</source>
-        <translation type="obsolete">Exit</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Help</source>
-        <translation type="obsolete">Help</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Page up</source>
-        <translation type="obsolete">Page up</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Page down</source>
-        <translation type="obsolete">Page down</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Save as</source>
-        <translation type="obsolete">Save as</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Print</source>
-        <translation type="obsolete">Print</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Save</source>
-        <translation type="obsolete">Save</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Add bookmark</source>
-        <translation type="obsolete">Add bookmark</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="obsolete">Delete</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Fullscreen</source>
-        <translation type="obsolete">Fullscreen</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="obsolete">Copy</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Cut</source>
-        <translation type="obsolete">Cut</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Paste</source>
-        <translation type="obsolete">Paste</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Undo</source>
-        <translation type="obsolete">Undo</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Select all</source>
-        <translation type="obsolete">Select all</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <source>Display shortcuts</source>
-        <translation type="obsolete">Display shortcuts</translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>

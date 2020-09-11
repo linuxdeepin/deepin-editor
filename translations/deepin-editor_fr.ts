@@ -153,7 +153,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="24"/>
         <source>Basic</source>
-        <translation>Basique</translation>
+        <translation>Simple</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="25"/>
@@ -599,7 +599,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="114"/>
         <source>Show blank characters</source>
-        <translation type="unfinished"/>
+        <translation>Afficher les espaces</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="115"/>
@@ -685,7 +685,7 @@
     <message>
         <location filename="../src/settings.cpp" line="320"/>
         <source>This shortcut conflicts with system shortcut %1</source>
-        <translation type="unfinished"/>
+        <translation>Ce raccourci entre en conflit avec le raccourci système %1</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="322"/>
@@ -696,7 +696,7 @@
         <location filename="../src/settings.cpp" line="437"/>
         <location filename="../src/settings.cpp" line="445"/>
         <source>The shortcut %1 is invalid, please set another one.</source>
-        <translation type="unfinished"/>
+        <translation>Le raccourci %1 n&apos;est pas valide, veuillez en définir un autre.</translation>
     </message>
     <message>
         <source>%1 is invalid</source>
@@ -715,7 +715,7 @@
     <message>
         <location filename="../src/settings.cpp" line="483"/>
         <source>OK</source>
-        <translation type="unfinished"/>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -920,7 +920,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="230"/>
         <source>Press ALT and click lines to edit in column mode</source>
-        <translation type="unfinished"/>
+        <translation>Appuyer sur ALT et cliquer sur les lignes pour éditer en mode colonne</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="156"/>

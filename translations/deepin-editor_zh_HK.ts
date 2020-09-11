@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="hu" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_HK" version="2.1">
 <context>
     <name>BookMarkWidget</name>
     <message>
@@ -11,17 +11,17 @@
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="39"/>
         <source>Row</source>
-        <translation>Sor</translation>
+        <translation>行</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="40"/>
         <source>Column</source>
-        <translation>Oszlop</translation>
+        <translation>列</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="41"/>
         <source>Characters %1</source>
-        <translation>%1 karakter</translation>
+        <translation>字符數 %1</translation>
     </message>
 </context>
 <context>
@@ -29,56 +29,56 @@
     <message>
         <location filename="../src/editwrapper.cpp" line="592"/>
         <source>File has changed on disk. Reload?</source>
-        <translation>A fájl megváltozott a lemezen. Újból betöltöd?</translation>
+        <translation>磁盤中的原文件已被修改，是否重新載入？</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="595"/>
         <source>File removed on the disk. Save it now?</source>
-        <translation>A fájl törlődött a lemezről. Elmented most?</translation>
+        <translation>磁盤中的原文件已被移除，是否另存？</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="653"/>
         <location filename="../src/widgets/bottombar.cpp" line="66"/>
         <source>INSERT</source>
-        <translation>BESZÚRÁS</translation>
+        <translation>插入</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="656"/>
         <source>OVERWRITE</source>
-        <translation>FELÜLÍRÁS</translation>
+        <translation>覆蓋</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="659"/>
         <source>R/O</source>
-        <translation>Írásvédett</translation>
+        <translation>只讀</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="306"/>
         <source>Encoding changed. Do you want to save the file now?</source>
-        <translation>A kódolás megváltozott. El akarja menteni a fájlt most?</translation>
+        <translation>文件編碼已更改，是否先進行保存？</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="309"/>
         <location filename="../src/editwrapper.cpp" line="502"/>
         <source>Cancel</source>
-        <translation>Mégsem</translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="310"/>
         <location filename="../src/editwrapper.cpp" line="338"/>
         <location filename="../src/editwrapper.cpp" line="451"/>
         <source>Save</source>
-        <translation>Mentés</translation>
+        <translation>保存</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="499"/>
         <source>There are errors when using this encoding. If continue, the file contents may be changed</source>
-        <translation>Ezen kódolás használatakor hibák lehetnek. Ha folytatja, a fájl tartalma megváltozhat</translation>
+        <translation>使用此編碼加載文件出錯，如果強制使用，可能會導致文件內容發生改變</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="503"/>
         <source>Continue</source>
-        <translation>Folytatás</translation>
+        <translation>繼續</translation>
     </message>
 </context>
 <context>
@@ -86,17 +86,17 @@
     <message>
         <location filename="../src/findbar.cpp" line="40"/>
         <source>Find</source>
-        <translation>Keresés</translation>
+        <translation>查找</translation>
     </message>
     <message>
         <location filename="../src/findbar.cpp" line="46"/>
         <source>Next</source>
-        <translation>Következő</translation>
+        <translation>下一個</translation>
     </message>
     <message>
         <location filename="../src/findbar.cpp" line="44"/>
         <source>Previous</source>
-        <translation>Előző</translation>
+        <translation>上一個</translation>
     </message>
 </context>
 <context>
@@ -115,7 +115,7 @@
     <message>
         <location filename="../src/jumplinebar.cpp" line="41"/>
         <source>Go to Line: </source>
-        <translation>Ugrás megadott sorra:</translation>
+        <translation>跳到行：</translation>
     </message>
 </context>
 <context>
@@ -123,12 +123,12 @@
     <message>
         <location filename="../src/main.cpp" line="53"/>
         <source>Text Editor is a powerful tool for viewing and editing text files.</source>
-        <translation>A szövegszerkesztő egy hatékony eszköz a szöveges fájlok megtekintésére és szerkesztésére.</translation>
+        <translation>文本編輯器是一款用來查看和編輯文本文件的工具。</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="65"/>
         <source>Text Editor</source>
-        <translation>Szövegszerkesztő</translation>
+        <translation>文本編輯器</translation>
     </message>
 </context>
 <context>
@@ -143,468 +143,468 @@
     <message>
         <location filename="../src/startmanager.cpp" line="267"/>
         <source>File not saved</source>
-        <translation>A fájl nincs elmentve</translation>
+        <translation>文件未保存</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="62"/>
         <source>Text Editor</source>
-        <translation>Szövegszerkesztő</translation>
+        <translation>文本編輯器</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="24"/>
         <source>Basic</source>
-        <translation>Alap</translation>
+        <translation>基礎設置</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="25"/>
         <source>Font Style</source>
-        <translation>Betűstílus</translation>
+        <translation>字體樣式</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="26"/>
         <source>Font</source>
-        <translation>Betűtípus</translation>
+        <translation>字體</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="27"/>
         <source>Font Size</source>
-        <translation>Betűméret</translation>
+        <translation>字號</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="29"/>
         <location filename="../src/settingsdialog.cpp" line="30"/>
         <source>Keymap</source>
-        <translation>Karakterkiosztás</translation>
+        <translation>快捷鍵映射</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="28"/>
         <source>Shortcuts</source>
-        <translation>Parancsikonok</translation>
+        <translation>快捷鍵</translation>
     </message>
     <message>
         <source>Increase font size</source>
-        <translation type="vanished">Betűméret növelése</translation>
+        <translation type="vanished">放大字號</translation>
     </message>
     <message>
         <source>Decrease font size</source>
-        <translation type="vanished">Betűméret csökkentése</translation>
+        <translation type="vanished">縮小字號</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="58"/>
         <source>Forward character</source>
-        <translation>Előre karakter</translation>
+        <translation>右移一個字符</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="59"/>
         <source>Backward character</source>
-        <translation>Vissza karakter</translation>
+        <translation>左移一個字符</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="92"/>
         <source>Transpose character</source>
-        <translation>Karakter átalakítás</translation>
+        <translation>調換字符</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="109"/>
         <source>Tab width</source>
-        <translation>Tabulátor szélesség</translation>
+        <translation>Tab字符寬度</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="111"/>
         <source>Word wrap</source>
-        <translation>Sortörés</translation>
+        <translation>自動換行</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="31"/>
         <location filename="../src/settingsdialog.cpp" line="107"/>
         <location filename="../src/window.cpp" line="1389"/>
         <source>Window</source>
-        <translation>Ablak</translation>
+        <translation>窗口</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="32"/>
         <source>New tab</source>
-        <translation>Új lap</translation>
+        <translation>新標籤頁</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="33"/>
         <source>New window</source>
-        <translation>Új ablak</translation>
+        <translation>新窗口</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="34"/>
         <source>Save</source>
-        <translation>Mentés</translation>
+        <translation>保存</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="35"/>
         <source>Save as</source>
-        <translation>Mentés másként</translation>
+        <translation>另存為</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="36"/>
         <source>Next tab</source>
-        <translation>Következő lap</translation>
+        <translation>下一個標籤頁</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="37"/>
         <source>Previous tab</source>
-        <translation>Előző lap</translation>
+        <translation>上一個標籤頁</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="38"/>
         <source>Close tab</source>
-        <translation>Lap bezárása</translation>
+        <translation>關閉標籤頁</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="39"/>
         <source>Close other tabs</source>
-        <translation>Többi lap bezárása</translation>
+        <translation>關閉其他標籤頁</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="40"/>
         <source>Restore tab</source>
-        <translation>Lap visszaállítása</translation>
+        <translation>恢復標籤頁</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="41"/>
         <source>Open file</source>
-        <translation>Fájl megnyitása</translation>
+        <translation>打開文件</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="42"/>
         <source>Increment font size</source>
-        <translation>Betűméret növelése</translation>
+        <translation>放大字號</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="43"/>
         <source>Decrement font size</source>
-        <translation>Betűméret csökkentése</translation>
+        <translation>縮小字號</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="44"/>
         <source>Reset font size</source>
-        <translation>Betűméret visszaállítása</translation>
+        <translation>還原字號</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="46"/>
         <source>Toggle fullscreen</source>
-        <translation>Teljes képernyős mód</translation>
+        <translation>切換全屏</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="45"/>
         <source>Help</source>
-        <translation>Segítség</translation>
+        <translation>幫助</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="47"/>
         <source>Find</source>
-        <translation>Keresés</translation>
+        <translation>查找</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="48"/>
         <source>Replace</source>
-        <translation>Csere</translation>
+        <translation>替換</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="49"/>
         <source>Go to line</source>
-        <translation>Ugrás megadott sorra</translation>
+        <translation>跳到行</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="50"/>
         <source>Save cursor position</source>
-        <translation>Kurzor pozíciójának mentése</translation>
+        <translation>保存光標位置</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="51"/>
         <source>Reset cursor position</source>
-        <translation>Kurzor pozíciójának visszaállítása</translation>
+        <translation>跳轉到保存光標位置</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="52"/>
         <source>Exit</source>
-        <translation>Kilépés</translation>
+        <translation>退出</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="53"/>
         <source>Display shortcuts</source>
-        <translation>Kijelző parancsikonok</translation>
+        <translation>顯示快捷鍵</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="54"/>
         <source>Print</source>
-        <translation>Nyomtatás</translation>
+        <translation>打印</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="55"/>
         <source>Editor</source>
-        <translation>Szerkesztő</translation>
+        <translation>編輯</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="56"/>
         <source>Increase indent</source>
-        <translation>Behúzás növelése</translation>
+        <translation>增加縮進</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="57"/>
         <source>Decrease indent</source>
-        <translation>Behúzás csökkentése</translation>
+        <translation>減少縮進</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="60"/>
         <source>Forward word</source>
-        <translation>Szó előre</translation>
+        <translation>右移一個詞</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="61"/>
         <source>Backward word</source>
-        <translation>Szó hátra</translation>
+        <translation>左移一個詞</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="62"/>
         <source>Next line</source>
-        <translation>Következő sor</translation>
+        <translation>下一行</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="63"/>
         <source>Previous line</source>
-        <translation>Előző sor</translation>
+        <translation>上一行</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="64"/>
         <source>New line</source>
-        <translation>Új sor</translation>
+        <translation>換行</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="65"/>
         <source>New line above</source>
-        <translation>Új sor felülre</translation>
+        <translation>向上插入一行</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="66"/>
         <source>New line below</source>
-        <translation>Új sor alulra</translation>
+        <translation>向下插入一行</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="67"/>
         <source>Duplicate line</source>
-        <translation>Sor duplikálása</translation>
+        <translation>複製並黏貼當前行</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="68"/>
         <source>Delete to end of line</source>
-        <translation>Sorvég törlése</translation>
+        <translation>刪除到行尾</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="69"/>
         <source>Delete current line</source>
-        <translation>Aktuális sor törlése</translation>
+        <translation>刪除當前行</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="70"/>
         <source>Swap line up</source>
-        <translation>Sor cseréje felfelé</translation>
+        <translation>上移一行</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="71"/>
         <source>Swap line down</source>
-        <translation>Sor cseréje lefelé</translation>
+        <translation>下移一行</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="72"/>
         <source>Scroll up one line</source>
-        <translation>Egy sorral felfelé</translation>
+        <translation>向上滾動一行</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="73"/>
         <source>Scroll down one line</source>
-        <translation>Egy sorral lefelé</translation>
+        <translation>向下滾動一行</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="74"/>
         <source>Page up</source>
-        <translation>Lapozás felfelé</translation>
+        <translation>向上滾動一頁</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="75"/>
         <source>Page down</source>
-        <translation>Lapozás lefelé</translation>
+        <translation>向下滾動一頁</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="76"/>
         <source>Move to end of line</source>
-        <translation>Ugrás a sor végére</translation>
+        <translation>移動到行尾</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="77"/>
         <source>Move to start of line</source>
-        <translation>Ugrás a sor elejére</translation>
+        <translation>移動到行頭</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="78"/>
         <source>Move to end of text</source>
-        <translation>Ugrás a szöveg végére</translation>
+        <translation>移動到文本結尾</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="79"/>
         <source>Move to start of text</source>
-        <translation>Ugrás a szöveg elejére</translation>
+        <translation>移動到文本開頭</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="80"/>
         <source>Move to line indentation</source>
-        <translation>Ugrás a sorbehúzáshoz</translation>
+        <translation>移動到行縮進</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="81"/>
         <source>Upper case</source>
-        <translation>Nagybetű</translation>
+        <translation>轉換為大寫</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="82"/>
         <source>Lower case</source>
-        <translation>Kisbetű</translation>
+        <translation>轉換為小寫</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="83"/>
         <source>Capitalize</source>
-        <translation>Kapitalizálás</translation>
+        <translation>首字母大寫</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="84"/>
         <source>Delete backward word</source>
-        <translation>Szó törlése vissza</translation>
+        <translation>向左刪除一個詞</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="85"/>
         <source>Delete forward word</source>
-        <translation>Szó törlése előre</translation>
+        <translation>向右刪除一個詞</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="86"/>
         <source>Forward over a pair</source>
-        <translation>Előre kettővel</translation>
+        <translation>向右匹配</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="87"/>
         <source>Backward over a pair</source>
-        <translation>Vissza kettővel</translation>
+        <translation>向左匹配</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="88"/>
         <source>Select all</source>
-        <translation>Összes kijelölése</translation>
+        <translation>全選</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="89"/>
         <source>Copy</source>
-        <translation>Másolás</translation>
+        <translation>複製</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="90"/>
         <source>Cut</source>
-        <translation>Kivágás</translation>
+        <translation>剪切</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="91"/>
         <source>Paste</source>
-        <translation>Beillesztés</translation>
+        <translation>黏貼</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="93"/>
         <source>Mark</source>
-        <translation>Jelölés</translation>
+        <translation>設置標記</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="94"/>
         <source>Unmark</source>
-        <translation>Jelölés törlése</translation>
+        <translation>取消標記</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="95"/>
         <source>Copy line</source>
-        <translation>Sor másolása</translation>
+        <translation>複製行</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="96"/>
         <source>Cut line</source>
-        <translation>Sor kivágása</translation>
+        <translation>剪切行</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="97"/>
         <source>Merge lines</source>
-        <translation>Sorok összefűzése</translation>
+        <translation>合併行</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="98"/>
         <source>Read-Only mode</source>
-        <translation>Csak olvasható mód</translation>
+        <translation>切換到只讀模式</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="99"/>
         <source>Add comment</source>
-        <translation>Megjegyzés hozzáadása</translation>
+        <translation>添加注釋</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="100"/>
         <source>Remove comment</source>
-        <translation>Megjegyzés eltávolítása</translation>
+        <translation>取消注釋</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="101"/>
         <source>Undo</source>
-        <translation>Visszavonás</translation>
+        <translation>撤銷</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="102"/>
         <source>Redo</source>
-        <translation>Újra</translation>
+        <translation>重做</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="103"/>
         <source>Add/Remove bookmark</source>
-        <translation>Könyvjelző hozzáadása/eltávolítása</translation>
+        <translation>添加/清除書籤</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="104"/>
         <source>Move to previous bookmark</source>
-        <translation>Ugrás az előző könyvjelzőre</translation>
+        <translation>跳轉到上一個書籤</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="105"/>
         <source>Move to next bookmark</source>
-        <translation>Ugrás a következő könyvjelzőre</translation>
+        <translation>跳轉到下一個書籤</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="106"/>
         <source>Advanced</source>
-        <translation>Speciális</translation>
+        <translation>高級設置</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="108"/>
         <source>Window size</source>
-        <translation>Ablakméret</translation>
+        <translation>窗口狀態</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="112"/>
         <source>Code folding flag</source>
-        <translation>Kód hajtogatási zászló</translation>
+        <translation>顯示代碼摺疊標誌</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="113"/>
         <source>Show line numbers</source>
-        <translation>Sorok számának mutatása</translation>
+        <translation>顯示行號</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="114"/>
         <source>Show blank characters</source>
-        <translation>Szóközök mutatása</translation>
+        <translation>顯示空白字符</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="115"/>
         <source>Color mark</source>
-        <translation>Színes jelölő</translation>
+        <translation>顏色標記</translation>
     </message>
 </context>
 <context>
@@ -612,32 +612,32 @@
     <message>
         <location filename="../src/replacebar.cpp" line="39"/>
         <source>Find</source>
-        <translation>Találat</translation>
+        <translation>查找</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="43"/>
         <source>Replace With</source>
-        <translation>Csrélje</translation>
+        <translation>替換為</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="47"/>
         <source>Replace</source>
-        <translation>Csere</translation>
+        <translation>替換</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="50"/>
         <source>Skip</source>
-        <translation>Átugrás</translation>
+        <translation>跳過</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="53"/>
         <source>Replace Rest</source>
-        <translation>Mindegyik cseréje</translation>
+        <translation>剩餘替換</translation>
     </message>
     <message>
         <location filename="../src/replacebar.cpp" line="56"/>
         <source>Replace All</source>
-        <translation>Összes cseréje</translation>
+        <translation>全部替換</translation>
     </message>
 </context>
 <context>
@@ -660,62 +660,62 @@
     <message>
         <location filename="../src/settings.cpp" line="92"/>
         <source>Standard</source>
-        <translation>Standard</translation>
+        <translation>標準</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="92"/>
         <source>Customize</source>
-        <translation>Testreszabás</translation>
+        <translation>自定義</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="106"/>
         <source>Normal</source>
-        <translation>Normál</translation>
+        <translation>正常窗口</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="106"/>
         <source>Maximum</source>
-        <translation>Maximum</translation>
+        <translation>最大化</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="106"/>
         <source>Fullscreen</source>
-        <translation>Teljes képernyő</translation>
+        <translation>全屏</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="320"/>
         <source>This shortcut conflicts with system shortcut %1</source>
-        <translation>Ez a parancsikon ütközik a %1 rendszerikonnal</translation>
+        <translation>此快捷鍵與系統快捷鍵%1衝突</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="322"/>
         <source>This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately</source>
-        <translation>Ez a parancsikon ütközik a következővel: %1, kattintson a Csere gombra a parancsikon azonnali működtetéséhez</translation>
+        <translation>此快捷鍵與%1衝突，點擊替換使這個快捷鍵立即生效</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="437"/>
         <location filename="../src/settings.cpp" line="445"/>
         <source>The shortcut %1 is invalid, please set another one.</source>
-        <translation>A %1 parancsikon érvénytelen, kérjük állítson be egy másikat.</translation>
+        <translation>%1為無效快捷鍵，請重新設置</translation>
     </message>
     <message>
         <source>%1 is invalid</source>
-        <translation type="vanished">%1 érvénytelen</translation>
+        <translation type="vanished">此快捷鍵%1無效</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="480"/>
         <source>Cancel</source>
-        <translation>Mégsem</translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="481"/>
         <source>Replace</source>
-        <translation>Csere</translation>
+        <translation>替換</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="483"/>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation>確定</translation>
     </message>
 </context>
 <context>
@@ -794,32 +794,32 @@
     <message>
         <location filename="../src/tabbar.cpp" line="401"/>
         <source>Close tab</source>
-        <translation>Lap bezárása</translation>
+        <translation>關閉標籤頁</translation>
     </message>
     <message>
         <location filename="../src/tabbar.cpp" line="403"/>
         <source>More options</source>
-        <translation>További beállítások</translation>
+        <translation>更多關閉方式</translation>
     </message>
     <message>
         <location filename="../src/tabbar.cpp" line="404"/>
         <source>Close tabs to the left</source>
-        <translation>Fülek balra zárása</translation>
+        <translation>關閉左側所有標籤頁</translation>
     </message>
     <message>
         <location filename="../src/tabbar.cpp" line="405"/>
         <source>Close tabs to the right</source>
-        <translation>Fülek jobbra zárása</translation>
+        <translation>關閉右側所有標籤頁</translation>
     </message>
     <message>
         <location filename="../src/tabbar.cpp" line="406"/>
         <source>Close unmodified tabs</source>
-        <translation>Módosítatlan fülek bezárása</translation>
+        <translation>關閉所有未修改標籤頁</translation>
     </message>
     <message>
         <location filename="../src/tabbar.cpp" line="402"/>
         <source>Close other tabs</source>
-        <translation>Többi lap bezárása</translation>
+        <translation>關閉其他標籤頁</translation>
     </message>
 </context>
 <context>
@@ -827,278 +827,278 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="140"/>
         <source>Undo</source>
-        <translation>Visszavonás</translation>
+        <translation>撤銷</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="141"/>
         <source>Redo</source>
-        <translation>Újra</translation>
+        <translation>重做</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="142"/>
         <source>Cut</source>
-        <translation>Kivágás</translation>
+        <translation>剪切</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="143"/>
         <source>Copy</source>
-        <translation>Másolás</translation>
+        <translation>複製</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="144"/>
         <source>Paste</source>
-        <translation>Beillesztés</translation>
+        <translation>黏貼</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="145"/>
         <source>Delete</source>
-        <translation>Törlés</translation>
+        <translation>刪除</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="146"/>
         <source>Select All</source>
-        <translation>Összes kijelölése</translation>
+        <translation>全選</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="147"/>
         <location filename="../src/window.cpp" line="261"/>
         <source>Find</source>
-        <translation>Keresés</translation>
+        <translation>查找</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="148"/>
         <location filename="../src/window.cpp" line="262"/>
         <source>Replace</source>
-        <translation>Csere</translation>
+        <translation>替換</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="149"/>
         <source>Go to Line</source>
-        <translation>Ugrás megadott sorra</translation>
+        <translation>跳到行</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="150"/>
         <source>Turn on Read-Only mode</source>
-        <translation>Csak olvasható mód bekapcsolása</translation>
+        <translation>開啟只讀模式</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="151"/>
         <source>Turn off Read-Only mode</source>
-        <translation>Csak olvasható mód kikapcsolása</translation>
+        <translation>關閉只讀模式</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="152"/>
         <source>Fullscreen</source>
-        <translation>Teljes képernyő</translation>
+        <translation>全屏</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="153"/>
         <source>Exit fullscreen</source>
-        <translation>Kilépés a teljes képernyőből</translation>
+        <translation>退出全屏</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="154"/>
         <source>Display in file manager</source>
-        <translation>Megjelenítés a fájlkezelőben</translation>
+        <translation>在檔案管理員中顯示</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="155"/>
         <location filename="../src/dtextedit.cpp" line="229"/>
         <source>Add Comment</source>
-        <translation>Megjegyzés hozzáadása</translation>
+        <translation>添加注釋</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="227"/>
         <source>Column Mode</source>
-        <translation>Oszlop mód</translation>
+        <translation>列編輯模式</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="230"/>
         <source>Remove Comment</source>
-        <translation>Megjegyzés eltávolítása</translation>
+        <translation>取消注釋</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="230"/>
         <source>Press ALT and click lines to edit in column mode</source>
-        <translation>Nyomja meg az ALT gombot, és kattintson a sorokra az oszlop módban történő szerkesztéshez</translation>
+        <translation>請使用ALT+鼠標點選切換列編輯模式</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="156"/>
         <source>Text to Speech</source>
-        <translation>Szövegből beszéd</translation>
+        <translation>語音朗讀</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="157"/>
         <source>Stop reading</source>
-        <translation>Olvasás megállítása</translation>
+        <translation>停止朗讀</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="158"/>
         <source>Speech to Text</source>
-        <translation>Beszédből szöveg</translation>
+        <translation>語音聽寫</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="159"/>
         <source>Translate</source>
-        <translation>Fordítás</translation>
+        <translation>文本翻譯</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="160"/>
         <source>Add bookmark</source>
-        <translation>Könyvjelző hozzáadása</translation>
+        <translation>添加書籤</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="161"/>
         <source>Remove Bookmark</source>
-        <translation>Könyvjelző eltávolítása</translation>
+        <translation>清除書籤</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="162"/>
         <source>Previous bookmark</source>
-        <translation>Előző könyvjelző</translation>
+        <translation>上一個書籤</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="163"/>
         <source>Next bookmark</source>
-        <translation>Következő könyvjelző</translation>
+        <translation>下一個書籤</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="164"/>
         <source>Remove All Bookmarks</source>
-        <translation>Összes könyvjelző eltávolítása</translation>
+        <translation>清除所有書籤</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="165"/>
         <source>Fold All</source>
-        <translation>Összes hajtogatása</translation>
+        <translation>摺疊所有層次</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="166"/>
         <source>Fold Current Level</source>
-        <translation>Jelenlegi szint hajtogatása</translation>
+        <translation>摺疊當前層次</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="167"/>
         <source>Unfold All</source>
-        <translation>Összes kihajtogatása</translation>
+        <translation>展開所有層次</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="168"/>
         <source>Unfold Current Level</source>
-        <translation>Jelenlegi szint kihajtogatása</translation>
+        <translation>展開當前層次</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="174"/>
         <source>Color Mark</source>
-        <translation>Színes jelölő</translation>
+        <translation>顏色標記</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="210"/>
         <source>Mark All</source>
-        <translation>Összes jelölése</translation>
+        <translation>標記所有</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="193"/>
         <source>Mark</source>
-        <translation>Jelölés</translation>
+        <translation>設置標記</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="177"/>
         <source>Clear All Marks</source>
-        <translation>Összes jelölő törlése</translation>
+        <translation>清除所有標記</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="179"/>
         <source>Clear Last Mark</source>
-        <translation>Utolsó jelölés törlése</translation>
+        <translation>清除上次標記</translation>
     </message>
     <message>
         <source>Style 1</source>
-        <translation type="vanished">Stílus 1</translation>
+        <translation type="vanished">格式一</translation>
     </message>
     <message>
         <source>Style 2</source>
-        <translation type="vanished">Stílus 2</translation>
+        <translation type="vanished">格式二</translation>
     </message>
     <message>
         <source>Style 3</source>
-        <translation type="vanished">Stílus 3</translation>
+        <translation type="vanished">格式三</translation>
     </message>
     <message>
         <source>Style 4</source>
-        <translation type="vanished">Stílus 4</translation>
+        <translation type="vanished">格式四</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="227"/>
         <source>Column Mode</source>
-        <translation>Oszlop mód</translation>
+        <translation>列編輯模式</translation>
     </message>
     <message>
         <source>Add comment</source>
-        <translation type="vanished">Megjegyzés hozzáadása</translation>
+        <translation type="vanished">添加注釋</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="230"/>
         <source>Remove Comment</source>
-        <translation>Megjegyzés eltávolítása</translation>
+        <translation>取消注釋</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="289"/>
         <source>Change Case</source>
-        <translation>Kis/nagybetű váltása</translation>
+        <translation>切換大小寫</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="290"/>
         <source>Upper Case</source>
-        <translation>Nagybetű</translation>
+        <translation>大寫</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="291"/>
         <source>Lower Case</source>
-        <translation>Kisbetű</translation>
+        <translation>小寫</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="292"/>
         <source>Capitalize</source>
-        <translation>Kapitalizálás</translation>
+        <translation>首字母大寫</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="343"/>
         <location filename="../src/widgets/bottombar.cpp" line="73"/>
         <source>None</source>
-        <translation>Semmi</translation>
+        <translation>無</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="977"/>
         <source>Selected line(s) copied</source>
-        <translation>A kijelölt sor(ok) átmásolva</translation>
+        <translation>已複製選中行到剪貼板</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="983"/>
         <source>Current line copied</source>
-        <translation>A jelenlegi sor átmásolva</translation>
+        <translation>已複製當前行到剪貼板</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="1022"/>
         <source>Selected line(s) clipped</source>
-        <translation>A kijelölt sor(ok) kivágva</translation>
+        <translation>已剪切選中行到剪貼板</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="1028"/>
         <source>Current line clipped</source>
-        <translation>A jelenlegi sor kivágva</translation>
+        <translation>已剪切當前行到剪貼板</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2823"/>
         <source>Read-Only mode is off</source>
-        <translation>Csak olvasható mód kikapcsolva</translation>
+        <translation>只讀模式已關閉</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="2830"/>
         <location filename="../src/dtextedit.cpp" line="2838"/>
         <location filename="../src/dtextedit.cpp" line="4996"/>
         <source>Read-Only mode is on</source>
-        <translation>Csak olvasható mód bekapcsolva</translation>
+        <translation>只讀模式已開啟</translation>
     </message>
 </context>
 <context>
@@ -1106,7 +1106,7 @@
     <message>
         <location filename="../src/widgets/toast.cpp" line="38"/>
         <source>Reload</source>
-        <translation>Újratöltés</translation>
+        <translation>重新載入</translation>
     </message>
 </context>
 <context>
@@ -1114,7 +1114,7 @@
     <message>
         <location filename="../src/warningnotices.cpp" line="15"/>
         <source>Reload</source>
-        <translation>Újratöltés</translation>
+        <translation>重新載入</translation>
     </message>
 </context>
 <context>
@@ -1122,50 +1122,50 @@
     <message>
         <location filename="../src/window.cpp" line="253"/>
         <source>New window</source>
-        <translation>Új ablak</translation>
+        <translation>新窗口</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="254"/>
         <source>New tab</source>
-        <translation>Új lap</translation>
+        <translation>新標籤頁</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="255"/>
         <source>Open file</source>
-        <translation>Fájl megnyitása</translation>
+        <translation>打開文件</translation>
     </message>
     <message>
         <location filename="../src/warningnotices.cpp" line="17"/>
         <location filename="../src/widgets/toast.cpp" line="39"/>
         <location filename="../src/window.cpp" line="257"/>
         <source>Save as</source>
-        <translation>Mentés másként</translation>
+        <translation>另存為</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="258"/>
         <source>Print</source>
-        <translation>Nyomtatás</translation>
+        <translation>打印</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="259"/>
         <source>Switch theme</source>
-        <translation>Téma váltása</translation>
+        <translation>切換主題</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="356"/>
         <location filename="../src/window.cpp" line="1988"/>
         <source>Read-Only</source>
-        <translation>Csak olvasható</translation>
+        <translation>只讀</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="841"/>
         <source>Saved successfully</source>
-        <translation>Mentés sikeres</translation>
+        <translation>文件已保存</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1145"/>
         <source>Read-Only mode is on</source>
-        <translation>Csak olvasható mód bekapcsolva</translation>
+        <translation>只讀模式已開啟</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1399"/>
@@ -1180,35 +1180,35 @@
     <message>
         <location filename="../src/window.cpp" line="1906"/>
         <source>Discard</source>
-        <translation>Elvet</translation>
+        <translation>不保存</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="260"/>
         <location filename="../src/window.cpp" line="1449"/>
         <source>Settings</source>
-        <translation>Beállítások</translation>
+        <translation>設置</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="386"/>
         <source>You do not have permission to open %1</source>
-        <translation>Nincs engedélye %1 megnyitásához</translation>
+        <translation>您沒有權限打開%1</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="424"/>
         <source>Invalid file: %1</source>
-        <translation>Érvénytelen fájl: %1</translation>
+        <translation>無效文件：%1</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="866"/>
         <location filename="../src/window.cpp" line="946"/>
         <location filename="../src/window.cpp" line="1007"/>
         <source>Save File</source>
-        <translation>Fájl mentése</translation>
+        <translation>保存</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="531"/>
         <source>Do you want to save this file?</source>
-        <translation>Kívánja menteni ezt a fájlt?</translation>
+        <translation>您是否要保存此文件？</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="868"/>
@@ -1218,7 +1218,7 @@
         <location filename="../src/window.cpp" line="1009"/>
         <location filename="../src/window.cpp" line="1024"/>
         <source>Encoding</source>
-        <translation>Kódolás</translation>
+        <translation>編碼</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="869"/>
@@ -1228,49 +1228,49 @@
         <location filename="../src/window.cpp" line="1010"/>
         <location filename="../src/window.cpp" line="1025"/>
         <source>Line Endings</source>
-        <translation>Sorvégek</translation>
+        <translation>換行符</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1431"/>
         <source>Editor</source>
-        <translation>Szerkesztő</translation>
+        <translation>編輯</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="784"/>
         <source>You do not have permission to save %1</source>
-        <translation>Nincs engedélye %1 mentéséhez</translation>
+        <translation>您沒有權限保存%1</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="827"/>
         <source>Do you want to save as another?</source>
-        <translation>Kívánja másként menteni?</translation>
+        <translation>您是否要另存為其他文件？</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1547"/>
         <location filename="../src/window.cpp" line="2051"/>
         <source>Do you want to save all the files?</source>
-        <translation>Kívánja menteni az összes fájlt?</translation>
+        <translation>您是否要保存所有文件？</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1506"/>
         <source>Untitled %1</source>
-        <translation>Cím nélküli %1</translation>
+        <translation>未命名文檔%1</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1305"/>
         <source>Current location remembered</source>
-        <translation>A jelenlegi helyre emlékezve</translation>
+        <translation>已記住當前位置</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1905"/>
         <source>Cancel</source>
-        <translation>Mégsem</translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="256"/>
         <location filename="../src/window.cpp" line="1907"/>
         <source>Save</source>
-        <translation>Mentés</translation>
+        <translation>保存</translation>
     </message>
 </context>
 </TS>
