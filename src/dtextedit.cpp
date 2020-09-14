@@ -5280,6 +5280,11 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             e->ignore();
             return;
         }
+        if(key==Utils::getKeyshortcutFromKeymap(m_settings, "window", "savefile"))
+        {
+            QPlainTextEdit::keyPressEvent(e);
+            return;
+        }
         if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "selectall")) {
             m_bIsAltMod = false;
             selectAll();
