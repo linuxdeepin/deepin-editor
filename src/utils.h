@@ -69,4 +69,6 @@ public:
             安全考虑，不要全局使用．仅在个别控件中使用
     *******************************************************************************/
     static void clearChildrenFocus(QObject *objParent);
+    //清除　控件及子控件所以焦点　梁卫东　２０２０－０９－１４　１０：３４：１９
+    static void clearChildrenFoucusEx(QWidget* pWidget);
 };

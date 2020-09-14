@@ -212,7 +212,7 @@ Window::Window(DMainWindow *parent)
     connect(qApp, &QGuiApplication::focusWindowChanged, this, &Window::handleFocusWindowChanged);
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &Window::slotLoadContentTheme);
 
-    Utils::clearChildrenFocus(m_tabbar);//使用此函数把tabbar的组件焦点去掉(左右箭头不能focus)
+   // Utils::clearChildrenFocus(m_tabbar);//使用此函数把tabbar的组件焦点去掉(左右箭头不能focus)
 }
 
 Window::~Window()
@@ -1525,6 +1525,24 @@ void Window::displayShortcuts()
     connect(shortcutViewProcess, SIGNAL(finished(int)), shortcutViewProcess, SLOT(deleteLater()));
 }
 
+void Window::clearTileBarFocus()
+{
+    DIconButton *addButton = m_tabbar->findChild<DIconButton *>("AddButton");
+    DIconButton *optionBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowOptionButton");
+    DIconButton *minBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowMinButton");
+    DIconButton *quitFullBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowQuitFullscreenButton");
+    DIconButton *maxBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowMaxButton");
+    DIconButton *closeBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowCloseButton");
+
+    titlebar()->clearFocus();
+    if(addButton) addButton->clearFocus();
+    if(optionBtn) optionBtn->clearFocus();
+    if(minBtn) minBtn->clearFocus();
+    if(quitFullBtn) quitFullBtn->clearFocus();
+    if(maxBtn) maxBtn->clearFocus();
+    if(closeBtn) closeBtn->clearFocus();
+}
+
 void Window::addBlankTab()
 {
     addBlankTab("");
@@ -1694,8 +1712,8 @@ void Window::handleCurrentChanged(const int &index)
 
     if (currentWrapper() != nullptr) {
         //  if (currentWrapper()!=nullptr) {
-        currentWrapper()->m_bottomBar->show();
-         currentWrapper()->m_bottomBar->updateSize(32);
+        currentWrapper()->bottomBar()->show();
+         currentWrapper()->bottomBar()->updateSize(32);
     }
     //qDebug() << "tabbarChanged:" << filepath;
 }
@@ -2200,7 +2218,7 @@ void Window::hideEvent(QHideEvent *event)
     if (m_findBar->isVisible()) {
        // m_findBar->hide();
         if (currentWrapper() != nullptr) {
-            currentWrapper()->m_bottomBar->show();
+            currentWrapper()->bottomBar()->show();
         }
     }
 

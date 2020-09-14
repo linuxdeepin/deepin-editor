@@ -170,6 +170,11 @@ void BottomBar::updateSize(int size)
     setFixedHeight(size);
 }
 
+void BottomBar::chearAllFocus()
+{
+    Utils::clearChildrenFoucusEx(this);
+}
+
 void BottomBar::handleEncodeChanged(const QString &name)
 {
     m_wrapper->setTextCodec(name.toLocal8Bit(), true);

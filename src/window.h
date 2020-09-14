@@ -108,6 +108,8 @@ public:
     void changeTitlebarBackground(const QString &startColor, const QString &endColor);
 
     void displayShortcuts();
+public:
+    void clearTileBarFocus();
 signals:
     void themeChanged(const QString themeName);
     void requestDragEnterEvent(QDragEnterEvent *);

@@ -667,3 +667,21 @@ void Utils::clearChildrenFocus(QObject *objParent)
 
     //qDebug() << "checkChildrenFocus over" << objParent->children().size();
 }
+
+void Utils::clearChildrenFoucusEx(QWidget *pWidget)
+{
+    pWidget->clearFocus();
+
+    QObjectList childern = pWidget->children();
+
+    if(childern.size() <= 0) return;
+
+    foreach(QObject* child , childern) {
+        if (!child->isWidgetType()) {
+            continue;
+        }
+
+        QWidget *obj = static_cast<QWidget *>(child);
+        clearChildrenFoucusEx(obj);
+    }
+}

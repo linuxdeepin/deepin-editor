@@ -40,8 +40,8 @@ EditWrapper::EditWrapper(QWidget *parent)
     : QWidget(parent),
       m_layout(new QHBoxLayout),
       m_textEdit(new TextEdit),
-      m_bottomBar(new BottomBar(this)),
       m_textCodec(QTextCodec::codecForName("UTF-8")),
+      m_bottomBar(new BottomBar(this)),
       m_endOfLineMode(eolUnix),
       m_isLoadFinished(true),
       m_isRefreshing(false),
@@ -81,6 +81,11 @@ EditWrapper::~EditWrapper()
 {
     delete m_textEdit;
     //delete m_waringNotices;
+}
+
+void EditWrapper::clearAllFocus()
+{
+    Utils::clearChildrenFoucusEx(this->m_bottomBar);
 }
 
 void EditWrapper::openFile(const QString &filepath)

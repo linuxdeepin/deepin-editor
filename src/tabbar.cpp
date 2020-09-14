@@ -643,6 +643,10 @@ void Tabbar::handleTabReleased(int index)
     closeTab(newIndex);
     // remove wrapper from window, not delete.
     window->removeWrapper(tabPath, false);
+
+    //清除焦点 梁卫东　２０２０－０９－１４　１４：２２：２６
+    wrapper->clearAllFocus();
+    window->clearTileBarFocus();
 }
 
 void Tabbar::handleTabIsRemoved(int index)
