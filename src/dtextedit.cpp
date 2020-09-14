@@ -5270,6 +5270,11 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
 
     if(m_bIsAltMod)
     {
+        if(key=="Del")
+        {
+            columnDelete();
+            return;
+        }
         if(key=="Backspace")
         {
             columnDelete();
