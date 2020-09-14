@@ -133,11 +133,11 @@ Window::Window(DMainWindow *parent)
     }
 
     // window minimum size.
-    setMinimumSize(500, 300);
-
+    setMinimumSize(1000,605);
     // resize window size.
     resize(QSize(Settings::instance()->settings->option("advance.window.window_width")->value().toDouble(),
                  Settings::instance()->settings->option("advance.window.window_height")->value().toDouble()));
+    setMinimumSize(500,300);
 
     // Init find bar.
     connect(m_findBar, &FindBar::findNext, this, &Window::handleFindNext, Qt::QueuedConnection);
