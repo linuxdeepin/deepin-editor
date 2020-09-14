@@ -56,6 +56,9 @@ public:
     EditWrapper(QWidget *parent = 0);
     ~EditWrapper();
 
+    //清除焦点　梁卫东　２０２０－０９－１４　１１：００：５０
+    void clearAllFocus();
+
     void openFile(const QString &filepath);
     bool saveFile();
     bool saveAsFile(const QString &newFilePath, QByteArray encodeName);
@@ -67,28 +70,18 @@ public:
     void setEndOfLineMode(EndOfLineMode eol);
     void setTextCodec(QByteArray encodeName, bool reload = false);
 
-    BottomBar *bottomBar() { return m_bottomBar; }
-    QString filePath() { return m_textEdit->filepath; }
-    TextEdit *textEditor() { return m_textEdit; }
     void hideWarningNotices();
-
     void checkForReload();
     void initToastPosition();
-
     void showNotify(const QString &message);
-
-    BottomBar *m_bottomBar;
     bool getTextChangeFlag();
     void setTextChangeFlag(bool bFlag);
     void setLineNumberShow(bool bIsShow,bool bIsFirstShow = false);
     void setShowBlankCharacter(bool ok);
-signals:
-    void requestSaveAs();
-    void sigCodecSaveFile(const QString &strOldFilePath, const QString &strNewFilePath);
 
-public slots:
-    void onFileClosed();
-
+    BottomBar *bottomBar() { return m_bottomBar; }
+    QString filePath() { return m_textEdit->filepath; }
+    TextEdit *textEditor() { return m_textEdit; }
 private:
     void detectEndOfLine();
     void handleCursorModeChanged(TextEdit::CursorMode mode);
@@ -99,28 +92,29 @@ private:
     int GetCorrectUnicode1(const QByteArray &ba);
     bool saveDraftFile();
     void readFile(const QString &filePath);
+public slots:
+    void onFileClosed();
+    void slotTextChange();
+
+signals:
+    void requestSaveAs();
+    void sigCodecSaveFile(const QString &strOldFilePath, const QString &strNewFilePath);
 
 protected:
     void resizeEvent(QResizeEvent *);
-
 private:
     QHBoxLayout *m_layout;
     TextEdit *m_textEdit;
-    //BottomBar *m_bottomBar;
     QTextCodec *m_textCodec;
-
+    BottomBar *m_bottomBar;
     EndOfLineMode m_endOfLineMode;
     bool m_isLoadFinished;
     QDateTime m_modified;
-
     bool m_isRefreshing;
     WarningNotices *m_waringNotices;
     bool m_bTextChange = true;
     QByteArray m_BeforeEncodeName {"UTF-8"};
     bool m_bIsContinue;
-
-public slots:
-    void slotTextChange();
 };
 
 #endif
