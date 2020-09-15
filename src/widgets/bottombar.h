@@ -44,8 +44,8 @@ public:
     void setHightlightName(const QString &name);
     void setPalette(const QPalette &palette);
     void updateSize(int size);
-    //清除所有焦点　梁卫东　２０２０－０９－１４　１０：５５：２２
-    void chearAllFocus();
+    //设置所有焦点　梁卫东　２０２０－０９－１４　１０：５５：２２
+    void setChildrenFocus(bool ok);
 private:
     void handleEncodeChanged(const QString &name);
 

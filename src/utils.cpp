@@ -685,3 +685,21 @@ void Utils::clearChildrenFoucusEx(QWidget *pWidget)
         clearChildrenFoucusEx(obj);
     }
 }
+
+void Utils::setChildrenFocus(QWidget *pWidget, Qt::FocusPolicy policy)
+{
+    pWidget->setFocusPolicy(policy);
+
+    QObjectList childern = pWidget->children();
+
+    if(childern.size() <= 0) return;
+
+    foreach(QObject* child , childern) {
+        if (!child->isWidgetType()) {
+            continue;
+        }
+
+        QWidget *obj = static_cast<QWidget *>(child);
+        setChildrenFocus(obj,policy);
+    }
+}

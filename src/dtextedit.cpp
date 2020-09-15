@@ -734,6 +734,7 @@ void TextEdit::jumpToLine(int line, bool keepLineAtCenter)
     if (keepLineAtCenter) {
         keepCurrentLineAtCenter();
     }
+    m_pLeftAreaWidget->m_linenumberarea->update();
 }
 
 void TextEdit::newline()

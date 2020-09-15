@@ -77,6 +77,7 @@ void JumpLineBar::activeInput(QString file, int row, int column, int lineCount, 
     setFixedSize(nJumpLineBarWidth + QString::number(lineCount).size() * fontMetrics().width('9'),nJumpLineBarHeight);
 
     // Clear line number.
+    if(m_editLine->lineEdit()->text().toInt() > lineCount)
     m_editLine->lineEdit()->setText("");
 
     // Show jump line bar.

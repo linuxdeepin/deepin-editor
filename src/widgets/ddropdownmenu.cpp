@@ -33,7 +33,7 @@ using namespace Dtk::Core;
 
 DDropdownMenu::DDropdownMenu(QWidget *parent)
     : QFrame(parent)
-    , m_pToolButton(new DToolButton(parent))
+    , m_pToolButton(new DToolButton(this))
     , m_menu(new DMenu)
 {
     //设置toobutton属性
@@ -190,6 +190,11 @@ void DDropdownMenu::setTheme(const QString &theme)
     m_pToolButton->setIcon(createIcon());
 }
 
+void DDropdownMenu::clearAllFocus()
+{
+  m_pToolButton->clearFocus();
+}
+
 
 QIcon DDropdownMenu::createIcon()
 {
@@ -211,13 +216,6 @@ QIcon DDropdownMenu::createIcon()
     label.setFont(m_font);
     DPalette dpalette  = DApplicationHelper::instance()->palette(&label);
     textColor = dpalette.textTips().color();
-//    if(label.palette().color((QPalette::Background)).lightness() < 128) {
-//        textColor = dpalette.textTips().color();
-//    }
-//    else {
-//        textColor = dpalette.textTips().color();
-//    }
-
 
     QPainter painter(&icon);
     painter.setFont(m_font);

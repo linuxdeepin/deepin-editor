@@ -34,8 +34,8 @@ BottomBar::BottomBar(QWidget *parent)
       m_positionLabel(new DLabel),
       m_charCountLabel(new DLabel),
       m_cursorStatus(new DLabel),
-      m_encodeMenu(new DDropdownMenu),
-      m_highlightMenu(new DDropdownMenu),
+      m_encodeMenu(new DDropdownMenu()),
+      m_highlightMenu(new DDropdownMenu()),
       m_rowStr(tr("Row")),
       m_columnStr(tr("Column")),
       m_chrCountStr(tr("Characters %1"))
@@ -170,10 +170,17 @@ void BottomBar::updateSize(int size)
     setFixedHeight(size);
 }
 
-void BottomBar::chearAllFocus()
+void BottomBar::setChildrenFocus(bool ok)
 {
-    Utils::clearChildrenFoucusEx(this);
+    if(ok){
+        m_encodeMenu->setFocusPolicy(Qt::StrongFocus);
+        m_highlightMenu->setFocusPolicy(Qt::StrongFocus);
+    }else {
+        m_encodeMenu->setFocusPolicy(Qt::NoFocus);
+        m_highlightMenu->setFocusPolicy(Qt::NoFocus);
+    }
 }
+
 
 void BottomBar::handleEncodeChanged(const QString &name)
 {

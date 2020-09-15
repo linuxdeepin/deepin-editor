@@ -71,4 +71,6 @@ public:
     static void clearChildrenFocus(QObject *objParent);
     //清除　控件及子控件所以焦点　梁卫东　２０２０－０９－１４　１０：３４：１９
     static void clearChildrenFoucusEx(QWidget* pWidget);
+    //设置所有控件焦点 梁卫东　２０２０－０９－１５　１７：５５：１８
+    static void setChildrenFocus(QWidget* pWidget,Qt::FocusPolicy policy = Qt::StrongFocus);
 };

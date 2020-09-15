@@ -83,10 +83,6 @@ EditWrapper::~EditWrapper()
     //delete m_waringNotices;
 }
 
-void EditWrapper::clearAllFocus()
-{
-    Utils::clearChildrenFoucusEx(this->m_bottomBar);
-}
 
 void EditWrapper::openFile(const QString &filepath)
 {

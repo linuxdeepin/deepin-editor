@@ -354,6 +354,7 @@ bool Tabbar::canInsertFromMimeData(int index, const QMimeData *source) const
 
 void Tabbar::handleDragActionChanged(Qt::DropAction action)
 {
+    //qDebug()<<"======Tabbar::handleDragActionChanged"<<action<<this->window();
     if (action == Qt::CopyAction) {
 //        qDebug() << "IgnoreAction";
         Window *window = static_cast<Window *>(this->window());
@@ -629,6 +630,7 @@ void Tabbar::showTabs()
 
 void Tabbar::handleTabReleased(int index)
 {
+   // qDebug()<<"______________________Tabbar::handleTabReleased"<<this->window();
     if(index == -1) index = 0;
     QString path = m_listOldTabPath.value(index);
     int newIndex = m_tabPaths.indexOf(path);
@@ -643,14 +645,11 @@ void Tabbar::handleTabReleased(int index)
     closeTab(newIndex);
     // remove wrapper from window, not delete.
     window->removeWrapper(tabPath, false);
-
-    //清除焦点 梁卫东　２０２０－０９－１４　１４：２２：２６
-    wrapper->clearAllFocus();
-    window->clearTileBarFocus();
 }
 
 void Tabbar::handleTabIsRemoved(int index)
 {   
+//    qDebug()<<"______________________Tabbar::handleTabIsRemoved"<<this->window();
 //    qDebug() << "handleTabIsRemoved" << index;
     const QString filePath = m_tabPaths.at(index);
     Window *window = static_cast<Window *>(this->window());
@@ -658,11 +657,14 @@ void Tabbar::handleTabIsRemoved(int index)
     m_tabPaths.removeAt(index);
 
     window->removeWrapper(filePath, false);
+
+    //清除焦点 梁卫东　２０２０－０９－１４　１４：２２：２６
+   // Window *window = static_cast<Window *>(this->window());
+    window->setChildrenFocus(true);
 }
 
 void Tabbar::handleTabDroped(int index, Qt::DropAction action, QObject *target)
 {
-
     Tabbar *tabbar = qobject_cast<Tabbar *>(target);
     m_pWrapper = nullptr;
 
@@ -677,10 +679,15 @@ void Tabbar::handleTabDroped(int index, Qt::DropAction action, QObject *target)
         //qDebug() << "newIndex" << newIndex;
         closeTab(newIndex);
     }
+
 }
 
 void Tabbar::onTabDrapStart()
 {
+
+    //清除焦点 梁卫东　２０２０－０９－１４　１４：２２：２６
+    Window *window = static_cast<Window *>(this->window());
+    window->setChildrenFocus(false);
     m_listOldTabPath = m_tabPaths;
 //    qDebug() << "onTabDrapStart";
 }
