@@ -47,6 +47,8 @@ FindBar::FindBar(QWidget *parent)
     m_findNextButton->setFixedSize(80, 36);
     m_closeButton = new DIconButton(DStyle::SP_CloseButton);
     m_closeButton->setIconSize(QSize(30, 30));
+    m_closeButton->setFixedSize(30,30);
+    m_closeButton->setEnabledCircle(true);
     m_closeButton->setFlat(true);
     m_layout->setContentsMargins(16, 4, 11, 4);
 

@@ -58,6 +58,8 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     m_replaceAllButton->setMinimumHeight(36);
     m_closeButton = new DIconButton(DStyle::SP_CloseButton);
     m_closeButton->setFlat(true);
+    m_closeButton->setFixedSize(30,30);
+    m_closeButton->setEnabledCircle(true);
     m_closeButton->setIconSize(QSize(30, 30));
 
     m_layout->addWidget(m_replaceLabel);
