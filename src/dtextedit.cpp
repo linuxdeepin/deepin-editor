@@ -5536,7 +5536,9 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         }
 
         bool b_Ret = DSysInfo::isCommunityEdition();
-        if(!b_Ret){
+        const DSysInfo::DeepinType DeepinType = DSysInfo::deepinType();
+        bool IsServerSystem = (DSysInfo::DeepinServer == DeepinType);
+        if(!b_Ret||!IsServerSystem){
             bool stopReadingState = false;
             QDBusMessage stopReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
                                                               "/aiassistant/tts",
@@ -5970,7 +5972,9 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
     }
 
     bool b_Ret = DSysInfo::isCommunityEdition();
-    if(!b_Ret){
+    const DSysInfo::DeepinType DeepinType = DSysInfo::deepinType();
+    bool IsServerSystem = (DSysInfo::DeepinServer == DeepinType);
+    if(!b_Ret||!IsServerSystem){
         bool stopReadingState = false;
         QDBusMessage stopReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
                                                           "/aiassistant/tts",
