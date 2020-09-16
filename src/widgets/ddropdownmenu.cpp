@@ -37,7 +37,7 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     , m_menu(new DMenu)
 {
     //设置toobutton属性
-    m_pToolButton->setFocusPolicy(Qt::StrongFocus);
+    m_pToolButton->setFocusPolicy(Qt::NoFocus);
     m_pToolButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
     m_pToolButton->setArrowType(Qt::NoArrow);
     m_pToolButton->setFixedHeight(30);

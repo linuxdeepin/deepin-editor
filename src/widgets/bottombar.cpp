@@ -91,7 +91,7 @@ BottomBar::BottomBar(QWidget *parent)
 
     connect(m_encodeMenu, &DDropdownMenu::currentTextChanged, this, &BottomBar::handleEncodeChanged);
 
-    setTabOrder(m_encodeMenu,m_highlightMenu);
+
 }
 
 BottomBar::~BottomBar()
@@ -175,9 +175,12 @@ void BottomBar::setChildrenFocus(bool ok)
     if(ok){
         m_encodeMenu->setFocusPolicy(Qt::StrongFocus);
         m_highlightMenu->setFocusPolicy(Qt::StrongFocus);
+        setTabOrder(m_encodeMenu,m_highlightMenu);
+        //qDebug()<<"m_encodeMenu StrongFocus";
     }else {
         m_encodeMenu->setFocusPolicy(Qt::NoFocus);
         m_highlightMenu->setFocusPolicy(Qt::NoFocus);
+        //qDebug()<<"m_encodeMenu NoFocus";
     }
 }
 

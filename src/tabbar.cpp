@@ -525,9 +525,8 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
             static_cast<Window*>(this->window())->changeTitlebarBackground(m_dndStartColor, m_dndEndColor);
         }
     } else if (event->type() == QEvent::DragLeave) {
-        static_cast<Window*>(this->window())->changeTitlebarBackground(m_backgroundStartColor, m_backgroundEndColor);
+
     } else if (event->type() == QEvent::Drop) {
-        static_cast<Window*>(this->window())->changeTitlebarBackground(m_backgroundStartColor, m_backgroundEndColor);
     } else if (event->type() == QEvent::DragMove) {
         event->accept();
     }
@@ -616,6 +615,7 @@ void Tabbar::handleTabMoved(int fromIndex, int toIndex)
         m_tabPaths.swap(fromIndex, toIndex);
     }
 }
+
 void Tabbar::showTabs()
 {
     int currentIndex  =  DTabBar::currentIndex();
@@ -629,37 +629,29 @@ void Tabbar::showTabs()
 
 void Tabbar::handleTabReleased(int index)
 {
-   // qDebug()<<"______________________Tabbar::handleTabReleased"<<this->window();
     if(index == -1) index = 0;
     QString path = m_listOldTabPath.value(index);
     int newIndex = m_tabPaths.indexOf(path);
     const QString tabPath = fileAt(newIndex);
     const QString tabName = textAt(newIndex);
-//    qDebug() << "handleTabReleased" << index << newIndex;
 
     Window *window = static_cast<Window *>(this->window());
     EditWrapper *wrapper = window->wrapper(tabPath);
-    StartManager::instance()->createWindowFromWrapper(tabName, tabPath, wrapper, wrapper->textEditor()->document()->isModified());
 
     closeTab(newIndex);
     // remove wrapper from window, not delete.
     window->removeWrapper(tabPath, false);
+
+    StartManager::instance()->createWindowFromWrapper(tabName, tabPath, wrapper, wrapper->textEditor()->document()->isModified());
 }
 
 void Tabbar::handleTabIsRemoved(int index)
 {   
-//    qDebug()<<"______________________Tabbar::handleTabIsRemoved"<<this->window();
 //    qDebug() << "handleTabIsRemoved" << index;
     const QString filePath = m_tabPaths.at(index);
     Window *window = static_cast<Window *>(this->window());
-
     m_tabPaths.removeAt(index);
-
     window->removeWrapper(filePath, false);
-
-    //清除焦点 梁卫东　２０２０－０９－１４　１４：２２：２６
-   // Window *window = static_cast<Window *>(this->window());
-    window->setChildrenFocus(true);
 }
 
 void Tabbar::handleTabDroped(int index, Qt::DropAction action, QObject *target)
@@ -669,6 +661,7 @@ void Tabbar::handleTabDroped(int index, Qt::DropAction action, QObject *target)
 
     if (tabbar == nullptr) {
         Window *window = static_cast<Window *>(this->window());
+
         window->move(QCursor::pos() - window->topLevelWidget()->pos());
         window->show();
         window->activateWindow();
@@ -678,15 +671,10 @@ void Tabbar::handleTabDroped(int index, Qt::DropAction action, QObject *target)
         //qDebug() << "newIndex" << newIndex;
         closeTab(newIndex);
     }
-
 }
 
 void Tabbar::onTabDrapStart()
 {
-
-    //清除焦点 梁卫东　２０２０－０９－１４　１４：２２：２６
-    Window *window = static_cast<Window *>(this->window());
-    window->setChildrenFocus(false);
     m_listOldTabPath = m_tabPaths;
 //    qDebug() << "onTabDrapStart";
 }

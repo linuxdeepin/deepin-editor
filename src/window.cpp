@@ -212,6 +212,7 @@ Window::Window(DMainWindow *parent)
     connect(qApp, &QGuiApplication::focusWindowChanged, this, &Window::handleFocusWindowChanged);
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &Window::slotLoadContentTheme);
 
+     setChildrenFocus(false);
    // Utils::clearChildrenFocus(m_tabbar);//使用此函数把tabbar的组件焦点去掉(左右箭头不能focus)
 }
 
@@ -1528,10 +1529,12 @@ void Window::displayShortcuts()
 
 void Window::setChildrenFocus(bool ok)
 {
-    QMap<QString, EditWrapper *>::const_iterator it = m_wrappers.constBegin();
-    for(;it != m_wrappers.constBegin();it++){
+    QMap<QString, EditWrapper *>::Iterator it = m_wrappers.begin();
+    for(;it != m_wrappers.end();it++){
         it.value()->bottomBar()->setChildrenFocus(ok);
     }
+    //currentWrapper()->bottomBar()->setChildrenFocus(ok);
+    //qDebug()<<m_wrappers;
 
     if(ok){
         DIconButton *addButton = m_tabbar->findChild<DIconButton *>("AddButton");
@@ -2061,6 +2064,11 @@ void Window::slot_beforeReplace(QString _)
 
 void Window::slot_setTitleFocus()
 {
+    QMap<QString, EditWrapper *>::Iterator it = m_wrappers.begin();
+    for(;it != m_wrappers.end();it++){
+        it.value()->bottomBar()->setChildrenFocus(true);
+    }
+
     titlebar()->setFocusPolicy(Qt::TabFocus);
     titlebar()->setFocus(Qt::MouseFocusReason);
     DIconButton *addButton = m_tabbar->findChild<DIconButton *>("AddButton");
@@ -2081,6 +2089,8 @@ void Window::slot_setTitleFocus()
     QWidget::setTabOrder(minBtn, quitFullBtn);
     QWidget::setTabOrder(quitFullBtn, maxBtn);
     QWidget::setTabOrder(maxBtn, closeBtn);
+
+
 }
 
 void Window::handleFocusWindowChanged(QWindow *w)

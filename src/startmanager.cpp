@@ -211,6 +211,7 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
     window->currentWrapper()->textEditor()->setModified(isModifyed);
     window->setMinimumSize(Tabbar::sm_pDragPixmap->rect().size());
 
+
     QRect rect = window->rect();
     QPoint pos = QCursor::pos() ;/*- window->topLevelWidget()->pos();*/
     QRect startRect(pos, Tabbar::sm_pDragPixmap->rect().size());
