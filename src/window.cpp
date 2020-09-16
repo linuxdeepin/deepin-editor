@@ -212,8 +212,8 @@ Window::Window(DMainWindow *parent)
     connect(qApp, &QGuiApplication::focusWindowChanged, this, &Window::handleFocusWindowChanged);
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &Window::slotLoadContentTheme);
 
-     setChildrenFocus(false);
-   // Utils::clearChildrenFocus(m_tabbar);//使用此函数把tabbar的组件焦点去掉(左右箭头不能focus)
+     //setChildrenFocus(false);
+     Utils::clearChildrenFocus(m_tabbar);//使用此函数把tabbar的组件焦点去掉(左右箭头不能focus)
 }
 
 Window::~Window()
@@ -1533,8 +1533,6 @@ void Window::setChildrenFocus(bool ok)
     for(;it != m_wrappers.end();it++){
         it.value()->bottomBar()->setChildrenFocus(ok);
     }
-    //currentWrapper()->bottomBar()->setChildrenFocus(ok);
-    //qDebug()<<m_wrappers;
 
     if(ok){
         DIconButton *addButton = m_tabbar->findChild<DIconButton *>("AddButton");

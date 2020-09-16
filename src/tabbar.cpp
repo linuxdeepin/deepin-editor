@@ -675,6 +675,8 @@ void Tabbar::handleTabDroped(int index, Qt::DropAction action, QObject *target)
 
 void Tabbar::onTabDrapStart()
 {
+      Window *window = static_cast<Window *>(this->window());
+      window->setChildrenFocus(false);
     m_listOldTabPath = m_tabPaths;
 //    qDebug() << "onTabDrapStart";
 }

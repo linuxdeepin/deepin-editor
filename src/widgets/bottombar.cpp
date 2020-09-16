@@ -172,16 +172,9 @@ void BottomBar::updateSize(int size)
 
 void BottomBar::setChildrenFocus(bool ok)
 {
-    if(ok){
-        m_encodeMenu->setFocusPolicy(Qt::StrongFocus);
-        m_highlightMenu->setFocusPolicy(Qt::StrongFocus);
-        setTabOrder(m_encodeMenu,m_highlightMenu);
-        //qDebug()<<"m_encodeMenu StrongFocus";
-    }else {
-        m_encodeMenu->setFocusPolicy(Qt::NoFocus);
-        m_highlightMenu->setFocusPolicy(Qt::NoFocus);
-        //qDebug()<<"m_encodeMenu NoFocus";
-    }
+    m_encodeMenu->setChildrenFocus(ok);
+    m_highlightMenu->setChildrenFocus(ok);
+    if(ok) setTabOrder(m_encodeMenu,m_highlightMenu);
 }
 
 

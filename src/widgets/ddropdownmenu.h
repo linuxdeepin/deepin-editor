@@ -49,7 +49,7 @@ public:
     void setMenu(DMenu *menu);
     void setTheme(const QString &theme);
 
-    void clearAllFocus();
+    void setChildrenFocus(bool ok);
 private:
     //创建文字ICON
     QIcon createIcon();
