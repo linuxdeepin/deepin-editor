@@ -666,30 +666,47 @@ void TextEdit::moveToLineIndentation()
     cursor.movePosition(QTextCursor::EndOfBlock, moveMode);
     int endColumn = cursor.columnNumber();
 
-    // Move to line start first.
+    // Move to line start first.   
     cursor.movePosition(QTextCursor::StartOfBlock, moveMode);
+    int nStartPos = cursor.position();
 
+    if (nStartPos - 1 < 0) {
+        nStartPos = 0;
+        //cursor.setPosition(nStartPos, QTextCursor::MoveAnchor);
+        cursor.setPosition(nStartPos + 1, moveMode);
+    } else {
+        cursor.setPosition(nStartPos - 1, moveMode);
+        cursor.setPosition(nStartPos, QTextCursor::KeepAnchor);
+    }
+
+//    cursor.movePosition(QTextCursor::PreviousCharacter,QTextCursor::KeepAnchor);
+
+    //qDebug () << "currentChar" << *cursor.selection().toPlainText().data() << "llll" << toPlainText().at(std::max(cursor.position() - 1, 0));
     // Move to first non-blank char of line.
     int column = startColumn;
     while (column < endColumn) {
-        QChar currentChar = toPlainText().at(std::max(cursor.position() - 1, 0));
+        QChar currentChar = *cursor.selection().toPlainText().data();
+        //QChar currentChar = toPlainText().at(std::max(cursor.position() - 1, 0));
 
         if (!currentChar.isSpace()) {
-            cursor.movePosition(QTextCursor::PreviousCharacter, moveMode);
+            //cursor.setPosition(cursor.position(), QTextCursor::MoveAnchor);
+            cursor.setPosition(cursor.position() - 1, moveMode);
             break;
         } else {
-            cursor.movePosition(QTextCursor::NextCharacter, moveMode);
+            //cursor.setPosition(cursor.position(), QTextCursor::MoveAnchor);
+            cursor.setPosition(cursor.position() + 1, moveMode);
         }
 
         column++;
     }
 
+    cursor.clearSelection();
     setTextCursor(cursor);
 }
 
 void TextEdit::nextLine()
 {
-    if (toPlainText().isEmpty())
+    if (!characterCount())
         return;
 
     if (m_cursorMark) {
@@ -703,7 +720,7 @@ void TextEdit::nextLine()
 
 void TextEdit::prevLine()
 {
-    if (toPlainText().isEmpty())
+    if (!characterCount())
         return;
 
     if (m_cursorMark) {
@@ -1744,6 +1761,7 @@ void TextEdit::renderAllSelections()
 //        findMatch.format = m_findMatchFormat;
 //        selections.append(findMatch);
 //    }
+
     selections.append(m_currentLineSelection);
     selections.append(m_markAllSelection);
     selections.append(m_wordMarkSelections);
@@ -3106,7 +3124,7 @@ void TextEdit::slot_translate()
 
 QString TextEdit::getWordAtCursor()
 {
-    if (toPlainText().isEmpty()) {
+    if (!characterCount()) {
         return "";
     } else {
         QTextCursor cursor = textCursor();
@@ -3129,7 +3147,7 @@ QString TextEdit::getWordAtCursor()
 
 QString TextEdit::getWordAtMouse()
 {
-    if (toPlainText().isEmpty()) {
+    if (!characterCount()) {
         return "";
     } else {
         auto pos = mapFromGlobal(QCursor::pos());
@@ -3207,66 +3225,85 @@ void TextEdit::toggleComment(bool sister)
 int TextEdit::getNextWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode)
 {
     // FIXME(rekols): if is empty text, it will crash.
-    if (toPlainText().isEmpty()) {
+    if (!characterCount()) {
         return 0;
     }
 
     // Move next char first.
-    cursor.movePosition(QTextCursor::NextCharacter, moveMode);
+    QTextCursor copyCursor = cursor;
+    copyCursor.movePosition(QTextCursor::NextCharacter,moveMode);
+    QChar *currentChar = copyCursor.selection().toPlainText().data();
 
-    QChar currentChar = toPlainText().at(cursor.position() - 1);
-
+    //cursor.movePosition(QTextCursor::NextCharacter, moveMode);
+    //QChar currentChar = toPlainText().at(cursor.position() - 1);
     // Just to next non-space char if current char is space.
-    if (currentChar.isSpace()) {
-        while (cursor.position() < toPlainText().length() && currentChar.isSpace()) {
-            cursor.movePosition(QTextCursor::NextCharacter, moveMode);
-            currentChar = toPlainText().at(cursor.position() - 1);
+    if (currentChar->isSpace()) {
+        while (copyCursor.position() < characterCount() - 1 && currentChar->isSpace()) {
+            copyCursor.movePosition(QTextCursor::NextCharacter,moveMode);
+            currentChar = copyCursor.selection().toPlainText().data();
+
+            //cursor.movePosition(QTextCursor::NextCharacter, moveMode);
+            //currentChar = toPlainText().at(cursor.position() - 1);
         }
-        while (cursor.position() < toPlainText().length() && !atWordSeparator(cursor.position())) {
-            cursor.movePosition(QTextCursor::NextCharacter, moveMode);
+        while (copyCursor.position() < characterCount() - 1 && !atWordSeparator(copyCursor.position())) {
+            copyCursor.movePosition(QTextCursor::NextCharacter,moveMode);
+
+            //cursor.movePosition(QTextCursor::NextCharacter, moveMode);
         }
     }
     // Just to next word-separator char.
     else {
-        while (cursor.position() < toPlainText().length() && !atWordSeparator(cursor.position())) {
-            cursor.movePosition(QTextCursor::NextCharacter, moveMode);
+        while (copyCursor.position() < characterCount() - 1 && !atWordSeparator(copyCursor.position())) {
+            copyCursor.movePosition(QTextCursor::NextCharacter,moveMode);
+            //cursor.movePosition(QTextCursor::NextCharacter, moveMode);
         }
     }
 
-    return cursor.position();
+    return copyCursor.position();
 }
 
 int TextEdit::getPrevWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode)
 {
-    if (toPlainText().isEmpty()) {
+    if (!characterCount()) {
         return 0;
     }
 
     // Move prev char first.
-    cursor.movePosition(QTextCursor::PreviousCharacter, moveMode);
+    QTextCursor copyCursor = cursor;
+    copyCursor.movePosition(QTextCursor::PreviousCharacter,moveMode);
+    QChar *currentChar = copyCursor.selection().toPlainText().data();
 
-    QChar currentChar = toPlainText().at(cursor.position());
+//    cursor.movePosition(QTextCursor::PreviousCharacter, moveMode);
+//    QChar currentChar = toPlainText().at(cursor.position());
 
     // Just to next non-space char if current char is space.
-    if (currentChar.isSpace()) {
-        while (cursor.position() > 0 && currentChar.isSpace()) {
-            cursor.movePosition(QTextCursor::PreviousCharacter, moveMode);
-            currentChar = toPlainText().at(cursor.position());
+    if (currentChar->isSpace()) {
+        while (copyCursor.position() > 0 && currentChar->isSpace()) {
+            copyCursor.movePosition(QTextCursor::PreviousCharacter,moveMode);
+            currentChar = copyCursor.selection().toPlainText().data();
+
+//            cursor.movePosition(QTextCursor::PreviousCharacter, moveMode);
+//            currentChar = toPlainText().at(cursor.position());
         }
     }
     // Just to next word-separator char.
     else {
-        while (cursor.position() > 0 && !atWordSeparator(cursor.position())) {
-            cursor.movePosition(QTextCursor::PreviousCharacter, moveMode);
+        while (copyCursor.position() > 0 && !atWordSeparator(copyCursor.position())) {
+            copyCursor.movePosition(QTextCursor::PreviousCharacter,moveMode);
+            //cursor.movePosition(QTextCursor::PreviousCharacter, moveMode);
         }
     }
 
-    return cursor.position();
+    return copyCursor.position();
 }
 
 bool TextEdit::atWordSeparator(int position)
 {
-    return m_wordSepartors.contains(QString(toPlainText().at(position)));
+    QTextCursor copyCursor = textCursor();
+    copyCursor.setPosition(position,QTextCursor::MoveAnchor);
+    copyCursor.movePosition(QTextCursor::NextCharacter,QTextCursor::KeepAnchor);
+    QString currentChar = copyCursor.selection().toPlainText();
+    return m_wordSepartors.contains(currentChar);
 }
 
 void TextEdit::showCursorBlink()
@@ -4167,7 +4204,8 @@ void TextEdit::isMarkCurrentLine(bool isMark, QString strColor)
 void TextEdit::isMarkAllLine(bool isMark, QString strColor)
 {
     if (isMark) {
-        if (this->textCursor().hasSelection()) {
+
+        if (this->textCursor().hasSelection() && !(textCursor().selectionStart() == 0 && textCursor().selectionEnd() == document()->characterCount() - 1)) {
             QList<QTextEdit::ExtraSelection> wordMarkSelections = m_wordMarkSelections;
             QList<QTextEdit::ExtraSelection> listExtraSelection;
             QList<QTextEdit::ExtraSelection> listSelections;
@@ -4193,57 +4231,25 @@ void TextEdit::isMarkAllLine(bool isMark, QString strColor)
             m_mapWordMarkSelections.clear();
 
             QTextEdit::ExtraSelection selection;
-            QTextEdit::ExtraSelection currentSelection;
+//            QTextEdit::ExtraSelection currentSelection;
             QList<QTextEdit::ExtraSelection> listSelections;
             QList<QTextEdit::ExtraSelection> wordMarkSelections = m_wordMarkSelections;
 
             selection.format.setBackground(QColor(strColor));
             selection.cursor = textCursor();
-            currentSelection.cursor = textCursor();
-            currentSelection.cursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
-            currentSelection.cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+//            currentSelection.cursor = textCursor();
+//            currentSelection.cursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+//            currentSelection.cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
 //            selection.cursor.select(QTextCursor::Document);
 
-            QString markText = "" ,currentMarkText = currentSelection.cursor.selection().toPlainText();
-            int pos = currentMarkText.indexOf("\n");
-
-            if (pos != -1) {
-                selection.cursor.setPosition(currentSelection.cursor.selectionStart(), QTextCursor::MoveAnchor);
-                selection.cursor.setPosition(currentSelection.cursor.selectionStart() + pos, QTextCursor::KeepAnchor);
-
-                if (selection.cursor.selectedText() != "") {
-                    appendExtraSelection(wordMarkSelections,selection,strColor,&listSelections);
-                }
-
-                while (pos != -1) {
-                       selection.cursor.setPosition(currentSelection.cursor.selectionStart() + pos + 1, QTextCursor::MoveAnchor);
-                       pos = currentMarkText.indexOf("\n",pos + 1);
-                       if(pos == -1)
-                       {
-                           break;
-                       }
-
-                       selection.cursor.setPosition(currentSelection.cursor.selectionStart() + pos, QTextCursor::KeepAnchor);
-
-                       if (selection.cursor.selectedText() != "") {
-                           wordMarkSelections = m_wordMarkSelections;
-                           appendExtraSelection(wordMarkSelections,selection,strColor,&listSelections);
-                       }
-
-                }
-                selection.cursor.setPosition(currentSelection.cursor.selectionEnd(), QTextCursor::KeepAnchor);
+            for (auto block = document()->firstBlock();block != document()->lastBlock().next();block = block.next()) {
+                selection.cursor.setPosition(block.position(), QTextCursor::MoveAnchor);
+                selection.cursor.setPosition(block.position() + block.length() - 1, QTextCursor::KeepAnchor);
+                m_wordMarkSelections.append(selection);
+                listSelections.append(selection);
             }
 
-            if (selection.cursor.selectedText() != "") {
-                wordMarkSelections = m_wordMarkSelections;
-                appendExtraSelection(wordMarkSelections,selection,strColor,&listSelections);
-            }
-
-            if (!listSelections.isEmpty()) {
-                m_mapWordMarkSelections.insert(m_mapWordMarkSelections.count(),listSelections);
-            }
-
-//            m_markAllSelection = selection;
+            m_mapWordMarkSelections.insert(m_mapWordMarkSelections.count(),listSelections);
         }
     } else {
         m_wordMarkSelections.clear();
@@ -4551,7 +4557,6 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                 }else {
                      bHasCommnent = false;
                 }
-
 
                 // 当前行line-1 判断下行line是否隐藏
                 if(document()->findBlockByNumber(line).isVisible() && document()->findBlockByNumber(line-1).text().contains("{") && !bHasCommnent){
@@ -5470,12 +5475,12 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
 
         }
 
-        if (!toPlainText().isEmpty()) {
+        if (characterCount()) {
             m_rightMenu->addAction(m_selectAllAction);
         }
         m_rightMenu->addSeparator();
 
-        if (!toPlainText().isEmpty()) {
+        if (characterCount()) {
             m_rightMenu->addAction(m_findAction);
             if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
                 m_rightMenu->addAction(m_replaceAction);
@@ -5493,7 +5498,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
 
         // intelligent judge whether to support comments.
         const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());
-        if (!toPlainText().isEmpty() &&
+        if (characterCount() &&
             (textCursor().hasSelection() || !isBlankLine) &&
             !def.filePath().isEmpty()) {
     //        m_rightMenu->addAction(m_toggleCommentAction);
@@ -5850,9 +5855,11 @@ void TextEdit::wheelEvent(QWheelEvent *e)
 
 void TextEdit::contextMenuEvent(QContextMenuEvent *event)
 {
+    qDebug() << "contextMenuEvent11111111111111111";
     m_rightMenu->clear();
 
     QString wordAtCursor = getWordAtMouse();
+
     m_mouseClickPos = event->pos();
     QTextCursor selectionCursor = textCursor();
     selectionCursor.movePosition(QTextCursor::StartOfBlock);
@@ -5899,12 +5906,13 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
         }
 
     }
-    if (!toPlainText().isEmpty()) {
+
+    if (characterCount()) {
         m_rightMenu->addAction(m_selectAllAction);
     }
     m_rightMenu->addSeparator();
 
-    if (!toPlainText().isEmpty()) {
+    if (characterCount()) {
         m_rightMenu->addAction(m_findAction);
         if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
             m_rightMenu->addAction(m_replaceAction);
@@ -5922,7 +5930,7 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
 
     // intelligent judge whether to support comments.
     const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());
-    if (!toPlainText().isEmpty() &&
+    if (characterCount() &&
         (textCursor().hasSelection() || !isBlankLine) &&
         !def.filePath().isEmpty()) {
 //        m_rightMenu->addAction(m_toggleCommentAction);
@@ -6055,11 +6063,13 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
         m_rightMenu->addMenu(m_colorMarkMenu);
     }
 
-    m_rightMenu->exec(event->globalPos());
+    qDebug() << "contextMenuEvent222222222222222222";
+    m_rightMenu->exec(event->globalPos());  
 }
 
 void TextEdit::paintEvent(QPaintEvent *e)
 {
+    //qDebug() << "paintEvent" << e->rect();
     QPlainTextEdit::paintEvent(e);
 
     if(m_altModSelections.length()>0)

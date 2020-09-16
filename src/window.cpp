@@ -277,11 +277,11 @@ void Window::initTitlebar()
     titlebar()->setFocusPolicy(Qt::NoFocus);         //设置titlebar无焦点，点击titlebar时光标不移动
    // titlebar()->findChild<DIconButton *>;
 
-    QList<DIconButton*> childern = titlebar()->findChildren<DIconButton*>();
-    for(int i =0;i<childern.size();i++)
-    {
-        qDebug()<<childern[i];
-    }
+//    QList<DIconButton*> childern = titlebar()->findChildren<DIconButton*>();
+//    for(int i =0;i<childern.size();i++)
+//    {
+//        qDebug()<<childern[i];
+//    }
 
     DIconButton *addButton = m_tabbar->findChild<DIconButton *>("AddButton");
     addButton->setFocusPolicy(Qt::NoFocus);
@@ -2148,7 +2148,6 @@ void Window::resizeEvent(QResizeEvent *e)
 void Window::closeEvent(QCloseEvent *e)
 {
     e->ignore();
-
     QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
 
     QList<EditWrapper *> needSaveList;
@@ -2180,6 +2179,8 @@ void Window::closeEvent(QCloseEvent *e)
                         disconnect(wrapper->textEditor(), 0, this, 0);
                         delete wrapper;
                     } else {
+                        hide();
+
                         if (wrapper->saveFile()) {
                             //wrapper->deleteLater();
                             // remove all signals on this connection.
@@ -2191,6 +2192,8 @@ void Window::closeEvent(QCloseEvent *e)
                 }
 
             } else if (index == 1){
+                hide();
+
                 for (EditWrapper *wrapper : wrappers) {
                     m_wrappers.remove(wrapper->filePath());
                     disconnect(wrapper->textEditor(), 0, this, 0);
@@ -2204,6 +2207,8 @@ void Window::closeEvent(QCloseEvent *e)
             return;
         }
     } else {
+        hide();
+
         for (EditWrapper *wrapper : wrappers) {
             m_wrappers.remove(wrapper->filePath());
             disconnect(wrapper->textEditor(), 0, this, 0);
@@ -2232,7 +2237,7 @@ void Window::closeEvent(QCloseEvent *e)
 
     disconnect(m_settings,nullptr,this,nullptr);
     e->accept();
-    emit close();
+//    emit close();
 }
 
 void Window::hideEvent(QHideEvent *event)

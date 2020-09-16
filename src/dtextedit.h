@@ -645,6 +645,7 @@ private:
     int m_startY = 0;
     int m_endX = 0;
     int m_endY = 0;
+
 public:
     leftareaoftextedit *m_pLeftAreaWidget;
     QString filepath;

@@ -70,7 +70,6 @@ void Tabbar::addTab(const QString &filePath, const QString &tabName)
 void Tabbar::addTabWithIndex(int index, const QString &filePath, const QString &tabName)
 {
     // FIXME(rekols): do not insert duplicate values.
-
     // if (!m_tabPaths.contains(filePath)) {
         m_tabPaths.insert(index, filePath);
     // }
