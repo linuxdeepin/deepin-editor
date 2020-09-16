@@ -5857,7 +5857,6 @@ void TextEdit::wheelEvent(QWheelEvent *e)
 
 void TextEdit::contextMenuEvent(QContextMenuEvent *event)
 {
-    qDebug() << "contextMenuEvent11111111111111111";
     m_rightMenu->clear();
 
     QString wordAtCursor = getWordAtMouse();
@@ -6067,13 +6066,11 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
         m_rightMenu->addMenu(m_colorMarkMenu);
     }
 
-    qDebug() << "contextMenuEvent222222222222222222";
     m_rightMenu->exec(event->globalPos());  
 }
 
 void TextEdit::paintEvent(QPaintEvent *e)
 {
-    //qDebug() << "paintEvent" << e->rect();
     QPlainTextEdit::paintEvent(e);
 
     if(m_altModSelections.length()>0)
@@ -6098,7 +6095,7 @@ void TextEdit::paintEvent(QPaintEvent *e)
 
         QTextCursor textCursor = this->textCursor();
         int cursorWidth = this->cursorWidth();
-        int cursoColumn = textCursor.positionInBlock();
+//        int cursoColumn = textCursor.positionInBlock();
         QPainter painter(viewport());
         QPen pen;
         pen.setColor(lineColor);
