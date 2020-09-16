@@ -2245,7 +2245,7 @@ void Window::closeEvent(QCloseEvent *e)
 
     disconnect(m_settings,nullptr,this,nullptr);
     e->accept();
-//    emit close();
+    emit close();
 }
 
 void Window::hideEvent(QHideEvent *event)
