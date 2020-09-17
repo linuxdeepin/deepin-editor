@@ -116,3 +116,7 @@ INSTALLS += target desktop themes
 DISTFILES += \
     themes/deepin_dark.theme \
     images/warning.svg
+TRANSLATIONS += ../translations/deepin-editor_zh_CN.ts\
+    ../translations/deepin-editor_zh_HK.ts\
+    ../translations/deepin-editor_zh_TW.ts\
+    ../translations/deepin-editor.ts
