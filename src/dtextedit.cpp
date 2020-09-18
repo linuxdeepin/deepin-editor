@@ -5554,8 +5554,8 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         }
 
         bool b_Ret = DSysInfo::isCommunityEdition();
-        const DSysInfo::DeepinType DeepinType = DSysInfo::deepinType();
-        bool IsServerSystem = (DSysInfo::DeepinServer == DeepinType);
+        const DSysInfo::UosEdition DeepinType = DSysInfo::uosEditionType();
+        bool IsServerSystem = (DSysInfo::UosMilitaryS == DeepinType);
         if(!b_Ret||!IsServerSystem){
             bool stopReadingState = false;
             QDBusMessage stopReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
@@ -6001,8 +6001,8 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
     }
 
     bool b_Ret = DSysInfo::isCommunityEdition();
-    const DSysInfo::DeepinType DeepinType = DSysInfo::deepinType();
-    bool IsServerSystem = (DSysInfo::DeepinServer == DeepinType);
+    const DSysInfo::UosEdition DeepinType = DSysInfo::uosEditionType();
+    bool IsServerSystem = (DSysInfo::UosMilitaryS == DeepinType);
     if(!b_Ret||!IsServerSystem){
         bool stopReadingState = false;
         QDBusMessage stopReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
