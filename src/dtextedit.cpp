@@ -5014,6 +5014,14 @@ void TextEdit::appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSel
 
 void TextEdit::onSelectionArea()
 {
+    if (m_gestureAction != GA_null) {
+        QTextCursor cursor = textCursor();
+        if (cursor.selectedText() != "") {
+            cursor.clearSelection();
+            setTextCursor(cursor);
+        }
+    }
+
     if (textCursor().hasSelection()) {
         m_nSelectStart = textCursor().selectionStart();
         m_nSelectEnd = textCursor().selectionEnd();
