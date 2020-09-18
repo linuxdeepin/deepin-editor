@@ -677,6 +677,6 @@ void Tabbar::onTabDrapStart()
 {
       Window *window = static_cast<Window *>(this->window());
       window->setChildrenFocus(false);
-    m_listOldTabPath = m_tabPaths;
+      m_listOldTabPath = m_tabPaths;
 //    qDebug() << "onTabDrapStart";
 }

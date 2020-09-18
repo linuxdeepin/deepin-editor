@@ -3205,9 +3205,19 @@ void TextEdit::toggleComment(bool sister)
         return;
     }
 
-    const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());
-    qDebug()<<"文件的名字"<<def.name();                  //Java ,C++,HTML,
+    //不同类型文件注释符号不同 梁卫东　２０２０－０９－０３　１７：２８：４５
+    bool bHasCommnent = false;
+    if(m_commentDefinition.isValid()){
+       QString  multiLineCommentMark = m_commentDefinition.multiLineStart.simplified();
+       QString  singleLineCommentMark = m_commentDefinition.singleLine.simplified();
+       if(multiLineCommentMark.isEmpty() && singleLineCommentMark.isEmpty()) bHasCommnent = false;
+       else bHasCommnent = true;
+    }
+    if(!bHasCommnent) return;
+
+    const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());  //Java ,C++,HTML,
     QString name= def.name();
+
 
     if (!def.filePath().isEmpty()) {
         if(sister){
@@ -5939,9 +5949,21 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
 
     // intelligent judge whether to support comments.
     const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());
+
+    //不同类型文件注释符号不同 梁卫东　２０２０－０９－０３　１７：２８：４５
+    bool bHasCommnent = false;
+
+    if(m_commentDefinition.isValid()){
+       QString  multiLineCommentMark = m_commentDefinition.multiLineStart.simplified();
+       QString  singleLineCommentMark = m_commentDefinition.singleLine.simplified();
+       if(multiLineCommentMark.isEmpty() && singleLineCommentMark.isEmpty()) bHasCommnent = false;
+       else bHasCommnent = true;
+    }
+
+
     if (characterCount() &&
         (textCursor().hasSelection() || !isBlankLine) &&
-        !def.filePath().isEmpty()) {
+        bHasCommnent) {
 //        m_rightMenu->addAction(m_toggleCommentAction);
 
         //yanyuhan 折叠、代码注释（有代码选中时增加注释选项显示）

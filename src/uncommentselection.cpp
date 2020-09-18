@@ -224,7 +224,7 @@ void Comment::removeComment(QPlainTextEdit *edit, const CommentDefinition &defin
     //definition.singleLine="//";
     QString tep = definition.singleLine;
     QString abb = tep.remove(QRegExp("\\s"));
-    qDebug()<<"asdffffffffffffffffffffffffff"<<abb;
+
 
     QTextCursor cursor = edit->textCursor();
     QTextDocument *doc = cursor.document();
