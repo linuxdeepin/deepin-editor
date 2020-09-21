@@ -5924,12 +5924,12 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
 
     }
 
-    if (characterCount()) {
+    if (!this->document()->isEmpty()) {
         m_rightMenu->addAction(m_selectAllAction);
     }
     m_rightMenu->addSeparator();
 
-    if (characterCount()) {
+    if (!this->document()->isEmpty()) {
         m_rightMenu->addAction(m_findAction);
         if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
             m_rightMenu->addAction(m_replaceAction);
