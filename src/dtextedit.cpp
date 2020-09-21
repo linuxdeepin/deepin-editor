@@ -5431,6 +5431,21 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             columnCut();
             return;
         }
+        if(key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "find"))
+        {
+            emit clickFindAction();
+            return;
+        }
+        if(key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "replace"))
+        {
+            emit clickReplaceAction();
+            return;
+        }
+        if(key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "jumptoline"))
+        {
+            emit clickJumpLineAction();
+            return;
+        }
 
         textCursor().beginEditBlock();
 
