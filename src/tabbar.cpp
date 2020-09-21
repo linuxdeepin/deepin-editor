@@ -37,7 +37,6 @@ Tabbar::Tabbar(QWidget *parent)
     : DTabBar(parent)
 {
     m_rightClickTab = -1;
-    m_bIsDragEnter = false;
 
     installEventFilter(this);
 
@@ -137,9 +136,8 @@ void Tabbar::closeRightTabs(const QString &filePath)
         }
         closePathlist << m_tabPaths.value(i);
     }
+
     emit closeTabs(closePathlist);
-
-
 }
 
 void Tabbar::updateTab(int index, const QString &filePath, const QString &tabName)
@@ -355,7 +353,6 @@ void Tabbar::handleDragActionChanged(Qt::DropAction action)
 {
     //qDebug()<<"======Tabbar::handleDragActionChanged"<<action<<this->window();
     if (action == Qt::CopyAction) {
-//        qDebug() << "IgnoreAction";
         Window *window = static_cast<Window *>(this->window());
 
         if (StartManager::instance()->isDragEnter()) {
@@ -363,10 +360,10 @@ void Tabbar::handleDragActionChanged(Qt::DropAction action)
             m_pWrapper = window->wrapper(fileAt(currentIndex()));
             m_qstrDragName = currentName();
             closeCurrentTab();
-            StartManager::instance()->setDragEnter(false);
+            //StartManager::instance()->setDragEnter(false);
         }
     } else if (action == Qt::IgnoreAction) {
-//        qDebug() << "IgnoreAction";
+        //qDebug() << "IgnoreAction";
         if (m_pWrapper && !m_tabPaths.contains(m_pWrapper->textEditor()->filepath)) {
             Window *window = static_cast<Window *>(this->window());
             window->addTabWithWrapper(m_pWrapper, m_pWrapper->textEditor()->filepath, m_qstrDragName, m_nDragIndex);
@@ -670,6 +667,7 @@ void Tabbar::handleTabDroped(int index, Qt::DropAction action, QObject *target)
         int newIndex = m_tabPaths.indexOf(path);
         //qDebug() << "newIndex" << newIndex;
         closeTab(newIndex);
+        StartManager::instance()->setDragEnter(false);
     }
 }
 

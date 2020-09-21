@@ -103,7 +103,6 @@ private:
     DMenu   *m_rightMenu;
     DMenu   *m_moreWaysCloseMenu;
     int m_rightClickTab;
-    bool m_bIsDragEnter;
     int m_nDragIndex;
     QString m_qstrDragName;
     QString m_qstrDragPath;
