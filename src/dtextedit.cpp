@@ -3217,7 +3217,8 @@ void TextEdit::toggleComment(bool sister)
 
     const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());  //Java ,C++,HTML,
     QString name= def.name();
-
+    if(name=="Markdown")
+    return;
 
     if (!def.filePath().isEmpty()) {
         if(sister){
@@ -5539,8 +5540,11 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             //yanyuhan 折叠、代码注释（有代码选中时增加注释选项显示）
     //        m_rightMenu->addMenu(m_collapseExpandMenu);             //折叠展开
 
-            m_rightMenu->addAction(m_addComment);
-            m_rightMenu->addAction(m_cancelComment);
+            if(def.name()!="Markdown")
+            {
+                m_rightMenu->addAction(m_addComment);
+                m_rightMenu->addAction(m_cancelComment);
+            }
 
             if (m_readOnlyMode == true) {
                 m_addComment->setEnabled(false);
@@ -5982,8 +5986,11 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
         //yanyuhan 折叠、代码注释（有代码选中时增加注释选项显示）
 //        m_rightMenu->addMenu(m_collapseExpandMenu);             //折叠展开
 
-        m_rightMenu->addAction(m_addComment);
-        m_rightMenu->addAction(m_cancelComment);
+        if(def.name()!="Markdown")
+        {
+            m_rightMenu->addAction(m_addComment);
+            m_rightMenu->addAction(m_cancelComment);
+        }
 
         if (m_readOnlyMode == true) {
 //            m_toggleCommentAction->setEnabled(false);
