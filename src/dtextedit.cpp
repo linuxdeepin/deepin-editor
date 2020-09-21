@@ -5553,10 +5553,8 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             m_rightMenu->addAction(m_fullscreenAction);
         }
 
-        bool b_Ret = DSysInfo::isCommunityEdition();
-        const DSysInfo::UosEdition DeepinType = DSysInfo::uosEditionType();
-        bool IsServerSystem = (DSysInfo::UosMilitaryS == DeepinType);
-        if(!b_Ret||!IsServerSystem){
+        bool if_server = (DSysInfo::uosEditionType()==DSysInfo::UosEdition::UosProfessional);
+        if(if_server){
             bool stopReadingState = false;
             QDBusMessage stopReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
                                                               "/aiassistant/tts",
@@ -6000,10 +5998,8 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
         m_rightMenu->addAction(m_fullscreenAction);
     }
 
-    bool b_Ret = DSysInfo::isCommunityEdition();
-    const DSysInfo::UosEdition DeepinType = DSysInfo::uosEditionType();
-    bool IsServerSystem = (DSysInfo::UosMilitaryS == DeepinType);
-    if(!b_Ret||!IsServerSystem){
+    bool if_server = (DSysInfo::uosEditionType()==DSysInfo::UosEdition::UosProfessional);
+    if(if_server){
         bool stopReadingState = false;
         QDBusMessage stopReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
                                                           "/aiassistant/tts",
