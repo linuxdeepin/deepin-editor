@@ -626,12 +626,15 @@ private:
     qreal duration = {0.0};
     qreal changeX = {0.0};
     qreal durationX = {0.0};
-    bool m_slideContinue = false;
+    bool m_slideContinue {false};
     int m_lastMouseYpos;
     int m_lastMouseXpos;
     ulong m_lastMouseTime;
     qreal m_stepSpeed = 0;
     qreal m_stepSpeedX = 0;
+    bool m_bIsDoubleClick {false};
+    bool m_bBeforeIsDoubleClick {false};
+
     QList<QTextEdit::ExtraSelection> m_altModSelections;
     QTextCursor m_altStartTextCursor;//开始按住alt鼠标点击光标位置
     QTextCursor m_altEndTextCursor;//结束按住alt鼠标点击光标位置

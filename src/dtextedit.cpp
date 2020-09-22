@@ -2623,7 +2623,7 @@ void TextEdit::slideGestureX(qreal diff)
     int step = static_cast<int>(diff+delta);
     delta = diff+delta - step;
 
-    horizontalScrollBar()->setValue(horizontalScrollBar()->value() + step*10);
+    horizontalScrollBar()->setValue(horizontalScrollBar()->value() + step*30);
 }
 
 void TextEdit::setThemeWithPath(const QString &path)
@@ -4710,6 +4710,10 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
         }
 
     }
+	else if (event->type() == QEvent::MouseButtonDblClick) {
+        m_bIsDoubleClick = true;
+        m_bBeforeIsDoubleClick = true;
+    }
 
     return QPlainTextEdit::eventFilter(object, event);
 }
@@ -5025,20 +5029,30 @@ void TextEdit::appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSel
 
 void TextEdit::onSelectionArea()
 {
-    if (m_gestureAction != GA_null) {
-        QTextCursor cursor = textCursor();
-        if (cursor.selectedText() != "") {
-            cursor.clearSelection();
-            setTextCursor(cursor);
-        }
-    }
-
     if (textCursor().hasSelection()) {
         m_nSelectStart = textCursor().selectionStart();
         m_nSelectEnd = textCursor().selectionEnd();
         m_nSelectEndLine = document()->findBlock(textCursor().selectionEnd()).blockNumber() + 1;
     } else {
         m_nSelectEndLine = -1;
+    }
+	
+	//防止三次点击选中一整行的功能失效
+    if (m_bIsDoubleClick == true) {
+        m_bIsDoubleClick = false;
+        return;
+    }
+    else if (m_bBeforeIsDoubleClick == true && textCursor().selectedText() != "") {
+        m_bBeforeIsDoubleClick = false;
+        return;
+    }
+
+    if (m_gestureAction != GA_null) {
+        QTextCursor cursor = textCursor();
+        if (cursor.selectedText() != "") {
+            cursor.clearSelection();
+            setTextCursor(cursor);
+        }
     }
 }
 
