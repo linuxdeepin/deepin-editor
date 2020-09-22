@@ -49,7 +49,7 @@ class StartManager : public QObject
 public:
     static StartManager* instance();
     StartManager(QObject *parent = 0);
-    void setDragEnter(bool bIsDragEnter);
+//    void setDragEnter(bool bIsDragEnter);
     bool ifKlu();
 
 public slots:
@@ -63,7 +63,7 @@ public slots:
     void initWindowPosition(Window *window, bool alwaysCenter = false);
     void popupExistTabs(FileTabInfo info);
     FileTabInfo getFileTabInfo(QString file);
-    bool isDragEnter();
+//    bool isDragEnter();
 
     void slotCheckUnsaveTab();
 
@@ -74,7 +74,7 @@ private:
     QDBusReply<QDBusUnixFileDescriptor> m_reply;
     QDBusInterface *m_pLoginManager = nullptr;
     QList<QVariant> m_arg;
-    bool m_bIsDragEnter;
+//    bool m_bIsDragEnter;
 
     void initBlockShutdown();
     QDBusPendingReply<QDBusUnixFileDescriptor> m_inhibitReply;

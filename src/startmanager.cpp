@@ -45,22 +45,21 @@ StartManager *StartManager::instance()
 StartManager::StartManager(QObject *parent)
     : QObject(parent)
 {
-    m_bIsDragEnter = false;
+//    m_bIsDragEnter = false;
     // Create blank directory if it not exist.
     initBlockShutdown();
     QString blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
 
     if (!QFileInfo(blankFileDir).exists()) {
         QDir().mkpath(blankFileDir);
-
         //qDebug() << "Create blank file dir: " << blankFileDir;
     }
 }
 
-void StartManager::setDragEnter(bool bIsDragEnter)
-{
-    m_bIsDragEnter = bIsDragEnter;
-}
+//void StartManager::setDragEnter(bool bIsDragEnter)
+//{
+//    m_bIsDragEnter = bIsDragEnter;
+//}
 
 bool StartManager::ifKlu()
 {
@@ -388,10 +387,10 @@ StartManager::FileTabInfo StartManager::getFileTabInfo(QString file)
     return info;
 }
 
-bool StartManager::isDragEnter()
-{
-    return m_bIsDragEnter;
-}
+//bool StartManager::isDragEnter()
+//{
+//    return m_bIsDragEnter;
+//}
 
 void StartManager::initBlockShutdown() {
     if (m_reply.value().isValid()) {
