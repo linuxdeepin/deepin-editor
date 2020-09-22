@@ -61,6 +61,17 @@ StartManager::StartManager(QObject *parent)
 //    m_bIsDragEnter = bIsDragEnter;
 //}
 
+bool StartManager::checkPath(const QString &file)
+{
+    for (int i = 0;i < m_windows.count();i++) {
+        if (m_windows.value(i)->wrapper(file) != nullptr) {
+            m_windows.value(i)->activateWindow();
+            return false;
+        }
+    }
+    return true;
+}
+
 bool StartManager::ifKlu()
 {
     auto e = QProcessEnvironment::systemEnvironment();

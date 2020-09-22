@@ -88,7 +88,7 @@ void EditWrapper::openFile(const QString &filepath)
 {
     // update file path.
     updatePath(filepath);
-    detectEndOfLine();
+    //detectEndOfLine();
 
     m_textEdit->setIsFileOpen();
     m_isLoadFinished = false;

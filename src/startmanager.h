@@ -49,6 +49,7 @@ class StartManager : public QObject
 public:
     static StartManager* instance();
     StartManager(QObject *parent = 0);
+    bool checkPath(const QString &file);
 //    void setDragEnter(bool bIsDragEnter);
     bool ifKlu();
 
@@ -80,6 +81,7 @@ private:
     QDBusPendingReply<QDBusUnixFileDescriptor> m_inhibitReply;
     QScopedPointer<Dock> m_pDock;
     QScopedPointer<Entry> m_pEntry;
+    QStringList m_listFilePath;
 };
 
 #endif

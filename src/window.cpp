@@ -26,6 +26,7 @@
 #include "dthememanager.h"
 #include "dtoast.h"
 #include "utils.h"
+#include "startmanager.h"
 
 #include <DSettingsWidgetFactory>
 #include <DSettingsGroup>
@@ -400,7 +401,7 @@ void Window::addTab(const QString &filepath, bool activeTab)
         }
         file.close();
 
-        if (m_tabbar->indexOf(filepath) == -1) {
+        if (/*m_tabbar->indexOf(filepath) == -1*/StartManager::instance()->checkPath(filepath)) {
             m_tabbar->addTab(filepath, tabName);
 
             if (!m_wrappers.contains(filepath)) {
@@ -416,10 +417,9 @@ void Window::addTab(const QString &filepath, bool activeTab)
                     wrapper->textEditor()->setReadOnlyPermission(true);
                 }
             }
+            // Activate window.
+            activateWindow();
         }
-
-        // Activate window.
-        activateWindow();
 
         // Active tab if activeTab is true.
         if (activeTab) {
