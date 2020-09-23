@@ -429,7 +429,7 @@ TextEdit::TextEdit(QWidget *parent)
 TextEdit::~TextEdit()
 {
     writeHistoryRecord();
-    writeEncodeHistoryRecord();
+    //writeEncodeHistoryRecord();
     delete m_highlighter;
 }
 

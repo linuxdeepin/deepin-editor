@@ -55,7 +55,8 @@ HEADERS += window.h \
     codeflodarea.h \
     showflodcodewidget.h \
     widgets/ColorSelectWdg.h \
-    editorapplication.h
+    editorapplication.h \
+    encoding.h
 
 SOURCES += window.cpp \
            startmanager.cpp \
@@ -90,7 +91,8 @@ SOURCES += window.cpp \
     codeflodarea.cpp \
     showflodcodewidget.cpp \
     widgets/ColorSelectWdg.cpp \
-    editorapplication.cpp
+    editorapplication.cpp \
+    encoding.cpp
 
 
 QMAKE_CXXFLAGS += -g
