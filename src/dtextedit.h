@@ -337,6 +337,11 @@ public:
     void columnUndo();
     void columnRedo();
 
+    /**
+     * @brief tellFindBarClose 通知查找框关闭
+     */
+    void tellFindBarClose();
+
 signals:
     void clickFindAction();
     void clickReplaceAction();
@@ -648,6 +653,8 @@ private:
     int m_startY = 0;
     int m_endX = 0;
     int m_endY = 0;
+
+    bool m_bIsFindClose = false;///< 关闭查找框事件是否发生
 
 public:
     leftareaoftextedit *m_pLeftAreaWidget;

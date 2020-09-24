@@ -4130,6 +4130,11 @@ void TextEdit::columnRedo()
     redo();
 }
 
+void TextEdit::tellFindBarClose()
+{
+    m_bIsFindClose = true;
+}
+
 void TextEdit::updateLeftAreaWidget()
 {
     if(m_pLeftAreaWidget){
@@ -5144,6 +5149,11 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
 
 void TextEdit::mousePressEvent(QMouseEvent *e)
 {
+    if (m_bIsFindClose) {
+        m_bIsFindClose = false;
+        removeKeywords();
+    }
+
     qobject_cast<Window *>(this->window())->decrementFontSize();
     qobject_cast<Window *>(this->window())->incrementFontSize();
     if (Qt::MouseEventSynthesizedByQt == e->source()) {
@@ -5448,17 +5458,26 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         }
         if(key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "find"))
         {
-            emit clickFindAction();
+            if (!document()->isEmpty()) {
+                emit clickFindAction();
+            }
+
             return;
         }
         if(key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "replace"))
         {
-            emit clickReplaceAction();
+            if (!document()->isEmpty()) {
+                emit clickReplaceAction();
+            }
+
             return;
         }
         if(key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "jumptoline"))
         {
-            emit clickJumpLineAction();
+            if (!document()->isEmpty()) {
+                emit clickJumpLineAction();
+            }
+
             return;
         }
 
@@ -5523,12 +5542,12 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
 
         }
 
-        if (characterCount()) {
+        if (!document()->isEmpty()) {
             m_rightMenu->addAction(m_selectAllAction);
         }
         m_rightMenu->addSeparator();
 
-        if (characterCount()) {
+        if (!document()->isEmpty()) {
             m_rightMenu->addAction(m_findAction);
             if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
                 m_rightMenu->addAction(m_replaceAction);

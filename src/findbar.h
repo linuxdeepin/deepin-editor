@@ -35,9 +35,9 @@
 #include <DIconButton>
 #include <DApplicationHelper>
 #include <DFloatingWidget>
-#include<QMouseEvent>
-#include<qmouseeventtransition.h>
-#include<QMouseEventTransition>
+#include <QMouseEvent>
+#include <qmouseeventtransition.h>
+#include <QMouseEventTransition>
 
 #include <DPalette>
 #include <DAbstractDialog>

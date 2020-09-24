@@ -150,7 +150,7 @@ Window::Window(DMainWindow *parent)
     connect(m_findBar, &FindBar::sigFindbarClose, this, &Window::slotFindbarClose, Qt::QueuedConnection);
 
     // Init replace bar.
-    connect(m_replaceBar, &ReplaceBar::removeSearchKeyword, this, &Window::handleRemoveSearchKeyword, Qt::QueuedConnection);
+    //connect(m_replaceBar, &ReplaceBar::removeSearchKeyword, this, &Window::handleRemoveSearchKeyword, Qt::QueuedConnection);
 
     connect(m_replaceBar, &ReplaceBar::beforeReplace,this, &Window::slot_beforeReplace, Qt::QueuedConnection);
     connect(m_replaceBar, &ReplaceBar::replaceAll, this, &Window::handleReplaceAll, Qt::QueuedConnection);
@@ -1152,9 +1152,10 @@ void Window::popupFindBar()
             return;
         }
 
-//        if (wrapper->textEditor()->toPlainText().isEmpty()) {
-//            return;
-//        }
+        if (wrapper->textEditor()->document()->isEmpty()) {
+            return;
+        }
+
         currentWrapper()->bottomBar()->updateSize(59);
 
         if (m_replaceBar->isVisible()) {
@@ -1181,6 +1182,10 @@ void Window::popupReplaceBar()
         return;
     }
 
+    if (currentWrapper()->textEditor()->document()->isEmpty()) {
+        return;
+    }
+
     QTextCursor cursor = currentWrapper()->textEditor()->textCursor();
 
     m_replaceBar->setsearched(false);
@@ -1204,25 +1209,24 @@ void Window::popupReplaceBar()
 
 	currentWrapper()->bottomBar()->updateSize(59);
 
-        EditWrapper *wrapper = currentWrapper();
-        if (m_findBar->isVisible()) {
-            m_findBar->hide();
-        }
-        m_replaceBar->raise();
-        m_replaceBar->move(QPoint(10, height() - 59));
-        m_replaceBar->show();
-        //addBottomWidget(m_replaceBar);
+    EditWrapper *wrapper = currentWrapper();
+    if (m_findBar->isVisible()) {
+        m_findBar->hide();
+    }
+    m_replaceBar->raise();
+    m_replaceBar->move(QPoint(10, height() - 59));
+    m_replaceBar->show();
+    //addBottomWidget(m_replaceBar);
 
-        QString tabPath = m_tabbar->currentPath();
-        QString text = wrapper->textEditor()->textCursor().selectedText();
-        int row = wrapper->textEditor()->getCurrentLine();
-        int column = wrapper->textEditor()->getCurrentColumn();
-        int scrollOffset = wrapper->textEditor()->getScrollOffset();
+    QString tabPath = m_tabbar->currentPath();
+    QString text = wrapper->textEditor()->textCursor().selectedText();
+    int row = wrapper->textEditor()->getCurrentLine();
+    int column = wrapper->textEditor()->getCurrentColumn();
+    int scrollOffset = wrapper->textEditor()->getScrollOffset();
 
-        m_replaceBar->activeInput(text, tabPath, row, column, scrollOffset);
+    m_replaceBar->activeInput(text, tabPath, row, column, scrollOffset);
 
-        QTimer::singleShot(10, this, [ = ] { m_replaceBar->focus(); });
-
+    QTimer::singleShot(10, this, [ = ] { m_replaceBar->focus(); });
 }
 
 void Window::popupJumpLineBar()
@@ -1233,9 +1237,10 @@ void Window::popupJumpLineBar()
         return;
     }
 
-    if (curWrapper->textEditor()->toPlainText().isEmpty()) {
+    if (curWrapper->textEditor()->document()->isEmpty()) {
         return;
     }
+
     if(m_jumpLineBar->isVisible())
     {
         m_jumpLineBar->hide();
@@ -1260,7 +1265,7 @@ void Window::popupJumpLineBar()
         m_jumpLineBar->activeInput(tabPath, row, column, count, scrollOffset);
         m_jumpLineBar->show();
         m_jumpLineBar->focus();
-        }
+    }
 }
 
 void Window::updateJumpLineBar()
@@ -1808,6 +1813,7 @@ void Window::slotFindbarClose()
     }
     wrapper->bottomBar()->updateSize(32);
     currentWrapper()->textEditor()->setFocus();
+    currentWrapper()->textEditor()->tellFindBarClose();
 }
 
 void Window::slotReplacebarClose()
@@ -1818,6 +1824,7 @@ void Window::slotReplacebarClose()
     }
     wrapper->bottomBar()->updateSize(32);
     currentWrapper()->textEditor()->setFocus();
+    currentWrapper()->textEditor()->tellFindBarClose();
 }
 
 void Window::handleReplaceAll(const QString &replaceText, const QString &withText)

@@ -84,7 +84,7 @@ void LineBar::keyPressEvent(QKeyEvent *e)
      }else if(modifiers == Qt::AltModifier && e->text() == "\r"){
         pressAltEnter();
      }else if(modifiers == Qt::MetaModifier && e->text() == "\r"){
-       pressMetaEnter();
+        pressMetaEnter();
      }else if(modifiers == Qt::NoModifier && e->text() == "\r"){
         pressEnter();
      }else {
