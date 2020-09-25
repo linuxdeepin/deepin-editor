@@ -38,8 +38,8 @@
 #include <QPropertyAnimation>
 #include <QFont>
 #include <DApplicationHelper>
-#include<QtDBus>
-#include<QGestureEvent>
+#include <QtDBus>
+#include <QGestureEvent>
 #include <QProxyStyle>
 #include "widgets/ColorSelectWdg.h"
 #include <DTextEdit>

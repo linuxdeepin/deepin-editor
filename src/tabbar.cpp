@@ -46,7 +46,7 @@ Tabbar::Tabbar(QWidget *parent)
     setDragable(true);
    // setStartDragDistance(40);
     setElideMode(Qt::ElideMiddle);
-
+    setTabPalette(palette().buttonText().color().name(),palette().buttonText().color().name());
     setFocusPolicy(Qt::NoFocus);
 
     connect(this, &DTabBar::dragStarted, this, &Tabbar::onTabDrapStart);
@@ -196,10 +196,11 @@ QString Tabbar::textAt(int index) const
     return DTabBar::tabText(index);
 }
 
-void Tabbar::setTabActiveColor(const QString &color)
+void Tabbar::setTabPalette(const QString &activeColor, const QString &inactiveColor)
 {
     QPalette pa = this->palette();
-    pa.setColor(QPalette::Active, QPalette::Text, QColor(color));
+    pa.setColor(QPalette::Inactive, QPalette::WindowText, QColor(inactiveColor));
+    pa.setColor(QPalette::Active, QPalette::WindowText, QColor(activeColor));
     setPalette(pa);
 }
 

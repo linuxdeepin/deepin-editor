@@ -1933,7 +1933,6 @@ void Window::loadTheme(const QString &path)
 //    } else {
 //        DThemeManager::instance()->setTheme("light");
 //    }
-
     //changeTitlebarBackground(tabbarStartColor, tabbarEndColor);
 
     for (EditWrapper *wrapper : m_wrappers.values()) {
@@ -2032,6 +2031,7 @@ void Window::slotLoadContentTheme(DGuiApplicationHelper::ColorType themeType)
             DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::ColorType::UnknownType);
         }
     }
+    m_tabbar->setTabPalette(palette().buttonText().color().name(),palette().buttonText().color().name());
 }
 
 void Window::slotSettingResetTheme(const QString &path)

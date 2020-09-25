@@ -57,11 +57,10 @@ public:
     QString fileAt(int index) const;
     QString textAt(int index) const;
 
-    void setTabActiveColor(const QString &color);
+    void setTabPalette(const QString &activeColor, const QString &inactiveColor);
     void setBackground(const QString &startColor, const QString &endColor);
     void setDNDColor(const QString &startColor, const QString &endColor);
     void showTabs();
-
 
 signals:
     void requestHistorySaved(const QString &filePath);
@@ -80,6 +79,7 @@ protected:
     QSize maximumTabSizeHint(int index) const;
     void mousePressEvent(QMouseEvent *e);
     void dropEvent(QDropEvent *e);
+
 private:
     void handleTabMoved(int fromIndex, int toIndex);
     void handleTabReleased(int index);
