@@ -1790,7 +1790,7 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
     QColor lineNumberAreaBackgroundColor;
     if (QColor(m_backgroundColor).lightness() < 128) {
         lineNumberAreaBackgroundColor = palette().brightText().color();
-        lineNumberAreaBackgroundColor.setAlphaF(0.01);
+        lineNumberAreaBackgroundColor.setAlphaF(0.06);
 
         m_lineNumbersColor.setAlphaF(0.2);
     } else {
@@ -1939,7 +1939,7 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
     QColor codeFlodAreaBackgroundColor;
     if (QColor(m_backgroundColor).lightness() < 128) {
         codeFlodAreaBackgroundColor = palette().brightText().color();
-        codeFlodAreaBackgroundColor.setAlphaF(0.01);
+        codeFlodAreaBackgroundColor.setAlphaF(0.06);
 
         m_lineNumbersColor.setAlphaF(0.2);
     } else {
@@ -3418,7 +3418,7 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
     QColor lineNumberAreaBackgroundColor;
     if (QColor(m_backgroundColor).lightness() < 128) {
         lineNumberAreaBackgroundColor = palette().brightText().color();
-        lineNumberAreaBackgroundColor.setAlphaF(0.01);
+        lineNumberAreaBackgroundColor.setAlphaF(0.06);
 
         m_lineNumbersColor.setAlphaF(0.2);
     } else {
