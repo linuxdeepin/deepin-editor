@@ -2032,7 +2032,16 @@ void Window::slotLoadContentTheme(DGuiApplicationHelper::ColorType themeType)
             DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::ColorType::UnknownType);
         }
     }
-    m_tabbar->setTabPalette(palette().buttonText().color().name(),palette().buttonText().color().name());
+
+    QString qstrColor;
+
+    for (auto wrapper : m_wrappers) {
+        qstrColor = palette().color(QPalette::Active,QPalette::Text).name();
+        wrapper->textEditor()->setEditPalette(qstrColor,qstrColor);
+    }
+
+    qstrColor = palette().color(QPalette::Active,QPalette::ButtonText).name();
+    m_tabbar->setTabPalette(qstrColor,qstrColor);
 }
 
 void Window::slotSettingResetTheme(const QString &path)
@@ -2095,8 +2104,6 @@ void Window::slot_setTitleFocus()
     QWidget::setTabOrder(minBtn, quitFullBtn);
     QWidget::setTabOrder(quitFullBtn, maxBtn);
     QWidget::setTabOrder(maxBtn, closeBtn);
-
-
 }
 
 void Window::handleFocusWindowChanged(QWindow *w)

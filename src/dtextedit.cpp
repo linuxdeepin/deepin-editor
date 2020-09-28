@@ -96,7 +96,6 @@ TextEdit::TextEdit(QWidget *parent)
     m_bIsInputMethod = false;
     m_pLeftAreaWidget = new leftareaoftextedit(this);
 
-
 #if QT_VERSION < QT_VERSION_CHECK(5,9,0)
     m_touchTapDistance = 15;
 #else
@@ -116,13 +115,13 @@ TextEdit::TextEdit(QWidget *parent)
     setFocusPolicy(Qt::StrongFocus);
     setMouseTracking(true);
     setContentsMargins(0,0,0,0);
+    setEditPalette(palette().foreground().color().name(),palette().foreground().color().name());
 //    document()->setDocumentMargin(1);
  //   setAcceptRichText(false);
     //m_timer = new QTimer(this);
     //connect(m_timer,SIGNAL(timeout()),this,SLOT(onTimeout()));
     //m_timer->setInterval(QGuiApplication::styleHints()->cursorFlashTime()/2);
     //m_timer->start();
-
 
     grabGesture(Qt::TapGesture);
     grabGesture(Qt::TapAndHoldGesture);
@@ -2665,14 +2664,14 @@ void TextEdit::setTheme(const KSyntaxHighlighting::Theme &theme, const QString &
     m_beginBracketSelection.format = m_bracketMatchFormat;
     m_endBracketSelection.format = m_bracketMatchFormat;
 
-    const QString &styleSheet = QString("QTextEdit {"
-                                        "background-color: %1;"
-                                        "color: %2;"
-                                        "selection-color: %3;"
-                                        "selection-background-color: %4;"
-                                        "}").arg(m_backgroundColor.name(), textColor,
-                                                 m_selectionColor.name(), m_selectionBgColor.name());
-    setStyleSheet(styleSheet);
+//    const QString &styleSheet = QString("QTextEdit {"
+//                                        "background-color: %1;"
+//                                        "color: %2;"
+//                                        "selection-color: %3;"
+//                                        "selection-background-color: %4;"
+//                                        "}").arg(m_backgroundColor.name(), textColor,
+//                                                 m_selectionColor.name(), m_selectionBgColor.name());
+//    setStyleSheet(styleSheet);
 
     if (m_highlighter != nullptr) {
         if (m_backgroundColor.lightness() < 128) {
@@ -4133,6 +4132,14 @@ void TextEdit::columnRedo()
 void TextEdit::tellFindBarClose()
 {
     m_bIsFindClose = true;
+}
+
+void TextEdit::setEditPalette(const QString &activeColor, const QString &inactiveColor)
+{
+    QPalette pa = this->palette();
+    pa.setColor(QPalette::Inactive, QPalette::Text, QColor(inactiveColor));
+    pa.setColor(QPalette::Active, QPalette::Text, QColor(activeColor));
+    setPalette(pa);
 }
 
 void TextEdit::updateLeftAreaWidget()
@@ -6152,7 +6159,7 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
 
 void TextEdit::paintEvent(QPaintEvent *e)
 {
-    QPlainTextEdit::paintEvent(e);
+    DPlainTextEdit::paintEvent(e);
 
     if(m_altModSelections.length()>0)
     {
@@ -6195,6 +6202,18 @@ void TextEdit::paintEvent(QPaintEvent *e)
            // }
         }
     }
+}
+
+void TextEdit::focusOutEvent(QFocusEvent *e)
+{
+    setReadOnly(true);
+    return DPlainTextEdit::focusOutEvent(e);
+}
+
+void TextEdit::focusInEvent(QFocusEvent *e)
+{
+    setReadOnly(false);
+    return DPlainTextEdit::focusInEvent(e);
 }
 
 bool TextEdit::blockContainStrBrackets(int line)

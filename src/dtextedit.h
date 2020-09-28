@@ -214,6 +214,10 @@ public:
     void duplicateLine();
     void copyLines();
     void cutlines();
+
+    /**
+     * @brief joinLines 合并行
+     */
     void joinLines();
 
     void killLine();
@@ -342,6 +346,13 @@ public:
      */
     void tellFindBarClose();
 
+    /**
+     * @brief setEditPalette 设置textEdit的颜色
+     * @param activeColor active时的颜色
+     * @param inactiveColor inactive时的颜色
+     */
+    void setEditPalette(const QString &activeColor, const QString &inactiveColor);
+
 signals:
     void clickFindAction();
     void clickReplaceAction();
@@ -360,7 +371,7 @@ signals:
     void toTellInputModEdit(QString input);
 
 public slots:
-    //跟新左边区域界面　梁卫东　２０２０－０９－０９　１３：５３：５８
+    //更新左边区域界面　梁卫东　２０２０－０９－０９　１３：５３：５８
     void updateLeftAreaWidget();
     void highlightCurrentLine();
     void updateLineNumber();
@@ -420,6 +431,8 @@ protected:
     bool eventFilter(QObject *object, QEvent *event) override;
     void contextMenuEvent(QContextMenuEvent *event) override;
     void paintEvent(QPaintEvent *e) override;
+    void focusOutEvent(QFocusEvent *e) override;
+    void focusInEvent(QFocusEvent *e) override;
 
 private:
     //去除"*{*" "*}*" "*{*}*"跳过当做普通文本处理不折叠　梁卫东２０２０－０９－０１　１７：１６：４１
