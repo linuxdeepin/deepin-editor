@@ -60,12 +60,6 @@
 #include <private/qguiapplication_p.h>
 #include <qpa/qplatformtheme.h>
 
-#define STYLE_COLOR_1 "#FFA503"
-#define STYLE_COLOR_2 "#FF1C49"
-#define STYLE_COLOR_3 "#9023FC"
-#define STYLE_COLOR_4 "#3468FF"
-#define FOLD_HIGHLIGHT_COLOR "#0081FF"
-
 static inline bool isModifier(QKeyEvent *e)
 {
     if (!e) {
@@ -665,7 +659,7 @@ void TextEdit::moveToLineIndentation()
     cursor.movePosition(QTextCursor::EndOfBlock, moveMode);
     int endColumn = cursor.columnNumber();
 
-    // Move to line start first.   
+    // Move to line start first.
     cursor.movePosition(QTextCursor::StartOfBlock, moveMode);
     int nStartPos = cursor.position();
 
@@ -2432,7 +2426,7 @@ bool TextEdit::event(QEvent *event)
 }
 
 bool TextEdit::gestureEvent(QGestureEvent *event)
-{    
+{
     if (QGesture *tap = event->gesture(Qt::TapGesture))
         tapGestureTriggered(static_cast<QTapGesture *>(tap));
     if (QGesture *tapAndHold = event->gesture(Qt::TapAndHoldGesture))
@@ -4341,7 +4335,7 @@ void TextEdit::markSelectWord()
 }
 
 void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
-{    
+{
     if (m_readOnlyMode) {
         undo();
         return;
@@ -4669,7 +4663,7 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
 
                     QTextEdit::ExtraSelection selection;
 
-                    selection.format.setBackground(QColor(FOLD_HIGHLIGHT_COLOR));
+                    selection.format.setBackground(palette().background());
                     selection.format.setProperty(QTextFormat::FullWidthSelection, true);
 
                     QTextBlock startblock;
@@ -4722,7 +4716,7 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
         }
 
     }
-	else if (event->type() == QEvent::MouseButtonDblClick) {
+    else if (event->type() == QEvent::MouseButtonDblClick) {
         m_bIsDoubleClick = true;
         m_bBeforeIsDoubleClick = true;
     }
@@ -4880,7 +4874,7 @@ void TextEdit::appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSel
 
                 m_wordMarkSelections.append(selection);
 
-                if (wordMarkSelections.value(i).format != selection.format) {                   
+                if (wordMarkSelections.value(i).format != selection.format) {
 
                     QList<QTextEdit::ExtraSelection> selecList;
                     bool bIsFind = false;
@@ -5048,8 +5042,8 @@ void TextEdit::onSelectionArea()
     } else {
         m_nSelectEndLine = -1;
     }
-	
-	//防止三次点击选中一整行的功能失效
+
+    //防止三次点击选中一整行的功能失效
     if (m_bIsDoubleClick == true) {
         m_bIsDoubleClick = false;
         return;
@@ -5151,7 +5145,7 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
         }
 
         QPlainTextEdit::inputMethodEvent(e);
-    }  
+    }
 }
 
 void TextEdit::mousePressEvent(QMouseEvent *e)
@@ -5207,7 +5201,7 @@ void TextEdit::mousePressEvent(QMouseEvent *e)
             tween.stop();
         }
     }
-    if (e->modifiers() == Qt::AltModifier){     
+    if (e->modifiers() == Qt::AltModifier){
        m_bIsAltMod = true;
        //鼠标点击位置为光标位置 　获取光标行列位置
        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(e);
@@ -5233,7 +5227,7 @@ void TextEdit::mouseMoveEvent(QMouseEvent *e)
         m_endY = e->y();
     }
 
-	/*
+    /*
     if (e->source() == Qt::MouseEventSynthesizedByQt) {
         if (QScroller::hasScroller(this))
             return;
@@ -5254,9 +5248,9 @@ void TextEdit::mouseMoveEvent(QMouseEvent *e)
             return;
         }
     }
-	*/
+    */
 
-	//add for single refers to the sliding
+    //add for single refers to the sliding
     if (e->type() == QEvent::MouseMove && e->source() == Qt::MouseEventSynthesizedByQt)
     {
         const ulong diffTime = e->timestamp() - m_lastMouseTime;
@@ -5382,7 +5376,7 @@ void TextEdit::mouseMoveEvent(QMouseEvent *e)
 
 void TextEdit::mouseReleaseEvent(QMouseEvent *e)
 {
-	//add for single refers to the sliding
+    //add for single refers to the sliding
     if (e->type() == QEvent::MouseButtonRelease && e->source() == Qt::MouseEventSynthesizedByQt)
     {
         qDebug()<< "action is over" << m_gestureAction;
@@ -6154,7 +6148,7 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
         m_rightMenu->addMenu(m_colorMarkMenu);
     }
 
-    m_rightMenu->exec(event->globalPos());  
+    m_rightMenu->exec(event->globalPos());
 }
 
 void TextEdit::paintEvent(QPaintEvent *e)

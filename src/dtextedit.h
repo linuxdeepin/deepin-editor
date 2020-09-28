@@ -51,10 +51,6 @@ namespace KSyntaxHighlighting {
     class SyntaxHighlighter;
 }
 
-const QString STYLE_COLOR_1 = "#FFA503";
-const QString STYLE_COLOR_2 = "#FF1C49";
-const QString STYLE_COLOR_3 = "#9023FC";
-const QString STYLE_COLOR_4 = "#05EA6B";
 const QString SELECT_HIGHLIGHT_COLOR = "#2CA7F8";
 
 enum ConvertCase { UPPER, LOWER, CAPITALIZE };
