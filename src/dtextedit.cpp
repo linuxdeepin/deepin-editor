@@ -885,11 +885,11 @@ void TextEdit::scrollDown()
     auto moveMode = m_cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
     int tem = document()->blockCount();
 
-    if(this->getFirstVisibleBlockId() + lines <tem ){
-    QTextCursor lineCursor(document()->findBlockByLineNumber(this->getFirstVisibleBlockId()-1));
-    QTextCursor cursor = textCursor();
-    cursor.setPosition(lineCursor.position(), moveMode);
-    setTextCursor(cursor);
+    if (this->getFirstVisibleBlockId() + lines <tem ) {
+        QTextCursor lineCursor(document()->findBlockByLineNumber(this->getFirstVisibleBlockId()-1));
+        QTextCursor cursor = textCursor();
+        cursor.setPosition(lineCursor.position(), moveMode);
+        setTextCursor(cursor);
     }
     else {              //如果文本结尾部分不足一页
         if((getCurrentLine()+lines)>tem)
@@ -1552,7 +1552,7 @@ void TextEdit::replaceNext(const QString &replaceText, const QString &withText)
     }
 
     if (replaceText.isEmpty() ||
-        !m_findHighlightSelection.cursor.hasSelection()) {
+        ! m_findHighlightSelection.cursor.hasSelection()) {
         // 无限替换的根源
         return;
     }
@@ -4203,6 +4203,7 @@ void TextEdit::isMarkCurrentLine(bool isMark, QString strColor)
     } else {
 //        m_wordMarkSelections.removeLast();
 //        updateHighlightLineSelection();
+        //取消标记当前行（功能未加入）
         for (int i = 0 ; i < m_wordMarkSelections.size(); ++i) {
             QTextCursor curson = m_wordMarkSelections.at(i).cursor;
             curson.movePosition(QTextCursor::EndOfLine);
@@ -4336,52 +4337,68 @@ void TextEdit::markSelectWord()
 
 void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
 {
+    //只读模式下实现禁止语音输入的效果
     if (m_readOnlyMode) {
         undo();
         return;
     }
 
+    //如果是读取文件导致的文本改变
     if (m_bIsFileOpen) {
         return;
     }
 
-    int nStartPos = 0,nEndPos = 0,nCurrentPos = 0;
-    QTextEdit::ExtraSelection selection;
-    QList<QTextEdit::ExtraSelection> listSelections;
-    QList<QTextEdit::ExtraSelection> wordMarkSelections = m_wordMarkSelections;
-    QColor strColor;
+    //更新标记
+    int nStartPos = 0,///< 标记的起始位置
+        nEndPos = 0,///< 标记的结束位置
+        nCurrentPos = 0;///< 当前光标位置
+    QTextEdit::ExtraSelection selection;///< 指定文本格式
+    QList<QTextEdit::ExtraSelection> listSelections;///< 指定文本格式列表
+    QList<QTextEdit::ExtraSelection> wordMarkSelections = m_wordMarkSelections;///< 标记列表
+    QColor strColor;///< 指定文本颜色格式
     nCurrentPos = textCursor().position();
 
+    //如果是删除字符
     if (charsRemoved > 0) {
-        QList<int> listRemoveItem;
+        QList<int> listRemoveItem;///< 要移除标记的indexs
 
+        //寻找要移除标记的index
         for (int i = 0;i < wordMarkSelections.count();i++) {
 
             nEndPos = wordMarkSelections.value(i).cursor.selectionEnd();
             nStartPos = wordMarkSelections.value(i).cursor.selectionStart();
             strColor = wordMarkSelections.value(i).format.background().color();
+
+            //如果有文字被选择
             if (m_nSelectEndLine != -1) {
+
+                //如果删除的内容，完全包含标记内容
                 if (m_nSelectStart <= nStartPos && m_nSelectEnd >= nEndPos) {
                     listRemoveItem.append(i);
                 }
             } else {
+
+                //如果标记内容全部被删除
                 if (wordMarkSelections.value(i).cursor.selection().toPlainText().isEmpty()) {
                     m_wordMarkSelections.removeAt(i);
                 }
             }
         }
 
+        //从标记列表中移除标记
         for (int j = 0;j < listRemoveItem.count();j++) {
             m_wordMarkSelections.removeAt(listRemoveItem.value(j) - j);
         }
     }
 
+    //如果是添加字符
     if (charsAdded > 0) {
         for (int i = 0;i < wordMarkSelections.count();i++) {
             nEndPos = wordMarkSelections.value(i).cursor.selectionEnd();
             nStartPos = wordMarkSelections.value(i).cursor.selectionStart();
             strColor = wordMarkSelections.value(i).format.background().color();
 
+            //如果字符添加在标记中
             if (nCurrentPos > nStartPos && nCurrentPos < nEndPos) {
 
                 m_wordMarkSelections.removeAt(i);
@@ -4389,7 +4406,11 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
                 selection.cursor = textCursor();
 
                 QTextEdit::ExtraSelection preSelection;
+
+                //如果是输入法输入
                 if (m_bIsInputMethod) {
+
+                    //添加第一段标记
                     selection.cursor.setPosition(nStartPos, QTextCursor::MoveAnchor);
                     selection.cursor.setPosition(nCurrentPos - m_qstrCommitString.count(), QTextCursor::KeepAnchor);
                     m_wordMarkSelections.insert(i,selection);
@@ -4397,12 +4418,15 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
                     preSelection.cursor = selection.cursor;
                     preSelection.format = selection.format;
 
+                    //添加第二段标记
                     selection.cursor.setPosition(nCurrentPos, QTextCursor::MoveAnchor);
                     selection.cursor.setPosition(nEndPos, QTextCursor::KeepAnchor);
                     m_wordMarkSelections.insert(i + 1,selection);
 
                     m_bIsInputMethod = false;
                 } else {
+
+                    //添加第一段标记
                     selection.cursor.setPosition(nStartPos, QTextCursor::MoveAnchor);
                     selection.cursor.setPosition(from, QTextCursor::KeepAnchor);
                     m_wordMarkSelections.insert(i,selection);
@@ -4410,12 +4434,15 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
                     preSelection.cursor = selection.cursor;
                     preSelection.format = selection.format;
 
+                    //添加第二段标记
                     selection.cursor.setPosition(nCurrentPos, QTextCursor::MoveAnchor);
                     selection.cursor.setPosition(nEndPos, QTextCursor::KeepAnchor);
                     m_wordMarkSelections.insert(i + 1,selection);
                 }
 
                 bool bIsFind = false;
+
+                //在记录标记的表中替换（按标记动作记录）
                 for (int j = 0;j < m_mapWordMarkSelections.count();j++) {
                     auto list = m_mapWordMarkSelections.value(j);
                     for (int k = 0;k < list.count();k++) {
@@ -4438,7 +4465,7 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
                 }
                 break;
 
-            } else if (nCurrentPos == nEndPos) {
+            } else if (nCurrentPos == nEndPos) { //如果字符添加在标记后
                 m_wordMarkSelections.removeAt(i);
                 selection.format.setBackground(strColor);
                 selection.cursor = textCursor();
@@ -4478,6 +4505,8 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
             }
         }
     }
+
+    //渲染所有的指定字符格式
     renderAllSelections();
 }
 
@@ -4499,7 +4528,6 @@ void TextEdit::completionWord(QString word)
     if (completionString.size() > 0) {
         cursor = textCursor();
         cursor.insertText(completionString);
-
         setTextCursor(cursor);
     }
 }
@@ -4755,10 +4783,15 @@ void TextEdit::appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSel
                                     ,QTextEdit::ExtraSelection selection,QString strColor
                                     ,QList<QTextEdit::ExtraSelection> *listSelections)
 {
+    //如果文档中有标记
     if (wordMarkSelections.count() > 0) {
-        bool bIsContains = false;
-        int nWordMarkSelectionStart = 0,nSelectionStart = 0,nWordMarkSelectionEnd = 0,nSelectionEnd = 0;
+        bool bIsContains = false;///< 是否占用已有标记
+        int nWordMarkSelectionStart = 0,///< 已有标记起始位置
+            nSelectionStart = 0,///< 标记起始位置
+            nWordMarkSelectionEnd = 0,///< 已有标记结束位置
+            nSelectionEnd = 0;///< 标记结束位置
 
+        //按大小确定标记的起始和结束位置
         if (selection.cursor.selectionStart() > selection.cursor.selectionEnd()) {
             nSelectionStart = selection.cursor.selectionEnd();
             nSelectionEnd = selection.cursor.selectionStart();
@@ -4769,6 +4802,7 @@ void TextEdit::appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSel
 
         for (int i = 0;i < wordMarkSelections.count();i++) {
 
+            //按大小确定已有标记的起始和结束位置
             if (wordMarkSelections.value(i).cursor.selectionStart() > wordMarkSelections.value(i).cursor.selectionEnd()) {
                 nWordMarkSelectionStart = wordMarkSelections.value(i).cursor.selectionEnd();
                 nWordMarkSelectionEnd = wordMarkSelections.value(i).cursor.selectionStart();
@@ -4777,27 +4811,36 @@ void TextEdit::appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSel
                 nWordMarkSelectionEnd = wordMarkSelections.value(i).cursor.selectionEnd();
             }
 
+            //如果被已有标记包含
             if ((nWordMarkSelectionStart <= nSelectionStart && nWordMarkSelectionEnd > nSelectionEnd)
                     || (nWordMarkSelectionStart < nSelectionStart && nWordMarkSelectionEnd >= nSelectionEnd)) {
+
                 bIsContains = true;
                 selection.format.setBackground(QColor(strColor));
+
+                //如果标记格式不相同
                 if (wordMarkSelections.value(i).format != selection.format) {
-                    int nRemPos = 0;
+                    int nRemPos = 0;///< 标记插入位置
+
+                    //移除已有标记
                     for (int j = 0;j < wordMarkSelections.count();j++) {
                         if (m_wordMarkSelections.value(j).cursor == wordMarkSelections.value(i).cursor
                                 && m_wordMarkSelections.value(j).format == wordMarkSelections.value(i).format) {
+
                             m_wordMarkSelections.removeAt(j);
                             nRemPos = j;
                             break;
                         }
                     }
 
+                    //重新记录标记
                     selection.cursor.setPosition(nWordMarkSelectionStart, QTextCursor::MoveAnchor);
                     selection.cursor.setPosition(nSelectionStart, QTextCursor::KeepAnchor);
                     selection.format.setBackground(wordMarkSelections.value(i).format.background());
 
-                    bool bIsInsert = false;
+                    bool bIsInsert = false;///< 标记是否将原有标记分成两段
 
+                    //如果第一段存在
                     if (selection.cursor.selectedText() != "") {
                         bIsInsert = true;
                         m_wordMarkSelections.insert(nRemPos,selection);
@@ -4810,6 +4853,7 @@ void TextEdit::appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSel
                     selection.cursor.setPosition(nSelectionEnd, QTextCursor::MoveAnchor);
                     selection.cursor.setPosition(nWordMarkSelectionEnd, QTextCursor::KeepAnchor);
 
+                    //如果第二段存在
                     if (selection.cursor.selectedText() != "") {
                         if (bIsInsert) {
                             m_wordMarkSelections.insert(nRemPos + 1,selection);
@@ -4818,13 +4862,17 @@ void TextEdit::appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSel
                         }
                     }
 
+                    //从记录标记的表中替换原有标记（按标记动作记录）
                     QList<QTextEdit::ExtraSelection> selecList;
-                    bool bIsFind = false;
+                    bool bIsFind = false;///< 是否有包含该标记的标记动作
+
                     for (int j = 0;j < m_mapWordMarkSelections.count();j++) {
                         auto list = m_mapWordMarkSelections.value(j);
+
                         for (int k = 0;k < list.count();k++) {
                             if (list.value(k).cursor == wordMarkSelections.value(i).cursor
                                     && list.value(k).format == wordMarkSelections.value(i).format) {
+
                                 list.removeAt(k);
                                 selecList = list;
                                 bIsInsert = false;
@@ -4854,16 +4902,18 @@ void TextEdit::appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSel
                         }
                     }
 
+                    //记录新添加的标记
                     selection.cursor.setPosition(nSelectionStart, QTextCursor::MoveAnchor);
                     selection.cursor.setPosition(nSelectionEnd, QTextCursor::KeepAnchor);
                     selection.format.setBackground(QColor(strColor));
                     m_wordMarkSelections.append(selection);
                     listSelections->append(selection);
                 }
-            } else if (nWordMarkSelectionStart >= nSelectionStart && nWordMarkSelectionEnd <= nSelectionEnd) {
+            } else if (nWordMarkSelectionStart >= nSelectionStart && nWordMarkSelectionEnd <= nSelectionEnd) { //如果标记包含已有标记
                 bIsContains = true;
                 selection.format.setBackground(QColor(strColor));
 
+                //移除已有标记
                 for (int j = 0;j < wordMarkSelections.count();j++) {
                     if (m_wordMarkSelections.value(j).cursor == wordMarkSelections.value(i).cursor
                             && m_wordMarkSelections.value(j).format == wordMarkSelections.value(i).format) {
@@ -4872,18 +4922,22 @@ void TextEdit::appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSel
                     }
                 }
 
+                //记录新添加的标记
                 m_wordMarkSelections.append(selection);
 
+                //如果标记格式不相同
                 if (wordMarkSelections.value(i).format != selection.format) {
 
                     QList<QTextEdit::ExtraSelection> selecList;
-                    bool bIsFind = false;
+                    bool bIsFind = false;///< 是否有包含该标记的标记动作
 
+                    //从记录标记的表中替换原有标记（按标记动作记录）
                     for (int j = 0;j < m_mapWordMarkSelections.count();j++) {
                         auto list = m_mapWordMarkSelections.value(j);
                         for (int k = 0;k < list.count();k++) {
                             if (list.value(k).cursor == wordMarkSelections.value(i).cursor
                                     && list.value(k).format == wordMarkSelections.value(i).format) {
+
                                 list.removeAt(k);
                                 selecList = list;
                                 bIsFind = true;
@@ -4901,10 +4955,12 @@ void TextEdit::appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSel
 
                 listSelections->append(selection);
             } else if (nWordMarkSelectionEnd < nSelectionEnd && nWordMarkSelectionStart < nSelectionStart
-                       && nWordMarkSelectionEnd > nSelectionStart) {
-                selection.format.setBackground(QColor(strColor));
+                       && nWordMarkSelectionEnd > nSelectionStart) { //如果添加的标记占有原有标记的后段部分
 
-                int nRemPos = 0;
+                selection.format.setBackground(QColor(strColor));
+                int nRemPos = 0;///< 标记插入位置
+
+                //移除已有标记
                 for (int j = 0;j < wordMarkSelections.count();j++) {
                     if (m_wordMarkSelections.value(j).cursor == wordMarkSelections.value(i).cursor
                             && m_wordMarkSelections.value(j).format == wordMarkSelections.value(i).format) {
@@ -4914,16 +4970,19 @@ void TextEdit::appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSel
                     }
                 }
 
+                //如果标记格式不相同
                 if (wordMarkSelections.value(i).format != selection.format) {
 
+                    //从记录标记的表中替换原有标记（分行记录）
                     selection.cursor.setPosition(nWordMarkSelectionStart, QTextCursor::MoveAnchor);
                     selection.cursor.setPosition(nSelectionStart, QTextCursor::KeepAnchor);
                     selection.format.setBackground(wordMarkSelections.value(i).format.background());
                     m_wordMarkSelections.insert(nRemPos,selection);
 
                     QList<QTextEdit::ExtraSelection> selecList;
-                    bool bIsFind = false;
+                    bool bIsFind = false;///< 是否有包含该标记的标记动作
 
+                    //从记录标记的表中替换原有标记（按标记动作记录）
                     for (int j = 0;j < m_mapWordMarkSelections.count();j++) {
                         auto list = m_mapWordMarkSelections.value(j);
                         for (int k = 0;k < list.count();k++) {
@@ -4944,11 +5003,12 @@ void TextEdit::appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSel
                         }
                     }
 
+                    //记录新添加的标记
                     selection.cursor.setPosition(nSelectionStart, QTextCursor::MoveAnchor);
                     selection.cursor.setPosition(nSelectionEnd, QTextCursor::KeepAnchor);
                     selection.format.setBackground(QColor(strColor));
                     m_wordMarkSelections.append(selection);
-                } else {
+                } else { //如果标记格式相同
                     selection.cursor.setPosition(nWordMarkSelectionStart, QTextCursor::MoveAnchor);
                     selection.cursor.setPosition(nSelectionEnd, QTextCursor::KeepAnchor);
                     m_wordMarkSelections.insert(nRemPos,selection);
@@ -4960,10 +5020,12 @@ void TextEdit::appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSel
 
                 bIsContains = true;
             } else if (nWordMarkSelectionEnd > nSelectionEnd && nWordMarkSelectionStart > nSelectionStart
-                       && nWordMarkSelectionStart < nSelectionEnd) {
-                selection.format.setBackground(QColor(strColor));
+                       && nWordMarkSelectionStart < nSelectionEnd) { //如果添加的标记占有原有标记的前段部分
 
-                int nRemPos = 0;
+                selection.format.setBackground(QColor(strColor));
+                int nRemPos = 0;///< 标记插入位置
+
+                //移除已有标记
                 for (int j = 0;j < wordMarkSelections.count();j++) {
                     if (m_wordMarkSelections.value(j).cursor == wordMarkSelections.value(i).cursor
                             && m_wordMarkSelections.value(j).format == wordMarkSelections.value(i).format) {
@@ -4973,8 +5035,10 @@ void TextEdit::appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSel
                     }
                 }
 
+                //如果标记格式不相同
                 if (wordMarkSelections.value(i).format != selection.format) {
 
+                    //从记录标记的表中替换原有标记（分行记录）
                     selection.cursor.setPosition(nSelectionEnd, QTextCursor::MoveAnchor);
                     selection.cursor.setPosition(nWordMarkSelectionEnd, QTextCursor::KeepAnchor);
                     selection.format.setBackground(wordMarkSelections.value(i).format.background());
@@ -4983,6 +5047,7 @@ void TextEdit::appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSel
                     QList<QTextEdit::ExtraSelection> selecList;
                     bool bIsFind = false;
 
+                    //从记录标记的表中替换原有标记（按标记动作记录）
                     for (int j = 0;j < m_mapWordMarkSelections.count();j++) {
                         auto list = m_mapWordMarkSelections.value(j);
                         for (int k = 0;k < list.count();k++) {
@@ -5003,11 +5068,12 @@ void TextEdit::appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSel
                         }
                     }
 
+                    //记录新添加的标记
                     selection.cursor.setPosition(nSelectionStart, QTextCursor::MoveAnchor);
                     selection.cursor.setPosition(nSelectionEnd, QTextCursor::KeepAnchor);
                     selection.format.setBackground(QColor(strColor));
                     m_wordMarkSelections.append(selection);
-                } else {
+                } else { //如果标记格式相同
                     selection.cursor.setPosition(nSelectionStart, QTextCursor::MoveAnchor);
                     selection.cursor.setPosition(nWordMarkSelectionEnd, QTextCursor::KeepAnchor);
                     m_wordMarkSelections.insert(nRemPos,selection);
@@ -5026,7 +5092,7 @@ void TextEdit::appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSel
             listSelections->append(selection);
         }
 
-    } else {
+    } else { //如果文档中没有标记
         selection.format.setBackground(QColor(strColor));
         m_wordMarkSelections.append(selection);
         listSelections->append(selection);

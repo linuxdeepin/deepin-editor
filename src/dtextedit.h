@@ -307,26 +307,128 @@ public:
     bool ifHasHighlight();
 
     //书签功能相关
+    /**
+     * @brief bookMarkAreaPaintEvent 绘制书签
+     * @param event 书签区域的绘制事件
+     */
     void bookMarkAreaPaintEvent(QPaintEvent *event);
+
+    /**
+     * @brief getLineFromPoint 得到鼠标点击位置所在的行
+     * @param point 鼠标点击位置
+     * @return 鼠标点击位置所在的行
+     */
     int getLineFromPoint(const QPoint &point);
+
+    /**
+     * @brief addOrDeleteBookMark 添加或删除书签
+     */
     void addOrDeleteBookMark();
+
+    /**
+     * @brief moveToPreviousBookMark 移动到上一个书签
+     */
     void moveToPreviousBookMark();
+
+    /**
+     * @brief moveToNextBookMark 移动到下一个书签
+     */
     void moveToNextBookMark();
+
+    /**
+     * @brief checkBookmarkLineMove 检测书签行移动
+     * @param from 文本变化时光标位置
+     * @param charsRemoved 移除的字符数
+     * @param charsAdded 添加的字符数
+     */
     void checkBookmarkLineMove(int from, int charsRemoved, int charsAdded);
+
+    /**
+     * @brief setIsFileOpen 设置是否在读取文件
+     */
     void setIsFileOpen();
+
+    /**
+     * @brief setTextFinished 读取文件结束
+     */
     void setTextFinished();
+
+    /**
+     * @brief readHistoryRecord 读取书签相关记录
+     * @return 书签相关记录列表
+     */
     QStringList readHistoryRecord(QString key);
+
+    /**
+     * @brief readHistoryRecordofBookmark 读取书签记录
+     * @return 书签记录列表
+     */
     QStringList readHistoryRecordofBookmark();
+
+    /**
+     * @brief readHistoryRecordofFilePath 读取添加了书签的文件路径记录
+     * @return 文件路径列表
+     */
     QStringList readHistoryRecordofFilePath(QString key);
+
+    /**
+     * @brief writeHistoryRecord 写入书签相关记录
+     */
     void writeHistoryRecord();
 
+    //标记功能相关
+    /**
+     * @brief isMarkCurrentLine 标记或取消标记当前行
+     * @param isMark true为标记，false为取消标记
+     * @param strColor 标记格式
+     */
     void isMarkCurrentLine(bool isMark, QString strColor = "");
-    void isMarkAllLine(bool isMark, QString strColor = "");
-    void cancelLastMark();
-    void markSelectWord();
-    void updateMark(int from, int charsRemoved, int charsAdded);
-    void setCursorStart(int _);
 
+    /**
+     * @brief isMarkAllLine 标记或取消标记所有
+     * @param isMark true为标记，false为取消标记
+     * @param strColor 标记格式
+     */
+    void isMarkAllLine(bool isMark, QString strColor = "");
+
+    /**
+     * @brief cancelLastMark 取消上一个标记
+     */
+    void cancelLastMark();
+
+    /**
+     * @brief markSelectWord 标记选择的文本
+     */
+    void markSelectWord();
+
+    /**
+     * @brief updateMark 更新标记
+     * @param from 文本变化时光标位置
+     * @param charsRemoved 移除的字符数
+     * @param charsAdded 添加的字符数
+     */
+    void updateMark(int from, int charsRemoved, int charsAdded);
+
+    //QTextEdit :: ExtraSelection结构提供了一种为文档中的给定选择,指定字符格式的方法。
+    /**
+     * @brief containsExtraSelection 指定字符格式列表是否包含该指定字符格式
+     * @param listSelections 指定字符格式列表
+     * @param selection 指定字符格式
+     * @return true or false
+     */
+    bool containsExtraSelection(QList<QTextEdit::ExtraSelection> listSelections, QTextEdit::ExtraSelection selection);
+
+    /**
+     * @brief appendExtraSelection 在指定字符格式列表添加指定字符格式
+     * @param wordMarkSelections 指定字符格式列表
+     * @param selection 指定字符格式
+     * @param markColor 指定字符颜色格式
+     * @param listSelections 添加的指定字符格式列表
+     */
+    void appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSelections, QTextEdit::ExtraSelection selection
+                              , QString strColor, QList<QTextEdit::ExtraSelection> *listSelections);
+
+    void setCursorStart(int _);
     void setTextCode(QString encode);
     void writeEncodeHistoryRecord();
     QStringList readEncodeHistoryRecord();
@@ -403,10 +505,6 @@ public slots:
     void handleCursorMarkChanged(bool mark, QTextCursor cursor);
 
     void adjustScrollbarMargins();
-    bool containsExtraSelection(QList<QTextEdit::ExtraSelection> listSelections, QTextEdit::ExtraSelection selection);
-    void appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSelections
-                              ,QTextEdit::ExtraSelection selection,QString strColor
-                              ,QList<QTextEdit::ExtraSelection> *listSelections);
     void onSelectionArea();
     void fingerZoom(QString name, QString direction, int fingers);
     void onInputModEdit(QString input);
@@ -459,15 +557,15 @@ private:
     EditWrapper *m_wrapper;
     QPropertyAnimation *m_scrollAnimation;
 
-    QList<QTextEdit::ExtraSelection> m_findMatchSelections;
+    QList<QTextEdit::ExtraSelection> m_findMatchSelections;///< “查找”的字符格式（所有查找的字符）
     QTextEdit::ExtraSelection m_beginBracketSelection;
     QTextEdit::ExtraSelection m_endBracketSelection;
     QTextEdit::ExtraSelection m_currentLineSelection;
-    QTextEdit::ExtraSelection m_findHighlightSelection;
+    QTextEdit::ExtraSelection m_findHighlightSelection;///< “查找”的字符格式（当前位置字符）
     QTextEdit::ExtraSelection m_wordUnderCursorSelection;
-    QList<QTextEdit::ExtraSelection> m_wordMarkSelections;
-    QMap<int,QList<QTextEdit::ExtraSelection>> m_mapWordMarkSelections;
-    QTextEdit::ExtraSelection m_markAllSelection;
+    QList<QTextEdit::ExtraSelection> m_wordMarkSelections;///< 记录标记的列表（分行记录）
+    QMap<int,QList<QTextEdit::ExtraSelection>> m_mapWordMarkSelections;///< 记录标记的表（按标记动作记录）
+    QTextEdit::ExtraSelection m_markAllSelection;///< “标记所有”的字符格式
     QList<QTextEdit::ExtraSelection> m_markFoldHighLightSelections;
 
     QTextCursor m_highlightWordCacheCursor;
@@ -579,7 +677,7 @@ private:
     QColor m_selectionColor;
     QColor m_selectionBgColor;
 
-    QPoint m_mouseClickPos;
+    QPoint m_mouseClickPos;///< 鼠标点击位置
     QPoint m_menuPos;
 
     bool m_highlighted = false;
@@ -596,23 +694,23 @@ private:
     QPointer<QTimer> m_updateEnableSelectionByMouseTimer;
     int m_touchTapDistance = -1;
 
-    QFont m_fontLineNumberArea;
-    QList<int> m_listBookmark;
-    int m_nBookMarkHoverLine;
-    int m_nLines;
-    bool m_bIsFileOpen;
-    bool m_bIsShortCut;
+    QFont m_fontLineNumberArea;///< 绘制行号的字体
+    QList<int> m_listBookmark;///< 存储书签的list
+    int m_nBookMarkHoverLine;///< 悬浮效果书签所在的行
+    int m_nLines;///< 文本总行数
+    bool m_bIsFileOpen;///< 是否在读取文件（导致文本变化）
+    bool m_bIsShortCut;///< 是否在使用书签快捷键
 
     //存储所有有折叠标记的位置，包含不可见区域
     QList<int> m_listFlodFlag;
     //包含当前可见区域的标志
     QList<int> m_listFlodIconPos;
 
-    QString m_qstrCommitString;
-    bool m_bIsInputMethod;
-    int m_nSelectEndLine;
-    int m_nSelectStart;
-    int m_nSelectEnd;
+    QString m_qstrCommitString;///< 输入法输入的字符
+    bool m_bIsInputMethod;///< 是否是输入法输入
+    int m_nSelectEndLine;///< 选择结束时后鼠标所在行
+    int m_nSelectStart;///< 选择开始时的鼠标位置
+    int m_nSelectEnd;///< 选择结束时的鼠标位置
 
     int m_cursorStart=-1;
     QString m_textEncode;

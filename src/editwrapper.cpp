@@ -93,8 +93,36 @@ void EditWrapper::openFile(const QString &filepath)
     m_textEdit->setIsFileOpen();
     m_isLoadFinished = false;
 
-    // begin to load the file.
     FileLoadThread *thread = new FileLoadThread(filepath);
+
+    QFile file(filepath);
+
+    if (file.open(QIODevice::ReadOnly)) {
+        // reads all remaining data from the file.
+        QByteArray fileContentAll = file.readAll();
+
+        // read the encode.
+        QByteArray encodeArray = "";
+
+        QByteArray encode = encodeArray.fromStdString(thread->getCodec().toStdString());
+
+
+        file.close();
+        if (file.open(QIODevice::ReadOnly)) {
+            QTextStream stream(&fileContentAll);
+            stream.setCodec(encode);
+            QString preconten = stream.read(5000);
+            m_textEdit->setPlainText(preconten);
+
+        }
+
+        file.close();
+    }
+    else {
+        file.close();
+    }
+
+    // begin to load the file.
     connect(thread, &FileLoadThread::loadFinished, this, &EditWrapper::handleFileLoadFinished);
     connect(thread, &FileLoadThread::toTellFileClosed, this, &EditWrapper::onFileClosed);
     connect(thread, &FileLoadThread::finished, thread, &FileLoadThread::deleteLater);
@@ -695,6 +723,7 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QString 
 
     // set text.
     m_textEdit->loadHighlighter();
+    m_textEdit->clear();
     m_textEdit->setPlainText(content);
     m_textEdit->setTextFinished();
 
