@@ -65,24 +65,37 @@ public:
     ~FlashTween(){}
 
 public:
-    void start(qreal t,qreal b,qreal c,qreal d, FunSlideInertial fSlideGesture);
-    void stop(){m_timer->stop();}
-    bool active(){return m_timer->isActive();}
+    void startX(qreal t,qreal b,qreal c,qreal d, FunSlideInertial fSlideGesture);
+    void startY(qreal t,qreal b,qreal c,qreal d, FunSlideInertial fSlideGesture);
+    void stopX(){m_timerX->stop();}
+    void stopY(){m_timerY->stop();}
+    bool activeX(){return m_timerX->isActive();}
+    bool activeY(){return m_timerY->isActive();}
 
 private slots:
-    void __run();
+    void __runY();
+    void __runX();
 
 private:
-    QTimer* m_timer = nullptr;
-    FunSlideInertial m_fSlideGesture = nullptr;
+    QTimer* m_timerY = nullptr;
+    QTimer* m_timerX = nullptr;
+    FunSlideInertial m_fSlideGestureX = nullptr;
+    FunSlideInertial m_fSlideGestureY = nullptr;
 
-    qreal m_currentTime = 0;
-    qreal m_beginValue = 0;
-    qreal m_changeValue = 0;
-    qreal m_durationTime = 0;
+    //纵向单指惯性滑动
+    qreal m_currentTimeY = 0;
+    qreal m_beginValueY = 0;
+    qreal m_changeValueY = 0;
+    qreal m_durationTimeY = 0;
+    qreal m_directionY = 1;
+    qreal m_lastValueY = 0;
 
-    qreal m_direction = 1;
-    qreal m_lastValue = 0;
+    qreal m_currentTimeX = 0;
+    qreal m_beginValueX = 0;
+    qreal m_changeValueX = 0;
+    qreal m_durationTimeX = 0;
+    qreal m_directionX = 1;
+    qreal m_lastValueX = 0;
 
 private:
     /**
@@ -546,7 +559,7 @@ private:
     void swipeTriggered(QSwipeGesture*);
 	
 	//add for single refers to the sliding
-    void slideGesture(qreal diff);
+    void slideGestureY(qreal diff);
     void slideGestureX(qreal diff);
 
 public:
@@ -733,16 +746,19 @@ private:
     GestureAction m_gestureAction = GA_null;
 
 	//add for single refers to the sliding
-    FlashTween tween;
-    qreal change = {0.0};
-    qreal duration = {0.0};
+    FlashTween tweenX;
+    FlashTween tweenY;
+    qreal changeY = {0.0};
     qreal changeX = {0.0};
+    qreal durationY = {0.0};
     qreal durationX = {0.0};
-    bool m_slideContinue {false};
+    bool m_slideContinueX {false};
+    bool m_slideContinueY {false};
     int m_lastMouseYpos;
     int m_lastMouseXpos;
-    ulong m_lastMouseTime;
-    qreal m_stepSpeed = 0;
+    ulong m_lastMouseTimeX;
+    ulong m_lastMouseTimeY;
+    qreal m_stepSpeedY = 0;
     qreal m_stepSpeedX = 0;
     bool m_bIsDoubleClick {false};
     bool m_bBeforeIsDoubleClick {false};

@@ -1706,6 +1706,11 @@ void TextEdit::updateCursorKeywordSelection(int position, bool findNext)
 
 void TextEdit::updateHighlightLineSelection()
 {
+    if (m_gestureAction != GA_null && m_gestureAction == GA_slide) {
+        QTextCursor textCursor = QPlainTextEdit::textCursor();
+        return;
+    }
+
     QTextEdit::ExtraSelection selection;
 
     selection.format.setBackground(m_currentLineColor);
@@ -2444,6 +2449,7 @@ bool TextEdit::gestureEvent(QGestureEvent *event)
 
 void TextEdit::tapGestureTriggered(QTapGesture *tap)
 {
+    this->clearFocus();
     //单指点击函数
     qobject_cast<Window *>(this->window())->decrementFontSize();
     qobject_cast<Window *>(this->window())->incrementFontSize();
@@ -2456,14 +2462,16 @@ void TextEdit::tapGestureTriggered(QTapGesture *tap)
     }
     case Qt::GestureUpdated:
     {
+        m_gestureAction = GA_slide;
         break;
     }
     case Qt::GestureCanceled:
-    {
+    {   
         //根据时间长短区分轻触滑动
         qint64 timeSpace = QDateTime::currentDateTime().toMSecsSinceEpoch() - m_tapBeginTime;
-        if(timeSpace < TAP_MOVE_DELAY || m_slideContinue){
-            m_slideContinue = false;
+        if(timeSpace < TAP_MOVE_DELAY || m_slideContinueX || m_slideContinueY){
+            m_slideContinueX = false;
+            m_slideContinueY = false;
             m_gestureAction = GA_slide;
             qDebug() << "slide start" << timeSpace;
         } else {
@@ -2601,7 +2609,7 @@ void TextEdit::swipeTriggered(QSwipeGesture *swipe)
 
 }
 
-void TextEdit::slideGesture(qreal diff)
+void TextEdit::slideGestureY(qreal diff)
 {
     static qreal delta = 0.0;
     int step = static_cast<int>(diff+delta);
@@ -5225,6 +5233,7 @@ void TextEdit::mousePressEvent(QMouseEvent *e)
     qobject_cast<Window *>(this->window())->incrementFontSize();
     if (Qt::MouseEventSynthesizedByQt == e->source()) {
         m_startY = e->y();
+        m_startX = e->x();
     }
     if (e->source() == Qt::MouseEventSynthesizedByQt) {
         m_lastTouchBeginPos = e->pos();
@@ -5257,16 +5266,24 @@ void TextEdit::mousePressEvent(QMouseEvent *e)
     //add for single refers to the sliding
     if (e->type() == QEvent::MouseButtonPress && e->source() == Qt::MouseEventSynthesizedByQt)
     {
-        m_lastMouseTime = e->timestamp();
+        m_lastMouseTimeX = e->timestamp();
+        m_lastMouseTimeY = e->timestamp();
         m_lastMouseYpos = e->pos().y();
         m_lastMouseXpos = e->pos().x();
 
-        if(tween.active())
+        if(tweenY.activeY())
         {
-            m_slideContinue = true;
-            tween.stop();
+            m_slideContinueY = true;
+            tweenY.stopY();
+        }
+
+        if(tweenX.activeX())
+        {
+            m_slideContinueX = true;
+            tweenX.stopX();
         }
     }
+
     if (e->modifiers() == Qt::AltModifier){
        m_bIsAltMod = true;
        //鼠标点击位置为光标位置 　获取光标行列位置
@@ -5291,6 +5308,7 @@ void TextEdit::mouseMoveEvent(QMouseEvent *e)
 {
     if (Qt::MouseEventSynthesizedByQt == e->source()) {
         m_endY = e->y();
+        m_endX = e->x();
     }
 
     /*
@@ -5319,10 +5337,12 @@ void TextEdit::mouseMoveEvent(QMouseEvent *e)
     //add for single refers to the sliding
     if (e->type() == QEvent::MouseMove && e->source() == Qt::MouseEventSynthesizedByQt)
     {
-        const ulong diffTime = e->timestamp() - m_lastMouseTime;
+        const ulong diffTimeX = e->timestamp() - m_lastMouseTimeX;
+        const ulong diffTimeY = e->timestamp() - m_lastMouseTimeY;
         const int diffYpos = e->pos().y() - m_lastMouseYpos;
         const int diffXpos = e->pos().x() - m_lastMouseXpos;
-        m_lastMouseTime = e->timestamp();
+        m_lastMouseTimeX = e->timestamp();
+        m_lastMouseTimeY = e->timestamp();
         m_lastMouseYpos = e->pos().y();
         m_lastMouseXpos = e->pos().x();
 
@@ -5332,19 +5352,19 @@ void TextEdit::mouseMoveEvent(QMouseEvent *e)
 
             /*开根号时数值越大衰减比例越大*/
             qreal direction = diffYpos>0?1.0:-1.0;
-            slideGesture(-direction*sqrt(abs(diffYpos))/font.pointSize());
+            slideGestureY(-direction*sqrt(abs(diffYpos))/font.pointSize());
             qreal directionX = diffXpos>0?1.0:-1.0;
             slideGestureX(-directionX*sqrt(abs(diffXpos))/font.pointSize());
 
             /*预算惯性滑动时间*/
-            m_stepSpeed = static_cast<qreal>(diffYpos)/static_cast<qreal>(diffTime+0.000001);
-            duration = sqrt(abs(m_stepSpeed))*1000;
-            m_stepSpeedX = static_cast<qreal>(diffXpos)/static_cast<qreal>(diffTime+0.000001);
+            m_stepSpeedY = static_cast<qreal>(diffYpos)/static_cast<qreal>(diffTimeY+0.000001);
+            durationY = sqrt(abs(m_stepSpeedY))*1000;
+            m_stepSpeedX = static_cast<qreal>(diffXpos)/static_cast<qreal>(diffTimeX+0.000001);
             durationX = sqrt(abs(m_stepSpeedX))*1000;
 
             /*预算惯性滑动距离,4.0为调优数值*/
-            m_stepSpeed /= sqrt(font.pointSize()*4.0);
-            change = m_stepSpeed*sqrt(abs(m_stepSpeed))*100;
+            m_stepSpeedY /= sqrt(font.pointSize()*4.0);
+            changeY = m_stepSpeedY*sqrt(abs(m_stepSpeedY))*100;
             m_stepSpeedX /= sqrt(font.pointSize()*4.0);
             changeX = m_stepSpeedX*sqrt(abs(m_stepSpeedX))*100;
 
@@ -5448,16 +5468,19 @@ void TextEdit::mouseReleaseEvent(QMouseEvent *e)
         qDebug()<< "action is over" << m_gestureAction;
 
         if(m_gestureAction == GA_slide){
-            tween.start(0, 0, change, duration, std::bind(&TextEdit::slideGesture, this, std::placeholders::_1));
-            tween.start(0, 0, changeX, durationX, std::bind(&TextEdit::slideGestureX, this, std::placeholders::_1));
+
+            tweenX.startX(0, 0, changeX, durationX, std::bind(&TextEdit::slideGestureX, this, std::placeholders::_1));
+            tweenY.startY(0, 0, changeY, durationY, std::bind(&TextEdit::slideGestureY, this, std::placeholders::_1));
         }
 
         m_gestureAction = GA_null;
     }
 
     int i = m_endY - m_startY;
+    int k = m_endX - m_startX;
     if (Qt::MouseEventSynthesizedByQt == e->source()
-            &&( i > 10&&this->verticalScrollBar()->value()!=0)) {
+            &&( i > 10&&this->verticalScrollBar()->value()!=0 )
+            &&( k > 10&&this->horizontalScrollBar()->value()!=0 )) {
         e->accept();
         return;
     }
@@ -6299,38 +6322,72 @@ void TextEdit::highlightCurrentLine()
 
 FlashTween::FlashTween()
 {
-    m_timer = new QTimer(this);
-    connect(m_timer, &QTimer::timeout, this ,&FlashTween::__run);
+    m_timerX = new QTimer(this);
+    connect(m_timerX, &QTimer::timeout, this ,&FlashTween::__runX);
+
+    m_timerY = new QTimer(this);
+    connect(m_timerY, &QTimer::timeout, this ,&FlashTween::__runY);
 }
 
-void FlashTween::start(qreal t,qreal b,qreal c,qreal d, FunSlideInertial f)
+void FlashTween::startY(qreal t,qreal b,qreal c,qreal d, FunSlideInertial f)
 {
     if(c==0.0 || d==0.0) return;
-    m_currentTime = t;
-    m_beginValue = b;
-    m_changeValue = c;
-    m_durationTime = d;
+    m_currentTimeY = t;
+    m_beginValueY = b;
+    m_changeValueY = c;
+    m_durationTimeY = d;
 
-    m_lastValue = 0;
-    m_fSlideGesture = f;
-    m_direction = m_changeValue<0?1:-1;
+    m_lastValueY = 0;
+    m_fSlideGestureY = f;
+    m_directionY = m_changeValueY<0?1:-1;
 
-    m_timer->stop();
-    m_timer->start(CELL_TIME);
+    m_timerY->stop();
+    m_timerY->start(CELL_TIME);
 }
 
-void FlashTween::__run()
+void FlashTween::startX(qreal t,qreal b,qreal c,qreal d, FunSlideInertial f)
 {
-    qreal tempValue = m_lastValue;
-    m_lastValue = FlashTween::sinusoidalEaseOut(m_currentTime, m_beginValue, abs(m_changeValue), m_durationTime);
-    m_fSlideGesture(m_direction*(m_lastValue-tempValue));
+    if(c==0.0 || d==0.0) return;
+    m_currentTimeX = t;
+    m_beginValueX = b;
+    m_changeValueX = c;
+    m_durationTimeX = d;
+
+    m_lastValueX = 0;
+    m_fSlideGestureX = f;
+    m_directionX = m_changeValueX<0?1:-1;
+
+    m_timerX->stop();
+    m_timerX->start(CELL_TIME);
+}
+
+void FlashTween::__runY()
+{
+    qreal tempValue = m_lastValueY;
+    m_lastValueY = FlashTween::sinusoidalEaseOut(m_currentTimeY, m_beginValueY, abs(m_changeValueY), m_durationTimeY);
+    m_fSlideGestureY(m_directionY*(m_lastValueY-tempValue));
     //qDebug()<<"###############################"<<m_lastValue<<temp<<m_lastValue-temp;
 
-    if(m_currentTime<m_durationTime){
-        m_currentTime+=CELL_TIME;
+    if(m_currentTimeY<m_durationTimeY){
+        m_currentTimeY+=CELL_TIME;
     }
     else {
-        m_timer->stop();
+        m_timerY->stop();
+    }
+}
+
+void FlashTween::__runX()
+{
+    qreal tempValue = m_lastValueX;
+    m_lastValueX = FlashTween::sinusoidalEaseOut(m_currentTimeX, m_beginValueX, abs(m_changeValueX), m_durationTimeX);
+    m_fSlideGestureX(m_directionX*(m_lastValueX-tempValue));
+    //qDebug()<<"###############################"<<m_lastValue<<temp<<m_lastValue-temp;
+
+    if(m_currentTimeX<m_durationTimeX){
+        m_currentTimeX+=CELL_TIME;
+    }
+    else {
+        m_timerX->stop();
     }
 }
 
