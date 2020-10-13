@@ -630,6 +630,7 @@ void Tabbar::showTabs()
 
 void Tabbar::handleTabReleased(int index)
 {
+    //qDebug() << "handleTabReleased" << index;
     if(index == -1) index = 0;
     QString path = m_listOldTabPath.value(index);
     int newIndex = m_tabPaths.indexOf(path);
@@ -638,16 +639,17 @@ void Tabbar::handleTabReleased(int index)
 
     Window *window = static_cast<Window *>(this->window());
     EditWrapper *wrapper = window->wrapper(tabPath);
+
+    StartManager::instance()->createWindowFromWrapper(tabName, tabPath, wrapper, wrapper->textEditor()->document()->isModified());
+
     closeTab(newIndex);
     // remove wrapper from window, not delete.
     window->removeWrapper(tabPath, false);
-
-    StartManager::instance()->createWindowFromWrapper(tabName, tabPath, wrapper, wrapper->textEditor()->document()->isModified());
 }
 
 void Tabbar::handleTabIsRemoved(int index)
 {   
-//    qDebug() << "handleTabIsRemoved" << index;
+    //qDebug() << "handleTabIsRemoved" << index;
     const QString filePath = m_tabPaths.at(index);
     Window *window = static_cast<Window *>(this->window());
     m_tabPaths.removeAt(index);
