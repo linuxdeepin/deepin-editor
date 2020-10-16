@@ -6289,13 +6289,13 @@ void TextEdit::paintEvent(QPaintEvent *e)
 
 void TextEdit::focusOutEvent(QFocusEvent *e)
 {
-    setReadOnly(true);
+    //setReadOnly(true);
     return DPlainTextEdit::focusOutEvent(e);
 }
 
 void TextEdit::focusInEvent(QFocusEvent *e)
 {
-    setReadOnly(false);
+    //setReadOnly(false);
     return DPlainTextEdit::focusInEvent(e);
 }
 
