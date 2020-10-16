@@ -115,6 +115,9 @@ themes.files += themes/atom_dark.theme
 
 INSTALLS += target desktop themes
 
+QMAKE_CXXFLAGS+= -fPIE
+QMAKE_LFLAGS += -pie
+
 DISTFILES += \
     themes/deepin_dark.theme \
     images/warning.svg
