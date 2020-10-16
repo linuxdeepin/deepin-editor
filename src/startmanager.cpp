@@ -141,6 +141,7 @@ void StartManager::openFilesInTab(QStringList files)
         else {
             // m_windows[0]->activateWindow();
             Window *window = createWindow();
+            window->showCenterWindow(true);
             window->activateWindow();
             window->addBlankTab();
         }
