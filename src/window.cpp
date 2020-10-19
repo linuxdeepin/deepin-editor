@@ -772,7 +772,7 @@ void Window::removeWrapper(const QString &filePath, bool isDelete)
 
 void Window::openFile()
 {
-    QFileDialog dialog;
+    QFileDialog dialog(this);
     dialog.setFileMode(QFileDialog::ExistingFiles);
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
 
