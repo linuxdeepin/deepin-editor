@@ -47,6 +47,9 @@ int main(int argc, char *argv[])
 {
     using namespace Dtk::Core;
 
+    qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
+    QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
+
     EditorApplication app(argc, argv);
     //save theme
     DApplicationSettings savetheme;
