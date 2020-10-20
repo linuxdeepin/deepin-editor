@@ -1254,7 +1254,7 @@
     <message>
         <location filename="../src/window.cpp" line="1506"/>
         <source>Untitled %1</source>
-        <translation>Sem Título %1</translation>
+        <translation>Sem título %1</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1305"/>

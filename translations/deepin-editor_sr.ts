@@ -514,12 +514,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="93"/>
         <source>Mark</source>
-        <translation>Нагласи</translation>
+        <translation>Истакни</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="94"/>
         <source>Unmark</source>
-        <translation>Уклони наглашавање</translation>
+        <translation>Уклони истицање</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="95"/>
@@ -604,7 +604,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="115"/>
         <source>Color mark</source>
-        <translation>Наглашавање у боји</translation>
+        <translation>Истицање у боји</translation>
     </message>
 </context>
 <context>
@@ -910,7 +910,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="227"/>
         <source>Column Mode</source>
-        <translation>Режим колоне</translation>
+        <translation>Режим колона</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="230"/>
@@ -990,7 +990,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="174"/>
         <source>Color Mark</source>
-        <translation>Наглашавање у боји</translation>
+        <translation>Истицање у боји</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="210"/>
@@ -1005,12 +1005,12 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="177"/>
         <source>Clear All Marks</source>
-        <translation>Уклони сва наглашавања</translation>
+        <translation>Уклони сва истицања</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="179"/>
         <source>Clear Last Mark</source>
-        <translation>Уклони последње наглашавање</translation>
+        <translation>Уклони последње истицање</translation>
     </message>
     <message>
         <source>Style 1</source>
@@ -1031,7 +1031,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="227"/>
         <source>Column Mode</source>
-        <translation>Режим колоне</translation>
+        <translation>Режим колона</translation>
     </message>
     <message>
         <source>Add comment</source>

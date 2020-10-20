@@ -128,7 +128,7 @@
     <message>
         <location filename="../src/main.cpp" line="65"/>
         <source>Text Editor</source>
-        <translation>Text Editor</translation>
+        <translation>Texteditor</translation>
     </message>
 </context>
 <context>
@@ -148,7 +148,7 @@
     <message>
         <location filename="../src/main.cpp" line="62"/>
         <source>Text Editor</source>
-        <translation>Text Editor</translation>
+        <translation>Texteditor</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="24"/>
@@ -187,7 +187,7 @@
     </message>
     <message>
         <source>Decrease font size</source>
-        <translation type="vanished">Schriftgröße verkleinern</translation>
+        <translation type="vanished">Schriftgröße verringern</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="58"/>
@@ -249,7 +249,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="37"/>
         <source>Previous tab</source>
-        <translation>Voriger Tab</translation>
+        <translation>Vorheriger Tab</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="38"/>
@@ -289,7 +289,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="46"/>
         <source>Toggle fullscreen</source>
-        <translation>Vollbildmodus einschalten/ausschalten</translation>
+        <translation>Vollbildmodus umschalten</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="45"/>
@@ -349,7 +349,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="57"/>
         <source>Decrease indent</source>
-        <translation>Einrückung verkleinern</translation>
+        <translation>Einrückung verringern</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="60"/>
@@ -394,7 +394,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="68"/>
         <source>Delete to end of line</source>
-        <translation>Ende der Zeile entfernen</translation>
+        <translation>Ende der Zeile löschen</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="69"/>
@@ -544,12 +544,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="99"/>
         <source>Add comment</source>
-        <translation type="unfinished"/>
+        <translation>Kommentar hinzufügen</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="100"/>
         <source>Remove comment</source>
-        <translation type="unfinished"/>
+        <translation>Kommentar entfernen</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="101"/>
@@ -559,12 +559,12 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="102"/>
         <source>Redo</source>
-        <translation>Wiederholen</translation>
+        <translation>Wiederherstellen</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="103"/>
         <source>Add/Remove bookmark</source>
-        <translation type="unfinished"/>
+        <translation>Lesezeichen hinzufügen/entfernen</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="104"/>
@@ -594,17 +594,17 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="113"/>
         <source>Show line numbers</source>
-        <translation type="unfinished"/>
+        <translation>Zeilennummern anzeigen</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="114"/>
         <source>Show blank characters</source>
-        <translation type="unfinished"/>
+        <translation>Leerzeichen anzeigen</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="115"/>
         <source>Color mark</source>
-        <translation type="unfinished"/>
+        <translation>Farbmarkierung</translation>
     </message>
 </context>
 <context>
@@ -700,7 +700,7 @@
     </message>
     <message>
         <source>%1 is invalid</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">%1 ist ungültig</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="480"/>
@@ -715,7 +715,7 @@
     <message>
         <location filename="../src/settings.cpp" line="483"/>
         <source>OK</source>
-        <translation type="unfinished"/>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -799,7 +799,7 @@
     <message>
         <location filename="../src/tabbar.cpp" line="403"/>
         <source>More options</source>
-        <translation type="unfinished"/>
+        <translation>Weitere Optionen</translation>
     </message>
     <message>
         <location filename="../src/tabbar.cpp" line="404"/>
@@ -832,7 +832,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="141"/>
         <source>Redo</source>
-        <translation>Wiederholen</translation>
+        <translation>Wiederherstellen</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="142"/>
@@ -852,7 +852,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="145"/>
         <source>Delete</source>
-        <translation>Entfernen</translation>
+        <translation>Löschen</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="146"/>
@@ -899,23 +899,23 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="154"/>
         <source>Display in file manager</source>
-        <translation>Anzeige im Dateimanager</translation>
+        <translation>Im Dateimanager anzeigen</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="155"/>
         <location filename="../src/dtextedit.cpp" line="229"/>
         <source>Add Comment</source>
-        <translation type="unfinished"/>
+        <translation>Kommentar hinzufügen</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="227"/>
         <source>Column Mode</source>
-        <translation type="unfinished"/>
+        <translation>Spaltenmodus</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="230"/>
         <source>Remove Comment</source>
-        <translation type="unfinished"/>
+        <translation>Kommentar entfernen</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="230"/>
@@ -945,27 +945,27 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="160"/>
         <source>Add bookmark</source>
-        <translation type="unfinished"/>
+        <translation>Lesezeichen hinzufügen</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="161"/>
         <source>Remove Bookmark</source>
-        <translation type="unfinished"/>
+        <translation>Lesezeichen entfernen</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="162"/>
         <source>Previous bookmark</source>
-        <translation type="unfinished"/>
+        <translation>Vorheriges Lesezeichen</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="163"/>
         <source>Next bookmark</source>
-        <translation type="unfinished"/>
+        <translation>Nächstes Lesezeichen</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="164"/>
         <source>Remove All Bookmarks</source>
-        <translation type="unfinished"/>
+        <translation>Alle Lesezeichen entfernen</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="165"/>
@@ -990,12 +990,12 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="174"/>
         <source>Color Mark</source>
-        <translation type="unfinished"/>
+        <translation>Farbmarkierung</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="210"/>
         <source>Mark All</source>
-        <translation type="unfinished"/>
+        <translation>Alles markieren</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="193"/>
@@ -1005,42 +1005,42 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="177"/>
         <source>Clear All Marks</source>
-        <translation type="unfinished"/>
+        <translation>Alle Markierungen löschen</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="179"/>
         <source>Clear Last Mark</source>
-        <translation type="unfinished"/>
+        <translation>Letzte Markierung löschen</translation>
     </message>
     <message>
         <source>Style 1</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Stil 1</translation>
     </message>
     <message>
         <source>Style 2</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Stil 2</translation>
     </message>
     <message>
         <source>Style 3</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Stil 3</translation>
     </message>
     <message>
         <source>Style 4</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Stil 4</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="227"/>
         <source>Column Mode</source>
-        <translation type="unfinished"/>
+        <translation>Spaltenmodus</translation>
     </message>
     <message>
         <source>Add comment</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Kommentar hinzufügen</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="230"/>
         <source>Remove Comment</source>
-        <translation type="unfinished"/>
+        <translation>Kommentar entfernen</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="289"/>
@@ -1170,12 +1170,12 @@
     <message>
         <location filename="../src/window.cpp" line="1399"/>
         <source>Ctrl+&apos;=&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Strg+&apos;=&apos;</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1402"/>
         <source>Ctrl+&apos;-&apos;</source>
-        <translation type="unfinished"/>
+        <translation>Strg+&apos;-&apos;</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1906"/>
@@ -1208,7 +1208,7 @@
     <message>
         <location filename="../src/window.cpp" line="531"/>
         <source>Do you want to save this file?</source>
-        <translation>Wollen Sie diese Datei speichern?</translation>
+        <translation>Möchten Sie diese Datei speichern?</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="868"/>
@@ -1249,7 +1249,7 @@
         <location filename="../src/window.cpp" line="1547"/>
         <location filename="../src/window.cpp" line="2051"/>
         <source>Do you want to save all the files?</source>
-        <translation>Wollen Sie alle Dateien speichern?</translation>
+        <translation>Möchten Sie alle Dateien speichern?</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="1506"/>

@@ -1,6 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="zh_TW">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_TW" version="2.1">
+<context>
+    <name>BookMarkWidget</name>
+    <message>
+        <source>Add bookmark</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
 <context>
     <name>BottomBar</name>
     <message>
@@ -22,56 +27,56 @@
 <context>
     <name>EditWrapper</name>
     <message>
-        <location filename="../src/editwrapper.cpp" line="594"/>
+        <location filename="../src/editwrapper.cpp" line="592"/>
         <source>File has changed on disk. Reload?</source>
         <translation>磁碟上的檔案已被更改。是否重新載入？</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="597"/>
+        <location filename="../src/editwrapper.cpp" line="595"/>
         <source>File removed on the disk. Save it now?</source>
         <translation>磁碟上的檔案已被移除。是否現在儲存？</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="656"/>
-        <location filename="../src/widgets/bottombar.cpp" line="67"/>
+        <location filename="../src/editwrapper.cpp" line="653"/>
+        <location filename="../src/widgets/bottombar.cpp" line="66"/>
         <source>INSERT</source>
         <translation>插入</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="659"/>
+        <location filename="../src/editwrapper.cpp" line="656"/>
         <source>OVERWRITE</source>
         <translation>覆寫</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="662"/>
+        <location filename="../src/editwrapper.cpp" line="659"/>
         <source>R/O</source>
         <translation>唯讀</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="308"/>
+        <location filename="../src/editwrapper.cpp" line="306"/>
         <source>Encoding changed. Do you want to save the file now?</source>
         <translation>文件編碼已更改，是否先進行儲存？</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="311"/>
-        <location filename="../src/editwrapper.cpp" line="504"/>
+        <location filename="../src/editwrapper.cpp" line="309"/>
+        <location filename="../src/editwrapper.cpp" line="502"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="312"/>
-        <location filename="../src/editwrapper.cpp" line="340"/>
-        <location filename="../src/editwrapper.cpp" line="453"/>
+        <location filename="../src/editwrapper.cpp" line="310"/>
+        <location filename="../src/editwrapper.cpp" line="338"/>
+        <location filename="../src/editwrapper.cpp" line="451"/>
         <source>Save</source>
         <translation>儲存</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="501"/>
+        <location filename="../src/editwrapper.cpp" line="499"/>
         <source>There are errors when using this encoding. If continue, the file contents may be changed</source>
         <translation>使用此編碼載入文件出錯，如果強制使用，可能會導致文件內容發生改變</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="505"/>
+        <location filename="../src/editwrapper.cpp" line="503"/>
         <source>Continue</source>
         <translation>繼續</translation>
     </message>
@@ -95,6 +100,17 @@
     </message>
 </context>
 <context>
+    <name>FindWidget</name>
+    <message>
+        <source>Next</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Previous</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>JumpLineBar</name>
     <message>
         <location filename="../src/jumplinebar.cpp" line="41"/>
@@ -105,25 +121,32 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/editorapplication.cpp" line="7"/>
+        <location filename="../src/main.cpp" line="53"/>
         <source>Text Editor is a powerful tool for viewing and editing text files.</source>
         <translation>文字編輯器是一款用來查看和編輯文字文件的工具。</translation>
     </message>
     <message>
-        <location filename="../src/editorapplication.cpp" line="18"/>
+        <location filename="../src/main.cpp" line="65"/>
         <source>Text Editor</source>
         <translation>文字編輯器</translation>
     </message>
 </context>
 <context>
+    <name>NoteMenu</name>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>QObject</name>
     <message>
-        <location filename="../src/startmanager.cpp" line="409"/>
+        <location filename="../src/startmanager.cpp" line="267"/>
         <source>File not saved</source>
         <translation>文件未儲存</translation>
     </message>
     <message>
-        <location filename="../src/editorapplication.cpp" line="15"/>
+        <location filename="../src/main.cpp" line="62"/>
         <source>Text Editor</source>
         <translation>文字編輯器</translation>
     </message>
@@ -194,7 +217,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="31"/>
         <location filename="../src/settingsdialog.cpp" line="107"/>
-        <location filename="../src/window.cpp" line="1441"/>
+        <location filename="../src/window.cpp" line="1389"/>
         <source>Window</source>
         <translation>視窗</translation>
     </message>
@@ -271,7 +294,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="45"/>
         <source>Help</source>
-        <translation>幫助</translation>
+        <translation>說明</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="47"/>
@@ -301,7 +324,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="52"/>
         <source>Exit</source>
-        <translation>退出</translation>
+        <translation>離開</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="53"/>
@@ -575,12 +598,8 @@
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="114"/>
-        <source>Show whitespaces and tabs</source>
-        <translation>顯示空白字元</translation>
-    </message>
-    <message>
         <source>Show blank characters</source>
-        <translation type="vanished">顯示空白字元</translation>
+        <translation>顯示空白字元</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="115"/>
@@ -622,6 +641,21 @@
     </message>
 </context>
 <context>
+    <name>SaveDialog</name>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Discard</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Settings</name>
     <message>
         <location filename="../src/settings.cpp" line="92"/>
@@ -649,18 +683,18 @@
         <translation>全螢幕</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="328"/>
+        <location filename="../src/settings.cpp" line="320"/>
         <source>This shortcut conflicts with system shortcut %1</source>
         <translation>此快捷鍵與系統快捷鍵%1衝突</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="330"/>
+        <location filename="../src/settings.cpp" line="322"/>
         <source>This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately</source>
         <translation>此快捷鍵與%1衝突，點擊替換使這個快捷鍵立即生效</translation>
     </message>
     <message>
+        <location filename="../src/settings.cpp" line="437"/>
         <location filename="../src/settings.cpp" line="445"/>
-        <location filename="../src/settings.cpp" line="453"/>
         <source>The shortcut %1 is invalid, please set another one.</source>
         <translation>%1為無效快捷鍵，請重新設定</translation>
     </message>
@@ -669,50 +703,121 @@
         <translation type="vanished">此快捷鍵%1無效</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="488"/>
+        <location filename="../src/settings.cpp" line="480"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="489"/>
+        <location filename="../src/settings.cpp" line="481"/>
         <source>Replace</source>
         <translation>取代</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="491"/>
+        <location filename="../src/settings.cpp" line="483"/>
         <source>OK</source>
         <translation>確定</translation>
     </message>
 </context>
 <context>
+    <name>ShortCutShow</name>
+    <message>
+        <source>Settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Exit</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Help</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Page up</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Page down</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Save as</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Print</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Add bookmark</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Fullscreen</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Cut</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Paste</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Undo</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Select all</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Display shortcuts</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>Tabbar</name>
     <message>
-        <location filename="../src/tabbar.cpp" line="417"/>
+        <location filename="../src/tabbar.cpp" line="401"/>
         <source>Close tab</source>
         <translation>關閉標籤頁</translation>
     </message>
     <message>
-        <location filename="../src/tabbar.cpp" line="419"/>
+        <location filename="../src/tabbar.cpp" line="403"/>
         <source>More options</source>
         <translation>更多關閉方式</translation>
     </message>
     <message>
-        <location filename="../src/tabbar.cpp" line="420"/>
+        <location filename="../src/tabbar.cpp" line="404"/>
         <source>Close tabs to the left</source>
         <translation>關閉左側所有標籤頁</translation>
     </message>
     <message>
-        <location filename="../src/tabbar.cpp" line="421"/>
+        <location filename="../src/tabbar.cpp" line="405"/>
         <source>Close tabs to the right</source>
         <translation>關閉右側所有標籤頁</translation>
     </message>
     <message>
-        <location filename="../src/tabbar.cpp" line="422"/>
+        <location filename="../src/tabbar.cpp" line="406"/>
         <source>Close unmodified tabs</source>
         <translation>關閉所有未修改標籤頁</translation>
     </message>
     <message>
-        <location filename="../src/tabbar.cpp" line="418"/>
+        <location filename="../src/tabbar.cpp" line="402"/>
         <source>Close other tabs</source>
         <translation>關閉其他標籤頁</translation>
     </message>
@@ -720,191 +825,190 @@
 <context>
     <name>TextEdit</name>
     <message>
-        <location filename="../src/dtextedit.cpp" line="162"/>
+        <location filename="../src/dtextedit.cpp" line="140"/>
         <source>Undo</source>
         <translation>復原</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="163"/>
+        <location filename="../src/dtextedit.cpp" line="141"/>
         <source>Redo</source>
         <translation>重做</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="164"/>
+        <location filename="../src/dtextedit.cpp" line="142"/>
         <source>Cut</source>
         <translation>剪下</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="165"/>
+        <location filename="../src/dtextedit.cpp" line="143"/>
         <source>Copy</source>
         <translation>複製</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="166"/>
+        <location filename="../src/dtextedit.cpp" line="144"/>
         <source>Paste</source>
         <translation>貼上</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="167"/>
+        <location filename="../src/dtextedit.cpp" line="145"/>
         <source>Delete</source>
         <translation>刪除</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="168"/>
+        <location filename="../src/dtextedit.cpp" line="146"/>
         <source>Select All</source>
         <translation>全部選取</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="169"/>
-        <location filename="../src/window.cpp" line="253"/>
+        <location filename="../src/dtextedit.cpp" line="147"/>
+        <location filename="../src/window.cpp" line="261"/>
         <source>Find</source>
         <translation>尋找</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="170"/>
-        <location filename="../src/window.cpp" line="254"/>
+        <location filename="../src/dtextedit.cpp" line="148"/>
+        <location filename="../src/window.cpp" line="262"/>
         <source>Replace</source>
         <translation>取代</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="171"/>
+        <location filename="../src/dtextedit.cpp" line="149"/>
         <source>Go to Line</source>
         <translation>前往該行</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="172"/>
+        <location filename="../src/dtextedit.cpp" line="150"/>
         <source>Turn on Read-Only mode</source>
         <translation>開啟唯讀模式</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="173"/>
+        <location filename="../src/dtextedit.cpp" line="151"/>
         <source>Turn off Read-Only mode</source>
         <translation>關閉唯讀模式</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="174"/>
+        <location filename="../src/dtextedit.cpp" line="152"/>
         <source>Fullscreen</source>
         <translation>全螢幕</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="175"/>
+        <location filename="../src/dtextedit.cpp" line="153"/>
         <source>Exit fullscreen</source>
         <translation>退出全螢幕</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="176"/>
+        <location filename="../src/dtextedit.cpp" line="154"/>
         <source>Display in file manager</source>
         <translation>在檔案管理器中顯示</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="177"/>
-        <location filename="../src/dtextedit.cpp" line="252"/>
+        <location filename="../src/dtextedit.cpp" line="155"/>
+        <location filename="../src/dtextedit.cpp" line="229"/>
         <source>Add Comment</source>
         <translation>添加注釋</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="182"/>
-        <location filename="../src/dtextedit.cpp" line="251"/>
+        <location filename="../src/dtextedit.cpp" line="227"/>
         <source>Column Mode</source>
         <translation>列編輯模式</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="253"/>
+        <location filename="../src/dtextedit.cpp" line="230"/>
         <source>Remove Comment</source>
         <translation>取消注釋</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="288"/>
+        <location filename="../src/dtextedit.cpp" line="230"/>
         <source>Press ALT and click lines to edit in column mode</source>
         <translation>請使用ALT+滑鼠點選切換列編輯模式</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="178"/>
+        <location filename="../src/dtextedit.cpp" line="156"/>
         <source>Text to Speech</source>
         <translation>語音朗讀</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="179"/>
+        <location filename="../src/dtextedit.cpp" line="157"/>
         <source>Stop reading</source>
         <translation>停止朗讀</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="180"/>
+        <location filename="../src/dtextedit.cpp" line="158"/>
         <source>Speech to Text</source>
         <translation>語音聽寫</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="181"/>
+        <location filename="../src/dtextedit.cpp" line="159"/>
         <source>Translate</source>
         <translation>文字翻譯</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="183"/>
+        <location filename="../src/dtextedit.cpp" line="160"/>
         <source>Add bookmark</source>
         <translation>添加書籤</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="184"/>
+        <location filename="../src/dtextedit.cpp" line="161"/>
         <source>Remove Bookmark</source>
         <translation>清除書籤</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="185"/>
+        <location filename="../src/dtextedit.cpp" line="162"/>
         <source>Previous bookmark</source>
         <translation>上一個書籤</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="186"/>
+        <location filename="../src/dtextedit.cpp" line="163"/>
         <source>Next bookmark</source>
         <translation>下一個書籤</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="187"/>
+        <location filename="../src/dtextedit.cpp" line="164"/>
         <source>Remove All Bookmarks</source>
         <translation>清除所有書籤</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="188"/>
+        <location filename="../src/dtextedit.cpp" line="165"/>
         <source>Fold All</source>
         <translation>摺疊所有層次</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="189"/>
+        <location filename="../src/dtextedit.cpp" line="166"/>
         <source>Fold Current Level</source>
         <translation>摺疊當前層次</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="190"/>
+        <location filename="../src/dtextedit.cpp" line="167"/>
         <source>Unfold All</source>
         <translation>展開所有層次</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="191"/>
+        <location filename="../src/dtextedit.cpp" line="168"/>
         <source>Unfold Current Level</source>
         <translation>展開當前層次</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="197"/>
+        <location filename="../src/dtextedit.cpp" line="174"/>
         <source>Color Mark</source>
         <translation>顏色標記</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="234"/>
+        <location filename="../src/dtextedit.cpp" line="210"/>
         <source>Mark All</source>
         <translation>標記所有</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="216"/>
+        <location filename="../src/dtextedit.cpp" line="193"/>
         <source>Mark</source>
         <translation>標記</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="200"/>
+        <location filename="../src/dtextedit.cpp" line="177"/>
         <source>Clear All Marks</source>
         <translation>清除所有標記</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="202"/>
+        <location filename="../src/dtextedit.cpp" line="179"/>
         <source>Clear Last Mark</source>
         <translation>清除上次標記</translation>
     </message>
@@ -925,64 +1029,74 @@
         <translation type="vanished">格式四</translation>
     </message>
     <message>
+        <location filename="../src/dtextedit.cpp" line="227"/>
+        <source>Column Mode</source>
+        <translation>列編輯模式</translation>
+    </message>
+    <message>
         <source>Add comment</source>
         <translation type="vanished">添加注釋</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="321"/>
+        <location filename="../src/dtextedit.cpp" line="230"/>
+        <source>Remove Comment</source>
+        <translation>取消注釋</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="289"/>
         <source>Change Case</source>
         <translation>變更大小寫</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="322"/>
+        <location filename="../src/dtextedit.cpp" line="290"/>
         <source>Upper Case</source>
         <translation>大寫</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="323"/>
+        <location filename="../src/dtextedit.cpp" line="291"/>
         <source>Lower Case</source>
         <translation>小寫</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="324"/>
+        <location filename="../src/dtextedit.cpp" line="292"/>
         <source>Capitalize</source>
         <translation>首字母大寫</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="375"/>
-        <location filename="../src/widgets/bottombar.cpp" line="74"/>
+        <location filename="../src/dtextedit.cpp" line="343"/>
+        <location filename="../src/widgets/bottombar.cpp" line="73"/>
         <source>None</source>
         <translation>無</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="1027"/>
+        <location filename="../src/dtextedit.cpp" line="977"/>
         <source>Selected line(s) copied</source>
         <translation>已複製選中行到剪貼簿</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="1033"/>
+        <location filename="../src/dtextedit.cpp" line="983"/>
         <source>Current line copied</source>
         <translation>已複製目前行到剪貼簿</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="1072"/>
+        <location filename="../src/dtextedit.cpp" line="1022"/>
         <source>Selected line(s) clipped</source>
         <translation>已剪下選中行到剪貼簿</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="1078"/>
+        <location filename="../src/dtextedit.cpp" line="1028"/>
         <source>Current line clipped</source>
         <translation>已剪下目前行到剪貼簿</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="3189"/>
+        <location filename="../src/dtextedit.cpp" line="2823"/>
         <source>Read-Only mode is off</source>
         <translation>唯讀模式已關閉</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="3196"/>
-        <location filename="../src/dtextedit.cpp" line="3204"/>
-        <location filename="../src/dtextedit.cpp" line="5693"/>
+        <location filename="../src/dtextedit.cpp" line="2830"/>
+        <location filename="../src/dtextedit.cpp" line="2838"/>
+        <location filename="../src/dtextedit.cpp" line="4996"/>
         <source>Read-Only mode is on</source>
         <translation>唯讀模式已開啟</translation>
     </message>
@@ -1006,155 +1120,155 @@
 <context>
     <name>Window</name>
     <message>
-        <location filename="../src/window.cpp" line="245"/>
+        <location filename="../src/window.cpp" line="253"/>
         <source>New window</source>
         <translation>建立新視窗</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="246"/>
+        <location filename="../src/window.cpp" line="254"/>
         <source>New tab</source>
         <translation>建立新標籤頁</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="247"/>
+        <location filename="../src/window.cpp" line="255"/>
         <source>Open file</source>
         <translation>開啟檔案</translation>
     </message>
     <message>
         <location filename="../src/warningnotices.cpp" line="17"/>
         <location filename="../src/widgets/toast.cpp" line="39"/>
-        <location filename="../src/window.cpp" line="249"/>
+        <location filename="../src/window.cpp" line="257"/>
         <source>Save as</source>
         <translation>另存新檔</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="250"/>
+        <location filename="../src/window.cpp" line="258"/>
         <source>Print</source>
         <translation>列印</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="251"/>
+        <location filename="../src/window.cpp" line="259"/>
         <source>Switch theme</source>
         <translation>切換主題</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="368"/>
-        <location filename="../src/window.cpp" line="2116"/>
+        <location filename="../src/window.cpp" line="356"/>
+        <location filename="../src/window.cpp" line="1988"/>
         <source>Read-Only</source>
         <translation>唯讀</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="888"/>
+        <location filename="../src/window.cpp" line="841"/>
         <source>Saved successfully</source>
         <translation>儲存成功</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1197"/>
+        <location filename="../src/window.cpp" line="1145"/>
         <source>Read-Only mode is on</source>
         <translation>唯讀模式已開啟</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1451"/>
+        <location filename="../src/window.cpp" line="1399"/>
         <source>Ctrl+&apos;=&apos;</source>
         <translation>Ctrl+&apos;=&apos;</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1454"/>
+        <location filename="../src/window.cpp" line="1402"/>
         <source>Ctrl+&apos;-&apos;</source>
         <translation>Ctrl+&apos;-&apos;</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="2009"/>
+        <location filename="../src/window.cpp" line="1906"/>
         <source>Discard</source>
         <translation>捨棄</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="252"/>
-        <location filename="../src/window.cpp" line="1501"/>
+        <location filename="../src/window.cpp" line="260"/>
+        <location filename="../src/window.cpp" line="1449"/>
         <source>Settings</source>
         <translation>設定</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="398"/>
+        <location filename="../src/window.cpp" line="386"/>
         <source>You do not have permission to open %1</source>
         <translation>您沒有權限開啟 %1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="436"/>
+        <location filename="../src/window.cpp" line="424"/>
         <source>Invalid file: %1</source>
         <translation>無效檔案：%1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="913"/>
-        <location filename="../src/window.cpp" line="993"/>
-        <location filename="../src/window.cpp" line="1054"/>
+        <location filename="../src/window.cpp" line="866"/>
+        <location filename="../src/window.cpp" line="946"/>
+        <location filename="../src/window.cpp" line="1007"/>
         <source>Save File</source>
         <translation>儲存檔案</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="560"/>
+        <location filename="../src/window.cpp" line="531"/>
         <source>Do you want to save this file?</source>
         <translation>是否儲存此檔案？</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="915"/>
-        <location filename="../src/window.cpp" line="930"/>
-        <location filename="../src/window.cpp" line="995"/>
-        <location filename="../src/window.cpp" line="1010"/>
-        <location filename="../src/window.cpp" line="1056"/>
-        <location filename="../src/window.cpp" line="1071"/>
+        <location filename="../src/window.cpp" line="868"/>
+        <location filename="../src/window.cpp" line="883"/>
+        <location filename="../src/window.cpp" line="948"/>
+        <location filename="../src/window.cpp" line="963"/>
+        <location filename="../src/window.cpp" line="1009"/>
+        <location filename="../src/window.cpp" line="1024"/>
         <source>Encoding</source>
         <translation>編碼方式</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="916"/>
-        <location filename="../src/window.cpp" line="931"/>
-        <location filename="../src/window.cpp" line="996"/>
-        <location filename="../src/window.cpp" line="1011"/>
-        <location filename="../src/window.cpp" line="1057"/>
-        <location filename="../src/window.cpp" line="1072"/>
+        <location filename="../src/window.cpp" line="869"/>
+        <location filename="../src/window.cpp" line="884"/>
+        <location filename="../src/window.cpp" line="949"/>
+        <location filename="../src/window.cpp" line="964"/>
+        <location filename="../src/window.cpp" line="1010"/>
+        <location filename="../src/window.cpp" line="1025"/>
         <source>Line Endings</source>
         <translation>每行結尾</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1483"/>
+        <location filename="../src/window.cpp" line="1431"/>
         <source>Editor</source>
         <translation>編輯器</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="831"/>
+        <location filename="../src/window.cpp" line="784"/>
         <source>You do not have permission to save %1</source>
         <translation>您沒有權限儲存 %1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="874"/>
+        <location filename="../src/window.cpp" line="827"/>
         <source>Do you want to save as another?</source>
         <translation>確定另存為其他檔案？</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1646"/>
-        <location filename="../src/window.cpp" line="2176"/>
+        <location filename="../src/window.cpp" line="1547"/>
+        <location filename="../src/window.cpp" line="2051"/>
         <source>Do you want to save all the files?</source>
         <translation>確定全部儲存？</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1605"/>
+        <location filename="../src/window.cpp" line="1506"/>
         <source>Untitled %1</source>
         <translation>未命名文件%1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1357"/>
+        <location filename="../src/window.cpp" line="1305"/>
         <source>Current location remembered</source>
         <translation>已記住目前位置</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="2008"/>
+        <location filename="../src/window.cpp" line="1905"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="248"/>
-        <location filename="../src/window.cpp" line="2010"/>
+        <location filename="../src/window.cpp" line="256"/>
+        <location filename="../src/window.cpp" line="1907"/>
         <source>Save</source>
         <translation>儲存</translation>
     </message>

@@ -690,7 +690,7 @@
     <message>
         <location filename="../src/settings.cpp" line="322"/>
         <source>This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately</source>
-        <translation>Ce raccourci entre en conflit avec %1, cliquer sur Remplacer pour rendre ce raccourci effectif immédiatement</translation>
+        <translation>Ce raccourci entre en conflit avec %1, cliquez sur Remplacer pour rendre ce raccourci effectif immédiatement</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="437"/>

@@ -61,7 +61,7 @@
         <location filename="../src/editwrapper.cpp" line="309"/>
         <location filename="../src/editwrapper.cpp" line="502"/>
         <source>Cancel</source>
-        <translation>Storno</translation>
+        <translation>Zrušit</translation>
     </message>
     <message>
         <location filename="../src/editwrapper.cpp" line="310"/>
@@ -690,7 +690,7 @@
     <message>
         <location filename="../src/settings.cpp" line="322"/>
         <source>This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately</source>
-        <translation>Tato zkratka koliduje s %1 – klikněte na Nahradit, pokud chcete, aby začala platit pro tuto akci</translation>
+        <translation>Tato zkratka koliduje s %1 – klepněte na Nahradit, pokud chcete, aby začala platit pro tuto akci</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="437"/>
@@ -705,7 +705,7 @@
     <message>
         <location filename="../src/settings.cpp" line="480"/>
         <source>Cancel</source>
-        <translation>Storno</translation>
+        <translation>Zrušit</translation>
     </message>
     <message>
         <location filename="../src/settings.cpp" line="481"/>
@@ -920,7 +920,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="230"/>
         <source>Press ALT and click lines to edit in column mode</source>
-        <translation>Pro upravování ve sloupcovém režimu stiskněte ALT a klikejte na řádky</translation>
+        <translation>Pro upravování ve sloupcovém režimu stiskněte ALT a klepejte na řádky</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="156"/>
@@ -1264,7 +1264,7 @@
     <message>
         <location filename="../src/window.cpp" line="1905"/>
         <source>Cancel</source>
-        <translation>Storno</translation>
+        <translation>Zrušit</translation>
     </message>
     <message>
         <location filename="../src/window.cpp" line="256"/>
