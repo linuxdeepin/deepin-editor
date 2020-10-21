@@ -2451,8 +2451,6 @@ void TextEdit::tapGestureTriggered(QTapGesture *tap)
 {
     this->clearFocus();
     //单指点击函数
-    qobject_cast<Window *>(this->window())->decrementFontSize();
-    qobject_cast<Window *>(this->window())->incrementFontSize();
     switch (tap->state()) {
     case Qt::GestureStarted:
     {
@@ -5228,9 +5226,6 @@ void TextEdit::mousePressEvent(QMouseEvent *e)
         m_bIsFindClose = false;
         removeKeywords();
     }
-
-    qobject_cast<Window *>(this->window())->decrementFontSize();
-    qobject_cast<Window *>(this->window())->incrementFontSize();
     if (Qt::MouseEventSynthesizedByQt == e->source()) {
         m_startY = e->y();
         m_startX = e->x();
