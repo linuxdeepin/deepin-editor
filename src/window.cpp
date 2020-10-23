@@ -756,7 +756,8 @@ void Window::removeWrapper(const QString &filePath, bool isDelete)
         if (isDelete) {
             //wrapper->deleteLater();
             disconnect(wrapper->textEditor(), 0, this, 0);
-            delete wrapper;
+            wrapper->setQuitFlag();
+            wrapper->deleteLater();
             wrapper = nullptr;
         }
 
@@ -2200,7 +2201,8 @@ void Window::closeEvent(QCloseEvent *e)
                     if (!wrapper->textEditor()->document()->isModified()) {
                         m_wrappers.remove(wrapper->filePath());
                         disconnect(wrapper->textEditor(), 0, this, 0);
-                        delete wrapper;
+                        wrapper->setQuitFlag();
+                        wrapper->deleteLater();
                     } else {
                         hide();
 
@@ -2209,7 +2211,8 @@ void Window::closeEvent(QCloseEvent *e)
                             // remove all signals on this connection.
                             m_wrappers.remove(wrapper->filePath());
                             disconnect(wrapper->textEditor(), 0, this, 0);
-                            delete wrapper;
+                            wrapper->setQuitFlag();
+                            wrapper->deleteLater();
                         }
                     }
                 }
@@ -2220,7 +2223,8 @@ void Window::closeEvent(QCloseEvent *e)
                 for (EditWrapper *wrapper : wrappers) {
                     m_wrappers.remove(wrapper->filePath());
                     disconnect(wrapper->textEditor(), 0, this, 0);
-                    delete wrapper;
+                    wrapper->setQuitFlag();
+                    wrapper->deleteLater();
                 }
             }
         });
@@ -2235,7 +2239,8 @@ void Window::closeEvent(QCloseEvent *e)
         for (EditWrapper *wrapper : wrappers) {
             m_wrappers.remove(wrapper->filePath());
             disconnect(wrapper->textEditor(), 0, this, 0);
-            delete wrapper;
+            wrapper->setQuitFlag();
+            wrapper->deleteLater();
         }
     }
 

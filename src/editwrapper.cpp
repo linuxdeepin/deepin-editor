@@ -83,6 +83,12 @@ EditWrapper::~EditWrapper()
     //delete m_waringNotices;
 }
 
+void EditWrapper::setQuitFlag()
+{
+    m_bQuit = true;
+    QApplication::processEvents();
+}
+
 
 void EditWrapper::openFile(const QString &filepath)
 {
@@ -724,7 +730,62 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QString 
     // set text.
     m_textEdit->loadHighlighter();
     m_textEdit->clear();
-    m_textEdit->setPlainText(content);
+
+    //tab点击关闭
+    m_bQuit = false;
+    QTextDocument *doc = m_textEdit->document();
+    QTextCursor cursor = m_textEdit->textCursor();
+    int len = content.length();
+    //初始化显示文本大小
+    int InitContentPos = 5*1024;
+    //每次读取文件步长
+    int step = 1*1024*1024;
+    //循环读取次数
+    int cnt = len / step;
+    //文件末尾余数
+    int mod = len % step;
+
+    int max = 40*1024*1024;
+    QString data;
+    if(len > max){
+        for (int i = 0; i < cnt; i++) {
+            //初始化秒开
+            if(i == 0 && !m_bQuit){
+              data = content.mid(i*step,InitContentPos);
+              cursor.insertText(data);
+              QApplication::processEvents();
+              continue;
+            }
+            if(!m_bQuit){
+                data= content.mid(i*step,step);
+                cursor.insertText(data);
+                QApplication::processEvents();
+                if(!m_bQuit && i == cnt -1 && mod > 0){
+                    data = content.mid(cnt*step,mod);
+                    cursor.insertText(data);
+                    QApplication::processEvents();
+                }
+            }
+        }
+
+    }else {
+        //初始化秒开
+        if(!m_bQuit && len > InitContentPos){
+            data = content.mid(0,InitContentPos);
+            cursor.insertText(data);
+            QApplication::processEvents();
+
+            if(!m_bQuit){
+                data = content.mid(InitContentPos,len-InitContentPos);
+                cursor.insertText(data);
+            }
+        }else {
+           if(!m_bQuit) cursor.insertText(content);
+        }
+    }
+
+    if(m_bQuit) return;
+
     m_textEdit->setTextFinished();
 
 //    m_textEdit->clearBlack();

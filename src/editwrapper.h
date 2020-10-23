@@ -58,7 +58,7 @@ public:
 
     //清除焦点　梁卫东　２０２０－０９－１４　１１：００：５０
     void clearAllFocus();
-
+    void setQuitFlag();
     void openFile(const QString &filepath);
     bool saveFile();
     bool saveAsFile(const QString &newFilePath, QByteArray encodeName);
@@ -86,7 +86,7 @@ private:
     void detectEndOfLine();
     void handleCursorModeChanged(TextEdit::CursorMode mode);
     void handleHightlightChanged(const QString &name);
-    void handleFileLoadFinished(const QByteArray &encode,const QString &content);
+
     void setTextCodec(QTextCodec *codec, bool reload = false);
 
     int GetCorrectUnicode1(const QByteArray &ba);
@@ -95,7 +95,7 @@ private:
 public slots:
     void onFileClosed();
     void slotTextChange();
-
+    void handleFileLoadFinished(const QByteArray &encode,const QString &content);
 signals:
     void requestSaveAs();
     void sigCodecSaveFile(const QString &strOldFilePath, const QString &strNewFilePath);
@@ -115,6 +115,7 @@ private:
     bool m_bTextChange = true;
     QByteArray m_BeforeEncodeName {"UTF-8"};
     bool m_bIsContinue;
+    bool m_bQuit = false;
 };
 
 #endif
