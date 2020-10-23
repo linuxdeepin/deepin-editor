@@ -24,6 +24,7 @@
 #include "dtextedit.h"
 #include "widgets/bottombar.h"
 #include "warningnotices.h"
+#include "performancemonitor.h"
 
 #include <QVBoxLayout>
 #include <QWidget>

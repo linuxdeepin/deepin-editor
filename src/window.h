@@ -32,6 +32,7 @@
 #include "settings.h"
 #include "tabbar.h"
 #include "thememodule/themepanel.h"
+#include "performancemonitor.h"
 
 #include <QWidget>
 #include <QStackedWidget>
@@ -41,7 +42,7 @@
 #include <DMessageManager>
 #include <DGuiApplicationHelper>
 #include <qprintpreviewdialog.h>
-#include<dprintpreviewdialog.h>
+#include <dprintpreviewdialog.h>
 
 DWIDGET_USE_NAMESPACE
 

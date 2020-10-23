@@ -27,6 +27,7 @@
 #include "dtoast.h"
 #include "utils.h"
 #include "startmanager.h"
+#include "performancemonitor.h"
 
 #include <DSettingsWidgetFactory>
 #include <DSettingsGroup>
@@ -791,6 +792,7 @@ void Window::openFile()
 
     const int mode = dialog.exec();
 
+    PerformanceMonitor::openFileStart();
     // save the directory string.
     m_settings->settings->option("advance.editor.file_dialog_dir")->setValue(dialog.directoryUrl().toLocalFile());
 
@@ -2171,6 +2173,7 @@ void Window::resizeEvent(QResizeEvent *e)
 
 void Window::closeEvent(QCloseEvent *e)
 {
+    PerformanceMonitor::closeAppStart();
     e->ignore();
     QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
 

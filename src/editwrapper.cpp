@@ -784,6 +784,8 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QString 
         }
     }
 
+    PerformanceMonitor::openFileFinish(filePath(), QFileInfo(filePath()).size());
+
     if(m_bQuit) return;
 
     m_textEdit->setTextFinished();

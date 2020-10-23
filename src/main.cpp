@@ -39,7 +39,9 @@
 #include <QScreen>
 #include <iostream>
 #include <DApplicationSettings>
-#include"editorapplication.h"
+
+#include "editorapplication.h"
+#include "performancemonitor.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -47,15 +49,15 @@ int main(int argc, char *argv[])
 {
     using namespace Dtk::Core;
 
+    PerformanceMonitor::initializeAppStart();
     qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
     QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
 
     EditorApplication app(argc, argv);
-    //save theme
-    DApplicationSettings savetheme;
-
     Dtk::Core::DLogManager::registerConsoleAppender();
     Dtk::Core::DLogManager::registerFileAppender();
+    //save theme
+    DApplicationSettings savetheme;
 
     // Parser input arguments.
     QCommandLineParser parser;
@@ -87,6 +89,7 @@ int main(int argc, char *argv[])
 
         dbus.registerObject("/com/deepin/Editor", startManager, QDBusConnection::ExportScriptableSlots);
 
+        PerformanceMonitor::initializAppFinish();
         return app.exec();
     }
     // Just send dbus message to exist editor process.
