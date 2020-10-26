@@ -4741,19 +4741,19 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                     selection.format.setProperty(QTextFormat::FullWidthSelection, true);
 
                     QTextBlock startblock;
+                    QTextBlock endblock = document()->findBlockByNumber(iLine);
 //                    if (line == 1 && document()->findBlockByNumber(0).text().trimmed().startsWith("{")) {
 //                        startblock = document()->findBlockByNumber(line - 1);
 //                    } else {
                         startblock = document()->findBlockByNumber(line - 1);
 //                    }
-
                     QTextCursor beginCursor(startblock);
                     beginCursor.setPosition(startblock.position() + startblock.text().indexOf("{"), QTextCursor::MoveAnchor);
 
 //                    if (line == 1 && document()->findBlockByNumber(0).text().trimmed().startsWith("{")) {
 //                        beginCursor.movePosition(QTextCursor::Down, QTextCursor::KeepAnchor, iLine - line + 2);
 //                    } else {
-                        beginCursor.movePosition(QTextCursor::Down, QTextCursor::KeepAnchor, iLine - line + 2);
+                        beginCursor.setPosition(endblock.position() + endblock.text().indexOf("}") + 1, QTextCursor::KeepAnchor);
 //                    }
                     if (iLine == document()->blockCount() - 1)
                      beginCursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
