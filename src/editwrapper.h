@@ -60,6 +60,7 @@ public:
     //清除焦点　梁卫东　２０２０－０９－１４　１１：００：５０
     void clearAllFocus();
     void setQuitFlag();
+    bool getFileLoading();
     void openFile(const QString &filepath);
     bool saveFile();
     bool saveAsFile(const QString &newFilePath, QByteArray encodeName);
@@ -117,6 +118,7 @@ private:
     QByteArray m_BeforeEncodeName {"UTF-8"};
     bool m_bIsContinue;
     bool m_bQuit = false;
+    bool m_bFileLoading = false;
 };
 
 #endif

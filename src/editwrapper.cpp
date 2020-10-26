@@ -39,7 +39,7 @@ DCORE_USE_NAMESPACE
 EditWrapper::EditWrapper(QWidget *parent)
     : QWidget(parent),
       m_layout(new QHBoxLayout),
-      m_textEdit(new TextEdit),
+      m_textEdit(new TextEdit(this)),
       m_textCodec(QTextCodec::codecForName("UTF-8")),
       m_bottomBar(new BottomBar(this)),
       m_endOfLineMode(eolUnix),
@@ -79,14 +79,21 @@ EditWrapper::EditWrapper(QWidget *parent)
 
 EditWrapper::~EditWrapper()
 {
-    delete m_textEdit;
+  // if(m_textEdit)
+   //    m_textEdit->deleteLater();
     //delete m_waringNotices;
 }
 
 void EditWrapper::setQuitFlag()
 {
     m_bQuit = true;
-    QApplication::processEvents();
+    //m_bFileLoading = true;
+    //QApplication::processEvents();
+}
+
+bool EditWrapper::getFileLoading()
+{
+    return (m_bQuit || m_bFileLoading);
 }
 
 
@@ -719,6 +726,8 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QString 
 
     m_isLoadFinished = true;
 
+    m_bFileLoading = true;
+
     m_BeforeEncodeName = encode;
     if (m_BeforeEncodeName.isEmpty()) {
         QString str = "UTF-8";
@@ -784,7 +793,10 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QString 
         }
     }
 
+
     PerformanceMonitor::openFileFinish(filePath(), QFileInfo(filePath()).size());
+
+    m_bFileLoading = false;
 
     if(m_bQuit) return;
 

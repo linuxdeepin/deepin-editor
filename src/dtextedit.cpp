@@ -2833,8 +2833,8 @@ void TextEdit::setSettings(Settings *keySettings)
 
 void TextEdit::setModified(bool modified)
 {
+    if(m_wrapper->getFileLoading()) return;
     document()->setModified(modified);
-
     emit modificationChanged(filepath, modified);
 }
 

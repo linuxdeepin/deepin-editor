@@ -556,6 +556,8 @@ void Window::closeTab()
     // this property holds whether the document has been modified by the user
     bool isModified = wrapper->textEditor()->document()->isModified();
 
+    if(wrapper->getFileLoading()) isModified = false;
+
     // document has been modified or unsaved draft document.
     // need to prompt whether to save.
     if (isModified || (isBlankFile && !wrapper->textEditor()->toPlainText().isEmpty())) {
@@ -756,10 +758,9 @@ void Window::removeWrapper(const QString &filePath, bool isDelete)
 
         if (isDelete) {
             //wrapper->deleteLater();
-            disconnect(wrapper->textEditor(), 0, this, 0);
+            disconnect(wrapper->textEditor(),nullptr);
             wrapper->setQuitFlag();
             wrapper->deleteLater();
-            wrapper = nullptr;
         }
 
         // remove all signals on this connection.
@@ -2186,7 +2187,7 @@ void Window::closeEvent(QCloseEvent *e)
             continue;
         }
 
-        if (wrapper->textEditor()->document()->isModified()) {
+        if (!wrapper->getFileLoading() && wrapper->textEditor()->document()->isModified()) {
             needSaveList << wrapper;
         }
     }
