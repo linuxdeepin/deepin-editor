@@ -68,6 +68,7 @@ signals:
     void adjustFontSize(int fontSize);
     void adjustTabSpaceNumber(int number);
     void adjustWordWrap(bool enable);
+    void adjustBookmark(bool enable);
     void showCodeFlodFlag(bool enable);
     void showBlankCharacter(bool enable);
     void themeChanged(const QString &theme);

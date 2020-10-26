@@ -4,15 +4,15 @@
 
 #include <DApplication>
 #include <DPushButton>
-#include<QEvent>
+#include <QEvent>
 #include <QObject>
 #include <DSettingsDialog>
 #include <DDialog>
-#include<QKeyEvent>
+#include <QKeyEvent>
 #include <QObject>
-#include<QTimer>
+#include <QTimer>
 #include <QSharedMemory>
-#include"startmanager.h"
+#include "startmanager.h"
 
 DWIDGET_USE_NAMESPACE
 
@@ -21,7 +21,7 @@ class EditorApplication:public DApplication
     Q_OBJECT
 public:
     EditorApplication(int &argc, char *argv[]);
-    ~EditorApplication();
+    ~EditorApplication() override;
 protected:
     void handleQuitAction()override;
     bool notify(QObject *object, QEvent *event) override;

@@ -267,6 +267,7 @@ public:
 
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     void codeFLodAreaPaintEvent(QPaintEvent *event);
+    void setBookmarkFlagVisable(bool isVisable,bool bIsFirstOpen = false);
     void setCodeFlodFlagVisable(bool isVisable,bool bIsFirstOpen = false);
     void setThemeWithPath(const QString &path);
     void setTheme(const KSyntaxHighlighting::Theme &theme, const QString &path);
@@ -565,6 +566,7 @@ private:
 public:
     bool bIsSetLineNumberWidth = true;
     bool m_pIsShowCodeFoldArea;
+    bool m_pIsShowBookmarkArea;
 
 private:
     EditWrapper *m_wrapper;

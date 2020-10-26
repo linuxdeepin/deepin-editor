@@ -65,6 +65,16 @@ Settings::Settings(QWidget *parent)
         emit adjustWordWrap(value.toBool());
     });
 
+    auto showLineNumber = settings->option("base.font.showlinenumber");
+    connect(showLineNumber,&Dtk::Core::DSettingsOption::valueChanged,this,[=] (QVariant value){
+        emit setLineNumberShow(value.toBool());
+    });
+
+    auto bookmark = settings->option("base.font.showbookmark");
+    connect(bookmark, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
+        emit adjustBookmark(value.toBool());
+    });
+
     auto codeFlod = settings->option("base.font.codeflod");
     connect(codeFlod, &Dtk::Core::DSettingsOption::valueChanged, this, [ = ](QVariant value) {
         emit showCodeFlodFlag(value.toBool());
@@ -132,11 +142,6 @@ Settings::Settings(QWidget *parent)
             }
             m_userChangeKey = false;
         }
-    });
-
-    auto showLineNumber = settings->option("base.font.showlinenumber");
-    connect(showLineNumber,&Dtk::Core::DSettingsOption::valueChanged,this,[=] (QVariant value){
-        emit setLineNumberShow(value.toBool());
     });
 }
 

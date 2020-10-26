@@ -97,6 +97,13 @@ Window::Window(DMainWindow *parent)
        }
     });
 
+    connect(m_settings,&Settings::adjustBookmark,this,[=] (bool bIsShow) {
+       for(EditWrapper *wrapper : m_wrappers.values()) {
+           TextEdit *textedit = wrapper->textEditor();
+           textedit->setBookmarkFlagVisable(bIsShow);
+       }
+    });
+
     //添加显示空白符 梁卫东　２０２０－０８－１４　１５：２６：３２
     connect(m_settings,&Settings::showBlankCharacter,this,[=] (bool bIsShow) {
        for(EditWrapper *wrapper : m_wrappers.values()) {
@@ -827,7 +834,7 @@ void Window::openFile()
 bool Window::saveFile()
 {
     const QString &currentPath = m_tabbar->currentPath();
-    const QString &currentDir = QFileInfo(currentPath).absolutePath();
+    //const QString &currentDir = QFileInfo(currentPath).absolutePath();
     const QFileInfo fileInfo(currentPath);
     bool isBlankFile = fileInfo.dir().absolutePath() == m_blankFileDir;
 
@@ -837,15 +844,16 @@ bool Window::saveFile()
         temporaryBuffer.close();
         return false;
 
-        const QString content = getTextEditor(currentPath)->toPlainText();
-        bool saveResult = m_rootSaveDBus->saveFile(currentPath.toUtf8(), content.toUtf8(), "");
-        if (saveResult) {
-            getTextEditor(currentPath)->setModified(false);
-            showNotify(QString("Saved root file %1").arg(m_tabbar->currentName()));
-        } else {
-            showNotify(QString("Save root file %1 failed.").arg(m_tabbar->currentName()));
-        }
-        return saveResult;
+        //以下代码从未执行
+        //const QString content = getTextEditor(currentPath)->toPlainText();
+        //bool saveResult = m_rootSaveDBus->saveFile(currentPath.toUtf8(), content.toUtf8(), "");
+//        if (saveResult) {
+//            getTextEditor(currentPath)->setModified(false);
+//            showNotify(QString("Saved root file %1").arg(m_tabbar->currentName()));
+//        } else {
+//            showNotify(QString("Save root file %1 failed.").arg(m_tabbar->currentName()));
+//        }
+//        return saveResult;
     }
 
     temporaryBuffer.close();
@@ -1963,7 +1971,9 @@ void Window::showNewEditor(EditWrapper *wrapper)
     wrapper->setShowBlankCharacter(m_settings->settings->option("base.font.showblankcharacter")->value().toBool());
     //yanyuhan 设置行号显示
     wrapper->setLineNumberShow(m_settings->settings->option("base.font.showlinenumber")->value().toBool(),true);
+    wrapper->textEditor()->setBookmarkFlagVisable(m_settings->settings->option("base.font.showbookmark")->value().toBool(), true);
     wrapper->textEditor()->setCodeFlodFlagVisable(m_settings->settings->option("base.font.codeflod")->value().toBool(), true);
+    wrapper->textEditor()->updateLineNumber();
 }
 
 void Window::showNotify(const QString &message)
@@ -2037,10 +2047,9 @@ void Window::slotLoadContentTheme(DGuiApplicationHelper::ColorType themeType)
         }
     }
 
-    QString qstrColor;
+    QString qstrColor = palette().color(QPalette::Active,QPalette::Text).name();
 
     for (auto wrapper : m_wrappers) {
-        qstrColor = palette().color(QPalette::Active,QPalette::Text).name();
         wrapper->textEditor()->setEditPalette(qstrColor,qstrColor);
     }
 

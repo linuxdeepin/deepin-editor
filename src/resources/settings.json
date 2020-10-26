@@ -27,7 +27,7 @@
                             "name": "Word Wrap",
                             "type": "checkbox",
                             "text": "Word wrap",
-                            "default": "true"
+                            "default": "false"
                         },
                         {
 
@@ -35,7 +35,7 @@
                             "name":"CODE FLOD",
                             "type":"checkbox",
                             "text":"Code folding flag",
-                            "default":"true"
+                            "default":"false"
                         },
                         {
                             "key": "showlinenumber",
@@ -43,6 +43,13 @@
                             "type": "checkbox",
                             "text": "Show line numbers",
                             "default": "true"
+                        },
+                        {
+                            "key": "showbookmark",
+                            "name": "Show bookmark flag",
+                            "type": "checkbox",
+                            "text": "Show bookmark flag",
+                            "default": "false"
                         },
                         {
                             "key": "showblankcharacter",

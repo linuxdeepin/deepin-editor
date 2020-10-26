@@ -2059,15 +2059,16 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                    scaleunFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
                }
 
+               int nOffset = (m_pLeftAreaWidget->m_bookMarkArea->width() - scaleFoldPixmap.width())/2;
                if (block.next().isVisible()) {
                    if (block.isVisible()) {
                        imageTop = cursorRect(cur).y() + (cursorRect(cur).height() - scaleFoldPixmap.height())/2;
-                       painter.drawPixmap(5, imageTop/* - static_cast<int>(document()->documentMargin())*/, scaleFoldPixmap);
+                       painter.drawPixmap(nOffset, imageTop/* - static_cast<int>(document()->documentMargin())*/, scaleFoldPixmap);
                    }
                } else {
                    if (block.isVisible()) {
                        imageTop = cursorRect(cur).y() + (cursorRect(cur).height() - scaleunFoldPixmap.height())/2;
-                       painter.drawPixmap(5, imageTop/* - static_cast<int>(document()->documentMargin())*/, scaleunFoldPixmap);
+                       painter.drawPixmap(nOffset, imageTop/* - static_cast<int>(document()->documentMargin())*/, scaleunFoldPixmap);
                    }
                }
 
@@ -2079,6 +2080,23 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
     }
 }
 
+void TextEdit::setBookmarkFlagVisable(bool isVisable, bool bIsFirstOpen)
+{
+    int leftAreaWidth = m_pLeftAreaWidget->width();
+    int bookmarkAreaWidth = m_pLeftAreaWidget->m_bookMarkArea->width();
+
+    if(!bIsFirstOpen) {
+       if(isVisable) {
+           m_pLeftAreaWidget->setFixedWidth(leftAreaWidth + bookmarkAreaWidth);
+       } else {
+           m_pLeftAreaWidget->setFixedWidth(leftAreaWidth - bookmarkAreaWidth);
+       }
+    }
+
+    m_pIsShowBookmarkArea = isVisable;
+    m_pLeftAreaWidget->m_bookMarkArea->setVisible(isVisable);
+}
+
 void TextEdit::setCodeFlodFlagVisable(bool isVisable,bool bIsFirstOpen)
 {
    int leftAreaWidth = m_pLeftAreaWidget->width();
@@ -2087,7 +2105,7 @@ void TextEdit::setCodeFlodFlagVisable(bool isVisable,bool bIsFirstOpen)
 //    qDebug()<<"flodAreaWidth = "<<flodAreaWidth;
     if(!bIsFirstOpen) {
        if(isVisable) {
-           m_pLeftAreaWidget->setFixedWidth(leftAreaWidth+flodAreaWidth);
+           m_pLeftAreaWidget->setFixedWidth(leftAreaWidth + flodAreaWidth);
 //            qDebug()<<"isVisable = "<<isVisable;
 //            qDebug()<<"-----------------------leftAreaWidth = "<<m_pLeftAreaWidget->width();
        } else {
@@ -2104,24 +2122,39 @@ void TextEdit::updateLineNumber()
 {
     // Update line number painter.
     int blockSize = QString::number(blockCount()).size();
+    int leftAreaWidth = 0;
 
-//    m_pLeftAreaWidget->setFixedWidth(23 + blockSize * fontMetrics().width('9') + m_lineNumberPaddingX * 4);
+    if(m_pIsShowBookmarkArea) {
+        leftAreaWidth += m_pLeftAreaWidget->m_bookMarkArea->width();
+//        m_pLeftAreaWidget->setFixedWidth(m_pLeftAreaWidget->m_bookMarkArea->width() + blockSize * fontMetrics().width('9')
+//                                         + m_pLeftAreaWidget->m_flodArea->width());
+        //m_pLeftAreaWidget->setFixedWidth(leftAreaWidth);
+    } /*else {
+        m_pLeftAreaWidget->setFixedWidth(blockSize * fontMetrics().width('9') + m_pLeftAreaWidget->m_flodArea->width());
+    }*/
 
-//    m_pLeftAreaWidget->setFixedWidth(blockSize * fontMetrics().width('9') + m_lineNumberPaddingX * 4);
-
+//    if(m_pIsShowCodeFoldArea) {
+////        m_pLeftAreaWidget->setFixedWidth(23 + blockSize * fontMetrics().width('9') + m_lineNumberPaddingX * 4);
+//        m_pLeftAreaWidget->setFixedWidth(14 + blockSize * fontMetrics().width('9') + m_pLeftAreaWidget->m_bookMarkArea->width());
+//    } else {
+////        m_pLeftAreaWidget->setFixedWidth(blockSize * fontMetrics().width('9') + m_lineNumberPaddingX * 4);
+//        m_pLeftAreaWidget->setFixedWidth(blockSize * fontMetrics().width('9') + m_pLeftAreaWidget->m_bookMarkArea->width());
+//    }
 
     if(m_pIsShowCodeFoldArea) {
-//        m_pLeftAreaWidget->setFixedWidth(23 + blockSize * fontMetrics().width('9') + m_lineNumberPaddingX * 4);
-        m_pLeftAreaWidget->setFixedWidth(23 + blockSize * fontMetrics().width('9') + m_pLeftAreaWidget->m_bookMarkArea->width());
-    } else {
-//        m_pLeftAreaWidget->setFixedWidth(blockSize * fontMetrics().width('9') + m_lineNumberPaddingX * 4);
-        m_pLeftAreaWidget->setFixedWidth(blockSize * fontMetrics().width('9') + m_pLeftAreaWidget->m_bookMarkArea->width());
+        leftAreaWidth += m_pLeftAreaWidget->m_flodArea->width();
     }
 
-    if(!bIsSetLineNumberWidth) {
-        int leftAreaWidth = m_pLeftAreaWidget->width();
-        m_pLeftAreaWidget->setFixedWidth(leftAreaWidth - blockSize * fontMetrics().width('9'));
+//    if(!bIsSetLineNumberWidth) {
+////        int leftAreaWidth = m_pLeftAreaWidget->width();
+//        m_pLeftAreaWidget->setFixedWidth(leftAreaWidth - blockSize * fontMetrics().width('9'));
+//    }
+
+    if(bIsSetLineNumberWidth) {
+        leftAreaWidth += blockSize * fontMetrics().width('9');
     }
+
+    m_pLeftAreaWidget->setFixedWidth(leftAreaWidth);
     m_pLeftAreaWidget->m_bookMarkArea->update();
     m_pLeftAreaWidget->m_linenumberarea->update();
     m_pLeftAreaWidget->m_flodArea->update();
@@ -3498,7 +3531,8 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
 //                imageTop = startPoint + static_cast<int>(qFabs(fontHeight - scaleImage.height())/2);
 //            }
 
-            painter.drawPixmap(5,imageTop,scalePixmap);
+            int nOffset = (m_pLeftAreaWidget->m_bookMarkArea->width() - scalePixmap.width())/2;
+            painter.drawPixmap(nOffset,imageTop,scalePixmap);
 
         }
      }
@@ -4697,38 +4731,36 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                     m_foldCodeShow->move(0, getLinePosByLineNum(line - 1) + 5);
                 } else {
                     QTextCursor previousCursor = textCursor();
-                    int ivalue =  this->verticalScrollBar()->value();
-                    int iLine =  getHighLightRowContentLineNum(line-1);
+                    int ivalue = this->verticalScrollBar()->value();
+                    int iLine = getHighLightRowContentLineNum(line-1);
 
                     if(line-1 == iLine)   return false;
 
                     QTextEdit::ExtraSelection selection;
-
                     selection.format.setBackground(palette().background());
                     selection.format.setProperty(QTextFormat::FullWidthSelection, true);
 
                     QTextBlock startblock;
-                    if (line == 1 && document()->findBlockByNumber(0).text().trimmed().startsWith("{")) {
+//                    if (line == 1 && document()->findBlockByNumber(0).text().trimmed().startsWith("{")) {
+//                        startblock = document()->findBlockByNumber(line - 1);
+//                    } else {
                         startblock = document()->findBlockByNumber(line - 1);
-                    } else {
-                        startblock = document()->findBlockByNumber(line);
-                    }
-
+//                    }
 
                     QTextCursor beginCursor(startblock);
+                    beginCursor.setPosition(startblock.position() + startblock.text().indexOf("{"), QTextCursor::MoveAnchor);
 
-
-                    beginCursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
-                    if (line == 1 && document()->findBlockByNumber(0).text().trimmed().startsWith("{")) {
+//                    if (line == 1 && document()->findBlockByNumber(0).text().trimmed().startsWith("{")) {
+//                        beginCursor.movePosition(QTextCursor::Down, QTextCursor::KeepAnchor, iLine - line + 2);
+//                    } else {
                         beginCursor.movePosition(QTextCursor::Down, QTextCursor::KeepAnchor, iLine - line + 2);
-                    } else {
-                        beginCursor.movePosition(QTextCursor::Down, QTextCursor::KeepAnchor, iLine - line + 1);
-                    }
+//                    }
                     if (iLine == document()->blockCount() - 1)
                      beginCursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
 
                     setTextCursor(beginCursor);
                     selection.cursor = textCursor();
+                    selection.format.setBackground(palette().highlight());
                     m_markFoldHighLightSelections.push_back(selection);
 
                     renderAllSelections();
@@ -6382,7 +6414,7 @@ void FlashTween::__runX()
 {
     qreal tempValue = m_lastValueX;
     m_lastValueX = FlashTween::sinusoidalEaseOut(m_currentTimeX, m_beginValueX, abs(m_changeValueX), m_durationTimeX);
-    m_fSlideGestureX(m_directionX*(m_lastValueX-tempValue));
+    m_fSlideGestureX(m_directionX*(m_lastValueX - tempValue));
     //qDebug()<<"###############################"<<m_lastValue<<temp<<m_lastValue-temp;
 
     if(m_currentTimeX<m_durationTimeX){

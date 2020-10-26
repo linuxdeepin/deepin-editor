@@ -111,6 +111,7 @@ void GenerateSettingTranslate()
     auto base_font_wordwrapText = QObject::tr("Word wrap");
     auto base_font_codeflod = QObject::tr("Code folding flag");
     auto base_font_showLineNumber = QObject::tr("Show line numbers");
+    auto base_font_showBookmark = QObject::tr("Show bookmark flag");
     auto showblankcharacter = QObject::tr("Show whitespaces and tabs");
     auto shortcuts_editor_markName = QObject::tr("Color mark");
 }
