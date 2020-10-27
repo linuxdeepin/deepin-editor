@@ -92,10 +92,15 @@ void StartManager::openFilesInWindow(QStringList files)
     if (files.isEmpty()) {
         if (m_windows.count() >= 20)
             return;
+        QPoint startPoint = QApplication::focusWidget()->topLevelWidget()->mapToGlobal(QPoint(0,0));
         Window *window = createWindow();
-        window->showCenterWindow(true);
+        window->showCenterWindow(true);      
         window->addBlankTab();
         window->activateWindow();
+        QPoint point = QApplication::focusWidget()->topLevelWidget()->mapToGlobal(QPoint(0,0));
+        if (point.x() == startPoint.x() && point.y() == startPoint.y()) {
+            window->move(startPoint.x() + 10, startPoint.y() + 10);
+        }
     } else {
         for (const QString &file : files) {
             FileTabInfo info = getFileTabInfo(file);
@@ -140,9 +145,16 @@ void StartManager::openFilesInTab(QStringList files)
         // Just active first window if no file is need opened.
         else {
             // m_windows[0]->activateWindow();
+            QPoint startPoint = QApplication::focusWidget()->topLevelWidget()->mapToGlobal(QPoint(0,0));
             Window *window = createWindow();
             window->showCenterWindow(true);
             window->activateWindow();
+            QPoint point = QApplication::focusWidget()->topLevelWidget()->mapToGlobal(QPoint(0,0));
+
+            if (point.x() == startPoint.x() && point.y() == startPoint.y()) {
+                window->move(startPoint.x() + 10, startPoint.y() + 10);
+            }
+
             window->addBlankTab();
         }
     } else {
