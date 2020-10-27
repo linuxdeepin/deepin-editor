@@ -42,9 +42,9 @@ FindBar::FindBar(QWidget *parent)
     m_editLine = new LineBar();
     m_editLine->lineEdit()->setMinimumHeight(36);
     m_findPrevButton = new QPushButton(tr("Previous"));
-    m_findPrevButton->setFixedSize(80, 36);
+    //m_findPrevButton->setFixedSize(80, 36);
     m_findNextButton = new QPushButton(tr("Next"));
-    m_findNextButton->setFixedSize(80, 36);
+    //m_findNextButton->setFixedSize(80, 36);
     m_closeButton = new DIconButton(DStyle::SP_CloseButton);
     m_closeButton->setIconSize(QSize(30, 30));
     m_closeButton->setFixedSize(30,30);
