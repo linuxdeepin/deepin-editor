@@ -108,33 +108,6 @@ void EditWrapper::openFile(const QString &filepath)
 
     FileLoadThread *thread = new FileLoadThread(filepath);
 
-    QFile file(filepath);
-
-    if (file.open(QIODevice::ReadOnly)) {
-        // reads all remaining data from the file.
-        QByteArray fileContentAll = file.readAll();
-
-        // read the encode.
-        QByteArray encodeArray = "";
-
-        QByteArray encode = encodeArray.fromStdString(thread->getCodec().toStdString());
-
-
-        file.close();
-        if (file.open(QIODevice::ReadOnly)) {
-            QTextStream stream(&fileContentAll);
-            stream.setCodec(encode);
-            QString preconten = stream.read(5000);
-            m_textEdit->setPlainText(preconten);
-
-        }
-
-        file.close();
-    }
-    else {
-        file.close();
-    }
-
     // begin to load the file.
     connect(thread, &FileLoadThread::loadFinished, this, &EditWrapper::handleFileLoadFinished);
     connect(thread, &FileLoadThread::toTellFileClosed, this, &EditWrapper::onFileClosed);
@@ -724,6 +697,9 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QString 
         DRecentManager::addItem(m_textEdit->filepath, data);
     }
 
+    bool flag = m_textEdit->getReadOnlyPermission();
+    if(flag == true) m_textEdit->setReadOnlyPermission(false);
+
     m_isLoadFinished = true;
 
     m_bFileLoading = true;
@@ -800,6 +776,7 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QString 
     PerformanceMonitor::openFileFinish(filePath(), QFileInfo(filePath()).size());
 
     m_bFileLoading = false;
+    if(flag == true) m_textEdit->setReadOnlyPermission(true);
 
     if(m_bQuit) return;
 
