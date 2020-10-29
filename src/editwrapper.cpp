@@ -738,19 +738,16 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QString 
             if(i == 0 && !m_bQuit){
               data = content.mid(i*step,InitContentPos);
               cursor.insertText(data);
-              m_textEdit->setModified(false);
               QApplication::processEvents();
               continue;
             }
             if(!m_bQuit){
                 data= content.mid(i*step,step);
                 cursor.insertText(data);
-                m_textEdit->setModified(false);
                 QApplication::processEvents();
                 if(!m_bQuit && i == cnt -1 && mod > 0){
                     data = content.mid(cnt*step,mod);
                     cursor.insertText(data);
-                    m_textEdit->setModified(false);
                     QApplication::processEvents();
                 }
             }
