@@ -2108,6 +2108,7 @@ void Window::slot_setTitleFocus()
     QWidget::setTabOrder(minBtn, quitFullBtn);
     QWidget::setTabOrder(quitFullBtn, maxBtn);
     QWidget::setTabOrder(maxBtn, closeBtn);
+    currentWrapper()->bottomBar()->setChildrenFocus(true,closeBtn);
 }
 
 void Window::handleFocusWindowChanged(QWindow *w)

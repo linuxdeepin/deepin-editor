@@ -50,6 +50,7 @@ public:
     void setTheme(const QString &theme);
 
     void setChildrenFocus(bool ok);
+    DToolButton* getButton() { return m_pToolButton;}
 private:
     //创建文字ICON
     QIcon createIcon();

@@ -45,7 +45,7 @@ public:
     void setPalette(const QPalette &palette);
     void updateSize(int size);
     //设置所有焦点　梁卫东　２０２０－０９－１４　１０：５５：２２
-    void setChildrenFocus(bool ok);
+    void setChildrenFocus(bool ok,QWidget* preOrderWidget = nullptr);
 private:
     void handleEncodeChanged(const QString &name);
 

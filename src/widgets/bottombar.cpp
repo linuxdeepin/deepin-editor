@@ -170,13 +170,15 @@ void BottomBar::updateSize(int size)
     setFixedHeight(size);
 }
 
-void BottomBar::setChildrenFocus(bool ok)
+void BottomBar::setChildrenFocus(bool ok,QWidget* preOrderWidget)
 {
     m_encodeMenu->setChildrenFocus(ok);
     m_highlightMenu->setChildrenFocus(ok);
-    if(ok) setTabOrder(m_encodeMenu,m_highlightMenu);
+    if(ok) {
+        if(preOrderWidget) setTabOrder(preOrderWidget,m_encodeMenu->getButton());
+        setTabOrder(m_encodeMenu->getButton(),m_highlightMenu->getButton());
+    }
 }
-
 
 void BottomBar::handleEncodeChanged(const QString &name)
 {
