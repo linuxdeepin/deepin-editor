@@ -2202,6 +2202,10 @@ void TextEdit::cursorPositionChanged()
         m_wrapper->bottomBar()->updatePosition(cursor.blockNumber() + 1,
                                                cursor.columnNumber() + 1);
     }
+
+    m_pLeftAreaWidget->m_linenumberarea->update();
+    m_pLeftAreaWidget->m_bookMarkArea->update();
+    m_pLeftAreaWidget->m_flodArea->update();
 }
 
 void TextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &closeChar)
