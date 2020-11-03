@@ -322,12 +322,14 @@ public:
 
     //书签功能相关
     /**
+     * @author liumaochuan ut000616
      * @brief bookMarkAreaPaintEvent 绘制书签
      * @param event 书签区域的绘制事件
      */
     void bookMarkAreaPaintEvent(QPaintEvent *event);
 
     /**
+     * @author liumaochuan ut000616
      * @brief getLineFromPoint 得到鼠标点击位置所在的行
      * @param point 鼠标点击位置
      * @return 鼠标点击位置所在的行
@@ -335,21 +337,25 @@ public:
     int getLineFromPoint(const QPoint &point);
 
     /**
+     * @author liumaochuan ut000616
      * @brief addOrDeleteBookMark 添加或删除书签
      */
     void addOrDeleteBookMark();
 
     /**
+     * @author liumaochuan ut000616
      * @brief moveToPreviousBookMark 移动到上一个书签
      */
     void moveToPreviousBookMark();
 
     /**
+     * @author liumaochuan ut000616
      * @brief moveToNextBookMark 移动到下一个书签
      */
     void moveToNextBookMark();
 
     /**
+     * @author liumaochuan ut000616
      * @brief checkBookmarkLineMove 检测书签行移动
      * @param from 文本变化时光标位置
      * @param charsRemoved 移除的字符数
@@ -358,40 +364,47 @@ public:
     void checkBookmarkLineMove(int from, int charsRemoved, int charsAdded);
 
     /**
+     * @author liumaochuan ut000616
      * @brief setIsFileOpen 设置是否在读取文件
      */
     void setIsFileOpen();
 
     /**
+     * @author liumaochuan ut000616
      * @brief setTextFinished 读取文件结束
      */
     void setTextFinished();
 
     /**
+     * @author liumaochuan ut000616
      * @brief readHistoryRecord 读取书签相关记录
      * @return 书签相关记录列表
      */
     QStringList readHistoryRecord(QString key);
 
     /**
+     * @author liumaochuan ut000616
      * @brief readHistoryRecordofBookmark 读取书签记录
      * @return 书签记录列表
      */
     QStringList readHistoryRecordofBookmark();
 
     /**
+     * @author liumaochuan ut000616
      * @brief readHistoryRecordofFilePath 读取添加了书签的文件路径记录
      * @return 文件路径列表
      */
     QStringList readHistoryRecordofFilePath(QString key);
 
     /**
+     * @author liumaochuan ut000616
      * @brief writeHistoryRecord 写入书签相关记录
      */
     void writeHistoryRecord();
 
     //标记功能相关
     /**
+     * @author liumaochuan ut000616
      * @brief isMarkCurrentLine 标记或取消标记当前行
      * @param isMark true为标记，false为取消标记
      * @param strColor 标记格式
@@ -399,6 +412,7 @@ public:
     void isMarkCurrentLine(bool isMark, QString strColor = "");
 
     /**
+     * @author liumaochuan ut000616
      * @brief isMarkAllLine 标记或取消标记所有
      * @param isMark true为标记，false为取消标记
      * @param strColor 标记格式
@@ -406,6 +420,7 @@ public:
     void isMarkAllLine(bool isMark, QString strColor = "");
 
     /**
+     * @author liumaochuan ut000616
      * @brief cancelLastMark 取消上一个标记
      */
     void cancelLastMark();
@@ -416,6 +431,7 @@ public:
     void markSelectWord();
 
     /**
+     * @author liumaochuan ut000616
      * @brief updateMark 更新标记
      * @param from 文本变化时光标位置
      * @param charsRemoved 移除的字符数
@@ -425,6 +441,7 @@ public:
 
     //QTextEdit :: ExtraSelection结构提供了一种为文档中的给定选择,指定字符格式的方法。
     /**
+     * @author liumaochuan ut000616
      * @brief containsExtraSelection 指定字符格式列表是否包含该指定字符格式
      * @param listSelections 指定字符格式列表
      * @param selection 指定字符格式
@@ -433,6 +450,7 @@ public:
     bool containsExtraSelection(QList<QTextEdit::ExtraSelection> listSelections, QTextEdit::ExtraSelection selection);
 
     /**
+     * @author liumaochuan ut000616
      * @brief appendExtraSelection 在指定字符格式列表添加指定字符格式
      * @param wordMarkSelections 指定字符格式列表
      * @param selection 指定字符格式
@@ -459,11 +477,19 @@ public:
     void tellFindBarClose();
 
     /**
+     * @author liumaochuan ut000616
      * @brief setEditPalette 设置textEdit的颜色
      * @param activeColor active时的颜色
      * @param inactiveColor inactive时的颜色
      */
     void setEditPalette(const QString &activeColor, const QString &inactiveColor);
+
+    /**
+     * @author liumaochuan ut000616
+     * @brief setCodeFoldWidgetHide 代码折叠悬浮预览
+     * @param isHidden 是否隐藏
+     */
+    void setCodeFoldWidgetHide(bool isHidden);
 
 signals:
     void clickFindAction();

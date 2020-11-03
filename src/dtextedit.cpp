@@ -55,7 +55,6 @@
 #include <QGesture>
 #include <QStyleHints>
 #include <DSysInfo>
-#include <QStyleFactory>
 
 #include <private/qguiapplication_p.h>
 #include <qpa/qplatformtheme.h>
@@ -2210,7 +2209,6 @@ bool TextEdit::setCursorKeywordSeletoin(int position, bool findNext)
 
                 // Update cursor.
                 setTextCursor(cursor);
-
                 return true;
             }
         }
@@ -3753,11 +3751,12 @@ void TextEdit::getHideRowContent(int iLine)
    }
 
 
+    m_foldCodeShow->initHighLight(filepath);
     //左右括弧没有匹配到
     if(braceDepth != 0){
         //遍历最后右括弧文本块 设置块隐藏或显示
         while(beginBlock.isValid()){
-           m_foldCodeShow->appendText(beginBlock.text());
+           m_foldCodeShow->appendText(beginBlock.text(), width());
            beginBlock = beginBlock.next();
         }
 
@@ -3770,11 +3769,11 @@ void TextEdit::getHideRowContent(int iLine)
         //遍历最后右括弧文本块 设置块隐藏或显示
         while(beginBlock != endBlock && beginBlock.isValid()){
           if(beginBlock.isValid()){
-             m_foldCodeShow->appendText(beginBlock.text());
+             m_foldCodeShow->appendText(beginBlock.text(), width());
           }
           beginBlock = beginBlock.next();
         }
-        m_foldCodeShow->appendText(endBlock.text());
+        m_foldCodeShow->appendText(endBlock.text(), width());
     }
 }
 
@@ -4181,6 +4180,13 @@ void TextEdit::setEditPalette(const QString &activeColor, const QString &inactiv
     pa.setColor(QPalette::Inactive, QPalette::Text, QColor(inactiveColor));
     pa.setColor(QPalette::Active, QPalette::Text, QColor(activeColor));
     setPalette(pa);
+}
+
+void TextEdit::setCodeFoldWidgetHide(bool isHidden)
+{
+    if (m_foldCodeShow) {
+        m_foldCodeShow->setHidden(isHidden);
+    }
 }
 
 void TextEdit::updateLeftAreaWidget()
@@ -4623,7 +4629,6 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
 
                 m_rightMenu->exec(mouseEvent->globalPos());
             } else {
-                qDebug() << "bookMarkAreaClicked:" << mouseEvent->pos();
                 addOrDeleteBookMark();
             }
             return true;
@@ -4710,7 +4715,6 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
             return true;
         }
 
-
     } else if (event->type() == QEvent::HoverMove) {
         QHoverEvent *hoverEvent = static_cast<QHoverEvent *>(event);
         int line = getLineFromPoint(hoverEvent->pos());
@@ -4726,9 +4730,10 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
             if (m_listFlodIconPos.contains(line - 1)) {
                 if (!document()->findBlockByNumber(line).isVisible()) {
                     m_foldCodeShow->clear();
+                    m_foldCodeShow->setStyle(lineWrapMode());//enum LineWrapMode {NoWrap,WidgetWidth};
                     getHideRowContent(line - 1);
                     m_foldCodeShow->show();
-                    m_foldCodeShow->move(0, getLinePosByLineNum(line - 1) + 5);
+                    m_foldCodeShow->move(5, getLinePosByLineNum(line));
                 } else {
                     QTextCursor previousCursor = textCursor();
                     int ivalue = this->verticalScrollBar()->value();
@@ -4737,7 +4742,6 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                     if(line-1 == iLine)   return false;
 
                     QTextEdit::ExtraSelection selection;
-                    selection.format.setBackground(palette().background());
                     selection.format.setProperty(QTextFormat::FullWidthSelection, true);
 
                     QTextBlock startblock;
@@ -4766,7 +4770,6 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                     renderAllSelections();
                     setTextCursor(QTextCursor(document()->findBlockByNumber(line-1)));
                     this->verticalScrollBar()->setValue(ivalue);
-
                 }
             } else {
                 m_foldCodeShow->hide();
