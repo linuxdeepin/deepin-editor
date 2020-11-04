@@ -2,4 +2,4 @@ deepin-editor (20191016) unstable; urgency=medium
 
   * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
 
- -- unknown <zs@zs-PC>  Mon, 22 Jan 2018 16:48:30 +0800
+ -- Deepin Packages Builder <packages@deepin.com>  Wed, 11 Oct 2017 17:38:35 +0800
