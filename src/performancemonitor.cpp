@@ -2,11 +2,9 @@
 
 const QString LOG_FLAG = "[PerformanceMonitor]";
 
-const QString GRAB_POINT     = "[GRABPOINT]";
-const QString APP_NAME       = "DEEPIN_EDITOR";
-const QString INIT_APP_TIME  = "0001";
-const QString CLOSE_APP_TIME = "0002";
-const QString OOPEN_FILE_TIME = "0004";
+const QString GRAB_POINT_INIT_APP_TIME  = "[GRABPOINT] POINT-01";
+const QString GRAB_POINT_CLOSE_APP_TIME = "[GRABPOINT] POINT-02";
+const QString GRAB_POINT_OPEN_FILE_TIME = "[GRABPOINT] POINT-04";
 
 qint64 PerformanceMonitor::initializeAppStartMs  = 0;
 qint64 PerformanceMonitor::inittalizeApoFinishMs = 0;
@@ -38,7 +36,7 @@ void PerformanceMonitor::initializAppFinish()
 
     inittalizeApoFinishMs = current.toMSecsSinceEpoch();
     qint64 time = inittalizeApoFinishMs - initializeAppStartMs;
-    qInfo() << QString("%1 %2-%3 %4 #(Init app time)").arg(GRAB_POINT).arg(APP_NAME).arg(INIT_APP_TIME).arg(time);
+    qInfo() << QString("%1 startduration=%2ms #(Init app time)").arg(GRAB_POINT_INIT_APP_TIME).arg(time);
 }
 
 void PerformanceMonitor::closeAppStart()
@@ -59,7 +57,7 @@ void PerformanceMonitor::closeAPPFinish()
 
     closeAppFinishMs = current.toMSecsSinceEpoch();
     qint64 time = closeAppFinishMs - closeAppStartMs;
-    qInfo() << QString("%1 %2-%3 %4 #(Close app time)").arg(GRAB_POINT).arg(APP_NAME).arg(CLOSE_APP_TIME).arg(time);
+    qInfo() << QString("%1 closeduration=%2ms #(Close app time)").arg(GRAB_POINT_CLOSE_APP_TIME).arg(time);
 }
 
 void PerformanceMonitor::openFileStart()
@@ -80,5 +78,6 @@ void PerformanceMonitor::openFileFinish(const QString &strFileName, qint64 iFile
 
     openFileFinishMs = current.toMSecsSinceEpoch();
     qint64 time = openFileFinishMs - openFileStartMs;
-    qInfo() << QString("%1 %2-%3 %4 #(Open file time) file name:%5, file size:%6 ").arg(GRAB_POINT).arg(APP_NAME).arg(OOPEN_FILE_TIME).arg(time).arg(strFileName).arg(iFileSize);
+    float fFilesize = iFileSize;
+    qInfo() << QString("%1 filename=%2 filezise=%3M opentime=%4ms #(Open file time)").arg(GRAB_POINT_OPEN_FILE_TIME).arg(strFileName).arg(QString::number(fFilesize/(1024*1024), 'f', 6)).arg(time);
 }
