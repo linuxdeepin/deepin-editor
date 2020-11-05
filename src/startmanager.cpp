@@ -223,10 +223,24 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
 
     QRect rect = window->rect();
     QPoint pos = QCursor::pos() ;/*- window->topLevelWidget()->pos();*/
-    QRect startRect(pos, Tabbar::sm_pDragPixmap->rect().size());
-    QRect endRect(pos-QPoint(rect.width()/2,rect.height()/2),window->rect().size());
+    QRect desktopRect = QApplication::desktop()->rect();
+    QPoint startPos = pos;
 
-    window->move(pos);
+    if ((pos.x() + rect.width()) > desktopRect.width()) {
+        startPos.setX(desktopRect.width() - rect.width());
+    } else if (pos.x() < 0) {
+        startPos.setX(0);
+    }
+
+    if ((pos.y() + rect.height()) > desktopRect.height()) {
+        startPos.setY(desktopRect.height() - rect.height());
+    } else if (pos.y() < 0) {
+        startPos.setY(0);
+    }
+
+    QRect startRect(startPos, Tabbar::sm_pDragPixmap->rect().size());
+    QRect endRect(startPos,window->rect().size());
+    window->move(startPos);
     window->show();
 #if 0
     // window->setFixedSize(Tabbar::sm_pDragPixmap->rect().size());
