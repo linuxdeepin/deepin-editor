@@ -8,7 +8,7 @@ if (NOT (${CMAKE_BUILD_TYPE} MATCHES "Debug"))
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 endif ()
 
-configure_file(environments.h.in environments.h @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/environments.h.in ${CMAKE_CURRENT_SOURCE_DIR}/environments.h @ONLY)
 
 # Sources files
 file(GLOB SRCS "*.h" "*.cpp"
@@ -29,6 +29,8 @@ find_package(KF5Codecs)
 find_package(DFrameworkdbus REQUIRED)
 
 include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
+include_directories(Qt5PrintSupport)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # Tell CMake to create the executable
 add_executable(deepin-editor ${SRCS} deepin-editor.qrc)
@@ -41,7 +43,6 @@ target_link_libraries(deepin-editor
     ${Qt5PrintSupport_LIBRARIES}
     ${Qt5Concurrent_LIBRARIES}
     ${DFrameworkdbus_LIBRARIES}
-
     KF5::Codecs
     KF5::SyntaxHighlighting
 )

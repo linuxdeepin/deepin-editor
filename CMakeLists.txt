@@ -19,3 +19,9 @@ endif ()
 
 add_subdirectory(src)
 
+option(USE_TEST "UT" OFF)
+if (USE_TEST)
+add_subdirectory(test)
+endif(USE_TEST)
+
+
