@@ -916,7 +916,10 @@ QString Window::saveAsFileToDisk()
 {
     QString filePath = m_tabbar->currentPath();
     EditWrapper *wrapper = m_wrappers.value(filePath);
+    qDebug()<<"=========saveAsFileToDisk :filePath"<<filePath;
+    qDebug()<<"=========EditWrapper :"<<wrapper;
     bool isDraft = Utils::isDraftFile(filePath);
+    qDebug()<<"=========isDraftFile :"<<isDraft;
     QFileInfo fileInfo(filePath);
 
     if (!wrapper)

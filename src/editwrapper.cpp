@@ -613,7 +613,7 @@ void EditWrapper::checkForReload()
     }
 
     m_waringNotices->show();
-    DMessageManager::instance()->sendMessage(m_textEdit, m_waringNotices);
+    DMessageManager::instance()->sendMessage(this, m_waringNotices);
 }
 
 void EditWrapper::showNotify(const QString &message)
