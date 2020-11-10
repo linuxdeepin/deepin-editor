@@ -2057,7 +2057,9 @@ void Window::slotLoadContentTheme(DGuiApplicationHelper::ColorType themeType)
     }
 
     qstrColor = palette().color(QPalette::Active,QPalette::ButtonText).name();
-    m_tabbar->setTabPalette(qstrColor,qstrColor);
+    QString qstrHighlightColor = palette().color(QPalette::Active,QPalette::HighlightedText).name();
+
+    m_tabbar->setTabPalette(qstrColor,qstrHighlightColor);
 }
 
 void Window::slotSettingResetTheme(const QString &path)
