@@ -46,9 +46,9 @@
                         },
                         {
                             "key": "showbookmark",
-                            "name": "Show bookmark flag",
+                            "name": "Show bookmarks icon",
                             "type": "checkbox",
-                            "text": "Show bookmark flag",
+                            "text": "Show bookmarks icon",
                             "default": "false"
                         },
                         {

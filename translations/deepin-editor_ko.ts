@@ -1,12 +1,5 @@
 <?xml version="1.0" ?><!DOCTYPE TS><TS language="ko" version="2.1">
 <context>
-    <name>BookMarkWidget</name>
-    <message>
-        <source>Add bookmark</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
     <name>BottomBar</name>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="39"/>
@@ -27,56 +20,56 @@
 <context>
     <name>EditWrapper</name>
     <message>
-        <location filename="../src/editwrapper.cpp" line="592"/>
+        <location filename="../src/editwrapper.cpp" line="608"/>
         <source>File has changed on disk. Reload?</source>
         <translation>디스크의 파일이 변경되었습니다. 다시 불러오시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="595"/>
+        <location filename="../src/editwrapper.cpp" line="611"/>
         <source>File removed on the disk. Save it now?</source>
         <translation>디스크에서 파일이 제거되었습니다. 지금 저장 하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="653"/>
-        <location filename="../src/widgets/bottombar.cpp" line="66"/>
+        <location filename="../src/editwrapper.cpp" line="670"/>
+        <location filename="../src/widgets/bottombar.cpp" line="67"/>
         <source>INSERT</source>
         <translation>삽입</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="656"/>
+        <location filename="../src/editwrapper.cpp" line="673"/>
         <source>OVERWRITE</source>
         <translation>덮어쓰기</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="659"/>
+        <location filename="../src/editwrapper.cpp" line="676"/>
         <source>R/O</source>
         <translation>읽기 전용</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="306"/>
+        <location filename="../src/editwrapper.cpp" line="322"/>
         <source>Encoding changed. Do you want to save the file now?</source>
         <translation>인코딩이 변경되었습니다. 지금 파일을 저장하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="309"/>
-        <location filename="../src/editwrapper.cpp" line="502"/>
+        <location filename="../src/editwrapper.cpp" line="325"/>
+        <location filename="../src/editwrapper.cpp" line="518"/>
         <source>Cancel</source>
         <translation>취소</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="310"/>
-        <location filename="../src/editwrapper.cpp" line="338"/>
-        <location filename="../src/editwrapper.cpp" line="451"/>
+        <location filename="../src/editwrapper.cpp" line="326"/>
+        <location filename="../src/editwrapper.cpp" line="354"/>
+        <location filename="../src/editwrapper.cpp" line="467"/>
         <source>Save</source>
         <translation>저장</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="499"/>
+        <location filename="../src/editwrapper.cpp" line="515"/>
         <source>There are errors when using this encoding. If continue, the file contents may be changed</source>
         <translation>이 인코딩을 사용할 때 오류가 발생했습니다. 계속하면 파일 내용이 변경될 수 있습니다.</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="503"/>
+        <location filename="../src/editwrapper.cpp" line="519"/>
         <source>Continue</source>
         <translation>계속</translation>
     </message>
@@ -100,17 +93,6 @@
     </message>
 </context>
 <context>
-    <name>FindWidget</name>
-    <message>
-        <source>Next</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Previous</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
     <name>JumpLineBar</name>
     <message>
         <location filename="../src/jumplinebar.cpp" line="41"/>
@@ -121,32 +103,25 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/main.cpp" line="53"/>
+        <location filename="../src/editorapplication.cpp" line="7"/>
         <source>Text Editor is a powerful tool for viewing and editing text files.</source>
         <translation>텍스트 편집기는 텍스트 파일을 보고 편집할 수 있는 강력한 도구입니다.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="65"/>
+        <location filename="../src/editorapplication.cpp" line="18"/>
         <source>Text Editor</source>
         <translation>텍스트 편집기</translation>
     </message>
 </context>
 <context>
-    <name>NoteMenu</name>
-    <message>
-        <source>Copy</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
     <name>QObject</name>
     <message>
-        <location filename="../src/startmanager.cpp" line="267"/>
+        <location filename="../src/startmanager.cpp" line="433"/>
         <source>File not saved</source>
         <translation>파일이 저장되지 않음</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="62"/>
+        <location filename="../src/editorapplication.cpp" line="15"/>
         <source>Text Editor</source>
         <translation>텍스트 편집기</translation>
     </message>
@@ -217,7 +192,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="31"/>
         <location filename="../src/settingsdialog.cpp" line="107"/>
-        <location filename="../src/window.cpp" line="1389"/>
+        <location filename="../src/window.cpp" line="1462"/>
         <source>Window</source>
         <translation>창</translation>
     </message>
@@ -598,11 +573,20 @@
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="114"/>
-        <source>Show blank characters</source>
+        <source>Show bookmarks icon</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="115"/>
+        <source>Show whitespaces and tabs</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <source>Show blank characters</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="116"/>
         <source>Color mark</source>
         <translation>색상 표시</translation>
     </message>
@@ -641,60 +625,45 @@
     </message>
 </context>
 <context>
-    <name>SaveDialog</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Discard</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
     <name>Settings</name>
     <message>
-        <location filename="../src/settings.cpp" line="92"/>
+        <location filename="../src/settings.cpp" line="102"/>
         <source>Standard</source>
         <translation>표준</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="92"/>
+        <location filename="../src/settings.cpp" line="102"/>
         <source>Customize</source>
         <translation>사용자 정의</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="106"/>
+        <location filename="../src/settings.cpp" line="116"/>
         <source>Normal</source>
         <translation>보통</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="106"/>
+        <location filename="../src/settings.cpp" line="116"/>
         <source>Maximum</source>
         <translation>최대</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="106"/>
+        <location filename="../src/settings.cpp" line="116"/>
         <source>Fullscreen</source>
         <translation>전체 화면</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="320"/>
+        <location filename="../src/settings.cpp" line="333"/>
         <source>This shortcut conflicts with system shortcut %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="322"/>
+        <location filename="../src/settings.cpp" line="335"/>
         <source>This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately</source>
         <translation>이 단축키는 %1과 충돌합니다. 이 단축키를 즉시 적용하려면 바꾸기를 클릭하십시오.</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="437"/>
-        <location filename="../src/settings.cpp" line="445"/>
+        <location filename="../src/settings.cpp" line="450"/>
+        <location filename="../src/settings.cpp" line="458"/>
         <source>The shortcut %1 is invalid, please set another one.</source>
         <translation type="unfinished"/>
     </message>
@@ -703,121 +672,50 @@
         <translation type="vanished">%1이(가) 잘못됨</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="480"/>
+        <location filename="../src/settings.cpp" line="493"/>
         <source>Cancel</source>
         <translation>취소</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="481"/>
+        <location filename="../src/settings.cpp" line="494"/>
         <source>Replace</source>
         <translation>바꾸기</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="483"/>
+        <location filename="../src/settings.cpp" line="496"/>
         <source>OK</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>ShortCutShow</name>
-    <message>
-        <source>Settings</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Exit</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Help</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Page up</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Page down</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Save as</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Print</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Add bookmark</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Fullscreen</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Copy</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Cut</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Paste</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Undo</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Select all</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Display shortcuts</source>
         <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>Tabbar</name>
     <message>
-        <location filename="../src/tabbar.cpp" line="401"/>
+        <location filename="../src/tabbar.cpp" line="420"/>
         <source>Close tab</source>
         <translation>탭 닫기</translation>
     </message>
     <message>
-        <location filename="../src/tabbar.cpp" line="403"/>
+        <location filename="../src/tabbar.cpp" line="422"/>
         <source>More options</source>
         <translation>더보기</translation>
     </message>
     <message>
-        <location filename="../src/tabbar.cpp" line="404"/>
+        <location filename="../src/tabbar.cpp" line="423"/>
         <source>Close tabs to the left</source>
         <translation>왼쪽으로 탭 닫기</translation>
     </message>
     <message>
-        <location filename="../src/tabbar.cpp" line="405"/>
+        <location filename="../src/tabbar.cpp" line="424"/>
         <source>Close tabs to the right</source>
         <translation>오른쪽으로 탭 닫기</translation>
     </message>
     <message>
-        <location filename="../src/tabbar.cpp" line="406"/>
+        <location filename="../src/tabbar.cpp" line="425"/>
         <source>Close unmodified tabs</source>
         <translation>수정되지 않은 탭 닫기</translation>
     </message>
     <message>
-        <location filename="../src/tabbar.cpp" line="402"/>
+        <location filename="../src/tabbar.cpp" line="421"/>
         <source>Close other tabs</source>
         <translation>다른 탭 닫기</translation>
     </message>
@@ -825,190 +723,191 @@
 <context>
     <name>TextEdit</name>
     <message>
-        <location filename="../src/dtextedit.cpp" line="140"/>
+        <location filename="../src/dtextedit.cpp" line="154"/>
         <source>Undo</source>
         <translation>되돌리기</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="141"/>
+        <location filename="../src/dtextedit.cpp" line="155"/>
         <source>Redo</source>
         <translation>재실행</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="142"/>
+        <location filename="../src/dtextedit.cpp" line="156"/>
         <source>Cut</source>
         <translation>잘라내기</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="143"/>
+        <location filename="../src/dtextedit.cpp" line="157"/>
         <source>Copy</source>
         <translation>복사하기</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="144"/>
+        <location filename="../src/dtextedit.cpp" line="158"/>
         <source>Paste</source>
         <translation>붙여넣기</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="145"/>
+        <location filename="../src/dtextedit.cpp" line="159"/>
         <source>Delete</source>
         <translation>삭제하기</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="146"/>
+        <location filename="../src/dtextedit.cpp" line="160"/>
         <source>Select All</source>
         <translation>모두 선택</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="147"/>
-        <location filename="../src/window.cpp" line="261"/>
+        <location filename="../src/dtextedit.cpp" line="161"/>
+        <location filename="../src/window.cpp" line="263"/>
         <source>Find</source>
         <translation>찾기</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="148"/>
-        <location filename="../src/window.cpp" line="262"/>
+        <location filename="../src/dtextedit.cpp" line="162"/>
+        <location filename="../src/window.cpp" line="264"/>
         <source>Replace</source>
         <translation>바꾸기</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="149"/>
+        <location filename="../src/dtextedit.cpp" line="163"/>
         <source>Go to Line</source>
         <translation>줄로 이동</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="150"/>
+        <location filename="../src/dtextedit.cpp" line="164"/>
         <source>Turn on Read-Only mode</source>
         <translation>읽기 전용 모드 켜기</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="151"/>
+        <location filename="../src/dtextedit.cpp" line="165"/>
         <source>Turn off Read-Only mode</source>
         <translation>읽기 전용 모드 끄기</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="152"/>
+        <location filename="../src/dtextedit.cpp" line="166"/>
         <source>Fullscreen</source>
         <translation>전체 화면</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="153"/>
+        <location filename="../src/dtextedit.cpp" line="167"/>
         <source>Exit fullscreen</source>
         <translation>전체 화면 종료</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="154"/>
+        <location filename="../src/dtextedit.cpp" line="168"/>
         <source>Display in file manager</source>
         <translation>파일 관리자에 표시</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="155"/>
-        <location filename="../src/dtextedit.cpp" line="229"/>
+        <location filename="../src/dtextedit.cpp" line="169"/>
+        <location filename="../src/dtextedit.cpp" line="244"/>
         <source>Add Comment</source>
         <translation>주석 추가하기</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="227"/>
+        <location filename="../src/dtextedit.cpp" line="174"/>
+        <location filename="../src/dtextedit.cpp" line="243"/>
         <source>Column Mode</source>
         <translation>열 모드</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="230"/>
+        <location filename="../src/dtextedit.cpp" line="245"/>
         <source>Remove Comment</source>
         <translation>주석 제거하기</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="230"/>
+        <location filename="../src/dtextedit.cpp" line="280"/>
         <source>Press ALT and click lines to edit in column mode</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="156"/>
+        <location filename="../src/dtextedit.cpp" line="170"/>
         <source>Text to Speech</source>
         <translation>텍스트 음성 변환</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="157"/>
+        <location filename="../src/dtextedit.cpp" line="171"/>
         <source>Stop reading</source>
         <translation>읽기 중지</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="158"/>
+        <location filename="../src/dtextedit.cpp" line="172"/>
         <source>Speech to Text</source>
         <translation>음성 텍스트 변환</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="159"/>
+        <location filename="../src/dtextedit.cpp" line="173"/>
         <source>Translate</source>
         <translation>번역</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="160"/>
+        <location filename="../src/dtextedit.cpp" line="175"/>
         <source>Add bookmark</source>
         <translation>책갈피 추가</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="161"/>
+        <location filename="../src/dtextedit.cpp" line="176"/>
         <source>Remove Bookmark</source>
         <translation>책갈피 제거</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="162"/>
+        <location filename="../src/dtextedit.cpp" line="177"/>
         <source>Previous bookmark</source>
         <translation>이전 책갈피</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="163"/>
+        <location filename="../src/dtextedit.cpp" line="178"/>
         <source>Next bookmark</source>
         <translation>다음 책갈피</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="164"/>
+        <location filename="../src/dtextedit.cpp" line="179"/>
         <source>Remove All Bookmarks</source>
         <translation>모든 책갈피 제거</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="165"/>
+        <location filename="../src/dtextedit.cpp" line="180"/>
         <source>Fold All</source>
         <translation>모두 접기</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="166"/>
+        <location filename="../src/dtextedit.cpp" line="181"/>
         <source>Fold Current Level</source>
         <translation>현재 레벨 접기</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="167"/>
+        <location filename="../src/dtextedit.cpp" line="182"/>
         <source>Unfold All</source>
         <translation>모두 펼치기</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="168"/>
+        <location filename="../src/dtextedit.cpp" line="183"/>
         <source>Unfold Current Level</source>
         <translation>현재 레벨 펼치기</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="174"/>
+        <location filename="../src/dtextedit.cpp" line="189"/>
         <source>Color Mark</source>
         <translation>색상 표시</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="210"/>
+        <location filename="../src/dtextedit.cpp" line="226"/>
         <source>Mark All</source>
         <translation>모두 표시하기</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="193"/>
+        <location filename="../src/dtextedit.cpp" line="208"/>
         <source>Mark</source>
         <translation>선택표시 시작</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="177"/>
+        <location filename="../src/dtextedit.cpp" line="192"/>
         <source>Clear All Marks</source>
         <translation>모든 표시 지우기</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="179"/>
+        <location filename="../src/dtextedit.cpp" line="194"/>
         <source>Clear Last Mark</source>
         <translation>마지막 표시 지우기</translation>
     </message>
@@ -1029,74 +928,64 @@
         <translation type="vanished">스타일 4</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="227"/>
-        <source>Column Mode</source>
-        <translation>열 모드</translation>
-    </message>
-    <message>
         <source>Add comment</source>
         <translation type="vanished">주석 추가하기</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="230"/>
-        <source>Remove Comment</source>
-        <translation>주석 제거하기</translation>
-    </message>
-    <message>
-        <location filename="../src/dtextedit.cpp" line="289"/>
+        <location filename="../src/dtextedit.cpp" line="313"/>
         <source>Change Case</source>
         <translation>대/소문자 변경</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="290"/>
+        <location filename="../src/dtextedit.cpp" line="314"/>
         <source>Upper Case</source>
         <translation>대문자</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="291"/>
+        <location filename="../src/dtextedit.cpp" line="315"/>
         <source>Lower Case</source>
         <translation>소문자</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="292"/>
+        <location filename="../src/dtextedit.cpp" line="316"/>
         <source>Capitalize</source>
         <translation>대문자로 쓰기</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="343"/>
-        <location filename="../src/widgets/bottombar.cpp" line="73"/>
+        <location filename="../src/dtextedit.cpp" line="367"/>
+        <location filename="../src/widgets/bottombar.cpp" line="74"/>
         <source>None</source>
         <translation>없음</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="977"/>
+        <location filename="../src/dtextedit.cpp" line="1019"/>
         <source>Selected line(s) copied</source>
         <translation>선택된 줄 복사됨</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="983"/>
+        <location filename="../src/dtextedit.cpp" line="1025"/>
         <source>Current line copied</source>
         <translation>현재 줄 복사됨</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="1022"/>
+        <location filename="../src/dtextedit.cpp" line="1064"/>
         <source>Selected line(s) clipped</source>
         <translation>선택된 줄 복사됨</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="1028"/>
+        <location filename="../src/dtextedit.cpp" line="1070"/>
         <source>Current line clipped</source>
         <translation>현재 줄 복사됨</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="2823"/>
+        <location filename="../src/dtextedit.cpp" line="3223"/>
         <source>Read-Only mode is off</source>
         <translation>읽기 전용 모드가 꺼져 있음</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="2830"/>
-        <location filename="../src/dtextedit.cpp" line="2838"/>
-        <location filename="../src/dtextedit.cpp" line="4996"/>
+        <location filename="../src/dtextedit.cpp" line="3230"/>
+        <location filename="../src/dtextedit.cpp" line="3238"/>
+        <location filename="../src/dtextedit.cpp" line="5889"/>
         <source>Read-Only mode is on</source>
         <translation>읽기 전용 모드가 켜져 있음</translation>
     </message>
@@ -1120,155 +1009,155 @@
 <context>
     <name>Window</name>
     <message>
-        <location filename="../src/window.cpp" line="253"/>
+        <location filename="../src/window.cpp" line="255"/>
         <source>New window</source>
         <translation>새 창</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="254"/>
+        <location filename="../src/window.cpp" line="256"/>
         <source>New tab</source>
         <translation>새 탭</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="255"/>
+        <location filename="../src/window.cpp" line="257"/>
         <source>Open file</source>
         <translation>파일 열기</translation>
     </message>
     <message>
         <location filename="../src/warningnotices.cpp" line="17"/>
         <location filename="../src/widgets/toast.cpp" line="39"/>
-        <location filename="../src/window.cpp" line="257"/>
+        <location filename="../src/window.cpp" line="259"/>
         <source>Save as</source>
         <translation>다른 이름으로 저장</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="258"/>
+        <location filename="../src/window.cpp" line="260"/>
         <source>Print</source>
         <translation>인쇄</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="259"/>
+        <location filename="../src/window.cpp" line="261"/>
         <source>Switch theme</source>
         <translation>테마 전환</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="356"/>
-        <location filename="../src/window.cpp" line="1988"/>
+        <location filename="../src/window.cpp" line="378"/>
+        <location filename="../src/window.cpp" line="2150"/>
         <source>Read-Only</source>
         <translation>읽기 전용</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="841"/>
+        <location filename="../src/window.cpp" line="901"/>
         <source>Saved successfully</source>
         <translation>성공적으로 저장됨</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1145"/>
+        <location filename="../src/window.cpp" line="1218"/>
         <source>Read-Only mode is on</source>
         <translation>읽기 전용 모드가 켜져 있음</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1399"/>
+        <location filename="../src/window.cpp" line="1472"/>
         <source>Ctrl+&apos;=&apos;</source>
         <translation>Ctrl+&apos;=&apos;</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1402"/>
+        <location filename="../src/window.cpp" line="1475"/>
         <source>Ctrl+&apos;-&apos;</source>
         <translation>Ctrl+&apos;-&apos;</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1906"/>
+        <location filename="../src/window.cpp" line="2033"/>
         <source>Discard</source>
         <translation>폐기</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="260"/>
-        <location filename="../src/window.cpp" line="1449"/>
+        <location filename="../src/window.cpp" line="262"/>
+        <location filename="../src/window.cpp" line="1522"/>
         <source>Settings</source>
         <translation>설정</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="386"/>
+        <location filename="../src/window.cpp" line="408"/>
         <source>You do not have permission to open %1</source>
         <translation>%1을(를) 열 수 있는 권한이 없음</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="424"/>
+        <location filename="../src/window.cpp" line="445"/>
         <source>Invalid file: %1</source>
         <translation>잘못된 파일: %1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="866"/>
-        <location filename="../src/window.cpp" line="946"/>
-        <location filename="../src/window.cpp" line="1007"/>
+        <location filename="../src/window.cpp" line="929"/>
+        <location filename="../src/window.cpp" line="1009"/>
+        <location filename="../src/window.cpp" line="1070"/>
         <source>Save File</source>
         <translation>파일 저장</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="531"/>
+        <location filename="../src/window.cpp" line="571"/>
         <source>Do you want to save this file?</source>
         <translation>이 파일을 저장하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="868"/>
-        <location filename="../src/window.cpp" line="883"/>
-        <location filename="../src/window.cpp" line="948"/>
-        <location filename="../src/window.cpp" line="963"/>
-        <location filename="../src/window.cpp" line="1009"/>
-        <location filename="../src/window.cpp" line="1024"/>
+        <location filename="../src/window.cpp" line="931"/>
+        <location filename="../src/window.cpp" line="946"/>
+        <location filename="../src/window.cpp" line="1011"/>
+        <location filename="../src/window.cpp" line="1026"/>
+        <location filename="../src/window.cpp" line="1072"/>
+        <location filename="../src/window.cpp" line="1087"/>
         <source>Encoding</source>
         <translation>인코딩</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="869"/>
-        <location filename="../src/window.cpp" line="884"/>
-        <location filename="../src/window.cpp" line="949"/>
-        <location filename="../src/window.cpp" line="964"/>
-        <location filename="../src/window.cpp" line="1010"/>
-        <location filename="../src/window.cpp" line="1025"/>
+        <location filename="../src/window.cpp" line="932"/>
+        <location filename="../src/window.cpp" line="947"/>
+        <location filename="../src/window.cpp" line="1012"/>
+        <location filename="../src/window.cpp" line="1027"/>
+        <location filename="../src/window.cpp" line="1073"/>
+        <location filename="../src/window.cpp" line="1088"/>
         <source>Line Endings</source>
         <translation>줄 끝</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1431"/>
+        <location filename="../src/window.cpp" line="1504"/>
         <source>Editor</source>
         <translation>편집기</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="784"/>
+        <location filename="../src/window.cpp" line="843"/>
         <source>You do not have permission to save %1</source>
         <translation>%1을(를) 저장할 권한이 없습니다</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="827"/>
+        <location filename="../src/window.cpp" line="887"/>
         <source>Do you want to save as another?</source>
         <translation>다른 이름으로 저장하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1547"/>
-        <location filename="../src/window.cpp" line="2051"/>
+        <location filename="../src/window.cpp" line="1667"/>
+        <location filename="../src/window.cpp" line="2211"/>
         <source>Do you want to save all the files?</source>
         <translation>모든 파일을 저장하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1506"/>
+        <location filename="../src/window.cpp" line="1626"/>
         <source>Untitled %1</source>
         <translation>제목 없음 %1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1305"/>
+        <location filename="../src/window.cpp" line="1378"/>
         <source>Current location remembered</source>
         <translation>기억된 현재 위치</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1905"/>
+        <location filename="../src/window.cpp" line="2032"/>
         <source>Cancel</source>
         <translation>취소</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="256"/>
-        <location filename="../src/window.cpp" line="1907"/>
+        <location filename="../src/window.cpp" line="258"/>
+        <location filename="../src/window.cpp" line="2034"/>
         <source>Save</source>
         <translation>저장</translation>
     </message>
