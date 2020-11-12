@@ -891,12 +891,12 @@ TEST_F(test_textedit, getHighLightRowContentLineNum)
     assert(1==1);
 }
 //int  getLinePosByLineNum(int iLine);
-TEST_F(test_textedit, getLinePosByLineNum)
+TEST_F(test_textedit, getLinePosYByLineNum)
 {
     TextEdit *startManager = new TextEdit();
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
-    startManager->getLinePosByLineNum(1);
+    startManager->getLinePosYByLineNum(1);
 
     assert(1==1);
 }
