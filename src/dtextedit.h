@@ -317,7 +317,14 @@ public:
     void getHideRowContent(int iLine);
     bool isNeedShowFoldIcon(QTextBlock block);
     int  getHighLightRowContentLineNum(int iLine);
-    int  getLinePosByLineNum(int iLine);
+
+    /**
+     * @author liumaochuan ut000616
+     * @brief getLinePosYByLineNum 根据行号获得行Y轴坐标
+     * @param iLine 行
+     * @return 行Y轴坐标
+     */
+    int  getLinePosYByLineNum(int iLine);
     bool ifHasHighlight();
 
     //书签功能相关

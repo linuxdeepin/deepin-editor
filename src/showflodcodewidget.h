@@ -32,7 +32,7 @@ public:
      * @brief initHighLight 设置语法高亮
      * @param filepath 当前文件路径
      */
-    void initHighLight(QString filepath);
+    void initHighLight(QString filepath, bool bIsLight);
 
     /**
      * @author liumaochuan ut000616
@@ -40,6 +40,12 @@ public:
      * @param bIsLineWrap  是否换行
      */
     void setStyle(bool bIsLineWrap);
+
+    /**
+     * @author liumaochuan ut000616
+     * @brief hideFirstBlock 隐藏首行
+     */
+    void hideFirstBlock();
 
 private:
     DPlainTextEdit *m_pContentEdit;

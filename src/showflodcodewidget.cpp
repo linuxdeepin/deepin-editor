@@ -5,6 +5,7 @@
 #include <QVBoxLayout>
 #include <DWindowManagerHelper>
 #include <QGraphicsDropShadowEffect>
+#include <QXmlStreamReader>
 
 namespace KSyntaxHighlighting {
     class SyntaxHighlighter;
@@ -44,11 +45,10 @@ void ShowFlodCodeWidget::clear()
     m_nTextWidth = 0;
 }
 
-void ShowFlodCodeWidget::initHighLight(QString filepath)
+void ShowFlodCodeWidget::initHighLight(QString filepath, bool bIsLight)
 {
     if (m_highlighter != nullptr) {
-        if (this->palette().background().color().lightness() < 128) {
-
+        if (!bIsLight) {
             m_highlighter->setTheme(m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme));
         } else {
             m_highlighter->setTheme(m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
@@ -84,6 +84,11 @@ void ShowFlodCodeWidget::setStyle(bool bIsLineWrap)
     } else {
         m_pContentEdit->setLineWrapMode(QPlainTextEdit::NoWrap);
     }
+}
+
+void ShowFlodCodeWidget::hideFirstBlock()
+{
+    m_pContentEdit->document()->firstBlock().setVisible(false);
 }
 
 void ShowFlodCodeWidget::appendText(QString strText, int maxWidth)

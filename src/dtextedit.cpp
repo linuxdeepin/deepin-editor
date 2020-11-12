@@ -2038,7 +2038,6 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                 bHasCommnent = false;
            }
 
-
            //添加注释判断 存在不显示折叠标志　不存在显示折叠标准　梁卫东　２０２０年０９月０３日１７：２８：５０
            if (curText.contains("{") && isNeedShowFoldIcon(block) && !bHasCommnent) {
 
@@ -3729,29 +3728,36 @@ void TextEdit::getHideRowContent(int iLine)
     QTextCursor bracketEndCursor = cursor;
     bracketBeginCursor.movePosition(QTextCursor::NextCharacter,QTextCursor::KeepAnchor);
 
-   //获取最后右括弧光标
-   int braceDepth = 0;
-   QChar c;
-   while (!(c = doc->characterAt(position)).isNull()) {
-       if (c == begin) {
-           braceDepth++;
-       } else if (c == end) {
-           braceDepth--;
+    //获取最后右括弧光标
+    int braceDepth = 0;
+    QChar c;
+    while (!(c = doc->characterAt(position)).isNull()) {
+        if (c == begin) {
+            braceDepth++;
+        } else if (c == end) {
+            braceDepth--;
 
-           if (0 == braceDepth) {
-               bracketEndCursor = QTextCursor(doc);
-               bracketEndCursor.setPosition(position);
-               bracketEndCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-               //获取有括弧最后文本块
-               endBlock = bracketEndCursor.block();
-               break;
-           }
-       }
-       position++;
-   }
+            if (0 == braceDepth) {
+                bracketEndCursor = QTextCursor(doc);
+                bracketEndCursor.setPosition(position);
+                bracketEndCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+                //获取有括弧最后文本块
+                endBlock = bracketEndCursor.block();
+                break;
+            }
+        }
+        position++;
+    }
 
+    if (QColor(m_backgroundColor).lightness() < 128) {
+        m_foldCodeShow->initHighLight(filepath,false);
+    } else {
+        m_foldCodeShow->initHighLight(filepath,true);
+    }
 
-    m_foldCodeShow->initHighLight(filepath);
+    if (QFileInfo(filepath).suffix() == "css") {
+        m_foldCodeShow->appendText("{", width());
+    }
     //左右括弧没有匹配到
     if(braceDepth != 0){
         //遍历最后右括弧文本块 设置块隐藏或显示
@@ -3760,7 +3766,7 @@ void TextEdit::getHideRowContent(int iLine)
            beginBlock = beginBlock.next();
         }
 
-      //如果左右"{" "}"在同一行不折叠
+    //如果左右"{" "}"在同一行不折叠
     } else if(endBlock == curBlock){
 
         return;
@@ -3880,38 +3886,17 @@ int TextEdit::getHighLightRowContentLineNum(int iLine)
     }
 }
 
-int TextEdit::getLinePosByLineNum(int iLine)
+int TextEdit::getLinePosYByLineNum(int iLine)
 {
-    int blockNumber = getFirstVisibleBlockId();
-    QTextBlock block = document()->findBlockByNumber(blockNumber);
-    QTextBlock prev_block = (blockNumber > 0) ? document()->findBlockByNumber(blockNumber - 1) : block;
-    int translate_y = (blockNumber > 0) ? -verticalScrollBar()->sliderPosition() : 0;
+    QTextBlock block = document()->findBlockByNumber(iLine);
+    QTextCursor cur = textCursor();
 
-    int top = this->viewport()->geometry().top();
-    int additional_margin;
-    if (blockNumber == 0)
-        // Simply adjust to document's margin
-        //     additional_margin = document()->documentMargin() - 1 - this->verticalScrollBar()->sliderPosition();
-        additional_margin = document()->documentMargin() - this->verticalScrollBar()->sliderPosition();
-    else
-        // Getting the height of the visible part of the previous "non entirely visible" block
-        additional_margin = document()->documentLayout()->blockBoundingRect(prev_block).toRect()
-                            .translated(0, translate_y).intersected(this->viewport()->geometry()).height();
-
-    // Shift the starting point
-    additional_margin += 3;
-    top += additional_margin;
-
-    int bottom = top + document()->documentLayout()->blockBoundingRect(block).height();
-    while (block.isValid()) {
-        if (blockNumber == iLine)
-            return top;
+    while (!block.isVisible()) {
         block = block.next();
-        top = bottom;
-        bottom = top + document()->documentLayout()->blockBoundingRect(block).height();
-        ++blockNumber;
     }
-    return -1;
+
+    cur.setPosition(block.position(),QTextCursor::MoveAnchor);
+    return cursorRect(cur).y();
 }
 
 bool TextEdit::ifHasHighlight()
@@ -4733,7 +4718,12 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                     m_foldCodeShow->setStyle(lineWrapMode());//enum LineWrapMode {NoWrap,WidgetWidth};
                     getHideRowContent(line - 1);
                     m_foldCodeShow->show();
-                    m_foldCodeShow->move(5, getLinePosByLineNum(line));
+
+                    if (QFileInfo(filepath).suffix() == "css") {
+                        m_foldCodeShow->hideFirstBlock();
+                    }
+
+                    m_foldCodeShow->move(5, getLinePosYByLineNum(line));
                 } else {
                     QTextCursor previousCursor = textCursor();
                     int ivalue = this->verticalScrollBar()->value();
