@@ -867,7 +867,10 @@ void TextEdit::scrollLineDown()
 void TextEdit::scrollUp()
 {
     QScrollBar *scrollbar = verticalScrollBar();
-    scrollbar->setValue(scrollbar->value()-scrollbar->pageStep());
+    scrollbar->triggerAction(QAbstractSlider::SliderPageStepSub);
+    m_pLeftAreaWidget->m_linenumberarea->update();
+    m_pLeftAreaWidget->m_flodArea->update();
+    m_pLeftAreaWidget->m_bookMarkArea->update();
     auto moveMode = m_cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
     QTextCursor lineCursor(document()->findBlockByLineNumber(this->getFirstVisibleBlockId()));
     QTextCursor cursor = textCursor();
@@ -878,14 +881,17 @@ void TextEdit::scrollUp()
 void TextEdit::scrollDown()
 {
     QScrollBar *scrollbar = verticalScrollBar();
-    scrollbar->setValue(scrollbar->value()+scrollbar->pageStep());
-    int lines = this->height() / fontMetrics().height();
+    scrollbar->triggerAction(QAbstractSlider::SliderPageStepAdd);
 
+    m_pLeftAreaWidget->m_linenumberarea->update();
+    m_pLeftAreaWidget->m_flodArea->update();
+    m_pLeftAreaWidget->m_bookMarkArea->update();
     auto moveMode = m_cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
+    int lines = this->height() / fontMetrics().height();
     int tem = document()->blockCount();
 
     if (this->getFirstVisibleBlockId() + lines <tem ) {
-        QTextCursor lineCursor(document()->findBlockByLineNumber(this->getFirstVisibleBlockId()-1));
+        QTextCursor lineCursor(document()->findBlockByLineNumber(this->getFirstVisibleBlockId()));
         QTextCursor cursor = textCursor();
         cursor.setPosition(lineCursor.position(), moveMode);
         setTextCursor(cursor);
