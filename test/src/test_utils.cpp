@@ -16,7 +16,6 @@
 */
 #include "test_utils.h"
 
-
 test_utils::test_utils()
 {
 
