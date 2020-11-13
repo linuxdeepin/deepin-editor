@@ -52,6 +52,7 @@ int main(int argc, char *argv[])
     PerformanceMonitor::initializeAppStart();
     qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
     QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
+//    QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     EditorApplication app(argc, argv);
     Dtk::Core::DLogManager::registerConsoleAppender();

@@ -186,7 +186,7 @@ void DDropdownMenu::setTheme(const QString &theme)
     m_textColor = jsonMap["text-styles"].toMap()["Normal"].toMap()["text-color"].toString();
     m_backgroundColor = jsonMap["editor-colors"].toMap()["background-color"].toString();
 
-    m_arrowPixmap = arrowSvgPath;
+    m_arrowPixmap = arrowPixmap;
     m_pToolButton->setIcon(createIcon());
 }
 
@@ -197,9 +197,6 @@ void DDropdownMenu::setChildrenFocus(bool ok)
     else
     m_pToolButton->setFocusPolicy(Qt::NoFocus);
 }
-
-
-
 
 QIcon DDropdownMenu::createIcon()
 {
@@ -212,7 +209,8 @@ QIcon DDropdownMenu::createIcon()
     setFixedWidth(iconW);
     m_pToolButton->setIconSize(QSize(iconW,iconH));
 
-    QPixmap icon(iconW,iconH);
+    QPixmap icon(QSize(iconW,iconH) * devicePixelRatioF());
+    icon.setDevicePixelRatio(devicePixelRatioF());
     icon.fill(Qt::transparent);
 
     //获取文本字体颜色
