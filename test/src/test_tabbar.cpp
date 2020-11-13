@@ -5,6 +5,12 @@ test_tabbar::test_tabbar()
 
 }
 
+TEST_F(test_tabbar, Tabbar)
+{
+    Tabbar tab(nullptr);
+    assert(1==1);
+}
+
 TEST_F(test_tabbar, openFilesInWindow)
 {
     Tabbar * tab = new Tabbar();

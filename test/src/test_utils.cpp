@@ -20,6 +20,7 @@ test_utils::test_utils()
 {
 
 }
+
 //static QString getQrcPath(const QString &imageName);
 TEST_F(test_utils, getQrcPath)
 {

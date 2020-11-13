@@ -5,6 +5,18 @@ test_startmanager::test_startmanager()
 
 }
 
+TEST_F(test_startmanager, StartManager)
+{
+    StartManager startManager(nullptr);
+    assert(1==1);
+}
+
+TEST_F(test_startmanager, instance)
+{
+    StartManager::instance();
+    assert(1==1);
+}
+
 TEST_F(test_startmanager, openFilesInWindow)
 {
     StartManager *startManager = StartManager::instance();

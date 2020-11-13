@@ -9,7 +9,6 @@
 #include"../../src/replacebar.h"
 #include<QEvent>
 
-
 class tes_replacebar: public QObject, public::testing::Test
 {
 public:

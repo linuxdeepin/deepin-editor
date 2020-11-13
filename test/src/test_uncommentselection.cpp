@@ -6,7 +6,11 @@ test_uncommentselection::test_uncommentselection()
 }
 //void setComments(QString singleLineComment, QString multiLineCommentStart, QString multiLineCommentEnd);
 
-
+TEST_F(test_uncommentselection, CommentDefinition)
+{
+    CommentDefinition num;
+    assert(1==1);
+}
 
 TEST_F(test_uncommentselection, setComments)
 {

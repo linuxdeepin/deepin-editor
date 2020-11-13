@@ -21,6 +21,12 @@ test_editwrapper::test_editwrapper()
 
 }
 
+TEST_F(test_editwrapper, EditWrapper)
+{
+    EditWrapper *wrapper = new EditWrapper;
+    assert(1==1);
+}
+
 //void clearAllFocus() 无实现;
 
 //void setQuitFlag();
@@ -270,10 +276,6 @@ TEST_F(test_editwrapper, handleFileLoadFinished)
     wrapper->handleFileLoadFinished("UTF-8","aa");
     assert(1==1);
 }
-
-//signals:
-//void requestSaveAs();
-//void sigCodecSaveFile(const QString &strOldFilePath, const QString &strNewFilePath);
 
 //protected:
 //void resizeEvent(QResizeEvent *);

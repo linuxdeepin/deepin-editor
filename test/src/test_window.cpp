@@ -8,6 +8,12 @@ test_window::test_window()
 
 }
 
+TEST_F(test_window, Window)
+{
+    Window window1;
+    assert(1==1);
+}
+
 TEST_F(test_window, showCenterWindow)
 {
     Window * window1 = new Window();
@@ -58,7 +64,7 @@ TEST_F(test_window, addTab)
 TEST_F(test_window, openFile)
 {
     Window * window = new Window();
-//    //window->openFile();
+    window->openFile();
 //    delete window;
 //    window = nullptr;
 
@@ -74,8 +80,9 @@ TEST_F(test_window, saveFile)
 //closeTab
 TEST_F(test_window, closeTab)
 {
-//    Window * window = new Window();
-//    window->closeTab();
+    Window * window = new Window();
+    window->addBlankTab("aabb");
+    window->closeTab();
 //    delete window;
 //    window = nullptr;
 
@@ -100,10 +107,13 @@ TEST_F(test_window, saveBlankFileToDisk)
 //saveAsOtherTabFile
 TEST_F(test_window, saveAsOtherTabFile)
 {
-//    EditWrapper * eeee = new EditWrapper();
-//    Window * window = new Window();
-//    window->saveAsOtherTabFile(eeee);
-//    delete window;
+//    Window * window = StartManager::instance()->createWindow();
+//    window->addBlankTab("");
+//    window->addBlankTab("");
+//    window->addBlankTab("");
+//    EditWrapper *wrapper = window->currentWrapper();
+//    window->saveAsOtherTabFile(wrapper);
+////    delete window;
 //    window = nullptr;
 
     assert(1==1);
@@ -145,8 +155,8 @@ TEST_F(test_window, popupJumpLineBar)
 //updateJumpLineBar
 TEST_F(test_window, updateJumpLineBar)
 {
-    Window * window1 = new Window();
-    //window->updateJumpLineBar();
+//    Window * window = new Window();
+//    window->updateJumpLineBar();
 
 
     assert(1==1);
@@ -239,8 +249,8 @@ TEST_F(test_window, addTabWithWrapper)
 }
 TEST_F(test_window, handleTabCloseRequested)
 {
-   // StartManager::instance()->createWindow()->addTabWithWrapper(edit,"aabb","aabb",0);
-   // StartManager::instance()->createWindow()->handleTabCloseRequested(0);
+//    StartManager::instance()->createWindow()->addTabWithWrapper(edit,"aabb","aabb",0);
+//    StartManager::instance()->createWindow()->handleTabCloseRequested(0);
 
     assert(1==1);
 }
@@ -265,9 +275,9 @@ TEST_F(test_window, handleCurrentChanged)
 //slot_setTitleFocus
 TEST_F(test_window, slot_setTitleFocus)
 {
-    QStringList aa;
-    window = new Window();
-   // StartManager::instance()->createWindow()->slot_setTitleFocus();
+//    QStringList aa;
+    //window = new Window();
+//    StartManager::instance()->createWindow()->slot_setTitleFocus();
     //window->slot_setTitleFocus();
 
     assert(1==1);
