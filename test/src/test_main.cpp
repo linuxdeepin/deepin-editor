@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 
 
 
-    testing::InitGoogleTest();
+    testing::InitGoogleTest(&argc, argv);
 
 
 

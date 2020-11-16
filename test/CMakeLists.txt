@@ -16,7 +16,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-ADD_COMPILE_OPTIONS(-fno-access-control) 
+ADD_COMPILE_OPTIONS(-fno-access-control)
 set(APP_QRC "../src/deepin-editor.qrc")
 
 # Find the library
@@ -32,12 +32,10 @@ find_package(KF5SyntaxHighlighting)
 find_package(KF5Codecs)
 find_package(DFrameworkdbus REQUIRED)
 find_package(Qt5Test REQUIRED)
+find_package(GTest REQUIRED)
 
-include_directories(googletest)                           #以下三行添加包含以便测试用例代码的编写
-include_directories(googletest/googlemock/include)
 include_directories(Qt5PrintSupport)
-include_directories(googletest/googletest/include)
-add_subdirectory(googletest)                              #添加googletest库
+include_directories(${GTEST_INCLUDE_DIRS})
 include_directories(src)
 
 set(PROJECT_NAME_TEST
@@ -62,7 +60,7 @@ add_executable(${PROJECT_NAME_TEST}
     )
 
 # 生成测试可执行程序的依赖库
-target_link_libraries(${PROJECT_NAME_TEST} 
+target_link_libraries(${PROJECT_NAME_TEST}
         gmock gmock_main gtest gtest_main
     ${DtkWidget_LIBRARIES}
     ${DtkCore_LIBRARIES}
@@ -70,6 +68,8 @@ target_link_libraries(${PROJECT_NAME_TEST}
     ${GSTREAMER_LIBRARIES}
     ${Qt5PrintSupport_LIBRARIES}
     ${LIBDMR_LIBRARIES}
+    ${GTEST_LIBRARIES}
+    ${GTEST_MAIN_LIBRARIES}
     Qt5::Core
     Qt5::Gui
     Qt5::Widgets
@@ -79,17 +79,19 @@ target_link_libraries(${PROJECT_NAME_TEST}
     ${Qt5Concurrent_LIBRARIES}
     KF5::Codecs
     KF5::SyntaxHighlighting
+    -lpthread
+    -lm
         )
 
 target_include_directories(${PROJECT_NAME_TEST} PUBLIC ${DtkWidget_INCLUDE_DIRS}
                                                        ${DtkCore_INCLUDE_DIRS}
                                                        ${DtkGui_INCLUDE_DIRS})
-                         
+
 add_custom_target(test
     #执行mkdir -p 创建 coverageResult
     COMMAND mkdir -p test/coverageResult
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-)                               
+)
 
 add_custom_command(TARGET test
             COMMAND echo " =================== CREAT LCOV REPROT BEGIN ==================== "
