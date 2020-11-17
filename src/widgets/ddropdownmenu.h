@@ -36,33 +36,28 @@ class DDropdownMenu : public QFrame
 public:
     DDropdownMenu(QWidget *parent = nullptr);
     ~DDropdownMenu();
-
-    QList<QAction *> actions() const;
-
-    QAction *addAction(const QString &text);
-    void addActions(QStringList list);
-    void setCurrentAction(QAction *action);
-    void setCurrentText(const QString &text);
-    void setCurrentTextOnly(const QString &text);
-    void setText(const QString &text);
-
     void setMenu(DMenu *menu);
     void setTheme(const QString &theme);
 
     void setChildrenFocus(bool ok);
-    DToolButton* getButton() { return m_pToolButton;}
+    DToolButton* getButton();
+public slots:
+    void setCurrentTextOnly(const QString &text);
+public:
+    //创建编码菜单
+    static DDropdownMenu* createEncodeMenu();
+    //创建文件类型菜单
+    static DDropdownMenu* createHighLightMenu();
+signals:
+    void requestContextMenu(bool bClicked = false);
+    void currentTextChanged(const QString &text);
 private:
     //创建文字ICON
     QIcon createIcon();
-public slots:
+    void setText(const QString &text);
+private slots:
     //字体大小跟随系统变化
     void OnFontChangedSlot(const QFont &font);
-
-signals:
-    void requestContextMenu(bool bClicked = false);
-    void triggered(QAction *action);
-    void currentTextChanged(const QString &text);
-
 protected:
     //按键事件　鼠标释放弹出菜单
     bool eventFilter(QObject *object, QEvent *event);
@@ -70,10 +65,11 @@ private:
     DToolButton *m_pToolButton = nullptr;
     DMenu *m_menu = nullptr;
     QPixmap m_arrowPixmap;
-    QString m_text;
+    QString m_text = "UTF-8";
     QFont m_font;
     QString m_textColor;
     QString m_backgroundColor;
+    static QVector<QPair<QString,QStringList>> sm_groupEncodeVec;
 };
 
 #endif

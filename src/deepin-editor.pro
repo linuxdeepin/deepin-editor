@@ -32,8 +32,6 @@ HEADERS += window.h \
            linebar.h \
            settings.h \
            tabbar.h \
-           toolbar.h \
-           #editorbuffer.h \
            linenumberarea.h \
            editwrapper.h \
            uncommentselection.h \
@@ -50,14 +48,15 @@ HEADERS += window.h \
            environments.h \
            fontitemdelegate.h \
     	   warningnotices.h \
-    bookmarkwidget.h \
-    leftareaoftextedit.h \
-    codeflodarea.h \
-    showflodcodewidget.h \
-    widgets/ColorSelectWdg.h \
-    editorapplication.h \
-    encoding.h \
-    performancemonitor.h
+           bookmarkwidget.h \
+           leftareaoftextedit.h \
+           codeflodarea.h \
+           showflodcodewidget.h \
+           widgets/ColorSelectWdg.h \
+           editorapplication.h \
+           encoding.h \
+           performancemonitor.h \
+           encodes/detectcode.h
 
 SOURCES += window.cpp \
            startmanager.cpp \
@@ -71,7 +70,6 @@ SOURCES += window.cpp \
            settingsdialog.cpp \
            tabbar.cpp \
            toolbar.cpp \
-           #editorbuffer.cpp \
            linenumberarea.cpp \
            editwrapper.cpp \
            utils.cpp \
@@ -86,18 +84,20 @@ SOURCES += window.cpp \
            thememodule/themelistmodel.cpp \
            thememodule/themelistview.cpp \
            fontitemdelegate.cpp \
-    	   warningnotices.cpp \
-    bookmarkwidget.cpp \
-    leftareaoftextedit.cpp \
-    codeflodarea.cpp \
-    showflodcodewidget.cpp \
-    widgets/ColorSelectWdg.cpp \
-    editorapplication.cpp \
-    encoding.cpp \
-    performancemonitor.cpp
+           warningnotices.cpp \
+           bookmarkwidget.cpp \
+           leftareaoftextedit.cpp \
+           codeflodarea.cpp \
+           showflodcodewidget.cpp \
+           widgets/ColorSelectWdg.cpp \
+           editorapplication.cpp \
+           encoding.cpp \
+           performancemonitor.cpp \
+           encodes/detectcode.cpp
 
 
 QMAKE_CXXFLAGS += -g
+QMAKE_CFLAGS += -fPIC
 LIBS += -lX11 -lXext -lXtst
 
 isEmpty(BINDIR):BINDIR=/usr/bin
@@ -127,3 +127,20 @@ TRANSLATIONS += ../translations/deepin-editor_zh_CN.ts\
     ../translations/deepin-editor_zh_HK.ts\
     ../translations/deepin-editor_zh_TW.ts\
     ../translations/deepin-editor.ts
+
+
+INCLUDEPATH += $$PWD/../third/lib/include/uchardet
+INCLUDEPATH += $$PWD/../third/lib/include
+
+
+LIBS += -L$$PWD/../third/lib/lib/ -lenca
+PRE_TARGETDEPS += $$PWD/../third/lib/lib/libenca.a
+
+LIBS += -L$$PWD/../third/lib/lib/ -luchardet
+PRE_TARGETDEPS += $$PWD/../third/lib/lib/libuchardet.a
+
+LIBS += -L$$PWD/../third/lib/lib/ -libcharset
+PRE_TARGETDEPS += $$PWD/../third/lib/lib/libcharset.a
+
+LIBS += -L$$PWD/../third/lib/lib/ -libiconv
+PRE_TARGETDEPS += $$PWD/../third/lib/lib/libiconv.a

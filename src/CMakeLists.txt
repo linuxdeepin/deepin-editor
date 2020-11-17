@@ -13,7 +13,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/environments.h.in ${CMAKE_CURRENT_SOU
 # Sources files
 file(GLOB SRCS "*.h" "*.cpp"
                "thememodule/*.h" "thememodule/*.cpp"
-               "widgets/*.h" "widgets/*.cpp")
+	       "widgets/*.h" "widgets/*.cpp" "encodes/detectcode.h" "encodes/detectcode.cpp")
 
 # Find the library
 find_package(PkgConfig REQUIRED)
@@ -31,6 +31,11 @@ find_package(DFrameworkdbus REQUIRED)
 include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 include_directories(Qt5PrintSupport)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/include)
+link_libraries(${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/lib/libcharset.a)
+link_libraries(${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/lib/libiconv.a)
+link_libraries(${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/lib/libenca.a)
+link_libraries(${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/lib/libuchardet.a)
 
 # Tell CMake to create the executable
 add_executable(deepin-editor ${SRCS} deepin-editor.qrc)

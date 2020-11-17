@@ -31,6 +31,8 @@
 #include <DApplicationHelper>
 using namespace Dtk::Core;
 
+QVector<QPair<QString,QStringList>> DDropdownMenu::sm_groupEncodeVec;
+
 DDropdownMenu::DDropdownMenu(QWidget *parent)
     : QFrame(parent)
     , m_pToolButton(new DToolButton(this))
@@ -67,16 +69,6 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     layout->setContentsMargins(0,0,0,0);
     this->setLayout(layout);
 
-    connect(m_menu, &DMenu::triggered, this, [=](QAction *action) {
-        //编码内容改变触发内容改变和信号发射 梁卫东 2020.7.7
-        if (m_text != action->text()) {
-            Q_EMIT this->triggered(action);
-            Q_EMIT this->currentTextChanged(action->text());
-        }
-        setText(action->text());
-        setCurrentAction(action);
-    });
-
     connect(this, &DDropdownMenu::requestContextMenu, this, [=] (bool bClicked){
         QPoint center = this->mapToGlobal(this->rect().center());
         int menuHeight = m_menu->sizeHint().height();
@@ -93,64 +85,12 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
 
     //设置字体自适应大小
     //设置界面大小根据内容大小自适应 梁卫东 2020.7.7
-      connect(qApp,&DApplication::fontChanged,this,&DDropdownMenu::OnFontChangedSlot);
+    connect(qApp,&DApplication::fontChanged,this,&DDropdownMenu::OnFontChangedSlot);
 }
 
 DDropdownMenu::~DDropdownMenu() {}
 
-QList<QAction *> DDropdownMenu::actions() const
-{
-    return m_menu->actions();
-}
 
-QAction *DDropdownMenu::addAction(const QString &text)
-{
-    QAction *action = m_menu->addAction(text);
-    action->setCheckable(true);
-    setText(action->text());
-    return action;
-}
-
-void DDropdownMenu::addActions(QStringList list)
-{
-    for (int i =0;i<list.size();i++) {
-
-      //if(i == 0) m_menu->addSeparator();
-     // if(i == list.size() -1) m_menu->addSeparator();
-
-      QAction *action = m_menu->addAction(list[i]);
-      action->setCheckable(true);
-    }
-
-    //setText(list.last());
-}
-
-void DDropdownMenu::setCurrentAction(QAction *action)
-{
-    if (action) {
-        for (QAction *action : m_menu->actions()) {
-            action->setChecked(false);
-        }
-        setText(action->text());
-        action->setChecked(true);
-    } else {
-        for (QAction *action : m_menu->actions()) {
-            action->setChecked(false);
-        }
-    }
-}
-
-void DDropdownMenu::setCurrentText(const QString &text)
-{
-    QString strCodecName = text;
-    strCodecName = strCodecName.toUpper();
-    for (QAction *action : m_menu->actions()) {
-        if (action->text() == strCodecName) {
-            setCurrentAction(action);
-            break;
-        }
-    }
-}
 
 void DDropdownMenu::setCurrentTextOnly(const QString &text)
 {
@@ -169,9 +109,7 @@ void DDropdownMenu::setMenu(DMenu *menu)
     if (m_menu) {
         delete m_menu;
     }
-
     m_menu = menu;
-   //m_pToolButton->setMenu(m_menu);
 }
 
 void DDropdownMenu::setTheme(const QString &theme)
@@ -192,10 +130,78 @@ void DDropdownMenu::setTheme(const QString &theme)
 
 void DDropdownMenu::setChildrenFocus(bool ok)
 {
-    if(ok)
-    m_pToolButton->setFocusPolicy(Qt::StrongFocus);
-    else
-    m_pToolButton->setFocusPolicy(Qt::NoFocus);
+    if(ok)  m_pToolButton->setFocusPolicy(Qt::StrongFocus);
+    else   m_pToolButton->setFocusPolicy(Qt::NoFocus);
+}
+
+DToolButton *DDropdownMenu::getButton()
+{
+    return m_pToolButton;
+}
+
+DDropdownMenu *DDropdownMenu::createEncodeMenu()
+{
+    DDropdownMenu *m_pEncodeMenu = new DDropdownMenu();
+    DMenu* m_pMenu = new DMenu();
+    if(sm_groupEncodeVec.isEmpty()){
+        QFile file(":/encodes/encodes.ini");
+        QString data;
+        if(file.open(QIODevice::ReadOnly))
+        {
+           data = QString::fromUtf8(file.readAll());
+           file.close();
+        }
+
+        QTextStream readStream(&data,QIODevice::ReadOnly);
+        while (!readStream.atEnd()) {
+            QString group = readStream.readLine();
+            QString key = group.mid(1,group.length()-2);
+            QString encodes = readStream.readLine();
+            QString value = encodes.mid(8,encodes.length()-2);
+            sm_groupEncodeVec.append(QPair<QString,QStringList>(key,value.split(",")));
+
+            QStringList list = value.split(",");
+            QMenu* groupMenu = new QMenu(QObject::tr(key.toLocal8Bit().data()));
+             foreach(QString var,list)
+             {
+               QAction *act= groupMenu->addAction(QObject::tr(var.toLocal8Bit().data()));
+               //act->setCheckable(true);
+             }
+
+            m_pMenu->addMenu(groupMenu);
+        }
+    }else {
+
+        int cnt = sm_groupEncodeVec.size();
+        for (int i = 0;i < cnt;i++) {
+            QMenu* groupMenu = new QMenu(QObject::tr(sm_groupEncodeVec[i].first.toLocal8Bit().data()));
+             foreach(QString var,sm_groupEncodeVec[i].second)
+             {
+               QAction *act= groupMenu->addAction(QObject::tr(var.toLocal8Bit().data()));
+              // act->setCheckable(true);
+             }
+
+            m_pMenu->addMenu(groupMenu);
+        }
+    }
+
+    connect(m_pMenu, &DMenu::triggered, m_pEncodeMenu,[m_pEncodeMenu](QAction *action) {
+        //编码内容改变触发内容改变和信号发射 梁卫东 2020.7.7
+        if (m_pEncodeMenu->m_text != action->text()) {
+            Q_EMIT m_pEncodeMenu->currentTextChanged(action->text());
+        }
+       // m_pEncodeMenu->setText(action->text());
+    });
+
+    m_pEncodeMenu->setText("UTF-8");
+    m_pEncodeMenu->setMenu(m_pMenu);
+
+    return  m_pEncodeMenu;
+}
+
+DDropdownMenu *DDropdownMenu::createHighLightMenu()
+{
+    return nullptr;
 }
 
 QIcon DDropdownMenu::createIcon()

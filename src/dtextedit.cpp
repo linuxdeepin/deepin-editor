@@ -78,7 +78,7 @@ static inline bool isModifier(QKeyEvent *e)
 
 TextEdit::TextEdit(QWidget *parent)
     : DPlainTextEdit(parent),
-      m_wrapper(nullptr),
+     m_wrapper(nullptr),
      m_highlighter(new KSyntaxHighlighting::SyntaxHighlighter(document()))
 {
     m_nLines = 0;
@@ -2878,6 +2878,11 @@ void TextEdit::setModified(bool modified)
     emit modificationChanged(filepath, modified);
 }
 
+void TextEdit::setTabbarModified(bool modified)
+{
+    emit modificationChanged(filepath, modified);
+}
+
 void TextEdit::copySelectedText()
 {
     QClipboard *clipboard = QApplication::clipboard();
@@ -4559,10 +4564,7 @@ void TextEdit::setCursorStart(int _)
     m_cursorStart = _;
 }
 
-void TextEdit::setTextCode(QString encode)
-{
-    m_textEncode = encode;
-}
+
 void TextEdit::completionWord(QString word)
 {
     QString wordAtCursor = getWordAtCursor();

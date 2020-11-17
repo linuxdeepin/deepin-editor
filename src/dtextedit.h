@@ -278,7 +278,8 @@ public:
 
     void setSettings(Settings *settings);
     void setModified(bool modified);
-
+    //设置tabbar修改状态是否带*,不改变document 修改属性
+    void setTabbarModified(bool modified);
     void copySelectedText();
     void cutSelectedText();
     void pasteText();
@@ -468,7 +469,6 @@ public:
                               , QString strColor, QList<QTextEdit::ExtraSelection> *listSelections);
 
     void setCursorStart(int _);
-    void setTextCode(QString encode);
     void writeEncodeHistoryRecord();
     QStringList readEncodeHistoryRecord();
     void columnCopy();

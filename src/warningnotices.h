@@ -13,7 +13,7 @@ class WarningNotices : public DFloatingMessage
 {
     Q_OBJECT
 public:
-    explicit WarningNotices(MessageType notifyType = MessageType::ResidentType);
+    explicit WarningNotices(MessageType notifyType = MessageType::ResidentType ,QWidget *parent = nullptr);
     ~WarningNotices();
 
     void setReloadBtn();

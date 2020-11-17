@@ -41,14 +41,6 @@ class EditWrapper : public QWidget
     Q_OBJECT
 
 public:
-    // end of line mode.
-    enum EndOfLineMode {
-        eolUnknown = -1,
-        eolUnix = 0,
-        eolDos = 1,
-        eolMac = 2
-    };
-
     struct FileStateItem {
         QDateTime modified;
         QFile::Permissions permissions;
@@ -61,16 +53,33 @@ public:
     void clearAllFocus();
     void setQuitFlag();
     bool getFileLoading();
-    void openFile(const QString &filepath);
-    bool saveFile();
-    bool saveAsFile(const QString &newFilePath, QByteArray encodeName);
-    void updatePath(const QString &file);
-    void refresh();
-    bool isLoadFinished() { return m_isLoadFinished; }
 
-    EndOfLineMode endOfLineMode();
-    void setEndOfLineMode(EndOfLineMode eol);
-    void setTextCodec(QByteArray encodeName, bool reload = false);
+    //打开文件
+    void openFile(const QString &filepath);
+    //以默认编码encode重写读取去文件
+    bool readFile(QByteArray encode="");
+    //保存文件
+    bool saveFile();
+    //重新加载文件编码
+    bool saveAsFile(const QString &newFilePath, QByteArray encodeName);
+    //保存草稿文件
+    bool saveDraftFile();
+    //另存为第一次打开文件编码文件
+    bool saveAsFile();
+    //重新加载文件编码 1.文件修改 2.文件未修改处理逻辑一样 切换编码重新加载和另存为 梁卫东
+    bool reloadFileEncode(QByteArray encode);
+    //重写加载修改文件
+    void reloadModifyFile();
+    //获取文件编码
+    QString getTextEncode();
+    //跟新路径
+    void updatePath(const QString &file);
+    //判断是否修改
+    bool isModified();
+    //判断是否草稿文件
+    bool isDraftFile();
+    //判断内容是否为空
+    bool isPlainTextEmpty();
 
     void hideWarningNotices();
     void checkForReload();
@@ -80,44 +89,44 @@ public:
     void setTextChangeFlag(bool bFlag);
     void setLineNumberShow(bool bIsShow,bool bIsFirstShow = false);
     void setShowBlankCharacter(bool ok);
-
-    BottomBar *bottomBar() { return m_bottomBar; }
-    QString filePath() { return m_textEdit->filepath; }
-    TextEdit *textEditor() { return m_textEdit; }
+    //
+    BottomBar *bottomBar();
+    QString filePath();
+    TextEdit *textEditor();
 private:
-    void detectEndOfLine();
+    // 类似setPlainText(QString) 接口支持大文本加载 不卡顿 秒退出 梁卫东 2020年11月11日16:56:27
+    void loadContent(const QByteArray&);
+private:
     void handleCursorModeChanged(TextEdit::CursorMode mode);
     void handleHightlightChanged(const QString &name);
 
-    void setTextCodec(QTextCodec *codec, bool reload = false);
-
     int GetCorrectUnicode1(const QByteArray &ba);
-    bool saveDraftFile();
-    void readFile(const QString &filePath);
+
 public slots:
-    void onFileClosed();
     void slotTextChange();
-    void handleFileLoadFinished(const QByteArray &encode,const QString &content);
+    void handleFileLoadFinished(const QByteArray &encode,const QByteArray &content);
 signals:
     void requestSaveAs();
     void sigCodecSaveFile(const QString &strOldFilePath, const QString &strNewFilePath);
-
-protected:
-    void resizeEvent(QResizeEvent *);
 private:
-    QHBoxLayout *m_layout;
-    TextEdit *m_textEdit;
-    QTextCodec *m_textCodec;
-    BottomBar *m_bottomBar;
-    EndOfLineMode m_endOfLineMode;
-    bool m_isLoadFinished;
-    QDateTime m_modified;
-    bool m_isRefreshing;
-    WarningNotices *m_waringNotices;
+    //第一次打开文件编码
+    QString m_sFirstEncode= QString("UTF-8");
+    //当前切换文件编码
+    QString  m_sCurEncode =QString("UTF-8");
+
+
+    TextEdit *m_pTextEdit = nullptr;
+    BottomBar *m_pBottomBar = nullptr;
+    WarningNotices *m_pWaringNotices = nullptr;
+
+    QDateTime m_tModifiedDateTime;
+
+
     bool m_bTextChange = true;
-    QByteArray m_BeforeEncodeName {"UTF-8"};
     bool m_bIsContinue;
+    //退出
     bool m_bQuit = false;
+    //文件是否加载
     bool m_bFileLoading = false;
 };
 

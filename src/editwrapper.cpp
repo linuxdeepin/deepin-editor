@@ -17,13 +17,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "encodes/detectcode.h"
 #include "widgets/toast.h"
 #include "fileloadthread.h"
 #include "editwrapper.h"
 #include "utils.h"
-#include <unistd.h>
 #include "leftareaoftextedit.h"
+#include "drecentmanager.h"
 
+#include <unistd.h>
 #include <QCoreApplication>
 #include <QApplication>
 #include <QSaveFile>
@@ -32,63 +34,50 @@
 #include <QDebug>
 #include <QTimer>
 #include <QDir>
-#include "drecentmanager.h"
+
 
 DCORE_USE_NAMESPACE
 
 EditWrapper::EditWrapper(QWidget *parent)
     : QWidget(parent),
-      m_layout(new QHBoxLayout),
-      m_textEdit(new TextEdit(this)),
-      m_textCodec(QTextCodec::codecForName("UTF-8")),
-      m_bottomBar(new BottomBar(this)),
-      m_endOfLineMode(eolUnix),
-      m_isLoadFinished(true),
-      m_isRefreshing(false),
-      m_waringNotices(new WarningNotices)
+      m_pTextEdit(new TextEdit(this)),
+      m_pBottomBar(new BottomBar(this)),
+      m_pWaringNotices(new WarningNotices(WarningNotices::ResidentType,this))
 {
+    m_pWaringNotices->hide();
     // Init layout and widgets.
+    QHBoxLayout* m_layout = new QHBoxLayout;
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->setSpacing(0);
-    m_layout->addWidget(m_textEdit->m_pLeftAreaWidget);
-    m_layout->addWidget(m_textEdit);
+    m_layout->addWidget(m_pTextEdit->m_pLeftAreaWidget);
+    m_layout->addWidget(m_pTextEdit);
 
-    m_bottomBar->setHighlightMenu(m_textEdit->getHighlightMenu());
-    m_textEdit->setWrapper(this);
+    m_pBottomBar->setHighlightMenu(m_pTextEdit->getHighlightMenu());
+    m_pTextEdit->setWrapper(this);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
     mainLayout->addLayout(m_layout);
-    mainLayout->addWidget(m_bottomBar);
+    mainLayout->addWidget(m_pBottomBar);
     mainLayout->setContentsMargins(0, 0, 0, 0);
     mainLayout->setSpacing(0);
     setLayout(mainLayout);
 
-    connect(m_textEdit, &TextEdit::cursorModeChanged, this, &EditWrapper::handleCursorModeChanged);
-    connect(m_textEdit, &TextEdit::hightlightChanged, this, &EditWrapper::handleHightlightChanged);
-    connect(m_textEdit, &TextEdit::textChanged, this, &EditWrapper::slotTextChange);
+    connect(m_pTextEdit, &TextEdit::cursorModeChanged, this, &EditWrapper::handleCursorModeChanged);
+    connect(m_pTextEdit, &TextEdit::hightlightChanged, this, &EditWrapper::handleHightlightChanged);
+    connect(m_pTextEdit, &TextEdit::textChanged, this, &EditWrapper::slotTextChange);
 
-    //connect(m_waringNotices, &WarningNotices::closeButtonClicked, m_waringNotices, &WarningNotices::closeBtnClicked);
-    connect(m_waringNotices, &WarningNotices::reloadBtnClicked, this, &EditWrapper::refresh);
-    connect(m_waringNotices, &WarningNotices::closeButtonClicked, this, [=] {
-        QFileInfo fi(filePath());
-        m_modified = fi.lastModified();
-    });
-
-    connect(m_waringNotices, &WarningNotices::saveAsBtnClicked, this, &EditWrapper::requestSaveAs);
+    connect(m_pWaringNotices, &WarningNotices::reloadBtnClicked, this, &EditWrapper::reloadModifyFile);
+    connect(m_pWaringNotices, &WarningNotices::saveAsBtnClicked, this, &EditWrapper::requestSaveAs);
 }
 
 EditWrapper::~EditWrapper()
 {
-  // if(m_textEdit)
-   //    m_textEdit->deleteLater();
-    //delete m_waringNotices;
+
 }
 
 void EditWrapper::setQuitFlag()
 {
     m_bQuit = true;
-    //m_bFileLoading = true;
-    //QApplication::processEvents();
 }
 
 bool EditWrapper::getFileLoading()
@@ -96,34 +85,46 @@ bool EditWrapper::getFileLoading()
     return (m_bQuit || m_bFileLoading);
 }
 
-
 void EditWrapper::openFile(const QString &filepath)
 {
     // update file path.
     updatePath(filepath);
-    //detectEndOfLine();
 
-    m_textEdit->setIsFileOpen();
-    m_isLoadFinished = false;
+    m_pTextEdit->setIsFileOpen();
 
     FileLoadThread *thread = new FileLoadThread(filepath);
 
     // begin to load the file.
     connect(thread, &FileLoadThread::loadFinished, this, &EditWrapper::handleFileLoadFinished);
-    connect(thread, &FileLoadThread::toTellFileClosed, this, &EditWrapper::onFileClosed);
     connect(thread, &FileLoadThread::finished, thread, &FileLoadThread::deleteLater);
 
-    QStringList encodeList = textEditor()->readEncodeHistoryRecord();
-    QStringList filepathList = textEditor()->readHistoryRecordofFilePath("advance.editor.browsing_encode_history");
-    thread->setEncodeInfo(filepathList,encodeList);
-//    // start the thread.
-    QApplication::setOverrideCursor(Qt::WaitCursor);
     thread->start();
+}
+
+bool EditWrapper::readFile(QByteArray encode)
+{
+   QByteArray newEncode = encode;
+   if(newEncode.isEmpty()){
+      newEncode = DetectCode::GetFileEncodingFormat(m_pTextEdit->filepath);
+      m_sFirstEncode = newEncode;
+   }
+
+    QFile file(m_pTextEdit->filepath);
+    if (file.open(QIODevice::ReadOnly)) {
+        QByteArray fileContent = file.readAll();
+        QByteArray Outdata;
+        DetectCode::ChangeFileEncodingFormat(fileContent,Outdata,newEncode,QString("UTF-8"));
+        loadContent(Outdata);
+        file.close();
+        m_sCurEncode = newEncode;
+        m_pTextEdit->setModified(false);
+        return true;
+    }
+    return false;
 }
 
 bool EditWrapper::saveAsFile(const QString &newFilePath, QByteArray encodeName)
 {
-    QTextCodec *pSaveAsFileCodec = QTextCodec::codecForName(encodeName);
     // use QSaveFile for safely save files.
     QSaveFile saveFile(newFilePath);
     saveFile.setDirectWriteFallback(true);
@@ -133,49 +134,18 @@ bool EditWrapper::saveAsFile(const QString &newFilePath, QByteArray encodeName)
     }
 
     QFile file(newFilePath);
-    if (!file.open(QIODevice::WriteOnly)) {
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         return false;
     }
 
-    QRegularExpression eolRegex("\r?\n|\r");
-    QString eol = QStringLiteral("\n");
-    if (m_endOfLineMode == eolDos) {
-        eol = QStringLiteral("\r\n");
-    } else if (m_endOfLineMode == eolMac) {
-        eol = QStringLiteral("\r");
-    }
-
     //auto append new line char to end of file when file's format is Linux/MacOS
-    QString fileContent = m_textEdit->toPlainText();
+    QByteArray fileContent = m_pTextEdit->toPlainText().toUtf8();
 
-    if (m_endOfLineMode == eolUnix) {
-        if (!fileContent.endsWith("\n"))
-        {
-            fileContent = fileContent.append(QChar('\n'));
-        }
-    }
-    else if (m_endOfLineMode == eolDos)
-    {
-        if (!fileContent.endsWith("\r\n"))
-        {
-            fileContent = fileContent.append(QChar('\r')).append(QChar('\n'));
-        }
-    }
-    else if (m_endOfLineMode == eolMac) {
-        if (!fileContent.endsWith("\r"))
-        {
-            fileContent = fileContent.append(QChar('\r'));
-        }
-    }
-
-    QTextStream stream(&file);
-    stream.setCodec(pSaveAsFileCodec);
-    stream << fileContent.replace(eolRegex, eol);
-
-    //flush stream.
-    stream.flush();
-
+    QByteArray Outdata;
+    DetectCode::ChangeFileEncodingFormat(fileContent,Outdata,QString("UTF-8"),encodeName);
+    file.write(Outdata);
     // close and delete file.
+    QFileDevice::FileError error = file.error();
     file.close();
 
     // flush file.
@@ -185,446 +155,333 @@ bool EditWrapper::saveAsFile(const QString &newFilePath, QByteArray encodeName)
 
     // ensure that the file is written to disk
     fsync(saveFile.handle());
-
     QFileInfo fi(filePath());
-    m_modified = fi.lastModified();
+    m_tModifiedDateTime = fi.lastModified();
 
     // did save work?
     // only finalize if stream status == OK
-    bool ok = (stream.status() == QTextStream::Ok);
-
-    // update status.
-    if (ok) {
-        //m_textEdit->setModified(false);
-        //m_isLoadFinished = true;
-    }
-
-//    qDebug() << "Saved file:" << m_textEdit->filepath
-//             << "with codec:" << pSaveAsFileCodec->name()
-//             << "Line Endings:" << m_endOfLineMode
-//             << "State:" << ok;
+    bool ok = (error == QFileDevice::NoError);
 
     return ok;
 }
 
+bool EditWrapper::saveAsFile()
+{
+    DFileDialog dialog(this, tr("Save"));
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.addComboBox(tr("Encoding"),  QStringList() << m_sFirstEncode);
+    dialog.setDirectory(QDir::homePath());
+    dialog.setNameFilter("*.txt");
+
+    this->setUpdatesEnabled(false);
+    int mode =  dialog.exec();
+    this->setUpdatesEnabled(true);
+    hideWarningNotices();
+
+    if(QDialog::Accepted == mode)
+    {
+        const QString newFilePath = dialog.selectedFiles().value(0);
+        if (newFilePath.isEmpty())
+            return false;
+
+        QFile qfile(newFilePath);
+
+        if (!qfile.open(QFile::WriteOnly | QIODevice::Truncate)) {
+            return false;
+        }
+
+        // 以新的编码保存内容到文件
+        QByteArray inputData = m_pTextEdit->toPlainText().toUtf8();
+        QByteArray outData;
+        DetectCode::ChangeFileEncodingFormat(inputData,outData,QString("UTF-8"),m_sFirstEncode);
+        qfile.write(outData);
+        qfile.close();
+
+        return true;
+    }
+
+    return false;
+}
+
+bool EditWrapper::reloadFileEncode(QByteArray encode)
+{
+    //切换编码相同不重写加载
+    if(m_sCurEncode == encode) return false;
+
+    //草稿文件 空白文件不保存
+    if(Utils::isDraftFile(m_pTextEdit->filepath) &&  m_pTextEdit->toPlainText().isEmpty()) {
+        m_sCurEncode = encode;
+        m_sFirstEncode = encode;
+        return true;
+    }
+
+
+    //1.如果修改切换编码提示用户是否保存,不保存重新打开文件读取.2.没有修改是否另存为
+    if(m_pTextEdit->document()->isModified())
+    {
+        DDialog *dialog = new DDialog(tr("The current file changes, whether to save first?"), "", this);
+        dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
+        dialog->setIcon(QIcon::fromTheme("deepin-editor"));
+        dialog->addButton(QString(tr("Cancel")), 0, DDialog::ButtonNormal);
+        dialog->addButton(QString(tr("Save")), 1, DDialog::ButtonRecommend);
+        int res = dialog->exec();//0  1
+
+        //关闭对话框
+        if(res == -1) return false;
+
+        //保存
+        if(res == 1){
+            //草稿文件
+            if(Utils::isDraftFile(m_pTextEdit->filepath)){
+                if(saveDraftFile())
+                {
+                    bool ok = readFile(encode);
+                    return ok;
+                }else {
+                    return false;
+                }
+
+            }else {
+                saveFile();
+                bool ok = readFile(encode);
+                return ok;
+            }
+
+        }
+
+        //取消保存,重写载入
+        if(res == 0)
+        {
+            bool ok = readFile(encode);
+            if(ok) m_pTextEdit->setTabbarModified(true);
+            return ok;
+        }
+        return false;
+    }else {
+//        //没有修改 提示是否另存为新文件重新载入, 切换编码显示修改,需要保存
+//        DDialog *dialog = new DDialog(tr("The current file changes, whether to save first?"), "", this);
+//        dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
+//        dialog->setIcon(QIcon::fromTheme("deepin-editor"));
+//        dialog->addButton(QString(tr("Cancel")), 0, DDialog::ButtonNormal);
+//        dialog->addButton(QString(tr("Save")), 1, DDialog::ButtonRecommend);
+//        int res = dialog->exec();//0  1
+
+        bool ok = readFile(encode);
+        if(ok) m_pTextEdit->setTabbarModified(true);
+        return ok;
+    }
+}
+
+void EditWrapper::reloadModifyFile()
+{
+    hideWarningNotices();
+
+    int curPos = m_pTextEdit->textCursor().position();
+    int yoffset = m_pTextEdit->verticalScrollBar()->value();
+    int xoffset = m_pTextEdit->horizontalScrollBar()->value();
+
+    //如果文件修改提示用户是否保存  如果临时文件保存就是另存为
+    if (m_pTextEdit->document()->isModified()) {
+        DDialog *dialog = new DDialog(tr("The current file changes, whether to save as?"), "", this);
+        dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
+        dialog->setIcon(QIcon::fromTheme("deepin-editor"));
+        dialog->addButton(QString(tr("Cancel")), 0, DDialog::ButtonNormal);
+        dialog->addButton(QString(tr("Save")), 1, DDialog::ButtonRecommend);
+        dialog->setCloseButtonVisible(false);
+        int res = dialog->exec();//0  1
+
+        //点击关闭
+        if(res == -1) return;
+
+        //点击取消
+        if(res == 0) {
+            //重写加载文件
+            readFile();
+        }
+
+        //点击另存为
+        if(res == 1){
+            //临时文件保存另存为 需要删除源草稿文件文件
+           if(Utils::isDraftFile(m_pTextEdit->filepath)){
+               if(!saveDraftFile()) return;
+           }
+           else {
+              if(!saveAsFile()) return;
+           }
+           //重写加载文件
+           readFile();
+        }
+
+    }else{
+        //重写加载文件
+        readFile();
+    }
+
+    QFileInfo fi(m_pTextEdit->filepath);
+    m_tModifiedDateTime = fi.lastModified();
+
+    QTextCursor textcur = m_pTextEdit->textCursor();
+    textcur.setPosition(curPos);
+    m_pTextEdit->setTextCursor(textcur);
+    m_pTextEdit->verticalScrollBar()->setValue(yoffset);
+    m_pTextEdit->horizontalScrollBar()->setValue(xoffset);
+}
+
+QString EditWrapper::getTextEncode()
+{
+    return m_sCurEncode;
+}
+
 bool EditWrapper::saveFile()
 {
-    // use QSaveFile for safely save files.
-    QSaveFile saveFile(m_textEdit->filepath);
-    saveFile.setDirectWriteFallback(true);
+    QFile file(m_pTextEdit->filepath);
+    file.remove();
 
-    if (!saveFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+    if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        QByteArray fileContent = m_pTextEdit->toPlainText().toLocal8Bit();
+        if(!fileContent.isEmpty())
+        {
+            QByteArray Outdata;
+            DetectCode::ChangeFileEncodingFormat(fileContent,Outdata,QString("UTF-8"),m_sCurEncode);
+            file.write(Outdata);
+            QFileDevice::FileError error = file.error();
+            file.close();
+            m_sFirstEncode = m_sCurEncode;
+
+            QFileInfo fi(filePath());
+            m_tModifiedDateTime = fi.lastModified();
+
+            // did save work?
+            // only finalize if stream status == OK
+            bool ok = (error == QFileDevice::NoError);
+
+            // update status.
+            if (ok)  m_pTextEdit->setModified(false);
+            return ok;
+
+        }else {
+            file.write(fileContent);
+            QFileDevice::FileError error = file.error();
+            file.close();
+            m_sFirstEncode = m_sCurEncode;
+
+            QFileInfo fi(filePath());
+            m_tModifiedDateTime = fi.lastModified();
+
+            // did save work?
+            // only finalize if stream status == OK
+            bool ok = (error == QFileDevice::NoError);
+
+            // update status.
+            if (ok)  m_pTextEdit->setModified(false);
+            return ok;
+        }
+    }else {
         return false;
     }
 
-    QFile file(m_textEdit->filepath);
-    if (!file.open(QIODevice::WriteOnly)) {
-        return false;
-    }
-
-    QRegularExpression eolRegex("\r?\n|\r");
-    QString eol = QStringLiteral("\n");
-    if (m_endOfLineMode == eolDos) {
-        eol = QStringLiteral("\r\n");
-    } else if (m_endOfLineMode == eolMac) {
-        eol = QStringLiteral("\r");
-    }
-
-    //auto append new line char to end of file when file's format is Linux/MacOS
-    QString fileContent = m_textEdit->toPlainText();
-
-    if (m_endOfLineMode == eolUnix) {
-        if (!fileContent.endsWith("\n"))
-        {
-            //fileContent = fileContent.append(QChar('\n'));
-        }
-    }
-    else if (m_endOfLineMode == eolDos)
-    {
-        if (!fileContent.endsWith("\r\n"))
-        {
-            //fileContent = fileContent.append(QChar('\r')).append(QChar('\n'));
-        }
-    }
-    else if (m_endOfLineMode == eolMac) {
-        if (!fileContent.endsWith("\r"))
-        {
-            //fileContent = fileContent.append(QChar('\r'));
-        }
-    }
-
-    QTextStream stream(&file);
-    stream.setCodec(m_textCodec);
-    stream << fileContent.replace(eolRegex, eol);
-
-//    qDebug() << "saveFile stream.codec()->name():" << stream.codec()->name();
-
-    //flush stream.
-    stream.flush();
-
-    // close and delete file.
-    file.close();
-
-    // flush file.
-    if (!saveFile.flush()) {
-        return false;
-    }
-
-    // ensure that the file is written to disk
-    fsync(saveFile.handle());
-
-    QFileInfo fi(filePath());
-    m_modified = fi.lastModified();
-
-    // did save work?
-    // only finalize if stream status == OK
-    bool ok = (stream.status() == QTextStream::Ok);
-
-    // update status.
-    if (ok) {
-        m_textEdit->setModified(false);
-        m_isLoadFinished = true;
-    }
-
-//    qDebug() << "Saved file:" << m_textEdit->filepath
-//             << "with codec:" << m_textCodec->name()
-//             << "Line Endings:" << m_endOfLineMode
-//             << "State:" << ok;
-
-    return ok;
 }
 
 void EditWrapper::updatePath(const QString &file)
 {
     QFileInfo fi(file);
-    m_modified = fi.lastModified();
-
-    m_textEdit->filepath = file;
-    detectEndOfLine();
+    m_tModifiedDateTime = fi.lastModified();
+    m_pTextEdit->filepath = file;
 }
 
-void EditWrapper::refresh()
+bool EditWrapper::isModified()
 {
-//    if (filePath().isEmpty() || Utils::isDraftFile(filePath()) || m_isRefreshing) {
-//        return;
-//    }
-    if (filePath().isEmpty() || m_isRefreshing) {
-        return;
-    }
+    //编码改变内容没有修改也算是文件修改
+    bool modified = (m_sFirstEncode != m_sCurEncode || m_pTextEdit->document()->isModified());
+    return  modified;
+}
 
-    QFile file(filePath());
-    int curPos = m_textEdit->textCursor().position();
-    int yoffset = m_textEdit->verticalScrollBar()->value();
-    int xoffset = m_textEdit->horizontalScrollBar()->value();
+bool EditWrapper::isDraftFile()
+{
+    return Utils::isDraftFile(m_pTextEdit->filepath);
+}
 
-    //如果文件有被修改了
-    if (m_textEdit->document()->isModified()) {
-        DDialog *dialog = new DDialog(tr("Encoding changed. Do you want to save the file now?"), "", this);
-        dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
-        dialog->setIcon(QIcon::fromTheme("deepin-editor"));
-        dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
-        dialog->addButton(QString(tr("Save")), true, DDialog::ButtonRecommend);
-
-        //如果用户直接按关闭按钮
-        connect(dialog, &DDialog::closed, this, [=] {
-            m_bottomBar->setEncodeName(QString(m_BeforeEncodeName));
-            m_textCodec = QTextCodec::codecForName(m_BeforeEncodeName);
-            return;
-        });
-
-        connect(dialog, &DDialog::buttonClicked, this, [=] (int index) {
-            dialog->hide();
-
-            // 如果用户放弃了这次操作
-            if (index == 0) {
-                m_bottomBar->setEncodeName(QString(m_BeforeEncodeName));
-                m_textCodec = QTextCodec::codecForName(m_BeforeEncodeName);
-                return;
-            }
-            else if (index == 1) {
-
-                bool isDraft = Utils::isDraftFile(m_textEdit->filepath);
-                //如果是临时标签文件
-                if (isDraft == true) {
-                    //如果临时文件内容为空则不做操作
-                    if (m_textEdit->toPlainText() == "") {
-                        return;
-                    }
-
-                    const QString &new_file = DFileDialog::getSaveFileName(this, tr("Save"), QDir::homePath(), "*.txt");
-                    if (new_file.isEmpty())
-                        return;
-
-                    QFile qfile(new_file);
-
-                    if (!qfile.open(QFile::WriteOnly)) {
-                        return;
-                    }
-
-                    // 以切换前的编码保存内容到文件
-                    qDebug() << "write m_BeforeEncodeName:" << m_BeforeEncodeName;
-                    if (m_BeforeEncodeName.isNull()) {
-                        QString str = "UTF-8";
-                        m_BeforeEncodeName = str.toLocal8Bit();
-                    }
-                    qfile.write(QTextCodec::codecForName(m_BeforeEncodeName)->fromUnicode(m_textEdit->toPlainText()));
-                    qfile.close();
-
-                    QString strOldFilePath = m_textEdit->filepath;
-                    if (isDraft) {
-                        QFile(m_textEdit->filepath).remove();
-                        this->updatePath(new_file);
-                    }
-
-                    // 重新读取文件
-                    readFile(new_file);
-                    m_bTextChange = false;
-
-                    emit sigCodecSaveFile(strOldFilePath, new_file);
-                    //m_textEdit->setModified(false);
-                    //m_textEdit->document()->setModified(false);
-                    //m_isLoadFinished = true;
-                }
-                //如果是已经存在的文件
-                else {
-                    QFile qfile(m_textEdit->filepath);
-                    if (!qfile.open(QFile::WriteOnly)) {
-                        return;
-                    }
-
-                    // 以切换前的编码保存内容到文件
-                    qfile.write(QTextCodec::codecForName(m_BeforeEncodeName)->fromUnicode(m_textEdit->toPlainText()));
-                    qfile.close();
-
-                    // 重新读取文件
-                    readFile(m_textEdit->filepath);
-                    m_bTextChange = false;
-                }
-            }
-        });
-
-        dialog->exec();
-    }
-    else {
-        readFile(m_textEdit->filepath);
-        m_bTextChange = false;
-    }
-
-    if (file.open(QIODevice::ReadOnly)) {
-        m_isRefreshing = true;
-
-        //QTextStream out(&file);
-        //out.setCodec(m_textCodec);
-        //QString content = out.readAll();
-
-        //设置编码方法1
-        //const QString strContent = m_textEdit->toPlainText();
-        //QTextStream streamContent(strContent.toLocal8Bit());
-        //streamContent.setCodec(m_textCodec);
-        //QString content = streamContent.readAll();
-        //in >> content;
-
-        //设置编码 方法2
-//        const QString strContent = m_textEdit->toPlainText();
-//        qDebug() << "get strContent:" << strContent;
-//        QByteArray byteContent = m_textCodec->fromUnicode(strContent);
-//        QTextStream streamContent(byteContent);
-//        streamContent.setCodec(m_textCodec);
-//        QString content = streamContent.readAll();
-
-//        m_textEdit->setPlainText(QString());
-//        qDebug() << "set content:" << content;
-//        m_textEdit->setPlainText(content);
-        //m_textEdit->setModified(false);
-
-        QTextCursor textcur = m_textEdit->textCursor();
-        textcur.setPosition(curPos);
-        m_textEdit->setTextCursor(textcur);
-        m_textEdit->verticalScrollBar()->setValue(yoffset);
-        m_textEdit->horizontalScrollBar()->setValue(xoffset);
-
-        QFileInfo fi(filePath());
-        m_modified = fi.lastModified();
-
-        file.close();
-        m_waringNotices->hide();
-
-        fsync(file.handle());
-
-        m_textEdit->setUpdatesEnabled(false);
-
-        QTimer::singleShot(10, this, [=] {
-            m_textEdit->setUpdatesEnabled(true);
-            m_isRefreshing = false;
-        });
-    } else {
-        m_isRefreshing = false;
-    }
+bool EditWrapper::isPlainTextEmpty()
+{
+    return m_pTextEdit->document()->isEmpty();
 }
 
 bool EditWrapper::saveDraftFile()
 {
-    const QString &new_file = DFileDialog::getSaveFileName(this, tr("Save"), QDir::homePath(), "*.txt");
-    if (new_file.isEmpty())
-        return false;
+    DFileDialog dialog(this, tr("Save"));
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.addComboBox(tr("Encoding"),  QStringList() << m_sCurEncode);
+    dialog.setDirectory(QDir::homePath());
+    dialog.setNameFilter("*.txt");
 
-    QFile qfile(new_file);
+    this->setUpdatesEnabled(false);
+    int mode =  dialog.exec();
+    this->setUpdatesEnabled(true);
+    hideWarningNotices();
 
-    if (!qfile.open(QFile::WriteOnly)) {
-        return false;
-    }
+    if(QDialog::Accepted == mode)
+    {
+        const QString newFilePath = dialog.selectedFiles().value(0);
+        if (newFilePath.isEmpty())
+            return false;
 
-    // 以新的编码保存内容到文件
-    qfile.write(QTextCodec::codecForName(m_textCodec->name())->fromUnicode(m_textEdit->toPlainText()));
-    qfile.close();
+        QFile qfile(newFilePath);
 
-    QFile(m_textEdit->filepath).remove();
-    this->updatePath(new_file);
-
-    return true;
-}
-
-void EditWrapper::readFile(const QString &filePath)
-{
-    QByteArray data;
-    QFile qfile(filePath);
-    m_bIsContinue = true;
-
-    // 重新读取文件
-    if (data.isEmpty()) {
-        if (!qfile.open(QFile::ReadOnly)) {
-            return;
+        if (!qfile.open(QFile::WriteOnly)) {
+            return false;
         }
 
-        data = qfile.readAll();
+        // 以新的编码保存内容到文件
+        QByteArray inputData = m_pTextEdit->toPlainText().toUtf8();
+        QByteArray outData;
+        DetectCode::ChangeFileEncodingFormat(inputData,outData,QString("UTF-8"),m_sCurEncode);
+        qfile.write(outData);
         qfile.close();
+
+        QFile(m_pTextEdit->filepath).remove();
+        emit sigCodecSaveFile(m_pTextEdit->filepath,newFilePath);
+        updatePath(newFilePath);
+        return true;
     }
 
-    if  (data.isEmpty()) {
-        return;
-    }
-
-    // 使用新的编码重新加载文件
-    // 获取当前用户选择使用的编码
-    QTextCodec *codec = QTextCodec::codecForName(m_textCodec->name());
-    QTextDecoder *decoder = codec->makeDecoder();
-    const QString &text = decoder->toUnicode(data);
-
-    // 判断是否出错
-    if (decoder->hasFailure()) {
-        DDialog *dialogWarning = new DDialog(tr("There are errors when using this encoding. If continue, the file contents may be changed"), "", this);
-        dialogWarning->setWindowFlags(dialogWarning->windowFlags() | Qt::WindowStaysOnTopHint);
-        dialogWarning->setIcon(QIcon::fromTheme("deepin-editor"));
-        dialogWarning->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
-        dialogWarning->addButton(QString(tr("Continue")), true, DDialog::ButtonRecommend);
-
-        // 如果用户按关闭按钮放弃了这次操作
-        connect(dialogWarning, &DDialog::closed, this, [=] {
-            // 恢复到旧的编码
-            //QSignalBlocker blocker(ui->comboBox); // 禁用信号通知
-            //Q_UNUSED(blocker)
-            //ui->comboBox->setCurrentText(m_currentCodec);
-            m_bottomBar->setEncodeName(m_BeforeEncodeName);
-            m_bIsContinue = false;
-            return;
-        });
-
-        connect(dialogWarning, &DDialog::buttonClicked, this, [=] (int index) {
-            qDebug() << "index:" << index;
-            // 如果用户放弃了这次操作
-            if (index == 0) {
-                // 恢复到旧的编码
-                //QSignalBlocker blocker(ui->comboBox); // 禁用信号通知
-                //Q_UNUSED(blocker)
-                //ui->comboBox->setCurrentText(m_currentCodec);
-                m_bottomBar->setEncodeName(m_BeforeEncodeName);
-                m_bIsContinue = false;
-                return;
-            }
-        });
-
-        dialogWarning->exec();
-    }
-
-    if (m_bIsContinue == false) {
-        return;
-    }
-    m_BeforeEncodeName = m_textCodec->name();
-    m_textEdit->setPlainText(text);
-}
-
-EditWrapper::EndOfLineMode EditWrapper::endOfLineMode()
-{
-    return m_endOfLineMode;
-}
-
-void EditWrapper::setEndOfLineMode(EndOfLineMode eol)
-{
-    m_endOfLineMode = eol;
-}
-
-void EditWrapper::setTextCodec(QTextCodec *codec, bool reload)
-{
-    m_textCodec = codec;
-    if (reload == false)
-        return;
-
-    refresh();
-
-    // TODO: enforce bom for some encodings
-}
-
-void EditWrapper::setTextCodec(QByteArray encodeName, bool reload)
-{
-    QTextCodec* codec = QTextCodec::codecForName(encodeName);
-
-    if (!codec) {
-        qWarning() << "Codec for" << encodeName << "not found! Fallback to UTF-8";
-        codec = QTextCodec::codecForName("UTF-8");
-    }
-
-    setTextCodec(codec, reload);
+    return false;
 }
 
 void EditWrapper::hideWarningNotices()
 {
-
-    if (m_waringNotices->isVisible()) {
-        m_waringNotices->hide();
+    if (m_pWaringNotices->isVisible()) {
+        m_pWaringNotices->hide();
     }
 }
 
+//除草稿文件 检查文件是否被删除,是否被修复
 void EditWrapper::checkForReload()
 {
-    if (Utils::isDraftFile(m_textEdit->filepath))
-        return;
+    if (Utils::isDraftFile(m_pTextEdit->filepath)) return;
 
-    QFileInfo fi(filePath());
+    QFileInfo fi(m_pTextEdit->filepath);
 
-    if (fi.lastModified() == m_modified || m_waringNotices->isVisible())
-        return;
+    if (fi.lastModified() == m_tModifiedDateTime || m_pWaringNotices->isVisible()) return;
 
-    if (fi.exists() && fi.lastModified() != m_modified) {
-        m_waringNotices->setMessage(tr("File has changed on disk. Reload?"));
-        m_waringNotices->setReloadBtn();
-    } else {
-        m_waringNotices->setMessage(tr("File removed on the disk. Save it now?"));
-        m_waringNotices->setSaveAsBtn();
+
+    if (!fi.exists()) {
+        m_pWaringNotices->setMessage(tr("File removed on the disk. Save it now?"));
+        m_pWaringNotices->setSaveAsBtn();
+    }else if(fi.lastModified() != m_tModifiedDateTime){
+        m_pWaringNotices->setMessage(tr("File has changed on disk. Reload?"));
+        m_pWaringNotices->setReloadBtn();
     }
 
-    m_waringNotices->show();
-    DMessageManager::instance()->sendMessage(this, m_waringNotices);
+    m_pWaringNotices->show();
+    DMessageManager::instance()->sendMessage(m_pTextEdit, m_pWaringNotices);
 }
 
 void EditWrapper::showNotify(const QString &message)
 {
-    //DFloatingMessage
-    //DMainWindow::sendMessage(QIcon(":/images/ok.svg"), message);
-    //DMessageManager::sendMessage(QIcon(":/images/ok.svg"), message);
-    if (m_textEdit->getReadOnlyPermission() == true || m_textEdit->getReadOnlyMode() == true) {
-        DMessageManager::instance()->sendMessage(m_textEdit, QIcon(":/images/warning.svg"), message);
+    if (m_pTextEdit->getReadOnlyPermission() || m_pTextEdit->getReadOnlyMode()) {
+        DMessageManager::instance()->sendMessage(m_pTextEdit, QIcon(":/images/warning.svg"), message);
     } else {
-        DMessageManager::instance()->sendMessage(m_textEdit, QIcon(":/images/ok.svg"), message);
+        DMessageManager::instance()->sendMessage(m_pTextEdit, QIcon(":/images/ok.svg"), message);
     }
 }
 
@@ -638,88 +495,123 @@ void EditWrapper::setTextChangeFlag(bool bFlag)
     m_bTextChange = bFlag;
 }
 
-void EditWrapper::onFileClosed()
-{
-    m_textEdit->clearBlack();
-}
-
-void EditWrapper::detectEndOfLine()
-{
-    QFile file(m_textEdit->filepath);
-
-    if (!file.open(QIODevice::ReadOnly)) {
-        return;
-    }
-
-    QByteArray line = file.readLine();
-    if (line.indexOf("\r\n") != -1) {
-        m_endOfLineMode = eolDos;
-    } else if (line.indexOf("\r") != -1) {
-        m_endOfLineMode = eolMac;
-    } else {
-        m_endOfLineMode = eolUnix;
-    }
-
-    file.close();
-}
-
 void EditWrapper::handleCursorModeChanged(TextEdit::CursorMode mode)
 {
     switch (mode) {
     case TextEdit::Insert:
-        m_bottomBar->setCursorStatus(tr("INSERT"));
+        m_pBottomBar->setCursorStatus(tr("INSERT"));
         break;
     case TextEdit::Overwrite:
-        m_bottomBar->setCursorStatus(tr("OVERWRITE"));
+        m_pBottomBar->setCursorStatus(tr("OVERWRITE"));
         break;
     case TextEdit::Readonly:
-        m_bottomBar->setCursorStatus(tr("R/O"));
-        break;
-    default:
+        m_pBottomBar->setCursorStatus(tr("R/O"));
         break;
     }
 }
 
 void EditWrapper::handleHightlightChanged(const QString &name)
 {
-    m_bottomBar->setHightlightName(name);
+    m_pBottomBar->setHightlightName(name);
 }
 
-void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QString &content)
-{
-    // restore mouse style.
-    // QApplication::restoreOverrideCursor();
+void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QByteArray &content)
+{   
 
-    if (!Utils::isDraftFile(m_textEdit->filepath)) {
+    if (!Utils::isDraftFile(m_pTextEdit->filepath)) {
         DRecentData data;
         data.appName = "Deepin Editor";
         data.appExec = "deepin-editor";
-        DRecentManager::addItem(m_textEdit->filepath, data);
+        DRecentManager::addItem(m_pTextEdit->filepath, data);
     }
 
-    bool flag = m_textEdit->getReadOnlyPermission();
-    if(flag == true) m_textEdit->setReadOnlyPermission(false);
-
-    m_isLoadFinished = true;
+    bool flag = m_pTextEdit->getReadOnlyPermission();
+    if(flag == true) m_pTextEdit->setReadOnlyPermission(false);
 
     m_bFileLoading = true;
+    m_sCurEncode = encode;
+    m_sFirstEncode = encode;
+    //设置语法高亮
+    m_pTextEdit->loadHighlighter();
+    loadContent(content);
 
-    m_BeforeEncodeName = encode;
-    if (m_BeforeEncodeName.isEmpty()) {
-        QString str = "UTF-8";
-        m_BeforeEncodeName = str.toLocal8Bit();
+    PerformanceMonitor::openFileFinish(filePath(), QFileInfo(filePath()).size());
+
+    m_bFileLoading = false;
+    if(flag == true) m_pTextEdit->setReadOnlyPermission(true);
+    if(m_bQuit) return;
+    m_pTextEdit->setTextFinished();
+
+    m_pTextEdit->setModified(false);
+    m_pBottomBar->setEncodeName(m_sCurEncode);
+}
+
+
+void EditWrapper::slotTextChange()
+{
+    m_bTextChange = true;
+}
+
+//yanyuhan
+void EditWrapper::setLineNumberShow(bool bIsShow ,bool bIsFirstShow)
+{
+    if(bIsShow && !bIsFirstShow) {
+        int lineNumberAreaWidth = m_pTextEdit->m_pLeftAreaWidget->m_linenumberarea->width();
+        int leftAreaWidth = m_pTextEdit->m_pLeftAreaWidget->width();
+        m_pTextEdit->m_pLeftAreaWidget->m_linenumberarea->show();
+        m_pTextEdit->m_pLeftAreaWidget->setFixedWidth(leftAreaWidth + lineNumberAreaWidth);
+
+    } else if(!bIsShow) {
+        int lineNumberAreaWidth = m_pTextEdit->m_pLeftAreaWidget->m_linenumberarea->width();
+        int leftAreaWidth = m_pTextEdit->m_pLeftAreaWidget->width();
+        m_pTextEdit->m_pLeftAreaWidget->m_linenumberarea->hide();
+        m_pTextEdit->m_pLeftAreaWidget->setFixedWidth(leftAreaWidth - lineNumberAreaWidth);
     }
+    m_pTextEdit->bIsSetLineNumberWidth = bIsShow;
+    m_pTextEdit->updateLineNumber();
+}
 
-    setTextCodec(encode);
+//显示空白符
+void EditWrapper::setShowBlankCharacter(bool ok)
+{
+    if(ok){
+        QTextOption opts = m_pTextEdit->document()->defaultTextOption();
+        QTextOption::Flags flag = opts.flags();
+        flag |= QTextOption::ShowTabsAndSpaces;
+        opts.setFlags(flag);
+        m_pTextEdit->document()->setDefaultTextOption(opts);
+    }else {
+        QTextOption opts = m_pTextEdit->document()->defaultTextOption();
+        QTextOption::Flags flag = opts.flags();
+        flag &= ~QTextOption::ShowTabsAndSpaces;
+        opts.setFlags(flag);
+        m_pTextEdit->document()->setDefaultTextOption(opts);
+    }
+}
 
-    // set text.
-    m_textEdit->loadHighlighter();
-    m_textEdit->clear();
+BottomBar *EditWrapper::bottomBar()
+{
+    return m_pBottomBar;
+}
 
-    //tab点击关闭
+QString EditWrapper::filePath()
+{
+    return  m_pTextEdit->filepath;
+}
+
+TextEdit *EditWrapper::textEditor()
+{
+    return m_pTextEdit;
+}
+
+//支持大文本加载 界面不卡顿 秒关闭
+void EditWrapper::loadContent(const QByteArray &content)
+{
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    m_pTextEdit->clear();
     m_bQuit = false;
-    QTextDocument *doc = m_textEdit->document();
-    QTextCursor cursor = m_textEdit->textCursor();
+    QTextDocument *doc = m_pTextEdit->document();
+    QTextCursor cursor = m_pTextEdit->textCursor();
     int len = content.length();
     //初始化显示文本大小
     int InitContentPos = 5*1024;
@@ -731,7 +623,8 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QString 
     int mod = len % step;
 
     int max = 40*1024*1024;
-    QString data;
+
+    QByteArray data;
     if(len > max){
         for (int i = 0; i < cnt; i++) {
             //初始化秒开
@@ -769,76 +662,6 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QString 
         }
     }
 
-
-    PerformanceMonitor::openFileFinish(filePath(), QFileInfo(filePath()).size());
-
-    m_bFileLoading = false;
-    if(flag == true) m_textEdit->setReadOnlyPermission(true);
-
-    if(m_bQuit) return;
-
-    m_textEdit->setTextFinished();
-
-//    m_textEdit->clearBlack();
+    doc->setModified(false);
     QApplication::restoreOverrideCursor();
-    // update status.
-    m_textEdit->setModified(false);
-//    m_textEdit->moveToStart();
-
-    m_bottomBar->setEncodeName(m_textCodec->name());
-
-    // load highlight.
-    //QTimer::singleShot(100, this, [=] { m_textEdit->loadHighlighter(); });
-}
-
-void EditWrapper::resizeEvent(QResizeEvent *e)
-{
-
-    QWidget::resizeEvent(e);
-}
-
-void EditWrapper::slotTextChange()
-{
-    m_bTextChange = true;
-}
-
-//yanyuhan
-void EditWrapper::setLineNumberShow(bool bIsShow ,bool bIsFirstShow)
-{
-    if(bIsShow && !bIsFirstShow) {
-        int lineNumberAreaWidth = m_textEdit->m_pLeftAreaWidget->m_linenumberarea->width();
-        int leftAreaWidth = m_textEdit->m_pLeftAreaWidget->width();
-        m_textEdit->m_pLeftAreaWidget->m_linenumberarea->show();
-        m_textEdit->m_pLeftAreaWidget->setFixedWidth(leftAreaWidth + lineNumberAreaWidth);
-
-    } else if(!bIsShow) {
-        int lineNumberAreaWidth = m_textEdit->m_pLeftAreaWidget->m_linenumberarea->width();
-        int leftAreaWidth = m_textEdit->m_pLeftAreaWidget->width();
-        m_textEdit->m_pLeftAreaWidget->m_linenumberarea->hide();
-        m_textEdit->m_pLeftAreaWidget->setFixedWidth(leftAreaWidth - lineNumberAreaWidth);
-    }
-    m_textEdit->bIsSetLineNumberWidth = bIsShow;
-    m_textEdit->updateLineNumber();
-}
-
-//显示空白符
-void EditWrapper::setShowBlankCharacter(bool ok)
-{
-    if(ok){
-        QTextOption opts = m_textEdit->document()->defaultTextOption();
-        QTextOption::Flags flag = opts.flags();
-        flag |= QTextOption::ShowTabsAndSpaces;
-//        flag |= QTextOption::ShowLineAndParagraphSeparators;
-//        flag |= QTextOption::AddSpaceForLineAndParagraphSeparators;
-        opts.setFlags(flag);
-        m_textEdit->document()->setDefaultTextOption(opts);
-    }else {
-        QTextOption opts = m_textEdit->document()->defaultTextOption();
-        QTextOption::Flags flag = opts.flags();
-        flag &= ~QTextOption::ShowTabsAndSpaces;
-//        flag &= ~QTextOption::ShowLineAndParagraphSeparators;
-//        flag &= ~QTextOption::AddSpaceForLineAndParagraphSeparators;
-        opts.setFlags(flag);
-        m_textEdit->document()->setDefaultTextOption(opts);
-    }
 }

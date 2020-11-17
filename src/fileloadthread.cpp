@@ -19,6 +19,7 @@
 
 #include "fileloadthread.h"
 #include "utils.h"
+#include "encodes/detectcode.h"
 
 #include <QCoreApplication>
 #include <QPlainTextEdit>
@@ -27,7 +28,9 @@
 #include <QFile>
 #include <QDebug>
 #include <QTextCodec>
-#include"encoding.h"
+#include "encoding.h"
+
+
 
 FileLoadThread::FileLoadThread(const QString &filepath, QObject *parent)
     : QThread(parent),
@@ -46,32 +49,20 @@ void FileLoadThread::run()
 
     if (file.open(QIODevice::ReadOnly)) {
         // reads all remaining data from the file.
-        QByteArray fileContentAll = file.readAll();
-
-        // read the encode.
-        QByteArray encodeArray = "";
-
-        QByteArray encode = encodeArray.fromStdString(getCodec().toStdString());
-
-//        if (m_pathList.contains(m_filePath)) {
-//            encodeArray = m_codeList.value(m_pathList.indexOf(m_filePath)).toUtf8();
-//        }
-
+        QByteArray Indata = file.readAll();
         file.close();
-        if (file.open(QIODevice::ReadOnly)) {
-            QTextStream stream(&fileContentAll);
-            stream.setCodec(encode);
-            QString content = stream.readAll();
+        QByteArray OutData;
+        // read the encode.
+        QByteArray encode = DetectCode::GetFileEncodingFormat(m_filePath);
+        QString textEncode =QString::fromLocal8Bit(encode);
 
-            emit loadFinished(encode, content);
-            }
-
-            file.close();
-            emit toTellFileClosed();
-        }
-        else {
-            file.close();
-        }
+         if(textEncode.contains("ASCII",Qt::CaseInsensitive) || textEncode.contains("UTF-8",Qt::CaseInsensitive)){
+            emit loadFinished(encode, Indata);
+         }else {
+            DetectCode::ChangeFileEncodingFormat(Indata,OutData,textEncode,QString("UTF-8"));
+            emit loadFinished(encode, OutData);
+         }
+    }
 }
 
 void FileLoadThread::setEncodeInfo(QStringList pathList,QStringList codeList)

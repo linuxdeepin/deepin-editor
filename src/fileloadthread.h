@@ -34,9 +34,7 @@ public:
     void setEncodeInfo(QStringList pathList,QStringList codeList);
     QString getCodec();
 signals:
-    void loadFinished(const QByteArray &encode, const QString &content);
-    void toTellFileClosed();
-
+    void loadFinished(const QByteArray &encode, const QByteArray &content);
 private:
     QString m_filePath;
     QStringList m_pathList;

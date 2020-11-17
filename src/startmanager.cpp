@@ -52,14 +52,9 @@ StartManager::StartManager(QObject *parent)
 
     if (!QFileInfo(blankFileDir).exists()) {
         QDir().mkpath(blankFileDir);
-        //qDebug() << "Create blank file dir: " << blankFileDir;
     }
 }
 
-//void StartManager::setDragEnter(bool bIsDragEnter)
-//{
-//    m_bIsDragEnter = bIsDragEnter;
-//}
 
 bool StartManager::checkPath(const QString &file)
 {
@@ -90,8 +85,7 @@ void StartManager::openFilesInWindow(QStringList files)
 {
     // Open window with blank tab if no files need open.
     if (files.isEmpty()) {
-        if (m_windows.count() >= 20)
-            return;
+        if (m_windows.count() >= 20) return;
         Window *window = createWindow();
         window->show();
         window->addBlankTab();
@@ -412,12 +406,9 @@ StartManager::FileTabInfo StartManager::getFileTabInfo(QString file)
     return info;
 }
 
-//bool StartManager::isDragEnter()
-//{
-//    return m_bIsDragEnter;
-//}
 
-void StartManager::initBlockShutdown() {
+void StartManager::initBlockShutdown()
+{
     if (m_reply.value().isValid()) {
         //qDebug() << "m_reply.value().isValid():" << m_reply.value().isValid();
         return;

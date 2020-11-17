@@ -523,10 +523,10 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
         const QDragEnterEvent *e = static_cast<QDragEnterEvent*>(event);
         const QMimeData* mimeData = e->mimeData();
 
-        if ((!e->source() || e->source()->parent() != this) &&
-            mimeData->hasFormat("dedit/tabbar")) {
-            static_cast<Window*>(this->window())->changeTitlebarBackground(m_dndStartColor, m_dndEndColor);
-        }
+//        if ((!e->source() || e->source()->parent() != this) &&
+//            mimeData->hasFormat("dedit/tabbar")) {
+//            static_cast<Window*>(this->window())->changeTitlebarBackground(m_dndStartColor, m_dndEndColor);
+//        }
     } else if (event->type() == QEvent::DragLeave) {
     } else if (event->type() == QEvent::Drop) {
     } else if (event->type() == QEvent::DragMove) {

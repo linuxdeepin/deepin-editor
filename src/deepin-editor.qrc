@@ -300,5 +300,6 @@
         <file>images/d-l.svg</file>
         <file>images/like_hover_light.svg</file>
         <file>images/like_hover_dark.svg</file>
+        <file>encodes/encodes.ini</file>
     </qresource>
 </RCC>
