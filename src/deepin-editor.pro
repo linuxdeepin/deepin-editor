@@ -117,8 +117,8 @@ themes.files += themes/atom_dark.theme
 
 INSTALLS += target desktop themes
 
-QMAKE_CXXFLAGS+= -fPIE
-QMAKE_LFLAGS += -pie
+#QMAKE_CXXFLAGS+= -fPIE
+#QMAKE_LFLAGS += -pie
 
 DISTFILES += \
     themes/deepin_dark.theme \
@@ -139,8 +139,8 @@ PRE_TARGETDEPS += $$PWD/../third/lib/lib/libenca.a
 LIBS += -L$$PWD/../third/lib/lib/ -luchardet
 PRE_TARGETDEPS += $$PWD/../third/lib/lib/libuchardet.a
 
-LIBS += -L$$PWD/../third/lib/lib/ -libcharset
-PRE_TARGETDEPS += $$PWD/../third/lib/lib/libcharset.a
-
-LIBS += -L$$PWD/../third/lib/lib/ -libiconv
+LIBS += -L$$PWD/../third/lib/lib/ -liconv
 PRE_TARGETDEPS += $$PWD/../third/lib/lib/libiconv.a
+
+LIBS += -L$$PWD/../third/lib/lib/ -lcharset
+PRE_TARGETDEPS += $$PWD/../third/lib/lib/libcharset.a
