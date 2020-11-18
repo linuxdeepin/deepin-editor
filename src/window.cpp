@@ -817,7 +817,7 @@ bool Window::saveFile()
 
     // save blank file.
     if (isDraftFile) {
-        if(!isEmpty && isModified) return wrapperEdit->saveDraftFile();
+        if(!isEmpty) return wrapperEdit->saveDraftFile();
         return false;
     }
     // save normal file.
@@ -863,7 +863,7 @@ QString Window::saveAsFileToDisk()
 
     DFileDialog dialog(this, tr("Save File"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.addComboBox(tr("Encoding"),  QStringList() << wrapper->getTextEncode());
+    dialog.addComboBox(QObject::tr("Encoding"),  QStringList() << wrapper->getTextEncode());
     dialog.setDirectory(QDir::homePath());
 
     if (isDraft) {
@@ -881,8 +881,8 @@ QString Window::saveAsFileToDisk()
 
 
     if (mode == QDialog::Accepted) {
-        const QByteArray encode = dialog.getComboBoxValue(tr("Encoding")).toUtf8();
-        const QString endOfLine = dialog.getComboBoxValue(tr("Line Endings"));
+        const QByteArray encode = dialog.getComboBoxValue(QObject::tr("Encoding")).toUtf8();
+        const QString endOfLine = dialog.getComboBoxValue(QObject::tr("Line Endings"));
         const QString newFilePath = dialog.selectedFiles().value(0);
 
         wrapper->updatePath(newFilePath);
@@ -956,8 +956,8 @@ bool Window::saveAsOtherTabFile(EditWrapper *wrapper)
 
     DFileDialog dialog(this, tr("Save File"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.addComboBox(tr("Encoding"), Utils::getEncodeList());
-    dialog.addComboBox(tr("Line Endings"), QStringList() << "Linux" << "Windows" << "Mac OS");
+    dialog.addComboBox(QObject::tr("Encoding"), Utils::getEncodeList());
+    dialog.addComboBox(QObject::tr("Line Endings"), QStringList() << "Linux" << "Windows" << "Mac OS");
     dialog.setDirectory(QDir::homePath());
 
     if (isDraft) {
@@ -971,8 +971,8 @@ bool Window::saveAsOtherTabFile(EditWrapper *wrapper)
 
     int mode = dialog.exec();
     if (mode == QDialog::Accepted) {
-        const QByteArray encode = dialog.getComboBoxValue(tr("Encoding")).toUtf8();
-        const QString endOfLine = dialog.getComboBoxValue(tr("Line Endings"));
+        const QByteArray encode = dialog.getComboBoxValue(QObject::tr("Encoding")).toUtf8();
+        const QString endOfLine = dialog.getComboBoxValue(QObject::tr("Line Endings"));
         const QString newFilePath = dialog.selectedFiles().value(0);
         const QFileInfo newFileInfo(newFilePath);
 //        EditWrapper::EndOfLineMode eol = EditWrapper::eolUnix;

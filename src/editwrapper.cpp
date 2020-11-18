@@ -169,7 +169,7 @@ bool EditWrapper::saveAsFile()
 {
     DFileDialog dialog(this, tr("Save"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.addComboBox(tr("Encoding"),  QStringList() << m_sFirstEncode);
+    dialog.addComboBox(QObject::tr("Encoding"),  QStringList() << m_sFirstEncode);
     dialog.setDirectory(QDir::homePath());
     dialog.setNameFilter("*.txt");
 
@@ -207,6 +207,7 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
 {
     //切换编码相同不重写加载
     if(m_sCurEncode == encode) return false;
+
 
     //草稿文件 空白文件不保存
     if(Utils::isDraftFile(m_pTextEdit->filepath) &&  m_pTextEdit->toPlainText().isEmpty()) {
@@ -253,7 +254,7 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
         if(res == 0)
         {
             bool ok = readFile(encode);
-            if(ok) m_pTextEdit->setTabbarModified(true);
+            if(ok && m_sCurEncode != m_sFirstEncode) m_pTextEdit->setTabbarModified(true);
             return ok;
         }
         return false;
@@ -267,7 +268,7 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
 //        int res = dialog->exec();//0  1
 
         bool ok = readFile(encode);
-        if(ok) m_pTextEdit->setTabbarModified(true);
+        if(ok && m_sCurEncode != m_sFirstEncode) m_pTextEdit->setTabbarModified(true);
         return ok;
     }
 }
@@ -410,7 +411,7 @@ bool EditWrapper::saveDraftFile()
 {
     DFileDialog dialog(this, tr("Save"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.addComboBox(tr("Encoding"),  QStringList() << m_sCurEncode);
+    dialog.addComboBox(QObject::tr("Encoding"),  QStringList() << m_sCurEncode);
     dialog.setDirectory(QDir::homePath());
     dialog.setNameFilter("*.txt");
 
