@@ -3,6 +3,8 @@
 # output every command that modifies files on the build system.
 #export DH_VERBOSE = 1
 
+export QT_SELECT := 5
+
 VERSION ?= $(shell dpkg-parsechangelog -ldebian/changelog -SVersion | awk -F'-' '{print $$1}')
 
 %:
