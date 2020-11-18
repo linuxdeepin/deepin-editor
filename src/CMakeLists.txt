@@ -57,15 +57,11 @@ set(CMAKE_INSTALL_PREFIX /usr)
 add_subdirectory("dedit")
 
 # Install qm files
-file(GLOB QM_FILES "../translations/*.qm")
-install(FILES ${QM_FILES}
-        DESTINATION share/deepin-editor/translations)
-install(FILES ${APP_ICONPATH} DESTINATION share/icons/hicolor/scalable/apps/)
-install(FILES images/deepin-editor.svg
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps/)
+file(GLOB QM_FILES "${CMAKE_SOURCE_DIR}/translations/*.qm")
+install(FILES ${QM_FILES} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-editor/translations/)
+install(FILES ${APP_ICONPATH} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps/)
+install(FILES images/deepin-editor.svg DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps/)
 
-install(TARGETS deepin-editor DESTINATION bin)
-install(FILES ../deepin-editor.desktop DESTINATION share/applications)
-
-install(DIRECTORY themes
-        DESTINATION share/deepin-editor)
+install(TARGETS deepin-editor DESTINATION bin/)
+install(FILES ${CMAKE_SOURCE_DIR}/deepin-editor.desktop DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications/)
+install(DIRECTORY themes DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-editor/)
