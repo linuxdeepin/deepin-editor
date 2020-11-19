@@ -45,13 +45,6 @@
                             "default": "true"
                         },
                         {
-                            "key": "showbookmark",
-                            "name": "Show bookmarks icon",
-                            "type": "checkbox",
-                            "text": "Show bookmarks icon",
-                            "default": "false"
-                        },
-                        {
                             "key": "showblankcharacter",
                             "name": "Show whitespaces and tabs",
                             "type": "checkbox",
