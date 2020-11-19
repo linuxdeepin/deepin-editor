@@ -2456,7 +2456,7 @@ void TextEdit::getNeedControlLine(int line, bool isVisable)
        }
 
        //最后一行显示或隐藏,或者下行就包含"}"
-       if(beginBlock.isValid() && beginBlock == endBlock){
+       if(beginBlock.isValid() && beginBlock == endBlock && endBlock.text().simplified() == "}"){
           endBlock.setVisible(isVisable);
           viewport()->adjustSize();
        }
@@ -3766,9 +3766,7 @@ void TextEdit::getHideRowContent(int iLine)
         m_foldCodeShow->initHighLight(filepath,true);
     }
 
-    if (QFileInfo(filepath).suffix() == "css") {
-        m_foldCodeShow->appendText("{", width());
-    }
+    m_foldCodeShow->appendText("{", width());
     //左右括弧没有匹配到
     if(braceDepth != 0){
         //遍历最后右括弧文本块 设置块隐藏或显示
@@ -3788,9 +3786,15 @@ void TextEdit::getHideRowContent(int iLine)
           if(beginBlock.isValid()){
              m_foldCodeShow->appendText(beginBlock.text(), width());
           }
+
           beginBlock = beginBlock.next();
         }
-        m_foldCodeShow->appendText(endBlock.text(), width());
+
+        if (endBlock.text().simplified() == "}") {
+            m_foldCodeShow->appendText("}", width());
+        }
+
+        m_foldCodeShow->appendText("}", width());
     }
 }
 
@@ -4726,11 +4730,7 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                     m_foldCodeShow->setStyle(lineWrapMode());//enum LineWrapMode {NoWrap,WidgetWidth};
                     getHideRowContent(line - 1);
                     m_foldCodeShow->show();
-
-                    if (QFileInfo(filepath).suffix() == "css") {
-                        m_foldCodeShow->hideFirstBlock();
-                    }
-
+                    m_foldCodeShow->hideFirstBlock();
                     m_foldCodeShow->move(5, getLinePosYByLineNum(line));
                 } else {
                     QTextCursor previousCursor = textCursor();

@@ -89,6 +89,7 @@ void ShowFlodCodeWidget::setStyle(bool bIsLineWrap)
 void ShowFlodCodeWidget::hideFirstBlock()
 {
     m_pContentEdit->document()->firstBlock().setVisible(false);
+    m_pContentEdit->document()->lastBlock().setVisible(false);
 }
 
 void ShowFlodCodeWidget::appendText(QString strText, int maxWidth)

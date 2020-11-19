@@ -43,7 +43,7 @@ public:
 
     /**
      * @author liumaochuan ut000616
-     * @brief hideFirstBlock 隐藏首行
+     * @brief hideFirstAndLastBlock 隐藏首末行
      */
     void hideFirstBlock();
 
