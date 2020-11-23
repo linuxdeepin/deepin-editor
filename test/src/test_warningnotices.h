@@ -18,8 +18,6 @@
 #define TEST_WARNINGNOTICES_H
 #include "gtest/gtest.h"
 #include <QObject>
-#define private public
-#define protected public
 
 class test_warningnotices : public QObject, public::testing::Test
 {

@@ -25,7 +25,6 @@
 #include "gtest/gtest.h"
 #include"../../src/utils.h"
 #include <QObject>
-#define private public
 
 
 class test_utils: public QObject, public::testing::Test

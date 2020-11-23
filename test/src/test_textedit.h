@@ -8,7 +8,6 @@
 #include"../../src/tabbar.h"
 #include "gtest/gtest.h"
 #include <QObject>
-#define private public
 
 
 class test_textedit: public QObject, public::testing::Test

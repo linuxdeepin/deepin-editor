@@ -183,8 +183,8 @@ TEST_F(test_tabbar, eventFilter)
 {
     Tabbar * tab = new Tabbar();
     tab->addTab("/.cache/deepin/deepin-editor","aa");
-    QEvent *a;
-    tab->eventFilter(tab,a);
+    QEvent a=QEvent(QEvent::Type::MouseButtonRelease);
+    tab->eventFilter(tab,&a);
 
     assert(1==1);
 }
@@ -194,7 +194,7 @@ TEST_F(test_tabbar, tabSizeHint)
 {
     Tabbar * tab = new Tabbar();
     tab->addTab("/.cache/deepin/deepin-editor","aa");
-    QEvent *a;
+    QEvent a=QEvent(QEvent::Type::MouseButtonRelease);
     tab->tabSizeHint(0);
 
     assert(1==1);
@@ -219,22 +219,3 @@ TEST_F(test_tabbar, maximumTabSizeHint)
 
     assert(1==1);
 }
-//void mousePressEvent(QMouseEvent *e);
-//TEST_F(test_tabbar, mousePressEvent)
-//{
-//    Tabbar * tab = new Tabbar();
-//    tab->addTab("/.cache/deepin/deepin-editor","aa");
-//    QMouseEvent *a;
-//    tab->mousePressEvent(a);
-
-//    assert(1==1);
-//}
-//private:
-//void handleTabMoved(int fromIndex, int toIndex);
-
-//void handleTabReleased(int index);
-
-//void handleTabIsRemoved(int index);
-//void handleTabDroped(int index, Qt::DropAction, QObject *target);
-//void handleDragActionChanged(Qt::DropAction action);
-//void onTabDrapStart();

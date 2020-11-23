@@ -18,8 +18,6 @@
 #define TEST_LEFTAREAOFTEXTEDIT_H
 #include "gtest/gtest.h"
 #include <QObject>
-#define private public
-#define protected public
 
 class test_leftareaoftextedit : public QObject, public::testing::Test
 {

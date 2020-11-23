@@ -25,8 +25,6 @@
 #include"../../src/tabbar.h"
 #include "gtest/gtest.h"
 #include <QObject>
-#define private public
-#define protected public
 
 class test_editwrapper: public QObject, public::testing::Test
 {

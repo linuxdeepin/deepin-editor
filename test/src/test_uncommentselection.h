@@ -10,7 +10,6 @@
 #include "gtest/gtest.h"
 #include"../../src/uncommentselection.h"
 #include <QObject>
-#define private public
 
 using namespace Comment;
 class test_uncommentselection: public QObject, public::testing::Test

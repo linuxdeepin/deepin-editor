@@ -34,9 +34,15 @@ find_package(DFrameworkdbus REQUIRED)
 find_package(Qt5Test REQUIRED)
 find_package(GTest REQUIRED)
 
+include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 include_directories(Qt5PrintSupport)
 include_directories(${GTEST_INCLUDE_DIRS})
 include_directories(src)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/include)
+link_libraries(${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/lib/libcharset.a)
+link_libraries(${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/lib/libiconv.a)
+link_libraries(${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/lib/libenca.a)
+link_libraries(${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/lib/libuchardet.a)
 
 set(PROJECT_NAME_TEST
     ${PROJECT_NAME}_test)
@@ -86,43 +92,43 @@ target_link_libraries(${PROJECT_NAME_TEST}
 target_include_directories(${PROJECT_NAME_TEST} PUBLIC ${DtkWidget_INCLUDE_DIRS}
                                                        ${DtkCore_INCLUDE_DIRS}
                                                        ${DtkGui_INCLUDE_DIRS})
-
-add_custom_target(test
-    #执行mkdir -p 创建 coverageResult
-    COMMAND mkdir -p test/coverageResult
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-)
-
-add_custom_command(TARGET test
-            COMMAND echo " =================== CREAT LCOV REPROT BEGIN ==================== "
-
-    #1.清理原先的gcov信息
-    COMMAND lcov --directory ./test/CMakeFiles/${PROJECT_NAME_TEST}.dir --zerocounters
-    COMMAND lcov --directory ./test/CMakeFiles/${PROJECT_NAME}.dir --zerocounters
-    COMMAND ./test/${PROJECT_NAME_TEST}
-
-    #2.收集gcov信息到.info文件中
-    COMMAND lcov --directory . --capture --output-file ./test/coverageResult/${PROJECT_NAME}_Coverage.info
-
-    #3.过滤一些我们不感兴趣的文件的覆盖率信息
-    COMMAND echo " =================== do filter begin ==================== "
-    COMMAND lcov --remove ./test/coverageResult/${PROJECT_NAME}_Coverage.info
-    '*/${PROJECT_NAME_TEST}_autogen/*' '*/${PROJECT_NAME}_autogen/*' '*/usr/include/*' '*/dbuslogin1manager*' '*/test/*' '*/googletest/*'
-    -o ./test/coverageResult/${PROJECT_NAME}_Coverage.info
-    COMMAND echo " =================== do filter end ==================== "
-
-    #3.将.info信息生成报告到reprot文件夹中
-    COMMAND genhtml -o ./test/coverageResult/report ./test/coverageResult/${PROJECT_NAME}_Coverage.info
-
-    COMMAND echo " =================== CREAT LCOV REPROT END ==================== "
-
-    COMMAND echo " Coverage files have been output to ${CMAKE_BINARY_DIR}/coverageResult/report "
-
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-    )
-
-#'make test'命令依赖与我们的测试程序f
-add_dependencies(test ${PROJECT_NAME_TEST})
-
-# 设置添加gocv相关信息的输出
-set(CMAKE_CXX_FLAGS "-g -fprofile-arcs -ftest-coverage")
+#以下注释
+#add_custom_target(test
+#    #执行mkdir -p 创建 coverageResult
+#    COMMAND mkdir -p test/coverageResult
+#    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+#)
+#
+#add_custom_command(TARGET test
+#            COMMAND echo " =================== CREAT LCOV REPROT BEGIN ==================== "
+#
+#    #1.清理原先的gcov信息
+#    COMMAND lcov --directory ./test/CMakeFiles/${PROJECT_NAME_TEST}.dir --zerocounters
+#    COMMAND lcov --directory ./test/CMakeFiles/${PROJECT_NAME}.dir --zerocounters
+#    COMMAND ./test/${PROJECT_NAME_TEST}
+#
+#    #2.收集gcov信息到.info文件中
+#    COMMAND lcov --directory . --capture --output-file ./test/coverageResult/${PROJECT_NAME}_Coverage.info
+#
+#    #3.过滤一些我们不感兴趣的文件的覆盖率信息
+#    COMMAND echo " =================== do filter begin ==================== "
+#    COMMAND lcov --remove ./test/coverageResult/${PROJECT_NAME}_Coverage.info
+#    '*/${PROJECT_NAME_TEST}_autogen/*' '*/${PROJECT_NAME}_autogen/*' '*/usr/include/*' '*/dbuslogin1manager*' '*/test/*' '*/googletest/*'
+#    -o ./test/coverageResult/${PROJECT_NAME}_Coverage.info
+#    COMMAND echo " =================== do filter end ==================== "
+#
+#    #3.将.info信息生成报告到reprot文件夹中
+#    COMMAND genhtml -o ./test/coverageResult/report ./test/coverageResult/${PROJECT_NAME}_Coverage.info
+#
+#    COMMAND echo " =================== CREAT LCOV REPROT END ==================== "
+#
+#    COMMAND echo " Coverage files have been output to ${CMAKE_BINARY_DIR}/coverageResult/report "
+#
+#    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+#    )
+#
+##'make test'命令依赖与我们的测试程序f
+#add_dependencies(test ${PROJECT_NAME_TEST})
+#
+## 设置添加gocv相关信息的输出
+#set(CMAKE_CXX_FLAGS "-g -fprofile-arcs -ftest-coverage")

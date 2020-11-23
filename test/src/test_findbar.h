@@ -18,8 +18,6 @@
 #define TEST_FINDBAR_H
 #include "gtest/gtest.h"
 #include <QObject>
-#define private public
-#define protected public
 
 class test_findbar : public QObject, public::testing::Test
 {

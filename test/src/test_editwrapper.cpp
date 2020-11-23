@@ -80,48 +80,8 @@ TEST_F(test_editwrapper, updatePath)
     assert(1==1);
 }
 
-//void refresh();
-TEST_F(test_editwrapper, refresh)
-{
-    EditWrapper *wrapper = new EditWrapper();
-    wrapper->refresh();
-    assert(1==1);
-}
 
-//bool isLoadFinished();
-TEST_F(test_editwrapper, isLoadFinished)
-{
-    EditWrapper *wrapper = new EditWrapper();
-    wrapper->refresh();
-    assert(1==1);
-}
 
-//EndOfLineMode endOfLineMode();
-TEST_F(test_editwrapper, endOfLineMode)
-{
-    EditWrapper *wrapper = new EditWrapper();
-    wrapper->endOfLineMode();
-    assert(1==1);
-}
-
-//void setEndOfLineMode(EndOfLineMode eol);
-TEST_F(test_editwrapper, setEndOfLineMode)
-{
-    EditWrapper *wrapper = new EditWrapper();
-    wrapper->setEndOfLineMode(EditWrapper::eolDos);
-    assert(1==1);
-}
-
-//void setTextCodec(QByteArray encodeName, bool reload = false);
-//void setTextCodec(QTextCodec *codec, bool reload = false);
-TEST_F(test_editwrapper, setTextCodec)
-{
-    EditWrapper *wrapper = new EditWrapper();
-    wrapper->setTextCodec("UTF-8");
-    QTextCodec* codec = QTextCodec::codecForName("UTF-8");
-    wrapper->setTextCodec(codec);
-    assert(1==1);
-}
 
 //void hideWarningNotices();
 TEST_F(test_editwrapper, hideWarningNotices)
@@ -206,29 +166,7 @@ TEST_F(test_editwrapper, textEditor)
 }
 
 //private:
-//void detectEndOfLine();
-TEST_F(test_editwrapper, detectEndOfLine)
-{
-    EditWrapper *wrapper = new EditWrapper();
-    wrapper->detectEndOfLine();
-    assert(1==1);
-}
 
-void handleCursorModeChanged(TextEdit::CursorMode mode);
-TEST_F(test_editwrapper, handleCursorModeChanged)
-{
-    EditWrapper *wrapper = new EditWrapper();
-    wrapper->handleCursorModeChanged(TextEdit::Insert);
-    assert(1==1);
-}
-
-//void handleHightlightChanged(const QString &name);
-TEST_F(test_editwrapper, handleHightlightChanged)
-{
-    EditWrapper *wrapper = new EditWrapper();
-    wrapper->handleHightlightChanged("aa");
-    assert(1==1);
-}
 
 //int GetCorrectUnicode1(const QByteArray &ba) 未实现;
 
@@ -248,15 +186,6 @@ TEST_F(test_editwrapper, readFile)
     assert(1==1);
 }
 
-
-//public slots:
-//void onFileClosed();
-TEST_F(test_editwrapper, onFileClosed)
-{
-    EditWrapper *wrapper = new EditWrapper();
-    wrapper->onFileClosed();
-    assert(1==1);
-}
 
 //void slotTextChange();
 TEST_F(test_editwrapper, slotTextChange)

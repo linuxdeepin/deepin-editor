@@ -1,8 +1,5 @@
 #include "test_window.h"
 
-#define protected public
-#define private public
-
 test_window::test_window()
 {
 
@@ -298,7 +295,7 @@ TEST_F(test_window, keyPressEvent)
     QStringList aa;
     window = new Window();
     QKeyEvent * eve;
-    window->keyPressEvent(eve);
+    //window->keyPressEvent(eve);
 
     assert(1==1);
 }
