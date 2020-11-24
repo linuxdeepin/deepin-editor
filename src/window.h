@@ -92,7 +92,7 @@ public:
     void popupFindBar();
     void popupReplaceBar();
     void popupJumpLineBar();
-    void updateJumpLineBar();
+    void updateJumpLineBar(TextEdit* editor);
     void popupSettingsDialog();
     void popupPrintDialog();
     void popupThemePanel();

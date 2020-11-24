@@ -68,6 +68,7 @@ Window::Window(DMainWindow *parent)
       m_menu(new DMenu),
       m_titlebarStyleSheet(titlebar()->styleSheet())
 {
+    qRegisterMetaType<TextEdit*>("TextEdit");
     m_blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
     m_themePath = Settings::instance()->settings->option("advance.editor.theme")->value().toString();
     m_rootSaveDBus = new DBusDaemon::dbus("com.deepin.editor.daemon", "/", QDBusConnection::systemBus(), this);
@@ -629,7 +630,9 @@ EditWrapper *Window::createEditor()
     connect(wrapper->textEditor(), &TextEdit::popupNotify, this, &Window::showNotify, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::pressEsc, this, &Window::removeBottomWidget, Qt::QueuedConnection);
     connect(wrapper, &EditWrapper::requestSaveAs, this, &Window::saveAsFile);
-    connect(wrapper->textEditor(), &TextEdit::textChanged, this, &Window::updateJumpLineBar, Qt::QueuedConnection);
+    connect(wrapper->textEditor(), &TextEdit::textChanged, this, [=](){
+        updateJumpLineBar(wrapper->textEditor());
+    }, Qt::QueuedConnection);
 
     connect(wrapper->textEditor(), &TextEdit::modificationChanged, this, [ = ](const QString & path, bool isModified) {
         int tabIndex = m_tabbar->indexOf(path);
@@ -1171,20 +1174,19 @@ void Window::popupJumpLineBar()
     }
 }
 
-void Window::updateJumpLineBar()
+void Window::updateJumpLineBar(TextEdit* editor)
 {
-    EditWrapper *wrapper = currentWrapper();
     if(m_jumpLineBar->isVisible())
     {
         QString tabPath = m_tabbar->currentPath();
-        QString text = wrapper->textEditor()->textCursor().selectedText();
-        int row = wrapper->textEditor()->getCurrentLine();
-        int column = wrapper->textEditor()->getCurrentColumn();
-        int count = wrapper->textEditor()->blockCount();
-        int scrollOffset = wrapper->textEditor()->getScrollOffset();
+        QString text = editor->textCursor().selectedText();
+        int row = editor->getCurrentLine();
+        int column = editor->getCurrentColumn();
+        int count = editor->blockCount();
+        int scrollOffset = editor->getScrollOffset();
         m_jumpLineBar->activeInput(tabPath, row, column, count, scrollOffset);
     }
-    if(!wrapper->textEditor()->ifHasHighlight())
+    if(!editor->ifHasHighlight())
     {
         m_findBar->setSearched(false);
         m_replaceBar->setsearched(false);
