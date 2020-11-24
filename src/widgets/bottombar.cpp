@@ -87,10 +87,10 @@ BottomBar::BottomBar(QWidget *parent)
     m_encodeMenu->setCurrentTextOnly("UTF-8");
 
     //切换编码
-    connect(m_encodeMenu, &DDropdownMenu::currentTextChanged, this,[this](const QString &text){
-        if(m_wrapper->reloadFileEncode(text.toLocal8Bit()))
+    connect(m_encodeMenu, &DDropdownMenu::currentActionChanged, this,[this](QAction* pAct){
+        if(m_wrapper->reloadFileEncode(pAct->text().toLocal8Bit()))
         {
-            m_encodeMenu->setCurrentTextOnly(text);
+            m_encodeMenu->setCurrentAction(pAct);
         }
 
     });

@@ -51,7 +51,7 @@ class Window : public DMainWindow
     Q_OBJECT
 
 public:
-    Window(DMainWindow *parent = 0);
+    Window(DMainWindow *parent = nullptr);
     ~Window() override;
 
     void showCenterWindow(bool bIsCenter);
@@ -60,6 +60,8 @@ public:
 
     int getTabIndex(const QString &file);
     void activeTab(int index);
+
+    Tabbar* getTabbar();
 
     void addTab(const QString &filepath, bool activeTab = false);
     void addTabWithWrapper(EditWrapper *wrapper, const QString &filepath,

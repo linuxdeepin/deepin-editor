@@ -57,7 +57,8 @@ void FileLoadThread::run()
         QString textEncode =QString::fromLocal8Bit(encode);
 
          if(textEncode.contains("ASCII",Qt::CaseInsensitive) || textEncode.contains("UTF-8",Qt::CaseInsensitive)){
-            emit loadFinished(encode, Indata);
+
+           emit loadFinished(encode, Indata);
          }else {
             DetectCode::ChangeFileEncodingFormat(Indata,OutData,textEncode,QString("UTF-8"));
             emit loadFinished(encode, OutData);

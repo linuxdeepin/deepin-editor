@@ -36,6 +36,7 @@
 #include <DMessageBox>
 #include <DFileDialog>
 
+class Window;
 class EditWrapper : public QWidget
 {
     Q_OBJECT
@@ -46,7 +47,7 @@ public:
         QFile::Permissions permissions;
     };
 
-    EditWrapper(QWidget *parent = 0);
+    EditWrapper(Window* window=nullptr,QWidget *parent = nullptr);
     ~EditWrapper();
 
     //清除焦点　梁卫东　２０２０－０９－１４　１１：００：５０
@@ -128,6 +129,8 @@ private:
     bool m_bQuit = false;
     //文件是否加载
     bool m_bFileLoading = false;
+
+    Window* m_pWindow= nullptr;
 };
 
 #endif

@@ -23,7 +23,7 @@ test_editwrapper::test_editwrapper()
 
 TEST_F(test_editwrapper, EditWrapper)
 {
-    EditWrapper *wrapper = new EditWrapper;
+    EditWrapper *wrapper = new EditWrapper();
     assert(1==1);
 }
 

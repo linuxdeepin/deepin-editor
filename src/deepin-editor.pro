@@ -133,7 +133,7 @@ INCLUDEPATH += $$PWD/../third/lib/include/uchardet
 INCLUDEPATH += $$PWD/../third/lib/include
 
 
-LIBS += -L$$PWD/../third/lib/lib/ -lenca
+LIBS += -L$$PWD/../third/lib/lib/ -lenca -lm
 PRE_TARGETDEPS += $$PWD/../third/lib/lib/libenca.a
 
 LIBS += -L$$PWD/../third/lib/lib/ -luchardet

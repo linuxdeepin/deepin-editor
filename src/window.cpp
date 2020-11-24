@@ -401,6 +401,11 @@ void Window::activeTab(int index)
     m_tabbar->setCurrentIndex(index);
 }
 
+Tabbar *Window::getTabbar()
+{
+    return m_tabbar;
+}
+
 void Window::addTab(const QString &filepath, bool activeTab)
 {
     // check whether it is an editable file thround mimeType.
@@ -576,26 +581,22 @@ void Window::closeTab()
             if(isDraftFile){
                wrapper->saveDraftFile();
                focusActiveEditor();
-               return;
+               //return;
             }else {
                wrapper->saveFile();
                focusActiveEditor();
-               return;
+               //return;
             }
         }
 
-        //不保存
-        if(res == 1)
-        {
-           removeWrapper(filePath, true);
-           m_tabbar->closeCurrentTab();
-           if (isDraftFile) {
-               QFile(filePath).remove();
-           }
 
-          focusActiveEditor();
+        removeWrapper(filePath, true);
+        m_tabbar->closeCurrentTab();
+        if (isDraftFile) {
+            QFile(filePath).remove();
         }
 
+       focusActiveEditor();
 
     } else {
 
@@ -620,7 +621,7 @@ void Window::restoreTab()
 
 EditWrapper *Window::createEditor()
 {
-    EditWrapper *wrapper = new EditWrapper();
+    EditWrapper *wrapper = new EditWrapper(this);
     connect(wrapper->textEditor(), &TextEdit::signal_readingPath, this, &Window::slot_saveReadingPath, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::signal_setTitleFocus, this, &Window::slot_setTitleFocus, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);

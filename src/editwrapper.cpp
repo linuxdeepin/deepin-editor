@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+#include "window.h"
 #include "encodes/detectcode.h"
 #include "widgets/toast.h"
 #include "fileloadthread.h"
@@ -38,11 +38,12 @@
 
 DCORE_USE_NAMESPACE
 
-EditWrapper::EditWrapper(QWidget *parent)
+EditWrapper::EditWrapper(Window* window,QWidget *parent)
     : QWidget(parent),
       m_pTextEdit(new TextEdit(this)),
       m_pBottomBar(new BottomBar(this)),
-      m_pWaringNotices(new WarningNotices(WarningNotices::ResidentType,this))
+      m_pWaringNotices(new WarningNotices(WarningNotices::ResidentType,this)),
+      m_pWindow(window)
 {
     m_pWaringNotices->hide();
     // Init layout and widgets.
@@ -415,6 +416,14 @@ bool EditWrapper::saveDraftFile()
     dialog.setDirectory(QDir::homePath());
     dialog.setNameFilter("*.txt");
 
+    if(m_pWindow){
+        QRegularExpression reg("[^*](.+)");
+        QRegularExpressionMatch match = reg.match(m_pWindow->getTabbar()->currentName());
+        dialog.selectFile(match.captured(0) + ".txt");
+    }
+
+
+
     this->setUpdatesEnabled(false);
     int mode =  dialog.exec();
     this->setUpdatesEnabled(true);
@@ -439,9 +448,12 @@ bool EditWrapper::saveDraftFile()
         qfile.write(outData);
         qfile.close();
 
+        //草稿文件保存 等同于重写打开
+        m_sFirstEncode = m_sCurEncode;
         QFile(m_pTextEdit->filepath).remove();
         emit sigCodecSaveFile(m_pTextEdit->filepath,newFilePath);
-        updatePath(newFilePath);
+        //updatePath(newFilePath);
+        m_pTextEdit->document()->setModified(false);
         return true;
     }
 

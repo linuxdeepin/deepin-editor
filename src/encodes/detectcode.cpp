@@ -20,7 +20,7 @@ QByteArray DetectCode::GetFileEncodingFormat(QString filepath)
     if(charset == "unknown" || charset == "???" || charset.isEmpty()){
        charset = DetectCode::UchardetCode(filepath);
     }
-
+    if(charset == "ASCII") charset = "UTF-8";
     return charset;
 }
 

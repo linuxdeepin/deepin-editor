@@ -32,10 +32,7 @@ include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 include_directories(Qt5PrintSupport)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/include)
-link_libraries(${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/lib/libcharset.a)
-link_libraries(${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/lib/libiconv.a)
-link_libraries(${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/lib/libenca.a)
-link_libraries(${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/lib/libuchardet.a)
+
 
 # Tell CMake to create the executable
 add_executable(deepin-editor ${SRCS} deepin-editor.qrc)
@@ -50,6 +47,11 @@ target_link_libraries(deepin-editor
     ${DFrameworkdbus_LIBRARIES}
     KF5::Codecs
     KF5::SyntaxHighlighting
+    ${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/lib/libcharset.a
+    ${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/lib/libiconv.a
+    ${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/lib/libenca.a
+    -lm
+    ${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/lib/libuchardet.a
 )
 
 set(CMAKE_INSTALL_PREFIX /usr)

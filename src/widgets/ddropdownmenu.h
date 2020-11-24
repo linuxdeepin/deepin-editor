@@ -43,6 +43,7 @@ public:
     DToolButton* getButton();
 public slots:
     void setCurrentTextOnly(const QString &text);
+    void setCurrentAction(QAction*);
 public:
     //创建编码菜单
     static DDropdownMenu* createEncodeMenu();
@@ -51,6 +52,7 @@ public:
 signals:
     void requestContextMenu(bool bClicked = false);
     void currentTextChanged(const QString &text);
+    void currentActionChanged(QAction*);
 private:
     //创建文字ICON
     QIcon createIcon();
