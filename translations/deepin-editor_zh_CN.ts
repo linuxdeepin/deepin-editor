@@ -674,7 +674,7 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="135"/>
         <source>Korean</source>
-        <translation>朝鲜语</translation>
+        <translation>韩语</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="136"/>

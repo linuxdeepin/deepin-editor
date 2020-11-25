@@ -46,15 +46,15 @@ BottomBar::BottomBar(QWidget *parent)
     m_positionLabel->setFont(font);
     m_charCountLabel->setFont(font);
     m_cursorStatus->setFont(font);
-    m_encodeMenu->setFont(font);
-    m_highlightMenu->setFont(font);
+   // m_encodeMenu->setFontEx(font);
+   // m_highlightMenu->setFontEx(font);
 
 
     DFontSizeManager::instance()->bind(m_positionLabel, DFontSizeManager::T9);
     DFontSizeManager::instance()->bind(m_charCountLabel, DFontSizeManager::T9);
     DFontSizeManager::instance()->bind(m_cursorStatus, DFontSizeManager::T9);
-    DFontSizeManager::instance()->bind(m_encodeMenu, DFontSizeManager::T9);
-    DFontSizeManager::instance()->bind(m_highlightMenu, DFontSizeManager::T9);
+    //DFontSizeManager::instance()->bind(m_encodeMenu->getButton(), DFontSizeManager::T9);
+   // DFontSizeManager::instance()->bind(m_highlightMenu->getButton(), DFontSizeManager::T9);
 
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setContentsMargins(29, 1, 10, 0);
@@ -81,10 +81,8 @@ BottomBar::BottomBar(QWidget *parent)
     layout->addWidget(m_encodeMenu);
     layout->addWidget(pVerticalLine2);
     layout->addWidget(m_highlightMenu);
-
-    m_encodeMenu->setFixedHeight(30);
     setFixedHeight(32);
-    m_encodeMenu->setCurrentTextOnly("UTF-8");
+
 
     //切换编码
     connect(m_encodeMenu, &DDropdownMenu::currentActionChanged, this,[this](QAction* pAct){
@@ -137,28 +135,22 @@ void BottomBar::setPalette(const QPalette &palette)
     DPalette paPositionLabel  = DApplicationHelper::instance()->palette(m_positionLabel);
     DPalette paCharCountLabel = DApplicationHelper::instance()->palette(m_charCountLabel);
     DPalette paCursorStatus = DApplicationHelper::instance()->palette(m_cursorStatus);
-    DPalette paEncodeMenu = DApplicationHelper::instance()->palette(m_encodeMenu);
-    DPalette paHighlightMenu = DApplicationHelper::instance()->palette(m_highlightMenu);
+    DPalette paEncodeMenu = DApplicationHelper::instance()->palette(m_encodeMenu->getButton());
+    DPalette paHighlightMenu = DApplicationHelper::instance()->palette(m_highlightMenu->getButton());
 
-    QColor colorFont;
-    if(palette.color((QPalette::Background)).lightness() < 128) {
-        colorFont = paPositionLabel.textTips().color();
-    }
-    else {
-        colorFont = paPositionLabel.textTips().color();
-    }
+    QColor colorFont = paPositionLabel.textTips().color();
 
-    //QColor(palette.color(QPalette::Text).name())
     paPositionLabel.setColor(DPalette::WindowText, colorFont);
     paCharCountLabel.setColor(DPalette::WindowText, colorFont);
     paCursorStatus.setColor(DPalette::WindowText, colorFont);
     paEncodeMenu.setColor(DPalette::WindowText, colorFont);
     paHighlightMenu.setColor(DPalette::WindowText, colorFont);
+
     m_positionLabel->setPalette(paPositionLabel);
     m_charCountLabel->setPalette(paCharCountLabel);
     m_cursorStatus->setPalette(paCursorStatus);
-    m_encodeMenu->setPalette(paEncodeMenu);
-    m_highlightMenu->setPalette(paHighlightMenu);
+    m_encodeMenu->getButton()->setPalette(paEncodeMenu);
+    m_highlightMenu->getButton()->setPalette(paHighlightMenu);
 
     QString theme = (palette.color(QPalette::Background).lightness() < 128) ? "dark" : "light";
     m_encodeMenu->setTheme(theme);

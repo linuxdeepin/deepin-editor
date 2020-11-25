@@ -47,15 +47,8 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
 
     //设置图标
     QPixmap arrowPixmap = Utils::renderSVG(":/images/dropdown_arrow_light.svg", QSize(9, 5));
-    arrowPixmap.setDevicePixelRatio(devicePixelRatioF());
     m_arrowPixmap = arrowPixmap;
     m_pToolButton->setIcon(createIcon());
-
-    //获取文本颜色
-    QString themePath = Settings::instance()->settings->option("advance.editor.theme")->value().toString();
-    QVariantMap jsonMap = Utils::getThemeMapFromPath(themePath);
-    m_textColor = jsonMap["text-styles"].toMap()["Normal"].toMap()["text-color"].toString();
-    m_backgroundColor = jsonMap["editor-colors"].toMap()["background-color"].toString();
 
     //设置字体
     int fontsize =DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T9);
@@ -89,6 +82,12 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
 }
 
 DDropdownMenu::~DDropdownMenu() {}
+
+void DDropdownMenu::setFontEx(const QFont& font)
+{
+    m_pToolButton->setFont(font);
+    m_font = font;
+}
 
 
 
@@ -131,14 +130,6 @@ void DDropdownMenu::setTheme(const QString &theme)
 {
     QString arrowSvgPath = QString(":/images/dropdown_arrow_%1.svg").arg(theme);
     QPixmap arrowPixmap = Utils::renderSVG(arrowSvgPath, QSize(9, 5));
-    arrowPixmap.setDevicePixelRatio(devicePixelRatioF());
-
-    //获取文本颜色
-    QString themePath = Settings::instance()->settings->option("advance.editor.theme")->value().toString();
-    QVariantMap jsonMap = Utils::getThemeMapFromPath(themePath);
-    m_textColor = jsonMap["text-styles"].toMap()["Normal"].toMap()["text-color"].toString();
-    m_backgroundColor = jsonMap["editor-colors"].toMap()["background-color"].toString();
-
     m_arrowPixmap = arrowPixmap;
     m_pToolButton->setIcon(createIcon());
 }
@@ -225,27 +216,27 @@ QIcon DDropdownMenu::createIcon()
     //height 30    width QFontMetrics fm(font()) fm.width(text)+40;
     int fontWidth = QFontMetrics(m_font).width(m_text)+20;
     int fontHeight = QFontMetrics(m_font).height();
-    int iconW = fontWidth+20;
+    int iconW = fontWidth + 20;
     int iconH = 30;
     setFixedWidth(iconW);
-    m_pToolButton->setIconSize(QSize(iconW,iconH));
+    int scaled =1;
+    if(devicePixelRatioF() == 1.25) scaled = 2;
 
-    QPixmap icon(QSize(iconW,iconH) * devicePixelRatioF());
-    icon.setDevicePixelRatio(devicePixelRatioF());
+    m_pToolButton->setIconSize(QSize(iconW,iconH));
+    QPixmap icon(QSize(iconW,iconH)*scaled);
+    icon.setDevicePixelRatio(scaled);
     icon.fill(Qt::transparent);
 
-    //获取文本字体颜色
-    QColor textColor;
-    DLabel label;
-    label.setFont(m_font);
-    DPalette dpalette  = DApplicationHelper::instance()->palette(&label);
-    textColor = dpalette.textTips().color();
+
+    DPalette dpalette  = DApplicationHelper::instance()->palette(m_pToolButton);
+    QColor textColor = dpalette.color(DPalette::WindowText);
 
     QPainter painter(&icon);
+
     painter.setFont(m_font);
     painter.setPen(textColor);
-    painter.drawText(QRect(10,(iconH-fontHeight)/2,fontWidth,fontHeight),m_text);
-    painter.drawPixmap(QRect(fontWidth,(iconH-5)/2,9,5),m_arrowPixmap,m_arrowPixmap.rect());
+    painter.drawText(QRectF(10,(iconH-fontHeight)/2,fontWidth,fontHeight),m_text);
+    painter.drawPixmap(QRectF(fontWidth,(iconH-5)/2,9,5),m_arrowPixmap,m_arrowPixmap.rect());
 
     painter.end();
     return icon;
@@ -256,6 +247,7 @@ void DDropdownMenu::OnFontChangedSlot(const QFont &font)
     m_font = font;
     int fontsize =DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T9);
     m_font.setPixelSize(fontsize);
+
     m_pToolButton->setIcon(createIcon());
 }
 

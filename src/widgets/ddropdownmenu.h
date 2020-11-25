@@ -36,6 +36,8 @@ class DDropdownMenu : public QFrame
 public:
     DDropdownMenu(QWidget *parent = nullptr);
     ~DDropdownMenu();
+    void setFontEx(const QFont& font);
+
     void setMenu(DMenu *menu);
     void setTheme(const QString &theme);
 

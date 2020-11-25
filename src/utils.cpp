@@ -613,16 +613,18 @@ const QStringList Utils::getEncodeList()
 
 QPixmap Utils::renderSVG(const QString &filePath, const QSize &size)
 {
+    int scaled =1;
+    if(qApp->devicePixelRatio() == 1.25) scaled =2;
+
+    QPixmap pixmap(size*scaled);
     QImageReader reader;
-    QPixmap pixmap;
 
     reader.setFileName(filePath);
 
     if (reader.canRead()) {
-        const qreal ratio = qApp->devicePixelRatio();
-        reader.setScaledSize(size * ratio);
+        reader.setScaledSize(size * scaled);
         pixmap = QPixmap::fromImage(reader.read());
-        pixmap.setDevicePixelRatio(ratio);
+        pixmap.setDevicePixelRatio(scaled);
     } else {
         pixmap.load(filePath);
     }
