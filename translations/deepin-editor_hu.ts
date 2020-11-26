@@ -20,58 +20,50 @@
 <context>
     <name>EditWrapper</name>
     <message>
-        <location filename="../src/editwrapper.cpp" line="608"/>
-        <source>File has changed on disk. Reload?</source>
-        <translation>A fájl megváltozott a lemezen. Újra betölti?</translation>
-    </message>
-    <message>
-        <location filename="../src/editwrapper.cpp" line="611"/>
-        <source>File removed on the disk. Save it now?</source>
-        <translation>A fájl eltávolítva a lemezről. Elmenti most?</translation>
-    </message>
-    <message>
-        <location filename="../src/editwrapper.cpp" line="670"/>
-        <location filename="../src/widgets/bottombar.cpp" line="67"/>
-        <source>INSERT</source>
-        <translation>BESZÚRÁS</translation>
-    </message>
-    <message>
-        <location filename="../src/editwrapper.cpp" line="673"/>
-        <source>OVERWRITE</source>
-        <translation>FELÜLÍRÁS</translation>
-    </message>
-    <message>
-        <location filename="../src/editwrapper.cpp" line="676"/>
-        <source>R/O</source>
-        <translation>Írásvédett</translation>
-    </message>
-    <message>
-        <location filename="../src/editwrapper.cpp" line="322"/>
-        <source>Encoding changed. Do you want to save the file now?</source>
-        <translation>A kódolás megváltozott. El akarja menteni a fájlt most?</translation>
-    </message>
-    <message>
-        <location filename="../src/editwrapper.cpp" line="325"/>
-        <location filename="../src/editwrapper.cpp" line="518"/>
-        <source>Cancel</source>
-        <translation>Mégsem</translation>
-    </message>
-    <message>
-        <location filename="../src/editwrapper.cpp" line="326"/>
-        <location filename="../src/editwrapper.cpp" line="354"/>
-        <location filename="../src/editwrapper.cpp" line="467"/>
+        <location filename="../src/editwrapper.cpp" line="171"/>
+        <location filename="../src/editwrapper.cpp" line="228"/>
+        <location filename="../src/editwrapper.cpp" line="291"/>
+        <location filename="../src/editwrapper.cpp" line="413"/>
         <source>Save</source>
         <translation>Mentés</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="515"/>
-        <source>There are errors when using this encoding. If continue, the file contents may be changed</source>
-        <translation>Ezen kódolás használatakor hibák lehetnek. Ha folytatja, a fájl tartalma megváltozhat</translation>
+        <location filename="../src/editwrapper.cpp" line="224"/>
+        <location filename="../src/editwrapper.cpp" line="287"/>
+        <source>Do you want to save this file?</source>
+        <translation>El akarja menteni ezt a fájlt?</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="519"/>
-        <source>Continue</source>
-        <translation>Folytatás</translation>
+        <location filename="../src/editwrapper.cpp" line="227"/>
+        <location filename="../src/editwrapper.cpp" line="290"/>
+        <source>Discard</source>
+        <translation>Elvetés</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="481"/>
+        <source>File removed on the disk. Save it now?</source>
+        <translation>A fájl eltávolítva a lemezről. Elmenti most?</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="484"/>
+        <source>File has changed on disk. Reload?</source>
+        <translation>A fájl megváltozott a lemezen. Újra betölti?</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="515"/>
+        <location filename="../src/widgets/bottombar.cpp" line="66"/>
+        <source>INSERT</source>
+        <translation>BESZÚRÁS</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="518"/>
+        <source>OVERWRITE</source>
+        <translation>FELÜLÍRÁS</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="521"/>
+        <source>R/O</source>
+        <translation>Írásvédett</translation>
     </message>
 </context>
 <context>
@@ -82,14 +74,14 @@
         <translation>Találat</translation>
     </message>
     <message>
-        <location filename="../src/findbar.cpp" line="46"/>
-        <source>Next</source>
-        <translation>Következő</translation>
-    </message>
-    <message>
         <location filename="../src/findbar.cpp" line="44"/>
         <source>Previous</source>
         <translation>Előző</translation>
+    </message>
+    <message>
+        <location filename="../src/findbar.cpp" line="46"/>
+        <source>Next</source>
+        <translation>Következő</translation>
     </message>
 </context>
 <context>
@@ -116,14 +108,19 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/startmanager.cpp" line="433"/>
-        <source>File not saved</source>
-        <translation>A fájl nincs elmentve</translation>
-    </message>
-    <message>
         <location filename="../src/editorapplication.cpp" line="15"/>
         <source>Text Editor</source>
         <translation>Szövegszerkesztő</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="173"/>
+        <location filename="../src/editwrapper.cpp" line="415"/>
+        <location filename="../src/window.cpp" line="870"/>
+        <location filename="../src/window.cpp" line="888"/>
+        <location filename="../src/window.cpp" line="963"/>
+        <location filename="../src/window.cpp" line="978"/>
+        <source>Encoding</source>
+        <translation>Kódolás</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="24"/>
@@ -146,53 +143,20 @@
         <translation>Betűméret</translation>
     </message>
     <message>
+        <location filename="../src/settingsdialog.cpp" line="28"/>
+        <source>Shortcuts</source>
+        <translation>Gyorsbillentyűk</translation>
+    </message>
+    <message>
         <location filename="../src/settingsdialog.cpp" line="29"/>
         <location filename="../src/settingsdialog.cpp" line="30"/>
         <source>Keymap</source>
         <translation>Karakterkiosztás</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="28"/>
-        <source>Shortcuts</source>
-        <translation>Gyorsbillentyűk</translation>
-    </message>
-    <message>
-        <source>Increase font size</source>
-        <translation type="vanished">Betűméret növelése</translation>
-    </message>
-    <message>
-        <source>Decrease font size</source>
-        <translation type="vanished">Betűméret csökkentése</translation>
-    </message>
-    <message>
-        <location filename="../src/settingsdialog.cpp" line="58"/>
-        <source>Forward character</source>
-        <translation>Előre mutató karakter</translation>
-    </message>
-    <message>
-        <location filename="../src/settingsdialog.cpp" line="59"/>
-        <source>Backward character</source>
-        <translation>Visszafelé mutató karakter</translation>
-    </message>
-    <message>
-        <location filename="../src/settingsdialog.cpp" line="92"/>
-        <source>Transpose character</source>
-        <translation>Karakter átalakítása</translation>
-    </message>
-    <message>
-        <location filename="../src/settingsdialog.cpp" line="109"/>
-        <source>Tab width</source>
-        <translation>Tabulátor szélesség</translation>
-    </message>
-    <message>
-        <location filename="../src/settingsdialog.cpp" line="111"/>
-        <source>Word wrap</source>
-        <translation>Sortörés</translation>
-    </message>
-    <message>
         <location filename="../src/settingsdialog.cpp" line="31"/>
         <location filename="../src/settingsdialog.cpp" line="107"/>
-        <location filename="../src/window.cpp" line="1462"/>
+        <location filename="../src/window.cpp" line="1305"/>
         <source>Window</source>
         <translation>Ablak</translation>
     </message>
@@ -262,14 +226,14 @@
         <translation>Betűméret visszaállítása</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="46"/>
-        <source>Toggle fullscreen</source>
-        <translation>Teljes képernyős mód</translation>
-    </message>
-    <message>
         <location filename="../src/settingsdialog.cpp" line="45"/>
         <source>Help</source>
         <translation>Segítség</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="46"/>
+        <source>Toggle fullscreen</source>
+        <translation>Teljes képernyős mód</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="47"/>
@@ -325,6 +289,16 @@
         <location filename="../src/settingsdialog.cpp" line="57"/>
         <source>Decrease indent</source>
         <translation>Behúzás csökkentése</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="58"/>
+        <source>Forward character</source>
+        <translation>Előre mutató karakter</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="59"/>
+        <source>Backward character</source>
+        <translation>Visszafelé mutató karakter</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="60"/>
@@ -487,6 +461,11 @@
         <translation>Beillesztés</translation>
     </message>
     <message>
+        <location filename="../src/settingsdialog.cpp" line="92"/>
+        <source>Transpose character</source>
+        <translation>Karakter átalakítása</translation>
+    </message>
+    <message>
         <location filename="../src/settingsdialog.cpp" line="93"/>
         <source>Mark</source>
         <translation>Jelölés</translation>
@@ -562,6 +541,16 @@
         <translation>Ablakméret</translation>
     </message>
     <message>
+        <location filename="../src/settingsdialog.cpp" line="109"/>
+        <source>Tab width</source>
+        <translation>Tabulátor szélesség</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="111"/>
+        <source>Word wrap</source>
+        <translation>Sortörés</translation>
+    </message>
+    <message>
         <location filename="../src/settingsdialog.cpp" line="112"/>
         <source>Code folding flag</source>
         <translation>Kód hajtogatási zászló</translation>
@@ -574,21 +563,194 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="114"/>
         <source>Show bookmarks icon</source>
-        <translation type="unfinished"/>
+        <translation>Könyvjelző ikon megjelenítése</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="115"/>
         <source>Show whitespaces and tabs</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Show blank characters</source>
-        <translation type="vanished">Szóközök mutatása</translation>
+        <translation>Szóközök és fülek megjelenítése</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="116"/>
         <source>Color mark</source>
         <translation>Színes jelölő</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="119"/>
+        <source>Unicode</source>
+        <translation>Unicode</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="120"/>
+        <source>Arabic</source>
+        <translation>Arab</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="121"/>
+        <source>Belarussian</source>
+        <translation>Belorusz</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="122"/>
+        <source>Bulgarian</source>
+        <translation>Bulgár</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="123"/>
+        <source>Chinese</source>
+        <translation>Kínai</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="124"/>
+        <source>Czech</source>
+        <translation>Cseh</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="125"/>
+        <source>Estonian</source>
+        <translation>Észt</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="126"/>
+        <source>Croatian</source>
+        <translation>Horvát</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="127"/>
+        <source>Danish</source>
+        <translation>Dán</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="128"/>
+        <source>Finnish</source>
+        <translation>Finn</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="129"/>
+        <source>French</source>
+        <translation>Francia</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="130"/>
+        <source>German</source>
+        <translation>Német</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="131"/>
+        <source>Greek</source>
+        <translation>Görög</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="132"/>
+        <source>Hebrew</source>
+        <translation>Héber</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="133"/>
+        <source>Hungarian</source>
+        <translation>Magyar</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="134"/>
+        <source>Japanese</source>
+        <translation>Japán</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="135"/>
+        <source>Korean</source>
+        <translation>Kóreai</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="136"/>
+        <source>Irish Gaelic</source>
+        <translation>Ír</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="137"/>
+        <source>Italian</source>
+        <translation>Olasz</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="138"/>
+        <source>Lithuanian</source>
+        <translation>Litván</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="139"/>
+        <source>Latvian</source>
+        <translation>Lett</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="140"/>
+        <source>Polish</source>
+        <translation>Lengyel</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="141"/>
+        <source>Portuguese</source>
+        <translation>Portugál</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="142"/>
+        <source>Russian</source>
+        <translation>Orosz</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="143"/>
+        <source>Romanian</source>
+        <translation>Román</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="144"/>
+        <source>Slovak</source>
+        <translation>Szlovák</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="145"/>
+        <source>Slovenian</source>
+        <translation>Szlovén</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="146"/>
+        <source>Spanish</source>
+        <translation>Spanyol</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="147"/>
+        <source>Swedish</source>
+        <translation>Svéd</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="148"/>
+        <source>Thai</source>
+        <translation>Thai</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="149"/>
+        <source>Turkish</source>
+        <translation>Török</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="150"/>
+        <source>Ukrainian</source>
+        <translation>Ukrán</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="151"/>
+        <source>Vietnamese</source>
+        <translation>Vietnámi</translation>
+    </message>
+    <message>
+        <location filename="../src/startmanager.cpp" line="424"/>
+        <source>File not saved</source>
+        <translation>A fájl nincs elmentve</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="889"/>
+        <location filename="../src/window.cpp" line="964"/>
+        <location filename="../src/window.cpp" line="979"/>
+        <source>Line Endings</source>
+        <translation>Sorvégek</translation>
     </message>
 </context>
 <context>
@@ -668,10 +830,6 @@
         <translation>A %1 gyorsbillentyű érvénytelen, kérjük állítson be egy másikat.</translation>
     </message>
     <message>
-        <source>%1 is invalid</source>
-        <translation type="vanished">%1 érvénytelen</translation>
-    </message>
-    <message>
         <location filename="../src/settings.cpp" line="493"/>
         <source>Cancel</source>
         <translation>Mégsem</translation>
@@ -695,6 +853,11 @@
         <translation>Lap bezárása</translation>
     </message>
     <message>
+        <location filename="../src/tabbar.cpp" line="421"/>
+        <source>Close other tabs</source>
+        <translation>Többi lap bezárása</translation>
+    </message>
+    <message>
         <location filename="../src/tabbar.cpp" line="422"/>
         <source>More options</source>
         <translation>További beállítások</translation>
@@ -713,11 +876,6 @@
         <location filename="../src/tabbar.cpp" line="425"/>
         <source>Close unmodified tabs</source>
         <translation>Módosítatlan lapok bezárása</translation>
-    </message>
-    <message>
-        <location filename="../src/tabbar.cpp" line="421"/>
-        <source>Close other tabs</source>
-        <translation>Többi lap bezárása</translation>
     </message>
 </context>
 <context>
@@ -759,13 +917,13 @@
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="161"/>
-        <location filename="../src/window.cpp" line="263"/>
+        <location filename="../src/window.cpp" line="304"/>
         <source>Find</source>
         <translation>Találat</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="162"/>
-        <location filename="../src/window.cpp" line="264"/>
+        <location filename="../src/window.cpp" line="305"/>
         <source>Replace</source>
         <translation>Csere</translation>
     </message>
@@ -806,22 +964,6 @@
         <translation>Megjegyzés hozzáadása</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="174"/>
-        <location filename="../src/dtextedit.cpp" line="243"/>
-        <source>Column Mode</source>
-        <translation>Oszlop mód</translation>
-    </message>
-    <message>
-        <location filename="../src/dtextedit.cpp" line="245"/>
-        <source>Remove Comment</source>
-        <translation>Megjegyzés eltávolítása</translation>
-    </message>
-    <message>
-        <location filename="../src/dtextedit.cpp" line="280"/>
-        <source>Press ALT and click lines to edit in column mode</source>
-        <translation>Nyomja meg az ALT gombot, és kattintson a sorokra az oszlop módban történő szerkesztéshez</translation>
-    </message>
-    <message>
         <location filename="../src/dtextedit.cpp" line="170"/>
         <source>Text to Speech</source>
         <translation>Szövegből beszéd</translation>
@@ -840,6 +982,12 @@
         <location filename="../src/dtextedit.cpp" line="173"/>
         <source>Translate</source>
         <translation>Fordítás</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="174"/>
+        <location filename="../src/dtextedit.cpp" line="243"/>
+        <source>Column Mode</source>
+        <translation>Oszlop mód</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="175"/>
@@ -892,16 +1040,6 @@
         <translation>Színes jelölő</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="226"/>
-        <source>Mark All</source>
-        <translation>Összes jelölése</translation>
-    </message>
-    <message>
-        <location filename="../src/dtextedit.cpp" line="208"/>
-        <source>Mark</source>
-        <translation>Jelölő</translation>
-    </message>
-    <message>
         <location filename="../src/dtextedit.cpp" line="192"/>
         <source>Clear All Marks</source>
         <translation>Összes jelölő törlése</translation>
@@ -912,24 +1050,24 @@
         <translation>Utolsó jelölés törlése</translation>
     </message>
     <message>
-        <source>Style 1</source>
-        <translation type="vanished">Stílus 1</translation>
+        <location filename="../src/dtextedit.cpp" line="208"/>
+        <source>Mark</source>
+        <translation>Jelölő</translation>
     </message>
     <message>
-        <source>Style 2</source>
-        <translation type="vanished">Stílus 2</translation>
+        <location filename="../src/dtextedit.cpp" line="226"/>
+        <source>Mark All</source>
+        <translation>Összes jelölése</translation>
     </message>
     <message>
-        <source>Style 3</source>
-        <translation type="vanished">Stílus 3</translation>
+        <location filename="../src/dtextedit.cpp" line="245"/>
+        <source>Remove Comment</source>
+        <translation>Megjegyzés eltávolítása</translation>
     </message>
     <message>
-        <source>Style 4</source>
-        <translation type="vanished">Stílus 4</translation>
-    </message>
-    <message>
-        <source>Add comment</source>
-        <translation type="vanished">Megjegyzés hozzáadása</translation>
+        <location filename="../src/dtextedit.cpp" line="280"/>
+        <source>Press ALT and click lines to edit in column mode</source>
+        <translation>Nyomja meg az ALT gombot, és kattintson a sorokra az oszlop módban történő szerkesztéshez</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="313"/>
@@ -953,38 +1091,38 @@
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="367"/>
-        <location filename="../src/widgets/bottombar.cpp" line="74"/>
+        <location filename="../src/widgets/bottombar.cpp" line="70"/>
         <source>None</source>
         <translation>Semmi</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="1019"/>
+        <location filename="../src/dtextedit.cpp" line="1025"/>
         <source>Selected line(s) copied</source>
         <translation>A kijelölt sor(ok) átmásolva</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="1025"/>
+        <location filename="../src/dtextedit.cpp" line="1031"/>
         <source>Current line copied</source>
         <translation>A jelenlegi sor átmásolva</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="1064"/>
+        <location filename="../src/dtextedit.cpp" line="1070"/>
         <source>Selected line(s) clipped</source>
         <translation>A kijelölt sor(ok) kivágva</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="1070"/>
+        <location filename="../src/dtextedit.cpp" line="1076"/>
         <source>Current line clipped</source>
         <translation>A jelenlegi sor kivágva</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="3223"/>
+        <location filename="../src/dtextedit.cpp" line="3233"/>
         <source>Read-Only mode is off</source>
         <translation>Csak olvasható mód kikapcsolva</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="3230"/>
-        <location filename="../src/dtextedit.cpp" line="3238"/>
+        <location filename="../src/dtextedit.cpp" line="3240"/>
+        <location filename="../src/dtextedit.cpp" line="3248"/>
         <location filename="../src/dtextedit.cpp" line="5889"/>
         <source>Read-Only mode is on</source>
         <translation>Csak olvasható mód bekapcsolva</translation>
@@ -1009,157 +1147,142 @@
 <context>
     <name>Window</name>
     <message>
-        <location filename="../src/window.cpp" line="255"/>
-        <source>New window</source>
-        <translation>Új ablak</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="256"/>
-        <source>New tab</source>
-        <translation>Új lap</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="257"/>
-        <source>Open file</source>
-        <translation>Fájl megnyitása</translation>
-    </message>
-    <message>
         <location filename="../src/warningnotices.cpp" line="17"/>
         <location filename="../src/widgets/toast.cpp" line="39"/>
-        <location filename="../src/window.cpp" line="259"/>
+        <location filename="../src/window.cpp" line="300"/>
         <source>Save as</source>
         <translation>Mentés másként</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="260"/>
+        <location filename="../src/window.cpp" line="296"/>
+        <source>New window</source>
+        <translation>Új ablak</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="297"/>
+        <source>New tab</source>
+        <translation>Új lap</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="298"/>
+        <source>Open file</source>
+        <translation>Fájl megnyitása</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="299"/>
+        <location filename="../src/window.cpp" line="1868"/>
+        <source>Save</source>
+        <translation>Mentés</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="301"/>
         <source>Print</source>
         <translation>Nyomtatás</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="261"/>
+        <location filename="../src/window.cpp" line="302"/>
         <source>Switch theme</source>
         <translation>Téma váltása</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="378"/>
-        <location filename="../src/window.cpp" line="2150"/>
-        <source>Read-Only</source>
-        <translation>Csak olvasható</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="901"/>
-        <source>Saved successfully</source>
-        <translation>A mentés sikeres</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="1218"/>
-        <source>Read-Only mode is on</source>
-        <translation>Csak olvasható mód bekapcsolva</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="1472"/>
-        <source>Ctrl+&apos;=&apos;</source>
-        <translation>Ctrl+&apos;=&apos;</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="1475"/>
-        <source>Ctrl+&apos;-&apos;</source>
-        <translation>Ctrl+&apos;-&apos;</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="2033"/>
-        <source>Discard</source>
-        <translation>Elvetés</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="262"/>
-        <location filename="../src/window.cpp" line="1522"/>
+        <location filename="../src/window.cpp" line="303"/>
+        <location filename="../src/window.cpp" line="1365"/>
         <source>Settings</source>
         <translation>Beállítások</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="408"/>
+        <location filename="../src/window.cpp" line="418"/>
+        <location filename="../src/window.cpp" line="1984"/>
+        <source>Read-Only</source>
+        <translation>Csak olvasható</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="436"/>
         <source>You do not have permission to open %1</source>
         <translation>Nincs engedélye a %1 megnyitásához</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="445"/>
+        <location filename="../src/window.cpp" line="472"/>
         <source>Invalid file: %1</source>
         <translation>Érvénytelen fájl: %1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="929"/>
-        <location filename="../src/window.cpp" line="1009"/>
-        <location filename="../src/window.cpp" line="1070"/>
-        <source>Save File</source>
-        <translation>Fájl mentése</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="571"/>
+        <location filename="../src/window.cpp" line="576"/>
         <source>Do you want to save this file?</source>
         <translation>El akarja menteni ezt a fájlt?</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="931"/>
-        <location filename="../src/window.cpp" line="946"/>
-        <location filename="../src/window.cpp" line="1011"/>
-        <location filename="../src/window.cpp" line="1026"/>
-        <location filename="../src/window.cpp" line="1072"/>
-        <location filename="../src/window.cpp" line="1087"/>
-        <source>Encoding</source>
-        <translation>Kódolás</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="932"/>
-        <location filename="../src/window.cpp" line="947"/>
-        <location filename="../src/window.cpp" line="1012"/>
-        <location filename="../src/window.cpp" line="1027"/>
-        <location filename="../src/window.cpp" line="1073"/>
-        <location filename="../src/window.cpp" line="1088"/>
-        <source>Line Endings</source>
-        <translation>Sorvégek</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="1504"/>
-        <source>Editor</source>
-        <translation>Szerkesztő</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="843"/>
+        <location filename="../src/window.cpp" line="818"/>
         <source>You do not have permission to save %1</source>
         <translation>Nincs engedélye a %1 mentéséhez</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="887"/>
+        <location filename="../src/window.cpp" line="832"/>
+        <source>Saved successfully</source>
+        <translation>A mentés sikeres</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="835"/>
         <source>Do you want to save as another?</source>
         <translation>El akarja menteni másként?</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1667"/>
-        <location filename="../src/window.cpp" line="2211"/>
-        <source>Do you want to save all the files?</source>
-        <translation>El akarja menteni az összes fájlt?</translation>
+        <location filename="../src/window.cpp" line="868"/>
+        <location filename="../src/window.cpp" line="920"/>
+        <location filename="../src/window.cpp" line="961"/>
+        <source>Save File</source>
+        <translation>Fájl mentése</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1626"/>
-        <source>Untitled %1</source>
-        <translation>Cím nélküli %1</translation>
+        <location filename="../src/window.cpp" line="922"/>
+        <source>Encoding</source>
+        <translation>Kódolás</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1378"/>
+        <location filename="../src/window.cpp" line="1109"/>
+        <source>Read-Only mode is on</source>
+        <translation>Csak olvasható mód bekapcsolva</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="1264"/>
         <source>Current location remembered</source>
         <translation>A jelenlegi hely megjegyezve</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="2032"/>
+        <location filename="../src/window.cpp" line="1315"/>
+        <source>Ctrl+&apos;=&apos;</source>
+        <translation>Ctrl+&apos;=&apos;</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="1318"/>
+        <source>Ctrl+&apos;-&apos;</source>
+        <translation>Ctrl+&apos;-&apos;</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="1347"/>
+        <source>Editor</source>
+        <translation>Szerkesztő</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="1469"/>
+        <source>Untitled %1</source>
+        <translation>Cím nélküli %1</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="1509"/>
+        <location filename="../src/window.cpp" line="2054"/>
+        <source>Do you want to save all the files?</source>
+        <translation>El akarja menteni az összes fájlt?</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="1866"/>
         <source>Cancel</source>
         <translation>Mégsem</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="258"/>
-        <location filename="../src/window.cpp" line="2034"/>
-        <source>Save</source>
-        <translation>Mentés</translation>
+        <location filename="../src/window.cpp" line="1867"/>
+        <source>Discard</source>
+        <translation>Elvetés</translation>
     </message>
 </context>
 </TS>

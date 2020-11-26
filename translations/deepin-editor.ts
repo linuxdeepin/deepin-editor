@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="en">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="en" version="2.1">
 <context>
     <name>BottomBar</name>
     <message>
@@ -22,66 +20,50 @@
 <context>
     <name>EditWrapper</name>
     <message>
-        <location filename="../src/editwrapper.cpp" line="472"/>
-        <source>File has changed on disk. Reload?</source>
-        <translation>File has changed on disk. Reload?</translation>
+        <location filename="../src/editwrapper.cpp" line="171"/>
+        <location filename="../src/editwrapper.cpp" line="228"/>
+        <location filename="../src/editwrapper.cpp" line="291"/>
+        <location filename="../src/editwrapper.cpp" line="413"/>
+        <source>Save</source>
+        <translation>Save</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="469"/>
+        <location filename="../src/editwrapper.cpp" line="224"/>
+        <location filename="../src/editwrapper.cpp" line="287"/>
+        <source>Do you want to save this file?</source>
+        <translation>Do you want to save this file?</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="227"/>
+        <location filename="../src/editwrapper.cpp" line="290"/>
+        <source>Discard</source>
+        <translation>Discard</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="481"/>
         <source>File removed on the disk. Save it now?</source>
         <translation>File removed on the disk. Save it now?</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="223"/>
-        <source>The current file changes, whether to save first?</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/editwrapper.cpp" line="484"/>
+        <source>File has changed on disk. Reload?</source>
+        <translation>File has changed on disk. Reload?</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="286"/>
-        <source>The current file changes, whether to save as?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/editwrapper.cpp" line="503"/>
+        <location filename="../src/editwrapper.cpp" line="515"/>
         <location filename="../src/widgets/bottombar.cpp" line="66"/>
         <source>INSERT</source>
         <translation>INSERT</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="506"/>
+        <location filename="../src/editwrapper.cpp" line="518"/>
         <source>OVERWRITE</source>
         <translation>OVERWRITE</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="509"/>
+        <location filename="../src/editwrapper.cpp" line="521"/>
         <source>R/O</source>
         <translation>R/O</translation>
-    </message>
-    <message>
-        <source>Encoding changed. Do you want to save the file now?</source>
-        <translation type="vanished">Encoding changed. Do you want to save the file now?</translation>
-    </message>
-    <message>
-        <location filename="../src/editwrapper.cpp" line="226"/>
-        <location filename="../src/editwrapper.cpp" line="289"/>
-        <source>Cancel</source>
-        <translation>Cancel</translation>
-    </message>
-    <message>
-        <location filename="../src/editwrapper.cpp" line="170"/>
-        <location filename="../src/editwrapper.cpp" line="227"/>
-        <location filename="../src/editwrapper.cpp" line="290"/>
-        <location filename="../src/editwrapper.cpp" line="412"/>
-        <source>Save</source>
-        <translation>Save</translation>
-    </message>
-    <message>
-        <source>There are errors when using this encoding. If continue, the file contents may be changed</source>
-        <translation type="vanished">There are errors when using this encoding. If continue, the file contents may be changed</translation>
-    </message>
-    <message>
-        <source>Continue</source>
-        <translation type="vanished">Continue</translation>
     </message>
 </context>
 <context>
@@ -92,14 +74,14 @@
         <translation>Find</translation>
     </message>
     <message>
-        <location filename="../src/findbar.cpp" line="46"/>
-        <source>Next</source>
-        <translation>Next</translation>
-    </message>
-    <message>
         <location filename="../src/findbar.cpp" line="44"/>
         <source>Previous</source>
         <translation>Previous</translation>
+    </message>
+    <message>
+        <location filename="../src/findbar.cpp" line="46"/>
+        <source>Next</source>
+        <translation>Next</translation>
     </message>
 </context>
 <context>
@@ -126,14 +108,19 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/startmanager.cpp" line="424"/>
-        <source>File not saved</source>
-        <translation>File not saved</translation>
-    </message>
-    <message>
         <location filename="../src/editorapplication.cpp" line="15"/>
         <source>Text Editor</source>
         <translation>Text Editor</translation>
+    </message>
+    <message>
+        <location filename="../src/editwrapper.cpp" line="173"/>
+        <location filename="../src/editwrapper.cpp" line="415"/>
+        <location filename="../src/window.cpp" line="870"/>
+        <location filename="../src/window.cpp" line="888"/>
+        <location filename="../src/window.cpp" line="963"/>
+        <location filename="../src/window.cpp" line="978"/>
+        <source>Encoding</source>
+        <translation>Encoding</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="24"/>
@@ -156,45 +143,20 @@
         <translation>Font Size</translation>
     </message>
     <message>
+        <location filename="../src/settingsdialog.cpp" line="28"/>
+        <source>Shortcuts</source>
+        <translation>Shortcuts</translation>
+    </message>
+    <message>
         <location filename="../src/settingsdialog.cpp" line="29"/>
         <location filename="../src/settingsdialog.cpp" line="30"/>
         <source>Keymap</source>
         <translation>Keymap</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="28"/>
-        <source>Shortcuts</source>
-        <translation>Shortcuts</translation>
-    </message>
-    <message>
-        <location filename="../src/settingsdialog.cpp" line="58"/>
-        <source>Forward character</source>
-        <translation>Forward character</translation>
-    </message>
-    <message>
-        <location filename="../src/settingsdialog.cpp" line="59"/>
-        <source>Backward character</source>
-        <translation>Backward character</translation>
-    </message>
-    <message>
-        <location filename="../src/settingsdialog.cpp" line="92"/>
-        <source>Transpose character</source>
-        <translation>Transpose character</translation>
-    </message>
-    <message>
-        <location filename="../src/settingsdialog.cpp" line="109"/>
-        <source>Tab width</source>
-        <translation>Tab width</translation>
-    </message>
-    <message>
-        <location filename="../src/settingsdialog.cpp" line="111"/>
-        <source>Word wrap</source>
-        <translation>Word wrap</translation>
-    </message>
-    <message>
         <location filename="../src/settingsdialog.cpp" line="31"/>
         <location filename="../src/settingsdialog.cpp" line="107"/>
-        <location filename="../src/window.cpp" line="1302"/>
+        <location filename="../src/window.cpp" line="1305"/>
         <source>Window</source>
         <translation>Window</translation>
     </message>
@@ -264,14 +226,14 @@
         <translation>Reset font size</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="46"/>
-        <source>Toggle fullscreen</source>
-        <translation>Toggle fullscreen</translation>
-    </message>
-    <message>
         <location filename="../src/settingsdialog.cpp" line="45"/>
         <source>Help</source>
         <translation>Help</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="46"/>
+        <source>Toggle fullscreen</source>
+        <translation>Toggle fullscreen</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="47"/>
@@ -327,6 +289,16 @@
         <location filename="../src/settingsdialog.cpp" line="57"/>
         <source>Decrease indent</source>
         <translation>Decrease indent</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="58"/>
+        <source>Forward character</source>
+        <translation>Forward character</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="59"/>
+        <source>Backward character</source>
+        <translation>Backward character</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="60"/>
@@ -489,6 +461,11 @@
         <translation>Paste</translation>
     </message>
     <message>
+        <location filename="../src/settingsdialog.cpp" line="92"/>
+        <source>Transpose character</source>
+        <translation>Transpose character</translation>
+    </message>
+    <message>
         <location filename="../src/settingsdialog.cpp" line="93"/>
         <source>Mark</source>
         <translation>Mark</translation>
@@ -564,6 +541,16 @@
         <translation>Window size</translation>
     </message>
     <message>
+        <location filename="../src/settingsdialog.cpp" line="109"/>
+        <source>Tab width</source>
+        <translation>Tab width</translation>
+    </message>
+    <message>
+        <location filename="../src/settingsdialog.cpp" line="111"/>
+        <source>Word wrap</source>
+        <translation>Word wrap</translation>
+    </message>
+    <message>
         <location filename="../src/settingsdialog.cpp" line="112"/>
         <source>Code folding flag</source>
         <translation>Code folding flag</translation>
@@ -591,184 +578,179 @@
     <message>
         <location filename="../src/settingsdialog.cpp" line="119"/>
         <source>Unicode</source>
-        <translation type="unfinished"></translation>
+        <translation>Unicode</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="120"/>
         <source>Arabic</source>
-        <translation type="unfinished"></translation>
+        <translation>Arabic</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="121"/>
         <source>Belarussian</source>
-        <translation type="unfinished"></translation>
+        <translation>Belarussian</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="122"/>
         <source>Bulgarian</source>
-        <translation type="unfinished"></translation>
+        <translation>Bulgarian</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="123"/>
         <source>Chinese</source>
-        <translation type="unfinished"></translation>
+        <translation>Chinese</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="124"/>
         <source>Czech</source>
-        <translation type="unfinished"></translation>
+        <translation>Czech</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="125"/>
         <source>Estonian</source>
-        <translation type="unfinished"></translation>
+        <translation>Estonian</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="126"/>
         <source>Croatian</source>
-        <translation type="unfinished"></translation>
+        <translation>Croatian</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="127"/>
         <source>Danish</source>
-        <translation type="unfinished"></translation>
+        <translation>Danish</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="128"/>
         <source>Finnish</source>
-        <translation type="unfinished"></translation>
+        <translation>Finnish</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="129"/>
         <source>French</source>
-        <translation type="unfinished"></translation>
+        <translation>French</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="130"/>
         <source>German</source>
-        <translation type="unfinished"></translation>
+        <translation>German</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="131"/>
         <source>Greek</source>
-        <translation type="unfinished"></translation>
+        <translation>Greek</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="132"/>
         <source>Hebrew</source>
-        <translation type="unfinished"></translation>
+        <translation>Hebrew</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="133"/>
         <source>Hungarian</source>
-        <translation type="unfinished"></translation>
+        <translation>Hungarian</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="134"/>
         <source>Japanese</source>
-        <translation type="unfinished"></translation>
+        <translation>Japanese</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="135"/>
         <source>Korean</source>
-        <translation type="unfinished"></translation>
+        <translation>Korean</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="136"/>
         <source>Irish Gaelic</source>
-        <translation type="unfinished"></translation>
+        <translation>Irish Gaelic</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="137"/>
         <source>Italian</source>
-        <translation type="unfinished"></translation>
+        <translation>Italian</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="138"/>
         <source>Lithuanian</source>
-        <translation type="unfinished"></translation>
+        <translation>Lithuanian</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="139"/>
         <source>Latvian</source>
-        <translation type="unfinished"></translation>
+        <translation>Latvian</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="140"/>
         <source>Polish</source>
-        <translation type="unfinished"></translation>
+        <translation>Polish</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="141"/>
         <source>Portuguese</source>
-        <translation type="unfinished"></translation>
+        <translation>Portuguese</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="142"/>
         <source>Russian</source>
-        <translation type="unfinished"></translation>
+        <translation>Russian</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="143"/>
         <source>Romanian</source>
-        <translation type="unfinished"></translation>
+        <translation>Romanian</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="144"/>
         <source>Slovak</source>
-        <translation type="unfinished"></translation>
+        <translation>Slovak</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="145"/>
-        <source>Slovene</source>
-        <translation type="unfinished"></translation>
+        <source>Slovenian</source>
+        <translation>Slovenian</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="146"/>
         <source>Spanish</source>
-        <translation type="unfinished"></translation>
+        <translation>Spanish</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="147"/>
         <source>Swedish</source>
-        <translation type="unfinished"></translation>
+        <translation>Swedish</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="148"/>
         <source>Thai</source>
-        <translation type="unfinished"></translation>
+        <translation>Thai</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="149"/>
         <source>Turkish</source>
-        <translation type="unfinished"></translation>
+        <translation>Turkish</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="150"/>
         <source>Ukrainian</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukrainian</translation>
     </message>
     <message>
         <location filename="../src/settingsdialog.cpp" line="151"/>
         <source>Vietnamese</source>
-        <translation type="unfinished"></translation>
+        <translation>Vietnamese</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="172"/>
-        <location filename="../src/editwrapper.cpp" line="414"/>
-        <location filename="../src/window.cpp" line="866"/>
-        <location filename="../src/window.cpp" line="884"/>
-        <location filename="../src/window.cpp" line="959"/>
-        <location filename="../src/window.cpp" line="974"/>
-        <source>Encoding</source>
-        <translation type="unfinished">Encoding</translation>
+        <location filename="../src/startmanager.cpp" line="424"/>
+        <source>File not saved</source>
+        <translation>File not saved</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="885"/>
-        <location filename="../src/window.cpp" line="960"/>
-        <location filename="../src/window.cpp" line="975"/>
+        <location filename="../src/window.cpp" line="889"/>
+        <location filename="../src/window.cpp" line="964"/>
+        <location filename="../src/window.cpp" line="979"/>
         <source>Line Endings</source>
-        <translation type="unfinished">Line Endings</translation>
+        <translation>Line Endings</translation>
     </message>
 </context>
 <context>
@@ -871,6 +853,11 @@
         <translation>Close tab</translation>
     </message>
     <message>
+        <location filename="../src/tabbar.cpp" line="421"/>
+        <source>Close other tabs</source>
+        <translation>Close other tabs</translation>
+    </message>
+    <message>
         <location filename="../src/tabbar.cpp" line="422"/>
         <source>More options</source>
         <translation>More options</translation>
@@ -889,11 +876,6 @@
         <location filename="../src/tabbar.cpp" line="425"/>
         <source>Close unmodified tabs</source>
         <translation>Close unmodified tabs</translation>
-    </message>
-    <message>
-        <location filename="../src/tabbar.cpp" line="421"/>
-        <source>Close other tabs</source>
-        <translation>Close other tabs</translation>
     </message>
 </context>
 <context>
@@ -935,13 +917,13 @@
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="161"/>
-        <location filename="../src/window.cpp" line="303"/>
+        <location filename="../src/window.cpp" line="304"/>
         <source>Find</source>
         <translation>Find</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="162"/>
-        <location filename="../src/window.cpp" line="304"/>
+        <location filename="../src/window.cpp" line="305"/>
         <source>Replace</source>
         <translation>Replace</translation>
     </message>
@@ -982,22 +964,6 @@
         <translation>Add Comment</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="174"/>
-        <location filename="../src/dtextedit.cpp" line="243"/>
-        <source>Column Mode</source>
-        <translation>Column Mode</translation>
-    </message>
-    <message>
-        <location filename="../src/dtextedit.cpp" line="245"/>
-        <source>Remove Comment</source>
-        <translation>Remove Comment</translation>
-    </message>
-    <message>
-        <location filename="../src/dtextedit.cpp" line="280"/>
-        <source>Press ALT and click lines to edit in column mode</source>
-        <translation>Press ALT and click lines to edit in column mode</translation>
-    </message>
-    <message>
         <location filename="../src/dtextedit.cpp" line="170"/>
         <source>Text to Speech</source>
         <translation>Text to Speech</translation>
@@ -1005,7 +971,7 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="171"/>
         <source>Stop reading</source>
-        <translation>Stop Reading</translation>
+        <translation>Stop reading</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="172"/>
@@ -1018,9 +984,15 @@
         <translation>Translate</translation>
     </message>
     <message>
+        <location filename="../src/dtextedit.cpp" line="174"/>
+        <location filename="../src/dtextedit.cpp" line="243"/>
+        <source>Column Mode</source>
+        <translation>Column Mode</translation>
+    </message>
+    <message>
         <location filename="../src/dtextedit.cpp" line="175"/>
         <source>Add bookmark</source>
-        <translation>Add Bookmark</translation>
+        <translation>Add bookmark</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="176"/>
@@ -1030,12 +1002,12 @@
     <message>
         <location filename="../src/dtextedit.cpp" line="177"/>
         <source>Previous bookmark</source>
-        <translation>Previous Bookmark</translation>
+        <translation>Previous bookmark</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="178"/>
         <source>Next bookmark</source>
-        <translation>Next Bookmark</translation>
+        <translation>Next bookmark</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="179"/>
@@ -1068,16 +1040,6 @@
         <translation>Color Mark</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="226"/>
-        <source>Mark All</source>
-        <translation>Mark All</translation>
-    </message>
-    <message>
-        <location filename="../src/dtextedit.cpp" line="208"/>
-        <source>Mark</source>
-        <translation>Mark</translation>
-    </message>
-    <message>
         <location filename="../src/dtextedit.cpp" line="192"/>
         <source>Clear All Marks</source>
         <translation>Clear All Marks</translation>
@@ -1086,6 +1048,26 @@
         <location filename="../src/dtextedit.cpp" line="194"/>
         <source>Clear Last Mark</source>
         <translation>Clear Last Mark</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="208"/>
+        <source>Mark</source>
+        <translation>Mark</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="226"/>
+        <source>Mark All</source>
+        <translation>Mark All</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="245"/>
+        <source>Remove Comment</source>
+        <translation>Remove Comment</translation>
+    </message>
+    <message>
+        <location filename="../src/dtextedit.cpp" line="280"/>
+        <source>Press ALT and click lines to edit in column mode</source>
+        <translation>Press ALT and click lines to edit in column mode</translation>
     </message>
     <message>
         <location filename="../src/dtextedit.cpp" line="313"/>
@@ -1165,146 +1147,142 @@
 <context>
     <name>Window</name>
     <message>
-        <location filename="../src/window.cpp" line="295"/>
-        <source>New window</source>
-        <translation>New window</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="296"/>
-        <source>New tab</source>
-        <translation>New tab</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="297"/>
-        <source>Open file</source>
-        <translation>Open file</translation>
-    </message>
-    <message>
         <location filename="../src/warningnotices.cpp" line="17"/>
         <location filename="../src/widgets/toast.cpp" line="39"/>
-        <location filename="../src/window.cpp" line="299"/>
+        <location filename="../src/window.cpp" line="300"/>
         <source>Save as</source>
         <translation>Save as</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="300"/>
+        <location filename="../src/window.cpp" line="296"/>
+        <source>New window</source>
+        <translation>New window</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="297"/>
+        <source>New tab</source>
+        <translation>New tab</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="298"/>
+        <source>Open file</source>
+        <translation>Open file</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="299"/>
+        <location filename="../src/window.cpp" line="1868"/>
+        <source>Save</source>
+        <translation>Save</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="301"/>
         <source>Print</source>
         <translation>Print</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="301"/>
+        <location filename="../src/window.cpp" line="302"/>
         <source>Switch theme</source>
         <translation>Switch theme</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="412"/>
-        <location filename="../src/window.cpp" line="1981"/>
-        <source>Read-Only</source>
-        <translation>Read-Only</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="828"/>
-        <source>Saved successfully</source>
-        <translation>Saved successfully</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="1105"/>
-        <source>Read-Only mode is on</source>
-        <translation>Read-Only mode is on</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="1312"/>
-        <source>Ctrl+&apos;=&apos;</source>
-        <translation>Ctrl+&apos;=&apos;</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="1315"/>
-        <source>Ctrl+&apos;-&apos;</source>
-        <translation>Ctrl+&apos;-&apos;</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="1864"/>
-        <source>Discard</source>
-        <translation>Discard</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="302"/>
-        <location filename="../src/window.cpp" line="1362"/>
+        <location filename="../src/window.cpp" line="303"/>
+        <location filename="../src/window.cpp" line="1365"/>
         <source>Settings</source>
         <translation>Settings</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="430"/>
+        <location filename="../src/window.cpp" line="418"/>
+        <location filename="../src/window.cpp" line="1984"/>
+        <source>Read-Only</source>
+        <translation>Read-Only</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="436"/>
         <source>You do not have permission to open %1</source>
         <translation>You do not have permission to open %1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="466"/>
+        <location filename="../src/window.cpp" line="472"/>
         <source>Invalid file: %1</source>
         <translation>Invalid file: %1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="864"/>
-        <location filename="../src/window.cpp" line="916"/>
-        <location filename="../src/window.cpp" line="957"/>
-        <source>Save File</source>
-        <translation>Save File</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="570"/>
+        <location filename="../src/window.cpp" line="576"/>
         <source>Do you want to save this file?</source>
         <translation>Do you want to save this file?</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="918"/>
-        <source>Encoding</source>
-        <translation>Encoding</translation>
-    </message>
-    <message>
-        <source>Line Endings</source>
-        <translation type="vanished">Line Endings</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="1344"/>
-        <source>Editor</source>
-        <translation>Editor</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="814"/>
+        <location filename="../src/window.cpp" line="818"/>
         <source>You do not have permission to save %1</source>
         <translation>You do not have permission to save %1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="831"/>
+        <location filename="../src/window.cpp" line="832"/>
+        <source>Saved successfully</source>
+        <translation>Saved successfully</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="835"/>
         <source>Do you want to save as another?</source>
         <translation>Do you want to save as another?</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1506"/>
-        <location filename="../src/window.cpp" line="2051"/>
-        <source>Do you want to save all the files?</source>
-        <translation>Do you want to save all the files?</translation>
+        <location filename="../src/window.cpp" line="868"/>
+        <location filename="../src/window.cpp" line="920"/>
+        <location filename="../src/window.cpp" line="961"/>
+        <source>Save File</source>
+        <translation>Save File</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1466"/>
-        <source>Untitled %1</source>
-        <translation>Untitled %1</translation>
+        <location filename="../src/window.cpp" line="922"/>
+        <source>Encoding</source>
+        <translation>Encoding</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1261"/>
+        <location filename="../src/window.cpp" line="1109"/>
+        <source>Read-Only mode is on</source>
+        <translation>Read-Only mode is on</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="1264"/>
         <source>Current location remembered</source>
         <translation>Current location remembered</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1863"/>
+        <location filename="../src/window.cpp" line="1315"/>
+        <source>Ctrl+&apos;=&apos;</source>
+        <translation>Ctrl+&apos;=&apos;</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="1318"/>
+        <source>Ctrl+&apos;-&apos;</source>
+        <translation>Ctrl+&apos;-&apos;</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="1347"/>
+        <source>Editor</source>
+        <translation>Editor</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="1469"/>
+        <source>Untitled %1</source>
+        <translation>Untitled %1</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="1509"/>
+        <location filename="../src/window.cpp" line="2054"/>
+        <source>Do you want to save all the files?</source>
+        <translation>Do you want to save all the files?</translation>
+    </message>
+    <message>
+        <location filename="../src/window.cpp" line="1866"/>
         <source>Cancel</source>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="298"/>
-        <location filename="../src/window.cpp" line="1865"/>
-        <source>Save</source>
-        <translation>Save</translation>
+        <location filename="../src/window.cpp" line="1867"/>
+        <source>Discard</source>
+        <translation>Discard</translation>
     </message>
 </context>
 </TS>
