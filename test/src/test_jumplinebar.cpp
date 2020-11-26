@@ -15,7 +15,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "test_jumplinebar.h"
-#include "../../src/jumplinebar.h"
+#include "../../src/controls/jumplinebar.h"
 
 test_jumplinebar::test_jumplinebar()
 {

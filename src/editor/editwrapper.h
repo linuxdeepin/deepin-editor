@@ -20,12 +20,9 @@
 #ifndef EDITORBUFFER_H
 #define EDITORBUFFER_H
 
-#include "dbusinterface.h"
-#include "dtextedit.h"
-#include "widgets/bottombar.h"
-#include "warningnotices.h"
-#include "performancemonitor.h"
-
+#include "../editor/dtextedit.h"
+#include "../widgets/bottombar.h"
+#include "../controls/warningnotices.h"
 #include <QVBoxLayout>
 #include <QWidget>
 #include <DMessageManager>

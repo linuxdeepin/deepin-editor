@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 ~ 2019 Deepin Technology Co., Ltd.
+ * Copyright (C) 2017 ~ 2019 Deepin, Inc.
  *
  * Author:     rekols <rekols@foxmail.com>
  *
@@ -17,24 +17,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-#include <stdio.h>
+#include "linenumberarea.h"
+#include "dtextedit.h"
+#include "leftareaoftextedit.h"
+#include <QDebug>
 
-#define PATH "/usr/bin/deepin-editor"
-
-int main(int argc, char *argv[])
+LineNumberArea::LineNumberArea(LeftAreaTextEdit *leftAreaWidget)
 {
-    FILE *fp;
+    m_leftAreaWidget = leftAreaWidget;
+    setContentsMargins(0,0,0,0);
+    //m_textEdit = textEdit;
+}
 
-    std::string command = PATH;
-    command.push_back(' ');
-    for (int i = 1; i < argc; ++i) {
-        command.append(argv[i]);
-        command.push_back(' ');
-    }
+LineNumberArea::~LineNumberArea()
+{
+}
 
-    fp = popen(command.c_str(), "r");
-    pclose(fp);
+void LineNumberArea::paintEvent(QPaintEvent *e)
+{
+    //qDebug() << "LineNumberArea::paintEvent ";
+    m_leftAreaWidget->lineNumberAreaPaintEvent(e);
+    //m_textEdit->lineNumberAreaPaintEvent(e);
+}
 
-    return 0;
+QSize LineNumberArea::sizeHint() const
+{
+    return QSize(m_leftAreaWidget->lineNumberAreaWidth(), 0);
 }

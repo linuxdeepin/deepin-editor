@@ -142,7 +142,7 @@ void GenerateSettingTranslate()
     auto Russian = QObject::tr("Russian");
     auto Romanian = QObject::tr("Romanian");
     auto Slovak = QObject::tr("Slovak");
-    auto Slovene = QObject::tr("Slovenian");
+    auto Slovene = QObject::tr("Slovene");
     auto Spanish = QObject::tr("Spanish");
     auto Swedish = QObject::tr("Swedish");
     auto Thai = QObject::tr("Thai");

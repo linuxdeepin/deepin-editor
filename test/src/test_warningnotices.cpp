@@ -15,7 +15,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "test_warningnotices.h"
-#include "../../src/warningnotices.h"
+#include "../../src/controls/warningnotices.h"
 
 test_warningnotices::test_warningnotices()
 {

@@ -21,21 +21,16 @@
  */
 
 #include "window.h"
-#include "toolbar.h"
-#include "danchors.h"
-#include "dthememanager.h"
-#include "dtoast.h"
-#include "utils.h"
-#include "startmanager.h"
-#include "performancemonitor.h"
 
+
+#include <DTitlebar>
+#include <DAnchors>
+#include <DThemeManager>
+#include <DToast>
 #include <DSettingsWidgetFactory>
 #include <DSettingsGroup>
 #include <DSettings>
 #include <DSettingsOption>
-#include <DTitlebar>
-#include <DAnchors>
-
 #include <QApplication>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
@@ -43,10 +38,18 @@
 #include <QScreen>
 #include <QStyleFactory>
 #include <QEvent>
-
+#include <DDialog>
+#include <QStackedWidget>
+#include <QResizeEvent>
+#include <QVBoxLayout>
+#include <DGuiApplicationHelper>
+#include <DMessageManager>
+#include <DGuiApplicationHelper>
+#include <DPrintPreviewDialog>
 #include <QGuiApplication>
 #include <QWindow>
 #include <DWidgetUtil>
+
 
 #ifdef DTKWIDGET_CLASS_DFileDialog
 
@@ -1213,7 +1216,7 @@ void Window::popupSettingsDialog()
 void Window::popupPrintDialog()
 {
     DPrinter printer(QPrinter::HighResolution);
-    DPrintPreviewDialog preview( this);
+    DPrintPreviewDialog preview(this);
 
     TextEdit *wrapper = currentWrapper()->textEditor();
     const QString &filePath = wrapper->filepath;

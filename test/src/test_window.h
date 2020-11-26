@@ -1,11 +1,11 @@
 #ifndef TEST_WINDOW_H
 #define TEST_WINDOW_H
 #include "gtest/gtest.h"
-#include <QObject>
-#include"../../src/editwrapper.h"
-#include"../../src/window.h"
+#include"../../src/editor/editwrapper.h"
+#include"../../src/widgets/window.h"
 #include"../../src/startmanager.h"
-#include"../../src/dtextedit.h"
+#include"../../src/editor/dtextedit.h"
+#include <QObject>
 #include<QEvent>
 
 

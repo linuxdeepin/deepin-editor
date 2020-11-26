@@ -29,7 +29,7 @@
 #include "bookmarkwidget.h"
 #include "codeflodarea.h"
 
-#include "settings.h"
+#include "../common/settings.h"
 #include <QAction>
 #include <DMenu>
 #include <QPaintEvent>
@@ -41,7 +41,7 @@
 #include <QtDBus>
 #include <QGestureEvent>
 #include <QProxyStyle>
-#include "widgets/ColorSelectWdg.h"
+#include "../widgets/ColorSelectWdg.h"
 #include <DTextEdit>
 
 #define CELL_TIME   15
@@ -164,8 +164,9 @@ private:
 };
 
 class ShowFlodCodeWidget;
-class leftareaoftextedit;
+class LeftAreaTextEdit;
 class EditWrapper;
+
 class TextEdit : public DPlainTextEdit
 {
     Q_OBJECT
@@ -815,7 +816,7 @@ private:
     bool m_bIsFindClose = false;///< 关闭查找框事件是否发生
 
 public:
-    leftareaoftextedit *m_pLeftAreaWidget;
+    LeftAreaTextEdit *m_pLeftAreaWidget;
     QString filepath;
 };
 #endif

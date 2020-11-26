@@ -10,6 +10,7 @@ project(deepin-editor)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
@@ -20,10 +21,5 @@ endif ()
 add_subdirectory(third)
 
 add_subdirectory(src)
+
 add_subdirectory(test)
-#option(USE_TEST "UT" OFF)
-#if (USE_TEST)
-#add_subdirectory(test)
-#endif(USE_TEST)
-
-

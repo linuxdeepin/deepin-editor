@@ -14,21 +14,24 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "bookmarkwidget.h"
-#include "leftareaoftextedit.h"
-#include <QMouseEvent>
+#ifndef BOOKMARKWIDGET_H
+#define BOOKMARKWIDGET_H
 
-bookmarkwidget::bookmarkwidget(leftareaoftextedit *leftAreaWidget)
+#include <QWidget>
+
+class LeftAreaTextEdit;
+class BookMarkWidget : public QWidget
 {
-    m_leftAreaWidget = leftAreaWidget;
-}
+    Q_OBJECT
+public:
+    BookMarkWidget(LeftAreaTextEdit *leftAreaWidget);
+    ~BookMarkWidget() override;
 
-bookmarkwidget::~bookmarkwidget()
-{
+protected:
+    void paintEvent(QPaintEvent *event) override;
 
-}
+private:
+    LeftAreaTextEdit *m_leftAreaWidget;
+};
 
-void bookmarkwidget::paintEvent(QPaintEvent *event)
-{
-    m_leftAreaWidget->bookMarkAreaPaintEvent(event);
-}
+#endif // BOOKMARKWIDGET_H

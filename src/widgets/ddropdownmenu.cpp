@@ -17,13 +17,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "../common/utils.h"
+#include "../common/settings.h"
 #include "ddropdownmenu.h"
 #include <QHBoxLayout>
 #include <QMouseEvent>
 #include <DApplication>
-#include "../utils.h"
 #include <QPainter>
-#include "../settings.h"
 #include <DSettingsOption>
 #include <QDebug>
 #include <DFontSizeManager>
@@ -91,11 +91,6 @@ void DDropdownMenu::setFontEx(const QFont& font)
 
 
 
-void DDropdownMenu::setCurrentTextOnly(const QString &text)
-{
-    setText(text);
-}
-
 void DDropdownMenu::setCurrentAction(QAction *pAct)
 {
     if(pAct){
@@ -110,6 +105,11 @@ void DDropdownMenu::setCurrentAction(QAction *pAct)
         }
     }
     setText(pAct->text());
+}
+
+void DDropdownMenu::setCurrentTextOnly(const QString &name)
+{
+    setText(name);
 }
 void DDropdownMenu::setText(const QString &text)
 {

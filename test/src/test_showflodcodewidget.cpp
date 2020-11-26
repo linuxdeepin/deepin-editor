@@ -15,7 +15,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "test_showflodcodewidget.h"
-#include "../../src/showflodcodewidget.h"
+#include "../../src/editor/showflodcodewidget.h"
 
 test_showflodcodewidget::test_showflodcodewidget()
 {

@@ -18,24 +18,23 @@
  */
 
 #include "bottombar.h"
-#include "../utils.h"
-#include "../editwrapper.h"
+#include "../common/utils.h"
+#include "../editor/editwrapper.h"
 
 #include <QLabel>
 #include <QPainter>
 #include <QHBoxLayout>
 #include <DMenu>
-
 #include <DVerticalLine>
 
 BottomBar::BottomBar(QWidget *parent)
     : QWidget(parent),
-      m_wrapper(static_cast<EditWrapper *>(parent)),
-      m_positionLabel(new DLabel),
-      m_charCountLabel(new DLabel),
-      m_cursorStatus(new DLabel),
-      m_encodeMenu(DDropdownMenu::createEncodeMenu()),
-      m_highlightMenu(new DDropdownMenu()),
+      m_pWrapper(static_cast<EditWrapper *>(parent)),
+      m_pPositionLabel(new DLabel),
+      m_pCharCountLabel(new DLabel),
+      m_pCursorStatus(new DLabel),
+      m_pEncodeMenu(DDropdownMenu::createEncodeMenu()),
+      m_pHighlightMenu(new DDropdownMenu()),
       m_rowStr(tr("Row")),
       m_columnStr(tr("Column")),
       m_chrCountStr(tr("Characters %1"))
@@ -43,31 +42,31 @@ BottomBar::BottomBar(QWidget *parent)
     QFont font;
     font.setFamily("SourceHanSansSC-Normal");
     //font.setPixelSize(11);
-    m_positionLabel->setFont(font);
-    m_charCountLabel->setFont(font);
-    m_cursorStatus->setFont(font);
-   // m_encodeMenu->setFontEx(font);
-   // m_highlightMenu->setFontEx(font);
+    m_pPositionLabel->setFont(font);
+    m_pCharCountLabel->setFont(font);
+    m_pCursorStatus->setFont(font);
+   // m_pEncodeMenu->setFontEx(font);
+   // m_pHighlightMenu->setFontEx(font);
 
 
-    DFontSizeManager::instance()->bind(m_positionLabel, DFontSizeManager::T9);
-    DFontSizeManager::instance()->bind(m_charCountLabel, DFontSizeManager::T9);
-    DFontSizeManager::instance()->bind(m_cursorStatus, DFontSizeManager::T9);
-    //DFontSizeManager::instance()->bind(m_encodeMenu->getButton(), DFontSizeManager::T9);
-   // DFontSizeManager::instance()->bind(m_highlightMenu->getButton(), DFontSizeManager::T9);
+    DFontSizeManager::instance()->bind(m_pPositionLabel, DFontSizeManager::T9);
+    DFontSizeManager::instance()->bind(m_pCharCountLabel, DFontSizeManager::T9);
+    DFontSizeManager::instance()->bind(m_pCursorStatus, DFontSizeManager::T9);
+    //DFontSizeManager::instance()->bind(m_pEncodeMenu->getButton(), DFontSizeManager::T9);
+   // DFontSizeManager::instance()->bind(m_pHighlightMenu->getButton(), DFontSizeManager::T9);
 
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setContentsMargins(29, 1, 10, 0);
-    layout->addWidget(m_positionLabel);
+    layout->addWidget(m_pPositionLabel);
     layout->addStretch();
     layout->addSpacerItem(new QSpacerItem(110,20,QSizePolicy::Expanding,QSizePolicy::Fixed));
-    layout->addWidget(m_charCountLabel);
+    layout->addWidget(m_pCharCountLabel);
 
-    m_cursorStatus->setText(qApp->translate("EditWrapper", "INSERT"));
-    m_positionLabel->setText(QString("%1 %2  %3 %4").arg(m_rowStr, "1",m_columnStr, "1"));
+    m_pCursorStatus->setText(qApp->translate("EditWrapper", "INSERT"));
+    m_pPositionLabel->setText(QString("%1 %2  %3 %4").arg(m_rowStr, "1",m_columnStr, "1"));
 
-    m_charCountLabel->setText(m_chrCountStr.arg("0"));
-    m_highlightMenu->setCurrentTextOnly(qApp->translate("TextEdit", "None"));
+    m_pCharCountLabel->setText(m_chrCountStr.arg("0"));
+    m_pHighlightMenu->setCurrentTextOnly(qApp->translate("TextEdit", "None"));
 
     DVerticalLine *pVerticalLine1 = new DVerticalLine();
     DVerticalLine *pVerticalLine2 = new DVerticalLine();
@@ -75,20 +74,20 @@ BottomBar::BottomBar(QWidget *parent)
     pVerticalLine2->setFixedSize(1, 15);
 
     layout->addStretch();
-    layout->addWidget(m_cursorStatus);
+    layout->addWidget(m_pCursorStatus);
     layout->addSpacing(10);
     layout->addWidget(pVerticalLine1);
-    layout->addWidget(m_encodeMenu);
+    layout->addWidget(m_pEncodeMenu);
     layout->addWidget(pVerticalLine2);
-    layout->addWidget(m_highlightMenu);
+    layout->addWidget(m_pHighlightMenu);
     setFixedHeight(32);
 
 
     //切换编码
-    connect(m_encodeMenu, &DDropdownMenu::currentActionChanged, this,[this](QAction* pAct){
-        if(m_wrapper->reloadFileEncode(pAct->text().toLocal8Bit()))
+    connect(m_pEncodeMenu, &DDropdownMenu::currentActionChanged, this,[this](QAction* pAct){
+        if(m_pWrapper->reloadFileEncode(pAct->text().toLocal8Bit()))
         {
-            m_encodeMenu->setCurrentAction(pAct);
+            m_pEncodeMenu->setCurrentAction(pAct);
         }
 
     });
@@ -100,43 +99,43 @@ BottomBar::~BottomBar()
 
 void BottomBar::updatePosition(int row, int column)
 {
-    m_positionLabel->setText(QString("%1 %2  %3 %4").arg(m_rowStr, QString::number(row),
+    m_pPositionLabel->setText(QString("%1 %2  %3 %4").arg(m_rowStr, QString::number(row),
                                                           m_columnStr, QString::number(column)));
 }
 
 void BottomBar::updateWordCount(int charactorCount)
 {
-    m_charCountLabel->setText(m_chrCountStr.arg(QString::number(charactorCount-1)));
+    m_pCharCountLabel->setText(m_chrCountStr.arg(QString::number(charactorCount-1)));
 }
 
 void BottomBar::setEncodeName(const QString &name)
 {
-    m_encodeMenu->setCurrentTextOnly(name);
+    m_pEncodeMenu->setCurrentTextOnly(name);
     //m_wrapper->textEditor()->setTextCode(name);
 }
 
 void BottomBar::setCursorStatus(const QString &text)
 {
-    m_cursorStatus->setText(text);
+    m_pCursorStatus->setText(text);
 }
 
 void BottomBar::setHighlightMenu(DMenu *menu)
 {
-    m_highlightMenu->setMenu(menu);
+    m_pHighlightMenu->setMenu(menu);
 }
 
 void BottomBar::setHightlightName(const QString &name)
 {
-    m_highlightMenu->setCurrentTextOnly(name);
+    m_pHighlightMenu->setCurrentTextOnly(name);
 }
 
 void BottomBar::setPalette(const QPalette &palette)
 {
-    DPalette paPositionLabel  = DApplicationHelper::instance()->palette(m_positionLabel);
-    DPalette paCharCountLabel = DApplicationHelper::instance()->palette(m_charCountLabel);
-    DPalette paCursorStatus = DApplicationHelper::instance()->palette(m_cursorStatus);
-    DPalette paEncodeMenu = DApplicationHelper::instance()->palette(m_encodeMenu->getButton());
-    DPalette paHighlightMenu = DApplicationHelper::instance()->palette(m_highlightMenu->getButton());
+    DPalette paPositionLabel  = DApplicationHelper::instance()->palette(m_pPositionLabel);
+    DPalette paCharCountLabel = DApplicationHelper::instance()->palette(m_pCharCountLabel);
+    DPalette paCursorStatus = DApplicationHelper::instance()->palette(m_pCursorStatus);
+    DPalette paEncodeMenu = DApplicationHelper::instance()->palette(m_pEncodeMenu->getButton());
+    DPalette paHighlightMenu = DApplicationHelper::instance()->palette(m_pHighlightMenu->getButton());
 
     QColor colorFont = paPositionLabel.textTips().color();
 
@@ -146,15 +145,15 @@ void BottomBar::setPalette(const QPalette &palette)
     paEncodeMenu.setColor(DPalette::WindowText, colorFont);
     paHighlightMenu.setColor(DPalette::WindowText, colorFont);
 
-    m_positionLabel->setPalette(paPositionLabel);
-    m_charCountLabel->setPalette(paCharCountLabel);
-    m_cursorStatus->setPalette(paCursorStatus);
-    m_encodeMenu->getButton()->setPalette(paEncodeMenu);
-    m_highlightMenu->getButton()->setPalette(paHighlightMenu);
+    m_pPositionLabel->setPalette(paPositionLabel);
+    m_pCharCountLabel->setPalette(paCharCountLabel);
+    m_pCursorStatus->setPalette(paCursorStatus);
+    m_pEncodeMenu->getButton()->setPalette(paEncodeMenu);
+    m_pHighlightMenu->getButton()->setPalette(paHighlightMenu);
 
     QString theme = (palette.color(QPalette::Background).lightness() < 128) ? "dark" : "light";
-    m_encodeMenu->setTheme(theme);
-    m_highlightMenu->setTheme(theme);
+    m_pEncodeMenu->setTheme(theme);
+    m_pHighlightMenu->setTheme(theme);
 
     QWidget::setPalette(palette);
 }
@@ -166,11 +165,11 @@ void BottomBar::updateSize(int size)
 
 void BottomBar::setChildrenFocus(bool ok,QWidget* preOrderWidget)
 {
-    m_encodeMenu->setChildrenFocus(ok);
-    m_highlightMenu->setChildrenFocus(ok);
+    m_pEncodeMenu->setChildrenFocus(ok);
+    m_pHighlightMenu->setChildrenFocus(ok);
     if(ok) {
-        if(preOrderWidget) setTabOrder(preOrderWidget,m_encodeMenu->getButton());
-        setTabOrder(m_encodeMenu->getButton(),m_highlightMenu->getButton());
+        if(preOrderWidget) setTabOrder(preOrderWidget,m_pEncodeMenu->getButton());
+        setTabOrder(m_pEncodeMenu->getButton(),m_pHighlightMenu->getButton());
     }
 }
 

@@ -15,7 +15,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "test_performancemonitor.h"
-#include "../../src/performancemonitor.h"
+#include "../../src/common/performancemonitor.h"
 
 test_performanceMonitor::test_performanceMonitor()
 {

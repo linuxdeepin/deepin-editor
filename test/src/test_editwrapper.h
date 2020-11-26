@@ -18,11 +18,11 @@
 #define TEST_EDITWRAPPER_H
 
 #include"../../src/startmanager.h"
-#include"../../src/dtextedit.h"
-#include"../../src/settings.h"
-#include"../../src/window.h"
-#include"../../src/editwrapper.h"
-#include"../../src/tabbar.h"
+#include"../../src/editor/dtextedit.h"
+#include"../../src/common/settings.h"
+#include"../../src/widgets/window.h"
+#include"../../src/editor/editwrapper.h"
+#include"../../src/controls/tabbar.h"
 #include "gtest/gtest.h"
 #include <QObject>
 

@@ -1,19 +1,18 @@
 #ifndef CODEFLODAREA_H
 #define CODEFLODAREA_H
 #include <QWidget>
-class leftareaoftextedit;
-class TextEdit;
+class LeftAreaTextEdit;
+
+
 class CodeFlodArea: public QWidget
 {
     Q_OBJECT
 public:
-    CodeFlodArea(leftareaoftextedit *leftAreaWidget);
+    CodeFlodArea(LeftAreaTextEdit *leftAreaWidget);
     ~CodeFlodArea() override;
-
     void paintEvent(QPaintEvent *e) override;
-
 private:
-    leftareaoftextedit *m_leftAreaWidget;
+    LeftAreaTextEdit* m_pLeftAreaWidget = nullptr;
 };
 
 #endif // CODEFLODAREA_H

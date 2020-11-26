@@ -15,7 +15,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "test_fileloadthread.h"
-#include "../../src/fileloadthread.h"
+#include "../../src/common/fileloadthread.h"
 
 test_fileloadthread::test_fileloadthread()
 {

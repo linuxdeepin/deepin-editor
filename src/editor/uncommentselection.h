@@ -1,6 +1,6 @@
 #pragma once
 
-#include "comment_global.h"
+#include "../common/comment_global.h"
 
 #include <QString>
 #include<QtDebug>

@@ -18,7 +18,7 @@
  */
 
 #include "themelistmodel.h"
-#include "../utils.h"
+#include "../common/utils.h"
 #include <QFileInfoList>
 #include <QJsonDocument>
 #include <QJsonObject>

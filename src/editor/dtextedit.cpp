@@ -20,13 +20,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "dtextedit.h"
-#include "utils.h"
-#include "window.h"
-#include "editwrapper.h"
-#include "widgets/bottombar.h"
-#include "leftareaoftextedit.h"
 
+#include "../common/utils.h"
+#include "../widgets/window.h"
+#include "../widgets/bottombar.h"
+#include "dtextedit.h"
+#include "leftareaoftextedit.h"
+#include "editwrapper.h"
 #include "showflodcodewidget.h"
 
 
@@ -59,22 +59,6 @@
 #include <private/qguiapplication_p.h>
 #include <qpa/qplatformtheme.h>
 
-static inline bool isModifier(QKeyEvent *e)
-{
-    if (!e) {
-        return false;
-    }
-
-    switch (e->key()) {
-    case Qt::Key_Shift:
-    case Qt::Key_Control:
-    case Qt::Key_Meta:
-    case Qt::Key_Alt:
-        return true;
-    default:
-        return false;
-    }
-}
 
 TextEdit::TextEdit(QWidget *parent)
     : DPlainTextEdit(parent),
@@ -87,7 +71,7 @@ TextEdit::TextEdit(QWidget *parent)
     m_qstrCommitString = "";
     m_bIsShortCut = false;
     m_bIsInputMethod = false;
-    m_pLeftAreaWidget = new leftareaoftextedit(this);
+    m_pLeftAreaWidget = new LeftAreaTextEdit(this);
 
 #if QT_VERSION < QT_VERSION_CHECK(5,9,0)
     m_touchTapDistance = 15;
@@ -96,11 +80,11 @@ TextEdit::TextEdit(QWidget *parent)
 #endif
     m_fontLineNumberArea.setFamily("SourceHanSansSC-Normal");
 
-    m_pLeftAreaWidget->m_flodArea->setAttribute(Qt::WA_Hover, true); //开启悬停事件
-    m_pLeftAreaWidget->m_bookMarkArea->setAttribute(Qt::WA_Hover, true);
+    m_pLeftAreaWidget->m_pFlodArea->setAttribute(Qt::WA_Hover, true); //开启悬停事件
+    m_pLeftAreaWidget->m_pBookMarkArea->setAttribute(Qt::WA_Hover, true);
     viewport()->installEventFilter(this);
-    m_pLeftAreaWidget->m_bookMarkArea->installEventFilter(this);
-    m_pLeftAreaWidget->m_flodArea->installEventFilter(this);
+    m_pLeftAreaWidget->m_pBookMarkArea->installEventFilter(this);
+    m_pLeftAreaWidget->m_pFlodArea->installEventFilter(this);
     viewport()->setCursor(Qt::IBeamCursor);
 
     // Don't draw frame around editor widget.
@@ -743,7 +727,7 @@ void TextEdit::jumpToLine(int line, bool keepLineAtCenter)
     if (keepLineAtCenter) {
         keepCurrentLineAtCenter();
     }
-    m_pLeftAreaWidget->m_linenumberarea->update();
+    m_pLeftAreaWidget->m_pLineNumberArea->update();
 }
 
 void TextEdit::newline()
@@ -868,9 +852,9 @@ void TextEdit::scrollUp()
 {
     QScrollBar *scrollbar = verticalScrollBar();
     scrollbar->triggerAction(QAbstractSlider::SliderPageStepSub);
-    m_pLeftAreaWidget->m_linenumberarea->update();
-    m_pLeftAreaWidget->m_flodArea->update();
-    m_pLeftAreaWidget->m_bookMarkArea->update();
+    m_pLeftAreaWidget->m_pLineNumberArea->update();
+    m_pLeftAreaWidget->m_pFlodArea->update();
+    m_pLeftAreaWidget->m_pBookMarkArea->update();
     auto moveMode = m_cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
     QTextCursor lineCursor(document()->findBlockByLineNumber(this->getFirstVisibleBlockId()));
     QTextCursor cursor = textCursor();
@@ -883,9 +867,9 @@ void TextEdit::scrollDown()
     QScrollBar *scrollbar = verticalScrollBar();
     scrollbar->triggerAction(QAbstractSlider::SliderPageStepAdd);
 
-    m_pLeftAreaWidget->m_linenumberarea->update();
-    m_pLeftAreaWidget->m_flodArea->update();
-    m_pLeftAreaWidget->m_bookMarkArea->update();
+    m_pLeftAreaWidget->m_pLineNumberArea->update();
+    m_pLeftAreaWidget->m_pFlodArea->update();
+    m_pLeftAreaWidget->m_pBookMarkArea->update();
     auto moveMode = m_cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
     int lines = this->height() / fontMetrics().height();
     int tem = document()->blockCount();
@@ -1384,8 +1368,8 @@ void TextEdit::handleCursorMarkChanged(bool mark, QTextCursor cursor)
         m_markStartLine = -1;
     }
 
-    m_pLeftAreaWidget->m_linenumberarea->update();
-    m_pLeftAreaWidget->m_bookMarkArea->update();
+    m_pLeftAreaWidget->m_pLineNumberArea->update();
+    m_pLeftAreaWidget->m_pBookMarkArea->update();
 }
 
 void TextEdit::convertWordCase(ConvertCase convertCase)
@@ -1481,9 +1465,9 @@ void TextEdit::setLineWrapMode(bool enable)
     int nJumpLine = textCursor().blockNumber() + 1;
     this->setWordWrapMode(QTextOption::WrapAnywhere);
     QPlainTextEdit::setLineWrapMode(enable ? QPlainTextEdit::WidgetWidth : QPlainTextEdit::NoWrap);
-    m_pLeftAreaWidget->m_linenumberarea->update();
-    m_pLeftAreaWidget->m_flodArea->update();
-    m_pLeftAreaWidget->m_bookMarkArea->update();
+    m_pLeftAreaWidget->m_pLineNumberArea->update();
+    m_pLeftAreaWidget->m_pFlodArea->update();
+    m_pLeftAreaWidget->m_pBookMarkArea->update();
 
     jumpToLine(nJumpLine,false);
     setTextCursor(cursor);
@@ -1787,7 +1771,7 @@ DMenu *TextEdit::getHighlightMenu()
 
 void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
-    QPainter painter(m_pLeftAreaWidget->m_linenumberarea);
+    QPainter painter(m_pLeftAreaWidget->m_pLineNumberArea);
     //painter.fillRect(event->rect(), m_backgroundColor);
 
     QColor lineNumberAreaBackgroundColor;
@@ -1874,7 +1858,7 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
 
         if (block.isVisible()) {
             painter.drawText(0, cursorRect(cur).y(),
-                             m_pLeftAreaWidget->m_linenumberarea->width(), cursorRect(cur).height() - static_cast<int>(document()->documentMargin()),
+                             m_pLeftAreaWidget->m_pLineNumberArea->width(), cursorRect(cur).height() - static_cast<int>(document()->documentMargin()),
                              Qt::AlignVCenter | Qt::AlignHCenter, QString::number(block.blockNumber() + 1));
         }
 
@@ -1937,7 +1921,7 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
 {
     m_listFlodFlag.clear();
     m_listFlodIconPos.clear();
-    QPainter painter(m_pLeftAreaWidget->m_flodArea);
+    QPainter painter(m_pLeftAreaWidget->m_pFlodArea);
 
     QColor codeFlodAreaBackgroundColor;
     if (QColor(m_backgroundColor).lightness() < 128) {
@@ -2063,7 +2047,7 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                    scaleunFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
                }
 
-               int nOffset = (m_pLeftAreaWidget->m_bookMarkArea->width() - scaleFoldPixmap.width())/2;
+               int nOffset = (m_pLeftAreaWidget->m_pBookMarkArea->width() - scaleFoldPixmap.width())/2;
                if (block.next().isVisible()) {
                    if (block.isVisible()) {
                        imageTop = cursorRect(cur).y() + (cursorRect(cur).height() - scaleFoldPixmap.height())/2;
@@ -2087,7 +2071,7 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
 void TextEdit::setBookmarkFlagVisable(bool isVisable, bool bIsFirstOpen)
 {
     int leftAreaWidth = m_pLeftAreaWidget->width();
-    int bookmarkAreaWidth = m_pLeftAreaWidget->m_bookMarkArea->width();
+    int bookmarkAreaWidth = m_pLeftAreaWidget->m_pBookMarkArea->width();
 
     if(!bIsFirstOpen) {
        if(isVisable) {
@@ -2098,13 +2082,13 @@ void TextEdit::setBookmarkFlagVisable(bool isVisable, bool bIsFirstOpen)
     }
 
     m_pIsShowBookmarkArea = isVisable;
-    m_pLeftAreaWidget->m_bookMarkArea->setVisible(isVisable);
+    m_pLeftAreaWidget->m_pBookMarkArea->setVisible(isVisable);
 }
 
 void TextEdit::setCodeFlodFlagVisable(bool isVisable,bool bIsFirstOpen)
 {
    int leftAreaWidth = m_pLeftAreaWidget->width();
-   int flodAreaWidth = m_pLeftAreaWidget->m_flodArea->width();
+   int flodAreaWidth = m_pLeftAreaWidget->m_pFlodArea->width();
 //    qDebug()<<"leftAreaWidth = "<<leftAreaWidth;
 //    qDebug()<<"flodAreaWidth = "<<flodAreaWidth;
     if(!bIsFirstOpen) {
@@ -2119,7 +2103,7 @@ void TextEdit::setCodeFlodFlagVisable(bool isVisable,bool bIsFirstOpen)
        }
     }
     m_pIsShowCodeFoldArea = isVisable;
-    m_pLeftAreaWidget->m_flodArea->setVisible(isVisable);
+    m_pLeftAreaWidget->m_pFlodArea->setVisible(isVisable);
 }
 
 void TextEdit::updateLineNumber()
@@ -2129,24 +2113,24 @@ void TextEdit::updateLineNumber()
     int leftAreaWidth = 0;
 
     if(m_pIsShowBookmarkArea) {
-        leftAreaWidth += m_pLeftAreaWidget->m_bookMarkArea->width();
-//        m_pLeftAreaWidget->setFixedWidth(m_pLeftAreaWidget->m_bookMarkArea->width() + blockSize * fontMetrics().width('9')
-//                                         + m_pLeftAreaWidget->m_flodArea->width());
+        leftAreaWidth += m_pLeftAreaWidget->m_pBookMarkArea->width();
+//        m_pLeftAreaWidget->setFixedWidth(m_pLeftAreaWidget->m_pBookMarkArea->width() + blockSize * fontMetrics().width('9')
+//                                         + m_pLeftAreaWidget->m_pFlodArea->width());
         //m_pLeftAreaWidget->setFixedWidth(leftAreaWidth);
     } /*else {
-        m_pLeftAreaWidget->setFixedWidth(blockSize * fontMetrics().width('9') + m_pLeftAreaWidget->m_flodArea->width());
+        m_pLeftAreaWidget->setFixedWidth(blockSize * fontMetrics().width('9') + m_pLeftAreaWidget->m_pFlodArea->width());
     }*/
 
 //    if(m_pIsShowCodeFoldArea) {
 ////        m_pLeftAreaWidget->setFixedWidth(23 + blockSize * fontMetrics().width('9') + m_lineNumberPaddingX * 4);
-//        m_pLeftAreaWidget->setFixedWidth(14 + blockSize * fontMetrics().width('9') + m_pLeftAreaWidget->m_bookMarkArea->width());
+//        m_pLeftAreaWidget->setFixedWidth(14 + blockSize * fontMetrics().width('9') + m_pLeftAreaWidget->m_pBookMarkArea->width());
 //    } else {
 ////        m_pLeftAreaWidget->setFixedWidth(blockSize * fontMetrics().width('9') + m_lineNumberPaddingX * 4);
-//        m_pLeftAreaWidget->setFixedWidth(blockSize * fontMetrics().width('9') + m_pLeftAreaWidget->m_bookMarkArea->width());
+//        m_pLeftAreaWidget->setFixedWidth(blockSize * fontMetrics().width('9') + m_pLeftAreaWidget->m_pBookMarkArea->width());
 //    }
 
     if(m_pIsShowCodeFoldArea) {
-        leftAreaWidth += m_pLeftAreaWidget->m_flodArea->width();
+        leftAreaWidth += m_pLeftAreaWidget->m_pFlodArea->width();
     }
 
 //    if(!bIsSetLineNumberWidth) {
@@ -2159,9 +2143,9 @@ void TextEdit::updateLineNumber()
     }
 
     m_pLeftAreaWidget->setFixedWidth(leftAreaWidth);
-    m_pLeftAreaWidget->m_bookMarkArea->update();
-    m_pLeftAreaWidget->m_linenumberarea->update();
-    m_pLeftAreaWidget->m_flodArea->update();
+    m_pLeftAreaWidget->m_pBookMarkArea->update();
+    m_pLeftAreaWidget->m_pLineNumberArea->update();
+    m_pLeftAreaWidget->m_pFlodArea->update();
 }
 
 void TextEdit::updateWordCount()
@@ -2239,9 +2223,9 @@ void TextEdit::cursorPositionChanged()
                                                cursor.columnNumber() + 1);
     }
 
-    m_pLeftAreaWidget->m_linenumberarea->update();
-    m_pLeftAreaWidget->m_bookMarkArea->update();
-    m_pLeftAreaWidget->m_flodArea->update();
+    m_pLeftAreaWidget->m_pLineNumberArea->update();
+    m_pLeftAreaWidget->m_pBookMarkArea->update();
+    m_pLeftAreaWidget->m_pFlodArea->update();
 }
 
 void TextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &closeChar)
@@ -2745,8 +2729,8 @@ void TextEdit::setTheme(const KSyntaxHighlighting::Theme &theme, const QString &
     verticalScrollBar()->setSliderPosition(iVerticalScrollValue);
     horizontalScrollBar()->setSliderPosition(iHorizontalScrollVaule);
 
-    m_pLeftAreaWidget->m_linenumberarea->update();
-    m_pLeftAreaWidget->m_bookMarkArea->update();
+    m_pLeftAreaWidget->m_pLineNumberArea->update();
+    m_pLeftAreaWidget->m_pBookMarkArea->update();
 
     highlightCurrentLine();
 }
@@ -2863,7 +2847,7 @@ void TextEdit::removeHighlightWordUnderCursor()
 
     renderAllSelections();
     m_nBookMarkHoverLine = -1;
-    m_pLeftAreaWidget->m_bookMarkArea->update();
+    m_pLeftAreaWidget->m_pBookMarkArea->update();
 }
 
 void TextEdit::setSettings(Settings *keySettings)
@@ -3125,7 +3109,7 @@ void TextEdit::onClearBookMark()
 {
     m_listBookmark.clear();
     qDebug() << "ClearBookMark:" << m_listBookmark;
-    m_pLeftAreaWidget->m_bookMarkArea->update();
+    m_pLeftAreaWidget->m_pBookMarkArea->update();
 }
 
 void TextEdit::copyWordUnderCursor()
@@ -3457,7 +3441,7 @@ void TextEdit::clearBlack()
 
 void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
 {
-    bookmarkwidget *bookMarkArea = m_pLeftAreaWidget->m_bookMarkArea;
+    BookMarkWidget *bookMarkArea = m_pLeftAreaWidget->m_pBookMarkArea;
     QPainter painter(bookMarkArea);
     QColor lineNumberAreaBackgroundColor;
     if (QColor(m_backgroundColor).lightness() < 128) {
@@ -3539,7 +3523,7 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
 //                imageTop = startPoint + static_cast<int>(qFabs(fontHeight - scaleImage.height())/2);
 //            }
 
-            int nOffset = (m_pLeftAreaWidget->m_bookMarkArea->width() - scalePixmap.width())/2;
+            int nOffset = (m_pLeftAreaWidget->m_pBookMarkArea->width() - scalePixmap.width())/2;
             painter.drawPixmap(nOffset,imageTop,scalePixmap);
 
         }
@@ -3577,7 +3561,7 @@ void TextEdit::addOrDeleteBookMark()
         qDebug() << "AddBookMark:" << line << m_listBookmark;
     }
 
-    m_pLeftAreaWidget->m_bookMarkArea->update();
+    m_pLeftAreaWidget->m_pBookMarkArea->update();
 }
 
 void TextEdit::moveToPreviousBookMark()
@@ -3685,9 +3669,9 @@ void TextEdit::flodOrUnflodAllLevel(bool isFlod)
     this->setWordWrapMode(QTextOption::WrapAnywhere);
     this->setLineWrapMode(WrapMode);
 
-    m_pLeftAreaWidget->m_flodArea->update();
-    m_pLeftAreaWidget->m_linenumberarea->update();
-    m_pLeftAreaWidget->m_bookMarkArea->update();
+    m_pLeftAreaWidget->m_pFlodArea->update();
+    m_pLeftAreaWidget->m_pLineNumberArea->update();
+    m_pLeftAreaWidget->m_pBookMarkArea->update();
 
     viewport()->update();
     document()->adjustSize();
@@ -3700,9 +3684,9 @@ void TextEdit::flodOrUnflodCurrentLevel(bool isFlod)
 {
     int line = getLineFromPoint(m_mouseClickPos);
     getNeedControlLine(line - 1, !isFlod);
-    m_pLeftAreaWidget->m_flodArea->update();
-    m_pLeftAreaWidget->m_linenumberarea->update();
-    m_pLeftAreaWidget->m_bookMarkArea->update();
+    m_pLeftAreaWidget->m_pFlodArea->update();
+    m_pLeftAreaWidget->m_pLineNumberArea->update();
+    m_pLeftAreaWidget->m_pBookMarkArea->update();
     viewport()->update();
     document()->adjustSize();
 
@@ -4192,9 +4176,9 @@ void TextEdit::setCodeFoldWidgetHide(bool isHidden)
 void TextEdit::updateLeftAreaWidget()
 {
     if(m_pLeftAreaWidget){
-        m_pLeftAreaWidget->m_linenumberarea->update();
-        m_pLeftAreaWidget->m_bookMarkArea->update();
-        m_pLeftAreaWidget->m_flodArea->update();
+        m_pLeftAreaWidget->m_pLineNumberArea->update();
+        m_pLeftAreaWidget->m_pBookMarkArea->update();
+        m_pLeftAreaWidget->m_pFlodArea->update();
     }
 }
 
@@ -4605,7 +4589,7 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
         m_mouseClickPos = mouseEvent->pos();
 
-        if (object == m_pLeftAreaWidget->m_bookMarkArea) {
+        if (object == m_pLeftAreaWidget->m_pBookMarkArea) {
             m_mouseClickPos = mouseEvent->pos();
             if (mouseEvent->button() == Qt::RightButton) {
                 m_rightMenu->clear();
@@ -4629,7 +4613,7 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                 addOrDeleteBookMark();
             }
             return true;
-        } else if (object == m_pLeftAreaWidget->m_flodArea) {
+        } else if (object == m_pLeftAreaWidget->m_pFlodArea) {
             m_foldCodeShow->hide();
             if (mouseEvent->button() == Qt::LeftButton) {
                 int line = getLineFromPoint(mouseEvent->pos());
@@ -4663,9 +4647,9 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                     QPlainTextEdit::LineWrapMode WrapMode = curMode ==  QPlainTextEdit::NoWrap?  QPlainTextEdit::WidgetWidth :  QPlainTextEdit::NoWrap;          this->setWordWrapMode(QTextOption::WrapAnywhere);
                     this->setLineWrapMode(WrapMode);
                     viewport()->update();
-                    m_pLeftAreaWidget->m_flodArea->update();
-                    m_pLeftAreaWidget->m_linenumberarea->update();
-                    m_pLeftAreaWidget->m_bookMarkArea->update();
+                    m_pLeftAreaWidget->m_pFlodArea->update();
+                    m_pLeftAreaWidget->m_pLineNumberArea->update();
+                    m_pLeftAreaWidget->m_pBookMarkArea->update();
 
                     this->setLineWrapMode(curMode);
                     viewport()->update();
@@ -4679,9 +4663,9 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                     QPlainTextEdit::LineWrapMode WrapMode = curMode ==  QPlainTextEdit::NoWrap?  QPlainTextEdit::WidgetWidth :  QPlainTextEdit::NoWrap;          this->setWordWrapMode(QTextOption::WrapAnywhere);
                     this->setLineWrapMode(WrapMode);
                     viewport()->update();
-                    m_pLeftAreaWidget->m_flodArea->update();
-                    m_pLeftAreaWidget->m_linenumberarea->update();
-                    m_pLeftAreaWidget->m_bookMarkArea->update();
+                    m_pLeftAreaWidget->m_pFlodArea->update();
+                    m_pLeftAreaWidget->m_pLineNumberArea->update();
+                    m_pLeftAreaWidget->m_pBookMarkArea->update();
 
                     this->setLineWrapMode(curMode);
                     viewport()->update();
@@ -4716,10 +4700,10 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
         QHoverEvent *hoverEvent = static_cast<QHoverEvent *>(event);
         int line = getLineFromPoint(hoverEvent->pos());
 
-        if (object == m_pLeftAreaWidget->m_bookMarkArea) {
+        if (object == m_pLeftAreaWidget->m_pBookMarkArea) {
             m_nBookMarkHoverLine = line;
-            m_pLeftAreaWidget->m_bookMarkArea->update();
-        }else if (object == m_pLeftAreaWidget->m_flodArea) {
+            m_pLeftAreaWidget->m_pBookMarkArea->update();
+        }else if (object == m_pLeftAreaWidget->m_pFlodArea) {
             m_markFoldHighLightSelections.clear();
             renderAllSelections();
             QHoverEvent *hoverEvent = static_cast<QHoverEvent *>(event);
@@ -4780,12 +4764,12 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
         }
 
     } else if (event->type() == QEvent::HoverLeave) {
-        if (object == m_pLeftAreaWidget->m_bookMarkArea) {
+        if (object == m_pLeftAreaWidget->m_pBookMarkArea) {
             m_nBookMarkHoverLine = -1;
-            m_pLeftAreaWidget->m_bookMarkArea->update();
+            m_pLeftAreaWidget->m_pBookMarkArea->update();
             return true;
         }
-        else if (object == m_pLeftAreaWidget->m_flodArea) {
+        else if (object == m_pLeftAreaWidget->m_pFlodArea) {
             m_markFoldHighLightSelections.clear();
             m_foldCodeShow->hide();
             renderAllSelections();
@@ -5527,9 +5511,6 @@ void TextEdit::mouseReleaseEvent(QMouseEvent *e)
 
 void TextEdit::keyPressEvent(QKeyEvent *e)
 {
-    // if (!isModifier(e)) {
-    //     viewport()->setCursor(Qt::BlankCursor);
-    // }
     const QString &key = Utils::getKeyshortcut(e);
 
     if(m_bIsAltMod)

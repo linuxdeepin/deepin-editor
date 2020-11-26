@@ -1,6 +1,6 @@
 #include "editorapplication.h"
+#include "common/settings.h"
 #include <QDebug>
-#include "settings.h"
 
 EditorApplication::EditorApplication(int &argc, char *argv[]) : DApplication(argc, argv)
 {

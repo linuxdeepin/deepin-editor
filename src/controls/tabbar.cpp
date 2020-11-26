@@ -18,10 +18,10 @@
  */
 
 #include "tabbar.h"
-#include "window.h"
-#include "utils.h"
-#include "editwrapper.h"
-#include "startmanager.h"
+#include "../widgets/window.h"
+#include "../common/utils.h"
+#include "../editor/editwrapper.h"
+#include "../startmanager.h"
 
 #include <QApplication>
 #include <QStyleFactory>

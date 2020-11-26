@@ -15,7 +15,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "test_findbar.h"
-#include "../../src/findbar.h"
+#include "../../src/controls/findbar.h"
 #include <QFocusEvent>
 #include <QEvent>
 

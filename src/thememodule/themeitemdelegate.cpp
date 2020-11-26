@@ -19,7 +19,7 @@
 
 #include "themeitemdelegate.h"
 #include "themelistmodel.h"
-#include "../utils.h"
+#include "../common/utils.h"
 #include <QPainter>
 #include <QDebug>
 

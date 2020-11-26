@@ -20,34 +20,27 @@
 #include <QWidget>
 
 class CodeFlodArea;
-class bookmarkwidget;
+class BookMarkWidget;
 class LineNumberArea;
 class TextEdit;
-class leftareaoftextedit : public QWidget
+
+class LeftAreaTextEdit : public QWidget
 {
     Q_OBJECT
 public:
-    leftareaoftextedit(TextEdit *textEdit);
-    ~leftareaoftextedit() override;
+    LeftAreaTextEdit(TextEdit *textEdit);
+    ~LeftAreaTextEdit() override;
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();
-//    LineNumberArea *getLineNumberArea();
-//    bookmarkwidget *getBookMarkWidget();
-//    CodeFlodArea   *getCodeFlodArea();
-
     void bookMarkAreaPaintEvent(QPaintEvent *event);
     void codeFlodAreaPaintEvent(QPaintEvent *event);
 public:
-    LineNumberArea *m_linenumberarea;
-    bookmarkwidget *m_bookMarkArea;
-    CodeFlodArea *m_flodArea;
+    LineNumberArea *m_pLineNumberArea = nullptr;
+    BookMarkWidget *m_pBookMarkArea = nullptr;
+    CodeFlodArea *m_pFlodArea = nullptr;
 
-protected:
-//    void paintEvent(QPaintEvent *e) override;
-//    void mousePressEvent(QMouseEvent *event) override;
-//    QSize sizeHint() const override;
 private:
-    TextEdit *m_textEdit;
+    TextEdit *m_pTextEdit = nullptr;
 };
 
 #endif // LEFTAREAOFTEXTEDIT_H

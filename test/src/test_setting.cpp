@@ -15,7 +15,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "test_setting.h"
-#include "../../src/settings.h"
+#include "../../src/common/settings.h"
 #include <DSettingsDialog>
 #include <DSettingsWidgetFactory>
 #include <QKeySequence>

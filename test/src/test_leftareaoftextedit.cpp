@@ -15,19 +15,19 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "test_leftareaoftextedit.h"
-#include "../../src/leftareaoftextedit.h"
-#include "../../src/dtextedit.h"
+#include "../../src/editor/leftareaoftextedit.h"
+#include "../../src/editor/dtextedit.h"
 
 test_leftareaoftextedit::test_leftareaoftextedit()
 {
 
 }
 
-//leftareaoftextedit(TextEdit *textEdit);
-TEST_F(test_leftareaoftextedit, leftareaoftextedit)
+//LeftAreaTextEdit(TextEdit *textEdit);
+TEST_F(test_leftareaoftextedit, LeftAreaTextEdit)
 {
     TextEdit *textEdit = new TextEdit;
-    leftareaoftextedit *leftArea = new leftareaoftextedit(textEdit);
+    LeftAreaTextEdit *leftArea = new LeftAreaTextEdit(textEdit);
     assert(1==1);
 }
 
@@ -35,7 +35,7 @@ TEST_F(test_leftareaoftextedit, leftareaoftextedit)
 TEST_F(test_leftareaoftextedit, lineNumberAreaPaintEvent)
 {
     TextEdit *textEdit = new TextEdit;
-    leftareaoftextedit *leftArea = new leftareaoftextedit(textEdit);
+    LeftAreaTextEdit *leftArea = new LeftAreaTextEdit(textEdit);
     QPaintEvent *event = new QPaintEvent(QRegion());
     leftArea->lineNumberAreaPaintEvent(event);
     assert(1==1);
@@ -45,7 +45,7 @@ TEST_F(test_leftareaoftextedit, lineNumberAreaPaintEvent)
 TEST_F(test_leftareaoftextedit, lineNumberAreaWidth)
 {
     TextEdit *textEdit = new TextEdit;
-    leftareaoftextedit *leftArea = new leftareaoftextedit(textEdit);
+    LeftAreaTextEdit *leftArea = new LeftAreaTextEdit(textEdit);
     leftArea->lineNumberAreaWidth();
     assert(1==1);
 }
@@ -54,7 +54,7 @@ TEST_F(test_leftareaoftextedit, lineNumberAreaWidth)
 TEST_F(test_leftareaoftextedit, bookMarkAreaPaintEvent)
 {
     TextEdit *textEdit = new TextEdit;
-    leftareaoftextedit *leftArea = new leftareaoftextedit(textEdit);
+    LeftAreaTextEdit *leftArea = new LeftAreaTextEdit(textEdit);
     QPaintEvent *event = new QPaintEvent(QRegion());
     leftArea->bookMarkAreaPaintEvent(event);
     assert(1==1);
@@ -64,7 +64,7 @@ TEST_F(test_leftareaoftextedit, bookMarkAreaPaintEvent)
 TEST_F(test_leftareaoftextedit, codeFlodAreaPaintEvent)
 {
     TextEdit *textEdit = new TextEdit;
-    leftareaoftextedit *leftArea = new leftareaoftextedit(textEdit);
+    LeftAreaTextEdit *leftArea = new LeftAreaTextEdit(textEdit);
     QPaintEvent *event = new QPaintEvent(QRegion());
     leftArea->codeFlodAreaPaintEvent(event);
     assert(1==1);

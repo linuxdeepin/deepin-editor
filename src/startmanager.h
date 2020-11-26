@@ -23,8 +23,8 @@
 #ifndef STARTMANAGER_H
 #define STARTMANAGER_H
 
-#include "window.h"
-#include "editwrapper.h"
+#include "widgets/window.h"
+#include "editor/editwrapper.h"
 
 #include <com_deepin_dde_daemon_dock.h>
 #include <com_deepin_dde_daemon_dock_entry.h>

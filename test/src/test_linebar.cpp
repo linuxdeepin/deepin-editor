@@ -15,7 +15,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "test_linebar.h"
-#include "../../src/linebar.h"
+#include "../../src/controls/linebar.h"
 #include <QFocusEvent>
 #include <QEvent>
 

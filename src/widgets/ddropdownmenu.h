@@ -44,8 +44,8 @@ public:
     void setChildrenFocus(bool ok);
     DToolButton* getButton();
 public slots:
-    void setCurrentTextOnly(const QString &text);
     void setCurrentAction(QAction*);
+    void setCurrentTextOnly(const QString& name);
 public:
     //创建编码菜单
     static DDropdownMenu* createEncodeMenu();
@@ -71,8 +71,6 @@ private:
     QPixmap m_arrowPixmap;
     QString m_text = "UTF-8";
     QFont m_font;
-    QString m_textColor;
-    QString m_backgroundColor;
     static QVector<QPair<QString,QStringList>> sm_groupEncodeVec;
 };
 

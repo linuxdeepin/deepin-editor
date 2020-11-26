@@ -23,26 +23,21 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include "ddialog.h"
-#include "dmainwindow.h"
-#include "editwrapper.h"
-#include "findbar.h"
-#include "jumplinebar.h"
-#include "replacebar.h"
-#include "settings.h"
-#include "tabbar.h"
-#include "thememodule/themepanel.h"
-#include "performancemonitor.h"
-
-#include <QWidget>
-#include <QStackedWidget>
-#include <QResizeEvent>
-#include <QVBoxLayout>
-#include <DGuiApplicationHelper>
-#include <DMessageManager>
-#include <DGuiApplicationHelper>
-#include <qprintpreviewdialog.h>
-#include <dprintpreviewdialog.h>
+#include "../controls/toolbar.h"
+#include "../common/utils.h"
+#include "../startmanager.h"
+#include "../common/performancemonitor.h"
+#include "../editor/editwrapper.h"
+#include "../controls/findbar.h"
+#include "../controls/jumplinebar.h"
+#include "../controls/replacebar.h"
+#include "../common/settings.h"
+#include "../controls/tabbar.h"
+#include "../thememodule/themepanel.h"
+#include "../common/performancemonitor.h"
+#include "../common/dbusinterface.h"
+#include <DMainWindow>
+#include <DStackedWidget>
 
 DWIDGET_USE_NAMESPACE
 
@@ -176,7 +171,7 @@ private:
     DBusDaemon::dbus *m_rootSaveDBus;
 
     QWidget *m_centralWidget;
-    QStackedWidget *m_editorWidget;
+    DStackedWidget *m_editorWidget;
     QVBoxLayout *m_centralLayout;
     Tabbar *m_tabbar;
 

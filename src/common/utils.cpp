@@ -21,7 +21,7 @@
  */
 
 #include "utils.h"
-#include "widgets/toast.h"
+#include "../controls/toast.h"
 
 #include <DSettings>
 #include <DSettingsOption>

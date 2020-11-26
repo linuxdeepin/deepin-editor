@@ -21,7 +21,7 @@
  */
 
 #include "replacebar.h"
-#include "utils.h"
+#include "../common/utils.h"
 
 #include <QDebug>
 

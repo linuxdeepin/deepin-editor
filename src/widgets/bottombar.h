@@ -51,12 +51,12 @@ protected:
     void paintEvent(QPaintEvent *);
 
 private:
-    EditWrapper *m_wrapper;
-    DLabel *m_positionLabel;
-    DLabel *m_charCountLabel;
-    DLabel *m_cursorStatus;
-    DDropdownMenu *m_encodeMenu;
-    DDropdownMenu *m_highlightMenu;
+    EditWrapper *m_pWrapper {nullptr};
+    DLabel *m_pPositionLabel {nullptr};
+    DLabel *m_pCharCountLabel {nullptr};
+    DLabel *m_pCursorStatus {nullptr};
+    DDropdownMenu *m_pEncodeMenu {nullptr};
+    DDropdownMenu *m_pHighlightMenu {nullptr};
     QString m_rowStr;
     QString m_columnStr;
     QString m_chrCountStr;

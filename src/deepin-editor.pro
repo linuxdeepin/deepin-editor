@@ -21,79 +21,84 @@ CONFIG += c++11
 PKGCONFIG += xcb xcb-util dtkwidget dtkwm dtkgui dframeworkdbus
 RESOURCES += deepin-editor.qrc
 
-# Input
-HEADERS += window.h \
-           startmanager.h \
-           dbusinterface.h \
-           dtextedit.h \
-           jumplinebar.h \
-           findbar.h \
-           replacebar.h \
-           linebar.h \
-           settings.h \
-           tabbar.h \
-           linenumberarea.h \
-           editwrapper.h \
-           uncommentselection.h \
-           utils.h \
-           urlinfo.h \
-           fileloadthread.h \
-           widgets/ddropdownmenu.h \
-           widgets/bottombar.h \
-           widgets/toast.h \
-           thememodule/themelistmodel.h \
-           thememodule/themeitemdelegate.h \
-           thememodule/themepanel.h \
-           thememodule/themelistview.h \
-           environments.h \
-           fontitemdelegate.h \
-    	   warningnotices.h \
-           bookmarkwidget.h \
-           leftareaoftextedit.h \
-           codeflodarea.h \
-           showflodcodewidget.h \
-           widgets/ColorSelectWdg.h \
-           editorapplication.h \
-           encoding.h \
-           performancemonitor.h \
-           encodes/detectcode.h
+INCLUDEPATH += common controls editor encodes thememodule widgets
+INCLUDEPATH += ../third/lib/include/uchardet
+INCLUDEPATH += ../third/lib/include
 
-SOURCES += window.cpp \
-           startmanager.cpp \
-           dbusinterface.cpp \
-           dtextedit.cpp \
-           jumplinebar.cpp \
-           findbar.cpp \
-           replacebar.cpp \
-           linebar.cpp \
-           settings.cpp \
-           settingsdialog.cpp \
-           tabbar.cpp \
-           toolbar.cpp \
-           linenumberarea.cpp \
-           editwrapper.cpp \
-           utils.cpp \
-           uncommentselection.cpp \
-           main.cpp \
-           fileloadthread.cpp \
-           widgets/ddropdownmenu.cpp \
-           widgets/toast.cpp \
-           widgets/bottombar.cpp \
+HEADERS += editor/bookmarkwidget.h \
+           editor/codeflodarea.h \
+           editor/dtextedit.h \
+           editor/editwrapper.h \
+           editor/leftareaoftextedit.h \
+           editor/linenumberarea.h \
+           editor/showflodcodewidget.h \
+           editor/uncommentselection.h \
+           encodes/detectcode.h \
+           common/comment_global.h \
+           common/common.h \
+           common/encoding.h \
+           common/dbusinterface.h \
+           common/fileloadthread.h \
+           common/performancemonitor.h \
+           common/settings.h \
+           common/urlinfo.h \
+           common/utils.h \
+           controls/findbar.h \
+           controls/fontitemdelegate.h \
+           controls/jumplinebar.h \
+           controls/linebar.h \
+           controls/replacebar.h \
+           controls/tabbar.h \
+           controls/toast.h \
+           controls/toolbar.h \
+           controls/warningnotices.h \
+           thememodule/themeitemdelegate.h \
+           thememodule/themelistmodel.h \
+           thememodule/themelistview.h \
+           thememodule/themepanel.h \
+           widgets/bottombar.h \
+           widgets/ColorSelectWdg.h \
+           widgets/ddropdownmenu.h \
+           widgets/window.h \
+           editorapplication.h \
+           environments.h \
+           startmanager.h
+
+SOURCES += editor/bookmarkwidget.cpp \
+           editor/codeflodarea.cpp \
+           editor/dtextedit.cpp \
+           editor/editwrapper.cpp \
+           editor/leftareaoftextedit.cpp \
+           editor/linenumberarea.cpp \
+           editor/showflodcodewidget.cpp \
+           editor/uncommentselection.cpp \
+           encodes/detectcode.cpp \
+           common/encoding.cpp \
+           common/dbusinterface.cpp \
+           common/fileloadthread.cpp \
+           common/performancemonitor.cpp \
+           common/settings.cpp \
+           common/utils.cpp \
+           controls/findbar.cpp \
+           controls/fontitemdelegate.cpp \
+           controls/jumplinebar.cpp \
+           controls/linebar.cpp \
+           controls/replacebar.cpp \
+           controls/tabbar.cpp \
+           controls/toast.cpp \
+           controls/toolbar.cpp \
+           controls/warningnotices.cpp \
            thememodule/themeitemdelegate.cpp \
-           thememodule/themepanel.cpp \
            thememodule/themelistmodel.cpp \
            thememodule/themelistview.cpp \
-           fontitemdelegate.cpp \
-           warningnotices.cpp \
-           bookmarkwidget.cpp \
-           leftareaoftextedit.cpp \
-           codeflodarea.cpp \
-           showflodcodewidget.cpp \
+           thememodule/themepanel.cpp \
+           widgets/bottombar.cpp \
            widgets/ColorSelectWdg.cpp \
+           widgets/ddropdownmenu.cpp \
+           widgets/window.cpp \
            editorapplication.cpp \
-           encoding.cpp \
-           performancemonitor.cpp \
-           encodes/detectcode.cpp
+           startmanager.cpp \
+           main.cpp
 
 
 QMAKE_CXXFLAGS += -g
@@ -116,10 +121,6 @@ themes.files += themes/solarized_light.theme
 themes.files += themes/atom_dark.theme
 
 INSTALLS += target desktop themes
-
-#QMAKE_CXXFLAGS+= -fPIE
-#QMAKE_LFLAGS += -pie
-
 DISTFILES += \
     themes/deepin_dark.theme \
     images/warning.svg
@@ -127,10 +128,6 @@ TRANSLATIONS += ../translations/deepin-editor_zh_CN.ts\
     ../translations/deepin-editor_zh_HK.ts\
     ../translations/deepin-editor_zh_TW.ts\
     ../translations/deepin-editor.ts
-
-
-INCLUDEPATH += $$PWD/../third/lib/include/uchardet
-INCLUDEPATH += $$PWD/../third/lib/include
 
 
 LIBS += -L$$PWD/../third/lib/lib/ -lenca -lm

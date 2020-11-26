@@ -19,7 +19,7 @@
 
 #include "fileloadthread.h"
 #include "utils.h"
-#include "encodes/detectcode.h"
+#include "../encodes/detectcode.h"
 
 #include <QCoreApplication>
 #include <QPlainTextEdit>

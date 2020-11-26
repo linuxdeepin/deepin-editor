@@ -2,7 +2,7 @@
 #define TEST_TABBAR_H
 #include "gtest/gtest.h"
 #include <QObject>
-#include"../../src/tabbar.h"
+#include"../../src/controls/tabbar.h"
 
 
 class test_tabbar: public QObject, public::testing::Test

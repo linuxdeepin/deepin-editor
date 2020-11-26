@@ -1,14 +1,14 @@
 #ifndef TEST_UNCOMMENTSELECTION_H
 #define TEST_UNCOMMENTSELECTION_H
 
+#include"../../src/common/settings.h"
+#include"../../src/controls/tabbar.h"
+#include"../../src/editor/editwrapper.h"
+#include"../../src/widgets/window.h"
 #include"../../src/startmanager.h"
-#include"../../src/dtextedit.h"
-#include"../../src/settings.h"
-#include"../../src/window.h"
-#include"../../src/editwrapper.h"
-#include"../../src/tabbar.h"
+#include"../../src/editor/dtextedit.h"
 #include "gtest/gtest.h"
-#include"../../src/uncommentselection.h"
+#include"../../src/editor/uncommentselection.h"
 #include <QObject>
 
 using namespace Comment;

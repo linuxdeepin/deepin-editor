@@ -16,12 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "window.h"
-#include "encodes/detectcode.h"
-#include "widgets/toast.h"
-#include "fileloadthread.h"
+#include "../widgets/window.h"
+#include "../encodes/detectcode.h"
+#include "../controls/toast.h"
+#include "../common/fileloadthread.h"
 #include "editwrapper.h"
-#include "utils.h"
+#include "../common/utils.h"
 #include "leftareaoftextedit.h"
 #include "drecentmanager.h"
 
@@ -221,10 +221,10 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
     //1.如果修改切换编码提示用户是否保存,不保存重新打开文件读取.2.没有修改是否另存为
     if(m_pTextEdit->document()->isModified())
     {
-        DDialog *dialog = new DDialog(tr("Do you want to save this file?"), "", this);
+        DDialog *dialog = new DDialog(tr("The current file changes, whether to save first?"), "", this);
         dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
         dialog->setIcon(QIcon::fromTheme("deepin-editor"));
-        dialog->addButton(QString(tr("Discard")), 0, DDialog::ButtonNormal);
+        dialog->addButton(QString(tr("Cancel")), 0, DDialog::ButtonNormal);
         dialog->addButton(QString(tr("Save")), 1, DDialog::ButtonRecommend);
         int res = dialog->exec();//0  1
 
@@ -284,10 +284,10 @@ void EditWrapper::reloadModifyFile()
 
     //如果文件修改提示用户是否保存  如果临时文件保存就是另存为
     if (m_pTextEdit->document()->isModified()) {
-        DDialog *dialog = new DDialog(tr("Do you want to save this file?"), "", this);
+        DDialog *dialog = new DDialog(tr("The current file changes, whether to save as?"), "", this);
         dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
         dialog->setIcon(QIcon::fromTheme("deepin-editor"));
-        dialog->addButton(QString(tr("Discard")), 0, DDialog::ButtonNormal);
+        dialog->addButton(QString(tr("Cancel")), 0, DDialog::ButtonNormal);
         dialog->addButton(QString(tr("Save")), 1, DDialog::ButtonRecommend);
         dialog->setCloseButtonVisible(false);
         int res = dialog->exec();//0  1
@@ -569,15 +569,15 @@ void EditWrapper::slotTextChange()
 void EditWrapper::setLineNumberShow(bool bIsShow ,bool bIsFirstShow)
 {
     if(bIsShow && !bIsFirstShow) {
-        int lineNumberAreaWidth = m_pTextEdit->m_pLeftAreaWidget->m_linenumberarea->width();
+        int lineNumberAreaWidth = m_pTextEdit->m_pLeftAreaWidget->m_pLineNumberArea->width();
         int leftAreaWidth = m_pTextEdit->m_pLeftAreaWidget->width();
-        m_pTextEdit->m_pLeftAreaWidget->m_linenumberarea->show();
+        m_pTextEdit->m_pLeftAreaWidget->m_pLineNumberArea->show();
         m_pTextEdit->m_pLeftAreaWidget->setFixedWidth(leftAreaWidth + lineNumberAreaWidth);
 
     } else if(!bIsShow) {
-        int lineNumberAreaWidth = m_pTextEdit->m_pLeftAreaWidget->m_linenumberarea->width();
+        int lineNumberAreaWidth = m_pTextEdit->m_pLeftAreaWidget->m_pLineNumberArea->width();
         int leftAreaWidth = m_pTextEdit->m_pLeftAreaWidget->width();
-        m_pTextEdit->m_pLeftAreaWidget->m_linenumberarea->hide();
+        m_pTextEdit->m_pLeftAreaWidget->m_pLineNumberArea->hide();
         m_pTextEdit->m_pLeftAreaWidget->setFixedWidth(leftAreaWidth - lineNumberAreaWidth);
     }
     m_pTextEdit->bIsSetLineNumberWidth = bIsShow;

@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+#pragma once
 #include "settings.h"
 #include <QKeyEvent>
 #include <QObject>
@@ -29,10 +29,8 @@
 #include <DMainWindow>
 #include <QIcon>
 
-class Utils : public QObject
+class Utils
 {
-    Q_OBJECT
-
 public:
     static QString getQrcPath(const QString &imageName);
     static QString getQssPath(const QString &qssName);

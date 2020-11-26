@@ -1,9 +1,9 @@
 #include "ColorSelectWdg.h"
+#include "../common/utils.h"
+#include "../common/settings.h"
 #include <QPainter>
-#include "../utils.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include "../settings.h"
 #include <DSettingsOption>
 #include <DFontSizeManager>
 

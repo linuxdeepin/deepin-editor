@@ -18,7 +18,8 @@
  */
 
 #include "themepanel.h"
-#include "../window.h"
+#include "../widgets/window.h"
+
 #include <QPropertyAnimation>
 #include <QScroller>
 #include <QVBoxLayout>
