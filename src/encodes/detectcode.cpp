@@ -20,7 +20,7 @@ QByteArray DetectCode::GetFileEncodingFormat(QString filepath)
     if(charset == "unknown" || charset == "???" || charset.isEmpty()){
        charset = DetectCode::UchardetCode(filepath);
     }
-    if(charset == "ASCII") charset = "UTF-8";
+    if(charset == "ASCII" || charset.isEmpty()) charset = "UTF-8";
     return charset;
 }
 
@@ -160,6 +160,8 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr, QByteArray &outS
 
    // qDebug()<<"=====编码转化 Begin:"<<QDateTime::currentDateTime().toString("hh:mm:ss");
     iconv_t handle =iconv_open(toCode.toLocal8Bit().data(),fromCode.toLocal8Bit().data());
+    int val = 1;
+    int res = iconvctl(handle,ICONV_SET_DISCARD_ILSEQ,&val);
 
     if(handle != reinterpret_cast<iconv_t>(-1)){
         char* inbuf = inputStr.data();

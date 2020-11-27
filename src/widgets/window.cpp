@@ -579,27 +579,36 @@ void Window::closeTab()
         DDialog *dialog = createDialog(tr("Do you want to save this file?"), "");
         int res = dialog->exec();
 
+        //取消或关闭弹窗不做任务操作
+        if(res == 0 || res == -1) return;
+
+        //不保存
+        if(res == 1){
+           removeWrapper(filePath, true);
+           m_tabbar->closeCurrentTab();
+           if (isDraftFile) {
+                QFile(filePath).remove();
+           }
+
+           focusActiveEditor();
+           return;
+        }
+
         //保存
         if(res == 2){
             if(isDraftFile){
                wrapper->saveDraftFile();
                focusActiveEditor();
-               //return;
+               removeWrapper(filePath, true);
+               m_tabbar->closeCurrentTab();
+               QFile(filePath).remove();
             }else {
                wrapper->saveFile();
+               removeWrapper(filePath, true);
+               m_tabbar->closeCurrentTab();
                focusActiveEditor();
-               //return;
             }
         }
-
-
-        removeWrapper(filePath, true);
-        m_tabbar->closeCurrentTab();
-        if (isDraftFile) {
-            QFile(filePath).remove();
-        }
-
-       focusActiveEditor();
 
     } else {
 
@@ -2033,20 +2042,17 @@ void Window::closeEvent(QCloseEvent *e)
     QList<EditWrapper *> needSaveList;
     QMap<QString, EditWrapper *> wrappers = m_wrappers;
     for (EditWrapper *wrapper : wrappers) {
-        // save all the draft documents.
-        if (wrapper->isDraftFile() && wrapper->isModified()) {
+        // save all the not empty draft documents.
+        if (wrapper->isDraftFile() && !wrapper->isPlainTextEmpty()) {
             wrapper->saveFile();
-//            if(wrapper->isPlainTextEmpty()){
-//               QFile(wrapper->textEditor()->filepath).remove();
-//            }
             continue;
         }
 
-//        //删除空白草稿文件
-//        if(wrapper->isDraftFile() && wrapper->isPlainTextEmpty())
-//        {
-//           QFile(wrapper->textEditor()->filepath).remove();
-//        }
+       //删除空白草稿文件
+        if(wrapper->isDraftFile() && wrapper->isPlainTextEmpty())
+        {
+           QFile(wrapper->textEditor()->filepath).remove();
+        }
 
         if (!wrapper->getFileLoading() && wrapper->isModified()) {
             needSaveList << wrapper;

@@ -269,7 +269,7 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
 //        int res = dialog->exec();//0  1
 
         bool ok = readFile(encode);
-        if(ok && m_sCurEncode != m_sFirstEncode) m_pTextEdit->setTabbarModified(true);
+        //if(ok && m_sCurEncode != m_sFirstEncode) m_pTextEdit->setTabbarModified(true);
         return ok;
     }
 }
@@ -337,7 +337,6 @@ QString EditWrapper::getTextEncode()
 bool EditWrapper::saveFile()
 {
     QFile file(m_pTextEdit->filepath);
-    file.remove();
 
     if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         QByteArray fileContent = m_pTextEdit->toPlainText().toLocal8Bit();
@@ -394,7 +393,8 @@ void EditWrapper::updatePath(const QString &file)
 bool EditWrapper::isModified()
 {
     //编码改变内容没有修改也算是文件修改
-    bool modified = (m_sFirstEncode != m_sCurEncode || m_pTextEdit->document()->isModified());
+   // bool modified = (m_sFirstEncode != m_sCurEncode || m_pTextEdit->document()->isModified());
+    bool modified =  m_pTextEdit->document()->isModified();
     return  modified;
 }
 

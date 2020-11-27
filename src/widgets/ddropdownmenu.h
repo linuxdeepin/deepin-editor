@@ -70,6 +70,7 @@ private:
     DMenu *m_menu = nullptr;
     QPixmap m_arrowPixmap;
     QString m_text = "UTF-8";
+    QAction* m_pActUtf8 = nullptr;
     QFont m_font;
     static QVector<QPair<QString,QStringList>> sm_groupEncodeVec;
 };

@@ -109,8 +109,13 @@ void DDropdownMenu::setCurrentAction(QAction *pAct)
 
 void DDropdownMenu::setCurrentTextOnly(const QString &name)
 {
-    setText(name);
+    if(name == "UTF-8"){
+        if(m_pActUtf8) setCurrentAction(m_pActUtf8);
+    }else {
+        setText(name);
+    }
 }
+
 void DDropdownMenu::setText(const QString &text)
 {
     m_text = text;
@@ -171,7 +176,10 @@ DDropdownMenu *DDropdownMenu::createEncodeMenu()
              foreach(QString var,list)
              {
                QAction *act= groupMenu->addAction(QObject::tr(var.toLocal8Bit().data()));
-               if(act->text() == "UTF-8") act->setChecked(true);
+               if(act->text() == "UTF-8") {
+                   m_pEncodeMenu->m_pActUtf8 = act;
+                   act->setChecked(true);
+               }
                act->setCheckable(true);
              }
 
@@ -185,7 +193,10 @@ DDropdownMenu *DDropdownMenu::createEncodeMenu()
              foreach(QString var,sm_groupEncodeVec[i].second)
              {
                QAction *act= groupMenu->addAction(QObject::tr(var.toLocal8Bit().data()));
-               if(act->text() == "UTF-8") act->setChecked(true);
+               if(act->text() == "UTF-8") {
+                   m_pEncodeMenu->m_pActUtf8 = act;
+                   act->setChecked(true);
+               }
                act->setCheckable(true);
              }
 
@@ -196,7 +207,6 @@ DDropdownMenu *DDropdownMenu::createEncodeMenu()
     connect(m_pMenu, &DMenu::triggered, m_pEncodeMenu,[m_pEncodeMenu](QAction *action) {
         //编码内容改变触发内容改变和信号发射 梁卫东 2020.7.7
         if (m_pEncodeMenu->m_text != action->text()) {
-            //emit m_pEncodeMenu->currentTextChanged(action->text());
             emit m_pEncodeMenu->currentActionChanged(action);
         }
     });
