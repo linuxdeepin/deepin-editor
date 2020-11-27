@@ -3900,7 +3900,11 @@ int TextEdit::getLinePosYByLineNum(int iLine)
 
 bool TextEdit::ifHasHighlight()
 {
-     return m_findHighlightSelection.cursor.hasSelection();
+    if(!m_findHighlightSelection.cursor.isNull())
+        return m_findHighlightSelection.cursor.hasSelection();
+    else {
+        return  false;
+    }
 }
 
 void TextEdit::setIsFileOpen()

@@ -561,9 +561,10 @@ void Window::closeTab()
     const QString &filePath = m_tabbar->currentPath();
     EditWrapper *wrapper = m_wrappers.value(filePath);
 
-    if (!wrapper)  {
-        return;
-    }
+    if (!wrapper) return;
+
+    disconnect(wrapper,nullptr);
+    disconnect(wrapper->textEditor(), &TextEdit::textChanged,nullptr,nullptr);
 
     // this property holds whether the document has been modified by the user
     bool isModified = wrapper->isModified();
@@ -612,13 +613,16 @@ void Window::closeTab()
 
     } else {
 
+
+        removeWrapper(filePath, true);
+        m_tabbar->closeCurrentTab();
+
         if (isDraftFile) {
             QFile::remove(filePath);
         }else {
             m_closeFileHistory << m_tabbar->currentPath();
         }
-        removeWrapper(filePath, true);
-        m_tabbar->closeCurrentTab();
+
         focusActiveEditor();
     }
 }
@@ -735,22 +739,18 @@ void Window::focusActiveEditor()
 
 void Window::removeWrapper(const QString &filePath, bool isDelete)
 {
-    if (m_wrappers.contains(filePath)) {
-        EditWrapper *wrapper = m_wrappers.value(filePath);
+    EditWrapper *wrapper = m_wrappers.value(filePath);
 
+    if (wrapper) {
         m_editorWidget->removeWidget(wrapper);
         //
         m_wrappers.remove(filePath);
-
         if (isDelete) {
-            //wrapper->deleteLater();
             disconnect(wrapper->textEditor(),nullptr);
+            disconnect(wrapper,nullptr);
             wrapper->setQuitFlag();
             wrapper->deleteLater();
         }
-
-        // remove all signals on this connection.
-        //disconnect(wrapper->textEditor(), 0, this, 0);
     }
 
     // Exit window after close all tabs.
@@ -1199,7 +1199,7 @@ void Window::updateJumpLineBar(TextEdit* editor)
         int scrollOffset = editor->getScrollOffset();
         m_jumpLineBar->activeInput(tabPath, row, column, count, scrollOffset);
     }
-    if(!editor->ifHasHighlight())
+    if(editor && !editor->ifHasHighlight())
     {
         m_findBar->setSearched(false);
         m_replaceBar->setsearched(false);
@@ -2041,6 +2041,7 @@ void Window::closeEvent(QCloseEvent *e)
 
     QList<EditWrapper *> needSaveList;
     QMap<QString, EditWrapper *> wrappers = m_wrappers;
+
     for (EditWrapper *wrapper : wrappers) {
         // save all the not empty draft documents.
         if (wrapper->isDraftFile() && !wrapper->isPlainTextEmpty()) {

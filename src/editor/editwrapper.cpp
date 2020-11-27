@@ -73,7 +73,7 @@ EditWrapper::EditWrapper(Window* window,QWidget *parent)
 
 EditWrapper::~EditWrapper()
 {
-
+    if(m_pTextEdit) delete m_pTextEdit;
 }
 
 void EditWrapper::setQuitFlag()
