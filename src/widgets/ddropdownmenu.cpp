@@ -171,6 +171,7 @@ DDropdownMenu *DDropdownMenu::createEncodeMenu()
              foreach(QString var,list)
              {
                QAction *act= groupMenu->addAction(QObject::tr(var.toLocal8Bit().data()));
+               if(act->text() == "UTF-8") act->setChecked(true);
                act->setCheckable(true);
              }
 
@@ -184,6 +185,7 @@ DDropdownMenu *DDropdownMenu::createEncodeMenu()
              foreach(QString var,sm_groupEncodeVec[i].second)
              {
                QAction *act= groupMenu->addAction(QObject::tr(var.toLocal8Bit().data()));
+               if(act->text() == "UTF-8") act->setChecked(true);
                act->setCheckable(true);
              }
 
