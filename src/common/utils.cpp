@@ -611,10 +611,13 @@ const QStringList Utils::getEncodeList()
     return encodeList;
 }
 
-QPixmap Utils::renderSVG(const QString &filePath, const QSize &size)
+QPixmap Utils::renderSVG(const QString &filePath, const QSize &size,bool bIsScale)
 {
     int scaled =1;
-    if(qApp->devicePixelRatio() == 1.25) scaled =2;
+
+    if(qApp->devicePixelRatio() == 1.25 && bIsScale) {
+        scaled = 2;
+    }
 
     QPixmap pixmap(size*scaled);
     QImageReader reader;

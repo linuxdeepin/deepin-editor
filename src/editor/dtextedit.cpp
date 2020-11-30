@@ -1965,14 +1965,12 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
         theme = "l";
     }
 
-    QString flodImagePath = ":/images/d-" + theme + ".svg";
-    QString unflodImagePath = ":/images/u-" + theme + ".svg";
+    QString flodImagePath = QString(":/images/d-%1.svg").arg(theme);
+    QString unflodImagePath = QString(":/images/u-%1.svg").arg(theme);
     QImage Unfoldimage(unflodImagePath);
     QImage foldimage(flodImagePath);
     QPixmap scaleFoldPixmap;
     QPixmap scaleunFoldPixmap;
-    QImage scaleFoldImage;
-    QImage scaleunFoldImage;
     int imageTop = 0;//图片绘制位置
     int fontHeight = fontMetrics().height();
     double nfoldImageHeight = fontHeight;
@@ -2034,16 +2032,16 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                cur.setPosition(block.position(),QTextCursor::MoveAnchor);
 
                if(fontHeight > foldimage.height()) {
-                   scaleFoldPixmap = Utils::renderSVG(flodImagePath, QSize(foldimage.height(), foldimage.width()));
+                   scaleFoldPixmap = Utils::renderSVG(flodImagePath, QSize(foldimage.height(), foldimage.width()),false);
                    scaleFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
-                   scaleunFoldPixmap = Utils::renderSVG(unflodImagePath, QSize(foldimage.height(), foldimage.width()));
+                   scaleunFoldPixmap = Utils::renderSVG(unflodImagePath, QSize(foldimage.height(), foldimage.width()),false);
                    scaleunFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
                } else {
                    double scale = nfoldImageHeight / foldimage.height();
                    double nScaleWidth = scale * foldimage.height() * foldimage.height() / foldimage.width();
-                   scaleFoldPixmap = Utils::renderSVG(flodImagePath, QSize(static_cast<int>(foldimage.height()*scale), static_cast<int>(nScaleWidth)));
+                   scaleFoldPixmap = Utils::renderSVG(flodImagePath, QSize(static_cast<int>(foldimage.height()*scale), static_cast<int>(nScaleWidth)),false);
                    scaleFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
-                   scaleunFoldPixmap = Utils::renderSVG(unflodImagePath, QSize(static_cast<int>(foldimage.height()*scale), static_cast<int>(nScaleWidth)));
+                   scaleunFoldPixmap = Utils::renderSVG(unflodImagePath, QSize(static_cast<int>(foldimage.height()*scale), static_cast<int>(nScaleWidth)),false);
                    scaleunFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
                }
 
@@ -3503,12 +3501,12 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
 
             if(fontHeight > image.height()) {
 //                scaleImage = image;
-                scalePixmap = Utils::renderSVG(pixmapPath, QSize(image.height(), image.width()));
+                scalePixmap = Utils::renderSVG(pixmapPath, QSize(image.height(), image.width()),false);
                 scalePixmap.setDevicePixelRatio(devicePixelRatioF());
             } else {
                 double scale = nBookmarkLineHeight/image.height();
                 int nScaleWidth = static_cast<int>(scale*image.width());
-                scalePixmap = Utils::renderSVG(pixmapPath, QSize(static_cast<int>(scale*image.height()),nScaleWidth));
+                scalePixmap = Utils::renderSVG(pixmapPath, QSize(static_cast<int>(scale*image.height()),nScaleWidth),false);
                 scalePixmap.setDevicePixelRatio(devicePixelRatioF());
 //                scaleImage = image.scaled(static_cast<int>(scale*image.height()),nScaleWidth);
             }
