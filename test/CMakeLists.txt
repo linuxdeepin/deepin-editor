@@ -17,6 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ADD_COMPILE_OPTIONS(-fno-access-control)
+set(CMAKE_CXX_FLAGS "-g -fprofile-arcs -ftest-coverage")
 set(APP_QRC "../src/deepin-editor.qrc")
 
 # Find the library
