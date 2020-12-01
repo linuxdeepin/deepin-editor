@@ -25,14 +25,14 @@ test_performanceMonitor::test_performanceMonitor()
 //explicit PerformanceMonitor(QObject *parent = nullptr);
 TEST_F(test_performanceMonitor, PerformanceMonitor)
 {
-    PerformanceMonitor PerformanceMonitor(nullptr);
+    PerformanceMonitor PerformanceMonitor;
     assert(1==1);
 }
 
 //static void initializeAppStart();
 TEST_F(test_performanceMonitor, initializeAppStart)
 {
-    PerformanceMonitor PerformanceMonitor(nullptr);
+    PerformanceMonitor PerformanceMonitor;
     PerformanceMonitor.initializeAppStart();
     assert(1==1);
 }
@@ -40,7 +40,7 @@ TEST_F(test_performanceMonitor, initializeAppStart)
 //static void initializAppFinish();
 TEST_F(test_performanceMonitor, initializAppFinish)
 {
-    PerformanceMonitor PerformanceMonitor(nullptr);
+    PerformanceMonitor PerformanceMonitor;
     PerformanceMonitor.initializAppFinish();
     assert(1==1);
 }
@@ -48,7 +48,7 @@ TEST_F(test_performanceMonitor, initializAppFinish)
 //static void closeAppStart();
 TEST_F(test_performanceMonitor, closeAppStart)
 {
-    PerformanceMonitor PerformanceMonitor(nullptr);
+    PerformanceMonitor PerformanceMonitor;
     PerformanceMonitor.closeAppStart();
     assert(1==1);
 }
@@ -56,7 +56,7 @@ TEST_F(test_performanceMonitor, closeAppStart)
 //static void closeAPPFinish();
 TEST_F(test_performanceMonitor, closeAPPFinish)
 {
-    PerformanceMonitor PerformanceMonitor(nullptr);
+    PerformanceMonitor PerformanceMonitor;
     PerformanceMonitor.closeAPPFinish();
     assert(1==1);
 }
@@ -64,7 +64,7 @@ TEST_F(test_performanceMonitor, closeAPPFinish)
 //static void openFileStart();
 TEST_F(test_performanceMonitor, openFileStart)
 {
-     PerformanceMonitor PerformanceMonitor(nullptr);
+     PerformanceMonitor PerformanceMonitor;
     PerformanceMonitor.openFileStart();
     assert(1==1);
 }
@@ -72,7 +72,7 @@ TEST_F(test_performanceMonitor, openFileStart)
 //static void openFileFinish(const QString &strFileName, qint64 iFileSize);
 TEST_F(test_performanceMonitor, openFileFinish)
 {
-    PerformanceMonitor PerformanceMonitor(nullptr);
+    PerformanceMonitor PerformanceMonitor;
     PerformanceMonitor.openFileFinish("aa",1);
     assert(1==1);
 }

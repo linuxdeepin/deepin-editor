@@ -36,12 +36,12 @@ public:
 signals:
     void loadFinished(const QByteArray &encode, const QByteArray &content);
 private:
-    QString m_filePath;
+    QString m_sFilePath;
     QStringList m_pathList;
     QStringList m_codeList;
-    QString charset_;
-    bool forceUneditable_=false;
-    bool skipNonText_=true;
+    QString m_sCharset;
+    bool m_bForceUneditable = false;
+    bool m_bSkipNonText = true;
 };
 
 #endif

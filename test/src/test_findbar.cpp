@@ -104,12 +104,12 @@ TEST_F(test_findbar, handleContentChanged)
 }
 
 //void slot_ifClearSearchWord();
-TEST_F(test_findbar, slot_ifClearSearchWord)
-{
-    FindBar *findBar = new FindBar();
-    findBar->slot_ifClearSearchWord();
-    assert(1==1);
-}
+//TEST_F(test_findbar, slot_ifClearSearchWord)
+//{
+//    FindBar *findBar = new FindBar();
+//    findBar->slot_ifClearSearchWord();
+//    assert(1==1);
+//}
 
 //protected:
 //void hideEvent(QHideEvent *event) override;

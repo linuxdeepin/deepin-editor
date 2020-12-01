@@ -60,16 +60,16 @@ FindBar::FindBar(QWidget *parent)
     this->setLayout(m_layout);
 
     // Make button don't grab keyboard focus after click it.
-//    m_findNextButton->setFocusPolicy(Qt::NoFocus);
-//    m_findPrevButton->setFocusPolicy(Qt::NoFocus);
-//    m_closeButton->setFocusPolicy(Qt::NoFocus);
+    // m_findNextButton->setFocusPolicy(Qt::NoFocus);
+    // m_findPrevButton->setFocusPolicy(Qt::NoFocus);
+    // m_closeButton->setFocusPolicy(Qt::NoFocus);
 
     connect(m_editLine, &LineBar::pressEsc, this, &FindBar::findCancel, Qt::QueuedConnection);
- //   connect(m_editLine, &LineBar::pressEnter, this, &FindBar::findNext, Qt::QueuedConnection);            //Shielded by Hengbo ,for new demand. 20200220
+    // connect(m_editLine, &LineBar::pressEnter, this, &FindBar::findNext, Qt::QueuedConnection);            //Shielded by Hengbo ,for new demand. 20200220
     connect(m_editLine, &LineBar::pressCtrlEnter, this, &FindBar::findPrev, Qt::QueuedConnection);
     connect(m_editLine, &LineBar::returnPressed, this, &FindBar::handleContentChanged, Qt::QueuedConnection);
     connect(m_editLine, &LineBar::signal_sentText, this, &FindBar::receiveText, Qt::QueuedConnection);
-    connect(m_editLine, &LineBar::contentChanged, this, &FindBar::slot_ifClearSearchWord, Qt::QueuedConnection);
+    //connect(m_editLine, &LineBar::contentChanged, this, &FindBar::slot_ifClearSearchWord, Qt::QueuedConnection);
 
     connect(m_findNextButton, &QPushButton::clicked,  this,&FindBar::findNext, Qt::QueuedConnection);
     connect(m_findPrevButton, &QPushButton::clicked, this, &FindBar::findPreClicked, Qt::QueuedConnection);
@@ -120,15 +120,6 @@ void FindBar::handleContentChanged()
     updateSearchKeyword(m_findFile, m_editLine->lineEdit()->text());
 }
 
-void FindBar::slot_ifClearSearchWord()
-{
-    //因为搜索更改为按下enter,所以使用这个函数在点击"x"时清除;
-    if(m_editLine->lineEdit()->text() == nullptr)
-    {
-   //     updateSearchKeyword(m_findFile, m_receivedText);
-   //     updateSearchKeyword(m_findFile, "");
-    }
-}
 
 void FindBar::hideEvent(QHideEvent *)
 {

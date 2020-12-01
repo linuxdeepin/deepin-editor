@@ -13,7 +13,7 @@ qint64 PerformanceMonitor::closeAppFinishMs      = 0;
 qint64 PerformanceMonitor::openFileStartMs       = 0;
 qint64 PerformanceMonitor::openFileFinishMs      = 0;
 
-PerformanceMonitor::PerformanceMonitor(QObject *parent) : QObject(parent)
+PerformanceMonitor::PerformanceMonitor()
 {
 
 }

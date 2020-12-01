@@ -2036,7 +2036,7 @@ void Window::resizeEvent(QResizeEvent *e)
 void Window::closeEvent(QCloseEvent *e)
 {
     PerformanceMonitor::closeAppStart();
-    e->ignore();
+
     QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
 
     QList<EditWrapper *> needSaveList;
@@ -2073,7 +2073,7 @@ void Window::closeEvent(QCloseEvent *e)
                     wrapper->setQuitFlag();
                     wrapper->deleteLater();
                 } else {
-                    hide();
+                   // hide();
                     if (wrapper->saveFile()) {
                         m_wrappers.remove(wrapper->filePath());
                         disconnect(wrapper->textEditor());
@@ -2086,7 +2086,7 @@ void Window::closeEvent(QCloseEvent *e)
 
         //不保存
         if (res == 1){
-            hide();
+          //  hide();
             for (EditWrapper *wrapper : wrappers) {
                 m_wrappers.remove(wrapper->filePath());
                 disconnect(wrapper->textEditor());
@@ -2094,10 +2094,8 @@ void Window::closeEvent(QCloseEvent *e)
                 wrapper->deleteLater();
             }
         }
-
-        return;
     } else {
-        hide();
+       // hide();
         for (EditWrapper *wrapper : wrappers) {
             m_wrappers.remove(wrapper->filePath());
             disconnect(wrapper->textEditor());
@@ -2126,8 +2124,7 @@ void Window::closeEvent(QCloseEvent *e)
     }
 
     disconnect(m_settings,nullptr,this,nullptr);
-    e->accept();
-    emit close();
+    this->close();
 }
 
 void Window::hideEvent(QHideEvent *event)
@@ -2153,6 +2150,7 @@ void Window::hideEvent(QHideEvent *event)
 //            currentWrapper()->m_bottomBar->show();
 //        }
 //    }
+     DMainWindow::hideEvent(event);
 }
 
 void Window::keyPressEvent(QKeyEvent *e)

@@ -1,16 +1,16 @@
 #ifndef PERFORMANCEMONITOR_H
 #define PERFORMANCEMONITOR_H
 
-#include <QObject>
+
 #include <QTime>
 #include <QDateTime>
 #include <QDebug>
 
-class PerformanceMonitor : public QObject
+class PerformanceMonitor
 {
-    Q_OBJECT
+
 public:
-    explicit PerformanceMonitor(QObject *parent = nullptr);
+    explicit PerformanceMonitor();
 
     static void initializeAppStart();
     static void initializAppFinish();

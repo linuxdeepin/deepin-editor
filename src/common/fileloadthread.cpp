@@ -34,7 +34,7 @@
 
 FileLoadThread::FileLoadThread(const QString &filepath, QObject *parent)
     : QThread(parent),
-      m_filePath(filepath)
+      m_sFilePath(filepath)
 {
 
 }
@@ -45,7 +45,7 @@ FileLoadThread::~FileLoadThread()
 
 void FileLoadThread::run()
 {
-    QFile file(m_filePath);
+    QFile file(m_sFilePath);
 
     if (file.open(QIODevice::ReadOnly)) {
         // reads all remaining data from the file.
@@ -53,11 +53,10 @@ void FileLoadThread::run()
         file.close();
         QByteArray OutData;
         // read the encode.
-        QByteArray encode = DetectCode::GetFileEncodingFormat(m_filePath);
+        QByteArray encode = DetectCode::GetFileEncodingFormat(m_sFilePath);
         QString textEncode =QString::fromLocal8Bit(encode);
 
          if(textEncode.contains("ASCII",Qt::CaseInsensitive) || textEncode.contains("UTF-8",Qt::CaseInsensitive)){
-
            emit loadFinished(encode, Indata);
          }else {
             DetectCode::ChangeFileEncodingFormat(Indata,OutData,textEncode,QString("UTF-8"));
@@ -74,9 +73,9 @@ void FileLoadThread::setEncodeInfo(QStringList pathList,QStringList codeList)
 
 QString FileLoadThread::getCodec()
 {
-    QFile file(m_filePath);
+    QFile file(m_sFilePath);
 
-    if (!QFile::exists (m_filePath))
+    if (!QFile::exists (m_sFilePath))
     {
         return "";
     }
@@ -86,7 +85,7 @@ QString FileLoadThread::getCodec()
         return "";
     }
 
-    bool enforced = !charset_.isEmpty();
+    bool enforced = !m_sCharset.isEmpty();
     bool hasNull = false;
     QByteArray data;
     char c;
@@ -101,7 +100,7 @@ QString FileLoadThread::getCodec()
             if (num < 500004) // a multiple of 4 (for UTF-16/32)
                 data.append (c);
             else
-                forceUneditable_ = true;
+                m_bForceUneditable = true;
             ++num;
         }
     }
@@ -119,7 +118,7 @@ QString FileLoadThread::getCodec()
             ++ num;
         }
         if (num == 2 && ((C[0] != '\0' && C[1] == '\0') || (C[0] == '\0' && C[1] != '\0')))
-            charset_ = "UTF-16"; // single character
+            m_sCharset = "UTF-16"; // single character
         else if (num == 4)
         {
             if (hasNull)
@@ -129,18 +128,18 @@ QString FileLoadThread::getCodec()
                     || (C[0] != '\0' && C[1] == '\0' && C[2] != '\0' && C[3] == '\0') // le
                     || (C[0] == '\0' && C[1] != '\0' && C[2] == '\0' && C[3] != '\0')) // be
                 {
-                    charset_ = "UTF-16";
+                    m_sCharset = "UTF-16";
                 }
                 /*else if ((C[0] == 0xFF && C[1] == 0xFE && C[2] == '\0' && C[3] == '\0')
                           || (C[0] == '\0' && C[1] == '\0' && C[2] == 0xFE && C[3] == 0xFF))*/
                 else if ((C[0] != '\0' && C[1] != '\0' && C[2] == '\0' && C[3] == '\0') // le
                          || (C[0] == '\0' && C[1] == '\0' && C[2] != '\0' && C[3] != '\0')) // be
                 {
-                    charset_ = "UTF-32";
+                    m_sCharset = "UTF-32";
                 }
             }
             /* reading may still be possible */
-            if (charset_.isEmpty() && !hasNull)
+            if (m_sCharset.isEmpty() && !hasNull)
             {
                 num = 5; // 4 characters are already read
                 while (file.read (&c, charSize) > 0)
@@ -149,7 +148,7 @@ QString FileLoadThread::getCodec()
                     {
                         if (!hasNull)
                         {
-                            if (skipNonText_)
+                            if (m_bSkipNonText)
                             {
                                 file.close();
                                 return "UTF-8";
@@ -164,14 +163,14 @@ QString FileLoadThread::getCodec()
                     else if (num == 500001)
                     {
                         data += QByteArray ("    HUGE LINE TRUNCATED: NO LINE WITH MORE THAN 500000 CHARACTERS");
-                        forceUneditable_ = true;
+                       m_bForceUneditable = true;
                     }
                     ++num;
                 }
             }
             else
             { // the meaning of null characters was determined before
-                if (skipNonText_ && hasNull && charset_.isEmpty())
+                if (m_bSkipNonText && hasNull && m_sCharset.isEmpty())
                 {
                     file.close();
                     return "UTF-8";
@@ -184,35 +183,35 @@ QString FileLoadThread::getCodec()
                     if (num < 500004) // a multiple of 4 (for UTF-16/32)
                         data.append (c);
                     else
-                        forceUneditable_ = true;
+                        m_bForceUneditable = true;
                     ++num;
                 }
             }
         }
     }
     file.close();
-    if (skipNonText_ && hasNull && charset_.isEmpty())
+    if (m_bSkipNonText && hasNull && m_sCharset.isEmpty())
     {
         return "UTF-8";
     }
 
-    if (charset_.isEmpty())
+    if (m_sCharset.isEmpty())
     {
         if (hasNull)
         {
-            forceUneditable_ = true;
-            charset_ = "UTF-8"; // always open non-text files as UTF-8
+            m_bForceUneditable = true;
+            m_sCharset = "UTF-8"; // always open non-text files as UTF-8
         }
         else
-            charset_ = detectCharset (data);
+            m_sCharset = detectCharset (data);
     }
 
-    QTextCodec *codec = QTextCodec::codecForName (charset_.toUtf8()); // or charset_.toStdString().c_str()
+    QTextCodec *codec = QTextCodec::codecForName (m_sCharset.toUtf8()); // or m_sCharset.toStdString().c_str()
     if (!codec) // prevent any chance of crash if there's a bug
     {
-        charset_ = "UTF-8";
+        m_sCharset = "UTF-8";
         codec = QTextCodec::codecForName ("UTF-8");
     }
-    return charset_;
+    return m_sCharset;
 }
 
