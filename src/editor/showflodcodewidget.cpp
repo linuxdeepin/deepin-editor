@@ -43,6 +43,7 @@ void ShowFlodCodeWidget::clear()
 {
     m_pContentEdit->document()->clear();
     m_nTextWidth = 0;
+    adjustSize();
 }
 
 void ShowFlodCodeWidget::initHighLight(QString filepath, bool bIsLight)
@@ -90,11 +91,23 @@ void ShowFlodCodeWidget::hideFirstBlock()
 {
     m_pContentEdit->document()->firstBlock().setVisible(false);
     m_pContentEdit->document()->lastBlock().setVisible(false);
+    int editHight = 0;
+
+    for (auto block = m_pContentEdit->document()->firstBlock(); block.isValid(); block = block.next()) {
+
+        if (block == m_pContentEdit->document()->lastBlock()) {
+            break;
+        }
+
+        editHight += m_pContentEdit->document()->documentLayout()->blockBoundingRect(block).toRect().height();
+    }
+
+    m_pContentEdit->setFixedHeight(editHight + 10);
 }
 
 void ShowFlodCodeWidget::appendText(QString strText, int maxWidth)
 {
-    int textWidth = m_pContentEdit->fontMetrics().width(strText);
+    int textWidth = m_pContentEdit->fontMetrics().width(strText) + 10;
 
     if (m_nTextWidth < textWidth) {
         m_nTextWidth = textWidth;
@@ -103,15 +116,14 @@ void ShowFlodCodeWidget::appendText(QString strText, int maxWidth)
         }
     }
 
-    m_pContentEdit->appendPlainText(strText);
     m_pContentEdit->setFixedWidth(m_nTextWidth);
-    int editHight = 0;
 
-    for (auto block = m_pContentEdit->document()->firstBlock(); block.isValid(); block = block.next()) {
-        editHight += m_pContentEdit->document()->documentLayout()->blockBoundingRect(block).toRect().height();
+    if (m_pContentEdit->document()->isEmpty()) {
+        m_pContentEdit->setPlainText(strText);
+    } else {
+        m_pContentEdit->appendPlainText(strText);
     }
 
-    m_pContentEdit->setFixedHeight(editHight);
     QTextCursor cursor = m_pContentEdit->textCursor();
     cursor.movePosition(QTextCursor::Start);
     m_pContentEdit->setTextCursor(cursor);
