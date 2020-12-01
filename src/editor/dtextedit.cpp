@@ -1071,6 +1071,8 @@ void TextEdit::cutlines()
 
 void TextEdit::joinLines()
 {
+    if(blockCount()==getCurrentLine())
+    {return ;}
     if (textCursor().hasSelection()) {
         // Get selection bound.
         int startPos = textCursor().anchor();
