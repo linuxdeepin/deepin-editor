@@ -408,11 +408,11 @@ bool EditWrapper::saveDraftFile()
 
 
     this->setUpdatesEnabled(false);
-    int mode =  dialog.exec();
+    int mode =  dialog.exec(); // 0表示取消 1保存
     this->setUpdatesEnabled(true);
     hideWarningNotices();
 
-    if(QDialog::Accepted == mode)
+    if(mode == 1)
     {
         const QString newFilePath = dialog.selectedFiles().value(0);
         if (newFilePath.isEmpty())

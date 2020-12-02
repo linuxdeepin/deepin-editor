@@ -599,16 +599,21 @@ void Window::closeTab()
         //保存
         if(res == 2){
             if(isDraftFile){
-               wrapper->saveDraftFile();
-               focusActiveEditor();
-               removeWrapper(filePath, true);
-               m_tabbar->closeCurrentTab();
-               QFile(filePath).remove();
+              if(wrapper->saveDraftFile())
+              {
+                  focusActiveEditor();
+                  removeWrapper(filePath, true);
+                  m_tabbar->closeCurrentTab();
+                  QFile(filePath).remove();
+              }
+
             }else {
-               wrapper->saveFile();
-               removeWrapper(filePath, true);
-               m_tabbar->closeCurrentTab();
-               focusActiveEditor();
+               if(wrapper->saveFile())
+               {
+                   removeWrapper(filePath, true);
+                   m_tabbar->closeCurrentTab();
+                   focusActiveEditor();
+               }
             }
         }
 
