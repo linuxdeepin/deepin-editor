@@ -23,59 +23,53 @@
     <name>EditWrapper</name>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="171"/>
-        <location filename="../src/editor/editwrapper.cpp" line="228"/>
-        <location filename="../src/editor/editwrapper.cpp" line="291"/>
-        <location filename="../src/editor/editwrapper.cpp" line="413"/>
+        <location filename="../src/editor/editwrapper.cpp" line="229"/>
+        <location filename="../src/editor/editwrapper.cpp" line="293"/>
+        <location filename="../src/editor/editwrapper.cpp" line="415"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <source>Do you want to save this file?</source>
-        <translation type="vanished">您是否要保存此文件？</translation>
-    </message>
-    <message>
-        <source>Discard</source>
-        <translation type="vanished">不保存</translation>
+        <location filename="../src/editor/editwrapper.cpp" line="227"/>
+        <location filename="../src/editor/editwrapper.cpp" line="291"/>
+        <source>Cancel</source>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="224"/>
-        <source>The current file changes, whether to save first?</source>
-        <translation type="unfinished"></translation>
+        <location filename="../src/editor/editwrapper.cpp" line="288"/>
+        <source>Do you want to save this file?</source>
+        <translation>您是否要保存此文件？</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="227"/>
-        <location filename="../src/editor/editwrapper.cpp" line="290"/>
-        <source>Cancel</source>
-        <translation type="unfinished">取消</translation>
+        <location filename="../src/editor/editwrapper.cpp" line="228"/>
+        <location filename="../src/editor/editwrapper.cpp" line="292"/>
+        <source>Discard</source>
+        <translation>不保存</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="287"/>
-        <source>The current file changes, whether to save as?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/editor/editwrapper.cpp" line="481"/>
+        <location filename="../src/editor/editwrapper.cpp" line="483"/>
         <source>File removed on the disk. Save it now?</source>
         <translation>磁盘中的原文件已被移除，是否另存？</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="484"/>
+        <location filename="../src/editor/editwrapper.cpp" line="486"/>
         <source>File has changed on disk. Reload?</source>
         <translation>磁盘中的原文件已被修改，是否重新载入？ </translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="515"/>
+        <location filename="../src/editor/editwrapper.cpp" line="517"/>
         <location filename="../src/widgets/bottombar.cpp" line="65"/>
         <source>INSERT</source>
         <translation>插入</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="518"/>
+        <location filename="../src/editor/editwrapper.cpp" line="520"/>
         <source>OVERWRITE</source>
         <translation>覆盖</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="521"/>
+        <location filename="../src/editor/editwrapper.cpp" line="523"/>
         <source>R/O</source>
         <translation>只读</translation>
     </message>
@@ -128,7 +122,7 @@
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="173"/>
-        <location filename="../src/editor/editwrapper.cpp" line="415"/>
+        <location filename="../src/editor/editwrapper.cpp" line="417"/>
         <location filename="../src/widgets/window.cpp" line="883"/>
         <location filename="../src/widgets/window.cpp" line="901"/>
         <location filename="../src/widgets/window.cpp" line="976"/>
@@ -605,61 +599,9 @@
         <translation>希伯来语</translation>
     </message>
     <message>
-        <source>Arabic</source>
-        <translation type="vanished">阿拉伯语</translation>
-    </message>
-    <message>
-        <source>Belarussian</source>
-        <translation type="vanished">白俄罗斯语</translation>
-    </message>
-    <message>
-        <source>Bulgarian</source>
-        <translation type="vanished">保加利亚语</translation>
-    </message>
-    <message>
         <location filename="../src/controls/settingsdialog.cpp" line="120"/>
         <source>Chinese</source>
         <translation>中文</translation>
-    </message>
-    <message>
-        <source>Czech</source>
-        <translation type="vanished">捷克语</translation>
-    </message>
-    <message>
-        <source>Estonian</source>
-        <translation type="vanished">爱沙尼亚语</translation>
-    </message>
-    <message>
-        <source>Croatian</source>
-        <translation type="vanished">克罗地亚语</translation>
-    </message>
-    <message>
-        <source>Danish</source>
-        <translation type="vanished">丹麦语</translation>
-    </message>
-    <message>
-        <source>Finnish</source>
-        <translation type="vanished">芬兰语</translation>
-    </message>
-    <message>
-        <source>French</source>
-        <translation type="vanished">法语</translation>
-    </message>
-    <message>
-        <source>German</source>
-        <translation type="vanished">德语</translation>
-    </message>
-    <message>
-        <source>Greek</source>
-        <translation type="vanished">希腊语</translation>
-    </message>
-    <message>
-        <source>Hebrew</source>
-        <translation type="vanished">希伯来语</translation>
-    </message>
-    <message>
-        <source>Hungarian</source>
-        <translation type="vanished">匈牙利语</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="122"/>
@@ -672,65 +614,9 @@
         <translation>韩语</translation>
     </message>
     <message>
-        <source>Irish Gaelic</source>
-        <translation type="vanished">爱尔兰盖尔语</translation>
-    </message>
-    <message>
-        <source>Italian</source>
-        <translation type="vanished">意大利语</translation>
-    </message>
-    <message>
-        <source>Lithuanian</source>
-        <translation type="vanished">立陶宛语</translation>
-    </message>
-    <message>
-        <source>Latvian</source>
-        <translation type="vanished">拉脱维亚语</translation>
-    </message>
-    <message>
-        <source>Polish</source>
-        <translation type="vanished">波兰语</translation>
-    </message>
-    <message>
-        <source>Portuguese</source>
-        <translation type="vanished">葡萄牙语</translation>
-    </message>
-    <message>
-        <source>Russian</source>
-        <translation type="vanished">俄语</translation>
-    </message>
-    <message>
-        <source>Romanian</source>
-        <translation type="vanished">罗马尼亚语</translation>
-    </message>
-    <message>
-        <source>Slovak</source>
-        <translation type="vanished">斯洛伐克语</translation>
-    </message>
-    <message>
-        <source>Slovenian</source>
-        <translation type="vanished">斯洛文尼亚语</translation>
-    </message>
-    <message>
-        <source>Spanish</source>
-        <translation type="vanished">西班牙语</translation>
-    </message>
-    <message>
-        <source>Swedish</source>
-        <translation type="vanished">瑞典语</translation>
-    </message>
-    <message>
         <location filename="../src/controls/settingsdialog.cpp" line="125"/>
         <source>Thai</source>
         <translation>泰语</translation>
-    </message>
-    <message>
-        <source>Turkish</source>
-        <translation type="vanished">土耳其语</translation>
-    </message>
-    <message>
-        <source>Ukrainian</source>
-        <translation type="vanished">乌克兰语</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="126"/>

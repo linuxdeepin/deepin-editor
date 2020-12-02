@@ -89,7 +89,7 @@ BottomBar::BottomBar(QWidget *parent)
     connect(m_pEncodeMenu, &DDropdownMenu::currentActionChanged, this,[this](QAction* pAct){
         if(m_pWrapper->reloadFileEncode(pAct->text().toLocal8Bit()))
         {
-            m_pEncodeMenu->setCurrentAction(pAct);
+            m_pEncodeMenu->setCurrentTextOnly(pAct->text());
         }
 
     });

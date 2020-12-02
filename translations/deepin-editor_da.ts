@@ -1,25 +1,20 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="da" version="2.1">
-<context>
-    <name>BookMarkWidget</name>
-    <message>
-        <source>Add bookmark</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="da">
 <context>
     <name>BottomBar</name>
     <message>
-        <location filename="../src/widgets/bottombar.cpp" line="39"/>
+        <location filename="../src/widgets/bottombar.cpp" line="38"/>
         <source>Row</source>
         <translation>Række</translation>
     </message>
     <message>
-        <location filename="../src/widgets/bottombar.cpp" line="40"/>
+        <location filename="../src/widgets/bottombar.cpp" line="39"/>
         <source>Column</source>
         <translation>Kolonne</translation>
     </message>
     <message>
-        <location filename="../src/widgets/bottombar.cpp" line="41"/>
+        <location filename="../src/widgets/bottombar.cpp" line="40"/>
         <source>Characters %1</source>
         <translation>Tegn %1</translation>
     </message>
@@ -27,93 +22,80 @@
 <context>
     <name>EditWrapper</name>
     <message>
-        <location filename="../src/editwrapper.cpp" line="592"/>
+        <location filename="../src/editor/editwrapper.cpp" line="486"/>
         <source>File has changed on disk. Reload?</source>
         <translation>Filen er blevet ændret på disken. Genindlæs?</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="595"/>
+        <location filename="../src/editor/editwrapper.cpp" line="483"/>
         <source>File removed on the disk. Save it now?</source>
         <translation>Filen er fjernet fra disken. Gem den nu?</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="653"/>
-        <location filename="../src/widgets/bottombar.cpp" line="66"/>
+        <location filename="../src/editor/editwrapper.cpp" line="224"/>
+        <location filename="../src/editor/editwrapper.cpp" line="288"/>
+        <source>Do you want to save this file?</source>
+        <translation type="unfinished">Vil du gemme filen?</translation>
+    </message>
+    <message>
+        <location filename="../src/editor/editwrapper.cpp" line="228"/>
+        <location filename="../src/editor/editwrapper.cpp" line="292"/>
+        <source>Discard</source>
+        <translation type="unfinished">Forkast</translation>
+    </message>
+    <message>
+        <location filename="../src/editor/editwrapper.cpp" line="517"/>
+        <location filename="../src/widgets/bottombar.cpp" line="65"/>
         <source>INSERT</source>
         <translation>INDSÆT</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="656"/>
+        <location filename="../src/editor/editwrapper.cpp" line="520"/>
         <source>OVERWRITE</source>
         <translation>OVERSKRIV</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="659"/>
+        <location filename="../src/editor/editwrapper.cpp" line="523"/>
         <source>R/O</source>
         <translation>SB</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="306"/>
-        <source>Encoding changed. Do you want to save the file now?</source>
-        <translation>Kodning ændret. Vil du gemme filen nu?</translation>
-    </message>
-    <message>
-        <location filename="../src/editwrapper.cpp" line="309"/>
-        <location filename="../src/editwrapper.cpp" line="502"/>
+        <location filename="../src/editor/editwrapper.cpp" line="227"/>
+        <location filename="../src/editor/editwrapper.cpp" line="291"/>
         <source>Cancel</source>
         <translation>Annuller</translation>
     </message>
     <message>
-        <location filename="../src/editwrapper.cpp" line="310"/>
-        <location filename="../src/editwrapper.cpp" line="338"/>
-        <location filename="../src/editwrapper.cpp" line="451"/>
+        <location filename="../src/editor/editwrapper.cpp" line="171"/>
+        <location filename="../src/editor/editwrapper.cpp" line="229"/>
+        <location filename="../src/editor/editwrapper.cpp" line="293"/>
+        <location filename="../src/editor/editwrapper.cpp" line="415"/>
         <source>Save</source>
         <translation>Gem</translation>
-    </message>
-    <message>
-        <location filename="../src/editwrapper.cpp" line="499"/>
-        <source>There are errors when using this encoding. If continue, the file contents may be changed</source>
-        <translation>Der er fejl når denne kodning bruges. Hvis du fortsætter ændres filens indhold måske</translation>
-    </message>
-    <message>
-        <location filename="../src/editwrapper.cpp" line="503"/>
-        <source>Continue</source>
-        <translation>Fortsæt</translation>
     </message>
 </context>
 <context>
     <name>FindBar</name>
     <message>
-        <location filename="../src/findbar.cpp" line="40"/>
+        <location filename="../src/controls/findbar.cpp" line="40"/>
         <source>Find</source>
         <translation>Find</translation>
     </message>
     <message>
-        <location filename="../src/findbar.cpp" line="46"/>
+        <location filename="../src/controls/findbar.cpp" line="46"/>
         <source>Next</source>
         <translation>Næste</translation>
     </message>
     <message>
-        <location filename="../src/findbar.cpp" line="44"/>
+        <location filename="../src/controls/findbar.cpp" line="44"/>
         <source>Previous</source>
         <translation>Forrige</translation>
     </message>
 </context>
 <context>
-    <name>FindWidget</name>
-    <message>
-        <source>Next</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Previous</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
     <name>JumpLineBar</name>
     <message>
-        <location filename="../src/jumplinebar.cpp" line="41"/>
+        <location filename="../src/controls/jumplinebar.cpp" line="41"/>
         <source>Go to Line: </source>
         <translation>Gå til linje: </translation>
     </message>
@@ -121,703 +103,660 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/main.cpp" line="53"/>
+        <location filename="../src/editorapplication.cpp" line="7"/>
         <source>Text Editor is a powerful tool for viewing and editing text files.</source>
         <translation>Teksteditor er et kraftfuldt værktøj til at vise og redigere tekstfiler.</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="65"/>
+        <location filename="../src/editorapplication.cpp" line="18"/>
         <source>Text Editor</source>
         <translation>Teksteditor</translation>
-    </message>
-</context>
-<context>
-    <name>NoteMenu</name>
-    <message>
-        <source>Copy</source>
-        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/startmanager.cpp" line="267"/>
+        <location filename="../src/startmanager.cpp" line="424"/>
         <source>File not saved</source>
         <translation>Filen er ikke gemt</translation>
     </message>
     <message>
-        <location filename="../src/main.cpp" line="62"/>
+        <location filename="../src/editorapplication.cpp" line="15"/>
         <source>Text Editor</source>
         <translation>Teksteditor</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="24"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="24"/>
         <source>Basic</source>
         <translation>Grundlæggende</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="25"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="25"/>
         <source>Font Style</source>
         <translation>Skriftstil</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="26"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="26"/>
         <source>Font</source>
         <translation>Skrifttype</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="27"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="27"/>
         <source>Font Size</source>
         <translation>Skriftstørrelse</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="29"/>
-        <location filename="../src/settingsdialog.cpp" line="30"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="29"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="30"/>
         <source>Keymap</source>
         <translation>Tegnkort</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="28"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="28"/>
         <source>Shortcuts</source>
         <translation>Genveje</translation>
     </message>
     <message>
-        <source>Increase font size</source>
-        <translation type="vanished">Større tekst</translation>
-    </message>
-    <message>
-        <source>Decrease font size</source>
-        <translation type="vanished">Mindre tekst</translation>
-    </message>
-    <message>
-        <location filename="../src/settingsdialog.cpp" line="58"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="58"/>
         <source>Forward character</source>
         <translation>Et tegn fremad</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="59"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="59"/>
         <source>Backward character</source>
         <translation>Et tegn tilbage</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="92"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="92"/>
         <source>Transpose character</source>
         <translation>Omvendte tegn</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="109"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="109"/>
         <source>Tab width</source>
         <translation>Tabulatorbredde</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="111"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="111"/>
         <source>Word wrap</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="31"/>
-        <location filename="../src/settingsdialog.cpp" line="107"/>
-        <location filename="../src/window.cpp" line="1389"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="31"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="107"/>
+        <location filename="../src/widgets/window.cpp" line="1318"/>
         <source>Window</source>
         <translation>Vindue</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="32"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="32"/>
         <source>New tab</source>
         <translation>Nyt faneblad</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="33"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="33"/>
         <source>New window</source>
         <translation>Nyt vindue</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="34"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="34"/>
         <source>Save</source>
         <translation>Gem</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="35"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="35"/>
         <source>Save as</source>
         <translation>Gem som</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="36"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="36"/>
         <source>Next tab</source>
         <translation>Næste faneblad</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="37"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="37"/>
         <source>Previous tab</source>
         <translation>Forrige faneblad</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="38"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="38"/>
         <source>Close tab</source>
         <translation>Luk faneblad</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="39"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="39"/>
         <source>Close other tabs</source>
         <translation>Luk andre faneblade</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="40"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="40"/>
         <source>Restore tab</source>
         <translation>Gendan faneblad</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="41"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="41"/>
         <source>Open file</source>
         <translation>Åbn fil</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="42"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="42"/>
         <source>Increment font size</source>
         <translation>Større skriftstørrelse</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="43"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="43"/>
         <source>Decrement font size</source>
         <translation>Mindre skriftstørrelse</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="44"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="44"/>
         <source>Reset font size</source>
         <translation>Nulstil skriftstørrelse</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="46"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="46"/>
         <source>Toggle fullscreen</source>
         <translation>Fuldskærm til/fra</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="45"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="45"/>
         <source>Help</source>
         <translation>Hjælp</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="47"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="47"/>
         <source>Find</source>
         <translation>Find</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="48"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="48"/>
         <source>Replace</source>
         <translation>Erstat</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="49"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="49"/>
         <source>Go to line</source>
         <translation>Gå til linje</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="50"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="50"/>
         <source>Save cursor position</source>
         <translation>Gem markørplacering</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="51"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="51"/>
         <source>Reset cursor position</source>
         <translation>Nulstil markørplacering</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="52"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="52"/>
         <source>Exit</source>
         <translation>Afslut</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="53"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="53"/>
         <source>Display shortcuts</source>
         <translation>Vis genveje</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="54"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="54"/>
         <source>Print</source>
         <translation>Udskriv</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="55"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="55"/>
         <source>Editor</source>
         <translation>Editor</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="56"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="56"/>
         <source>Increase indent</source>
         <translation>Større indrykning</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="57"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="57"/>
         <source>Decrease indent</source>
         <translation>Mindre indrykning</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="60"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="60"/>
         <source>Forward word</source>
         <translation>Et ord fremad</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="61"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="61"/>
         <source>Backward word</source>
         <translation>Et ord tilbage</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="62"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="62"/>
         <source>Next line</source>
         <translation>Næste linje</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="63"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="63"/>
         <source>Previous line</source>
         <translation>Forrige linje</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="64"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="64"/>
         <source>New line</source>
         <translation>Ny linje</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="65"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="65"/>
         <source>New line above</source>
         <translation>Ny linje nedenfor</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="66"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="66"/>
         <source>New line below</source>
         <translation>Ny linje ovenfor</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="67"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="67"/>
         <source>Duplicate line</source>
         <translation>Dupliker linje</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="68"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="68"/>
         <source>Delete to end of line</source>
         <translation>Slet til slutningen af linjen</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="69"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="69"/>
         <source>Delete current line</source>
         <translation>Slet nuværende linje</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="70"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="70"/>
         <source>Swap line up</source>
         <translation>Ombyt linje op</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="71"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="71"/>
         <source>Swap line down</source>
         <translation>Ombyt linje ned</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="72"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="72"/>
         <source>Scroll up one line</source>
         <translation>Rul en linje op</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="73"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="73"/>
         <source>Scroll down one line</source>
         <translation>Rul en linje ned</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="74"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="74"/>
         <source>Page up</source>
         <translation>Side op</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="75"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="75"/>
         <source>Page down</source>
         <translation>Side ned</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="76"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="76"/>
         <source>Move to end of line</source>
         <translation>Flyt til slutningen af linjen</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="77"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="77"/>
         <source>Move to start of line</source>
         <translation>Flyt til begyndelsen af linjen</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="78"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="78"/>
         <source>Move to end of text</source>
         <translation>Flyt til slutningen af teksten</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="79"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="79"/>
         <source>Move to start of text</source>
         <translation>Flyt til begyndelsen af teksten</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="80"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="80"/>
         <source>Move to line indentation</source>
         <translation>Flyt til linjeindrykning</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="81"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="81"/>
         <source>Upper case</source>
         <translation>Store bogstaver</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="82"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="82"/>
         <source>Lower case</source>
         <translation>Små bogstaver</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="83"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="83"/>
         <source>Capitalize</source>
         <translation>Stort begyndelsesbogstav</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="84"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="84"/>
         <source>Delete backward word</source>
         <translation>Slet et ord tilbage</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="85"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="85"/>
         <source>Delete forward word</source>
         <translation>Slet et ord fremad</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="86"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="86"/>
         <source>Forward over a pair</source>
         <translation>Fremad over et par</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="87"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="87"/>
         <source>Backward over a pair</source>
         <translation>Tilbage over et par</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="88"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="88"/>
         <source>Select all</source>
         <translation>Markér alt</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="89"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="89"/>
         <source>Copy</source>
         <translation>Kopiér</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="90"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="90"/>
         <source>Cut</source>
         <translation>Klip</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="91"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="91"/>
         <source>Paste</source>
         <translation>Indsæt</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="93"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="93"/>
         <source>Mark</source>
         <translation>Sæt mærke</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="94"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="94"/>
         <source>Unmark</source>
         <translation>Fjern mærke</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="95"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="95"/>
         <source>Copy line</source>
         <translation>Kopiér linje</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="96"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="96"/>
         <source>Cut line</source>
         <translation>Klip linje</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="97"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="97"/>
         <source>Merge lines</source>
         <translation>Sammenlæg linjer</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="98"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="98"/>
         <source>Read-Only mode</source>
         <translation>Skrivebeskyttet tilstand</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="99"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="99"/>
         <source>Add comment</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="100"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="100"/>
         <source>Remove comment</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="101"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="101"/>
         <source>Undo</source>
         <translation>Fortryd</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="102"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="102"/>
         <source>Redo</source>
         <translation>Omgør</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="103"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="103"/>
         <source>Add/Remove bookmark</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="104"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="104"/>
         <source>Move to previous bookmark</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="105"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="105"/>
         <source>Move to next bookmark</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="106"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="106"/>
         <source>Advanced</source>
         <translation>Avanceret</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="108"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="108"/>
         <source>Window size</source>
         <translation>Vinduesstørrelse</translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="112"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="112"/>
         <source>Code folding flag</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="113"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="113"/>
         <source>Show line numbers</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="114"/>
-        <source>Show blank characters</source>
-        <translation type="unfinished"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="114"/>
+        <source>Show bookmarks icon</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/settingsdialog.cpp" line="115"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="115"/>
+        <source>Show whitespaces and tabs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="119"/>
+        <source>Unicode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="120"/>
+        <source>Chinese</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="121"/>
+        <source>European</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="122"/>
+        <source>Japanese</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="123"/>
+        <source>Korean</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="124"/>
+        <source>Semitic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="125"/>
+        <source>Thai</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="126"/>
+        <source>Vietnamese</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="116"/>
         <source>Color mark</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/editor/editwrapper.cpp" line="173"/>
+        <location filename="../src/editor/editwrapper.cpp" line="417"/>
+        <location filename="../src/widgets/window.cpp" line="883"/>
+        <location filename="../src/widgets/window.cpp" line="901"/>
+        <location filename="../src/widgets/window.cpp" line="976"/>
+        <location filename="../src/widgets/window.cpp" line="991"/>
+        <source>Encoding</source>
+        <translation type="unfinished">Kodning</translation>
+    </message>
+    <message>
+        <location filename="../src/widgets/window.cpp" line="902"/>
+        <location filename="../src/widgets/window.cpp" line="977"/>
+        <location filename="../src/widgets/window.cpp" line="992"/>
+        <source>Line Endings</source>
+        <translation type="unfinished">Linjeskift</translation>
     </message>
 </context>
 <context>
     <name>ReplaceBar</name>
     <message>
-        <location filename="../src/replacebar.cpp" line="39"/>
+        <location filename="../src/controls/replacebar.cpp" line="39"/>
         <source>Find</source>
         <translation>Find</translation>
     </message>
     <message>
-        <location filename="../src/replacebar.cpp" line="43"/>
+        <location filename="../src/controls/replacebar.cpp" line="43"/>
         <source>Replace With</source>
         <translation>Erstat med</translation>
     </message>
     <message>
-        <location filename="../src/replacebar.cpp" line="47"/>
+        <location filename="../src/controls/replacebar.cpp" line="47"/>
         <source>Replace</source>
         <translation>Erstat</translation>
     </message>
     <message>
-        <location filename="../src/replacebar.cpp" line="50"/>
+        <location filename="../src/controls/replacebar.cpp" line="50"/>
         <source>Skip</source>
         <translation>Spring over</translation>
     </message>
     <message>
-        <location filename="../src/replacebar.cpp" line="53"/>
+        <location filename="../src/controls/replacebar.cpp" line="53"/>
         <source>Replace Rest</source>
         <translation>Erstat resten</translation>
     </message>
     <message>
-        <location filename="../src/replacebar.cpp" line="56"/>
+        <location filename="../src/controls/replacebar.cpp" line="56"/>
         <source>Replace All</source>
         <translation>Erstat alle</translation>
     </message>
 </context>
 <context>
-    <name>SaveDialog</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Discard</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
     <name>Settings</name>
     <message>
-        <location filename="../src/settings.cpp" line="92"/>
+        <location filename="../src/common/settings.cpp" line="102"/>
         <source>Standard</source>
         <translation>Standard</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="92"/>
+        <location filename="../src/common/settings.cpp" line="102"/>
         <source>Customize</source>
         <translation>Tilpas</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="106"/>
+        <location filename="../src/common/settings.cpp" line="116"/>
         <source>Normal</source>
         <translation>Normal</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="106"/>
+        <location filename="../src/common/settings.cpp" line="116"/>
         <source>Maximum</source>
         <translation>Maksimum</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="106"/>
+        <location filename="../src/common/settings.cpp" line="116"/>
         <source>Fullscreen</source>
         <translation>Fuldskærm</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="320"/>
+        <location filename="../src/common/settings.cpp" line="333"/>
         <source>This shortcut conflicts with system shortcut %1</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="322"/>
+        <location filename="../src/common/settings.cpp" line="335"/>
         <source>This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="437"/>
-        <location filename="../src/settings.cpp" line="445"/>
+        <location filename="../src/common/settings.cpp" line="450"/>
+        <location filename="../src/common/settings.cpp" line="458"/>
         <source>The shortcut %1 is invalid, please set another one.</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>%1 is invalid</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/settings.cpp" line="480"/>
+        <location filename="../src/common/settings.cpp" line="493"/>
         <source>Cancel</source>
         <translation>Annuller</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="481"/>
+        <location filename="../src/common/settings.cpp" line="494"/>
         <source>Replace</source>
         <translation>Erstat</translation>
     </message>
     <message>
-        <location filename="../src/settings.cpp" line="483"/>
+        <location filename="../src/common/settings.cpp" line="496"/>
         <source>OK</source>
-        <translation type="unfinished"/>
-    </message>
-</context>
-<context>
-    <name>ShortCutShow</name>
-    <message>
-        <source>Settings</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Exit</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Help</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Page up</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Page down</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Save as</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Print</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Save</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Add bookmark</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Fullscreen</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Copy</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Cut</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Paste</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Undo</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Select all</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Display shortcuts</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Tabbar</name>
     <message>
-        <location filename="../src/tabbar.cpp" line="401"/>
+        <location filename="../src/controls/tabbar.cpp" line="420"/>
         <source>Close tab</source>
         <translation>Luk faneblad</translation>
     </message>
     <message>
-        <location filename="../src/tabbar.cpp" line="403"/>
+        <location filename="../src/controls/tabbar.cpp" line="422"/>
         <source>More options</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/tabbar.cpp" line="404"/>
+        <location filename="../src/controls/tabbar.cpp" line="423"/>
         <source>Close tabs to the left</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/tabbar.cpp" line="405"/>
+        <location filename="../src/controls/tabbar.cpp" line="424"/>
         <source>Close tabs to the right</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/tabbar.cpp" line="406"/>
+        <location filename="../src/controls/tabbar.cpp" line="425"/>
         <source>Close unmodified tabs</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/tabbar.cpp" line="402"/>
+        <location filename="../src/controls/tabbar.cpp" line="421"/>
         <source>Close other tabs</source>
         <translation>Luk andre faneblade</translation>
     </message>
@@ -825,278 +764,249 @@
 <context>
     <name>TextEdit</name>
     <message>
-        <location filename="../src/dtextedit.cpp" line="140"/>
+        <location filename="../src/editor/dtextedit.cpp" line="138"/>
         <source>Undo</source>
         <translation>Fortryd</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="141"/>
+        <location filename="../src/editor/dtextedit.cpp" line="139"/>
         <source>Redo</source>
         <translation>Omgør</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="142"/>
+        <location filename="../src/editor/dtextedit.cpp" line="140"/>
         <source>Cut</source>
         <translation>Klip</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="143"/>
+        <location filename="../src/editor/dtextedit.cpp" line="141"/>
         <source>Copy</source>
         <translation>Kopiér</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="144"/>
+        <location filename="../src/editor/dtextedit.cpp" line="142"/>
         <source>Paste</source>
         <translation>Indsæt</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="145"/>
+        <location filename="../src/editor/dtextedit.cpp" line="143"/>
         <source>Delete</source>
         <translation>Slet</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="146"/>
+        <location filename="../src/editor/dtextedit.cpp" line="144"/>
         <source>Select All</source>
         <translation>Markér alt</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="147"/>
-        <location filename="../src/window.cpp" line="261"/>
+        <location filename="../src/editor/dtextedit.cpp" line="145"/>
+        <location filename="../src/widgets/window.cpp" line="308"/>
         <source>Find</source>
         <translation>Find</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="148"/>
-        <location filename="../src/window.cpp" line="262"/>
+        <location filename="../src/editor/dtextedit.cpp" line="146"/>
+        <location filename="../src/widgets/window.cpp" line="309"/>
         <source>Replace</source>
         <translation>Erstat</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="149"/>
+        <location filename="../src/editor/dtextedit.cpp" line="147"/>
         <source>Go to Line</source>
         <translation>Gå til linje</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="150"/>
+        <location filename="../src/editor/dtextedit.cpp" line="148"/>
         <source>Turn on Read-Only mode</source>
         <translation>Aktivér skrivebeskyttet tilstand</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="151"/>
+        <location filename="../src/editor/dtextedit.cpp" line="149"/>
         <source>Turn off Read-Only mode</source>
         <translation>Deaktivér skrivebeskyttet tilstand</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="152"/>
+        <location filename="../src/editor/dtextedit.cpp" line="150"/>
         <source>Fullscreen</source>
         <translation>Fuldskærm</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="153"/>
+        <location filename="../src/editor/dtextedit.cpp" line="151"/>
         <source>Exit fullscreen</source>
         <translation>Afslut fuldskærm</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="154"/>
+        <location filename="../src/editor/dtextedit.cpp" line="152"/>
         <source>Display in file manager</source>
         <translation>Vis i filhåndtering</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="155"/>
-        <location filename="../src/dtextedit.cpp" line="229"/>
+        <location filename="../src/editor/dtextedit.cpp" line="153"/>
+        <location filename="../src/editor/dtextedit.cpp" line="228"/>
         <source>Add Comment</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="227"/>
+        <location filename="../src/editor/dtextedit.cpp" line="158"/>
+        <location filename="../src/editor/dtextedit.cpp" line="227"/>
         <source>Column Mode</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="230"/>
+        <location filename="../src/editor/dtextedit.cpp" line="229"/>
         <source>Remove Comment</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="230"/>
+        <location filename="../src/editor/dtextedit.cpp" line="264"/>
         <source>Press ALT and click lines to edit in column mode</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="156"/>
+        <location filename="../src/editor/dtextedit.cpp" line="154"/>
         <source>Text to Speech</source>
         <translation>Tekst til tale</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="157"/>
+        <location filename="../src/editor/dtextedit.cpp" line="155"/>
         <source>Stop reading</source>
         <translation>Stop læsning</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="158"/>
+        <location filename="../src/editor/dtextedit.cpp" line="156"/>
         <source>Speech to Text</source>
         <translation>Tale til tekst</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="159"/>
+        <location filename="../src/editor/dtextedit.cpp" line="157"/>
         <source>Translate</source>
         <translation>Oversæt</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="160"/>
+        <location filename="../src/editor/dtextedit.cpp" line="159"/>
         <source>Add bookmark</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="161"/>
+        <location filename="../src/editor/dtextedit.cpp" line="160"/>
         <source>Remove Bookmark</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="162"/>
+        <location filename="../src/editor/dtextedit.cpp" line="161"/>
         <source>Previous bookmark</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="163"/>
+        <location filename="../src/editor/dtextedit.cpp" line="162"/>
         <source>Next bookmark</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="164"/>
+        <location filename="../src/editor/dtextedit.cpp" line="163"/>
         <source>Remove All Bookmarks</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="165"/>
+        <location filename="../src/editor/dtextedit.cpp" line="164"/>
         <source>Fold All</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="166"/>
+        <location filename="../src/editor/dtextedit.cpp" line="165"/>
         <source>Fold Current Level</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="167"/>
+        <location filename="../src/editor/dtextedit.cpp" line="166"/>
         <source>Unfold All</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="168"/>
+        <location filename="../src/editor/dtextedit.cpp" line="167"/>
         <source>Unfold Current Level</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="174"/>
+        <location filename="../src/editor/dtextedit.cpp" line="173"/>
         <source>Color Mark</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="210"/>
+        <location filename="../src/editor/dtextedit.cpp" line="210"/>
         <source>Mark All</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="193"/>
+        <location filename="../src/editor/dtextedit.cpp" line="192"/>
         <source>Mark</source>
         <translation>Sæt mærke</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="177"/>
+        <location filename="../src/editor/dtextedit.cpp" line="176"/>
         <source>Clear All Marks</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="179"/>
+        <location filename="../src/editor/dtextedit.cpp" line="178"/>
         <source>Clear Last Mark</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Style 1</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Style 2</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Style 3</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Style 4</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/dtextedit.cpp" line="227"/>
-        <source>Column Mode</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <source>Add comment</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/dtextedit.cpp" line="230"/>
-        <source>Remove Comment</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="../src/dtextedit.cpp" line="289"/>
+        <location filename="../src/editor/dtextedit.cpp" line="297"/>
         <source>Change Case</source>
         <translation>Skift store/små bogstaver</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="290"/>
+        <location filename="../src/editor/dtextedit.cpp" line="298"/>
         <source>Upper Case</source>
         <translation>Store bogstaver</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="291"/>
+        <location filename="../src/editor/dtextedit.cpp" line="299"/>
         <source>Lower Case</source>
         <translation>Små bogstaver</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="292"/>
+        <location filename="../src/editor/dtextedit.cpp" line="300"/>
         <source>Capitalize</source>
         <translation>Stort begyndelsesbogstav</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="343"/>
-        <location filename="../src/widgets/bottombar.cpp" line="73"/>
+        <location filename="../src/editor/dtextedit.cpp" line="351"/>
+        <location filename="../src/widgets/bottombar.cpp" line="69"/>
         <source>None</source>
         <translation>Ingen</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="977"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1009"/>
         <source>Selected line(s) copied</source>
         <translation>Valgte linje(r) kopieret</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="983"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1015"/>
         <source>Current line copied</source>
         <translation>Nuværende linje kopieret</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="1022"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1054"/>
         <source>Selected line(s) clipped</source>
         <translation>Valgte linje(r) beskåret</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="1028"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1060"/>
         <source>Current line clipped</source>
         <translation>Nuværende linje beskåret</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="2823"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3217"/>
         <source>Read-Only mode is off</source>
         <translation>Skrivebeskyttet tilstand er deaktiveret</translation>
     </message>
     <message>
-        <location filename="../src/dtextedit.cpp" line="2830"/>
-        <location filename="../src/dtextedit.cpp" line="2838"/>
-        <location filename="../src/dtextedit.cpp" line="4996"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3224"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3232"/>
+        <location filename="../src/editor/dtextedit.cpp" line="5874"/>
         <source>Read-Only mode is on</source>
         <translation>Skrivebeskyttet tilstand er aktiveret</translation>
     </message>
@@ -1104,7 +1014,7 @@
 <context>
     <name>Toast</name>
     <message>
-        <location filename="../src/widgets/toast.cpp" line="38"/>
+        <location filename="../src/controls/toast.cpp" line="38"/>
         <source>Reload</source>
         <translation>Genindlæs</translation>
     </message>
@@ -1112,7 +1022,7 @@
 <context>
     <name>WarningNotices</name>
     <message>
-        <location filename="../src/warningnotices.cpp" line="15"/>
+        <location filename="../src/controls/warningnotices.cpp" line="15"/>
         <source>Reload</source>
         <translation>Genindlæs</translation>
     </message>
@@ -1120,155 +1030,140 @@
 <context>
     <name>Window</name>
     <message>
-        <location filename="../src/window.cpp" line="253"/>
+        <location filename="../src/widgets/window.cpp" line="300"/>
         <source>New window</source>
         <translation>Nyt vindue</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="254"/>
+        <location filename="../src/widgets/window.cpp" line="301"/>
         <source>New tab</source>
         <translation>Nyt faneblad</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="255"/>
+        <location filename="../src/widgets/window.cpp" line="302"/>
         <source>Open file</source>
         <translation>Åbn fil</translation>
     </message>
     <message>
-        <location filename="../src/warningnotices.cpp" line="17"/>
-        <location filename="../src/widgets/toast.cpp" line="39"/>
-        <location filename="../src/window.cpp" line="257"/>
+        <location filename="../src/controls/toast.cpp" line="39"/>
+        <location filename="../src/controls/warningnotices.cpp" line="17"/>
+        <location filename="../src/widgets/window.cpp" line="304"/>
         <source>Save as</source>
         <translation>Gem som</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="258"/>
+        <location filename="../src/widgets/window.cpp" line="305"/>
         <source>Print</source>
         <translation>Udskriv</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="259"/>
+        <location filename="../src/widgets/window.cpp" line="306"/>
         <source>Switch theme</source>
         <translation>Skift tema</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="356"/>
-        <location filename="../src/window.cpp" line="1988"/>
+        <location filename="../src/widgets/window.cpp" line="422"/>
+        <location filename="../src/widgets/window.cpp" line="1997"/>
         <source>Read-Only</source>
         <translation>Skrivebeskyttet</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="841"/>
+        <location filename="../src/widgets/window.cpp" line="845"/>
         <source>Saved successfully</source>
         <translation>Gemt</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1145"/>
+        <location filename="../src/widgets/window.cpp" line="1122"/>
         <source>Read-Only mode is on</source>
         <translation>Skrivebeskyttet tilstand er aktiveret</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1399"/>
+        <location filename="../src/widgets/window.cpp" line="1328"/>
         <source>Ctrl+&apos;=&apos;</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1402"/>
+        <location filename="../src/widgets/window.cpp" line="1331"/>
         <source>Ctrl+&apos;-&apos;</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1906"/>
+        <location filename="../src/widgets/window.cpp" line="1880"/>
         <source>Discard</source>
         <translation>Forkast</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="260"/>
-        <location filename="../src/window.cpp" line="1449"/>
+        <location filename="../src/widgets/window.cpp" line="307"/>
+        <location filename="../src/widgets/window.cpp" line="1378"/>
         <source>Settings</source>
         <translation>Indstillinger</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="386"/>
+        <location filename="../src/widgets/window.cpp" line="440"/>
         <source>You do not have permission to open %1</source>
         <translation>Du har ikke tilladelse til at åbne %1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="424"/>
+        <location filename="../src/widgets/window.cpp" line="476"/>
         <source>Invalid file: %1</source>
         <translation>Ugyldig fil: %1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="866"/>
-        <location filename="../src/window.cpp" line="946"/>
-        <location filename="../src/window.cpp" line="1007"/>
+        <location filename="../src/widgets/window.cpp" line="881"/>
+        <location filename="../src/widgets/window.cpp" line="933"/>
+        <location filename="../src/widgets/window.cpp" line="974"/>
         <source>Save File</source>
         <translation>Gem fil</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="531"/>
+        <location filename="../src/widgets/window.cpp" line="581"/>
         <source>Do you want to save this file?</source>
         <translation>Vil du gemme filen?</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="868"/>
-        <location filename="../src/window.cpp" line="883"/>
-        <location filename="../src/window.cpp" line="948"/>
-        <location filename="../src/window.cpp" line="963"/>
-        <location filename="../src/window.cpp" line="1009"/>
-        <location filename="../src/window.cpp" line="1024"/>
+        <location filename="../src/widgets/window.cpp" line="935"/>
         <source>Encoding</source>
         <translation>Kodning</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="869"/>
-        <location filename="../src/window.cpp" line="884"/>
-        <location filename="../src/window.cpp" line="949"/>
-        <location filename="../src/window.cpp" line="964"/>
-        <location filename="../src/window.cpp" line="1010"/>
-        <location filename="../src/window.cpp" line="1025"/>
-        <source>Line Endings</source>
-        <translation>Linjeskift</translation>
-    </message>
-    <message>
-        <location filename="../src/window.cpp" line="1431"/>
+        <location filename="../src/widgets/window.cpp" line="1360"/>
         <source>Editor</source>
         <translation>Editor</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="784"/>
+        <location filename="../src/widgets/window.cpp" line="831"/>
         <source>You do not have permission to save %1</source>
         <translation>Du har ikke tilladelse til at gemme %1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="827"/>
+        <location filename="../src/widgets/window.cpp" line="848"/>
         <source>Do you want to save as another?</source>
         <translation>Vil du gemme til en anden?</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1547"/>
-        <location filename="../src/window.cpp" line="2051"/>
+        <location filename="../src/widgets/window.cpp" line="1522"/>
+        <location filename="../src/widgets/window.cpp" line="2065"/>
         <source>Do you want to save all the files?</source>
         <translation>Vil du gemme alle filerne?</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1506"/>
+        <location filename="../src/widgets/window.cpp" line="1482"/>
         <source>Untitled %1</source>
         <translation>Unavngivet %1</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1305"/>
+        <location filename="../src/widgets/window.cpp" line="1277"/>
         <source>Current location remembered</source>
         <translation>Nuværende placering husket</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="1905"/>
+        <location filename="../src/widgets/window.cpp" line="1879"/>
         <source>Cancel</source>
         <translation>Annuller</translation>
     </message>
     <message>
-        <location filename="../src/window.cpp" line="256"/>
-        <location filename="../src/window.cpp" line="1907"/>
+        <location filename="../src/widgets/window.cpp" line="303"/>
+        <location filename="../src/widgets/window.cpp" line="1881"/>
         <source>Save</source>
         <translation>Gem</translation>
     </message>

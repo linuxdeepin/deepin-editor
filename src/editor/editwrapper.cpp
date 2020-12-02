@@ -221,56 +221,39 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
     //1.如果修改切换编码提示用户是否保存,不保存重新打开文件读取.2.没有修改是否另存为
     if(m_pTextEdit->document()->isModified())
     {
-        DDialog *dialog = new DDialog(tr("The current file changes, whether to save first?"), "", this);
+        DDialog *dialog = new DDialog(tr("Do you want to save this file?"), "", this);
         dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
         dialog->setIcon(QIcon::fromTheme("deepin-editor"));
-        dialog->addButton(QString(tr("Cancel")), 0, DDialog::ButtonNormal);
-        dialog->addButton(QString(tr("Save")), 1, DDialog::ButtonRecommend);
+        dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);//不保存
+        dialog->addButton(QString(tr("Discard")), false, DDialog::ButtonNormal);//取消
+        dialog->addButton(QString(tr("Save")), true, DDialog::ButtonRecommend);//保存
         int res = dialog->exec();//0  1
 
         //关闭对话框
-        if(res == -1) return false;
+        if(res == 0) return false;
 
-        //保存
-        if(res == 1){
-            //草稿文件
-            if(Utils::isDraftFile(m_pTextEdit->filepath)){
-                if(saveDraftFile())
-                {
-                    bool ok = readFile(encode);
-                    return ok;
-                }else {
-                    return false;
-                }
-
-            }else {
-                saveFile();
-                bool ok = readFile(encode);
-                return ok;
-            }
-
-        }
-
-        //取消保存,重写载入
-        if(res == 0)
+        //不保存,重写载入
+        if(res == 1)
         {
             bool ok = readFile(encode);
-            if(ok && m_sCurEncode != m_sFirstEncode) m_pTextEdit->setTabbarModified(true);
+            //if(ok && m_sCurEncode != m_sFirstEncode) m_pTextEdit->setTabbarModified(true);
             return ok;
         }
+
+        //保存
+        if(res == 2){
+            //草稿文件
+            if(Utils::isDraftFile(m_pTextEdit->filepath)){
+                if(saveDraftFile()) return readFile(encode);
+                else return false;
+            }else {
+                return (saveFile() && readFile(encode));
+            }
+        }
+
         return false;
     }else {
-//        //没有修改 提示是否另存为新文件重新载入, 切换编码显示修改,需要保存
-//        DDialog *dialog = new DDialog(tr("The current file changes, whether to save first?"), "", this);
-//        dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
-//        dialog->setIcon(QIcon::fromTheme("deepin-editor"));
-//        dialog->addButton(QString(tr("Cancel")), 0, DDialog::ButtonNormal);
-//        dialog->addButton(QString(tr("Save")), 1, DDialog::ButtonRecommend);
-//        int res = dialog->exec();//0  1
-
-        bool ok = readFile(encode);
-        //if(ok && m_sCurEncode != m_sFirstEncode) m_pTextEdit->setTabbarModified(true);
-        return ok;
+        return readFile(encode);
     }
 }
 
@@ -284,25 +267,25 @@ void EditWrapper::reloadModifyFile()
 
     //如果文件修改提示用户是否保存  如果临时文件保存就是另存为
     if (m_pTextEdit->document()->isModified()) {
-        DDialog *dialog = new DDialog(tr("The current file changes, whether to save as?"), "", this);
+        DDialog *dialog = new DDialog(tr("Do you want to save this file?"), "", this);
         dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
         dialog->setIcon(QIcon::fromTheme("deepin-editor"));
-        dialog->addButton(QString(tr("Cancel")), 0, DDialog::ButtonNormal);
-        dialog->addButton(QString(tr("Save")), 1, DDialog::ButtonRecommend);
+        dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);//不保存
+        dialog->addButton(QString(tr("Discard")), false, DDialog::ButtonNormal);//取消
+        dialog->addButton(QString(tr("Save")), true, DDialog::ButtonRecommend);//保存
         dialog->setCloseButtonVisible(false);
         int res = dialog->exec();//0  1
 
         //点击关闭
-        if(res == -1) return;
+        if(res == 0) return;
 
-        //点击取消
-        if(res == 0) {
+        //不保存
+        if(res == 1) {
             //重写加载文件
             readFile();
         }
-
-        //点击另存为
-        if(res == 1){
+        //另存
+        if(res == 2){
             //临时文件保存另存为 需要删除源草稿文件文件
            if(Utils::isDraftFile(m_pTextEdit->filepath)){
                if(!saveDraftFile()) return;
