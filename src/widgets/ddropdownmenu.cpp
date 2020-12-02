@@ -29,6 +29,7 @@
 #include <DFontSizeManager>
 #include <DLabel>
 #include <DApplicationHelper>
+
 using namespace Dtk::Core;
 
 QVector<QPair<QString,QStringList>> DDropdownMenu::sm_groupEncodeVec;
@@ -44,7 +45,7 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     m_pToolButton->setArrowType(Qt::NoArrow);
     m_pToolButton->setFixedHeight(30);
     m_pToolButton->installEventFilter(this);
-
+    //this->installEventFilter(this);
     //设置图标
     QPixmap arrowPixmap = Utils::renderSVG(":/images/dropdown_arrow_light.svg", QSize(9, 5));
     m_arrowPixmap = arrowPixmap;
@@ -55,7 +56,6 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     m_font.setPixelSize(fontsize);
     m_font.setFamily("SourceHanSansSC-Normal");
 
-
      //添加布局
     QHBoxLayout *layout = new QHBoxLayout();
     layout->addWidget(m_pToolButton);
@@ -63,16 +63,22 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     this->setLayout(layout);
 
     connect(this, &DDropdownMenu::requestContextMenu, this, [=] (bool bClicked){
+        if(bClicked){
+            //如果鼠标点击清除ｆｏｃｕｓ
+            m_pToolButton->clearFocus();
+        }
         QPoint center = this->mapToGlobal(this->rect().center());
         int menuHeight = m_menu->sizeHint().height();
         int menuWidth = m_menu->sizeHint().width();
-        center.setY(center.y() - menuHeight - this->rect().height() / 2);
+        center.setY(center.y() - menuHeight - this->rect().height()/2);
         center.setX(center.x() - menuWidth / 2);
         m_menu->move(center);
         m_menu->exec();
         if(bClicked){
             //如果鼠标点击清除ｆｏｃｕｓ
             m_pToolButton->clearFocus();
+            QEvent event(QEvent::HoverLeave);
+            QApplication::sendEvent(m_pToolButton,&event);
         }
     });
 
@@ -155,7 +161,10 @@ void DDropdownMenu::setTheme(const QString &theme)
 void DDropdownMenu::setChildrenFocus(bool ok)
 {
     if(ok)  m_pToolButton->setFocusPolicy(Qt::StrongFocus);
-    else   m_pToolButton->setFocusPolicy(Qt::NoFocus);
+    else  {
+        m_pToolButton->clearFocus();
+        m_pToolButton->setFocusPolicy(Qt::NoFocus);
+    }
 }
 
 DToolButton *DDropdownMenu::getButton()
@@ -283,7 +292,6 @@ void DDropdownMenu::OnFontChangedSlot(const QFont &font)
 
 bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
 {
-
     if(object == m_pToolButton){
         if(event->type() == QEvent::KeyPress){
             QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
@@ -297,14 +305,14 @@ bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
         }
 
         if(event->type() == QEvent::MouseButtonRelease){
-             QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
+            QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
             if(mouseEvent->button() == Qt::LeftButton){
                 Q_EMIT requestContextMenu(true);
+                m_pToolButton->clearFocus();
                 return true;
             }
-             return false;
+            return true;
         }
-
     }
 
     return QFrame::eventFilter(object,event);
