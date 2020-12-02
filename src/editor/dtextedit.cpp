@@ -359,8 +359,14 @@ TextEdit::TextEdit(QWidget *parent)
 
     DMenu *hlSubMenu = nullptr;
     QString currentGroup;
+    bool intel = true;
 
     for (const auto &def : m_repository.definitions()) {
+        if(def.translatedName()=="Intel x86 (NASM)"&&intel)
+        {
+            intel = false;
+            continue;
+        }
         if (def.isHidden()) {
             continue;
         }
