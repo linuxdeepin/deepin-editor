@@ -88,6 +88,7 @@ SOURCES += editor/bookmarkwidget.cpp \
            controls/toast.cpp \
            controls/toolbar.cpp \
            controls/warningnotices.cpp \
+           controls/settingsdialog.cpp \
            thememodule/themeitemdelegate.cpp \
            thememodule/themelistmodel.cpp \
            thememodule/themelistview.cpp \

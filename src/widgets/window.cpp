@@ -187,11 +187,12 @@ Window::Window(DMainWindow *parent)
     }
 
     // window minimum size.
-    setMinimumSize(1000,605);
-    // resize window size.
-    resize(QSize(Settings::instance()->settings->option("advance.window.window_width")->value().toDouble(),
-                 Settings::instance()->settings->option("advance.window.window_height")->value().toDouble()));
     setMinimumSize(500,300);
+    // resize window size.
+    int window_width =Settings::instance()->settings->option("advance.window.window_width")->value().toInt();
+    int window_height =Settings::instance()->settings->option("advance.window.window_height")->value().toInt();
+    resize(window_width,window_height);
+
 
     // Init find bar.
     connect(m_findBar, &FindBar::findNext, this, &Window::handleFindNext, Qt::QueuedConnection);
@@ -2125,6 +2126,7 @@ void Window::closeEvent(QCloseEvent *e)
 
     disconnect(m_settings,nullptr,this,nullptr);
     this->close();
+    emit close();
 }
 
 void Window::hideEvent(QHideEvent *event)

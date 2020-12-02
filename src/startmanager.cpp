@@ -87,7 +87,7 @@ void StartManager::openFilesInWindow(QStringList files)
     if (files.isEmpty()) {
         if (m_windows.count() >= 20) return;
         Window *window = createWindow();
-        window->show();
+        window->showCenterWindow(true);
         window->addBlankTab();
         window->activateWindow();
     } else {
