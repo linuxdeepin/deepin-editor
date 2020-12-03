@@ -3920,9 +3920,6 @@ void TextEdit::setIsFileOpen()
 
 void TextEdit::setTextFinished()
 {
-    QTextCursor cursor = textCursor();
-    cursor.movePosition(QTextCursor::Start);
-    setTextCursor(cursor);
     m_bIsFileOpen = false;
     m_nLines = blockCount();
 
