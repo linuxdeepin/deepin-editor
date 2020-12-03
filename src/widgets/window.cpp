@@ -2041,6 +2041,8 @@ void Window::resizeEvent(QResizeEvent *e)
 
 void Window::closeEvent(QCloseEvent *e)
 {
+
+
     PerformanceMonitor::closeAppStart();
 
     QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
@@ -2069,6 +2071,12 @@ void Window::closeEvent(QCloseEvent *e)
     if (!needSaveList.isEmpty()) {
         DDialog *dialog = createDialog(tr("Do you want to save all the files?"), "");
         int res = dialog->exec();
+
+        //取消窗口
+        if(res == -1 || res == 0) {
+            e->ignore();
+            return;
+        }
 
         //保存文件
         if(res == 2){
@@ -2130,7 +2138,7 @@ void Window::closeEvent(QCloseEvent *e)
     }
 
     disconnect(m_settings,nullptr,this,nullptr);
-    this->close();
+    //this->close();
     emit close();
 }
 

@@ -118,17 +118,19 @@ void DDropdownMenu::setCurrentTextOnly(const QString &name)
    QList<QAction*> menuList = m_menu->actions();
 
    for (int i = 0; i < menuList.size(); i++) {
-         QList<QAction*> acts = menuList[i]->menu()->actions();
-         if(acts.size() == 0) continue;
-         for (int j = 0; j < acts.size(); j++) {
-         if(acts[j]->text() != name){
-             acts[j]->setCheckable(false);
-             acts[j]->setChecked(false);
-         }
-         else{
-             acts[j]->setCheckable(true);
-             acts[j]->setChecked(true);
-         }
+       if(menuList[i]->menu()){
+           QList<QAction*> acts = menuList[i]->menu()->actions();
+           if(acts.size() == 0) continue;
+           for (int j = 0; j < acts.size(); j++) {
+           if(acts[j]->text() != name){
+               acts[j]->setCheckable(false);
+               acts[j]->setChecked(false);
+           }
+           else{
+               acts[j]->setCheckable(true);
+               acts[j]->setChecked(true);
+           }
+        }
       }
    }
 
