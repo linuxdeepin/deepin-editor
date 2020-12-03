@@ -621,12 +621,16 @@ void EditWrapper::loadContent(const QByteArray &content)
     int max = 40*1024*1024;
 
     QByteArray data;
+    QTextCursor cursor1 = m_pTextEdit->textCursor();
+
     if(len > max){
         for (int i = 0; i < cnt; i++) {
             //初始化秒开
             if(i == 0 && !m_bQuit){
               data = content.mid(i*step,InitContentPos);
               cursor.insertText(data);
+              cursor1.movePosition(QTextCursor::Start);
+              m_pTextEdit->setTextCursor(cursor1);
               QApplication::processEvents();
               continue;
             }
@@ -647,6 +651,8 @@ void EditWrapper::loadContent(const QByteArray &content)
         if(!m_bQuit && len > InitContentPos){
             data = content.mid(0,InitContentPos);
             cursor.insertText(data);
+            cursor1.movePosition(QTextCursor::Start);
+            m_pTextEdit->setTextCursor(cursor1);
             QApplication::processEvents();
 
             if(!m_bQuit){
