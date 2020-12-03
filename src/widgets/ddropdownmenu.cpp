@@ -115,24 +115,24 @@ void DDropdownMenu::setCurrentAction(QAction *pAct)
 
 void DDropdownMenu::setCurrentTextOnly(const QString &name)
 {
-   QList<QAction*> menuList = m_menu->actions();
+//   QList<QAction*> menuList = m_menu->actions();
 
-   for (int i = 0; i < menuList.size(); i++) {
-       if(menuList[i]->menu()){
-           QList<QAction*> acts = menuList[i]->menu()->actions();
-           if(acts.size() == 0) continue;
-           for (int j = 0; j < acts.size(); j++) {
-           if(acts[j]->text() != name){
-               acts[j]->setCheckable(false);
-               acts[j]->setChecked(false);
-           }
-           else{
-               acts[j]->setCheckable(true);
-               acts[j]->setChecked(true);
-           }
-        }
-      }
-   }
+//   for (int i = 0; i < menuList.size(); i++) {
+//       if(menuList[i]->menu()){
+//           QList<QAction*> acts = menuList[i]->menu()->actions();
+//           if(acts.size() == 0) continue;
+//           for (int j = 0; j < acts.size(); j++) {
+//           if(acts[j]->text() != name){
+//               acts[j]->setCheckable(false);
+//               acts[j]->setChecked(false);
+//           }
+//           else{
+//               acts[j]->setCheckable(true);
+//               acts[j]->setChecked(true);
+//           }
+//        }
+//      }
+//   }
 
    setText(name);
 }
@@ -179,7 +179,7 @@ DDropdownMenu *DDropdownMenu::createEncodeMenu()
     DDropdownMenu *m_pEncodeMenu = new DDropdownMenu();
     DMenu* m_pMenu = new DMenu();
     if(sm_groupEncodeVec.isEmpty()){
-        QFile file(":/encodes/encodes.ini");
+        QFile file(":/encodes/encodes1.ini");
         QString data;
         if(file.open(QIODevice::ReadOnly))
         {
@@ -200,12 +200,12 @@ DDropdownMenu *DDropdownMenu::createEncodeMenu()
              foreach(QString var,list)
              {
                QAction *act= groupMenu->addAction(QObject::tr(var.toLocal8Bit().data()));
-               if(act->text() == "UTF-8") {
-                   m_pEncodeMenu->m_pActUtf8 = act;
-                   act->setChecked(true);
-               }else {
-                   act->setCheckable(false);
-               }
+//               if(act->text() == "UTF-8") {
+//                   m_pEncodeMenu->m_pActUtf8 = act;
+//                   act->setChecked(true);
+//               }else {
+//                   act->setCheckable(false);
+//               }
 
              }
 
@@ -219,13 +219,13 @@ DDropdownMenu *DDropdownMenu::createEncodeMenu()
              foreach(QString var,sm_groupEncodeVec[i].second)
              {
                QAction *act= groupMenu->addAction(QObject::tr(var.toLocal8Bit().data()));
-               if(act->text() == "UTF-8") {
-                   m_pEncodeMenu->m_pActUtf8 = act;
-                   act->setCheckable(true);
-                   act->setChecked(true);
-               }else {
-                   act->setCheckable(false);
-               }
+//               if(act->text() == "UTF-8") {
+//                   m_pEncodeMenu->m_pActUtf8 = act;
+//                   act->setCheckable(true);
+//                   act->setChecked(true);
+//               }else {
+//                   act->setCheckable(false);
+//               }
              }
 
             m_pMenu->addMenu(groupMenu);
