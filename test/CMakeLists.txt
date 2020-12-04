@@ -106,7 +106,7 @@ add_custom_command(TARGET test
 #    #1.清理原先的gcov信息
 #    COMMAND lcov --directory ./test/CMakeFiles/${PROJECT_NAME_TEST}.dir --zerocounters
 #    COMMAND lcov --directory ./test/CMakeFiles/${PROJECT_NAME}.dir --zerocounters
-COMMAND ./test/${PROJECT_NAME_TEST}
+COMMAND ${CMAKE_BINARY_DIR}/test/${PROJECT_NAME_TEST}
 #
 #    #2.收集gcov信息到.info文件中
 #    COMMAND lcov --directory . --capture --output-file ./test/coverageResult/${PROJECT_NAME}_Coverage.info

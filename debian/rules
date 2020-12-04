@@ -1,7 +1,5 @@
 #!/usr/bin/make -f
 
-override_dh_auto_test:
-
 export QT_SELECT=5
 include /usr/share/dpkg/default.mk
 
