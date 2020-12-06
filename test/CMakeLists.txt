@@ -34,6 +34,8 @@ find_package(KF5Codecs)
 find_package(DFrameworkdbus REQUIRED)
 find_package(Qt5Test REQUIRED)
 find_package(GTest REQUIRED)
+find_package(Qt5Xml REQUIRED)
+find_package(Qt5Svg REQUIRED)
 
 include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 include_directories(Qt5PrintSupport)
@@ -77,6 +79,8 @@ target_link_libraries(${PROJECT_NAME_TEST}
     ${LIBDMR_LIBRARIES}
     ${GTEST_LIBRARIES}
     ${GTEST_MAIN_LIBRARIES}
+    ${Qt5Xml_LIBRARIES}
+    ${Qt5Svg_LIBRARIES}
     Qt5::Core
     Qt5::Gui
     Qt5::Widgets
