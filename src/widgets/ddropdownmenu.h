@@ -26,6 +26,10 @@
 #include <QEvent>
 #include <DToolButton>
 #include <QPalette>
+#include <QtXml/QDomDocument>
+#include <QtXml/QDomElement>
+#include <QtXml/QDomNode>
+#include <QtXml/QDomNodeList>
 
 DWIDGET_USE_NAMESPACE
 
@@ -66,6 +70,9 @@ protected:
     //按键事件　鼠标释放弹出菜单
     bool eventFilter(QObject *object, QEvent *event);
 private:
+    QPixmap setSvgColor(QString color);
+    void SetSVGBackColor(QDomElement &elem, QString strattr, QString strattrval);
+private:
     DToolButton *m_pToolButton = nullptr;
     DMenu *m_menu = nullptr;
     QPixmap m_arrowPixmap;
@@ -73,6 +80,7 @@ private:
     QAction* m_pActUtf8 = nullptr;
     QFont m_font;
     static QVector<QPair<QString,QStringList>> sm_groupEncodeVec;
+    bool m_bPressed =false;
 };
 
 #endif

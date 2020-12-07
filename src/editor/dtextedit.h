@@ -57,6 +57,7 @@ enum ConvertCase { UPPER, LOWER, CAPITALIZE };
 
 // Tween算法(模拟惯性)
 typedef std::function<void (qreal)> FunSlideInertial;
+
 class FlashTween : public QObject
 {
     Q_OBJECT

@@ -620,6 +620,7 @@ QPixmap Utils::renderSVG(const QString &filePath, const QSize &size,bool bIsScal
     }
 
     QPixmap pixmap(size*scaled);
+    pixmap.fill(Qt::transparent);
     QImageReader reader;
 
     reader.setFileName(filePath);

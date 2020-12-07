@@ -12,6 +12,7 @@ QT += svg
 QT += widgets
 QT += x11extras
 QT += KCodecs
+QT += xml
 
 TEMPLATE = app
 TARGET = deepin-editor

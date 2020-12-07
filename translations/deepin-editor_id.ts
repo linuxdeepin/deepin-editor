@@ -22,54 +22,54 @@
 <context>
     <name>EditWrapper</name>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="486"/>
+        <location filename="../src/editor/editwrapper.cpp" line="467"/>
         <source>File has changed on disk. Reload?</source>
         <translation>Berkas didisk sudah berubah, muat ulang?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="483"/>
+        <location filename="../src/editor/editwrapper.cpp" line="464"/>
         <source>File removed on the disk. Save it now?</source>
         <translation>Berkas didisk sudah dihapus. Simpan sekarang?</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="224"/>
-        <location filename="../src/editor/editwrapper.cpp" line="288"/>
+        <location filename="../src/editor/editwrapper.cpp" line="270"/>
         <source>Do you want to save this file?</source>
         <translation type="unfinished">Apakah anda ingin menyimpan berkas ini?</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="228"/>
-        <location filename="../src/editor/editwrapper.cpp" line="292"/>
+        <location filename="../src/editor/editwrapper.cpp" line="274"/>
         <source>Discard</source>
         <translation type="unfinished">Membuang</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="517"/>
+        <location filename="../src/editor/editwrapper.cpp" line="498"/>
         <location filename="../src/widgets/bottombar.cpp" line="65"/>
         <source>INSERT</source>
         <translation>MASUK</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="520"/>
+        <location filename="../src/editor/editwrapper.cpp" line="501"/>
         <source>OVERWRITE</source>
         <translation>TULIS ULANG</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="523"/>
+        <location filename="../src/editor/editwrapper.cpp" line="504"/>
         <source>R/O</source>
         <translation>R/O</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="227"/>
-        <location filename="../src/editor/editwrapper.cpp" line="291"/>
+        <location filename="../src/editor/editwrapper.cpp" line="273"/>
         <source>Cancel</source>
         <translation type="unfinished">Batal</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="171"/>
         <location filename="../src/editor/editwrapper.cpp" line="229"/>
-        <location filename="../src/editor/editwrapper.cpp" line="293"/>
-        <location filename="../src/editor/editwrapper.cpp" line="415"/>
+        <location filename="../src/editor/editwrapper.cpp" line="275"/>
+        <location filename="../src/editor/editwrapper.cpp" line="396"/>
         <source>Save</source>
         <translation type="unfinished">Simpan</translation>
     </message>
@@ -204,7 +204,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="31"/>
         <location filename="../src/controls/settingsdialog.cpp" line="107"/>
-        <location filename="../src/widgets/window.cpp" line="1318"/>
+        <location filename="../src/widgets/window.cpp" line="1323"/>
         <source>Window</source>
         <translation>Jendela</translation>
     </message>
@@ -565,37 +565,172 @@
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="120"/>
-        <source>Chinese</source>
+        <source>Arabic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="121"/>
-        <source>European</source>
+        <source>Belarussian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="122"/>
-        <source>Japanese</source>
+        <source>Bulgarian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="123"/>
-        <source>Korean</source>
+        <source>Chinese</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="124"/>
-        <source>Semitic</source>
+        <source>Czech</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="125"/>
-        <source>Thai</source>
+        <source>Estonian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="126"/>
+        <source>Croatian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="127"/>
+        <source>Danish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="128"/>
+        <source>Finnish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="129"/>
+        <source>French</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="130"/>
+        <source>German</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="131"/>
+        <source>Greek</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="132"/>
+        <source>Hebrew</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="133"/>
+        <source>Hungarian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="134"/>
+        <source>Japanese</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="135"/>
+        <source>Korean</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="136"/>
+        <source>Irish Gaelic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="137"/>
+        <source>Italian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="138"/>
+        <source>Lithuanian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="139"/>
+        <source>Latvian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="140"/>
+        <source>Polish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="141"/>
+        <source>Portuguese</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="142"/>
+        <source>Russian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="143"/>
+        <source>Romanian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="144"/>
+        <source>Slovak</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="145"/>
+        <source>Slovenian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="146"/>
+        <source>Spanish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="147"/>
+        <source>Swedish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="148"/>
+        <source>Thai</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="149"/>
+        <source>Turkish</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="150"/>
+        <source>Ukrainian</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="151"/>
         <source>Vietnamese</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="156"/>
+        <source>European</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="159"/>
+        <source>Semitic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -620,18 +755,18 @@
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="173"/>
-        <location filename="../src/editor/editwrapper.cpp" line="417"/>
-        <location filename="../src/widgets/window.cpp" line="883"/>
-        <location filename="../src/widgets/window.cpp" line="901"/>
-        <location filename="../src/widgets/window.cpp" line="976"/>
-        <location filename="../src/widgets/window.cpp" line="991"/>
+        <location filename="../src/editor/editwrapper.cpp" line="398"/>
+        <location filename="../src/widgets/window.cpp" line="888"/>
+        <location filename="../src/widgets/window.cpp" line="906"/>
+        <location filename="../src/widgets/window.cpp" line="981"/>
+        <location filename="../src/widgets/window.cpp" line="996"/>
         <source>Encoding</source>
         <translation type="unfinished">Mengencode</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="902"/>
-        <location filename="../src/widgets/window.cpp" line="977"/>
-        <location filename="../src/widgets/window.cpp" line="992"/>
+        <location filename="../src/widgets/window.cpp" line="907"/>
+        <location filename="../src/widgets/window.cpp" line="982"/>
+        <location filename="../src/widgets/window.cpp" line="997"/>
         <source>Line Endings</source>
         <translation type="unfinished">Akhir Baris</translation>
     </message>
@@ -979,34 +1114,34 @@
         <translation>Tidak ada</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1009"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1015"/>
         <source>Selected line(s) copied</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1015"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1021"/>
         <source>Current line copied</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1054"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1060"/>
         <source>Selected line(s) clipped</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1060"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1066"/>
         <source>Current line clipped</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3217"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3223"/>
         <source>Read-Only mode is off</source>
         <translation>Mode Hanya-Baca sudah dimatikan</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3224"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3232"/>
-        <location filename="../src/editor/dtextedit.cpp" line="5874"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3230"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3238"/>
+        <location filename="../src/editor/dtextedit.cpp" line="5877"/>
         <source>Read-Only mode is on</source>
         <translation>Mode Hanya-Baca sudah dinyalakan</translation>
     </message>
@@ -1063,38 +1198,38 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="422"/>
-        <location filename="../src/widgets/window.cpp" line="1997"/>
+        <location filename="../src/widgets/window.cpp" line="2002"/>
         <source>Read-Only</source>
         <translation>Hanya-Baca</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="845"/>
+        <location filename="../src/widgets/window.cpp" line="850"/>
         <source>Saved successfully</source>
         <translation>Berhasil disimpan</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1122"/>
+        <location filename="../src/widgets/window.cpp" line="1127"/>
         <source>Read-Only mode is on</source>
         <translation type="unfinished">Mode Hanya-Baca sudah dinyalakan</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1328"/>
+        <location filename="../src/widgets/window.cpp" line="1333"/>
         <source>Ctrl+&apos;=&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1331"/>
+        <location filename="../src/widgets/window.cpp" line="1336"/>
         <source>Ctrl+&apos;-&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1880"/>
+        <location filename="../src/widgets/window.cpp" line="1885"/>
         <source>Discard</source>
         <translation>Membuang</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="307"/>
-        <location filename="../src/widgets/window.cpp" line="1378"/>
+        <location filename="../src/widgets/window.cpp" line="1383"/>
         <source>Settings</source>
         <translation>Pengaturan</translation>
     </message>
@@ -1109,9 +1244,9 @@
         <translation>Berkas tidak valid: %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="881"/>
-        <location filename="../src/widgets/window.cpp" line="933"/>
-        <location filename="../src/widgets/window.cpp" line="974"/>
+        <location filename="../src/widgets/window.cpp" line="886"/>
+        <location filename="../src/widgets/window.cpp" line="938"/>
+        <location filename="../src/widgets/window.cpp" line="979"/>
         <source>Save File</source>
         <translation>Simpan Berkas</translation>
     </message>
@@ -1121,49 +1256,49 @@
         <translation>Apakah anda ingin menyimpan berkas ini?</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="935"/>
+        <location filename="../src/widgets/window.cpp" line="940"/>
         <source>Encoding</source>
         <translation>Mengencode</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1360"/>
+        <location filename="../src/widgets/window.cpp" line="1365"/>
         <source>Editor</source>
         <translation>Penyunting</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="831"/>
+        <location filename="../src/widgets/window.cpp" line="836"/>
         <source>You do not have permission to save %1</source>
         <translation>Anda tidak mempunyai ijin untuk simpan %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="848"/>
+        <location filename="../src/widgets/window.cpp" line="853"/>
         <source>Do you want to save as another?</source>
         <translation>Apakah anda ingin simpan sebagai lainnya?</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1522"/>
-        <location filename="../src/widgets/window.cpp" line="2065"/>
+        <location filename="../src/widgets/window.cpp" line="1527"/>
+        <location filename="../src/widgets/window.cpp" line="2072"/>
         <source>Do you want to save all the files?</source>
         <translation>Apakah anda ingin simpan semua berkas?</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1482"/>
+        <location filename="../src/widgets/window.cpp" line="1487"/>
         <source>Untitled %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1277"/>
+        <location filename="../src/widgets/window.cpp" line="1282"/>
         <source>Current location remembered</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1879"/>
+        <location filename="../src/widgets/window.cpp" line="1884"/>
         <source>Cancel</source>
         <translation>Batal</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="303"/>
-        <location filename="../src/widgets/window.cpp" line="1881"/>
+        <location filename="../src/widgets/window.cpp" line="1886"/>
         <source>Save</source>
         <translation>Simpan</translation>
     </message>

@@ -133,11 +133,11 @@ void BottomBar::setHightlightName(const QString &name)
 
 void BottomBar::setPalette(const QPalette &palette)
 {
-    DPalette paPositionLabel  = DApplicationHelper::instance()->palette(m_pPositionLabel);
-    DPalette paCharCountLabel = DApplicationHelper::instance()->palette(m_pCharCountLabel);
-    DPalette paCursorStatus = DApplicationHelper::instance()->palette(m_pCursorStatus);
-    DPalette paEncodeMenu = DApplicationHelper::instance()->palette(m_pEncodeMenu->getButton());
-    DPalette paHighlightMenu = DApplicationHelper::instance()->palette(m_pHighlightMenu->getButton());
+    DPalette paPositionLabel  = DApplicationHelper::instance()->applicationPalette();
+    DPalette paCharCountLabel = DApplicationHelper::instance()->applicationPalette();
+    DPalette paCursorStatus = DApplicationHelper::instance()->applicationPalette();
+    DPalette paEncodeMenu = DApplicationHelper::instance()->applicationPalette();
+    DPalette paHighlightMenu = DApplicationHelper::instance()->applicationPalette();
 
     QColor colorFont = paPositionLabel.textTips().color();
 

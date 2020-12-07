@@ -33,6 +33,8 @@ find_package(DtkCore REQUIRED)
 find_package(KF5SyntaxHighlighting)
 find_package(KF5Codecs)
 find_package(DFrameworkdbus REQUIRED)
+find_package(Qt5Xml REQUIRED)
+find_package(Qt5Svg REQUIRED)
 include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 
 # Tell CMake to create the executable
@@ -45,6 +47,8 @@ target_link_libraries(deepin-editor
     ${Qt5PrintSupport_LIBRARIES}
     ${Qt5Concurrent_LIBRARIES}
     ${DFrameworkdbus_LIBRARIES}
+    ${Qt5Xml_LIBRARIES}
+    ${Qt5Svg_LIBRARIES}
     KF5::Codecs
     KF5::SyntaxHighlighting
     ${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/lib/libcharset.a

@@ -29,6 +29,7 @@
 #include <DFontSizeManager>
 #include <DLabel>
 #include <DApplicationHelper>
+#include <QtSvg/QSvgRenderer>
 
 using namespace Dtk::Core;
 
@@ -47,7 +48,8 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     m_pToolButton->installEventFilter(this);
     //this->installEventFilter(this);
     //设置图标
-    QPixmap arrowPixmap = Utils::renderSVG(":/images/dropdown_arrow_light.svg", QSize(9, 5));
+    QString theme =  (DGuiApplicationHelper::instance()->applicationPalette().color(QPalette::Background).lightness() < 128) ? "dark" : "light";
+    QPixmap arrowPixmap = Utils::renderSVG(QString(":/images/arrow_%1.svg").arg(theme), QSize(8, 5));
     m_arrowPixmap = arrowPixmap;
     m_pToolButton->setIcon(createIcon());
 
@@ -154,7 +156,7 @@ void DDropdownMenu::setMenu(DMenu *menu)
 
 void DDropdownMenu::setTheme(const QString &theme)
 {
-    QString arrowSvgPath = QString(":/images/dropdown_arrow_%1.svg").arg(theme);
+    QString arrowSvgPath = QString(":/images/arrow_%1.svg").arg(theme);
     QPixmap arrowPixmap = Utils::renderSVG(arrowSvgPath, QSize(9, 5));
     m_arrowPixmap = arrowPixmap;
     m_pToolButton->setIcon(createIcon());
@@ -250,6 +252,7 @@ DDropdownMenu *DDropdownMenu::createHighLightMenu()
     return nullptr;
 }
 
+
 QIcon DDropdownMenu::createIcon()
 {
     //根据字体大小设置icon大小
@@ -269,14 +272,27 @@ QIcon DDropdownMenu::createIcon()
 
 
     DPalette dpalette  = DApplicationHelper::instance()->palette(m_pToolButton);
-    QColor textColor = dpalette.color(DPalette::WindowText);
+    QColor textColor;
+
+    QPixmap arrowPixmap;
+
+    if(m_bPressed){
+        textColor = dpalette.color(DPalette::Highlight);
+        QString color = textColor.name(QColor::HexRgb);
+        arrowPixmap = setSvgColor(color);
+    }else {
+        textColor = dpalette.color(DPalette::WindowText);
+        arrowPixmap = m_arrowPixmap;
+    }
+
 
     QPainter painter(&icon);
-
     painter.setFont(m_font);
     painter.setPen(textColor);
     painter.drawText(QRectF(10,(iconH-fontHeight)/2,fontWidth,fontHeight),m_text);
-    painter.drawPixmap(QRectF(fontWidth,(iconH-5)/2,9,5),m_arrowPixmap,m_arrowPixmap.rect());
+
+
+    painter.drawPixmap(QRectF(fontWidth,(iconH-5)/2,8,5),arrowPixmap,arrowPixmap.rect());
 
     painter.end();
     return icon;
@@ -306,16 +322,72 @@ bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
             return false;
         }
 
+        if(event->type() == QEvent::MouseButtonPress){
+            m_bPressed = true;
+            //重新绘制icon 点击改变前景色
+            m_pToolButton->setIcon(createIcon());
+            //return false;
+        }
+
+
+
         if(event->type() == QEvent::MouseButtonRelease){
+
             QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
             if(mouseEvent->button() == Qt::LeftButton){
+                m_bPressed = false;
+                m_pToolButton->setIcon(createIcon());
                 Q_EMIT requestContextMenu(true);
                 m_pToolButton->clearFocus();
-                return true;
             }
             return true;
         }
+
     }
 
     return QFrame::eventFilter(object,event);
+}
+
+QPixmap DDropdownMenu::setSvgColor(QString color)
+{
+    //设置图标
+    QString path = QString(":/images/arrow_dark.svg");
+    QFile file(path);
+    file.open(QIODevice::ReadOnly);
+    QByteArray data = file.readAll();
+    QDomDocument doc;
+    doc.setContent(data);
+    file.close();
+
+    QDomElement elem = doc.documentElement();
+    SetSVGBackColor(elem, "fill", color);
+
+    int scaled =qApp->devicePixelRatio() == 1.25 ? 2 : 1;
+
+    QPixmap pixmap(QSize(8,5)*scaled);
+    pixmap.fill(Qt::transparent);
+    pixmap.setDevicePixelRatio(scaled);
+
+    QSvgRenderer svg_render(doc.toByteArray());
+
+    QPainter painter(&pixmap);
+    svg_render.render(&painter);
+
+    return pixmap;
+}
+
+void DDropdownMenu::SetSVGBackColor(QDomElement &elem, QString strattr, QString strattrval)
+{
+
+    if (elem.tagName().compare("g") == 0 && elem.attribute("id").compare("color") == 0)
+    {
+        QString before_color = elem.attribute(strattr);
+        elem.setAttribute(strattr, strattrval);
+    }
+    for (int i = 0; i < elem.childNodes().count(); i++)
+    {
+        if (!elem.childNodes().at(i).isElement()) continue;
+        QDomElement element = elem.childNodes().at(i).toElement();
+        SetSVGBackColor(element, strattr, strattrval);
+    }
 }
