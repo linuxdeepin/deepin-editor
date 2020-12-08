@@ -437,7 +437,8 @@ void Window::addTab(const QString &filepath, bool activeTab)
         bool bIsRead = (permissions & QFile::ReadUser ||permissions & QFile::ReadOwner || permissions & QFile::ReadOther);
         if(fileInfo.exists() && !bIsRead)
         {
-           showNotify(QString(tr("You do not have permission to open %1")).arg(filepath));
+           DMessageManager::instance()->sendMessage(m_editorWidget->currentWidget(), QIcon(":/images/warning.svg")
+                                                    , QString(tr("You do not have permission to open %1")).arg(filepath));
            return;
         }
 
@@ -833,7 +834,8 @@ bool Window::saveFile()
     QFile::Permissions pers = temporaryBuffer.permissions();
     bool isWrite = ((pers & QFile::WriteUser) || (pers & QFile::WriteOwner) || (pers & QFile::WriteOther));
     if(!isWrite){
-        showNotify(QString(tr("You do not have permission to save %1")).arg(info.fileName()));
+        DMessageManager::instance()->sendMessage(m_editorWidget->currentWidget(), QIcon(":/images/warning.svg")
+                                                 , QString(tr("You do not have permission to save %1")).arg(info.fileName()));
         return false;
     }
 
