@@ -44,13 +44,21 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     m_pToolButton->setFocusPolicy(Qt::StrongFocus);
     m_pToolButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
     m_pToolButton->setArrowType(Qt::NoArrow);
-    m_pToolButton->setFixedHeight(34);
+    m_pToolButton->setFixedHeight(32);
     m_pToolButton->installEventFilter(this);
     //this->installEventFilter(this);
     //设置图标
     QString theme =  (DGuiApplicationHelper::instance()->applicationPalette().color(QPalette::Background).lightness() < 128) ? "dark" : "light";
-    QPixmap arrowPixmap = Utils::renderSVG(QString(":/images/arrow_%1.svg").arg(theme), QSize(8, 5));
-    m_arrowPixmap = arrowPixmap;
+    QString arrowSvgPath = QString(":/images/arrow_%1.svg").arg(theme);
+    //装换图片
+    int scaled =qApp->devicePixelRatio() == 1.25 ? 2 : 1;
+    QSvgRenderer svg_render(arrowSvgPath);
+    QPixmap pixmap(QSize(8,5)*scaled);
+    pixmap.fill(Qt::transparent);
+    pixmap.setDevicePixelRatio(scaled);
+    QPainter painter(&pixmap);
+    svg_render.render(&painter,QRect(0,0,8,5));
+    m_arrowPixmap = pixmap;
     m_pToolButton->setIcon(createIcon());
 
     //设置字体
@@ -157,8 +165,18 @@ void DDropdownMenu::setMenu(DMenu *menu)
 void DDropdownMenu::setTheme(const QString &theme)
 {
     QString arrowSvgPath = QString(":/images/arrow_%1.svg").arg(theme);
-    QPixmap arrowPixmap = Utils::renderSVG(arrowSvgPath, QSize(8, 5));
-    m_arrowPixmap = arrowPixmap;
+    //装换图片
+    int scaled =qApp->devicePixelRatio() == 1.25 ? 2 : 1;
+    QSvgRenderer svg_render(arrowSvgPath);
+
+    QPixmap pixmap(QSize(8,5)*scaled);
+    pixmap.fill(Qt::transparent);
+    pixmap.setDevicePixelRatio(scaled);
+
+    QPainter painter(&pixmap);
+    svg_render.render(&painter,QRect(0,0,8,5));
+
+    m_arrowPixmap = pixmap;
     m_pToolButton->setIcon(createIcon());
 }
 
@@ -282,7 +300,7 @@ QIcon DDropdownMenu::createIcon()
 
 
     int totalWidth = fontWidth + iconW+ 20;
-    int totalHeigth = 34;
+    int totalHeigth = 30;
     m_pToolButton->setFixedSize(totalWidth,totalHeigth);
     m_pToolButton->setIconSize(QSize(totalWidth,totalHeigth));
 
@@ -290,14 +308,15 @@ QIcon DDropdownMenu::createIcon()
     icon.setDevicePixelRatio(scaled);
     icon.fill(Qt::transparent);
 
-
     QPainter painter(&icon);
-    painter.drawPixmap(QRectF(fontWidth+10,(totalHeigth-arrowPixmap.rect().height())/2,iconW,iconH),arrowPixmap,arrowPixmap.rect());
-
     painter.setFont(m_font);
     painter.setPen(textColor);
     painter.drawText(QRectF(5,(totalHeigth-fontHeight)/2,fontWidth,fontHeight),m_text);
 
+    //arrowPixmap=arrowPixmap.scaled(iconW,iconH,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+
+    //qDebug()<<"==================="<<arrowPixmap.rect().height();
+    painter.drawPixmap(QRectF(fontWidth+10,(totalHeigth-arrowPixmap.rect().height())/2,iconW,iconH),arrowPixmap,arrowPixmap.rect());
 
     painter.end();
     return icon;
@@ -306,9 +325,8 @@ QIcon DDropdownMenu::createIcon()
 void DDropdownMenu::OnFontChangedSlot(const QFont &font)
 {
     m_font = font;
-    int fontsize =DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T9);
+    int fontsize =DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T8);
     m_font.setPixelSize(fontsize);
-
     m_pToolButton->setIcon(createIcon());
 }
 
@@ -366,18 +384,16 @@ QPixmap DDropdownMenu::setSvgColor(QString color)
     QDomElement elem = doc.documentElement();
     SetSVGBackColor(elem, "fill", color);
 
-    int fontsize =DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T9);
-    //m_font.setPixelSize(fontsize);
     //装换图片
     int scaled =qApp->devicePixelRatio() == 1.25 ? 2 : 1;
     QSvgRenderer svg_render(doc.toByteArray());
 
-    QPixmap pixmap(QSize(fontsize,5*scaled));
+    QPixmap pixmap(QSize(8,5)*scaled);
     pixmap.fill(Qt::transparent);
-    //pixmap.setDevicePixelRatio(scaled);
+    pixmap.setDevicePixelRatio(scaled);
 
     QPainter painter(&pixmap);
-    svg_render.render(&painter,pixmap.rect());
+    svg_render.render(&painter,QRect(0,0,8,5));
 
     return pixmap;
 }
