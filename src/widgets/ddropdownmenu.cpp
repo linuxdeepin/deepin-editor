@@ -44,7 +44,7 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     m_pToolButton->setFocusPolicy(Qt::StrongFocus);
     m_pToolButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
     m_pToolButton->setArrowType(Qt::NoArrow);
-    m_pToolButton->setFixedHeight(32);
+    m_pToolButton->setFixedHeight(28);
     m_pToolButton->installEventFilter(this);
     //this->installEventFilter(this);
     //设置图标
@@ -293,16 +293,17 @@ QIcon DDropdownMenu::createIcon()
 
     //根据字体大小设置icon大小
     //height 30    width QFontMetrics fm(font()) fm.width(text)+40;
-    int fontWidth = QFontMetrics(m_font).width(m_text);
+    int fontWidth = QFontMetrics(m_font).width(m_text)+20;
     int fontHeight = QFontMetrics(m_font).height();
     int iconW = 8;
     int iconH = 5;
 
 
-    int totalWidth = fontWidth + iconW+ 20;
-    int totalHeigth = 30;
+    int totalWidth = fontWidth + iconW + 20;
+    int totalHeigth = 28;
     m_pToolButton->setFixedSize(totalWidth,totalHeigth);
     m_pToolButton->setIconSize(QSize(totalWidth,totalHeigth));
+
 
     QPixmap icon(QSize(totalWidth,totalHeigth)*scaled);
     icon.setDevicePixelRatio(scaled);
@@ -311,12 +312,12 @@ QIcon DDropdownMenu::createIcon()
     QPainter painter(&icon);
     painter.setFont(m_font);
     painter.setPen(textColor);
-    painter.drawText(QRectF(5,(totalHeigth-fontHeight)/2,fontWidth,fontHeight),m_text);
+    painter.drawText(QRectF(10,(totalHeigth-fontHeight)/2,fontWidth,fontHeight),m_text);
 
     //arrowPixmap=arrowPixmap.scaled(iconW,iconH,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
 
     //qDebug()<<"==================="<<arrowPixmap.rect().height();
-    painter.drawPixmap(QRectF(fontWidth+10,(totalHeigth-arrowPixmap.rect().height())/2,iconW,iconH),arrowPixmap,arrowPixmap.rect());
+    painter.drawPixmap(QRectF(fontWidth,(totalHeigth-iconH)/2,iconW,iconH),arrowPixmap,arrowPixmap.rect());
 
     painter.end();
     return icon;
