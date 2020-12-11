@@ -45,6 +45,13 @@
                             "default": "true"
                         },
                         {
+                            "key": "hightlightcurrentline",
+                            "name": "hightlight current line",
+                            "type": "checkbox",
+                            "text": "Highlight current line",
+                            "default": "false"
+                        },
+                        {
                             "key": "showbookmark",
                             "name": "Show bookmarks icon",
                             "type": "checkbox",

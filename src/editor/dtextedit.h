@@ -271,6 +271,7 @@ public:
     void codeFLodAreaPaintEvent(QPaintEvent *event);
     void setBookmarkFlagVisable(bool isVisable,bool bIsFirstOpen = false);
     void setCodeFlodFlagVisable(bool isVisable,bool bIsFirstOpen = false);
+    void setHighLineCurrentLine(bool _);
     void setThemeWithPath(const QString &path);
     void setTheme(const KSyntaxHighlighting::Theme &theme, const QString &path);
     void loadHighlighter();
@@ -693,7 +694,7 @@ private:
 
     bool m_canUndo;
     bool m_canRedo;
-
+    bool m_HightlightYes;
     bool m_haveWordUnderCursor;
 
     bool m_cursorMark = false;

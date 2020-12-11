@@ -93,12 +93,6 @@ TextEdit::TextEdit(QWidget *parent)
     setMouseTracking(true);
     setContentsMargins(0,0,0,0);
     setEditPalette(palette().foreground().color().name(),palette().foreground().color().name());
-//    document()->setDocumentMargin(1);
- //   setAcceptRichText(false);
-    //m_timer = new QTimer(this);
-    //connect(m_timer,SIGNAL(timeout()),this,SLOT(onTimeout()));
-    //m_timer->setInterval(QGuiApplication::styleHints()->cursorFlashTime()/2);
-    //m_timer->start();
 
     grabGesture(Qt::TapGesture);
     grabGesture(Qt::TapAndHoldGesture);
@@ -109,11 +103,6 @@ TextEdit::TextEdit(QWidget *parent)
     // Init widgets.
     connect(this->verticalScrollBar(), &QScrollBar::valueChanged, this, &TextEdit::updateLineNumber);
     connect(this, &QPlainTextEdit::textChanged, this, [this]() {
-
-//        if (!m_bIsFileOpen) {
-//            checkBookmarkLineMove();
-//        }
-//        qDebug() << " textChanged";
         updateLineNumber();
         updateWordCount();
     });
@@ -212,17 +201,6 @@ TextEdit::TextEdit(QWidget *parent)
         isMarkAllLine(true, pColorsAllSelectWdg->getDefaultColor().name());
         renderAllSelections();
     });
-
-    //点击折叠/展开菜单，显示二级菜单;包括：折叠所有层次、展开所有层次、折叠当前层次、展开当前层次。
-//    m_collapseExpandMenu = new DMenu(tr("Collapse/Expand"),this);
-//    QAction *collapseAll = new QAction(tr("Collapse all"));
-//    QAction *expandAll = new QAction(tr("Expand all"));
-//    QAction *collapseThis = new QAction(tr("Collapse this"));
-//    QAction *expandThis = new QAction(tr("Expand this"));
-//    m_collapseExpandMenu->addAction(collapseAll);
-//    m_collapseExpandMenu->addAction(expandAll);
-//    m_collapseExpandMenu->addAction(collapseThis);
-//    m_collapseExpandMenu->addAction(expandThis);
 
     m_columnEditAction = new QAction(tr("Column Mode"),this);
     m_addComment = new QAction(tr("Add Comment"),this);
@@ -1750,14 +1728,11 @@ bool TextEdit::updateKeywordSelections(QString keyword,QTextCharFormat charForma
 void TextEdit::renderAllSelections()
 {
     QList<QTextEdit::ExtraSelection> selections;
-//    setExtraSelections(selections);
-
-//    for (auto findMatch : m_findMatchSelections) {
-//        findMatch.format = m_findMatchFormat;
-//        selections.append(findMatch);
-//    }
-
-    selections.append(m_currentLineSelection);
+    if(m_HightlightYes)
+        selections.append(m_currentLineSelection);
+    else {
+        selections.clear();
+    }
     selections.append(m_markAllSelection);
     selections.append(m_wordMarkSelections);
     selections.append(m_findMatchSelections);
@@ -1767,7 +1742,6 @@ void TextEdit::renderAllSelections()
     selections.append(m_endBracketSelection);
     selections.append(m_markFoldHighLightSelections);
     selections.append(m_altModSelections);
-//    selections.append(m_markAllSelection);
 
     setExtraSelections(selections);
 }
@@ -2093,23 +2067,24 @@ void TextEdit::setBookmarkFlagVisable(bool isVisable, bool bIsFirstOpen)
 
 void TextEdit::setCodeFlodFlagVisable(bool isVisable,bool bIsFirstOpen)
 {
-   int leftAreaWidth = m_pLeftAreaWidget->width();
-   int flodAreaWidth = m_pLeftAreaWidget->m_pFlodArea->width();
-//    qDebug()<<"leftAreaWidth = "<<leftAreaWidth;
-//    qDebug()<<"flodAreaWidth = "<<flodAreaWidth;
+    int leftAreaWidth = m_pLeftAreaWidget->width();
+    int flodAreaWidth = m_pLeftAreaWidget->m_pFlodArea->width();
     if(!bIsFirstOpen) {
-       if(isVisable) {
-           m_pLeftAreaWidget->setFixedWidth(leftAreaWidth + flodAreaWidth);
-//            qDebug()<<"isVisable = "<<isVisable;
-//            qDebug()<<"-----------------------leftAreaWidth = "<<m_pLeftAreaWidget->width();
-       } else {
-           m_pLeftAreaWidget->setFixedWidth(leftAreaWidth - flodAreaWidth);
-//            qDebug()<<"isVisable = "<<isVisable;
-//            qDebug()<<"-----------------------leftAreaWidth = "<<m_pLeftAreaWidget->width();
-       }
+        if(isVisable) {
+            m_pLeftAreaWidget->setFixedWidth(leftAreaWidth + flodAreaWidth);
+        } else {
+            m_pLeftAreaWidget->setFixedWidth(leftAreaWidth - flodAreaWidth);
+        }
     }
     m_pIsShowCodeFoldArea = isVisable;
     m_pLeftAreaWidget->m_pFlodArea->setVisible(isVisable);
+}
+
+void TextEdit::setHighLineCurrentLine(bool _)
+{
+    qDebug()<<"fuck"<<_;
+    m_HightlightYes = _;
+    renderAllSelections();
 }
 
 void TextEdit::updateLineNumber()
@@ -6189,8 +6164,6 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
             m_rightMenu->removeAction(m_voiceReadingAction);
             m_rightMenu->addAction(m_stopReadingAction);
         }
-
-
 
         bool voiceReadingState = false;
         QDBusMessage voiceReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",

@@ -85,7 +85,11 @@ Settings::Settings(QWidget *parent)
     connect(blankCharacter, &Dtk::Core::DSettingsOption::valueChanged, this, [ = ](QVariant value) {
         emit showBlankCharacter(value.toBool());
     });
-
+    //hightlightcurrentline
+    auto hightlightCurrentLine = settings->option("base.font.hightlightcurrentline");
+    connect(hightlightCurrentLine, &Dtk::Core::DSettingsOption::valueChanged, this, [ = ](QVariant value) {
+        emit hightLightCurrentLine(value.toBool());
+    });
     auto theme = settings->option("advance.editor.theme");
     connect(theme, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
         //emit themeChanged(value.toString());

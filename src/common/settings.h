@@ -71,6 +71,7 @@ signals:
     void adjustBookmark(bool enable);
     void showCodeFlodFlag(bool enable);
     void showBlankCharacter(bool enable);
+    void hightLightCurrentLine(bool enable);
     void themeChanged(const QString &theme);
     void setLineNumberShow(bool bIsShow);
     void changeWindowSize(QString mode);

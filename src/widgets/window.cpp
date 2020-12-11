@@ -154,7 +154,12 @@ Window::Window(DMainWindow *parent)
            wrapper->setShowBlankCharacter(bIsShow);
        }
     });
-
+    //setHighLineCurrentLine
+    connect(m_settings,&Settings::hightLightCurrentLine,this,[=] (bool bIsShow) {
+       for(EditWrapper *wrapper : m_wrappers.values()) {
+           wrapper->textEditor()->setHighLineCurrentLine(bIsShow);
+       }
+    });
     connect(m_settings, &Settings::showCodeFlodFlag, this, [ = ](bool enable) {
         for (EditWrapper *wrapper : m_wrappers.values()) {
             TextEdit *textedit = wrapper->textEditor();
@@ -700,6 +705,7 @@ EditWrapper *Window::createEditor()
     wrapper->setShowBlankCharacter(m_settings->settings->option("base.font.showblankcharacter")->value().toBool());
     //yanyuhan 设置行号显示
     wrapper->setLineNumberShow(m_settings->settings->option("base.font.showlinenumber")->value().toBool(),true);
+    wrapper->textEditor()->setHighLineCurrentLine(m_settings->settings->option("base.font.hightlightcurrentline")->value().toBool());
     wrapper->textEditor()->setBookmarkFlagVisable(m_settings->settings->option("base.font.showbookmark")->value().toBool(), true);
     wrapper->textEditor()->setCodeFlodFlagVisable(m_settings->settings->option("base.font.codeflod")->value().toBool(), true);
     wrapper->textEditor()->updateLineNumber();
@@ -1247,7 +1253,7 @@ void Window::popupPrintDialog()
         printer.setDocName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
     }
 
-    printer.setOutputFormat(QPrinter::PdfFormat);
+    //printer.setOutputFormat(QPrinter::PdfFormat);
 
     connect(&preview, &DPrintPreviewDialog::paintRequested, this, [ = ](QPrinter * printer) {
         currentWrapper()->textEditor()->print(printer);
