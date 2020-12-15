@@ -391,6 +391,21 @@ void Tabbar::handleDragActionChanged(Qt::DropAction action)
 
 bool Tabbar::eventFilter(QObject *, QEvent *event)
 {
+    //show file path at tab,blank file only show it's name.
+    if(m_tabPaths.length()>=0)
+    {
+        for(int i=0;i<m_tabPaths.length();i++)
+        {
+            if(m_tabPaths[i].contains("/.local/share/deepin/deepin-editor/"))
+            {
+                setTabToolTip(i,textAt(i));}
+            else
+            {
+                setTabToolTip(i,m_tabPaths[i]);
+            }
+        }
+    }
+
     if (event->type() == QEvent::MouseButtonPress) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
 
