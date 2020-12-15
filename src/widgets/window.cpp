@@ -574,6 +574,11 @@ bool Window::closeTab()
     bool isModified = wrapper->isModified();
     bool isDraftFile = wrapper->isDraftFile();
 //    bool isEmpty = wrapper->isPlainTextEmpty();
+    bool bIsBackupFile = false;
+
+    if (wrapper->textEditor()->getTruePath() != wrapper->textEditor()->filepath) {
+        bIsBackupFile = true;
+    }
 
     if(wrapper->getFileLoading()) isModified = false;
 
@@ -621,8 +626,11 @@ bool Window::closeTab()
            removeWrapper(filePath, true);
            m_tabbar->closeCurrentTab();
 
-           if (isDraftFile) {
-                QFile(filePath).remove();
+           if (bIsBackupFile) {
+               QFile(filePath).remove();
+               QFileInfo fileinfo (filePath);
+               qInfo() << "fileinfo.ab" << fileinfo.absoluteDir().dirName();
+               QDir(m_blankFileDir).rmdir(fileinfo.absoluteDir().dirName());
            }
 
            //focusActiveEditor();
@@ -631,13 +639,16 @@ bool Window::closeTab()
 
         //保存
         if(res == 2){
-            if(isDraftFile){
-              if(wrapper->saveDraftFile())
+            if(bIsBackupFile){
+              if(wrapper->saveFile())
               {
-                  focusActiveEditor();
+                  //focusActiveEditor();
                   removeWrapper(filePath, true);
                   m_tabbar->closeCurrentTab();
                   QFile(filePath).remove();
+                  QFileInfo fileinfo (filePath);
+                  qInfo() << "fileinfo.ab111" << fileinfo.absoluteDir().dirName();
+                  QDir(m_blankFileDir).rmdir(fileinfo.absoluteDir().dirName());
               }
 
             }else {
