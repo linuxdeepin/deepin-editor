@@ -34,6 +34,7 @@
 #include <QDebug>
 #include <QTimer>
 #include <QDir>
+#include <DSettingsOption>
 
 
 DCORE_USE_NAMESPACE
@@ -86,11 +87,11 @@ bool EditWrapper::getFileLoading()
     return (m_bQuit || m_bFileLoading);
 }
 
-void EditWrapper::openFile(const QString &filepath)
+void EditWrapper::openFile(const QString &filepath,QString qstrTruePath,bool bIsTemFile)
 {
+    m_bIsTemFile = bIsTemFile;
     // update file path.
-    updatePath(filepath);
-
+    updatePath(filepath,qstrTruePath);
     m_pTextEdit->setIsFileOpen();
 
     FileLoadThread *thread = new FileLoadThread(filepath);
@@ -319,7 +320,12 @@ QString EditWrapper::getTextEncode()
 
 bool EditWrapper::saveFile()
 {
-    QFile file(m_pTextEdit->filepath);
+    QString qstrFilePath = m_pTextEdit->getTruePath();
+    if (qstrFilePath.isEmpty()) {
+        qstrFilePath = m_pTextEdit->filepath;
+    }
+
+    QFile file(qstrFilePath);
 
     if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         QByteArray fileContent = m_pTextEdit->toPlainText().toLocal8Bit();
@@ -332,7 +338,7 @@ bool EditWrapper::saveFile()
             file.close();
             m_sFirstEncode = m_sCurEncode;
 
-            QFileInfo fi(filePath());
+            QFileInfo fi(qstrFilePath);
             m_tModifiedDateTime = fi.lastModified();
 
             // did save work?
@@ -349,7 +355,7 @@ bool EditWrapper::saveFile()
             file.close();
             m_sFirstEncode = m_sCurEncode;
 
-            QFileInfo fi(filePath());
+            QFileInfo fi(qstrFilePath);
             m_tModifiedDateTime = fi.lastModified();
 
             // did save work?
@@ -366,11 +372,61 @@ bool EditWrapper::saveFile()
 
 }
 
-void EditWrapper::updatePath(const QString &file)
+bool EditWrapper::saveTemFile(QString qstrDir)
+{
+    QFile file(qstrDir);
+
+    if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        QByteArray fileContent = m_pTextEdit->toPlainText().toLocal8Bit();
+        if(!fileContent.isEmpty())
+        {
+            QByteArray Outdata;
+            DetectCode::ChangeFileEncodingFormat(fileContent,Outdata,QString("UTF-8"),m_sCurEncode);
+            file.write(Outdata);
+            QFileDevice::FileError error = file.error();
+            file.close();
+            m_sFirstEncode = m_sCurEncode;
+
+            QFileInfo fi(qstrDir);
+            m_tModifiedDateTime = fi.lastModified();
+
+            // did save work?
+            // only finalize if stream status == OK
+            bool ok = (error == QFileDevice::NoError);
+
+            // update status.
+            if (ok)  m_pTextEdit->setModified(false);
+            return ok;
+
+        }else {
+            file.write(fileContent);
+            QFileDevice::FileError error = file.error();
+            file.close();
+            m_sFirstEncode = m_sCurEncode;
+
+            QFileInfo fi(qstrDir);
+            m_tModifiedDateTime = fi.lastModified();
+
+            // did save work?
+            // only finalize if stream status == OK
+            bool ok = (error == QFileDevice::NoError);
+
+            // update status.
+            if (ok)  m_pTextEdit->setModified(false);
+            return ok;
+        }
+    }else {
+        return false;
+    }
+
+}
+
+void EditWrapper::updatePath(const QString &file,QString qstrTruePath)
 {
     QFileInfo fi(file);
     m_tModifiedDateTime = fi.lastModified();
     m_pTextEdit->filepath = file;
+    m_pTextEdit->setBackupPath(qstrTruePath);
 }
 
 bool EditWrapper::isModified()
@@ -538,7 +594,61 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QByteArr
     if(m_bQuit) return;
     m_pTextEdit->setTextFinished();
 
-    m_pTextEdit->setModified(false);
+    QStringList temFileList = Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->value().toStringList();
+
+    for (int var = 0; var < temFileList.count(); ++var) {
+        QJsonParseError jsonError;
+        // 转化为 JSON 文档
+        QJsonDocument doucment = QJsonDocument::fromJson(temFileList.value(var).toUtf8(), &jsonError);
+        // 解析未发生错误
+        if (!doucment.isNull() && (jsonError.error == QJsonParseError::NoError))
+        {
+            if (doucment.isObject())
+            {
+                QString temFilePath;
+                QString localPath;
+                // JSON 文档为对象
+                QJsonObject object = doucment.object();  // 转化为对象
+
+                if (object.contains("localPath") || object.contains("temFilePath"))
+                {  // 包含指定的 key
+                    QJsonValue localPathValue = object.value("localPath");  // 获取指定 key 对应的 value
+                    QJsonValue temFilePathValue = object.value("temFilePath");  // 获取指定 key 对应的 value
+
+                    if (localPathValue.toString() == m_pTextEdit->filepath)
+                    {
+                        QJsonValue value = object.value("cursorPosition");  // 获取指定 key 对应的 value
+
+                        if (value.isString())
+                        {
+                            QTextCursor cursor = m_pTextEdit->textCursor();
+                            cursor.setPosition(value.toString().toInt());
+                            m_pTextEdit->setTextCursor(cursor);
+                            break;
+                        }
+                    } else if (temFilePathValue.toString() == m_pTextEdit->filepath) {
+                        QJsonValue value = object.value("cursorPosition");  // 获取指定 key 对应的 value
+
+                        if (value.isString())
+                        {
+                            QTextCursor cursor = m_pTextEdit->textCursor();
+                            cursor.setPosition(value.toString().toInt());
+                            m_pTextEdit->setTextCursor(cursor);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if (m_bIsTemFile) {
+        m_bIsTemFile = false;
+        m_pTextEdit->setModified(true);
+    } else {
+        m_pTextEdit->setModified(false);
+    }
+
     m_pBottomBar->setEncodeName(m_sCurEncode);
 }
 

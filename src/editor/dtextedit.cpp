@@ -4155,6 +4155,18 @@ void TextEdit::setCodeFoldWidgetHide(bool isHidden)
     }
 }
 
+void TextEdit::setBackupPath(QString qstrTruePath)
+{
+    m_qstrTruePath = qstrTruePath;
+    qInfo() << "m_qstrTruePath" << qstrTruePath;
+}
+
+QString TextEdit::getTruePath()
+{
+    qInfo() << "getTruePath" << m_qstrTruePath;
+    return m_qstrTruePath;
+}
+
 void TextEdit::updateLeftAreaWidget()
 {
     if(m_pLeftAreaWidget){

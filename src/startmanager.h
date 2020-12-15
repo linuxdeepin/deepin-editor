@@ -40,24 +40,26 @@ class StartManager : public QObject
 
     Q_CLASSINFO("D-Bus Interface", "com.deepin.Editor")
 
+public:
     struct FileTabInfo
     {
         int windowIndex;
         int tabIndex;
     };
 
-public:
     static StartManager* instance();
     StartManager(QObject *parent = nullptr);
     bool checkPath(const QString &file);
     bool ifKlu();
+    bool isMultiWindow();
+
 private:
     void initBlockShutdown();
 public slots:
     Q_SCRIPTABLE void openFilesInTab(QStringList files);
     Q_SCRIPTABLE void openFilesInWindow(QStringList files);
 
-    void createWindowFromWrapper(const QString &tabName, const QString &filePath, EditWrapper *buffer, bool isModifyed);
+    void createWindowFromWrapper(const QString &tabName, const QString &filePath, const QString &qstrTruePath, EditWrapper *buffer, bool isModifyed);
     void loadTheme(const QString &themeName);
 
     Window* createWindow(bool alwaysCenter = false);
@@ -79,6 +81,7 @@ private:
     QScopedPointer<Dock> m_pDock;
     QScopedPointer<Entry> m_pEntry;
     QStringList m_listFilePath;
+    QStringList m_qlistTemFile;
 };
 
 #endif

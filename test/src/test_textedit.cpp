@@ -1948,3 +1948,20 @@ TEST_F(test_textedit, appendExtraSelection)
     assert(1==1);
 }
 
+//void setBackupPath(QString qstrTruePath);
+TEST_F(test_textedit, setBackupPath)
+{
+    TextEdit *startManager = new TextEdit();
+    startManager->setBackupPath("aa");
+
+    assert(1==1);
+}
+
+// QString getTruePath();
+TEST_F(test_textedit, getTruePath)
+{
+    TextEdit *startManager = new TextEdit();
+    startManager->getTruePath();
+
+    assert(1==1);
+}

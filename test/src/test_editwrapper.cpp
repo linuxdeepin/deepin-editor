@@ -45,14 +45,14 @@ TEST_F(test_editwrapper, getFileLoading)
     assert(1==1);
 }
 
-//void openFile(const QString &filepath);
+//void openFile(const QString &filepath,QString qstrTruePath,bool bIsTemFile = false);
 TEST_F(test_editwrapper, openFile)
 {
     EditWrapper *wrapper = new EditWrapper();
     Settings *s = new Settings();
     wrapper->textEditor()->setSettings(s);
     wrapper->textEditor()->setWrapper(wrapper);
-    wrapper->openFile("aa");
+    wrapper->openFile("aa","bb");
     assert(1==1);
 }
 

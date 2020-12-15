@@ -59,9 +59,9 @@ public:
     Tabbar* getTabbar();
 
     void addTab(const QString &filepath, bool activeTab = false);
-    void addTabWithWrapper(EditWrapper *wrapper, const QString &filepath,
+    void addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, const QString &qstrTruePath,
                            const QString &tabName, int index = -1);
-    void closeTab();
+    bool closeTab();
     void restoreTab();
 
     void clearBlack();
@@ -100,6 +100,13 @@ public:
     void remberPositionRestore();
 
     void displayShortcuts();
+
+    void backupFile();
+
+    bool closeAllFiles();
+
+    void addTemFileTab(QString qstrPath,QString qstrName,QString qstrTruePath,bool bIsTemFile = false);
+
 public:
     //设置显示清除焦点
     void setChildrenFocus(bool ok);
@@ -200,6 +207,7 @@ private:
     QString m_themePath;
     QString m_tabbarActiveColor;
     QList <TextEdit *> m_reading_list;
+    QStringList m_qlistTemFile;///<临时文件列表
 };
 
 #endif

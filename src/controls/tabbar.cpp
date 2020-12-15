@@ -321,7 +321,7 @@ void Tabbar::insertFromMimeDataOnDragEnter(int index, const QMimeData *source)
 
 //    StartManager::instance()->setDragEnter(true);
     //qDebug() << "insertFromMimeDataOnDragEnter";
-    window->addTabWithWrapper(wrapper, wrapper->textEditor()->filepath, tabName, index);
+    window->addTabWithWrapper(wrapper,wrapper->textEditor()->filepath,wrapper->textEditor()->getTruePath(),tabName,index);
     //window->currentWrapper()->textEditor()->setModified(source->property("isModified").toBool());
     wrapper->textEditor()->setModified(source->property("isModified").toBool());
     window->focusActiveEditor();
@@ -343,7 +343,7 @@ void Tabbar::insertFromMimeData(int index, const QMimeData *source)
     }
 
     //qDebug() << "insertFromMimeData";
-    window->addTabWithWrapper(wrapper, wrapper->textEditor()->filepath, tabName, index);
+    window->addTabWithWrapper(wrapper, wrapper->textEditor()->filepath, wrapper->textEditor()->getTruePath(), tabName, index);
     //window->currentWrapper()->textEditor()->setModified(source->property("isModified").toBool());
     wrapper->textEditor()->setModified(source->property("isModified").toBool());
     window->focusActiveEditor();
@@ -641,7 +641,7 @@ void Tabbar::handleTabReleased(int index)
     Window *window = static_cast<Window *>(this->window());
     EditWrapper *wrapper = window->wrapper(tabPath);
 
-    StartManager::instance()->createWindowFromWrapper(tabName, tabPath, wrapper, wrapper->textEditor()->document()->isModified());
+    StartManager::instance()->createWindowFromWrapper(tabName, tabPath, wrapper->textEditor()->getTruePath(), wrapper, wrapper->textEditor()->document()->isModified());
 
     closeTab(newIndex);
     // remove wrapper from window, not delete.

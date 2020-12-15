@@ -500,6 +500,8 @@ public:
      * @param isHidden 是否隐藏
      */
     void setCodeFoldWidgetHide(bool isHidden);
+    void setBackupPath(QString qstrTruePath);
+    QString getTruePath();
 
 signals:
     void clickFindAction();
@@ -816,6 +818,7 @@ private:
     int m_endY = 0;
 
     bool m_bIsFindClose = false;///< 关闭查找框事件是否发生
+    QString m_qstrTruePath;///< 源文件路径
 
 public:
     LeftAreaTextEdit *m_pLeftAreaWidget;

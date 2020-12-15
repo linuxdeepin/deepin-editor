@@ -53,7 +53,7 @@ public:
     bool getFileLoading();
 
     //打开文件
-    void openFile(const QString &filepath);
+    void openFile(const QString &filepath,QString qstrTruePath,bool bIsTemFile = false);
     //以默认编码encode重写读取去文件
     bool readFile(QByteArray encode="");
     //保存文件
@@ -70,8 +70,9 @@ public:
     void reloadModifyFile();
     //获取文件编码
     QString getTextEncode();
+    bool saveTemFile(QString qstrDir);
     //跟新路径
-    void updatePath(const QString &file);
+    void updatePath(const QString &file,QString qstrTruePath = QString());
     //判断是否修改
     bool isModified();
     //判断是否草稿文件
@@ -119,7 +120,6 @@ private:
 
     QDateTime m_tModifiedDateTime;
 
-
     bool m_bTextChange = true;
     bool m_bIsContinue;
     //退出
@@ -128,6 +128,7 @@ private:
     bool m_bFileLoading = false;
 
     Window* m_pWindow= nullptr;
+    bool m_bIsTemFile = false;
 };
 
 #endif

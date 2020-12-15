@@ -21,6 +21,7 @@
  */
 
 #include "startmanager.h"
+//#include <settings.h>
 
 #include <DApplication>
 #include <QDesktopWidget>
@@ -28,6 +29,8 @@
 #include <QDebug>
 #include <QScreen>
 #include <QPropertyAnimation>
+#include <DSettingsOption>
+//#include <DSettings>
 
 DWIDGET_USE_NAMESPACE
 
@@ -81,6 +84,15 @@ bool StartManager::ifKlu()
     }
 }
 
+bool StartManager::isMultiWindow()
+{
+    if (m_windows.count() > 1) {
+        return true;
+    }
+
+    return false;
+}
+
 void StartManager::openFilesInWindow(QStringList files)
 {
     // Open window with blank tab if no files need open.
@@ -111,24 +123,97 @@ void StartManager::openFilesInWindow(QStringList files)
 void StartManager::openFilesInTab(QStringList files)
 {
     if (files.isEmpty()) {
+        QDir blankDirectory = QDir(QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files"));
+        QStringList blankFiles = blankDirectory.entryList(QStringList(), QDir::Files);
+
         if (m_windows.isEmpty()) {
-            QDir blankDirectory = QDir(QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files"));
-            QStringList blankFiles = blankDirectory.entryList(QStringList(), QDir::Files);
 
             Window *window = createWindow(true);
             window->showCenterWindow(true);
+            bool bIsEmpty = false;
+            m_qlistTemFile = Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->value().toStringList();
 
-            // Open blank files of last session.
-            if (!blankFiles.isEmpty()) {
-                QTimer::singleShot(50, [=] {
-                    for (const QString &blankFile : blankFiles) {
-                        window->addBlankTab(QDir(blankDirectory).filePath(blankFile));
-                    }
-                });
+            for (auto temFile : m_qlistTemFile) {
+                if (temFile.isEmpty()) {
+                    bIsEmpty = true;
+                }
             }
-            // Just open new window with blank tab if no blank files in last session.
-            else {
-                window->addBlankTab();
+
+            if (!bIsEmpty) {
+                QFileInfo fileInfo;
+                QFileInfo fileInfoTem;
+                bool bIsTemFile = false;
+
+                for (int i = 0;i < m_qlistTemFile.count();i++) {
+                    QJsonParseError jsonError;
+                    // 转化为 JSON 文档
+                    QJsonDocument doucment = QJsonDocument::fromJson(m_qlistTemFile.value(i).toUtf8(), &jsonError);
+                    // 解析未发生错误
+                    if (!doucment.isNull() && (jsonError.error == QJsonParseError::NoError)) {
+                        if (doucment.isObject()) {
+                            QString temFilePath;
+                            QString localPath;
+                            // JSON 文档为对象
+                            QJsonObject object = doucment.object();  // 转化为对象
+
+                            if (object.contains("temFilePath")) {  // 包含指定的 key
+                                QJsonValue value = object.value("temFilePath");  // 获取指定 key 对应的 value
+
+                                if (value.isString()) {  // 判断 value 是否为字符串
+                                    temFilePath = value.toString();  // 将 value 转化为字符串
+                                }
+                            }
+
+                            if (object.contains("modify")) {  // 包含指定的 key
+                                QJsonValue value = object.value("modify");  // 获取指定 key 对应的 value
+
+                                if (value.isBool()) {  // 判断 value 是否为字符串
+                                    bIsTemFile = value.toBool();
+                                }
+                            }
+
+                            if (object.contains("localPath")) {  // 包含指定的 key
+                                QJsonValue value = object.value("localPath");  // 获取指定 key 对应的 value
+
+                                if (value.isString()) {  // 判断 value 是否为字符串
+                                    localPath = value.toString();  // 将 value 转化为字符串
+                                    fileInfo.setFile(localPath);
+                                }
+                            }
+
+                            if (!temFilePath.isEmpty()) {
+                                if (temFilePath == localPath) {
+                                    int index = blankFiles.indexOf(fileInfo.fileName());
+
+                                    if (index >= 0) {
+                                        QString fileName = tr("Untitled %1").arg(index + 1);
+                                        window->addTemFileTab(temFilePath,fileName,localPath,bIsTemFile);
+                                    }
+                                } else {
+                                        window->addTemFileTab(temFilePath,fileInfo.fileName(),localPath,bIsTemFile);
+
+                                }
+                            } else {
+                                if (!localPath.isEmpty()) {
+                                    window->addTemFileTab(localPath,fileInfo.fileName(),localPath,bIsTemFile);
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                // Open blank files of last session.
+                if (!blankFiles.isEmpty()) {
+                    QTimer::singleShot(50, [=] {
+                        for (const QString &blankFile : blankFiles) {
+                            window->addBlankTab(QDir(blankDirectory).filePath(blankFile));
+                        }
+                    });
+                }
+                // Just open new window with blank tab if no blank files in last session.
+                else {
+                    window->addBlankTab();
+                }
             }
         }
         // Just active first window if no file is need opened.
@@ -205,12 +290,12 @@ void StartManager::openFilesInTab(QStringList files)
 }
 
 
-void StartManager::createWindowFromWrapper(const QString &tabName, const QString &filePath, EditWrapper *buffer, bool isModifyed)
+void StartManager::createWindowFromWrapper(const QString &tabName, const QString &filePath, const QString &qstrTruePath, EditWrapper *buffer, bool isModifyed)
 {
 
     Window *window = createWindow();
     //window->showCenterWindow();
-    window->addTabWithWrapper(buffer, filePath, tabName);
+    window->addTabWithWrapper(buffer, filePath, qstrTruePath, tabName);
     window->currentWrapper()->textEditor()->setModified(isModifyed);
     window->setMinimumSize(Tabbar::sm_pDragPixmap->rect().size());
 

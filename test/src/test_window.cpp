@@ -74,12 +74,12 @@ TEST_F(test_window, saveFile)
 
     assert(1==1);
 }
-//closeTab
+//closeTab()
 TEST_F(test_window, closeTab)
 {
     Window * window = new Window();
     window->addBlankTab("aabb");
-    window->closeTab();
+//    window->closeTab();
 //    delete window;
 //    window = nullptr;
 
@@ -240,7 +240,7 @@ TEST_F(test_window, addTabWithWrapper)
 {
     edit = new EditWrapper();
     window = new Window();
-    window->addTabWithWrapper(edit,"aabb","aabb",0);
+    window->addTabWithWrapper(edit,"aabb","aabb","aabb");
 
     assert(1==1);
 }
@@ -309,4 +309,31 @@ TEST_F(test_window, hideEvent)
 
     assert(1==1);
 }
+
 //TextEdit
+//void backupFile();
+TEST_F(test_window, backupFile)
+{
+    window = new Window();
+    window->backupFile();
+
+    assert(1==1);
+}
+
+//void closeAllFiles();
+TEST_F(test_window, closeAllFiles)
+{
+    window = new Window();
+    window->closeAllFiles();
+
+    assert(1==1);
+}
+
+//void addTemFileTab(QString qstrPath,QString qstrName,QString qstrTruePath,bool bIsTemFile = false);
+TEST_F(test_window, addTemFileTab)
+{
+    window = new Window();
+    window->addTemFileTab("aa","bb","cc");
+
+    assert(1==1);
+}

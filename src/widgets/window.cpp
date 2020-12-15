@@ -22,7 +22,6 @@
 
 #include "window.h"
 
-
 #include <DTitlebar>
 #include <DAnchors>
 #include <DThemeManager>
@@ -460,7 +459,7 @@ void Window::addTab(const QString &filepath, bool activeTab)
                     wrapper->textEditor()->setReadOnlyPermission(true);
                 }
 
-                wrapper->openFile(filepath);
+                wrapper->openFile(filepath,filepath);
 
             }
             // Activate window.
@@ -483,7 +482,7 @@ void Window::addTab(const QString &filepath, bool activeTab)
     }
 }
 
-void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, const QString &tabName, int index)
+void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, const QString &qstrTruePath, const QString &tabName, int index)
 {
     if (index == -1) {
         index = m_tabbar->currentIndex() + 1;
@@ -538,8 +537,7 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
         EditWrapper *wrapper = m_wrappers.value(strOldFilePath);
         m_tabbar->updateTab(tabIndex, strNewFilePath, QFileInfo(strNewFilePath).fileName());
 
-        wrapper->updatePath(strNewFilePath);
-
+        wrapper->updatePath(strNewFilePath,qstrTruePath);
 
         m_wrappers.remove(strOldFilePath);
         m_wrappers.insert(strNewFilePath, wrapper);
@@ -552,23 +550,22 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
     // add wrapper to this window.
     m_tabbar->addTabWithIndex(index, filepath, tabName);
     m_wrappers[filepath] = wrapper;
-    wrapper->updatePath(filepath);
+    wrapper->updatePath(filepath,qstrTruePath);
 
     showNewEditor(wrapper);
     wrapper->textEditor()->setThemeWithPath(m_themePath);
 }
 
-void Window::closeTab()
+bool Window::closeTab()
 {
+    const QString &filePath = m_tabbar->currentPath();
+    EditWrapper *wrapper = m_wrappers.value(filePath);
 
     if (m_reading_list.contains(currentWrapper()->textEditor())) {
         QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
     }
 
-    const QString &filePath = m_tabbar->currentPath();
-    EditWrapper *wrapper = m_wrappers.value(filePath);
-
-    if (!wrapper) return;
+    if (!wrapper) return false;
 
     disconnect(wrapper,nullptr);
     disconnect(wrapper->textEditor(), &TextEdit::textChanged,nullptr,nullptr);
@@ -576,30 +573,60 @@ void Window::closeTab()
     // this property holds whether the document has been modified by the user
     bool isModified = wrapper->isModified();
     bool isDraftFile = wrapper->isDraftFile();
-    bool isEmpty = wrapper->isPlainTextEmpty();
+//    bool isEmpty = wrapper->isPlainTextEmpty();
 
     if(wrapper->getFileLoading()) isModified = false;
 
-    // document has been modified or unsaved draft document.
-    // need to prompt whether to save.
-    if (isModified || (isDraftFile && !isEmpty)) {
-
-        DDialog *dialog = createDialog(tr("Do you want to save this file?"), "");
+    if (isDraftFile) {
+        DDialog *dialog = createDialog(tr("Do you want to save as another?"), "");
         int res = dialog->exec();
 
         //取消或关闭弹窗不做任务操作
-        if(res == 0 || res == -1) return;
+        if(res == 0 || res == -1) {
+            return false;
+        }
 
         //不保存
         if(res == 1){
            removeWrapper(filePath, true);
            m_tabbar->closeCurrentTab();
+           QFile(filePath).remove();
+           //focusActiveEditor();
+           return true;
+        }
+
+        //保存
+        if(res == 2){
+           if(wrapper->saveAsFile())
+           {
+               removeWrapper(filePath, true);
+               m_tabbar->closeCurrentTab();
+               //focusActiveEditor();
+           }
+        }
+    }
+
+    // document has been modified or unsaved draft document.
+    // need to prompt whether to save.
+    else {
+
+        DDialog *dialog = createDialog(tr("Do you want to save this file?"), "");
+        int res = dialog->exec();
+
+        //取消或关闭弹窗不做任务操作
+        if(res == 0 || res == -1) return false;
+
+        //不保存
+        if(res == 1){
+           removeWrapper(filePath, true);
+           m_tabbar->closeCurrentTab();
+
            if (isDraftFile) {
                 QFile(filePath).remove();
            }
 
-           focusActiveEditor();
-           return;
+           //focusActiveEditor();
+           return true;
         }
 
         //保存
@@ -618,25 +645,13 @@ void Window::closeTab()
                {
                    removeWrapper(filePath, true);
                    m_tabbar->closeCurrentTab();
-                   focusActiveEditor();
+                   //focusActiveEditor();
                }
             }
         }
-
-    } else {
-
-
-        removeWrapper(filePath, true);
-        m_tabbar->closeCurrentTab();
-
-        if (isDraftFile) {
-            QFile::remove(filePath);
-        }else {
-            m_closeFileHistory << m_tabbar->currentPath();
-        }
-
-        focusActiveEditor();
     }
+
+    return true;
 }
 
 void Window::restoreTab()
@@ -830,15 +845,13 @@ bool Window::saveFile()
     if(!wrapperEdit) return false;
 
     bool isDraftFile = wrapperEdit->isDraftFile();
-    bool isModified = wrapperEdit->isModified();
     bool isEmpty = wrapperEdit->isPlainTextEmpty();
-
     QFileInfo info(wrapperEdit->textEditor()->filepath);
-
     //判断文件是否有写的权限
     QFile temporaryBuffer(wrapperEdit->textEditor()->filepath);
     QFile::Permissions pers = temporaryBuffer.permissions();
     bool isWrite = ((pers & QFile::WriteUser) || (pers & QFile::WriteOwner) || (pers & QFile::WriteOther));
+
     if(!isWrite){
         DMessageManager::instance()->sendMessage(m_editorWidget->currentWidget(), QIcon(":/images/warning.svg")
                                                  , QString(tr("You do not have permission to save %1")).arg(info.fileName()));
@@ -1416,6 +1429,132 @@ void Window::displayShortcuts()
     connect(shortcutViewProcess, SIGNAL(finished(int)), shortcutViewProcess, SLOT(deleteLater()));
 }
 
+void Window::backupFile()
+{
+    QMap<QString, EditWrapper *> wrappers = m_wrappers;
+    QStringList listBackupInfo;
+    QString filePath,curPos;
+    QFileInfo fileInfo;
+    m_qlistTemFile.clear();
+    listBackupInfo = Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->value().toStringList();
+
+    for (EditWrapper *wrapper : wrappers) {
+        filePath = wrapper->textEditor()->filepath;
+        StartManager::FileTabInfo tabInfo = StartManager::instance()->getFileTabInfo(filePath);
+        curPos = QString::number(wrapper->textEditor()->textCursor().position());
+        fileInfo.setFile(filePath);
+
+        if (fileInfo.dir().absolutePath() == m_blankFileDir) {
+            QJsonObject jsonObject;
+            QJsonDocument document;
+            jsonObject.insert("localPath",filePath);
+            jsonObject.insert("cursorPosition",curPos);
+            jsonObject.insert("temFilePath",filePath);
+            jsonObject.insert("modify",wrapper->textEditor()->document()->isModified());
+            document.setObject(jsonObject);
+            QByteArray byteArray = document.toJson(QJsonDocument::Compact);
+            m_qlistTemFile.insert(tabInfo.tabIndex,byteArray);
+            wrapper->saveFile();
+        } else {
+            QString localPath = filePath;
+            fileInfo.setFile(localPath);
+
+            for (int var = 0; var < listBackupInfo.count();var ++) {
+                QJsonParseError jsonError;
+                // 转化为 JSON 文档
+                QJsonDocument document = QJsonDocument::fromJson(listBackupInfo.value(var).toUtf8(), &jsonError);
+                // 解析未发生错误
+                if (!document.isNull() && (jsonError.error == QJsonParseError::NoError)) {
+                    if (document.isObject()) {
+                        // JSON 文档为对象
+                        QJsonObject object = document.object();  // 转化为对象
+
+                        if (object.contains("temFilePath")) {  // 包含指定的 key
+                            QJsonValue value = object.value("temFilePath");  // 获取指定 key 对应的 value
+
+                            if (value.toString() == filePath) {
+
+                                if (object.contains("localPath")) {  // 包含指定的 key
+                                    QJsonValue value = object.value("localPath");  // 获取指定 key 对应的 value
+
+                                    if (value.isString()) {
+                                        localPath = value.toString();
+                                        fileInfo.setFile(localPath);
+                                    }
+
+                                    break;
+                                }
+                            }
+                        } else if (object.contains("localPath")) {
+                            QJsonValue value = object.value("localPath");
+
+                            if (value.toString() == filePath) {
+
+                                if (value.isString()) {
+                                    localPath = value.toString();
+                                    fileInfo.setFile(localPath);
+                                }
+
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            QJsonObject jsonObject;
+            QJsonDocument document;
+            jsonObject.insert("localPath",localPath);
+            jsonObject.insert("cursorPosition",QString::number(wrapper->textEditor()->textCursor().position()));
+            jsonObject.insert("modify",wrapper->textEditor()->document()->isModified());
+
+            if (wrapper->textEditor()->document()->isModified()) {
+                QString path = fileInfo.path();
+                int lastPath = fileInfo.path().lastIndexOf("/");
+                QString name = path.right(path.count() - lastPath - 1);
+                QDir dir(m_blankFileDir);
+                dir.mkdir(name);
+                QString qstrFilePath = m_blankFileDir + "/" + name + "/" + fileInfo.baseName() + ".deepin-editor_temfile." + fileInfo.suffix();
+                jsonObject.insert("temFilePath",qstrFilePath);
+                wrapper->saveTemFile(qstrFilePath);
+            }
+
+            document.setObject(jsonObject);
+            QByteArray byteArray = document.toJson(QJsonDocument::Compact);
+            m_qlistTemFile.insert(tabInfo.tabIndex,byteArray);
+        }
+    }
+
+    m_settings->settings->option("advance.editor.browsing_history_temfile")->setValue(m_qlistTemFile);
+}
+
+bool Window::closeAllFiles()
+{
+    bool bIsCloseAll = true;
+    QMap<QString, EditWrapper *> wrappers = m_wrappers;
+
+    for (int i = 0;i < wrappers.count();i++) {
+        m_tabbar->setCurrentIndex(0);
+        if (!closeTab()) {
+            bIsCloseAll = false;
+        }
+    }
+
+    return bIsCloseAll;
+}
+
+void Window::addTemFileTab(QString qstrPath,QString qstrName,QString qstrTruePath,bool bIsTemFile)
+{
+    EditWrapper *wrapper = createEditor();
+    m_tabbar->addTab(qstrPath, qstrName);
+
+    if (!qstrPath.isEmpty() && Utils::fileExists(qstrPath)) {
+        wrapper->openFile(qstrPath,qstrTruePath,bIsTemFile);
+    }
+
+    m_wrappers[qstrPath] = wrapper;
+    showNewEditor(wrapper);
+}
 
 void Window::setChildrenFocus(bool ok)
 {
@@ -1497,7 +1636,7 @@ void Window::addBlankTab(const QString &blankFile)
     wrapper->updatePath(blankTabPath);
 
     if (!blankFile.isEmpty() && Utils::fileExists(blankFile)) {
-        wrapper->openFile(blankFile);
+        wrapper->openFile(blankTabPath,blankTabPath);
     }
 
     m_wrappers[blankTabPath] = wrapper;
@@ -1516,73 +1655,10 @@ void Window::handleTabsClosed(QStringList tabList)
         return;
     }
 
-    QList<EditWrapper *> needSaveList;
     for (const QString &path : tabList) {
-        if (m_wrappers.contains(path)) {
-            EditWrapper *wrapper = m_wrappers.value(path);
-            bool isDraftFile = wrapper->isDraftFile();
-            bool isContentEmpty = wrapper->isPlainTextEmpty();
-            bool isModified = wrapper->isModified();
-
-            if ((isDraftFile && !isContentEmpty) || (!isDraftFile && isModified)) {
-                needSaveList << wrapper;
-            }
-        }
-    }
-
-    // popup save file dialog.
-    if (!needSaveList.isEmpty()) {
-        DDialog *dialog = createDialog(tr("Do you want to save all the files?"), "");
-
-        connect(dialog, &DDialog::buttonClicked, this, [&](int index) {
-            dialog->hide();
-
-            // 1: don't save.
-            // 2: save
-            if (index == 1) {
-                // need delete all draft documents.
-                for (EditWrapper *wrapper : needSaveList) {
-                    if (QFileInfo(wrapper->textEditor()->filepath).dir().absolutePath() == m_blankFileDir) {
-                        QFile::remove(wrapper->textEditor()->filepath);
-                    }
-                }
-
-            } else if (index == 2) {
-                for (EditWrapper *wrapper : needSaveList) {
-                    const QString &path = wrapper->textEditor()->filepath;
-                    if (Utils::isDraftFile(path)) {
-                        //saveAsFile();
-
-                        bool bRet = saveAsOtherTabFile(wrapper);
-                        if (bRet == false) {
-                            for (int i = 0; i < tabList.count(); i++) {
-                                if (tabList.at(i) == m_wrappers.key(wrapper)) {
-                                    tabList.removeAt(i);
-                                    break;
-                                }
-                            }
-                        }
-
-                    } else {
-                        wrapper->saveFile();
-                    }
-                }
-            }
-        });
-
-        int mode = dialog->exec();
-        // click cancel button.
-        if (mode == -1 || mode == 0) {
-            return;
-        }
-    }
-
-    // close tabs.
-    for (const QString &path : tabList) {
-        if (m_wrappers.contains(path)) {
-            removeWrapper(path, true);
-            m_tabbar->closeTab(m_tabbar->indexOf(path));
-        }
+        int index = m_tabbar->indexOf(path);
+        m_tabbar->setCurrentIndex(index);
+        closeTab();
     }
 }
 
@@ -2049,9 +2125,16 @@ void Window::resizeEvent(QResizeEvent *e)
 
 void Window::closeEvent(QCloseEvent *e)
 {
-
-
     PerformanceMonitor::closeAppStart();
+
+    if (StartManager::instance()->isMultiWindow()) {
+        if (!closeAllFiles()) {
+            e->ignore();
+            return;
+        }
+    } else {
+        backupFile();
+    }
 
     QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
 
@@ -2059,95 +2142,15 @@ void Window::closeEvent(QCloseEvent *e)
     QMap<QString, EditWrapper *> wrappers = m_wrappers;
 
     for (EditWrapper *wrapper : wrappers) {
-        // save all the not empty draft documents.
-        if (wrapper->isDraftFile() && !wrapper->isPlainTextEmpty()) {
-            wrapper->saveFile();
-            continue;
-        }
-
-       //删除空白草稿文件
-        if(wrapper->isDraftFile() && wrapper->isPlainTextEmpty())
-        {
-           QFile(wrapper->textEditor()->filepath).remove();
-        }
-
-        if (!wrapper->getFileLoading() && wrapper->isModified()) {
-            needSaveList << wrapper;
-        }
-    }
-
-    if (!needSaveList.isEmpty()) {
-        DDialog *dialog = createDialog(tr("Do you want to save all the files?"), "");
-        int res = dialog->exec();
-
-        //取消窗口
-        if(res == -1 || res == 0) {
-            e->ignore();
-            return;
-        }
-
-        //保存文件
-        if(res == 2){
-            for (EditWrapper *wrapper : wrappers) {
-                if (!wrapper->isModified()) {
-                    m_wrappers.remove(wrapper->filePath());
-                    disconnect(wrapper->textEditor());
-                    wrapper->setQuitFlag();
-                    wrapper->deleteLater();
-                } else {
-                   // hide();
-                    if (wrapper->saveFile()) {
-                        m_wrappers.remove(wrapper->filePath());
-                        disconnect(wrapper->textEditor());
-                        wrapper->setQuitFlag();
-                        wrapper->deleteLater();
-                    }
-                }
-            }
-        }
-
-        //不保存
-        if (res == 1){
-          //  hide();
-            for (EditWrapper *wrapper : wrappers) {
-                m_wrappers.remove(wrapper->filePath());
-                disconnect(wrapper->textEditor());
-                wrapper->setQuitFlag();
-                wrapper->deleteLater();
-            }
-        }
-    } else {
-       // hide();
-        for (EditWrapper *wrapper : wrappers) {
-            m_wrappers.remove(wrapper->filePath());
-            disconnect(wrapper->textEditor());
-            wrapper->setQuitFlag();
-            wrapper->deleteLater();
-        }
-    }
-
-    // save all draft documents.
-    QDir blankDir(m_blankFileDir);
-    QFileInfoList blankFiles = blankDir.entryInfoList(QDir::Files);
-
-    // clear blank files that have no content.
-    for (const QFileInfo &blankFile : blankFiles) {
-        QFile file(blankFile.absoluteFilePath());
-
-        if (!file.open(QFile::ReadOnly)) {
-            continue;
-        }
-
-        if (file.readAll().simplified().isEmpty()) {
-            file.remove();
-        }
-
-        file.close();
+        m_wrappers.remove(wrapper->filePath());
+        disconnect(wrapper->textEditor());
+        wrapper->deleteLater();
     }
 
     disconnect(m_settings,nullptr,this,nullptr);
     //this->close();
     emit close();
+    return DMainWindow::closeEvent(e);
 }
 
 void Window::hideEvent(QHideEvent *event)

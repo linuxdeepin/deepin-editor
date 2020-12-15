@@ -2049,6 +2049,12 @@
                             "default": ""
                         },
                         {
+                            "key": "browsing_history_temfile",
+                            "hide": true,
+                            "reset": false,
+                            "default": ""
+                        },
+                        {
                             "key": "theme",
                             "hide": true,
                             "reset": true,

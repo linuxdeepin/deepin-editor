@@ -74,3 +74,12 @@ TEST_F(test_startmanager,loadTheme )
 
     assert(1==1);
 }
+
+// bool isMultiWindow();
+TEST_F(test_startmanager,isMultiWindow )
+{
+    StartManager *startManager = StartManager::instance();
+    startManager->isMultiWindow();
+
+    assert(1==1);
+}
