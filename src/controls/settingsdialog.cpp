@@ -113,6 +113,7 @@ void GenerateSettingTranslate()
     auto base_font_showLineNumber = QObject::tr("Show line numbers");
     auto base_font_showBookmark = QObject::tr("Show bookmarks icon");
     auto showblankcharacter = QObject::tr("Show whitespaces and tabs");
+    auto base_font_highlightCurrentLine = QObject::tr("Highlight current line");
     auto shortcuts_editor_markName = QObject::tr("Color mark");
 
     //编码翻译

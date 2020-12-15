@@ -22,54 +22,54 @@
 <context>
     <name>EditWrapper</name>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="467"/>
+        <location filename="../src/editor/editwrapper.cpp" line="523"/>
         <source>File has changed on disk. Reload?</source>
         <translation>डिस्कमा फाइल परिवर्तन भएको छ। पुन: लोड गर्नुहोस?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="464"/>
+        <location filename="../src/editor/editwrapper.cpp" line="520"/>
         <source>File removed on the disk. Save it now?</source>
         <translation>डिस्कबाट फाइल हटाइयो सुरक्षित गर्नुहोस्।</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="224"/>
-        <location filename="../src/editor/editwrapper.cpp" line="270"/>
+        <location filename="../src/editor/editwrapper.cpp" line="225"/>
+        <location filename="../src/editor/editwrapper.cpp" line="271"/>
         <source>Do you want to save this file?</source>
         <translation type="unfinished">के तपाइँ यो फाईल सुरक्षित गर्न चाहनुहुन्छ?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="228"/>
-        <location filename="../src/editor/editwrapper.cpp" line="274"/>
+        <location filename="../src/editor/editwrapper.cpp" line="229"/>
+        <location filename="../src/editor/editwrapper.cpp" line="275"/>
         <source>Discard</source>
         <translation type="unfinished">त्याग्नुहोस्</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="498"/>
+        <location filename="../src/editor/editwrapper.cpp" line="554"/>
         <location filename="../src/widgets/bottombar.cpp" line="65"/>
         <source>INSERT</source>
         <translation>हाल्नु</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="501"/>
+        <location filename="../src/editor/editwrapper.cpp" line="557"/>
         <source>OVERWRITE</source>
         <translation>त्योमाथि</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="504"/>
+        <location filename="../src/editor/editwrapper.cpp" line="560"/>
         <source>R/O</source>
         <translation>आर / ओ</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="227"/>
-        <location filename="../src/editor/editwrapper.cpp" line="273"/>
+        <location filename="../src/editor/editwrapper.cpp" line="228"/>
+        <location filename="../src/editor/editwrapper.cpp" line="274"/>
         <source>Cancel</source>
         <translation>रद्द गर्नुहोस्</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="171"/>
-        <location filename="../src/editor/editwrapper.cpp" line="229"/>
-        <location filename="../src/editor/editwrapper.cpp" line="275"/>
-        <location filename="../src/editor/editwrapper.cpp" line="396"/>
+        <location filename="../src/editor/editwrapper.cpp" line="172"/>
+        <location filename="../src/editor/editwrapper.cpp" line="230"/>
+        <location filename="../src/editor/editwrapper.cpp" line="276"/>
+        <location filename="../src/editor/editwrapper.cpp" line="452"/>
         <source>Save</source>
         <translation>सुरक्षित गर्नु</translation>
     </message>
@@ -116,7 +116,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/startmanager.cpp" line="424"/>
+        <location filename="../src/startmanager.cpp" line="509"/>
         <source>File not saved</source>
         <translation>फाइल बचत भएन</translation>
     </message>
@@ -204,7 +204,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="31"/>
         <location filename="../src/controls/settingsdialog.cpp" line="107"/>
-        <location filename="../src/widgets/window.cpp" line="1323"/>
+        <location filename="../src/widgets/window.cpp" line="1344"/>
         <source>Window</source>
         <translation>विन्डो</translation>
     </message>
@@ -555,181 +555,186 @@
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="116"/>
+        <source>Highlight current line</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="117"/>
         <source>Color mark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="119"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="120"/>
         <source>Unicode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="120"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="121"/>
         <source>Arabic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="121"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="122"/>
         <source>Belarussian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="122"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="123"/>
         <source>Bulgarian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="123"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="124"/>
         <source>Chinese</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="124"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="125"/>
         <source>Czech</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="125"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="126"/>
         <source>Estonian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="126"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="127"/>
         <source>Croatian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="127"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="128"/>
         <source>Danish</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="128"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="129"/>
         <source>Finnish</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="129"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="130"/>
         <source>French</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="130"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="131"/>
         <source>German</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="131"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="132"/>
         <source>Greek</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="132"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="133"/>
         <source>Hebrew</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="133"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="134"/>
         <source>Hungarian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="134"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="135"/>
         <source>Japanese</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="135"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="136"/>
         <source>Korean</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="136"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="137"/>
         <source>Irish Gaelic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="137"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="138"/>
         <source>Italian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="138"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="139"/>
         <source>Lithuanian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="139"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="140"/>
         <source>Latvian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="140"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="141"/>
         <source>Polish</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="141"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="142"/>
         <source>Portuguese</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="142"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="143"/>
         <source>Russian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="143"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="144"/>
         <source>Romanian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="144"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="145"/>
         <source>Slovak</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="145"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="146"/>
         <source>Slovenian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="146"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="147"/>
         <source>Spanish</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="147"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="148"/>
         <source>Swedish</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="148"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="149"/>
         <source>Thai</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="149"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="150"/>
         <source>Turkish</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="150"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="151"/>
         <source>Ukrainian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="151"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="152"/>
         <source>Vietnamese</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="156"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="157"/>
         <source>European</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="159"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="160"/>
         <source>Semitic</source>
         <translation type="unfinished"></translation>
     </message>
@@ -754,19 +759,19 @@
         <translation>विन्डोको आकार</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="173"/>
-        <location filename="../src/editor/editwrapper.cpp" line="398"/>
-        <location filename="../src/widgets/window.cpp" line="888"/>
-        <location filename="../src/widgets/window.cpp" line="906"/>
-        <location filename="../src/widgets/window.cpp" line="981"/>
-        <location filename="../src/widgets/window.cpp" line="996"/>
+        <location filename="../src/editor/editwrapper.cpp" line="174"/>
+        <location filename="../src/editor/editwrapper.cpp" line="454"/>
+        <location filename="../src/widgets/window.cpp" line="909"/>
+        <location filename="../src/widgets/window.cpp" line="927"/>
+        <location filename="../src/widgets/window.cpp" line="1002"/>
+        <location filename="../src/widgets/window.cpp" line="1017"/>
         <source>Encoding</source>
         <translation type="unfinished">सङ्केतन</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="907"/>
-        <location filename="../src/widgets/window.cpp" line="982"/>
-        <location filename="../src/widgets/window.cpp" line="997"/>
+        <location filename="../src/widgets/window.cpp" line="928"/>
+        <location filename="../src/widgets/window.cpp" line="1003"/>
+        <location filename="../src/widgets/window.cpp" line="1018"/>
         <source>Line Endings</source>
         <translation type="unfinished">रेखा समाप्ति</translation>
     </message>
@@ -807,60 +812,68 @@
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../src/common/settings.cpp" line="102"/>
+        <location filename="../src/common/settings.cpp" line="106"/>
         <source>Standard</source>
         <translation>स्तर</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="102"/>
+        <location filename="../src/common/settings.cpp" line="106"/>
         <source>Customize</source>
         <translation>अनुकूलन गर्नुहोस्</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="116"/>
+        <location filename="../src/common/settings.cpp" line="120"/>
         <source>Normal</source>
         <translation>साधारण</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="116"/>
+        <location filename="../src/common/settings.cpp" line="120"/>
         <source>Maximum</source>
         <translation>अधिकतम</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="116"/>
+        <location filename="../src/common/settings.cpp" line="120"/>
         <source>Fullscreen</source>
         <translation>पूरा स्क्रीन</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="333"/>
+        <location filename="../src/common/settings.cpp" line="337"/>
         <source>This shortcut conflicts with system shortcut %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="335"/>
+        <location filename="../src/common/settings.cpp" line="339"/>
         <source>This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="450"/>
-        <location filename="../src/common/settings.cpp" line="458"/>
+        <location filename="../src/common/settings.cpp" line="454"/>
+        <location filename="../src/common/settings.cpp" line="462"/>
         <source>The shortcut %1 is invalid, please set another one.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="493"/>
+        <location filename="../src/common/settings.cpp" line="497"/>
         <source>Cancel</source>
         <translation type="unfinished">रद्द गर्नुहोस्</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="494"/>
+        <location filename="../src/common/settings.cpp" line="498"/>
         <source>Replace</source>
         <translation type="unfinished">बदल्नुहोस्</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="496"/>
+        <location filename="../src/common/settings.cpp" line="500"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>StartManager</name>
+    <message>
+        <location filename="../src/startmanager.cpp" line="189"/>
+        <source>Untitled %1</source>
+        <translation type="unfinished">शीर्षकविहिन% 1</translation>
     </message>
 </context>
 <context>
@@ -899,249 +912,249 @@
 <context>
     <name>TextEdit</name>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="138"/>
+        <location filename="../src/editor/dtextedit.cpp" line="127"/>
         <source>Undo</source>
         <translation>पूर्ववत गर्नुहोस्</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="139"/>
+        <location filename="../src/editor/dtextedit.cpp" line="128"/>
         <source>Redo</source>
         <translation>फेरि गर्नुहोस्</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="140"/>
+        <location filename="../src/editor/dtextedit.cpp" line="129"/>
         <source>Cut</source>
         <translation>काट्नुहोस्</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="141"/>
+        <location filename="../src/editor/dtextedit.cpp" line="130"/>
         <source>Copy</source>
         <translation>कपी</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="142"/>
+        <location filename="../src/editor/dtextedit.cpp" line="131"/>
         <source>Paste</source>
         <translation>टाँस्नुहोस्</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="143"/>
+        <location filename="../src/editor/dtextedit.cpp" line="132"/>
         <source>Delete</source>
         <translation>मेटाउनुहोस्</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="144"/>
+        <location filename="../src/editor/dtextedit.cpp" line="133"/>
         <source>Select All</source>
         <translation>सबै छान्नु</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="145"/>
-        <location filename="../src/widgets/window.cpp" line="308"/>
+        <location filename="../src/editor/dtextedit.cpp" line="134"/>
+        <location filename="../src/widgets/window.cpp" line="312"/>
         <source>Find</source>
         <translation>खोज्नुहोस्</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="146"/>
-        <location filename="../src/widgets/window.cpp" line="309"/>
+        <location filename="../src/editor/dtextedit.cpp" line="135"/>
+        <location filename="../src/widgets/window.cpp" line="313"/>
         <source>Replace</source>
         <translation>बदल्नुहोस्</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="147"/>
+        <location filename="../src/editor/dtextedit.cpp" line="136"/>
         <source>Go to Line</source>
         <translation>रेखामा जानुहोस्</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="148"/>
+        <location filename="../src/editor/dtextedit.cpp" line="137"/>
         <source>Turn on Read-Only mode</source>
         <translation>पढ्ने-मात्र मोड खोल्नुहोस्</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="149"/>
+        <location filename="../src/editor/dtextedit.cpp" line="138"/>
         <source>Turn off Read-Only mode</source>
         <translation>पढ्ने-मात्र मोड बन्द गर्नुहोस्</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="150"/>
+        <location filename="../src/editor/dtextedit.cpp" line="139"/>
         <source>Fullscreen</source>
         <translation>पूरा स्क्रीन</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="151"/>
+        <location filename="../src/editor/dtextedit.cpp" line="140"/>
         <source>Exit fullscreen</source>
         <translation>पूरा स्क्रिनबाट निस्कनुहोस्</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="152"/>
+        <location filename="../src/editor/dtextedit.cpp" line="141"/>
         <source>Display in file manager</source>
         <translation>फाईल प्रबन्धकमा प्रदर्शन गर्नुहोस्</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="153"/>
-        <location filename="../src/editor/dtextedit.cpp" line="228"/>
+        <location filename="../src/editor/dtextedit.cpp" line="142"/>
+        <location filename="../src/editor/dtextedit.cpp" line="206"/>
         <source>Add Comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="154"/>
+        <location filename="../src/editor/dtextedit.cpp" line="143"/>
         <source>Text to Speech</source>
         <translation>टेक्स्ट तु स्पीच </translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="155"/>
+        <location filename="../src/editor/dtextedit.cpp" line="144"/>
         <source>Stop reading</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="156"/>
+        <location filename="../src/editor/dtextedit.cpp" line="145"/>
         <source>Speech to Text</source>
         <translation>स्पीच  तु  टेक्स्ट </translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="157"/>
+        <location filename="../src/editor/dtextedit.cpp" line="146"/>
         <source>Translate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="158"/>
-        <location filename="../src/editor/dtextedit.cpp" line="227"/>
+        <location filename="../src/editor/dtextedit.cpp" line="147"/>
+        <location filename="../src/editor/dtextedit.cpp" line="205"/>
         <source>Column Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="159"/>
+        <location filename="../src/editor/dtextedit.cpp" line="148"/>
         <source>Add bookmark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="160"/>
+        <location filename="../src/editor/dtextedit.cpp" line="149"/>
         <source>Remove Bookmark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="161"/>
+        <location filename="../src/editor/dtextedit.cpp" line="150"/>
         <source>Previous bookmark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="162"/>
+        <location filename="../src/editor/dtextedit.cpp" line="151"/>
         <source>Next bookmark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="163"/>
+        <location filename="../src/editor/dtextedit.cpp" line="152"/>
         <source>Remove All Bookmarks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="164"/>
+        <location filename="../src/editor/dtextedit.cpp" line="153"/>
         <source>Fold All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="165"/>
+        <location filename="../src/editor/dtextedit.cpp" line="154"/>
         <source>Fold Current Level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="166"/>
+        <location filename="../src/editor/dtextedit.cpp" line="155"/>
         <source>Unfold All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="167"/>
+        <location filename="../src/editor/dtextedit.cpp" line="156"/>
         <source>Unfold Current Level</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="173"/>
+        <location filename="../src/editor/dtextedit.cpp" line="162"/>
         <source>Color Mark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="176"/>
+        <location filename="../src/editor/dtextedit.cpp" line="165"/>
         <source>Clear All Marks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="178"/>
+        <location filename="../src/editor/dtextedit.cpp" line="167"/>
         <source>Clear Last Mark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="192"/>
+        <location filename="../src/editor/dtextedit.cpp" line="181"/>
         <source>Mark</source>
         <translation type="unfinished">चिन्ह लगाउनुहोस्</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="210"/>
+        <location filename="../src/editor/dtextedit.cpp" line="199"/>
         <source>Mark All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="229"/>
+        <location filename="../src/editor/dtextedit.cpp" line="207"/>
         <source>Remove Comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="264"/>
+        <location filename="../src/editor/dtextedit.cpp" line="242"/>
         <source>Press ALT and click lines to edit in column mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="297"/>
+        <location filename="../src/editor/dtextedit.cpp" line="275"/>
         <source>Change Case</source>
         <translation>केस परिवर्तन गर्नुहोस्</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="298"/>
+        <location filename="../src/editor/dtextedit.cpp" line="276"/>
         <source>Upper Case</source>
         <translation>माथिल्लो केस</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="299"/>
+        <location filename="../src/editor/dtextedit.cpp" line="277"/>
         <source>Lower Case</source>
         <translation>तल्लो केस</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="300"/>
+        <location filename="../src/editor/dtextedit.cpp" line="278"/>
         <source>Capitalize</source>
         <translation>क्यापिटलिज गर्नुहोस्</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="351"/>
+        <location filename="../src/editor/dtextedit.cpp" line="329"/>
         <location filename="../src/widgets/bottombar.cpp" line="69"/>
         <source>None</source>
         <translation>कुनै पनि होइन</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1015"/>
+        <location filename="../src/editor/dtextedit.cpp" line="993"/>
         <source>Selected line(s) copied</source>
         <translation>चयनित लाइन (हरू) प्रतिलिपि गरियो</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1021"/>
+        <location filename="../src/editor/dtextedit.cpp" line="999"/>
         <source>Current line copied</source>
         <translation>हालको लाइन प्रतिलिपि गरियो</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1060"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1038"/>
         <source>Selected line(s) clipped</source>
         <translation>चयनित लाइन (हरू) क्लिप गरियो</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1066"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1044"/>
         <source>Current line clipped</source>
         <translation>हालको लाइन क्लिप गरियो</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3223"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3198"/>
         <source>Read-Only mode is off</source>
         <translation>पढ्ने मात्र मोड बन्द छ</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3230"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3238"/>
-        <location filename="../src/editor/dtextedit.cpp" line="5877"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3205"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3213"/>
+        <location filename="../src/editor/dtextedit.cpp" line="5864"/>
         <source>Read-Only mode is on</source>
         <translation>पढ्ने मात्र मोड चालू छ</translation>
     </message>
@@ -1165,140 +1178,135 @@
 <context>
     <name>Window</name>
     <message>
-        <location filename="../src/widgets/window.cpp" line="300"/>
+        <location filename="../src/widgets/window.cpp" line="304"/>
         <source>New window</source>
         <translation>नयाँ विन्डो</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="301"/>
+        <location filename="../src/widgets/window.cpp" line="305"/>
         <source>New tab</source>
         <translation>नयाँ ट्याब</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="302"/>
+        <location filename="../src/widgets/window.cpp" line="306"/>
         <source>Open file</source>
         <translation>फाईल खोल्नुहोस्</translation>
     </message>
     <message>
         <location filename="../src/controls/toast.cpp" line="39"/>
         <location filename="../src/controls/warningnotices.cpp" line="17"/>
-        <location filename="../src/widgets/window.cpp" line="304"/>
+        <location filename="../src/widgets/window.cpp" line="308"/>
         <source>Save as</source>
         <translation>यसरी राख</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="305"/>
+        <location filename="../src/widgets/window.cpp" line="309"/>
         <source>Print</source>
         <translation>प्रिन्ट गर्नुहोस्</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="306"/>
+        <location filename="../src/widgets/window.cpp" line="310"/>
         <source>Switch theme</source>
         <translation>स्विच थेम</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="422"/>
-        <location filename="../src/widgets/window.cpp" line="2002"/>
+        <location filename="../src/widgets/window.cpp" line="426"/>
+        <location filename="../src/widgets/window.cpp" line="2086"/>
         <source>Read-Only</source>
         <translation>पढ्ने मात्र </translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="850"/>
+        <location filename="../src/widgets/window.cpp" line="871"/>
         <source>Saved successfully</source>
         <translation>सफलतापूर्वक सुरक्षित गरियो</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1127"/>
+        <location filename="../src/widgets/window.cpp" line="1148"/>
         <source>Read-Only mode is on</source>
         <translation type="unfinished">पढ्ने मात्र मोड चालू छ</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1333"/>
+        <location filename="../src/widgets/window.cpp" line="1354"/>
         <source>Ctrl+&apos;=&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1336"/>
+        <location filename="../src/widgets/window.cpp" line="1357"/>
         <source>Ctrl+&apos;-&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1885"/>
+        <location filename="../src/widgets/window.cpp" line="1969"/>
         <source>Discard</source>
         <translation>त्याग्नुहोस्</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="307"/>
-        <location filename="../src/widgets/window.cpp" line="1383"/>
+        <location filename="../src/widgets/window.cpp" line="311"/>
+        <location filename="../src/widgets/window.cpp" line="1404"/>
         <source>Settings</source>
         <translation>सेटिङ्हरू</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="440"/>
+        <location filename="../src/widgets/window.cpp" line="445"/>
         <source>You do not have permission to open %1</source>
         <translation>तपाईंसँग% 1 खोल्न अनुमति छैन</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="476"/>
+        <location filename="../src/widgets/window.cpp" line="481"/>
         <source>Invalid file: %1</source>
         <translation>अमान्य फाइल:% 1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="886"/>
-        <location filename="../src/widgets/window.cpp" line="938"/>
-        <location filename="../src/widgets/window.cpp" line="979"/>
+        <location filename="../src/widgets/window.cpp" line="907"/>
+        <location filename="../src/widgets/window.cpp" line="959"/>
+        <location filename="../src/widgets/window.cpp" line="1000"/>
         <source>Save File</source>
         <translation>फाइल सुरक्षित गर्नु</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="581"/>
+        <location filename="../src/widgets/window.cpp" line="613"/>
         <source>Do you want to save this file?</source>
         <translation>के तपाइँ यो फाईल सुरक्षित गर्न चाहनुहुन्छ?</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="940"/>
+        <location filename="../src/widgets/window.cpp" line="961"/>
         <source>Encoding</source>
         <translation>सङ्केतन</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1365"/>
+        <location filename="../src/widgets/window.cpp" line="1386"/>
         <source>Editor</source>
         <translation>संपादक</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="836"/>
+        <location filename="../src/widgets/window.cpp" line="857"/>
         <source>You do not have permission to save %1</source>
         <translation>तपाईंसँग% 1 सुरक्षित गर्न अनुमति छैन</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="853"/>
+        <location filename="../src/widgets/window.cpp" line="581"/>
+        <location filename="../src/widgets/window.cpp" line="874"/>
         <source>Do you want to save as another?</source>
         <translation>के तपाईं अर्कोको रूपमा सुरक्षित गर्न चाहनुहुन्छ?</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1527"/>
-        <location filename="../src/widgets/window.cpp" line="2072"/>
-        <source>Do you want to save all the files?</source>
-        <translation>के तपाईँ सबै फाइलहरू सुरक्षित गर्न चाहनुहुन्छ?</translation>
-    </message>
-    <message>
-        <location filename="../src/widgets/window.cpp" line="1487"/>
+        <location filename="../src/widgets/window.cpp" line="1634"/>
         <source>Untitled %1</source>
         <translation>शीर्षकविहिन% 1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1282"/>
+        <location filename="../src/widgets/window.cpp" line="1303"/>
         <source>Current location remembered</source>
         <translation>हालको स्थान सम्झियो</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1884"/>
+        <location filename="../src/widgets/window.cpp" line="1968"/>
         <source>Cancel</source>
         <translation>रद्द गर्नुहोस्</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="303"/>
-        <location filename="../src/widgets/window.cpp" line="1886"/>
+        <location filename="../src/widgets/window.cpp" line="307"/>
+        <location filename="../src/widgets/window.cpp" line="1970"/>
         <source>Save</source>
         <translation>सुरक्षित गर्नु</translation>
     </message>
