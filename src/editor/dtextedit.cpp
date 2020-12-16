@@ -206,7 +206,7 @@ TextEdit::TextEdit(QWidget *parent)
     m_addComment = new QAction(tr("Add Comment"),this);
     m_cancelComment = new QAction(tr("Remove Comment"),this);
 
-    connect(m_rightMenu, &DMenu::aboutToHide, this, &TextEdit::removeHighlightWordUnderCursor);
+    connect(m_rightMenu, &DMenu::destroyed, this, &TextEdit::removeHighlightWordUnderCursor);
     connect(m_undoAction, &QAction::triggered, this, &TextEdit::columnUndo);
     connect(m_redoAction, &QAction::triggered, this, &TextEdit::columnRedo);
     connect(m_cutAction, &QAction::triggered, this, &TextEdit::clickCutAction);
@@ -3089,7 +3089,6 @@ void TextEdit::onMoveToNextBookMark()
 void TextEdit::onClearBookMark()
 {
     m_listBookmark.clear();
-    qDebug() << "ClearBookMark:" << m_listBookmark;
     m_pLeftAreaWidget->m_pBookMarkArea->update();
 }
 
@@ -4587,6 +4586,10 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
             m_mouseClickPos = mouseEvent->pos();
             if (mouseEvent->button() == Qt::RightButton) {
                 m_rightMenu->clear();
+                m_rightMenu->deleteLater();
+                m_rightMenu = nullptr;
+                m_rightMenu = new DMenu(this);
+                connect(m_rightMenu, &DMenu::destroyed, this, &TextEdit::removeHighlightWordUnderCursor);
                 int line = getLineFromPoint(mouseEvent->pos());
                 if (m_listBookmark.contains(line)) {
                     m_rightMenu->addAction(m_cancelBookMarkAction);
@@ -4670,7 +4673,12 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
             } else {
                 m_mouseClickPos = mouseEvent->pos();
                 m_rightMenu->clear();
+                m_rightMenu->deleteLater();
+                m_rightMenu = nullptr;
+                m_rightMenu = new DMenu(this);
+                connect(m_rightMenu, &DMenu::destroyed, this, &TextEdit::removeHighlightWordUnderCursor);
                 int line = getLineFromPoint(mouseEvent->pos());
+
                 if (m_listFlodIconPos.contains(line - 1)) {
                     m_rightMenu->addAction(m_flodAllLevel);
                     m_rightMenu->addAction(m_unflodAllLevel);
@@ -6029,7 +6037,10 @@ void TextEdit::wheelEvent(QWheelEvent *e)
 void TextEdit::contextMenuEvent(QContextMenuEvent *event)
 {
     m_rightMenu->clear();
-
+    m_rightMenu->deleteLater();
+    m_rightMenu = nullptr;
+    m_rightMenu = new DMenu(this);
+    connect(m_rightMenu, &DMenu::destroyed, this, &TextEdit::removeHighlightWordUnderCursor);
     QString wordAtCursor = getWordAtMouse();
 
     m_mouseClickPos = event->pos();
