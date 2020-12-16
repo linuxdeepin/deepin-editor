@@ -48,7 +48,7 @@ QByteArray DetectCode::UchardetCode(QString filepath)
             int retval = uchardet_handle_data(handle, buff, len);
             if (retval != 0)
             {
-               //qDebug()<<QStringLiteral("Uchardet分析编码失败")<<QString(buff);
+                qDebug()<<QStringLiteral("Uchardet分析编码失败")<<QString(buff);
                 continue;
             }
 
@@ -116,14 +116,9 @@ QByteArray DetectCode::EncaDetectCode(QString filepath)
                 EncaEncoding encoding = enca_analyse(analyser,buff,len);
                 charset = enca_charset_name(encoding.charset,EncaNameStyle::ENCA_NAME_STYLE_MIME);
                 qDebug()<<QStringLiteral("ENCA文本的编码方式是:")<<charset;
-
                 //识别文本编码识别
-                if(encoding.charset == -1)
-                {
-
-                }
-
-               // break;
+                if(encoding.charset == -1) continue;
+                break;
            }
 
            enca_analyser_free(analyser);

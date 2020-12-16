@@ -34,26 +34,21 @@ BottomBar::BottomBar(QWidget *parent)
       m_pCharCountLabel(new DLabel),
       m_pCursorStatus(new DLabel),
       m_pEncodeMenu(DDropdownMenu::createEncodeMenu()),
-      m_pHighlightMenu(new DDropdownMenu()),
+      m_pHighlightMenu(DDropdownMenu::createHighLightMenu()),
       m_rowStr(tr("Row")),
       m_columnStr(tr("Column")),
       m_chrCountStr(tr("Characters %1"))
 {
     QFont font;
     font.setFamily("SourceHanSansSC-Normal");
-    //font.setPixelSize(11);
     m_pPositionLabel->setFont(font);
     m_pCharCountLabel->setFont(font);
     m_pCursorStatus->setFont(font);
-   // m_pEncodeMenu->setFontEx(font);
-   // m_pHighlightMenu->setFontEx(font);
-
 
     DFontSizeManager::instance()->bind(m_pPositionLabel, DFontSizeManager::T9);
     DFontSizeManager::instance()->bind(m_pCharCountLabel, DFontSizeManager::T9);
     DFontSizeManager::instance()->bind(m_pCursorStatus, DFontSizeManager::T9);
-    //DFontSizeManager::instance()->bind(m_pEncodeMenu->getButton(), DFontSizeManager::T9);
-   // DFontSizeManager::instance()->bind(m_pHighlightMenu->getButton(), DFontSizeManager::T9);
+
 
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setContentsMargins(29, 1, 10, 0);
@@ -91,8 +86,15 @@ BottomBar::BottomBar(QWidget *parent)
         {
             m_pEncodeMenu->setCurrentTextOnly(pAct->text());
         }
+    });
+
+    //切换文件类型
+    connect(m_pHighlightMenu, &DDropdownMenu::currentActionChanged, this,[this](QAction* pAct){
+
+        m_pHighlightMenu->setCurrentTextOnly(pAct->text());
 
     });
+
 }
 
 BottomBar::~BottomBar()
@@ -113,22 +115,11 @@ void BottomBar::updateWordCount(int charactorCount)
 void BottomBar::setEncodeName(const QString &name)
 {
     m_pEncodeMenu->setCurrentTextOnly(name);
-    //m_wrapper->textEditor()->setTextCode(name);
 }
 
 void BottomBar::setCursorStatus(const QString &text)
 {
     m_pCursorStatus->setText(text);
-}
-
-void BottomBar::setHighlightMenu(DMenu *menu)
-{
-    m_pHighlightMenu->setMenu(menu);
-}
-
-void BottomBar::setHightlightName(const QString &name)
-{
-    m_pHighlightMenu->setCurrentTextOnly(name);
 }
 
 void BottomBar::setPalette(const QPalette &palette)
@@ -175,6 +166,15 @@ void BottomBar::setChildrenFocus(bool ok,QWidget* preOrderWidget)
     }
 }
 
+DDropdownMenu *BottomBar::getEncodeMenu()
+{
+    return m_pEncodeMenu;
+}
+
+DDropdownMenu *BottomBar::getHighlightMenu()
+{
+    return m_pHighlightMenu;
+}
 
 void BottomBar::paintEvent(QPaintEvent *)
 {

@@ -38,8 +38,6 @@ LeftAreaTextEdit::LeftAreaTextEdit(TextEdit *textEdit) :
     m_pLineNumberArea->setContentsMargins(0,0,0,0);
     m_pBookMarkArea->setFixedWidth(14);
     m_pFlodArea->setFixedWidth(14);
-    //m_pBookMarkArea->setMinimumWidth(20);
-//    m_pFlodArea->setMinimumWidth(20);
     pHLayout->addWidget(m_pBookMarkArea);
     pHLayout->addWidget(m_pLineNumberArea);
     pHLayout->addWidget(m_pFlodArea);
@@ -60,7 +58,14 @@ void LeftAreaTextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
 
 int LeftAreaTextEdit::lineNumberAreaWidth()
 {
-    return m_pTextEdit->lineNumberAreaWidth();
+    int digits = 1;
+    int max = qMax(1, m_pTextEdit->document()->blockCount());
+    while (max >= 10) {
+        max /= 10;
+        ++digits;
+    }
+
+    return 13 + fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits + 40;
 }
 
 
@@ -72,6 +77,28 @@ void LeftAreaTextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
 void LeftAreaTextEdit::codeFlodAreaPaintEvent(QPaintEvent *event)
 {
     m_pTextEdit->codeFLodAreaPaintEvent(event);
+}
+
+void LeftAreaTextEdit::updateLineNumber()
+{
+   if(m_pLineNumberArea) m_pLineNumberArea->update();
+}
+
+void LeftAreaTextEdit::updateBookMark()
+{
+   if(m_pBookMarkArea) m_pBookMarkArea->update();
+}
+
+void LeftAreaTextEdit::updateCodeFlod()
+{
+   if(m_pFlodArea) m_pFlodArea->update();
+}
+
+void LeftAreaTextEdit::updateAll()
+{
+    if(m_pLineNumberArea) m_pLineNumberArea->update();
+    if(m_pBookMarkArea) m_pBookMarkArea->update();
+    if(m_pFlodArea) m_pFlodArea->update();
 }
 
 

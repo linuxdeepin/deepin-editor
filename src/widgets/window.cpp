@@ -542,7 +542,7 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
         m_wrappers.remove(strOldFilePath);
         m_wrappers.insert(strNewFilePath, wrapper);
 
-        wrapper->textEditor()->loadHighlighter();
+       // wrapper->textEditor()->loadHighlighter();
     });
 
     connect(wrapper, &EditWrapper::requestSaveAs, this, &Window::saveAsFile);
@@ -553,7 +553,7 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
     wrapper->updatePath(filepath,qstrTruePath);
 
     showNewEditor(wrapper);
-    wrapper->textEditor()->setThemeWithPath(m_themePath);
+    wrapper->OnThemeChangeSlot(m_themePath);
 }
 
 bool Window::closeTab()
@@ -713,13 +713,13 @@ EditWrapper *Window::createEditor()
         wrapper->updatePath(strNewFilePath);
         m_wrappers.remove(strOldFilePath);
         m_wrappers.insert(strNewFilePath, wrapper);
-        wrapper->textEditor()->loadHighlighter();
+       // wrapper->textEditor()->loadHighlighter();
     });
 
 
     bool wordWrap = m_settings->settings->option("base.font.wordwrap")->value().toBool();
     wrapper->textEditor()->m_pIsShowCodeFoldArea = m_settings->settings->option("base.font.codeflod")->value().toBool();
-    wrapper->textEditor()->setThemeWithPath(m_themePath);
+    wrapper->OnThemeChangeSlot(m_themePath);
     wrapper->textEditor()->setSettings(m_settings);
     wrapper->textEditor()->setTabSpaceNumber(m_settings->settings->option("advance.editor.tabspacenumber")->value().toInt());
     wrapper->textEditor()->setFontFamily(m_settings->settings->option("base.font.family")->value().toString());
@@ -734,7 +734,7 @@ EditWrapper *Window::createEditor()
     wrapper->textEditor()->setHighLineCurrentLine(m_settings->settings->option("base.font.hightlightcurrentline")->value().toBool());
     wrapper->textEditor()->setBookmarkFlagVisable(m_settings->settings->option("base.font.showbookmark")->value().toBool(), true);
     wrapper->textEditor()->setCodeFlodFlagVisable(m_settings->settings->option("base.font.codeflod")->value().toBool(), true);
-    wrapper->textEditor()->updateLineNumber();
+    wrapper->textEditor()->updateLeftAreaWidget();
 
     return wrapper;
 }
@@ -945,7 +945,7 @@ QString Window::saveAsFileToDisk()
         m_wrappers.remove(wrapper->filePath());
         m_wrappers.insert(newFilePath, wrapper);
 
-        wrapper->textEditor()->loadHighlighter();
+        //wrapper->textEditor()->loadHighlighter();
 
         QFileInfo info(newFilePath);
         m_tabbar->updateTab(m_tabbar->currentIndex(), newFilePath, info.fileName());
@@ -990,7 +990,7 @@ QString Window::saveBlankFileToDisk()
         m_wrappers.remove(filePath);
         m_wrappers.insert(newFilePath, wrapper);
 
-        wrapper->textEditor()->loadHighlighter();
+       // wrapper->textEditor()->loadHighlighter();
         return newFilePath;
     }
 
@@ -1048,7 +1048,7 @@ bool Window::saveAsOtherTabFile(EditWrapper *wrapper)
         //wrapper->setEndOfLineMode(eol);
         wrapper->saveFile();
 
-        wrapper->textEditor()->loadHighlighter();
+       // wrapper->textEditor()->loadHighlighter();
     } else {
         return false;
     }
@@ -1762,7 +1762,7 @@ void Window::handleFindNext()
     wrapper->textEditor()->updateCursorKeywordSelection(wrapper->textEditor()->getPosition(), true);
     wrapper->textEditor()->renderAllSelections();
     wrapper->textEditor()->restoreMarkStatus();
-    wrapper->textEditor()->updateLineNumber();
+    wrapper->textEditor()->updateLeftAreaWidget();
 }
 
 void Window::handleFindPrev()
@@ -1773,7 +1773,7 @@ void Window::handleFindPrev()
     wrapper->textEditor()->updateCursorKeywordSelection(wrapper->textEditor()->getPosition(), false);
     wrapper->textEditor()->renderAllSelections();
     wrapper->textEditor()->restoreMarkStatus();
-    wrapper->textEditor()->updateLineNumber();
+    wrapper->textEditor()->updateLeftAreaWidget();
 }
 
 void Window::slotFindbarClose()
@@ -1862,7 +1862,7 @@ void Window::handleUpdateSearchKeyword(QWidget *widget, const QString &file, con
         }
     }
     EditWrapper *wrapper = currentWrapper();
-    wrapper->textEditor()->updateLineNumber();
+    wrapper->textEditor()->updateLeftAreaWidget();
 }
 
 void Window::addBottomWidget(QWidget *widget)
@@ -1894,20 +1894,12 @@ void Window::loadTheme(const QString &path)
 
     QVariantMap jsonMap = Utils::getThemeMapFromPath(path);
     const QString &backgroundColor = jsonMap["editor-colors"].toMap()["background-color"].toString();
-    //m_tabbarActiveColor = jsonMap["app-colors"].toMap()["tab-active"].toString();
-
     const QString &tabbarStartColor = jsonMap["app-colors"].toMap()["tab-background-start-color"].toString();
     const QString &tabbarEndColor = jsonMap["app-colors"].toMap()["tab-background-end-color"].toString();
 
-//    if (QColor(backgroundColor).lightness() < 128) {
-//        DThemeManager::instance()->setTheme("dark");
-//    } else {
-//        DThemeManager::instance()->setTheme("light");
-//    }
-    //changeTitlebarBackground(tabbarStartColor, tabbarEndColor);
 
     for (EditWrapper *wrapper : m_wrappers.values()) {
-        wrapper->textEditor()->setThemeWithPath(path);
+        wrapper->OnThemeChangeSlot(m_themePath);
     }
 
     m_themePanel->setBackground(backgroundColor);

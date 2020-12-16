@@ -24,7 +24,9 @@
 #include "../common/utils.h"
 #include "leftareaoftextedit.h"
 #include "drecentmanager.h"
-
+#include "../common/settings.h"
+#include <DSettingsOption>
+#include <DSettings>
 #include <unistd.h>
 #include <QCoreApplication>
 #include <QApplication>
@@ -35,26 +37,28 @@
 #include <QTimer>
 #include <QDir>
 #include <DSettingsOption>
+#include <QFileInfo>
+//#include "../common/CSyntaxHighlighter.h"
 
 
 DCORE_USE_NAMESPACE
 
 EditWrapper::EditWrapper(Window* window,QWidget *parent)
     : QWidget(parent),
+      m_pWindow(window),
       m_pTextEdit(new TextEdit(this)),
       m_pBottomBar(new BottomBar(this)),
-      m_pWaringNotices(new WarningNotices(WarningNotices::ResidentType,this)),
-      m_pWindow(window)
+      m_pWaringNotices(new WarningNotices(WarningNotices::ResidentType,this))
+
 {
     m_pWaringNotices->hide();
     // Init layout and widgets.
     QHBoxLayout* m_layout = new QHBoxLayout;
+    m_pLeftAreaTextEdit = m_pTextEdit->m_pLeftAreaWidget;
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->setSpacing(0);
-    m_layout->addWidget(m_pTextEdit->m_pLeftAreaWidget);
+    m_layout->addWidget(m_pLeftAreaTextEdit);
     m_layout->addWidget(m_pTextEdit);
-
-    m_pBottomBar->setHighlightMenu(m_pTextEdit->getHighlightMenu());
     m_pTextEdit->setWrapper(this);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
@@ -65,9 +69,6 @@ EditWrapper::EditWrapper(Window* window,QWidget *parent)
     setLayout(mainLayout);
 
     connect(m_pTextEdit, &TextEdit::cursorModeChanged, this, &EditWrapper::handleCursorModeChanged);
-    connect(m_pTextEdit, &TextEdit::hightlightChanged, this, &EditWrapper::handleHightlightChanged);
-    connect(m_pTextEdit, &TextEdit::textChanged, this, &EditWrapper::slotTextChange);
-
     connect(m_pWaringNotices, &WarningNotices::reloadBtnClicked, this, &EditWrapper::reloadModifyFile);
     connect(m_pWaringNotices, &WarningNotices::saveAsBtnClicked, this, &EditWrapper::requestSaveAs);
 }
@@ -94,12 +95,17 @@ void EditWrapper::openFile(const QString &filepath,QString qstrTruePath,bool bIs
     updatePath(filepath,qstrTruePath);
     m_pTextEdit->setIsFileOpen();
 
-    FileLoadThread *thread = new FileLoadThread(filepath);
+//    CSyntaxHighlighter* pCSyntaxHighlighter = new CSyntaxHighlighter(QFileInfo(filePath()).fileName());
+//    qRegisterMetaType<KSyntaxHighlighting::Definition>("KSyntaxHighlighting::Definition");
+//    connect(pCSyntaxHighlighter,&CSyntaxHighlighter::sigDefinition,this,&EditWrapper::loadSyntaxHighlighter);
+//    connect(pCSyntaxHighlighter, &CSyntaxHighlighter::finished, pCSyntaxHighlighter, &CSyntaxHighlighter::deleteLater);
+//    pCSyntaxHighlighter->start();
 
+
+    FileLoadThread *thread = new FileLoadThread(filepath);
     // begin to load the file.
     connect(thread, &FileLoadThread::loadFinished, this, &EditWrapper::handleFileLoadFinished);
     connect(thread, &FileLoadThread::finished, thread, &FileLoadThread::deleteLater);
-
     thread->start();
 }
 
@@ -537,15 +543,6 @@ void EditWrapper::showNotify(const QString &message)
     }
 }
 
-bool EditWrapper::getTextChangeFlag()
-{
-    return m_bTextChange;
-}
-
-void EditWrapper::setTextChangeFlag(bool bFlag)
-{
-    m_bTextChange = bFlag;
-}
 
 void EditWrapper::handleCursorModeChanged(TextEdit::CursorMode mode)
 {
@@ -562,13 +559,32 @@ void EditWrapper::handleCursorModeChanged(TextEdit::CursorMode mode)
     }
 }
 
-void EditWrapper::handleHightlightChanged(const QString &name)
-{
-    m_pBottomBar->setHightlightName(name);
-}
 
 void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QByteArray &content)
 {   
+
+    qint64 time1 = QDateTime::currentMSecsSinceEpoch();
+
+    m_Definition = m_Repository.definitionForFileName(m_pTextEdit->filepath);
+    qDebug()<<"===========begin load file:"<<time1;
+    qDebug()<<m_Definition.isValid()<<m_Definition.filePath()<<m_Definition.translatedName();
+    if(m_Definition.isValid() && !m_Definition.filePath().isEmpty()){
+        if(!m_pSyntaxHighlighter) m_pSyntaxHighlighter = new KSyntaxHighlighting::SyntaxHighlighter(m_pTextEdit->document());
+        QString m_themePath = Settings::instance()->settings->option("advance.editor.theme")->value().toString();
+        if(m_themePath.contains("dark")){
+            m_pSyntaxHighlighter->setTheme(m_Repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme));
+        }else {
+            m_pSyntaxHighlighter->setTheme(m_Repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
+        }
+
+        m_pSyntaxHighlighter->setDefinition(m_Definition);
+        m_pTextEdit->setSyntaxDefinition(m_Definition);
+        m_pBottomBar->getHighlightMenu()->setCurrentTextOnly(m_Definition.translatedName());
+    }
+
+
+    qint64 time2 = QDateTime::currentMSecsSinceEpoch();
+    qDebug()<<"===========load SyntaxHighter:"<<time2 - time1;
 
     if (!Utils::isDraftFile(m_pTextEdit->filepath)) {
         DRecentData data;
@@ -583,9 +599,12 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QByteArr
     m_bFileLoading = true;
     m_sCurEncode = encode;
     m_sFirstEncode = encode;
-    //设置语法高亮
-    m_pTextEdit->loadHighlighter();
+
     loadContent(content);
+
+
+    qint64 time3 = QDateTime::currentMSecsSinceEpoch();
+    qDebug()<<"===========end load file:"<<time3 - time1;
 
     PerformanceMonitor::openFileFinish(filePath(), QFileInfo(filePath()).size());
 
@@ -652,10 +671,53 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QByteArr
     m_pBottomBar->setEncodeName(m_sCurEncode);
 }
 
-
-void EditWrapper::slotTextChange()
+void EditWrapper::loadSyntaxHighlighter(KSyntaxHighlighting::Definition def)
 {
-    m_bTextChange = true;
+    qDebug()<<def.isValid()<<def.translatedName();
+    if(!def.filePath().isEmpty()){
+        if(nullptr == m_pSyntaxHighlighter){
+           // m_pTextEdit->setSyntaxDefinition(def);
+            m_pSyntaxHighlighter = new KSyntaxHighlighting::SyntaxHighlighter(m_pTextEdit->document());
+
+        }
+        m_pSyntaxHighlighter->setTheme(KSyntaxHighlighting::Repository().defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
+        m_pSyntaxHighlighter->setDefinition(def);
+        m_pSyntaxHighlighter->rehighlight();
+        m_pBottomBar->getHighlightMenu()->setCurrentTextOnly(def.translatedName());
+    }
+}
+
+void EditWrapper::OnThemeChangeSlot(QString theme)
+{
+    QVariantMap jsonMap = Utils::getThemeMapFromPath(theme);
+    QString backgroundColor = jsonMap["editor-colors"].toMap()["background-color"].toString();
+    QString textColor = jsonMap["Normal"].toMap()["text-color"].toString();
+
+    //设置底部栏
+    QPalette palette = m_pBottomBar->palette();
+    palette.setColor(QPalette::Background, backgroundColor);
+    palette.setColor(QPalette::Text, textColor);
+    m_pBottomBar->setPalette(palette);
+
+    //设置编辑器
+    if(m_pSyntaxHighlighter){
+
+        if (QColor(backgroundColor).lightness() < 128) {
+             m_pSyntaxHighlighter->setTheme(m_Repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme));
+        } else {
+             m_pSyntaxHighlighter->setTheme(m_Repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
+        }
+//        m_Definition = m_Repository.definitionForFileName(m_pTextEdit->filepath);
+//        m_pSyntaxHighlighter->setDefinition(m_Definition);
+         m_pSyntaxHighlighter->rehighlight();
+    }
+
+    m_pTextEdit->setTheme(theme);
+}
+
+void EditWrapper::UpdateBottomBarWordCnt(int cnt)
+{
+    m_pBottomBar->updateWordCount(cnt);
 }
 
 //yanyuhan
@@ -674,7 +736,7 @@ void EditWrapper::setLineNumberShow(bool bIsShow ,bool bIsFirstShow)
         m_pTextEdit->m_pLeftAreaWidget->setFixedWidth(leftAreaWidth - lineNumberAreaWidth);
     }
     m_pTextEdit->bIsSetLineNumberWidth = bIsShow;
-    m_pTextEdit->updateLineNumber();
+    m_pTextEdit->updateLeftAreaWidget();
 }
 
 //显示空白符

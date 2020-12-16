@@ -31,17 +31,10 @@ public:
     ~FileLoadThread();
 
     void run();
-    void setEncodeInfo(QStringList pathList,QStringList codeList);
-    QString getCodec();
 signals:
     void loadFinished(const QByteArray &encode, const QByteArray &content);
 private:
     QString m_sFilePath;
-    QStringList m_pathList;
-    QStringList m_codeList;
-    QString m_sCharset;
-    bool m_bForceUneditable = false;
-    bool m_bSkipNonText = true;
 };
 
 #endif

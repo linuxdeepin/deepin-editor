@@ -40,12 +40,13 @@ public:
     void updateWordCount(int charactorCount);
     void setEncodeName(const QString &name);
     void setCursorStatus(const QString &text);
-    void setHighlightMenu(DMenu *menu);
-    void setHightlightName(const QString &name);
     void setPalette(const QPalette &palette);
     void updateSize(int size);
     //设置所有焦点　梁卫东　２０２０－０９－１４　１０：５５：２２
     void setChildrenFocus(bool ok,QWidget* preOrderWidget = nullptr);
+
+    DDropdownMenu* getEncodeMenu();
+    DDropdownMenu* getHighlightMenu();
 
 protected:
     void paintEvent(QPaintEvent *);

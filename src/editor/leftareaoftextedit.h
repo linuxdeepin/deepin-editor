@@ -34,6 +34,10 @@ public:
     int lineNumberAreaWidth();
     void bookMarkAreaPaintEvent(QPaintEvent *event);
     void codeFlodAreaPaintEvent(QPaintEvent *event);
+    void updateLineNumber();
+    void updateBookMark();
+    void updateCodeFlod();
+    void updateAll();
 public:
     LineNumberArea *m_pLineNumberArea = nullptr;
     BookMarkWidget *m_pBookMarkArea = nullptr;

@@ -492,7 +492,7 @@ void Comment::setComment(QPlainTextEdit *edit, const CommentDefinition &definito
         qDebug()<<definiton.multiLineStart;
         doMultiLineStyleComment = !doMultiLineStyleUncomment && !text.isEmpty();
 
-        qDebug()<<",,,,,,,,,,,,,,,,,,,,,,,,,,没有" <<!text.isEmpty()<<text<<end<<start;
+        qDebug()<<".................没有" <<!text.isEmpty()<<text<<end<<start;
 
         start = startBlock.position();
         end = endBlock.position() + endBlock.length() - 1;

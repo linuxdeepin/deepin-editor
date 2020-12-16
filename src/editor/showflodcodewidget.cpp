@@ -36,7 +36,8 @@ ShowFlodCodeWidget::ShowFlodCodeWidget(DWidget *parent)
 
 ShowFlodCodeWidget::~ShowFlodCodeWidget()
 {
-
+    m_highlighter->deleteLater();
+    m_highlighter = nullptr;
 }
 
 void ShowFlodCodeWidget::clear()
@@ -55,7 +56,7 @@ void ShowFlodCodeWidget::initHighLight(QString filepath, bool bIsLight)
             m_highlighter->setTheme(m_repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
         }
     }
-
+   // m_highlighter->rehighlight();
     const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());
     m_highlighter->setDefinition(def);
 }

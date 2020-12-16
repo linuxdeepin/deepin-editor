@@ -26,15 +26,7 @@ TEST_F(test_textedit, TextEdit)
 
     assert(1==1);
 }
-//lineNumberAreaWidth
 
-TEST_F(test_textedit, lineNumberAreaWidth)
-{
-    TextEdit *startManager = new TextEdit();
-    startManager->lineNumberAreaWidth();
-
-    assert(1==1);
-}
 //getCurrentLine
 TEST_F(test_textedit, getCurrentLine)
 {
@@ -576,21 +568,12 @@ TEST_F(test_textedit, setThemeWithPath)
     TextEdit *startManager = new TextEdit();
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
-    startManager->setThemeWithPath("aa");
+    ee->OnThemeChangeSlot("aa");
 
     assert(1==1);
 }
 //void setTheme(const KSyntaxHighlighting::Theme &theme, const QString &path);
-//void loadHighlighter();
-TEST_F(test_textedit, loadHighlighter)
-{
-    TextEdit *startManager = new TextEdit();
-    EditWrapper * ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->loadHighlighter();
 
-    assert(1==1);
-}
 
 //bool highlightWordUnderMouse(QPoint pos);
 TEST_F(test_textedit, highlightWordUnderMouse)
@@ -1158,90 +1141,8 @@ TEST_F(test_textedit, appendExtraSelection)
 
     assert(1==1);
 }
-//void columnCopy();
- TEST_F(test_textedit, columnCopy)
-{
-    QList<QTextEdit::ExtraSelection> listSelection;
-    QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
-    EditWrapper * ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
-    startManager->columnCopy();
 
-    assert(1==1);
-}
-//void columnPaste();
- TEST_F(test_textedit, columnPaste)
-{
-    QList<QTextEdit::ExtraSelection> listSelection;
-    QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
-    EditWrapper * ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
-    startManager->columnPaste();
 
-    assert(1==1);
-}
-//void columnCut();
- TEST_F(test_textedit, columnCut)
-{
-    QList<QTextEdit::ExtraSelection> listSelection;
-    QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
-    EditWrapper * ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
-    startManager->columnCut();
-
-    assert(1==1);
-}
-//void columnDelete();
- TEST_F(test_textedit, columnDelete)
-{
-    QList<QTextEdit::ExtraSelection> listSelection;
-    QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
-    EditWrapper * ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
-    startManager->columnDelete();
-
-    assert(1==1);
-}
-//void columnUndo();
- TEST_F(test_textedit, columnUndo)
-{
-    QList<QTextEdit::ExtraSelection> listSelection;
-    QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
-    EditWrapper * ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
-    startManager->columnUndo();
-
-    assert(1==1);
-}
-//void columnRedo();
- TEST_F(test_textedit, columnRedo)
-{
-    QList<QTextEdit::ExtraSelection> listSelection;
-    QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
-    EditWrapper * ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
-    startManager->columnRedo();
-
-    assert(1==1);
-}
  //clickFindAction
  TEST_F(test_textedit, clickFindAction)
 {
@@ -1314,20 +1215,7 @@ TEST_F(test_textedit, appendExtraSelection)
 
     assert(1==1);
 }
-// void highlightCurrentLine();
- TEST_F(test_textedit, highlightCurrentLine)
-{
-    QList<QTextEdit::ExtraSelection> listSelection;
-    QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
-    EditWrapper * ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
-    startManager->highlightCurrentLine();
 
-    assert(1==1);
-}
 // void updateLineNumber();
  TEST_F(test_textedit, updateLineNumber)
 {
@@ -1338,24 +1226,24 @@ TEST_F(test_textedit, appendExtraSelection)
     Settings *s = new Settings();
     startManager->setSettings(s);
     startManager->setWrapper(ee);
-    startManager->updateLineNumber();
+    startManager->updateLeftAreaWidget();
 
     assert(1==1);
 }
 // void updateWordCount();
- TEST_F(test_textedit, updateWordCount)
-{
-    QList<QTextEdit::ExtraSelection> listSelection;
-    QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
-    EditWrapper * ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
-    startManager->updateWordCount();
+// TEST_F(test_textedit, updateWordCount)
+//{
+//    QList<QTextEdit::ExtraSelection> listSelection;
+//    QTextEdit::ExtraSelection selectio;
+//    TextEdit *startManager = new TextEdit();
+//    EditWrapper * ee = new EditWrapper();
+//    Settings *s = new Settings();
+//    startManager->setSettings(s);
+//    startManager->setWrapper(ee);
+//    startManager->updateWordCount();
 
-    assert(1==1);
-}
+//    assert(1==1);
+//}
 // void handleScrollFinish();
  TEST_F(test_textedit, handleScrollFinish)
 {
@@ -1371,207 +1259,8 @@ TEST_F(test_textedit, appendExtraSelection)
     assert(1==1);
 }
 
-// void clickCutAction();
- TEST_F(test_textedit, clickCutAction)
-{
-    QList<QTextEdit::ExtraSelection> listSelection;
-    QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
-    EditWrapper * ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
-    startManager->clickCutAction();
 
-    assert(1==1);
-}
-// void clickCopyAction();
- TEST_F(test_textedit, clickCopyAction)
-{
-    QList<QTextEdit::ExtraSelection> listSelection;
-    QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
-    EditWrapper * ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
-    startManager->clickCopyAction();
 
-    assert(1==1);
-}
-// void clickPasteAction();
- TEST_F(test_textedit, clickPasteAction)
-{
-    QList<QTextEdit::ExtraSelection> listSelection;
-    QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
-    EditWrapper * ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
-    startManager->clickPasteAction();
-
-    assert(1==1);
-}
-// void clickDeleteAction();
- TEST_F(test_textedit, clickDeleteAction)
-{
-    QList<QTextEdit::ExtraSelection> listSelection;
-    QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
-    EditWrapper * ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
-    startManager->clickDeleteAction();
-
-    assert(1==1);
-}
-// void clickOpenInFileManagerAction();
- TEST_F(test_textedit, clickOpenInFileManagerAction)
-{
-    QList<QTextEdit::ExtraSelection> listSelection;
-    QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
-    EditWrapper * ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
-    startManager->clickOpenInFileManagerAction();
-
-    assert(1==1);
-}
-
-// //书签右键菜单功能
-// void onAddBookMark();
- TEST_F(test_textedit, onAddBookMark)
-{
-    QList<QTextEdit::ExtraSelection> listSelection;
-    QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
-    EditWrapper * ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
-    startManager->onAddBookMark();
-
-    assert(1==1);
-}
-// void onCancelBookMark();
- TEST_F(test_textedit, onCancelBookMark)
-{
-    QList<QTextEdit::ExtraSelection> listSelection;
-    QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
-    EditWrapper * ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
-    startManager->onCancelBookMark();
-
-    assert(1==1);
-}
-// void onMoveToPreviousBookMark();
- TEST_F(test_textedit, onMoveToPreviousBookMark)
-{
-    QList<QTextEdit::ExtraSelection> listSelection;
-    QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
-    EditWrapper * ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
-    startManager->onMoveToPreviousBookMark();
-
-    assert(1==1);
-}
-// void onMoveToNextBookMark();
-// void onClearBookMark();
- TEST_F(test_textedit, onClearBookMark)
-{
-    QList<QTextEdit::ExtraSelection> listSelection;
-    QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
-    EditWrapper * ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
-    startManager->onClearBookMark();
-
-    assert(1==1);
-}
-
-// void copyWordUnderCursor();
- TEST_F(test_textedit, copyWordUnderCursor)
-{
-    QList<QTextEdit::ExtraSelection> listSelection;
-    QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
-    EditWrapper * ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
-    startManager->copyWordUnderCursor();
-
-    assert(1==1);
-}
-// void cutWordUnderCursor();
- TEST_F(test_textedit, cutWordUnderCursor)
-{
-    QList<QTextEdit::ExtraSelection> listSelection;
-    QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
-    EditWrapper * ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
-    startManager->cutWordUnderCursor();
-
-    assert(1==1);
-}
-
-// void slot_voiceReading();
- TEST_F(test_textedit, slot_voiceReading)
-{
-    QList<QTextEdit::ExtraSelection> listSelection;
-    QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
-    EditWrapper * ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
-    startManager->slot_voiceReading();
-
-    assert(1==1);
-}
-// void slot_stopReading();
- TEST_F(test_textedit, slot_stopReading)
-{
-    QList<QTextEdit::ExtraSelection> listSelection;
-    QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
-    EditWrapper * ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
-    startManager->slot_stopReading();
-
-    assert(1==1);
-}
-// void slot_dictation();
- TEST_F(test_textedit, slot_dictation)
-{
-    QList<QTextEdit::ExtraSelection> listSelection;
-    QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
-    EditWrapper * ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
-    startManager->slot_dictation();
-
-    assert(1==1);
-}
 // void slot_translate();
  TEST_F(test_textedit, slot_translate)
 {
@@ -1702,20 +1391,7 @@ TEST_F(test_textedit, appendExtraSelection)
 
     assert(1==1);
 }
-// void onInputModEdit(QString input);
- TEST_F(test_textedit, onInputModEdit)
-{
-    QList<QTextEdit::ExtraSelection> listSelection;
-    QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
-    EditWrapper * ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
-    startManager->onInputModEdit("aa");
 
-    assert(1==1);
-}
 // bool event(QEvent* evt) override;   //触摸屏event事件
  TEST_F(test_textedit, event)
 {
@@ -1727,7 +1403,7 @@ TEST_F(test_textedit, appendExtraSelection)
     startManager->setSettings(s);
     startManager->setWrapper(ee);
     QEvent e=QEvent(QEvent::Type::MouseButtonPress);
-    startManager->event(&e);
+    //startManager->event(&e);
 
     assert(1==1);
 }
@@ -1913,7 +1589,7 @@ TEST_F(test_textedit, appendExtraSelection)
     startManager->setSettings(s);
     startManager->setWrapper(ee);
     QPaintEvent *e;
-    startManager->updateHighlightBrackets(a,a);
+    //startManager->updateHighlightBrackets(a,a);
 
     assert(1==1);
 }
@@ -1928,22 +1604,7 @@ TEST_F(test_textedit, appendExtraSelection)
     startManager->setSettings(s);
     startManager->setWrapper(ee);
     QPaintEvent *e;
-    startManager->getFirstVisibleBlockId();
-
-    assert(1==1);
-}
-// void getNeedControlLine(int line, bool isVisable);
- TEST_F(test_textedit, getNeedControlLine)
-{
-    QList<QTextEdit::ExtraSelection> listSelection;
-    QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
-    EditWrapper * ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
-    QPaintEvent *e;
-    startManager->getNeedControlLine(2,true);
+    //startManager->getFirstVisibleBlockId();
 
     assert(1==1);
 }

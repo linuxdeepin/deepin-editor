@@ -23,6 +23,7 @@
 #include "../editor/dtextedit.h"
 #include "../widgets/bottombar.h"
 #include "../controls/warningnotices.h"
+#include "../editor/leftareaoftextedit.h"
 #include <QVBoxLayout>
 #include <QWidget>
 #include <DMessageManager>
@@ -32,6 +33,10 @@
 #include <DDialog>
 #include <DMessageBox>
 #include <DFileDialog>
+#include <KSyntaxHighlighting/Definition>
+#include <KSyntaxHighlighting/SyntaxHighlighter>
+#include <KSyntaxHighlighting/Repository>
+#include <KSyntaxHighlighting/Theme>
 
 class Window;
 class EditWrapper : public QWidget
@@ -98,37 +103,43 @@ private:
 private:
     void handleCursorModeChanged(TextEdit::CursorMode mode);
     void handleHightlightChanged(const QString &name);
-
     int GetCorrectUnicode1(const QByteArray &ba);
-
 public slots:
-    void slotTextChange();
     void handleFileLoadFinished(const QByteArray &encode,const QByteArray &content);
+    void loadSyntaxHighlighter(KSyntaxHighlighting::Definition def);
+    void OnThemeChangeSlot(QString theme);
+    void UpdateBottomBarWordCnt(int cnt);
 signals:
     void requestSaveAs();
     void sigCodecSaveFile(const QString &strOldFilePath, const QString &strNewFilePath);
 private:
     //第一次打开文件编码
-    QString m_sFirstEncode= QString("UTF-8");
+    QString m_sFirstEncode = QString("UTF-8");
     //当前切换文件编码
-    QString  m_sCurEncode =QString("UTF-8");
+    QString  m_sCurEncode = QString("UTF-8");
 
-
+    //左边栏　标记　行号　折叠三合一控件
+    LeftAreaTextEdit* m_pLeftAreaTextEdit = nullptr;
+    //
+    Window* m_pWindow = nullptr;
+    //
     TextEdit *m_pTextEdit = nullptr;
+    //
     BottomBar *m_pBottomBar = nullptr;
+    //
     WarningNotices *m_pWaringNotices = nullptr;
 
     QDateTime m_tModifiedDateTime;
-
-    bool m_bTextChange = true;
-    bool m_bIsContinue;
     //退出
     bool m_bQuit = false;
     //文件是否加载
     bool m_bFileLoading = false;
-
-    Window* m_pWindow= nullptr;
     bool m_bIsTemFile = false;
+
+    //语法高亮
+    KSyntaxHighlighting::Repository m_Repository;
+    KSyntaxHighlighting::Definition m_Definition;
+    KSyntaxHighlighting::SyntaxHighlighter *m_pSyntaxHighlighter = nullptr;
 };
 
 #endif

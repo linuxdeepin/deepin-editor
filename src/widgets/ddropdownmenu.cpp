@@ -125,24 +125,24 @@ void DDropdownMenu::setCurrentAction(QAction *pAct)
 
 void DDropdownMenu::setCurrentTextOnly(const QString &name)
 {
-//   QList<QAction*> menuList = m_menu->actions();
+   QList<QAction*> menuList = m_menu->actions();
 
-//   for (int i = 0; i < menuList.size(); i++) {
-//       if(menuList[i]->menu()){
-//           QList<QAction*> acts = menuList[i]->menu()->actions();
-//           if(acts.size() == 0) continue;
-//           for (int j = 0; j < acts.size(); j++) {
-//           if(acts[j]->text() != name){
-//               acts[j]->setCheckable(false);
-//               acts[j]->setChecked(false);
-//           }
-//           else{
-//               acts[j]->setCheckable(true);
-//               acts[j]->setChecked(true);
-//           }
-//        }
-//      }
-//   }
+   for (int i = 0; i < menuList.size(); i++) {
+       if(menuList[i]->menu()){
+           QList<QAction*> acts = menuList[i]->menu()->actions();
+           if(acts.size() == 0) continue;
+           for (int j = 0; j < acts.size(); j++) {
+           if(acts[j]->text() != name){
+               acts[j]->setCheckable(false);
+               acts[j]->setChecked(false);
+           }
+           else{
+               acts[j]->setCheckable(true);
+               acts[j]->setChecked(true);
+           }
+        }
+      }
+   }
 
    setText(name);
 }
@@ -267,7 +267,61 @@ DDropdownMenu *DDropdownMenu::createEncodeMenu()
 
 DDropdownMenu *DDropdownMenu::createHighLightMenu()
 {
-    return nullptr;
+    DDropdownMenu *m_pHighLightMenu = new DDropdownMenu();
+    DMenu *m_pMenu = new DMenu;
+    QAction *noHlAction = m_pMenu->addAction(tr("None"));
+    noHlAction->setCheckable(true);
+
+    QActionGroup* m_pActionGroup = new QActionGroup(m_pMenu);
+    m_pActionGroup->setExclusive(true);
+    m_pActionGroup->addAction(noHlAction);
+
+
+    DMenu *pSubMenu = nullptr;
+    QString currentGroup;
+
+
+    bool intel = true;
+    for (KSyntaxHighlighting::Definition def : m_pHighLightMenu->m_Repository.definitions()) {
+
+        if(def.translatedName()=="Intel x86 (NASM)"&&intel)
+        {
+            intel = false;
+            continue;
+        }
+        if (def.isHidden()) {
+            continue;
+        }
+
+        if (currentGroup != def.section()) {
+            currentGroup = def.section();
+            pSubMenu = m_pMenu->addMenu(def.translatedSection());
+        }
+
+        if (!pSubMenu) {
+            continue;
+        }
+
+        QAction* action = pSubMenu->addAction(def.translatedName());
+        action->setCheckable(true);
+        action->setText(def.name());
+        m_pActionGroup->addAction(action);
+
+    }
+
+    connect(m_pActionGroup, &QActionGroup::triggered, m_pHighLightMenu, [m_pHighLightMenu] (QAction *action) {
+        const auto defName = action->text();
+        const auto def = m_pHighLightMenu->m_Repository.definitionForName(defName);
+        if (def.isValid() && m_pHighLightMenu->m_text != action->text()) {
+            emit m_pHighLightMenu->currentActionChanged(action);
+        }
+
+    });
+
+
+    m_pHighLightMenu->setText(tr("None"));
+    m_pHighLightMenu->setMenu(m_pMenu);
+    return m_pHighLightMenu;
 }
 
 

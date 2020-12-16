@@ -109,21 +109,6 @@ TEST_F(test_editwrapper, showNotify)
     assert(1==1);
 }
 
-//bool getTextChangeFlag();
-TEST_F(test_editwrapper, getTextChangeFlag)
-{
-    EditWrapper *wrapper = new EditWrapper();
-    wrapper->getTextChangeFlag();
-    assert(1==1);
-}
-
-//void setTextChangeFlag(bool bFlag);
-TEST_F(test_editwrapper, setTextChangeFlag)
-{
-    EditWrapper *wrapper = new EditWrapper();
-    wrapper->setTextChangeFlag(true);
-    assert(1==1);
-}
 
 //void setLineNumberShow(bool bIsShow,bool bIsFirstShow = false);
 TEST_F(test_editwrapper, setLineNumberShow)
@@ -187,13 +172,6 @@ TEST_F(test_editwrapper, readFile)
 }
 
 
-//void slotTextChange();
-TEST_F(test_editwrapper, slotTextChange)
-{
-    EditWrapper *wrapper = new EditWrapper();
-    wrapper->slotTextChange();
-    assert(1==1);
-}
 
 //void handleFileLoadFinished(const QByteArray &encode,const QString &content);
 TEST_F(test_editwrapper, handleFileLoadFinished)
@@ -206,12 +184,3 @@ TEST_F(test_editwrapper, handleFileLoadFinished)
     assert(1==1);
 }
 
-//protected:
-//void resizeEvent(QResizeEvent *);
-TEST_F(test_editwrapper, resizeEvent)
-{
-    EditWrapper *wrapper = new EditWrapper();
-    QResizeEvent *e;
-    wrapper->resizeEvent(e);
-    assert(1==1);
-}

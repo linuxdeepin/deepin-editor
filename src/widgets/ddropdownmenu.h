@@ -30,7 +30,8 @@
 #include <QtXml/QDomElement>
 #include <QtXml/QDomNode>
 #include <QtXml/QDomNodeList>
-
+#include <KSyntaxHighlighting/Repository>
+#include <KSyntaxHighlighting/Definition>
 DWIDGET_USE_NAMESPACE
 
 class DDropdownMenu : public QFrame
@@ -79,8 +80,10 @@ private:
     QString m_text = "UTF-8";
     QAction* m_pActUtf8 = nullptr;
     QFont m_font;
-    static QVector<QPair<QString,QStringList>> sm_groupEncodeVec;
     bool m_bPressed =false;
+    KSyntaxHighlighting::Repository m_Repository;
+private:
+    static QVector<QPair<QString,QStringList>> sm_groupEncodeVec;
 };
 
 #endif

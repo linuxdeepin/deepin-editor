@@ -23,13 +23,24 @@
 #ifndef TEXTEDIT_H
 #define TEXTEDIT_H
 
-#include <KF5/KSyntaxHighlighting/repository.h>
+
+
 #include "uncommentselection.h"
 #include "linenumberarea.h"
 #include "bookmarkwidget.h"
+#include "FlashTween.h"
 #include "codeflodarea.h"
-
 #include "../common/settings.h"
+#include "../widgets/ColorSelectWdg.h"
+
+//添加自定义撤销重做栈
+#include "inserttextundocommand.h"
+#include "deletetextundocommand.h"
+#include <QUndoStack>
+
+#include <KSyntaxHighlighting/Definition>
+#include <KSyntaxHighlighting/SyntaxHighlighter>
+#include <KSyntaxHighlighting/Repository>
 #include <QAction>
 #include <DMenu>
 #include <QPaintEvent>
@@ -41,128 +52,10 @@
 #include <QtDBus>
 #include <QGestureEvent>
 #include <QProxyStyle>
-#include "../widgets/ColorSelectWdg.h"
-#include <DTextEdit>
 
-#define CELL_TIME   15
-#define TAP_MOVE_DELAY 300
-
-namespace KSyntaxHighlighting {
-    class SyntaxHighlighter;
-}
 
 const QString SELECT_HIGHLIGHT_COLOR = "#2CA7F8";
-
 enum ConvertCase { UPPER, LOWER, CAPITALIZE };
-
-// Tween算法(模拟惯性)
-typedef std::function<void (qreal)> FunSlideInertial;
-
-class FlashTween : public QObject
-{
-    Q_OBJECT
-public:
-    FlashTween();
-    ~FlashTween(){}
-
-public:
-    void startX(qreal t,qreal b,qreal c,qreal d, FunSlideInertial fSlideGesture);
-    void startY(qreal t,qreal b,qreal c,qreal d, FunSlideInertial fSlideGesture);
-    void stopX(){m_timerX->stop();}
-    void stopY(){m_timerY->stop();}
-    bool activeX(){return m_timerX->isActive();}
-    bool activeY(){return m_timerY->isActive();}
-
-private slots:
-    void __runY();
-    void __runX();
-
-private:
-    QTimer* m_timerY = nullptr;
-    QTimer* m_timerX = nullptr;
-    FunSlideInertial m_fSlideGestureX = nullptr;
-    FunSlideInertial m_fSlideGestureY = nullptr;
-
-    //纵向单指惯性滑动
-    qreal m_currentTimeY = 0;
-    qreal m_beginValueY = 0;
-    qreal m_changeValueY = 0;
-    qreal m_durationTimeY = 0;
-    qreal m_directionY = 1;
-    qreal m_lastValueY = 0;
-
-    qreal m_currentTimeX = 0;
-    qreal m_beginValueX = 0;
-    qreal m_changeValueX = 0;
-    qreal m_durationTimeX = 0;
-    qreal m_directionX = 1;
-    qreal m_lastValueX = 0;
-
-private:
-    /**
-    链接:https://www.cnblogs.com/cloudgamer/archive/2009/01/06/Tween.html
-    效果说明
-        Linear：无缓动效果；
-        Quadratic：二次方的缓动（t^2）；
-        Cubic：三次方的缓动（t^3）；
-        Quartic：四次方的缓动（t^4）；
-        Quintic：五次方的缓动（t^5）；
-        Sinusoidal：正弦曲线的缓动（sin(t)）；
-        Exponential：指数曲线的缓动（2^t）；
-        Circular：圆形曲线的缓动（sqrt(1-t^2)）；
-        Elastic：指数衰减的正弦曲线缓动；
-        Back：超过范围的三次方缓动（(s+1)*t^3 - s*t^2）；
-        Bounce：指数衰减的反弹缓动。
-    每个效果都分三个缓动方式（方法），分别是：
-        easeIn：从0开始加速的缓动；
-        easeOut：减速到0的缓动；
-        easeInOut：前半段从0开始加速，后半段减速到0的缓动。
-        其中Linear是无缓动效果，没有以上效果。
-    四个参数分别是：
-        t: current time（当前时间）；
-        b: beginning value（初始值）；
-        c: change in value（变化量）；
-        d: duration（持续时间）。
-    */
-    #pragma GCC diagnostic push
-    #pragma GCC diagnostic ignored "-Wsequence-point"
-    static qreal quadraticEaseOut(qreal t,qreal b,qreal c,qreal d){
-        return -c *(t/=d)*(t-2) + b;
-    }
-
-    static qreal cubicEaseOut(qreal t,qreal b,qreal c,qreal d){
-        return c*((t=t/d-1)*t*t + 1) + b;
-    }
-
-    static qreal quarticEaseOut(qreal t,qreal b,qreal c,qreal d){
-        return -c * ((t=t/d-1)*t*t*t - 1) + b;
-    }
-
-    static qreal quinticEaseOut(qreal t,qreal b,qreal c,qreal d){
-        return c*((t=t/d-1)*t*t*t*t + 1) + b;
-    }
-
-    static qreal sinusoidalEaseOut(qreal t,qreal b,qreal c,qreal d){
-        return c * sin(t/d * (3.14/2)) + b;
-    }
-
-    static qreal circularEaseOut(qreal t,qreal b,qreal c,qreal d){
-        return c * sqrt(1 - (t=t/d-1)*t) + b;
-    }
-
-    static qreal bounceEaseOut(qreal t,qreal b,qreal c,qreal d){
-        if ((t/=d) < (1/2.75)) {
-            return c*(7.5625*t*t) + b;
-        } else if (t < (2/2.75)) {
-            return c*(7.5625*(t-=(1.5/2.75))*t + .75) + b;
-        } else if (t < (2.5/2.75)) {
-            return c*(7.5625*(t-=(2.25/2.75))*t + .9375) + b;
-        } else {
-            return c*(7.5625*(t-=(2.625/2.75))*t + .984375) + b;
-        }
-    }
-    #pragma GCC diagnostic pop
-};
 
 class ShowFlodCodeWidget;
 class LeftAreaTextEdit;
@@ -182,9 +75,12 @@ public:
     TextEdit(QWidget *parent = nullptr);
     ~TextEdit() override;
 	
-	
+    //初始化右键菜单
+    void initRightClickedMenu();
+    //弹窗右键菜单
+    void popRightMenu(QPoint pos = QPoint());
+
     void setWrapper(EditWrapper *);
-    int lineNumberAreaWidth();
 
     int getCurrentLine();
     int getCurrentColumn();
@@ -266,15 +162,11 @@ public:
     void renderAllSelections();
 
     DMenu *getHighlightMenu();
-
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     void codeFLodAreaPaintEvent(QPaintEvent *event);
     void setBookmarkFlagVisable(bool isVisable,bool bIsFirstOpen = false);
     void setCodeFlodFlagVisable(bool isVisable,bool bIsFirstOpen = false);
-    void setHighLineCurrentLine(bool _);
-    void setThemeWithPath(const QString &path);
-    void setTheme(const KSyntaxHighlighting::Theme &theme, const QString &path);
-    void loadHighlighter();
+    void setTheme(const QString &path);
 
     bool highlightWordUnderMouse(QPoint pos);
     void removeHighlightWordUnderCursor();
@@ -346,12 +238,6 @@ public:
      * @return 鼠标点击位置所在的行
      */
     int getLineFromPoint(const QPoint &point);
-
-    /**
-     * @author liumaochuan ut000616
-     * @brief addOrDeleteBookMark 添加或删除书签
-     */
-    void addOrDeleteBookMark();
 
     /**
      * @author liumaochuan ut000616
@@ -471,16 +357,9 @@ public:
     void appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSelections, QTextEdit::ExtraSelection selection
                               , QString strColor, QList<QTextEdit::ExtraSelection> *listSelections);
 
-    void setCursorStart(int _);
+    void setCursorStart(int pos);
     void writeEncodeHistoryRecord();
     QStringList readEncodeHistoryRecord();
-    void columnCopy();
-    void columnPaste();
-    void columnCut();
-    void columnDelete();
-    void columnUndo();
-    void columnRedo();
-
     /**
      * @brief tellFindBarClose 通知查找框关闭
      */
@@ -493,7 +372,6 @@ public:
      * @param inactiveColor inactive时的颜色
      */
     void setEditPalette(const QString &activeColor, const QString &inactiveColor);
-
     /**
      * @author liumaochuan ut000616
      * @brief setCodeFoldWidgetHide 代码折叠悬浮预览
@@ -518,37 +396,20 @@ signals:
 
     void signal_clearBlack();
     void signal_setTitleFocus();
-    void toTellInputModEdit(QString input);
-
 public slots:
+    /**
+     * @author liumaochuan ut000616
+     * @brief addOrDeleteBookMark 添加或删除书签
+     */
+    void addOrDeleteBookMark();
     //更新左边区域界面　梁卫东　２０２０－０９－０９　１３：５３：５８
     void updateLeftAreaWidget();
-    void highlightCurrentLine();
-    void updateLineNumber();
-    void updateWordCount();
     void handleScrollFinish();
-
-    void clickCutAction();
-    void clickCopyAction();
-    void clickPasteAction();
-    void clickDeleteAction();
-    void clickOpenInFileManagerAction();
+    void setSyntaxDefinition(KSyntaxHighlighting::Definition def);
 
     //书签右键菜单功能
-    void onAddBookMark();
-    void onCancelBookMark();
-    void onMoveToPreviousBookMark();
-    void onMoveToNextBookMark();
-    void onClearBookMark();
-
-    void copyWordUnderCursor();
-    void cutWordUnderCursor();
-
-    void slot_voiceReading();
-    void slot_stopReading();
-    void slot_dictation();
     void slot_translate();
-
+    void setHighLineCurrentLine(bool ok);
     void upcaseWord();
     void downcaseWord();
     void capitalizeWord();
@@ -559,8 +420,6 @@ public slots:
     void adjustScrollbarMargins();
     void onSelectionArea();
     void fingerZoom(QString name, QString direction, int fingers);
-    void onInputModEdit(QString input);
-
 protected:
     bool event(QEvent* evt) override;   //触摸屏event事件
 
@@ -568,7 +427,6 @@ protected:
     void dragMoveEvent(QDragMoveEvent *event) override;
     void dropEvent(QDropEvent *event) override;
     void inputMethodEvent(QInputMethodEvent *e) override;
-
     void mousePressEvent(QMouseEvent *e) override;
     void mouseMoveEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
@@ -577,9 +435,6 @@ protected:
     bool eventFilter(QObject *object, QEvent *event) override;
     void contextMenuEvent(QContextMenuEvent *event) override;
     void paintEvent(QPaintEvent *e) override;
-    void focusOutEvent(QFocusEvent *e) override;
-    void focusInEvent(QFocusEvent *e) override;
-
 private:
     //去除"*{*" "*}*" "*{*}*"跳过当做普通文本处理不折叠　梁卫东２０２０－０９－０１　１７：１６：４１
     bool blockContainStrBrackets(int line);
@@ -632,7 +487,7 @@ private:
     int m_tabSpaceNumber = 4;
 
     KSyntaxHighlighting::Repository m_repository;
-    KSyntaxHighlighting::SyntaxHighlighter *m_highlighter;
+    KSyntaxHighlighting::SyntaxHighlighter *m_highlighter = nullptr;
 
     DMenu *m_rightMenu;
     QAction *m_undoAction;
@@ -823,5 +678,7 @@ private:
 public:
     LeftAreaTextEdit *m_pLeftAreaWidget;
     QString filepath;
+    //自定义撤销重做栈
+    QUndoStack* m_pUndoStack = nullptr;
 };
 #endif
