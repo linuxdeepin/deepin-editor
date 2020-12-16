@@ -851,9 +851,11 @@ void Window::openFile()
 
 bool Window::saveFile()
 {
+
     EditWrapper* wrapperEdit = currentWrapper();
 
-    if(!wrapperEdit) return false;
+    //大文本加载过程不允许保存
+    if(!wrapperEdit || wrapperEdit->getFileLoading()) return false;
 
     bool isDraftFile = wrapperEdit->isDraftFile();
     bool isEmpty = wrapperEdit->isPlainTextEmpty();
@@ -908,7 +910,8 @@ bool Window::saveAsFile()
 QString Window::saveAsFileToDisk()
 {
     EditWrapper *wrapper = currentWrapper();
-    if (!wrapper) return QString();
+    //大文本加载过程不允许保存　梁卫东
+    if (!wrapper || wrapper->getFileLoading()) return QString();
 
     bool isDraft = wrapper->isDraftFile();
     QFileInfo fileInfo(wrapper->filePath());

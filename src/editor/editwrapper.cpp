@@ -123,7 +123,6 @@ bool EditWrapper::readFile(QByteArray encode)
         loadContent(Outdata);
         file.close();
         m_sCurEncode = newEncode;
-        m_pTextEdit->setModified(false);
         return true;
     }
     return false;
@@ -338,6 +337,7 @@ bool EditWrapper::saveFile()
             QByteArray Outdata;
             DetectCode::ChangeFileEncodingFormat(fileContent,Outdata,QString("UTF-8"),m_sCurEncode);
             file.write(Outdata);
+
             QFileDevice::FileError error = file.error();
             file.close();
             m_sFirstEncode = m_sCurEncode;
@@ -597,7 +597,7 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QByteArr
     m_bFileLoading = true;
     m_sCurEncode = encode;
     m_sFirstEncode = encode;
-
+  
     loadContent(content);
 
 
@@ -662,8 +662,6 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QByteArr
     if (m_bIsTemFile) {
         m_bIsTemFile = false;
         m_pTextEdit->setModified(true);
-    } else {
-        m_pTextEdit->setModified(false);
     }
 
     m_pBottomBar->setEncodeName(m_sCurEncode);
@@ -796,7 +794,7 @@ void EditWrapper::loadContent(const QByteArray &content)
     if(len > max){
         for (int i = 0; i < cnt; i++) {
             //初始化秒开
-            if(i == 0 && !m_bQuit){
+            if(i == 0 && !m_bQuit){              
               data = content.mid(i*step,InitContentPos);
               cursor.insertText(data);
               cursor1.movePosition(QTextCursor::Start);

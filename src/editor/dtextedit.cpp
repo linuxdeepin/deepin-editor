@@ -64,8 +64,11 @@ TextEdit::TextEdit(QWidget *parent)
     : DPlainTextEdit(parent),
      m_wrapper(nullptr)
 {
+
     //撤销重做栈
     m_pUndoStack = new QUndoStack(this);
+
+
     m_nLines = 0;
     m_nBookMarkHoverLine = -1;
     m_bIsFileOpen = false;
@@ -113,6 +116,13 @@ TextEdit::TextEdit(QWidget *parent)
     connect(document(), &QTextDocument::modificationChanged, this, &TextEdit::setModified);
     connect(document(), &QTextDocument::contentsChange, this, &TextEdit::updateMark);
     connect(document(), &QTextDocument::contentsChange, this, &TextEdit::checkBookmarkLineMove);
+    connect(m_pUndoStack,&QUndoStack::canRedoChanged,this,[this](bool){
+     emit modificationChanged(filepath, true);
+    });
+
+    connect(m_pUndoStack,&QUndoStack::canRedoChanged,this,[this](bool){
+     emit modificationChanged(filepath, true);
+    });
 
 
     QDBusConnection dbus = QDBusConnection::sessionBus();
@@ -2855,12 +2865,7 @@ void TextEdit::setSettings(Settings *keySettings)
 void TextEdit::setModified(bool modified)
 {
     if(m_wrapper->getFileLoading()) return;
-    document()->setModified(modified);
-    emit modificationChanged(filepath, modified);
-}
-
-void TextEdit::setTabbarModified(bool modified)
-{
+   // document()->setModified(modified);
     emit modificationChanged(filepath, modified);
 }
 

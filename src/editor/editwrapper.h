@@ -140,6 +140,12 @@ private:
     KSyntaxHighlighting::Repository m_Repository;
     KSyntaxHighlighting::Definition m_Definition;
     KSyntaxHighlighting::SyntaxHighlighter *m_pSyntaxHighlighter = nullptr;
+
+    //大文本修改保存
+    QByteArray m_fileContent;
+    //大文本加载过程修改保存
+    bool m_bInterruptSaveFile = false;
+    quint64 m_iInterruptPos =0;
 };
 
 #endif
