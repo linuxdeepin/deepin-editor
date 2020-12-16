@@ -3039,7 +3039,6 @@ QString TextEdit::getWordAtMouse()
     }
 }
 
-
 void TextEdit::toggleReadOnlyMode()
 {
     if (m_readOnlyMode) {
@@ -3883,6 +3882,7 @@ void TextEdit::setCodeFoldWidgetHide(bool isHidden)
     }
 }
 
+
 void TextEdit::setBackupPath(QString qstrTruePath)
 {
     m_qstrTruePath = qstrTruePath;
@@ -3892,6 +3892,7 @@ QString TextEdit::getTruePath()
 {
     return  m_qstrTruePath;
 }
+
 
 void TextEdit::isMarkCurrentLine(bool isMark, QString strColor)
 {
@@ -5230,7 +5231,6 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         }
         return;
     }else{
-
         //重做 ctrl+shift+z
         if(modifiers == (Qt::ControlModifier | Qt::ShiftModifier) && e->key() == Qt::Key_Z){
           m_pUndoStack->redo();
@@ -5242,7 +5242,6 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
           m_pUndoStack->undo();
           return;
         }
-
         //剪切ctrl+x
         if(modifiers == Qt::ControlModifier && e->key() == Qt::Key_X){
             //列编辑添加撤销重做

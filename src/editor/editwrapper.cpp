@@ -38,8 +38,6 @@
 #include <QDir>
 #include <DSettingsOption>
 #include <QFileInfo>
-//#include "../common/CSyntaxHighlighter.h"
-
 
 DCORE_USE_NAMESPACE
 
@@ -836,6 +834,5 @@ void EditWrapper::loadContent(const QByteArray &content)
         }
     }
 
-    doc->setModified(false);
     QApplication::restoreOverrideCursor();
 }

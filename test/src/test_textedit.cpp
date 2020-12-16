@@ -1609,6 +1609,7 @@ TEST_F(test_textedit, appendExtraSelection)
     assert(1==1);
 }
 
+
 //void setBackupPath(QString qstrTruePath);
 TEST_F(test_textedit, setBackupPath)
 {
@@ -1626,3 +1627,4 @@ TEST_F(test_textedit, getTruePath)
 
     assert(1==1);
 }
+

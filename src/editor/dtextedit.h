@@ -167,7 +167,6 @@ public:
     void setBookmarkFlagVisable(bool isVisable,bool bIsFirstOpen = false);
     void setCodeFlodFlagVisable(bool isVisable,bool bIsFirstOpen = false);
     void setTheme(const QString &path);
-
     bool highlightWordUnderMouse(QPoint pos);
     void removeHighlightWordUnderCursor();
 
