@@ -1266,15 +1266,30 @@ void Window::popupSettingsDialog()
 void Window::popupPrintDialog()
 {
     DPrinter printer(QPrinter::HighResolution);
-    DPrintPreviewDialog preview(this);
+    DPrintPreviewDialog preview( this);
 
     TextEdit *wrapper = currentWrapper()->textEditor();
     const QString &filePath = wrapper->filepath;
     const QString &fileDir = QFileInfo(filePath).dir().absolutePath();
 
+    //适配打印接口2.0，dtk大于 5.4.3 版才合入最新的2.0打印控件接口
+#if (DTK_VERSION_MAJOR > 5 \
+    || (DTK_VERSION_MAJOR >=5 && DTK_VERSION_MINOR > 4) \
+    || (DTK_VERSION_MAJOR >= 5 && DTK_VERSION_MINOR >= 4 && DTK_VERSION_PATCH > 3))
+
     if (fileDir == m_blankFileDir) {
-        printer.setOutputFileName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
-        printer.setDocName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
+        preview.setDocName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
+    } else {
+        preview.setDocName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
+    }
+
+    connect(&preview, &DPrintPreviewDialog::paintRequested, this, [ = ](DPrinter * printer) {
+        currentWrapper()->textEditor()->print(printer);
+    });
+#else
+    if (fileDir == m_blankFileDir) {
+            printer.setOutputFileName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
+            printer.setDocName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
     } else {
         printer.setOutputFileName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
         printer.setDocName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
@@ -1285,6 +1300,7 @@ void Window::popupPrintDialog()
     connect(&preview, &DPrintPreviewDialog::paintRequested, this, [ = ](QPrinter * printer) {
         currentWrapper()->textEditor()->print(printer);
     });
+#endif
 
     preview.exec();
 }
