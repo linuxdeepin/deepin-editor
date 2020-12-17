@@ -74,7 +74,7 @@ public:
 
     TextEdit(QWidget *parent = nullptr);
     ~TextEdit() override;
-	
+
     //初始化右键菜单
     void initRightClickedMenu();
     //弹窗右键菜单
@@ -87,6 +87,10 @@ public:
     inline void setFilePath(QString file) { m_sFilePath = file;}
     //
     inline LeftAreaTextEdit* getLeftAreaWidget() { return m_pLeftAreaWidget;};
+    //是否撤销重做操作
+    bool isUndoRedoOpt() {return (m_pUndoStack->canRedo()||m_pUndoStack->canUndo());};
+    //判断是否修改
+    bool getModified() { return (document()->isModified() && isUndoRedoOpt());}
 
     int getCurrentLine();
     int getCurrentColumn();

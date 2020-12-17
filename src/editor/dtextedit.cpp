@@ -64,7 +64,7 @@ TextEdit::TextEdit(QWidget *parent)
     : DPlainTextEdit(parent),
      m_wrapper(nullptr)
 {
-
+    setUndoRedoEnabled(false);
     //撤销重做栈
     m_pUndoStack = new QUndoStack(this);
 

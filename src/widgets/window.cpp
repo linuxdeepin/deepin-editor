@@ -601,50 +601,53 @@ bool Window::closeTab()
     // need to prompt whether to save.
     else {
 
-        DDialog *dialog = createDialog(tr("Do you want to save this file?"), "");
-        int res = dialog->exec();
+        if(isModified){
+            DDialog *dialog = createDialog(tr("Do you want to save this file?"), "");
+            int res = dialog->exec();
 
-        //取消或关闭弹窗不做任务操作
-        if(res == 0 || res == -1) return false;
+            //取消或关闭弹窗不做任务操作
+            if(res == 0 || res == -1) return false;
 
-        //不保存
-        if(res == 1){
-           removeWrapper(filePath, true);
-           m_tabbar->closeCurrentTab();
+            //不保存
+            if(res == 1){
+               removeWrapper(filePath, true);
+               m_tabbar->closeCurrentTab();
 
-           if (bIsBackupFile) {
-               QFile(filePath).remove();
-               QFileInfo fileinfo (filePath);
-               qInfo() << "fileinfo.ab" << fileinfo.absoluteDir().dirName();
-               QDir(m_blankFileDir).rmdir(fileinfo.absoluteDir().dirName());
-           }
-
-           //focusActiveEditor();
-           return true;
-        }
-
-        //保存
-        if(res == 2){
-            if(bIsBackupFile){
-              if(wrapper->saveFile())
-              {
-                  //focusActiveEditor();
-                  removeWrapper(filePath, true);
-                  m_tabbar->closeCurrentTab();
-                  QFile(filePath).remove();
-                  QFileInfo fileinfo (filePath);
-                  qInfo() << "fileinfo.ab111" << fileinfo.absoluteDir().dirName();
-                  QDir(m_blankFileDir).rmdir(fileinfo.absoluteDir().dirName());
-              }
-
-            }else {
-               if(wrapper->saveFile())
-               {
-                   removeWrapper(filePath, true);
-                   m_tabbar->closeCurrentTab();
-                   //focusActiveEditor();
+               if (bIsBackupFile) {
+                   QFile(filePath).remove();
+                   QFileInfo fileinfo (filePath);
+                   qInfo() << "fileinfo.ab" << fileinfo.absoluteDir().dirName();
+                   QDir(m_blankFileDir).rmdir(fileinfo.absoluteDir().dirName());
                }
+
+               //focusActiveEditor();
+               return true;
             }
+
+            //保存
+            if(res == 2){
+                if(bIsBackupFile){
+                  if(wrapper->saveFile())
+                  {
+                      removeWrapper(filePath, true);
+                      m_tabbar->closeCurrentTab();
+                      QFile(filePath).remove();
+                      QFileInfo fileinfo (filePath);
+                      qInfo() << "fileinfo.ab111" << fileinfo.absoluteDir().dirName();
+                      QDir(m_blankFileDir).rmdir(fileinfo.absoluteDir().dirName());
+                  }
+
+                }else {
+                   if(wrapper->saveFile())
+                   {
+                       removeWrapper(filePath, true);
+                       m_tabbar->closeCurrentTab();
+                   }
+                }
+            }
+        }else {
+            removeWrapper(filePath, true);
+            m_tabbar->closeCurrentTab();
         }
     }
 

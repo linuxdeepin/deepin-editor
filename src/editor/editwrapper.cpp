@@ -123,6 +123,7 @@ bool EditWrapper::readFile(QByteArray encode)
         loadContent(Outdata);
         file.close();
         m_sCurEncode = newEncode;
+        updateModifyStatus(false);
         return true;
     }
     return false;
@@ -223,7 +224,7 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
 
 
     //1.如果修改切换编码提示用户是否保存,不保存重新打开文件读取.2.没有修改是否另存为
-    if(m_pTextEdit->document()->isModified())
+    if(m_pTextEdit->getModified())
     {
         DDialog *dialog = new DDialog(tr("Do you want to save this file?"), "", this);
         dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
@@ -270,7 +271,7 @@ void EditWrapper::reloadModifyFile()
     int xoffset = m_pTextEdit->horizontalScrollBar()->value();
 
     //如果文件修改提示用户是否保存  如果临时文件保存就是另存为
-    if (m_pTextEdit->document()->isModified()) {
+    if (m_pTextEdit->getModified()) {
         DDialog *dialog = new DDialog(tr("Do you want to save this file?"), "", this);
         dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
         dialog->setIcon(QIcon::fromTheme("deepin-editor"));
@@ -437,7 +438,7 @@ bool EditWrapper::isModified()
 {
     //编码改变内容没有修改也算是文件修改
    // bool modified = (m_sFirstEncode != m_sCurEncode || m_pTextEdit->document()->isModified());
-    bool modified =  m_pTextEdit->document()->isModified();
+    bool modified =  m_pTextEdit->getModified();
     return  modified;
 }
 
