@@ -79,13 +79,21 @@ public:
     void initRightClickedMenu();
     //弹窗右键菜单
     void popRightMenu(QPoint pos = QPoint());
-
+    //
     void setWrapper(EditWrapper *);
+    //
+    inline QString getFilePath() { return m_sFilePath;};
+    //
+    inline void setFilePath(QString file) { m_sFilePath = file;}
+    //
+    inline LeftAreaTextEdit* getLeftAreaWidget() { return m_pLeftAreaWidget;};
 
     int getCurrentLine();
     int getCurrentColumn();
     int getPosition();
     int getScrollOffset();
+    DMenu *getHighlightMenu();
+
 
     void forwardChar();
     void backwardChar();
@@ -161,7 +169,7 @@ public:
     bool updateKeywordSelections(QString keyword,QTextCharFormat charFormat,QList<QTextEdit::ExtraSelection> *listSelection);
     void renderAllSelections();
 
-    DMenu *getHighlightMenu();
+
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     void codeFLodAreaPaintEvent(QPaintEvent *event);
     void setBookmarkFlagVisable(bool isVisable,bool bIsFirstOpen = false);
@@ -169,43 +177,32 @@ public:
     void setTheme(const QString &path);
     bool highlightWordUnderMouse(QPoint pos);
     void removeHighlightWordUnderCursor();
-
     void setSettings(Settings *settings);
-    void setModified(bool modified);
     //设置tabbar修改状态是否带*,不改变document 修改属性
     void setTabbarModified(bool modified);
     void copySelectedText();
     void cutSelectedText();
     void pasteText();
-
     void setMark();
     void unsetMark();
     bool tryUnsetMark();
     void exchangeMark();
-
     void saveMarkStatus();
     void restoreMarkStatus();
-
     void completionWord(QString word);
     QString getWordAtMouse();
     QString getWordAtCursor();
-
     void toggleReadOnlyMode();
     void toggleComment(bool sister);
-
     int getNextWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode);
     int getPrevWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode);
     bool atWordSeparator(int position);
-
     void showCursorBlink();
     void hideCursorBlink();
-
     void setReadOnlyPermission(bool permission);
     bool getReadOnlyPermission();
     bool getReadOnlyMode();
-
     void hideRightMenu();
-
     void clearBlack();
     void flodOrUnflodAllLevel(bool isFlod);
     void flodOrUnflodCurrentLevel(bool isFlod);
@@ -363,7 +360,6 @@ public:
      * @brief tellFindBarClose 通知查找框关闭
      */
     void tellFindBarClose();
-
     /**
      * @author liumaochuan ut000616
      * @brief setEditPalette 设置textEdit的颜色
@@ -386,13 +382,11 @@ signals:
     void clickJumpLineAction();
     void clickFullscreenAction();
     void cursorMarkChanged(bool mark, QTextCursor cursor);
-    void modificationChanged(const QString &path, bool isModified);
     void cursorModeChanged(CursorMode mode);
     void hightlightChanged(const QString &name);
     void popupNotify(QString notify);
     void pressEsc();
     void signal_readingPath();
-
     void signal_clearBlack();
     void signal_setTitleFocus();
 public slots:
@@ -405,7 +399,6 @@ public slots:
     void updateLeftAreaWidget();
     void handleScrollFinish();
     void setSyntaxDefinition(KSyntaxHighlighting::Definition def);
-
     //书签右键菜单功能
     void slot_translate();
     void setHighLineCurrentLine(bool ok);
@@ -421,7 +414,6 @@ public slots:
     void fingerZoom(QString name, QString direction, int fingers);
 protected:
     bool event(QEvent* evt) override;   //触摸屏event事件
-
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dragMoveEvent(QDragMoveEvent *event) override;
     void dropEvent(QDropEvent *event) override;
@@ -442,7 +434,6 @@ private:
     void updateHighlightBrackets(const QChar &openChar, const QChar &closeChar);
     int getFirstVisibleBlockId() const;
     void getNeedControlLine(int line, bool isVisable);
-
     //触摸屏功能函数
     bool gestureEvent(QGestureEvent *event);
     void tapGestureTriggered(QTapGesture*);
@@ -450,8 +441,7 @@ private:
     void panTriggered(QPanGesture*);
     void pinchTriggered(QPinchGesture*);
     void swipeTriggered(QSwipeGesture*);
-	
-	//add for single refers to the sliding
+    //add for single refers to the sliding
     void slideGestureY(qreal diff);
     void slideGestureX(qreal diff);
 
@@ -674,9 +664,9 @@ private:
     bool m_bIsFindClose = false;///< 关闭查找框事件是否发生
     QString m_qstrTruePath;///< 源文件路径
 
-public:
-    LeftAreaTextEdit *m_pLeftAreaWidget;
-    QString filepath;
+private:
+    LeftAreaTextEdit *m_pLeftAreaWidget = nullptr;
+    QString m_sFilePath;
     //自定义撤销重做栈
     QUndoStack* m_pUndoStack = nullptr;
 };

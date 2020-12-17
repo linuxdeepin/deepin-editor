@@ -52,7 +52,7 @@ EditWrapper::EditWrapper(Window* window,QWidget *parent)
     m_pWaringNotices->hide();
     // Init layout and widgets.
     QHBoxLayout* m_layout = new QHBoxLayout;
-    m_pLeftAreaTextEdit = m_pTextEdit->m_pLeftAreaWidget;
+    m_pLeftAreaTextEdit = m_pTextEdit->getLeftAreaWidget();
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->setSpacing(0);
     m_layout->addWidget(m_pLeftAreaTextEdit);
@@ -68,7 +68,7 @@ EditWrapper::EditWrapper(Window* window,QWidget *parent)
 
     connect(m_pTextEdit, &TextEdit::cursorModeChanged, this, &EditWrapper::handleCursorModeChanged);
     connect(m_pWaringNotices, &WarningNotices::reloadBtnClicked, this, &EditWrapper::reloadModifyFile);
-    connect(m_pWaringNotices, &WarningNotices::saveAsBtnClicked, this, &EditWrapper::requestSaveAs);
+    connect(m_pWaringNotices, &WarningNotices::saveAsBtnClicked, m_pWindow, &Window::saveAsFile);
 }
 
 EditWrapper::~EditWrapper()
@@ -111,11 +111,11 @@ bool EditWrapper::readFile(QByteArray encode)
 {
    QByteArray newEncode = encode;
    if(newEncode.isEmpty()){
-      newEncode = DetectCode::GetFileEncodingFormat(m_pTextEdit->filepath);
+      newEncode = DetectCode::GetFileEncodingFormat(m_pTextEdit->getFilePath());
       m_sFirstEncode = newEncode;
    }
 
-    QFile file(m_pTextEdit->filepath);
+    QFile file(m_pTextEdit->getFilePath());
     if (file.open(QIODevice::ReadOnly)) {
         QByteArray fileContent = file.readAll();
         QByteArray Outdata;
@@ -215,7 +215,7 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
 
 
     //草稿文件 空白文件不保存
-    if(Utils::isDraftFile(m_pTextEdit->filepath) &&  m_pTextEdit->toPlainText().isEmpty()) {
+    if(Utils::isDraftFile(m_pTextEdit->getFilePath()) &&  m_pTextEdit->toPlainText().isEmpty()) {
         m_sCurEncode = encode;
         m_sFirstEncode = encode;
         return true;
@@ -247,7 +247,7 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
         //保存
         if(res == 2){
             //草稿文件
-            if(Utils::isDraftFile(m_pTextEdit->filepath)){
+            if(Utils::isDraftFile(m_pTextEdit->getFilePath())){
                 if(saveDraftFile()) return readFile(encode);
                 else return false;
             }else {
@@ -291,7 +291,7 @@ void EditWrapper::reloadModifyFile()
         //另存
         if(res == 2){
             //临时文件保存另存为 需要删除源草稿文件文件
-           if(Utils::isDraftFile(m_pTextEdit->filepath)){
+           if(Utils::isDraftFile(m_pTextEdit->getFilePath())){
                if(!saveDraftFile()) return;
            }
            else {
@@ -306,7 +306,7 @@ void EditWrapper::reloadModifyFile()
         readFile();
     }
 
-    QFileInfo fi(m_pTextEdit->filepath);
+    QFileInfo fi(m_pTextEdit->getFilePath());
     m_tModifiedDateTime = fi.lastModified();
 
     QTextCursor textcur = m_pTextEdit->textCursor();
@@ -325,7 +325,7 @@ bool EditWrapper::saveFile()
 {
     QString qstrFilePath = m_pTextEdit->getTruePath();
     if (qstrFilePath.isEmpty()) {
-        qstrFilePath = m_pTextEdit->filepath;
+        qstrFilePath = m_pTextEdit->getFilePath();
     }
 
     QFile file(qstrFilePath);
@@ -350,7 +350,7 @@ bool EditWrapper::saveFile()
             bool ok = (error == QFileDevice::NoError);
 
             // update status.
-            if (ok)  m_pTextEdit->setModified(false);
+            if (ok)  updateModifyStatus(false);
             return ok;
 
         }else {
@@ -367,7 +367,7 @@ bool EditWrapper::saveFile()
             bool ok = (error == QFileDevice::NoError);
 
             // update status.
-            if (ok)  m_pTextEdit->setModified(false);
+            if (ok)  updateModifyStatus(false);
             return ok;
         }
     }else {
@@ -399,7 +399,7 @@ bool EditWrapper::saveTemFile(QString qstrDir)
             bool ok = (error == QFileDevice::NoError);
 
             // update status.
-            if (ok)  m_pTextEdit->setModified(false);
+            if (ok)  updateModifyStatus(false);
             return ok;
 
         }else {
@@ -416,7 +416,7 @@ bool EditWrapper::saveTemFile(QString qstrDir)
             bool ok = (error == QFileDevice::NoError);
 
             // update status.
-            if (ok)  m_pTextEdit->setModified(false);
+            if (ok)  updateModifyStatus(false);
             return ok;
         }
     }else {
@@ -429,7 +429,7 @@ void EditWrapper::updatePath(const QString &file,QString qstrTruePath)
 {
     QFileInfo fi(file);
     m_tModifiedDateTime = fi.lastModified();
-    m_pTextEdit->filepath = file;
+    m_pTextEdit->setFilePath(file);
     m_pTextEdit->setBackupPath(qstrTruePath);
 }
 
@@ -443,7 +443,7 @@ bool EditWrapper::isModified()
 
 bool EditWrapper::isDraftFile()
 {
-    return Utils::isDraftFile(m_pTextEdit->filepath);
+    return Utils::isDraftFile(m_pTextEdit->getFilePath());
 }
 
 bool EditWrapper::isPlainTextEmpty()
@@ -493,9 +493,8 @@ bool EditWrapper::saveDraftFile()
 
         //草稿文件保存 等同于重写打开
         m_sFirstEncode = m_sCurEncode;
-        QFile(m_pTextEdit->filepath).remove();
-        emit sigCodecSaveFile(m_pTextEdit->filepath,newFilePath);
-        //updatePath(newFilePath);
+        QFile(m_pTextEdit->getFilePath()).remove();
+        updateSaveAsFileName(m_pTextEdit->getFilePath(),newFilePath);
         m_pTextEdit->document()->setModified(false);
         return true;
     }
@@ -513,9 +512,9 @@ void EditWrapper::hideWarningNotices()
 //除草稿文件 检查文件是否被删除,是否被修复
 void EditWrapper::checkForReload()
 {
-    if (Utils::isDraftFile(m_pTextEdit->filepath)) return;
+    if (Utils::isDraftFile(m_pTextEdit->getFilePath())) return;
 
-    QFileInfo fi(m_pTextEdit->filepath);
+    QFileInfo fi(m_pTextEdit->getFilePath());
 
     if (fi.lastModified() == m_tModifiedDateTime || m_pWaringNotices->isVisible()) return;
 
@@ -563,7 +562,7 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QByteArr
 
     qint64 time1 = QDateTime::currentMSecsSinceEpoch();
 
-    m_Definition = m_Repository.definitionForFileName(m_pTextEdit->filepath);
+    m_Definition = m_Repository.definitionForFileName(m_pTextEdit->getFilePath());
     qDebug()<<"===========begin load file:"<<time1;
     qDebug()<<m_Definition.isValid()<<m_Definition.filePath()<<m_Definition.translatedName();
     if(m_Definition.isValid() && !m_Definition.filePath().isEmpty()){
@@ -584,11 +583,11 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QByteArr
     qint64 time2 = QDateTime::currentMSecsSinceEpoch();
     qDebug()<<"===========load SyntaxHighter:"<<time2 - time1;
 
-    if (!Utils::isDraftFile(m_pTextEdit->filepath)) {
+    if (!Utils::isDraftFile(m_pTextEdit->getFilePath())) {
         DRecentData data;
         data.appName = "Deepin Editor";
         data.appExec = "deepin-editor";
-        DRecentManager::addItem(m_pTextEdit->filepath, data);
+        DRecentManager::addItem(m_pTextEdit->getFilePath(), data);
     }
 
     bool flag = m_pTextEdit->getReadOnlyPermission();
@@ -632,7 +631,7 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QByteArr
                     QJsonValue localPathValue = object.value("localPath");  // 获取指定 key 对应的 value
                     QJsonValue temFilePathValue = object.value("temFilePath");  // 获取指定 key 对应的 value
 
-                    if (localPathValue.toString() == m_pTextEdit->filepath)
+                    if (localPathValue.toString() == m_pTextEdit->getFilePath())
                     {
                         QJsonValue value = object.value("cursorPosition");  // 获取指定 key 对应的 value
 
@@ -643,7 +642,7 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QByteArr
                             m_pTextEdit->setTextCursor(cursor);
                             break;
                         }
-                    } else if (temFilePathValue.toString() == m_pTextEdit->filepath) {
+                    } else if (temFilePathValue.toString() == m_pTextEdit->getFilePath()) {
                         QJsonValue value = object.value("cursorPosition");  // 获取指定 key 对应的 value
 
                         if (value.isString())
@@ -661,7 +660,7 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QByteArr
 
     if (m_bIsTemFile) {
         m_bIsTemFile = false;
-        m_pTextEdit->setModified(true);
+        updateModifyStatus(false);
     }
 
     m_pBottomBar->setEncodeName(m_sCurEncode);
@@ -703,7 +702,7 @@ void EditWrapper::OnThemeChangeSlot(QString theme)
         } else {
              m_pSyntaxHighlighter->setTheme(m_Repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
         }
-//        m_Definition = m_Repository.definitionForFileName(m_pTextEdit->filepath);
+//        m_Definition = m_Repository.definitionForFileName(m_pTextEdit->getFilePath());
 //        m_pSyntaxHighlighter->setDefinition(m_Definition);
          m_pSyntaxHighlighter->rehighlight();
     }
@@ -716,20 +715,32 @@ void EditWrapper::UpdateBottomBarWordCnt(int cnt)
     m_pBottomBar->updateWordCount(cnt);
 }
 
+void EditWrapper::updateModifyStatus(bool bModified)
+{
+    if(getFileLoading()) return;
+    m_pTextEdit->document()->setModified(bModified);
+    m_pWindow->updateModifyStatus(m_pTextEdit->getFilePath(),bModified);
+}
+
+void EditWrapper::updateSaveAsFileName(QString strOldFilePath, QString strNewFilePath)
+{
+    m_pWindow->updateSaveAsFileName(strOldFilePath,strNewFilePath);
+}
+
 //yanyuhan
 void EditWrapper::setLineNumberShow(bool bIsShow ,bool bIsFirstShow)
 {
     if(bIsShow && !bIsFirstShow) {
-        int lineNumberAreaWidth = m_pTextEdit->m_pLeftAreaWidget->m_pLineNumberArea->width();
-        int leftAreaWidth = m_pTextEdit->m_pLeftAreaWidget->width();
-        m_pTextEdit->m_pLeftAreaWidget->m_pLineNumberArea->show();
-        m_pTextEdit->m_pLeftAreaWidget->setFixedWidth(leftAreaWidth + lineNumberAreaWidth);
+        int lineNumberAreaWidth = m_pTextEdit->getLeftAreaWidget()->m_pLineNumberArea->width();
+        int leftAreaWidth = m_pTextEdit->getLeftAreaWidget()->width();
+        m_pTextEdit->getLeftAreaWidget()->m_pLineNumberArea->show();
+        m_pTextEdit->getLeftAreaWidget()->setFixedWidth(leftAreaWidth + lineNumberAreaWidth);
 
     } else if(!bIsShow) {
-        int lineNumberAreaWidth = m_pTextEdit->m_pLeftAreaWidget->m_pLineNumberArea->width();
-        int leftAreaWidth = m_pTextEdit->m_pLeftAreaWidget->width();
-        m_pTextEdit->m_pLeftAreaWidget->m_pLineNumberArea->hide();
-        m_pTextEdit->m_pLeftAreaWidget->setFixedWidth(leftAreaWidth - lineNumberAreaWidth);
+        int lineNumberAreaWidth = m_pTextEdit->getLeftAreaWidget()->m_pLineNumberArea->width();
+        int leftAreaWidth = m_pTextEdit->getLeftAreaWidget()->width();
+        m_pTextEdit->getLeftAreaWidget()->m_pLineNumberArea->hide();
+        m_pTextEdit->getLeftAreaWidget()->setFixedWidth(leftAreaWidth - lineNumberAreaWidth);
     }
     m_pTextEdit->bIsSetLineNumberWidth = bIsShow;
     m_pTextEdit->updateLeftAreaWidget();
@@ -760,12 +771,17 @@ BottomBar *EditWrapper::bottomBar()
 
 QString EditWrapper::filePath()
 {
-    return  m_pTextEdit->filepath;
+    return  m_pTextEdit->getFilePath();
 }
 
 TextEdit *EditWrapper::textEditor()
 {
     return m_pTextEdit;
+}
+
+Window *EditWrapper::window()
+{
+    return m_pWindow;
 }
 
 //支持大文本加载 界面不卡顿 秒关闭

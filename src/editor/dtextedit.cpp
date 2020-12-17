@@ -68,7 +68,6 @@ TextEdit::TextEdit(QWidget *parent)
     //撤销重做栈
     m_pUndoStack = new QUndoStack(this);
 
-
     m_nLines = 0;
     m_nBookMarkHoverLine = -1;
     m_bIsFileOpen = false;
@@ -113,15 +112,16 @@ TextEdit::TextEdit(QWidget *parent)
 
     connect(this, &QPlainTextEdit::cursorPositionChanged, this, &TextEdit::cursorPositionChanged);
     connect(this, &QPlainTextEdit::selectionChanged, this, &TextEdit::onSelectionArea);
-    connect(document(), &QTextDocument::modificationChanged, this, &TextEdit::setModified);
+
     connect(document(), &QTextDocument::contentsChange, this, &TextEdit::updateMark);
     connect(document(), &QTextDocument::contentsChange, this, &TextEdit::checkBookmarkLineMove);
+
     connect(m_pUndoStack,&QUndoStack::canRedoChanged,this,[this](bool){
-     emit modificationChanged(filepath, true);
+        this->m_wrapper->window()->updateModifyStatus(m_sFilePath,true);
     });
 
     connect(m_pUndoStack,&QUndoStack::canRedoChanged,this,[this](bool){
-     emit modificationChanged(filepath, true);
+        this->m_wrapper->window()->updateModifyStatus(m_sFilePath,true);
     });
 
 
@@ -356,7 +356,7 @@ void TextEdit::initRightClickedMenu()
     connect(m_disableReadOnlyModeAction, &QAction::triggered, this, &TextEdit::toggleReadOnlyMode);
 
     connect(m_openInFileManagerAction, &QAction::triggered, this,[this](){
-        DDesktopServices::showFileItem(filepath);
+        DDesktopServices::showFileItem(m_sFilePath);
     });
 
     connect(m_addComment,&QAction::triggered,this,[=] {
@@ -555,7 +555,7 @@ void TextEdit::popRightMenu(QPoint pos)
 
     ok =false;
     // intelligent judge whether to support comments.
-    const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());
+    const auto def = m_repository.definitionForFileName(QFileInfo(m_sFilePath).fileName());
     if (characterCount() &&
         (textCursor().hasSelection() || !isBlankLine) &&
         !def.filePath().isEmpty()) {
@@ -2862,12 +2862,6 @@ void TextEdit::setSettings(Settings *keySettings)
     m_settings = keySettings;
 }
 
-void TextEdit::setModified(bool modified)
-{
-    if(m_wrapper->getFileLoading()) return;
-   // document()->setModified(modified);
-    emit modificationChanged(filepath, modified);
-}
 
 void TextEdit::copySelectedText()
 {
@@ -3086,7 +3080,7 @@ void TextEdit::toggleComment(bool sister)
     }
     if(!bHasCommnent) return;
 
-    const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());  //Java ,C++,HTML,
+    const auto def = m_repository.definitionForFileName(QFileInfo(m_sFilePath).fileName());  //Java ,C++,HTML,
     QString name= def.name();
     if(name=="Markdown")
     return;
@@ -3537,9 +3531,9 @@ void TextEdit::getHideRowContent(int iLine)
     }
 
     if (QColor(m_backgroundColor).lightness() < 128) {
-        m_foldCodeShow->initHighLight(filepath,false);
+        m_foldCodeShow->initHighLight(m_sFilePath,false);
     } else {
-        m_foldCodeShow->initHighLight(filepath,true);
+        m_foldCodeShow->initHighLight(m_sFilePath,true);
     }
 
     m_foldCodeShow->appendText("{", width());
@@ -3712,7 +3706,7 @@ void TextEdit::setTextFinished()
     QStringList bookmarkList = readHistoryRecordofBookmark();
     QStringList filePathList = readHistoryRecordofFilePath("advance.editor.browsing_history_file");
     QList<int> linesList;
-    QString qstrPath = filepath;
+    QString qstrPath = m_sFilePath;
 
     if (filePathList.contains(qstrPath)) {
         int index = 2;
@@ -3790,15 +3784,15 @@ void TextEdit::writeHistoryRecord()
     QString history = m_settings->settings->option("advance.editor.browsing_history_file")->value().toString();
     QStringList historyList = readHistoryRecord("advance.editor.browsing_history_file");
 
-    int nLeftPosition = history.indexOf(filepath);
+    int nLeftPosition = history.indexOf(m_sFilePath);
     int nRightPosition = history.indexOf("}*",nLeftPosition);
-    if (history.contains(filepath)) {
+    if (history.contains(m_sFilePath)) {
         history.remove(nLeftPosition - 4,nRightPosition + 6 - nLeftPosition);
     }
 
     if (!m_listBookmark.isEmpty()) {
 
-        QString filePathandBookmarkLine = "*{*[" + filepath + "]**(";
+        QString filePathandBookmarkLine = "*{*[" + m_sFilePath + "]**(";
 
         foreach (auto line, m_listBookmark) {
             if (line <= 0) {
@@ -3838,14 +3832,14 @@ void TextEdit::writeEncodeHistoryRecord()
         }
     }
 
-    int nLeftPosition = history.indexOf(filepath);
+    int nLeftPosition = history.indexOf(m_sFilePath);
     int nRightPosition = history.indexOf("}*",nLeftPosition);
 
-    if (history.contains(filepath)) {
+    if (history.contains(m_sFilePath)) {
         history.remove(nLeftPosition - 4,nRightPosition + 6 - nLeftPosition);
     }
 
-    QString encodeHistory = history + "*{*[" + filepath + "]*" + m_textEncode + "}*";
+    QString encodeHistory = history + "*{*[" + m_sFilePath + "]*" + m_textEncode + "}*";
     m_settings->settings->option("advance.editor.browsing_encode_history")->setValue(encodeHistory);
 }
 

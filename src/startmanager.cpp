@@ -138,12 +138,11 @@ void StartManager::openFilesInTab(QStringList files)
                     bIsEmpty = true;
                 }
             }
-
+           // bIsEmpty = true;
             if (!bIsEmpty) {
                 QFileInfo fileInfo;
                 QFileInfo fileInfoTem;
                 bool bIsTemFile = false;
-
                 for (int i = 0;i < m_qlistTemFile.count();i++) {
                     QJsonParseError jsonError;
                     // 转化为 JSON 文档
@@ -296,7 +295,7 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
     Window *window = createWindow();
     //window->showCenterWindow();
     window->addTabWithWrapper(buffer, filePath, qstrTruePath, tabName);
-    window->currentWrapper()->textEditor()->setModified(isModifyed);
+    window->currentWrapper()->updateModifyStatus(isModifyed);
     window->setMinimumSize(Tabbar::sm_pDragPixmap->rect().size());
 
 

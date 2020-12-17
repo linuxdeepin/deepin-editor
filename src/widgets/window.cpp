@@ -280,6 +280,30 @@ Window::~Window()
     // We don't need clean pointers because application has exit here.
 }
 
+void Window::updateModifyStatus(const QString &path, bool isModified)
+{
+    int tabIndex = m_tabbar->indexOf(path);
+    QString tabName = m_tabbar->textAt(tabIndex);
+    QRegularExpression reg("[^*](.+)");
+    QRegularExpressionMatch match = reg.match(tabName);
+
+    tabName = match.captured(0);
+    if (isModified) tabName.prepend('*');
+    m_tabbar->setTabText(tabIndex, tabName);
+    //判断是否需要阻塞系统关机
+    emit sigJudgeBlockShutdown();
+}
+
+void Window::updateSaveAsFileName(QString strOldFilePath, QString strNewFilePath)
+{
+    int tabIndex = m_tabbar->indexOf(strOldFilePath);
+    EditWrapper *wrapper = m_wrappers.value(strOldFilePath);
+    m_tabbar->updateTab(tabIndex, strNewFilePath, QFileInfo(strNewFilePath).fileName());
+    wrapper->updatePath(strNewFilePath);
+    m_wrappers.remove(strOldFilePath);
+    m_wrappers.insert(strNewFilePath, wrapper);
+}
+
 void Window::showCenterWindow(bool bIsCenter)
 {
     // Init window state with config.
@@ -508,44 +532,6 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
                                 "Event",
                                 wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
 
-    connect(wrapper->textEditor(), &TextEdit::modificationChanged, this, [ = ](const QString & path, bool isModified) {
-        int tabIndex = m_tabbar->indexOf(path);
-        QString tabName = m_tabbar->textAt(tabIndex);
-        QRegularExpression reg("[^*](.+)");
-        QRegularExpressionMatch match = reg.match(tabName);
-
-        tabName = match.captured(0);
-
-        if (isModified) {
-            tabName.prepend('*');
-        }
-
-        m_tabbar->setTabText(tabIndex, tabName);
-        //判断是否需要阻塞系统关机
-        emit sigJudgeBlockShutdown();
-    });
-
-//    dbus.systemBus().connect("com.deepin.daemon.Gesture",
-//                                "/com/deepin/daemon/Gesture", "com.deepin.daemon.Gesture",
-//                                "Event",
-//                                wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
-
-    connect(wrapper,  &EditWrapper::sigCodecSaveFile, this, [ = ](QString strOldFilePath, QString strNewFilePath) {
-        int tabIndex = m_tabbar->indexOf(strOldFilePath);
-
-
-        EditWrapper *wrapper = m_wrappers.value(strOldFilePath);
-        m_tabbar->updateTab(tabIndex, strNewFilePath, QFileInfo(strNewFilePath).fileName());
-
-        wrapper->updatePath(strNewFilePath,qstrTruePath);
-
-        m_wrappers.remove(strOldFilePath);
-        m_wrappers.insert(strNewFilePath, wrapper);
-
-       // wrapper->textEditor()->loadHighlighter();
-    });
-
-    connect(wrapper, &EditWrapper::requestSaveAs, this, &Window::saveAsFile);
 
     // add wrapper to this window.
     m_tabbar->addTabWithIndex(index, filepath, tabName);
@@ -576,7 +562,7 @@ bool Window::closeTab()
 //    bool isEmpty = wrapper->isPlainTextEmpty();
     bool bIsBackupFile = false;
 
-    if (wrapper->textEditor()->getTruePath() != wrapper->textEditor()->filepath) {
+    if (wrapper->textEditor()->getTruePath() != wrapper->textEditor()->getFilePath()) {
         bIsBackupFile = true;
     }
 
@@ -684,37 +670,9 @@ EditWrapper *Window::createEditor()
     connect(wrapper->textEditor(), &TextEdit::clickFullscreenAction, this, &Window::toggleFullscreen, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::popupNotify, this, &Window::showNotify, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::pressEsc, this, &Window::removeBottomWidget, Qt::QueuedConnection);
-    connect(wrapper, &EditWrapper::requestSaveAs, this, &Window::saveAsFile);
     connect(wrapper->textEditor(), &TextEdit::textChanged, this, [=](){
         updateJumpLineBar(wrapper->textEditor());
     }, Qt::QueuedConnection);
-
-    connect(wrapper->textEditor(), &TextEdit::modificationChanged, this, [ = ](const QString & path, bool isModified) {
-        int tabIndex = m_tabbar->indexOf(path);
-        QString tabName = m_tabbar->textAt(tabIndex);
-        QRegularExpression reg("[^*](.*)");
-        QRegularExpressionMatch match = reg.match(tabName);
-
-        tabName = match.captured(0);
-
-        if (isModified) {
-            tabName.prepend('*');
-        }
-
-        m_tabbar->setTabText(tabIndex, tabName);
-        //判断是否需要阻塞系统关机
-        emit sigJudgeBlockShutdown();
-    });
-
-    connect(wrapper,  &EditWrapper::sigCodecSaveFile, this, [ = ](QString strOldFilePath, QString strNewFilePath) {
-        int tabIndex = m_tabbar->indexOf(strOldFilePath);
-        EditWrapper *wrapper = m_wrappers.value(strOldFilePath);
-        m_tabbar->updateTab(tabIndex, strNewFilePath, QFileInfo(strNewFilePath).fileName());
-        wrapper->updatePath(strNewFilePath);
-        m_wrappers.remove(strOldFilePath);
-        m_wrappers.insert(strNewFilePath, wrapper);
-       // wrapper->textEditor()->loadHighlighter();
-    });
 
 
     bool wordWrap = m_settings->settings->option("base.font.wordwrap")->value().toBool();
@@ -723,7 +681,7 @@ EditWrapper *Window::createEditor()
     wrapper->textEditor()->setSettings(m_settings);
     wrapper->textEditor()->setTabSpaceNumber(m_settings->settings->option("advance.editor.tabspacenumber")->value().toInt());
     wrapper->textEditor()->setFontFamily(m_settings->settings->option("base.font.family")->value().toString());
-    wrapper->textEditor()->setModified(false);
+    wrapper->updateModifyStatus(false);
     wrapper->textEditor()->setLineWrapMode(wordWrap);
     setFontSizeWithConfig(wrapper);
 
@@ -859,9 +817,9 @@ bool Window::saveFile()
 
     bool isDraftFile = wrapperEdit->isDraftFile();
     bool isEmpty = wrapperEdit->isPlainTextEmpty();
-    QFileInfo info(wrapperEdit->textEditor()->filepath);
+    QFileInfo info(wrapperEdit->textEditor()->getFilePath());
     //判断文件是否有写的权限
-    QFile temporaryBuffer(wrapperEdit->textEditor()->filepath);
+    QFile temporaryBuffer(wrapperEdit->textEditor()->getFilePath());
     QFile::Permissions pers = temporaryBuffer.permissions();
     bool isWrite = ((pers & QFile::WriteUser) || (pers & QFile::WriteOwner) || (pers & QFile::WriteOther));
 
@@ -945,14 +903,7 @@ QString Window::saveAsFileToDisk()
         wrapper->updatePath(newFilePath);
         wrapper->saveFile();
 
-        m_wrappers.remove(wrapper->filePath());
-        m_wrappers.insert(newFilePath, wrapper);
-
-        //wrapper->textEditor()->loadHighlighter();
-
-        QFileInfo info(newFilePath);
-        m_tabbar->updateTab(m_tabbar->currentIndex(), newFilePath, info.fileName());
-
+        updateSaveAsFileName(wrapper->filePath(),newFilePath);
         return newFilePath;
     }
 
@@ -1002,7 +953,7 @@ QString Window::saveBlankFileToDisk()
 
 bool Window::saveAsOtherTabFile(EditWrapper *wrapper)
 {
-    QString filePath = wrapper->textEditor()->filepath;
+    QString filePath = wrapper->textEditor()->getFilePath();
     bool isDraft = Utils::isDraftFile(filePath);
     QFileInfo fileInfo(filePath);
     int index = m_tabbar->indexOf(filePath);
@@ -1268,8 +1219,7 @@ void Window::popupPrintDialog()
     DPrinter printer(QPrinter::HighResolution);
     DPrintPreviewDialog preview( this);
 
-    TextEdit *wrapper = currentWrapper()->textEditor();
-    const QString &filePath = wrapper->filepath;
+    const QString &filePath = currentWrapper()->textEditor()->getFilePath();
     const QString &fileDir = QFileInfo(filePath).dir().absolutePath();
 
     //适配打印接口2.0，dtk大于 5.4.3 版才合入最新的2.0打印控件接口
@@ -1469,7 +1419,7 @@ void Window::backupFile()
     listBackupInfo = Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->value().toStringList();
 
     for (EditWrapper *wrapper : wrappers) {
-        filePath = wrapper->textEditor()->filepath;
+        filePath = wrapper->textEditor()->getFilePath();
         StartManager::FileTabInfo tabInfo = StartManager::instance()->getFileTabInfo(filePath);
         curPos = QString::number(wrapper->textEditor()->textCursor().position());
         fileInfo.setFile(filePath);

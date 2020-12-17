@@ -49,6 +49,11 @@ public:
     Window(DMainWindow *parent = nullptr);
     ~Window() override;
 
+    //跟新文件修改状态
+    void updateModifyStatus(const QString &path, bool isModified);
+    //跟新tab文件名称
+    void updateSaveAsFileName(QString strOldFilePath, QString strNewFilePath);
+
     void showCenterWindow(bool bIsCenter);
     void initTitlebar();
     bool checkBlockShutdown();

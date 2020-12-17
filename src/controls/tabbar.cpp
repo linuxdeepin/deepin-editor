@@ -321,9 +321,9 @@ void Tabbar::insertFromMimeDataOnDragEnter(int index, const QMimeData *source)
 
 //    StartManager::instance()->setDragEnter(true);
     //qDebug() << "insertFromMimeDataOnDragEnter";
-    window->addTabWithWrapper(wrapper,wrapper->textEditor()->filepath,wrapper->textEditor()->getTruePath(),tabName,index);
+    window->addTabWithWrapper(wrapper,wrapper->textEditor()->getFilePath(),wrapper->textEditor()->getTruePath(),tabName,index);
     //window->currentWrapper()->textEditor()->setModified(source->property("isModified").toBool());
-    wrapper->textEditor()->setModified(source->property("isModified").toBool());
+    wrapper->updateModifyStatus(source->property("isModified").toBool());
     window->focusActiveEditor();
 }
 
@@ -343,9 +343,9 @@ void Tabbar::insertFromMimeData(int index, const QMimeData *source)
     }
 
     //qDebug() << "insertFromMimeData";
-    window->addTabWithWrapper(wrapper, wrapper->textEditor()->filepath, wrapper->textEditor()->getTruePath(), tabName, index);
+    window->addTabWithWrapper(wrapper, wrapper->textEditor()->getFilePath(), wrapper->textEditor()->getTruePath(), tabName, index);
     //window->currentWrapper()->textEditor()->setModified(source->property("isModified").toBool());
-    wrapper->textEditor()->setModified(source->property("isModified").toBool());
+    wrapper->updateModifyStatus(source->property("isModified").toBool());
     window->focusActiveEditor();
 }
 

@@ -608,16 +608,7 @@ TEST_F(test_textedit, setSettings)
 
     assert(1==1);
 }
-//void setModified(bool modified);
-TEST_F(test_textedit, setModified)
-{
-    TextEdit *startManager = new TextEdit();
-    EditWrapper * ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->setModified(true);
 
-    assert(1==1);
-}
 
 //void copySelectedText();
 TEST_F(test_textedit, copySelectedText)

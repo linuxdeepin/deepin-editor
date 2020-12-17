@@ -97,6 +97,7 @@ public:
     BottomBar *bottomBar();
     QString filePath();
     TextEdit *textEditor();
+    Window *window();
 private:
     // 类似setPlainText(QString) 接口支持大文本加载 不卡顿 秒退出 梁卫东 2020年11月11日16:56:27
     void loadContent(const QByteArray&);
@@ -109,9 +110,9 @@ public slots:
     void loadSyntaxHighlighter(KSyntaxHighlighting::Definition def);
     void OnThemeChangeSlot(QString theme);
     void UpdateBottomBarWordCnt(int cnt);
-signals:
-    void requestSaveAs();
-    void sigCodecSaveFile(const QString &strOldFilePath, const QString &strNewFilePath);
+public:
+    void updateModifyStatus(bool isModified);
+    void updateSaveAsFileName(QString strOldFilePath, QString strNewFilePath);
 private:
     //第一次打开文件编码
     QString m_sFirstEncode = QString("UTF-8");
