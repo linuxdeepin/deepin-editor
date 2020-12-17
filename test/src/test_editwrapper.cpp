@@ -176,7 +176,8 @@ TEST_F(test_editwrapper, readFile)
 //void handleFileLoadFinished(const QByteArray &encode,const QString &content);
 TEST_F(test_editwrapper, handleFileLoadFinished)
 {
-    EditWrapper *wrapper = new EditWrapper();
+    Window* pWindow = new Window;
+    EditWrapper *wrapper = pWindow->createEditor();
     Settings *s = new Settings();
     wrapper->textEditor()->setSettings(s);
     wrapper->textEditor()->setWrapper(wrapper);

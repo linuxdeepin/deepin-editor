@@ -661,7 +661,7 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QByteArr
 
     if (m_bIsTemFile) {
         m_bIsTemFile = false;
-        updateModifyStatus(false);
+        updateModifyStatus(true);
     }
 
     m_pBottomBar->setEncodeName(m_sCurEncode);
