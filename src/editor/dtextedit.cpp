@@ -5402,7 +5402,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
 
         } else {
             if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "indentline")) {
-                indentText();
+                QPlainTextEdit::keyPressEvent(e);
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "backindentline")) {
                 unindentText();
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "forwardchar")) {
