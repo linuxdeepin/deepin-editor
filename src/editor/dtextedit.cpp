@@ -4081,7 +4081,7 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
 {
     //只读模式下实现禁止语音输入的效果
     if (m_readOnlyMode) {
-        undo();
+      //  undo();
         return;
     }
 
@@ -5181,7 +5181,7 @@ void TextEdit::mouseReleaseEvent(QMouseEvent *e)
 void TextEdit::keyPressEvent(QKeyEvent *e)
 {
     Qt::KeyboardModifiers modifiers = e->modifiers();
-
+    qDebug()<<e<<e->text()<<e->key()<<e->modifiers();
     //没有修改键　插入文件
     if(modifiers == Qt::NoModifier){
         //按下esc的时候,光标退出编辑区，切换至标题栏
@@ -5216,6 +5216,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             return;
         }
 
+
         //删除撤销重做
         //列编辑
         if(e->key() == Qt::Key_Backspace){
@@ -5230,6 +5231,22 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         }
         return;
     }else{
+
+        //键盘右边数字键
+        if(modifiers == Qt::KeypadModifier && (e->key() <= Qt::Key_9 && e->key() >= Qt::Key_0) && !e->text().isEmpty())
+        {
+            //非修改键盘按键加撤销重做栈
+            if(m_bIsAltMod && !m_altModSelections.isEmpty()){
+                QUndoCommand * pInsertStack= new InsertTextUndoCommand(m_altModSelections,e->text());
+                m_pUndoStack->push(pInsertStack);
+            }else {
+                QUndoCommand * pInsertStack= new InsertTextUndoCommand(textCursor(),e->text());
+                m_pUndoStack->push(pInsertStack);
+            }
+            return;
+        }
+
+
         //重做 ctrl+shift+z
         if(modifiers == (Qt::ControlModifier | Qt::ShiftModifier) && e->key() == Qt::Key_Z){
           m_pUndoStack->redo();

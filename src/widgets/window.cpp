@@ -283,6 +283,7 @@ Window::~Window()
 void Window::updateModifyStatus(const QString &path, bool isModified)
 {
     int tabIndex = m_tabbar->indexOf(path);
+    if(tabIndex == -1) return;
     QString tabName = m_tabbar->textAt(tabIndex);
     QRegularExpression reg("[^*](.+)");
     QRegularExpressionMatch match = reg.match(tabName);
@@ -684,7 +685,6 @@ EditWrapper *Window::createEditor()
     wrapper->textEditor()->setSettings(m_settings);
     wrapper->textEditor()->setTabSpaceNumber(m_settings->settings->option("advance.editor.tabspacenumber")->value().toInt());
     wrapper->textEditor()->setFontFamily(m_settings->settings->option("base.font.family")->value().toString());
-    wrapper->updateModifyStatus(false);
     wrapper->textEditor()->setLineWrapMode(wordWrap);
     setFontSizeWithConfig(wrapper);
 

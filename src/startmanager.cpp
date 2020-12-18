@@ -138,7 +138,7 @@ void StartManager::openFilesInTab(QStringList files)
                     bIsEmpty = true;
                 }
             }
-           // bIsEmpty = true;
+
             if (!bIsEmpty) {
                 QFileInfo fileInfo;
                 QFileInfo fileInfoTem;
@@ -245,43 +245,6 @@ void StartManager::openFilesInTab(QStringList files)
                 window->addTab(file);
                 window->setWindowState(Qt::WindowActive);
                 window->activateWindow();
-
-//                int indexid=0;
-//                uint winid=0;
-//                QDBusInterface dock("com.deepin.dde.daemon.Dock",
-//                                    "/com/deepin/dde/daemon/Dock",
-//                                    "com.deepin.dde.daemon.Dock",
-//                                    QDBusConnection::sessionBus()
-//                                    );
-//                QDBusReply<QStringList> rep = dock.call("GetEntryIDs");
-//                for(auto name:rep.value())
-//                {
-//                    if(name=="deepin-editor")
-//                    {
-//                        indexid=rep.value().indexOf(name);
-//                    }
-//                }
-
-//                m_pDock.reset(new Dock("com.deepin.dde.daemon.Dock",
-//                                       "/com/deepin/dde/daemon/Dock",
-//                                       QDBusConnection::sessionBus(),
-//                                       this
-//                                       )
-//                              );
-//                QList<QDBusObjectPath> list = m_pDock->entries();
-
-//                m_pEntry.reset(new Entry("com.deepin.dde.daemon.Dock",
-//                                         list[indexid].path(),
-//                                         QDBusConnection::sessionBus(),
-//                                         this));
-//                winid= m_pEntry->currentWindow() ;
-
-//                QDBusMessage active = QDBusMessage::createMethodCall("com.deepin.dde.daemon.Dock",
-//                                                                     "/com/deepin/dde/daemon/Dock",
-//                                                                     "com.deepin.dde.daemon.Dock",
-//                                                                     "ActivateWindow");
-//                active<<winid;
-//                QDBusConnection::sessionBus().call(active, QDBus::BlockWithGui);
             }
 
         }
