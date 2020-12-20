@@ -24,6 +24,7 @@
 #include "../widgets/bottombar.h"
 #include "../controls/warningnotices.h"
 #include "../editor/leftareaoftextedit.h"
+#include "../common/CSyntaxHighlighter.h"
 #include <QVBoxLayout>
 #include <QWidget>
 #include <DMessageManager>
@@ -107,7 +108,6 @@ private:
     int GetCorrectUnicode1(const QByteArray &ba);
 public slots:
     void handleFileLoadFinished(const QByteArray &encode,const QByteArray &content);
-    void loadSyntaxHighlighter(KSyntaxHighlighting::Definition def);
     void OnThemeChangeSlot(QString theme);
     void UpdateBottomBarWordCnt(int cnt);
 public:
@@ -141,9 +141,8 @@ private:
     //语法高亮
     KSyntaxHighlighting::Repository m_Repository;
     KSyntaxHighlighting::Definition m_Definition;
-    KSyntaxHighlighting::SyntaxHighlighter *m_pSyntaxHighlighter = nullptr;
-
-
+    //KSyntaxHighlighting::SyntaxHighlighter *m_pSyntaxHighlighter = nullptr;
+    CSyntaxHighlighter *m_pSyntaxHighlighter = nullptr;
 
 };
 

@@ -18,37 +18,32 @@
  */
 
 #include "CSyntaxHighlighter.h"
-#include "utils.h"
-#include "../encodes/detectcode.h"
-#include "../editor/uncommentselection.h"
-#include <QFile>
-#include <QFileInfo>
 #include <QDebug>
-#include <QXmlStreamReader>
 
-
-CSyntaxHighlighter::CSyntaxHighlighter(const QString &filepath, QObject *parent)
-    : QThread(parent),
-      m_sFilePath(filepath)
+CSyntaxHighlighter::CSyntaxHighlighter(QObject *parent):
+    SyntaxHighlighter (parent),
+    m_bHighlight(false)
 {
 
 }
 
-CSyntaxHighlighter::~CSyntaxHighlighter()
+CSyntaxHighlighter::CSyntaxHighlighter(QTextDocument *document):
+    SyntaxHighlighter (document),m_bHighlight(false)
 {
+
 }
 
-void CSyntaxHighlighter::run()
+
+
+void CSyntaxHighlighter::setEnableHighlight(bool ok)
 {
-    Comment::CommentDefinition commentDefinition;
-    KSyntaxHighlighting::Repository repository;
-    QVector<KSyntaxHighlighting::Definition> defs =repository.definitions();
-    KSyntaxHighlighting::Definition def = repository.definitionForFileName(m_sFilePath);
-    if (def.isValid()) {
-        qDebug()<<"KSyntaxHighlighting::Definition Path "<<def.filePath();
-        qDebug()<<"def.singleLineCommentMarker():"<< def.singleLineCommentMarker();
-        qDebug()<<"def.multiLineCommentMarker():"<< def.multiLineCommentMarker();
-        qDebug()<<def.section()<<def.name()<<def.translatedSection()<<def.translatedName();
-    }
-   emit sigDefinition(def);
+    m_bHighlight = ok;
+}
+
+void CSyntaxHighlighter::highlightBlock(const QString &text)
+{
+    if(!m_bHighlight) return;
+
+   // qDebug()<<"=========highlightBlock"<<text<<currentBlockState();
+    KSyntaxHighlighting::SyntaxHighlighter::highlightBlock(text);
 }

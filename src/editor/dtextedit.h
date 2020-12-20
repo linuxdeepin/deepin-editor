@@ -436,7 +436,7 @@ private:
     bool setCursorKeywordSeletoin(int position, bool findNext);
     void cursorPositionChanged();
     void updateHighlightBrackets(const QChar &openChar, const QChar &closeChar);
-    int getFirstVisibleBlockId() const;
+
     void getNeedControlLine(int line, bool isVisable);
     //触摸屏功能函数
     bool gestureEvent(QGestureEvent *event);
@@ -448,7 +448,8 @@ private:
     //add for single refers to the sliding
     void slideGestureY(qreal diff);
     void slideGestureX(qreal diff);
-
+public:
+    int getFirstVisibleBlockId() const;
 public:
     bool bIsSetLineNumberWidth = true;
     bool m_pIsShowCodeFoldArea;

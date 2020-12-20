@@ -69,6 +69,33 @@ EditWrapper::EditWrapper(Window* window,QWidget *parent)
     connect(m_pTextEdit, &TextEdit::cursorModeChanged, this, &EditWrapper::handleCursorModeChanged);
     connect(m_pWaringNotices, &WarningNotices::reloadBtnClicked, this, &EditWrapper::reloadModifyFile);
     connect(m_pWaringNotices, &WarningNotices::saveAsBtnClicked, m_pWindow, &Window::saveAsFile);
+    connect(m_pTextEdit->verticalScrollBar(),&QScrollBar::valueChanged,this,[this](int value){
+        if(m_pSyntaxHighlighter){
+
+          QScrollBar* pScrollBar = m_pTextEdit->verticalScrollBar();
+          //QTextBlock textBlock = m_pTextEdit->document()->findBlockByNumber(value);
+
+          QTextBlock beginBlock = m_pTextEdit->document()->findBlockByNumber(m_pTextEdit->getFirstVisibleBlockId());
+
+          QTextBlock endBlock;
+          if (pScrollBar->maximum() > 0){
+              QPoint endPoint = QPointF(0,m_pTextEdit->height() + (m_pTextEdit->height()/pScrollBar->maximum())*pScrollBar->value()).toPoint();
+             endBlock = m_pTextEdit->cursorForPosition(endPoint).block();
+          }else {
+             endBlock = m_pTextEdit->document()->lastBlock();
+           }
+
+
+           for (QTextBlock var = beginBlock; var != endBlock; var= var.next()) {
+                m_pSyntaxHighlighter->setEnableHighlight(true);
+                m_pSyntaxHighlighter->rehighlightBlock(var);
+                m_pSyntaxHighlighter->setEnableHighlight(false);
+           }
+
+          qDebug()<<"valueChanged:"<<beginBlock.text()<<endBlock.text();
+
+        }
+    });
 }
 
 EditWrapper::~EditWrapper()
@@ -562,12 +589,11 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QByteArr
 {   
 
     qint64 time1 = QDateTime::currentMSecsSinceEpoch();
-
     m_Definition = m_Repository.definitionForFileName(m_pTextEdit->getFilePath());
     qDebug()<<"===========begin load file:"<<time1;
     qDebug()<<m_Definition.isValid()<<m_Definition.filePath()<<m_Definition.translatedName();
     if(m_Definition.isValid() && !m_Definition.filePath().isEmpty()){
-        if(!m_pSyntaxHighlighter) m_pSyntaxHighlighter = new KSyntaxHighlighting::SyntaxHighlighter(m_pTextEdit->document());
+        if(!m_pSyntaxHighlighter) m_pSyntaxHighlighter = new CSyntaxHighlighter(m_pTextEdit->document());
         QString m_themePath = Settings::instance()->settings->option("advance.editor.theme")->value().toString();
         if(m_themePath.contains("dark")){
             m_pSyntaxHighlighter->setTheme(m_Repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme));
@@ -575,14 +601,16 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QByteArr
             m_pSyntaxHighlighter->setTheme(m_Repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
         }
 
-        m_pSyntaxHighlighter->setDefinition(m_Definition);
+        if(m_pSyntaxHighlighter) m_pSyntaxHighlighter->setDefinition(m_Definition);;
         m_pTextEdit->setSyntaxDefinition(m_Definition);
         m_pBottomBar->getHighlightMenu()->setCurrentTextOnly(m_Definition.translatedName());
-    }
 
+    }
 
     qint64 time2 = QDateTime::currentMSecsSinceEpoch();
     qDebug()<<"===========load SyntaxHighter:"<<time2 - time1;
+
+
 
     if (!Utils::isDraftFile(m_pTextEdit->getFilePath())) {
         DRecentData data;
@@ -670,24 +698,11 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QByteArr
         updateModifyStatus(true);
     }
 
+    if(m_pSyntaxHighlighter) m_pSyntaxHighlighter->setEnableHighlight(true);
+
     m_pBottomBar->setEncodeName(m_sCurEncode);
 }
 
-void EditWrapper::loadSyntaxHighlighter(KSyntaxHighlighting::Definition def)
-{
-    qDebug()<<def.isValid()<<def.translatedName();
-    if(!def.filePath().isEmpty()){
-        if(nullptr == m_pSyntaxHighlighter){
-           // m_pTextEdit->setSyntaxDefinition(def);
-            m_pSyntaxHighlighter = new KSyntaxHighlighting::SyntaxHighlighter(m_pTextEdit->document());
-
-        }
-        m_pSyntaxHighlighter->setTheme(KSyntaxHighlighting::Repository().defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
-        m_pSyntaxHighlighter->setDefinition(def);
-        m_pSyntaxHighlighter->rehighlight();
-        m_pBottomBar->getHighlightMenu()->setCurrentTextOnly(def.translatedName());
-    }
-}
 
 void EditWrapper::OnThemeChangeSlot(QString theme)
 {
@@ -703,14 +718,11 @@ void EditWrapper::OnThemeChangeSlot(QString theme)
 
     //设置编辑器
     if(m_pSyntaxHighlighter){
-
         if (QColor(backgroundColor).lightness() < 128) {
              m_pSyntaxHighlighter->setTheme(m_Repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme));
         } else {
              m_pSyntaxHighlighter->setTheme(m_Repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
         }
-//        m_Definition = m_Repository.definitionForFileName(m_pTextEdit->getFilePath());
-//        m_pSyntaxHighlighter->setDefinition(m_Definition);
          m_pSyntaxHighlighter->rehighlight();
     }
 
@@ -812,7 +824,6 @@ void EditWrapper::loadContent(const QByteArray &content)
     int max = 40*1024*1024;
 
     QByteArray data;
-   // QTextCursor cursor1 = m_pTextEdit->textCursor();
 
     if(len > max){
         for (int i = 0; i < cnt; i++) {
@@ -820,8 +831,8 @@ void EditWrapper::loadContent(const QByteArray &content)
             if(i == 0 && !m_bQuit){              
               data = content.mid(i*step,InitContentPos);
               cursor.insertText(data);
-              //cursor1.movePosition(QTextCursor::Start);
-              //m_pTextEdit->setTextCursor(cursor1);
+              //秒开界面语法高亮
+              emit m_pTextEdit->verticalScrollBar()->valueChanged(0);
               QApplication::processEvents();
               continue;
             }
@@ -842,16 +853,19 @@ void EditWrapper::loadContent(const QByteArray &content)
         if(!m_bQuit && len > InitContentPos){
             data = content.mid(0,InitContentPos);
             cursor.insertText(data);
-            //cursor1.movePosition(QTextCursor::Start);
-            //m_pTextEdit->setTextCursor(cursor1);
+            //秒开界面语法高亮
+            emit m_pTextEdit->verticalScrollBar()->valueChanged(0);
             QApplication::processEvents();
-
             if(!m_bQuit){
                 data = content.mid(InitContentPos,len-InitContentPos);
                 cursor.insertText(data);
             }
         }else {
-           if(!m_bQuit) cursor.insertText(content);
+           if(!m_bQuit) {
+               cursor.insertText(content);
+               //秒开界面语法高亮
+               emit m_pTextEdit->verticalScrollBar()->valueChanged(0);
+           }
         }
     }
 

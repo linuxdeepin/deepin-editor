@@ -17,24 +17,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #pragma once
-
-#include <QThread>
-#include <QString>
 #include <KSyntaxHighlighting/Repository>
 #include <KSyntaxHighlighting/Definition>
+#include <KSyntaxHighlighting/SyntaxHighlighter>
 
-class CSyntaxHighlighter : public QThread
+using namespace KSyntaxHighlighting;
+class CSyntaxHighlighter : public SyntaxHighlighter
 {
     Q_OBJECT
-
 public:
-    CSyntaxHighlighter(const QString &filepath, QObject *QObject = nullptr);
-    ~CSyntaxHighlighter();
+    explicit CSyntaxHighlighter(QObject *parent = nullptr);
+    explicit CSyntaxHighlighter(QTextDocument *document);
+    void setEnableHighlight(bool ok);
+protected:
+    virtual void highlightBlock(const QString & text) override;
 
-    void run();
-signals:
-    //void loadFinished(const QByteArray &encode, const QByteArray &content);
-    void sigDefinition(KSyntaxHighlighting::Definition def);
 private:
-    QString m_sFilePath;
+    bool m_bHighlight = false;
 };

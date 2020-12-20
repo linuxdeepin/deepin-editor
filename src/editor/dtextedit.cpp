@@ -5229,7 +5229,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             }
            return;
         }
-        return;
+        return QPlainTextEdit::keyPressEvent(e);
     }else{
 
         //键盘右边数字键
@@ -5541,6 +5541,8 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             copySelectedText();
             return;
         }
+
+        QPlainTextEdit::keyPressEvent(e);
     }
 }
 
