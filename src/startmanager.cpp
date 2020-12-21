@@ -189,8 +189,7 @@ void StartManager::openFilesInTab(QStringList files)
                                         window->addTemFileTab(temFilePath,fileName,localPath,bIsTemFile);
                                     }
                                 } else {
-                                        window->addTemFileTab(temFilePath,fileInfo.fileName(),localPath,bIsTemFile);
-
+                                    window->addTemFileTab(temFilePath,fileInfo.fileName(),localPath,bIsTemFile);
                                 }
                             } else {
                                 if (!localPath.isEmpty()) {

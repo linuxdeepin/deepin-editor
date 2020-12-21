@@ -352,6 +352,7 @@ QString EditWrapper::getTextEncode()
 bool EditWrapper::saveFile()
 {
     QString qstrFilePath = m_pTextEdit->getTruePath();
+
     if (qstrFilePath.isEmpty()) {
         qstrFilePath = m_pTextEdit->getFilePath();
     }
@@ -455,8 +456,14 @@ bool EditWrapper::saveTemFile(QString qstrDir)
 
 void EditWrapper::updatePath(const QString &file,QString qstrTruePath)
 {
-    QFileInfo fi(file);
+
+    if (qstrTruePath.isEmpty()) {
+        qstrTruePath = file;
+    }
+
+    QFileInfo fi(qstrTruePath);
     m_tModifiedDateTime = fi.lastModified();
+
     m_pTextEdit->setFilePath(file);
     m_pTextEdit->setBackupPath(qstrTruePath);
 }
@@ -540,9 +547,9 @@ void EditWrapper::hideWarningNotices()
 //除草稿文件 检查文件是否被删除,是否被修复
 void EditWrapper::checkForReload()
 {
-    if (Utils::isDraftFile(m_pTextEdit->getFilePath())) return;
+    if (Utils::isDraftFile(m_pTextEdit->getTruePath())) return;
 
-    QFileInfo fi(m_pTextEdit->getFilePath());
+    QFileInfo fi(m_pTextEdit->getTruePath());
 
     if (fi.lastModified() == m_tModifiedDateTime || m_pWaringNotices->isVisible()) return;
 

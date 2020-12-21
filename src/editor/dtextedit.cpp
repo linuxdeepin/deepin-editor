@@ -109,7 +109,6 @@ TextEdit::TextEdit(QWidget *parent)
          this->m_wrapper->UpdateBottomBarWordCnt(this->characterCount());
     });
 
-
     connect(this, &QPlainTextEdit::cursorPositionChanged, this, &TextEdit::cursorPositionChanged);
     connect(this, &QPlainTextEdit::selectionChanged, this, &TextEdit::onSelectionArea);
 

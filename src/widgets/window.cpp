@@ -617,7 +617,6 @@ bool Window::closeTab()
                if (bIsBackupFile) {
                    QFile(filePath).remove();
                    QFileInfo fileinfo (filePath);
-                   qInfo() << "fileinfo.ab" << fileinfo.absoluteDir().dirName();
                    QDir(m_blankFileDir).rmdir(fileinfo.absoluteDir().dirName());
                }
 
@@ -634,7 +633,6 @@ bool Window::closeTab()
                       m_tabbar->closeCurrentTab();
                       QFile(filePath).remove();
                       QFileInfo fileinfo (filePath);
-                      qInfo() << "fileinfo.ab111" << fileinfo.absoluteDir().dirName();
                       QDir(m_blankFileDir).rmdir(fileinfo.absoluteDir().dirName());
                   }
 
@@ -820,9 +818,15 @@ bool Window::saveFile()
 
     bool isDraftFile = wrapperEdit->isDraftFile();
     bool isEmpty = wrapperEdit->isPlainTextEmpty();
-    QFileInfo info(wrapperEdit->textEditor()->getFilePath());
+    QString filePath = wrapperEdit->textEditor()->getTruePath();
+
+    if (filePath.isEmpty()) {
+        filePath = wrapperEdit->textEditor()->getFilePath();
+    }
+
+    QFileInfo info(filePath);
     //判断文件是否有写的权限
-    QFile temporaryBuffer(wrapperEdit->textEditor()->getFilePath());
+    QFile temporaryBuffer(filePath);
     QFile::Permissions pers = temporaryBuffer.permissions();
     bool isWrite = ((pers & QFile::WriteUser) || (pers & QFile::WriteOwner) || (pers & QFile::WriteOther));
 
@@ -839,7 +843,23 @@ bool Window::saveFile()
     }
     // save normal file.
     else {
-       bool success = wrapperEdit->saveFile();
+        QString temPath = "";
+
+        if (wrapperEdit->textEditor()->getTruePath() != wrapperEdit->textEditor()->getFilePath()) {
+            temPath = wrapperEdit->textEditor()->getFilePath();
+        }
+
+        wrapperEdit->updatePath(filePath,filePath);
+        updateModifyStatus(temPath,false);
+        bool success = wrapperEdit->saveFile();
+//        wrapperEdit->updatePath(wrapperEdit->filePath());
+
+        if (!temPath.isEmpty()) {
+            QFile(temPath).remove();
+            QFileInfo fileinfo (temPath);
+            QDir(m_blankFileDir).rmdir(fileinfo.absoluteDir().dirName());
+        }
+
        if(success){
            currentWrapper()->hideWarningNotices();
            showNotify(tr("Saved successfully"));
@@ -903,9 +923,11 @@ QString Window::saveAsFileToDisk()
         const QString endOfLine = dialog.getComboBoxValue(QObject::tr("Line Endings"));
         const QString newFilePath = dialog.selectedFiles().value(0);
 
-        wrapper->updatePath(newFilePath);
+        wrapper->updatePath(wrapper->filePath(),newFilePath);
         wrapper->saveFile();
-
+        QFile(wrapper->filePath()).remove();
+        QFileInfo fileinfo (wrapper->filePath());
+        QDir(m_blankFileDir).rmdir(fileinfo.absoluteDir().dirName());
         updateSaveAsFileName(wrapper->filePath(),newFilePath);
         return newFilePath;
     }
@@ -1422,6 +1444,8 @@ void Window::backupFile()
     listBackupInfo = Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->value().toStringList();
 
     for (EditWrapper *wrapper : wrappers) {
+        if(wrapper->getFileLoading()) continue;
+
         filePath = wrapper->textEditor()->getFilePath();
         StartManager::FileTabInfo tabInfo = StartManager::instance()->getFileTabInfo(filePath);
         curPos = QString::number(wrapper->textEditor()->textCursor().position());
@@ -1433,7 +1457,7 @@ void Window::backupFile()
             jsonObject.insert("localPath",filePath);
             jsonObject.insert("cursorPosition",curPos);
             jsonObject.insert("temFilePath",filePath);
-            jsonObject.insert("modify",wrapper->textEditor()->document()->isModified());
+            jsonObject.insert("modify",wrapper->isModified());
             document.setObject(jsonObject);
             QByteArray byteArray = document.toJson(QJsonDocument::Compact);
             m_qlistTemFile.insert(tabInfo.tabIndex,byteArray);
@@ -1489,9 +1513,9 @@ void Window::backupFile()
             QJsonDocument document;
             jsonObject.insert("localPath",localPath);
             jsonObject.insert("cursorPosition",QString::number(wrapper->textEditor()->textCursor().position()));
-            jsonObject.insert("modify",wrapper->textEditor()->document()->isModified());
+            jsonObject.insert("modify",wrapper->isModified());
 
-            if (wrapper->textEditor()->document()->isModified()) {
+            if (wrapper->isModified()) {
                 QString path = fileInfo.path();
                 int lastPath = fileInfo.path().lastIndexOf("/");
                 QString name = path.right(path.count() - lastPath - 1);
@@ -2119,6 +2143,7 @@ void Window::closeEvent(QCloseEvent *e)
     for (EditWrapper *wrapper : wrappers) {
         m_wrappers.remove(wrapper->filePath());
         disconnect(wrapper->textEditor());
+        wrapper->setQuitFlag();
         wrapper->deleteLater();
     }
 

@@ -296,7 +296,7 @@ QMimeData* Tabbar::createMimeDataFromTab(int index, const QStyleOptionTab &optio
     }
     //qDebug() << "DragEnter(index)" << index;
     mimeData->setProperty("wrapper", QVariant::fromValue(static_cast<void *>(wrapper)));
-    mimeData->setProperty("isModified", wrapper->textEditor()->document()->isModified());
+    mimeData->setProperty("isModified", wrapper->isModified());
     mimeData->setData("dedit/tabbar", tabName.toUtf8());
     mimeData->removeFormat("text/plain");
 
@@ -510,7 +510,7 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
 //                    }
                                         for ( auto path : m_tabPaths) {
                                             EditWrapper *wrapper = window->wrapper(path);//路径获取文件
-                                            if (!wrapper->textEditor()->document()->isModified()){
+                                            if (!wrapper->isModified()){
                                                 window->removeWrapper(path,true);
                                                 closeTab(this->indexOf(path));
                                             }
@@ -656,7 +656,7 @@ void Tabbar::handleTabReleased(int index)
     Window *window = static_cast<Window *>(this->window());
     EditWrapper *wrapper = window->wrapper(tabPath);
 
-    StartManager::instance()->createWindowFromWrapper(tabName, tabPath, wrapper->textEditor()->getTruePath(), wrapper, wrapper->textEditor()->document()->isModified());
+    StartManager::instance()->createWindowFromWrapper(tabName, tabPath, wrapper->textEditor()->getTruePath(), wrapper, wrapper->isModified());
 
     closeTab(newIndex);
     // remove wrapper from window, not delete.
