@@ -5273,14 +5273,14 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
                 QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
                 clipboard->setText(data);
             }
-            return DPlainTextEdit::keyPressEvent(e);
+            return/* DPlainTextEdit::keyPressEvent(e);*/;
         }
 
         //粘贴ctrl+v
         if(modifiers == Qt::ControlModifier && e->key() == Qt::Key_V){
           //添加剪切板内容到撤销重做栈
           const QClipboard *clipboard = QApplication::clipboard(); //获取剪切版内容
-          //qDebug()<<"MimeData Formats:"<<clipboard->mimeData()->formats()<<clipboard->mimeData()->colorData();
+          qDebug()<<"MimeData Formats:"<<clipboard->mimeData()->formats()<<clipboard->mimeData()->colorData();
           if(!clipboard->text().isEmpty()){
                //列编辑添加撤销重做
                if(m_bIsAltMod && !m_altModSelections.isEmpty()){
@@ -5309,7 +5309,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
                QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
                clipboard->setText(textCursor().selectedText());
            }
-           return DPlainTextEdit::keyPressEvent(e);
+           return /*DPlainTextEdit::keyPressEvent(e)*/;
         }
 
         //快捷建处理
