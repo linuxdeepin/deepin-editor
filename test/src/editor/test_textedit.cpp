@@ -12,18 +12,18 @@ void test_textedit::forstub(QPoint q)
 
 TEST_F(test_textedit, setWrapper)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper *e = new EditWrapper();
     startManager->setWrapper(e);
 
     assert(1==1);
 }
-
+//TextEdit(QWidget *parent = nullptr);
 TEST_F(test_textedit, TextEdit)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -35,7 +35,7 @@ TEST_F(test_textedit, TextEdit)
 //getCurrentLine
 TEST_F(test_textedit, getCurrentLine)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     startManager->getCurrentLine();
 
     assert(1==1);
@@ -43,7 +43,7 @@ TEST_F(test_textedit, getCurrentLine)
 //getCurrentColumn
 TEST_F(test_textedit, getCurrentColumn)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     startManager->getCurrentColumn();
 
     assert(1==1);
@@ -51,7 +51,7 @@ TEST_F(test_textedit, getCurrentColumn)
 //getPosition
 TEST_F(test_textedit, getPosition)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     startManager->getPosition();
 
     assert(1==1);
@@ -59,7 +59,7 @@ TEST_F(test_textedit, getPosition)
 //getScrollOffset
 TEST_F(test_textedit, getScrollOffset)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     startManager->getScrollOffset();
 
     assert(1==1);
@@ -67,7 +67,7 @@ TEST_F(test_textedit, getScrollOffset)
 //forwardChar
 TEST_F(test_textedit, forwardChar)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     startManager->forwardChar();
 
     assert(1==1);
@@ -75,7 +75,7 @@ TEST_F(test_textedit, forwardChar)
 //backwardChar
 TEST_F(test_textedit, backwardChar)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     startManager->backwardChar();
 
     assert(1==1);
@@ -83,7 +83,7 @@ TEST_F(test_textedit, backwardChar)
 //forwardWord
 TEST_F(test_textedit, forwardWord)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     startManager->forwardWord();
 
     assert(1==1);
@@ -91,7 +91,7 @@ TEST_F(test_textedit, forwardWord)
 //forwardPair
 TEST_F(test_textedit, forwardPair)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     startManager->forwardPair();
 
     assert(1==1);
@@ -99,7 +99,7 @@ TEST_F(test_textedit, forwardPair)
 //backwardPair
 TEST_F(test_textedit, backwardPair)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     startManager->backwardPair();
 
     assert(1==1);
@@ -107,7 +107,7 @@ TEST_F(test_textedit, backwardPair)
 //blockCount
 TEST_F(test_textedit, blockCount)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     startManager->blockCount();
 
     assert(1==1);
@@ -115,7 +115,7 @@ TEST_F(test_textedit, blockCount)
 //moveToStart
 TEST_F(test_textedit, moveToStart)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     startManager->moveToStart();
 
     assert(1==1);
@@ -123,7 +123,7 @@ TEST_F(test_textedit, moveToStart)
 //moveToEnd
 TEST_F(test_textedit, moveToEnd)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     startManager->moveToEnd();
 
     assert(1==1);
@@ -131,7 +131,7 @@ TEST_F(test_textedit, moveToEnd)
 //moveToStartOfLine
 TEST_F(test_textedit, moveToStartOfLine)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     startManager->moveToStartOfLine();
 
     assert(1==1);
@@ -139,7 +139,7 @@ TEST_F(test_textedit, moveToStartOfLine)
 //moveToEndOfLine
 TEST_F(test_textedit, moveToEndOfLine)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     startManager->moveToEndOfLine();
 
     assert(1==1);
@@ -147,7 +147,7 @@ TEST_F(test_textedit, moveToEndOfLine)
 //moveToLineIndentation
 TEST_F(test_textedit, moveToLineIndentation)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     startManager->moveToLineIndentation();
 
     assert(1==1);
@@ -155,7 +155,7 @@ TEST_F(test_textedit, moveToLineIndentation)
 //nextLine
 TEST_F(test_textedit, nextLine)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     startManager->nextLine();
 
     assert(1==1);
@@ -163,7 +163,7 @@ TEST_F(test_textedit, nextLine)
 //prevLine
 TEST_F(test_textedit, prevLine)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     startManager->prevLine();
 
     assert(1==1);
@@ -171,15 +171,17 @@ TEST_F(test_textedit, prevLine)
 //jumpToLine
 TEST_F(test_textedit, jumpToLine)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     startManager->jumpToLine(1,true);
+    startManager->jumpToLine(1,false);
+
 
     assert(1==1);
 }
 //newline
 TEST_F(test_textedit, newline)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->newline();
@@ -189,7 +191,7 @@ TEST_F(test_textedit, newline)
 //openNewlineAbove
 TEST_F(test_textedit, openNewlineAbove)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->openNewlineAbove();
@@ -199,7 +201,7 @@ TEST_F(test_textedit, openNewlineAbove)
 //openNewlineBelow
 TEST_F(test_textedit, openNewlineBelow)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->openNewlineBelow();
@@ -209,17 +211,18 @@ TEST_F(test_textedit, openNewlineBelow)
 //moveLineDownUp
 TEST_F(test_textedit, moveLineDownUp)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->moveLineDownUp(true);
+    startManager->moveLineDownUp(false);
 
     assert(1==1);
 }
 //scrollLineUp
 TEST_F(test_textedit, scrollLineUp)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->scrollLineUp();
@@ -228,7 +231,7 @@ TEST_F(test_textedit, scrollLineUp)
 }
 TEST_F(test_textedit, scrollLineDown)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->scrollLineDown();
@@ -237,7 +240,7 @@ TEST_F(test_textedit, scrollLineDown)
 }
 TEST_F(test_textedit, scrollUp)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->scrollUp();
@@ -246,7 +249,7 @@ TEST_F(test_textedit, scrollUp)
 }
 TEST_F(test_textedit, scrollDown)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->scrollDown();
@@ -256,7 +259,7 @@ TEST_F(test_textedit, scrollDown)
 //duplicateLine
 TEST_F(test_textedit, duplicateLine)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->duplicateLine();
@@ -267,7 +270,7 @@ TEST_F(test_textedit, duplicateLine)
 //void cutlines();
 TEST_F(test_textedit, copyLines)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->copyLines();
@@ -276,7 +279,7 @@ TEST_F(test_textedit, copyLines)
 }
 TEST_F(test_textedit, cutlines)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->cutlines();
@@ -286,7 +289,7 @@ TEST_F(test_textedit, cutlines)
 
 TEST_F(test_textedit, joinLines)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->joinLines();
@@ -295,7 +298,7 @@ TEST_F(test_textedit, joinLines)
 }
 TEST_F(test_textedit, killLine)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->killLine();
@@ -304,7 +307,7 @@ TEST_F(test_textedit, killLine)
 }
 TEST_F(test_textedit, killCurrentLine)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->killCurrentLine();
@@ -313,7 +316,7 @@ TEST_F(test_textedit, killCurrentLine)
 }
 TEST_F(test_textedit, killBackwardWord)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->killBackwardWord();
@@ -323,7 +326,7 @@ TEST_F(test_textedit, killBackwardWord)
 
 TEST_F(test_textedit, killForwardWord)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->killForwardWord();
@@ -332,7 +335,7 @@ TEST_F(test_textedit, killForwardWord)
 }
 TEST_F(test_textedit, escape)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->escape();
@@ -341,7 +344,7 @@ TEST_F(test_textedit, escape)
 }
 TEST_F(test_textedit, indentText)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->indentText();
@@ -351,7 +354,7 @@ TEST_F(test_textedit, indentText)
 
 TEST_F(test_textedit, unindentText)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->unindentText();
@@ -360,7 +363,7 @@ TEST_F(test_textedit, unindentText)
 }
 TEST_F(test_textedit, setTabSpaceNumber)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->setTabSpaceNumber(2);
@@ -376,7 +379,7 @@ TEST_F(test_textedit, setTabSpaceNumber)
 
 TEST_F(test_textedit, capitalizeText)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->capitalizeText("2");
@@ -385,7 +388,7 @@ TEST_F(test_textedit, capitalizeText)
 }
 TEST_F(test_textedit, keepCurrentLineAtCenter)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->keepCurrentLineAtCenter();
@@ -394,10 +397,12 @@ TEST_F(test_textedit, keepCurrentLineAtCenter)
 }
 TEST_F(test_textedit, setLineWrapMode)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->setLineWrapMode(true);
+    startManager->setLineWrapMode(false);
+
 
     assert(1==1);
 }
@@ -406,7 +411,7 @@ TEST_F(test_textedit, setLineWrapMode)
 //void updateFont();
 TEST_F(test_textedit, setFontFamily)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->setFontFamily("2");
@@ -415,7 +420,7 @@ TEST_F(test_textedit, setFontFamily)
 }
 TEST_F(test_textedit, setFontSize)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->setFontSize(2);
@@ -424,7 +429,7 @@ TEST_F(test_textedit, setFontSize)
 }
 TEST_F(test_textedit, updateFont)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->updateFont();
@@ -434,7 +439,7 @@ TEST_F(test_textedit, updateFont)
 
 TEST_F(test_textedit, replaceAll)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->replaceAll("aa","bb");
@@ -444,7 +449,7 @@ TEST_F(test_textedit, replaceAll)
 
 TEST_F(test_textedit, replaceNext)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->replaceAll("aa","bb");
@@ -453,7 +458,7 @@ TEST_F(test_textedit, replaceNext)
 }
 TEST_F(test_textedit, replaceRest)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->replaceRest("aa","bb");
@@ -462,7 +467,7 @@ TEST_F(test_textedit, replaceRest)
 }
 TEST_F(test_textedit, beforeReplace)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->beforeReplace("bb");
@@ -471,7 +476,7 @@ TEST_F(test_textedit, beforeReplace)
 }
 TEST_F(test_textedit, findKeywordForward)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->findKeywordForward("bb");
@@ -480,7 +485,7 @@ TEST_F(test_textedit, findKeywordForward)
 }
 TEST_F(test_textedit, removeKeywords)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->removeKeywords();
@@ -490,7 +495,7 @@ TEST_F(test_textedit, removeKeywords)
 //void renderAllSelections();
 TEST_F(test_textedit, highlightKeyword)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->highlightKeyword("aa",2);
@@ -499,16 +504,17 @@ TEST_F(test_textedit, highlightKeyword)
 }
 TEST_F(test_textedit, updateCursorKeywordSelection)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->updateCursorKeywordSelection(2,true);
+    startManager->updateCursorKeywordSelection(2,false);
 
     assert(1==1);
 }
 TEST_F(test_textedit, updateHighlightLineSelection)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->updateHighlightLineSelection();
@@ -517,7 +523,7 @@ TEST_F(test_textedit, updateHighlightLineSelection)
 }
 TEST_F(test_textedit, renderAllSelections)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->renderAllSelections();
@@ -527,7 +533,7 @@ TEST_F(test_textedit, renderAllSelections)
 //DMenu *getHighlightMenu();
 TEST_F(test_textedit, getHighlightMenu)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->getHighlightMenu();
@@ -538,7 +544,7 @@ TEST_F(test_textedit, getHighlightMenu)
 //void lineNumberAreaPaintEvent(QPaintEvent *event);
 TEST_F(test_textedit, lineNumberAreaPaintEvent)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     QPaintEvent *e;
     startManager->setWrapper(ee);
@@ -549,7 +555,7 @@ TEST_F(test_textedit, lineNumberAreaPaintEvent)
 //void codeFLodAreaPaintEvent(QPaintEvent *event);
 TEST_F(test_textedit, codeFLodAreaPaintEvent)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     QPaintEvent *e;
     startManager->setWrapper(ee);
@@ -560,17 +566,18 @@ TEST_F(test_textedit, codeFLodAreaPaintEvent)
 //void setCodeFlodFlagVisable(bool isVisable,bool bIsFirstOpen = false);
 TEST_F(test_textedit, setCodeFlodFlagVisable)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
-    startManager->setCodeFlodFlagVisable(true,true);
+    startManager->setCodeFlodFlagVisable(true,false);
+    startManager->setCodeFlodFlagVisable(false,false);
 
     assert(1==1);
 }
 //void setThemeWithPath(const QString &path);
 TEST_F(test_textedit, setThemeWithPath)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     ee->OnThemeChangeSlot("aa");
@@ -583,7 +590,7 @@ TEST_F(test_textedit, setThemeWithPath)
 //bool highlightWordUnderMouse(QPoint pos);
 TEST_F(test_textedit, highlightWordUnderMouse)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     QPoint x(10,10);
     startManager->setWrapper(ee);
@@ -594,7 +601,7 @@ TEST_F(test_textedit, highlightWordUnderMouse)
 //void removeHighlightWordUnderCursor();
 TEST_F(test_textedit, removeHighlightWordUnderCursor)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->removeHighlightWordUnderCursor();
@@ -605,7 +612,7 @@ TEST_F(test_textedit, removeHighlightWordUnderCursor)
 //void setSettings(Settings *settings);
 TEST_F(test_textedit, setSettings)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *set;
     startManager->setWrapper(ee);
@@ -618,7 +625,7 @@ TEST_F(test_textedit, setSettings)
 //void copySelectedText();
 TEST_F(test_textedit, copySelectedText)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->copySelectedText();
@@ -628,7 +635,7 @@ TEST_F(test_textedit, copySelectedText)
 //void cutSelectedText();
 TEST_F(test_textedit, cutSelectedText)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->cutSelectedText();
@@ -638,7 +645,9 @@ TEST_F(test_textedit, cutSelectedText)
 //void pasteText();
 TEST_F(test_textedit, pasteText)
 {
-    TextEdit *startManager = new TextEdit();
+    QClipboard * c = QApplication::clipboard();
+    c->setText("ddd");
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->pasteText();
@@ -649,7 +658,7 @@ TEST_F(test_textedit, pasteText)
 //void setMark();
 TEST_F(test_textedit, setMark)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->setMark();
@@ -659,7 +668,7 @@ TEST_F(test_textedit, setMark)
 //void unsetMark();
 TEST_F(test_textedit, unsetMark)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->unsetMark();
@@ -669,7 +678,7 @@ TEST_F(test_textedit, unsetMark)
 //bool tryUnsetMark();
 TEST_F(test_textedit, tryUnsetMark)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->tryUnsetMark();
@@ -679,7 +688,7 @@ TEST_F(test_textedit, tryUnsetMark)
 //void exchangeMark();
 TEST_F(test_textedit, exchangeMark)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->exchangeMark();
@@ -689,7 +698,7 @@ TEST_F(test_textedit, exchangeMark)
 //void saveMarkStatus();
 TEST_F(test_textedit, saveMarkStatus)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->saveMarkStatus();
@@ -699,7 +708,7 @@ TEST_F(test_textedit, saveMarkStatus)
 //void restoreMarkStatus();
 TEST_F(test_textedit, restoreMarkStatus)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->restoreMarkStatus();
@@ -711,7 +720,7 @@ TEST_F(test_textedit, restoreMarkStatus)
 //QString getWordAtMouse();
 TEST_F(test_textedit, getWordAtMouse)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->getWordAtMouse();
@@ -723,7 +732,7 @@ TEST_F(test_textedit, getWordAtMouse)
 //void toggleReadOnlyMode();
 TEST_F(test_textedit, toggleReadOnlyMode)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->toggleReadOnlyMode();
@@ -733,7 +742,7 @@ TEST_F(test_textedit, toggleReadOnlyMode)
 //void toggleComment(bool sister);
 TEST_F(test_textedit, toggleComment)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->toggleComment(true);
@@ -744,7 +753,7 @@ TEST_F(test_textedit, toggleComment)
 //bool atWordSeparator(int position);
 TEST_F(test_textedit, atWordSeparator)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->atWordSeparator(2);
@@ -755,7 +764,7 @@ TEST_F(test_textedit, atWordSeparator)
 //void showCursorBlink();
 TEST_F(test_textedit, showCursorBlink)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->showCursorBlink();
@@ -765,7 +774,7 @@ TEST_F(test_textedit, showCursorBlink)
 //void hideCursorBlink();
 TEST_F(test_textedit, hideCursorBlink)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->hideCursorBlink();
@@ -776,7 +785,7 @@ TEST_F(test_textedit, hideCursorBlink)
 //void setReadOnlyPermission(bool permission);
 TEST_F(test_textedit, setReadOnlyPermission)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->setReadOnlyPermission(true);
@@ -787,7 +796,7 @@ TEST_F(test_textedit, setReadOnlyPermission)
 //bool getReadOnlyPermission();
 TEST_F(test_textedit, getReadOnlyPermission)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->getReadOnlyPermission();
@@ -797,7 +806,7 @@ TEST_F(test_textedit, getReadOnlyPermission)
 //bool getReadOnlyMode();
 TEST_F(test_textedit, getReadOnlyMode)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->getReadOnlyMode();
@@ -808,7 +817,7 @@ TEST_F(test_textedit, getReadOnlyMode)
 //void hideRightMenu();
 TEST_F(test_textedit, hideRightMenu)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->hideRightMenu();
@@ -819,7 +828,7 @@ TEST_F(test_textedit, hideRightMenu)
 //void clearBlack();
 TEST_F(test_textedit, clearBlack)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->clearBlack();
@@ -829,7 +838,7 @@ TEST_F(test_textedit, clearBlack)
 //void flodOrUnflodAllLevel(bool isFlod);
 TEST_F(test_textedit, flodOrUnflodAllLevel)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->flodOrUnflodAllLevel(true);
@@ -840,7 +849,7 @@ TEST_F(test_textedit, flodOrUnflodAllLevel)
 //void flodOrUnflodCurrentLevel(bool isFlod);
 TEST_F(test_textedit, flodOrUnflodCurrentLevel)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->flodOrUnflodCurrentLevel(true);
@@ -851,7 +860,7 @@ TEST_F(test_textedit, flodOrUnflodCurrentLevel)
 //void getHideRowContent(int iLine);
 TEST_F(test_textedit, getHideRowContent)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->getHideRowContent(1);
@@ -861,7 +870,7 @@ TEST_F(test_textedit, getHideRowContent)
 //int  getHighLightRowContentLineNum(int iLine);
 TEST_F(test_textedit, getHighLightRowContentLineNum)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->getHighLightRowContentLineNum(1);
@@ -871,7 +880,7 @@ TEST_F(test_textedit, getHighLightRowContentLineNum)
 //int  getLinePosByLineNum(int iLine);
 TEST_F(test_textedit, getLinePosYByLineNum)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->getLinePosYByLineNum(1);
@@ -881,7 +890,7 @@ TEST_F(test_textedit, getLinePosYByLineNum)
 //bool ifHasHighlight();
 TEST_F(test_textedit, ifHasHighlight)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->ifHasHighlight();
@@ -891,7 +900,7 @@ TEST_F(test_textedit, ifHasHighlight)
 //void bookMarkAreaPaintEvent(QPaintEvent *event);
 TEST_F(test_textedit, bookMarkAreaPaintEvent)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     QPaintEvent *e;
@@ -903,7 +912,7 @@ TEST_F(test_textedit, bookMarkAreaPaintEvent)
 //int getLineFromPoint(const QPoint &point);
 TEST_F(test_textedit, getLineFromPoint)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     QPoint s(10,10);
@@ -915,7 +924,7 @@ TEST_F(test_textedit, getLineFromPoint)
 //void addOrDeleteBookMark();
 TEST_F(test_textedit, addOrDeleteBookMark)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->addOrDeleteBookMark();
@@ -926,7 +935,7 @@ TEST_F(test_textedit, addOrDeleteBookMark)
 //void moveToPreviousBookMark();
 TEST_F(test_textedit, moveToPreviousBookMark)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->moveToPreviousBookMark();
@@ -938,7 +947,7 @@ TEST_F(test_textedit, moveToPreviousBookMark)
 //void checkBookmarkLineMove(int from, int charsRemoved, int charsAdded);
 TEST_F(test_textedit, checkBookmarkLineMove)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->checkBookmarkLineMove(2,3,4);
@@ -949,7 +958,7 @@ TEST_F(test_textedit, checkBookmarkLineMove)
 //void setIsFileOpen();
 TEST_F(test_textedit, setIsFileOpen)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->setIsFileOpen();
@@ -960,7 +969,7 @@ TEST_F(test_textedit, setIsFileOpen)
 //QStringList readHistoryRecordofBookmark();
 TEST_F(test_textedit, readHistoryRecordofBookmark)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -973,7 +982,7 @@ TEST_F(test_textedit, readHistoryRecordofBookmark)
 //QStringList readHistoryRecordofFilePath(QString key);
 TEST_F(test_textedit, readHistoryRecordofFilePath)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -986,7 +995,7 @@ TEST_F(test_textedit, readHistoryRecordofFilePath)
 //void writeHistoryRecord();
 TEST_F(test_textedit, writeHistoryRecord)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -999,12 +1008,13 @@ TEST_F(test_textedit, writeHistoryRecord)
 //void isMarkCurrentLine(bool isMark, QString strColor = "");
 TEST_F(test_textedit, isMarkCurrentLine)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
     startManager->setWrapper(ee);
     startManager->isMarkCurrentLine(true,"red");
+    startManager->isMarkCurrentLine(false,"red");
 
     assert(1==1);
 }
@@ -1012,12 +1022,13 @@ TEST_F(test_textedit, isMarkCurrentLine)
 //void isMarkAllLine(bool isMark, QString strColor = "");
 TEST_F(test_textedit, isMarkAllLine)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
     startManager->setWrapper(ee);
     startManager->isMarkAllLine(true,"red");
+    startManager->isMarkAllLine(false,"red");
 
     assert(1==1);
 }
@@ -1025,7 +1036,7 @@ TEST_F(test_textedit, isMarkAllLine)
 //void cancelLastMark();
 TEST_F(test_textedit, cancelLastMark)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -1038,7 +1049,7 @@ TEST_F(test_textedit, cancelLastMark)
 //void markSelectWord();
 TEST_F(test_textedit, markSelectWord)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -1051,7 +1062,7 @@ TEST_F(test_textedit, markSelectWord)
 //void updateMark(int from, int charsRemoved, int charsAdded);
 TEST_F(test_textedit, updateMark)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -1066,7 +1077,7 @@ TEST_F(test_textedit, containsExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -1080,7 +1091,7 @@ TEST_F(test_textedit, containsExtraSelection)
 //                          , QString strColor, QList<QTextEdit::ExtraSelection> *listSelections);
 TEST_F(test_textedit, appendExtraSelection)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
     selectio.cursor=startManager->textCursor();
@@ -1100,7 +1111,7 @@ TEST_F(test_textedit, appendExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -1114,7 +1125,7 @@ TEST_F(test_textedit, appendExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -1128,7 +1139,7 @@ TEST_F(test_textedit, appendExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -1144,7 +1155,7 @@ TEST_F(test_textedit, appendExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -1158,7 +1169,7 @@ TEST_F(test_textedit, appendExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -1173,7 +1184,7 @@ TEST_F(test_textedit, appendExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -1188,12 +1199,13 @@ TEST_F(test_textedit, appendExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
     startManager->setWrapper(ee);
     startManager->setCodeFoldWidgetHide(true);
+    startManager->setCodeFoldWidgetHide(false);
 
     assert(1==1);
 }
@@ -1202,7 +1214,7 @@ TEST_F(test_textedit, appendExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -1217,7 +1229,7 @@ TEST_F(test_textedit, appendExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -1231,7 +1243,7 @@ TEST_F(test_textedit, appendExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -1248,7 +1260,7 @@ TEST_F(test_textedit, appendExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -1263,7 +1275,7 @@ TEST_F(test_textedit, appendExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -1277,7 +1289,7 @@ TEST_F(test_textedit, appendExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -1291,7 +1303,7 @@ TEST_F(test_textedit, appendExtraSelection)
 //{
 //    QList<QTextEdit::ExtraSelection> listSelection;
 //    QTextEdit::ExtraSelection selectio;
-//    TextEdit *startManager = new TextEdit();
+//    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
 //    EditWrapper * ee = new EditWrapper();
 //    Settings *s = new Settings();
 //    startManager->setSettings(s);
@@ -1305,7 +1317,7 @@ TEST_F(test_textedit, appendExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -1320,12 +1332,13 @@ TEST_F(test_textedit, appendExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
     startManager->setWrapper(ee);
     startManager->handleCursorMarkChanged(true,QTextCursor());
+    startManager->handleCursorMarkChanged(false,QTextCursor());
 
     assert(1==1);
 }
@@ -1335,7 +1348,7 @@ TEST_F(test_textedit, appendExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -1350,7 +1363,7 @@ TEST_F(test_textedit, appendExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -1364,7 +1377,7 @@ TEST_F(test_textedit, appendExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -1379,7 +1392,7 @@ TEST_F(test_textedit, appendExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -1397,7 +1410,7 @@ TEST_F(test_textedit, appendExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -1413,7 +1426,7 @@ TEST_F(test_textedit, appendExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -1430,7 +1443,7 @@ TEST_F(test_textedit, appendExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -1447,12 +1460,11 @@ TEST_F(test_textedit, appendExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
     startManager->setWrapper(ee);
-   
     QKeyEvent *e=new QKeyEvent(QKeyEvent::Type::Enter,1,Qt::KeyboardModifier::NoModifier);
     startManager->keyPressEvent(e);
 
@@ -1463,7 +1475,7 @@ TEST_F(test_textedit, appendExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -1483,7 +1495,7 @@ TEST_F(test_textedit, appendExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -1512,20 +1524,21 @@ TEST_F(test_textedit, appendExtraSelection)
      return nullptr;
  }
 // void contextMenuEvent(QContextMenuEvent *event) override;
+
  TEST_F(test_textedit, contextMenuEvent)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
-    QPoint b(500,500);
+    QPoint b(0,0);
     startManager->setSettings(s);
     startManager->setWrapper(ee);
     Stub stub;
     stub.set((QAction *(QMenu::*)(const QPoint &, QAction *))ADDR(QMenu, exec), stub_exec);
     QContextMenuEvent *e=new QContextMenuEvent(QContextMenuEvent::Reason::Keyboard,b);
-    startManager->contextMenuEvent(e);
+    //startManager->contextMenuEvent(e);
 
     assert(1==1);
 }
@@ -1534,7 +1547,7 @@ TEST_F(test_textedit, appendExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -1551,7 +1564,7 @@ TEST_F(test_textedit, appendExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -1566,13 +1579,14 @@ TEST_F(test_textedit, appendExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
     startManager->setWrapper(ee);
     QPaintEvent *e;
     startManager->setCursorKeywordSeletoin(2,true);
+    startManager->setCursorKeywordSeletoin(2,false);
 
     assert(1==1);
 }
@@ -1581,7 +1595,7 @@ TEST_F(test_textedit, appendExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -1596,7 +1610,7 @@ TEST_F(test_textedit, appendExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     QChar a=' ';
     Settings *s = new Settings();
@@ -1612,7 +1626,7 @@ TEST_F(test_textedit, appendExtraSelection)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
     QTextEdit::ExtraSelection selectio;
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
     startManager->setSettings(s);
@@ -1627,7 +1641,7 @@ TEST_F(test_textedit, appendExtraSelection)
 //void setBackupPath(QString qstrTruePath);
 TEST_F(test_textedit, setBackupPath)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     startManager->setBackupPath("aa");
 
     assert(1==1);
@@ -1636,7 +1650,7 @@ TEST_F(test_textedit, setBackupPath)
 // QString getTruePath();
 TEST_F(test_textedit, getTruePath)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     startManager->getTruePath();
 
     assert(1==1);
@@ -1646,7 +1660,7 @@ TEST_F(test_textedit, getTruePath)
 //void initRightClickedMenu();
 TEST_F(test_textedit, initRightClickedMenu)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     startManager->initRightClickedMenu();
 
     assert(1==1);
@@ -1655,7 +1669,7 @@ TEST_F(test_textedit, initRightClickedMenu)
 //inline QString getFilePath() { return m_sFilePath;};
 TEST_F(test_textedit, getFilePath)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     startManager->getFilePath();
 
     assert(1==1);
@@ -1664,7 +1678,7 @@ TEST_F(test_textedit, getFilePath)
 //inline void setFilePath(QString file) { m_sFilePath = file;}
 TEST_F(test_textedit, setFilePath)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     startManager->setFilePath("a");
 
     assert(1==1);
@@ -1673,7 +1687,7 @@ TEST_F(test_textedit, setFilePath)
 //int characterCount() const;
 TEST_F(test_textedit, characterCount)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     startManager->characterCount();
 
     assert(1==1);
@@ -1684,7 +1698,7 @@ TEST_F(test_textedit, characterCount)
 //                       QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
 TEST_F(test_textedit, moveCursorNoBlink)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     startManager->moveCursorNoBlink(QTextCursor::MoveOperation::Up);
 
     assert(1==1);
@@ -1694,7 +1708,7 @@ TEST_F(test_textedit, moveCursorNoBlink)
 //void convertWordCase(ConvertCase convertCase);
 //TEST_F(test_textedit, convertWordCase)
 //{
-//    TextEdit *startManager = new TextEdit();
+//    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
 //    startManager->convertWordCase(ConvertCase::LOWER);
 //    startManager->convertWordCase(ConvertCase::UPPER);
 //    startManager->convertWordCase(ConvertCase::CAPITALIZE);
@@ -1708,7 +1722,7 @@ TEST_F(test_textedit, moveCursorNoBlink)
 //void setBookmarkFlagVisable(bool isVisable,bool bIsFirstOpen = false);
 TEST_F(test_textedit, setBookmarkFlagVisable)
 {
-    TextEdit *startManager = new TextEdit();
+    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     startManager->setBookmarkFlagVisable(false,false);
     startManager->setBookmarkFlagVisable(true,false);
     assert(1==1);

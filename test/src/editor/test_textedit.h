@@ -14,6 +14,7 @@
 #include<QEvent>
 #include "gtest/gtest.h"
 #include <QObject>
+#include<QClipboard>
 
 
 class test_textedit: public QObject, public::testing::Test

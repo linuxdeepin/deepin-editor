@@ -185,3 +185,106 @@ TEST_F(test_editwrapper, handleFileLoadFinished)
     assert(1==1);
 }
 
+////重新加载文件编码 1.文件修改 2.文件未修改处理逻辑一样 切换编码重新加载和另存为 梁卫东
+//bool reloadFileEncode(QByteArray encode);
+TEST_F(test_editwrapper, reloadFileEncode)
+{
+    Window* pWindow = new Window;
+    char c = 'd';
+    QByteArray d(5,c);
+    EditWrapper *wrapper = pWindow->createEditor();
+    Settings *s = new Settings();
+    wrapper->textEditor()->setSettings(s);
+    wrapper->textEditor()->setWrapper(wrapper);
+    wrapper->reloadFileEncode(d);
+    assert(1==1);
+}
+
+////重写加载修改文件
+//void reloadModifyFile();
+TEST_F(test_editwrapper, reloadModifyFile)
+{
+    Window* pWindow = new Window;
+    char c = 'd';
+    QByteArray d(5,c);
+    EditWrapper *wrapper = pWindow->createEditor();
+    Settings *s = new Settings();
+    wrapper->textEditor()->setSettings(s);
+    wrapper->textEditor()->setWrapper(wrapper);
+    wrapper->reloadModifyFile();
+    assert(1==1);
+}
+////获取文件编码
+//QString getTextEncode();
+TEST_F(test_editwrapper, getTextEncode)
+{
+    Window* pWindow = new Window;
+    char c = 'd';
+    QByteArray d(5,c);
+    EditWrapper *wrapper = pWindow->createEditor();
+    Settings *s = new Settings();
+    wrapper->textEditor()->setSettings(s);
+    wrapper->textEditor()->setWrapper(wrapper);
+    wrapper->getTextEncode();
+    assert(1==1);
+}
+//bool saveTemFile(QString qstrDir);
+TEST_F(test_editwrapper, saveTemFile)
+{
+    Window* pWindow = new Window;
+    char c = 'd';
+    QByteArray d(5,c);
+    EditWrapper *wrapper = pWindow->createEditor();
+    Settings *s = new Settings();
+    wrapper->textEditor()->setSettings(s);
+    wrapper->textEditor()->setWrapper(wrapper);
+    wrapper->saveTemFile("ddd");
+    assert(1==1);
+}
+////跟新路径
+//void updatePath(const QString &file,QString qstrTruePath = QString());
+////判断是否修改
+//bool isModified();
+TEST_F(test_editwrapper, isModified)
+{
+    Window* pWindow = new Window;
+    char c = 'd';
+    QByteArray d(5,c);
+    EditWrapper *wrapper = pWindow->createEditor();
+    Settings *s = new Settings();
+    wrapper->textEditor()->setSettings(s);
+    wrapper->textEditor()->setWrapper(wrapper);
+    wrapper->isModified();
+    assert(1==1);
+}
+////判断是否草稿文件
+//bool isDraftFile();
+TEST_F(test_editwrapper, isDraftFile)
+{
+    Window* pWindow = new Window;
+    char c = 'd';
+    QByteArray d(5,c);
+    EditWrapper *wrapper = pWindow->createEditor();
+    Settings *s = new Settings();
+    wrapper->textEditor()->setSettings(s);
+    wrapper->textEditor()->setWrapper(wrapper);
+    wrapper->isDraftFile();
+    assert(1==1);
+}
+////判断内容是否为空
+//bool isPlainTextEmpty();
+TEST_F(test_editwrapper, isPlainTextEmpty)
+{
+    Window* pWindow = new Window;
+    char c = 'd';
+    QByteArray d(5,c);
+    EditWrapper *wrapper = pWindow->createEditor();
+    Settings *s = new Settings();
+    wrapper->textEditor()->setSettings(s);
+    wrapper->textEditor()->setWrapper(wrapper);
+    wrapper->isPlainTextEmpty();
+    assert(1==1);
+}
+
+
+
