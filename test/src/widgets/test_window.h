@@ -5,7 +5,9 @@
 #include"../../src/widgets/window.h"
 #include"../../src/startmanager.h"
 #include"../../src/editor/dtextedit.h"
+#include"../stub.h"
 #include <QObject>
+#include<QWindow>
 #include<QEvent>
 
 
