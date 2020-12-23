@@ -30,6 +30,7 @@
 #include <DWindowManagerHelper>
 #include <QPixmap>
 #include <DFrame>
+#include <QDesktopWidget>
 
 QPixmap* Tabbar::sm_pDragPixmap = nullptr;
 
@@ -76,6 +77,32 @@ void Tabbar::addTabWithIndex(int index, const QString &filePath, const QString &
     QString trimmedName = tabName.simplified();
     DTabBar::insertTab(index, trimmedName);
     DTabBar::setCurrentIndex(index);
+    if(filePath.contains("/.local/share/deepin/deepin-editor/"))
+    {
+        setTabToolTip(index,tabName);
+    }
+    else
+    {
+        QString path = filePath;
+        QFontMetrics fontMetrics(font());
+        int nFontWidth = fontMetrics.width(path)*(qApp->devicePixelRatio()==1.25 ? 2 :1);
+
+        QDesktopWidget* d = qApp->desktop();
+        int w = d->availableGeometry().width()-200;
+
+        if(nFontWidth >= w) {
+            int mod = nFontWidth%w;
+
+            int step = nFontWidth/w + (mod > 0 ? 1:0);
+
+            for (int i = 1; i < step;i++)
+            {
+               path.insert(i*(path.length()/step),'\n');
+            }
+        }
+
+        setTabToolTip(index,path);
+    }
 }
 
 void Tabbar::closeTab(int index)
@@ -147,6 +174,32 @@ void Tabbar::updateTab(int index, const QString &filePath, const QString &tabNam
 {
     DTabBar::setTabText(index, tabName);
     m_tabPaths[index] = filePath;
+    //show file path at tab,blank file only show it's name.
+
+     if(filePath.contains("/.local/share/deepin/deepin-editor/"))
+     {
+         setTabToolTip(index,tabName);}
+     else
+     {
+         QString path = filePath;
+         QFontMetrics fontMetrics(font());
+         int nFontWidth = fontMetrics.width(path)*(qApp->devicePixelRatio()==1.25 ? 2 :1);
+
+         QDesktopWidget* d = QApplication::desktop();
+         int w = d->availableGeometry().width()-200;
+
+         if(nFontWidth >= w) {
+             int mod = nFontWidth%w;
+             int step = nFontWidth/w + (mod > 0 ? 1:0);
+
+             for (int i = 1; i < step;i++)
+             {
+                 path.insert(i*(path.length()/step),'\n');
+             }
+         }
+
+         setTabToolTip(index,path);
+     }
 }
 
 void Tabbar::previousTab()
@@ -356,25 +409,6 @@ bool Tabbar::canInsertFromMimeData(int index, const QMimeData *source) const
 
 void Tabbar::handleDragActionChanged(Qt::DropAction action)
 {
-    //qDebug()<<"======Tabbar::handleDragActionChanged"<<action<<this->window();
-//    if (action == Qt::CopyAction) {
-//        Window *window = static_cast<Window *>(this->window());
-
-//        if (StartManager::instance()->isDragEnter()) {
-//            m_nDragIndex = currentIndex();
-//            m_pWrapper = window->wrapper(fileAt(currentIndex()));
-//            m_qstrDragName = currentName();
-//            //closeCurrentTab();
-//            qDebug() << "closeCurrentTab" << currentIndex();
-//            //StartManager::instance()->setDragEnter(false);
-//        }
-//    } else if (action == Qt::IgnoreAction) {
-//        //qDebug() << "IgnoreAction";
-//        if (m_pWrapper && !m_tabPaths.contains(m_pWrapper->textEditor()->filepath)) {
-//            Window *window = static_cast<Window *>(this->window());
-//            window->addTabWithWrapper(m_pWrapper, m_pWrapper->textEditor()->filepath, m_qstrDragName, m_nDragIndex);
-//        }
-//    }
 
     // Reset cursor to Qt::ArrowCursor if drag tab to TextEditor widget.
     if (action == Qt::IgnoreAction) {
@@ -391,20 +425,6 @@ void Tabbar::handleDragActionChanged(Qt::DropAction action)
 
 bool Tabbar::eventFilter(QObject *, QEvent *event)
 {
-    //show file path at tab,blank file only show it's name.
-    if(m_tabPaths.length()>=0)
-    {
-        for(int i=0;i<m_tabPaths.length();i++)
-        {
-            if(m_tabPaths[i].contains("/.local/share/deepin/deepin-editor/"))
-            {
-                setTabToolTip(i,textAt(i));}
-            else
-            {
-                setTabToolTip(i,m_tabPaths[i]);
-            }
-        }
-    }
 
     if (event->type() == QEvent::MouseButtonPress) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
@@ -675,8 +695,6 @@ void Tabbar::handleTabIsRemoved(int index)
 void Tabbar::handleTabDroped(int index, Qt::DropAction action, QObject *target)
 {
     Tabbar *tabbar = qobject_cast<Tabbar *>(target);
-    m_pWrapper = nullptr;
-
     if (tabbar == nullptr) {
         Window *window = static_cast<Window *>(this->window());
 
