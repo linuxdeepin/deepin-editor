@@ -1226,20 +1226,6 @@ TEST_F(test_textedit, appendExtraSelection)
 
     assert(1==1);
 }
-// void updateWordCount();
-// TEST_F(test_textedit, updateWordCount)
-//{
-//    QList<QTextEdit::ExtraSelection> listSelection;
-//    QTextEdit::ExtraSelection selectio;
-//    TextEdit *startManager = new TextEdit();
-//    EditWrapper * ee = new EditWrapper();
-//    Settings *s = new Settings();
-//    startManager->setSettings(s);
-//    startManager->setWrapper(ee);
-//    startManager->updateWordCount();
-
-//    assert(1==1);
-//}
 // void handleScrollFinish();
  TEST_F(test_textedit, handleScrollFinish)
 {
@@ -1398,8 +1384,8 @@ TEST_F(test_textedit, appendExtraSelection)
     Settings *s = new Settings();
     startManager->setSettings(s);
     startManager->setWrapper(ee);
-    QEvent e=QEvent(QEvent::Type::MouseButtonPress);
-    //startManager->event(&e);
+    QEvent *e=new QEvent(QEvent::Type::MouseButtonPress);
+    startManager->event(e);
 
     assert(1==1);
 }
@@ -1416,9 +1402,10 @@ TEST_F(test_textedit, appendExtraSelection)
     Settings *s = new Settings();
     startManager->setSettings(s);
     startManager->setWrapper(ee);
-    QMouseEvent *e;
-    //startManager->mousePressEvent(e);
-
+    QPoint a(1,2);
+    QPointF b(a);
+    QMouseEvent *e=new QMouseEvent(QMouseEvent::Type::Enter,b,Qt::MouseButton::LeftButton,Qt::MouseButton::LeftButton,Qt::KeyboardModifier::NoModifier);
+    startManager->mousePressEvent(e);
     assert(1==1);
 }
 // void mouseMoveEvent(QMouseEvent *e) override;
@@ -1431,8 +1418,10 @@ TEST_F(test_textedit, appendExtraSelection)
     Settings *s = new Settings();
     startManager->setSettings(s);
     startManager->setWrapper(ee);
-    QMouseEvent *e;
-    //startManager->mouseMoveEvent(e);
+    QPoint a(1,2);
+    QPointF b(a);
+    QMouseEvent *e=new QMouseEvent(QMouseEvent::Type::Enter,b,Qt::MouseButton::LeftButton,Qt::MouseButton::LeftButton,Qt::KeyboardModifier::NoModifier);
+    startManager->mouseMoveEvent(e);
 
     assert(1==1);
 }
@@ -1446,8 +1435,10 @@ TEST_F(test_textedit, appendExtraSelection)
     Settings *s = new Settings();
     startManager->setSettings(s);
     startManager->setWrapper(ee);
-    QMouseEvent *e;
-    //startManager->mouseReleaseEvent(e);
+    QPoint a(1,2);
+    QPointF b(a);
+    QMouseEvent *e=new QMouseEvent(QMouseEvent::Type::Enter,b,Qt::MouseButton::LeftButton,Qt::MouseButton::LeftButton,Qt::KeyboardModifier::NoModifier);
+    startManager->mouseReleaseEvent(e);
 
     assert(1==1);
 }
@@ -1461,8 +1452,8 @@ TEST_F(test_textedit, appendExtraSelection)
     Settings *s = new Settings();
     startManager->setSettings(s);
     startManager->setWrapper(ee);
-    QKeyEvent *e;
-    //startManager->keyPressEvent(e);
+    QKeyEvent *e=new QKeyEvent(QKeyEvent::Type::Enter,1,Qt::KeyboardModifier::NoModifier);
+    startManager->keyPressEvent(e);
 
     assert(1==1);
 }
