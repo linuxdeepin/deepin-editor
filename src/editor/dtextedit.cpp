@@ -2259,7 +2259,6 @@ void TextEdit::setCodeFlodFlagVisable(bool isVisable,bool bIsFirstOpen)
 
 void TextEdit::setHighLineCurrentLine(bool ok)
 {
-    qDebug()<<"fuck"<<ok;
     m_HightlightYes = ok;
     renderAllSelections();
 }
