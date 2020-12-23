@@ -5,6 +5,11 @@ test_textedit::test_textedit()
 
 }
 
+void test_textedit::forstub(QPoint q)
+{
+  qDebug()<<q;
+}
+
 TEST_F(test_textedit, setWrapper)
 {
     TextEdit *startManager = new TextEdit();
@@ -1471,8 +1476,13 @@ TEST_F(test_textedit, appendExtraSelection)
     Settings *s = new Settings();
     startManager->setSettings(s);
     startManager->setWrapper(ee);
-    QWheelEvent *e;
-    //startManager->wheelEvent(e);
+    QPointF pos;
+    QWheelEvent *e = new QWheelEvent(pos,4,Qt::MouseButton::LeftButton,Qt::KeyboardModifier::AltModifier);
+
+    //    QWheelEvent(const QPointF &pos, int delta,
+//    Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers,
+//    Qt::Orientation orient = Qt::Vertical);
+    startManager->wheelEvent(e);
 
     assert(1==1);
 }
@@ -1487,11 +1497,28 @@ TEST_F(test_textedit, appendExtraSelection)
     startManager->setSettings(s);
     startManager->setWrapper(ee);
     QObject *object;
-    QEvent *e;
-    //startManager->eventFilter(object,e);
+
+    QEvent *e=new QEvent(QEvent::MouseButtonPress);
+    startManager->eventFilter(startManager,e);
+    //MouseButtonDblClick
+
+    QEvent *e1=new QEvent(QEvent::MouseButtonDblClick);
+    startManager->eventFilter(startManager,e1);
+    QEvent *e2=new QEvent(QEvent::HoverMove);
+    startManager->eventFilter(startManager,e2);
+    QEvent *e3=new QEvent(QEvent::HoverLeave);
+    startManager->eventFilter(startManager,e3);
+
 
     assert(1==1);
 }
+ QAction *stub_exec(const QPoint &pos, QAction *at = nullptr)
+ {
+     Q_UNUSED(pos)
+     Q_UNUSED(at)
+
+     return nullptr;
+ }
 // void contextMenuEvent(QContextMenuEvent *event) override;
  TEST_F(test_textedit, contextMenuEvent)
 {
@@ -1500,10 +1527,13 @@ TEST_F(test_textedit, appendExtraSelection)
     TextEdit *startManager = new TextEdit();
     EditWrapper * ee = new EditWrapper();
     Settings *s = new Settings();
+    QPoint b(500,500);
     startManager->setSettings(s);
     startManager->setWrapper(ee);
-    QContextMenuEvent *e;
-   // startManager->contextMenuEvent(e);
+    Stub stub;
+    stub.set((QAction *(QMenu::*)(const QPoint &, QAction *))ADDR(QMenu, exec), stub_exec);
+    QContextMenuEvent *e=new QContextMenuEvent(QContextMenuEvent::Reason::Keyboard,b);
+    startManager->contextMenuEvent(e);
 
     assert(1==1);
 }
@@ -1517,8 +1547,9 @@ TEST_F(test_textedit, appendExtraSelection)
     Settings *s = new Settings();
     startManager->setSettings(s);
     startManager->setWrapper(ee);
-    QPaintEvent *e;
-    //startManager->paintEvent(e);
+    QRect a(1,2,3,4);
+    QPaintEvent *e=new QPaintEvent(a);
+    startManager->paintEvent(e);
 
     assert(1==1);
 }
@@ -1534,7 +1565,7 @@ TEST_F(test_textedit, appendExtraSelection)
     startManager->setSettings(s);
     startManager->setWrapper(ee);
     QPaintEvent *e;
-    //startManager->blockContainStrBrackets(2);
+    startManager->blockContainStrBrackets(2);
 
     assert(1==1);
 }
@@ -1549,7 +1580,7 @@ TEST_F(test_textedit, appendExtraSelection)
     startManager->setSettings(s);
     startManager->setWrapper(ee);
     QPaintEvent *e;
-  //  startManager->setCursorKeywordSeletoin(2,true);
+    startManager->setCursorKeywordSeletoin(2,true);
 
     assert(1==1);
 }
@@ -1564,7 +1595,7 @@ TEST_F(test_textedit, appendExtraSelection)
     startManager->setSettings(s);
     startManager->setWrapper(ee);
     QPaintEvent *e;
-   // startManager->cursorPositionChanged();
+    startManager->cursorPositionChanged();
 
     assert(1==1);
 }
@@ -1575,12 +1606,12 @@ TEST_F(test_textedit, appendExtraSelection)
     QTextEdit::ExtraSelection selectio;
     TextEdit *startManager = new TextEdit();
     EditWrapper * ee = new EditWrapper();
-    QChar a;
+    QChar a=' ';
     Settings *s = new Settings();
     startManager->setSettings(s);
     startManager->setWrapper(ee);
     QPaintEvent *e;
-    //startManager->updateHighlightBrackets(a,a);
+    startManager->updateHighlightBrackets(a,a);
 
     assert(1==1);
 }
@@ -1618,4 +1649,336 @@ TEST_F(test_textedit, getTruePath)
 
     assert(1==1);
 }
+
+////初始化右键菜单
+//void initRightClickedMenu();
+TEST_F(test_textedit, initRightClickedMenu)
+{
+    TextEdit *startManager = new TextEdit();
+    startManager->initRightClickedMenu();
+
+    assert(1==1);
+}
+////弹窗右键菜单
+//void popRightMenu(QPoint pos = QPoint());
+//TEST_F(test_textedit, contextMenuEvent)
+//{
+//    TextEdit *startManager = new TextEdit();
+//    QContextMenuEvent *event ;
+//    startManager->contextMenuEvent(event);
+//    startManager->deleteLater();
+
+//    assert(1==1);
+//}
+//inline QString getFilePath() { return m_sFilePath;};
+TEST_F(test_textedit, getFilePath)
+{
+    TextEdit *startManager = new TextEdit();
+    startManager->getFilePath();
+
+    assert(1==1);
+}
+////
+//inline void setFilePath(QString file) { m_sFilePath = file;}
+TEST_F(test_textedit, setFilePath)
+{
+    TextEdit *startManager = new TextEdit();
+    startManager->setFilePath("a");
+
+    assert(1==1);
+}
+////
+//inline LeftAreaTextEdit* getLeftAreaWidget() { return m_pLeftAreaWidget;};
+////是否撤销重做操作
+//bool isUndoRedoOpt() {return (m_pUndoStack->canRedo()||m_pUndoStack->canUndo());};
+////判断是否修改
+//bool getModified() { return (document()->isModified() && isUndoRedoOpt());}
+
+//int getCurrentLine();
+//int getCurrentColumn();
+//int getPosition();
+//int getScrollOffset();
+//DMenu *getHighlightMenu();
+
+
+//void forwardChar();
+//void backwardChar();
+//void forwardWord();
+//void backwardWord();
+//void forwardPair();
+//void backwardPair();
+
+//int blockCount() const;
+//int characterCount() const;
+//QTextBlock firstVisibleBlock();
+
+//void moveToStart();
+//void moveToEnd();
+//void moveToStartOfLine();
+//void moveToEndOfLine();
+//void moveToLineIndentation();
+//void nextLine();
+//void prevLine();
+//void jumpToLine(int line, bool keepLineAtCenter);
+
+//void moveCursorNoBlink(QTextCursor::MoveOperation operation,
+//                       QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
+
+//void newline();
+//void openNewlineAbove();
+//void openNewlineBelow();
+//void moveLineDownUp(bool up);
+//void scrollLineUp();
+//void scrollLineDown();
+//void scrollUp();
+//void scrollDown();
+//void duplicateLine();
+//void copyLines();
+//void cutlines();
+
+///**
+// * @brief joinLines 合并行
+// */
+//void joinLines();
+
+//void killLine();
+//void killCurrentLine();
+//void killBackwardWord();
+//void killForwardWord();
+
+//void escape();
+//void indentText();
+//void unindentText();
+//void setTabSpaceNumber(int number);
+//void convertWordCase(ConvertCase convertCase);
+//QString capitalizeText(QString text);
+
+//void keepCurrentLineAtCenter();
+//void scrollToLine(int scrollOffset, int row, int column);
+
+//void setLineWrapMode(bool enable);
+//void setFontFamily(QString fontName);
+//void setFontSize(int fontSize);
+//void updateFont();
+
+//void replaceAll(const QString &replaceText, const QString &withText);
+//void replaceNext(const QString &replaceText, const QString &withText);
+//void replaceRest(const QString &replaceText, const QString &withText);
+//void beforeReplace(QString _);
+
+//bool findKeywordForward(const QString &keyword);
+
+//void removeKeywords();
+//bool highlightKeyword(QString keyword, int position);
+//void updateCursorKeywordSelection(int position, bool findNext);
+//void updateHighlightLineSelection();
+//bool updateKeywordSelections(QString keyword,QTextCharFormat charFormat,QList<QTextEdit::ExtraSelection> *listSelection);
+//void renderAllSelections();
+
+
+//void lineNumberAreaPaintEvent(QPaintEvent *event);
+//void codeFLodAreaPaintEvent(QPaintEvent *event);
+//void setBookmarkFlagVisable(bool isVisable,bool bIsFirstOpen = false);
+//void setCodeFlodFlagVisable(bool isVisable,bool bIsFirstOpen = false);
+//void setTheme(const QString &path);
+//bool highlightWordUnderMouse(QPoint pos);
+//void removeHighlightWordUnderCursor();
+//void setSettings(Settings *settings);
+////设置tabbar修改状态是否带*,不改变document 修改属性
+//void setTabbarModified(bool modified);
+//void copySelectedText();
+//void cutSelectedText();
+//void pasteText();
+//void setMark();
+//void unsetMark();
+//bool tryUnsetMark();
+//void exchangeMark();
+//void saveMarkStatus();
+//void restoreMarkStatus();
+//void completionWord(QString word);
+//QString getWordAtMouse();
+//QString getWordAtCursor();
+//void toggleReadOnlyMode();
+//void toggleComment(bool sister);
+//int getNextWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode);
+//int getPrevWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode);
+//bool atWordSeparator(int position);
+//void showCursorBlink();
+//void hideCursorBlink();
+//void setReadOnlyPermission(bool permission);
+//bool getReadOnlyPermission();
+//bool getReadOnlyMode();
+//void hideRightMenu();
+//void clearBlack();
+//void flodOrUnflodAllLevel(bool isFlod);
+//void flodOrUnflodCurrentLevel(bool isFlod);
+//void getHideRowContent(int iLine);
+//bool isNeedShowFoldIcon(QTextBlock block);
+//int  getHighLightRowContentLineNum(int iLine);
+
+///**
+// * @author liumaochuan ut000616
+// * @brief getLinePosYByLineNum 根据行号获得行Y轴坐标
+// * @param iLine 行
+// * @return 行Y轴坐标
+// */
+//int  getLinePosYByLineNum(int iLine);
+//bool ifHasHighlight();
+
+////书签功能相关
+///**
+// * @author liumaochuan ut000616
+// * @brief bookMarkAreaPaintEvent 绘制书签
+// * @param event 书签区域的绘制事件
+// */
+//void bookMarkAreaPaintEvent(QPaintEvent *event);
+
+///**
+// * @author liumaochuan ut000616
+// * @brief getLineFromPoint 得到鼠标点击位置所在的行
+// * @param point 鼠标点击位置
+// * @return 鼠标点击位置所在的行
+// */
+//int getLineFromPoint(const QPoint &point);
+
+///**
+// * @author liumaochuan ut000616
+// * @brief moveToPreviousBookMark 移动到上一个书签
+// */
+//void moveToPreviousBookMark();
+
+///**
+// * @author liumaochuan ut000616
+// * @brief moveToNextBookMark 移动到下一个书签
+// */
+//void moveToNextBookMark();
+
+///**
+// * @author liumaochuan ut000616
+// * @brief checkBookmarkLineMove 检测书签行移动
+// * @param from 文本变化时光标位置
+// * @param charsRemoved 移除的字符数
+// * @param charsAdded 添加的字符数
+// */
+//void checkBookmarkLineMove(int from, int charsRemoved, int charsAdded);
+
+///**
+// * @author liumaochuan ut000616
+// * @brief setIsFileOpen 设置是否在读取文件
+// */
+//void setIsFileOpen();
+
+///**
+// * @author liumaochuan ut000616
+// * @brief setTextFinished 读取文件结束
+// */
+//void setTextFinished();
+
+///**
+// * @author liumaochuan ut000616
+// * @brief readHistoryRecord 读取书签相关记录
+// * @return 书签相关记录列表
+// */
+//QStringList readHistoryRecord(QString key);
+
+///**
+// * @author liumaochuan ut000616
+// * @brief readHistoryRecordofBookmark 读取书签记录
+// * @return 书签记录列表
+// */
+//QStringList readHistoryRecordofBookmark();
+
+///**
+// * @author liumaochuan ut000616
+// * @brief readHistoryRecordofFilePath 读取添加了书签的文件路径记录
+// * @return 文件路径列表
+// */
+//QStringList readHistoryRecordofFilePath(QString key);
+
+///**
+// * @author liumaochuan ut000616
+// * @brief writeHistoryRecord 写入书签相关记录
+// */
+//void writeHistoryRecord();
+
+////标记功能相关
+///**
+// * @author liumaochuan ut000616
+// * @brief isMarkCurrentLine 标记或取消标记当前行
+// * @param isMark true为标记，false为取消标记
+// * @param strColor 标记格式
+// */
+//void isMarkCurrentLine(bool isMark, QString strColor = "");
+
+///**
+// * @author liumaochuan ut000616
+// * @brief isMarkAllLine 标记或取消标记所有
+// * @param isMark true为标记，false为取消标记
+// * @param strColor 标记格式
+// */
+//void isMarkAllLine(bool isMark, QString strColor = "");
+
+///**
+// * @author liumaochuan ut000616
+// * @brief cancelLastMark 取消上一个标记
+// */
+//void cancelLastMark();
+
+///**
+// * @brief markSelectWord 标记选择的文本
+// */
+//void markSelectWord();
+
+///**
+// * @author liumaochuan ut000616
+// * @brief updateMark 更新标记
+// * @param from 文本变化时光标位置
+// * @param charsRemoved 移除的字符数
+// * @param charsAdded 添加的字符数
+// */
+//void updateMark(int from, int charsRemoved, int charsAdded);
+
+////QTextEdit :: ExtraSelection结构提供了一种为文档中的给定选择,指定字符格式的方法。
+///**
+// * @author liumaochuan ut000616
+// * @brief containsExtraSelection 指定字符格式列表是否包含该指定字符格式
+// * @param listSelections 指定字符格式列表
+// * @param selection 指定字符格式
+// * @return true or false
+// */
+//bool containsExtraSelection(QList<QTextEdit::ExtraSelection> listSelections, QTextEdit::ExtraSelection selection);
+
+///**
+// * @author liumaochuan ut000616
+// * @brief appendExtraSelection 在指定字符格式列表添加指定字符格式
+// * @param wordMarkSelections 指定字符格式列表
+// * @param selection 指定字符格式
+// * @param markColor 指定字符颜色格式
+// * @param listSelections 添加的指定字符格式列表
+// */
+//void appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSelections, QTextEdit::ExtraSelection selection
+//                          , QString strColor, QList<QTextEdit::ExtraSelection> *listSelections);
+
+//void setCursorStart(int pos);
+//void writeEncodeHistoryRecord();
+//QStringList readEncodeHistoryRecord();
+///**
+// * @brief tellFindBarClose 通知查找框关闭
+// */
+//void tellFindBarClose();
+///**
+// * @author liumaochuan ut000616
+// * @brief setEditPalette 设置textEdit的颜色
+// * @param activeColor active时的颜色
+// * @param inactiveColor inactive时的颜色
+// */
+//void setEditPalette(const QString &activeColor, const QString &inactiveColor);
+///**
+// * @author liumaochuan ut000616
+// * @brief setCodeFoldWidgetHide 代码折叠悬浮预览
+// * @param isHidden 是否隐藏
+// */
+//void setCodeFoldWidgetHide(bool isHidden);
+//void setBackupPath(QString qstrTruePath);
+//QString getTruePath();
 

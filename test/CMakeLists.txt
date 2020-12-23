@@ -37,6 +37,8 @@ find_package(GTest REQUIRED)
 find_package(Qt5Xml REQUIRED)
 find_package(Qt5Svg REQUIRED)
 
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 include_directories(Qt5PrintSupport)
 include_directories(${GTEST_INCLUDE_DIRS})
@@ -51,6 +53,7 @@ set(PROJECT_NAME_TEST
     ${PROJECT_NAME}_test)
 
 #Include all app own subdirectorys
+
 
 file(GLOB_RECURSE INTRODUCTION_SRC_TEST ${CMAKE_CURRENT_LIST_DIR}/../src/*.cpp)
 #file(GLOB_RECURSE INTRODUCTION_SRC_TEST ${CMAKE_CURRENT_LIST_DIR}/../src/*.)
