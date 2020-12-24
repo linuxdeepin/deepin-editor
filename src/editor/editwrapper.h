@@ -86,6 +86,8 @@ public:
     //判断内容是否为空
     bool isPlainTextEmpty();
 
+    bool isTemFile();
+
     void hideWarningNotices();
     void checkForReload();
     void initToastPosition();

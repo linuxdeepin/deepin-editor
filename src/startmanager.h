@@ -52,6 +52,8 @@ public:
     bool checkPath(const QString &file);
     bool ifKlu();
     bool isMultiWindow();
+    bool isTemFilesEmpty();
+    void recoverFile(Window *window);
 
 private:
     void initBlockShutdown();

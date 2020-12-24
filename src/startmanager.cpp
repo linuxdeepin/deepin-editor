@@ -56,17 +56,23 @@ StartManager::StartManager(QObject *parent)
     if (!QFileInfo(blankFileDir).exists()) {
         QDir().mkpath(blankFileDir);
     }
+
+    m_qlistTemFile = Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->value().toStringList();
 }
 
 
 bool StartManager::checkPath(const QString &file)
 {
     for (int i = 0;i < m_windows.count();i++) {
-        if (m_windows.value(i)->wrapper(file) != nullptr) {
-            m_windows.value(i)->activateWindow();
+        EditWrapper *wrapper = m_windows.value(i)->wrapper(file);
+        if (wrapper != nullptr) {
+            FileTabInfo info = getFileTabInfo(wrapper->textEditor()->getFilePath());
+            // Open exist tab if file has opened.
+            popupExistTabs(info);
             return false;
         }
     }
+
     return true;
 }
 
@@ -91,6 +97,85 @@ bool StartManager::isMultiWindow()
     }
 
     return false;
+}
+
+bool StartManager::isTemFilesEmpty()
+{
+    bool bIsEmpty = false;
+
+    for (auto temFile : m_qlistTemFile) {
+        if (temFile.isEmpty()) {
+            bIsEmpty = true;
+        }
+    }
+
+    return bIsEmpty;
+}
+
+void StartManager::recoverFile(Window *window)
+{
+    QFileInfo fileInfo;
+    QFileInfo fileInfoTem;
+    bool bIsTemFile = false;
+    QDir blankDirectory = QDir(QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files"));
+    QStringList blankFiles = blankDirectory.entryList(QStringList(), QDir::Files);
+
+    for (int i = 0;i < m_qlistTemFile.count();i++) {
+        QJsonParseError jsonError;
+        // 转化为 JSON 文档
+        QJsonDocument doucment = QJsonDocument::fromJson(m_qlistTemFile.value(i).toUtf8(), &jsonError);
+        // 解析未发生错误
+        if (!doucment.isNull() && (jsonError.error == QJsonParseError::NoError)) {
+            if (doucment.isObject()) {
+                QString temFilePath;
+                QString localPath;
+                // JSON 文档为对象
+                QJsonObject object = doucment.object();  // 转化为对象
+
+                if (object.contains("temFilePath")) {  // 包含指定的 key
+                    QJsonValue value = object.value("temFilePath");  // 获取指定 key 对应的 value
+
+                    if (value.isString()) {  // 判断 value 是否为字符串
+                        temFilePath = value.toString();  // 将 value 转化为字符串
+                    }
+                }
+
+                if (object.contains("modify")) {  // 包含指定的 key
+                    QJsonValue value = object.value("modify");  // 获取指定 key 对应的 value
+
+                    if (value.isBool()) {  // 判断 value 是否为字符串
+                        bIsTemFile = value.toBool();
+                    }
+                }
+
+                if (object.contains("localPath")) {  // 包含指定的 key
+                    QJsonValue value = object.value("localPath");  // 获取指定 key 对应的 value
+
+                    if (value.isString()) {  // 判断 value 是否为字符串
+                        localPath = value.toString();  // 将 value 转化为字符串
+                        fileInfo.setFile(localPath);
+                    }
+                }
+
+                if (!temFilePath.isEmpty()) {
+                    if (temFilePath == localPath) {
+                        int index = blankFiles.indexOf(fileInfo.fileName());
+
+                        if (index >= 0) {
+                            QString fileName = tr("Untitled %1").arg(index + 1);
+                            window->addTemFileTab(temFilePath,fileName,localPath,bIsTemFile);
+                        }
+                    } else {
+                        window->addTemFileTab(temFilePath,fileInfo.fileName(),localPath,bIsTemFile);
+                    }
+                } else {
+                    if (!localPath.isEmpty()) {
+                        window->addTemFileTab(localPath,fileInfo.fileName(),localPath,bIsTemFile);
+                    }
+                }
+            }
+        }
+    }
 }
 
 void StartManager::openFilesInWindow(QStringList files)
@@ -127,89 +212,13 @@ void StartManager::openFilesInTab(QStringList files)
         QStringList blankFiles = blankDirectory.entryList(QStringList(), QDir::Files);
 
         if (m_windows.isEmpty()) {
-
             Window *window = createWindow(true);
             window->showCenterWindow(true);
-            bool bIsEmpty = false;
-            m_qlistTemFile = Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->value().toStringList();
 
-            for (auto temFile : m_qlistTemFile) {
-                if (temFile.isEmpty()) {
-                    bIsEmpty = true;
-                }
-            }
-
-            if (!bIsEmpty) {
-                QFileInfo fileInfo;
-                QFileInfo fileInfoTem;
-                bool bIsTemFile = false;
-                for (int i = 0;i < m_qlistTemFile.count();i++) {
-                    QJsonParseError jsonError;
-                    // 转化为 JSON 文档
-                    QJsonDocument doucment = QJsonDocument::fromJson(m_qlistTemFile.value(i).toUtf8(), &jsonError);
-                    // 解析未发生错误
-                    if (!doucment.isNull() && (jsonError.error == QJsonParseError::NoError)) {
-                        if (doucment.isObject()) {
-                            QString temFilePath;
-                            QString localPath;
-                            // JSON 文档为对象
-                            QJsonObject object = doucment.object();  // 转化为对象
-
-                            if (object.contains("temFilePath")) {  // 包含指定的 key
-                                QJsonValue value = object.value("temFilePath");  // 获取指定 key 对应的 value
-
-                                if (value.isString()) {  // 判断 value 是否为字符串
-                                    temFilePath = value.toString();  // 将 value 转化为字符串
-                                }
-                            }
-
-                            if (object.contains("modify")) {  // 包含指定的 key
-                                QJsonValue value = object.value("modify");  // 获取指定 key 对应的 value
-
-                                if (value.isBool()) {  // 判断 value 是否为字符串
-                                    bIsTemFile = value.toBool();
-                                }
-                            }
-
-                            if (object.contains("localPath")) {  // 包含指定的 key
-                                QJsonValue value = object.value("localPath");  // 获取指定 key 对应的 value
-
-                                if (value.isString()) {  // 判断 value 是否为字符串
-                                    localPath = value.toString();  // 将 value 转化为字符串
-                                    fileInfo.setFile(localPath);
-                                }
-                            }
-
-                            if (!temFilePath.isEmpty()) {
-                                if (temFilePath == localPath) {
-                                    int index = blankFiles.indexOf(fileInfo.fileName());
-
-                                    if (index >= 0) {
-                                        QString fileName = tr("Untitled %1").arg(index + 1);
-                                        window->addTemFileTab(temFilePath,fileName,localPath,bIsTemFile);
-                                    }
-                                } else {
-                                    window->addTemFileTab(temFilePath,fileInfo.fileName(),localPath,bIsTemFile);
-                                }
-                            } else {
-                                if (!localPath.isEmpty()) {
-                                    window->addTemFileTab(localPath,fileInfo.fileName(),localPath,bIsTemFile);
-                                }
-                            }
-                        }
-                    }
-                }
+            if (!isTemFilesEmpty()) {
+                recoverFile(window);
             } else {
-                // Open blank files of last session.
-                if (!blankFiles.isEmpty()) {
-                    QTimer::singleShot(50, [=] {
-                        for (const QString &blankFile : blankFiles) {
-                            window->addBlankTab(QDir(blankDirectory).filePath(blankFile));
-                        }
-                    });
-                }
-                // Just open new window with blank tab if no blank files in last session.
-                else {
+                if (blankFiles.isEmpty()) {
                     window->addBlankTab();
                 }
             }
@@ -222,30 +231,35 @@ void StartManager::openFilesInTab(QStringList files)
         }
     } else {
         for (const QString &file : files) {
+
+            if (!checkPath(file)) {
+                return;
+            }
+
             FileTabInfo info = getFileTabInfo(file);
 
             // Open exist tab if file has opened.
             if (info.windowIndex != -1) {
                 popupExistTabs(info);
-
-                //qDebug() << "Open " << file << " in exist tab";
             }
             // Create new window with file if haven't window exist.
             else if (m_windows.size() == 0) {
                 Window *window = createWindow(true);
                 window->showCenterWindow(true);
-                QTimer::singleShot(50, [=] { window->addTab(file); });
 
-                //qDebug() << "Open " << file << " with new window";
+                QTimer::singleShot(50, [=] {
+                    recoverFile(window);
+                    window->addTab(file);
+                });
             }
             // Open file tab in first window of window list.
             else {
                 Window *window = m_windows[0];
+                recoverFile(window);
                 window->addTab(file);
                 window->setWindowState(Qt::WindowActive);
                 window->activateWindow();
             }
-
         }
     }
 }

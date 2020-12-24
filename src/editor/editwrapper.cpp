@@ -115,6 +115,7 @@ bool EditWrapper::getFileLoading()
 
 void EditWrapper::openFile(const QString &filepath,QString qstrTruePath,bool bIsTemFile)
 {
+
     m_bIsTemFile = bIsTemFile;
     // update file path.
     updatePath(filepath,qstrTruePath);
@@ -380,6 +381,7 @@ bool EditWrapper::saveFile()
 
             // update status.
             if (ok)  updateModifyStatus(false);
+            m_bIsTemFile = false;
             return ok;
 
         }else {
@@ -397,6 +399,7 @@ bool EditWrapper::saveFile()
 
             // update status.
             if (ok)  updateModifyStatus(false);
+            m_bIsTemFile = false;
             return ok;
         }
     }else {
@@ -473,7 +476,8 @@ bool EditWrapper::isModified()
     //编码改变内容没有修改也算是文件修改
    // bool modified = (m_sFirstEncode != m_sCurEncode || m_pTextEdit->document()->isModified());
     bool modified =  m_pTextEdit->getModified();
-    return  modified;
+
+    return  modified | m_bIsTemFile;
 }
 
 bool EditWrapper::isDraftFile()
@@ -484,6 +488,11 @@ bool EditWrapper::isDraftFile()
 bool EditWrapper::isPlainTextEmpty()
 {
     return m_pTextEdit->document()->isEmpty();
+}
+
+bool EditWrapper::isTemFile()
+{
+    return m_bIsTemFile;
 }
 
 bool EditWrapper::saveDraftFile()
@@ -641,7 +650,6 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QByteArr
 
     loadContent(content);
 
-
     qint64 time3 = QDateTime::currentMSecsSinceEpoch();
     qDebug()<<"===========end load file:"<<time3 - time1;
 
@@ -701,7 +709,7 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QByteArr
     }
     //备份显示修改状态
     if (m_bIsTemFile) {
-        m_bIsTemFile = false;
+        //m_bIsTemFile = false;
         updateModifyStatus(true);
     }
 

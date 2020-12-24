@@ -453,10 +453,8 @@ void Window::addTab(const QString &filepath, bool activeTab)
 
         if (curWrapper) {
             // if the current page is a draft file and is empty
-
             if (m_tabbar->indexOf(filepath) != -1) {
                 m_tabbar->setCurrentIndex(m_tabbar->indexOf(filepath));
-//                }
             }
         }
 
@@ -485,7 +483,6 @@ void Window::addTab(const QString &filepath, bool activeTab)
                 }
 
                 wrapper->openFile(filepath,filepath);
-
             }
             // Activate window.
             activateWindow();
@@ -560,43 +557,48 @@ bool Window::closeTab()
     // this property holds whether the document has been modified by the user
     bool isModified = wrapper->isModified();
     bool isDraftFile = wrapper->isDraftFile();
-//    bool isEmpty = wrapper->isPlainTextEmpty();
     bool bIsBackupFile = false;
 
-    if (wrapper->textEditor()->getTruePath() != wrapper->textEditor()->getFilePath()) {
+    if (wrapper->isTemFile()) {
         bIsBackupFile = true;
     }
 
     if(wrapper->getFileLoading()) isModified = false;
 
     if (isDraftFile) {
-        DDialog *dialog = createDialog(tr("Do you want to save as another?"), "");
-        int res = dialog->exec();
+        if(isModified){
+            DDialog *dialog = createDialog(tr("Do you want to save as another?"), "");
+            int res = dialog->exec();
 
-        //取消或关闭弹窗不做任务操作
-        if(res == 0 || res == -1) {
-            return false;
-        }
+            //取消或关闭弹窗不做任务操作
+            if(res == 0 || res == -1) {
+                return false;
+            }
 
-        //不保存
-        if(res == 1){
-           removeWrapper(filePath, true);
-           m_tabbar->closeCurrentTab();
-           QFile(filePath).remove();
-           //focusActiveEditor();
-           return true;
-        }
-
-        //保存
-        if(res == 2){
-           if(wrapper->saveAsFile())
-           {
+            //不保存
+            if(res == 1){
                removeWrapper(filePath, true);
                m_tabbar->closeCurrentTab();
-               //focusActiveEditor();
-           }
+               QFile(filePath).remove();
+               return true;
+            }
+
+            //保存
+            if(res == 2){
+               if(wrapper->saveDraftFile())
+               {
+                   removeWrapper(filePath, true);
+                   m_tabbar->closeCurrentTab();
+                   QFile(filePath).remove();
+               }
+            }
+        } else {
+            removeWrapper(filePath, true);
+            m_tabbar->closeCurrentTab();
+            QFile(filePath).remove();
         }
     }
+
 
     // document has been modified or unsaved draft document.
     // need to prompt whether to save.
@@ -620,7 +622,6 @@ bool Window::closeTab()
                    QDir(m_blankFileDir).rmdir(fileinfo.absoluteDir().dirName());
                }
 
-               //focusActiveEditor();
                return true;
             }
 
@@ -635,7 +636,6 @@ bool Window::closeTab()
                       QFileInfo fileinfo (filePath);
                       QDir(m_blankFileDir).rmdir(fileinfo.absoluteDir().dirName());
                   }
-
                 }else {
                    if(wrapper->saveFile())
                    {
@@ -712,6 +712,14 @@ EditWrapper *Window::wrapper(const QString &filePath)
     if (m_wrappers.contains(filePath)) {
        return m_wrappers.value(filePath);     
     } else {
+       for (auto wrapper : m_wrappers) {
+           QString truePath = wrapper->textEditor()->getTruePath();
+
+           if (truePath == filePath) {
+               return m_wrappers.value(wrapper->textEditor()->getFilePath());
+           }
+       }
+
        return nullptr;
     }
 }
@@ -768,7 +776,9 @@ void Window::openFile()
     if (historyDirStr.isEmpty()) {
         historyDirStr = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     }
+
     QDir historyDir(historyDirStr);
+
     if (historyDir.exists()) {
         dialog.setDirectory(historyDir);
     } else {
@@ -845,7 +855,7 @@ bool Window::saveFile()
     else {
         QString temPath = "";
 
-        if (wrapperEdit->textEditor()->getTruePath() != wrapperEdit->textEditor()->getFilePath()) {
+        if (wrapperEdit->isTemFile()) {
             temPath = wrapperEdit->textEditor()->getFilePath();
         }
 
