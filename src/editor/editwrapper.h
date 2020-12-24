@@ -112,6 +112,7 @@ public slots:
     void handleFileLoadFinished(const QByteArray &encode,const QByteArray &content);
     void OnThemeChangeSlot(QString theme);
     void UpdateBottomBarWordCnt(int cnt);
+    void OnUpdateHighlighter();
 public:
     void updateModifyStatus(bool isModified);
     void updateSaveAsFileName(QString strOldFilePath, QString strNewFilePath);

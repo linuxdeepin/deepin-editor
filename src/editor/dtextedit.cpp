@@ -117,10 +117,12 @@ TextEdit::TextEdit(QWidget *parent)
 
     connect(m_pUndoStack,&QUndoStack::canRedoChanged,this,[this](bool){
         this->m_wrapper->window()->updateModifyStatus(m_sFilePath,true);
+        this->m_wrapper->OnUpdateHighlighter();
     });
 
     connect(m_pUndoStack,&QUndoStack::canRedoChanged,this,[this](bool){
         this->m_wrapper->window()->updateModifyStatus(m_sFilePath,true);
+        this->m_wrapper->OnUpdateHighlighter();
     });
 
 
@@ -5182,6 +5184,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
     qDebug()<<e<<e->text()<<e->key()<<e->modifiers();
     //没有修改键　插入文件
     if(modifiers == Qt::NoModifier){
+         QString key = Utils::getKeyshortcut(e);
         //按下esc的时候,光标退出编辑区，切换至标题栏
         if(e->key() == Qt::Key_Escape)
         {
@@ -5227,6 +5230,16 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             }
            return;
         }
+
+        if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "scrollup")) {
+            scrollUp();
+            m_wrapper->OnUpdateHighlighter();
+            return;
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "scrolldown")) {
+            scrollDown();
+            m_wrapper->OnUpdateHighlighter();
+            return;
+        }
         return QPlainTextEdit::keyPressEvent(e);
     }else{
 
@@ -5244,18 +5257,15 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             return;
         }
 
+            const QString key1 = Utils::getKeyshortcut(e);
+            if (key1 == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "undo")) {
+                m_pUndoStack->undo();
+                return;
+            } else if (key1 == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "redo")) {
+                m_pUndoStack->redo();
+                return;
+            }
 
-        //重做 ctrl+shift+z
-        if(modifiers == (Qt::ControlModifier | Qt::ShiftModifier) && e->key() == Qt::Key_Z){
-          m_pUndoStack->redo();
-          return;
-        }
-
-        //撤销 ctrl+z
-        if(modifiers == Qt::ControlModifier && e->key() == Qt::Key_Z){
-          m_pUndoStack->undo();
-          return;
-        }
         //剪切ctrl+x
         if(modifiers == Qt::ControlModifier && e->key() == Qt::Key_X){
             //列编辑添加撤销重做
@@ -5486,9 +5496,9 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "removecomment")) {
                 toggleComment(false);
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "undo")) {
-                QPlainTextEdit::undo();
+                m_pUndoStack->undo();
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "redo")) {
-                QPlainTextEdit::redo();
+                m_pUndoStack->redo();
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "switchbookmark")) {
                 m_bIsShortCut = true;
                 addOrDeleteBookMark();

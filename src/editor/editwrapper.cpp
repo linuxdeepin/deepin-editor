@@ -69,32 +69,8 @@ EditWrapper::EditWrapper(Window* window,QWidget *parent)
     connect(m_pTextEdit, &TextEdit::cursorModeChanged, this, &EditWrapper::handleCursorModeChanged);
     connect(m_pWaringNotices, &WarningNotices::reloadBtnClicked, this, &EditWrapper::reloadModifyFile);
     connect(m_pWaringNotices, &WarningNotices::saveAsBtnClicked, m_pWindow, &Window::saveAsFile);
-    connect(m_pTextEdit->verticalScrollBar(),&QScrollBar::valueChanged,this,[this](int value){
-        if(m_pSyntaxHighlighter){
-
-          QScrollBar* pScrollBar = m_pTextEdit->verticalScrollBar();
-          //QTextBlock textBlock = m_pTextEdit->document()->findBlockByNumber(value);
-
-          QTextBlock beginBlock = m_pTextEdit->document()->findBlockByNumber(m_pTextEdit->getFirstVisibleBlockId());
-
-          QTextBlock endBlock;
-          if (pScrollBar->maximum() > 0){
-              QPoint endPoint = QPointF(0,m_pTextEdit->height() + (m_pTextEdit->height()/pScrollBar->maximum())*pScrollBar->value()).toPoint();
-             endBlock = m_pTextEdit->cursorForPosition(endPoint).block();
-          }else {
-             endBlock = m_pTextEdit->document()->lastBlock();
-           }
-
-
-           for (QTextBlock var = beginBlock; var != endBlock; var= var.next()) {
-                m_pSyntaxHighlighter->setEnableHighlight(true);
-                m_pSyntaxHighlighter->rehighlightBlock(var);
-                m_pSyntaxHighlighter->setEnableHighlight(false);
-           }
-
-          qDebug()<<"valueChanged:"<<beginBlock.text()<<endBlock.text();
-
-        }
+    connect(m_pTextEdit->verticalScrollBar(),&QScrollBar::valueChanged,this,[this](int){
+        OnUpdateHighlighter();
     });
 }
 
@@ -120,13 +96,6 @@ void EditWrapper::openFile(const QString &filepath,QString qstrTruePath,bool bIs
     // update file path.
     updatePath(filepath,qstrTruePath);
     m_pTextEdit->setIsFileOpen();
-
-//    CSyntaxHighlighter* pCSyntaxHighlighter = new CSyntaxHighlighter(QFileInfo(filePath()).fileName());
-//    qRegisterMetaType<KSyntaxHighlighting::Definition>("KSyntaxHighlighting::Definition");
-//    connect(pCSyntaxHighlighter,&CSyntaxHighlighter::sigDefinition,this,&EditWrapper::loadSyntaxHighlighter);
-//    connect(pCSyntaxHighlighter, &CSyntaxHighlighter::finished, pCSyntaxHighlighter, &CSyntaxHighlighter::deleteLater);
-//    pCSyntaxHighlighter->start();
-
 
     FileLoadThread *thread = new FileLoadThread(filepath);
     // begin to load the file.
@@ -749,6 +718,34 @@ void EditWrapper::UpdateBottomBarWordCnt(int cnt)
     m_pBottomBar->updateWordCount(cnt);
 }
 
+void EditWrapper::OnUpdateHighlighter()
+{
+    if(m_pSyntaxHighlighter){
+      QScrollBar* pScrollBar = m_pTextEdit->verticalScrollBar();
+      //QTextBlock textBlock = m_pTextEdit->document()->findBlockByNumber(value);
+
+      QTextBlock beginBlock = m_pTextEdit->document()->findBlockByNumber(m_pTextEdit->getFirstVisibleBlockId());
+
+      QTextBlock endBlock;
+      if (pScrollBar->maximum() > 0){
+          QPoint endPoint = QPointF(0,m_pTextEdit->height() + (m_pTextEdit->height()/pScrollBar->maximum())*pScrollBar->value()).toPoint();
+         endBlock = m_pTextEdit->cursorForPosition(endPoint).block();
+
+      }else {
+         endBlock = m_pTextEdit->document()->lastBlock();
+      }
+
+
+     for (QTextBlock var = beginBlock; var != endBlock; var= var.next()) {
+          m_pSyntaxHighlighter->setEnableHighlight(true);
+          m_pSyntaxHighlighter->rehighlightBlock(var);
+          m_pSyntaxHighlighter->setEnableHighlight(false);
+     }
+
+     qDebug()<<"OnUpdateHighlighter:"<<beginBlock.text()<<endBlock.text();
+    }
+}
+
 void EditWrapper::updateModifyStatus(bool bModified)
 {
     if(getFileLoading()) return;
@@ -824,8 +821,9 @@ void EditWrapper::loadContent(const QByteArray &content)
     QApplication::setOverrideCursor(Qt::WaitCursor);
     m_pTextEdit->clear();
     m_bQuit = false;
-    QTextDocument *doc = m_pTextEdit->document();
+    //QTextDocument *doc = m_pTextEdit->document();
     QTextCursor cursor = m_pTextEdit->textCursor();
+
     int len = content.length();
     //初始化显示文本大小
     int InitContentPos = 5*1024;
@@ -846,8 +844,11 @@ void EditWrapper::loadContent(const QByteArray &content)
             if(i == 0 && !m_bQuit){              
               data = content.mid(i*step,InitContentPos);
               cursor.insertText(data);
+              QTextCursor firstLineCursor = m_pTextEdit->textCursor();
+              firstLineCursor.movePosition(QTextCursor::Start,QTextCursor::MoveAnchor);
+              m_pTextEdit->setTextCursor(firstLineCursor);
               //秒开界面语法高亮
-              emit m_pTextEdit->verticalScrollBar()->valueChanged(0);
+              OnUpdateHighlighter();
               QApplication::processEvents();
               continue;
             }
@@ -868,8 +869,11 @@ void EditWrapper::loadContent(const QByteArray &content)
         if(!m_bQuit && len > InitContentPos){
             data = content.mid(0,InitContentPos);
             cursor.insertText(data);
+            QTextCursor firstLineCursor = m_pTextEdit->textCursor();
+            firstLineCursor.movePosition(QTextCursor::Start,QTextCursor::MoveAnchor);
+            m_pTextEdit->setTextCursor(firstLineCursor);
             //秒开界面语法高亮
-            emit m_pTextEdit->verticalScrollBar()->valueChanged(0);
+            OnUpdateHighlighter();
             QApplication::processEvents();
             if(!m_bQuit){
                 data = content.mid(InitContentPos,len-InitContentPos);
@@ -877,9 +881,9 @@ void EditWrapper::loadContent(const QByteArray &content)
             }
         }else {
            if(!m_bQuit) {
-               cursor.insertText(content);
+              cursor.insertText(content);
                //秒开界面语法高亮
-               emit m_pTextEdit->verticalScrollBar()->valueChanged(0);
+              OnUpdateHighlighter();
            }
         }
     }
