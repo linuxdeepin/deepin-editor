@@ -63,7 +63,7 @@ signals:
     void backToPosition(QString file, int row, int column, int scrollOffset);
     void jumpToLine(QString file, int line, bool focusEditor);
     void lostFocusExit();
-
+    void pressEsc();
 protected:
 
 private:

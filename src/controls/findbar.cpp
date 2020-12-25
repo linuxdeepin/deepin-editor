@@ -64,7 +64,7 @@ FindBar::FindBar(QWidget *parent)
     // m_findPrevButton->setFocusPolicy(Qt::NoFocus);
     // m_closeButton->setFocusPolicy(Qt::NoFocus);
 
-    connect(m_editLine, &LineBar::pressEsc, this, &FindBar::findCancel, Qt::QueuedConnection);
+    connect(this, &FindBar::pressEsc, this, &FindBar::findCancel, Qt::QueuedConnection);
     // connect(m_editLine, &LineBar::pressEnter, this, &FindBar::findNext, Qt::QueuedConnection);            //Shielded by Hengbo ,for new demand. 20200220
     connect(m_editLine, &LineBar::pressCtrlEnter, this, &FindBar::findPrev, Qt::QueuedConnection);
     connect(m_editLine, &LineBar::returnPressed, this, &FindBar::handleContentChanged, Qt::QueuedConnection);

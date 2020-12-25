@@ -122,7 +122,7 @@ signals:
     void newWindow();
     void close();
     void sigJudgeBlockShutdown();
-
+    void pressEsc();
 public slots:
     void addBlankTab();
     void addBlankTab(const QString &blankFile);
@@ -147,9 +147,6 @@ public slots:
 
     void handleRemoveSearchKeyword();
     void handleUpdateSearchKeyword(QWidget *widget, const QString &file, const QString &keyword);
-
-    void addBottomWidget(QWidget *widget);
-    void removeBottomWidget();
 
     void loadTheme(const QString &path);
 

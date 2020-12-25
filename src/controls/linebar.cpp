@@ -59,7 +59,6 @@ void LineBar::handleTextChanged()
 
 void LineBar::sendText(QString t)
 {
-    qDebug()<<"ppppppttttt"<<t;
     emit signal_sentText(t);
 }
 
@@ -77,9 +76,7 @@ void LineBar::keyPressEvent(QKeyEvent *e)
     QString key = Utils::getKeyshortcut(e);
     Qt::KeyboardModifiers modifiers = e->modifiers();
 
-     if (key == "Esc") {
-        pressEsc();
-     }else if(modifiers == Qt::ControlModifier && e->text() == "\r"){
+     if(modifiers == Qt::ControlModifier && e->text() == "\r"){
         pressCtrlEnter();
      }else if(modifiers == Qt::AltModifier && e->text() == "\r"){
         pressAltEnter();

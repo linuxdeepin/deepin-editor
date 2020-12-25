@@ -389,7 +389,6 @@ signals:
     void cursorModeChanged(CursorMode mode);
     void hightlightChanged(const QString &name);
     void popupNotify(QString notify);
-    void pressEsc();
     void signal_readingPath();
     void signal_clearBlack();
     void signal_setTitleFocus();

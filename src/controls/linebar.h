@@ -47,7 +47,6 @@ signals:
     void pressAltEnter();
     void pressCtrlEnter();
     void pressEnter();
-    void pressEsc();
     void pressMetaEnter();
     void signal_sentText(QString t);
 

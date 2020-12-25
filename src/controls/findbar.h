@@ -61,6 +61,7 @@ public:
     void findPreClicked();
 
 signals:
+    void pressEsc();
     void findNext();
     void findPrev();
 

@@ -49,7 +49,7 @@ JumpLineBar::JumpLineBar(DFloatingWidget *parent)
     m_layout->addWidget(m_editLine);
     this->setLayout(m_layout);
 
-    connect(m_editLine, &LineBar::pressEsc, this, &JumpLineBar::jumpCancel, Qt::QueuedConnection);
+    connect(this, &JumpLineBar::pressEsc, this, &JumpLineBar::jumpCancel, Qt::QueuedConnection);
     connect(m_editLine, &LineBar::returnPressed, this, &JumpLineBar::jumpConfirm, Qt::QueuedConnection);
     connect(m_editLine, &LineBar::textChanged, this, &JumpLineBar::handleLineChanged, Qt::QueuedConnection);
     connect(m_editLine, &LineBar::focusOut, this, &JumpLineBar::handleFocusOut, Qt::QueuedConnection);

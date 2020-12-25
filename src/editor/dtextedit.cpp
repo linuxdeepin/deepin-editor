@@ -1502,13 +1502,6 @@ void TextEdit::killForwardWord()
     }
 }
 
-void TextEdit::escape()
-{
-    emit pressEsc();
-
-    tryUnsetMark();
-}
-
 void TextEdit::indentText()
 {
     // Stop mark if mark is set.
@@ -5562,9 +5555,6 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
                 return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "mark")) {
                 markSelectWord();
-                return;
-            } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "escape")) {
-                escape();
                 return;
             } else if (e->key() == Qt::Key_Insert && key != "Shift+Ins") {
                 if (e->modifiers() == Qt::NoModifier) {

@@ -82,8 +82,7 @@ ReplaceBar::ReplaceBar(QWidget *parent)
 
     connect(m_replaceLine, &LineBar::signal_sentText, this, &ReplaceBar::change, Qt::QueuedConnection);
 
-    connect(m_replaceLine, &LineBar::pressEsc, this, &ReplaceBar::replaceClose, Qt::QueuedConnection);
-    connect(m_withLine, &LineBar::pressEsc, this, &ReplaceBar::replaceClose, Qt::QueuedConnection);
+    connect(this, &ReplaceBar::pressEsc, this, &ReplaceBar::replaceClose, Qt::QueuedConnection);
 
     //connect(m_replaceLine, &LineBar::pressEnter, this, &ReplaceBar::handleReplaceNext, Qt::QueuedConnection);         //Shielded by Hengbo for new demand.
     connect(m_withLine, &LineBar::returnPressed, this, &ReplaceBar::handleReplaceNext, Qt::QueuedConnection);

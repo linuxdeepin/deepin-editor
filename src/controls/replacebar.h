@@ -52,6 +52,7 @@ public:
     void setsearched(bool _);
 
 signals:
+    void pressEsc();
     void replaceNext(QString replaceText, QString withText);
     void replaceSkip();
     void replaceRest(QString replaceText, QString withText);

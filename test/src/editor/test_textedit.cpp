@@ -333,15 +333,7 @@ TEST_F(test_textedit, killForwardWord)
 
     assert(1==1);
 }
-TEST_F(test_textedit, escape)
-{
-    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
-    EditWrapper * ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->escape();
 
-    assert(1==1);
-}
 TEST_F(test_textedit, indentText)
 {
     QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);

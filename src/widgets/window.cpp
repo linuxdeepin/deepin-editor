@@ -81,8 +81,13 @@ Window::Window(DMainWindow *parent)
     setAcceptDrops(true);
     loadTheme(m_themePath);
 
-    // Init settings.
 
+    //关闭　替换　查找 跳行bar
+    connect(this, &Window::pressEsc, m_replaceBar, &ReplaceBar::pressEsc, Qt::QueuedConnection);
+    connect(this, &Window::pressEsc, m_findBar, &FindBar::pressEsc, Qt::QueuedConnection);
+    connect(this, &Window::pressEsc, m_jumpLineBar, &JumpLineBar::pressEsc, Qt::QueuedConnection);
+
+    // Init settings.
     connect(m_settings, &Settings::adjustFont, this,[this](QString fontName){
        for (EditWrapper *wrapper : m_wrappers.values()) {
            wrapper->textEditor()->setFontFamily(fontName);
@@ -522,7 +527,6 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
     connect(wrapper->textEditor(), &TextEdit::clickJumpLineAction, this, &Window::popupJumpLineBar, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::clickFullscreenAction, this, &Window::toggleFullscreen, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::popupNotify, this, &Window::showNotify, Qt::QueuedConnection);
-    connect(wrapper->textEditor(), &TextEdit::pressEsc, this, &Window::removeBottomWidget, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::signal_setTitleFocus, this, &Window::slot_setTitleFocus, Qt::QueuedConnection);
 
     dbus.systemBus().connect("com.deepin.daemon.Gesture",
@@ -671,7 +675,6 @@ EditWrapper *Window::createEditor()
     connect(wrapper->textEditor(), &TextEdit::clickJumpLineAction, this, &Window::popupJumpLineBar, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::clickFullscreenAction, this, &Window::toggleFullscreen, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::popupNotify, this, &Window::showNotify, Qt::QueuedConnection);
-    connect(wrapper->textEditor(), &TextEdit::pressEsc, this, &Window::removeBottomWidget, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::textChanged, this, [=](){
         updateJumpLineBar(wrapper->textEditor());
     }, Qt::QueuedConnection);
@@ -1877,24 +1880,6 @@ void Window::handleUpdateSearchKeyword(QWidget *widget, const QString &file, con
     wrapper->textEditor()->updateLeftAreaWidget();
 }
 
-void Window::addBottomWidget(QWidget *widget)
-{
-    if (m_centralLayout->count() >= 2) {
-        removeBottomWidget();
-    }
-
-    m_centralLayout->addWidget(widget);
-}
-
-void Window::removeBottomWidget()
-{
-    auto item = m_centralLayout->takeAt(1);
-
-    if (item) {
-        item->widget()->hide();
-    }
-}
-
 void Window::loadTheme(const QString &path)
 {
     QFileInfo fileInfo(path);
@@ -2255,7 +2240,7 @@ void Window::keyPressEvent(QKeyEvent *e)
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "restoreposition")) {
         remberPositionRestore();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "escape")) {
-        removeBottomWidget();
+       emit pressEsc();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "displayshortcuts")) {
         displayShortcuts();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "print")) {
