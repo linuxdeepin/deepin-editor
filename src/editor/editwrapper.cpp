@@ -885,6 +885,9 @@ void EditWrapper::loadContent(const QByteArray &content)
         }else {
            if(!m_bQuit) {
               cursor.insertText(content);
+              QTextCursor firstLineCursor = m_pTextEdit->textCursor();
+              firstLineCursor.movePosition(QTextCursor::Start,QTextCursor::MoveAnchor);
+              m_pTextEdit->setTextCursor(firstLineCursor);
                //秒开界面语法高亮
               OnUpdateHighlighter();
            }

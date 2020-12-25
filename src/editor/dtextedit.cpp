@@ -2457,6 +2457,7 @@ void TextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &close
 int TextEdit::getFirstVisibleBlockId() const
 {
     QTextCursor cur = QTextCursor(this->document());
+    if(cur.isNull()) return 0;
     cur.movePosition(QTextCursor::Start);
 
     QPoint startPoint,endPoint;
@@ -2870,8 +2871,23 @@ void TextEdit::setSettings(Settings *keySettings)
 
 void TextEdit::copySelectedText()
 {
-    QClipboard *clipboard = QApplication::clipboard();
-    clipboard->setText(textCursor().selection().toPlainText());
+    if(m_bIsAltMod && !m_altModSelections.isEmpty()){
+       QString data;
+        for(auto sel:m_altModSelections)
+        {
+            data.append(sel.cursor.selectedText());
+        }
+        QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
+        clipboard->setText(data);
+    }else {
+       QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
+       if (textCursor().hasSelection()) {
+          clipboard->setText(textCursor().selection().toPlainText());
+          tryUnsetMark();
+       } else {
+          clipboard->setText(m_highlightWordCacheCursor.selectedText());
+       }
+    }
     tryUnsetMark();
 }
 
@@ -5186,158 +5202,15 @@ void TextEdit::mouseReleaseEvent(QMouseEvent *e)
 void TextEdit::keyPressEvent(QKeyEvent *e)
 {
     Qt::KeyboardModifiers modifiers = e->modifiers();
-    qDebug()<<e<<e->text()<<e->key()<<e->modifiers();
+    QString key = Utils::getKeyshortcut(e);
+    qDebug()<<e<<e->text()<<e->key()<<e->modifiers()<<key;
     //没有修改键　插入文件
-    if(modifiers == Qt::NoModifier){
-         QString key = Utils::getKeyshortcut(e);
-        //按下esc的时候,光标退出编辑区，切换至标题栏
-        if(e->key() == Qt::Key_Escape)
-        {
-            emit signal_setTitleFocus();
-            return;
-        }
-
-        if(e->key() == Qt::Key_Tab || e->key() == Qt::Key_Return) {
-            //列编辑添加撤销重做
-            if(m_bIsAltMod && !m_altModSelections.isEmpty()){
-                QUndoCommand * pInsertStack= new InsertTextUndoCommand(m_altModSelections,e->text());
-                m_pUndoStack->push(pInsertStack);
-            }else {
-                QUndoCommand * pInsertStack= new InsertTextUndoCommand(textCursor(),e->text());
-                m_pUndoStack->push(pInsertStack);
-            }
-            return;
-        }
-
-        if((e->key()<=Qt::Key_ydiaeresis && e->key() >= Qt::Key_Space) && !e->text().isEmpty())
-        {
-            //非修改键盘按键加撤销重做栈
-            if(m_bIsAltMod && !m_altModSelections.isEmpty()){
-                QUndoCommand * pInsertStack= new InsertTextUndoCommand(m_altModSelections,e->text());
-                m_pUndoStack->push(pInsertStack);
-            }else {
-                QUndoCommand * pInsertStack= new InsertTextUndoCommand(textCursor(),e->text());
-                m_pUndoStack->push(pInsertStack);
-            }
-            return;
-        }
-
-
-        //删除撤销重做
-        //列编辑
-        if(e->key() == Qt::Key_Backspace){
-           if(m_bIsAltMod && !m_altModSelections.isEmpty()){
-                QUndoCommand * pDeleteStack= new DeleteTextUndoCommand(m_altModSelections);
-                m_pUndoStack->push(pDeleteStack);
-            }else {
-                QUndoCommand * pDeleteStack= new DeleteTextUndoCommand(textCursor());
-                m_pUndoStack->push(pDeleteStack);
-            }
-           return;
-        }
-
-        if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "scrollup")) {
-            scrollUp();
-            m_wrapper->OnUpdateHighlighter();
-            return;
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "scrolldown")) {
-            scrollDown();
-            m_wrapper->OnUpdateHighlighter();
-            return;
-        }
-        return QPlainTextEdit::keyPressEvent(e);
-    }else{
-
-        //键盘右边数字键
-        if(modifiers == Qt::KeypadModifier && (e->key() <= Qt::Key_9 && e->key() >= Qt::Key_0) && !e->text().isEmpty())
-        {
-            //非修改键盘按键加撤销重做栈
-            if(m_bIsAltMod && !m_altModSelections.isEmpty()){
-                QUndoCommand * pInsertStack= new InsertTextUndoCommand(m_altModSelections,e->text());
-                m_pUndoStack->push(pInsertStack);
-            }else {
-                QUndoCommand * pInsertStack= new InsertTextUndoCommand(textCursor(),e->text());
-                m_pUndoStack->push(pInsertStack);
-            }
-            return;
-        }
-
-            const QString key1 = Utils::getKeyshortcut(e);
-            if (key1 == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "undo")) {
-                m_pUndoStack->undo();
-                return;
-            } else if (key1 == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "redo")) {
-                m_pUndoStack->redo();
-                return;
-            }
-
-        //剪切ctrl+x
-        if(modifiers == Qt::ControlModifier && e->key() == Qt::Key_X){
-            //列编辑添加撤销重做
-            if(m_bIsAltMod && !m_altModSelections.isEmpty()){
-               QString data;
-                for(auto sel:m_altModSelections)
-                {
-                    data.append(sel.cursor.selectedText());
-
-                }
-                QUndoCommand * pDeleteStack= new DeleteTextUndoCommand(m_altModSelections);
-                m_pUndoStack->push(pDeleteStack);
-                QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
-                clipboard->setText(data);
-            }
-            return/* DPlainTextEdit::keyPressEvent(e);*/;
-        }
-
-        //粘贴ctrl+v
-        if(modifiers == Qt::ControlModifier && e->key() == Qt::Key_V){
-          //添加剪切板内容到撤销重做栈
-          const QClipboard *clipboard = QApplication::clipboard(); //获取剪切版内容
-          qDebug()<<"MimeData Formats:"<<clipboard->mimeData()->formats()<<clipboard->mimeData()->colorData();
-          if(!clipboard->text().isEmpty()){
-               //列编辑添加撤销重做
-              if(m_bIsAltMod && !m_altModSelections.isEmpty()){
-                  QUndoCommand * pDeleteStack= new DeleteTextUndoCommand(m_altModSelections);
-                  m_pUndoStack->push(pDeleteStack);
-                  QUndoCommand * pInsertStack= new InsertTextUndoCommand(m_altModSelections,clipboard->text());
-                  m_pUndoStack->push(pInsertStack);
-              }else {
-                  QTextCursor cursor = textCursor();
-                  QUndoCommand * pDeleteStack= new DeleteTextUndoCommand(cursor);
-                  m_pUndoStack->push(pDeleteStack);
-                  QUndoCommand * pInsertStack= new InsertTextUndoCommand(cursor,clipboard->text());
-                  m_pUndoStack->push(pInsertStack);
-              }
-           }
-          return;
-        }
-
-        //复制ctrl+c
-        if(modifiers == Qt::ControlModifier && e->key() == Qt::Key_V){
-           //列编辑添加撤销重做
-           if(m_bIsAltMod && !m_altModSelections.isEmpty()){
-              QString data;
-               for(auto sel:m_altModSelections)
-               {
-                   data.append(sel.cursor.selectedText());
-               }
-               QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
-               clipboard->setText(data);
-           }else {
-               QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
-               clipboard->setText(textCursor().selectedText());
-           }
-           return /*DPlainTextEdit::keyPressEvent(e)*/;
-        }
-
-        //快捷建处理
-        // alt+m 弹出编辑器右键菜单
-        if(e->modifiers() == Qt::AltModifier && !e->text().compare(QString("m"),Qt::CaseInsensitive)){
-           popRightMenu();
-           return;
-        }
-
-        const QString &key = Utils::getKeyshortcut(e);
+    //按下esc的时候,光标退出编辑区，切换至标题栏
+    if(modifiers == Qt::NoModifier && e->key() == Qt::Key_Escape)
+    {
+       emit signal_setTitleFocus();
+       return;
+    }
 
         if (m_readOnlyMode || m_bReadOnlyPermission) {
             if (key == "J") {
@@ -5417,109 +5290,282 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
                 e->ignore();
                 return;
             }
-
         } else {
-            if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "indentline")) {
+
+          //插入键盘可现实字符
+          if(modifiers == Qt::NoModifier && (e->key()<=Qt::Key_ydiaeresis && e->key() >= Qt::Key_Space) && !e->text().isEmpty())
+          {
+              //非修改键盘按键加撤销重做栈
+              if(m_bIsAltMod && !m_altModSelections.isEmpty()){
+                  QUndoCommand * pInsertStack= new InsertTextUndoCommand(m_altModSelections,e->text());
+                  m_pUndoStack->push(pInsertStack);
+              }else {
+                  QUndoCommand * pInsertStack= new InsertTextUndoCommand(textCursor(),e->text());
+                  m_pUndoStack->push(pInsertStack);
+              }
+              return;
+          }
+
+         //键盘右边数字键
+         if(modifiers == Qt::KeypadModifier && (e->key() <= Qt::Key_9 && e->key() >= Qt::Key_0) && !e->text().isEmpty())
+         {
+             //非修改键盘按键加撤销重做栈
+             if(m_bIsAltMod && !m_altModSelections.isEmpty()){
+                 QUndoCommand * pInsertStack= new InsertTextUndoCommand(m_altModSelections,e->text());
+                 m_pUndoStack->push(pInsertStack);
+             }else {
+                 QUndoCommand * pInsertStack= new InsertTextUndoCommand(textCursor(),e->text());
+                 m_pUndoStack->push(pInsertStack);
+             }
+             return;
+         }
+
+          //插入空白字符
+         if(modifiers == Qt::NoModifier && (e->key() == Qt::Key_Tab || e->key() == Qt::Key_Return)) {
+           //列编辑添加撤销重做
+           if(m_bIsAltMod && !m_altModSelections.isEmpty()){
+               QUndoCommand * pInsertStack= new InsertTextUndoCommand(m_altModSelections,e->text());
+               m_pUndoStack->push(pInsertStack);
+           }else {
+               QUndoCommand * pInsertStack= new InsertTextUndoCommand(textCursor(),e->text());
+               m_pUndoStack->push(pInsertStack);
+           }
+           return;
+         }
+
+          //列编辑 删除撤销重做
+          if(modifiers == Qt::NoModifier && e->key() == Qt::Key_Backspace){
+             if(m_bIsAltMod && !m_altModSelections.isEmpty()){
+                  QUndoCommand * pDeleteStack= new DeleteTextUndoCommand(m_altModSelections);
+                  m_pUndoStack->push(pDeleteStack);
+              }else {
+                  QUndoCommand * pDeleteStack= new DeleteTextUndoCommand(textCursor());
+                  m_pUndoStack->push(pDeleteStack);
+              }
+             return;
+          }
+
+            // alt+m 弹出编辑器右键菜单
+           if(e->modifiers() == Qt::AltModifier && !e->text().compare(QString("m"),Qt::CaseInsensitive)){
+              popRightMenu();
+              return;
+           }
+
+            //快捷建处理
+            if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "undo")) {
+                m_pUndoStack->undo();
+                return;
+            } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "redo")) {
+                m_pUndoStack->redo();
+                return;
+            } else if(key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "cut")) {
+               //列编辑添加撤销重做
+               if(m_bIsAltMod && !m_altModSelections.isEmpty()){
+                  QString data;
+                   for(auto sel:m_altModSelections) data.append(sel.cursor.selectedText());
+                   QUndoCommand * pDeleteStack= new DeleteTextUndoCommand(m_altModSelections);
+                   m_pUndoStack->push(pDeleteStack);
+                   QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
+                   clipboard->setText(data);
+               }else {
+                   QString data = textCursor().selectedText();
+                   QUndoCommand * pDeleteStack= new DeleteTextUndoCommand(textCursor());
+                   m_pUndoStack->push(pDeleteStack);
+                   QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
+                   clipboard->setText(data);
+               }
+               return;
+            } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "paste")) {
+                //添加剪切板内容到撤销重做栈
+                const QClipboard *clipboard = QApplication::clipboard(); //获取剪切版内容
+                qDebug()<<"MimeData Formats:"<<clipboard->mimeData()->formats()<<clipboard->mimeData()->colorData();
+                if(!clipboard->text().isEmpty()){
+                     //列编辑添加撤销重做
+                    if(m_bIsAltMod && !m_altModSelections.isEmpty()){
+                        QUndoCommand * pDeleteStack= new DeleteTextUndoCommand(m_altModSelections);
+                        m_pUndoStack->push(pDeleteStack);
+                        QUndoCommand * pInsertStack= new InsertTextUndoCommand(m_altModSelections,clipboard->text());
+                        m_pUndoStack->push(pInsertStack);
+                    }else {
+                        QTextCursor cursor = textCursor();
+                        QUndoCommand * pDeleteStack= new DeleteTextUndoCommand(cursor);
+                        m_pUndoStack->push(pDeleteStack);
+                        QUndoCommand * pInsertStack= new InsertTextUndoCommand(cursor,clipboard->text());
+                        m_pUndoStack->push(pInsertStack);
+                    }
+                 }
+                return;
+            }else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "copy")) {
+                if(m_bIsAltMod && !m_altModSelections.isEmpty()){
+                   QString data;
+                    for(auto sel:m_altModSelections)
+                    {
+                        data.append(sel.cursor.selectedText());
+                    }
+                    QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
+                    clipboard->setText(data);
+                }else {
+                   QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
+                   if (textCursor().hasSelection()) {
+                      clipboard->setText(textCursor().selection().toPlainText());
+                      tryUnsetMark();
+                   } else {
+                      clipboard->setText(m_highlightWordCacheCursor.selectedText());
+                   }
+                }
+                return;
+            }else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "scrollup")) {
+                //向上翻页
+                scrollUp();
+                m_wrapper->OnUpdateHighlighter();
+                return;
+            } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "scrolldown")) {
+                //向下翻页
+                scrollDown();
+                m_wrapper->OnUpdateHighlighter();
+                return;
+            }else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "selectall")) {
+                m_bIsAltMod = false;
+                selectAll();
+                return;
+            } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "copylines")) {
+                copyLines();
+                return;
+            } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "cutlines")) {
+                cutlines();
+                return;
+            }else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "indentline")) {
                 QPlainTextEdit::keyPressEvent(e);
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "backindentline")) {
                 unindentText();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "forwardchar")) {
                 forwardChar();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "backwardchar")) {
                 backwardChar();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "forwardword")) {
                 forwardWord();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "backwardword")) {
                 backwardWord();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "nextline")) {
                 nextLine();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "prevline")) {
                 prevLine();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "newline")/* || key == "Return"*/) {
                 newline();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "opennewlineabove")) {
                 openNewlineAbove();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "opennewlinebelow")) {
                 openNewlineBelow();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "duplicateline")) {
                 duplicateLine();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "killline")) {
                 killLine();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "killcurrentline")) {
                 killCurrentLine();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "swaplineup")) {
                 moveLineDownUp(true);
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "swaplinedown")) {
                 moveLineDownUp(false);
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "scrolllineup")) {
                 scrollLineUp();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "scrolllinedown")) {
                 scrollLineDown();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "scrollup")) {
                 scrollUp();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "scrolldown")) {
                 scrollDown();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "movetoendofline")) {
                 moveToEndOfLine();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "movetostartofline")) {
                 moveToStartOfLine();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "movetostart")) {
                 moveToStart();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "movetoend")) {
                 moveToEnd();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "movetolineindentation")) {
                 moveToLineIndentation();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "upcaseword")) {
                 upcaseWord();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "downcaseword")) {
                 downcaseWord();
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "capitalizeword")) {
                 capitalizeWord();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "killbackwardword")) {
                 killBackwardWord();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "killforwardword")) {
                 killForwardWord();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "forwardpair")) {
                 forwardPair();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "backwardpair")) {
                 backwardPair();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "transposechar")) {
                 transposeChar();
-            } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "cut")) {
-                cutSelectedText();
-            } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "paste")) {
-                pasteText();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "setmark")) {
                 setMark();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "exchangemark")) {
                 exchangeMark();
-            } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "copylines")) {
-                copyLines();
-            } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "cutlines")) {
-                cutlines();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "joinlines")) {
                 joinLines();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglereadonlymode")/*|| key=="Alt+Meta+L"*/) {
                 toggleReadOnlyMode();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglecomment")) {
                 toggleComment(true);
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "removecomment")) {
                 toggleComment(false);
-            } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "undo")) {
-                m_pUndoStack->undo();
-            } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "redo")) {
-                m_pUndoStack->redo();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "switchbookmark")) {
                 m_bIsShortCut = true;
                 addOrDeleteBookMark();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "movetoprebookmark")) {
                 moveToPreviousBookMark();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "movetonextbookmark")) {
                 moveToNextBookMark();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "mark")) {
                 markSelectWord();
+                return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "escape")) {
                 escape();
+                return;
             } else if (e->key() == Qt::Key_Insert && key != "Shift+Ins") {
                 if (e->modifiers() == Qt::NoModifier) {
                     setOverwriteMode(!overwriteMode());
@@ -5551,17 +5597,8 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             }
         }
 
-        if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "selectall")) {
-            m_bIsAltMod = false;
-            selectAll();
-            return;
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "copy")) {
-            copySelectedText();
-            return;
-        }
 
-        QPlainTextEdit::keyPressEvent(e);
-    }
+    QPlainTextEdit::keyPressEvent(e);
 }
 
 void TextEdit::wheelEvent(QWheelEvent *e)
