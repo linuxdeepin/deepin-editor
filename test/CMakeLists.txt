@@ -36,7 +36,7 @@ find_package(Qt5Test REQUIRED)
 find_package(GTest REQUIRED)
 find_package(Qt5Xml REQUIRED)
 find_package(Qt5Svg REQUIRED)
-
+find_package(Qt5Test REQUIRED)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
@@ -88,6 +88,7 @@ target_link_libraries(${PROJECT_NAME_TEST}
     Qt5::Gui
     Qt5::Widgets
     Qt5::DBus
+    Qt5::Test
     ${Qt5Widgets_LIBRARIES}
     ${Qt5DBus_LIBRARIES}
     ${Qt5Concurrent_LIBRARIES}
