@@ -314,10 +314,15 @@ void TextEdit::initRightClickedMenu()
         if(!clipboard->text().isEmpty()){
              //列编辑添加撤销重做
              if(m_bIsAltMod && !m_altModSelections.isEmpty()){
+                 QUndoCommand * pDeleteStack= new DeleteTextUndoCommand(m_altModSelections);
+                 m_pUndoStack->push(pDeleteStack);
                  QUndoCommand * pInsertStack= new InsertTextUndoCommand(m_altModSelections,clipboard->text());
                  m_pUndoStack->push(pInsertStack);
              }else {
-                 QUndoCommand * pInsertStack= new InsertTextUndoCommand(textCursor(),clipboard->text());
+                 QTextCursor cursor = textCursor();
+                 QUndoCommand * pDeleteStack= new DeleteTextUndoCommand(cursor);
+                 m_pUndoStack->push(pDeleteStack);
+                 QUndoCommand * pInsertStack= new InsertTextUndoCommand(cursor,clipboard->text());
                  m_pUndoStack->push(pInsertStack);
              }
          }
@@ -5291,13 +5296,18 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
           qDebug()<<"MimeData Formats:"<<clipboard->mimeData()->formats()<<clipboard->mimeData()->colorData();
           if(!clipboard->text().isEmpty()){
                //列编辑添加撤销重做
-               if(m_bIsAltMod && !m_altModSelections.isEmpty()){
-                   QUndoCommand * pInsertStack= new InsertTextUndoCommand(m_altModSelections,clipboard->text());
-                   m_pUndoStack->push(pInsertStack);
-               }else {
-                   QUndoCommand * pInsertStack= new InsertTextUndoCommand(textCursor(),clipboard->text());
-                   m_pUndoStack->push(pInsertStack);
-               }
+              if(m_bIsAltMod && !m_altModSelections.isEmpty()){
+                  QUndoCommand * pDeleteStack= new DeleteTextUndoCommand(m_altModSelections);
+                  m_pUndoStack->push(pDeleteStack);
+                  QUndoCommand * pInsertStack= new InsertTextUndoCommand(m_altModSelections,clipboard->text());
+                  m_pUndoStack->push(pInsertStack);
+              }else {
+                  QTextCursor cursor = textCursor();
+                  QUndoCommand * pDeleteStack= new DeleteTextUndoCommand(cursor);
+                  m_pUndoStack->push(pDeleteStack);
+                  QUndoCommand * pInsertStack= new InsertTextUndoCommand(cursor,clipboard->text());
+                  m_pUndoStack->push(pInsertStack);
+              }
            }
           return;
         }

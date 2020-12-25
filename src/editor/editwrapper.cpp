@@ -659,6 +659,7 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QByteArr
                             QTextCursor cursor = m_pTextEdit->textCursor();
                             cursor.setPosition(value.toString().toInt());
                             m_pTextEdit->setTextCursor(cursor);
+                            OnUpdateHighlighter();
                             break;
                         }
                     } else if (temFilePathValue.toString() == m_pTextEdit->getFilePath()) {
@@ -669,6 +670,7 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QByteArr
                             QTextCursor cursor = m_pTextEdit->textCursor();
                             cursor.setPosition(value.toString().toInt());
                             m_pTextEdit->setTextCursor(cursor);
+                            OnUpdateHighlighter();
                             break;
                         }
                     }
