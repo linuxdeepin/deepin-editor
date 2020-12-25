@@ -76,7 +76,8 @@ EditWrapper::EditWrapper(Window* window,QWidget *parent)
 
 EditWrapper::~EditWrapper()
 {
-    if(m_pTextEdit) delete m_pTextEdit;
+    disconnect(m_pTextEdit);
+    disconnect(m_pWaringNotices);
 }
 
 void EditWrapper::setQuitFlag()
