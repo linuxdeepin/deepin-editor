@@ -1,23 +1,43 @@
 #include "test_uncommentselection.h"
+#include "../../src/common/settings.h"
+#include "../../src/controls/tabbar.h"
+#include "../../src/editor/editwrapper.h"
+#include "../../src/widgets/window.h"
+#include "../../src/startmanager.h"
+#include "../../src/editor/dtextedit.h"
+#include "../../src/editor/uncommentselection.h"
+
+using namespace Comment;
 
 test_uncommentselection::test_uncommentselection()
 {
-
 }
-//void setComments(QString singleLineComment, QString multiLineCommentStart, QString multiLineCommentEnd);
+
+void test_uncommentselection::SetUp()
+{
+    comDef = new CommentDefinition;
+}
+
+void test_uncommentselection::TearDown()
+{
+    delete comDef;
+}
 
 TEST_F(test_uncommentselection, CommentDefinition)
 {
     CommentDefinition num;
-    assert(1==1);
+    ASSERT_FALSE(num.isAfterWhiteSpaces);
 }
 
 TEST_F(test_uncommentselection, setComments)
 {
-    CommentDefinition * numm = new CommentDefinition();
-    numm->setComments("aa","aa","aa");
-
-    assert(1==1);
+    QString singleLineComment = "a";
+    QString multiLineCommentStart = "b";
+    QString multiLineCommentEnd = "c";
+    comDef->setComments(singleLineComment, multiLineCommentStart, multiLineCommentEnd);
+    ASSERT_EQ(comDef->singleLine, singleLineComment);
+    ASSERT_EQ(comDef->multiLineStart, multiLineCommentStart);
+    ASSERT_EQ(comDef->multiLineEnd, multiLineCommentEnd);
 }
 //bool isValid() const;
 TEST_F(test_uncommentselection, isValid)
