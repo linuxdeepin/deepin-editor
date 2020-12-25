@@ -1251,6 +1251,9 @@ void Window::popupSettingsDialog()
 
 void Window::popupPrintDialog()
 {
+    //大文本加载过程不允许打印操作
+    if(currentWrapper() && currentWrapper()->getFileLoading()) return;
+
     const QString &filePath = currentWrapper()->textEditor()->getFilePath();
     const QString &fileDir = QFileInfo(filePath).dir().absolutePath();
 
