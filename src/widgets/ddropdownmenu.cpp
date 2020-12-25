@@ -117,10 +117,9 @@ void DDropdownMenu::setCurrentAction(QAction *pAct)
             for (int j = 0; j < acts.size(); j++) {
                 if(acts[j] != pAct) acts[j]->setChecked(false);
             }
-
         }
+        setText(pAct->text());
     }
-    setText(pAct->text());
 }
 
 void DDropdownMenu::setCurrentTextOnly(const QString &name)
