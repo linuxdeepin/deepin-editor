@@ -372,7 +372,7 @@ bool EditWrapper::saveFile()
             m_bIsTemFile = false;
             return ok;
         }
-    }else {
+    }else {      
         return false;
     }
 

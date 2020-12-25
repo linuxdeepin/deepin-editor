@@ -76,16 +76,16 @@ void LineBar::keyPressEvent(QKeyEvent *e)
     QString key = Utils::getKeyshortcut(e);
     Qt::KeyboardModifiers modifiers = e->modifiers();
 
-     if(modifiers == Qt::ControlModifier && e->text() == "\r"){
-        pressCtrlEnter();
-     }else if(modifiers == Qt::AltModifier && e->text() == "\r"){
-        pressAltEnter();
-     }else if(modifiers == Qt::MetaModifier && e->text() == "\r"){
-        pressMetaEnter();
-     }else if(modifiers == Qt::NoModifier && e->text() == "\r"){
-        pressEnter();
-     }else {
-       // Pass event to DLineEdit continue, otherwise you can't type anything after here. ;)
-        DLineEdit::keyPressEvent(e);
-     }
+    if(modifiers == Qt::ControlModifier && e->text() == "\r"){
+       pressCtrlEnter();
+    }else if(modifiers == Qt::AltModifier && e->text() == "\r"){
+       pressAltEnter();
+    }else if(modifiers == Qt::MetaModifier && e->text() == "\r"){
+       pressMetaEnter();
+    }else if(modifiers == Qt::NoModifier && e->text() == "\r"){
+       pressEnter();
+    }else {
+      // Pass event to DLineEdit continue, otherwise you can't type anything after here. ;)
+       DLineEdit::keyPressEvent(e);
+    }
 }

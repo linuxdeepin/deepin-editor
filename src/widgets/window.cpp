@@ -1573,14 +1573,14 @@ bool Window::closeAllFiles()
 }
 
 void Window::addTemFileTab(QString qstrPath,QString qstrName,QString qstrTruePath,bool bIsTemFile)
-{
-    EditWrapper *wrapper = createEditor();
-    m_tabbar->addTab(qstrPath, qstrName);
-
-    if (!qstrPath.isEmpty() && Utils::fileExists(qstrPath)) {
-        wrapper->openFile(qstrPath,qstrTruePath,bIsTemFile);
+{      
+    if (qstrPath.isEmpty() || !Utils::fileExists(qstrPath)) {
+        return;
     }
 
+    EditWrapper *wrapper = createEditor();
+    m_tabbar->addTab(qstrPath, qstrName);   
+    wrapper->openFile(qstrPath,qstrTruePath,bIsTemFile);
     m_wrappers[qstrPath] = wrapper;
     showNewEditor(wrapper);
 }
@@ -1646,20 +1646,12 @@ void Window::addBlankTab(const QString &blankFile)
 
         if (!Utils::fileExists(blankTabPath)) {
             QDir().mkpath(m_blankFileDir);
-
-            if (QFile(blankTabPath).open(QIODevice::ReadWrite)) {
-                //qDebug() << "Create blank file: " << blankTabPath;
-            } else {
-                //qDebug() << "Can't create blank file: " << blankTabPath;
-            }
         }
-
     } else {
         blankTabPath = blankFile;
     }
 
     int blankFileIndex = getBlankFileIndex();
-
     m_tabbar->addTab(blankTabPath, tr("Untitled %1").arg(blankFileIndex));
     EditWrapper *wrapper = createEditor();
     wrapper->updatePath(blankTabPath);
@@ -1700,6 +1692,7 @@ void Window::handleCurrentChanged(const int &index)
     if (m_replaceBar->isVisible()) {
         m_replaceBar->hide();
     }
+
     if (m_jumpLineBar->isVisible()) {
         m_jumpLineBar->hide();
     }
@@ -1735,17 +1728,13 @@ void Window::handleCurrentChanged(const int &index)
     }
 
     if (currentWrapper() != nullptr) {
-        //  if (currentWrapper()!=nullptr) {
         currentWrapper()->bottomBar()->show();
-         currentWrapper()->bottomBar()->updateSize(32);
+        currentWrapper()->bottomBar()->updateSize(32);
     }
-    //qDebug() << "tabbarChanged:" << filepath;
 }
 
 void Window::handleJumpLineBarExit()
 {
-   // if(m_jumpLineBar)
-      //  m_jumpLineBar->hide();
     if (currentWrapper() != nullptr) {
         QTimer::singleShot(0, currentWrapper()->textEditor(), SLOT(setFocus()));
     }
@@ -1753,7 +1742,6 @@ void Window::handleJumpLineBarExit()
 
 void Window::handleJumpLineBarJumpToLine(const QString &filepath, int line, bool focusEditor)
 {
-
     if (m_wrappers.contains(filepath)) {
         getTextEditor(filepath)->jumpToLine(line, true);
 
@@ -1767,15 +1755,12 @@ void Window::handleBackToPosition(const QString &file, int row, int column, int 
 {
     if (m_wrappers.contains(file)) {
         m_wrappers.value(file)->textEditor()->scrollToLine(scrollOffset, row, column);
-
-        //QTimer::singleShot(0, m_wrappers.value(file)->textEditor(), SLOT(setFocus()));
     }
 }
 
 void Window::handleFindNext()
 {
     EditWrapper *wrapper = currentWrapper();
-
     wrapper->textEditor()->saveMarkStatus();
     wrapper->textEditor()->updateCursorKeywordSelection(wrapper->textEditor()->getPosition(), true);
     wrapper->textEditor()->renderAllSelections();
@@ -1786,7 +1771,6 @@ void Window::handleFindNext()
 void Window::handleFindPrev()
 {
     EditWrapper *wrapper = currentWrapper();
-
     wrapper->textEditor()->saveMarkStatus();
     wrapper->textEditor()->updateCursorKeywordSelection(wrapper->textEditor()->getPosition(), false);
     wrapper->textEditor()->renderAllSelections();
@@ -1797,9 +1781,11 @@ void Window::handleFindPrev()
 void Window::slotFindbarClose()
 {
     EditWrapper *wrapper = currentWrapper();
+
     if (wrapper->bottomBar()->isHidden()) {
         wrapper->bottomBar()->show();
     }
+
     wrapper->bottomBar()->updateSize(32);
     currentWrapper()->textEditor()->setFocus();
     currentWrapper()->textEditor()->tellFindBarClose();
@@ -1808,9 +1794,11 @@ void Window::slotFindbarClose()
 void Window::slotReplacebarClose()
 {
     EditWrapper *wrapper = currentWrapper();
+
     if (wrapper->bottomBar()->isHidden()) {
         wrapper->bottomBar()->show();
     }
+
     wrapper->bottomBar()->updateSize(32);
     currentWrapper()->textEditor()->setFocus();
     currentWrapper()->textEditor()->tellFindBarClose();
@@ -1819,28 +1807,24 @@ void Window::slotReplacebarClose()
 void Window::handleReplaceAll(const QString &replaceText, const QString &withText)
 {
     EditWrapper *wrapper = currentWrapper();
-
     wrapper->textEditor()->replaceAll(replaceText, withText);
 }
 
 void Window::handleReplaceNext(const QString &replaceText, const QString &withText)
 {
     EditWrapper *wrapper = currentWrapper();
-
     wrapper->textEditor()->replaceNext(replaceText, withText);
 }
 
 void Window::handleReplaceRest(const QString &replaceText, const QString &withText)
 {
     EditWrapper *wrapper = currentWrapper();
-
     wrapper->textEditor()->replaceRest(replaceText, withText);
 }
 
 void Window::handleReplaceSkip()
 {
     EditWrapper *wrapper = currentWrapper();
-
     wrapper->textEditor()->updateCursorKeywordSelection(wrapper->textEditor()->getPosition(), true);
     wrapper->textEditor()->renderAllSelections();
 }

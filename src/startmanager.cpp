@@ -112,13 +112,21 @@ bool StartManager::isTemFilesEmpty()
     return bIsEmpty;
 }
 
-void StartManager::recoverFile(Window *window)
+int StartManager::recoverFile(Window *window)
 {
     QFileInfo fileInfo;
     QFileInfo fileInfoTem;
     bool bIsTemFile = false;
     QDir blankDirectory = QDir(QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files"));
     QStringList blankFiles = blankDirectory.entryList(QStringList(), QDir::Files);
+    QStringList files = blankFiles;
+    int  recFilesSum = 0;
+
+    for (auto file : blankFiles) {
+        if (!file.contains("blank_file")) {
+            files.removeOne(file);
+        }
+    }
 
     for (int i = 0;i < m_qlistTemFile.count();i++) {
         QJsonParseError jsonError;
@@ -158,24 +166,31 @@ void StartManager::recoverFile(Window *window)
                 }
 
                 if (!temFilePath.isEmpty()) {
-                    if (temFilePath == localPath) {
-                        int index = blankFiles.indexOf(fileInfo.fileName());
+                    if (Utils::fileExists(temFilePath)) {
+                        if (temFilePath == localPath) {
+                            int index = files.indexOf(fileInfo.fileName());
 
-                        if (index >= 0) {
-                            QString fileName = tr("Untitled %1").arg(index + 1);
-                            window->addTemFileTab(temFilePath,fileName,localPath,bIsTemFile);
+                            if (index >= 0) {
+                                QString fileName = tr("Untitled %1").arg(index + 1);
+                                window->addTemFileTab(temFilePath,fileName,localPath,bIsTemFile);
+                            }
+                        } else {
+                            window->addTemFileTab(temFilePath,fileInfo.fileName(),localPath,bIsTemFile);
                         }
-                    } else {
-                        window->addTemFileTab(temFilePath,fileInfo.fileName(),localPath,bIsTemFile);
+
+                        recFilesSum++;
                     }
                 } else {
-                    if (!localPath.isEmpty()) {
+                    if (!localPath.isEmpty() && Utils::fileExists(localPath)) {
                         window->addTemFileTab(localPath,fileInfo.fileName(),localPath,bIsTemFile);
+                        recFilesSum++;
                     }
                 }
             }
         }
     }
+
+    return recFilesSum;
 }
 
 void StartManager::openFilesInWindow(QStringList files)
@@ -216,9 +231,19 @@ void StartManager::openFilesInTab(QStringList files)
             window->showCenterWindow(true);
 
             if (!isTemFilesEmpty()) {
-                recoverFile(window);
+                if (recoverFile(window) == 0) {
+                    window->addBlankTab();
+                }
             } else {
                 if (blankFiles.isEmpty()) {
+                    window->addBlankTab();
+                } else {
+                    for (auto file : blankFiles) {
+                        if (file.contains("blank_file")) {
+                            blankDirectory.remove(file);
+                        }
+                    }
+
                     window->addBlankTab();
                 }
             }

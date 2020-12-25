@@ -53,7 +53,7 @@ public:
     bool ifKlu();
     bool isMultiWindow();
     bool isTemFilesEmpty();
-    void recoverFile(Window *window);
+    int recoverFile(Window *window);
 
 private:
     void initBlockShutdown();
