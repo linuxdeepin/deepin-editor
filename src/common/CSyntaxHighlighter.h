@@ -27,8 +27,9 @@ class CSyntaxHighlighter : public SyntaxHighlighter
     Q_OBJECT
 public:
     explicit CSyntaxHighlighter(QObject *parent = nullptr);
-    explicit CSyntaxHighlighter(QTextDocument *document);
-    void setEnableHighlight(bool ok);
+    explicit CSyntaxHighlighter(QTextDocument *pDocument);
+    void setEnableHighlight(bool isEnable);
+
 protected:
     virtual void highlightBlock(const QString & text) override;
 

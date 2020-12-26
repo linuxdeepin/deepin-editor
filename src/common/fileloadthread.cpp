@@ -23,11 +23,9 @@
 #include <QFile>
 #include <QDebug>
 
-
-
 FileLoadThread::FileLoadThread(const QString &filepath, QObject *parent)
     : QThread(parent),
-      m_sFilePath(filepath)
+      m_strFilePath(filepath)
 {
 
 }
@@ -38,22 +36,22 @@ FileLoadThread::~FileLoadThread()
 
 void FileLoadThread::run()
 {
-    QFile file(m_sFilePath);
+    QFile file(m_strFilePath);
 
     if (file.open(QIODevice::ReadOnly)) {
         // reads all remaining data from the file.
-        QByteArray Indata = file.readAll();
+        QByteArray indata = file.readAll();
         file.close();
-        QByteArray OutData;
+        QByteArray outData;
         // read the encode.
-        QByteArray encode = DetectCode::GetFileEncodingFormat(m_sFilePath);
+        QByteArray encode = DetectCode::GetFileEncodingFormat(m_strFilePath);
         QString textEncode =QString::fromLocal8Bit(encode);
 
-         if(textEncode.contains("ASCII",Qt::CaseInsensitive) || textEncode.contains("UTF-8",Qt::CaseInsensitive)){
-           emit loadFinished(encode, Indata);
-         }else {
-           DetectCode::ChangeFileEncodingFormat(Indata,OutData,textEncode,QString("UTF-8"));
-           emit loadFinished(encode, OutData);
+         if (textEncode.contains("ASCII", Qt::CaseInsensitive) || textEncode.contains("UTF-8", Qt::CaseInsensitive)) {
+           emit sigLoadFinished(encode, indata);
+         } else {
+           DetectCode::ChangeFileEncodingFormat(indata, outData, textEncode, QString("UTF-8"));
+           emit sigLoadFinished(encode, outData);
          }
     }
 }

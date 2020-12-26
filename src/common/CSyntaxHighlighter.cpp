@@ -27,23 +27,22 @@ CSyntaxHighlighter::CSyntaxHighlighter(QObject *parent):
 
 }
 
-CSyntaxHighlighter::CSyntaxHighlighter(QTextDocument *document):
-    SyntaxHighlighter (document),m_bHighlight(false)
+CSyntaxHighlighter::CSyntaxHighlighter(QTextDocument *pDocument):
+    SyntaxHighlighter (pDocument),m_bHighlight(false)
 {
 
 }
 
-
-
-void CSyntaxHighlighter::setEnableHighlight(bool ok)
+void CSyntaxHighlighter::setEnableHighlight(bool isEnable)
 {
-    m_bHighlight = ok;
+    m_bHighlight = isEnable;
 }
 
 void CSyntaxHighlighter::highlightBlock(const QString &text)
 {
-    if(!m_bHighlight) return;
+    if (!m_bHighlight) {
+        return;
+    }
 
-   // qDebug()<<"=========highlightBlock"<<text<<currentBlockState();
     KSyntaxHighlighting::SyntaxHighlighter::highlightBlock(text);
 }

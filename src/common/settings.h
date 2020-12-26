@@ -57,24 +57,24 @@ public:
 
     void setSettingDialog(DSettingsDialog *settingsDialog);
 
-    int defaultFontSize = 12;
-    int maxFontSize = 50;
-    int minFontSize = 8;
+    int m_iDefaultFontSize = 12;
+    int m_iMaxFontSize = 50;
+    int m_iMinFontSize = 8;
 
     DSettings *settings;
 
 signals:
-    void adjustFont(QString name);
-    void adjustFontSize(int fontSize);
-    void adjustTabSpaceNumber(int number);
-    void adjustWordWrap(bool enable);
-    void adjustBookmark(bool enable);
-    void showCodeFlodFlag(bool enable);
-    void showBlankCharacter(bool enable);
-    void hightLightCurrentLine(bool enable);
-    void themeChanged(const QString &theme);
-    void setLineNumberShow(bool bIsShow);
-    void changeWindowSize(QString mode);
+    void sigAdjustFont(QString name);
+    void sigAdjustFontSize(int fontSize);
+    void sigAdjustTabSpaceNumber(int number);
+    void sigAdjustWordWrap(bool enable);
+    void sigAdjustBookmark(bool enable);
+    void sigShowCodeFlodFlag(bool enable);
+    void sigShowBlankCharacter(bool enable);
+    void sigHightLightCurrentLine(bool enable);
+    void sigThemeChanged(const QString &theme);
+    void sigSetLineNumberShow(bool bIsShow);
+    void sigChangeWindowSize(QString mode);
 
 private:
     void updateAllKeysWithKeymap(QString keymap);
@@ -86,11 +86,11 @@ private:
 private:
     Dtk::Core::QSettingBackend *m_backend;
 
-    QString m_configPath;
-    bool m_userChangeKey = false;
+    QString m_strConfigPath;
+    bool m_bUserChangeKey = false;
     DSettingsDialog *m_pSettingsDialog;
-    static Settings* m_setting;
-    DKeySequenceEdit *m_shortCutLineEdit;
+    static Settings* s_pSetting;
+    DKeySequenceEdit *m_pShortCutLineEdit;
     DDialog *m_pDialog;
 };
 
@@ -99,48 +99,49 @@ class KeySequenceEdit : public DKeySequenceEdit
 public:
     inline KeySequenceEdit(DTK_CORE_NAMESPACE::DSettingsOption *opt, QWidget *parent = nullptr): DKeySequenceEdit(parent)
     {
-        m_poption = opt;
+        m_pOption = opt;
         this->installEventFilter(this);
     }
+	
     DTK_CORE_NAMESPACE::DSettingsOption *option()
     {
-        return m_poption;
+        return m_pOption;
     }
-protected:
 
-    inline bool eventFilter(QObject*o,QEvent*e)
+protected:
+    inline bool eventFilter(QObject *object, QEvent *event)
     {
         //设置界面　回车键和空格键　切换输入 梁卫东　２０２０－０８－２１　１６：２８：３１
-        if(o == this){
-            if(e->type() == QEvent::KeyPress){
-                QKeyEvent* keyEvent = static_cast<QKeyEvent*>(e);
-                //qDebug()<<keyEvent->text()<<keyEvent->key();
+        if (object == this) {
+            if (event->type() == QEvent::KeyPress) {
+                QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
 
                //判断是否包含组合键　梁卫东　２０２０－０９－０２　１５：０３：５６
                 Qt::KeyboardModifiers modifiers = keyEvent->modifiers();
-                bool bHasModifier = (modifiers & Qt::ShiftModifier ||modifiers & Qt::ControlModifier || modifiers & Qt::AltModifier);
+                bool bHasModifier = (modifiers & Qt::ShiftModifier ||modifiers & Qt::ControlModifier ||
+                                     modifiers & Qt::AltModifier);
 
-
-                if(!bHasModifier && (keyEvent->key()== Qt::Key_Return || keyEvent->key() == Qt::Key_Space)){
+                if (!bHasModifier && (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Space)) {
                     QRect rect = this->rect();
                     QList<QLabel*> childern = findChildren<QLabel*>();
 
-                    for (int i =0; i< childern.size();i++) {
+                    for (int i =0; i < childern.size(); i++) {
                         QPoint pos(25,rect.height()/2);
 
                         QMouseEvent event0(QEvent::MouseButtonPress, pos, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
                         DApplication::sendEvent(childern[i], &event0);
                     }
+
                     return true;
                 }
             }
         }
 
-        return DKeySequenceEdit::eventFilter(o,e);
+        return DKeySequenceEdit::eventFilter(object, event);
     }
 
 private:
-    DTK_CORE_NAMESPACE::DSettingsOption *m_poption = nullptr;
+    DTK_CORE_NAMESPACE::DSettingsOption *m_pOption = nullptr;
 };
 
 #endif // SETTINGS_H

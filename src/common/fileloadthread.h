@@ -31,10 +31,12 @@ public:
     ~FileLoadThread();
 
     void run();
+
 signals:
-    void loadFinished(const QByteArray &encode, const QByteArray &content);
+    void sigLoadFinished(const QByteArray &encode, const QByteArray &content);
+
 private:
-    QString m_sFilePath;
+    QString m_strFilePath;
 };
 
 #endif

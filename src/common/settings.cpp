@@ -36,59 +36,59 @@
 #include <QDir>
 #include <QStandardPaths>
 
-Settings *Settings::m_setting = nullptr;
+Settings *Settings::s_pSetting = nullptr;
 Settings::Settings(QWidget *parent)
     : QObject(parent)
 {
-    m_configPath = QString("%1/%2/%3/config.conf")
+    m_strConfigPath = QString("%1/%2/%3/config.conf")
         .arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation))
         .arg(qApp->organizationName())
         .arg(qApp->applicationName());
 
-    m_backend = new QSettingBackend(m_configPath);
+    m_backend = new QSettingBackend(m_strConfigPath);
 
     settings = DSettings::fromJsonFile(":/resources/settings.json");
     settings->setBackend(m_backend);
 
     auto fontFamliy = settings->option("base.font.family");
     connect(fontFamliy, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
-        emit adjustFont(value.toString());
+        emit sigAdjustFont(value.toString());
     });
 
     auto fontSize = settings->option("base.font.size");
     connect(fontSize, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
-        emit adjustFontSize(value.toInt());
+        emit sigAdjustFontSize(value.toInt());
     });
 
     auto wordWrap = settings->option("base.font.wordwrap");
     connect(wordWrap, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
-        emit adjustWordWrap(value.toBool());
+        emit sigAdjustWordWrap(value.toBool());
     });
 
     auto showLineNumber = settings->option("base.font.showlinenumber");
     connect(showLineNumber,&Dtk::Core::DSettingsOption::valueChanged,this,[=] (QVariant value){
-        emit setLineNumberShow(value.toBool());
+        emit sigSetLineNumberShow(value.toBool());
     });
 
     auto bookmark = settings->option("base.font.showbookmark");
     connect(bookmark, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
-        emit adjustBookmark(value.toBool());
+        emit sigAdjustBookmark(value.toBool());
     });
 
     auto codeFlod = settings->option("base.font.codeflod");
     connect(codeFlod, &Dtk::Core::DSettingsOption::valueChanged, this, [ = ](QVariant value) {
-        emit showCodeFlodFlag(value.toBool());
+        emit sigShowCodeFlodFlag(value.toBool());
     });
 
     //添加显示空白符　梁卫东
     auto blankCharacter = settings->option("base.font.showblankcharacter");
     connect(blankCharacter, &Dtk::Core::DSettingsOption::valueChanged, this, [ = ](QVariant value) {
-        emit showBlankCharacter(value.toBool());
+        emit sigShowBlankCharacter(value.toBool());
     });
     //hightlightcurrentline
     auto hightlightCurrentLine = settings->option("base.font.hightlightcurrentline");
     connect(hightlightCurrentLine, &Dtk::Core::DSettingsOption::valueChanged, this, [ = ](QVariant value) {
-        emit hightLightCurrentLine(value.toBool());
+        emit sigHightLightCurrentLine(value.toBool());
     });
     auto theme = settings->option("advance.editor.theme");
     connect(theme, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
@@ -97,7 +97,7 @@ Settings::Settings(QWidget *parent)
 
     auto tabSpaceNumber = settings->option("advance.editor.tabspacenumber");
     connect(tabSpaceNumber, &Dtk::Core::DSettingsOption::valueChanged, this, [=](QVariant value) {
-        emit adjustTabSpaceNumber(value.toInt());
+        emit sigAdjustTabSpaceNumber(value.toInt());
     });
 
     auto keymap = settings->option("shortcuts.keymap.keymap");
@@ -113,7 +113,7 @@ Settings::Settings(QWidget *parent)
 
     auto windowState = settings->option("advance.window.windowstate");
     connect(windowState, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
-        emit changeWindowSize(value.toString());
+        emit sigChangeWindowSize(value.toString());
     });
     QMap<QString, QVariant> windowStateMap;
     windowStateMap.insert("keys", QStringList() << "window_normal" << "window_maximum" << "fullscreen");
@@ -123,8 +123,8 @@ Settings::Settings(QWidget *parent)
     connect(settings, &Dtk::Core::DSettings::valueChanged, this, [=] (const QString &key, const QVariant &value) {
 
         // Change keymap to customize once user change any keyshortcut.
-        if (!m_userChangeKey && key.startsWith("shortcuts.") && key != "shortcuts.keymap.keymap" && !key.contains("_keymap_")) {
-            m_userChangeKey = true;
+        if (!m_bUserChangeKey && key.startsWith("shortcuts.") && key != "shortcuts.keymap.keymap" && !key.contains("_keymap_")) {
+            m_bUserChangeKey = true;
 
             QString currentKeymap = settings->option("shortcuts.keymap.keymap")->value().toString();
 
@@ -144,7 +144,7 @@ Settings::Settings(QWidget *parent)
                 settings->option(customizeKey)->setValue(value);
                 keymap->setValue("customize");
             }
-            m_userChangeKey = false;
+            m_bUserChangeKey = false;
         }
     });
 }
@@ -246,7 +246,7 @@ QPair<QWidget *, QWidget *> Settings::createKeySequenceEditHandle(QObject *obj)
         QString originalKeys;
 
         if (keymap->value().toString() != "customize") {
-            instance()->m_userChangeKey = true;
+            instance()->m_bUserChangeKey = true;
 
             for (auto option : instance()->settings->group("shortcuts.window_keymap_customize")->options()) {
                 QStringList keySplitList = option->key().split(".");
@@ -282,10 +282,10 @@ QPair<QWidget *, QWidget *> Settings::createKeySequenceEditHandle(QObject *obj)
                 }
             }
 
-            instance()->m_userChangeKey = false;
+            instance()->m_bUserChangeKey = false;
         }  else {
             bIsCustomize = true;
-            instance()->m_userChangeKey = true;
+            instance()->m_bUserChangeKey = true;
             for (auto option : instance()->settings->group("shortcuts.window_keymap_customize")->options()) {
                 QStringList keySplitList = option->key().split(".");
                 keySplitList[1] = QString("window_keymap_%1").arg(keymap->value().toString());
@@ -315,7 +315,7 @@ QPair<QWidget *, QWidget *> Settings::createKeySequenceEditHandle(QObject *obj)
                     }
                 }
             }
-            instance()->m_userChangeKey = false;
+            instance()->m_bUserChangeKey = false;
         }
 
         keySplitList = option->key().split(".");
@@ -393,15 +393,15 @@ QPair<QWidget *, QWidget *> Settings::createKeySequenceEditHandle(QObject *obj)
 
 Settings *Settings::instance()
 {
-    if (m_setting == nullptr) {
-        m_setting = new Settings;
+    if (s_pSetting == nullptr) {
+        s_pSetting = new Settings;
     }
-    return m_setting;
+    return s_pSetting;
 }
 
 void Settings::updateAllKeysWithKeymap(QString keymap)
 {
-    m_userChangeKey = true;
+    m_bUserChangeKey = true;
 
     for (auto option : settings->group("shortcuts.window")->options()) {
         QStringList keySplitList = option->key().split(".");
@@ -415,12 +415,12 @@ void Settings::updateAllKeysWithKeymap(QString keymap)
         option->setValue(settings->option(keySplitList.join("."))->value().toString());
     }
 
-    m_userChangeKey = false;
+    m_bUserChangeKey = false;
 }
 
 void Settings::copyCustomizeKeysFromKeymap(QString keymap)
 {
-    m_userChangeKey = true;
+    m_bUserChangeKey = true;
 
     for (auto option : settings->group("shortcuts.window_keymap_customize")->options()) {
         QStringList keySplitList = option->key().split(".");
@@ -434,7 +434,7 @@ void Settings::copyCustomizeKeysFromKeymap(QString keymap)
         option->setValue(settings->option(keySplitList.join("."))->value().toString());
     }
 
-    m_userChangeKey = false;
+    m_bUserChangeKey = false;
 }
 
 bool Settings::checkShortcutValid(const QString &Name,QString Key, QString &Reason ,bool &bIsConflicts)

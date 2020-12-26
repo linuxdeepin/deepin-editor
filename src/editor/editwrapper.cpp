@@ -100,7 +100,7 @@ void EditWrapper::openFile(const QString &filepath,QString qstrTruePath,bool bIs
 
     FileLoadThread *thread = new FileLoadThread(filepath);
     // begin to load the file.
-    connect(thread, &FileLoadThread::loadFinished, this, &EditWrapper::handleFileLoadFinished);
+    connect(thread, &FileLoadThread::sigLoadFinished, this, &EditWrapper::handleFileLoadFinished);
     connect(thread, &FileLoadThread::finished, thread, &FileLoadThread::deleteLater);
     thread->start();
 }

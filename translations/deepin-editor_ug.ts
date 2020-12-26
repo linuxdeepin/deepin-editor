@@ -31,54 +31,54 @@
 <context>
     <name>EditWrapper</name>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="203"/>
-        <location filename="../src/editor/editwrapper.cpp" line="261"/>
-        <location filename="../src/editor/editwrapper.cpp" line="307"/>
-        <location filename="../src/editor/editwrapper.cpp" line="491"/>
+        <location filename="../src/editor/editwrapper.cpp" line="174"/>
+        <location filename="../src/editor/editwrapper.cpp" line="232"/>
+        <location filename="../src/editor/editwrapper.cpp" line="278"/>
+        <location filename="../src/editor/editwrapper.cpp" line="470"/>
         <source>Save</source>
         <translation>ساقلاش</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="256"/>
-        <location filename="../src/editor/editwrapper.cpp" line="302"/>
+        <location filename="../src/editor/editwrapper.cpp" line="227"/>
+        <location filename="../src/editor/editwrapper.cpp" line="273"/>
         <source>Do you want to save this file?</source>
         <translation>بۇ ھۆججەتنى ساقلامسىز؟</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="259"/>
-        <location filename="../src/editor/editwrapper.cpp" line="305"/>
+        <location filename="../src/editor/editwrapper.cpp" line="230"/>
+        <location filename="../src/editor/editwrapper.cpp" line="276"/>
         <source>Cancel</source>
         <translation>بىكار قىلىش</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="260"/>
-        <location filename="../src/editor/editwrapper.cpp" line="306"/>
+        <location filename="../src/editor/editwrapper.cpp" line="231"/>
+        <location filename="../src/editor/editwrapper.cpp" line="277"/>
         <source>Discard</source>
         <translation>ساقلىمايمەن</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="558"/>
+        <location filename="../src/editor/editwrapper.cpp" line="537"/>
         <source>File removed on the disk. Save it now?</source>
         <translation>دىسكىدىكى ئەسلى ھۆججەت ئۆچۈرۈلدى، قايتا ساقلىماقچىمۇ؟</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="561"/>
+        <location filename="../src/editor/editwrapper.cpp" line="540"/>
         <source>File has changed on disk. Reload?</source>
         <translation>دىسكىدىكى ئەسلى ھۆججەت ئۆزگەرتىلدى، قايتا يۈكلىمەكچىمۇ؟</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="583"/>
+        <location filename="../src/editor/editwrapper.cpp" line="562"/>
         <location filename="../src/widgets/bottombar.cpp" line="60"/>
         <source>INSERT</source>
         <translation>كىرگۈزۈش</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="586"/>
+        <location filename="../src/editor/editwrapper.cpp" line="565"/>
         <source>OVERWRITE</source>
         <translation>باستۇرۇش</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="589"/>
+        <location filename="../src/editor/editwrapper.cpp" line="568"/>
         <source>R/O</source>
         <translation>پەقەت ئوقۇش</translation>
     </message>
@@ -130,12 +130,12 @@
         <translation>تېكىست تەھرىرلىگۈچ</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="205"/>
-        <location filename="../src/editor/editwrapper.cpp" line="493"/>
-        <location filename="../src/widgets/window.cpp" line="904"/>
-        <location filename="../src/widgets/window.cpp" line="922"/>
-        <location filename="../src/widgets/window.cpp" line="992"/>
-        <location filename="../src/widgets/window.cpp" line="1007"/>
+        <location filename="../src/editor/editwrapper.cpp" line="176"/>
+        <location filename="../src/editor/editwrapper.cpp" line="472"/>
+        <location filename="../src/widgets/window.cpp" line="920"/>
+        <location filename="../src/widgets/window.cpp" line="938"/>
+        <location filename="../src/widgets/window.cpp" line="1008"/>
+        <location filename="../src/widgets/window.cpp" line="1023"/>
         <source>Encoding</source>
         <translation>كودلاش</translation>
     </message>
@@ -173,7 +173,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="31"/>
         <location filename="../src/controls/settingsdialog.cpp" line="107"/>
-        <location filename="../src/widgets/window.cpp" line="1329"/>
+        <location filename="../src/widgets/window.cpp" line="1371"/>
         <source>Window</source>
         <translation>كۆزنەك</translation>
     </message>
@@ -773,14 +773,14 @@
         <translation>سېمىتىكچە</translation>
     </message>
     <message>
-        <location filename="../src/startmanager.cpp" line="470"/>
+        <location filename="../src/startmanager.cpp" line="484"/>
         <source>File not saved</source>
         <translation>ھۆججەت ساقلانمىغان</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="923"/>
-        <location filename="../src/widgets/window.cpp" line="993"/>
-        <location filename="../src/widgets/window.cpp" line="1008"/>
+        <location filename="../src/widgets/window.cpp" line="939"/>
+        <location filename="../src/widgets/window.cpp" line="1009"/>
+        <location filename="../src/widgets/window.cpp" line="1024"/>
         <source>Line Endings</source>
         <translation>قۇر تاشلاش بەلگىسى</translation>
     </message>
@@ -889,7 +889,7 @@
 <context>
     <name>StartManager</name>
     <message>
-        <location filename="../src/startmanager.cpp" line="188"/>
+        <location filename="../src/startmanager.cpp" line="165"/>
         <source>Untitled %1</source>
         <translation>%1نىڭ نامىنى ئۆزگەتىش</translation>
     </message>
@@ -897,32 +897,32 @@
 <context>
     <name>Tabbar</name>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="435"/>
+        <location filename="../src/controls/tabbar.cpp" line="455"/>
         <source>Close tab</source>
         <translation>خەتكۈچنى تاقاش</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="436"/>
+        <location filename="../src/controls/tabbar.cpp" line="456"/>
         <source>Close other tabs</source>
         <translation>باشقا خەتكۈچنى تاقاش</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="437"/>
+        <location filename="../src/controls/tabbar.cpp" line="457"/>
         <source>More options</source>
         <translation>تېخىمۇ كۆپ تاقاش ئۇسۇلى</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="438"/>
+        <location filename="../src/controls/tabbar.cpp" line="458"/>
         <source>Close tabs to the left</source>
         <translation>سولدىكى بارلىق خەتكۈچنى تاقاش</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="439"/>
+        <location filename="../src/controls/tabbar.cpp" line="459"/>
         <source>Close tabs to the right</source>
         <translation>ئوڭدىكى بارلىق خەتكۈچنى تاقاش</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="440"/>
+        <location filename="../src/controls/tabbar.cpp" line="460"/>
         <source>Close unmodified tabs</source>
         <translation>ئۆزگەرتىلمىگەن بارلىق خەتكۈچنى تاقاش</translation>
     </message>
@@ -930,211 +930,211 @@
 <context>
     <name>TextEdit</name>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="175"/>
+        <location filename="../src/editor/dtextedit.cpp" line="177"/>
         <source>Undo</source>
         <translation>ئەمەلدىن قالدۇرۇش</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="176"/>
+        <location filename="../src/editor/dtextedit.cpp" line="178"/>
         <source>Redo</source>
         <translation>قايتا</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="177"/>
+        <location filename="../src/editor/dtextedit.cpp" line="179"/>
         <source>Cut</source>
         <translation>چاپلاش</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="178"/>
+        <location filename="../src/editor/dtextedit.cpp" line="180"/>
         <source>Copy</source>
         <translation>كۆچۈرۈش</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="179"/>
+        <location filename="../src/editor/dtextedit.cpp" line="181"/>
         <source>Paste</source>
         <translation>چاپلاش</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="180"/>
+        <location filename="../src/editor/dtextedit.cpp" line="182"/>
         <source>Delete</source>
         <translation>ئۆچۈرۈش</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="181"/>
+        <location filename="../src/editor/dtextedit.cpp" line="183"/>
         <source>Select All</source>
         <translation>ھەممىنى</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="182"/>
-        <location filename="../src/widgets/window.cpp" line="337"/>
+        <location filename="../src/editor/dtextedit.cpp" line="184"/>
+        <location filename="../src/widgets/window.cpp" line="345"/>
         <source>Find</source>
         <translation>ئىزدەش</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="183"/>
-        <location filename="../src/widgets/window.cpp" line="338"/>
+        <location filename="../src/editor/dtextedit.cpp" line="185"/>
+        <location filename="../src/widgets/window.cpp" line="346"/>
         <source>Replace</source>
         <translation>ئالماشتۇرۇش</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="184"/>
+        <location filename="../src/editor/dtextedit.cpp" line="186"/>
         <source>Go to Line</source>
         <translation>سەكرەش</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="185"/>
+        <location filename="../src/editor/dtextedit.cpp" line="187"/>
         <source>Turn on Read-Only mode</source>
         <translation>پەقەت ئوقۇيدىغان ھالەتنى ئېچىش</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="186"/>
+        <location filename="../src/editor/dtextedit.cpp" line="188"/>
         <source>Turn off Read-Only mode</source>
         <translation>پەقەت ئوقۇيدىغان ھالەتنى تاقاش</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="187"/>
+        <location filename="../src/editor/dtextedit.cpp" line="189"/>
         <source>Fullscreen</source>
         <translation>پۈتۈن ئېكران</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="188"/>
+        <location filename="../src/editor/dtextedit.cpp" line="190"/>
         <source>Exit fullscreen</source>
         <translation>پۈتۈن ئېكراندىن چېكىنىش</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="189"/>
+        <location filename="../src/editor/dtextedit.cpp" line="191"/>
         <source>Display in file manager</source>
         <translation>ھۆججەت باشقۇرغۇچتا كۆرسىتىش</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="190"/>
-        <location filename="../src/editor/dtextedit.cpp" line="249"/>
+        <location filename="../src/editor/dtextedit.cpp" line="192"/>
+        <location filename="../src/editor/dtextedit.cpp" line="251"/>
         <source>Add Comment</source>
         <translation>ئىزاھات قوشۇش</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="191"/>
+        <location filename="../src/editor/dtextedit.cpp" line="193"/>
         <source>Text to Speech</source>
         <translation>تېكىستنى ئاۋازغا ئايلاندۇرۇش</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="192"/>
+        <location filename="../src/editor/dtextedit.cpp" line="194"/>
         <source>Stop reading</source>
         <translation>ئوقۇشنى توختىتىش</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="193"/>
+        <location filename="../src/editor/dtextedit.cpp" line="195"/>
         <source>Speech to Text</source>
         <translation>ئاۋازنى تېكىستكە ئايلاندۇرۇش</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="194"/>
+        <location filename="../src/editor/dtextedit.cpp" line="196"/>
         <source>Translate</source>
         <translation>تەرجىمان</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="195"/>
-        <location filename="../src/editor/dtextedit.cpp" line="248"/>
+        <location filename="../src/editor/dtextedit.cpp" line="197"/>
+        <location filename="../src/editor/dtextedit.cpp" line="250"/>
         <source>Column Mode</source>
         <translation>ئىستون تەھرىرلەش ھالىتى</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="196"/>
+        <location filename="../src/editor/dtextedit.cpp" line="198"/>
         <source>Add bookmark</source>
         <translation>خەتكۈچ قوشۇش</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="197"/>
+        <location filename="../src/editor/dtextedit.cpp" line="199"/>
         <source>Remove Bookmark</source>
         <translation>خەتكۈچ چىقىرىۋېتىش</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="198"/>
+        <location filename="../src/editor/dtextedit.cpp" line="200"/>
         <source>Previous bookmark</source>
         <translation>ئالدىنقى خەتكۈچ</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="199"/>
+        <location filename="../src/editor/dtextedit.cpp" line="201"/>
         <source>Next bookmark</source>
         <translation>كېيىنكى خەتكۈچ</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="200"/>
+        <location filename="../src/editor/dtextedit.cpp" line="202"/>
         <source>Remove All Bookmarks</source>
         <translation>بارلىق خەتكۈچنى چىقىرىۋېتىش</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="201"/>
+        <location filename="../src/editor/dtextedit.cpp" line="203"/>
         <source>Fold All</source>
         <translation>بارلىق قاتلامنى قاتلاش</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="202"/>
+        <location filename="../src/editor/dtextedit.cpp" line="204"/>
         <source>Fold Current Level</source>
         <translation>ھازىرقى قاتلامنى قاتلاش</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="203"/>
+        <location filename="../src/editor/dtextedit.cpp" line="205"/>
         <source>Unfold All</source>
         <translation>بارلىق قاتلامنى ئېچىش</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="204"/>
+        <location filename="../src/editor/dtextedit.cpp" line="206"/>
         <source>Unfold Current Level</source>
         <translation>ھازىرقى قاتلامنى ئېچىش</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="209"/>
+        <location filename="../src/editor/dtextedit.cpp" line="211"/>
         <source>Color Mark</source>
         <translation>رەڭ بەلگىسى</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="210"/>
+        <location filename="../src/editor/dtextedit.cpp" line="212"/>
         <source>Clear All Marks</source>
         <translation>بارلىق بەلگىلەرنى چىقىرىۋېتىش</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="211"/>
+        <location filename="../src/editor/dtextedit.cpp" line="213"/>
         <source>Clear Last Mark</source>
         <translation>ئالدىنقى بەلگىنى چىقىرىۋېتىش</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="225"/>
+        <location filename="../src/editor/dtextedit.cpp" line="227"/>
         <source>Mark</source>
         <translation>بەلگە قويۇش</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="242"/>
+        <location filename="../src/editor/dtextedit.cpp" line="244"/>
         <source>Mark All</source>
         <translation>ھەممىسىگە بەلگە قويۇش</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="250"/>
+        <location filename="../src/editor/dtextedit.cpp" line="252"/>
         <source>Remove Comment</source>
         <translation>ئىزاھاتنى بىكار قىلىش</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="380"/>
+        <location filename="../src/editor/dtextedit.cpp" line="387"/>
         <source>Press ALT and click lines to edit in column mode</source>
         <translation>ئىستون تەھرىرلەش ھالىتىنى ئالماشتۇرۇش ئۈچۈن ALT   بىلەن مائۇسنى ئىشلىتىڭ</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="448"/>
+        <location filename="../src/editor/dtextedit.cpp" line="455"/>
         <source>Change Case</source>
         <translation>چوڭ-كىچىك يېزىلىشىنى ئالماشتۇرۇش</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="449"/>
+        <location filename="../src/editor/dtextedit.cpp" line="456"/>
         <source>Upper Case</source>
         <translation>چوڭ يېزىلىش</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="450"/>
+        <location filename="../src/editor/dtextedit.cpp" line="457"/>
         <source>Lower Case</source>
         <translation>كىچىك يېزىلىش</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="451"/>
+        <location filename="../src/editor/dtextedit.cpp" line="458"/>
         <source>Capitalize</source>
         <translation>1-ھەرپ چوڭ يېزىلسۇن</translation>
     </message>
@@ -1144,34 +1144,34 @@
         <translation>يوق</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1279"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1286"/>
         <source>Selected line(s) copied</source>
         <translation>تاللانغان قۇر چاپلاش تاختىسىغا كۆچۈرۈلدى</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1285"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1292"/>
         <source>Current line copied</source>
         <translation>نۆۋەتتىكى قۇر چاپلاش تاختىسىغا كۆچۈرۈلدى</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1324"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1331"/>
         <source>Selected line(s) clipped</source>
         <translation>تاللانغان قۇر چاپلاش تاختىسىغا كېسىلدى</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1330"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1337"/>
         <source>Current line clipped</source>
         <translation>نۆۋەتتىكى قۇر چاپلاش تاختىسىغا كېسىلدى</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3052"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3068"/>
         <source>Read-Only mode is off</source>
         <translation>پەقەت ئوقۇيدىغان ھالەت تاقالدى</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3059"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3067"/>
-        <location filename="../src/editor/dtextedit.cpp" line="5392"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3075"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3083"/>
+        <location filename="../src/editor/dtextedit.cpp" line="5278"/>
         <source>Read-Only mode is on</source>
         <translation>پەقەت ئوقۇيدىغان ھالەتنى ئېچىلدى</translation>
     </message>
@@ -1197,133 +1197,133 @@
     <message>
         <location filename="../src/controls/toast.cpp" line="39"/>
         <location filename="../src/controls/warningnotices.cpp" line="17"/>
-        <location filename="../src/widgets/window.cpp" line="333"/>
+        <location filename="../src/widgets/window.cpp" line="341"/>
         <source>Save as</source>
         <translation>باشقا ساقلاش</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="329"/>
+        <location filename="../src/widgets/window.cpp" line="337"/>
         <source>New window</source>
         <translation>يېڭى كۆزنەك</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="330"/>
+        <location filename="../src/widgets/window.cpp" line="338"/>
         <source>New tab</source>
         <translation>يېڭى خەتكۈچ</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="331"/>
+        <location filename="../src/widgets/window.cpp" line="339"/>
         <source>Open file</source>
         <translation>ئېچىش</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="332"/>
-        <location filename="../src/widgets/window.cpp" line="1949"/>
+        <location filename="../src/widgets/window.cpp" line="340"/>
+        <location filename="../src/widgets/window.cpp" line="1973"/>
         <source>Save</source>
         <translation>ساقلاش</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="334"/>
+        <location filename="../src/widgets/window.cpp" line="342"/>
         <source>Print</source>
         <translation>بېسىش</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="335"/>
+        <location filename="../src/widgets/window.cpp" line="343"/>
         <source>Switch theme</source>
         <translation>ئۇسلۇب ئالماشتۇرۇش</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="336"/>
-        <location filename="../src/widgets/window.cpp" line="1389"/>
+        <location filename="../src/widgets/window.cpp" line="344"/>
+        <location filename="../src/widgets/window.cpp" line="1431"/>
         <source>Settings</source>
         <translation>تەڭشەك</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="451"/>
-        <location filename="../src/widgets/window.cpp" line="2065"/>
+        <location filename="../src/widgets/window.cpp" line="459"/>
+        <location filename="../src/widgets/window.cpp" line="2089"/>
         <source>Read-Only</source>
         <translation>پەقەت ئوقۇيدىغان قىلىش</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="470"/>
+        <location filename="../src/widgets/window.cpp" line="476"/>
         <source>You do not have permission to open %1</source>
         <translation>%1نى ئېچىش ھوقۇقىڭىز يوق</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="506"/>
+        <location filename="../src/widgets/window.cpp" line="511"/>
         <source>Invalid file: %1</source>
         <translation>ئۈنۈمسىز ھۆججەت: %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="606"/>
+        <location filename="../src/widgets/window.cpp" line="615"/>
         <source>Do you want to save this file?</source>
         <translation>بۇ ھۆججەتنى ساقلامسىز؟</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="835"/>
+        <location filename="../src/widgets/window.cpp" line="851"/>
         <source>You do not have permission to save %1</source>
         <translation>%1نى ساقلاش ھوقۇقىڭىز يوق</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="865"/>
+        <location filename="../src/widgets/window.cpp" line="881"/>
         <source>Saved successfully</source>
         <translation>ھۆججەت ساقلاندى</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="573"/>
-        <location filename="../src/widgets/window.cpp" line="868"/>
+        <location filename="../src/widgets/window.cpp" line="577"/>
+        <location filename="../src/widgets/window.cpp" line="884"/>
         <source>Do you want to save as another?</source>
         <translation>باشقا ھۆججەتلەرنى باشقىدىن ساقلامسىز؟</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="902"/>
-        <location filename="../src/widgets/window.cpp" line="949"/>
-        <location filename="../src/widgets/window.cpp" line="990"/>
+        <location filename="../src/widgets/window.cpp" line="918"/>
+        <location filename="../src/widgets/window.cpp" line="965"/>
+        <location filename="../src/widgets/window.cpp" line="1006"/>
         <source>Save File</source>
         <translation>ساقلاش</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="951"/>
+        <location filename="../src/widgets/window.cpp" line="967"/>
         <source>Encoding</source>
         <translation>كودلاش</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1138"/>
+        <location filename="../src/widgets/window.cpp" line="1154"/>
         <source>Read-Only mode is on</source>
         <translation>پەقەت ئوقۇيدىغان ھالەتنى ئېچىلدى</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1288"/>
+        <location filename="../src/widgets/window.cpp" line="1330"/>
         <source>Current location remembered</source>
         <translation>نۆۋەتتىكى ئورۇن ئەستە ساقلاندى</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1339"/>
+        <location filename="../src/widgets/window.cpp" line="1381"/>
         <source>Ctrl+&apos;=&apos;</source>
         <translation>Ctrl+&apos;=&apos;</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1342"/>
+        <location filename="../src/widgets/window.cpp" line="1384"/>
         <source>Ctrl+&apos;-&apos;</source>
         <translation>Ctrl+&apos;-&apos;</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1371"/>
+        <location filename="../src/widgets/window.cpp" line="1413"/>
         <source>Editor</source>
         <translation>تەھرىرلەش</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1621"/>
+        <location filename="../src/widgets/window.cpp" line="1663"/>
         <source>Untitled %1</source>
         <translation>%1نىڭ نامىنى ئۆزگەتىش</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1947"/>
+        <location filename="../src/widgets/window.cpp" line="1971"/>
         <source>Cancel</source>
         <translation>بىكار قىلىش</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1948"/>
+        <location filename="../src/widgets/window.cpp" line="1972"/>
         <source>Discard</source>
         <translation>ساقلىمايمەن</translation>
     </message>

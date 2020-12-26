@@ -88,13 +88,14 @@ Window::Window(DMainWindow *parent)
     connect(this, &Window::pressEsc, m_jumpLineBar, &JumpLineBar::pressEsc, Qt::QueuedConnection);
 
     // Init settings.
-    connect(m_settings, &Settings::adjustFont, this,[this](QString fontName){
+
+    connect(m_settings, &Settings::sigAdjustFont, this,[this](QString fontName){
        for (EditWrapper *wrapper : m_wrappers.values()) {
            wrapper->textEditor()->setFontFamily(fontName);
        }
     });
 
-    connect(m_settings, &Settings::adjustFontSize, this,[this](int size){
+    connect(m_settings, &Settings::sigAdjustFontSize, this,[this](int size){
        for (EditWrapper *wrapper : m_wrappers.values()) {
            wrapper->textEditor()->setFontSize(size);
        }
@@ -102,14 +103,13 @@ Window::Window(DMainWindow *parent)
        m_fontSize = size;
     });
 
-    connect(m_settings, &Settings::adjustTabSpaceNumber, this,[this](int number){
+    connect(m_settings, &Settings::sigAdjustTabSpaceNumber, this,[this](int number){
             for (EditWrapper *wrapper : m_wrappers.values()) {
                 wrapper->textEditor()->setTabSpaceNumber(number);
             }
      });
 
-
-    connect(m_settings, &Settings::themeChanged,this,[](const QString &path)
+    connect(m_settings, &Settings::sigThemeChanged, this, [](const QString &path)
     {
         QString strLightTheme = "/usr/share/deepin-editor/themes/deepin.theme";
         QString strDarkTheme = "/usr/share/deepin-editor/themes/deepin_dark.theme";
@@ -132,20 +132,20 @@ Window::Window(DMainWindow *parent)
     });
 
 
-    connect(m_settings, &Settings::adjustWordWrap, this, [ = ](bool enable) {
+    connect(m_settings, &Settings::sigAdjustWordWrap, this, [ = ](bool enable) {
         for (EditWrapper *wrapper : m_wrappers.values()) {
             TextEdit *textedit = wrapper->textEditor();
             textedit->setLineWrapMode(enable);
         }
     });
 
-    connect(m_settings,&Settings::setLineNumberShow,this,[=] (bool bIsShow) {
+    connect(m_settings,&Settings::sigSetLineNumberShow,this,[=] (bool bIsShow) {
        for(EditWrapper *wrapper : m_wrappers.values()) {
            wrapper->setLineNumberShow(bIsShow);
        }
     });
 
-    connect(m_settings,&Settings::adjustBookmark,this,[=] (bool bIsShow) {
+    connect(m_settings,&Settings::sigAdjustBookmark,this,[=] (bool bIsShow) {
        for(EditWrapper *wrapper : m_wrappers.values()) {
            TextEdit *textedit = wrapper->textEditor();
            textedit->setBookmarkFlagVisable(bIsShow);
@@ -153,27 +153,30 @@ Window::Window(DMainWindow *parent)
     });
 
     //添加显示空白符 梁卫东　２０２０－０８－１４　１５：２６：３２
-    connect(m_settings,&Settings::showBlankCharacter,this,[=] (bool bIsShow) {
+    connect(m_settings, &Settings::sigShowBlankCharacter, this, [=] (bool bIsShow) {
        for(EditWrapper *wrapper : m_wrappers.values()) {
            wrapper->setShowBlankCharacter(bIsShow);
        }
     });
+
     //setHighLineCurrentLine
-    connect(m_settings,&Settings::hightLightCurrentLine,this,[=] (bool bIsShow) {
+    connect(m_settings, &Settings::sigHightLightCurrentLine, this, [=] (bool bIsShow) {
        for(EditWrapper *wrapper : m_wrappers.values()) {
            wrapper->textEditor()->setHighLineCurrentLine(bIsShow);
        }
     });
-    connect(m_settings, &Settings::showCodeFlodFlag, this, [ = ](bool enable) {
+
+    connect(m_settings, &Settings::sigShowCodeFlodFlag, this, [ = ](bool enable) {
         for (EditWrapper *wrapper : m_wrappers.values()) {
             TextEdit *textedit = wrapper->textEditor();
             textedit->setCodeFlodFlagVisable(enable);
         }
     });
-    connect(m_settings, &Settings::changeWindowSize, this, [ = ](QString mode) {
-        if(mode=="fullscreen"){
+
+    connect(m_settings, &Settings::sigChangeWindowSize, this, [ = ](QString mode) {
+        if (mode == "fullscreen") {
             this->showFullScreen();
-        } else if (mode=="window_maximum") {
+        } else if (mode == "window_maximum") {
             this->showNormal();
             this->showMaximized();
         }
@@ -1055,19 +1058,19 @@ void Window::changeSettingDialogComboxFontNumber(int fontNumber)
 
 void Window::decrementFontSize()
 {
-    int size = std::max(m_fontSize - 1, m_settings->minFontSize);
+    int size = std::max(m_fontSize - 1, m_settings->m_iMinFontSize);
     m_settings->settings->option("base.font.size")->setValue(size);
 }
 
 void Window::incrementFontSize()
 {
-    int size = std::min(m_fontSize + 1, m_settings->maxFontSize);
+    int size = std::min(m_fontSize + 1, m_settings->m_iMaxFontSize);
     m_settings->settings->option("base.font.size")->setValue(size);
 }
 
 void Window::resetFontSize()
 {
-    m_settings->settings->option("base.font.size")->setValue(m_settings->defaultFontSize);
+    m_settings->settings->option("base.font.size")->setValue(m_settings->m_iDefaultFontSize);
 }
 
 void Window::setFontSizeWithConfig(EditWrapper *wrapper)
