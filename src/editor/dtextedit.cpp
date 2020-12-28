@@ -5205,85 +5205,85 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
        return;
     }
 
-        if (m_readOnlyMode || m_bReadOnlyPermission) {
-            if (key == "J") {
-                nextLine();
-                return;
-            } else if (key == "K") {
-                prevLine();
-                return;
-            } else if (key == ",") {
-                moveToEnd();
-                return;
-            } else if (key == ".") {
-                moveToStart();
-                return;
-            } else if (key == "H") {
-                backwardChar();
-                return;
-            } else if (key == "L") {
-                forwardChar();
-                return;
-            } else if (key == "Space") {
-                scrollUp();
-                return;
-            } else if (key == "V") {
-                scrollDown();
-                return;
-            } else if (key == "F") {
-                forwardWord();
-                return;
-            } else if (key == "B") {
-                backwardWord();
-                return;
-            } else if (key == "A") {
-                moveToStartOfLine();
-                return;
-            } else if (key == "E") {
-                moveToEndOfLine();
-                return;
-            } else if (key == "M") {
-                moveToLineIndentation();
-                return;
-            } else if (key == "Q" && m_bReadOnlyPermission == false) {
-                toggleReadOnlyMode();
-                return;
-            } else if (key == "Shfit+J") {
-                scrollLineUp();
-                return;
-            } else if (key == "Shift+K") {
-                scrollLineDown();
-                return;
-            } else if (key == "P") {
-                forwardPair();
-                return;
-            } else if (key == "N") {
-                backwardPair();
-                return;
-            } else if (key == "Shift+:") {
-                copyLines();
-                return;
-            } else if ((key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglereadonlymode")/* || key=="Alt+Meta+L"*/)
-                       && m_bReadOnlyPermission == false) {
-                toggleReadOnlyMode();
-                return;
-            } else if (key == "Shift+/" && e->modifiers() == Qt::ControlModifier) {
-                e->ignore();
-            } else if (e->key() == Qt::Key_Control || e->key() == Qt::Key_Shift) {
-                e->ignore();
-            } else if (e->key() == Qt::Key_F11 || e->key() == Qt::Key_F5) {
-                e->ignore();
-                return;
-            } else if (e->modifiers() == Qt::NoModifier || e->modifiers() == Qt::KeypadModifier) {
-                popupNotify(tr("Read-Only mode is on"));
-                return;
-            } else {
-                // If press another key
-                // the main window does not receive
-                e->ignore();
-                return;
-            }
+    if (m_readOnlyMode || m_bReadOnlyPermission) {
+        if (key == "J") {
+            nextLine();
+            return;
+        } else if (key == "K") {
+            prevLine();
+            return;
+        } else if (key == ",") {
+            moveToEnd();
+            return;
+        } else if (key == ".") {
+            moveToStart();
+            return;
+        } else if (key == "H") {
+            backwardChar();
+            return;
+        } else if (key == "L") {
+            forwardChar();
+            return;
+        } else if (key == "Space") {
+            scrollUp();
+            return;
+        } else if (key == "V") {
+            scrollDown();
+            return;
+        } else if (key == "F") {
+            forwardWord();
+            return;
+        } else if (key == "B") {
+            backwardWord();
+            return;
+        } else if (key == "A") {
+            moveToStartOfLine();
+            return;
+        } else if (key == "E") {
+            moveToEndOfLine();
+            return;
+        } else if (key == "M") {
+            moveToLineIndentation();
+            return;
+        } else if (key == "Q" && m_bReadOnlyPermission == false) {
+            toggleReadOnlyMode();
+            return;
+        } else if (key == "Shfit+J") {
+            scrollLineUp();
+            return;
+        } else if (key == "Shift+K") {
+            scrollLineDown();
+            return;
+        } else if (key == "P") {
+            forwardPair();
+            return;
+        } else if (key == "N") {
+            backwardPair();
+            return;
+        } else if (key == "Shift+:") {
+            copyLines();
+            return;
+        } else if ((key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglereadonlymode")/* || key=="Alt+Meta+L"*/)
+                   && m_bReadOnlyPermission == false) {
+            toggleReadOnlyMode();
+            return;
+        } else if (key == "Shift+/" && e->modifiers() == Qt::ControlModifier) {
+            e->ignore();
+        } else if (e->key() == Qt::Key_Control || e->key() == Qt::Key_Shift) {
+            e->ignore();
+        } else if (e->key() == Qt::Key_F11 || e->key() == Qt::Key_F5) {
+            e->ignore();
+            return;
+        } else if (e->modifiers() == Qt::NoModifier || e->modifiers() == Qt::KeypadModifier) {
+            popupNotify(tr("Read-Only mode is on"));
+            return;
         } else {
+            // If press another key
+            // the main window does not receive
+            e->ignore();
+            return;
+        }
+    } else {
 
           //插入键盘可现实字符
           if(modifiers == Qt::NoModifier && (e->key()<=Qt::Key_ydiaeresis && e->key() >= Qt::Key_Space) && !e->text().isEmpty())
@@ -5585,10 +5585,10 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
                 // Text editor handle key self.
                 QPlainTextEdit::keyPressEvent(e);
             }
+
+           return QPlainTextEdit::keyPressEvent(e);
         }
 
-
-    QPlainTextEdit::keyPressEvent(e);
 }
 
 void TextEdit::wheelEvent(QWheelEvent *e)
