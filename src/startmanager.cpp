@@ -271,7 +271,6 @@ void StartManager::openFilesInTab(QStringList files)
             else if (m_windows.size() == 0) {
                 Window *window = createWindow(true);
                 window->showCenterWindow(true);
-
                 QTimer::singleShot(50, [=] {
                     recoverFile(window);
                     window->addTab(file);
@@ -280,7 +279,7 @@ void StartManager::openFilesInTab(QStringList files)
             // Open file tab in first window of window list.
             else {
                 Window *window = m_windows[0];
-                recoverFile(window);
+                //recoverFile(window);
                 window->addTab(file);
                 window->setWindowState(Qt::WindowActive);
                 window->activateWindow();

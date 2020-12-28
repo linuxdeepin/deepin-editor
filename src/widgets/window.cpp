@@ -1464,6 +1464,7 @@ void Window::backupFile()
     QFileInfo fileInfo;
     m_qlistTemFile.clear();
     listBackupInfo = Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->value().toStringList();
+    m_qlistTemFile = wrappers.keys();
 
     for (EditWrapper *wrapper : wrappers) {
         if(wrapper->getFileLoading()) continue;
@@ -1482,7 +1483,7 @@ void Window::backupFile()
             jsonObject.insert("modify",wrapper->isModified());
             document.setObject(jsonObject);
             QByteArray byteArray = document.toJson(QJsonDocument::Compact);
-            m_qlistTemFile.insert(tabInfo.tabIndex,byteArray);
+            m_qlistTemFile.replace(tabInfo.tabIndex,byteArray);
             wrapper->saveFile();
         } else {
             QString localPath = filePath;
@@ -1550,7 +1551,7 @@ void Window::backupFile()
 
             document.setObject(jsonObject);
             QByteArray byteArray = document.toJson(QJsonDocument::Compact);
-            m_qlistTemFile.insert(tabInfo.tabIndex,byteArray);
+            m_qlistTemFile.replace(tabInfo.tabIndex,byteArray);
         }
     }
 
