@@ -63,48 +63,4 @@ TEST_F(test_uncommentselection, hasMultiLineStyle)
 
     assert(1==1);
 }
-//void unCommentSelection(QPlainTextEdit *edit,
-//                    const CommentDefinition &definiton = CommentDefinition());
-TEST_F(test_uncommentselection, unCommentSelection)
-{
-    TextEdit * edit = new TextEdit();
-    KSyntaxHighlighting::Repository m_r;
-    KSyntaxHighlighting::Definition m_Definition=m_r.definitionForFileName("aa.cpp");
-    edit->setSyntaxDefinition(m_Definition);
-    const CommentDefinition &definiton = CommentDefinition();
-    Comment::CommentDefinition numm;
-    Comment::unCommentSelection(edit,definiton);
-
-    assert(1==1);
-}
-//                    const CommentDefinition &definiton = CommentDefinition());
-//void setComment(QPlainTextEdit *edit,
-//                const CommentDefinition &definiton = CommentDefinition(),QString name="");
-TEST_F(test_uncommentselection, setComment)
-{
-    TextEdit * edit = new TextEdit();
-    KSyntaxHighlighting::Repository m_r;
-    KSyntaxHighlighting::Definition m_Definition=m_r.definitionForFileName("aa.cpp");
-    edit->setSyntaxDefinition(m_Definition);
-    const CommentDefinition &definiton = CommentDefinition();
-    Comment::CommentDefinition numm;
-    Comment::setComment(edit,definiton);
-
-    assert(1==1);
-}
-
-//void removeComment(QPlainTextEdit *edit,
-//                   const CommentDefinition &definiton = CommentDefinition(),QString name="");
-TEST_F(test_uncommentselection, removeComment)
-{
-    TextEdit * edit = new TextEdit();
-    KSyntaxHighlighting::Repository m_r;
-    KSyntaxHighlighting::Definition m_Definition=m_r.definitionForFileName("aa.cpp");
-    edit->setSyntaxDefinition(m_Definition);
-    const CommentDefinition &definiton = CommentDefinition();
-    Comment::CommentDefinition numm;
-    Comment::removeComment(edit,definiton);
-
-    assert(1==1);
-}
 

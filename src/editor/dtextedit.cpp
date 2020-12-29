@@ -120,7 +120,7 @@ TextEdit::TextEdit(QWidget *parent)
         this->m_wrapper->OnUpdateHighlighter();
     });
 
-    connect(m_pUndoStack,&QUndoStack::canRedoChanged,this,[this](bool){
+    connect(m_pUndoStack,&QUndoStack::canUndoChanged,this,[this](bool){
         this->m_wrapper->window()->updateModifyStatus(m_sFilePath,true);
         this->m_wrapper->OnUpdateHighlighter();
     });
@@ -168,6 +168,20 @@ TextEdit::TextEdit(QWidget *parent)
 TextEdit::~TextEdit()
 {
     writeHistoryRecord();
+}
+
+void TextEdit::insertTextEx(QTextCursor cursor, QString text)
+{
+//    QUndoCommand * pDeleteStack= new DeleteTextUndoCommand(cursor);
+//    m_pUndoStack->push(pDeleteStack);
+    QUndoCommand * pInsertStack= new InsertTextUndoCommand(cursor,text);
+    m_pUndoStack->push(pInsertStack);
+}
+
+void TextEdit::deleteTextEx(QTextCursor cursor)
+{
+    QUndoCommand * pDeleteStack= new DeleteTextUndoCommand(cursor);
+    m_pUndoStack->push(pDeleteStack);
 }
 
 void TextEdit::initRightClickedMenu()
@@ -3101,12 +3115,13 @@ void TextEdit::toggleComment(bool sister)
 
     if (!def.filePath().isEmpty()) {
         if(sister){
-        Comment::setComment(this, m_commentDefinition,name);
+            setComment();
         }
         else {
-        Comment::removeComment(this, m_commentDefinition,name);
+            removeComment();
+            //unCommentSelection();
         }
-    } else {
+     } else {
         // do not need to prompt the user.
         // popupNotify(tr("File does not support syntax comments"));
     }
@@ -5657,6 +5672,510 @@ void TextEdit::paintEvent(QPaintEvent *e)
                 }
            // }
         }
+    }
+}
+
+static bool isComment(const QString &text, int index, const QString &commentType)
+{
+    int length = commentType.length();
+
+    Q_ASSERT(text.length() - index >= length);
+
+    int i = 0;
+    while (i < length) {
+        if (text.at(index + i) != commentType.at(i))
+            return false;
+        ++i;
+    }
+    return true;
+}
+
+
+void TextEdit::unCommentSelection()
+{
+    if (!m_commentDefinition.isValid())
+        return;
+
+    QTextCursor cursor = textCursor();
+    QTextDocument *doc = cursor.document();
+
+    int pos = cursor.position();
+    int anchor = cursor.anchor();
+    int start = qMin(anchor, pos);
+    int end = qMax(anchor, pos);
+    bool anchorIsStart = (anchor == start);
+
+    QTextBlock startBlock = doc->findBlock(start);
+    QTextBlock endBlock = doc->findBlock(end);
+
+    if (end > start && endBlock.position() == end) {
+        --end;
+        endBlock = endBlock.previous();
+    }
+
+    bool doMultiLineStyleUncomment = false;
+    bool doMultiLineStyleComment = false;
+    bool doSingleLineStyleUncomment = false;
+
+    bool hasSelection = cursor.hasSelection();
+
+    if (hasSelection && m_commentDefinition.hasMultiLineStyle()) {
+
+        QString startText = startBlock.text();
+        int startPos = start - startBlock.position();
+        const int multiLineStartLength = m_commentDefinition.multiLineStart.length();
+        bool hasLeadingCharacters = !startText.left(startPos).trimmed().isEmpty();
+
+        if (startPos >= multiLineStartLength
+            && isComment(startText,
+                         startPos - multiLineStartLength,
+                         m_commentDefinition.multiLineStart)) {
+            startPos -= multiLineStartLength;
+            start -= multiLineStartLength;
+        }
+
+        bool hasSelStart = startPos <= startText.length() - multiLineStartLength
+            && isComment(startText, startPos, m_commentDefinition.multiLineStart);
+
+        QString endText = endBlock.text();
+        int endPos = end - endBlock.position();
+        const int multiLineEndLength = m_commentDefinition.multiLineEnd.length();
+        bool hasTrailingCharacters =
+            !endText.left(endPos).remove(m_commentDefinition.singleLine).trimmed().isEmpty()
+            && !endText.mid(endPos).trimmed().isEmpty();
+
+        if (endPos <= endText.length() - multiLineEndLength
+            && isComment(endText, endPos, m_commentDefinition.multiLineEnd)) {
+            endPos += multiLineEndLength;
+            end += multiLineEndLength;
+        }
+
+        bool hasSelEnd = endPos >= multiLineEndLength
+            && isComment(endText, endPos - multiLineEndLength, m_commentDefinition.multiLineEnd);
+
+        doMultiLineStyleUncomment = hasSelStart && hasSelEnd;
+        doMultiLineStyleComment = !doMultiLineStyleUncomment
+            && (hasLeadingCharacters
+                || hasTrailingCharacters
+                || !m_commentDefinition.hasSingleLineStyle());
+    } else if (!hasSelection && !m_commentDefinition.hasSingleLineStyle()) {
+
+        QString text = startBlock.text().trimmed();
+        doMultiLineStyleUncomment = text.startsWith(m_commentDefinition.multiLineStart)
+            && text.endsWith(m_commentDefinition.multiLineEnd);
+        doMultiLineStyleComment = !doMultiLineStyleUncomment && !text.isEmpty();
+
+        start = startBlock.position();
+        end = endBlock.position() + endBlock.length() - 1;
+
+        if (doMultiLineStyleUncomment) {
+            int offset = 0;
+            text = startBlock.text();
+            const int length = text.length();
+            while (offset < length && text.at(offset).isSpace())
+                ++offset;
+            start += offset;
+        }
+    }
+
+    if (doMultiLineStyleUncomment) {
+        cursor.setPosition(end);
+        cursor.movePosition(QTextCursor::PreviousCharacter,
+                            QTextCursor::KeepAnchor,
+                            m_commentDefinition.multiLineEnd.length());
+        //cursor.removeSelectedText();
+        deleteTextEx(cursor);
+        cursor.setPosition(start);
+        cursor.movePosition(QTextCursor::NextCharacter,
+                            QTextCursor::KeepAnchor,
+                            m_commentDefinition.multiLineStart.length());
+        //cursor.removeSelectedText();
+        deleteTextEx(cursor);
+    } else if (doMultiLineStyleComment) {
+        cursor.setPosition(end);
+        insertTextEx(cursor,m_commentDefinition.multiLineEnd);
+        //cursor.insertText(m_commentDefinition.multiLineEnd);
+        cursor.setPosition(start);
+        insertTextEx(cursor,m_commentDefinition.multiLineStart);
+        //cursor.insertText(m_commentDefinition.multiLineStart);
+    } else {
+        endBlock = endBlock.next();
+        doSingleLineStyleUncomment = true;
+        for (QTextBlock block = startBlock; block != endBlock; block = block.next()) {
+            QString text = block.text().trimmed();
+            if (!text.isEmpty() && !text.startsWith(m_commentDefinition.singleLine)) {
+                doSingleLineStyleUncomment = false;
+                break;
+            }
+        }
+
+        const int singleLineLength = m_commentDefinition.singleLine.length();
+        for (QTextBlock block = startBlock; block != endBlock; block = block.next()) {
+            if (doSingleLineStyleUncomment) {
+                QString text = block.text();
+                int i = 0;
+                while (i <= text.size() - singleLineLength) {
+                    if (isComment(text, i, m_commentDefinition.singleLine)) {
+                        cursor.setPosition(block.position() + i);
+                        cursor.movePosition(QTextCursor::NextCharacter,
+                                            QTextCursor::KeepAnchor,
+                                            singleLineLength);
+                        //cursor.removeSelectedText();
+                        deleteTextEx(cursor);
+                        break;
+                    }
+                    if (!text.at(i).isSpace())
+                        break;
+                    ++i;
+                }
+            } else {
+                const QString text = block.text();
+                foreach (QChar c, text) {
+                    if (!c.isSpace()) {
+                        if (m_commentDefinition.isAfterWhiteSpaces)
+                            cursor.setPosition(block.position() + text.indexOf(c));
+                        else
+                            cursor.setPosition(block.position());
+                        insertTextEx(cursor,m_commentDefinition.singleLine);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    // adjust selection when commenting out
+    if (hasSelection && !doMultiLineStyleUncomment && !doSingleLineStyleUncomment) {
+        cursor = textCursor();
+        if (!doMultiLineStyleComment)
+            start = startBlock.position(); // move the comment into the selection
+        int lastSelPos = anchorIsStart ? cursor.position() : cursor.anchor();
+        if (anchorIsStart) {
+            cursor.setPosition(start);
+            cursor.setPosition(lastSelPos, QTextCursor::KeepAnchor);
+        } else {
+            cursor.setPosition(lastSelPos);
+            cursor.setPosition(start, QTextCursor::KeepAnchor);
+        }
+        setTextCursor(cursor);
+    }
+}
+
+void TextEdit::setComment()
+{
+    //此函数是删除了unCommentSelection()的if-else的uncomment分支得来的
+    if (!m_commentDefinition.isValid())
+        return;
+
+    QTextCursor cursor = textCursor();
+    if(cursor.isNull()) return;
+
+    QTextDocument *doc = cursor.document();
+
+    int pos = cursor.position();
+    int anchor = cursor.anchor();
+    int start = qMin(anchor, pos);
+    int end = qMax(anchor, pos);
+    bool anchorIsStart = (anchor == start);
+
+    QTextBlock startBlock = doc->findBlock(start);
+    QTextBlock endBlock = doc->findBlock(end);
+    if (end > start && endBlock.position() == end) {
+        --end;
+        endBlock = endBlock.previous();
+    }
+    bool doMultiLineStyleUncomment = false;
+    bool doMultiLineStyleComment = false;
+    bool doSingleLineStyleUncomment = false;
+
+    bool hasSelection = cursor.hasSelection();
+
+    if (hasSelection && m_commentDefinition.hasMultiLineStyle()) {
+
+        QString startText = startBlock.text();
+        int startPos = start - startBlock.position();
+        const int multiLineStartLength = m_commentDefinition.multiLineStart.length();
+        bool hasLeadingCharacters = !startText.left(startPos).trimmed().isEmpty();
+
+        if (startPos >= multiLineStartLength
+            && isComment(startText,
+                         startPos - multiLineStartLength,
+                         m_commentDefinition.multiLineStart)) {
+            startPos -= multiLineStartLength;
+            start -= multiLineStartLength;
+        }
+
+        bool hasSelStart = startPos <= startText.length() - multiLineStartLength
+            && isComment(startText, startPos, m_commentDefinition.multiLineStart);
+
+        QString endText = endBlock.text();
+        int endPos = end - endBlock.position();
+        const int multiLineEndLength = m_commentDefinition.multiLineEnd.length();
+        bool hasTrailingCharacters =
+            !endText.left(endPos).remove(m_commentDefinition.singleLine).trimmed().isEmpty()
+            && !endText.mid(endPos).trimmed().isEmpty();
+
+        if (endPos <= endText.length() - multiLineEndLength
+            && isComment(endText, endPos, m_commentDefinition.multiLineEnd)) {
+            endPos += multiLineEndLength;
+            end += multiLineEndLength;
+        }
+
+        bool hasSelEnd = endPos >= multiLineEndLength
+            && isComment(endText, endPos - multiLineEndLength, m_commentDefinition.multiLineEnd);
+
+        doMultiLineStyleUncomment = hasSelStart && hasSelEnd;
+        doMultiLineStyleComment = !doMultiLineStyleUncomment
+            && (hasLeadingCharacters
+                || hasTrailingCharacters
+                || !m_commentDefinition.hasSingleLineStyle());
+    } else if (!hasSelection && !m_commentDefinition.hasSingleLineStyle()) {
+
+        QString text = startBlock.text().trimmed();
+        doMultiLineStyleUncomment = text.startsWith(m_commentDefinition.multiLineStart)
+            && text.endsWith(m_commentDefinition.multiLineEnd);
+        qDebug()<<m_commentDefinition.multiLineStart;
+        doMultiLineStyleComment = !doMultiLineStyleUncomment && !text.isEmpty();
+
+        qDebug()<<"setComment:" <<!text.isEmpty()<<text<<end<<start;
+
+        start = startBlock.position();
+        end = endBlock.position() + endBlock.length() - 1;
+
+        if (doMultiLineStyleUncomment) {
+            int offset = 0;
+            text = startBlock.text();
+            const int length = text.length();
+            while (offset < length && text.at(offset).isSpace())
+                ++offset;
+            start += offset;
+        }
+    }
+
+     if (doMultiLineStyleComment) {
+             cursor.setPosition(end);
+             insertTextEx(cursor,m_commentDefinition.multiLineEnd);
+             cursor.setPosition(start);
+             insertTextEx(cursor,m_commentDefinition.multiLineStart);
+    } else {
+        endBlock = endBlock.next();
+        doSingleLineStyleUncomment = true;
+        for (QTextBlock block = startBlock; block != endBlock; block = block.next()) {
+            QString text = block.text().trimmed();
+            if (!text.isEmpty() && !text.startsWith(m_commentDefinition.singleLine)) {
+                doSingleLineStyleUncomment = false;
+                break;
+            }
+        }
+        //qDebug()<<startBlock.text()<<startBlock.position() <<endBlock.text()<<endBlock.position() ;
+        for (QTextBlock block = startBlock; block != endBlock; block = block.next()) {
+            const QString text = block.text();
+//            foreach (QChar c, text) {
+//                if (!c.isSpace()) {
+//                    if (m_commentDefinition.isAfterWhiteSpaces)
+//                        cursor.setPosition(block.position() + text.indexOf(c));
+//                    else
+//                        cursor.setPosition(block.position());
+
+//                }
+//            }
+            cursor.setPosition(block.position());
+            insertTextEx(cursor,m_commentDefinition.singleLine);
+
+            if(startBlock.lineCount() == endBlock.lineCount()) break;
+        }
+    }
+
+
+    // adjust selection when commenting out
+    if (hasSelection && !doMultiLineStyleUncomment && !doSingleLineStyleUncomment) {
+        cursor = textCursor();
+        if (!doMultiLineStyleComment)
+            start = startBlock.position(); // move the comment into the selection
+        int lastSelPos = anchorIsStart ? cursor.position() : cursor.anchor();
+        if (anchorIsStart) {
+            cursor.setPosition(start);
+            cursor.setPosition(lastSelPos, QTextCursor::KeepAnchor);
+        } else {
+            cursor.setPosition(lastSelPos);
+            cursor.setPosition(start, QTextCursor::KeepAnchor);
+        }
+        setTextCursor(cursor);
+    }
+}
+
+void TextEdit::removeComment()
+{
+    int tmp = 0;//备注偏移量，判断备注标记后面有没有空格
+    //此函数是删除了unCommentSelection()的if-else的comment分支得来的
+    if (!m_commentDefinition.isValid())
+        return;
+
+    qDebug()<<m_commentDefinition.multiLineStart<<m_commentDefinition.multiLineEnd<<m_commentDefinition.singleLine;
+    QString tep = m_commentDefinition.singleLine;
+    QString abb = tep.remove(QRegExp("\\s"));
+
+
+    QTextCursor cursor = textCursor();
+    QTextDocument *doc = cursor.document();
+
+    int pos = cursor.position();
+    int anchor = cursor.anchor();
+    int start = qMin(anchor, pos);
+    int end = qMax(anchor, pos);
+    bool anchorIsStart = (anchor == start);
+
+    QTextBlock startBlock = doc->findBlock(start);
+    QTextBlock endBlock = doc->findBlock(end);
+
+    if (end > start && endBlock.position() == end) {
+        --end;
+        endBlock = endBlock.previous();
+    }
+
+    bool doMultiLineStyleUncomment = false;
+    bool doMultiLineStyleComment = false;
+    bool doSingleLineStyleUncomment = false;
+
+    bool hasSelection = cursor.hasSelection();
+
+    if (hasSelection && m_commentDefinition.hasMultiLineStyle()) {
+        QString startText = startBlock.text();
+        int startPos = start - startBlock.position();
+        const int multiLineStartLength = m_commentDefinition.multiLineStart.length();
+        bool hasLeadingCharacters = !startText.left(startPos).trimmed().isEmpty();
+
+        if (startPos >= multiLineStartLength
+            && isComment(startText,
+                         startPos - multiLineStartLength,
+                         m_commentDefinition.multiLineStart)) {
+            startPos -= multiLineStartLength;
+            start -= multiLineStartLength;
+        }
+
+        bool hasSelStart = startPos <= startText.length() - multiLineStartLength
+            && isComment(startText, startPos, m_commentDefinition.multiLineStart);
+
+        QString endText = endBlock.text();
+        int endPos = end - endBlock.position();
+        const int multiLineEndLength = m_commentDefinition.multiLineEnd.length();
+        bool hasTrailingCharacters =
+            !endText.left(endPos).remove(m_commentDefinition.singleLine).trimmed().isEmpty()
+            && !endText.mid(endPos).trimmed().isEmpty();
+
+        if (endPos <= endText.length() - multiLineEndLength
+            && isComment(endText, endPos, m_commentDefinition.multiLineEnd)) {
+            endPos += multiLineEndLength;
+            end += multiLineEndLength;
+        }
+
+        bool hasSelEnd = endPos >= multiLineEndLength
+            && isComment(endText, endPos - multiLineEndLength, m_commentDefinition.multiLineEnd);
+
+        doMultiLineStyleUncomment = hasSelStart && hasSelEnd;
+        doMultiLineStyleComment = !doMultiLineStyleUncomment
+            && (hasLeadingCharacters
+                || hasTrailingCharacters
+                || !m_commentDefinition.hasSingleLineStyle());
+    } else if (!hasSelection && !m_commentDefinition.hasSingleLineStyle()) {
+
+        QString text = startBlock.text().trimmed();
+        doMultiLineStyleUncomment = text.startsWith(m_commentDefinition.multiLineStart)
+            && text.endsWith(m_commentDefinition.multiLineEnd);
+        doMultiLineStyleComment = !doMultiLineStyleUncomment && !text.isEmpty();
+        start = startBlock.position();
+        end = endBlock.position() + endBlock.length() - 1;
+
+        if (doMultiLineStyleUncomment) {
+            int offset = 0;
+            text = startBlock.text();
+            const int length = text.length();
+            while (offset < length && text.at(offset).isSpace())
+                ++offset;
+            start += offset;
+        }
+    }
+
+
+    if (doMultiLineStyleUncomment) {
+        cursor.setPosition(end);
+        cursor.movePosition(QTextCursor::PreviousCharacter,
+                            QTextCursor::KeepAnchor,
+                            m_commentDefinition.multiLineEnd.length());
+        //cursor.removeSelectedText();
+        deleteTextEx(cursor);
+        cursor.setPosition(start);
+        cursor.movePosition(QTextCursor::NextCharacter,
+                            QTextCursor::KeepAnchor,
+                            m_commentDefinition.multiLineStart.length());
+        //cursor.removeSelectedText();
+        deleteTextEx(cursor);
+    }
+     else {
+        endBlock = endBlock.next();
+        doSingleLineStyleUncomment = true;
+        for (QTextBlock block = startBlock; block != endBlock; block = block.next()) {
+            QString text = block.text().trimmed();
+            if (!text.isEmpty() && (!text.startsWith(m_commentDefinition.singleLine))) {
+                if(!text.startsWith(abb)){
+                doSingleLineStyleUncomment = false;
+                break;
+                }
+            }
+        }
+
+       int singleLineLength = m_commentDefinition.singleLine.length();
+        QString text = startBlock.text().trimmed();
+
+        if(text.startsWith(m_commentDefinition.singleLine)){
+                tmp=0;
+        }
+        else if(text.startsWith(abb)){
+            tmp=1;
+        }
+            QString check="";
+        for (QTextBlock block = startBlock; block != endBlock; block = block.next()) {
+            if (doSingleLineStyleUncomment) {
+                QString text = block.text();
+                int i = 0;
+                if(tmp==1)
+                check = abb;
+                else {
+                    check=m_commentDefinition.singleLine;
+                }
+                while (i <= text.size() - singleLineLength) {
+                    if (isComment(text, i, check)) {
+                        cursor.setPosition(block.position() + i);
+                        cursor.movePosition(QTextCursor::NextCharacter,
+                                            QTextCursor::KeepAnchor,
+                                            singleLineLength-tmp);
+                        //cursor.removeSelectedText();
+                        deleteTextEx(cursor);
+                        break;
+                    }
+                    if (!text.at(i).isSpace())
+                        break;
+                    ++i;
+                }
+            }
+        }
+    }
+
+
+    // adjust selection when commenting out
+    if (hasSelection && !doMultiLineStyleUncomment && !doSingleLineStyleUncomment) {
+        cursor = textCursor();
+        if (!doMultiLineStyleComment)
+            start = startBlock.position(); // move the comment into the selection
+        int lastSelPos = anchorIsStart ? cursor.position() : cursor.anchor();
+        if (anchorIsStart) {
+            cursor.setPosition(start);
+            cursor.setPosition(lastSelPos, QTextCursor::KeepAnchor);
+        } else {
+            cursor.setPosition(lastSelPos);
+            cursor.setPosition(start, QTextCursor::KeepAnchor);
+        }
+        setTextCursor(cursor);
     }
 }
 

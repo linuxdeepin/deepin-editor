@@ -22,17 +22,13 @@
 
 #ifndef TEXTEDIT_H
 #define TEXTEDIT_H
-
-
-
-#include "uncommentselection.h"
 #include "linenumberarea.h"
 #include "bookmarkwidget.h"
 #include "FlashTween.h"
 #include "codeflodarea.h"
 #include "../common/settings.h"
 #include "../widgets/ColorSelectWdg.h"
-
+#include "uncommentselection.h"
 //添加自定义撤销重做栈
 #include "inserttextundocommand.h"
 #include "deletetextundocommand.h"
@@ -75,6 +71,9 @@ public:
     TextEdit(QWidget *parent = nullptr);
     ~TextEdit() override;
 
+    //在光标处添加删除内容
+    void insertTextEx(QTextCursor,QString);
+    void deleteTextEx(QTextCursor);
     //初始化右键菜单
     void initRightClickedMenu();
     //弹窗右键菜单
@@ -430,6 +429,10 @@ protected:
     void contextMenuEvent(QContextMenuEvent *event) override;
     void paintEvent(QPaintEvent *e) override;
 private:
+    void unCommentSelection();
+    void setComment();
+    void removeComment();
+
     //去除"*{*" "*}*" "*{*}*"跳过当做普通文本处理不折叠　梁卫东２０２０－０９－０１　１７：１６：４１
     bool blockContainStrBrackets(int line);
     bool setCursorKeywordSeletoin(int position, bool findNext);

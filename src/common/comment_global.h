@@ -32,5 +32,5 @@
 #elif  defined(QTCREATOR_UTILS_STATIC_LIB) // Abuse single files for manual tests
 #  define COMMENT_EXPORT
 #else
-#  define COMMENT_EXPORT Q_DECL_IMPORT
+#define COMMENT_EXPORT Q_DECL_IMPORT
 #endif
