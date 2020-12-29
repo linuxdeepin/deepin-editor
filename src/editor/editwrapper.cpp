@@ -738,6 +738,7 @@ void EditWrapper::OnUpdateHighlighter()
          endBlock = m_pTextEdit->document()->lastBlock();
       }
 
+    if(!beginBlock.isValid() || !endBlock.isValid()) return;
 
      for (QTextBlock var = beginBlock; var != endBlock; var= var.next()) {
           m_pSyntaxHighlighter->setEnableHighlight(true);
