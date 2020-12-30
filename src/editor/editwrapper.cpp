@@ -723,7 +723,7 @@ void EditWrapper::UpdateBottomBarWordCnt(int cnt)
 
 void EditWrapper::OnUpdateHighlighter()
 {
-    if(m_pSyntaxHighlighter){
+    if(m_pSyntaxHighlighter  && !m_bQuit){
       QScrollBar* pScrollBar = m_pTextEdit->verticalScrollBar();
       //QTextBlock textBlock = m_pTextEdit->document()->findBlockByNumber(value);
 

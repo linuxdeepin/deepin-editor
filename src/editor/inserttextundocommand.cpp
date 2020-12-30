@@ -5,7 +5,7 @@ InsertTextUndoCommand::InsertTextUndoCommand(QTextCursor textcursor, QString tex
     m_textCursor(textcursor),
     m_sInsertText(text)
 {
-    m_textCursor.clearSelection();
+     if(m_textCursor.hasSelection()) m_textCursor.clearSelection();
 }
 
 InsertTextUndoCommand::InsertTextUndoCommand(QList<QTextEdit::ExtraSelection> &selections, QString text):
