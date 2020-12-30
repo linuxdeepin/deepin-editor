@@ -16,13 +16,21 @@
 */
 #ifndef TEST_SETTING_H
 #define TEST_SETTING_H
-#include "gtest/gtest.h"
-#include <QObject>
 
-class test_setting : public QObject, public::testing::Test
+#include "gtest/gtest.h"
+#include <QTest>
+#include <QObject>
+class Settings;
+class test_setting : public QObject
+    , public ::testing::Test
 {
+    Q_OBJECT
+
 public:
     test_setting();
+    virtual void SetUp() override;
+    virtual void TearDown() override;
+    Settings *m_setting;
 };
 
 #endif // TEST_SETTING_H

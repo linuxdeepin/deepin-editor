@@ -19,10 +19,15 @@
 #include "gtest/gtest.h"
 #include <QObject>
 
-class test_fileloadthread : public QObject, public::testing::Test
+class FileLoadThread;
+class test_fileloadthread : public QObject
+    , public ::testing::Test
 {
 public:
     test_fileloadthread();
+    virtual void SetUp() override;
+    virtual void TearDown() override;
+    FileLoadThread *fthread;
 };
 
 #endif // TEST_FILELOADTHREAD_H

@@ -23,7 +23,7 @@ mkdir -p coverage
 lcov --directory ../ --capture --output-file ./coverage/coverage.info
 
 #以下几行是过滤一些我们不感兴趣的文件的覆盖率信息，各模块根据自模块实际情况填写过滤信息
-lcov --remove ./coverage/coverage.info '*/${project_name}_test_autogen/*' '*/${project_name}_autogen/*' '*/usr/include/*' '*/dbuslogin1manager*' '*obj-x86_64-linux-gnu/*' '*/test/*' -o ./coverage/coverage.info
+lcov --remove ./coverage/coverage.info '*/${project_name}_test_autogen/*' '*/${project_name}_autogen/*' '*/usr/include/*' '*/dbuslogin1manager*' '*obj-x86_64-linux-gnu/*' '*.h*' '*/test/*' -o ./coverage/coverage.info
 
 genhtml -o ../report ./coverage/coverage.info
 

@@ -19,14 +19,23 @@
 
 test_fileloadthread::test_fileloadthread()
 {
+}
 
+void test_fileloadthread::SetUp()
+{
+    fthread = new FileLoadThread("aa");
+}
+
+void test_fileloadthread::TearDown()
+{
+    delete fthread;
 }
 
 //FileLoadThread(const QString &filepath, QObject *QObject = nullptr);
 TEST_F(test_fileloadthread, FileLoadThread)
 {
     FileLoadThread thread("aa");
-    assert(1==1);
+    assert(1 == 1);
 }
 
 //void run();
@@ -34,22 +43,22 @@ TEST_F(test_fileloadthread, run)
 {
     FileLoadThread *thread = new FileLoadThread("aa");
     thread->run();
-    assert(1==1);
+    assert(1 == 1);
 }
 
 //void setEncodeInfo(QStringList pathList,QStringList codeList);
 TEST_F(test_fileloadthread, setEncodeInfo)
 {
-    QStringList pathList,codeList;
+    QStringList pathList, codeList;
     FileLoadThread *thread = new FileLoadThread("aa");
     //thread->setEncodeInfo(pathList,codeList);
-    assert(1==1);
+    assert(1 == 1);
 }
 
 //QString getCodec();
 TEST_F(test_fileloadthread, getCodec)
 {
     FileLoadThread *thread = new FileLoadThread("aa");
-  //  thread->getCodec();
-    assert(1==1);
+    //  thread->getCodec();
+    assert(1 == 1);
 }
