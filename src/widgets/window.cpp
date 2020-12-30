@@ -77,13 +77,11 @@ Window::Window(DMainWindow *parent)
     m_rootSaveDBus = new DBusDaemon::dbus("com.deepin.editor.daemon", "/", QDBusConnection::systemBus(), this);
     m_settings = Settings::instance();
 
-
     // Init.
     setAcceptDrops(true);
     loadTheme(m_themePath);
 
     // Init settings.
-
     connect(m_settings, &Settings::adjustFont, this,[this](QString fontName){
        for (EditWrapper *wrapper : m_wrappers.values()) {
            wrapper->textEditor()->setFontFamily(fontName);
@@ -187,7 +185,7 @@ Window::Window(DMainWindow *parent)
     }
 
     // window minimum size.
-    setMinimumSize(500,300);
+    setMinimumSize(1000, 600);
     // resize window size.
     int window_width =Settings::instance()->settings->option("advance.window.window_width")->value().toInt();
     int window_height =Settings::instance()->settings->option("advance.window.window_height")->value().toInt();
