@@ -118,46 +118,20 @@ void GenerateSettingTranslate()
 
     //编码翻译
     auto Unicode = QObject::tr("Unicode");
+    auto WesternEuropean = QObject::tr("WesternEuropean");
+    auto CentralEuropean = QObject::tr("CentralEuropean");
+    auto Baltic = QObject::tr("Baltic");
+    auto Cyrillic = QObject::tr("Cyrillic");
     auto Arabic = QObject::tr("Arabic");
-    auto Belarussian = QObject::tr("Belarussian");
-    auto Bulgarian = QObject::tr("Bulgarian");
-    auto Chinese = QObject::tr("Chinese");
-    auto Czech = QObject::tr("Czech");
-    auto Estonian = QObject::tr("Estonian");
-    auto Croatian = QObject::tr("Croatian");
-    auto Danish = QObject::tr("Danish");
-    auto Finnish = QObject::tr("Finnish");
-    auto French = QObject::tr("French");
-    auto German = QObject::tr("German");
     auto Greek = QObject::tr("Greek");
     auto Hebrew = QObject::tr("Hebrew");
-    auto Hungarian = QObject::tr("Hungarian");
+    auto Turkish = QObject::tr("Turkish");
+    auto Thai = QObject::tr("Thai");
+    auto Celtic = QObject::tr("Celtic");
+    auto SouthEasternEuropean = QObject::tr("SouthEasternEuropean");
+    auto Simplified = QObject::tr("ChineseSimplified");
+    auto Traditional = QObject::tr("ChineseTraditional");
     auto Japanese = QObject::tr("Japanese");
     auto Korean = QObject::tr("Korean");
-    auto IrishGaelic = QObject::tr("Irish Gaelic");
-    auto Italian = QObject::tr("Italian");
-    auto Lithuanian = QObject::tr("Lithuanian");
-    auto Latvian = QObject::tr("Latvian");
-    auto Polish = QObject::tr("Polish");
-    auto Portuguese = QObject::tr("Portuguese");
-    auto Russian = QObject::tr("Russian");
-    auto Romanian = QObject::tr("Romanian");
-    auto Slovak = QObject::tr("Slovak");
-    auto Slovenian = QObject::tr("Slovenian");
-    auto Spanish = QObject::tr("Spanish");
-    auto Swedish = QObject::tr("Swedish");
-    auto Thai = QObject::tr("Thai");
-    auto Turkish = QObject::tr("Turkish");
-    auto Ukrainian = QObject::tr("Ukrainian");
     auto Vietnamese = QObject::tr("Vietnamese");
-
-    //编码翻译
-//    auto Unicode = QObject::tr("Unicode");
-//    auto Chinese = QObject::tr("Chinese");
-    auto European = QObject::tr("European");
-//    auto Japanese = QObject::tr("Japanese");
-//    auto Korean = QObject::tr("Korean");
-    auto Semitic = QObject::tr("Semitic");//希伯来语
- //   auto Thai = QObject::tr("Thai");
- //   auto Vietnamese = QObject::tr("Vietnamese");
 }

@@ -2,12 +2,24 @@
 
 test_textedit::test_textedit()
 {
-
+    QString text = QString("#include \"window.h\"\n"
+                           "#include \"urlinfo.h\"\n"
+                           "int main(int argc, char *argv[])\n"
+                           "{\n"
+                           "using namespace Dtk::Core;\n"
+                           "PerformanceMonitor::initializeAppStart();\n"
+                           "return 0;\n"
+                           "}");
+    QFile f("1.cpp");
+    if(f.open(QFile::WriteOnly)){
+        f.write(text.toUtf8());
+        f.close();
+    }
 }
 
 void test_textedit::forstub(QPoint q)
 {
-  qDebug()<<q;
+
 }
 
 TEST_F(test_textedit, setWrapper)
@@ -1455,21 +1467,7 @@ TEST_F(test_textedit, appendExtraSelection)
 
     assert(1==1);
 }
-// void keyPressEvent(QKeyEvent *e) override;
- TEST_F(test_textedit, keyPressEvent)
-{
-    QList<QTextEdit::ExtraSelection> listSelection;
-    QTextEdit::ExtraSelection selectio;
-    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
-    EditWrapper * ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
-    QKeyEvent *e=new QKeyEvent(QKeyEvent::Type::Enter,1,Qt::KeyboardModifier::NoModifier);
-    startManager->keyPressEvent(e);
 
-    assert(1==1);
-}
 // void wheelEvent(QWheelEvent *e) override;
  TEST_F(test_textedit, wheelEvent)
 {
@@ -1727,6 +1725,53 @@ TEST_F(test_textedit, setBookmarkFlagVisable)
     startManager->setBookmarkFlagVisable(true,false);
     assert(1==1);
 }
+/*
+    void unCommentSelection();
+    void setComment();
+    void removeComment();
+*/
+TEST_F(test_textedit, unCommentSelection)
+{
+    EditWrapper* editWrapper = new EditWrapper;
+    editWrapper->openFile("1.cpp","1.cpp");
+    QTextCursor cursor =editWrapper->m_pTextEdit->textCursor();
+    cursor.setPosition(0,QTextCursor::MoveAnchor);
+    editWrapper->m_pTextEdit->setTextCursor(cursor);
+    editWrapper->m_pTextEdit->unCommentSelection();
+    assert(1==1);
+}
 
+TEST_F(test_textedit, setComment)
+{
+    EditWrapper* editWrapper = new EditWrapper;
+    editWrapper->openFile("1.cpp","1.cpp");
+    QTextCursor cursor =editWrapper->m_pTextEdit->textCursor();
+    cursor.setPosition(0,QTextCursor::MoveAnchor);
+    editWrapper->m_pTextEdit->setTextCursor(cursor);
+    editWrapper->m_pTextEdit->setComment();
+    assert(1==1);
+}
 
+TEST_F(test_textedit, removeComment)
+{
+    EditWrapper* editWrapper = new EditWrapper;
+    editWrapper->openFile("1.cpp","1.cpp");
+    QTextCursor cursor =editWrapper->m_pTextEdit->textCursor();
+    cursor.setPosition(0,QTextCursor::MoveAnchor);
+    editWrapper->m_pTextEdit->setTextCursor(cursor);
+    editWrapper->m_pTextEdit->removeComment();
+    assert(1==1);
+}
 
+TEST_F(test_textedit, keyPressEvent)
+{
+    Window* window= new Window;
+    EditWrapper* editWrapper = window->createEditor();
+    editWrapper->openFile("1.cpp","1.cpp");
+    QTextCursor cursor =editWrapper->m_pTextEdit->textCursor();
+    cursor.setPosition(0,QTextCursor::MoveAnchor);
+    editWrapper->m_pTextEdit->setTextCursor(cursor);
+    QKeyEvent keyEvent(QEvent::KeyPress,Qt::Key_Insert,Qt::NoModifier);
+    editWrapper->m_pTextEdit->keyPressEvent(&keyEvent);
+    assert(1==1);
+}

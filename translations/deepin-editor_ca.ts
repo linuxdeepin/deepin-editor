@@ -22,8 +22,8 @@
 <context>
     <name>DDropdownMenu</name>
     <message>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="272"/>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="322"/>
+        <location filename="../src/widgets/ddropdownmenu.cpp" line="271"/>
+        <location filename="../src/widgets/ddropdownmenu.cpp" line="321"/>
         <source>None</source>
         <translation>Cap</translation>
     </message>
@@ -604,176 +604,86 @@
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="121"/>
+        <source>WesternEuropean</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="122"/>
+        <source>CentralEuropean</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="123"/>
+        <source>Baltic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="124"/>
+        <source>Cyrillic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="125"/>
         <source>Arabic</source>
         <translation>Àrab</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="122"/>
-        <source>Belarussian</source>
-        <translation>Bielorús</translation>
-    </message>
-    <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="123"/>
-        <source>Bulgarian</source>
-        <translation>Búlgar</translation>
-    </message>
-    <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="124"/>
-        <source>Chinese</source>
-        <translation>Xinès</translation>
-    </message>
-    <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="125"/>
-        <source>Czech</source>
-        <translation>Txec</translation>
-    </message>
-    <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="126"/>
-        <source>Estonian</source>
-        <translation>Estonià</translation>
-    </message>
-    <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="127"/>
-        <source>Croatian</source>
-        <translation>Croat</translation>
-    </message>
-    <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="128"/>
-        <source>Danish</source>
-        <translation>Danès</translation>
-    </message>
-    <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="129"/>
-        <source>Finnish</source>
-        <translation>Finès</translation>
-    </message>
-    <message>
         <location filename="../src/controls/settingsdialog.cpp" line="130"/>
-        <source>French</source>
-        <translation>Francès</translation>
+        <source>Celtic</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="131"/>
-        <source>German</source>
-        <translation>Alemany</translation>
+        <source>SouthEasternEuropean</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="132"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="126"/>
         <source>Greek</source>
         <translation>Grec</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="133"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="127"/>
         <source>Hebrew</source>
         <translation>Hebreu</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="134"/>
-        <source>Hungarian</source>
-        <translation>Hongarès</translation>
+        <location filename="../src/controls/settingsdialog.cpp" line="132"/>
+        <source>ChineseSimplified</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="135"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="133"/>
+        <source>ChineseTraditional</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="134"/>
         <source>Japanese</source>
         <translation>Japonès</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="136"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="135"/>
         <source>Korean</source>
         <translation>Coreà</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="137"/>
-        <source>Irish Gaelic</source>
-        <translation>Gaèlic irlandès</translation>
-    </message>
-    <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="138"/>
-        <source>Italian</source>
-        <translation>Italià</translation>
-    </message>
-    <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="139"/>
-        <source>Lithuanian</source>
-        <translation>Lituà</translation>
-    </message>
-    <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="140"/>
-        <source>Latvian</source>
-        <translation>Letó</translation>
-    </message>
-    <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="141"/>
-        <source>Polish</source>
-        <translation>Polonès</translation>
-    </message>
-    <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="142"/>
-        <source>Portuguese</source>
-        <translation>Portuguès</translation>
-    </message>
-    <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="143"/>
-        <source>Russian</source>
-        <translation>Rus</translation>
-    </message>
-    <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="144"/>
-        <source>Romanian</source>
-        <translation>Romanès</translation>
-    </message>
-    <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="145"/>
-        <source>Slovak</source>
-        <translation>Eslovac</translation>
-    </message>
-    <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="146"/>
-        <source>Slovenian</source>
-        <translation>Eslovè</translation>
-    </message>
-    <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="147"/>
-        <source>Spanish</source>
-        <translation>Espnayol</translation>
-    </message>
-    <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="148"/>
-        <source>Swedish</source>
-        <translation>Suec</translation>
-    </message>
-    <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="149"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="129"/>
         <source>Thai</source>
         <translation>Tailandès</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="150"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="128"/>
         <source>Turkish</source>
         <translation>Turc</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="151"/>
-        <source>Ukrainian</source>
-        <translation>Ucraïnès</translation>
-    </message>
-    <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="152"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="136"/>
         <source>Vietnamese</source>
         <translation>Vietnamita</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="157"/>
-        <source>European</source>
-        <translation>Europeu</translation>
-    </message>
-    <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="160"/>
-        <source>Semitic</source>
-        <translation>Semític</translation>
-    </message>
-    <message>
-        <location filename="../src/startmanager.cpp" line="484"/>
+        <location filename="../src/startmanager.cpp" line="508"/>
         <source>File not saved</source>
         <translation>Fitxer no desat</translation>
     </message>
@@ -889,7 +799,7 @@
 <context>
     <name>StartManager</name>
     <message>
-        <location filename="../src/startmanager.cpp" line="165"/>
+        <location filename="../src/startmanager.cpp" line="174"/>
         <source>Untitled %1</source>
         <translation>Sense títol: %1</translation>
     </message>
@@ -930,211 +840,211 @@
 <context>
     <name>TextEdit</name>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="177"/>
+        <location filename="../src/editor/dtextedit.cpp" line="191"/>
         <source>Undo</source>
         <translation>Desfés</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="178"/>
+        <location filename="../src/editor/dtextedit.cpp" line="192"/>
         <source>Redo</source>
         <translation>Refés</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="179"/>
+        <location filename="../src/editor/dtextedit.cpp" line="193"/>
         <source>Cut</source>
         <translation>Retalla</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="180"/>
+        <location filename="../src/editor/dtextedit.cpp" line="194"/>
         <source>Copy</source>
         <translation>Copia</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="181"/>
+        <location filename="../src/editor/dtextedit.cpp" line="195"/>
         <source>Paste</source>
         <translation>Enganxa</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="182"/>
+        <location filename="../src/editor/dtextedit.cpp" line="196"/>
         <source>Delete</source>
         <translation>Suprimeix</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="183"/>
+        <location filename="../src/editor/dtextedit.cpp" line="197"/>
         <source>Select All</source>
         <translation>Selecciona-ho tot</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="184"/>
+        <location filename="../src/editor/dtextedit.cpp" line="198"/>
         <location filename="../src/widgets/window.cpp" line="345"/>
         <source>Find</source>
         <translation>Troba</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="185"/>
+        <location filename="../src/editor/dtextedit.cpp" line="199"/>
         <location filename="../src/widgets/window.cpp" line="346"/>
         <source>Replace</source>
         <translation>Reemplaça</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="186"/>
+        <location filename="../src/editor/dtextedit.cpp" line="200"/>
         <source>Go to Line</source>
         <translation>Ves a la línia</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="187"/>
+        <location filename="../src/editor/dtextedit.cpp" line="201"/>
         <source>Turn on Read-Only mode</source>
         <translation>Activa el mode només de lectura</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="188"/>
+        <location filename="../src/editor/dtextedit.cpp" line="202"/>
         <source>Turn off Read-Only mode</source>
         <translation>Desactiva el mode només de lectura</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="189"/>
+        <location filename="../src/editor/dtextedit.cpp" line="203"/>
         <source>Fullscreen</source>
         <translation>Pantalla completa</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="190"/>
+        <location filename="../src/editor/dtextedit.cpp" line="204"/>
         <source>Exit fullscreen</source>
         <translation>Surt de la pantalla completa</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="191"/>
+        <location filename="../src/editor/dtextedit.cpp" line="205"/>
         <source>Display in file manager</source>
         <translation>Mostra-ho al gestor de fitxers</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="192"/>
-        <location filename="../src/editor/dtextedit.cpp" line="251"/>
+        <location filename="../src/editor/dtextedit.cpp" line="206"/>
+        <location filename="../src/editor/dtextedit.cpp" line="265"/>
         <source>Add Comment</source>
         <translation>Afegeix-hi un comentari</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="193"/>
+        <location filename="../src/editor/dtextedit.cpp" line="207"/>
         <source>Text to Speech</source>
         <translation>Text a veu</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="194"/>
+        <location filename="../src/editor/dtextedit.cpp" line="208"/>
         <source>Stop reading</source>
         <translation>Atura la lectura</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="195"/>
+        <location filename="../src/editor/dtextedit.cpp" line="209"/>
         <source>Speech to Text</source>
         <translation>Veu a text</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="196"/>
+        <location filename="../src/editor/dtextedit.cpp" line="210"/>
         <source>Translate</source>
         <translation>Tradueix</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="197"/>
-        <location filename="../src/editor/dtextedit.cpp" line="250"/>
+        <location filename="../src/editor/dtextedit.cpp" line="211"/>
+        <location filename="../src/editor/dtextedit.cpp" line="264"/>
         <source>Column Mode</source>
         <translation>Mode de columna</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="198"/>
+        <location filename="../src/editor/dtextedit.cpp" line="212"/>
         <source>Add bookmark</source>
         <translation>Afegeix-hi un marcador</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="199"/>
+        <location filename="../src/editor/dtextedit.cpp" line="213"/>
         <source>Remove Bookmark</source>
         <translation>Elimina el marcador</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="200"/>
+        <location filename="../src/editor/dtextedit.cpp" line="214"/>
         <source>Previous bookmark</source>
         <translation>Marcador anterior</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="201"/>
+        <location filename="../src/editor/dtextedit.cpp" line="215"/>
         <source>Next bookmark</source>
         <translation>Marcador següent</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="202"/>
+        <location filename="../src/editor/dtextedit.cpp" line="216"/>
         <source>Remove All Bookmarks</source>
         <translation>Elimina tots els marcadors</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="203"/>
+        <location filename="../src/editor/dtextedit.cpp" line="217"/>
         <source>Fold All</source>
         <translation>Plega-ho tot</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="204"/>
+        <location filename="../src/editor/dtextedit.cpp" line="218"/>
         <source>Fold Current Level</source>
         <translation>Plega el nivell actual</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="205"/>
+        <location filename="../src/editor/dtextedit.cpp" line="219"/>
         <source>Unfold All</source>
         <translation>Desplega-ho tot</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="206"/>
+        <location filename="../src/editor/dtextedit.cpp" line="220"/>
         <source>Unfold Current Level</source>
         <translation>Desplega el nivell actual</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="211"/>
+        <location filename="../src/editor/dtextedit.cpp" line="225"/>
         <source>Color Mark</source>
         <translation>Marca de color</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="212"/>
+        <location filename="../src/editor/dtextedit.cpp" line="226"/>
         <source>Clear All Marks</source>
         <translation>Neteja totes les marques</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="213"/>
+        <location filename="../src/editor/dtextedit.cpp" line="227"/>
         <source>Clear Last Mark</source>
         <translation>Neteja la darrera marca</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="227"/>
+        <location filename="../src/editor/dtextedit.cpp" line="241"/>
         <source>Mark</source>
         <translation>Marca</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="244"/>
+        <location filename="../src/editor/dtextedit.cpp" line="258"/>
         <source>Mark All</source>
         <translation>Marca-ho tot</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="252"/>
+        <location filename="../src/editor/dtextedit.cpp" line="266"/>
         <source>Remove Comment</source>
         <translation>Elimina el comentari</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="387"/>
+        <location filename="../src/editor/dtextedit.cpp" line="410"/>
         <source>Press ALT and click lines to edit in column mode</source>
         <translation>Premeu ALT i feu clic a les línies per editar-lo en mode columna</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="455"/>
+        <location filename="../src/editor/dtextedit.cpp" line="478"/>
         <source>Change Case</source>
         <translation>Canvia&apos;n la caixa</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="456"/>
+        <location filename="../src/editor/dtextedit.cpp" line="479"/>
         <source>Upper Case</source>
         <translation>Majúscules</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="457"/>
+        <location filename="../src/editor/dtextedit.cpp" line="480"/>
         <source>Lower Case</source>
         <translation>Minúscules</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="458"/>
+        <location filename="../src/editor/dtextedit.cpp" line="481"/>
         <source>Capitalize</source>
         <translation>Posa en majúscules</translation>
     </message>
@@ -1144,34 +1054,34 @@
         <translation>Cap</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1286"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1309"/>
         <source>Selected line(s) copied</source>
         <translation>S&apos;han copiat les línies seleccionades.</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1292"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1315"/>
         <source>Current line copied</source>
         <translation>S&apos;ha copiat la línia actual.</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1331"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1354"/>
         <source>Selected line(s) clipped</source>
         <translation>S&apos;han retallat les línies seleccionades.</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1337"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1360"/>
         <source>Current line clipped</source>
         <translation>S&apos;ha retallat la línia actual.</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3068"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3091"/>
         <source>Read-Only mode is off</source>
         <translation>Mode de lectura desactivat</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3075"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3083"/>
-        <location filename="../src/editor/dtextedit.cpp" line="5278"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3098"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3106"/>
+        <location filename="../src/editor/dtextedit.cpp" line="5302"/>
         <source>Read-Only mode is on</source>
         <translation>Mode de lectura activat</translation>
     </message>
@@ -1218,7 +1128,7 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="340"/>
-        <location filename="../src/widgets/window.cpp" line="1973"/>
+        <location filename="../src/widgets/window.cpp" line="1958"/>
         <source>Save</source>
         <translation>Desa</translation>
     </message>
@@ -1240,7 +1150,7 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="459"/>
-        <location filename="../src/widgets/window.cpp" line="2089"/>
+        <location filename="../src/widgets/window.cpp" line="2074"/>
         <source>Read-Only</source>
         <translation>Només de lectura</translation>
     </message>
@@ -1313,17 +1223,17 @@
         <translation>Editor</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1663"/>
+        <location filename="../src/widgets/window.cpp" line="1656"/>
         <source>Untitled %1</source>
         <translation>Sense títol: %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1971"/>
+        <location filename="../src/widgets/window.cpp" line="1956"/>
         <source>Cancel</source>
         <translation>Cancel·la</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1972"/>
+        <location filename="../src/widgets/window.cpp" line="1957"/>
         <source>Discard</source>
         <translation>Descarta</translation>
     </message>

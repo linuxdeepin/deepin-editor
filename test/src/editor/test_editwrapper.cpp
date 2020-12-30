@@ -18,7 +18,19 @@
 
 test_editwrapper::test_editwrapper()
 {
-
+    QString text = QString("#include \"window.h\"\n"
+                           "#include \"urlinfo.h\"\n"
+                           "int main(int argc, char *argv[])\n"
+                           "{\n"
+                           "using namespace Dtk::Core;\n"
+                           "PerformanceMonitor::initializeAppStart();\n"
+                           "return 0;\n"
+                           "}");
+    QFile f("1.cpp");
+    if(f.open(QFile::WriteOnly)){
+        f.write(text.toUtf8());
+        f.close();
+    }
 }
 
 TEST_F(test_editwrapper, EditWrapper)
@@ -52,7 +64,7 @@ TEST_F(test_editwrapper, openFile)
     Settings *s = new Settings();
     wrapper->textEditor()->setSettings(s);
     wrapper->textEditor()->setWrapper(wrapper);
-    wrapper->openFile("aa","bb");
+    wrapper->openFile("1.cpp","1.cpp");
     assert(1==1);
 }
 
@@ -68,7 +80,7 @@ TEST_F(test_editwrapper, saveFile)
 TEST_F(test_editwrapper, saveAsFile)
 {
     EditWrapper *wrapper = new EditWrapper();
-    wrapper->saveAsFile("aa","UTF-8");
+    wrapper->saveAsFile("1.cpp","UTF-8");
     assert(1==1);
 }
 
@@ -76,7 +88,7 @@ TEST_F(test_editwrapper, saveAsFile)
 TEST_F(test_editwrapper, updatePath)
 {
     EditWrapper *wrapper = new EditWrapper();
-    wrapper->updatePath("aa");
+    wrapper->updatePath("1.cpp");
     assert(1==1);
 }
 
@@ -238,6 +250,7 @@ TEST_F(test_editwrapper, saveTemFile)
     Settings *s = new Settings();
     wrapper->textEditor()->setSettings(s);
     wrapper->textEditor()->setWrapper(wrapper);
+    wrapper->openFile("1.cpp","1.cpp");
     wrapper->saveTemFile("ddd");
     assert(1==1);
 }

@@ -198,7 +198,7 @@ DDropdownMenu *DDropdownMenu::createEncodeMenu()
     DDropdownMenu *m_pEncodeMenu = new DDropdownMenu();
     DMenu* m_pMenu = new DMenu();
     if(sm_groupEncodeVec.isEmpty()){
-        QFile file(":/encodes/encodes1.ini");
+        QFile file(":/encodes/encodes.ini");
         QString data;
         if(file.open(QIODevice::ReadOnly))
         {
@@ -219,12 +219,12 @@ DDropdownMenu *DDropdownMenu::createEncodeMenu()
              foreach(QString var,list)
              {
                QAction *act= groupMenu->addAction(QObject::tr(var.toLocal8Bit().data()));
-//               if(act->text() == "UTF-8") {
-//                   m_pEncodeMenu->m_pActUtf8 = act;
-//                   act->setChecked(true);
-//               }else {
-//                   act->setCheckable(false);
-//               }
+               if(act->text() == "UTF-8") {
+                   m_pEncodeMenu->m_pActUtf8 = act;
+                   act->setChecked(true);
+               }else {
+                   act->setCheckable(false);
+               }
 
              }
 
@@ -238,13 +238,13 @@ DDropdownMenu *DDropdownMenu::createEncodeMenu()
              foreach(QString var,sm_groupEncodeVec[i].second)
              {
                QAction *act= groupMenu->addAction(QObject::tr(var.toLocal8Bit().data()));
-//               if(act->text() == "UTF-8") {
-//                   m_pEncodeMenu->m_pActUtf8 = act;
-//                   act->setCheckable(true);
-//                   act->setChecked(true);
-//               }else {
-//                   act->setCheckable(false);
-//               }
+               if(act->text() == "UTF-8") {
+                   m_pEncodeMenu->m_pActUtf8 = act;
+                   act->setCheckable(true);
+                   act->setChecked(true);
+               }else {
+                   act->setCheckable(false);
+               }
              }
 
             m_pMenu->addMenu(groupMenu);
@@ -390,8 +390,8 @@ bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
     if(object == m_pToolButton){
         if(event->type() == QEvent::KeyPress){
             QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-            QString key = Utils::getKeyshortcut(keyEvent);
-            if(key=="Enter")        //按下enter展开列表
+            //QString key = Utils::getKeyshortcut(keyEvent);
+            if(keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Space)        //按下enter展开列表
             {
                 Q_EMIT requestContextMenu(false);
                 return true;
@@ -400,10 +400,17 @@ bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
         }
 
         if(event->type() == QEvent::MouseButtonPress){
-            m_bPressed = true;
-            //重新绘制icon 点击改变前景色
-            m_pToolButton->setIcon(createIcon());
-            //return false;
+            QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
+            if(mouseEvent->button() == Qt::LeftButton){
+                m_bPressed = true;
+                //重新绘制icon 点击改变前景色
+                m_pToolButton->setIcon(createIcon());
+                return true;
+            }
+
+            if(mouseEvent->button() == Qt::RightButton){
+                return true;
+            }
         }
 
 

@@ -8,6 +8,7 @@
 #include"../../src/widgets/window.h"
 #include"../../src/startmanager.h"
 #include"../../src/editor/dtextedit.h"
+#include"../../src/common/CSyntaxHighlighter.h"
 #include<QMenu>
 
 #include"../stub.h"
@@ -15,7 +16,8 @@
 #include "gtest/gtest.h"
 #include <QObject>
 #include<QClipboard>
-
+#include <QEvent>
+#include <QKeyEvent>
 
 class test_textedit: public QObject, public::testing::Test
 {

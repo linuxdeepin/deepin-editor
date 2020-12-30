@@ -5627,7 +5627,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
                 QPlainTextEdit::keyPressEvent(e);
             }
 
-           return QPlainTextEdit::keyPressEvent(e);
+           //return QPlainTextEdit::keyPressEvent(e);
         }
 
 }
