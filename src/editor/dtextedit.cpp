@@ -2308,7 +2308,7 @@ void TextEdit::updateLeftAreaWidget()
     }
 
     if(bIsSetLineNumberWidth) {
-        leftAreaWidth += blockSize * fontMetrics().width('9');
+        leftAreaWidth += blockSize * fontMetrics().width('9') + 5;
     }
     m_pLeftAreaWidget->setFixedWidth(leftAreaWidth);
     m_pLeftAreaWidget->updateAll();

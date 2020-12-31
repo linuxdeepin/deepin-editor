@@ -56,7 +56,7 @@
                             "name": "Show bookmarks icon",
                             "type": "checkbox",
                             "text": "Show bookmarks icon",
-                            "default": "true"
+                            "default": "false"
                         },
                         {
                             "key": "showblankcharacter",
