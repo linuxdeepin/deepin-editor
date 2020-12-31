@@ -72,10 +72,24 @@ public:
     ~TextEdit() override;
 
     //在光标处添加删除内容
+
+    //直接插入文本
     void insertTextEx(QTextCursor,QString);
+
+    //直接删除字符 删除选择或一个字符
     void deleteTextEx(QTextCursor);
+
+    //插入选择文本字符
+    void insertSelectTextEx(QTextCursor,QString);
+
+    //插入列编辑文本字符
+    void insertColumnEditTextEx(QString text);
+    //插入带选择字符
+    void deleteSelectTextEx(QTextCursor);
+
     //初始化右键菜单
     void initRightClickedMenu();
+
     //弹窗右键菜单
     void popRightMenu(QPoint pos = QPoint());
     //

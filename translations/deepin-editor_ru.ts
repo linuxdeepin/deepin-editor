@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ru">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ru" version="2.1">
 <context>
     <name>BottomBar</name>
     <message>
@@ -54,7 +52,7 @@
         <location filename="../src/editor/editwrapper.cpp" line="231"/>
         <location filename="../src/editor/editwrapper.cpp" line="277"/>
         <source>Discard</source>
-        <translation>Отмена</translation>
+        <translation>Забыть</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="537"/>
@@ -580,17 +578,17 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="114"/>
         <source>Show bookmarks icon</source>
-        <translation>Показать значок закладки</translation>
+        <translation>Показать значок закладок</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="115"/>
         <source>Show whitespaces and tabs</source>
-        <translation>Показывать пробелы и вкладки</translation>
+        <translation>Показать пробелы и табуляции</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="116"/>
         <source>Highlight current line</source>
-        <translation type="unfinished"></translation>
+        <translation>Выделить текущую строку</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="117"/>
@@ -605,57 +603,57 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="121"/>
         <source>WesternEuropean</source>
-        <translation type="unfinished"></translation>
+        <translation>Западноевропейский</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="122"/>
         <source>CentralEuropean</source>
-        <translation type="unfinished"></translation>
+        <translation>Центральноевропейский</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="123"/>
         <source>Baltic</source>
-        <translation type="unfinished"></translation>
+        <translation>Балтийский</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="124"/>
         <source>Cyrillic</source>
-        <translation type="unfinished"></translation>
+        <translation>Кириллица</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="125"/>
         <source>Arabic</source>
-        <translation type="unfinished"></translation>
+        <translation>Арабский</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="130"/>
         <source>Celtic</source>
-        <translation type="unfinished"></translation>
+        <translation>Кельтский</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="131"/>
         <source>SouthEasternEuropean</source>
-        <translation type="unfinished"></translation>
+        <translation>Юго-Восточная Европа</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="126"/>
         <source>Greek</source>
-        <translation type="unfinished"></translation>
+        <translation>Греческий</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="127"/>
         <source>Hebrew</source>
-        <translation type="unfinished"></translation>
+        <translation>Еврейский</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="132"/>
         <source>ChineseSimplified</source>
-        <translation type="unfinished"></translation>
+        <translation>Китайский упрощенный</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="133"/>
         <source>ChineseTraditional</source>
-        <translation type="unfinished"></translation>
+        <translation>Китайский традиционный</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="134"/>
@@ -675,7 +673,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="128"/>
         <source>Turkish</source>
-        <translation type="unfinished"></translation>
+        <translation>Турецкий</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="136"/>
@@ -692,7 +690,7 @@
         <location filename="../src/widgets/window.cpp" line="1009"/>
         <location filename="../src/widgets/window.cpp" line="1024"/>
         <source>Line Endings</source>
-        <translation>Строка Кодировки</translation>
+        <translation>Окончание строк</translation>
     </message>
 </context>
 <context>
@@ -732,9 +730,9 @@
     <name>S:</name>
     <message>
         <location filename="../third/libiconv-1.16/src/iconv.c" line="103"/>
-        <source></source>
+        <source/>
         <comment>The first line of the short usage message.</comment>
-        <translation></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -767,18 +765,18 @@
     <message>
         <location filename="../src/common/settings.cpp" line="337"/>
         <source>This shortcut conflicts with system shortcut %1</source>
-        <translation>Этот ярлык конфликтует с системным ярлыком %1</translation>
+        <translation>Это сочетание конфликтует с системным сочитанием %1</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="339"/>
         <source>This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately</source>
-        <translation>Этот ярлык конфликтует с %1, нажмите &quot;Заменить&quot;, чтобы этот ярлык вступил в силу немедленно.</translation>
+        <translation>Это сочетание конфликтует с %1, нажмите Заменить, чтобы это сочетание вступило в силу немедленно</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="454"/>
         <location filename="../src/common/settings.cpp" line="462"/>
         <source>The shortcut %1 is invalid, please set another one.</source>
-        <translation>Ярлык %1 недействителен, установите другой.</translation>
+        <translation>Сочетание %1 недействительно, установите другое.</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="497"/>
@@ -834,7 +832,7 @@
     <message>
         <location filename="../src/controls/tabbar.cpp" line="460"/>
         <source>Close unmodified tabs</source>
-        <translation>Закрыть не измененные вкладки</translation>
+        <translation>Закрыть не изменённые вкладки</translation>
     </message>
 </context>
 <context>
@@ -872,7 +870,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="197"/>
         <source>Select All</source>
-        <translation>Выбрать Всё</translation>
+        <translation>Выбрать всё</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="198"/>
@@ -889,7 +887,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="200"/>
         <source>Go to Line</source>
-        <translation>Перейти к Строке:</translation>
+        <translation>Перейти к строке</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="201"/>
@@ -904,17 +902,17 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="203"/>
         <source>Fullscreen</source>
-        <translation>Полный экран</translation>
+        <translation>Полноэкранный режим</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="204"/>
         <source>Exit fullscreen</source>
-        <translation>Выйти из Полного экрана</translation>
+        <translation>Выйти из полноэкранного режима</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="205"/>
         <source>Display in file manager</source>
-        <translation>Отобразить в файловом менеджере</translation>
+        <translation>Показать в файловом менеджере</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="206"/>
@@ -925,28 +923,28 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="207"/>
         <source>Text to Speech</source>
-        <translation>Текст к слову</translation>
+        <translation>Текст в речь</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="208"/>
         <source>Stop reading</source>
-        <translation>Прекратите читать</translation>
+        <translation>Прекратить читать</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="209"/>
         <source>Speech to Text</source>
-        <translation>Слова перед текстом</translation>
+        <translation>Речь в текст</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="210"/>
         <source>Translate</source>
-        <translation>Перевод</translation>
+        <translation>Перевести</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="211"/>
         <location filename="../src/editor/dtextedit.cpp" line="264"/>
         <source>Column Mode</source>
-        <translation>Режим &quot;В столбец&quot;</translation>
+        <translation>Режим колонки</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="212"/>
@@ -1026,27 +1024,27 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="410"/>
         <source>Press ALT and click lines to edit in column mode</source>
-        <translation>Нажмите ALT и щелкните строки для редактирования в режиме &quot;В столбец&quot;</translation>
+        <translation>Нажмите ALT и щелкните строки для редактирования в режиме колонки</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="478"/>
         <source>Change Case</source>
-        <translation>Изменить Регистр</translation>
+        <translation>Изменить регистр</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="479"/>
         <source>Upper Case</source>
-        <translation>Верхний Регистр</translation>
+        <translation>Верхний регистр</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="480"/>
         <source>Lower Case</source>
-        <translation>Нижний Регистр</translation>
+        <translation>Нижний регистр</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="481"/>
         <source>Capitalize</source>
-        <translation>Прописной</translation>
+        <translation>Заглавные буквы</translation>
     </message>
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="64"/>
@@ -1056,7 +1054,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="1309"/>
         <source>Selected line(s) copied</source>
-        <translation>Копируются выбранная(ые) строки</translation>
+        <translation>Выбранные строки скопированы</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="1315"/>
@@ -1066,7 +1064,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="1354"/>
         <source>Selected line(s) clipped</source>
-        <translation>Выбранная линия(и) обрезана</translation>
+        <translation>Выбранные строки обрезаны</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="1360"/>

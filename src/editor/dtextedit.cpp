@@ -172,16 +172,38 @@ TextEdit::~TextEdit()
 
 void TextEdit::insertTextEx(QTextCursor cursor, QString text)
 {
-//    QUndoCommand * pDeleteStack= new DeleteTextUndoCommand(cursor);
-//    m_pUndoStack->push(pDeleteStack);
     QUndoCommand * pInsertStack= new InsertTextUndoCommand(cursor,text);
     m_pUndoStack->push(pInsertStack);
+}
+
+void TextEdit::deleteSelectTextEx(QTextCursor cursor)
+{
+    if(cursor.hasSelection()){
+        QUndoCommand * pDeleteStack= new DeleteTextUndoCommand(cursor);
+        m_pUndoStack->push(pDeleteStack);
+    }
 }
 
 void TextEdit::deleteTextEx(QTextCursor cursor)
 {
     QUndoCommand * pDeleteStack= new DeleteTextUndoCommand(cursor);
     m_pUndoStack->push(pDeleteStack);
+}
+
+void TextEdit::insertSelectTextEx(QTextCursor cursor, QString text)
+{
+    if(cursor.hasSelection()) deleteTextEx(cursor);
+    QUndoCommand * pInsertStack= new InsertTextUndoCommand(cursor,text);
+    m_pUndoStack->push(pInsertStack);
+}
+
+void TextEdit::insertColumnEditTextEx(QString text)
+{
+     for (int i=0; i < m_altModSelections.size();i++) {
+         if(m_altModSelections[i].cursor.hasSelection()) deleteTextEx(m_altModSelections[i].cursor);
+     }
+     QUndoCommand * pInsertStack= new InsertTextUndoCommand(m_altModSelections,text);
+     m_pUndoStack->push(pInsertStack);
 }
 
 void TextEdit::initRightClickedMenu()
@@ -327,24 +349,10 @@ void TextEdit::initRightClickedMenu()
         const QClipboard *clipboard = QApplication::clipboard(); //获取剪切版内容
 
         if(m_bIsAltMod && !m_altModSelections.isEmpty()){
-          for (int i=0; i < m_altModSelections.size();i++) {
-              if(m_altModSelections[i].cursor.hasSelection())
-              {
-                  QUndoCommand * pDeleteStack= new DeleteTextUndoCommand(m_altModSelections[i].cursor);
-                  m_pUndoStack->push(pDeleteStack);
-              }
-          }
-          QUndoCommand * pInsertStack= new InsertTextUndoCommand(m_altModSelections,clipboard->text());
-          m_pUndoStack->push(pInsertStack);
-
+            insertColumnEditTextEx(clipboard->text());
         }else {
             QTextCursor cursor = textCursor();
-            if(cursor.hasSelection()){
-                QUndoCommand * pDeleteStack= new DeleteTextUndoCommand(cursor);
-                m_pUndoStack->push(pDeleteStack);
-            }
-            QUndoCommand * pInsertStack= new InsertTextUndoCommand(cursor,clipboard->text());
-            m_pUndoStack->push(pInsertStack);
+            insertSelectTextEx(textCursor(),clipboard->text());
         }
 
          unsetMark();
@@ -4968,11 +4976,9 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
     if(!m_readOnlyMode && !e->commitString().isEmpty()) {
        //列编辑添加撤销重做
        if(m_bIsAltMod && !m_altModSelections.isEmpty()){
-           QUndoCommand * pInsertStack= new InsertTextUndoCommand(m_altModSelections,e->commitString());
-           m_pUndoStack->push(pInsertStack);
+           insertColumnEditTextEx(e->commitString());
        }else {
-           QUndoCommand * pInsertStack= new InsertTextUndoCommand(textCursor(),e->commitString());
-           m_pUndoStack->push(pInsertStack);
+           insertSelectTextEx(textCursor(),e->commitString());
        }
     }
 }
@@ -5312,11 +5318,9 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
           {
               //非修改键盘按键加撤销重做栈
               if(m_bIsAltMod && !m_altModSelections.isEmpty()){
-                  QUndoCommand * pInsertStack= new InsertTextUndoCommand(m_altModSelections,e->text());
-                  m_pUndoStack->push(pInsertStack);
+                  insertColumnEditTextEx(e->text());
               }else {
-                  QUndoCommand * pInsertStack= new InsertTextUndoCommand(textCursor(),e->text());
-                  m_pUndoStack->push(pInsertStack);
+                  insertSelectTextEx(textCursor(),e->text());
               }
               return;
           }
@@ -5326,11 +5330,9 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
          {
              //非修改键盘按键加撤销重做栈
              if(m_bIsAltMod && !m_altModSelections.isEmpty()){
-                 QUndoCommand * pInsertStack= new InsertTextUndoCommand(m_altModSelections,e->text());
-                 m_pUndoStack->push(pInsertStack);
+                 insertColumnEditTextEx(e->text());
              }else {
-                 QUndoCommand * pInsertStack= new InsertTextUndoCommand(textCursor(),e->text());
-                 m_pUndoStack->push(pInsertStack);
+                 insertSelectTextEx(textCursor(),e->text());
              }
              return;
          }
@@ -5339,11 +5341,9 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
          if(modifiers == Qt::NoModifier && (e->key() == Qt::Key_Tab || e->key() == Qt::Key_Return)) {
            //列编辑添加撤销重做
            if(m_bIsAltMod && !m_altModSelections.isEmpty()){
-               QUndoCommand * pInsertStack= new InsertTextUndoCommand(m_altModSelections,e->text());
-               m_pUndoStack->push(pInsertStack);
+               insertColumnEditTextEx(e->text());
            }else {
-               QUndoCommand * pInsertStack= new InsertTextUndoCommand(textCursor(),e->text());
-               m_pUndoStack->push(pInsertStack);
+               insertSelectTextEx(textCursor(),e->text());
            }
            return;
          }
@@ -5394,9 +5394,8 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
                      //有选择内容才剪切
                     if(cursor.hasSelection())
                     {
+                        deleteTextEx(cursor);
                         QString data = cursor.selectedText();
-                        QUndoCommand * pDeleteStack= new DeleteTextUndoCommand(cursor);
-                        m_pUndoStack->push(pDeleteStack);
                         QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
                         clipboard->setText(data);
                     }
@@ -5407,24 +5406,9 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
                 const QClipboard *clipboard = QApplication::clipboard(); //获取剪切版内容
 
                 if(m_bIsAltMod && !m_altModSelections.isEmpty()){
-                  for (int i=0; i < m_altModSelections.size();i++) {
-                      if(m_altModSelections[i].cursor.hasSelection())
-                      {
-                          QUndoCommand * pDeleteStack= new DeleteTextUndoCommand(m_altModSelections[i].cursor);
-                          m_pUndoStack->push(pDeleteStack);
-                      }
-                  }
-                  QUndoCommand * pInsertStack= new InsertTextUndoCommand(m_altModSelections,clipboard->text());
-                  m_pUndoStack->push(pInsertStack);
-
+                    insertColumnEditTextEx(clipboard->text());
                 }else {
-                    QTextCursor cursor = textCursor();
-                    if(cursor.hasSelection()){
-                        QUndoCommand * pDeleteStack= new DeleteTextUndoCommand(cursor);
-                        m_pUndoStack->push(pDeleteStack);
-                    }
-                    QUndoCommand * pInsertStack= new InsertTextUndoCommand(cursor,clipboard->text());
-                    m_pUndoStack->push(pInsertStack);
+                    insertSelectTextEx(textCursor(),clipboard->text());
                 }
                 return;
             }else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "copy")) {
