@@ -830,8 +830,13 @@ bool Window::saveFile()
     if(!wrapperEdit || wrapperEdit->getFileLoading()) return false;
 
     bool isDraftFile = wrapperEdit->isDraftFile();
-    bool isEmpty = wrapperEdit->isPlainTextEmpty();
+//    bool isEmpty = wrapperEdit->isPlainTextEmpty();
     QString filePath = wrapperEdit->textEditor()->getTruePath();
+
+    // save blank file.
+    if (isDraftFile) {
+        return saveAsFile();
+    }
 
     if (filePath.isEmpty()) {
         filePath = wrapperEdit->textEditor()->getFilePath();
@@ -849,51 +854,43 @@ bool Window::saveFile()
         return false;
     }
 
-    // save blank file.
-    if (isDraftFile) {
-        if(!isEmpty) return wrapperEdit->saveDraftFile();
-        return false;
-    }
     // save normal file.
-    else {
-        QString temPath = "";
+    QString temPath = "";
 
-        if (wrapperEdit->isTemFile()) {
-            temPath = wrapperEdit->textEditor()->getFilePath();
-        }
-
-        wrapperEdit->updatePath(filePath,filePath);
-        updateModifyStatus(temPath,false);
-        bool success = wrapperEdit->saveFile();
-//        wrapperEdit->updatePath(wrapperEdit->filePath());
-
-        if (!temPath.isEmpty()) {
-            QFile(temPath).remove();
-            QFileInfo fileinfo (temPath);
-            QDir(m_blankFileDir).rmdir(fileinfo.absoluteDir().dirName());
-        }
-
-       if(success){
-           currentWrapper()->hideWarningNotices();
-           showNotify(tr("Saved successfully"));
-           return true;
-       }else {
-           DDialog *dialog = createDialog(tr("Do you want to save as another?"), "");
-
-           wrapperEdit->setUpdatesEnabled(false);
-           int mode =  dialog->exec();
-           wrapperEdit->setUpdatesEnabled(true);
-           wrapperEdit->hideWarningNotices();
-           dialog->deleteLater();
-           dialog = nullptr;
-
-           if(mode == 2){
-               return  saveAsFile();
-           }
-
-           return false;
-       }
+    if (wrapperEdit->isTemFile()) {
+        temPath = wrapperEdit->textEditor()->getFilePath();
     }
+
+    wrapperEdit->updatePath(filePath,filePath);
+    updateModifyStatus(temPath,false);
+    bool success = wrapperEdit->saveFile();
+
+    if (!temPath.isEmpty()) {
+        QFile(temPath).remove();
+        QFileInfo fileinfo (temPath);
+        QDir(m_blankFileDir).rmdir(fileinfo.absoluteDir().dirName());
+    }
+
+   if(success){
+       currentWrapper()->hideWarningNotices();
+       showNotify(tr("Saved successfully"));
+       return true;
+   }else {
+       DDialog *dialog = createDialog(tr("Do you want to save as another?"), "");
+
+       wrapperEdit->setUpdatesEnabled(false);
+       int mode =  dialog->exec();
+       wrapperEdit->setUpdatesEnabled(true);
+       wrapperEdit->hideWarningNotices();
+       dialog->deleteLater();
+       dialog = nullptr;
+
+       if(mode == 2){
+           return  saveAsFile();
+       }
+
+       return false;
+   }
 }
 
 bool Window::saveAsFile()
@@ -909,8 +906,6 @@ QString Window::saveAsFileToDisk()
 
     bool isDraft = wrapper->isDraftFile();
     QFileInfo fileInfo(wrapper->filePath());
-
-
 
     DFileDialog dialog(this, tr("Save File"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
