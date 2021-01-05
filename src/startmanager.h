@@ -89,6 +89,8 @@ private:
     QString m_blankFileDir;
     QString m_backupDir;
     QString m_autoBackupDir;
+    Window* pFocusWindow;
+
 };
 
 #endif

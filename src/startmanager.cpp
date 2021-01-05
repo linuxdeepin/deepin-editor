@@ -164,6 +164,12 @@ void StartManager::autoBackupFile()
             jsonObject.insert("modify",wrapper->isModified());
             jsonObject.insert("window",var);
 
+            if (m_windows.value(var)->isActiveWindow()) {
+                if (wrapper == m_windows.value(var)->currentWrapper()) {
+                    jsonObject.insert("focus",true);
+                }
+            }
+
             if (Utils::isDraftFile(filePath)) {
                 wrapper->saveTemFile(filePath);
             } else {
@@ -188,11 +194,13 @@ void StartManager::autoBackupFile()
 
 int StartManager::recoverFile(Window *window)
 {
-    QFileInfo fileInfo;
+    Window *pFocusWindow = nullptr;
+    QString focusPath;
     bool bIsTemFile = false;
     QStringList blankFiles = QDir(m_blankFileDir).entryList(QStringList(), QDir::Files);
     int recFilesSum = 0;
     QStringList files = blankFiles;
+    QFileInfo fileInfo;
 
     for (auto file : blankFiles) {
         if (!file.contains("blank_file")) {
@@ -258,6 +266,16 @@ int StartManager::recoverFile(Window *window)
                 if (!temFilePath.isEmpty()) {
                     if (Utils::fileExists(temFilePath)) {
                         window->addTemFileTab(temFilePath,fileInfo.fileName(),localPath,bIsTemFile);
+
+                        if (object.contains("focus")) {  // 包含指定的 key
+                            QJsonValue value = object.value("focus");  // 获取指定 key 对应的 value
+
+                            if (value.isBool() && value.toBool()) {
+                                pFocusWindow = window;
+                                focusPath = temFilePath;
+                            }
+                        }
+
                         recFilesSum++;
                     }
                 } else {
@@ -273,11 +291,27 @@ int StartManager::recoverFile(Window *window)
                             window->addTemFileTab(localPath,fileInfo.fileName(),localPath,bIsTemFile);
                         }
 
+                        if (object.contains("focus")) {  // 包含指定的 key
+                            QJsonValue value = object.value("focus");  // 获取指定 key 对应的 value
+
+                            if (value.isBool() && value.toBool()) {
+                                pFocusWindow = window;
+                                focusPath = localPath;
+                            }
+                        }
+
                         recFilesSum++;
                     }
                 }
             }
         }
+    }
+
+    if (pFocusWindow != nullptr && !focusPath.isNull()) {
+        FileTabInfo info;
+        info.windowIndex = m_windows.indexOf(pFocusWindow);
+        info.tabIndex = pFocusWindow->getTabIndex(focusPath);
+        popupExistTabs(info);
     }
 
     return recFilesSum;
@@ -289,7 +323,7 @@ void StartManager::openFilesInWindow(QStringList files)
     if (files.isEmpty()) {
         if (m_windows.count() >= 20) return;
         Window *window = createWindow();
-        window->showCenterWindow(true);
+        window->showCenterWindow(false);
         window->addBlankTab();
         window->activateWindow();
     } else {
@@ -303,7 +337,7 @@ void StartManager::openFilesInWindow(QStringList files)
             // Add new tab in current window.
             else {
                 Window* window = createWindow();
-                window->showCenterWindow(true);
+                window->showCenterWindow(false);
                 window->addTab(file);
             }
         }
@@ -318,7 +352,7 @@ void StartManager::openFilesInTab(QStringList files)
 
         if (m_windows.isEmpty()) {
             Window *window = createWindow(true);
-            window->showCenterWindow(true);
+            window->showCenterWindow(false);
 
             if (!isTemFilesEmpty()) {
                 if (recoverFile(window) == 0) {
@@ -360,7 +394,7 @@ void StartManager::openFilesInTab(QStringList files)
             // Create new window with file if haven't window exist.
             else if (m_windows.size() == 0) {
                 Window *window = createWindow(true);
-                window->showCenterWindow(true);
+                window->showCenterWindow(false);
                 QTimer::singleShot(50, [=] {
                     recoverFile(window);
                     window->addTab(file);

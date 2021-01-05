@@ -328,7 +328,7 @@ void Window::showCenterWindow(bool bIsCenter)
     } else if (windowState == "fullscreen") {
         showFullScreen();
     } else {
-        show();
+        showNormal();
     }
 }
 
@@ -1489,6 +1489,10 @@ void Window::backupFile()
         jsonObject.insert("localPath",localPath);
         jsonObject.insert("cursorPosition",QString::number(wrapper->textEditor()->textCursor().position()));
         jsonObject.insert("modify",wrapper->isModified());
+
+        if (filePath == m_tabbar->currentPath()) {
+            jsonObject.insert("focus",true);
+        }
 
         if (Utils::isDraftFile(filePath)) {
             wrapper->saveTemFile(filePath);
