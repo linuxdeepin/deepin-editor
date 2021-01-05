@@ -241,19 +241,19 @@ TEST_F(test_editwrapper, getTextEncode)
     assert(1==1);
 }
 //bool saveTemFile(QString qstrDir);
-TEST_F(test_editwrapper, saveTemFile)
-{
-    Window* pWindow = new Window;
-    char c = 'd';
-    QByteArray d(5,c);
-    EditWrapper *wrapper = pWindow->createEditor();
-    Settings *s = new Settings();
-    wrapper->textEditor()->setSettings(s);
-    wrapper->textEditor()->setWrapper(wrapper);
-    wrapper->openFile("1.cpp","1.cpp");
-    wrapper->saveTemFile("ddd");
-    assert(1==1);
-}
+//TEST_F(test_editwrapper, saveTemFile)
+//{
+//    Window* pWindow = new Window;
+//    char c = 'd';
+//    QByteArray d(5,c);
+//    EditWrapper *wrapper = pWindow->createEditor();
+//    Settings *s = new Settings();
+//    wrapper->textEditor()->setSettings(s);
+//    wrapper->textEditor()->setWrapper(wrapper);
+//    wrapper->openFile("1.cpp","1.cpp");
+//    wrapper->saveTemFile("ddd");
+//    assert(1==1);
+//}
 ////跟新路径
 //void updatePath(const QString &file,QString qstrTruePath = QString());
 ////判断是否修改

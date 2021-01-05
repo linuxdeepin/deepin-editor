@@ -108,6 +108,7 @@ private:
     void handleCursorModeChanged(TextEdit::CursorMode mode);
     void handleHightlightChanged(const QString &name);
     int GetCorrectUnicode1(const QByteArray &ba);
+
 public slots:
     void handleFileLoadFinished(const QByteArray &encode,const QByteArray &content);
     void OnThemeChangeSlot(QString theme);

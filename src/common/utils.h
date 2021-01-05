@@ -55,7 +55,6 @@ public:
     static QVariantMap getThemeMapFromPath(const QString &filepath);
     static bool isMimeTypeSupport(const QString &filepath);
     static bool isDraftFile(const QString &filepath);
-    static void toast(const QString &message, QWidget* parent = nullptr);
     static const QStringList getEncodeList();
     static QPixmap renderSVG(const QString &filePath, const QSize &size ,bool bIsScale = true);
     static QList<QColor> getHiglightColorList();

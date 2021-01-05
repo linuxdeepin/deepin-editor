@@ -384,8 +384,8 @@ bool EditWrapper::saveTemFile(QString qstrDir)
 
     if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         QByteArray fileContent = m_pTextEdit->toPlainText().toLocal8Bit();
-        if(!fileContent.isEmpty())
-        {
+//        if(!fileContent.isEmpty())
+//        {
             QByteArray Outdata;
             DetectCode::ChangeFileEncodingFormat(fileContent,Outdata,QString("UTF-8"),m_sCurEncode);
             file.write(Outdata);
@@ -393,38 +393,31 @@ bool EditWrapper::saveTemFile(QString qstrDir)
             file.close();
             m_sFirstEncode = m_sCurEncode;
 
-            QFileInfo fi(qstrDir);
-            m_tModifiedDateTime = fi.lastModified();
-
             // did save work?
             // only finalize if stream status == OK
             bool ok = (error == QFileDevice::NoError);
 
             // update status.
-            if (ok)  updateModifyStatus(false);
+            if (ok)  updateModifyStatus(isModified());
             return ok;
 
-        }else {
-            file.write(fileContent);
-            QFileDevice::FileError error = file.error();
-            file.close();
-            m_sFirstEncode = m_sCurEncode;
+//        }else {
+//            file.write(fileContent);
+//            QFileDevice::FileError error = file.error();
+//            file.close();
+//            m_sFirstEncode = m_sCurEncode;
 
-            QFileInfo fi(qstrDir);
-            m_tModifiedDateTime = fi.lastModified();
+//            // did save work?
+//            // only finalize if stream status == OK
+//            bool ok = (error == QFileDevice::NoError);
 
-            // did save work?
-            // only finalize if stream status == OK
-            bool ok = (error == QFileDevice::NoError);
-
-            // update status.
-            if (ok)  updateModifyStatus(false);
-            return ok;
-        }
+//            // update status.
+//            if (ok)  updateModifyStatus(true);
+//            return ok;
+//        }
     }else {
         return false;
     }
-
 }
 
 void EditWrapper::updatePath(const QString &file,QString qstrTruePath)
@@ -754,7 +747,8 @@ void EditWrapper::updateModifyStatus(bool bModified)
 {
     if(getFileLoading()) return;
     m_pTextEdit->document()->setModified(bModified);
-    m_pWindow->updateModifyStatus(m_pTextEdit->getFilePath(),bModified);
+    Window *pWindow = static_cast<Window*>(QWidget::window());
+    pWindow->updateModifyStatus(m_pTextEdit->getFilePath(),bModified);
 }
 
 void EditWrapper::updateSaveAsFileName(QString strOldFilePath, QString strNewFilePath)

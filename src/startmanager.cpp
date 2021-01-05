@@ -51,13 +51,23 @@ StartManager::StartManager(QObject *parent)
 //    m_bIsDragEnter = false;
     // Create blank directory if it not exist.
     initBlockShutdown();
-    QString blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
+    m_blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
+    m_backupDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("backup-files");
+    m_autoBackupDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("autoBackup-files");
 
-    if (!QFileInfo(blankFileDir).exists()) {
-        QDir().mkpath(blankFileDir);
+    if (!QFileInfo(m_blankFileDir).exists()) {
+        QDir().mkpath(m_blankFileDir);
+    }
+
+    if (!QFileInfo(m_backupDir).exists()) {
+        QDir().mkpath(m_backupDir);
     }
 
     m_qlistTemFile = Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->value().toStringList();
+
+    m_pTimer = new QTimer;
+    connect(m_pTimer,&QTimer::timeout,this,&StartManager::autoBackupFile);
+    m_pTimer->start(5*2*1000);
 }
 
 
@@ -112,21 +122,85 @@ bool StartManager::isTemFilesEmpty()
     return bIsEmpty;
 }
 
+void StartManager::autoBackupFile()
+{
+    if (!QFileInfo(m_autoBackupDir).exists()) {
+        QDir().mkpath(m_autoBackupDir);
+    } else {
+        if (!QDir(m_backupDir).isEmpty()) {
+            QDir(m_backupDir).removeRecursively();
+        }
+    }
+
+    QMap<QString, EditWrapper *> wrappers;
+    QStringList listBackupInfo;
+    QString filePath,localPath,curPos;
+    QFileInfo fileInfo;
+    m_qlistTemFile.clear();   
+    listBackupInfo = Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->value().toStringList();
+
+    for (int var = 0; var < m_windows.count(); ++var) {
+        wrappers = m_windows.value(var)->getWrappers();
+        QStringList list = wrappers.keys();
+
+        for (EditWrapper *wrapper : wrappers) {
+            if(wrapper->getFileLoading()) continue;
+
+            filePath = wrapper->textEditor()->getFilePath();
+            localPath = wrapper->textEditor()->getTruePath();
+
+            if (localPath.isEmpty()) {
+                localPath = wrapper->textEditor()->getFilePath();
+            }
+
+            StartManager::FileTabInfo tabInfo = StartManager::instance()->getFileTabInfo(filePath);
+            curPos = QString::number(wrapper->textEditor()->textCursor().position());
+            fileInfo.setFile(localPath);
+
+            QJsonObject jsonObject;
+            QJsonDocument document;
+            jsonObject.insert("localPath",localPath);
+            jsonObject.insert("cursorPosition",curPos);
+            jsonObject.insert("modify",wrapper->isModified());
+            jsonObject.insert("window",var);
+
+            if (Utils::isDraftFile(filePath)) {
+                wrapper->saveTemFile(filePath);
+            } else {
+                if (wrapper->isModified()) {
+                    QString name = fileInfo.absolutePath().replace("/","_");
+                    QString qstrFilePath = m_autoBackupDir + "/" + fileInfo.baseName() + "." + name + "." + fileInfo.suffix();
+                    jsonObject.insert("temFilePath",qstrFilePath);
+                    wrapper->saveTemFile(qstrFilePath);
+                }
+            }
+
+            document.setObject(jsonObject);
+            QByteArray byteArray = document.toJson(QJsonDocument::Compact);
+            list.replace(tabInfo.tabIndex,byteArray);
+        }
+
+        m_qlistTemFile.append(list);
+    }
+
+    Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->setValue(m_qlistTemFile);
+}
+
 int StartManager::recoverFile(Window *window)
 {
     QFileInfo fileInfo;
-    QFileInfo fileInfoTem;
     bool bIsTemFile = false;
-    QDir blankDirectory = QDir(QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files"));
-    QStringList blankFiles = blankDirectory.entryList(QStringList(), QDir::Files);
+    QStringList blankFiles = QDir(m_blankFileDir).entryList(QStringList(), QDir::Files);
+    int recFilesSum = 0;
     QStringList files = blankFiles;
-    int  recFilesSum = 0;
 
     for (auto file : blankFiles) {
         if (!file.contains("blank_file")) {
             files.removeOne(file);
         }
     }
+
+    int windowIndex = -1;
 
     for (int i = 0;i < m_qlistTemFile.count();i++) {
         QJsonParseError jsonError;
@@ -139,6 +213,22 @@ int StartManager::recoverFile(Window *window)
                 QString localPath;
                 // JSON 文档为对象
                 QJsonObject object = doucment.object();  // 转化为对象
+
+                if (object.contains("window")) {  // 包含指定的 key
+                    QJsonValue value = object.value("window");  // 获取指定 key 对应的 value
+
+                    if (value.isDouble()) {
+                        if (windowIndex == -1) {
+                            windowIndex = static_cast<int>(value.toDouble());
+                        } else {
+                            if (windowIndex != static_cast<int>(value.toDouble())) {
+                                windowIndex = static_cast<int>(value.toDouble());
+                                window = createWindow(true);
+                                window->showCenterWindow(false);
+                            }
+                        }
+                    }
+                }
 
                 if (object.contains("temFilePath")) {  // 包含指定的 key
                     QJsonValue value = object.value("temFilePath");  // 获取指定 key 对应的 value
@@ -167,22 +257,22 @@ int StartManager::recoverFile(Window *window)
 
                 if (!temFilePath.isEmpty()) {
                     if (Utils::fileExists(temFilePath)) {
-                        if (temFilePath == localPath) {
-                            int index = files.indexOf(fileInfo.fileName());
-
-                            if (index >= 0) {
-                                QString fileName = tr("Untitled %1").arg(index + 1);
-                                window->addTemFileTab(temFilePath,fileName,localPath,bIsTemFile);
-                            }
-                        } else {
-                            window->addTemFileTab(temFilePath,fileInfo.fileName(),localPath,bIsTemFile);
-                        }
-
+                        window->addTemFileTab(temFilePath,fileInfo.fileName(),localPath,bIsTemFile);
                         recFilesSum++;
                     }
                 } else {
                     if (!localPath.isEmpty() && Utils::fileExists(localPath)) {
-                        window->addTemFileTab(localPath,fileInfo.fileName(),localPath,bIsTemFile);
+                        if (Utils::isDraftFile(localPath)) {
+                            int index = files.indexOf(QFileInfo(localPath).fileName());
+
+                            if (index >= 0) {
+                                QString fileName = tr("Untitled %1").arg(index + 1);
+                                window->addTemFileTab(localPath,fileName,localPath,bIsTemFile);
+                            }
+                        } else {
+                            window->addTemFileTab(localPath,fileInfo.fileName(),localPath,bIsTemFile);
+                        }
+
                         recFilesSum++;
                     }
                 }
@@ -279,7 +369,6 @@ void StartManager::openFilesInTab(QStringList files)
             // Open file tab in first window of window list.
             else {
                 Window *window = m_windows[0];
-                //recoverFile(window);
                 window->addTab(file);
                 window->setWindowState(Qt::WindowActive);
                 window->activateWindow();

@@ -111,6 +111,7 @@ public:
     bool closeAllFiles();
 
     void addTemFileTab(QString qstrPath,QString qstrName,QString qstrTruePath,bool bIsTemFile = false);
+    QMap<QString, EditWrapper *> getWrappers();
 
 public:
     //设置显示清除焦点
@@ -202,6 +203,8 @@ private:
     int m_remberPositionScrollOffset;
 
     QString m_blankFileDir;
+    QString m_backupDir;
+    QString m_autoBackupDir;
     int m_fontSize = 0;
 
     QString m_titlebarStyleSheet;

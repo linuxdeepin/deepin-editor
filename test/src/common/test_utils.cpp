@@ -238,13 +238,6 @@ TEST_F(test_utils, isDraftFile)
     assert(1 == 1);
 }
 
-//static void toast(const QString &message, QWidget* parent = nullptr);
-TEST_F(test_utils, toast)
-{
-    Utils::toast("aa");
-    assert(1 == 1);
-}
-
 //static const QStringList getEncodeList();
 TEST_F(test_utils, getEncodeList)
 {

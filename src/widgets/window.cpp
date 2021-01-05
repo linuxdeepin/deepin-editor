@@ -49,7 +49,6 @@
 #include <QWindow>
 #include <DWidgetUtil>
 
-
 #ifdef DTKWIDGET_CLASS_DFileDialog
 
 #include <DFileDialog>
@@ -72,6 +71,8 @@ Window::Window(DMainWindow *parent)
 {
     qRegisterMetaType<TextEdit*>("TextEdit");
     m_blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
+    m_backupDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("backup-files");
+    m_autoBackupDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("autoBackup-files");
     m_themePath = Settings::instance()->settings->option("advance.editor.theme")->value().toString();
     m_rootSaveDBus = new DBusDaemon::dbus("com.deepin.editor.daemon", "/", QDBusConnection::systemBus(), this);
     m_settings = Settings::instance();
@@ -326,6 +327,8 @@ void Window::showCenterWindow(bool bIsCenter)
         showMaximized();
     } else if (windowState == "fullscreen") {
         showFullScreen();
+    } else {
+        show();
     }
 }
 
@@ -602,11 +605,10 @@ bool Window::closeTab()
             QFile(filePath).remove();
         }
     }
-
-
     // document has been modified or unsaved draft document.
     // need to prompt whether to save.
     else {
+        QFileInfo fileInfo (filePath);
 
         if(isModified){
             DDialog *dialog = createDialog(tr("Do you want to save this file?"), "");
@@ -620,10 +622,14 @@ bool Window::closeTab()
                removeWrapper(filePath, true);
                m_tabbar->closeCurrentTab();
 
+
                if (bIsBackupFile) {
                    QFile(filePath).remove();
-                   QFileInfo fileinfo (filePath);
-                   QDir(m_blankFileDir).rmdir(fileinfo.absoluteDir().dirName());
+               }
+
+               if (QFileInfo(m_autoBackupDir).exists()) {
+                   QString name = fileInfo.absolutePath().replace("/","_");
+                   QDir(m_autoBackupDir).remove(fileInfo.baseName() + "." + name + "." + fileInfo.suffix());
                }
 
                return true;
@@ -631,15 +637,13 @@ bool Window::closeTab()
 
             //保存
             if(res == 2){
-                if(bIsBackupFile){
+                if(bIsBackupFile){                    
                   if(wrapper->saveFile())
                   {
                       removeWrapper(filePath, true);
                       m_tabbar->closeCurrentTab();
                       QFile(filePath).remove();
-                      QFileInfo fileinfo (filePath);
-                      QDir(m_blankFileDir).rmdir(fileinfo.absoluteDir().dirName());
-                  }
+                  }             
                 }else {
                    if(wrapper->saveFile())
                    {
@@ -647,10 +651,15 @@ bool Window::closeTab()
                        m_tabbar->closeCurrentTab();
                    }
                 }
-            }
+            }          
         }else {
             removeWrapper(filePath, true);
             m_tabbar->closeCurrentTab();
+        }
+
+        if (QFileInfo(m_autoBackupDir).exists()) {
+            QString name = fileInfo.absolutePath().replace("/","_");
+            QDir(m_autoBackupDir).remove(fileInfo.baseName() + "." + name + "." + fileInfo.suffix());
         }
     }
 
@@ -776,6 +785,7 @@ void Window::openFile()
 
     // read history directory.
     QString historyDirStr = m_settings->settings->option("advance.editor.file_dialog_dir")->value().toString();
+
     if (historyDirStr.isEmpty()) {
         historyDirStr = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     }
@@ -823,7 +833,6 @@ void Window::openFile()
 
 bool Window::saveFile()
 {
-
     EditWrapper* wrapperEdit = currentWrapper();
 
     //大文本加载过程不允许保存
@@ -871,26 +880,26 @@ bool Window::saveFile()
         QDir(m_blankFileDir).rmdir(fileinfo.absoluteDir().dirName());
     }
 
-   if(success){
-       currentWrapper()->hideWarningNotices();
-       showNotify(tr("Saved successfully"));
-       return true;
-   }else {
-       DDialog *dialog = createDialog(tr("Do you want to save as another?"), "");
+    if(success){
+        currentWrapper()->hideWarningNotices();
+        showNotify(tr("Saved successfully"));
+        return true;
+    }else {
+        DDialog *dialog = createDialog(tr("Do you want to save as another?"), "");
 
-       wrapperEdit->setUpdatesEnabled(false);
-       int mode =  dialog->exec();
-       wrapperEdit->setUpdatesEnabled(true);
-       wrapperEdit->hideWarningNotices();
-       dialog->deleteLater();
-       dialog = nullptr;
+        wrapperEdit->setUpdatesEnabled(false);
+        int mode =  dialog->exec();
+        wrapperEdit->setUpdatesEnabled(true);
+        wrapperEdit->hideWarningNotices();
+        dialog->deleteLater();
+        dialog = nullptr;
 
-       if(mode == 2){
-           return  saveAsFile();
-       }
+        if(mode == 2){
+            return  saveAsFile();
+        }
 
-       return false;
-   }
+        return false;
+    }
 }
 
 bool Window::saveAsFile()
@@ -1450,104 +1459,58 @@ void Window::displayShortcuts()
 
 void Window::backupFile()
 {
+    if (!QFileInfo(m_backupDir).exists()) {
+        QDir().mkpath(m_backupDir);
+    }
+
     QMap<QString, EditWrapper *> wrappers = m_wrappers;
     QStringList listBackupInfo;
-    QString filePath,curPos;
+    QString filePath,localPath,curPos;
     QFileInfo fileInfo;
     m_qlistTemFile.clear();
-    listBackupInfo = Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->value().toStringList();
     m_qlistTemFile = wrappers.keys();
 
     for (EditWrapper *wrapper : wrappers) {
         if(wrapper->getFileLoading()) continue;
 
         filePath = wrapper->textEditor()->getFilePath();
+        localPath = wrapper->textEditor()->getTruePath();
+
+        if (localPath.isEmpty()) {
+            localPath = wrapper->textEditor()->getFilePath();
+        }
+
         StartManager::FileTabInfo tabInfo = StartManager::instance()->getFileTabInfo(filePath);
-        curPos = QString::number(wrapper->textEditor()->textCursor().position());
-        fileInfo.setFile(filePath);
+        curPos = QString::number(wrapper->textEditor()->textCursor().position());              
+        fileInfo.setFile(localPath);
 
-        if (fileInfo.dir().absolutePath() == m_blankFileDir) {
-            QJsonObject jsonObject;
-            QJsonDocument document;
-            jsonObject.insert("localPath",filePath);
-            jsonObject.insert("cursorPosition",curPos);
-            jsonObject.insert("temFilePath",filePath);
-            jsonObject.insert("modify",wrapper->isModified());
-            document.setObject(jsonObject);
-            QByteArray byteArray = document.toJson(QJsonDocument::Compact);
-            m_qlistTemFile.replace(tabInfo.tabIndex,byteArray);
-            wrapper->saveFile();
+        QJsonObject jsonObject;
+        QJsonDocument document;
+        jsonObject.insert("localPath",localPath);
+        jsonObject.insert("cursorPosition",QString::number(wrapper->textEditor()->textCursor().position()));
+        jsonObject.insert("modify",wrapper->isModified());
+
+        if (Utils::isDraftFile(filePath)) {
+            wrapper->saveTemFile(filePath);
         } else {
-            QString localPath = filePath;
-            fileInfo.setFile(localPath);
-
-            for (int var = 0; var < listBackupInfo.count();var ++) {
-                QJsonParseError jsonError;
-                // 转化为 JSON 文档
-                QJsonDocument document = QJsonDocument::fromJson(listBackupInfo.value(var).toUtf8(), &jsonError);
-                // 解析未发生错误
-                if (!document.isNull() && (jsonError.error == QJsonParseError::NoError)) {
-                    if (document.isObject()) {
-                        // JSON 文档为对象
-                        QJsonObject object = document.object();  // 转化为对象
-
-                        if (object.contains("temFilePath")) {  // 包含指定的 key
-                            QJsonValue value = object.value("temFilePath");  // 获取指定 key 对应的 value
-
-                            if (value.toString() == filePath) {
-
-                                if (object.contains("localPath")) {  // 包含指定的 key
-                                    QJsonValue value = object.value("localPath");  // 获取指定 key 对应的 value
-
-                                    if (value.isString()) {
-                                        localPath = value.toString();
-                                        fileInfo.setFile(localPath);
-                                    }
-
-                                    break;
-                                }
-                            }
-                        } else if (object.contains("localPath")) {
-                            QJsonValue value = object.value("localPath");
-
-                            if (value.toString() == filePath) {
-
-                                if (value.isString()) {
-                                    localPath = value.toString();
-                                    fileInfo.setFile(localPath);
-                                }
-
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-
-            QJsonObject jsonObject;
-            QJsonDocument document;
-            jsonObject.insert("localPath",localPath);
-            jsonObject.insert("cursorPosition",QString::number(wrapper->textEditor()->textCursor().position()));
-            jsonObject.insert("modify",wrapper->isModified());
-
             if (wrapper->isModified()) {
-                QString path = fileInfo.path();
-                int lastPath = fileInfo.path().lastIndexOf("/");
-                QString name = path.right(path.count() - lastPath - 1);
-                QDir dir(m_blankFileDir);
-                dir.mkdir(name);
-                QString qstrFilePath = m_blankFileDir + "/" + name + "/" + fileInfo.baseName() + ".deepin-editor_temfile." + fileInfo.suffix();
+                QString name = fileInfo.absolutePath().replace("/","_");
+                QString qstrFilePath = m_backupDir + "/" + fileInfo.baseName() + "." + name + "." + fileInfo.suffix();
                 jsonObject.insert("temFilePath",qstrFilePath);
                 wrapper->saveTemFile(qstrFilePath);
             }
-
-            document.setObject(jsonObject);
-            QByteArray byteArray = document.toJson(QJsonDocument::Compact);
-            m_qlistTemFile.replace(tabInfo.tabIndex,byteArray);
         }
+
+        document.setObject(jsonObject);
+        QByteArray byteArray = document.toJson(QJsonDocument::Compact);
+        m_qlistTemFile.replace(tabInfo.tabIndex,byteArray);
     }
 
     m_settings->settings->option("advance.editor.browsing_history_temfile")->setValue(m_qlistTemFile);
+
+    if (QFileInfo(m_autoBackupDir).exists()) {
+        QDir(m_autoBackupDir).removeRecursively();
+    }
 }
 
 bool Window::closeAllFiles()
@@ -1576,6 +1539,11 @@ void Window::addTemFileTab(QString qstrPath,QString qstrName,QString qstrTruePat
     wrapper->openFile(qstrPath,qstrTruePath,bIsTemFile);
     m_wrappers[qstrPath] = wrapper;
     showNewEditor(wrapper);
+}
+
+QMap<QString, EditWrapper *> Window::getWrappers()
+{
+    return m_wrappers;
 }
 
 void Window::setChildrenFocus(bool ok)

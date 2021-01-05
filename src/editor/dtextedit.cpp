@@ -4972,7 +4972,7 @@ void TextEdit::dropEvent(QDropEvent *event)
 void TextEdit::inputMethodEvent(QInputMethodEvent *e)
 {
     m_bIsInputMethod = true;
-    //qDebug()<<e;
+
     if(!m_readOnlyMode && !e->commitString().isEmpty()) {
        //列编辑添加撤销重做
        if(m_bIsAltMod && !m_altModSelections.isEmpty()){

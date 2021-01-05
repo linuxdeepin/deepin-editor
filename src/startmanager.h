@@ -53,6 +53,7 @@ public:
     bool ifKlu();
     bool isMultiWindow();
     bool isTemFilesEmpty();
+    void autoBackupFile();
     int recoverFile(Window *window);
 
 private:
@@ -84,6 +85,10 @@ private:
     QScopedPointer<Entry> m_pEntry;
     QStringList m_listFilePath;
     QStringList m_qlistTemFile;
+    QTimer *m_pTimer;
+    QString m_blankFileDir;
+    QString m_backupDir;
+    QString m_autoBackupDir;
 };
 
 #endif
