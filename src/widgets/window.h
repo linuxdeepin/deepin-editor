@@ -115,6 +115,7 @@ public:
 public:
     //设置显示清除焦点
     void setChildrenFocus(bool ok);
+
 signals:
     void themeChanged(const QString themeName);
     void requestDragEnterEvent(QDragEnterEvent *);
@@ -123,6 +124,7 @@ signals:
     void close();
     void sigJudgeBlockShutdown();
     void pressEsc();
+
 public slots:
     void addBlankTab();
     void addBlankTab(const QString &blankFile);
@@ -158,6 +160,7 @@ public slots:
 
     void slotLoadContentTheme(DGuiApplicationHelper::ColorType themeType);
     void slotSettingResetTheme(const QString &path);
+    void slotFindIconBtnClicked();
 
     void slot_saveReadingPath();
     void slot_beforeReplace(QString _);
@@ -173,7 +176,9 @@ protected:
     void closeEvent(QCloseEvent *event) override;
     void hideEvent(QHideEvent *event) override;
     void keyPressEvent(QKeyEvent *keyEvent) override;
+    #ifdef TABLET
     void dragEnterEvent(QDragEnterEvent *e) override;
+    #endif
     void dropEvent(QDropEvent* event) override;
 
 private:
@@ -193,6 +198,8 @@ private:
     QMap<QString, EditWrapper *> m_wrappers;
 
     DMenu *m_menu;
+    //查找按钮图标
+    DToolButton *m_pFindToolBtn {nullptr};
 
     QStringList m_closeFileHistory;
 

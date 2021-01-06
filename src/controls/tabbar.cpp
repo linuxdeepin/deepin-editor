@@ -44,8 +44,10 @@ Tabbar::Tabbar(QWidget *parent)
     setMovable(true);
     setTabsClosable(true);
     setVisibleAddButton(true);
+    #ifdef TABLET
     setDragable(true);
-   // setStartDragDistance(40);
+    #endif
+    //setStartDragDistance(40);
     setElideMode(Qt::ElideMiddle);
     setTabPalette(palette().buttonText().color().name(),palette().highlightedText().color().name());
     setFocusPolicy(Qt::NoFocus);
@@ -54,8 +56,10 @@ Tabbar::Tabbar(QWidget *parent)
     connect(this, &DTabBar::tabMoved, this, &Tabbar::handleTabMoved);
     connect(this, &DTabBar::tabDroped, this, &Tabbar::handleTabDroped);
     connect(this, &DTabBar::tabIsRemoved, this, &Tabbar::handleTabIsRemoved);
+    #ifdef TABLET
     connect(this, &DTabBar::tabReleaseRequested, this, &Tabbar::handleTabReleased);
     connect(this, &DTabBar::dragActionChanged, this, &Tabbar::handleDragActionChanged);
+    #endif
 }
 
 Tabbar::~Tabbar()
@@ -270,6 +274,7 @@ void Tabbar::setDNDColor(const QString &startColor, const QString &endColor)
     m_dndEndColor = endColor;
 }
 
+#ifdef TABLET
 QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option, QPoint *hotspot) const
 {
     const qreal ratio = qApp->devicePixelRatio();
@@ -385,12 +390,11 @@ void Tabbar::insertFromMimeData(int index, const QMimeData *source)
     if (source == nullptr) {
         return;
     }
-//    qDebug() << "insertFromMimeData";
+
     const QString tabName = QString::fromUtf8(source->data("dedit/tabbar"));
     QVariant pVar = source->property("wrapper");
     EditWrapper *wrapper = static_cast<EditWrapper *>(pVar.value<void *>());
     Window *window = static_cast<Window *>(this->window());
-
     if (!wrapper) {
         return;
     }
@@ -406,10 +410,10 @@ bool Tabbar::canInsertFromMimeData(int index, const QMimeData *source) const
 {
     return source->hasFormat("dedit/tabbar");
 }
+#endif
 
 void Tabbar::handleDragActionChanged(Qt::DropAction action)
 {
-
     // Reset cursor to Qt::ArrowCursor if drag tab to TextEditor widget.
     if (action == Qt::IgnoreAction) {
         if (dragIconWindow()) {
@@ -431,7 +435,6 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
 
         if (mouseEvent->button() == Qt::RightButton) {
 
-
             QPoint position = mouseEvent->pos();
             m_rightClickTab = this->tabAt(position);
             int indexCount = this->count();
@@ -444,8 +447,6 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
 //                    break;
 //                }
 //            }
-
-
 
             // popup right menu on tab.
             if (m_rightClickTab >= 0) {
@@ -581,6 +582,7 @@ void Tabbar::mousePressEvent(QMouseEvent *e)
     DTabBar::mousePressEvent(e);
 }
 
+#ifdef TABLET
 void Tabbar::dropEvent(QDropEvent *e)
 {
     if(e->dropAction() == Qt::CopyAction && e->mimeData()->hasFormat("dedit/tabbar"))
@@ -609,6 +611,7 @@ void Tabbar::dropEvent(QDropEvent *e)
 
     DTabBar::dropEvent(e);
 }
+#endif
 
 QSize Tabbar::tabSizeHint(int index) const
 {

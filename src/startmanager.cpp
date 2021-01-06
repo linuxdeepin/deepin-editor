@@ -291,13 +291,13 @@ void StartManager::openFilesInTab(QStringList files)
 
 void StartManager::createWindowFromWrapper(const QString &tabName, const QString &filePath, const QString &qstrTruePath, EditWrapper *buffer, bool isModifyed)
 {
-
     Window *window = createWindow();
     //window->showCenterWindow();
     window->addTabWithWrapper(buffer, filePath, qstrTruePath, tabName);
     window->currentWrapper()->updateModifyStatus(isModifyed);
-    window->setMinimumSize(Tabbar::sm_pDragPixmap->rect().size());
 
+    #ifdef TABLET
+    window->setMinimumSize(Tabbar::sm_pDragPixmap->rect().size());
 
     QRect rect = window->rect();
     QPoint pos = QCursor::pos() ;/*- window->topLevelWidget()->pos();*/
@@ -319,15 +319,16 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
     QRect startRect(startPos, Tabbar::sm_pDragPixmap->rect().size());
     QRect endRect(startPos,window->rect().size());
     window->move(startPos);
+
     window->show();
-#if 0
+    #if 0
     // window->setFixedSize(Tabbar::sm_pDragPixmap->rect().size());
     QLabel *pLab = new QLabel();
     //pLab->resize(Tabbar::sm_pDragPixmap->rect().size());
     pLab->move(pos);
     pLab->setPixmap(*Tabbar::sm_pDragPixmap);
     pLab->show();
-#endif
+    #endif
     //添加编辑窗口drop动态显示效果　梁卫东　２０２０－０８－２５　０９：５４：５７
     QPropertyAnimation *geometry = new QPropertyAnimation(window, "geometry");
     geometry->setDuration(200);
@@ -356,6 +357,7 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
    // group->addAnimation(Opacity);
 
     group->start();
+    #endif
 }
 
 void StartManager::loadTheme(const QString &themeName)

@@ -67,18 +67,22 @@ signals:
     void closeTabs(const QStringList pathList);
 
 protected:
+    #ifdef TABLET
     QPixmap createDragPixmapFromTab(int index, const QStyleOptionTab &option, QPoint *hotspot) const;
     QMimeData *createMimeDataFromTab(int index, const QStyleOptionTab &option) const;
     void insertFromMimeDataOnDragEnter(int index, const QMimeData *source);
     void insertFromMimeData(int index, const QMimeData *source);
     bool canInsertFromMimeData(int index, const QMimeData *source) const;
+    #endif
     bool eventFilter(QObject *, QEvent *event);
 
     QSize tabSizeHint(int index) const;
     QSize minimumTabSizeHint(int index) const;
     QSize maximumTabSizeHint(int index) const;
     void mousePressEvent(QMouseEvent *e);
+    #ifdef TABLET
     void dropEvent(QDropEvent *e);
+    #endif
 
 private:
     void handleTabMoved(int fromIndex, int toIndex);
@@ -87,6 +91,7 @@ private:
     void handleTabDroped(int index, Qt::DropAction, QObject *target);
     void handleDragActionChanged(Qt::DropAction action);
     void onTabDrapStart();
+
 private:
     QStringList m_tabPaths;
     QStringList m_listOldTabPath;
@@ -107,6 +112,7 @@ private:
     QString m_qstrDragName;
     QString m_qstrDragPath;
     EditWrapper *m_pWrapper = nullptr;
+
 public:
     static QPixmap *sm_pDragPixmap;
 };

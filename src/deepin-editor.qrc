@@ -304,5 +304,7 @@
         <file>encodes/encodes1.ini</file>
         <file>images/arrow_dark.svg</file>
         <file>images/arrow_light.svg</file>
+        <file>images/find_dark.svg</file>
+        <file>images/find_light.svg</file>
     </qresource>
 </RCC>

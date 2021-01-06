@@ -1277,7 +1277,7 @@ TEST_F(test_textedit, appendExtraSelection)
     Settings *s = new Settings();
     startManager->setSettings(s);
     startManager->setWrapper(ee);
-    startManager->slot_translate();
+    //startManager->slot_translate();
 
     assert(1==1);
 }

@@ -136,7 +136,6 @@ TextEdit::TextEdit(QWidget *parent)
     //初始化右键菜单
     initRightClickedMenu();
 
-
     // Init scroll animation.
     m_scrollAnimation = new QPropertyAnimation(verticalScrollBar(), "value");
     m_scrollAnimation->setEasingCurve(QEasingCurve::InOutExpo);
@@ -222,14 +221,16 @@ void TextEdit::initRightClickedMenu()
     m_jumpLineAction = new QAction(tr("Go to Line"), this);
     m_enableReadOnlyModeAction = new QAction(tr("Turn on Read-Only mode"), this);
     m_disableReadOnlyModeAction = new QAction(tr("Turn off Read-Only mode"), this);
+    #ifdef TABLET
     m_fullscreenAction = new QAction(tr("Fullscreen"), this);
     m_exitFullscreenAction = new QAction(tr("Exit fullscreen"), this);
-    m_openInFileManagerAction = new QAction(tr("Display in file manager"), this);
-    m_toggleCommentAction = new QAction(tr("Add Comment"), this);
     m_voiceReadingAction = new QAction(tr("Text to Speech"),this);
     m_stopReadingAction = new QAction(tr("Stop reading"),this);
     m_dictationAction = new QAction(tr("Speech to Text"),this);
     m_translateAction = new QAction(tr("Translate"),this);
+    #endif
+    m_openInFileManagerAction = new QAction(tr("Display in file manager"), this);
+    m_toggleCommentAction = new QAction(tr("Add Comment"), this);
     m_columnEditAction = new QAction(tr("Column Mode"),this);
     m_addBookMarkAction = new QAction(tr("Add bookmark"),this);
     m_cancelBookMarkAction = new QAction(tr("Remove Bookmark"),this);
@@ -275,7 +276,6 @@ void TextEdit::initRightClickedMenu()
     });
     m_actionAllColorStyles = new QWidgetAction(this);
     m_actionAllColorStyles->setDefaultWidget(pColorsAllSelectWdg);
-
 
     m_markAllAct = new QAction(tr("Mark All"), this);
     connect(m_markAllAct, &QAction::triggered, this,[this,pColorsAllSelectWdg](){
@@ -387,10 +387,27 @@ void TextEdit::initRightClickedMenu()
     connect(m_findAction, &QAction::triggered, this, &TextEdit::clickFindAction);
     connect(m_replaceAction, &QAction::triggered, this, &TextEdit::clickReplaceAction);
     connect(m_jumpLineAction, &QAction::triggered, this, &TextEdit::clickJumpLineAction);
-    connect(m_fullscreenAction, &QAction::triggered, this, &TextEdit::clickFullscreenAction);
-    connect(m_exitFullscreenAction, &QAction::triggered, this, &TextEdit::clickFullscreenAction);
     connect(m_enableReadOnlyModeAction, &QAction::triggered, this, &TextEdit::toggleReadOnlyMode);
     connect(m_disableReadOnlyModeAction, &QAction::triggered, this, &TextEdit::toggleReadOnlyMode);
+
+    #ifdef TABLET
+    connect(m_fullscreenAction, &QAction::triggered, this, &TextEdit::clickFullscreenAction);
+    connect(m_exitFullscreenAction, &QAction::triggered, this, &TextEdit::clickFullscreenAction);
+    connect(m_voiceReadingAction, &QAction::triggered, this,[this](){
+        QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.TextToSpeech");
+        emit signal_readingPath();
+    });
+
+    connect(m_stopReadingAction, &QAction::triggered, this,[](){
+        QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
+    });
+
+    connect(m_dictationAction, &QAction::triggered, this,[](){
+        QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.SpeechToText");
+    });
+
+    connect(m_translateAction, &QAction::triggered, this, &TextEdit::slot_translate);
+    #endif
 
     connect(m_openInFileManagerAction, &QAction::triggered, this,[this](){
         DDesktopServices::showFileItem(m_sFilePath);
@@ -399,20 +416,11 @@ void TextEdit::initRightClickedMenu()
     connect(m_addComment,&QAction::triggered,this,[=] {
         toggleComment(true);
     });
+
     connect(m_cancelComment,&QAction::triggered,this,[=] {
         toggleComment(false);
     });
-    connect(m_voiceReadingAction, &QAction::triggered, this,[this](){
-        QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.TextToSpeech");
-        emit signal_readingPath();
-    });
-    connect(m_stopReadingAction, &QAction::triggered, this,[](){
-        QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
-    });
-    connect(m_dictationAction, &QAction::triggered, this,[](){
-        QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.SpeechToText");
-    });
-    connect(m_translateAction, &QAction::triggered, this, &TextEdit::slot_translate);
+
     connect(m_columnEditAction,&QAction::triggered,this,[this] {
         //toggleComment(true); todo
         DMessageManager::instance()->sendMessage(this, QIcon(":/images/ok.svg"),tr("Press ALT and click lines to edit in column mode"));
@@ -480,7 +488,6 @@ void TextEdit::initRightClickedMenu()
         renderAllSelections();
     });
 
-
     // Init convert case sub menu.
     m_haveWordUnderCursor = false;
     m_convertCaseMenu = new DMenu(tr("Change Case"));
@@ -491,7 +498,6 @@ void TextEdit::initRightClickedMenu()
     m_convertCaseMenu->addAction(m_upcaseAction);
     m_convertCaseMenu->addAction(m_downcaseAction);
     m_convertCaseMenu->addAction(m_capitalizeAction);
-
 
     connect(m_upcaseAction, &QAction::triggered, this, &TextEdit::upcaseWord);
     connect(m_downcaseAction, &QAction::triggered, this, &TextEdit::downcaseWord);
@@ -506,7 +512,6 @@ void TextEdit::initRightClickedMenu()
     connect(this, &TextEdit::redoAvailable, this, [=] (bool redoIsAvailable) {
         m_canRedo = redoIsAvailable;
     });
-
 }
 
 void TextEdit::popRightMenu(QPoint pos)
@@ -623,6 +628,7 @@ void TextEdit::popRightMenu(QPoint pos)
     }
 
     m_rightMenu->addAction(m_openInFileManagerAction);
+    #ifdef TABLET
     m_rightMenu->addSeparator();
     if (static_cast<Window*>(this->window())->isFullScreen()) {
         m_rightMenu->addAction(m_exitFullscreenAction);
@@ -631,7 +637,7 @@ void TextEdit::popRightMenu(QPoint pos)
     }
 
     if ((DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosProfessional) ||
-         (DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosHome)){
+         (DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosHome)) {
         bool stopReadingState = false;
         QDBusMessage stopReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
                                                           "/aiassistant/tts",
@@ -696,7 +702,7 @@ void TextEdit::popRightMenu(QPoint pos)
             m_translateAction->setEnabled(translateState);
         }
     }
-
+    #endif
 
     if(!this->document()->isEmpty()) {
 
@@ -3026,11 +3032,12 @@ void TextEdit::restoreMarkStatus()
     }
 }
 
-
+#ifdef TABLET
 void TextEdit::slot_translate()
 {
     QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.TextToTranslate");
 }
+#endif
 
 QString TextEdit::getWordAtCursor()
 {
@@ -4322,6 +4329,7 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
     case QEvent::TouchUpdate:
     case QEvent::TouchEnd:
     {
+        #ifdef TABLET //触控板三指触发翻译功能
         QTouchEvent *touchEvent = static_cast<QTouchEvent *>(event);
         QList<QTouchEvent::TouchPoint> touchPoints = touchEvent->touchPoints();
         QMouseEvent *event2 = static_cast<QMouseEvent *>(event);
@@ -4330,6 +4338,7 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
         {
             slot_translate();
         }
+        #endif
         break;
     }
     default:break;
@@ -4919,10 +4928,12 @@ void TextEdit::onSelectionArea()
 
 void TextEdit::fingerZoom(QString name, QString direction, int fingers)
 {
+    #ifdef TABLET //触控板三指触发翻译功能
     if(name=="tap"&&fingers==3)
     {
         slot_translate();
     }
+    #endif
         // 当前窗口被激活,且有焦点
         if (hasFocus()) {
             if (name == "pinch" && fingers == 2) {
@@ -5566,7 +5577,9 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "removecomment")) {
                 toggleComment(false);
                 return;
-            } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "switchbookmark")) {
+            }
+            #ifdef TABLET
+            else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "switchbookmark")) {
                 m_bIsShortCut = true;
                 addOrDeleteBookMark();
                 return;
@@ -5576,7 +5589,9 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "movetonextbookmark")) {
                 moveToNextBookMark();
                 return;
-            } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "mark")) {
+            }
+            #endif
+            else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "mark")) {
                 markSelectWord();
                 return;
             } else if (e->key() == Qt::Key_Insert && key != "Shift+Ins") {

@@ -202,7 +202,6 @@ Window::Window(DMainWindow *parent)
     int window_height =Settings::instance()->settings->option("advance.window.window_height")->value().toInt();
     resize(window_width,window_height);
 
-
     // Init find bar.
     connect(m_findBar, &FindBar::findNext, this, &Window::handleFindNext, Qt::QueuedConnection);
     connect(m_findBar, &FindBar::findPrev, this, &Window::handleFindPrev, Qt::QueuedConnection);
@@ -277,7 +276,7 @@ Window::Window(DMainWindow *parent)
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::themeTypeChanged, this, &Window::slotLoadContentTheme);
 
      //setChildrenFocus(false);
-     Utils::clearChildrenFocus(m_tabbar);//使用此函数把tabbar的组件焦点去掉(左右箭头不能focus)
+     Utils::clearChildrenFocus(m_tabbar); //使用此函数把tabbar的组件焦点去掉(左右箭头不能focus)
 }
 
 Window::~Window()
@@ -331,7 +330,9 @@ void Window::showCenterWindow(bool bIsCenter)
 
 void Window::initTitlebar()
 {
+    #ifdef TABLET
     QAction *newWindowAction(new QAction(tr("New window"), this));
+    #endif
     QAction *newTabAction(new QAction(tr("New tab"), this));
     QAction *openFileAction(new QAction(tr("Open file"), this));
     QAction *saveAction(new QAction(tr("Save"), this));
@@ -342,7 +343,9 @@ void Window::initTitlebar()
     QAction *findAction(new QAction(QApplication::translate("TextEdit", "Find"), this));
     QAction *replaceAction(new QAction(QApplication::translate("TextEdit", "Replace"), this));
 
+    #ifdef TABLET
     m_menu->addAction(newWindowAction);
+    #endif
     m_menu->addAction(newTabAction);
     m_menu->addAction(openFileAction);
     m_menu->addSeparator();
@@ -354,17 +357,28 @@ void Window::initTitlebar()
     //m_menu->addAction(switchThemeAction);
     m_menu->addSeparator();
     m_menu->addAction(settingAction);
-
     m_menu->setMinimumWidth(150);
 
     titlebar()->addWidget(m_tabbar);
-
     titlebar()->setCustomWidget(m_tabbar, false);
     titlebar()->setSeparatorVisible(false);
     titlebar()->setMenu(m_menu);
     titlebar()->setIcon(QIcon::fromTheme("deepin-editor"));
-
     titlebar()->setFocusPolicy(Qt::NoFocus);         //设置titlebar无焦点，点击titlebar时光标不移动
+
+    //平板需求，标题栏添加查找按钮图标
+    m_pFindToolBtn = new DToolButton(nullptr);
+    m_pFindToolBtn->setFixedSize(QSize(37, 37));
+    m_pFindToolBtn->setIconSize(QSize(43, 43));
+    QString strFindToolPath(":/images/find_");
+    if (DApplicationHelper::instance()->themeType() == DApplicationHelper::ColorType::LightType) {
+        strFindToolPath = strFindToolPath + "light.svg";
+    } else if (DApplicationHelper::instance()->themeType() == DApplicationHelper::ColorType::DarkType) {
+        strFindToolPath = strFindToolPath + "dark.svg";
+    }
+    m_pFindToolBtn->setIcon(QIcon(strFindToolPath));
+    titlebar()->addWidget(m_pFindToolBtn, Qt::AlignVCenter | Qt::AlignRight);
+    connect(m_pFindToolBtn, &DToolButton::clicked, this, &Window::slotFindIconBtnClicked);
 
     DIconButton *addButton = m_tabbar->findChild<DIconButton *>("AddButton");
     addButton->setFocusPolicy(Qt::NoFocus);
@@ -396,9 +410,9 @@ void Window::initTitlebar()
     connect(m_tabbar, &DTabBar::tabAddRequested, this, static_cast<void (Window::*)()>(&Window::addBlankTab), Qt::QueuedConnection);
     connect(m_tabbar, &DTabBar::currentChanged, this, &Window::handleCurrentChanged, Qt::QueuedConnection);
 
-
-
+    #ifdef TABLET
     connect(newWindowAction, &QAction::triggered, this, &Window::newWindow);
+    #endif
     connect(newTabAction, &QAction::triggered, this, static_cast<void (Window::*)()>(&Window::addBlankTab));
     connect(openFileAction, &QAction::triggered, this, &Window::openFile);
     connect(findAction, &QAction::triggered, this, &Window::popupFindBar);
@@ -525,7 +539,9 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
     connect(wrapper->textEditor(), &TextEdit::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::clickReplaceAction, this, &Window::popupReplaceBar, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::clickJumpLineAction, this, &Window::popupJumpLineBar, Qt::QueuedConnection);
+    #ifdef TABLET
     connect(wrapper->textEditor(), &TextEdit::clickFullscreenAction, this, &Window::toggleFullscreen, Qt::QueuedConnection);
+    #endif
     connect(wrapper->textEditor(), &TextEdit::popupNotify, this, &Window::showNotify, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::signal_setTitleFocus, this, &Window::slot_setTitleFocus, Qt::QueuedConnection);
 
@@ -673,7 +689,9 @@ EditWrapper *Window::createEditor()
     connect(wrapper->textEditor(), &TextEdit::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::clickReplaceAction, this, &Window::popupReplaceBar, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::clickJumpLineAction, this, &Window::popupJumpLineBar, Qt::QueuedConnection);
+    #ifdef TABLET
     connect(wrapper->textEditor(), &TextEdit::clickFullscreenAction, this, &Window::toggleFullscreen, Qt::QueuedConnection);
+    #endif
     connect(wrapper->textEditor(), &TextEdit::popupNotify, this, &Window::showNotify, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::textChanged, this, [=](){
         updateJumpLineBar(wrapper->textEditor());
@@ -681,7 +699,9 @@ EditWrapper *Window::createEditor()
 
 
     bool wordWrap = m_settings->settings->option("base.font.wordwrap")->value().toBool();
+    #ifdef TABLET
     wrapper->textEditor()->m_pIsShowCodeFoldArea = m_settings->settings->option("base.font.codeflod")->value().toBool();
+    #endif
     wrapper->OnThemeChangeSlot(m_themePath);
     wrapper->textEditor()->setSettings(m_settings);
     wrapper->textEditor()->setTabSpaceNumber(m_settings->settings->option("advance.editor.tabspacenumber")->value().toInt());
@@ -694,8 +714,8 @@ EditWrapper *Window::createEditor()
     //yanyuhan 设置行号显示
     wrapper->setLineNumberShow(m_settings->settings->option("base.font.showlinenumber")->value().toBool(),true);
     wrapper->textEditor()->setHighLineCurrentLine(m_settings->settings->option("base.font.hightlightcurrentline")->value().toBool());
-    wrapper->textEditor()->setBookmarkFlagVisable(m_settings->settings->option("base.font.showbookmark")->value().toBool(), true);
-    wrapper->textEditor()->setCodeFlodFlagVisable(m_settings->settings->option("base.font.codeflod")->value().toBool(), true);
+    wrapper->textEditor()->setBookmarkFlagVisable(false, true);
+    wrapper->textEditor()->setCodeFlodFlagVisable(false, true);
     wrapper->textEditor()->updateLeftAreaWidget();
 
     return wrapper;
@@ -1076,48 +1096,48 @@ void Window::setFontSizeWithConfig(EditWrapper *wrapper)
 
 void Window::popupFindBar()
 {
-
-
-//    if (m_findBar->isVisible()) {
-//        m_findBar->move(QPoint(10, height() - 59));
-//        if (m_findBar->isFocus()) {
-//            m_wrappers.value(m_tabbar->currentPath())->textEditor()->setFocus();
-//        } else {
-//            m_findBar->focus();
-//        }
-//    } else {
-        //addBottomWidget(m_findBar);
-        m_findBar->setSearched(false);
-        QString tabPath = m_tabbar->currentPath();
-        EditWrapper *wrapper = currentWrapper();
-
-
-        if (currentWrapper() == nullptr) {
-            return;
-        }
-
-        if (wrapper->textEditor()->document()->isEmpty()) {
-            return;
-        }
-
-        currentWrapper()->bottomBar()->updateSize(59);
-
-        if (m_replaceBar->isVisible()) {
-            m_replaceBar->hide();
-        }
-        m_findBar->raise();
+    #if 0
+    if (m_findBar->isVisible()) {
         m_findBar->move(QPoint(10, height() - 59));
-        m_findBar->show();
+        if (m_findBar->isFocus()) {
+            m_wrappers.value(m_tabbar->currentPath())->textEditor()->setFocus();
+        } else {
+            m_findBar->focus();
+        }
+    } else {
+        addBottomWidget(m_findBar);
+    }
+    #endif
 
-        QString text = wrapper->textEditor()->textCursor().selectedText();
-        int row = wrapper->textEditor()->getCurrentLine();
-        int column = wrapper->textEditor()->getCurrentColumn();
-        int scrollOffset = wrapper->textEditor()->getScrollOffset();
+    m_findBar->setSearched(false);
+    QString tabPath = m_tabbar->currentPath();
+    EditWrapper *wrapper = currentWrapper();
 
-        m_findBar->activeInput(text, tabPath, row, column, scrollOffset);
+    if (currentWrapper() == nullptr) {
+        return;
+    }
 
-        QTimer::singleShot(10, this, [ = ] { m_findBar->focus(); });
-   // }
+    if (wrapper->textEditor()->document()->isEmpty()) {
+        return;
+    }
+
+    currentWrapper()->bottomBar()->updateSize(59);
+
+    if (m_replaceBar->isVisible()) {
+        m_replaceBar->hide();
+    }
+    m_findBar->raise();
+    m_findBar->move(QPoint(10, height() - 59));
+    m_findBar->show();
+
+    QString text = wrapper->textEditor()->textCursor().selectedText();
+    int row = wrapper->textEditor()->getCurrentLine();
+    int column = wrapper->textEditor()->getCurrentColumn();
+    int scrollOffset = wrapper->textEditor()->getScrollOffset();
+
+    m_findBar->activeInput(text, tabPath, row, column, scrollOffset);
+
+    QTimer::singleShot(10, this, [ = ] { m_findBar->focus(); });
 }
 
 void Window::popupReplaceBar()
@@ -1954,17 +1974,21 @@ DDialog *Window::createDialog(const QString &title, const QString &content)
 
 void Window::slotLoadContentTheme(DGuiApplicationHelper::ColorType themeType)
 {
+    QString strFindToolPath(":/images/find_");
     if (themeType == DGuiApplicationHelper::ColorType::LightType) {
+        strFindToolPath = strFindToolPath + "light.svg";
         loadTheme("/usr/share/deepin-editor/themes/deepin.theme");
         if (DGuiApplicationHelper::instance()->paletteType() == DGuiApplicationHelper::ColorType::UnknownType) {
             DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::ColorType::UnknownType);
         }
     } else if (themeType == DGuiApplicationHelper::ColorType::DarkType) {
+        strFindToolPath = strFindToolPath + "dark.svg";
         loadTheme("/usr/share/deepin-editor/themes/deepin_dark.theme");
         if (DGuiApplicationHelper::instance()->paletteType() == DGuiApplicationHelper::ColorType::UnknownType) {
             DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::ColorType::UnknownType);
         }
     }
+    m_pFindToolBtn->setIcon(QIcon(strFindToolPath));
 
     QString qstrColor = palette().color(QPalette::Active,QPalette::Text).name();
 
@@ -1998,6 +2022,11 @@ void Window::slotSettingResetTheme(const QString &path)
             //DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::DarkType);
         }
     }
+}
+
+void Window::slotFindIconBtnClicked()
+{
+    popupFindBar();
 }
 
 void Window::slot_saveReadingPath()
@@ -2151,13 +2180,15 @@ void Window::hideEvent(QHideEvent *event)
     }
 
     //如果替换浮窗正显示着，则隐藏
-//    if (m_replaceBar->isVisible()) {
-//      //  m_replaceBar->hide();
-//        if (currentWrapper() != nullptr) {
-//            currentWrapper()->m_bottomBar->show();
-//        }
-//    }
-     DMainWindow::hideEvent(event);
+    #if 0
+    if (m_replaceBar->isVisible()) {
+      //  m_replaceBar->hide();
+        if (currentWrapper() != nullptr) {
+            currentWrapper()->m_bottomBar->show();
+        }
+    }
+    #endif
+    DMainWindow::hideEvent(event);
 }
 
 void Window::keyPressEvent(QKeyEvent *e)
@@ -2244,11 +2275,13 @@ void Window::keyPressEvent(QKeyEvent *e)
     }
 }
 
+#ifdef TABLET
 void Window::dragEnterEvent(QDragEnterEvent *event)
 {
-    // Accept drag event if mime type is url.
+    //Accept drag event if mime type is url.
     event->accept();
 }
+#endif
 
 void Window::dropEvent(QDropEvent *event)
 {
@@ -2257,6 +2290,7 @@ void Window::dropEvent(QDropEvent *event)
     if (mimeData->hasUrls()) {
         QStringList supportfileNames;
         QStringList otherfiles;
+
         for (auto url : mimeData->urls()) {
             QString file = url.toLocalFile();
             if(Utils::isMimeTypeSupport(file))

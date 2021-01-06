@@ -397,7 +397,9 @@ signals:
     void clickFindAction();
     void clickReplaceAction();
     void clickJumpLineAction();
+    #ifdef TABLET
     void clickFullscreenAction();
+    #endif
     void cursorMarkChanged(bool mark, QTextCursor cursor);
     void cursorModeChanged(CursorMode mode);
     void hightlightChanged(const QString &name);
@@ -405,6 +407,7 @@ signals:
     void signal_readingPath();
     void signal_clearBlack();
     void signal_setTitleFocus();
+
 public slots:
     /**
      * @author liumaochuan ut000616
@@ -415,8 +418,10 @@ public slots:
     void updateLeftAreaWidget();
     void handleScrollFinish();
     void setSyntaxDefinition(KSyntaxHighlighting::Definition def);
-    //书签右键菜单功能
+    #ifdef TABLET
     void slot_translate();
+    #endif
+    //书签右键菜单功能
     void setHighLineCurrentLine(bool ok);
     void upcaseWord();
     void downcaseWord();
@@ -428,6 +433,7 @@ public slots:
     void adjustScrollbarMargins();
     void onSelectionArea();
     void fingerZoom(QString name, QString direction, int fingers);
+
 protected:
     bool event(QEvent* evt) override;   //触摸屏event事件
     void dragEnterEvent(QDragEnterEvent *event) override;
@@ -442,6 +448,7 @@ protected:
     bool eventFilter(QObject *object, QEvent *event) override;
     void contextMenuEvent(QContextMenuEvent *event) override;
     void paintEvent(QPaintEvent *e) override;
+
 private:
     void unCommentSelection();
     void setComment();
@@ -464,8 +471,10 @@ private:
     //add for single refers to the sliding
     void slideGestureY(qreal diff);
     void slideGestureX(qreal diff);
+
 public:
     int getFirstVisibleBlockId() const;
+
 public:
     bool bIsSetLineNumberWidth = true;
     bool m_pIsShowCodeFoldArea;
@@ -512,16 +521,17 @@ private:
     QAction *m_jumpLineAction;
     QAction *m_enableReadOnlyModeAction;
     QAction *m_disableReadOnlyModeAction;
+    #ifdef TABLET
     QAction *m_fullscreenAction;
     QAction *m_exitFullscreenAction;
-    QAction *m_openInFileManagerAction;
-    QAction *m_toggleCommentAction;
     QAction *m_voiceReadingAction;
     QAction *m_stopReadingAction;
-    QAction *m_dictationAction;
     QAction *m_translateAction;
+    #endif
+    QAction *m_openInFileManagerAction;
+    QAction *m_toggleCommentAction;
+    QAction *m_dictationAction;
     QAction *m_columnEditAction;
-
     QAction *m_addBookMarkAction;
     QAction *m_cancelBookMarkAction;
     QAction *m_clearBookMarkAction;
