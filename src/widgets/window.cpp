@@ -622,11 +622,12 @@ bool Window::closeTab()
                removeWrapper(filePath, true);
                m_tabbar->closeCurrentTab();
 
-
+               //删除备份文件
                if (bIsBackupFile) {
                    QFile(filePath).remove();
                }
 
+               //删除自动备份文件
                if (QFileInfo(m_autoBackupDir).exists()) {
                    QString name = fileInfo.absolutePath().replace("/","_");
                    QDir(m_autoBackupDir).remove(fileInfo.baseName() + "." + name + "." + fileInfo.suffix());
@@ -657,6 +658,7 @@ bool Window::closeTab()
             m_tabbar->closeCurrentTab();
         }
 
+        //删除自动备份文件
         if (QFileInfo(m_autoBackupDir).exists()) {
             QString name = fileInfo.absolutePath().replace("/","_");
             QDir(m_autoBackupDir).remove(fileInfo.baseName() + "." + name + "." + fileInfo.suffix());
@@ -1512,6 +1514,7 @@ void Window::backupFile()
 
     m_settings->settings->option("advance.editor.browsing_history_temfile")->setValue(m_qlistTemFile);
 
+    //删除自动备份文件
     if (QFileInfo(m_autoBackupDir).exists()) {
         QDir(m_autoBackupDir).removeRecursively();
     }
@@ -1522,8 +1525,10 @@ bool Window::closeAllFiles()
     bool bIsCloseAll = true;
     QMap<QString, EditWrapper *> wrappers = m_wrappers;
 
+    //关闭所有文件
     for (int i = 0;i < wrappers.count();i++) {
         m_tabbar->setCurrentIndex(0);
+
         if (!closeTab()) {
             bIsCloseAll = false;
         }

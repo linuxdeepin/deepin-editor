@@ -1636,11 +1636,11 @@ TEST_F(test_textedit, appendExtraSelection)
 }
 
 
-//void setBackupPath(QString qstrTruePath);
+//void setTruePath(QString qstrTruePath);
 TEST_F(test_textedit, setBackupPath)
 {
     QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
-    startManager->setBackupPath("aa");
+    startManager->setTruePath("aa");
 
     assert(1==1);
 }

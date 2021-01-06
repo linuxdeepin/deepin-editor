@@ -94,7 +94,11 @@ public:
     void popRightMenu(QPoint pos = QPoint());
     //
     void setWrapper(EditWrapper *);
-    //
+
+    /**
+     * @brief getFilePath 获取打开文件路径
+     * @return 打开文件路径
+     */
     inline QString getFilePath() { return m_sFilePath;};
     //
     inline void setFilePath(QString file) { m_sFilePath = file;}
@@ -390,7 +394,17 @@ public:
      * @param isHidden 是否隐藏
      */
     void setCodeFoldWidgetHide(bool isHidden);
-    void setBackupPath(QString qstrTruePath);
+
+    /**
+     * @brief setTruePath 设置真实文件路径
+     * @param qstrTruePath　真实文件路径
+     */
+    void setTruePath(QString qstrTruePath);
+
+    /**
+     * @brief getTruePath 获取真实文件路径
+     * @return 真实文件路径
+     */
     QString getTruePath();
 
 signals:
@@ -687,7 +701,7 @@ private:
 
 private:
     LeftAreaTextEdit *m_pLeftAreaWidget = nullptr;
-    QString m_sFilePath;
+    QString m_sFilePath;///＜打开文件路径
     //自定义撤销重做栈
     QUndoStack* m_pUndoStack = nullptr;
 };

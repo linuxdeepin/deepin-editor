@@ -431,7 +431,7 @@ void EditWrapper::updatePath(const QString &file,QString qstrTruePath)
     m_tModifiedDateTime = fi.lastModified();
 
     m_pTextEdit->setFilePath(file);
-    m_pTextEdit->setBackupPath(qstrTruePath);
+    m_pTextEdit->setTruePath(qstrTruePath);
 }
 
 bool EditWrapper::isModified()

@@ -51,9 +51,29 @@ public:
     StartManager(QObject *parent = nullptr);
     bool checkPath(const QString &file);
     bool ifKlu();
+
+    /**
+     * @brief isMultiWindow 是否是多窗口
+     * @return true or false
+     */
     bool isMultiWindow();
+
+    /**
+     * @brief isTemFilesEmpty 是否需要备份
+     * @return　true or false
+     */
     bool isTemFilesEmpty();
+
+    /**
+     * @brief autoBackupFile 自动备份
+     */
     void autoBackupFile();
+
+    /**
+     * @brief recoverFile 备份恢复
+     * @param window　从哪个窗口进行恢复
+     * @return 恢复完成的文件数量
+     */
     int recoverFile(Window *window);
 
 private:
@@ -83,12 +103,11 @@ private:
     QDBusPendingReply<QDBusUnixFileDescriptor> m_inhibitReply;
     QScopedPointer<Dock> m_pDock;
     QScopedPointer<Entry> m_pEntry;
-    QStringList m_listFilePath;
-    QStringList m_qlistTemFile;
+    QStringList m_qlistTemFile;///<备份信息列表
     QTimer *m_pTimer;
-    QString m_blankFileDir;
-    QString m_backupDir;
-    QString m_autoBackupDir;
+    QString m_blankFileDir;///<新建文件目录
+    QString m_backupDir;///<用户备份文件目录
+    QString m_autoBackupDir;///<自动备份文件目录
     Window* pFocusWindow;
 
 };

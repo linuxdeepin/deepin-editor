@@ -65,16 +65,17 @@ StartManager::StartManager(QObject *parent)
 
     m_qlistTemFile = Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->value().toStringList();
 
+    //按时间自动备份（5分钟）
     m_pTimer = new QTimer;
     connect(m_pTimer,&QTimer::timeout,this,&StartManager::autoBackupFile);
-    m_pTimer->start(5*2*1000);
+    m_pTimer->start(5*60*1000);
 }
-
 
 bool StartManager::checkPath(const QString &file)
 {
     for (int i = 0;i < m_windows.count();i++) {
         EditWrapper *wrapper = m_windows.value(i)->wrapper(file);
+
         if (wrapper != nullptr) {
             FileTabInfo info = getFileTabInfo(wrapper->textEditor()->getFilePath());
             // Open exist tab if file has opened.
@@ -124,9 +125,11 @@ bool StartManager::isTemFilesEmpty()
 
 void StartManager::autoBackupFile()
 {
+    //如果自动备份文件夹不存在，创建自动备份文件夹
     if (!QFileInfo(m_autoBackupDir).exists()) {
         QDir().mkpath(m_autoBackupDir);
     } else {
+        //有用户备份时删除用户备份
         if (!QDir(m_backupDir).isEmpty()) {
             QDir(m_backupDir).removeRecursively();
         }
@@ -139,11 +142,13 @@ void StartManager::autoBackupFile()
     m_qlistTemFile.clear();   
     listBackupInfo = Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->value().toStringList();
 
+    //记录所有的文件信息
     for (int var = 0; var < m_windows.count(); ++var) {
         wrappers = m_windows.value(var)->getWrappers();
         QStringList list = wrappers.keys();
 
         for (EditWrapper *wrapper : wrappers) {
+            //大文件加载时不备份
             if(wrapper->getFileLoading()) continue;
 
             filePath = wrapper->textEditor()->getFilePath();
@@ -157,19 +162,22 @@ void StartManager::autoBackupFile()
             curPos = QString::number(wrapper->textEditor()->textCursor().position());
             fileInfo.setFile(localPath);
 
+            //json格式记录文件信息
             QJsonObject jsonObject;
             QJsonDocument document;
-            jsonObject.insert("localPath",localPath);
-            jsonObject.insert("cursorPosition",curPos);
-            jsonObject.insert("modify",wrapper->isModified());
-            jsonObject.insert("window",var);
+            jsonObject.insert("localPath",localPath);//记录源文件路径
+            jsonObject.insert("cursorPosition",curPos);//记录鼠标位置
+            jsonObject.insert("modify",wrapper->isModified());//记录修改状态
+            jsonObject.insert("window",var);//记录窗口Index
 
+            //记录活动页
             if (m_windows.value(var)->isActiveWindow()) {
                 if (wrapper == m_windows.value(var)->currentWrapper()) {
                     jsonObject.insert("focus",true);
                 }
             }
 
+            //保存备份文件
             if (Utils::isDraftFile(filePath)) {
                 wrapper->saveTemFile(filePath);
             } else {
@@ -181,6 +189,7 @@ void StartManager::autoBackupFile()
                 }
             }
 
+            //使用json串形式保存
             document.setObject(jsonObject);
             QByteArray byteArray = document.toJson(QJsonDocument::Compact);
             list.replace(tabInfo.tabIndex,byteArray);
@@ -189,6 +198,7 @@ void StartManager::autoBackupFile()
         m_qlistTemFile.append(list);
     }
 
+    //将json串列表写入配置文件
     Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->setValue(m_qlistTemFile);
 }
 
@@ -202,6 +212,7 @@ int StartManager::recoverFile(Window *window)
     QStringList files = blankFiles;
     QFileInfo fileInfo;
 
+    //去除非新建文件
     for (auto file : blankFiles) {
         if (!file.contains("blank_file")) {
             files.removeOne(file);
@@ -210,6 +221,7 @@ int StartManager::recoverFile(Window *window)
 
     int windowIndex = -1;
 
+    //根据备份信息恢复文件
     for (int i = 0;i < m_qlistTemFile.count();i++) {
         QJsonParseError jsonError;
         // 转化为 JSON 文档
@@ -222,6 +234,7 @@ int StartManager::recoverFile(Window *window)
                 // JSON 文档为对象
                 QJsonObject object = doucment.object();  // 转化为对象
 
+                //得到恢复文件对应的窗口
                 if (object.contains("window")) {  // 包含指定的 key
                     QJsonValue value = object.value("window");  // 获取指定 key 对应的 value
 
@@ -238,6 +251,7 @@ int StartManager::recoverFile(Window *window)
                     }
                 }
 
+                //得到备份文件路径
                 if (object.contains("temFilePath")) {  // 包含指定的 key
                     QJsonValue value = object.value("temFilePath");  // 获取指定 key 对应的 value
 
@@ -246,6 +260,7 @@ int StartManager::recoverFile(Window *window)
                     }
                 }
 
+                //得到文件修改状态
                 if (object.contains("modify")) {  // 包含指定的 key
                     QJsonValue value = object.value("modify");  // 获取指定 key 对应的 value
 
@@ -254,6 +269,7 @@ int StartManager::recoverFile(Window *window)
                     }
                 }
 
+                //得到真实文件路径
                 if (object.contains("localPath")) {  // 包含指定的 key
                     QJsonValue value = object.value("localPath");  // 获取指定 key 对应的 value
 
@@ -263,6 +279,7 @@ int StartManager::recoverFile(Window *window)
                     }
                 }
 
+                //打开文件
                 if (!temFilePath.isEmpty()) {
                     if (Utils::fileExists(temFilePath)) {
                         window->addTemFileTab(temFilePath,fileInfo.fileName(),localPath,bIsTemFile);
@@ -281,6 +298,7 @@ int StartManager::recoverFile(Window *window)
                 } else {
                     if (!localPath.isEmpty() && Utils::fileExists(localPath)) {
                         if (Utils::isDraftFile(localPath)) {
+                            //得到新建文件名称
                             int index = files.indexOf(QFileInfo(localPath).fileName());
 
                             if (index >= 0) {
@@ -307,6 +325,7 @@ int StartManager::recoverFile(Window *window)
         }
     }
 
+    //当前活动页
     if (pFocusWindow != nullptr && !focusPath.isNull()) {
         FileTabInfo info;
         info.windowIndex = m_windows.indexOf(pFocusWindow);

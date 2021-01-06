@@ -106,11 +106,26 @@ public:
 
     void displayShortcuts();
 
+    /**
+     * @brief backupFile 备份文件
+     */
     void backupFile();
 
+    /**
+     * @brief closeAllFiles 关闭当前窗口所有文件
+     * @return
+     */
     bool closeAllFiles();
 
+    /**
+     * @brief addTemFileTab　恢复备份文件标签页
+     * @param qstrPath　打开文件路径
+     * @param qstrName　真实文件名
+     * @param qstrTruePath　真实文件路径
+     * @param bIsTemFile　是否修改
+     */
     void addTemFileTab(QString qstrPath,QString qstrName,QString qstrTruePath,bool bIsTemFile = false);
+
     QMap<QString, EditWrapper *> getWrappers();
 
 public:
