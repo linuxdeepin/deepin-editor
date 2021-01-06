@@ -393,7 +393,7 @@ void TextEdit::initRightClickedMenu()
     connect(m_disableReadOnlyModeAction, &QAction::triggered, this, &TextEdit::toggleReadOnlyMode);
 
     connect(m_openInFileManagerAction, &QAction::triggered, this,[this](){
-        DDesktopServices::showFileItem(m_sFilePath);
+        DDesktopServices::showFileItem(this->getTruePath());
     });
 
     connect(m_addComment,&QAction::triggered,this,[=] {
@@ -3933,6 +3933,10 @@ void TextEdit::setTruePath(QString qstrTruePath)
 
 QString TextEdit::getTruePath()
 {
+    if (m_qstrTruePath.isEmpty()) {
+        return m_sFilePath;
+    }
+
     return  m_qstrTruePath;
 }
 

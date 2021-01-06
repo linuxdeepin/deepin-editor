@@ -629,6 +629,7 @@ bool Window::closeTab()
 
                //删除自动备份文件
                if (QFileInfo(m_autoBackupDir).exists()) {
+                   fileInfo.setFile(wrapper->textEditor()->getTruePath());
                    QString name = fileInfo.absolutePath().replace("/","_");
                    QDir(m_autoBackupDir).remove(fileInfo.baseName() + "." + name + "." + fileInfo.suffix());
                }
@@ -660,6 +661,7 @@ bool Window::closeTab()
 
         //删除自动备份文件
         if (QFileInfo(m_autoBackupDir).exists()) {
+            fileInfo.setFile(wrapper->textEditor()->getTruePath());
             QString name = fileInfo.absolutePath().replace("/","_");
             QDir(m_autoBackupDir).remove(fileInfo.baseName() + "." + name + "." + fileInfo.suffix());
         }
@@ -763,7 +765,7 @@ void Window::removeWrapper(const QString &filePath, bool isDelete)
 
     if (wrapper) {
         m_editorWidget->removeWidget(wrapper);
-        //
+
         m_wrappers.remove(filePath);
         if (isDelete) {
             disconnect(wrapper->textEditor(),nullptr);
@@ -872,19 +874,26 @@ bool Window::saveFile()
         temPath = wrapperEdit->textEditor()->getFilePath();
     }
 
-    wrapperEdit->updatePath(filePath,filePath);
-    updateModifyStatus(temPath,false);
-    bool success = wrapperEdit->saveFile();
+    wrapperEdit->updatePath(temPath,filePath);
 
-    if (!temPath.isEmpty()) {
-        QFile(temPath).remove();
-        QFileInfo fileinfo (temPath);
-        QDir(m_blankFileDir).rmdir(fileinfo.absoluteDir().dirName());
-    }
+    bool success = wrapperEdit->saveFile();
 
     if(success){
         currentWrapper()->hideWarningNotices();
         showNotify(tr("Saved successfully"));
+
+        //删除备份文件
+        if (!temPath.isEmpty()) {
+            QFile(temPath).remove();
+        }
+
+        //删除自动备份文件
+        if (QFileInfo(m_autoBackupDir).exists()) {
+            QFileInfo fileInfo(filePath);
+            QString name = fileInfo.absolutePath().replace("/","_");
+            QDir(m_autoBackupDir).remove(fileInfo.baseName() + "." + name + "." + fileInfo.suffix());
+        }
+
         return true;
     }else {
         DDialog *dialog = createDialog(tr("Do you want to save as another?"), "");
@@ -945,8 +954,15 @@ QString Window::saveAsFileToDisk()
         wrapper->updatePath(wrapper->filePath(),newFilePath);
         wrapper->saveFile();
         QFile(wrapper->filePath()).remove();
-        QFileInfo fileinfo (wrapper->filePath());
-        QDir(m_blankFileDir).rmdir(fileinfo.absoluteDir().dirName());
+
+        //删除自动备份文件
+        if (QFileInfo(m_autoBackupDir).exists()) {
+            QString truePath = wrapper->textEditor()->getTruePath();
+            QFileInfo fileInfo(truePath);
+            QString name = fileInfo.absolutePath().replace("/","_");
+            QDir(m_autoBackupDir).remove(fileInfo.baseName() + "." + name + "." + fileInfo.suffix());
+        }
+
         updateSaveAsFileName(wrapper->filePath(),newFilePath);
         return newFilePath;
     }

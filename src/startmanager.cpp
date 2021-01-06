@@ -340,9 +340,15 @@ void StartManager::openFilesInWindow(QStringList files)
 {
     // Open window with blank tab if no files need open.
     if (files.isEmpty()) {
-        if (m_windows.count() >= 20) return;
+        if (m_windows.count() >= 20) return;      
         Window *window = createWindow();
-        window->showCenterWindow(false);
+
+        if (m_windows.count() > 0) {
+            window->showCenterWindow(false);
+        } else {
+            window->showCenterWindow(true);
+        }
+
         window->addBlankTab();
         window->activateWindow();
     } else {
@@ -356,7 +362,7 @@ void StartManager::openFilesInWindow(QStringList files)
             // Add new tab in current window.
             else {
                 Window* window = createWindow();
-                window->showCenterWindow(false);
+                window->showCenterWindow(true);
                 window->addTab(file);
             }
         }
@@ -371,7 +377,7 @@ void StartManager::openFilesInTab(QStringList files)
 
         if (m_windows.isEmpty()) {
             Window *window = createWindow(true);
-            window->showCenterWindow(false);
+            window->showCenterWindow(true);
 
             if (!isTemFilesEmpty()) {
                 if (recoverFile(window) == 0) {
@@ -413,7 +419,7 @@ void StartManager::openFilesInTab(QStringList files)
             // Create new window with file if haven't window exist.
             else if (m_windows.size() == 0) {
                 Window *window = createWindow(true);
-                window->showCenterWindow(false);
+                window->showCenterWindow(true);
                 QTimer::singleShot(50, [=] {
                     recoverFile(window);
                     window->addTab(file);
