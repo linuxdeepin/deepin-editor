@@ -612,7 +612,7 @@ void EditWrapper::loadContent(const QByteArray &content)
     //初始化显示文本大小
     int InitContentPos = 5*1024;
     //每次读取文件步长
-    int step = 1*1024*1024;
+    int step = 1*1024*1024/2;
     //循环读取次数
     int cnt = len / step;
     //文件末尾余数
