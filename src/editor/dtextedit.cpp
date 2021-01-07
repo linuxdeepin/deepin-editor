@@ -3932,7 +3932,6 @@ void TextEdit::setCodeFoldWidgetHide(bool isHidden)
     }
 }
 
-
 void TextEdit::setBackupPath(QString qstrTruePath)
 {
     m_qstrTruePath = qstrTruePath;

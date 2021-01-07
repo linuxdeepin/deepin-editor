@@ -2195,16 +2195,18 @@ void Window::keyPressEvent(QKeyEvent *e)
 {
     QString key = Utils::getKeyshortcut(e);
 
-    if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "decrementfontsize")
-            || key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "incrementfontsize")
-            || key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "togglefullscreen")) {
+    if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "decrementfontsize") ||
+        key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "incrementfontsize") ||
+        key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "togglefullscreen")) {
         currentWrapper()->textEditor()->setCodeFoldWidgetHide(true);
     }
 
     if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "addblanktab")) {
         addBlankTab();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "newwindow")) {
+        #ifdef TABLET
         emit newWindow();
+        #endif
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "savefile")) {
         saveFile();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "saveasfile")) {
@@ -2228,6 +2230,7 @@ void Window::keyPressEvent(QKeyEvent *e)
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "resetfontsize")) {
         resetFontSize();
     }  else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "togglefullscreen")) {
+        #ifdef TABLET
         DIconButton *minBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowMinButton");
         DIconButton *quitFullBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowQuitFullscreenButton");
         quitFullBtn->setFocusPolicy(Qt::TabFocus);
@@ -2240,6 +2243,7 @@ void Window::keyPressEvent(QKeyEvent *e)
         else {
             toggleFullscreen();
         }
+        #endif
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "find")) {
         popupFindBar();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "replace")) {
@@ -2255,7 +2259,9 @@ void Window::keyPressEvent(QKeyEvent *e)
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "displayshortcuts")) {
         displayShortcuts();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "print")) {
+        #ifdef TABLET
         popupPrintDialog();
+        #endif
     } else {
         // Post event to window widget if match Alt+0 ~ Alt+9
         QRegularExpression re("^Alt\\+\\d");

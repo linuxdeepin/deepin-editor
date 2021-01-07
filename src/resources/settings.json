@@ -18,7 +18,7 @@
                             "key": "size",
                             "name": "Font Size",
                             "type": "spinbutton",
-                            "default": 12,
+                            "default": 14,
                             "max": 50,
                             "min": 8
                         },
@@ -74,6 +74,7 @@
         {
             "key": "shortcuts",
             "name": "Shortcuts",
+            "hide": true,
             "groups": [
                 {
                     "key" : "keymap",
@@ -101,7 +102,8 @@
                             "key": "newwindow",
                             "name": "New window",
                             "type": "keySequenceEdit",
-                            "default":  "Ctrl+N"
+                            "default":  "Ctrl+N",
+                            "hide": true
                         },
                         {
                             "key": "savefile",
@@ -173,13 +175,15 @@
                             "key": "togglefullscreen",
                             "name": "Toggle fullscreen",
                             "type": "keySequenceEdit",
-                            "default":  "F11"
+                            "default":  "F11",
+                            "hide": true
                         },
                         {
                             "key": "help",
                             "name": "Help",
                             "type": "keySequenceEdit",
-                            "default":  "F1"
+                            "default":  "F1",
+                            "hide": true
                         },
                         {
                             "key": "find",
@@ -227,7 +231,8 @@
                             "key": "print",
                             "name": "Print",
                             "type": "keySequenceEdit",
-                            "default":  "Ctrl+P"
+                            "default":  "Ctrl+P",
+                            "hide": true
                         }
                     ]
                 },
@@ -2002,6 +2007,7 @@
                 {
                     "key": "window",
                     "name": "Window",
+                    "hide": true,
                     "options": [
                         {
                             "key": "windowstate",

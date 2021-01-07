@@ -50,7 +50,9 @@ StartManager::StartManager(QObject *parent)
 {
 //    m_bIsDragEnter = false;
     // Create blank directory if it not exist.
+    #ifdef TABLET
     initBlockShutdown();
+    #endif
     QString blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
 
     if (!QFileInfo(blankFileDir).exists()) {
@@ -518,6 +520,7 @@ void StartManager::initBlockShutdown()
 }
 
 void StartManager::slotCheckUnsaveTab() {
+    #ifdef TABLET
     for (Window *pWindow : m_windows) {
         //如果返回true，则表示有未保存的tab项，则阻塞系统关机
         bool bRet = pWindow->checkBlockShutdown();
@@ -538,4 +541,5 @@ void StartManager::slotCheckUnsaveTab() {
         //m_pLoginManager->callWithArgumentList(QDBus::NoBlock, "Inhibit", m_arg);
         //qDebug() << "Nublock shutdown.";
     }
+    #endif
 }
