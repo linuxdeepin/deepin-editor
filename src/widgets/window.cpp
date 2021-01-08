@@ -1283,19 +1283,19 @@ void Window::popupPrintDialog()
     const QString &fileDir = QFileInfo(filePath).dir().absolutePath();
 
     DPrinter printer(QPrinter::HighResolution);
-    DPrintPreviewDialog preview( this);
+    m_pPreview = new DPrintPreviewDialog(this);
 
     if (fileDir == m_blankFileDir) {
-        preview.setDocName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
+        m_pPreview->setDocName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
     } else {
-        preview.setDocName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
+        m_pPreview->setDocName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
     }
 
-    connect(&preview, &DPrintPreviewDialog::paintRequested, this, [ = ](DPrinter * printer) {
+    connect(m_pPreview, &DPrintPreviewDialog::paintRequested, this, [=](DPrinter *printer) {
         currentWrapper()->textEditor()->print(printer);
     });
 
-    preview.exec();
+    m_pPreview->exec();
 }
 
 void Window::popupThemePanel()

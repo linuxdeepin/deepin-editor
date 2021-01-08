@@ -38,6 +38,7 @@
 #include "../common/dbusinterface.h"
 #include <DMainWindow>
 #include <DStackedWidget>
+#include <DPrintPreviewDialog>
 
 DWIDGET_USE_NAMESPACE
 
@@ -228,6 +229,9 @@ private:
     QString m_tabbarActiveColor;
     QList <TextEdit *> m_reading_list;
     QStringList m_qlistTemFile;///<临时文件列表
+
+	//打印预览
+    DPrintPreviewDialog *m_pPreview {nullptr};
 };
 
 #endif
