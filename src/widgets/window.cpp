@@ -57,6 +57,7 @@
 #include <QFileDialog>
 #endif
 
+Window *Window::m_pInstance = nullptr;
 Window::Window(DMainWindow *parent)
     : DMainWindow(parent),
       m_centralWidget(new QWidget),
@@ -196,7 +197,9 @@ Window::Window(DMainWindow *parent)
     }
 
     // window minimum size.
-    setMinimumSize(1000, 600);
+    //setMinimumSize(1000, 600);
+    showMaximized();
+
     // resize window size.
     int window_width =Settings::instance()->settings->option("advance.window.window_width")->value().toInt();
     int window_height =Settings::instance()->settings->option("advance.window.window_height")->value().toInt();
@@ -284,6 +287,19 @@ Window::~Window()
     // We don't need clean pointers because application has exit here.
 }
 
+/*******************************************************************************
+ 1. @function:    instance
+ 2. @author:      ut000455 shaoyu.Guo
+ 3. @date:        2021-01-10
+ 4. @description: In tablet mode, only one MainWindow can be opened.
+*******************************************************************************/
+Window *Window::instance()
+{
+    if (m_pInstance == nullptr) {
+        m_pInstance = new Window;
+    }
+    return m_pInstance;
+}
 void Window::updateModifyStatus(const QString &path, bool isModified)
 {
     int tabIndex = m_tabbar->indexOf(path);
@@ -332,28 +348,28 @@ void Window::initTitlebar()
 {
     #ifdef TABLET
     QAction *newWindowAction(new QAction(tr("New window"), this));
-    #endif
     QAction *newTabAction(new QAction(tr("New tab"), this));
+    QAction *findAction(new QAction(QApplication::translate("TextEdit", "Find"), this));
+    QAction *printAction(new QAction(tr("Print"), this));
+    #endif
     QAction *openFileAction(new QAction(tr("Open file"), this));
     QAction *saveAction(new QAction(tr("Save"), this));
     QAction *saveAsAction(new QAction(tr("Save as"), this));
-    QAction *printAction(new QAction(tr("Print"), this));
     QAction *switchThemeAction(new QAction(tr("Switch theme"), this));
     QAction *settingAction(new QAction(tr("Settings"), this));
-    QAction *findAction(new QAction(QApplication::translate("TextEdit", "Find"), this));
     QAction *replaceAction(new QAction(QApplication::translate("TextEdit", "Replace"), this));
 
     #ifdef TABLET
     m_menu->addAction(newWindowAction);
-    #endif
     m_menu->addAction(newTabAction);
+    m_menu->addAction(findAction);
+    m_menu->addAction(printAction);
+    #endif
     m_menu->addAction(openFileAction);
     m_menu->addSeparator();
-    m_menu->addAction(findAction);
     m_menu->addAction(replaceAction);
     m_menu->addAction(saveAction);
     m_menu->addAction(saveAsAction);
-    m_menu->addAction(printAction);
     //m_menu->addAction(switchThemeAction);
     m_menu->addSeparator();
     m_menu->addAction(settingAction);
@@ -412,14 +428,14 @@ void Window::initTitlebar()
 
     #ifdef TABLET
     connect(newWindowAction, &QAction::triggered, this, &Window::newWindow);
-    #endif
     connect(newTabAction, &QAction::triggered, this, static_cast<void (Window::*)()>(&Window::addBlankTab));
-    connect(openFileAction, &QAction::triggered, this, &Window::openFile);
     connect(findAction, &QAction::triggered, this, &Window::popupFindBar);
+    connect(printAction, &QAction::triggered, this, &Window::popupPrintDialog);
+    #endif
+    connect(openFileAction, &QAction::triggered, this, &Window::openFile);
     connect(replaceAction, &QAction::triggered, this, &Window::popupReplaceBar);
     connect(saveAction, &QAction::triggered, this, &Window::saveFile);
     connect(saveAsAction, &QAction::triggered, this, &Window::saveAsFile);
-    connect(printAction, &QAction::triggered, this, &Window::popupPrintDialog);
     connect(settingAction, &QAction::triggered, this, &Window::popupSettingsDialog);
     connect(switchThemeAction, &QAction::triggered, this, &Window::popupThemePanel);
 }
@@ -1284,9 +1300,9 @@ void Window::popupPrintDialog()
     DPrintPreviewDialog preview( this);
 
     if (fileDir == m_blankFileDir) {
-        preview.setDocName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
+        //preview.setDocName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
     } else {
-        preview.setDocName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
+        //preview.setDocName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
     }
 
     connect(&preview, &DPrintPreviewDialog::paintRequested, this, [ = ](DPrinter * printer) {
@@ -2124,10 +2140,12 @@ void Window::resizeEvent(QResizeEvent *e)
     m_replaceBar->resize(width() - 20, m_replaceBar->height());
     m_replaceBar->move(QPoint(10, height() - 59));
 
-//    if (!(m_tabbar->currentPath() == "")) {
-//        EditWrapper *wrapper = m_wrappers.value(m_tabbar->currentPath());
-//        wrapper->textEditor()->hideRightMenu();
-//    }
+    #if 0
+    if (!(m_tabbar->currentPath() == "")) {
+        EditWrapper *wrapper = m_wrappers.value(m_tabbar->currentPath());
+        wrapper->textEditor()->hideRightMenu();
+    }
+    #endif
 
     DMainWindow::resizeEvent(e);
 }

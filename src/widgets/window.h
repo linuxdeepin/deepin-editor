@@ -48,6 +48,7 @@ class Window : public DMainWindow
 public:
     Window(DMainWindow *parent = nullptr);
     ~Window() override;
+    static Window *instance();
 
     //跟新文件修改状态
     void updateModifyStatus(const QString &path, bool isModified);
@@ -112,7 +113,6 @@ public:
 
     void addTemFileTab(QString qstrPath,QString qstrName,QString qstrTruePath,bool bIsTemFile = false);
 
-public:
     //设置显示清除焦点
     void setChildrenFocus(bool ok);
 
@@ -172,17 +172,18 @@ private:
     void checkTabbarForReload();
 
 protected:
+    #ifdef TABLET
+    void dragEnterEvent(QDragEnterEvent *e) override;
+    #endif
     void resizeEvent(QResizeEvent* event) override;
     void closeEvent(QCloseEvent *event) override;
     void hideEvent(QHideEvent *event) override;
     void keyPressEvent(QKeyEvent *keyEvent) override;
-    #ifdef TABLET
-    void dragEnterEvent(QDragEnterEvent *e) override;
-    #endif
     void dropEvent(QDropEvent* event) override;
 
 private:
     DBusDaemon::dbus *m_rootSaveDBus;
+    static Window *m_pInstance;
 
     QWidget *m_centralWidget;
     DStackedWidget *m_editorWidget;

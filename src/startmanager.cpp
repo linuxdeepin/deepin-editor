@@ -372,7 +372,8 @@ void StartManager::loadTheme(const QString &themeName)
 Window* StartManager::createWindow(bool alwaysCenter)
 {
     // Create window.
-    Window *window = new Window;
+    //Window *window = new Window;
+    Window *window = Window::instance();
     connect(window, &Window::themeChanged, this, &StartManager::loadTheme, Qt::QueuedConnection);
     connect(window, &Window::sigJudgeBlockShutdown, this, &StartManager::slotCheckUnsaveTab, Qt::QueuedConnection);
 
@@ -404,8 +405,9 @@ Window* StartManager::createWindow(bool alwaysCenter)
     });
 
     // Init window position.
+    #ifdef TABLET
     initWindowPosition(window, alwaysCenter);
-
+    #endif
     connect(window, &Window::newWindow, this, [=] {
         openFilesInWindow(QStringList());
     });
