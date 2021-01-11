@@ -407,6 +407,18 @@ public:
      */
     QString getTruePath();
 
+    /**
+     * @brief getBookmarkInfo 得到书签信息
+     * @return 书签信息
+     */
+    QList<int> getBookmarkInfo();
+
+    /**
+     * @brief setBookMarkList 设置书签
+     * @param bookMarkList 书签列表
+     */
+    void setBookMarkList(QList<int> bookMarkList);
+
 signals:
     void clickFindAction();
     void clickReplaceAction();

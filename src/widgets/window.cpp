@@ -925,7 +925,7 @@ QString Window::saveAsFileToDisk()
     if (!wrapper || wrapper->getFileLoading()) return QString();
 
     bool isDraft = wrapper->isDraftFile();
-    QFileInfo fileInfo(wrapper->filePath());
+    QFileInfo fileInfo(wrapper->textEditor()->getTruePath());
 
     DFileDialog dialog(this, tr("Save File"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
@@ -1103,8 +1103,6 @@ void Window::setFontSizeWithConfig(EditWrapper *wrapper)
 
 void Window::popupFindBar()
 {
-
-
 //    if (m_findBar->isVisible()) {
 //        m_findBar->move(QPoint(10, height() - 59));
 //        if (m_findBar->isFocus()) {
@@ -1282,8 +1280,13 @@ void Window::popupPrintDialog()
     const QString &filePath = currentWrapper()->textEditor()->getFilePath();
     const QString &fileDir = QFileInfo(filePath).dir().absolutePath();
 
-    DPrinter printer(QPrinter::HighResolution);
-    DPrintPreviewDialog preview(this);
+    //适配打印接口2.0，dtk大于 5.4.3 版才合入最新的2.0打印控件接口
+#if (DTK_VERSION_MAJOR > 5 \
+    || (DTK_VERSION_MAJOR >=5 && DTK_VERSION_MINOR > 4) \
+    || (DTK_VERSION_MAJOR >= 5 && DTK_VERSION_MINOR >= 4 && DTK_VERSION_PATCH > 3))
+
+	DPrinter printer(QPrinter::HighResolution);
+    DPrintPreviewDialog preview( this);
 
     if (fileDir == m_blankFileDir) {
         preview.setDocName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
@@ -1291,9 +1294,27 @@ void Window::popupPrintDialog()
         preview.setDocName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
     }
 
-    connect(&preview, QOverload<DPrinter *>::of(&DPrintPreviewDialog::paintRequested), this, [=](DPrinter *printer) {
+    connect(&preview, &DPrintPreviewDialog::paintRequested, this, [ = ](DPrinter * printer) {
         currentWrapper()->textEditor()->print(printer);
     });
+#else
+	QPrinter printer(QPrinter::HighResolution);
+    QPrintPreviewDialog preview( this);
+
+    if (fileDir == m_blankFileDir) {
+            printer.setOutputFileName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
+            printer.setDocName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
+    } else {
+        printer.setOutputFileName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
+        printer.setDocName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
+    }
+
+    //printer.setOutputFormat(QPrinter::PdfFormat);
+
+    connect(&preview, &QPrintPreviewDialog::paintRequested, this, [ = ](QPrinter * printer) {
+        currentWrapper()->textEditor()->print(printer);
+    });
+#endif
 
     preview.exec();
 }
@@ -1483,12 +1504,29 @@ void Window::backupFile()
         QJsonDocument document;
         jsonObject.insert("localPath",localPath);
         jsonObject.insert("cursorPosition",QString::number(wrapper->textEditor()->textCursor().position()));
-        jsonObject.insert("modify",wrapper->isModified());
+        jsonObject.insert("modify",wrapper->isModified());      
+        QList<int> bookmarkList= wrapper->textEditor()->getBookmarkInfo();
+        if (!bookmarkList.isEmpty()) {
+            QString bookmarkInfo;
 
+            //记录书签
+            for (int i = 0;i < bookmarkList.count();i++) {
+                if (i == bookmarkList.count() - 1) {
+                    bookmarkInfo.append(QString::number(bookmarkList.value(i)));
+                } else {
+                    bookmarkInfo.append(QString::number(bookmarkList.value(i)) + ",");
+                }
+            }
+
+            jsonObject.insert("bookMark",bookmarkInfo);
+        }
+
+        //记录活动页
         if (filePath == m_tabbar->currentPath()) {
             jsonObject.insert("focus",true);
         }
 
+        //保存备份文件
         if (Utils::isDraftFile(filePath)) {
             wrapper->saveTemFile(filePath);
         } else {
@@ -1500,11 +1538,13 @@ void Window::backupFile()
             }
         }
 
+        //使用json串形式保存
         document.setObject(jsonObject);
         QByteArray byteArray = document.toJson(QJsonDocument::Compact);
         m_qlistTemFile.replace(tabInfo.tabIndex,byteArray);
     }
 
+    //将json串列表写入配置文件
     m_settings->settings->option("advance.editor.browsing_history_temfile")->setValue(m_qlistTemFile);
 
     //删除自动备份文件

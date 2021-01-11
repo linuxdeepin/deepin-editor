@@ -170,6 +170,23 @@ void StartManager::autoBackupFile()
             jsonObject.insert("modify",wrapper->isModified());//记录修改状态
             jsonObject.insert("window",var);//记录窗口Index
 
+            //记录书签
+            QList<int> bookmarkList= wrapper->textEditor()->getBookmarkInfo();
+
+            if (!bookmarkList.isEmpty()) {
+                QString bookmarkInfo;
+
+                for (int i = 0;i < bookmarkList.count();i++) {
+                    if (i == bookmarkList.count() - 1) {
+                        bookmarkInfo.append(QString::number(bookmarkList.value(i)));
+                    } else {
+                        bookmarkInfo.append(QString::number(bookmarkList.value(i)) + ",");
+                    }
+                }
+
+                jsonObject.insert("bookMark",bookmarkInfo);
+            }
+
             //记录活动页
             if (m_windows.value(var)->isActiveWindow()) {
                 if (wrapper == m_windows.value(var)->currentWrapper()) {
@@ -284,6 +301,17 @@ int StartManager::recoverFile(Window *window)
                     if (Utils::fileExists(temFilePath)) {
                         window->addTemFileTab(temFilePath,fileInfo.fileName(),localPath,bIsTemFile);
 
+                        //打开文件后设置书签
+                        if (object.contains("bookMark")) {  // 包含指定的 key
+                            QJsonValue value = object.value("bookMark");  // 获取指定 key 对应的 value
+
+                            if (value.isString()) {
+                                QList<int> bookmarkList;
+                                bookmarkList = analyzeBookmakeInfo(value.toString());
+                                window->wrapper(temFilePath)->textEditor()->setBookMarkList(bookmarkList);
+                            }
+                        }
+
                         if (object.contains("focus")) {  // 包含指定的 key
                             QJsonValue value = object.value("focus");  // 获取指定 key 对应的 value
 
@@ -304,9 +332,21 @@ int StartManager::recoverFile(Window *window)
                             if (index >= 0) {
                                 QString fileName = tr("Untitled %1").arg(index + 1);
                                 window->addTemFileTab(localPath,fileName,localPath,bIsTemFile);
+
                             }
                         } else {
                             window->addTemFileTab(localPath,fileInfo.fileName(),localPath,bIsTemFile);
+                        }
+
+                        //打开文件后设置书签
+                        if (object.contains("bookMark")) {  // 包含指定的 key
+                            QJsonValue value = object.value("bookMark");  // 获取指定 key 对应的 value
+
+                            if (value.isString()) {
+                                QList<int> bookmarkList;
+                                bookmarkList = analyzeBookmakeInfo(value.toString());
+                                window->wrapper(localPath)->textEditor()->setBookMarkList(bookmarkList);
+                            }
                         }
 
                         if (object.contains("focus")) {  // 包含指定的 key
@@ -636,6 +676,24 @@ StartManager::FileTabInfo StartManager::getFileTabInfo(QString file)
     }
 
     return info;
+}
+
+QList<int> StartManager::analyzeBookmakeInfo(QString bookmarkInfo)
+{
+    QList<int> bookmarkList;
+    int nLeftPosition = 0;
+    int nRightPosition = bookmarkInfo.indexOf(",");
+    bookmarkList << bookmarkInfo.mid(nLeftPosition,nRightPosition - nLeftPosition).toInt();
+    nLeftPosition = nRightPosition;
+
+    while (nRightPosition != -1) {
+        nRightPosition = bookmarkInfo.indexOf(",",nRightPosition + 1);
+        bookmarkList << bookmarkInfo.mid(nLeftPosition + 1,nRightPosition - nLeftPosition - 1).toInt();
+        nLeftPosition = nRightPosition;
+    }
+
+    bookmarkList << bookmarkInfo.mid(nRightPosition,bookmarkInfo.count() - 1).toInt();
+    return bookmarkList;
 }
 
 

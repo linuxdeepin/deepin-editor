@@ -76,6 +76,13 @@ public:
      */
     int recoverFile(Window *window);
 
+    /**
+     * @brief analyzeBookmakeInfo 解析书签信息
+     * @param bookmarkInfo 书签信息
+     * @return 书签列表
+     */
+    QList<int> analyzeBookmakeInfo(QString bookmarkInfo);
+
 private:
     void initBlockShutdown();
 public slots:

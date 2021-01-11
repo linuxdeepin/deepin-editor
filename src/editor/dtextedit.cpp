@@ -3747,18 +3747,25 @@ void TextEdit::setTextFinished()
     m_bIsFileOpen = false;
     m_nLines = blockCount();
 
+    if (!m_listBookmark.isEmpty()) {
+        return;
+    }
+
     QStringList bookmarkList = readHistoryRecordofBookmark();
     QStringList filePathList = readHistoryRecordofFilePath("advance.editor.browsing_history_file");
     QList<int> linesList;
+
     QString qstrPath = m_sFilePath;
 
     if (filePathList.contains(qstrPath)) {
         int index = 2;
         QString qstrLines = bookmarkList.value(filePathList.indexOf(qstrPath));
         QString sign;
+
         for (int i = 0;i < qstrLines.count()-1;i++) {
             sign = qstrLines.at(i);
             sign.append(qstrLines.at(i + 1));
+
             if(sign == ",*" || sign ==")*") {
                 linesList << qstrLines.mid(index,i - index).toInt();
                 index = i + 2;
@@ -3768,7 +3775,9 @@ void TextEdit::setTextFinished()
 
     foreach (const auto line, linesList) {
         if (line <= document()->blockCount()) {
-            m_listBookmark << line;
+            if (!m_listBookmark.contains(line)) {
+                m_listBookmark << line;
+            }
         }
     }
 //    qDebug() << m_listBookmark << document()->blockCount();
@@ -3938,6 +3947,16 @@ QString TextEdit::getTruePath()
     }
 
     return  m_qstrTruePath;
+}
+
+QList<int> TextEdit::getBookmarkInfo()
+{
+    return m_listBookmark;
+}
+
+void TextEdit::setBookMarkList(QList<int> bookMarkList)
+{
+    m_listBookmark = bookMarkList;
 }
 
 
