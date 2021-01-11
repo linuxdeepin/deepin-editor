@@ -3186,14 +3186,16 @@ void TextEdit::toggleReadOnlyMode()
         }
 
         m_readOnlyMode = false;
-        setReadOnly(false);
+        //setReadOnly(false);
+        setCursorWidth(1);
         updateHighlightLineSelection();
         //setSpeechToTextEnabled(true); //此函数在shuttle上编译报错
         popupNotify(tr("Read-Only mode is off"));
     } else {//
         m_readOnlyMode = true;
-        setReadOnly(true);
+        //setReadOnly(true);
         //setSpeechToTextEnabled(false);
+        setCursorWidth(0); //隐藏光标
         document()->clearUndoRedoStacks();
         updateHighlightLineSelection();
         popupNotify(tr("Read-Only mode is on"));
