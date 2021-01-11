@@ -380,6 +380,9 @@ void TextEdit::initRightClickedMenu()
 
 
     connect(m_selectAllAction,&QAction::triggered,this,[=] {
+        if (m_wrapper->getFileLoading()) {
+            return;
+        }
         m_bIsAltMod =false;
         selectAll();
     });
@@ -5464,6 +5467,9 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
                 m_wrapper->OnUpdateHighlighter();
                 return;
             }else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "selectall")) {
+                if (m_wrapper->getFileLoading()) {
+                    return;
+                }
                 m_bIsAltMod = false;
                 selectAll();
                 return;

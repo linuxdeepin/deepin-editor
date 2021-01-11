@@ -1294,7 +1294,7 @@ void Window::popupPrintDialog()
         preview.setDocName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
     }
 
-    connect(&preview, &DPrintPreviewDialog::paintRequested, this, [ = ](DPrinter * printer) {
+    connect(&preview, QOverload<DPrinter *>::of(&DPrintPreviewDialog::paintRequested), this, [=](DPrinter *printer) {
         currentWrapper()->textEditor()->print(printer);
     });
 #else
@@ -1308,8 +1308,6 @@ void Window::popupPrintDialog()
         printer.setOutputFileName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
         printer.setDocName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
     }
-
-    //printer.setOutputFormat(QPrinter::PdfFormat);
 
     connect(&preview, &QPrintPreviewDialog::paintRequested, this, [ = ](QPrinter * printer) {
         currentWrapper()->textEditor()->print(printer);
