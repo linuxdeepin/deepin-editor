@@ -310,20 +310,24 @@ TEST_F(test_textedit, joinLines)
 }
 TEST_F(test_textedit, killLine)
 {
-    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
-    EditWrapper * ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->killLine();
-
+    Window* pWindow = new Window;
+    EditWrapper* wrapper = pWindow->createEditor();
+    QFile f("1.cpp");
+    if(f.exists()){
+        pWindow->addTab("1.cpp");
+        pWindow->currentWrapper()->m_pTextEdit->killLine();
+    }
     assert(1==1);
 }
 TEST_F(test_textedit, killCurrentLine)
 {
-    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
-    EditWrapper * ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->killCurrentLine();
-
+    Window* pWindow = new Window;
+    EditWrapper* wrapper = pWindow->createEditor();
+    QFile f("1.cpp");
+    if(f.exists()){
+        pWindow->addTab("1.cpp");
+        pWindow->currentWrapper()->m_pTextEdit->killCurrentLine();
+    }
     assert(1==1);
 }
 TEST_F(test_textedit, killBackwardWord)
