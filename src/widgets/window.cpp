@@ -1330,10 +1330,10 @@ void Window::popupThemePanel()
 
 void Window::toggleFullscreen()
 {
-    if (isFullScreen()) {
-        showNormal();
-    }  else {
-        showFullScreen();
+    if ( !window()->windowState().testFlag(Qt::WindowFullScreen)) {
+        window()->setWindowState(windowState() | Qt::WindowFullScreen);
+    } else {
+        window()->setWindowState(windowState() & ~Qt::WindowFullScreen);
     }
 }
 
