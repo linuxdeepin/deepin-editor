@@ -87,8 +87,9 @@ void Tabbar::addTabWithIndex(int index, const QString &filePath, const QString &
         QFontMetrics fontMetrics(font());
         int nFontWidth = fontMetrics.width(path)*(qApp->devicePixelRatio()==1.25 ? 2 :1);
 
-        QDesktopWidget* d = qApp->desktop();
-        int w = d->availableGeometry().width()-200;
+        Window* pWindow = static_cast<Window*>(this->window());
+        int w = pWindow->width()-200;
+        if(w < 800) w =800;
 
         if(nFontWidth >= w) {
             int mod = nFontWidth%w;
@@ -103,6 +104,41 @@ void Tabbar::addTabWithIndex(int index, const QString &filePath, const QString &
 
         setTabToolTip(index,path);
     }
+}
+
+
+void Tabbar::resizeEvent(QResizeEvent *event)
+{
+    int cnt = count();
+
+    for(int i = 0; i < cnt ;i++)
+    {
+        QString path = tabToolTip(i);
+       path = path.replace("\n","");
+        QFontMetrics fontMetrics(font());
+        int nFontWidth = fontMetrics.width(path)*(qApp->devicePixelRatio()==1.25 ? 2 :1);
+
+        QDesktopWidget* d = qApp->desktop();
+        Window* pWindow = static_cast<Window*>(this->window());
+        int w = pWindow->width()-200;
+        if(w < 800) w =800;
+
+        if(nFontWidth >= w) {
+            int mod = nFontWidth%w;
+
+            int step = nFontWidth/w + (mod > 0 ? 1:0);
+
+            for (int i = 1; i < step;i++)
+            {
+               path.insert(i*(path.length()/step),'\n');
+            }
+        }
+
+        setTabToolTip(i,path);
+    }
+
+
+    return DTabBar::resizeEvent(event);
 }
 
 void Tabbar::closeTab(int index)
