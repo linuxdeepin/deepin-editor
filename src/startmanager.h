@@ -83,8 +83,6 @@ public:
      */
     QList<int> analyzeBookmakeInfo(QString bookmarkInfo);
 
-private:
-    void initBlockShutdown();
 public slots:
     Q_SCRIPTABLE void openFilesInTab(QStringList files);
     Q_SCRIPTABLE void openFilesInWindow(QStringList files);
@@ -100,6 +98,7 @@ public slots:
     void slotCheckUnsaveTab();
 
 private:
+    void initBlockShutdown();
     static StartManager *m_instance;
     QList<Window*> m_windows;
 

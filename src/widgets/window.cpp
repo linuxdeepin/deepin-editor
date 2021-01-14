@@ -1103,15 +1103,19 @@ void Window::setFontSizeWithConfig(EditWrapper *wrapper)
 
 void Window::popupFindBar()
 {
-//    if (m_findBar->isVisible()) {
-//        m_findBar->move(QPoint(10, height() - 59));
-//        if (m_findBar->isFocus()) {
-//            m_wrappers.value(m_tabbar->currentPath())->textEditor()->setFocus();
-//        } else {
-//            m_findBar->focus();
-//        }
-//    } else {
-        //addBottomWidget(m_findBar);
+    #if 0
+    if (m_findBar->isVisible()) {
+        m_findBar->move(QPoint(10, height() - 59));
+        if (m_findBar->isFocus()) {
+            m_wrappers.value(m_tabbar->currentPath())->textEditor()->setFocus();
+        } else {
+            m_findBar->focus();
+        }
+    } else {
+        addBottomWidget(m_findBar);
+    }
+    #endif
+	
         m_findBar->setSearched(false);
         QString tabPath = m_tabbar->currentPath();
         EditWrapper *wrapper = currentWrapper();
@@ -2103,10 +2107,12 @@ void Window::resizeEvent(QResizeEvent *e)
     m_replaceBar->resize(width() - 20, m_replaceBar->height());
     m_replaceBar->move(QPoint(10, height() - 59));
 
-//    if (!(m_tabbar->currentPath() == "")) {
-//        EditWrapper *wrapper = m_wrappers.value(m_tabbar->currentPath());
-//        wrapper->textEditor()->hideRightMenu();
-//    }
+    #if 0
+    if (!(m_tabbar->currentPath() == "")) {
+        EditWrapper *wrapper = m_wrappers.value(m_tabbar->currentPath());
+        wrapper->textEditor()->hideRightMenu();
+    }
+    #endif
 
     DMainWindow::resizeEvent(e);
 }
@@ -2159,12 +2165,14 @@ void Window::hideEvent(QHideEvent *event)
     }
 
     //如果替换浮窗正显示着，则隐藏
-//    if (m_replaceBar->isVisible()) {
+    #if 0
+    if (m_replaceBar->isVisible()) {
 //      //  m_replaceBar->hide();
-//        if (currentWrapper() != nullptr) {
-//            currentWrapper()->m_bottomBar->show();
-//        }
-//    }
+        if (currentWrapper() != nullptr) {
+            currentWrapper()->m_bottomBar->show();
+        }
+    }
+    #endif
      DMainWindow::hideEvent(event);
 }
 
@@ -2172,9 +2180,9 @@ void Window::keyPressEvent(QKeyEvent *e)
 {
     QString key = Utils::getKeyshortcut(e);
 
-    if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "decrementfontsize")
-            || key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "incrementfontsize")
-            || key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "togglefullscreen")) {
+    if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "decrementfontsize") ||
+        key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "incrementfontsize") ||
+        key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "togglefullscreen")) {
         currentWrapper()->textEditor()->setCodeFoldWidgetHide(true);
     }
 

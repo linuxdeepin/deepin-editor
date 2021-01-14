@@ -128,9 +128,9 @@ public:
 
     QMap<QString, EditWrapper *> getWrappers();
 
-public:
     //设置显示清除焦点
     void setChildrenFocus(bool ok);
+	
 signals:
     void themeChanged(const QString themeName);
     void requestDragEnterEvent(QDragEnterEvent *);

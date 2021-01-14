@@ -50,7 +50,10 @@ StartManager::StartManager(QObject *parent)
 {
 //    m_bIsDragEnter = false;
     // Create blank directory if it not exist.
+	
     initBlockShutdown();
+	
+	
     m_blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
     m_backupDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("backup-files");
     m_autoBackupDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("autoBackup-files");
