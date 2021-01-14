@@ -525,6 +525,7 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
                                 "Event",
                                 wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
     wrapper->textEditor()->disconnect();
+    connect(wrapper->textEditor(), &TextEdit::cursorModeChanged, wrapper, &EditWrapper::handleCursorModeChanged);
     connect(wrapper->textEditor(), &TextEdit::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::clickReplaceAction, this, &Window::popupReplaceBar, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::clickJumpLineAction, this, &Window::popupJumpLineBar, Qt::QueuedConnection);
