@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sr">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="sr" version="2.1">
 <context>
     <name>BottomBar</name>
     <message>
@@ -39,7 +37,6 @@
         <translation>Сачувај</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="227"/>
         <location filename="../src/editor/editwrapper.cpp" line="273"/>
         <source>Do you want to save this file?</source>
         <translation>Желите ли да сачувате ову датотеку?</translation>
@@ -49,6 +46,11 @@
         <location filename="../src/editor/editwrapper.cpp" line="276"/>
         <source>Cancel</source>
         <translation>Откажи</translation>
+    </message>
+    <message>
+        <location filename="../src/editor/editwrapper.cpp" line="227"/>
+        <source>Encoding changed. Do you want to save the file now?</source>
+        <translation>Промењено кодирање. Желите ли да сачувате датотеку сад?</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="231"/>
@@ -605,22 +607,22 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="121"/>
         <source>WesternEuropean</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="122"/>
         <source>CentralEuropean</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="123"/>
         <source>Baltic</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="124"/>
         <source>Cyrillic</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="125"/>
@@ -630,12 +632,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="130"/>
         <source>Celtic</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="131"/>
         <source>SouthEasternEuropean</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="126"/>
@@ -650,12 +652,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="132"/>
         <source>ChineseSimplified</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="133"/>
         <source>ChineseTraditional</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="134"/>
@@ -683,7 +685,7 @@
         <translation>Вијетнамски</translation>
     </message>
     <message>
-        <location filename="../src/startmanager.cpp" line="656"/>
+        <location filename="../src/startmanager.cpp" line="718"/>
         <source>File not saved</source>
         <translation>Датотека није сачувана</translation>
     </message>
@@ -732,9 +734,9 @@
     <name>S:</name>
     <message>
         <location filename="../third/libiconv-1.16/src/iconv.c" line="103"/>
-        <source></source>
+        <source/>
         <comment>The first line of the short usage message.</comment>
-        <translation></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -799,7 +801,7 @@
 <context>
     <name>StartManager</name>
     <message>
-        <location filename="../src/startmanager.cpp" line="305"/>
+        <location filename="../src/startmanager.cpp" line="333"/>
         <source>Untitled %1</source>
         <translation>Ненасловњено %1</translation>
     </message>
@@ -807,32 +809,32 @@
 <context>
     <name>Tabbar</name>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="455"/>
+        <location filename="../src/controls/tabbar.cpp" line="468"/>
         <source>Close tab</source>
         <translation>Затвори картицу</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="456"/>
+        <location filename="../src/controls/tabbar.cpp" line="469"/>
         <source>Close other tabs</source>
         <translation>Затвори остале картице</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="457"/>
+        <location filename="../src/controls/tabbar.cpp" line="470"/>
         <source>More options</source>
         <translation>Више опција</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="458"/>
+        <location filename="../src/controls/tabbar.cpp" line="471"/>
         <source>Close tabs to the left</source>
         <translation>Затвори леве картице</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="459"/>
+        <location filename="../src/controls/tabbar.cpp" line="472"/>
         <source>Close tabs to the right</source>
         <translation>Затвори десне картице</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="460"/>
+        <location filename="../src/controls/tabbar.cpp" line="473"/>
         <source>Close unmodified tabs</source>
         <translation>Затвори непромењене картице</translation>
     </message>
@@ -918,7 +920,7 @@
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="228"/>
-        <location filename="../src/editor/dtextedit.cpp" line="287"/>
+        <location filename="../src/editor/dtextedit.cpp" line="286"/>
         <source>Add Comment</source>
         <translation>Додај коментар</translation>
     </message>
@@ -944,7 +946,6 @@
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="233"/>
-        <location filename="../src/editor/dtextedit.cpp" line="286"/>
         <source>Column Mode</source>
         <translation>Режим колона</translation>
     </message>
@@ -1019,32 +1020,32 @@
         <translation>Обележи све</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="288"/>
+        <location filename="../src/editor/dtextedit.cpp" line="287"/>
         <source>Remove Comment</source>
         <translation>Уклони коментар</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="421"/>
+        <location filename="../src/editor/dtextedit.cpp" line="420"/>
         <source>Press ALT and click lines to edit in column mode</source>
         <translation>Притисните ALT и кликните на редове да уредите у режиму колона</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="489"/>
+        <location filename="../src/editor/dtextedit.cpp" line="488"/>
         <source>Change Case</source>
         <translation>Промени величину слова</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="490"/>
+        <location filename="../src/editor/dtextedit.cpp" line="489"/>
         <source>Upper Case</source>
         <translation>Велика слова</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="491"/>
+        <location filename="../src/editor/dtextedit.cpp" line="490"/>
         <source>Lower Case</source>
         <translation>Мала слова</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="492"/>
+        <location filename="../src/editor/dtextedit.cpp" line="491"/>
         <source>Capitalize</source>
         <translation>Почетна велика</translation>
     </message>
@@ -1054,34 +1055,34 @@
         <translation>Ништа</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1320"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1308"/>
         <source>Selected line(s) copied</source>
         <translation>Изабрани редови копирани</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1326"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1314"/>
         <source>Current line copied</source>
         <translation>Тренутни ред копиран</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1365"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1353"/>
         <source>Selected line(s) clipped</source>
         <translation>Изабрани редови копирани</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1371"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1359"/>
         <source>Current line clipped</source>
         <translation>Тренутни ред копиран</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3101"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3097"/>
         <source>Read-Only mode is off</source>
         <translation>Режим Само-Читање је искључен</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3107"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3115"/>
-        <location filename="../src/editor/dtextedit.cpp" line="5313"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3103"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3111"/>
+        <location filename="../src/editor/dtextedit.cpp" line="5328"/>
         <source>Read-Only mode is on</source>
         <translation>Режим Само-Читање је укључен</translation>
     </message>
@@ -1128,7 +1129,7 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="340"/>
-        <location filename="../src/widgets/window.cpp" line="1939"/>
+        <location filename="../src/widgets/window.cpp" line="1958"/>
         <source>Save</source>
         <translation>Сачувај</translation>
     </message>
@@ -1150,7 +1151,7 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="459"/>
-        <location filename="../src/widgets/window.cpp" line="2055"/>
+        <location filename="../src/widgets/window.cpp" line="2074"/>
         <source>Read-Only</source>
         <translation>Само-Чтање</translation>
     </message>
@@ -1198,7 +1199,7 @@
         <translation>Кодирање</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1173"/>
+        <location filename="../src/widgets/window.cpp" line="1171"/>
         <source>Read-Only mode is on</source>
         <translation>Режим Само-Читање је укључен</translation>
     </message>
@@ -1223,17 +1224,17 @@
         <translation>Уређивач</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1637"/>
+        <location filename="../src/widgets/window.cpp" line="1656"/>
         <source>Untitled %1</source>
         <translation> Ненасловњено %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1937"/>
+        <location filename="../src/widgets/window.cpp" line="1956"/>
         <source>Cancel</source>
         <translation>Откажи</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1938"/>
+        <location filename="../src/widgets/window.cpp" line="1957"/>
         <source>Discard</source>
         <translation>Одбаци</translation>
     </message>

@@ -41,7 +41,6 @@
         <translation>Fail dalam cakera telah dibuang. Simpan ia sekarang?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="227"/>
         <location filename="../src/editor/editwrapper.cpp" line="273"/>
         <source>Do you want to save this file?</source>
         <translation type="unfinished">Anda mahu menyimpan fail ini?</translation>
@@ -51,6 +50,11 @@
         <location filename="../src/editor/editwrapper.cpp" line="277"/>
         <source>Discard</source>
         <translation type="unfinished">Singkir</translation>
+    </message>
+    <message>
+        <location filename="../src/editor/editwrapper.cpp" line="227"/>
+        <source>Encoding changed. Do you want to save the file now?</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="555"/>
@@ -125,7 +129,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/startmanager.cpp" line="656"/>
+        <location filename="../src/startmanager.cpp" line="718"/>
         <source>File not saved</source>
         <translation>Fail tidak disimpan</translation>
     </message>
@@ -790,7 +794,7 @@
 <context>
     <name>StartManager</name>
     <message>
-        <location filename="../src/startmanager.cpp" line="305"/>
+        <location filename="../src/startmanager.cpp" line="333"/>
         <source>Untitled %1</source>
         <translation type="unfinished">%1 Tidak Bertajuk</translation>
     </message>
@@ -798,32 +802,32 @@
 <context>
     <name>Tabbar</name>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="455"/>
+        <location filename="../src/controls/tabbar.cpp" line="468"/>
         <source>Close tab</source>
         <translation>Tutup tab</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="457"/>
+        <location filename="../src/controls/tabbar.cpp" line="470"/>
         <source>More options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="458"/>
+        <location filename="../src/controls/tabbar.cpp" line="471"/>
         <source>Close tabs to the left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="459"/>
+        <location filename="../src/controls/tabbar.cpp" line="472"/>
         <source>Close tabs to the right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="460"/>
+        <location filename="../src/controls/tabbar.cpp" line="473"/>
         <source>Close unmodified tabs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="456"/>
+        <location filename="../src/controls/tabbar.cpp" line="469"/>
         <source>Close other tabs</source>
         <translation>Tutup tab lain</translation>
     </message>
@@ -909,23 +913,22 @@
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="228"/>
-        <location filename="../src/editor/dtextedit.cpp" line="287"/>
+        <location filename="../src/editor/dtextedit.cpp" line="286"/>
         <source>Add Comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="233"/>
-        <location filename="../src/editor/dtextedit.cpp" line="286"/>
         <source>Column Mode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="288"/>
+        <location filename="../src/editor/dtextedit.cpp" line="287"/>
         <source>Remove Comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="421"/>
+        <location filename="../src/editor/dtextedit.cpp" line="420"/>
         <source>Press ALT and click lines to edit in column mode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1020,22 +1023,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="489"/>
+        <location filename="../src/editor/dtextedit.cpp" line="488"/>
         <source>Change Case</source>
         <translation>Ubah Kata</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="490"/>
+        <location filename="../src/editor/dtextedit.cpp" line="489"/>
         <source>Upper Case</source>
         <translation>Huruf Besar</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="491"/>
+        <location filename="../src/editor/dtextedit.cpp" line="490"/>
         <source>Lower Case</source>
         <translation>Huruf Kecil</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="492"/>
+        <location filename="../src/editor/dtextedit.cpp" line="491"/>
         <source>Capitalize</source>
         <translation>Huruf Besarkan</translation>
     </message>
@@ -1045,34 +1048,34 @@
         <translation>Tiada</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1320"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1308"/>
         <source>Selected line(s) copied</source>
         <translation>Baris terpilih disalin</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1326"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1314"/>
         <source>Current line copied</source>
         <translation>Baris semasa disalin</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1365"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1353"/>
         <source>Selected line(s) clipped</source>
         <translation>Baris terpilih dikerat</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1371"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1359"/>
         <source>Current line clipped</source>
         <translation>Baris semasa dikerat</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3101"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3097"/>
         <source>Read-Only mode is off</source>
         <translation>Mod Baca-Sahaja dimatikan</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3107"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3115"/>
-        <location filename="../src/editor/dtextedit.cpp" line="5313"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3103"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3111"/>
+        <location filename="../src/editor/dtextedit.cpp" line="5328"/>
         <source>Read-Only mode is on</source>
         <translation>Mod Baca-Sahaja dihidupkan</translation>
     </message>
@@ -1129,7 +1132,7 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="459"/>
-        <location filename="../src/widgets/window.cpp" line="2055"/>
+        <location filename="../src/widgets/window.cpp" line="2074"/>
         <source>Read-Only</source>
         <translation>Baca-Sahaja</translation>
     </message>
@@ -1139,7 +1142,7 @@
         <translation>Berjaya disimpan</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1173"/>
+        <location filename="../src/widgets/window.cpp" line="1171"/>
         <source>Read-Only mode is on</source>
         <translation>Mod Baca-Sahaja dihidupkan</translation>
     </message>
@@ -1154,7 +1157,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1938"/>
+        <location filename="../src/widgets/window.cpp" line="1957"/>
         <source>Discard</source>
         <translation>Singkir</translation>
     </message>
@@ -1208,7 +1211,7 @@
         <translation>Anda mahu menyimpan sebagai yang lain?</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1637"/>
+        <location filename="../src/widgets/window.cpp" line="1656"/>
         <source>Untitled %1</source>
         <translation>%1 Tidak Bertajuk</translation>
     </message>
@@ -1218,13 +1221,13 @@
         <translation>Lokasi semasa diingati</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1937"/>
+        <location filename="../src/widgets/window.cpp" line="1956"/>
         <source>Cancel</source>
         <translation>Batal</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="340"/>
-        <location filename="../src/widgets/window.cpp" line="1939"/>
+        <location filename="../src/widgets/window.cpp" line="1958"/>
         <source>Save</source>
         <translation>Simpan</translation>
     </message>

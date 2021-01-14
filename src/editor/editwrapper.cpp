@@ -224,7 +224,7 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
     //1.如果修改切换编码提示用户是否保存,不保存重新打开文件读取.2.没有修改是否另存为
     if(m_pTextEdit->getModified())
     {
-        DDialog *dialog = new DDialog(tr("Do you want to save this file?"), "", this);
+        DDialog *dialog = new DDialog(tr("Encoding changed. Do you want to save the file now?"), "", this);
         dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
         dialog->setIcon(QIcon::fromTheme("deepin-editor"));
         dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);//不保存
