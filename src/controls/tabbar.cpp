@@ -274,7 +274,13 @@ QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option
 {
     const qreal ratio = qApp->devicePixelRatio();
 
-    TextEdit *textEdit = static_cast<Window *>(this->window())->getTextEditor(fileAt(index));
+    Window *window = static_cast<Window *>(this->window());
+    EditWrapper *wrapper = window->wrapper(fileAt(index));
+    //加载大文本不允许拖拽
+    if(wrapper && wrapper->getFileLoading()) return QPixmap();
+
+    TextEdit *textEdit = wrapper->textEditor();
+
     int width = textEdit->width() * ratio;
     int height = textEdit->height() * ratio;
     QImage screenshotImage(width, height, QImage::Format_ARGB32_Premultiplied);
@@ -341,6 +347,9 @@ QMimeData* Tabbar::createMimeDataFromTab(int index, const QStyleOptionTab &optio
 
     Window *window = static_cast<Window *>(this->window());
     EditWrapper *wrapper = window->wrapper(fileAt(index));
+
+    if(wrapper && wrapper->getFileLoading()) return nullptr;
+
     QMimeData *mimeData = new QMimeData;
 
     if (!wrapper) {
@@ -365,6 +374,10 @@ void Tabbar::insertFromMimeDataOnDragEnter(int index, const QMimeData *source)
     const QString tabName = QString::fromUtf8(source->data("dedit/tabbar"));
     QVariant pVar = source->property("wrapper");
     EditWrapper *wrapper = static_cast<EditWrapper *>(pVar.value<void *>());
+
+    //大文本加载不允许拖拽
+    if(wrapper || (wrapper && wrapper->getFileLoading())) return;
+
     Window *window = static_cast<Window *>(this->window());
 //    EditWrapper *wrapper = window->addTab();
 
