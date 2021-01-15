@@ -82,7 +82,7 @@ BottomBar::BottomBar(QWidget *parent)
 
     //切换编码
     connect(m_pEncodeMenu, &DDropdownMenu::currentActionChanged, this,[this](QAction* pAct){
-        if(m_pWrapper->reloadFileEncode(pAct->text().toLocal8Bit()))
+        if(!m_pWrapper->getFileLoading() && m_pWrapper->reloadFileEncode(pAct->text().toLocal8Bit()))
         {
             m_pEncodeMenu->setCurrentTextOnly(pAct->text());
         }
