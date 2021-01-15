@@ -2082,8 +2082,11 @@ void Window::checkTabbarForReload()
     EditWrapper *wrapper = m_wrappers.value(m_tabbar->currentPath());
     if (fi.exists() && !fi.isWritable()) {
         tabName.append(readOnlyStr);
+        m_tabbar->setTabText(m_tabbar->currentIndex(),tabName);
         wrapper->textEditor()->setReadOnlyPermission(true);
     } else {
+        tabName.remove(readOnlyStr);
+        m_tabbar->setTabText(m_tabbar->currentIndex(),tabName);
         wrapper->textEditor()->setReadOnlyPermission(false);
     }
 
