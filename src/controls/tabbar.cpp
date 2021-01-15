@@ -313,7 +313,7 @@ QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option
     Window *window = static_cast<Window *>(this->window());
     EditWrapper *wrapper = window->wrapper(fileAt(index));
     //加载大文本不允许拖拽
-    if(wrapper && wrapper->getFileLoading()) return QPixmap();
+    //if(wrapper && wrapper->getFileLoading()) return QPixmap();
 
     TextEdit *textEdit = wrapper->textEditor();
 
@@ -412,7 +412,7 @@ void Tabbar::insertFromMimeDataOnDragEnter(int index, const QMimeData *source)
     EditWrapper *wrapper = static_cast<EditWrapper *>(pVar.value<void *>());
 
     //大文本加载不允许拖拽
-    if(wrapper || (wrapper && wrapper->getFileLoading())) return;
+    if(wrapper && (wrapper && wrapper->getFileLoading())) return;
 
     Window *window = static_cast<Window *>(this->window());
 //    EditWrapper *wrapper = window->addTab();

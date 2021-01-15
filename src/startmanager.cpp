@@ -486,8 +486,6 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
     Window *window = createWindow();
     //window->showCenterWindow();
 
-
-
     QRect rect = window->rect();
     QPoint pos = QCursor::pos() ;/*- window->topLevelWidget()->pos();*/
     QRect desktopRect = QApplication::desktop()->rect();
@@ -533,23 +531,18 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
 //    Opacity->setEasingCurve(QEasingCurve::InCirc);
 
     QParallelAnimationGroup *group = new QParallelAnimationGroup;
-    connect(group,&QParallelAnimationGroup::finished,geometry,[/*window,geometry,/*Opacity,group,*/=](){
-        // window minimum size.
-        //window->setMinimumSize(1000, 600);
+    connect(group,&QParallelAnimationGroup::finished,geometry,[/*window,geometry,Opacity,group,*/=](){
         window->showCenterWindow(false);
         geometry->deleteLater();
        // Opacity->deleteLater();
         group->deleteLater();
 
-
         window->addTabWithWrapper(buffer, filePath, qstrTruePath, tabName);
         window->currentWrapper()->updateModifyStatus(isModifyed);
-        window->setMinimumSize(Tabbar::sm_pDragPixmap->rect().size());
     });
 
     group->addAnimation(geometry);
    // group->addAnimation(Opacity);
-
     group->start();
 }
 
