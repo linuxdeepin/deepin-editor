@@ -1304,7 +1304,7 @@ void Window::popupPrintDialog()
     });
 #else
 	QPrinter printer(QPrinter::HighResolution);
-    QPrintPreviewDialog preview( this);
+    QPrintPreviewDialog preview(&printer, this);
 
     if (fileDir == m_blankFileDir) {
             printer.setOutputFileName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
@@ -1313,6 +1313,7 @@ void Window::popupPrintDialog()
         printer.setOutputFileName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
         printer.setDocName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
     }
+    printer.setOutputFormat(QPrinter::PdfFormat);
 
     connect(&preview, &QPrintPreviewDialog::paintRequested, this, [ = ](QPrinter * printer) {
         currentWrapper()->textEditor()->print(printer);

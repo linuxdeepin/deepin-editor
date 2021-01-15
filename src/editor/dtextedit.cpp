@@ -688,7 +688,7 @@ void TextEdit::popRightMenu(QPoint pos)
             m_translateAction->setEnabled(translateState);
         }
     }
-    m_rightMenu->addAction(m_columnEditAction);
+
 
     if(!this->document()->isEmpty()) {
 
