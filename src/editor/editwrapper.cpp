@@ -227,8 +227,8 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
         DDialog *dialog = new DDialog(tr("Encoding changed. Do you want to save the file now?"), "", this);
         dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
         dialog->setIcon(QIcon::fromTheme("deepin-editor"));
-        dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);//不保存
-        dialog->addButton(QString(tr("Discard")), false, DDialog::ButtonNormal);//取消
+        dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);//取消
+ //       dialog->addButton(QString(tr("Discard")), false, DDialog::ButtonNormal);//不保存
         dialog->addButton(QString(tr("Save")), true, DDialog::ButtonRecommend);//保存
         int res = dialog->exec();//0  1
 
