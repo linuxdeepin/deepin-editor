@@ -323,11 +323,6 @@ QString EditWrapper::getTextEncode()
 bool EditWrapper::saveFile()
 {
     QString qstrFilePath = m_pTextEdit->getTruePath();
-
-    if (qstrFilePath.isEmpty()) {
-        qstrFilePath = m_pTextEdit->getFilePath();
-    }
-
     QFile file(qstrFilePath);
 
     if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {

@@ -852,10 +852,6 @@ bool Window::saveFile()
         return saveAsFile();
     }
 
-    if (filePath.isEmpty()) {
-        filePath = wrapperEdit->textEditor()->getFilePath();
-    }
-
     QFileInfo info(filePath);
     //判断文件是否有写的权限
     QFile temporaryBuffer(filePath);
@@ -873,6 +869,8 @@ bool Window::saveFile()
 
     if (wrapperEdit->isTemFile()) {
         temPath = wrapperEdit->textEditor()->getFilePath();
+    } else {
+        temPath = filePath;
     }
 
     wrapperEdit->updatePath(temPath,filePath);
@@ -884,7 +882,7 @@ bool Window::saveFile()
         showNotify(tr("Saved successfully"));
 
         //删除备份文件
-        if (!temPath.isEmpty()) {
+        if (temPath != filePath) {
             QFile(temPath).remove();
         }
 

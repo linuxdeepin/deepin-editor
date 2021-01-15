@@ -157,10 +157,6 @@ void StartManager::autoBackupFile()
             filePath = wrapper->textEditor()->getFilePath();
             localPath = wrapper->textEditor()->getTruePath();
 
-            if (localPath.isEmpty()) {
-                localPath = wrapper->textEditor()->getFilePath();
-            }
-
             StartManager::FileTabInfo tabInfo = StartManager::instance()->getFileTabInfo(filePath);
             curPos = QString::number(wrapper->textEditor()->textCursor().position());
             fileInfo.setFile(localPath);
