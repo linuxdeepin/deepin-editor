@@ -283,7 +283,6 @@ void TextEdit::initRightClickedMenu()
         renderAllSelections();
     });
 
-    m_columnEditAction = new QAction(tr("Column Mode"),this);
     m_addComment = new QAction(tr("Add Comment"),this);
     m_cancelComment = new QAction(tr("Remove Comment"),this);
 
@@ -380,6 +379,9 @@ void TextEdit::initRightClickedMenu()
 
 
     connect(m_selectAllAction,&QAction::triggered,this,[=] {
+        if (m_wrapper->getFileLoading()) {
+            return;
+        }
         m_bIsAltMod =false;
         selectAll();
     });
@@ -410,7 +412,7 @@ void TextEdit::initRightClickedMenu()
     #endif
 
     connect(m_openInFileManagerAction, &QAction::triggered, this,[this](){
-        DDesktopServices::showFileItem(m_sFilePath);
+        DDesktopServices::showFileItem(this->getTruePath());
     });
 
     connect(m_addComment,&QAction::triggered,this,[=] {
@@ -542,60 +544,51 @@ void TextEdit::popRightMenu(QPoint pos)
 
     if(isAddUndoRedo) m_rightMenu->addSeparator();
 
-    bool ok = false;
     if (textCursor().hasSelection() || m_hasColumnSelection) {
         if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
             m_rightMenu->addAction(m_cutAction);
-            ok = true;
         }
         m_rightMenu->addAction(m_copyAction);
-        ok = true;
     }
 
 
     if (canPaste()) {
         if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
             m_rightMenu->addAction(m_pasteAction);
-            ok = true;
         }
     }
 
     if (textCursor().hasSelection()||m_hasColumnSelection) {
         if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
             m_rightMenu->addAction(m_deleteAction);
-            ok = true;
         }
 
     }
 
     if (!document()->isEmpty()) {
         m_rightMenu->addAction(m_selectAllAction);
-        ok = true;
     }
 
-    if(ok) m_rightMenu->addSeparator();
-    ok = false;
+    m_rightMenu->addSeparator();
 
     if (!document()->isEmpty()) {
         m_rightMenu->addAction(m_findAction);
         if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
+            m_rightMenu->addAction(m_columnEditAction);
             m_rightMenu->addAction(m_replaceAction);
-             ok = true;
         }
         m_rightMenu->addAction(m_jumpLineAction);
-         ok = true;
-         if(ok) m_rightMenu->addSeparator();
+       m_rightMenu->addSeparator();
     }
-    ok =false;
+
     if(textCursor().hasSelection()){
         if(m_bReadOnlyPermission == false &&m_readOnlyMode == false){
-           if(ok)  m_rightMenu->addMenu(m_convertCaseMenu);
+           m_rightMenu->addMenu(m_convertCaseMenu);
         }
     } else {
         m_convertCaseMenu->hide();
     }
 
-    ok =false;
     // intelligent judge whether to support comments.
     const auto def = m_repository.definitionForFileName(QFileInfo(m_sFilePath).fileName());
     if (characterCount() &&
@@ -606,7 +599,6 @@ void TextEdit::popRightMenu(QPoint pos)
         {
             m_rightMenu->addAction(m_addComment);
             m_rightMenu->addAction(m_cancelComment);
-             ok = true;
         }
 
         if (m_readOnlyMode == true) {
@@ -618,7 +610,7 @@ void TextEdit::popRightMenu(QPoint pos)
         }
     }
 
-    if(ok) m_rightMenu->addSeparator();
+    m_rightMenu->addSeparator();
     if (m_bReadOnlyPermission == false) {
         if (m_readOnlyMode) {
             m_rightMenu->addAction(m_disableReadOnlyModeAction);
@@ -1441,7 +1433,8 @@ void TextEdit::killLine()
 
     // Remove selection content if has selection.
     if (textCursor().hasSelection()) {
-        textCursor().removeSelectedText();
+       // textCursor().removeSelectedText();
+       deleteSelectTextEx(textCursor());
     } else {
         // Get current line content.
         QTextCursor selectionCursor = textCursor();
@@ -1456,24 +1449,27 @@ void TextEdit::killLine()
         // Join next line if current line is empty or cursor at end of line.
         if (isEmptyLine || textCursor().atBlockEnd()) {
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
-            cursor.deleteChar();
+ 			//cursor.deleteChar();
+            deleteTextEx(cursor);
         }
         // Kill whole line if current line is blank line.
         else if (isBlankLine && textCursor().atBlockStart()) {
             cursor.movePosition(QTextCursor::StartOfBlock);
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-            cursor.removeSelectedText();
-            cursor.deleteChar();
+			//cursor.removeSelectedText();
+			//cursor.deleteChar();
+            deleteSelectTextEx(cursor);
         }
         // Otherwise kill rest content of line.
         else {
             cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-            cursor.removeSelectedText();
+            //cursor.removeSelectedText();
+            deleteSelectTextEx(cursor);
         }
 
         // Update cursor.
-        setTextCursor(cursor);
+        // setTextCursor(cursor);
     }
 }
 
@@ -1491,12 +1487,14 @@ void TextEdit::killCurrentLine()
     QString text = cursor.selectedText();
     bool isBlankLine = text.trimmed().size() == 0;
 
-    cursor.removeSelectedText();
+    //cursor.removeSelectedText();
+    deleteSelectTextEx(cursor);
     if (isBlankLine) {
-        cursor.deleteChar();
+    	//cursor.deleteChar();
+        deleteTextEx(cursor);
     }
 
-    setTextCursor(cursor);
+    //setTextCursor(cursor);
 }
 
 void TextEdit::killBackwardWord()
@@ -1514,8 +1512,9 @@ void TextEdit::killBackwardWord()
 
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
-        cursor.removeSelectedText();
-        setTextCursor(cursor);
+		//cursor.removeSelectedText();
+		//setTextCursor(cursor);
+        deleteSelectTextEx(cursor);
     }
 }
 
@@ -1534,8 +1533,9 @@ void TextEdit::killForwardWord()
 
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
-        cursor.removeSelectedText();
-        setTextCursor(cursor);
+		//cursor.removeSelectedText();
+		//setTextCursor(cursor);
+        deleteSelectTextEx(cursor);
     }
 }
 
@@ -3257,10 +3257,15 @@ void TextEdit::setReadOnlyPermission(bool permission)
     }
 
     if(permission){
-        setReadOnly(permission);
+        m_readOnlyMode = true;
+        setCursorWidth(0); //隐藏光标
+        updateHighlightLineSelection();
         emit cursorModeChanged(Readonly);
     }
-    else if(m_bReadOnlyPermission){
+    else {
+        m_readOnlyMode = false;
+        setCursorWidth(1);
+        updateHighlightLineSelection();
         emit cursorModeChanged(Insert);
     }
 }
@@ -3280,11 +3285,6 @@ void TextEdit::hideRightMenu()
     //arm平台全屏然后恢复窗口，右键菜单不会消失，所以加了这个函数
     if(m_rightMenu)
     m_rightMenu->hide();
-}
-
-void TextEdit::clearBlack()
-{
-    emit signal_clearBlack();
 }
 
 void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
@@ -3754,6 +3754,10 @@ void TextEdit::setTextFinished()
     m_bIsFileOpen = false;
     m_nLines = blockCount();
 
+    if (!m_listBookmark.isEmpty()) {
+        return;
+    }
+	
     QStringList bookmarkList = readHistoryRecordofBookmark();
     QStringList filePathList = readHistoryRecordofFilePath("advance.editor.browsing_history_file");
     QList<int> linesList;
@@ -3775,7 +3779,9 @@ void TextEdit::setTextFinished()
 
     foreach (const auto line, linesList) {
         if (line <= document()->blockCount()) {
+            if (!m_listBookmark.contains(line)) {
             m_listBookmark << line;
+            }
         }
     }
 //    qDebug() << m_listBookmark << document()->blockCount();
@@ -3932,14 +3938,27 @@ void TextEdit::setCodeFoldWidgetHide(bool isHidden)
     }
 }
 
-void TextEdit::setBackupPath(QString qstrTruePath)
+
+void TextEdit::setTruePath(QString qstrTruePath)
 {
     m_qstrTruePath = qstrTruePath;
 }
 
 QString TextEdit::getTruePath()
 {
+    if (m_qstrTruePath.isEmpty()) {
+        return m_sFilePath;
+    }
     return  m_qstrTruePath;
+}
+QList<int> TextEdit::getBookmarkInfo()
+{
+    return m_listBookmark;
+}
+
+void TextEdit::setBookMarkList(QList<int> bookMarkList)
+{
+    m_listBookmark = bookMarkList;
 }
 
 
@@ -5451,6 +5470,9 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
                 m_wrapper->OnUpdateHighlighter();
                 return;
             }else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "selectall")) {
+                if (m_wrapper->getFileLoading()) {
+                    return;
+                }
                 m_bIsAltMod = false;
                 selectAll();
                 return;

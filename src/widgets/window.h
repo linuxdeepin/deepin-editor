@@ -107,11 +107,27 @@ public:
 
     void displayShortcuts();
 
+    /**
+     * @brief backupFile 备份文件
+     */
     void backupFile();
 
+    /**
+     * @brief closeAllFiles 关闭当前窗口所有文件
+     * @return
+     */
     bool closeAllFiles();
 
+    /**
+     * @brief addTemFileTab　恢复备份文件标签页
+     * @param qstrPath　打开文件路径
+     * @param qstrName　真实文件名
+     * @param qstrTruePath　真实文件路径
+     * @param bIsTemFile　是否修改
+     */
     void addTemFileTab(QString qstrPath,QString qstrName,QString qstrTruePath,bool bIsTemFile = false);
+
+    QMap<QString, EditWrapper *> getWrappers();
 
     //设置显示清除焦点
     void setChildrenFocus(bool ok);
@@ -165,6 +181,8 @@ public slots:
     void slot_saveReadingPath();
     void slot_beforeReplace(QString _);
     void slot_setTitleFocus();
+    //清除不支持双字节字符集符号
+    void slotClearDoubleCharaterEncode();
 
 private:
     void handleFocusWindowChanged(QWindow *w);
@@ -210,6 +228,8 @@ private:
     int m_remberPositionScrollOffset;
 
     QString m_blankFileDir;
+    QString m_backupDir;
+    QString m_autoBackupDir;
     int m_fontSize = 0;
 
     QString m_titlebarStyleSheet;

@@ -53,15 +53,26 @@ StartManager::StartManager(QObject *parent)
     #ifdef TABLET
     initBlockShutdown();
     #endif
-    QString blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
+	
+    m_blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
+    m_backupDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("backup-files");
+    m_autoBackupDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("autoBackup-files");
 
-    if (!QFileInfo(blankFileDir).exists()) {
-        QDir().mkpath(blankFileDir);
+    if (!QFileInfo(m_blankFileDir).exists()) {
+        QDir().mkpath(m_blankFileDir);
+    }
+
+    if (!QFileInfo(m_backupDir).exists()) {
+        QDir().mkpath(m_backupDir);
     }
 
     m_qlistTemFile = Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->value().toStringList();
-}
 
+    //按时间自动备份（5分钟）
+    m_pTimer = new QTimer;
+    connect(m_pTimer,&QTimer::timeout,this,&StartManager::autoBackupFile);
+    m_pTimer->start(5*60*1000);
+}
 
 bool StartManager::checkPath(const QString &file)
 {
@@ -114,15 +125,107 @@ bool StartManager::isTemFilesEmpty()
     return bIsEmpty;
 }
 
+void StartManager::autoBackupFile()
+{
+    //如果自动备份文件夹不存在，创建自动备份文件夹
+    if (!QFileInfo(m_autoBackupDir).exists()) {
+        QDir().mkpath(m_autoBackupDir);
+    } else {
+        //有用户备份时删除用户备份
+        if (!QDir(m_backupDir).isEmpty()) {
+            QDir(m_backupDir).removeRecursively();
+        }
+    }
+
+    QMap<QString, EditWrapper *> wrappers;
+    QStringList listBackupInfo;
+    QString filePath,localPath,curPos;
+    QFileInfo fileInfo;
+    m_qlistTemFile.clear();   
+    listBackupInfo = Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->value().toStringList();
+
+    //记录所有的文件信息
+    for (int var = 0; var < m_windows.count(); ++var) {
+        wrappers = m_windows.value(var)->getWrappers();
+        QStringList list = wrappers.keys();
+
+        for (EditWrapper *wrapper : wrappers) {
+            //大文件加载时不备份
+            if(wrapper->getFileLoading()) continue;
+
+            filePath = wrapper->textEditor()->getFilePath();
+            localPath = wrapper->textEditor()->getTruePath();
+
+            StartManager::FileTabInfo tabInfo = StartManager::instance()->getFileTabInfo(filePath);
+            curPos = QString::number(wrapper->textEditor()->textCursor().position());
+            fileInfo.setFile(localPath);
+
+            //json格式记录文件信息
+            QJsonObject jsonObject;
+            QJsonDocument document;
+            jsonObject.insert("localPath",localPath);//记录源文件路径
+            jsonObject.insert("cursorPosition",curPos);//记录鼠标位置
+            jsonObject.insert("modify",wrapper->isModified());//记录修改状态
+            jsonObject.insert("window",var);//记录窗口Index
+
+            //记录书签
+            QList<int> bookmarkList= wrapper->textEditor()->getBookmarkInfo();
+
+            if (!bookmarkList.isEmpty()) {
+                QString bookmarkInfo;
+
+                for (int i = 0;i < bookmarkList.count();i++) {
+                    if (i == bookmarkList.count() - 1) {
+                        bookmarkInfo.append(QString::number(bookmarkList.value(i)));
+                    } else {
+                        bookmarkInfo.append(QString::number(bookmarkList.value(i)) + ",");
+                    }
+                }
+
+                jsonObject.insert("bookMark",bookmarkInfo);
+            }
+
+            //记录活动页
+            if (m_windows.value(var)->isActiveWindow()) {
+                if (wrapper == m_windows.value(var)->currentWrapper()) {
+                    jsonObject.insert("focus",true);
+                }
+            }
+
+            //保存备份文件
+            if (Utils::isDraftFile(filePath)) {
+                wrapper->saveTemFile(filePath);
+            } else {
+                if (wrapper->isModified()) {
+                    QString name = fileInfo.absolutePath().replace("/","_");
+                    QString qstrFilePath = m_autoBackupDir + "/" + fileInfo.baseName() + "." + name + "." + fileInfo.suffix();
+                    jsonObject.insert("temFilePath",qstrFilePath);
+                    wrapper->saveTemFile(qstrFilePath);
+                }
+            }
+
+            //使用json串形式保存
+            document.setObject(jsonObject);
+            QByteArray byteArray = document.toJson(QJsonDocument::Compact);
+            list.replace(tabInfo.tabIndex,byteArray);
+        }
+
+        m_qlistTemFile.append(list);
+    }
+
+    //将json串列表写入配置文件
+    Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->setValue(m_qlistTemFile);
+}
 int StartManager::recoverFile(Window *window)
 {
-    QFileInfo fileInfo;
-    QFileInfo fileInfoTem;
+    Window *pFocusWindow = nullptr;
+    QString focusPath;
     bool bIsTemFile = false;
-    QDir blankDirectory = QDir(QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files"));
-    QStringList blankFiles = blankDirectory.entryList(QStringList(), QDir::Files);
+    QStringList blankFiles = QDir(m_blankFileDir).entryList(QStringList(), QDir::Files);
+    int recFilesSum = 0;
     QStringList files = blankFiles;
-    int  recFilesSum = 0;
+    QFileInfo fileInfo;
+
 
     for (auto file : blankFiles) {
         if (!file.contains("blank_file")) {
@@ -130,6 +233,9 @@ int StartManager::recoverFile(Window *window)
         }
     }
 
+    int windowIndex = -1;
+
+    //根据备份信息恢复文件
     for (int i = 0;i < m_qlistTemFile.count();i++) {
         QJsonParseError jsonError;
         // 转化为 JSON 文档
@@ -142,6 +248,24 @@ int StartManager::recoverFile(Window *window)
                 // JSON 文档为对象
                 QJsonObject object = doucment.object();  // 转化为对象
 
+                //得到恢复文件对应的窗口
+                if (object.contains("window")) {  // 包含指定的 key
+                    QJsonValue value = object.value("window");  // 获取指定 key 对应的 value
+
+                    if (value.isDouble()) {
+                        if (windowIndex == -1) {
+                            windowIndex = static_cast<int>(value.toDouble());
+                        } else {
+                            if (windowIndex != static_cast<int>(value.toDouble())) {
+                                windowIndex = static_cast<int>(value.toDouble());
+                                window = createWindow(true);
+                                window->showCenterWindow(false);
+                            }
+                        }
+                    }
+                }
+
+                //得到备份文件路径
                 if (object.contains("temFilePath")) {  // 包含指定的 key
                     QJsonValue value = object.value("temFilePath");  // 获取指定 key 对应的 value
 
@@ -150,6 +274,7 @@ int StartManager::recoverFile(Window *window)
                     }
                 }
 
+                //得到文件修改状态
                 if (object.contains("modify")) {  // 包含指定的 key
                     QJsonValue value = object.value("modify");  // 获取指定 key 对应的 value
 
@@ -158,6 +283,7 @@ int StartManager::recoverFile(Window *window)
                     }
                 }
 
+                //得到真实文件路径
                 if (object.contains("localPath")) {  // 包含指定的 key
                     QJsonValue value = object.value("localPath");  // 获取指定 key 对应的 value
 
@@ -167,29 +293,80 @@ int StartManager::recoverFile(Window *window)
                     }
                 }
 
+                //打开文件
                 if (!temFilePath.isEmpty()) {
                     if (Utils::fileExists(temFilePath)) {
-                        if (temFilePath == localPath) {
-                            int index = files.indexOf(fileInfo.fileName());
+                        window->addTemFileTab(temFilePath,fileInfo.fileName(),localPath,bIsTemFile);
 
-                            if (index >= 0) {
-                                QString fileName = tr("Untitled %1").arg(index + 1);
-                                window->addTemFileTab(temFilePath,fileName,localPath,bIsTemFile);
+                        //打开文件后设置书签
+                        if (object.contains("bookMark")) {  // 包含指定的 key
+                            QJsonValue value = object.value("bookMark");  // 获取指定 key 对应的 value
+
+                            if (value.isString()) {
+                                QList<int> bookmarkList;
+                                bookmarkList = analyzeBookmakeInfo(value.toString());
+                                window->wrapper(temFilePath)->textEditor()->setBookMarkList(bookmarkList);
                             }
-                        } else {
-                            window->addTemFileTab(temFilePath,fileInfo.fileName(),localPath,bIsTemFile);
+                        }
+
+                        if (object.contains("focus")) {  // 包含指定的 key
+                            QJsonValue value = object.value("focus");  // 获取指定 key 对应的 value
+
+                            if (value.isBool() && value.toBool()) {
+                                pFocusWindow = window;
+                                focusPath = temFilePath;
+                            }
                         }
 
                         recFilesSum++;
                     }
                 } else {
                     if (!localPath.isEmpty() && Utils::fileExists(localPath)) {
-                        window->addTemFileTab(localPath,fileInfo.fileName(),localPath,bIsTemFile);
+                        if (Utils::isDraftFile(localPath)) {
+                            //得到新建文件名称
+                            int index = files.indexOf(QFileInfo(localPath).fileName());
+
+                            if (index >= 0) {
+                                QString fileName = tr("Untitled %1").arg(index + 1);
+                                window->addTemFileTab(localPath,fileName,localPath,bIsTemFile);
+
+                            }
+                        } else {
+                            window->addTemFileTab(localPath,fileInfo.fileName(),localPath,bIsTemFile);
+                        }
+
+                        //打开文件后设置书签
+                        if (object.contains("bookMark")) {  // 包含指定的 key
+                            QJsonValue value = object.value("bookMark");  // 获取指定 key 对应的 value
+
+                            if (value.isString()) {
+                                QList<int> bookmarkList;
+                                bookmarkList = analyzeBookmakeInfo(value.toString());
+                                window->wrapper(localPath)->textEditor()->setBookMarkList(bookmarkList);
+                            }
+                        }
+
+                        if (object.contains("focus")) {  // 包含指定的 key
+                            QJsonValue value = object.value("focus");  // 获取指定 key 对应的 value
+
+                            if (value.isBool() && value.toBool()) {
+                                pFocusWindow = window;
+                                focusPath = localPath;
+                            }
+                        }
                         recFilesSum++;
                     }
                 }
             }
         }
+    }
+
+    //当前活动页
+    if (pFocusWindow != nullptr && !focusPath.isNull()) {
+        FileTabInfo info;
+        info.windowIndex = m_windows.indexOf(pFocusWindow);
+        info.tabIndex = pFocusWindow->getTabIndex(focusPath);
+        popupExistTabs(info);
     }
 
     return recFilesSum;
@@ -199,9 +376,15 @@ void StartManager::openFilesInWindow(QStringList files)
 {
     // Open window with blank tab if no files need open.
     if (files.isEmpty()) {
-        if (m_windows.count() >= 20) return;
+        if (m_windows.count() >= 20) return;      
         Window *window = createWindow();
-        window->showCenterWindow(true);
+
+        if (m_windows.count() > 0) {
+            window->showCenterWindow(false);
+        } else {
+            window->showCenterWindow(true);
+        }
+
         window->addBlankTab();
         window->activateWindow();
     } else {
@@ -295,11 +478,8 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
 {
     Window *window = createWindow();
     //window->showCenterWindow();
-    window->addTabWithWrapper(buffer, filePath, qstrTruePath, tabName);
-    window->currentWrapper()->updateModifyStatus(isModifyed);
 
     #ifdef TABLET
-    window->setMinimumSize(Tabbar::sm_pDragPixmap->rect().size());
 
     QRect rect = window->rect();
     QPoint pos = QCursor::pos() ;/*- window->topLevelWidget()->pos();*/
@@ -319,9 +499,9 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
     }
 
     QRect startRect(startPos, Tabbar::sm_pDragPixmap->rect().size());
+    //QRect startRect(startPos, QSize(0,0));
     QRect endRect(startPos,window->rect().size());
     window->move(startPos);
-
     window->show();
     #if 0
     // window->setFixedSize(Tabbar::sm_pDragPixmap->rect().size());
@@ -346,18 +526,18 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
 //    Opacity->setEasingCurve(QEasingCurve::InCirc);
 
     QParallelAnimationGroup *group = new QParallelAnimationGroup;
-    connect(group,&QParallelAnimationGroup::finished,geometry,[window,geometry,/*Opacity,*/group](){
-        // window minimum size.
-        //window->setMinimumSize(1000, 600);
+    connect(group,&QParallelAnimationGroup::finished,geometry,[/*window,geometry,Opacity,group,*/=](){
         window->showCenterWindow(false);
         geometry->deleteLater();
        // Opacity->deleteLater();
         group->deleteLater();
+
+        window->addTabWithWrapper(buffer, filePath, qstrTruePath, tabName);
+        window->currentWrapper()->updateModifyStatus(isModifyed);
     });
 
     group->addAnimation(geometry);
    // group->addAnimation(Opacity);
-
     group->start();
     #endif
 }
@@ -496,6 +676,23 @@ StartManager::FileTabInfo StartManager::getFileTabInfo(QString file)
     return info;
 }
 
+QList<int> StartManager::analyzeBookmakeInfo(QString bookmarkInfo)
+{
+    QList<int> bookmarkList;
+    int nLeftPosition = 0;
+    int nRightPosition = bookmarkInfo.indexOf(",");
+    bookmarkList << bookmarkInfo.mid(nLeftPosition,nRightPosition - nLeftPosition).toInt();
+    nLeftPosition = nRightPosition;
+
+    while (nRightPosition != -1) {
+        nRightPosition = bookmarkInfo.indexOf(",",nRightPosition + 1);
+        bookmarkList << bookmarkInfo.mid(nLeftPosition + 1,nRightPosition - nLeftPosition - 1).toInt();
+        nLeftPosition = nRightPosition;
+    }
+
+    bookmarkList << bookmarkInfo.mid(nRightPosition,bookmarkInfo.count() - 1).toInt();
+    return bookmarkList;
+}
 
 void StartManager::initBlockShutdown()
 {

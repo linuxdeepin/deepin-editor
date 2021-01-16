@@ -91,8 +91,9 @@ void Tabbar::addTabWithIndex(int index, const QString &filePath, const QString &
         QFontMetrics fontMetrics(font());
         int nFontWidth = fontMetrics.width(path)*(qApp->devicePixelRatio()==1.25 ? 2 :1);
 
-        QDesktopWidget* d = qApp->desktop();
-        int w = d->availableGeometry().width()-200;
+        Window* pWindow = static_cast<Window*>(this->window());
+        int w = pWindow->width()-200;
+        if(w < 800) w =800;
 
         if(nFontWidth >= w) {
             int mod = nFontWidth%w;
@@ -107,6 +108,31 @@ void Tabbar::addTabWithIndex(int index, const QString &filePath, const QString &
 
         setTabToolTip(index,path);
     }
+}
+void Tabbar::resizeEvent(QResizeEvent *event)
+{
+    int cnt = count();
+    for(int i = 0; i < cnt ;i++)
+    {
+        QString path = tabToolTip(i);
+       path = path.replace("\n","");
+        QFontMetrics fontMetrics(font());
+        int nFontWidth = fontMetrics.width(path)*(qApp->devicePixelRatio()==1.25 ? 2 :1);
+        QDesktopWidget* d = qApp->desktop();
+        Window* pWindow = static_cast<Window*>(this->window());
+        int w = pWindow->width()-200;
+        if(w < 800) w =800;
+        if(nFontWidth >= w) {
+            int mod = nFontWidth%w;
+            int step = nFontWidth/w + (mod > 0 ? 1:0);
+            for (int i = 1; i < step;i++)
+            {
+               path.insert(i*(path.length()/step),'\n');
+            }
+        }
+        setTabToolTip(i,path);
+    }
+    return DTabBar::resizeEvent(event);
 }
 
 void Tabbar::closeTab(int index)
@@ -279,7 +305,13 @@ QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option
 {
     const qreal ratio = qApp->devicePixelRatio();
 
-    TextEdit *textEdit = static_cast<Window *>(this->window())->getTextEditor(fileAt(index));
+    Window *window = static_cast<Window *>(this->window());
+    EditWrapper *wrapper = window->wrapper(fileAt(index));
+    //加载大文本不允许拖拽
+    //if(wrapper && wrapper->getFileLoading()) return QPixmap();
+
+    TextEdit *textEdit = wrapper->textEditor();
+
     int width = textEdit->width() * ratio;
     int height = textEdit->height() * ratio;
     QImage screenshotImage(width, height, QImage::Format_ARGB32_Premultiplied);
@@ -346,6 +378,7 @@ QMimeData* Tabbar::createMimeDataFromTab(int index, const QStyleOptionTab &optio
 
     Window *window = static_cast<Window *>(this->window());
     EditWrapper *wrapper = window->wrapper(fileAt(index));
+    if(wrapper && wrapper->getFileLoading()) return nullptr;
     QMimeData *mimeData = new QMimeData;
 
     if (!wrapper) {
@@ -370,6 +403,10 @@ void Tabbar::insertFromMimeDataOnDragEnter(int index, const QMimeData *source)
     const QString tabName = QString::fromUtf8(source->data("dedit/tabbar"));
     QVariant pVar = source->property("wrapper");
     EditWrapper *wrapper = static_cast<EditWrapper *>(pVar.value<void *>());
+
+    //大文本加载不允许拖拽
+    if(wrapper && (wrapper && wrapper->getFileLoading())) return;
+
     Window *window = static_cast<Window *>(this->window());
 //    EditWrapper *wrapper = window->addTab();
 

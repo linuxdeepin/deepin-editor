@@ -390,8 +390,29 @@ public:
      * @param isHidden 是否隐藏
      */
     void setCodeFoldWidgetHide(bool isHidden);
-    void setBackupPath(QString qstrTruePath);
+
+    /**
+     * @brief setTruePath 设置真实文件路径
+     * @param qstrTruePath　真实文件路径
+     */
+    void setTruePath(QString qstrTruePath);
+
+    /**
+     * @brief getTruePath 获取真实文件路径
+     * @return 真实文件路径
+     */
     QString getTruePath();
+
+    /**
+     * @brief getBookmarkInfo 得到书签信息
+     * @return 书签信息
+     */
+    QList<int> getBookmarkInfo();
+    /**
+     * @brief setBookMarkList 设置书签
+     * @param bookMarkList 书签列表
+     */
+    void setBookMarkList(QList<int> bookMarkList);
 
 signals:
     void clickFindAction();
@@ -405,7 +426,6 @@ signals:
     void hightlightChanged(const QString &name);
     void popupNotify(QString notify);
     void signal_readingPath();
-    void signal_clearBlack();
     void signal_setTitleFocus();
 
 public slots:

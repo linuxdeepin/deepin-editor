@@ -224,11 +224,11 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
     //1.如果修改切换编码提示用户是否保存,不保存重新打开文件读取.2.没有修改是否另存为
     if(m_pTextEdit->getModified())
     {
-        DDialog *dialog = new DDialog(tr("Do you want to save this file?"), "", this);
+        DDialog *dialog = new DDialog(tr("Encoding changed. Do you want to save the file now?"), "", this);
         dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
         dialog->setIcon(QIcon::fromTheme("deepin-editor"));
         dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);//不保存
-        dialog->addButton(QString(tr("Discard")), false, DDialog::ButtonNormal);//取消
+ //       dialog->addButton(QString(tr("Discard")), false, DDialog::ButtonNormal);//不保存
         dialog->addButton(QString(tr("Save")), true, DDialog::ButtonRecommend);//保存
         int res = dialog->exec();//0  1
 
@@ -323,11 +323,6 @@ QString EditWrapper::getTextEncode()
 bool EditWrapper::saveFile()
 {
     QString qstrFilePath = m_pTextEdit->getTruePath();
-
-    if (qstrFilePath.isEmpty()) {
-        qstrFilePath = m_pTextEdit->getFilePath();
-    }
-
     QFile file(qstrFilePath);
 
     if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
@@ -384,8 +379,8 @@ bool EditWrapper::saveTemFile(QString qstrDir)
 
     if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         QByteArray fileContent = m_pTextEdit->toPlainText().toLocal8Bit();
-        if(!fileContent.isEmpty())
-        {
+//        if(!fileContent.isEmpty())
+//        {
             QByteArray Outdata;
             DetectCode::ChangeFileEncodingFormat(fileContent,Outdata,QString("UTF-8"),m_sCurEncode);
             file.write(Outdata);
@@ -393,38 +388,31 @@ bool EditWrapper::saveTemFile(QString qstrDir)
             file.close();
             m_sFirstEncode = m_sCurEncode;
 
-            QFileInfo fi(qstrDir);
-            m_tModifiedDateTime = fi.lastModified();
-
             // did save work?
             // only finalize if stream status == OK
             bool ok = (error == QFileDevice::NoError);
 
             // update status.
-            if (ok)  updateModifyStatus(false);
+            if (ok)  updateModifyStatus(isModified());
             return ok;
 
-        }else {
-            file.write(fileContent);
-            QFileDevice::FileError error = file.error();
-            file.close();
-            m_sFirstEncode = m_sCurEncode;
+//        }else {
+//            file.write(fileContent);
+//            QFileDevice::FileError error = file.error();
+//            file.close();
+//            m_sFirstEncode = m_sCurEncode;
 
-            QFileInfo fi(qstrDir);
-            m_tModifiedDateTime = fi.lastModified();
-
-            // did save work?
+//            // did save work?
             // only finalize if stream status == OK
-            bool ok = (error == QFileDevice::NoError);
+//            bool ok = (error == QFileDevice::NoError);
 
-            // update status.
-            if (ok)  updateModifyStatus(false);
-            return ok;
-        }
+//            // update status.
+//            if (ok)  updateModifyStatus(true);
+//            return ok;
+//        }
     }else {
         return false;
     }
-
 }
 
 void EditWrapper::updatePath(const QString &file,QString qstrTruePath)
@@ -438,7 +426,7 @@ void EditWrapper::updatePath(const QString &file,QString qstrTruePath)
     m_tModifiedDateTime = fi.lastModified();
 
     m_pTextEdit->setFilePath(file);
-    m_pTextEdit->setBackupPath(qstrTruePath);
+    m_pTextEdit->setTruePath(qstrTruePath);
 }
 
 bool EditWrapper::isModified()
@@ -619,6 +607,8 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QByteArr
     }
 
     loadContent(content);
+    //清除不支持双字节字符集符号
+    clearDoubleCharaterEncode();
 
     qint64 time3 = QDateTime::currentMSecsSinceEpoch();
     qDebug()<<"===========end load file:"<<time3 - time1;
@@ -754,7 +744,8 @@ void EditWrapper::updateModifyStatus(bool bModified)
 {
     if(getFileLoading()) return;
     m_pTextEdit->document()->setModified(bModified);
-    m_pWindow->updateModifyStatus(m_pTextEdit->getFilePath(),bModified);
+    Window *pWindow = static_cast<Window*>(QWidget::window());
+    pWindow->updateModifyStatus(m_pTextEdit->getFilePath(),bModified);
 }
 
 void EditWrapper::updateSaveAsFileName(QString strOldFilePath, QString strNewFilePath)
@@ -788,14 +779,14 @@ void EditWrapper::setShowBlankCharacter(bool ok)
         QTextOption opts = m_pTextEdit->document()->defaultTextOption();
         QTextOption::Flags flag = opts.flags();
         flag |= QTextOption::ShowTabsAndSpaces;
-        flag |= QTextOption::ShowLineAndParagraphSeparators;
+       // flag |= QTextOption::ShowLineAndParagraphSeparators;
         opts.setFlags(flag);
         m_pTextEdit->document()->setDefaultTextOption(opts);
     }else {
         QTextOption opts = m_pTextEdit->document()->defaultTextOption();
         QTextOption::Flags flag = opts.flags();
         flag &= ~QTextOption::ShowTabsAndSpaces;
-        flag &= ~QTextOption::ShowLineAndParagraphSeparators;
+       // flag &= ~QTextOption::ShowLineAndParagraphSeparators;
         opts.setFlags(flag);
         m_pTextEdit->document()->setDefaultTextOption(opts);
     }
@@ -898,4 +889,15 @@ void EditWrapper::loadContent(const QByteArray &content)
     }
 
     QApplication::restoreOverrideCursor();
+}
+void EditWrapper::clearDoubleCharaterEncode()
+{
+    if (QFileInfo(filePath()).baseName().contains("double")
+        || QFileInfo(filePath()).baseName().contains("user")
+        || QFileInfo(filePath()).baseName().contains("four")) {
+        if (QFileInfo(filePath()).size() > 500*1024) {
+            return;
+        }
+        emit sigClearDoubleCharaterEncode();
+    }
 }

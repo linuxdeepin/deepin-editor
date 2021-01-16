@@ -83,7 +83,7 @@ protected:
     #ifdef TABLET
     void dropEvent(QDropEvent *e);
     #endif
-
+    void resizeEvent(QResizeEvent *event);
 private:
     void handleTabMoved(int fromIndex, int toIndex);
     void handleTabReleased(int index);
