@@ -1443,27 +1443,27 @@ void TextEdit::killLine()
         // Join next line if current line is empty or cursor at end of line.
         if (isEmptyLine || textCursor().atBlockEnd()) {
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
- //           cursor.deleteChar();
+ 			//cursor.deleteChar();
             deleteTextEx(cursor);
         }
         // Kill whole line if current line is blank line.
         else if (isBlankLine && textCursor().atBlockStart()) {
             cursor.movePosition(QTextCursor::StartOfBlock);
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-//            cursor.removeSelectedText();
-//            cursor.deleteChar();
+			//cursor.removeSelectedText();
+			//cursor.deleteChar();
             deleteSelectTextEx(cursor);
         }
         // Otherwise kill rest content of line.
         else {
             cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-           // cursor.removeSelectedText();
-             deleteSelectTextEx(cursor);
+            //cursor.removeSelectedText();
+            deleteSelectTextEx(cursor);
         }
 
         // Update cursor.
-       // setTextCursor(cursor);
+        // setTextCursor(cursor);
     }
 }
 
@@ -1481,14 +1481,14 @@ void TextEdit::killCurrentLine()
     QString text = cursor.selectedText();
     bool isBlankLine = text.trimmed().size() == 0;
 
-   // cursor.removeSelectedText();
+    //cursor.removeSelectedText();
     deleteSelectTextEx(cursor);
     if (isBlankLine) {
-      // cursor.deleteChar();
+    	//cursor.deleteChar();
         deleteTextEx(cursor);
     }
 
-   // setTextCursor(cursor);
+    //setTextCursor(cursor);
 }
 
 void TextEdit::killBackwardWord()
@@ -1506,8 +1506,8 @@ void TextEdit::killBackwardWord()
 
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
-//        cursor.removeSelectedText();
-//        setTextCursor(cursor);
+		//cursor.removeSelectedText();
+		//setTextCursor(cursor);
         deleteSelectTextEx(cursor);
     }
 }
@@ -1527,8 +1527,8 @@ void TextEdit::killForwardWord()
 
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
-//        cursor.removeSelectedText();
-//        setTextCursor(cursor);
+		//cursor.removeSelectedText();
+		//setTextCursor(cursor);
         deleteSelectTextEx(cursor);
     }
 }

@@ -2079,6 +2079,7 @@ void Window::slotClearDoubleCharaterEncode()
         handleReplaceAll(strTemp, " ");
     }
 }
+
 void Window::handleFocusWindowChanged(QWindow *w)
 {
     if (windowHandle() != w || !currentWrapper() || !isActiveWindow()) {

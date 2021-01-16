@@ -440,8 +440,10 @@ public slots:
     void updateLeftAreaWidget();
     void handleScrollFinish();
     void setSyntaxDefinition(KSyntaxHighlighting::Definition def);
-    //书签右键菜单功能
+    
     void slot_translate();
+	
+	//书签右键菜单功能
     void setHighLineCurrentLine(bool ok);
     void upcaseWord();
     void downcaseWord();

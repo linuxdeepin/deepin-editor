@@ -478,7 +478,6 @@ void StartManager::openFilesInTab(QStringList files)
 
 void StartManager::createWindowFromWrapper(const QString &tabName, const QString &filePath, const QString &qstrTruePath, EditWrapper *buffer, bool isModifyed)
 {
-
     Window *window = createWindow();
     //window->showCenterWindow();
 
@@ -691,7 +690,6 @@ QList<int> StartManager::analyzeBookmakeInfo(QString bookmarkInfo)
     bookmarkList << bookmarkInfo.mid(nRightPosition,bookmarkInfo.count() - 1).toInt();
     return bookmarkList;
 }
-
 
 void StartManager::initBlockShutdown()
 {
