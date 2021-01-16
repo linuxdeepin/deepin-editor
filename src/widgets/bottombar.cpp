@@ -86,6 +86,7 @@ BottomBar::BottomBar(QWidget *parent)
         {
             m_pEncodeMenu->setCurrentTextOnly(pAct->text());
         }
+        m_pWrapper->clearDoubleCharaterEncode();
     });
 
     //切换文件类型

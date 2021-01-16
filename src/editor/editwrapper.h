@@ -108,6 +108,7 @@ public:
     void setLineNumberShow(bool bIsShow,bool bIsFirstShow = false);
     void setShowBlankCharacter(bool ok);
     void handleCursorModeChanged(TextEdit::CursorMode mode);
+    void clearDoubleCharaterEncode();
     //
     BottomBar *bottomBar();
     QString filePath();
@@ -120,10 +121,8 @@ signals:
 private:
     // 类似setPlainText(QString) 接口支持大文本加载 不卡顿 秒退出 梁卫东 2020年11月11日16:56:27
     void loadContent(const QByteArray&);
-
     void handleHightlightChanged(const QString &name);
     int GetCorrectUnicode1(const QByteArray &ba);
-    void clearDoubleCharaterEncode();
 
 public slots:
     void handleFileLoadFinished(const QByteArray &encode,const QByteArray &content);
