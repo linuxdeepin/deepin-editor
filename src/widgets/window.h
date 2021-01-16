@@ -178,6 +178,8 @@ public slots:
     void slot_saveReadingPath();
     void slot_beforeReplace(QString _);
     void slot_setTitleFocus();
+    //清除不支持双字节字符集符号
+    void slotClearDoubleCharaterEncode();
 
 private:
     void handleFocusWindowChanged(QWindow *w);

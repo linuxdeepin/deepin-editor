@@ -3280,11 +3280,6 @@ void TextEdit::hideRightMenu()
     m_rightMenu->hide();
 }
 
-void TextEdit::clearBlack()
-{
-    emit signal_clearBlack();
-}
-
 void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
 {
     BookMarkWidget *bookMarkArea = m_pLeftAreaWidget->m_pBookMarkArea;

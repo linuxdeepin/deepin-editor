@@ -847,7 +847,7 @@ TEST_F(test_textedit, clearBlack)
     QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
-    startManager->clearBlack();
+    //startManager->clearBlack();
 
     assert(1==1);
 }

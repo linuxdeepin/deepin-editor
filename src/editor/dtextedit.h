@@ -429,7 +429,6 @@ signals:
     void hightlightChanged(const QString &name);
     void popupNotify(QString notify);
     void signal_readingPath();
-    void signal_clearBlack();
     void signal_setTitleFocus();
 public slots:
     /**

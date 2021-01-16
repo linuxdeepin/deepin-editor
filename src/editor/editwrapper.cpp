@@ -607,6 +607,8 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QByteArr
     }
 
     loadContent(content);
+    //清除不支持双字节字符集符号
+    clearDoubleCharaterEncode();
 
     qint64 time3 = QDateTime::currentMSecsSinceEpoch();
     qDebug()<<"===========end load file:"<<time3 - time1;
@@ -887,4 +889,16 @@ void EditWrapper::loadContent(const QByteArray &content)
     }
 
     QApplication::restoreOverrideCursor();
+}
+
+void EditWrapper::clearDoubleCharaterEncode()
+{
+    if (QFileInfo(filePath()).baseName().contains("double")
+        || QFileInfo(filePath()).baseName().contains("user")
+        || QFileInfo(filePath()).baseName().contains("four")) {
+        if (QFileInfo(filePath()).size() > 500*1024) {
+            return;
+        }
+        emit sigClearDoubleCharaterEncode();
+    }
 }

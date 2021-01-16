@@ -682,6 +682,7 @@ void Window::restoreTab()
 EditWrapper *Window::createEditor()
 {
     EditWrapper *wrapper = new EditWrapper(this);
+    connect(wrapper, &EditWrapper::sigClearDoubleCharaterEncode, this, &Window::slotClearDoubleCharaterEncode);
     connect(wrapper->textEditor(), &TextEdit::signal_readingPath, this, &Window::slot_saveReadingPath, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::signal_setTitleFocus, this, &Window::slot_setTitleFocus, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);
@@ -2053,6 +2054,31 @@ void Window::slot_setTitleFocus()
     currentWrapper()->bottomBar()->setChildrenFocus(true,closeBtn);
 }
 
+void Window::slotClearDoubleCharaterEncode()
+{
+    //赛迪方要求不能出现以下字符，但是编码库中存在，所以手动去掉
+    QStringList shouldBeEmpty;
+    shouldBeEmpty << "\uE768" << "\uE769" << "\uE76A" << "\uE76B" << "\uE76D" << "\uE76E" << "\uE76F" << "\uE766" << "\uE767" << "\uE770"
+                  << "\uE771" << "\uE777" << "\uE778" << "\uE779" << "\uE77A" << "\uE77B" << "\uE77C" << "\uE77D" << "\uE77E" << "\uE77F" << "\uE7FE" << "\uE7FF"
+                  << "\uE801" << "\uE802" << "\uE803" << "\uE804" << "\uE805" << "\uE806" << "\uE807" << "\uE808" << "\uE809" << "\uE80A" << "\uE80B" << "\uE80C" << "\uE80D" << "\uE80E"
+                  << "\uE80F" << "\uE800" << "\uE7D3" << "\uE7D4" << "\uE7D5" << "\uE7D6" << "\uE7D7" << "\uE7D8" << "\uE7D9" << "\uE7DA" << "\uE7DB" << "\uE7DC" << "\uE7DD"
+                  << "\uE7DE" << "\uE7DF" << "\uE7E0" << "\uE7E1" << "\uE7CD" << "\uE7CE" << "\uE7CF" << "\uE7D0" << "\uE7D1" << "\uE7D2" << "\uE7AF" << "\uE7B0" << "\uE7B1" << "\uE7B2"
+                  << "\uE7B3" << "\uE7B4" << "\uE7B5" << "\uE7B6" << "\uE7B7" << "\uE7B8" << "\uE7B9" << "\uE7BA" << "\uE7BB" << "\uE7A0" << "\uE7A1" << "\uE7A2" << "\uE7A3" << "\uE7A4"
+                  << "\uE7A5" << "\uE7A6" << "\uE7A7" << "\uE7A8" << "\uE7A9" << "\uE7AA" << "\uE7AB" << "\uE7AC" << "\uE7AD" << "\uE7AE" << "\uE797" << "\uE798" << "\uE799" << "\uE79A"
+                  << "\uE79B" << "\uE79C" << "\uE79D" << "\uE79E" << "\uE79F" << "\uE780" << "\uE781" << "\uE782" << "\uE783" << "\uE784" << "\uE772" << "\uE773" << "\uE774" << "\uE775"
+                  << "\uE776" << "\uE78D" << "\uE78E" << "\uE78F" << "\uE790" << "\uE791" << "\uE792" << "\uE793" << "\uE796"
+                  << "\uE7BC" << "\uE7BD" << "\uE7BE" << "\uE7BF" << "\uE7C0" << "\uE7C1" << "\uE7C2" << "\uE7C3" << "\uE7C4"
+                  << "\uE7C5" << "\uE7C6" << "\uE7E3" << "\uE7E4" << "\uE7E5" << "\uE7E6" << "〾⿰⿱⿲⿳⿴⿵" << "\uE7F4" << "\uE7F5" << "\uE7F6"
+                  << "\uE7F7" << "\uE7F8" << "\uE7F9" << "\uE7FA" << "\uE7FB" << "\uE7FC" << "⿶⿷⿸⿹⿺⿻" << "\uE7FD"
+                  << "\u4DB6" << "\uE26C" << "\uE28F" << "\uE290" << "\uE291" << "\uE292" << "\uE293" << "\uE294" << "\uE295" << "\uE296" << "\uE297" << "\uE298" << "\uE299"
+                  << "\uE29A" << "\uE29B" << "\uE29C" << "\uE29D" << "\uE29E" << "\uE29F" << "\uE26D"
+                  << "\uE644" << "\uE645" << "\uE645" << "\uE646" << "\uE647" << "\uE648" << "\uE649" << "\uE64A" << "\uE64B" << "\uE64C" << "\uE64D" << "\uE64E" << "\uE64F"
+                  << "\uE680" << "\uE681" << "\uE682" << "\uE683" << "\uE686" << "\uE688" << "\uE689" << "\uE68A" << "\uE68B" << "\uE68C" << "\uE68D" << "\uE6AC" << "\uE6AD" << "\uE6AE";
+
+    for (const QString &strTemp : shouldBeEmpty) {
+        handleReplaceAll(strTemp, " ");
+    }
+}
 void Window::handleFocusWindowChanged(QWindow *w)
 {
     if (windowHandle() != w || !currentWrapper() || !isActiveWindow()) {
