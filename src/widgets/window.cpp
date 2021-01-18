@@ -1322,26 +1322,25 @@ void Window::popupPrintDialog()
 #if (DTK_VERSION_MAJOR > 5 \
     || (DTK_VERSION_MAJOR >=5 && DTK_VERSION_MINOR > 4) \
     || (DTK_VERSION_MAJOR >= 5 && DTK_VERSION_MINOR >= 4 && DTK_VERSION_PATCH > 3))
-
 	DPrinter printer(QPrinter::HighResolution);
     DPrintPreviewDialog preview( this);
 
     if (fileDir == m_blankFileDir) {
-        preview.setDocName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
+        preview.setDocName(QString(m_tabbar->currentName()));
     } else {
-        preview.setDocName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
+        preview.setDocName(QString(QFileInfo(filePath).baseName()));
     }
 
     connect(&preview, QOverload<DPrinter *>::of(&DPrintPreviewDialog::paintRequested), this, [=](DPrinter *printer) {
         currentWrapper()->textEditor()->print(printer);
     });
 #else
-	QPrinter printer(QPrinter::HighResolution);
+    QPrinter printer(QPrinter::HighResolution);
     QPrintPreviewDialog preview(&printer, this);
 
     if (fileDir == m_blankFileDir) {
-            printer.setOutputFileName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
-            printer.setDocName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
+        printer.setOutputFileName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
+        printer.setDocName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
     } else {
         printer.setOutputFileName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
         printer.setDocName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
