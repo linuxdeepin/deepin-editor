@@ -3257,15 +3257,10 @@ void TextEdit::setReadOnlyPermission(bool permission)
     }
 
     if(permission){
-        m_readOnlyMode = true;
-        setCursorWidth(0); //隐藏光标
-        updateHighlightLineSelection();
+        setReadOnly(permission);
         emit cursorModeChanged(Readonly);
     }
     else {
-        m_readOnlyMode = false;
-        setCursorWidth(1);
-        updateHighlightLineSelection();
         emit cursorModeChanged(Insert);
     }
 }
