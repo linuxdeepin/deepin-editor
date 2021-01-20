@@ -324,6 +324,7 @@ bool EditWrapper::saveFile()
 {
     QString qstrFilePath = m_pTextEdit->getTruePath();
     QFile file(qstrFilePath);
+    hideWarningNotices();
 
     if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         QByteArray fileContent = m_pTextEdit->toPlainText().toLocal8Bit();

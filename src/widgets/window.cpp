@@ -953,7 +953,10 @@ QString Window::saveAsFileToDisk()
 
         wrapper->updatePath(wrapper->filePath(),newFilePath);
         wrapper->saveFile();
-        QFile(wrapper->filePath()).remove();
+
+        if (wrapper->filePath().contains(m_backupDir) || wrapper->filePath().contains(m_blankFileDir)) {
+            QFile(wrapper->filePath()).remove();
+        }
 
         //删除自动备份文件
         if (QFileInfo(m_autoBackupDir).exists()) {
