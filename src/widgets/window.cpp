@@ -1287,7 +1287,7 @@ void Window::popupPrintDialog()
     //适配打印接口2.0，dtk大于 5.4.3 版才合入最新的2.0打印控件接口
 #if (DTK_VERSION_MAJOR > 5 \
     || (DTK_VERSION_MAJOR >=5 && DTK_VERSION_MINOR > 4) \
-    || (DTK_VERSION_MAJOR >= 5 && DTK_VERSION_MINOR >= 4 && DTK_VERSION_PATCH > 2))
+    || (DTK_VERSION_MAJOR >= 5 && DTK_VERSION_MINOR >= 4 && DTK_VERSION_PATCH > 3))
 
     DPrinter printer(QPrinter::HighResolution);
     DPrintPreviewDialog preview( this);
