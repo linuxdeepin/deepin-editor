@@ -3239,22 +3239,21 @@ void TextEdit::hideCursorBlink()
 
 void TextEdit::setReadOnlyPermission(bool permission)
 {
-    if(m_bReadOnlyPermission){
-        m_bReadOnlyPermission = permission;
-        m_readOnlyMode = permission;
-    }
-    else if(!m_bReadOnlyPermission){
-        m_bReadOnlyPermission = permission;
-        if(permission)
-            m_readOnlyMode = permission;
-    }
-
+    m_bReadOnlyPermission = permission; //true为不可读
     if(permission){
-        setReadOnly(permission);
+        setReadOnly(true);
         emit cursorModeChanged(Readonly);
     }
     else {
-        emit cursorModeChanged(Insert);
+        if(!m_readOnlyMode)
+        {
+            setReadOnly(false);
+            emit cursorModeChanged(Insert);
+        }
+        else{
+            setReadOnly(true);
+            emit cursorModeChanged(Readonly);
+        }
     }
 }
 
@@ -5330,6 +5329,10 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             return;
         }
     } else {
+        if(isReadOnly())  //原生接口setReadOnly不生效,在这里拦截模拟ReadOnly
+        {
+             return;
+        }
 
           //插入键盘可现实字符
           if(modifiers == Qt::NoModifier && (e->key()<=Qt::Key_ydiaeresis && e->key() >= Qt::Key_Space) && !e->text().isEmpty())
