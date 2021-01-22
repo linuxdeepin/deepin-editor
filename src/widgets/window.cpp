@@ -874,7 +874,8 @@ bool Window::saveFile()
         temPath = filePath;
     }
 
-    wrapperEdit->updatePath(temPath,filePath);
+    updateSaveAsFileName(temPath,filePath);
+    //wrapperEdit->updatePath(temPath,filePath);
 
     bool success = wrapperEdit->saveFile();
 

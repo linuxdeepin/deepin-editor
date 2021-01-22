@@ -810,6 +810,12 @@ TextEdit *EditWrapper::textEditor()
 
 Window *EditWrapper::window()
 {
+    Window *window = static_cast<Window*>(QWidget::window());
+
+    if (m_pWindow != window) {
+        m_pWindow = window;
+    }
+
     return m_pWindow;
 }
 
