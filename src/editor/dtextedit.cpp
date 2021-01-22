@@ -254,6 +254,7 @@ void TextEdit::initRightClickedMenu()
     connect(pColorsSelectWdg, &ColorSelectWdg::sigColorSelected, this, [this](bool bSelected, QColor color) {
         isMarkCurrentLine(bSelected, color.name());
         renderAllSelections();
+        m_colorMarkMenu->close();
         m_rightMenu->close();//选择颜色关闭菜单　梁卫东　２０２０－０８－２１　０９：３４：５３
     });
 
@@ -271,6 +272,7 @@ void TextEdit::initRightClickedMenu()
     connect(pColorsAllSelectWdg, &ColorSelectWdg::sigColorSelected, this, [this](bool bSelected, QColor color) {
         isMarkAllLine(bSelected, color.name());
         renderAllSelections();
+        m_colorMarkMenu->close();
         m_rightMenu->close();//选择颜色关闭菜单　梁卫东　２０２０－０８－２１　０９：３４：５３
     });
     m_actionAllColorStyles = new QWidgetAction(this);
