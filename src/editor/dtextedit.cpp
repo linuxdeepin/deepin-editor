@@ -635,12 +635,12 @@ void TextEdit::popRightMenu(QPoint pos)
             stopReadingState = stopReadingStateRet.value();
         }
         if(!stopReadingState){
-            m_rightMenu->addAction(m_voiceReadingAction);
+            //m_rightMenu->addAction(m_voiceReadingAction);
             m_voiceReadingAction->setEnabled(false);
         }
         else {
-            m_rightMenu->removeAction(m_voiceReadingAction);
-            m_rightMenu->addAction(m_stopReadingAction);
+            //m_rightMenu->removeAction(m_voiceReadingAction);
+            //m_rightMenu->addAction(m_stopReadingAction);
         }
         bool voiceReadingState = false;
         QDBusMessage voiceReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
@@ -656,7 +656,7 @@ void TextEdit::popRightMenu(QPoint pos)
             m_voiceReadingAction->setEnabled(true);
         }
 
-        m_rightMenu->addAction(m_dictationAction);
+        //m_rightMenu->addAction(m_dictationAction);
         bool dictationState = false;
         QDBusMessage dictationMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
                                                           "/aiassistant/iat",
@@ -672,7 +672,7 @@ void TextEdit::popRightMenu(QPoint pos)
             m_dictationAction->setEnabled(false);
         }
 
-        m_rightMenu->addAction(m_translateAction);
+        //m_rightMenu->addAction(m_translateAction);
         m_translateAction->setEnabled(false);
         bool translateState = false;
         QDBusMessage translateReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",

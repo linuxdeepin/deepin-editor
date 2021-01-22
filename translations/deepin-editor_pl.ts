@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="pl" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="pl">
 <context>
     <name>BottomBar</name>
     <message>
@@ -32,7 +34,7 @@
         <location filename="../src/editor/editwrapper.cpp" line="174"/>
         <location filename="../src/editor/editwrapper.cpp" line="232"/>
         <location filename="../src/editor/editwrapper.cpp" line="278"/>
-        <location filename="../src/editor/editwrapper.cpp" line="463"/>
+        <location filename="../src/editor/editwrapper.cpp" line="459"/>
         <source>Save</source>
         <translation>Zapisz</translation>
     </message>
@@ -53,34 +55,33 @@
         <translation>Kodowanie zmienione. Czy chcesz teraz zapisać plik?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="231"/>
         <location filename="../src/editor/editwrapper.cpp" line="277"/>
         <source>Discard</source>
         <translation>Odrzuć</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="530"/>
+        <location filename="../src/editor/editwrapper.cpp" line="526"/>
         <source>File removed on the disk. Save it now?</source>
         <translation>Plik został usunięty z dysku. Zapisać go teraz?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="533"/>
+        <location filename="../src/editor/editwrapper.cpp" line="529"/>
         <source>File has changed on disk. Reload?</source>
         <translation>Plik został zmieniony na dysku. Wczytać go ponownie?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="555"/>
+        <location filename="../src/editor/editwrapper.cpp" line="551"/>
         <location filename="../src/widgets/bottombar.cpp" line="60"/>
         <source>INSERT</source>
         <translation>WSTAWIANIE</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="558"/>
+        <location filename="../src/editor/editwrapper.cpp" line="554"/>
         <source>OVERWRITE</source>
         <translation>NADPISYWANIE</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="561"/>
+        <location filename="../src/editor/editwrapper.cpp" line="557"/>
         <source>R/O</source>
         <translation>TYLKO DO ODCZYTU</translation>
     </message>
@@ -133,11 +134,11 @@
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="176"/>
-        <location filename="../src/editor/editwrapper.cpp" line="465"/>
+        <location filename="../src/editor/editwrapper.cpp" line="461"/>
         <location filename="../src/widgets/window.cpp" line="932"/>
         <location filename="../src/widgets/window.cpp" line="950"/>
-        <location filename="../src/widgets/window.cpp" line="1027"/>
-        <location filename="../src/widgets/window.cpp" line="1042"/>
+        <location filename="../src/widgets/window.cpp" line="1030"/>
+        <location filename="../src/widgets/window.cpp" line="1045"/>
         <source>Encoding</source>
         <translation>Kodowanie</translation>
     </message>
@@ -175,7 +176,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="31"/>
         <location filename="../src/controls/settingsdialog.cpp" line="107"/>
-        <location filename="../src/widgets/window.cpp" line="1386"/>
+        <location filename="../src/widgets/window.cpp" line="1394"/>
         <source>Window</source>
         <translation>Okno</translation>
     </message>
@@ -582,17 +583,17 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="114"/>
         <source>Show bookmarks icon</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="115"/>
         <source>Show whitespaces and tabs</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="116"/>
         <source>Highlight current line</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="117"/>
@@ -602,97 +603,97 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="120"/>
         <source>Unicode</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="121"/>
         <source>WesternEuropean</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="122"/>
         <source>CentralEuropean</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="123"/>
         <source>Baltic</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="124"/>
         <source>Cyrillic</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="125"/>
         <source>Arabic</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="130"/>
         <source>Celtic</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="131"/>
         <source>SouthEasternEuropean</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="126"/>
         <source>Greek</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="127"/>
         <source>Hebrew</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="132"/>
         <source>ChineseSimplified</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="133"/>
         <source>ChineseTraditional</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="134"/>
         <source>Japanese</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="135"/>
         <source>Korean</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="129"/>
         <source>Thai</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="128"/>
         <source>Turkish</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="136"/>
         <source>Vietnamese</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/startmanager.cpp" line="718"/>
+        <location filename="../src/startmanager.cpp" line="708"/>
         <source>File not saved</source>
         <translation>Plik nie został zapisany</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="951"/>
-        <location filename="../src/widgets/window.cpp" line="1028"/>
-        <location filename="../src/widgets/window.cpp" line="1043"/>
+        <location filename="../src/widgets/window.cpp" line="1031"/>
+        <location filename="../src/widgets/window.cpp" line="1046"/>
         <source>Line Endings</source>
         <translation>Zakończenia wiersza</translation>
     </message>
@@ -734,9 +735,9 @@
     <name>S:</name>
     <message>
         <location filename="../third/libiconv-1.16/src/iconv.c" line="103"/>
-        <source/>
+        <source></source>
         <comment>The first line of the short usage message.</comment>
-        <translation type="unfinished"/>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -801,7 +802,7 @@
 <context>
     <name>StartManager</name>
     <message>
-        <location filename="../src/startmanager.cpp" line="333"/>
+        <location filename="../src/startmanager.cpp" line="332"/>
         <source>Untitled %1</source>
         <translation>Bez tytułu %1</translation>
     </message>
@@ -809,32 +810,32 @@
 <context>
     <name>Tabbar</name>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="468"/>
+        <location filename="../src/controls/tabbar.cpp" line="506"/>
         <source>Close tab</source>
         <translation>Zamknij kartę</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="469"/>
+        <location filename="../src/controls/tabbar.cpp" line="507"/>
         <source>Close other tabs</source>
         <translation>Zamknij pozostałe karty</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="470"/>
+        <location filename="../src/controls/tabbar.cpp" line="508"/>
         <source>More options</source>
         <translation>Więcej możliwości</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="471"/>
+        <location filename="../src/controls/tabbar.cpp" line="509"/>
         <source>Close tabs to the left</source>
         <translation>Zamknij karty po lewej stronie</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="472"/>
+        <location filename="../src/controls/tabbar.cpp" line="510"/>
         <source>Close tabs to the right</source>
         <translation>Zamknij karty po prawej stronie</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="473"/>
+        <location filename="../src/controls/tabbar.cpp" line="511"/>
         <source>Close unmodified tabs</source>
         <translation>Zamknij niezmodyfikowane karty</translation>
     </message>
@@ -932,7 +933,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="230"/>
         <source>Stop reading</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="231"/>
@@ -952,7 +953,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="234"/>
         <source>Add bookmark</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="235"/>
@@ -962,12 +963,12 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="236"/>
         <source>Previous bookmark</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="237"/>
         <source>Next bookmark</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="238"/>
@@ -1055,34 +1056,34 @@
         <translation>Brak</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1308"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1309"/>
         <source>Selected line(s) copied</source>
         <translation>Wybrane linie zostały skopiowane</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1314"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1315"/>
         <source>Current line copied</source>
         <translation>Bieżąca linia została skopiowana</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1353"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1354"/>
         <source>Selected line(s) clipped</source>
         <translation>Obcięto wybrane linie</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1359"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1360"/>
         <source>Current line clipped</source>
         <translation>Obcięto bieżącą linię</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3097"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3098"/>
         <source>Read-Only mode is off</source>
         <translation>Tryb tylko odczutu jest wyłączony</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3103"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3111"/>
-        <location filename="../src/editor/dtextedit.cpp" line="5328"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3104"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3112"/>
+        <location filename="../src/editor/dtextedit.cpp" line="5324"/>
         <source>Read-Only mode is on</source>
         <translation>Tryb tylko odczutu jest włączony</translation>
     </message>
@@ -1129,7 +1130,7 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="340"/>
-        <location filename="../src/widgets/window.cpp" line="1958"/>
+        <location filename="../src/widgets/window.cpp" line="1966"/>
         <source>Save</source>
         <translation>Zapisz</translation>
     </message>
@@ -1145,13 +1146,13 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="344"/>
-        <location filename="../src/widgets/window.cpp" line="1446"/>
+        <location filename="../src/widgets/window.cpp" line="1454"/>
         <source>Settings</source>
         <translation>Ustawienia</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="459"/>
-        <location filename="../src/widgets/window.cpp" line="2074"/>
+        <location filename="../src/widgets/window.cpp" line="2108"/>
         <source>Read-Only</source>
         <translation>Tylko do odczytu</translation>
     </message>
@@ -1166,12 +1167,12 @@
         <translation>Nieprawidłowy plik: %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="614"/>
+        <location filename="../src/widgets/window.cpp" line="615"/>
         <source>Do you want to save this file?</source>
         <translation>Czy chcesz zapisać plik?</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="866"/>
+        <location filename="../src/widgets/window.cpp" line="864"/>
         <source>You do not have permission to save %1</source>
         <translation>Nie posiadasz uprawnień do zapisania %1</translation>
     </message>
@@ -1181,60 +1182,60 @@
         <translation>Zapisano pomyślnie</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="577"/>
+        <location filename="../src/widgets/window.cpp" line="578"/>
         <location filename="../src/widgets/window.cpp" line="899"/>
         <source>Do you want to save as another?</source>
         <translation>Czy chcesz zapisać plik pod inną nazwą?</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="930"/>
-        <location filename="../src/widgets/window.cpp" line="984"/>
-        <location filename="../src/widgets/window.cpp" line="1025"/>
+        <location filename="../src/widgets/window.cpp" line="987"/>
+        <location filename="../src/widgets/window.cpp" line="1028"/>
         <source>Save File</source>
         <translation>Zapisz plik</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="986"/>
+        <location filename="../src/widgets/window.cpp" line="989"/>
         <source>Encoding</source>
         <translation>Kodowanie</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1171"/>
+        <location filename="../src/widgets/window.cpp" line="1178"/>
         <source>Read-Only mode is on</source>
         <translation>Tryb tylko odczutu jest włączony</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1345"/>
+        <location filename="../src/widgets/window.cpp" line="1353"/>
         <source>Current location remembered</source>
         <translation>Aktualna lokalizacja zapamiętana</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1396"/>
+        <location filename="../src/widgets/window.cpp" line="1404"/>
         <source>Ctrl+&apos;=&apos;</source>
         <translation>Ctrl+&apos;=&apos;</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1399"/>
+        <location filename="../src/widgets/window.cpp" line="1407"/>
         <source>Ctrl+&apos;-&apos;</source>
         <translation>Ctrl+&apos;-&apos;</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1428"/>
+        <location filename="../src/widgets/window.cpp" line="1436"/>
         <source>Editor</source>
         <translation>Edytor</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1656"/>
+        <location filename="../src/widgets/window.cpp" line="1664"/>
         <source>Untitled %1</source>
         <translation>Bez tytułu %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1956"/>
+        <location filename="../src/widgets/window.cpp" line="1964"/>
         <source>Cancel</source>
         <translation>Anuluj</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1957"/>
+        <location filename="../src/widgets/window.cpp" line="1965"/>
         <source>Discard</source>
         <translation>Odrzuć</translation>
     </message>
