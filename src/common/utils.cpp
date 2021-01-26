@@ -703,3 +703,41 @@ void Utils::setChildrenFocus(QWidget *pWidget, Qt::FocusPolicy policy)
         setChildrenFocus(obj,policy);
     }
 }
+
+int Utils::getProcessCountByName(char *pstrName)
+{
+    FILE *fp = NULL;
+    int count = -1;
+    char buf[1024];
+    char command[1024];
+
+    if (NULL == pstrName || strlen(pstrName) <= 0) {
+        return count;
+    }
+
+    memset(command, 0, sizeof(command));
+    sprintf(command, "ps -ef | grep %s | grep -v grep | wc -l", pstrName);
+
+    if ((fp = popen(command, "r")) != NULL) {
+        memset(buf, 0, sizeof(buf));
+        if ((fgets(buf, sizeof(buf)-1, fp)) != NULL) {
+            count = atoi(buf);
+        }
+    } else {
+        qDebug() << ">>> popen error";
+    }
+
+    return count;
+}
+
+void Utils::killProcessByName(char *pstrName)
+{
+    char command[1024];
+
+    if (pstrName != NULL && strlen(pstrName) > 0) {
+        memset(command, 0, sizeof(command));
+        sprintf(command, "killall %s", pstrName);
+        qDebug() << ">>> command: " << command;
+        system(command);
+    }
+}

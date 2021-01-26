@@ -70,4 +70,8 @@ public:
     static void clearChildrenFoucusEx(QWidget* pWidget);
     //设置所有控件焦点 梁卫东　２０２０－０９－１５　１７：５５：１８
     static void setChildrenFocus(QWidget* pWidget,Qt::FocusPolicy policy = Qt::StrongFocus);
+    //根据指定名称获取进程数量 秦浩玲　2021-01-26
+    static int getProcessCountByName(char *pstrName);
+    //批量结束指定名称的进程 秦浩玲　2021-01-26
+    static void killProcessByName(char *pstrName);
 };

@@ -39,6 +39,7 @@
 #include <DMainWindow>
 #include <DStackedWidget>
 
+
 DWIDGET_USE_NAMESPACE
 
 class Window : public DMainWindow
@@ -191,6 +192,7 @@ protected:
     void closeEvent(QCloseEvent *event) override;
     void hideEvent(QHideEvent *event) override;
     void keyPressEvent(QKeyEvent *keyEvent) override;
+    void keyReleaseEvent(QKeyEvent *keyEvent) override;
     void dragEnterEvent(QDragEnterEvent *e) override;
     void dropEvent(QDropEvent* event) override;
 
@@ -230,6 +232,8 @@ private:
     QString m_tabbarActiveColor;
     QList <TextEdit *> m_reading_list;
     QStringList m_qlistTemFile;///<临时文件列表
+
+    QProcess *m_shortcutViewProcess = nullptr;
 };
 
 #endif

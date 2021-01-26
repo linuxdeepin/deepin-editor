@@ -284,6 +284,10 @@ Window::Window(DMainWindow *parent)
 Window::~Window()
 {
     // We don't need clean pointers because application has exit here.
+    if (nullptr != m_shortcutViewProcess) {
+        delete(m_shortcutViewProcess);
+        m_shortcutViewProcess = nullptr;
+    }
 }
 
 void Window::updateModifyStatus(const QString &path, bool isModified)
@@ -1474,10 +1478,11 @@ void Window::displayShortcuts()
     QString param2 = "-p=" + QString::number(pos.x()) + "," + QString::number(pos.y());
     shortcutString << param1 << param2;
 
-    QProcess *shortcutViewProcess = new QProcess();
-    shortcutViewProcess->startDetached("deepin-shortcut-viewer", shortcutString);
+    m_shortcutViewProcess = new QProcess();
+    m_shortcutViewProcess->startDetached("deepin-shortcut-viewer", shortcutString);
+    qDebug() << ">>> new shortcutViewProcess: " << m_shortcutViewProcess;
 
-    connect(shortcutViewProcess, SIGNAL(finished(int)), shortcutViewProcess, SLOT(deleteLater()));
+    connect(m_shortcutViewProcess, SIGNAL(finished(int)), m_shortcutViewProcess, SLOT(deleteLater()));
 }
 
 void Window::backupFile()
@@ -2214,6 +2219,8 @@ void Window::keyPressEvent(QKeyEvent *e)
 {
     QString key = Utils::getKeyshortcut(e);
 
+    qDebug() << ">>> Press Key: " << key;
+
     if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "decrementfontsize") ||
         key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "incrementfontsize") ||
         key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "togglefullscreen")) {
@@ -2290,6 +2297,25 @@ void Window::keyPressEvent(QKeyEvent *e)
                     activeTab(tabIndex - 1);
                 }
             }
+        }
+    }
+}
+
+void Window::keyReleaseEvent(QKeyEvent *keyEvent)
+{
+    QString key = Utils::getKeyshortcut(keyEvent);
+
+    qDebug() << ">>> Release Key: " << key;
+
+    if (key.contains("Ctrl") || key.contains("Shift")) {
+        if (nullptr != m_shortcutViewProcess) {
+            int count = Utils::getProcessCountByName("deepin-shortcut-viewer");
+            if (count > 0) {
+                Utils::killProcessByName("deepin-shortcut-viewer");
+            }
+
+            delete(m_shortcutViewProcess);
+            m_shortcutViewProcess = nullptr;
         }
     }
 }
