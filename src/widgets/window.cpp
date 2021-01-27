@@ -1480,7 +1480,6 @@ void Window::displayShortcuts()
 
     m_shortcutViewProcess = new QProcess();
     m_shortcutViewProcess->startDetached("deepin-shortcut-viewer", shortcutString);
-    qDebug() << ">>> new shortcutViewProcess: " << m_shortcutViewProcess;
 
     connect(m_shortcutViewProcess, SIGNAL(finished(int)), m_shortcutViewProcess, SLOT(deleteLater()));
 }
@@ -2219,8 +2218,6 @@ void Window::keyPressEvent(QKeyEvent *e)
 {
     QString key = Utils::getKeyshortcut(e);
 
-    qDebug() << ">>> Press Key: " << key;
-
     if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "decrementfontsize") ||
         key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "incrementfontsize") ||
         key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "togglefullscreen")) {
@@ -2303,11 +2300,7 @@ void Window::keyPressEvent(QKeyEvent *e)
 
 void Window::keyReleaseEvent(QKeyEvent *keyEvent)
 {
-    QString key = Utils::getKeyshortcut(keyEvent);
-
-    qDebug() << ">>> Release Key: " << key;
-
-    if (key.contains("Ctrl") || key.contains("Shift")) {
+    if ((keyEvent->modifiers() | Qt::ShiftModifier) || (keyEvent->modifiers() | Qt::ControlModifier)) {
         if (nullptr != m_shortcutViewProcess) {
             int count = Utils::getProcessCountByName("deepin-shortcut-viewer");
             if (count > 0) {

@@ -2112,8 +2112,8 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
     }
 
     cur = textCursor();
-    for (int i = nStartLine;i <= nPageLine;i++) {
-        if (blockNumber + 1 == m_markStartLine) {
+    for (int i = nStartLine; i <= nPageLine; i++) {
+        if (i + 1 == m_markStartLine) {
             painter.setPen(m_regionMarkerColor);
         } else {
             painter.setPen(m_lineNumbersColor);
@@ -5243,7 +5243,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
 {
     Qt::KeyboardModifiers modifiers = e->modifiers();
     QString key = Utils::getKeyshortcut(e);
-    qDebug()<<e<<e->text()<<e->key()<<e->modifiers()<<key;
+
     //没有修改键　插入文件
     //按下esc的时候,光标退出编辑区，切换至标题栏
     if(modifiers == Qt::NoModifier && e->key() == Qt::Key_Escape)

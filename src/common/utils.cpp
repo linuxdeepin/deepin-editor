@@ -737,7 +737,6 @@ void Utils::killProcessByName(char *pstrName)
     if (pstrName != NULL && strlen(pstrName) > 0) {
         memset(command, 0, sizeof(command));
         sprintf(command, "killall %s", pstrName);
-        qDebug() << ">>> command: " << command;
         system(command);
     }
 }
