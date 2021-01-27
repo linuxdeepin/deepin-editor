@@ -38,6 +38,12 @@
 #include "../common/dbusinterface.h"
 #include <DMainWindow>
 #include <DStackedWidget>
+#include <QDesktopWidget>
+
+//virtual keyboard dbus
+#define DUE_IM_DBUS_NAME "com.deepin.im"
+#define DUE_IM_DBUS_PATH "/com/deepin/im"
+#define DUE_IM_DBUS_INTERFACE "com.deepin.im"
 
 DWIDGET_USE_NAMESPACE
 
@@ -57,6 +63,14 @@ public:
 
     void showCenterWindow(bool bIsCenter);
     void initTitlebar();
+    // Virtual keyboard dbus connnecttion initialization.
+    void initVirtualKeyboardDbus();
+    void setKeyboardHeight(int iKeyboardHeight);
+    int  getKeyboardHeight();
+    void setDesktopAvailableHeight(int iHeight);
+    int  getDesktopAvailableHeight();
+    void setDesktopAvailableWidth(int iWidth);
+    int  getDesktopAvailableWidth();
     bool checkBlockShutdown();
 
     int getTabIndex(const QString &file);
@@ -183,6 +197,7 @@ public slots:
     void slot_setTitleFocus();
     //清除不支持双字节字符集符号
     void slotClearDoubleCharaterEncode();
+    void slotVirtualKeyboardImActiveChanged(bool bActiove);
 
 private:
     void handleFocusWindowChanged(QWindow *w);
@@ -238,6 +253,12 @@ private:
     QString m_tabbarActiveColor;
     QList <TextEdit *> m_reading_list;
     QStringList m_qlistTemFile;///<临时文件列表
+
+    //virtual keyboard due-im
+    QDBusInterface *m_pDueimDBusInterFace {nullptr};
+    int m_iKeyboardHeight {0};
+    int m_iDesktopAvailableHeight {0};
+    int m_iDesktopAvailableWidth {0};
 };
 
 #endif

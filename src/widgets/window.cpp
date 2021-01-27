@@ -71,6 +71,12 @@ Window::Window(DMainWindow *parent)
       m_menu(new DMenu),
       m_titlebarStyleSheet(titlebar()->styleSheet())
 {
+    initVirtualKeyboardDbus();
+    if (/*DGuiApplicationHelper::isTabletEnvironment()*/1) {
+        setWindowFlag(Qt::WindowMinMaxButtonsHint, false);
+        setWindowFlag(Qt::WindowCloseButtonHint, false);
+        setMinimumSize(QSize(getDesktopAvailableWidth(), getDesktopAvailableHeight()));
+    }
     qRegisterMetaType<TextEdit*>("TextEdit");
     m_blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
     m_backupDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("backup-files");
@@ -198,15 +204,13 @@ Window::Window(DMainWindow *parent)
         initTitlebar();
     }
 
-    // window minimum size.
-    //setMinimumSize(1000, 600);
-    showMaximized();
-
+    #ifdef TABLET
     // resize window size.
-    int window_width =Settings::instance()->settings->option("advance.window.window_width")->value().toInt();
-    int window_height =Settings::instance()->settings->option("advance.window.window_height")->value().toInt();
-    resize(window_width,window_height);
-
+    //int window_width =Settings::instance()->settings->option("advance.window.window_width")->value().toInt();
+    //int window_height =Settings::instance()->settings->option("advance.window.window_height")->value().toInt();
+    //resize(window_width,window_height);
+    #endif
+    
     // Init find bar.
     connect(m_findBar, &FindBar::findNext, this, &Window::handleFindNext, Qt::QueuedConnection);
     connect(m_findBar, &FindBar::findPrev, this, &Window::handleFindPrev, Qt::QueuedConnection);
@@ -445,6 +449,95 @@ void Window::initTitlebar()
     connect(switchThemeAction, &QAction::triggered, this, &Window::popupThemePanel);
 }
 
+/*******************************************************************************
+ 1. @function:    initVirtualKeyboardDbus
+ 2. @author:      ut000455 shaoyu.Guo
+ 3. @date:        2021-01-19
+ 4. @description: Virtual keyboard dbus connnecttion initialization.
+*******************************************************************************/
+void Window::initVirtualKeyboardDbus()
+{
+    QDesktopWidget *pDesktopWidget = QApplication::desktop();
+    int iDesktopAvailHeight = pDesktopWidget->availableGeometry().size().height();
+    int iDesktopAvailWidth  = pDesktopWidget->availableGeometry().size().width();
+    setDesktopAvailableHeight(iDesktopAvailHeight);
+    setDesktopAvailableWidth(iDesktopAvailWidth);
+
+    m_pDueimDBusInterFace = new QDBusInterface(DUE_IM_DBUS_NAME,
+                                               DUE_IM_DBUS_PATH,
+                                               DUE_IM_DBUS_INTERFACE,
+                                               QDBusConnection::sessionBus(),
+                                               this);
+
+    if (m_pDueimDBusInterFace->isValid()) {
+        QVariant variant = m_pDueimDBusInterFace->property("geometry");
+        setKeyboardHeight(variant.value<QRect>().height());
+
+        // or
+        //m_iKeyboardHeight = m_pDueimDBusInterFace->property("geometry").toRect().height();
+
+        bool bRet = QDBusConnection::sessionBus().connect(DUE_IM_DBUS_NAME,
+                                                          DUE_IM_DBUS_PATH,
+                                                          DUE_IM_DBUS_INTERFACE,
+                                                          "imActiveChanged",
+                                                          this,
+                                                          SLOT(slotVirtualKeyboardImActiveChanged(bool)));
+        if (!bRet) {
+            qDebug() << "com.deepin.im dbus connect faild.";
+        }
+    } else {
+        qDebug() << "com.deepin.im dbus interface invalid.";
+    }
+}
+
+/*******************************************************************************
+ 1. @function:    setKeyboardHeight
+ 2. @author:      ut000455 shaoyu.Guo
+ 3. @date:        2021-01-21
+ 4. @description: set save keyboard height
+*******************************************************************************/
+void Window::setKeyboardHeight(int iKeyboardHeight)
+{
+    m_iKeyboardHeight = iKeyboardHeight;
+}
+
+int Window::getKeyboardHeight()
+{
+    return m_iKeyboardHeight;
+}
+
+/*******************************************************************************
+ 1. @function:    setDesktopAvailableHeight
+ 2. @author:      ut000455 shaoyu.Guo
+ 3. @date:        2021-01-20
+ 4. @description: set save desktop available height.
+*******************************************************************************/
+void Window::setDesktopAvailableHeight(int iHeight)
+{
+    m_iDesktopAvailableHeight = iHeight;
+}
+
+/*******************************************************************************
+ 1. @function:    setDesktopAvailableWidth
+ 2. @author:      ut000455 shaoyu.Guo
+ 3. @date:        2021-01-27
+ 4. @description: set save desktop available width.
+*******************************************************************************/
+void Window::setDesktopAvailableWidth(int iWidth)
+{
+    m_iDesktopAvailableWidth = iWidth;
+}
+
+/*******************************************************************************
+ 1. @function:    getDesktopAvailableWidth
+ 2. @author:      ut000455 shaoyu.Guo
+ 3. @date:        2021-01-27
+ 4. @description: get available desktop width.
+*******************************************************************************/
+int Window::getDesktopAvailableWidth()
+{
+    return m_iDesktopAvailableWidth;
+}
 bool Window::checkBlockShutdown()
 {
 //    qDebug() << "Enter function [" << __FUNCTION__ << "].";
@@ -2116,6 +2209,32 @@ void Window::slotClearDoubleCharaterEncode()
     for (const QString &strTemp : shouldBeEmpty) {
         handleReplaceAll(strTemp, " ");
     }
+}
+
+/*******************************************************************************
+ 1. @function:    slotVirtualKeyboardImActiveChanged
+ 2. @author:      ut000455 shaoyu.Guo
+ 3. @date:        2021-01-19
+ 4. @description:
+*******************************************************************************/
+void Window::slotVirtualKeyboardImActiveChanged(bool bActiove)
+{
+    if (bActiove) {
+        setFixedHeight(DApplication::desktop()->screenGeometry().size().height() - getKeyboardHeight());
+    } else {
+        setFixedHeight(getDesktopAvailableHeight());
+    }
+}
+
+/*******************************************************************************
+ 1. @function:    getDesktopAvailableHeight
+ 2. @author:      ut000455 shaoyu.Guo
+ 3. @date:        2021-01-19
+ 4. @description: get available desktop height.
+*******************************************************************************/
+int Window::getDesktopAvailableHeight()
+{
+    return m_iDesktopAvailableHeight;
 }
 
 void Window::handleFocusWindowChanged(QWindow *w)
