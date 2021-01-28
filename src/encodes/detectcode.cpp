@@ -155,11 +155,8 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr, QByteArray &outS
 
    // qDebug()<<"=====编码转化 Begin:"<<QDateTime::currentDateTime().toString("hh:mm:ss");
     iconv_t handle =iconv_open(toCode.toLocal8Bit().data(),fromCode.toLocal8Bit().data());
-    int val = 1;
-    int res = iconvctl(handle,ICONV_SET_DISCARD_ILSEQ,&val);
 
     if(handle != reinterpret_cast<iconv_t>(-1)){
-        char* inbuf = inputStr.data();
         size_t inbytesleft = static_cast<size_t>(inputStr.size())+1;
         //qDebug()<<inbuf<<inbytesleft;
 
@@ -169,7 +166,6 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr, QByteArray &outS
         char* tmp = outbuf;
         memset(outbuf,0,outbytesleft);
 
-       size_t len = iconv(handle,&inbuf,&inbytesleft,&outbuf,&outbytesleft);
        iconv_close(handle);
 
        outStr = QByteArray(tmp);

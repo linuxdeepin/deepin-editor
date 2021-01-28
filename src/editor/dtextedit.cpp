@@ -2486,7 +2486,7 @@ int TextEdit::getFirstVisibleBlockId() const
     if(cur.isNull()) return 0;
     cur.movePosition(QTextCursor::Start);
 
-    QPoint startPoint,endPoint;
+    QPoint startPoint;
     QTextBlock startBlock,endBlock;
 
  //   qDebug() << "r1.contains(r2" << verticalScrollBar()->maximum();
@@ -5682,7 +5682,6 @@ void TextEdit::paintEvent(QPaintEvent *e)
     }
 
     QColor lineColor = palette().text().color();
-    QColor backgrColor = palette().background().color();
 
     if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
 

@@ -118,7 +118,6 @@ void Tabbar::resizeEvent(QResizeEvent *event)
         QFontMetrics fontMetrics(font());
         int nFontWidth = fontMetrics.width(path)*(qApp->devicePixelRatio()==1.25 ? 2 :1);
 
-        QDesktopWidget* d = qApp->desktop();
         Window* pWindow = static_cast<Window*>(this->window());
         int w = pWindow->width()-200;
         if(w < 800) w =800;
@@ -606,8 +605,6 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
         }
 
     } else if (event->type() == QEvent::DragEnter) {
-        const QDragEnterEvent *e = static_cast<QDragEnterEvent*>(event);
-        const QMimeData* mimeData = e->mimeData();
 
 //        if ((!e->source() || e->source()->parent() != this) &&
 //            mimeData->hasFormat("dedit/tabbar")) {

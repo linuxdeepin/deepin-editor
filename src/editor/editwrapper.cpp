@@ -18,7 +18,6 @@
  */
 #include "../widgets/window.h"
 #include "../encodes/detectcode.h"
-#include "../controls/toast.h"
 #include "../common/fileloadthread.h"
 #include "editwrapper.h"
 #include "../common/utils.h"

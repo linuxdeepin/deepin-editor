@@ -21,7 +21,6 @@
  */
 
 #include "utils.h"
-#include "../controls/toast.h"
 
 #include <DSettings>
 #include <DSettingsOption>
@@ -704,7 +703,7 @@ void Utils::setChildrenFocus(QWidget *pWidget, Qt::FocusPolicy policy)
     }
 }
 
-int Utils::getProcessCountByName(char *pstrName)
+int Utils::getProcessCountByName(const char *pstrName)
 {
     FILE *fp = NULL;
     int count = -1;
@@ -730,7 +729,7 @@ int Utils::getProcessCountByName(char *pstrName)
     return count;
 }
 
-void Utils::killProcessByName(char *pstrName)
+void Utils::killProcessByName(const char *pstrName)
 {
     char command[1024];
 
