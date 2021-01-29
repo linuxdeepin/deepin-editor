@@ -713,30 +713,31 @@ void EditWrapper::UpdateBottomBarWordCnt(int cnt)
 
 void EditWrapper::OnUpdateHighlighter()
 {
-    if(m_pSyntaxHighlighter  && !m_bQuit){
-      QScrollBar* pScrollBar = m_pTextEdit->verticalScrollBar();
-      //QTextBlock textBlock = m_pTextEdit->document()->findBlockByNumber(value);
+    if (m_pSyntaxHighlighter  && !m_bQuit) {
+        QScrollBar* pScrollBar = m_pTextEdit->verticalScrollBar();
+        QTextBlock beginBlock = m_pTextEdit->document()->findBlockByNumber(m_pTextEdit->getFirstVisibleBlockId());
+        QTextBlock endBlock;
 
-      QTextBlock beginBlock = m_pTextEdit->document()->findBlockByNumber(m_pTextEdit->getFirstVisibleBlockId());
+        if (pScrollBar->maximum() > 0) {
+            QPoint endPoint = QPointF(0,m_pTextEdit->height() + (m_pTextEdit->height()/pScrollBar->maximum())*pScrollBar->value()).toPoint();
+            endBlock = m_pTextEdit->cursorForPosition(endPoint).block();
+        } else {
+            endBlock = m_pTextEdit->document()->lastBlock();
+        }
 
-      QTextBlock endBlock;
-      if (pScrollBar->maximum() > 0){
-          QPoint endPoint = QPointF(0,m_pTextEdit->height() + (m_pTextEdit->height()/pScrollBar->maximum())*pScrollBar->value()).toPoint();
-         endBlock = m_pTextEdit->cursorForPosition(endPoint).block();
+        if (!beginBlock.isValid() || !endBlock.isValid()) {
+            return;
+        }
 
-      }else {
-         endBlock = m_pTextEdit->document()->lastBlock();
-      }
+        for (QTextBlock var = beginBlock; var != endBlock; var = var.next()) {
+              m_pSyntaxHighlighter->setEnableHighlight(true);
+              m_pSyntaxHighlighter->rehighlightBlock(var);
+              m_pSyntaxHighlighter->setEnableHighlight(false);
+        }
 
-    if(!beginBlock.isValid() || !endBlock.isValid()) return;
-
-     for (QTextBlock var = beginBlock; var != endBlock; var= var.next()) {
-          m_pSyntaxHighlighter->setEnableHighlight(true);
-          m_pSyntaxHighlighter->rehighlightBlock(var);
-          m_pSyntaxHighlighter->setEnableHighlight(false);
-     }
-
-     qDebug()<<"OnUpdateHighlighter:"<<beginBlock.text()<<endBlock.text();
+        m_pSyntaxHighlighter->setEnableHighlight(true);
+        m_pSyntaxHighlighter->rehighlightBlock(endBlock);
+        m_pSyntaxHighlighter->setEnableHighlight(false);
     }
 }
 
