@@ -41,6 +41,7 @@
 #include <KEncodingProber>
 #include <QTextCodec>
 #include <QImageReader>
+#include <QCryptographicHash>
 
 QT_BEGIN_NAMESPACE
 extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
@@ -738,4 +739,10 @@ void Utils::killProcessByName(const char *pstrName)
         sprintf(command, "killall %s", pstrName);
         system(command);
     }
+}
+
+QString Utils::getStringMD5Hash(const QString &input)
+{
+    QByteArray md5Path = QCryptographicHash::hash(input.toLatin1(), QCryptographicHash::Md5);
+    return QString::fromLocal8Bit(md5Path);
 }

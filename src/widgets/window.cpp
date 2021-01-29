@@ -1543,7 +1543,7 @@ void Window::backupFile()
         } else {
             if (wrapper->isModified()) {
                 QString name = fileInfo.absolutePath().replace("/","_");
-                QString qstrFilePath = m_backupDir + "/" + fileInfo.baseName() + "." + name + "." + fileInfo.suffix();
+                QString qstrFilePath = m_backupDir + "/" + Utils::getStringMD5Hash(fileInfo.baseName()) + "." + name + "." + fileInfo.suffix();
                 jsonObject.insert("temFilePath",qstrFilePath);
                 wrapper->saveTemFile(qstrFilePath);
             }

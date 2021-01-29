@@ -199,7 +199,7 @@ void StartManager::autoBackupFile()
             } else {
                 if (wrapper->isModified()) {
                     QString name = fileInfo.absolutePath().replace("/","_");
-                    QString qstrFilePath = m_autoBackupDir + "/" + fileInfo.baseName() + "." + name + "." + fileInfo.suffix();
+                    QString qstrFilePath = m_autoBackupDir + "/" + Utils::getStringMD5Hash(fileInfo.baseName()) + "." + name + "." + fileInfo.suffix();
                     jsonObject.insert("temFilePath",qstrFilePath);
                     wrapper->saveTemFile(qstrFilePath);
                 }
