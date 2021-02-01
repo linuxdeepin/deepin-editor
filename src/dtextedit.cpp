@@ -5222,9 +5222,11 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
 
         if (m_bIsAltMod) {
             emit toTellInputModEdit(m_qstrCommitString);
-            return;
+            //return;
         }
+    }
 
+    if (!m_readOnlyMode && !m_bIsAltMod) {
         QPlainTextEdit::inputMethodEvent(e);
     }
 }
