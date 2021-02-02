@@ -62,12 +62,12 @@ Tabbar::~Tabbar()
 {
 }
 
-void Tabbar::addTab(const QString &filePath, const QString &tabName)
+void Tabbar::addTab(const QString &filePath, const QString &tabName, const QString &tipPath)
 {
-    addTabWithIndex(currentIndex() + 1, filePath, tabName);
+    addTabWithIndex(currentIndex() + 1, filePath, tabName, tipPath);
 }
 
-void Tabbar::addTabWithIndex(int index, const QString &filePath, const QString &tabName)
+void Tabbar::addTabWithIndex(int index, const QString &filePath, const QString &tabName, const QString &tipPath)
 {
     // FIXME(rekols): do not insert duplicate values.
     // if (!m_tabPaths.contains(filePath)) {
@@ -79,7 +79,11 @@ void Tabbar::addTabWithIndex(int index, const QString &filePath, const QString &
     DTabBar::setCurrentIndex(index);
     if(filePath.contains("/.local/share/deepin/deepin-editor/"))
     {
-        setTabToolTip(index,tabName);
+        if (filePath.contains("/.local/share/deepin/deepin-editor/backup-files") && !tipPath.isNull() && tipPath.length() > 0) {
+            setTabToolTip(index, tipPath);
+        } else {
+            setTabToolTip(index, tabName);
+        }
     }
     else
     {

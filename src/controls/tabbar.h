@@ -36,8 +36,8 @@ public:
     Tabbar(QWidget *parent = nullptr);
     ~Tabbar();
 
-    void addTab(const QString &filePath, const QString &tabName);
-    void addTabWithIndex(int index, const QString &filePath, const QString &tabName);
+    void addTab(const QString &filePath, const QString &tabName, const QString &tipPath = QString::null);
+    void addTabWithIndex(int index, const QString &filePath, const QString &tabName, const QString &tipPath = QString::null);
     void closeTab(int index);
     void closeCurrentTab();
     void closeOtherTabs();

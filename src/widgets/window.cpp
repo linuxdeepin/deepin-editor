@@ -1588,8 +1588,8 @@ void Window::addTemFileTab(QString qstrPath,QString qstrName,QString qstrTruePat
     }
 
     EditWrapper *wrapper = createEditor();
-    m_tabbar->addTab(qstrPath, qstrName);   
-    wrapper->openFile(qstrPath,qstrTruePath,bIsTemFile);
+    m_tabbar->addTab(qstrPath, qstrName, qstrTruePath);
+    wrapper->openFile(qstrPath, qstrTruePath, bIsTemFile);
     m_wrappers[qstrPath] = wrapper;
     showNewEditor(wrapper);
 }
