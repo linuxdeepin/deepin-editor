@@ -1154,14 +1154,20 @@ void TextEdit::scrollUp()
 {
     QScrollBar *scrollbar = verticalScrollBar();
     scrollbar->triggerAction(QAbstractSlider::SliderPageStepSub);
+
     //m_pLeftAreaWidget->m_pLineNumberArea->update();
-   // m_pLeftAreaWidget->m_pFlodArea->update();
+    //m_pLeftAreaWidget->m_pFlodArea->update();
     //m_pLeftAreaWidget->m_pBookMarkArea->update();
-    auto moveMode = m_cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
-    QTextCursor lineCursor(document()->findBlockByLineNumber(this->getFirstVisibleBlockId()));
-    QTextCursor cursor = textCursor();
-    cursor.setPosition(lineCursor.position(), moveMode);
-    setTextCursor(cursor);
+
+    if (verticalScrollBar()->maximum() > 0)
+    {
+        auto moveMode = m_cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
+        QPoint startPoint = QPointF(0, fontMetrics().height()).toPoint();
+        QTextCursor cur = cursorForPosition(startPoint);
+        QTextCursor cursor = textCursor();
+        cursor.setPosition(cur.position(), moveMode);
+        setTextCursor(cursor);
+    }
 }
 
 void TextEdit::scrollDown()
@@ -1169,33 +1175,18 @@ void TextEdit::scrollDown()
     QScrollBar *scrollbar = verticalScrollBar();
     scrollbar->triggerAction(QAbstractSlider::SliderPageStepAdd);
 
-    m_pLeftAreaWidget->m_pLineNumberArea->update();
-    m_pLeftAreaWidget->m_pFlodArea->update();
-    m_pLeftAreaWidget->m_pBookMarkArea->update();
-    auto moveMode = m_cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
-    int lines = this->height() / fontMetrics().height();
-    int tem = document()->blockCount();
+    //m_pLeftAreaWidget->m_pLineNumberArea->update();
+    //m_pLeftAreaWidget->m_pFlodArea->update();
+    //m_pLeftAreaWidget->m_pBookMarkArea->update();
 
-    if (this->getFirstVisibleBlockId() + lines <tem ) {
-        QTextCursor lineCursor(document()->findBlockByLineNumber(this->getFirstVisibleBlockId()));
+    if (verticalScrollBar()->maximum() > 0)
+    {
+        auto moveMode = m_cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
+        QPoint endPoint = QPointF(0, height() - fontMetrics().height()).toPoint();
+        QTextCursor cur = cursorForPosition(endPoint);
         QTextCursor cursor = textCursor();
-        cursor.setPosition(lineCursor.position(), moveMode);
+        cursor.setPosition(cur.position(), moveMode);
         setTextCursor(cursor);
-    }
-    else {              //如果文本结尾部分不足一页
-        if((getCurrentLine()+lines)>tem)
-        {
-            QTextCursor lineCursor(document()->findBlockByLineNumber(tem-1));
-            QTextCursor cursor = textCursor();
-            cursor.setPosition(lineCursor.position(), moveMode);
-            setTextCursor(cursor);
-        }
-        else {
-            QTextCursor lineCursor(document()->findBlockByLineNumber(getCurrentLine()+lines-1));
-            QTextCursor cursor = textCursor();
-            cursor.setPosition(lineCursor.position(), moveMode);
-            setTextCursor(cursor);
-        }
     }
 }
 
