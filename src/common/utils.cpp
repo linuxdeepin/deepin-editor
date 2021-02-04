@@ -743,6 +743,8 @@ void Utils::killProcessByName(const char *pstrName)
 
 QString Utils::getStringMD5Hash(const QString &input)
 {
-    QByteArray md5Path = QCryptographicHash::hash(input.toLatin1(), QCryptographicHash::Md5);
-    return QString::fromLocal8Bit(md5Path);
+    QByteArray byteArray;
+    byteArray.append(input);
+    QByteArray md5Path = QCryptographicHash::hash(byteArray, QCryptographicHash::Md5);
+    return md5Path.toHex();
 }

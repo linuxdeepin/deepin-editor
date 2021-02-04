@@ -116,12 +116,14 @@ TextEdit::TextEdit(QWidget *parent)
     connect(document(), &QTextDocument::contentsChange, this, &TextEdit::checkBookmarkLineMove);
 
     connect(m_pUndoStack,&QUndoStack::canRedoChanged,this,[this](bool){
-        this->m_wrapper->window()->updateModifyStatus(m_sFilePath,true);
+        bool isModified = this->m_wrapper->isTemFile() | m_pUndoStack->canUndo();
+        this->m_wrapper->window()->updateModifyStatus(m_sFilePath, isModified);
         this->m_wrapper->OnUpdateHighlighter();
     });
 
-    connect(m_pUndoStack,&QUndoStack::canUndoChanged,this,[this](bool){
-        this->m_wrapper->window()->updateModifyStatus(m_sFilePath,true);
+    connect(m_pUndoStack,&QUndoStack::canUndoChanged,this,[this](bool canUndo){
+        bool isModified = this->m_wrapper->isTemFile() | canUndo;
+        this->m_wrapper->window()->updateModifyStatus(m_sFilePath, isModified);
         this->m_wrapper->OnUpdateHighlighter();
     });
 
@@ -670,7 +672,7 @@ void TextEdit::popRightMenu(QPoint pos)
             dictationState = dictationStateRet.value();
         }
         m_dictationAction->setEnabled(dictationState);
-        if(m_bReadOnlyPermission || m_readOnlyMode){
+        if (m_bReadOnlyPermission || m_readOnlyMode){
             m_dictationAction->setEnabled(false);
         }
 
