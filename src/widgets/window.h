@@ -36,6 +36,7 @@
 #include "../thememodule/themepanel.h"
 #include "../common/performancemonitor.h"
 #include "../common/dbusinterface.h"
+#include "../common/ImInterface.h"
 #include <DMainWindow>
 #include <DStackedWidget>
 #include <QDesktopWidget>
@@ -63,15 +64,6 @@ public:
 
     void showCenterWindow(bool bIsCenter);
     void initTitlebar();
-    // Virtual keyboard dbus connnecttion initialization.
-    void initVirtualKeyboardDbus();
-    void setKeyboardHeight(int iKeyboardHeight);
-    int  getKeyboardHeight();
-    void setDesktopAvailableHeight(int iHeight);
-    int  getDesktopAvailableHeight();
-    void setDesktopAvailableWidth(int iWidth);
-    int  getDesktopAvailableWidth();
-    bool checkBlockShutdown();
 
     int getTabIndex(const QString &file);
     void activeTab(int index);
@@ -204,6 +196,16 @@ private:
     void updateThemePanelGeomerty();
     void checkTabbarForReload();
 
+    // Virtual keyboard dbus connnecttion initialization.
+    void initVirtualKeyboardDbus();
+    void setKeyboardHeight(int iKeyboardHeight);
+    int  getKeyboardHeight();
+    void setDesktopAvailableHeight(int iHeight);
+    int  getDesktopAvailableHeight();
+    void setDesktopAvailableWidth(int iWidth);
+    int  getDesktopAvailableWidth();
+    bool checkBlockShutdown();
+    void addFindToolButtonToTitlbar();
 protected:
     #ifdef TABLET
     void dragEnterEvent(QDragEnterEvent *e) override;
@@ -255,7 +257,7 @@ private:
     QStringList m_qlistTemFile;///<临时文件列表
 
     //virtual keyboard due-im
-    QDBusInterface *m_pDueimDBusInterFace {nullptr};
+    ComDeepinImInterface *m_pImInterface {nullptr};
     int m_iKeyboardHeight {0};
     int m_iDesktopAvailableHeight {0};
     int m_iDesktopAvailableWidth {0};

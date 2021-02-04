@@ -392,18 +392,7 @@ void Window::initTitlebar()
     titlebar()->setFocusPolicy(Qt::NoFocus);         //设置titlebar无焦点，点击titlebar时光标不移动
 
     //平板需求，标题栏添加查找按钮图标
-    m_pFindToolBtn = new DToolButton(nullptr);
-    m_pFindToolBtn->setFixedSize(QSize(37, 37));
-    m_pFindToolBtn->setIconSize(QSize(43, 43));
-    QString strFindToolPath(":/images/find_");
-    if (DApplicationHelper::instance()->themeType() == DApplicationHelper::ColorType::LightType) {
-        strFindToolPath = strFindToolPath + "light.svg";
-    } else if (DApplicationHelper::instance()->themeType() == DApplicationHelper::ColorType::DarkType) {
-        strFindToolPath = strFindToolPath + "dark.svg";
-    }
-    m_pFindToolBtn->setIcon(QIcon(strFindToolPath));
-    titlebar()->addWidget(m_pFindToolBtn, Qt::AlignVCenter | Qt::AlignRight);
-    connect(m_pFindToolBtn, &DToolButton::clicked, this, &Window::slotFindIconBtnClicked);
+    addFindToolButtonToTitlbar();
 
     DIconButton *addButton = m_tabbar->findChild<DIconButton *>("AddButton");
     addButton->setFocusPolicy(Qt::NoFocus);
@@ -463,31 +452,15 @@ void Window::initVirtualKeyboardDbus()
     setDesktopAvailableHeight(iDesktopAvailHeight);
     setDesktopAvailableWidth(iDesktopAvailWidth);
 
-    m_pDueimDBusInterFace = new QDBusInterface(DUE_IM_DBUS_NAME,
-                                               DUE_IM_DBUS_PATH,
-                                               DUE_IM_DBUS_INTERFACE,
+    m_pImInterface = new ComDeepinImInterface("com.deepin.im",
+                                              "/com/deepin/im",
                                                QDBusConnection::sessionBus(),
                                                this);
 
-    if (m_pDueimDBusInterFace->isValid()) {
-        QVariant variant = m_pDueimDBusInterFace->property("geometry");
-        setKeyboardHeight(variant.value<QRect>().height());
-
-        // or
-        //m_iKeyboardHeight = m_pDueimDBusInterFace->property("geometry").toRect().height();
-
-        bool bRet = QDBusConnection::sessionBus().connect(DUE_IM_DBUS_NAME,
-                                                          DUE_IM_DBUS_PATH,
-                                                          DUE_IM_DBUS_INTERFACE,
-                                                          "imActiveChanged",
-                                                          this,
-                                                          SLOT(slotVirtualKeyboardImActiveChanged(bool)));
-        if (!bRet) {
-            qDebug() << "com.deepin.im dbus connect faild.";
-        }
-    } else {
-        qDebug() << "com.deepin.im dbus interface invalid.";
-    }
+    m_pImInterface->setImSignalLock(false);
+    QVariant variant = m_pImInterface->geometry();
+    setKeyboardHeight(variant.value<QRect>().height());
+    connect(m_pImInterface, &ComDeepinImInterface::imActiveChanged, this, &Window::slotVirtualKeyboardImActiveChanged);
 }
 
 /*******************************************************************************
@@ -540,10 +513,8 @@ int Window::getDesktopAvailableWidth()
 }
 bool Window::checkBlockShutdown()
 {
-//    qDebug() << "Enter function [" << __FUNCTION__ << "].";
     //判断是否有未保存的tab项
     for (int i = 0; i < m_tabbar->count(); i++) {
-//        qDebug() << "m_tabbar->textAt(i):" << m_tabbar->textAt(i);
         if (m_tabbar->textAt(i).isNull()) {
             return false;
         }
@@ -554,6 +525,22 @@ bool Window::checkBlockShutdown()
     }
 
     return false;
+}
+
+void Window::addFindToolButtonToTitlbar()
+{
+    m_pFindToolBtn = new DToolButton(nullptr);
+    m_pFindToolBtn->setFixedSize(QSize(37, 37));
+    m_pFindToolBtn->setIconSize(QSize(43, 43));
+    QString strFindToolPath(":/images/find_");
+    if (DApplicationHelper::instance()->themeType() == DApplicationHelper::ColorType::LightType) {
+        strFindToolPath = strFindToolPath + "light.svg";
+    } else if (DApplicationHelper::instance()->themeType() == DApplicationHelper::ColorType::DarkType) {
+        strFindToolPath = strFindToolPath + "dark.svg";
+    }
+    m_pFindToolBtn->setIcon(QIcon(strFindToolPath));
+    titlebar()->addWidget(m_pFindToolBtn, Qt::AlignVCenter | Qt::AlignRight);
+    connect(m_pFindToolBtn, &DToolButton::clicked, this, &Window::slotFindIconBtnClicked);
 }
 
 int Window::getTabIndex(const QString &file)
