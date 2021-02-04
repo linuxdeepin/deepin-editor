@@ -597,14 +597,14 @@ void TextEdit::popRightMenu(QPoint pos)
             m_rightMenu->addAction(m_addComment);
             m_rightMenu->addAction(m_cancelComment);
         }
+    }
 
-        if (m_readOnlyMode == true) {
-            m_addComment->setEnabled(false);
-            m_cancelComment->setEnabled(false);
-        } else {
-            m_addComment->setEnabled(true);
-            m_cancelComment->setEnabled(true);
-        }
+    if (m_bReadOnlyPermission || m_readOnlyMode) {
+        m_addComment->setEnabled(false);
+        m_cancelComment->setEnabled(false);
+    } else {
+        m_addComment->setEnabled(true);
+        m_cancelComment->setEnabled(true);
     }
 
     m_rightMenu->addSeparator();
@@ -670,7 +670,7 @@ void TextEdit::popRightMenu(QPoint pos)
             dictationState = dictationStateRet.value();
         }
         m_dictationAction->setEnabled(dictationState);
-        if(m_readOnlyMode){
+        if(m_bReadOnlyPermission || m_readOnlyMode){
             m_dictationAction->setEnabled(false);
         }
 
