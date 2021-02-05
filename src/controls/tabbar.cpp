@@ -72,6 +72,7 @@ void Tabbar::addTabWithIndex(int index, const QString &filePath, const QString &
     // FIXME(rekols): do not insert duplicate values.
     // if (!m_tabPaths.contains(filePath)) {
         m_tabPaths.insert(index, filePath);
+        m_tabTruePaths.insert(index, tipPath);
     // }
     //除去空白符 梁卫东 ２０２０－０８－２６　１４：４９：１５
     QString trimmedName = tabName.simplified();
@@ -213,6 +214,7 @@ void Tabbar::updateTab(int index, const QString &filePath, const QString &tabNam
 {
     DTabBar::setTabText(index, tabName);
     m_tabPaths[index] = filePath;
+    m_tabTruePaths[index] = filePath;
     //show file path at tab,blank file only show it's name.
 
      if(filePath.contains("/.local/share/deepin/deepin-editor/"))
@@ -278,6 +280,11 @@ QString Tabbar::currentName() const
 QString Tabbar::currentPath() const
 {
     return m_tabPaths.value(currentIndex());
+}
+
+QString Tabbar::truePathAt(int index) const
+{
+    return m_tabTruePaths.value(index);
 }
 
 QString Tabbar::fileAt(int index) const
@@ -702,6 +709,7 @@ void Tabbar::handleTabMoved(int fromIndex, int toIndex)
     //qDebug () << "handleTabMoved";
     if (m_tabPaths.count() > fromIndex && m_tabPaths.count() > toIndex && fromIndex >= 0 && toIndex >= 0) {
         m_tabPaths.swap(fromIndex, toIndex);
+        m_tabTruePaths.swap(fromIndex, toIndex);
     }
 }
 
@@ -741,6 +749,7 @@ void Tabbar::handleTabIsRemoved(int index)
     const QString filePath = m_tabPaths.at(index);
     Window *window = static_cast<Window *>(this->window());
     m_tabPaths.removeAt(index);
+    m_tabTruePaths.removeAt(index);
     window->removeWrapper(filePath, false);
 }
 

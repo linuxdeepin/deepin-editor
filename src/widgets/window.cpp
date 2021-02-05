@@ -293,13 +293,33 @@ Window::~Window()
 void Window::updateModifyStatus(const QString &path, bool isModified)
 {
     int tabIndex = m_tabbar->indexOf(path);
-    if(tabIndex == -1) return;
-    QString tabName = m_tabbar->textAt(tabIndex);
-    QRegularExpression reg("[^*](.+)");
-    QRegularExpressionMatch match = reg.match(tabName);
+    if (tabIndex == -1) {
+        return;
+    }
 
-    tabName = match.captured(0);
-    if (isModified) tabName.prepend('*');
+    QString tabName;
+    QString filePath = m_tabbar->truePathAt(tabIndex);
+    if (filePath.isNull() || filePath.length() <= 0 || filePath.contains("/.local/share/deepin/deepin-editor/blank-files")) {
+        tabName = m_tabbar->textAt(tabIndex);
+        if (isModified) {
+            if (!tabName.contains('*')) {
+                tabName.prepend('*');
+            }
+        } else {
+            QRegularExpression reg("[^*](.+)");
+            QRegularExpressionMatch match = reg.match(tabName);
+            if (match.hasMatch()) {
+                tabName = match.captured(0);
+            }
+        }
+    } else {
+        QFileInfo fileInfo(filePath);
+        tabName = fileInfo.fileName();
+        if (isModified) {
+            tabName.prepend('*');
+        }
+    }
+
     m_tabbar->setTabText(tabIndex, tabName);
     //判断是否需要阻塞系统关机
     emit sigJudgeBlockShutdown();
@@ -483,7 +503,7 @@ void Window::addTab(const QString &filepath, bool activeTab)
 
         if (StartManager::instance()->checkPath(filepath)) {
 
-            m_tabbar->addTab(filepath, tabName);
+            m_tabbar->addTab(filepath, tabName, filepath);
 
             if (!m_wrappers.contains(filepath)) {
                 EditWrapper *wrapper = createEditor();

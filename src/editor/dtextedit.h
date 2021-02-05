@@ -99,15 +99,15 @@ public:
      * @brief getFilePath 获取打开文件路径
      * @return 打开文件路径
      */
-    inline QString getFilePath() { return m_sFilePath;};
+    inline QString getFilePath() { return m_sFilePath;}
     //
     inline void setFilePath(QString file) { m_sFilePath = file;}
     //
-    inline LeftAreaTextEdit* getLeftAreaWidget() { return m_pLeftAreaWidget;};
+    inline LeftAreaTextEdit* getLeftAreaWidget() { return m_pLeftAreaWidget;}
     //是否撤销重做操作
-    bool isUndoRedoOpt() {return (m_pUndoStack->canRedo()||m_pUndoStack->canUndo());};
+    bool isUndoRedoOpt() {return (m_pUndoStack->canRedo()||m_pUndoStack->canUndo());}
     //判断是否修改
-    bool getModified() { return (document()->isModified() && isUndoRedoOpt());}
+    bool getModified() { return (document()->isModified() && m_pUndoStack->canUndo());}
 
     int getCurrentLine();
     int getCurrentColumn();

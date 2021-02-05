@@ -54,6 +54,7 @@ public:
 
     QString currentName() const;
     QString currentPath() const;
+    QString truePathAt(int index) const;
     QString fileAt(int index) const;
     QString textAt(int index) const;
 
@@ -90,6 +91,7 @@ private:
 
 private:
     QStringList m_tabPaths;
+    QStringList m_tabTruePaths;
     QStringList m_listOldTabPath;
     QString m_backgroundStartColor;
     QString m_backgroundEndColor;
