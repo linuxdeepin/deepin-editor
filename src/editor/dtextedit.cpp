@@ -2113,7 +2113,7 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
 
     cur = textCursor();
     for (int i = nStartLine;i <= nPageLine;i++) {
-        if (blockNumber + 1 == m_markStartLine) {
+        if (i + 1 == m_markStartLine) {
             painter.setPen(m_regionMarkerColor);
         } else {
             painter.setPen(m_lineNumbersColor);
