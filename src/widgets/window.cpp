@@ -878,6 +878,7 @@ bool Window::saveFile()
     }
 
     QFileInfo info(filePath);
+    if (info.exists()) {
     //判断文件是否有写的权限
     QFile temporaryBuffer(filePath);
     QFile::Permissions pers = temporaryBuffer.permissions();
@@ -887,6 +888,7 @@ bool Window::saveFile()
         DMessageManager::instance()->sendMessage(m_editorWidget->currentWidget(), QIcon(":/images/warning.svg")
                                                  , QString(tr("You do not have permission to save %1")).arg(info.fileName()));
         return false;
+        }
     }
 
     // save normal file.
