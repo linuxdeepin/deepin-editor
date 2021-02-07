@@ -490,7 +490,7 @@ bool Settings::isShortcutConflict(const QString &Name, const QString &Key)
 DDialog *Settings::createDialog(const QString &title, const QString &content, const bool &bIsConflicts)
 {
     DDialog *dialog = new DDialog(title,content, m_pSettingsDialog);
-    dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
+    dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnBottomHint);
     dialog->setIcon(QIcon::fromTheme("deepin-editor"));
 
     if (bIsConflicts) {

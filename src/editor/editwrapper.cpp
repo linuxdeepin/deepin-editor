@@ -224,7 +224,7 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
     if(m_pTextEdit->getModified())
     {
         DDialog *dialog = new DDialog(tr("Encoding changed. Do you want to save the file now?"), "", this);
-        dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
+        dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnBottomHint);
         dialog->setIcon(QIcon::fromTheme("deepin-editor"));
         dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);//取消
  //       dialog->addButton(QString(tr("Discard")), false, DDialog::ButtonNormal);//不保存
@@ -270,7 +270,7 @@ void EditWrapper::reloadModifyFile()
     //如果文件修改提示用户是否保存  如果临时文件保存就是另存为
     if (m_pTextEdit->getModified()) {
         DDialog *dialog = new DDialog(tr("Do you want to save this file?"), "", this);
-        dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
+        dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnBottomHint);
         dialog->setIcon(QIcon::fromTheme("deepin-editor"));
         dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);//不保存
         dialog->addButton(QString(tr("Discard")), false, DDialog::ButtonNormal);//取消
