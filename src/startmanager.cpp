@@ -534,6 +534,7 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
 
         window->addTabWithWrapper(buffer, filePath, qstrTruePath, tabName);
         window->currentWrapper()->updateModifyStatus(isModifyed);
+        window->currentWrapper()->OnUpdateHighlighter();
     });
 
     group->addAnimation(geometry);

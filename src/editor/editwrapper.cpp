@@ -675,7 +675,10 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QByteArr
         updateModifyStatus(true);
     }
 
-    if(m_pSyntaxHighlighter) m_pSyntaxHighlighter->setEnableHighlight(true);
+    if (m_pSyntaxHighlighter) {
+        m_pSyntaxHighlighter->setEnableHighlight(true);
+        OnUpdateHighlighter();
+    }
 
     m_pBottomBar->setEncodeName(m_sCurEncode);
 }
