@@ -1314,10 +1314,10 @@ void Window::popupPrintDialog()
     const QString &filePath = currentWrapper()->textEditor()->getFilePath();
     const QString &fileDir = QFileInfo(filePath).dir().absolutePath();
 
-    //适配打印接口2.0，dtk大于 5.4.3 版才合入最新的2.0打印控件接口
+    //适配打印接口2.0，dtk版本大于或等于5.4.7才放开最新的2.0打印预览接口
 #if (DTK_VERSION_MAJOR > 5 \
-    || (DTK_VERSION_MAJOR >=5 && DTK_VERSION_MINOR > 4) \
-    || (DTK_VERSION_MAJOR >= 5 && DTK_VERSION_MINOR >= 4 && DTK_VERSION_PATCH > 3))
+    || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR > 4) \
+    || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 4 && DTK_VERSION_PATCH >= 7))
 
     DPrinter printer(QPrinter::HighResolution);
     DPrintPreviewDialog preview( this);
