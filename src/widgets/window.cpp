@@ -2157,10 +2157,10 @@ void Window::resizeEvent(QResizeEvent *e)
         updateThemePanelGeomerty();
     }
 
-    if (!isMaximized() && !isFullScreen()) {
+    //if (!isMaximized() && !isFullScreen()) {
         m_settings->settings->option("advance.window.window_width")->setValue(rect().width());
         m_settings->settings->option("advance.window.window_height")->setValue(rect().height());
-    }
+    //}
 
     m_findBar->resize(width() - 20, m_findBar->height());
     m_findBar->move(QPoint(10, height() - 59));
