@@ -610,9 +610,9 @@ void StartManager::initWindowPosition(Window *window, bool alwaysCenter)
 void StartManager::popupExistTabs(FileTabInfo info)
 {
     Window *window = m_windows[info.windowIndex];
-    window->showNormal();
+    //window->showNormal();
     window->activeTab(info.tabIndex);
-    window->setWindowState(Qt::WindowActive);
+    //window->setWindowState(Qt::WindowActive);
     window->activateWindow();
 
 //    int indexid=0;
