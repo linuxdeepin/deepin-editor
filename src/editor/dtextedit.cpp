@@ -5410,8 +5410,8 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
                      //有选择内容才剪切
                     if(cursor.hasSelection())
                     {
-                        deleteTextEx(cursor);
                         QString data = cursor.selectedText();
+                        deleteTextEx(cursor);
                         QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
                         clipboard->setText(data);
                     }
