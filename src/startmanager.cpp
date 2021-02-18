@@ -468,7 +468,7 @@ void StartManager::openFilesInTab(QStringList files)
             else {
                 Window *window = m_windows[0];
                 window->addTab(file);
-                window->setWindowState(Qt::WindowActive);
+                //window->setWindowState(Qt::WindowActive);
                 window->activateWindow();
             }
         }
