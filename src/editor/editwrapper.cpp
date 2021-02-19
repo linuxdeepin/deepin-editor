@@ -718,11 +718,12 @@ void EditWrapper::OnUpdateHighlighter()
 {
     if (m_pSyntaxHighlighter  && !m_bQuit) {
         QScrollBar* pScrollBar = m_pTextEdit->verticalScrollBar();
-        QTextBlock beginBlock = m_pTextEdit->document()->findBlockByNumber(m_pTextEdit->getFirstVisibleBlockId());
+        QPoint startPoint = QPointF(0, 0).toPoint();
+        QTextBlock beginBlock = m_pTextEdit->cursorForPosition(startPoint).block();
         QTextBlock endBlock;
 
         if (pScrollBar->maximum() > 0) {
-            QPoint endPoint = QPointF(0,m_pTextEdit->height() + (m_pTextEdit->height()/pScrollBar->maximum())*pScrollBar->value()).toPoint();
+            QPoint endPoint = QPointF(0, m_pTextEdit->height() + ((m_pTextEdit->height()/pScrollBar->maximum())*(pScrollBar->value()+1))).toPoint();
             endBlock = m_pTextEdit->cursorForPosition(endPoint).block();
         } else {
             endBlock = m_pTextEdit->document()->lastBlock();
