@@ -96,6 +96,7 @@ Window::Window(DMainWindow *parent)
     connect(m_settings, &Settings::sigAdjustFontSize, this,[this](int size){
        for (EditWrapper *wrapper : m_wrappers.values()) {
            wrapper->textEditor()->setFontSize(size);
+           wrapper->OnUpdateHighlighter();
        }
 
        m_fontSize = size;
