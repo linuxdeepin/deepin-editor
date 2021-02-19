@@ -1157,7 +1157,7 @@ void TextEdit::scrollUp()
     QScrollBar *scrollbar = verticalScrollBar();
     scrollbar->triggerAction(QAbstractSlider::SliderPageStepSub);
 
-    //m_pLeftAreaWidget->m_pLineNumberArea->update();
+    m_pLeftAreaWidget->m_pLineNumberArea->update();
     //m_pLeftAreaWidget->m_pFlodArea->update();
     //m_pLeftAreaWidget->m_pBookMarkArea->update();
 
@@ -1177,7 +1177,7 @@ void TextEdit::scrollDown()
     QScrollBar *scrollbar = verticalScrollBar();
     scrollbar->triggerAction(QAbstractSlider::SliderPageStepAdd);
 
-    //m_pLeftAreaWidget->m_pLineNumberArea->update();
+    m_pLeftAreaWidget->m_pLineNumberArea->update();
     //m_pLeftAreaWidget->m_pFlodArea->update();
     //m_pLeftAreaWidget->m_pBookMarkArea->update();
 
