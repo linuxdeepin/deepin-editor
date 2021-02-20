@@ -757,6 +757,11 @@ int TextEdit::getScrollOffset()
    return verticalScrollBar()->value();
 }
 
+qreal TextEdit::getHighlightScaleRate()
+{
+   return m_highlightScaleRate;
+}
+
 void TextEdit::forwardChar()
 {
     if (m_cursorMark) {
@@ -4567,6 +4572,20 @@ void TextEdit::adjustScrollbarMargins()
         //setViewportMargins(0, 0, -verticalScrollBar()->sizeHint().width(), 0);
     } else {
         setViewportMargins(0, 0, 5, 0);
+    }
+
+    if (m_scrollBarMaximum > 0) {
+        if (verticalScrollBar()->maximum() > m_scrollBarMaximum) {
+            qreal rate = (qreal)verticalScrollBar()->maximum()/(qreal)m_scrollBarMaximum;
+            if (rate > m_highlightScaleRate) {
+                m_highlightScaleRate = rate;
+            }
+            m_scrollBarMaximum = verticalScrollBar()->maximum();
+        }
+    } else {
+        if (verticalScrollBar()->maximum() > 0) {
+            m_scrollBarMaximum = verticalScrollBar()->maximum();
+        }
     }
 }
 
