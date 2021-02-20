@@ -176,6 +176,7 @@ void TextEdit::insertTextEx(QTextCursor cursor, QString text)
 {
     QUndoCommand * pInsertStack= new InsertTextUndoCommand(cursor,text);
     m_pUndoStack->push(pInsertStack);
+    ensureCursorVisible();
 }
 
 void TextEdit::deleteSelectTextEx(QTextCursor cursor)
@@ -197,6 +198,7 @@ void TextEdit::insertSelectTextEx(QTextCursor cursor, QString text)
     if(cursor.hasSelection()) deleteTextEx(cursor);
     QUndoCommand * pInsertStack= new InsertTextUndoCommand(cursor,text);
     m_pUndoStack->push(pInsertStack);
+    ensureCursorVisible();
 }
 
 void TextEdit::insertColumnEditTextEx(QString text)
@@ -206,6 +208,7 @@ void TextEdit::insertColumnEditTextEx(QString text)
      }
      QUndoCommand * pInsertStack= new InsertTextUndoCommand(m_altModSelections,text);
      m_pUndoStack->push(pInsertStack);
+     ensureCursorVisible();
 }
 
 void TextEdit::initRightClickedMenu()
