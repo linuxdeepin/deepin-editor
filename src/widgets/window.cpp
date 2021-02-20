@@ -67,13 +67,14 @@ Window::Window(DMainWindow *parent)
       m_themePanel(new ThemePanel(this)),
       m_findBar(new FindBar(this)),
       m_menu(new DMenu),
-      m_titlebarStyleSheet(titlebar()->styleSheet())
+      m_titlebarStyleSheet(titlebar()->styleSheet()),
+      m_blankFileDir(QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files")),
+      m_backupDir(QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("backup-files")),
+      m_autoBackupDir(QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("autoBackup-files")),
+      m_themePath(Settings::instance()->settings->option("advance.editor.theme")->value().toString())
 {
     qRegisterMetaType<TextEdit*>("TextEdit");
-    m_blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
-    m_backupDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("backup-files");
-    m_autoBackupDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("autoBackup-files");
-    m_themePath = Settings::instance()->settings->option("advance.editor.theme")->value().toString();
+
     m_rootSaveDBus = new DBusDaemon::dbus("com.deepin.editor.daemon", "/", QDBusConnection::systemBus(), this);
     m_settings = Settings::instance();
 
@@ -989,7 +990,7 @@ QString Window::saveAsFileToDisk()
         //删除自动备份文件
         if (QFileInfo(m_autoBackupDir).exists()) {
             QString truePath = wrapper->textEditor()->getTruePath();
-            QFileInfo fileInfo(truePath);
+            fileInfo.setFile(truePath);
             QString name = fileInfo.absolutePath().replace("/","_");
             QDir(m_autoBackupDir).remove(fileInfo.baseName() + "." + name + "." + fileInfo.suffix());
         }
@@ -1745,9 +1746,9 @@ void Window::handleCurrentChanged(const int &index)
     }
 
     const QString &filepath = m_tabbar->fileAt(index);
-    bool bIsContains = false;
 
     if (m_wrappers.contains(filepath)) {
+        bool bIsContains = false;
         EditWrapper *wrapper = m_wrappers.value(filepath);
         wrapper->textEditor()->setFocus();
 

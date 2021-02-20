@@ -1997,7 +1997,7 @@ void TextEdit::updateCursorKeywordSelection(int position, bool findNext)
 
 void TextEdit::updateHighlightLineSelection()
 {
-    if (m_gestureAction != GA_null && m_gestureAction == GA_slide) {
+    if (m_gestureAction == GA_slide) {
         QTextCursor textCursor = QPlainTextEdit::textCursor();
         return;
     }
@@ -2409,7 +2409,6 @@ void TextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &close
         bracketBeginCursor = bracketEndCursor = QTextCursor();
     }
 
-    bool forward;
     QChar begin, end;
 
     if (doc->characterAt(position) == openChar ||
@@ -2417,7 +2416,7 @@ void TextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &close
         doc->characterAt(position - 1) == openChar ||
         doc->characterAt(position - 1) == closeChar)
     {
-        forward = doc->characterAt(position) == openChar ||
+        bool forward = doc->characterAt(position) == openChar ||
                   doc->characterAt(position - 1) == openChar;
 
         if (forward) {
@@ -4477,8 +4476,7 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
         }else if (object == m_pLeftAreaWidget->m_pFlodArea) {
             m_markFoldHighLightSelections.clear();
             renderAllSelections();
-            QHoverEvent *hoverEvent = static_cast<QHoverEvent *>(event);
-            int line = getLineFromPoint(hoverEvent->pos());
+
             if (m_listFlodIconPos.contains(line - 1)) {
                 if (!document()->findBlockByNumber(line).isVisible()) {
                     m_foldCodeShow->clear();
@@ -6035,7 +6033,6 @@ void TextEdit::setComment()
 
 void TextEdit::removeComment()
 {
-    int tmp = 0;//备注偏移量，判断备注标记后面有没有空格
     //此函数是删除了unCommentSelection()的if-else的comment分支得来的
     if (!m_commentDefinition.isValid())
         return;
@@ -6141,6 +6138,7 @@ void TextEdit::removeComment()
         deleteTextEx(cursor);
     }
      else {
+        int tmp = 0;//备注偏移量，判断备注标记后面有没有空格
         endBlock = endBlock.next();
         doSingleLineStyleUncomment = true;
         for (QTextBlock block = startBlock; block != endBlock; block = block.next()) {
@@ -6165,7 +6163,7 @@ void TextEdit::removeComment()
             QString check="";
         for (QTextBlock block = startBlock; block != endBlock; block = block.next()) {
             if (doSingleLineStyleUncomment) {
-                QString text = block.text();
+                text = block.text();
                 int i = 0;
                 if(tmp==1)
                 check = abb;

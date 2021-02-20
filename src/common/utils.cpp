@@ -708,10 +708,9 @@ int Utils::getProcessCountByName(const char *pstrName)
 {
     FILE *fp = NULL;
     int count = -1;
-    char buf[1024];
     char command[1024];
 
-    if (NULL == pstrName || strlen(pstrName) <= 0) {
+    if (NULL == pstrName || strlen(pstrName) == 0) {
         return count;
     }
 
@@ -719,6 +718,7 @@ int Utils::getProcessCountByName(const char *pstrName)
     sprintf(command, "ps -ef | grep %s | grep -v grep | wc -l", pstrName);
 
     if ((fp = popen(command, "r")) != NULL) {
+        char buf[1024];
         memset(buf, 0, sizeof(buf));
         if ((fgets(buf, sizeof(buf)-1, fp)) != NULL) {
             count = atoi(buf);
@@ -732,9 +732,8 @@ int Utils::getProcessCountByName(const char *pstrName)
 
 void Utils::killProcessByName(const char *pstrName)
 {
-    char command[1024];
-
     if (pstrName != NULL && strlen(pstrName) > 0) {
+        char command[1024];
         memset(command, 0, sizeof(command));
         sprintf(command, "killall %s", pstrName);
         system(command);

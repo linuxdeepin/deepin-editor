@@ -60,16 +60,16 @@ QByteArray DetectCode::UchardetCode(QString filepath)
         charset = uchardet_get_charset(handle);
         qDebug()<<QStringLiteral("Uchardet文本的编码方式是:")<<charset;
         uchardet_delete(handle);
-
-        delete [] buff;
-        buff = nullptr;
     }
 
-     if(charset == "MAC-CENTRALEUROPE") charset = "MACCENTRALEUROPE";
-     if(charset == "MAC-CYRILLIC") charset = "MACCYRILLIC";
-     if(charset.contains("WINDOWS-")) charset = charset.replace("WINDOWS-","CP");
-     qDebug()<<"UchardetCode End:"<<QDateTime::currentDateTime().toString("hh:mm:ss");
-     return charset;
+    delete [] buff;
+    buff = nullptr;
+
+    if(charset == "MAC-CENTRALEUROPE") charset = "MACCENTRALEUROPE";
+    if(charset == "MAC-CYRILLIC") charset = "MACCYRILLIC";
+    if(charset.contains("WINDOWS-")) charset = charset.replace("WINDOWS-","CP");
+    qDebug()<<"UchardetCode End:"<<QDateTime::currentDateTime().toString("hh:mm:ss");
+    return charset;
 }
 
 QByteArray DetectCode::EncaDetectCode(QString filepath)

@@ -132,9 +132,9 @@ void Tabbar::resizeEvent(QResizeEvent *event)
 
             int step = nFontWidth/w + (mod > 0 ? 1:0);
 
-            for (int i = 1; i < step;i++)
+            for (int j = 1; j < step;j++)
             {
-               path.insert(i*(path.length()/step),'\n');
+               path.insert(j*(path.length()/step),'\n');
             }
         }
 
