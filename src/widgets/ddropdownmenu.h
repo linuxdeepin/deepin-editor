@@ -39,7 +39,7 @@ class DDropdownMenu : public QFrame
     Q_OBJECT
 
 public:
-    DDropdownMenu(QWidget *parent = nullptr);
+    explicit DDropdownMenu(QWidget *parent = nullptr);
     ~DDropdownMenu();
     void setFontEx(const QFont& font);
 

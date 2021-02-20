@@ -33,7 +33,7 @@ class BottomBar : public QWidget
     Q_OBJECT
 
 public:
-    BottomBar(QWidget *parent = nullptr);
+    explicit BottomBar(QWidget *parent = nullptr);
     ~BottomBar();
 
     void updatePosition(int row, int column);

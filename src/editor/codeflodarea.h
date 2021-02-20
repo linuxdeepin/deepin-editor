@@ -8,7 +8,7 @@ class CodeFlodArea: public QWidget
 {
     Q_OBJECT
 public:
-    CodeFlodArea(LeftAreaTextEdit *leftAreaWidget);
+    explicit CodeFlodArea(LeftAreaTextEdit *leftAreaWidget);
     ~CodeFlodArea() override;
     void paintEvent(QPaintEvent *e) override;
 private:

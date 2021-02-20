@@ -30,7 +30,7 @@ class LineNumberArea : public QWidget
     Q_OBJECT
 
 public:
-    LineNumberArea(LeftAreaTextEdit *leftAreaWidget);
+    explicit LineNumberArea(LeftAreaTextEdit *leftAreaWidget);
     ~LineNumberArea() override;
 
     void paintEvent(QPaintEvent *e) override;

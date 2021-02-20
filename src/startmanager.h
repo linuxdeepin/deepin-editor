@@ -48,7 +48,7 @@ public:
     };
 
     static StartManager* instance();
-    StartManager(QObject *parent = nullptr);
+    explicit StartManager(QObject *parent = nullptr);
     bool checkPath(const QString &file);
     bool ifKlu();
 

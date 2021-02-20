@@ -47,7 +47,7 @@ class Window : public DMainWindow
     Q_OBJECT
 
 public:
-    Window(DMainWindow *parent = nullptr);
+    explicit Window(DMainWindow *parent = nullptr);
     ~Window() override;
 
     //跟新文件修改状态

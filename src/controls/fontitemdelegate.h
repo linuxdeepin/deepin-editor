@@ -27,7 +27,7 @@ class FontItemDelegate : public QStyledItemDelegate
     Q_OBJECT
 
 public:
-    FontItemDelegate(QObject *parent = nullptr);
+    explicit FontItemDelegate(QObject *parent = nullptr);
     ~FontItemDelegate();
 
 protected:

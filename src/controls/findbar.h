@@ -49,7 +49,7 @@ class FindBar : public DFloatingWidget
     Q_OBJECT
 
 public:
-    FindBar(QWidget *parent = 0);
+    explicit FindBar(QWidget *parent = 0);
 
     bool isFocus();
     void focus();

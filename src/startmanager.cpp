@@ -709,10 +709,9 @@ void StartManager::initBlockShutdown()
           << QObject::tr("File not saved") // why
           << QString("delay");                        // mode
 
-    int fd = -1;
     m_reply = m_pLoginManager->callWithArgumentList(QDBus::Block, "Inhibit", m_arg);
     if (m_reply.isValid()) {
-        fd = m_reply.value().fileDescriptor();
+        m_reply.value().fileDescriptor();
     }
 }
 

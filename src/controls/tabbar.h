@@ -33,7 +33,7 @@ class Tabbar : public DTabBar
     Q_OBJECT
 
 public:
-    Tabbar(QWidget *parent = nullptr);
+    explicit Tabbar(QWidget *parent = nullptr);
     ~Tabbar();
 
     void addTab(const QString &filePath, const QString &tabName, const QString &tipPath = QString::null);

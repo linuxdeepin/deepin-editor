@@ -42,7 +42,7 @@ class ReplaceBar : public DFloatingWidget
     Q_OBJECT
 
 public:
-    ReplaceBar(QWidget *parent = 0);
+    explicit ReplaceBar(QWidget *parent = 0);
 
     bool isFocus();
     void focus();

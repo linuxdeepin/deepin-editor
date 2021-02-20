@@ -43,7 +43,7 @@ class JumpLineBar : public DFloatingWidget
     Q_OBJECT
 
 public:
-    JumpLineBar(DFloatingWidget *parent = 0);
+    explicit JumpLineBar(DFloatingWidget *parent = 0);
 
 public slots:
     void focus();
