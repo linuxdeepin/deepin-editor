@@ -1988,7 +1988,9 @@ int Window::getBlankFileIndex()
 DDialog *Window::createDialog(const QString &title, const QString &content)
 {
     DDialog *dialog = new DDialog(title, content, this);
-    dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnBottomHint);
+    //dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnBottomHint);
+    dialog->setWindowModality(Qt::WindowModal);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->setIcon(QIcon::fromTheme("deepin-editor"));
     dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
     dialog->addButton(QString(tr("Discard")), false, DDialog::ButtonNormal);
