@@ -30,6 +30,7 @@
 #include <QScreen>
 #include <QPropertyAnimation>
 #include <DSettingsOption>
+#include <DAboutDialog>
 //#include <DSettings>
 
 DWIDGET_USE_NAMESPACE
@@ -735,5 +736,19 @@ void StartManager::slotCheckUnsaveTab() {
         m_reply = QDBusReply<QDBusUnixFileDescriptor>();
         //m_pLoginManager->callWithArgumentList(QDBus::NoBlock, "Inhibit", m_arg);
         //qDebug() << "Nublock shutdown.";
+    }
+}
+
+void StartManager::closeAboutForWindow(Window *window)
+{
+    if (qApp != nullptr) {
+        DAboutDialog *pAboutDialog = qApp->aboutDialog();
+        if (pAboutDialog != nullptr) {
+            if (pAboutDialog->parent() != nullptr) {
+                if (pAboutDialog->parent() == window) {
+                    pAboutDialog->close();
+                }
+            }
+        }
     }
 }

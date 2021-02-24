@@ -805,7 +805,7 @@ void Window::removeWrapper(const QString &filePath, bool isDelete)
 
     // Exit window after close all tabs.
     if (m_wrappers.isEmpty()) {
-        DMainWindow::close();
+        close();
     }
 }
 
@@ -2212,7 +2212,11 @@ void Window::closeEvent(QCloseEvent *e)
 
     disconnect(m_settings,nullptr,this,nullptr);
     //this->close();
+
+    StartManager::instance()->closeAboutForWindow(this);
+
     emit close();
+
     return DMainWindow::closeEvent(e);
 }
 

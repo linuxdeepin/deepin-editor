@@ -97,6 +97,8 @@ public slots:
 
     void slotCheckUnsaveTab();
 
+    void closeAboutForWindow(Window *window);
+
 private:
     void initBlockShutdown();
     static StartManager *m_instance;
