@@ -18,7 +18,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/controls)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/editor)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thememodule)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/widgets)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/include)
 
 
 # Find the library
@@ -51,11 +51,11 @@ target_link_libraries(deepin-editor
     ${Qt5Svg_LIBRARIES}
     KF5::Codecs
     KF5::SyntaxHighlighting
-    ${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/lib/libcharset.a
-    ${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/lib/libiconv.a
-    ${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/lib/libenca.a
+    ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/lib/libcharset.a
+    ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/lib/libiconv.a
+    ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/lib/libenca.a
     -lm
-    ${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/lib/libuchardet.a
+    ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/lib/libuchardet.a
 )
 
 set(CMAKE_INSTALL_PREFIX /usr)
