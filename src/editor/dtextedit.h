@@ -113,7 +113,6 @@ public:
     int getCurrentColumn();
     int getPosition();
     int getScrollOffset();
-    qreal getHighlightScaleRate();
     DMenu *getHighlightMenu();
 
 
@@ -523,9 +522,6 @@ private:
     int m_restoreRow;
 
     int m_tabSpaceNumber = 4;
-
-    int m_scrollBarMaximum = 0;
-    qreal m_highlightScaleRate = 1.0;
 
     KSyntaxHighlighting::Repository m_repository;
     KSyntaxHighlighting::SyntaxHighlighter *m_highlighter = nullptr;

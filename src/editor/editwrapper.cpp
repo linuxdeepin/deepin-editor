@@ -723,7 +723,7 @@ void EditWrapper::OnUpdateHighlighter()
         QTextBlock endBlock;
 
         if (pScrollBar->maximum() > 0) {
-            QPoint endPoint = QPointF(0, m_pTextEdit->getHighlightScaleRate() * m_pTextEdit->height()).toPoint();
+            QPoint endPoint = QPointF(0, 1.5 * m_pTextEdit->height()).toPoint();
             endBlock = m_pTextEdit->cursorForPosition(endPoint).block();
         } else {
             endBlock = m_pTextEdit->document()->lastBlock();
