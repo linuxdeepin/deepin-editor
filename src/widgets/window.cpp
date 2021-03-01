@@ -1800,7 +1800,8 @@ void Window::handleFindNext()
 {
     EditWrapper *wrapper = currentWrapper();
     wrapper->textEditor()->saveMarkStatus();
-    wrapper->textEditor()->updateCursorKeywordSelection(wrapper->textEditor()->getPosition(), true);
+    wrapper->textEditor()->updateCursorKeywordSelection(m_searchKeyword, true);
+    wrapper->textEditor()->highlightKeywordInView(m_searchKeyword);
     wrapper->textEditor()->renderAllSelections();
     wrapper->textEditor()->restoreMarkStatus();
     wrapper->textEditor()->updateLeftAreaWidget();
@@ -1810,7 +1811,8 @@ void Window::handleFindPrev()
 {
     EditWrapper *wrapper = currentWrapper();
     wrapper->textEditor()->saveMarkStatus();
-    wrapper->textEditor()->updateCursorKeywordSelection(wrapper->textEditor()->getPosition(), false);
+    wrapper->textEditor()->updateCursorKeywordSelection(m_searchKeyword, false);
+    wrapper->textEditor()->highlightKeywordInView(m_searchKeyword);
     wrapper->textEditor()->renderAllSelections();
     wrapper->textEditor()->restoreMarkStatus();
     wrapper->textEditor()->updateLeftAreaWidget();
@@ -1863,7 +1865,7 @@ void Window::handleReplaceRest(const QString &replaceText, const QString &withTe
 void Window::handleReplaceSkip()
 {
     EditWrapper *wrapper = currentWrapper();
-    wrapper->textEditor()->updateCursorKeywordSelection(wrapper->textEditor()->getPosition(), true);
+    wrapper->textEditor()->updateCursorKeywordSelection(m_searchKeyword, true);
     wrapper->textEditor()->renderAllSelections();
 }
 
@@ -1880,6 +1882,7 @@ void Window::handleUpdateSearchKeyword(QWidget *widget, const QString &file, con
 
         // Update input widget warning status along with keyword match situation.
         bool findKeyword = m_wrappers.value(file)->textEditor()->highlightKeyword(keyword, m_wrappers.value(file)->textEditor()->getPosition());
+        m_searchKeyword = keyword;
         //    bool findKeyword = m_wrappers.value(file)->textEditor()->findKeywordForward(keyword);
         bool emptyKeyword = keyword.trimmed().isEmpty();
 
@@ -2380,4 +2383,18 @@ void Window::dropEvent(QDropEvent *event)
             addTab(var, true);
         }
     }
+}
+
+bool Window::findBarIsVisiable()
+{
+    if (m_findBar->isVisible()) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+QString Window::getSearchKeyword()
+{
+    return m_searchKeyword;
 }

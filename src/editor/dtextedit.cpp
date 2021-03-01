@@ -1964,33 +1964,32 @@ void TextEdit::removeKeywords()
 bool TextEdit::highlightKeyword(QString keyword, int position)
 {
     m_findMatchSelections.clear();
-    bool yes = updateKeywordSelections(keyword,m_findMatchFormat,&m_findMatchSelections);
-    setExtraSelections(m_findMatchSelections);
-    updateCursorKeywordSelection(position, true);
+    bool yes = updateKeywordSelectionsInView(keyword, m_findMatchFormat, &m_findMatchSelections);
+    updateCursorKeywordSelection(keyword, true);
     updateHighlightLineSelection();
     renderAllSelections();
     return yes;
 }
 
-void TextEdit::updateCursorKeywordSelection(int position, bool findNext)
+bool TextEdit::highlightKeywordInView(QString keyword)
 {
-    bool findOne = setCursorKeywordSeletoin(position, findNext);
+    m_findMatchSelections.clear();
+    bool yes = updateKeywordSelectionsInView(keyword, m_findMatchFormat, &m_findMatchSelections);
+    setExtraSelections(m_findMatchSelections);
+    return yes;
+}
+
+void TextEdit::updateCursorKeywordSelection(QString keyword, bool findNext)
+{
+    bool findOne = searchKeywordSeletion(keyword, textCursor(), findNext);
 
     if (!findOne) {
-        if (findNext) {
-            // Clear keyword if keyword not match anything.
-            if (!setCursorKeywordSeletoin(0, findNext)) {
-                m_findHighlightSelection.cursor = textCursor();
-
-                m_findMatchSelections.clear();
-                renderAllSelections();
-            }
-        } else {
-            QTextCursor cursor = textCursor();
-            cursor.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
-
-            m_findHighlightSelection.cursor.clearSelection();
-            setCursorKeywordSeletoin(cursor.position(), findNext);
+        QTextCursor cursor = textCursor();
+        cursor.movePosition(findNext ? QTextCursor::Start : QTextCursor::End, QTextCursor::MoveAnchor);
+        if (!searchKeywordSeletion(keyword, cursor, findNext)) {
+            m_findHighlightSelection.cursor = textCursor();
+            m_findMatchSelections.clear();
+            renderAllSelections();
         }
     }
 }
@@ -2039,6 +2038,83 @@ bool TextEdit::updateKeywordSelections(QString keyword,QTextCharFormat charForma
         return true;
     }
     return false;
+}
+
+bool TextEdit::updateKeywordSelectionsInView(QString keyword, QTextCharFormat charFormat, QList<QTextEdit::ExtraSelection> *listSelection)
+{
+    // Clear keyword selections first.
+    listSelection->clear();
+
+    // Update selections with keyword.
+    if (!keyword.isEmpty()) {
+        QTextCursor cursor(document());
+        QTextEdit::ExtraSelection extra;
+        extra.format = charFormat;
+
+        QScrollBar* pScrollBar = verticalScrollBar();
+        QPoint startPoint = QPointF(0, 0).toPoint();
+        QTextBlock beginBlock = cursorForPosition(startPoint).block();
+        int beginPos = beginBlock.position();
+        QTextBlock endBlock;
+
+        if (pScrollBar->maximum() > 0) {
+            QPoint endPoint = QPointF(0, 1.5 * height()).toPoint();
+            endBlock = cursorForPosition(endPoint).block();
+        } else {
+            endBlock = document()->lastBlock();
+        }
+        int endPos = endBlock.position() + endBlock.length() - 1;
+
+        cursor = document()->find(keyword, beginPos);
+        if (cursor.isNull()) {
+            return false;
+        }
+
+        while (!cursor.isNull()) {
+            extra.cursor = cursor;
+            listSelection->append(extra);
+            cursor = document()->find(keyword, cursor);
+
+            if (cursor.position() > endPos) {
+                break;
+            }
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+bool TextEdit::searchKeywordSeletion(QString keyword, QTextCursor cursor, bool findNext)
+{
+    if (keyword.isEmpty()) {
+        return false;
+    }
+
+    bool ret = false;
+    int offsetLines = 3;
+
+    if (findNext) {
+        QTextCursor next = document()->find(keyword, cursor);
+        if (!next.isNull()) {
+            m_findHighlightSelection.cursor = next;
+            jumpToLine(next.blockNumber() + offsetLines, false);
+            setTextCursor(next);
+            ret = true;
+        }
+
+    } else {
+        QTextCursor prev = document()->find(keyword, cursor, QTextDocument::FindBackward);
+        if (!prev.isNull()) {
+            m_findHighlightSelection.cursor = prev;
+            jumpToLine(prev.blockNumber() + offsetLines, false);
+            setTextCursor(prev);
+            ret = true;
+        }
+    }
+
+    return ret;
 }
 
 void TextEdit::renderAllSelections()
@@ -5451,11 +5527,17 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
                 //向上翻页
                 scrollUp();
                 m_wrapper->OnUpdateHighlighter();
+                if (m_wrapper->window()->findBarIsVisiable()) {
+                    highlightKeywordInView(m_wrapper->window()->getSearchKeyword());
+                }
                 return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "scrolldown")) {
                 //向下翻页
                 scrollDown();
                 m_wrapper->OnUpdateHighlighter();
+                if (m_wrapper->window()->findBarIsVisiable()) {
+                    highlightKeywordInView(m_wrapper->window()->getSearchKeyword());
+                }
                 return;
             }else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "selectall")) {
                 if (m_wrapper->getFileLoading()) {

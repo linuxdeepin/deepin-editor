@@ -523,8 +523,8 @@ TEST_F(test_textedit, updateCursorKeywordSelection)
     QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
-    startManager->updateCursorKeywordSelection(2,true);
-    startManager->updateCursorKeywordSelection(2,false);
+    startManager->updateCursorKeywordSelection("aa",true);
+    startManager->updateCursorKeywordSelection("aa",false);
 
     assert(1==1);
 }

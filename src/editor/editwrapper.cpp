@@ -70,6 +70,9 @@ EditWrapper::EditWrapper(Window* window,QWidget *parent)
     connect(m_pWaringNotices, &WarningNotices::saveAsBtnClicked, m_pWindow, &Window::saveAsFile);
     connect(m_pTextEdit->verticalScrollBar(),&QScrollBar::valueChanged,this,[this](int){
         OnUpdateHighlighter();
+        if (m_pWindow->findBarIsVisiable()) {
+            m_pTextEdit->highlightKeywordInView(m_pWindow->getSearchKeyword());
+        }
     });
 }
 

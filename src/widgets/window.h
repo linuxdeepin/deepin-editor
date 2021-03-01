@@ -131,6 +131,9 @@ public:
 
     //设置显示清除焦点
     void setChildrenFocus(bool ok);
+
+    bool findBarIsVisiable();
+    QString getSearchKeyword();
 	
 signals:
     void themeChanged(const QString themeName);
@@ -227,6 +230,8 @@ private:
     int m_fontSize = 0;
 
     QString m_titlebarStyleSheet;
+
+    QString m_searchKeyword;
 
     QString m_themePath;
     QString m_tabbarActiveColor;
