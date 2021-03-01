@@ -427,6 +427,8 @@ signals:
     void popupNotify(QString notify);
     void signal_readingPath();
     void signal_setTitleFocus();
+    void sigShowVirtualKeyboard();
+    void sigHideVirtualKeyboard();
 
 public slots:
     /**

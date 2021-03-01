@@ -173,6 +173,7 @@ void TextEdit::insertTextEx(QTextCursor cursor, QString text)
 {
     QUndoCommand * pInsertStack= new InsertTextUndoCommand(cursor,text);
     m_pUndoStack->push(pInsertStack);
+    ensureCursorVisible();
 }
 
 void TextEdit::deleteSelectTextEx(QTextCursor cursor)
@@ -194,6 +195,7 @@ void TextEdit::insertSelectTextEx(QTextCursor cursor, QString text)
     if(cursor.hasSelection()) deleteTextEx(cursor);
     QUndoCommand * pInsertStack= new InsertTextUndoCommand(cursor,text);
     m_pUndoStack->push(pInsertStack);
+    ensureCursorVisible();
 }
 
 void TextEdit::insertColumnEditTextEx(QString text)
@@ -203,6 +205,7 @@ void TextEdit::insertColumnEditTextEx(QString text)
      }
      QUndoCommand * pInsertStack= new InsertTextUndoCommand(m_altModSelections,text);
      m_pUndoStack->push(pInsertStack);
+     ensureCursorVisible();
 }
 
 void TextEdit::initRightClickedMenu()
@@ -2621,7 +2624,7 @@ bool TextEdit::gestureEvent(QGestureEvent *event)
 
 void TextEdit::tapGestureTriggered(QTapGesture *tap)
 {
-    this->clearFocus();
+    //this->clearFocus();
     //单指点击函数
     switch (tap->state()) {
     case Qt::GestureStarted:
@@ -2644,6 +2647,7 @@ void TextEdit::tapGestureTriggered(QTapGesture *tap)
             m_slideContinueY = false;
             m_gestureAction = GA_slide;
             qDebug() << "slide start" << timeSpace;
+            emit sigHideVirtualKeyboard();
         } else {
             qDebug() << "null start" << timeSpace;
             m_gestureAction = GA_null;
@@ -2653,6 +2657,7 @@ void TextEdit::tapGestureTriggered(QTapGesture *tap)
     case Qt::GestureFinished:
     {
         m_gestureAction = GA_null;
+        emit sigShowVirtualKeyboard();
         break;
     }
     default:

@@ -458,6 +458,7 @@ void Window::initVirtualKeyboardDbus()
                                                this);
 
     m_pImInterface->setImSignalLock(false);
+    m_pImInterface->setImActive(false);
     QVariant variant = m_pImInterface->geometry();
     setKeyboardHeight(variant.value<QRect>().height());
     connect(m_pImInterface, &ComDeepinImInterface::imActiveChanged, this, &Window::slotVirtualKeyboardImActiveChanged);
@@ -809,7 +810,12 @@ EditWrapper *Window::createEditor()
     connect(wrapper->textEditor(), &TextEdit::textChanged, this, [=](){
         updateJumpLineBar(wrapper->textEditor());
     }, Qt::QueuedConnection);
-
+    connect(wrapper->textEditor(), &TextEdit::sigHideVirtualKeyboard, this, [=]() {
+        m_pImInterface->setImActive(false);
+    });
+    connect(wrapper->textEditor(), &TextEdit::sigShowVirtualKeyboard, this, [=]() {
+        m_pImInterface->setImActive(true);
+    });
 
     bool wordWrap = m_settings->settings->option("base.font.wordwrap")->value().toBool();
     #ifdef TABLET
