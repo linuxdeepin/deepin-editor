@@ -140,7 +140,7 @@ signals:
     void requestDragEnterEvent(QDragEnterEvent *);
     void requestDropEvent(QDropEvent *);
     void newWindow();
-    void close();
+    void closeWindow();
     void sigJudgeBlockShutdown();
     void pressEsc();
 public slots:

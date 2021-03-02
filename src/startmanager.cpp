@@ -558,7 +558,7 @@ Window* StartManager::createWindow(bool alwaysCenter)
     connect(window, &Window::sigJudgeBlockShutdown, this, &StartManager::slotCheckUnsaveTab, Qt::QueuedConnection);
 
     // Quit application if close last window.
-    connect(window, &Window::close, this, [=] {
+    connect(window, &Window::closeWindow, this, [=] {
         int windowIndex = m_windows.indexOf(window);
         //qDebug() << "Close window " << windowIndex;
 

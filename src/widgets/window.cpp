@@ -2216,9 +2216,10 @@ void Window::closeEvent(QCloseEvent *e)
     disconnect(m_settings,nullptr,this,nullptr);
     //this->close();
 
+
     StartManager::instance()->closeAboutForWindow(this);
 
-    emit close();
+    emit closeWindow();
 
     return DMainWindow::closeEvent(e);
 }
