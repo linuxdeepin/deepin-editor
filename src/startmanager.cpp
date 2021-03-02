@@ -293,6 +293,9 @@ int StartManager::recoverFile(Window *window)
                     if (value.isString()) {  // 判断 value 是否为字符串
                         localPath = value.toString();  // 将 value 转化为字符串
                         fileInfo.setFile(localPath);
+                        if (!fileInfo.exists()) {
+                            continue;
+                        }
                     }
                 }
 
@@ -723,7 +726,6 @@ void StartManager::slotCheckUnsaveTab() {
         if (bRet == true) {
             m_reply = m_pLoginManager->callWithArgumentList(QDBus::Block, "Inhibit", m_arg);
             if (m_reply.isValid()) {
-                //qDebug() << "Block shutdown.";
             }
 
             return;
@@ -732,10 +734,7 @@ void StartManager::slotCheckUnsaveTab() {
 
     //如果for结束则表示没有发现未保存的tab项，则放开阻塞关机
     if (m_reply.isValid()) {
-        QDBusReply<QDBusUnixFileDescriptor> tmp = m_reply;
         m_reply = QDBusReply<QDBusUnixFileDescriptor>();
-        //m_pLoginManager->callWithArgumentList(QDBus::NoBlock, "Inhibit", m_arg);
-        //qDebug() << "Nublock shutdown.";
     }
 }
 
