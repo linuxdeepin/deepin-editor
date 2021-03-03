@@ -147,36 +147,33 @@ QByteArray DetectCode::EncaDetectCode(QString filepath)
 
 bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr, QByteArray &outStr,QString fromCode, QString toCode)
 {
-    if(fromCode == toCode){
-        qDebug()<<"=====编码转换相同:"<<fromCode;
+    if (fromCode == toCode) {
         outStr = inputStr;
         return true;
     }
 
-   // qDebug()<<"=====编码转化 Begin:"<<QDateTime::currentDateTime().toString("hh:mm:ss");
-    iconv_t handle =iconv_open(toCode.toLocal8Bit().data(),fromCode.toLocal8Bit().data());
+    iconv_t handle = iconv_open(toCode.toLocal8Bit().data(), fromCode.toLocal8Bit().data());
+    int val = 1;
+    iconvctl(handle, ICONV_SET_DISCARD_ILSEQ, &val);
 
-    if(handle != reinterpret_cast<iconv_t>(-1)){
+    if (handle != reinterpret_cast<iconv_t>(-1)) {
+        char* inbuf = inputStr.data();
         size_t inbytesleft = static_cast<size_t>(inputStr.size())+1;
-        //qDebug()<<inbuf<<inbytesleft;
-
         size_t outbytesleft = 4*inbytesleft;
-
         char* outbuf = new char[outbytesleft];
         char* tmp = outbuf;
-        memset(outbuf,0,outbytesleft);
 
-       iconv_close(handle);
-
-       outStr = QByteArray(tmp);
-       qDebug()<<"编码转换前 文本大小:"<<inputStr.length()/*<<QString::fromUtf8(inputStr)*/;
-       qDebug()<<"转换编码后 文本大小:"<<outStr.length()/*<<QString::fromUtf8(outStr)*/;
+        memset(outbuf, 0, outbytesleft);
+        iconv(handle, &inbuf, &inbytesleft, &outbuf, &outbytesleft);
+        iconv_close(handle);
+        outStr = QByteArray(tmp);
 
         delete [] tmp;
         tmp = nullptr;
-        //qDebug()<<"======编码转化 End:"<<QDateTime::currentDateTime().toString("hh:mm:ss");
+
         return true;
-    }else {
+
+    } else {
         qDebug()<<"编码转换失败";
         return  false;
     }
