@@ -134,6 +134,7 @@ public:
 
     bool findBarIsVisiable();
     QString getKeywordForSearchAll();
+    QString getKeywordForSearch();
 
 signals:
     void themeChanged(const QString themeName);

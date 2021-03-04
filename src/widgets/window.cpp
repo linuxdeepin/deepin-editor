@@ -1792,7 +1792,12 @@ void Window::handleFindNextSearchKeyword(const QString &keyword)
     m_keywordForSearch = keyword;
     wrapper->textEditor()->saveMarkStatus();
     wrapper->textEditor()->updateCursorKeywordSelection(m_keywordForSearch, true);
-    wrapper->textEditor()->highlightKeywordInView(m_keywordForSearchAll);
+    if (QString::compare(m_keywordForSearch, m_keywordForSearchAll, Qt::CaseInsensitive) != 0) {
+        m_keywordForSearchAll.clear();
+        wrapper->textEditor()->clearFindMatchSelections();
+    } else {
+        wrapper->textEditor()->highlightKeywordInView(m_keywordForSearchAll);
+    }
     wrapper->textEditor()->renderAllSelections();
     wrapper->textEditor()->restoreMarkStatus();
     wrapper->textEditor()->updateLeftAreaWidget();
@@ -1804,7 +1809,12 @@ void Window::handleFindPrevSearchKeyword(const QString &keyword)
     m_keywordForSearch = keyword;
     wrapper->textEditor()->saveMarkStatus();
     wrapper->textEditor()->updateCursorKeywordSelection(m_keywordForSearch, false);
-    wrapper->textEditor()->highlightKeywordInView(m_keywordForSearchAll);
+    if (QString::compare(m_keywordForSearch, m_keywordForSearchAll, Qt::CaseInsensitive) != 0) {
+        m_keywordForSearchAll.clear();
+        wrapper->textEditor()->clearFindMatchSelections();
+    } else {
+        wrapper->textEditor()->highlightKeywordInView(m_keywordForSearchAll);
+    }
     wrapper->textEditor()->renderAllSelections();
     wrapper->textEditor()->restoreMarkStatus();
     wrapper->textEditor()->updateLeftAreaWidget();
@@ -1875,6 +1885,7 @@ void Window::handleUpdateSearchKeyword(QWidget *widget, const QString &file, con
         // Update input widget warning status along with keyword match situation.
         bool findKeyword = m_wrappers.value(file)->textEditor()->highlightKeyword(keyword, m_wrappers.value(file)->textEditor()->getPosition());
         m_keywordForSearchAll = keyword;
+        m_keywordForSearch = keyword;
         //    bool findKeyword = m_wrappers.value(file)->textEditor()->findKeywordForward(keyword);
         bool emptyKeyword = keyword.trimmed().isEmpty();
 
@@ -2390,4 +2401,9 @@ bool Window::findBarIsVisiable()
 QString Window::getKeywordForSearchAll()
 {
     return m_keywordForSearchAll;
+}
+
+QString Window::getKeywordForSearch()
+{
+    return m_keywordForSearch;
 }

@@ -1002,7 +1002,8 @@ void TextEdit::nextLine()
 
     if (m_wrapper != nullptr) {
         m_wrapper->OnUpdateHighlighter();
-        if (m_wrapper->window()->findBarIsVisiable()) {
+        if (m_wrapper->window()->findBarIsVisiable() &&
+           (QString::compare(m_wrapper->window()->getKeywordForSearchAll(), m_wrapper->window()->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
             highlightKeywordInView(m_wrapper->window()->getKeywordForSearchAll());
         }
     }
@@ -1023,7 +1024,8 @@ void TextEdit::prevLine()
 
     if (m_wrapper != nullptr) {
         m_wrapper->OnUpdateHighlighter();
-        if (m_wrapper->window()->findBarIsVisiable()) {
+        if (m_wrapper->window()->findBarIsVisiable() &&
+           (QString::compare(m_wrapper->window()->getKeywordForSearchAll(), m_wrapper->window()->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
             highlightKeywordInView(m_wrapper->window()->getKeywordForSearchAll());
         }
     }
@@ -1190,7 +1192,8 @@ void TextEdit::scrollUp()
 
     if (m_wrapper != nullptr) {
         m_wrapper->OnUpdateHighlighter();
-        if (m_wrapper->window()->findBarIsVisiable()) {
+        if (m_wrapper->window()->findBarIsVisiable() &&
+           (QString::compare(m_wrapper->window()->getKeywordForSearchAll(), m_wrapper->window()->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
             highlightKeywordInView(m_wrapper->window()->getKeywordForSearchAll());
         }
     }
@@ -1217,7 +1220,8 @@ void TextEdit::scrollDown()
 
     if (m_wrapper != nullptr) {
         m_wrapper->OnUpdateHighlighter();
-        if (m_wrapper->window()->findBarIsVisiable()) {
+        if (m_wrapper->window()->findBarIsVisiable() &&
+           (QString::compare(m_wrapper->window()->getKeywordForSearchAll(), m_wrapper->window()->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
             highlightKeywordInView(m_wrapper->window()->getKeywordForSearchAll());
         }
     }
@@ -2020,6 +2024,11 @@ bool TextEdit::highlightKeywordInView(QString keyword)
     bool yes = updateKeywordSelectionsInView(keyword, m_findMatchFormat, &m_findMatchSelections);
     setExtraSelections(m_findMatchSelections);
     return yes;
+}
+
+void TextEdit::clearFindMatchSelections()
+{
+    m_findMatchSelections.clear();
 }
 
 void TextEdit::updateCursorKeywordSelection(QString keyword, bool findNext)

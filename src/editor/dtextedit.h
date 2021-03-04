@@ -186,6 +186,7 @@ public:
     void removeKeywords();
     bool highlightKeyword(QString keyword, int position);
     bool highlightKeywordInView(QString keyword);
+    void clearFindMatchSelections();
     void updateCursorKeywordSelection(QString keyword, bool findNext);
     void updateHighlightLineSelection();
     bool updateKeywordSelections(QString keyword,QTextCharFormat charFormat,QList<QTextEdit::ExtraSelection> *listSelection);
