@@ -66,13 +66,13 @@ FindBar::FindBar(QWidget *parent)
 
     connect(this, &FindBar::pressEsc, this, &FindBar::findCancel, Qt::QueuedConnection);
     // connect(m_editLine, &LineBar::pressEnter, this, &FindBar::findNext, Qt::QueuedConnection);            //Shielded by Hengbo ,for new demand. 20200220
-    connect(m_editLine, &LineBar::pressCtrlEnter, this, &FindBar::findPrev, Qt::QueuedConnection);
+    //connect(m_editLine, &LineBar::pressCtrlEnter, this, &FindBar::findPrev, Qt::QueuedConnection);
     connect(m_editLine, &LineBar::returnPressed, this, &FindBar::handleContentChanged, Qt::QueuedConnection);
     connect(m_editLine, &LineBar::signal_sentText, this, &FindBar::receiveText, Qt::QueuedConnection);
     //connect(m_editLine, &LineBar::contentChanged, this, &FindBar::slot_ifClearSearchWord, Qt::QueuedConnection);
 
-    connect(m_findNextButton, &QPushButton::clicked,  this,&FindBar::findNext, Qt::QueuedConnection);
-    connect(m_findPrevButton, &QPushButton::clicked, this, &FindBar::findPreClicked, Qt::QueuedConnection);
+    connect(m_findNextButton, &QPushButton::clicked,  this,&FindBar::handleFindNext, Qt::QueuedConnection);
+    connect(m_findPrevButton, &QPushButton::clicked, this, &FindBar::handleFindPrev, Qt::QueuedConnection);
     //connect(m_findPrevButton, &QPushButton::clicked, this, &FindBar::findPrev, Qt::QueuedConnection);
 
     connect(m_closeButton, &DIconButton::clicked, this, &FindBar::findCancel, Qt::QueuedConnection);
@@ -120,6 +120,15 @@ void FindBar::handleContentChanged()
     updateSearchKeyword(m_findFile, m_editLine->lineEdit()->text());
 }
 
+void FindBar::handleFindPrev()
+{
+    findPrev(m_editLine->lineEdit()->text());
+}
+
+void FindBar::handleFindNext()
+{
+    findNext(m_editLine->lineEdit()->text());
+}
 
 void FindBar::hideEvent(QHideEvent *)
 {
@@ -183,10 +192,10 @@ void FindBar::findPreClicked()
 {
     if(!searched){
         updateSearchKeyword(m_findFile, m_editLine->lineEdit()->text());
-        emit findPrev();
+        emit findPrev(m_editLine->lineEdit()->text());
         searched = true;
     }
     else {
-        emit findPrev();
+        emit findPrev(m_editLine->lineEdit()->text());
     }
 }

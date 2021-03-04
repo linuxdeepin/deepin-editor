@@ -133,7 +133,7 @@ public:
     void setChildrenFocus(bool ok);
 
     bool findBarIsVisiable();
-    QString getSearchKeyword();
+    QString getKeywordForSearchAll();
 
 signals:
     void themeChanged(const QString themeName);
@@ -155,8 +155,8 @@ public slots:
 
     void handleBackToPosition(const QString &file, int row, int column, int scrollOffset);
 
-    void handleFindNext();
-    void handleFindPrev();
+    void handleFindNextSearchKeyword(const QString &keyword);
+    void handleFindPrevSearchKeyword(const QString &keyword);
     void slotFindbarClose();
     void slotReplacebarClose();
 
@@ -231,7 +231,8 @@ private:
 
     QString m_titlebarStyleSheet;
 
-    QString m_searchKeyword;
+    QString m_keywordForSearch;
+    QString m_keywordForSearchAll;
 
     QString m_themePath;
     QString m_tabbarActiveColor;

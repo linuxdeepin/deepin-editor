@@ -999,6 +999,13 @@ void TextEdit::nextLine()
     } else {
         moveCursorNoBlink(QTextCursor::Down);
     }
+
+    if (m_wrapper != nullptr) {
+        m_wrapper->OnUpdateHighlighter();
+        if (m_wrapper->window()->findBarIsVisiable()) {
+            highlightKeywordInView(m_wrapper->window()->getKeywordForSearchAll());
+        }
+    }
 }
 
 void TextEdit::prevLine()
@@ -1012,6 +1019,13 @@ void TextEdit::prevLine()
         setTextCursor(cursor);
     } else {
         moveCursorNoBlink(QTextCursor::Up);
+    }
+
+    if (m_wrapper != nullptr) {
+        m_wrapper->OnUpdateHighlighter();
+        if (m_wrapper->window()->findBarIsVisiable()) {
+            highlightKeywordInView(m_wrapper->window()->getKeywordForSearchAll());
+        }
     }
 }
 
@@ -1173,6 +1187,13 @@ void TextEdit::scrollUp()
         cursor.setPosition(cur.position(), moveMode);
         setTextCursor(cursor);
     }
+
+    if (m_wrapper != nullptr) {
+        m_wrapper->OnUpdateHighlighter();
+        if (m_wrapper->window()->findBarIsVisiable()) {
+            highlightKeywordInView(m_wrapper->window()->getKeywordForSearchAll());
+        }
+    }
 }
 
 void TextEdit::scrollDown()
@@ -1192,6 +1213,13 @@ void TextEdit::scrollDown()
         QTextCursor cursor = textCursor();
         cursor.setPosition(cur.position(), moveMode);
         setTextCursor(cursor);
+    }
+
+    if (m_wrapper != nullptr) {
+        m_wrapper->OnUpdateHighlighter();
+        if (m_wrapper->window()->findBarIsVisiable()) {
+            highlightKeywordInView(m_wrapper->window()->getKeywordForSearchAll());
+        }
     }
 }
 
@@ -5525,19 +5553,11 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
                 return;
             }else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "scrollup")) {
                 //向上翻页
-                scrollUp();
-                m_wrapper->OnUpdateHighlighter();
-                if (m_wrapper->window()->findBarIsVisiable()) {
-                    highlightKeywordInView(m_wrapper->window()->getSearchKeyword());
-                }
+                scrollUp(); 
                 return;
             } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "scrolldown")) {
                 //向下翻页
                 scrollDown();
-                m_wrapper->OnUpdateHighlighter();
-                if (m_wrapper->window()->findBarIsVisiable()) {
-                    highlightKeywordInView(m_wrapper->window()->getSearchKeyword());
-                }
                 return;
             }else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "selectall")) {
                 if (m_wrapper->getFileLoading()) {

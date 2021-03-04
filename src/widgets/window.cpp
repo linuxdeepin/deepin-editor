@@ -205,8 +205,8 @@ Window::Window(DMainWindow *parent)
 
 
     // Init find bar.
-    connect(m_findBar, &FindBar::findNext, this, &Window::handleFindNext, Qt::QueuedConnection);
-    connect(m_findBar, &FindBar::findPrev, this, &Window::handleFindPrev, Qt::QueuedConnection);
+    connect(m_findBar, &FindBar::findNext, this, &Window::handleFindNextSearchKeyword, Qt::QueuedConnection);
+    connect(m_findBar, &FindBar::findPrev, this, &Window::handleFindPrevSearchKeyword, Qt::QueuedConnection);
     connect(m_findBar, &FindBar::removeSearchKeyword, this, &Window::handleRemoveSearchKeyword, Qt::QueuedConnection);
     connect(m_findBar, &FindBar::updateSearchKeyword, this, [ = ](QString file, QString keyword) {
         handleUpdateSearchKeyword(m_findBar, file, keyword);
@@ -1786,23 +1786,25 @@ void Window::handleBackToPosition(const QString &file, int row, int column, int 
     }
 }
 
-void Window::handleFindNext()
+void Window::handleFindNextSearchKeyword(const QString &keyword)
 {
     EditWrapper *wrapper = currentWrapper();
+    m_keywordForSearch = keyword;
     wrapper->textEditor()->saveMarkStatus();
-    wrapper->textEditor()->updateCursorKeywordSelection(m_searchKeyword, true);
-    wrapper->textEditor()->highlightKeywordInView(m_searchKeyword);
+    wrapper->textEditor()->updateCursorKeywordSelection(m_keywordForSearch, true);
+    wrapper->textEditor()->highlightKeywordInView(m_keywordForSearchAll);
     wrapper->textEditor()->renderAllSelections();
     wrapper->textEditor()->restoreMarkStatus();
     wrapper->textEditor()->updateLeftAreaWidget();
 }
 
-void Window::handleFindPrev()
+void Window::handleFindPrevSearchKeyword(const QString &keyword)
 {
     EditWrapper *wrapper = currentWrapper();
+    m_keywordForSearch = keyword;
     wrapper->textEditor()->saveMarkStatus();
-    wrapper->textEditor()->updateCursorKeywordSelection(m_searchKeyword, false);
-    wrapper->textEditor()->highlightKeywordInView(m_searchKeyword);
+    wrapper->textEditor()->updateCursorKeywordSelection(m_keywordForSearch, false);
+    wrapper->textEditor()->highlightKeywordInView(m_keywordForSearchAll);
     wrapper->textEditor()->renderAllSelections();
     wrapper->textEditor()->restoreMarkStatus();
     wrapper->textEditor()->updateLeftAreaWidget();
@@ -1855,7 +1857,7 @@ void Window::handleReplaceRest(const QString &replaceText, const QString &withTe
 void Window::handleReplaceSkip()
 {
     EditWrapper *wrapper = currentWrapper();
-    wrapper->textEditor()->updateCursorKeywordSelection(m_searchKeyword, true);
+    wrapper->textEditor()->updateCursorKeywordSelection(m_keywordForSearchAll, true);
     wrapper->textEditor()->renderAllSelections();
 }
 
@@ -1872,7 +1874,7 @@ void Window::handleUpdateSearchKeyword(QWidget *widget, const QString &file, con
 
         // Update input widget warning status along with keyword match situation.
         bool findKeyword = m_wrappers.value(file)->textEditor()->highlightKeyword(keyword, m_wrappers.value(file)->textEditor()->getPosition());
-        m_searchKeyword = keyword;
+        m_keywordForSearchAll = keyword;
         //    bool findKeyword = m_wrappers.value(file)->textEditor()->findKeywordForward(keyword);
         bool emptyKeyword = keyword.trimmed().isEmpty();
 
@@ -2385,7 +2387,7 @@ bool Window::findBarIsVisiable()
     }
 }
 
-QString Window::getSearchKeyword()
+QString Window::getKeywordForSearchAll()
 {
-    return m_searchKeyword;
+    return m_keywordForSearchAll;
 }
