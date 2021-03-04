@@ -41,9 +41,9 @@ Settings::Settings(QWidget *parent)
     : QObject(parent)
 {
     QString strConfigPath = QString("%1/%2/%3/config.conf")
-        .arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation))
-        .arg(qApp->organizationName())
-        .arg(qApp->applicationName());
+                            .arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation))
+                            .arg(qApp->organizationName())
+                            .arg(qApp->applicationName());
 
     m_backend = new QSettingBackend(strConfigPath);
 
@@ -51,27 +51,27 @@ Settings::Settings(QWidget *parent)
     settings->setBackend(m_backend);
 
     auto fontFamliy = settings->option("base.font.family");
-    connect(fontFamliy, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
+    connect(fontFamliy, &Dtk::Core::DSettingsOption::valueChanged, this, [ = ](QVariant value) {
         emit sigAdjustFont(value.toString());
     });
 
     auto fontSize = settings->option("base.font.size");
-    connect(fontSize, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
+    connect(fontSize, &Dtk::Core::DSettingsOption::valueChanged, this, [ = ](QVariant value) {
         emit sigAdjustFontSize(value.toInt());
     });
 
     auto wordWrap = settings->option("base.font.wordwrap");
-    connect(wordWrap, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
+    connect(wordWrap, &Dtk::Core::DSettingsOption::valueChanged, this, [ = ](QVariant value) {
         emit sigAdjustWordWrap(value.toBool());
     });
 
     auto showLineNumber = settings->option("base.font.showlinenumber");
-    connect(showLineNumber,&Dtk::Core::DSettingsOption::valueChanged,this,[=] (QVariant value){
+    connect(showLineNumber, &Dtk::Core::DSettingsOption::valueChanged, this, [ = ](QVariant value) {
         emit sigSetLineNumberShow(value.toBool());
     });
 
     auto bookmark = settings->option("base.font.showbookmark");
-    connect(bookmark, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
+    connect(bookmark, &Dtk::Core::DSettingsOption::valueChanged, this, [ = ](QVariant value) {
         emit sigAdjustBookmark(value.toBool());
     });
 
@@ -91,12 +91,12 @@ Settings::Settings(QWidget *parent)
         emit sigHightLightCurrentLine(value.toBool());
     });
     auto theme = settings->option("advance.editor.theme");
-    connect(theme, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
+    connect(theme, &Dtk::Core::DSettingsOption::valueChanged, this, [ = ](QVariant value) {
         //emit themeChanged(value.toString());
     });
 
     auto tabSpaceNumber = settings->option("advance.editor.tabspacenumber");
-    connect(tabSpaceNumber, &Dtk::Core::DSettingsOption::valueChanged, this, [=](QVariant value) {
+    connect(tabSpaceNumber, &Dtk::Core::DSettingsOption::valueChanged, this, [ = ](QVariant value) {
         emit sigAdjustTabSpaceNumber(value.toInt());
     });
 
@@ -106,21 +106,22 @@ Settings::Settings(QWidget *parent)
     keymapMap.insert("values", QStringList() << tr("Standard") << "Emacs" << tr("Customize"));
     keymap->setData("items", keymapMap);
 
-    connect(keymap, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
+    connect(keymap, &Dtk::Core::DSettingsOption::valueChanged, this, [ = ](QVariant value) {
         // Update all key's display value with user select keymap.
         updateAllKeysWithKeymap(value.toString());
     });
 
+    //only used by new window
     auto windowState = settings->option("advance.window.windowstate");
-    connect(windowState, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
-        emit sigChangeWindowSize(value.toString());
-    });
+//    connect(windowState, &Dtk::Core::DSettingsOption::valueChanged, this, [=] (QVariant value) {
+//        emit sigChangeWindowSize(value.toString());
+//    });
     QMap<QString, QVariant> windowStateMap;
     windowStateMap.insert("keys", QStringList() << "window_normal" << "window_maximum" << "fullscreen");
     windowStateMap.insert("values", QStringList() << tr("Normal") << tr("Maximum") << tr("Fullscreen"));
     windowState->setData("items", windowStateMap);
 
-    connect(settings, &Dtk::Core::DSettings::valueChanged, this, [=] (const QString &key, const QVariant &value) {
+    connect(settings, &Dtk::Core::DSettings::valueChanged, this, [ = ](const QString & key, const QVariant & value) {
 
         // Change keymap to customize once user change any keyshortcut.
         if (!m_bUserChangeKey && key.startsWith("shortcuts.") && key != "shortcuts.keymap.keymap" && !key.contains("_keymap_")) {
@@ -174,13 +175,13 @@ void Settings::dtkThemeWorkaround(QWidget *parent, const QString &theme)
 }
 
 //QWidget *Settings::createFontComBoBoxHandle(QObject *obj)
-QPair<QWidget*, QWidget*> Settings::createFontComBoBoxHandle(QObject *obj)
+QPair<QWidget *, QWidget *> Settings::createFontComBoBoxHandle(QObject *obj)
 {
     auto option = qobject_cast<DTK_CORE_NAMESPACE::DSettingsOption *>(obj);
 
     QComboBox *comboBox = new QComboBox;
     //QWidget *optionWidget = DSettingsWidgetFactory::createTwoColumWidget(option, comboBox);
-    QPair<QWidget*, QWidget*> optionWidget = DSettingsWidgetFactory::createStandardItem(QByteArray(), option, comboBox);
+    QPair<QWidget *, QWidget *> optionWidget = DSettingsWidgetFactory::createStandardItem(QByteArray(), option, comboBox);
 
     QFontDatabase fontDatabase;
     comboBox->addItems(fontDatabase.families());
@@ -194,11 +195,11 @@ QPair<QWidget*, QWidget*> Settings::createFontComBoBoxHandle(QObject *obj)
     // init.
     comboBox->setCurrentText(option->value().toString());
 
-    connect(option, &DSettingsOption::valueChanged, comboBox, [=] (QVariant var) {
+    connect(option, &DSettingsOption::valueChanged, comboBox, [ = ](QVariant var) {
         comboBox->setCurrentText(var.toString());
     });
 
-    option->connect(comboBox, &QComboBox::currentTextChanged, option, [=] (const QString &text) {
+    option->connect(comboBox, &QComboBox::currentTextChanged, option, [ = ](const QString & text) {
         option->setValue(text);
     });
 
@@ -218,11 +219,11 @@ QPair<QWidget *, QWidget *> Settings::createKeySequenceEditHandle(QObject *obj)
 
     // init.
     shortCutLineEdit->setKeySequence(QKeySequence(option->value().toString()));
-    QPair<QWidget*, QWidget*> optionWidget = DSettingsWidgetFactory::createStandardItem(QByteArray(), option, shortCutLineEdit);
+    QPair<QWidget *, QWidget *> optionWidget = DSettingsWidgetFactory::createStandardItem(QByteArray(), option, shortCutLineEdit);
 
     option->connect(shortCutLineEdit, &DKeySequenceEdit::editingFinished, [ = ](const QKeySequence & sequence) {
 
-        if(sequence.toString()== "Enter") qDebug()<<"==========Enter";
+        if (sequence.toString() == "Enter") qDebug() << "==========Enter";
 
 
         QString checkName = option->key();
@@ -232,8 +233,8 @@ QPair<QWidget *, QWidget *> Settings::createKeySequenceEditHandle(QObject *obj)
         QStringList keySplitList = option->key().split(".");
         keySplitList[1] = QString("%1_keymap_%2").arg(keySplitList[1]).arg(keymap->value().toString());
 
-        if (!instance()->checkShortcutValid(checkName,sequence.toString(),reason,bIsConflicts)) {
-            instance()->m_pDialog = instance()->createDialog(reason,"",bIsConflicts);
+        if (!instance()->checkShortcutValid(checkName, sequence.toString(), reason, bIsConflicts)) {
+            instance()->m_pDialog = instance()->createDialog(reason, "", bIsConflicts);
             instance()->m_pDialog->exec();
             shortCutLineEdit->setKeySequence(QKeySequence(instance()->settings->value(keySplitList.join(".")).toString()));
             keymap->setValue("emacs");
@@ -323,20 +324,20 @@ QPair<QWidget *, QWidget *> Settings::createKeySequenceEditHandle(QObject *obj)
         QString qstrSequence = sequence.toString();
 
         if (sequence.toString().contains("<")) {
-            qstrSequence.replace(qstrSequence.indexOf("<"),1,"&lt;");
+            qstrSequence.replace(qstrSequence.indexOf("<"), 1, "&lt;");
         }
 
-        if(sequence.toString().contains("Return")) {
-            qstrSequence.replace(qstrSequence.indexOf("Return"),6,"Enter");
+        if (sequence.toString().contains("Return")) {
+            qstrSequence.replace(qstrSequence.indexOf("Return"), 6, "Enter");
         }
 
         QString style = QString("<span style=\"color: rgba(255, 87, 54, 1);\">[%1]</span>").arg(qstrSequence);
 
         if (bIsConflicts || sequence.toString() == "Alt+M") {
             if (sequence.toString() == "Alt+M") {
-                instance()->m_pDialog = instance()->createDialog(tr("This shortcut conflicts with system shortcut %1").arg(style),"",bIsConflicts);
+                instance()->m_pDialog = instance()->createDialog(tr("This shortcut conflicts with system shortcut %1").arg(style), "", bIsConflicts);
             } else {
-                instance()->m_pDialog = instance()->createDialog(tr("This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately").arg(style),"",bIsConflicts);
+                instance()->m_pDialog = instance()->createDialog(tr("This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately").arg(style), "", bIsConflicts);
             }
 
             int mode = instance()->m_pDialog->exec();
@@ -437,12 +438,12 @@ void Settings::copyCustomizeKeysFromKeymap(QString keymap)
     m_bUserChangeKey = false;
 }
 
-bool Settings::checkShortcutValid(const QString &Name,QString Key, QString &Reason ,bool &bIsConflicts)
+bool Settings::checkShortcutValid(const QString &Name, QString Key, QString &Reason, bool &bIsConflicts)
 {
     Q_UNUSED(Name);
 
     if (Key.contains("<")) {
-        Key.replace(Key.indexOf("<"),1,"&lt;");
+        Key.replace(Key.indexOf("<"), 1, "&lt;");
     }
 
     QString style = QString("<span style=\"color: rgba(255, 87, 54, 1);\">[%1]</span>").arg(Key);
@@ -489,7 +490,7 @@ bool Settings::isShortcutConflict(const QString &Name, const QString &Key)
 
 DDialog *Settings::createDialog(const QString &title, const QString &content, const bool &bIsConflicts)
 {
-    DDialog *dialog = new DDialog(title,content, m_pSettingsDialog);
+    DDialog *dialog = new DDialog(title, content, m_pSettingsDialog);
     dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnBottomHint);
     dialog->setIcon(QIcon::fromTheme("deepin-editor"));
 

@@ -62,7 +62,7 @@ public:
     int getTabIndex(const QString &file);
     void activeTab(int index);
 
-    Tabbar* getTabbar();
+    Tabbar *getTabbar();
 
     void addTab(const QString &filepath, bool activeTab = false);
     void addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, const QString &qstrTruePath,
@@ -72,10 +72,10 @@ public:
 
     void clearBlack();
 
-    EditWrapper* createEditor();
-    EditWrapper* currentWrapper();
-    EditWrapper* wrapper(const QString &filePath);
-    TextEdit* getTextEditor(const QString &filepath);
+    EditWrapper *createEditor();
+    EditWrapper *currentWrapper();
+    EditWrapper *wrapper(const QString &filePath);
+    TextEdit *getTextEditor(const QString &filepath);
     void focusActiveEditor();
     void removeWrapper(const QString &filePath, bool isDelete = false);
 
@@ -95,7 +95,7 @@ public:
     void popupFindBar();
     void popupReplaceBar();
     void popupJumpLineBar();
-    void updateJumpLineBar(TextEdit* editor);
+    void updateJumpLineBar(TextEdit *editor);
     void popupSettingsDialog();
     void popupPrintDialog();
     void popupThemePanel();
@@ -125,7 +125,7 @@ public:
      * @param qstrTruePath　真实文件路径
      * @param bIsTemFile　是否修改
      */
-    void addTemFileTab(QString qstrPath,QString qstrName,QString qstrTruePath,bool bIsTemFile = false);
+    void addTemFileTab(QString qstrPath, QString qstrName, QString qstrTruePath, bool bIsTemFile = false);
 
     QMap<QString, EditWrapper *> getWrappers();
 
@@ -134,7 +134,7 @@ public:
 
     bool findBarIsVisiable();
     QString getSearchKeyword();
-	
+
 signals:
     void themeChanged(const QString themeName);
     void requestDragEnterEvent(QDragEnterEvent *);
@@ -191,13 +191,13 @@ private:
     void checkTabbarForReload();
 
 protected:
-    void resizeEvent(QResizeEvent* event) override;
+    void resizeEvent(QResizeEvent *event) override;
     void closeEvent(QCloseEvent *event) override;
     void hideEvent(QHideEvent *event) override;
     void keyPressEvent(QKeyEvent *keyEvent) override;
     void keyReleaseEvent(QKeyEvent *keyEvent) override;
     void dragEnterEvent(QDragEnterEvent *e) override;
-    void dropEvent(QDropEvent* event) override;
+    void dropEvent(QDropEvent *event) override;
 
 private:
     DBusDaemon::dbus *m_rootSaveDBus;
@@ -239,6 +239,7 @@ private:
     QStringList m_qlistTemFile;///<临时文件列表
 
     QProcess *m_shortcutViewProcess = nullptr;
+    bool m_needMoveToCenter = false;
 };
 
 #endif
