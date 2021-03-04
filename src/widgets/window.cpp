@@ -562,6 +562,7 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
                              "/com/deepin/daemon/Gesture", "com.deepin.daemon.Gesture",
                              "Event",
                              wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
+    connect(wrapper->textEditor(), &QPlainTextEdit::cursorPositionChanged, wrapper->textEditor(), &TextEdit::cursorPositionChanged);
 
 
     // add wrapper to this window.
