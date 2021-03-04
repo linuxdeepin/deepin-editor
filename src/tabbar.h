@@ -87,6 +87,7 @@ private:
     void handleTabDroped(int index, Qt::DropAction, QObject *target);
     void handleDragActionChanged(Qt::DropAction action);
     void onTabDrapStart();
+    void updateTabTooltip(int index, const QString &filePath);
 private:
     QStringList m_tabPaths;
     QStringList m_listOldTabPath;

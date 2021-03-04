@@ -71,6 +71,8 @@ public:
 
     void clearBlack();
 
+    QString blankFileDir() const;
+
     EditWrapper* createEditor();
     EditWrapper* currentWrapper();
     EditWrapper* wrapper(const QString &filePath);

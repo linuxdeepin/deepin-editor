@@ -618,6 +618,10 @@ void Window::restoreTab()
     }
 }
 
+QString Window::blankFileDir() const
+{
+    return m_blankFileDir;
+}
 
 EditWrapper *Window::createEditor()
 {

@@ -76,6 +76,7 @@ void Tabbar::addTabWithIndex(int index, const QString &filePath, const QString &
     QString trimmedName = tabName.simplified();
     DTabBar::insertTab(index, trimmedName);
     DTabBar::setCurrentIndex(index);
+    updateTabTooltip(index, filePath);
 }
 
 void Tabbar::closeTab(int index)
@@ -147,6 +148,7 @@ void Tabbar::updateTab(int index, const QString &filePath, const QString &tabNam
 {
     DTabBar::setTabText(index, tabName);
     m_tabPaths[index] = filePath;
+    updateTabTooltip(index, filePath);
 }
 
 void Tabbar::previousTab()
@@ -682,4 +684,10 @@ void Tabbar::onTabDrapStart()
       Window *window = static_cast<Window *>(this->window());
       window->setChildrenFocus(false);
       m_listOldTabPath = m_tabPaths;
+}
+
+void Tabbar::updateTabTooltip(int index, const QString &filePath)
+{
+    const QString &blankFileDir = static_cast<Window *>(this->window())->blankFileDir();
+    DTabBar::setTabToolTip(index, (QFileInfo(filePath).dir().absolutePath() == blankFileDir) ? "" : filePath);
 }
