@@ -1850,14 +1850,21 @@ void TextEdit::replaceAll(const QString &replaceText, const QString &withText)
     QTextCursor startCursor = textCursor();
     startCursor.beginEditBlock();
 
+    bool bReplaceSucceed = false;
     while (1) {
         cursor = document()->find(replaceText, cursor, flags);
 
         if (!cursor.isNull()) {
             cursor.insertText(withText);
+            bReplaceSucceed = true;
         } else {
             break;
         }
+    }
+
+    //有替换，文档被修改则设置带*，后续添加撤销重做栈
+    if (bReplaceSucceed) {
+        this->m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
     }
 
     startCursor.endEditBlock();
@@ -1887,7 +1894,8 @@ void TextEdit::replaceNext(const QString &replaceText, const QString &withText)
     }
     cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, replaceText.size());
-    cursor.insertText(withText);
+    //cursor.insertText(withText);
+    insertSelectTextEx(cursor, withText);
 
     // Update cursor.
     setTextCursor(cursor);
@@ -1913,14 +1921,21 @@ void TextEdit::replaceRest(const QString &replaceText, const QString &withText)
     QTextCursor startCursor = textCursor();
     startCursor.beginEditBlock();
 
+    bool bReplaceSucceed = false;
     while (1) {
         cursor = document()->find(replaceText, cursor, flags);
 
         if (!cursor.isNull()) {
             cursor.insertText(withText);
+            bReplaceSucceed = true;
         } else {
             break;
         }
+    }
+
+    //有替换，文档被修改则设置带*，后续添加撤销重做栈
+    if (bReplaceSucceed) {
+        m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
     }
 
     startCursor.endEditBlock();
