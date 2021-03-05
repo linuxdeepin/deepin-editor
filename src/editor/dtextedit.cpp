@@ -576,7 +576,6 @@ void TextEdit::popRightMenu(QPoint pos)
     if (!document()->isEmpty()) {
         m_rightMenu->addAction(m_findAction);
         if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
-            m_rightMenu->addAction(m_columnEditAction);
             m_rightMenu->addAction(m_replaceAction);
         }
         m_rightMenu->addAction(m_jumpLineAction);
@@ -715,6 +714,9 @@ void TextEdit::popRightMenu(QPoint pos)
         }
 
         m_rightMenu->addSeparator();
+        if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
+            m_rightMenu->addAction(m_columnEditAction);
+        }
         m_rightMenu->addMenu(m_colorMarkMenu);
     }
 
