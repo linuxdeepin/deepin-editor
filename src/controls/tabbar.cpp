@@ -70,9 +70,11 @@ void Tabbar::addTab(const QString &filePath, const QString &tabName, const QStri
 void Tabbar::addTabWithIndex(int index, const QString &filePath, const QString &tabName, const QString &tipPath)
 {
     // FIXME(rekols): do not insert duplicate values.
-    // if (!m_tabPaths.contains(filePath)) {
-        m_tabPaths.insert(index, filePath);
-        m_tabTruePaths.insert(index, tipPath);
+    if (m_tabPaths.contains(filePath)) {
+        return;
+    }
+    m_tabPaths.insert(index, filePath);
+    m_tabTruePaths.insert(index, tipPath);
     // }
     //除去空白符 梁卫东 ２０２０－０８－２６　１４：４９：１５
     QString trimmedName = tabName.simplified();
