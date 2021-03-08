@@ -2024,6 +2024,7 @@ void Window::slotLoadContentTheme(DGuiApplicationHelper::ColorType themeType)
 
     for (auto wrapper : m_wrappers) {
         wrapper->textEditor()->setEditPalette(qstrColor, qstrColor);
+        wrapper->OnUpdateHighlighter();
     }
 
     qstrColor = palette().color(QPalette::Active, QPalette::ButtonText).name();
