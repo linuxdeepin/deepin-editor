@@ -5,9 +5,6 @@ InsertTextUndoCommand::InsertTextUndoCommand(QTextCursor textcursor, QString tex
     m_textCursor(textcursor),
     m_sInsertText(text)
 {
-    if(m_textCursor.hasSelection()) m_textCursor.clearSelection();
-    //qDebug()<<m_textCursor.selectedText();
-    //m_textCursor.clearSelection();
 
 }
 
@@ -21,10 +18,11 @@ InsertTextUndoCommand::InsertTextUndoCommand(QList<QTextEdit::ExtraSelection> &s
 
 void InsertTextUndoCommand::undo()
 {
-    if(m_ColumnEditSelections.isEmpty()){
+    if (m_ColumnEditSelections.isEmpty()) {
+        m_textCursor.setPosition(m_endPostion);
+        m_textCursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor, m_endPostion-m_beginPostion);
         m_textCursor.deleteChar();
-        qDebug()<<"InsertTextUndoCommand[undo]:"<<m_sInsertText<<m_sInsertText.length();
-    }else {
+    } else {
         int cnt = m_ColumnEditSelections.size();
         for (int i = 0; i < cnt; i++) {
             m_ColumnEditSelections[i].cursor.deleteChar();
@@ -36,14 +34,14 @@ void InsertTextUndoCommand::undo()
 
 void InsertTextUndoCommand::redo()
 {
-    if(m_ColumnEditSelections.isEmpty()){
+    if (m_ColumnEditSelections.isEmpty()) {
         m_textCursor.insertText(m_sInsertText);
-        m_textCursor.movePosition(QTextCursor::Left,QTextCursor::KeepAnchor,m_sInsertText.length());
-        qDebug()<<"InsertTextUndoCommand[redo]:"<<m_sInsertText<<m_sInsertText.length();
-    }else {
+        m_textCursor.movePosition(QTextCursor::PreviousCharacter,QTextCursor::KeepAnchor,m_sInsertText.length());
+        m_beginPostion = m_textCursor.selectionStart();
+        m_endPostion = m_textCursor.selectionEnd();
+    } else {
         int cnt = m_ColumnEditSelections.size();
         for (int i = 0; i < cnt; i++) {
-            //m_ColumnEditSelections[i].cursor.deleteChar();
             m_ColumnEditSelections[i].cursor.insertText(m_sInsertText);
             m_ColumnEditSelections[i].cursor.movePosition(QTextCursor::Left,QTextCursor::KeepAnchor,m_sInsertText.length());
         }
