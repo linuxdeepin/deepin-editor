@@ -56,6 +56,40 @@
 #include <QFileDialog>
 #endif
 
+#define PRINT_FLAG 2
+
+/*!
+ * \~chinese \brief printPage 绘制每一页文本纸张到打印机
+ * \~chinese \param index 纸张索引
+ * \~chinese \param doc 文本文件
+ * \~chinese \param body 范围大小
+ * \~chinese \param pageCountBox 绘制页码的范围
+ */
+static void printPage(int index, QPainter *painter, const QTextDocument *doc,
+                      const QRectF &body, const QRectF &pageCountBox)
+{
+    painter->save();
+
+    painter->translate(body.left(), body.top() - (index - 1) * body.height());
+    const QRectF view(0, (index - 1) * body.height(), body.width(), body.height());
+
+    QAbstractTextDocumentLayout *layout = doc->documentLayout();
+    QAbstractTextDocumentLayout::PaintContext ctx;
+
+    painter->setFont(QFont(doc->defaultFont()));
+    const QRectF box = pageCountBox.translated(0, view.top());
+    const QString pageString = QString::number(index);
+    painter->drawText(box, Qt::AlignRight, pageString);
+
+    painter->setClipRect(view);
+    ctx.clip = view;
+    ctx.palette.setColor(QPalette::Text, Qt::black);
+
+    layout->draw(painter, ctx);
+
+    painter->restore();
+}
+
 Window::Window(DMainWindow *parent)
     : DMainWindow(parent),
       m_centralWidget(new QWidget),
@@ -1309,22 +1343,20 @@ void Window::popupPrintDialog()
     const QString &fileDir = QFileInfo(filePath).dir().absolutePath();
 
     //适配打印接口2.0，dtk版本大于或等于5.4.7才放开最新的2.0打印预览接口
-#if (DTK_VERSION_MAJOR > 5 \
-    || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR > 4) \
-    || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 4 && DTK_VERSION_PATCH >= 10))
-
+#if (DTK_VERSION_MAJOR > 5 || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR > 4) || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 4 && DTK_VERSION_PATCH >= 10))
     DPrinter printer(QPrinter::HighResolution);
-    DPrintPreviewDialog preview(this);
+    preview = new DPrintPreviewDialog(this);
 
     if (fileDir == m_blankFileDir) {
-        preview.setDocName(QString(m_tabbar->currentName()));
+        preview->setDocName(QString(m_tabbar->currentName()));
     } else {
-        preview.setDocName(QString(QFileInfo(filePath).baseName()));
+        preview->setDocName(QString(QFileInfo(filePath).baseName()));
     }
-
-    connect(&preview, QOverload<DPrinter *>::of(&DPrintPreviewDialog::paintRequested), this, [ = ](DPrinter * printer) {
-        currentWrapper()->textEditor()->print(printer);
-    });
+    preview->setAsynPreview(PRINT_FLAG);
+    connect(preview, QOverload<DPrinter *, const QVector<int> &>::of(&DPrintPreviewDialog::paintRequested),
+            this, [=](DPrinter *_printer, const QVector<int> &pageRange) {
+                this->doPrint(_printer, pageRange);
+            });
 #else
     QPrinter printer(QPrinter::HighResolution);
     QPrintPreviewDialog preview(&printer, this);
@@ -1499,6 +1531,92 @@ void Window::displayShortcuts()
 
     connect(m_shortcutViewProcess, SIGNAL(finished(int)), m_shortcutViewProcess, SLOT(deleteLater()));
 }
+
+/*!
+ * \~chinese \brief Window::doPrint 调用打印预览，将文本分块输出给打印机
+ * \~chinese \param pageRange 打印预览请求的页码列表
+ */
+#if (DTK_VERSION_MAJOR > 5 || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR > 4) || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 4 && DTK_VERSION_PATCH >= 10))
+void Window::doPrint(DPrinter *printer, const QVector<int> &pageRange)
+{
+    //如果打印预览请求的页码为空，则直接返回
+    if (pageRange.isEmpty()) {
+        return;
+    }
+    //对文本进行分页处理
+    QTextDocument *doc = currentWrapper()->textEditor()->document();
+    QPainter p(printer);
+    // Check that there is a valid device to print to.
+    if (!p.isActive())
+        return;
+    doc = doc->clone(doc);
+
+    QTextOption opt = doc->defaultTextOption();
+    opt.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+    doc->setDefaultTextOption(opt);
+
+    (void)doc->documentLayout(); // make sure that there is a layout
+
+    QColor background = currentWrapper()->textEditor()->palette().color(QPalette::Base);
+    bool backgroundIsDark = background.value() < 128;
+
+    for (QTextBlock srcBlock = currentWrapper()->textEditor()->document()->firstBlock(), dstBlock = doc->firstBlock();
+         srcBlock.isValid() && dstBlock.isValid();
+         srcBlock = srcBlock.next(), dstBlock = dstBlock.next()) {
+        QVector<QTextLayout::FormatRange> formatList = srcBlock.layout()->formats();
+        if (backgroundIsDark) {
+            // adjust syntax highlighting colors for better contrast
+            for (int i = formatList.count() - 1; i >= 0; --i) {
+                QTextCharFormat &format = formatList[i].format;
+                if (format.background().color() == background) {
+                    QBrush brush = format.foreground();
+                    QColor color = brush.color();
+                    int h, s, v, a;
+                    color.getHsv(&h, &s, &v, &a);
+                    color.setHsv(h, s, qMin(128, v), a);
+                    brush.setColor(color);
+                    format.setForeground(brush);
+                }
+                format.setBackground(Qt::white);
+            }
+        }
+
+        dstBlock.layout()->setFormats(formatList);
+    }
+
+    QAbstractTextDocumentLayout *layout = doc->documentLayout();
+    layout->setPaintDevice(p.device());
+
+    int dpiy = p.device()->logicalDpiY();
+    int margin = (int)((2 / 2.54) * dpiy); // 2 cm margins
+
+    QTextFrameFormat fmt = doc->rootFrame()->frameFormat();
+    fmt.setMargin(margin);
+    doc->rootFrame()->setFrameFormat(fmt);
+
+    QRectF pageRect(printer->pageRect());
+    QRectF body = QRectF(0, 0, pageRect.width(), pageRect.height());
+    QFontMetrics fontMetrics(doc->defaultFont(), p.device());
+    QRectF titleBox(margin,
+                    body.bottom() - margin
+                        + fontMetrics.height()
+                        - 6 * dpiy / 72.0,
+                    body.width() - 2 * margin,
+                    fontMetrics.height());
+    doc->setPageSize(body.size());
+    //输出总页码给到打印预览
+    preview->setAsynPreview(doc->pageCount());
+
+    for (int i = 0; i < pageRange.count(); ++i) {
+        //根据打印预览请求的页码，渲染请求的资源
+        if (pageRange[i] > doc->pageCount())
+            continue;
+        printPage(pageRange[i], &p, doc, body, titleBox);
+        if (i != pageRange.count() - 1)
+            printer->newPage();
+    }
+}
+#endif
 
 void Window::backupFile()
 {

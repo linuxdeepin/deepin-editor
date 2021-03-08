@@ -38,7 +38,8 @@
 #include "../common/dbusinterface.h"
 #include <DMainWindow>
 #include <DStackedWidget>
-
+#include <qprintpreviewdialog.h>
+#include <dprintpreviewdialog.h>
 
 DWIDGET_USE_NAMESPACE
 
@@ -106,6 +107,7 @@ public:
     void remberPositionRestore();
 
     void displayShortcuts();
+    void doPrint(DPrinter *printer, const QVector<int> &pageRange);
 
     /**
      * @brief backupFile 备份文件
@@ -242,6 +244,7 @@ private:
 
     QProcess *m_shortcutViewProcess = nullptr;
     bool m_needMoveToCenter = false;
+    DPrintPreviewDialog *preview = nullptr;
 };
 
 #endif
