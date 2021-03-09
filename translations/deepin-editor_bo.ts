@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="bo">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="bo" version="2.1">
 <context>
     <name>BottomBar</name>
     <message>
@@ -31,57 +29,58 @@
 <context>
     <name>EditWrapper</name>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="177"/>
-        <location filename="../src/editor/editwrapper.cpp" line="235"/>
-        <location filename="../src/editor/editwrapper.cpp" line="281"/>
-        <location filename="../src/editor/editwrapper.cpp" line="462"/>
+        <location filename="../src/editor/editwrapper.cpp" line="174"/>
+        <location filename="../src/editor/editwrapper.cpp" line="232"/>
+        <location filename="../src/editor/editwrapper.cpp" line="278"/>
+        <location filename="../src/editor/editwrapper.cpp" line="463"/>
         <source>Save</source>
         <translation>ཉར་ཚགས།</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="276"/>
+        <location filename="../src/editor/editwrapper.cpp" line="273"/>
         <source>Do you want to save this file?</source>
         <translation>ཁྱེད་ཀྱིས་ཡིག་ཆ་འདི་ཉར་ཚགས་བྱེད་དམ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="233"/>
-        <location filename="../src/editor/editwrapper.cpp" line="279"/>
+        <location filename="../src/editor/editwrapper.cpp" line="230"/>
+        <location filename="../src/editor/editwrapper.cpp" line="276"/>
         <source>Cancel</source>
         <translation>འདོར་བ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="230"/>
+        <location filename="../src/editor/editwrapper.cpp" line="227"/>
         <source>Encoding changed. Do you want to save the file now?</source>
         <translation>ཡིག་ཆའི་ཨང་སྒྲིག་བཟོ་བཅོས་བྱས་ཟིན་པས། སྔོན་ལ་ཉར་ཚགས་བྱེད་དམ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="280"/>
+        <location filename="../src/editor/editwrapper.cpp" line="231"/>
+        <location filename="../src/editor/editwrapper.cpp" line="277"/>
         <source>Discard</source>
         <translation>མི་ཉར།</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="529"/>
+        <location filename="../src/editor/editwrapper.cpp" line="530"/>
         <source>File removed on the disk. Save it now?</source>
         <translation>སྡུད་སྡེར་ནང་གི་ཐོག་མའི་ཡིག་ཆ་འབུད་ཟིན་པས། དེ་ཉར་རམ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="532"/>
+        <location filename="../src/editor/editwrapper.cpp" line="533"/>
         <source>File has changed on disk. Reload?</source>
         <translation>སྡུད་སྡེར་ནང་གི་ཐོག་མའི་ཡིག་ཆ་བཟོ་བཅོས་བྱས་ཟིན་པས། བསྐྱར་འཇུག་བྱེད་དམ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="554"/>
+        <location filename="../src/editor/editwrapper.cpp" line="555"/>
         <location filename="../src/widgets/bottombar.cpp" line="60"/>
         <source>INSERT</source>
         <translation>ནང་འཇུག</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="557"/>
+        <location filename="../src/editor/editwrapper.cpp" line="558"/>
         <source>OVERWRITE</source>
         <translation>འགེབས་པ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="560"/>
+        <location filename="../src/editor/editwrapper.cpp" line="561"/>
         <source>R/O</source>
         <translation>ཀློག་ཙམ།</translation>
     </message>
@@ -133,12 +132,12 @@
         <translation>ཡིག་ཆ་རྩོམ་སྒྲུག་ཆས།</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="179"/>
-        <location filename="../src/editor/editwrapper.cpp" line="464"/>
-        <location filename="../src/widgets/window.cpp" line="991"/>
-        <location filename="../src/widgets/window.cpp" line="1009"/>
-        <location filename="../src/widgets/window.cpp" line="1089"/>
-        <location filename="../src/widgets/window.cpp" line="1104"/>
+        <location filename="../src/editor/editwrapper.cpp" line="176"/>
+        <location filename="../src/editor/editwrapper.cpp" line="465"/>
+        <location filename="../src/widgets/window.cpp" line="932"/>
+        <location filename="../src/widgets/window.cpp" line="950"/>
+        <location filename="../src/widgets/window.cpp" line="1027"/>
+        <location filename="../src/widgets/window.cpp" line="1042"/>
         <source>Encoding</source>
         <translation>ཨང་སྒྲིག</translation>
     </message>
@@ -176,7 +175,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="31"/>
         <location filename="../src/controls/settingsdialog.cpp" line="107"/>
-        <location filename="../src/widgets/window.cpp" line="1447"/>
+        <location filename="../src/widgets/window.cpp" line="1386"/>
         <source>Window</source>
         <translation>སྒེའུ་ཁུང་།</translation>
     </message>
@@ -593,7 +592,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="116"/>
         <source>Highlight current line</source>
-        <translation type="unfinished"></translation>
+        <translation>མིག་སྔའི་མཐོ་ཚད་གསལ་བ།</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="117"/>
@@ -603,97 +602,97 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="120"/>
         <source>Unicode</source>
-        <translation type="unfinished"></translation>
+        <translation>Unicode</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="121"/>
         <source>WesternEuropean</source>
-        <translation type="unfinished"></translation>
+        <translation>ཡོ་རོབ་ནུབ་མའི་སྐད་ཁོངས།</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="122"/>
         <source>CentralEuropean</source>
-        <translation type="unfinished"></translation>
+        <translation>ཡོ་རོབ་བར་མའི་སྐད་ཁོངས།</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="123"/>
         <source>Baltic</source>
-        <translation type="unfinished"></translation>
+        <translation>པོ་ལོའུ་ཏི་ཧའེ་ཡི་སྐད་ཡིག</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="124"/>
         <source>Cyrillic</source>
-        <translation type="unfinished"></translation>
+        <translation>ཞི་ལེར་གྱི་ཡི་གེ།</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="125"/>
         <source>Arabic</source>
-        <translation type="unfinished"></translation>
+        <translation>ཨ་རབ་ཀྱི་སྐད།</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="130"/>
         <source>Celtic</source>
-        <translation type="unfinished"></translation>
+        <translation>ཁའེ་ཐེའི་སྐད།</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="131"/>
         <source>SouthEasternEuropean</source>
-        <translation type="unfinished"></translation>
+        <translation>ཡོ་རོབ་ཤར་ལྷོའི་སྐད་ཁོངས།</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="126"/>
         <source>Greek</source>
-        <translation type="unfinished"></translation>
+        <translation>གྷི་རིག་གི་སྐད།</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="127"/>
         <source>Hebrew</source>
-        <translation type="unfinished"></translation>
+        <translation>ཞི་པོ་ལའེ་ཡི་སྐད།</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="132"/>
         <source>ChineseSimplified</source>
-        <translation type="unfinished"></translation>
+        <translation>ཟོར་ཡང་རྒྱ་ཡིག</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="133"/>
         <source>ChineseTraditional</source>
-        <translation type="unfinished"></translation>
+        <translation>ཟོར་ལྕིའི་རྒྱ་ཡིག</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="134"/>
         <source>Japanese</source>
-        <translation type="unfinished"></translation>
+        <translation>ཉི་ཧོང་སྐད།</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="135"/>
         <source>Korean</source>
-        <translation type="unfinished"></translation>
+        <translation>ཁོ་རེ་ཡའི་སྐད།</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="129"/>
         <source>Thai</source>
-        <translation type="unfinished"></translation>
+        <translation>ཐེ་ལན་གྱི་སྐད།</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="128"/>
         <source>Turkish</source>
-        <translation type="unfinished"></translation>
+        <translation>ཐུར་ཁེའི་སྐད།</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="136"/>
         <source>Vietnamese</source>
-        <translation type="unfinished"></translation>
+        <translation>ཝེ་ཐེ་ནམ་གྱི་སྐད།</translation>
     </message>
     <message>
-        <location filename="../src/startmanager.cpp" line="714"/>
+        <location filename="../src/startmanager.cpp" line="718"/>
         <source>File not saved</source>
         <translation>ཡིག་ཆ་ཉར་ཚགས་བྱས་མེད།</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1010"/>
-        <location filename="../src/widgets/window.cpp" line="1090"/>
-        <location filename="../src/widgets/window.cpp" line="1105"/>
+        <location filename="../src/widgets/window.cpp" line="951"/>
+        <location filename="../src/widgets/window.cpp" line="1028"/>
+        <location filename="../src/widgets/window.cpp" line="1043"/>
         <source>Line Endings</source>
         <translation>སྟར་བརྗེ་རྟགས།</translation>
     </message>
@@ -735,9 +734,9 @@
     <name>S:</name>
     <message>
         <location filename="../third/libiconv-1.16/src/iconv.c" line="103"/>
-        <source></source>
+        <source/>
         <comment>The first line of the short usage message.</comment>
-        <translation></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -753,48 +752,48 @@
         <translation>རང་སྒྲུབ།</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="121"/>
+        <location filename="../src/common/settings.cpp" line="120"/>
         <source>Normal</source>
         <translation>རྒྱུན་གཏན་སྒེའུ་ཁུང་།</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="121"/>
+        <location filename="../src/common/settings.cpp" line="120"/>
         <source>Maximum</source>
         <translation>ཆེ་སྒྱུར།</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="121"/>
+        <location filename="../src/common/settings.cpp" line="120"/>
         <source>Fullscreen</source>
         <translation>ཡོལ་གང་།</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="338"/>
+        <location filename="../src/common/settings.cpp" line="337"/>
         <source>This shortcut conflicts with system shortcut %1</source>
         <translation>མྱུར་མཐེབ་འདི་དང་མ་ལག་གི་མྱུར་མཐེབ་%1འགལ་ཟླ་ཡོད།</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="340"/>
+        <location filename="../src/common/settings.cpp" line="339"/>
         <source>This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately</source>
         <translation>མྱུར་མཐེབ་འདི་དང་%1འགལ་ཟླ་ཡོད་པས། བརྗེ་པོ་མནན་ནས་མྱུར་མཐེབ་འདི་ལམ་སེང་སྤྱོད་གོ་ཆོད།</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="455"/>
-        <location filename="../src/common/settings.cpp" line="463"/>
+        <location filename="../src/common/settings.cpp" line="454"/>
+        <location filename="../src/common/settings.cpp" line="462"/>
         <source>The shortcut %1 is invalid, please set another one.</source>
         <translation>%1ནི་ནུས་མེད་མྱུར་མཐེབ་ཡིན་པས། ཡང་བསྐྱར་སྒྲིག་བཀོད་གནང་རྒྱུ།</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="498"/>
+        <location filename="../src/common/settings.cpp" line="497"/>
         <source>Cancel</source>
         <translation>འདོར་བ།</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="499"/>
+        <location filename="../src/common/settings.cpp" line="498"/>
         <source>Replace</source>
         <translation>བརྗེ་བ།</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="501"/>
+        <location filename="../src/common/settings.cpp" line="500"/>
         <source>OK</source>
         <translation>གཏན་འཁེལ།</translation>
     </message>
@@ -802,7 +801,7 @@
 <context>
     <name>StartManager</name>
     <message>
-        <location filename="../src/startmanager.cpp" line="335"/>
+        <location filename="../src/startmanager.cpp" line="333"/>
         <source>Untitled %1</source>
         <translation>མིང་མེད་པའི་ཡིག་ཚགས་%1</translation>
     </message>
@@ -810,32 +809,32 @@
 <context>
     <name>Tabbar</name>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="518"/>
+        <location filename="../src/controls/tabbar.cpp" line="468"/>
         <source>Close tab</source>
         <translation>ཁ་བྱང་ངོས་ཁ་རྒྱག</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="519"/>
+        <location filename="../src/controls/tabbar.cpp" line="469"/>
         <source>Close other tabs</source>
         <translation>ཁ་བྱང་ངོས་གཞན་དག་ཁ་རྒྱག</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="520"/>
+        <location filename="../src/controls/tabbar.cpp" line="470"/>
         <source>More options</source>
         <translation>ཁ་རྒྱག་ཐབས་དེ་ལས་མང་།</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="521"/>
+        <location filename="../src/controls/tabbar.cpp" line="471"/>
         <source>Close tabs to the left</source>
         <translation>གཡོན་ཕྱོགས་ཀྱི་ཁ་བྱང་ངོས་ཚང་མ་ཁ་རྒྱག</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="522"/>
+        <location filename="../src/controls/tabbar.cpp" line="472"/>
         <source>Close tabs to the right</source>
         <translation>གཡས་ཕྱོགས་ཀྱི་ཁ་བྱང་ངོས་ཚང་མ་ཁ་རྒྱག</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="523"/>
+        <location filename="../src/controls/tabbar.cpp" line="473"/>
         <source>Close unmodified tabs</source>
         <translation>བཟོ་བཅོས་བྱས་མེད་པའི་ཁ་བྱང་ངོས་ཚང་མ་ཁ་རྒྱག</translation>
     </message>
@@ -843,210 +842,210 @@
 <context>
     <name>TextEdit</name>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="218"/>
+        <location filename="../src/editor/dtextedit.cpp" line="213"/>
         <source>Undo</source>
         <translation>མི་བྱེད།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="219"/>
+        <location filename="../src/editor/dtextedit.cpp" line="214"/>
         <source>Redo</source>
         <translation>བསྐྱར་བྱེད།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="220"/>
+        <location filename="../src/editor/dtextedit.cpp" line="215"/>
         <source>Cut</source>
         <translation>དྲས་གཏུབ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="221"/>
+        <location filename="../src/editor/dtextedit.cpp" line="216"/>
         <source>Copy</source>
         <translation>པར་སློག</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="222"/>
+        <location filename="../src/editor/dtextedit.cpp" line="217"/>
         <source>Paste</source>
         <translation>སྦྱར་བ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="223"/>
+        <location filename="../src/editor/dtextedit.cpp" line="218"/>
         <source>Delete</source>
         <translation>སུབ་པ། </translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="224"/>
+        <location filename="../src/editor/dtextedit.cpp" line="219"/>
         <source>Select All</source>
         <translation>ཡོངས་འདེམས།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="225"/>
-        <location filename="../src/widgets/window.cpp" line="405"/>
+        <location filename="../src/editor/dtextedit.cpp" line="220"/>
+        <location filename="../src/widgets/window.cpp" line="345"/>
         <source>Find</source>
         <translation>འཚོལ་བ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="226"/>
-        <location filename="../src/widgets/window.cpp" line="406"/>
+        <location filename="../src/editor/dtextedit.cpp" line="221"/>
+        <location filename="../src/widgets/window.cpp" line="346"/>
         <source>Replace</source>
         <translation>བརྗེ་བ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="227"/>
+        <location filename="../src/editor/dtextedit.cpp" line="222"/>
         <source>Go to Line</source>
         <translation>འཕྲེད་སྟར་དུ་མཆོང་བ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="228"/>
+        <location filename="../src/editor/dtextedit.cpp" line="223"/>
         <source>Turn on Read-Only mode</source>
         <translation>ཀློག་ཙམ་དཔེ་དབྱིབས་ཁ་ཕྱེ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="229"/>
+        <location filename="../src/editor/dtextedit.cpp" line="224"/>
         <source>Turn off Read-Only mode</source>
         <translation>ཀློག་ཙམ་དཔེ་དབྱིབས་ཁ་རྒྱག</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="230"/>
+        <location filename="../src/editor/dtextedit.cpp" line="225"/>
         <source>Fullscreen</source>
         <translation>ཡོལ་གང་།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="231"/>
+        <location filename="../src/editor/dtextedit.cpp" line="226"/>
         <source>Exit fullscreen</source>
         <translation>ཡོལ་གང་ནས་ཕྱིར་འབུད་པ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="232"/>
+        <location filename="../src/editor/dtextedit.cpp" line="227"/>
         <source>Display in file manager</source>
         <translation>ཡིག་ཆ་དོ་དམ་ཆས་ཁྲོད་དུ་མངོན་པ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="233"/>
-        <location filename="../src/editor/dtextedit.cpp" line="293"/>
+        <location filename="../src/editor/dtextedit.cpp" line="228"/>
+        <location filename="../src/editor/dtextedit.cpp" line="286"/>
         <source>Add Comment</source>
         <translation>མཆན་སྣོན་པ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="234"/>
+        <location filename="../src/editor/dtextedit.cpp" line="229"/>
         <source>Text to Speech</source>
         <translation>ཀློག་འདོན་བྱ་རྒྱུ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="235"/>
+        <location filename="../src/editor/dtextedit.cpp" line="230"/>
         <source>Stop reading</source>
-        <translation type="unfinished"></translation>
+        <translation>ཀློག་མཚམས་འཇོག་པ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="236"/>
+        <location filename="../src/editor/dtextedit.cpp" line="231"/>
         <source>Speech to Text</source>
         <translation>སྐད་སྒྲའི་དཔོད་བྲིས།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="237"/>
+        <location filename="../src/editor/dtextedit.cpp" line="232"/>
         <source>Translate</source>
         <translation>ཡིག་སྒྱུར།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="238"/>
+        <location filename="../src/editor/dtextedit.cpp" line="233"/>
         <source>Column Mode</source>
         <translation>གཞུང་སྟར་རྩོམ་སྒྲིག་རྣམ་པ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="239"/>
+        <location filename="../src/editor/dtextedit.cpp" line="234"/>
         <source>Add bookmark</source>
-        <translation type="unfinished"></translation>
+        <translation>ཤོག་འཛར་སྣོན་པ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="240"/>
+        <location filename="../src/editor/dtextedit.cpp" line="235"/>
         <source>Remove Bookmark</source>
         <translation>ཤོག་འཛར་འདོར་བ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="241"/>
+        <location filename="../src/editor/dtextedit.cpp" line="236"/>
         <source>Previous bookmark</source>
-        <translation type="unfinished"></translation>
+        <translation>ཤོག་འཛར་གོང་མ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="242"/>
+        <location filename="../src/editor/dtextedit.cpp" line="237"/>
         <source>Next bookmark</source>
-        <translation type="unfinished"></translation>
+        <translation>ཤོག་འཛར་རྗེས་མ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="243"/>
+        <location filename="../src/editor/dtextedit.cpp" line="238"/>
         <source>Remove All Bookmarks</source>
         <translation>ཤོག་འཛར་ཚང་མ་འདོར་བ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="244"/>
+        <location filename="../src/editor/dtextedit.cpp" line="239"/>
         <source>Fold All</source>
         <translation>བང་རིམ་ཚང་མ་ལྟེབ་པ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="245"/>
+        <location filename="../src/editor/dtextedit.cpp" line="240"/>
         <source>Fold Current Level</source>
         <translation>མིག་སྔའི་བང་རིམ་ལྟེབ་པ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="246"/>
+        <location filename="../src/editor/dtextedit.cpp" line="241"/>
         <source>Unfold All</source>
         <translation>བང་རིམ་ཚང་མ་བཀྲམ་པ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="247"/>
+        <location filename="../src/editor/dtextedit.cpp" line="242"/>
         <source>Unfold Current Level</source>
         <translation>མིག་སྔའི་བང་རིམ་བཀྲམ་པ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="252"/>
+        <location filename="../src/editor/dtextedit.cpp" line="247"/>
         <source>Color Mark</source>
         <translation>ཚོས་གཞིའི་རྟགས།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="253"/>
+        <location filename="../src/editor/dtextedit.cpp" line="248"/>
         <source>Clear All Marks</source>
         <translation>རྟགས་ཚང་མ་གཙང་སེལ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="254"/>
+        <location filename="../src/editor/dtextedit.cpp" line="249"/>
         <source>Clear Last Mark</source>
         <translation>གོང་གི་རྟགས་གཙང་སེལ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="269"/>
+        <location filename="../src/editor/dtextedit.cpp" line="263"/>
         <source>Mark</source>
         <translation>རྟགས་སྒྲིག་བཀོད།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="287"/>
+        <location filename="../src/editor/dtextedit.cpp" line="280"/>
         <source>Mark All</source>
         <translation>རྟགས་ཚང་མ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="294"/>
+        <location filename="../src/editor/dtextedit.cpp" line="287"/>
         <source>Remove Comment</source>
         <translation>མཆན་འདོར་བ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="427"/>
+        <location filename="../src/editor/dtextedit.cpp" line="420"/>
         <source>Press ALT and click lines to edit in column mode</source>
         <translation>ALT+ཙི་གུའི་འདེམས་པ་སྤྱད་ནས་གཞུང་སྟར་རྩོམ་སྒྲིག་རྣམ་པ་བརྗེ་རྒྱུ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="495"/>
+        <location filename="../src/editor/dtextedit.cpp" line="488"/>
         <source>Change Case</source>
         <translation>ཆེ་བྲིས་ཆུང་བྲིས་བརྗེ་བ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="496"/>
+        <location filename="../src/editor/dtextedit.cpp" line="489"/>
         <source>Upper Case</source>
         <translation>ཆེ་བྲིས།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="497"/>
+        <location filename="../src/editor/dtextedit.cpp" line="490"/>
         <source>Lower Case</source>
         <translation>ཆུང་བྲིས།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="498"/>
+        <location filename="../src/editor/dtextedit.cpp" line="491"/>
         <source>Capitalize</source>
         <translation>མགོ་ཡིག་ཆེ་བྲིས།</translation>
     </message>
@@ -1056,36 +1055,44 @@
         <translation>མེད།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1341"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1308"/>
         <source>Selected line(s) copied</source>
-        <translation>བདམས་ཟིན་པའི་སྟར་པ་འདི་དྲས་སྦྱར་པང་དུ་པར་སློག་བྱས་ཟིན།</translation>
+        <translation>བདམས་ཟིན་པའི་སྟར་པ(རུ་སྟར)འདི་དྲས་སྦྱར་པང་དུ་པར་སློག་བྱས་ཟིན།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1347"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1314"/>
         <source>Current line copied</source>
         <translation>མིག་སྔའི་སྟར་པ་འདི་དྲས་སྦྱར་པང་དུ་པར་སློག་བྱས་ཟིན།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1386"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1353"/>
         <source>Selected line(s) clipped</source>
-        <translation>བདམས་ཟིན་པའི་སྟར་པ་འདི་དྲས་སྦྱར་པང་དུ་དྲས་གཏུབ་བྱས་ཟིན།</translation>
+        <translation>བདམས་ཟིན་པའི་སྟར་པ(རུ་སྟར)འདི་དྲས་སྦྱར་པང་དུ་དྲས་གཏུབ་བྱས་ཟིན།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1392"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1359"/>
         <source>Current line clipped</source>
         <translation>མིག་སྔའི་སྟར་པ་འདི་དྲས་སྦྱར་པང་དུ་དྲས་གཏུབ་བྱས་ཟིན།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3225"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3097"/>
         <source>Read-Only mode is off</source>
         <translation>ཀློག་ཙམ་དཔེ་དབྱིབས་ཁ་བརྒྱབ་ཟིན།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3231"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3239"/>
-        <location filename="../src/editor/dtextedit.cpp" line="5449"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3103"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3111"/>
+        <location filename="../src/editor/dtextedit.cpp" line="5328"/>
         <source>Read-Only mode is on</source>
         <translation>ཀློག་ཙམ་དཔེ་དབྱིབས་ཁ་ཕྱེ་ཟིན།</translation>
+    </message>
+</context>
+<context>
+    <name>Toast</name>
+    <message>
+        <location filename="../src/controls/toast.cpp" line="38"/>
+        <source>Reload</source>
+        <translation>བསྐྱར་འཇུག</translation>
     </message>
 </context>
 <context>
@@ -1099,134 +1106,135 @@
 <context>
     <name>Window</name>
     <message>
+        <location filename="../src/controls/toast.cpp" line="39"/>
         <location filename="../src/controls/warningnotices.cpp" line="17"/>
-        <location filename="../src/widgets/window.cpp" line="401"/>
+        <location filename="../src/widgets/window.cpp" line="341"/>
         <source>Save as</source>
         <translation>གཞན་ཉར།</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="397"/>
+        <location filename="../src/widgets/window.cpp" line="337"/>
         <source>New window</source>
         <translation>སྒེའུ་ཁུང་གསར་པ།</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="398"/>
+        <location filename="../src/widgets/window.cpp" line="338"/>
         <source>New tab</source>
         <translation>ཁ་བྱང་ངོས་གསར།</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="399"/>
+        <location filename="../src/widgets/window.cpp" line="339"/>
         <source>Open file</source>
         <translation>ཡིག་ཆ་ཁ་ཕྱེ།</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="400"/>
-        <location filename="../src/widgets/window.cpp" line="2120"/>
+        <location filename="../src/widgets/window.cpp" line="340"/>
+        <location filename="../src/widgets/window.cpp" line="1958"/>
         <source>Save</source>
         <translation>ཉར་ཚགས།</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="402"/>
+        <location filename="../src/widgets/window.cpp" line="342"/>
         <source>Print</source>
         <translation>པར་འདེབས།</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="403"/>
+        <location filename="../src/widgets/window.cpp" line="343"/>
         <source>Switch theme</source>
         <translation>བརྗོད་བྱ་གཙོ་བོ་བརྗེ་བ།</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="404"/>
-        <location filename="../src/widgets/window.cpp" line="1507"/>
+        <location filename="../src/widgets/window.cpp" line="344"/>
+        <location filename="../src/widgets/window.cpp" line="1446"/>
         <source>Settings</source>
         <translation>སྒྲིག་བཀོད།</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="519"/>
-        <location filename="../src/widgets/window.cpp" line="2262"/>
+        <location filename="../src/widgets/window.cpp" line="459"/>
+        <location filename="../src/widgets/window.cpp" line="2074"/>
         <source>Read-Only</source>
         <translation>ཀློག་ཙམ།</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="535"/>
+        <location filename="../src/widgets/window.cpp" line="476"/>
         <source>You do not have permission to open %1</source>
         <translation>ཁྱེད་ལ་%1ཁ་ཕྱེ་བའི་དབང་ཚད་མེད།</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="570"/>
+        <location filename="../src/widgets/window.cpp" line="511"/>
         <source>Invalid file: %1</source>
         <translation>ཕན་མེད་ཡིག་ཆ། %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="674"/>
+        <location filename="../src/widgets/window.cpp" line="614"/>
         <source>Do you want to save this file?</source>
         <translation>ཁྱེད་ཀྱིས་ཡིག་ཆ་འདི་ཉར་ཚགས་བྱེད་དམ།</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="921"/>
+        <location filename="../src/widgets/window.cpp" line="866"/>
         <source>You do not have permission to save %1</source>
         <translation>ཁྱེད་ལ་%1ཉར་བའི་དབང་ཚད་མེད།</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="942"/>
+        <location filename="../src/widgets/window.cpp" line="883"/>
         <source>Saved successfully</source>
         <translation>ཡིག་ཆ་ཉར་ཟིན།</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="638"/>
-        <location filename="../src/widgets/window.cpp" line="958"/>
+        <location filename="../src/widgets/window.cpp" line="577"/>
+        <location filename="../src/widgets/window.cpp" line="899"/>
         <source>Do you want to save as another?</source>
         <translation>ཁྱེད་ཀྱིས་ཡིག་ཆ་གཞན་དག་ཏུ་གཞན་ཉར་བྱེད་དམ།</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="989"/>
-        <location filename="../src/widgets/window.cpp" line="1046"/>
-        <location filename="../src/widgets/window.cpp" line="1087"/>
+        <location filename="../src/widgets/window.cpp" line="930"/>
+        <location filename="../src/widgets/window.cpp" line="984"/>
+        <location filename="../src/widgets/window.cpp" line="1025"/>
         <source>Save File</source>
         <translation>ཉར་བ།</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1048"/>
+        <location filename="../src/widgets/window.cpp" line="986"/>
         <source>Encoding</source>
         <translation>ཨང་སྒྲིག</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1236"/>
+        <location filename="../src/widgets/window.cpp" line="1171"/>
         <source>Read-Only mode is on</source>
         <translation>ཀློག་ཙམ་དཔེ་དབྱིབས་ཁ་ཕྱེ་ཟིན།</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1406"/>
+        <location filename="../src/widgets/window.cpp" line="1345"/>
         <source>Current location remembered</source>
         <translation>མིག་སྔའི་གནས་ས་ངེས་ཟིན།</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1457"/>
+        <location filename="../src/widgets/window.cpp" line="1396"/>
         <source>Ctrl+&apos;=&apos;</source>
         <translation>Ctrl+&apos;=&apos;</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1460"/>
+        <location filename="../src/widgets/window.cpp" line="1399"/>
         <source>Ctrl+&apos;-&apos;</source>
         <translation>Ctrl+&apos;-&apos;</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1489"/>
+        <location filename="../src/widgets/window.cpp" line="1428"/>
         <source>Editor</source>
         <translation>རྩོམ་སྒྲིག</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1801"/>
+        <location filename="../src/widgets/window.cpp" line="1656"/>
         <source>Untitled %1</source>
         <translation>མིང་མེད་པའི་ཡིག་ཚགས་%1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="2118"/>
+        <location filename="../src/widgets/window.cpp" line="1956"/>
         <source>Cancel</source>
         <translation>འདོར་བ།</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="2119"/>
+        <location filename="../src/widgets/window.cpp" line="1957"/>
         <source>Discard</source>
         <translation>མི་ཉར།</translation>
     </message>

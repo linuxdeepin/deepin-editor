@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ca">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ca" version="2.1">
 <context>
     <name>BottomBar</name>
     <message>
@@ -31,57 +29,58 @@
 <context>
     <name>EditWrapper</name>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="177"/>
-        <location filename="../src/editor/editwrapper.cpp" line="235"/>
-        <location filename="../src/editor/editwrapper.cpp" line="281"/>
-        <location filename="../src/editor/editwrapper.cpp" line="462"/>
+        <location filename="../src/editor/editwrapper.cpp" line="174"/>
+        <location filename="../src/editor/editwrapper.cpp" line="232"/>
+        <location filename="../src/editor/editwrapper.cpp" line="278"/>
+        <location filename="../src/editor/editwrapper.cpp" line="463"/>
         <source>Save</source>
         <translation>Desa</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="276"/>
+        <location filename="../src/editor/editwrapper.cpp" line="273"/>
         <source>Do you want to save this file?</source>
         <translation>Voleu desar aquest fitxer?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="233"/>
-        <location filename="../src/editor/editwrapper.cpp" line="279"/>
+        <location filename="../src/editor/editwrapper.cpp" line="230"/>
+        <location filename="../src/editor/editwrapper.cpp" line="276"/>
         <source>Cancel</source>
         <translation>Cancel·la</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="230"/>
+        <location filename="../src/editor/editwrapper.cpp" line="227"/>
         <source>Encoding changed. Do you want to save the file now?</source>
         <translation>Ha canviat la codificació. Voleu desar el fitxer ara?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="280"/>
+        <location filename="../src/editor/editwrapper.cpp" line="231"/>
+        <location filename="../src/editor/editwrapper.cpp" line="277"/>
         <source>Discard</source>
         <translation>Descarta</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="529"/>
+        <location filename="../src/editor/editwrapper.cpp" line="530"/>
         <source>File removed on the disk. Save it now?</source>
         <translation>El fitxer s&apos;ha eliminat del disc. El voleu desar ara?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="532"/>
+        <location filename="../src/editor/editwrapper.cpp" line="533"/>
         <source>File has changed on disk. Reload?</source>
         <translation>El fitxer ha canviat al disc. El torno a carregar?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="554"/>
+        <location filename="../src/editor/editwrapper.cpp" line="555"/>
         <location filename="../src/widgets/bottombar.cpp" line="60"/>
         <source>INSERT</source>
         <translation>INSEREIX</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="557"/>
+        <location filename="../src/editor/editwrapper.cpp" line="558"/>
         <source>OVERWRITE</source>
         <translation>SOBREESCRIU</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="560"/>
+        <location filename="../src/editor/editwrapper.cpp" line="561"/>
         <source>R/O</source>
         <translation>N/L</translation>
     </message>
@@ -133,12 +132,12 @@
         <translation>Editor de text</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="179"/>
-        <location filename="../src/editor/editwrapper.cpp" line="464"/>
-        <location filename="../src/widgets/window.cpp" line="991"/>
-        <location filename="../src/widgets/window.cpp" line="1009"/>
-        <location filename="../src/widgets/window.cpp" line="1089"/>
-        <location filename="../src/widgets/window.cpp" line="1104"/>
+        <location filename="../src/editor/editwrapper.cpp" line="176"/>
+        <location filename="../src/editor/editwrapper.cpp" line="465"/>
+        <location filename="../src/widgets/window.cpp" line="932"/>
+        <location filename="../src/widgets/window.cpp" line="950"/>
+        <location filename="../src/widgets/window.cpp" line="1027"/>
+        <location filename="../src/widgets/window.cpp" line="1042"/>
         <source>Encoding</source>
         <translation>Codificació</translation>
     </message>
@@ -176,7 +175,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="31"/>
         <location filename="../src/controls/settingsdialog.cpp" line="107"/>
-        <location filename="../src/widgets/window.cpp" line="1447"/>
+        <location filename="../src/widgets/window.cpp" line="1386"/>
         <source>Window</source>
         <translation>Finestra</translation>
     </message>
@@ -686,14 +685,14 @@
         <translation>Vietnamita</translation>
     </message>
     <message>
-        <location filename="../src/startmanager.cpp" line="714"/>
+        <location filename="../src/startmanager.cpp" line="718"/>
         <source>File not saved</source>
         <translation>Fitxer no desat</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1010"/>
-        <location filename="../src/widgets/window.cpp" line="1090"/>
-        <location filename="../src/widgets/window.cpp" line="1105"/>
+        <location filename="../src/widgets/window.cpp" line="951"/>
+        <location filename="../src/widgets/window.cpp" line="1028"/>
+        <location filename="../src/widgets/window.cpp" line="1043"/>
         <source>Line Endings</source>
         <translation>Finals de línia</translation>
     </message>
@@ -735,9 +734,9 @@
     <name>S:</name>
     <message>
         <location filename="../third/libiconv-1.16/src/iconv.c" line="103"/>
-        <source></source>
+        <source/>
         <comment>The first line of the short usage message.</comment>
-        <translation></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -753,48 +752,48 @@
         <translation>Personalitza</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="121"/>
+        <location filename="../src/common/settings.cpp" line="120"/>
         <source>Normal</source>
         <translation>Normal</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="121"/>
+        <location filename="../src/common/settings.cpp" line="120"/>
         <source>Maximum</source>
         <translation>Màxim</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="121"/>
+        <location filename="../src/common/settings.cpp" line="120"/>
         <source>Fullscreen</source>
         <translation>Pantalla completa</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="338"/>
+        <location filename="../src/common/settings.cpp" line="337"/>
         <source>This shortcut conflicts with system shortcut %1</source>
         <translation>Aquesta drecera entra en conflicte amb la drecera del sistema %1</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="340"/>
+        <location filename="../src/common/settings.cpp" line="339"/>
         <source>This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately</source>
         <translation>Aquesta tecla de drecera té conflicte amb %1. Cliqueu a Reemplaça perquè aquesta drecera tingui efecte immediatament.</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="455"/>
-        <location filename="../src/common/settings.cpp" line="463"/>
+        <location filename="../src/common/settings.cpp" line="454"/>
+        <location filename="../src/common/settings.cpp" line="462"/>
         <source>The shortcut %1 is invalid, please set another one.</source>
         <translation>La drecera %1 no és vàlida. Establiu-ne una altra.</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="498"/>
+        <location filename="../src/common/settings.cpp" line="497"/>
         <source>Cancel</source>
         <translation>Cancel·la</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="499"/>
+        <location filename="../src/common/settings.cpp" line="498"/>
         <source>Replace</source>
         <translation>Reemplaça</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="501"/>
+        <location filename="../src/common/settings.cpp" line="500"/>
         <source>OK</source>
         <translation>D&apos;acord</translation>
     </message>
@@ -802,7 +801,7 @@
 <context>
     <name>StartManager</name>
     <message>
-        <location filename="../src/startmanager.cpp" line="335"/>
+        <location filename="../src/startmanager.cpp" line="333"/>
         <source>Untitled %1</source>
         <translation>Sense títol: %1</translation>
     </message>
@@ -810,32 +809,32 @@
 <context>
     <name>Tabbar</name>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="518"/>
+        <location filename="../src/controls/tabbar.cpp" line="468"/>
         <source>Close tab</source>
         <translation>Tanca la pestanya</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="519"/>
+        <location filename="../src/controls/tabbar.cpp" line="469"/>
         <source>Close other tabs</source>
         <translation>Tanca les altres pestanyes</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="520"/>
+        <location filename="../src/controls/tabbar.cpp" line="470"/>
         <source>More options</source>
         <translation>Més opcions</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="521"/>
+        <location filename="../src/controls/tabbar.cpp" line="471"/>
         <source>Close tabs to the left</source>
         <translation>Tanca les pestanyes de l&apos;esquerra</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="522"/>
+        <location filename="../src/controls/tabbar.cpp" line="472"/>
         <source>Close tabs to the right</source>
         <translation>Tanca les pestanyes de la dreta</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="523"/>
+        <location filename="../src/controls/tabbar.cpp" line="473"/>
         <source>Close unmodified tabs</source>
         <translation>Tanca les pestanyes no modificades</translation>
     </message>
@@ -843,210 +842,210 @@
 <context>
     <name>TextEdit</name>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="218"/>
+        <location filename="../src/editor/dtextedit.cpp" line="213"/>
         <source>Undo</source>
         <translation>Desfés</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="219"/>
+        <location filename="../src/editor/dtextedit.cpp" line="214"/>
         <source>Redo</source>
         <translation>Refés</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="220"/>
+        <location filename="../src/editor/dtextedit.cpp" line="215"/>
         <source>Cut</source>
         <translation>Retalla</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="221"/>
+        <location filename="../src/editor/dtextedit.cpp" line="216"/>
         <source>Copy</source>
         <translation>Copia</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="222"/>
+        <location filename="../src/editor/dtextedit.cpp" line="217"/>
         <source>Paste</source>
         <translation>Enganxa</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="223"/>
+        <location filename="../src/editor/dtextedit.cpp" line="218"/>
         <source>Delete</source>
         <translation>Suprimeix</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="224"/>
+        <location filename="../src/editor/dtextedit.cpp" line="219"/>
         <source>Select All</source>
         <translation>Selecciona-ho tot</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="225"/>
-        <location filename="../src/widgets/window.cpp" line="405"/>
+        <location filename="../src/editor/dtextedit.cpp" line="220"/>
+        <location filename="../src/widgets/window.cpp" line="345"/>
         <source>Find</source>
         <translation>Troba</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="226"/>
-        <location filename="../src/widgets/window.cpp" line="406"/>
+        <location filename="../src/editor/dtextedit.cpp" line="221"/>
+        <location filename="../src/widgets/window.cpp" line="346"/>
         <source>Replace</source>
         <translation>Reemplaça</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="227"/>
+        <location filename="../src/editor/dtextedit.cpp" line="222"/>
         <source>Go to Line</source>
         <translation>Ves a la línia</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="228"/>
+        <location filename="../src/editor/dtextedit.cpp" line="223"/>
         <source>Turn on Read-Only mode</source>
         <translation>Activa el mode només de lectura</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="229"/>
+        <location filename="../src/editor/dtextedit.cpp" line="224"/>
         <source>Turn off Read-Only mode</source>
         <translation>Desactiva el mode només de lectura</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="230"/>
+        <location filename="../src/editor/dtextedit.cpp" line="225"/>
         <source>Fullscreen</source>
         <translation>Pantalla completa</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="231"/>
+        <location filename="../src/editor/dtextedit.cpp" line="226"/>
         <source>Exit fullscreen</source>
         <translation>Surt de la pantalla completa</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="232"/>
+        <location filename="../src/editor/dtextedit.cpp" line="227"/>
         <source>Display in file manager</source>
         <translation>Mostra-ho al gestor de fitxers</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="233"/>
-        <location filename="../src/editor/dtextedit.cpp" line="293"/>
+        <location filename="../src/editor/dtextedit.cpp" line="228"/>
+        <location filename="../src/editor/dtextedit.cpp" line="286"/>
         <source>Add Comment</source>
         <translation>Afegeix-hi un comentari</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="234"/>
+        <location filename="../src/editor/dtextedit.cpp" line="229"/>
         <source>Text to Speech</source>
         <translation>Text a veu</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="235"/>
+        <location filename="../src/editor/dtextedit.cpp" line="230"/>
         <source>Stop reading</source>
         <translation>Atura la lectura</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="236"/>
+        <location filename="../src/editor/dtextedit.cpp" line="231"/>
         <source>Speech to Text</source>
         <translation>Veu a text</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="237"/>
+        <location filename="../src/editor/dtextedit.cpp" line="232"/>
         <source>Translate</source>
         <translation>Tradueix</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="238"/>
+        <location filename="../src/editor/dtextedit.cpp" line="233"/>
         <source>Column Mode</source>
         <translation>Mode de columna</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="239"/>
+        <location filename="../src/editor/dtextedit.cpp" line="234"/>
         <source>Add bookmark</source>
         <translation>Afegeix-hi un marcador</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="240"/>
+        <location filename="../src/editor/dtextedit.cpp" line="235"/>
         <source>Remove Bookmark</source>
         <translation>Elimina el marcador</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="241"/>
+        <location filename="../src/editor/dtextedit.cpp" line="236"/>
         <source>Previous bookmark</source>
         <translation>Marcador anterior</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="242"/>
+        <location filename="../src/editor/dtextedit.cpp" line="237"/>
         <source>Next bookmark</source>
         <translation>Marcador següent</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="243"/>
+        <location filename="../src/editor/dtextedit.cpp" line="238"/>
         <source>Remove All Bookmarks</source>
         <translation>Elimina tots els marcadors</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="244"/>
+        <location filename="../src/editor/dtextedit.cpp" line="239"/>
         <source>Fold All</source>
         <translation>Plega-ho tot</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="245"/>
+        <location filename="../src/editor/dtextedit.cpp" line="240"/>
         <source>Fold Current Level</source>
         <translation>Plega el nivell actual</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="246"/>
+        <location filename="../src/editor/dtextedit.cpp" line="241"/>
         <source>Unfold All</source>
         <translation>Desplega-ho tot</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="247"/>
+        <location filename="../src/editor/dtextedit.cpp" line="242"/>
         <source>Unfold Current Level</source>
         <translation>Desplega el nivell actual</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="252"/>
+        <location filename="../src/editor/dtextedit.cpp" line="247"/>
         <source>Color Mark</source>
         <translation>Marca de color</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="253"/>
+        <location filename="../src/editor/dtextedit.cpp" line="248"/>
         <source>Clear All Marks</source>
         <translation>Neteja totes les marques</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="254"/>
+        <location filename="../src/editor/dtextedit.cpp" line="249"/>
         <source>Clear Last Mark</source>
         <translation>Neteja la darrera marca</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="269"/>
+        <location filename="../src/editor/dtextedit.cpp" line="263"/>
         <source>Mark</source>
         <translation>Marca</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="287"/>
+        <location filename="../src/editor/dtextedit.cpp" line="280"/>
         <source>Mark All</source>
         <translation>Marca-ho tot</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="294"/>
+        <location filename="../src/editor/dtextedit.cpp" line="287"/>
         <source>Remove Comment</source>
         <translation>Elimina el comentari</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="427"/>
+        <location filename="../src/editor/dtextedit.cpp" line="420"/>
         <source>Press ALT and click lines to edit in column mode</source>
         <translation>Premeu ALT i feu clic a les línies per editar-lo en mode columna</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="495"/>
+        <location filename="../src/editor/dtextedit.cpp" line="488"/>
         <source>Change Case</source>
         <translation>Canvia&apos;n la caixa</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="496"/>
+        <location filename="../src/editor/dtextedit.cpp" line="489"/>
         <source>Upper Case</source>
         <translation>Majúscules</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="497"/>
+        <location filename="../src/editor/dtextedit.cpp" line="490"/>
         <source>Lower Case</source>
         <translation>Minúscules</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="498"/>
+        <location filename="../src/editor/dtextedit.cpp" line="491"/>
         <source>Capitalize</source>
         <translation>Posa en majúscules</translation>
     </message>
@@ -1056,36 +1055,44 @@
         <translation>Cap</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1341"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1308"/>
         <source>Selected line(s) copied</source>
         <translation>S&apos;han copiat les línies seleccionades.</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1347"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1314"/>
         <source>Current line copied</source>
         <translation>S&apos;ha copiat la línia actual.</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1386"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1353"/>
         <source>Selected line(s) clipped</source>
         <translation>S&apos;han retallat les línies seleccionades.</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1392"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1359"/>
         <source>Current line clipped</source>
         <translation>S&apos;ha retallat la línia actual.</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3225"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3097"/>
         <source>Read-Only mode is off</source>
         <translation>Mode de lectura desactivat</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3231"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3239"/>
-        <location filename="../src/editor/dtextedit.cpp" line="5449"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3103"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3111"/>
+        <location filename="../src/editor/dtextedit.cpp" line="5328"/>
         <source>Read-Only mode is on</source>
         <translation>Mode de lectura activat</translation>
+    </message>
+</context>
+<context>
+    <name>Toast</name>
+    <message>
+        <location filename="../src/controls/toast.cpp" line="38"/>
+        <source>Reload</source>
+        <translation>Torna-ho a carregar</translation>
     </message>
 </context>
 <context>
@@ -1099,134 +1106,135 @@
 <context>
     <name>Window</name>
     <message>
+        <location filename="../src/controls/toast.cpp" line="39"/>
         <location filename="../src/controls/warningnotices.cpp" line="17"/>
-        <location filename="../src/widgets/window.cpp" line="401"/>
+        <location filename="../src/widgets/window.cpp" line="341"/>
         <source>Save as</source>
         <translation>Desa com a</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="397"/>
+        <location filename="../src/widgets/window.cpp" line="337"/>
         <source>New window</source>
         <translation>Finestra nova</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="398"/>
+        <location filename="../src/widgets/window.cpp" line="338"/>
         <source>New tab</source>
         <translation>Pestanya nova</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="399"/>
+        <location filename="../src/widgets/window.cpp" line="339"/>
         <source>Open file</source>
         <translation>Obre un fitxer</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="400"/>
-        <location filename="../src/widgets/window.cpp" line="2120"/>
+        <location filename="../src/widgets/window.cpp" line="340"/>
+        <location filename="../src/widgets/window.cpp" line="1958"/>
         <source>Save</source>
         <translation>Desa</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="402"/>
+        <location filename="../src/widgets/window.cpp" line="342"/>
         <source>Print</source>
         <translation>Imprimeix</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="403"/>
+        <location filename="../src/widgets/window.cpp" line="343"/>
         <source>Switch theme</source>
         <translation>Canvia el tema</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="404"/>
-        <location filename="../src/widgets/window.cpp" line="1507"/>
+        <location filename="../src/widgets/window.cpp" line="344"/>
+        <location filename="../src/widgets/window.cpp" line="1446"/>
         <source>Settings</source>
         <translation>Paràmetres</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="519"/>
-        <location filename="../src/widgets/window.cpp" line="2262"/>
+        <location filename="../src/widgets/window.cpp" line="459"/>
+        <location filename="../src/widgets/window.cpp" line="2074"/>
         <source>Read-Only</source>
         <translation>Només de lectura</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="535"/>
+        <location filename="../src/widgets/window.cpp" line="476"/>
         <source>You do not have permission to open %1</source>
         <translation>No teniu permís per obrir %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="570"/>
+        <location filename="../src/widgets/window.cpp" line="511"/>
         <source>Invalid file: %1</source>
         <translation>Fitxer no vàlid: %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="674"/>
+        <location filename="../src/widgets/window.cpp" line="614"/>
         <source>Do you want to save this file?</source>
         <translation>Voleu desar aquest fitxer?</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="921"/>
+        <location filename="../src/widgets/window.cpp" line="866"/>
         <source>You do not have permission to save %1</source>
         <translation>No teniu permís per desar %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="942"/>
+        <location filename="../src/widgets/window.cpp" line="883"/>
         <source>Saved successfully</source>
         <translation>S&apos;ha desat correctament</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="638"/>
-        <location filename="../src/widgets/window.cpp" line="958"/>
+        <location filename="../src/widgets/window.cpp" line="577"/>
+        <location filename="../src/widgets/window.cpp" line="899"/>
         <source>Do you want to save as another?</source>
         <translation>Voleu desar-lo com si fos un altre fitxer?</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="989"/>
-        <location filename="../src/widgets/window.cpp" line="1046"/>
-        <location filename="../src/widgets/window.cpp" line="1087"/>
+        <location filename="../src/widgets/window.cpp" line="930"/>
+        <location filename="../src/widgets/window.cpp" line="984"/>
+        <location filename="../src/widgets/window.cpp" line="1025"/>
         <source>Save File</source>
         <translation>Desa el fitxer</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1048"/>
+        <location filename="../src/widgets/window.cpp" line="986"/>
         <source>Encoding</source>
         <translation>Codificació</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1236"/>
+        <location filename="../src/widgets/window.cpp" line="1171"/>
         <source>Read-Only mode is on</source>
         <translation>Mode de lectura activat</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1406"/>
+        <location filename="../src/widgets/window.cpp" line="1345"/>
         <source>Current location remembered</source>
         <translation>Es recorda la ubicació actual.</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1457"/>
+        <location filename="../src/widgets/window.cpp" line="1396"/>
         <source>Ctrl+&apos;=&apos;</source>
         <translation>Ctrl + =</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1460"/>
+        <location filename="../src/widgets/window.cpp" line="1399"/>
         <source>Ctrl+&apos;-&apos;</source>
         <translation>Ctrl + -</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1489"/>
+        <location filename="../src/widgets/window.cpp" line="1428"/>
         <source>Editor</source>
         <translation>Editor</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1801"/>
+        <location filename="../src/widgets/window.cpp" line="1656"/>
         <source>Untitled %1</source>
         <translation>Sense títol: %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="2118"/>
+        <location filename="../src/widgets/window.cpp" line="1956"/>
         <source>Cancel</source>
         <translation>Cancel·la</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="2119"/>
+        <location filename="../src/widgets/window.cpp" line="1957"/>
         <source>Discard</source>
         <translation>Descarta</translation>
     </message>
