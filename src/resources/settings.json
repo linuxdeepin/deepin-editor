@@ -531,7 +531,7 @@
                             "key": "redo",
                             "name": "Redo",
                             "type": "keySequenceEdit",
-                            "default":  "Ctrl+Shift+Z"
+                            "default":  "Ctrl+Y"
                         },
                         {
                             "key": "mark",
@@ -1014,7 +1014,7 @@
                             "key": "redo",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Ctrl+Shift+Z"
+                            "default":  "Ctrl+Y"
                         },
                         {
                             "key": "mark",
@@ -1388,7 +1388,7 @@
                             "key": "paste",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Ctrl+Shift+Z"
+                            "default":  "Ctrl+Y"
                         },
                         {
                             "key": "transposechar",
@@ -1978,7 +1978,7 @@
                             "key": "redo",
                             "hide" : true,
                             "reset" : false,
-                            "default":  "Ctrl+Shift+Z"
+                            "default":  "Ctrl+Y"
                         },
                         {
                             "key": "mark",
