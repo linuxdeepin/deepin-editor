@@ -1342,21 +1342,26 @@ void Window::popupPrintDialog()
     const QString &filePath = currentWrapper()->textEditor()->getFilePath();
     const QString &fileDir = QFileInfo(filePath).dir().absolutePath();
 
-    //适配打印接口2.0，dtk版本大于或等于5.4.7才放开最新的2.0打印预览接口
-#if (DTK_VERSION_MAJOR > 5 || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR > 4) || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 4 && DTK_VERSION_PATCH >= 10))
+    //适配打印接口2.0，dtk版本大于或等于5.4.10才放开最新的2.0打印预览接口
+#if (DTK_VERSION_MAJOR > 5 \
+    || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR > 4) \
+    || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 4 && DTK_VERSION_PATCH >= 10))
     DPrinter printer(QPrinter::HighResolution);
-    preview = new DPrintPreviewDialog(this);
+    m_pPreview = new DPrintPreviewDialog(this);
+    m_pPreview->setAttribute(Qt::WA_DeleteOnClose);
 
     if (fileDir == m_blankFileDir) {
-        preview->setDocName(QString(m_tabbar->currentName()));
+        m_pPreview->setDocName(QString(m_tabbar->currentName()));
     } else {
-        preview->setDocName(QString(QFileInfo(filePath).baseName()));
+        m_pPreview->setDocName(QString(QFileInfo(filePath).baseName()));
     }
-    preview->setAsynPreview(PRINT_FLAG);
-    connect(preview, QOverload<DPrinter *, const QVector<int> &>::of(&DPrintPreviewDialog::paintRequested),
+    m_pPreview->setAsynPreview(PRINT_FLAG);
+    connect(m_pPreview, QOverload<DPrinter *, const QVector<int> &>::of(&DPrintPreviewDialog::paintRequested),
             this, [=](DPrinter *_printer, const QVector<int> &pageRange) {
                 this->doPrint(_printer, pageRange);
             });
+
+    m_pPreview->exec();
 #else
     QPrinter printer(QPrinter::HighResolution);
     QPrintPreviewDialog preview(&printer, this);
@@ -1373,9 +1378,9 @@ void Window::popupPrintDialog()
     connect(&preview, &QPrintPreviewDialog::paintRequested, this, [ = ](QPrinter * printer) {
         currentWrapper()->textEditor()->print(printer);
     });
-#endif
 
     preview.exec();
+#endif
 }
 
 void Window::popupThemePanel()
@@ -1605,7 +1610,7 @@ void Window::doPrint(DPrinter *printer, const QVector<int> &pageRange)
                     fontMetrics.height());
     doc->setPageSize(body.size());
     //输出总页码给到打印预览
-    preview->setAsynPreview(doc->pageCount());
+    m_pPreview->setAsynPreview(doc->pageCount());
 
     for (int i = 0; i < pageRange.count(); ++i) {
         //根据打印预览请求的页码，渲染请求的资源

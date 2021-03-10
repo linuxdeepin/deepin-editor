@@ -244,7 +244,7 @@ private:
 
     QProcess *m_shortcutViewProcess = nullptr;
     bool m_needMoveToCenter = false;
-    DPrintPreviewDialog *preview = nullptr;
+    DPrintPreviewDialog *m_pPreview {nullptr};
 };
 
 #endif
