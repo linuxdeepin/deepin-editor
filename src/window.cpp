@@ -1540,9 +1540,6 @@ void Window::displayShortcuts()
 void Window::setChildrenFocus(bool ok)
 {
     QMap<QString, EditWrapper *>::Iterator it = m_wrappers.begin();
-    for(;it != m_wrappers.end();it++){
-        it.value()->bottomBar()->setChildrenFocus(ok);
-    }
 
     if(ok){
         DIconButton *addButton = m_tabbar->findChild<DIconButton *>("AddButton");
