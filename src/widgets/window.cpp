@@ -1193,14 +1193,14 @@ void Window::popupFindBar()
         return;
     }
 
-    currentWrapper()->bottomBar()->updateSize(59);
+    currentWrapper()->bottomBar()->updateSize(m_findBar->height() + 8);
 
     if (m_replaceBar->isVisible()) {
         m_replaceBar->hide();
     }
     m_findBar->raise();
-    m_findBar->move(QPoint(10, height() - 59));
     m_findBar->show();
+    m_findBar->move(QPoint(4, height() - m_findBar->height() - 4));
 
     QString text = wrapper->textEditor()->textCursor().selectedText();
     int row = wrapper->textEditor()->getCurrentLine();
@@ -1243,15 +1243,15 @@ void Window::popupReplaceBar()
 //        return;
 //    }
 
-    currentWrapper()->bottomBar()->updateSize(59);
+    currentWrapper()->bottomBar()->updateSize(m_replaceBar->height() + 8);
 
     EditWrapper *wrapper = currentWrapper();
     if (m_findBar->isVisible()) {
         m_findBar->hide();
     }
     m_replaceBar->raise();
-    m_replaceBar->move(QPoint(10, height() - 59));
     m_replaceBar->show();
+    m_replaceBar->move(QPoint(4, height() - m_replaceBar->height() - 4));
     //addBottomWidget(m_replaceBar);
 
     QString tabPath = m_tabbar->currentPath();
@@ -1359,9 +1359,9 @@ void Window::popupPrintDialog()
     }
     m_pPreview->setAsynPreview(PRINT_FLAG);
     connect(m_pPreview, QOverload<DPrinter *, const QVector<int> &>::of(&DPrintPreviewDialog::paintRequested),
-            this, [=](DPrinter *_printer, const QVector<int> &pageRange) {
-                this->doPrint(_printer, pageRange);
-            });
+    this, [ = ](DPrinter * _printer, const QVector<int> &pageRange) {
+        this->doPrint(_printer, pageRange);
+    });
 
     m_pPreview->exec();
 #else
@@ -1568,8 +1568,8 @@ void Window::doPrint(DPrinter *printer, const QVector<int> &pageRange)
     bool backgroundIsDark = background.value() < 128;
 
     for (QTextBlock srcBlock = currentWrapper()->textEditor()->document()->firstBlock(), dstBlock = doc->firstBlock();
-         srcBlock.isValid() && dstBlock.isValid();
-         srcBlock = srcBlock.next(), dstBlock = dstBlock.next()) {
+            srcBlock.isValid() && dstBlock.isValid();
+            srcBlock = srcBlock.next(), dstBlock = dstBlock.next()) {
         QVector<QTextLayout::FormatRange> formatList = srcBlock.layout()->formats();
         if (backgroundIsDark) {
             // adjust syntax highlighting colors for better contrast
@@ -1606,8 +1606,8 @@ void Window::doPrint(DPrinter *printer, const QVector<int> &pageRange)
     QFontMetrics fontMetrics(doc->defaultFont(), p.device());
     QRectF titleBox(margin,
                     body.bottom() - margin
-                        + fontMetrics.height()
-                        - 6 * dpiy / 72.0,
+                    + fontMetrics.height()
+                    - 6 * dpiy / 72.0,
                     body.width() - 2 * margin,
                     fontMetrics.height());
     doc->setPageSize(body.size());
@@ -2303,10 +2303,8 @@ void Window::resizeEvent(QResizeEvent *e)
         }
     }
 
-    m_findBar->resize(width() - 20, m_findBar->height());
-    m_findBar->move(QPoint(10, height() - 59));
-    m_replaceBar->resize(width() - 20, m_replaceBar->height());
-    m_replaceBar->move(QPoint(10, height() - 59));
+    m_findBar->setGeometry(4, height() - m_findBar->height() - 4, width() - 8, m_findBar->height());
+    m_replaceBar->setGeometry(4, height() - m_replaceBar->height() - 4, width() - 8, m_replaceBar->height());
 
     for (EditWrapper *wrapper : m_wrappers.values()) {
         wrapper->OnUpdateHighlighter();

@@ -33,14 +33,12 @@ JumpLineBar::JumpLineBar(DFloatingWidget *parent)
 
     // Init layout and widgets.
     m_layout = new QHBoxLayout();
-    m_layout->setContentsMargins(10, 4, 4, 4);
+    m_layout->setContentsMargins(10, 6, 10, 6);
     m_layout->setSpacing(0);
 
     m_label = new QLabel();
-    m_label->setMinimumHeight(37);
     m_label->setText(tr("Go to Line: "));
     m_editLine = new LineBar();
-    //m_editLine->lineEdit()->setFixedSize(96, 37);
 
     m_lineValidator = new QIntValidator;
     m_editLine->lineEdit()->setValidator(m_lineValidator);
@@ -73,12 +71,12 @@ void JumpLineBar::activeInput(QString file, int row, int column, int lineCount, 
     m_rowBeforeJump = row;
     m_columnBeforeJump = column;
     m_jumpFileScrollOffset = scrollOffset;
-    m_lineValidator->setRange(1, lineCount);    
-    setFixedSize(nJumpLineBarWidth + QString::number(lineCount).size() * fontMetrics().width('9'),nJumpLineBarHeight);
+    m_lineValidator->setRange(1, lineCount);
+    setFixedSize(nJumpLineBarWidth + QString::number(lineCount).size() * fontMetrics().width('9'), nJumpLineBarHeight);
 
     // Clear line number.
-    if(m_editLine->lineEdit()->text().toInt() > lineCount)
-    m_editLine->lineEdit()->setText("");
+    if (m_editLine->lineEdit()->text().toInt() > lineCount)
+        m_editLine->lineEdit()->setText("");
 
     // Show jump line bar.
 //    show();
@@ -106,8 +104,8 @@ void JumpLineBar::handleLineChanged()
 void JumpLineBar::jumpCancel()
 {
     hide();
-   // esc键不跳转　返回当前
-   // backToPosition(m_jumpFile, m_rowBeforeJump, m_columnBeforeJump, m_jumpFileScrollOffset);
+    // esc键不跳转　返回当前
+    // backToPosition(m_jumpFile, m_rowBeforeJump, m_columnBeforeJump, m_jumpFileScrollOffset);
 }
 
 void JumpLineBar::jumpConfirm()

@@ -35,8 +35,8 @@
 
 DWIDGET_USE_NAMESPACE
 
-const int nJumpLineBarWidth = 200;
-const int nJumpLineBarHeight = 58;
+const int nJumpLineBarWidth = 212;
+const int nJumpLineBarHeight = 60;
 
 class JumpLineBar : public DFloatingWidget
 {

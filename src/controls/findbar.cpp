@@ -31,12 +31,12 @@ FindBar::FindBar(QWidget *parent)
     // Init.
     //setWindowFlags(Qt::FramelessWindowHint | Qt::X11BypassWindowManagerHint);
     hide();
-    setFixedHeight(58);
+    setFixedHeight(60);
 
     // Init layout and widgets.
 
     m_layout = new QHBoxLayout();
-    m_layout->setSpacing(7);
+    m_layout->setSpacing(10);
     m_findLabel = new QLabel(tr("Find"));
     m_findLabel->setMinimumHeight(36);
     m_editLine = new LineBar();
@@ -47,10 +47,10 @@ FindBar::FindBar(QWidget *parent)
     //m_findNextButton->setFixedSize(80, 36);
     m_closeButton = new DIconButton(DStyle::SP_CloseButton);
     m_closeButton->setIconSize(QSize(30, 30));
-    m_closeButton->setFixedSize(30,30);
+    m_closeButton->setFixedSize(30, 30);
     m_closeButton->setEnabledCircle(true);
     m_closeButton->setFlat(true);
-    m_layout->setContentsMargins(16, 4, 11, 4);
+    m_layout->setContentsMargins(16, 6, 10, 6);
 
     m_layout->addWidget(m_findLabel);
     m_layout->addWidget(m_editLine);
@@ -71,7 +71,7 @@ FindBar::FindBar(QWidget *parent)
     connect(m_editLine, &LineBar::signal_sentText, this, &FindBar::receiveText, Qt::QueuedConnection);
     //connect(m_editLine, &LineBar::contentChanged, this, &FindBar::slot_ifClearSearchWord, Qt::QueuedConnection);
 
-    connect(m_findNextButton, &QPushButton::clicked,  this,&FindBar::handleFindNext, Qt::QueuedConnection);
+    connect(m_findNextButton, &QPushButton::clicked,  this, &FindBar::handleFindNext, Qt::QueuedConnection);
     connect(m_findPrevButton, &QPushButton::clicked, this, &FindBar::handleFindPrev, Qt::QueuedConnection);
     //connect(m_findPrevButton, &QPushButton::clicked, this, &FindBar::findPrev, Qt::QueuedConnection);
 
@@ -144,26 +144,20 @@ bool FindBar::focusNextPrevChild(bool next)
 void FindBar::keyPressEvent(QKeyEvent *e)
 {
     const QString &key = Utils::getKeyshortcut(e);
-    if(key=="Esc")
-    {
+    if (key == "Esc") {
         QWidget::hide();
         emit sigFindbarClose();
     }
-    if(m_closeButton->hasFocus()&&key=="Tab")
-    {
+    if (m_closeButton->hasFocus() && key == "Tab") {
         m_editLine->lineEdit()->setFocus();
-    }
-    else{
+    } else {
         DFloatingWidget::keyPressEvent(e);
     }
-    if(key=="Enter")
-    {
-        if(m_findPrevButton->hasFocus())
-        {
+    if (key == "Enter") {
+        if (m_findPrevButton->hasFocus()) {
             m_findPrevButton->click();
         }
-        if(m_findNextButton->hasFocus())
-        {
+        if (m_findNextButton->hasFocus()) {
             m_findNextButton->click();
         }
     }
@@ -176,9 +170,8 @@ void FindBar::setMismatchAlert(bool isAlert)
 
 void FindBar::receiveText(QString t)
 {
-    searched=false;
-    if(t!="")
-    {
+    searched = false;
+    if (t != "") {
         m_receivedText = t;
     }
 }
@@ -190,12 +183,11 @@ void FindBar::setSearched(bool _)
 
 void FindBar::findPreClicked()
 {
-    if(!searched){
+    if (!searched) {
         updateSearchKeyword(m_findFile, m_editLine->lineEdit()->text());
         emit findPrev(m_editLine->lineEdit()->text());
         searched = true;
-    }
-    else {
+    } else {
         emit findPrev(m_editLine->lineEdit()->text());
     }
 }
