@@ -193,6 +193,11 @@ public:
     bool updateKeywordSelectionsInView(QString keyword, QTextCharFormat charFormat, QList<QTextEdit::ExtraSelection> *listSelection);
     bool searchKeywordSeletion(QString keyword, QTextCursor cursor, bool findNext);
     void renderAllSelections();
+    /**
+     * @author shaoyu.guo ut000455
+     * @brief updateMarkAllSelectColor 文档篇幅视图有变更时（翻页/滚动条变化/鼠标滚轮变化/键盘上下键），动态更新绘制可视范围内字符颜色
+     */
+    void updateMarkAllSelectColor();
 
 
     void lineNumberAreaPaintEvent(QPaintEvent *event);
@@ -502,6 +507,7 @@ public:
     bool bIsSetLineNumberWidth = true;
     bool m_pIsShowCodeFoldArea;
     bool m_pIsShowBookmarkArea;
+    bool m_bIsMarkAllLine {false}; ///< 颜色“标记所有”标志
 
 private:
     EditWrapper *m_wrapper;
@@ -580,6 +586,7 @@ private:
      //颜色选择控件替换下面action 1 2 3 4
     QWidgetAction *m_actionAllColorStyles;
     QAction *m_markAllAct;
+    QString m_strMarkAllLineColorName; ///< “标记所有”选择的颜色名称
 
     QAction *m_addComment;
     QAction *m_cancelComment;

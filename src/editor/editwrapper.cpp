@@ -74,6 +74,11 @@ EditWrapper::EditWrapper(Window* window,QWidget *parent)
            (QString::compare(m_pWindow->getKeywordForSearchAll(), m_pWindow->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
             m_pTextEdit->highlightKeywordInView(m_pWindow->getKeywordForSearchAll());
         }
+
+        //如果已选择了颜色“标记所有”，则动态更新可视范围内标记的颜色
+        if (m_pTextEdit->m_bIsMarkAllLine) {
+            m_pTextEdit->updateMarkAllSelectColor();
+        }
     });
 }
 

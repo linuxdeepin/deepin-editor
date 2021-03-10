@@ -1924,6 +1924,11 @@ void Window::handleFindNextSearchKeyword(const QString &keyword)
     } else {
         wrapper->textEditor()->highlightKeywordInView(m_keywordForSearchAll);
     }
+
+    //如果已选择了颜色“标记所有”，则动态更新可视范围内标记的颜色
+    if (wrapper->textEditor()->m_bIsMarkAllLine) {
+        wrapper->textEditor()->updateMarkAllSelectColor();
+    }
     wrapper->textEditor()->renderAllSelections();
     wrapper->textEditor()->restoreMarkStatus();
     wrapper->textEditor()->updateLeftAreaWidget();
@@ -1940,6 +1945,11 @@ void Window::handleFindPrevSearchKeyword(const QString &keyword)
         wrapper->textEditor()->clearFindMatchSelections();
     } else {
         wrapper->textEditor()->highlightKeywordInView(m_keywordForSearchAll);
+    }
+
+    //如果已选择了颜色“标记所有”，则动态更新可视范围内标记的颜色
+    if (wrapper->textEditor()->m_bIsMarkAllLine) {
+        wrapper->textEditor()->updateMarkAllSelectColor();
     }
     wrapper->textEditor()->renderAllSelections();
     wrapper->textEditor()->restoreMarkStatus();

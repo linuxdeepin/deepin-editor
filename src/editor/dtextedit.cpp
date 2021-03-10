@@ -290,6 +290,7 @@ void TextEdit::initRightClickedMenu()
 
     m_markAllAct = new QAction(tr("Mark All"), this);
     connect(m_markAllAct, &QAction::triggered, this, [this, pColorsAllSelectWdg]() {
+        m_strMarkAllLineColorName = pColorsAllSelectWdg->getDefaultColor().name();
         isMarkAllLine(true, pColorsAllSelectWdg->getDefaultColor().name());
         renderAllSelections();
     });
@@ -479,6 +480,7 @@ void TextEdit::initRightClickedMenu()
     });
 
     connect(m_cancleMarkAllLine, &QAction::triggered, this, [this] {
+        m_bIsMarkAllLine = false;
         isMarkAllLine(false);
         renderAllSelections();
     });
@@ -1004,6 +1006,11 @@ void TextEdit::nextLine()
                 (QString::compare(m_wrapper->window()->getKeywordForSearchAll(), m_wrapper->window()->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
             highlightKeywordInView(m_wrapper->window()->getKeywordForSearchAll());
         }
+
+        //如果已选择了颜色“标记所有”，则动态更新可视范围内标记的颜色
+        if (m_wrapper->textEditor()->m_bIsMarkAllLine) {
+            m_wrapper->textEditor()->updateMarkAllSelectColor();
+        }
     }
 }
 
@@ -1023,8 +1030,13 @@ void TextEdit::prevLine()
     if (m_wrapper != nullptr) {
         m_wrapper->OnUpdateHighlighter();
         if (m_wrapper->window()->findBarIsVisiable() &&
-                (QString::compare(m_wrapper->window()->getKeywordForSearchAll(), m_wrapper->window()->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
+           (QString::compare(m_wrapper->window()->getKeywordForSearchAll(), m_wrapper->window()->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
             highlightKeywordInView(m_wrapper->window()->getKeywordForSearchAll());
+        }
+
+        //如果已选择了颜色“标记所有”，则动态更新可视范围内标记的颜色
+        if (m_wrapper->textEditor()->m_bIsMarkAllLine) {
+            m_wrapper->textEditor()->updateMarkAllSelectColor();
         }
     }
 }
@@ -1193,6 +1205,11 @@ void TextEdit::scrollUp()
                 (QString::compare(m_wrapper->window()->getKeywordForSearchAll(), m_wrapper->window()->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
             highlightKeywordInView(m_wrapper->window()->getKeywordForSearchAll());
         }
+
+        //如果已选择了颜色“标记所有”，则动态更新可视范围内标记的颜色
+        if (m_wrapper->textEditor()->m_bIsMarkAllLine) {
+            m_wrapper->textEditor()->updateMarkAllSelectColor();
+        }
     }
 }
 
@@ -1217,8 +1234,13 @@ void TextEdit::scrollDown()
     if (m_wrapper != nullptr) {
         m_wrapper->OnUpdateHighlighter();
         if (m_wrapper->window()->findBarIsVisiable() &&
-                (QString::compare(m_wrapper->window()->getKeywordForSearchAll(), m_wrapper->window()->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
+           (QString::compare(m_wrapper->window()->getKeywordForSearchAll(), m_wrapper->window()->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
             highlightKeywordInView(m_wrapper->window()->getKeywordForSearchAll());
+        }
+
+        //如果已选择了颜色“标记所有”，则动态更新可视范围内标记的颜色
+        if (m_wrapper->textEditor()->m_bIsMarkAllLine) {
+            m_wrapper->textEditor()->updateMarkAllSelectColor();
         }
     }
 }
@@ -2181,6 +2203,11 @@ void TextEdit::renderAllSelections()
     setExtraSelections(selections);
 }
 
+void TextEdit::updateMarkAllSelectColor()
+{
+    isMarkAllLine(m_bIsMarkAllLine, m_strMarkAllLineColorName);
+    renderAllSelections();
+}
 DMenu *TextEdit::getHighlightMenu()
 {
     return m_hlGroupMenu;
@@ -4119,7 +4146,10 @@ void TextEdit::isMarkAllLine(bool isMark, QString strColor)
 {
     if (isMark) {
 
-        if (this->textCursor().hasSelection() && !(textCursor().selectionStart() == 0 && textCursor().selectionEnd() == document()->characterCount() - 1)) {
+        if (this->textCursor().hasSelection() \
+                && !(textCursor().selectionStart() == 0 \
+                && textCursor().selectionEnd() == document()->characterCount() - 1) \
+                && !m_wrapper->window()->findBarIsVisiable() ) {
             QList<QTextEdit::ExtraSelection> wordMarkSelections = m_wordMarkSelections;
             QList<QTextEdit::ExtraSelection> listExtraSelection;
             QList<QTextEdit::ExtraSelection> listSelections;
@@ -4141,6 +4171,8 @@ void TextEdit::isMarkAllLine(bool isMark, QString strColor)
                 }
             }
         } else {
+            m_bIsMarkAllLine = true;
+            m_strMarkAllLineColorName = strColor;
             m_wordMarkSelections.clear();
             m_mapWordMarkSelections.clear();
 
@@ -4152,12 +4184,31 @@ void TextEdit::isMarkAllLine(bool isMark, QString strColor)
             selection.format.setBackground(QColor(strColor));
             selection.cursor = textCursor();
 
-            for (auto block = document()->firstBlock(); block != document()->lastBlock().next(); block = block.next()) {
+            QScrollBar *pScrollBar = verticalScrollBar();
+            QPoint startPoint = QPointF(0, 0).toPoint();
+            QTextBlock block = cursorForPosition(startPoint).block();
+
+            QTextBlock endBlock;
+            if (pScrollBar->maximum() > 0) {
+                QPoint endPoint = QPointF(0, 1.5 * height()).toPoint();
+                endBlock = cursorForPosition(endPoint).block();
+            } else {
+                endBlock = document()->lastBlock();
+            }
+
+            for (auto block = cursorForPosition(startPoint).block(); block != endBlock; block = block.next()) {
                 selection.cursor.setPosition(block.position(), QTextCursor::MoveAnchor);
                 selection.cursor.setPosition(block.position() + block.length() - 1, QTextCursor::KeepAnchor);
                 m_wordMarkSelections.append(selection);
                 listSelections.append(selection);
             }
+
+            /* for (auto block = document()->firstBlock(); block != document()->lastBlock().next(); block = block.next()) {
+                selection.cursor.setPosition(block.position(), QTextCursor::MoveAnchor);
+                selection.cursor.setPosition(block.position() + block.length() - 1, QTextCursor::KeepAnchor);
+                m_wordMarkSelections.append(selection);
+                listSelections.append(selection);
+            } */
 
             m_mapWordMarkSelections.insert(m_mapWordMarkSelections.count(), listSelections);
         }
@@ -4181,6 +4232,9 @@ void TextEdit::cancelLastMark()
     }
     QList<QTextEdit::ExtraSelection> wordMarkSelections = m_wordMarkSelections;
     int nRemCount = 0;
+    if (m_bIsMarkAllLine) {
+        m_bIsMarkAllLine = false;
+    }
 
     for (int j = 0; j < m_mapWordMarkSelections.count(); j++) {
         auto listSelections = m_mapWordMarkSelections.value(j);
