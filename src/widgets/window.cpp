@@ -669,7 +669,9 @@ bool Window::closeTab()
     // need to prompt whether to save.
     else {
         QFileInfo fileInfo(filePath);
-
+        if (m_tabbar->textAt(m_tabbar->currentIndex()).front() == "*") {
+            isModified = true;
+        }
         if (isModified) {
             DDialog *dialog = createDialog(tr("Do you want to save this file?"), "");
             int res = dialog->exec();
