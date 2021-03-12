@@ -1349,6 +1349,7 @@ void Window::popupPrintDialog()
     || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR > 4) \
     || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 4 && DTK_VERSION_PATCH >= 10))
     DPrinter printer(QPrinter::HighResolution);
+    newPrint = true;
     m_pPreview = new DPrintPreviewDialog(this);
     m_pPreview->setAttribute(Qt::WA_DeleteOnClose);
 
@@ -1357,7 +1358,7 @@ void Window::popupPrintDialog()
     } else {
         m_pPreview->setDocName(QString(QFileInfo(filePath).baseName()));
     }
-    m_pPreview->setAsynPreview(PRINT_FLAG);
+    preview->setAsynPreview(printDoc ? printDoc->pageCount() : PRINT_FLAG);
     connect(m_pPreview, QOverload<DPrinter *, const QVector<int> &>::of(&DPrintPreviewDialog::paintRequested),
     this, [ = ](DPrinter * _printer, const QVector<int> &pageRange) {
         this->doPrint(_printer, pageRange);
@@ -1550,26 +1551,38 @@ void Window::doPrint(DPrinter *printer, const QVector<int> &pageRange)
     if (pageRange.isEmpty()) {
         return;
     }
-    //对文本进行分页处理
-    QTextDocument *doc = currentWrapper()->textEditor()->document();
+
     QPainter p(printer);
-    // Check that there is a valid device to print to.
     if (!p.isActive())
         return;
-    doc = doc->clone(doc);
+    QTextDocument *doc = currentWrapper()->textEditor()->document();
+    if (printDoc && lastLayout.isValid() && !newPrint) {
+        if (lastLayout == printer->pageLayout()) {
+            // 如果打印属性没发生变化，直接加载已生成的资源，提高切换速度
+            asynPrint(p, printer, pageRange);
+            return;
+        }
+    }
 
-    QTextOption opt = doc->defaultTextOption();
+    //保留print的打印布局
+    lastLayout = printer->pageLayout();
+    newPrint = false;
+
+    // Check that there is a valid device to print to.
+    printDoc = doc->clone(doc);
+
+    QTextOption opt = printDoc->defaultTextOption();
     opt.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
-    doc->setDefaultTextOption(opt);
+    printDoc->setDefaultTextOption(opt);
 
-    (void)doc->documentLayout(); // make sure that there is a layout
+    (void)printDoc->documentLayout(); // make sure that there is a layout
 
     QColor background = currentWrapper()->textEditor()->palette().color(QPalette::Base);
     bool backgroundIsDark = background.value() < 128;
-
-    for (QTextBlock srcBlock = currentWrapper()->textEditor()->document()->firstBlock(), dstBlock = doc->firstBlock();
-            srcBlock.isValid() && dstBlock.isValid();
-            srcBlock = srcBlock.next(), dstBlock = dstBlock.next()) {
+    //对文本进行分页处理
+    for (QTextBlock srcBlock = currentWrapper()->textEditor()->document()->firstBlock(), dstBlock = printDoc->firstBlock();
+         srcBlock.isValid() && dstBlock.isValid();
+         srcBlock = srcBlock.next(), dstBlock = dstBlock.next()) {
         QVector<QTextLayout::FormatRange> formatList = srcBlock.layout()->formats();
         if (backgroundIsDark) {
             // adjust syntax highlighting colors for better contrast
@@ -1591,39 +1604,66 @@ void Window::doPrint(DPrinter *printer, const QVector<int> &pageRange)
         dstBlock.layout()->setFormats(formatList);
     }
 
-    QAbstractTextDocumentLayout *layout = doc->documentLayout();
+    QAbstractTextDocumentLayout *layout = printDoc->documentLayout();
     layout->setPaintDevice(p.device());
 
     int dpiy = p.device()->logicalDpiY();
     int margin = (int)((2 / 2.54) * dpiy); // 2 cm margins
 
-    QTextFrameFormat fmt = doc->rootFrame()->frameFormat();
+    QTextFrameFormat fmt = printDoc->rootFrame()->frameFormat();
     fmt.setMargin(margin);
-    doc->rootFrame()->setFrameFormat(fmt);
+    printDoc->rootFrame()->setFrameFormat(fmt);
 
     QRectF pageRect(printer->pageRect());
     QRectF body = QRectF(0, 0, pageRect.width(), pageRect.height());
-    QFontMetrics fontMetrics(doc->defaultFont(), p.device());
+    QFontMetrics fontMetrics(printDoc->defaultFont(), p.device());
     QRectF titleBox(margin,
                     body.bottom() - margin
-                    + fontMetrics.height()
-                    - 6 * dpiy / 72.0,
+                        + fontMetrics.height()
+                        - 6 * dpiy / 72.0,
                     body.width() - 2 * margin,
                     fontMetrics.height());
-    doc->setPageSize(body.size());
+    printDoc->setPageSize(body.size());
     //输出总页码给到打印预览
-    m_pPreview->setAsynPreview(doc->pageCount());
+    preview->setAsynPreview(printDoc->pageCount());
 
+    //渲染第一页文本
     for (int i = 0; i < pageRange.count(); ++i) {
-        //根据打印预览请求的页码，渲染请求的资源
-        if (pageRange[i] > doc->pageCount())
+        if (pageRange[i] > printDoc->pageCount())
             continue;
-        printPage(pageRange[i], &p, doc, body, titleBox);
+        printPage(pageRange[i], &p, printDoc, body, titleBox);
         if (i != pageRange.count() - 1)
             printer->newPage();
     }
 }
+
 #endif
+
+/*!
+ * \~chinese \brief Window::asynPrint 进行翻页预览打印
+ * \~chinese \param pageRange 打印预览请求的页码列表
+ */
+void Window::asynPrint(QPainter &p, DPrinter *printer, const QVector<int> &pageRange)
+{
+    QRectF pageRect(printer->pageRect());
+    int dpiy = p.device()->logicalDpiY();
+    int margin = (int)((2 / 2.54) * dpiy); // 2 cm margins
+    QRectF body = QRectF(0, 0, pageRect.width(), pageRect.height());
+    QFontMetrics fontMetrics(printDoc->defaultFont(), p.device());
+    QRectF titleBox(margin,
+                    body.bottom() - margin
+                        + fontMetrics.height()
+                        - 6 * dpiy / 72.0,
+                    body.width() - 2 * margin,
+                    fontMetrics.height());
+    for (int i = 0; i < pageRange.count(); ++i) {
+        if (pageRange[i] > printDoc->pageCount())
+            continue;
+        printPage(pageRange[i], &p, printDoc, body, titleBox);
+        if (i != pageRange.count() - 1)
+            printer->newPage();
+    }
+}
 
 void Window::backupFile()
 {

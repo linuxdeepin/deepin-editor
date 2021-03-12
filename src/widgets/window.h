@@ -108,6 +108,7 @@ public:
 
     void displayShortcuts();
     void doPrint(DPrinter *printer, const QVector<int> &pageRange);
+    void asynPrint(QPainter &p, DPrinter *printer, const QVector<int> &pageRange);
 
     /**
      * @brief backupFile 备份文件
@@ -245,6 +246,12 @@ private:
     QProcess *m_shortcutViewProcess = nullptr;
     bool m_needMoveToCenter = false;
     DPrintPreviewDialog *m_pPreview {nullptr};
+    //打印文本
+    QTextDocument *printDoc = nullptr;
+    //打印布局
+    QPageLayout lastLayout;
+    //判断是否是新的打印文档
+    bool newPrint = false;
 };
 
 #endif
