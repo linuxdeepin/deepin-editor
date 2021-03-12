@@ -116,13 +116,13 @@ TextEdit::TextEdit(QWidget *parent)
     connect(document(), &QTextDocument::contentsChange, this, &TextEdit::checkBookmarkLineMove);
 
     connect(m_pUndoStack, &QUndoStack::canRedoChanged, this, [this](bool) {
-        bool isModified = this->m_wrapper->isTemFile() | m_pUndoStack->canUndo();
+        bool isModified = this->m_wrapper->isTemFile() | (m_pUndoStack->canUndo() || m_pUndoStack->index() != m_lastSaveIndex);
         this->m_wrapper->window()->updateModifyStatus(m_sFilePath, isModified);
         this->m_wrapper->OnUpdateHighlighter();
     });
 
     connect(m_pUndoStack, &QUndoStack::canUndoChanged, this, [this](bool canUndo) {
-        bool isModified = this->m_wrapper->isTemFile() | canUndo;
+        bool isModified = this->m_wrapper->isTemFile() | (canUndo || m_pUndoStack->index() != m_lastSaveIndex);
         this->m_wrapper->window()->updateModifyStatus(m_sFilePath, isModified);
         this->m_wrapper->OnUpdateHighlighter();
     });
@@ -1030,7 +1030,7 @@ void TextEdit::prevLine()
     if (m_wrapper != nullptr) {
         m_wrapper->OnUpdateHighlighter();
         if (m_wrapper->window()->findBarIsVisiable() &&
-           (QString::compare(m_wrapper->window()->getKeywordForSearchAll(), m_wrapper->window()->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
+                (QString::compare(m_wrapper->window()->getKeywordForSearchAll(), m_wrapper->window()->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
             highlightKeywordInView(m_wrapper->window()->getKeywordForSearchAll());
         }
 
@@ -1234,7 +1234,7 @@ void TextEdit::scrollDown()
     if (m_wrapper != nullptr) {
         m_wrapper->OnUpdateHighlighter();
         if (m_wrapper->window()->findBarIsVisiable() &&
-           (QString::compare(m_wrapper->window()->getKeywordForSearchAll(), m_wrapper->window()->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
+                (QString::compare(m_wrapper->window()->getKeywordForSearchAll(), m_wrapper->window()->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
             highlightKeywordInView(m_wrapper->window()->getKeywordForSearchAll());
         }
 
@@ -4070,6 +4070,11 @@ void TextEdit::setBookMarkList(QList<int> bookMarkList)
     m_listBookmark = bookMarkList;
 }
 
+void TextEdit::updateSaveIndex()
+{
+    m_lastSaveIndex = m_pUndoStack->index();
+}
+
 
 void TextEdit::isMarkCurrentLine(bool isMark, QString strColor)
 {
@@ -4148,8 +4153,8 @@ void TextEdit::isMarkAllLine(bool isMark, QString strColor)
 
         if (this->textCursor().hasSelection() \
                 && !(textCursor().selectionStart() == 0 \
-                && textCursor().selectionEnd() == document()->characterCount() - 1) \
-                && !m_wrapper->window()->findBarIsVisiable() ) {
+                     && textCursor().selectionEnd() == document()->characterCount() - 1) \
+                && !m_wrapper->window()->findBarIsVisiable()) {
             QList<QTextEdit::ExtraSelection> wordMarkSelections = m_wordMarkSelections;
             QList<QTextEdit::ExtraSelection> listExtraSelection;
             QList<QTextEdit::ExtraSelection> listSelections;
