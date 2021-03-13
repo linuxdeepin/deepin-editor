@@ -26,6 +26,7 @@
 #include "ddropdownmenu.h"
 #include <DApplicationHelper>
 #include <DFontSizeManager>
+#include <QPainterPath>
 
 class EditWrapper;
 class BottomBar : public QWidget

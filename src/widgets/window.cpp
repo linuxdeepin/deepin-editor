@@ -1636,7 +1636,6 @@ void Window::doPrint(DPrinter *printer, const QVector<int> &pageRange)
             printer->newPage();
     }
 }
-
 #endif
 
 /*!

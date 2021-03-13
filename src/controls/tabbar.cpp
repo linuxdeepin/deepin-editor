@@ -337,11 +337,15 @@ QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option
     backgroundImage.fill(QColor(palette().color(QPalette::Base)));
     // clip screenshot image with window radius.
     QPainter painter(&backgroundImage);
-    painter.drawImage(5, 5, scaledImage);
+    painter.drawImage(5,5,scaledImage);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
+    if (count() == 1) {
+        this->window()->hide();
+    }
+
     // adjust offset.
-    hotspot->setX(scaledWidth / 2);
+    hotspot->setX(scaledWidth/2);
     hotspot->setY(scaledHeight / 2);
 
     QPainterPath rectPath;
