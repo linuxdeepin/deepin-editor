@@ -1358,7 +1358,7 @@ void Window::popupPrintDialog()
     } else {
         m_pPreview->setDocName(QString(QFileInfo(filePath).baseName()));
     }
-    preview->setAsynPreview(printDoc ? printDoc->pageCount() : PRINT_FLAG);
+    m_pPreview->setAsynPreview(printDoc ? printDoc->pageCount() : PRINT_FLAG);
     connect(m_pPreview, QOverload<DPrinter *, const QVector<int> &>::of(&DPrintPreviewDialog::paintRequested),
     this, [ = ](DPrinter * _printer, const QVector<int> &pageRange) {
         this->doPrint(_printer, pageRange);
@@ -1625,7 +1625,7 @@ void Window::doPrint(DPrinter *printer, const QVector<int> &pageRange)
                     fontMetrics.height());
     printDoc->setPageSize(body.size());
     //输出总页码给到打印预览
-    preview->setAsynPreview(printDoc->pageCount());
+    m_pPreview->setAsynPreview(printDoc->pageCount());
 
     //渲染第一页文本
     for (int i = 0; i < pageRange.count(); ++i) {

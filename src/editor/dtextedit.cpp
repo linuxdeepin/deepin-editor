@@ -1407,7 +1407,9 @@ void TextEdit::cutlines()
 
         popupNotify(tr("Current line clipped"));
     }
-
+    // Add the cut operation to the undo stack
+    QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(copyCursor);
+    m_pUndoStack->push(pDeleteStack);
     // Copy lines to system clipboard.
     setTextCursor(copyCursor);
     cutSelectedText();
@@ -1415,6 +1417,8 @@ void TextEdit::cutlines()
     // Reset cursor before copy lines.
     copyCursor.setPosition(currentCursor.position(), QTextCursor::MoveAnchor);
     setTextCursor(copyCursor);
+    // Setting text has been modified
+    this->m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
 }
 
 void TextEdit::joinLines()
