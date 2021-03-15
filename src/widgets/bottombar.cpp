@@ -160,7 +160,9 @@ void BottomBar::updateSize(int size)
 void BottomBar::setChildEnabled(bool enabled)
 {
     m_pEncodeMenu->setEnabled(enabled);
+    m_pHighlightMenu->setEnabled(enabled);
     m_pEncodeMenu->setRequestMenu(enabled);
+    m_pHighlightMenu->setRequestMenu(enabled);
 }
 
 void BottomBar::setChildrenFocus(bool ok,QWidget* preOrderWidget)

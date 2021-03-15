@@ -52,6 +52,8 @@ public:
 public slots:
     void setCurrentAction(QAction*);
     void setCurrentTextOnly(const QString& name);
+    void slotRequestMenu(bool request);
+
 public:
     //创建编码菜单
     static DDropdownMenu* createEncodeMenu();
@@ -82,7 +84,7 @@ private:
     QAction* m_pActUtf8 = nullptr;
     QFont m_font;
     bool m_bPressed =false;
-    bool isRequest = true;
+    bool isRequest = false;
     KSyntaxHighlighting::Repository m_Repository;
 private:
     static QVector<QPair<QString,QStringList>> sm_groupEncodeVec;

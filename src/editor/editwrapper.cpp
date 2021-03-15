@@ -824,9 +824,9 @@ Window *EditWrapper::window()
 //支持大文本加载 界面不卡顿 秒关闭
 void EditWrapper::loadContent(const QByteArray &content)
 {
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    m_pWindow->setPrintEnabled(false);
     m_pBottomBar->setChildEnabled(false);
+    m_pWindow->setPrintEnabled(false);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     m_pTextEdit->clear();
     m_bQuit = false;
     //QTextDocument *doc = m_pTextEdit->document();

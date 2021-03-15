@@ -72,23 +72,7 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     layout->setContentsMargins(0,0,0,0);
     this->setLayout(layout);
 
-    connect(this, &DDropdownMenu::requestContextMenu, this, [=] (bool bClicked){
-        if(bClicked){
-            //如果鼠标点击清除ｆｏｃｕｓ
-            m_pToolButton->clearFocus();
-        }
-        QPoint center = this->mapToGlobal(this->rect().center());
-        int menuHeight = m_menu->sizeHint().height();
-        int menuWidth = m_menu->sizeHint().width();
-        center.setY(center.y() - menuHeight - this->rect().height()/2);
-        center.setX(center.x() - menuWidth / 2);
-        m_menu->move(center);
-        m_menu->exec();
-        //清除ｆｏｃｕｓ
-        m_pToolButton->clearFocus();
-        QEvent event(QEvent::HoverLeave);
-        QApplication::sendEvent(m_pToolButton, &event);
-    });
+    connect(this, &DDropdownMenu::requestContextMenu, this, &DDropdownMenu::slotRequestMenu);
 
     //设置字体自适应大小
     //设置界面大小根据内容大小自适应 梁卫东 2020.7.7
@@ -144,6 +128,25 @@ void DDropdownMenu::setCurrentTextOnly(const QString &name)
    setText(name);
 }
 
+void DDropdownMenu::slotRequestMenu(bool request)
+{
+    if (request) {
+        //如果鼠标点击清除ｆｏｃｕｓ
+        m_pToolButton->clearFocus();
+    }
+    QPoint center = this->mapToGlobal(this->rect().center());
+    int menuHeight = m_menu->sizeHint().height();
+    int menuWidth = m_menu->sizeHint().width();
+    center.setY(center.y() - menuHeight - this->rect().height() / 2);
+    center.setX(center.x() - menuWidth / 2);
+    m_menu->move(center);
+    m_menu->exec();
+    //清除ｆｏｃｕｓ
+    m_pToolButton->clearFocus();
+    QEvent event(QEvent::HoverLeave);
+    QApplication::sendEvent(m_pToolButton, &event);
+}
+
 void DDropdownMenu::setText(const QString &text)
 {
     m_text = text;
@@ -188,7 +191,6 @@ void DDropdownMenu::setChildrenFocus(bool ok)
 
 void DDropdownMenu::setRequestMenu(bool request)
 {
-    m_pToolButton->setEnabled(request);
     isRequest = request;
 }
 
@@ -427,9 +429,8 @@ bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
             if(mouseEvent->button() == Qt::LeftButton){
                 m_bPressed = false;
                 m_pToolButton->setIcon(createIcon());
-                if (isRequest) {
+                if (isRequest)
                     Q_EMIT requestContextMenu(true);
-                }
                 m_pToolButton->clearFocus();
             }
             return true;
