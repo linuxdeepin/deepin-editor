@@ -1783,9 +1783,11 @@ QMap<QString, EditWrapper *> Window::getWrappers()
 void Window::setChildrenFocus(bool ok)
 {
     QMap<QString, EditWrapper *>::Iterator it = m_wrappers.begin();
+    #if 0 //fix 65897 拖拽标签页生成的新窗口中，编码方式/文本类型按钮置灰显示
     for (; it != m_wrappers.end(); it++) {
         it.value()->bottomBar()->setChildrenFocus(ok);
     }
+    #endif
 
     if (ok) {
         DIconButton *addButton = m_tabbar->findChild<DIconButton *>("AddButton");
