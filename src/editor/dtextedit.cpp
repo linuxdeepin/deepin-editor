@@ -5542,6 +5542,16 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             return;
         }
 
+        //fix 66710 输入的内容为英文符号时，文本编辑器未识别为临时文件
+        if (modifiers == Qt::ShiftModifier && (e->key() == Qt::Key_Shift || !e->text().isEmpty())) {
+            if (m_bIsAltMod) {
+               insertColumnEditTextEx(e->text());
+            } else {
+               insertSelectTextEx(textCursor(), e->text());
+            }
+            return;
+        }
+
         // alt+m 弹出编辑器右键菜单
         if (e->modifiers() == Qt::AltModifier && !e->text().compare(QString("m"), Qt::CaseInsensitive)) {
             popRightMenu();
