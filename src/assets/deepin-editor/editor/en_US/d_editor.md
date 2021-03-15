@@ -1,4 +1,4 @@
-# Text Editor|../common/deepin_editor_96.svg|
+# Text Editor|deepin_editor|
 
 ## Overview
 
@@ -26,7 +26,7 @@ Text Editor is a simple text editing tool. You can use it to write a simple text
 
 ### View Shortcuts
 
-On the Text Editor Interface, press **Ctrl + Shift + ? ** to view all the shortcuts. You can also check shortcuts in Settings. Proficiency in shortcuts will greatly improve your efficiency.
+On the Text Editor Interface, press **Ctrl + Shift + ?** to view all the shortcuts. You can also check shortcuts in Settings. Proficiency in shortcuts will greatly improve your efficiency.
 
 ![1|hotkey](fig/hotkey.png)
 
@@ -112,7 +112,7 @@ It helps you change the case of selected text. You can change it to lowercase, u
 
 You can also use **Alt** + **U / L / C** to quickly switch the cases.
 
-![changecase](fig/changecase.png)
+![changecase](fig/d_changecase.png)
 
 ### Highlight Texts
 Text Editor supports highlighting different kinds of texts.
@@ -262,7 +262,7 @@ Click ![icon_menu](../common/icon_menu.svg)> **Settings** and you can perform th
 - Check **Show bookmarks icon** to display the bookmarks in the text.
 - Check **Show whitespaces and tabs** to display all the white spaces and tabs. You can also input or delete white spaces and tabs manually.
 
-> ![tips](../common/tips.svg)Tips: You can also use **Ctrl + “+”/ “-” ** to adjust the font size, and press **Ctrl + 0** to restore default font size.
+> ![tips](../common/tips.svg)Tips: You can also use **Ctrl + “+”/ “-”** to adjust the font size, and press **Ctrl + 0** to restore default font size.
 
 #### Shortcuts Settings
 1. Click ![icon_menu](../common/icon_menu.svg)> **Settings** to view the current shortcut in the **Shortcuts** option.
