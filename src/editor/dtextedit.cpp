@@ -480,13 +480,10 @@ void TextEdit::initRightClickedMenu()
     });
 
     connect(m_cancleMarkAllLine, &QAction::triggered, this, [this] {
-        m_bIsMarkAllLine = false;
         isMarkAllLine(false);
-        renderAllSelections();
     });
     connect(m_cancleLastMark, &QAction::triggered, this, [this] {
         cancelLastMark();
-        renderAllSelections();
     });
 
 
@@ -704,7 +701,7 @@ void TextEdit::popRightMenu(QPoint pos)
         m_colorMarkMenu->addAction(m_actionAllColorStyles);
         m_colorMarkMenu->addSeparator();
 
-        if (m_wordMarkSelections.size() > 0) {
+        if (m_markOperations.size() > 0) {
             m_colorMarkMenu->addAction(m_cancleLastMark);
 
             m_colorMarkMenu->addSeparator();
@@ -1007,10 +1004,7 @@ void TextEdit::nextLine()
             highlightKeywordInView(m_wrapper->window()->getKeywordForSearchAll());
         }
 
-        //如果已选择了颜色“标记所有”，则动态更新可视范围内标记的颜色
-        if (m_wrapper->textEditor()->m_bIsMarkAllLine) {
-            m_wrapper->textEditor()->updateMarkAllSelectColor();
-        }
+        markAllKeywordInView();
     }
 }
 
@@ -1034,10 +1028,7 @@ void TextEdit::prevLine()
             highlightKeywordInView(m_wrapper->window()->getKeywordForSearchAll());
         }
 
-        //如果已选择了颜色“标记所有”，则动态更新可视范围内标记的颜色
-        if (m_wrapper->textEditor()->m_bIsMarkAllLine) {
-            m_wrapper->textEditor()->updateMarkAllSelectColor();
-        }
+        markAllKeywordInView();
     }
 }
 
@@ -1206,10 +1197,7 @@ void TextEdit::scrollUp()
             highlightKeywordInView(m_wrapper->window()->getKeywordForSearchAll());
         }
 
-        //如果已选择了颜色“标记所有”，则动态更新可视范围内标记的颜色
-        if (m_wrapper->textEditor()->m_bIsMarkAllLine) {
-            m_wrapper->textEditor()->updateMarkAllSelectColor();
-        }
+        markAllKeywordInView();
     }
 }
 
@@ -1238,10 +1226,7 @@ void TextEdit::scrollDown()
             highlightKeywordInView(m_wrapper->window()->getKeywordForSearchAll());
         }
 
-        //如果已选择了颜色“标记所有”，则动态更新可视范围内标记的颜色
-        if (m_wrapper->textEditor()->m_bIsMarkAllLine) {
-            m_wrapper->textEditor()->updateMarkAllSelectColor();
-        }
+        markAllKeywordInView();
     }
 }
 
@@ -2203,6 +2188,11 @@ void TextEdit::renderAllSelections()
     selections.append(m_endBracketSelection);
     selections.append(m_markFoldHighLightSelections);
     selections.append(m_altModSelections);
+
+    QMap<QString, QList<QTextEdit::ExtraSelection>>::Iterator it;
+    for (it = m_mapKeywordMarkSelections.begin(); it != m_mapKeywordMarkSelections.end(); ++it) {
+        selections.append(it.value());
+    }
 
     setExtraSelections(selections);
 }
@@ -4087,54 +4077,27 @@ void TextEdit::isMarkCurrentLine(bool isMark, QString strColor)
         QList<QTextEdit::ExtraSelection> listSelections;
         QList<QTextEdit::ExtraSelection> wordMarkSelections = m_wordMarkSelections;
         selection.cursor = textCursor();
+        selection.format.setBackground(QColor(strColor));
 
-        if (!this->textCursor().hasSelection()) {
-            selection.cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-            selection.cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+        TextEdit::MarkOperation markOperation;
+        markOperation.cursor = textCursor();
+        markOperation.color = strColor;
+
+        if (textCursor().hasSelection()) {
+            markOperation.type = MarkOnce;
+
+        } else {
+            markOperation.type = MarkLine;
+            int beginPos = textCursor().block().position();
+            int endPos = beginPos + textCursor().block().length();
+            selection.cursor.setPosition(beginPos, QTextCursor::MoveAnchor);
+            selection.cursor.setPosition(endPos, QTextCursor::KeepAnchor);
         }
 
-        QString markText = "", currentMarkText = textCursor().selection().toPlainText();
-        int pos = currentMarkText.indexOf("\n");
-
-        if (pos != -1) {
-            selection.cursor.setPosition(textCursor().selectionStart(), QTextCursor::MoveAnchor);
-            selection.cursor.setPosition(textCursor().selectionStart() + pos, QTextCursor::KeepAnchor);
-
-            if (selection.cursor.selectedText() != "") {
-                appendExtraSelection(wordMarkSelections, selection, strColor, &listSelections);
-            }
-
-            while (pos != -1) {
-                selection.cursor.setPosition(textCursor().selectionStart() + pos + 1, QTextCursor::MoveAnchor);
-                pos = currentMarkText.indexOf("\n", pos + 1);
-
-                if (pos == -1) {
-                    break;
-                }
-
-                selection.cursor.setPosition(textCursor().selectionStart() + pos, QTextCursor::KeepAnchor);
-
-                if (selection.cursor.selectedText() != "") {
-                    wordMarkSelections = m_wordMarkSelections;
-                    appendExtraSelection(wordMarkSelections, selection, strColor, &listSelections);
-                }
-
-            }
-            selection.cursor.setPosition(textCursor().selectionEnd(), QTextCursor::KeepAnchor);
-        }
-
-        if (selection.cursor.selectedText() != "") {
-            wordMarkSelections = m_wordMarkSelections;
-            appendExtraSelection(wordMarkSelections, selection, strColor, &listSelections);
-        }
-
-        if (!listSelections.isEmpty()) {
-            m_mapWordMarkSelections.insert(m_mapWordMarkSelections.count(), listSelections);
-        }
+        m_markOperations.append(markOperation);
+        m_wordMarkSelections.append(selection);
 
     } else {
-//        m_wordMarkSelections.removeLast();
-//        updateHighlightLineSelection();
         //取消标记当前行（功能未加入）
         for (int i = 0 ; i < m_wordMarkSelections.size(); ++i) {
             QTextCursor curson = m_wordMarkSelections.at(i).cursor;
@@ -4151,14 +4114,74 @@ void TextEdit::isMarkCurrentLine(bool isMark, QString strColor)
     }
 }
 
+void TextEdit::markAllKeywordInView()
+{
+    if (m_markOperations.isEmpty()) {
+        return;
+    }
+
+    QList<TextEdit::MarkOperation>::iterator it;
+
+    for (it = m_markOperations.begin(); it != m_markOperations.end(); ++it) {
+        if (MarkAllMatch == it->type) {
+            QString keyword = it->cursor.selectedText();
+            markKeywordInView(keyword, it->color);
+        } else if (MarkAll == it->type) {
+            markAllInView(it->color);
+        }
+    }
+
+    renderAllSelections();
+}
+
+bool TextEdit::markKeywordInView(QString keyword, QString color)
+{
+    if (keyword.isEmpty()) {
+        return false;
+    }
+
+    QList<QTextEdit::ExtraSelection> listExtraSelection;
+    QTextCharFormat format;
+    bool ret = false;
+
+    format.setBackground(QColor(color));
+    ret = updateKeywordSelectionsInView(keyword, format, &listExtraSelection);
+    if (ret) {
+        m_mapKeywordMarkSelections[keyword] = listExtraSelection;
+    }
+
+    return ret;
+}
+
+void TextEdit::markAllInView(QString color)
+{
+    QTextEdit::ExtraSelection selection;
+    QList<QTextEdit::ExtraSelection> listSelections;
+    QScrollBar *pScrollBar = verticalScrollBar();
+    QPoint startPoint = QPointF(0, 0).toPoint();
+    QTextBlock beginBlock = cursorForPosition(startPoint).block();
+    QTextBlock endBlock;
+
+    if (pScrollBar->maximum() > 0) {
+        QPoint endPoint = QPointF(0, 1.5 * height()).toPoint();
+        endBlock = cursorForPosition(endPoint).block();
+    } else {
+        endBlock = document()->lastBlock();
+    }
+
+    selection.format.setBackground(QColor(color));
+    selection.cursor = textCursor();
+    selection.cursor.setPosition(beginBlock.position(), QTextCursor::MoveAnchor);
+    selection.cursor.setPosition(endBlock.position() + endBlock.length() - 1, QTextCursor::KeepAnchor);
+    listSelections.append(selection);
+    m_mapKeywordMarkSelections[TEXT_EIDT_MARK_ALL] = listSelections;
+}
+
 void TextEdit::isMarkAllLine(bool isMark, QString strColor)
 {
     if (isMark) {
-
-        if (this->textCursor().hasSelection() \
-                && !(textCursor().selectionStart() == 0 \
-                     && textCursor().selectionEnd() == document()->characterCount() - 1) \
-                && !m_wrapper->window()->findBarIsVisiable()) {
+        QString selectionText = textCursor().selectedText();
+        if (selectionText.length() != 0 && selectionText.length() < (document()->characterCount() - 1)) {
             QList<QTextEdit::ExtraSelection> wordMarkSelections = m_wordMarkSelections;
             QList<QTextEdit::ExtraSelection> listExtraSelection;
             QList<QTextEdit::ExtraSelection> listSelections;
@@ -4167,63 +4190,31 @@ void TextEdit::isMarkAllLine(bool isMark, QString strColor)
             format.setBackground(QColor(strColor));
             extraSelection.cursor = textCursor();
             extraSelection.format = format;
-            if (!updateKeywordSelections(textCursor().selection().toPlainText(), format, &listExtraSelection)) {
-                isMarkCurrentLine(true, strColor);
-            } else {
-                for (int j = 0; j < listExtraSelection.count(); j++) {
-                    wordMarkSelections = m_wordMarkSelections;
-                    appendExtraSelection(wordMarkSelections, listExtraSelection.value(j), strColor, &listSelections);
-                }
 
-                if (!listSelections.isEmpty()) {
-                    m_mapWordMarkSelections.insert(m_mapWordMarkSelections.count(), listSelections);
-                }
-            }
-        } else {
-            m_bIsMarkAllLine = true;
-            m_strMarkAllLineColorName = strColor;
-            m_wordMarkSelections.clear();
-            m_mapWordMarkSelections.clear();
+            TextEdit::MarkOperation markOperation;
+            markOperation.type = MarkAllMatch;
+            markOperation.cursor = textCursor();
+            markOperation.color = strColor;
+            m_markOperations.append(markOperation);
 
-            QTextEdit::ExtraSelection selection;
-//            QTextEdit::ExtraSelection currentSelection;
-            QList<QTextEdit::ExtraSelection> listSelections;
-            QList<QTextEdit::ExtraSelection> wordMarkSelections = m_wordMarkSelections;
-
-            selection.format.setBackground(QColor(strColor));
-            selection.cursor = textCursor();
-
-            QScrollBar *pScrollBar = verticalScrollBar();
-            QPoint startPoint = QPointF(0, 0).toPoint();
-            QTextBlock block = cursorForPosition(startPoint).block();
-
-            QTextBlock endBlock;
-            if (pScrollBar->maximum() > 0) {
-                QPoint endPoint = QPointF(0, 1.5 * height()).toPoint();
-                endBlock = cursorForPosition(endPoint).block();
-            } else {
-                endBlock = document()->lastBlock();
+            if (updateKeywordSelectionsInView(selectionText, format, &listExtraSelection)) {
+                m_mapKeywordMarkSelections[selectionText] = listExtraSelection;
             }
 
-            for (auto block = cursorForPosition(startPoint).block(); block != endBlock; block = block.next()) {
-                selection.cursor.setPosition(block.position(), QTextCursor::MoveAnchor);
-                selection.cursor.setPosition(block.position() + block.length() - 1, QTextCursor::KeepAnchor);
-                m_wordMarkSelections.append(selection);
-                listSelections.append(selection);
-            }
+        } else if (!textCursor().hasSelection() || selectionText.length() == (document()->characterCount() - 1)) {
+            //m_wordMarkSelections.clear();
 
-            /* for (auto block = document()->firstBlock(); block != document()->lastBlock().next(); block = block.next()) {
-                selection.cursor.setPosition(block.position(), QTextCursor::MoveAnchor);
-                selection.cursor.setPosition(block.position() + block.length() - 1, QTextCursor::KeepAnchor);
-                m_wordMarkSelections.append(selection);
-                listSelections.append(selection);
-            } */
+            TextEdit::MarkOperation markOperation;
+            markOperation.type = MarkAll;
+            markOperation.color = strColor;
+            m_markOperations.append(markOperation);
 
-            m_mapWordMarkSelections.insert(m_mapWordMarkSelections.count(), listSelections);
+            markAllInView(strColor);
         }
     } else {
+        m_markOperations.clear();
         m_wordMarkSelections.clear();
-        m_mapWordMarkSelections.clear();
+        m_mapKeywordMarkSelections.clear();
 
         QTextEdit::ExtraSelection selection;
         selection.format.setBackground(QColor(strColor));
@@ -4232,38 +4223,75 @@ void TextEdit::isMarkAllLine(bool isMark, QString strColor)
         selection.cursor.clearSelection();
         m_markAllSelection = selection;
     }
+
+    renderAllSelections();
 }
 
 void TextEdit::cancelLastMark()
 {
-    if (m_wordMarkSelections.size() < 1) {
+    if (m_markOperations.isEmpty()) {
         return;
     }
-    QList<QTextEdit::ExtraSelection> wordMarkSelections = m_wordMarkSelections;
-    int nRemCount = 0;
-    if (m_bIsMarkAllLine) {
-        m_bIsMarkAllLine = false;
-    }
 
-    for (int j = 0; j < m_mapWordMarkSelections.count(); j++) {
-        auto listSelections = m_mapWordMarkSelections.value(j);
-
-        if (containsExtraSelection(listSelections, m_wordMarkSelections.value(m_wordMarkSelections.count() - 1))) {
-            for (int k = 0; k < listSelections.count(); k++) {
-                for (int i = 0; i < wordMarkSelections.count(); i++) {
-                    if (listSelections.value(k).cursor == wordMarkSelections.at(i).cursor
-                            && listSelections.value(k).format ==  wordMarkSelections.at(i).format) {
-                        m_wordMarkSelections.removeAt(i - nRemCount);
-                        nRemCount++;
-                    }
-                }
+    switch (m_markOperations.last().type) {
+        case MarkOnce:
+        case MarkLine: {
+            if (!m_wordMarkSelections.isEmpty()) {
+                m_wordMarkSelections.removeLast();
             }
-
-            m_mapWordMarkSelections.remove(j);
             break;
         }
+
+        case MarkAllMatch: {
+            QString keyword = m_markOperations.last().cursor.selectedText();
+            if (m_mapKeywordMarkSelections.contains(keyword)) {
+                m_mapKeywordMarkSelections.remove(keyword);
+            }
+            break;
+        }
+
+        case MarkAll: {
+            if (m_mapKeywordMarkSelections.contains(TEXT_EIDT_MARK_ALL)) {
+                m_mapKeywordMarkSelections.remove(TEXT_EIDT_MARK_ALL);
+            }
+            break;
+        }
+
     }
-    updateHighlightLineSelection();
+
+    m_markOperations.removeLast();
+    renderAllSelections();
+}
+
+void TextEdit::toggleMarkSelections()
+{
+    bool isFind  = false;
+    QTextCursor cursor;
+    QTextCursor textcursor = textCursor();
+
+    for (int i = 0 ; i < m_wordMarkSelections.size(); ++i) {
+        cursor = m_wordMarkSelections.at(i).cursor;
+        if (textcursor.hasSelection()) {
+            if (textcursor == cursor) {
+                isFind = true;
+                m_wordMarkSelections.removeAt(i);
+                break;
+            }
+
+        } else {
+            if (textcursor.position() >= cursor.selectionStart() && textcursor.position() <= cursor.selectionEnd()) {
+                isFind = true;
+                m_wordMarkSelections.removeAt(i);
+            }
+        }
+    }
+
+    if (!isFind) {
+        ColorSelectWdg *pColorSelectWdg = static_cast<ColorSelectWdg *>(m_actionColorStyles->defaultWidget());
+        isMarkCurrentLine(true, pColorSelectWdg->getDefaultColor().name());
+    }
+
+    renderAllSelections();
 }
 
 void TextEdit::markSelectWord()
@@ -5729,7 +5757,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             moveToNextBookMark();
             return;
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "mark")) {
-            markSelectWord();
+            toggleMarkSelections();
             return;
         } else if (e->key() == Qt::Key_Insert && key != "Shift+Ins") {
             if (e->modifiers() == Qt::NoModifier) {

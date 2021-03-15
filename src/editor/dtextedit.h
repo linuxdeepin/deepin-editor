@@ -49,6 +49,7 @@
 #include <QGestureEvent>
 #include <QProxyStyle>
 
+#define TEXT_EIDT_MARK_ALL  "MARK_ALL"
 
 const QString SELECT_HIGHLIGHT_COLOR = "#2CA7F8";
 enum ConvertCase { UPPER, LOWER, CAPITALIZE };
@@ -66,6 +67,20 @@ public:
         Insert,
         Overwrite,
         Readonly
+    };
+
+    enum MarkOperationType {
+        MarkOnce,
+        MarkAllMatch,
+        MarkLine,
+        MarkAll
+    };
+
+    struct MarkOperation
+    {
+        MarkOperationType type;
+        QTextCursor cursor;
+        QString color;
     };
 
     TextEdit(QWidget *parent = nullptr);
@@ -193,6 +208,12 @@ public:
     bool updateKeywordSelectionsInView(QString keyword, QTextCharFormat charFormat, QList<QTextEdit::ExtraSelection> *listSelection);
     bool searchKeywordSeletion(QString keyword, QTextCursor cursor, bool findNext);
     void renderAllSelections();
+
+    void markAllKeywordInView();
+    bool markKeywordInView(QString keyword, QString color);
+    void markAllInView(QString color);
+    void toggleMarkSelections();
+
     /**
      * @author shaoyu.guo ut000455
      * @brief updateMarkAllSelectColor 文档篇幅视图有变更时（翻页/滚动条变化/鼠标滚轮变化/键盘上下键），动态更新绘制可视范围内字符颜色
@@ -525,7 +546,10 @@ private:
     QTextEdit::ExtraSelection m_findHighlightSelection;///< “查找”的字符格式（当前位置字符）
     QTextEdit::ExtraSelection m_wordUnderCursorSelection;
     QList<QTextEdit::ExtraSelection> m_wordMarkSelections;///< 记录标记的列表（分行记录）
-    QMap<int, QList<QTextEdit::ExtraSelection>> m_mapWordMarkSelections; ///< 记录标记的表（按标记动作记录）
+    QMap<int,QList<QTextEdit::ExtraSelection>> m_mapWordMarkSelections;///< 记录标记的表（按标记动作记录）
+    QMap<QString, QString> m_mapKeywordAndColors;
+    QList<TextEdit::MarkOperation> m_markOperations;    ///记录所有标记操作
+    QMap<QString, QList<QTextEdit::ExtraSelection>> m_mapKeywordMarkSelections; ///记录关键字对应的全文标记
     QTextEdit::ExtraSelection m_markAllSelection;///< “标记所有”的字符格式
     QList<QTextEdit::ExtraSelection> m_markFoldHighLightSelections;
 
