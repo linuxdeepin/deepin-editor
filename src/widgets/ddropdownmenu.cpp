@@ -84,12 +84,10 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
         center.setX(center.x() - menuWidth / 2);
         m_menu->move(center);
         m_menu->exec();
-        if(bClicked){
-            //如果鼠标点击清除ｆｏｃｕｓ
-            m_pToolButton->clearFocus();
-            QEvent event(QEvent::HoverLeave);
-            QApplication::sendEvent(m_pToolButton,&event);
-        }
+        //清除ｆｏｃｕｓ
+        m_pToolButton->clearFocus();
+        QEvent event(QEvent::HoverLeave);
+        QApplication::sendEvent(m_pToolButton, &event);
     });
 
     //设置字体自适应大小
@@ -186,6 +184,12 @@ void DDropdownMenu::setChildrenFocus(bool ok)
         m_pToolButton->clearFocus();
         m_pToolButton->setFocusPolicy(Qt::NoFocus);
     }
+}
+
+void DDropdownMenu::setRequestMenu(bool request)
+{
+    m_pToolButton->setEnabled(request);
+    isRequest = request;
 }
 
 DToolButton *DDropdownMenu::getButton()
@@ -403,8 +407,10 @@ bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
             QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
             if(mouseEvent->button() == Qt::LeftButton){
                 m_bPressed = true;
-                //重新绘制icon 点击改变前景色
-                m_pToolButton->setIcon(createIcon());
+                if (isRequest) {
+                    //重新绘制icon 点击改变前景色
+                    m_pToolButton->setIcon(createIcon());
+                }
                 return true;
             }
 
@@ -421,7 +427,9 @@ bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
             if(mouseEvent->button() == Qt::LeftButton){
                 m_bPressed = false;
                 m_pToolButton->setIcon(createIcon());
-                Q_EMIT requestContextMenu(true);
+                if (isRequest) {
+                    Q_EMIT requestContextMenu(true);
+                }
                 m_pToolButton->clearFocus();
             }
             return true;

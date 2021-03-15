@@ -36,6 +36,7 @@
 #include <QTimer>
 #include <QDir>
 #include <DSettingsOption>
+#include <DMenuBar>
 #include <QFileInfo>
 
 DCORE_USE_NAMESPACE
@@ -824,6 +825,8 @@ Window *EditWrapper::window()
 void EditWrapper::loadContent(const QByteArray &content)
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
+    m_pWindow->setPrintEnabled(false);
+    m_pBottomBar->setChildEnabled(false);
     m_pTextEdit->clear();
     m_bQuit = false;
     //QTextDocument *doc = m_pTextEdit->document();
@@ -895,7 +898,8 @@ void EditWrapper::loadContent(const QByteArray &content)
             }
         }
     }
-
+    m_pWindow->setPrintEnabled(true);
+    m_pBottomBar->setChildEnabled(true);
     QApplication::restoreOverrideCursor();
 }
 

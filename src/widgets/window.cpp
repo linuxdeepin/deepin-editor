@@ -57,6 +57,7 @@
 #endif
 
 #define PRINT_FLAG 2
+#define PRINT_ACTION 8
 
 /*!
  * \~chinese \brief printPage 绘制每一页文本纸张到打印机
@@ -2576,4 +2577,9 @@ QString Window::getKeywordForSearchAll()
 QString Window::getKeywordForSearch()
 {
     return m_keywordForSearch;
+}
+
+void Window::setPrintEnabled(bool enabled)
+{
+    m_menu->actions().at(PRINT_ACTION)->setEnabled(enabled);
 }

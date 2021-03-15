@@ -47,6 +47,7 @@ public:
     void setTheme(const QString &theme);
 
     void setChildrenFocus(bool ok);
+    void setRequestMenu(bool request);
     DToolButton* getButton();
 public slots:
     void setCurrentAction(QAction*);
@@ -81,6 +82,7 @@ private:
     QAction* m_pActUtf8 = nullptr;
     QFont m_font;
     bool m_bPressed =false;
+    bool isRequest = true;
     KSyntaxHighlighting::Repository m_Repository;
 private:
     static QVector<QPair<QString,QStringList>> sm_groupEncodeVec;

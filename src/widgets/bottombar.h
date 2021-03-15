@@ -43,6 +43,7 @@ public:
     void setCursorStatus(const QString &text);
     void setPalette(const QPalette &palette);
     void updateSize(int size);
+    void setChildEnabled(bool enabled);
     //设置所有焦点　梁卫东　２０２０－０９－１４　１０：５５：２２
     void setChildrenFocus(bool ok,QWidget* preOrderWidget = nullptr);
 

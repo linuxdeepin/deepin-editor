@@ -1,4 +1,7 @@
 #include "test_textedit.h"
+#include "stub.h"
+#include "../../src/widgets/window.h"
+#include <QUndoStack>
 
 test_textedit::test_textedit()
 {
@@ -289,8 +292,23 @@ TEST_F(test_textedit, copyLines)
 
     assert(1==1);
 }
+
+void stub_push(QUndoCommand *cmd)
+{
+    Q_UNUSED(cmd);
+}
+
+void stub_updateModifyStatus(const QString &path, bool isModified)
+{
+    Q_UNUSED(path);
+    Q_UNUSED(isModified);
+}
+
 TEST_F(test_textedit, cutlines)
 {
+    Stub stub;
+    stub.set(ADDR(QUndoStack, push), stub_push);
+    stub.set(ADDR(Window, updateModifyStatus), stub_updateModifyStatus);
     QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
     EditWrapper * ee = new EditWrapper();
     startManager->setWrapper(ee);
