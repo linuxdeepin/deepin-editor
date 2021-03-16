@@ -832,7 +832,9 @@ void EditWrapper::loadContent(const QByteArray &content)
     //QTextDocument *doc = m_pTextEdit->document();
     QTextCursor cursor = m_pTextEdit->textCursor();
 
-    int len = content.length();
+    QString strContent = content.data();
+
+    int len = strContent.length();
     //初始化显示文本大小
     int InitContentPos = 5 * 1024;
     //每次读取文件步长
@@ -844,13 +846,13 @@ void EditWrapper::loadContent(const QByteArray &content)
 
     int max = 40 * 1024 * 1024;
 
-    QByteArray data;
+    QString data;
 
     if (len > max) {
         for (int i = 0; i < cnt; i++) {
             //初始化秒开
             if (i == 0 && !m_bQuit) {
-                data = content.mid(i * step, InitContentPos);
+                data = strContent.mid(i * step, InitContentPos);
                 cursor.insertText(data);
                 QTextCursor firstLineCursor = m_pTextEdit->textCursor();
                 firstLineCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
@@ -861,11 +863,11 @@ void EditWrapper::loadContent(const QByteArray &content)
                 continue;
             }
             if (!m_bQuit) {
-                data = content.mid(i * step, step);
+                data = strContent.mid(i * step, step);
                 cursor.insertText(data);
                 QApplication::processEvents();
                 if (!m_bQuit && i == cnt - 1 && mod > 0) {
-                    data = content.mid(cnt * step, mod);
+                    data = strContent.mid(cnt * step, mod);
                     cursor.insertText(data);
                     QApplication::processEvents();
                 }
@@ -875,7 +877,7 @@ void EditWrapper::loadContent(const QByteArray &content)
     } else {
         //初始化秒开
         if (!m_bQuit && len > InitContentPos) {
-            data = content.mid(0, InitContentPos);
+            data = strContent.mid(0, InitContentPos);
             cursor.insertText(data);
             QTextCursor firstLineCursor = m_pTextEdit->textCursor();
             firstLineCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
@@ -884,12 +886,12 @@ void EditWrapper::loadContent(const QByteArray &content)
             OnUpdateHighlighter();
             QApplication::processEvents();
             if (!m_bQuit) {
-                data = content.mid(InitContentPos, len - InitContentPos);
+                data = strContent.mid(InitContentPos, len - InitContentPos);
                 cursor.insertText(data);
             }
         } else {
             if (!m_bQuit) {
-                cursor.insertText(content);
+                cursor.insertText(strContent);
                 QTextCursor firstLineCursor = m_pTextEdit->textCursor();
                 firstLineCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
                 m_pTextEdit->setTextCursor(firstLineCursor);

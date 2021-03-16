@@ -1545,7 +1545,9 @@ void Window::displayShortcuts()
  * \~chinese \brief Window::doPrint 调用打印预览，将文本分块输出给打印机
  * \~chinese \param pageRange 打印预览请求的页码列表
  */
-#if (DTK_VERSION_MAJOR > 5 || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR > 4) || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 4 && DTK_VERSION_PATCH >= 10))
+#if (DTK_VERSION_MAJOR > 5 \
+ || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR > 4) \
+ || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 4 && DTK_VERSION_PATCH >= 1))
 void Window::doPrint(DPrinter *printer, const QVector<int> &pageRange)
 {
     //如果打印预览请求的页码为空，则直接返回
