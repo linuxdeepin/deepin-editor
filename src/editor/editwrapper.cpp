@@ -608,8 +608,8 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteAr
     }
 
     loadContent(content);
-    //清除不支持双字节字符集符号
-    clearDoubleCharaterEncode();
+    //先屏蔽，双字节空字符先按照显示字符编码号处理
+    //clearDoubleCharaterEncode();
 
     qint64 time3 = QDateTime::currentMSecsSinceEpoch();
     qDebug() << "===========end load file:" << time3 - time1;
