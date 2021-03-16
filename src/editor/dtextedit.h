@@ -209,6 +209,8 @@ public:
     bool searchKeywordSeletion(QString keyword, QTextCursor cursor, bool findNext);
     void renderAllSelections();
 
+    bool clearMarkOperationForCursor(QTextCursor cursor);
+    bool clearMarksForTextCursor();
     void markAllKeywordInView();
     bool markKeywordInView(QString keyword, QString color);
     void markAllInView(QString color);
@@ -547,7 +549,6 @@ private:
     QTextEdit::ExtraSelection m_wordUnderCursorSelection;
     QList<QTextEdit::ExtraSelection> m_wordMarkSelections;///< 记录标记的列表（分行记录）
     QMap<int,QList<QTextEdit::ExtraSelection>> m_mapWordMarkSelections;///< 记录标记的表（按标记动作记录）
-    QMap<QString, QString> m_mapKeywordAndColors;
     QList<TextEdit::MarkOperation> m_markOperations;    ///记录所有标记操作
     QMap<QString, QList<QTextEdit::ExtraSelection>> m_mapKeywordMarkSelections; ///记录关键字对应的全文标记
     QTextEdit::ExtraSelection m_markAllSelection;///< “标记所有”的字符格式

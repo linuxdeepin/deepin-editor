@@ -4074,43 +4074,28 @@ void TextEdit::isMarkCurrentLine(bool isMark, QString strColor)
 {
     if (isMark) {
         QTextEdit::ExtraSelection selection;
-        QList<QTextEdit::ExtraSelection> listSelections;
-        QList<QTextEdit::ExtraSelection> wordMarkSelections = m_wordMarkSelections;
         selection.cursor = textCursor();
         selection.format.setBackground(QColor(strColor));
 
         TextEdit::MarkOperation markOperation;
-        markOperation.cursor = textCursor();
         markOperation.color = strColor;
 
         if (textCursor().hasSelection()) {
             markOperation.type = MarkOnce;
-
         } else {
             markOperation.type = MarkLine;
             int beginPos = textCursor().block().position();
-            int endPos = beginPos + textCursor().block().length();
+            int endPos = beginPos + textCursor().block().length() - 1;
             selection.cursor.setPosition(beginPos, QTextCursor::MoveAnchor);
             selection.cursor.setPosition(endPos, QTextCursor::KeepAnchor);
         }
+        markOperation.cursor = selection.cursor;
 
         m_markOperations.append(markOperation);
         m_wordMarkSelections.append(selection);
 
     } else {
-        //取消标记当前行（功能未加入）
-        for (int i = 0 ; i < m_wordMarkSelections.size(); ++i) {
-            QTextCursor curson = m_wordMarkSelections.at(i).cursor;
-            curson.movePosition(QTextCursor::EndOfLine);
-            QTextCursor currentCurson = textCursor();
-            currentCurson.movePosition(QTextCursor::EndOfLine);
-            //       if (m_wordMarkSelections.at(i).cursor == textCursor()) {
-            if (curson == currentCurson) {
-                m_wordMarkSelections.removeAt(i);
-//                renderAllSelections();
-                break;
-            }
-        }
+        clearMarksForTextCursor();
     }
 }
 
@@ -4202,8 +4187,6 @@ void TextEdit::isMarkAllLine(bool isMark, QString strColor)
             }
 
         } else if (!textCursor().hasSelection() || selectionText.length() == (document()->characterCount() - 1)) {
-            //m_wordMarkSelections.clear();
-
             TextEdit::MarkOperation markOperation;
             markOperation.type = MarkAll;
             markOperation.color = strColor;
@@ -4263,30 +4246,51 @@ void TextEdit::cancelLastMark()
     renderAllSelections();
 }
 
-void TextEdit::toggleMarkSelections()
+bool TextEdit::clearMarkOperationForCursor(QTextCursor cursor)
 {
-    bool isFind  = false;
+    bool bRet = false;
+    for (int i = m_markOperations.size() - 1; i >= 0; --i) {
+        if (m_markOperations.at(i).cursor == cursor) {
+            m_markOperations.removeAt(i);
+            bRet = true;
+            break;
+        }
+    }
+
+    return bRet;
+}
+
+bool TextEdit::clearMarksForTextCursor()
+{
+    bool bFind = false;
     QTextCursor cursor;
     QTextCursor textcursor = textCursor();
 
-    for (int i = 0 ; i < m_wordMarkSelections.size(); ++i) {
+    for (int i = m_wordMarkSelections.size() - 1; i >= 0; --i) {
         cursor = m_wordMarkSelections.at(i).cursor;
         if (textcursor.hasSelection()) {
             if (textcursor == cursor) {
-                isFind = true;
+                bFind = true;
+                clearMarkOperationForCursor(cursor);
                 m_wordMarkSelections.removeAt(i);
                 break;
             }
 
         } else {
             if (textcursor.position() >= cursor.selectionStart() && textcursor.position() <= cursor.selectionEnd()) {
-                isFind = true;
+                bFind = true;
+                clearMarkOperationForCursor(cursor);
                 m_wordMarkSelections.removeAt(i);
             }
         }
     }
 
-    if (!isFind) {
+    return bFind;
+}
+
+void TextEdit::toggleMarkSelections()
+{
+    if (!clearMarksForTextCursor()) {
         ColorSelectWdg *pColorSelectWdg = static_cast<ColorSelectWdg *>(m_actionColorStyles->defaultWidget());
         isMarkCurrentLine(true, pColorSelectWdg->getDefaultColor().name());
     }
