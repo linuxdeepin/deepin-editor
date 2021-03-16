@@ -377,13 +377,13 @@ void Window::showCenterWindow(bool bIsCenter)
     const QString &windowState = Settings::instance()->settings->option("advance.window.windowstate")->value().toString();
 
 
-    show();
     if (bIsCenter) {
         Dtk::Widget::moveToCenter(this);
     }
     // init window state.
     if (windowState == "window_maximum") {
         showMaximized();
+        this->overrideWindowState(Qt::WindowMaximized);
         m_needMoveToCenter = true;
     } else if (windowState == "fullscreen") {
         showFullScreen();
@@ -391,6 +391,7 @@ void Window::showCenterWindow(bool bIsCenter)
     } else {
         showNormal();
     }
+
 }
 
 void Window::initTitlebar()
@@ -1587,8 +1588,8 @@ void Window::doPrint(DPrinter *printer, const QVector<int> &pageRange)
     bool backgroundIsDark = background.value() < 128;
     //对文本进行分页处理
     for (QTextBlock srcBlock = currentWrapper()->textEditor()->document()->firstBlock(), dstBlock = printDoc->firstBlock();
-         srcBlock.isValid() && dstBlock.isValid();
-         srcBlock = srcBlock.next(), dstBlock = dstBlock.next()) {
+            srcBlock.isValid() && dstBlock.isValid();
+            srcBlock = srcBlock.next(), dstBlock = dstBlock.next()) {
         QVector<QTextLayout::FormatRange> formatList = srcBlock.layout()->formats();
         if (backgroundIsDark) {
             // adjust syntax highlighting colors for better contrast
@@ -1625,8 +1626,8 @@ void Window::doPrint(DPrinter *printer, const QVector<int> &pageRange)
     QFontMetrics fontMetrics(printDoc->defaultFont(), p.device());
     QRectF titleBox(margin,
                     body.bottom() - margin
-                        + fontMetrics.height()
-                        - 6 * dpiy / 72.0,
+                    + fontMetrics.height()
+                    - 6 * dpiy / 72.0,
                     body.width() - 2 * margin,
                     fontMetrics.height());
     printDoc->setPageSize(body.size());
@@ -1657,8 +1658,8 @@ void Window::asynPrint(QPainter &p, DPrinter *printer, const QVector<int> &pageR
     QFontMetrics fontMetrics(printDoc->defaultFont(), p.device());
     QRectF titleBox(margin,
                     body.bottom() - margin
-                        + fontMetrics.height()
-                        - 6 * dpiy / 72.0,
+                    + fontMetrics.height()
+                    - 6 * dpiy / 72.0,
                     body.width() - 2 * margin,
                     fontMetrics.height());
     for (int i = 0; i < pageRange.count(); ++i) {
@@ -1788,11 +1789,11 @@ QMap<QString, EditWrapper *> Window::getWrappers()
 void Window::setChildrenFocus(bool ok)
 {
     QMap<QString, EditWrapper *>::Iterator it = m_wrappers.begin();
-    #if 0 //fix 65897 拖拽标签页生成的新窗口中，编码方式/文本类型按钮置灰显示
+#if 0 //fix 65897 拖拽标签页生成的新窗口中，编码方式/文本类型按钮置灰显示
     for (; it != m_wrappers.end(); it++) {
         it.value()->bottomBar()->setChildrenFocus(ok);
     }
-    #endif
+#endif
 
     if (ok) {
         DIconButton *addButton = m_tabbar->findChild<DIconButton *>("AddButton");
