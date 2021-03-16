@@ -1366,6 +1366,9 @@ void Window::popupPrintDialog()
     });
 
     m_pPreview->exec();
+    printDoc->clear();
+    printDoc = nullptr;
+
 #else
     QPrinter printer(QPrinter::HighResolution);
     QPrintPreviewDialog preview(&printer, this);
