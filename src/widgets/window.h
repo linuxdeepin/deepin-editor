@@ -194,6 +194,7 @@ private:
     void handleFocusWindowChanged(QWindow *w);
     void updateThemePanelGeomerty();
     void checkTabbarForReload();
+    void clearPrintTextDocument();
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -248,11 +249,11 @@ private:
     bool m_needMoveToCenter = false;
     DPrintPreviewDialog *m_pPreview {nullptr};
     //打印文本
-    QTextDocument *printDoc = nullptr;
+    QTextDocument *m_printDoc = nullptr;
     //打印布局
-    QPageLayout lastLayout;
+    QPageLayout m_lastLayout;
     //判断是否是新的打印文档
-    bool newPrint = false;
+    bool m_isNewPrint = false;
 };
 
 #endif
