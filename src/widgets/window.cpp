@@ -1577,7 +1577,7 @@ void Window::displayShortcuts()
  */
 #if (DTK_VERSION_MAJOR > 5 \
  || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR > 4) \
- || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 4 && DTK_VERSION_PATCH >= 1))
+ || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 4 && DTK_VERSION_PATCH >= 10))
 void Window::doPrint(DPrinter *printer, const QVector<int> &pageRange)
 {
     if (nullptr == m_printDoc) {
