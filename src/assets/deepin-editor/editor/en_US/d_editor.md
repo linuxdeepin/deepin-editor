@@ -1,4 +1,4 @@
-# Text Editor|deepin_editor|
+# Text Editor|deepin-editor|
 
 ## Overview
 
@@ -211,7 +211,7 @@ Select the text to be marked in Text Editor, right-click to select **Color Mark*
 
 ### Manage Bookmark 
 
-You can add a bookmark for any current line on the Text Editor interface. The icon ![icon](../common/bookmark_normal_light.svg) shows up when you move the cursor to any line in the left column, and the icon ![bookmarkbig](../common/bookmarkbig_checked_light.svg) will appear after a bookmark is successfully added.
+Check **Show bookmarks icon** in **Settings** and you can add a bookmark for any line on the Text Editor interface. The icon ![icon](../common/bookmark_normal_light.svg) shows up when you move the cursor to any line in the left column, and the icon ![bookmarkbig](../common/bookmarkbig_checked_light.svg) will appear after a bookmark is successfully added.
 
 - Add bookmark
 

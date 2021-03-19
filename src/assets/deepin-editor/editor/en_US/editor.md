@@ -1,4 +1,4 @@
-# Text Editor|deepin_editor|
+# Text Editor|deepin-editor|
 
 ## Overview
 
