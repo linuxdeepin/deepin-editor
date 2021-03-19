@@ -1,31 +1,23 @@
-#!/bin/bash
-workspace=$1
+utdir=build-ut
+rm -r $utdir
+rm -r ../$utdir
+mkdir ../$utdir
+cd ../$utdir
 
-cd $workspace
+cmake -DCMAKE_BUILD_TYPE=Debug ..
+make -j16
 
-dpkg-buildpackage -b -d -uc -us
+workdir=$(cd ../$(dirname $0)/$utdir; pwd)
 
-project_path=$(cd `dirname $0`; pwd)
-#获取工程名
-project_name="${project_path##*/}"
-echo $project_name
+./tests/deepin-editor-test --gtest_output=xml:./report/report.xml
 
-#获取打包生成文件夹路径
-pathname=$(find . -name obj*)
+mkdir -p report
+lcov -d $workdir -c -o ./report/coverage.info
 
-echo $pathname
+lcov --extract ./report/coverage.info '*/src/*' -o ./report/coverage.info
 
-cd $pathname/tests
+lcov --remove ./report/coverage.info '*/tests/*' -o ./report/coverage.info
 
-mkdir -p coverage
-
-lcov -d ../ -c -o ./coverage/coverage.info
-
-lcov --extract ./coverage/coverage.info '*/src/*' -o ./coverage/coverage.info
-
-lcov --remove ./coverage/coverage.info '*/tests/*' -o ./coverage/coverage.info
-
-mkdir ../report
-genhtml -o ../report ./coverage/coverage.info
+genhtml -o ./report ./report/coverage.info
 
 exit 0

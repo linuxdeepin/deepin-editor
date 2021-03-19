@@ -50,7 +50,7 @@ link_libraries(${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/lib/libenca.a)
 link_libraries(${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/lib/libuchardet.a)
 
 set(PROJECT_NAME_TEST
-    ${PROJECT_NAME}_test)
+    ${PROJECT_NAME}-test)
 
 #Include all app own subdirectorys
 
