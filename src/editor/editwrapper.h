@@ -114,6 +114,7 @@ public:
     QString filePath();
     TextEdit *textEditor();
     Window *window();
+    void updateHighlighterAll();
 
 signals:
     void sigClearDoubleCharaterEncode();
@@ -162,7 +163,7 @@ private:
     KSyntaxHighlighting::Definition m_Definition;
     //KSyntaxHighlighting::SyntaxHighlighter *m_pSyntaxHighlighter = nullptr;
     CSyntaxHighlighter *m_pSyntaxHighlighter = nullptr;
-
+    bool m_bHighlighterAll = false;
 };
 
 #endif

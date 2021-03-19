@@ -1365,6 +1365,7 @@ void Window::popupPrintDialog()
 
     QTextDocument *doc = currentWrapper()->textEditor()->document();
     if (doc != nullptr && !doc->isEmpty()) {
+        currentWrapper()->updateHighlighterAll();
         m_printDoc = doc->clone(doc);
     }
 
@@ -1413,6 +1414,7 @@ void Window::popupPrintDialog()
         currentWrapper()->textEditor()->print(printer);
     });
 
+    currentWrapper()->updateHighlighterAll();
     preview.exec();
 #endif
 }

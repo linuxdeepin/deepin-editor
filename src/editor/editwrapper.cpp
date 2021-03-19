@@ -712,7 +712,7 @@ void EditWrapper::UpdateBottomBarWordCnt(int cnt)
 
 void EditWrapper::OnUpdateHighlighter()
 {
-    if (m_pSyntaxHighlighter  && !m_bQuit) {
+    if (m_pSyntaxHighlighter  && !m_bQuit && !m_bHighlighterAll) {
         QScrollBar *pScrollBar = m_pTextEdit->verticalScrollBar();
         QPoint startPoint = QPointF(0, 0).toPoint();
         QTextBlock beginBlock = m_pTextEdit->cursorForPosition(startPoint).block();
@@ -738,6 +738,30 @@ void EditWrapper::OnUpdateHighlighter()
         m_pSyntaxHighlighter->setEnableHighlight(true);
         m_pSyntaxHighlighter->rehighlightBlock(endBlock);
         m_pSyntaxHighlighter->setEnableHighlight(false);
+    }
+}
+
+void EditWrapper::updateHighlighterAll()
+{
+    if (m_pSyntaxHighlighter  && !m_bQuit && !m_bHighlighterAll) {
+        QTextBlock beginBlock = m_pTextEdit->document()->firstBlock();
+        QTextBlock endBlock = m_pTextEdit->document()->lastBlock();
+
+        if (!beginBlock.isValid() || !endBlock.isValid()) {
+            return;
+        }
+
+        for (QTextBlock var = beginBlock; var != endBlock; var = var.next()) {
+            m_pSyntaxHighlighter->setEnableHighlight(true);
+            m_pSyntaxHighlighter->rehighlightBlock(var);
+            m_pSyntaxHighlighter->setEnableHighlight(false);
+        }
+
+        m_pSyntaxHighlighter->setEnableHighlight(true);
+        m_pSyntaxHighlighter->rehighlightBlock(endBlock);
+        m_pSyntaxHighlighter->setEnableHighlight(false);
+
+        m_bHighlighterAll = true;
     }
 }
 
