@@ -8,6 +8,7 @@
 #include <QEvent>
 #include <DPushButton>
 #include <DLabel>
+#include <QPainterPath>
 
 using namespace Dtk::Widget;
 

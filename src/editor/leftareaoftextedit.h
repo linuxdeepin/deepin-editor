@@ -28,7 +28,7 @@ class LeftAreaTextEdit : public QWidget
 {
     Q_OBJECT
 public:
-    LeftAreaTextEdit(TextEdit *textEdit);
+    explicit LeftAreaTextEdit(TextEdit *textEdit);
     ~LeftAreaTextEdit() override;
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     int lineNumberAreaWidth();

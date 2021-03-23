@@ -46,7 +46,7 @@ class Settings : public QObject
     Q_OBJECT
 
 public:
-    Settings(QWidget *parent = 0);
+    explicit Settings(QWidget *parent = 0);
     ~Settings();
 
     void dtkThemeWorkaround(QWidget *parent, const QString &theme);
@@ -86,7 +86,6 @@ private:
 private:
     Dtk::Core::QSettingBackend *m_backend;
 
-    QString m_strConfigPath;
     bool m_bUserChangeKey = false;
     DSettingsDialog *m_pSettingsDialog;
     static Settings* s_pSetting;

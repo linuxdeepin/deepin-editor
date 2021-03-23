@@ -18,7 +18,6 @@
  */
 #include "../widgets/window.h"
 #include "../encodes/detectcode.h"
-#include "../controls/toast.h"
 #include "../common/fileloadthread.h"
 #include "editwrapper.h"
 #include "../common/utils.h"
@@ -37,6 +36,7 @@
 #include <QTimer>
 #include <QDir>
 #include <DSettingsOption>
+#include <DMenuBar>
 #include <QFileInfo>
 
 DCORE_USE_NAMESPACE
@@ -71,6 +71,11 @@ EditWrapper::EditWrapper(Window* window,QWidget *parent)
     connect(m_pWaringNotices, &WarningNotices::saveAsBtnClicked, m_pWindow, &Window::saveAsFile);
     connect(m_pTextEdit->verticalScrollBar(),&QScrollBar::valueChanged,this,[this](int){
         OnUpdateHighlighter();
+        if (m_pWindow->findBarIsVisiable() &&
+                (QString::compare(m_pWindow->getKeywordForSearchAll(), m_pWindow->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
+            m_pTextEdit->highlightKeywordInView(m_pWindow->getKeywordForSearchAll());
+        }
+        m_pTextEdit->markAllKeywordInView();
     });
 }
 
@@ -182,8 +187,7 @@ bool EditWrapper::saveAsFile()
     this->setUpdatesEnabled(true);
     hideWarningNotices();
 
-    if(QDialog::Accepted == mode)
-    {
+    if (QDialog::Accepted == mode) {
         const QString newFilePath = dialog.selectedFiles().value(0);
         if (newFilePath.isEmpty())
             return false;
@@ -222,10 +226,9 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
 
 
     //1.如果修改切换编码提示用户是否保存,不保存重新打开文件读取.2.没有修改是否另存为
-    if(m_pTextEdit->getModified())
-    {
+    if (m_pTextEdit->getModified()) {
         DDialog *dialog = new DDialog(tr("Encoding changed. Do you want to save the file now?"), "", this);
-        dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
+        dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnBottomHint);
         dialog->setIcon(QIcon::fromTheme("deepin-editor"));
         dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);//不保存
  //       dialog->addButton(QString(tr("Discard")), false, DDialog::ButtonNormal);//不保存
@@ -236,8 +239,7 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
         if(res == 0) return false;
 
         //不保存,重写载入
-        if(res == 1)
-        {
+        if (res == 1) {
             bool ok = readFile(encode);
             //if(ok && m_sCurEncode != m_sFirstEncode) m_pTextEdit->setTabbarModified(true);
             return ok;
@@ -271,7 +273,7 @@ void EditWrapper::reloadModifyFile()
     //如果文件修改提示用户是否保存  如果临时文件保存就是另存为
     if (m_pTextEdit->getModified()) {
         DDialog *dialog = new DDialog(tr("Do you want to save this file?"), "", this);
-        dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
+        dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnBottomHint);
         dialog->setIcon(QIcon::fromTheme("deepin-editor"));
         dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);//不保存
         dialog->addButton(QString(tr("Discard")), false, DDialog::ButtonNormal);//取消
@@ -292,8 +294,7 @@ void EditWrapper::reloadModifyFile()
             //临时文件保存另存为 需要删除源草稿文件文件
            if(Utils::isDraftFile(m_pTextEdit->getFilePath())){
                if(!saveDraftFile()) return;
-           }
-           else {
+            } else {
               if(!saveAsFile()) return;
            }
            //重写加载文件
@@ -324,11 +325,11 @@ bool EditWrapper::saveFile()
 {
     QString qstrFilePath = m_pTextEdit->getTruePath();
     QFile file(qstrFilePath);
+    hideWarningNotices();
 
     if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         QByteArray fileContent = m_pTextEdit->toPlainText().toLocal8Bit();
-        if(!fileContent.isEmpty())
-        {
+        if (!fileContent.isEmpty()) {
             QByteArray Outdata;
             DetectCode::ChangeFileEncodingFormat(fileContent,Outdata,QString("UTF-8"),m_sCurEncode);
             file.write(Outdata);
@@ -474,8 +475,7 @@ bool EditWrapper::saveDraftFile()
     this->setUpdatesEnabled(true);
     hideWarningNotices();
 
-    if(mode == 1)
-    {
+    if (mode == 1) {
         const QString newFilePath = dialog.selectedFiles().value(0);
         if (newFilePath.isEmpty())
             return false;
@@ -608,7 +608,7 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QByteArr
 
     loadContent(content);
     //清除不支持双字节字符集符号
-    clearDoubleCharaterEncode();
+    //clearDoubleCharaterEncode();
 
     qint64 time3 = QDateTime::currentMSecsSinceEpoch();
     qDebug()<<"===========end load file:"<<time3 - time1;
@@ -627,26 +627,22 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QByteArr
         // 转化为 JSON 文档
         QJsonDocument doucment = QJsonDocument::fromJson(temFileList.value(var).toUtf8(), &jsonError);
         // 解析未发生错误
-        if (!doucment.isNull() && (jsonError.error == QJsonParseError::NoError))
-        {
-            if (doucment.isObject())
-            {
+        if (!doucment.isNull() && (jsonError.error == QJsonParseError::NoError)) {
+            if (doucment.isObject()) {
                 QString temFilePath;
                 QString localPath;
                 // JSON 文档为对象
                 QJsonObject object = doucment.object();  // 转化为对象
 
-                if (object.contains("localPath") || object.contains("temFilePath"))
-                {  // 包含指定的 key
+                if (object.contains("localPath") || object.contains("temFilePath")) {
+                    // 包含指定的 key
                     QJsonValue localPathValue = object.value("localPath");  // 获取指定 key 对应的 value
                     QJsonValue temFilePathValue = object.value("temFilePath");  // 获取指定 key 对应的 value
 
-                    if (localPathValue.toString() == m_pTextEdit->getFilePath())
-                    {
+                    if (localPathValue.toString() == m_pTextEdit->getFilePath()) {
                         QJsonValue value = object.value("cursorPosition");  // 获取指定 key 对应的 value
 
-                        if (value.isString())
-                        {
+                        if (value.isString()) {
                             QTextCursor cursor = m_pTextEdit->textCursor();
                             cursor.setPosition(value.toString().toInt());
                             m_pTextEdit->setTextCursor(cursor);
@@ -656,8 +652,7 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QByteArr
                     } else if (temFilePathValue.toString() == m_pTextEdit->getFilePath()) {
                         QJsonValue value = object.value("cursorPosition");  // 获取指定 key 对应的 value
 
-                        if (value.isString())
-                        {
+                        if (value.isString()) {
                             QTextCursor cursor = m_pTextEdit->textCursor();
                             cursor.setPosition(value.toString().toInt());
                             m_pTextEdit->setTextCursor(cursor);
@@ -675,7 +670,10 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode,const QByteArr
         updateModifyStatus(true);
     }
 
-    if(m_pSyntaxHighlighter) m_pSyntaxHighlighter->setEnableHighlight(true);
+    if (m_pSyntaxHighlighter) {
+        m_pSyntaxHighlighter->setEnableHighlight(true);
+        OnUpdateHighlighter();
+    }
 
     m_pBottomBar->setEncodeName(m_sCurEncode);
 }
@@ -713,22 +711,22 @@ void EditWrapper::UpdateBottomBarWordCnt(int cnt)
 
 void EditWrapper::OnUpdateHighlighter()
 {
-    if(m_pSyntaxHighlighter  && !m_bQuit){
-      QScrollBar* pScrollBar = m_pTextEdit->verticalScrollBar();
-      //QTextBlock textBlock = m_pTextEdit->document()->findBlockByNumber(value);
+    if (m_pSyntaxHighlighter  && !m_bQuit && !m_bHighlighterAll) {
+        QScrollBar *pScrollBar = m_pTextEdit->verticalScrollBar();
+        QPoint startPoint = QPointF(0, 0).toPoint();
+        QTextBlock beginBlock = m_pTextEdit->cursorForPosition(startPoint).block();
+        QTextBlock endBlock;
 
-      QTextBlock beginBlock = m_pTextEdit->document()->findBlockByNumber(m_pTextEdit->getFirstVisibleBlockId());
-
-      QTextBlock endBlock;
-      if (pScrollBar->maximum() > 0){
-          QPoint endPoint = QPointF(0,m_pTextEdit->height() + (m_pTextEdit->height()/pScrollBar->maximum())*pScrollBar->value()).toPoint();
-         endBlock = m_pTextEdit->cursorForPosition(endPoint).block();
-
-      }else {
-         endBlock = m_pTextEdit->document()->lastBlock();
+        if (pScrollBar->maximum() > 0) {
+            QPoint endPoint = QPointF(0, 1.5 * m_pTextEdit->height()).toPoint();
+            endBlock = m_pTextEdit->cursorForPosition(endPoint).block();
+        } else {
+            endBlock = m_pTextEdit->document()->lastBlock();
       }
 
-    if(!beginBlock.isValid() || !endBlock.isValid()) return;
+        if (!beginBlock.isValid() || !endBlock.isValid()) {
+            return;
+        }
 
      for (QTextBlock var = beginBlock; var != endBlock; var= var.next()) {
           m_pSyntaxHighlighter->setEnableHighlight(true);
@@ -736,13 +734,41 @@ void EditWrapper::OnUpdateHighlighter()
           m_pSyntaxHighlighter->setEnableHighlight(false);
      }
 
-     qDebug()<<"OnUpdateHighlighter:"<<beginBlock.text()<<endBlock.text();
+        m_pSyntaxHighlighter->setEnableHighlight(true);
+        m_pSyntaxHighlighter->rehighlightBlock(endBlock);
+        m_pSyntaxHighlighter->setEnableHighlight(false);
+    }
+}
+
+void EditWrapper::updateHighlighterAll()
+{
+    if (m_pSyntaxHighlighter  && !m_bQuit && !m_bHighlighterAll) {
+        QTextBlock beginBlock = m_pTextEdit->document()->firstBlock();
+        QTextBlock endBlock = m_pTextEdit->document()->lastBlock();
+
+        if (!beginBlock.isValid() || !endBlock.isValid()) {
+            return;
+        }
+
+        for (QTextBlock var = beginBlock; var != endBlock; var = var.next()) {
+            m_pSyntaxHighlighter->setEnableHighlight(true);
+            m_pSyntaxHighlighter->rehighlightBlock(var);
+            m_pSyntaxHighlighter->setEnableHighlight(false);
+        }
+
+        m_pSyntaxHighlighter->setEnableHighlight(true);
+        m_pSyntaxHighlighter->rehighlightBlock(endBlock);
+        m_pSyntaxHighlighter->setEnableHighlight(false);
+
+        m_bHighlighterAll = true;
     }
 }
 
 void EditWrapper::updateModifyStatus(bool bModified)
 {
     if(getFileLoading()) return;
+    if (!bModified)
+        m_pTextEdit->updateSaveIndex();
     m_pTextEdit->document()->setModified(bModified);
     Window *pWindow = static_cast<Window*>(QWidget::window());
     pWindow->updateModifyStatus(m_pTextEdit->getFilePath(),bModified);
@@ -809,19 +835,30 @@ TextEdit *EditWrapper::textEditor()
 
 Window *EditWrapper::window()
 {
+    Window *window = static_cast<Window *>(QWidget::window());
+
+    if (m_pWindow != window) {
+        m_pWindow = window;
+    }
+
     return m_pWindow;
 }
 
 //支持大文本加载 界面不卡顿 秒关闭
 void EditWrapper::loadContent(const QByteArray &content)
 {
+    m_pBottomBar->setChildEnabled(false);
+    #ifdef TABLET
+    m_pWindow->setPrintEnabled(false);
+    #endif
     QApplication::setOverrideCursor(Qt::WaitCursor);
     m_pTextEdit->clear();
     m_bQuit = false;
     //QTextDocument *doc = m_pTextEdit->document();
     QTextCursor cursor = m_pTextEdit->textCursor();
 
-    int len = content.length();
+    QString strContent = content.data();
+    int len = strContent.length();
     //初始化显示文本大小
     int InitContentPos = 5*1024;
     //每次读取文件步长
@@ -833,13 +870,13 @@ void EditWrapper::loadContent(const QByteArray &content)
 
     int max = 40*1024*1024;
 
-    QByteArray data;
+    QString data;
 
     if(len > max){
         for (int i = 0; i < cnt; i++) {
             //初始化秒开
             if(i == 0 && !m_bQuit){              
-              data = content.mid(i*step,InitContentPos);
+                data = strContent.mid(i * step, InitContentPos);
               cursor.insertText(data);
               QTextCursor firstLineCursor = m_pTextEdit->textCursor();
               firstLineCursor.movePosition(QTextCursor::Start,QTextCursor::MoveAnchor);
@@ -850,11 +887,11 @@ void EditWrapper::loadContent(const QByteArray &content)
               continue;
             }
             if(!m_bQuit){
-                data= content.mid(i*step,step);
+                data = strContent.mid(i * step, step);
                 cursor.insertText(data);
                 QApplication::processEvents();
                 if(!m_bQuit && i == cnt -1 && mod > 0){
-                    data = content.mid(cnt*step,mod);
+                    data = strContent.mid(cnt * step, mod);
                     cursor.insertText(data);
                     QApplication::processEvents();
                 }
@@ -864,7 +901,7 @@ void EditWrapper::loadContent(const QByteArray &content)
     }else {
         //初始化秒开
         if(!m_bQuit && len > InitContentPos){
-            data = content.mid(0,InitContentPos);
+            data = strContent.mid(0, InitContentPos);
             cursor.insertText(data);
             QTextCursor firstLineCursor = m_pTextEdit->textCursor();
             firstLineCursor.movePosition(QTextCursor::Start,QTextCursor::MoveAnchor);
@@ -873,12 +910,12 @@ void EditWrapper::loadContent(const QByteArray &content)
             OnUpdateHighlighter();
             QApplication::processEvents();
             if(!m_bQuit){
-                data = content.mid(InitContentPos,len-InitContentPos);
+                data = strContent.mid(InitContentPos, len - InitContentPos);
                 cursor.insertText(data);
             }
         }else {
            if(!m_bQuit) {
-              cursor.insertText(content);
+                cursor.insertText(strContent);
               QTextCursor firstLineCursor = m_pTextEdit->textCursor();
               firstLineCursor.movePosition(QTextCursor::Start,QTextCursor::MoveAnchor);
               m_pTextEdit->setTextCursor(firstLineCursor);
@@ -887,7 +924,10 @@ void EditWrapper::loadContent(const QByteArray &content)
            }
         }
     }
-
+    #ifdef TABLET
+    m_pWindow->setPrintEnabled(true);
+    #endif
+    m_pBottomBar->setChildEnabled(true);
     QApplication::restoreOverrideCursor();
 }
 void EditWrapper::clearDoubleCharaterEncode()

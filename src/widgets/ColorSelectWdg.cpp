@@ -56,7 +56,7 @@ void ColorLabel::paintEvent(QPaintEvent *event)
 
     //如果点击选择画　圆环
     if(m_bSelected){
-        QRect r = rect();
+        r = rect();
         QPainterPath sencondCircle;
         sencondCircle.addEllipse(r.adjusted(distance,distance,-distance,-distance));
         //大圆减小圆等于圆环

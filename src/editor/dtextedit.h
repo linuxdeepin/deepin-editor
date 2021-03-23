@@ -49,6 +49,7 @@
 #include <QGestureEvent>
 #include <QProxyStyle>
 
+#define TEXT_EIDT_MARK_ALL  "MARK_ALL"
 
 const QString SELECT_HIGHLIGHT_COLOR = "#2CA7F8";
 enum ConvertCase { UPPER, LOWER, CAPITALIZE };
@@ -66,6 +67,18 @@ public:
         Insert,
         Overwrite,
         Readonly
+    };
+    enum MarkOperationType {
+        MarkOnce,
+        MarkAllMatch,
+        MarkLine,
+        MarkAll
+    };
+    struct MarkOperation
+    {
+        MarkOperationType type;
+        QTextCursor cursor;
+        QString color;
     };
 
     TextEdit(QWidget *parent = nullptr);
@@ -94,16 +107,20 @@ public:
     void popRightMenu(QPoint pos = QPoint());
     //
     void setWrapper(EditWrapper *);
-    //
-    inline QString getFilePath() { return m_sFilePath;};
+
+    /**
+     * @brief getFilePath 获取打开文件路径
+     * @return 打开文件路径
+     */
+    inline QString getFilePath() { return m_sFilePath;}
     //
     inline void setFilePath(QString file) { m_sFilePath = file;}
     //
-    inline LeftAreaTextEdit* getLeftAreaWidget() { return m_pLeftAreaWidget;};
+    inline LeftAreaTextEdit *getLeftAreaWidget() { return m_pLeftAreaWidget;}
     //是否撤销重做操作
-    bool isUndoRedoOpt() {return (m_pUndoStack->canRedo()||m_pUndoStack->canUndo());};
+    bool isUndoRedoOpt() {return (m_pUndoStack->canRedo() || m_pUndoStack->canUndo());}
     //判断是否修改
-    bool getModified() { return (document()->isModified() && isUndoRedoOpt());}
+    bool getModified() { return (document()->isModified() && (m_pUndoStack->canUndo() || m_pUndoStack->index() != m_lastSaveIndex));}
 
     int getCurrentLine();
     int getCurrentColumn();
@@ -181,10 +198,25 @@ public:
 
     void removeKeywords();
     bool highlightKeyword(QString keyword, int position);
-    void updateCursorKeywordSelection(int position, bool findNext);
+    bool highlightKeywordInView(QString keyword);
+    void clearFindMatchSelections();
+    void updateCursorKeywordSelection(QString keyword, bool findNext);
     void updateHighlightLineSelection();
     bool updateKeywordSelections(QString keyword,QTextCharFormat charFormat,QList<QTextEdit::ExtraSelection> *listSelection);
+    bool updateKeywordSelectionsInView(QString keyword, QTextCharFormat charFormat, QList<QTextEdit::ExtraSelection> *listSelection);
+    bool searchKeywordSeletion(QString keyword, QTextCursor cursor, bool findNext);
     void renderAllSelections();
+    bool clearMarkOperationForCursor(QTextCursor cursor);
+    bool clearMarksForTextCursor();
+    void markAllKeywordInView();
+    bool markKeywordInView(QString keyword, QString color);
+    void markAllInView(QString color);
+    void toggleMarkSelections();
+    /**
+     * @author shaoyu.guo ut000455
+     * @brief updateMarkAllSelectColor 文档篇幅视图有变更时（翻页/滚动条变化/鼠标滚轮变化/键盘上下键），动态更新绘制可视范围内字符颜色
+     */
+    void updateMarkAllSelectColor();
 
 
     void lineNumberAreaPaintEvent(QPaintEvent *event);
@@ -414,6 +446,11 @@ public:
      */
     void setBookMarkList(QList<int> bookMarkList);
 
+    /**
+     * 更新上次保存时的撤销回收栈的索引值
+     */
+    void updateSaveIndex();
+
 signals:
     void clickFindAction();
     void clickReplaceAction();
@@ -455,6 +492,7 @@ public slots:
     void adjustScrollbarMargins();
     void onSelectionArea();
     void fingerZoom(QString name, QString direction, int fingers);
+    void cursorPositionChanged();
 
 protected:
     bool event(QEvent* evt) override;   //触摸屏event事件
@@ -479,7 +517,6 @@ private:
     //去除"*{*" "*}*" "*{*}*"跳过当做普通文本处理不折叠　梁卫东２０２０－０９－０１　１７：１６：４１
     bool blockContainStrBrackets(int line);
     bool setCursorKeywordSeletoin(int position, bool findNext);
-    void cursorPositionChanged();
     void updateHighlightBrackets(const QChar &openChar, const QChar &closeChar);
 
     void getNeedControlLine(int line, bool isVisable);
@@ -501,6 +538,7 @@ public:
     bool bIsSetLineNumberWidth = true;
     bool m_pIsShowCodeFoldArea;
     bool m_pIsShowBookmarkArea;
+    bool m_bIsMarkAllLine {false}; ///< 颜色“标记所有”标志
 
 private:
     EditWrapper *m_wrapper;
@@ -514,6 +552,8 @@ private:
     QTextEdit::ExtraSelection m_wordUnderCursorSelection;
     QList<QTextEdit::ExtraSelection> m_wordMarkSelections;///< 记录标记的列表（分行记录）
     QMap<int,QList<QTextEdit::ExtraSelection>> m_mapWordMarkSelections;///< 记录标记的表（按标记动作记录）
+    QList<TextEdit::MarkOperation> m_markOperations;    ///记录所有标记操作
+    QMap<QString, QList<QTextEdit::ExtraSelection>> m_mapKeywordMarkSelections; ///记录关键字对应的全文标记
     QTextEdit::ExtraSelection m_markAllSelection;///< “标记所有”的字符格式
     QList<QTextEdit::ExtraSelection> m_markFoldHighLightSelections;
 
@@ -580,6 +620,7 @@ private:
      //颜色选择控件替换下面action 1 2 3 4
     QWidgetAction *m_actionAllColorStyles;
     QAction *m_markAllAct;
+    QString m_strMarkAllLineColorName; ///< “标记所有”选择的颜色名称
 
     QAction *m_addComment;
     QAction *m_cancelComment;
@@ -722,5 +763,6 @@ private:
     QString m_sFilePath;
     //自定义撤销重做栈
     QUndoStack* m_pUndoStack = nullptr;
+    int m_lastSaveIndex = 0;
 };
 #endif

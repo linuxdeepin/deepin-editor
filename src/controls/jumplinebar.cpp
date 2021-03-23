@@ -33,14 +33,12 @@ JumpLineBar::JumpLineBar(DFloatingWidget *parent)
 
     // Init layout and widgets.
     m_layout = new QHBoxLayout();
-    m_layout->setContentsMargins(10, 4, 4, 4);
+    m_layout->setContentsMargins(10, 6, 10, 6);
     m_layout->setSpacing(0);
 
     m_label = new QLabel();
-    m_label->setMinimumHeight(37);
     m_label->setText(tr("Go to Line: "));
     m_editLine = new LineBar();
-    //m_editLine->lineEdit()->setFixedSize(96, 37);
 
     m_lineValidator = new QIntValidator;
     m_editLine->lineEdit()->setValidator(m_lineValidator);

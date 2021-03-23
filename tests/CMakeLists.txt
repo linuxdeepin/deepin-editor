@@ -27,8 +27,8 @@ find_package(Qt5DBus REQUIRED)
 find_package(Qt5Concurrent REQUIRED)
 find_package(Qt5PrintSupport REQUIRED)
 find_package(Qt5Gui REQUIRED)
-find_package(DtkWidget REQUIRED)
-find_package(DtkCore REQUIRED)
+find_package(DtkWidget5.5 REQUIRED)
+find_package(DtkCore5.5 REQUIRED)
 find_package(KF5SyntaxHighlighting)
 find_package(KF5Codecs)
 find_package(DFrameworkdbus REQUIRED)
@@ -75,8 +75,8 @@ add_executable(${PROJECT_NAME_TEST}
 # 生成测试可执行程序的依赖库
 target_link_libraries(${PROJECT_NAME_TEST}
         gmock gmock_main gtest gtest_main
-    ${DtkWidget_LIBRARIES}
-    ${DtkCore_LIBRARIES}
+    ${DtkWidget5.5_LIBRARIES}
+    ${DtkCore5.5_LIBRARIES}
     ${DFrameworkdbus_LIBRARIES}
     ${GSTREAMER_LIBRARIES}
     ${Qt5PrintSupport_LIBRARIES}
@@ -99,9 +99,9 @@ target_link_libraries(${PROJECT_NAME_TEST}
     -lm
         )
 
-target_include_directories(${PROJECT_NAME_TEST} PUBLIC ${DtkWidget_INCLUDE_DIRS}
-                                                       ${DtkCore_INCLUDE_DIRS}
-                                                       ${DtkGui_INCLUDE_DIRS})
+target_include_directories(${PROJECT_NAME_TEST} PUBLIC ${DtkWidget5.5_INCLUDE_DIRS}
+                                                       ${DtkCore5.5_INCLUDE_DIRS}
+                                                       ${DtkGui5.5_INCLUDE_DIRS})
 #以下注释
 add_custom_target(test
 #    #执行mkdir -p 创建 coverageResult
@@ -110,33 +110,13 @@ add_custom_target(test
 )
 #
 add_custom_command(TARGET test
-            COMMAND echo " =================== CREAT LCOV REPROT BEGIN ==================== "
-#
-#    #1.清理原先的gcov信息
-#    COMMAND lcov --directory ./test/CMakeFiles/${PROJECT_NAME_TEST}.dir --zerocounters
-#    COMMAND lcov --directory ./test/CMakeFiles/${PROJECT_NAME}.dir --zerocounters
-COMMAND ${CMAKE_BINARY_DIR}/test/${PROJECT_NAME_TEST}
-#
-#    #2.收集gcov信息到.info文件中
-#    COMMAND lcov --directory . --capture --output-file ./test/coverageResult/${PROJECT_NAME}_Coverage.info
-#
-#    #3.过滤一些我们不感兴趣的文件的覆盖率信息
-#    COMMAND echo " =================== do filter begin ==================== "
-#    COMMAND lcov --remove ./test/coverageResult/${PROJECT_NAME}_Coverage.info
-#    '*/${PROJECT_NAME_TEST}_autogen/*' '*/${PROJECT_NAME}_autogen/*' '*/usr/include/*' '*/dbuslogin1manager*' '*/test/*' '*/googletest/*'
-#    -o ./test/coverageResult/${PROJECT_NAME}_Coverage.info
-#    COMMAND echo " =================== do filter end ==================== "
-#
-#    #3.将.info信息生成报告到reprot文件夹中
-#    COMMAND genhtml -o ./test/coverageResult/report ./test/coverageResult/${PROJECT_NAME}_Coverage.info
-#
+    COMMAND echo " =================== CREAT LCOV REPROT BEGIN ==================== "
+
+    COMMAND ${CMAKE_BINARY_DIR}/tests/${PROJECT_NAME_TEST}
+
     COMMAND echo " =================== TEST END ==================== "
-#
-#    COMMAND echo " Coverage files have been output to ${CMAKE_BINARY_DIR}/coverageResult/report "
-#
-#    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-    )
-#
+)
+
 ##'make test'命令依赖与我们的测试程序f
 add_dependencies(test ${PROJECT_NAME_TEST})
 #

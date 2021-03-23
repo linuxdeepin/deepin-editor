@@ -26,6 +26,7 @@
 #include "ddropdownmenu.h"
 #include <DApplicationHelper>
 #include <DFontSizeManager>
+#include <QPainterPath>
 
 class EditWrapper;
 class BottomBar : public QWidget
@@ -33,7 +34,7 @@ class BottomBar : public QWidget
     Q_OBJECT
 
 public:
-    BottomBar(QWidget *parent = nullptr);
+    explicit BottomBar(QWidget *parent = nullptr);
     ~BottomBar();
 
     void updatePosition(int row, int column);
@@ -42,6 +43,7 @@ public:
     void setCursorStatus(const QString &text);
     void setPalette(const QPalette &palette);
     void updateSize(int size);
+    void setChildEnabled(bool enabled);
     //设置所有焦点　梁卫东　２０２０－０９－１４　１０：５５：２２
     void setChildrenFocus(bool ok,QWidget* preOrderWidget = nullptr);
 

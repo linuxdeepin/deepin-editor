@@ -83,7 +83,8 @@ BottomBar::BottomBar(QWidget *parent)
         {
             m_pEncodeMenu->setCurrentTextOnly(pAct->text());
         }
-        m_pWrapper->clearDoubleCharaterEncode();
+        //先屏蔽，双字节空字符先按照显示字符编码号处理
+        //m_pWrapper->clearDoubleCharaterEncode();
     });
 
     //切换文件类型
@@ -152,6 +153,13 @@ void BottomBar::setPalette(const QPalette &palette)
 void BottomBar::updateSize(int size)
 {
     setFixedHeight(size);
+}
+void BottomBar::setChildEnabled(bool enabled)
+{
+    m_pEncodeMenu->setEnabled(enabled);
+    m_pHighlightMenu->setEnabled(enabled);
+    m_pEncodeMenu->setRequestMenu(enabled);
+    m_pHighlightMenu->setRequestMenu(enabled);
 }
 
 void BottomBar::setChildrenFocus(bool ok,QWidget* preOrderWidget)

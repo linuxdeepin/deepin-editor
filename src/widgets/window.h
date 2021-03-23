@@ -39,6 +39,8 @@
 #include "../common/ImInterface.h"
 #include <DMainWindow>
 #include <DStackedWidget>
+#include <qprintpreviewdialog.h>
+#include <dprintpreviewdialog.h>
 #include <QDesktopWidget>
 
 //virtual keyboard dbus
@@ -64,6 +66,7 @@ public:
 
     void showCenterWindow(bool bIsCenter);
     void initTitlebar();
+    bool checkBlockShutdown();
 
     int getTabIndex(const QString &file);
     void activeTab(int index);
@@ -112,6 +115,8 @@ public:
     void remberPositionRestore();
 
     void displayShortcuts();
+    void doPrint(DPrinter *printer, const QVector<int> &pageRange);
+    void asynPrint(QPainter &p, DPrinter *printer, const QVector<int> &pageRange);
 
     /**
      * @brief backupFile 备份文件
@@ -138,12 +143,16 @@ public:
     //设置显示清除焦点
     void setChildrenFocus(bool ok);
 
+    bool findBarIsVisiable();
+    QString getKeywordForSearchAll();
+    QString getKeywordForSearch();
+    void setPrintEnabled(bool enabled);
 signals:
     void themeChanged(const QString themeName);
     void requestDragEnterEvent(QDragEnterEvent *);
     void requestDropEvent(QDropEvent *);
     void newWindow();
-    void close();
+    void closeWindow();
     void sigJudgeBlockShutdown();
     void pressEsc();
 
@@ -159,8 +168,8 @@ public slots:
 
     void handleBackToPosition(const QString &file, int row, int column, int scrollOffset);
 
-    void handleFindNext();
-    void handleFindPrev();
+    void handleFindNextSearchKeyword(const QString &keyword);
+    void handleFindPrevSearchKeyword(const QString &keyword);
     void slotFindbarClose();
     void slotReplacebarClose();
 
@@ -195,6 +204,7 @@ private:
     void handleFocusWindowChanged(QWindow *w);
     void updateThemePanelGeomerty();
     void checkTabbarForReload();
+    void clearPrintTextDocument();
 
     // Virtual keyboard dbus connnecttion initialization.
     void initVirtualKeyboardDbus();
@@ -204,8 +214,8 @@ private:
     int  getDesktopAvailableHeight();
     void setDesktopAvailableWidth(int iWidth);
     int  getDesktopAvailableWidth();
-    bool checkBlockShutdown();
     void addFindToolButtonToTitlbar();
+	
 protected:
     #ifdef TABLET
     void dragEnterEvent(QDragEnterEvent *e) override;
@@ -214,6 +224,7 @@ protected:
     void closeEvent(QCloseEvent *event) override;
     void hideEvent(QHideEvent *event) override;
     void keyPressEvent(QKeyEvent *keyEvent) override;
+    void keyReleaseEvent(QKeyEvent *keyEvent) override;
     void dropEvent(QDropEvent* event) override;
 
 private:
@@ -251,12 +262,25 @@ private:
 
     QString m_titlebarStyleSheet;
 
+    QString m_keywordForSearch;
+    QString m_keywordForSearchAll;
+
     QString m_themePath;
     QString m_tabbarActiveColor;
     QList <TextEdit *> m_reading_list;
     QStringList m_qlistTemFile;///<临时文件列表
 
-    //virtual keyboard due-im
+    QProcess *m_shortcutViewProcess = nullptr;
+    bool m_needMoveToCenter = false;
+    DPrintPreviewDialog *m_pPreview {nullptr};
+    //打印文本
+    QTextDocument *m_printDoc = nullptr;
+    //打印布局
+    QPageLayout m_lastLayout;
+    //判断是否是新的打印文档
+    bool m_isNewPrint = false;
+	
+	//virtual keyboard due-im
     ComDeepinImInterface *m_pImInterface {nullptr};
     int m_iKeyboardHeight {0};
     int m_iDesktopAvailableHeight {0};

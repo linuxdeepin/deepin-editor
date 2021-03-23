@@ -37,7 +37,7 @@ LeftAreaTextEdit::LeftAreaTextEdit(TextEdit *textEdit) :
     m_pFlodArea->setContentsMargins(0,0,0,0);
     m_pLineNumberArea->setContentsMargins(0,0,0,0);
     m_pBookMarkArea->setFixedWidth(14);
-    m_pFlodArea->setFixedWidth(14);
+    m_pFlodArea->setFixedWidth(18);
     pHLayout->addWidget(m_pBookMarkArea);
     pHLayout->addWidget(m_pLineNumberArea);
     pHLayout->addWidget(m_pFlodArea);

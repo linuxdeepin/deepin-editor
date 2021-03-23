@@ -28,8 +28,8 @@ find_package(Qt5DBus REQUIRED)
 find_package(Qt5Concurrent REQUIRED)
 find_package(Qt5PrintSupport REQUIRED)
 find_package(Qt5Gui REQUIRED)
-find_package(DtkWidget REQUIRED)
-find_package(DtkCore REQUIRED)
+find_package(DtkWidget5.5 REQUIRED)
+find_package(DtkCore5.5 REQUIRED)
 find_package(KF5SyntaxHighlighting)
 find_package(KF5Codecs)
 find_package(DFrameworkdbus REQUIRED)
@@ -40,8 +40,8 @@ include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 # Tell CMake to create the executable
 add_executable(deepin-editor ${SRCS} deepin-editor.qrc)
 target_link_libraries(deepin-editor
-    ${DtkWidget_LIBRARIES}
-    ${DtkCore_LIBRARIES}
+    ${DtkWidget5.5_LIBRARIES}
+    ${DtkCore5.5_LIBRARIES}
     ${Qt5Widgets_LIBRARIES}
     ${Qt5DBus_LIBRARIES}
     ${Qt5PrintSupport_LIBRARIES}

@@ -40,12 +40,12 @@ Settings *Settings::s_pSetting = nullptr;
 Settings::Settings(QWidget *parent)
     : QObject(parent)
 {
-    m_strConfigPath = QString("%1/%2/%3/config.conf")
+    QString strConfigPath = QString("%1/%2/%3/config.conf")
         .arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation))
         .arg(qApp->organizationName())
         .arg(qApp->applicationName());
 
-    m_backend = new QSettingBackend(m_strConfigPath);
+    m_backend = new QSettingBackend(strConfigPath);
 
     settings = DSettings::fromJsonFile(":/resources/settings.json");
     settings->setBackend(m_backend);
@@ -490,7 +490,7 @@ bool Settings::isShortcutConflict(const QString &Name, const QString &Key)
 DDialog *Settings::createDialog(const QString &title, const QString &content, const bool &bIsConflicts)
 {
     DDialog *dialog = new DDialog(title,content, m_pSettingsDialog);
-    dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
+    dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnBottomHint);
     dialog->setIcon(QIcon::fromTheme("deepin-editor"));
 
     if (bIsConflicts) {

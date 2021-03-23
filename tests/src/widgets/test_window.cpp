@@ -521,25 +521,25 @@ TEST_F(test_window, handleBackToPosition)
 }
 
 //void handleFindNext();
-TEST_F(test_window, handleFindNext)
+TEST_F(test_window, handleFindNextSearchKeyword)
 {
     window = new Window();
     EditWrapper * a = new EditWrapper();
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
     window->addTabWithWrapper(a,"bb","aad","aadd",1);
     window->m_settings =Settings::instance();
-    window->handleFindNext();
+    window->handleFindNextSearchKeyword("");
     assert(1==1);
 }
 //void handleFindPrev();
-TEST_F(test_window, handleFindPrev)
+TEST_F(test_window, handleFindPrevSearchKeyword)
 {
     window = new Window();
     EditWrapper * a = new EditWrapper();
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
     window->addTabWithWrapper(a,"bb","aad","aadd",1);
     window->m_settings =Settings::instance();
-    window->handleFindPrev();
+    window->handleFindPrevSearchKeyword("");
     assert(1==1);
 }
 //void slotFindbarClose();

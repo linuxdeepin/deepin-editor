@@ -39,7 +39,7 @@ class DDropdownMenu : public QFrame
     Q_OBJECT
 
 public:
-    DDropdownMenu(QWidget *parent = nullptr);
+    explicit DDropdownMenu(QWidget *parent = nullptr);
     ~DDropdownMenu();
     void setFontEx(const QFont& font);
 
@@ -47,10 +47,13 @@ public:
     void setTheme(const QString &theme);
 
     void setChildrenFocus(bool ok);
+    void setRequestMenu(bool request);
     DToolButton* getButton();
 public slots:
     void setCurrentAction(QAction*);
     void setCurrentTextOnly(const QString& name);
+    void slotRequestMenu(bool request);
+
 public:
     //创建编码菜单
     static DDropdownMenu* createEncodeMenu();
@@ -81,6 +84,7 @@ private:
     QAction* m_pActUtf8 = nullptr;
     QFont m_font;
     bool m_bPressed =false;
+    bool isRequest = false;
     KSyntaxHighlighting::Repository m_Repository;
 private:
     static QVector<QPair<QString,QStringList>> sm_groupEncodeVec;

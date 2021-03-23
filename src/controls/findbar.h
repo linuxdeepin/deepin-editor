@@ -49,7 +49,7 @@ class FindBar : public DFloatingWidget
     Q_OBJECT
 
 public:
-    FindBar(QWidget *parent = 0);
+    explicit FindBar(QWidget *parent = 0);
 
     bool isFocus();
     void focus();
@@ -62,8 +62,8 @@ public:
 
 signals:
     void pressEsc();
-    void findNext();
-    void findPrev();
+    void findNext(const QString &keyword);
+    void findPrev(const QString &keyword);
 
     void removeSearchKeyword();
     void updateSearchKeyword(QString file, QString keyword);
@@ -74,6 +74,8 @@ signals:
 public slots:
     void findCancel();
     void handleContentChanged();
+    void handleFindNext();
+    void handleFindPrev();
 
 protected:
     void hideEvent(QHideEvent *event) override;

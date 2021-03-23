@@ -30,12 +30,12 @@ ReplaceBar::ReplaceBar(QWidget *parent)
 {
     // Init.
     hide();
-    setFixedHeight(58);
+    setFixedHeight(60);
 
     // Init layout and widgets.
     m_layout = new QHBoxLayout();
-    m_layout->setSpacing(7);
-    m_layout->setContentsMargins(16, 4, 11, 4);
+    m_layout->setSpacing(10);
+    m_layout->setContentsMargins(16, 6, 10, 6);
     m_replaceLabel = new QLabel(tr("Find"));
     //m_replaceLabel->setMinimumHeight(36);
     m_replaceLine = new LineBar();
@@ -151,8 +151,7 @@ void ReplaceBar::handleContentChanged()
 
 void ReplaceBar::handleReplaceNext()
 {
-    if(!searched)
-    {
+    if (!searched) {
         emit removeSearchKeyword();
         emit beforeReplace(m_replaceLine->lineEdit()->text());
     }
@@ -198,34 +197,26 @@ bool ReplaceBar::focusNextPrevChild(bool)
 void ReplaceBar::keyPressEvent(QKeyEvent *e)
 {
     const QString &key = Utils::getKeyshortcut(e);
-    if(key=="Esc")
-    {
+    if (key == "Esc") {
         QWidget::hide();
         emit sigReplacebarClose();
     }
-    if(m_closeButton->hasFocus()&&key=="Tab")
-    {
+    if (m_closeButton->hasFocus() && key == "Tab") {
         m_replaceLine->lineEdit()->setFocus();
-    }
-    else{
+    } else {
         DFloatingWidget::keyPressEvent(e);
     }
-    if(key=="Enter")
-    {
-        if(m_replaceAllButton->hasFocus())
-        {
+    if (key == "Enter") {
+        if (m_replaceAllButton->hasFocus()) {
             m_replaceAllButton->click();
         }
-        if(m_replaceButton->hasFocus())
-        {
+        if (m_replaceButton->hasFocus()) {
             m_replaceButton->click();
         }
-        if(m_replaceRestButton->hasFocus())
-        {
+        if (m_replaceRestButton->hasFocus()) {
             m_replaceRestButton->click();
         }
-        if(m_replaceSkipButton->hasFocus())
-        {
+        if (m_replaceSkipButton->hasFocus()) {
             m_replaceSkipButton->click();
         }
     }

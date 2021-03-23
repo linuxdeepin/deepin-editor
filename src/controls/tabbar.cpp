@@ -66,27 +66,31 @@ Tabbar::~Tabbar()
 {
 }
 
-void Tabbar::addTab(const QString &filePath, const QString &tabName)
+void Tabbar::addTab(const QString &filePath, const QString &tabName, const QString &tipPath)
 {
-    addTabWithIndex(currentIndex() + 1, filePath, tabName);
+    addTabWithIndex(currentIndex() + 1, filePath, tabName, tipPath);
 }
 
-void Tabbar::addTabWithIndex(int index, const QString &filePath, const QString &tabName)
+void Tabbar::addTabWithIndex(int index, const QString &filePath, const QString &tabName, const QString &tipPath)
 {
     // FIXME(rekols): do not insert duplicate values.
-    // if (!m_tabPaths.contains(filePath)) {
+    if (m_tabPaths.contains(filePath)) {
+        return;
+    }
         m_tabPaths.insert(index, filePath);
+    m_tabTruePaths.insert(index, tipPath);
     // }
     //除去空白符 梁卫东 ２０２０－０８－２６　１４：４９：１５
     QString trimmedName = tabName.simplified();
     DTabBar::insertTab(index, trimmedName);
     DTabBar::setCurrentIndex(index);
-    if(filePath.contains("/.local/share/deepin/deepin-editor/"))
-    {
+    if (filePath.contains("/.local/share/deepin/deepin-editor/")) {
+        if (filePath.contains("/.local/share/deepin/deepin-editor/backup-files") && !tipPath.isNull() && tipPath.length() > 0) {
+            setTabToolTip(index, tipPath);
+        } else {
         setTabToolTip(index,tabName);
     }
-    else
-    {
+    } else {
         QString path = filePath;
         QFontMetrics fontMetrics(font());
         int nFontWidth = fontMetrics.width(path)*(qApp->devicePixelRatio()==1.25 ? 2 :1);
@@ -100,8 +104,7 @@ void Tabbar::addTabWithIndex(int index, const QString &filePath, const QString &
 
             int step = nFontWidth/w + (mod > 0 ? 1:0);
 
-            for (int i = 1; i < step;i++)
-            {
+            for (int i = 1; i < step; i++) {
                path.insert(i*(path.length()/step),'\n');
             }
         }
@@ -112,22 +115,20 @@ void Tabbar::addTabWithIndex(int index, const QString &filePath, const QString &
 void Tabbar::resizeEvent(QResizeEvent *event)
 {
     int cnt = count();
-    for(int i = 0; i < cnt ;i++)
-    {
+    for (int i = 0; i < cnt ; i++) {
         QString path = tabToolTip(i);
        path = path.replace("\n","");
         QFontMetrics fontMetrics(font());
         int nFontWidth = fontMetrics.width(path)*(qApp->devicePixelRatio()==1.25 ? 2 :1);
-        QDesktopWidget* d = qApp->desktop();
+
         Window* pWindow = static_cast<Window*>(this->window());
         int w = pWindow->width()-200;
         if(w < 800) w =800;
         if(nFontWidth >= w) {
             int mod = nFontWidth%w;
             int step = nFontWidth/w + (mod > 0 ? 1:0);
-            for (int i = 1; i < step;i++)
-            {
-               path.insert(i*(path.length()/step),'\n');
+            for (int j = 1; j < step; j++) {
+                path.insert(j * (path.length() / step), '\n');
             }
         }
         setTabToolTip(i,path);
@@ -204,26 +205,25 @@ void Tabbar::updateTab(int index, const QString &filePath, const QString &tabNam
 {
     DTabBar::setTabText(index, tabName);
     m_tabPaths[index] = filePath;
+    m_tabTruePaths[index] = filePath;
     //show file path at tab,blank file only show it's name.
 
-     if(filePath.contains("/.local/share/deepin/deepin-editor/"))
-     {
-         setTabToolTip(index,tabName);}
-     else
-     {
+    if (filePath.contains("/.local/share/deepin/deepin-editor/")) {
+        setTabToolTip(index, tabName);
+    } else {
          QString path = filePath;
          QFontMetrics fontMetrics(font());
          int nFontWidth = fontMetrics.width(path)*(qApp->devicePixelRatio()==1.25 ? 2 :1);
 
-         QDesktopWidget* d = QApplication::desktop();
-         int w = d->availableGeometry().width()-200;
+        Window *pWindow = static_cast<Window *>(this->window());
+        int w = pWindow->width() - 200;
+        if (w < 800) w = 800;
 
          if(nFontWidth >= w) {
              int mod = nFontWidth%w;
              int step = nFontWidth/w + (mod > 0 ? 1:0);
 
-             for (int i = 1; i < step;i++)
-             {
+            for (int i = 1; i < step; i++) {
                  path.insert(i*(path.length()/step),'\n');
              }
          }
@@ -269,6 +269,10 @@ QString Tabbar::currentPath() const
     return m_tabPaths.value(currentIndex());
 }
 
+QString Tabbar::truePathAt(int index) const
+{
+    return m_tabTruePaths.value(index);
+}
 QString Tabbar::fileAt(int index) const
 {
     return m_tabPaths.value(index);
@@ -340,8 +344,7 @@ QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option
 
     QPainterPath rectPath;
 
-    if(DWindowManagerHelper::instance()->hasComposite())
-    {
+    if (DWindowManagerHelper::instance()->hasComposite()) {
         QPainterPath roundedRectPath;
 
         rectPath.addRect(0, 0, scaledWidth + 10, scaledHeight + 10);
@@ -419,6 +422,7 @@ void Tabbar::insertFromMimeDataOnDragEnter(int index, const QMimeData *source)
     window->addTabWithWrapper(wrapper,wrapper->textEditor()->getFilePath(),wrapper->textEditor()->getTruePath(),tabName,index);
     //window->currentWrapper()->textEditor()->setModified(source->property("isModified").toBool());
     wrapper->updateModifyStatus(source->property("isModified").toBool());
+    wrapper->OnUpdateHighlighter();
     window->focusActiveEditor();
 }
 
@@ -432,6 +436,7 @@ void Tabbar::insertFromMimeData(int index, const QMimeData *source)
     QVariant pVar = source->property("wrapper");
     EditWrapper *wrapper = static_cast<EditWrapper *>(pVar.value<void *>());
     Window *window = static_cast<Window *>(this->window());
+
     if (!wrapper) {
         return;
     }
@@ -440,6 +445,7 @@ void Tabbar::insertFromMimeData(int index, const QMimeData *source)
     window->addTabWithWrapper(wrapper, wrapper->textEditor()->getFilePath(), wrapper->textEditor()->getTruePath(), tabName, index);
     //window->currentWrapper()->textEditor()->setModified(source->property("isModified").toBool());
     wrapper->updateModifyStatus(source->property("isModified").toBool());
+    wrapper->OnUpdateHighlighter();
     window->focusActiveEditor();
 }
 
@@ -566,7 +572,8 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
 //                            closeTab(this->indexOf(m_tabPaths.value(i)));
 //                        }
 //                    }
-                                        for ( auto path : m_tabPaths) {
+                    for (auto path : m_tabPaths)
+                    {
                                             EditWrapper *wrapper = window->wrapper(path);//路径获取文件
                                             if (!wrapper->isModified()){
                                                 window->removeWrapper(path,true);
@@ -593,8 +600,6 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
         }
 
     } else if (event->type() == QEvent::DragEnter) {
-        const QDragEnterEvent *e = static_cast<QDragEnterEvent*>(event);
-        const QMimeData* mimeData = e->mimeData();
 
 //        if ((!e->source() || e->source()->parent() != this) &&
 //            mimeData->hasFormat("dedit/tabbar")) {
@@ -611,8 +616,7 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
 
 void Tabbar::mousePressEvent(QMouseEvent *e)
 {
-    if(e->button()==Qt::MidButton)
-    {
+    if (e->button() == Qt::MidButton) {
         emit tabCloseRequested(tabAt(QPoint(e->x(), e->y())));
     }
 
@@ -622,8 +626,7 @@ void Tabbar::mousePressEvent(QMouseEvent *e)
 #ifdef TABLET
 void Tabbar::dropEvent(QDropEvent *e)
 {
-    if(e->dropAction() == Qt::CopyAction && e->mimeData()->hasFormat("dedit/tabbar"))
-    {
+    if (e->dropAction() == Qt::CopyAction && e->mimeData()->hasFormat("dedit/tabbar")) {
         if(sm_pDragPixmap){
            QPoint cursorPos = QCursor::pos() - QPoint(sm_pDragPixmap->width()/2,20);
            DLabel * pLabel = new DLabel();
@@ -653,8 +656,7 @@ void Tabbar::dropEvent(QDropEvent *e)
 QSize Tabbar::tabSizeHint(int index) const
 {
 
-    if(index >= 0)
-    {
+    if (index >= 0) {
         int total = this->width();
 
         //计算每个tab平均宽度 返回　100到160
@@ -690,6 +692,7 @@ void Tabbar::handleTabMoved(int fromIndex, int toIndex)
     //qDebug () << "handleTabMoved";
     if (m_tabPaths.count() > fromIndex && m_tabPaths.count() > toIndex && fromIndex >= 0 && toIndex >= 0) {
         m_tabPaths.swap(fromIndex, toIndex);
+        m_tabTruePaths.swap(fromIndex, toIndex);
     }
 }
 
@@ -729,6 +732,7 @@ void Tabbar::handleTabIsRemoved(int index)
     const QString filePath = m_tabPaths.at(index);
     Window *window = static_cast<Window *>(this->window());
     m_tabPaths.removeAt(index);
+    m_tabTruePaths.removeAt(index);
     window->removeWrapper(filePath, false);
 }
 

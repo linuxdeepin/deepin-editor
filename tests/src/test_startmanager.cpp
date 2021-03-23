@@ -44,13 +44,14 @@ TEST_F(test_startmanager, getFileTabInfo)
     assert(1==1);
 }
 //slotCheckUnsaveTab
-TEST_F(test_startmanager, slotCheckUnsaveTab)
-{
-    StartManager *startManager = StartManager::instance();
-    startManager->slotCheckUnsaveTab();
+//TEST_F(test_startmanager, slotCheckUnsaveTab)
+//{
+//    StartManager *startManager = StartManager::instance();
+//    startManager->initBlockShutdown();
+//    //startManager->slotCheckUnsaveTab();
 
-    assert(1==1);
-}
+//    assert(1==1);
+//}
 //checkPath
 TEST_F(test_startmanager, checkPath)
 {

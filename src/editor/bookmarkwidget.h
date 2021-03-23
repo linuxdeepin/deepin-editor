@@ -24,7 +24,7 @@ class BookMarkWidget : public QWidget
 {
     Q_OBJECT
 public:
-    BookMarkWidget(LeftAreaTextEdit *leftAreaWidget);
+    explicit BookMarkWidget(LeftAreaTextEdit *leftAreaWidget);
     ~BookMarkWidget() override;
 
 protected:

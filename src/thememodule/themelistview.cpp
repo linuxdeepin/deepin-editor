@@ -70,7 +70,6 @@ void ThemeListView::selectionChanged(const QItemSelection &selected, const QItem
 
     QModelIndexList list = selectionModel()->selectedIndexes();
     for (const QModelIndex &index : list) {
-        const QString &themeName = index.data(ThemeListModel::ThemeName).toString();
         const QString &themePath = index.data(ThemeListModel::ThemePath).toString();
 
         emit themeChanged(themePath);

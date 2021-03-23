@@ -30,6 +30,7 @@
 #include <QScreen>
 #include <QPropertyAnimation>
 #include <DSettingsOption>
+#include <DAboutDialog>
 //#include <DSettings>
 
 DWIDGET_USE_NAMESPACE
@@ -97,8 +98,7 @@ bool StartManager::ifKlu()
 
     if (XDG_SESSION_TYPE == QLatin1String("wayland") || WAYLAND_DISPLAY.contains(QLatin1String("wayland"), Qt::CaseInsensitive)){
         return true;
-    }
-    else {
+    } else {
         return false;
     }
 }
@@ -198,7 +198,7 @@ void StartManager::autoBackupFile()
             } else {
                 if (wrapper->isModified()) {
                     QString name = fileInfo.absolutePath().replace("/","_");
-                    QString qstrFilePath = m_autoBackupDir + "/" + fileInfo.baseName() + "." + name + "." + fileInfo.suffix();
+                    QString qstrFilePath = m_autoBackupDir + "/" + Utils::getStringMD5Hash(fileInfo.baseName()) + "." + name + "." + fileInfo.suffix();
                     jsonObject.insert("temFilePath",qstrFilePath);
                     wrapper->saveTemFile(qstrFilePath);
                 }
@@ -290,6 +290,9 @@ int StartManager::recoverFile(Window *window)
                     if (value.isString()) {  // 判断 value 是否为字符串
                         localPath = value.toString();  // 将 value 转化为字符串
                         fileInfo.setFile(localPath);
+                        if (!fileInfo.exists()) {
+                            continue;
+                        }
                     }
                 }
 
@@ -464,9 +467,8 @@ void StartManager::openFilesInTab(QStringList files)
             // Open file tab in first window of window list.
             else {
                 Window *window = m_windows[0];
-                //recoverFile(window);
                 window->addTab(file);
-                window->setWindowState(Qt::WindowActive);
+                //window->setWindowState(Qt::WindowActive);
                 window->activateWindow();
             }
         }
@@ -502,7 +504,6 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
     //QRect startRect(startPos, QSize(0,0));
     QRect endRect(startPos,window->rect().size());
     window->move(startPos);
-    window->show();
     #if 0
     // window->setFixedSize(Tabbar::sm_pDragPixmap->rect().size());
     QLabel *pLab = new QLabel();
@@ -527,6 +528,7 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
 
     QParallelAnimationGroup *group = new QParallelAnimationGroup;
     connect(group,&QParallelAnimationGroup::finished,geometry,[/*window,geometry,Opacity,group,*/=](){
+        window->show();
         window->showCenterWindow(false);
         geometry->deleteLater();
        // Opacity->deleteLater();
@@ -534,6 +536,7 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
 
         window->addTabWithWrapper(buffer, filePath, qstrTruePath, tabName);
         window->currentWrapper()->updateModifyStatus(isModifyed);
+        window->currentWrapper()->OnUpdateHighlighter();
     });
 
     group->addAnimation(geometry);
@@ -552,21 +555,22 @@ void StartManager::loadTheme(const QString &themeName)
 Window* StartManager::createWindow(bool alwaysCenter)
 {
     // Create window.
-    //Window *window = new Window;
-    Window *window = Window::instance();
+    Window *window = new Window;
     connect(window, &Window::themeChanged, this, &StartManager::loadTheme, Qt::QueuedConnection);
     connect(window, &Window::sigJudgeBlockShutdown, this, &StartManager::slotCheckUnsaveTab, Qt::QueuedConnection);
 
     // Quit application if close last window.
-    connect(window, &Window::close, this, [=] {
+    connect(window, &Window::closeWindow, this, [ = ] {
         int windowIndex = m_windows.indexOf(window);
         //qDebug() << "Close window " << windowIndex;
 
-        if (windowIndex >= 0) {
+        if (windowIndex >= 0)
+        {
             m_windows.takeAt(windowIndex);
         }
 
-        if (m_windows.isEmpty()) {
+        if (m_windows.isEmpty())
+        {
             QDir path = QDir::currentPath();
             if (!path.exists()) {
                 return ;
@@ -613,9 +617,9 @@ void StartManager::initWindowPosition(Window *window, bool alwaysCenter)
 void StartManager::popupExistTabs(FileTabInfo info)
 {
     Window *window = m_windows[info.windowIndex];
-    window->showNormal();
+    //window->showNormal();
     window->activeTab(info.tabIndex);
-    window->setWindowState(Qt::WindowActive);
+    //window->setWindowState(Qt::WindowActive);
     window->activateWindow();
 
 //    int indexid=0;
@@ -711,22 +715,22 @@ void StartManager::initBlockShutdown()
           << QObject::tr("File not saved") // why
           << QString("delay");                        // mode
 
-    int fd = -1;
     m_reply = m_pLoginManager->callWithArgumentList(QDBus::Block, "Inhibit", m_arg);
     if (m_reply.isValid()) {
-        fd = m_reply.value().fileDescriptor();
+        m_reply.value().fileDescriptor();
     }
 }
 
-void StartManager::slotCheckUnsaveTab() {
-    #ifdef TABLET
+void StartManager::slotCheckUnsaveTab()
+{
+    //平板不需要判断
+    return;
     for (Window *pWindow : m_windows) {
         //如果返回true，则表示有未保存的tab项，则阻塞系统关机
         bool bRet = pWindow->checkBlockShutdown();
         if (bRet == true) {
             m_reply = m_pLoginManager->callWithArgumentList(QDBus::Block, "Inhibit", m_arg);
             if (m_reply.isValid()) {
-                //qDebug() << "Block shutdown.";
             }
 
             return;
@@ -735,10 +739,20 @@ void StartManager::slotCheckUnsaveTab() {
 
     //如果for结束则表示没有发现未保存的tab项，则放开阻塞关机
     if (m_reply.isValid()) {
-        QDBusReply<QDBusUnixFileDescriptor> tmp = m_reply;
         m_reply = QDBusReply<QDBusUnixFileDescriptor>();
-        //m_pLoginManager->callWithArgumentList(QDBus::NoBlock, "Inhibit", m_arg);
-        //qDebug() << "Nublock shutdown.";
     }
-    #endif
+}
+
+void StartManager::closeAboutForWindow(Window *window)
+{
+    if (qApp != nullptr) {
+        DAboutDialog *pAboutDialog = qApp->aboutDialog();
+        if (pAboutDialog != nullptr) {
+            if (pAboutDialog->parent() != nullptr) {
+                if (pAboutDialog->parent() == window) {
+                    pAboutDialog->close();
+                }
+            }
+        }
+    }
 }

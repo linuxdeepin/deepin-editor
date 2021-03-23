@@ -21,6 +21,7 @@
 #define THEMEITEMDELEGATE_H
 
 #include <QAbstractItemDelegate>
+#include <QPainterPath>
 
 class ThemeItemDelegate : public QAbstractItemDelegate
 {
