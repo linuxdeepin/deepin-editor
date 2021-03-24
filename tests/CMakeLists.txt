@@ -43,14 +43,14 @@ include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 include_directories(Qt5PrintSupport)
 include_directories(${GTEST_INCLUDE_DIRS})
 include_directories(src)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/include)
-link_libraries(${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/lib/libcharset.a)
-link_libraries(${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/lib/libiconv.a)
-link_libraries(${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/lib/libenca.a)
-link_libraries(${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/lib/libuchardet.a)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/include)
+link_libraries(${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/lib/libcharset.a)
+link_libraries(${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/lib/libiconv.a)
+link_libraries(${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/lib/libenca.a)
+link_libraries(${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/lib/libuchardet.a)
 
 set(PROJECT_NAME_TEST
-    ${PROJECT_NAME}_test)
+    ${PROJECT_NAME}-test)
 
 #Include all app own subdirectorys
 

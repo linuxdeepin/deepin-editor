@@ -23,8 +23,8 @@ PKGCONFIG += xcb xcb-util dtkwidget dtkwm dtkgui dframeworkdbus
 RESOURCES += deepin-editor.qrc
 
 INCLUDEPATH += common controls editor encodes thememodule widgets
-INCLUDEPATH += ../third/lib/include/uchardet
-INCLUDEPATH += ../third/lib/include
+INCLUDEPATH += ../3rdparty/lib/include/uchardet
+INCLUDEPATH += ../3rdparty/lib/include
 
 HEADERS += editor/bookmarkwidget.h \
            editor/codeflodarea.h \
@@ -132,14 +132,14 @@ TRANSLATIONS += ../translations/deepin-editor_zh_CN.ts\
     ../translations/deepin-editor.ts
 
 
-LIBS += -L$$PWD/../third/lib/lib/ -lenca -lm
-PRE_TARGETDEPS += $$PWD/../third/lib/lib/libenca.a
+LIBS += -L$$PWD/../3rdparty/lib/lib/ -lenca -lm
+PRE_TARGETDEPS += $$PWD/../3rdparty/lib/lib/libenca.a
 
-LIBS += -L$$PWD/../third/lib/lib/ -luchardet
-PRE_TARGETDEPS += $$PWD/../third/lib/lib/libuchardet.a
+LIBS += -L$$PWD/../3rdparty/lib/lib/ -luchardet
+PRE_TARGETDEPS += $$PWD/../3rdparty/lib/lib/libuchardet.a
 
-LIBS += -L$$PWD/../third/lib/lib/ -liconv
-PRE_TARGETDEPS += $$PWD/../third/lib/lib/libiconv.a
+LIBS += -L$$PWD/../3rdparty/lib/lib/ -liconv
+PRE_TARGETDEPS += $$PWD/../3rdparty/lib/lib/libiconv.a
 
-LIBS += -L$$PWD/../third/lib/lib/ -lcharset
-PRE_TARGETDEPS += $$PWD/../third/lib/lib/libcharset.a
+LIBS += -L$$PWD/../3rdparty/lib/lib/ -lcharset
+PRE_TARGETDEPS += $$PWD/../3rdparty/lib/lib/libcharset.a
