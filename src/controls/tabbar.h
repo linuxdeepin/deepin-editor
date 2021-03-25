@@ -103,8 +103,8 @@ private:
     QAction *m_closeLeftTabAction;
     QAction *m_closeRightTabAction;
     QAction *m_closeAllunModifiedTabAction;
-    DMenu   *m_rightMenu;
-    DMenu   *m_moreWaysCloseMenu;
+    DMenu   *m_rightMenu {nullptr};
+    DMenu   *m_moreWaysCloseMenu {nullptr};
     int m_rightClickTab;
     int m_nDragIndex;
     QString m_qstrDragName;

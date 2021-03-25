@@ -247,7 +247,7 @@ public:
     QString getWordAtCursor();
     void toggleReadOnlyMode();
     void toggleComment(bool sister);
-    int getNextWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode);
+    int getNextWordPosition(QTextCursor &cursor, QTextCursor::MoveMode moveMode);
     int getPrevWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode);
     bool atWordSeparator(int position);
     void showCursorBlink();
@@ -539,7 +539,7 @@ public:
 
 private:
     EditWrapper *m_wrapper;
-    QPropertyAnimation *m_scrollAnimation;
+    QPropertyAnimation *m_scrollAnimation {nullptr};
 
     QList<QTextEdit::ExtraSelection> m_findMatchSelections;///< “查找”的字符格式（所有查找的字符）
     QTextEdit::ExtraSelection m_beginBracketSelection;

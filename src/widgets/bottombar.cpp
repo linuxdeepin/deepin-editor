@@ -101,6 +101,15 @@ BottomBar::BottomBar(QWidget *parent)
 
 BottomBar::~BottomBar()
 {
+    if (m_pEncodeMenu != nullptr) {
+        delete m_pEncodeMenu;
+        m_pEncodeMenu = nullptr;
+    }
+
+    if (m_pHighlightMenu != nullptr) {
+        delete m_pHighlightMenu;
+        m_pHighlightMenu = nullptr;
+    }
 }
 
 void BottomBar::updatePosition(int row, int column)

@@ -31,6 +31,19 @@ FlashTween::FlashTween()
     QObject::connect(m_timerY, &QTimer::timeout, this ,&FlashTween::__runY);
 }
 
+FlashTween::~FlashTween()
+{
+    if (m_timerX != nullptr) {
+        delete m_timerX;
+        m_timerX = nullptr;
+    }
+
+    if (m_timerY != nullptr) {
+        delete m_timerY;
+        m_timerY = nullptr;
+    }
+}
+
 void FlashTween::startY(qreal t,qreal b,qreal c,qreal d, FunSlideInertial f)
 {
     if(c==0.0 || d==0.0) return;
@@ -43,8 +56,10 @@ void FlashTween::startY(qreal t,qreal b,qreal c,qreal d, FunSlideInertial f)
     m_fSlideGestureY = f;
     m_directionY = m_changeValueY<0?1:-1;
 
+    if (m_timerY != nullptr) {
     m_timerY->stop();
     m_timerY->start(CELL_TIME);
+    }
 }
 
 void FlashTween::startX(qreal t,qreal b,qreal c,qreal d, FunSlideInertial f)
@@ -74,7 +89,9 @@ void FlashTween::__runY()
         m_currentTimeY+=CELL_TIME;
     }
     else {
+        if (m_timerY != nullptr) {
         m_timerY->stop();
+        }
     }
 }
 

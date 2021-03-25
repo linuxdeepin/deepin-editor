@@ -82,8 +82,21 @@ EditWrapper::EditWrapper(Window *window, QWidget *parent)
 
 EditWrapper::~EditWrapper()
 {
+    if (m_pTextEdit != nullptr) {
     disconnect(m_pTextEdit);
+        delete m_pTextEdit;
+        m_pTextEdit = nullptr;
+    }
+    if (m_pBottomBar != nullptr) {
+        disconnect(m_pBottomBar);
+        delete m_pBottomBar;
+        m_pBottomBar = nullptr;
+    }
+    if (m_pWaringNotices != nullptr) {
     disconnect(m_pWaringNotices);
+        delete m_pWaringNotices;
+        m_pWaringNotices = nullptr;
+    }
 }
 
 void EditWrapper::setQuitFlag()

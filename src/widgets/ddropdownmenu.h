@@ -44,6 +44,9 @@ public:
     void setFontEx(const QFont& font);
 
     void setMenu(DMenu *menu);
+    void deleteMenu();
+    void setMenuActionGroup(QActionGroup *actionGroup);
+    void deleteMenuActionGroup();
     void setTheme(const QString &theme);
 
     void setChildrenFocus(bool ok);
@@ -79,6 +82,7 @@ private:
 private:
     DToolButton *m_pToolButton = nullptr;
     DMenu *m_menu = nullptr;
+    QActionGroup *m_actionGroup = nullptr;
     QPixmap m_arrowPixmap;
     QString m_text = "UTF-8";
     QAction* m_pActUtf8 = nullptr;

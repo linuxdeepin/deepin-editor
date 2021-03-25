@@ -172,6 +172,25 @@ TextEdit::TextEdit(QWidget *parent)
 TextEdit::~TextEdit()
 {
     writeHistoryRecord();
+    if (m_scrollAnimation != nullptr) {
+        if (m_scrollAnimation->state() != QAbstractAnimation::Stopped) {
+            m_scrollAnimation->stop();
+        }
+        delete m_scrollAnimation;
+        m_scrollAnimation = nullptr;
+    }
+    if (m_colorMarkMenu != nullptr) {
+        delete m_colorMarkMenu;
+        m_colorMarkMenu = nullptr;
+    }
+    if (m_convertCaseMenu != nullptr) {
+        delete m_convertCaseMenu;
+        m_convertCaseMenu = nullptr;
+    }
+    if (m_rightMenu != nullptr) {
+        delete m_rightMenu;
+        m_rightMenu = nullptr;
+    }
 }
 
 void TextEdit::insertTextEx(QTextCursor cursor, QString text)
@@ -518,7 +537,10 @@ void TextEdit::initRightClickedMenu()
 void TextEdit::popRightMenu(QPoint pos)
 {
     //清除菜单分割线残影
-    if (m_rightMenu) m_rightMenu->deleteLater();
+    if (m_rightMenu != nullptr) {
+        delete m_rightMenu;
+        m_rightMenu = nullptr;
+    }
     m_rightMenu = new DMenu;
 
     m_rightMenu->clear();
@@ -2202,6 +2224,7 @@ void TextEdit::updateMarkAllSelectColor()
     isMarkAllLine(m_bIsMarkAllLine, m_strMarkAllLineColorName);
     renderAllSelections();
 }
+
 DMenu *TextEdit::getHighlightMenu()
 {
     return m_hlGroupMenu;
@@ -3264,7 +3287,7 @@ void TextEdit::toggleComment(bool sister)
     }
 }
 
-int TextEdit::getNextWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode)
+int TextEdit::getNextWordPosition(QTextCursor &cursor, QTextCursor::MoveMode moveMode)
 {
     // FIXME(rekols): if is empty text, it will crash.
     if (!characterCount()) {

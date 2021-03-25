@@ -79,7 +79,11 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     connect(qApp,&DApplication::fontChanged,this,&DDropdownMenu::OnFontChangedSlot);
 }
 
-DDropdownMenu::~DDropdownMenu() {}
+DDropdownMenu::~DDropdownMenu()
+{
+    deleteMenuActionGroup();
+    deleteMenu();
+}
 
 void DDropdownMenu::setFontEx(const QFont& font)
 {
@@ -156,10 +160,28 @@ void DDropdownMenu::setText(const QString &text)
 
 void DDropdownMenu::setMenu(DMenu *menu)
 {
-    if (m_menu) {
-        delete m_menu;
-    }
+    deleteMenu();
     m_menu = menu;
+}
+void DDropdownMenu::deleteMenu()
+{
+    if (m_menu != nullptr) {
+        delete m_menu;
+        m_menu = nullptr;
+    }
+}
+
+void DDropdownMenu::setMenuActionGroup(QActionGroup *actionGroup)
+{
+    deleteMenuActionGroup();
+    m_actionGroup = actionGroup;
+}
+void DDropdownMenu::deleteMenuActionGroup()
+{
+    if (m_actionGroup != nullptr) {
+        delete m_actionGroup;
+        m_actionGroup = nullptr;
+    }
 }
 
 void DDropdownMenu::setTheme(const QString &theme)
@@ -326,6 +348,8 @@ DDropdownMenu *DDropdownMenu::createHighLightMenu()
 
     m_pHighLightMenu->setText(tr("None"));
     m_pHighLightMenu->setMenu(m_pMenu);
+    m_pHighLightMenu->setMenuActionGroup(m_pActionGroup);
+
     return m_pHighLightMenu;
 }
 

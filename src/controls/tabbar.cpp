@@ -60,6 +60,14 @@ Tabbar::Tabbar(QWidget *parent)
 
 Tabbar::~Tabbar()
 {
+    if (m_moreWaysCloseMenu != nullptr) {
+        delete m_moreWaysCloseMenu;
+        m_moreWaysCloseMenu = nullptr;
+    }
+    if (m_rightMenu != nullptr) {
+        delete m_rightMenu;
+        m_rightMenu = nullptr;
+    }
 }
 
 void Tabbar::addTab(const QString &filePath, const QString &tabName, const QString &tipPath)
