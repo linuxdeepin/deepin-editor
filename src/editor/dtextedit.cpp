@@ -5482,6 +5482,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             moveToLineIndentation();
             return;
         } else if (key == "Q" && m_bReadOnlyPermission == false) {
+            setReadOnly(false);
             toggleReadOnlyMode();
             return;
         } else if (key == "Shfit+J") {
@@ -5501,6 +5502,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             return;
         } else if ((key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglereadonlymode")/* || key=="Alt+Meta+L"*/)
                    && m_bReadOnlyPermission == false) {
+            setReadOnly(false);
             toggleReadOnlyMode();
             return;
         } else if (key == "Shift+/" && e->modifiers() == Qt::ControlModifier) {
@@ -5775,6 +5777,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             joinLines();
             return;
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglereadonlymode")/*|| key=="Alt+Meta+L"*/) {
+            setReadOnly(false);
             toggleReadOnlyMode();
             return;
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglecomment")) {
