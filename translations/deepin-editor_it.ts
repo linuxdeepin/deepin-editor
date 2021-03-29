@@ -32,12 +32,11 @@
         <location filename="../src/editor/editwrapper.cpp" line="174"/>
         <location filename="../src/editor/editwrapper.cpp" line="232"/>
         <location filename="../src/editor/editwrapper.cpp" line="278"/>
-        <location filename="../src/editor/editwrapper.cpp" line="470"/>
+        <location filename="../src/editor/editwrapper.cpp" line="463"/>
         <source>Save</source>
         <translation>Salva</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="227"/>
         <location filename="../src/editor/editwrapper.cpp" line="273"/>
         <source>Do you want to save this file?</source>
         <translation>Desideri salvare questo file?</translation>
@@ -49,34 +48,40 @@
         <translation>Annulla</translation>
     </message>
     <message>
+        <location filename="../src/editor/editwrapper.cpp" line="227"/>
+        <source>Encoding changed. Do you want to save the file now?</source>
+        <translation> 
+La codifica è cambiata. Vuoi salvare il file ora?</translation>
+    </message>
+    <message>
         <location filename="../src/editor/editwrapper.cpp" line="231"/>
         <location filename="../src/editor/editwrapper.cpp" line="277"/>
         <source>Discard</source>
         <translation>Scarta</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="537"/>
+        <location filename="../src/editor/editwrapper.cpp" line="530"/>
         <source>File removed on the disk. Save it now?</source>
         <translation>File rimosso dal disco, salvarlo ora?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="540"/>
+        <location filename="../src/editor/editwrapper.cpp" line="533"/>
         <source>File has changed on disk. Reload?</source>
         <translation>File modificato sul Disco, ricaricarlo?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="562"/>
+        <location filename="../src/editor/editwrapper.cpp" line="555"/>
         <location filename="../src/widgets/bottombar.cpp" line="60"/>
         <source>INSERT</source>
         <translation>INSERT</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="565"/>
+        <location filename="../src/editor/editwrapper.cpp" line="558"/>
         <source>OVERWRITE</source>
         <translation>OVERWRITE</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="568"/>
+        <location filename="../src/editor/editwrapper.cpp" line="561"/>
         <source>R/O</source>
         <translation>R/O</translation>
     </message>
@@ -130,11 +135,11 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="176"/>
-        <location filename="../src/editor/editwrapper.cpp" line="472"/>
-        <location filename="../src/widgets/window.cpp" line="920"/>
-        <location filename="../src/widgets/window.cpp" line="938"/>
-        <location filename="../src/widgets/window.cpp" line="1008"/>
-        <location filename="../src/widgets/window.cpp" line="1023"/>
+        <location filename="../src/editor/editwrapper.cpp" line="465"/>
+        <location filename="../src/widgets/window.cpp" line="932"/>
+        <location filename="../src/widgets/window.cpp" line="950"/>
+        <location filename="../src/widgets/window.cpp" line="1027"/>
+        <location filename="../src/widgets/window.cpp" line="1042"/>
         <source>Encoding</source>
         <translation>Codifica</translation>
     </message>
@@ -172,7 +177,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="31"/>
         <location filename="../src/controls/settingsdialog.cpp" line="107"/>
-        <location filename="../src/widgets/window.cpp" line="1371"/>
+        <location filename="../src/widgets/window.cpp" line="1386"/>
         <source>Window</source>
         <translation>Finestra</translation>
     </message>
@@ -604,22 +609,22 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="121"/>
         <source>WesternEuropean</source>
-        <translation type="unfinished"/>
+        <translation>Europa occidentale</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="122"/>
         <source>CentralEuropean</source>
-        <translation type="unfinished"/>
+        <translation>Europa centrale</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="123"/>
         <source>Baltic</source>
-        <translation type="unfinished"/>
+        <translation>Baltici</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="124"/>
         <source>Cyrillic</source>
-        <translation type="unfinished"/>
+        <translation>Cirillico</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="125"/>
@@ -629,12 +634,12 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="130"/>
         <source>Celtic</source>
-        <translation type="unfinished"/>
+        <translation>Celtico</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="131"/>
         <source>SouthEasternEuropean</source>
-        <translation type="unfinished"/>
+        <translation>Sud est Europa</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="126"/>
@@ -649,12 +654,12 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="132"/>
         <source>ChineseSimplified</source>
-        <translation type="unfinished"/>
+        <translation>Cinese Semplificato</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="133"/>
         <source>ChineseTraditional</source>
-        <translation type="unfinished"/>
+        <translation>Cinese Tradizionale</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="134"/>
@@ -682,14 +687,14 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
         <translation>Vietnamese</translation>
     </message>
     <message>
-        <location filename="../src/startmanager.cpp" line="508"/>
+        <location filename="../src/startmanager.cpp" line="718"/>
         <source>File not saved</source>
         <translation>File non salvato</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="939"/>
-        <location filename="../src/widgets/window.cpp" line="1009"/>
-        <location filename="../src/widgets/window.cpp" line="1024"/>
+        <location filename="../src/widgets/window.cpp" line="951"/>
+        <location filename="../src/widgets/window.cpp" line="1028"/>
+        <location filename="../src/widgets/window.cpp" line="1043"/>
         <source>Line Endings</source>
         <translation>Fine delle righe</translation>
     </message>
@@ -798,7 +803,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>StartManager</name>
     <message>
-        <location filename="../src/startmanager.cpp" line="174"/>
+        <location filename="../src/startmanager.cpp" line="333"/>
         <source>Untitled %1</source>
         <translation>%1 senza titolo</translation>
     </message>
@@ -806,32 +811,32 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>Tabbar</name>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="455"/>
+        <location filename="../src/controls/tabbar.cpp" line="468"/>
         <source>Close tab</source>
         <translation>Chiudi scheda</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="456"/>
+        <location filename="../src/controls/tabbar.cpp" line="469"/>
         <source>Close other tabs</source>
         <translation>Chiudi le altre schede</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="457"/>
+        <location filename="../src/controls/tabbar.cpp" line="470"/>
         <source>More options</source>
         <translation>Ulteriori opzioni</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="458"/>
+        <location filename="../src/controls/tabbar.cpp" line="471"/>
         <source>Close tabs to the left</source>
         <translation>Chiudi le schede sulla sinistra</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="459"/>
+        <location filename="../src/controls/tabbar.cpp" line="472"/>
         <source>Close tabs to the right</source>
         <translation>Chiudi le schede sulla destra</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="460"/>
+        <location filename="../src/controls/tabbar.cpp" line="473"/>
         <source>Close unmodified tabs</source>
         <translation>Chiudi schede non modificate</translation>
     </message>
@@ -839,211 +844,210 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
 <context>
     <name>TextEdit</name>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="191"/>
+        <location filename="../src/editor/dtextedit.cpp" line="213"/>
         <source>Undo</source>
         <translation>Annulla</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="192"/>
+        <location filename="../src/editor/dtextedit.cpp" line="214"/>
         <source>Redo</source>
         <translation>Ripeti</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="193"/>
+        <location filename="../src/editor/dtextedit.cpp" line="215"/>
         <source>Cut</source>
         <translation>Taglia</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="194"/>
+        <location filename="../src/editor/dtextedit.cpp" line="216"/>
         <source>Copy</source>
         <translation>Copia</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="195"/>
+        <location filename="../src/editor/dtextedit.cpp" line="217"/>
         <source>Paste</source>
         <translation>Incolla</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="196"/>
+        <location filename="../src/editor/dtextedit.cpp" line="218"/>
         <source>Delete</source>
         <translation>Elimina</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="197"/>
+        <location filename="../src/editor/dtextedit.cpp" line="219"/>
         <source>Select All</source>
         <translation>Seleziona tutto</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="198"/>
+        <location filename="../src/editor/dtextedit.cpp" line="220"/>
         <location filename="../src/widgets/window.cpp" line="345"/>
         <source>Find</source>
         <translation>Trova</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="199"/>
+        <location filename="../src/editor/dtextedit.cpp" line="221"/>
         <location filename="../src/widgets/window.cpp" line="346"/>
         <source>Replace</source>
         <translation>Sostituisci</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="200"/>
+        <location filename="../src/editor/dtextedit.cpp" line="222"/>
         <source>Go to Line</source>
         <translation>Vai alla linea</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="201"/>
+        <location filename="../src/editor/dtextedit.cpp" line="223"/>
         <source>Turn on Read-Only mode</source>
         <translation>Attiva la modalità Sola Lettura</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="202"/>
+        <location filename="../src/editor/dtextedit.cpp" line="224"/>
         <source>Turn off Read-Only mode</source>
         <translation>Disattiva la modalità Sola Lettura</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="203"/>
+        <location filename="../src/editor/dtextedit.cpp" line="225"/>
         <source>Fullscreen</source>
         <translation>Schermo intero</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="204"/>
+        <location filename="../src/editor/dtextedit.cpp" line="226"/>
         <source>Exit fullscreen</source>
         <translation>Esci dallo schermo intero</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="205"/>
+        <location filename="../src/editor/dtextedit.cpp" line="227"/>
         <source>Display in file manager</source>
         <translation>Visualizza nel gestore file</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="206"/>
-        <location filename="../src/editor/dtextedit.cpp" line="265"/>
+        <location filename="../src/editor/dtextedit.cpp" line="228"/>
+        <location filename="../src/editor/dtextedit.cpp" line="286"/>
         <source>Add Comment</source>
         <translation>Aggiungi commento</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="207"/>
+        <location filename="../src/editor/dtextedit.cpp" line="229"/>
         <source>Text to Speech</source>
         <translation>Da testo a voce</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="208"/>
+        <location filename="../src/editor/dtextedit.cpp" line="230"/>
         <source>Stop reading</source>
         <translation>Interrompi lettura</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="209"/>
+        <location filename="../src/editor/dtextedit.cpp" line="231"/>
         <source>Speech to Text</source>
         <translation>Da voce a testo</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="210"/>
+        <location filename="../src/editor/dtextedit.cpp" line="232"/>
         <source>Translate</source>
         <translation>Traduci</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="211"/>
-        <location filename="../src/editor/dtextedit.cpp" line="264"/>
+        <location filename="../src/editor/dtextedit.cpp" line="233"/>
         <source>Column Mode</source>
         <translation>Modlità colonna</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="212"/>
+        <location filename="../src/editor/dtextedit.cpp" line="234"/>
         <source>Add bookmark</source>
         <translation>Aggiungi segnalibro</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="213"/>
+        <location filename="../src/editor/dtextedit.cpp" line="235"/>
         <source>Remove Bookmark</source>
         <translation>Rimuovi segnalibro</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="214"/>
+        <location filename="../src/editor/dtextedit.cpp" line="236"/>
         <source>Previous bookmark</source>
         <translation>Segnalibro precedente</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="215"/>
+        <location filename="../src/editor/dtextedit.cpp" line="237"/>
         <source>Next bookmark</source>
         <translation>Prossimo segnalibro</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="216"/>
+        <location filename="../src/editor/dtextedit.cpp" line="238"/>
         <source>Remove All Bookmarks</source>
         <translation>Rimuovi tutti i segnalibri</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="217"/>
+        <location filename="../src/editor/dtextedit.cpp" line="239"/>
         <source>Fold All</source>
         <translation>Collassa tutti i livelli</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="218"/>
+        <location filename="../src/editor/dtextedit.cpp" line="240"/>
         <source>Fold Current Level</source>
         <translation>Collassa l&apos;attuale livello</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="219"/>
+        <location filename="../src/editor/dtextedit.cpp" line="241"/>
         <source>Unfold All</source>
         <translation>Espandi tutti i livelli</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="220"/>
+        <location filename="../src/editor/dtextedit.cpp" line="242"/>
         <source>Unfold Current Level</source>
         <translation>Espandi il livello corrente</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="225"/>
+        <location filename="../src/editor/dtextedit.cpp" line="247"/>
         <source>Color Mark</source>
         <translation>Colori come marcatori</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="226"/>
+        <location filename="../src/editor/dtextedit.cpp" line="248"/>
         <source>Clear All Marks</source>
         <translation>Rimuovi le evidenziazioni</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="227"/>
+        <location filename="../src/editor/dtextedit.cpp" line="249"/>
         <source>Clear Last Mark</source>
         <translation>Rimuovi ultima evidenziazione</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="241"/>
+        <location filename="../src/editor/dtextedit.cpp" line="263"/>
         <source>Mark</source>
         <translation>Evidenzia</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="258"/>
+        <location filename="../src/editor/dtextedit.cpp" line="280"/>
         <source>Mark All</source>
         <translation>Evidenzia tutto</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="266"/>
+        <location filename="../src/editor/dtextedit.cpp" line="287"/>
         <source>Remove Comment</source>
         <translation>Rimuovi commenti</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="410"/>
+        <location filename="../src/editor/dtextedit.cpp" line="420"/>
         <source>Press ALT and click lines to edit in column mode</source>
         <translation>Premi ALT e clicca sulle linee per editare in modalità colonna</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="478"/>
+        <location filename="../src/editor/dtextedit.cpp" line="488"/>
         <source>Change Case</source>
         <translation>Cambia maiuscole</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="479"/>
+        <location filename="../src/editor/dtextedit.cpp" line="489"/>
         <source>Upper Case</source>
         <translation>Maiuscolo</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="480"/>
+        <location filename="../src/editor/dtextedit.cpp" line="490"/>
         <source>Lower Case</source>
         <translation>Minuscolo</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="481"/>
+        <location filename="../src/editor/dtextedit.cpp" line="491"/>
         <source>Capitalize</source>
         <translation>Maiuscola iniziale</translation>
     </message>
@@ -1053,34 +1057,34 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
         <translation>No</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1309"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1308"/>
         <source>Selected line(s) copied</source>
         <translation>Linea(e) selezionate copiate</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1315"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1314"/>
         <source>Current line copied</source>
         <translation>Linea corrente copiata</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1354"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1353"/>
         <source>Selected line(s) clipped</source>
         <translation>Linea(e) selezionate copiate negli appunti</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1360"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1359"/>
         <source>Current line clipped</source>
         <translation>Linea corrente copiata negli appunti</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3091"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3097"/>
         <source>Read-Only mode is off</source>
         <translation>La modalità sola lettura è disattivata</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3098"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3106"/>
-        <location filename="../src/editor/dtextedit.cpp" line="5302"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3103"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3111"/>
+        <location filename="../src/editor/dtextedit.cpp" line="5328"/>
         <source>Read-Only mode is on</source>
         <translation>La modalità sola lettura è attiva</translation>
     </message>
@@ -1143,7 +1147,7 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="344"/>
-        <location filename="../src/widgets/window.cpp" line="1431"/>
+        <location filename="../src/widgets/window.cpp" line="1446"/>
         <source>Settings</source>
         <translation>Impostazioni</translation>
     </message>
@@ -1164,60 +1168,60 @@ Localizzazione italiana a cura di Massimo A. Carofano.</translation>
         <translation>File non valido: %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="615"/>
+        <location filename="../src/widgets/window.cpp" line="614"/>
         <source>Do you want to save this file?</source>
         <translation>Desideri salvare questo file?</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="851"/>
+        <location filename="../src/widgets/window.cpp" line="866"/>
         <source>You do not have permission to save %1</source>
         <translation>Non hai i permessi per salvare %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="881"/>
+        <location filename="../src/widgets/window.cpp" line="883"/>
         <source>Saved successfully</source>
         <translation>Salvato con successo</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="577"/>
-        <location filename="../src/widgets/window.cpp" line="884"/>
+        <location filename="../src/widgets/window.cpp" line="899"/>
         <source>Do you want to save as another?</source>
         <translation>Desideri salvarlo in altro modo?</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="918"/>
-        <location filename="../src/widgets/window.cpp" line="965"/>
-        <location filename="../src/widgets/window.cpp" line="1006"/>
+        <location filename="../src/widgets/window.cpp" line="930"/>
+        <location filename="../src/widgets/window.cpp" line="984"/>
+        <location filename="../src/widgets/window.cpp" line="1025"/>
         <source>Save File</source>
         <translation>Salva file</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="967"/>
+        <location filename="../src/widgets/window.cpp" line="986"/>
         <source>Encoding</source>
         <translation>Codifica</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1154"/>
+        <location filename="../src/widgets/window.cpp" line="1171"/>
         <source>Read-Only mode is on</source>
         <translation>La modalità sola lettura è attiva</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1330"/>
+        <location filename="../src/widgets/window.cpp" line="1345"/>
         <source>Current location remembered</source>
         <translation>Locazione corrente memorizzata</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1381"/>
+        <location filename="../src/widgets/window.cpp" line="1396"/>
         <source>Ctrl+&apos;=&apos;</source>
         <translation>Ctrl+&apos;=&apos;</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1384"/>
+        <location filename="../src/widgets/window.cpp" line="1399"/>
         <source>Ctrl+&apos;-&apos;</source>
         <translation>Ctrl+&apos;-&apos;</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1413"/>
+        <location filename="../src/widgets/window.cpp" line="1428"/>
         <source>Editor</source>
         <translation>Editor</translation>
     </message>
