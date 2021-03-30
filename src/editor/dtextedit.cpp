@@ -1859,7 +1859,7 @@ void TextEdit::updateFont()
     font.setPointSize(m_fontSize);
     font.setFamily(m_fontName);
     setFont(font);
-    setTabStopWidth(m_tabSpaceNumber * QFontMetrics(font).width(' '));
+    setTabStopWidth(m_tabSpaceNumber * QFontMetrics(font).width(QChar(0x2192)));
 }
 
 void TextEdit::replaceAll(const QString &replaceText, const QString &withText)
