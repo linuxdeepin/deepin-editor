@@ -1348,6 +1348,33 @@ void Window::clearPrintTextDocument()
     }
 }
 
+#if 0 //Qt原生打印预览调用
+void Window::popupPrintDialog()
+{
+    QPrinter printer(QPrinter::HighResolution);
+    QPrintPreviewDialog preview(this);
+
+    TextEdit *wrapper = currentWrapper()->textEditor();
+    const QString &filePath = wrapper->filepath;
+    const QString &fileDir = QFileInfo(filePath).dir().absolutePath();
+
+    if (fileDir == m_blankFileDir) {
+        printer.setOutputFileName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
+        printer.setDocName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
+    } else {
+        printer.setOutputFileName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
+        printer.setDocName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
+    }
+
+    printer.setOutputFormat(QPrinter::PdfFormat);
+
+    connect(&preview, &QPrintPreviewDialog::paintRequested, this, [ = ](QPrinter *printer) {
+        currentWrapper()->textEditor()->print(printer);
+    });
+
+    preview.exec();
+}
+#endif
 void Window::popupPrintDialog()
 {
     //大文本加载过程不允许打印操作
@@ -1396,23 +1423,20 @@ void Window::popupPrintDialog()
     m_pPreview->exec();
 
 #else
-    QPrinter printer(QPrinter::HighResolution);
-    QPrintPreviewDialog preview(&printer, this);
+    DPrintPreviewDialog preview(this);
 
-    if (fileDir == m_blankFileDir) {
-        printer.setOutputFileName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
-        printer.setDocName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
-    } else {
-        printer.setOutputFileName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
-        printer.setDocName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
-    }
-    printer.setOutputFormat(QPrinter::PdfFormat);
-
-    connect(&preview, &QPrintPreviewDialog::paintRequested, this, [ = ](QPrinter * printer) {
+    connect(&preview, QOverload<DPrinter *>::of(&DPrintPreviewDialog::paintRequested),
+            this, [ = ](DPrinter *printer) {
+        if (fileDir == m_blankFileDir) {
+            printer->setDocName(QString(m_tabbar->currentName()));
+        } else {
+            printer->setDocName(QString(QFileInfo(filePath).baseName()));
+        }
         currentWrapper()->textEditor()->print(printer);
     });
 
     currentWrapper()->updateHighlighterAll();
+
     preview.exec();
 #endif
 }
