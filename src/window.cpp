@@ -1313,6 +1313,7 @@ void Window::popupSettingsDialog()
     m_settings->settings->sync();
 }
 
+#if 0 //Qt原生打印预览调用
 void Window::popupPrintDialog()
 {
     QPrinter printer(QPrinter::HighResolution);
@@ -1332,7 +1333,29 @@ void Window::popupPrintDialog()
 
     printer.setOutputFormat(QPrinter::PdfFormat);
 
-    connect(&preview, &QPrintPreviewDialog::paintRequested, this, [ = ](QPrinter * printer) {
+    connect(&preview, &QPrintPreviewDialog::paintRequested, this, [ = ](QPrinter *printer) {
+        currentWrapper()->textEditor()->print(printer);
+    });
+
+    preview.exec();
+}
+#endif
+
+void Window::popupPrintDialog()
+{
+    DPrintPreviewDialog preview(this);
+
+    TextEdit *wrapper = currentWrapper()->textEditor();
+    const QString &filePath = wrapper->filepath;
+    const QString &fileDir = QFileInfo(filePath).dir().absolutePath();
+
+    connect(&preview, QOverload<DPrinter *>::of(&DPrintPreviewDialog::paintRequested),
+            this, [ = ](DPrinter *printer) {
+        if (fileDir == m_blankFileDir) {
+            printer->setDocName(QString(m_tabbar->currentName()));
+        } else {
+            printer->setDocName(QString(QFileInfo(filePath).baseName()));
+        }
         currentWrapper()->textEditor()->print(printer);
     });
 
