@@ -260,6 +260,7 @@ public:
     bool highlightKeyword(QString keyword, int position);
     void updateCursorKeywordSelection(int position, bool findNext);
     void updateHighlightLineSelection();
+    void updateHighlightLineSelection(bool bIsInputting);
     bool updateKeywordSelections(QString keyword,QTextCharFormat charFormat,QList<QTextEdit::ExtraSelection> *listSelection);
     void renderAllSelections();
 

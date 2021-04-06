@@ -1720,6 +1720,26 @@ void TextEdit::updateHighlightLineSelection()
     m_currentLineSelection = selection;
 }
 
+void TextEdit::updateHighlightLineSelection(bool bIsInputting)
+{
+    if (m_gestureAction != GA_null && m_gestureAction == GA_slide) {
+        QTextCursor textCursor = QPlainTextEdit::textCursor();
+        return;
+    }
+
+    QTextEdit::ExtraSelection selection;
+
+    selection.format.setBackground(m_currentLineColor);
+    if (bIsInputting) {
+        selection.format.setProperty(QTextFormat::ObjectIndex, true);
+    } else {
+        selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+    }
+    selection.cursor = textCursor();
+    selection.cursor.clearSelection();
+    m_currentLineSelection = selection;
+}
+
 bool TextEdit::updateKeywordSelections(QString keyword,QTextCharFormat charFormat,QList<QTextEdit::ExtraSelection> *listSelection)
 {
     // Clear keyword selections first.
@@ -5215,6 +5235,7 @@ void TextEdit::dropEvent(QDropEvent *event)
 
 void TextEdit::inputMethodEvent(QInputMethodEvent *e)
 {
+    updateHighlightLineSelection(true);
     m_bIsInputMethod = true;
     m_qstrCommitString = e->commitString();
 
@@ -5223,6 +5244,12 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
         if (m_bIsAltMod) {
             emit toTellInputModEdit(m_qstrCommitString);
             //return;
+        } else {
+            //输入法按空格键或回车键后，当前行背景色置灰高亮显示
+            QTimer::singleShot(1, [=]() {
+                updateHighlightLineSelection(false);
+                renderAllSelections();
+            });
         }
     }
 
