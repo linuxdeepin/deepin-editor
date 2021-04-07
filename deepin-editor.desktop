@@ -1,6 +1,13 @@
 [Desktop Entry]
 Categories=Utility;TextEditor;
 Comment=Simple and easy to use text editor
+StartupNotify=false
+Type=Application
+X-Deepin-AppID=deepin-editor
+X-Deepin-CreatedBy=com.deepin.dde.daemon.Launcher
+X-Deepin-Vendor=deepin
+# Translations:
+# Do not manually modify!
 Comment[ar]=محرر النصوص بسيط وسهل الاستخدام
 Comment[bo]=སྟབས་བདེ་ལ་སྤྱོད་བདེ་བའི་ཡིག་ཆ་རྩོམ་སྒྲིག་ཆས།
 Comment[br]=An aozer testennoù simpl hag aes d'ober gantañ
@@ -99,8 +106,3 @@ Name[uk]=Текстовий редактор Deepin
 Name[zh_CN]=文本编辑器
 Name[zh_HK]=Deepin 文本編輯器
 Name[zh_TW]=Deepin 文字編輯器
-StartupNotify=false
-Type=Application
-X-Deepin-AppID=deepin-editor
-X-Deepin-CreatedBy=com.deepin.dde.daemon.Launcher
-X-Deepin-Vendor=user-custom
