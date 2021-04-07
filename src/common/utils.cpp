@@ -745,5 +745,22 @@ QString Utils::getStringMD5Hash(const QString &input)
     QByteArray byteArray;
     byteArray.append(input);
     QByteArray md5Path = QCryptographicHash::hash(byteArray, QCryptographicHash::Md5);
+
     return md5Path.toHex();
+}
+
+bool Utils::activeWindowFromDock(quintptr winId)
+{
+    bool bRet = true;
+    // new interface use application as id
+    QDBusInterface dockDbusInterface("com.deepin.dde.daemon.Dock" ,
+                                 "/com/deepin/dde/daemon/Dock",
+                                 "com.deepin.dde.daemon.Dock");
+    QDBusReply<void> reply = dockDbusInterface.call("ActivateWindow", winId);
+    if (!reply.isValid()) {
+        qDebug() << "call com.deepin.dde.daemon.Dock failed" << reply.error();
+        bRet = false;
+    }
+
+    return bRet;
 }

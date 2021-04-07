@@ -472,7 +472,10 @@ void StartManager::openFilesInTab(QStringList files)
                 Window *window = m_windows[0];
                 window->addTab(file);
                 //window->setWindowState(Qt::WindowActive);
-                window->activateWindow();
+                //通过dbus接口从任务栏激活窗口
+                if (!Q_LIKELY(Utils::activeWindowFromDock(window->winId()))) {
+                    window->activateWindow();
+                }
             }
         }
     }
@@ -619,46 +622,51 @@ void StartManager::popupExistTabs(FileTabInfo info)
     //window->showNormal();
     window->activeTab(info.tabIndex);
     //window->setWindowState(Qt::WindowActive);
-    window->activateWindow();
+    //通过dbus接口从任务栏激活窗口
+    if (!Q_LIKELY(Utils::activeWindowFromDock(window->winId()))) {
+        window->activateWindow();
+    }
 
-//    int indexid=0;
-//    uint winid=0;
-//    QDBusInterface dock("com.deepin.dde.daemon.Dock",
-//                        "/com/deepin/dde/daemon/Dock",
-//                        "com.deepin.dde.daemon.Dock",
-//                        QDBusConnection::sessionBus()
-//                        );
-//    QDBusReply<QStringList> rep = dock.call("GetEntryIDs");
+    #if 0
+    int indexid=0;
+    uint winid=0;
+    QDBusInterface dock("com.deepin.dde.daemon.Dock",
+                        "/com/deepin/dde/daemon/Dock",
+                        "com.deepin.dde.daemon.Dock",
+                        QDBusConnection::sessionBus()
+                        );
+    QDBusReply<QStringList> rep = dock.call("GetEntryIDs");
 
-//    for(auto name:rep.value())
-//    {
-//        if(name=="deepin-editor")
-//        {
-//            indexid=rep.value().indexOf(name);
-//        }
-//    }
+    for(auto name:rep.value())
+    {
+        if(name=="deepin-editor")
+        {
+            indexid=rep.value().indexOf(name);
+        }
+    }
 
-//    m_pDock.reset(new Dock("com.deepin.dde.daemon.Dock",
-//                           "/com/deepin/dde/daemon/Dock",
-//                           QDBusConnection::sessionBus(),
-//                           this
-//                           )
-//                  );
-//    QList<QDBusObjectPath> list = m_pDock->entries();
+    m_pDock.reset(new Dock("com.deepin.dde.daemon.Dock",
+                           "/com/deepin/dde/daemon/Dock",
+                           QDBusConnection::sessionBus(),
+                           this
+                           )
+                  );
+    QList<QDBusObjectPath> list = m_pDock->entries();
 
-//    m_pEntry.reset(new Entry("com.deepin.dde.daemon.Dock",
-//                             list[indexid].path(),
-//                             QDBusConnection::sessionBus(),
-//                             this));
-//    winid= m_pEntry->currentWindow() ;
+    m_pEntry.reset(new Entry("com.deepin.dde.daemon.Dock",
+                             list[indexid].path(),
+                             QDBusConnection::sessionBus(),
+                             this));
+    winid= m_pEntry->currentWindow() ;
 
 
-//    QDBusMessage active = QDBusMessage::createMethodCall("com.deepin.dde.daemon.Dock",
-//                                                         "/com/deepin/dde/daemon/Dock",
-//                                                         "com.deepin.dde.daemon.Dock",
-//                                                         "ActivateWindow");
-//    active<<winid;
-//    QDBusConnection::sessionBus().call(active, QDBus::BlockWithGui);
+    QDBusMessage active = QDBusMessage::createMethodCall("com.deepin.dde.daemon.Dock",
+                                                         "/com/deepin/dde/daemon/Dock",
+                                                         "com.deepin.dde.daemon.Dock",
+                                                         "ActivateWindow");
+    active<<winid;
+    QDBusConnection::sessionBus().call(active, QDBus::BlockWithGui);
+    #endif
 }
 
 StartManager::FileTabInfo StartManager::getFileTabInfo(QString file)

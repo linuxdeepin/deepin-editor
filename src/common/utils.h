@@ -28,6 +28,8 @@
 #include <QImage>
 #include <DMainWindow>
 #include <QIcon>
+#include <QDBusInterface>
+#include <QDBusReply>
 
 class Utils
 {
@@ -76,4 +78,6 @@ public:
     static void killProcessByName(const char *pstrName);
     //计算字符串MD5哈希值 秦浩玲　2021-01-28
     static QString getStringMD5Hash(const QString &input);
+    //通过dbus接口从任务栏激活窗口 add by guoshaoyu 2021-04-07
+    static bool activeWindowFromDock(quintptr winId);
 };
