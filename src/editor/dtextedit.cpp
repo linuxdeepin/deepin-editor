@@ -1021,7 +1021,7 @@ void TextEdit::nextLine()
 
     if (m_wrapper != nullptr) {
         m_wrapper->OnUpdateHighlighter();
-        if (m_wrapper->window()->findBarIsVisiable() &&
+        if ((m_wrapper->window()->findBarIsVisiable() || m_wrapper->window()->replaceBarIsVisiable()) &&
                 (QString::compare(m_wrapper->window()->getKeywordForSearchAll(), m_wrapper->window()->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
             highlightKeywordInView(m_wrapper->window()->getKeywordForSearchAll());
         }
@@ -1045,7 +1045,7 @@ void TextEdit::prevLine()
 
     if (m_wrapper != nullptr) {
         m_wrapper->OnUpdateHighlighter();
-        if (m_wrapper->window()->findBarIsVisiable() &&
+        if ((m_wrapper->window()->findBarIsVisiable() || m_wrapper->window()->replaceBarIsVisiable()) &&
                 (QString::compare(m_wrapper->window()->getKeywordForSearchAll(), m_wrapper->window()->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
             highlightKeywordInView(m_wrapper->window()->getKeywordForSearchAll());
         }
@@ -1214,7 +1214,7 @@ void TextEdit::scrollUp()
 
     if (m_wrapper != nullptr) {
         m_wrapper->OnUpdateHighlighter();
-        if (m_wrapper->window()->findBarIsVisiable() &&
+        if ((m_wrapper->window()->findBarIsVisiable() || m_wrapper->window()->replaceBarIsVisiable()) &&
                 (QString::compare(m_wrapper->window()->getKeywordForSearchAll(), m_wrapper->window()->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
             highlightKeywordInView(m_wrapper->window()->getKeywordForSearchAll());
         }
@@ -1243,7 +1243,7 @@ void TextEdit::scrollDown()
 
     if (m_wrapper != nullptr) {
         m_wrapper->OnUpdateHighlighter();
-        if (m_wrapper->window()->findBarIsVisiable() &&
+        if ((m_wrapper->window()->findBarIsVisiable() || m_wrapper->window()->replaceBarIsVisiable()) &&
                 (QString::compare(m_wrapper->window()->getKeywordForSearchAll(), m_wrapper->window()->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
             highlightKeywordInView(m_wrapper->window()->getKeywordForSearchAll());
         }
@@ -2036,11 +2036,12 @@ void TextEdit::removeKeywords()
 bool TextEdit::highlightKeyword(QString keyword, int position)
 {
     m_findMatchSelections.clear();
-    bool yes = updateKeywordSelectionsInView(keyword, m_findMatchFormat, &m_findMatchSelections);
-    updateCursorKeywordSelection(keyword, true);
     updateHighlightLineSelection();
+    updateCursorKeywordSelection(keyword, true);
+    bool bRet = updateKeywordSelectionsInView(keyword, m_findMatchFormat, &m_findMatchSelections);
     renderAllSelections();
-    return yes;
+
+    return bRet;
 }
 
 bool TextEdit::highlightKeywordInView(QString keyword)

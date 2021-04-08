@@ -71,7 +71,7 @@ EditWrapper::EditWrapper(Window *window, QWidget *parent)
     connect(m_pWaringNotices, &WarningNotices::saveAsBtnClicked, m_pWindow, &Window::saveAsFile);
     connect(m_pTextEdit->verticalScrollBar(), &QScrollBar::valueChanged, this, [this](int) {
         OnUpdateHighlighter();
-        if (m_pWindow->findBarIsVisiable() &&
+        if ((m_pWindow->findBarIsVisiable() || m_pWindow->replaceBarIsVisiable()) &&
                 (QString::compare(m_pWindow->getKeywordForSearchAll(), m_pWindow->getKeywordForSearch(), Qt::CaseInsensitive) == 0)) {
             m_pTextEdit->highlightKeywordInView(m_pWindow->getKeywordForSearchAll());
         }

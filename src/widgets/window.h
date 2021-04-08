@@ -135,6 +135,7 @@ public:
     //设置显示清除焦点
     void setChildrenFocus(bool ok);
 
+    bool replaceBarIsVisiable();
     bool findBarIsVisiable();
     QString getKeywordForSearchAll();
     QString getKeywordForSearch();
@@ -166,9 +167,9 @@ public slots:
     void slotReplacebarClose();
 
     void handleReplaceAll(const QString &replaceText, const QString &withText);
-    void handleReplaceNext(const QString &replaceText, const QString &withText);
+    void handleReplaceNext(QString file, const QString &replaceText, const QString &withText);
     void handleReplaceRest(const QString &replaceText, const QString &withText);
-    void handleReplaceSkip();
+    void handleReplaceSkip(QString file, QString keyword);
 
     void handleRemoveSearchKeyword();
     void handleUpdateSearchKeyword(QWidget *widget, const QString &file, const QString &keyword);

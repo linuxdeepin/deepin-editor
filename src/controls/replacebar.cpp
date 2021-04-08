@@ -74,12 +74,13 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     this->setLayout(m_layout);
 
     // Make button don't grab keyboard focus after click it.
-//    m_replaceButton->setFocusPolicy(Qt::NoFocus);
-//    m_replaceSkipButton->setFocusPolicy(Qt::NoFocus);
-//    m_replaceRestButton->setFocusPolicy(Qt::NoFocus);
-//    m_replaceAllButton->setFocusPolicy(Qt::NoFocus);
-//    m_closeButton->setFocusPolicy(Qt::NoFocus);
-
+    #if 0
+    m_replaceButton->setFocusPolicy(Qt::NoFocus);
+    m_replaceSkipButton->setFocusPolicy(Qt::NoFocus);
+    m_replaceRestButton->setFocusPolicy(Qt::NoFocus);
+    m_replaceAllButton->setFocusPolicy(Qt::NoFocus);
+    m_closeButton->setFocusPolicy(Qt::NoFocus);
+    #endif
     connect(m_replaceLine, &LineBar::signal_sentText, this, &ReplaceBar::change, Qt::QueuedConnection);
 
     connect(this, &ReplaceBar::pressEsc, this, &ReplaceBar::replaceClose, Qt::QueuedConnection);
@@ -87,8 +88,12 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     //connect(m_replaceLine, &LineBar::pressEnter, this, &ReplaceBar::handleReplaceNext, Qt::QueuedConnection);         //Shielded by Hengbo for new demand.
     connect(m_withLine, &LineBar::returnPressed, this, &ReplaceBar::handleReplaceNext, Qt::QueuedConnection);
 
-    connect(m_replaceLine, &LineBar::pressCtrlEnter, this, &ReplaceBar::replaceSkip, Qt::QueuedConnection);
-    connect(m_withLine, &LineBar::pressCtrlEnter, this, &ReplaceBar::replaceSkip, Qt::QueuedConnection);
+    connect(m_replaceLine, &LineBar::pressCtrlEnter, this, [=]() {
+        emit replaceSkip(m_replaceFile, m_replaceLine->lineEdit()->text());
+    });
+    connect(m_withLine, &LineBar::pressCtrlEnter, this, [=]() {
+        emit replaceSkip(m_replaceFile, m_replaceLine->lineEdit()->text());
+    });
 
     connect(m_replaceLine, &LineBar::pressAltEnter, this, &ReplaceBar::handleReplaceRest, Qt::QueuedConnection);
     connect(m_withLine, &LineBar::pressAltEnter, this, &ReplaceBar::handleReplaceRest, Qt::QueuedConnection);
@@ -99,7 +104,9 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     connect(m_replaceLine, &LineBar::returnPressed, this, &ReplaceBar::handleContentChanged, Qt::QueuedConnection);
 
     connect(m_replaceButton, &QPushButton::clicked, this, &ReplaceBar::handleReplaceNext, Qt::QueuedConnection);
-    connect(m_replaceSkipButton, &QPushButton::clicked, this, &ReplaceBar::replaceSkip, Qt::QueuedConnection);
+    connect(m_replaceSkipButton, &QPushButton::clicked, this, [=]() {
+        emit replaceSkip(m_replaceFile, m_replaceLine->lineEdit()->text());
+    });
     connect(m_replaceRestButton, &QPushButton::clicked, this, &ReplaceBar::handleReplaceRest, Qt::QueuedConnection);
     connect(m_replaceAllButton, &QPushButton::clicked, this, &ReplaceBar::handleReplaceAll, Qt::QueuedConnection);
 
@@ -155,7 +162,7 @@ void ReplaceBar::handleReplaceNext()
         emit removeSearchKeyword();
         emit beforeReplace(m_replaceLine->lineEdit()->text());
     }
-    replaceNext(m_replaceLine->lineEdit()->text(), m_withLine->lineEdit()->text());
+    replaceNext(m_replaceFile, m_replaceLine->lineEdit()->text(), m_withLine->lineEdit()->text());
     searched = true;
 }
 

@@ -2087,8 +2087,10 @@ void Window::handleReplaceAll(const QString &replaceText, const QString &withTex
     wrapper->textEditor()->replaceAll(replaceText, withText);
 }
 
-void Window::handleReplaceNext(const QString &replaceText, const QString &withText)
+void Window::handleReplaceNext(QString file, const QString &replaceText, const QString &withText)
 {
+    m_keywordForSearch = replaceText;
+    m_keywordForSearchAll = replaceText;
     EditWrapper *wrapper = currentWrapper();
     wrapper->textEditor()->replaceNext(replaceText, withText);
 }
@@ -2099,11 +2101,21 @@ void Window::handleReplaceRest(const QString &replaceText, const QString &withTe
     wrapper->textEditor()->replaceRest(replaceText, withText);
 }
 
-void Window::handleReplaceSkip()
+void Window::handleReplaceSkip(QString file, QString keyword)
 {
+    EditWrapper *wrapper = currentWrapper();
+    handleUpdateSearchKeyword(m_replaceBar, file, keyword);
+    if (QString::compare(m_keywordForSearch, m_keywordForSearchAll, Qt::CaseInsensitive) != 0) {
+        m_keywordForSearchAll.clear();
+        wrapper->textEditor()->clearFindMatchSelections();
+    } else {
+        wrapper->textEditor()->highlightKeywordInView(m_keywordForSearchAll);
+    }
+    #if 0
     EditWrapper *wrapper = currentWrapper();
     wrapper->textEditor()->updateCursorKeywordSelection(m_keywordForSearchAll, true);
     wrapper->textEditor()->renderAllSelections();
+    #endif
 }
 
 void Window::handleRemoveSearchKeyword()
@@ -2627,6 +2639,15 @@ void Window::dropEvent(QDropEvent *event)
 bool Window::findBarIsVisiable()
 {
     if (m_findBar->isVisible()) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool Window::replaceBarIsVisiable()
+{
+    if (m_replaceBar->isVisible()) {
         return true;
     } else {
         return false;
