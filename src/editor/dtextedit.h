@@ -518,7 +518,7 @@ private:
     bool setCursorKeywordSeletoin(int position, bool findNext);
     void updateHighlightBrackets(const QChar &openChar, const QChar &closeChar);
 
-    void getNeedControlLine(int line, bool isVisable);
+    bool getNeedControlLine(int line, bool isVisable);
     //触摸屏功能函数
     bool gestureEvent(QGestureEvent *event);
     void tapGestureTriggered(QTapGesture *);
@@ -689,7 +689,7 @@ private:
     bool m_bIsShortCut;///< 是否在使用书签快捷键
 
     //存储所有有折叠标记的位置，包含不可见区域
-    QList<int> m_listFlodFlag;
+    QList<int> m_listMainFlodAllPos;
     //包含当前可见区域的标志
     QList<int> m_listFlodIconPos;
 

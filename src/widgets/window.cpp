@@ -2647,10 +2647,12 @@ bool Window::findBarIsVisiable()
 
 bool Window::replaceBarIsVisiable()
 {
-    if (m_replaceBar->isVisible()) {
-        return true;
-    } else {
-        return false;
+    if (m_replaceBar) {
+        if (m_replaceBar->isVisible()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 
