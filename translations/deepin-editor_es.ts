@@ -487,12 +487,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="93"/>
         <source>Mark</source>
-        <translation>Marcar</translation>
+        <translation>Resaltar</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="94"/>
         <source>Unmark</source>
-        <translation>Desmarcar</translation>
+        <translation>No resaltar</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="95"/>
@@ -597,7 +597,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="117"/>
         <source>Color mark</source>
-        <translation>Marcar con color</translation>
+        <translation>Resaltador</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="120"/>
@@ -607,22 +607,22 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="121"/>
         <source>WesternEuropean</source>
-        <translation type="unfinished"/>
+        <translation>Europeo Occidental</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="122"/>
         <source>CentralEuropean</source>
-        <translation type="unfinished"/>
+        <translation>Centro Europeo</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="123"/>
         <source>Baltic</source>
-        <translation type="unfinished"/>
+        <translation>Báltico</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="124"/>
         <source>Cyrillic</source>
-        <translation type="unfinished"/>
+        <translation>Cirílico</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="125"/>
@@ -632,12 +632,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="130"/>
         <source>Celtic</source>
-        <translation type="unfinished"/>
+        <translation>Céltico</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="131"/>
         <source>SouthEasternEuropean</source>
-        <translation type="unfinished"/>
+        <translation>Europeo del Sudeste</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="126"/>
@@ -652,12 +652,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="132"/>
         <source>ChineseSimplified</source>
-        <translation type="unfinished"/>
+        <translation>Chino Simplificado</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="133"/>
         <source>ChineseTraditional</source>
-        <translation type="unfinished"/>
+        <translation>Chino Tradicional</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="134"/>
@@ -901,7 +901,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="224"/>
         <source>Turn off Read-Only mode</source>
-        <translation>Desactiva modo solo lectura</translation>
+        <translation>Desactivar modo solo lectura</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="225"/>
@@ -997,27 +997,27 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="247"/>
         <source>Color Mark</source>
-        <translation>Marcar con color</translation>
+        <translation>Resaltador</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="248"/>
         <source>Clear All Marks</source>
-        <translation>Borrar todas las marcas</translation>
+        <translation>Borrar todo lo resaltado</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="249"/>
         <source>Clear Last Mark</source>
-        <translation>Borrar la última marca</translation>
+        <translation>Borrar último resalte</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="263"/>
         <source>Mark</source>
-        <translation>Marcar</translation>
+        <translation>Resaltar</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="280"/>
         <source>Mark All</source>
-        <translation>Marcar todo</translation>
+        <translation>Resaltar todo</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="287"/>
