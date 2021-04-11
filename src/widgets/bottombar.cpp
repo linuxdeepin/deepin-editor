@@ -20,6 +20,7 @@
 #include "bottombar.h"
 #include "../common/utils.h"
 #include "../editor/editwrapper.h"
+#include "../widgets/window.h"
 
 #include <QLabel>
 #include <QPainter>
@@ -82,8 +83,7 @@ BottomBar::BottomBar(QWidget *parent)
 
     //切换编码
     connect(m_pEncodeMenu, &DDropdownMenu::currentActionChanged, this,[this](QAction* pAct){
-        if(!m_pWrapper->getFileLoading() && m_pWrapper->reloadFileEncode(pAct->text().toLocal8Bit()))
-        {
+        if(!m_pWrapper->getFileLoading() && m_pWrapper->reloadFileEncode(pAct->text().toLocal8Bit())) {
             m_pEncodeMenu->setCurrentTextOnly(pAct->text());
         }
         //先屏蔽，双字节空字符先按照显示字符编码号处理
@@ -91,12 +91,13 @@ BottomBar::BottomBar(QWidget *parent)
     });
 
     //切换文件类型
-    connect(m_pHighlightMenu, &DDropdownMenu::currentActionChanged, this,[this](QAction* pAct){
-
+    connect(m_pHighlightMenu, &DDropdownMenu::currentActionChanged, this,[this](QAction* pAct) {
         m_pHighlightMenu->setCurrentTextOnly(pAct->text());
-
     });
 
+    //编码按钮/文本类型按钮失去焦点后，设置光标回到文本框里
+    connect(m_pEncodeMenu, &DDropdownMenu::sigSetTextEditFocus, this, &BottomBar::slotSetTextEditFocus);
+    connect(m_pHighlightMenu, &DDropdownMenu::sigSetTextEditFocus, this, &BottomBar::slotSetTextEditFocus);
 }
 
 BottomBar::~BottomBar()
@@ -241,4 +242,10 @@ void BottomBar::paintEvent(QPaintEvent *)
     framePath.addRect(QRect(rect().x(), rect().y(), rect().width(), 1));
     painter.setOpacity(0.1);
     painter.fillPath(framePath, splitLineColor);
+}
+
+void BottomBar::slotSetTextEditFocus()
+{
+    Window *pWindow = static_cast<Window *>(m_pWrapper->window());
+    emit pWindow->pressEsc();
 }

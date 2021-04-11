@@ -91,8 +91,6 @@ void DDropdownMenu::setFontEx(const QFont& font)
     m_font = font;
 }
 
-
-
 void DDropdownMenu::setCurrentAction(QAction *pAct)
 {
     if(pAct){
@@ -149,6 +147,7 @@ void DDropdownMenu::slotRequestMenu(bool request)
     m_pToolButton->clearFocus();
     QEvent event(QEvent::HoverLeave);
     QApplication::sendEvent(m_pToolButton, &event);
+    emit sigSetTextEditFocus();
 }
 
 void DDropdownMenu::setText(const QString &text)
@@ -303,10 +302,8 @@ DDropdownMenu *DDropdownMenu::createHighLightMenu()
     m_pActionGroup->setExclusive(true);
     m_pActionGroup->addAction(noHlAction);
 
-
     DMenu *pSubMenu = nullptr;
     QString currentGroup;
-
 
     bool intel = true;
     for (KSyntaxHighlighting::Definition def : m_pHighLightMenu->m_Repository.definitions()) {
@@ -333,7 +330,6 @@ DDropdownMenu *DDropdownMenu::createHighLightMenu()
         action->setCheckable(true);
         action->setText(def.name());
         m_pActionGroup->addAction(action);
-
     }
 
     connect(m_pActionGroup, &QActionGroup::triggered, m_pHighLightMenu, [m_pHighLightMenu] (QAction *action) {
@@ -345,14 +341,12 @@ DDropdownMenu *DDropdownMenu::createHighLightMenu()
 
     });
 
-
     m_pHighLightMenu->setText(tr("None"));
     m_pHighLightMenu->setMenu(m_pMenu);
     m_pHighLightMenu->setMenuActionGroup(m_pActionGroup);
 
     return m_pHighLightMenu;
 }
-
 
 QIcon DDropdownMenu::createIcon()
 {
@@ -373,7 +367,6 @@ QIcon DDropdownMenu::createIcon()
         arrowPixmap = m_arrowPixmap;
     }
 
-
     //根据字体大小设置icon大小
     //height 30    width QFontMetrics fm(font()) fm.width(text)+40;
     int fontWidth = QFontMetrics(m_font).width(m_text)+20;
@@ -381,12 +374,10 @@ QIcon DDropdownMenu::createIcon()
     int iconW = 8;
     int iconH = 5;
 
-
     int totalWidth = fontWidth + iconW + 20;
     int totalHeigth = 28;
     m_pToolButton->setFixedSize(totalWidth,totalHeigth);
     m_pToolButton->setIconSize(QSize(totalWidth,totalHeigth));
-
 
     QPixmap icon(QSize(totalWidth,totalHeigth)*scaled);
     icon.setDevicePixelRatio(scaled);
@@ -445,23 +436,19 @@ bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
             }
         }
 
-
-
         if(event->type() == QEvent::MouseButtonRelease){
-
             QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
             if(mouseEvent->button() == Qt::LeftButton){
                 m_bPressed = false;
                 m_pToolButton->setIcon(createIcon());
-                if (isRequest)
+                if (isRequest) {
                     Q_EMIT requestContextMenu(true);
+                }
                 m_pToolButton->clearFocus();
             }
             return true;
         }
-
     }
-
     return QFrame::eventFilter(object,event);
 }
 

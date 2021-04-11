@@ -23,7 +23,7 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include "../controls/toolbar.h"
+//#include "../controls/toolbar.h"
 #include "../common/utils.h"
 #include "../startmanager.h"
 #include "../common/performancemonitor.h"

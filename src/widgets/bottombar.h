@@ -63,6 +63,10 @@ private:
     QString m_rowStr;
     QString m_columnStr;
     QString m_chrCountStr;
+
+public slots:
+	//编码按钮/文本类型按钮失去焦点后，设置光标回到文本框里
+    void slotSetTextEditFocus();
 };
 
 #endif
