@@ -237,10 +237,10 @@ void TextEdit::initRightClickedMenu()
     m_stopReadingAction = new QAction(tr("Stop reading"),this);
     m_dictationAction = new QAction(tr("Speech to Text"),this);
     m_translateAction = new QAction(tr("Translate"),this);
+    m_columnEditAction = new QAction(tr("Column Mode"),this);
     #endif
     m_openInFileManagerAction = new QAction(tr("Display in file manager"), this);
     m_toggleCommentAction = new QAction(tr("Add Comment"), this);
-    m_columnEditAction = new QAction(tr("Column Mode"),this);
     m_addBookMarkAction = new QAction(tr("Add bookmark"),this);
     m_cancelBookMarkAction = new QAction(tr("Remove Bookmark"),this);
     m_preBookMarkAction = new QAction(tr("Previous bookmark"),this);
@@ -418,6 +418,11 @@ void TextEdit::initRightClickedMenu()
     });
 
     connect(m_translateAction, &QAction::triggered, this, &TextEdit::slot_translate);
+
+    connect(m_columnEditAction,&QAction::triggered,this,[this] {
+        //toggleComment(true); todo
+        DMessageManager::instance()->sendMessage(this, QIcon(":/images/ok.svg"),tr("Press ALT and click lines to edit in column mode"));
+    });
     #endif
 
     connect(m_openInFileManagerAction, &QAction::triggered, this,[this](){
@@ -430,11 +435,6 @@ void TextEdit::initRightClickedMenu()
 
     connect(m_cancelComment,&QAction::triggered,this,[=] {
         toggleComment(false);
-    });
-
-    connect(m_columnEditAction,&QAction::triggered,this,[this] {
-        //toggleComment(true); todo
-        DMessageManager::instance()->sendMessage(this, QIcon(":/images/ok.svg"),tr("Press ALT and click lines to edit in column mode"));
     });
 
     connect(m_addBookMarkAction, &QAction::triggered, this, &TextEdit::addOrDeleteBookMark);
@@ -716,9 +716,11 @@ void TextEdit::popRightMenu(QPoint pos)
         }
 
         m_rightMenu->addSeparator();
+        #ifdef TABLET
         if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
             m_rightMenu->addAction(m_columnEditAction);
         }
+        #endif
         m_rightMenu->addMenu(m_colorMarkMenu);
     }
 

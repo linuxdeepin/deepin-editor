@@ -589,11 +589,11 @@ private:
     QAction *m_voiceReadingAction;
     QAction *m_stopReadingAction;
     QAction *m_translateAction;
+    QAction *m_columnEditAction;
     #endif
     QAction *m_openInFileManagerAction;
     QAction *m_toggleCommentAction;
     QAction *m_dictationAction;
-    QAction *m_columnEditAction;
     QAction *m_addBookMarkAction;
     QAction *m_cancelBookMarkAction;
     QAction *m_clearBookMarkAction;
