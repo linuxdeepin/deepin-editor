@@ -42,9 +42,12 @@ class EditorApplication:public DApplication
 public:
     EditorApplication(int &argc, char *argv[]);
     ~EditorApplication() override;
+
+    virtual void handleQuitAction() override;
+
 protected:
-    void handleQuitAction()override;
     bool notify(QObject *object, QEvent *event) override;
+
 private:
     // 模拟键盘space键按压
     void pressSpace(DPushButton *pushButton);

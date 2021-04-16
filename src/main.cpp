@@ -24,12 +24,14 @@
 #include "utils.h"
 #include "window.h"
 #include "urlinfo.h"
+#include "editorapplication.h"
+#include "performancemonitor.h"
 
+#include <signal.h>
 #include <DApplication>
 #include <DMainWindow>
 #include <DWidgetUtil>
 #include <DLog>
-
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QDBusConnection>
@@ -40,21 +42,36 @@
 #include <iostream>
 #include <DApplicationSettings>
 
-#include "editorapplication.h"
-#include "performancemonitor.h"
-
+DCORE_USE_NAMESPACE
 DWIDGET_USE_NAMESPACE
+
+void signalHander(int signo)
+{
+    switch (signo) {
+    case SIGINT:
+        break;
+    case SIGTERM: {
+            EditorApplication *pApp = dynamic_cast<EditorApplication *>(qApp);
+            qInfo() << "SIGTERM qApp quit";
+            pApp->handleQuitAction();
+        } break;
+    default:
+        break;
+    }
+}
 
 int main(int argc, char *argv[])
 {
     using namespace Dtk::Core;
 
     PerformanceMonitor::initializeAppStart();
+
     qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
     QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
-//    QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+    //QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     EditorApplication app(argc, argv);
+    signal(SIGTERM, signalHander);
     Dtk::Core::DLogManager::registerConsoleAppender();
     Dtk::Core::DLogManager::registerFileAppender();
     //save theme
