@@ -2473,7 +2473,9 @@ void Window::slotClearDoubleCharaterEncode()
 void Window::slotVirtualKeyboardImActiveChanged(bool bActiove)
 {
     if (bActiove) {
+        QTimer::singleShot(300, [=]() {
         setFixedHeight(DApplication::desktop()->screenGeometry().size().height() - getKeyboardHeight());
+        });
     } else {
         setFixedHeight(getDesktopAvailableHeight());
     }
