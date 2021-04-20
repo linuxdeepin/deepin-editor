@@ -33,8 +33,8 @@ BuildRequires: pkgconfig(polkit-qt5-1)
 BuildRequires: pkgconfig(dframeworkdbus)
 # BuildRequires: qt5-linguist
 # BuildRequires: qt5-qtbase-private-devel
-BuildRequires: pkgconfig(KF5Codecs)
-BuildRequires: pkgconfig(KF5SyntaxHighlighting)
+BuildRequires: kf5-kcodecs-devel
+BuildRequires: kf5-syntax-highlighting-devel
 BuildRequires: gtest-devel
 BuildRequires: gmock-devel
 
