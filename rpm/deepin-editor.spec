@@ -33,8 +33,8 @@ BuildRequires: pkgconfig(polkit-qt5-1)
 BuildRequires: pkgconfig(dframeworkdbus)
 # BuildRequires: qt5-linguist
 # BuildRequires: qt5-qtbase-private-devel
-BuildRequires: cmake(KF5Codecs)
-BuildRequires: cmake(KF5SyntaxHighlighting)
+BuildRequires: pkgconfig(KF5Codecs)
+BuildRequires: pkgconfig(KF5SyntaxHighlighting)
 BuildRequires: gtest-devel
 BuildRequires: gmock-devel
 
@@ -46,18 +46,20 @@ BuildRequires: gmock-devel
 %prep
 %setup -q
 
-%build
 # help find (and prefer) qt5 utilities, e.g. qmake, lrelease
 export PATH=%{_qt5_bindir}:$PATH
+# cmake_minimum_required version is too high
 sed -i "s|^cmake_minimum_required.*|cmake_minimum_required(VERSION 3.0)|" $(find . -name "CMakeLists.txt")
-%cmake . -DVERSION=%{version}
+mkdir build && pushd build
+%cmake -DCMAKE_BUILD_TYPE=Release -DAPP_VERSION=%{version} -DVERSION=%{version}  ../
 %make_build
+popd
 
 %install
-%make_install
+%make_install -C build INSTALL_ROOT="%buildroot"
 
-%check
-desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop ||:
+# %check
+# desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop ||:
 
 %files
 %doc README.md
