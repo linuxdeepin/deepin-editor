@@ -25,14 +25,14 @@ BuildRequires: pkgconfig(libexif)
 BuildRequires: pkgconfig(xcb-aux)
 BuildRequires: pkgconfig(xtst)
 BuildRequires: pkgconfig(polkit-qt5-1)
-# BuildRequires: pkgconfig(Qt5)
-# BuildRequires: pkgconfig(Qt5DBus)
-# BuildRequires: pkgconfig(Qt5Gui)
-# BuildRequires: pkgconfig(Qt5Svg)
-# BuildRequires: pkgconfig(Qt5X11Extras)
+BuildRequires: pkgconfig(Qt5)
+BuildRequires: pkgconfig(Qt5DBus)
+BuildRequires: pkgconfig(Qt5Gui)
+BuildRequires: pkgconfig(Qt5Svg)
+BuildRequires: pkgconfig(Qt5X11Extras)
 BuildRequires: pkgconfig(dframeworkdbus)
-# BuildRequires: qt5-linguist
-# BuildRequires: qt5-qtbase-private-devel
+BuildRequires: qt5-linguist
+BuildRequires: qt5-qtbase-private-devel
 BuildRequires: kf5-kcodecs-devel
 BuildRequires: kf5-syntax-highlighting-devel
 BuildRequires: gtest-devel
