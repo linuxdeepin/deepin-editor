@@ -3779,11 +3779,6 @@ bool TextEdit::isNeedShowFoldIcon(QTextBlock block)
 
 int TextEdit::getHighLightRowContentLineNum(int iLine)
 {
-
-    bool isFirstLine = true;
-    if (iLine == 0) isFirstLine = true;
-    else isFirstLine = false;
-
     QTextDocument *doc = document();
     //获取行号文本块
     QTextBlock curBlock = doc->findBlockByNumber(iLine);
