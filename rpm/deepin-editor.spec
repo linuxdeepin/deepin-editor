@@ -19,8 +19,8 @@ BuildRequires: cmake3
 BuildRequires: qt5-devel
 BuildRequires: gcc-c++
 BuildRequires: freeimage-devel
-BuildRequires: pkgconfig(dtkwidget) >= 2.0.6
-BuildRequires: pkgconfig(dtkwm)
+BuildRequires: pkgconfig(dtkwidget)
+BuildRequires: pkgconfig(dtkcore)
 BuildRequires: pkgconfig(libexif)
 BuildRequires: pkgconfig(xcb-aux)
 BuildRequires: pkgconfig(xtst)
