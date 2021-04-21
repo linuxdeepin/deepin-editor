@@ -56,7 +56,7 @@ target_link_libraries(deepin-editor
     ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/lib/libiconv.a
     ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/lib/libenca.a
     -lm
-    ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/lib/libuchardet.a
+    ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/lib64/libuchardet.a
 )
 
 set(CMAKE_INSTALL_PREFIX /usr)

@@ -47,7 +47,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/include)
 link_libraries(${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/lib/libcharset.a)
 link_libraries(${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/lib/libiconv.a)
 link_libraries(${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/lib/libenca.a)
-link_libraries(${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/lib/libuchardet.a)
+link_libraries(${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/lib64/libuchardet.a)
 
 set(PROJECT_NAME_TEST
     ${PROJECT_NAME}-test)
