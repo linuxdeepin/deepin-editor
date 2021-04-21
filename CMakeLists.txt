@@ -6,6 +6,8 @@ endif ()
 
 project(deepin-editor)
 
+set(CMAKE_INSTALL_LIBDIR "lib" CACHE PATH "object code libraries (lib)")
+
 #set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
