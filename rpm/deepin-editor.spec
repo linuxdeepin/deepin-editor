@@ -64,7 +64,7 @@ popd
 %files
 %doc README.md
 %license LICENSE
-%{_bindir}/dedit
+# %{_bindir}/dedit
 %{_bindir}/%{name}
 %{_datadir}/%{name}/
 %{_datadir}/applications/%{name}.desktop
