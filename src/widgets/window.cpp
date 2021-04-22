@@ -2589,15 +2589,15 @@ void Window::keyPressEvent(QKeyEvent *e)
 void Window::keyReleaseEvent(QKeyEvent *keyEvent)
 {
     if ((keyEvent->modifiers() | Qt::ShiftModifier) || (keyEvent->modifiers() | Qt::ControlModifier)) {
-        if (nullptr != m_shortcutViewProcess) {
-            int count = Utils::getProcessCountByName("deepin-shortcut-viewer");
-            if (count > 0) {
-                Utils::killProcessByName("deepin-shortcut-viewer");
-            }
+//        if (nullptr != m_shortcutViewProcess) {
+//            int count = Utils::getProcessCountByName("deepin-shortcut-viewer");
+//            if (count > 0) {s
+//                Utils::killProcessByName("deepin-shortcut-viewer");
+//            }
 
-            delete (m_shortcutViewProcess);
-            m_shortcutViewProcess = nullptr;
-        }
+//            delete (m_shortcutViewProcess);
+//            m_shortcutViewProcess = nullptr;
+//        }s
     }
 }
 
