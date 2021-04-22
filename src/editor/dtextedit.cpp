@@ -5615,7 +5615,8 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         }
 
         //fix 66710 输入的内容为英文符号时，文本编辑器未识别为临时文件
-        if (modifiers == Qt::ShiftModifier && (e->key() == Qt::Key_Shift || !e->text().isEmpty())) {
+        //fix 75313  lxp 2021.4.22
+        if ((modifiers == Qt::ShiftModifier || e->key() == Qt::Key_Shift) && !e->text().isEmpty()) {
             if (m_bIsAltMod) {
                insertColumnEditTextEx(e->text());
             } else {
