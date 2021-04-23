@@ -1,5 +1,5 @@
 #include "test_themeitemdelegate.h"
-#include "../src/thememodule/themeitemdelegate.h"
+#include "../../src/thememodule/themeitemdelegate.h"
 #include <QPainter>
 
 test_ThemeItemDelegate::test_ThemeItemDelegate()
