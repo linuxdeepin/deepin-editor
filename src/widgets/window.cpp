@@ -966,14 +966,16 @@ bool Window::saveFile()
         int mode =  dialog->exec();
         wrapperEdit->setUpdatesEnabled(true);
         wrapperEdit->hideWarningNotices();
-        dialog->deleteLater();
-        dialog = nullptr;
+//        dialog->deleteLater();
+//        dialog = nullptr;
 
+        //保存
         if (mode == 2) {
             return  saveAsFile();
         }
-
-        return false;
+        else {
+            return false;
+        }
     }
 }
 
