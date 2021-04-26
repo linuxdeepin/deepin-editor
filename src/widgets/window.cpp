@@ -238,6 +238,8 @@ Window::Window(DMainWindow *parent)
     int window_height = Settings::instance()->settings->option("advance.window.window_height")->value().toInt();
     resize(window_width, window_height);
 
+    //设置函数最大化或者正常窗口的初始化　2021.4.26 ut002764 lxp   fix bug:74774
+    showCenterWindow(true);
 
     // Init find bar.
     connect(m_findBar, &FindBar::findNext, this, &Window::handleFindNextSearchKeyword, Qt::QueuedConnection);
@@ -376,7 +378,7 @@ void Window::showCenterWindow(bool bIsCenter)
 {
     // Init window state with config.
     // Below code must before this->titlebar()->setMenu, otherwise main menu can't display pre-build-in menu items by dtk.
-    const QString &windowState = Settings::instance()->settings->option("advance.window.windowstate")->value().toString();
+    QString windowState = Settings::instance()->settings->option("advance.window.windowstate")->value().toString();
 
 
     if (bIsCenter) {
@@ -385,9 +387,8 @@ void Window::showCenterWindow(bool bIsCenter)
     // init window state.
     if (windowState == "window_maximum") {
         showMaximized();
-        this->overrideWindowState(Qt::WindowMaximized);
         m_needMoveToCenter = true;
-    } else if (windowState == "fullscreen") {
+    } else if (windowState == "fullscreen"){
         showFullScreen();
         m_needMoveToCenter = true;
     } else {
