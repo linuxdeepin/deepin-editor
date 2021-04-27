@@ -102,10 +102,10 @@ Window::Window(DMainWindow *parent)
       m_themePanel(new ThemePanel(this)),
       m_findBar(new FindBar(this)),
       m_menu(new DMenu),
-      m_titlebarStyleSheet(titlebar()->styleSheet()),
       m_blankFileDir(QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files")),
       m_backupDir(QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("backup-files")),
       m_autoBackupDir(QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("autoBackup-files")),
+      m_titlebarStyleSheet(titlebar()->styleSheet()),
       m_themePath(Settings::instance()->settings->option("advance.editor.theme")->value().toString())
 {
     qRegisterMetaType<TextEdit *>("TextEdit");
@@ -710,10 +710,16 @@ bool Window::closeTab()
                         m_tabbar->closeCurrentTab();
                         QFile(filePath).remove();
                     }
+                    else {
+                        saveAsFile();
+                    }
                 } else {
                     if (wrapper->saveFile()) {
                         removeWrapper(filePath, true);
                         m_tabbar->closeCurrentTab();
+                    }
+                    else {
+                        saveAsFile();
                     }
                 }
             }
@@ -937,12 +943,13 @@ bool Window::saveFile()
         temPath = filePath;
     }
 
-    updateSaveAsFileName(temPath, filePath);
+//    updateSaveAsFileName(temPath, filePath);
     //wrapperEdit->updatePath(temPath,filePath);
 
     bool success = wrapperEdit->saveFile();
 
     if (success) {
+        updateSaveAsFileName(temPath, filePath);
         currentWrapper()->hideWarningNotices();
         showNotify(tr("Saved successfully"));
 
@@ -961,7 +968,6 @@ bool Window::saveFile()
         return true;
     } else {
         DDialog *dialog = createDialog(tr("Do you want to save as another?"), "");
-
         wrapperEdit->setUpdatesEnabled(false);
         int mode =  dialog->exec();
         wrapperEdit->setUpdatesEnabled(true);
@@ -2020,30 +2026,20 @@ void Window::handleBackToPosition(const QString &file, int row, int column, int 
 
 void Window::handleFindNextSearchKeyword(const QString &keyword)
 {
-    EditWrapper *wrapper = currentWrapper();
-    m_keywordForSearch = keyword;
-    wrapper->textEditor()->saveMarkStatus();
-    wrapper->textEditor()->updateCursorKeywordSelection(m_keywordForSearch, true);
-    if (QString::compare(m_keywordForSearch, m_keywordForSearchAll, Qt::CaseInsensitive) != 0) {
-        m_keywordForSearchAll.clear();
-        wrapper->textEditor()->clearFindMatchSelections();
-    } else {
-        wrapper->textEditor()->highlightKeywordInView(m_keywordForSearchAll);
-    }
-
-    wrapper->textEditor()->markAllKeywordInView();
-
-    wrapper->textEditor()->renderAllSelections();
-    wrapper->textEditor()->restoreMarkStatus();
-    wrapper->textEditor()->updateLeftAreaWidget();
+    handleFindKeyword(keyword,true);
 }
 
 void Window::handleFindPrevSearchKeyword(const QString &keyword)
 {
+    handleFindKeyword(keyword,false);
+}
+
+void Window::handleFindKeyword(const QString &keyword, bool state)
+{
     EditWrapper *wrapper = currentWrapper();
     m_keywordForSearch = keyword;
     wrapper->textEditor()->saveMarkStatus();
-    wrapper->textEditor()->updateCursorKeywordSelection(m_keywordForSearch, false);
+    wrapper->textEditor()->updateCursorKeywordSelection(m_keywordForSearch, state);
     if (QString::compare(m_keywordForSearch, m_keywordForSearchAll, Qt::CaseInsensitive) != 0) {
         m_keywordForSearchAll.clear();
         wrapper->textEditor()->clearFindMatchSelections();
@@ -2597,7 +2593,6 @@ void Window::keyReleaseEvent(QKeyEvent *keyEvent)
 //            if (count > 0) {s
 //                Utils::killProcessByName("deepin-shortcut-viewer");
 //            }
-
 //            delete (m_shortcutViewProcess);
 //            m_shortcutViewProcess = nullptr;
 //        }s
