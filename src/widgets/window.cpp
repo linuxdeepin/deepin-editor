@@ -2387,7 +2387,8 @@ void Window::updateThemePanelGeomerty()
 
 void Window::checkTabbarForReload()
 {
-    QFileInfo fi(m_tabbar->currentPath());
+    int cur = m_tabbar->currentIndex();
+    QFileInfo fi(m_tabbar->truePathAt(cur));
     QString tabName = m_tabbar->currentName();
     QString readOnlyStr = QString(" (%1)").arg(tr("Read-Only"));
     tabName.remove(readOnlyStr);
