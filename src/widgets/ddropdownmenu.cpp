@@ -414,7 +414,9 @@ bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
             //QString key = Utils::getKeyshortcut(keyEvent);
             if(keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Space)        //按下enter展开列表
             {
-                Q_EMIT requestContextMenu(false);
+                if(isRequest){
+                    Q_EMIT requestContextMenu(false);
+                }
                 return true;
             }
             return false;
