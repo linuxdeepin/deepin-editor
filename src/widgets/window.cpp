@@ -117,6 +117,9 @@ Window::Window(DMainWindow *parent)
     setAcceptDrops(true);
     loadTheme(m_themePath);
 
+    DGuiApplicationHelper *guiAppHelp = DGuiApplicationHelper::instance();
+    slotLoadContentTheme(guiAppHelp->themeType());
+
     //关闭　替换　查找 跳行bar
     connect(this, &Window::pressEsc, m_replaceBar, &ReplaceBar::pressEsc, Qt::QueuedConnection);
     connect(this, &Window::pressEsc, m_findBar, &FindBar::pressEsc, Qt::QueuedConnection);
