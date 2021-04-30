@@ -92,11 +92,12 @@ EditWrapper::~EditWrapper()
         delete m_pBottomBar;
         m_pBottomBar = nullptr;
     }
-    if (m_pWaringNotices != nullptr) {
-    disconnect(m_pWaringNotices);
-        delete m_pWaringNotices;
-        m_pWaringNotices = nullptr;
-    }
+    //delete 之后，如果出现文件被修改，需要重新加载弹框，之后，点击标签关闭，闪退问题　78042 ut002764
+//    if (m_pWaringNotices != nullptr) {
+//    disconnect(m_pWaringNotices);
+//        delete m_pWaringNotices;
+//        m_pWaringNotices = nullptr;
+//    }
 }
 
 void EditWrapper::setQuitFlag()
@@ -132,13 +133,15 @@ bool EditWrapper::readFile(QByteArray encode)
         m_sFirstEncode = newEncode;
     }
 
-    QFile file(m_pTextEdit->getFilePath());
-    if (file.open(QIODevice::ReadOnly)) {
-        QByteArray fileContent = file.readAll();
+//    QFile file(m_pTextEdit->getFilePath());
+    QFile file2(m_pTextEdit->getTruePath());
+
+    if (file2.open(QIODevice::ReadOnly)) {
+        QByteArray fileContent = file2.readAll();
         QByteArray Outdata;
         DetectCode::ChangeFileEncodingFormat(fileContent, Outdata, newEncode, QString("UTF-8"));
         loadContent(Outdata);
-        file.close();
+        file2.close();
         m_sCurEncode = newEncode;
         updateModifyStatus(false);
         return true;
@@ -284,8 +287,13 @@ void EditWrapper::reloadModifyFile()
     int yoffset = m_pTextEdit->verticalScrollBar()->value();
     int xoffset = m_pTextEdit->horizontalScrollBar()->value();
 
+    bool IsModified = m_pTextEdit->getModified();
+
+    if (m_pWindow->getTabbar()->textAt(m_pWindow->getTabbar()->currentIndex()).front() == "*") {
+        IsModified = true;
+    }
     //如果文件修改提示用户是否保存  如果临时文件保存就是另存为
-    if (m_pTextEdit->getModified()) {
+    if (IsModified) {
         DDialog *dialog = new DDialog(tr("Do you want to save this file?"), "", this);
         dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnBottomHint);
         dialog->setIcon(QIcon::fromTheme("deepin-editor"));
@@ -320,7 +328,7 @@ void EditWrapper::reloadModifyFile()
         readFile();
     }
 
-    QFileInfo fi(m_pTextEdit->getFilePath());
+    QFileInfo fi(m_pTextEdit->getTruePath());
     m_tModifiedDateTime = fi.lastModified();
 
     QTextCursor textcur = m_pTextEdit->textCursor();
