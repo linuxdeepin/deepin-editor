@@ -525,7 +525,6 @@ void Window::initVirtualKeyboardDbus()
                                                QDBusConnection::sessionBus(),
                                                this);
 
-    m_pImInterface->setImSignalLock(false);
     m_pImInterface->setImActive(false);
     QVariant variant = m_pImInterface->geometry();
     setKeyboardHeight(variant.value<QRect>().height());
