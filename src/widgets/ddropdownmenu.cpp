@@ -446,9 +446,9 @@ bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
             if(mouseEvent->button() == Qt::LeftButton){
                 m_bPressed = false;
                 m_pToolButton->setIcon(createIcon());
-//                if (isRequest) {
+                if (isEnabled()) {
                     Q_EMIT requestContextMenu(true);
-//                }
+                }
                 m_pToolButton->clearFocus();
             }
             return true;
