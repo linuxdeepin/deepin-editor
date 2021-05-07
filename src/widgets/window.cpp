@@ -1438,7 +1438,7 @@ void Window::popupPrintDialog()
     DPrintPreviewDialog preview(this);
 
     connect(&preview, QOverload<DPrinter *>::of(&DPrintPreviewDialog::paintRequested),
-            this, [ = ](DPrinter *printer) {
+            this, [ & ](DPrinter *printer) {
         if (fileDir == m_blankFileDir) {
             printer->setDocName(QString(m_tabbar->currentName()));
         } else {
@@ -1680,9 +1680,9 @@ void Window::doPrint(DPrinter *printer, const QVector<int> &pageRange)
     int dpiy = p.device()->logicalDpiY();
     int margin = (int)((2 / 2.54) * dpiy); // 2 cm margins
 
-    QTextFrameFormat fmt = m_printDoc->rootFrame()->frameFormat();
-    fmt.setMargin(margin);
-    m_printDoc->rootFrame()->setFrameFormat(fmt);
+     auto fmt = m_printDoc->rootFrame()->frameFormat();
+     fmt.setMargin(30);
+     m_printDoc->rootFrame()->setFrameFormat(fmt);
 
     QRectF pageRect(printer->pageRect());
     QRectF body = QRectF(0, 0, pageRect.width(), pageRect.height());
