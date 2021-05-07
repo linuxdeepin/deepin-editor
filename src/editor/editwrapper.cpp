@@ -536,12 +536,16 @@ void EditWrapper::hideWarningNotices()
 //除草稿文件 检查文件是否被删除,是否被修复
 void EditWrapper::checkForReload()
 {
-    if (Utils::isDraftFile(m_pTextEdit->getTruePath())) return;
+    if (Utils::isDraftFile(m_pTextEdit->getTruePath())) {
+        return;
+    }
 
     QFileInfo fi(m_pTextEdit->getTruePath());
 
-    if (fi.lastModified() == m_tModifiedDateTime || m_pWaringNotices->isVisible()) return;
-
+    QTimer::singleShot(50, [=]() {
+        if (fi.lastModified() == m_tModifiedDateTime || m_pWaringNotices->isVisible()) {
+            return;
+        }
 
     if (!fi.exists()) {
         m_pWaringNotices->setMessage(tr("File removed on the disk. Save it now?"));
@@ -553,6 +557,7 @@ void EditWrapper::checkForReload()
 
     m_pWaringNotices->show();
     DMessageManager::instance()->sendMessage(m_pTextEdit, m_pWaringNotices);
+    });
 }
 
 void EditWrapper::showNotify(const QString &message)
