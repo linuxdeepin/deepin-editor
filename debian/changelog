@@ -1,5 +1,13 @@
-deepin-editor (20191016) unstable; urgency=medium
+deepin-editor (5.9.0.53+nmu1) UNRELEASED; urgency=medium
 
-  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+ * Non-maintainer upload.
+ * 
 
- -- Deepin Packages Builder <packages@deepin.com>  Wed, 11 Oct 2017 17:38:35 +0800
+ --  <guoshaoyu@guoshaoyu-PC>  Sat, 08 May 2021 17:26:20 +0800 
+deepin-editor (5.9.0.53) unstable; urgency=medium
+
+ * 修复关闭只读模式后无法切换输入法输入中文的问题；
+ * 修改打印机打印队列无显示文档名称的问题；
+ * 放开输入法预览；                                  
+ 
+-- Deepin Packages Builder <packages@deepin.com>  Wed, 11 Oct 2017 17:38:35 +0800

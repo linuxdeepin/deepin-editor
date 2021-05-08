@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.7)
 
+set(PROJECT_VERSION "5.9.0.53")
+
 if (NOT DEFINED VERSION)
     set(VERSION 1.2.2)
 endif ()
