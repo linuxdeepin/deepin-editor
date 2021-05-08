@@ -70,7 +70,7 @@ TEST_F(TestBottomBar, checkSetPalette)
 TEST_F(TestBottomBar, checkUpdateSize)
 {
     do {
-        bottomBar->updateSize(32);
+        bottomBar->updateSize(32, false);
     } while (false);
 }
 

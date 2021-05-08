@@ -163,9 +163,10 @@ void BottomBar::setPalette(const QPalette &palette)
     QWidget::setPalette(palette);
 }
 
-void BottomBar::updateSize(int size)
+void BottomBar::updateSize(int size, bool bIsFindOrReplace)
 {
     setFixedHeight(size);
+    m_bIsFindOrReplace = bIsFindOrReplace;
 }
 
 void BottomBar::setChildEnabled(bool enabled)
@@ -238,10 +239,12 @@ void BottomBar::paintEvent(QPaintEvent *)
         splitLineColor.setAlphaF(0.5);
     }
 
+    if (!m_bIsFindOrReplace) {
     QPainterPath framePath;
     framePath.addRect(QRect(rect().x(), rect().y(), rect().width(), 1));
     painter.setOpacity(0.1);
     painter.fillPath(framePath, splitLineColor);
+    }
 }
 
 void BottomBar::slotSetTextEditFocus()

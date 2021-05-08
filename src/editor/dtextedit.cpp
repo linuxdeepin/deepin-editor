@@ -5603,15 +5603,11 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         }
 
         //列编辑 删除撤销重做
-        if (modifiers == Qt::NoModifier && (e->key() == Qt::Key_Backspace || e->key() == Qt::Key_Delete))
-        {
-            if (m_bIsAltMod && !m_altModSelections.isEmpty())
-            {
+        if (modifiers == Qt::NoModifier && (e->key() == Qt::Key_Backspace || e->key() == Qt::Key_Delete)) {
+            if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
                 QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(m_altModSelections);
                 m_pUndoStack->push(pDeleteStack);
-            }
-            else
-            {
+            } else {
                 QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(textCursor());
                 m_pUndoStack->push(pDeleteStack);
             }

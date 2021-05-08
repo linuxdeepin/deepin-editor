@@ -1207,7 +1207,7 @@ void Window::popupFindBar()
         return;
     }
 
-    currentWrapper()->bottomBar()->updateSize(m_findBar->height() + 8);
+    currentWrapper()->bottomBar()->updateSize(m_findBar->height() + 8, true);
 
     if (m_replaceBar->isVisible()) {
         m_replaceBar->hide();
@@ -1257,7 +1257,7 @@ void Window::popupReplaceBar()
 //        return;
 //    }
 
-    currentWrapper()->bottomBar()->updateSize(m_replaceBar->height() + 8);
+    currentWrapper()->bottomBar()->updateSize(m_replaceBar->height() + 8, true);
 
     EditWrapper *wrapper = currentWrapper();
     if (m_findBar->isVisible()) {
@@ -1998,7 +1998,7 @@ void Window::handleCurrentChanged(const int &index)
 
     if (currentWrapper() != nullptr) {
         currentWrapper()->bottomBar()->show();
-        currentWrapper()->bottomBar()->updateSize(32);
+        currentWrapper()->bottomBar()->updateSize(32, false);
     }
 }
 
@@ -2065,7 +2065,7 @@ void Window::slotFindbarClose()
         wrapper->bottomBar()->show();
     }
 
-    wrapper->bottomBar()->updateSize(32);
+    wrapper->bottomBar()->updateSize(32, false);
     currentWrapper()->textEditor()->setFocus();
     currentWrapper()->textEditor()->tellFindBarClose();
 }
@@ -2078,7 +2078,7 @@ void Window::slotReplacebarClose()
         wrapper->bottomBar()->show();
     }
 
-    wrapper->bottomBar()->updateSize(32);
+    wrapper->bottomBar()->updateSize(32, false);
     currentWrapper()->textEditor()->setFocus();
     currentWrapper()->textEditor()->tellFindBarClose();
 }
