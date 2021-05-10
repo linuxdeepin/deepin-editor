@@ -3481,7 +3481,14 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
                 continue;
             }
 
-            if (fontHeight > image.height()) {
+            auto rate = devicePixelRatioF();
+            image = image.scaled(image.width()*rate,image.height()*rate);
+
+            scalePixmap = Utils::renderSVG(pixmapPath, QSize(image.height(), image.width()), false);
+            scalePixmap.setDevicePixelRatio(devicePixelRatioF());
+#if 0
+            if (fontHeight > image.height())
+            {
                 scalePixmap = Utils::renderSVG(pixmapPath, QSize(image.height(), image.width()), false);
                 scalePixmap.setDevicePixelRatio(devicePixelRatioF());
             } else {
@@ -3490,10 +3497,11 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
                 scalePixmap = Utils::renderSVG(pixmapPath, QSize(static_cast<int>(scale * image.height()), nScaleWidth), false);
                 scalePixmap.setDevicePixelRatio(devicePixelRatioF());
             }
+#endif
+
 
             imageTop = cursorRect(cur).y() + (cursorRect(cur).height() - scalePixmap.height()) / 2;
-
-            int nOffset = (m_pLeftAreaWidget->m_pBookMarkArea->width() - scalePixmap.width()) / 2;
+            int nOffset = (m_pLeftAreaWidget->m_pBookMarkArea->width()  - scalePixmap.width()) / 2;
             painter.drawPixmap(nOffset, imageTop, scalePixmap);
 
         }
