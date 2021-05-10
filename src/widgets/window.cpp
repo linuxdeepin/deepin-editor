@@ -58,6 +58,7 @@
 
 #define PRINT_FLAG 2
 #define PRINT_ACTION 8
+#define PRINT_FORMAT_MARGIN 10
 
 /*!
  * \~chinese \brief printPage 绘制每一页文本纸张到打印机
@@ -1679,9 +1680,10 @@ void Window::doPrint(DPrinter *printer, const QVector<int> &pageRange)
 
     int dpiy = p.device()->logicalDpiY();
     int margin = (int)((2 / 2.54) * dpiy); // 2 cm margins
+    margin = PRINT_FORMAT_MARGIN;
 
      auto fmt = m_printDoc->rootFrame()->frameFormat();
-     fmt.setMargin(30);
+     fmt.setMargin(margin);
      m_printDoc->rootFrame()->setFrameFormat(fmt);
 
     QRectF pageRect(printer->pageRect());
