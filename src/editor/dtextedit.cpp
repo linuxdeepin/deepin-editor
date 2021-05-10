@@ -2380,6 +2380,14 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
 
                 cur.setPosition(block.position(), QTextCursor::MoveAnchor);
 
+                auto rate = devicePixelRatioF();
+                foldimage = foldimage.scaled(foldimage.width()*rate, foldimage.height()*rate);
+                scaleFoldPixmap = Utils::renderSVG(flodImagePath, QSize(foldimage.height(), foldimage.width()), false);
+                scaleFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
+                scaleunFoldPixmap = Utils::renderSVG(unflodImagePath, QSize(foldimage.height(), foldimage.width()), false);
+                scaleunFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
+
+#if 0
                 if (fontHeight > foldimage.height()) {
                     scaleFoldPixmap = Utils::renderSVG(flodImagePath, QSize(foldimage.height(), foldimage.width()), false);
                     scaleFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
@@ -2393,6 +2401,7 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                     scaleunFoldPixmap = Utils::renderSVG(unflodImagePath, QSize(static_cast<int>(foldimage.height() * scale), static_cast<int>(nScaleWidth)), false);
                     scaleunFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
                 }
+#endif
 
                 int nOffset = (m_pLeftAreaWidget->m_pBookMarkArea->width() - scaleFoldPixmap.width()) / 2;
                 if (block.next().isVisible()) {
