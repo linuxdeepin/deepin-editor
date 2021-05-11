@@ -2401,7 +2401,6 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                     scaleunFoldPixmap = Utils::renderSVG(unflodImagePath, QSize(static_cast<int>(foldimage.height() * scale), static_cast<int>(nScaleWidth)), false);
                     scaleunFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
                 }
-#endif
 
                 int nOffset = (m_pLeftAreaWidget->m_pBookMarkArea->width() - scaleFoldPixmap.width()) / 2;
                 if (block.next().isVisible()) {
@@ -2415,7 +2414,19 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                         painter.drawPixmap(nOffset, imageTop/* - static_cast<int>(document()->documentMargin())*/, scaleunFoldPixmap);
                     }
                 }
-
+ #endif
+                int nOffset = 0;
+                if (block.next().isVisible()) {
+                     if (block.isVisible()) {
+                         imageTop = cursorRect(cur).y() ;
+                         painter.drawPixmap(nOffset, imageTop/* - static_cast<int>(document()->documentMargin())*/, scaleFoldPixmap);
+                      }
+                  } else {
+                     if (block.isVisible()) {
+                         imageTop = cursorRect(cur).y();
+                         painter.drawPixmap(nOffset, imageTop/* - static_cast<int>(document()->documentMargin())*/, scaleunFoldPixmap);
+                      }
+                  }
                 m_listFlodIconPos.append(block.blockNumber());
             }
         }
@@ -3506,12 +3517,15 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
                 scalePixmap = Utils::renderSVG(pixmapPath, QSize(static_cast<int>(scale * image.height()), nScaleWidth), false);
                 scalePixmap.setDevicePixelRatio(devicePixelRatioF());
             }
-#endif
-
 
             imageTop = cursorRect(cur).y() + (cursorRect(cur).height() - scalePixmap.height()) / 2;
             int nOffset = (m_pLeftAreaWidget->m_pBookMarkArea->width()  - scalePixmap.width()) / 2;
             painter.drawPixmap(nOffset, imageTop, scalePixmap);
+#endif
+
+            imageTop = cursorRect(cur).y() ;
+            int nOffset = (m_pLeftAreaWidget->m_pBookMarkArea->width()  - scalePixmap.width()) / 2;
+            painter.drawPixmap(0 , imageTop, scalePixmap);
 
         }
     }
