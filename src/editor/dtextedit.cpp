@@ -5176,7 +5176,7 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
     //qDebug()<<e;
     if(!m_readOnlyMode && !e->commitString().isEmpty()) {
        //列编辑添加撤销重做
-       if(m_bIsAltMod && !m_altModSelections.isEmpty()){
+       if(m_bIsAltMod && !m_altModSelections.isEmpty()) {
            insertColumnEditTextEx(e->commitString());
        }else {
            insertSelectTextEx(textCursor(),e->commitString());
@@ -5240,13 +5240,15 @@ void TextEdit::mousePressEvent(QMouseEvent *e)
     }
 
     if (e->modifiers() == Qt::AltModifier){
-       m_bIsAltMod = true;
-       //鼠标点击位置为光标位置 　获取光标行列位置
-       QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(e);
-       m_altStartTextCursor = this->cursorForPosition(mouseEvent->pos());
-       m_altStartTextCursor.clearSelection();
-       this->setTextCursor(m_altStartTextCursor);
-       m_altModSelections.clear();
+        #ifdef TABLET
+        m_bIsAltMod = true;
+        //鼠标点击位置为光标位置 　获取光标行列位置
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(e);
+        m_altStartTextCursor = this->cursorForPosition(mouseEvent->pos());
+        m_altStartTextCursor.clearSelection();
+        this->setTextCursor(m_altStartTextCursor);
+        m_altModSelections.clear();
+        #endif
     }else {
         if (e->button() != 2) { //右键,调用右键菜单时候不能清空
             m_bIsAltMod = false;
