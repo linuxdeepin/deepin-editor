@@ -428,6 +428,11 @@ void TextEdit::initRightClickedMenu()
 
     connect(m_addComment, &QAction::triggered, this, [ = ] {
         toggleComment(true);
+        QTimer::singleShot(0,this,[&]()
+        {
+            m_wrapper->OnUpdateHighlighter();
+        });
+
     });
     connect(m_cancelComment, &QAction::triggered, this, [ = ] {
         toggleComment(false);
@@ -6226,7 +6231,8 @@ void TextEdit::setComment()
         doMultiLineStyleComment = !doMultiLineStyleUncomment
                                   && (hasLeadingCharacters
                                       || hasTrailingCharacters
-                                      || !m_commentDefinition.hasSingleLineStyle());
+                                     // || !m_commentDefinition.hasSingleLineStyle());
+                                         || m_commentDefinition.hasMultiLineStyle());
     } else if (!hasSelection && !m_commentDefinition.hasSingleLineStyle()) {
 
         QString text = startBlock.text().trimmed();
