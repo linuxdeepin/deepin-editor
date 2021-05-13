@@ -79,15 +79,17 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     connect(qApp,&DApplication::fontChanged,this,&DDropdownMenu::OnFontChangedSlot);
 }
 
-DDropdownMenu::~DDropdownMenu() {}
+DDropdownMenu::~DDropdownMenu()
+{
+    deleteMenuActionGroup();
+    deleteMenu();
+}
 
 void DDropdownMenu::setFontEx(const QFont& font)
 {
     m_pToolButton->setFont(font);
     m_font = font;
 }
-
-
 
 void DDropdownMenu::setCurrentAction(QAction *pAct)
 {
@@ -145,7 +147,9 @@ void DDropdownMenu::slotRequestMenu(bool request)
     m_pToolButton->clearFocus();
     QEvent event(QEvent::HoverLeave);
     QApplication::sendEvent(m_pToolButton, &event);
+    emit sigSetTextEditFocus();
 }
+
 void DDropdownMenu::setText(const QString &text)
 {
     m_text = text;
@@ -155,10 +159,29 @@ void DDropdownMenu::setText(const QString &text)
 
 void DDropdownMenu::setMenu(DMenu *menu)
 {
-    if (m_menu) {
-        delete m_menu;
-    }
+    deleteMenu();
     m_menu = menu;
+}
+
+void DDropdownMenu::deleteMenu()
+{
+    if (m_menu != nullptr) {
+        delete m_menu;
+        m_menu = nullptr;
+    }
+}
+
+void DDropdownMenu::setMenuActionGroup(QActionGroup *actionGroup)
+{
+    deleteMenuActionGroup();
+    m_actionGroup = actionGroup;
+}
+void DDropdownMenu::deleteMenuActionGroup()
+{
+    if (m_actionGroup != nullptr) {
+        delete m_actionGroup;
+        m_actionGroup = nullptr;
+    }
 }
 
 void DDropdownMenu::setTheme(const QString &theme)
@@ -187,6 +210,7 @@ void DDropdownMenu::setChildrenFocus(bool ok)
         m_pToolButton->setFocusPolicy(Qt::NoFocus);
     }
 }
+
 void DDropdownMenu::setRequestMenu(bool request)
 {
     isRequest = request;
@@ -279,10 +303,8 @@ DDropdownMenu *DDropdownMenu::createHighLightMenu()
     m_pActionGroup->setExclusive(true);
     m_pActionGroup->addAction(noHlAction);
 
-
     DMenu *pSubMenu = nullptr;
     QString currentGroup;
-
 
     bool intel = true;
     for (KSyntaxHighlighting::Definition def : m_pHighLightMenu->m_Repository.definitions()) {
@@ -309,7 +331,6 @@ DDropdownMenu *DDropdownMenu::createHighLightMenu()
         action->setCheckable(true);
         action->setText(def.name());
         m_pActionGroup->addAction(action);
-
     }
 
     connect(m_pActionGroup, &QActionGroup::triggered, m_pHighLightMenu, [m_pHighLightMenu] (QAction *action) {
@@ -318,15 +339,18 @@ DDropdownMenu *DDropdownMenu::createHighLightMenu()
         if (def.isValid() && m_pHighLightMenu->m_text != action->text()) {
             emit m_pHighLightMenu->currentActionChanged(action);
         }
+        else {
+            m_pHighLightMenu->setText(tr("None"));
+        }
 
     });
 
-
     m_pHighLightMenu->setText(tr("None"));
     m_pHighLightMenu->setMenu(m_pMenu);
+    m_pHighLightMenu->setMenuActionGroup(m_pActionGroup);
+
     return m_pHighLightMenu;
 }
-
 
 QIcon DDropdownMenu::createIcon()
 {
@@ -347,7 +371,6 @@ QIcon DDropdownMenu::createIcon()
         arrowPixmap = m_arrowPixmap;
     }
 
-
     //根据字体大小设置icon大小
     //height 30    width QFontMetrics fm(font()) fm.width(text)+40;
     int fontWidth = QFontMetrics(m_font).width(m_text)+20;
@@ -355,12 +378,10 @@ QIcon DDropdownMenu::createIcon()
     int iconW = 8;
     int iconH = 5;
 
-
     int totalWidth = fontWidth + iconW + 20;
     int totalHeigth = 28;
     m_pToolButton->setFixedSize(totalWidth,totalHeigth);
     m_pToolButton->setIconSize(QSize(totalWidth,totalHeigth));
-
 
     QPixmap icon(QSize(totalWidth,totalHeigth)*scaled);
     icon.setDevicePixelRatio(scaled);
@@ -373,7 +394,6 @@ QIcon DDropdownMenu::createIcon()
 
     //arrowPixmap=arrowPixmap.scaled(iconW,iconH,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
 
-    //qDebug()<<"==================="<<arrowPixmap.rect().height();
     painter.drawPixmap(QRectF(fontWidth,(totalHeigth-iconH)/2,iconW,iconH),arrowPixmap,arrowPixmap.rect());
 
     painter.end();
@@ -397,7 +417,9 @@ bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
             //QString key = Utils::getKeyshortcut(keyEvent);
             if(keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Space)        //按下enter展开列表
             {
-                Q_EMIT requestContextMenu(false);
+                //if(isRequest){
+                    Q_EMIT requestContextMenu(false);
+                //}
                 return true;
             }
             return false;
@@ -407,10 +429,10 @@ bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
             QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
             if(mouseEvent->button() == Qt::LeftButton){
                 m_bPressed = true;
-                if (isRequest) {
-                //重新绘制icon 点击改变前景色
-                m_pToolButton->setIcon(createIcon());
-                }
+                //if (isRequest) {
+                    //重新绘制icon 点击改变前景色
+                    m_pToolButton->setIcon(createIcon());
+                //}
                 return true;
             }
 
@@ -419,23 +441,19 @@ bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
             }
         }
 
-
-
         if(event->type() == QEvent::MouseButtonRelease){
-
             QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
             if(mouseEvent->button() == Qt::LeftButton){
                 m_bPressed = false;
                 m_pToolButton->setIcon(createIcon());
-                if (isRequest)
-                Q_EMIT requestContextMenu(true);
+                if (isEnabled()) {
+                    Q_EMIT requestContextMenu(true);
+                }
                 m_pToolButton->clearFocus();
             }
             return true;
         }
-
     }
-
     return QFrame::eventFilter(object,event);
 }
 

@@ -56,7 +56,7 @@
         <location filename="../src/editor/editwrapper.cpp" line="231"/>
         <location filename="../src/editor/editwrapper.cpp" line="277"/>
         <source>Discard</source>
-        <translation>Ignorer</translation>
+        <translation>Abandonner</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="530"/>
@@ -1147,7 +1147,7 @@
         <location filename="../src/widgets/window.cpp" line="344"/>
         <location filename="../src/widgets/window.cpp" line="1446"/>
         <source>Settings</source>
-        <translation>Paramètre </translation>
+        <translation>Paramètres</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="459"/>
@@ -1236,7 +1236,7 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="1957"/>
         <source>Discard</source>
-        <translation>Ignorer</translation>
+        <translation>Abandonner</translation>
     </message>
 </context>
 </TS>

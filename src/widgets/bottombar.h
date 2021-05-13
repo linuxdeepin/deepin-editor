@@ -42,7 +42,7 @@ public:
     void setEncodeName(const QString &name);
     void setCursorStatus(const QString &text);
     void setPalette(const QPalette &palette);
-    void updateSize(int size);
+    void updateSize(int size, bool bIsFindOrReplace);
     void setChildEnabled(bool enabled);
     //设置所有焦点　梁卫东　２０２０－０９－１４　１０：５５：２２
     void setChildrenFocus(bool ok,QWidget* preOrderWidget = nullptr);
@@ -60,9 +60,14 @@ private:
     DLabel *m_pCursorStatus {nullptr};
     DDropdownMenu *m_pEncodeMenu {nullptr};
     DDropdownMenu *m_pHighlightMenu {nullptr};
-    QString m_rowStr;
-    QString m_columnStr;
-    QString m_chrCountStr;
+    QString m_rowStr {QString()};
+    QString m_columnStr {QString()};
+    QString m_chrCountStr {QString()};
+    bool m_bIsFindOrReplace {false};
+
+public slots:
+	//编码按钮/文本类型按钮失去焦点后，设置光标回到文本框里
+    void slotSetTextEditFocus();
 };
 
 #endif

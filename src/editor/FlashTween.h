@@ -36,9 +36,12 @@ class FlashTween :public QObject
     Q_OBJECT
 public:
     FlashTween();
-    ~FlashTween(){}
+    ~FlashTween();
 
 public:
+    QTimer* m_timerY = nullptr;
+    QTimer* m_timerX = nullptr;
+
     void startX(qreal t,qreal b,qreal c,qreal d, FunSlideInertial fSlideGesture);
     void startY(qreal t,qreal b,qreal c,qreal d, FunSlideInertial fSlideGesture);
     void stopX(){m_timerX->stop();}
@@ -51,8 +54,6 @@ private slots:
     void __runX();
 
 private:
-    QTimer* m_timerY = nullptr;
-    QTimer* m_timerX = nullptr;
     FunSlideInertial m_fSlideGestureX = nullptr;
     FunSlideInertial m_fSlideGestureY = nullptr;
 

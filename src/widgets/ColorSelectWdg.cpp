@@ -22,8 +22,6 @@
 #include "../common/utils.h"
 #include "../common/settings.h"
 #include <QPainter>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
 #include <DSettingsOption>
 #include <DFontSizeManager>
 
@@ -106,11 +104,29 @@ ColorSelectWdg::ColorSelectWdg(QString text,QWidget *parent):DWidget (parent),m_
     initWidget();
 }
 
+ColorSelectWdg::~ColorSelectWdg()
+{
+    if (m_pHLayout2 != nullptr) {
+        delete m_pHLayout2;
+        m_pHLayout2 = nullptr;
+    }
+
+    if (m_pHLayout1 != nullptr) {
+        delete m_pHLayout1;
+        m_pHLayout1 = nullptr;
+    }
+
+    if (m_pMainLayout != nullptr) {
+        delete m_pMainLayout;
+        m_pMainLayout = nullptr;
+    }
+}
+
 void ColorSelectWdg::initWidget()
 {
-    QVBoxLayout *pMainLayout = new QVBoxLayout();
-    QHBoxLayout *pHLayout1 = new QHBoxLayout();
-    QHBoxLayout *pHLayout2 = new QHBoxLayout();
+    m_pMainLayout = new QVBoxLayout;
+    m_pHLayout1 = new QHBoxLayout();
+    m_pHLayout2 = new QHBoxLayout();
 
     if(!m_text.isEmpty()){
         m_pButton = new DPushButton(m_text,this);
@@ -121,7 +137,6 @@ void ColorSelectWdg::initWidget()
             emit this->sigColorSelected(true,m_defaultColor);
         });
     }
-
 
     QList<QColor> colors = Utils::getHiglightColorList();
     for (int i = 0;i<colors.size();i++) {
@@ -134,7 +149,7 @@ void ColorSelectWdg::initWidget()
             colorlabel->setColorSelected(true);
         }
 
-        pHLayout2->addWidget(colorlabel);
+        m_pHLayout2->addWidget(colorlabel);
         m_colorLabels.append(colorlabel);
 
         connect(colorlabel,&ColorLabel::sigColorClicked,this,[this,colorlabel](bool bSelect,QColor color){
@@ -150,29 +165,26 @@ void ColorSelectWdg::initWidget()
         });
     }
 
-
-
     if(!m_text.isEmpty()){
-        pHLayout1->addWidget(m_pButton);
-        pHLayout1->addSpacerItem(new QSpacerItem(100,25,QSizePolicy::Expanding,QSizePolicy::Preferred));
+        m_pHLayout1->addWidget(m_pButton);
+        m_pHLayout1->addSpacerItem(new QSpacerItem(100,25,QSizePolicy::Expanding,QSizePolicy::Preferred));
 
-        pHLayout1->setContentsMargins(20,1,0,0);
-        pHLayout2->setContentsMargins(5,2,5,2);
+        m_pHLayout1->setContentsMargins(20,1,0,0);
+        m_pHLayout2->setContentsMargins(5,2,5,2);
 
-        pMainLayout->addLayout(pHLayout1);
-        pMainLayout->addLayout(pHLayout2);
-        pMainLayout->setContentsMargins(0,0,0,0);
-        this->setLayout(pMainLayout);
+        m_pMainLayout->addLayout(m_pHLayout1);
+        m_pMainLayout->addLayout(m_pHLayout2);
+        m_pMainLayout->setContentsMargins(0,0,0,0);
+        this->setLayout(m_pMainLayout);
     }else {
-        pHLayout2->setContentsMargins(8+m_labelWidth,0,8+m_labelWidth,0);
-        this->setLayout(pHLayout2);
+        m_pHLayout2->setContentsMargins(8+m_labelWidth,0,8+m_labelWidth,0);
+        this->setLayout(m_pHLayout2);
     }
 }
 
 
 void ColorSelectWdg::setTheme(const QString &theme)
 {
-
     //获取主题颜色
     if(theme == "light") {
         m_textColor = "#1f1c1b";

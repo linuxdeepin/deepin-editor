@@ -26,16 +26,16 @@
 
 
 LeftAreaTextEdit::LeftAreaTextEdit(TextEdit *textEdit) :
-       m_pTextEdit(textEdit)
+    m_pTextEdit(textEdit)
 {
     QHBoxLayout *pHLayout = new QHBoxLayout(this);
     m_pLineNumberArea = new LineNumberArea(this);
     m_pBookMarkArea = new BookMarkWidget(this);
     m_pFlodArea = new CodeFlodArea(this);
 
-    m_pBookMarkArea->setContentsMargins(0,0,0,0);
-    m_pFlodArea->setContentsMargins(0,0,0,0);
-    m_pLineNumberArea->setContentsMargins(0,0,0,0);
+    m_pBookMarkArea->setContentsMargins(0, 0, 0, 0);
+    m_pFlodArea->setContentsMargins(0, 0, 0, 0);
+    m_pLineNumberArea->setContentsMargins(0, 0, 0, 0);
     m_pBookMarkArea->setFixedWidth(14);
     m_pFlodArea->setFixedWidth(18);
     pHLayout->addWidget(m_pBookMarkArea);
@@ -81,24 +81,24 @@ void LeftAreaTextEdit::codeFlodAreaPaintEvent(QPaintEvent *event)
 
 void LeftAreaTextEdit::updateLineNumber()
 {
-   if(m_pLineNumberArea) m_pLineNumberArea->update();
+    if (m_pLineNumberArea) m_pLineNumberArea->update();
 }
 
 void LeftAreaTextEdit::updateBookMark()
 {
-   if(m_pBookMarkArea) m_pBookMarkArea->update();
+    if (m_pBookMarkArea) m_pBookMarkArea->update();
 }
 
 void LeftAreaTextEdit::updateCodeFlod()
 {
-   if(m_pFlodArea) m_pFlodArea->update();
+    if (m_pFlodArea) m_pFlodArea->update();
 }
 
 void LeftAreaTextEdit::updateAll()
 {
-    if(m_pLineNumberArea) m_pLineNumberArea->update();
-    if(m_pBookMarkArea) m_pBookMarkArea->update();
-    if(m_pFlodArea) m_pFlodArea->update();
+    if (m_pLineNumberArea) m_pLineNumberArea->update();
+    if (m_pBookMarkArea) m_pBookMarkArea->update();
+    if (m_pFlodArea) m_pFlodArea->update();
 }
 
 

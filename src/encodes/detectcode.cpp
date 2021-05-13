@@ -82,14 +82,14 @@ QByteArray DetectCode::UchardetCode(QString filepath)
         uchardet_delete(handle);
     }
 
-        delete [] buff;
-        buff = nullptr;
+    delete [] buff;
+    buff = nullptr;
 
-     if(charset == "MAC-CENTRALEUROPE") charset = "MACCENTRALEUROPE";
-     if(charset == "MAC-CYRILLIC") charset = "MACCYRILLIC";
-     if(charset.contains("WINDOWS-")) charset = charset.replace("WINDOWS-","CP");
-     qDebug()<<"UchardetCode End:"<<QDateTime::currentDateTime().toString("hh:mm:ss");
-     return charset;
+    if(charset == "MAC-CENTRALEUROPE") charset = "MACCENTRALEUROPE";
+    if(charset == "MAC-CYRILLIC") charset = "MACCYRILLIC";
+    if(charset.contains("WINDOWS-")) charset = charset.replace("WINDOWS-","CP");
+    qDebug()<<"UchardetCode End:"<<QDateTime::currentDateTime().toString("hh:mm:ss");
+    return charset;
 }
 
 QByteArray DetectCode::EncaDetectCode(QString filepath)
@@ -167,7 +167,7 @@ QByteArray DetectCode::EncaDetectCode(QString filepath)
 
 bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr, QByteArray &outStr,QString fromCode, QString toCode)
 {
-    if(fromCode == toCode){
+    if (fromCode == toCode) {
         outStr = inputStr;
         return true;
     }

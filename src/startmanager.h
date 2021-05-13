@@ -51,6 +51,7 @@ public:
     explicit StartManager(QObject *parent = nullptr);
     bool checkPath(const QString &file);
     bool ifKlu();
+
     /**
      * @brief isMultiWindow 是否是多窗口
      * @return true or false
@@ -86,7 +87,6 @@ public slots:
     Q_SCRIPTABLE void openFilesInTab(QStringList files);
     Q_SCRIPTABLE void openFilesInWindow(QStringList files);
 
-    void initBlockShutdown();
     void createWindowFromWrapper(const QString &tabName, const QString &filePath, const QString &qstrTruePath, EditWrapper *buffer, bool isModifyed);
     void loadTheme(const QString &themeName);
 
@@ -100,6 +100,7 @@ public slots:
     void closeAboutForWindow(Window *window);
 
 private:
+    void initBlockShutdown();
     static StartManager *m_instance;
     QList<Window*> m_windows;
 

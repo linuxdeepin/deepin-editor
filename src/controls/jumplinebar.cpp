@@ -71,12 +71,12 @@ void JumpLineBar::activeInput(QString file, int row, int column, int lineCount, 
     m_rowBeforeJump = row;
     m_columnBeforeJump = column;
     m_jumpFileScrollOffset = scrollOffset;
-    m_lineValidator->setRange(1, lineCount);    
-    setFixedSize(nJumpLineBarWidth + QString::number(lineCount).size() * fontMetrics().width('9'),nJumpLineBarHeight);
+    m_lineValidator->setRange(1, lineCount);
+    setFixedSize(nJumpLineBarWidth + QString::number(lineCount).size() * fontMetrics().width('9'), nJumpLineBarHeight);
 
     // Clear line number.
-    if(m_editLine->lineEdit()->text().toInt() > lineCount)
-    m_editLine->lineEdit()->setText("");
+    if (m_editLine->lineEdit()->text().toInt() > lineCount)
+        m_editLine->lineEdit()->setText("");
 
     // Show jump line bar.
 //    show();
@@ -104,8 +104,8 @@ void JumpLineBar::handleLineChanged()
 void JumpLineBar::jumpCancel()
 {
     hide();
-   // esc键不跳转　返回当前
-   // backToPosition(m_jumpFile, m_rowBeforeJump, m_columnBeforeJump, m_jumpFileScrollOffset);
+    // esc键不跳转　返回当前
+    // backToPosition(m_jumpFile, m_rowBeforeJump, m_columnBeforeJump, m_jumpFileScrollOffset);
 }
 
 void JumpLineBar::jumpConfirm()

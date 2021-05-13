@@ -43,6 +43,7 @@ public:
     EditorApplication(int &argc, char *argv[]);
     ~EditorApplication() override;
 
+    //重写标题栏退出事件
     virtual void handleQuitAction() override;
 
 protected:

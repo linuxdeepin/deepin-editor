@@ -47,7 +47,7 @@ FindBar::FindBar(QWidget *parent)
     //m_findNextButton->setFixedSize(80, 36);
     m_closeButton = new DIconButton(DStyle::SP_CloseButton);
     m_closeButton->setIconSize(QSize(30, 30));
-    m_closeButton->setFixedSize(30,30);
+    m_closeButton->setFixedSize(30, 30);
     m_closeButton->setEnabledCircle(true);
     m_closeButton->setFlat(true);
     m_layout->setContentsMargins(16, 6, 10, 6);
@@ -124,6 +124,7 @@ void FindBar::handleFindPrev()
 {
     findPrev(m_editLine->lineEdit()->text());
 }
+
 void FindBar::handleFindNext()
 {
     findNext(m_editLine->lineEdit()->text());
@@ -169,7 +170,7 @@ void FindBar::setMismatchAlert(bool isAlert)
 
 void FindBar::receiveText(QString t)
 {
-    searched=false;
+    searched = false;
     if (t != "") {
         m_receivedText = t;
     }
@@ -182,7 +183,7 @@ void FindBar::setSearched(bool _)
 
 void FindBar::findPreClicked()
 {
-    if(!searched){
+    if (!searched) {
         updateSearchKeyword(m_findFile, m_editLine->lineEdit()->text());
         emit findPrev(m_editLine->lineEdit()->text());
         searched = true;

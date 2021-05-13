@@ -774,7 +774,7 @@
     <message>
         <location filename="../src/common/settings.cpp" line="339"/>
         <source>This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately</source>
-        <translation>Ez a gyorsbillentyű ütközik a következővel: %1, kattintson a Csere gombra a gyorsbillentyű azonnali működtetéséhez</translation>
+        <translation>Ez a gyorsbillentyű ütközik a következővel: %1, kattintson a Csere gombra a gyorsbillentyű azonnali használatához</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="454"/>

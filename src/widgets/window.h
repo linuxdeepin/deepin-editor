@@ -23,7 +23,7 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include "../controls/toolbar.h"
+//#include "../controls/toolbar.h"
 #include "../common/utils.h"
 #include "../startmanager.h"
 #include "../common/performancemonitor.h"
@@ -55,7 +55,7 @@ class Window : public DMainWindow
     Q_OBJECT
 
 public:
-    Window(DMainWindow *parent = nullptr);
+    explicit Window(DMainWindow *parent = nullptr);
     ~Window() override;
     static Window *instance();
 
@@ -71,7 +71,7 @@ public:
     int getTabIndex(const QString &file);
     void activeTab(int index);
 
-    Tabbar* getTabbar();
+    Tabbar *getTabbar();
 
     void addTab(const QString &filepath, bool activeTab = false);
     void addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, const QString &qstrTruePath,
@@ -81,10 +81,10 @@ public:
 
     void clearBlack();
 
-    EditWrapper* createEditor();
-    EditWrapper* currentWrapper();
-    EditWrapper* wrapper(const QString &filePath);
-    TextEdit* getTextEditor(const QString &filepath);
+    EditWrapper *createEditor();
+    EditWrapper *currentWrapper();
+    EditWrapper *wrapper(const QString &filePath);
+    TextEdit *getTextEditor(const QString &filepath);
     void focusActiveEditor();
     void removeWrapper(const QString &filePath, bool isDelete = false);
 
@@ -104,7 +104,7 @@ public:
     void popupFindBar();
     void popupReplaceBar();
     void popupJumpLineBar();
-    void updateJumpLineBar(TextEdit* editor);
+    void updateJumpLineBar(TextEdit *editor);
     void popupSettingsDialog();
     void popupPrintDialog();
     void popupThemePanel();
@@ -136,17 +136,19 @@ public:
      * @param qstrTruePath　真实文件路径
      * @param bIsTemFile　是否修改
      */
-    void addTemFileTab(QString qstrPath,QString qstrName,QString qstrTruePath,bool bIsTemFile = false);
+    void addTemFileTab(QString qstrPath, QString qstrName, QString qstrTruePath, bool bIsTemFile = false);
 
     QMap<QString, EditWrapper *> getWrappers();
 
     //设置显示清除焦点
     void setChildrenFocus(bool ok);
 
+    bool replaceBarIsVisiable();
     bool findBarIsVisiable();
     QString getKeywordForSearchAll();
     QString getKeywordForSearch();
     void setPrintEnabled(bool enabled);
+
 signals:
     void themeChanged(const QString themeName);
     void requestDragEnterEvent(QDragEnterEvent *);
@@ -170,13 +172,20 @@ public slots:
 
     void handleFindNextSearchKeyword(const QString &keyword);
     void handleFindPrevSearchKeyword(const QString &keyword);
+    /**
+     * @brief handleFindKeyword
+     * @param keyword
+     * @author ut002764 lxp 2021.4.27
+     */
+    void handleFindKeyword(const QString &keyword, bool state);
+
     void slotFindbarClose();
     void slotReplacebarClose();
 
     void handleReplaceAll(const QString &replaceText, const QString &withText);
-    void handleReplaceNext(const QString &replaceText, const QString &withText);
+    void handleReplaceNext(QString file, const QString &replaceText, const QString &withText);
     void handleReplaceRest(const QString &replaceText, const QString &withText);
-    void handleReplaceSkip();
+    void handleReplaceSkip(QString file, QString keyword);
 
     void handleRemoveSearchKeyword();
     void handleUpdateSearchKeyword(QWidget *widget, const QString &file, const QString &keyword);
@@ -206,6 +215,8 @@ private:
     void checkTabbarForReload();
     void clearPrintTextDocument();
 
+    // tablet features init
+    void initTabletFeatures();
     // Virtual keyboard dbus connnecttion initialization.
     void initVirtualKeyboardDbus();
     void setKeyboardHeight(int iKeyboardHeight);

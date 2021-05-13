@@ -53,8 +53,8 @@ public:
 
 signals:
     void pressEsc();
-    void replaceNext(QString replaceText, QString withText);
-    void replaceSkip();
+    void replaceNext(QString file, QString replaceText, QString withText);
+    void replaceSkip(QString file, QString keyword);
     void replaceRest(QString replaceText, QString withText);
     void replaceAll(QString replaceText, QString withText);
     void beforeReplace(QString _);

@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <gmock/gmock-matchers.h>
-#include<QApplication>
+#include <QApplication>
 #include <DApplication>
 
 DWIDGET_USE_NAMESPACE

@@ -584,7 +584,7 @@ TEST_F(test_window, handleReplaceNext)
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
     window->addTabWithWrapper(a,"bb","aad","aadd",1);
     window->m_settings =Settings::instance();
-    window->handleReplaceNext("","");
+    window->handleReplaceNext("a", "", "");
     assert(1==1);
 }
 //void handleReplaceRest(const QString &replaceText, const QString &withText);
@@ -606,7 +606,7 @@ TEST_F(test_window, handleReplaceSkip)
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
     window->addTabWithWrapper(a,"bb","aad","aadd",1);
     window->m_settings =Settings::instance();
-    window->handleReplaceSkip();
+    window->handleReplaceSkip("aa", "");
     assert(1==1);
 }
 

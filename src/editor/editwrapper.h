@@ -58,7 +58,12 @@ public:
     void setQuitFlag();
     bool getFileLoading();
 
-    //打开文件
+    /**
+     * @brief openFile 打开文件
+     * @param filepath　打开文件路径
+     * @param qstrTruePath　真实文件路径
+     * @param bIsTemFile　修改状态
+     */
     void openFile(const QString &filepath,QString qstrTruePath,bool bIsTemFile = false);
     //以默认编码encode重写读取去文件
     bool readFile(QByteArray encode="");
@@ -76,8 +81,14 @@ public:
     void reloadModifyFile();
     //获取文件编码
     QString getTextEncode();
+
+    /**
+     * @brief saveTemFile 保存备份文件
+     * @param qstrDir　备份文件路径
+     * @return true or false
+     */
     bool saveTemFile(QString qstrDir);
-    //跟新路径
+    //更新路径
     void updatePath(const QString &file,QString qstrTruePath = QString());
     //判断是否修改
     bool isModified();
@@ -107,11 +118,13 @@ public:
 
 signals:
     void sigClearDoubleCharaterEncode();
+
 private:
     // 类似setPlainText(QString) 接口支持大文本加载 不卡顿 秒退出 梁卫东 2020年11月11日16:56:27
     void loadContent(const QByteArray&);
     void handleHightlightChanged(const QString &name);
     int GetCorrectUnicode1(const QByteArray &ba);
+
 public slots:
     void handleFileLoadFinished(const QByteArray &encode,const QByteArray &content);
     void OnThemeChangeSlot(QString theme);

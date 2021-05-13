@@ -32,6 +32,7 @@ public:
     explicit CodeFlodArea(LeftAreaTextEdit *leftAreaWidget);
     ~CodeFlodArea() override;
     void paintEvent(QPaintEvent *e) override;
+
 private:
     LeftAreaTextEdit* m_pLeftAreaWidget = nullptr;
 };

@@ -44,11 +44,15 @@ public:
     void setFontEx(const QFont& font);
 
     void setMenu(DMenu *menu);
+    void deleteMenu();
+    void setMenuActionGroup(QActionGroup *actionGroup);
+    void deleteMenuActionGroup();
     void setTheme(const QString &theme);
 
     void setChildrenFocus(bool ok);
     void setRequestMenu(bool request);
     DToolButton* getButton();
+
 public slots:
     void setCurrentAction(QAction*);
     void setCurrentTextOnly(const QString& name);
@@ -59,10 +63,13 @@ public:
     static DDropdownMenu* createEncodeMenu();
     //创建文件类型菜单
     static DDropdownMenu* createHighLightMenu();
+
 signals:
     void requestContextMenu(bool bClicked = false);
     void currentTextChanged(const QString &text);
     void currentActionChanged(QAction*);
+    void sigSetTextEditFocus();
+
 private:
     //创建文字ICON
     QIcon createIcon();
@@ -79,6 +86,7 @@ private:
 private:
     DToolButton *m_pToolButton = nullptr;
     DMenu *m_menu = nullptr;
+    QActionGroup *m_actionGroup = nullptr;
     QPixmap m_arrowPixmap;
     QString m_text = "UTF-8";
     QAction* m_pActUtf8 = nullptr;

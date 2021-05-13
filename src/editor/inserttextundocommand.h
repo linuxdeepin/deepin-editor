@@ -29,8 +29,8 @@
 class InsertTextUndoCommand : public QUndoCommand
 {
 public:
-    explicit InsertTextUndoCommand(QTextCursor textcursor,QString text);
-    explicit InsertTextUndoCommand(QList<QTextEdit::ExtraSelection> &selections,QString text);
+    explicit InsertTextUndoCommand(QTextCursor textcursor, QString text);
+    explicit InsertTextUndoCommand(QList<QTextEdit::ExtraSelection> &selections, QString text);
     virtual void undo();
     virtual void redo();
 
