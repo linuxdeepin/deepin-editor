@@ -49,7 +49,7 @@ StartManager *StartManager::instance()
 StartManager::StartManager(QObject *parent)
     : QObject(parent)
 {
-//    m_bIsDragEnter = false;
+	//m_bIsDragEnter = false;
     // Create blank directory if it not exist.
 
     initBlockShutdown();
@@ -486,7 +486,6 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
 {
     Window *window = createWindow();
     //window->showCenterWindow();
-
     QRect rect = window->rect();
     QPoint pos = QCursor::pos() ;/*- window->topLevelWidget()->pos();*/
     QRect desktopRect = QApplication::desktop()->rect();
@@ -508,14 +507,14 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
     //QRect startRect(startPos, QSize(0,0));
     QRect endRect(startPos, window->rect().size());
     window->move(startPos);
-#if 0
+    #if 0
     // window->setFixedSize(Tabbar::sm_pDragPixmap->rect().size());
     QLabel *pLab = new QLabel();
     //pLab->resize(Tabbar::sm_pDragPixmap->rect().size());
     pLab->move(pos);
     pLab->setPixmap(*Tabbar::sm_pDragPixmap);
     pLab->show();
-#endif
+    #endif
     //添加编辑窗口drop动态显示效果　梁卫东　２０２０－０８－２５　０９：５４：５７
     QPropertyAnimation *geometry = new QPropertyAnimation(window, "geometry");
     geometry->setDuration(200);

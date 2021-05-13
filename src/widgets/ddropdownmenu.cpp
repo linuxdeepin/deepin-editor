@@ -162,6 +162,7 @@ void DDropdownMenu::setMenu(DMenu *menu)
     deleteMenu();
     m_menu = menu;
 }
+
 void DDropdownMenu::deleteMenu()
 {
     if (m_menu != nullptr) {
@@ -421,9 +422,9 @@ bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
             //QString key = Utils::getKeyshortcut(keyEvent);
             if(keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Space)        //按下enter展开列表
             {
-//                if(isRequest){
+                //if(isRequest){
                     Q_EMIT requestContextMenu(false);
-//                }
+                //}
                 return true;
             }
             return false;
@@ -433,10 +434,10 @@ bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
             QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
             if(mouseEvent->button() == Qt::LeftButton){
                 m_bPressed = true;
-//                if (isRequest) {
+                //if (isRequest) {
                     //重新绘制icon 点击改变前景色
                     m_pToolButton->setIcon(createIcon());
-//                }
+                //}
                 return true;
             }
 

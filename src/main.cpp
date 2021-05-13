@@ -24,6 +24,8 @@
 #include "utils.h"
 #include "window.h"
 #include "urlinfo.h"
+#include "editorapplication.h"
+#include "performancemonitor.h"
 
 #include <DApplication>
 #include <DMainWindow>
@@ -40,9 +42,6 @@
 #include <iostream>
 #include <DApplicationSettings>
 
-#include "editorapplication.h"
-#include "performancemonitor.h"
-
 DWIDGET_USE_NAMESPACE
 
 int main(int argc, char *argv[])
@@ -50,9 +49,10 @@ int main(int argc, char *argv[])
     using namespace Dtk::Core;
 
     PerformanceMonitor::initializeAppStart();
+
     qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
     QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
-//    QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+    //QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     EditorApplication app(argc, argv);
     Dtk::Core::DLogManager::registerConsoleAppender();

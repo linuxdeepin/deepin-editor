@@ -50,7 +50,6 @@ BottomBar::BottomBar(QWidget *parent)
     DFontSizeManager::instance()->bind(m_pCharCountLabel, DFontSizeManager::T9);
     DFontSizeManager::instance()->bind(m_pCursorStatus, DFontSizeManager::T9);
 
-
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setContentsMargins(29, 1, 10, 0);
     layout->addWidget(m_pPositionLabel);
@@ -65,7 +64,6 @@ BottomBar::BottomBar(QWidget *parent)
     m_pHighlightMenu->setCurrentTextOnly(qApp->translate("TextEdit", "None"));
     m_pEncodeMenu->setCurrentTextOnly(QString("UTF-8"));
 
-
     DVerticalLine *pVerticalLine1 = new DVerticalLine();
     DVerticalLine *pVerticalLine2 = new DVerticalLine();
     pVerticalLine1->setFixedSize(1, 15);
@@ -79,7 +77,6 @@ BottomBar::BottomBar(QWidget *parent)
     layout->addWidget(pVerticalLine2);
     layout->addWidget(m_pHighlightMenu);
     setFixedHeight(32);
-
 
     //切换编码
     connect(m_pEncodeMenu, &DDropdownMenu::currentActionChanged, this,[this](QAction* pAct){
@@ -240,10 +237,10 @@ void BottomBar::paintEvent(QPaintEvent *)
     }
 
     if (!m_bIsFindOrReplace) {
-    QPainterPath framePath;
-    framePath.addRect(QRect(rect().x(), rect().y(), rect().width(), 1));
-    painter.setOpacity(0.1);
-    painter.fillPath(framePath, splitLineColor);
+	    QPainterPath framePath;
+	    framePath.addRect(QRect(rect().x(), rect().y(), rect().width(), 1));
+	    painter.setOpacity(0.1);
+	    painter.fillPath(framePath, splitLineColor);
     }
 }
 

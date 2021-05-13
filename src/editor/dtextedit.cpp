@@ -138,7 +138,6 @@ TextEdit::TextEdit(QWidget *parent)
     //初始化右键菜单
     initRightClickedMenu();
 
-
     // Init scroll animation.
     m_scrollAnimation = new QPropertyAnimation(verticalScrollBar(), "value");
     m_scrollAnimation->setEasingCurve(QEasingCurve::InOutExpo);
@@ -305,7 +304,6 @@ void TextEdit::initRightClickedMenu()
     });
     m_actionAllColorStyles = new QWidgetAction(this);
     m_actionAllColorStyles->setDefaultWidget(pColorsAllSelectWdg);
-
 
     m_markAllAct = new QAction(tr("Mark All"), this);
     connect(m_markAllAct, &QAction::triggered, this, [this, pColorsAllSelectWdg]() {
@@ -521,7 +519,6 @@ void TextEdit::initRightClickedMenu()
     m_convertCaseMenu->addAction(m_upcaseAction);
     m_convertCaseMenu->addAction(m_downcaseAction);
     m_convertCaseMenu->addAction(m_capitalizeAction);
-
 
     connect(m_upcaseAction, &QAction::triggered, this, &TextEdit::upcaseWord);
     connect(m_downcaseAction, &QAction::triggered, this, &TextEdit::downcaseWord);
@@ -2392,7 +2389,7 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                 scaleunFoldPixmap = Utils::renderSVG(unflodImagePath, QSize(foldimage.height(), foldimage.width()), false);
                 scaleunFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
 
-#if 0
+				#if 0
                 if (fontHeight > foldimage.height()) {
                     scaleFoldPixmap = Utils::renderSVG(flodImagePath, QSize(foldimage.height(), foldimage.width()), false);
                     scaleFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
@@ -2419,7 +2416,7 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                         painter.drawPixmap(nOffset, imageTop/* - static_cast<int>(document()->documentMargin())*/, scaleunFoldPixmap);
                     }
                 }
- #endif
+ 				#endif
                 int nOffset = 0;
                 if (block.next().isVisible()) {
                      if (block.isVisible()) {
@@ -2671,7 +2668,6 @@ int TextEdit::getFirstVisibleBlockId() const
     QPoint startPoint;
     QTextBlock startBlock, endBlock;
 
-//   qDebug() << "r1.contains(r2" << verticalScrollBar()->maximum();
     if (verticalScrollBar()->maximum() > height()) {
         startPoint = QPointF(0, height() / verticalScrollBar()->maximum() * verticalScrollBar()->value()).toPoint();
         //endPoint = QPointF(0,height() + height()/verticalScrollBar()->maximum()*verticalScrollBar()->value()).toPoint();
@@ -2793,7 +2789,6 @@ bool TextEdit::gestureEvent(QGestureEvent *event)
         panTriggered(static_cast<QPanGesture *>(pan));
     if (QGesture *pinch = event->gesture(Qt::PinchGesture))
         pinchTriggered(static_cast<QPinchGesture *>(pinch));
-    // qDebug()<<event<<"this is for test";
     if (QGesture *swipe = event->gesture(Qt::SwipeGesture))
         swipeTriggered(static_cast<QSwipeGesture *>(swipe));
 
@@ -2929,7 +2924,6 @@ void TextEdit::pinchTriggered(QPinchGesture *pinch)
 
 void TextEdit::swipeTriggered(QSwipeGesture *swipe)
 {
-    qDebug() << "三指滑动";
     //三指滑动
 //    switch (swipe->state()) {
 //    case Qt::GestureStarted:
@@ -3511,7 +3505,7 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
 
             scalePixmap = Utils::renderSVG(pixmapPath, QSize(image.height(), image.width()), false);
             scalePixmap.setDevicePixelRatio(devicePixelRatioF());
-#if 0
+			#if 0
             if (fontHeight > image.height())
             {
                 scalePixmap = Utils::renderSVG(pixmapPath, QSize(image.height(), image.width()), false);
@@ -3526,7 +3520,7 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
             imageTop = cursorRect(cur).y() + (cursorRect(cur).height() - scalePixmap.height()) / 2;
             int nOffset = (m_pLeftAreaWidget->m_pBookMarkArea->width()  - scalePixmap.width()) / 2;
             painter.drawPixmap(nOffset, imageTop, scalePixmap);
-#endif
+			#endif
 
             imageTop = cursorRect(cur).y() ;
             int nOffset = (m_pLeftAreaWidget->m_pBookMarkArea->width()  - scalePixmap.width()) / 2;
@@ -4142,7 +4136,6 @@ void TextEdit::updateSaveIndex()
     m_lastSaveIndex = m_pUndoStack->index();
 }
 
-
 void TextEdit::isMarkCurrentLine(bool isMark, QString strColor)
 {
     if (isMark) {
@@ -4379,7 +4372,7 @@ void TextEdit::markSelectWord()
         curson.movePosition(QTextCursor::EndOfLine);
         QTextCursor currentCurson = textCursor();
         currentCurson.movePosition(QTextCursor::EndOfLine);
-//       if (m_wordMarkSelections.at(i).cursor == textCursor()) {
+        //if (m_wordMarkSelections.at(i).cursor == textCursor()) {
         if (curson == currentCurson) {
             isFind = true;
             m_wordMarkSelections.removeAt(i);
@@ -4399,7 +4392,7 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
 {
     //只读模式下实现禁止语音输入的效果
     if (m_readOnlyMode) {
-        //  undo();
+        //undo();
         return;
     }
 
@@ -5911,7 +5904,6 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
 
         //return QPlainTextEdit::keyPressEvent(e);
     }
-
 }
 
 void TextEdit::wheelEvent(QWheelEvent *e)
@@ -5957,7 +5949,7 @@ void TextEdit::paintEvent(QPaintEvent *e)
 
         QTextCursor textCursor = this->textCursor();
         int cursorWidth = this->cursorWidth();
-//        int cursoColumn = textCursor.positionInBlock();
+        //int cursoColumn = textCursor.positionInBlock();
         QPainter painter(viewport());
         QPen pen;
         pen.setColor(lineColor);
@@ -5973,7 +5965,6 @@ void TextEdit::paintEvent(QPaintEvent *e)
                 QRect textCursorRect = this->cursorRect(m_altModSelections[i].cursor);
                 painter.drawRect(textCursorRect);
             }
-            // }
         }
     }
 }

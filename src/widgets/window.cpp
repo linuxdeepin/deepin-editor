@@ -423,6 +423,7 @@ void Window::initTitlebar()
     m_menu->addAction(saveAction);
     m_menu->addAction(saveAsAction);
     m_menu->addAction(printAction);
+	//此接口不可删除，预留的编辑器内部主题选择接口
     //m_menu->addAction(switchThemeAction);
     m_menu->addSeparator();
     m_menu->addAction(settingAction);
@@ -435,7 +436,6 @@ void Window::initTitlebar()
     titlebar()->setSeparatorVisible(false);
     titlebar()->setMenu(m_menu);
     titlebar()->setIcon(QIcon::fromTheme("deepin-editor"));
-
     titlebar()->setFocusPolicy(Qt::NoFocus);         //设置titlebar无焦点，点击titlebar时光标不移动
 
     DIconButton *addButton = m_tabbar->findChild<DIconButton *>("AddButton");
@@ -916,7 +916,7 @@ bool Window::saveFile()
     if (!wrapperEdit || wrapperEdit->getFileLoading()) return false;
 
     bool isDraftFile = wrapperEdit->isDraftFile();
-//    bool isEmpty = wrapperEdit->isPlainTextEmpty();
+    //bool isEmpty = wrapperEdit->isPlainTextEmpty();
     QString filePath = wrapperEdit->textEditor()->getTruePath();
 
     // save blank file.
@@ -947,7 +947,7 @@ bool Window::saveFile()
         temPath = filePath;
     }
 
-//    updateSaveAsFileName(temPath, filePath);
+	//updateSaveAsFileName(temPath, filePath);
     //wrapperEdit->updatePath(temPath,filePath);
 
     bool success = wrapperEdit->saveFile();
@@ -976,8 +976,8 @@ bool Window::saveFile()
         int mode =  dialog->exec();
         wrapperEdit->setUpdatesEnabled(true);
         wrapperEdit->hideWarningNotices();
-//        dialog->deleteLater();
-//        dialog = nullptr;
+		//dialog->deleteLater();
+		//dialog = nullptr;
 
         //保存
         if (mode == 2) {
@@ -1182,7 +1182,7 @@ void Window::setFontSizeWithConfig(EditWrapper *wrapper)
 
 void Window::popupFindBar()
 {
-#if 0
+    #if 0
     if (m_findBar->isVisible()) {
         m_findBar->move(QPoint(10, height() - 59));
         if (m_findBar->isFocus()) {
@@ -1193,12 +1193,11 @@ void Window::popupFindBar()
     } else {
         addBottomWidget(m_findBar);
     }
-#endif
+    #endif
 
     m_findBar->setSearched(false);
     QString tabPath = m_tabbar->currentPath();
     EditWrapper *wrapper = currentWrapper();
-
 
     if (currentWrapper() == nullptr) {
         return;
@@ -1225,7 +1224,6 @@ void Window::popupFindBar()
     m_findBar->activeInput(text, tabPath, row, column, scrollOffset);
 
     QTimer::singleShot(10, this, [ = ] { m_findBar->focus(); });
-    // }
 }
 
 void Window::popupReplaceBar()
@@ -1388,6 +1386,7 @@ void Window::popupPrintDialog()
     preview.exec();
 }
 #endif
+
 void Window::popupPrintDialog()
 {
     //大文本加载过程不允许打印操作
@@ -2436,12 +2435,12 @@ void Window::resizeEvent(QResizeEvent *e)
         wrapper->OnUpdateHighlighter();
     }
 
-#if 0
+    #if 0
     if (!(m_tabbar->currentPath() == "")) {
         EditWrapper *wrapper = m_wrappers.value(m_tabbar->currentPath());
         wrapper->textEditor()->hideRightMenu();
     }
-#endif
+    #endif
 
     DMainWindow::resizeEvent(e);
 }
@@ -2498,14 +2497,14 @@ void Window::hideEvent(QHideEvent *event)
     }
 
     //如果替换浮窗正显示着，则隐藏
-#if 0
+    #if 0
     if (m_replaceBar->isVisible()) {
-//      //  m_replaceBar->hide();
+        //m_replaceBar->hide();
         if (currentWrapper() != nullptr) {
             currentWrapper()->m_bottomBar->show();
         }
     }
-#endif
+    #endif
     DMainWindow::hideEvent(event);
 }
 
@@ -2514,8 +2513,8 @@ void Window::keyPressEvent(QKeyEvent *e)
     QString key = Utils::getKeyshortcut(e);
 
     if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "decrementfontsize") ||
-            key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "incrementfontsize") ||
-            key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "togglefullscreen")) {
+        key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "incrementfontsize") ||
+        key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "togglefullscreen")) {
         currentWrapper()->textEditor()->setCodeFoldWidgetHide(true);
     }
 
@@ -2596,12 +2595,12 @@ void Window::keyReleaseEvent(QKeyEvent *keyEvent)
     if ((keyEvent->modifiers() | Qt::ShiftModifier) || (keyEvent->modifiers() | Qt::ControlModifier)) {
 //        if (nullptr != m_shortcutViewProcess) {
 //            int count = Utils::getProcessCountByName("deepin-shortcut-viewer");
-//            if (count > 0) {s
+//            if (count > 0) {
 //                Utils::killProcessByName("deepin-shortcut-viewer");
 //            }
 //            delete (m_shortcutViewProcess);
 //            m_shortcutViewProcess = nullptr;
-//        }s
+//        }
     }
 }
 

@@ -529,8 +529,10 @@ private:
     //add for single refers to the sliding
     void slideGestureY(qreal diff);
     void slideGestureX(qreal diff);
+
 public:
     int getFirstVisibleBlockId() const;
+
 public:
     bool bIsSetLineNumberWidth = true;
     bool m_pIsShowCodeFoldArea;
@@ -602,7 +604,7 @@ private:
 
     //yanyuhan
     //颜色标记、折叠/展开、书签、列编辑、设置注释、取消注释;
-//    QAction *m_colorMarkAction;
+	//QAction *m_colorMarkAction;
     DMenu *m_collapseExpandMenu;
     DMenu *m_colorMarkMenu;
     QAction *m_cancleMarkCurrentLine;

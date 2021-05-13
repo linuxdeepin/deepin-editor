@@ -43,6 +43,7 @@ TEST_F(test_startmanager, getFileTabInfo)
 
     assert(1==1);
 }
+
 //slotCheckUnsaveTab
 TEST_F(test_startmanager, slotCheckUnsaveTab)
 {
@@ -51,6 +52,7 @@ TEST_F(test_startmanager, slotCheckUnsaveTab)
 
     assert(1==1);
 }
+
 //checkPath
 TEST_F(test_startmanager, checkPath)
 {

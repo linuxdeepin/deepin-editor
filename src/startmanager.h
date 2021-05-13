@@ -117,7 +117,6 @@ private:
     QString m_backupDir;///<用户备份文件目录
     QString m_autoBackupDir;///<自动备份文件目录
     Window* pFocusWindow;
-
 };
 
 #endif

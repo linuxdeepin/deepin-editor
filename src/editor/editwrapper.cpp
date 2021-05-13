@@ -133,7 +133,7 @@ bool EditWrapper::readFile(QByteArray encode)
         m_sFirstEncode = newEncode;
     }
 
-//    QFile file(m_pTextEdit->getFilePath());
+	//QFile file(m_pTextEdit->getFilePath());
     QFile file2(m_pTextEdit->getTruePath());
 
     if (file2.open(QIODevice::ReadOnly)) {
@@ -233,7 +233,6 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
     //切换编码相同不重写加载
     if (m_sCurEncode == encode) return false;
 
-
     //草稿文件 空白文件不保存
     if (Utils::isDraftFile(m_pTextEdit->getFilePath()) &&  m_pTextEdit->toPlainText().isEmpty()) {
         m_sCurEncode = encode;
@@ -247,9 +246,9 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
         DDialog *dialog = new DDialog(tr("Encoding changed. Do you want to save the file now?"), "", this);
         dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnBottomHint);
         dialog->setIcon(QIcon::fromTheme("deepin-editor"));
-        dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);//取消
-//       dialog->addButton(QString(tr("Discard")), false, DDialog::ButtonNormal);//不保存
-        dialog->addButton(QString(tr("Save")), true, DDialog::ButtonRecommend);//保存
+        dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);   //取消
+        //dialog->addButton(QString(tr("Discard")), false, DDialog::ButtonNormal);//不保存
+        dialog->addButton(QString(tr("Save")), true, DDialog::ButtonRecommend);   //保存
         int res = dialog->exec();//0  1
 
         //关闭对话框
@@ -425,8 +424,8 @@ bool EditWrapper::saveTemFile(QString qstrDir)
 //            file.close();
 //            m_sFirstEncode = m_sCurEncode;
 
-//            // did save work?
-//            // only finalize if stream status == OK
+              // did save work?
+              // only finalize if stream status == OK
 //            bool ok = (error == QFileDevice::NoError);
 
 //            // update status.
@@ -440,7 +439,6 @@ bool EditWrapper::saveTemFile(QString qstrDir)
 
 void EditWrapper::updatePath(const QString &file, QString qstrTruePath)
 {
-
     if (qstrTruePath.isEmpty()) {
         qstrTruePath = file;
     }

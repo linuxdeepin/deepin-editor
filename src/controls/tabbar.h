@@ -110,6 +110,7 @@ private:
     QString m_qstrDragName;
     QString m_qstrDragPath;
     EditWrapper *m_pWrapper = nullptr;
+
 public:
     static QPixmap *sm_pDragPixmap;
 };

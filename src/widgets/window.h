@@ -149,6 +149,7 @@ signals:
     void closeWindow();
     void sigJudgeBlockShutdown();
     void pressEsc();
+
 public slots:
     void addBlankTab();
     void addBlankTab(const QString &blankFile);
