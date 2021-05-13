@@ -642,7 +642,7 @@ bool Window::closeTab()
 
     if (isDraftFile) {
         if (isModified) {
-            DDialog *dialog = createDialog(tr("Do you want to save as another?"), "");
+            DDialog *dialog = createDialog(tr("Do you want to save this file?"), "");
             int res = dialog->exec();
 
             //取消或关闭弹窗不做任务操作
