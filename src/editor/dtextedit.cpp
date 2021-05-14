@@ -348,7 +348,7 @@ void TextEdit::initRightClickedMenu()
         unsetMark();
     });
 
-
+#if 0
     connect(m_copyAction, &QAction::triggered, this, [this]() {
         if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
             QString data;
@@ -382,6 +382,17 @@ void TextEdit::initRightClickedMenu()
 
         unsetMark();
     });
+
+#endif
+
+    connect(m_copyAction, &QAction::triggered, this, [this]() {
+       this->copy();
+    });
+
+    connect(m_pasteAction, &QAction::triggered, this, [this]() {
+        this->paste();
+    });
+
 
 
     connect(m_deleteAction, &QAction::triggered, this, [this]() {
@@ -2574,6 +2585,38 @@ void TextEdit::cursorPositionChanged()
     m_pLeftAreaWidget->m_pLineNumberArea->update();
     m_pLeftAreaWidget->m_pBookMarkArea->update();
     m_pLeftAreaWidget->m_pFlodArea->update();
+}
+
+void TextEdit::copy()
+{
+    if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
+        QString data;
+        for(auto it = m_altModSelections.begin();it!=m_altModSelections.end();it++)
+        {
+            auto text = (*it).cursor.selectedText();
+            data += text ;
+            if(it != m_altModSelections.end() - 1)
+                data += "\n";
+        }
+        QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
+        clipboard->setText(data);
+        tryUnsetMark();
+    } else {
+        QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
+        if (textCursor().hasSelection()) {
+            clipboard->setText(textCursor().selection().toPlainText());
+            tryUnsetMark();
+        } else {
+            clipboard->setText(m_highlightWordCacheCursor.selectedText());
+        }
+    }
+}
+void TextEdit::paste()
+{
+    const QClipboard *clipboard = QApplication::clipboard(); //获取剪切版内容
+    QTextCursor cursor = textCursor();
+    insertSelectTextEx(textCursor(), clipboard->text());
+    unsetMark();
 }
 
 void TextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &closeChar)
@@ -5694,6 +5737,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             }
             return;
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "paste")) {
+#if 0
             //添加剪切板内容到撤销重做栈
             const QClipboard *clipboard = QApplication::clipboard(); //获取剪切版内容
 
@@ -5702,8 +5746,11 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             } else {
                 insertSelectTextEx(textCursor(), clipboard->text());
             }
+#endif
+            this->paste();
             return;
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "copy")) {
+#if 0
             if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
                 QString data;
                 for (auto sel : m_altModSelections) {
@@ -5720,6 +5767,8 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
                     clipboard->setText(m_highlightWordCacheCursor.selectedText());
                 }
             }
+#endif
+            this->copy();
             return;
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "scrollup")) {
             //向上翻页
@@ -6252,6 +6301,12 @@ void TextEdit::setComment()
         insertTextEx(cursor, m_commentDefinition.multiLineEnd);
         cursor.setPosition(start);
         insertTextEx(cursor, m_commentDefinition.multiLineStart);
+
+        QTimer::singleShot(0,this,[&]()
+        {
+            if(nullptr != m_wrapper)
+                m_wrapper->OnUpdateHighlighter();
+        });
     } else {
         endBlock = endBlock.next();
         doSingleLineStyleUncomment = true;

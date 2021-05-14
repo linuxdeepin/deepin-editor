@@ -494,6 +494,11 @@ public slots:
     void fingerZoom(QString name, QString direction, int fingers);
     void cursorPositionChanged();
 
+    //复制槽函数
+    void copy();
+    //粘贴槽函数
+    void paste();
+
 protected:
     bool event(QEvent *evt) override;   //触摸屏event事件
     void dragEnterEvent(QDragEnterEvent *event) override;
