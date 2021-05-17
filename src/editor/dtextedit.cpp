@@ -437,11 +437,6 @@ void TextEdit::initRightClickedMenu()
 
     connect(m_addComment, &QAction::triggered, this, [ = ] {
         toggleComment(true);
-        QTimer::singleShot(0,this,[&]()
-        {
-            m_wrapper->OnUpdateHighlighter();
-        });
-
     });
     connect(m_cancelComment, &QAction::triggered, this, [ = ] {
         toggleComment(false);
@@ -5835,9 +5830,13 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             return;
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "swaplineup")) {
             moveLineDownUp(true);
+            if(nullptr != m_wrapper)
+                 m_wrapper->OnUpdateHighlighter();
             return;
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "swaplinedown")) {
             moveLineDownUp(false);
+            if(nullptr != m_wrapper)
+                 m_wrapper->OnUpdateHighlighter();
             return;
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "scrolllineup")) {
             scrollLineUp();
