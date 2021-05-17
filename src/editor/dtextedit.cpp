@@ -28,6 +28,7 @@
 #include "leftareaoftextedit.h"
 #include "editwrapper.h"
 #include "showflodcodewidget.h"
+#include "convertcasecommond.h"
 
 
 #include <KF5/KSyntaxHighlighting/definition.h>
@@ -1750,6 +1751,7 @@ void TextEdit::handleCursorMarkChanged(bool mark, QTextCursor cursor)
 
 void TextEdit::convertWordCase(ConvertCase convertCase)
 {
+#if 0
     if (textCursor().hasSelection()) {
         QString text = textCursor().selectedText();
 
@@ -1784,6 +1786,23 @@ void TextEdit::convertWordCase(ConvertCase convertCase)
         setTextCursor(cursor);
 
         m_haveWordUnderCursor = false;
+    }
+#endif
+
+    if (textCursor().hasSelection()) {
+        QString text = textCursor().selectedText();
+        if (convertCase == UPPER) {
+            text = text.toUpper();
+        } else if (convertCase == LOWER) {
+            text = text.toLower();
+        } else {
+            text = capitalizeText(text);
+        }
+
+        DeleteTextUndoCommand* deleteCommond = new DeleteTextUndoCommand(textCursor());
+        InsertTextUndoCommand* insertCommond = new InsertTextUndoCommand(textCursor(),text);
+        ConvertCaseCommond* convertCaseCommond = new ConvertCaseCommond(deleteCommond,insertCommond);
+        m_pUndoStack->push(convertCaseCommond);
     }
 }
 
