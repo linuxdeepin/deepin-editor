@@ -1688,15 +1688,20 @@ void TextEdit::setTabSpaceNumber(int number)
 void TextEdit::upcaseWord()
 {
     tryUnsetMark();
-
     convertWordCase(UPPER);
+
+    if(nullptr != m_wrapper)
+        m_wrapper->OnUpdateHighlighter();
+
 }
 
 void TextEdit::downcaseWord()
 {
     tryUnsetMark();
-
     convertWordCase(LOWER);
+
+    if(nullptr != m_wrapper)
+        m_wrapper->OnUpdateHighlighter();
 }
 
 void TextEdit::capitalizeWord()
