@@ -28,7 +28,6 @@
 #include "leftareaoftextedit.h"
 #include "editwrapper.h"
 #include "showflodcodewidget.h"
-#include "convertcasecommond.h"
 
 
 #include <KF5/KSyntaxHighlighting/definition.h>
@@ -1799,10 +1798,8 @@ void TextEdit::convertWordCase(ConvertCase convertCase)
             text = capitalizeText(text);
         }
 
-        DeleteTextUndoCommand* deleteCommond = new DeleteTextUndoCommand(textCursor());
         InsertTextUndoCommand* insertCommond = new InsertTextUndoCommand(textCursor(),text);
-        ConvertCaseCommond* convertCaseCommond = new ConvertCaseCommond(deleteCommond,insertCommond);
-        m_pUndoStack->push(convertCaseCommond);
+        m_pUndoStack->push(insertCommond);
     }
 }
 

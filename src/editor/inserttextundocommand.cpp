@@ -59,9 +59,15 @@ void InsertTextUndoCommand::undo()
 
 void InsertTextUndoCommand::redo()
 {
+
     if (m_ColumnEditSelections.isEmpty()) {
         if (m_textCursor.hasSelection()) {
             m_selectText = m_textCursor.selectedText();
+            m_textCursor.removeSelectedText();
+        }
+        else if(!m_selectText.isEmpty())
+        {
+           m_textCursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor, m_selectText.size());
             m_textCursor.removeSelectedText();
         }
         m_textCursor.insertText(m_sInsertText);
@@ -75,4 +81,5 @@ void InsertTextUndoCommand::redo()
             m_ColumnEditSelections[i].cursor.movePosition(QTextCursor::Left, QTextCursor::KeepAnchor, m_sInsertText.length());
         }
     }
+
 }
