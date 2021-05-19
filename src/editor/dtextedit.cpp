@@ -319,6 +319,7 @@ void TextEdit::initRightClickedMenu()
     connect(m_undoAction, &QAction::triggered, m_pUndoStack, &QUndoStack::undo);
     connect(m_redoAction, &QAction::triggered, m_pUndoStack, &QUndoStack::redo);
 
+    #if 0
     connect(m_cutAction, &QAction::triggered, this, [this]() {
         //列编辑添加撤销重做
         if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
@@ -348,7 +349,6 @@ void TextEdit::initRightClickedMenu()
         unsetMark();
     });
 
-#if 0
     connect(m_copyAction, &QAction::triggered, this, [this]() {
         if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
             QString data;
@@ -385,6 +385,9 @@ void TextEdit::initRightClickedMenu()
 
 #endif
 
+    connect(m_cutAction, &QAction::triggered, this, [this]() {
+        this->cut();
+    });
     connect(m_copyAction, &QAction::triggered, this, [this]() {
        this->copy();
     });
@@ -2603,6 +2606,42 @@ void TextEdit::cursorPositionChanged()
     m_pLeftAreaWidget->m_pFlodArea->update();
 }
 
+void TextEdit::cut()
+{
+    //列编辑添加撤销重做
+    if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
+        QString data;
+        for(auto it = m_altModSelections.begin();it!=m_altModSelections.end();it++)
+        {
+            auto text = (*it).cursor.selectedText();
+            data += text ;
+            if(it != m_altModSelections.end() - 1)
+                data += "\n";
+        }
+        //删除有选择
+        for (int i = 0; i < m_altModSelections.size(); i++) {
+            if (m_altModSelections[i].cursor.hasSelection()) {
+                QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(m_altModSelections[i].cursor);
+                m_pUndoStack->push(pDeleteStack);
+            }
+        }
+        //设置到剪切板
+        QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
+        clipboard->setText(data);
+    } else {
+        QTextCursor cursor = textCursor();
+        //有选择内容才剪切
+        if (cursor.hasSelection()) {
+            QString data = cursor.selectedText();
+            QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(cursor);
+            m_pUndoStack->push(pDeleteStack);
+            QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
+            clipboard->setText(data);
+        }
+    }
+    unsetMark();
+}
+
 void TextEdit::copy()
 {
     if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
@@ -2627,6 +2666,7 @@ void TextEdit::copy()
         }
     }
 }
+
 void TextEdit::paste()
 {
     const QClipboard *clipboard = QApplication::clipboard(); //获取剪切版内容
@@ -5727,6 +5767,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             m_pUndoStack->redo();
             return;
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "cut")) {
+#if 0
             //列编辑添加撤销重做
             if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
                 QString data;
@@ -5751,6 +5792,8 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
                     clipboard->setText(data);
                 }
             }
+#endif
+            this->cut();
             return;
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "paste")) {
 #if 0
