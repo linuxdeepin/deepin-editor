@@ -164,6 +164,8 @@ public:
     void scrollDown();
     void duplicateLine();
     void copyLines();
+
+    //剪切选中行或当前行至剪贴板中
     void cutlines();
 
     /**

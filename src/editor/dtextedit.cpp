@@ -1390,6 +1390,8 @@ void TextEdit::copyLines()
     setTextCursor(copyCursor);
 }
 
+#if 0
+//2021-05-19该函数实现有误，重写同名函数
 void TextEdit::cutlines()
 {
     // Record current cursor and build copy cursor.
@@ -1437,6 +1439,30 @@ void TextEdit::cutlines()
     setTextCursor(copyCursor);
     // Setting text has been modified
     this->m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
+}
+#endif
+
+void TextEdit::cutlines()
+{
+    if (textCursor().hasSelection()){
+        this->cut();
+        popupNotify(tr("Selected line(s) clipped"));
+    }
+    else {
+        auto cursor = textCursor();
+        cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+        cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+        if (cursor.hasSelection()) {
+            QString data = cursor.selectedText();
+            QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(cursor);
+            m_pUndoStack->push(pDeleteStack);
+            QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
+            clipboard->setText(data);
+
+            popupNotify(tr("Current line clipped"));
+        }
+
+    }
 }
 
 void TextEdit::joinLines()
