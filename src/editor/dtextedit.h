@@ -500,6 +500,9 @@ public slots:
     void copy();
     //粘贴槽函数
     void paste();
+    //修改后高亮显示
+    void highlight();
+
 
 protected:
     bool event(QEvent *evt) override;   //触摸屏event事件

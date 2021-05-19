@@ -1692,19 +1692,12 @@ void TextEdit::upcaseWord()
 {
     tryUnsetMark();
     convertWordCase(UPPER);
-
-    if(nullptr != m_wrapper)
-        m_wrapper->OnUpdateHighlighter();
-
 }
 
 void TextEdit::downcaseWord()
 {
     tryUnsetMark();
     convertWordCase(LOWER);
-
-    if(nullptr != m_wrapper)
-        m_wrapper->OnUpdateHighlighter();
 }
 
 void TextEdit::capitalizeWord()
@@ -2673,6 +2666,15 @@ void TextEdit::paste()
     QTextCursor cursor = textCursor();
     insertSelectTextEx(textCursor(), clipboard->text());
     unsetMark();
+}
+
+void TextEdit::highlight()
+{
+    QTimer::singleShot(0,this,[&]()
+    {
+        if(nullptr != m_wrapper)
+            m_wrapper->OnUpdateHighlighter();
+    });
 }
 
 void TextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &closeChar)
@@ -4660,6 +4662,8 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
 
     //渲染所有的指定字符格式
     renderAllSelections();
+
+    highlight();
 }
 
 void TextEdit::setCursorStart(int pos)
@@ -5894,13 +5898,9 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             return;
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "swaplineup")) {
             moveLineDownUp(true);
-            if(nullptr != m_wrapper)
-                 m_wrapper->OnUpdateHighlighter();
             return;
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "swaplinedown")) {
             moveLineDownUp(false);
-            if(nullptr != m_wrapper)
-                 m_wrapper->OnUpdateHighlighter();
             return;
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "scrolllineup")) {
             scrollLineUp();
@@ -6364,12 +6364,6 @@ void TextEdit::setComment()
         insertTextEx(cursor, m_commentDefinition.multiLineEnd);
         cursor.setPosition(start);
         insertTextEx(cursor, m_commentDefinition.multiLineStart);
-
-        QTimer::singleShot(0,this,[&]()
-        {
-            if(nullptr != m_wrapper)
-                m_wrapper->OnUpdateHighlighter();
-        });
     } else {
         endBlock = endBlock.next();
         doSingleLineStyleUncomment = true;
