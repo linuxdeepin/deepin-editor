@@ -28,6 +28,7 @@
 #include "leftareaoftextedit.h"
 #include "editwrapper.h"
 #include "showflodcodewidget.h"
+#include "deletebackcommond.h"
 
 
 #include <KF5/KSyntaxHighlighting/definition.h>
@@ -1444,7 +1445,7 @@ void TextEdit::cutlines()
 
 void TextEdit::cutlines()
 {
-    if (textCursor().hasSelection()){
+    if (textCursor().hasSelection() || m_bIsAltMod){
         this->cut();
         popupNotify(tr("Selected line(s) clipped"));
     }
@@ -2689,9 +2690,18 @@ void TextEdit::copy()
 void TextEdit::paste()
 {
     const QClipboard *clipboard = QApplication::clipboard(); //获取剪切版内容
-    QTextCursor cursor = textCursor();
-    insertSelectTextEx(textCursor(), clipboard->text());
-    unsetMark();
+    auto text = clipboard->text();
+    if(text.isEmpty())
+        return;
+    if (!m_bIsAltMod){
+        QTextCursor cursor = textCursor();
+        insertSelectTextEx(cursor, text);
+        unsetMark();
+    }
+    else {
+        insertColumnEditTextEx(text);
+    }
+
 }
 
 void TextEdit::highlight()
@@ -5761,13 +5771,26 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         }
 
         //列编辑 删除撤销重做
-        if (modifiers == Qt::NoModifier && (e->key() == Qt::Key_Backspace || e->key() == Qt::Key_Delete)) {
+        if (modifiers == Qt::NoModifier && (e->key() == Qt::Key_Backspace)) {
             if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
                 QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(m_altModSelections);
                 m_pUndoStack->push(pDeleteStack);
             } else {
                 QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(textCursor());
                 m_pUndoStack->push(pDeleteStack);
+            }
+            return;
+        }
+
+        //列编辑 向后删除撤销重做
+        if (modifiers == Qt::NoModifier && (e->key() == Qt::Key_Delete)) {
+            if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
+
+                DeleteBackAltCommond *commond = new DeleteBackAltCommond(m_altModSelections,this);
+                m_pUndoStack->push(commond);
+            } else {
+                DeleteBackCommond *commond = new DeleteBackCommond(textCursor(),this);
+                m_pUndoStack->push(commond);
             }
             return;
         }
