@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="nl">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="nl" version="2.1">
 <context>
     <name>BottomBar</name>
     <message>
@@ -34,7 +32,7 @@
         <location filename="../src/editor/editwrapper.cpp" line="174"/>
         <location filename="../src/editor/editwrapper.cpp" line="232"/>
         <location filename="../src/editor/editwrapper.cpp" line="278"/>
-        <location filename="../src/editor/editwrapper.cpp" line="459"/>
+        <location filename="../src/editor/editwrapper.cpp" line="463"/>
         <source>Save</source>
         <translation>Opslaan</translation>
     </message>
@@ -55,33 +53,34 @@
         <translation>De tekencodering is aangepast. Wil je het bestand opslaan?</translation>
     </message>
     <message>
+        <location filename="../src/editor/editwrapper.cpp" line="231"/>
         <location filename="../src/editor/editwrapper.cpp" line="277"/>
         <source>Discard</source>
         <translation>Verwerpen</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="526"/>
+        <location filename="../src/editor/editwrapper.cpp" line="530"/>
         <source>File removed on the disk. Save it now?</source>
         <translation>Het bestand is verwijderd van de schijf. Wil je het opslaan?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="529"/>
+        <location filename="../src/editor/editwrapper.cpp" line="533"/>
         <source>File has changed on disk. Reload?</source>
         <translation>Het bestand is aangepast op de schijf. Wil je het opnieuw laden?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="551"/>
+        <location filename="../src/editor/editwrapper.cpp" line="555"/>
         <location filename="../src/widgets/bottombar.cpp" line="60"/>
         <source>INSERT</source>
         <translation>INSERT</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="554"/>
+        <location filename="../src/editor/editwrapper.cpp" line="558"/>
         <source>OVERWRITE</source>
         <translation>OVERSCHRIJVEN</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="557"/>
+        <location filename="../src/editor/editwrapper.cpp" line="561"/>
         <source>R/O</source>
         <translation>ALLEEN-LEZEN</translation>
     </message>
@@ -134,11 +133,11 @@
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="176"/>
-        <location filename="../src/editor/editwrapper.cpp" line="461"/>
+        <location filename="../src/editor/editwrapper.cpp" line="465"/>
         <location filename="../src/widgets/window.cpp" line="932"/>
         <location filename="../src/widgets/window.cpp" line="950"/>
-        <location filename="../src/widgets/window.cpp" line="1030"/>
-        <location filename="../src/widgets/window.cpp" line="1045"/>
+        <location filename="../src/widgets/window.cpp" line="1027"/>
+        <location filename="../src/widgets/window.cpp" line="1042"/>
         <source>Encoding</source>
         <translation>Tekencodering</translation>
     </message>
@@ -176,7 +175,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="31"/>
         <location filename="../src/controls/settingsdialog.cpp" line="107"/>
-        <location filename="../src/widgets/window.cpp" line="1394"/>
+        <location filename="../src/widgets/window.cpp" line="1386"/>
         <source>Window</source>
         <translation>Venster</translation>
     </message>
@@ -686,14 +685,14 @@
         <translation>Vietnamees</translation>
     </message>
     <message>
-        <location filename="../src/startmanager.cpp" line="708"/>
+        <location filename="../src/startmanager.cpp" line="718"/>
         <source>File not saved</source>
         <translation>Bestand is niet opgeslagen</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="951"/>
-        <location filename="../src/widgets/window.cpp" line="1031"/>
-        <location filename="../src/widgets/window.cpp" line="1046"/>
+        <location filename="../src/widgets/window.cpp" line="1028"/>
+        <location filename="../src/widgets/window.cpp" line="1043"/>
         <source>Line Endings</source>
         <translation>Regeleindes</translation>
     </message>
@@ -735,9 +734,9 @@
     <name>S:</name>
     <message>
         <location filename="../third/libiconv-1.16/src/iconv.c" line="103"/>
-        <source></source>
+        <source/>
         <comment>The first line of the short usage message.</comment>
-        <translation></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -802,7 +801,7 @@
 <context>
     <name>StartManager</name>
     <message>
-        <location filename="../src/startmanager.cpp" line="332"/>
+        <location filename="../src/startmanager.cpp" line="333"/>
         <source>Untitled %1</source>
         <translation>Naamloos %1</translation>
     </message>
@@ -810,32 +809,32 @@
 <context>
     <name>Tabbar</name>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="506"/>
+        <location filename="../src/controls/tabbar.cpp" line="468"/>
         <source>Close tab</source>
         <translation>Tabblad sluiten</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="507"/>
+        <location filename="../src/controls/tabbar.cpp" line="469"/>
         <source>Close other tabs</source>
         <translation>Overige tabbladen sluiten</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="508"/>
+        <location filename="../src/controls/tabbar.cpp" line="470"/>
         <source>More options</source>
         <translation>Meer opties</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="509"/>
+        <location filename="../src/controls/tabbar.cpp" line="471"/>
         <source>Close tabs to the left</source>
         <translation>Tabbladen links sluiten</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="510"/>
+        <location filename="../src/controls/tabbar.cpp" line="472"/>
         <source>Close tabs to the right</source>
         <translation>Tabbladen rechts sluiten</translation>
     </message>
     <message>
-        <location filename="../src/controls/tabbar.cpp" line="511"/>
+        <location filename="../src/controls/tabbar.cpp" line="473"/>
         <source>Close unmodified tabs</source>
         <translation>Onaangepaste tabbladen sluiten</translation>
     </message>
@@ -1056,34 +1055,34 @@
         <translation>Geen</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1309"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1308"/>
         <source>Selected line(s) copied</source>
         <translation>De geselecteerde regel(s) is (zijn) gekopieerd</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1315"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1314"/>
         <source>Current line copied</source>
         <translation>De huidige regel is gekopieerd</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1354"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1353"/>
         <source>Selected line(s) clipped</source>
         <translation>De geselecteerde regel(s) is (zijn) ingekort</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1360"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1359"/>
         <source>Current line clipped</source>
         <translation>De huidige regel is ingekort</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3098"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3097"/>
         <source>Read-Only mode is off</source>
         <translation>Alleen-lezenmodus is uitgeschakeld</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3104"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3112"/>
-        <location filename="../src/editor/dtextedit.cpp" line="5324"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3103"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3111"/>
+        <location filename="../src/editor/dtextedit.cpp" line="5328"/>
         <source>Read-Only mode is on</source>
         <translation>Alleen-lezenmodus is ingeschakeld</translation>
     </message>
@@ -1130,7 +1129,7 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="340"/>
-        <location filename="../src/widgets/window.cpp" line="1966"/>
+        <location filename="../src/widgets/window.cpp" line="1958"/>
         <source>Save</source>
         <translation>Opslaan</translation>
     </message>
@@ -1146,13 +1145,13 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="344"/>
-        <location filename="../src/widgets/window.cpp" line="1454"/>
+        <location filename="../src/widgets/window.cpp" line="1446"/>
         <source>Settings</source>
         <translation>Instellingen</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="459"/>
-        <location filename="../src/widgets/window.cpp" line="2108"/>
+        <location filename="../src/widgets/window.cpp" line="2074"/>
         <source>Read-Only</source>
         <translation>Alleen-lezen</translation>
     </message>
@@ -1167,12 +1166,12 @@
         <translation>Ongeldig bestand: %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="615"/>
+        <location filename="../src/widgets/window.cpp" line="614"/>
         <source>Do you want to save this file?</source>
         <translation>Wil je dit bestand opslaan?</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="864"/>
+        <location filename="../src/widgets/window.cpp" line="866"/>
         <source>You do not have permission to save %1</source>
         <translation>Je bent niet gemachtigd om %1 op te slaan</translation>
     </message>
@@ -1182,60 +1181,60 @@
         <translation>Opgeslagen</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="578"/>
+        <location filename="../src/widgets/window.cpp" line="577"/>
         <location filename="../src/widgets/window.cpp" line="899"/>
         <source>Do you want to save as another?</source>
         <translation>Wil je het als nieuw bestand opslaan?</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="930"/>
-        <location filename="../src/widgets/window.cpp" line="987"/>
-        <location filename="../src/widgets/window.cpp" line="1028"/>
+        <location filename="../src/widgets/window.cpp" line="984"/>
+        <location filename="../src/widgets/window.cpp" line="1025"/>
         <source>Save File</source>
         <translation>Bestand opslaan</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="989"/>
+        <location filename="../src/widgets/window.cpp" line="986"/>
         <source>Encoding</source>
         <translation>Tekencodering</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1178"/>
+        <location filename="../src/widgets/window.cpp" line="1171"/>
         <source>Read-Only mode is on</source>
         <translation>Alleen-lezenmodus is ingeschakeld</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1353"/>
+        <location filename="../src/widgets/window.cpp" line="1345"/>
         <source>Current location remembered</source>
         <translation>De huidige locatie wordt onthouden</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1404"/>
+        <location filename="../src/widgets/window.cpp" line="1396"/>
         <source>Ctrl+&apos;=&apos;</source>
         <translation>Ctrl+&apos;=&apos;</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1407"/>
+        <location filename="../src/widgets/window.cpp" line="1399"/>
         <source>Ctrl+&apos;-&apos;</source>
         <translation>Ctrl+&apos;-&apos;</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1436"/>
+        <location filename="../src/widgets/window.cpp" line="1428"/>
         <source>Editor</source>
         <translation>Bewerker</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1664"/>
+        <location filename="../src/widgets/window.cpp" line="1656"/>
         <source>Untitled %1</source>
         <translation>Naamloos %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1964"/>
+        <location filename="../src/widgets/window.cpp" line="1956"/>
         <source>Cancel</source>
         <translation>Annuleren</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1965"/>
+        <location filename="../src/widgets/window.cpp" line="1957"/>
         <source>Discard</source>
         <translation>Verwerpen</translation>
     </message>

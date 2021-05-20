@@ -1,9 +1,27 @@
+/*
+* Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd.
+*
+* Author:     liumaochuan <liumaochuan@uniontech.com>
+*
+* Maintainer: liumaochuan <liumaochuan@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 #include "ColorSelectWdg.h"
 #include "../common/utils.h"
 #include "../common/settings.h"
 #include <QPainter>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
 #include <DSettingsOption>
 #include <DFontSizeManager>
 
@@ -56,7 +74,7 @@ void ColorLabel::paintEvent(QPaintEvent *event)
 
     //如果点击选择画　圆环
     if(m_bSelected){
-        QRect r = rect();
+        r = rect();
         QPainterPath sencondCircle;
         sencondCircle.addEllipse(r.adjusted(distance,distance,-distance,-distance));
         //大圆减小圆等于圆环
@@ -86,11 +104,29 @@ ColorSelectWdg::ColorSelectWdg(QString text,QWidget *parent):DWidget (parent),m_
     initWidget();
 }
 
+ColorSelectWdg::~ColorSelectWdg()
+{
+    if (m_pHLayout2 != nullptr) {
+        delete m_pHLayout2;
+        m_pHLayout2 = nullptr;
+    }
+
+    if (m_pHLayout1 != nullptr) {
+        delete m_pHLayout1;
+        m_pHLayout1 = nullptr;
+    }
+
+    if (m_pMainLayout != nullptr) {
+        delete m_pMainLayout;
+        m_pMainLayout = nullptr;
+    }
+}
+
 void ColorSelectWdg::initWidget()
 {
-    QVBoxLayout *pMainLayout = new QVBoxLayout();
-    QHBoxLayout *pHLayout1 = new QHBoxLayout();
-    QHBoxLayout *pHLayout2 = new QHBoxLayout();
+    m_pMainLayout = new QVBoxLayout;
+    m_pHLayout1 = new QHBoxLayout();
+    m_pHLayout2 = new QHBoxLayout();
 
     if(!m_text.isEmpty()){
         m_pButton = new DPushButton(m_text,this);
@@ -101,7 +137,6 @@ void ColorSelectWdg::initWidget()
             emit this->sigColorSelected(true,m_defaultColor);
         });
     }
-
 
     QList<QColor> colors = Utils::getHiglightColorList();
     for (int i = 0;i<colors.size();i++) {
@@ -114,7 +149,7 @@ void ColorSelectWdg::initWidget()
             colorlabel->setColorSelected(true);
         }
 
-        pHLayout2->addWidget(colorlabel);
+        m_pHLayout2->addWidget(colorlabel);
         m_colorLabels.append(colorlabel);
 
         connect(colorlabel,&ColorLabel::sigColorClicked,this,[this,colorlabel](bool bSelect,QColor color){
@@ -130,29 +165,26 @@ void ColorSelectWdg::initWidget()
         });
     }
 
-
-
     if(!m_text.isEmpty()){
-        pHLayout1->addWidget(m_pButton);
-        pHLayout1->addSpacerItem(new QSpacerItem(100,25,QSizePolicy::Expanding,QSizePolicy::Preferred));
+        m_pHLayout1->addWidget(m_pButton);
+        m_pHLayout1->addSpacerItem(new QSpacerItem(100,25,QSizePolicy::Expanding,QSizePolicy::Preferred));
 
-        pHLayout1->setContentsMargins(20,1,0,0);
-        pHLayout2->setContentsMargins(5,2,5,2);
+        m_pHLayout1->setContentsMargins(20,1,0,0);
+        m_pHLayout2->setContentsMargins(5,2,5,2);
 
-        pMainLayout->addLayout(pHLayout1);
-        pMainLayout->addLayout(pHLayout2);
-        pMainLayout->setContentsMargins(0,0,0,0);
-        this->setLayout(pMainLayout);
+        m_pMainLayout->addLayout(m_pHLayout1);
+        m_pMainLayout->addLayout(m_pHLayout2);
+        m_pMainLayout->setContentsMargins(0,0,0,0);
+        this->setLayout(m_pMainLayout);
     }else {
-        pHLayout2->setContentsMargins(8+m_labelWidth,0,8+m_labelWidth,0);
-        this->setLayout(pHLayout2);
+        m_pHLayout2->setContentsMargins(8+m_labelWidth,0,8+m_labelWidth,0);
+        this->setLayout(m_pHLayout2);
     }
 }
 
 
 void ColorSelectWdg::setTheme(const QString &theme)
 {
-
     //获取主题颜色
     if(theme == "light") {
         m_textColor = "#1f1c1b";

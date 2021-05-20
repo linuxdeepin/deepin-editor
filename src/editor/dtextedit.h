@@ -1,24 +1,24 @@
-﻿ /* -*- Mode: C++; indent-tabs-mode: nil; tab-width: 4 -*-
- * -*- coding: utf-8 -*-
- *
- * Copyright (C) 2011 ~ 2018 Deepin, Inc.
- *
- * Author:     Wang Yong <wangyong@deepin.com>
- * Maintainer: Rekols    <rekols@foxmail.com>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
+﻿/* -*- Mode: C++; indent-tabs-mode: nil; tab-width: 4 -*-
+* -*- coding: utf-8 -*-
+*
+* Copyright (C) 2011 ~ 2018 Deepin, Inc.
+*
+* Author:     Wang Yong <wangyong@deepin.com>
+* Maintainer: Rekols    <rekols@foxmail.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 
 #ifndef TEXTEDIT_H
 #define TEXTEDIT_H
@@ -49,6 +49,7 @@
 #include <QGestureEvent>
 #include <QProxyStyle>
 
+#define TEXT_EIDT_MARK_ALL  "MARK_ALL"
 
 const QString SELECT_HIGHLIGHT_COLOR = "#2CA7F8";
 enum ConvertCase { UPPER, LOWER, CAPITALIZE };
@@ -68,19 +69,33 @@ public:
         Readonly
     };
 
+    enum MarkOperationType {
+        MarkOnce,
+        MarkAllMatch,
+        MarkLine,
+        MarkAll
+    };
+
+    struct MarkOperation
+    {
+        MarkOperationType type;
+        QTextCursor cursor;
+        QString color;
+    };
+
     TextEdit(QWidget *parent = nullptr);
     ~TextEdit() override;
 
     //在光标处添加删除内容
 
     //直接插入文本
-    void insertTextEx(QTextCursor,QString);
+    void insertTextEx(QTextCursor, QString);
 
     //直接删除字符 删除选择或一个字符
     void deleteTextEx(QTextCursor);
 
     //插入选择文本字符
-    void insertSelectTextEx(QTextCursor,QString);
+    void insertSelectTextEx(QTextCursor, QString);
 
     //插入列编辑文本字符
     void insertColumnEditTextEx(QString text);
@@ -99,15 +114,15 @@ public:
      * @brief getFilePath 获取打开文件路径
      * @return 打开文件路径
      */
-    inline QString getFilePath() { return m_sFilePath;};
+    inline QString getFilePath() { return m_sFilePath;}
     //
     inline void setFilePath(QString file) { m_sFilePath = file;}
     //
-    inline LeftAreaTextEdit* getLeftAreaWidget() { return m_pLeftAreaWidget;};
+    inline LeftAreaTextEdit *getLeftAreaWidget() { return m_pLeftAreaWidget;}
     //是否撤销重做操作
-    bool isUndoRedoOpt() {return (m_pUndoStack->canRedo()||m_pUndoStack->canUndo());};
+    bool isUndoRedoOpt() {return (m_pUndoStack->canRedo() || m_pUndoStack->canUndo());}
     //判断是否修改
-    bool getModified() { return (document()->isModified() && isUndoRedoOpt());}
+    bool getModified() { return (document()->isModified() && (m_pUndoStack->canUndo() || m_pUndoStack->index() != m_lastSaveIndex));}
 
     int getCurrentLine();
     int getCurrentColumn();
@@ -185,16 +200,33 @@ public:
 
     void removeKeywords();
     bool highlightKeyword(QString keyword, int position);
-    void updateCursorKeywordSelection(int position, bool findNext);
+    bool highlightKeywordInView(QString keyword);
+    void clearFindMatchSelections();
+    void updateCursorKeywordSelection(QString keyword, bool findNext);
     void updateHighlightLineSelection();
-    bool updateKeywordSelections(QString keyword,QTextCharFormat charFormat,QList<QTextEdit::ExtraSelection> *listSelection);
+    bool updateKeywordSelections(QString keyword, QTextCharFormat charFormat, QList<QTextEdit::ExtraSelection> *listSelection);
+    bool updateKeywordSelectionsInView(QString keyword, QTextCharFormat charFormat, QList<QTextEdit::ExtraSelection> *listSelection);
+    bool searchKeywordSeletion(QString keyword, QTextCursor cursor, bool findNext);
     void renderAllSelections();
+
+    bool clearMarkOperationForCursor(QTextCursor cursor);
+    bool clearMarksForTextCursor();
+    void markAllKeywordInView();
+    bool markKeywordInView(QString keyword, QString color);
+    void markAllInView(QString color);
+    void toggleMarkSelections();
+
+    /**
+     * @author shaoyu.guo ut000455
+     * @brief updateMarkAllSelectColor 文档篇幅视图有变更时（翻页/滚动条变化/鼠标滚轮变化/键盘上下键），动态更新绘制可视范围内字符颜色
+     */
+    void updateMarkAllSelectColor();
 
 
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     void codeFLodAreaPaintEvent(QPaintEvent *event);
-    void setBookmarkFlagVisable(bool isVisable,bool bIsFirstOpen = false);
-    void setCodeFlodFlagVisable(bool isVisable,bool bIsFirstOpen = false);
+    void setBookmarkFlagVisable(bool isVisable, bool bIsFirstOpen = false);
+    void setCodeFlodFlagVisable(bool isVisable, bool bIsFirstOpen = false);
     void setTheme(const QString &path);
     bool highlightWordUnderMouse(QPoint pos);
     void removeHighlightWordUnderCursor();
@@ -215,7 +247,7 @@ public:
     QString getWordAtCursor();
     void toggleReadOnlyMode();
     void toggleComment(bool sister);
-    int getNextWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode);
+    int getNextWordPosition(QTextCursor &cursor, QTextCursor::MoveMode moveMode);
     int getPrevWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode);
     bool atWordSeparator(int position);
     void showCursorBlink();
@@ -419,6 +451,11 @@ public:
      */
     void setBookMarkList(QList<int> bookMarkList);
 
+    /**
+     * 更新上次保存时的撤销回收栈的索引值
+     */
+    void updateSaveIndex();
+
 signals:
     void clickFindAction();
     void clickReplaceAction();
@@ -440,10 +477,10 @@ public slots:
     void updateLeftAreaWidget();
     void handleScrollFinish();
     void setSyntaxDefinition(KSyntaxHighlighting::Definition def);
-    
+
     void slot_translate();
-	
-	//书签右键菜单功能
+
+    //书签右键菜单功能
     void setHighLineCurrentLine(bool ok);
     void upcaseWord();
     void downcaseWord();
@@ -455,8 +492,10 @@ public slots:
     void adjustScrollbarMargins();
     void onSelectionArea();
     void fingerZoom(QString name, QString direction, int fingers);
+    void cursorPositionChanged();
+
 protected:
-    bool event(QEvent* evt) override;   //触摸屏event事件
+    bool event(QEvent *evt) override;   //触摸屏event事件
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dragMoveEvent(QDragMoveEvent *event) override;
     void dropEvent(QDropEvent *event) override;
@@ -477,30 +516,32 @@ private:
     //去除"*{*" "*}*" "*{*}*"跳过当做普通文本处理不折叠　梁卫东２０２０－０９－０１　１７：１６：４１
     bool blockContainStrBrackets(int line);
     bool setCursorKeywordSeletoin(int position, bool findNext);
-    void cursorPositionChanged();
     void updateHighlightBrackets(const QChar &openChar, const QChar &closeChar);
 
-    void getNeedControlLine(int line, bool isVisable);
+    bool getNeedControlLine(int line, bool isVisable);
     //触摸屏功能函数
     bool gestureEvent(QGestureEvent *event);
-    void tapGestureTriggered(QTapGesture*);
-    void tapAndHoldGestureTriggered(QTapAndHoldGesture*);
-    void panTriggered(QPanGesture*);
-    void pinchTriggered(QPinchGesture*);
-    void swipeTriggered(QSwipeGesture*);
+    void tapGestureTriggered(QTapGesture *);
+    void tapAndHoldGestureTriggered(QTapAndHoldGesture *);
+    void panTriggered(QPanGesture *);
+    void pinchTriggered(QPinchGesture *);
+    void swipeTriggered(QSwipeGesture *);
     //add for single refers to the sliding
     void slideGestureY(qreal diff);
     void slideGestureX(qreal diff);
+
 public:
     int getFirstVisibleBlockId() const;
+
 public:
     bool bIsSetLineNumberWidth = true;
     bool m_pIsShowCodeFoldArea;
     bool m_pIsShowBookmarkArea;
+    bool m_bIsMarkAllLine {false}; ///< 颜色“标记所有”标志
 
 private:
     EditWrapper *m_wrapper;
-    QPropertyAnimation *m_scrollAnimation;
+    QPropertyAnimation *m_scrollAnimation {nullptr};
 
     QList<QTextEdit::ExtraSelection> m_findMatchSelections;///< “查找”的字符格式（所有查找的字符）
     QTextEdit::ExtraSelection m_beginBracketSelection;
@@ -510,6 +551,8 @@ private:
     QTextEdit::ExtraSelection m_wordUnderCursorSelection;
     QList<QTextEdit::ExtraSelection> m_wordMarkSelections;///< 记录标记的列表（分行记录）
     QMap<int,QList<QTextEdit::ExtraSelection>> m_mapWordMarkSelections;///< 记录标记的表（按标记动作记录）
+    QList<TextEdit::MarkOperation> m_markOperations;    ///记录所有标记操作
+    QMap<QString, QList<QTextEdit::ExtraSelection>> m_mapKeywordMarkSelections; ///记录关键字对应的全文标记
     QTextEdit::ExtraSelection m_markAllSelection;///< “标记所有”的字符格式
     QList<QTextEdit::ExtraSelection> m_markFoldHighLightSelections;
 
@@ -560,8 +603,8 @@ private:
     QAction *m_unflodCurrentLevel;
 
     //yanyuhan
-     //颜色标记、折叠/展开、书签、列编辑、设置注释、取消注释;
- //    QAction *m_colorMarkAction;
+    //颜色标记、折叠/展开、书签、列编辑、设置注释、取消注释;
+	//QAction *m_colorMarkAction;
     DMenu *m_collapseExpandMenu;
     DMenu *m_colorMarkMenu;
     QAction *m_cancleMarkCurrentLine;
@@ -572,9 +615,10 @@ private:
     QWidgetAction *m_actionColorStyles;
     QAction *m_markCurrentAct;
 
-     //颜色选择控件替换下面action 1 2 3 4
+    //颜色选择控件替换下面action 1 2 3 4
     QWidgetAction *m_actionAllColorStyles;
     QAction *m_markAllAct;
+    QString m_strMarkAllLineColorName; ///< “标记所有”选择的颜色名称
 
     QAction *m_addComment;
     QAction *m_cancelComment;
@@ -608,11 +652,11 @@ private:
     Comment::CommentDefinition m_commentDefinition;
 
     QStringList m_wordSepartors = QStringList({
-            // English separator.
-            ".", ",", "?", "!", "@", "#", "$", ":", ";", "-", "<", ">", "[", "]", "(", ")", "{", "}", "=", "/", "+", "%", "&", "^", "*", "\"", "'", "`", "~", "|", "\\", "\n",
-            // Chinese separator.
-            "。", "，", "？", "！", "￥", "：", "；", "《", "》", "【", "】", "（", "）", " "
-        });
+        // English separator.
+        ".", ",", "?", "!", "@", "#", "$", ":", ";", "-", "<", ">", "[", "]", "(", ")", "{", "}", "=", "/", "+", "%", "&", "^", "*", "\"", "'", "`", "~", "|", "\\", "\n",
+        // Chinese separator.
+        "。", "，", "？", "！", "￥", "：", "；", "《", "》", "【", "】", "（", "）", " "
+    });
 
     QColor m_currentLineColor;
     QColor m_backgroundColor;
@@ -647,7 +691,7 @@ private:
     bool m_bIsShortCut;///< 是否在使用书签快捷键
 
     //存储所有有折叠标记的位置，包含不可见区域
-    QList<int> m_listFlodFlag;
+    QList<int> m_listMainFlodAllPos;
     //包含当前可见区域的标志
     QList<int> m_listFlodIconPos;
 
@@ -657,11 +701,11 @@ private:
     int m_nSelectStart;///< 选择开始时的鼠标位置
     int m_nSelectEnd;///< 选择结束时的鼠标位置
 
-    int m_cursorStart=-1;
+    int m_cursorStart = -1;
     QString m_textEncode;
 
     //触摸屏
-    enum GestureAction{
+    enum GestureAction {
         GA_null,
         GA_tap,
         GA_slide,
@@ -677,7 +721,7 @@ private:
     Qt::GestureState m_tapStatus = Qt::NoGesture;
     GestureAction m_gestureAction = GA_null;
 
-	//add for single refers to the sliding
+    //add for single refers to the sliding
     FlashTween tweenX;
     FlashTween tweenY;
     qreal changeY = {0.0};
@@ -698,10 +742,10 @@ private:
     QList<QTextEdit::ExtraSelection> m_altModSelections;
     QTextCursor m_altStartTextCursor;//开始按住alt鼠标点击光标位置
     QTextCursor m_altEndTextCursor;//结束按住alt鼠标点击光标位置
-    bool m_bIsAltMod=false;
+    bool m_bIsAltMod = false;
     int m_redoCount = 0;
     QStringList m_pastText;
-    bool m_hasColumnSelection= false;
+    bool m_hasColumnSelection = false;
 
     //鼠标事件的位置
     int m_startX = 0;
@@ -716,6 +760,7 @@ private:
     LeftAreaTextEdit *m_pLeftAreaWidget = nullptr;
     QString m_sFilePath;///＜打开文件路径
     //自定义撤销重做栈
-    QUndoStack* m_pUndoStack = nullptr;
+    QUndoStack *m_pUndoStack = nullptr;
+    int m_lastSaveIndex = 0;
 };
 #endif

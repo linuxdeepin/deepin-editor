@@ -27,13 +27,13 @@ class ToolBar : public QWidget
 {
 
 public:
-    ToolBar(QWidget *parent = nullptr);
+    explicit ToolBar(QWidget *parent = nullptr);
     ~ToolBar();
 
     void setTabbar(QWidget *w);
 
 private:
-    QHBoxLayout *m_layout;
+    QHBoxLayout *m_layout {nullptr};
 };
 
 #endif

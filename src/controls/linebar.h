@@ -34,7 +34,7 @@ class LineBar : public DLineEdit
     Q_OBJECT
 
 public:
-    LineBar(DLineEdit *parent = 0);
+    explicit LineBar(DLineEdit *parent = 0);
 
 public slots:
     void handleTextChangeTimer();

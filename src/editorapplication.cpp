@@ -1,3 +1,23 @@
+/*
+* Copyright (C) 2019 ~ 2021 Uniontech Software Technology Co.,Ltd.
+*
+* Author:     liangweidong <liangweidong@uniontech.com>
+*
+* Maintainer: liangweidong <liangweidong@uniontech.com>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 #include "editorapplication.h"
 #include "common/settings.h"
 #include <QDebug>
@@ -72,27 +92,29 @@ bool EditorApplication::notify(QObject *object, QEvent *event)
             return true;
         }
 
-//        if ((keyevent->modifiers() == Qt::AltModifier) && keyevent->key() == Qt::Key_M) {
-//            // 光标中心点
-//            QPoint pos = QPoint(qApp->inputMethod()->cursorRectangle().x() + qApp->inputMethod()->cursorRectangle().width() / 2,
-//                                qApp->inputMethod()->cursorRectangle().y() + qApp->inputMethod()->cursorRectangle().height() / 2);
+        #if 0
+        if ((keyevent->modifiers() == Qt::AltModifier) && keyevent->key() == Qt::Key_M) {
+            // 光标中心点
+            QPoint pos = QPoint(qApp->inputMethod()->cursorRectangle().x() + qApp->inputMethod()->cursorRectangle().width() / 2,
+                                qApp->inputMethod()->cursorRectangle().y() + qApp->inputMethod()->cursorRectangle().height() / 2);
 
-//            qDebug() << "Alt+M has triggerd" << pos << qApp->inputMethod();
-//            // QPoint(0,0) 表示无法获取光标位置
-//            if (pos != QPoint(0, 0)) {
-//                QMouseEvent event1(QEvent::MouseButtonPress, pos, Qt::RightButton, Qt::NoButton, Qt::NoModifier);
-//                QCoreApplication::sendEvent(object, &event1);
-//            }
+            qDebug() << "Alt+M has triggerd" << pos << qApp->inputMethod();
+            // QPoint(0,0) 表示无法获取光标位置
+            if (pos != QPoint(0, 0)) {
+                QMouseEvent event1(QEvent::MouseButtonPress, pos, Qt::RightButton, Qt::NoButton, Qt::NoModifier);
+                QCoreApplication::sendEvent(object, &event1);
+            }
 
-//            return true;
-//        }
+            return true;
+        }
+        #endif
 
         return QApplication::notify(object, event);
     }
-#if 0
+
+    #if 0
     // 快捷键检测
     bool spont = event->spontaneous();
-    //qDebug() <<event->type()<< spont<<classname;
     QString classname = object->metaObject()->className();
     if ((event->type() == QEvent::KeyPress || event->type() == QEvent::Shortcut)
             /*&& QString(object->metaObject()->className()) == "MainWindow"*/) {
@@ -133,15 +155,14 @@ bool EditorApplication::notify(QObject *object, QEvent *event)
                  << keyevent->nativeScanCode() << keyevent->nativeVirtualKey() << keyevent->nativeModifiers();
 
     }
-#endif
+    #endif
 
-
-#if 0
+    #if 0
     // 焦点检测
     if (event->type() == QEvent::FocusIn) {
         qDebug() << "FocusIn:" << object;
     }
-#endif
+	#endif
 
     return QApplication::notify(object, event);
 }

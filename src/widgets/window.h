@@ -23,7 +23,7 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include "../controls/toolbar.h"
+//#include "../controls/toolbar.h"
 #include "../common/utils.h"
 #include "../startmanager.h"
 #include "../common/performancemonitor.h"
@@ -38,6 +38,8 @@
 #include "../common/dbusinterface.h"
 #include <DMainWindow>
 #include <DStackedWidget>
+#include <qprintpreviewdialog.h>
+#include <dprintpreviewdialog.h>
 
 DWIDGET_USE_NAMESPACE
 
@@ -46,7 +48,7 @@ class Window : public DMainWindow
     Q_OBJECT
 
 public:
-    Window(DMainWindow *parent = nullptr);
+    explicit Window(DMainWindow *parent = nullptr);
     ~Window() override;
 
     //跟新文件修改状态
@@ -61,7 +63,7 @@ public:
     int getTabIndex(const QString &file);
     void activeTab(int index);
 
-    Tabbar* getTabbar();
+    Tabbar *getTabbar();
 
     void addTab(const QString &filepath, bool activeTab = false);
     void addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, const QString &qstrTruePath,
@@ -71,10 +73,10 @@ public:
 
     void clearBlack();
 
-    EditWrapper* createEditor();
-    EditWrapper* currentWrapper();
-    EditWrapper* wrapper(const QString &filePath);
-    TextEdit* getTextEditor(const QString &filepath);
+    EditWrapper *createEditor();
+    EditWrapper *currentWrapper();
+    EditWrapper *wrapper(const QString &filePath);
+    TextEdit *getTextEditor(const QString &filepath);
     void focusActiveEditor();
     void removeWrapper(const QString &filePath, bool isDelete = false);
 
@@ -94,7 +96,7 @@ public:
     void popupFindBar();
     void popupReplaceBar();
     void popupJumpLineBar();
-    void updateJumpLineBar(TextEdit* editor);
+    void updateJumpLineBar(TextEdit *editor);
     void popupSettingsDialog();
     void popupPrintDialog();
     void popupThemePanel();
@@ -105,6 +107,8 @@ public:
     void remberPositionRestore();
 
     void displayShortcuts();
+    void doPrint(DPrinter *printer, const QVector<int> &pageRange);
+    void asynPrint(QPainter &p, DPrinter *printer, const QVector<int> &pageRange);
 
     /**
      * @brief backupFile 备份文件
@@ -124,21 +128,28 @@ public:
      * @param qstrTruePath　真实文件路径
      * @param bIsTemFile　是否修改
      */
-    void addTemFileTab(QString qstrPath,QString qstrName,QString qstrTruePath,bool bIsTemFile = false);
+    void addTemFileTab(QString qstrPath, QString qstrName, QString qstrTruePath, bool bIsTemFile = false);
 
     QMap<QString, EditWrapper *> getWrappers();
 
     //设置显示清除焦点
     void setChildrenFocus(bool ok);
-	
+
+    bool replaceBarIsVisiable();
+    bool findBarIsVisiable();
+    QString getKeywordForSearchAll();
+    QString getKeywordForSearch();
+    void setPrintEnabled(bool enabled);
+
 signals:
     void themeChanged(const QString themeName);
     void requestDragEnterEvent(QDragEnterEvent *);
     void requestDropEvent(QDropEvent *);
     void newWindow();
-    void close();
+    void closeWindow();
     void sigJudgeBlockShutdown();
     void pressEsc();
+
 public slots:
     void addBlankTab();
     void addBlankTab(const QString &blankFile);
@@ -151,15 +162,22 @@ public slots:
 
     void handleBackToPosition(const QString &file, int row, int column, int scrollOffset);
 
-    void handleFindNext();
-    void handleFindPrev();
+    void handleFindNextSearchKeyword(const QString &keyword);
+    void handleFindPrevSearchKeyword(const QString &keyword);
+    /**
+     * @brief handleFindKeyword
+     * @param keyword
+     * @author ut002764 lxp 2021.4.27
+     */
+    void handleFindKeyword(const QString &keyword, bool state);
+
     void slotFindbarClose();
     void slotReplacebarClose();
 
     void handleReplaceAll(const QString &replaceText, const QString &withText);
-    void handleReplaceNext(const QString &replaceText, const QString &withText);
+    void handleReplaceNext(QString file, const QString &replaceText, const QString &withText);
     void handleReplaceRest(const QString &replaceText, const QString &withText);
-    void handleReplaceSkip();
+    void handleReplaceSkip(QString file, QString keyword);
 
     void handleRemoveSearchKeyword();
     void handleUpdateSearchKeyword(QWidget *widget, const QString &file, const QString &keyword);
@@ -185,14 +203,16 @@ private:
     void handleFocusWindowChanged(QWindow *w);
     void updateThemePanelGeomerty();
     void checkTabbarForReload();
+    void clearPrintTextDocument();
 
 protected:
-    void resizeEvent(QResizeEvent* event) override;
+    void resizeEvent(QResizeEvent *event) override;
     void closeEvent(QCloseEvent *event) override;
     void hideEvent(QHideEvent *event) override;
     void keyPressEvent(QKeyEvent *keyEvent) override;
+    void keyReleaseEvent(QKeyEvent *keyEvent) override;
     void dragEnterEvent(QDragEnterEvent *e) override;
-    void dropEvent(QDropEvent* event) override;
+    void dropEvent(QDropEvent *event) override;
 
 private:
     DBusDaemon::dbus *m_rootSaveDBus;
@@ -226,10 +246,23 @@ private:
 
     QString m_titlebarStyleSheet;
 
+    QString m_keywordForSearch;
+    QString m_keywordForSearchAll;
+
     QString m_themePath;
     QString m_tabbarActiveColor;
     QList <TextEdit *> m_reading_list;
     QStringList m_qlistTemFile;///<临时文件列表
+
+    QProcess *m_shortcutViewProcess = nullptr;
+    bool m_needMoveToCenter = false;
+    DPrintPreviewDialog *m_pPreview {nullptr};
+    //打印文本
+    QTextDocument *m_printDoc = nullptr;
+    //打印布局
+    QPageLayout m_lastLayout;
+    //判断是否是新的打印文档
+    bool m_isNewPrint = false;
 };
 
 #endif

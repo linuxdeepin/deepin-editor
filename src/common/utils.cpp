@@ -21,7 +21,6 @@
  */
 
 #include "utils.h"
-#include "../controls/toast.h"
 
 #include <DSettings>
 #include <DSettingsOption>
@@ -42,6 +41,7 @@
 #include <KEncodingProber>
 #include <QTextCodec>
 #include <QImageReader>
+#include <QCryptographicHash>
 
 QT_BEGIN_NAMESPACE
 extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
@@ -568,7 +568,8 @@ bool Utils::isMimeTypeSupport(const QString &filepath)
                       << "application/x-ruby"
                       << "application/x-mpegURL"
                       << "application/x-wine-extension-ini"
-                      << "model/vrml";
+                      << "model/vrml"
+                      << "application/pkix-cert+pem";
 
     if (textMimeTypes.contains(mimeType)) {
         return true;
@@ -701,4 +702,65 @@ void Utils::setChildrenFocus(QWidget *pWidget, Qt::FocusPolicy policy)
         QWidget *obj = static_cast<QWidget *>(child);
         setChildrenFocus(obj,policy);
     }
+}
+
+int Utils::getProcessCountByName(const char *pstrName)
+{
+    FILE *fp = NULL;
+    int count = -1;
+    char command[1024];
+
+    if (NULL == pstrName || strlen(pstrName) == 0) {
+        return count;
+    }
+
+    memset(command, 0, sizeof(command));
+    sprintf(command, "ps -ef | grep %s | grep -v grep | wc -l", pstrName);
+
+    if ((fp = popen(command, "r")) != NULL) {
+        char buf[1024];
+        memset(buf, 0, sizeof(buf));
+        if ((fgets(buf, sizeof(buf)-1, fp)) != NULL) {
+            count = atoi(buf);
+        }
+    } else {
+        qDebug() << ">>> popen error";
+    }
+
+    return count;
+}
+
+void Utils::killProcessByName(const char *pstrName)
+{
+    if (pstrName != NULL && strlen(pstrName) > 0) {
+        char command[1024];
+        memset(command, 0, sizeof(command));
+        sprintf(command, "killall %s", pstrName);
+        system(command);
+    }
+}
+
+QString Utils::getStringMD5Hash(const QString &input)
+{
+    QByteArray byteArray;
+    byteArray.append(input);
+    QByteArray md5Path = QCryptographicHash::hash(byteArray, QCryptographicHash::Md5);
+
+    return md5Path.toHex();
+}
+
+bool Utils::activeWindowFromDock(quintptr winId)
+{
+    bool bRet = true;
+    // new interface use application as id
+    QDBusInterface dockDbusInterface("com.deepin.dde.daemon.Dock" ,
+                                 "/com/deepin/dde/daemon/Dock",
+                                 "com.deepin.dde.daemon.Dock");
+    QDBusReply<void> reply = dockDbusInterface.call("ActivateWindow", winId);
+    if (!reply.isValid()) {
+        qDebug() << "call com.deepin.dde.daemon.Dock failed" << reply.error();
+        bRet = false;
+    }
+
+    return bRet;
 }

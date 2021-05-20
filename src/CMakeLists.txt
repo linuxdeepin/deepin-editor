@@ -18,7 +18,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/controls)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/editor)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thememodule)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/widgets)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/include)
 
 
 # Find the library
@@ -51,11 +51,11 @@ target_link_libraries(deepin-editor
     ${Qt5Svg_LIBRARIES}
     KF5::Codecs
     KF5::SyntaxHighlighting
-    ${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/lib/libcharset.a
-    ${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/lib/libiconv.a
-    ${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/lib/libenca.a
+    ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/lib/libcharset.a
+    ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/lib/libiconv.a
+    ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/lib/libenca.a
     -lm
-    ${CMAKE_CURRENT_SOURCE_DIR}/../third/lib/lib/libuchardet.a
+    ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/lib/libuchardet.a
 )
 
 set(CMAKE_INSTALL_PREFIX /usr)
@@ -66,6 +66,9 @@ install(FILES ${QM_FILES} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-edito
 install(FILES ${APP_ICONPATH} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps/)
 install(FILES ${CMAKE_SOURCE_DIR}/src/images/deepin-editor.svg DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps/)
 
+# Install help manual
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets/deepin-editor
+        DESTINATION /usr/share/deepin-manual/manual-assets/application/)
 install(TARGETS deepin-editor DESTINATION bin/)
 install(FILES ${CMAKE_SOURCE_DIR}/deepin-editor.desktop DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications/)
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/themes DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-editor/)

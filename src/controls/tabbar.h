@@ -33,11 +33,11 @@ class Tabbar : public DTabBar
     Q_OBJECT
 
 public:
-    Tabbar(QWidget *parent = nullptr);
+    explicit Tabbar(QWidget *parent = nullptr);
     ~Tabbar();
 
-    void addTab(const QString &filePath, const QString &tabName);
-    void addTabWithIndex(int index, const QString &filePath, const QString &tabName);
+    void addTab(const QString &filePath, const QString &tabName, const QString &tipPath = QString::null);
+    void addTabWithIndex(int index, const QString &filePath, const QString &tabName, const QString &tipPath = QString::null);
     void closeTab(int index);
     void closeCurrentTab();
     void closeOtherTabs();
@@ -54,6 +54,7 @@ public:
 
     QString currentName() const;
     QString currentPath() const;
+    QString truePathAt(int index) const;
     QString fileAt(int index) const;
     QString textAt(int index) const;
 
@@ -90,6 +91,7 @@ private:
 
 private:
     QStringList m_tabPaths;
+    QStringList m_tabTruePaths;
     QStringList m_listOldTabPath;
     QString m_backgroundStartColor;
     QString m_backgroundEndColor;
@@ -101,13 +103,14 @@ private:
     QAction *m_closeLeftTabAction;
     QAction *m_closeRightTabAction;
     QAction *m_closeAllunModifiedTabAction;
-    DMenu   *m_rightMenu;
-    DMenu   *m_moreWaysCloseMenu;
+    DMenu   *m_rightMenu {nullptr};
+    DMenu   *m_moreWaysCloseMenu {nullptr};
     int m_rightClickTab;
     int m_nDragIndex;
     QString m_qstrDragName;
     QString m_qstrDragPath;
     EditWrapper *m_pWrapper = nullptr;
+
 public:
     static QPixmap *sm_pDragPixmap;
 };

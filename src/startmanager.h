@@ -48,7 +48,7 @@ public:
     };
 
     static StartManager* instance();
-    StartManager(QObject *parent = nullptr);
+    explicit StartManager(QObject *parent = nullptr);
     bool checkPath(const QString &file);
     bool ifKlu();
 
@@ -97,6 +97,8 @@ public slots:
 
     void slotCheckUnsaveTab();
 
+    void closeAboutForWindow(Window *window);
+
 private:
     void initBlockShutdown();
     static StartManager *m_instance;
@@ -115,7 +117,6 @@ private:
     QString m_backupDir;///<用户备份文件目录
     QString m_autoBackupDir;///<自动备份文件目录
     Window* pFocusWindow;
-
 };
 
 #endif

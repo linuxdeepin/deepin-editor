@@ -21,6 +21,7 @@
 #define THEMEPANEL_H
 
 #include <QWidget>
+#include <QPainterPath>
 #include "themelistview.h"
 #include "themelistmodel.h"
 #include "themeitemdelegate.h"

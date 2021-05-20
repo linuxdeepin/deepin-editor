@@ -20,6 +20,7 @@
 #include "bottombar.h"
 #include "../common/utils.h"
 #include "../editor/editwrapper.h"
+#include "../widgets/window.h"
 
 #include <QLabel>
 #include <QPainter>
@@ -49,7 +50,6 @@ BottomBar::BottomBar(QWidget *parent)
     DFontSizeManager::instance()->bind(m_pCharCountLabel, DFontSizeManager::T9);
     DFontSizeManager::instance()->bind(m_pCursorStatus, DFontSizeManager::T9);
 
-
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setContentsMargins(29, 1, 10, 0);
     layout->addWidget(m_pPositionLabel);
@@ -63,7 +63,6 @@ BottomBar::BottomBar(QWidget *parent)
     m_pCharCountLabel->setText(m_chrCountStr.arg("0"));
     m_pHighlightMenu->setCurrentTextOnly(qApp->translate("TextEdit", "None"));
     m_pEncodeMenu->setCurrentTextOnly(QString("UTF-8"));
-
 
     DVerticalLine *pVerticalLine1 = new DVerticalLine();
     DVerticalLine *pVerticalLine2 = new DVerticalLine();
@@ -79,27 +78,36 @@ BottomBar::BottomBar(QWidget *parent)
     layout->addWidget(m_pHighlightMenu);
     setFixedHeight(32);
 
-
     //切换编码
     connect(m_pEncodeMenu, &DDropdownMenu::currentActionChanged, this,[this](QAction* pAct){
-        if(!m_pWrapper->getFileLoading() && m_pWrapper->reloadFileEncode(pAct->text().toLocal8Bit()))
-        {
+        if(!m_pWrapper->getFileLoading() && m_pWrapper->reloadFileEncode(pAct->text().toLocal8Bit())) {
             m_pEncodeMenu->setCurrentTextOnly(pAct->text());
         }
-        m_pWrapper->clearDoubleCharaterEncode();
+        //先屏蔽，双字节空字符先按照显示字符编码号处理
+        //m_pWrapper->clearDoubleCharaterEncode();
     });
 
     //切换文件类型
-    connect(m_pHighlightMenu, &DDropdownMenu::currentActionChanged, this,[this](QAction* pAct){
-
+    connect(m_pHighlightMenu, &DDropdownMenu::currentActionChanged, this,[this](QAction* pAct) {
         m_pHighlightMenu->setCurrentTextOnly(pAct->text());
-
     });
 
+    //编码按钮/文本类型按钮失去焦点后，设置光标回到文本框里
+    connect(m_pEncodeMenu, &DDropdownMenu::sigSetTextEditFocus, this, &BottomBar::slotSetTextEditFocus);
+    connect(m_pHighlightMenu, &DDropdownMenu::sigSetTextEditFocus, this, &BottomBar::slotSetTextEditFocus);
 }
 
 BottomBar::~BottomBar()
 {
+    if (m_pEncodeMenu != nullptr) {
+        delete m_pEncodeMenu;
+        m_pEncodeMenu = nullptr;
+    }
+
+    if (m_pHighlightMenu != nullptr) {
+        delete m_pHighlightMenu;
+        m_pHighlightMenu = nullptr;
+    }
 }
 
 void BottomBar::updatePosition(int row, int column)
@@ -152,9 +160,18 @@ void BottomBar::setPalette(const QPalette &palette)
     QWidget::setPalette(palette);
 }
 
-void BottomBar::updateSize(int size)
+void BottomBar::updateSize(int size, bool bIsFindOrReplace)
 {
     setFixedHeight(size);
+    m_bIsFindOrReplace = bIsFindOrReplace;
+}
+
+void BottomBar::setChildEnabled(bool enabled)
+{
+    m_pEncodeMenu->setEnabled(enabled);
+    m_pHighlightMenu->setEnabled(enabled);
+    m_pEncodeMenu->setRequestMenu(enabled);
+    m_pHighlightMenu->setRequestMenu(enabled);
 }
 
 void BottomBar::setChildrenFocus(bool ok,QWidget* preOrderWidget)
@@ -219,8 +236,16 @@ void BottomBar::paintEvent(QPaintEvent *)
         splitLineColor.setAlphaF(0.5);
     }
 
-    QPainterPath framePath;
-    framePath.addRect(QRect(rect().x(), rect().y(), rect().width(), 1));
-    painter.setOpacity(0.1);
-    painter.fillPath(framePath, splitLineColor);
+    if (!m_bIsFindOrReplace) {
+	    QPainterPath framePath;
+	    framePath.addRect(QRect(rect().x(), rect().y(), rect().width(), 1));
+	    painter.setOpacity(0.1);
+	    painter.fillPath(framePath, splitLineColor);
+    }
+}
+
+void BottomBar::slotSetTextEditFocus()
+{
+    Window *pWindow = static_cast<Window *>(m_pWrapper->window());
+    emit pWindow->pressEsc();
 }

@@ -109,9 +109,9 @@ void GenerateSettingTranslate()
     auto advance_editor_tabspacenumberName = QObject::tr("Tab width");
 
     auto base_font_wordwrapText = QObject::tr("Word wrap");
-    auto base_font_codeflod = QObject::tr("Code folding flag");
+    //auto base_font_codeflod = QObject::tr("Code folding flag");
     auto base_font_showLineNumber = QObject::tr("Show line numbers");
-    auto base_font_showBookmark = QObject::tr("Show bookmarks icon");
+    //auto base_font_showBookmark = QObject::tr("Show bookmarks icon");
     auto showblankcharacter = QObject::tr("Show whitespaces and tabs");
     auto base_font_highlightCurrentLine = QObject::tr("Highlight current line");
     auto shortcuts_editor_markName = QObject::tr("Color mark");

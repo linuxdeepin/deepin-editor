@@ -30,12 +30,12 @@ ReplaceBar::ReplaceBar(QWidget *parent)
 {
     // Init.
     hide();
-    setFixedHeight(58);
+    setFixedHeight(60);
 
     // Init layout and widgets.
     m_layout = new QHBoxLayout();
-    m_layout->setSpacing(7);
-    m_layout->setContentsMargins(16, 4, 11, 4);
+    m_layout->setSpacing(10);
+    m_layout->setContentsMargins(16, 6, 10, 6);
     m_replaceLabel = new QLabel(tr("Find"));
     //m_replaceLabel->setMinimumHeight(36);
     m_replaceLine = new LineBar();
@@ -58,7 +58,7 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     //m_replaceAllButton->setMinimumHeight(36);
     m_closeButton = new DIconButton(DStyle::SP_CloseButton);
     m_closeButton->setFlat(true);
-    m_closeButton->setFixedSize(30,30);
+    m_closeButton->setFixedSize(30, 30);
     m_closeButton->setEnabledCircle(true);
     m_closeButton->setIconSize(QSize(30, 30));
 
@@ -74,12 +74,13 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     this->setLayout(m_layout);
 
     // Make button don't grab keyboard focus after click it.
-//    m_replaceButton->setFocusPolicy(Qt::NoFocus);
-//    m_replaceSkipButton->setFocusPolicy(Qt::NoFocus);
-//    m_replaceRestButton->setFocusPolicy(Qt::NoFocus);
-//    m_replaceAllButton->setFocusPolicy(Qt::NoFocus);
-//    m_closeButton->setFocusPolicy(Qt::NoFocus);
-
+    #if 0
+    m_replaceButton->setFocusPolicy(Qt::NoFocus);
+    m_replaceSkipButton->setFocusPolicy(Qt::NoFocus);
+    m_replaceRestButton->setFocusPolicy(Qt::NoFocus);
+    m_replaceAllButton->setFocusPolicy(Qt::NoFocus);
+    m_closeButton->setFocusPolicy(Qt::NoFocus);
+    #endif
     connect(m_replaceLine, &LineBar::signal_sentText, this, &ReplaceBar::change, Qt::QueuedConnection);
 
     connect(this, &ReplaceBar::pressEsc, this, &ReplaceBar::replaceClose, Qt::QueuedConnection);
@@ -87,8 +88,12 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     //connect(m_replaceLine, &LineBar::pressEnter, this, &ReplaceBar::handleReplaceNext, Qt::QueuedConnection);         //Shielded by Hengbo for new demand.
     connect(m_withLine, &LineBar::returnPressed, this, &ReplaceBar::handleReplaceNext, Qt::QueuedConnection);
 
-    connect(m_replaceLine, &LineBar::pressCtrlEnter, this, &ReplaceBar::replaceSkip, Qt::QueuedConnection);
-    connect(m_withLine, &LineBar::pressCtrlEnter, this, &ReplaceBar::replaceSkip, Qt::QueuedConnection);
+    connect(m_replaceLine, &LineBar::pressCtrlEnter, this, [=]() {
+        emit replaceSkip(m_replaceFile, m_replaceLine->lineEdit()->text());
+    });
+    connect(m_withLine, &LineBar::pressCtrlEnter, this, [=]() {
+        emit replaceSkip(m_replaceFile, m_replaceLine->lineEdit()->text());
+    });
 
     connect(m_replaceLine, &LineBar::pressAltEnter, this, &ReplaceBar::handleReplaceRest, Qt::QueuedConnection);
     connect(m_withLine, &LineBar::pressAltEnter, this, &ReplaceBar::handleReplaceRest, Qt::QueuedConnection);
@@ -99,7 +104,9 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     connect(m_replaceLine, &LineBar::returnPressed, this, &ReplaceBar::handleContentChanged, Qt::QueuedConnection);
 
     connect(m_replaceButton, &QPushButton::clicked, this, &ReplaceBar::handleReplaceNext, Qt::QueuedConnection);
-    connect(m_replaceSkipButton, &QPushButton::clicked, this, &ReplaceBar::replaceSkip, Qt::QueuedConnection);
+    connect(m_replaceSkipButton, &QPushButton::clicked, this, [=]() {
+        emit replaceSkip(m_replaceFile, m_replaceLine->lineEdit()->text());
+    });
     connect(m_replaceRestButton, &QPushButton::clicked, this, &ReplaceBar::handleReplaceRest, Qt::QueuedConnection);
     connect(m_replaceAllButton, &QPushButton::clicked, this, &ReplaceBar::handleReplaceAll, Qt::QueuedConnection);
 
@@ -139,7 +146,7 @@ void ReplaceBar::activeInput(QString text, QString file, int row, int column, in
 
 void ReplaceBar::replaceClose()
 {
-    searched=false;
+    searched = false;
     hide();
     emit sigReplacebarClose();
 }
@@ -151,13 +158,12 @@ void ReplaceBar::handleContentChanged()
 
 void ReplaceBar::handleReplaceNext()
 {
-    if(!searched)
-    {
+    if (!searched) {
         emit removeSearchKeyword();
         emit beforeReplace(m_replaceLine->lineEdit()->text());
     }
-    replaceNext(m_replaceLine->lineEdit()->text(), m_withLine->lineEdit()->text());
-    searched=true;
+    replaceNext(m_replaceFile, m_replaceLine->lineEdit()->text(), m_withLine->lineEdit()->text());
+    searched = true;
 }
 
 void ReplaceBar::handleReplaceRest()
@@ -172,14 +178,14 @@ void ReplaceBar::handleReplaceAll()
 
 void ReplaceBar::hideEvent(QHideEvent *)
 {
-    searched=false;
+    searched = false;
     removeSearchKeyword();
 }
 
 bool ReplaceBar::focusNextPrevChild(bool)
 {
     // Make keyword jump between two EditLine widgets.
-    auto *editWidget = qobject_cast<LineBar*>(focusWidget());
+    auto *editWidget = qobject_cast<LineBar *>(focusWidget());
     if (editWidget != nullptr) {
         if (editWidget == m_replaceLine) {
             m_withLine->lineEdit()->setFocus();
@@ -198,34 +204,26 @@ bool ReplaceBar::focusNextPrevChild(bool)
 void ReplaceBar::keyPressEvent(QKeyEvent *e)
 {
     const QString &key = Utils::getKeyshortcut(e);
-    if(key=="Esc")
-    {
+    if (key == "Esc") {
         QWidget::hide();
         emit sigReplacebarClose();
     }
-    if(m_closeButton->hasFocus()&&key=="Tab")
-    {
+    if (m_closeButton->hasFocus() && key == "Tab") {
         m_replaceLine->lineEdit()->setFocus();
-    }
-    else{
+    } else {
         DFloatingWidget::keyPressEvent(e);
     }
-    if(key=="Enter")
-    {
-        if(m_replaceAllButton->hasFocus())
-        {
+    if (key == "Enter") {
+        if (m_replaceAllButton->hasFocus()) {
             m_replaceAllButton->click();
         }
-        if(m_replaceButton->hasFocus())
-        {
+        if (m_replaceButton->hasFocus()) {
             m_replaceButton->click();
         }
-        if(m_replaceRestButton->hasFocus())
-        {
+        if (m_replaceRestButton->hasFocus()) {
             m_replaceRestButton->click();
         }
-        if(m_replaceSkipButton->hasFocus())
-        {
+        if (m_replaceSkipButton->hasFocus()) {
             m_replaceSkipButton->click();
         }
     }
@@ -243,5 +241,5 @@ void ReplaceBar::setsearched(bool _)
 
 void ReplaceBar::change()
 {
-    searched=false;
+    searched = false;
 }
