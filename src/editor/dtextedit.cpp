@@ -29,6 +29,7 @@
 #include "editwrapper.h"
 #include "showflodcodewidget.h"
 #include "deletebackcommond.h"
+#include "replaceallcommond.h"
 
 
 #include <KF5/KSyntaxHighlighting/definition.h>
@@ -1942,16 +1943,21 @@ void TextEdit::replaceAll(const QString &replaceText, const QString &withText)
     startCursor.beginEditBlock();
 
     bool bReplaceSucceed = false;
+    QList<QTextCursor> cursorList;
     while (1) {
         cursor = document()->find(replaceText, cursor, flags);
 
         if (!cursor.isNull()) {
-            cursor.insertText(withText);
+            //cursor.insertText(withText);
+            cursorList.push_back(cursor);
             bReplaceSucceed = true;
         } else {
             break;
         }
     }
+
+    ReplaceAllCommond* commond = new ReplaceAllCommond(replaceText,withText,cursorList);
+    m_pUndoStack->push(commond);
 
     //有替换，文档被修改则设置带*，后续添加撤销重做栈
     if (bReplaceSucceed) {
@@ -2011,16 +2017,21 @@ void TextEdit::replaceRest(const QString &replaceText, const QString &withText)
     startCursor.beginEditBlock();
 
     bool bReplaceSucceed = false;
+    QList<QTextCursor> cursorList;
     while (1) {
         cursor = document()->find(replaceText, cursor, flags);
 
         if (!cursor.isNull()) {
-            cursor.insertText(withText);
+            //cursor.insertText(withText);
+            cursorList.push_back(cursor);
             bReplaceSucceed = true;
         } else {
             break;
         }
     }
+
+    ReplaceAllCommond* commond = new ReplaceAllCommond(replaceText,withText,cursorList);
+    m_pUndoStack->push(commond);
 
     //有替换，文档被修改则设置带*，后续添加撤销重做栈
     if (bReplaceSucceed) {
