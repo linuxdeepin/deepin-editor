@@ -154,6 +154,7 @@ QByteArray DetectCode::EncaDetectCode(QString filepath)
 
        if(charset == "US-ASCII") charset = "ASCII";
        if(charset == "GB2312" || charset == "GBK") charset = "GB18030";
+       if(charset == "ISO-10646-UCS-2") charset = "UTF-16BE";
        sm_LangsMap[langArray[i]] = charset;
 
        if(!charset.isEmpty()){
