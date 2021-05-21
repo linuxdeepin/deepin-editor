@@ -1533,14 +1533,22 @@ void TextEdit::killLine()
         selectionCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
         QString text = selectionCursor.selectedText();
 
-        bool isEmptyLine = text.size() == 0;
-        bool isBlankLine = text.trimmed().size() == 0;
+        bool isEmptyLine = (text.size() == 0);
+        bool isBlankLine = (text.trimmed().size() == 0);
 
         QTextCursor cursor = textCursor();
         // Join next line if current line is empty or cursor at end of line.
         if (isEmptyLine || textCursor().atBlockEnd()) {
-            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
+            //fixed bug 80435  ut002764  刪除到尾后，光标设置到下一列开头
+//            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
+             cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
+             cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
             //cursor.deleteChar();
+            if(!textCursor().hasSelection()){
+                insertTextEx(cursor, " ");
+                cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
+                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+            }
             deleteTextEx(cursor);
         }
         // Kill whole line if current line is blank line.
@@ -2439,7 +2447,7 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                 scaleunFoldPixmap = Utils::renderSVG(unflodImagePath, QSize(foldimage.height(), foldimage.width()), false);
                 scaleunFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
 
-				#if 0
+		#if 0
                 if (fontHeight > foldimage.height()) {
                     scaleFoldPixmap = Utils::renderSVG(flodImagePath, QSize(foldimage.height(), foldimage.width()), false);
                     scaleFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
@@ -2466,7 +2474,7 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                         painter.drawPixmap(nOffset, imageTop/* - static_cast<int>(document()->documentMargin())*/, scaleunFoldPixmap);
                     }
                 }
- 				#endif
+ 		#endif
                 int nOffset = 0;
                 if (block.next().isVisible()) {
                      if (block.isVisible()) {
@@ -6126,6 +6134,7 @@ void TextEdit::paintEvent(QPaintEvent *e)
                 QRect textCursorRect = this->cursorRect(m_altModSelections[i].cursor);
                 painter.drawRect(textCursorRect);
             }
+            // }
         }
     }
 }
