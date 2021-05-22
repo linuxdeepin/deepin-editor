@@ -1833,6 +1833,35 @@ void TextEdit::convertWordCase(ConvertCase convertCase)
         InsertTextUndoCommand* insertCommond = new InsertTextUndoCommand(textCursor(),text);
         m_pUndoStack->push(insertCommond);
     }
+    else{
+        QTextCursor cursor;
+
+        // Move cursor to mouse position first. if have word under mouse pointer.
+        if (m_haveWordUnderCursor) {
+            setTextCursor(m_wordUnderPointerCursor);
+        }
+
+        cursor = textCursor();
+        cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
+        cursor.setPosition(getNextWordPosition(cursor, QTextCursor::KeepAnchor), QTextCursor::KeepAnchor);
+
+        QString text = cursor.selectedText();
+        if (convertCase == UPPER) {
+            text = text.toUpper();
+        } else if (convertCase == LOWER) {
+            text = text.toLower();
+        } else {
+            text = capitalizeText(text);
+        }
+
+        InsertTextUndoCommand* insertCommond = new InsertTextUndoCommand(cursor,text);
+        m_pUndoStack->push(insertCommond);
+
+        setTextCursor(cursor);
+
+        m_haveWordUnderCursor = false;
+    }
+
 }
 
 QString TextEdit::capitalizeText(QString text)
@@ -1942,27 +1971,17 @@ void TextEdit::replaceAll(const QString &replaceText, const QString &withText)
     QTextCursor startCursor = textCursor();
     startCursor.beginEditBlock();
 
-    bool bReplaceSucceed = false;
-    QList<QTextCursor> cursorList;
-    while (1) {
-        cursor = document()->find(replaceText, cursor, flags);
 
-        if (!cursor.isNull()) {
-            //cursor.insertText(withText);
-            cursorList.push_back(cursor);
-            bReplaceSucceed = true;
-        } else {
-            break;
-        }
-    }
+    QString oldText = this->toPlainText();
+    QString newText = oldText;
 
-    ReplaceAllCommond* commond = new ReplaceAllCommond(replaceText,withText,cursorList);
+    newText.replace(replaceText,withText);
+
+    ReplaceAllCommond* commond = new ReplaceAllCommond(oldText,newText,this);
     m_pUndoStack->push(commond);
 
-    //有替换，文档被修改则设置带*，后续添加撤销重做栈
-    if (bReplaceSucceed) {
-        this->m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
-    }
+
+    this->m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
 
     startCursor.endEditBlock();
     setTextCursor(startCursor);
@@ -2016,27 +2035,19 @@ void TextEdit::replaceRest(const QString &replaceText, const QString &withText)
     QTextCursor startCursor = textCursor();
     startCursor.beginEditBlock();
 
-    bool bReplaceSucceed = false;
-    QList<QTextCursor> cursorList;
-    while (1) {
-        cursor = document()->find(replaceText, cursor, flags);
 
-        if (!cursor.isNull()) {
-            //cursor.insertText(withText);
-            cursorList.push_back(cursor);
-            bReplaceSucceed = true;
-        } else {
-            break;
-        }
-    }
+    int pos = cursor.position();
+    QString oldText = this->toPlainText();
+    QString newText = oldText.left(pos);
+    QString right = oldText.right(oldText.size() - pos);
+    right.replace(replaceText,withText);
+    newText += right;
 
-    ReplaceAllCommond* commond = new ReplaceAllCommond(replaceText,withText,cursorList);
+    ReplaceAllCommond* commond = new ReplaceAllCommond(oldText,newText,this);
     m_pUndoStack->push(commond);
 
-    //有替换，文档被修改则设置带*，后续添加撤销重做栈
-    if (bReplaceSucceed) {
-        m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
-    }
+
+    m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
 
     startCursor.endEditBlock();
     setTextCursor(startCursor);
