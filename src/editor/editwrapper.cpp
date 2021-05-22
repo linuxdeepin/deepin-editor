@@ -255,14 +255,14 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
         if (res == 0) return false;
 
         //不保存,重写载入
-        if (res == 1) {
-            bool ok = readFile(encode);
-            //if(ok && m_sCurEncode != m_sFirstEncode) m_pTextEdit->setTabbarModified(true);
-            return ok;
-        }
+//        if (res == 1) {
+//            bool ok = readFile(encode);
+//            //if(ok && m_sCurEncode != m_sFirstEncode) m_pTextEdit->setTabbarModified(true);
+//            return ok;
+//        }
 
         //保存
-        if (res == 2) {
+        if (res == 1) {
             //草稿文件
             if (Utils::isDraftFile(m_pTextEdit->getFilePath())) {
                 if (saveDraftFile()) return readFile(encode);
