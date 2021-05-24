@@ -1,5 +1,5 @@
 #include "test_inserttextundocommand.h"
-#include "../src/editor/inserttextundocommand.h"
+#include "../../src/editor/inserttextundocommand.h"
 
 test_InsertTextUndoCommand::test_InsertTextUndoCommand()
 {

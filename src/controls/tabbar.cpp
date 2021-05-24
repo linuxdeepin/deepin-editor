@@ -117,7 +117,6 @@ void Tabbar::addTabWithIndex(int index, const QString &filePath, const QString &
     }
 }
 
-
 void Tabbar::resizeEvent(QResizeEvent *event)
 {
     int cnt = count();
@@ -144,7 +143,6 @@ void Tabbar::resizeEvent(QResizeEvent *event)
 
         setTabToolTip(i, path);
     }
-
 
     return DTabBar::resizeEvent(event);
 }
@@ -447,7 +445,7 @@ void Tabbar::insertFromMimeData(int index, const QMimeData *source)
     if (source == nullptr) {
         return;
     }
-//    qDebug() << "insertFromMimeData";
+
     const QString tabName = QString::fromUtf8(source->data("dedit/tabbar"));
     QVariant pVar = source->property("wrapper");
     EditWrapper *wrapper = static_cast<EditWrapper *>(pVar.value<void *>());
@@ -472,7 +470,6 @@ bool Tabbar::canInsertFromMimeData(int index, const QMimeData *source) const
 
 void Tabbar::handleDragActionChanged(Qt::DropAction action)
 {
-
     // Reset cursor to Qt::ArrowCursor if drag tab to TextEditor widget.
     if (action == Qt::IgnoreAction) {
         if (dragIconWindow()) {
@@ -493,8 +490,6 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
 
         if (mouseEvent->button() == Qt::RightButton) {
-
-
             QPoint position = mouseEvent->pos();
             m_rightClickTab = this->tabAt(position);
             int indexCount = this->count();
@@ -507,8 +502,6 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
 //                    break;
 //                }
 //            }
-
-
 
             // popup right menu on tab.
             if (m_rightClickTab >= 0) {
@@ -532,7 +525,6 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
                     m_closeRightTabAction->setEnabled(false);
                 }
 
-
                 //优化tab菜单显示　梁卫东
                 if (m_rightClickTab == 0 && indexCount == 1) {
                     m_closeLeftTabAction->setEnabled(false);
@@ -552,7 +544,6 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
                 }
 
                 //showTabs();
-
 
                 connect(m_closeTabAction, &QAction::triggered, this, [ = ] {
                     Q_EMIT tabCloseRequested(m_rightClickTab);

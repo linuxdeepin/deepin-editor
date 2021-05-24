@@ -185,7 +185,6 @@ void ColorSelectWdg::initWidget()
 
 void ColorSelectWdg::setTheme(const QString &theme)
 {
-
     //获取主题颜色
     if(theme == "light") {
         m_textColor = "#1f1c1b";

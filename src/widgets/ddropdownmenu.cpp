@@ -162,6 +162,7 @@ void DDropdownMenu::setMenu(DMenu *menu)
     deleteMenu();
     m_menu = menu;
 }
+
 void DDropdownMenu::deleteMenu()
 {
     if (m_menu != nullptr) {
@@ -338,6 +339,9 @@ DDropdownMenu *DDropdownMenu::createHighLightMenu()
         if (def.isValid() && m_pHighLightMenu->m_text != action->text()) {
             emit m_pHighLightMenu->currentActionChanged(action);
         }
+        else {
+            m_pHighLightMenu->setText(tr("None"));
+        }
 
     });
 
@@ -350,8 +354,6 @@ DDropdownMenu *DDropdownMenu::createHighLightMenu()
 
 QIcon DDropdownMenu::createIcon()
 {
-    int scaled = 1;
-    if(devicePixelRatioF() == 1.25) scaled = 2;
 
     DPalette dpalette  = DApplicationHelper::instance()->palette(m_pToolButton);
     QColor textColor;
@@ -379,14 +381,20 @@ QIcon DDropdownMenu::createIcon()
     m_pToolButton->setFixedSize(totalWidth,totalHeigth);
     m_pToolButton->setIconSize(QSize(totalWidth,totalHeigth));
 
-    QPixmap icon(QSize(totalWidth,totalHeigth)*scaled);
-    icon.setDevicePixelRatio(scaled);
+    qreal rate = this->devicePixelRatioF();
+    QPixmap icon(QSize(totalWidth,totalHeigth)*rate);
+    icon.setDevicePixelRatio(rate);
     icon.fill(Qt::transparent);
 
     QPainter painter(&icon);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHints(QPainter::SmoothPixmapTransform);
+
+    painter.save();
     painter.setFont(m_font);
     painter.setPen(textColor);
     painter.drawText(QRectF(10,(totalHeigth-fontHeight)/2,fontWidth,fontHeight),m_text);
+    painter.restore();
 
     //arrowPixmap=arrowPixmap.scaled(iconW,iconH,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
 
@@ -414,7 +422,9 @@ bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
             //QString key = Utils::getKeyshortcut(keyEvent);
             if(keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Space)        //按下enter展开列表
             {
-                Q_EMIT requestContextMenu(false);
+                //if(isRequest){
+                    Q_EMIT requestContextMenu(false);
+                //}
                 return true;
             }
             return false;
@@ -424,10 +434,10 @@ bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
             QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
             if(mouseEvent->button() == Qt::LeftButton){
                 m_bPressed = true;
-                if (isRequest) {
+                //if (isRequest) {
                     //重新绘制icon 点击改变前景色
                     m_pToolButton->setIcon(createIcon());
-                }
+                //}
                 return true;
             }
 
@@ -441,7 +451,7 @@ bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
             if(mouseEvent->button() == Qt::LeftButton){
                 m_bPressed = false;
                 m_pToolButton->setIcon(createIcon());
-                if (isRequest) {
+                if (isEnabled()) {
                     Q_EMIT requestContextMenu(true);
                 }
                 m_pToolButton->clearFocus();
@@ -466,7 +476,8 @@ QPixmap DDropdownMenu::setSvgColor(QString color)
     SetSVGBackColor(elem, "fill", color);
 
     //装换图片
-    int scaled =qApp->devicePixelRatio() == 1.25 ? 2 : 1;
+    //int scaled =qApp->devicePixelRatio() == 1.25 ? 2 : 1;
+    qreal scaled = this->devicePixelRatioF();
     QSvgRenderer svg_render(doc.toByteArray());
 
     QPixmap pixmap(QSize(8,5)*scaled);

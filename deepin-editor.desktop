@@ -1,9 +1,14 @@
 [Desktop Entry]
 Categories=Utility;TextEditor;
 Comment=Simple and easy to use text editor
+Exec=deepin-editor %F
+Icon=deepin-editor
+Name=Text Editor
+GenericName=Text Editor
 StartupNotify=false
 Type=Application
 X-Deepin-AppID=deepin-editor
+X-MultipleArgs=false
 X-Deepin-CreatedBy=com.deepin.dde.daemon.Launcher
 X-Deepin-Vendor=deepin
 # Translations:
@@ -39,8 +44,6 @@ Comment[uk]=Простий і доступний текстовий редакт
 Comment[zh_CN]=简单好用的文本编辑器
 Comment[zh_HK]=簡單好用的文本編輯器
 Comment[zh_TW]=簡單好用的文字編輯器
-Exec=deepin-editor %F
-GenericName=Text Editor
 GenericName[ar]=محرر النصوص
 GenericName[bo]=ཡིག་ཆ་རྩོམ་སྒྲུག་ཆས།
 GenericName[br]=Aozer testennoù
@@ -72,9 +75,7 @@ GenericName[uk]=Текстовий редактор
 GenericName[zh_CN]=文本编辑器
 GenericName[zh_HK]=文本編輯器
 GenericName[zh_TW]=文字編輯器
-Icon=deepin-editor
 MimeType=text/english;text/plain;text/x-makefile;text/x-c++hdr;text/x-c++src;text/x-chdr;text/x-csrc;text/x-java;text/x-moc;text/x-pascal;text/x-tcl;text/x-tex;application/x-shellscript;text/x-patch;text/x-adasrc;text/x-chdr;text/x-csrc;text/css;application/x-desktop;text/x-patch;text/x-fortran;text/html;text/x-java;text/x-tex;text/x-makefile;text/x-objcsrc;text/x-pascal;application/x-perl;application/x-perl;application/x-php;text/vnd.wap.wml;text/x-python;application/x-ruby;text/sgml;application/xml;model/vrml;image/svg+xml;application/json;
-Name=Text Editor
 Name[ar]=محرر نصوص ديبين
 Name[bo]=གཏིང་ཟབ་ཡིག་ཆ་རྩོམ་སྒྲིག་ཆས།
 Name[br]=Aozer testennoù Deepin

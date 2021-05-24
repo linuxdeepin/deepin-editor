@@ -63,7 +63,7 @@ You can open one or multiple text files at one time in the following ways, and t
 ### Save Files
 
 - Press **Ctrl + S** or click ![icon_menu](../common/icon_menu.svg)> **Save** to save the current document.
-- Press **Ctrl + Shift + S** or  click ![icon_menu](../common/icon_menu.svg)> **Save as **to save the file as a new one.
+- Press **Ctrl + Shift + S** or  click ![icon_menu](../common/icon_menu.svg)> **Save as** to save the file as a new one.
 
 ### Print Files
 
@@ -175,12 +175,12 @@ Use the shortcuts below to edit lines easily:
 
 1. Open the document with Text Editor, right-click on the Text Editor interface, and select **Turn on Read-Only mode**.
 
-![readonly](fig/read-only.png)
+![readonly](fig/read_only.png)
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
 2. Right-click on the Text Editor interface, and select **Turn off Read-Only mode** under the read-only mode.
 
-![read-only](fig/read-only-02.png)
+![read-only](fig/read_only_02.png)
 
 ### Text to Speech  
 

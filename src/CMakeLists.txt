@@ -51,7 +51,6 @@ target_link_libraries(deepin-editor
     ${Qt5Svg_LIBRARIES}
     KF5::Codecs
     KF5::SyntaxHighlighting
-
     ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/lib/libcharset.a
     ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/lib/libiconv.a
     ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/lib/libenca.a

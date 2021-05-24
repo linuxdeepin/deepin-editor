@@ -149,6 +149,7 @@ signals:
     void closeWindow();
     void sigJudgeBlockShutdown();
     void pressEsc();
+
 public slots:
     void addBlankTab();
     void addBlankTab(const QString &blankFile);
@@ -163,6 +164,13 @@ public slots:
 
     void handleFindNextSearchKeyword(const QString &keyword);
     void handleFindPrevSearchKeyword(const QString &keyword);
+    /**
+     * @brief handleFindKeyword
+     * @param keyword
+     * @author ut002764 lxp 2021.4.27
+     */
+    void handleFindKeyword(const QString &keyword, bool state);
+
     void slotFindbarClose();
     void slotReplacebarClose();
 

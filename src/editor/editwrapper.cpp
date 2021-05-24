@@ -92,11 +92,12 @@ EditWrapper::~EditWrapper()
         delete m_pBottomBar;
         m_pBottomBar = nullptr;
     }
-    if (m_pWaringNotices != nullptr) {
-    disconnect(m_pWaringNotices);
-        delete m_pWaringNotices;
-        m_pWaringNotices = nullptr;
-    }
+    //delete 之后，如果出现文件被修改，需要重新加载弹框，之后，点击标签关闭，闪退问题　78042 ut002764
+//    if (m_pWaringNotices != nullptr) {
+//    disconnect(m_pWaringNotices);
+//        delete m_pWaringNotices;
+//        m_pWaringNotices = nullptr;
+//    }
 }
 
 void EditWrapper::setQuitFlag()
@@ -132,13 +133,15 @@ bool EditWrapper::readFile(QByteArray encode)
         m_sFirstEncode = newEncode;
     }
 
-    QFile file(m_pTextEdit->getFilePath());
-    if (file.open(QIODevice::ReadOnly)) {
-        QByteArray fileContent = file.readAll();
+	//QFile file(m_pTextEdit->getFilePath());
+    QFile file2(m_pTextEdit->getTruePath());
+
+    if (file2.open(QIODevice::ReadOnly)) {
+        QByteArray fileContent = file2.readAll();
         QByteArray Outdata;
         DetectCode::ChangeFileEncodingFormat(fileContent, Outdata, newEncode, QString("UTF-8"));
         loadContent(Outdata);
-        file.close();
+        file2.close();
         m_sCurEncode = newEncode;
         updateModifyStatus(false);
         return true;
@@ -230,7 +233,6 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
     //切换编码相同不重写加载
     if (m_sCurEncode == encode) return false;
 
-
     //草稿文件 空白文件不保存
     if (Utils::isDraftFile(m_pTextEdit->getFilePath()) &&  m_pTextEdit->toPlainText().isEmpty()) {
         m_sCurEncode = encode;
@@ -244,23 +246,23 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
         DDialog *dialog = new DDialog(tr("Encoding changed. Do you want to save the file now?"), "", this);
         dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnBottomHint);
         dialog->setIcon(QIcon::fromTheme("deepin-editor"));
-        dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);//取消
-//       dialog->addButton(QString(tr("Discard")), false, DDialog::ButtonNormal);//不保存
-        dialog->addButton(QString(tr("Save")), true, DDialog::ButtonRecommend);//保存
+        dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);   //取消
+        //dialog->addButton(QString(tr("Discard")), false, DDialog::ButtonNormal);//不保存
+        dialog->addButton(QString(tr("Save")), true, DDialog::ButtonRecommend);   //保存
         int res = dialog->exec();//0  1
 
         //关闭对话框
         if (res == 0) return false;
 
         //不保存,重写载入
-        if (res == 1) {
-            bool ok = readFile(encode);
-            //if(ok && m_sCurEncode != m_sFirstEncode) m_pTextEdit->setTabbarModified(true);
-            return ok;
-        }
+//        if (res == 1) {
+//            bool ok = readFile(encode);
+//            //if(ok && m_sCurEncode != m_sFirstEncode) m_pTextEdit->setTabbarModified(true);
+//            return ok;
+//        }
 
         //保存
-        if (res == 2) {
+        if (res == 1) {
             //草稿文件
             if (Utils::isDraftFile(m_pTextEdit->getFilePath())) {
                 if (saveDraftFile()) return readFile(encode);
@@ -284,8 +286,13 @@ void EditWrapper::reloadModifyFile()
     int yoffset = m_pTextEdit->verticalScrollBar()->value();
     int xoffset = m_pTextEdit->horizontalScrollBar()->value();
 
+    bool IsModified = m_pTextEdit->getModified();
+
+    if (m_pWindow->getTabbar()->textAt(m_pWindow->getTabbar()->currentIndex()).front() == "*") {
+        IsModified = true;
+    }
     //如果文件修改提示用户是否保存  如果临时文件保存就是另存为
-    if (m_pTextEdit->getModified()) {
+    if (IsModified) {
         DDialog *dialog = new DDialog(tr("Do you want to save this file?"), "", this);
         dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnBottomHint);
         dialog->setIcon(QIcon::fromTheme("deepin-editor"));
@@ -320,7 +327,7 @@ void EditWrapper::reloadModifyFile()
         readFile();
     }
 
-    QFileInfo fi(m_pTextEdit->getFilePath());
+    QFileInfo fi(m_pTextEdit->getTruePath());
     m_tModifiedDateTime = fi.lastModified();
 
     QTextCursor textcur = m_pTextEdit->textCursor();
@@ -417,8 +424,8 @@ bool EditWrapper::saveTemFile(QString qstrDir)
 //            file.close();
 //            m_sFirstEncode = m_sCurEncode;
 
-//            // did save work?
-//            // only finalize if stream status == OK
+              // did save work?
+              // only finalize if stream status == OK
 //            bool ok = (error == QFileDevice::NoError);
 
 //            // update status.
@@ -432,7 +439,6 @@ bool EditWrapper::saveTemFile(QString qstrDir)
 
 void EditWrapper::updatePath(const QString &file, QString qstrTruePath)
 {
-
     if (qstrTruePath.isEmpty()) {
         qstrTruePath = file;
     }
@@ -528,12 +534,16 @@ void EditWrapper::hideWarningNotices()
 //除草稿文件 检查文件是否被删除,是否被修复
 void EditWrapper::checkForReload()
 {
-    if (Utils::isDraftFile(m_pTextEdit->getTruePath())) return;
+    if (Utils::isDraftFile(m_pTextEdit->getTruePath())) {
+        return;
+    }
 
     QFileInfo fi(m_pTextEdit->getTruePath());
 
-    if (fi.lastModified() == m_tModifiedDateTime || m_pWaringNotices->isVisible()) return;
-
+    QTimer::singleShot(50, [=]() {
+        if (fi.lastModified() == m_tModifiedDateTime || m_pWaringNotices->isVisible()) {
+            return;
+        }
 
     if (!fi.exists()) {
         m_pWaringNotices->setMessage(tr("File removed on the disk. Save it now?"));
@@ -545,6 +555,7 @@ void EditWrapper::checkForReload()
 
     m_pWaringNotices->show();
     DMessageManager::instance()->sendMessage(m_pTextEdit, m_pWaringNotices);
+    });
 }
 
 void EditWrapper::showNotify(const QString &message)

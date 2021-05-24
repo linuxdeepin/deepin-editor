@@ -162,7 +162,7 @@ bool EditorApplication::notify(QObject *object, QEvent *event)
     if (event->type() == QEvent::FocusIn) {
         qDebug() << "FocusIn:" << object;
     }
-#endif
+    #endif
 
     return QApplication::notify(object, event);
 }

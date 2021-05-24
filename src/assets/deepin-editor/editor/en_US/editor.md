@@ -64,7 +64,7 @@ You can open one or multiple text files at one time in the following ways, and t
 ### Save Files
 
 - Press **Ctrl + S** or click ![icon_menu](../common/icon_menu.svg)> **Save** to save the current document.
-- Press **Ctrl + Shift + S** or  click ![icon_menu](../common/icon_menu.svg)> **Save as **to save the file as a new one.
+- Press **Ctrl + Shift + S** or  click ![icon_menu](../common/icon_menu.svg)> **Save as** to save the file as a new one.
 
 ### Print Files
 
