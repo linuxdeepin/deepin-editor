@@ -10,15 +10,16 @@
 class ReplaceAllCommond:public QUndoCommand
 {
 public:
-    ReplaceAllCommond(QString& oldText,QString& newText,QPlainTextEdit* edit);
+    ReplaceAllCommond(QString& oldText,QString& newText,QTextCursor cursor);
     virtual ~ReplaceAllCommond();
+
     virtual void redo();
     virtual void undo();
 
 private:
     QString m_oldText;
     QString m_newText;
-    QPlainTextEdit* m_edit;
+    QTextCursor m_cursor;
 
 };
 

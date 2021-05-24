@@ -1977,7 +1977,8 @@ void TextEdit::replaceAll(const QString &replaceText, const QString &withText)
 
     newText.replace(replaceText,withText);
 
-    ReplaceAllCommond* commond = new ReplaceAllCommond(oldText,newText,this);
+
+    ReplaceAllCommond* commond = new ReplaceAllCommond(oldText,newText,cursor);
     m_pUndoStack->push(commond);
 
 
@@ -2043,7 +2044,8 @@ void TextEdit::replaceRest(const QString &replaceText, const QString &withText)
     right.replace(replaceText,withText);
     newText += right;
 
-    ReplaceAllCommond* commond = new ReplaceAllCommond(oldText,newText,this);
+
+    ReplaceAllCommond* commond = new ReplaceAllCommond(oldText,newText,cursor);
     m_pUndoStack->push(commond);
 
 

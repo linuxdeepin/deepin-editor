@@ -1,10 +1,11 @@
 #include "replaceallcommond.h"
 
 
-ReplaceAllCommond::ReplaceAllCommond(QString& oldText, QString& newText, QPlainTextEdit *edit):
+
+ReplaceAllCommond::ReplaceAllCommond(QString& oldText, QString& newText, QTextCursor cursor):
     m_oldText(oldText),
     m_newText(newText),
-    m_edit(edit)
+    m_cursor(cursor)
 {
 
 }
@@ -15,12 +16,19 @@ ReplaceAllCommond::~ReplaceAllCommond()
 
 void ReplaceAllCommond::redo()
 {
-    m_edit->clear();
-    m_edit->setPlainText(m_newText);
+
+    m_cursor.setPosition(0);
+    m_cursor.movePosition(QTextCursor::End,QTextCursor::KeepAnchor);
+    m_cursor.deleteChar();
+
+    m_cursor.insertText(m_newText);
 }
 
 void ReplaceAllCommond::undo()
 {
-    m_edit->clear();
-    m_edit->setPlainText(m_oldText);
+    m_cursor.setPosition(0);
+    m_cursor.movePosition(QTextCursor::End,QTextCursor::KeepAnchor);
+    m_cursor.deleteChar();
+
+    m_cursor.insertText(m_oldText);
 }
