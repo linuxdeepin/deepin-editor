@@ -502,8 +502,12 @@ public slots:
     void copy();
     //粘贴槽函数
     void paste();
-    //修改后高亮显示
+    //修改后，高亮显示
     void highlight();
+    //选中视口中可见的文本
+    void selectTextInView();
+    //全部选中，区别于QPlainTextEdit::selectAll
+    void selectAll_();
 
 
 protected:
@@ -520,6 +524,7 @@ protected:
     bool eventFilter(QObject *object, QEvent *event) override;
     void contextMenuEvent(QContextMenuEvent *event) override;
     void paintEvent(QPaintEvent *e) override;
+    void resizeEvent(QResizeEvent *e) override;
 private:
     void unCommentSelection();
     void setComment();
@@ -767,6 +772,8 @@ private:
 
     bool m_bIsFindClose = false;///< 关闭查找框事件是否发生
     QString m_qstrTruePath;///< 源文件路径
+
+    bool m_isSelectAll;
 
 private:
     LeftAreaTextEdit *m_pLeftAreaWidget = nullptr;
