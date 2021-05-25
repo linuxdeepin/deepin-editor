@@ -1540,17 +1540,10 @@ void TextEdit::killLine()
         QTextCursor cursor = textCursor();
         // Join next line if current line is empty or cursor at end of line.
         if (isEmptyLine || textCursor().atBlockEnd()) {
-            //fixed bug 80435  ut002764  刪除到尾后，光标设置到下一列开头
+            //fixed bug 80435  ut002764  刪除到尾后，光标设置到下一个字符
 //            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
-             cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
-             cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-            //cursor.deleteChar();
-            if(!textCursor().hasSelection()){
-                insertTextEx(cursor, " ");
-                cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
-                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-            }
-            deleteTextEx(cursor);
+            cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+            deleteSelectTextEx(cursor);
         }
         // Kill whole line if current line is blank line.
         else if (isBlankLine && textCursor().atBlockStart()) {
@@ -1583,16 +1576,18 @@ void TextEdit::killCurrentLine()
 
     cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
 
-    QString text = cursor.selectedText();
-    bool isBlankLine = text.trimmed().size() == 0;
+    //因为删除整行之后，如果后面没有内容了，则不在删除，光标前面不会删除；
+//    QString text = cursor.selectedText();
+//    bool isBlankLine = text.trimmed().size() == 0;
 
     //cursor.removeSelectedText();
     deleteSelectTextEx(cursor);
-    if (isBlankLine) {
-        //cursor.deleteChar();
-        deleteTextEx(cursor);
-    }
+//    if (isBlankLine) {
+//        //cursor.deleteChar();
+//        deleteTextEx(cursor);
+//    }
 
     //setTextCursor(cursor);
 }
