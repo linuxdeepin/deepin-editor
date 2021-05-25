@@ -585,6 +585,7 @@ Window *StartManager::createWindow(bool alwaysCenter)
                     file.remove();
                 }
             }
+
             QApplication::quit();
             PerformanceMonitor::closeAPPFinish();
         }
