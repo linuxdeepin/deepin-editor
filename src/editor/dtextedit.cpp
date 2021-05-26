@@ -6665,20 +6665,8 @@ void TextEdit::setComment()
         }
         //qDebug()<<startBlock.text()<<startBlock.position() <<endBlock.text()<<endBlock.position() ;
         for (QTextBlock block = startBlock; block != endBlock; block = block.next()) {
-            const QString text = block.text();
-//            foreach (QChar c, text) {
-//                if (!c.isSpace()) {
-//                    if (m_commentDefinition.isAfterWhiteSpaces)
-//                        cursor.setPosition(block.position() + text.indexOf(c));
-//                    else
-//                        cursor.setPosition(block.position());
-
-//                }
-//            }
             cursor.setPosition(block.position());
             insertTextEx(cursor, m_commentDefinition.singleLine);
-
-            if (startBlock.lineCount() == endBlock.lineCount()) break;
         }
     }
 
