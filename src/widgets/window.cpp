@@ -972,10 +972,10 @@ bool Window::saveFile()
         return true;
     } else {
         DDialog *dialog = createDialog(tr("Do you want to save as another?"), "");
-        wrapperEdit->setUpdatesEnabled(false);
-        int mode =  dialog->exec();
+        //wrapperEdit->setUpdatesEnabled(false);
         wrapperEdit->setUpdatesEnabled(true);
         wrapperEdit->hideWarningNotices();
+        int mode =  dialog->exec();
 		//dialog->deleteLater();
 		//dialog = nullptr;
 
@@ -2474,11 +2474,10 @@ void Window::closeEvent(QCloseEvent *e)
     disconnect(m_settings, nullptr, this, nullptr);
     //this->close();
 
+
     StartManager::instance()->closeAboutForWindow(this);
 
-    QTimer::singleShot(50, this, [=]() {
-        emit closeWindow();
-    });
+    emit closeWindow();
 
     return DMainWindow::closeEvent(e);
 }
