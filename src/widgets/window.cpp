@@ -1813,7 +1813,6 @@ void Window::backupFile()
     //将json串列表写入配置文件
     //m_settings->settings->option("advance.editor.browsing_history_temfile")->setValue(m_qlistTemFile);
     m_settings->settings->setOption("advance.editor.browsing_history_temfile", m_qlistTemFile);
-    m_settings->settings->sync();
 
     //删除自动备份文件
     if (QFileInfo(m_autoBackupDir).exists()) {
