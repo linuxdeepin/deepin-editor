@@ -5975,7 +5975,15 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
                 QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(m_altModSelections);
                 m_pUndoStack->push(pDeleteStack);
             } else {
-                QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(textCursor());
+                //修改backspace删除，在文档最末尾点击backspace,引起标签栏*出现问题
+                QTextCursor cursor = textCursor();
+                if(!cursor.hasSelection())
+                {
+                    cursor.movePosition(QTextCursor::PreviousCharacter,QTextCursor::KeepAnchor);
+                }
+                QString m_delText = cursor.selectedText();
+                if(m_delText.size()<=0) return;
+                QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(cursor);
                 m_pUndoStack->push(pDeleteStack);
             }
             return;
@@ -5990,7 +5998,16 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
                 DeleteBackAltCommond *commond = new DeleteBackAltCommond(m_altModSelections,this);
                 m_pUndoStack->push(commond);
             } else {
-                DeleteBackCommond *commond = new DeleteBackCommond(textCursor(),this);
+                //修改delete删除，在文档最末尾点击delete,引起标签栏*出现问题
+                QTextCursor cursor = textCursor();
+                if(!cursor.hasSelection())
+                {
+                    cursor.movePosition(QTextCursor::NextCharacter,QTextCursor::KeepAnchor);
+                }
+                QString m_delText = cursor.selectedText();
+                if(m_delText.size()<=0) return;
+
+                DeleteBackCommond *commond = new DeleteBackCommond(cursor,this);
                 m_pUndoStack->push(commond);
             }
             return;
