@@ -5580,7 +5580,7 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
     if(m_isSelectAll)
         QPlainTextEdit::selectAll();
 
-    if (!m_readOnlyMode && !e->commitString().isEmpty()) {
+    if (!m_readOnlyMode && !m_bReadOnlyPermission && !e->commitString().isEmpty()) {
         //列编辑添加撤销重做
         if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
             insertColumnEditTextEx(e->commitString());
