@@ -49,6 +49,7 @@ EditWrapper::EditWrapper(Window *window, QWidget *parent)
       m_pWaringNotices(new WarningNotices(WarningNotices::ResidentType, this))
 
 {
+    m_bQuit = false;
     m_pWaringNotices->hide();
     // Init layout and widgets.
     QHBoxLayout *m_layout = new QHBoxLayout;
@@ -103,6 +104,11 @@ EditWrapper::~EditWrapper()
 void EditWrapper::setQuitFlag()
 {
     m_bQuit = true;
+}
+
+bool EditWrapper::isQuit()
+{
+    return m_bQuit;
 }
 
 bool EditWrapper::getFileLoading()

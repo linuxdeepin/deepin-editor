@@ -434,7 +434,7 @@ void TextEdit::initRightClickedMenu()
 
     connect(m_selectAllAction, &QAction::triggered, this, [ = ] {
 #if 0
-        //2021-5-25:selectAll_()替换
+        //2021-5-25:setSelectAll()替换
         if (m_wrapper->getFileLoading())
         {
             return;
@@ -442,7 +442,7 @@ void TextEdit::initRightClickedMenu()
         m_bIsAltMod = false;
         selectAll();
 #endif
-        selectAll_();
+        setSelectAll();
     });
 
     connect(m_findAction, &QAction::triggered, this, &TextEdit::clickFindAction);
@@ -783,6 +783,11 @@ void TextEdit::popRightMenu(QPoint pos)
 void TextEdit::setWrapper(EditWrapper *w)
 {
     m_wrapper = w;
+}
+
+EditWrapper *TextEdit::getWrapper()
+{
+    return m_wrapper;
 }
 
 
@@ -2802,7 +2807,7 @@ void TextEdit::paste()
         int block = 1 * 1024 * 1024 ;
         int size = text.size();
         if(size > block){
-            InsertBlockByTextCommond* commond = new InsertBlockByTextCommond(text,this);
+            InsertBlockByTextCommond* commond = new InsertBlockByTextCommond(text,this,m_wrapper);
             m_pUndoStack->push(commond);
         }else{
             QTextCursor cursor = textCursor();
@@ -2881,7 +2886,7 @@ void TextEdit::selectTextInView()
 
 }
 
-void TextEdit::selectAll_()
+void TextEdit::setSelectAll()
 {
     if(m_wrapper->getFileLoading())
             return;
@@ -6114,14 +6119,14 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             return;
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "selectall")) {
 #if 0
-            //2021-2-25:selectAll_()替换
+            //2021-2-25:setSelectAll()替换
             if (m_wrapper->getFileLoading()) {
                 return;
             }
             m_bIsAltMod = false;
             selectAll();
 #endif
-            selectAll_();
+            setSelectAll();
             return;
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "copylines")) {
             copyLines();

@@ -110,6 +110,8 @@ public:
     //
     void setWrapper(EditWrapper *);
 
+    EditWrapper* getWrapper();
+
     /**
      * @brief getFilePath 获取打开文件路径
      * @return 打开文件路径
@@ -506,8 +508,8 @@ public slots:
     void highlight();
     //选中视口中可见的文本
     void selectTextInView();
-    //全部选中，区别于QPlainTextEdit::selectAll
-    void selectAll_();
+    //设置"全部选中"(全选槽函数)
+    void setSelectAll();
 
 
 protected:
