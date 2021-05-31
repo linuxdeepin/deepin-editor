@@ -906,7 +906,7 @@ void EditWrapper::loadContent(const QByteArray &content)
         for (int i = 0; i < cnt; i++) {
             //初始化秒开
             if (i == 0 && !m_bQuit) {
-                data = strContent.mid(i * step, InitContentPos);
+                data = strContent.mid(i * step, step);
                 cursor.insertText(data);
                 QTextCursor firstLineCursor = m_pTextEdit->textCursor();
                 firstLineCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
