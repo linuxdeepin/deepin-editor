@@ -1395,10 +1395,10 @@ void Window::popupPrintDialog()
     const QString &filePath = currentWrapper()->textEditor()->getFilePath();
     const QString &fileDir = QFileInfo(filePath).dir().absolutePath();
 
-    //适配打印接口2.0，dtk版本大于或等于5.4.10才放开最新的2.0打印预览接口
+/* 适配打印接口2.0，dtk版本大于或等于5.4.11才放开最新的2.0打印预览接口（打印预览二期 104x） */
 #if (DTK_VERSION_MAJOR > 5 \
     || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR > 4) \
-    || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 4 && DTK_VERSION_PATCH >= 10))
+    || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 4 && DTK_VERSION_PATCH >= 11))
 
     QTextDocument *doc = currentWrapper()->textEditor()->document();
     if (doc != nullptr && !doc->isEmpty()) {
@@ -1434,7 +1434,11 @@ void Window::popupPrintDialog()
 
     m_pPreview->exec();
 
-#else
+/* dtk=>5.2.2.15用打印预览一期（v20 103x） */
+#elif (DTK_VERSION_MAJOR > 5 \
+    || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR > 2) \
+    || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 2 && DTK_VERSION_PATCH > 2) \
+    || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 2 && DTK_VERSION_PATCH == 2 && DTK_VERSION_BUILD >= 15))
     DPrintPreviewDialog preview(this);
 
     connect(&preview, QOverload<DPrinter *>::of(&DPrintPreviewDialog::paintRequested),
@@ -1449,6 +1453,27 @@ void Window::popupPrintDialog()
 
     currentWrapper()->updateHighlighterAll();
 
+    preview.exec();
+
+#else /* dtk=>5.2.2.15用打印预览一期（v20 103x） */
+    QPrinter printer(QPrinter::HighResolution);
+    QPrintPreviewDialog preview(this);
+
+    if (fileDir == m_blankFileDir) {
+        printer.setOutputFileName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
+        printer.setDocName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
+    } else {
+        printer.setOutputFileName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
+        printer.setDocName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
+    }
+
+    printer.setOutputFormat(QPrinter::PdfFormat);
+
+    connect(&preview, &QPrintPreviewDialog::paintRequested, this, [ = ](QPrinter *printer) {
+        currentWrapper()->textEditor()->print(printer);
+    });
+
+    currentWrapper()->updateHighlighterAll();
     preview.exec();
 #endif
 }
