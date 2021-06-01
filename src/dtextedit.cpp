@@ -2451,6 +2451,7 @@ bool TextEdit::event(QEvent *event)
 {
     if (event->type() == QEvent::Gesture)
       gestureEvent(static_cast<QGestureEvent*>(event));
+
     return DPlainTextEdit::event(event);
 }
 
@@ -6176,8 +6177,10 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
         m_rightMenu->addAction(m_fullscreenAction);
     }
 
+    /* 专业版/家庭版/教育版鼠标右键菜单支持语音读写 */
     if ((DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosProfessional) ||
-         (DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosHome)){
+        (DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosHome) ||
+        (DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosEducation)){
         bool stopReadingState = false;
         QDBusMessage stopReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
                                                           "/aiassistant/tts",
@@ -6196,8 +6199,6 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
             m_rightMenu->removeAction(m_voiceReadingAction);
             m_rightMenu->addAction(m_stopReadingAction);
         }
-
-
 
         bool voiceReadingState = false;
         QDBusMessage voiceReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
