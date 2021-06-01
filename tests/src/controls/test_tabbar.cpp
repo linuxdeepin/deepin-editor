@@ -1,4 +1,8 @@
 #include "test_tabbar.h"
+#include "QStyleOptionTab"
+#include "../src/widgets/window.h"
+#include "../src/editor/editwrapper.h"
+#include <QMouseEvent>
 
 test_tabbar::test_tabbar()
 {
@@ -181,10 +185,13 @@ TEST_F(test_tabbar, setDNDColor)
 //bool eventFilter(QObject *, QEvent *event);
 TEST_F(test_tabbar, eventFilter)
 {
+
     Tabbar * tab = new Tabbar();
     tab->addTab("/.cache/deepin/deepin-editor","aa");
-    QEvent a=QEvent(QEvent::Type::MouseButtonRelease);
-    tab->eventFilter(tab,&a);
+    QMouseEvent *e = new QMouseEvent(QEvent::MouseButtonPress,QPointF(76,29),Qt::RightButton,Qt::RightButton,Qt::NoModifier);
+
+    //eventFilter: m_rightMenu->exec(mapToGlobal(position));会导致运行停止
+    //tab->eventFilter(tab,e);
 
     assert(1==1);
 }
@@ -219,3 +226,35 @@ TEST_F(test_tabbar, maximumTabSizeHint)
 
     assert(1==1);
 }
+
+TEST_F(test_tabbar, createDragPixmapFromTab)
+{
+    int index = 0;
+    QStyleOptionTab option;
+    QPoint p;
+
+    Window * window = new Window;
+    window->addTab("/.cache/deepin/deepin-editor",true);
+    EditWrapper* wrapper = new EditWrapper(window);
+    window->getTabbar()->createDragPixmapFromTab(index,option,&p);
+
+    assert(1==1);
+}
+
+#if 0
+TEST_F(test_tabbar, eventFilter)
+{
+    Tabbar * tab = new Tabbar();
+    int index = 0;
+    QStyleOptionTab option;
+    QPoint p;
+
+    Window * window = new Window;
+    window->addTab("/.cache/deepin/deepin-editor",true);
+    EditWrapper* wrapper = new EditWrapper(window);
+    //QMouseEvent e(QEvent::MouseButtonPress,Qt::RightButton,)
+    window->getTabbar()->eventFilter(nullptr,);
+
+    assert(1==1);
+}
+#endif
