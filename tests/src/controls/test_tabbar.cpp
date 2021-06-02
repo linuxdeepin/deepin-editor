@@ -11,7 +11,11 @@ test_tabbar::test_tabbar()
 
 TEST_F(test_tabbar, Tabbar)
 {
-    Tabbar tab(nullptr);
+    Tabbar* tab = new Tabbar;
+    tab->m_moreWaysCloseMenu = new QMenu();
+    tab->m_rightMenu = new QMenu();
+    delete tab;
+
     assert(1==1);
 }
 
@@ -33,8 +37,15 @@ TEST_F(test_tabbar, addTabWithIndex)
 //closeTab
 TEST_F(test_tabbar, closeTab)
 {
-    Tabbar * tab = new Tabbar();
-    tab->closeTab(0);
+    int index = 0;
+    QStyleOptionTab option;
+    QPoint p;
+
+    Window * window = new Window;
+    window->addTab("/.cache/deepin/deepin-editor",true);
+    EditWrapper* wrapper = new EditWrapper(window);
+    window->getTabbar()->closeTab(index);
+    window->getTabbar()->closeTab(-1);
 
     assert(1==1);
 }
@@ -196,16 +207,6 @@ TEST_F(test_tabbar, eventFilter)
     assert(1==1);
 }
 
-//QSize tabSizeHint(int index) const;
-TEST_F(test_tabbar, tabSizeHint)
-{
-    Tabbar * tab = new Tabbar();
-    tab->addTab("/.cache/deepin/deepin-editor","aa");
-    QEvent a=QEvent(QEvent::Type::MouseButtonRelease);
-    tab->tabSizeHint(0);
-
-    assert(1==1);
-}
 //QSize minimumTabSizeHint(int index) const;
 TEST_F(test_tabbar, minimumTabSizeHint)
 {
@@ -241,10 +242,9 @@ TEST_F(test_tabbar, createDragPixmapFromTab)
     assert(1==1);
 }
 
-#if 0
-TEST_F(test_tabbar, eventFilter)
+
+TEST_F(test_tabbar, createMimeDataFromTab)
 {
-    Tabbar * tab = new Tabbar();
     int index = 0;
     QStyleOptionTab option;
     QPoint p;
@@ -252,9 +252,216 @@ TEST_F(test_tabbar, eventFilter)
     Window * window = new Window;
     window->addTab("/.cache/deepin/deepin-editor",true);
     EditWrapper* wrapper = new EditWrapper(window);
-    //QMouseEvent e(QEvent::MouseButtonPress,Qt::RightButton,)
-    window->getTabbar()->eventFilter(nullptr,);
+    window->getTabbar()->createMimeDataFromTab(index,option);
 
     assert(1==1);
 }
-#endif
+
+TEST_F(test_tabbar, insertFromMimeDataOnDragEnter)
+{
+    int index = 0;
+    QStyleOptionTab option;
+    QPoint p;
+    QMimeData *mimeData = new QMimeData;
+    mimeData->setData("dedit/tabbar","test");
+
+    Window * window = new Window;
+    window->addTab("/.cache/deepin/deepin-editor",true);
+    EditWrapper* wrapper = new EditWrapper(window);
+    window->getTabbar()->insertFromMimeDataOnDragEnter(index,mimeData);
+
+    assert(1==1);
+}
+
+TEST_F(test_tabbar, insertFromMimeData)
+{
+    int index = 0;
+    QStyleOptionTab option;
+    QPoint p;
+    QMimeData *mimeData = new QMimeData;
+    mimeData->setData("dedit/tabbar","test");
+
+    Window * window = new Window;
+    window->addTab("/.cache/deepin/deepin-editor",true);
+    EditWrapper* wrapper = new EditWrapper(window);
+    window->getTabbar()->insertFromMimeData(index,mimeData);
+
+    assert(1==1);
+}
+
+
+TEST_F(test_tabbar, canInsertFromMimeData)
+{
+    int index = 0;
+    QStyleOptionTab option;
+    QPoint p;
+    QMimeData *mimeData = new QMimeData;
+    mimeData->setData("dedit/tabbar","test");
+
+    Window * window = new Window;
+    window->addTab("/.cache/deepin/deepin-editor",true);
+    EditWrapper* wrapper = new EditWrapper(window);
+    window->getTabbar()->canInsertFromMimeData(index,mimeData);
+
+    assert(1==1);
+}
+
+
+TEST_F(test_tabbar, handleDragActionChanged)
+{
+    int index = 0;
+    QStyleOptionTab option;
+    QPoint p;
+    Qt::DropAction actions[2] = {Qt::IgnoreAction,Qt::MoveAction};
+
+    Window * window = new Window;
+    window->addTab("/.cache/deepin/deepin-editor",true);
+    EditWrapper* wrapper = new EditWrapper(window);
+    window->getTabbar()->handleDragActionChanged(actions[0]);
+    window->getTabbar()->handleDragActionChanged(actions[1]);
+
+    assert(1==1);
+}
+
+TEST_F(test_tabbar, mousePressEvent)
+{
+    int index = 0;
+    QStyleOptionTab option;
+    QPoint p;
+    QMouseEvent* event = new QMouseEvent(QEvent::None,QPoint(),Qt::MidButton,Qt::MidButton,Qt::NoModifier);
+
+
+    Window * window = new Window;
+    window->addTab("/.cache/deepin/deepin-editor",true);
+    EditWrapper* wrapper = new EditWrapper(window);
+    window->getTabbar()->mousePressEvent(event);
+
+    assert(1==1);
+}
+
+TEST_F(test_tabbar, dropEvent)
+{
+    int index = 0;
+    QStyleOptionTab option;
+    QPoint p;
+    QMimeData *mimeData = new QMimeData;
+    mimeData->setData("dedit/tabbar","test");
+    QDropEvent* event = new QDropEvent(QPointF(100,100),Qt::CopyAction,mimeData,Qt::LeftButton,Qt::NoModifier);
+
+
+    Window * window = new Window;
+    window->addTab("/.cache/deepin/deepin-editor",true);
+    EditWrapper* wrapper = new EditWrapper(window);
+    window->getTabbar()->dropEvent(event);
+
+
+    assert(1==1);
+}
+
+TEST_F(test_tabbar, tabSizeHint)
+{
+    int index = 0;
+    QStyleOptionTab option;
+    QPoint p;
+
+    Window * window = new Window;
+    window->addTab("/.cache/deepin/deepin-editor",true);
+    EditWrapper* wrapper = new EditWrapper(window);
+    window->getTabbar()->tabSizeHint(index);
+
+    assert(1==1);
+}
+
+TEST_F(test_tabbar, handleTabMoved)
+{
+    int index = 0;
+    QStyleOptionTab option;
+    QPoint p;
+
+    Window * window = new Window;
+    window->addTab("/.cache/deepin/deepin-editor",true);
+    EditWrapper* wrapper = new EditWrapper(window);
+    window->getTabbar()->handleTabMoved(index,index);
+
+    assert(1==1);
+}
+
+TEST_F(test_tabbar, handleTabReleased)
+{
+    int index = 0;
+    QStyleOptionTab option;
+    QPoint p;
+
+    Window * window = new Window;
+    window->addTab("/.cache/deepin/deepin-editor",true);
+    EditWrapper* wrapper = new EditWrapper(window);
+    window->getTabbar()->m_listOldTabPath.push_back("/.cache/deepin/deepin-editor");
+    window->getTabbar()->handleTabReleased(index);
+
+    assert(1==1);
+}
+
+TEST_F(test_tabbar, handleTabIsRemoved)
+{
+    int index = 0;
+    QStyleOptionTab option;
+    QPoint p;
+
+    Window * window = new Window;
+    window->addTab("/.cache/deepin/deepin-editor",true);
+    EditWrapper* wrapper = new EditWrapper(window);
+    window->getTabbar()->handleTabIsRemoved(index);
+
+    assert(1==1);
+}
+
+TEST_F(test_tabbar, handleTabDroped)
+{
+    int index = 0;
+    QStyleOptionTab option;
+    QPoint p;
+    Qt::DropAction actions[2] = {Qt::IgnoreAction,Qt::MoveAction};
+
+
+    Window * window = new Window;
+    window->addTab("/.cache/deepin/deepin-editor",true);
+    EditWrapper* wrapper = new EditWrapper(window);
+    window->getTabbar()->handleTabDroped(index,actions[0],nullptr);
+    window->getTabbar()->handleTabDroped(index,actions[0],window->getTabbar());
+    assert(1==1);
+}
+
+TEST_F(test_tabbar, onTabDrapStart)
+{
+    int index = 0;
+    QStyleOptionTab option;
+    QPoint p;
+    Qt::DropAction actions[2] = {Qt::IgnoreAction,Qt::MoveAction};
+
+
+    Window * window = new Window;
+    window->addTab("/.cache/deepin/deepin-editor",true);
+    EditWrapper* wrapper = new EditWrapper(window);
+    window->getTabbar()->onTabDrapStart();
+
+    assert(1==1);
+}
+
+TEST_F(test_tabbar, resizeEvent)
+{
+    int index = 0;
+    QStyleOptionTab option;
+    QPoint p;
+    Qt::DropAction actions[2] = {Qt::IgnoreAction,Qt::MoveAction};
+    QResizeEvent* e = new QResizeEvent(QSize(),QSize());
+
+
+    Window * window = new Window;
+    window->addTab("/.cache/deepin/deepin-editor",true);
+    EditWrapper* wrapper = new EditWrapper(window);
+    window->getTabbar()->resizeEvent(e);
+
+    assert(1==1);
+}
+
+

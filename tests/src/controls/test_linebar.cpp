@@ -69,7 +69,15 @@ TEST_F(test_linebar, focusOutEvent)
 TEST_F(test_linebar, keyPressEvent)
 {
     LineBar *lineBar = new LineBar();
-    QKeyEvent *e = new QKeyEvent(QEvent::KeyPress,1,Qt::NoModifier);
+    Qt::KeyboardModifier modefiers[4] = {Qt::ControlModifier,Qt::AltModifier,Qt::MetaModifier,Qt::NoModifier};
+    QKeyEvent *e = new QKeyEvent(QEvent::KeyPress,1,modefiers[0],"\r");
+    lineBar->keyPressEvent(e);
+
+    e = new QKeyEvent(QEvent::KeyPress,1,modefiers[1],"\r");
+    lineBar->keyPressEvent(e);
+    e = new QKeyEvent(QEvent::KeyPress,1,modefiers[2],"\r");
+    lineBar->keyPressEvent(e);
+    e = new QKeyEvent(QEvent::KeyPress,1,modefiers[3],"\r");
     lineBar->keyPressEvent(e);
     assert(1==1);
 }
