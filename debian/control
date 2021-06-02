@@ -8,7 +8,7 @@ Homepage: https://www.deepin.org
 
 Package: deepin-editor
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, libdtkwidget5 (>= 5.4.11)
 Description: dtk based text editor
  Text Editor is a simple text editing tool. 
  You can use it to write a simple text document, or make it a code editing tool with its advanced features which support code syntax highlighting.
