@@ -6524,8 +6524,11 @@ void TextEdit::unCommentSelection()
                         deleteTextEx(cursor);
                         break;
                     }
-                    if (!text.at(i).isSpace())
-                        break;
+                    if (i < text.size()) {
+                        if (!text.at(i).isSpace())
+                            break;
+                    }
+
                     ++i;
                 }
             } else {
@@ -6845,8 +6848,11 @@ void TextEdit::removeComment()
                         deleteTextEx(cursor);
                         break;
                     }
-                    if (!text.at(i).isSpace())
-                        break;
+                    if (i < text.size()) {
+                        if (!text.at(i).isSpace())
+                            break;
+                    }
+
                     ++i;
                 }
             }
