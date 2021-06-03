@@ -9,6 +9,10 @@ TEST_F(test_flashTween, LeftAreaTextEdit)
 {
     FlashTween *a = new FlashTween();
     a->stopX();
+
+    delete a;
+    a=nullptr;
+
     assert(1==1);
 }
 
@@ -55,6 +59,20 @@ TEST_F(test_flashTween, activeY)
     a->activeY();
     assert(1==1);
 }
+
+TEST_F(test_flashTween, stopX)
+{
+    FlashTween *a = new FlashTween();
+    a->stopX();
+
+    delete a;
+    a=nullptr;
+    assert(1==1);
+}
+
+
+
+
 
 //private slots:
 //    void __runY();

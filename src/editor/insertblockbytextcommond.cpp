@@ -54,14 +54,18 @@ void InsertBlockByTextCommond::undo()
 
 void InsertBlockByTextCommond::treat(bool isStart)
 {
-    Window* window = m_wrapper->window();
-    BottomBar* bar = m_wrapper->bottomBar();
-    if(window){
-        window->setPrintEnabled(!isStart);
+    if(m_wrapper!=nullptr){
+
+        Window* window = m_wrapper->window();
+        BottomBar* bar = m_wrapper->bottomBar();
+        if(window){
+            window->setPrintEnabled(!isStart);
+        }
+        if(bar){
+            bar->setChildEnabled(!isStart);
+        }
     }
-    if(bar){
-        bar->setChildEnabled(!isStart);
-    }
+
     if(!isStart)
         QObject::connect(m_edit, &QPlainTextEdit::cursorPositionChanged, m_edit, &TextEdit::cursorPositionChanged);
     else
@@ -78,14 +82,14 @@ void InsertBlockByTextCommond::insertByBlock()
         int y = size % (block);
         int k=0;
         for(;k<n;k++){
-            if(!m_wrapper->isQuit()){
+            if(m_wrapper!=nullptr && !m_wrapper->isQuit()){
                 QString insertText = m_text.mid(k*block,block);
                 cursor.insertText(insertText);
                 QApplication::processEvents();
             }
         }
         if(y){
-            if(!m_wrapper->isQuit()){
+            if(m_wrapper!=nullptr && !m_wrapper->isQuit()){
                 QString insertText = m_text.mid(k*block,y);
                 cursor.insertText(insertText);
                 QApplication::processEvents();
