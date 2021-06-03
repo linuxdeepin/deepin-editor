@@ -127,100 +127,18 @@ Window::Window(DMainWindow *parent)
     connect(this, &Window::pressEsc, m_jumpLineBar, &JumpLineBar::pressEsc, Qt::QueuedConnection);
 
     // Init settings.
-    connect(m_settings, &Settings::sigAdjustFont, this, [this](QString fontName) {
-        for (EditWrapper *wrapper : m_wrappers.values()) {
-            wrapper->textEditor()->setFontFamily(fontName);
-        }
-    });
-
-    connect(m_settings, &Settings::sigAdjustFontSize, this, [this](int size) {
-        for (EditWrapper *wrapper : m_wrappers.values()) {
-            wrapper->textEditor()->setFontSize(size);
-            wrapper->OnUpdateHighlighter();
-        }
-
-        m_fontSize = size;
-    });
-
-    connect(m_settings, &Settings::sigAdjustTabSpaceNumber, this, [this](int number) {
-        for (EditWrapper *wrapper : m_wrappers.values()) {
-            wrapper->textEditor()->setTabSpaceNumber(number);
-        }
-    });
-
-    connect(m_settings, &Settings::sigThemeChanged, this, [](const QString & path) {
-        QString strLightTheme = "/usr/share/deepin-editor/themes/deepin.theme";
-        QString strDarkTheme = "/usr/share/deepin-editor/themes/deepin_dark.theme";
-
-        if (path == strLightTheme) {
-            if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
-                return;
-            } else {
-                DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::LightType);
-                //DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::LightType);
-            }
-        } else if (path == strDarkTheme) {
-            if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType) {
-                return;
-            } else {
-                DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::DarkType);
-                //DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::DarkType);
-            }
-        }
-    });
-
-
-    connect(m_settings, &Settings::sigAdjustWordWrap, this, [ = ](bool enable) {
-        for (EditWrapper *wrapper : m_wrappers.values()) {
-            TextEdit *textedit = wrapper->textEditor();
-            textedit->setLineWrapMode(enable);
-        }
-    });
-
-    connect(m_settings, &Settings::sigSetLineNumberShow, this, [ = ](bool bIsShow) {
-        for (EditWrapper *wrapper : m_wrappers.values()) {
-            wrapper->setLineNumberShow(bIsShow);
-        }
-    });
-
-    connect(m_settings, &Settings::sigAdjustBookmark, this, [ = ](bool bIsShow) {
-        for (EditWrapper *wrapper : m_wrappers.values()) {
-            TextEdit *textedit = wrapper->textEditor();
-            textedit->setBookmarkFlagVisable(bIsShow);
-        }
-    });
-
-    //添加显示空白符 梁卫东　２０２０－０８－１４　１５：２６：３２
-    connect(m_settings, &Settings::sigShowBlankCharacter, this, [ = ](bool bIsShow) {
-        for (EditWrapper *wrapper : m_wrappers.values()) {
-            wrapper->setShowBlankCharacter(bIsShow);
-        }
-    });
-
-    //setHighLineCurrentLine
-    connect(m_settings, &Settings::sigHightLightCurrentLine, this, [ = ](bool bIsShow) {
-        for (EditWrapper *wrapper : m_wrappers.values()) {
-            wrapper->textEditor()->setHighLineCurrentLine(bIsShow);
-        }
-    });
-
-    connect(m_settings, &Settings::sigShowCodeFlodFlag, this, [ = ](bool enable) {
-        for (EditWrapper *wrapper : m_wrappers.values()) {
-            TextEdit *textedit = wrapper->textEditor();
-            textedit->setCodeFlodFlagVisable(enable);
-        }
-    });
-
-//    connect(m_settings, &Settings::sigChangeWindowSize, this, [ = ](QString mode) {
-//        if (mode == "fullscreen") {
-//            this->showFullScreen();
-//        } else if (mode == "window_maximum") {
-//            this->showNormal();
-//            this->showMaximized();
-//        } else {
-//            this->showNormal();
-//        }
-//    });
+    connect(m_settings, &Settings::sigAdjustFont, this, &Window::slotSigAdjustFont);
+    connect(m_settings, &Settings::sigAdjustFontSize, this, &Window::slotSigAdjustFontSize);
+    connect(m_settings, &Settings::sigAdjustTabSpaceNumber, this, &Window::slotSigAdjustTabSpaceNumber);
+    connect(m_settings, &Settings::sigThemeChanged, this, &Window::slotSigThemeChanged);
+    connect(m_settings, &Settings::sigAdjustWordWrap, this, &Window::slotSigAdjustWordWrap);
+    connect(m_settings, &Settings::sigSetLineNumberShow, this, &Window::slotSigSetLineNumberShow);
+    connect(m_settings, &Settings::sigAdjustBookmark, this, &Window::slotSigAdjustBookmark);
+    connect(m_settings, &Settings::sigShowBlankCharacter, this, &Window::slotSigShowBlankCharacter);
+    connect(m_settings, &Settings::sigHightLightCurrentLine, this, &Window::slotSigHightLightCurrentLine);
+    connect(m_settings, &Settings::sigShowCodeFlodFlag, this, &Window::slotSigShowCodeFlodFlag);
+    /* 设置页面里窗口模式的设置是针对新创建窗口的设置，本窗口不需要实时响应，暂且屏蔽此信号的绑定 */
+    //connect(m_settings, &Settings::sigChangeWindowSize, this, &Window::slotSigChangeWindowSize);
 
     // Init layout and editor.
     m_centralLayout->setMargin(0);
@@ -2258,12 +2176,12 @@ DDialog *Window::createDialog(const QString &title, const QString &content)
 void Window::slotLoadContentTheme(DGuiApplicationHelper::ColorType themeType)
 {
     if (themeType == DGuiApplicationHelper::ColorType::LightType) {
-        loadTheme("/usr/share/deepin-editor/themes/deepin.theme");
+        loadTheme(DEEPIN_THEME);
         if (DGuiApplicationHelper::instance()->paletteType() == DGuiApplicationHelper::ColorType::UnknownType) {
             DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::ColorType::UnknownType);
         }
     } else if (themeType == DGuiApplicationHelper::ColorType::DarkType) {
-        loadTheme("/usr/share/deepin-editor/themes/deepin_dark.theme");
+        loadTheme(DEEPIN_DARK_THEME);
         if (DGuiApplicationHelper::instance()->paletteType() == DGuiApplicationHelper::ColorType::UnknownType) {
             DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::ColorType::UnknownType);
         }
@@ -2284,22 +2202,17 @@ void Window::slotLoadContentTheme(DGuiApplicationHelper::ColorType themeType)
 
 void Window::slotSettingResetTheme(const QString &path)
 {
-    QString strLightTheme = "/usr/share/deepin-editor/themes/deepin.theme";
-    QString strDarkTheme = "/usr/share/deepin-editor/themes/deepin_dark.theme";
-
-    if (path == strLightTheme) {
+    if (path == DEEPIN_THEME) {
         if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
             return;
         } else {
             DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::LightType);
-            //DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::LightType);
         }
-    } else if (path == strDarkTheme) {
+    } else if (path == DEEPIN_DARK_THEME) {
         if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType) {
             return;
         } else {
             DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::DarkType);
-            //DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::DarkType);
         }
     }
 }
@@ -2368,6 +2281,104 @@ void Window::slotClearDoubleCharaterEncode()
 
     for (const QString &strTemp : shouldBeEmpty) {
         handleReplaceAll(strTemp, " ");
+    }
+}
+
+void Window::slotSigThemeChanged(const QString &path)
+{
+    if (path == DEEPIN_THEME) {
+        if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
+            return;
+        } else {
+            DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::LightType);
+        }
+    } else if (path == DEEPIN_DARK_THEME) {
+        if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType) {
+            return;
+        } else {
+            DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::DarkType);
+        }
+    }
+}
+
+void Window::slotSigAdjustFont(QString fontName)
+{
+    for (EditWrapper *wrapper : m_wrappers.values()) {
+        wrapper->textEditor()->setFontFamily(fontName);
+    }
+}
+
+void Window::slotSigAdjustFontSize(int fontSize)
+{
+    for (EditWrapper *wrapper : m_wrappers.values()) {
+        wrapper->textEditor()->setFontSize(fontSize);
+        wrapper->OnUpdateHighlighter();
+    }
+
+    m_fontSize = fontSize;
+}
+
+void Window::slotSigAdjustTabSpaceNumber(int number)
+{
+    for (EditWrapper *wrapper : m_wrappers.values()) {
+        wrapper->textEditor()->setTabSpaceNumber(number);
+    }
+}
+
+void Window::slotSigAdjustWordWrap(bool enable)
+{
+    for (EditWrapper *wrapper : m_wrappers.values()) {
+        TextEdit *textedit = wrapper->textEditor();
+        textedit->setLineWrapMode(enable);
+    }
+}
+
+void Window::slotSigSetLineNumberShow(bool bIsShow)
+{
+    for (EditWrapper *wrapper : m_wrappers.values()) {
+        wrapper->setLineNumberShow(bIsShow);
+    }
+}
+
+void Window::slotSigAdjustBookmark(bool bIsShow)
+{
+    for (EditWrapper *wrapper : m_wrappers.values()) {
+        TextEdit *textedit = wrapper->textEditor();
+        textedit->setBookmarkFlagVisable(bIsShow);
+    }
+}
+
+void Window::slotSigShowBlankCharacter(bool bIsShow)
+{
+    for (EditWrapper *wrapper : m_wrappers.values()) {
+        wrapper->setShowBlankCharacter(bIsShow);
+    }
+}
+
+void Window::slotSigHightLightCurrentLine(bool bIsShow)
+{
+    for (EditWrapper *wrapper : m_wrappers.values()) {
+        wrapper->textEditor()->setHighLineCurrentLine(bIsShow);
+    }
+}
+
+void Window::slotSigShowCodeFlodFlag(bool bIsShow)
+{
+    for (EditWrapper *wrapper : m_wrappers.values()) {
+        TextEdit *textedit = wrapper->textEditor();
+        textedit->setCodeFlodFlagVisable(bIsShow);
+    }
+}
+
+void Window::slotSigChangeWindowSize(QString mode)
+{
+    if (mode == "fullscreen") {
+        this->showFullScreen();
+    } else if (mode == "window_maximum") {
+        this->showNormal();
+        this->showMaximized();
+    } else {
+        this->showNormal();
     }
 }
 

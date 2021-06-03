@@ -35,6 +35,9 @@
 #define SAFE_DELETE(p)      if((p)) { delete (p); (p) = nullptr;}
 #endif
 
+#define DEEPIN_THEME      "/usr/share/deepin-editor/themes/deepin.theme"
+#define DEEPIN_DARK_THEME "/usr/share/deepin-editor/themes/deepin_dark.theme"
+
 class Utils
 {
 public:

@@ -198,6 +198,17 @@ public slots:
     void slot_setTitleFocus();
     //清除不支持双字节字符集符号
     void slotClearDoubleCharaterEncode();
+    void slotSigThemeChanged(const QString &path);
+    void slotSigAdjustFont(QString fontName);
+    void slotSigAdjustFontSize(int fontSize);
+    void slotSigAdjustTabSpaceNumber(int number);
+    void slotSigAdjustWordWrap(bool enable);
+    void slotSigSetLineNumberShow(bool bIsShow);
+    void slotSigAdjustBookmark(bool bIsShow);
+    void slotSigShowBlankCharacter(bool bIsShow);
+    void slotSigHightLightCurrentLine(bool bIsShow);
+    void slotSigShowCodeFlodFlag(bool bIsShow);
+    void slotSigChangeWindowSize(QString mode);
 
 private:
     void handleFocusWindowChanged(QWindow *w);
