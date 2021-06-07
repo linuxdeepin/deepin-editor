@@ -30,7 +30,6 @@ void GenerateSettingTranslate()
     auto shortcurs_keymap_keymap = QObject::tr("Keymap");
     auto shortcuts_windowName = QObject::tr("Window");
     auto shortcuts_window_addblanktabName = QObject::tr("New tab");
-    auto shortcuts_window_newwindowName = QObject::tr("New window");
     auto shortcuts_window_savefileName = QObject::tr("Save");
     auto shortcuts_window_saveasfileName = QObject::tr("Save as");
     auto shortcuts_window_selectnexttabName = QObject::tr("Next tab");
@@ -42,8 +41,6 @@ void GenerateSettingTranslate()
     auto shortcuts_window_incrementfontsizeName = QObject::tr("Increment font size");
     auto shortcuts_window_decrementfontsizeName = QObject::tr("Decrement font size");
     auto shortcuts_window_resetfontsizeName = QObject::tr("Reset font size");
-    auto shortcuts_window_help = QObject::tr("Help");
-    auto shortcuts_window_togglefullscreenName = QObject::tr("Toggle fullscreen");
     auto shortcuts_window_findName = QObject::tr("Find");
     auto shortcuts_window_replaceName = QObject::tr("Replace");
     auto shortcuts_window_jumptolineName = QObject::tr("Go to line");
@@ -51,7 +48,6 @@ void GenerateSettingTranslate()
     auto shortcuts_window_restorepositionName = QObject::tr("Reset cursor position");
     auto shortcuts_window_escapeName = QObject::tr("Exit");
     auto shortcuts_window_displayshortcutsName = QObject::tr("Display shortcuts");
-    auto shortcuts_window_printName = QObject::tr("Print");
     auto group_editorName = QObject::tr("Editor");
     auto shortcuts_editor_indentlineName = QObject::tr("Increase indent");
     auto shortcuts_editor_backindentlineName = QObject::tr("Decrease indent");
@@ -100,9 +96,6 @@ void GenerateSettingTranslate()
     auto shortcuts_editor_removecommentName = QObject::tr("Remove comment");
     auto shortcuts_editor_undoName = QObject::tr("Undo");
     auto shortcuts_editor_redoName = QObject::tr("Redo");
-    auto shortcuts_editor_switchbookmarkName = QObject::tr("Add/Remove bookmark");
-    auto shortcuts_editor_movetoprebookmarkName = QObject::tr("Move to previous bookmark");
-    auto shortcuts_editor_movetonextbookmarkName = QObject::tr("Move to next bookmark");
     auto group_advanceName = QObject::tr("Advanced");
     auto advance_windowName = QObject::tr("Window");
     auto advance_window_windowstateName = QObject::tr("Window size");

@@ -99,13 +99,6 @@
                             "default":  "Ctrl+T"
                         },
                         {
-                            "key": "newwindow",
-                            "name": "New window",
-                            "type": "keySequenceEdit",
-                            "default":  "Ctrl+N",
-                            "hide": true
-                        },
-                        {
                             "key": "savefile",
                             "name": "Save",
                             "type": "keySequenceEdit",
@@ -172,20 +165,6 @@
                             "default":  "Ctrl+0"
                         },
                         {
-                            "key": "togglefullscreen",
-                            "name": "Toggle fullscreen",
-                            "type": "keySequenceEdit",
-                            "default":  "F11",
-                            "hide": true
-                        },
-                        {
-                            "key": "help",
-                            "name": "Help",
-                            "type": "keySequenceEdit",
-                            "default":  "F1",
-                            "hide": true
-                        },
-                        {
                             "key": "find",
                             "name": "Find",
                             "type": "keySequenceEdit",
@@ -226,13 +205,6 @@
                             "name": "Display shortcuts",
                             "type": "keySequenceEdit",
                             "default":  "Ctrl+Shift+?"
-                        },
-                        {
-                            "key": "print",
-                            "name": "Print",
-                            "type": "keySequenceEdit",
-                            "default":  "Ctrl+P",
-                            "hide": true
                         }
                     ]
                 },
@@ -517,27 +489,6 @@
                             "default":  "Ctrl+Z"
                         },
                         {
-                            "key": "switchbookmark",
-                            "name": "Add/Remove bookmark",
-                            "type": "keySequenceEdit",
-                            "default":  "Ctrl+F2",
-                            "hide": true
-                        },
-                        {
-                            "key": "movetoprebookmark",
-                            "name": "Move to previous bookmark",
-                            "type": "keySequenceEdit",
-                            "default":  "F2",
-                            "hide": true
-                        },
-                        {
-                            "key": "movetonextbookmark",
-                            "name": "Move to next bookmark",
-                            "type": "keySequenceEdit",
-                            "default":  "Shift+F2",
-                            "hide": true
-                        },
-                        {
                             "key": "redo",
                             "name": "Redo",
                             "type": "keySequenceEdit",
@@ -562,12 +513,6 @@
                             "hide" : true,
                             "reset" : false,
                             "default":  "Ctrl+T"
-                        },
-                        {
-                            "key": "newwindow",
-                            "hide" : true,
-                            "reset" : false,
-                            "default":  "Ctrl+N"
                         },
                         {
                             "key": "savefile",
@@ -636,18 +581,6 @@
                             "default":  "Ctrl+0"
                         },
                         {
-                            "key": "togglefullscreen",
-                            "hide" : true,
-                            "reset" : false,
-                            "default":  "F11"
-                        },
-                        {
-                            "key": "help",
-                            "hide": true,
-                            "reset": false,
-                            "default":  "F1"
-                        },
-                        {
                             "key": "find",
                             "hide" : true,
                             "reset" : false,
@@ -688,12 +621,6 @@
                             "hide" : true,
                             "reset" : false,
                             "default":  "Ctrl+Shift+?"
-                        },
-                        {
-                            "key": "print",
-                            "hide" : true,
-                            "reset" : false,
-                            "default":  "Ctrl+P"
                         }
                     ]
                 },
@@ -1003,24 +930,6 @@
                             "default":  "Ctrl+Z"
                         },
                         {
-                            "key": "switchbookmark",
-                            "hide" : true,
-                            "reset" : false,
-                            "default":  "Ctrl+F2"
-                        },
-                        {
-                            "key": "movetoprebookmark",
-                            "hide" : true,
-                            "reset" : false,
-                            "default":  "F2"
-                        },
-                        {
-                            "key": "movetonextbookmark",
-                            "hide" : true,
-                            "reset" : false,
-                            "default":  "Shift+F2"
-                        },
-                        {
                             "key": "redo",
                             "hide" : true,
                             "reset" : false,
@@ -1118,18 +1027,6 @@
                             "default":  "Ctrl+0"
                         },
                         {
-                            "key": "togglefullscreen",
-                            "hide" : true,
-                            "reset" : false,
-                            "default":  "F11"
-                        },
-                        {
-                            "key": "help",
-                            "hide" : true,
-                            "reset" : false,
-                            "default":  "F1"
-                        },
-                        {
                             "key": "find",
                             "hide" : true,
                             "reset" : false,
@@ -1170,12 +1067,6 @@
                             "hide" : true,
                             "reset" : false,
                             "default":  "Ctrl+Shift+H"
-                        },
-                        {
-                            "key": "print",
-                            "hide" : true,
-                            "reset" : false,
-                            "default":  "Ctrl+Shift+P"
                         }
                     ]
                 },
@@ -1219,12 +1110,6 @@
                             "hide" : true,
                             "reset" : false,
                             "default":  "Alt+B"
-                        },
-                        {
-                            "key": "nextline",
-                            "hide" : true,
-                            "reset" : false,
-                            "default":  "Ctrl+N"
                         },
                         {
                             "key": "prevline",
@@ -1485,24 +1370,6 @@
                             "default":  "Ctrl+/"
                         },
                         {
-                            "key": "switchbookmark",
-                            "hide" : true,
-                            "reset" : false,
-                            "default":  "Ctrl+F2"
-                        },
-                        {
-                            "key": "movetoprebookmark",
-                            "hide" : true,
-                            "reset" : false,
-                            "default":  "F2"
-                        },
-                        {
-                            "key": "movetonextbookmark",
-                            "hide" : true,
-                            "reset" : false,
-                            "default":  "Shift+F2"
-                        },
-                        {
                             "key": "redo",
                             "hide" : true,
                             "reset" : false,
@@ -1526,12 +1393,6 @@
                             "hide" : true,
                             "reset" : false,
                             "default":  "Ctrl+T"
-                        },
-                        {
-                            "key": "newwindow",
-                            "hide" : true,
-                            "reset" : false,
-                            "default":  "Ctrl+N"
                         },
                         {
                             "key": "savefile",
@@ -1600,18 +1461,6 @@
                             "default":  "Ctrl+0"
                         },
                         {
-                            "key": "togglefullscreen",
-                            "hide" : true,
-                            "reset" : false,
-                            "default":  "F11"
-                        },
-                        {
-                            "key": "help",
-                            "hide" : true,
-                            "reset" : false,
-                            "default":  "F1"
-                        },
-                        {
                             "key": "find",
                             "hide" : true,
                             "reset" : false,
@@ -1652,12 +1501,6 @@
                             "hide" : true,
                             "reset" : false,
                             "default":  "Ctrl+Shift+?"
-                        },
-                        {
-                            "key": "print",
-                            "hide" : true,
-                            "reset" : false,
-                            "default":  "Ctrl+P"
                         }
                     ]
                 },
@@ -1965,24 +1808,6 @@
                             "hide" : true,
                             "reset" : false,
                             "default":  "Ctrl+Z"
-                        },
-                        {
-                            "key": "switchbookmark",
-                            "hide" : true,
-                            "reset" : false,
-                            "default":  "Ctrl+F2"
-                        },
-                        {
-                            "key": "movetoprebookmark",
-                            "hide" : true,
-                            "reset" : false,
-                            "default":  "F2"
-                        },
-                        {
-                            "key": "movetonextbookmark",
-                            "hide" : true,
-                            "reset" : false,
-                            "default":  "Shift+F2"
                         },
                         {
                             "key": "redo",

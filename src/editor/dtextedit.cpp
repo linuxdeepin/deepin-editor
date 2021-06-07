@@ -5860,7 +5860,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             toggleComment(false);
                 return;
             }
-            #ifdef TABLET
+        #ifdef TABLET
             else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "switchbookmark")) {
             m_bIsShortCut = true;
             addOrDeleteBookMark();
@@ -5872,7 +5872,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             moveToNextBookMark();
             return;
             }
-            #endif
+        #endif
             else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "mark")) {
             toggleMarkSelections();
             return;

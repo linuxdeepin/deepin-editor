@@ -1485,6 +1485,7 @@ void Window::popupSettingsDialog()
     dialog->exec();
 
     delete dialog;
+    dialog = nullptr;
     m_settings->settings->sync();
 }
 
@@ -1646,13 +1647,13 @@ void Window::displayShortcuts()
 
     //窗体快捷键
     QStringList windowKeymaps;
-    windowKeymaps << "addblanktab" << "newwindow" << "savefile"
+    windowKeymaps << "addblanktab" << "savefile"
                   << "saveasfile" << "selectnexttab" << "selectprevtab"
                   << "closetab" << "closeothertabs" << "restoretab"
                   << "openfile" << "incrementfontsize" << "decrementfontsize"
-                  << "resetfontsize" << "togglefullscreen" << "find" << "replace"
+                  << "resetfontsize" << "find" << "replace"
                   << "jumptoline" << "saveposition" << "restoreposition"
-                  << "escape" << "print";
+                  << "escape";
 
     QJsonObject shortcutObj;
     QJsonArray jsonGroups;
@@ -1696,8 +1697,7 @@ void Window::displayShortcuts()
                   << "backwardpair" << "selectall" << "copy" << "cut"
                   << "paste" << "transposechar" << "setmark" << "exchangemark"
                   << "copylines" << "cutlines" << "joinlines" << "togglereadonlymode"
-                  << "togglecomment" << "removecomment" << "undo" << "redo" << "switchbookmark" << "movetoprebookmark"
-                  << "movetonextbookmark" << "mark";
+                  << "togglecomment" << "removecomment" << "undo" << "redo" << "mark";
 
     QJsonObject editorJsonGroup;
     editorJsonGroup.insert("groupName", tr("Editor"));
@@ -1715,7 +1715,7 @@ void Window::displayShortcuts()
 
     //设置快捷键
     QStringList setupKeymaps;
-    setupKeymaps << "help" << "displayshortcuts";
+    setupKeymaps << "displayshortcuts";
 
     QJsonObject setupJsonGroup;
     setupJsonGroup.insert("groupName", tr("Settings"));
@@ -2696,17 +2696,17 @@ void Window::keyPressEvent(QKeyEvent *e)
     QString key = Utils::getKeyshortcut(e);
 
     if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "decrementfontsize") ||
-        key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "incrementfontsize") ||
-        key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "togglefullscreen")) {
+        key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "incrementfontsize")) {
         currentWrapper()->textEditor()->setCodeFoldWidgetHide(true);
     }
 
     if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "addblanktab")) {
         addBlankTab();
-    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "newwindow")) {
-        #ifdef TABLET
-        emit newWindow();
-        #endif
+
+    #ifdef TABLET
+    else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "newwindow")) {
+    emit newWindow();
+    #endif
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "savefile")) {
         saveFile();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "saveasfile")) {
@@ -2729,8 +2729,8 @@ void Window::keyPressEvent(QKeyEvent *e)
         decrementFontSize();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "resetfontsize")) {
         resetFontSize();
+    #ifdef TABLET
     }  else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "togglefullscreen")) {
-        #ifdef TABLET
         DIconButton *minBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowMinButton");
         DIconButton *quitFullBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowQuitFullscreenButton");
         quitFullBtn->setFocusPolicy(Qt::TabFocus);
@@ -2741,7 +2741,7 @@ void Window::keyPressEvent(QKeyEvent *e)
         } else {
             toggleFullscreen();
         }
-        #endif
+    #endif
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "find")) {
         popupFindBar();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "replace")) {
@@ -2756,10 +2756,11 @@ void Window::keyPressEvent(QKeyEvent *e)
         emit pressEsc();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "displayshortcuts")) {
         displayShortcuts();
+    #ifdef TABLET
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "print")) {
-        #ifdef TABLET
+
         popupPrintDialog();
-        #endif
+    #endif
     } else {
         // Post event to window widget if match Alt+0 ~ Alt+9
         QRegularExpression re("^Alt\\+\\d");
