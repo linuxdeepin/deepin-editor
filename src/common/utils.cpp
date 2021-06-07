@@ -522,7 +522,6 @@ QVariantMap Utils::getThemeMapFromPath(const QString &filepath)
 bool Utils::isMimeTypeSupport(const QString &filepath)
 {
     QString mimeType = QMimeDatabase().mimeTypeForFile(filepath).name();
-    qDebug() << "detect mime type: " << filepath << mimeType;
 
     if (mimeType.startsWith("text/")) {
         return true;
@@ -569,7 +568,8 @@ bool Utils::isMimeTypeSupport(const QString &filepath)
                       << "application/x-mpegURL"
                       << "application/x-wine-extension-ini"
                       << "model/vrml"
-                      << "application/pkix-cert+pem";
+                      << "application/pkix-cert+pem"
+                      << "application/x-pak";
 
     if (textMimeTypes.contains(mimeType)) {
         return true;

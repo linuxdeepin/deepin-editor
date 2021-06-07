@@ -710,6 +710,7 @@ TEST_F(test_window, slotLoadContentTheme)
     window->slotLoadContentTheme(DGuiApplicationHelper::ColorType::DarkType);
     assert(1==1);
 }
+
 //void slotSettingResetTheme(const QString &path);
 TEST_F(test_window, slotSettingResetTheme)
 {
@@ -720,6 +721,26 @@ TEST_F(test_window, slotSettingResetTheme)
     window->addTabWithWrapper(a,"bb","aad","aadd",1);
     window->m_settings =Settings::instance();
     window->slotSettingResetTheme("DGuiApplicationHelper::ColorType::DarkType");
+    assert(1==1);
+}
+
+//void slotSigThemeChanged(const QString &path);
+TEST_F(test_window, slotSigThemeChanged)
+{
+    Window *pWindow = new Window();
+    EditWrapper *pEditWrapper = new EditWrapper();
+    pWindow->addTabWithWrapper(pEditWrapper, "aa", "aad", "aadd", 0);
+    pWindow->addBlankTab();
+    pWindow->addTabWithWrapper(pEditWrapper, "bb", "aad", "aadd", 1);
+    pWindow->m_settings = Settings::instance();
+    DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::LightType);
+    pWindow->slotSigThemeChanged(DEEPIN_THEME);
+    pWindow->slotSigThemeChanged(DEEPIN_DARK_THEME);
+
+    DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::DarkType);
+    pWindow->slotSigThemeChanged(DEEPIN_THEME);
+    pWindow->slotSigThemeChanged(DEEPIN_DARK_THEME);
+
     assert(1==1);
 }
 
@@ -776,6 +797,7 @@ TEST_F(test_window, updateThemePanelGeomerty)
     window->updateThemePanelGeomerty();
     assert(1==1);
 }
+
 //void checkTabbarForReload();
 TEST_F(test_window, checkTabbarForReload)
 {
@@ -787,6 +809,121 @@ TEST_F(test_window, checkTabbarForReload)
     window->addTabWithWrapper(a,"bb","aad","aadd",1);
     window->m_settings =Settings::instance();
     window->checkTabbarForReload();
+
     assert(1==1);
 }
 
+//void slotSigAdjustFont();
+TEST_F(test_window, slotSigAdjustFont)
+{
+    window = new Window();
+    EditWrapper *pEditWrapper = new EditWrapper();
+    window->addTabWithWrapper(pEditWrapper, "aa", "aad", "aadd", 0);
+    window->addBlankTab();
+    window->addTabWithWrapper(pEditWrapper,"bb", "aad", "aadd", 1);
+    window->slotSigAdjustFont(QString());
+
+    assert(1==1);
+}
+
+//void slotSigAdjustFontSize();
+TEST_F(test_window, slotSigAdjustFontSize)
+{
+    window = new Window();
+    EditWrapper *pEditWrapper = new EditWrapper();
+    window->addTabWithWrapper(pEditWrapper, "aa", "aad", "aadd", 0);
+    window->addBlankTab();
+    window->addTabWithWrapper(pEditWrapper, "bb", "aad", "aadd", 1);
+    window->slotSigAdjustFontSize(14);
+
+    assert(1==1);
+}
+
+//void slotSigAdjustTabSpaceNumber();
+TEST_F(test_window, slotSigAdjustTabSpaceNumber)
+{
+    window = new Window();
+    EditWrapper *pEditWrapper = new EditWrapper();
+    window->addTabWithWrapper(pEditWrapper, "aa", "aad", "aadd", 0);
+    window->addBlankTab();
+    window->addTabWithWrapper(pEditWrapper, "bb", "aad", "aadd", 1);
+
+    window->slotSigAdjustTabSpaceNumber(14);
+    assert(1==1);
+}
+
+//void slotSigAdjustWordWrap();
+TEST_F(test_window, slotSigAdjustWordWrap)
+{
+    window = new Window();
+    EditWrapper *pEditWrapper = new EditWrapper();
+    window->addTabWithWrapper(pEditWrapper, "aa", "aad", "aadd", 0);
+    window->addBlankTab();
+    window->addTabWithWrapper(pEditWrapper, "bb", "aad", "aadd", 1);
+
+    window->slotSigAdjustWordWrap(true);
+    assert(1==1);
+}
+
+//void slotSigAdjustBookmark();
+TEST_F(test_window, slotSigAdjustBookmark)
+{
+    window = new Window();
+    EditWrapper *pEditWrapper = new EditWrapper();
+    window->addTabWithWrapper(pEditWrapper, "aa", "aad", "aadd", 0);
+    window->addBlankTab();
+    window->addTabWithWrapper(pEditWrapper, "bb", "aad", "aadd", 1);
+
+    window->slotSigAdjustBookmark(true);
+    assert(1==1);
+}
+
+//void slotSigShowBlankCharacter();
+TEST_F(test_window, slotSigShowBlankCharacter)
+{
+    window = new Window();
+    EditWrapper *pEditWrapper = new EditWrapper();
+    window->addTabWithWrapper(pEditWrapper, "aa", "aad", "aadd", 0);
+    window->addBlankTab();
+    window->addTabWithWrapper(pEditWrapper, "bb", "aad", "aadd", 1);
+
+    window->slotSigShowBlankCharacter(true);
+    assert(1==1);
+}
+
+//void slotSigHightLightCurrentLine();
+TEST_F(test_window, slotSigHightLightCurrentLine)
+{
+    window = new Window();
+    EditWrapper *pEditWrapper = new EditWrapper();
+    window->addTabWithWrapper(pEditWrapper, "aa", "aad", "aadd", 0);
+    window->addBlankTab();
+    window->addTabWithWrapper(pEditWrapper, "bb", "aad", "aadd", 1);
+
+    window->slotSigHightLightCurrentLine(true);
+    assert(1==1);
+}
+
+//void slotSigShowCodeFlodFlag();
+TEST_F(test_window, slotSigShowCodeFlodFlag)
+{
+    window = new Window();
+    EditWrapper *pEditWrapper = new EditWrapper();
+    window->addTabWithWrapper(pEditWrapper, "aa", "aad", "aadd", 0);
+    window->addBlankTab();
+    window->addTabWithWrapper(pEditWrapper, "bb", "aad", "aadd", 1);
+
+    window->slotSigShowCodeFlodFlag(true);
+    assert(1==1);
+}
+
+//void slotSigShowCodeFlodFlag();
+TEST_F(test_window, slotSigChangeWindowSize)
+{
+    window = new Window();
+    window->slotSigChangeWindowSize(QString());
+    window->slotSigChangeWindowSize(QString("fullscreen"));
+    window->slotSigChangeWindowSize(QString("window_maximum"));
+
+    assert(1==1);
+}

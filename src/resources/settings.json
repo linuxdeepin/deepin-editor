@@ -30,6 +30,14 @@
                             "default": "true"
                         },
                         {
+
+                            "key":"codeflod",
+                            "name":"CODE FLOD",
+                            "type":"checkbox",
+                            "text":"Code folding flag",
+                            "default":"true"
+                        },
+                        {
                             "key": "showlinenumber",
                             "name": "Show line number",
                             "type": "checkbox",
@@ -42,6 +50,13 @@
                             "type": "checkbox",
                             "text": "Highlight current line",
                             "default": "true"
+                        },
+                        {
+                            "key": "showbookmark",
+                            "name": "Show bookmarks icon",
+                            "type": "checkbox",
+                            "text": "Show bookmarks icon",
+                            "default": "false"
                         },
                         {
                             "key": "showblankcharacter",

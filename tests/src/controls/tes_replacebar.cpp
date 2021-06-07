@@ -1,5 +1,5 @@
 #include "tes_replacebar.h"
-
+#include <QKeyEvent>
 tes_replacebar::tes_replacebar()
 {
 
@@ -107,4 +107,28 @@ TEST_F(tes_replacebar, hideEvent)
 //bool focusNextPrevChild(bool next);
 //void keyPressEvent(QKeyEvent *e);
 
+TEST_F(tes_replacebar, focusNextPrevChild)
+{
+    ReplaceBar * rep = new ReplaceBar();
+    rep->focusNextPrevChild(true);
 
+    assert(1==1);
+}
+
+TEST_F(tes_replacebar, keyPressEvent)
+{
+    ReplaceBar * rep = new ReplaceBar();
+    QKeyEvent * e = new QKeyEvent(QEvent::KeyPress,Qt::Key_Excel,Qt::NoModifier);
+    rep->keyPressEvent(e);
+
+    e = new QKeyEvent(QEvent::KeyPress,Qt::Key_Tab,Qt::NoModifier);
+    rep->m_closeButton->setFocus();
+    rep->keyPressEvent(e);
+
+    e = new QKeyEvent(QEvent::KeyPress,Qt::Key_Enter,Qt::NoModifier);
+    rep->m_replaceSkipButton->setFocus();
+    rep->keyPressEvent(e);
+
+
+    assert(1==1);
+}

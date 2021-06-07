@@ -85,3 +85,45 @@ TEST_F(test_startmanager,isMultiWindow )
 
     assert(1==1);
 }
+
+TEST_F(test_startmanager,isTemFilesEmpty )
+{
+    StartManager *startManager = StartManager::instance();
+    startManager->isTemFilesEmpty();
+
+    assert(1==1);
+}
+
+TEST_F(test_startmanager,autoBackupFile)
+{
+    StartManager *startManager = StartManager::instance();
+    startManager->autoBackupFile();
+
+    assert(1==1);
+}
+
+TEST_F(test_startmanager,recoverFile)
+{
+    StartManager *startManager = StartManager::instance();
+    Window w;
+    startManager->recoverFile(&w);
+
+    assert(1==1);
+}
+
+TEST_F(test_startmanager,openFilesInTab)
+{
+    StartManager *startManager = StartManager::instance();
+    startManager->openFilesInTab(QStringList());
+
+    assert(1==1);
+}
+
+TEST_F(test_startmanager,analyzeBookmakeInfo)
+{
+    StartManager *startManager = StartManager::instance();
+    startManager->analyzeBookmakeInfo(QString());
+
+    assert(1==1);
+}
+

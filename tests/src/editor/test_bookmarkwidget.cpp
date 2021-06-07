@@ -13,4 +13,7 @@ TEST_F(test_bookmarkwidget, paintEvent)
     QPaintEvent *e;
     a->paintEvent(e);
     a->deleteLater();
+
+    delete a;
+    a=nullptr;
 }

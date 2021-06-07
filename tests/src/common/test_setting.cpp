@@ -89,7 +89,8 @@ TEST_F(test_setting, createKeySequenceEditHandle)
     DSettingsDialog *dialog = new DSettingsDialog(widget);
     dialog->widgetFactory()->registerWidget("fontcombobox", Settings::createKeySequenceEditHandle);
 
-    //    Settings::instance()->createKeySequenceEditHandle(dialog);
+    DTK_CORE_NAMESPACE::DSettingsOption o;
+    Settings::instance()->createKeySequenceEditHandle(&o);
 }
 
 //static Settings* instance();
