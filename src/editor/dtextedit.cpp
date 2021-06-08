@@ -5732,7 +5732,14 @@ void TextEdit::mouseMoveEvent(QMouseEvent *e)
         viewport()->setCursor(Qt::IBeamCursor);
     }
 
-    QPlainTextEdit::mouseMoveEvent(e);
+    //QPlainTextEdit::mouseMoveEvent(e);
+
+    if((e->buttons() & Qt::LeftButton) && !m_bIsAltMod){
+        auto cursor = this->textCursor();
+        int pos = this->cursorForPosition(e->pos()).position();
+        cursor.setPosition(pos,QTextCursor::KeepAnchor);
+        this->setTextCursor(cursor);
+    }
 
     if (e->modifiers() == Qt::AltModifier && m_bIsAltMod) {
         m_altModSelections.clear();
