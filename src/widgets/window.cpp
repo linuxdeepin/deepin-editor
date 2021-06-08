@@ -996,9 +996,9 @@ void Window::removeWrapper(const QString &filePath, bool isDelete)
 
 void Window::openFile()
 {
-    QFileDialog dialog(this);
-    dialog.setFileMode(QFileDialog::ExistingFiles);
-    dialog.setAcceptMode(QFileDialog::AcceptOpen);
+    DFileDialog dialog(this);
+    dialog.setFileMode(DFileDialog::ExistingFiles);
+    dialog.setAcceptMode(DFileDialog::AcceptOpen);
 
     // read history directory.
     QString historyDirStr = m_settings->settings->option("advance.editor.file_dialog_dir")->value().toString();
