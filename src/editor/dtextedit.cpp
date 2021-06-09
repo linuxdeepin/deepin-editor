@@ -6278,11 +6278,21 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         } else if (e->key() == Qt::Key_Insert && key != "Shift+Ins") {
             if (e->modifiers() == Qt::NoModifier) {
                 setOverwriteMode(!overwriteMode());
-                update();
-                e->accept();
+                //update();
+                if(!overwriteMode()){
+                    auto cursor = this->textCursor();
+                    cursor.clearSelection();
+                    cursor.movePosition(QTextCursor::Right);
+                    this->setTextCursor(cursor);
+
+                    cursor = this->textCursor();
+                    cursor.movePosition(QTextCursor::Left);
+                    this->setTextCursor(cursor);
+                }
 
                 m_cursorMode = overwriteMode() ? Overwrite : Insert;
                 emit cursorModeChanged(m_cursorMode);
+                e->accept();
             }
         } else {
             // Post event to window widget if key match window key list.
