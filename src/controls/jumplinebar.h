@@ -75,6 +75,7 @@ private:
     int m_jumpFileScrollOffset;
     int m_rowBeforeJump;
     int m_columnBeforeJump;
+    int m_lineCount;
     QColor m_backgroundColor;
 };
 
