@@ -49,8 +49,8 @@ StartManager *StartManager::instance()
 StartManager::StartManager(QObject *parent)
     : QObject(parent)
 {
-	//m_bIsDragEnter = false;
-    // Create blank directory if it not exist.
+    //m_bIsDragEnter = false;
+    //Create blank directory if it not exist.
     #ifdef TABLET
     initBlockShutdown();
     #endif
@@ -524,12 +524,14 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
     geometry->setEndValue(endRect);
     geometry->setEasingCurve(QEasingCurve::InCubic);
     //OutCubic InCubic
-//    QPropertyAnimation *Opacity = new QPropertyAnimation(this, "windowOpacity");
-//    connect(Opacity,&QPropertyAnimation::finished,Opacity,&QPropertyAnimation::deleteLater);
-//    Opacity->setDuration(200);
-//    Opacity->setStartValue(1.0);
-//    Opacity->setEndValue(0);
-//    Opacity->setEasingCurve(QEasingCurve::InCirc);
+    #if 0
+    QPropertyAnimation *Opacity = new QPropertyAnimation(this, "windowOpacity");
+    connect(Opacity,&QPropertyAnimation::finished,Opacity,&QPropertyAnimation::deleteLater);
+    Opacity->setDuration(200);
+    Opacity->setStartValue(1.0);
+    Opacity->setEndValue(0);
+    Opacity->setEasingCurve(QEasingCurve::InCirc);
+    #endif
 
     QParallelAnimationGroup *group = new QParallelAnimationGroup;
     connect(group, &QParallelAnimationGroup::finished, geometry, [/*window,geometry,Opacity,group,*/ = ]() {
@@ -597,7 +599,7 @@ Window *StartManager::createWindow(bool alwaysCenter)
     #ifdef TABLET
     initWindowPosition(window, alwaysCenter);
     #endif
-    connect(window, &Window::newWindow, this, [=] {
+    connect(window, &Window::newWindow, this, [ = ] {
         openFilesInWindow(QStringList());
     });
 

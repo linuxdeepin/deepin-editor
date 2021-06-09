@@ -354,9 +354,6 @@ DDropdownMenu *DDropdownMenu::createHighLightMenu()
 
 QIcon DDropdownMenu::createIcon()
 {
-    int scaled = 1;
-    if(devicePixelRatioF() == 1.25) scaled = 2;
-
     DPalette dpalette  = DApplicationHelper::instance()->palette(m_pToolButton);
     QColor textColor;
 
@@ -383,14 +380,20 @@ QIcon DDropdownMenu::createIcon()
     m_pToolButton->setFixedSize(totalWidth,totalHeigth);
     m_pToolButton->setIconSize(QSize(totalWidth,totalHeigth));
 
-    QPixmap icon(QSize(totalWidth,totalHeigth)*scaled);
-    icon.setDevicePixelRatio(scaled);
+    qreal rate = this->devicePixelRatioF();
+    QPixmap icon(QSize(totalWidth,totalHeigth)*rate);
+    icon.setDevicePixelRatio(rate);
     icon.fill(Qt::transparent);
 
     QPainter painter(&icon);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHints(QPainter::SmoothPixmapTransform);
+
+    painter.save();
     painter.setFont(m_font);
     painter.setPen(textColor);
     painter.drawText(QRectF(10,(totalHeigth-fontHeight)/2,fontWidth,fontHeight),m_text);
+    painter.restore();
 
     //arrowPixmap=arrowPixmap.scaled(iconW,iconH,Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
 
@@ -471,7 +474,8 @@ QPixmap DDropdownMenu::setSvgColor(QString color)
     SetSVGBackColor(elem, "fill", color);
 
     //装换图片
-    int scaled =qApp->devicePixelRatio() == 1.25 ? 2 : 1;
+    //int scaled =qApp->devicePixelRatio() == 1.25 ? 2 : 1;
+    qreal scaled = this->devicePixelRatioF();
     QSvgRenderer svg_render(doc.toByteArray());
 
     QPixmap pixmap(QSize(8,5)*scaled);

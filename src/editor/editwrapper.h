@@ -56,6 +56,7 @@ public:
     //清除焦点　梁卫东　２０２０－０９－１４　１１：００：５０
     void clearAllFocus();
     void setQuitFlag();
+    bool isQuit();
     bool getFileLoading();
 
     /**

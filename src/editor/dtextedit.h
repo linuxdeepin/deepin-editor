@@ -110,6 +110,8 @@ public:
     //
     void setWrapper(EditWrapper *);
 
+    EditWrapper* getWrapper();
+
     /**
      * @brief getFilePath 获取打开文件路径
      * @return 打开文件路径
@@ -164,6 +166,8 @@ public:
     void scrollDown();
     void duplicateLine();
     void copyLines();
+
+    //剪切选中行或当前行至剪贴板中
     void cutlines();
 
     /**
@@ -499,6 +503,19 @@ public slots:
     void fingerZoom(QString name, QString direction, int fingers);
     void cursorPositionChanged();
 
+    //剪切槽函数
+    void cut();
+    //复制槽函数
+    void copy();
+    //粘贴槽函数
+    void paste();
+    //修改后，高亮显示
+    void highlight();
+    //选中视口中可见的文本
+    void selectTextInView();
+    //设置"全部选中"(全选槽函数)
+    void setSelectAll();
+
 protected:
     bool event(QEvent *evt) override;   //触摸屏event事件
     void dragEnterEvent(QDragEnterEvent *event) override;
@@ -513,6 +530,7 @@ protected:
     bool eventFilter(QObject *object, QEvent *event) override;
     void contextMenuEvent(QContextMenuEvent *event) override;
     void paintEvent(QPaintEvent *e) override;
+    void resizeEvent(QResizeEvent *e) override;
 
 private:
     void unCommentSelection();
@@ -762,6 +780,8 @@ private:
 
     bool m_bIsFindClose = false;///< 关闭查找框事件是否发生
     QString m_qstrTruePath;///< 源文件路径
+
+    bool m_isSelectAll;
 
 private:
     LeftAreaTextEdit *m_pLeftAreaWidget = nullptr;

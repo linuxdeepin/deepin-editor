@@ -136,102 +136,18 @@ Window::Window(DMainWindow *parent)
     connect(this, &Window::pressEsc, m_jumpLineBar, &JumpLineBar::pressEsc, Qt::QueuedConnection);
 
     // Init settings.
-    connect(m_settings, &Settings::sigAdjustFont, this, [this](QString fontName) {
-        for (EditWrapper *wrapper : m_wrappers.values()) {
-            wrapper->textEditor()->setFontFamily(fontName);
-        }
-    });
-
-    connect(m_settings, &Settings::sigAdjustFontSize, this, [this](int size) {
-        for (EditWrapper *wrapper : m_wrappers.values()) {
-            wrapper->textEditor()->setFontSize(size);
-            wrapper->OnUpdateHighlighter();
-        }
-
-        m_fontSize = size;
-    });
-
-    connect(m_settings, &Settings::sigAdjustTabSpaceNumber, this, [this](int number) {
-        for (EditWrapper *wrapper : m_wrappers.values()) {
-            wrapper->textEditor()->setTabSpaceNumber(number);
-        }
-    });
-
-    connect(m_settings, &Settings::sigThemeChanged, this, [](const QString & path) {
-        QString strLightTheme = "/usr/share/deepin-editor/themes/deepin.theme";
-        QString strDarkTheme = "/usr/share/deepin-editor/themes/deepin_dark.theme";
-
-        if (path == strLightTheme) {
-            if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
-                return;
-            } else {
-                DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::LightType);
-                //DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::LightType);
-            }
-        } else if (path == strDarkTheme) {
-            if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType) {
-                return;
-            } else {
-                DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::DarkType);
-                //DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::DarkType);
-            }
-        }
-    });
-
-
-    connect(m_settings, &Settings::sigAdjustWordWrap, this, [ = ](bool enable) {
-        for (EditWrapper *wrapper : m_wrappers.values()) {
-            TextEdit *textedit = wrapper->textEditor();
-            textedit->setLineWrapMode(enable);
-        }
-    });
-
-    connect(m_settings, &Settings::sigSetLineNumberShow, this, [ = ](bool bIsShow) {
-        for (EditWrapper *wrapper : m_wrappers.values()) {
-            wrapper->setLineNumberShow(bIsShow);
-        }
-    });
-
-    connect(m_settings, &Settings::sigAdjustBookmark, this, [ = ](bool bIsShow) {
-        for (EditWrapper *wrapper : m_wrappers.values()) {
-            TextEdit *textedit = wrapper->textEditor();
-            textedit->setBookmarkFlagVisable(bIsShow);
-        }
-    });
-
-    //添加显示空白符 梁卫东　２０２０－０８－１４　１５：２６：３２
-    connect(m_settings, &Settings::sigShowBlankCharacter, this, [ = ](bool bIsShow) {
-        for (EditWrapper *wrapper : m_wrappers.values()) {
-            wrapper->setShowBlankCharacter(bIsShow);
-        }
-    });
-
-    //setHighLineCurrentLine
-    connect(m_settings, &Settings::sigHightLightCurrentLine, this, [ = ](bool bIsShow) {
-        for (EditWrapper *wrapper : m_wrappers.values()) {
-            wrapper->textEditor()->setHighLineCurrentLine(bIsShow);
-        }
-    });
-
-    connect(m_settings, &Settings::sigShowCodeFlodFlag, this, [ = ](bool enable) {
-        for (EditWrapper *wrapper : m_wrappers.values()) {
-            TextEdit *textedit = wrapper->textEditor();
-            textedit->setCodeFlodFlagVisable(enable);
-        }
-    });
-
-    #if 0
-    connect(m_settings, &Settings::sigChangeWindowSize, this, [ = ](QString mode) {
-        if (mode == "fullscreen") {
-            this->showFullScreen();
-        } else if (mode == "window_maximum") {
-            this->showNormal();
-            this->showMaximized();
-        } else {
-            this->showNormal();
-        }
-    });
-    #endif
+    connect(m_settings, &Settings::sigAdjustFont, this, &Window::slotSigAdjustFont);
+    connect(m_settings, &Settings::sigAdjustFontSize, this, &Window::slotSigAdjustFontSize);
+    connect(m_settings, &Settings::sigAdjustTabSpaceNumber, this, &Window::slotSigAdjustTabSpaceNumber);
+    connect(m_settings, &Settings::sigThemeChanged, this, &Window::slotSigThemeChanged);
+    connect(m_settings, &Settings::sigAdjustWordWrap, this, &Window::slotSigAdjustWordWrap);
+    connect(m_settings, &Settings::sigSetLineNumberShow, this, &Window::slotSigSetLineNumberShow);
+    connect(m_settings, &Settings::sigAdjustBookmark, this, &Window::slotSigAdjustBookmark);
+    connect(m_settings, &Settings::sigShowBlankCharacter, this, &Window::slotSigShowBlankCharacter);
+    connect(m_settings, &Settings::sigHightLightCurrentLine, this, &Window::slotSigHightLightCurrentLine);
+    connect(m_settings, &Settings::sigShowCodeFlodFlag, this, &Window::slotSigShowCodeFlodFlag);
+    /* 设置页面里窗口模式的设置是针对新创建窗口的设置，本窗口不需要实时响应，暂且屏蔽此信号的绑定 */
+    //connect(m_settings, &Settings::sigChangeWindowSize, this, &Window::slotSigChangeWindowSize);
 
     // Init layout and editor.
     m_centralLayout->setMargin(0);
@@ -247,7 +163,10 @@ Window::Window(DMainWindow *parent)
     //int window_height =Settings::instance()->settings->option("advance.window.window_height")->value().toInt();
     //resize(window_width,window_height);
     #endif
-    
+
+    //设置函数最大化或者正常窗口的初始化　2021.4.26 ut002764 lxp   fix bug:74774
+    showCenterWindow(true);
+
     // Init find bar.
     connect(m_findBar, &FindBar::findNext, this, &Window::handleFindNextSearchKeyword, Qt::QueuedConnection);
     connect(m_findBar, &FindBar::findPrev, this, &Window::handleFindPrevSearchKeyword, Qt::QueuedConnection);
@@ -444,7 +363,7 @@ void Window::initTitlebar()
     m_menu->addAction(replaceAction);
     m_menu->addAction(saveAction);
     m_menu->addAction(saveAsAction);
-	//此接口不可删除，预留的编辑器内部主题选择接口
+    //此接口不可删除，预留的编辑器内部主题选择接口
     //m_menu->addAction(switchThemeAction);
     m_menu->addSeparator();
     m_menu->addAction(settingAction);
@@ -772,7 +691,7 @@ bool Window::closeTab()
 
     if (isDraftFile) {
         if (isModified) {
-            DDialog *dialog = createDialog(tr("Do you want to save as another?"), "");
+            DDialog *dialog = createDialog(tr("Do you want to save this file?"), "");
             int res = dialog->exec();
 
             //取消或关闭弹窗不做任务操作
@@ -894,7 +813,7 @@ EditWrapper *Window::createEditor()
     connect(wrapper->textEditor(), &TextEdit::clickFullscreenAction, this, &Window::toggleFullscreen, Qt::QueuedConnection);
     #endif
     connect(wrapper->textEditor(), &TextEdit::popupNotify, this, &Window::showNotify, Qt::QueuedConnection);
-    connect(wrapper->textEditor(), &TextEdit::textChanged, this, [=](){
+    connect(wrapper->textEditor(), &TextEdit::textChanged, this, [ = ]() {
         updateJumpLineBar(wrapper->textEditor());
     }, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::sigHideVirtualKeyboard, this, [=]() {
@@ -1111,10 +1030,10 @@ bool Window::saveFile()
         return true;
     } else {
         DDialog *dialog = createDialog(tr("Do you want to save as another?"), "");
-        wrapperEdit->setUpdatesEnabled(false);
-        int mode =  dialog->exec();
+        //wrapperEdit->setUpdatesEnabled(false);
         wrapperEdit->setUpdatesEnabled(true);
         wrapperEdit->hideWarningNotices();
+        int mode =  dialog->exec();
 		//dialog->deleteLater();
 		//dialog = nullptr;
 
@@ -2002,7 +1921,7 @@ void Window::setChildrenFocus(bool ok)
     }
 	#endif
 
-    if(ok){
+    if (ok) {
         DIconButton *addButton = m_tabbar->findChild<DIconButton *>("AddButton");
         DToolButton *pToolBtn = titlebar()->findChild<DToolButton *>("TitleFindToolButton");
         DIconButton *optionBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowOptionButton");
@@ -2012,13 +1931,13 @@ void Window::setChildrenFocus(bool ok)
         DIconButton *closeBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowCloseButton");
 
         titlebar()->setFocusPolicy(Qt::TabFocus);
-        if(addButton) addButton->setFocusPolicy(Qt::TabFocus);
-        if(pToolBtn) pToolBtn->setFocusPolicy(Qt::TabFocus);
-        if(optionBtn) optionBtn->setFocusPolicy(Qt::TabFocus);
-        if(minBtn) minBtn->setFocusPolicy(Qt::TabFocus);
-        if(quitFullBtn) quitFullBtn->setFocusPolicy(Qt::TabFocus);
-        if(maxBtn) maxBtn->setFocusPolicy(Qt::TabFocus);
-        if(closeBtn) closeBtn->setFocusPolicy(Qt::TabFocus);
+        if (addButton) addButton->setFocusPolicy(Qt::TabFocus);
+        if (pToolBtn) pToolBtn->setFocusPolicy(Qt::TabFocus);
+        if (optionBtn) optionBtn->setFocusPolicy(Qt::TabFocus);
+        if (minBtn) minBtn->setFocusPolicy(Qt::TabFocus);
+        if (quitFullBtn) quitFullBtn->setFocusPolicy(Qt::TabFocus);
+        if (maxBtn) maxBtn->setFocusPolicy(Qt::TabFocus);
+        if (closeBtn) closeBtn->setFocusPolicy(Qt::TabFocus);
 
         setTabOrder(addButton, pToolBtn);
         setTabOrder(pToolBtn, optionBtn);
@@ -2026,7 +1945,7 @@ void Window::setChildrenFocus(bool ok)
         setTabOrder(minBtn, quitFullBtn);
         setTabOrder(quitFullBtn, maxBtn);
         setTabOrder(maxBtn, closeBtn);
-    }else {
+    } else {
         DIconButton *addButton = m_tabbar->findChild<DIconButton *>("AddButton");
         DToolButton *pToolBtn = titlebar()->findChild<DToolButton *>("TitleFindToolButton");
         DIconButton *optionBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowOptionButton");
@@ -2036,13 +1955,13 @@ void Window::setChildrenFocus(bool ok)
         DIconButton *closeBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowCloseButton");
 
         titlebar()->setFocusPolicy(Qt::NoFocus);
-        if(addButton) addButton->setFocusPolicy(Qt::NoFocus);
-        if(pToolBtn) pToolBtn->setFocusPolicy(Qt::NoFocus);
-        if(optionBtn) optionBtn->setFocusPolicy(Qt::NoFocus);
-        if(minBtn) minBtn->setFocusPolicy(Qt::NoFocus);
-        if(quitFullBtn) quitFullBtn->setFocusPolicy(Qt::NoFocus);
-        if(maxBtn) maxBtn->setFocusPolicy(Qt::NoFocus);
-        if(closeBtn) closeBtn->setFocusPolicy(Qt::NoFocus);
+        if (addButton) addButton->setFocusPolicy(Qt::NoFocus);
+        if (pToolBtn) pToolBtn->setFocusPolicy(Qt::NoFocus);
+        if (optionBtn) optionBtn->setFocusPolicy(Qt::NoFocus);
+        if (minBtn) minBtn->setFocusPolicy(Qt::NoFocus);
+        if (quitFullBtn) quitFullBtn->setFocusPolicy(Qt::NoFocus);
+        if (maxBtn) maxBtn->setFocusPolicy(Qt::NoFocus);
+        if (closeBtn) closeBtn->setFocusPolicy(Qt::NoFocus);
     }
 }
 
@@ -2404,13 +2323,13 @@ void Window::slotLoadContentTheme(DGuiApplicationHelper::ColorType themeType)
     QString strFindToolPath(":/images/find_");
     if (themeType == DGuiApplicationHelper::ColorType::LightType) {
         strFindToolPath = strFindToolPath + "light.svg";
-        loadTheme("/usr/share/deepin-editor/themes/deepin.theme");
+        loadTheme(DEEPIN_THEME);
         if (DGuiApplicationHelper::instance()->paletteType() == DGuiApplicationHelper::ColorType::UnknownType) {
             DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::ColorType::UnknownType);
         }
     } else if (themeType == DGuiApplicationHelper::ColorType::DarkType) {
         strFindToolPath = strFindToolPath + "dark.svg";
-        loadTheme("/usr/share/deepin-editor/themes/deepin_dark.theme");
+        loadTheme(DEEPIN_DARK_THEME);
         if (DGuiApplicationHelper::instance()->paletteType() == DGuiApplicationHelper::ColorType::UnknownType) {
             DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::ColorType::UnknownType);
         }
@@ -2432,22 +2351,17 @@ void Window::slotLoadContentTheme(DGuiApplicationHelper::ColorType themeType)
 
 void Window::slotSettingResetTheme(const QString &path)
 {
-    QString strLightTheme = "/usr/share/deepin-editor/themes/deepin.theme";
-    QString strDarkTheme = "/usr/share/deepin-editor/themes/deepin_dark.theme";
-
-    if (path == strLightTheme) {
+    if (path == DEEPIN_THEME) {
         if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
             return;
         } else {
             DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::LightType);
-            //DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::LightType);
         }
-    } else if (path == strDarkTheme) {
+    } else if (path == DEEPIN_DARK_THEME) {
         if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType) {
             return;
         } else {
             DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::DarkType);
-            //DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::DarkType);
         }
     }
 }
@@ -2471,7 +2385,7 @@ void Window::slot_beforeReplace(QString _)
 void Window::slot_setTitleFocus()
 {
     QMap<QString, EditWrapper *>::Iterator it = m_wrappers.begin();
-    for(;it != m_wrappers.end();it++){
+    for (; it != m_wrappers.end(); it++) {
         it.value()->bottomBar()->setChildrenFocus(true);
     }
 
@@ -2552,6 +2466,104 @@ void Window::slotVirtualKeyboardImActiveChanged(bool bActiove)
 int Window::getDesktopAvailableHeight()
 {
     return m_iDesktopAvailableHeight;
+}
+
+void Window::slotSigThemeChanged(const QString &path)
+{
+    if (path == DEEPIN_THEME) {
+        if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::LightType) {
+            return;
+        } else {
+            DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::LightType);
+        }
+    } else if (path == DEEPIN_DARK_THEME) {
+        if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType) {
+            return;
+        } else {
+            DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::DarkType);
+        }
+    }
+}
+
+void Window::slotSigAdjustFont(QString fontName)
+{
+    for (EditWrapper *wrapper : m_wrappers.values()) {
+        wrapper->textEditor()->setFontFamily(fontName);
+    }
+}
+
+void Window::slotSigAdjustFontSize(int fontSize)
+{
+    for (EditWrapper *wrapper : m_wrappers.values()) {
+        wrapper->textEditor()->setFontSize(fontSize);
+        wrapper->OnUpdateHighlighter();
+    }
+
+    m_fontSize = fontSize;
+}
+
+void Window::slotSigAdjustTabSpaceNumber(int number)
+{
+    for (EditWrapper *wrapper : m_wrappers.values()) {
+        wrapper->textEditor()->setTabSpaceNumber(number);
+    }
+}
+
+void Window::slotSigAdjustWordWrap(bool enable)
+{
+    for (EditWrapper *wrapper : m_wrappers.values()) {
+        TextEdit *textedit = wrapper->textEditor();
+        textedit->setLineWrapMode(enable);
+    }
+}
+
+void Window::slotSigSetLineNumberShow(bool bIsShow)
+{
+    for (EditWrapper *wrapper : m_wrappers.values()) {
+        wrapper->setLineNumberShow(bIsShow);
+    }
+}
+
+void Window::slotSigAdjustBookmark(bool bIsShow)
+{
+    for (EditWrapper *wrapper : m_wrappers.values()) {
+        TextEdit *textedit = wrapper->textEditor();
+        textedit->setBookmarkFlagVisable(bIsShow);
+    }
+}
+
+void Window::slotSigShowBlankCharacter(bool bIsShow)
+{
+    for (EditWrapper *wrapper : m_wrappers.values()) {
+        wrapper->setShowBlankCharacter(bIsShow);
+    }
+}
+
+void Window::slotSigHightLightCurrentLine(bool bIsShow)
+{
+    for (EditWrapper *wrapper : m_wrappers.values()) {
+        wrapper->textEditor()->setHighLineCurrentLine(bIsShow);
+    }
+}
+
+void Window::slotSigShowCodeFlodFlag(bool bIsShow)
+{
+    for (EditWrapper *wrapper : m_wrappers.values()) {
+        TextEdit *textedit = wrapper->textEditor();
+        textedit->setCodeFlodFlagVisable(bIsShow);
+    }
+}
+
+void Window::slotSigChangeWindowSize(QString mode)
+{
+    if (mode == "fullscreen") {
+        this->showFullScreen();
+    } else if (mode == "window_maximum") {
+        this->showNormal();
+        this->showMaximized();
+    } else {
+        this->showNormal();
+    }
 }
 
 void Window::handleFocusWindowChanged(QWindow *w)
@@ -2682,7 +2694,7 @@ void Window::hideEvent(QHideEvent *event)
     //如果替换浮窗正显示着，则隐藏
     #if 0
     if (m_replaceBar->isVisible()) {
-      //  m_replaceBar->hide();
+        //m_replaceBar->hide();
         if (currentWrapper() != nullptr) {
             currentWrapper()->m_bottomBar->show();
         }
@@ -2783,14 +2795,16 @@ void Window::keyPressEvent(QKeyEvent *e)
 void Window::keyReleaseEvent(QKeyEvent *keyEvent)
 {
     if ((keyEvent->modifiers() | Qt::ShiftModifier) || (keyEvent->modifiers() | Qt::ControlModifier)) {
-//        if (nullptr != m_shortcutViewProcess) {
-//            int count = Utils::getProcessCountByName("deepin-shortcut-viewer");
-//            if (count > 0) {
-//                Utils::killProcessByName("deepin-shortcut-viewer");
-//            }
-//            delete (m_shortcutViewProcess);
-//            m_shortcutViewProcess = nullptr;
-//        }
+        #if 0
+        if (nullptr != m_shortcutViewProcess) {
+            int count = Utils::getProcessCountByName("deepin-shortcut-viewer");
+            if (count > 0) {
+                Utils::killProcessByName("deepin-shortcut-viewer");
+            }
+            delete (m_shortcutViewProcess);
+            m_shortcutViewProcess = nullptr;
+        }
+	#endif
     }
 }
 
@@ -2809,7 +2823,6 @@ void Window::dropEvent(QDropEvent *event)
     if (mimeData->hasUrls()) {
         QStringList supportfileNames;
         QStringList otherfiles;
-
         for (auto url : mimeData->urls()) {
             QString file = url.toLocalFile();
             if (Utils::isMimeTypeSupport(file)) {
@@ -2830,6 +2843,7 @@ void Window::dropEvent(QDropEvent *event)
         }
     }
 }
+
 bool Window::findBarIsVisiable()
 {
     if (m_findBar->isVisible()) {

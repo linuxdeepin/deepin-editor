@@ -49,6 +49,7 @@ EditWrapper::EditWrapper(Window *window, QWidget *parent)
       m_pWaringNotices(new WarningNotices(WarningNotices::ResidentType, this))
 
 {
+    m_bQuit = false;
     m_pWaringNotices->hide();
     // Init layout and widgets.
     QHBoxLayout *m_layout = new QHBoxLayout;
@@ -103,6 +104,11 @@ EditWrapper::~EditWrapper()
 void EditWrapper::setQuitFlag()
 {
     m_bQuit = true;
+}
+
+bool EditWrapper::isQuit()
+{
+    return m_bQuit;
 }
 
 bool EditWrapper::getFileLoading()
@@ -255,14 +261,16 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
         if (res == 0) return false;
 
         //不保存,重写载入
+	#if 0
         if (res == 1) {
             bool ok = readFile(encode);
             //if(ok && m_sCurEncode != m_sFirstEncode) m_pTextEdit->setTabbarModified(true);
             return ok;
         }
+	#endif
 
         //保存
-        if (res == 2) {
+        if (res == 1) {
             //草稿文件
             if (Utils::isDraftFile(m_pTextEdit->getFilePath())) {
                 if (saveDraftFile()) return readFile(encode);
@@ -902,7 +910,7 @@ void EditWrapper::loadContent(const QByteArray &content)
         for (int i = 0; i < cnt; i++) {
             //初始化秒开
             if (i == 0 && !m_bQuit) {
-                data = strContent.mid(i * step, InitContentPos);
+                data = strContent.mid(i * step, step);
                 cursor.insertText(data);
                 QTextCursor firstLineCursor = m_pTextEdit->textCursor();
                 firstLineCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);

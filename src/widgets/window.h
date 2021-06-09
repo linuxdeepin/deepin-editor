@@ -208,6 +208,17 @@ public slots:
     //清除不支持双字节字符集符号
     void slotClearDoubleCharaterEncode();
     void slotVirtualKeyboardImActiveChanged(bool bActiove);
+    void slotSigThemeChanged(const QString &path);
+    void slotSigAdjustFont(QString fontName);
+    void slotSigAdjustFontSize(int fontSize);
+    void slotSigAdjustTabSpaceNumber(int number);
+    void slotSigAdjustWordWrap(bool enable);
+    void slotSigSetLineNumberShow(bool bIsShow);
+    void slotSigAdjustBookmark(bool bIsShow);
+    void slotSigShowBlankCharacter(bool bIsShow);
+    void slotSigHightLightCurrentLine(bool bIsShow);
+    void slotSigShowCodeFlodFlag(bool bIsShow);
+    void slotSigChangeWindowSize(QString mode);
 
 private:
     void handleFocusWindowChanged(QWindow *w);
@@ -215,9 +226,9 @@ private:
     void checkTabbarForReload();
     void clearPrintTextDocument();
 
-    // tablet features init
+    /* tablet features init */
     void initTabletFeatures();
-    // Virtual keyboard dbus connnecttion initialization.
+    /* Virtual keyboard dbus connnecttion initialization. */
     void initVirtualKeyboardDbus();
     void setKeyboardHeight(int iKeyboardHeight);
     int  getKeyboardHeight();
@@ -231,12 +242,12 @@ protected:
     #ifdef TABLET
     void dragEnterEvent(QDragEnterEvent *e) override;
     #endif
-    void resizeEvent(QResizeEvent* event) override;
+    void resizeEvent(QResizeEvent *event) override;
     void closeEvent(QCloseEvent *event) override;
     void hideEvent(QHideEvent *event) override;
     void keyPressEvent(QKeyEvent *keyEvent) override;
     void keyReleaseEvent(QKeyEvent *keyEvent) override;
-    void dropEvent(QDropEvent* event) override;
+    void dropEvent(QDropEvent *event) override;
 
 private:
     DBusDaemon::dbus *m_rootSaveDBus;
@@ -291,7 +302,7 @@ private:
     //判断是否是新的打印文档
     bool m_isNewPrint = false;
 	
-	//virtual keyboard due-im
+    //virtual keyboard due-im
     ComDeepinImInterface *m_pImInterface {nullptr};
     int m_iKeyboardHeight {0};
     int m_iDesktopAvailableHeight {0};
