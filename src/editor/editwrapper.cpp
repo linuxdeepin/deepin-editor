@@ -261,11 +261,13 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
         if (res == 0) return false;
 
         //不保存,重写载入
-//        if (res == 1) {
-//            bool ok = readFile(encode);
-//            //if(ok && m_sCurEncode != m_sFirstEncode) m_pTextEdit->setTabbarModified(true);
-//            return ok;
-//        }
+	#if 0
+        if (res == 1) {
+            bool ok = readFile(encode);
+            //if(ok && m_sCurEncode != m_sFirstEncode) m_pTextEdit->setTabbarModified(true);
+            return ok;
+        }
+	#endif
 
         //保存
         if (res == 1) {

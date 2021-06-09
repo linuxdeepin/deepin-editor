@@ -59,7 +59,6 @@ void InsertTextUndoCommand::undo()
 
 void InsertTextUndoCommand::redo()
 {
-
     if (m_ColumnEditSelections.isEmpty()) {
         if (m_textCursor.hasSelection()) {
             m_selectText = m_textCursor.selectedText();
@@ -83,5 +82,4 @@ void InsertTextUndoCommand::redo()
             m_ColumnEditSelections[i].cursor.movePosition(QTextCursor::Left, QTextCursor::KeepAnchor, m_sInsertText.length());
         }
     }
-
 }

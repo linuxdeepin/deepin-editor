@@ -216,7 +216,6 @@ TEST_F(test_tabbar, setDNDColor)
 //bool eventFilter(QObject *, QEvent *event);
 TEST_F(test_tabbar, eventFilter)
 {
-
     Tabbar * tab = new Tabbar();
     tab->addTab("/.cache/deepin/deepin-editor","aa");
     QMouseEvent *e = new QMouseEvent(QEvent::MouseButtonPress,QPointF(76,29),Qt::RightButton,Qt::RightButton,Qt::NoModifier);
@@ -245,6 +244,7 @@ TEST_F(test_tabbar, maximumTabSizeHint)
 {
     Tabbar * tab = new Tabbar();
     tab->addTab("/.cache/deepin/deepin-editor","aa");
+    QEvent *a;
     tab->maximumTabSizeHint(0);
 
     tab->deleteLater();

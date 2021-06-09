@@ -32,7 +32,6 @@
 #include "replaceallcommond.h"
 #include "insertblockbytextcommond.h"
 
-
 #include <KF5/KSyntaxHighlighting/definition.h>
 #include <KF5/KSyntaxHighlighting/syntaxhighlighter.h>
 #include <KF5/KSyntaxHighlighting/theme.h>
@@ -1571,7 +1570,7 @@ void TextEdit::killLine()
         // Join next line if current line is empty or cursor at end of line.
         if (isEmptyLine || textCursor().atBlockEnd()) {
             //fixed bug 80435  ut002764  刪除到尾后，光标设置到下一个字符
-//            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
+            //cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
             cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
             deleteSelectTextEx(cursor);
         }
@@ -1612,15 +1611,15 @@ void TextEdit::killCurrentLine()
     cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
 
     //因为删除整行之后，如果后面没有内容了，则不在删除，光标前面不会删除；
-//    QString text = cursor.selectedText();
-//    bool isBlankLine = text.trimmed().size() == 0;
+    //QString text = cursor.selectedText();
+    //bool isBlankLine = text.trimmed().size() == 0;
 
     //cursor.removeSelectedText();
     deleteSelectTextEx(cursor);
-//    if (isBlankLine) {
-//        //cursor.deleteChar();
-//        deleteTextEx(cursor);
-//    }
+    //if (isBlankLine) {
+    //cursor.deleteChar();
+    //deleteTextEx(cursor);
+    //}
 
     //setTextCursor(cursor);
 }
@@ -2599,7 +2598,6 @@ void TextEdit::setHighLineCurrentLine(bool ok)
 
 void TextEdit::updateLeftAreaWidget()
 {
-
     int blockSize = QString::number(blockCount()).size();
     int leftAreaWidth = 0;
 
@@ -5035,7 +5033,7 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                     m_flodCurrentLevel->setEnabled(false);
                 }
 				
-				//展开/折叠所有层次后，对应的菜单项置灰
+		//展开/折叠所有层次后，对应的菜单项置灰
                 if (m_listMainFlodAllPos.count() == 0) {
                     m_unflodAllLevel->setEnabled(false);
                 } else {
@@ -5147,7 +5145,6 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
             renderAllSelections();
             return true;
         }
-
     } else if (event->type() == QEvent::MouseButtonDblClick) {
         m_bIsDoubleClick = true;
         m_bBeforeIsDoubleClick = true;

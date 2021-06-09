@@ -49,8 +49,8 @@ StartManager *StartManager::instance()
 StartManager::StartManager(QObject *parent)
     : QObject(parent)
 {
-	//m_bIsDragEnter = false;
-    // Create blank directory if it not exist.
+    //m_bIsDragEnter = false;
+    //Create blank directory if it not exist.
 
     initBlockShutdown();
 
