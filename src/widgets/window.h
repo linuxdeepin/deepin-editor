@@ -230,6 +230,7 @@ private:
     void initTabletFeatures();
     /* Virtual keyboard dbus connnecttion initialization. */
     void initVirtualKeyboardDbus();
+    void updateWindowWidthHightValue();
     void setKeyboardHeight(int iKeyboardHeight);
     int  getKeyboardHeight();
     void setDesktopAvailableHeight(int iHeight);

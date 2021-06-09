@@ -428,6 +428,7 @@ void Window::initTabletFeatures()
 {
     //平板模式，窗口不需要圆角
     setWindowRadius(0);
+    updateWindowWidthHightValue();
 
     initVirtualKeyboardDbus();
     if (/*DGuiApplicationHelper::isTabletEnvironment()*/1) {
@@ -448,12 +449,6 @@ void Window::initTabletFeatures()
 *******************************************************************************/
 void Window::initVirtualKeyboardDbus()
 {
-    QDesktopWidget *pDesktopWidget = QApplication::desktop();
-    int iDesktopAvailHeight = pDesktopWidget->availableGeometry().size().height();
-    int iDesktopAvailWidth  = pDesktopWidget->availableGeometry().size().width();
-    setDesktopAvailableHeight(iDesktopAvailHeight);
-    setDesktopAvailableWidth(iDesktopAvailWidth);
-
     m_pImInterface = new ComDeepinImInterface("com.deepin.im",
                                               "/com/deepin/im",
                                                QDBusConnection::sessionBus(),
@@ -463,6 +458,15 @@ void Window::initVirtualKeyboardDbus()
     QVariant variant = m_pImInterface->geometry();
     setKeyboardHeight(variant.value<QRect>().height());
     connect(m_pImInterface, &ComDeepinImInterface::imActiveChanged, this, &Window::slotVirtualKeyboardImActiveChanged);
+}
+
+void Window::updateWindowWidthHightValue()
+{
+    QDesktopWidget *pDesktopWidget = QApplication::desktop();
+    int iDesktopAvailHeight = pDesktopWidget->availableGeometry().size().height();
+    int iDesktopAvailWidth  = pDesktopWidget->availableGeometry().size().width();
+    setDesktopAvailableHeight(iDesktopAvailHeight);
+    setDesktopAvailableWidth(iDesktopAvailWidth);
 }
 
 /*******************************************************************************
@@ -2610,6 +2614,8 @@ void Window::checkTabbarForReload()
 
 void Window::resizeEvent(QResizeEvent *e)
 {
+    updateWindowWidthHightValue();
+
     if (m_themePanel->isVisible()) {
         updateThemePanelGeomerty();
     }
