@@ -293,6 +293,11 @@ void Window::updateSaveAsFileName(QString strOldFilePath, QString strNewFilePath
     m_tabbar->updateTab(tabIndex, strNewFilePath, QFileInfo(strNewFilePath).fileName());
     wrapper->updatePath(strNewFilePath);
     m_wrappers.remove(strOldFilePath);
+
+    if(m_wrappers.find(strNewFilePath)!=m_wrappers.end()){
+        closeTab(strNewFilePath);
+    }
+
     m_wrappers.insert(strNewFilePath, wrapper);
 }
 
@@ -536,6 +541,11 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
 bool Window::closeTab()
 {
     const QString &filePath = m_tabbar->currentPath();
+    return closeTab(filePath);
+}
+
+bool Window::closeTab(const QString &filePath)
+{
     EditWrapper *wrapper = m_wrappers.value(filePath);
 
     if (m_reading_list.contains(currentWrapper()->textEditor())) {
@@ -660,6 +670,7 @@ bool Window::closeTab()
 
     return true;
 }
+
 
 void Window::restoreTab()
 {
