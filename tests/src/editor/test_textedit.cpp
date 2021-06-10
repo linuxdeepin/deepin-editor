@@ -47,7 +47,14 @@ TEST_F(test_textedit, TextEdit)
     startManager->setSettings(s);
     startManager->setWrapper(ee);
 
-    assert(1 == 1);
+
+    Window* window = new Window;
+    EditWrapper *wrapper = window->createEditor();
+    TextEdit * edit = wrapper->textEditor();
+    delete edit;edit = nullptr;
+
+    assert(1==1);
+
 }
 
 //getCurrentLine
