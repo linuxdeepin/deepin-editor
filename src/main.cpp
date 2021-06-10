@@ -49,6 +49,10 @@ int main(int argc, char *argv[])
     using namespace Dtk::Core;
 
     PerformanceMonitor::initializeAppStart();
+    if (!QString(qgetenv("XDG_CURRENT_DESKTOP")).toLower().startsWith("deepin")) {
+
+        setenv("XDG_CURRENT_DESKTOP", "Deepin", 1);
+    }
 
     qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
     QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
