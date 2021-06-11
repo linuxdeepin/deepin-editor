@@ -36,6 +36,7 @@
 #include <KF5/KSyntaxHighlighting/definition.h>
 #include <KF5/KSyntaxHighlighting/syntaxhighlighter.h>
 #include <KF5/KSyntaxHighlighting/theme.h>
+#include <com_deepin_daemon_inputdevices.h>
 
 #include <QAbstractTextDocumentLayout>
 #include <QTextDocumentFragment>
@@ -104,6 +105,13 @@ TextEdit::TextEdit(QWidget *parent)
     grabGesture(Qt::SwipeGesture);
     grabGesture(Qt::PanGesture);
     grabGesture(Qt::PinchGesture);
+
+
+    __InputDevices* inputDevices = new __InputDevices("com.deepin.daemon.InputDevices","/com/deepin/daemon/InputDevices",QDBusConnection::sessionBus(),this);
+    connect(inputDevices,&__InputDevices::WheelSpeedChanged,this,[&](uint s){
+        if(s>0)
+            this->verticalScrollBar()->setSingleStep(s);
+    });
 
     // Init widgets.
     //左边栏控件　滑动条滚动跟新行号 折叠标记
