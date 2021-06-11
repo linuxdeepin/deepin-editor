@@ -136,27 +136,52 @@ TEST_F(test_window, changeSettingDialogComboxFontNumber)
 TEST_F(test_window, popupFindBar)
 {
     Window * window1 = new Window();
+    EditWrapper *pEditWrapper = new EditWrapper();
+    window1->addTabWithWrapper(pEditWrapper, "aa", "aad", "aadd", 0);
+    window1->addBlankTab();
+    window1->currentWrapper()->textEditor()->setPlainText(QString("12345"));
+    window1->popupFindBar();
+
+    window1->currentWrapper()->textEditor()->document()->clear();
     window1->popupFindBar();
 
     assert(1==1);
 }
+
 //popupReplaceBar
 TEST_F(test_window, popupReplaceBar)
 {
     Window * window1 = new Window();
+    EditWrapper *pEditWrapper = new EditWrapper();
+    window1->addTabWithWrapper(pEditWrapper, "aa", "aad", "aadd", 0);
+    window1->addBlankTab();
+    window1->currentWrapper()->textEditor()->setPlainText(QString("12345"));
+    window1->popupReplaceBar();
+
+    window1->currentWrapper()->textEditor()->document()->clear();
     window1->popupReplaceBar();
 
     assert(1==1);
 }
+
 //popupJumpLineBar
 TEST_F(test_window, popupJumpLineBar)
 {
     Window * window1 = new Window();
     window1->popupJumpLineBar();
 
+    EditWrapper *pEditWrapper = new EditWrapper();
+    window1->addTabWithWrapper(pEditWrapper, "aa", "aad", "aadd", 0);
+    window1->addBlankTab();
+    window1->currentWrapper()->textEditor()->setPlainText(QString("12345"));
+    window1->popupJumpLineBar();
+
+    window1->currentWrapper()->textEditor()->document()->clear();
+    window1->popupJumpLineBar();
 
     assert(1==1);
 }
+
 //updateJumpLineBar
 TEST_F(test_window, updateJumpLineBar)
 {
@@ -166,6 +191,7 @@ TEST_F(test_window, updateJumpLineBar)
 
     assert(1==1);
 }
+
 //popupSettingsDialog
 TEST_F(test_window, popupSettingsDialog)
 {

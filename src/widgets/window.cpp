@@ -1097,7 +1097,6 @@ void Window::setFontSizeWithConfig(EditWrapper *wrapper)
     m_fontSize = size;
 }
 
-
 void Window::popupFindBar()
 {
     #if 0
@@ -1164,15 +1163,10 @@ void Window::popupReplaceBar()
         currentWrapper()->textEditor()->setCursorStart(cursor.selectionStart());
     }
 
-
     if (bIsReadOnly) {
         showNotify(tr("Read-Only mode is on"));
         return;
     }
-
-//    if (curWrapper->textEditor()->toPlainText().isEmpty()) {
-//        return;
-//    }
 
     currentWrapper()->bottomBar()->updateSize(m_replaceBar->height() + 8, true);
 

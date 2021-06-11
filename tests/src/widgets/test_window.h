@@ -1,11 +1,12 @@
 #ifndef TEST_WINDOW_H
 #define TEST_WINDOW_H
 #include "gtest/gtest.h"
-#include"../../src/editor/editwrapper.h"
-#include"../../src/widgets/window.h"
-#include"../../src/startmanager.h"
-#include"../../src/editor/dtextedit.h"
-#include"../stub.h"
+#include "../../src/editor/editwrapper.h"
+#include "../../src/widgets/window.h"
+#include "../../src/startmanager.h"
+#include "../../src/editor/dtextedit.h"
+#include "../stub.h"
+#include "../../src/controls/replacebar.h"
 #include <QObject>
 #include<QWindow>
 #include<QEvent>
