@@ -317,6 +317,7 @@ void Window::showCenterWindow(bool bIsCenter)
         m_needMoveToCenter = true;
     } else if (windowState == "fullscreen"){
         showFullScreen();
+        this->move(0,0);
         m_needMoveToCenter = true;
     } else {
         showNormal();
