@@ -16,6 +16,7 @@ TEST_F(test_codeflodarea, BookMarkWidget)
 
 TEST_F(test_codeflodarea, paintEvent)
 {
+#if 0
     Window* window = new Window;
     EditWrapper *wrapper = window->createEditor();
     TextEdit * edit = wrapper->textEditor();
@@ -23,6 +24,7 @@ TEST_F(test_codeflodarea, paintEvent)
     auto l = edit->getLeftAreaWidget();
     CodeFlodArea area(l);
     QPaintEvent* e = new QPaintEvent(area.rect());
-   // area.paintEvent(e);
-   // area.m_pLeftAreaWidget->codeFlodAreaPaintEvent(e);
+    area.paintEvent(e);
+    area.m_pLeftAreaWidget->codeFlodAreaPaintEvent(e);
+#endif
 }
