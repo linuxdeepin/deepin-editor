@@ -430,13 +430,14 @@ void Window::initTabletFeatures()
     setWindowRadius(0);
     updateWindowWidthHightValue();
 
-    initVirtualKeyboardDbus();
-    if (/*DGuiApplicationHelper::isTabletEnvironment()*/1) {
+    if (/*DGuiApplicationHelper::isTabletEnvironment()*/ 1) {
         setWindowFlag(Qt::WindowMinMaxButtonsHint, false);
         setWindowFlag(Qt::WindowCloseButtonHint, false);
-        setMinimumSize(QSize(getDesktopAvailableWidth(), getDesktopAvailableHeight()));
+        setFixedSize(QSize(m_iDesktopAvailableWidth, m_iDesktopAvailableHeight));
     }
 
+    initStatuBar();
+    initVirtualKeyboardDbus();
     //平板需求，标题栏添加查找按钮图标
     addFindToolButtonToTitlbar();
 }
@@ -451,22 +452,41 @@ void Window::initVirtualKeyboardDbus()
 {
     m_pImInterface = new ComDeepinImInterface("com.deepin.im",
                                               "/com/deepin/im",
-                                               QDBusConnection::sessionBus(),
-                                               this);
+                                              QDBusConnection::sessionBus(),
+                                              this);
 
-    m_pImInterface->setImActive(false);
-    QVariant variant = m_pImInterface->geometry();
-    setKeyboardHeight(variant.value<QRect>().height());
-    connect(m_pImInterface, &ComDeepinImInterface::imActiveChanged, this, &Window::slotVirtualKeyboardImActiveChanged);
+    if (m_pImInterface->isValid()) {
+        QVariant variant = m_pImInterface->geometry();
+        setKeyboardHeight(variant.value<QRect>().height());
+        connect(m_pImInterface, &ComDeepinImInterface::imActiveChanged, this, &Window::slotVirtualKeyboardImActiveChanged);
+        qInfo() << "connect vietual keyboard dbus ok.";
+    } else {
+        delete m_pImInterface;
+        m_pImInterface = nullptr;
+        qInfo() << "connect vietual keyboard dbus error.";
+    }
+}
+
+void Window::initStatuBar()
+{
+    m_pStatusDbusface = new QDBusInterface("com.deepin.due.statusbar",
+                                           "/com/deepin/due/statusbar",
+                                           "com.deepin.due.statusbar",
+                                           QDBusConnection::sessionBus());
+    if (m_pStatusDbusface->isValid()) {
+        slotStatusBarHeightChange();
+        connect(m_pStatusDbusface, SIGNAL(heightChanged()), this, SLOT(slotStatusBarHeightChange()));
+    } else {
+        delete m_pStatusDbusface;
+        m_pStatusDbusface = nullptr;
+        qInfo() << "connect status bar dbus error";
+    }
 }
 
 void Window::updateWindowWidthHightValue()
 {
-    QDesktopWidget *pDesktopWidget = QApplication::desktop();
-    int iDesktopAvailHeight = pDesktopWidget->availableGeometry().size().height();
-    int iDesktopAvailWidth  = pDesktopWidget->availableGeometry().size().width();
-    setDesktopAvailableHeight(iDesktopAvailHeight);
-    setDesktopAvailableWidth(iDesktopAvailWidth);
+    m_iDesktopAvailableHeight = QApplication::desktop()->availableGeometry().size().height();
+    m_iDesktopAvailableWidth = QApplication::desktop()->availableGeometry().size().width();
 }
 
 /*******************************************************************************
@@ -485,38 +505,6 @@ int Window::getKeyboardHeight()
     return m_iKeyboardHeight;
 }
 
-/*******************************************************************************
- 1. @function:    setDesktopAvailableHeight
- 2. @author:      ut000455 shaoyu.Guo
- 3. @date:        2021-01-20
- 4. @description: set save desktop available height.
-*******************************************************************************/
-void Window::setDesktopAvailableHeight(int iHeight)
-{
-    m_iDesktopAvailableHeight = iHeight;
-}
-
-/*******************************************************************************
- 1. @function:    setDesktopAvailableWidth
- 2. @author:      ut000455 shaoyu.Guo
- 3. @date:        2021-01-27
- 4. @description: set save desktop available width.
-*******************************************************************************/
-void Window::setDesktopAvailableWidth(int iWidth)
-{
-    m_iDesktopAvailableWidth = iWidth;
-}
-
-/*******************************************************************************
- 1. @function:    getDesktopAvailableWidth
- 2. @author:      ut000455 shaoyu.Guo
- 3. @date:        2021-01-27
- 4. @description: get available desktop width.
-*******************************************************************************/
-int Window::getDesktopAvailableWidth()
-{
-    return m_iDesktopAvailableWidth;
-}
 bool Window::checkBlockShutdown()
 {
     //判断是否有未保存的tab项
@@ -532,7 +520,7 @@ bool Window::checkBlockShutdown()
 
     return false;
 }
-	
+
 void Window::addFindToolButtonToTitlbar()
 {
     m_pFindToolBtn->setObjectName(QString("TitleFindToolButton"));
@@ -821,10 +809,14 @@ EditWrapper *Window::createEditor()
         updateJumpLineBar(wrapper->textEditor());
     }, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::sigHideVirtualKeyboard, this, [=]() {
-        m_pImInterface->setImActive(false);
+        if (m_pImInterface) {
+            m_pImInterface->setImActive(false);
+        }
     });
     connect(wrapper->textEditor(), &TextEdit::sigShowVirtualKeyboard, this, [=]() {
-        m_pImInterface->setImActive(true);
+        if (m_pImInterface) {
+            m_pImInterface->setImActive(true);
+        }
     });
 
     bool wordWrap = m_settings->settings->option("base.font.wordwrap")->value().toBool();
@@ -2450,26 +2442,17 @@ void Window::slotClearDoubleCharaterEncode()
  3. @date:        2021-01-19
  4. @description:
 *******************************************************************************/
-void Window::slotVirtualKeyboardImActiveChanged(bool bActiove)
+void Window::slotVirtualKeyboardImActiveChanged(bool bIsVirKeyboarShow)
 {
-    if (bActiove) {
-        QTimer::singleShot(300, [=]() {
-        setFixedHeight(DApplication::desktop()->screenGeometry().size().height() - getKeyboardHeight());
-        });
-    } else {
-        setFixedHeight(getDesktopAvailableHeight());
+    if (m_pImInterface) {
+        if (bIsVirKeyboarShow) {
+            QTimer::singleShot(300, this, [=]() {
+                setFixedHeight(QApplication::desktop()->geometry().height() - getKeyboardHeight() - m_iStatusBarHeight);
+            });
+        } else {
+            setFixedHeight(QApplication::desktop()->availableGeometry().height());
+        }
     }
-}
-
-/*******************************************************************************
- 1. @function:    getDesktopAvailableHeight
- 2. @author:      ut000455 shaoyu.Guo
- 3. @date:        2021-01-19
- 4. @description: get available desktop height.
-*******************************************************************************/
-int Window::getDesktopAvailableHeight()
-{
-    return m_iDesktopAvailableHeight;
 }
 
 void Window::slotSigThemeChanged(const QString &path)
@@ -2567,6 +2550,17 @@ void Window::slotSigChangeWindowSize(QString mode)
         this->showMaximized();
     } else {
         this->showNormal();
+    }
+}
+
+void Window::slotStatusBarHeightChange()
+{
+    QDBusReply<uint> reply = m_pStatusDbusface->call("height");
+    if (reply.isValid()) {
+        m_iStatusBarHeight = static_cast<int>(reply.value());
+        qInfo() << "status bar height: " << m_iStatusBarHeight;
+    } else {
+        qInfo() << "call status bar height error";
     }
 }
 

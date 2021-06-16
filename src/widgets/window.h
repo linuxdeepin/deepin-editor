@@ -207,7 +207,7 @@ public slots:
     void slot_setTitleFocus();
     //清除不支持双字节字符集符号
     void slotClearDoubleCharaterEncode();
-    void slotVirtualKeyboardImActiveChanged(bool bActiove);
+    void slotVirtualKeyboardImActiveChanged(bool bIsVirKeyboarShow);
     void slotSigThemeChanged(const QString &path);
     void slotSigAdjustFont(QString fontName);
     void slotSigAdjustFontSize(int fontSize);
@@ -219,6 +219,7 @@ public slots:
     void slotSigHightLightCurrentLine(bool bIsShow);
     void slotSigShowCodeFlodFlag(bool bIsShow);
     void slotSigChangeWindowSize(QString mode);
+    void slotStatusBarHeightChange();
 
 private:
     void handleFocusWindowChanged(QWindow *w);
@@ -230,13 +231,10 @@ private:
     void initTabletFeatures();
     /* Virtual keyboard dbus connnecttion initialization. */
     void initVirtualKeyboardDbus();
+    void initStatuBar();
     void updateWindowWidthHightValue();
     void setKeyboardHeight(int iKeyboardHeight);
     int  getKeyboardHeight();
-    void setDesktopAvailableHeight(int iHeight);
-    int  getDesktopAvailableHeight();
-    void setDesktopAvailableWidth(int iWidth);
-    int  getDesktopAvailableWidth();
     void addFindToolButtonToTitlbar();
 	
 protected:
@@ -305,6 +303,8 @@ private:
 	
     //virtual keyboard due-im
     ComDeepinImInterface *m_pImInterface {nullptr};
+    QDBusInterface *m_pStatusDbusface {nullptr};
+    int m_iStatusBarHeight {0};
     int m_iKeyboardHeight {0};
     int m_iDesktopAvailableHeight {0};
     int m_iDesktopAvailableWidth {0};
