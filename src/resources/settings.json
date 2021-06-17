@@ -12,7 +12,7 @@
                             "key": "family",
                             "name": "Font",
                             "type": "fontcombobox",
-                            "default": "Noto Mono"
+                            "default": "DejaVu Sans"
                         },
                         {
                             "key": "size",
