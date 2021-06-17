@@ -119,6 +119,9 @@ void Tabbar::addTabWithIndex(int index, const QString &filePath, const QString &
 
         setTabToolTip(index, path);
     }
+
+    /* 平板不接鼠标，Tip信息全部放空 */
+    setTabToolTip(index, QString());
 }
 
 void Tabbar::resizeEvent(QResizeEvent *event)
@@ -145,7 +148,9 @@ void Tabbar::resizeEvent(QResizeEvent *event)
             }
         }
 
-        setTabToolTip(i, path);
+        //setTabToolTip(i, path);
+        /* 平板不接鼠标，Tip信息全部放空 */
+        setTabToolTip(i, QString());
     }
 
     return DTabBar::resizeEvent(event);
@@ -246,6 +251,9 @@ void Tabbar::updateTab(int index, const QString &filePath, const QString &tabNam
 
         setTabToolTip(index, path);
     }
+
+    /* 平板不接鼠标，Tip信息全部放空 */
+    setTabToolTip(index, QString());
 }
 
 void Tabbar::previousTab()
