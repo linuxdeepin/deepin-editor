@@ -1279,6 +1279,14 @@ void Window::popupFindBar()
     m_findBar->activeInput(text, tabPath, row, column, scrollOffset);
 
     QTimer::singleShot(10, this, [ = ] { m_findBar->focus(); });
+
+    /* 查找弹出虚拟键盘　*/
+    if (m_pImInterface != nullptr) {
+        bool bIsShow = m_pImInterface->property("imActive").toBool();
+        if (!bIsShow) {
+            m_pImInterface->setImActive(true);
+        }
+    }
 }
 
 void Window::popupReplaceBar()
@@ -1331,6 +1339,14 @@ void Window::popupReplaceBar()
     m_replaceBar->activeInput(text, tabPath, row, column, scrollOffset);
 
     QTimer::singleShot(10, this, [ = ] { m_replaceBar->focus(); });
+
+    /* 替换弹出虚拟键盘　*/
+    if (m_pImInterface != nullptr) {
+        bool bIsShow = m_pImInterface->property("imActive").toBool();
+        if (!bIsShow) {
+            m_pImInterface->setImActive(true);
+        }
+    }
 }
 
 void Window::popupJumpLineBar()
@@ -1368,6 +1384,14 @@ void Window::popupJumpLineBar()
         m_jumpLineBar->activeInput(tabPath, row, column, count, scrollOffset);
         m_jumpLineBar->show();
         m_jumpLineBar->focus();
+
+        /* 跳转行弹出虚拟键盘　*/
+        if (m_pImInterface != nullptr) {
+            bool bIsShow = m_pImInterface->property("imActive").toBool();
+            if (!bIsShow) {
+                m_pImInterface->setImActive(true);
+            }
+        }
     }
 }
 
@@ -1993,6 +2017,14 @@ void Window::addBlankTab(const QString &blankFile)
 
     m_wrappers[blankTabPath] = wrapper;
     showNewEditor(wrapper);
+
+    /* 添加一个空白tab标签弹出虚拟键盘　*/
+    if (m_pImInterface != nullptr) {
+        bool bIsShow = m_pImInterface->property("imActive").toBool();
+        if (!bIsShow) {
+            m_pImInterface->setImActive(true);
+        }
+    }
 }
 
 void Window::handleTabCloseRequested(int index)
