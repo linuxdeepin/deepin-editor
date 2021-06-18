@@ -513,7 +513,7 @@ void EditWrapper::readFile(const QString &filePath)
     // 判断是否出错
     if (decoder->hasFailure()) {
         DDialog *dialogWarning = new DDialog(tr("There are errors when using this encoding. If continue, the file contents may be changed"), "", this);
-        dialogWarning->setWindowFlags(dialogWarning->windowFlags() | Qt::WindowStaysOnTopHint);
+        dialogWarning->setWindowFlags(dialogWarning->windowFlags() | Qt::WindowStaysOnBottomHint);
         dialogWarning->setIcon(QIcon::fromTheme("deepin-editor"));
         dialogWarning->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
         dialogWarning->addButton(QString(tr("Continue")), true, DDialog::ButtonRecommend);

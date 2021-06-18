@@ -3380,63 +3380,39 @@ void TextEdit::hideCursorBlink()
 
 void TextEdit::setReadOnlyPermission(bool permission)
 {
-    if(m_bReadOnlyPermission){
-        m_bReadOnlyPermission = permission;
-        m_readOnlyMode = permission;
-    }
-    else if(!m_bReadOnlyPermission){
-        m_bReadOnlyPermission = permission;
-        if(permission)
-            m_readOnlyMode = permission;
-    }
 
-    if(permission){
-        setReadOnly(permission);
+//    if(m_bReadOnlyPermission){
+//    m_bReadOnlyPermission = permission;
+//        m_readOnlyMode = permission;
+//    }
+//    else if(!m_bReadOnlyPermission){
+//        m_bReadOnlyPermission = permission;
+//        if(permission)
+//            m_readOnlyMode = permission;
+//    }
+
+//    if(permission){
+//        setReadOnly(permission);
+//        emit cursorModeChanged(Readonly);
+//    }
+//    else if(m_bReadOnlyPermission){
+//        emit cursorModeChanged(Insert);
+//    }
+
+    //读写属性权限修改消息通知逻辑变更 ut002764
+    m_bReadOnlyPermission = permission; //true为不可读
+    if (permission) {
+        setReadOnly(true);
         emit cursorModeChanged(Readonly);
+    } else {
+        if (!m_readOnlyMode) {
+            setReadOnly(false);
+            emit cursorModeChanged(Insert);
+        } else {
+            setReadOnly(true);
+            emit cursorModeChanged(Readonly);
+        }
     }
-    else if(m_bReadOnlyPermission){
-        emit cursorModeChanged(Insert);
-    }
-
-//    if (m_bReadOnlyPermission == true)
-//    {
-//        m_bReadOnlyPermission = permission;
-//        if (m_bReadOnlyPermission == true)
-//        {
-//            if(m_readOnlyMode == false)
-//            {
-//                m_readOnlyMode = true;
-//            }
-
-//            emit cursorModeChanged(Readonly);
-//        }
-//        else
-//        {
-//            if(m_readOnlyMode == true)
-//            {
-//                m_readOnlyMode = false;
-//            }
-//            emit cursorModeChanged(Insert);
-//        }
-//    }
-//    else if (m_bReadOnlyPermission == false)
-//    {
-//        m_bReadOnlyPermission = permission;
-//        if (m_bReadOnlyPermission == true)
-//        {
-//            if(m_readOnlyMode == false)
-//            {
-//                m_readOnlyMode = true;
-//            }
-//            emit cursorModeChanged(Readonly);
-//        }
-//        else
-//        {
-//            //emit cursorModeChanged(Insert);
-//        }
-//    }
-
-
 }
 
 bool TextEdit::getReadOnlyPermission()
