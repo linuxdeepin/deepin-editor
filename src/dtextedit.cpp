@@ -27,7 +27,10 @@
 #include "widgets/bottombar.h"
 #include "leftareaoftextedit.h"
 #include "showflodcodewidget.h"
+
 #include <com_iflytek_aiservice_session.h>
+#include "deletebackcommond.h"
+
 
 #include <KF5/KSyntaxHighlighting/definition.h>
 #include <KF5/KSyntaxHighlighting/syntaxhighlighter.h>
@@ -2499,7 +2502,7 @@ void TextEdit::tapGestureTriggered(QTapGesture *tap)
         break;
     }
     case Qt::GestureCanceled:
-    {   
+    {
         //根据时间长短区分轻触滑动
         qint64 timeSpace = QDateTime::currentDateTime().toMSecsSinceEpoch() - m_tapBeginTime;
         if(timeSpace < TAP_MOVE_DELAY || m_slideContinueX || m_slideContinueY){
@@ -4152,6 +4155,7 @@ void TextEdit::columnCut()
 
 void TextEdit::columnDelete()
 {
+#if 0
     for(auto sel:m_altModSelections)
     {
         if(sel.cursor.hasSelection())
@@ -4161,6 +4165,14 @@ void TextEdit::columnDelete()
         else {
             sel.cursor.deletePreviousChar();
         }
+    }
+#endif
+
+    if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
+        DeleteBackAltCommond *commond = new DeleteBackAltCommond(m_altModSelections,this);
+        commond->redo();
+        this->document()->clearUndoRedoStacks();
+
     }
 }
 
