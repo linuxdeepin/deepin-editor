@@ -212,7 +212,9 @@ QIcon DDropdownMenu::createIcon()
     setFixedWidth(iconW);
     m_pToolButton->setIconSize(QSize(iconW,iconH));
 
-    QPixmap icon(iconW,iconH);
+    qreal rate = this->devicePixelRatioF();
+    QPixmap icon(iconW*rate,iconH*rate);
+    icon.setDevicePixelRatio(rate);
     icon.fill(Qt::transparent);
 
     //获取文本字体颜色
@@ -223,9 +225,15 @@ QIcon DDropdownMenu::createIcon()
     textColor = dpalette.textTips().color();
 
     QPainter painter(&icon);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setRenderHints(QPainter::SmoothPixmapTransform);
+
+    painter.save();
     painter.setFont(m_font);
     painter.setPen(textColor);
     painter.drawText(QRect(10,(iconH-fontHeight)/2,fontWidth,fontHeight),m_text);
+    painter.restore();
+
     painter.drawPixmap(QRect(fontWidth,(iconH-5)/2,9,5),m_arrowPixmap,m_arrowPixmap.rect());
 
     painter.end();
