@@ -450,7 +450,7 @@ public:
     void columnCopy();
     void columnPaste();
     void columnCut();
-    void columnDelete();
+    void columnDelete(bool isBack=false);
     void columnUndo();
     void columnRedo();
 

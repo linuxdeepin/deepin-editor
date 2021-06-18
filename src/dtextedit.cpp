@@ -29,6 +29,9 @@
 #include "showflodcodewidget.h"
 
 #include "deletebackcommond.h"
+#include "inserttextundocommand.h"
+#include "deletetextundocommand.h"
+
 
 #include <KF5/KSyntaxHighlighting/definition.h>
 #include <KF5/KSyntaxHighlighting/syntaxhighlighter.h>
@@ -4123,6 +4126,7 @@ void TextEdit::columnCopy()
 
 void TextEdit::columnPaste()
 {
+#if 0
     QClipboard *clipboard = QApplication::clipboard();
     QString originalText = clipboard->text();
 
@@ -4145,6 +4149,28 @@ void TextEdit::columnPaste()
     else {
         m_altModSelections[0].cursor.insertText(originalText);
     }
+#endif
+
+    QClipboard *clipboard = QApplication::clipboard();
+    QString text = clipboard->text();
+    for (int i = 0; i < m_altModSelections.size(); i++) {
+        if (m_altModSelections[i].cursor.hasSelection()){
+            auto cursor = m_altModSelections[i].cursor;
+            QUndoCommand *com = new DeleteTextUndoCommand(cursor);
+            com->redo();
+
+            delete com;
+            com = nullptr;
+        }
+
+    }
+    QUndoCommand *com = new InsertTextUndoCommand(m_altModSelections, text);
+    com->redo();
+    delete com;
+    com = nullptr;
+
+    this->document()->clearUndoRedoStacks();
+
 }
 
 void TextEdit::columnCut()
@@ -4162,26 +4188,31 @@ void TextEdit::columnCut()
     clipboard->setText(pasteText);
 }
 
-void TextEdit::columnDelete()
+void TextEdit::columnDelete(bool isBack)
 {
-#if 0
-    for(auto sel:m_altModSelections)
-    {
-        if(sel.cursor.hasSelection())
+    if(!isBack){
+        for(auto sel:m_altModSelections)
         {
-            sel.cursor.removeSelectedText();
+            if(sel.cursor.hasSelection())
+            {
+                sel.cursor.removeSelectedText();
+            }
+            else {
+                sel.cursor.deletePreviousChar();
+            }
         }
-        else {
-            sel.cursor.deletePreviousChar();
+    }else{
+
+        if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
+            DeleteBackAltCommond *commond = new DeleteBackAltCommond(m_altModSelections,this);
+            commond->redo();
+            this->document()->clearUndoRedoStacks();
+
+            delete commond;
+            commond = nullptr;
+
+
         }
-    }
-#endif
-
-    if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
-        DeleteBackAltCommond *commond = new DeleteBackAltCommond(m_altModSelections,this);
-        commond->redo();
-        this->document()->clearUndoRedoStacks();
-
     }
 }
 
@@ -4194,6 +4225,7 @@ void TextEdit::columnUndo()
 void TextEdit::columnRedo()
 {
 //    for(int i=0;i<=m_altModSelections.length();i++)
+
     redo();
 }
 
@@ -5597,7 +5629,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
     {
         if(key=="Del")
         {
-            columnDelete();
+            columnDelete(true);
             return;
         }
         if(key=="Backspace")
