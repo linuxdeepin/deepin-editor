@@ -320,7 +320,7 @@ void EditWrapper::refresh()
     //如果文件有被修改了
     if (m_textEdit->document()->isModified()) {
         DDialog *dialog = new DDialog(tr("Encoding changed. Do you want to save the file now?"), "", this);
-        dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnTopHint);
+        dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnBottomHint);
         dialog->setIcon(QIcon::fromTheme("deepin-editor"));
         dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
         dialog->addButton(QString(tr("Save")), true, DDialog::ButtonRecommend);

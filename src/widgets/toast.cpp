@@ -23,7 +23,7 @@
 Toast::Toast(QWidget *parent)
     : QFrame(parent)
 {
-    setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
+    setWindowFlags(windowFlags() | Qt::WindowStaysOnBottomHint);
 
     m_layout = new QHBoxLayout(this);
     m_layout->setContentsMargins(10, 10, 10, 10);
