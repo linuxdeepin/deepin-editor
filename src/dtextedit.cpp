@@ -26,9 +26,8 @@
 #include "editwrapper.h"
 #include "widgets/bottombar.h"
 #include "leftareaoftextedit.h"
-
 #include "showflodcodewidget.h"
-
+#include <com_iflytek_aiservice_session.h>
 
 #include <KF5/KSyntaxHighlighting/definition.h>
 #include <KF5/KSyntaxHighlighting/syntaxhighlighter.h>
@@ -103,6 +102,8 @@ TextEdit::TextEdit(QWidget *parent)
     m_pLeftAreaWidget->m_bookMarkArea->installEventFilter(this);
     m_pLeftAreaWidget->m_flodArea->installEventFilter(this);
     viewport()->setCursor(Qt::IBeamCursor);
+    //判断语音助手是否存在
+    isExistVoiceAssistant();
 
     // Don't draw frame around editor widget.
     setFrameShape(QFrame::NoFrame);
@@ -2657,6 +2658,20 @@ void TextEdit::slideGestureX(qreal diff)
     delta = diff+delta - step;
 
     horizontalScrollBar()->setValue(horizontalScrollBar()->value() + step*30);
+}
+
+void TextEdit::isExistVoiceAssistant()
+{
+    com::iflytek::aiservice::session session(
+        "com.iflytek.aiservice",
+        "/",
+        QDBusConnection::sessionBus());
+
+    if (session.isValid()) {
+        m_bIsExistVoiceAssistant = true;
+    } else {
+        m_bIsExistVoiceAssistant = false;
+    }
 }
 
 void TextEdit::setThemeWithPath(const QString &path)
@@ -5755,8 +5770,8 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             m_rightMenu->addAction(m_fullscreenAction);
         }
 
-        if ((DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosProfessional) ||
-             (DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosHome)){
+        if ((m_bIsExistVoiceAssistant) && ((DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosProfessional) ||
+             (DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosHome))) {
             bool stopReadingState = false;
             QDBusMessage stopReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
                                                               "/aiassistant/tts",
@@ -6204,9 +6219,9 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
     }
 
     /* 专业版/家庭版/教育版鼠标右键菜单支持语音读写 */
-    if ((DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosProfessional) ||
+    if ((m_bIsExistVoiceAssistant) && ((DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosProfessional) ||
         (DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosHome) ||
-        (DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosEducation)){
+        (DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosEducation))) {
         bool stopReadingState = false;
         QDBusMessage stopReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
                                                           "/aiassistant/tts",

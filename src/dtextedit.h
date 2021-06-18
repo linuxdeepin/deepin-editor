@@ -562,6 +562,7 @@ private:
 	//add for single refers to the sliding
     void slideGestureY(qreal diff);
     void slideGestureX(qreal diff);
+    void isExistVoiceAssistant();
 
 public:
     bool bIsSetLineNumberWidth = true;
@@ -779,6 +780,7 @@ private:
     int m_endY = 0;
 
     bool m_bIsFindClose = false;///< 关闭查找框事件是否发生
+    bool m_bIsExistVoiceAssistant {false};
 
 public:
     leftareaoftextedit *m_pLeftAreaWidget;
