@@ -3496,6 +3496,7 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
 
         if(line > 0)
         {
+#if 0
             lineBlock = document()->findBlockByNumber(line - 1);
             if (!lineBlock.isVisible()) {
                 continue;
@@ -3524,7 +3525,23 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
 //            }
 
             painter.drawPixmap(5,imageTop,scalePixmap);
+#endif
 
+
+            lineBlock = document()->findBlockByNumber(line - 1);
+            if (!lineBlock.isVisible()) {
+                continue;
+            }
+
+            auto rate = devicePixelRatioF();
+            image = image.scaled(image.width()*rate,image.height()*rate);
+
+            scalePixmap = Utils::renderSVG(pixmapPath, QSize(image.height(), image.width()), false);
+            scalePixmap.setDevicePixelRatio(devicePixelRatioF());
+
+            imageTop = cursorRect(cur).y() ;
+            int nOffset = (m_pLeftAreaWidget->m_bookMarkArea->width()  - scalePixmap.width()) / 2;
+            painter.drawPixmap(0 , imageTop, scalePixmap);
         }
      }
 }

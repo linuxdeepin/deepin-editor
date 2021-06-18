@@ -59,7 +59,7 @@ public:
     static bool isDraftFile(const QString &filepath);
     static void toast(const QString &message, QWidget* parent = nullptr);
     static const QStringList getEncodeList();
-    static QPixmap renderSVG(const QString &filePath, const QSize &size);
+    static QPixmap renderSVG(const QString &filePath, const QSize &size,bool bIsScale=false);
     static QList<QColor> getHiglightColorList();
     /*******************************************************************************
      1. @函数:    clearChildrenFocus
