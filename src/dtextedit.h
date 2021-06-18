@@ -43,6 +43,7 @@
 #include <QProxyStyle>
 #include "widgets/ColorSelectWdg.h"
 #include <DTextEdit>
+#include <com_iflytek_aiservice_session.h>
 
 #define CELL_TIME   15
 #define TAP_MOVE_DELAY 300
@@ -549,7 +550,7 @@ private:
     bool setCursorKeywordSeletoin(int position, bool findNext);
     void updateHighlightBrackets(const QChar &openChar, const QChar &closeChar);
     int getFirstVisibleBlockId() const;
-    void getNeedControlLine(int line, bool isVisable);
+    bool getNeedControlLine(int line, bool isVisable);
 
     //触摸屏功能函数
     bool gestureEvent(QGestureEvent *event);
@@ -717,7 +718,7 @@ private:
     bool m_bIsShortCut;///< 是否在使用书签快捷键
 
     //存储所有有折叠标记的位置，包含不可见区域
-    QList<int> m_listFlodFlag;
+    QList<int> m_listMainFlodAllPos;
     //包含当前可见区域的标志
     QList<int> m_listFlodIconPos;
 

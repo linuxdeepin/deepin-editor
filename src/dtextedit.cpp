@@ -28,9 +28,7 @@
 #include "leftareaoftextedit.h"
 #include "showflodcodewidget.h"
 
-#include <com_iflytek_aiservice_session.h>
 #include "deletebackcommond.h"
-
 
 #include <KF5/KSyntaxHighlighting/definition.h>
 #include <KF5/KSyntaxHighlighting/syntaxhighlighter.h>
@@ -1943,7 +1941,6 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
 
 void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
 {
-    m_listFlodFlag.clear();
     m_listFlodIconPos.clear();
     QPainter painter(m_pLeftAreaWidget->m_flodArea);
 
@@ -2378,7 +2375,7 @@ int TextEdit::getFirstVisibleBlockId() const
 }
 
 //line 开始处理的行号  isvisable是否折叠  iInitnum左括号默认开始计算的数量  isFirstLine是否是第一行，因为第一行默认不折叠
-void TextEdit::getNeedControlLine(int line, bool isVisable)
+bool TextEdit::getNeedControlLine(int line, bool isVisable)
 {
     QTextDocument *doc = document();
 
@@ -2441,7 +2438,7 @@ void TextEdit::getNeedControlLine(int line, bool isVisable)
        }
        //没有找到匹配左右括弧 //如果左右"{" "}"在同一行不折叠
    }else if(braceDepth != 0 || endBlock == curBlock){
-        return;
+        return false;
    } else{
        //遍历最后右括弧文本块 设置块隐藏或显示
        while(beginBlock != endBlock && beginBlock.isValid()){
@@ -2457,6 +2454,8 @@ void TextEdit::getNeedControlLine(int line, bool isVisable)
           endBlock.setVisible(isVisable);
           viewport()->adjustSize();
        }
+
+       return true;
    }
 }
 
@@ -3664,18 +3663,28 @@ void TextEdit::checkBookmarkLineMove(int from, int charsRemoved, int charsAdded)
 
 void TextEdit::flodOrUnflodAllLevel(bool isFlod)
 {
+    m_listMainFlodAllPos.clear();
     //折叠
     if(isFlod){
 
           for (int line = 0;line< document()->blockCount();line++) {
-              if (blockContainStrBrackets(line) && document()->findBlockByNumber(line).isVisible()&& !document()->findBlockByNumber(line).text().trimmed().startsWith("//"))
-               getNeedControlLine(line, false);
+              if (blockContainStrBrackets(line)
+                  && document()->findBlockByNumber(line).isVisible()
+                  && !document()->findBlockByNumber(line).text().trimmed().startsWith("//")) {
+                  if (getNeedControlLine(line, false)) {
+                      m_listMainFlodAllPos.append(line);
+                  }
+              }
            }
      //展开
     }else{
         for (int line = 0;line< document()->blockCount();line++) {
-            if(blockContainStrBrackets(line) && !document()->findBlockByNumber(line+1).isVisible()&& !document()->findBlockByNumber(line).text().trimmed().startsWith("//")){
-                getNeedControlLine(line, true);
+            if (blockContainStrBrackets(line)
+                && !document()->findBlockByNumber(line + 1).isVisible()
+                && !document()->findBlockByNumber(line).text().trimmed().startsWith("//")) {
+                if (getNeedControlLine(line, true)) {
+                    m_listMainFlodAllPos.append(line);
+                }
             }
          }
     }
@@ -4722,6 +4731,36 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                     m_unflodCurrentLevel->setEnabled(true);
                     m_flodCurrentLevel->setEnabled(false);
                 }
+
+                //展开/折叠所有层次后，对应的菜单项置灰
+                if (m_listMainFlodAllPos.count() == 0) {
+                    m_unflodAllLevel->setEnabled(false);
+                } else {
+                    bool bExistVisible = false;
+                    bool bExistInVisble = false;
+                    for (int iLine : m_listMainFlodAllPos) {
+                        if (document()->findBlockByNumber(iLine+1).isVisible()) {
+                            m_flodAllLevel->setEnabled(true);
+                            bExistVisible = true;
+                        } else {
+                            m_unflodAllLevel->setEnabled(true);
+                            bExistInVisble = true;
+                        }
+
+                        if (bExistVisible && bExistInVisble) {
+                            break;
+                        }
+                    }
+                    if (!bExistVisible) {
+                        m_flodAllLevel->setEnabled(false);
+                        m_unflodAllLevel->setEnabled(true);
+                    }
+                    if (!bExistInVisble) {
+                        m_unflodAllLevel->setEnabled(false);
+                        m_flodAllLevel->setEnabled(true);
+                    }
+                }
+
                 m_rightMenu->exec(mouseEvent->globalPos());
             }
 
@@ -4766,9 +4805,7 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                         startblock = document()->findBlockByNumber(line);
                     }
 
-
                     QTextCursor beginCursor(startblock);
-
 
                     beginCursor.movePosition(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
                     if (line == 1 && document()->findBlockByNumber(0).text().trimmed().startsWith("{")) {
@@ -4786,7 +4823,6 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
                     renderAllSelections();
                     setTextCursor(QTextCursor(document()->findBlockByNumber(line-1)));
                     this->verticalScrollBar()->setValue(ivalue);
-
                 }
             } else {
                 m_foldCodeShow->hide();
