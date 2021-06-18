@@ -80,13 +80,13 @@ public:
     void setTextChangeFlag(bool bFlag);
     void setLineNumberShow(bool bIsShow,bool bIsFirstShow = false);
     void setShowBlankCharacter(bool ok);
+    void handleCursorModeChanged(TextEdit::CursorMode mode);
 
     BottomBar *bottomBar() { return m_bottomBar; }
     QString filePath() { return m_textEdit->filepath; }
     TextEdit *textEditor() { return m_textEdit; }
 private:
     void detectEndOfLine();
-    void handleCursorModeChanged(TextEdit::CursorMode mode);
     void handleHightlightChanged(const QString &name);
 
     void setTextCodec(QTextCodec *codec, bool reload = false);

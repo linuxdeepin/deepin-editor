@@ -459,6 +459,7 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
     //disconnect(wrapper->textEditor(),nullptr,wrapper->parent(),nullptr);
     // wrapper may be from anther window pointer.
     // reconnect signal.
+    connect(wrapper->textEditor(), &TextEdit::cursorModeChanged, wrapper, &EditWrapper::handleCursorModeChanged);
     connect(wrapper->textEditor(), &TextEdit::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::clickReplaceAction, this, &Window::popupReplaceBar, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::clickJumpLineAction, this, &Window::popupJumpLineBar, Qt::QueuedConnection);
