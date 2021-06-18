@@ -146,6 +146,7 @@ Window::Window(DMainWindow *parent)
     connect(m_settings, &Settings::sigShowBlankCharacter, this, &Window::slotSigShowBlankCharacter);
     connect(m_settings, &Settings::sigHightLightCurrentLine, this, &Window::slotSigHightLightCurrentLine);
     connect(m_settings, &Settings::sigShowCodeFlodFlag, this, &Window::slotSigShowCodeFlodFlag);
+    connect(m_settings, &Settings::sigSendresetHeight, this, &Window::slotSendresetHeight);
     /* 设置页面里窗口模式的设置是针对新创建窗口的设置，本窗口不需要实时响应，暂且屏蔽此信号的绑定 */
     //connect(m_settings, &Settings::sigChangeWindowSize, this, &Window::slotSigChangeWindowSize);
 
@@ -2444,6 +2445,7 @@ void Window::slotClearDoubleCharaterEncode()
 *******************************************************************************/
 void Window::slotVirtualKeyboardImActiveChanged(bool bIsVirKeyboarShow)
 {
+    Settings::instance()->setVirkeyboardStatus(bIsVirKeyboarShow);
     if (m_pImInterface) {
         if (bIsVirKeyboarShow) {
             QTimer::singleShot(300, this, [=]() {
@@ -2452,6 +2454,14 @@ void Window::slotVirtualKeyboardImActiveChanged(bool bIsVirKeyboarShow)
         } else {
             setFixedHeight(QApplication::desktop()->availableGeometry().height());
         }
+    }
+}
+
+void Window::slotSendresetHeight()
+{
+    if(m_pImInterface) {
+        setFixedHeight(QApplication::desktop()->availableGeometry().height());
+        qInfo()<<"************will do reset height***********";
     }
 }
 

@@ -221,6 +221,9 @@ public slots:
     void slotSigChangeWindowSize(QString mode);
     void slotStatusBarHeightChange();
 
+    //设置文本高度复位；ut002764 2021-6-17
+    void slotSendresetHeight();
+
 private:
     void handleFocusWindowChanged(QWindow *w);
     void updateThemePanelGeomerty();

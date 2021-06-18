@@ -505,3 +505,12 @@ DDialog *Settings::createDialog(const QString &title, const QString &content, co
 
     return dialog;
 }
+
+bool Settings::getVirkeyboardStatus()
+{
+    return m_getVirKeyboardStatus;
+}
+void Settings::setVirkeyboardStatus(bool visable)
+{
+    m_getVirKeyboardStatus = visable;
+}

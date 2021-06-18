@@ -432,6 +432,10 @@ bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
             QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
             if(mouseEvent->button() == Qt::LeftButton){
                 m_bPressed = true;
+                //如果虚拟键盘开启，点击编码按钮时候，键盘自动关闭；通知window 设置文本显示区域高度复位；
+                if(Settings::instance()->getVirkeyboardStatus()) {
+                    emit Settings::instance()->sigSendresetHeight();
+                }
                 //if (isRequest) {
                     //重新绘制icon 点击改变前景色
                     m_pToolButton->setIcon(createIcon());

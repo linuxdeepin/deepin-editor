@@ -63,6 +63,10 @@ public:
 
     DSettings *settings;
 
+    //获取和设置 当前虚拟键盘是否弹出的临时变量状态 ut002764  2021-6-17
+    bool getVirkeyboardStatus();
+    void setVirkeyboardStatus(bool visable);
+
 signals:
     void sigAdjustFont(QString name);
     void sigAdjustFontSize(int fontSize);
@@ -75,6 +79,9 @@ signals:
     void sigThemeChanged(const QString &theme);
     void sigSetLineNumberShow(bool bIsShow);
     void sigChangeWindowSize(QString mode);
+
+    //通知文本框高度复位消息  ut002764 2021-6-17
+    void sigSendresetHeight();
 
 private:
     void updateAllKeysWithKeymap(QString keymap);
@@ -91,6 +98,9 @@ private:
     static Settings* s_pSetting;
     DKeySequenceEdit *m_pShortCutLineEdit;
     DDialog *m_pDialog;
+
+    //虚拟键盘的临时状态变量 ut002764
+    bool m_getVirKeyboardStatus = false;
 };
 
 class KeySequenceEdit : public DKeySequenceEdit
