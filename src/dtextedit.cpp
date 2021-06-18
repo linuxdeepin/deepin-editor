@@ -2065,8 +2065,15 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
            //添加注释判断 存在不显示折叠标志　不存在显示折叠标准　梁卫东　２０２０年０９月０３日１７：２８：５０
            if (curText.contains("{") && isNeedShowFoldIcon(block) && !bHasCommnent) {
 
-               cur.setPosition(block.position(),QTextCursor::MoveAnchor);
+               cur.setPosition(block.position(), QTextCursor::MoveAnchor);
 
+               auto rate = devicePixelRatioF();
+               foldimage = foldimage.scaled(foldimage.width()*rate, foldimage.height()*rate);
+               scaleFoldPixmap = Utils::renderSVG(flodImagePath, QSize(foldimage.height(), foldimage.width()), false);
+               scaleFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
+               scaleunFoldPixmap = Utils::renderSVG(unflodImagePath, QSize(foldimage.height(), foldimage.width()), false);
+               scaleunFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
+#if 0
                if(fontHeight > foldimage.height()) {
                    scaleFoldPixmap = Utils::renderSVG(flodImagePath, QSize(foldimage.height(), foldimage.width()));
                    scaleFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
@@ -2092,7 +2099,20 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                        painter.drawPixmap(5, imageTop/* - static_cast<int>(document()->documentMargin())*/, scaleunFoldPixmap);
                    }
                }
+#endif
 
+               int nOffset = 0;
+               if (block.next().isVisible()) {
+                    if (block.isVisible()) {
+                        imageTop = cursorRect(cur).y() ;
+                        painter.drawPixmap(nOffset, imageTop/* - static_cast<int>(document()->documentMargin())*/, scaleFoldPixmap);
+                     }
+                 } else {
+                    if (block.isVisible()) {
+                        imageTop = cursorRect(cur).y();
+                        painter.drawPixmap(nOffset, imageTop/* - static_cast<int>(document()->documentMargin())*/, scaleunFoldPixmap);
+                     }
+                 }
                m_listFlodIconPos.append(block.blockNumber());
            }
         }
