@@ -522,6 +522,7 @@ public slots:
     void onSelectionArea();
     void fingerZoom(QString name, QString direction, int fingers);
     void onInputModEdit(QString input);
+    void cursorPositionChanged();
 
 protected:
     bool event(QEvent* evt) override;   //触摸屏event事件
@@ -546,7 +547,6 @@ private:
     //去除"*{*" "*}*" "*{*}*"跳过当做普通文本处理不折叠　梁卫东２０２０－０９－０１　１７：１６：４１
     bool blockContainStrBrackets(int line);
     bool setCursorKeywordSeletoin(int position, bool findNext);
-    void cursorPositionChanged();
     void updateHighlightBrackets(const QChar &openChar, const QChar &closeChar);
     int getFirstVisibleBlockId() const;
     void getNeedControlLine(int line, bool isVisable);

@@ -471,6 +471,7 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
                                 "/com/deepin/daemon/Gesture", "com.deepin.daemon.Gesture",
                                 "Event",
                                 wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
+    connect(wrapper->textEditor(), &QPlainTextEdit::cursorPositionChanged, wrapper->textEditor(), &TextEdit::cursorPositionChanged);
 
     connect(wrapper->textEditor(), &TextEdit::modificationChanged, this, [ = ](const QString & path, bool isModified) {
         int tabIndex = m_tabbar->indexOf(path);
