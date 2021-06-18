@@ -67,6 +67,7 @@ public slots:
 //    bool isDragEnter();
 
     void slotCheckUnsaveTab();
+    void closeAboutForWindow(Window *window);
 
 private:
     static StartManager *m_instance;
