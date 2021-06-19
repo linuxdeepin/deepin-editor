@@ -1797,8 +1797,6 @@ DMenu *TextEdit::getHighlightMenu()
 void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
     QPainter painter(m_pLeftAreaWidget->m_linenumberarea);
-    //painter.fillRect(event->rect(), m_backgroundColor);
-
     QColor lineNumberAreaBackgroundColor;
     if (QColor(m_backgroundColor).lightness() < 128) {
         lineNumberAreaBackgroundColor = palette().brightText().color();
@@ -1813,50 +1811,17 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
     painter.fillRect(event->rect(), lineNumberAreaBackgroundColor);
 
     int blockNumber = getFirstVisibleBlockId();
-//    if(blockNumber > 0) {        //多绘制上面一行的行号
-//        blockNumber--;
-//    }
-//    blockNumber = 0;
     QTextBlock block = document()->findBlockByNumber(blockNumber);
-//    QTextBlock prev_block = (blockNumber > 0) ? document()->findBlockByNumber(blockNumber-1) : block;
-//    int translate_y = (blockNumber > 0) ? -verticalScrollBar()->sliderPosition() : 0;
+
 
     int top = this->viewport()->geometry().top() + verticalScrollBar()->value();
-
-    // Adjust text position according to the previous "non entirely visible" block
-    // if applicable. Also takes in consideration the document's margin offset.
-//    int additional_margin;
-//    if (blockNumber == 0) {
-//        // Simply adjust to document's margin
-//  //      additional_margin = document()->documentMargin() -1 - this->verticalScrollBar()->sliderPosition();
-//        additional_margin = document()->documentMargin() - this->verticalScrollBar()->sliderPosition();
-//    }
-//    else {
-//        // Getting the height of the visible part of the previous "non entirely visible" block
-////        additional_margin = document()->documentLayout()->blockBoundingRect(prev_block).toRect()
-////                .translated(0, translate_y).intersected(this->viewport()->geometry()).height();
-//        additional_margin = document()->documentLayout()->blockBoundingRect(prev_block).toRect()
-//                .translated(0, translate_y).bottom();          //不比较，直接从上一行的底边开始绘制，即多绘制一行的行号
-//    }
-
-    // Shift the starting point
-    //additional_margin -= 2;
-
-//    top += additional_margin /*+ height() */+ verticalScrollBar()->value();
-
     int bottom = top + static_cast<int>(document()->documentLayout()->blockBoundingRect(block).height());
 
-
-//    int bottom1 = top + document()->documentLayout()->blockBoundingRect(block).toRect().height();
-//    qDebug()<<"bottom1 = "<<bottom1;
-
     Utils::setFontSize(painter, document()->defaultFont().pointSize() - 2);
-    // Draw the numbers (displaying the current line number in green)
     QPoint endPoint;
 
-    if (verticalScrollBar()->maximum() > 0)
-    {
-        endPoint = QPointF(0,height() + height()/verticalScrollBar()->maximum()*verticalScrollBar()->value()).toPoint();
+    if (verticalScrollBar()->maximum() > 0) {
+        endPoint = QPointF(0, height() + height() / verticalScrollBar()->maximum() * verticalScrollBar()->value()).toPoint();
     }
 
     QTextCursor cur = cursorForPosition(endPoint);
@@ -1869,8 +1834,8 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
     }
 
     cur = textCursor();
-    for (int i = nStartLine;i <= nPageLine;i++) {
-        if (blockNumber + 1 == m_markStartLine) {
+    for (int i = nStartLine; i <= nPageLine; i++) {
+        if (i + 1 == m_markStartLine) {
             painter.setPen(m_regionMarkerColor);
         } else {
             painter.setPen(m_lineNumbersColor);
@@ -1879,7 +1844,7 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
         m_fontLineNumberArea.setPointSize(font().pointSize() - 1);
         painter.setFont(m_fontLineNumberArea);
 
-        cur.setPosition(block.position(),QTextCursor::MoveAnchor);
+        cur.setPosition(block.position(), QTextCursor::MoveAnchor);
 
         if (block.isVisible()) {
             painter.drawText(0, cursorRect(cur).y(),
@@ -1890,56 +1855,7 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
         block = block.next();
         top = bottom/* + document()->documentMargin()*/;
         bottom = top + static_cast<int>(document()->documentLayout()->blockBoundingRect(block).height());
-//        ++blockNumber;
-//        if (fontMetrics().height() *1.5 > document()->documentLayout()->blockBoundingRect(block).height()) {
-
-//            painter.drawText(0, cursorRect(cur).y(),
-//                             lineNumberArea->width(), document()->documentLayout()->blockBoundingRect(block).height() - document()->documentMargin(),
-//                             Qt::AlignVCenter | Qt::AlignHCenter, QString::number(blockNumber + 1));
-//           // qDebug() << ".........." << document()->documentLayout()->blockBoundingRect(block).width();
-//        } else {
-//            painter.drawText(0, cursorRect(cur).y(),
-//                             lineNumberArea->width(), cursorRect(cur).height() - static_cast<int>(document()->documentMargin()),
-//                             Qt::AlignVCenter | Qt::AlignHCenter, QString::number(blockNumber + 1));
-//        }
-//        block = block.next();
-//        //qDebug() << "cur" << block.position();
-//        top = bottom/* + document()->documentMargin()*/;
-//        bottom = top + static_cast<int>(document()->documentLayout()->blockBoundingRect(block).height());
-//        ++blockNumber;
     }
-
-
-
-//    while (block.isValid() && top <= event->rect().bottom()) {
-//        if (block.isVisible() && bottom >= event->rect().top()) {
-//            if (blockNumber + 1 == m_markStartLine) {
-//                painter.setPen(m_regionMarkerColor);
-//            } else {
-//                painter.setPen(m_lineNumbersColor);
-//            }
-
-//            m_fontLineNumberArea.setPointSize(font().pointSize() - 1);
-//            painter.setFont(m_fontLineNumberArea);
-
-//            if (fontMetrics().height() *1.5 > document()->documentLayout()->blockBoundingRect(block).height()) {
-
-//                painter.drawText(0, top,
-//                                 lineNumberArea->width(), document()->documentLayout()->blockBoundingRect(block).height(),
-//                                 Qt::AlignVCenter | Qt::AlignHCenter, QString::number(blockNumber + 1));
-//               // qDebug() << ".........." << document()->documentLayout()->blockBoundingRect(block).width();
-//            } else {
-//                painter.drawText(0, top,
-//                                 lineNumberArea->width(), document()->documentLayout()->blockBoundingRect(block).height(),
-//                                 Qt::AlignTop | Qt::AlignHCenter, QString::number(blockNumber + 1));
-//            }
-//        }
-
-//        block = block.next();
-//        top = bottom;
-//        bottom = top + document()->documentLayout()->blockBoundingRect(block).height();
-//        ++blockNumber;
-//    }
 }
 
 void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
