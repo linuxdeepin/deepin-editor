@@ -1235,39 +1235,44 @@ void TextEdit::escape()
     tryUnsetMark();
 }
 
-void TextEdit::indentText()
+void TextEdit::indentText(QString text)
 {
     // Stop mark if mark is set.
     tryUnsetMark();
     hideCursorBlink();
 
-    QTextCursor cursor = textCursor();
+    QTextCursor m_textCursor = textCursor();
 
-    if (cursor.hasSelection()) {
-        QTextBlock block = document()->findBlock(cursor.selectionStart());
-        QTextBlock end = document()->findBlock(cursor.selectionEnd()).next();
-
-        cursor.beginEditBlock();
-
-        while (block != end) {
-            QString speaces(m_tabSpaceNumber, ' ');
-            cursor.setPosition(block.position());
-            cursor.insertText(speaces);
-            block = block.next();
-        }
-
-        cursor.endEditBlock();
-    } else {
-        cursor.beginEditBlock();
-
-        int indent = m_tabSpaceNumber - (cursor.positionInBlock() % m_tabSpaceNumber);
-        QString spaces(indent, ' ');
-        cursor.insertText(spaces);
-
-        cursor.endEditBlock();
+    if (m_textCursor.hasSelection()) {
+        m_textCursor.removeSelectedText();
     }
+    m_textCursor.insertText(text);
 
-    showCursorBlink();
+//    if (cursor.hasSelection()) {
+//        QTextBlock block = document()->findBlock(cursor.selectionStart());
+//        QTextBlock end = document()->findBlock(cursor.selectionEnd()).next();
+
+//        cursor.beginEditBlock();
+
+//        while (block != end) {
+//            QString speaces(m_tabSpaceNumber, ' ');
+//            cursor.setPosition(block.position());
+//            cursor.insertText(speaces);
+//            block = block.next();
+//        }
+
+//        cursor.endEditBlock();
+//    } else {
+//        cursor.beginEditBlock();
+
+//        int indent = m_tabSpaceNumber - (cursor.positionInBlock() % m_tabSpaceNumber);
+//        QString spaces(indent, ' ');
+//        cursor.insertText(spaces);
+
+//        cursor.endEditBlock();
+//    }
+
+//    showCursorBlink();
 }
 
 void TextEdit::unindentText()
@@ -5904,7 +5909,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
 
     } else {
         if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "indentline")) {
-            indentText();
+            indentText(e->text());
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "backindentline")) {
             unindentText();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "forwardchar")) {

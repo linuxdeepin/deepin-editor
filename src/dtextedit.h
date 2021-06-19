@@ -236,7 +236,7 @@ public:
     void killForwardWord();
 
     void escape();
-    void indentText();
+    void indentText(QString text);
     void unindentText();
     void setTabSpaceNumber(int number);
     void convertWordCase(ConvertCase convertCase);
