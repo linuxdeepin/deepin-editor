@@ -27,16 +27,18 @@ TEST_F(test_deletebackcommond,redo)
 {
     QString text = "test";
     QTextCursor cursor;
-    QPlainTextEdit* edit = new QPlainTextEdit;
+    Window* window = new Window;
+    EditWrapper *wrapper = window->createEditor();
+    TextEdit * edit = wrapper->textEditor();
     DeleteBackCommond* com = new DeleteBackCommond(cursor,edit);
     com->m_delText = text;
     com->redo();
 
+    window->deleteLater();
+    wrapper->deleteLater();
+    edit->deleteLater();
     delete com;
     com = nullptr;
-    delete edit;
-    edit = nullptr;
-
     assert(1==1);
 }
 
@@ -44,16 +46,18 @@ TEST_F(test_deletebackcommond,undo)
 {
     QString text = "test";
     QTextCursor cursor;
-    QPlainTextEdit* edit = new QPlainTextEdit;
+    Window* window = new Window;
+    EditWrapper *wrapper = window->createEditor();
+    TextEdit * edit = wrapper->textEditor();
     DeleteBackCommond* com = new DeleteBackCommond(cursor,edit);
     com->m_delText = text;
     com->undo();
 
+    window->deleteLater();
+    wrapper->deleteLater();
+    edit->deleteLater();
     delete com;
     com = nullptr;
-    delete edit;
-    edit = nullptr;
-
     assert(1==1);
 }
 
@@ -94,17 +98,16 @@ TEST_F(test_deletebackaltcommond, redo)
     Window* window = new Window;
     EditWrapper *wrapper = window->createEditor();
     TextEdit * edit = wrapper->textEditor();
-    edit->insertTextEx(edit->textCursor(),"123456");
-    auto cursor1 = edit->textCursor();
-    edit->selectAll();
-    auto cursor2 = edit->textCursor();
-
-    QTextEdit::ExtraSelection select[2];
-    select[0].cursor = cursor1;
-    select[1].cursor = cursor2;
-
-    QList<QTextEdit::ExtraSelection> selections{select[0],select[1]};
-    DeleteBackAltCommond * commond = new DeleteBackAltCommond(selections,edit);
+    QString text = "test";
+    QList<QTextEdit::ExtraSelection> list;
+    QTextEdit::ExtraSelection sel;
+    QTextCursor cursor;
+    cursor.insertText(text);
+    cursor.movePosition(QTextCursor::Start,QTextCursor::KeepAnchor);
+    sel.cursor = cursor;
+    list.push_back(sel);
+    list.push_back(sel);
+    DeleteBackAltCommond * commond = new DeleteBackAltCommond(list,edit);
     commond->redo();
 
     window->deleteLater();
@@ -118,6 +121,9 @@ TEST_F(test_deletebackaltcommond, redo)
 
 TEST_F(test_deletebackaltcommond, undo)
 {
+    Window* window = new Window;
+    EditWrapper *wrapper = window->createEditor();
+    TextEdit * edit = wrapper->textEditor();
     QString text = "test";
     QList<QTextEdit::ExtraSelection> list;
     QTextEdit::ExtraSelection sel;
@@ -128,14 +134,13 @@ TEST_F(test_deletebackaltcommond, undo)
     list.push_back(sel);
     list.push_back(sel);
 
-    QPlainTextEdit* edit = new QPlainTextEdit;
     DeleteBackAltCommond* com = new DeleteBackAltCommond(list,edit);
     com->undo();
 
+    window->deleteLater();
+    wrapper->deleteLater();
+    edit->deleteLater();
     delete com;
     com = nullptr;
-    delete edit;
-    edit = nullptr;
-
     assert(1==1);
 }

@@ -102,6 +102,10 @@ public:
     //插入带选择字符
     void deleteSelectTextEx(QTextCursor);
 
+    /* 处理快捷键“ctrl + k 和Ctrl +shift +K”,删除到行尾和删除整行的  删除和撤销功能；
+     * currLine 表示删除的是不是整行，true 整行,false 删除到行尾 ut002764 2021.6.19*/
+    void deleteSelectTextEx(QTextCursor,QString text,bool currLine);
+
     //初始化右键菜单
     void initRightClickedMenu();
 

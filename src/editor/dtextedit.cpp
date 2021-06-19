@@ -215,6 +215,12 @@ void TextEdit::deleteSelectTextEx(QTextCursor cursor)
     }
 }
 
+void TextEdit::deleteSelectTextEx(QTextCursor cursor,QString text,bool currLine)
+{
+    QUndoCommand *pDeleteStack = new DeleteTextUndoCommand2(cursor,text,this,currLine);
+    m_pUndoStack->push(pDeleteStack);
+}
+
 void TextEdit::deleteTextEx(QTextCursor cursor)
 {
     QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(cursor);
@@ -1555,18 +1561,20 @@ void TextEdit::killLine()
 
     if (textCursor().hasSelection()) {
         // textCursor().removeSelectedText();
-        deleteSelectTextEx(textCursor());
+	//deleteSelectTextEx(textCursor());
+        deleteSelectTextEx(textCursor(),textCursor().selectedText(),false);
     } else {
         // Get current line content.
         QTextCursor selectionCursor = textCursor();
         selectionCursor.movePosition(QTextCursor::StartOfBlock);
         selectionCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
         QString text = selectionCursor.selectedText();
+        QTextCursor cursor = textCursor();
+        deleteSelectTextEx(cursor,text,false);
 
+        #if 0
         bool isEmptyLine = (text.size() == 0);
         bool isBlankLine = (text.trimmed().size() == 0);
-
-        QTextCursor cursor = textCursor();
         // Join next line if current line is empty or cursor at end of line.
         if (isEmptyLine || textCursor().atBlockEnd()) {
             //fixed bug 80435  ut002764  刪除到尾后，光标设置到下一个字符
@@ -1589,9 +1597,9 @@ void TextEdit::killLine()
             //cursor.removeSelectedText();
             deleteSelectTextEx(cursor);
         }
-
         // Update cursor.
         // setTextCursor(cursor);
+        #endif
     }
 }
 
@@ -1605,23 +1613,15 @@ void TextEdit::killCurrentLine()
         QPlainTextEdit::selectAll();
 
     QTextCursor cursor = textCursor();
-
-    cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-
+    //cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+    //cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+    //cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
     //因为删除整行之后，如果后面没有内容了，则不在删除，光标前面不会删除；
     //QString text = cursor.selectedText();
     //bool isBlankLine = text.trimmed().size() == 0;
-
     //cursor.removeSelectedText();
-    deleteSelectTextEx(cursor);
-    //if (isBlankLine) {
-    //cursor.deleteChar();
-    //deleteTextEx(cursor);
-    //}
-
-    //setTextCursor(cursor);
+    //deleteSelectTextEx(cursor);
+    deleteSelectTextEx(cursor,cursor.selectedText(),true);
 }
 
 void TextEdit::killBackwardWord()

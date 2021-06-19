@@ -20,6 +20,7 @@
 */
 
 #include "deletetextundocommand.h"
+#include "editwrapper.h"
 #include <QDebug>
 #include <QTextBlock>
 
@@ -93,5 +94,98 @@ void DeleteTextUndoCommand::redo()
             m_ColumnEditSelections[i].cursor.deletePreviousChar();
         }
         qDebug()<<"InsertTextUndoCommand[redo]:"<<m_selectTextList;
+    }
+}
+
+
+DeleteTextUndoCommand2::DeleteTextUndoCommand2(QTextCursor textcursor,QString text,QPlainTextEdit* edit,bool currLine):
+    m_textCursor(textcursor),
+    m_sInsertText(text),
+    m_edit(edit),
+    m_iscurrLine(currLine)
+{
+
+}
+
+DeleteTextUndoCommand2::DeleteTextUndoCommand2(QList<QTextEdit::ExtraSelection> &selections,QString text,QPlainTextEdit* edit,bool currLine):
+    m_sInsertText(text),
+    m_ColumnEditSelections(selections),
+    m_edit(edit),
+    m_iscurrLine(currLine)
+{
+    int cnt = m_ColumnEditSelections.size();
+    for (int i = 0; i < cnt; i++) {
+        QTextCursor textCursor =m_ColumnEditSelections[i].cursor;
+        if(textCursor.hasSelection())
+        {
+            m_selectTextList.append(textCursor.selectedText());
+        }else {
+            int pos = textCursor.positionInBlock()-1;
+            if(pos >= 0){
+                m_selectTextList.append(textCursor.block().text().at(pos));
+            }else {
+                //上一行lastQChar
+                m_selectTextList.append("\n");
+            }
+        }
+    }
+}
+
+void DeleteTextUndoCommand2::undo()
+{
+    if(m_ColumnEditSelections.isEmpty()){
+        qInfo()<<"****************chexiao************0= "<<m_textCursor.position();
+        m_textCursor.setPosition(m_beginPostion);
+        m_textCursor.insertText(m_sInsertText);
+        m_textCursor.setPosition(m_beginPostion);
+        m_edit->setTextCursor(m_textCursor);
+    }else {
+        int cnt = m_ColumnEditSelections.size();
+        for (int i = 0; i < cnt; i++) {
+            m_ColumnEditSelections[i].cursor.setPosition(m_beginPostion);
+            m_ColumnEditSelections[i].cursor.insertText(m_selectTextList[i]);
+            m_ColumnEditSelections[i].cursor.setPosition(m_beginPostion);
+            m_edit->setTextCursor(m_ColumnEditSelections[i].cursor);
+        }
+    }
+}
+
+void DeleteTextUndoCommand2::redo()
+{
+    if(m_ColumnEditSelections.isEmpty()){
+
+        bool isEmptyLine = (m_sInsertText.size() == 0);
+        bool isBlankLine = (m_sInsertText.trimmed().size() == 0);
+
+        if(!m_iscurrLine) {
+            //删除到行尾
+            if (isEmptyLine || m_textCursor.atBlockEnd()) {
+                m_textCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+            }
+            else if (isBlankLine && m_textCursor.atBlockStart()) {
+                m_textCursor.movePosition(QTextCursor::StartOfBlock);
+                m_textCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+            }
+            else {
+                m_textCursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
+                m_textCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+            }
+        }
+        else {
+            //删除整行
+            m_textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+            m_textCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+            m_textCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+        }
+
+        m_sInsertText = m_textCursor.selectedText();
+        m_beginPostion = m_textCursor.selectionStart();
+        m_textCursor.deletePreviousChar();
+    }else {
+        int cnt = m_ColumnEditSelections.size();
+        for (int i = 0; i < cnt; i++) {
+            m_beginPostion = m_ColumnEditSelections[i].cursor.selectionStart();
+            m_ColumnEditSelections[i].cursor.deletePreviousChar();
+        }
     }
 }
