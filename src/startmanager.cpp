@@ -95,7 +95,14 @@ void StartManager::openFilesInWindow(QStringList files)
         if (m_windows.count() >= 20)
             return;
         Window *window = createWindow();
-        window->show();
+
+        if (m_windows.count() > 0) {
+            window->showCenterWindow(false);
+        } else {
+            window->showCenterWindow(true);
+        }
+
+        //window->show();
         window->addBlankTab();
         window->activateWindow();
     } else {
@@ -215,21 +222,35 @@ void StartManager::openFilesInTab(QStringList files)
 
 void StartManager::createWindowFromWrapper(const QString &tabName, const QString &filePath, EditWrapper *buffer, bool isModifyed)
 {
-
     Window *window = createWindow();
     //window->showCenterWindow();
     window->addTabWithWrapper(buffer, filePath, tabName);
     window->currentWrapper()->textEditor()->setModified(isModifyed);
     window->setMinimumSize(Tabbar::sm_pDragPixmap->rect().size());
 
-
     QRect rect = window->rect();
     QPoint pos = QCursor::pos() ;/*- window->topLevelWidget()->pos();*/
-    QRect startRect(pos, Tabbar::sm_pDragPixmap->rect().size());
-    QRect endRect(pos-QPoint(rect.width()/2,rect.height()/2),window->rect().size());
+    QRect desktopRect = QApplication::desktop()->rect();
+    QPoint startPos = pos;
 
-    window->move(pos);
-    window->show();
+    if ((pos.x() + rect.width()) > desktopRect.width()) {
+        startPos.setX(desktopRect.width() - rect.width());
+    } else if (pos.x() < 0) {
+        startPos.setX(0);
+    }
+
+    if ((pos.y() + rect.height()) > desktopRect.height()) {
+        startPos.setY(desktopRect.height() - rect.height());
+    } else if (pos.y() < 0) {
+        startPos.setY(0);
+    }
+
+    QRect startRect(startPos, Tabbar::sm_pDragPixmap->rect().size());
+    //QRect startRect(startPos, QSize(0,0));
+    QRect endRect(startPos, window->rect().size());
+
+    window->move(startPos);
+    //window->show();
 #if 0
     // window->setFixedSize(Tabbar::sm_pDragPixmap->rect().size());
     QLabel *pLab = new QLabel();
@@ -254,8 +275,7 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
 
     QParallelAnimationGroup *group = new QParallelAnimationGroup;
     connect(group,&QParallelAnimationGroup::finished,geometry,[window,geometry,/*Opacity,*/group](){
-        // window minimum size.
-        //window->setMinimumSize(1000, 600);
+        window->show();
         window->showCenterWindow(false);
         geometry->deleteLater();
        // Opacity->deleteLater();
