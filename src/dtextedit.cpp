@@ -2410,7 +2410,7 @@ bool TextEdit::gestureEvent(QGestureEvent *event)
 
 void TextEdit::tapGestureTriggered(QTapGesture *tap)
 {
-    this->clearFocus();
+    //this->clearFocus();
     //单指点击函数
     switch (tap->state()) {
     case Qt::GestureStarted:
