@@ -546,73 +546,202 @@ void Window::closeTab()
 //        state = ret.value();
 //    }
 
+//    if (m_reading_list.contains(currentWrapper()->textEditor())) {
+//        QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
+//    }
+
+//    const QString &filePath = m_tabbar->currentPath();
+//    const bool isBlankFile = QFileInfo(filePath).dir().absolutePath() == m_blankFileDir;
+//    EditWrapper *wrapper = m_wrappers.value(filePath);
+
+//    if (!wrapper)  {
+//        return;
+//    }
+
+//    // this property holds whether the document has been modified by the user
+//    bool isModified = wrapper->textEditor()->document()->isModified();
+
+//    if(wrapper->getFileLoading()) isModified = false;
+
+//    // document has been modified or unsaved draft document.
+//    // need to prompt whether to save.
+//    if (isModified || (isBlankFile && !wrapper->textEditor()->toPlainText().isEmpty())) {
+//        DDialog *dialog = createDialog(tr("Do you want to save this file?"), "");
+
+//        connect(dialog, &DDialog::buttonClicked, this, [ = ](int index) {
+//            dialog->hide();
+
+//            // don't save.
+//            if (index == 1) {
+//                removeWrapper(filePath, true);
+//                m_tabbar->closeCurrentTab();
+
+//                // delete the draft document.
+//                if (isBlankFile) {
+//                    QFile(filePath).remove();
+//                }
+
+////                removeWrapper(filePath, true);
+//            } else if (index == 2) {
+//                // may to press CANEL button in the save dialog.
+//                if (saveFile()) {
+//                    removeWrapper(filePath, true);
+//                    m_tabbar->closeCurrentTab();
+//                }
+//            }
+
+//            focusActiveEditor();
+//        });
+
+//        dialog->exec();
+//    } else {
+//        // record last close path.
+//        bool bRet = Utils::isDraftFile(m_tabbar->currentPath());
+//        if (bRet == false) {
+//            m_closeFileHistory << m_tabbar->currentPath();
+//        }
+
+//        // close tab directly, because all file is save automatically.
+//        removeWrapper(filePath, true);
+//        m_tabbar->closeCurrentTab();
+
+//        // remove blank file.
+//        if (isBlankFile) {
+//            QFile::remove(filePath);
+//        }
+
+////        removeWrapper(filePath, true);
+//        focusActiveEditor();
+//    }
+    const QString &filePath = m_tabbar->currentPath();
+    closeTab(filePath);
+}
+
+bool Window::closeTab(const QString &filePath)
+{
+    EditWrapper *wrapper = m_wrappers.value(filePath);
+
     if (m_reading_list.contains(currentWrapper()->textEditor())) {
         QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
     }
 
-    const QString &filePath = m_tabbar->currentPath();
-    const bool isBlankFile = QFileInfo(filePath).dir().absolutePath() == m_blankFileDir;
-    EditWrapper *wrapper = m_wrappers.value(filePath);
+    if (!wrapper) return false;
 
-    if (!wrapper)  {
-        return;
-    }
+    disconnect(wrapper, nullptr);
+    disconnect(wrapper->textEditor(), &TextEdit::textChanged, nullptr, nullptr);
 
     // this property holds whether the document has been modified by the user
-    bool isModified = wrapper->textEditor()->document()->isModified();
+    bool isModified = wrapper->isModified();
+    bool isDraftFile = wrapper->isDraftFile();
+    bool bIsBackupFile = false;
 
-    if(wrapper->getFileLoading()) isModified = false;
+//    if (wrapper->isTemFile()) {
+//        bIsBackupFile = true;
+//    }
 
+    if (wrapper->getFileLoading()) isModified = false;
+
+    if (isDraftFile) {
+        if (isModified) {
+            DDialog *dialog = createDialog(tr("Do you want to save this file?"), "");
+            int res = dialog->exec();
+
+            //取消或关闭弹窗不做任务操作
+            if (res == 0 || res == -1) {
+                return false;
+            }
+
+            //不保存
+            if (res == 1) {
+                removeWrapper(filePath, true);
+                m_tabbar->closeCurrentTab();
+                QFile(filePath).remove();
+                return true;
+            }
+
+            //保存
+            if (res == 2) {
+                if (wrapper->saveDraftFile()) {
+                    removeWrapper(filePath, true);
+                    m_tabbar->closeCurrentTab();
+                    QFile(filePath).remove();
+                }
+            }
+        } else {
+            removeWrapper(filePath, true);
+            m_tabbar->closeCurrentTab();
+            QFile(filePath).remove();
+        }
+    }
     // document has been modified or unsaved draft document.
     // need to prompt whether to save.
-    if (isModified || (isBlankFile && !wrapper->textEditor()->toPlainText().isEmpty())) {
-        DDialog *dialog = createDialog(tr("Do you want to save this file?"), "");
+    else {
+        QFileInfo fileInfo(filePath);
+        if (m_tabbar->textAt(m_tabbar->currentIndex()).front() == "*") {
+            isModified = true;
+        }
+        if (isModified) {
+            DDialog *dialog = createDialog(tr("Do you want to save this file?"), "");
+            int res = dialog->exec();
 
-        connect(dialog, &DDialog::buttonClicked, this, [ = ](int index) {
-            dialog->hide();
+            //取消或关闭弹窗不做任务操作
+            if (res == 0 || res == -1) return false;
 
-            // don't save.
-            if (index == 1) {
+            //不保存
+            if (res == 1) {
                 removeWrapper(filePath, true);
                 m_tabbar->closeCurrentTab();
 
-                // delete the draft document.
-                if (isBlankFile) {
+                //删除备份文件
+                if (bIsBackupFile) {
                     QFile(filePath).remove();
                 }
 
-//                removeWrapper(filePath, true);
-            } else if (index == 2) {
-                // may to press CANEL button in the save dialog.
-                if (saveFile()) {
-                    removeWrapper(filePath, true);
-                    m_tabbar->closeCurrentTab();                  
-                }
+//                //删除自动备份文件
+//                if (QFileInfo(m_autoBackupDir).exists()) {
+//                    fileInfo.setFile(wrapper->textEditor()->getTruePath());
+//                    QString name = fileInfo.absolutePath().replace("/", "_");
+//                    QDir(m_autoBackupDir).remove(fileInfo.baseName() + "." + name + "." + fileInfo.suffix());
+//                }
+
+                return true;
             }
 
-            focusActiveEditor();
-        });
-
-        dialog->exec();
-    } else {
-        // record last close path.
-        bool bRet = Utils::isDraftFile(m_tabbar->currentPath());
-        if (bRet == false) {
-            m_closeFileHistory << m_tabbar->currentPath();
+            //保存
+            if (res == 2) {
+                if (bIsBackupFile) {
+                    if (wrapper->saveFile()) {
+                        removeWrapper(filePath, true);
+                        m_tabbar->closeCurrentTab();
+                        QFile(filePath).remove();
+                    }
+                    else {
+                        saveAsFile();
+                    }
+                } else {
+                    if (wrapper->saveFile()) {
+                        removeWrapper(filePath, true);
+                        m_tabbar->closeCurrentTab();
+                    }
+                    else {
+                        saveAsFile();
+                    }
+                }
+            }
+        } else {
+            removeWrapper(filePath, true);
+            m_tabbar->closeCurrentTab();
         }
 
-        // close tab directly, because all file is save automatically.
-        removeWrapper(filePath, true);
-        m_tabbar->closeCurrentTab();
-
-        // remove blank file.
-        if (isBlankFile) {
-            QFile::remove(filePath);
-        }
-
-//        removeWrapper(filePath, true);
-        focusActiveEditor();
+//        //删除自动备份文件
+//        if (QFileInfo(m_autoBackupDir).exists()) {
+//            fileInfo.setFile(wrapper->textEditor()->getTruePath());
+//            QString name = fileInfo.absolutePath().replace("/", "_");
+//            QDir(m_autoBackupDir).remove(fileInfo.baseName() + "." + name + "." + fileInfo.suffix());
+//        }
     }
+
+    return true;
 }
 
 void Window::restoreTab()
@@ -756,20 +885,16 @@ void Window::removeWrapper(const QString &filePath, bool isDelete)
 {
     if (m_wrappers.contains(filePath)) {
         EditWrapper *wrapper = m_wrappers.value(filePath);
-
-        m_editorWidget->removeWidget(wrapper);
-        //
-        m_wrappers.remove(filePath);
-
-        if (isDelete) {
-            //wrapper->deleteLater();
-            disconnect(wrapper->textEditor(),nullptr);
-            wrapper->setQuitFlag();
-            wrapper->deleteLater();
+        if(wrapper) {
+            m_editorWidget->removeWidget(wrapper);
+            m_wrappers.remove(filePath);
+            if (isDelete) {
+                disconnect(wrapper->textEditor(),nullptr);
+                disconnect(wrapper, nullptr);
+                wrapper->setQuitFlag();
+                wrapper->deleteLater();
+            }
         }
-
-        // remove all signals on this connection.
-        //disconnect(wrapper->textEditor(), 0, this, 0);
     }
 
     // Exit window after close all tabs.

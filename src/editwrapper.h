@@ -81,6 +81,12 @@ public:
     void setLineNumberShow(bool bIsShow,bool bIsFirstShow = false);
     void setShowBlankCharacter(bool ok);
     void handleCursorModeChanged(TextEdit::CursorMode mode);
+    bool saveDraftFile();
+
+    //判断是否修改
+    bool isModified();
+    //判断是否草稿文件
+    bool isDraftFile();
 
     BottomBar *bottomBar() { return m_bottomBar; }
     QString filePath() { return m_textEdit->filepath; }
@@ -92,7 +98,6 @@ private:
     void setTextCodec(QTextCodec *codec, bool reload = false);
 
     int GetCorrectUnicode1(const QByteArray &ba);
-    bool saveDraftFile();
     void readFile(const QString &filePath);
 public slots:
     void onFileClosed();

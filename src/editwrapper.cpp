@@ -484,6 +484,20 @@ bool EditWrapper::saveDraftFile()
     return true;
 }
 
+bool EditWrapper::isModified()
+{
+    //编码改变内容没有修改也算是文件修改
+    // bool modified = (m_sFirstEncode != m_sCurEncode || m_pTextEdit->document()->isModified());
+    bool modified =  m_textEdit->document()->isModified();
+
+    return  modified;
+}
+
+bool EditWrapper::isDraftFile()
+{
+    return Utils::isDraftFile(m_textEdit->filepath);
+}
+
 void EditWrapper::readFile(const QString &filePath)
 {
     QByteArray data;
