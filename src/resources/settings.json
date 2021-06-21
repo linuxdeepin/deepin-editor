@@ -27,7 +27,7 @@
                             "name": "Word Wrap",
                             "type": "checkbox",
                             "text": "Word wrap",
-                            "default": "false"
+                            "default": "true"
                         },
                         {
 
