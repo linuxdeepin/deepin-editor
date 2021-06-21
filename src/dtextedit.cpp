@@ -5881,6 +5881,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         } else if (key == "M") {
             moveToLineIndentation();
         } else if (key == "Q" && m_bReadOnlyPermission == false) {
+            setReadOnly(false);
             toggleReadOnlyMode();
         } else if (key == "Shfit+J") {
             scrollLineUp();
@@ -5894,6 +5895,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             copyLines();
         } else if ((key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglereadonlymode")/* || key=="Alt+Meta+L"*/)
                    && m_bReadOnlyPermission == false) {
+            setReadOnly(false);
             toggleReadOnlyMode();
         } else if (key == "Shift+/" && e->modifiers() == Qt::ControlModifier) {
             e->ignore();
