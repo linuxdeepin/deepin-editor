@@ -145,8 +145,11 @@ void DDropdownMenu::slotRequestMenu(bool request)
     m_menu->exec();
     //清除ｆｏｃｕｓ
     m_pToolButton->clearFocus();
-    QEvent event(QEvent::HoverLeave);
-    QApplication::sendEvent(m_pToolButton, &event);
+//    QEvent event(QEvent::HoverLeave);
+//    QApplication::sendEvent(m_pToolButton, &event);
+    m_pToolButton->setAttribute(Qt::WA_UnderMouse, false);
+    QHoverEvent hoverevent(QEvent::HoverLeave,m_pToolButton->pos(), QPoint(0, 0));
+    QApplication::sendEvent(m_pToolButton, &hoverevent);
     emit sigSetTextEditFocus();
 }
 
