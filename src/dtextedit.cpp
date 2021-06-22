@@ -5236,7 +5236,7 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
     m_bIsInputMethod = true;
     m_qstrCommitString = e->commitString();
 
-    if (!m_readOnlyMode && e->commitString() != "") {
+    if ((!m_readOnlyMode || !m_bReadOnlyPermission) && e->commitString() != "") {
 
         if (m_bIsAltMod) {
             emit toTellInputModEdit(m_qstrCommitString);
@@ -5250,7 +5250,7 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
         }
     }
 
-    if (!m_readOnlyMode && !m_bIsAltMod) {
+    if ((!m_readOnlyMode || !m_bReadOnlyPermission) && !m_bIsAltMod) {
         QPlainTextEdit::inputMethodEvent(e);
     }
 }
@@ -5314,14 +5314,16 @@ void TextEdit::mousePressEvent(QMouseEvent *e)
         }
     }
 
-    if (e->modifiers() == Qt::AltModifier){
-       m_bIsAltMod = true;
-       //鼠标点击位置为光标位置 　获取光标行列位置
-       QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(e);
-       m_altStartTextCursor = this->cursorForPosition(mouseEvent->pos());
-       m_altStartTextCursor.clearSelection();
-       this->setTextCursor(m_altStartTextCursor);
-       m_altModSelections.clear();
+    if (e->modifiers() == Qt::AltModifier) {
+       if (!m_readOnlyMode && !m_bReadOnlyPermission) {
+           m_bIsAltMod = true;
+           //鼠标点击位置为光标位置 　获取光标行列位置
+           QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(e);
+           m_altStartTextCursor = this->cursorForPosition(mouseEvent->pos());
+           m_altStartTextCursor.clearSelection();
+           this->setTextCursor(m_altStartTextCursor);
+           m_altModSelections.clear();
+       }
     }else {
         if(e->button()!=2)  //右键,调用右键菜单时候不能清空
         {
@@ -6232,7 +6234,6 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
         }
     }
 
-
     if(! this->document()->isEmpty()) {
 
         m_colorMarkMenu->clear();
@@ -6252,8 +6253,11 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
         m_colorMarkMenu->addSeparator();
 
         m_rightMenu->addSeparator();
-        if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
-            m_rightMenu->addAction(m_columnEditAction);
+        m_rightMenu->addAction(m_columnEditAction);
+        if (m_bReadOnlyPermission || m_readOnlyMode) {
+            m_columnEditAction->setEnabled(false);
+        } else {
+            m_columnEditAction->setEnabled(true);
         }
         m_rightMenu->addMenu(m_colorMarkMenu);
     }

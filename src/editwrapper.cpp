@@ -320,7 +320,7 @@ void EditWrapper::refresh()
     //如果文件有被修改了
     if (m_textEdit->document()->isModified()) {
         DDialog *dialog = new DDialog(tr("Encoding changed. Do you want to save the file now?"), "", this);
-        dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnBottomHint);
+        //dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnBottomHint);
         dialog->setIcon(QIcon::fromTheme("deepin-editor"));
         dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
         dialog->addButton(QString(tr("Save")), true, DDialog::ButtonRecommend);
@@ -527,7 +527,7 @@ void EditWrapper::readFile(const QString &filePath)
     // 判断是否出错
     if (decoder->hasFailure()) {
         DDialog *dialogWarning = new DDialog(tr("There are errors when using this encoding. If continue, the file contents may be changed"), "", this);
-        dialogWarning->setWindowFlags(dialogWarning->windowFlags() | Qt::WindowStaysOnBottomHint);
+        //dialogWarning->setWindowFlags(dialogWarning->windowFlags() | Qt::WindowStaysOnBottomHint);
         dialogWarning->setIcon(QIcon::fromTheme("deepin-editor"));
         dialogWarning->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);
         dialogWarning->addButton(QString(tr("Continue")), true, DDialog::ButtonRecommend);
