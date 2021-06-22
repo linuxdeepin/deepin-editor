@@ -1885,23 +1885,6 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
     painter.fillRect(event->rect(), codeFlodAreaBackgroundColor);
     int blockNumber = getFirstVisibleBlockId();
     QTextBlock block = document()->findBlockByNumber(blockNumber);
-//    QTextBlock prev_block = (blockNumber > 0) ? document()->findBlockByNumber(blockNumber - 1) : block;
-//    int translate_y = (blockNumber > 0) ? -verticalScrollBar()->sliderPosition() : 0;
-
-//    int top = this->viewport()->geometry().top();
-//    int additional_margin;
-//    if (blockNumber == 0)
-//        // Simply adjust to document's margin
-//   //     additional_margin = document()->documentMargin() - 1 - this->verticalScrollBar()->sliderPosition();
-//        additional_margin = document()->documentMargin() - this->verticalScrollBar()->sliderPosition();
-//    else
-//        // Getting the height of the visible part of the previous "non entirely visible" block
-//        additional_margin = document()->documentLayout()->blockBoundingRect(prev_block).toRect()
-//                            .translated(0, translate_y).intersected(this->viewport()->geometry()).height();
-
-//    // Shift the starting point
-//    additional_margin += 3;
-//    top += additional_margin;
 
     DGuiApplicationHelper *guiAppHelp = DGuiApplicationHelper::instance();
     QString theme  = "";
@@ -1912,25 +1895,20 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
         theme = "l";
     }
 
-    QString flodImagePath = ":/images/d-" + theme + ".svg";
-    QString unflodImagePath = ":/images/u-" + theme + ".svg";
+    QString flodImagePath = QString(":/images/d-%1.svg").arg(theme);
+    QString unflodImagePath = QString(":/images/u-%1.svg").arg(theme);
     QImage Unfoldimage(unflodImagePath);
     QImage foldimage(flodImagePath);
     QPixmap scaleFoldPixmap;
     QPixmap scaleunFoldPixmap;
-    QImage scaleFoldImage;
-    QImage scaleunFoldImage;
     int imageTop = 0;//图片绘制位置
     int fontHeight = fontMetrics().height();
     double nfoldImageHeight = fontHeight;
 
-//    int bottom = top + document()->documentLayout()->blockBoundingRect(block).height();
-
     QPoint endPoint;
 
-    if (verticalScrollBar()->maximum() > 0)
-    {
-        endPoint = QPointF(0,height() + height()/verticalScrollBar()->maximum()*verticalScrollBar()->value()).toPoint();
+    if (verticalScrollBar()->maximum() > 0) {
+        endPoint = QPointF(0, height() + height() / verticalScrollBar()->maximum() * verticalScrollBar()->value()).toPoint();
     }
 
     QTextCursor cur = cursorForPosition(endPoint);
@@ -1944,36 +1922,28 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
     cur = textCursor();
 
     for (int iBlockCount = blockNumber ; iBlockCount <= nPageLine; ++iBlockCount) {
-        //注释代码 行单个"{" 折叠标志显示当前行
-//        if (block.text().trimmed().startsWith("{") && blockNumber != 0) {
-//            m_listFlodFlag.append(blockNumber - 1);
-//        } else {
-//            m_listFlodFlag.append(blockNumber);
-            //qDebug()<< "Block "<<blockNumber;
-//        }
-
         if (block.isVisible()) {
             //判定是否包含注释代码左括号、是否整行是注释，isNeedShowFoldIcon该函数是为了做判定当前行是否包含成对的括号，如果包括，则不显示折叠标志
 
-           //获取行数文本块 出去字符串判断　梁卫东２０２０年０９月０１日１７：１６：１７
-           QString text = block.text();
-           QRegExp regExp("^\"*\"&");
-           QString curText = text.remove(regExp);
+            //获取行数文本块 出去字符串判断　梁卫东２０２０年０９月０１日１７：１６：１７
+            QString text = block.text();
+            QRegExp regExp("^\"*\"&");
+            QString curText = text.remove(regExp);
 
-           //不同类型文件注释符号不同 梁卫东　２０２０－０９－０３　１７：２８：４５
-           bool bHasCommnent = false;
-           QString multiLineCommentMark;
-           QString singleLineCommentMark;
+            //不同类型文件注释符号不同 梁卫东　２０２０－０９－０３　１７：２８：４５
+            bool bHasCommnent = false;
+            QString multiLineCommentMark;
+            QString singleLineCommentMark;
 
-           if(m_commentDefinition.isValid()){
+            if (m_commentDefinition.isValid()) {
                 multiLineCommentMark = m_commentDefinition.multiLineStart.trimmed();
                 singleLineCommentMark = m_commentDefinition.singleLine.trimmed();
                 //判断是否包含单行或多行注释
-                if(!multiLineCommentMark.isEmpty()) bHasCommnent = block.text().trimmed().startsWith(multiLineCommentMark);
-                if(!singleLineCommentMark.isEmpty()) bHasCommnent = block.text().trimmed().startsWith(singleLineCommentMark);
-           }else {
+                if (!multiLineCommentMark.isEmpty()) bHasCommnent = block.text().trimmed().startsWith(multiLineCommentMark);
+                if (!singleLineCommentMark.isEmpty()) bHasCommnent = block.text().trimmed().startsWith(singleLineCommentMark);
+            } else {
                 bHasCommnent = false;
-           }
+            }
 
 
            //添加注释判断 存在不显示折叠标志　不存在显示折叠标准　梁卫东　２０２０年０９月０３日１７：２８：５０
@@ -1982,6 +1952,8 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                cur.setPosition(block.position(), QTextCursor::MoveAnchor);
 
                auto rate = devicePixelRatioF();
+               if(rate <=1)
+                   rate = 1.25;
                foldimage = foldimage.scaled(foldimage.width()*rate, foldimage.height()*rate);
                scaleFoldPixmap = Utils::renderSVG(flodImagePath, QSize(foldimage.height(), foldimage.width()), false);
                scaleFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
@@ -2015,22 +1987,26 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                }
 #endif
 
-               int nOffset = 0;
+               int nOffset = -8;
+               painter.setRenderHint(QPainter::Antialiasing, true);
+               painter.setRenderHints(QPainter::SmoothPixmapTransform);
+
+               QRect rt = cursorRect(cur);
+
                if (block.next().isVisible()) {
                     if (block.isVisible()) {
-                        imageTop = cursorRect(cur).y() ;
-                        painter.drawPixmap(nOffset, imageTop/* - static_cast<int>(document()->documentMargin())*/, scaleFoldPixmap);
+                        imageTop = rt.y() ;
+                        painter.drawPixmap(nOffset, imageTop, rt.height(),rt.height(),scaleFoldPixmap);
                      }
                  } else {
                     if (block.isVisible()) {
-                        imageTop = cursorRect(cur).y();
-                        painter.drawPixmap(nOffset, imageTop/* - static_cast<int>(document()->documentMargin())*/, scaleunFoldPixmap);
+                        imageTop = rt.y() ;
+                        painter.drawPixmap(nOffset, imageTop,rt.height(),rt.height(), scaleunFoldPixmap);
                      }
                  }
                m_listFlodIconPos.append(block.blockNumber());
            }
-        }
-
+       }
         block = block.next();
     }
 }
