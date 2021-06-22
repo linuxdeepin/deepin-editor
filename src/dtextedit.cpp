@@ -6289,7 +6289,9 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
         m_colorMarkMenu->addSeparator();
 
         m_rightMenu->addSeparator();
-        m_rightMenu->addAction(m_columnEditAction);
+        if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
+            m_rightMenu->addAction(m_columnEditAction);
+        }
         m_rightMenu->addMenu(m_colorMarkMenu);
     }
 
