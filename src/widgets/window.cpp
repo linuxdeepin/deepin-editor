@@ -1164,6 +1164,10 @@ void Window::popupReplaceBar()
         return;
     }
 
+    if(currentWrapper() && currentWrapper()->getFileLoading()){
+        return;
+    }
+
     QTextCursor cursor = currentWrapper()->textEditor()->textCursor();
 
     m_replaceBar->setsearched(false);

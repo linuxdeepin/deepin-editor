@@ -2504,13 +2504,15 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                 cur.setPosition(block.position(), QTextCursor::MoveAnchor);
 
                 auto rate = devicePixelRatioF();
+                if(rate <=1)
+                    rate = 1.25;
                 foldimage = foldimage.scaled(foldimage.width()*rate, foldimage.height()*rate);
                 scaleFoldPixmap = Utils::renderSVG(flodImagePath, QSize(foldimage.height(), foldimage.width()), false);
                 scaleFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
                 scaleunFoldPixmap = Utils::renderSVG(unflodImagePath, QSize(foldimage.height(), foldimage.width()), false);
                 scaleunFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
 
-		#if 0
+        #if 0
                 if (fontHeight > foldimage.height()) {
                     scaleFoldPixmap = Utils::renderSVG(flodImagePath, QSize(foldimage.height(), foldimage.width()), false);
                     scaleFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
@@ -2537,17 +2539,22 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                         painter.drawPixmap(nOffset, imageTop/* - static_cast<int>(document()->documentMargin())*/, scaleunFoldPixmap);
                     }
                 }
- 		#endif
-                int nOffset = 0;
+        #endif
+                int nOffset = -8;
+                painter.setRenderHint(QPainter::Antialiasing, true);
+                painter.setRenderHints(QPainter::SmoothPixmapTransform);
+
+                QRect rt = cursorRect(cur);
+
                 if (block.next().isVisible()) {
                      if (block.isVisible()) {
-                         imageTop = cursorRect(cur).y() ;
-                         painter.drawPixmap(nOffset, imageTop/* - static_cast<int>(document()->documentMargin())*/, scaleFoldPixmap);
+                         imageTop = rt.y() ;
+                         painter.drawPixmap(nOffset, imageTop, rt.height(),rt.height(),scaleFoldPixmap);
                       }
                   } else {
                      if (block.isVisible()) {
-                         imageTop = cursorRect(cur).y();
-                         painter.drawPixmap(nOffset, imageTop/* - static_cast<int>(document()->documentMargin())*/, scaleunFoldPixmap);
+                         imageTop = rt.y() ;
+                         painter.drawPixmap(nOffset, imageTop,rt.height(),rt.height(), scaleunFoldPixmap);
                       }
                   }
                 m_listFlodIconPos.append(block.blockNumber());
