@@ -34,6 +34,7 @@ TEST_F(test_jumplinebar, focus)
     JumpLineBar *jumpLineBar = new JumpLineBar();
     jumpLineBar->focus();
     assert(1==1);
+    delete jumpLineBar;
 }
 
 //bool isFocus();
@@ -42,6 +43,7 @@ TEST_F(test_jumplinebar, isFocus)
     JumpLineBar *jumpLineBar = new JumpLineBar();
     jumpLineBar->isFocus();
     assert(1==1);
+    delete jumpLineBar;
 }
 
 //void activeInput(QString file, int row, int column, int lineCount, int scrollOffset);
@@ -50,6 +52,7 @@ TEST_F(test_jumplinebar, activeInput)
     JumpLineBar *jumpLineBar = new JumpLineBar();
     jumpLineBar->activeInput("aa",1,1,1,1);
     assert(1==1);
+    delete jumpLineBar;
 }
 
 //void handleFocusOut();
@@ -58,6 +61,7 @@ TEST_F(test_jumplinebar, handleFocusOut)
     JumpLineBar *jumpLineBar = new JumpLineBar();
     jumpLineBar->handleFocusOut();
     assert(1==1);
+    delete jumpLineBar;
 }
 
 //void handleLineChanged();
@@ -66,6 +70,7 @@ TEST_F(test_jumplinebar, handleLineChanged)
     JumpLineBar *jumpLineBar = new JumpLineBar();
     jumpLineBar->handleLineChanged();
     assert(1==1);
+    delete jumpLineBar;
 }
 
 //void jumpCancel();
@@ -74,6 +79,7 @@ TEST_F(test_jumplinebar, jumpCancel)
     JumpLineBar *jumpLineBar = new JumpLineBar();
     jumpLineBar->jumpCancel();
     assert(1==1);
+    delete jumpLineBar;
 }
 
 //void jumpConfirm();
@@ -82,6 +88,7 @@ TEST_F(test_jumplinebar, jumpConfirm)
     JumpLineBar *jumpLineBar = new JumpLineBar();
     jumpLineBar->jumpConfirm();
     assert(1==1);
+    delete jumpLineBar;
 }
 
 //void slotFocusChanged(bool bFocus);
@@ -90,4 +97,5 @@ TEST_F(test_jumplinebar, slotFocusChanged)
     JumpLineBar *jumpLineBar = new JumpLineBar();
     jumpLineBar->slotFocusChanged(true);
     assert(1==1);
+    delete jumpLineBar;
 }

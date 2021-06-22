@@ -54,6 +54,14 @@ JumpLineBar::JumpLineBar(DFloatingWidget *parent)
     connect(m_editLine, &LineBar::focusChanged, this, &JumpLineBar::slotFocusChanged, Qt::QueuedConnection);
 }
 
+JumpLineBar::~JumpLineBar()
+{
+    if (m_lineValidator != nullptr) {
+        delete m_lineValidator;
+        m_lineValidator = nullptr;
+    }
+}
+
 void JumpLineBar::focus()
 {
     m_editLine->lineEdit()->setFocus();

@@ -21,6 +21,8 @@ TEST_F(test_fontitemdelegata, paint)
     QModelIndex index;
     option.state = QStyle::State_Selected;
     delegate->paint(painter,option,index);
+    delete painter;
+    delete delegate;
 
 }
 
@@ -32,5 +34,7 @@ TEST_F(test_fontitemdelegata, sizeHint)
     QModelIndex index;
     option.state = QStyle::State_Selected;
     delegate->sizeHint(option,index);
+    delete painter;
+    delete delegate;
 
 }

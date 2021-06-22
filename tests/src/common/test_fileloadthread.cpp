@@ -44,6 +44,7 @@ TEST_F(test_fileloadthread, run)
     FileLoadThread *thread = new FileLoadThread("aa");
     thread->run();
     assert(1 == 1);
+    delete thread;
 }
 
 //void setEncodeInfo(QStringList pathList,QStringList codeList);
@@ -53,6 +54,7 @@ TEST_F(test_fileloadthread, setEncodeInfo)
     FileLoadThread *thread = new FileLoadThread("aa");
     //thread->setEncodeInfo(pathList,codeList);
     assert(1 == 1);
+    delete thread;
 }
 
 //QString getCodec();
@@ -61,4 +63,5 @@ TEST_F(test_fileloadthread, getCodec)
     FileLoadThread *thread = new FileLoadThread("aa");
     //  thread->getCodec();
     assert(1 == 1);
+    delete thread;
 }

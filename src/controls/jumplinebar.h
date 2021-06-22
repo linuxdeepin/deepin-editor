@@ -45,6 +45,7 @@ class JumpLineBar : public DFloatingWidget
 public:
     explicit JumpLineBar(DFloatingWidget *parent = 0);
 
+    ~JumpLineBar();
 public slots:
     void focus();
     bool isFocus();

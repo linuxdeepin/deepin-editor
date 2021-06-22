@@ -154,6 +154,10 @@ Settings::Settings(QWidget *parent)
 
 Settings::~Settings()
 {
+    if (m_backend != nullptr) {
+        delete m_backend;
+        m_backend = nullptr;
+    }
 }
 
 void Settings::setSettingDialog(DSettingsDialog *settingsDialog)

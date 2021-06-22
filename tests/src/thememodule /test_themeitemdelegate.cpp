@@ -23,6 +23,7 @@ TEST_F(test_ThemeItemDelegate, paint)
     const QStyleOptionViewItem option;
     //    ThemeItemDelegate tid;
     tid->paint(painter, option, index);
+    delete painter;
 }
 
 TEST_F(test_ThemeItemDelegate, sizeHint)

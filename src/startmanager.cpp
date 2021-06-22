@@ -536,6 +536,8 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
         geometry->deleteLater();
         // Opacity->deleteLater();
         group->deleteLater();
+        delete geometry;
+        delete group;
 
         window->addTabWithWrapper(buffer, filePath, qstrTruePath, tabName);
         window->currentWrapper()->updateModifyStatus(isModifyed);
