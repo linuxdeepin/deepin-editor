@@ -553,16 +553,20 @@ void EditWrapper::checkForReload()
             return;
         }
 
-    if (!fi.exists()) {
+    QFileInfo fi2(m_pTextEdit->getTruePath());
+
+    if (!fi2.exists()) {
         m_pWaringNotices->setMessage(tr("File removed on the disk. Save it now?"));
         m_pWaringNotices->setSaveAsBtn();
-    } else if (fi.lastModified() != m_tModifiedDateTime) {
+        m_pWaringNotices->show();
+        DMessageManager::instance()->sendMessage(m_pTextEdit, m_pWaringNotices);
+    } else if (fi2.lastModified() != m_tModifiedDateTime) {
         m_pWaringNotices->setMessage(tr("File has changed on disk. Reload?"));
         m_pWaringNotices->setReloadBtn();
+        m_pWaringNotices->show();
+        DMessageManager::instance()->sendMessage(m_pTextEdit, m_pWaringNotices);
     }
 
-    m_pWaringNotices->show();
-    DMessageManager::instance()->sendMessage(m_pTextEdit, m_pWaringNotices);
     });
 }
 
