@@ -5712,17 +5712,11 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         if (characterCount() &&
             (textCursor().hasSelection() || !isBlankLine) &&
             !def.filePath().isEmpty()) {
-    //        m_rightMenu->addAction(m_toggleCommentAction);
-
-            //yanyuhan 折叠、代码注释（有代码选中时增加注释选项显示）
-    //        m_rightMenu->addMenu(m_collapseExpandMenu);             //折叠展开
-
             if(def.name()!="Markdown")
             {
                 m_rightMenu->addAction(m_addComment);
                 m_rightMenu->addAction(m_cancelComment);
             }
-
             if (m_readOnlyMode == true) {
                 m_addComment->setEnabled(false);
                 m_cancelComment->setEnabled(false);
@@ -6156,30 +6150,23 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
        else bHasCommnent = true;
     }
 
-
     if (characterCount() &&
         (textCursor().hasSelection() || !isBlankLine) &&
         bHasCommnent) {
-//        m_rightMenu->addAction(m_toggleCommentAction);
-
-        //yanyuhan 折叠、代码注释（有代码选中时增加注释选项显示）
-//        m_rightMenu->addMenu(m_collapseExpandMenu);             //折叠展开
 
         if(def.name()!="Markdown")
         {
             m_rightMenu->addAction(m_addComment);
             m_rightMenu->addAction(m_cancelComment);
         }
+    }
 
-        if (m_readOnlyMode == true) {
-//            m_toggleCommentAction->setEnabled(false);
-            m_addComment->setEnabled(false);
-            m_cancelComment->setEnabled(false);
-        } else {
-//            m_toggleCommentAction->setEnabled(true);
-            m_addComment->setEnabled(true);
-            m_cancelComment->setEnabled(true);
-        }
+    if (m_readOnlyMode || m_bReadOnlyPermission) {
+        m_addComment->setEnabled(false);
+        m_cancelComment->setEnabled(false);
+    } else {
+        m_addComment->setEnabled(true);
+        m_cancelComment->setEnabled(true);
     }
 
     m_rightMenu->addSeparator();
