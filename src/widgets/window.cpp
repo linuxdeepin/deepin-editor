@@ -1988,6 +1988,20 @@ void Window::setChildrenFocus(bool ok)
 
 void Window::addBlankTab()
 {
+
+    if (m_findBar->isVisible()) {
+        m_findBar->hide();
+    }
+
+    if (m_replaceBar->isVisible()) {
+        m_replaceBar->hide();
+    }
+
+    if (m_jumpLineBar->isVisible()) {
+        m_jumpLineBar->hide();
+    }
+
+
     addBlankTab("");
 }
 
