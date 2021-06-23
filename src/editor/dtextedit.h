@@ -554,6 +554,10 @@ private:
     void slideGestureY(qreal diff);
     void slideGestureX(qreal diff);
 
+    //只读权限不显示中文输入提示框 ut002764 2021.6.23
+    void SendtoggleReadOnlyMode();
+    void SendtoggleReadmessage();
+
 public:
     int getFirstVisibleBlockId() const;
 
@@ -789,5 +793,9 @@ private:
     //自定义撤销重做栈
     QUndoStack *m_pUndoStack = nullptr;
     int m_lastSaveIndex = 0;
+
+    //只读权限模式执行一次的判断变量  ut002764 2021.6.23
+    bool m_Permission = false;
+    bool m_Permission2 = false;
 };
 #endif
