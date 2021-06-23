@@ -14,7 +14,6 @@ TEST_F(test_flashTween, LeftAreaTextEdit)
     a=nullptr;
 
     assert(1==1);
-    delete a;
 }
 
 TEST_F(test_flashTween, stopY)
@@ -74,7 +73,6 @@ TEST_F(test_flashTween, stopX)
     delete a;
     a=nullptr;
     assert(1==1);
-    delete a;
 }
 
 

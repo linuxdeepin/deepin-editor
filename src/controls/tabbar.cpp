@@ -380,15 +380,17 @@ QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option
         sm_pDragPixmap = new QPixmap(QPixmap::fromImage(backgroundImage));
         return QPixmap::fromImage(backgroundImage);
     }
-//   QPixmap backgroundImage = DTabBar::createDragPixmapFromTab(index,option,hotspot);
-//    if(sm_pDragPixmap) delete sm_pDragPixmap;
-//    sm_pDragPixmap = new QPixmap(backgroundImage);
-//    return backgroundImage;
+
+    #if 0
+    QPixmap backgroundImage = DTabBar::createDragPixmapFromTab(index,option,hotspot);
+    if(sm_pDragPixmap) delete sm_pDragPixmap;
+    sm_pDragPixmap = new QPixmap(backgroundImage);
+    return backgroundImage;
+    #endif
 }
 
 QMimeData *Tabbar::createMimeDataFromTab(int index, const QStyleOptionTab &option) const
 {
-    //qDebug() << "DragEnter";
     const QString tabName = textAt(index);
 
     Window *window = static_cast<Window *>(this->window());
@@ -397,12 +399,13 @@ QMimeData *Tabbar::createMimeDataFromTab(int index, const QStyleOptionTab &optio
     if (wrapper && wrapper->getFileLoading()) return nullptr;
 
     QMimeData *mimeData = new QMimeData;
+    mimeData->setParent(window);
 
     if (!wrapper) {
         //m_tabbar->closeCurrentTab();
         return nullptr;
     }
-    //qDebug() << "DragEnter(index)" << index;
+
     mimeData->setProperty("wrapper", QVariant::fromValue(static_cast<void *>(wrapper)));
     mimeData->setProperty("isModified", wrapper->isModified());
     mimeData->setData("dedit/tabbar", tabName.toUtf8());
@@ -416,7 +419,7 @@ void Tabbar::insertFromMimeDataOnDragEnter(int index, const QMimeData *source)
     if (source == nullptr) {
         return;
     }
-//    qDebug() << "insertFromMimeDataOnDragEnter";
+
     const QString tabName = QString::fromUtf8(source->data("dedit/tabbar"));
     QVariant pVar = source->property("wrapper");
     EditWrapper *wrapper = static_cast<EditWrapper *>(pVar.value<void *>());
@@ -425,14 +428,11 @@ void Tabbar::insertFromMimeDataOnDragEnter(int index, const QMimeData *source)
     if (wrapper && (wrapper && wrapper->getFileLoading())) return;
 
     Window *window = static_cast<Window *>(this->window());
-//    EditWrapper *wrapper = window->addTab();
 
     if (!wrapper) {
         return;
     }
 
-//    StartManager::instance()->setDragEnter(true);
-    //qDebug() << "insertFromMimeDataOnDragEnter";
     window->addTabWithWrapper(wrapper, wrapper->textEditor()->getFilePath(), wrapper->textEditor()->getTruePath(), tabName, index);
     //window->currentWrapper()->textEditor()->setModified(source->property("isModified").toBool());
     wrapper->updateModifyStatus(source->property("isModified").toBool());
