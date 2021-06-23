@@ -2188,6 +2188,11 @@ void Window::slotReplacebarClose()
     wrapper->bottomBar()->updateSize(32, false);
     currentWrapper()->textEditor()->setFocus();
     currentWrapper()->textEditor()->tellFindBarClose();
+
+    QPoint pos = QCursor::pos();
+    pos.setY(pos.y() - 100);
+    QCursor::setPos(pos);
+
 }
 
 void Window::handleReplaceAll(const QString &replaceText, const QString &withText)
