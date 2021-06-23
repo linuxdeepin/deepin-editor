@@ -3743,7 +3743,7 @@ void TextEdit::setReadOnlyPermission(bool permission)
 
 void TextEdit::SendtoggleReadmessage()
 {
-    if (m_bReadOnlyPermission) {
+    if (!m_bReadOnlyPermission) {
         if (m_cursorMode == Overwrite) {
             emit cursorModeChanged(Overwrite);
         } else {
