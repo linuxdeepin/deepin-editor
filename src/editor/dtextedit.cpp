@@ -3576,11 +3576,13 @@ void TextEdit::toggleReadOnlyMode()
         }
 
         m_readOnlyMode = false;
+        setReadOnly(false);
         setCursorWidth(1);
         updateHighlightLineSelection();
         popupNotify(tr("Read-Only mode is off"));
     } else {
         m_readOnlyMode = true;
+        setReadOnly(true);
         setCursorWidth(0); //隐藏光标
         document()->clearUndoRedoStacks();
         updateHighlightLineSelection();
@@ -3723,9 +3725,11 @@ void TextEdit::setReadOnlyPermission(bool permission)
 {
     m_bReadOnlyPermission = permission; //true为不可读
     if (permission) {
+        m_Permission2 = true;
         setReadOnly(true);
         emit cursorModeChanged(Readonly);
     } else {
+        m_Permission = false;
         if (!m_readOnlyMode) {
             setReadOnly(false);
             emit cursorModeChanged(Insert);
@@ -3733,6 +3737,38 @@ void TextEdit::setReadOnlyPermission(bool permission)
             setReadOnly(true);
             emit cursorModeChanged(Readonly);
         }
+    }
+    SendtoggleReadOnlyMode();
+}
+
+void TextEdit::SendtoggleReadmessage()
+{
+    if (m_bReadOnlyPermission) {
+        if (m_cursorMode == Overwrite) {
+            emit cursorModeChanged(Overwrite);
+        } else {
+            emit cursorModeChanged(Insert);
+        }
+        setReadOnly(false);
+        setCursorWidth(1);
+        updateHighlightLineSelection();
+    } else {
+        setReadOnly(true);
+        setCursorWidth(0); //隐藏光标
+        document()->clearUndoRedoStacks();
+        updateHighlightLineSelection();
+        emit cursorModeChanged(Readonly);
+    }
+}
+
+void TextEdit::SendtoggleReadOnlyMode() {
+    if(m_bReadOnlyPermission && !m_Permission) {
+        m_Permission = m_bReadOnlyPermission;
+        SendtoggleReadmessage();
+    }
+    else if(m_Permission2 && !m_bReadOnlyPermission){
+        m_Permission2 = m_bReadOnlyPermission;
+        SendtoggleReadmessage();
     }
 }
 
@@ -5875,7 +5911,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             moveToLineIndentation();
             return;
         } else if (key == "Q" && m_bReadOnlyPermission == false) {
-            setReadOnly(false);
+            //setReadOnly(false);
             toggleReadOnlyMode();
             return;
         } else if (key == "Shfit+J") {
@@ -5895,7 +5931,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             return;
         } else if ((key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglereadonlymode")/* || key=="Alt+Meta+L"*/)
                    && m_bReadOnlyPermission == false) {
-            setReadOnly(false);
+            //setReadOnly(false);
             toggleReadOnlyMode();
             return;
         } else if (key == "Shift+/" && e->modifiers() == Qt::ControlModifier) {
@@ -6235,7 +6271,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             joinLines();
             return;
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglereadonlymode")/*|| key=="Alt+Meta+L"*/) {
-            setReadOnly(false);
+            //setReadOnly(false);
             toggleReadOnlyMode();
             return;
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglecomment")) {
