@@ -3135,15 +3135,13 @@ void TextEdit::toggleReadOnlyMode()
         }
 
         m_readOnlyMode = false;
-        //setReadOnly(false);
+        setReadOnly(false);
         setCursorWidth(1);
         updateHighlightLineSelection();
-        //setSpeechToTextEnabled(true); //此函数在shuttle上编译报错
         popupNotify(tr("Read-Only mode is off"));
     } else {//
         m_readOnlyMode = true;
-        //setReadOnly(true);
-        //setSpeechToTextEnabled(false);
+        setReadOnly(true);
         setCursorWidth(0); //隐藏光标
         document()->clearUndoRedoStacks();
         updateHighlightLineSelection();
@@ -3306,9 +3304,11 @@ void TextEdit::setReadOnlyPermission(bool permission)
     //读写属性权限修改消息通知逻辑变更 ut002764
     m_bReadOnlyPermission = permission; //true为不可读
     if (permission) {
+        m_Permission2 = true;
         setReadOnly(true);
         emit cursorModeChanged(Readonly);
     } else {
+         m_Permission = false;
         if (!m_readOnlyMode) {
             setReadOnly(false);
             emit cursorModeChanged(Insert);
@@ -3316,6 +3316,18 @@ void TextEdit::setReadOnlyPermission(bool permission)
             setReadOnly(true);
             emit cursorModeChanged(Readonly);
         }
+    }
+    SendtoggleReadOnlyMode();
+}
+
+void TextEdit::SendtoggleReadOnlyMode() {
+    if(m_bReadOnlyPermission && !m_Permission) {
+        m_Permission = m_bReadOnlyPermission;
+        toggleReadOnlyMode();
+    }
+    else if(m_Permission2 && !m_bReadOnlyPermission){
+        m_Permission2 = m_bReadOnlyPermission;
+        toggleReadOnlyMode();
     }
 }
 
