@@ -567,6 +567,7 @@ private:
 
     //只读权限不显示中文输入提示框 ut002764 2021.6.23
     void SendtoggleReadOnlyMode();
+    void SendtoggleReadmessage();
 
 public:
     bool bIsSetLineNumberWidth = true;

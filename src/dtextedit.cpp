@@ -3320,14 +3320,34 @@ void TextEdit::setReadOnlyPermission(bool permission)
     SendtoggleReadOnlyMode();
 }
 
+void TextEdit::SendtoggleReadmessage()
+{
+    if (m_bReadOnlyPermission) {
+        if (m_cursorMode == Overwrite) {
+            emit cursorModeChanged(Overwrite);
+        } else {
+            emit cursorModeChanged(Insert);
+        }
+        setReadOnly(false);
+        setCursorWidth(1);
+        updateHighlightLineSelection();
+    } else {
+        setReadOnly(true);
+        setCursorWidth(0); //隐藏光标
+        document()->clearUndoRedoStacks();
+        updateHighlightLineSelection();
+        emit cursorModeChanged(Readonly);
+    }
+}
+
 void TextEdit::SendtoggleReadOnlyMode() {
     if(m_bReadOnlyPermission && !m_Permission) {
         m_Permission = m_bReadOnlyPermission;
-        toggleReadOnlyMode();
+        SendtoggleReadmessage();
     }
     else if(m_Permission2 && !m_bReadOnlyPermission){
         m_Permission2 = m_bReadOnlyPermission;
-        toggleReadOnlyMode();
+        SendtoggleReadmessage();
     }
 }
 
@@ -5865,7 +5885,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         } else if (key == "M") {
             moveToLineIndentation();
         } else if (key == "Q" && m_bReadOnlyPermission == false) {
-            setReadOnly(false);
+//            setReadOnly(false);
             toggleReadOnlyMode();
         } else if (key == "Shfit+J") {
             scrollLineUp();
@@ -5879,7 +5899,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             copyLines();
         } else if ((key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglereadonlymode")/* || key=="Alt+Meta+L"*/)
                    && m_bReadOnlyPermission == false) {
-            setReadOnly(false);
+//            setReadOnly(false);
             toggleReadOnlyMode();
         } else if (key == "Shift+/" && e->modifiers() == Qt::ControlModifier) {
             e->ignore();
