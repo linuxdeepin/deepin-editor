@@ -208,6 +208,8 @@ public slots:
     //清除不支持双字节字符集符号
     void slotClearDoubleCharaterEncode();
     void slotVirtualKeyboardImActiveChanged(bool bIsVirKeyboarShow);
+    //切换横屏或者竖屏时，如果虚拟键盘是弹出的状态，则重新获取页面大小和，虚拟键盘高度等信息 ut002764 2021.6.24
+    void slotVirtualKeyboardgeometryChanged();
     void slotSigThemeChanged(const QString &path);
     void slotSigAdjustFont(QString fontName);
     void slotSigAdjustFontSize(int fontSize);

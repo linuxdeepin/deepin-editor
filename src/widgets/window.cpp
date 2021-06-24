@@ -429,12 +429,12 @@ void Window::initTabletFeatures()
 {
     //平板模式，窗口不需要圆角
     setWindowRadius(0);
-    updateWindowWidthHightValue();
+//    updateWindowWidthHightValue();
 
     if (/*DGuiApplicationHelper::isTabletEnvironment()*/ 1) {
         setWindowFlag(Qt::WindowMinMaxButtonsHint, false);
         setWindowFlag(Qt::WindowCloseButtonHint, false);
-        setFixedSize(QSize(m_iDesktopAvailableWidth, m_iDesktopAvailableHeight));
+//        setFixedSize(QSize(m_iDesktopAvailableWidth, m_iDesktopAvailableHeight));
     }
 
     initStatuBar();
@@ -459,7 +459,9 @@ void Window::initVirtualKeyboardDbus()
     if (m_pImInterface->isValid()) {
         QVariant variant = m_pImInterface->geometry();
         setKeyboardHeight(variant.value<QRect>().height());
-        connect(m_pImInterface, &ComDeepinImInterface::imActiveChanged, this, &Window::slotVirtualKeyboardImActiveChanged);
+//        connect(m_pImInterface, &ComDeepinImInterface::imActiveChanged, this, &Window::slotVirtualKeyboardImActiveChanged);
+//        connect(m_pImInterface, &ComDeepinImInterface::geometryChanged, this, &Window::slotVirtualKeyboardgeometryChanged);
+
         qInfo() << "connect vietual keyboard dbus ok.";
     } else {
         delete m_pImInterface;
@@ -503,6 +505,10 @@ void Window::setKeyboardHeight(int iKeyboardHeight)
 
 int Window::getKeyboardHeight()
 {
+    if (m_pImInterface->isValid()) {
+        QVariant variant = m_pImInterface->property("geometry");
+        m_iKeyboardHeight = variant.toRect().height();
+    }
     return m_iKeyboardHeight;
 }
 
@@ -2496,23 +2502,42 @@ void Window::slotClearDoubleCharaterEncode()
 *******************************************************************************/
 void Window::slotVirtualKeyboardImActiveChanged(bool bIsVirKeyboarShow)
 {
+    slotStatusBarHeightChange();
     Settings::instance()->setVirkeyboardStatus(bIsVirKeyboarShow);
-    if (m_pImInterface) {
+//    if (m_pImInterface) {
         if (bIsVirKeyboarShow) {
             QTimer::singleShot(300, this, [=]() {
                 setFixedHeight(QApplication::desktop()->geometry().height() - getKeyboardHeight() - m_iStatusBarHeight);
+                setFixedWidth(QApplication::desktop()->geometry().width());
             });
         } else {
-            setFixedHeight(QApplication::desktop()->availableGeometry().height());
+            setFixedHeight(QApplication::desktop()->geometry().height());
+            setFixedWidth(QApplication::desktop()->geometry().width());
         }
+//    }
+}
+
+void Window::slotVirtualKeyboardgeometryChanged()
+{
+    //切换横屏或者竖屏，如果键盘显示，先关闭，在开启
+    if(Settings::instance()->getVirkeyboardStatus()) {
+        if (m_pImInterface) {
+            m_pImInterface->setImActive(false);
+            QTimer::singleShot(100, this, [=]() {
+                m_pImInterface->setImActive(true);
+            });
+        }
+    }
+    else {
+        slotVirtualKeyboardImActiveChanged(false);
     }
 }
 
 void Window::slotSendresetHeight()
 {
     if(m_pImInterface) {
-        setFixedHeight(QApplication::desktop()->availableGeometry().height());
-        qInfo()<<"************will do reset height***********";
+        m_pImInterface->setImActive(false);
+        setFixedHeight(QApplication::desktop()->geometry().height());
     }
 }
 
@@ -2616,9 +2641,11 @@ void Window::slotSigChangeWindowSize(QString mode)
 
 void Window::slotStatusBarHeightChange()
 {
-    QDBusReply<uint> reply = m_pStatusDbusface->call("height");
-    if (reply.isValid()) {
-        m_iStatusBarHeight = static_cast<int>(reply.value());
+    QDBusMessage reply = m_pStatusDbusface->call(QDBus::AutoDetect,"height");
+    if (QDBusMessage::ReplyMessage == reply.type()) {
+        QList<QVariant> list = reply.arguments();
+        m_iStatusBarHeight = list.takeFirst().toInt();
+//        m_iStatusBarHeight = static_cast<int>(reply.value());
         qInfo() << "status bar height: " << m_iStatusBarHeight;
     } else {
         qInfo() << "call status bar height error";
