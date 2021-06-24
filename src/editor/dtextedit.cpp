@@ -5649,6 +5649,7 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
     }
 }
 
+#if 0
 void TextEdit::mousePressEvent(QMouseEvent *e)
 {
     if (m_bIsFindClose) {
@@ -5877,6 +5878,7 @@ void TextEdit::mouseReleaseEvent(QMouseEvent *e)
     }
     return QPlainTextEdit::mouseReleaseEvent(e);
 }
+#endif
 
 void TextEdit::keyPressEvent(QKeyEvent *e)
 {
