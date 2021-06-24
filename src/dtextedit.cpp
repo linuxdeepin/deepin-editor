@@ -1987,7 +1987,7 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                }
 #endif
 
-               int nOffset = -8;
+               int nOffset = 0;
                painter.setRenderHint(QPainter::Antialiasing, true);
                painter.setRenderHints(QPainter::SmoothPixmapTransform);
 
