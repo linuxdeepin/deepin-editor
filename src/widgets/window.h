@@ -222,8 +222,8 @@ public slots:
     void slotSigHightLightCurrentLine(bool bIsShow);
     void slotSigShowCodeFlodFlag(bool bIsShow);
     void slotSigChangeWindowSize(QString mode);
-    void slotStatusBarHeightChange();
 
+    void slotStatusBarHeightChange();
     //设置文本高度复位；ut002764 2021-6-17
     void slotSendresetHeight();
 
@@ -314,6 +314,9 @@ private:
     int m_iKeyboardHeight {0};
     int m_iDesktopAvailableHeight {0};
     int m_iDesktopAvailableWidth {0};
+
+    //判断当前窗口最小化隐藏时，键盘是否弹出；
+    bool m_isKeyvisable = false;
 };
 
 #endif

@@ -104,12 +104,12 @@ Window::Window(DMainWindow *parent)
       m_themePanel(new ThemePanel(this)),
       m_findBar(new FindBar(this)),
       m_menu(new DMenu),
+      m_pFindToolBtn(new DToolButton(nullptr)),
       m_blankFileDir(QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files")),
       m_backupDir(QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("backup-files")),
       m_autoBackupDir(QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("autoBackup-files")),
       m_titlebarStyleSheet(titlebar()->styleSheet()),
-      m_themePath(Settings::instance()->settings->option("advance.editor.theme")->value().toString()),
-      m_pFindToolBtn(new DToolButton(nullptr))
+      m_themePath(Settings::instance()->settings->option("advance.editor.theme")->value().toString())
 {
     // tablet features init
     initTabletFeatures();
@@ -429,12 +429,12 @@ void Window::initTabletFeatures()
 {
     //平板模式，窗口不需要圆角
     setWindowRadius(0);
-//    updateWindowWidthHightValue();
+    updateWindowWidthHightValue();
 
     if (/*DGuiApplicationHelper::isTabletEnvironment()*/ 1) {
         setWindowFlag(Qt::WindowMinMaxButtonsHint, false);
         setWindowFlag(Qt::WindowCloseButtonHint, false);
-//        setFixedSize(QSize(m_iDesktopAvailableWidth, m_iDesktopAvailableHeight));
+        setFixedSize(QSize(m_iDesktopAvailableWidth, m_iDesktopAvailableHeight));
     }
 
     initStatuBar();
@@ -459,8 +459,8 @@ void Window::initVirtualKeyboardDbus()
     if (m_pImInterface->isValid()) {
         QVariant variant = m_pImInterface->geometry();
         setKeyboardHeight(variant.value<QRect>().height());
-//        connect(m_pImInterface, &ComDeepinImInterface::imActiveChanged, this, &Window::slotVirtualKeyboardImActiveChanged);
-//        connect(m_pImInterface, &ComDeepinImInterface::geometryChanged, this, &Window::slotVirtualKeyboardgeometryChanged);
+        connect(m_pImInterface, &ComDeepinImInterface::imActiveChanged, this, &Window::slotVirtualKeyboardImActiveChanged);
+        connect(m_pImInterface, &ComDeepinImInterface::geometryChanged, this, &Window::slotVirtualKeyboardgeometryChanged);
 
         qInfo() << "connect vietual keyboard dbus ok.";
     } else {
@@ -2645,14 +2645,16 @@ void Window::slotSigChangeWindowSize(QString mode)
 
 void Window::slotStatusBarHeightChange()
 {
-    QDBusMessage reply = m_pStatusDbusface->call(QDBus::AutoDetect,"height");
-    if (QDBusMessage::ReplyMessage == reply.type()) {
-        QList<QVariant> list = reply.arguments();
-        m_iStatusBarHeight = list.takeFirst().toInt();
-//        m_iStatusBarHeight = static_cast<int>(reply.value());
-        qInfo() << "status bar height: " << m_iStatusBarHeight;
-    } else {
-        qInfo() << "call status bar height error";
+    if(m_pStatusDbusface) {
+        QDBusMessage reply = m_pStatusDbusface->call(QDBus::AutoDetect,"height");
+        if (QDBusMessage::ReplyMessage == reply.type()) {
+            QList<QVariant> list = reply.arguments();
+            m_iStatusBarHeight = list.takeFirst().toInt();
+    //        m_iStatusBarHeight = static_cast<int>(reply.value());
+            qInfo() << "status bar height: " << m_iStatusBarHeight;
+        } else {
+            qInfo() << "call status bar height error";
+        }
     }
 }
 
@@ -2954,6 +2956,7 @@ bool Window::replaceBarIsVisiable()
             return false;
         }
     }
+    return false;
 }
 
 QString Window::getKeywordForSearchAll()
