@@ -77,6 +77,13 @@ int main(int argc, char *argv[])
     //save theme
     DApplicationSettings savetheme;
 
+    DGuiApplicationHelper::instance()->setSingleInstanceInterval(-1);
+    if (!DGuiApplicationHelper::instance()->setSingleInstance(
+            app.applicationName(),
+            DGuiApplicationHelper::UserScope)) {
+        return 0;
+    }
+
     // Parser input arguments.
     QCommandLineParser parser;
     const QCommandLineOption newWindowOption("w", "Open file in new window");
