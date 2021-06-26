@@ -1305,6 +1305,10 @@ void Window::popupReplaceBar()
         return;
     }
 
+    if(currentWrapper() && currentWrapper()->getFileLoading()){
+        return;
+    }
+
     QTextCursor cursor = currentWrapper()->textEditor()->textCursor();
 
     m_replaceBar->setsearched(false);
@@ -2965,4 +2969,12 @@ QString Window::getKeywordForSearch()
 void Window::setPrintEnabled(bool enabled)
 {
     m_menu->actions().at(PRINT_ACTION)->setEnabled(enabled);
+}
+
+void Window::showReplaceBar(bool show)
+{
+    if(show && m_replaceBar)
+        m_replaceBar->show();
+    else if(!show)
+        m_replaceBar->hide();
 }

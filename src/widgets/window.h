@@ -148,6 +148,7 @@ public:
     QString getKeywordForSearchAll();
     QString getKeywordForSearch();
     void setPrintEnabled(bool enabled);
+     void showReplaceBar(bool show);
 
 signals:
     void themeChanged(const QString themeName);

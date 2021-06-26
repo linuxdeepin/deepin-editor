@@ -2003,36 +2003,38 @@ void TextEdit::updateFont()
 void TextEdit::replaceAll(const QString &replaceText, const QString &withText)
 {
     if (m_readOnlyMode) {
-        return;
-    }
+           return;
+       }
 
-    if (replaceText.isEmpty()) {
-        return;
-    }
+       if (replaceText.isEmpty()) {
+           return;
+       }
 
-    QTextDocument::FindFlags flags;
-    flags &= QTextDocument::FindCaseSensitively;
+   #if 0
+       QTextDocument::FindFlags flags;
+       flags &= QTextDocument::FindCaseSensitively;
+       QTextCursor cursor = textCursor();
+       cursor.movePosition(QTextCursor::Start);
 
-    QTextCursor cursor = textCursor();
-    cursor.movePosition(QTextCursor::Start);
+       QTextCursor startCursor = textCursor();
+       startCursor.beginEditBlock();
 
     QTextCursor startCursor = textCursor();
     startCursor.beginEditBlock();
 
+       QString oldText = this->toPlainText();
+       QString newText = oldText;
 
-    QString oldText = this->toPlainText();
-    QString newText = oldText;
+       newText.replace(replaceText,withText);
 
-    newText.replace(replaceText,withText);
+       ReplaceAllCommond* commond = new ReplaceAllCommond(oldText,newText,cursor);
+       m_pUndoStack->push(commond);
 
+       startCursor.endEditBlock();
+       setTextCursor(startCursor);
+   #endif
 
-    ReplaceAllCommond* commond = new ReplaceAllCommond(oldText,newText,cursor);
-    m_pUndoStack->push(commond);
-
-    this->m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
-
-    startCursor.endEditBlock();
-    setTextCursor(startCursor);
+       replaceFrom(0,replaceText,withText);
 }
 
 void TextEdit::replaceNext(const QString &replaceText, const QString &withText)
@@ -2070,39 +2072,44 @@ void TextEdit::replaceNext(const QString &replaceText, const QString &withText)
 void TextEdit::replaceRest(const QString &replaceText, const QString &withText)
 {
     if (m_readOnlyMode) {
-        return;
-    }
+           return;
+       }
 
-    // If replace text is nothing, don't do replace action.
-    if (replaceText.isEmpty()) {
-        return;
-    }
+       // If replace text is nothing, don't do replace action.
+       if (replaceText.isEmpty()) {
+           return;
+       }
 
-    QTextDocument::FindFlags flags;
-    flags &= QTextDocument::FindCaseSensitively;
+   #if 0
+       QTextDocument::FindFlags flags;
+       flags &= QTextDocument::FindCaseSensitively;
+       QTextCursor cursor = textCursor();
 
-    QTextCursor cursor = textCursor();
+       QTextCursor startCursor = textCursor();
+       startCursor.beginEditBlock();
 
     QTextCursor startCursor = textCursor();
     startCursor.beginEditBlock();
 
-
-    int pos = cursor.position();
-    QString oldText = this->toPlainText();
-    QString newText = oldText.left(pos);
-    QString right = oldText.right(oldText.size() - pos);
-    right.replace(replaceText,withText);
-    newText += right;
-
-
-    ReplaceAllCommond* commond = new ReplaceAllCommond(oldText,newText,cursor);
-    m_pUndoStack->push(commond);
+       int pos = cursor.position();
+       QString oldText = this->toPlainText();
+       QString newText = oldText.left(pos);
+       QString right = oldText.right(oldText.size() - pos);
+       right.replace(replaceText,withText);
+       newText += right;
 
 
-    m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
+       ReplaceAllCommond* commond = new ReplaceAllCommond(oldText,newText,cursor);
+       m_pUndoStack->push(commond);
 
-    startCursor.endEditBlock();
-    setTextCursor(startCursor);
+
+       m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
+
+       startCursor.endEditBlock();
+       setTextCursor(startCursor);
+   #endif
+
+       replaceFrom(this->textCursor().position(),replaceText,withText);
 }
 
 void TextEdit::beforeReplace(QString _)
@@ -2111,6 +2118,22 @@ void TextEdit::beforeReplace(QString _)
             !m_findHighlightSelection.cursor.hasSelection()) {
         highlightKeyword(_, getPosition());
     }
+}
+
+void TextEdit::replaceFrom(int pos, const QString &replaceText, const QString &withText)
+{
+    QList<int> positinos;
+    QString text = this->toPlainText();
+    int from = pos;
+    int index = -1;
+    while((index = text.indexOf(replaceText,from,Qt::CaseInsensitive)) != -1){
+        positinos.push_back(index);
+        from = index+1;
+    }
+
+    ReplaceAllCommond*commond = new ReplaceAllCommond(this,m_wrapper,positinos,replaceText,withText);
+    m_pUndoStack->push(commond);
+    this->m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
 }
 
 bool TextEdit::findKeywordForward(const QString &keyword)

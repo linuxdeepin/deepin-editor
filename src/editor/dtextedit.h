@@ -200,6 +200,9 @@ public:
     void replaceRest(const QString &replaceText, const QString &withText);
     void beforeReplace(QString _);
 
+    //将pos后的内容做替换
+    void replaceFrom(int pos,const QString &replaceText, const QString &withText);
+
     bool findKeywordForward(const QString &keyword);
 
     void removeKeywords();
