@@ -33,7 +33,11 @@ TEST_F(test_warningnotices, WarningNotices)
 TEST_F(test_warningnotices, setReloadBtn)
 {
     WarningNotices *notices = new WarningNotices(WarningNotices::ResidentType);
+    notices->m_reloadBtn->setVisible(false);
     notices->setReloadBtn();
+
+    notices->setReloadBtn();
+    notices->slotreloadBtnClicked();
     assert(1==1);
 }
 
@@ -42,6 +46,7 @@ TEST_F(test_warningnotices, setSaveAsBtn)
 {
     WarningNotices *notices = new WarningNotices(WarningNotices::ResidentType);
     notices->setSaveAsBtn();
+    notices->slotsaveAsBtnClicked();
     assert(1==1);
 }
 

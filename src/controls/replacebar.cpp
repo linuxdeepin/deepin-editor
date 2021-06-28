@@ -88,12 +88,15 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     //connect(m_replaceLine, &LineBar::pressEnter, this, &ReplaceBar::handleReplaceNext, Qt::QueuedConnection);         //Shielded by Hengbo for new demand.
     connect(m_withLine, &LineBar::returnPressed, this, &ReplaceBar::handleReplaceNext, Qt::QueuedConnection);
 
-    connect(m_replaceLine, &LineBar::pressCtrlEnter, this, [=]() {
-        emit replaceSkip(m_replaceFile, m_replaceLine->lineEdit()->text());
-    });
-    connect(m_withLine, &LineBar::pressCtrlEnter, this, [=]() {
-        emit replaceSkip(m_replaceFile, m_replaceLine->lineEdit()->text());
-    });
+    connect(m_replaceLine, &LineBar::pressCtrlEnter, this, &ReplaceBar::handleSkip,Qt::QueuedConnection);
+//    connect(m_replaceLine, &LineBar::pressCtrlEnter, this, [=]() {
+//        emit replaceSkip(m_replaceFile, m_replaceLine->lineEdit()->text());
+//    });
+
+    connect(m_withLine, &LineBar::pressCtrlEnter, this, &ReplaceBar::handleSkip,Qt::QueuedConnection);
+//    connect(m_withLine, &LineBar::pressCtrlEnter, this, [=]() {
+//        emit replaceSkip(m_replaceFile, m_replaceLine->lineEdit()->text());
+//    });
 
     connect(m_replaceLine, &LineBar::pressAltEnter, this, &ReplaceBar::handleReplaceRest, Qt::QueuedConnection);
     connect(m_withLine, &LineBar::pressAltEnter, this, &ReplaceBar::handleReplaceRest, Qt::QueuedConnection);
@@ -104,9 +107,10 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     connect(m_replaceLine, &LineBar::returnPressed, this, &ReplaceBar::handleContentChanged, Qt::QueuedConnection);
 
     connect(m_replaceButton, &QPushButton::clicked, this, &ReplaceBar::handleReplaceNext, Qt::QueuedConnection);
-    connect(m_replaceSkipButton, &QPushButton::clicked, this, [=]() {
-        emit replaceSkip(m_replaceFile, m_replaceLine->lineEdit()->text());
-    });
+    connect(m_replaceSkipButton, &QPushButton::clicked, this, &ReplaceBar::handleSkip,Qt::QueuedConnection);
+//    connect(m_replaceSkipButton, &QPushButton::clicked, this, [=]() {
+//        emit replaceSkip(m_replaceFile, m_replaceLine->lineEdit()->text());
+//    });
     connect(m_replaceRestButton, &QPushButton::clicked, this, &ReplaceBar::handleReplaceRest, Qt::QueuedConnection);
     connect(m_replaceAllButton, &QPushButton::clicked, this, &ReplaceBar::handleReplaceAll, Qt::QueuedConnection);
 
@@ -142,6 +146,11 @@ void ReplaceBar::activeInput(QString text, QString file, int row, int column, in
 
     // Focus.
     focus();
+}
+
+void ReplaceBar::handleSkip()
+{
+    emit replaceSkip(m_replaceFile, m_replaceLine->lineEdit()->text());
 }
 
 void ReplaceBar::replaceClose()

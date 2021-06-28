@@ -24,6 +24,9 @@ TEST_F(test_startmanager, openFilesInWindow)
     filePathList<<".cache/deepin/deepin-editor";
     startManager->openFilesInWindow(filePathList);
 
+    filePathList<<".cache/deepin/";
+    startManager->openFilesInWindow(filePathList);
+
     assert(1==1);
 }
 //initWindowPosition
@@ -115,6 +118,13 @@ TEST_F(test_startmanager,openFilesInTab)
 {
     StartManager *startManager = StartManager::instance();
     startManager->openFilesInTab(QStringList());
+
+    startManager->openFilesInTab(QStringList(".cache/deepin/deepin-editor"));
+
+    startManager->slotCloseWindow();
+    startManager->slotCreatNewwindow();
+
+
 
     assert(1==1);
 }

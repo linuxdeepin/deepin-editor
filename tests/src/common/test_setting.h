@@ -21,6 +21,7 @@
 #include <QTest>
 #include <QObject>
 class Settings;
+class KeySequenceEdit;
 class test_setting : public QObject
     , public ::testing::Test
 {

@@ -46,6 +46,8 @@ signals:
     void closeBtnClicked();
 
 public slots:
+    void slotreloadBtnClicked();
+    void slotsaveAsBtnClicked();
 
 private:
     QPushButton *m_reloadBtn;

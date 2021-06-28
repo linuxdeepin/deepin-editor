@@ -99,6 +99,10 @@ public slots:
 
     void closeAboutForWindow(Window *window);
 
+    //信号封装 ut002764 2021.6.28
+    void slotCreatNewwindow();
+    void slotCloseWindow();
+
 private:
     void initBlockShutdown();
     static StartManager *m_instance;

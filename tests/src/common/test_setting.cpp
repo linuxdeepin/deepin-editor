@@ -52,6 +52,7 @@ TEST_F(test_setting, Settings)
     //        QVariant value;
     //        fontFamliy->valueChanged(value);
     //        sleep(500);
+
     QVariant retVal;
     QMetaObject::invokeMethod(fontFamliy, "valueChanged", Qt::DirectConnection,
                               QGenericReturnArgument(),
@@ -78,7 +79,10 @@ TEST_F(test_setting, createFontComBoBoxHandle)
 {
     QWidget *widget = new QWidget();
     DSettingsDialog *dialog = new DSettingsDialog(widget);
-    dialog->widgetFactory()->registerWidget("fontcombobox", Settings::createFontComBoBoxHandle);
+    dialog->widgetFactory()->registerWidget("fontcombobox", m_setting->createFontComBoBoxHandle);
+
+    DTK_CORE_NAMESPACE::DSettingsOption o;
+    m_setting->createFontComBoBoxHandle(&o);
     assert(1 == 1);
 }
 
@@ -90,7 +94,7 @@ TEST_F(test_setting, createKeySequenceEditHandle)
     dialog->widgetFactory()->registerWidget("fontcombobox", Settings::createKeySequenceEditHandle);
 
     DTK_CORE_NAMESPACE::DSettingsOption o;
-    Settings::instance()->createKeySequenceEditHandle(&o);
+    m_setting->createKeySequenceEditHandle(&o);
 }
 
 //static Settings* instance();
@@ -150,8 +154,24 @@ TEST_F(test_setting, isShortcutConflict)
     QStringList list;
     list << "aa"
          << "bb";
-    Settings set;
-    set.isShortcutConflict("aa", "bb");
+    m_setting->isShortcutConflict("aa", "bb");
+
+    m_setting->isShortcutConflict("aa", "bb");
+
+    QVariant value;
+    m_setting->slotCustomshortcut("Ctrl+T",value);
+}
+
+TEST_F(test_setting, KeySequenceEdit)
+{
+    QWidget *widget = new QWidget();
+    DSettingsDialog *dialog = new DSettingsDialog(widget);
+    auto option = qobject_cast<DTK_CORE_NAMESPACE::DSettingsOption *>(dialog);
+    KeySequenceEdit *shortCutLineEdit = new KeySequenceEdit(option);
+    QEvent *e=new QEvent(QEvent::KeyPress);
+    shortCutLineEdit->eventFilter(shortCutLineEdit,e);
+    delete widget;
+    delete shortCutLineEdit;
 }
 
 //以下两条CASE 脚本跑会造成程序崩，加两行debug后就不崩了

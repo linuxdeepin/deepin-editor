@@ -566,45 +566,79 @@ Window *StartManager::createWindow(bool alwaysCenter)
     connect(window, &Window::sigJudgeBlockShutdown, this, &StartManager::slotCheckUnsaveTab, Qt::QueuedConnection);
 
     // Quit application if close last window.
-    connect(window, &Window::closeWindow, this, [ = ] {
-        int windowIndex = m_windows.indexOf(window);
-        //qDebug() << "Close window " << windowIndex;
+    connect(window, &Window::closeWindow, this, &StartManager::slotCloseWindow);
+//    connect(window, &Window::closeWindow, this, [ = ] {
+//        int windowIndex = m_windows.indexOf(window);
+//        //qDebug() << "Close window " << windowIndex;
 
-        if (windowIndex >= 0)
-        {
-            m_windows.takeAt(windowIndex);
-        }
+//        Window *pWindow = static_cast<Window *>(sender());
+//        if (windowIndex >= 0)
+//        {
+//            m_windows.takeAt(windowIndex);
+//        }
 
-        if (m_windows.isEmpty())
-        {
-            QDir path = QDir::currentPath();
-            if (!path.exists()) {
-                return ;
-            }
-            path.setFilter(QDir::Files);
-            QStringList nameList = path.entryList();
-            foreach (auto name, nameList) {
-                if (name.contains("tabPaths.txt")) {
-                    QFile file(name);
-                    file.remove();
-                }
-            }
-            QApplication::quit();
-            PerformanceMonitor::closeAPPFinish();
-        }
-    });
+//        if (m_windows.isEmpty())
+//        {
+//            QDir path = QDir::currentPath();
+//            if (!path.exists()) {
+//                return ;
+//            }
+//            path.setFilter(QDir::Files);
+//            QStringList nameList = path.entryList();
+//            foreach (auto name, nameList) {
+//                if (name.contains("tabPaths.txt")) {
+//                    QFile file(name);
+//                    file.remove();
+//                }
+//            }
+//            QApplication::quit();
+//            PerformanceMonitor::closeAPPFinish();
+//        }
+//    });
 
     // Init window position.
     initWindowPosition(window, alwaysCenter);
 
-    connect(window, &Window::newWindow, this, [ = ] {
-        openFilesInWindow(QStringList());
-    });
-
+    connect(window, &Window::newWindow, this, &StartManager::slotCreatNewwindow);
     // Append window in window list.
     m_windows << window;
 
     return window;
+}
+
+
+void StartManager::slotCloseWindow()
+{
+    Window *pWindow = static_cast<Window *>(sender());
+    int windowIndex = m_windows.indexOf(pWindow);
+    //qDebug() << "Close window " << windowIndex;
+    if (windowIndex >= 0)
+    {
+        m_windows.takeAt(windowIndex);
+    }
+
+    if (m_windows.isEmpty())
+    {
+        QDir path = QDir::currentPath();
+        if (!path.exists()) {
+            return ;
+        }
+        path.setFilter(QDir::Files);
+        QStringList nameList = path.entryList();
+        foreach (auto name, nameList) {
+            if (name.contains("tabPaths.txt")) {
+                QFile file(name);
+                file.remove();
+            }
+        }
+        QApplication::quit();
+        PerformanceMonitor::closeAPPFinish();
+    }
+}
+
+void StartManager::slotCreatNewwindow()
+{
+    openFilesInWindow(QStringList());
 }
 
 void StartManager::initWindowPosition(Window *window, bool alwaysCenter)

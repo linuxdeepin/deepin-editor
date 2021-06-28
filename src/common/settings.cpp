@@ -123,33 +123,34 @@ Settings::Settings(QWidget *parent)
     windowStateMap.insert("values", QStringList() << tr("Normal") << tr("Maximum") << tr("Fullscreen"));
     windowState->setData("items", windowStateMap);
 
-    connect(settings, &Dtk::Core::DSettings::valueChanged, this, [ = ](const QString & key, const QVariant & value) {
+    connect(settings, &Dtk::Core::DSettings::valueChanged, this, &Settings::slotCustomshortcut);
+//    connect(settings, &Dtk::Core::DSettings::valueChanged, this, [ = ](const QString & key, const QVariant & value) {
 
-        // Change keymap to customize once user change any keyshortcut.
-        if (!m_bUserChangeKey && key.startsWith("shortcuts.") && key != "shortcuts.keymap.keymap" && !key.contains("_keymap_")) {
-            m_bUserChangeKey = true;
+//        // Change keymap to customize once user change any keyshortcut.
+//        if (!m_bUserChangeKey && key.startsWith("shortcuts.") && key != "shortcuts.keymap.keymap" && !key.contains("_keymap_")) {
+//            m_bUserChangeKey = true;
 
-            QString currentKeymap = settings->option("shortcuts.keymap.keymap")->value().toString();
+//            QString currentKeymap = settings->option("shortcuts.keymap.keymap")->value().toString();
 
-            QStringList keySplitList = key.split(".");
-            keySplitList[1] = QString("%1_keymap_customize").arg(keySplitList[1]);
-            QString customizeKey = keySplitList.join(".");
+//            QStringList keySplitList = key.split(".");
+//            keySplitList[1] = QString("%1_keymap_customize").arg(keySplitList[1]);
+//            QString customizeKey = keySplitList.join(".");
 
-            // Just update customize key user input, don't change keymap.
-            if (currentKeymap == "customize") {
-                settings->option(customizeKey)->setValue(value);
-            }
-            // If current kemap is not "customize".
-            // Copy all customize keys from current keymap, and then update customize key just user input.
-            // Then change keymap name.
-            else {
-                copyCustomizeKeysFromKeymap(currentKeymap);
-                settings->option(customizeKey)->setValue(value);
-                keymap->setValue("customize");
-            }
-            m_bUserChangeKey = false;
-        }
-    });
+//            // Just update customize key user input, don't change keymap.
+//            if (currentKeymap == "customize") {
+//                settings->option(customizeKey)->setValue(value);
+//            }
+//            // If current kemap is not "customize".
+//            // Copy all customize keys from current keymap, and then update customize key just user input.
+//            // Then change keymap name.
+//            else {
+//                copyCustomizeKeysFromKeymap(currentKeymap);
+//                settings->option(customizeKey)->setValue(value);
+//                keymap->setValue("customize");
+//            }
+//            m_bUserChangeKey = false;
+//        }
+//    });
 }
 
 Settings::~Settings()
@@ -508,4 +509,32 @@ DDialog *Settings::createDialog(const QString &title, const QString &content, co
     }
 
     return dialog;
+}
+
+void Settings::slotCustomshortcut(const QString &key, const QVariant &value)
+{
+    auto keymap = settings->option("shortcuts.keymap.keymap");
+    if (!m_bUserChangeKey && key.startsWith("shortcuts.") && key != "shortcuts.keymap.keymap" && !key.contains("_keymap_")) {
+        m_bUserChangeKey = true;
+
+        QString currentKeymap = settings->option("shortcuts.keymap.keymap")->value().toString();
+
+        QStringList keySplitList = key.split(".");
+        keySplitList[1] = QString("%1_keymap_customize").arg(keySplitList[1]);
+        QString customizeKey = keySplitList.join(".");
+
+        // Just update customize key user input, don't change keymap.
+        if (currentKeymap == "customize") {
+            settings->option(customizeKey)->setValue(value);
+        }
+        // If current kemap is not "customize".
+        // Copy all customize keys from current keymap, and then update customize key just user input.
+        // Then change keymap name.
+        else {
+            copyCustomizeKeysFromKeymap(currentKeymap);
+            settings->option(customizeKey)->setValue(value);
+            keymap->setValue("customize");
+        }
+        m_bUserChangeKey = false;
+    }
 }

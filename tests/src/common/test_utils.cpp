@@ -242,6 +242,7 @@ TEST_F(test_utils, isDraftFile)
 TEST_F(test_utils, getEncodeList)
 {
     Utils::getEncodeList();
+    Utils::renderSVG("", QSize(40, 40), false);
     assert(1 == 1);
 }
 

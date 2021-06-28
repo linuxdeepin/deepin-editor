@@ -60,8 +60,7 @@ bool EditorApplication::notify(QObject *object, QEvent *event)
     if (event->type() == QEvent::KeyPress) {
         QKeyEvent *keyevent = static_cast<QKeyEvent *>(event);
         /***add begin by ut001121 zhangmeng 20200801 截获DPushButton控件回车按键事件并模拟空格键点击事件,用以解决回车键不响应的问题***/
-        // 回车键
-        // 恢复默认 添健按钮
+        // 回车键 恢复默认 添健按钮
         if ((object->metaObject()->className() == QStringLiteral("QPushButton")
                 // 远程和自定义列表的返回按钮，编辑按钮
                 || object->metaObject()->className() == QStringLiteral("IconButton")

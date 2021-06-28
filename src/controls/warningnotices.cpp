@@ -41,16 +41,8 @@ WarningNotices::WarningNotices(MessageType notifyType, QWidget *parent)
     m_reloadBtn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_saveAsBtn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
-    connect(m_reloadBtn, &QPushButton::clicked, this, [=] {
-        this->hide();
-        emit reloadBtnClicked();
-    });
-
-    connect(m_saveAsBtn, &QPushButton::clicked, this, [=] {
-        this->hide();
-        emit saveAsBtnClicked();
-    });
-
+    connect(m_reloadBtn, &QPushButton::clicked, this, &WarningNotices::slotreloadBtnClicked);
+    connect(m_saveAsBtn, &QPushButton::clicked, this, &WarningNotices::slotsaveAsBtnClicked);
 }
 
 WarningNotices::~WarningNotices()
@@ -76,4 +68,16 @@ void WarningNotices::setSaveAsBtn()
     m_saveAsBtn->setVisible(true);
     m_reloadBtn->setVisible(false);
     setWidget(m_saveAsBtn);
+}
+
+void WarningNotices::slotreloadBtnClicked()
+{
+    this->hide();
+    emit reloadBtnClicked();
+}
+
+void WarningNotices::slotsaveAsBtnClicked()
+{
+    this->hide();
+    emit saveAsBtnClicked();
 }

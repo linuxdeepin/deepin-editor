@@ -83,6 +83,8 @@ TEST_F(test_findbar, findPreClicked)
 {
     FindBar *findBar = new FindBar();
     findBar->findPreClicked();
+
+    findBar->findPreClicked();
     assert(1==1);
 }
 
@@ -100,6 +102,8 @@ TEST_F(test_findbar, handleContentChanged)
 {
     FindBar *findBar = new FindBar();
     findBar->handleContentChanged();
+    findBar->handleFindPrev();
+    findBar->handleFindNext();
     assert(1==1);
 }
 
@@ -132,8 +136,15 @@ TEST_F(test_findbar, focusNextPrevChild)
 //void keyPressEvent(QKeyEvent *e) override;
 TEST_F(test_findbar, keyPressEvent)
 {
-    QKeyEvent *e = new QKeyEvent(QEvent::KeyPress,1,Qt::NoModifier);
     FindBar *findBar = new FindBar();
+
+    QKeyEvent *e = new QKeyEvent(QEvent::KeyPress,Qt::Key_Tab,Qt::NoModifier);
     findBar->keyPressEvent(e);
+
+    QKeyEvent *e1 = new QKeyEvent(QEvent::KeyPress,Qt::Key_Escape,Qt::NoModifier);
+    findBar->keyPressEvent(e1);
+
+    QKeyEvent *e2 = new QKeyEvent(QEvent::KeyPress,Qt::Key_Enter,Qt::NoModifier);
+    findBar->keyPressEvent(e2);
     assert(1==1);
 }

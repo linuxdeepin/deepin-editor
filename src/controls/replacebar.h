@@ -73,6 +73,7 @@ public slots:
     void handleReplaceAll();
     void handleReplaceNext();
     void handleReplaceRest();
+    void handleSkip();
 
 protected:
     void hideEvent(QHideEvent *event);

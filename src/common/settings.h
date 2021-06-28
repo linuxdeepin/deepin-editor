@@ -76,6 +76,11 @@ signals:
     void sigSetLineNumberShow(bool bIsShow);
     void sigChangeWindowSize(QString mode);
 
+public slots:
+    //自定义快捷键 ut002764 2021.6.28
+    void slotCustomshortcut(const QString &key, const QVariant &value);
+
+
 private:
     void updateAllKeysWithKeymap(QString keymap);
     void copyCustomizeKeysFromKeymap(QString keymap);

@@ -7,6 +7,8 @@
 
 class test_tabbar: public QObject, public::testing::Test
 {
+    Q_OBJECT
+
 public:
     test_tabbar();
 };
