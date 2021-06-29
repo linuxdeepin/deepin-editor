@@ -314,7 +314,6 @@ private:
     int m_iKeyboardHeight {0};
     int m_iDesktopAvailableHeight {0};
     int m_iDesktopAvailableWidth {0};
-
 };
 
 #endif

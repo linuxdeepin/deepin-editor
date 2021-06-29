@@ -818,12 +818,12 @@ EditWrapper *Window::createEditor()
         updateJumpLineBar(wrapper->textEditor());
     }, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::sigHideVirtualKeyboard, this, [=]() {
-        if (m_pImInterface) {
+        if (m_pImInterface != nullptr && m_pImInterface->isValid()) {
             m_pImInterface->setImActive(false);
         }
     });
     connect(wrapper->textEditor(), &TextEdit::sigShowVirtualKeyboard, this, [=]() {
-        if (m_pImInterface) {
+        if (m_pImInterface != nullptr && m_pImInterface->isValid()) {
             m_pImInterface->setImActive(true);
         }
     });
@@ -1289,7 +1289,7 @@ void Window::popupFindBar()
     QTimer::singleShot(10, this, [ = ] { m_findBar->focus(); });
 
     /* 查找弹出虚拟键盘　*/
-    if (m_pImInterface != nullptr) {
+    if (m_pImInterface != nullptr && m_pImInterface->isValid()) {
         bool bIsShow = m_pImInterface->property("imActive").toBool();
         if (!bIsShow) {
             m_pImInterface->setImActive(true);
@@ -1353,7 +1353,7 @@ void Window::popupReplaceBar()
     QTimer::singleShot(10, this, [ = ] { m_replaceBar->focus(); });
 
     /* 替换弹出虚拟键盘　*/
-    if (m_pImInterface != nullptr) {
+    if (m_pImInterface != nullptr && m_pImInterface->isValid()) {
         bool bIsShow = m_pImInterface->property("imActive").toBool();
         if (!bIsShow) {
             m_pImInterface->setImActive(true);
@@ -1398,7 +1398,7 @@ void Window::popupJumpLineBar()
         m_jumpLineBar->focus();
 
         /* 跳转行弹出虚拟键盘　*/
-        if (m_pImInterface != nullptr) {
+        if (m_pImInterface != nullptr && m_pImInterface->isValid()) {
             bool bIsShow = m_pImInterface->property("imActive").toBool();
             if (!bIsShow) {
                 m_pImInterface->setImActive(true);
@@ -2045,7 +2045,7 @@ void Window::addBlankTab(const QString &blankFile)
     showNewEditor(wrapper);
 
     /* 添加一个空白tab标签弹出虚拟键盘　*/
-    if (m_pImInterface != nullptr) {
+    if (m_pImInterface != nullptr && m_pImInterface->isValid()) {
         m_pImInterface->setImActive(true);
     }
 }
@@ -2198,9 +2198,9 @@ void Window::slotReplacebarClose()
     currentWrapper()->textEditor()->setFocus();
     currentWrapper()->textEditor()->tellFindBarClose();
 
-    QPoint pos = QCursor::pos();
-    pos.setY(pos.y() - 100);
-    QCursor::setPos(pos);
+    //QPoint pos = QCursor::pos();
+    //pos.setY(pos.y() - 100);
+    //QCursor::setPos(pos);
 
 }
 
@@ -2522,7 +2522,7 @@ void Window::slotVirtualKeyboardgeometryChanged()
 {
     //切换横屏或者竖屏，如果键盘显示，先关闭，在开启
     if(Settings::instance()->getVirkeyboardStatus()) {
-        if (m_pImInterface) {
+        if (m_pImInterface != nullptr && m_pImInterface->isValid()) {
             m_pImInterface->setImActive(false);
             QTimer::singleShot(100, this, [=]() {
                 m_pImInterface->setImActive(true);
@@ -2536,7 +2536,7 @@ void Window::slotVirtualKeyboardgeometryChanged()
 
 void Window::slotSendresetHeight()
 {
-    if(m_pImInterface) {
+    if(m_pImInterface != nullptr && m_pImInterface->isValid()) {
         m_pImInterface->setImActive(false);
         setFixedHeight(QApplication::desktop()->geometry().height());
     }

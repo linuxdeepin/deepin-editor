@@ -5677,7 +5677,6 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
     }
 }
 
-
 void TextEdit::mousePressEvent(QMouseEvent *e)
 {
     if (m_bIsFindClose) {
