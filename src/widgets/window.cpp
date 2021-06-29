@@ -158,6 +158,14 @@ Window::Window(DMainWindow *parent)
     setWindowIcon(QIcon::fromTheme("deepin-editor"));
     setCentralWidget(m_centralWidget);
 
+    // 开启以下属性虚拟键盘弹起是控件不会变形
+    m_centralWidget->setAttribute(Qt::WA_LayoutOnEntireRect, false);
+    m_centralWidget->setAttribute(Qt::WA_ContentsMarginsRespectsSafeArea, false);
+    // 还未考虑好是否对外提供接口，可以先使用该属性 dtkwidget5.5>=5.5.17.17(仓库中版本) 文件夹外lib中包含
+    m_centralWidget->setProperty("_dtk_NoTopLevelEnabled", true);
+    // 对该容器内的输入控件做自适应虚拟键盘操作
+    qApp->acclimatizeVirtualKeyboard(m_centralWidget);
+
     #ifdef TABLET
     // resize window size.
     //int window_width =Settings::instance()->settings->option("advance.window.window_width")->value().toInt();
@@ -434,6 +442,9 @@ void Window::initTitlebar()
 
 void Window::initTabletFeatures()
 {
+    // 将不会为虚拟键盘做任何自适应操作
+    qApp->ignoreVirtualKeyboard(this);
+
     //平板模式，窗口不需要圆角
     setWindowRadius(0);
     updateWindowWidthHightValue();
