@@ -2532,8 +2532,8 @@ void Window::slotVirtualKeyboardImActiveChanged(bool bIsVirKeyboarShow)
 //            setFixedWidth(QApplication::desktop()->geometry().width());
 //        });
 //    } else {
-        setFixedHeight(QApplication::desktop()->geometry().height());
-        setFixedWidth(QApplication::desktop()->geometry().width());
+        //setFixedHeight(QApplication::desktop()->geometry().height());
+        //setFixedWidth(QApplication::desktop()->geometry().width());
 //    }
 }
 
