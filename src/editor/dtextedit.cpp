@@ -5675,6 +5675,8 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
             insertSelectTextEx(textCursor(), e->commitString());
         }
     }
+
+    return DPlainTextEdit::inputMethodEvent(e);
 }
 
 void TextEdit::mousePressEvent(QMouseEvent *e)
@@ -5810,13 +5812,7 @@ void TextEdit::mouseMoveEvent(QMouseEvent *e)
         viewport()->setCursor(Qt::IBeamCursor);
     }
 
-    //QPlainTextEdit::mouseMoveEvent(e);
-    if((e->buttons() & Qt::LeftButton) && !m_bIsAltMod){
-            auto cursor = this->textCursor();
-            int pos = this->cursorForPosition(e->pos()).position();
-            cursor.setPosition(pos,QTextCursor::KeepAnchor);
-            this->setTextCursor(cursor);
-        }
+    QPlainTextEdit::mouseMoveEvent(e);
 
     if (e->modifiers() == Qt::AltModifier && m_bIsAltMod) {
         m_altModSelections.clear();
