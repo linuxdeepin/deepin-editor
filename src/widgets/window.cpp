@@ -2007,7 +2007,6 @@ void Window::setChildrenFocus(bool ok)
 
 void Window::addBlankTab()
 {
-
     if (m_findBar->isVisible()) {
         m_findBar->hide();
     }
@@ -2205,10 +2204,9 @@ void Window::slotReplacebarClose()
     currentWrapper()->textEditor()->setFocus();
     currentWrapper()->textEditor()->tellFindBarClose();
 
-    //QPoint pos = QCursor::pos();
-    //pos.setY(pos.y() - 100);
-    //QCursor::setPos(pos);
-
+    QPoint pos = QCursor::pos();
+    pos.setY(pos.y() - 100);
+    QCursor::setPos(pos);
 }
 
 void Window::handleReplaceAll(const QString &replaceText, const QString &withText)
