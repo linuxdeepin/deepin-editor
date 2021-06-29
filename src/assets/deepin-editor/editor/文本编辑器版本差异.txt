@@ -1,4 +1,4 @@
-社区版和服务器企业版：editor
+社区版、服务器版：editor
 
 专业版：p_editor
 
