@@ -380,19 +380,26 @@ void Window::initTitlebar()
     titlebar()->setFocusPolicy(Qt::NoFocus);         //设置titlebar无焦点，点击titlebar时光标不移动
 
     DIconButton *addButton = m_tabbar->findChild<DIconButton *>("AddButton");
-    addButton->setFocusPolicy(Qt::NoFocus);
+    if(addButton)
+        addButton->setFocusPolicy(Qt::NoFocus);
     DToolButton *pToolButton = titlebar()->findChild<DToolButton *>("TitleFindToolButton");
-    pToolButton->setFocusPolicy(Qt::NoFocus);
+    if(pToolButton)
+        pToolButton->setFocusPolicy(Qt::NoFocus);
     DIconButton *optionBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowOptionButton");
-    optionBtn->setFocusPolicy(Qt::NoFocus);
+    if(optionBtn)
+        optionBtn->setFocusPolicy(Qt::NoFocus);
     DIconButton *minBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowMinButton");
-    minBtn->setFocusPolicy(Qt::NoFocus);
+    if(minBtn)
+        minBtn->setFocusPolicy(Qt::NoFocus);
     DIconButton *quitFullBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowQuitFullscreenButton");
-    quitFullBtn->setFocusPolicy(Qt::NoFocus);
+    if(quitFullBtn)
+        quitFullBtn->setFocusPolicy(Qt::NoFocus);
     DIconButton *maxBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowMaxButton");
-    maxBtn->setFocusPolicy(Qt::NoFocus);
+    if(maxBtn)
+        maxBtn->setFocusPolicy(Qt::NoFocus);
     DIconButton *closeBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowCloseButton");
-    closeBtn->setFocusPolicy(Qt::NoFocus);
+    if(closeBtn)
+        closeBtn->setFocusPolicy(Qt::NoFocus);
 
     connect(m_tabbar, &DTabBar::tabBarDoubleClicked, titlebar(), &DTitlebar::doubleClicked, Qt::QueuedConnection);
 
