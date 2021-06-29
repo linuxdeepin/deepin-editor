@@ -315,8 +315,6 @@ private:
     int m_iDesktopAvailableHeight {0};
     int m_iDesktopAvailableWidth {0};
 
-    //判断当前窗口最小化隐藏时，键盘是否弹出；
-    bool m_isKeyvisable = false;
 };
 
 #endif

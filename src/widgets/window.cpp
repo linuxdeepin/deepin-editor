@@ -2046,10 +2046,7 @@ void Window::addBlankTab(const QString &blankFile)
 
     /* 添加一个空白tab标签弹出虚拟键盘　*/
     if (m_pImInterface != nullptr) {
-        bool bIsShow = m_pImInterface->property("imActive").toBool();
-        if (!bIsShow) {
-            m_pImInterface->setImActive(true);
-        }
+        m_pImInterface->setImActive(true);
     }
 }
 
