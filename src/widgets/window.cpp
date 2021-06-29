@@ -454,7 +454,7 @@ void Window::initTabletFeatures()
         setFixedSize(QSize(m_iDesktopAvailableWidth, m_iDesktopAvailableHeight));
     }
 
-    initStatuBar();
+//    initStatuBar();
     initVirtualKeyboardDbus();
     //平板需求，标题栏添加查找按钮图标
     addFindToolButtonToTitlbar();
@@ -477,14 +477,14 @@ void Window::initVirtualKeyboardDbus()
         QVariant variant = m_pImInterface->geometry();
         setKeyboardHeight(variant.value<QRect>().height());
         //虚拟键盘弹出或隐藏后，应用的高度的压缩和恢复全屏高度由dtk适配，应用内部无需对应用坐标和高度的设置
-        //connect(m_pImInterface, &ComDeepinImInterface::imActiveChanged, this, &Window::slotVirtualKeyboardImActiveChanged);
-        //connect(m_pImInterface, &ComDeepinImInterface::geometryChanged, this, &Window::slotVirtualKeyboardgeometryChanged);
+        connect(m_pImInterface, &ComDeepinImInterface::imActiveChanged, this, &Window::slotVirtualKeyboardImActiveChanged);
+        connect(m_pImInterface, &ComDeepinImInterface::geometryChanged, this, &Window::slotVirtualKeyboardgeometryChanged);
 
-        qInfo() << "connect vietual keyboard dbus ok.";
+        qInfo() << "connect virtual keyboard dbus ok.";
     } else {
         delete m_pImInterface;
         m_pImInterface = nullptr;
-        qInfo() << "connect vietual keyboard dbus error.";
+        qInfo() << "connect virtual keyboard dbus error.";
     }
 }
 
@@ -2031,7 +2031,7 @@ void Window::addBlankTab()
         m_jumpLineBar->hide();
     }
 
-
+    slotFindbarClose();
     addBlankTab("");
 }
 
@@ -2065,6 +2065,7 @@ void Window::addBlankTab(const QString &blankFile)
     /* 添加一个空白tab标签弹出虚拟键盘　*/
     if (m_pImInterface != nullptr && m_pImInterface->isValid()) {
         m_pImInterface->setImActive(true);
+        qInfo()<<"********set keyboard show********";
     }
 }
 
@@ -2522,17 +2523,18 @@ void Window::slotClearDoubleCharaterEncode()
 *******************************************************************************/
 void Window::slotVirtualKeyboardImActiveChanged(bool bIsVirKeyboarShow)
 {
-    slotStatusBarHeightChange();
+//    slotStatusBarHeightChange();
     Settings::instance()->setVirkeyboardStatus(bIsVirKeyboarShow);
-    if (bIsVirKeyboarShow) {
-        QTimer::singleShot(300, this, [=]() {
-            setFixedHeight(QApplication::desktop()->geometry().height() - getKeyboardHeight() - m_iStatusBarHeight);
-            setFixedWidth(QApplication::desktop()->geometry().width());
-        });
-    } else {
+      //虚拟键盘弹出或隐藏后，应用的高度的压缩和恢复全屏高度由dtk适配，应用内部无需对应用坐标和高度的设置
+//    if (bIsVirKeyboarShow) {
+//        QTimer::singleShot(300, this, [=]() {
+//            setFixedHeight(QApplication::desktop()->geometry().height() - getKeyboardHeight() - m_iStatusBarHeight);
+//            setFixedWidth(QApplication::desktop()->geometry().width());
+//        });
+//    } else {
         setFixedHeight(QApplication::desktop()->geometry().height());
         setFixedWidth(QApplication::desktop()->geometry().width());
-    }
+//    }
 }
 
 void Window::slotVirtualKeyboardgeometryChanged()
