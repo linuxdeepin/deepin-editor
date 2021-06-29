@@ -25,14 +25,14 @@
 
 #include <QDebug>
 
-JumpLineBar::JumpLineBar(DFloatingWidget *parent)
+JumpLineBar::JumpLineBar(QWidget *parent)
     : DFloatingWidget(parent)
 {
     // Init.
     setFixedSize(nJumpLineBarWidth, nJumpLineBarHeight);
 
     // Init layout and widgets.
-    m_layout = new QHBoxLayout();
+    m_layout = new QHBoxLayout(this);
     m_layout->setContentsMargins(10, 6, 10, 6);
     m_layout->setSpacing(0);
 
