@@ -478,8 +478,6 @@ void Window::initVirtualKeyboardDbus()
         setKeyboardHeight(variant.value<QRect>().height());
         //虚拟键盘弹出或隐藏后，应用的高度的压缩和恢复全屏高度由dtk适配，应用内部无需对应用坐标和高度的设置
         connect(m_pImInterface, &ComDeepinImInterface::imActiveChanged, this, &Window::slotVirtualKeyboardImActiveChanged);
-        connect(m_pImInterface, &ComDeepinImInterface::geometryChanged, this, &Window::slotVirtualKeyboardgeometryChanged);
-
         qInfo() << "connect virtual keyboard dbus ok.";
     } else {
         delete m_pImInterface;
@@ -549,18 +547,20 @@ bool Window::checkBlockShutdown()
 
 void Window::addFindToolButtonToTitlbar()
 {
-    m_pFindToolBtn->setObjectName(QString("TitleFindToolButton"));
-    m_pFindToolBtn->setFixedSize(QSize(37, 37));
-    m_pFindToolBtn->setIconSize(QSize(43, 43));
-    QString strFindToolPath(":/images/find_");
-    if (DApplicationHelper::instance()->themeType() == DApplicationHelper::ColorType::LightType) {
-        strFindToolPath = strFindToolPath + "light.svg";
-    } else if (DApplicationHelper::instance()->themeType() == DApplicationHelper::ColorType::DarkType) {
-        strFindToolPath = strFindToolPath + "dark.svg";
+    if(m_pFindToolBtn) {
+        m_pFindToolBtn->setObjectName(QString("TitleFindToolButton"));
+        m_pFindToolBtn->setFixedSize(QSize(37, 37));
+        m_pFindToolBtn->setIconSize(QSize(43, 43));
+        QString strFindToolPath(":/images/find_");
+        if (DApplicationHelper::instance()->themeType() == DApplicationHelper::ColorType::LightType) {
+            strFindToolPath = strFindToolPath + "light.svg";
+        } else if (DApplicationHelper::instance()->themeType() == DApplicationHelper::ColorType::DarkType) {
+            strFindToolPath = strFindToolPath + "dark.svg";
+        }
+        m_pFindToolBtn->setIcon(QIcon(strFindToolPath));
+        titlebar()->addWidget(m_pFindToolBtn, Qt::AlignVCenter | Qt::AlignRight);
+        connect(m_pFindToolBtn, &DToolButton::clicked, this, &Window::slotFindIconBtnClicked);
     }
-    m_pFindToolBtn->setIcon(QIcon(strFindToolPath));
-    titlebar()->addWidget(m_pFindToolBtn, Qt::AlignVCenter | Qt::AlignRight);
-    connect(m_pFindToolBtn, &DToolButton::clicked, this, &Window::slotFindIconBtnClicked);
 }
 
 int Window::getTabIndex(const QString &file)
@@ -1853,6 +1853,7 @@ void Window::backupFile()
 {
     if (!QFileInfo(m_backupDir).exists()) {
         QDir().mkpath(m_backupDir);
+        qInfo()<<"*****backupfile*********1*******";
     }
 
     QMap<QString, EditWrapper *> wrappers = m_wrappers;
@@ -1919,7 +1920,7 @@ void Window::backupFile()
         QByteArray byteArray = document.toJson(QJsonDocument::Compact);
         m_qlistTemFile.replace(tabInfo.tabIndex, byteArray);
     }
-
+    qInfo()<<"*****backupfile*********2******* m_qlistTemFile = "<<m_qlistTemFile;
     //将json串列表写入配置文件
     m_settings->settings->option("advance.editor.browsing_history_temfile")->setValue(m_qlistTemFile);
 
@@ -2065,7 +2066,6 @@ void Window::addBlankTab(const QString &blankFile)
     /* 添加一个空白tab标签弹出虚拟键盘　*/
     if (m_pImInterface != nullptr && m_pImInterface->isValid()) {
         m_pImInterface->setImActive(true);
-        qInfo()<<"********set keyboard show********";
     }
 }
 
@@ -2523,34 +2523,7 @@ void Window::slotClearDoubleCharaterEncode()
 *******************************************************************************/
 void Window::slotVirtualKeyboardImActiveChanged(bool bIsVirKeyboarShow)
 {
-//    slotStatusBarHeightChange();
     Settings::instance()->setVirkeyboardStatus(bIsVirKeyboarShow);
-      //虚拟键盘弹出或隐藏后，应用的高度的压缩和恢复全屏高度由dtk适配，应用内部无需对应用坐标和高度的设置
-//    if (bIsVirKeyboarShow) {
-//        QTimer::singleShot(300, this, [=]() {
-//            setFixedHeight(QApplication::desktop()->geometry().height() - getKeyboardHeight() - m_iStatusBarHeight);
-//            setFixedWidth(QApplication::desktop()->geometry().width());
-//        });
-//    } else {
-        //setFixedHeight(QApplication::desktop()->geometry().height());
-        //setFixedWidth(QApplication::desktop()->geometry().width());
-//    }
-}
-
-void Window::slotVirtualKeyboardgeometryChanged()
-{
-    //切换横屏或者竖屏，如果键盘显示，先关闭，在开启
-    if(Settings::instance()->getVirkeyboardStatus()) {
-        if (m_pImInterface != nullptr && m_pImInterface->isValid()) {
-            m_pImInterface->setImActive(false);
-            QTimer::singleShot(100, this, [=]() {
-                m_pImInterface->setImActive(true);
-            });
-        }
-    }
-    else {
-        slotVirtualKeyboardImActiveChanged(false);
-    }
 }
 
 void Window::slotSendresetHeight()
@@ -2751,6 +2724,7 @@ void Window::resizeEvent(QResizeEvent *e)
 
 void Window::closeEvent(QCloseEvent *e)
 {
+    qInfo() << "*** intercloseEvent ****************";
     PerformanceMonitor::closeAppStart();
 
     if (StartManager::instance()->isMultiWindow()) {
@@ -2760,6 +2734,7 @@ void Window::closeEvent(QCloseEvent *e)
         }
     } else {
         backupFile();
+        qInfo()<<"***closeEvent***save backupfile****************";
     }
 
     QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");

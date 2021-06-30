@@ -51,7 +51,7 @@ EditorApplication::~EditorApplication()
 
 void EditorApplication::handleQuitAction()
 {
-    activeWindow()->close();
+    activeWindow()->window()->close();
 }
 
 bool EditorApplication::notify(QObject *object, QEvent *event)
