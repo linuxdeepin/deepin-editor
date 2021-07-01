@@ -547,7 +547,7 @@ bool Window::checkBlockShutdown()
 
 void Window::addFindToolButtonToTitlbar()
 {
-    if(m_pFindToolBtn) {
+    if (m_pFindToolBtn) {
         m_pFindToolBtn->setObjectName(QString("TitleFindToolButton"));
         m_pFindToolBtn->setFixedSize(QSize(37, 37));
         m_pFindToolBtn->setIconSize(QSize(43, 43));
@@ -1381,7 +1381,6 @@ void Window::popupReplaceBar()
 void Window::popupJumpLineBar()
 {
     EditWrapper *curWrapper = currentWrapper();
-
     if (curWrapper == nullptr) {
         return;
     }
@@ -1410,9 +1409,10 @@ void Window::popupJumpLineBar()
         int count = wrapper->textEditor()->blockCount();
         int scrollOffset = wrapper->textEditor()->getScrollOffset();
 
+        m_jumpLineBar->raise();
+        m_jumpLineBar->show();
         m_jumpLineBar->activeInput(tabPath, row, column, count, scrollOffset);
-        QTimer::singleShot(50, this, [this]() {
-            m_jumpLineBar->show();
+        QTimer::singleShot(10, this, [ = ]() {
             m_jumpLineBar->focus();
         });
 
@@ -1851,6 +1851,7 @@ void Window::asynPrint(QPainter &p, DPrinter *printer, const QVector<int> &pageR
 
 void Window::backupFile()
 {
+    qInfo() << "==== inter backupFile() ====";
     if (!QFileInfo(m_backupDir).exists()) {
         QDir().mkpath(m_backupDir);
         qInfo()<<"*****backupfile*********1*******";
@@ -1928,6 +1929,8 @@ void Window::backupFile()
     if (QFileInfo(m_autoBackupDir).exists()) {
         QDir(m_autoBackupDir).removeRecursively();
     }
+
+    qInfo() << "==== end backupFile() ====";
 }
 
 bool Window::closeAllFiles()
@@ -2021,10 +2024,12 @@ void Window::setChildrenFocus(bool ok)
 void Window::addBlankTab()
 {
     if (m_findBar->isVisible()) {
+        slotFindbarClose();
         m_findBar->hide();
     }
 
     if (m_replaceBar->isVisible()) {
+        slotReplacebarClose();
         m_replaceBar->hide();
     }
 
@@ -2032,7 +2037,6 @@ void Window::addBlankTab()
         m_jumpLineBar->hide();
     }
 
-    slotFindbarClose();
     addBlankTab("");
 }
 
@@ -2195,6 +2199,9 @@ void Window::handleFindKeyword(const QString &keyword, bool state)
 void Window::slotFindbarClose()
 {
     EditWrapper *wrapper = currentWrapper();
+    if (wrapper == nullptr) {
+        return;
+    }
 
     if (wrapper->bottomBar()->isHidden()) {
         wrapper->bottomBar()->show();
@@ -2208,6 +2215,9 @@ void Window::slotFindbarClose()
 void Window::slotReplacebarClose()
 {
     EditWrapper *wrapper = currentWrapper();
+    if (wrapper == nullptr) {
+        return;
+    }
 
     if (wrapper->bottomBar()->isHidden()) {
         wrapper->bottomBar()->show();
