@@ -463,6 +463,8 @@ public:
      */
     void updateSaveIndex();
 
+    bool isSeletAll();
+
 signals:
     void clickFindAction();
     void clickReplaceAction();

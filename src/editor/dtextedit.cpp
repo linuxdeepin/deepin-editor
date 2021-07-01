@@ -107,8 +107,6 @@ TextEdit::TextEdit(QWidget *parent)
     // Init widgets.
     //左边栏控件　滑动条滚动跟新行号 折叠标记
     connect(this->verticalScrollBar(), &QScrollBar::valueChanged, this, [&](){
-        if(m_isSelectAll)
-            this->selectTextInView();
 
         this->updateLeftAreaWidget();
     });
@@ -233,8 +231,6 @@ void TextEdit::insertSelectTextEx(QTextCursor cursor, QString text)
 
 void TextEdit::insertColumnEditTextEx(QString text)
 {
-    if(m_isSelectAll)
-        QPlainTextEdit::selectAll();
 
     for (int i = 0; i < m_altModSelections.size(); i++) {
         if (m_altModSelections[i].cursor.hasSelection()) deleteTextEx(m_altModSelections[i].cursor);
@@ -412,8 +408,6 @@ void TextEdit::initRightClickedMenu()
 
 
     connect(m_deleteAction, &QAction::triggered, this, [this]() {
-        if(m_isSelectAll)
-            QPlainTextEdit::selectAll();
 
         if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
             for (int i = 0; i < m_altModSelections.size(); i++) {
@@ -434,16 +428,15 @@ void TextEdit::initRightClickedMenu()
 
 
     connect(m_selectAllAction, &QAction::triggered, this, [ = ] {
-	#if 0
-        //2021-5-25:setSelectAll()替换
         if (m_wrapper->getFileLoading())
         {
             return;
         }
         m_bIsAltMod = false;
         selectAll();
-	#endif
-        setSelectAll();
+        m_isSelectAll = true;
+
+        //setSelectAll();
     });
 
     connect(m_findAction, &QAction::triggered, this, &TextEdit::clickFindAction);
@@ -1481,8 +1474,6 @@ void TextEdit::cutlines()
 
 void TextEdit::cutlines()
 {
-    if(m_isSelectAll)
-        QPlainTextEdit::selectAll();
 
     if (textCursor().hasSelection() || m_bIsAltMod){
         this->cut();
@@ -1562,8 +1553,6 @@ void TextEdit::killLine()
     }
 
     // Remove selection content if has selection.
-    if(m_isSelectAll)
-        QPlainTextEdit::selectAll();
 
     if (textCursor().hasSelection()) {
         // textCursor().removeSelectedText();
@@ -1613,8 +1602,6 @@ void TextEdit::killCurrentLine()
         return;
     }
 
-    if(m_isSelectAll)
-        QPlainTextEdit::selectAll();
 
     QTextCursor cursor = textCursor();
 
@@ -1640,8 +1627,6 @@ void TextEdit::killBackwardWord()
 {
     tryUnsetMark();
 
-    if(m_isSelectAll)
-        QPlainTextEdit::selectAll();
 
     if (textCursor().hasSelection()) {
         //textCursor().removeSelectedText();
@@ -1664,8 +1649,6 @@ void TextEdit::killForwardWord()
 {
     tryUnsetMark();
 
-    if(m_isSelectAll)
-        QPlainTextEdit::selectAll();
 
     if (textCursor().hasSelection()) {
         //textCursor().removeSelectedText();
@@ -1865,8 +1848,6 @@ void TextEdit::convertWordCase(ConvertCase convertCase)
     }
     #endif
 
-    if(m_isSelectAll)
-        QPlainTextEdit::selectAll();
 
     if (textCursor().hasSelection()) {
         QString text = textCursor().selectedText();
@@ -2043,8 +2024,6 @@ void TextEdit::replaceNext(const QString &replaceText, const QString &withText)
         return;
     }
 
-    if(m_isSelectAll)
-        QPlainTextEdit::selectAll();
 
     if (replaceText.isEmpty() ||
             ! m_findHighlightSelection.cursor.hasSelection()) {
@@ -2734,8 +2713,6 @@ void TextEdit::cursorPositionChanged()
 void TextEdit::cut()
 {
 
-    if(m_isSelectAll)
-        QPlainTextEdit::selectAll();
 
     //列编辑添加撤销重做
     if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
@@ -2829,8 +2806,6 @@ void TextEdit::paste()
 
 
     //大文件粘贴-采用分块插入
-    if(m_isSelectAll)
-        QPlainTextEdit::selectAll();
 
     const QClipboard *clipboard = QApplication::clipboard(); //获取剪切版内容
     auto text = clipboard->text();
@@ -3186,6 +3161,7 @@ void TextEdit::tapGestureTriggered(QTapGesture *tap)
             emit sigHideVirtualKeyboard();
 
          m_gestureAction = GA_null;
+         m_isSelectAll = false;
         break;
     }
     default: {
@@ -4533,6 +4509,11 @@ void TextEdit::updateSaveIndex()
     m_lastSaveIndex = m_pUndoStack->index();
 }
 
+bool TextEdit::isSeletAll()
+{
+    return m_isSelectAll;
+}
+
 void TextEdit::isMarkCurrentLine(bool isMark, QString strColor)
 {
     if (isMark) {
@@ -5664,9 +5645,6 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
 {
     m_bIsInputMethod = true;
 
-    if(m_isSelectAll)
-        QPlainTextEdit::selectAll();
-
     if (!m_readOnlyMode && !m_bReadOnlyPermission && !e->commitString().isEmpty()) {
         //列编辑添加撤销重做
         if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
@@ -6010,9 +5988,6 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         //插入键盘可现实字符
         if (modifiers == Qt::NoModifier && (e->key() <= Qt::Key_ydiaeresis && e->key() >= Qt::Key_Space) && !e->text().isEmpty()) {
 
-            if(m_isSelectAll)
-                QPlainTextEdit::selectAll();
-
             //非修改键盘按键加撤销重做栈
             if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
                 insertColumnEditTextEx(e->text());
@@ -6024,9 +5999,6 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
 
         //键盘右边数字键
         if (modifiers == Qt::KeypadModifier && (e->key() <= Qt::Key_9 && e->key() >= Qt::Key_0) && !e->text().isEmpty()) {
-
-            if(m_isSelectAll)
-                QPlainTextEdit::selectAll();
 
             //非修改键盘按键加撤销重做栈
             if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
@@ -6040,8 +6012,6 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         //插入空白字符
         if (modifiers == Qt::NoModifier && (e->key() == Qt::Key_Tab || e->key() == Qt::Key_Return)) {
 
-            if(m_isSelectAll)
-                QPlainTextEdit::selectAll();
 
             //列编辑添加撤销重做
             if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
@@ -6054,8 +6024,6 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
 
         //列编辑 删除撤销重做
         if (modifiers == Qt::NoModifier && (e->key() == Qt::Key_Backspace)) {
-            if(m_isSelectAll)
-                QPlainTextEdit::selectAll();
 
             if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
                 QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(m_altModSelections);
@@ -6076,8 +6044,6 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
 
         //列编辑 向后删除撤销重做
         if (modifiers == Qt::NoModifier && (e->key() == Qt::Key_Delete)) {
-            if(m_isSelectAll)
-                QPlainTextEdit::selectAll();
 
             if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
                 DeleteBackAltCommond *commond = new DeleteBackAltCommond(m_altModSelections,this);
@@ -6102,8 +6068,6 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         //fix 75313  lxp 2021.4.22
         if ((modifiers == Qt::ShiftModifier || e->key() == Qt::Key_Shift) && !e->text().isEmpty()) {
 
-            if(m_isSelectAll)
-                QPlainTextEdit::selectAll();
 
             if (m_bIsAltMod) {
                insertColumnEditTextEx(e->text());
@@ -6198,15 +6162,15 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             scrollDown();
             return;
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "selectall")) {
-            #if 0
-            //2021-2-25:setSelectAll()替换
+
             if (m_wrapper->getFileLoading()) {
                 return;
             }
             m_bIsAltMod = false;
             selectAll();
-            #endif
-            setSelectAll();
+            m_isSelectAll = true;
+
+            //setSelectAll();
             return;
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "copylines")) {
             copyLines();
@@ -6447,8 +6411,6 @@ void TextEdit::paintEvent(QPaintEvent *e)
 
 void TextEdit::resizeEvent(QResizeEvent *e)
 {
-    if(m_isSelectAll)
-        selectTextInView();
 
     QPlainTextEdit::resizeEvent(e);
 }
@@ -6474,8 +6436,6 @@ void TextEdit::unCommentSelection()
     if (!m_commentDefinition.isValid())
         return;
 
-    if(m_isSelectAll)
-        QPlainTextEdit::selectAll();
 
     QTextCursor cursor = textCursor();
     QTextDocument *doc = cursor.document();
@@ -6650,8 +6610,6 @@ void TextEdit::setComment()
     //此函数是删除了unCommentSelection()的if-else的uncomment分支得来的
     if (!m_commentDefinition.isValid())
         return;
-    if(m_isSelectAll)
-        QPlainTextEdit::selectAll();
 
     QTextCursor cursor = textCursor();
     if (cursor.isNull()) return;
@@ -6789,8 +6747,6 @@ void TextEdit::removeComment()
     QString tep = m_commentDefinition.singleLine;
     QString abb = tep.remove(QRegExp("\\s"));
 
-    if(m_isSelectAll)
-        QPlainTextEdit::selectAll();
 
 
     QTextCursor cursor = textCursor();
