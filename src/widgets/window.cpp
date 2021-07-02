@@ -1851,10 +1851,8 @@ void Window::asynPrint(QPainter &p, DPrinter *printer, const QVector<int> &pageR
 
 void Window::backupFile()
 {
-    qInfo() << "==== inter backupFile() ====";
     if (!QFileInfo(m_backupDir).exists()) {
         QDir().mkpath(m_backupDir);
-        qInfo()<<"*****backupfile*********1*******";
     }
 
     QMap<QString, EditWrapper *> wrappers = m_wrappers;
@@ -1921,7 +1919,6 @@ void Window::backupFile()
         QByteArray byteArray = document.toJson(QJsonDocument::Compact);
         m_qlistTemFile.replace(tabInfo.tabIndex, byteArray);
     }
-    qInfo()<<"*****backupfile*********2******* m_qlistTemFile = "<<m_qlistTemFile;
     //将json串列表写入配置文件
     m_settings->settings->option("advance.editor.browsing_history_temfile")->setValue(m_qlistTemFile);
 
@@ -1929,8 +1926,6 @@ void Window::backupFile()
     if (QFileInfo(m_autoBackupDir).exists()) {
         QDir(m_autoBackupDir).removeRecursively();
     }
-
-    qInfo() << "==== end backupFile() ====";
 }
 
 bool Window::closeAllFiles()
@@ -2744,7 +2739,6 @@ void Window::closeEvent(QCloseEvent *e)
         }
     } else {
         backupFile();
-        qInfo()<<"***closeEvent***save backupfile****************";
     }
 
     QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");

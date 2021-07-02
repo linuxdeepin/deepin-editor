@@ -144,7 +144,6 @@ void StartManager::autoBackupFile()
     QFileInfo fileInfo;
     m_qlistTemFile.clear();
     listBackupInfo = Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->value().toStringList();
-
     //记录所有的文件信息
     for (int var = 0; var < m_windows.count(); ++var) {
         wrappers = m_windows.value(var)->getWrappers();
@@ -213,9 +212,9 @@ void StartManager::autoBackupFile()
 
         m_qlistTemFile.append(list);
     }
-
     //将json串列表写入配置文件
     Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->setValue(m_qlistTemFile);
+
 }
 
 int StartManager::recoverFile(Window *window)

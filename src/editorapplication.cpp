@@ -51,7 +51,8 @@ EditorApplication::~EditorApplication()
 
 void EditorApplication::handleQuitAction()
 {
-    activeWindow()->window()->close();
+    //退出时调用保存现场函数
+    StartManager::instance()->autoBackupFile();
 }
 
 bool EditorApplication::notify(QObject *object, QEvent *event)

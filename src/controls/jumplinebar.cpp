@@ -79,11 +79,11 @@ void JumpLineBar::activeInput(QString file, int row, int column, int lineCount, 
         m_editLine->lineEdit()->setText("");
 
     // Show jump line bar.
-//    show();
-//    raise();
+    show();
+    raise();
 
 //    // Focus default.
-//    m_editLine->lineEdit()->setFocus();
+    m_editLine->lineEdit()->setFocus();
 }
 
 void JumpLineBar::handleFocusOut()

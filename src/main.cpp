@@ -52,8 +52,10 @@ void signalHander(int signo)
         break;
     case SIGTERM: {
             EditorApplication *pApp = dynamic_cast<EditorApplication *>(qApp);
-            qInfo() << "SIGTERM qApp quit";
+            qInfo() << "SIGTERM qApp quit*****inter";
             pApp->handleQuitAction();
+            qInfo() << "SIGTERM qApp quit*****quit";
+            qApp->quit();
         } break;
     default:
         break;
