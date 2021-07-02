@@ -2062,6 +2062,13 @@ void Window::addBlankTab(const QString &blankFile)
     m_wrappers[blankTabPath] = wrapper;
     showNewEditor(wrapper);
 
+    //添加一个标签按钮点击后，取消hover 状态  ut002764  2021.7.2
+    DIconButton *addButton = m_tabbar->findChild<DIconButton *>("AddButton");
+    if(addButton) {
+        addButton->setAttribute(Qt::WA_UnderMouse, false);
+        QHoverEvent hoverevent(QEvent::HoverLeave,addButton->pos(), QPoint(0, 0));
+        QApplication::sendEvent(addButton, &hoverevent);
+    }
     /* 添加一个空白tab标签弹出虚拟键盘　*/
     if (m_pImInterface != nullptr && m_pImInterface->isValid()) {
         m_pImInterface->setImActive(true);
@@ -2449,6 +2456,10 @@ void Window::slotSettingResetTheme(const QString &path)
 void Window::slotFindIconBtnClicked()
 {
     popupFindBar();
+    //搜索按钮点击后，取消hover 状态  ut002764  2021.7.2
+    m_pFindToolBtn->setAttribute(Qt::WA_UnderMouse, false);
+    QHoverEvent hoverevent(QEvent::HoverLeave,m_pFindToolBtn->pos(), QPoint(0, 0));
+    QApplication::sendEvent(m_pFindToolBtn, &hoverevent);
 }
 
 void Window::slot_saveReadingPath()
