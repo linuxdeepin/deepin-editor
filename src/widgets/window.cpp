@@ -453,6 +453,8 @@ void Window::initTabletFeatures()
         setWindowFlag(Qt::WindowCloseButtonHint, false);
         setFixedSize(QSize(m_iDesktopAvailableWidth, m_iDesktopAvailableHeight));
     }
+    //屏幕大小变化信号监听
+    connect(QGuiApplication::primaryScreen(), &QScreen::geometryChanged, this,&Window::slotVirtualKeyboardgeometryChanged);
 
 //    initStatuBar();
     initVirtualKeyboardDbus();
@@ -478,6 +480,7 @@ void Window::initVirtualKeyboardDbus()
         setKeyboardHeight(variant.value<QRect>().height());
         //虚拟键盘弹出或隐藏后，应用的高度的压缩和恢复全屏高度由dtk适配，应用内部无需对应用坐标和高度的设置
         connect(m_pImInterface, &ComDeepinImInterface::imActiveChanged, this, &Window::slotVirtualKeyboardImActiveChanged);
+
         qInfo() << "connect virtual keyboard dbus ok.";
     } else {
         delete m_pImInterface;
@@ -2541,6 +2544,17 @@ void Window::slotVirtualKeyboardImActiveChanged(bool bIsVirKeyboarShow)
 {
     Settings::instance()->setVirkeyboardStatus(bIsVirKeyboarShow);
 }
+
+void Window::slotVirtualKeyboardgeometryChanged(const QRect &rect)
+{
+    //切换横屏或者竖屏，
+    qInfo()<<"***********change size signal*************"<<rect;
+//    setFixedHeight(QApplication::desktop()->availableGeometry().size().height());
+//    setFixedWidth(QApplication::desktop()->availableGeometry().size().width());
+    setFixedHeight(rect.height());
+    setFixedWidth(rect.width());
+}
+
 
 void Window::slotSendresetHeight()
 {

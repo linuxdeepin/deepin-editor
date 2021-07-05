@@ -209,6 +209,7 @@ public slots:
     //清除不支持双字节字符集符号
     void slotClearDoubleCharaterEncode();
     void slotVirtualKeyboardImActiveChanged(bool bIsVirKeyboarShow);
+    void slotVirtualKeyboardgeometryChanged(const QRect &rect);
 
     void slotSigThemeChanged(const QString &path);
     void slotSigAdjustFont(QString fontName);
