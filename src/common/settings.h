@@ -80,6 +80,17 @@ public slots:
     //自定义快捷键 ut002764 2021.6.28
     void slotCustomshortcut(const QString &key, const QVariant &value);
 
+    //添加信号槽 ut002764-07-05
+    void slotsigAdjustFont(QVariant value);
+    void slotsigAdjustFontSize(QVariant value);
+    void slotsigAdjustWordWrap(QVariant value);
+    void slotsigSetLineNumberShow(QVariant value);
+    void slotsigAdjustBookmark(QVariant value);
+    void slotsigShowCodeFlodFlag(QVariant value);
+    void slotsigShowBlankCharacter(QVariant value);
+    void slotsigHightLightCurrentLine(QVariant value);
+    void slotsigAdjustTabSpaceNumber(QVariant value);
+    void slotupdateAllKeysWithKeymap(QVariant value);
 
 private:
     void updateAllKeysWithKeymap(QString keymap);
@@ -111,6 +122,8 @@ public:
     {
         return m_pOption;
     }
+    // ut002764 2021.7.05
+    void slotDSettingsOptionvalueChanged(const QVariant & value);
 
 protected:
     inline bool eventFilter(QObject *object, QEvent *event)

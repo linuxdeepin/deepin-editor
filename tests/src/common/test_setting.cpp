@@ -160,6 +160,21 @@ TEST_F(test_setting, isShortcutConflict)
 
     QVariant value;
     m_setting->slotCustomshortcut("Ctrl+T",value);
+
+    m_setting->slotsigAdjustFont(value);
+
+    QVariant keymap2 = Settings::instance()->settings->option("base.font.size")->value();
+    m_setting->slotsigAdjustFontSize(keymap2);
+    m_setting->slotsigAdjustWordWrap(value);
+    m_setting->slotsigSetLineNumberShow(value);
+    m_setting->slotsigAdjustBookmark(value);
+    m_setting->slotsigShowCodeFlodFlag(value);
+    m_setting->slotsigShowBlankCharacter(value);
+    m_setting->slotsigHightLightCurrentLine(value);
+    m_setting->slotsigAdjustTabSpaceNumber(value);
+
+    QVariant keymap = Settings::instance()->settings->option("shortcuts.keymap.keymap")->value();
+    m_setting->slotupdateAllKeysWithKeymap(keymap);
 }
 
 TEST_F(test_setting, KeySequenceEdit)
@@ -167,9 +182,14 @@ TEST_F(test_setting, KeySequenceEdit)
     QWidget *widget = new QWidget();
     DSettingsDialog *dialog = new DSettingsDialog(widget);
     auto option = qobject_cast<DTK_CORE_NAMESPACE::DSettingsOption *>(dialog);
+
     KeySequenceEdit *shortCutLineEdit = new KeySequenceEdit(option);
-    QEvent *e=new QEvent(QEvent::KeyPress);
+    QEvent *e = new QEvent(QEvent::KeyPress);
     shortCutLineEdit->eventFilter(shortCutLineEdit,e);
+
+    QVariant keymap = Settings::instance()->settings->option("shortcuts.keymap.keymap")->value();
+    shortCutLineEdit->slotDSettingsOptionvalueChanged(keymap);
+
     delete widget;
     delete shortCutLineEdit;
 }

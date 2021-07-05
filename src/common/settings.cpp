@@ -51,65 +51,45 @@ Settings::Settings(QWidget *parent)
     settings->setBackend(m_backend);
 
     auto fontFamliy = settings->option("base.font.family");
-    connect(fontFamliy, &Dtk::Core::DSettingsOption::valueChanged, this, [ = ](QVariant value) {
-        emit sigAdjustFont(value.toString());
-    });
+    connect(fontFamliy, &Dtk::Core::DSettingsOption::valueChanged, this, &Settings::slotsigAdjustFont);
 
     auto fontSize = settings->option("base.font.size");
-    connect(fontSize, &Dtk::Core::DSettingsOption::valueChanged, this, [ = ](QVariant value) {
-        emit sigAdjustFontSize(value.toInt());
-    });
+    connect(fontSize, &Dtk::Core::DSettingsOption::valueChanged, this, &Settings::slotsigAdjustFontSize);
 
     auto wordWrap = settings->option("base.font.wordwrap");
-    connect(wordWrap, &Dtk::Core::DSettingsOption::valueChanged, this, [ = ](QVariant value) {
-        emit sigAdjustWordWrap(value.toBool());
-    });
+    connect(wordWrap, &Dtk::Core::DSettingsOption::valueChanged, this, &Settings::slotsigAdjustWordWrap);
 
     auto showLineNumber = settings->option("base.font.showlinenumber");
-    connect(showLineNumber, &Dtk::Core::DSettingsOption::valueChanged, this, [ = ](QVariant value) {
-        emit sigSetLineNumberShow(value.toBool());
-    });
+    connect(showLineNumber, &Dtk::Core::DSettingsOption::valueChanged, this, &Settings::slotsigSetLineNumberShow);
 
     auto bookmark = settings->option("base.font.showbookmark");
-    connect(bookmark, &Dtk::Core::DSettingsOption::valueChanged, this, [ = ](QVariant value) {
-        emit sigAdjustBookmark(value.toBool());
-    });
+    connect(bookmark, &Dtk::Core::DSettingsOption::valueChanged, this, &Settings::slotsigAdjustBookmark);
 
     auto codeFlod = settings->option("base.font.codeflod");
-    connect(codeFlod, &Dtk::Core::DSettingsOption::valueChanged, this, [ = ](QVariant value) {
-        emit sigShowCodeFlodFlag(value.toBool());
-    });
+    connect(codeFlod, &Dtk::Core::DSettingsOption::valueChanged, this, &Settings::slotsigShowCodeFlodFlag);
 
     //添加显示空白符　梁卫东
     auto blankCharacter = settings->option("base.font.showblankcharacter");
-    connect(blankCharacter, &Dtk::Core::DSettingsOption::valueChanged, this, [ = ](QVariant value) {
-        emit sigShowBlankCharacter(value.toBool());
-    });
+    connect(blankCharacter, &Dtk::Core::DSettingsOption::valueChanged, this, &Settings::slotsigShowBlankCharacter);
+
     //hightlightcurrentline
     auto hightlightCurrentLine = settings->option("base.font.hightlightcurrentline");
-    connect(hightlightCurrentLine, &Dtk::Core::DSettingsOption::valueChanged, this, [ = ](QVariant value) {
-        emit sigHightLightCurrentLine(value.toBool());
-    });
+    connect(hightlightCurrentLine, &Dtk::Core::DSettingsOption::valueChanged, this, &Settings::slotsigHightLightCurrentLine);
+
     auto theme = settings->option("advance.editor.theme");
     connect(theme, &Dtk::Core::DSettingsOption::valueChanged, this, [ = ](QVariant value) {
         //emit themeChanged(value.toString());
     });
 
     auto tabSpaceNumber = settings->option("advance.editor.tabspacenumber");
-    connect(tabSpaceNumber, &Dtk::Core::DSettingsOption::valueChanged, this, [ = ](QVariant value) {
-        emit sigAdjustTabSpaceNumber(value.toInt());
-    });
+    connect(tabSpaceNumber, &Dtk::Core::DSettingsOption::valueChanged, this, &Settings::slotsigAdjustTabSpaceNumber);
 
     auto keymap = settings->option("shortcuts.keymap.keymap");
     QMap<QString, QVariant> keymapMap;
     keymapMap.insert("keys", QStringList() << "standard" << "emacs" << "customize");
     keymapMap.insert("values", QStringList() << tr("Standard") << "Emacs" << tr("Customize"));
     keymap->setData("items", keymapMap);
-
-    connect(keymap, &Dtk::Core::DSettingsOption::valueChanged, this, [ = ](QVariant value) {
-        // Update all key's display value with user select keymap.
-        updateAllKeysWithKeymap(value.toString());
-    });
+    connect(keymap, &Dtk::Core::DSettingsOption::valueChanged, this, &Settings::slotupdateAllKeysWithKeymap);
 
     //only used by new window
     auto windowState = settings->option("advance.window.windowstate");
@@ -124,33 +104,6 @@ Settings::Settings(QWidget *parent)
     windowState->setData("items", windowStateMap);
 
     connect(settings, &Dtk::Core::DSettings::valueChanged, this, &Settings::slotCustomshortcut);
-//    connect(settings, &Dtk::Core::DSettings::valueChanged, this, [ = ](const QString & key, const QVariant & value) {
-
-//        // Change keymap to customize once user change any keyshortcut.
-//        if (!m_bUserChangeKey && key.startsWith("shortcuts.") && key != "shortcuts.keymap.keymap" && !key.contains("_keymap_")) {
-//            m_bUserChangeKey = true;
-
-//            QString currentKeymap = settings->option("shortcuts.keymap.keymap")->value().toString();
-
-//            QStringList keySplitList = key.split(".");
-//            keySplitList[1] = QString("%1_keymap_customize").arg(keySplitList[1]);
-//            QString customizeKey = keySplitList.join(".");
-
-//            // Just update customize key user input, don't change keymap.
-//            if (currentKeymap == "customize") {
-//                settings->option(customizeKey)->setValue(value);
-//            }
-//            // If current kemap is not "customize".
-//            // Copy all customize keys from current keymap, and then update customize key just user input.
-//            // Then change keymap name.
-//            else {
-//                copyCustomizeKeysFromKeymap(currentKeymap);
-//                settings->option(customizeKey)->setValue(value);
-//                keymap->setValue("customize");
-//            }
-//            m_bUserChangeKey = false;
-//        }
-//    });
 }
 
 Settings::~Settings()
@@ -385,18 +338,19 @@ QPair<QWidget *, QWidget *> Settings::createKeySequenceEditHandle(QObject *obj)
     });
 
     // 配置修改
-    option->connect(option, &DTK_CORE_NAMESPACE::DSettingsOption::valueChanged, shortCutLineEdit, [ = ](const QVariant & value) {
-        QString keyseq = value.toString();
-
-        if (keyseq.isEmpty()) {
-            shortCutLineEdit->clear();
-            return;
-        }
-
-        shortCutLineEdit->setKeySequence(QKeySequence(keyseq));
-    });
-
+    option->connect(option, &DTK_CORE_NAMESPACE::DSettingsOption::valueChanged, shortCutLineEdit, &KeySequenceEdit::slotDSettingsOptionvalueChanged);
     return optionWidget;
+}
+
+void KeySequenceEdit::slotDSettingsOptionvalueChanged(const QVariant & value)
+{
+    QString keyseq = value.toString();
+
+    if (keyseq.isEmpty()) {
+        this->clear();
+        return;
+    }
+    this->setKeySequence(QKeySequence(keyseq));
 }
 
 Settings *Settings::instance()
@@ -537,4 +491,55 @@ void Settings::slotCustomshortcut(const QString &key, const QVariant &value)
         }
         m_bUserChangeKey = false;
     }
+}
+
+
+void Settings::slotsigAdjustFont(QVariant value)
+{
+    emit sigAdjustFont(value.toString());
+}
+
+void Settings::slotsigAdjustFontSize(QVariant value)
+{
+    emit sigAdjustFontSize(value.toInt());
+}
+
+void Settings::slotsigAdjustWordWrap(QVariant value)
+{
+    emit sigAdjustWordWrap(value.toBool());
+}
+
+void Settings::slotsigSetLineNumberShow(QVariant value)
+{
+    emit sigSetLineNumberShow(value.toBool());
+}
+
+void Settings::slotsigAdjustBookmark(QVariant value)
+{
+    emit sigAdjustBookmark(value.toBool());
+}
+
+void Settings::slotsigShowCodeFlodFlag(QVariant value)
+{
+    emit sigShowCodeFlodFlag(value.toBool());
+}
+
+void Settings::slotsigShowBlankCharacter(QVariant value)
+{
+    emit sigShowBlankCharacter(value.toBool());
+}
+
+void Settings::slotsigHightLightCurrentLine(QVariant value)
+{
+    emit sigHightLightCurrentLine(value.toBool());
+}
+
+void Settings::slotsigAdjustTabSpaceNumber(QVariant value)
+{
+    emit sigAdjustTabSpaceNumber(value.toInt());
+}
+
+void Settings::slotupdateAllKeysWithKeymap(QVariant value)
+{
+    updateAllKeysWithKeymap(value.toString());
 }
