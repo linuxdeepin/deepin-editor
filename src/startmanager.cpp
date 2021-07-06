@@ -709,6 +709,11 @@ QList<int> StartManager::analyzeBookmakeInfo(QString bookmarkInfo)
     return bookmarkList;
 }
 
+QList<Window *> StartManager::getWindows()
+{
+    return m_windows;
+}
+
 void StartManager::initBlockShutdown()
 {
     if (m_reply.value().isValid()) {

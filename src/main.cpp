@@ -115,6 +115,7 @@ int main(int argc, char *argv[])
         }
 
         dbus.registerObject("/com/deepin/Editor", startManager, QDBusConnection::ExportScriptableSlots);
+        dbus.registerObject("/com/deepin/Editor/slide", startManager->getWindows().first(), QDBusConnection::ExportScriptableSignals | QDBusConnection::ExportScriptableSlots);
 
         PerformanceMonitor::initializAppFinish();
         return app.exec();

@@ -82,6 +82,7 @@ public:
      * @return 书签列表
      */
     QList<int> analyzeBookmakeInfo(QString bookmarkInfo);
+    QList<Window *> getWindows();
 
 public slots:
     Q_SCRIPTABLE void openFilesInTab(QStringList files);

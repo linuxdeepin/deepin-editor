@@ -840,11 +840,15 @@ EditWrapper *Window::createEditor()
     connect(wrapper->textEditor(), &TextEdit::sigHideVirtualKeyboard, this, [=]() {
         if (m_pImInterface != nullptr && m_pImInterface->isValid()) {
             m_pImInterface->setImActive(false);
+            Q_EMIT sigEditorSliding(true);
+            qInfo() << "==== send sigEditorSliding true ====";
         }
     });
     connect(wrapper->textEditor(), &TextEdit::sigShowVirtualKeyboard, this, [=]() {
         if (m_pImInterface != nullptr && m_pImInterface->isValid()) {
             m_pImInterface->setImActive(true);
+            Q_EMIT sigEditorSliding(false);
+            qInfo() << "==== send sigEditorSliding false ====";
         }
     });
 

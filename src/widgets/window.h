@@ -53,6 +53,7 @@ DWIDGET_USE_NAMESPACE
 class Window : public DMainWindow
 {
     Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", "com.deepin.Editor")
 
 public:
     explicit Window(DMainWindow *parent = nullptr);
@@ -158,6 +159,7 @@ signals:
     void closeWindow();
     void sigJudgeBlockShutdown();
     void pressEsc();
+    Q_SCRIPTABLE void sigEditorSliding(bool bIsSliding);
 
 public slots:
     void addBlankTab();
