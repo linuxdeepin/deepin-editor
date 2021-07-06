@@ -255,6 +255,7 @@ protected:
     void keyPressEvent(QKeyEvent *keyEvent) override;
     void keyReleaseEvent(QKeyEvent *keyEvent) override;
     void dropEvent(QDropEvent *event) override;
+    void changeEvent(QEvent *event) override;
 
 private:
     DBusDaemon::dbus *m_rootSaveDBus;

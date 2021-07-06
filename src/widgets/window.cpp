@@ -2078,6 +2078,7 @@ void Window::addBlankTab(const QString &blankFile)
     }
     /* 添加一个空白tab标签弹出虚拟键盘　*/
     if (m_pImInterface != nullptr && m_pImInterface->isValid()) {
+        Q_EMIT sigEditorSliding(false);
         m_pImInterface->setImActive(true);
     }
 }
@@ -2957,6 +2958,15 @@ void Window::dropEvent(QDropEvent *event)
         //后添加不支持文件　在最后编辑页面显示
         foreach (QString var, otherfiles) {
             addTab(var, true);
+        }
+    }
+}
+
+void Window::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::ActionChanged) {
+        if (!this->isActiveWindow()) {
+            Q_EMIT sigEditorSliding(false);
         }
     }
 }
