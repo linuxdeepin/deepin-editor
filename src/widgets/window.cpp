@@ -841,14 +841,12 @@ EditWrapper *Window::createEditor()
         if (m_pImInterface != nullptr && m_pImInterface->isValid()) {
             m_pImInterface->setImActive(false);
             Q_EMIT sigEditorSliding(true);
-            qInfo() << "==== send sigEditorSliding true ====";
         }
     });
     connect(wrapper->textEditor(), &TextEdit::sigShowVirtualKeyboard, this, [=]() {
         if (m_pImInterface != nullptr && m_pImInterface->isValid()) {
             m_pImInterface->setImActive(true);
             Q_EMIT sigEditorSliding(false);
-            qInfo() << "==== send sigEditorSliding false ====";
         }
     });
 
@@ -2964,11 +2962,13 @@ void Window::dropEvent(QDropEvent *event)
 
 void Window::changeEvent(QEvent *event)
 {
-    if (event->type() == QEvent::ActionChanged) {
+    if (event->type() == QEvent::ActivationChange) {
         if (!this->isActiveWindow()) {
             Q_EMIT sigEditorSliding(false);
         }
     }
+
+    DMainWindow::changeEvent(event);
 }
 
 bool Window::findBarIsVisiable()
