@@ -440,9 +440,12 @@ void StartManager::openFilesInTab(QStringList files)
         }
         // Just active first window if no file is need opened.
         else {
-            Window *window = createWindow();
+            Window *window = m_windows[0];
             window->show();
             window->addBlankTab();
+            if (!Q_LIKELY(Utils::activeWindowFromDock(window->winId()))) {
+                window->activateWindow();
+            }
         }
     } else {
         for (const QString &file : files) {

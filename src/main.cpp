@@ -79,12 +79,26 @@ int main(int argc, char *argv[])
     //save theme
     DApplicationSettings savetheme;
 
-    DGuiApplicationHelper::instance()->setSingleInstanceInterval(-1);
-    if (!DGuiApplicationHelper::instance()->setSingleInstance(
-            app.applicationName(),
-            DGuiApplicationHelper::UserScope)) {
+
+    if (!DGuiApplicationHelper::instance()->setSingleInstance(app.applicationName(),DGuiApplicationHelper::UserScope)) {
         return 0;
     }
+    DGuiApplicationHelper::instance()->setSingleInstanceInterval(1);
+
+    QObject::connect(DGuiApplicationHelper::instance(),&DGuiApplicationHelper::newProcessInstance,StartManager::instance(),[&](qint64 pid, const QStringList &arguments)
+    {
+        if(arguments.size()<1)
+            return;
+        else {
+            QStringList paths;
+            if(arguments.size()>=1){
+              paths = arguments.mid(1);
+            }
+            StartManager::instance()->openFilesInTab(paths);
+        }
+    });
+
+
 
     // Parser input arguments.
     QCommandLineParser parser;
@@ -108,11 +122,13 @@ int main(int argc, char *argv[])
     if (dbus.registerService("com.deepin.Editor")) {
         StartManager *startManager = StartManager::instance();
 
-        if (hasWindowFlag) {
-            startManager->openFilesInWindow(urls);
-        } else {
-            startManager->openFilesInTab(urls);
-        }
+//        if (hasWindowFlag) {
+//            startManager->openFilesInWindow(urls);
+//        } else {
+//            startManager->openFilesInTab(urls);
+//        }
+
+        startManager->openFilesInTab(urls);
 
         dbus.registerObject("/com/deepin/Editor", startManager, QDBusConnection::ExportScriptableSlots);
         dbus.registerObject("/com/deepin/Editor/slide", startManager->getWindows().first(), QDBusConnection::ExportScriptableSignals | QDBusConnection::ExportScriptableSlots);
