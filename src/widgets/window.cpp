@@ -845,7 +845,7 @@ EditWrapper *Window::createEditor()
     });
     connect(wrapper->textEditor(), &TextEdit::sigShowVirtualKeyboard, this, [=]() {
         if (m_pImInterface != nullptr && m_pImInterface->isValid()) {
-            m_pImInterface->setImActive(true);
+            //m_pImInterface->setImActive(true);
             Q_EMIT sigEditorSliding(false);
         }
     });

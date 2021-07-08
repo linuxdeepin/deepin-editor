@@ -24,6 +24,7 @@
 #include <functional>
 #include <QObject>
 #include <QTimer>
+#include <QDebug>
 #define CELL_TIME   15
 #define TAP_MOVE_DELAY 300
 
@@ -37,6 +38,9 @@ class FlashTween :public QObject
 public:
     FlashTween();
     ~FlashTween();
+
+signals:
+    void sigSlideInertialFinish();
 
 public:
     QTimer* m_timerY = nullptr;

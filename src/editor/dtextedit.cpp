@@ -140,7 +140,6 @@ TextEdit::TextEdit(QWidget *parent)
                              "Event",
                              this, SLOT(fingerZoom(QString, QString, int)));
 
-
     //初始化右键菜单
     initRightClickedMenu();
 
@@ -172,6 +171,9 @@ TextEdit::TextEdit(QWidget *parent)
             showCursorBlink();
         }
     });
+
+    connect(&tweenX, &FlashTween::sigSlideInertialFinish, this, &TextEdit::slotSlideInertialFinish);
+    connect(&tweenY, &FlashTween::sigSlideInertialFinish, this, &TextEdit::slotSlideInertialFinish);
 }
 
 TextEdit::~TextEdit()
@@ -2905,6 +2907,11 @@ void TextEdit::setSelectAll()
      selectTextInView();
 }
 
+void TextEdit::slotSlideInertialFinish()
+{
+    emit sigShowVirtualKeyboard();
+}
+
 void TextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &closeChar)
 {
     QTextDocument *doc = document();
@@ -3149,18 +3156,14 @@ void TextEdit::tapGestureTriggered(QTapGesture *tap)
             emit sigHideVirtualKeyboard();
         } else {
             qDebug() << "null start" << timeSpace;
+            emit sigShowVirtualKeyboard();
             m_gestureAction = GA_null;
         }
         break;
     }
     case Qt::GestureFinished: {
-        qint64 timeSpace = QDateTime::currentDateTime().toMSecsSinceEpoch() - m_tapBeginTime;
-        if(timeSpace < TAP_MOVE_DELAY && m_gestureAction == GA_tap)
-            emit sigShowVirtualKeyboard();
-        else
-            emit sigHideVirtualKeyboard();
-
          m_gestureAction = GA_null;
+         emit sigShowVirtualKeyboard();
          m_isSelectAll = false;
         break;
     }

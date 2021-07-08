@@ -520,6 +520,8 @@ public slots:
     void selectTextInView();
     //设置"全部选中"(全选槽函数)
     void setSelectAll();
+    //滑动惯性结束
+    void slotSlideInertialFinish();
 
 protected:
     bool event(QEvent *evt) override;   //触摸屏event事件

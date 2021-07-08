@@ -90,7 +90,8 @@ void FlashTween::__runY()
     }
     else {
         if (m_timerY != nullptr) {
-        m_timerY->stop();
+            m_timerY->stop();
+            emit sigSlideInertialFinish();
         }
     }
 }
@@ -107,6 +108,7 @@ void FlashTween::__runX()
     }
     else {
         m_timerX->stop();
+        emit sigSlideInertialFinish();
     }
 }
 
