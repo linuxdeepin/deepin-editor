@@ -174,8 +174,8 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr, QByteArray &outS
     }
 
     iconv_t handle = iconv_open(toCode.toLocal8Bit().data(), fromCode.toLocal8Bit().data());
-    int val = 1;
-    iconvctl(handle, ICONV_SET_DISCARD_ILSEQ, &val);
+    // int val = 1;
+    // iconvctl(handle, ICONV_SET_DISCARD_ILSEQ, &val);
 
     if (handle != reinterpret_cast<iconv_t>(-1)) {
         char* inbuf = inputStr.data();

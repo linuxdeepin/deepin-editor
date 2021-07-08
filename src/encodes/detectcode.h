@@ -25,7 +25,6 @@
 #include <QMap>
 #include <uchardet/uchardet.h>
 #include <enca.h>
-#include <libcharset.h>
 #include <iconv.h>
 /*
 *
