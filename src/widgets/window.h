@@ -229,6 +229,8 @@ public slots:
     //设置文本高度复位；ut002764 2021-6-17
     void slotSendresetHeight();
 
+    void updateBarGeo();
+
 private:
     void handleFocusWindowChanged(QWindow *w);
     void updateThemePanelGeomerty();
@@ -313,6 +315,7 @@ private:
     //virtual keyboard due-im
     ComDeepinImInterface *m_pImInterface {nullptr};
     QDBusInterface *m_pStatusDbusface {nullptr};
+    bool m_virtualKeyIsVisibel=false;
     int m_iStatusBarHeight {0};
     int m_iKeyboardHeight {0};
     int m_iDesktopAvailableHeight {0};

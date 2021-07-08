@@ -1299,7 +1299,7 @@ void Window::popupFindBar()
     }
     m_findBar->raise();
     m_findBar->show();
-    m_findBar->move(QPoint(4, height() - m_findBar->height() - 4));
+    //m_findBar->move(QPoint(4, height()  - m_findBar->height() - 4));
 
     QString text = wrapper->textEditor()->textCursor().selectedText();
     int row = wrapper->textEditor()->getCurrentLine();
@@ -1361,7 +1361,7 @@ void Window::popupReplaceBar()
     }
     m_replaceBar->raise();
     m_replaceBar->show();
-    m_replaceBar->move(QPoint(4, height() - m_replaceBar->height() - 4));
+    //m_replaceBar->move(QPoint(4, height() - m_replaceBar->height() - 4));
     //addBottomWidget(m_replaceBar);
 
     QString tabPath = m_tabbar->currentPath();
@@ -2546,6 +2546,15 @@ void Window::slotClearDoubleCharaterEncode()
 void Window::slotVirtualKeyboardImActiveChanged(bool bIsVirKeyboarShow)
 {
     Settings::instance()->setVirkeyboardStatus(bIsVirKeyboarShow);
+    if(bIsVirKeyboarShow){
+        m_virtualKeyIsVisibel = true;
+        updateBarGeo();
+    }
+    else {
+        m_virtualKeyIsVisibel = false;
+        updateBarGeo();
+    }
+
 }
 
 void Window::slotVirtualKeyboardgeometryChanged(const QRect &rect)
@@ -2564,6 +2573,17 @@ void Window::slotSendresetHeight()
     if(m_pImInterface != nullptr && m_pImInterface->isValid()) {
         m_pImInterface->setImActive(false);
         setFixedHeight(QApplication::desktop()->geometry().height());
+    }
+}
+
+void Window::updateBarGeo()
+{
+    if(m_virtualKeyIsVisibel){
+        m_findBar->setGeometry(4, height()  -  m_iKeyboardHeight - m_findBar->height() - 4, width() - 8, m_findBar->height());
+        m_replaceBar->setGeometry(4, height() - m_iKeyboardHeight - m_replaceBar->height() - 4, width() - 8, m_replaceBar->height());
+    }else {
+        m_findBar->setGeometry(4, height()  -  0 - m_findBar->height() - 4, width() - 8, m_findBar->height());
+        m_replaceBar->setGeometry(4, height() - 0 - m_replaceBar->height() - 4, width() - 8, m_replaceBar->height());
     }
 }
 
@@ -2738,8 +2758,9 @@ void Window::resizeEvent(QResizeEvent *e)
         }
     }
 
-    m_findBar->setGeometry(4, height() - m_findBar->height() - 4, width() - 8, m_findBar->height());
-    m_replaceBar->setGeometry(4, height() - m_replaceBar->height() - 4, width() - 8, m_replaceBar->height());
+    //m_findBar->setGeometry(4, height()  -  m_findBar->height() - 4, width() - 8, m_findBar->height());
+    //m_replaceBar->setGeometry(4, height() - m_replaceBar->height() - 4, width() - 8, m_replaceBar->height());
+    updateBarGeo();
 
     for (EditWrapper *wrapper : m_wrappers.values()) {
         wrapper->OnUpdateHighlighter();
