@@ -2486,22 +2486,31 @@ void Window::slot_setTitleFocus()
         it.value()->bottomBar()->setChildrenFocus(true);
     }
 
-    titlebar()->setFocusPolicy(Qt::TabFocus);
-    titlebar()->setFocus(Qt::MouseFocusReason);
+    if(titlebar()){
+        titlebar()->setFocusPolicy(Qt::TabFocus);
+        titlebar()->setFocus(Qt::MouseFocusReason);
+    }
     DIconButton *addButton = m_tabbar->findChild<DIconButton *>("AddButton");
-    addButton->setFocusPolicy(Qt::TabFocus);
+    if(addButton)
+        addButton->setFocusPolicy(Qt::TabFocus);
     DToolButton *pToolBtn = titlebar()->findChild<DToolButton *>("TitleFindToolButton");
-    pToolBtn->setFocusPolicy(Qt::TabFocus);
+    if(pToolBtn)
+        pToolBtn->setFocusPolicy(Qt::TabFocus);
     DIconButton *optionBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowOptionButton");
-    optionBtn->setFocusPolicy(Qt::TabFocus);
+    if(optionBtn)
+        optionBtn->setFocusPolicy(Qt::TabFocus);
     DIconButton *minBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowMinButton");
-    minBtn->setFocusPolicy(Qt::TabFocus);
+    if(minBtn)
+        minBtn->setFocusPolicy(Qt::TabFocus);
     DIconButton *quitFullBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowQuitFullscreenButton");
-    quitFullBtn->setFocusPolicy(Qt::TabFocus);
+    if(quitFullBtn)
+        quitFullBtn->setFocusPolicy(Qt::TabFocus);
     DIconButton *maxBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowMaxButton");
-    maxBtn->setFocusPolicy(Qt::TabFocus);
+    if(maxBtn)
+        maxBtn->setFocusPolicy(Qt::TabFocus);
     DIconButton *closeBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowCloseButton");
-    closeBtn->setFocusPolicy(Qt::TabFocus);
+    if(closeBtn)
+        closeBtn->setFocusPolicy(Qt::TabFocus);
     QWidget::setTabOrder(addButton, pToolBtn);
     QWidget::setTabOrder(pToolBtn, optionBtn);
     QWidget::setTabOrder(optionBtn, minBtn);

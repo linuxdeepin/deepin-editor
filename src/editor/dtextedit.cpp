@@ -5896,7 +5896,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
     //没有修改键　插入文件
     //按下esc的时候,光标退出编辑区，切换至标题栏
     if (modifiers == Qt::NoModifier && e->key() == Qt::Key_Escape) {
-        //emit signal_setTitleFocus();
+        emit signal_setTitleFocus();
         return;
     }
 
