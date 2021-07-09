@@ -2588,8 +2588,8 @@ void Window::slotSendresetHeight()
 void Window::updateBarGeo()
 {
     if(m_virtualKeyIsVisibel){
-        m_findBar->setGeometry(4, height()  -  m_iKeyboardHeight - m_findBar->height() - 4, width() - 8, m_findBar->height());
-        m_replaceBar->setGeometry(4, height() - m_iKeyboardHeight - m_replaceBar->height() - 4, width() - 8, m_replaceBar->height());
+        m_findBar->setGeometry(4, height()  -  m_pImInterface->geometry().height() - m_findBar->height() - 4, width() - 8, m_findBar->height());
+        m_replaceBar->setGeometry(4, height() - m_pImInterface->geometry().height() - m_replaceBar->height() - 4, width() - 8, m_replaceBar->height());
     }else {
         m_findBar->setGeometry(4, height()  -  0 - m_findBar->height() - 4, width() - 8, m_findBar->height());
         m_replaceBar->setGeometry(4, height() - 0 - m_replaceBar->height() - 4, width() - 8, m_replaceBar->height());
