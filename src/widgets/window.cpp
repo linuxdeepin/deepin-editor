@@ -3040,12 +3040,14 @@ void Window::setPrintEnabled(bool enabled)
     m_menu->actions().at(PRINT_ACTION)->setEnabled(enabled);
 }
 
-void Window::showReplaceBar(bool show)
+void Window::setReplaceBtnEnable(bool bEnable)
 {
-    if(show && m_replaceBar)
-        m_replaceBar->show();
-    else if(!show)
-        m_replaceBar->hide();
+    if (m_replaceBar) {
+        m_replaceBar->getReplaceAllButton()->setEnabled(bEnable);
+        m_replaceBar->getReplaceButton()->setEnabled(bEnable);
+        m_replaceBar->getReplaceRestButton()->setEnabled(bEnable);
+        m_replaceBar->getReplaceSkipButton()->setEnabled(bEnable);
+    }
 }
 
 void Window::imActive()

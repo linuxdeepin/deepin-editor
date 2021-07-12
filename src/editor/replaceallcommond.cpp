@@ -51,7 +51,7 @@ void ReplaceAllCommond::redo()
 #endif
 
     QObject::disconnect(m_edit, &QPlainTextEdit::cursorPositionChanged, m_edit, &TextEdit::cursorPositionChanged);
-    m_wrapper->window()->showReplaceBar(false);
+    m_wrapper->window()->setReplaceBtnEnable(false);
 
     QTextCursor cursor = m_edit->textCursor();
     int size = m_nodes.size();
@@ -73,6 +73,7 @@ void ReplaceAllCommond::redo()
      QObject::connect(m_edit, &QPlainTextEdit::cursorPositionChanged, m_edit, &TextEdit::cursorPositionChanged);
      m_edit->setReadOnly(false);
 
+     m_wrapper->window()->setReplaceBtnEnable(true);
 }
 
 

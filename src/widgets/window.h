@@ -149,7 +149,7 @@ public:
     QString getKeywordForSearchAll();
     QString getKeywordForSearch();
     void setPrintEnabled(bool enabled);
-    void showReplaceBar(bool show);
+    void setReplaceBtnEnable(bool bEnable);
     void imActive();
 
 signals:

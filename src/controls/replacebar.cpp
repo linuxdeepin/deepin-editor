@@ -37,25 +37,13 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     m_layout->setSpacing(10);
     m_layout->setContentsMargins(16, 6, 10, 6);
     m_replaceLabel = new QLabel(tr("Find"));
-    //m_replaceLabel->setMinimumHeight(36);
     m_replaceLine = new LineBar();
-    //m_replaceLine->lineEdit()->setMinimumHeight(36);
     m_withLabel = new QLabel(tr("Replace With"));
-    //m_withLabel->setMinimumHeight(36);
     m_withLine = new LineBar();
-    //m_withLine->lineEdit()->setMinimumHeight(36);
-    m_replaceButton = new QPushButton(tr("Replace"));
-    //m_replaceButton->setMinimumWidth(66);
-    //m_replaceButton->setMinimumHeight(36);
-    m_replaceSkipButton = new QPushButton(tr("Skip"));
-    //m_replaceSkipButton->setMinimumWidth(66);
-    //m_replaceSkipButton->setMinimumHeight(36);
-    m_replaceRestButton = new QPushButton(tr("Replace Rest"));
-    //m_replaceRestButton->setMinimumWidth(80);
-    //m_replaceRestButton->setMinimumHeight(36);
-    m_replaceAllButton = new QPushButton(tr("Replace All"));
-    //m_replaceAllButton->setMinimumWidth(80);
-    //m_replaceAllButton->setMinimumHeight(36);
+    m_replaceButton = new DPushButton(tr("Replace"));
+    m_replaceSkipButton = new DPushButton(tr("Skip"));
+    m_replaceRestButton = new DPushButton(tr("Replace Rest"));
+    m_replaceAllButton = new DPushButton(tr("Replace All"));
     m_closeButton = new DIconButton(DStyle::SP_CloseButton);
     m_closeButton->setFlat(true);
     m_closeButton->setFixedSize(30, 30);
@@ -103,12 +91,12 @@ ReplaceBar::ReplaceBar(QWidget *parent)
 
     connect(m_replaceLine, &LineBar::returnPressed, this, &ReplaceBar::handleContentChanged, Qt::QueuedConnection);
 
-    connect(m_replaceButton, &QPushButton::clicked, this, &ReplaceBar::handleReplaceNext, Qt::QueuedConnection);
-    connect(m_replaceSkipButton, &QPushButton::clicked, this, [=]() {
+    connect(m_replaceButton, &DPushButton::clicked, this, &ReplaceBar::handleReplaceNext, Qt::QueuedConnection);
+    connect(m_replaceSkipButton, &DPushButton::clicked, this, [=]() {
         emit replaceSkip(m_replaceFile, m_replaceLine->lineEdit()->text());
     });
-    connect(m_replaceRestButton, &QPushButton::clicked, this, &ReplaceBar::handleReplaceRest, Qt::QueuedConnection);
-    connect(m_replaceAllButton, &QPushButton::clicked, this, &ReplaceBar::handleReplaceAll, Qt::QueuedConnection);
+    connect(m_replaceRestButton, &DPushButton::clicked, this, &ReplaceBar::handleReplaceRest, Qt::QueuedConnection);
+    connect(m_replaceAllButton, &DPushButton::clicked, this, &ReplaceBar::handleReplaceAll, Qt::QueuedConnection);
 
     connect(m_closeButton, &DIconButton::clicked, this, &ReplaceBar::replaceClose, Qt::QueuedConnection);
 }

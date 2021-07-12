@@ -2002,8 +2002,8 @@ void TextEdit::replaceAll(const QString &replaceText, const QString &withText)
        QTextCursor startCursor = textCursor();
        startCursor.beginEditBlock();
 
-    QTextCursor startCursor = textCursor();
-    startCursor.beginEditBlock();
+       QTextCursor startCursor = textCursor();
+       startCursor.beginEditBlock();
 
        QString oldText = this->toPlainText();
        QString newText = oldText;
@@ -2017,7 +2017,7 @@ void TextEdit::replaceAll(const QString &replaceText, const QString &withText)
        setTextCursor(startCursor);
    #endif
 
-       replaceFrom(0,replaceText,withText);
+       replaceFrom(0, replaceText, withText);
 }
 
 void TextEdit::replaceNext(const QString &replaceText, const QString &withText)

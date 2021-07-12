@@ -23,7 +23,7 @@
 #ifndef REPLACEBAR_H
 #define REPLACEBAR_H
 
-#include <QPushButton>
+#include <DPushButton>
 #include "linebar.h"
 #include <QHBoxLayout>
 #include <QLabel>
@@ -50,6 +50,10 @@ public:
     void activeInput(QString text, QString file, int row, int column, int scrollOffset);
     void setMismatchAlert(bool isAlert);
     void setsearched(bool _);
+    inline DPushButton *getReplaceAllButton()  { return  m_replaceAllButton; }
+    inline DPushButton *getReplaceButton()     { return  m_replaceButton; }
+    inline DPushButton *getReplaceRestButton() { return  m_replaceRestButton; }
+    inline DPushButton *getReplaceSkipButton() { return  m_replaceSkipButton; }
 
 signals:
     void pressEsc();
@@ -63,7 +67,6 @@ signals:
 
     void removeSearchKeyword();
     void updateSearchKeyword(QString file, QString keyword);
-
     void sigReplacebarClose();
 
 public slots:
@@ -80,10 +83,10 @@ protected:
     void keyPressEvent(QKeyEvent *e);
 
 private:
-    QPushButton *m_replaceAllButton;
-    QPushButton *m_replaceButton;
-    QPushButton *m_replaceRestButton;
-    QPushButton *m_replaceSkipButton;
+    DPushButton *m_replaceAllButton;
+    DPushButton *m_replaceButton;
+    DPushButton *m_replaceRestButton;
+    DPushButton *m_replaceSkipButton;
     DIconButton *m_closeButton;
     LineBar *m_replaceLine;
     LineBar *m_withLine;
