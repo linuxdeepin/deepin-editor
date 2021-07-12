@@ -3152,12 +3152,10 @@ void TextEdit::tapGestureTriggered(QTapGesture *tap)
             m_slideContinueX = false;
             m_slideContinueY = false;
             m_gestureAction = GA_slide;
-            qDebug() << "slide start" << timeSpace;
             emit sigHideVirtualKeyboard();
         } else {
-            qDebug() << "null start" << timeSpace;
-            emit sigShowVirtualKeyboard();
             m_gestureAction = GA_null;
+            emit sigShowVirtualKeyboard();
         }
         break;
     }

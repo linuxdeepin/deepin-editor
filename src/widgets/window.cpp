@@ -837,12 +837,14 @@ EditWrapper *Window::createEditor()
     connect(wrapper->textEditor(), &TextEdit::textChanged, this, [ = ]() {
         updateJumpLineBar(wrapper->textEditor());
     }, Qt::QueuedConnection);
+
     connect(wrapper->textEditor(), &TextEdit::sigHideVirtualKeyboard, this, [=]() {
         if (m_pImInterface != nullptr && m_pImInterface->isValid()) {
             m_pImInterface->setImActive(false);
             Q_EMIT sigEditorSliding(true);
         }
     });
+
     connect(wrapper->textEditor(), &TextEdit::sigShowVirtualKeyboard, this, [=]() {
         if (m_pImInterface != nullptr && m_pImInterface->isValid()) {
             //m_pImInterface->setImActive(true);
@@ -1103,9 +1105,9 @@ QString Window::saveAsFileToDisk()
     }
 
     wrapper->setUpdatesEnabled(false);
+    imActive();
     int mode = dialog.exec();
     wrapper->setUpdatesEnabled(true);
-
 
     if (mode == QDialog::Accepted) {
         const QByteArray encode = dialog.getComboBoxValue(QObject::tr("Encoding")).toUtf8();
@@ -1159,6 +1161,7 @@ QString Window::saveBlankFileToDisk()
         dialog.selectFile(fileInfo.fileName());
     }
 
+    imActive();
     int mode = dialog.exec();
     if (mode == QDialog::Accepted) {
         const QString newFilePath = dialog.selectedFiles().value(0);
@@ -1201,6 +1204,7 @@ bool Window::saveAsOtherTabFile(EditWrapper *wrapper)
         dialog.selectFile(fileInfo.fileName());
     }
 
+    imActive();
     int mode = dialog.exec();
     if (mode == QDialog::Accepted) {
         const QByteArray encode = dialog.getComboBoxValue(QObject::tr("Encoding")).toUtf8();
@@ -2555,11 +2559,10 @@ void Window::slotClearDoubleCharaterEncode()
 void Window::slotVirtualKeyboardImActiveChanged(bool bIsVirKeyboarShow)
 {
     Settings::instance()->setVirkeyboardStatus(bIsVirKeyboarShow);
-    if(bIsVirKeyboarShow){
+    if(bIsVirKeyboarShow) {
         m_virtualKeyIsVisibel = true;
         updateBarGeo();
-    }
-    else {
+    } else {
         m_virtualKeyIsVisibel = false;
         updateBarGeo();
     }
@@ -2587,10 +2590,10 @@ void Window::slotSendresetHeight()
 
 void Window::updateBarGeo()
 {
-    if(m_virtualKeyIsVisibel){
+    if (m_virtualKeyIsVisibel) {
         m_findBar->setGeometry(4, height()  -  m_pImInterface->geometry().height() - m_findBar->height() - 4, width() - 8, m_findBar->height());
         m_replaceBar->setGeometry(4, height() - m_pImInterface->geometry().height() - m_replaceBar->height() - 4, width() - 8, m_replaceBar->height());
-    }else {
+    } else {
         m_findBar->setGeometry(4, height()  -  0 - m_findBar->height() - 4, width() - 8, m_findBar->height());
         m_replaceBar->setGeometry(4, height() - 0 - m_replaceBar->height() - 4, width() - 8, m_replaceBar->height());
     }
@@ -3043,4 +3046,11 @@ void Window::showReplaceBar(bool show)
         m_replaceBar->show();
     else if(!show)
         m_replaceBar->hide();
+}
+
+void Window::imActive()
+{
+    if (m_pImInterface != nullptr && m_pImInterface->isValid()) {
+        m_pImInterface->setImActive(true);
+    }
 }
