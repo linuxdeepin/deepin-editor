@@ -69,7 +69,7 @@ public:
     void addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, const QString &qstrTruePath,
                            const QString &tabName, int index = -1);
     bool closeTab();
-    bool closeTab(const QString& fileName);
+    //bool closeTab(const QString& fileName);
     void restoreTab();
 
     void clearBlack();
