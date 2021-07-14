@@ -5753,8 +5753,9 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             m_rightMenu->addAction(m_fullscreenAction);
         }
 
-        if ((m_bIsExistVoiceAssistant) && ((DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosProfessional) ||
-             (DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosHome))) {
+        if ((m_bIsExistVoiceAssistant) && ((DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosProfessional)
+                                           || (DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosHome)
+                                           /*||(DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosEducation)*/)) {
             bool stopReadingState = false;
             QDBusMessage stopReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
                                                               "/aiassistant/tts",
@@ -6197,9 +6198,9 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
     }
 
     /* 专业版/家庭版/教育版鼠标右键菜单支持语音读写 */
-    if ((m_bIsExistVoiceAssistant) && ((DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosProfessional) ||
-        (DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosHome) ||
-        (DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosEducation))) {
+    if ((m_bIsExistVoiceAssistant) && ((DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosProfessional)
+                                       ||(DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosHome)
+                                       /*||(DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosEducation)*/)) {
         bool stopReadingState = false;
         QDBusMessage stopReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
                                                           "/aiassistant/tts",
