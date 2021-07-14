@@ -1105,7 +1105,6 @@ QString Window::saveAsFileToDisk()
     }
 
     wrapper->setUpdatesEnabled(false);
-    imActive();
     int mode = dialog.exec();
     wrapper->setUpdatesEnabled(true);
 
@@ -1161,7 +1160,6 @@ QString Window::saveBlankFileToDisk()
         dialog.selectFile(fileInfo.fileName());
     }
 
-    imActive();
     int mode = dialog.exec();
     if (mode == QDialog::Accepted) {
         const QString newFilePath = dialog.selectedFiles().value(0);
@@ -1204,7 +1202,6 @@ bool Window::saveAsOtherTabFile(EditWrapper *wrapper)
         dialog.selectFile(fileInfo.fileName());
     }
 
-    imActive();
     int mode = dialog.exec();
     if (mode == QDialog::Accepted) {
         const QByteArray encode = dialog.getComboBoxValue(QObject::tr("Encoding")).toUtf8();
