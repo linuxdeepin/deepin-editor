@@ -944,7 +944,7 @@ void Window::removeWrapper(const QString &filePath, bool isDelete)
 
 void Window::openFile()
 {
-    DFileDialog dialog(this->parentWidget());
+    DFileDialog dialog(this);
     dialog.setFileMode(DFileDialog::ExistingFiles);
     dialog.setAcceptMode(DFileDialog::AcceptOpen);
 
@@ -1090,7 +1090,7 @@ QString Window::saveAsFileToDisk()
     bool isDraft = wrapper->isDraftFile();
     QFileInfo fileInfo(wrapper->textEditor()->getTruePath());
 
-    DFileDialog dialog(this->parentWidget(), tr("Save File"));
+    DFileDialog dialog(this, tr("Save File"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.addComboBox(QObject::tr("Encoding"),  QStringList() << wrapper->getTextEncode());
     dialog.setDirectory(QDir::homePath());
@@ -1146,7 +1146,7 @@ QString Window::saveBlankFileToDisk()
         //return false;
         return QString();
 
-    DFileDialog dialog(this->parentWidget(), tr("Save File"));
+    DFileDialog dialog(this, tr("Save File"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.addComboBox(tr("Encoding"), QStringList() << wrapper->getTextEncode());
     dialog.setDirectory(QDir::homePath());
@@ -1187,7 +1187,7 @@ bool Window::saveAsOtherTabFile(EditWrapper *wrapper)
     if (!wrapper)
         return false;
 
-    DFileDialog dialog(this->parentWidget(), tr("Save File"));
+    DFileDialog dialog(this, tr("Save File"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.addComboBox(QObject::tr("Encoding"), Utils::getEncodeList());
     dialog.addComboBox(QObject::tr("Line Endings"), QStringList() << "Linux" << "Windows" << "Mac OS");

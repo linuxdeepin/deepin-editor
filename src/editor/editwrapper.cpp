@@ -200,7 +200,7 @@ bool EditWrapper::saveAsFile(const QString &newFilePath, QByteArray encodeName)
 
 bool EditWrapper::saveAsFile()
 {
-    DFileDialog dialog(this->parentWidget(), tr("Save"));
+    DFileDialog dialog(this, tr("Save"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.addComboBox(QObject::tr("Encoding"),  QStringList() << m_sFirstEncode);
     dialog.setDirectory(QDir::homePath());
@@ -485,7 +485,7 @@ bool EditWrapper::isTemFile()
 
 bool EditWrapper::saveDraftFile()
 {
-    DFileDialog dialog(this->parentWidget(), tr("Save"));
+    DFileDialog dialog(this, tr("Save"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.addComboBox(QObject::tr("Encoding"),  QStringList() << m_sCurEncode);
     dialog.setDirectory(QDir::homePath());
