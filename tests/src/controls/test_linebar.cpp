@@ -62,6 +62,9 @@ TEST_F(test_linebar, focusOutEvent)
     LineBar *lineBar = new LineBar();
     QFocusEvent *e = new QFocusEvent(QEvent::FocusIn);
     lineBar->focusOutEvent(e);
+
+    lineBar->deleteLater();
+    delete e;
     assert(1==1);
 }
 

@@ -760,12 +760,12 @@ TEST_F(test_window, slotSigThemeChanged)
     pWindow->addTabWithWrapper(pEditWrapper, "bb", "aad", "aadd", 1);
     pWindow->m_settings = Settings::instance();
     DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::LightType);
-    pWindow->slotSigThemeChanged(DEEPIN_THEME);
-    pWindow->slotSigThemeChanged(DEEPIN_DARK_THEME);
+    //pWindow->slotSigThemeChanged(DEEPIN_THEME);
+    //pWindow->slotSigThemeChanged(DEEPIN_DARK_THEME);
 
     DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::DarkType);
-    pWindow->slotSigThemeChanged(DEEPIN_THEME);
-    pWindow->slotSigThemeChanged(DEEPIN_DARK_THEME);
+    //pWindow->slotSigThemeChanged(DEEPIN_THEME);
+    //pWindow->slotSigThemeChanged(DEEPIN_DARK_THEME);
 
     assert(1==1);
 }

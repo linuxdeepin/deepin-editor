@@ -192,6 +192,7 @@ TEST_F(test_setting, KeySequenceEdit)
 
     delete widget;
     delete shortCutLineEdit;
+    delete e;
 }
 
 //以下两条CASE 脚本跑会造成程序崩，加两行debug后就不崩了

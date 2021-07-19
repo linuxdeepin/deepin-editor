@@ -122,6 +122,9 @@ TEST_F(test_findbar, hideEvent)
     QHideEvent *event = new QHideEvent();
     FindBar *findBar = new FindBar();
     findBar->hideEvent(event);
+
+    findBar->deleteLater();
+    delete event;
     assert(1==1);
 }
 
