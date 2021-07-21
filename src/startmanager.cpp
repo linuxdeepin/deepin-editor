@@ -186,7 +186,8 @@ void StartManager::autoBackupFile()
             }
 
             //记录活动页
-            if (m_windows.value(var)->isActiveWindow()) {
+            //if (m_windows.value(var)->isActiveWindow())
+            {
                 if (wrapper == m_windows.value(var)->currentWrapper()) {
                     jsonObject.insert("focus", true);
                 }
