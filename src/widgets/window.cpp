@@ -157,15 +157,15 @@ Window::Window(DMainWindow *parent)
     m_centralLayout->addWidget(m_editorWidget);
     setWindowIcon(QIcon::fromTheme("deepin-editor"));
     setCentralWidget(m_centralWidget);
-
+#if 0
     // 开启以下属性虚拟键盘弹起是控件不会变形
     m_centralWidget->setAttribute(Qt::WA_LayoutOnEntireRect, false);
     m_centralWidget->setAttribute(Qt::WA_ContentsMarginsRespectsSafeArea, false);
     // 还未考虑好是否对外提供接口，可以先使用该属性 dtkwidget5.5>=5.5.17.17(仓库中版本) 文件夹外lib中包含
     m_centralWidget->setProperty("_dtk_NoTopLevelEnabled", true);
     // 对该容器内的输入控件做自适应虚拟键盘操作
-    qApp->acclimatizeVirtualKeyboard(m_centralWidget);
-
+    //qApp->acclimatizeVirtualKeyboard(m_centralWidget);
+#endif
     #ifdef TABLET
     // resize window size.
     //int window_width =Settings::instance()->settings->option("advance.window.window_width")->value().toInt();
@@ -1309,15 +1309,21 @@ void Window::popupFindBar()
 
     m_findBar->activeInput(text, tabPath, row, column, scrollOffset);
 
-    QTimer::singleShot(10, this, [ = ] { m_findBar->focus(); });
+    //currentWrapper()->textEditor()->setFocus();
+    //QTimer::singleShot(20, this, [ = ] { m_findBar->focus(); });
 
     /* 查找弹出虚拟键盘　*/
-    if (m_pImInterface != nullptr && m_pImInterface->isValid()) {
-        bool bIsShow = m_pImInterface->property("imActive").toBool();
-        if (!bIsShow) {
-            m_pImInterface->setImActive(true);
-        }
-    }
+//    if (m_pImInterface != nullptr && m_pImInterface->isValid()) {
+//        bool bIsShow = m_pImInterface->property("imActive").toBool();
+//        if (!bIsShow) {
+//            //m_pImInterface->setImActive(true);
+//            QTimer::singleShot(400, this, [ = ] { m_pImInterface->setImActive(true);});
+//        }
+//    }
+    showKeyBoard(500);
+
+
+
 }
 
 void Window::popupReplaceBar()
@@ -1373,15 +1379,17 @@ void Window::popupReplaceBar()
 
     m_replaceBar->activeInput(text, tabPath, row, column, scrollOffset);
 
-    QTimer::singleShot(10, this, [ = ] { m_replaceBar->focus(); });
+    //QTimer::singleShot(10, this, [ = ] { m_replaceBar->focus(); });
 
     /* 替换弹出虚拟键盘　*/
-    if (m_pImInterface != nullptr && m_pImInterface->isValid()) {
-        bool bIsShow = m_pImInterface->property("imActive").toBool();
-        if (!bIsShow) {
-            m_pImInterface->setImActive(true);
-        }
-    }
+//    if (m_pImInterface != nullptr && m_pImInterface->isValid()) {
+//        bool bIsShow = m_pImInterface->property("imActive").toBool();
+//        if (!bIsShow) {
+//            m_pImInterface->setImActive(true);
+//        }
+//    }
+
+    showKeyBoard(500);
 }
 
 void Window::popupJumpLineBar()
@@ -2559,6 +2567,10 @@ void Window::slotVirtualKeyboardImActiveChanged(bool bIsVirKeyboarShow)
     if(bIsVirKeyboarShow) {
         m_virtualKeyIsVisibel = true;
         updateBarGeo();
+        if(currentWrapper()){
+            auto cursor = currentWrapper()->textEditor()->textCursor();
+            currentWrapper()->textEditor()->setTextCursor(cursor);
+        }
     } else {
         m_virtualKeyIsVisibel = false;
         updateBarGeo();
@@ -2587,12 +2599,38 @@ void Window::slotSendresetHeight()
 
 void Window::updateBarGeo()
 {
+//    if (m_virtualKeyIsVisibel) {
+//        m_findBar->setGeometry(4, height()  -  m_pImInterface->geometry().height() - m_findBar->height() - 4, width() - 8, m_findBar->height());
+//        m_replaceBar->setGeometry(4, height() - m_pImInterface->geometry().height() - m_replaceBar->height() - 4, width() - 8, m_replaceBar->height());
+//    } else {
+//        m_findBar->setGeometry(4, height()  -  0 - m_findBar->height() - 4, width() - 8, m_findBar->height());
+//        m_replaceBar->setGeometry(4, height() - 0 - m_replaceBar->height() - 4, width() - 8, m_replaceBar->height());
+//    }
+
+    int h = QApplication::desktop()->geometry().height();
+    int w = QApplication::desktop()->geometry().width();
     if (m_virtualKeyIsVisibel) {
-        m_findBar->setGeometry(4, height()  -  m_pImInterface->geometry().height() - m_findBar->height() - 4, width() - 8, m_findBar->height());
-        m_replaceBar->setGeometry(4, height() - m_pImInterface->geometry().height() - m_replaceBar->height() - 4, width() - 8, m_replaceBar->height());
+        this->setFixedHeight(h  -  m_pImInterface->geometry().height() -40);
+        m_findBar->setGeometry(4, height()   - m_findBar->height() - 4, width() - 8, m_findBar->height());
+        m_replaceBar->setGeometry(4, height()  - m_replaceBar->height() - 4, width() - 8, m_replaceBar->height());
     } else {
-        m_findBar->setGeometry(4, height()  -  0 - m_findBar->height() - 4, width() - 8, m_findBar->height());
-        m_replaceBar->setGeometry(4, height() - 0 - m_replaceBar->height() - 4, width() - 8, m_replaceBar->height());
+        this->setFixedHeight(h);
+        m_findBar->setGeometry(4, height()   - m_findBar->height() - 4, width() - 8, m_findBar->height());
+        m_replaceBar->setGeometry(4, height()  - m_replaceBar->height() - 4, width() - 8, m_replaceBar->height());
+    }
+
+}
+
+void Window::showKeyBoard(int delay)
+{
+    if (m_pImInterface != nullptr && m_pImInterface->isValid()) {
+        bool bIsShow = m_pImInterface->property("imActive").toBool();
+        if (!bIsShow) {
+            if(0 == delay)
+                m_pImInterface->setImActive(true);
+            else
+                QTimer::singleShot(delay, this, [ = ] { m_pImInterface->setImActive(true);});
+        }
     }
 }
 

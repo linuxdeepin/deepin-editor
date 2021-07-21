@@ -232,6 +232,8 @@ public slots:
 
     void updateBarGeo();
 
+    void showKeyBoard(int delay = 0);
+
 private:
     void handleFocusWindowChanged(QWindow *w);
     void updateThemePanelGeomerty();
