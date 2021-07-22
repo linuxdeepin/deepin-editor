@@ -1090,28 +1090,30 @@ QString Window::saveAsFileToDisk()
     bool isDraft = wrapper->isDraftFile();
     QFileInfo fileInfo(wrapper->textEditor()->getTruePath());
 
-    DFileDialog dialog(this, tr("Save File"));
-    dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.addComboBox(QObject::tr("Encoding"),  QStringList() << wrapper->getTextEncode());
-    dialog.setDirectory(QDir::homePath());
+    DFileDialog *dialog = new DFileDialog(this, tr("Save File"));
+    dialog->setAcceptMode(QFileDialog::AcceptSave);
+    dialog->addComboBox(QObject::tr("Encoding"),  QStringList() << wrapper->getTextEncode());
+    dialog->setDirectory(QDir::homePath());
 
     if (isDraft) {
         QRegularExpression reg("[^*](.+)");
         QRegularExpressionMatch match = reg.match(m_tabbar->currentName());
-        dialog.selectFile(match.captured(0) + ".txt");
+        dialog->selectFile(match.captured(0) + ".txt");
     } else {
-        dialog.setDirectory(fileInfo.dir());
-        dialog.selectFile(fileInfo.fileName());
+        dialog->setDirectory(fileInfo.dir());
+        dialog->selectFile(fileInfo.fileName());
     }
 
     wrapper->setUpdatesEnabled(false);
-    int mode = dialog.exec();
+    dialog->setModal(true);
+    dialog->show();
+    int mode =dialog->acceptMode();
     wrapper->setUpdatesEnabled(true);
 
     if (mode == QDialog::Accepted) {
-        const QByteArray encode = dialog.getComboBoxValue(QObject::tr("Encoding")).toUtf8();
-        const QString endOfLine = dialog.getComboBoxValue(QObject::tr("Line Endings"));
-        const QString newFilePath = dialog.selectedFiles().value(0);
+        const QByteArray encode = dialog->getComboBoxValue(QObject::tr("Encoding")).toUtf8();
+        const QString endOfLine = dialog->getComboBoxValue(QObject::tr("Line Endings"));
+        const QString newFilePath = dialog->selectedFiles().value(0);
 
         wrapper->updatePath(wrapper->filePath(), newFilePath);
         wrapper->saveFile();
