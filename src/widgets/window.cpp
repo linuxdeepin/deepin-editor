@@ -713,6 +713,11 @@ bool Window::closeTab()
     if (isDraftFile) {
         if (isModified) {
             DDialog *dialog = createDialog(tr("Do you want to save this file?"), "");
+            int h = QApplication::desktop()->geometry().height();
+            int w = QApplication::desktop()->geometry().width();
+            int dw = dialog->width();
+            int dh = dialog->height();
+            dialog->move((w-dw)/2,(h-dh)/2);
             int res = dialog->exec();
 
             //取消或关闭弹窗不做任务操作
@@ -2477,6 +2482,11 @@ void Window::slotFindIconBtnClicked()
     m_pFindToolBtn->setAttribute(Qt::WA_UnderMouse, false);
     QHoverEvent hoverevent(QEvent::HoverLeave,m_pFindToolBtn->pos(), QPoint(0, 0));
     QApplication::sendEvent(m_pFindToolBtn, &hoverevent);
+
+    if(m_jumpLineBar->isVisible())
+        QTimer::singleShot(200, this, [ = ] { popupFindBar(); });
+
+
 }
 
 void Window::slot_saveReadingPath()

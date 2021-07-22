@@ -303,6 +303,7 @@ void TextEdit::initRightClickedMenu()
     connect(m_markCurrentAct, &QAction::triggered, this, [this, pColorsSelectWdg]() {
         isMarkCurrentLine(true, pColorsSelectWdg->getDefaultColor().name());
         renderAllSelections();
+        markAllKeywordInView();
     });
 
     //添加全部颜色选择控件　梁卫东
@@ -2321,6 +2322,11 @@ bool TextEdit::searchKeywordSeletion(QString keyword, QTextCursor cursor, bool f
 
     } else {
         QTextCursor prev = document()->find(keyword, cursor, QTextDocument::FindBackward);
+        if(prev.isNull()){
+            cursor.movePosition(QTextCursor::End);
+            cursor.setPosition(cursor.position() - 1);
+            prev = document()->find(keyword, cursor, QTextDocument::FindBackward);
+        }
         if (!prev.isNull()) {
             m_findHighlightSelection.cursor = prev;
             jumpToLine(prev.blockNumber() + offsetLines, false);
