@@ -31,8 +31,8 @@ void DeleteBackCommond::undo()
 void DeleteBackCommond::redo()
 {
     m_cursor.setPosition(m_delPos);
-    for(int i=0;i<m_delText.size();i++)
-        m_cursor.deleteChar();
+    m_cursor.setPosition(m_delPos+m_delText.size(),QTextCursor::KeepAnchor);
+    m_cursor.deleteChar();
 }
 
 

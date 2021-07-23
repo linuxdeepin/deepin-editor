@@ -5979,6 +5979,8 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             } else {
                 insertSelectTextEx(textCursor(), e->text());
             }
+
+            m_isSelectAll = false;
             return;
         }
 
