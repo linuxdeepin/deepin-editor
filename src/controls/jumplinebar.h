@@ -54,7 +54,7 @@ public slots:
     void handleFocusOut();
     void handleLineChanged();
 
-    void jumpCancel();
+    void jumpCancel(bool isBottom);
     void jumpConfirm();
 
     void slotFocusChanged(bool bFocus);
@@ -63,7 +63,7 @@ signals:
     void backToPosition(QString file, int row, int column, int scrollOffset);
     void jumpToLine(QString file, int line, bool focusEditor);
     void lostFocusExit();
-    void pressEsc();
+    void pressEsc(bool isBottom = false);
 protected:
 
 private:

@@ -101,9 +101,10 @@ void JumpLineBar::handleLineChanged()
     }
 }
 
-void JumpLineBar::jumpCancel()
+void JumpLineBar::jumpCancel(bool isBottom)
 {
-    hide();
+    if(!isBottom)
+        hide();
     // esc键不跳转　返回当前
     // backToPosition(m_jumpFile, m_rowBeforeJump, m_columnBeforeJump, m_jumpFileScrollOffset);
 }
