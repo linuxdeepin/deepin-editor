@@ -485,34 +485,24 @@ bool EditWrapper::isTemFile()
 
 bool EditWrapper::saveDraftFile()
 {
-//    DFileDialog dialog(this, tr("Save"));
-//    dialog.setAcceptMode(QFileDialog::AcceptSave);
-//    dialog.addComboBox(QObject::tr("Encoding"),  QStringList() << m_sCurEncode);
-//    dialog.setDirectory(QDir::homePath());
-//    dialog.setNameFilter("*.txt");
-
-    DFileDialog *dialog = new DFileDialog(this, tr("Save"));
-    dialog->setAcceptMode(QFileDialog::AcceptSave);
-    dialog->addComboBox(QObject::tr("Encoding"),  QStringList() << m_sCurEncode);
-    dialog->setDirectory(QDir::homePath());
-    dialog->setNameFilter("*.txt");
-
+    DFileDialog dialog(this, tr("Save"));
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.addComboBox(QObject::tr("Encoding"),  QStringList() << m_sCurEncode);
+    dialog.setDirectory(QDir::homePath());
+    dialog.setNameFilter("*.txt");
 
     if (m_pWindow) {
         QRegularExpression reg("[^*](.+)");
         QRegularExpressionMatch match = reg.match(m_pWindow->getTabbar()->currentName());
-        dialog->selectFile(match.captured(0) + ".txt");
+        dialog.selectFile(match.captured(0) + ".txt");
     }
-
-    this->setUpdatesEnabled(false);
-    dialog->setModal(true);
-    dialog->show();
-    int mode =dialog->acceptMode(); // 0表示取消 1保存
+   // this->setUpdatesEnabled(false);
+    int mode =dialog.exec(); // 0表示取消 1保存
     this->setUpdatesEnabled(true);
     hideWarningNotices();
 
     if (mode == 1) {
-        const QString newFilePath = dialog->selectedFiles().value(0);
+        const QString newFilePath = dialog.selectedFiles().value(0);
         if (newFilePath.isEmpty())
             return false;
 
