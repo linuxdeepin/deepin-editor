@@ -159,7 +159,7 @@ signals:
     void newWindow();
     void closeWindow();
     void sigJudgeBlockShutdown();
-    void pressEsc();
+    void pressEsc(bool isBottom = false);
     Q_SCRIPTABLE void sigEditorSliding(bool bIsSliding);
 
 public slots:

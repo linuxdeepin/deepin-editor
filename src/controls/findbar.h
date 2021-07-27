@@ -61,7 +61,7 @@ public:
     void findPreClicked();
 
 signals:
-    void pressEsc();
+    void pressEsc(bool isBottom = false);
     void findNext(const QString &keyword);
     void findPrev(const QString &keyword);
 
@@ -72,7 +72,7 @@ signals:
     void sigFindbarClose();
 
 public slots:
-    void findCancel();
+    void findCancel(bool isBottom);
     void handleContentChanged();
     void handleFindNext();
     void handleFindPrev();

@@ -109,10 +109,12 @@ void FindBar::activeInput(QString text, QString file, int row, int column, int s
     focus();
 }
 
-void FindBar::findCancel()
+void FindBar::findCancel(bool isBottom)
 {
-    QWidget::hide();
-    emit sigFindbarClose();
+    if(!isBottom) {
+        QWidget::hide();
+        emit sigFindbarClose();
+    }
 }
 
 void FindBar::handleContentChanged()

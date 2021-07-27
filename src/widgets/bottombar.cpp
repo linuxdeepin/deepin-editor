@@ -247,5 +247,5 @@ void BottomBar::paintEvent(QPaintEvent *)
 void BottomBar::slotSetTextEditFocus()
 {
     Window *pWindow = static_cast<Window *>(m_pWrapper->window());
-    emit pWindow->pressEsc();
+    emit pWindow->pressEsc(true);
 }
