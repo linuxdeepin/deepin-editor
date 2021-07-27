@@ -462,8 +462,9 @@ void EditWrapper::refresh()
     }
 }
 
-bool EditWrapper::saveDraftFile()
+bool EditWrapper::saveDraftFile(const QString& fileName)
 {
+#if 0
     const QString &new_file = DFileDialog::getSaveFileName(this, tr("Save"), QDir::homePath(), "*.txt");
     if (new_file.isEmpty())
         return false;
@@ -482,6 +483,42 @@ bool EditWrapper::saveDraftFile()
     this->updatePath(new_file);
 
     return true;
+#endif
+    DFileDialog dialog(this, tr("Save File"));
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.addComboBox(tr("Encoding"), Utils::getEncodeList());
+    dialog.addComboBox(tr("Line Endings"), QStringList() << "Linux" << "Windows" << "Mac OS");
+    dialog.setDirectory(QDir::homePath());
+
+    QRegularExpression reg("[^*](.+)");
+    QRegularExpressionMatch match = reg.match(fileName);
+    dialog.selectFile(match.captured(0) + ".txt");
+
+
+    int mode = dialog.exec();
+    if (mode == QDialog::Accepted) {
+        const QByteArray encode = dialog.getComboBoxValue(tr("Encoding")).toUtf8();
+        const QString endOfLine = dialog.getComboBoxValue(tr("Line Endings"));
+        const QString newFilePath = dialog.selectedFiles().value(0);
+        //const QFileInfo newFileInfo(newFilePath);
+        EditWrapper::EndOfLineMode eol = EditWrapper::eolUnix;
+
+        if (endOfLine == "Windows") {
+            eol = EditWrapper::eolDos;
+        } else if (endOfLine == "Mac OS") {
+            eol = EditWrapper::eolMac;
+        }
+
+        updatePath(newFilePath);
+        setEndOfLineMode(eol);
+        saveFile();
+
+
+        return true;
+    }
+
+    return false;
+
 }
 
 bool EditWrapper::isModified()

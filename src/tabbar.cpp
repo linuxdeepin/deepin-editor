@@ -55,6 +55,8 @@ Tabbar::Tabbar(QWidget *parent)
     connect(this, &DTabBar::tabIsRemoved, this, &Tabbar::handleTabIsRemoved);
     connect(this, &DTabBar::tabReleaseRequested, this, &Tabbar::handleTabReleased);
     connect(this, &DTabBar::dragActionChanged, this, &Tabbar::handleDragActionChanged);
+
+    setMinimumSize(200,40);
 }
 
 Tabbar::~Tabbar()

@@ -644,7 +644,7 @@ bool Window::closeTab(const QString &filePath)
     if (isDraftFile) {
         if (isModified) {
             DDialog *dialog = createDialog(tr("Do you want to save this file?"), "");
-            int res = dialog->exec();
+            int res =dialog->exec();
 
             //取消或关闭弹窗不做任务操作
             if (res == 0 || res == -1) {
@@ -661,7 +661,7 @@ bool Window::closeTab(const QString &filePath)
 
             //保存
             if (res == 2) {
-                if (wrapper->saveDraftFile()) {
+                if (wrapper->saveDraftFile(m_tabbar->currentName())) {
                     removeWrapper(filePath, true);
                     m_tabbar->closeCurrentTab();
                     QFile(filePath).remove();

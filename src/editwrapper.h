@@ -81,7 +81,7 @@ public:
     void setLineNumberShow(bool bIsShow,bool bIsFirstShow = false);
     void setShowBlankCharacter(bool ok);
     void handleCursorModeChanged(TextEdit::CursorMode mode);
-    bool saveDraftFile();
+    bool saveDraftFile(const QString& fileName);
 
     //判断是否修改
     bool isModified();
