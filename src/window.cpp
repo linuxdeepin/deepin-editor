@@ -1482,7 +1482,12 @@ void Window::popupPrintDialog()
     connect(&preview, QOverload<DPrinter *>::of(&DPrintPreviewDialog::paintRequested),
             this, [ = ](DPrinter *printer) {
         if (fileDir == m_blankFileDir) {
-            printer->setDocName(QString(m_tabbar->currentName()));
+
+            QString name = m_tabbar->currentName();
+            QRegularExpression reg("[^*](.+)");
+            QRegularExpressionMatch match = reg.match(name);
+            printer->setDocName(QString(match.captured(0)));
+
         } else {
             printer->setDocName(QString(QFileInfo(filePath).baseName()));
         }

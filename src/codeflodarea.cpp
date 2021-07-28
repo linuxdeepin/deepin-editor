@@ -18,4 +18,3 @@ void CodeFlodArea::paintEvent(QPaintEvent *e)
     //qDebug() << "codeflodarea::paintEvent ";
     m_leftAreaWidget->codeFlodAreaPaintEvent(e);
 }
-
