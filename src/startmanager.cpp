@@ -96,15 +96,16 @@ void StartManager::openFilesInWindow(QStringList files)
             return;
         Window *window = createWindow();
 
+        //window->show();
+        window->addBlankTab();
+        //window->activateWindow();
+
         if (m_windows.count() > 0) {
             window->showCenterWindow(false);
         } else {
             window->showCenterWindow(true);
         }
 
-        //window->show();
-        window->addBlankTab();
-        window->activateWindow();
     } else {
         for (const QString &file : files) {
             FileTabInfo info = getFileTabInfo(file);
