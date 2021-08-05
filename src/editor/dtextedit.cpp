@@ -2696,7 +2696,7 @@ void TextEdit::cursorPositionChanged()
     QTextCursor cursor = textCursor();
     if (m_wrapper) {
         m_wrapper->bottomBar()->updatePosition(cursor.blockNumber() + 1,
-                                               cursor.columnNumber() + 1);
+                                               cursor.positionInBlock() + 1);
     }
 
     m_pLeftAreaWidget->m_pLineNumberArea->update();
