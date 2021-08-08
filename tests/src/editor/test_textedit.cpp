@@ -1681,7 +1681,8 @@ TEST_F(test_textedit, event)
     QEvent *e = new QEvent(QEvent::Type::MouseButtonPress);
     startManager->event(e);
 
-    assert(1 == 1);
+    //assert(1 == 1);
+    delete e;
 }
 
 // void inputMethodEvent(QInputMethodEvent *e) override;

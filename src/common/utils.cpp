@@ -506,6 +506,7 @@ QVariantMap Utils::getThemeMapFromPath(const QString &filepath)
     QFile file(filepath);
     if(!file.open(QIODevice::ReadOnly)){
         qDebug() << "Failed to open " << filepath;
+        return QVariantMap();
     }
 
     QTextStream in(&file);
