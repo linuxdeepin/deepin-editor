@@ -30,7 +30,7 @@
 #include <DLabel>
 #include <DApplicationHelper>
 #include <QtSvg/QSvgRenderer>
-
+#include "QTimer"
 using namespace Dtk::Core;
 
 QVector<QPair<QString,QStringList>> DDropdownMenu::sm_groupEncodeVec;
@@ -72,7 +72,10 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     layout->setContentsMargins(0,0,0,0);
     this->setLayout(layout);
 
-    connect(this, &DDropdownMenu::requestContextMenu, this, &DDropdownMenu::slotRequestMenu);
+    connect(this, &DDropdownMenu::requestContextMenu, [=](bool click)
+    {
+        QTimer::singleShot(200,this,[=](){slotRequestMenu(click);});
+    });
 
     //设置字体自适应大小
     //设置界面大小根据内容大小自适应 梁卫东 2020.7.7
