@@ -380,6 +380,11 @@ void Window::initTitlebar()
 
     titlebar()->addWidget(m_tabbar);
 
+    connect(m_menu,&DMenu::aboutToShow,this,[=]()
+    {
+       this->currentWrapper()->textEditor()->setFocus();
+    });
+
     titlebar()->setCustomWidget(m_tabbar, false);
     titlebar()->setSeparatorVisible(false);
     titlebar()->setMenu(m_menu);
