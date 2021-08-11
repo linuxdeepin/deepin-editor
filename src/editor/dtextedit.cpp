@@ -5652,6 +5652,8 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
 {
     m_bIsInputMethod = true;
 
+#ifndef UOSTABLET
+    // UOS TABLET 不需要Alt输入功能
     if (!m_readOnlyMode && !m_bReadOnlyPermission && !e->commitString().isEmpty()) {
         //列编辑添加撤销重做
         if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
@@ -5660,7 +5662,7 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
             insertSelectTextEx(textCursor(), e->commitString());
         }
     }
-
+#endif
     return DPlainTextEdit::inputMethodEvent(e);
 }
 
