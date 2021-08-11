@@ -108,6 +108,10 @@ TextEdit::TextEdit(QWidget *parent)
 
 
     __InputDevices* inputDevices = new __InputDevices("com.deepin.daemon.InputDevices","/com/deepin/daemon/InputDevices",QDBusConnection::sessionBus(),this);
+    uint s = inputDevices->wheelSpeed();
+    if(s)
+        this->verticalScrollBar()->setSingleStep(s);
+
     connect(inputDevices,&__InputDevices::WheelSpeedChanged,this,[&](uint s){
         if(s>0)
             this->verticalScrollBar()->setSingleStep(s);
