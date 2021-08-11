@@ -2599,8 +2599,17 @@ void Window::slotVirtualKeyboardgeometryChanged(const QRect &rect)
     qInfo()<<"***********change size signal*************"<<rect;
 //    setFixedHeight(QApplication::desktop()->availableGeometry().size().height());
 //    setFixedWidth(QApplication::desktop()->availableGeometry().size().width());
-    setFixedHeight(rect.height());
-    setFixedWidth(rect.width());
+
+    // 窗口大小变化处理转移至 resetWndAndBarGeo 统一处理
+    // resetWndAndBarGeo 将同时处理相关浮窗
+    // 保持窗口在自动旋转屏幕场景下自适应效果
+    // setFixedHeight(rect.height());
+    // setFixedWidth(rect.width());
+
+#ifdef UOSTABLET
+    // 统一处理平板环境自动旋转屏幕下窗口尺寸调整
+    resetWndAndBarGeo(rect);
+#endif
 }
 
 
@@ -2633,7 +2642,32 @@ void Window::updateBarGeo()
         m_findBar->setGeometry(4, height()   - m_findBar->height() - 4, width() - 8, m_findBar->height());
         m_replaceBar->setGeometry(4, height()  - m_replaceBar->height() - 4, width() - 8, m_replaceBar->height());
     }
+}
 
+void Window::resetWndAndBarGeo(QRect rect){
+    // 以下自适应计算方法，来源于 updateBarGeo
+    int h = rect.height();
+    // 更新窗口宽度值
+    m_iDesktopAvailableWidth = rect.width();
+
+    // 预留平板状态下的状态栏高度
+    const int titleBarH = 40;
+
+    // 虚拟键盘适配处理
+    if (m_virtualKeyIsVisibel) {
+        // 更新窗口高度值
+        m_iDesktopAvailableHeight = h - m_pImInterface->geometry().height() - titleBarH;
+        m_findBar->setGeometry(4, m_iDesktopAvailableHeight - m_findBar->height() - 4, m_iDesktopAvailableWidth - 8, m_findBar->height());
+        m_replaceBar->setGeometry(4, m_iDesktopAvailableHeight - m_replaceBar->height() - 4, m_iDesktopAvailableWidth - 8, m_replaceBar->height());
+    } else {
+        // 更新窗口高度值
+        m_iDesktopAvailableHeight = h;
+        m_findBar->setGeometry(4, m_iDesktopAvailableHeight - m_findBar->height() - 4, m_iDesktopAvailableWidth - 8, m_findBar->height());
+        m_replaceBar->setGeometry(4, m_iDesktopAvailableHeight - m_replaceBar->height() - 4, m_iDesktopAvailableWidth - 8, m_replaceBar->height());
+    }
+
+    // 按照计算得到新的窗口高度宽度，修改窗口宽度和高度
+    setFixedSize(m_iDesktopAvailableWidth, m_iDesktopAvailableHeight);
 }
 
 void Window::showKeyBoard(int delay)
@@ -2805,7 +2839,9 @@ void Window::checkTabbarForReload()
 
 void Window::resizeEvent(QResizeEvent *e)
 {
-    updateWindowWidthHightValue();
+    // 分辨率变化下，窗口尺寸由 resetWndAndBarGeo 统一处理
+    // 窗口宽高变量也将同步更新
+    // updateWindowWidthHightValue();
 
     if (m_themePanel->isVisible()) {
         updateThemePanelGeomerty();
@@ -2822,7 +2858,14 @@ void Window::resizeEvent(QResizeEvent *e)
 
     //m_findBar->setGeometry(4, height()  -  m_findBar->height() - 4, width() - 8, m_findBar->height());
     //m_replaceBar->setGeometry(4, height() - m_replaceBar->height() - 4, width() - 8, m_replaceBar->height());
-    updateBarGeo();
+
+    // 不在此处进行相关浮窗处理
+    // 处理将在分辨率切换时，和主窗口size变化同时处理
+    // 分辨率变化信号的窗口自适应操作
+    // 将由 resetWndAndBarGeo（）函数统一进行处理
+    // 如果DTK后续统一实现窗口大小变化时，可方便移除
+    // 或在虚拟键盘唤醒和收起时，进行此处理 updateBarGeo
+    // updateBarGeo();
 
     for (EditWrapper *wrapper : m_wrappers.values()) {
         wrapper->OnUpdateHighlighter();

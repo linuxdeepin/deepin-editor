@@ -231,6 +231,8 @@ public slots:
     void slotSendresetHeight();
 
     void updateBarGeo();
+    // 此函数统一处理平板环境自动旋转屏幕下窗口尺寸调整
+    void resetWndAndBarGeo(QRect rect);
 
     void showKeyBoard(int delay = 0);
 
