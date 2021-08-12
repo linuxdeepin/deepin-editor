@@ -2789,6 +2789,7 @@ void TextEdit::setSettings(Settings *keySettings)
 
 void TextEdit::setModified(bool modified)
 {
+    m_isModified = modified;
     if(m_wrapper->getFileLoading()) return;
     document()->setModified(modified);
     emit modificationChanged(filepath, modified);
@@ -2809,14 +2810,12 @@ void TextEdit::cutSelectedText()
     QTextCursor cursor = textCursor();
     cursor.removeSelectedText();
     setTextCursor(cursor);
-    isModified = true;
     unsetMark();
 }
 
 void TextEdit::pasteText()
 {
     QPlainTextEdit::paste();
-    isModified = true;
     unsetMark();
 }
 
@@ -2985,7 +2984,6 @@ void TextEdit::clickDeleteAction()
         }
     }
 
-    isModified = true;
 }
 
 void TextEdit::clickOpenInFileManagerAction()
@@ -5672,7 +5670,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         // init base.
         bool isBlankLine = text.trimmed().isEmpty();
 
-        if (m_canUndo && isModified && m_bReadOnlyPermission == false && m_readOnlyMode == false) {
+        if (m_canUndo && m_isModified && m_bReadOnlyPermission == false && m_readOnlyMode == false) {
             m_rightMenu->addAction(m_undoAction);
         }
 
@@ -6051,7 +6049,6 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             }
 
             // Text editor handle key self.
-            isModified = true;
             QPlainTextEdit::keyPressEvent(e);
         }
     }
@@ -6096,7 +6093,7 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
     // init base.
     bool isBlankLine = text.trimmed().isEmpty();
 
-    if (m_canUndo && isModified && m_bReadOnlyPermission == false && m_readOnlyMode == false) {
+    if (m_canUndo && m_isModified && m_bReadOnlyPermission == false && m_readOnlyMode == false) {
         m_rightMenu->addAction(m_undoAction);
     }
 
