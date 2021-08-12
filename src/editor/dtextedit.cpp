@@ -239,6 +239,9 @@ void TextEdit::insertSelectTextEx(QTextCursor cursor, QString text)
 //    if (cursor.hasSelection()) {
 //        deleteTextEx(cursor);
 //    }
+    if(overwriteMode() && !cursor.hasSelection() && !cursor.atBlockEnd()){
+        cursor.movePosition(QTextCursor::Right,QTextCursor::KeepAnchor,1);
+    }
     QUndoCommand *pInsertStack = new InsertTextUndoCommand(cursor, text);
     m_pUndoStack->push(pInsertStack);
     ensureCursorVisible();
