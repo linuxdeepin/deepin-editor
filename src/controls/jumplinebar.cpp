@@ -78,12 +78,14 @@ void JumpLineBar::activeInput(QString file, int row, int column, int lineCount, 
     if (m_editLine->lineEdit()->text().toInt() > lineCount)
         m_editLine->lineEdit()->setText("");
 
+    // 保持与主线代码同步
+    // 不在activeInput中执行窗口的show raise focus
     // Show jump line bar.
-    show();
-    raise();
+    // show();
+    // raise();
 
-//    // Focus default.
-    m_editLine->lineEdit()->setFocus();
+    // Focus default.
+    // m_editLine->lineEdit()->setFocus();
 }
 
 void JumpLineBar::handleFocusOut()
