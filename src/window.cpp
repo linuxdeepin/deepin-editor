@@ -142,7 +142,7 @@ Window::Window(DMainWindow *parent)
                  Settings::instance()->settings->option("advance.window.window_height")->value().toDouble()));
 
     //设置函数最大化或者正常窗口的初始化　2021.4.26 ut002764 lxp   fix bug:74774
-    showCenterWindow(true);
+    //showCenterWindow(true);
 
     // Init find bar.
     connect(m_findBar, &FindBar::findNext, this, &Window::handleFindNext, Qt::QueuedConnection);
