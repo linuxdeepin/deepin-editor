@@ -5652,8 +5652,6 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
 {
     m_bIsInputMethod = true;
 
-#ifndef UOSTABLET
-    // UOS TABLET 不需要Alt输入功能
     if (!m_readOnlyMode && !m_bReadOnlyPermission && !e->commitString().isEmpty()) {
         //列编辑添加撤销重做
         if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
@@ -5662,8 +5660,10 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
             insertSelectTextEx(textCursor(), e->commitString());
         }
     }
-#endif
-    return DPlainTextEdit::inputMethodEvent(e);
+
+    // 与主线代码一致，不使用 DPlainTextEdit::inputMethodEvent 处理
+    // 由TextEdit::insertSelectTextEx ，TextEdit::insertColumnEditTextEx 进行输入法输入处理
+    // return DPlainTextEdit::inputMethodEvent(e);
 }
 
 void TextEdit::mousePressEvent(QMouseEvent *e)
