@@ -1866,8 +1866,11 @@ void TextEdit::convertWordCase(ConvertCase convertCase)
             text = capitalizeText(text);
         }
 
-        InsertTextUndoCommand* insertCommond = new InsertTextUndoCommand(textCursor(),text);
-        m_pUndoStack->push(insertCommond);
+        // 如果没有实际文本更改效果，不进行文本替换操作
+        if(text != textCursor().selectedText()) {
+            InsertTextUndoCommand* insertCommond = new InsertTextUndoCommand(textCursor(),text);
+            m_pUndoStack->push(insertCommond);
+        }
     }
     else{
         QTextCursor cursor;
