@@ -32,11 +32,13 @@ leftareaoftextedit::leftareaoftextedit(TextEdit *textEdit)
     m_bookMarkArea->setContentsMargins(0,0,0,0);
     m_flodArea->setContentsMargins(0,0,0,0);
     m_linenumberarea->setContentsMargins(0,0,0,0);
-    m_bookMarkArea->setFixedWidth(18);
-    m_flodArea->setFixedWidth(26);
+   // m_bookMarkArea->setFixedWidth(18);
+    //m_flodArea->setFixedWidth(26);
 
-    //m_bookMarkArea->setMinimumWidth(20);
-//    m_flodArea->setMinimumWidth(20);
+
+    //m_linenumberarea->setFixedWidth(textEdit->cursorRect(textEdit->textCursor()).height());
+    m_bookMarkArea->setFixedWidth(textEdit->cursorRect(textEdit->textCursor()).height());
+    m_flodArea->setFixedWidth(textEdit->cursorRect(textEdit->textCursor()).height());
     hLayout->addWidget(m_bookMarkArea);
     hLayout->addWidget(m_linenumberarea);
     hLayout->addWidget(m_flodArea);
@@ -81,14 +83,19 @@ void leftareaoftextedit::codeFlodAreaPaintEvent(QPaintEvent *event)
     m_textEdit->codeFLodAreaPaintEvent(event);
 }
 
-//void leftareaoftextedit::paintEvent(QPaintEvent *e)
-//{
-//    qDebug() << "leftareaoftextedit::paintEvent";
-//    //m_linenumberarea->update();
-//    //m_bookMarkArea->update();
-//    //m_flodArea->update();
-//    //e->ignore();
-//}
+void leftareaoftextedit::paintEvent(QPaintEvent *e)
+{
+    QPainter painter(this);
+    QColor bdColor;
+    if (m_textEdit->getBackColor().lightness() < 128) {
+        bdColor = palette().brightText().color();
+        bdColor.setAlphaF(0.06);
+    } else {
+        bdColor = palette().brightText().color();
+        bdColor.setAlphaF(0.03);
+    }
+    painter.fillRect(e->rect(), bdColor);
+}
 
 //void leftareaoftextedit::mousePressEvent(QMouseEvent *event)
 //{

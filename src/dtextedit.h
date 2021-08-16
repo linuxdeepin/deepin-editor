@@ -269,6 +269,7 @@ public:
 
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     void codeFLodAreaPaintEvent(QPaintEvent *event);
+    void paintCodeFlod(QPainter* painter,QRect rect,bool isFlod = false);
     void setCodeFlodFlagVisable(bool isVisable,bool bIsFirstOpen = false);
     void setThemeWithPath(const QString &path);
     void setTheme(const KSyntaxHighlighting::Theme &theme, const QString &path);
@@ -466,6 +467,8 @@ public:
      */
     void setEditPalette(const QString &activeColor, const QString &inactiveColor);
 
+    QColor getBackColor();
+
 signals:
     void clickFindAction();
     void clickReplaceAction();
@@ -568,6 +571,8 @@ private:
     //只读权限不显示中文输入提示框 ut002764 2021.6.23
     void SendtoggleReadOnlyMode();
     void SendtoggleReadmessage();
+
+    void updateLeftWidgetWidth(int width);
 
 public:
     bool bIsSetLineNumberWidth = true;

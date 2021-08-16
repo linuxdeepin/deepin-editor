@@ -860,13 +860,13 @@ void EditWrapper::setLineNumberShow(bool bIsShow ,bool bIsFirstShow)
         int lineNumberAreaWidth = m_textEdit->m_pLeftAreaWidget->m_linenumberarea->width();
         int leftAreaWidth = m_textEdit->m_pLeftAreaWidget->width();
         m_textEdit->m_pLeftAreaWidget->m_linenumberarea->show();
-        m_textEdit->m_pLeftAreaWidget->setFixedWidth(leftAreaWidth + lineNumberAreaWidth);
+       // m_textEdit->m_pLeftAreaWidget->setFixedWidth(leftAreaWidth + lineNumberAreaWidth);
 
     } else if(!bIsShow) {
         int lineNumberAreaWidth = m_textEdit->m_pLeftAreaWidget->m_linenumberarea->width();
         int leftAreaWidth = m_textEdit->m_pLeftAreaWidget->width();
         m_textEdit->m_pLeftAreaWidget->m_linenumberarea->hide();
-        m_textEdit->m_pLeftAreaWidget->setFixedWidth(leftAreaWidth - lineNumberAreaWidth);
+       // m_textEdit->m_pLeftAreaWidget->setFixedWidth(leftAreaWidth - lineNumberAreaWidth);
     }
     m_textEdit->bIsSetLineNumberWidth = bIsShow;
     m_textEdit->updateLineNumber();

@@ -43,6 +43,7 @@ find_package(Qt5DBus REQUIRED)
 find_package(Qt5Concurrent REQUIRED)
 find_package(Qt5PrintSupport REQUIRED)
 find_package(Qt5Gui REQUIRED)
+find_package(Qt5Svg REQUIRED)
 find_package(DtkWidget REQUIRED)
 find_package(DtkCore REQUIRED)
 find_package(KF5SyntaxHighlighting)
@@ -58,6 +59,7 @@ target_link_libraries(deepin-editor
     ${DtkWidget_LIBRARIES}
     ${DtkCore_LIBRARIES}
     ${Qt5Widgets_LIBRARIES}
+    ${Qt5Svg_LIBRARIES}
     ${Qt5DBus_LIBRARIES}
     ${Qt5PrintSupport_LIBRARIES}
     ${Qt5Concurrent_LIBRARIES}

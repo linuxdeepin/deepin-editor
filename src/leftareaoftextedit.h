@@ -43,7 +43,7 @@ public:
     CodeFlodArea *m_flodArea;
 
 protected:
-//    void paintEvent(QPaintEvent *e) override;
+    void paintEvent(QPaintEvent *e) override;
 //    void mousePressEvent(QMouseEvent *event) override;
 //    QSize sizeHint() const override;
 private:
