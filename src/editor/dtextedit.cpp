@@ -650,7 +650,8 @@ void TextEdit::popRightMenu(QPoint pos)
             (textCursor().hasSelection() || !isBlankLine) &&
             !def.filePath().isEmpty()) {
 
-        if (def.name() != "Markdown") {
+        // 对于vCard文件类型(.vcf)进行排除判断，不使用注释功能
+        if (def.name() != "Markdown" && def.name().contains("vCard") == false) {
             m_rightMenu->addAction(m_addComment);
             m_rightMenu->addAction(m_cancelComment);
         }
