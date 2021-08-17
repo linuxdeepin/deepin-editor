@@ -32,7 +32,6 @@
 #include "inserttextundocommand.h"
 #include "deletetextundocommand.h"
 
-
 #include <KF5/KSyntaxHighlighting/definition.h>
 #include <KF5/KSyntaxHighlighting/syntaxhighlighter.h>
 #include <KF5/KSyntaxHighlighting/theme.h>
@@ -1511,7 +1510,8 @@ void TextEdit::updateFont()
     font.setPointSize(m_fontSize);
     font.setFamily(m_fontName);
     setFont(font);
-    setTabStopWidth(m_tabSpaceNumber * QFontMetrics(font).width(' '));
+    QFontMetrics fontMetrics = this->fontMetrics();
+    setTabStopWidth(m_tabSpaceNumber * fontMetrics.width(QChar(0x2192)));
 }
 
 void TextEdit::replaceAll(const QString &replaceText, const QString &withText)
