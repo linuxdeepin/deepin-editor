@@ -133,3 +133,9 @@ void JumpLineBar::slotFocusChanged(bool bFocus)
     }
 }
 
+// Hide 跳转到行窗口时，需要清空编辑框中的内容
+void JumpLineBar::hide(){
+    m_editLine->clear();
+    DFloatingWidget::hide();
+}
+

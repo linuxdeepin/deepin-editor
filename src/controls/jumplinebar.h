@@ -60,6 +60,8 @@ public slots:
 
     void slotFocusChanged(bool bFocus);
 
+    void hide();
+
 signals:
     void backToPosition(QString file, int row, int column, int scrollOffset);
     void jumpToLine(QString file, int line, bool focusEditor);
