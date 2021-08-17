@@ -6083,7 +6083,8 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "removecomment")) {
             toggleComment(false);
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "undo")) {
-            QPlainTextEdit::undo();
+            if(m_isModified)
+                QPlainTextEdit::undo();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "redo")) {
             QPlainTextEdit::redo();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "switchbookmark")) {
