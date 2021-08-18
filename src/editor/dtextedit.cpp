@@ -289,6 +289,10 @@ void TextEdit::initRightClickedMenu()
     //颜色标记、折叠/展开、书签、列编辑、设置注释、取消注释;
     //点击颜色标记菜单，显示二级菜单，包括：标记、清除上次标记、清除标记、标记所有;
     m_colorMarkMenu = new DMenu(tr("Color Mark"));
+
+    // 为颜色标记Menu，增加事件过滤
+    m_colorMarkMenu->installEventFilter(this);
+
     m_cancleMarkAllLine = new QAction(tr("Clear All Marks"), this);
     m_cancleLastMark = new QAction(tr("Clear Last Mark"), this);
 
@@ -754,18 +758,34 @@ void TextEdit::popRightMenu(QPoint pos)
     if (!this->document()->isEmpty()) {
 
         m_colorMarkMenu->clear();
+        // 清空 tab order list
+        m_MarkColorMenuTabOrder.clear();
+
+        // 增加 Mark Color Menu Item
         m_colorMarkMenu->addAction(m_markCurrentAct);
         m_colorMarkMenu->addAction(m_actionColorStyles);
+        // 将对应 Mark Color Menu Item 加入 Tab Order
+        // QPair<QAction*, bool> , bool决定tab过程中是否可以获取focus
+        m_MarkColorMenuTabOrder.append(QPair<QAction*,bool>(m_markCurrentAct, true));
+        m_MarkColorMenuTabOrder.append(QPair<QAction*,bool>(m_actionColorStyles, false));
+
+        // 增加 Mark Color Menu Item
         m_colorMarkMenu->addSeparator();
         m_colorMarkMenu->addAction(m_markAllAct);
         m_colorMarkMenu->addAction(m_actionAllColorStyles);
         m_colorMarkMenu->addSeparator();
+        // 将对应 Mark Color Menu Item 加入 Tab Order
+        m_MarkColorMenuTabOrder.append(QPair<QAction*,bool>(m_markAllAct, true));
+        m_MarkColorMenuTabOrder.append(QPair<QAction*,bool>(m_actionAllColorStyles, false));
 
         if (m_markOperations.size() > 0) {
+             // 增加 Mark Color Menu Item
             m_colorMarkMenu->addAction(m_cancleLastMark);
-
             m_colorMarkMenu->addSeparator();
             m_colorMarkMenu->addAction(m_cancleMarkAllLine);
+            // 将对应 Mark Color Menu Item 加入 Tab Order
+            m_MarkColorMenuTabOrder.append(QPair<QAction*,bool>(m_cancleLastMark, true));
+            m_MarkColorMenuTabOrder.append(QPair<QAction*,bool>(m_cancleMarkAllLine, true));
         }
 
         m_rightMenu->addSeparator();
@@ -5194,6 +5214,85 @@ bool TextEdit::eventFilter(QObject *object, QEvent *event)
     } else if (event->type() == QEvent::MouseButtonDblClick) {
         m_bIsDoubleClick = true;
         m_bBeforeIsDoubleClick = true;
+    } else if (object == m_colorMarkMenu) {
+        // 进行对于 color mark menu 的特殊按键处理
+        if(event->type() == QEvent::KeyRelease) {
+            QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
+
+            // 当前仅处理 Tab 键 ， 保留后续其他按键的处理
+            if(keyEvent->key() == Qt::Key_Tab){
+                // handleKey 作用是保留后续增加方向键处理
+                int handleKey = keyEvent->key();
+
+                // 使用Timer进行后续处理，避免在此处处理后，和基类的处理造成混淆
+                QTimer::singleShot(0, this, [=] () {
+                    // 仅当 menu 可见时进行处理，当前仅处理Tab键
+                    if(m_colorMarkMenu->isVisible() && handleKey == Qt::Key_Tab) {
+                        QAction* currentAction = m_colorMarkMenu->activeAction();
+                        QAction* nextAction = nullptr;
+                        int currentIndex = -1;
+
+                        // 如果没有当前 focus item ， 不需要进行处理
+                        if(currentAction == nullptr) {
+                            return;
+                        }
+
+                        // 遍历 Order List， 如果不符合 order list 规则，变更focus item
+                        for(int i = 0; i < m_MarkColorMenuTabOrder.size(); i++) {
+                            QPair<QAction*,bool> orderItem = m_MarkColorMenuTabOrder.at(i);
+
+                            if(orderItem.first == currentAction) {
+                                // 设置当前 item 位置
+                                currentIndex = i;
+
+                                if(orderItem.second == true) {
+                                    // 允许 focus， 不进行处理，退出
+                                    return;
+                                } else {
+                                    // 退出当前查找循环，进行后续处理
+                                    break;
+                                }
+                            }
+                        }
+
+                        if(currentIndex == -1) {
+                            qWarning() << " can not find current item in tab order list , need check 'Mark Color Menu' tab order setting!";
+                            return;
+                        }
+
+                        // 在 order list中，寻找下一个item
+                        for(int j = currentIndex + 1; j < m_MarkColorMenuTabOrder.size(); j++) {
+                            QPair<QAction*,bool> newOrderItem = m_MarkColorMenuTabOrder.at(j);
+
+                            if(newOrderItem.second == true) {
+                                nextAction = newOrderItem.first;
+                                break;
+                            }
+                        }
+
+                        // 原 order list 中不存在后一个可用item， 从列表头开始头查找
+                        if(nextAction == nullptr) {
+                            // 从头进行查找，因为i为当前位置，查找到i就足够
+                            for(int j = 0; j < currentIndex; j++) {
+                                QPair<QAction*,bool> newOrderItem = m_MarkColorMenuTabOrder.at(j);
+
+                                if(newOrderItem.second == true) {
+                                    nextAction = newOrderItem.first;
+                                    break;
+                                }
+                            }
+                        }
+
+                        // 为找到的新item设置focus
+                        if(nextAction != nullptr) {
+                            m_colorMarkMenu->setActiveAction(nextAction);
+                        } else {
+                            qWarning() << " can not find valid item , need check 'Mark Color Menu' tab order setting!";
+                        }
+                    }
+                });
+            }
+        }
     }
 
     return QPlainTextEdit::eventFilter(object, event);

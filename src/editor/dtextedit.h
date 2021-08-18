@@ -647,6 +647,9 @@ private:
     QAction *m_markAllAct;
     QString m_strMarkAllLineColorName; ///< “标记所有”选择的颜色名称
 
+    // 增加对于颜色选择的 Tab 顺序控制
+    QList<QPair<QAction*,bool>> m_MarkColorMenuTabOrder;
+
     QAction *m_addComment;
     QAction *m_cancelComment;
 
