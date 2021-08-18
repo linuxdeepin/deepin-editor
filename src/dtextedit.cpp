@@ -2831,7 +2831,6 @@ void TextEdit::setSettings(Settings *keySettings)
 
 void TextEdit::setModified(bool modified)
 {
-    m_isModified = modified;
     if(m_wrapper->getFileLoading()) return;
     document()->setModified(modified);
     emit modificationChanged(filepath, modified);
@@ -3984,6 +3983,7 @@ void TextEdit::setTextFinished()
         }
     }
 //    qDebug() << m_listBookmark << document()->blockCount();
+    document()->clearUndoRedoStacks();
 }
 
 QStringList TextEdit::readHistoryRecord(QString key)
@@ -5745,7 +5745,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         // init base.
         bool isBlankLine = text.trimmed().isEmpty();
 
-        if (m_canUndo && m_isModified && m_bReadOnlyPermission == false && m_readOnlyMode == false) {
+        if (m_canUndo  && m_bReadOnlyPermission == false && m_readOnlyMode == false) {
             m_rightMenu->addAction(m_undoAction);
         }
 
@@ -6083,8 +6083,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "removecomment")) {
             toggleComment(false);
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "undo")) {
-            if(m_isModified)
-                QPlainTextEdit::undo();
+            QPlainTextEdit::undo();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "redo")) {
             QPlainTextEdit::redo();
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "switchbookmark")) {
@@ -6169,7 +6168,7 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
     // init base.
     bool isBlankLine = text.trimmed().isEmpty();
 
-    if (m_canUndo && m_isModified && m_bReadOnlyPermission == false && m_readOnlyMode == false) {
+    if (m_canUndo  && m_bReadOnlyPermission == false && m_readOnlyMode == false) {
         m_rightMenu->addAction(m_undoAction);
     }
 

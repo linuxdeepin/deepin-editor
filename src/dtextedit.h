@@ -668,7 +668,6 @@ private:
 
     bool m_canUndo;
     bool m_canRedo;
-    bool m_isModified = false;
 
     bool m_haveWordUnderCursor;
 
