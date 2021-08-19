@@ -10,7 +10,7 @@ Text Editor is a simple text editing tool. You can use it to write a simple text
 
 ### Run Text Editor
 
-1. Click ![deepin_launcher](../common/deepin_launcher.svg) in the dock to enter the Launcher interface. 
+1. Click the Launcher icon ![deepin_launcher](../common/deepin_launcher.svg) in the Dock to enter the Launcher interface. 
 2. Locate Text Editor ![deepin_editor](../common/deepin_editor.svg) by  scrolling the mouse wheel or searching "text editor" in the Launcher interface, and click it to run.
 3. In Launcher, right-click Text Editor to:
   - Click **Send to desktop** to create a desktop shortcut.
@@ -222,38 +222,38 @@ Select the text to be marked in Text Editor, right-click to select **Color Mark*
 - Select **Clear Last Mark** to cancel the last mark operation.
 - Select **Clear All Marks** to cancel all the current marks.
 
-### Manage Bookmark 
+### Manage Bookmarks 
 
-You can add a bookmark for any current line on the Text Editor interface. The icon ![icon](../common/bookmark_normal_light.svg) shows up when you move the cursor to any line in the left column, and the icon ![bookmarkbig](../common/bookmarkbig_checked_light.svg) will appear after a bookmark is successfully added.
+Check **Show bookmarks icon** in **Settings** and you can add a bookmark for any current line on the Text Editor interface. The icon ![icon](../common/bookmark_normal_light.svg) shows up when you move the cursor to any line in the left column, and the icon ![bookmarkbig](../common/bookmarkbig_checked_light.svg) will appear after a bookmark is successfully added.
 
-- Add bookmark
+- Add bookmarks
    + Click ![icon](../common/bookmark_normal_light.svg) to add a bookmark for the line.
    + Right-click ![icon](../common/bookmark_normal_light.svg) and select **Add bookmark** to add a bookmark for the line.
    + Place the cursor on any line, and press **Ctrl + F2** to add a bookmark for the line.
 
--   Delete bookmark 
+-   Delete bookmarks
    + Click the colored bookmark icon ![bookmarkbig](../common/bookmarkbig_checked_light.svg) to delete the bookmark of the line directly.
    + Right-click the colored bookmark icon ![bookmarkbig](../common/bookmarkbig_checked_light.svg) , and select **Remove Bookmark** to delete the bookmark in the line.
    + Right-click a bookmark, and select **Remove All Bookmarks** to delete all the bookmarks in the text.
   >![Notes](../common/notes.svg) Notes: The bookmark icon appears only when cursor is hovered over to the left of the line number in the left column; when it's moved beyond the left bookmark column, the bookmark icon will disappear. The bookmark icon will always be displayed after being added.
 
-### Manage Comment 
+### Manage Comments 
 
 You can add comments to any text with a code type suffix, such as cpp and java, among others.
 
-- Add comment
+- Add comments
   - Select the text needed, and right-click to select **Add Comment**.
-  - Select the text needed, and press **Alt + A** to add comment.
+  - Select the text needed, and press **Alt + A** to add comments.
 
-- Cancel comment
+- Cancel comments
   - Select the text with comments, and right-click to select **Remove Comment**.
-  - Select the text with comments, and press **Alt + Z** to cancel comment.
+  - Select the text with comments, and press **Alt + Z** to cancel comments.
 
 > ![notes](../common/notes.svg) Notes: This supports comments in different languages. Please refer to actual conditions for detailed information. For example, comment symbol for C, C# and Java is //, and comment symbol for Python is #.
 
 ## Main Menu
 
-On the main menu, you can [Create New Windows](#Manage Tabs), [Create New Files](#Manage Tabs), [Find Texts](#Find Texts), [Replace Texts](#Replace Texts), [Save Files](#Save Files), switch window themes, view help manual, and get more information about Text Editor.
+On the main menu, you can Create New Windows, Create New Files, [Find Texts](#Find Texts), [Replace Texts](#Replace Texts), [Save Files](#Save Files), switch window themes, view help manual, and get more information about Text Editor.
 
 ### Settings
 
@@ -267,7 +267,7 @@ Click ![icon_menu](../common/icon_menu.svg)> **Settings** and you can perform th
 - Check or uncheck **Word wrap**.
 - Check **Code folding flag** and ![next](../common/next.svg) or ![next](../common/next_down.svg) are displayed in the edit area. Right-click and select **Fold/Unfold Current Level** or **Fold/Unfold All** to perform the corresponding operations.
 - Check **Show line numbers** to display the line number in the edit area.
-- Check **Hightlight current line** to highlight the current line.
+- Check **Highlight current line** to highlight the current line.
 - Check **Show bookmarks icon** to display the bookmarks in the text.
 - Check **Show whitespaces and tabs** to display all the white spaces and tabs. You can also input or delete white spaces and tabs manually.
 
