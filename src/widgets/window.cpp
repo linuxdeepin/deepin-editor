@@ -595,6 +595,13 @@ bool Window::closeTab()
 
             //保存
             if (res == 2) {
+                QFileInfo fileInfo(filePath);
+                QFileInfo dir(fileInfo.absoluteDir().absolutePath());
+                if(!dir.isWritable()){
+                    DMessageManager::instance()->sendMessage(m_editorWidget->currentWidget(), QIcon(":/images/warning.svg")
+                                                             , QString(tr("You do not have permission to save %1")).arg(fileInfo.fileName()));
+                    return false;
+                }
                 if (wrapper->saveDraftFile()) {
                     removeWrapper(filePath, true);
                     m_tabbar->closeCurrentTab();
@@ -643,6 +650,14 @@ bool Window::closeTab()
 
             //保存
             if (res == 2) {
+                QFileInfo fileInfo(filePath);
+                QFileInfo dir(fileInfo.absoluteDir().absolutePath());
+                if(!dir.isWritable()){
+                    DMessageManager::instance()->sendMessage(m_editorWidget->currentWidget(), QIcon(":/images/warning.svg")
+                                                             , QString(tr("You do not have permission to save %1")).arg(fileInfo.fileName()));
+                    return false;
+                }
+
                 if (bIsBackupFile) {
                     if (wrapper->saveFile()) {
                         removeWrapper(filePath, true);
@@ -866,7 +881,11 @@ bool Window::saveFile()
         QFile::Permissions pers = temporaryBuffer.permissions();
         bool isWrite = ((pers & QFile::WriteUser) || (pers & QFile::WriteOwner) || (pers & QFile::WriteOther));
 
-        if (!isWrite) {
+        QFileInfo dir(info.absoluteDir().absolutePath());
+        bool canwritedir = dir.isWritable();
+
+
+        if (!isWrite || !canwritedir) {
             DMessageManager::instance()->sendMessage(m_editorWidget->currentWidget(), QIcon(":/images/warning.svg")
                                                      , QString(tr("You do not have permission to save %1")).arg(info.fileName()));
             return false;
@@ -961,6 +980,16 @@ QString Window::saveAsFileToDisk()
         const QByteArray encode = dialog.getComboBoxValue(QObject::tr("Encoding")).toUtf8();
         const QString endOfLine = dialog.getComboBoxValue(QObject::tr("Line Endings"));
         const QString newFilePath = dialog.selectedFiles().value(0);
+
+
+        QFileInfo fileInfo(newFilePath);
+        QFileInfo dir(fileInfo.absoluteDir().absolutePath());
+        if(!dir.isWritable()){
+            DMessageManager::instance()->sendMessage(m_editorWidget->currentWidget(), QIcon(":/images/warning.svg")
+                                                     , QString(tr("You do not have permission to save %1")).arg(fileInfo.fileName()));
+            return QString();
+        }
+
 
         wrapper->updatePath(wrapper->filePath(), newFilePath);
         wrapper->saveFile();
