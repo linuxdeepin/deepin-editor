@@ -361,7 +361,29 @@ bool EditWrapper::saveFile()
         if (!fileContent.isEmpty()) {
             QByteArray Outdata;
             DetectCode::ChangeFileEncodingFormat(fileContent, Outdata, QString("UTF-8"), m_sCurEncode);
-            file.write(Outdata);
+            // 如果 iconv 转换错误
+            if(Outdata.isEmpty()) {
+                qWarning() << QString("iconv Encode Transformat from '%1' to '%2' Fail!")
+                              .arg(QString("UTF-8")).arg(m_sCurEncode)
+                           << ", start QTextCodec Encode Transformat.";
+                // 使用 QTextCodec 进行转换尝试
+                QTextCodec *codec = QTextCodec::codecForName(m_sCurEncode.toUtf8());
+                QByteArray encodedString = codec->fromUnicode(fileContent);
+
+                if (encodedString.isEmpty()) {
+                    qWarning() << "Both iconv and QTextCodec Encode Transformat Fail!";
+                } else {
+                    qWarning() << QString("QTextCodec Encode Transformat from '%1' to '%2' Success!")
+                                  .arg(QString("UTF-8")).arg(m_sCurEncode);
+                    Outdata = encodedString;
+                }
+            }
+
+            if(Outdata.isEmpty() == false) {
+                // 如果新数据为空，不进行文件写入，以降低文件内容损失
+                // 此时如果写入，整个文件将被清空
+                file.write(Outdata);
+            }
 
             QFileDevice::FileError error = file.error();
             file.close();
@@ -372,7 +394,8 @@ bool EditWrapper::saveFile()
 
             // did save work?
             // only finalize if stream status == OK
-            bool ok = (error == QFileDevice::NoError);
+            // 增加对于转换失败的判断，新数据为空，ok返回false
+            bool ok = (Outdata.isEmpty() == false && error == QFileDevice::NoError);
 
             // update status.
             if (ok)  updateModifyStatus(false);
