@@ -107,7 +107,7 @@ TextEdit::TextEdit(QWidget *parent)
     m_pLeftAreaWidget->m_flodArea->installEventFilter(this);
     viewport()->setCursor(Qt::IBeamCursor);
     //判断语音助手是否存在
-    isExistVoiceAssistant();
+    //isExistVoiceAssistant();
 
     // Don't draw frame around editor widget.
     setFrameShape(QFrame::NoFrame);
@@ -5832,9 +5832,13 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             m_rightMenu->addAction(m_fullscreenAction);
         }
 
-        if ((m_bIsExistVoiceAssistant) && ((DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosProfessional)
+        /* 专业版/家庭版/教育版鼠标右键菜单支持语音读写 */
+        /* 更换成只要发现有com.iflytek.aiassistant服务已经注册开启，则开启支持语音读写功能 */
+        /*if ((m_bIsExistVoiceAssistant) && ((DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosProfessional)
                                            || (DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosHome)
-                                           /*||(DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosEducation)*/)) {
+                                           ||(DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosEducation))) {*/
+
+        if (static_cast<Window *>(m_wrapper->window())->isRegisteredFflytekAiassistant()) {
             bool stopReadingState = false;
             QDBusMessage stopReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
                                                               "/aiassistant/tts",
@@ -6277,9 +6281,12 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
     }
 
     /* 专业版/家庭版/教育版鼠标右键菜单支持语音读写 */
-    if ((m_bIsExistVoiceAssistant) && ((DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosProfessional)
-                                       ||(DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosHome)
-                                       /*||(DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosEducation)*/)) {
+    /* 更换成只要发现有com.iflytek.aiassistant服务已经注册开启，则开启支持语音读写功能 */
+    /*if ((m_bIsExistVoiceAssistant) && ((DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosProfessional)
+                                       || (DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosHome)
+                                       ||(DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosEducation))) {*/
+
+    if (static_cast<Window *>(m_wrapper->window())->isRegisteredFflytekAiassistant()) {
         bool stopReadingState = false;
         QDBusMessage stopReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
                                                           "/aiassistant/tts",

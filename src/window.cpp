@@ -1694,6 +1694,18 @@ void Window::displayShortcuts()
     connect(shortcutViewProcess, SIGNAL(finished(int)), shortcutViewProcess, SLOT(deleteLater()));
 }
 
+bool Window::isRegisteredFflytekAiassistant()
+{
+    QDBusConnection connection = QDBusConnection::sessionBus();
+    QDBusConnectionInterface *bus = connection.interface();
+    bool isVailid = bus->isServiceRegistered("com.iflytek.aiassistant");
+    if (isVailid) {
+        return true;
+    } else {
+        qInfo() << "com.iflytek.aiassistant service no registered!";
+        return false;
+    }
+}
 
 void Window::setChildrenFocus(bool ok)
 {

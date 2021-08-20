@@ -111,6 +111,10 @@ public:
     void changeTitlebarBackground(const QString &startColor, const QString &endColor);
 
     void displayShortcuts();
+
+    //判断语音助手服务是否已被注册
+    bool isRegisteredFflytekAiassistant();
+
 public:
     //设置显示清除焦点
     void setChildrenFocus(bool ok);
