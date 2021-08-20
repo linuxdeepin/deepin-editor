@@ -55,6 +55,7 @@ public:
     void updateModifyStatus(const QString &path, bool isModified);
     //跟新tab文件名称
     void updateSaveAsFileName(QString strOldFilePath, QString strNewFilePath);
+    void updateSabeAsFileNameTemp(QString strOldFilePath, QString strNewFilePath);
 
     void showCenterWindow(bool bIsCenter);
     void initTitlebar();
@@ -69,7 +70,7 @@ public:
     void addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, const QString &qstrTruePath,
                            const QString &tabName, int index = -1);
     bool closeTab();
-    //bool closeTab(const QString& fileName);
+    bool closeTab(const QString& fileName);
     void restoreTab();
 
     void clearBlack();

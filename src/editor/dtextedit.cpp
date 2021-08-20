@@ -135,7 +135,6 @@ TextEdit::TextEdit(QWidget *parent)
         this->m_wrapper->OnUpdateHighlighter();
     });
 
-
     QDBusConnection dbus = QDBusConnection::sessionBus();
     dbus.systemBus().connect("com.deepin.daemon.Gesture",
                              "/com/deepin/daemon/Gesture", "com.deepin.daemon.Gesture",
@@ -2041,7 +2040,6 @@ void TextEdit::replaceAll(const QString &replaceText, const QString &withText)
     ReplaceAllCommond* commond = new ReplaceAllCommond(oldText,newText,cursor);
     m_pUndoStack->push(commond);
 
-
     this->m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
 
     startCursor.endEditBlock();
@@ -2111,7 +2109,6 @@ void TextEdit::replaceRest(const QString &replaceText, const QString &withText)
     ReplaceAllCommond* commond = new ReplaceAllCommond(oldText,newText,cursor);
     m_pUndoStack->push(commond);
 
-
     m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
 
     startCursor.endEditBlock();
@@ -2167,7 +2164,6 @@ bool TextEdit::findKeywordForward(const QString &keyword)
 
 void TextEdit::removeKeywords()
 {
-
     m_findHighlightSelection.cursor = textCursor();
     m_findHighlightSelection.cursor.clearSelection();
 

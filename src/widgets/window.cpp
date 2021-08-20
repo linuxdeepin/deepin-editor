@@ -292,15 +292,23 @@ void Window::updateSaveAsFileName(QString strOldFilePath, QString strNewFilePath
     EditWrapper *wrapper = m_wrappers.value(strOldFilePath);
     m_tabbar->updateTab(tabIndex, strNewFilePath, QFileInfo(strNewFilePath).fileName());
     wrapper->updatePath(strNewFilePath);
-    m_wrappers.remove(strOldFilePath);
 
     //tabbar中存在和strNewFilePath同名的tab
-    #if 0
-    if(m_wrappers.find(strNewFilePath) != m_wrappers.end()){
+    if (m_wrappers.contains(strNewFilePath)) {
         closeTab(strNewFilePath);
     }
-    #endif
 
+    m_wrappers.remove(strOldFilePath);
+    m_wrappers.insert(strNewFilePath, wrapper);
+}
+
+void Window::updateSabeAsFileNameTemp(QString strOldFilePath, QString strNewFilePath)
+{
+    int tabIndex = m_tabbar->indexOf(strOldFilePath);
+    EditWrapper *wrapper = m_wrappers.value(strOldFilePath);
+    m_tabbar->updateTab(tabIndex, strNewFilePath, QFileInfo(strNewFilePath).fileName());
+    wrapper->updatePath(strNewFilePath);
+    m_wrappers.remove(strOldFilePath);
     m_wrappers.insert(strNewFilePath, wrapper);
 }
 
@@ -393,8 +401,6 @@ void Window::initTitlebar()
     connect(m_tabbar, &DTabBar::tabCloseRequested, this, &Window::handleTabCloseRequested, Qt::QueuedConnection);
     connect(m_tabbar, &DTabBar::tabAddRequested, this, static_cast<void (Window::*)()>(&Window::addBlankTab), Qt::QueuedConnection);
     connect(m_tabbar, &DTabBar::currentChanged, this, &Window::handleCurrentChanged, Qt::QueuedConnection);
-
-
 
     connect(newWindowAction, &QAction::triggered, this, &Window::newWindow);
     connect(newTabAction, &QAction::triggered, this, static_cast<void (Window::*)()>(&Window::addBlankTab));
@@ -541,18 +547,14 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
     wrapper->OnThemeChangeSlot(m_themePath);
 }
 
-#if 0
 bool Window::closeTab()
 {
     const QString &filePath = m_tabbar->currentPath();
-    closeTab(filePath);
+    return closeTab(filePath);
 }
-#endif
 
-//bool Window::closeTab(const QString &filePath)
-bool Window::closeTab()
+bool Window::closeTab(const QString &filePath)
 {
-    const QString filePath = m_tabbar->currentPath();
     EditWrapper *wrapper = m_wrappers.value(filePath);
 
     if (m_reading_list.contains(currentWrapper()->textEditor())) {
@@ -754,7 +756,6 @@ EditWrapper *Window::wrapper(const QString &filePath)
     } else {
         for (auto wrapper : m_wrappers) {
             QString truePath = wrapper->textEditor()->getTruePath();
-
             if (truePath == filePath) {
                 return m_wrappers.value(wrapper->textEditor()->getFilePath());
             }
@@ -901,14 +902,16 @@ bool Window::saveFile()
         temPath = filePath;
     }
 
-	//updateSaveAsFileName(temPath, filePath);
+    //updateSaveAsFileName(temPath, filePath);
     //wrapperEdit->updatePath(temPath,filePath);
 
     bool success = wrapperEdit->saveFile();
 
     if (success) {
-        updateSaveAsFileName(temPath, filePath);
-        currentWrapper()->hideWarningNotices();
+        updateSabeAsFileNameTemp(temPath, filePath);
+        if (currentWrapper()) {
+            currentWrapper()->hideWarningNotices();
+        }
         showNotify(tr("Saved successfully"));
 
         //删除备份文件
@@ -974,7 +977,6 @@ QString Window::saveAsFileToDisk()
     wrapper->setUpdatesEnabled(false);
     int mode = dialog.exec();
     wrapper->setUpdatesEnabled(true);
-
 
     if (mode == QDialog::Accepted) {
         const QByteArray encode = dialog.getComboBoxValue(QObject::tr("Encoding")).toUtf8();
