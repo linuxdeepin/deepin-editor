@@ -686,9 +686,12 @@ void TextEdit::popRightMenu(QPoint pos)
     }
 
     /* 专业版/家庭版/教育版鼠标右键菜单支持语音读写 */
-    if ((DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosProfessional) ||
+    /* 更换成只要发现有com.iflytek.aiassistant服务已经注册开启，则开启支持语音读写功能 */
+    /*if ((DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosProfessional) ||
         (DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosHome) ||
-        (DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosEducation)) {
+        (DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosEducation)) {*/
+
+    if (m_wrapper->window()->isRegisteredFflytekAiassistant()) {
         bool stopReadingState = false;
         QDBusMessage stopReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
                                                                      "/aiassistant/tts",

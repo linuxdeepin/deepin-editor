@@ -2730,3 +2730,16 @@ void Window::setPrintEnabled(bool enabled)
 {
     m_menu->actions().at(PRINT_ACTION)->setEnabled(enabled);
 }
+
+bool Window::isRegisteredFflytekAiassistant()
+{
+    QDBusConnection connection = QDBusConnection::sessionBus();
+    QDBusConnectionInterface *bus = connection.interface();
+    bool isVailid = bus->isServiceRegistered("com.iflytek.aiassistant");
+    if (isVailid) {
+        return true;
+    } else {
+        qInfo() << "com.iflytek.aiassistant service no registered!";
+        return false;
+    }
+}

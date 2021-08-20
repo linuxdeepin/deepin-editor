@@ -143,6 +143,9 @@ public:
     QString getKeywordForSearch();
     void setPrintEnabled(bool enabled);
 
+    //判断语音助手服务是否已被注册
+    bool isRegisteredFflytekAiassistant();
+
 signals:
     void themeChanged(const QString themeName);
     void requestDragEnterEvent(QDragEnterEvent *);
