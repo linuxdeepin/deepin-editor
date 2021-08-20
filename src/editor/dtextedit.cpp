@@ -60,6 +60,7 @@
 
 #include <private/qguiapplication_p.h>
 #include <qpa/qplatformtheme.h>
+#include <QtSvg/qsvgrenderer.h>
 
 
 TextEdit::TextEdit(QWidget *parent)
@@ -2391,7 +2392,7 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
         lineNumberAreaBackgroundColor.setAlphaF(0.03);
         m_lineNumbersColor.setAlphaF(0.3);
     }
-    painter.fillRect(event->rect(), lineNumberAreaBackgroundColor);
+    //painter.fillRect(event->rect(), lineNumberAreaBackgroundColor);
 
     int blockNumber = getFirstVisibleBlockId();
     QTextBlock block = document()->findBlockByNumber(blockNumber);
@@ -2430,6 +2431,8 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
         cur.setPosition(block.position(), QTextCursor::MoveAnchor);
 
         if (block.isVisible()) {
+            int height = cursorRect(cur).height();
+            updateLeftWidgetWidth(height);
             painter.drawText(0, cursorRect(cur).y(),
                              m_pLeftAreaWidget->m_pLineNumberArea->width(), cursorRect(cur).height() - static_cast<int>(document()->documentMargin()),
                              Qt::AlignVCenter | Qt::AlignHCenter, QString::number(block.blockNumber() + 1));
@@ -2458,7 +2461,7 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
         m_lineNumbersColor.setAlphaF(0.3);
     }
 
-    painter.fillRect(event->rect(), codeFlodAreaBackgroundColor);
+    //painter.fillRect(event->rect(), codeFlodAreaBackgroundColor);
     int blockNumber = getFirstVisibleBlockId();
     QTextBlock block = document()->findBlockByNumber(blockNumber);
 
@@ -2571,13 +2574,21 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
 
                 if (block.next().isVisible()) {
                      if (block.isVisible()) {
-                         imageTop = rt.y() ;
-                         painter.drawPixmap(nOffset, imageTop, rt.height(),rt.height(),scaleFoldPixmap);
+                         //imageTop = rt.y() ;
+                         //painter.drawPixmap(nOffset, imageTop, rt.height(),rt.height(),scaleFoldPixmap);
+                         int height = cursorRect(cur).height();
+                         updateLeftWidgetWidth(height);
+                         QRect rect(0,cursorRect(cur).y(),height,height);
+                         paintCodeFlod(&painter,rect);
                       }
                   } else {
                      if (block.isVisible()) {
-                         imageTop = rt.y() ;
-                         painter.drawPixmap(nOffset, imageTop,rt.height(),rt.height(), scaleunFoldPixmap);
+                         //imageTop = rt.y() ;
+                        // painter.drawPixmap(nOffset, imageTop,rt.height(),rt.height(), scaleunFoldPixmap);
+                         int height = cursorRect(cur).height();
+                         updateLeftWidgetWidth(height);
+                         QRect rect(0,cursorRect(cur).y(),height,height);
+                         paintCodeFlod(&painter,rect,true);
                       }
                   }
                 m_listFlodIconPos.append(block.blockNumber());
@@ -2595,9 +2606,9 @@ void TextEdit::setBookmarkFlagVisable(bool isVisable, bool bIsFirstOpen)
 
     if (!bIsFirstOpen) {
         if (isVisable) {
-            m_pLeftAreaWidget->setFixedWidth(leftAreaWidth + bookmarkAreaWidth);
+            //m_pLeftAreaWidget->setFixedWidth(leftAreaWidth + bookmarkAreaWidth);
         } else {
-            m_pLeftAreaWidget->setFixedWidth(leftAreaWidth - bookmarkAreaWidth);
+           // m_pLeftAreaWidget->setFixedWidth(leftAreaWidth - bookmarkAreaWidth);
         }
     }
 
@@ -2611,9 +2622,9 @@ void TextEdit::setCodeFlodFlagVisable(bool isVisable, bool bIsFirstOpen)
     int flodAreaWidth = m_pLeftAreaWidget->m_pFlodArea->width();
     if (!bIsFirstOpen) {
         if (isVisable) {
-            m_pLeftAreaWidget->setFixedWidth(leftAreaWidth + flodAreaWidth);
+            //m_pLeftAreaWidget->setFixedWidth(leftAreaWidth + flodAreaWidth);
         } else {
-            m_pLeftAreaWidget->setFixedWidth(leftAreaWidth - flodAreaWidth);
+            //m_pLeftAreaWidget->setFixedWidth(leftAreaWidth - flodAreaWidth);
         }
     }
     m_pIsShowCodeFoldArea = isVisable;
@@ -2642,7 +2653,7 @@ void TextEdit::updateLeftAreaWidget()
     if (bIsSetLineNumberWidth) {
         leftAreaWidth += blockSize * fontMetrics().width('9') + 5;
     }
-    m_pLeftAreaWidget->setFixedWidth(leftAreaWidth);
+   // m_pLeftAreaWidget->setFixedWidth(leftAreaWidth);
     m_pLeftAreaWidget->updateAll();
 }
 
@@ -3840,7 +3851,7 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
         lineNumberAreaBackgroundColor.setAlphaF(0.03);
         m_lineNumbersColor.setAlphaF(0.3);
     }
-    painter.fillRect(event->rect(), lineNumberAreaBackgroundColor);
+    //painter.fillRect(event->rect(), lineNumberAreaBackgroundColor);
 
 //    int top = this->viewport()->geometry().top() + verticalScrollBar()->value();
 
@@ -3907,9 +3918,18 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
             painter.drawPixmap(nOffset, imageTop, scalePixmap);
 			#endif
 
-            imageTop = cursorRect(cur).y() ;
-            int nOffset = (m_pLeftAreaWidget->m_pBookMarkArea->width()  - scalePixmap.width()) / 2;
-            painter.drawPixmap(0 , imageTop, scalePixmap);
+            //imageTop = cursorRect(cur).y() ;
+           // int nOffset = (m_pLeftAreaWidget->m_pBookMarkArea->width()  - scalePixmap.width()) / 2;
+           // painter.drawPixmap(0 , imageTop, scalePixmap);
+
+            int height = cursorRect(cur).height();
+            updateLeftWidgetWidth(height);
+            QRect rect(0,cursorRect(cur).y(),height,height);
+            rect = rect.adjusted(height/6,height/6,-1*height/6,-1*height/6);
+
+            QSvgRenderer render;
+            render.load(pixmapPath);
+            render.render(&painter,rect);
 
         }
     }
@@ -4270,6 +4290,58 @@ int TextEdit::getHighLightRowContentLineNum(int iLine)
         iLine++;
         return iLine;
     }
+}
+
+void TextEdit::paintCodeFlod(QPainter *painter, QRect rect, bool flod)
+{
+    painter->save();
+
+    painter->translate(rect.width()/2.0,rect.height()/2.0);
+    painter->translate(0,rect.y());
+    QPainterPath path;
+    //QPointF p1(rect.x()+rect.width() * (1.0/3),rect.y()+rect.height()*(1.0/3));
+    //QPointF p2(rect.x()+rect.width() * (2.0/3),rect.y()+rect.height()*(1.0/3));
+    //QPointF p3(rect.x()+rect.width() * (1.0/2),rect.y()+rect.height()*(1.5/3));
+    QPointF p1(-1*rect.width() * (1.0/6),-1*rect.height()*(1.0/6));
+    QPointF p2(rect.width() * (1.0/6),-1*rect.height()*(1.0/6));
+    QPointF p3(0,0);
+    path.moveTo(p1);
+    path.lineTo(p3);
+    path.lineTo(p2);
+
+    if(flod)
+        painter->rotate(-90);
+
+    QPen pen(this->palette().foreground(),2);
+    painter->setPen(pen);
+    painter->setRenderHint(QPainter::Antialiasing, true);
+    painter->drawPath(path);
+
+    painter->restore();
+}
+
+QColor TextEdit::getBackColor()
+{
+    return m_backgroundColor;
+}
+
+int TextEdit::lineNumberAreaWidth()
+{
+    int digits = 1;
+    int max = qMax(1, this->document()->blockCount());
+    while (max >= 10) {
+        max /= 10;
+        ++digits;
+    }
+
+    return  fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits ;
+}
+
+void TextEdit::updateLeftWidgetWidth(int width)
+{
+    m_pLeftAreaWidget->m_pFlodArea->setFixedWidth(width);
+    m_pLeftAreaWidget->m_pLineNumberArea->setFixedWidth(lineNumberAreaWidth());
+    m_pLeftAreaWidget->m_pBookMarkArea->setFixedWidth(width);
 }
 
 int TextEdit::getLinePosYByLineNum(int iLine)

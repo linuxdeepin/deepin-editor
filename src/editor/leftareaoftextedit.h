@@ -38,6 +38,8 @@ public:
     void updateBookMark();
     void updateCodeFlod();
     void updateAll();
+protected:
+    void paintEvent(QPaintEvent *event);
 public:
     LineNumberArea *m_pLineNumberArea = nullptr;
     BookMarkWidget *m_pBookMarkArea = nullptr;

@@ -537,6 +537,11 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
                              wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
     connect(wrapper->textEditor(), &QPlainTextEdit::cursorPositionChanged, wrapper->textEditor(), &TextEdit::cursorPositionChanged);
 
+    connect(wrapper->textEditor(),&QPlainTextEdit::textChanged,wrapper->textEditor(),[=]()
+    {
+       wrapper->UpdateBottomBarWordCnt(wrapper->textEditor()->characterCount());
+    });
+
 
     // add wrapper to this window.
     m_tabbar->addTabWithIndex(index, filepath, tabName);

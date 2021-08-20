@@ -271,6 +271,15 @@ public:
     bool isNeedShowFoldIcon(QTextBlock block);
     int  getHighLightRowContentLineNum(int iLine);
 
+    //代码折叠绘制
+    void paintCodeFlod(QPainter* painter,QRect rect,bool isFlod = false);
+    //获取背景颜色
+    QColor getBackColor();
+    //更新左侧widget宽度
+    void updateLeftWidgetWidth(int width);
+    //获取行号宽度
+    int lineNumberAreaWidth();
+
     /**
      * @author liumaochuan ut000616
      * @brief getLinePosYByLineNum 根据行号获得行Y轴坐标
