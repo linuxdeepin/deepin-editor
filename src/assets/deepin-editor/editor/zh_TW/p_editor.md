@@ -78,9 +78,9 @@
 3. 在列印預覽介面，單擊 **進階設定**，可配置紙張大小、列印方式等相關參數。
 4. 單擊 **列印** 即可將檔案發送到印表機列印。
 
-![print](fig/print setting.png)
+![print](fig/print_setting.png)
 
-![print](fig/advanced setting.png)
+![print](fig/advanced_setting.png)
 
 ## 編輯文字
 
