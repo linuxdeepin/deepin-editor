@@ -2182,6 +2182,7 @@ void TextEdit::removeKeywords()
 
 bool TextEdit::highlightKeyword(QString keyword, int position)
 {
+    Q_UNUSED(position)
     m_findMatchSelections.clear();
     updateHighlightLineSelection();
     updateCursorKeywordSelection(keyword, true);
@@ -2195,7 +2196,10 @@ bool TextEdit::highlightKeywordInView(QString keyword)
 {
     m_findMatchSelections.clear();
     bool yes = updateKeywordSelectionsInView(keyword, m_findMatchFormat, &m_findMatchSelections);
-    setExtraSelections(m_findMatchSelections);
+    // 直接设置 setExtraSelections 会导致无法显示颜色标记，调用 renderAllSelections 进行显示更新
+    // setExtraSelections(m_findMatchSelections);
+    renderAllSelections();
+
     return yes;
 }
 
@@ -2343,28 +2347,78 @@ bool TextEdit::searchKeywordSeletion(QString keyword, QTextCursor cursor, bool f
 
 void TextEdit::renderAllSelections()
 {
-    QList<QTextEdit::ExtraSelection> selections;
+    QList<QTextEdit::ExtraSelection> finalSelections;
+    QList<QPair<QTextEdit::ExtraSelection, qint64>> selectionsSortList;
+
+    // 标记当前行的浅灰色
     if (m_HightlightYes)
-        selections.append(m_currentLineSelection);
-    else {
-        selections.clear();
-    }
-    selections.append(m_markAllSelection);
-    selections.append(m_wordMarkSelections);
-    selections.append(m_findMatchSelections);
-    selections.append(m_findHighlightSelection);
-    selections.append(m_wordUnderCursorSelection);
-    selections.append(m_beginBracketSelection);
-    selections.append(m_endBracketSelection);
-    selections.append(m_markFoldHighLightSelections);
-    selections.append(m_altModSelections);
+        finalSelections.append(m_currentLineSelection);
+    // 此处代码无作用，去除
+    // else {
+    //     selections.clear();
+    // }
 
-    QMap<QString, QList<QTextEdit::ExtraSelection>>::Iterator it;
+    // 按代码逻辑，推测m_markAllSelection 用于还原所有文本的背景颜色, 实际不需要
+    // 考虑到各平台运行之间可能存在运行差异，暂不清除
+    // finalSelections.append(m_markAllSelection);
+
+    // 选中区域的颜色标记，先加入 selectionsSortList
+    // 通过时间戳升序排序后，加入到 finalSelections 中
+    selectionsSortList.append(m_wordMarkSelections);
+
+    // Find 和 Replace 高亮选中，移动到最后放入到 finalSelections 中
+    // 保证此高亮状态，若存在，一定可以被用户看到
+    // selections.append(m_findMatchSelections);
+    // selections.append(m_findHighlightSelection);
+
+    // 不再使用，注释掉
+    // selections.append(m_wordUnderCursorSelection);
+
+    // 标记括号移动到处理完颜色标记后，插入到 finalSelections 中
+    // selections.append(m_beginBracketSelection);
+    // selections.append(m_endBracketSelection);
+
+    // 仅对代码文件有效，标记代码中的代码段，例如函数内{}所有内容
+    // 移动到处理完颜色标记后，插入到 finalSelections 中，插入晚于括号
+    // selections.append(m_markFoldHighLightSelections);
+
+    // Alt选中区域的高亮, 移动到排序后面加入
+    // selections.append(m_altModSelections);
+
+    // 将颜色标记，标记所有的 selections 加入到 selectionsSortList 中， 后边将进行排序
+    QMap<QString, QList<QPair<QTextEdit::ExtraSelection, qint64>>>::Iterator it;
     for (it = m_mapKeywordMarkSelections.begin(); it != m_mapKeywordMarkSelections.end(); ++it) {
-        selections.append(it.value());
+        selectionsSortList.append(it.value());
     }
 
-    setExtraSelections(selections);
+    // 通过时间戳重新排序颜色标记功能的 selections
+    qSort(selectionsSortList.begin(), selectionsSortList.end(), [](const QPair<QTextEdit::ExtraSelection, qint64> &A,const QPair<QTextEdit::ExtraSelection, qint64> &B) {
+        return (A.second < B.second);
+    });
+
+    // 将排序后的颜色标记 selections 加入到 finalSelections 中
+    for(int i = 0; i < selectionsSortList.size(); i++){
+        finalSelections.append(selectionsSortList.at(i).first);
+    }
+
+    // 标记括号
+    finalSelections.append(m_beginBracketSelection);
+    finalSelections.append(m_endBracketSelection);
+
+    // 标记代码段
+    finalSelections.append(m_markFoldHighLightSelections);
+
+    // Alt选中区域的高亮
+    finalSelections.append(m_altModSelections);
+
+    // 查找替换的高亮需要放在最后
+    // Find 高亮
+    finalSelections.append(m_findMatchSelections);
+    // Replace 高亮
+    finalSelections.append(m_findHighlightSelection);
+
+    // 设置到 QPlainText 中进行渲染
+    setExtraSelections(finalSelections);
 }
 
 void TextEdit::updateMarkAllSelectColor()
@@ -2718,6 +2772,8 @@ bool TextEdit::setCursorKeywordSeletoin(int position, bool findNext)
 
 void TextEdit::cursorPositionChanged()
 {
+    // 以赋值形式，清空 Bracket 括号的selection
+    // m_beginBracketSelection 和 m_endBracketSelection 将在 updateHighlightBrackets 重新设置
     m_beginBracketSelection = QTextEdit::ExtraSelection();
     m_endBracketSelection = QTextEdit::ExtraSelection();
 
@@ -4593,8 +4649,13 @@ void TextEdit::updateSaveIndex()
     m_lastSaveIndex = m_pUndoStack->index();
 }
 
-void TextEdit::isMarkCurrentLine(bool isMark, QString strColor)
+void TextEdit::isMarkCurrentLine(bool isMark, QString strColor,  qint64 timeStamp)
 {
+    qint64 operationTimeStamp = timeStamp;
+    if(operationTimeStamp < 0) {
+        operationTimeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch();
+    }
+
     if (isMark) {
         QTextEdit::ExtraSelection selection;
         selection.cursor = textCursor();
@@ -4614,9 +4675,10 @@ void TextEdit::isMarkCurrentLine(bool isMark, QString strColor)
         }
         markOperation.cursor = selection.cursor;
 
-        m_markOperations.append(markOperation);
-        m_wordMarkSelections.append(selection);
-
+        m_markOperations.append(QPair<TextEdit::MarkOperation, qint64>(markOperation, operationTimeStamp));
+        m_wordMarkSelections.append(
+                    QPair<QTextEdit::ExtraSelection, qint64>
+                    (selection, operationTimeStamp));
     } else {
         clearMarksForTextCursor();
     }
@@ -4628,22 +4690,27 @@ void TextEdit::markAllKeywordInView()
         return;
     }
 
-    QList<TextEdit::MarkOperation>::iterator it;
+    QList<QPair<TextEdit::MarkOperation, qint64>>::iterator it;
 
     for (it = m_markOperations.begin(); it != m_markOperations.end(); ++it) {
-        if (MarkAllMatch == it->type) {
-            QString keyword = it->cursor.selectedText();
-            markKeywordInView(keyword, it->color);
-        } else if (MarkAll == it->type) {
-            markAllInView(it->color);
+        if (MarkAllMatch == it->first.type) {
+            QString keyword = it->first.cursor.selectedText();
+            markKeywordInView(keyword, it->first.color, it->second);
+        } else if (MarkAll == it->first.type) {
+            markAllInView(it->first.color, it->second);
         }
     }
 
     renderAllSelections();
 }
 
-bool TextEdit::markKeywordInView(QString keyword, QString color)
+bool TextEdit::markKeywordInView(QString keyword, QString color, qint64 timeStamp)
 {
+    qint64 operationTimeStamp = timeStamp;
+    if(operationTimeStamp < 0) {
+        operationTimeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch();
+    }
+
     if (keyword.isEmpty()) {
         return false;
     }
@@ -4654,45 +4721,76 @@ bool TextEdit::markKeywordInView(QString keyword, QString color)
 
     format.setBackground(QColor(color));
     ret = updateKeywordSelectionsInView(keyword, format, &listExtraSelection);
+
+    // 构建带有时间戳的 listExtraSelectionWithTimeStamp
+    QList<QPair<QTextEdit::ExtraSelection, qint64>> listExtraSelectionWithTimeStamp;
+    for(int i = 0; i < listExtraSelection.size(); i++) {
+        listExtraSelectionWithTimeStamp.append(QPair<QTextEdit::ExtraSelection, qint64>
+                                               (listExtraSelection.at(i), operationTimeStamp));
+    }
+
     if (ret) {
-        m_mapKeywordMarkSelections[keyword] = listExtraSelection;
+        m_mapKeywordMarkSelections[keyword] = listExtraSelectionWithTimeStamp;
     }
 
     return ret;
 }
 
-void TextEdit::markAllInView(QString color)
+void TextEdit::markAllInView(QString color, qint64 timeStamp)
 {
-    QTextEdit::ExtraSelection selection;
-    QList<QTextEdit::ExtraSelection> listSelections;
-    QScrollBar *pScrollBar = verticalScrollBar();
-    QPoint startPoint = QPointF(0, 0).toPoint();
-    QTextBlock beginBlock = cursorForPosition(startPoint).block();
-    QTextBlock endBlock;
-
-    if (pScrollBar->maximum() > 0) {
-        QPoint endPoint = QPointF(0, 1.5 * height()).toPoint();
-        endBlock = cursorForPosition(endPoint).block();
-    } else {
-        endBlock = document()->lastBlock();
+    // 增加时间戳
+    qint64 operationTimeStamp = timeStamp;
+    if(operationTimeStamp < 0) {
+        operationTimeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch();
     }
 
+    QTextEdit::ExtraSelection selection;
+    QList<QPair<QTextEdit::ExtraSelection, qint64>> listSelections;
+
+    // 此处选中操作存在错误
+    // QScrollBar *pScrollBar = verticalScrollBar();
+    // QPoint startPoint = QPointF(0, 0).toPoint();
+    // QTextBlock beginBlock = cursorForPosition(startPoint).block();
+    // QTextBlock endBlock;
+    //
+    // if (pScrollBar->maximum() > 0) {
+    //     QPoint endPoint = QPointF(0, 1.5 * height()).toPoint();
+    //     endBlock = cursorForPosition(endPoint).block();
+    // } else {
+    //     endBlock = document()->lastBlock();
+    // }
+
+    // selection.cursor = textCursor();
+    // selection.cursor.setPosition(beginBlock.position(), QTextCursor::MoveAnchor);
+    // selection.cursor.setPosition(endBlock.position() + endBlock.length() - 1, QTextCursor::KeepAnchor);
+
+    // 标准 QTextCursor 选中操作
+    QTextCursor textCursor(document());
+    textCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+    textCursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+
     selection.format.setBackground(QColor(color));
-    selection.cursor = textCursor();
-    selection.cursor.setPosition(beginBlock.position(), QTextCursor::MoveAnchor);
-    selection.cursor.setPosition(endBlock.position() + endBlock.length() - 1, QTextCursor::KeepAnchor);
-    listSelections.append(selection);
+    selection.cursor = textCursor;
+
+    listSelections.append(QPair<QTextEdit::ExtraSelection, qint64>
+                          (selection, operationTimeStamp));
+
     m_mapKeywordMarkSelections[TEXT_EIDT_MARK_ALL] = listSelections;
 }
 
 void TextEdit::isMarkAllLine(bool isMark, QString strColor)
 {
+    // 增加时间戳
+    qint64 timeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch();
+
     if (isMark) {
         QString selectionText = textCursor().selectedText();
         if (selectionText.length() != 0 && selectionText.length() < (document()->characterCount() - 1)) {
-            QList<QTextEdit::ExtraSelection> wordMarkSelections = m_wordMarkSelections;
+            // 没有使用的变量，去除
+            // QList<QTextEdit::ExtraSelection> wordMarkSelections = m_wordMarkSelections;
             QList<QTextEdit::ExtraSelection> listExtraSelection;
-            QList<QTextEdit::ExtraSelection> listSelections;
+            // 没有使用的变量，去除
+            // QList<QTextEdit::ExtraSelection> listSelections;
             QTextEdit::ExtraSelection  extraSelection;
             QTextCharFormat format;
             format.setBackground(QColor(strColor));
@@ -4703,19 +4801,36 @@ void TextEdit::isMarkAllLine(bool isMark, QString strColor)
             markOperation.type = MarkAllMatch;
             markOperation.cursor = textCursor();
             markOperation.color = strColor;
-            m_markOperations.append(markOperation);
+            m_markOperations.append(QPair<TextEdit::MarkOperation, qint64>(markOperation, timeStamp));
 
             if (updateKeywordSelectionsInView(selectionText, format, &listExtraSelection)) {
-                m_mapKeywordMarkSelections[selectionText] = listExtraSelection;
+
+                QList<QPair<QTextEdit::ExtraSelection, qint64>> listExtraSelectionWithTimeStamp;
+                for(int i = 0; i < listExtraSelection.size(); i++) {
+                    listExtraSelectionWithTimeStamp.append(QPair<QTextEdit::ExtraSelection, qint64>
+                                                           (listExtraSelection.at(i), timeStamp));
+                }
+
+                m_mapKeywordMarkSelections[selectionText] = listExtraSelectionWithTimeStamp;
+            } else {
+                // 选中部分在文档中仅此一个，查找标记失败了，进行补充处理
+                QTextEdit::ExtraSelection extraSelect;
+                listExtraSelection.append(extraSelection);
+                QList<QPair<QTextEdit::ExtraSelection, qint64>> listExtraSelectionWithTimeStamp;
+                for(int i = 0; i < listExtraSelection.size(); i++) {
+                    listExtraSelectionWithTimeStamp.append(QPair<QTextEdit::ExtraSelection, qint64>
+                                                           (listExtraSelection.at(i), timeStamp));
+                }
+
+                m_mapKeywordMarkSelections.insert(selectionText, listExtraSelectionWithTimeStamp);
             }
 
         } else if (!textCursor().hasSelection() || selectionText.length() == (document()->characterCount() - 1)) {
             TextEdit::MarkOperation markOperation;
             markOperation.type = MarkAll;
             markOperation.color = strColor;
-            m_markOperations.append(markOperation);
-
-            markAllInView(strColor);
+            m_markOperations.append(QPair<TextEdit::MarkOperation, qint64>(markOperation, timeStamp));
+            markAllInView(strColor, timeStamp);
         }
     } else {
         m_markOperations.clear();
@@ -4739,17 +4854,39 @@ void TextEdit::cancelLastMark()
         return;
     }
 
-    switch (m_markOperations.last().type) {
+    switch (m_markOperations.last().first.type) {
         case MarkOnce:
         case MarkLine: {
             if (!m_wordMarkSelections.isEmpty()) {
-                m_wordMarkSelections.removeLast();
+                // m_wordMarkSelections.removeLast();
+				// 考虑到可能的插入操作，需要同步清理时间戳一样的selection
+                const qint64 operationTimeStamp = m_markOperations.last().second;
+                for(int i = 0; i < m_wordMarkSelections.size(); i++) {
+                    if(operationTimeStamp == m_wordMarkSelections.at(i).second) {
+                        m_wordMarkSelections.removeAt(i);
+                        i--;
+                    }
+                }
             }
             break;
         }
 
         case MarkAllMatch: {
-            QString keyword = m_markOperations.last().cursor.selectedText();
+            // QString keyword = m_markOperations.last().first.cursor.selectedText();
+            QString keyword;
+            qint64 timeStamp = m_markOperations.last().second;
+            // 使用时间戳查找 keyword
+            QMap<QString, QList<QPair<QTextEdit::ExtraSelection, qint64>>>::Iterator it;
+            for (it = m_mapKeywordMarkSelections.begin(); it != m_mapKeywordMarkSelections.end(); ++it) {
+                if(it.value().size() > 0){
+                    qint64 itsTimeStamp = it.value().first().second;
+                    if(itsTimeStamp == timeStamp) {
+                        keyword = it.key();
+                        break;
+                    }
+                }
+            }
+
             if (m_mapKeywordMarkSelections.contains(keyword)) {
                 m_mapKeywordMarkSelections.remove(keyword);
             }
@@ -4766,6 +4903,16 @@ void TextEdit::cancelLastMark()
     }
 
     m_markOperations.removeLast();
+
+    // 如果在标记颜色操作后，更改文本内容，如果存在残留，补充一个清除处理
+    if(m_markOperations.isEmpty() &&
+            (m_wordMarkSelections.size() > 0 || m_mapKeywordMarkSelections.size() > 0)) {
+        qWarning() << __FUNCTION__ << __LINE__ << " cancle mark color operation,"
+                   << "find exist remain selections, will clear!";
+        m_wordMarkSelections.clear();
+        m_mapKeywordMarkSelections.clear();
+    }
+
     renderAllSelections();
 }
 
@@ -4773,7 +4920,7 @@ bool TextEdit::clearMarkOperationForCursor(QTextCursor cursor)
 {
     bool bRet = false;
     for (int i = m_markOperations.size() - 1; i >= 0; --i) {
-        if (m_markOperations.at(i).cursor == cursor) {
+        if (m_markOperations.at(i).first.cursor == cursor) {
             m_markOperations.removeAt(i);
             bRet = true;
             break;
@@ -4790,7 +4937,7 @@ bool TextEdit::clearMarksForTextCursor()
     QTextCursor textcursor = textCursor();
 
     for (int i = m_wordMarkSelections.size() - 1; i >= 0; --i) {
-        cursor = m_wordMarkSelections.at(i).cursor;
+        cursor = m_wordMarkSelections.at(i).first.cursor;
         if (textcursor.hasSelection()) {
             if (textcursor == cursor) {
                 bFind = true;
@@ -4825,7 +4972,7 @@ void TextEdit::markSelectWord()
 {
     bool isFind  = false;
     for (int i = 0 ; i < m_wordMarkSelections.size(); ++i) {
-        QTextCursor curson = m_wordMarkSelections.at(i).cursor;
+        QTextCursor curson = m_wordMarkSelections.at(i).first.cursor;
         curson.movePosition(QTextCursor::EndOfLine);
         QTextCursor currentCurson = textCursor();
         currentCurson.movePosition(QTextCursor::EndOfLine);
@@ -4864,7 +5011,7 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
         nCurrentPos = 0;///< 当前光标位置
     QTextEdit::ExtraSelection selection;///< 指定文本格式
     QList<QTextEdit::ExtraSelection> listSelections;///< 指定文本格式列表
-    QList<QTextEdit::ExtraSelection> wordMarkSelections = m_wordMarkSelections;///< 标记列表
+    QList<QPair<QTextEdit::ExtraSelection, qint64>> wordMarkSelections = m_wordMarkSelections;///< 标记列表
     QColor strColor;///< 指定文本颜色格式
     nCurrentPos = textCursor().position();
 
@@ -4875,9 +5022,9 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
         //寻找要移除标记的index
         for (int i = 0; i < wordMarkSelections.count(); i++) {
 
-            nEndPos = wordMarkSelections.value(i).cursor.selectionEnd();
-            nStartPos = wordMarkSelections.value(i).cursor.selectionStart();
-            strColor = wordMarkSelections.value(i).format.background().color();
+            nEndPos = wordMarkSelections.value(i).first.cursor.selectionEnd();
+            nStartPos = wordMarkSelections.value(i).first.cursor.selectionStart();
+            strColor = wordMarkSelections.value(i).first.format.background().color();
 
             //如果有文字被选择
             if (m_nSelectEndLine != -1) {
@@ -4889,24 +5036,30 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
             } else {
 
                 //如果标记内容全部被删除
-                if (wordMarkSelections.value(i).cursor.selection().toPlainText().isEmpty()) {
-                    m_wordMarkSelections.removeAt(i);
+                if (wordMarkSelections.value(i).first.cursor.selection().toPlainText().isEmpty()) {
+                    // 此时 remove m_wordMarkSelections中的元素
+                    // 会造成 m_wordMarkSelections 和 wordMarkSelections的长度不一致
+                    // m_wordMarkSelections.removeAt(i);
+                    listRemoveItem.append(i);
                 }
             }
         }
 
         //从标记列表中移除标记
         for (int j = 0; j < listRemoveItem.count(); j++) {
-            m_wordMarkSelections.removeAt(listRemoveItem.value(j) - j);
+            // 不应该-j
+            // m_wordMarkSelections.removeAt(listRemoveItem.value(j) - j);
+            m_wordMarkSelections.removeAt(listRemoveItem.value(j));
         }
     }
 
     //如果是添加字符
     if (charsAdded > 0) {
         for (int i = 0; i < wordMarkSelections.count(); i++) {
-            nEndPos = wordMarkSelections.value(i).cursor.selectionEnd();
-            nStartPos = wordMarkSelections.value(i).cursor.selectionStart();
-            strColor = wordMarkSelections.value(i).format.background().color();
+            nEndPos = wordMarkSelections.value(i).first.cursor.selectionEnd();
+            nStartPos = wordMarkSelections.value(i).first.cursor.selectionStart();
+            strColor = wordMarkSelections.value(i).first.format.background().color();
+            qint64 timeStamp = wordMarkSelections.value(i).second;
 
             //如果字符添加在标记中
             if (nCurrentPos > nStartPos && nCurrentPos < nEndPos) {
@@ -4923,7 +5076,8 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
                     //添加第一段标记
                     selection.cursor.setPosition(nStartPos, QTextCursor::MoveAnchor);
                     selection.cursor.setPosition(nCurrentPos - m_qstrCommitString.count(), QTextCursor::KeepAnchor);
-                    m_wordMarkSelections.insert(i, selection);
+                    m_wordMarkSelections.insert(i, QPair<QTextEdit::ExtraSelection, qint64>
+                                                (selection, timeStamp));
 
                     preSelection.cursor = selection.cursor;
                     preSelection.format = selection.format;
@@ -4931,7 +5085,8 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
                     //添加第二段标记
                     selection.cursor.setPosition(nCurrentPos, QTextCursor::MoveAnchor);
                     selection.cursor.setPosition(nEndPos, QTextCursor::KeepAnchor);
-                    m_wordMarkSelections.insert(i + 1, selection);
+                    m_wordMarkSelections.insert(i + 1,  QPair<QTextEdit::ExtraSelection, qint64>
+                                                (selection, timeStamp));
 
                     m_bIsInputMethod = false;
                 } else {
@@ -4939,7 +5094,8 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
                     //添加第一段标记
                     selection.cursor.setPosition(nStartPos, QTextCursor::MoveAnchor);
                     selection.cursor.setPosition(from, QTextCursor::KeepAnchor);
-                    m_wordMarkSelections.insert(i, selection);
+                    m_wordMarkSelections.insert(i, QPair<QTextEdit::ExtraSelection, qint64>
+                                                (selection, timeStamp));
 
                     preSelection.cursor = selection.cursor;
                     preSelection.format = selection.format;
@@ -4947,7 +5103,8 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
                     //添加第二段标记
                     selection.cursor.setPosition(nCurrentPos, QTextCursor::MoveAnchor);
                     selection.cursor.setPosition(nEndPos, QTextCursor::KeepAnchor);
-                    m_wordMarkSelections.insert(i + 1, selection);
+                    m_wordMarkSelections.insert(i + 1, QPair<QTextEdit::ExtraSelection, qint64>
+                                                (selection, timeStamp));
                 }
 
                 bool bIsFind = false;
@@ -4956,8 +5113,8 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
                 for (int j = 0; j < m_mapWordMarkSelections.count(); j++) {
                     auto list = m_mapWordMarkSelections.value(j);
                     for (int k = 0; k < list.count(); k++) {
-                        if (list.value(k).cursor == wordMarkSelections.value(i).cursor
-                                && list.value(k).format == wordMarkSelections.value(i).format) {
+                        if (list.value(k).cursor == wordMarkSelections.value(i).first.cursor
+                                && list.value(k).format == wordMarkSelections.value(i).first.format) {
                             list.removeAt(k);
                             listSelections = list;
                             listSelections.insert(k, preSelection);
@@ -4989,14 +5146,15 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
                     selection.cursor.setPosition(from, QTextCursor::KeepAnchor);
                 }
 
-                m_wordMarkSelections.insert(i, selection);
+                m_wordMarkSelections.insert(i, QPair<QTextEdit::ExtraSelection, qint64>
+                                            (selection, timeStamp));
 
                 bool bIsFind = false;
                 for (int j = 0; j < m_mapWordMarkSelections.count(); j++) {
                     auto list = m_mapWordMarkSelections.value(j);
                     for (int k = 0; k < list.count(); k++) {
-                        if (list.value(k).cursor == wordMarkSelections.value(i).cursor
-                                && list.value(k).format == wordMarkSelections.value(i).format) {
+                        if (list.value(k).cursor == wordMarkSelections.value(i).first.cursor
+                                && list.value(k).format == wordMarkSelections.value(i).first.format) {
                             list.removeAt(k);
                             listSelections = list;
                             listSelections.insert(k, selection);
@@ -5400,6 +5558,15 @@ void TextEdit::appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSel
                                     , QTextEdit::ExtraSelection selection, QString strColor
                                     , QList<QTextEdit::ExtraSelection> *listSelections)
 {
+// 没有使用的方法，应该去除，降低维护成本
+// 由于需要处理对应的单元测试，暂时不完全移除此函数，后期将统一进行处理
+#if 1
+    // 去除参数未使用警告
+    Q_UNUSED(wordMarkSelections)
+    Q_UNUSED(selection)
+    Q_UNUSED(strColor)
+    Q_UNUSED(listSelections)
+#else
     //如果文档中有标记
     if (wordMarkSelections.count() > 0) {
         bool bIsContains = false;///< 是否占用已有标记
@@ -5714,6 +5881,7 @@ void TextEdit::appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSel
         m_wordMarkSelections.append(selection);
         listSelections->append(selection);
     }
+#endif
 }
 
 void TextEdit::onSelectionArea()

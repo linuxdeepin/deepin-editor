@@ -220,8 +220,8 @@ public:
     bool clearMarkOperationForCursor(QTextCursor cursor);
     bool clearMarksForTextCursor();
     void markAllKeywordInView();
-    bool markKeywordInView(QString keyword, QString color);
-    void markAllInView(QString color);
+    bool markKeywordInView(QString keyword, QString color, qint64 timeStamp = -1);
+    void markAllInView(QString color, qint64 timeStamp = -1);
     void toggleMarkSelections();
 
     /**
@@ -372,7 +372,7 @@ public:
      * @param isMark true为标记，false为取消标记
      * @param strColor 标记格式
      */
-    void isMarkCurrentLine(bool isMark, QString strColor = "");
+    void isMarkCurrentLine(bool isMark, QString strColor = "", qint64 timeStamp = -1);
 
     /**
      * @author liumaochuan ut000616
@@ -421,7 +421,7 @@ public:
      * @param listSelections 添加的指定字符格式列表
      */
     void appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSelections, QTextEdit::ExtraSelection selection
-                              , QString strColor, QList<QTextEdit::ExtraSelection> *listSelections);
+                             , QString strColor, QList<QTextEdit::ExtraSelection> *listSelections);
 
     void setCursorStart(int pos);
     void writeEncodeHistoryRecord();
@@ -582,13 +582,14 @@ private:
     QList<QTextEdit::ExtraSelection> m_findMatchSelections;///< “查找”的字符格式（所有查找的字符）
     QTextEdit::ExtraSelection m_beginBracketSelection;
     QTextEdit::ExtraSelection m_endBracketSelection;
-    QTextEdit::ExtraSelection m_currentLineSelection;
+    QTextEdit::ExtraSelection m_currentLineSelection;///< 光标所在当前行的样式
     QTextEdit::ExtraSelection m_findHighlightSelection;///< “查找”的字符格式（当前位置字符）
-    QTextEdit::ExtraSelection m_wordUnderCursorSelection;
-    QList<QTextEdit::ExtraSelection> m_wordMarkSelections;///< 记录标记的列表（分行记录）
+    // 不再使用
+    //QTextEdit::ExtraSelection m_wordUnderCursorSelection;
+    QList<QPair<QTextEdit::ExtraSelection, qint64>> m_wordMarkSelections;///< 记录标记的列表（分行记录）
     QMap<int,QList<QTextEdit::ExtraSelection>> m_mapWordMarkSelections;///< 记录标记的表（按标记动作记录）
-    QList<TextEdit::MarkOperation> m_markOperations;    ///记录所有标记操作
-    QMap<QString, QList<QTextEdit::ExtraSelection>> m_mapKeywordMarkSelections; ///记录关键字对应的全文标记
+    QList<QPair<TextEdit::MarkOperation, qint64>> m_markOperations;    ///记录所有标记操作
+    QMap<QString, QList<QPair<QTextEdit::ExtraSelection, qint64>>> m_mapKeywordMarkSelections; ///记录关键字对应的全文标记
     QTextEdit::ExtraSelection m_markAllSelection;///< “标记所有”的字符格式
     QList<QTextEdit::ExtraSelection> m_markFoldHighLightSelections;
 
