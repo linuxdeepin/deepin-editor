@@ -29,7 +29,7 @@ TEST_F(test_insertblockbytextcommond, InsertBlockByTextCommond)
     wrapper->deleteLater();
     edit->deleteLater();
 
-    assert(1==1);
+    
 }
 
 TEST_F(test_insertblockbytextcommond, redo)
@@ -51,7 +51,7 @@ TEST_F(test_insertblockbytextcommond, redo)
     com=nullptr;
     edit->deleteLater();
 
-    assert(1==1);
+    
 }
 
 
@@ -73,7 +73,7 @@ TEST_F(test_insertblockbytextcommond, undo)
     com=nullptr;
     edit->deleteLater();
 
-    assert(1==1);
+    
 }
 
 
@@ -95,7 +95,7 @@ TEST_F(test_insertblockbytextcommond, treat)
     com=nullptr;
     edit->deleteLater();
 
-    assert(1==1);
+    
 }
 
 
@@ -118,6 +118,6 @@ TEST_F(test_insertblockbytextcommond, insertByBlock)
     com=nullptr;
     edit->deleteLater();
 
-    assert(1==1);
+    
 }
 

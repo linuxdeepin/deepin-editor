@@ -45,7 +45,7 @@ TEST_F(test_uncommentselection, isValid)
     Comment::CommentDefinition numm;
     numm.isValid();
 
-    assert(1==1);
+    
 }
 //bool hasSingleLineStyle() const;
 TEST_F(test_uncommentselection, hasSingleLineStyle)
@@ -53,7 +53,7 @@ TEST_F(test_uncommentselection, hasSingleLineStyle)
     Comment::CommentDefinition numm;
     numm.hasSingleLineStyle();
 
-    assert(1==1);
+    
 }
 //bool hasMultiLineStyle() const;
 TEST_F(test_uncommentselection, hasMultiLineStyle)
@@ -61,6 +61,6 @@ TEST_F(test_uncommentselection, hasMultiLineStyle)
     Comment::CommentDefinition numm;
     numm.hasMultiLineStyle();
 
-    assert(1==1);
+    
 }
 

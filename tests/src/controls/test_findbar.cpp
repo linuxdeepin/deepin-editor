@@ -27,7 +27,7 @@ test_findbar::test_findbar()
 TEST_F(test_findbar, FindBar)
 {
     FindBar findBar(nullptr);
-    assert(1==1);
+    
 }
 
 //bool isFocus();
@@ -35,7 +35,7 @@ TEST_F(test_findbar, isFocus)
 {
     FindBar *findBar = new FindBar();
     findBar->isFocus();
-    assert(1==1);
+    
 }
 
 //void focus();
@@ -43,7 +43,7 @@ TEST_F(test_findbar, focus)
 {
     FindBar *findBar = new FindBar();
     findBar->focus();
-    assert(1==1);
+    
 }
 
 //void activeInput(QString text, QString file, int row, int column, int scrollOffset);
@@ -51,7 +51,7 @@ TEST_F(test_findbar, activeInput)
 {
     FindBar *findBar = new FindBar();
     findBar->activeInput("aa","aa",1,1,1);
-    assert(1==1);
+    
 }
 
 //void setMismatchAlert(bool isAlert);
@@ -59,7 +59,7 @@ TEST_F(test_findbar, setMismatchAlert)
 {
     FindBar *findBar = new FindBar();
     findBar->setMismatchAlert(true);
-    assert(1==1);
+    
 }
 
 //void receiveText(QString t);
@@ -67,7 +67,7 @@ TEST_F(test_findbar, receiveText)
 {
     FindBar *findBar = new FindBar();
     findBar->receiveText("aa");
-    assert(1==1);
+    
 }
 
 //void setSearched(bool _);
@@ -75,7 +75,7 @@ TEST_F(test_findbar, setSearched)
 {
     FindBar *findBar = new FindBar();
     findBar->setSearched(true);
-    assert(1==1);
+    
 }
 
 //void findPreClicked();
@@ -85,7 +85,7 @@ TEST_F(test_findbar, findPreClicked)
     findBar->findPreClicked();
 
     findBar->findPreClicked();
-    assert(1==1);
+    
 }
 
 //public slots:
@@ -94,7 +94,7 @@ TEST_F(test_findbar, findCancel)
 {
     FindBar *findBar = new FindBar();
     findBar->findCancel();
-    assert(1==1);
+    
 }
 
 //void handleContentChanged();
@@ -104,7 +104,7 @@ TEST_F(test_findbar, handleContentChanged)
     findBar->handleContentChanged();
     findBar->handleFindPrev();
     findBar->handleFindNext();
-    assert(1==1);
+    
 }
 
 //void slot_ifClearSearchWord();
@@ -112,7 +112,7 @@ TEST_F(test_findbar, handleContentChanged)
 //{
 //    FindBar *findBar = new FindBar();
 //    findBar->slot_ifClearSearchWord();
-//    assert(1==1);
+//    
 //}
 
 //protected:
@@ -125,7 +125,7 @@ TEST_F(test_findbar, hideEvent)
 
     findBar->deleteLater();
     delete event;
-    assert(1==1);
+    
 }
 
 //bool focusNextPrevChild(bool next) override;
@@ -133,7 +133,7 @@ TEST_F(test_findbar, focusNextPrevChild)
 {
     FindBar *findBar = new FindBar();
     findBar->focusNextPrevChild(true);
-    assert(1==1);
+    
 }
 
 //void keyPressEvent(QKeyEvent *e) override;
@@ -149,5 +149,5 @@ TEST_F(test_findbar, keyPressEvent)
 
     QKeyEvent *e2 = new QKeyEvent(QEvent::KeyPress,Qt::Key_Enter,Qt::NoModifier);
     findBar->keyPressEvent(e2);
-    assert(1==1);
+    
 }

@@ -765,3 +765,27 @@ bool Utils::activeWindowFromDock(quintptr winId)
 
     return bRet;
 }
+
+bool Utils::isShareDirAndReadOnly(const QString &filePath)
+{
+    bool ret = false;
+
+    const QString sharePath = "/var/lib/samba/usershares";
+    QDir shareDir(sharePath);
+    if(shareDir.exists()){
+        QFileInfo fileInfo(filePath);
+        auto name = fileInfo.dir().dirName();
+        if(shareDir.exists(name)){
+            QFile file(sharePath + "/" + name);
+            if (file.open(QIODevice::ReadOnly)) {
+                QString fileContent = file.readAll();
+                if(fileContent.contains(":R"))
+                    ret = true;
+                file.close();
+            }
+        }
+    }
+
+    return ret;
+
+}

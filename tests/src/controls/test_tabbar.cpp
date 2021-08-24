@@ -16,7 +16,7 @@ TEST_F(test_tabbar, Tabbar)
     tab->m_rightMenu = new QMenu();
     delete tab;tab=nullptr;
 
-    assert(1==1);
+    
 }
 
 TEST_F(test_tabbar, openFilesInWindow)
@@ -25,7 +25,7 @@ TEST_F(test_tabbar, openFilesInWindow)
     tab->addTab(".cache/deepin/deepin-editor","aabb");
 
     tab->deleteLater();
-    assert(1==1);
+    
 }
 //addTabWithIndex
 TEST_F(test_tabbar, addTabWithIndex)
@@ -34,7 +34,7 @@ TEST_F(test_tabbar, addTabWithIndex)
     tab->addTabWithIndex(0,".cache/deepin/deepin-editor","aabb");
 
     tab->deleteLater();
-    assert(1==1);
+    
 }
 //closeTab
 TEST_F(test_tabbar, closeTab)
@@ -51,7 +51,7 @@ TEST_F(test_tabbar, closeTab)
 
     window->deleteLater();
     wrapper->deleteLater();
-    assert(1==1);
+    
 }
 //void closeCurrentTab();
 TEST_F(test_tabbar, closeCurrentTab)
@@ -60,7 +60,7 @@ TEST_F(test_tabbar, closeCurrentTab)
     tab->closeCurrentTab();
 
     tab->deleteLater();
-    assert(1==1);
+    
 }
 //void closeOtherTabs();
 TEST_F(test_tabbar, closeOtherTabs)
@@ -69,7 +69,7 @@ TEST_F(test_tabbar, closeOtherTabs)
     tab->closeOtherTabs();
 
     tab->deleteLater();
-    assert(1==1);
+    
 }
 
 //void closeLeftTabs(const QString &filePath);
@@ -79,7 +79,7 @@ TEST_F(test_tabbar, closeLeftTabs)
     tab->closeLeftTabs("aa");
 
     tab->deleteLater();
-    assert(1==1);
+    
 }
 //void closeRightTabs(const QString &filePath);
 TEST_F(test_tabbar, closeRightTabs)
@@ -88,7 +88,7 @@ TEST_F(test_tabbar, closeRightTabs)
     tab->closeRightTabs("aa");
 
     tab->deleteLater();
-    assert(1==1);
+    
 }
 
 //void closeOtherTabsExceptFile(const QString &filePath);
@@ -98,7 +98,7 @@ TEST_F(test_tabbar, closeOtherTabsExceptFile)
     tab->closeOtherTabsExceptFile("aa");
 
     tab->deleteLater();
-    assert(1==1);
+    
 }
 //void updateTab(int index, const QString &filePath, const QString &tabName);
 TEST_F(test_tabbar, updateTab)
@@ -108,7 +108,7 @@ TEST_F(test_tabbar, updateTab)
     tab->updateTab(0,"/.cache/deepin/deepin-editor","aa");
 
     tab->deleteLater();
-    assert(1==1);
+    
 }
 //void previousTab();
 TEST_F(test_tabbar, previousTab)
@@ -118,7 +118,7 @@ TEST_F(test_tabbar, previousTab)
     tab->previousTab();
 
     tab->deleteLater();
-    assert(1==1);
+    
 }
 //void nextTab();
 TEST_F(test_tabbar, nextTab)
@@ -127,7 +127,7 @@ TEST_F(test_tabbar, nextTab)
     tab->nextTab();
 
     tab->deleteLater();
-    assert(1==1);
+    
 }
 
 //int indexOf(const QString &filePath);
@@ -138,7 +138,7 @@ TEST_F(test_tabbar, indexOf)
     tab->indexOf("/.cache/deepin/deepin-editor");
 
     tab->deleteLater();
-    assert(1==1);
+    
 }
 
 //QString currentName() const;
@@ -149,7 +149,7 @@ TEST_F(test_tabbar, currentName)
     tab->currentName();
 
     tab->deleteLater();
-    assert(1==1);
+    
 }
 //QString currentPath() const;
 TEST_F(test_tabbar, currentPath)
@@ -159,7 +159,7 @@ TEST_F(test_tabbar, currentPath)
     tab->currentPath();
 
     tab->deleteLater();
-    assert(1==1);
+    
 }
 //QString fileAt(int index) const;
 TEST_F(test_tabbar, fileAt)
@@ -169,7 +169,7 @@ TEST_F(test_tabbar, fileAt)
     tab->fileAt(0);
 
     tab->deleteLater();
-    assert(1==1);
+    
 }
 //QString textAt(int index) const;
 TEST_F(test_tabbar, textAt)
@@ -179,7 +179,7 @@ TEST_F(test_tabbar, textAt)
     tab->textAt(0);
 
     tab->deleteLater();
-    assert(1==1);
+    
 }
 
 //void setTabPalette(const QString &activeColor, const QString &inactiveColor);
@@ -190,7 +190,7 @@ TEST_F(test_tabbar, setTabPalette)
     tab->setTabPalette("red","red");
 
     tab->deleteLater();
-    assert(1==1);
+    
 }
 //void setBackground(const QString &startColor, const QString &endColor);
 TEST_F(test_tabbar, setBackground)
@@ -200,7 +200,7 @@ TEST_F(test_tabbar, setBackground)
     tab->setBackground("red","red");
 
     tab->deleteLater();
-    assert(1==1);
+    
 }
 //void setDNDColor(const QString &startColor, const QString &endColor);
 TEST_F(test_tabbar, setDNDColor)
@@ -210,7 +210,7 @@ TEST_F(test_tabbar, setDNDColor)
     tab->setDNDColor("red","red");
 
     tab->deleteLater();
-    assert(1==1);
+    
 }
 //bool canInsertFromMimeData(int index, const QMimeData *source) const;
 //bool eventFilter(QObject *, QEvent *event);
@@ -225,7 +225,7 @@ TEST_F(test_tabbar, eventFilter)
 
     tab->deleteLater();
 
-    assert(1==1);
+    
 }
 
 //QSize minimumTabSizeHint(int index) const;
@@ -237,7 +237,7 @@ TEST_F(test_tabbar, minimumTabSizeHint)
 
     tab->deleteLater();
 
-    assert(1==1);
+    
 }
 //QSize maximumTabSizeHint(int index) const;
 TEST_F(test_tabbar, maximumTabSizeHint)
@@ -248,7 +248,7 @@ TEST_F(test_tabbar, maximumTabSizeHint)
     tab->maximumTabSizeHint(0);
 
     tab->deleteLater();
-    assert(1==1);
+    
 }
 
 TEST_F(test_tabbar, createDragPixmapFromTab)
@@ -265,7 +265,7 @@ TEST_F(test_tabbar, createDragPixmapFromTab)
     window->deleteLater();
     wrapper->deleteLater();
 
-    assert(1==1);
+    
 }
 
 
@@ -283,7 +283,7 @@ TEST_F(test_tabbar, createMimeDataFromTab)
     window->deleteLater();
     wrapper->deleteLater();
 
-    assert(1==1);
+    
 }
 
 TEST_F(test_tabbar, insertFromMimeDataOnDragEnter)
@@ -303,7 +303,7 @@ TEST_F(test_tabbar, insertFromMimeDataOnDragEnter)
     window->deleteLater();
     wrapper->deleteLater();
 
-    assert(1==1);
+    
 }
 
 TEST_F(test_tabbar, insertFromMimeData)
@@ -323,7 +323,7 @@ TEST_F(test_tabbar, insertFromMimeData)
     window->deleteLater();
     wrapper->deleteLater();
 
-    assert(1==1);
+    
 }
 
 
@@ -344,7 +344,7 @@ TEST_F(test_tabbar, canInsertFromMimeData)
     window->deleteLater();
     wrapper->deleteLater();
 
-    assert(1==1);
+    
 }
 
 
@@ -364,7 +364,7 @@ TEST_F(test_tabbar, handleDragActionChanged)
     window->deleteLater();
     wrapper->deleteLater();
 
-    assert(1==1);
+    
 }
 
 TEST_F(test_tabbar, mousePressEvent)
@@ -384,7 +384,7 @@ TEST_F(test_tabbar, mousePressEvent)
     window->deleteLater();
     wrapper->deleteLater();
 
-    assert(1==1);
+    
 }
 
 TEST_F(test_tabbar, dropEvent)
@@ -408,7 +408,7 @@ TEST_F(test_tabbar, dropEvent)
     wrapper->deleteLater();
 
 
-    assert(1==1);
+    
 }
 
 TEST_F(test_tabbar, tabSizeHint)
@@ -425,7 +425,7 @@ TEST_F(test_tabbar, tabSizeHint)
     window->deleteLater();
     wrapper->deleteLater();
 
-    assert(1==1);
+    
 }
 
 TEST_F(test_tabbar, handleTabMoved)
@@ -442,7 +442,7 @@ TEST_F(test_tabbar, handleTabMoved)
     window->deleteLater();
     wrapper->deleteLater();
 
-    assert(1==1);
+    
 }
 
 TEST_F(test_tabbar, handleTabReleased)
@@ -460,7 +460,7 @@ TEST_F(test_tabbar, handleTabReleased)
     window->deleteLater();
     wrapper->deleteLater();
 
-    assert(1==1);
+    
 }
 
 TEST_F(test_tabbar, handleTabIsRemoved)
@@ -477,7 +477,7 @@ TEST_F(test_tabbar, handleTabIsRemoved)
     window->deleteLater();
     wrapper->deleteLater();
 
-    assert(1==1);
+    
 }
 
 TEST_F(test_tabbar, handleTabDroped)
@@ -497,7 +497,7 @@ TEST_F(test_tabbar, handleTabDroped)
     window->deleteLater();
     wrapper->deleteLater();
 
-    assert(1==1);
+    
 }
 
 TEST_F(test_tabbar, onTabDrapStart)
@@ -516,7 +516,7 @@ TEST_F(test_tabbar, onTabDrapStart)
     window->deleteLater();
     wrapper->deleteLater();
 
-    assert(1==1);
+    
 }
 
 TEST_F(test_tabbar, resizeEvent)
@@ -537,7 +537,7 @@ TEST_F(test_tabbar, resizeEvent)
     window->deleteLater();
     wrapper->deleteLater();
 
-    assert(1==1);
+    
 }
 
 

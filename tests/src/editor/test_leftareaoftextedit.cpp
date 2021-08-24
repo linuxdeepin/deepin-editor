@@ -28,7 +28,7 @@ TEST_F(test_leftareaoftextedit, LeftAreaTextEdit)
 {
     TextEdit *textEdit = new TextEdit;
     LeftAreaTextEdit *leftArea = new LeftAreaTextEdit(textEdit);
-    assert(1==1);
+    
 }
 
 //void lineNumberAreaPaintEvent(QPaintEvent *event);
@@ -38,7 +38,7 @@ TEST_F(test_leftareaoftextedit, lineNumberAreaPaintEvent)
     LeftAreaTextEdit *leftArea = new LeftAreaTextEdit(textEdit);
     QPaintEvent *event = new QPaintEvent(QRegion());
     leftArea->lineNumberAreaPaintEvent(event);
-    assert(1==1);
+    
 }
 
 //int lineNumberAreaWidth();
@@ -47,7 +47,7 @@ TEST_F(test_leftareaoftextedit, lineNumberAreaWidth)
     TextEdit *textEdit = new TextEdit;
     LeftAreaTextEdit *leftArea = new LeftAreaTextEdit(textEdit);
     leftArea->lineNumberAreaWidth();
-    assert(1==1);
+    
 }
 
 //void bookMarkAreaPaintEvent(QPaintEvent *event);
@@ -57,7 +57,7 @@ TEST_F(test_leftareaoftextedit, bookMarkAreaPaintEvent)
     LeftAreaTextEdit *leftArea = new LeftAreaTextEdit(textEdit);
     QPaintEvent *event = new QPaintEvent(QRegion());
     leftArea->bookMarkAreaPaintEvent(event);
-    assert(1==1);
+    
 }
 
 //void codeFlodAreaPaintEvent(QPaintEvent *event);
@@ -67,5 +67,5 @@ TEST_F(test_leftareaoftextedit, codeFlodAreaPaintEvent)
     LeftAreaTextEdit *leftArea = new LeftAreaTextEdit(textEdit);
     QPaintEvent *event = new QPaintEvent(QRegion());
     leftArea->codeFlodAreaPaintEvent(event);
-    assert(1==1);
+    
 }

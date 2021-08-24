@@ -421,6 +421,8 @@ bool EditWrapper::saveFile()
             return ok;
         }
     } else {
+        DMessageManager::instance()->sendMessage(this->window(), QIcon(":/images/warning.svg")
+                                                 , QString(tr("You do not have permission to save %1")).arg(file.fileName()));
         return false;
     }
 

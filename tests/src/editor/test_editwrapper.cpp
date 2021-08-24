@@ -36,7 +36,7 @@ test_editwrapper::test_editwrapper()
 TEST_F(test_editwrapper, EditWrapper)
 {
     EditWrapper *wrapper = new EditWrapper();
-    assert(1==1);
+    
 }
 
 //void clearAllFocus() 无实现;
@@ -46,7 +46,7 @@ TEST_F(test_editwrapper, setQuitFlag)
 {
     EditWrapper *wrapper = new EditWrapper();
     wrapper->setQuitFlag();
-    assert(1==1);
+    
 }
 
 //bool getFileLoading();
@@ -54,7 +54,7 @@ TEST_F(test_editwrapper, getFileLoading)
 {
     EditWrapper *wrapper = new EditWrapper();
     wrapper->getFileLoading();
-    assert(1==1);
+    
 }
 
 //void openFile(const QString &filepath,QString qstrTruePath,bool bIsTemFile = false);
@@ -65,7 +65,7 @@ TEST_F(test_editwrapper, openFile)
     wrapper->textEditor()->setSettings(s);
     wrapper->textEditor()->setWrapper(wrapper);
     wrapper->openFile("1.cpp","1.cpp");
-    assert(1==1);
+    
 }
 
 //bool saveFile();
@@ -73,7 +73,7 @@ TEST_F(test_editwrapper, saveFile)
 {
     EditWrapper *wrapper = new EditWrapper();
     wrapper->saveFile();
-    assert(1==1);
+    
 }
 
 //bool saveAsFile(const QString &newFilePath, QByteArray encodeName);
@@ -81,7 +81,7 @@ TEST_F(test_editwrapper, saveAsFile)
 {
     EditWrapper *wrapper = new EditWrapper();
     wrapper->saveAsFile("1.cpp","UTF-8");
-    assert(1==1);
+    
 }
 
 //void updatePath(const QString &file);
@@ -89,7 +89,7 @@ TEST_F(test_editwrapper, updatePath)
 {
     EditWrapper *wrapper = new EditWrapper();
     wrapper->updatePath("1.cpp");
-    assert(1==1);
+    
 }
 
 
@@ -100,7 +100,7 @@ TEST_F(test_editwrapper, hideWarningNotices)
 {
     EditWrapper *wrapper = new EditWrapper();
     wrapper->hideWarningNotices();
-    assert(1==1);
+    
 }
 
 //void checkForReload();
@@ -108,7 +108,7 @@ TEST_F(test_editwrapper, checkForReload)
 {
     EditWrapper *wrapper = new EditWrapper();
     wrapper->checkForReload();
-    assert(1==1);
+    
 }
 
 //void initToastPosition() 无实现;
@@ -118,7 +118,7 @@ TEST_F(test_editwrapper, showNotify)
 {
     EditWrapper *wrapper = new EditWrapper();
     wrapper->showNotify("aa");
-    assert(1==1);
+    
 }
 
 
@@ -127,7 +127,7 @@ TEST_F(test_editwrapper, setLineNumberShow)
 {
     EditWrapper *wrapper = new EditWrapper();
     wrapper->setLineNumberShow(true);
-    assert(1==1);
+    
 }
 
 //void setShowBlankCharacter(bool ok);
@@ -135,7 +135,7 @@ TEST_F(test_editwrapper, setShowBlankCharacter)
 {
     EditWrapper *wrapper = new EditWrapper();
     wrapper->setShowBlankCharacter(true);
-    assert(1==1);
+    
 }
 
 //BottomBar *bottomBar();
@@ -143,7 +143,7 @@ TEST_F(test_editwrapper, bottomBar)
 {
     EditWrapper *wrapper = new EditWrapper();
     wrapper->bottomBar();
-    assert(1==1);
+    
 }
 
 //QString filePath();
@@ -151,7 +151,7 @@ TEST_F(test_editwrapper, filePath)
 {
     EditWrapper *wrapper = new EditWrapper();
     wrapper->filePath();
-    assert(1==1);
+    
 }
 
 //TextEdit *textEditor() { return m_textEdit; }
@@ -159,7 +159,7 @@ TEST_F(test_editwrapper, textEditor)
 {
     EditWrapper *wrapper = new EditWrapper();
     wrapper->textEditor();
-    assert(1==1);
+    
 }
 
 //private:
@@ -172,7 +172,7 @@ TEST_F(test_editwrapper, saveDraftFile)
 {
     EditWrapper *wrapper = new EditWrapper();
     //wrapper->saveDraftFile();
-    assert(1==1);
+    
 }
 
 //void readFile(const QString &filePath);
@@ -180,7 +180,7 @@ TEST_F(test_editwrapper, readFile)
 {
     EditWrapper *wrapper = new EditWrapper();
     wrapper->readFile("aa");
-    assert(1==1);
+    
 }
 
 
@@ -194,7 +194,7 @@ TEST_F(test_editwrapper, handleFileLoadFinished)
     wrapper->textEditor()->setSettings(s);
     wrapper->textEditor()->setWrapper(wrapper);
     wrapper->handleFileLoadFinished("UTF-8","aa");
-    assert(1==1);
+    
 }
 
 ////重新加载文件编码 1.文件修改 2.文件未修改处理逻辑一样 切换编码重新加载和另存为 梁卫东
@@ -209,7 +209,7 @@ TEST_F(test_editwrapper, reloadFileEncode)
     wrapper->textEditor()->setSettings(s);
     wrapper->textEditor()->setWrapper(wrapper);
     wrapper->reloadFileEncode(d);
-    assert(1==1);
+    
 }
 
 ////重写加载修改文件
@@ -224,7 +224,7 @@ TEST_F(test_editwrapper, reloadModifyFile)
     wrapper->textEditor()->setSettings(s);
     wrapper->textEditor()->setWrapper(wrapper);
     wrapper->reloadModifyFile();
-    assert(1==1);
+    
 }
 ////获取文件编码
 //QString getTextEncode();
@@ -238,7 +238,7 @@ TEST_F(test_editwrapper, getTextEncode)
     wrapper->textEditor()->setSettings(s);
     wrapper->textEditor()->setWrapper(wrapper);
     wrapper->getTextEncode();
-    assert(1==1);
+    
 }
 //bool saveTemFile(QString qstrDir);
 //TEST_F(test_editwrapper, saveTemFile)
@@ -252,7 +252,7 @@ TEST_F(test_editwrapper, getTextEncode)
 //    wrapper->textEditor()->setWrapper(wrapper);
 //    wrapper->openFile("1.cpp","1.cpp");
 //    wrapper->saveTemFile("ddd");
-//    assert(1==1);
+//    
 //}
 ////跟新路径
 //void updatePath(const QString &file,QString qstrTruePath = QString());
@@ -268,7 +268,7 @@ TEST_F(test_editwrapper, isModified)
     wrapper->textEditor()->setSettings(s);
     wrapper->textEditor()->setWrapper(wrapper);
     wrapper->isModified();
-    assert(1==1);
+    
 }
 ////判断是否草稿文件
 //bool isDraftFile();
@@ -282,7 +282,7 @@ TEST_F(test_editwrapper, isDraftFile)
     wrapper->textEditor()->setSettings(s);
     wrapper->textEditor()->setWrapper(wrapper);
     wrapper->isDraftFile();
-    assert(1==1);
+    
 }
 ////判断内容是否为空
 //bool isPlainTextEmpty();
@@ -296,7 +296,7 @@ TEST_F(test_editwrapper, isPlainTextEmpty)
     wrapper->textEditor()->setSettings(s);
     wrapper->textEditor()->setWrapper(wrapper);
     wrapper->isPlainTextEmpty();
-    assert(1==1);
+    
 }
 
 

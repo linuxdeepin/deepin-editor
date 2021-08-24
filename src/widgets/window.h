@@ -73,6 +73,8 @@ public:
     bool closeTab(const QString& fileName);
     void restoreTab();
 
+
+
     void clearBlack();
 
     EditWrapper *createEditor();

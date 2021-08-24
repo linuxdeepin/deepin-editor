@@ -26,7 +26,7 @@ test_performanceMonitor::test_performanceMonitor()
 TEST_F(test_performanceMonitor, PerformanceMonitor)
 {
     PerformanceMonitor PerformanceMonitor;
-    assert(1==1);
+    
 }
 
 //static void initializeAppStart();
@@ -34,7 +34,7 @@ TEST_F(test_performanceMonitor, initializeAppStart)
 {
     PerformanceMonitor PerformanceMonitor;
     PerformanceMonitor.initializeAppStart();
-    assert(1==1);
+    
 }
 
 //static void initializAppFinish();
@@ -42,7 +42,7 @@ TEST_F(test_performanceMonitor, initializAppFinish)
 {
     PerformanceMonitor PerformanceMonitor;
     PerformanceMonitor.initializAppFinish();
-    assert(1==1);
+    
 }
 
 //static void closeAppStart();
@@ -50,7 +50,7 @@ TEST_F(test_performanceMonitor, closeAppStart)
 {
     PerformanceMonitor PerformanceMonitor;
     PerformanceMonitor.closeAppStart();
-    assert(1==1);
+    
 }
 
 //static void closeAPPFinish();
@@ -58,7 +58,7 @@ TEST_F(test_performanceMonitor, closeAPPFinish)
 {
     PerformanceMonitor PerformanceMonitor;
     PerformanceMonitor.closeAPPFinish();
-    assert(1==1);
+    
 }
 
 //static void openFileStart();
@@ -66,7 +66,7 @@ TEST_F(test_performanceMonitor, openFileStart)
 {
      PerformanceMonitor PerformanceMonitor;
     PerformanceMonitor.openFileStart();
-    assert(1==1);
+    
 }
 
 //static void openFileFinish(const QString &strFileName, qint64 iFileSize);
@@ -74,5 +74,5 @@ TEST_F(test_performanceMonitor, openFileFinish)
 {
     PerformanceMonitor PerformanceMonitor;
     PerformanceMonitor.openFileFinish("aa",1);
-    assert(1==1);
+    
 }

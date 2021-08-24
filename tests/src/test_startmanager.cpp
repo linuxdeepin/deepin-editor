@@ -8,13 +8,13 @@ test_startmanager::test_startmanager()
 TEST_F(test_startmanager, StartManager)
 {
     StartManager startManager(nullptr);
-    assert(1==1);
+    
 }
 
 TEST_F(test_startmanager, instance)
 {
     StartManager::instance();
-    assert(1==1);
+    
 }
 
 TEST_F(test_startmanager, openFilesInWindow)
@@ -27,7 +27,7 @@ TEST_F(test_startmanager, openFilesInWindow)
     filePathList<<".cache/deepin/";
     startManager->openFilesInWindow(filePathList);
 
-    assert(1==1);
+    
 }
 //initWindowPosition
 TEST_F(test_startmanager, initWindowPosition)
@@ -36,7 +36,7 @@ TEST_F(test_startmanager, initWindowPosition)
     StartManager *startManager = StartManager::instance();
     startManager->initWindowPosition(window,true);
 
-    assert(1==1);
+    
 }
 //getFileTabInfo
 TEST_F(test_startmanager, getFileTabInfo)
@@ -44,7 +44,7 @@ TEST_F(test_startmanager, getFileTabInfo)
     StartManager *startManager = StartManager::instance();
     startManager->getFileTabInfo(".cache/deepin/deepin-editor");
 
-    assert(1==1);
+    
 }
 
 //slotCheckUnsaveTab
@@ -53,7 +53,7 @@ TEST_F(test_startmanager, slotCheckUnsaveTab)
     StartManager *startManager = StartManager::instance();
     startManager->slotCheckUnsaveTab();
 
-    assert(1==1);
+    
 }
 
 //checkPath
@@ -62,14 +62,14 @@ TEST_F(test_startmanager, checkPath)
     StartManager *startManager = StartManager::instance();
     startManager->checkPath(".cache/deepin/deepin-editor");
 
-    assert(1==1);
+    
 }
 TEST_F(test_startmanager,ifKlu )
 {
     StartManager *startManager = StartManager::instance();
     startManager->ifKlu();
 
-    assert(1==1);
+    
 }
 //loadTheme
 TEST_F(test_startmanager,loadTheme )
@@ -77,7 +77,7 @@ TEST_F(test_startmanager,loadTheme )
     StartManager *startManager = StartManager::instance();
     startManager->loadTheme("Dark");
 
-    assert(1==1);
+    
 }
 
 // bool isMultiWindow();
@@ -86,7 +86,7 @@ TEST_F(test_startmanager,isMultiWindow )
     StartManager *startManager = StartManager::instance();
     startManager->isMultiWindow();
 
-    assert(1==1);
+    
 }
 
 TEST_F(test_startmanager,isTemFilesEmpty )
@@ -94,7 +94,7 @@ TEST_F(test_startmanager,isTemFilesEmpty )
     StartManager *startManager = StartManager::instance();
     startManager->isTemFilesEmpty();
 
-    assert(1==1);
+    
 }
 
 TEST_F(test_startmanager,autoBackupFile)
@@ -102,7 +102,7 @@ TEST_F(test_startmanager,autoBackupFile)
     StartManager *startManager = StartManager::instance();
     startManager->autoBackupFile();
 
-    assert(1==1);
+    
 }
 
 TEST_F(test_startmanager,recoverFile)
@@ -111,7 +111,7 @@ TEST_F(test_startmanager,recoverFile)
     Window w;
     startManager->recoverFile(&w);
 
-    assert(1==1);
+    
 }
 
 TEST_F(test_startmanager,openFilesInTab)
@@ -126,7 +126,7 @@ TEST_F(test_startmanager,openFilesInTab)
 
 
 
-    assert(1==1);
+    
 }
 
 TEST_F(test_startmanager,analyzeBookmakeInfo)
@@ -134,6 +134,6 @@ TEST_F(test_startmanager,analyzeBookmakeInfo)
     StartManager *startManager = StartManager::instance();
     startManager->analyzeBookmakeInfo(QString());
 
-    assert(1==1);
+    
 }
 

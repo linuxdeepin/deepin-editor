@@ -5,12 +5,6 @@ DeleteBackCommond::DeleteBackCommond(QTextCursor cursor,QPlainTextEdit* edit):
     m_cursor(cursor),
     m_edit(edit)
 {
-      //修改delete删除，在文档最末尾点击ｄｅｌｅｔｅ,引起标签栏*出现问题
-//    if(!m_cursor.hasSelection())
-//    {
-//        m_cursor.movePosition(QTextCursor::Right,QTextCursor::KeepAnchor,1);
-//    }
-
     m_delText = m_cursor.selectedText();
     m_delPos = std::min(m_cursor.position(),m_cursor.anchor());
     m_insertPos = m_delPos;

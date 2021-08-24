@@ -27,7 +27,7 @@ test_linebar::test_linebar()
 TEST_F(test_linebar, LineBar)
 {
     LineBar lineBar(nullptr);
-    assert(1==1);
+    
 }
 
 //public slots:
@@ -36,7 +36,7 @@ TEST_F(test_linebar, handleTextChangeTimer)
 {
     LineBar *lineBar = new LineBar();
     lineBar->handleTextChangeTimer();
-    assert(1==1);
+    
 }
 
 //    void handleTextChanged();
@@ -44,7 +44,7 @@ TEST_F(test_linebar, handleTextChanged)
 {
     LineBar *lineBar = new LineBar();
     lineBar->handleTextChanged();
-    assert(1==1);
+    
 }
 
 //    void sendText(QString t);
@@ -52,7 +52,7 @@ TEST_F(test_linebar, sendText)
 {
     LineBar *lineBar = new LineBar();
     lineBar->sendText("aa");
-    assert(1==1);
+    
 }
 
 //protected:
@@ -65,7 +65,7 @@ TEST_F(test_linebar, focusOutEvent)
 
     lineBar->deleteLater();
     delete e;
-    assert(1==1);
+    
 }
 
 //    virtual void keyPressEvent(QKeyEvent *e);
@@ -82,5 +82,5 @@ TEST_F(test_linebar, keyPressEvent)
     lineBar->keyPressEvent(e);
     e = new QKeyEvent(QEvent::KeyPress,1,modefiers[3],"\r");
     lineBar->keyPressEvent(e);
-    assert(1==1);
+    
 }

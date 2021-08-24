@@ -25,7 +25,7 @@ test_jumplinebar::test_jumplinebar()
 TEST_F(test_jumplinebar, JumpLineBar)
 {
     JumpLineBar jumpLineBar(nullptr);
-    assert(1==1);
+    
 }
 
 //void focus();
@@ -33,7 +33,7 @@ TEST_F(test_jumplinebar, focus)
 {
     JumpLineBar *jumpLineBar = new JumpLineBar();
     jumpLineBar->focus();
-    assert(1==1);
+    
     delete jumpLineBar;
 }
 
@@ -42,7 +42,7 @@ TEST_F(test_jumplinebar, isFocus)
 {
     JumpLineBar *jumpLineBar = new JumpLineBar();
     jumpLineBar->isFocus();
-    assert(1==1);
+    
     delete jumpLineBar;
 }
 
@@ -51,7 +51,7 @@ TEST_F(test_jumplinebar, activeInput)
 {
     JumpLineBar *jumpLineBar = new JumpLineBar();
     jumpLineBar->activeInput("aa",1,1,1,1);
-    assert(1==1);
+    
     delete jumpLineBar;
 }
 
@@ -60,7 +60,7 @@ TEST_F(test_jumplinebar, handleFocusOut)
 {
     JumpLineBar *jumpLineBar = new JumpLineBar();
     jumpLineBar->handleFocusOut();
-    assert(1==1);
+    
     delete jumpLineBar;
 }
 
@@ -69,7 +69,7 @@ TEST_F(test_jumplinebar, handleLineChanged)
 {
     JumpLineBar *jumpLineBar = new JumpLineBar();
     jumpLineBar->handleLineChanged();
-    assert(1==1);
+    
     delete jumpLineBar;
 }
 
@@ -78,7 +78,7 @@ TEST_F(test_jumplinebar, jumpCancel)
 {
     JumpLineBar *jumpLineBar = new JumpLineBar();
     jumpLineBar->jumpCancel();
-    assert(1==1);
+    
     delete jumpLineBar;
 }
 
@@ -87,7 +87,7 @@ TEST_F(test_jumplinebar, jumpConfirm)
 {
     JumpLineBar *jumpLineBar = new JumpLineBar();
     jumpLineBar->jumpConfirm();
-    assert(1==1);
+    
     delete jumpLineBar;
 }
 
@@ -96,6 +96,6 @@ TEST_F(test_jumplinebar, slotFocusChanged)
 {
     JumpLineBar *jumpLineBar = new JumpLineBar();
     jumpLineBar->slotFocusChanged(true);
-    assert(1==1);
+    
     delete jumpLineBar;
 }

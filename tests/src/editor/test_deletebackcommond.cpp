@@ -20,7 +20,7 @@ TEST_F(test_deletebackcommond, DeleteBackCommond)
     delete edit;
     edit = nullptr;
 
-    assert(1==1);
+
 }
 
 TEST_F(test_deletebackcommond,redo)
@@ -39,7 +39,7 @@ TEST_F(test_deletebackcommond,redo)
     edit->deleteLater();
     delete com;
     com = nullptr;
-    assert(1==1);
+
 }
 
 TEST_F(test_deletebackcommond,undo)
@@ -58,7 +58,7 @@ TEST_F(test_deletebackcommond,undo)
     edit->deleteLater();
     delete com;
     com = nullptr;
-    assert(1==1);
+
 }
 
 
@@ -89,7 +89,7 @@ TEST_F(test_deletebackaltcommond,  DeleteBackAltCommond)
     delete edit;
     edit = nullptr;
 
-    assert(1==1);
+
 }
 
 TEST_F(test_deletebackaltcommond, redo)
@@ -115,7 +115,7 @@ TEST_F(test_deletebackaltcommond, redo)
     edit->deleteLater();
 
     delete commond;commond=nullptr;
-    assert(1==1);
+
 }
 
 
@@ -142,5 +142,5 @@ TEST_F(test_deletebackaltcommond, undo)
     edit->deleteLater();
     delete com;
     com = nullptr;
-    assert(1==1);
+
 }

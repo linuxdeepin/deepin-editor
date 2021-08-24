@@ -11,5 +11,5 @@ TEST_F(test_settingsdialog, GenerateSettingTranslate)
 {
 
     GenerateSettingTranslate();
-    assert(1==1);
+    
 }

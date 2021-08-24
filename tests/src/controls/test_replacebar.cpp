@@ -11,7 +11,7 @@ TEST_F(test_replacebar, isFocus)
     rep->isFocus();
     rep->handleSkip();
 
-    assert(1==1);
+    
 }
 //void focus();
 TEST_F(test_replacebar, focus)
@@ -19,7 +19,7 @@ TEST_F(test_replacebar, focus)
     ReplaceBar * rep = new ReplaceBar();
     rep->focus();
 
-    assert(1==1);
+    
 }
 
 //void activeInput(QString text, QString file, int row, int column, int scrollOffset);
@@ -28,7 +28,7 @@ TEST_F(test_replacebar, activeInput)
     ReplaceBar * rep = new ReplaceBar();
     rep->activeInput("aa","bb",2,2,2);
 
-    assert(1==1);
+    
 }
 //void setMismatchAlert(bool isAlert);
 TEST_F(test_replacebar, setMismatchAlert)
@@ -36,7 +36,7 @@ TEST_F(test_replacebar, setMismatchAlert)
     ReplaceBar * rep = new ReplaceBar();
     rep->setMismatchAlert(true);
 
-    assert(1==1);
+    
 }
 //void setsearched(bool _);
 TEST_F(test_replacebar, setsearched)
@@ -44,7 +44,7 @@ TEST_F(test_replacebar, setsearched)
     ReplaceBar * rep = new ReplaceBar();
     rep->setsearched(true);
 
-    assert(1==1);
+    
 }
 //    void change();
 TEST_F(test_replacebar, change)
@@ -52,7 +52,7 @@ TEST_F(test_replacebar, change)
     ReplaceBar * rep = new ReplaceBar();
     rep->change();
 
-    assert(1==1);
+    
 }
 //void replaceClose();
 TEST_F(test_replacebar, replaceClose)
@@ -60,7 +60,7 @@ TEST_F(test_replacebar, replaceClose)
     ReplaceBar * rep = new ReplaceBar();
     rep->replaceClose();
 
-    assert(1==1);
+    
 }
 //void handleContentChanged();
 TEST_F(test_replacebar, handleContentChanged)
@@ -68,7 +68,7 @@ TEST_F(test_replacebar, handleContentChanged)
     ReplaceBar * rep = new ReplaceBar();
     rep->handleContentChanged();
 
-    assert(1==1);
+    
 }
 //void handleReplaceAll();
 TEST_F(test_replacebar, handleReplaceAll)
@@ -76,7 +76,7 @@ TEST_F(test_replacebar, handleReplaceAll)
     ReplaceBar * rep = new ReplaceBar();
     rep->handleReplaceAll();
 
-    assert(1==1);
+    
 }
 //void handleReplaceNext();
 TEST_F(test_replacebar, handleReplaceNext)
@@ -84,7 +84,7 @@ TEST_F(test_replacebar, handleReplaceNext)
     ReplaceBar * rep = new ReplaceBar();
     rep->handleReplaceNext();
 
-    assert(1==1);
+    
 }
 //void handleReplaceRest();
 TEST_F(test_replacebar, handleReplaceRest)
@@ -92,7 +92,7 @@ TEST_F(test_replacebar, handleReplaceRest)
     ReplaceBar * rep = new ReplaceBar();
     rep->handleReplaceRest();
 
-    assert(1==1);
+    
 }
 
 //protected:
@@ -103,7 +103,7 @@ TEST_F(test_replacebar, hideEvent)
     QHideEvent*e;
     rep->hideEvent(e);
 
-    assert(1==1);
+    
 }
 //bool focusNextPrevChild(bool next);
 //void keyPressEvent(QKeyEvent *e);
@@ -113,7 +113,7 @@ TEST_F(test_replacebar, focusNextPrevChild)
     ReplaceBar * rep = new ReplaceBar();
     rep->focusNextPrevChild(true);
 
-    assert(1==1);
+    
 }
 
 TEST_F(test_replacebar, keyPressEvent)
@@ -137,5 +137,5 @@ TEST_F(test_replacebar, keyPressEvent)
     rep->keyPressEvent(e2);
 
 
-    assert(1==1);
+    
 }

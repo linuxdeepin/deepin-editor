@@ -53,7 +53,7 @@ TEST_F(test_textedit, TextEdit)
     TextEdit * edit = wrapper->textEditor();
     delete edit;edit = nullptr;
 
-    assert(1==1);
+    
 
 }
 
@@ -448,7 +448,7 @@ TEST_F(test_textedit, escape)
     //startManager->setWrapper(ee);
     //startManager->escape();
 
-    //assert(1==1);
+    //
 }
 TEST_F(test_textedit, indentText)
 {
@@ -1546,7 +1546,7 @@ TEST_F(test_textedit, slot_translate)
     startManager->setWrapper(ee);
     startManager->upcaseWord();
 
-    assert(1==1);
+    
 }
 #endif
 
@@ -1563,7 +1563,7 @@ TEST_F(test_textedit, slot_translate)
     startManager->setWrapper(ee);
     startManager->downcaseWord();
 
-    assert(1==1);
+    
 }
 #endif
 
@@ -1579,7 +1579,7 @@ TEST_F(test_textedit, slot_translate)
 //    startManager->setWrapper(ee);
 //    startManager->capitalizeWord();
 
-//    assert(1==1);
+//    
 //}
 // void transposeChar();
 TEST_F(test_textedit, transposeChar)
@@ -1789,7 +1789,7 @@ TEST_F(test_textedit, eventFilter)
     //    QEvent *e3=new QEvent(QEvent::HoverLeave);
     //    startManager->eventFilter(startManager,e3);
 
-    //    assert(1==1);
+    //    
 }
 QAction *stub_exec(const QPoint &pos, QAction *at = nullptr)
 {
@@ -2013,7 +2013,7 @@ TEST_F(test_textedit, moveCursorNoBlink)
 //    startManager->convertWordCase(ConvertCase::UPPER);
 //    startManager->convertWordCase(ConvertCase::CAPITALIZE);
 
-//    assert(1==1);
+//    
 //}
 
 //void renderAllSelections();

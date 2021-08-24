@@ -14,7 +14,7 @@ TEST_F(test_editorapplication, EditorApplication)
     char* argv[] = {"test"};
     //no deleted...
     EditorApplication *app = new EditorApplication(argc,argv);
-    assert(1==1);
+
 }
 
 TEST_F(test_editorapplication, notify)
@@ -29,7 +29,7 @@ TEST_F(test_editorapplication, notify)
     QPushButton* btn = new QPushButton;
     btn->setObjectName("CustomRebackButton");
     app->notify(btn,e);
-    assert(1==1);
+
 }
 
 TEST_F(test_editorapplication, pressSpace)
@@ -42,5 +42,5 @@ TEST_F(test_editorapplication, pressSpace)
     QPushButton* btn = new QPushButton;
     btn->setObjectName("CustomRebackButton");
     app->pressSpace(btn);
-    assert(1==1);
+
 }

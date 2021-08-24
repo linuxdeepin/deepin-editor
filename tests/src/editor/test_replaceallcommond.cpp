@@ -16,7 +16,7 @@ TEST_F(test_replaceallcommond, ReplaceAllCommond)
     delete com;
     com=nullptr;
 
-    assert(1==1);
+    
 }
 
 TEST_F(test_replaceallcommond, redo)
@@ -29,7 +29,7 @@ TEST_F(test_replaceallcommond, redo)
     delete com;
     com=nullptr;
 
-    assert(1==1);
+    
 }
 
 TEST_F(test_replaceallcommond, undo)
@@ -42,6 +42,6 @@ TEST_F(test_replaceallcommond, undo)
     delete com;
     com=nullptr;
 
-    assert(1==1);
+    
 }
 

@@ -13,14 +13,14 @@ TEST_F(test_flashTween, LeftAreaTextEdit)
     delete a;
     a=nullptr;
 
-    assert(1==1);
+    
 }
 
 TEST_F(test_flashTween, stopY)
 {
     FlashTween *a = new FlashTween();
     a->stopY();
-    assert(1==1);
+    
     delete a;
 }
 //public:
@@ -30,7 +30,7 @@ TEST_F(test_flashTween, startX)
     FlashTween *a = new FlashTween();
     FunSlideInertial b;
     a->startX(1.1,1.1,1.1,1.1,b);
-    assert(1==1);
+    
     delete a;
 }
 //    void startY(qreal t,qreal b,qreal c,qreal d, FunSlideInertial fSlideGesture);
@@ -39,7 +39,7 @@ TEST_F(test_flashTween, startY)
     FlashTween *a = new FlashTween();
     FunSlideInertial b;
     a->startY(1.1,1.1,1.1,1.1,b);
-    assert(1==1);
+    
     delete a;
 }
 //    void stopX(){m_timerX->stop();}
@@ -51,7 +51,7 @@ TEST_F(test_flashTween, activeX)
     FunSlideInertial b;
     a->m_timerX->start();
     a->activeX();
-    assert(1==1);
+    
     delete a;
 }
 //    bool activeY(){return m_timerY->isActive();}
@@ -61,7 +61,7 @@ TEST_F(test_flashTween, activeY)
     FunSlideInertial b;
     a->m_timerY->start();
     a->activeY();
-    assert(1==1);
+    
     delete a;
 }
 
@@ -72,7 +72,7 @@ TEST_F(test_flashTween, stopX)
 
     delete a;
     a=nullptr;
-    assert(1==1);
+    
 }
 
 

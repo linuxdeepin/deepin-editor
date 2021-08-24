@@ -13,7 +13,7 @@ TEST_F(test_CSyntaxHighlighter, setEnableHighlight)
     CSyntaxHighlighter *pCSyntaxHighlighter = new CSyntaxHighlighter(m_pTextEdit->document());
     pCSyntaxHighlighter->setEnableHighlight(bRet);
 
-    assert(1==1);
+    
 }
 
 TEST_F(test_CSyntaxHighlighter, setEnableHighlight2)
@@ -24,7 +24,7 @@ TEST_F(test_CSyntaxHighlighter, setEnableHighlight2)
     CSyntaxHighlighter *pCSyntaxHighlighter = new CSyntaxHighlighter(this);
     pCSyntaxHighlighter->setEnableHighlight(bRet);
 
-    assert(1==1);
+    
 }
 
 TEST_F(test_CSyntaxHighlighter, highlightBlock)
@@ -37,7 +37,7 @@ TEST_F(test_CSyntaxHighlighter, highlightBlock)
     pCSyntaxHighlighter->m_bHighlight = false;
     pCSyntaxHighlighter->highlightBlock(strTest);
 
-    assert(1==1);
+    
 }
 
 TEST_F(test_CSyntaxHighlighter, highlightBlock1)
@@ -50,6 +50,6 @@ TEST_F(test_CSyntaxHighlighter, highlightBlock1)
     pCSyntaxHighlighter->m_bHighlight = true;
     pCSyntaxHighlighter->highlightBlock(strTest);
 
-    assert(1==1);
+    
 }
 
