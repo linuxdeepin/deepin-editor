@@ -6327,7 +6327,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         }
 
         //键盘右边数字键
-        if (modifiers == Qt::KeypadModifier && (e->key() <= Qt::Key_9 && e->key() >= Qt::Key_0) && !e->text().isEmpty()) {
+        if (modifiers == Qt::KeypadModifier && (e->key() <= Qt::Key_9 && e->key() >= Qt::Key_Asterisk) && !e->text().isEmpty()) {
 
             if(m_isSelectAll)
                 QPlainTextEdit::selectAll();
@@ -6342,7 +6342,8 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         }
 
         //插入空白字符
-        if (modifiers == Qt::NoModifier && (e->key() == Qt::Key_Tab || e->key() == Qt::Key_Return)) {
+        if (modifiers == Qt::NoModifier && (e->key() == Qt::Key_Tab || e->key() == Qt::Key_Return) ||
+            modifiers == Qt::KeypadModifier && (e->key() == Qt::Key_Enter)) {
 
             if(m_isSelectAll)
                 QPlainTextEdit::selectAll();
