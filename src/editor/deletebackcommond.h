@@ -15,9 +15,9 @@ public:
 
 private:
     QTextCursor m_cursor;
-    QString m_delText;
-    int m_delPos;
-    int m_insertPos;
+    QString m_delText {QString()};
+    int m_delPos {0};
+    int m_insertPos {0};
 
     QPlainTextEdit* m_edit;
 

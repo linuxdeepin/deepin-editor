@@ -1,4 +1,4 @@
-#include "test_deletebackcommond.h"
+#include "ut_deletebackcommond.h"
 #include "../src/editor/deletebackcommond.h"
 #include"../../src/widgets/window.h"
 #include "qplaintextedit.h"
@@ -10,55 +10,55 @@ test_deletebackcommond::test_deletebackcommond()
 
 TEST_F(test_deletebackcommond, DeleteBackCommond)
 {
-    QString text = "test";
     QTextCursor cursor;
-    QPlainTextEdit* edit = new QPlainTextEdit;
-    DeleteBackCommond* com = new DeleteBackCommond(cursor,edit);
+    QPlainTextEdit *pEdit = new QPlainTextEdit;
+    DeleteBackCommond *pCom = new DeleteBackCommond(cursor, pEdit);
+    ASSERT_TRUE(pCom->m_insertPos != 0);
 
-    delete com;
-    com = nullptr;
-    delete edit;
-    edit = nullptr;
-
-
+    delete pCom;
+    pCom = nullptr;
+    delete pEdit;
+    pEdit = nullptr;
 }
 
-TEST_F(test_deletebackcommond,redo)
+TEST_F(test_deletebackcommond, redo)
 {
     QString text = "test";
-    QTextCursor cursor;
-    Window* window = new Window;
-    EditWrapper *wrapper = window->createEditor();
-    TextEdit * edit = wrapper->textEditor();
-    DeleteBackCommond* com = new DeleteBackCommond(cursor,edit);
-    com->m_delText = text;
-    com->redo();
+    Window *pWindow = new Window;
+    pWindow->addBlankTab(QString());
+    QTextCursor cursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertPlainText(QString("12345"));
+    cursor.setPosition(10, QTextCursor::MoveMode::KeepAnchor);
+    DeleteBackCommond *pCom = new DeleteBackCommond(cursor, pWindow->currentWrapper()->textEditor());
+    pCom->m_delText = text;
+    pCom->redo();
 
-    window->deleteLater();
-    wrapper->deleteLater();
-    edit->deleteLater();
-    delete com;
-    com = nullptr;
+    ASSERT_EQ(cursor.position(), pWindow->currentWrapper()->textEditor()->textCursor().position());
 
+    delete pCom;
+    pCom = nullptr;
+    delete pWindow;
+    pWindow = nullptr;
 }
 
-TEST_F(test_deletebackcommond,undo)
+TEST_F(test_deletebackcommond, undo)
 {
     QString text = "test";
-    QTextCursor cursor;
-    Window* window = new Window;
-    EditWrapper *wrapper = window->createEditor();
-    TextEdit * edit = wrapper->textEditor();
-    DeleteBackCommond* com = new DeleteBackCommond(cursor,edit);
-    com->m_delText = text;
-    com->undo();
+    Window *pWindow = new Window;
+    pWindow->addBlankTab(QString());
+    QTextCursor cursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertPlainText(QString("12345"));
+    cursor.setPosition(10, QTextCursor::MoveMode::KeepAnchor);
+    DeleteBackCommond *pCom = new DeleteBackCommond(cursor, pWindow->currentWrapper()->textEditor());
+    pCom->m_delText = text;
+    pCom->undo();
 
-    window->deleteLater();
-    wrapper->deleteLater();
-    edit->deleteLater();
-    delete com;
-    com = nullptr;
+    ASSERT_EQ(cursor.position(), pWindow->currentWrapper()->textEditor()->textCursor().position());
 
+    delete pCom;
+    pCom = nullptr;
+    delete pWindow;
+    pWindow = nullptr;
 }
 
 
@@ -68,7 +68,6 @@ test_deletebackaltcommond::test_deletebackaltcommond()
 
 }
 
-
 TEST_F(test_deletebackaltcommond,  DeleteBackAltCommond)
 {
     QString text = "test";
@@ -76,20 +75,18 @@ TEST_F(test_deletebackaltcommond,  DeleteBackAltCommond)
     QTextEdit::ExtraSelection sel;
     QTextCursor cursor;
     cursor.insertText(text);
-    cursor.movePosition(QTextCursor::Start,QTextCursor::KeepAnchor);
+    cursor.movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
     sel.cursor = cursor;
     list.push_back(sel);
     list.push_back(sel);
 
     QPlainTextEdit* edit = new QPlainTextEdit;
-    DeleteBackAltCommond* com = new DeleteBackAltCommond(list,edit);
+    DeleteBackAltCommond* com = new DeleteBackAltCommond(list, edit);
 
     delete com;
     com = nullptr;
     delete edit;
     edit = nullptr;
-
-
 }
 
 TEST_F(test_deletebackaltcommond, redo)
@@ -115,7 +112,6 @@ TEST_F(test_deletebackaltcommond, redo)
     edit->deleteLater();
 
     delete commond;commond=nullptr;
-
 }
 
 

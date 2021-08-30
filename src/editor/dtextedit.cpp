@@ -3986,7 +3986,6 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
             QSvgRenderer render;
             render.load(pixmapPath);
             render.render(&painter,rect);
-
         }
     }
 }
@@ -4518,7 +4517,6 @@ QStringList TextEdit::readHistoryRecordofFilePath(QString key)
 
 void TextEdit::writeHistoryRecord()
 {
-//    qDebug() << "writeHistoryRecord";
     QString history = m_settings->settings->option("advance.editor.browsing_history_file")->value().toString();
     QStringList historyList = readHistoryRecord("advance.editor.browsing_history_file");
 
@@ -6398,7 +6396,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
                 QString m_delText = cursor.selectedText();
                 if(m_delText.size()<=0) return;
 
-                DeleteBackCommond *commond = new DeleteBackCommond(cursor,this);
+                DeleteBackCommond *commond = new DeleteBackCommond(cursor, this);
                 m_pUndoStack->push(commond);
             }
             return;

@@ -1,12 +1,12 @@
 #include "deletebackcommond.h"
 #include <QTextBlock>
 
-DeleteBackCommond::DeleteBackCommond(QTextCursor cursor,QPlainTextEdit* edit):
+DeleteBackCommond::DeleteBackCommond(QTextCursor cursor, QPlainTextEdit *edit):
     m_cursor(cursor),
     m_edit(edit)
 {
     m_delText = m_cursor.selectedText();
-    m_delPos = std::min(m_cursor.position(),m_cursor.anchor());
+    m_delPos = std::min(m_cursor.position(), m_cursor.anchor());
     m_insertPos = m_delPos;
 }
 
@@ -25,11 +25,9 @@ void DeleteBackCommond::undo()
 void DeleteBackCommond::redo()
 {
     m_cursor.setPosition(m_delPos);
-    m_cursor.setPosition(m_delPos+m_delText.size(),QTextCursor::KeepAnchor);
+    m_cursor.setPosition(m_delPos+m_delText.size(), QTextCursor::KeepAnchor);
     m_cursor.deleteChar();
 }
-
-
 
 DeleteBackAltCommond::DeleteBackAltCommond(QList<QTextEdit::ExtraSelection> &selections,QPlainTextEdit* edit):
     m_ColumnEditSelections(selections),
@@ -58,7 +56,6 @@ DeleteBackAltCommond::DeleteBackAltCommond(QList<QTextEdit::ExtraSelection> &sel
 
             sum += text.size();
         }
-
     }
 }
 

@@ -678,7 +678,7 @@ private:
     bool m_cursorMark = false;
     int m_markStartLine = -1;
 
-    Settings *m_settings;
+    Settings *m_settings {nullptr};
 
     bool m_readOnlyMode = false;
     bool m_cursorMarkStatus = false;

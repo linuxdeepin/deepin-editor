@@ -61,7 +61,7 @@ public:
     int m_iMaxFontSize = 50;
     int m_iMinFontSize = 8;
 
-    DSettings *settings;
+    DSettings *settings {nullptr};
 
 signals:
     void sigAdjustFont(QString name);
