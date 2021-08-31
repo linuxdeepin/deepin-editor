@@ -148,6 +148,8 @@ public:
     //判断语音助手服务是否已被注册
     bool isRegisteredFflytekAiassistant();
 
+    QStackedWidget* getStackedWgt();
+
 signals:
     void themeChanged(const QString themeName);
     void requestDragEnterEvent(QDragEnterEvent *);

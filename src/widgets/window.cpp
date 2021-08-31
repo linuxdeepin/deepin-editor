@@ -916,7 +916,10 @@ bool Window::saveFile()
         }
 
         return true;
-    } else {
+    }
+#if 0
+    else {
+
         DDialog *dialog = createDialog(tr("Do you want to save as another?"), "");
         //wrapperEdit->setUpdatesEnabled(false);
         wrapperEdit->setUpdatesEnabled(true);
@@ -932,7 +935,11 @@ bool Window::saveFile()
         else {
             return false;
         }
+
     }
+#endif
+
+    return false;
 }
 
 bool Window::saveAsFile()
@@ -2722,4 +2729,9 @@ bool Window::isRegisteredFflytekAiassistant()
         qInfo() << "com.iflytek.aiassistant service no registered!";
         return false;
     }
+}
+
+QStackedWidget *Window::getStackedWgt()
+{
+    return m_editorWidget;
 }

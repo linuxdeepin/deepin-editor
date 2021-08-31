@@ -71,8 +71,8 @@ TEST_F(test_editwrapper, openFile)
 //bool saveFile();
 TEST_F(test_editwrapper, saveFile)
 {
-    EditWrapper *wrapper = new EditWrapper();
-    wrapper->saveFile();
+    //EditWrapper *wrapper = new EditWrapper();
+   // wrapper->saveFile();
     
 }
 
