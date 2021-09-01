@@ -14,7 +14,7 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "test_findbar.h"
+#include "ut_findbar.h"
 #include "../../src/controls/findbar.h"
 #include <QFocusEvent>
 #include <QEvent>
@@ -34,7 +34,10 @@ TEST_F(test_findbar, FindBar)
 TEST_F(test_findbar, isFocus)
 {
     FindBar *findBar = new FindBar();
-    findBar->isFocus();
+    EXPECT_NE(findBar,nullptr);
+    EXPECT_EQ(findBar->isFocus(),false);
+
+    findBar->deleteLater();
     
 }
 
@@ -43,6 +46,9 @@ TEST_F(test_findbar, focus)
 {
     FindBar *findBar = new FindBar();
     findBar->focus();
+    EXPECT_NE(findBar,nullptr);
+
+    findBar->deleteLater();
     
 }
 
@@ -51,6 +57,13 @@ TEST_F(test_findbar, activeInput)
 {
     FindBar *findBar = new FindBar();
     findBar->activeInput("aa","aa",1,1,1);
+
+
+    EXPECT_NE(findBar,nullptr);
+    EXPECT_EQ(findBar->m_editLine->lineEdit()->text(),"aa");
+
+    findBar->deleteLater();
+
     
 }
 
@@ -59,6 +72,10 @@ TEST_F(test_findbar, setMismatchAlert)
 {
     FindBar *findBar = new FindBar();
     findBar->setMismatchAlert(true);
+
+    EXPECT_NE(findBar,nullptr);
+    EXPECT_EQ(findBar->m_editLine->isAlert(),true);
+    findBar->deleteLater();
     
 }
 
@@ -67,6 +84,11 @@ TEST_F(test_findbar, receiveText)
 {
     FindBar *findBar = new FindBar();
     findBar->receiveText("aa");
+
+    EXPECT_NE(findBar,nullptr);
+    EXPECT_EQ(findBar->m_receivedText,"aa");
+
+    findBar->deleteLater();
     
 }
 
@@ -75,6 +97,10 @@ TEST_F(test_findbar, setSearched)
 {
     FindBar *findBar = new FindBar();
     findBar->setSearched(true);
+
+    EXPECT_NE(findBar,nullptr);
+    EXPECT_EQ(findBar->searched,true);
+    findBar->deleteLater();
     
 }
 
@@ -84,8 +110,10 @@ TEST_F(test_findbar, findPreClicked)
     FindBar *findBar = new FindBar();
     findBar->findPreClicked();
 
-    findBar->findPreClicked();
-    
+
+    EXPECT_NE(findBar,nullptr);
+    EXPECT_EQ(findBar->searched,true);
+    findBar->deleteLater();
 }
 
 //public slots:
@@ -94,6 +122,10 @@ TEST_F(test_findbar, findCancel)
 {
     FindBar *findBar = new FindBar();
     findBar->findCancel();
+
+    EXPECT_NE(findBar,nullptr);
+    EXPECT_EQ(findBar->isVisible(),false);
+    findBar->deleteLater();
     
 }
 
@@ -104,6 +136,9 @@ TEST_F(test_findbar, handleContentChanged)
     findBar->handleContentChanged();
     findBar->handleFindPrev();
     findBar->handleFindNext();
+
+    EXPECT_NE(findBar,nullptr);
+    findBar->deleteLater();
     
 }
 
@@ -123,6 +158,8 @@ TEST_F(test_findbar, hideEvent)
     FindBar *findBar = new FindBar();
     findBar->hideEvent(event);
 
+    EXPECT_NE(event,nullptr);
+    EXPECT_NE(findBar,nullptr);
     findBar->deleteLater();
     delete event;
     
@@ -132,7 +169,10 @@ TEST_F(test_findbar, hideEvent)
 TEST_F(test_findbar, focusNextPrevChild)
 {
     FindBar *findBar = new FindBar();
-    findBar->focusNextPrevChild(true);
+
+    EXPECT_EQ(findBar->focusNextPrevChild(true),false);
+    EXPECT_NE(findBar,nullptr);
+    findBar->deleteLater();
     
 }
 
@@ -142,12 +182,27 @@ TEST_F(test_findbar, keyPressEvent)
     FindBar *findBar = new FindBar();
 
     QKeyEvent *e = new QKeyEvent(QEvent::KeyPress,Qt::Key_Tab,Qt::NoModifier);
+    findBar->m_closeButton->setFocus();
     findBar->keyPressEvent(e);
+    EXPECT_EQ(findBar->m_closeButton->hasFocus(),false);
 
     QKeyEvent *e1 = new QKeyEvent(QEvent::KeyPress,Qt::Key_Escape,Qt::NoModifier);
     findBar->keyPressEvent(e1);
 
     QKeyEvent *e2 = new QKeyEvent(QEvent::KeyPress,Qt::Key_Enter,Qt::NoModifier);
+    findBar->m_findPrevButton->setFocus();
+    findBar->m_findNextButton->setFocus();
+    EXPECT_EQ(findBar->m_findPrevButton->hasFocus(),false);
+
     findBar->keyPressEvent(e2);
+
     
+
+    EXPECT_NE(findBar,nullptr);
+
+
+    findBar->deleteLater();
+    delete e;  e = nullptr;
+    delete e1; e1 = nullptr;
+    delete e2; e2 = nullptr;
 }

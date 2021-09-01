@@ -14,7 +14,7 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "test_linebar.h"
+#include "ut_linebar.h"
 #include "../../src/controls/linebar.h"
 #include <QFocusEvent>
 #include <QEvent>
@@ -36,6 +36,11 @@ TEST_F(test_linebar, handleTextChangeTimer)
 {
     LineBar *lineBar = new LineBar();
     lineBar->handleTextChangeTimer();
+
+
+     EXPECT_NE(lineBar,nullptr);
+
+    lineBar->deleteLater();
     
 }
 
@@ -43,8 +48,16 @@ TEST_F(test_linebar, handleTextChangeTimer)
 TEST_F(test_linebar, handleTextChanged)
 {
     LineBar *lineBar = new LineBar();
+    lineBar->m_autoSaveTimer->start();
+
     lineBar->handleTextChanged();
-    
+
+    lineBar->m_autoSaveTimer->stop();
+
+    EXPECT_EQ(lineBar->m_autoSaveTimer->isActive(),false);
+    EXPECT_NE(lineBar,nullptr);
+
+   lineBar->deleteLater();
 }
 
 //    void sendText(QString t);
@@ -53,6 +66,9 @@ TEST_F(test_linebar, sendText)
     LineBar *lineBar = new LineBar();
     lineBar->sendText("aa");
     
+    EXPECT_NE(lineBar,nullptr);
+
+    lineBar->deleteLater();
 }
 
 //protected:
@@ -63,8 +79,11 @@ TEST_F(test_linebar, focusOutEvent)
     QFocusEvent *e = new QFocusEvent(QEvent::FocusIn);
     lineBar->focusOutEvent(e);
 
+
+    EXPECT_NE(lineBar,nullptr);
+
     lineBar->deleteLater();
-    delete e;
+    delete e;e=nullptr;
     
 }
 
@@ -73,14 +92,26 @@ TEST_F(test_linebar, keyPressEvent)
 {
     LineBar *lineBar = new LineBar();
     Qt::KeyboardModifier modefiers[4] = {Qt::ControlModifier,Qt::AltModifier,Qt::MetaModifier,Qt::NoModifier};
+
+    EXPECT_NE(lineBar,nullptr);
+
     QKeyEvent *e = new QKeyEvent(QEvent::KeyPress,1,modefiers[0],"\r");
     lineBar->keyPressEvent(e);
+    delete e;e=nullptr;
+
 
     e = new QKeyEvent(QEvent::KeyPress,1,modefiers[1],"\r");
     lineBar->keyPressEvent(e);
+    delete e;e=nullptr;
+
     e = new QKeyEvent(QEvent::KeyPress,1,modefiers[2],"\r");
     lineBar->keyPressEvent(e);
+    delete e;e=nullptr;
+
     e = new QKeyEvent(QEvent::KeyPress,1,modefiers[3],"\r");
     lineBar->keyPressEvent(e);
-    
+    delete e;e=nullptr;
+
+
+    lineBar->deleteLater();
 }

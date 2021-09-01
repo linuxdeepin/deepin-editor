@@ -1,4 +1,4 @@
-#include "test_fontitemdelegata.h"
+#include "ut_fontitemdelegata.h"
 #include "../src/controls/fontitemdelegate.h"
 #include <QPainter>
 test_fontitemdelegata::test_fontitemdelegata()
@@ -9,7 +9,10 @@ test_fontitemdelegata::test_fontitemdelegata()
 TEST_F(test_fontitemdelegata, FontItemDelegate)
 {
     FontItemDelegate* delegate = new FontItemDelegate();
-    delete delegate;
+
+    EXPECT_NE(delegate,nullptr);
+
+    delete delegate;delegate=nullptr;
 }
 
 
@@ -19,10 +22,14 @@ TEST_F(test_fontitemdelegata, paint)
     QPainter* painter = new QPainter;
     QStyleOptionViewItem option;
     QModelIndex index;
-    option.state = QStyle::State_Selected;
+    option.state |= QStyle::State_Selected;
     delegate->paint(painter,option,index);
-    delete painter;
-    delete delegate;
+
+    EXPECT_NE(delegate,nullptr);
+    EXPECT_NE(painter->pen().color(),Qt::white);
+
+    delete painter;painter=nullptr;
+    delete delegate;delegate= nullptr;
 
 }
 
@@ -32,9 +39,12 @@ TEST_F(test_fontitemdelegata, sizeHint)
     QPainter* painter = new QPainter;
     QStyleOptionViewItem option;
     QModelIndex index;
-    option.state = QStyle::State_Selected;
-    delegate->sizeHint(option,index);
-    delete painter;
-    delete delegate;
+    option.state |= QStyle::State_Selected;
+
+    EXPECT_EQ(delegate->sizeHint(option,index),QSize(-1, 30));
+    EXPECT_NE(delegate,nullptr);
+
+    delete painter;painter=nullptr;
+    delete delegate;delegate=nullptr;
 
 }
