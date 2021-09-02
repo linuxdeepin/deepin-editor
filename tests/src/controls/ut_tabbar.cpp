@@ -1,4 +1,4 @@
-#include "test_tabbar.h"
+#include "ut_tabbar.h"
 #include "QStyleOptionTab"
 #include "../src/widgets/window.h"
 #include "../src/editor/editwrapper.h"
@@ -12,9 +12,14 @@ test_tabbar::test_tabbar()
 TEST_F(test_tabbar, Tabbar)
 {
     Tabbar* tab = new Tabbar;
-    tab->m_moreWaysCloseMenu = new QMenu();
-    tab->m_rightMenu = new QMenu();
-    delete tab;tab=nullptr;
+    tab->m_moreWaysCloseMenu = new QMenu(tab);
+    tab->m_rightMenu = new QMenu(tab);
+
+    EXPECT_NE(tab,nullptr);
+    EXPECT_NE(tab->m_moreWaysCloseMenu,nullptr);
+    EXPECT_NE(tab->m_rightMenu,nullptr);
+
+    tab->deleteLater();
 
     
 }
@@ -24,6 +29,10 @@ TEST_F(test_tabbar, openFilesInWindow)
     Tabbar * tab = new Tabbar();
     tab->addTab(".cache/deepin/deepin-editor","aabb");
 
+    EXPECT_NE(tab,nullptr);
+    EXPECT_EQ(tab->currentIndex(),0);
+
+
     tab->deleteLater();
     
 }
@@ -32,6 +41,9 @@ TEST_F(test_tabbar, addTabWithIndex)
 {
     Tabbar * tab = new Tabbar();
     tab->addTabWithIndex(0,".cache/deepin/deepin-editor","aabb");
+
+    EXPECT_NE(tab,nullptr);
+    EXPECT_NE(tab->tabToolTip(0),"aabb");
 
     tab->deleteLater();
     
@@ -49,6 +61,12 @@ TEST_F(test_tabbar, closeTab)
     window->getTabbar()->closeTab(index);
     window->getTabbar()->closeTab(-1);
 
+
+    EXPECT_EQ(window->getTabbar()->count(),0);
+    EXPECT_NE(window->getTabbar(),nullptr);
+    EXPECT_NE(window,nullptr);
+    EXPECT_NE(wrapper,nullptr);
+
     window->deleteLater();
     wrapper->deleteLater();
     
@@ -59,6 +77,9 @@ TEST_F(test_tabbar, closeCurrentTab)
     Tabbar * tab = new Tabbar();
     tab->closeCurrentTab();
 
+    EXPECT_EQ(tab->count(),0);
+    EXPECT_NE(tab,nullptr);
+
     tab->deleteLater();
     
 }
@@ -68,6 +89,10 @@ TEST_F(test_tabbar, closeOtherTabs)
     Tabbar * tab = new Tabbar();
     tab->closeOtherTabs();
 
+    EXPECT_EQ(tab->count(),0);
+    EXPECT_NE(tab,nullptr);
+
+
     tab->deleteLater();
     
 }
@@ -76,7 +101,13 @@ TEST_F(test_tabbar, closeOtherTabs)
 TEST_F(test_tabbar, closeLeftTabs)
 {
     Tabbar * tab = new Tabbar();
+    tab->m_tabPaths.push_back("aa");
     tab->closeLeftTabs("aa");
+    tab->closeLeftTabs("bb");
+
+
+    EXPECT_EQ(tab->count(),0);
+    EXPECT_NE(tab,nullptr);
 
     tab->deleteLater();
     
@@ -85,7 +116,12 @@ TEST_F(test_tabbar, closeLeftTabs)
 TEST_F(test_tabbar, closeRightTabs)
 {
     Tabbar * tab = new Tabbar();
+    tab->m_tabPaths.push_back("aa");
     tab->closeRightTabs("aa");
+    tab->closeLeftTabs("bb");
+
+    EXPECT_EQ(tab->count(),0);
+    EXPECT_NE(tab,nullptr);
 
     tab->deleteLater();
     
@@ -95,7 +131,11 @@ TEST_F(test_tabbar, closeRightTabs)
 TEST_F(test_tabbar, closeOtherTabsExceptFile)
 {
     Tabbar * tab = new Tabbar();
+    tab->m_tabPaths.push_back("bb");
     tab->closeOtherTabsExceptFile("aa");
+
+    EXPECT_EQ(tab->count(),0);
+    EXPECT_NE(tab,nullptr);
 
     tab->deleteLater();
     
@@ -105,8 +145,11 @@ TEST_F(test_tabbar, updateTab)
 {
     Tabbar * tab = new Tabbar();
     tab->addTab("/.cache/deepin/deepin-editor","aa");
+    EXPECT_EQ(tab->m_tabPaths.contains("/.cache/deepin/deepin-editor"),true);
+
     tab->updateTab(0,"/.cache/deepin/deepin-editor","aa");
 
+    EXPECT_NE(tab,nullptr);
     tab->deleteLater();
     
 }
@@ -115,7 +158,13 @@ TEST_F(test_tabbar, previousTab)
 {
     Tabbar * tab = new Tabbar();
     tab->addTab("/.cache/deepin/deepin-editor","aa");
+    EXPECT_EQ(tab->m_tabPaths.contains("/.cache/deepin/deepin-editor"),true);
     tab->previousTab();
+
+    tab->addTab("/.cache/deepin/deepin-editor","bb");
+    tab->previousTab();
+
+    EXPECT_NE(tab,nullptr);
 
     tab->deleteLater();
     
@@ -124,7 +173,12 @@ TEST_F(test_tabbar, previousTab)
 TEST_F(test_tabbar, nextTab)
 {
     Tabbar * tab = new Tabbar();
+    tab->addTab("/.cache/deepin/deepin-editor","aa");
+    EXPECT_EQ(tab->m_tabPaths.contains("/.cache/deepin/deepin-editor"),true);
+
     tab->nextTab();
+
+    EXPECT_NE(tab,nullptr);
 
     tab->deleteLater();
     
@@ -135,7 +189,10 @@ TEST_F(test_tabbar, indexOf)
 {
     Tabbar * tab = new Tabbar();
     tab->addTab("/.cache/deepin/deepin-editor","aa");
-    tab->indexOf("/.cache/deepin/deepin-editor");
+    EXPECT_EQ(tab->m_tabPaths.contains("/.cache/deepin/deepin-editor"),true);
+    EXPECT_NE(tab->indexOf("/.cache/deepin/deepin-editor"),2);
+
+    EXPECT_NE(tab,nullptr);
 
     tab->deleteLater();
     
@@ -146,7 +203,11 @@ TEST_F(test_tabbar, currentName)
 {
     Tabbar * tab = new Tabbar();
     tab->addTab("/.cache/deepin/deepin-editor","aa");
-    tab->currentName();
+    EXPECT_EQ(tab->m_tabPaths.contains("/.cache/deepin/deepin-editor"),true);
+
+    EXPECT_NE(tab->currentName(),"");
+
+    EXPECT_NE(tab,nullptr);
 
     tab->deleteLater();
     
@@ -156,7 +217,11 @@ TEST_F(test_tabbar, currentPath)
 {
     Tabbar * tab = new Tabbar();
     tab->addTab("/.cache/deepin/deepin-editor","aa");
-    tab->currentPath();
+    EXPECT_EQ(tab->m_tabPaths.contains("/.cache/deepin/deepin-editor"),true);
+
+    EXPECT_NE(tab->currentPath(),"");
+
+    EXPECT_NE(tab,nullptr);
 
     tab->deleteLater();
     
@@ -166,7 +231,10 @@ TEST_F(test_tabbar, fileAt)
 {
     Tabbar * tab = new Tabbar();
     tab->addTab("/.cache/deepin/deepin-editor","aa");
-    tab->fileAt(0);
+    EXPECT_EQ(tab->m_tabPaths.contains("/.cache/deepin/deepin-editor"),true);
+
+    EXPECT_NE(tab->fileAt(0),"");
+    EXPECT_NE(tab,nullptr);
 
     tab->deleteLater();
     
@@ -176,7 +244,10 @@ TEST_F(test_tabbar, textAt)
 {
     Tabbar * tab = new Tabbar();
     tab->addTab("/.cache/deepin/deepin-editor","aa");
-    tab->textAt(0);
+    EXPECT_EQ(tab->m_tabPaths.contains("/.cache/deepin/deepin-editor"),true);
+    EXPECT_NE(tab->textAt(0),"");
+
+    EXPECT_NE(tab,nullptr);
 
     tab->deleteLater();
     
@@ -187,7 +258,10 @@ TEST_F(test_tabbar, setTabPalette)
 {
     Tabbar * tab = new Tabbar();
     tab->addTab("/.cache/deepin/deepin-editor","aa");
+    EXPECT_EQ(tab->m_tabPaths.contains("/.cache/deepin/deepin-editor"),true);
     tab->setTabPalette("red","red");
+
+    EXPECT_NE(tab,nullptr);
 
     tab->deleteLater();
     
@@ -197,7 +271,11 @@ TEST_F(test_tabbar, setBackground)
 {
     Tabbar * tab = new Tabbar();
     tab->addTab("/.cache/deepin/deepin-editor","aa");
+    EXPECT_EQ(tab->m_tabPaths.contains("/.cache/deepin/deepin-editor"),true);
+
     tab->setBackground("red","red");
+
+    EXPECT_EQ(tab->m_backgroundStartColor,"red");
 
     tab->deleteLater();
     
@@ -207,7 +285,12 @@ TEST_F(test_tabbar, setDNDColor)
 {
     Tabbar * tab = new Tabbar();
     tab->addTab("/.cache/deepin/deepin-editor","aa");
+    EXPECT_EQ(tab->m_tabPaths.contains("/.cache/deepin/deepin-editor"),true);
+
     tab->setDNDColor("red","red");
+
+    EXPECT_EQ(tab->m_dndStartColor,"red");
+    EXPECT_NE(tab,nullptr);
 
     tab->deleteLater();
     
@@ -218,10 +301,14 @@ TEST_F(test_tabbar, eventFilter)
 {
     Tabbar * tab = new Tabbar();
     tab->addTab("/.cache/deepin/deepin-editor","aa");
+    EXPECT_EQ(tab->m_tabPaths.contains("/.cache/deepin/deepin-editor"),true);
+
     QMouseEvent *e = new QMouseEvent(QEvent::MouseButtonPress,QPointF(76,29),Qt::RightButton,Qt::RightButton,Qt::NoModifier);
 
     //eventFilter: m_rightMenu->exec(mapToGlobal(position));会导致运行停止
     //tab->eventFilter(tab,e);
+
+    EXPECT_NE(tab,nullptr);
 
     tab->deleteLater();
 
@@ -233,7 +320,12 @@ TEST_F(test_tabbar, minimumTabSizeHint)
 {
     Tabbar * tab = new Tabbar();
     tab->addTab("/.cache/deepin/deepin-editor","aa");
-    tab->minimumTabSizeHint(0);
+    EXPECT_EQ(tab->m_tabPaths.contains("/.cache/deepin/deepin-editor"),true);
+
+    EXPECT_EQ(tab->minimumTabSizeHint(0),QSize(110, 40));
+
+
+    EXPECT_NE(tab,nullptr);
 
     tab->deleteLater();
 
@@ -244,8 +336,10 @@ TEST_F(test_tabbar, maximumTabSizeHint)
 {
     Tabbar * tab = new Tabbar();
     tab->addTab("/.cache/deepin/deepin-editor","aa");
-    QEvent *a;
-    tab->maximumTabSizeHint(0);
+
+    EXPECT_EQ(tab->maximumTabSizeHint(0),QSize(160, 40));
+
+    EXPECT_NE(tab,nullptr);
 
     tab->deleteLater();
     
@@ -259,8 +353,14 @@ TEST_F(test_tabbar, createDragPixmapFromTab)
 
     Window * window = new Window;
     window->addTab("/.cache/deepin/deepin-editor",true);
+    EXPECT_EQ(window->m_tabbar->m_tabPaths.contains("/.cache/deepin/deepin-editor"),true);
+
     EditWrapper* wrapper = new EditWrapper(window);
     window->getTabbar()->createDragPixmapFromTab(index,option,&p);
+
+
+    EXPECT_NE(window,nullptr);
+    EXPECT_NE(wrapper,nullptr);
 
     window->deleteLater();
     wrapper->deleteLater();
@@ -277,8 +377,16 @@ TEST_F(test_tabbar, createMimeDataFromTab)
 
     Window * window = new Window;
     window->addTab("/.cache/deepin/deepin-editor",true);
+    EXPECT_EQ(window->m_tabbar->m_tabPaths.contains("/.cache/deepin/deepin-editor"),true);
+
     EditWrapper* wrapper = new EditWrapper(window);
     window->getTabbar()->createMimeDataFromTab(index,option);
+
+
+
+    EXPECT_NE(window,nullptr);
+    EXPECT_NE(wrapper,nullptr);
+
 
     window->deleteLater();
     wrapper->deleteLater();
@@ -296,8 +404,16 @@ TEST_F(test_tabbar, insertFromMimeDataOnDragEnter)
 
     Window * window = new Window;
     window->addTab("/.cache/deepin/deepin-editor",true);
+    EXPECT_EQ(window->m_tabbar->m_tabPaths.contains("/.cache/deepin/deepin-editor"),true);
+
     EditWrapper* wrapper = new EditWrapper(window);
     window->getTabbar()->insertFromMimeDataOnDragEnter(index,mimeData);
+    EXPECT_EQ(wrapper->getFileLoading(),false);
+
+
+    EXPECT_NE(window,nullptr);
+    EXPECT_NE(wrapper,nullptr);
+    EXPECT_NE(mimeData,nullptr);
 
     delete mimeData;mimeData = nullptr;
     window->deleteLater();
@@ -316,8 +432,17 @@ TEST_F(test_tabbar, insertFromMimeData)
 
     Window * window = new Window;
     window->addTab("/.cache/deepin/deepin-editor",true);
+    EXPECT_EQ(window->m_tabbar->m_tabPaths.contains("/.cache/deepin/deepin-editor"),true);
+
     EditWrapper* wrapper = new EditWrapper(window);
     window->getTabbar()->insertFromMimeData(index,mimeData);
+    EXPECT_NE(window->getTabbar()->count(),0);
+
+
+
+    EXPECT_NE(window,nullptr);
+    EXPECT_NE(wrapper,nullptr);
+    EXPECT_NE(mimeData,nullptr);
 
     delete mimeData;mimeData = nullptr;
     window->deleteLater();
@@ -337,8 +462,17 @@ TEST_F(test_tabbar, canInsertFromMimeData)
 
     Window * window = new Window;
     window->addTab("/.cache/deepin/deepin-editor",true);
+    EXPECT_EQ(window->m_tabbar->m_tabPaths.contains("/.cache/deepin/deepin-editor"),true);
+
     EditWrapper* wrapper = new EditWrapper(window);
-    window->getTabbar()->canInsertFromMimeData(index,mimeData);
+    EXPECT_EQ(window->getTabbar()->canInsertFromMimeData(index,mimeData),true);
+
+
+
+    EXPECT_NE(window,nullptr);
+    EXPECT_NE(wrapper,nullptr);
+    EXPECT_NE(mimeData,nullptr);
+
 
     delete mimeData;mimeData = nullptr;
     window->deleteLater();
@@ -357,9 +491,15 @@ TEST_F(test_tabbar, handleDragActionChanged)
 
     Window * window = new Window;
     window->addTab("/.cache/deepin/deepin-editor",true);
+    EXPECT_EQ(window->m_tabbar->m_tabPaths.contains("/.cache/deepin/deepin-editor"),true);
+
     EditWrapper* wrapper = new EditWrapper(window);
     window->getTabbar()->handleDragActionChanged(actions[0]);
     window->getTabbar()->handleDragActionChanged(actions[1]);
+
+
+    EXPECT_NE(window,nullptr);
+    EXPECT_NE(wrapper,nullptr);
 
     window->deleteLater();
     wrapper->deleteLater();
@@ -377,8 +517,14 @@ TEST_F(test_tabbar, mousePressEvent)
 
     Window * window = new Window;
     window->addTab("/.cache/deepin/deepin-editor",true);
+    EXPECT_EQ(window->m_tabbar->m_tabPaths.contains("/.cache/deepin/deepin-editor"),true);
+
     EditWrapper* wrapper = new EditWrapper(window);
     window->getTabbar()->mousePressEvent(event);
+
+
+    EXPECT_NE(window,nullptr);
+    EXPECT_NE(wrapper,nullptr);
 
     delete event;event = nullptr;
     window->deleteLater();
@@ -399,8 +545,16 @@ TEST_F(test_tabbar, dropEvent)
 
     Window * window = new Window;
     window->addTab("/.cache/deepin/deepin-editor",true);
+    EXPECT_EQ(window->m_tabbar->m_tabPaths.contains("/.cache/deepin/deepin-editor"),true);
+
     EditWrapper* wrapper = new EditWrapper(window);
     window->getTabbar()->dropEvent(event);
+
+
+    EXPECT_NE(window,nullptr);
+    EXPECT_NE(wrapper,nullptr);
+    EXPECT_NE(event,nullptr);
+    EXPECT_NE(mimeData,nullptr);
 
     delete mimeData;mimeData = nullptr;
     delete event;event = nullptr;
@@ -419,8 +573,16 @@ TEST_F(test_tabbar, tabSizeHint)
 
     Window * window = new Window;
     window->addTab("/.cache/deepin/deepin-editor",true);
+    EXPECT_EQ(window->m_tabbar->m_tabPaths.contains("/.cache/deepin/deepin-editor"),true);
+
     EditWrapper* wrapper = new EditWrapper(window);
-    window->getTabbar()->tabSizeHint(index);
+    EXPECT_NE(window->getTabbar()->tabSizeHint(index),QSize(1,1));
+
+
+
+
+    EXPECT_NE(window,nullptr);
+    EXPECT_NE(wrapper,nullptr);
 
     window->deleteLater();
     wrapper->deleteLater();
@@ -436,8 +598,13 @@ TEST_F(test_tabbar, handleTabMoved)
 
     Window * window = new Window;
     window->addTab("/.cache/deepin/deepin-editor",true);
+    EXPECT_EQ(window->m_tabbar->m_tabPaths.contains("/.cache/deepin/deepin-editor"),true);
+
     EditWrapper* wrapper = new EditWrapper(window);
     window->getTabbar()->handleTabMoved(index,index);
+
+    EXPECT_NE(window,nullptr);
+    EXPECT_NE(wrapper,nullptr);
 
     window->deleteLater();
     wrapper->deleteLater();
@@ -453,9 +620,16 @@ TEST_F(test_tabbar, handleTabReleased)
 
     Window * window = new Window;
     window->addTab("/.cache/deepin/deepin-editor",true);
+    EXPECT_EQ(window->m_tabbar->m_tabPaths.contains("/.cache/deepin/deepin-editor"),true);
+
     EditWrapper* wrapper = new EditWrapper(window);
     window->getTabbar()->m_listOldTabPath.push_back("/.cache/deepin/deepin-editor");
+    EXPECT_EQ(window->getTabbar()->m_listOldTabPath.contains("/.cache/deepin/deepin-editor"),true);
     window->getTabbar()->handleTabReleased(index);
+
+
+    EXPECT_NE(window,nullptr);
+    EXPECT_NE(wrapper,nullptr);
 
     window->deleteLater();
     wrapper->deleteLater();
@@ -471,8 +645,14 @@ TEST_F(test_tabbar, handleTabIsRemoved)
 
     Window * window = new Window;
     window->addTab("/.cache/deepin/deepin-editor",true);
+    EXPECT_EQ(window->m_tabbar->m_tabPaths.contains("/.cache/deepin/deepin-editor"),true);
+
     EditWrapper* wrapper = new EditWrapper(window);
     window->getTabbar()->handleTabIsRemoved(index);
+
+
+    EXPECT_NE(window,nullptr);
+    EXPECT_NE(wrapper,nullptr);
 
     window->deleteLater();
     wrapper->deleteLater();
@@ -490,9 +670,15 @@ TEST_F(test_tabbar, handleTabDroped)
 
     Window * window = new Window;
     window->addTab("/.cache/deepin/deepin-editor",true);
+    EXPECT_EQ(window->m_tabbar->m_tabPaths.contains("/.cache/deepin/deepin-editor"),true);
+
     EditWrapper* wrapper = new EditWrapper(window);
     window->getTabbar()->handleTabDroped(index,actions[0],nullptr);
     window->getTabbar()->handleTabDroped(index,actions[0],window->getTabbar());
+
+
+    EXPECT_NE(window,nullptr);
+    EXPECT_NE(wrapper,nullptr);
 
     window->deleteLater();
     wrapper->deleteLater();
@@ -510,8 +696,15 @@ TEST_F(test_tabbar, onTabDrapStart)
 
     Window * window = new Window;
     window->addTab("/.cache/deepin/deepin-editor",true);
+    EXPECT_EQ(window->m_tabbar->m_tabPaths.contains("/.cache/deepin/deepin-editor"),true);
+
+
     EditWrapper* wrapper = new EditWrapper(window);
     window->getTabbar()->onTabDrapStart();
+    EXPECT_EQ(window->isVisible(),true);
+
+    EXPECT_NE(window,nullptr);
+    EXPECT_NE(wrapper,nullptr);
 
     window->deleteLater();
     wrapper->deleteLater();
@@ -530,8 +723,17 @@ TEST_F(test_tabbar, resizeEvent)
 
     Window * window = new Window;
     window->addTab("/.cache/deepin/deepin-editor",true);
+    EXPECT_EQ(window->m_tabbar->m_tabPaths.contains("/.cache/deepin/deepin-editor"),true);
+
     EditWrapper* wrapper = new EditWrapper(window);
     window->getTabbar()->resizeEvent(e);
+
+
+    EXPECT_NE(window,nullptr);
+    EXPECT_NE(wrapper,nullptr);
+    EXPECT_NE(e,nullptr);
+
+
 
     delete e;  e = nullptr;
     window->deleteLater();
