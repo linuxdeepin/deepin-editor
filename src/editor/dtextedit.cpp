@@ -6222,6 +6222,22 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         return;
     }
 
+    if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "copy")) {
+        copy();
+        return;
+    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "selectall")) {
+        #if 0
+        //2021-2-25:setSelectAll()替换
+        if (m_wrapper->getFileLoading()) {
+            return;
+        }
+        m_bIsAltMod = false;
+        selectAll();
+        #endif
+        setSelectAll();
+        return;
+    }
+
     if (m_readOnlyMode || m_bReadOnlyPermission) {
         if (key == "J") {
             nextLine();
@@ -6431,7 +6447,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             m_pUndoStack->redo();
             return;
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "cut")) {
-#if 0
+	    #if 0
             //列编辑添加撤销重做
             if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
                 QString data;
@@ -6456,11 +6472,11 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
                     clipboard->setText(data);
                 }
             }
-#endif
+            #endif
             this->cut();
             return;
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "paste")) {
-#if 0
+            #if 0
             //添加剪切板内容到撤销重做栈
             const QClipboard *clipboard = QApplication::clipboard(); //获取剪切版内容
 
@@ -6469,31 +6485,10 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             } else {
                 insertSelectTextEx(textCursor(), clipboard->text());
             }
-#endif
+            #endif
             this->paste();
             return;
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "copy")) {
-#if 0
-            if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
-                QString data;
-                for (auto sel : m_altModSelections) {
-                    data.append(sel.cursor.selectedText());
-                }
-                QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
-                clipboard->setText(data);
-            } else {
-                QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
-                if (textCursor().hasSelection()) {
-                    clipboard->setText(textCursor().selection().toPlainText());
-                    tryUnsetMark();
-                } else {
-                    clipboard->setText(m_highlightWordCacheCursor.selectedText());
-                }
-            }
-#endif
-            this->copy();
-            return;
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "scrollup")) {
+        }  else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "scrollup")) {
             //向上翻页
             scrollUp();
             return;
@@ -6501,18 +6496,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             //向下翻页
             scrollDown();
             return;
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "selectall")) {
-#if 0
-            //2021-2-25:setSelectAll()替换
-            if (m_wrapper->getFileLoading()) {
-                return;
-            }
-            m_bIsAltMod = false;
-            selectAll();
-#endif
-            setSelectAll();
-            return;
-        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "copylines")) {
+        }  else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "copylines")) {
             copyLines();
             return;
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "cutlines")) {
