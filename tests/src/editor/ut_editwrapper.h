@@ -17,12 +17,13 @@
 #ifndef TEST_EDITWRAPPER_H
 #define TEST_EDITWRAPPER_H
 
-#include"../../src/startmanager.h"
-#include"../../src/editor/dtextedit.h"
-#include"../../src/common/settings.h"
-#include"../../src/widgets/window.h"
-#include"../../src/editor/editwrapper.h"
-#include"../../src/controls/tabbar.h"
+#include "../../src/startmanager.h"
+#include "../../src/editor/dtextedit.h"
+#include "../../src/common/settings.h"
+#include "../../src/widgets/window.h"
+#include "../../src/editor/editwrapper.h"
+#include "../../src/controls/tabbar.h"
+#include "../stub.h"
 #include "gtest/gtest.h"
 #include <QObject>
 

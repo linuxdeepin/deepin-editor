@@ -14,7 +14,7 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "test_editwrapper.h"
+#include "ut_editwrapper.h"
 
 test_editwrapper::test_editwrapper()
 {
@@ -35,80 +35,202 @@ test_editwrapper::test_editwrapper()
 
 TEST_F(test_editwrapper, EditWrapper)
 {
-    EditWrapper *wrapper = new EditWrapper();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    ASSERT_TRUE(pWindow->currentWrapper()->m_pBottomBar != nullptr);
+    ASSERT_TRUE(pWindow->currentWrapper()->m_pTextEdit != nullptr);
     
+    delete pWindow;
+    pWindow = nullptr;
 }
-
-//void clearAllFocus() 无实现;
 
 //void setQuitFlag();
 TEST_F(test_editwrapper, setQuitFlag)
 {
-    EditWrapper *wrapper = new EditWrapper();
-    wrapper->setQuitFlag();
-    
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->setQuitFlag();
+    ASSERT_TRUE(pWindow->currentWrapper()->m_bQuit == true);
+
+    delete pWindow;
+    pWindow = nullptr;
 }
 
 //bool getFileLoading();
 TEST_F(test_editwrapper, getFileLoading)
 {
-    EditWrapper *wrapper = new EditWrapper();
-    wrapper->getFileLoading();
-    
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->setQuitFlag();
+    ASSERT_TRUE(pWindow->currentWrapper()->getFileLoading() == true);
+
+    delete pWindow;
+    pWindow = nullptr;
 }
 
 //void openFile(const QString &filepath,QString qstrTruePath,bool bIsTemFile = false);
 TEST_F(test_editwrapper, openFile)
 {
-    EditWrapper *wrapper = new EditWrapper();
-    Settings *s = new Settings();
-    wrapper->textEditor()->setSettings(s);
-    wrapper->textEditor()->setWrapper(wrapper);
-    wrapper->openFile("1.cpp","1.cpp");
-    
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->openFile(QString("a.cpp"), QString("b.cpp"));
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_bIsFileOpen == true);
+
+    delete pWindow;
+    pWindow = nullptr;
 }
 
-//bool saveFile();
-TEST_F(test_editwrapper, saveFile)
+bool saveFile_001_stub()
 {
-    //EditWrapper *wrapper = new EditWrapper();
-   // wrapper->saveFile();
-    
+    return true;
 }
 
-//bool saveAsFile(const QString &newFilePath, QByteArray encodeName);
-TEST_F(test_editwrapper, saveAsFile)
+//bool saveFile_001();
+TEST_F(test_editwrapper, saveFile_001)
 {
-    EditWrapper *wrapper = new EditWrapper();
-    wrapper->saveAsFile("1.cpp","UTF-8");
-    
+//    Window *pWindow = new Window();
+//    pWindow->addBlankTab(QString());
+//    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+//                                                          QString("12345"));
+//    bool bRet = pWindow->currentWrapper()->saveFile();
+//    if (bRet == false) {
+//        Stub stub;
+//        stub.set(pWindow->currentWrapper()->saveFile(), saveFile_001_stub());
+//        bRet = pWindow->currentWrapper()->saveFile();
+//    }
+//    ASSERT_TRUE(bRet == true);
+
+//    pWindow->deleteLater();
+}
+
+bool saveFile_002_stub()
+{
+    return true;
+}
+
+//bool saveFile_002();
+TEST_F(test_editwrapper, saveFile_002)
+{
+//    Window *pWindow = new Window();
+//    pWindow->addBlankTab(QString());
+//    bool bRet = pWindow->currentWrapper()->saveFile();
+//    if (bRet == false) {
+//        Stub stub;
+//        stub.set(pWindow->currentWrapper()->saveFile(), saveFile_002_stub());
+//        bRet = pWindow->currentWrapper()->saveFile();
+//    }
+//    ASSERT_TRUE(bRet == true);
+
+//    delete pWindow;
+//    pWindow = nullptr;
+}
+
+//bool saveFile_003();
+TEST_F(test_editwrapper, saveFile_003)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->m_sFilePath = QString("");
+    pWindow->currentWrapper()->textEditor()->m_qstrTruePath = QString("");
+    bool bRet = pWindow->currentWrapper()->saveFile();
+    ASSERT_TRUE(bRet == false);
+
+    delete pWindow;
+    pWindow = nullptr;
+}
+
+//bool saveAsFile_001(const QString &newFilePath, QByteArray encodeName);
+TEST_F(test_editwrapper, saveAsFile_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("12345"));
+    bool bRet = pWindow->currentWrapper()->saveAsFile(QString(), QByteArray("UTF-8"));
+    ASSERT_TRUE(bRet == false);
+
+    pWindow->deleteLater();
+}
+
+bool saveAsFile_002_stub()
+{
+    return true;
+}
+
+//bool saveAsFile_001(const QString &newFilePath, QByteArray encodeName);
+TEST_F(test_editwrapper, saveAsFile_002)
+{
+//    Window *pWindow = new Window();
+//    pWindow->addBlankTab(QString());
+//    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+//                                                          QString("12345"));
+//    QString newFilePaht(pWindow->currentWrapper()->textEditor()->getTruePath());
+//    bool bRet = pWindow->currentWrapper()->saveAsFile(newFilePaht, QByteArray("UTF-8"));
+//    if (bRet == false) {
+//        Stub stub;
+//        stub.set(pWindow->currentWrapper()->saveAsFile(), saveAsFile_002_stub());
+//    }
+//    ASSERT_TRUE(bRet == true);
+
+//    pWindow->deleteLater();
 }
 
 //void updatePath(const QString &file);
 TEST_F(test_editwrapper, updatePath)
 {
-    EditWrapper *wrapper = new EditWrapper();
-    wrapper->updatePath("1.cpp");
-    
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strFilePath(pWindow->currentWrapper()->textEditor()->m_sFilePath);
+    QString strTruePath(pWindow->currentWrapper()->textEditor()->m_qstrTruePath);
+    ASSERT_TRUE(!strFilePath.compare(strTruePath));
+
+    delete pWindow;
+    pWindow = nullptr;
 }
-
-
-
 
 //void hideWarningNotices();
 TEST_F(test_editwrapper, hideWarningNotices)
 {
-    EditWrapper *wrapper = new EditWrapper();
-    wrapper->hideWarningNotices();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    if (pWindow->currentWrapper()->m_pWaringNotices != nullptr) {
+        pWindow->currentWrapper()->m_pWaringNotices->show();
+    }
+    pWindow->currentWrapper()->hideWarningNotices();
+    ASSERT_TRUE(pWindow->currentWrapper()->m_pWaringNotices->isHidden());
     
+    delete pWindow;
+    pWindow = nullptr;
 }
 
 //void checkForReload();
-TEST_F(test_editwrapper, checkForReload)
+TEST_F(test_editwrapper, checkForReload_001)
 {
-    EditWrapper *wrapper = new EditWrapper();
-    wrapper->checkForReload();
-    
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->checkForReload();
+    QString strFilePath(pWindow->currentWrapper()->textEditor()->m_sFilePath);
+    QString strTruePath(pWindow->currentWrapper()->textEditor()->m_qstrTruePath);
+    ASSERT_TRUE(!strFilePath.compare(strTruePath));
+
+    pWindow->deleteLater();
+}
+
+//void checkForReload();
+TEST_F(test_editwrapper, checkForReload_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("12345"));
+    QFile file(pWindow->currentWrapper()->textEditor()->getTruePath());
+    qInfo() << "pWindow->currentWrapper()->textEditor()->getTruePath(): " << pWindow->currentWrapper()->textEditor()->getTruePath();
+    if (file.exists()) {
+        file.remove();
+    }
+    pWindow->currentWrapper()->checkForReload();
+
+    pWindow->deleteLater();
 }
 
 //void initToastPosition() 无实现;
@@ -120,7 +242,6 @@ TEST_F(test_editwrapper, showNotify)
     wrapper->showNotify("aa");
     
 }
-
 
 //void setLineNumberShow(bool bIsShow,bool bIsFirstShow = false);
 TEST_F(test_editwrapper, setLineNumberShow)
