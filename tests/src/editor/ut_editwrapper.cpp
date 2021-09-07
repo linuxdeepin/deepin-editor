@@ -216,6 +216,11 @@ TEST_F(test_editwrapper, checkForReload_001)
     pWindow->deleteLater();
 }
 
+bool checkForReload_002_stub()
+{
+    return false;
+}
+
 //void checkForReload();
 TEST_F(test_editwrapper, checkForReload_002)
 {
@@ -223,12 +228,10 @@ TEST_F(test_editwrapper, checkForReload_002)
     pWindow->addBlankTab(QString());
     pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
                                                           QString("12345"));
-    QFile file(pWindow->currentWrapper()->textEditor()->getTruePath());
-    qInfo() << "pWindow->currentWrapper()->textEditor()->getTruePath(): " << pWindow->currentWrapper()->textEditor()->getTruePath();
-    if (file.exists()) {
-        file.remove();
-    }
+    Stub stub;
+    stub.set(ADDR(Utils,isDraftFile), checkForReload_002_stub);
     pWindow->currentWrapper()->checkForReload();
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->getTruePath() != nullptr);
 
     pWindow->deleteLater();
 }
@@ -236,86 +239,170 @@ TEST_F(test_editwrapper, checkForReload_002)
 //void initToastPosition() 无实现;
 
 //void showNotify(const QString &message);
-TEST_F(test_editwrapper, showNotify)
+TEST_F(test_editwrapper, showNotify_001)
 {
-    EditWrapper *wrapper = new EditWrapper();
-    wrapper->showNotify("aa");
-    
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->setReadOnlyPermission(true);
+    pWindow->currentWrapper()->textEditor()->m_readOnlyMode = true;
+    pWindow->currentWrapper()->showNotify(QString("read-only"));
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->getReadOnlyPermission() == true);
+
+    pWindow->deleteLater();
+}
+
+//void showNotify(const QString &message);
+TEST_F(test_editwrapper, showNotify_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->setReadOnlyPermission(false);
+    pWindow->currentWrapper()->textEditor()->m_readOnlyMode = false;
+    pWindow->currentWrapper()->showNotify(QString("Not read-only"));
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->getReadOnlyPermission() == false);
+
+    pWindow->deleteLater();
 }
 
 //void setLineNumberShow(bool bIsShow,bool bIsFirstShow = false);
-TEST_F(test_editwrapper, setLineNumberShow)
+TEST_F(test_editwrapper, setLineNumberShow_001)
 {
-    EditWrapper *wrapper = new EditWrapper();
-    wrapper->setLineNumberShow(true);
-    
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->setLineNumberShow(true, false);
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->getLeftAreaWidget()->m_pLineNumberArea->isVisible());
+
+    pWindow->deleteLater();
+}
+
+//void setLineNumberShow(bool bIsShow,bool bIsFirstShow = false);
+TEST_F(test_editwrapper, setLineNumberShow_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->setLineNumberShow(false);
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->getLeftAreaWidget()->m_pLineNumberArea->isHidden());
+
+    pWindow->deleteLater();
 }
 
 //void setShowBlankCharacter(bool ok);
-TEST_F(test_editwrapper, setShowBlankCharacter)
+TEST_F(test_editwrapper, setShowBlankCharacter_001)
 {
-    EditWrapper *wrapper = new EditWrapper();
-    wrapper->setShowBlankCharacter(true);
-    
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->setShowBlankCharacter(true);
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->document()->defaultTextOption().flags() == QTextOption::ShowTabsAndSpaces);
+
+    pWindow->deleteLater();
+}
+
+//void setShowBlankCharacter(bool ok);
+TEST_F(test_editwrapper, setShowBlankCharacter_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->setShowBlankCharacter(false);
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->document()->defaultTextOption().flags() != QTextOption::ShowTabsAndSpaces);
+
+    pWindow->deleteLater();
 }
 
 //BottomBar *bottomBar();
 TEST_F(test_editwrapper, bottomBar)
 {
-    EditWrapper *wrapper = new EditWrapper();
-    wrapper->bottomBar();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    ASSERT_TRUE(pWindow->currentWrapper()->bottomBar());
     
+    pWindow->deleteLater();
 }
 
 //QString filePath();
 TEST_F(test_editwrapper, filePath)
 {
-    EditWrapper *wrapper = new EditWrapper();
-    wrapper->filePath();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    ASSERT_TRUE(!pWindow->currentWrapper()->filePath().isEmpty());
     
+    pWindow->deleteLater();
 }
 
 //TextEdit *textEditor() { return m_textEdit; }
 TEST_F(test_editwrapper, textEditor)
 {
-    EditWrapper *wrapper = new EditWrapper();
-    wrapper->textEditor();
-    
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor());
+
+    pWindow->deleteLater();
 }
-
-//private:
-
 
 //int GetCorrectUnicode1(const QByteArray &ba) 未实现;
 
-//bool saveDraftFile();
+int saveDraftFile_stub()
+{
+    return 1;
+}
+
+//bool saveDraftFile(); Subsequent processing
 TEST_F(test_editwrapper, saveDraftFile)
 {
-    EditWrapper *wrapper = new EditWrapper();
-    //wrapper->saveDraftFile();
-    
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    //Stub stub;
+    //stub.set(ADDR(DFileDialog, exec), saveDraftFile_stub);
+    //pWindow->currentWrapper()->saveDraftFile();
+
+    pWindow->deleteLater();
+}
+
+void readFile_stub_001()
+{
+    return;
 }
 
 //void readFile(const QString &filePath);
-TEST_F(test_editwrapper, readFile)
+TEST_F(test_editwrapper, readFile_001)
 {
-    EditWrapper *wrapper = new EditWrapper();
-    wrapper->readFile("aa");
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString filePath = QCoreApplication::applicationDirPath() + QString("/Makefile");
+    pWindow->currentWrapper()->textEditor()->setTruePath(filePath);
+    pWindow->currentWrapper()->textEditor()->m_sFilePath = filePath;
+    Stub stub;
+    stub.set(ADDR(EditWrapper,loadContent), readFile_stub_001);
+    bool bRet = pWindow->currentWrapper()->readFile(QByteArray());
+    ASSERT_TRUE(bRet);
     
+    pWindow->deleteLater();
 }
 
+//void readFile(const QString &filePath);
+TEST_F(test_editwrapper, readFile_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString filePath = QCoreApplication::applicationDirPath() + QString("/Makefile001");
+    pWindow->currentWrapper()->textEditor()->setTruePath(filePath);
+    pWindow->currentWrapper()->textEditor()->m_sFilePath = filePath;
+    Stub stub;
+    stub.set(ADDR(EditWrapper,loadContent), readFile_stub_001);
+    bool bRet = pWindow->currentWrapper()->readFile(QByteArray("UTF-8"));
+    ASSERT_FALSE(bRet);
 
+    pWindow->deleteLater();
+}
 
 //void handleFileLoadFinished(const QByteArray &encode,const QString &content);
 TEST_F(test_editwrapper, handleFileLoadFinished)
 {
-    Window* pWindow = new Window;
-    EditWrapper *wrapper = pWindow->createEditor();
-    Settings *s = new Settings();
-    wrapper->textEditor()->setSettings(s);
-    wrapper->textEditor()->setWrapper(wrapper);
-    wrapper->handleFileLoadFinished("UTF-8","aa");
-    
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    const QString filePath = QCoreApplication::applicationDirPath() + QString("/Makefile");
+    pWindow->currentWrapper()->openFile(filePath, filePath, false);
+
+    pWindow->deleteLater();
 }
 
 ////重新加载文件编码 1.文件修改 2.文件未修改处理逻辑一样 切换编码重新加载和另存为 梁卫东
