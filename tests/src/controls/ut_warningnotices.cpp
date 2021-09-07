@@ -14,7 +14,7 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "test_warningnotices.h"
+#include "ut_warningnotices.h"
 #include "../../src/controls/warningnotices.h"
 
 test_warningnotices::test_warningnotices()
@@ -35,9 +35,15 @@ TEST_F(test_warningnotices, setReloadBtn)
     WarningNotices *notices = new WarningNotices(WarningNotices::ResidentType);
     notices->m_reloadBtn->setVisible(false);
     notices->setReloadBtn();
+    EXPECT_EQ(notices->m_reloadBtn->isVisible(),false);
 
     notices->setReloadBtn();
     notices->slotreloadBtnClicked();
+    EXPECT_EQ(notices->isVisible(),false);
+
+
+    EXPECT_NE(notices,nullptr);
+    notices->deleteLater();
     
 }
 
@@ -47,6 +53,11 @@ TEST_F(test_warningnotices, setSaveAsBtn)
     WarningNotices *notices = new WarningNotices(WarningNotices::ResidentType);
     notices->setSaveAsBtn();
     notices->slotsaveAsBtnClicked();
+
+    EXPECT_EQ(notices->m_saveAsBtn->isVisible(),false);
+
+    EXPECT_NE(notices,nullptr);
+    notices->deleteLater();
     
 }
 

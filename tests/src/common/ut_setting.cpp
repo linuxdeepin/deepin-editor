@@ -14,7 +14,7 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "test_setting.h"
+#include "ut_setting.h"
 #include "../../src/common/settings.h"
 #include <DSettingsDialog>
 #include <DSettingsWidgetFactory>

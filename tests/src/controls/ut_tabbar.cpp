@@ -410,7 +410,6 @@ TEST_F(test_tabbar, insertFromMimeDataOnDragEnter)
     window->getTabbar()->insertFromMimeDataOnDragEnter(index,mimeData);
     EXPECT_EQ(wrapper->getFileLoading(),false);
 
-
     EXPECT_NE(window,nullptr);
     EXPECT_NE(wrapper,nullptr);
     EXPECT_NE(mimeData,nullptr);

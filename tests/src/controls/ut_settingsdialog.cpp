@@ -1,4 +1,4 @@
-#include "test_settingsdialog.h"
+#include "ut_settingsdialog.h"
 
 test_settingsdialog::test_settingsdialog()
 {

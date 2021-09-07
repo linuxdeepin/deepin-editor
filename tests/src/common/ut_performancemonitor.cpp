@@ -14,7 +14,7 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "test_performancemonitor.h"
+#include "ut_performancemonitor.h"
 #include "../../src/common/performancemonitor.h"
 
 test_performanceMonitor::test_performanceMonitor()
@@ -32,47 +32,57 @@ TEST_F(test_performanceMonitor, PerformanceMonitor)
 //static void initializeAppStart();
 TEST_F(test_performanceMonitor, initializeAppStart)
 {
-    PerformanceMonitor PerformanceMonitor;
-    PerformanceMonitor.initializeAppStart();
+    PerformanceMonitor p;
+    p.initializeAppStart();
+    EXPECT_NE(p.initializeAppStartMs,0);
     
 }
 
 //static void initializAppFinish();
 TEST_F(test_performanceMonitor, initializAppFinish)
 {
-    PerformanceMonitor PerformanceMonitor;
-    PerformanceMonitor.initializAppFinish();
+    PerformanceMonitor p;
+    p.initializAppFinish();
+
+    EXPECT_NE(p.inittalizeApoFinishMs,0);
     
 }
 
 //static void closeAppStart();
 TEST_F(test_performanceMonitor, closeAppStart)
 {
-    PerformanceMonitor PerformanceMonitor;
-    PerformanceMonitor.closeAppStart();
+    PerformanceMonitor p;
+    p.closeAppStart();
+
+    EXPECT_NE(p.closeAppStartMs,0);
     
 }
 
 //static void closeAPPFinish();
 TEST_F(test_performanceMonitor, closeAPPFinish)
 {
-    PerformanceMonitor PerformanceMonitor;
-    PerformanceMonitor.closeAPPFinish();
+    PerformanceMonitor p;
+    p.closeAPPFinish();
+
+    EXPECT_NE(p.closeAppFinishMs,0);
     
 }
 
 //static void openFileStart();
 TEST_F(test_performanceMonitor, openFileStart)
 {
-     PerformanceMonitor PerformanceMonitor;
-    PerformanceMonitor.openFileStart();
+     PerformanceMonitor p;
+     p.openFileStart();
     
+     EXPECT_NE(p.openFileStartMs,0);
 }
 
 //static void openFileFinish(const QString &strFileName, qint64 iFileSize);
 TEST_F(test_performanceMonitor, openFileFinish)
 {
-    PerformanceMonitor PerformanceMonitor;
-    PerformanceMonitor.openFileFinish("aa",1);
+    PerformanceMonitor p;
+    p.openFileFinish("aa",1);
+
+    EXPECT_NE(p.openFileFinishMs,0);
     
 }

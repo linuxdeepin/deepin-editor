@@ -14,7 +14,7 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "test_utils.h"
+#include "ut_utils.h"
 
 #include "../../src/common/settings.h"
 #include "../../src/controls/tabbar.h"
