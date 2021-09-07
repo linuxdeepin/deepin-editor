@@ -19,6 +19,7 @@ TEST_F(test_toolbar, setTabbar)
 {
     ToolBar* tool = new ToolBar();
     tool->setTabbar(nullptr);
+
     EXPECT_NE(tool->m_layout->count(),0);
 
     EXPECT_NE(tool,nullptr);

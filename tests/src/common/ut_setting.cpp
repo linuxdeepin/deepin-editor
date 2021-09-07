@@ -31,11 +31,13 @@ test_setting::test_setting()
 void test_setting::SetUp()
 {
     m_setting = new Settings();
+    EXPECT_NE(m_setting,nullptr);
 }
 
 void test_setting::TearDown()
 {
     delete m_setting;
+    m_setting=nullptr;
 }
 
 TEST_F(test_setting, Settings)
@@ -45,6 +47,7 @@ TEST_F(test_setting, Settings)
                           .arg(qApp->organizationName())
                           .arg(qApp->applicationName());
     QSettingBackend *m_backend = new QSettingBackend(figPath);
+
 
     m_setting->settings = DSettings::fromJsonFile(":/resources/settings.json");
     m_setting->settings->setBackend(m_backend);
@@ -57,13 +60,17 @@ TEST_F(test_setting, Settings)
     QMetaObject::invokeMethod(fontFamliy, "valueChanged", Qt::DirectConnection,
                               QGenericReturnArgument(),
                               Q_ARG(QVariant, "dsd"));
+
+
+    EXPECT_NE(m_backend,nullptr);
+    m_backend->deleteLater();
 }
 
 //static Settings* instance();
 TEST_F(test_setting, instance)
 {
-    Settings::instance();
-    assert(1 == 1);
+    EXPECT_NE(Settings::instance(),nullptr);
+
 }
 
 //void dtkThemeWorkaround(QWidget *parent, const QString &theme);
@@ -71,7 +78,11 @@ TEST_F(test_setting, dtkThemeWorkaround)
 {
     QWidget *widget = new QWidget();
     Settings::instance()->dtkThemeWorkaround(widget, "dlight");
-    assert(1 == 1);
+
+
+    EXPECT_NE(widget,nullptr);
+    widget->deleteLater();
+
 }
 
 //static QPair<QWidget*, QWidget*> createFontComBoBoxHandle(QObject *obj);
@@ -82,8 +93,14 @@ TEST_F(test_setting, createFontComBoBoxHandle)
     dialog->widgetFactory()->registerWidget("fontcombobox", m_setting->createFontComBoBoxHandle);
 
     DTK_CORE_NAMESPACE::DSettingsOption o;
-    m_setting->createFontComBoBoxHandle(&o);
-    assert(1 == 1);
+    auto it = m_setting->createFontComBoBoxHandle(&o);
+    EXPECT_EQ(it.first,nullptr);
+
+    EXPECT_NE(dialog,nullptr);
+    EXPECT_NE(widget,nullptr);
+    widget->deleteLater();
+    dialog->deleteLater();
+
 }
 
 //static QPair<QWidget*, QWidget*> createKeySequenceEditHandle(QObject *obj);
@@ -94,7 +111,13 @@ TEST_F(test_setting, createKeySequenceEditHandle)
     dialog->widgetFactory()->registerWidget("fontcombobox", Settings::createKeySequenceEditHandle);
 
     DTK_CORE_NAMESPACE::DSettingsOption o;
-    m_setting->createKeySequenceEditHandle(&o);
+    auto it = m_setting->createKeySequenceEditHandle(&o);
+    EXPECT_EQ(it.first,nullptr);
+
+    EXPECT_NE(dialog,nullptr);
+    EXPECT_NE(widget,nullptr);
+    widget->deleteLater();
+    dialog->deleteLater();
 }
 
 //static Settings* instance();
@@ -105,7 +128,13 @@ TEST_F(test_setting, setSettingDialog)
     QWidget *widget = new QWidget();
     DSettingsDialog *dialog = new DSettingsDialog(widget);
     Settings::instance()->setSettingDialog(dialog);
-    assert(1 == 1);
+
+    EXPECT_NE(Settings::instance()->m_pSettingsDialog,nullptr);
+
+    EXPECT_NE(dialog,nullptr);
+    EXPECT_NE(widget,nullptr);
+    widget->deleteLater();
+    dialog->deleteLater();
 }
 
 //private:
@@ -114,7 +143,8 @@ TEST_F(test_setting, updateAllKeysWithKeymap)
 {
     QString keymap = Settings::instance()->settings->option("shortcuts.keymap.keymap")->value().toString();
     Settings::instance()->updateAllKeysWithKeymap(keymap);
-    assert(1 == 1);
+
+    EXPECT_NE(Settings::instance()->m_bUserChangeKey,true);
 }
 
 //void copyCustomizeKeysFromKeymap(QString keymap);
@@ -122,7 +152,8 @@ TEST_F(test_setting, copyCustomizeKeysFromKeymap)
 {
     QString keymap = Settings::instance()->settings->option("shortcuts.keymap.keymap")->value().toString();
     Settings::instance()->copyCustomizeKeysFromKeymap(keymap);
-    assert(1 == 1);
+
+    EXPECT_NE(Settings::instance()->m_bUserChangeKey,true);
 }
 
 //此函数代码调试中已经覆盖， html中显示未覆盖
@@ -130,21 +161,21 @@ TEST_F(test_setting, checkShortcutValid)
 {
     bool ok;
     QString reason = "reason";
-    m_setting->checkShortcutValid("shortcuts.keymap.keymap", "Enter", reason, ok);
+    EXPECT_NE(m_setting->checkShortcutValid("shortcuts.keymap.keymap", "Enter", reason, ok),true);
 }
 
 TEST_F(test_setting, checkShortcutValid2)
 {
     bool ok;
     QString reason = "reason";
-    m_setting->checkShortcutValid("shortcuts.keymap.keymap", "<", reason, ok);
+    EXPECT_NE(m_setting->checkShortcutValid("shortcuts.keymap.keymap", "<", reason, ok),true);
 }
 
 TEST_F(test_setting, checkShortcutValid3)
 {
     bool ok;
     QString reason = "reason";
-    m_setting->checkShortcutValid("shortcuts.keymap.keymap<", "Num+", reason, ok);
+    EXPECT_NE(m_setting->checkShortcutValid("shortcuts.keymap.keymap<", "Num+", reason, ok),true);
 }
 
 TEST_F(test_setting, isShortcutConflict)
@@ -154,9 +185,9 @@ TEST_F(test_setting, isShortcutConflict)
     QStringList list;
     list << "aa"
          << "bb";
-    m_setting->isShortcutConflict("aa", "bb");
+    EXPECT_NE(m_setting->isShortcutConflict("aa", "bb"),true);
 
-    m_setting->isShortcutConflict("aa", "bb");
+    EXPECT_NE(m_setting->isShortcutConflict("aa", "bb"),true);
 
     QVariant value;
     m_setting->slotCustomshortcut("Ctrl+T",value);
@@ -190,9 +221,13 @@ TEST_F(test_setting, KeySequenceEdit)
     QVariant keymap = Settings::instance()->settings->option("shortcuts.keymap.keymap")->value();
     shortCutLineEdit->slotDSettingsOptionvalueChanged(keymap);
 
-    delete widget;
-    delete shortCutLineEdit;
-    delete e;
+
+    EXPECT_NE(widget,nullptr);
+    EXPECT_NE(shortCutLineEdit,nullptr);
+    EXPECT_NE(e,nullptr);
+    widget->deleteLater();
+    shortCutLineEdit->deleteLater();
+    delete e ;e=nullptr;
 }
 
 //以下两条CASE 脚本跑会造成程序崩，加两行debug后就不崩了

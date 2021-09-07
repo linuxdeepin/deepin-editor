@@ -34,6 +34,7 @@ TEST_F(test_findbar, FindBar)
 TEST_F(test_findbar, isFocus)
 {
     FindBar *findBar = new FindBar();
+
     EXPECT_NE(findBar,nullptr);
     EXPECT_EQ(findBar->isFocus(),false);
 

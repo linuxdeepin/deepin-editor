@@ -185,6 +185,7 @@ TEST_F(test_replacebar, keyPressEvent)
     rep->m_replaceAllButton->setFocus();
     rep->m_replaceRestButton->setFocus();
     rep->keyPressEvent(e2);
+
     EXPECT_EQ(rep->m_replaceRestButton->hasFocus(),false);
     delete e2; e2=nullptr;
 

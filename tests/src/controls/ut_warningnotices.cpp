@@ -35,6 +35,7 @@ TEST_F(test_warningnotices, setReloadBtn)
     WarningNotices *notices = new WarningNotices(WarningNotices::ResidentType);
     notices->m_reloadBtn->setVisible(false);
     notices->setReloadBtn();
+
     EXPECT_EQ(notices->m_reloadBtn->isVisible(),false);
 
     notices->setReloadBtn();
@@ -53,6 +54,7 @@ TEST_F(test_warningnotices, setSaveAsBtn)
     WarningNotices *notices = new WarningNotices(WarningNotices::ResidentType);
     notices->setSaveAsBtn();
     notices->slotsaveAsBtnClicked();
+
 
     EXPECT_EQ(notices->m_saveAsBtn->isVisible(),false);
 
