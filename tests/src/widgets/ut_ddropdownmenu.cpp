@@ -16,7 +16,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "test_ddropdownmenu.h"
+#include "ut_ddropdownmenu.h"
 
 #include <QKeyEvent>
 #include <QFlags>

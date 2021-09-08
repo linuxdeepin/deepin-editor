@@ -16,7 +16,7 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "test_colorselectwidget.h"
+#include "ut_colorselectwidget.h"
 
 #include <QSignalSpy>
 
