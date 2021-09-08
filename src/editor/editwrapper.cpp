@@ -521,8 +521,6 @@ bool EditWrapper::saveDraftFile()
         dialog.selectFile(match.captured(0) + ".txt");
     }
 
-
-
     this->setUpdatesEnabled(false);
     int mode =  dialog.exec(); // 0表示取消 1保存
     this->setUpdatesEnabled(true);
@@ -623,11 +621,7 @@ void EditWrapper::handleCursorModeChanged(TextEdit::CursorMode mode)
 
 void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteArray &content)
 {
-
-    qint64 time1 = QDateTime::currentMSecsSinceEpoch();
     m_Definition = m_Repository.definitionForFileName(m_pTextEdit->getFilePath());
-    qDebug() << "===========begin load file:" << time1;
-    qDebug() << m_Definition.isValid() << m_Definition.filePath() << m_Definition.translatedName();
     if (m_Definition.isValid() && !m_Definition.filePath().isEmpty()) {
         if (!m_pSyntaxHighlighter) m_pSyntaxHighlighter = new CSyntaxHighlighter(m_pTextEdit->document());
         QString m_themePath = Settings::instance()->settings->option("advance.editor.theme")->value().toString();
@@ -643,11 +637,6 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteAr
 
     }
 
-    qint64 time2 = QDateTime::currentMSecsSinceEpoch();
-    qDebug() << "===========load SyntaxHighter:" << time2 - time1;
-
-
-
     if (!Utils::isDraftFile(m_pTextEdit->getFilePath())) {
         DRecentData data;
         data.appName = "Deepin Editor";
@@ -656,7 +645,9 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteAr
     }
 
     bool flag = m_pTextEdit->getReadOnlyPermission();
-    if (flag == true) m_pTextEdit->setReadOnlyPermission(false);
+    if (flag == true) {
+        m_pTextEdit->setReadOnlyPermission(false);
+    }
 
     m_bFileLoading = true;
     m_sCurEncode = encode;
@@ -672,14 +663,16 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteAr
     //先屏蔽，双字节空字符先按照显示字符编码号处理
     //clearDoubleCharaterEncode();
 
-    qint64 time3 = QDateTime::currentMSecsSinceEpoch();
-    qDebug() << "===========end load file:" << time3 - time1;
 
     PerformanceMonitor::openFileFinish(filePath(), QFileInfo(filePath()).size());
 
     m_bFileLoading = false;
-    if (flag == true) m_pTextEdit->setReadOnlyPermission(true);
-    if (m_bQuit) return;
+    if (flag == true) {
+        m_pTextEdit->setReadOnlyPermission(true);
+    }
+    if (m_bQuit) {
+        return;
+    }
     m_pTextEdit->setTextFinished();
 
     QStringList temFileList = Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->value().toStringList();

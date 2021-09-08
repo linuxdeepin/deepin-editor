@@ -340,19 +340,40 @@ TEST_F(test_editwrapper, textEditor)
 
 //int GetCorrectUnicode1(const QByteArray &ba) 未实现;
 
-int saveDraftFile_stub()
+int saveDraftFile001_exec_stub()
 {
     return 1;
 }
 
 //bool saveDraftFile(); Subsequent processing
-TEST_F(test_editwrapper, saveDraftFile)
+TEST_F(test_editwrapper, saveDraftFile_001)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
-    //Stub stub;
-    //stub.set(ADDR(DFileDialog, exec), saveDraftFile_stub);
-    //pWindow->currentWrapper()->saveDraftFile();
+    typedef int (*fptr)(QDialog *);
+    fptr fileDialogExec = (fptr)(&QDialog::exec);
+    Stub stub;
+    stub.set(fileDialogExec, saveDraftFile001_exec_stub);
+    pWindow->currentWrapper()->saveDraftFile();
+
+    pWindow->deleteLater();
+}
+
+int saveDraftFile002_exec_stub()
+{
+    return 0;
+}
+
+//bool saveDraftFile(); Subsequent processing
+TEST_F(test_editwrapper, saveDraftFile_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    typedef int (*fptr)(QDialog *);
+    fptr fileDialogExec = (fptr)(&QDialog::exec);
+    Stub stub;
+    stub.set(fileDialogExec, saveDraftFile002_exec_stub);
+    pWindow->currentWrapper()->saveDraftFile();
 
     pWindow->deleteLater();
 }
@@ -371,7 +392,7 @@ TEST_F(test_editwrapper, readFile_001)
     pWindow->currentWrapper()->textEditor()->setTruePath(filePath);
     pWindow->currentWrapper()->textEditor()->m_sFilePath = filePath;
     Stub stub;
-    stub.set(ADDR(EditWrapper,loadContent), readFile_stub_001);
+    stub.set(ADDR(EditWrapper, loadContent), readFile_stub_001);
     bool bRet = pWindow->currentWrapper()->readFile(QByteArray());
     ASSERT_TRUE(bRet);
     
@@ -387,20 +408,59 @@ TEST_F(test_editwrapper, readFile_002)
     pWindow->currentWrapper()->textEditor()->setTruePath(filePath);
     pWindow->currentWrapper()->textEditor()->m_sFilePath = filePath;
     Stub stub;
-    stub.set(ADDR(EditWrapper,loadContent), readFile_stub_001);
+    stub.set(ADDR(EditWrapper, loadContent), readFile_stub_001);
     bool bRet = pWindow->currentWrapper()->readFile(QByteArray("UTF-8"));
     ASSERT_FALSE(bRet);
 
     pWindow->deleteLater();
 }
 
+QByteArray test_editwrapper::FileLoadThreadRun(const QString &strFilePath, QByteArray *encode)
+{
+    QFile file(strFilePath);
+
+    if (file.open(QIODevice::ReadOnly)) {
+        // reads all remaining data from the file.
+        QByteArray indata = file.readAll();
+        file.close();
+        QByteArray outData;
+        // read the encode.
+        *encode = DetectCode::GetFileEncodingFormat(strFilePath);
+        QString textEncode = QString::fromLocal8Bit(*encode);
+
+         if (textEncode.contains("ASCII", Qt::CaseInsensitive) || textEncode.contains("UTF-8", Qt::CaseInsensitive)) {
+             return indata;
+         } else {
+           DetectCode::ChangeFileEncodingFormat(indata, outData, textEncode, QString("UTF-8"));
+           return outData;
+         }
+    }
+}
+
+void handleFileLoadFinished_001_setPrintEnabled_stub()
+{
+    return;
+}
+
+void handleFileLoadFinished_001_setTextFinished_stub()
+{
+    return;
+}
+
 //void handleFileLoadFinished(const QByteArray &encode,const QString &content);
-TEST_F(test_editwrapper, handleFileLoadFinished)
+TEST_F(test_editwrapper, handleFileLoadFinished_001)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
     const QString filePath = QCoreApplication::applicationDirPath() + QString("/Makefile");
-    pWindow->currentWrapper()->openFile(filePath, filePath, false);
+    QByteArray encode = QByteArray();
+    const QByteArray retFileContent = FileLoadThreadRun(filePath, &encode);
+    Stub setPrintEnabled_stub;
+    setPrintEnabled_stub.set(ADDR(Window, setPrintEnabled), handleFileLoadFinished_001_setPrintEnabled_stub);
+    Stub setTextFinished_stub;
+    setTextFinished_stub.set(ADDR(TextEdit, setTextFinished), handleFileLoadFinished_001_setTextFinished_stub);
+    pWindow->currentWrapper()->handleFileLoadFinished(encode, retFileContent);
+    ASSERT_TRUE(pWindow->currentWrapper()->m_pBottomBar->m_pEncodeMenu != nullptr);
 
     pWindow->deleteLater();
 }
@@ -448,6 +508,7 @@ TEST_F(test_editwrapper, getTextEncode)
     wrapper->getTextEncode();
     
 }
+
 //bool saveTemFile(QString qstrDir);
 //TEST_F(test_editwrapper, saveTemFile)
 //{
@@ -462,6 +523,7 @@ TEST_F(test_editwrapper, getTextEncode)
 //    wrapper->saveTemFile("ddd");
 //    
 //}
+
 ////跟新路径
 //void updatePath(const QString &file,QString qstrTruePath = QString());
 ////判断是否修改

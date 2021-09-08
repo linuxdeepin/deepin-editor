@@ -24,11 +24,13 @@
 #include "../../src/editor/editwrapper.h"
 #include "../../src/controls/tabbar.h"
 #include "../../src/common/utils.h"
+#include "../../src/encodes/detectcode.h"
 #include "../stub.h"
 #include "gtest/gtest.h"
 #include <QObject>
 #include <DFileDialog>
 #include <QFileDialog>
+#include <QDialog>
 
 DWIDGET_USE_NAMESPACE
 
@@ -36,6 +38,7 @@ class test_editwrapper: public QObject, public::testing::Test
 {
 public:
     test_editwrapper();
+    QByteArray FileLoadThreadRun(const QString &strFilePath, QByteArray *encode);
 };
 
 #endif // TEST_EDITWRAPPER_H

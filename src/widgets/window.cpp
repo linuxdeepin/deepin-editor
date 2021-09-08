@@ -2715,7 +2715,12 @@ QString Window::getKeywordForSearch()
 
 void Window::setPrintEnabled(bool enabled)
 {
-    m_menu->actions().at(PRINT_ACTION)->setEnabled(enabled);
+    for (int i = 0; i < m_menu->actions().count(); i++) {
+        if (!m_menu->actions().at(i)->text().compare(QString("Print"))) {
+            m_menu->actions().at(i)->setEnabled(enabled);
+            return;
+        }
+    }
 }
 
 bool Window::isRegisteredFflytekAiassistant()
