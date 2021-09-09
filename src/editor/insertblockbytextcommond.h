@@ -27,7 +27,7 @@ private:
     TextEdit* m_edit;
     EditWrapper* m_wrapper;
     int m_insertPos;
-    int m_delPos;
+    int m_delPos {0};
     QString m_selected;
 };
 

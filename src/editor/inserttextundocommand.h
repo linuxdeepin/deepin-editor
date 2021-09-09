@@ -40,8 +40,8 @@ public:
 
 private:
     QTextCursor m_textCursor;
-    int m_beginPostion;
-    int m_endPostion;
+    int m_beginPostion {0};
+    int m_endPostion   {0};
     QString m_sInsertText;
     QList<QTextEdit::ExtraSelection> m_ColumnEditSelections;
     QString m_selectText = QString();

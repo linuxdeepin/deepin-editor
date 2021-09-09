@@ -52,14 +52,15 @@ public:
     explicit DeleteTextUndoCommand2(QList<QTextEdit::ExtraSelection> &selections,QString text,QPlainTextEdit* edit,bool m_iscurrLine);
     virtual void undo();
     virtual void redo();
+
 private:
     QTextCursor m_textCursor;
     QString m_sInsertText;
     QList<QString> m_selectTextList;
     QList<QTextEdit::ExtraSelection> m_ColumnEditSelections;
     QPlainTextEdit* m_edit;
-    int m_beginPostion;
-    bool m_iscurrLine;
+    int m_beginPostion {0};
+    bool m_iscurrLine {false};
 };
 
 #endif // INSERTTEXTUNDOCOMMAND_H
