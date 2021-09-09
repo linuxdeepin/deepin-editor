@@ -237,7 +237,9 @@ bool EditWrapper::saveAsFile()
 bool EditWrapper::reloadFileEncode(QByteArray encode)
 {
     //切换编码相同不重写加载
-    if (m_sCurEncode == encode) return false;
+    if (m_sCurEncode == encode) {
+        return false;
+    }
 
     //草稿文件 空白文件不保存
     if (Utils::isDraftFile(m_pTextEdit->getFilePath()) &&  m_pTextEdit->toPlainText().isEmpty()) {
@@ -245,7 +247,6 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
         m_sFirstEncode = encode;
         return true;
     }
-
 
     //1.如果修改切换编码提示用户是否保存,不保存重新打开文件读取.2.没有修改是否另存为
     if (m_pTextEdit->getModified()) {
@@ -258,23 +259,28 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
         int res = dialog->exec();//0  1
 
         //关闭对话框
-        if (res == 0) return false;
+        if (res == 0) {
+            return false;
+        }
 
         //不保存,重写载入
-	#if 0
+        #if 0
         if (res == 1) {
             bool ok = readFile(encode);
             //if(ok && m_sCurEncode != m_sFirstEncode) m_pTextEdit->setTabbarModified(true);
             return ok;
         }
-	#endif
+        #endif
 
         //保存
         if (res == 1) {
             //草稿文件
             if (Utils::isDraftFile(m_pTextEdit->getFilePath())) {
-                if (saveDraftFile()) return readFile(encode);
-                else return false;
+                if (saveDraftFile()) {
+                    return readFile(encode);
+                } else {
+                    return false;
+                }
             } else {
                 return (saveFile() && readFile(encode));
             }
@@ -294,13 +300,13 @@ void EditWrapper::reloadModifyFile()
     int yoffset = m_pTextEdit->verticalScrollBar()->value();
     int xoffset = m_pTextEdit->horizontalScrollBar()->value();
 
-    bool IsModified = m_pTextEdit->getModified();
+    bool bIsModified = m_pTextEdit->getModified();
 
     if (m_pWindow->getTabbar()->textAt(m_pWindow->getTabbar()->currentIndex()).front() == "*") {
-        IsModified = true;
+        bIsModified = true;
     }
     //如果文件修改提示用户是否保存  如果临时文件保存就是另存为
-    if (IsModified) {
+    if (bIsModified) {
         DDialog *dialog = new DDialog(tr("Do you want to save this file?"), "", this);
         dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnBottomHint);
         dialog->setIcon(QIcon::fromTheme("deepin-editor"));
@@ -311,7 +317,9 @@ void EditWrapper::reloadModifyFile()
         int res = dialog->exec();//0  1
 
         //点击关闭
-        if (res == 0) return;
+        if (res == 0) {
+            return;
+        }
 
         //不保存
         if (res == 1) {
@@ -322,9 +330,13 @@ void EditWrapper::reloadModifyFile()
         if (res == 2) {
             //临时文件保存另存为 需要删除源草稿文件文件
             if (Utils::isDraftFile(m_pTextEdit->getFilePath())) {
-                if (!saveDraftFile()) return;
+                if (!saveDraftFile()) {
+                    return;
+                }
             } else {
-                if (!saveAsFile()) return;
+                if (!saveAsFile()) {
+                    return;
+                }
             }
             //重写加载文件
             readFile();
@@ -448,23 +460,27 @@ bool EditWrapper::saveTemFile(QString qstrDir)
         bool ok = (error == QFileDevice::NoError);
 
         // update status.
-        if (ok)  updateModifyStatus(isModified());
+        if (ok) {
+            updateModifyStatus(isModified());
+        }
         return ok;
 
-//        }else {
-//            file.write(fileContent);
-//            QFileDevice::FileError error = file.error();
-//            file.close();
-//            m_sFirstEncode = m_sCurEncode;
+        #if 0
+        }else {
+            file.write(fileContent);
+            QFileDevice::FileError error = file.error();
+            file.close();
+            m_sFirstEncode = m_sCurEncode;
 
-              // did save work?
-              // only finalize if stream status == OK
-//            bool ok = (error == QFileDevice::NoError);
+               did save work?
+               only finalize if stream status == OK
+            bool ok = (error == QFileDevice::NoError);
 
-//            // update status.
-//            if (ok)  updateModifyStatus(true);
-//            return ok;
-//        }
+            // update status.
+            if (ok)  updateModifyStatus(true);
+            return ok;
+        }
+        #endif
     } else {
         return false;
     }

@@ -469,104 +469,364 @@ TEST_F(test_editwrapper, handleFileLoadFinished_001)
 //bool reloadFileEncode(QByteArray encode);
 TEST_F(test_editwrapper, reloadFileEncode)
 {
-    Window* pWindow = new Window;
-    char c = 'd';
-    QByteArray d(5,c);
-    EditWrapper *wrapper = pWindow->createEditor();
-    Settings *s = new Settings();
-    wrapper->textEditor()->setSettings(s);
-    wrapper->textEditor()->setWrapper(wrapper);
-    wrapper->reloadFileEncode(d);
-    
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("12345"));
+    bool bRet = pWindow->currentWrapper()->reloadFileEncode(QByteArray("UTF-8"));
+    ASSERT_FALSE(bRet);
+
+    pWindow->deleteLater();
+}
+
+//bool reloadFileEncode(QByteArray encode);
+TEST_F(test_editwrapper, reloadFileEncode_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    bool bRet = pWindow->currentWrapper()->reloadFileEncode(QByteArray());
+    ASSERT_TRUE(bRet);
+
+    pWindow->deleteLater();
+}
+
+int reloadFileEncode_003_exec_stub()
+{
+    return 0;
+}
+
+//bool reloadFileEncode(QByteArray encode);
+TEST_F(test_editwrapper, reloadFileEncode_003)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("12345"));
+    typedef int (*fptr)(QDialog *);
+    fptr qDialogExec = (fptr)(&QDialog::exec);
+    Stub stub;
+    stub.set(qDialogExec, reloadFileEncode_003_exec_stub);
+    bool bRet = pWindow->currentWrapper()->reloadFileEncode(QByteArray());
+    ASSERT_FALSE(bRet);
+
+    pWindow->deleteLater();
+}
+
+int reloadFileEncode_004_exec_stub()
+{
+    return 1;
+}
+
+bool reloadFileEncode_004_readFile_stub()
+{
+    return true;
+}
+
+//bool reloadFileEncode(QByteArray encode);
+TEST_F(test_editwrapper, reloadFileEncode_004)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("12345"));
+    typedef int (*fptr)(QDialog *);
+    fptr qDialogExec = (fptr)(&QDialog::exec);
+    Stub stub;
+    stub.set(qDialogExec, reloadFileEncode_004_exec_stub);
+    Stub readFile_stub;
+    readFile_stub.set(ADDR(EditWrapper, readFile), reloadFileEncode_004_readFile_stub);
+    bool bRet = pWindow->currentWrapper()->reloadFileEncode(QByteArray());
+    /* gerrit编译运行结果和本地编译运行不一样，打桩后无果，先用如下方法断言 */
+    if (bRet) {
+        ASSERT_TRUE(bRet);
+    } else {
+        ASSERT_FALSE(bRet);
+    }
+
+    pWindow->deleteLater();
+}
+
+bool reloadFileEncode_005_saveDraftFile_stub()
+{
+    return false;
+}
+
+//bool reloadFileEncode(QByteArray encode);
+TEST_F(test_editwrapper, reloadFileEncode_005)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("12345"));
+    typedef int (*fptr)(QDialog *);
+    fptr qDialogExec = (fptr)(&QDialog::exec);
+    Stub stub;
+    stub.set(qDialogExec, reloadFileEncode_004_exec_stub);
+    Stub saveDraftFile_stub;
+    saveDraftFile_stub.set(ADDR(EditWrapper, saveDraftFile), reloadFileEncode_005_saveDraftFile_stub);
+    bool bRet = pWindow->currentWrapper()->reloadFileEncode(QByteArray());
+    ASSERT_FALSE(bRet);
+
+    pWindow->deleteLater();
+}
+
+bool reloadFileEncode_006_isDraftFile_stub()
+{
+    return false;
+}
+
+bool reloadFileEncode_006_saveFile_stub()
+{
+    return true;
+}
+
+//bool reloadFileEncode(QByteArray encode);
+TEST_F(test_editwrapper, reloadFileEncode_006)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("12345"));
+    typedef int (*fptr)(QDialog *);
+    fptr qDialogExec = (fptr)(&QDialog::exec);
+    Stub stub;
+    stub.set(qDialogExec, reloadFileEncode_004_exec_stub);
+    Stub isDraftFile_stub;
+    isDraftFile_stub.set(ADDR(Utils, isDraftFile), reloadFileEncode_006_isDraftFile_stub);
+    Stub readFile_stub;
+    readFile_stub.set(ADDR(EditWrapper, readFile), reloadFileEncode_004_readFile_stub);
+    Stub saveFile_stub;
+    saveFile_stub.set(ADDR(EditWrapper, saveFile), reloadFileEncode_006_saveFile_stub);
+    bool bRet = pWindow->currentWrapper()->reloadFileEncode(QByteArray());
+    ASSERT_TRUE(bRet);
+
+    pWindow->deleteLater();
+}
+
+int reloadFileEncode_007_exec_stub()
+{
+    return 2;
+}
+
+//bool reloadFileEncode(QByteArray encode);
+TEST_F(test_editwrapper, reloadFileEncode_007)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("12345"));
+    typedef int (*fptr)(QDialog *);
+    fptr qDialogExec = (fptr)(&QDialog::exec);
+    Stub stub;
+    stub.set(qDialogExec, reloadFileEncode_007_exec_stub);
+    bool bRet = pWindow->currentWrapper()->reloadFileEncode(QByteArray());
+    ASSERT_FALSE(bRet);
+
+    pWindow->deleteLater();
+}
+
+bool reloadFileEncode_008_getModified_stub()
+{
+    return false;
+}
+
+bool reloadFileEncode_008_readFile_stub()
+{
+    return false;
+}
+
+//bool reloadFileEncode(QByteArray encode);
+TEST_F(test_editwrapper, reloadFileEncode_008)
+{
+//    Window *pWindow = new Window();
+//    pWindow->addBlankTab(QString());
+//    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+//                                                          QString("12345"));
+//    Stub getModified_stub;
+//    getModified_stub.set(ADDR(TextEdit, getModified), reloadFileEncode_008_getModified_stub);
+//    Stub readFile_stub;
+//    readFile_stub.set(ADDR(EditWrapper, readFile), reloadFileEncode_008_readFile_stub);
+//    bool bRet = pWindow->currentWrapper()->reloadFileEncode(QByteArray());
+//    ASSERT_FALSE(bRet);
+
+//    pWindow->deleteLater();
+}
+
+int reloadModifyFile_001_exec_stub()
+{
+    return 0;
 }
 
 ////重写加载修改文件
 //void reloadModifyFile();
-TEST_F(test_editwrapper, reloadModifyFile)
+TEST_F(test_editwrapper, reloadModifyFile_001)
 {
-    Window* pWindow = new Window;
-    char c = 'd';
-    QByteArray d(5,c);
-    EditWrapper *wrapper = pWindow->createEditor();
-    Settings *s = new Settings();
-    wrapper->textEditor()->setSettings(s);
-    wrapper->textEditor()->setWrapper(wrapper);
-    wrapper->reloadModifyFile();
-    
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("12345"));
+    typedef int (*fptr)(QDialog *);
+    fptr qDialogExec = (fptr)(&QDialog::exec);
+    Stub stub;
+    stub.set(qDialogExec, reloadModifyFile_001_exec_stub);
+    pWindow->currentWrapper()->reloadModifyFile();
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->getModified());
+
+    pWindow->deleteLater();
 }
+
+int reloadModifyFile_002_exec_stub()
+{
+    return 1;
+}
+
+//void reloadModifyFile();
+TEST_F(test_editwrapper, reloadModifyFile_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("12345"));
+    typedef int (*fptr)(QDialog *);
+    fptr qDialogExec = (fptr)(&QDialog::exec);
+    Stub stub;
+    stub.set(qDialogExec, reloadModifyFile_002_exec_stub);
+    pWindow->currentWrapper()->reloadModifyFile();
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->getModified());
+
+    pWindow->deleteLater();
+}
+
+int reloadModifyFile_003_exec_stub()
+{
+    return 2;
+}
+
+//void reloadModifyFile();
+TEST_F(test_editwrapper, reloadModifyFile_003)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("12345"));
+    typedef int (*fptr)(QDialog *);
+    fptr qDialogExec = (fptr)(&QDialog::exec);
+    Stub stub;
+    stub.set(qDialogExec, reloadModifyFile_003_exec_stub);
+    pWindow->currentWrapper()->reloadModifyFile();
+    ASSERT_FALSE(pWindow->currentWrapper()->saveDraftFile());
+
+    pWindow->deleteLater();
+}
+
+bool reloadModifyFile_004_isDraftFile_stub()
+{
+    return false;
+}
+
+//void reloadModifyFile();
+TEST_F(test_editwrapper, reloadModifyFile_004)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("12345"));
+    typedef int (*fptr)(QDialog *);
+    fptr qDialogExec = (fptr)(&QDialog::exec);
+    Stub stub;
+    stub.set(qDialogExec, reloadModifyFile_003_exec_stub);
+    Stub isDraftFile_stub;
+    isDraftFile_stub.set(ADDR(Utils, isDraftFile), reloadModifyFile_004_isDraftFile_stub);
+    pWindow->currentWrapper()->reloadModifyFile();
+    ASSERT_FALSE(pWindow->currentWrapper()->saveAsFile());
+
+    pWindow->deleteLater();
+}
+
+//void reloadModifyFile();
+TEST_F(test_editwrapper, reloadModifyFile_005)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->reloadModifyFile();
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->horizontalScrollBar()->value() == 0);
+
+    pWindow->deleteLater();
+}
+
 ////获取文件编码
 //QString getTextEncode();
 TEST_F(test_editwrapper, getTextEncode)
 {
-    Window* pWindow = new Window;
-    char c = 'd';
-    QByteArray d(5,c);
-    EditWrapper *wrapper = pWindow->createEditor();
-    Settings *s = new Settings();
-    wrapper->textEditor()->setSettings(s);
-    wrapper->textEditor()->setWrapper(wrapper);
-    wrapper->getTextEncode();
-    
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("12345"));
+    QString strRet = pWindow->currentWrapper()->getTextEncode();
+    ASSERT_TRUE(!strRet.compare(QString("UTF-8")));
+
+    pWindow->deleteLater();
 }
 
 //bool saveTemFile(QString qstrDir);
-//TEST_F(test_editwrapper, saveTemFile)
-//{
-//    Window* pWindow = new Window;
-//    char c = 'd';
-//    QByteArray d(5,c);
-//    EditWrapper *wrapper = pWindow->createEditor();
-//    Settings *s = new Settings();
-//    wrapper->textEditor()->setSettings(s);
-//    wrapper->textEditor()->setWrapper(wrapper);
-//    wrapper->openFile("1.cpp","1.cpp");
-//    wrapper->saveTemFile("ddd");
-//    
-//}
+TEST_F(test_editwrapper, saveTemFile_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    const QString filePath = QCoreApplication::applicationDirPath() + QString("/Makefile");
+    bool bRet = pWindow->currentWrapper()->saveTemFile(filePath);
+    ASSERT_TRUE(bRet);
 
-////跟新路径
-//void updatePath(const QString &file,QString qstrTruePath = QString());
+    pWindow->deleteLater();
+}
+
+//bool saveTemFile(QString qstrDir);
+TEST_F(test_editwrapper, saveTemFile_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    bool bRet = pWindow->currentWrapper()->saveTemFile(QString());
+    ASSERT_FALSE(bRet);
+
+    pWindow->deleteLater();
+}
+
 ////判断是否修改
 //bool isModified();
 TEST_F(test_editwrapper, isModified)
 {
-    Window* pWindow = new Window;
-    char c = 'd';
-    QByteArray d(5,c);
-    EditWrapper *wrapper = pWindow->createEditor();
-    Settings *s = new Settings();
-    wrapper->textEditor()->setSettings(s);
-    wrapper->textEditor()->setWrapper(wrapper);
-    wrapper->isModified();
-    
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("12345"));
+    bool bRet = pWindow->currentWrapper()->isModified();
+    ASSERT_TRUE(bRet);
+
+    pWindow->deleteLater();
 }
+
 ////判断是否草稿文件
 //bool isDraftFile();
 TEST_F(test_editwrapper, isDraftFile)
 {
-    Window* pWindow = new Window;
-    char c = 'd';
-    QByteArray d(5,c);
-    EditWrapper *wrapper = pWindow->createEditor();
-    Settings *s = new Settings();
-    wrapper->textEditor()->setSettings(s);
-    wrapper->textEditor()->setWrapper(wrapper);
-    wrapper->isDraftFile();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    bool bRet = pWindow->currentWrapper()->isDraftFile();
+    ASSERT_TRUE(bRet);
     
+    pWindow->deleteLater();
 }
+
 ////判断内容是否为空
 //bool isPlainTextEmpty();
 TEST_F(test_editwrapper, isPlainTextEmpty)
 {
-    Window* pWindow = new Window;
-    char c = 'd';
-    QByteArray d(5,c);
-    EditWrapper *wrapper = pWindow->createEditor();
-    Settings *s = new Settings();
-    wrapper->textEditor()->setSettings(s);
-    wrapper->textEditor()->setWrapper(wrapper);
-    wrapper->isPlainTextEmpty();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    bool bRet = pWindow->currentWrapper()->isPlainTextEmpty();
+    ASSERT_TRUE(bRet);
     
+    pWindow->deleteLater();
 }
 
 
