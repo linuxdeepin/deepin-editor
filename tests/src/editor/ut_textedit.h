@@ -12,12 +12,17 @@
 #include<QMenu>
 
 #include"../stub.h"
-#include<QEvent>
+#include <QEvent>
 #include "gtest/gtest.h"
 #include <QObject>
-#include<QClipboard>
+#include <QClipboard>
 #include <QEvent>
 #include <QKeyEvent>
+#include <QAbstractScrollArea>
+#include <QPlainTextEdit>
+#include <QRegExp>
+#include <QTextDocument>
+#include <QScrollBar>
 
 class test_textedit: public QObject, public::testing::Test
 {

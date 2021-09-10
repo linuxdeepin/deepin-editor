@@ -1,4 +1,4 @@
-#include "test_textedit.h"
+#include "ut_textedit.h"
 #include "stub.h"
 #include "../../src/widgets/window.h"
 #include <QUndoStack>
@@ -26,337 +26,772 @@ void test_textedit::forstub(QPoint q)
 
 TEST_F(test_textedit, setWrapper)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *e = new EditWrapper();
-    startManager->setWrapper(e);
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_wrapper != nullptr);
 
-    assert(1 == 1);
+    pWindow->deleteLater();
 }
+
 //TextEdit(QWidget *parent = nullptr);
 TEST_F(test_textedit, TextEdit)
 {
-    QList<QTextEdit::ExtraSelection> listSelection;
-    QTextEdit::ExtraSelection selectio;
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->verticalScrollBarPolicy()   == Qt::ScrollBarAsNeeded);
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->horizontalScrollBarPolicy() == Qt::ScrollBarAsNeeded);
 
-
-    Window* window = new Window;
-    EditWrapper *wrapper = window->createEditor();
-    TextEdit * edit = wrapper->textEditor();
-    delete edit;edit = nullptr;
-
-    
-
+    pWindow->deleteLater();
 }
 
 //getCurrentLine
 TEST_F(test_textedit, getCurrentLine)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    startManager->getCurrentLine();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world.\n Create operating system innovation ecosystem!"));
+    int iRet = pWindow->currentWrapper()->textEditor()->getCurrentLine();
+    ASSERT_TRUE(iRet == 2);
 
-    assert(1 == 1);
+    pWindow->deleteLater();
 }
+
 //getCurrentColumn
 TEST_F(test_textedit, getCurrentColumn)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    startManager->getCurrentColumn();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world."));
+    int iRet = pWindow->currentWrapper()->textEditor()->getCurrentColumn();
+    ASSERT_TRUE(iRet == QString("Holle world.").length());
 
-    assert(1 == 1);
+    pWindow->deleteLater();
 }
+
 //getPosition
 TEST_F(test_textedit, getPosition)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    startManager->getPosition();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world."));
+    int iRet = pWindow->currentWrapper()->textEditor()->getPosition();
+    ASSERT_TRUE(iRet == QString("Holle world.").length());
 
-    assert(1 == 1);
+    pWindow->deleteLater();
 }
+
 //getScrollOffset
 TEST_F(test_textedit, getScrollOffset)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    startManager->getScrollOffset();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("H\nl\nl\ne\n\nw\no\nr\nl\nd\n.H\nl\nl\ne\n\nw"
+                                                                  "\no\nr\nl\nd\n.H\nl\nl\ne\n\nw\no\nr\nl\nd\n.H"
+                                                                  "\nl\nl\ne\n\nw\no\nr\nl\nd\n.H\nl\nl\ne\n\nw\no"
+                                                                  "\nr\nl\nd\n."));
+    int iRet = pWindow->currentWrapper()->textEditor()->getScrollOffset();
+    ASSERT_TRUE(iRet > 0);
 
-    assert(1 == 1);
+    pWindow->deleteLater();
 }
-//forwardChar
-TEST_F(test_textedit, forwardChar)
+
+//forwardChar 001
+TEST_F(test_textedit, forwardChar_001)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    startManager->forwardChar();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world."));
+    pWindow->currentWrapper()->textEditor()->m_cursorMark = true;
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->forwardChar();
+    int iRet = pWindow->currentWrapper()->textEditor()->textCursor().position();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().selectedText());
+    ASSERT_TRUE((iRet == 1) && (!strRet.compare(QString("H"))));
 
-    assert(1 == 1);
+    pWindow->deleteLater();
 }
-//backwardChar
-TEST_F(test_textedit, backwardChar)
+
+//forwardChar 002
+TEST_F(test_textedit, forwardChar_002)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    startManager->backwardChar();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world."));
+    pWindow->currentWrapper()->textEditor()->m_cursorMark = false;
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->forwardChar();
+    int iRet = pWindow->currentWrapper()->textEditor()->textCursor().position();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().selectedText());
+    ASSERT_TRUE((iRet == 1) && strRet.isEmpty());
 
-    assert(1 == 1);
+    pWindow->deleteLater();
 }
-//forwardWord
-TEST_F(test_textedit, forwardWord)
+
+//backwardChar 001
+TEST_F(test_textedit, backwardChar_001)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    startManager->forwardWord();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world"));
+    pWindow->currentWrapper()->textEditor()->m_cursorMark = true;
+    pWindow->currentWrapper()->textEditor()->backwardChar();
+    int iRet = pWindow->currentWrapper()->textEditor()->textCursor().position();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().selectedText());
+    ASSERT_TRUE((iRet == 10) && (!strRet.compare(QString("d"))));
 
-    assert(1 == 1);
+    pWindow->deleteLater();
 }
-//forwardPair
-TEST_F(test_textedit, forwardPair)
+
+//backwardChar 002
+TEST_F(test_textedit, backwardChar_002)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    startManager->forwardPair();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world"));
+    pWindow->currentWrapper()->textEditor()->m_cursorMark = false;
+    pWindow->currentWrapper()->textEditor()->backwardChar();
+    int iRet = pWindow->currentWrapper()->textEditor()->textCursor().position();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().selectedText());
+    ASSERT_TRUE((iRet == 10) && strRet.isEmpty());
 
-    assert(1 == 1);
+    pWindow->deleteLater();
 }
-//backwardPair
-TEST_F(test_textedit, backwardPair)
+
+//forwardWord 001
+TEST_F(test_textedit, forwardWord_001)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    startManager->backwardPair();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world"));
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->m_cursorMark = true;
+    pWindow->currentWrapper()->textEditor()->forwardWord();
+    int iRet = pWindow->currentWrapper()->textEditor()->textCursor().position();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().selectedText());
+    ASSERT_TRUE((iRet == 6) && (!strRet.compare(QString("Holle "))));
 
-    assert(1 == 1);
+    pWindow->deleteLater();
 }
+
+//forwardWord 002
+TEST_F(test_textedit, forwardWord_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world"));
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->m_cursorMark = false;
+    pWindow->currentWrapper()->textEditor()->forwardWord();
+    int iRet = pWindow->currentWrapper()->textEditor()->textCursor().position();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().selectedText());
+    ASSERT_TRUE((iRet == 6) && strRet.isEmpty());
+
+    pWindow->deleteLater();
+}
+
+//backwardWord 001
+TEST_F(test_textedit, backwardWord_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world"));
+    pWindow->currentWrapper()->textEditor()->m_cursorMark = true;
+    pWindow->currentWrapper()->textEditor()->backwardWord();
+    int iRet = pWindow->currentWrapper()->textEditor()->textCursor().position();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().selectedText());
+    ASSERT_TRUE((iRet == 6) && (!strRet.compare(QString("world"))));
+
+    pWindow->deleteLater();
+}
+
+//backwardWord 002
+TEST_F(test_textedit, backwardWord_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world"));
+    pWindow->currentWrapper()->textEditor()->m_cursorMark = false;
+    pWindow->currentWrapper()->textEditor()->backwardWord();
+    int iRet = pWindow->currentWrapper()->textEditor()->textCursor().position();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().selectedText());
+    ASSERT_TRUE((iRet == 6) && strRet.isEmpty());
+
+    pWindow->deleteLater();
+}
+
+bool forwardPair_001_find_stub()
+{
+    return true;
+}
+
+//forwardPair 001
+TEST_F(test_textedit, forwardPair_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world"));
+    #if 0 //保留打桩方法，后续完善覆盖率
+    typedef int (*fptr)(QDialog *);
+    fptr qDialogExec = (fptr)(&QDialog::exec);
+    Stub stub;
+    stub.set(qDialogExec, forwardPair_001_find_stub);
+
+    Stub find_stub;
+    find_stub.set((bool(QPlainTextEdit::*)(const QRegExp &))ADDR(QPlainTextEdit, QPlainTextEdit::find), forwardPair_001_find_stub);
+    #endif
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->forwardPair();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().selectedText());
+    ASSERT_TRUE(strRet.isEmpty());
+
+    pWindow->deleteLater();
+}
+
+//backwardPair 001
+TEST_F(test_textedit, backwardPair_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world"));
+    #if 0 //保留打桩方法，后续完善覆盖率
+    typedef int (*fptr)(QDialog *);
+    fptr qDialogExec = (fptr)(&QDialog::exec);
+    Stub stub;
+    stub.set(qDialogExec, forwardPair_001_find_stub);
+
+    Stub find_stub;
+    find_stub.set((bool(QPlainTextEdit::*)(const QRegExp &))ADDR(QPlainTextEdit, QPlainTextEdit::find), forwardPair_001_find_stub);
+    #endif
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->backwardPair();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().selectedText());
+    ASSERT_TRUE(strRet.isEmpty());
+
+    pWindow->deleteLater();
+}
+
 //blockCount
 TEST_F(test_textedit, blockCount)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    startManager->blockCount();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world"));
+    int iRet = pWindow->currentWrapper()->textEditor()->blockCount();
+    ASSERT_TRUE(iRet == 1);
 
-    assert(1 == 1);
+    pWindow->deleteLater();
 }
-//moveToStart
-TEST_F(test_textedit, moveToStart)
+
+//moveToStart 001
+TEST_F(test_textedit, moveToStart_001)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    startManager->moveToStart();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world"));
+    pWindow->currentWrapper()->textEditor()->m_cursorMark = true;
+    pWindow->currentWrapper()->textEditor()->moveToStart();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().selectedText());
+    ASSERT_TRUE(!strRet.compare(QString("Holle world")));
 
-    assert(1 == 1);
+    pWindow->deleteLater();
 }
-//moveToEnd
-TEST_F(test_textedit, moveToEnd)
+
+//moveToStart 002
+TEST_F(test_textedit, moveToStart_002)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    startManager->moveToEnd();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world"));
+    pWindow->currentWrapper()->textEditor()->m_cursorMark = false;
+    pWindow->currentWrapper()->textEditor()->moveToStart();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().selectedText());
+    ASSERT_TRUE(strRet.isEmpty());
 
-    assert(1 == 1);
+    pWindow->deleteLater();
 }
-//moveToStartOfLine
-TEST_F(test_textedit, moveToStartOfLine)
+
+//moveToEnd 001
+TEST_F(test_textedit, moveToEnd_001)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    startManager->moveToStartOfLine();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world"));
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->m_cursorMark = true;
+    pWindow->currentWrapper()->textEditor()->moveToEnd();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().selectedText());
+    ASSERT_TRUE(!strRet.compare(QString("Holle world")));
 
-    assert(1 == 1);
+    pWindow->deleteLater();
 }
-//moveToEndOfLine
-TEST_F(test_textedit, moveToEndOfLine)
+
+//moveToEnd 002
+TEST_F(test_textedit, moveToEnd_002)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    startManager->moveToEndOfLine();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world"));
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->m_cursorMark = false;
+    pWindow->currentWrapper()->textEditor()->moveToEnd();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().selectedText());
+    ASSERT_TRUE(strRet.isEmpty());
 
-    assert(1 == 1);
+    pWindow->deleteLater();
 }
-//moveToLineIndentation
-TEST_F(test_textedit, moveToLineIndentation)
+
+//moveToStartOfLine 001
+TEST_F(test_textedit, moveToStartOfLine_001)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    startManager->moveToLineIndentation();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world\nHolle world\nHolle world"));
+    pWindow->currentWrapper()->textEditor()->m_cursorMark = true;
+    pWindow->currentWrapper()->textEditor()->moveToStartOfLine();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().selectedText());
+    ASSERT_TRUE(!strRet.isEmpty());
 
-    assert(1 == 1);
+    pWindow->deleteLater();
 }
-//nextLine
-TEST_F(test_textedit, nextLine)
+
+//moveToStartOfLine 002
+TEST_F(test_textedit, moveToStartOfLine_002)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    startManager->nextLine();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world\nHolle world\nHolle world"));
+    pWindow->currentWrapper()->textEditor()->m_cursorMark = false;
+    pWindow->currentWrapper()->textEditor()->moveToStartOfLine();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().selectedText());
+    ASSERT_TRUE(strRet.isEmpty());
 
-    assert(1 == 1);
+    pWindow->deleteLater();
 }
-//prevLine
-TEST_F(test_textedit, prevLine)
+
+//moveToEndOfLine 001
+TEST_F(test_textedit, moveToEndOfLine_001)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    startManager->prevLine();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world"));
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->m_cursorMark = true;
+    pWindow->currentWrapper()->textEditor()->moveToEndOfLine();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().selectedText());
+    ASSERT_TRUE(!strRet.compare(QString("Holle world")));
 
-    assert(1 == 1);
+    pWindow->deleteLater();
 }
+
+//moveToEndOfLine 002
+TEST_F(test_textedit, moveToEndOfLine_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world"));
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->m_cursorMark = false;
+    pWindow->currentWrapper()->textEditor()->moveToEndOfLine();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().selectedText());
+    ASSERT_TRUE(strRet.isEmpty());
+
+    pWindow->deleteLater();
+}
+
+//moveToLineIndentation 001
+TEST_F(test_textedit, moveToLineIndentation_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world"));
+    pWindow->currentWrapper()->textEditor()->moveToLineIndentation();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().selectedText());
+    int iRet = pWindow->currentWrapper()->textEditor()->textCursor().position();
+    ASSERT_TRUE(strRet.isEmpty() && iRet == 0);
+
+    pWindow->deleteLater();
+}
+
+//moveToLineIndentation 002
+TEST_F(test_textedit, moveToLineIndentation_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world\nHolle world"));
+    pWindow->currentWrapper()->textEditor()->moveToLineIndentation();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().selectedText());
+    int iRet = pWindow->currentWrapper()->textEditor()->textCursor().position();
+    ASSERT_TRUE(strRet.isEmpty() && iRet == 12);
+
+    pWindow->deleteLater();
+}
+
+//nextLine 001
+TEST_F(test_textedit, nextLine_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world\nHolle world"));
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->m_cursorMark = true;
+    pWindow->currentWrapper()->textEditor()->nextLine();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().selectedText());
+    ASSERT_TRUE(!strRet.isEmpty());
+
+    pWindow->deleteLater();
+}
+
+//nextLine 002
+TEST_F(test_textedit, nextLine_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world\nHolle world"));
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->m_cursorMark = false;
+    pWindow->currentWrapper()->textEditor()->nextLine();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().selectedText());
+    ASSERT_TRUE(strRet.isEmpty());
+
+    pWindow->deleteLater();
+}
+
+//prevLine 001
+TEST_F(test_textedit, prevLine_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world\nHolle world"));
+    pWindow->currentWrapper()->textEditor()->m_cursorMark = true;
+    pWindow->currentWrapper()->textEditor()->prevLine();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().selectedText());
+    ASSERT_TRUE(!strRet.isEmpty());
+
+    pWindow->deleteLater();
+}
+
+//prevLine 002
+TEST_F(test_textedit, prevLine_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world\nHolle world"));
+    pWindow->currentWrapper()->textEditor()->m_cursorMark = false;
+    pWindow->currentWrapper()->textEditor()->prevLine();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().selectedText());
+    ASSERT_TRUE(strRet.isEmpty());
+
+    pWindow->deleteLater();
+}
+
 //jumpToLine
 TEST_F(test_textedit, jumpToLine)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    startManager->jumpToLine(1, true);
-    startManager->jumpToLine(1, false);
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world\nHolle world"));
+    pWindow->currentWrapper()->textEditor()->jumpToLine(1, true);
+    int iRet = pWindow->currentWrapper()->textEditor()->textCursor().blockNumber() + 1;
+    ASSERT_TRUE(iRet == 1);
 
-    assert(1 == 1);
+    pWindow->deleteLater();
 }
+
 //newline
 TEST_F(test_textedit, newline)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->newline();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world\nHolle world"));
+    pWindow->currentWrapper()->textEditor()->newline();
+    int iRet = pWindow->currentWrapper()->textEditor()->textCursor().blockNumber() + 1;
+    ASSERT_TRUE(iRet == 3);
 
-    assert(1 == 1);
+    pWindow->deleteLater();
 }
+
 //openNewlineAbove
 TEST_F(test_textedit, openNewlineAbove)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->openNewlineAbove();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world\nHolle world"));
+    pWindow->currentWrapper()->textEditor()->openNewlineAbove();
+    int iRet = pWindow->currentWrapper()->textEditor()->textCursor().blockNumber() + 1;
+    ASSERT_TRUE(iRet == 2);
 
-    assert(1 == 1);
+    pWindow->deleteLater();
 }
+
 //openNewlineBelow
 TEST_F(test_textedit, openNewlineBelow)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->openNewlineBelow();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world\nHolle world"));
+    pWindow->currentWrapper()->textEditor()->openNewlineBelow();
+    int iRet = pWindow->currentWrapper()->textEditor()->textCursor().blockNumber() + 1;
+    ASSERT_TRUE(iRet == 3);
 
-    assert(1 == 1);
+    pWindow->deleteLater();
 }
-//moveLineDownUp
-TEST_F(test_textedit, moveLineDownUp)
+
+//moveLineDownUp 001
+TEST_F(test_textedit, moveLineDownUp_001)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->moveLineDownUp(true);
-    startManager->moveLineDownUp(false);
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world\nHolle world"));
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->moveLineDownUp(true);
+    int iRet = pWindow->currentWrapper()->textEditor()->textCursor().blockNumber() + 1;
+    ASSERT_TRUE(iRet == 1);
 
-    assert(1 == 1);
+    pWindow->deleteLater();
 }
+
+//moveLineDownUp 002
+TEST_F(test_textedit, moveLineDownUp_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world\nHolle world\nHolle world"));
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->moveLineDownUp(false);
+    int iRet = pWindow->currentWrapper()->textEditor()->textCursor().blockNumber() + 1;
+    ASSERT_TRUE(iRet == 3);
+
+    pWindow->deleteLater();
+}
+
 //scrollLineUp
 TEST_F(test_textedit, scrollLineUp)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->scrollLineUp();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("H\nl\nl\ne\n\nw\no\nr\nl\nd\n.H\nl\nl\ne\n\nw"
+                                                                  "\no\nr\nl\nd\n.H\nl\nl\ne\n\nw\no\nr\nl\nd\n.H"
+                                                                  "\nl\nl\ne\n\nw\no\nr\nl\nd\n.H\nl\nl\ne\n\nw\no"
+                                                                  "\nr\nl\nd\n."));
+    pWindow->currentWrapper()->textEditor()->scrollLineUp();
+    int iRet = pWindow->currentWrapper()->textEditor()->verticalScrollBar()->value();
+    ASSERT_TRUE(iRet == 26);
 
-    assert(1 == 1);
+    pWindow->deleteLater();
 }
+
 TEST_F(test_textedit, scrollLineDown)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->scrollLineDown();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("H\nl\nl\ne\n\nw\no\nr\nl\nd\n.H\nl\nl\ne\n\nw"
+                                                                  "\no\nr\nl\nd\n.H\nl\nl\ne\n\nw\no\nr\nl\nd\n.H"
+                                                                  "\nl\nl\ne\n\nw\no\nr\nl\nd\n.H\nl\nl\ne\n\nw\no"
+                                                                  "\nr\nl\nd\n."));
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->scrollLineDown();
+    int iRet = pWindow->currentWrapper()->textEditor()->verticalScrollBar()->value();
+    ASSERT_TRUE(iRet == 1);
 
-    assert(1 == 1);
+    pWindow->deleteLater();
 }
+
 TEST_F(test_textedit, scrollUp)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("H\nl\nl\ne\n\nw\no\nr\nl\nd\n.H\nl\nl\ne\n\nw"
+                                                                  "\no\nr\nl\nd\n.H\nl\nl\ne\n\nw\no\nr\nl\nd\n.H"
+                                                                  "\nl\nl\ne\n\nw\no\nr\nl\nd\n.H\nl\nl\ne\n\nw\no"
+                                                                  "\nr\nl\nd\n.H\nl\nl\ne\n\nw\no\nr\nl\nd\n.H\n"));
+    int iScrollBarMaxmun = pWindow->currentWrapper()->textEditor()->verticalScrollBar()->maximum();
+    pWindow->currentWrapper()->textEditor()->verticalScrollBar()->setValue(iScrollBarMaxmun);
+    pWindow->currentWrapper()->textEditor()->scrollUp();
+    int iRet = pWindow->currentWrapper()->textEditor()->verticalScrollBar()->value();
+    ASSERT_TRUE(iScrollBarMaxmun != iRet);
 
-    //startManager->scrollUp();
-
-    assert(1 == 1);
+    pWindow->deleteLater();
 }
+
 TEST_F(test_textedit, scrollDown)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    //startManager->scrollDown();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("H\nl\nl\ne\n\nw\no\nr\nl\nd\n.H\nl\nl\ne\n\nw"
+                                                                  "\no\nr\nl\nd\n.H\nl\nl\ne\n\nw\no\nr\nl\nd\n.H"
+                                                                  "\nl\nl\ne\n\nw\no\nr\nl\nd\n.H\nl\nl\ne\n\nw\no"
+                                                                  "\nr\nl\nd\n.H\nl\nl\ne\n\nw\no\nr\nl\nd\n.H\n"));
+    pWindow->currentWrapper()->textEditor()->verticalScrollBar()->setValue(0);
+    pWindow->currentWrapper()->textEditor()->scrollDown();
+    int iRet = pWindow->currentWrapper()->textEditor()->verticalScrollBar()->value();
+    ASSERT_TRUE(iRet != 0);
 
-    assert(1 == 1);
+    pWindow->deleteLater();
 }
-//duplicateLine
-TEST_F(test_textedit, duplicateLine)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->duplicateLine();
 
-    assert(1 == 1);
+//duplicateLine 001
+TEST_F(test_textedit, duplicateLine_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world\nHolle world\nHolle world"));
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    int iDuplicateLineBeFor = pWindow->currentWrapper()->textEditor()->blockCount();
+    pWindow->currentWrapper()->textEditor()->duplicateLine();
+    int iDuplicateLineAfter = pWindow->currentWrapper()->textEditor()->blockCount();
+
+    ASSERT_TRUE(iDuplicateLineAfter == iDuplicateLineBeFor + 1);
+
+    pWindow->deleteLater();
 }
-//    void copyLines();
-//void cutlines();
-TEST_F(test_textedit, copyLines)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->copyLines();
 
-    assert(1 == 1);
+//duplicateLine 002
+TEST_F(test_textedit, duplicateLine_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world\nHolle world\nHolle world"));
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+    textCursor.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    int iDuplicateLineBeFor = pWindow->currentWrapper()->textEditor()->blockCount();
+    pWindow->currentWrapper()->textEditor()->duplicateLine();
+    int iDuplicateLineAfter = pWindow->currentWrapper()->textEditor()->blockCount();
+
+    ASSERT_TRUE(iDuplicateLineAfter == iDuplicateLineBeFor + 1);
+
+    pWindow->deleteLater();
+}
+
+//duplicateLine 003
+TEST_F(test_textedit, duplicateLine_003)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world\nHolle world\nHolle world"));
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::PreviousWord, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    int iDuplicateLineBeFor = pWindow->currentWrapper()->textEditor()->blockCount();
+    pWindow->currentWrapper()->textEditor()->duplicateLine();
+    int iDuplicateLineAfter = pWindow->currentWrapper()->textEditor()->blockCount();
+
+    ASSERT_TRUE(iDuplicateLineAfter == iDuplicateLineBeFor + 1);
+
+    pWindow->deleteLater();
+}
+
+//void copyLines 001
+TEST_F(test_textedit, copyLines_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world\nHolle world\nHolle world"));
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    QClipboard *pClipboard = QApplication::clipboard();
+    pClipboard->clear();
+    pWindow->currentWrapper()->textEditor()->copyLines();
+    QString strRet(pClipboard->text());
+    ASSERT_TRUE(!strRet.compare(QString("Holle world")));
+
+    pWindow->deleteLater();
+}
+
+//void copyLines 002
+TEST_F(test_textedit, copyLines_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world\nHolle world\nHolle world"));
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    QClipboard *pClipboard = QApplication::clipboard();
+    pClipboard->clear();
+    pWindow->currentWrapper()->textEditor()->copyLines();
+    QString strRet(pClipboard->text());
+    ASSERT_TRUE(!strRet.compare(QString("Holle world")));
+
+    pWindow->deleteLater();
 }
 
 void stub_push(QUndoCommand *cmd)
@@ -370,6 +805,7 @@ void stub_updateModifyStatus(const QString &path, bool isModified)
     Q_UNUSED(isModified);
 }
 
+//void cutlines();
 TEST_F(test_textedit, cutlines)
 {
     Stub stub;
@@ -382,7 +818,10 @@ TEST_F(test_textedit, cutlines)
     startManager->setWrapper(ee);
     startManager->cutlines();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    p->deleteLater();
+    startManager->deleteLater();
+    ee->deleteLater();
 }
 
 TEST_F(test_textedit, joinLines)
@@ -394,8 +833,12 @@ TEST_F(test_textedit, joinLines)
     startManager->setWrapper(ee);
     startManager->joinLines();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    p->deleteLater();
+    startManager->deleteLater();
+    ee->deleteLater();
 }
+
 TEST_F(test_textedit, killLine)
 {
     Window *pWindow = new Window;
@@ -405,7 +848,10 @@ TEST_F(test_textedit, killLine)
         pWindow->addTab("1.cpp");
         pWindow->currentWrapper()->m_pTextEdit->killLine();
     }
-    assert(1 == 1);
+
+    ASSERT_TRUE(wrapper->m_pTextEdit != nullptr);
+    wrapper->deleteLater();
+    pWindow->deleteLater();
 }
 TEST_F(test_textedit, killCurrentLine)
 {
@@ -416,7 +862,10 @@ TEST_F(test_textedit, killCurrentLine)
         pWindow->addTab("1.cpp");
         pWindow->currentWrapper()->m_pTextEdit->killCurrentLine();
     }
-    assert(1 == 1);
+
+    ASSERT_TRUE(wrapper->m_pTextEdit != nullptr);
+    wrapper->deleteLater();
+    pWindow->deleteLater();
 }
 TEST_F(test_textedit, killBackwardWord)
 {
@@ -427,7 +876,10 @@ TEST_F(test_textedit, killBackwardWord)
     startManager->setWrapper(ee);
     startManager->killBackwardWord();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 TEST_F(test_textedit, killForwardWord)
@@ -439,7 +891,10 @@ TEST_F(test_textedit, killForwardWord)
     startManager->setWrapper(ee);
     startManager->killForwardWord();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 TEST_F(test_textedit, escape)
 {
@@ -447,9 +902,8 @@ TEST_F(test_textedit, escape)
     //EditWrapper * ee = new EditWrapper();
     //startManager->setWrapper(ee);
     //startManager->escape();
-
-    //
 }
+
 TEST_F(test_textedit, indentText)
 {
     QScrollBar *p = new QScrollBar();
@@ -459,7 +913,10 @@ TEST_F(test_textedit, indentText)
     startManager->setWrapper(ee);
     startManager->indentText();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 TEST_F(test_textedit, unindentText)
@@ -471,8 +928,12 @@ TEST_F(test_textedit, unindentText)
     startManager->setWrapper(ee);
     startManager->unindentText();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
+
 TEST_F(test_textedit, setTabSpaceNumber)
 {
     QScrollBar *p = new QScrollBar();
@@ -482,8 +943,12 @@ TEST_F(test_textedit, setTabSpaceNumber)
     startManager->setWrapper(ee);
     startManager->setTabSpaceNumber(2);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
+
 //QString capitalizeText(QString text);
 
 //void keepCurrentLineAtCenter();
@@ -500,8 +965,12 @@ TEST_F(test_textedit, capitalizeText)
     startManager->setWrapper(ee);
     startManager->capitalizeText("2");
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
+
 TEST_F(test_textedit, keepCurrentLineAtCenter)
 {
     QScrollBar *p = new QScrollBar();
@@ -511,7 +980,10 @@ TEST_F(test_textedit, keepCurrentLineAtCenter)
     startManager->setWrapper(ee);
     startManager->keepCurrentLineAtCenter();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 TEST_F(test_textedit, setLineWrapMode)
 {
@@ -523,8 +995,12 @@ TEST_F(test_textedit, setLineWrapMode)
     startManager->setLineWrapMode(true);
     startManager->setLineWrapMode(false);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
+
 //void setFontFamily(QString fontName);
 //void setFontSize(int fontSize);
 //void updateFont();
@@ -537,7 +1013,10 @@ TEST_F(test_textedit, setFontFamily)
     startManager->setWrapper(ee);
     startManager->setFontFamily("2");
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 TEST_F(test_textedit, setFontSize)
 {
@@ -548,7 +1027,10 @@ TEST_F(test_textedit, setFontSize)
     startManager->setWrapper(ee);
     startManager->setFontSize(2);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 TEST_F(test_textedit, updateFont)
 {
@@ -559,7 +1041,10 @@ TEST_F(test_textedit, updateFont)
     startManager->setWrapper(ee);
     startManager->updateFont();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 TEST_F(test_textedit, replaceAll)
@@ -569,9 +1054,12 @@ TEST_F(test_textedit, replaceAll)
     startManager->setVerticalScrollBar(p);
     EditWrapper *ee = new EditWrapper();
     startManager->setWrapper(ee);
-    //    startManager->replaceAll("aa","bb");
+    //startManager->replaceAll("aa","bb");
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 TEST_F(test_textedit, replaceNext)
@@ -583,7 +1071,10 @@ TEST_F(test_textedit, replaceNext)
     startManager->setWrapper(ee);
     //    startManager->replaceAll("aa","bb");
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 TEST_F(test_textedit, replaceRest)
 {
@@ -594,7 +1085,10 @@ TEST_F(test_textedit, replaceRest)
     startManager->setWrapper(ee);
     //startManager->replaceRest("aa","bb");
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 TEST_F(test_textedit, beforeReplace)
 {
@@ -605,7 +1099,10 @@ TEST_F(test_textedit, beforeReplace)
     startManager->setWrapper(ee);
     startManager->beforeReplace("bb");
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 TEST_F(test_textedit, findKeywordForward)
 {
@@ -616,7 +1113,10 @@ TEST_F(test_textedit, findKeywordForward)
     startManager->setWrapper(ee);
     startManager->findKeywordForward("bb");
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 TEST_F(test_textedit, removeKeywords)
 {
@@ -627,7 +1127,10 @@ TEST_F(test_textedit, removeKeywords)
     startManager->setWrapper(ee);
     startManager->removeKeywords();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 //void renderAllSelections();
 TEST_F(test_textedit, highlightKeyword)
@@ -639,7 +1142,10 @@ TEST_F(test_textedit, highlightKeyword)
     startManager->setWrapper(ee);
     startManager->highlightKeyword("aa", 2);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 TEST_F(test_textedit, updateCursorKeywordSelection)
 {
@@ -651,7 +1157,10 @@ TEST_F(test_textedit, updateCursorKeywordSelection)
     startManager->updateCursorKeywordSelection("aa", true);
     startManager->updateCursorKeywordSelection("aa", false);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 TEST_F(test_textedit, updateHighlightLineSelection)
 {
@@ -662,7 +1171,10 @@ TEST_F(test_textedit, updateHighlightLineSelection)
     startManager->setWrapper(ee);
     startManager->updateHighlightLineSelection();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 TEST_F(test_textedit, renderAllSelections)
 {
@@ -673,7 +1185,10 @@ TEST_F(test_textedit, renderAllSelections)
     startManager->setWrapper(ee);
     startManager->renderAllSelections();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 //DMenu *getHighlightMenu();
 TEST_F(test_textedit, getHighlightMenu)
@@ -685,7 +1200,10 @@ TEST_F(test_textedit, getHighlightMenu)
     startManager->setWrapper(ee);
     startManager->getHighlightMenu();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 //void lineNumberAreaPaintEvent(QPaintEvent *event);
@@ -699,8 +1217,12 @@ TEST_F(test_textedit, lineNumberAreaPaintEvent)
     startManager->setWrapper(ee);
     startManager->lineNumberAreaPaintEvent(e);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
+
 //void codeFLodAreaPaintEvent(QPaintEvent *event);
 TEST_F(test_textedit, codeFLodAreaPaintEvent)
 {
@@ -712,7 +1234,10 @@ TEST_F(test_textedit, codeFLodAreaPaintEvent)
     startManager->setWrapper(ee);
     startManager->codeFLodAreaPaintEvent(e);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 //void setCodeFlodFlagVisable(bool isVisable,bool bIsFirstOpen = false);
 TEST_F(test_textedit, setCodeFlodFlagVisable)
@@ -725,7 +1250,10 @@ TEST_F(test_textedit, setCodeFlodFlagVisable)
     startManager->setCodeFlodFlagVisable(true, false);
     startManager->setCodeFlodFlagVisable(false, false);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 //void setThemeWithPath(const QString &path);
 TEST_F(test_textedit, setThemeWithPath)
@@ -737,7 +1265,10 @@ TEST_F(test_textedit, setThemeWithPath)
     startManager->setWrapper(ee);
     ee->OnThemeChangeSlot("aa");
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 //void setTheme(const KSyntaxHighlighting::Theme &theme, const QString &path);
 
@@ -752,7 +1283,10 @@ TEST_F(test_textedit, highlightWordUnderMouse)
     startManager->setWrapper(ee);
     startManager->highlightWordUnderMouse(x);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 //void removeHighlightWordUnderCursor();
 TEST_F(test_textedit, removeHighlightWordUnderCursor)
@@ -764,7 +1298,10 @@ TEST_F(test_textedit, removeHighlightWordUnderCursor)
     startManager->setWrapper(ee);
     startManager->removeHighlightWordUnderCursor();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 //void setSettings(Settings *settings);
@@ -778,7 +1315,10 @@ TEST_F(test_textedit, setSettings)
     startManager->setWrapper(ee);
     startManager->setSettings(set);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 //void copySelectedText();
@@ -791,8 +1331,12 @@ TEST_F(test_textedit, copySelectedText)
     startManager->setWrapper(ee);
     startManager->copySelectedText();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
+
 //void cutSelectedText();
 TEST_F(test_textedit, cutSelectedText)
 {
@@ -803,7 +1347,10 @@ TEST_F(test_textedit, cutSelectedText)
     startManager->setWrapper(ee);
     startManager->cutSelectedText();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 //void pasteText();
 TEST_F(test_textedit, pasteText)
@@ -817,7 +1364,10 @@ TEST_F(test_textedit, pasteText)
     startManager->setWrapper(ee);
     startManager->pasteText();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 //void setMark();
@@ -830,8 +1380,12 @@ TEST_F(test_textedit, setMark)
     startManager->setWrapper(ee);
     startManager->setMark();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
+
 //void unsetMark();
 TEST_F(test_textedit, unsetMark)
 {
@@ -842,8 +1396,12 @@ TEST_F(test_textedit, unsetMark)
     startManager->setWrapper(ee);
     startManager->unsetMark();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
+
 //bool tryUnsetMark();
 TEST_F(test_textedit, tryUnsetMark)
 {
@@ -854,8 +1412,12 @@ TEST_F(test_textedit, tryUnsetMark)
     startManager->setWrapper(ee);
     startManager->tryUnsetMark();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
+
 //void exchangeMark();
 TEST_F(test_textedit, exchangeMark)
 {
@@ -866,7 +1428,10 @@ TEST_F(test_textedit, exchangeMark)
     startManager->setWrapper(ee);
     startManager->exchangeMark();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 //void saveMarkStatus();
 TEST_F(test_textedit, saveMarkStatus)
@@ -878,7 +1443,10 @@ TEST_F(test_textedit, saveMarkStatus)
     startManager->setWrapper(ee);
     startManager->saveMarkStatus();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 //void restoreMarkStatus();
 TEST_F(test_textedit, restoreMarkStatus)
@@ -890,7 +1458,10 @@ TEST_F(test_textedit, restoreMarkStatus)
     startManager->setWrapper(ee);
     startManager->restoreMarkStatus();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 //void completionWord(QString word);
@@ -904,7 +1475,10 @@ TEST_F(test_textedit, getWordAtMouse)
     startManager->setWrapper(ee);
     startManager->getWordAtMouse();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 //QString getWordAtCursor();
 
@@ -918,7 +1492,10 @@ TEST_F(test_textedit, toggleReadOnlyMode)
     startManager->setWrapper(ee);
     startManager->toggleReadOnlyMode();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 //void toggleComment(bool sister);
 TEST_F(test_textedit, toggleComment)
@@ -931,7 +1508,10 @@ TEST_F(test_textedit, toggleComment)
     startManager->toggleComment(true);
     startManager->toggleComment(false);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 //bool atWordSeparator(int position);
 TEST_F(test_textedit, atWordSeparator)
@@ -943,7 +1523,10 @@ TEST_F(test_textedit, atWordSeparator)
     startManager->setWrapper(ee);
     startManager->atWordSeparator(2);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 //void showCursorBlink();
@@ -956,7 +1539,10 @@ TEST_F(test_textedit, showCursorBlink)
     startManager->setWrapper(ee);
     startManager->showCursorBlink();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 //void hideCursorBlink();
 TEST_F(test_textedit, hideCursorBlink)
@@ -968,7 +1554,10 @@ TEST_F(test_textedit, hideCursorBlink)
     startManager->setWrapper(ee);
     startManager->hideCursorBlink();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 //void setReadOnlyPermission(bool permission);
@@ -982,7 +1571,10 @@ TEST_F(test_textedit, setReadOnlyPermission)
     startManager->setReadOnlyPermission(true);
     startManager->setReadOnlyPermission(false);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 //bool getReadOnlyPermission();
 TEST_F(test_textedit, getReadOnlyPermission)
@@ -994,7 +1586,10 @@ TEST_F(test_textedit, getReadOnlyPermission)
     startManager->setWrapper(ee);
     startManager->getReadOnlyPermission();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 //bool getReadOnlyMode();
 TEST_F(test_textedit, getReadOnlyMode)
@@ -1006,7 +1601,10 @@ TEST_F(test_textedit, getReadOnlyMode)
     startManager->setWrapper(ee);
     startManager->getReadOnlyMode();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 //void hideRightMenu();
@@ -1019,7 +1617,10 @@ TEST_F(test_textedit, hideRightMenu)
     startManager->setWrapper(ee);
     startManager->hideRightMenu();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 //void clearBlack();
@@ -1032,7 +1633,10 @@ TEST_F(test_textedit, clearBlack)
     startManager->setWrapper(ee);
     //startManager->clearBlack();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 //void flodOrUnflodAllLevel(bool isFlod);
 TEST_F(test_textedit, flodOrUnflodAllLevel)
@@ -1045,7 +1649,10 @@ TEST_F(test_textedit, flodOrUnflodAllLevel)
     startManager->flodOrUnflodAllLevel(true);
     startManager->flodOrUnflodAllLevel(false);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 //void flodOrUnflodCurrentLevel(bool isFlod);
 TEST_F(test_textedit, flodOrUnflodCurrentLevel)
@@ -1058,7 +1665,10 @@ TEST_F(test_textedit, flodOrUnflodCurrentLevel)
     startManager->flodOrUnflodCurrentLevel(true);
     startManager->flodOrUnflodCurrentLevel(false);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 //void getHideRowContent(int iLine);
 TEST_F(test_textedit, getHideRowContent)
@@ -1070,7 +1680,10 @@ TEST_F(test_textedit, getHideRowContent)
     startManager->setWrapper(ee);
     startManager->getHideRowContent(1);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 //int  getHighLightRowContentLineNum(int iLine);
 TEST_F(test_textedit, getHighLightRowContentLineNum)
@@ -1082,7 +1695,10 @@ TEST_F(test_textedit, getHighLightRowContentLineNum)
     startManager->setWrapper(ee);
     startManager->getHighLightRowContentLineNum(1);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 //int  getLinePosByLineNum(int iLine);
 TEST_F(test_textedit, getLinePosYByLineNum)
@@ -1094,7 +1710,10 @@ TEST_F(test_textedit, getLinePosYByLineNum)
     startManager->setWrapper(ee);
     startManager->getLinePosYByLineNum(1);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 //bool ifHasHighlight();
 TEST_F(test_textedit, ifHasHighlight)
@@ -1106,7 +1725,10 @@ TEST_F(test_textedit, ifHasHighlight)
     startManager->setWrapper(ee);
     startManager->ifHasHighlight();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 //void bookMarkAreaPaintEvent(QPaintEvent *event);
 TEST_F(test_textedit, bookMarkAreaPaintEvent)
@@ -1119,7 +1741,10 @@ TEST_F(test_textedit, bookMarkAreaPaintEvent)
     QPaintEvent *e;
     startManager->bookMarkAreaPaintEvent(e);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 //int getLineFromPoint(const QPoint &point);
@@ -1133,7 +1758,10 @@ TEST_F(test_textedit, getLineFromPoint)
     QPoint s(10, 10);
     startManager->getLineFromPoint(s);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 //void addOrDeleteBookMark();
@@ -1146,7 +1774,10 @@ TEST_F(test_textedit, addOrDeleteBookMark)
     startManager->setWrapper(ee);
     startManager->addOrDeleteBookMark();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 //void moveToPreviousBookMark();
@@ -1159,7 +1790,10 @@ TEST_F(test_textedit, moveToPreviousBookMark)
     startManager->setWrapper(ee);
     startManager->moveToPreviousBookMark();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 //void checkBookmarkLineMove(int from, int charsRemoved, int charsAdded);
@@ -1172,7 +1806,10 @@ TEST_F(test_textedit, checkBookmarkLineMove)
     startManager->setWrapper(ee);
     startManager->checkBookmarkLineMove(2, 3, 4);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 //void setIsFileOpen();
@@ -1185,7 +1822,10 @@ TEST_F(test_textedit, setIsFileOpen)
     startManager->setWrapper(ee);
     startManager->setIsFileOpen();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 //QStringList readHistoryRecordofBookmark();
@@ -1200,7 +1840,10 @@ TEST_F(test_textedit, readHistoryRecordofBookmark)
     startManager->setWrapper(ee);
     startManager->readHistoryRecordofBookmark();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 //QStringList readHistoryRecordofFilePath(QString key);
@@ -1215,7 +1858,10 @@ TEST_F(test_textedit, readHistoryRecordofFilePath)
     startManager->setWrapper(ee);
     startManager->readHistoryRecordofFilePath("advance.editor.browsing_history_file");
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 //void writeHistoryRecord();
@@ -1230,7 +1876,10 @@ TEST_F(test_textedit, writeHistoryRecord)
     startManager->setWrapper(ee);
     startManager->writeHistoryRecord();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 //void isMarkCurrentLine(bool isMark, QString strColor = "");
@@ -1246,7 +1895,10 @@ TEST_F(test_textedit, isMarkCurrentLine)
     startManager->isMarkCurrentLine(true, "red");
     startManager->isMarkCurrentLine(false, "red");
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 //void isMarkAllLine(bool isMark, QString strColor = "");
@@ -1262,7 +1914,11 @@ TEST_F(test_textedit, isMarkAllLine)
     startManager->isMarkAllLine(true, "red");
     startManager->isMarkAllLine(false, "red");
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
+    s->deleteLater();
 }
 
 //void cancelLastMark();
@@ -1277,7 +1933,11 @@ TEST_F(test_textedit, cancelLastMark)
     startManager->setWrapper(ee);
     startManager->cancelLastMark();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
+    s->deleteLater();
 }
 
 //void markSelectWord();
@@ -1292,7 +1952,11 @@ TEST_F(test_textedit, markSelectWord)
     startManager->setWrapper(ee);
     startManager->markSelectWord();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
+    s->deleteLater();
 }
 
 //void updateMark(int from, int charsRemoved, int charsAdded);
@@ -1307,7 +1971,11 @@ TEST_F(test_textedit, updateMark)
     startManager->setWrapper(ee);
     startManager->updateMark(1, 2, 3);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
+    s->deleteLater();
 }
 
 //bool containsExtraSelection(QList<QTextEdit::ExtraSelection> listSelections, QTextEdit::ExtraSelection selection);
@@ -1324,7 +1992,11 @@ TEST_F(test_textedit, containsExtraSelection)
     startManager->setWrapper(ee);
     startManager->containsExtraSelection(listSelection, selectio);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
+    s->deleteLater();
 }
 
 //void appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSelections, QTextEdit::ExtraSelection selection
@@ -1346,7 +2018,11 @@ TEST_F(test_textedit, appendExtraSelection)
     startManager->setWrapper(ee);
     startManager->appendExtraSelection(listSelection, selectio, "#000000", &listSelectionsd);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
+    s->deleteLater();
 }
 /// void setCursorStart(int _);
 TEST_F(test_textedit, setCursorStart)
@@ -1362,7 +2038,11 @@ TEST_F(test_textedit, setCursorStart)
     startManager->setWrapper(ee);
     startManager->setCursorStart(2);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
+    s->deleteLater();
 }
 //void writeEncodeHistoryRecord();
 TEST_F(test_textedit, writeEncodeHistoryRecord)
@@ -1378,7 +2058,11 @@ TEST_F(test_textedit, writeEncodeHistoryRecord)
     startManager->setWrapper(ee);
     startManager->writeEncodeHistoryRecord();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
+    s->deleteLater();
 }
 //QStringList readEncodeHistoryRecord();
 TEST_F(test_textedit, readEncodeHistoryRecord)
@@ -1394,7 +2078,11 @@ TEST_F(test_textedit, readEncodeHistoryRecord)
     startManager->setWrapper(ee);
     startManager->readEncodeHistoryRecord();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
+    s->deleteLater();
 }
 
 //clickFindAction
@@ -1411,7 +2099,11 @@ TEST_F(test_textedit, clickFindAction)
     startManager->setWrapper(ee);
     startManager->clickFindAction();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
+    s->deleteLater();
 }
 // void tellFindBarClose();
 TEST_F(test_textedit, tellFindBarClose)
@@ -1427,7 +2119,11 @@ TEST_F(test_textedit, tellFindBarClose)
     startManager->setWrapper(ee);
     startManager->tellFindBarClose();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
+    s->deleteLater();
 }
 
 // void setEditPalette(const QString &activeColor, const QString &inactiveColor);
@@ -1444,7 +2140,11 @@ TEST_F(test_textedit, setEditPalette)
     startManager->setWrapper(ee);
     startManager->setEditPalette("aa", "aa");
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    s->deleteLater();
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 // void setCodeFoldWidgetHide(bool isHidden);
@@ -1462,7 +2162,11 @@ TEST_F(test_textedit, setCodeFoldWidgetHide)
     startManager->setCodeFoldWidgetHide(true);
     startManager->setCodeFoldWidgetHide(false);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    s->deleteLater();
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 // void updateLeftAreaWidget();
 TEST_F(test_textedit, updateLeftAreaWidget)
@@ -1478,7 +2182,11 @@ TEST_F(test_textedit, updateLeftAreaWidget)
     startManager->setWrapper(ee);
     startManager->updateLeftAreaWidget();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    s->deleteLater();
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 // void updateLineNumber();
@@ -1495,7 +2203,11 @@ TEST_F(test_textedit, updateLineNumber)
     startManager->setWrapper(ee);
     startManager->updateLeftAreaWidget();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    s->deleteLater();
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 // void handleScrollFinish();
 TEST_F(test_textedit, handleScrollFinish)
@@ -1511,7 +2223,11 @@ TEST_F(test_textedit, handleScrollFinish)
     startManager->setWrapper(ee);
     startManager->handleScrollFinish();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    s->deleteLater();
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 // void slot_translate();
@@ -1528,7 +2244,11 @@ TEST_F(test_textedit, slot_translate)
     startManager->setWrapper(ee);
     startManager->slot_translate();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    s->deleteLater();
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 #if 0 //gerrit上段错误，暂且屏蔽
@@ -1582,6 +2302,7 @@ TEST_F(test_textedit, slot_translate)
 //    
 //}
 // void transposeChar();
+
 TEST_F(test_textedit, transposeChar)
 {
     QList<QTextEdit::ExtraSelection> listSelection;
@@ -1595,7 +2316,11 @@ TEST_F(test_textedit, transposeChar)
     startManager->setWrapper(ee);
     startManager->transposeChar();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    s->deleteLater();
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 // void handleCursorMarkChanged(bool mark, QTextCursor cursor);
@@ -1613,7 +2338,11 @@ TEST_F(test_textedit, handleCursorMarkChanged)
     startManager->handleCursorMarkChanged(true, QTextCursor());
     startManager->handleCursorMarkChanged(false, QTextCursor());
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    s->deleteLater();
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 // void adjustScrollbarMargins();
@@ -1630,7 +2359,11 @@ TEST_F(test_textedit, adjustScrollbarMargins)
     startManager->setWrapper(ee);
     startManager->adjustScrollbarMargins();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    s->deleteLater();
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 // void onSelectionArea();
@@ -1647,7 +2380,11 @@ TEST_F(test_textedit, onSelectionArea)
     startManager->setWrapper(ee);
     startManager->onSelectionArea();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    s->deleteLater();
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 // void fingerZoom(QString name, QString direction, int fingers);
 TEST_F(test_textedit, fingerZoom)
@@ -1663,7 +2400,11 @@ TEST_F(test_textedit, fingerZoom)
     startManager->setWrapper(ee);
     startManager->fingerZoom("aa", "aa", 3);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    s->deleteLater();
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 // bool event(QEvent* evt) override;   //触摸屏event事件
@@ -1681,8 +2422,11 @@ TEST_F(test_textedit, event)
     QEvent *e = new QEvent(QEvent::Type::MouseButtonPress);
     startManager->event(e);
 
-    //assert(1 == 1);
-    delete e;
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    s->deleteLater();
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 // void inputMethodEvent(QInputMethodEvent *e) override;
@@ -1703,8 +2447,14 @@ TEST_F(test_textedit, mousePressEvent)
     QPointF b(a);
     QMouseEvent *e = new QMouseEvent(QMouseEvent::Type::Enter, b, Qt::MouseButton::LeftButton, Qt::MouseButton::LeftButton, Qt::KeyboardModifier::NoModifier);
     startManager->mousePressEvent(e);
-    assert(1 == 1);
+
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    s->deleteLater();
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
+
 // void mouseMoveEvent(QMouseEvent *e) override;
 TEST_F(test_textedit, mouseMoveEvent)
 {
@@ -1722,7 +2472,11 @@ TEST_F(test_textedit, mouseMoveEvent)
     QMouseEvent *e = new QMouseEvent(QMouseEvent::Type::Enter, b, Qt::MouseButton::LeftButton, Qt::MouseButton::LeftButton, Qt::KeyboardModifier::NoModifier);
     startManager->mouseMoveEvent(e);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    s->deleteLater();
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 // void mouseReleaseEvent(QMouseEvent *e) override;
 TEST_F(test_textedit, mouseReleaseEvent)
@@ -1741,7 +2495,11 @@ TEST_F(test_textedit, mouseReleaseEvent)
     QMouseEvent *e = new QMouseEvent(QMouseEvent::Type::Enter, b, Qt::MouseButton::LeftButton, Qt::MouseButton::LeftButton, Qt::KeyboardModifier::NoModifier);
     startManager->mouseReleaseEvent(e);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    s->deleteLater();
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 // void wheelEvent(QWheelEvent *e) override;
@@ -1764,7 +2522,11 @@ TEST_F(test_textedit, wheelEvent)
     //    Qt::Orientation orient = Qt::Vertical);
     startManager->wheelEvent(e);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    s->deleteLater();
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 // bool eventFilter(QObject *object, QEvent *event) override;
 TEST_F(test_textedit, eventFilter)
@@ -1817,7 +2579,11 @@ TEST_F(test_textedit, contextMenuEvent)
     QContextMenuEvent *e = new QContextMenuEvent(QContextMenuEvent::Reason::Keyboard, b);
     //startManager->contextMenuEvent(e);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    s->deleteLater();
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 // void paintEvent(QPaintEvent *e) override;
 TEST_F(test_textedit, paintEvent)
@@ -1835,7 +2601,11 @@ TEST_F(test_textedit, paintEvent)
     QPaintEvent *e = new QPaintEvent(a);
     startManager->paintEvent(e);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    s->deleteLater();
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 // bool blockContainStrBrackets(int line);
@@ -1853,7 +2623,11 @@ TEST_F(test_textedit, blockContainStrBrackets)
     QPaintEvent *e;
     startManager->blockContainStrBrackets(2);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    s->deleteLater();
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 // bool setCursorKeywordSeletoin(int position, bool findNext);
 TEST_F(test_textedit, setCursorKeywordSeletoin)
@@ -1871,7 +2645,11 @@ TEST_F(test_textedit, setCursorKeywordSeletoin)
     startManager->setCursorKeywordSeletoin(2, true);
     startManager->setCursorKeywordSeletoin(2, false);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    s->deleteLater();
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 // void cursorPositionChanged();
 TEST_F(test_textedit, cursorPositionChanged)
@@ -1888,7 +2666,11 @@ TEST_F(test_textedit, cursorPositionChanged)
     QPaintEvent *e;
     startManager->cursorPositionChanged();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    s->deleteLater();
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 // void updateHighlightBrackets(const QChar &openChar, const QChar &closeChar);
 TEST_F(test_textedit, updateHighlightBrackets)
@@ -1906,7 +2688,11 @@ TEST_F(test_textedit, updateHighlightBrackets)
     QPaintEvent *e;
     startManager->updateHighlightBrackets(a, a);
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    s->deleteLater();
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 // int getFirstVisibleBlockId() const;
 TEST_F(test_textedit, getFirstVisibleBlockId)
@@ -1923,7 +2709,11 @@ TEST_F(test_textedit, getFirstVisibleBlockId)
     QPaintEvent *e;
     //startManager->getFirstVisibleBlockId();
 
-    assert(1 == 1);
+    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    s->deleteLater();
+    ee->deleteLater();
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 //void setTruePath(QString qstrTruePath);
@@ -1934,7 +2724,9 @@ TEST_F(test_textedit, setBackupPath)
     startManager->setVerticalScrollBar(p);
     startManager->setTruePath("aa");
 
-    assert(1 == 1);
+    ASSERT_TRUE(startManager->m_pLeftAreaWidget != nullptr);
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 // QString getTruePath();
@@ -1945,7 +2737,9 @@ TEST_F(test_textedit, getTruePath)
     startManager->setVerticalScrollBar(p);
     startManager->getTruePath();
 
-    assert(1 == 1);
+    ASSERT_TRUE(startManager->m_pLeftAreaWidget != nullptr);
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 ////初始化右键菜单
@@ -1957,7 +2751,9 @@ TEST_F(test_textedit, initRightClickedMenu)
     startManager->setVerticalScrollBar(p);
     startManager->initRightClickedMenu();
 
-    assert(1 == 1);
+    ASSERT_TRUE(startManager->m_pLeftAreaWidget != nullptr);
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 //inline QString getFilePath() { return m_sFilePath;};
@@ -1968,7 +2764,9 @@ TEST_F(test_textedit, getFilePath)
     startManager->setVerticalScrollBar(p);
     startManager->getFilePath();
 
-    assert(1 == 1);
+    ASSERT_TRUE(startManager->m_pLeftAreaWidget != nullptr);
+    startManager->deleteLater();
+    p->deleteLater();
 }
 ////
 //inline void setFilePath(QString file) { m_sFilePath = file;}
@@ -1979,7 +2777,9 @@ TEST_F(test_textedit, setFilePath)
     startManager->setVerticalScrollBar(p);
     startManager->setFilePath("a");
 
-    assert(1 == 1);
+    ASSERT_TRUE(startManager->m_pLeftAreaWidget != nullptr);
+    startManager->deleteLater();
+    p->deleteLater();
 }
 ////
 //int characterCount() const;
@@ -1990,7 +2790,9 @@ TEST_F(test_textedit, characterCount)
     startManager->setVerticalScrollBar(p);
     startManager->characterCount();
 
-    assert(1 == 1);
+    ASSERT_TRUE(startManager->m_pLeftAreaWidget != nullptr);
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 //void moveCursorNoBlink(QTextCursor::MoveOperation operation,
@@ -2002,7 +2804,9 @@ TEST_F(test_textedit, moveCursorNoBlink)
     startManager->setVerticalScrollBar(p);
     startManager->moveCursorNoBlink(QTextCursor::MoveOperation::Up);
 
-    assert(1 == 1);
+    ASSERT_TRUE(startManager->m_pLeftAreaWidget != nullptr);
+    startManager->deleteLater();
+    p->deleteLater();
 }
 
 //void convertWordCase(ConvertCase convertCase);
@@ -2026,7 +2830,10 @@ TEST_F(test_textedit, setBookmarkFlagVisable)
     startManager->setVerticalScrollBar(p);
     startManager->setBookmarkFlagVisable(false, false);
     startManager->setBookmarkFlagVisable(true, false);
-    assert(1 == 1);
+
+    ASSERT_TRUE(startManager->m_pLeftAreaWidget != nullptr);
+    startManager->deleteLater();
+    p->deleteLater();
 }
 /*
     void unCommentSelection();
@@ -2041,7 +2848,9 @@ TEST_F(test_textedit, unCommentSelection)
     cursor.setPosition(0, QTextCursor::MoveAnchor);
     editWrapper->m_pTextEdit->setTextCursor(cursor);
     editWrapper->m_pTextEdit->unCommentSelection();
-    assert(1 == 1);
+
+    ASSERT_TRUE(editWrapper->m_pTextEdit != nullptr);
+    editWrapper->deleteLater();
 }
 
 TEST_F(test_textedit, setComment)
@@ -2052,7 +2861,9 @@ TEST_F(test_textedit, setComment)
     cursor.setPosition(0, QTextCursor::MoveAnchor);
     editWrapper->m_pTextEdit->setTextCursor(cursor);
     editWrapper->m_pTextEdit->setComment();
-    assert(1 == 1);
+
+    ASSERT_TRUE(editWrapper->m_pTextEdit != nullptr);
+    editWrapper->deleteLater();
 }
 
 TEST_F(test_textedit, removeComment)
@@ -2063,7 +2874,9 @@ TEST_F(test_textedit, removeComment)
     cursor.setPosition(0, QTextCursor::MoveAnchor);
     editWrapper->m_pTextEdit->setTextCursor(cursor);
     editWrapper->m_pTextEdit->removeComment();
-    assert(1 == 1);
+
+    ASSERT_TRUE(editWrapper->m_pTextEdit != nullptr);
+    editWrapper->deleteLater();
 }
 
 TEST_F(test_textedit, keyPressEvent)
@@ -2076,5 +2889,8 @@ TEST_F(test_textedit, keyPressEvent)
     editWrapper->m_pTextEdit->setTextCursor(cursor);
     QKeyEvent keyEvent(QEvent::KeyPress, Qt::Key_Insert, Qt::NoModifier);
     editWrapper->m_pTextEdit->keyPressEvent(&keyEvent);
-    assert(1 == 1);
+
+    ASSERT_TRUE(editWrapper->m_pTextEdit != nullptr);
+    editWrapper->deleteLater();
+    window->deleteLater();
 }
