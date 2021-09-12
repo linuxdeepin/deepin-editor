@@ -8,8 +8,9 @@
 #include"../../src/editor/FlashTween.h"
 #include"../stub.h"
 #include <QObject>
-#include<QWindow>
-#include<QEvent>
+#include <QWindow>
+#include <QEvent>
+#include <QTimer>
 
 class test_flashTween : public QObject, public::testing::Test
 {

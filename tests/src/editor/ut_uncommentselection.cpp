@@ -1,4 +1,4 @@
-#include "test_uncommentselection.h"
+#include "ut_uncommentselection.h"
 #include "../../src/common/settings.h"
 #include "../../src/controls/tabbar.h"
 #include "../../src/editor/editwrapper.h"
@@ -43,24 +43,24 @@ TEST_F(test_uncommentselection, setComments)
 TEST_F(test_uncommentselection, isValid)
 {
     Comment::CommentDefinition numm;
-    numm.isValid();
+    bool bRet = numm.isValid();
 
-    
+    ASSERT_TRUE(bRet == false);
 }
 //bool hasSingleLineStyle() const;
 TEST_F(test_uncommentselection, hasSingleLineStyle)
 {
     Comment::CommentDefinition numm;
-    numm.hasSingleLineStyle();
+    bool bRet = numm.hasSingleLineStyle();
 
-    
+    ASSERT_TRUE(bRet == false);
 }
 //bool hasMultiLineStyle() const;
 TEST_F(test_uncommentselection, hasMultiLineStyle)
 {
     Comment::CommentDefinition numm;
-    numm.hasMultiLineStyle();
+    bool bRet = numm.hasMultiLineStyle();
 
-    
+    ASSERT_TRUE(bRet == false);
 }
 

@@ -14,7 +14,7 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "test_leftareaoftextedit.h"
+#include "ut_leftareaoftextedit.h"
 #include "../../src/editor/leftareaoftextedit.h"
 #include "../../src/editor/dtextedit.h"
 
@@ -29,6 +29,9 @@ TEST_F(test_leftareaoftextedit, LeftAreaTextEdit)
     TextEdit *textEdit = new TextEdit;
     LeftAreaTextEdit *leftArea = new LeftAreaTextEdit(textEdit);
     
+    ASSERT_TRUE(leftArea->m_pFlodArea != nullptr);
+    leftArea->deleteLater();
+    textEdit->deleteLater();
 }
 
 //void lineNumberAreaPaintEvent(QPaintEvent *event);
@@ -39,6 +42,11 @@ TEST_F(test_leftareaoftextedit, lineNumberAreaPaintEvent)
     QPaintEvent *event = new QPaintEvent(QRegion());
     leftArea->lineNumberAreaPaintEvent(event);
     
+    ASSERT_TRUE(leftArea->m_pFlodArea != nullptr);
+    delete event;
+    event = nullptr;
+    leftArea->deleteLater();
+    textEdit->deleteLater();
 }
 
 //int lineNumberAreaWidth();
@@ -48,6 +56,9 @@ TEST_F(test_leftareaoftextedit, lineNumberAreaWidth)
     LeftAreaTextEdit *leftArea = new LeftAreaTextEdit(textEdit);
     leftArea->lineNumberAreaWidth();
     
+    ASSERT_TRUE(leftArea->m_pFlodArea != nullptr);
+    leftArea->deleteLater();
+    textEdit->deleteLater();
 }
 
 //void bookMarkAreaPaintEvent(QPaintEvent *event);
@@ -58,6 +69,11 @@ TEST_F(test_leftareaoftextedit, bookMarkAreaPaintEvent)
     QPaintEvent *event = new QPaintEvent(QRegion());
     leftArea->bookMarkAreaPaintEvent(event);
     
+    ASSERT_TRUE(leftArea->m_pFlodArea != nullptr);
+    delete event;
+    event = nullptr;
+    leftArea->deleteLater();
+    textEdit->deleteLater();
 }
 
 //void codeFlodAreaPaintEvent(QPaintEvent *event);
@@ -68,4 +84,9 @@ TEST_F(test_leftareaoftextedit, codeFlodAreaPaintEvent)
     QPaintEvent *event = new QPaintEvent(QRegion());
     leftArea->codeFlodAreaPaintEvent(event);
     
+    ASSERT_TRUE(leftArea->m_pFlodArea != nullptr);
+    delete event;
+    event = nullptr;
+    leftArea->deleteLater();
+    textEdit->deleteLater();
 }

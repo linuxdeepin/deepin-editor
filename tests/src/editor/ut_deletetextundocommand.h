@@ -10,8 +10,8 @@
 #include"../../src/editor/deletetextundocommand.h"
 #include"../stub.h"
 #include <QObject>
-#include<QWindow>
-#include<QEvent>
+#include <QWindow>
+#include <QEvent>
 
 
 class test_deletetextundocommond: public QObject, public::testing::Test

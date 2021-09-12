@@ -1,4 +1,4 @@
-#include "test_inserttextundocommand.h"
+#include "ut_inserttextundocommand.h"
 #include "../../src/editor/inserttextundocommand.h"
 
 test_InsertTextUndoCommand::test_InsertTextUndoCommand()
@@ -30,6 +30,10 @@ TEST_F(test_InsertTextUndoCommand, undo)
     QString text = "aaa";
     InsertTextUndoCommand *command = new InsertTextUndoCommand(extraSelections, text);
     command->undo();
+
+    int iRet = command->m_textCursor.position();
+    ASSERT_TRUE(iRet != 0);
+
 }
 
 TEST_F(test_InsertTextUndoCommand, undo2)
@@ -38,6 +42,9 @@ TEST_F(test_InsertTextUndoCommand, undo2)
     QString text = "aaa";
     InsertTextUndoCommand *command = new InsertTextUndoCommand(extraSelections, text);
     command->undo();
+
+    int iRet = command->m_textCursor.position();
+    ASSERT_TRUE(iRet != 0);
 }
 
 TEST_F(test_InsertTextUndoCommand, redo)
@@ -46,6 +53,9 @@ TEST_F(test_InsertTextUndoCommand, redo)
     QString text = "aaa";
     InsertTextUndoCommand *command = new InsertTextUndoCommand(extraSelections, text);
     ituc->redo();
+
+    int iRet = command->m_textCursor.position();
+    ASSERT_TRUE(iRet != 0);
 }
 
 TEST_F(test_InsertTextUndoCommand, redo2)
@@ -60,4 +70,7 @@ TEST_F(test_InsertTextUndoCommand, redo2)
     QString text = "aaa";
     InsertTextUndoCommand *command = new InsertTextUndoCommand(extraSelections, text);
     command->redo();
+
+    int iRet = command->m_textCursor.position();
+    ASSERT_TRUE(iRet != 0);
 }

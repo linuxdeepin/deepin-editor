@@ -1,4 +1,4 @@
-#include "test_replaceallcommond.h"
+#include "ut_replaceallcommond.h"
 #include "../../src/editor/replaceallcommond.h"
 #include "QTextCursor"
 test_replaceallcommond::test_replaceallcommond()
@@ -6,17 +6,15 @@ test_replaceallcommond::test_replaceallcommond()
 
 }
 
-
 TEST_F(test_replaceallcommond, ReplaceAllCommond)
 {
     QString text = "test";
     QTextCursor cursor;
     ReplaceAllCommond* com = new ReplaceAllCommond(text,text,cursor);
+    ASSERT_TRUE(!text.compare(com->m_newText));
 
     delete com;
     com=nullptr;
-
-    
 }
 
 TEST_F(test_replaceallcommond, redo)
@@ -25,11 +23,10 @@ TEST_F(test_replaceallcommond, redo)
     QTextCursor cursor;
     ReplaceAllCommond* com = new ReplaceAllCommond(text,text,cursor);
     com->redo();
+    ASSERT_TRUE(com->m_cursor.position() != 0);
 
     delete com;
     com=nullptr;
-
-    
 }
 
 TEST_F(test_replaceallcommond, undo)
@@ -38,6 +35,7 @@ TEST_F(test_replaceallcommond, undo)
     QTextCursor cursor;
     ReplaceAllCommond* com = new ReplaceAllCommond(text,text,cursor);
     com->undo();
+    ASSERT_TRUE(com->m_cursor.position() != 0);
 
     delete com;
     com=nullptr;
