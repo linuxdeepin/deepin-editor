@@ -44,6 +44,80 @@ TEST_F(test_textedit, TextEdit)
     pWindow->deleteLater();
 }
 
+//slotSelectionChanged 001
+TEST_F(test_textedit, slotSelectionChanged_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world."));
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->slotSelectionChanged();
+    int iRet = QApplication::cursorFlashTime();
+    ASSERT_TRUE(iRet == 0);
+
+    pWindow->deleteLater();
+}
+
+//slotSelectionChanged 002
+TEST_F(test_textedit, slotSelectionChanged_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world."));
+    pWindow->currentWrapper()->textEditor()->slotSelectionChanged();
+    int iRet = QApplication::cursorFlashTime();
+    ASSERT_TRUE(iRet != 0);
+
+    pWindow->deleteLater();
+}
+
+//slotCanRedoChanged
+TEST_F(test_textedit, slotCanRedoChanged)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world."));
+    pWindow->currentWrapper()->textEditor()->slotCanRedoChanged(true);
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_pUndoStack != nullptr);
+
+    pWindow->deleteLater();
+}
+
+//slotCanUndoChanged
+TEST_F(test_textedit, slotCanUndoChanged)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world."));
+    pWindow->currentWrapper()->textEditor()->slotCanUndoChanged(true);
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_pUndoStack != nullptr);
+
+    pWindow->deleteLater();
+}
+
+//slotValueChanged
+TEST_F(test_textedit, slotValueChanged)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMassege("Holle world.Holle world.Holle world.Holle world.Holle world.Holle world.Holle world.Holle world.Holle world.");
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(), strMassege);
+    pWindow->currentWrapper()->textEditor()->setLineWrapMode(QPlainTextEdit::NoWrap);
+    int iRetBefore = pWindow->currentWrapper()->textEditor()->horizontalScrollBar()->value();
+    pWindow->currentWrapper()->textEditor()->m_isSelectAll = true;
+    pWindow->currentWrapper()->textEditor()->slotValueChanged(true);
+    int iRetAfter = pWindow->currentWrapper()->textEditor()->horizontalScrollBar()->value();
+    ASSERT_TRUE(iRetBefore != iRetAfter && iRetAfter == 0);
+
+    pWindow->deleteLater();
+}
+
 //getCurrentLine
 TEST_F(test_textedit, getCurrentLine)
 {

@@ -506,7 +506,11 @@ public slots:
 
     void handleCursorMarkChanged(bool mark, QTextCursor cursor);
 
+    void slotValueChanged(int iValue);
     void adjustScrollbarMargins();
+    void slotSelectionChanged();
+    void slotCanRedoChanged(bool bCanRedo);
+    void slotCanUndoChanged(bool bCanUndo);
     void onSelectionArea();
     void fingerZoom(QString name, QString direction, int fingers);
     void cursorPositionChanged();

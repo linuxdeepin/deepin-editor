@@ -107,12 +107,7 @@ TextEdit::TextEdit(QWidget *parent)
 
     // Init widgets.
     //左边栏控件　滑动条滚动跟新行号 折叠标记
-    connect(this->verticalScrollBar(), &QScrollBar::valueChanged, this, [&](){
-        if(m_isSelectAll)
-            this->selectTextInView();
-
-        this->updateLeftAreaWidget();
-    });
+    connect(this->verticalScrollBar(), &QScrollBar::valueChanged, this, &TextEdit::slotValueChanged);
     connect(this, &QPlainTextEdit::textChanged, this, &TextEdit::updateLeftAreaWidget);
     connect(this, &QPlainTextEdit::textChanged, this, [this]() {
         this->m_wrapper->UpdateBottomBarWordCnt(this->characterCount());
@@ -123,18 +118,8 @@ TextEdit::TextEdit(QWidget *parent)
 
     connect(document(), &QTextDocument::contentsChange, this, &TextEdit::updateMark);
     connect(document(), &QTextDocument::contentsChange, this, &TextEdit::checkBookmarkLineMove);
-
-    connect(m_pUndoStack, &QUndoStack::canRedoChanged, this, [this](bool) {
-        bool isModified = this->m_wrapper->isTemFile() | (m_pUndoStack->canUndo() || m_pUndoStack->index() != m_lastSaveIndex);
-        this->m_wrapper->window()->updateModifyStatus(m_sFilePath, isModified);
-        this->m_wrapper->OnUpdateHighlighter();
-    });
-
-    connect(m_pUndoStack, &QUndoStack::canUndoChanged, this, [this](bool canUndo) {
-        bool isModified = this->m_wrapper->isTemFile() | (canUndo || m_pUndoStack->index() != m_lastSaveIndex);
-        this->m_wrapper->window()->updateModifyStatus(m_sFilePath, isModified);
-        this->m_wrapper->OnUpdateHighlighter();
-    });
+    connect(m_pUndoStack, &QUndoStack::canRedoChanged, this, &TextEdit::slotCanRedoChanged);
+    connect(m_pUndoStack, &QUndoStack::canUndoChanged, this, &TextEdit::slotCanUndoChanged);
 
     QDBusConnection dbus = QDBusConnection::sessionBus();
     dbus.systemBus().connect("com.deepin.daemon.Gesture",
@@ -165,15 +150,7 @@ TextEdit::TextEdit(QWidget *parent)
     connect(verticalScrollBar(), &QScrollBar::rangeChanged, this, &TextEdit::adjustScrollbarMargins, Qt::QueuedConnection);
     // Don't blink the cursor when selecting text
     // Recover blink when not selecting text.
-    connect(this, &TextEdit::selectionChanged, this, [ = ] {
-        if (textCursor().hasSelection())
-        {
-            hideCursorBlink();
-        } else
-        {
-            showCursorBlink();
-        }
-    });
+    connect(this, &TextEdit::selectionChanged, this, &TextEdit::slotSelectionChanged, Qt::QueuedConnection);
 }
 
 TextEdit::~TextEdit()
@@ -1047,9 +1024,7 @@ void TextEdit::moveToLineIndentation()
         cursor.setPosition(nStartPos, QTextCursor::KeepAnchor);
     }
 
-//    cursor.movePosition(QTextCursor::PreviousCharacter,QTextCursor::KeepAnchor);
-
-    //qDebug () << "currentChar" << *cursor.selection().toPlainText().data() << "llll" << toPlainText().at(std::max(cursor.position() - 1, 0));
+    //cursor.movePosition(QTextCursor::PreviousCharacter,QTextCursor::KeepAnchor);
     // Move to first non-blank char of line.
     int column = startColumn;
     while (column < endColumn) {
@@ -1837,6 +1812,16 @@ void TextEdit::handleCursorMarkChanged(bool mark, QTextCursor cursor)
     m_pLeftAreaWidget->m_pBookMarkArea->update();
 }
 
+void TextEdit::slotValueChanged(int iValue)
+{
+    Q_UNUSED(iValue);
+    if(m_isSelectAll) {
+        this->selectTextInView();
+    }
+
+    this->updateLeftAreaWidget();
+}
+
 void TextEdit::convertWordCase(ConvertCase convertCase)
 {
 #if 0
@@ -2034,7 +2019,6 @@ void TextEdit::replaceAll(const QString &replaceText, const QString &withText)
     QTextCursor startCursor = textCursor();
     startCursor.beginEditBlock();
 
-
     QString oldText = this->toPlainText();
     QString newText = oldText;
 
@@ -2101,7 +2085,6 @@ void TextEdit::replaceRest(const QString &replaceText, const QString &withText)
     QTextCursor startCursor = textCursor();
     startCursor.beginEditBlock();
 
-
     int pos = cursor.position();
     QString oldText = this->toPlainText();
     QString newText = oldText.left(pos);
@@ -2109,8 +2092,7 @@ void TextEdit::replaceRest(const QString &replaceText, const QString &withText)
     right.replace(replaceText,withText);
     newText += right;
 
-
-    ReplaceAllCommond* commond = new ReplaceAllCommond(oldText,newText,cursor);
+    ReplaceAllCommond* commond = new ReplaceAllCommond(oldText, newText, cursor);
     m_pUndoStack->push(commond);
 
     m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
@@ -2970,7 +2952,6 @@ void TextEdit::highlight()
 
 void TextEdit::selectTextInView()
 {
-
     QPoint bottom = QPoint(this->viewport()->width(),this->viewport()->height());
     int endPos = cursorForPosition(bottom).position();
     int startPos = cursorForPosition(QPoint(0,0)).position();
@@ -2980,7 +2961,6 @@ void TextEdit::selectTextInView()
     cursor.setPosition(startPos,QTextCursor::KeepAnchor);
     this->setTextCursor(cursor);
     this->horizontalScrollBar()->setValue(0);
-
 }
 
 void TextEdit::setSelectAll()
@@ -5539,6 +5519,30 @@ void TextEdit::adjustScrollbarMargins()
     } else {
         setViewportMargins(0, 0, 5, 0);
     }
+}
+
+void TextEdit::slotSelectionChanged()
+{
+    if (textCursor().hasSelection()) {
+        hideCursorBlink();
+    } else {
+        showCursorBlink();
+    }
+}
+
+void TextEdit::slotCanRedoChanged(bool bCanRedo)
+{
+    Q_UNUSED(bCanRedo)
+    bool isModified = this->m_wrapper->isTemFile() | (m_pUndoStack->canUndo() || m_pUndoStack->index() != m_lastSaveIndex);
+    this->m_wrapper->window()->updateModifyStatus(m_sFilePath, isModified);
+    this->m_wrapper->OnUpdateHighlighter();
+}
+
+void TextEdit::slotCanUndoChanged(bool bCanUndo)
+{
+    bool isModified = this->m_wrapper->isTemFile() | (bCanUndo || m_pUndoStack->index() != m_lastSaveIndex);
+    this->m_wrapper->window()->updateModifyStatus(m_sFilePath, isModified);
+    this->m_wrapper->OnUpdateHighlighter();
 }
 
 bool TextEdit::containsExtraSelection(QList<QTextEdit::ExtraSelection> listSelections, QTextEdit::ExtraSelection selection)
