@@ -3937,7 +3937,7 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
 
             scalePixmap = Utils::renderSVG(pixmapPath, QSize(image.height(), image.width()), false);
             scalePixmap.setDevicePixelRatio(devicePixelRatioF());
-			#if 0
+#if 0
             if (fontHeight > image.height())
             {
                 scalePixmap = Utils::renderSVG(pixmapPath, QSize(image.height(), image.width()), false);
@@ -3952,7 +3952,7 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
             imageTop = cursorRect(cur).y() + (cursorRect(cur).height() - scalePixmap.height()) / 2;
             int nOffset = (m_pLeftAreaWidget->m_pBookMarkArea->width()  - scalePixmap.width()) / 2;
             painter.drawPixmap(nOffset, imageTop, scalePixmap);
-			#endif
+#endif
 
             //imageTop = cursorRect(cur).y() ;
            // int nOffset = (m_pLeftAreaWidget->m_pBookMarkArea->width()  - scalePixmap.width()) / 2;
@@ -3961,7 +3961,7 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
             int height = cursorRect(cur).height();
             updateLeftWidgetWidth(height);
             QRect rect(0,cursorRect(cur).y(),height,height);
-            rect = rect.adjusted(height/6,height/6,-1*height/6,-1*height/6);
+            rect = rect.adjusted(height/24,height/24,-1*height/24,-1*height/24);
 
             QSvgRenderer render;
             render.load(pixmapPath);
