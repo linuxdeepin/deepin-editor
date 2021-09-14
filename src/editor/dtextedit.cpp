@@ -1563,13 +1563,19 @@ void TextEdit::killLine()
 	//deleteSelectTextEx(textCursor());
         deleteSelectTextEx(textCursor(),textCursor().selectedText(),false);
     } else {
-        // Get current line content.
-        QTextCursor selectionCursor = textCursor();
-        selectionCursor.movePosition(QTextCursor::StartOfBlock);
-        selectionCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-        QString text = selectionCursor.selectedText();
-        QTextCursor cursor = textCursor();
-        deleteSelectTextEx(cursor,text,false);
+
+        auto cursor = this->textCursor();
+        cursor.movePosition(QTextCursor::EndOfBlock,QTextCursor::KeepAnchor);
+        //the right of current line has no text but it is not the end line of this document
+        if(cursor.selectedText().isEmpty() && cursor.blockNumber()+1 != this->document()->blockCount()){
+            cursor.movePosition(QTextCursor::NextBlock,QTextCursor::KeepAnchor);
+        }
+
+        if(!cursor.selectedText().isEmpty()){
+            DeleteBackCommond* com = new DeleteBackCommond(cursor,this);
+            m_pUndoStack->push(com);
+        }
+
 
         #if 0
         bool isEmptyLine = (text.size() == 0);
@@ -1611,16 +1617,15 @@ void TextEdit::killCurrentLine()
     if(m_isSelectAll)
         QPlainTextEdit::selectAll();
 
-    QTextCursor cursor = textCursor();
-    //cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-    //cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-    //cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-    //因为删除整行之后，如果后面没有内容了，则不在删除，光标前面不会删除；
-    //QString text = cursor.selectedText();
-    //bool isBlankLine = text.trimmed().size() == 0;
-    //cursor.removeSelectedText();
-    //deleteSelectTextEx(cursor);
-    deleteSelectTextEx(cursor,cursor.selectedText(),true);
+    auto cursor = this->textCursor();
+    cursor.movePosition(QTextCursor::StartOfBlock,QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::EndOfBlock,QTextCursor::KeepAnchor);
+    if(!cursor.selectedText().isEmpty()){
+        DeleteBackCommond* com = new DeleteBackCommond(cursor,this);
+        m_pUndoStack->push(com);
+    }
+
+
 }
 
 void TextEdit::killBackwardWord()
