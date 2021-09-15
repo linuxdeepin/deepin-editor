@@ -1368,10 +1368,14 @@ void Window::popupPrintDialog()
     m_pPreview->setAttribute(Qt::WA_DeleteOnClose);
 
     if (fileDir == m_blankFileDir) {
-        m_pPreview->setDocName(QString(m_tabbar->currentName()));
+        QString name = m_tabbar->currentName();
+        QRegularExpression reg("[^*](.+)");
+        QRegularExpressionMatch match = reg.match(name);
+        m_pPreview->setDocName(QString(match.captured(0)));
     } else {
         m_pPreview->setDocName(QString(QFileInfo(filePath).baseName()));
     }
+
     m_pPreview->setAsynPreview(m_printDoc ? m_printDoc->pageCount() : PRINT_FLAG);
 
     connect(m_pPreview, &DPrintPreviewDialog::finished, this, [ = ] {
