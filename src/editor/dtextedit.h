@@ -527,7 +527,9 @@ public slots:
     void selectTextInView();
     //设置"全部选中"(全选槽函数)
     void setSelectAll();
-
+    void slotSigColorSelected(bool bSelected, QColor color);
+    void slotSigColorAllSelected(bool bSelected, QColor color);
+    void slotCutAction(bool checked = false);
 
 protected:
     bool event(QEvent *evt) override;   //触摸屏event事件

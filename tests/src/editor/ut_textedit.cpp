@@ -44,6 +44,98 @@ TEST_F(test_textedit, TextEdit)
     pWindow->deleteLater();
 }
 
+//insertTextEx
+TEST_F(test_textedit, insertTextEx)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world."));
+    QString strRet(pWindow->currentWrapper()->textEditor()->toPlainText());
+    ASSERT_TRUE(!strRet.isEmpty());
+
+    pWindow->deleteLater();
+}
+
+//deleteTextEx
+TEST_F(test_textedit, deleteTextEx)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world."));
+    pWindow->currentWrapper()->textEditor()->deleteTextEx(pWindow->currentWrapper()->textEditor()->textCursor());
+    bool bRet = pWindow->currentWrapper()->textEditor()->m_pUndoStack->canUndo();
+    ASSERT_TRUE(bRet == true);
+
+    pWindow->deleteLater();
+}
+
+//insertSelectTextEx
+TEST_F(test_textedit, insertSelectTextEx)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world."));
+    pWindow->currentWrapper()->textEditor()->insertSelectTextEx(pWindow->currentWrapper()->textEditor()->textCursor(), QString("Holle world."));
+    bool bRet = pWindow->currentWrapper()->textEditor()->m_pUndoStack->canUndo();
+    ASSERT_TRUE(bRet == true);
+
+    pWindow->deleteLater();
+}
+
+//insertColumnEditTextEx
+TEST_F(test_textedit, insertColumnEditTextEx)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world.\nHolle world.\nHolle world."));
+    pWindow->currentWrapper()->textEditor()->m_isSelectAll = true;
+    pWindow->currentWrapper()->textEditor()->insertColumnEditTextEx(QString("Holle world."));
+    bool bRet = pWindow->currentWrapper()->textEditor()->m_pUndoStack->canUndo();
+    ASSERT_TRUE(bRet == true);
+
+    pWindow->deleteLater();
+}
+
+//deleteSelectTextEx
+TEST_F(test_textedit, deleteSelectTextEx)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world.\nHolle world.\nHolle world."));
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    QString strBefore(pWindow->currentWrapper()->textEditor()->toPlainText());
+    pWindow->currentWrapper()->textEditor()->deleteSelectTextEx(textCursor);
+    QString strAfter(pWindow->currentWrapper()->textEditor()->toPlainText());
+    ASSERT_TRUE(strBefore.compare(strAfter));
+
+    pWindow->deleteLater();
+}
+
+//deleteSelectTextEx(QTextCursor,QString text,bool currLine)
+TEST_F(test_textedit, deleteSelectTextEx_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world.\nHolle world.\nHolle world."));
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    QString strBefore(pWindow->currentWrapper()->textEditor()->toPlainText());
+    pWindow->currentWrapper()->textEditor()->deleteSelectTextEx(textCursor, QString("Holle world."), true);
+    QString strAfter(pWindow->currentWrapper()->textEditor()->toPlainText());
+    ASSERT_TRUE(strBefore.compare(strAfter));
+
+    pWindow->deleteLater();
+}
+
 //slotSelectionChanged 001
 TEST_F(test_textedit, slotSelectionChanged_001)
 {
@@ -878,6 +970,81 @@ void stub_updateModifyStatus(const QString &path, bool isModified)
     Q_UNUSED(path);
     Q_UNUSED(isModified);
 }
+
+bool popRightMenu_001_canRedo_stub()
+{
+    return true;
+}
+
+void popRightMenu_001_UpdateBottomBarWordCnt_stub()
+{
+    return;
+}
+
+void popRightMenu_001_writeHistoryRecord_stub()
+{
+    return;
+}
+
+bool popRightMenu_001_isRegisteredFflytekAiassistant_stub()
+{
+    return false;
+}
+
+//popRightMenu 001
+TEST_F(test_textedit, popRightMenu_001)
+{
+#if 0
+    EditWrapper *pEditWrapper = new EditWrapper();
+    //TextEdit *pTextEdit = new TextEdit();
+    Stub isRegisteredFflytekAiassistant_stub;
+    isRegisteredFflytekAiassistant_stub.set(ADDR(Window, isRegisteredFflytekAiassistant), popRightMenu_001_isRegisteredFflytekAiassistant_stub);
+    Stub UpdateBottomBarWordCnt_stub;
+    UpdateBottomBarWordCnt_stub.set(ADDR(EditWrapper, UpdateBottomBarWordCnt), popRightMenu_001_UpdateBottomBarWordCnt_stub);
+    Stub writeHistoryRecord_stub;
+    writeHistoryRecord_stub.set(ADDR(TextEdit, writeHistoryRecord), popRightMenu_001_writeHistoryRecord_stub);
+    //typedef int (*fptr)(QMenu *);
+    //fptr fileDialogExec = (fptr)(&QMenu::exec);
+    //Stub stub;
+    //stub.set((QAction *)(QPoint, QAction *)ADDR(QMenu, exec), popRightMenu_001_writeHistoryRecord_stub);
+
+    pEditWrapper->textEditor()->popRightMenu();
+    //pTextEdit->popRightMenu();
+
+
+//    Window *pWindow = new Window();
+//    pWindow->addBlankTab(QString());
+//    //pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+//    //                                                      QString("Holle world\nHolle world\nHolle world"));
+//    Stub canRedo_stub;
+//    canRedo_stub.set(ADDR(QUndoStack, canRedo), popRightMenu_001_canRedo_stub);
+//    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+//    textCursor.movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
+//    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+//    Stub UpdateBottomBarWordCnt_stub;
+//    UpdateBottomBarWordCnt_stub.set(ADDR(EditWrapper, UpdateBottomBarWordCnt), popRightMenu_001_UpdateBottomBarWordCnt_stub);
+//    Stub writeHistoryRecord_stub;
+//    writeHistoryRecord_stub.set(ADDR(TextEdit, writeHistoryRecord), popRightMenu_001_writeHistoryRecord_stub);
+//    Stub isRegisteredFflytekAiassistant_stub;
+//    isRegisteredFflytekAiassistant_stub.set(ADDR(Window, isRegisteredFflytekAiassistant), popRightMenu_001_isRegisteredFflytekAiassistant_stub);
+//    Stub handleTabCloseRequested_stub;
+//    handleTabCloseRequested_stub.set(ADDR(Window, handleTabCloseRequested), popRightMenu_001_writeHistoryRecord_stub);
+//    Stub indexOf_stub;
+//    indexOf_stub.set(ADDR(Tabbar, indexOf), popRightMenu_001_writeHistoryRecord_stub);
+//    Stub itextAt_stub;
+//    itextAt_stub.set(ADDR(Tabbar, textAt), popRightMenu_001_writeHistoryRecord_stub);
+//    Stub slotCanRedoChanged_stub;
+//    slotCanRedoChanged_stub.set(ADDR(TextEdit, slotCanRedoChanged), popRightMenu_001_writeHistoryRecord_stub);
+//    Stub slotCanUndoChanged_stub;
+//    slotCanUndoChanged_stub.set(ADDR(TextEdit, slotCanUndoChanged), popRightMenu_001_writeHistoryRecord_stub);
+
+//    pWindow->currentWrapper()->textEditor()->popRightMenu(QPoint(10, 10));
+    //ASSERT_TRUE(!strRet.compare(QString("Holle world")));
+
+    //pEditWrapper->deleteLater();
+#endif
+}
+
 
 //void cutlines();
 TEST_F(test_textedit, cutlines)
@@ -2820,14 +2987,59 @@ TEST_F(test_textedit, getTruePath)
 //void initRightClickedMenu();
 TEST_F(test_textedit, initRightClickedMenu)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    startManager->initRightClickedMenu();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world."));
+    pWindow->currentWrapper()->textEditor()->initRightClickedMenu();
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_canUndo == false);
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_canRedo == false);
 
-    ASSERT_TRUE(startManager->m_pLeftAreaWidget != nullptr);
-    startManager->deleteLater();
-    p->deleteLater();
+    pWindow->deleteLater();
+}
+
+//slotSigColorSelected
+TEST_F(test_textedit, slotSigColorSelected)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world."));
+    pWindow->currentWrapper()->textEditor()->slotSigColorSelected(true, QColor("red"));
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_rightMenu != nullptr);
+
+    pWindow->deleteLater();
+}
+
+//slotSigColorAllSelected
+TEST_F(test_textedit, slotSigColorAllSelected)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world."));
+    pWindow->currentWrapper()->textEditor()->slotSigColorAllSelected(true, QColor("red"));
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_rightMenu != nullptr);
+
+    pWindow->deleteLater();
+}
+
+//slotCutAction
+TEST_F(test_textedit, slotCutAction)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world.\nHolle world."));
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    QString strBefore(pWindow->currentWrapper()->textEditor()->toPlainText());
+    pWindow->currentWrapper()->textEditor()->slotCutAction(true);
+    QString strAfter(pWindow->currentWrapper()->textEditor()->toPlainText());
+    ASSERT_TRUE(strBefore.compare(strAfter));
+
+    pWindow->deleteLater();
 }
 
 //inline QString getFilePath() { return m_sFilePath;};

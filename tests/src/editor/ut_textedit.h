@@ -23,6 +23,8 @@
 #include <QRegExp>
 #include <QTextDocument>
 #include <QScrollBar>
+#include <QUndoStack>
+#include <DMenu>
 
 class test_textedit: public QObject, public::testing::Test
 {

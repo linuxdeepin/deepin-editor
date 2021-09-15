@@ -206,9 +206,6 @@ void TextEdit::deleteTextEx(QTextCursor cursor)
 
 void TextEdit::insertSelectTextEx(QTextCursor cursor, QString text)
 {
-//    if (cursor.hasSelection()) {
-//        deleteTextEx(cursor);
-//    }
     QUndoCommand *pInsertStack = new InsertTextUndoCommand(cursor, text);
     m_pUndoStack->push(pInsertStack);
     ensureCursorVisible();
@@ -216,8 +213,9 @@ void TextEdit::insertSelectTextEx(QTextCursor cursor, QString text)
 
 void TextEdit::insertColumnEditTextEx(QString text)
 {
-    if(m_isSelectAll)
+    if(m_isSelectAll) {
         QPlainTextEdit::selectAll();
+    }
 
     for (int i = 0; i < m_altModSelections.size(); i++) {
         if (m_altModSelections[i].cursor.hasSelection()) deleteTextEx(m_altModSelections[i].cursor);
@@ -276,12 +274,7 @@ void TextEdit::initRightClickedMenu()
 
     //添加当前颜色选择控件　梁卫东
     ColorSelectWdg *pColorsSelectWdg = new ColorSelectWdg(QString(), this);
-    connect(pColorsSelectWdg, &ColorSelectWdg::sigColorSelected, this, [this](bool bSelected, QColor color) {
-        isMarkCurrentLine(bSelected, color.name());
-        renderAllSelections();
-        m_colorMarkMenu->close();
-        m_rightMenu->close();//选择颜色关闭菜单　梁卫东　２０２０－０８－２１　０９：３４：５３
-    });
+    connect(pColorsSelectWdg, &ColorSelectWdg::sigColorSelected, this, &TextEdit::slotSigColorSelected);
 
     m_actionColorStyles = new QWidgetAction(this);
     m_actionColorStyles->setDefaultWidget(pColorsSelectWdg);
@@ -294,12 +287,7 @@ void TextEdit::initRightClickedMenu()
 
     //添加全部颜色选择控件　梁卫东
     ColorSelectWdg *pColorsAllSelectWdg = new ColorSelectWdg(QString(), this);
-    connect(pColorsAllSelectWdg, &ColorSelectWdg::sigColorSelected, this, [this](bool bSelected, QColor color) {
-        isMarkAllLine(bSelected, color.name());
-        renderAllSelections();
-        m_colorMarkMenu->close();
-        m_rightMenu->close();//选择颜色关闭菜单　梁卫东　２０２０－０８－２１　０９：３４：５３
-    });
+    connect(pColorsAllSelectWdg, &ColorSelectWdg::sigColorSelected, this, &TextEdit::slotSigColorAllSelected);
     m_actionAllColorStyles = new QWidgetAction(this);
     m_actionAllColorStyles->setDefaultWidget(pColorsAllSelectWdg);
 
@@ -383,9 +371,7 @@ void TextEdit::initRightClickedMenu()
 
 #endif
 
-    connect(m_cutAction, &QAction::triggered, this, [this]() {
-        this->cut();
-    });
+    connect(m_cutAction, &QAction::triggered, this, &TextEdit::slotCutAction);
     connect(m_copyAction, &QAction::triggered, this, [this]() {
        this->copy();
     });
@@ -547,7 +533,6 @@ void TextEdit::initRightClickedMenu()
     connect(this, &TextEdit::redoAvailable, this, [ = ](bool redoIsAvailable) {
         m_canRedo = redoIsAvailable;
     });
-
 }
 
 void TextEdit::popRightMenu(QPoint pos)
@@ -579,7 +564,9 @@ void TextEdit::popRightMenu(QPoint pos)
         isAddUndoRedo = true;
     }
 
-    if (isAddUndoRedo) m_rightMenu->addSeparator();
+    if (isAddUndoRedo) {
+        m_rightMenu->addSeparator();
+    }
 
     if (textCursor().hasSelection() || m_hasColumnSelection) {
         if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
@@ -587,7 +574,6 @@ void TextEdit::popRightMenu(QPoint pos)
         }
         m_rightMenu->addAction(m_copyAction);
     }
-
 
     if (canPaste()) {
         if (m_bReadOnlyPermission == false && m_readOnlyMode == false) {
@@ -1657,7 +1643,6 @@ void TextEdit::indentText()
 
 void TextEdit::unindentText()
 {
-
     // Stop mark if mark is set.
     tryUnsetMark();
     hideCursorBlink();
@@ -2946,6 +2931,28 @@ void TextEdit::setSelectAll()
      m_bIsAltMod = false;
      m_isSelectAll = true;
      selectTextInView();
+}
+
+void TextEdit::slotSigColorSelected(bool bSelected, QColor color)
+{
+    isMarkCurrentLine(bSelected, color.name());
+    renderAllSelections();
+    m_colorMarkMenu->close();
+    m_rightMenu->close(); //选择颜色关闭菜单　梁卫东　２０２０－０８－２１　０９：３４：５３
+}
+
+void TextEdit::slotSigColorAllSelected(bool bSelected, QColor color)
+{
+    isMarkAllLine(bSelected, color.name());
+    renderAllSelections();
+    m_colorMarkMenu->close();
+    m_rightMenu->close(); //选择颜色关闭菜单　梁卫东　２０２０－０８－２１　０９：３４：５３
+}
+
+void TextEdit::slotCutAction(bool checked)
+{
+    Q_UNUSED(checked);
+    this->cut();
 }
 
 void TextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &closeChar)
