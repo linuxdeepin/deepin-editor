@@ -779,7 +779,7 @@ private:
     bool m_bIsFindClose = false;///< 关闭查找框事件是否发生
     QString m_qstrTruePath;///< 源文件路径
 
-    bool m_isSelectAll;
+    bool m_isSelectAll {false};
 
 private:
     LeftAreaTextEdit *m_pLeftAreaWidget = nullptr;

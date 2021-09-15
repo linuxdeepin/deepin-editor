@@ -2838,11 +2838,7 @@ void TextEdit::paste()
     else {
         insertColumnEditTextEx(text);
     }
-
-
-
-
-
+    m_isSelectAll = false;
 #if 0
     //大文件粘贴-使用文本替换
     if(m_isSelectAll)
@@ -2893,17 +2889,15 @@ void TextEdit::highlight()
 
 void TextEdit::selectTextInView()
 {
-
     QPoint bottom = QPoint(this->viewport()->width(),this->viewport()->height());
     int endPos = cursorForPosition(bottom).position();
     int startPos = cursorForPosition(QPoint(0,0)).position();
 
     auto cursor = this->textCursor();
-    cursor.setPosition(endPos);
-    cursor.setPosition(startPos,QTextCursor::KeepAnchor);
+    cursor.setPosition(startPos);
+    cursor.setPosition(endPos, QTextCursor::KeepAnchor);
     this->setTextCursor(cursor);
     this->horizontalScrollBar()->setValue(0);
-
 }
 
 void TextEdit::setSelectAll()
