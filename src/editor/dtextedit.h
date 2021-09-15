@@ -530,6 +530,10 @@ public slots:
     void slotSigColorSelected(bool bSelected, QColor color);
     void slotSigColorAllSelected(bool bSelected, QColor color);
     void slotCutAction(bool checked = false);
+    void slotCopyAction(bool checked = false);
+    void slotPasteAction(bool checked = false);
+    void slotDeleteAction(bool checked = false);
+    void slotSelectAllAction(bool checked = false);
 
 protected:
     bool event(QEvent *evt) override;   //触摸屏event事件

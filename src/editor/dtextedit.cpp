@@ -304,119 +304,11 @@ void TextEdit::initRightClickedMenu()
     connect(m_rightMenu, &DMenu::aboutToHide, this, &TextEdit::removeHighlightWordUnderCursor);
     connect(m_undoAction, &QAction::triggered, m_pUndoStack, &QUndoStack::undo);
     connect(m_redoAction, &QAction::triggered, m_pUndoStack, &QUndoStack::redo);
-
-    #if 0
-    connect(m_cutAction, &QAction::triggered, this, [this]() {
-        //列编辑添加撤销重做
-        if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
-            QString data;
-            for (auto sel : m_altModSelections) data.append(sel.cursor.selectedText());
-            //删除有选择
-            for (int i = 0; i < m_altModSelections.size(); i++) {
-                if (m_altModSelections[i].cursor.hasSelection()) {
-                    QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(m_altModSelections[i].cursor);
-                    m_pUndoStack->push(pDeleteStack);
-                }
-            }
-            //设置到剪切板
-            QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
-            clipboard->setText(data);
-        } else {
-            QTextCursor cursor = textCursor();
-            //有选择内容才剪切
-            if (cursor.hasSelection()) {
-                QString data = cursor.selectedText();
-                QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(cursor);
-                m_pUndoStack->push(pDeleteStack);
-                QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
-                clipboard->setText(data);
-            }
-        }
-        unsetMark();
-    });
-
-    connect(m_copyAction, &QAction::triggered, this, [this]() {
-        if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
-            QString data;
-            for (auto sel : m_altModSelections) {
-                data.append(sel.cursor.selectedText());
-            }
-            QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
-            clipboard->setText(data);
-        } else {
-            QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
-            if (textCursor().hasSelection()) {
-                clipboard->setText(textCursor().selection().toPlainText());
-                tryUnsetMark();
-            } else {
-                clipboard->setText(m_highlightWordCacheCursor.selectedText());
-            }
-        }
-    });
-
-
-    connect(m_pasteAction, &QAction::triggered, this, [this]() {
-        //添加剪切板内容到撤销重做栈
-        const QClipboard *clipboard = QApplication::clipboard(); //获取剪切版内容
-
-        if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
-            insertColumnEditTextEx(clipboard->text());
-        } else {
-            QTextCursor cursor = textCursor();
-            insertSelectTextEx(textCursor(), clipboard->text());
-        }
-
-        unsetMark();
-    });
-
-#endif
-
     connect(m_cutAction, &QAction::triggered, this, &TextEdit::slotCutAction);
-    connect(m_copyAction, &QAction::triggered, this, [this]() {
-       this->copy();
-    });
-
-    connect(m_pasteAction, &QAction::triggered, this, [this]() {
-        this->paste();
-    });
-
-
-
-    connect(m_deleteAction, &QAction::triggered, this, [this]() {
-        if(m_isSelectAll)
-            QPlainTextEdit::selectAll();
-
-        if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
-            for (int i = 0; i < m_altModSelections.size(); i++) {
-                if (m_altModSelections[i].cursor.hasSelection()) {
-                    QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(m_altModSelections[i].cursor);
-                    m_pUndoStack->push(pDeleteStack);
-                }
-            }
-        } else {
-            if (textCursor().hasSelection()) {
-                QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(textCursor());
-                m_pUndoStack->push(pDeleteStack);
-            } else {
-                setTextCursor(m_highlightWordCacheCursor);
-            }
-        }
-    });
-
-
-    connect(m_selectAllAction, &QAction::triggered, this, [ = ] {
-#if 0
-        //2021-5-25:setSelectAll()替换
-        if (m_wrapper->getFileLoading())
-        {
-            return;
-        }
-        m_bIsAltMod = false;
-        selectAll();
-#endif
-        setSelectAll();
-    });
-
+    connect(m_copyAction, &QAction::triggered, this, &TextEdit::slotCopyAction);
+    connect(m_pasteAction, &QAction::triggered, this, &TextEdit::slotPasteAction);
+    connect(m_deleteAction, &QAction::triggered, this, &TextEdit::slotDeleteAction);
+    connect(m_selectAllAction, &QAction::triggered, this, &TextEdit::slotSelectAllAction);
     connect(m_findAction, &QAction::triggered, this, &TextEdit::clickFindAction);
     connect(m_replaceAction, &QAction::triggered, this, &TextEdit::clickReplaceAction);
     connect(m_jumpLineAction, &QAction::triggered, this, &TextEdit::clickJumpLineAction);
@@ -2791,7 +2683,6 @@ void TextEdit::copy()
         clipboard->setText(data);
         tryUnsetMark();
     } else {
-
         if(!m_isSelectAll){
             QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
             if (textCursor().hasSelection()) {
@@ -2801,7 +2692,6 @@ void TextEdit::copy()
                 clipboard->setText(m_highlightWordCacheCursor.selectedText());
             }
         } else{
-
             QClipboard *clipboard = QApplication::clipboard();
             QString text = this->toPlainText();
             clipboard->setText(text);
@@ -2949,6 +2839,48 @@ void TextEdit::slotCutAction(bool checked)
 {
     Q_UNUSED(checked);
     this->cut();
+}
+
+void TextEdit::slotCopyAction(bool checked)
+{
+    Q_UNUSED(checked);
+    this->copy();
+}
+
+void TextEdit::slotPasteAction(bool checked)
+{
+    Q_UNUSED(checked);
+    this->paste();
+}
+
+void TextEdit::slotDeleteAction(bool checked)
+{
+    Q_UNUSED(checked);
+    if(m_isSelectAll) {
+        QPlainTextEdit::selectAll();
+    }
+
+    if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
+        for (int i = 0; i < m_altModSelections.size(); i++) {
+            if (m_altModSelections[i].cursor.hasSelection()) {
+                QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(m_altModSelections[i].cursor);
+                m_pUndoStack->push(pDeleteStack);
+            }
+        }
+    } else {
+        if (textCursor().hasSelection()) {
+            QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(textCursor());
+            m_pUndoStack->push(pDeleteStack);
+        } else {
+            setTextCursor(m_highlightWordCacheCursor);
+        }
+    }
+}
+
+void TextEdit::slotSelectAllAction(bool checked)
+{
+    Q_UNUSED(checked);
+    setSelectAll();
 }
 
 void TextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &closeChar)

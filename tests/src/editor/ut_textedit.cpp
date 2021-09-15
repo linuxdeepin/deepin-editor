@@ -2826,6 +2826,7 @@ TEST_F(test_textedit, contextMenuEvent)
     startManager->deleteLater();
     p->deleteLater();
 }
+
 // void paintEvent(QPaintEvent *e) override;
 TEST_F(test_textedit, paintEvent)
 {
@@ -3038,6 +3039,90 @@ TEST_F(test_textedit, slotCutAction)
     pWindow->currentWrapper()->textEditor()->slotCutAction(true);
     QString strAfter(pWindow->currentWrapper()->textEditor()->toPlainText());
     ASSERT_TRUE(strBefore.compare(strAfter));
+
+    pWindow->deleteLater();
+}
+
+//slotCopyAction
+TEST_F(test_textedit, slotCopyAction)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world.\nHolle world."));
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->slotCopyAction(true);
+    QClipboard *pClipboard = QApplication::clipboard();
+    QString strRet(pClipboard->text());
+    ASSERT_TRUE(!strRet.compare(QString("Holle world.")));
+
+    pWindow->deleteLater();
+}
+
+//slotPasteAction
+TEST_F(test_textedit, slotPasteAction)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world.\nHolle world."));
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->slotCopyAction(true);
+    QString strBefore(pWindow->currentWrapper()->textEditor()->toPlainText());
+    textCursor.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->slotPasteAction(true);
+    QString strAfter(pWindow->currentWrapper()->textEditor()->toPlainText());
+    ASSERT_TRUE(strBefore.compare(strAfter));
+
+    pWindow->deleteLater();
+}
+
+//slotDeleteAction 001
+TEST_F(test_textedit, slotDeleteAction_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world.\nHolle world."));
+    pWindow->currentWrapper()->textEditor()->slotSelectAllAction(true);
+    QString strBefore(pWindow->currentWrapper()->textEditor()->toPlainText());
+    pWindow->currentWrapper()->textEditor()->slotDeleteAction(true);
+    QString strAfter(pWindow->currentWrapper()->textEditor()->toPlainText());
+    ASSERT_TRUE(strBefore.compare(strAfter));
+
+    pWindow->deleteLater();
+}
+
+//slotDeleteAction 002
+TEST_F(test_textedit, slotDeleteAction_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world.\nHolle world."));
+    QString strBefore(pWindow->currentWrapper()->textEditor()->toPlainText());
+    pWindow->currentWrapper()->textEditor()->slotDeleteAction(true);
+    QString strAfter(pWindow->currentWrapper()->textEditor()->toPlainText());
+    ASSERT_TRUE(!strBefore.compare(strAfter));
+
+    pWindow->deleteLater();
+}
+
+//slotSelectAllAction
+TEST_F(test_textedit, slotSelectAllAction)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world.\nHolle world."));
+    pWindow->currentWrapper()->textEditor()->slotSelectAllAction(true);
+    bool bRet = pWindow->currentWrapper()->textEditor()->m_isSelectAll;
+    ASSERT_TRUE(bRet == true);
 
     pWindow->deleteLater();
 }
