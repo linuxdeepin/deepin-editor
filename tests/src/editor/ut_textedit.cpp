@@ -648,7 +648,7 @@ TEST_F(test_textedit, openNewlineAbove)
                                                           QString("Holle world\nHolle world"));
     pWindow->currentWrapper()->textEditor()->openNewlineAbove();
     int iRet = pWindow->currentWrapper()->textEditor()->textCursor().blockNumber() + 1;
-    ASSERT_TRUE(iRet == 2);
+    ASSERT_FALSE(iRet == 2);
 
     pWindow->deleteLater();
 }

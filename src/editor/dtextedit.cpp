@@ -1129,28 +1129,24 @@ void TextEdit::newline()
 
 void TextEdit::openNewlineAbove()
 {
-    // Stop mark if mark is set.
-    tryUnsetMark();
-
     QTextCursor cursor = textCursor();
     cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-    cursor.insertText("\n");
-    cursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
-
-    setTextCursor(cursor);
+    InsertTextUndoCommand* com = new InsertTextUndoCommand(cursor,"\n");
+    m_pUndoStack->push(com);
 }
 
 void TextEdit::openNewlineBelow()
 {
-    // Stop mark if mark is set.
-    tryUnsetMark();
-
-    moveCursorNoBlink(QTextCursor::EndOfBlock);
-    textCursor().insertText("\n");
+    QTextCursor cursor = textCursor();
+    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
+    InsertTextUndoCommand* com = new InsertTextUndoCommand(cursor,"\n");
+    m_pUndoStack->push(com);
 }
 
 void TextEdit::moveLineDownUp(bool up)
 {
+    const QString t1 = this->document()->toPlainText();
+
     QTextCursor cursor = textCursor();
     QTextCursor move = cursor;
     bool hasSelection = cursor.hasSelection();
@@ -1203,6 +1199,12 @@ void TextEdit::moveLineDownUp(bool up)
 
     move.endEditBlock();
     setTextCursor(move);
+
+    //after this operation,the text content changes
+    if(t1 != this->document()->toPlainText())
+        this->m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
+
+
 }
 
 void TextEdit::scrollLineUp()
@@ -1295,83 +1297,15 @@ void TextEdit::scrollDown()
 
 void TextEdit::duplicateLine()
 {
-    if (textCursor().hasSelection()) {
-        bool cursorAtSelectionStart = (textCursor().position() == textCursor().selectionStart());
-
-        // Rember current line's column number.
-        int column = textCursor().columnNumber();
-
-        int startPos = textCursor().selectionStart();
-        int endPos = textCursor().selectionEnd();
-
-        // Expand selection to lines bound.
-        QTextCursor startCursor = textCursor();
-        startCursor.setPosition(startPos, QTextCursor::MoveAnchor);
-        startCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-
-        QTextCursor endCursor = textCursor();
-        endCursor.setPosition(endPos, QTextCursor::MoveAnchor);
-        endCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
-
-        QTextCursor cursor = textCursor();
-        cursor.setPosition(startCursor.position(), QTextCursor::MoveAnchor);
-        cursor.setPosition(endCursor.position(), QTextCursor::KeepAnchor);
-
-        setTextCursor(cursor);
-
-        // Get selection lines content.
-        QString selectionLines = cursor.selectedText();
-
-        // Duplicate copy lines.
-        if (cursorAtSelectionStart) {
-            // Insert duplicate lines.
-            cursor.setPosition(startCursor.position(), QTextCursor::MoveAnchor);
-            cursor.insertText("\n");
-            cursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
-            cursor.insertText(selectionLines);
-
-            // Restore cursor's column.
-            cursor.setPosition(startCursor.position(), QTextCursor::MoveAnchor);
-            cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, column);
-        } else {
-            // Insert duplicate lines.
-            cursor.setPosition(endCursor.position(), QTextCursor::MoveAnchor);
-            cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor);
-            cursor.insertText(selectionLines);
-            cursor.insertText("\n");
-
-            // Restore cursor's column.
-            cursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
-            cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-            cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, column);
-        }
-
-        // Update cursor.
-        setTextCursor(cursor);
-
-        // Clean mark flag anyway.
-        unsetMark();
-    } else {
-        // Rember current line's column number.
-        int column = textCursor().columnNumber();
-
-        // Get current line's content.
-        QTextCursor cursor(textCursor().block());
-        cursor.movePosition(QTextCursor::StartOfBlock);
-        cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-        QString text = cursor.selectedText();
-
-        // Copy current line.
-        cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
-        cursor.insertText("\n");
-        cursor.insertText(text);
-
-        // Restore cursor's column.
-        cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-        cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, column);
-
-        // Update cursor.
-        setTextCursor(cursor);
+    auto cursor = textCursor();
+    cursor.movePosition(QTextCursor::StartOfBlock,QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::EndOfBlock,QTextCursor::KeepAnchor);
+    auto text = cursor.selectedText();
+    if(!text.isEmpty()){
+        text = "\n" + text;
+        cursor.movePosition(QTextCursor::EndOfBlock,QTextCursor::MoveAnchor);
+        auto com = new InsertTextUndoCommand(cursor,text);
+        m_pUndoStack->push(com);
     }
 }
 
@@ -1500,6 +1434,10 @@ void TextEdit::cutlines()
 
 void TextEdit::joinLines()
 {
+    const int l1 = this->textCursor().blockNumber();
+    auto b1 = this->document()->findBlockByNumber(l1);
+    const QString t1 = b1.text();
+
     if (blockCount() == getCurrentLine())
     {return ;}
     if (textCursor().hasSelection()) {
@@ -1546,6 +1484,11 @@ void TextEdit::joinLines()
     }
 
     tryUnsetMark();
+
+    b1 = this->document()->findBlockByNumber(l1);
+    //after this operation,the text content changes
+    if(t1 != b1.text())
+        this->m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
 }
 
 void TextEdit::killLine()
@@ -1566,6 +1509,7 @@ void TextEdit::killLine()
 
         auto cursor = this->textCursor();
         cursor.movePosition(QTextCursor::EndOfBlock,QTextCursor::KeepAnchor);
+
         //the right of current line has no text but it is not the end line of this document
         if(cursor.selectedText().isEmpty() && cursor.blockNumber()+1 != this->document()->blockCount()){
             cursor.movePosition(QTextCursor::NextBlock,QTextCursor::KeepAnchor);
@@ -1713,6 +1657,7 @@ void TextEdit::indentText()
 
 void TextEdit::unindentText()
 {
+
     // Stop mark if mark is set.
     tryUnsetMark();
     hideCursorBlink();
@@ -1730,12 +1675,13 @@ void TextEdit::unindentText()
     }
 
     cursor.beginEditBlock();
-
+    bool modified=false;
     while (block != end) {
         cursor.setPosition(block.position());
 
         if (document()->characterAt(cursor.position()) == '\t') {
             cursor.deleteChar();
+            modified=true;
         } else {
             int pos = 0;
 
@@ -1743,14 +1689,19 @@ void TextEdit::unindentText()
                     pos < m_tabSpaceNumber) {
                 pos++;
                 cursor.deleteChar();
+                modified=true;
             }
         }
 
         block = block.next();
     }
+    if(modified)
+        this->m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
 
     cursor.endEditBlock();
     showCursorBlink();
+
+
 }
 
 void TextEdit::setTabSpaceNumber(int number)
@@ -1782,6 +1733,14 @@ void TextEdit::capitalizeWord()
 
 void TextEdit::transposeChar()
 {
+    const int l1 = this->textCursor().blockNumber();
+    auto b1 = this->document()->findBlockByNumber(l1);
+    auto b0 = this->document()->findBlockByNumber(l1-1);
+    auto b2 = this->document()->findBlockByNumber(l1+1);
+    const QString t1 = b1.text();
+    const QString t0 = b0.text();
+    const QString t2 = b2.text();
+
     tryUnsetMark();
 
     QTextCursor cursor = textCursor();
@@ -1803,6 +1762,10 @@ void TextEdit::transposeChar()
     }
 
     setTextCursor(cursor);
+
+    //after this operation,the text content changes
+    if(t0 != b0.text() || t1!=b1.text() || t2 !=b2.text())
+        this->m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
 }
 
 void TextEdit::handleCursorMarkChanged(bool mark, QTextCursor cursor)
@@ -1899,20 +1862,22 @@ void TextEdit::convertWordCase(ConvertCase convertCase)
         cursor.setPosition(getNextWordPosition(cursor, QTextCursor::KeepAnchor), QTextCursor::KeepAnchor);
 
         QString text = cursor.selectedText();
-        if (convertCase == UPPER) {
-            text = text.toUpper();
-        } else if (convertCase == LOWER) {
-            text = text.toLower();
-        } else {
-            text = capitalizeText(text);
+        if(!text.isEmpty()){
+            if (convertCase == UPPER) {
+                text = text.toUpper();
+            } else if (convertCase == LOWER) {
+                text = text.toLower();
+            } else {
+                text = capitalizeText(text);
+            }
+
+            InsertTextUndoCommand* insertCommond = new InsertTextUndoCommand(cursor,text);
+            m_pUndoStack->push(insertCommond);
+
+            setTextCursor(cursor);
+
+            m_haveWordUnderCursor = false;
         }
-
-        InsertTextUndoCommand* insertCommond = new InsertTextUndoCommand(cursor,text);
-        m_pUndoStack->push(insertCommond);
-
-        setTextCursor(cursor);
-
-        m_haveWordUnderCursor = false;
     }
 
 }
@@ -2022,7 +1987,7 @@ void TextEdit::replaceAll(const QString &replaceText, const QString &withText)
     cursor.movePosition(QTextCursor::Start);
 
     QTextCursor startCursor = textCursor();
-    startCursor.beginEditBlock();
+    //startCursor.beginEditBlock();
 
     QString oldText = this->toPlainText();
     QString newText = oldText;
@@ -2030,13 +1995,15 @@ void TextEdit::replaceAll(const QString &replaceText, const QString &withText)
     newText.replace(replaceText,withText);
 
 
-    ReplaceAllCommond* commond = new ReplaceAllCommond(oldText,newText,cursor);
-    m_pUndoStack->push(commond);
+    if(oldText != newText){
+        ReplaceAllCommond* commond = new ReplaceAllCommond(oldText,newText,cursor);
+        m_pUndoStack->push(commond);
+    }
 
-    this->m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
+   // this->m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
 
-    startCursor.endEditBlock();
-    setTextCursor(startCursor);
+    //startCursor.endEditBlock();
+   // setTextCursor(startCursor);
 }
 
 void TextEdit::replaceNext(const QString &replaceText, const QString &withText)
@@ -2097,10 +2064,13 @@ void TextEdit::replaceRest(const QString &replaceText, const QString &withText)
     right.replace(replaceText,withText);
     newText += right;
 
-    ReplaceAllCommond* commond = new ReplaceAllCommond(oldText, newText, cursor);
-    m_pUndoStack->push(commond);
 
-    m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
+    if(oldText != newText){
+        ReplaceAllCommond* commond = new ReplaceAllCommond(oldText,newText,cursor);
+        m_pUndoStack->push(commond);
+    }
+
+   // m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
 
     startCursor.endEditBlock();
     setTextCursor(startCursor);
@@ -3966,7 +3936,7 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
             int height = cursorRect(cur).height();
             updateLeftWidgetWidth(height);
             QRect rect(0,cursorRect(cur).y(),height,height);
-            rect = rect.adjusted(height/24,height/24,-1*height/24,-1*height/24);
+            //rect = rect.adjusted(height/6,height/6,-1*height/6,-1*height/6);
 
             QSvgRenderer render;
             render.load(pixmapPath);
