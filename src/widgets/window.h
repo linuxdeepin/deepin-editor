@@ -150,6 +150,10 @@ public:
 
     QStackedWidget* getStackedWgt();
 
+
+    static void printPage(int index, QPainter *painter, const QTextDocument *doc,
+                                 const QRectF &body, const QRectF &pageCountBox);
+
 signals:
     void themeChanged(const QString themeName);
     void requestDragEnterEvent(QDragEnterEvent *);

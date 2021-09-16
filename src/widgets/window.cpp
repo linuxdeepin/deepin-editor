@@ -67,7 +67,7 @@
  * \~chinese \param body 范围大小
  * \~chinese \param pageCountBox 绘制页码的范围
  */
-static void printPage(int index, QPainter *painter, const QTextDocument *doc,
+void Window::printPage(int index, QPainter *painter, const QTextDocument *doc,
                       const QRectF &body, const QRectF &pageCountBox)
 {
     painter->save();
@@ -1656,7 +1656,7 @@ void Window::doPrint(DPrinter *printer, const QVector<int> &pageRange)
     for (int i = 0; i < pageRange.count(); ++i) {
         if (pageRange[i] > m_printDoc->pageCount())
             continue;
-        printPage(pageRange[i], &p, m_printDoc, body, titleBox);
+        Window::printPage(pageRange[i], &p, m_printDoc, body, titleBox);
         if (i != pageRange.count() - 1)
             printer->newPage();
     }
@@ -1687,7 +1687,7 @@ void Window::asynPrint(QPainter &p, DPrinter *printer, const QVector<int> &pageR
     for (int i = 0; i < pageRange.count(); ++i) {
         if (pageRange[i] > m_printDoc->pageCount())
             continue;
-        printPage(pageRange[i], &p, m_printDoc, body, titleBox);
+        Window::printPage(pageRange[i], &p, m_printDoc, body, titleBox);
         if (i != pageRange.count() - 1)
             printer->newPage();
     }

@@ -1,5 +1,6 @@
 #include "ut_window.h"
-
+#include "dsettingsoption.h"
+#include "ddialog.h"
 test_window::test_window()
 {
 
@@ -11,9 +12,25 @@ TEST_F(test_window, Window)
     
 }
 
-TEST_F(test_window, showCenterWindow)
+int option_stub_para=0;
+QPointer<DSettingsOption> option_stub()
 {
+    QPointer<DSettingsOption> p = new DSettingsOption;
+    if(option_stub_para==0)
+        p->setValue("window_maximum");
+    else if(option_stub_para==1)
+        p->setValue("fullscreen");
+    else
+        p->setValue("normal");
+    return p;
+}
+TEST_F(test_window, showCenterWindow_01)
+{
+    Stub stub;
+    stub.set(ADDR(DSettings,option),option_stub);
+
     Window * window1 = new Window();
+    option_stub_para=0;
     window1->showCenterWindow(true);
 
     EXPECT_NE(window1->isVisible(),false);
@@ -23,6 +40,43 @@ TEST_F(test_window, showCenterWindow)
 
     
 }
+
+TEST_F(test_window, showCenterWindow_02)
+{
+    Window * window1 = new Window();
+
+    Stub stub;
+    stub.set(ADDR(DSettings,option),option_stub);
+
+    option_stub_para=1;
+    window1->showCenterWindow(true);
+
+    EXPECT_NE(window1->isVisible(),false);
+    EXPECT_NE(window1,nullptr);
+
+    window1->deleteLater();
+
+
+}
+
+TEST_F(test_window, showCenterWindow_03)
+{
+    Window * window1 = new Window();
+
+    Stub stub;
+    stub.set(ADDR(DSettings,option),option_stub);
+
+    option_stub_para=2;
+    window1->showCenterWindow(true);
+
+    EXPECT_NE(window1->isVisible(),false);
+    EXPECT_NE(window1,nullptr);
+
+    window1->deleteLater();
+
+}
+
+
 //initTitlebar
 TEST_F(test_window, initTitlebar)
 {
@@ -115,14 +169,44 @@ TEST_F(test_window, saveFile)
 
     
 }
-//closeTab()
-TEST_F(test_window, closeTab)
+
+int exec_ret = 1;
+int exec_stub()
+{
+    return exec_ret;
+}
+
+bool isDraft=false;
+bool isDraftFile_stub()
+{
+    return isDraft;
+}
+
+bool isModified=false;
+bool isModified_stub()
+{
+    return isModified;
+}
+TEST_F(test_window, closeTab_01)
 {
     Window * window = new Window();
     window->addBlankTab("aabb");
-//    window->closeTab();
-//    delete window;
-//    window = nullptr;
+
+    typedef int (*Fptr)(QDialog *);
+    Fptr fptr = (Fptr)(&QDialog::exec);
+    Stub stub;
+    stub.set(fptr,exec_stub);
+
+    Stub s2;
+    s2.set(ADDR(EditWrapper,isDraftFile),isDraftFile_stub);
+    Stub s3;
+    s3.set(ADDR(EditWrapper,isModified),isModified_stub);
+
+
+    isDraft = true;
+    isModified = true;
+    exec_ret = 0;
+    window->closeTab();
 
 
     EXPECT_NE(window,nullptr);
@@ -131,6 +215,107 @@ TEST_F(test_window, closeTab)
 
     
 }
+
+TEST_F(test_window, closeTab_02)
+{
+    Window * window = new Window();
+    window->addBlankTab("aabb");
+
+    typedef int (*Fptr)(QDialog *);
+    Fptr fptr = (Fptr)(&QDialog::exec);
+    Stub stub;
+    stub.set(fptr,exec_stub);
+
+    Stub s2;
+    s2.set(ADDR(EditWrapper,isDraftFile),isDraftFile_stub);
+    Stub s3;
+    s3.set(ADDR(EditWrapper,isModified),isModified_stub);
+
+    isDraft = true;
+    isModified = true;
+    exec_ret = 1;
+    window->closeTab();
+
+    EXPECT_NE(window,nullptr);
+
+    window->deleteLater();
+}
+
+
+TEST_F(test_window, closeTab_03)
+{
+    Window * window = new Window();
+    window->addBlankTab("aabb");
+
+    typedef int (*Fptr)(QDialog *);
+    Fptr fptr = (Fptr)(&QDialog::exec);
+    Stub stub;
+    stub.set(fptr,exec_stub);
+
+    Stub s2;
+    s2.set(ADDR(EditWrapper,isDraftFile),isDraftFile_stub);
+    Stub s3;
+    s3.set(ADDR(EditWrapper,isModified),isModified_stub);
+
+    isDraft = true;
+    isModified = true;
+    exec_ret = 2;
+    window->closeTab();
+
+    EXPECT_NE(window,nullptr);
+
+    window->deleteLater();
+}
+
+TEST_F(test_window, closeTab_04)
+{
+    Window * window = new Window();
+    window->addBlankTab("aabb");
+
+    typedef int (*Fptr)(QDialog *);
+    Fptr fptr = (Fptr)(&QDialog::exec);
+    Stub stub;
+    stub.set(fptr,exec_stub);
+
+    Stub s2;
+    s2.set(ADDR(EditWrapper,isDraftFile),isDraftFile_stub);
+    Stub s3;
+    s3.set(ADDR(EditWrapper,isModified),isModified_stub);
+
+    isDraft = false;
+    isModified = true;
+    exec_ret = 1;
+    window->closeTab();
+
+    EXPECT_NE(window,nullptr);
+    window->deleteLater();
+}
+
+
+TEST_F(test_window, closeTab_05)
+{
+    Window * window = new Window();
+    window->addBlankTab("aabb");
+
+    typedef int (*Fptr)(QDialog *);
+    Fptr fptr = (Fptr)(&QDialog::exec);
+    Stub stub;
+    stub.set(fptr,exec_stub);
+
+    Stub s2;
+    s2.set(ADDR(EditWrapper,isDraftFile),isDraftFile_stub);
+    Stub s3;
+    s3.set(ADDR(EditWrapper,isModified),isModified_stub);
+
+    isDraft = false;
+    isModified = true;
+    exec_ret = 2;
+    window->closeTab();
+
+    EXPECT_NE(window,nullptr);
+    window->deleteLater();
+}
+
 //saveAsFileToDisk
 TEST_F(test_window, saveAsFileToDisk)
 {
@@ -1372,4 +1557,30 @@ TEST_F(test_window, slotSigChangeWindowSize)
     EXPECT_NE(window,nullptr);
     window->deleteLater();
     
+}
+
+
+
+TEST_F(test_window, printPage)
+{
+    QPainter* painter = new QPainter;
+    QTextDocument* doc = new QTextDocument;
+    QRectF body,pageContBox;
+    Window::printPage(0,painter,doc,body,pageContBox);
+
+    EXPECT_NE(window,nullptr);
+    EXPECT_NE(window,nullptr);
+    delete painter;painter=nullptr;
+    doc->deleteLater();
+
+}
+
+TEST_F(test_window, delete_window)
+{
+    Window* w = new Window();
+    w->m_shortcutViewProcess = new QProcess;
+
+    EXPECT_NE(w,nullptr);
+    w->deleteLater();
+    //w->m_shortcutViewProcess will be deleted in ~Window;
 }
