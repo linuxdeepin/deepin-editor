@@ -25,6 +25,7 @@
 #include <QScrollBar>
 #include <QUndoStack>
 #include <DMenu>
+#include <QList>
 
 class test_textedit: public QObject, public::testing::Test
 {

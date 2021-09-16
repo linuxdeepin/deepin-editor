@@ -534,6 +534,24 @@ public slots:
     void slotPasteAction(bool checked = false);
     void slotDeleteAction(bool checked = false);
     void slotSelectAllAction(bool checked = false);
+    bool slotOpenInFileManagerAction(bool checked = false);
+    void slotAddComment(bool checked = false);
+    void slotCancelComment(bool checked = false);
+    void slotVoiceReadingAction(bool checked = false);
+    bool slotStopReadingAction(bool checked = false);
+    void slotdictationAction(bool checked = false);
+    void slotColumnEditAction(bool checked = false);
+    void slotPreBookMarkAction(bool checked = false);
+    void slotNextBookMarkAction(bool checked = false);
+    void slotClearBookMarkAction(bool checked = false);
+    void slotFlodAllLevel(bool checked = false);
+    void slotUnflodAllLevel(bool checked = false);
+    void slotFlodCurrentLevel(bool checked = false);
+    void slotUnflodCurrentLevel(bool checked = false);
+    void slotCancleMarkAllLine(bool checked = false);
+    void slotCancleLastMark(bool checked = false);
+    void slotUndoAvailable(bool undoIsAvailable);
+    void slotRedoAvailable(bool redoIsAvailable);
 
 protected:
     bool event(QEvent *evt) override;   //触摸屏event事件
@@ -680,10 +698,10 @@ private:
 
     ShowFlodCodeWidget  *m_foldCodeShow;
 
-    bool m_canUndo;
-    bool m_canRedo;
-    bool m_HightlightYes;
-    bool m_haveWordUnderCursor;
+    bool m_canUndo {false};
+    bool m_canRedo {false};
+    bool m_HightlightYes {false};
+    bool m_haveWordUnderCursor {false};
 
     bool m_cursorMark = false;
     int m_markStartLine = -1;

@@ -1375,7 +1375,6 @@ void Window::popupPrintDialog()
     } else {
         m_pPreview->setDocName(QString(QFileInfo(filePath).baseName()));
     }
-
     m_pPreview->setAsynPreview(m_printDoc ? m_printDoc->pageCount() : PRINT_FLAG);
 
     connect(m_pPreview, &DPrintPreviewDialog::finished, this, [ = ] {

@@ -3127,6 +3127,293 @@ TEST_F(test_textedit, slotSelectAllAction)
     pWindow->deleteLater();
 }
 
+//slotOpenInFileManagerAction
+TEST_F(test_textedit, slotOpenInFileManagerAction)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world.\nHolle world."));
+    QString strRet(pWindow->currentWrapper()->textEditor()->getTruePath());
+    ASSERT_TRUE(!strRet.isEmpty());
+
+    pWindow->deleteLater();
+}
+
+//slotAddComment
+TEST_F(test_textedit, slotAddComment)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world.\nHolle world."));
+    pWindow->currentWrapper()->textEditor()->slotAddComment(true);
+    bool bRet = pWindow->currentWrapper()->textEditor()->m_commentDefinition.isValid();
+    ASSERT_TRUE(bRet == false);
+
+    pWindow->deleteLater();
+}
+
+//slotCancelComment
+TEST_F(test_textedit, slotCancelComment)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world.\nHolle world."));
+    pWindow->currentWrapper()->textEditor()->slotCancelComment(true);
+    bool bRet = pWindow->currentWrapper()->textEditor()->m_commentDefinition.isValid();
+    ASSERT_TRUE(bRet == false);
+
+    pWindow->deleteLater();
+}
+
+//slotVoiceReadingAction
+TEST_F(test_textedit, slotVoiceReadingAction)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world.\nHolle world."));
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->slotVoiceReadingAction(true);
+    bool bRet = pWindow->currentWrapper()->textEditor()->textCursor().hasSelection();
+    ASSERT_TRUE(bRet == true);
+
+    pWindow->deleteLater();
+}
+
+//slotStopReadingAction
+TEST_F(test_textedit, slotStopReadingAction)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world.\nHolle world."));
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->slotStopReadingAction(true);
+    bool bRet = pWindow->currentWrapper()->textEditor()->textCursor().hasSelection();
+    ASSERT_TRUE(bRet == true);
+
+    pWindow->deleteLater();
+}
+
+//slotdictationAction
+TEST_F(test_textedit, slotdictationAction)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world.\nHolle world."));
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->slotdictationAction(true);
+    bool bRet = pWindow->currentWrapper()->textEditor()->textCursor().hasSelection();
+    ASSERT_TRUE(bRet == true);
+
+    pWindow->deleteLater();
+}
+
+//slotColumnEditAction
+TEST_F(test_textedit, slotColumnEditAction)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world.\nHolle world."));
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->slotColumnEditAction(true);
+    bool bRet = pWindow->currentWrapper()->textEditor()->textCursor().hasSelection();
+    ASSERT_TRUE(bRet == true);
+
+    pWindow->deleteLater();
+}
+
+//slotPreBookMarkAction 001
+TEST_F(test_textedit, slotPreBookMarkAction_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world."));
+    pWindow->currentWrapper()->textEditor()->m_mouseClickPos = QPoint(0, 0);
+    pWindow->currentWrapper()->textEditor()->m_listBookmark.append(1);
+    pWindow->currentWrapper()->textEditor()->slotPreBookMarkAction(true);
+    int iRet = pWindow->currentWrapper()->textEditor()->m_listBookmark.indexOf(1);
+    ASSERT_TRUE(iRet == 0);
+
+    pWindow->deleteLater();
+}
+
+//slotPreBookMarkAction 002
+TEST_F(test_textedit, slotPreBookMarkAction_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world."));
+    pWindow->currentWrapper()->textEditor()->m_mouseClickPos = QPoint(0, 0);
+    pWindow->currentWrapper()->textEditor()->slotPreBookMarkAction(true);
+    int iRet = pWindow->currentWrapper()->textEditor()->m_listBookmark.indexOf(1);
+    ASSERT_TRUE(iRet != 0);
+
+    pWindow->deleteLater();
+}
+
+void slotNextBookMarkAction_001_jumpToLine_stub()
+{
+    return;
+}
+
+//slotNextBookMarkAction 001
+TEST_F(test_textedit, slotNextBookMarkAction_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world.\nHolle world."));
+    pWindow->currentWrapper()->textEditor()->m_mouseClickPos = QPoint(0, 0);
+    pWindow->currentWrapper()->textEditor()->m_listBookmark.append(2);
+    Stub jumpToLine_stub;
+    jumpToLine_stub.set(ADDR(TextEdit, jumpToLine), slotNextBookMarkAction_001_jumpToLine_stub);
+    pWindow->currentWrapper()->textEditor()->slotNextBookMarkAction(true);
+    bool bRet = pWindow->currentWrapper()->textEditor()->m_listBookmark.isEmpty();
+    ASSERT_TRUE(bRet == false);
+
+    pWindow->deleteLater();
+}
+
+//slotClearBookMarkAction
+TEST_F(test_textedit, slotClearBookMarkAction)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world.\nHolle world."));
+    pWindow->currentWrapper()->textEditor()->slotClearBookMarkAction(true);
+    bool bRet = pWindow->currentWrapper()->textEditor()->m_listBookmark.isEmpty();
+    ASSERT_TRUE(bRet == true);
+
+    pWindow->deleteLater();
+}
+
+//slotFlodAllLevel
+TEST_F(test_textedit, slotFlodAllLevel)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world.\nHolle world."));
+    pWindow->currentWrapper()->textEditor()->slotFlodAllLevel(true);
+    bool bRet = pWindow->currentWrapper()->textEditor()->m_listMainFlodAllPos.isEmpty();
+    ASSERT_TRUE(bRet == true);
+
+    pWindow->deleteLater();
+}
+
+//slotUnflodAllLevel
+TEST_F(test_textedit, slotUnflodAllLevel)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world.\nHolle world."));
+    pWindow->currentWrapper()->textEditor()->slotUnflodAllLevel(true);
+    bool bRet = pWindow->currentWrapper()->textEditor()->m_listMainFlodAllPos.isEmpty();
+    ASSERT_TRUE(bRet == true);
+
+    pWindow->deleteLater();
+}
+
+//slotFlodCurrentLevel
+TEST_F(test_textedit, slotFlodCurrentLevel)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world.\nHolle world."));
+    pWindow->currentWrapper()->textEditor()->slotFlodCurrentLevel(true);
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_pLeftAreaWidget != nullptr);
+
+    pWindow->deleteLater();
+}
+
+//slotUnflodCurrentLevel
+TEST_F(test_textedit, slotUnflodCurrentLevel)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world.\nHolle world."));
+    pWindow->currentWrapper()->textEditor()->slotUnflodCurrentLevel(true);
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_pLeftAreaWidget != nullptr);
+
+    pWindow->deleteLater();
+}
+
+//slotCancleMarkAllLine
+TEST_F(test_textedit, slotCancleMarkAllLine)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world.\nHolle world."));
+    pWindow->currentWrapper()->textEditor()->slotCancleMarkAllLine(true);
+    bool bRet = pWindow->currentWrapper()->textEditor()->m_markOperations.isEmpty();
+    ASSERT_TRUE(bRet == true);
+
+    pWindow->deleteLater();
+}
+
+//slotCancleLastMark
+TEST_F(test_textedit, slotCancleLastMark)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world.\nHolle world."));
+    pWindow->currentWrapper()->textEditor()->slotCancleLastMark(true);
+    bool bRet = pWindow->currentWrapper()->textEditor()->m_markOperations.isEmpty();
+    ASSERT_TRUE(bRet == true);
+
+    pWindow->deleteLater();
+}
+
+//slotUndoAvailable
+TEST_F(test_textedit, slotUndoAvailable)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world.\nHolle world."));
+    pWindow->currentWrapper()->textEditor()->slotUndoAvailable(true);
+    bool bRet = pWindow->currentWrapper()->textEditor()->m_canUndo;
+    ASSERT_TRUE(bRet == true);
+
+    pWindow->deleteLater();
+}
+
+//slotRedoAvailable
+TEST_F(test_textedit, slotRedoAvailable)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world.\nHolle world."));
+    pWindow->currentWrapper()->textEditor()->slotRedoAvailable(true);
+    bool bRet = pWindow->currentWrapper()->textEditor()->m_canRedo;
+    ASSERT_TRUE(bRet == true);
+
+    pWindow->deleteLater();
+}
+
 //inline QString getFilePath() { return m_sFilePath;};
 TEST_F(test_textedit, getFilePath)
 {

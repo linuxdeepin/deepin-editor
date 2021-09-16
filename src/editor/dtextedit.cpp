@@ -267,10 +267,8 @@ void TextEdit::initRightClickedMenu()
 
     // 为颜色标记Menu，增加事件过滤
     m_colorMarkMenu->installEventFilter(this);
-
     m_cancleMarkAllLine = new QAction(tr("Clear All Marks"), this);
     m_cancleLastMark = new QAction(tr("Clear Last Mark"), this);
-
 
     //添加当前颜色选择控件　梁卫东
     ColorSelectWdg *pColorsSelectWdg = new ColorSelectWdg(QString(), this);
@@ -316,90 +314,25 @@ void TextEdit::initRightClickedMenu()
     connect(m_exitFullscreenAction, &QAction::triggered, this, &TextEdit::clickFullscreenAction);
     connect(m_enableReadOnlyModeAction, &QAction::triggered, this, &TextEdit::toggleReadOnlyMode);
     connect(m_disableReadOnlyModeAction, &QAction::triggered, this, &TextEdit::toggleReadOnlyMode);
-
-    connect(m_openInFileManagerAction, &QAction::triggered, this, [this]() {
-        DDesktopServices::showFileItem(this->getTruePath());
-    });
-
-    connect(m_addComment, &QAction::triggered, this, [ = ] {
-        toggleComment(true);
-    });
-    connect(m_cancelComment, &QAction::triggered, this, [ = ] {
-        toggleComment(false);
-    });
-    connect(m_voiceReadingAction, &QAction::triggered, this, [this]() {
-        QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.TextToSpeech");
-        emit signal_readingPath();
-    });
-    connect(m_stopReadingAction, &QAction::triggered, this, []() {
-        QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
-    });
-    connect(m_dictationAction, &QAction::triggered, this, []() {
-        QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.SpeechToText");
-    });
+    connect(m_openInFileManagerAction, &QAction::triggered, this, &TextEdit::slotOpenInFileManagerAction);
+    connect(m_addComment, &QAction::triggered, this, &TextEdit::slotAddComment);
+    connect(m_cancelComment, &QAction::triggered, this, &TextEdit::slotCancelComment);
+    connect(m_voiceReadingAction, &QAction::triggered, this, &TextEdit::slotVoiceReadingAction);
+    connect(m_stopReadingAction, &QAction::triggered, this, &TextEdit::slotStopReadingAction);
+    connect(m_dictationAction, &QAction::triggered, this, &TextEdit::slotdictationAction);
     connect(m_translateAction, &QAction::triggered, this, &TextEdit::slot_translate);
-    connect(m_columnEditAction, &QAction::triggered, this, [this] {
-        //toggleComment(true); todo
-        DMessageManager::instance()->sendMessage(this, QIcon(":/images/ok.svg"), tr("Press ALT and click lines to edit in column mode"));
-    });
-
+    connect(m_columnEditAction, &QAction::triggered, this, &TextEdit::slotColumnEditAction);
     connect(m_addBookMarkAction, &QAction::triggered, this, &TextEdit::addOrDeleteBookMark);
-
     connect(m_cancelBookMarkAction, &QAction::triggered, this, &TextEdit::addOrDeleteBookMark);
-
-    connect(m_preBookMarkAction, &QAction::triggered, this, [this]() {
-
-        int line = getLineFromPoint(m_mouseClickPos);
-        int index = m_listBookmark.indexOf(line);
-
-        if (index == 0) {
-            jumpToLine(m_listBookmark.last(), true);
-        } else {
-            jumpToLine(m_listBookmark.value(index - 1), true);
-        }
-
-    });
-    connect(m_nextBookMarkAction, &QAction::triggered, this, [this]() {
-        int line = getLineFromPoint(m_mouseClickPos);
-        int index = m_listBookmark.indexOf(line);
-
-        if (index == -1 && !m_listBookmark.isEmpty()) {
-            jumpToLine(m_listBookmark.last(), false);
-        }
-
-        if (index == m_listBookmark.count() - 1) {
-            jumpToLine(m_listBookmark.first(), false);
-        } else {
-            jumpToLine(m_listBookmark.value(index + 1), false);
-        }
-    });
-
-    connect(m_clearBookMarkAction, &QAction::triggered, this, [this]() {
-        m_listBookmark.clear();
-        qDebug() << "ClearBookMark:" << m_listBookmark;
-        m_pLeftAreaWidget->m_pBookMarkArea->update();
-    });
-
-    connect(m_flodAllLevel, &QAction::triggered, this, [this] {
-        flodOrUnflodAllLevel(true);
-    });
-    connect(m_unflodAllLevel, &QAction::triggered, this, [this] {
-        flodOrUnflodAllLevel(false);
-    });
-    connect(m_flodCurrentLevel, &QAction::triggered, this, [this] {
-        flodOrUnflodCurrentLevel(true);
-    });
-    connect(m_unflodCurrentLevel, &QAction::triggered, this, [this] {
-        flodOrUnflodCurrentLevel(false);
-    });
-
-    connect(m_cancleMarkAllLine, &QAction::triggered, this, [this] {
-        isMarkAllLine(false);
-    });
-    connect(m_cancleLastMark, &QAction::triggered, this, [this] {
-        cancelLastMark();
-    });
-
+    connect(m_preBookMarkAction, &QAction::triggered, this, &TextEdit::slotPreBookMarkAction);
+    connect(m_nextBookMarkAction, &QAction::triggered, this, &TextEdit::slotNextBookMarkAction);
+    connect(m_clearBookMarkAction, &QAction::triggered, this, &TextEdit::slotClearBookMarkAction);
+    connect(m_flodAllLevel, &QAction::triggered, this, &TextEdit::slotFlodAllLevel);
+    connect(m_unflodAllLevel, &QAction::triggered, this, &TextEdit::slotUnflodAllLevel);
+    connect(m_flodCurrentLevel, &QAction::triggered, this, &TextEdit::slotFlodCurrentLevel);
+    connect(m_unflodCurrentLevel, &QAction::triggered, this, &TextEdit::slotUnflodCurrentLevel);
+    connect(m_cancleMarkAllLine, &QAction::triggered, this, &TextEdit::slotCancleMarkAllLine);
+    connect(m_cancleLastMark, &QAction::triggered, this, &TextEdit::slotCancleLastMark);
 
     // Init convert case sub menu.
     m_haveWordUnderCursor = false;
@@ -407,7 +340,6 @@ void TextEdit::initRightClickedMenu()
     m_upcaseAction = new QAction(tr("Upper Case"), this);
     m_downcaseAction = new QAction(tr("Lower Case"), this);
     m_capitalizeAction = new QAction(tr("Capitalize"), this);
-
     m_convertCaseMenu->addAction(m_upcaseAction);
     m_convertCaseMenu->addAction(m_downcaseAction);
     m_convertCaseMenu->addAction(m_capitalizeAction);
@@ -419,12 +351,8 @@ void TextEdit::initRightClickedMenu()
     m_canUndo = false;
     m_canRedo = false;
 
-    connect(this, &TextEdit::undoAvailable, this, [ = ](bool undoIsAvailable) {
-        m_canUndo = undoIsAvailable;
-    });
-    connect(this, &TextEdit::redoAvailable, this, [ = ](bool redoIsAvailable) {
-        m_canRedo = redoIsAvailable;
-    });
+    connect(this, &TextEdit::undoAvailable, this, &TextEdit::slotUndoAvailable);
+    connect(this, &TextEdit::redoAvailable, this, &TextEdit::slotRedoAvailable);
 }
 
 void TextEdit::popRightMenu(QPoint pos)
@@ -2881,6 +2809,133 @@ void TextEdit::slotSelectAllAction(bool checked)
 {
     Q_UNUSED(checked);
     setSelectAll();
+}
+
+bool TextEdit::slotOpenInFileManagerAction(bool checked)
+{
+    Q_UNUSED(checked);
+    return DDesktopServices::showFileItem(this->getTruePath());
+}
+
+void TextEdit::slotAddComment(bool checked)
+{
+    Q_UNUSED(checked);
+    toggleComment(true);
+}
+
+void TextEdit::slotCancelComment(bool checked)
+{
+    Q_UNUSED(checked);
+    toggleComment(false);
+}
+
+void TextEdit::slotVoiceReadingAction(bool checked)
+{
+    Q_UNUSED(checked);
+    QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.TextToSpeech");
+    emit signal_readingPath();
+}
+
+bool TextEdit::slotStopReadingAction(bool checked)
+{
+    Q_UNUSED(checked);
+    return QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
+}
+
+void TextEdit::slotdictationAction(bool checked)
+{
+    Q_UNUSED(checked);
+    QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.SpeechToText");
+}
+
+void TextEdit::slotColumnEditAction(bool checked)
+{
+    Q_UNUSED(checked);
+    DMessageManager::instance()->sendMessage(this, QIcon(":/images/ok.svg"), tr("Press ALT and click lines to edit in column mode"));
+}
+
+void TextEdit::slotPreBookMarkAction(bool checked)
+{
+    Q_UNUSED(checked);
+    int line = getLineFromPoint(m_mouseClickPos);
+    int index = m_listBookmark.indexOf(line);
+
+    if (index == 0) {
+        jumpToLine(m_listBookmark.last(), true);
+    } else {
+        jumpToLine(m_listBookmark.value(index - 1), true);
+    }
+}
+
+void TextEdit::slotNextBookMarkAction(bool checked)
+{
+    Q_UNUSED(checked);
+    int line = getLineFromPoint(m_mouseClickPos);
+    int index = m_listBookmark.indexOf(line);
+
+    if (index == -1 && !m_listBookmark.isEmpty()) {
+        jumpToLine(m_listBookmark.last(), false);
+    }
+
+    if (index == m_listBookmark.count() - 1) {
+        jumpToLine(m_listBookmark.first(), false);
+    } else {
+        jumpToLine(m_listBookmark.value(index + 1), false);
+    }
+}
+
+void TextEdit::slotClearBookMarkAction(bool checked)
+{
+    Q_UNUSED(checked);
+    m_listBookmark.clear();
+    qDebug() << "ClearBookMark:" << m_listBookmark;
+    m_pLeftAreaWidget->m_pBookMarkArea->update();
+}
+
+void TextEdit::slotFlodAllLevel(bool checked)
+{
+    Q_UNUSED(checked);
+    flodOrUnflodAllLevel(true);
+}
+
+void TextEdit::slotUnflodAllLevel(bool checked)
+{
+    Q_UNUSED(checked);
+    flodOrUnflodAllLevel(false);
+}
+
+void TextEdit::slotFlodCurrentLevel(bool checked)
+{
+    Q_UNUSED(checked);
+    flodOrUnflodCurrentLevel(true);
+}
+
+void TextEdit::slotUnflodCurrentLevel(bool checked)
+{
+    Q_UNUSED(checked);
+    flodOrUnflodCurrentLevel(false);
+}
+
+void TextEdit::slotCancleMarkAllLine(bool checked)
+{
+    Q_UNUSED(checked);
+    isMarkAllLine(false);
+}
+
+void TextEdit::slotCancleLastMark(bool checked)
+{
+    Q_UNUSED(checked);
+    cancelLastMark();
+}
+
+void TextEdit::slotUndoAvailable(bool undoIsAvailable)
+{
+    m_canUndo = undoIsAvailable;
+}
+
+void TextEdit::slotRedoAvailable(bool redoIsAvailable)
+{
+    m_canRedo = redoIsAvailable;
 }
 
 void TextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &closeChar)
