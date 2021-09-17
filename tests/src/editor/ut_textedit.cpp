@@ -1521,6 +1521,120 @@ TEST_F(test_textedit, setTabSpaceNumber)
     pWindow->deleteLater();
 }
 
+//convertWordCase 001
+TEST(UT_test_textedit_convertWordCase, UT_test_textedit_convertWordCase_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Holle world\nHolle world\nHolle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+    pWindow->currentWrapper()->textEditor()->m_isSelectAll = true;
+    pWindow->currentWrapper()->textEditor()->convertWordCase(UPPER);
+    QString strRet(pWindow->currentWrapper()->textEditor()->toPlainText());
+
+    ASSERT_TRUE(!strRet.compare(strMsg.toUpper()));
+    pWindow->deleteLater();
+}
+
+//convertWordCase 002
+TEST(UT_test_textedit_convertWordCase, UT_test_textedit_convertWordCase_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Holle world\nHolle world\nHolle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+    pWindow->currentWrapper()->textEditor()->m_isSelectAll = true;
+    pWindow->currentWrapper()->textEditor()->convertWordCase(LOWER);
+    QString strRet(pWindow->currentWrapper()->textEditor()->toPlainText());
+
+    ASSERT_TRUE(!strRet.compare(strMsg.toLower()));
+    pWindow->deleteLater();
+}
+
+//convertWordCase 003
+TEST(UT_test_textedit_convertWordCase, UT_test_textedit_convertWordCase_003)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Holle world\nHolle world\nHolle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+    pWindow->currentWrapper()->textEditor()->m_isSelectAll = true;
+    pWindow->currentWrapper()->textEditor()->convertWordCase(CAPITALIZE);
+    QString strRet(pWindow->currentWrapper()->textEditor()->toPlainText());
+
+    ASSERT_TRUE(strRet.compare(strMsg));
+    pWindow->deleteLater();
+}
+
+//convertWordCase 004
+TEST(UT_test_textedit_convertWordCase, UT_test_textedit_convertWordCase_004)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Holle world\nHolle world\nHolle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::PreviousWord, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->convertWordCase(UPPER);
+    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().selectedText());
+
+    ASSERT_TRUE(!strRet.compare(QString("WORLD")));
+    pWindow->deleteLater();
+}
+
+//convertWordCase 005
+TEST(UT_test_textedit_convertWordCase, UT_test_textedit_convertWordCase_005)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Holle world\nHolle world\nHolle WORLD");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::PreviousWord, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->convertWordCase(LOWER);
+    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().selectedText());
+
+    ASSERT_TRUE(!strRet.compare(QString("world")));
+    pWindow->deleteLater();
+}
+
+//convertWordCase 006
+TEST(UT_test_textedit_convertWordCase, UT_test_textedit_convertWordCase_006)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Holle world\nHolle world\nHolle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::PreviousWord, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->convertWordCase(CAPITALIZE);
+    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().selectedText());
+
+    ASSERT_TRUE(!strRet.compare(QString("World")));
+    pWindow->deleteLater();
+}
+
 //QString capitalizeText(QString text);
 
 //void keepCurrentLineAtCenter();
