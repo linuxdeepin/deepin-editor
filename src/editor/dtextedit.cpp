@@ -604,6 +604,16 @@ EditWrapper *TextEdit::getWrapper()
     return m_wrapper;
 }
 
+bool TextEdit::isUndoRedoOpt()
+{
+    return (m_pUndoStack->canRedo() || m_pUndoStack->canUndo());
+}
+
+bool TextEdit::getModified()
+{
+    return (document()->isModified() && (m_pUndoStack->canUndo() || m_pUndoStack->index() != m_lastSaveIndex));
+}
+
 
 int TextEdit::getCurrentLine()
 {
@@ -1160,64 +1170,13 @@ void TextEdit::copyLines()
     setTextCursor(copyCursor);
 }
 
-#if 0
-//2021-05-19该函数实现有误，重写同名函数
 void TextEdit::cutlines()
 {
-    // Record current cursor and build copy cursor.
-    QTextCursor currentCursor = textCursor();
-    QTextCursor copyCursor = textCursor();
-
-    if (textCursor().hasSelection()) {
-        // Sort selection bound cursors.
-        int startPos = textCursor().anchor();
-        int endPos = textCursor().position();
-
-        if (startPos > endPos) {
-            std::swap(startPos, endPos);
-        }
-
-        // Selectoin multi-lines.
-        QTextCursor startCursor = textCursor();
-        startCursor.setPosition(startPos, QTextCursor::MoveAnchor);
-        startCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-
-        QTextCursor endCursor = textCursor();
-        endCursor.setPosition(endPos, QTextCursor::MoveAnchor);
-        endCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
-
-        copyCursor.setPosition(startCursor.position(), QTextCursor::MoveAnchor);
-        copyCursor.setPosition(endCursor.position(), QTextCursor::KeepAnchor);
-
-        popupNotify(tr("Selected line(s) clipped"));
-    } else {
-        // Selection current line.
-        copyCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-        copyCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-
-        popupNotify(tr("Current line clipped"));
-    }
-    // Add the cut operation to the undo stack
-    QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(copyCursor);
-    m_pUndoStack->push(pDeleteStack);
-    // Copy lines to system clipboard.
-    setTextCursor(copyCursor);
-    cutSelectedText();
-
-    // Reset cursor before copy lines.
-    copyCursor.setPosition(currentCursor.position(), QTextCursor::MoveAnchor);
-    setTextCursor(copyCursor);
-    // Setting text has been modified
-    this->m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
-}
-#endif
-
-void TextEdit::cutlines()
-{
-    if(m_isSelectAll)
+    if(m_isSelectAll) {
         QPlainTextEdit::selectAll();
+    }
 
-    if (textCursor().hasSelection() || m_bIsAltMod){
+    if (textCursor().hasSelection() || m_bIsAltMod) {
         this->cut();
         popupNotify(tr("Selected line(s) clipped"));
     }
@@ -1231,10 +1190,8 @@ void TextEdit::cutlines()
             m_pUndoStack->push(pDeleteStack);
             QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
             clipboard->setText(data);
-
             popupNotify(tr("Current line clipped"));
         }
-
     }
 }
 
@@ -1244,8 +1201,9 @@ void TextEdit::joinLines()
     auto b1 = this->document()->findBlockByNumber(l1);
     const QString t1 = b1.text();
 
-    if (blockCount() == getCurrentLine())
-    {return ;}
+    if (blockCount() == getCurrentLine()) {
+        return;
+    }
     if (textCursor().hasSelection()) {
         // Get selection bound.
         int startPos = textCursor().anchor();

@@ -125,17 +125,20 @@ public:
     inline void setFilePath(QString file) { m_sFilePath = file;}
     //
     inline LeftAreaTextEdit *getLeftAreaWidget() { return m_pLeftAreaWidget;}
-    //是否撤销重做操作
-    bool isUndoRedoOpt() {return (m_pUndoStack->canRedo() || m_pUndoStack->canUndo());}
-    //判断是否修改
-    bool getModified() { return (document()->isModified() && (m_pUndoStack->canUndo() || m_pUndoStack->index() != m_lastSaveIndex));}
+    /**
+     * @brief 是否撤销重做操作
+     */
+    bool isUndoRedoOpt();
+    /**
+     * @brief 判断文档是否被修改
+     */
+    bool getModified();
 
     int getCurrentLine();
     int getCurrentColumn();
     int getPosition();
     int getScrollOffset();
     DMenu *getHighlightMenu();
-
 
     void forwardChar();
     void backwardChar();
@@ -744,8 +747,8 @@ private:
     QTextCharFormat m_findHighlightFormat;
     CursorMode m_cursorMode;
 
-    DMenu *m_hlGroupMenu;
-    QActionGroup *m_hlActionGroup;
+    DMenu *m_hlGroupMenu {nullptr};
+    QActionGroup *m_hlActionGroup {nullptr};
 
     QPoint m_lastTouchBeginPos;
     QPointer<QTimer> m_updateEnableSelectionByMouseTimer;

@@ -33,6 +33,78 @@ TEST_F(test_textedit, setWrapper)
     pWindow->deleteLater();
 }
 
+//getWrapper
+TEST_F(test_textedit, getWrapper)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    EditWrapper *pEditWrapper = pWindow->currentWrapper()->textEditor()->getWrapper();
+    ASSERT_TRUE(pEditWrapper != nullptr);
+
+    pWindow->deleteLater();
+}
+
+//inline QString getFilePath() { return m_sFilePath;};
+TEST_F(test_textedit, getFilePath)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world.\nHolle world."));
+    QString strRet(pWindow->currentWrapper()->textEditor()->getFilePath());
+    ASSERT_TRUE(strRet != nullptr);
+    pWindow->deleteLater();
+}
+
+//inline void setFilePath(QString file) { m_sFilePath = file;}
+TEST_F(test_textedit, setFilePath)
+{
+    QScrollBar *p = new QScrollBar();
+    TextEdit *startManager = new TextEdit();
+    startManager->setVerticalScrollBar(p);
+    startManager->setFilePath("a");
+
+    ASSERT_TRUE(startManager->m_pLeftAreaWidget != nullptr);
+    startManager->deleteLater();
+    p->deleteLater();
+}
+
+//getLeftAreaWidget
+TEST_F(test_textedit, getLeftAreaWidget)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world.\nHolle world."));
+    LeftAreaTextEdit *pLeftAreaTextEdit = pWindow->currentWrapper()->textEditor()->getLeftAreaWidget();
+    ASSERT_TRUE(pLeftAreaTextEdit != nullptr);
+    pWindow->deleteLater();
+}
+
+//isUndoRedoOpt
+TEST_F(test_textedit, isUndoRedoOpt)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world.\nHolle world."));
+    bool bRet = pWindow->currentWrapper()->textEditor()->isUndoRedoOpt();
+    ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
+}
+
+//getModified
+TEST_F(test_textedit, getModified)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world.\nHolle world."));
+    bool bRet = pWindow->currentWrapper()->textEditor()->getModified();
+    ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
+}
+
 //TextEdit(QWidget *parent = nullptr);
 TEST_F(test_textedit, TextEdit)
 {
@@ -265,6 +337,19 @@ TEST_F(test_textedit, getScrollOffset)
     pWindow->deleteLater();
 }
 
+//DMenu *getHighlightMenu();
+TEST_F(test_textedit, getHighlightMenu)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world."));
+
+    DMenu *pDMenu = pWindow->currentWrapper()->textEditor()->getHighlightMenu();
+    ASSERT_TRUE(pDMenu == nullptr);
+    pWindow->deleteLater();
+}
+
 //forwardChar 001
 TEST_F(test_textedit, forwardChar_001)
 {
@@ -472,6 +557,31 @@ TEST_F(test_textedit, blockCount)
     int iRet = pWindow->currentWrapper()->textEditor()->blockCount();
     ASSERT_TRUE(iRet == 1);
 
+    pWindow->deleteLater();
+}
+
+//int characterCount() const;
+TEST_F(test_textedit, characterCount)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world"));
+    int iRet = pWindow->currentWrapper()->textEditor()->characterCount();
+    ASSERT_TRUE(iRet == 12);
+    pWindow->deleteLater();
+}
+
+//firstVisibleBlock()
+TEST_F(test_textedit, firstVisibleBlock)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world\nHolle world"));
+    QTextBlock textBlock = pWindow->currentWrapper()->textEditor()->firstVisibleBlock();
+    QString strRet(textBlock.text());
+    ASSERT_TRUE(!strRet.compare(QString("Holle world")));
     pWindow->deleteLater();
 }
 
@@ -714,6 +824,20 @@ TEST_F(test_textedit, jumpToLine)
     int iRet = pWindow->currentWrapper()->textEditor()->textCursor().blockNumber() + 1;
     ASSERT_TRUE(iRet == 1);
 
+    pWindow->deleteLater();
+}
+
+//void moveCursorNoBlink(QTextCursor::MoveOperation operation,
+//                       QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
+TEST_F(test_textedit, moveCursorNoBlink)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world\nHolle world"));
+    pWindow->currentWrapper()->textEditor()->moveCursorNoBlink(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
+    bool bRet = pWindow->currentWrapper()->textEditor()->textCursor().hasSelection();
+    ASSERT_TRUE(bRet == true);
     pWindow->deleteLater();
 }
 
@@ -1045,24 +1169,37 @@ TEST_F(test_textedit, popRightMenu_001)
 #endif
 }
 
-
-//void cutlines();
-TEST_F(test_textedit, cutlines)
+//void cutlines 001
+TEST_F(test_textedit, cutlines_001)
 {
-    Stub stub;
-    stub.set(ADDR(QUndoStack, push), stub_push);
-    stub.set(ADDR(Window, updateModifyStatus), stub_updateModifyStatus);
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->cutlines();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Holle world\nHolle world\nHolle world");
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(), strMsg);
+    QClipboard *pClipboard = QApplication::clipboard();
+    pClipboard->clear();
+    pWindow->currentWrapper()->textEditor()->m_isSelectAll = true;
+    pWindow->currentWrapper()->textEditor()->cutlines();
+    QString strRet(pClipboard->text());
+    ASSERT_TRUE(strRet.length() == strMsg.length());
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    p->deleteLater();
-    startManager->deleteLater();
-    ee->deleteLater();
+    pWindow->deleteLater();
+}
+
+//void cutlines 002
+TEST_F(test_textedit, cutlines_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Holle world\nHolle world\nHolle world");
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(), strMsg);
+    QClipboard *pClipboard = QApplication::clipboard();
+    pClipboard->clear();
+    pWindow->currentWrapper()->textEditor()->cutlines();
+    QString strRet(pClipboard->text());
+    ASSERT_TRUE(!strRet.compare(QString("Holle world")));
+
+    pWindow->deleteLater();
 }
 
 TEST_F(test_textedit, joinLines)
@@ -1108,6 +1245,7 @@ TEST_F(test_textedit, killCurrentLine)
     wrapper->deleteLater();
     pWindow->deleteLater();
 }
+
 TEST_F(test_textedit, killBackwardWord)
 {
     QScrollBar *p = new QScrollBar();
@@ -1425,21 +1563,6 @@ TEST_F(test_textedit, renderAllSelections)
     EditWrapper *ee = new EditWrapper();
     startManager->setWrapper(ee);
     startManager->renderAllSelections();
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-//DMenu *getHighlightMenu();
-TEST_F(test_textedit, getHighlightMenu)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->getHighlightMenu();
 
     ASSERT_TRUE(ee->m_pTextEdit != nullptr);
     ee->deleteLater();
@@ -2936,6 +3059,7 @@ TEST_F(test_textedit, updateHighlightBrackets)
     startManager->deleteLater();
     p->deleteLater();
 }
+
 // int getFirstVisibleBlockId() const;
 TEST_F(test_textedit, getFirstVisibleBlockId)
 {
@@ -3412,59 +3536,6 @@ TEST_F(test_textedit, slotRedoAvailable)
     ASSERT_TRUE(bRet == true);
 
     pWindow->deleteLater();
-}
-
-//inline QString getFilePath() { return m_sFilePath;};
-TEST_F(test_textedit, getFilePath)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    startManager->getFilePath();
-
-    ASSERT_TRUE(startManager->m_pLeftAreaWidget != nullptr);
-    startManager->deleteLater();
-    p->deleteLater();
-}
-////
-//inline void setFilePath(QString file) { m_sFilePath = file;}
-TEST_F(test_textedit, setFilePath)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    startManager->setFilePath("a");
-
-    ASSERT_TRUE(startManager->m_pLeftAreaWidget != nullptr);
-    startManager->deleteLater();
-    p->deleteLater();
-}
-////
-//int characterCount() const;
-TEST_F(test_textedit, characterCount)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    startManager->characterCount();
-
-    ASSERT_TRUE(startManager->m_pLeftAreaWidget != nullptr);
-    startManager->deleteLater();
-    p->deleteLater();
-}
-
-//void moveCursorNoBlink(QTextCursor::MoveOperation operation,
-//                       QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
-TEST_F(test_textedit, moveCursorNoBlink)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    startManager->moveCursorNoBlink(QTextCursor::MoveOperation::Up);
-
-    ASSERT_TRUE(startManager->m_pLeftAreaWidget != nullptr);
-    startManager->deleteLater();
-    p->deleteLater();
 }
 
 //void convertWordCase(ConvertCase convertCase);
