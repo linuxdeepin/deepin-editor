@@ -1,16 +1,93 @@
 #include "ut_window.h"
 #include "dsettingsoption.h"
 #include "ddialog.h"
-test_window::test_window()
-{
+#include "qfileinfo.h"
+#include "qfile.h"
 
+
+int exec_ret = 1;
+int QDialog_exec_stub()
+{
+    return exec_ret;
 }
 
-TEST_F(test_window, Window)
+
+bool isDraft=false;
+bool EditWrapper_isDraftFile_stub()
 {
-    Window window1;
-    
+    return isDraft;
 }
+
+bool isModified=false;
+bool EditWrapper_isModified_stub()
+{
+    return isModified;
+}
+
+bool qfileinfo_exists= false;
+bool QFileInfo_exists_stub()
+{
+    return qfileinfo_exists;
+}
+
+bool editwrapper_istemfile=false;
+bool EditWrapper_isTemFile_stub()
+{
+    return editwrapper_istemfile;
+}
+
+bool editwrapper_saveFile = false;
+bool EditWrapper_saveFile_stub()
+{
+    return editwrapper_saveFile;
+}
+
+EditWrapper* window_currentWrapper = nullptr;
+EditWrapper* Window_currentWrapper_stub()
+{
+    return window_currentWrapper;
+}
+
+TextEdit* editwrapper_texteditor = nullptr;
+TextEdit *EditWrapper_textEditor_stub()
+{
+    return editwrapper_texteditor;
+}
+
+bool window_saveasfile=false;
+bool Window_saveAsFile_stub()
+{
+    return false;
+}
+
+int QFile_permissions_stub()
+{
+    return 0x2000;//The file is writable by the owner of the file.
+}
+
+void Window_updateSabeAsFileNameTemp_stub()
+{
+    return ;
+}
+
+StartManager::FileTabInfo StartManager_getFileTabInfo_stub()
+{
+    return StartManager::FileTabInfo{1,1};
+}
+
+QString utils_getkeyshortcut;
+QString Utils_getKeyshortcut_stub()
+{
+    return utils_getkeyshortcut;
+}
+
+
+QString utils_getkeyshortcutfromkeymap;
+QString Utils_getKeyshortcutFromKeymap_stub()
+{
+    return utils_getkeyshortcutfromkeymap;
+}
+
 
 int option_stub_para=0;
 QPointer<DSettingsOption> option_stub()
@@ -24,7 +101,20 @@ QPointer<DSettingsOption> option_stub()
         p->setValue("normal");
     return p;
 }
-TEST_F(test_window, showCenterWindow_01)
+
+
+UT_Window::UT_Window()
+{
+
+}
+
+TEST(UT_Window_Window, UT_Window_Window_001)
+{
+    Window window1;
+
+}
+
+TEST(UT_Window_showCenterWindow, UT_Window_showCenterWindow_001)
 {
     Stub stub;
     stub.set(ADDR(DSettings,option),option_stub);
@@ -38,10 +128,10 @@ TEST_F(test_window, showCenterWindow_01)
 
     window1->deleteLater();
 
-    
+
 }
 
-TEST_F(test_window, showCenterWindow_02)
+TEST(UT_Window_showCenterWindow, UT_Window_showCenterWindow_002)
 {
     Window * window1 = new Window();
 
@@ -59,7 +149,7 @@ TEST_F(test_window, showCenterWindow_02)
 
 }
 
-TEST_F(test_window, showCenterWindow_03)
+TEST(UT_Window_showCenterWindow, UT_Window_showCenterWindow_003)
 {
     Window * window1 = new Window();
 
@@ -78,7 +168,7 @@ TEST_F(test_window, showCenterWindow_03)
 
 
 //initTitlebar
-TEST_F(test_window, initTitlebar)
+TEST(UT_Window_initTitlebar, UT_Window_initTitlebar)
 {
     Window * window1 = new Window();
     window1->initTitlebar();
@@ -89,9 +179,9 @@ TEST_F(test_window, initTitlebar)
     window1->deleteLater();
 
 
-    
+
 }
-TEST_F(test_window, checkBlockShutdown)
+TEST(UT_Window_checkBlockShutdown, UT_Window_checkBlockShutdown)
 {
     Window * window1 = new Window();
     EXPECT_NE(window1->checkBlockShutdown(),true);
@@ -100,10 +190,10 @@ TEST_F(test_window, checkBlockShutdown)
 
     window1->deleteLater();
 
-    
+
 }
 //getTabIndex
-TEST_F(test_window, getTabIndex)
+TEST(UT_Window_getTabIndex, UT_Window_getTabIndex)
 {
     Window * window1 = new Window();
     EXPECT_NE(window1->getTabIndex("aadd"),1);
@@ -112,7 +202,7 @@ TEST_F(test_window, getTabIndex)
 
     window1->deleteLater();
 
-    
+
 }
 int *stub1_exec()
 {
@@ -120,7 +210,7 @@ int *stub1_exec()
     return nullptr;
 }
 //activeTab
-TEST_F(test_window, activeTab)
+TEST(UT_Window_activeTab, UT_Window_activeTab)
 {
     Window * window1 = new Window();
     window1->activeTab(0);
@@ -130,10 +220,10 @@ TEST_F(test_window, activeTab)
 
     window1->deleteLater();
 
-    
+
 }
 //addTab
-TEST_F(test_window, addTab)
+TEST(UT_Window_addTab, UT_Window_addTab)
 {
     Window * window1 = new Window();
     window1->addTab("aabb",true);
@@ -143,51 +233,120 @@ TEST_F(test_window, addTab)
 
     window1->deleteLater();
 
-    
+
 }
 //openFile
-//TEST_F(test_window, openFile)
-//{
-//    window = new Window();
-//    EditWrapper * a = new EditWrapper();
-//    window->addTabWithWrapper(a,"aa","aad","aadd",0);
-//    window->addTabWithWrapper(a,"bb","aad","aadd",1);
-//    Stub stub;
-//    stub.set((int (QDialog::*)(const QPoint &, int *))ADDR(QDialog, exec), stub1_exec);
-//    // stub.set((QAction *(QMenu::*)(const QPoint &, QAction *))ADDR(QMenu, exec), stub_exec);
-//    window->openFile();
-//    
-//}
-TEST_F(test_window, saveFile)
+TEST(UT_Window_openFile, UT_Window_openFile_001)
+{
+    Window* window = new Window();
+    EditWrapper * a = new EditWrapper();
+    window->addTabWithWrapper(a,"aa","aad","aadd",0);
+    window->addTabWithWrapper(a,"bb","aad","aadd",1);
+
+    typedef int (*Fptr)(QDialog *);
+    Fptr fptr = (Fptr)(&QDialog::exec);
+    Stub s1;
+    s1.set(fptr,QDialog_exec_stub);
+
+    exec_ret = 1;
+
+    window->openFile();
+
+    EXPECT_NE(window,nullptr);
+    EXPECT_NE(a,nullptr);
+    window->deleteLater();
+    a->deleteLater();
+
+}
+
+TEST(UT_Window_openFile, UT_Window_openFile_002)
+{
+    Window* window = new Window();
+    EditWrapper * a = new EditWrapper();
+    window->addTabWithWrapper(a,"aa","aad","aadd",0);
+    window->addTabWithWrapper(a,"bb","aad","aadd",1);
+
+    typedef int (*Fptr)(QDialog *);
+    Fptr fptr = (Fptr)(&QDialog::exec);
+    Stub s1;
+    s1.set(fptr,QDialog_exec_stub);
+
+    exec_ret = 0;
+
+    window->openFile();
+
+    EXPECT_NE(window,nullptr);
+    EXPECT_NE(a,nullptr);
+    window->deleteLater();
+    a->deleteLater();
+
+}
+
+TEST(UT_Window_saveFile, UT_Window_saveFile_001)
 {
     Window * window1 = new Window();
-    EXPECT_NE(window1->saveFile(),true);
+
+    isDraft=false;
+    qfileinfo_exists=true;
+    editwrapper_istemfile=false;//-
+    editwrapper_saveFile=true;
+    window_currentWrapper = new EditWrapper;
+
+    Stub s0;s0.set(ADDR(Window,currentWrapper),Window_currentWrapper_stub);
+    Stub s1;s1.set(ADDR(EditWrapper,isDraftFile),EditWrapper_isDraftFile_stub);
+    Stub s2;s2.set((bool (QFileInfo::*)(void) const)ADDR(QFileInfo,exists),QFileInfo_exists_stub);
+    Stub s3;s3.set(ADDR(EditWrapper,isTemFile),EditWrapper_isTemFile_stub);
+    Stub s4;s4.set(ADDR(EditWrapper,saveFile),EditWrapper_saveFile_stub);
+    Stub s5;s5.set(ADDR(Window,saveAsFile),Window_saveAsFile_stub);
+
+    typedef QFileDevice::Permissions (*Fptr)(QFile*);
+    Fptr fptr = (Fptr)((QFileDevice::Permissions(QFile::*)() const )&QFile::permissions);
+    Stub s6;s6.set(fptr,QFile_permissions_stub);
+
+    Stub s7;s7.set(ADDR(Window,updateSabeAsFileNameTemp),Window_updateSabeAsFileNameTemp_stub);
+
+    window1->saveFile();
+
 
     EXPECT_NE(window1,nullptr);
-
     window1->deleteLater();
-
-    
+   window_currentWrapper->deleteLater();
 }
 
-int exec_ret = 1;
-int exec_stub()
+
+TEST(UT_Window_saveFile, UT_Window_saveFile_002)
 {
-    return exec_ret;
+    Window * window1 = new Window();
+
+    isDraft=false;
+    qfileinfo_exists=true;
+    editwrapper_istemfile=true;//-
+    editwrapper_saveFile=true;
+    window_currentWrapper = new EditWrapper;
+
+    Stub s0;s0.set(ADDR(Window,currentWrapper),Window_currentWrapper_stub);
+    Stub s1;s1.set(ADDR(EditWrapper,isDraftFile),EditWrapper_isDraftFile_stub);
+    Stub s2;s2.set((bool (QFileInfo::*)(void) const)ADDR(QFileInfo,exists),QFileInfo_exists_stub);
+    Stub s3;s3.set(ADDR(EditWrapper,isTemFile),EditWrapper_isTemFile_stub);
+    Stub s4;s4.set(ADDR(EditWrapper,saveFile),EditWrapper_saveFile_stub);
+    Stub s5;s5.set(ADDR(Window,saveAsFile),Window_saveAsFile_stub);
+
+    typedef QFileDevice::Permissions (*Fptr)(QFile*);
+    Fptr fptr = (Fptr)((QFileDevice::Permissions(QFile::*)() const )&QFile::permissions);
+    Stub s6;s6.set(fptr,QFile_permissions_stub);
+
+    Stub s7;s7.set(ADDR(Window,updateSabeAsFileNameTemp),Window_updateSabeAsFileNameTemp_stub);
+
+    window1->saveFile();
+
+
+    EXPECT_NE(window1,nullptr);
+    window1->deleteLater();
+    window_currentWrapper->deleteLater();
 }
 
-bool isDraft=false;
-bool isDraftFile_stub()
-{
-    return isDraft;
-}
 
-bool isModified=false;
-bool isModified_stub()
-{
-    return isModified;
-}
-TEST_F(test_window, closeTab_01)
+TEST(UT_Window_closeTab, UT_Window_closeTab_001)
 {
     Window * window = new Window();
     window->addBlankTab("aabb");
@@ -195,12 +354,12 @@ TEST_F(test_window, closeTab_01)
     typedef int (*Fptr)(QDialog *);
     Fptr fptr = (Fptr)(&QDialog::exec);
     Stub stub;
-    stub.set(fptr,exec_stub);
+    stub.set(fptr,QDialog_exec_stub);
 
     Stub s2;
-    s2.set(ADDR(EditWrapper,isDraftFile),isDraftFile_stub);
+    s2.set(ADDR(EditWrapper,isDraftFile),EditWrapper_isDraftFile_stub);
     Stub s3;
-    s3.set(ADDR(EditWrapper,isModified),isModified_stub);
+    s3.set(ADDR(EditWrapper,isModified),EditWrapper_isModified_stub);
 
 
     isDraft = true;
@@ -213,10 +372,9 @@ TEST_F(test_window, closeTab_01)
 
     window->deleteLater();
 
-    
 }
 
-TEST_F(test_window, closeTab_02)
+TEST(UT_Window_closeTab, UT_Window_closeTab_002)
 {
     Window * window = new Window();
     window->addBlankTab("aabb");
@@ -224,12 +382,12 @@ TEST_F(test_window, closeTab_02)
     typedef int (*Fptr)(QDialog *);
     Fptr fptr = (Fptr)(&QDialog::exec);
     Stub stub;
-    stub.set(fptr,exec_stub);
+    stub.set(fptr,QDialog_exec_stub);
 
     Stub s2;
-    s2.set(ADDR(EditWrapper,isDraftFile),isDraftFile_stub);
+    s2.set(ADDR(EditWrapper,isDraftFile),EditWrapper_isDraftFile_stub);
     Stub s3;
-    s3.set(ADDR(EditWrapper,isModified),isModified_stub);
+    s3.set(ADDR(EditWrapper,isModified),EditWrapper_isModified_stub);
 
     isDraft = true;
     isModified = true;
@@ -242,7 +400,7 @@ TEST_F(test_window, closeTab_02)
 }
 
 
-TEST_F(test_window, closeTab_03)
+TEST(UT_Window_closeTab, UT_Window_closeTab_003)
 {
     Window * window = new Window();
     window->addBlankTab("aabb");
@@ -250,12 +408,12 @@ TEST_F(test_window, closeTab_03)
     typedef int (*Fptr)(QDialog *);
     Fptr fptr = (Fptr)(&QDialog::exec);
     Stub stub;
-    stub.set(fptr,exec_stub);
+    stub.set(fptr,QDialog_exec_stub);
 
     Stub s2;
-    s2.set(ADDR(EditWrapper,isDraftFile),isDraftFile_stub);
+    s2.set(ADDR(EditWrapper,isDraftFile),EditWrapper_isDraftFile_stub);
     Stub s3;
-    s3.set(ADDR(EditWrapper,isModified),isModified_stub);
+    s3.set(ADDR(EditWrapper,isModified),EditWrapper_isModified_stub);
 
     isDraft = true;
     isModified = true;
@@ -267,7 +425,7 @@ TEST_F(test_window, closeTab_03)
     window->deleteLater();
 }
 
-TEST_F(test_window, closeTab_04)
+TEST(UT_Window_closeTab, UT_Window_closeTab_004)
 {
     Window * window = new Window();
     window->addBlankTab("aabb");
@@ -275,12 +433,12 @@ TEST_F(test_window, closeTab_04)
     typedef int (*Fptr)(QDialog *);
     Fptr fptr = (Fptr)(&QDialog::exec);
     Stub stub;
-    stub.set(fptr,exec_stub);
+    stub.set(fptr,QDialog_exec_stub);
 
     Stub s2;
-    s2.set(ADDR(EditWrapper,isDraftFile),isDraftFile_stub);
+    s2.set(ADDR(EditWrapper,isDraftFile),EditWrapper_isDraftFile_stub);
     Stub s3;
-    s3.set(ADDR(EditWrapper,isModified),isModified_stub);
+    s3.set(ADDR(EditWrapper,isModified),EditWrapper_isModified_stub);
 
     isDraft = false;
     isModified = true;
@@ -292,7 +450,7 @@ TEST_F(test_window, closeTab_04)
 }
 
 
-TEST_F(test_window, closeTab_05)
+TEST(UT_Window_closeTab, UT_Window_closeTab_005)
 {
     Window * window = new Window();
     window->addBlankTab("aabb");
@@ -300,12 +458,12 @@ TEST_F(test_window, closeTab_05)
     typedef int (*Fptr)(QDialog *);
     Fptr fptr = (Fptr)(&QDialog::exec);
     Stub stub;
-    stub.set(fptr,exec_stub);
+    stub.set(fptr,QDialog_exec_stub);
 
     Stub s2;
-    s2.set(ADDR(EditWrapper,isDraftFile),isDraftFile_stub);
+    s2.set(ADDR(EditWrapper,isDraftFile),EditWrapper_isDraftFile_stub);
     Stub s3;
-    s3.set(ADDR(EditWrapper,isModified),isModified_stub);
+    s3.set(ADDR(EditWrapper,isModified),EditWrapper_isModified_stub);
 
     isDraft = false;
     isModified = true;
@@ -317,19 +475,63 @@ TEST_F(test_window, closeTab_05)
 }
 
 //saveAsFileToDisk
-TEST_F(test_window, saveAsFileToDisk)
+TEST(UT_Window_saveAsFileToDisk, UT_Window_saveAsFileToDisk_001)
 {
     Window * window1 = new Window();
+
+    window_currentWrapper = new EditWrapper;
+    exec_ret=0;
+    editwrapper_saveFile = true;
+    isDraft=true;
+
+    Stub s0;s0.set(ADDR(Window,currentWrapper),Window_currentWrapper_stub);
+    typedef int (*Fptr)(QFileDialog *);
+    Fptr fptr = (Fptr)(&QFileDialog::exec);
+    Stub s1;
+    s1.set(fptr,QDialog_exec_stub);
+    Stub s2;s2.set(ADDR(EditWrapper,saveFile),EditWrapper_saveFile_stub);
+    Stub s3;s3.set(ADDR(EditWrapper,updateSaveAsFileName),Window_updateSabeAsFileNameTemp_stub);
+    Stub s4;s4.set(ADDR(EditWrapper,isDraftFile),EditWrapper_isDraftFile_stub);
+
     EXPECT_NE(window1->saveAsFileToDisk(),"1");
 
     EXPECT_NE(window1,nullptr);
 
     window1->deleteLater();
+    window_currentWrapper->deleteLater();
 
-    
+
+}
+
+TEST(UT_Window_saveAsFileToDisk, UT_Window_saveAsFileToDisk_002)
+{
+    Window * window1 = new Window();
+
+    window_currentWrapper = new EditWrapper;
+    exec_ret=1;
+    editwrapper_saveFile = true;
+    isDraft=false;
+
+
+    Stub s0;s0.set(ADDR(Window,currentWrapper),Window_currentWrapper_stub);
+    typedef int (*Fptr)(QFileDialog *);
+    Fptr fptr = (Fptr)(&QFileDialog::exec);
+    Stub s1;s1.set(fptr,QDialog_exec_stub);
+    Stub s2;s2.set(ADDR(EditWrapper,saveFile),EditWrapper_saveFile_stub);
+    Stub s3;s3.set(ADDR(Window,updateSaveAsFileName),Window_updateSabeAsFileNameTemp_stub);
+    Stub s4;s4.set(ADDR(EditWrapper,isDraftFile),EditWrapper_isDraftFile_stub);
+
+
+    EXPECT_NE(window1->saveAsFileToDisk(),"1");
+
+    EXPECT_NE(window1,nullptr);
+    window1->deleteLater();
+    window_currentWrapper->deleteLater();
+
+
 }
 //saveBlankFileToDisk
-TEST_F(test_window, saveBlankFileToDisk)
+TEST(UT_Window_saveBlankFileToDisk, UT_Window_saveBlankFileToDisk)
 {
     Window * window1 = new Window();
     EXPECT_NE(window1->saveBlankFileToDisk(),"1");
@@ -338,24 +540,58 @@ TEST_F(test_window, saveBlankFileToDisk)
 
     window1->deleteLater();
 
-    
+
 }
 //saveAsOtherTabFile
-TEST_F(test_window, saveAsOtherTabFile)
+TEST(UT_Window_saveAsOtherTabFile, UT_Window_saveAsOtherTabFile_001)
 {
-//    Window * window = StartManager::instance()->createWindow();
-//    window->addBlankTab("");
-//    window->addBlankTab("");
-//    window->addBlankTab("");
-//    EditWrapper *wrapper = window->currentWrapper();
-//    window->saveAsOtherTabFile(wrapper);
-////    delete window;
-//    window = nullptr;
+    Window * window = StartManager::instance()->createWindow();
+    window->addBlankTab("");
+    window->addBlankTab("");
+    window->addBlankTab("");
+    EditWrapper *wrapper = window->currentWrapper();
 
-    
+    exec_ret=1;
+    isDraft=false;
+
+    typedef int (*Fptr)(QFileDialog *);
+    Fptr fptr = (Fptr)(&QFileDialog::exec);
+    Stub s1;s1.set(fptr,QDialog_exec_stub);
+    Stub s4;s4.set(ADDR(EditWrapper,isDraftFile),EditWrapper_isDraftFile_stub);
+
+    window->saveAsOtherTabFile(wrapper);
+
+
+    EXPECT_NE(window,nullptr);
+    window->deleteLater();
+
 }
+
+TEST(UT_Window_saveAsOtherTabFile, UT_Window_saveAsOtherTabFile_002)
+{
+    Window * window = StartManager::instance()->createWindow();
+    window->addBlankTab("");
+    window->addBlankTab("");
+    window->addBlankTab("");
+    EditWrapper *wrapper = window->currentWrapper();
+
+    exec_ret=1;
+    isDraft=true;
+
+    typedef int (*Fptr)(QFileDialog *);
+    Fptr fptr = (Fptr)(&QFileDialog::exec);
+    Stub s1;s1.set(fptr,QDialog_exec_stub);
+    Stub s4;s4.set(ADDR(EditWrapper,isDraftFile),EditWrapper_isDraftFile_stub);
+
+    window->saveAsOtherTabFile(wrapper);
+
+    EXPECT_NE(window,nullptr);
+    window->deleteLater();
+
+}
+
 //changeSettingDialogComboxFontNumber
-TEST_F(test_window, changeSettingDialogComboxFontNumber)
+TEST(UT_Window_changeSettingDialogComboxFontNumber, UT_Window_changeSettingDialogComboxFontNumber)
 {
     EditWrapper * e = new EditWrapper();
     Window * window1 = new Window();
@@ -367,10 +603,10 @@ TEST_F(test_window, changeSettingDialogComboxFontNumber)
     window1->deleteLater();
     e->deleteLater();
 
-    
+
 }
 //popupFindBar
-TEST_F(test_window, popupFindBar)
+TEST(UT_Window_popupFindBar, UT_Window_popupFindBar)
 {
     Window * window1 = new Window();
     EditWrapper *pEditWrapper = new EditWrapper();
@@ -390,11 +626,11 @@ TEST_F(test_window, popupFindBar)
     pEditWrapper->deleteLater();
 
 
-    
+
 }
 
 //popupReplaceBar
-TEST_F(test_window, popupReplaceBar)
+TEST(UT_Window_popupReplaceBar, UT_Window_popupReplaceBar)
 {
     Window * window1 = new Window();
     EditWrapper *pEditWrapper = new EditWrapper();
@@ -416,7 +652,7 @@ TEST_F(test_window, popupReplaceBar)
 }
 
 //popupJumpLineBar
-TEST_F(test_window, popupJumpLineBar)
+TEST(UT_Window_popupJumpLineBar, UT_Window_popupJumpLineBar)
 {
     Window * window1 = new Window();
     window1->popupJumpLineBar();
@@ -438,41 +674,49 @@ TEST_F(test_window, popupJumpLineBar)
     EXPECT_NE(pEditWrapper,nullptr);
     pEditWrapper->deleteLater();
 
-    
+
 }
 
 //updateJumpLineBar
-TEST_F(test_window, updateJumpLineBar)
+TEST(UT_Window_updateJumpLineBar, UT_Window_updateJumpLineBar)
 {
 //    Window * window = new Window();
 //    window->updateJumpLineBar();
 
 
-    
+
 }
 
 //popupSettingsDialog
-TEST_F(test_window, popupSettingsDialog)
+TEST(UT_Window_popupSettingsDialog, UT_Window_popupSettingsDialog)
 {
-//    Window * window = new Window();
-//    window->popupSettingsDialog();
-//    delete window;
-//    window = nullptr;
+    Window * window = new Window();
 
-    
+    exec_ret=1;
+
+    typedef int (*Fptr)(DSettingsDialog *);
+    Fptr fptr = (Fptr)(&DSettingsDialog::exec);
+    Stub s1;s1.set(fptr,QDialog_exec_stub);
+
+    window->popupSettingsDialog();
+
+
+    ASSERT_NE(window,nullptr);
+    window->deleteLater();
+
 }
 //popupPrintDialog
 
-TEST_F(test_window, popupPrintDialog)
+TEST(UT_Window_popupPrintDialog, UT_Window_popupPrintDialog)
 {
 //    Window * window = new Window();
 //    window->popupPrintDialog();
 //    delete window;
 //    window = nullptr;
 
-    
+
 }
-TEST_F(test_window, popupThemePanel)
+TEST(UT_Window_popupThemePanel, UT_Window_popupThemePanel)
 {
     Window * window1 = new Window();
     window1->popupThemePanel();
@@ -482,10 +726,10 @@ TEST_F(test_window, popupThemePanel)
     EXPECT_NE(window1,nullptr);
     window1->deleteLater();
 
-    
+
 }
 //toggleFullscreen
-TEST_F(test_window, toggleFullscreen)
+TEST(UT_Window_toggleFullscreen, UT_Window_toggleFullscreen)
 {
     Window * window1 = new Window();
     window1->toggleFullscreen();
@@ -493,32 +737,37 @@ TEST_F(test_window, toggleFullscreen)
     EXPECT_NE(window1,nullptr);
     window1->deleteLater();
 
-    
+
 }
-TEST_F(test_window, remberPositionSave)
+TEST(UT_Window_remberPositionSave, UT_Window_remberPositionSave)
 {
 //    Window * window = new Window();
 //    window->remberPositionSave();
 //    delete window;
 //    window = nullptr;
 
-    
+
 }
 //remberPositionRestore
-TEST_F(test_window, remberPositionRestore)
+TEST(UT_Window_remberPositionRestore, UT_Window_remberPositionRestore)
 {
     Window * window1 = new Window();
-    window1->remberPositionRestore();
 
-    EXPECT_NE(window1->m_remberPositionFilePath.isEmpty(),false);
+
+    EditWrapper* wrapper = new EditWrapper;
+    window1->m_remberPositionFilePath = "1234";
+    window1->m_wrappers["1234"] = wrapper;
+
+
+    window1->remberPositionRestore();
 
     EXPECT_NE(window1,nullptr);
     window1->deleteLater();
+    wrapper->deleteLater();
 
-    
 }
 //displayShortcuts
-TEST_F(test_window, displayShortcuts)
+TEST(UT_Window_displayShortcuts, UT_Window_displayShortcuts)
 {
     Window * window1 = new Window();
     window1->displayShortcuts();
@@ -528,21 +777,22 @@ TEST_F(test_window, displayShortcuts)
     EXPECT_NE(window1,nullptr);
     window1->deleteLater();
 
-    
+
 }
 //setChildrenFocus
-TEST_F(test_window, setChildrenFocus)
+TEST(UT_Window_setChildrenFocus, UT_Window_setChildrenFocus)
 {
     Window * window1 = new Window();
     window1->setChildrenFocus(false);
+    window1->setChildrenFocus(true);
 
     EXPECT_NE(window1,nullptr);
     window1->deleteLater();
 
-    
+
 }
 //addBlankTab
-TEST_F(test_window, addBlankTab)
+TEST(UT_Window_addBlankTab, UT_Window_addBlankTab)
 {
     Window * window1 = new Window();
     window1->addBlankTab("aabb");
@@ -552,13 +802,13 @@ TEST_F(test_window, addBlankTab)
     EXPECT_NE(window1,nullptr);
     window1->deleteLater();
 
-    
+
 }
 //handleTabCloseRequested
-TEST_F(test_window, addTabWithWrapper)
+TEST(UT_Window_addTabWithWrapper, UT_Window_addTabWithWrapper)
 {
-    edit = new EditWrapper();
-    window = new Window();
+    EditWrapper* edit = new EditWrapper();
+    Window *window = new Window();
     window->addTabWithWrapper(edit,"aabb","aabb","aabb");
 
     EXPECT_NE(window->m_tabbar->count(),0);
@@ -568,20 +818,20 @@ TEST_F(test_window, addTabWithWrapper)
     EXPECT_NE(edit,nullptr);
     edit->deleteLater();
 
-    
+
 }
-TEST_F(test_window, handleTabCloseRequested)
+TEST(UT_Window_handleTabCloseRequested, UT_Window_handleTabCloseRequested)
 {
 //    StartManager::instance()->createWindow()->addTabWithWrapper(edit,"aabb","aabb",0);
 //    StartManager::instance()->createWindow()->handleTabCloseRequested(0);
 
-    
+
 }
 //handleTabsClosed
-TEST_F(test_window, handleTabsClosed)
+TEST(UT_Window_handleTabsClosed, UT_Window_handleTabsClosed)
 {
     QStringList aa;
-    window = new Window();
+    Window *window = new Window();
     window->handleTabsClosed(aa);
 
     EXPECT_NE(window->m_tabbar->count(),1);
@@ -589,13 +839,13 @@ TEST_F(test_window, handleTabsClosed)
     EXPECT_NE(window,nullptr);
     window->deleteLater();
 
-    
+
 }
 //handleCurrentChanged
-TEST_F(test_window, handleCurrentChanged)
+TEST(UT_Window_handleCurrentChanged, UT_Window_handleCurrentChanged)
 {
     QStringList aa;
-    window = new Window();
+    Window *window = new Window();
     window->handleCurrentChanged(0);
 
     EXPECT_NE(window->m_findBar->isVisible(),true);
@@ -604,20 +854,20 @@ TEST_F(test_window, handleCurrentChanged)
     window->deleteLater();
 }
 //slot_setTitleFocus
-TEST_F(test_window, slot_setTitleFocus)
+TEST(UT_Window_slot_setTitleFocus, UT_Window_slot_setTitleFocus)
 {
 //    QStringList aa;
     //window = new Window();
 //    StartManager::instance()->createWindow()->slot_setTitleFocus();
     //window->slot_setTitleFocus();
 
-    
+
 }
 //resizeEvent
-TEST_F(test_window, resizeEvent)
+TEST(UT_Window_resizeEvent, UT_Window_resizeEvent)
 {
     QStringList aa;
-    window = new Window();
+    Window *window = new Window();
     QResizeEvent * eve= new QResizeEvent(QSize(100,100),QSize(50,50));
     window->resizeEvent(eve);
 
@@ -625,26 +875,143 @@ TEST_F(test_window, resizeEvent)
     window->deleteLater();
     delete eve;eve=nullptr;
 
-    
+
 }
 //closeEvent
-TEST_F(test_window, keyPressEvent)
+TEST(UT_Window_keyPressEvent, UT_Window_keyPressEvent_001)
 {
     QStringList aa;
-    window = new Window();
-    QKeyEvent * eve;
-    //window->keyPressEvent(eve);
+    Window *window = new Window();
+    window->m_settings = new Settings;
+    QKeyEvent * eve =nullptr;
+    utils_getkeyshortcut = Utils::getKeyshortcutFromKeymap(window->m_settings, "window", "decrementfontsize");
+    editwrapper_texteditor = new TextEdit;
+
+    Stub s1;s1.set(ADDR(Utils,getKeyshortcut),Utils_getKeyshortcut_stub);
+    Stub s2;s2.set(ADDR(EditWrapper,textEditor),EditWrapper_textEditor_stub);
+
+    window->keyPressEvent(eve);
 
     EXPECT_NE(window,nullptr);
     window->deleteLater();
-
-    
+    window->m_settings->deleteLater();
+    editwrapper_texteditor->deleteLater();
 }
-//hideEvent
-TEST_F(test_window, hideEvent)
+
+
+TEST(UT_Window_keyPressEvent, UT_Window_keyPressEvent_002)
 {
     QStringList aa;
-    window = new Window();
+    Window *window = new Window();
+    window->m_settings = new Settings;
+    QKeyEvent * eve =nullptr;
+    utils_getkeyshortcut = "Alt+4";
+    editwrapper_texteditor = new TextEdit;
+
+    Stub s1;s1.set(ADDR(Utils,getKeyshortcut),Utils_getKeyshortcut_stub);
+    Stub s2;s2.set(ADDR(EditWrapper,textEditor),EditWrapper_textEditor_stub);
+
+    window->keyPressEvent(eve);
+
+    EXPECT_NE(window,nullptr);
+    window->deleteLater();
+    window->m_settings->deleteLater();
+    editwrapper_texteditor->deleteLater();
+
+}
+
+
+TEST(UT_Window_keyPressEvent, UT_Window_keyPressEvent_003)
+{
+    QStringList aa;
+    Window *window = new Window();
+    window->m_settings = new Settings;
+    QKeyEvent * eve =nullptr;
+    utils_getkeyshortcut = Utils::getKeyshortcutFromKeymap(window->m_settings, "window", "incrementfontsize");
+    editwrapper_texteditor = new TextEdit;
+
+    Stub s1;s1.set(ADDR(Utils,getKeyshortcut),Utils_getKeyshortcut_stub);
+    Stub s2;s2.set(ADDR(EditWrapper,textEditor),EditWrapper_textEditor_stub);
+
+    window->keyPressEvent(eve);
+
+    EXPECT_NE(window,nullptr);
+    window->deleteLater();
+    window->m_settings->deleteLater();
+    editwrapper_texteditor->deleteLater();
+
+}
+
+TEST(UT_Window_keyPressEvent, UT_Window_keyPressEvent_004)
+{
+    QStringList aa;
+    Window *window = new Window();
+    window->m_settings = new Settings;
+    QKeyEvent * eve =nullptr;
+    utils_getkeyshortcut = Utils::getKeyshortcutFromKeymap(window->m_settings, "window", "decrementfontsize");
+    editwrapper_texteditor = new TextEdit;
+
+    Stub s1;s1.set(ADDR(Utils,getKeyshortcut),Utils_getKeyshortcut_stub);
+    Stub s2;s2.set(ADDR(EditWrapper,textEditor),EditWrapper_textEditor_stub);
+
+    window->keyPressEvent(eve);
+
+    EXPECT_NE(window,nullptr);
+    window->deleteLater();
+    window->m_settings->deleteLater();
+    editwrapper_texteditor->deleteLater();
+
+}
+
+
+TEST(UT_Window_keyPressEvent, UT_Window_keyPressEvent_005)
+{
+    QStringList aa;
+    Window *window = new Window();
+    window->m_settings = new Settings;
+    QKeyEvent * eve =nullptr;
+    utils_getkeyshortcut = Utils::getKeyshortcutFromKeymap(window->m_settings, "window", "resetfontsize");
+    editwrapper_texteditor = new TextEdit;
+
+    Stub s1;s1.set(ADDR(Utils,getKeyshortcut),Utils_getKeyshortcut_stub);
+    Stub s2;s2.set(ADDR(EditWrapper,textEditor),EditWrapper_textEditor_stub);
+
+    window->keyPressEvent(eve);
+
+    EXPECT_NE(window,nullptr);
+    window->deleteLater();
+    window->m_settings->deleteLater();
+    editwrapper_texteditor->deleteLater();
+
+}
+
+TEST(UT_Window_keyPressEvent, UT_Window_keyPressEvent_006)
+{
+    QStringList aa;
+    Window *window = new Window();
+    window->m_settings = new Settings;
+    QKeyEvent * eve =nullptr;
+    utils_getkeyshortcut = Utils::getKeyshortcutFromKeymap(window->m_settings, "window", "togglefullscreen");
+    editwrapper_texteditor = new TextEdit;
+
+    Stub s1;s1.set(ADDR(Utils,getKeyshortcut),Utils_getKeyshortcut_stub);
+    Stub s2;s2.set(ADDR(EditWrapper,textEditor),EditWrapper_textEditor_stub);
+    Stub s3;s3.set(ADDR(Utils,getKeyshortcutFromKeymap),Utils_getKeyshortcutFromKeymap_stub);
+
+    window->keyPressEvent(eve);
+
+    EXPECT_NE(window,nullptr);
+    window->deleteLater();
+    window->m_settings->deleteLater();
+    editwrapper_texteditor->deleteLater();
+}
+
+
+//hideEvent
+TEST(UT_Window_hideEvent, UT_Window_hideEvent)
+{
+    QStringList aa;
+    Window *window = new Window();
     QHideEvent * eve;
     window->hideEvent(eve);
 
@@ -656,23 +1023,30 @@ TEST_F(test_window, hideEvent)
 
 //TextEdit
 //void backupFile();
-TEST_F(test_window, backupFile)
+TEST(UT_Window_backupFile, UT_Window_backupFile)
 {
-    window = new Window();
+    Window *window = new Window();
+
+    EditWrapper* e1 = new EditWrapper;
+    EditWrapper* e2 = new EditWrapper;
+    window->m_wrappers["1"]=e1;
+    window->m_wrappers["2"]=e2;
+
+    Stub s1;s1.set(ADDR(StartManager,getFileTabInfo),StartManager_getFileTabInfo_stub);
+
     window->backupFile();
 
-    EXPECT_NE(window->m_qlistTemFile.isEmpty(),false);
 
     EXPECT_NE(window,nullptr);
     window->deleteLater();
 
-    
+
 }
 
 //void closeAllFiles();
-TEST_F(test_window, closeAllFiles)
+TEST(UT_Window_closeAllFiles, UT_Window_closeAllFiles)
 {
-    window = new Window();
+    Window *window = new Window();
     EXPECT_NE(window->closeAllFiles(),false);
 
     EXPECT_NE(window->m_tabbar->count(),1);
@@ -680,13 +1054,13 @@ TEST_F(test_window, closeAllFiles)
     EXPECT_NE(window,nullptr);
     window->deleteLater();
 
-    
+
 }
 
 //void addTemFileTab(QString qstrPath,QString qstrName,QString qstrTruePath,bool bIsTemFile = false);
-TEST_F(test_window, addTemFileTab)
+TEST(UT_Window_addTemFileTab, UT_Window_addTemFileTab)
 {
-    window = new Window();
+    Window *window = new Window();
     window->addTemFileTab("aa","bb","cc");
 
     EXPECT_NE(window->m_tabbar->count(),1);
@@ -694,29 +1068,29 @@ TEST_F(test_window, addTemFileTab)
     EXPECT_NE(window,nullptr);
     window->deleteLater();
 
-    
+
 }
 //Window(DMainWindow *parent = nullptr);
 //~Window() override;
 
 ////跟新文件修改状态
 //void updateModifyStatus(const QString &path, bool isModified);
-TEST_F(test_window, updateModifyStatus)
+TEST(UT_Window_updateModifyStatus, UT_Window_updateModifyStatus)
 {
-    window = new Window();
+    Window *window = new Window();
     window->updateModifyStatus("aa",false);
     window->updateModifyStatus("aa",true);
 
     EXPECT_NE(window,nullptr);
     window->deleteLater();
 
-    
+
 }
 ////跟新tab文件名称
 //void updateSaveAsFileName(QString strOldFilePath, QString strNewFilePath);
-TEST_F(test_window, updateSaveAsFileName)
+TEST(UT_Window_updateSaveAsFileName, UT_Window_updateSaveAsFileName)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
     window->addTabWithWrapper(a,"bb","aad","aadd",1);
@@ -726,21 +1100,21 @@ TEST_F(test_window, updateSaveAsFileName)
 
     EXPECT_NE(window,nullptr);
     window->deleteLater();
-    
+
 }
 
 //int getTabIndex(const QString &file);
 //void activeTab(int index);
 
 //Tabbar* getTabbar();
-TEST_F(test_window, getTabbar)
+TEST(UT_Window_getTabbar, UT_Window_getTabbar)
 {
-    window = new Window();
+    Window *window = new Window();
     EXPECT_NE(window->getTabbar(),nullptr);
 
     EXPECT_NE(window,nullptr);
     window->deleteLater();
-    
+
 }
 
 //void addTab(const QString &filepath, bool activeTab = false);
@@ -748,44 +1122,44 @@ TEST_F(test_window, getTabbar)
 //                       const QString &tabName, int index = -1);
 //bool closeTab();
 //void restoreTab();
-TEST_F(test_window, restoreTab)
+TEST(UT_Window_restoreTab, UT_Window_restoreTab)
 {
-    window = new Window();
+    Window *window = new Window();
     window->restoreTab();
     EXPECT_NE(window->m_closeFileHistory.isEmpty(),false);
 
     EXPECT_NE(window,nullptr);
     window->deleteLater();
-    
+
 }
 
 //void clearBlack();
 
 //EditWrapper* createEditor();
-TEST_F(test_window, createEditor)
+TEST(UT_Window_createEditor, UT_Window_createEditor)
 {
-    window = new Window();
+    Window *window = new Window();
     EXPECT_NE(window->createEditor(),nullptr);
 
     EXPECT_NE(window,nullptr);
     window->deleteLater();
-    
+
 }
 //EditWrapper* currentWrapper();
-TEST_F(test_window, currentWrapper)
+TEST(UT_Window_currentWrapper, UT_Window_currentWrapper)
 {
-    window = new Window();
+    Window *window = new Window();
     EXPECT_EQ(window->currentWrapper(),nullptr);
 
     EXPECT_NE(window,nullptr);
     window->deleteLater();
-    
+
 }
 //EditWrapper* wrapper(const QString &filePath);
 //TextEdit* getTextEditor(const QString &filepath);
-TEST_F(test_window, getTextEditor)
+TEST(UT_Window_getTextEditor, UT_Window_getTextEditor)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
     window->addTabWithWrapper(a,"bb","aad","aadd",1);
@@ -795,12 +1169,12 @@ TEST_F(test_window, getTextEditor)
     window->deleteLater();
     EXPECT_NE(a,nullptr);
     a->deleteLater();
-    
+
 }
 //void focusActiveEditor();
-TEST_F(test_window, focusActiveEditor)
+TEST(UT_Window_focusActiveEditor, UT_Window_focusActiveEditor)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
     window->addTabWithWrapper(a,"bb","aad","aadd",1);
@@ -810,12 +1184,12 @@ TEST_F(test_window, focusActiveEditor)
     window->deleteLater();
     EXPECT_NE(a,nullptr);
     a->deleteLater();
-    
+
 }
 //void removeWrapper(const QString &filePath, bool isDelete = false);
-TEST_F(test_window, removeWrapper)
+TEST(UT_Window_removeWrapper, UT_Window_removeWrapper)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
     window->addTabWithWrapper(a,"bb","aad","aadd",1);
@@ -829,12 +1203,12 @@ TEST_F(test_window, removeWrapper)
     EXPECT_NE(a,nullptr);
     a->deleteLater();
 
-    
+
 }
 
-TEST_F(test_window, decrementFontSize)
+TEST(UT_Window_decrementFontSize, UT_Window_decrementFontSize)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->m_settings =Settings::instance();
     window->decrementFontSize();
@@ -843,12 +1217,12 @@ TEST_F(test_window, decrementFontSize)
     window->deleteLater();
     EXPECT_NE(a,nullptr);
     a->deleteLater();
-    
+
 }
 //void incrementFontSize();
-TEST_F(test_window, incrementFontSize)
+TEST(UT_Window_incrementFontSize, UT_Window_incrementFontSize)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->m_settings =Settings::instance();
     window->incrementFontSize();
@@ -858,12 +1232,12 @@ TEST_F(test_window, incrementFontSize)
     window->deleteLater();
     EXPECT_NE(a,nullptr);
     a->deleteLater();
-    
+
 }
 //void resetFontSize();
-TEST_F(test_window, resetFontSize)
+TEST(UT_Window_resetFontSize, UT_Window_resetFontSize)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->m_settings =Settings::instance();
     window->resetFontSize();
@@ -872,12 +1246,12 @@ TEST_F(test_window, resetFontSize)
     window->deleteLater();
     EXPECT_NE(a,nullptr);
     a->deleteLater();
-    
+
 }
 //void setFontSizeWithConfig(EditWrapper *editor);
-TEST_F(test_window, setFontSizeWithConfig)
+TEST(UT_Window_setFontSizeWithConfig, UT_Window_setFontSizeWithConfig)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->m_settings =Settings::instance();
     window->setFontSizeWithConfig(a);
@@ -888,7 +1262,7 @@ TEST_F(test_window, setFontSizeWithConfig)
     window->deleteLater();
     EXPECT_NE(a,nullptr);
     a->deleteLater();
-    
+
 }
 
 
@@ -901,9 +1275,9 @@ TEST_F(test_window, setFontSizeWithConfig)
 //void handleCurrentChanged(const int &index);
 
 //void handleJumpLineBarExit();
-TEST_F(test_window, handleJumpLineBarExit)
+TEST(UT_Window_handleJumpLineBarExit, UT_Window_handleJumpLineBarExit)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->m_settings =Settings::instance();
     window->handleJumpLineBarExit();
@@ -914,12 +1288,12 @@ TEST_F(test_window, handleJumpLineBarExit)
     a->deleteLater();
 
 
-    
+
 }
 //void handleJumpLineBarJumpToLine(const QString &filepath, int line, bool focusEditor);
-TEST_F(test_window, handleJumpLineBarJumpToLine)
+TEST(UT_Window_handleJumpLineBarJumpToLine, UT_Window_handleJumpLineBarJumpToLine)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
     window->addTabWithWrapper(a,"bb","aad","aadd",1);
@@ -935,13 +1309,13 @@ TEST_F(test_window, handleJumpLineBarJumpToLine)
     EXPECT_NE(a,nullptr);
     a->deleteLater();
 
-    
+
 }
 
 //void handleBackToPosition(const QString &file, int row, int column, int scrollOffset);
-TEST_F(test_window, handleBackToPosition)
+TEST(UT_Window_handleBackToPosition, UT_Window_handleBackToPosition)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
     window->addTabWithWrapper(a,"bb","aad","aadd",1);
@@ -954,13 +1328,13 @@ TEST_F(test_window, handleBackToPosition)
     window->deleteLater();
     EXPECT_NE(a,nullptr);
     a->deleteLater();
-    
+
 }
 
 //void handleFindNext();
-TEST_F(test_window, handleFindNextSearchKeyword)
+TEST(UT_Window_handleFindNextSearchKeyword, UT_Window_handleFindNextSearchKeyword)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
     window->addTabWithWrapper(a,"bb","aad","aadd",1);
@@ -973,12 +1347,12 @@ TEST_F(test_window, handleFindNextSearchKeyword)
     window->deleteLater();
     EXPECT_NE(a,nullptr);
     a->deleteLater();
-    
+
 }
 //void handleFindPrev();
-TEST_F(test_window, handleFindPrevSearchKeyword)
+TEST(UT_Window_handleFindPrevSearchKeyword, UT_Window_handleFindPrevSearchKeyword)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
     window->addTabWithWrapper(a,"bb","aad","aadd",1);
@@ -992,12 +1366,12 @@ TEST_F(test_window, handleFindPrevSearchKeyword)
     EXPECT_NE(a,nullptr);
     a->deleteLater();
 
-    
+
 }
 //void slotFindbarClose();
-TEST_F(test_window, slotFindbarClose)
+TEST(UT_Window_slotFindbarClose, UT_Window_slotFindbarClose)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
     window->addTabWithWrapper(a,"bb","aad","aadd",1);
@@ -1011,12 +1385,12 @@ TEST_F(test_window, slotFindbarClose)
     EXPECT_NE(a,nullptr);
     a->deleteLater();
 
-    
+
 }
 //void slotReplacebarClose();
-TEST_F(test_window, slotReplacebarClose)
+TEST(UT_Window_slotReplacebarClose, UT_Window_slotReplacebarClose)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
     window->addTabWithWrapper(a,"bb","aad","aadd",1);
@@ -1030,13 +1404,13 @@ TEST_F(test_window, slotReplacebarClose)
     EXPECT_NE(a,nullptr);
     a->deleteLater();
 
-    
+
 }
 
 //void handleReplaceAll(const QString &replaceText, const QString &withText);
-TEST_F(test_window, handleReplaceAll)
+TEST(UT_Window_handleReplaceAll, UT_Window_handleReplaceAll)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
     window->addTabWithWrapper(a,"bb","aad","aadd",1);
@@ -1048,12 +1422,12 @@ TEST_F(test_window, handleReplaceAll)
     window->deleteLater();
     EXPECT_NE(a,nullptr);
     a->deleteLater();
-    
+
 }
 //void handleReplaceNext(const QString &replaceText, const QString &withText);
-TEST_F(test_window, handleReplaceNext)
+TEST(UT_Window_handleReplaceNext, UT_Window_handleReplaceNext)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
     window->addTabWithWrapper(a,"bb","aad","aadd",1);
@@ -1068,12 +1442,12 @@ TEST_F(test_window, handleReplaceNext)
     window->deleteLater();
     EXPECT_NE(a,nullptr);
     a->deleteLater();
-    
+
 }
 //void handleReplaceRest(const QString &replaceText, const QString &withText);
-TEST_F(test_window, handleReplaceRest)
+TEST(UT_Window_handleReplaceRest, UT_Window_handleReplaceRest)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
     window->addTabWithWrapper(a,"bb","aad","aadd",1);
@@ -1084,12 +1458,12 @@ TEST_F(test_window, handleReplaceRest)
     window->deleteLater();
     EXPECT_NE(a,nullptr);
     a->deleteLater();
-    
+
 }
 //void handleReplaceSkip();
-TEST_F(test_window, handleReplaceSkip)
+TEST(UT_Window_handleReplaceSkip, UT_Window_handleReplaceSkip)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
     window->addTabWithWrapper(a,"bb","aad","aadd",1);
@@ -1100,13 +1474,13 @@ TEST_F(test_window, handleReplaceSkip)
     window->deleteLater();
     EXPECT_NE(a,nullptr);
     a->deleteLater();
-    
+
 }
 
 //void handleRemoveSearchKeyword();
-TEST_F(test_window, handleRemoveSearchKeyword)
+TEST(UT_Window_handleRemoveSearchKeyword, UT_Window_handleRemoveSearchKeyword)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
     window->addTabWithWrapper(a,"bb","aad","aadd",1);
@@ -1118,12 +1492,12 @@ TEST_F(test_window, handleRemoveSearchKeyword)
     window->deleteLater();
     EXPECT_NE(a,nullptr);
     a->deleteLater();
-    
+
 }
 //void handleUpdateSearchKeyword(QWidget *widget, const QString &file, const QString &keyword);
-TEST_F(test_window, handleUpdateSearchKeyword)
+TEST(UT_Window_handleUpdateSearchKeyword, UT_Window_handleUpdateSearchKeyword)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
     window->addTabWithWrapper(a,"bb","aad","aadd",1);
@@ -1134,7 +1508,7 @@ TEST_F(test_window, handleUpdateSearchKeyword)
     window->deleteLater();
     EXPECT_NE(a,nullptr);
     a->deleteLater();
-    
+
 }
 
 
@@ -1142,9 +1516,9 @@ TEST_F(test_window, handleUpdateSearchKeyword)
 //void removeBottomWidget();
 
 //void loadTheme(const QString &path);
-TEST_F(test_window, loadTheme)
+TEST(UT_Window_loadTheme, UT_Window_loadTheme)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
     window->addTabWithWrapper(a,"bb","aad","aadd",1);
@@ -1157,14 +1531,14 @@ TEST_F(test_window, loadTheme)
     window->deleteLater();
     EXPECT_NE(a,nullptr);
     a->deleteLater();
-    
+
 }
 
 
 //void showNewEditor(EditWrapper *wrapper);
-TEST_F(test_window, showNewEditor)
+TEST(UT_Window_showNewEditor, UT_Window_showNewEditor)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
     window->addTabWithWrapper(a,"bb","aad","aadd",1);
@@ -1175,12 +1549,12 @@ TEST_F(test_window, showNewEditor)
     window->deleteLater();
     EXPECT_NE(a,nullptr);
     a->deleteLater();
-    
+
 }
 //void showNotify(const QString &message);
-TEST_F(test_window, showNotify)
+TEST(UT_Window_showNotify, UT_Window_showNotify)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
     window->addTabWithWrapper(a,"bb","aad","aadd",1);
@@ -1191,12 +1565,12 @@ TEST_F(test_window, showNotify)
     window->deleteLater();
     EXPECT_NE(a,nullptr);
     a->deleteLater();
-    
+
 }
 //int getBlankFileIndex();
-TEST_F(test_window, getBlankFileIndex)
+TEST(UT_Window_getBlankFileIndex, UT_Window_getBlankFileIndex)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
     window->addBlankTab();
@@ -1208,13 +1582,13 @@ TEST_F(test_window, getBlankFileIndex)
     window->deleteLater();
     EXPECT_NE(a,nullptr);
     a->deleteLater();
-    
+
 }
 
 //DDialog *createDialog(const QString &title, const QString &content);
-TEST_F(test_window, createDialog)
+TEST(UT_Window_createDialog, UT_Window_createDialog)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
     window->addBlankTab();
@@ -1226,13 +1600,13 @@ TEST_F(test_window, createDialog)
     window->deleteLater();
     EXPECT_NE(a,nullptr);
     a->deleteLater();
-    
+
 }
 
 //void slotLoadContentTheme(DGuiApplicationHelper::ColorType themeType);
-TEST_F(test_window, slotLoadContentTheme)
+TEST(UT_Window_slotLoadContentTheme, UT_Window_slotLoadContentTheme)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
     window->addBlankTab();
@@ -1244,13 +1618,13 @@ TEST_F(test_window, slotLoadContentTheme)
     window->deleteLater();
     EXPECT_NE(a,nullptr);
     a->deleteLater();
-    
+
 }
 
 //void slotSettingResetTheme(const QString &path);
-TEST_F(test_window, slotSettingResetTheme)
+TEST(UT_Window_slotSettingResetTheme, UT_Window_slotSettingResetTheme)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
     window->addBlankTab();
@@ -1262,11 +1636,11 @@ TEST_F(test_window, slotSettingResetTheme)
     window->deleteLater();
     EXPECT_NE(a,nullptr);
     a->deleteLater();
-    
+
 }
 
 //void slotSigThemeChanged(const QString &path);
-TEST_F(test_window, slotSigThemeChanged)
+TEST(UT_Window_slotSigThemeChanged, UT_Window_slotSigThemeChanged)
 {
     Window *pWindow = new Window();
     EditWrapper *pEditWrapper = new EditWrapper();
@@ -1275,8 +1649,8 @@ TEST_F(test_window, slotSigThemeChanged)
     pWindow->addTabWithWrapper(pEditWrapper, "bb", "aad", "aadd", 1);
     pWindow->m_settings = Settings::instance();
     DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::LightType);
-    //pWindow->slotSigThemeChanged(DEEPIN_THEME);
-    //pWindow->slotSigThemeChanged(DEEPIN_DARK_THEME);
+    pWindow->slotSigThemeChanged(DEEPIN_THEME);
+    pWindow->slotSigThemeChanged(DEEPIN_DARK_THEME);
 
     DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::DarkType);
     //pWindow->slotSigThemeChanged(DEEPIN_THEME);
@@ -1288,13 +1662,13 @@ TEST_F(test_window, slotSigThemeChanged)
     EXPECT_NE(pEditWrapper,nullptr);
     pEditWrapper->deleteLater();
 
-    
+
 }
 
 //void slot_saveReadingPath();
-TEST_F(test_window, slot_saveReadingPath)
+TEST(UT_Window_slot_saveReadingPath, UT_Window_slot_saveReadingPath)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
     window->addBlankTab();
@@ -1308,12 +1682,12 @@ TEST_F(test_window, slot_saveReadingPath)
     window->deleteLater();
     EXPECT_NE(a,nullptr);
     a->deleteLater();
-    
+
 }
 //void slot_beforeReplace(QString _);
-TEST_F(test_window, slot_beforeReplace)
+TEST(UT_Window_slot_beforeReplace, UT_Window_slot_beforeReplace)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
     window->addBlankTab();
@@ -1325,15 +1699,15 @@ TEST_F(test_window, slot_beforeReplace)
     window->deleteLater();
     EXPECT_NE(a,nullptr);
     a->deleteLater();
-    
+
 }
 //void slot_setTitleFocus();
 
 //private:
 //void handleFocusWindowChanged(QWindow *w);
-TEST_F(test_window, handleFocusWindowChanged)
+TEST(UT_Window_handleFocusWindowChanged, UT_Window_handleFocusWindowChanged)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     QWindow * q = new QWindow();
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
@@ -1348,12 +1722,12 @@ TEST_F(test_window, handleFocusWindowChanged)
     a->deleteLater();
     EXPECT_NE(q,nullptr);
     q->deleteLater();
-    
+
 }
 //void updateThemePanelGeomerty();
-TEST_F(test_window, updateThemePanelGeomerty)
+TEST(UT_Window_updateThemePanelGeomerty, UT_Window_updateThemePanelGeomerty)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     QWindow * q = new QWindow();
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
@@ -1371,13 +1745,13 @@ TEST_F(test_window, updateThemePanelGeomerty)
     EXPECT_NE(q,nullptr);
     q->deleteLater();
 
-    
+
 }
 
 //void checkTabbarForReload();
-TEST_F(test_window, checkTabbarForReload)
+TEST(UT_Window_checkTabbarForReload, UT_Window_checkTabbarForReload)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     QWindow * q = new QWindow();
     window->addTabWithWrapper(a,"aa","aad","aadd",0);
@@ -1395,13 +1769,13 @@ TEST_F(test_window, checkTabbarForReload)
     EXPECT_NE(q,nullptr);
     q->deleteLater();
 
-    
+
 }
 
 //void slotSigAdjustFont();
-TEST_F(test_window, slotSigAdjustFont)
+TEST(UT_Window_slotSigAdjustFont, UT_Window_slotSigAdjustFont)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper *pEditWrapper = new EditWrapper();
     window->addTabWithWrapper(pEditWrapper, "aa", "aad", "aadd", 0);
     window->addBlankTab();
@@ -1413,13 +1787,13 @@ TEST_F(test_window, slotSigAdjustFont)
     EXPECT_NE(pEditWrapper,nullptr);
     pEditWrapper->deleteLater();
 
-    
+
 }
 
 //void slotSigAdjustFontSize();
-TEST_F(test_window, slotSigAdjustFontSize)
+TEST(UT_Window_slotSigAdjustFontSize, UT_Window_slotSigAdjustFontSize)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper *pEditWrapper = new EditWrapper();
     window->addTabWithWrapper(pEditWrapper, "aa", "aad", "aadd", 0);
     window->addBlankTab();
@@ -1433,13 +1807,13 @@ TEST_F(test_window, slotSigAdjustFontSize)
     EXPECT_NE(pEditWrapper,nullptr);
     pEditWrapper->deleteLater();
 
-    
+
 }
 
 //void slotSigAdjustTabSpaceNumber();
-TEST_F(test_window, slotSigAdjustTabSpaceNumber)
+TEST(UT_Window_slotSigAdjustTabSpaceNumber, UT_Window_slotSigAdjustTabSpaceNumber)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper *pEditWrapper = new EditWrapper();
     window->addTabWithWrapper(pEditWrapper, "aa", "aad", "aadd", 0);
     window->addBlankTab();
@@ -1451,13 +1825,13 @@ TEST_F(test_window, slotSigAdjustTabSpaceNumber)
     window->deleteLater();
     EXPECT_NE(pEditWrapper,nullptr);
     pEditWrapper->deleteLater();
-    
+
 }
 
 //void slotSigAdjustWordWrap();
-TEST_F(test_window, slotSigAdjustWordWrap)
+TEST(UT_Window_slotSigAdjustWordWrap, UT_Window_slotSigAdjustWordWrap)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper *pEditWrapper = new EditWrapper();
     window->addTabWithWrapper(pEditWrapper, "aa", "aad", "aadd", 0);
     window->addBlankTab();
@@ -1469,13 +1843,13 @@ TEST_F(test_window, slotSigAdjustWordWrap)
     window->deleteLater();
     EXPECT_NE(pEditWrapper,nullptr);
     pEditWrapper->deleteLater();
-    
+
 }
 
 //void slotSigAdjustBookmark();
-TEST_F(test_window, slotSigAdjustBookmark)
+TEST(UT_Window_slotSigAdjustBookmark, UT_Window_slotSigAdjustBookmark)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper *pEditWrapper = new EditWrapper();
     window->addTabWithWrapper(pEditWrapper, "aa", "aad", "aadd", 0);
     window->addBlankTab();
@@ -1487,13 +1861,13 @@ TEST_F(test_window, slotSigAdjustBookmark)
     window->deleteLater();
     EXPECT_NE(pEditWrapper,nullptr);
     pEditWrapper->deleteLater();
-    
+
 }
 
 //void slotSigShowBlankCharacter();
-TEST_F(test_window, slotSigShowBlankCharacter)
+TEST(UT_Window_slotSigShowBlankCharacter, UT_Window_slotSigShowBlankCharacter)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper *pEditWrapper = new EditWrapper();
     window->addTabWithWrapper(pEditWrapper, "aa", "aad", "aadd", 0);
     window->addBlankTab();
@@ -1505,13 +1879,13 @@ TEST_F(test_window, slotSigShowBlankCharacter)
     window->deleteLater();
     EXPECT_NE(pEditWrapper,nullptr);
     pEditWrapper->deleteLater();
-    
+
 }
 
 //void slotSigHightLightCurrentLine();
-TEST_F(test_window, slotSigHightLightCurrentLine)
+TEST(UT_Window_slotSigHightLightCurrentLine, UT_Window_slotSigHightLightCurrentLine)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper *pEditWrapper = new EditWrapper();
     window->addTabWithWrapper(pEditWrapper, "aa", "aad", "aadd", 0);
     window->addBlankTab();
@@ -1523,13 +1897,13 @@ TEST_F(test_window, slotSigHightLightCurrentLine)
     window->deleteLater();
     EXPECT_NE(pEditWrapper,nullptr);
     pEditWrapper->deleteLater();
-    
+
 }
 
 //void slotSigShowCodeFlodFlag();
-TEST_F(test_window, slotSigShowCodeFlodFlag)
+TEST(UT_Window_slotSigShowCodeFlodFlag, UT_Window_slotSigShowCodeFlodFlag)
 {
-    window = new Window();
+    Window *window = new Window();
     EditWrapper *pEditWrapper = new EditWrapper();
     window->addTabWithWrapper(pEditWrapper, "aa", "aad", "aadd", 0);
     window->addBlankTab();
@@ -1541,13 +1915,13 @@ TEST_F(test_window, slotSigShowCodeFlodFlag)
     window->deleteLater();
     EXPECT_NE(pEditWrapper,nullptr);
     pEditWrapper->deleteLater();
-    
+
 }
 
 //void slotSigShowCodeFlodFlag();
-TEST_F(test_window, slotSigChangeWindowSize)
+TEST(UT_Window_slotSigChangeWindowSize, UT_Window_slotSigChangeWindowSize)
 {
-    window = new Window();
+    Window *window = new Window();
     window->slotSigChangeWindowSize(QString());
     window->slotSigChangeWindowSize(QString("fullscreen"));
     window->slotSigChangeWindowSize(QString("window_maximum"));
@@ -1556,13 +1930,14 @@ TEST_F(test_window, slotSigChangeWindowSize)
 
     EXPECT_NE(window,nullptr);
     window->deleteLater();
-    
+
 }
 
 
 
-TEST_F(test_window, printPage)
+TEST(UT_Window_printPage, UT_Window_printPage)
 {
+    Window *window = new Window();
     QPainter* painter = new QPainter;
     QTextDocument* doc = new QTextDocument;
     QRectF body,pageContBox;
@@ -1575,7 +1950,7 @@ TEST_F(test_window, printPage)
 
 }
 
-TEST_F(test_window, delete_window)
+TEST(UT_Window_delete_window, UT_Window_delete_window)
 {
     Window* w = new Window();
     w->m_shortcutViewProcess = new QProcess;
@@ -1584,3 +1959,89 @@ TEST_F(test_window, delete_window)
     w->deleteLater();
     //w->m_shortcutViewProcess will be deleted in ~Window;
 }
+
+TEST(UT_Window_doprint, UT_Window_doprint)
+{
+    Window* w = new Window();
+    DPrinter* p = new DPrinter;
+    w->m_printDoc = new QTextDocument;
+    w->m_pPreview = new DPrintPreviewDialog;
+
+    editwrapper_texteditor = new TextEdit;
+    Stub s1;s1.set(ADDR(EditWrapper,textEditor),EditWrapper_textEditor_stub);
+
+
+    QVector<int> pages{1,2,3,4,5};
+    w->doPrint(p,pages);
+
+
+    EXPECT_NE(w,nullptr);
+    w->deleteLater();
+    editwrapper_texteditor->deleteLater();
+    w->m_printDoc->deleteLater();
+    w->m_pPreview->deleteLater();
+
+}
+
+
+TEST(UT_Window_slotClearDoubleCharaterEncode, UT_Window_slotClearDoubleCharaterEncode)
+{
+    Window* w = new Window();
+
+    Stub s1;s1.set(ADDR(Window,handleReplaceAll),Window_updateSabeAsFileNameTemp_stub);
+
+    w->slotClearDoubleCharaterEncode();
+
+    EXPECT_NE(w,nullptr);
+    w->deleteLater();
+}
+
+
+
+TEST(UT_Window_dropEvent, UT_Window_dropEvent)
+{
+    Window* w = new Window();
+    QMimeData* data = new QMimeData;
+    QList<QUrl> urls = {QUrl("http://")};
+    data->setUrls(urls);
+    QDropEvent* d = new QDropEvent(QPointF(100,100), Qt::MoveAction,data ,Qt::LeftButton, Qt::ShiftModifier);
+
+    w->dropEvent(d);
+
+    EXPECT_NE(w,nullptr);
+    w->deleteLater();
+    data->deleteLater();
+    delete d; d=nullptr;
+}
+
+TEST(UT_Window_setPrintEnabled, UT_Window_setPrintEnabled)
+{
+    Window* w = new Window();
+    w->m_menu = new DMenu;
+    w->setPrintEnabled(true);
+
+    EXPECT_NE(w,nullptr);
+    w->deleteLater();
+}
+
+
+TEST(UT_Window_isRegisteredFflytekAiassistant, UT_Window_isRegisteredFflytekAiassistant)
+{
+    Window* w = new Window();
+    w->isRegisteredFflytekAiassistant();
+
+    EXPECT_NE(w,nullptr);
+    w->deleteLater();
+}
+
+
+TEST(UT_Window_getStackedWgt, UT_Window_getStackedWgt)
+{
+    Window* w = new Window();
+    w->getStackedWgt();
+
+    EXPECT_NE(w,nullptr);
+    w->deleteLater();
+}
+
+

@@ -171,6 +171,7 @@ public:
     void scrollLineDown();
     void scrollUp();
     void scrollDown();
+    //copy current line and paste in the next line
     void duplicateLine();
     void copyLines();
 

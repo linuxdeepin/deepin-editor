@@ -1,5 +1,5 @@
-#ifndef TEST_WINDOW_H
-#define TEST_WINDOW_H
+#ifndef UT_Window_H
+#define UT_Window_H
 #include "gtest/gtest.h"
 #include "../../src/editor/editwrapper.h"
 #include "../../src/widgets/window.h"
@@ -12,12 +12,12 @@
 #include<QEvent>
 
 
-class test_window: public QObject, public::testing::Test
+class UT_Window: public QObject, public::testing::Test
 {
 public:
-    test_window();
+    UT_Window();
     EditWrapper * edit;
     Window * window;
 };
 
-#endif // TEST_WINDOW_H
+#endif // UT_Window_H
