@@ -1251,8 +1251,9 @@ void TextEdit::joinLines()
 
     b1 = this->document()->findBlockByNumber(l1);
     //after this operation,the text content changes
-    if(t1 != b1.text())
+    if(t1 != b1.text()) {
         this->m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
+    }
 }
 
 void TextEdit::killLine()
@@ -1262,15 +1263,15 @@ void TextEdit::killLine()
     }
 
     // Remove selection content if has selection.
-    if(m_isSelectAll)
+    if(m_isSelectAll) {
         QPlainTextEdit::selectAll();
+    }
 
     if (textCursor().hasSelection()) {
-        // textCursor().removeSelectedText();
-	//deleteSelectTextEx(textCursor());
+        //textCursor().removeSelectedText();
+        //deleteSelectTextEx(textCursor());
         deleteSelectTextEx(textCursor(),textCursor().selectedText(),false);
     } else {
-
         auto cursor = this->textCursor();
         cursor.movePosition(QTextCursor::EndOfBlock,QTextCursor::KeepAnchor);
 
@@ -1283,36 +1284,6 @@ void TextEdit::killLine()
             DeleteBackCommond* com = new DeleteBackCommond(cursor,this);
             m_pUndoStack->push(com);
         }
-
-
-        #if 0
-        bool isEmptyLine = (text.size() == 0);
-        bool isBlankLine = (text.trimmed().size() == 0);
-        // Join next line if current line is empty or cursor at end of line.
-        if (isEmptyLine || textCursor().atBlockEnd()) {
-            //fixed bug 80435  ut002764  刪除到尾后，光标设置到下一个字符
-            //cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
-            cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-            deleteSelectTextEx(cursor);
-        }
-        // Kill whole line if current line is blank line.
-        else if (isBlankLine && textCursor().atBlockStart()) {
-            cursor.movePosition(QTextCursor::StartOfBlock);
-            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-            //cursor.removeSelectedText();
-            //cursor.deleteChar();
-            deleteSelectTextEx(cursor);
-        }
-        // Otherwise kill rest content of line.
-        else {
-            cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
-            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-            //cursor.removeSelectedText();
-            deleteSelectTextEx(cursor);
-        }
-        // Update cursor.
-        // setTextCursor(cursor);
-        #endif
     }
 }
 
@@ -1322,40 +1293,32 @@ void TextEdit::killCurrentLine()
         return;
     }
 
-    if(m_isSelectAll)
+    if(m_isSelectAll) {
         QPlainTextEdit::selectAll();
+    }
 
     auto cursor = this->textCursor();
-    cursor.movePosition(QTextCursor::StartOfBlock,QTextCursor::MoveAnchor);
-    cursor.movePosition(QTextCursor::EndOfBlock,QTextCursor::KeepAnchor);
+    cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
     if(!cursor.selectedText().isEmpty()){
         DeleteBackCommond* com = new DeleteBackCommond(cursor,this);
         m_pUndoStack->push(com);
     }
-
-
 }
 
 void TextEdit::killBackwardWord()
 {
     tryUnsetMark();
 
-    if(m_isSelectAll)
+    if(m_isSelectAll) {
         QPlainTextEdit::selectAll();
+    }
 
     if (textCursor().hasSelection()) {
         //textCursor().removeSelectedText();
     } else {
-        //  QTextCursor cursor = textCursor();
-        //  cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
-        //  cursor.setPosition(getPrevWordPosition(cursor, QTextCursor::KeepAnchor), QTextCursor::KeepAnchor);
-        //  cursor.removeSelectedText();
-        //  setTextCursor(cursor);
-
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
-        //cursor.removeSelectedText();
-        //setTextCursor(cursor);
         deleteSelectTextEx(cursor);
     }
 }
@@ -1364,22 +1327,15 @@ void TextEdit::killForwardWord()
 {
     tryUnsetMark();
 
-    if(m_isSelectAll)
+    if(m_isSelectAll) {
         QPlainTextEdit::selectAll();
+    }
 
     if (textCursor().hasSelection()) {
         //textCursor().removeSelectedText();
     } else {
-        //  QTextCursor cursor = textCursor();
-        //  cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
-        //  cursor.setPosition(getNextWordPosition(cursor, QTextCursor::KeepAnchor), QTextCursor::KeepAnchor);
-        //  cursor.removeSelectedText();
-        //  setTextCursor(cursor);
-
         QTextCursor cursor = textCursor();
         cursor.movePosition(QTextCursor::NextWord, QTextCursor::KeepAnchor);
-        //cursor.removeSelectedText();
-        //setTextCursor(cursor);
         deleteSelectTextEx(cursor);
     }
 }
@@ -1447,7 +1403,6 @@ void TextEdit::unindentText()
             modified=true;
         } else {
             int pos = 0;
-
             while (document()->characterAt(cursor.position()) == ' ' &&
                     pos < m_tabSpaceNumber) {
                 pos++;
@@ -1458,13 +1413,12 @@ void TextEdit::unindentText()
 
         block = block.next();
     }
-    if(modified)
+    if (modified) {
         this->m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
+    }
 
     cursor.endEditBlock();
     showCursorBlink();
-
-
 }
 
 void TextEdit::setTabSpaceNumber(int number)
@@ -1593,8 +1547,9 @@ void TextEdit::convertWordCase(ConvertCase convertCase)
     }
 #endif
 
-    if(m_isSelectAll)
+    if(m_isSelectAll) {
         QPlainTextEdit::selectAll();
+    }
 
     if (textCursor().hasSelection()) {
         QString text = textCursor().selectedText();
@@ -1612,7 +1567,7 @@ void TextEdit::convertWordCase(ConvertCase convertCase)
             m_pUndoStack->push(insertCommond);
         }
     }
-    else{
+    else {
         QTextCursor cursor;
 
         // Move cursor to mouse position first. if have word under mouse pointer.
@@ -1634,7 +1589,7 @@ void TextEdit::convertWordCase(ConvertCase convertCase)
                 text = capitalizeText(text);
             }
 
-            InsertTextUndoCommand* insertCommond = new InsertTextUndoCommand(cursor,text);
+            InsertTextUndoCommand* insertCommond = new InsertTextUndoCommand(cursor, text);
             m_pUndoStack->push(insertCommond);
 
             setTextCursor(cursor);

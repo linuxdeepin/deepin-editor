@@ -1202,130 +1202,323 @@ TEST_F(test_textedit, cutlines_002)
     pWindow->deleteLater();
 }
 
-TEST_F(test_textedit, joinLines)
+//joinLines 001
+TEST_F(test_textedit, joinLines_001)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->joinLines();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Holle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    p->deleteLater();
-    startManager->deleteLater();
-    ee->deleteLater();
-}
+    int iRetBefor = pWindow->currentWrapper()->textEditor()->document()->blockCount();
+    pWindow->currentWrapper()->textEditor()->joinLines();
+    int iRetAfter = pWindow->currentWrapper()->textEditor()->document()->blockCount();
+    ASSERT_TRUE(iRetAfter == iRetBefor);
 
-TEST_F(test_textedit, killLine)
-{
-    Window *pWindow = new Window;
-    EditWrapper *wrapper = pWindow->createEditor();
-    QFile f("1.cpp");
-    if (f.exists()) {
-        pWindow->addTab("1.cpp");
-        pWindow->currentWrapper()->m_pTextEdit->killLine();
-    }
-
-    ASSERT_TRUE(wrapper->m_pTextEdit != nullptr);
-    wrapper->deleteLater();
-    pWindow->deleteLater();
-}
-TEST_F(test_textedit, killCurrentLine)
-{
-    Window *pWindow = new Window;
-    EditWrapper *wrapper = pWindow->createEditor();
-    QFile f("1.cpp");
-    if (f.exists()) {
-        pWindow->addTab("1.cpp");
-        pWindow->currentWrapper()->m_pTextEdit->killCurrentLine();
-    }
-
-    ASSERT_TRUE(wrapper->m_pTextEdit != nullptr);
-    wrapper->deleteLater();
     pWindow->deleteLater();
 }
 
-TEST_F(test_textedit, killBackwardWord)
+//joinLines 002
+TEST_F(test_textedit, joinLines_002)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->killBackwardWord();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Holle world\nHolle world\nHolle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
+    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::Up, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    int iRetBefor = pWindow->currentWrapper()->textEditor()->document()->blockCount();
+    pWindow->currentWrapper()->textEditor()->joinLines();
+    int iRetAfter = pWindow->currentWrapper()->textEditor()->document()->blockCount();
+    ASSERT_TRUE(iRetAfter == iRetBefor - 1);
+
+    pWindow->deleteLater();
 }
 
-TEST_F(test_textedit, killForwardWord)
+//joinLines 003
+TEST_F(test_textedit, joinLines_003)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->killForwardWord();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Holle world\nHolle world\nHolle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-TEST_F(test_textedit, escape)
-{
-    //QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
-    //EditWrapper * ee = new EditWrapper();
-    //startManager->setWrapper(ee);
-    //startManager->escape();
+    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    int iRetBefor = pWindow->currentWrapper()->textEditor()->document()->blockCount();
+    pWindow->currentWrapper()->textEditor()->joinLines();
+    int iRetAfter = pWindow->currentWrapper()->textEditor()->document()->blockCount();
+    ASSERT_TRUE(iRetAfter == iRetBefor - 1);
+
+    pWindow->deleteLater();
 }
 
-TEST_F(test_textedit, indentText)
+//killLine 001
+TEST_F(test_textedit, killLine_001)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->indentText();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Holle world\nHolle world\nHolle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
+    pWindow->currentWrapper()->textEditor()->m_cursorMark = true;
+    pWindow->currentWrapper()->textEditor()->killLine();
+    QString strRet(pWindow->currentWrapper()->textEditor()->toPlainText());
+
+    ASSERT_TRUE(!strRet.compare(strMsg));
+    pWindow->deleteLater();
 }
 
-TEST_F(test_textedit, unindentText)
+//killLine 002
+TEST_F(test_textedit, killLine_002)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->unindentText();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Holle world\nHolle world\nHolle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
+    pWindow->currentWrapper()->textEditor()->m_isSelectAll = true;
+    pWindow->currentWrapper()->textEditor()->killLine();
+    QString strRet(pWindow->currentWrapper()->textEditor()->toPlainText());
+
+    ASSERT_TRUE(strRet.isEmpty());
+    pWindow->deleteLater();
 }
 
+//killLine 003
+TEST_F(test_textedit, killLine_003)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Holle world\nHolle world\nHolle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    QString strRetBefore(pWindow->currentWrapper()->textEditor()->textCursor().block().text());
+    pWindow->currentWrapper()->textEditor()->killLine();
+    QString strRetAfter(pWindow->currentWrapper()->textEditor()->textCursor().block().text());
+
+    ASSERT_TRUE(strRetAfter.compare(strRetBefore));
+    pWindow->deleteLater();
+}
+
+//killCurrentLine 001
+TEST_F(test_textedit, killCurrentLine_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Holle world\nHolle world\nHolle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->m_cursorMark = true;
+    pWindow->currentWrapper()->textEditor()->killCurrentLine();
+    QString strRet(pWindow->currentWrapper()->textEditor()->toPlainText());
+
+    ASSERT_TRUE(!strRet.compare(strMsg));
+    pWindow->deleteLater();
+}
+
+//killCurrentLine 002
+TEST_F(test_textedit, killCurrentLine_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Holle world\nHolle world\nHolle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->m_isSelectAll = true;
+    int iRetBefore = pWindow->currentWrapper()->textEditor()->document()->blockCount();
+    pWindow->currentWrapper()->textEditor()->killCurrentLine();
+    int iRetAfter = pWindow->currentWrapper()->textEditor()->document()->blockCount();
+
+    ASSERT_TRUE(iRetAfter == iRetBefore);
+    pWindow->deleteLater();
+}
+
+//killBackwardWord 001
+TEST_F(test_textedit, killBackwardWord_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Holle world\nHolle world\nHolle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->m_isSelectAll = true;
+    pWindow->currentWrapper()->textEditor()->killBackwardWord();
+    QString strRet(pWindow->currentWrapper()->textEditor()->toPlainText());
+
+    ASSERT_TRUE(!strRet.compare(strMsg));
+    pWindow->deleteLater();
+}
+
+//killBackwardWord 002
+TEST_F(test_textedit, killBackwardWord_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Holle world\nHolle world\nHolle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->killBackwardWord();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().block().text());
+
+    ASSERT_TRUE(!strRet.compare(QString("Holle ")));
+    pWindow->deleteLater();
+}
+
+//killForwardWord 001
+TEST_F(test_textedit, killForwardWord_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Holle world\nHolle world\nHolle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->m_isSelectAll = true;
+    QString strRetBefore(pWindow->currentWrapper()->textEditor()->textCursor().block().text());
+    pWindow->currentWrapper()->textEditor()->killForwardWord();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().block().text());
+
+    ASSERT_TRUE(!strRet.compare(strRetBefore));
+    pWindow->deleteLater();
+}
+
+//killForwardWord 002
+TEST_F(test_textedit, killForwardWord_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Holle world\nHolle world\nHolle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->killForwardWord();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().block().text());
+
+    ASSERT_TRUE(!strRet.compare(QString("world")));
+    pWindow->deleteLater();
+}
+
+//indentText 001
+TEST_F(test_textedit, indentText_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Holle world\nHolle world\nHolle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    int iRetBefore = pWindow->currentWrapper()->textEditor()->textCursor().position();
+    pWindow->currentWrapper()->textEditor()->indentText();
+    int iRetAfter = pWindow->currentWrapper()->textEditor()->textCursor().position();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().block().text());
+
+    ASSERT_TRUE(iRetAfter != iRetBefore);
+    pWindow->deleteLater();
+}
+
+//indentText 002
+TEST_F(test_textedit, indentText_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Holle world\nHolle world\nHolle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::PreviousWord, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    int iRetBefore = pWindow->currentWrapper()->textEditor()->textCursor().position();
+    pWindow->currentWrapper()->textEditor()->indentText();
+    int iRetAfter = pWindow->currentWrapper()->textEditor()->textCursor().position();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().block().text());
+
+    ASSERT_TRUE(iRetAfter != iRetBefore);
+    pWindow->deleteLater();
+}
+
+//unindentText 001
+TEST_F(test_textedit, unindentText_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Holle world\nHolle world\nHolle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    int iRetBefore = pWindow->currentWrapper()->textEditor()->textCursor().position();
+    pWindow->currentWrapper()->textEditor()->indentText();
+    pWindow->currentWrapper()->textEditor()->unindentText();
+    int iRetAfter = pWindow->currentWrapper()->textEditor()->textCursor().position();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().block().text());
+
+    ASSERT_TRUE(iRetAfter == iRetBefore);
+    pWindow->deleteLater();
+}
+
+//unindentText 002
+TEST_F(test_textedit, unindentText_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Holle world\nHolle world\nHolle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::PreviousWord, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    int iRetBefore = pWindow->currentWrapper()->textEditor()->textCursor().position();
+    pWindow->currentWrapper()->textEditor()->indentText();
+    pWindow->currentWrapper()->textEditor()->unindentText();
+    int iRetAfter = pWindow->currentWrapper()->textEditor()->textCursor().position();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().block().text());
+
+    ASSERT_TRUE(iRetAfter != iRetBefore);
+    pWindow->deleteLater();
+}
+
+//setTabSpaceNumber
 TEST_F(test_textedit, setTabSpaceNumber)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->setTabSpaceNumber(2);
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Holle world\nHolle world\nHolle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+    pWindow->currentWrapper()->textEditor()->setTabSpaceNumber(5);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_tabSpaceNumber == 5);
+    pWindow->deleteLater();
 }
 
 //QString capitalizeText(QString text);
@@ -3537,17 +3730,6 @@ TEST_F(test_textedit, slotRedoAvailable)
 
     pWindow->deleteLater();
 }
-
-//void convertWordCase(ConvertCase convertCase);
-//TEST_F(test_textedit, convertWordCase)
-//{
-//    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
-//    startManager->convertWordCase(ConvertCase::LOWER);
-//    startManager->convertWordCase(ConvertCase::UPPER);
-//    startManager->convertWordCase(ConvertCase::CAPITALIZE);
-
-//    
-//}
 
 //void renderAllSelections();
 
