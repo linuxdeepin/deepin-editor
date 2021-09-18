@@ -94,11 +94,13 @@ EditWrapper::~EditWrapper()
         m_pBottomBar = nullptr;
     }
     //delete 之后，如果出现文件被修改，需要重新加载弹框，之后，点击标签关闭，闪退问题　78042 ut002764
-//    if (m_pWaringNotices != nullptr) {
-//    disconnect(m_pWaringNotices);
-//        delete m_pWaringNotices;
-//        m_pWaringNotices = nullptr;
-//    }
+    #if 0
+    if (m_pWaringNotices != nullptr) {
+    disconnect(m_pWaringNotices);
+        delete m_pWaringNotices;
+        m_pWaringNotices = nullptr;
+    }
+    #endif
 }
 
 void EditWrapper::setQuitFlag()
