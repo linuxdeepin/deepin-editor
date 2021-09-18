@@ -1597,7 +1597,6 @@ void TextEdit::convertWordCase(ConvertCase convertCase)
             m_haveWordUnderCursor = false;
         }
     }
-
 }
 
 QString TextEdit::capitalizeText(QString text)
@@ -1613,10 +1612,6 @@ QString TextEdit::capitalizeText(QString text)
         currentChar = newText.at(i);
         if (i + 1 < newText.size())
             nextChar = newText.at(i + 1);
-//        if (!currentChar.isSpace() && !m_wordSepartors.contains(QString(currentChar))&&nextChar.isSpace()) {
-//            newText.replace(i, 1, currentChar.toUpper());
-//            //break;
-//        }
         if (currentChar.isSpace() && !nextChar.isSpace()) {
             newText.replace(i + 1, 1, nextChar.toUpper());
         }
@@ -1690,7 +1685,7 @@ void TextEdit::updateFont()
 
 void TextEdit::replaceAll(const QString &replaceText, const QString &withText)
 {
-    if (m_readOnlyMode) {
+    if (m_readOnlyMode || m_bReadOnlyPermission) {
         return;
     }
 
@@ -1700,42 +1695,33 @@ void TextEdit::replaceAll(const QString &replaceText, const QString &withText)
 
     QTextDocument::FindFlags flags;
     flags &= QTextDocument::FindCaseSensitively;
-
     QTextCursor cursor = textCursor();
     cursor.movePosition(QTextCursor::Start);
-
     QTextCursor startCursor = textCursor();
     //startCursor.beginEditBlock();
 
     QString oldText = this->toPlainText();
     QString newText = oldText;
-
     newText.replace(replaceText,withText);
 
-
-    if(oldText != newText){
+    if (oldText != newText) {
         ReplaceAllCommond* commond = new ReplaceAllCommond(oldText,newText,cursor);
         m_pUndoStack->push(commond);
     }
-
-   // this->m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
-
-    //startCursor.endEditBlock();
-   // setTextCursor(startCursor);
 }
 
 void TextEdit::replaceNext(const QString &replaceText, const QString &withText)
 {
-    if (m_readOnlyMode) {
+    if (m_readOnlyMode || m_bReadOnlyPermission) {
         return;
     }
 
-    if(m_isSelectAll)
+    if(m_isSelectAll) {
         QPlainTextEdit::selectAll();
+    }
 
-    if (replaceText.isEmpty() ||
-            ! m_findHighlightSelection.cursor.hasSelection()) {
-        // 无限替换的根源
+    if (replaceText.isEmpty() || !m_findHighlightSelection.cursor.hasSelection()) {
+        //无限替换的根源
         return;
     }
     QTextCursor cursor = textCursor();
@@ -1758,7 +1744,7 @@ void TextEdit::replaceNext(const QString &replaceText, const QString &withText)
 
 void TextEdit::replaceRest(const QString &replaceText, const QString &withText)
 {
-    if (m_readOnlyMode) {
+    if (m_readOnlyMode || m_bReadOnlyPermission) {
         return;
     }
 
@@ -1782,13 +1768,10 @@ void TextEdit::replaceRest(const QString &replaceText, const QString &withText)
     right.replace(replaceText,withText);
     newText += right;
 
-
     if(oldText != newText){
         ReplaceAllCommond* commond = new ReplaceAllCommond(oldText,newText,cursor);
         m_pUndoStack->push(commond);
     }
-
-   // m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
 
     startCursor.endEditBlock();
     setTextCursor(startCursor);
