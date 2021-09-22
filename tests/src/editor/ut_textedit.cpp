@@ -2213,7 +2213,7 @@ TEST(UT_test_textedit_updateKeywordSelectionsInView, UT_test_textedit_updateKeyw
     pWindow->addBlankTab(QString());
     QString strMsg("H\ne\nl\nl\ne\n w\no\nr\nl\nd\nH\ne\nl\nl\ne\n w\no\nr\nl\nd\n"
                    "H\ne\nl\nl\ne\n w\no\nr\nl\nd\nH\ne\nl\nl\ne\n w\no\nr\nl\nd\n"
-                   "H\ne\nl\nl\ne\n w\no\nr\nl\nd\nH\ne\nl\nl\ne\n w\no\nr\nl\nd\n\n"
+                   "H\ne\nl\nl\ne\n w\no\nr\nl\nd\nH\ne\nl\nl\ne\n w\no\nr\nl\nd\n"
                    "H\ne\nl\nl\ne\n w\no\nr\nl\nd\nH\ne\nl\nl\ne\n w\no\nr\nl\nd\n"
                    "H\ne\nl\nl\ne\n w\no\nr\nl\nd\nH\ne\nl\nl\ne\n w\no\nr\nl\nd\n");
     QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
@@ -2327,39 +2327,262 @@ TEST(UT_test_textedit_renderAllSelections, UT_test_textedit_renderAllSelections_
     pWindow->deleteLater();
 }
 
-//void lineNumberAreaPaintEvent(QPaintEvent *event);
-TEST_F(test_textedit, lineNumberAreaPaintEvent)
+//clearMarkOperationForCursor
+TEST(UT_test_textedit_clearMarkOperationForCursor, UT_test_textedit_clearMarkOperationForCursor_001)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    QPaintEvent *e;
-    startManager->setWrapper(ee);
-    startManager->lineNumberAreaPaintEvent(e);
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
+    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->isMarkAllLine(true, QString("red"));
+    QTextCursor textCursorTemp = pWindow->currentWrapper()->textEditor()->m_markOperations.at(0).first.cursor;
+    bool bRet = pWindow->currentWrapper()->textEditor()->clearMarkOperationForCursor(textCursorTemp);
+
+    ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
 }
 
-//void codeFLodAreaPaintEvent(QPaintEvent *event);
-TEST_F(test_textedit, codeFLodAreaPaintEvent)
+//clearMarksForTextCursor 001
+TEST(UT_test_textedit_clearMarksForTextCursor, UT_test_textedit_clearMarksForTextCursor_001)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    QPaintEvent *e;
-    startManager->setWrapper(ee);
-    startManager->codeFLodAreaPaintEvent(e);
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
+    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->isMarkCurrentLine(true, QString("red"));
+    bool bRet = pWindow->currentWrapper()->textEditor()->clearMarksForTextCursor();
+
+    ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
 }
+
+//clearMarksForTextCursor 002
+TEST(UT_test_textedit_clearMarksForTextCursor, UT_test_textedit_clearMarksForTextCursor_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->isMarkCurrentLine(true, QString("red"));
+    bool bRet = pWindow->currentWrapper()->textEditor()->clearMarksForTextCursor();
+
+    ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
+}
+
+//markAllKeywordInView 001
+TEST(UT_test_textedit_clearMarksForTextCursor, UT_test_textedit_markAllKeywordInView_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->markAllKeywordInView();
+
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_markOperations.isEmpty());
+    pWindow->deleteLater();
+}
+
+//markAllKeywordInView 002
+TEST(UT_test_textedit_clearMarksForTextCursor, UT_test_textedit_markAllKeywordInView_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->isMarkCurrentLine(true, QString("red"));
+    pWindow->currentWrapper()->textEditor()->m_markOperations.begin()->first.type = TextEdit::MarkAllMatch;
+    pWindow->currentWrapper()->textEditor()->markAllKeywordInView();
+
+    ASSERT_TRUE(!pWindow->currentWrapper()->textEditor()->m_markOperations.isEmpty());
+    pWindow->deleteLater();
+}
+
+//markAllKeywordInView 003
+TEST(UT_test_textedit_clearMarksForTextCursor, UT_test_textedit_markAllKeywordInView_003)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->isMarkCurrentLine(true, QString("red"));
+    pWindow->currentWrapper()->textEditor()->m_markOperations.begin()->first.type = TextEdit::MarkAll;
+    pWindow->currentWrapper()->textEditor()->markAllKeywordInView();
+
+    ASSERT_TRUE(!pWindow->currentWrapper()->textEditor()->m_markOperations.isEmpty());
+    pWindow->deleteLater();
+}
+
+//markKeywordInView 001
+TEST(UT_test_textedit_markKeywordInView, UT_test_textedit_markKeywordInView_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    bool bRet = pWindow->currentWrapper()->textEditor()->markKeywordInView(QString(), QString("red"));
+
+    ASSERT_TRUE(bRet == false);
+    pWindow->deleteLater();
+}
+
+//markKeywordInView 002
+TEST(UT_test_textedit_markKeywordInView, UT_test_textedit_markKeywordInView_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    bool bRet = pWindow->currentWrapper()->textEditor()->markKeywordInView(QString("world"), QString("red"));
+
+    ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
+}
+
+//markAllInView 001
+TEST(UT_test_textedit_markAllInView, UT_test_textedit_markAllInView_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->markAllInView(QString("red"));
+
+    ASSERT_TRUE(!pWindow->currentWrapper()->textEditor()->m_mapKeywordMarkSelections.isEmpty());
+    pWindow->deleteLater();
+}
+
+//toggleMarkSelections 001
+TEST(UT_test_textedit_toggleMarkSelections, UT_test_textedit_toggleMarkSelections_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->toggleMarkSelections();
+
+    ASSERT_TRUE(!pWindow->currentWrapper()->textEditor()->m_markOperations.isEmpty());
+    pWindow->deleteLater();
+}
+
+//updateMarkAllSelectColor 001
+TEST(UT_test_textedit_updateMarkAllSelectColor, UT_test_textedit_updateMarkAllSelectColor_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->updateMarkAllSelectColor();
+
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_mapKeywordMarkSelections.isEmpty());
+    pWindow->deleteLater();
+}
+
+//void lineNumberAreaPaintEvent(QPaintEvent *event) 001
+TEST(UT_test_textedit_lineNumberAreaPaintEvent, UT_test_textedit_lineNumberAreaPaintEvent_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("H\ne\nl\nl\ne\n w\no\nr\nl\nd\nH\ne\nl\nl\ne\n w\no\nr\nl\nd\n"
+                   "H\ne\nl\nl\ne\n w\no\nr\nl\nd\nH\ne\nl\nl\ne\n w\no\nr\nl\nd\n"
+                   "H\ne\nl\nl\ne\n w\no\nr\nl\nd\nH\ne\nl\nl\ne\n w\no\nr\nl\nd\n"
+                   "H\ne\nl\nl\ne\n w\no\nr\nl\nd\nH\ne\nl\nl\ne\n w\no\nr\nl\nd\n"
+                   "H\ne\nl\nl\ne\n w\no\nr\nl\nd\nH\ne\nl\nl\ne\n w\no\nr\nl\nd\n");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    DApplicationHelper::instance()->setThemeType(DApplicationHelper::ColorType::DarkType);
+    QPaintEvent *pPaintEvent;
+    pWindow->currentWrapper()->textEditor()->lineNumberAreaPaintEvent(pPaintEvent);
+
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_lineNumbersColor.alphaF() == 0.2);
+    pWindow->deleteLater();
+}
+
+//void lineNumberAreaPaintEvent(QPaintEvent *event) 002
+TEST(UT_test_textedit_lineNumberAreaPaintEvent, UT_test_textedit_lineNumberAreaPaintEvent_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    DApplicationHelper::instance()->setThemeType(DApplicationHelper::ColorType::LightType);
+    QPaintEvent *pPaintEvent;
+    pWindow->currentWrapper()->textEditor()->lineNumberAreaPaintEvent(pPaintEvent);
+
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_pLeftAreaWidget->m_pLineNumberArea != nullptr);
+    pWindow->deleteLater();
+}
+
+//void codeFLodAreaPaintEvent(QPaintEvent *event) 001
+TEST(UT_test_textedit_codeFLodAreaPaintEvent, UT_test_textedit_codeFLodAreaPaintEvent_001)
+{
+#if 0
+    Window *pWindow = new Window();
+    QString strNamePath = QCoreApplication::applicationDirPath() + QString("/1.cpp");
+    qInfo() << "====strNamePath: " << strNamePath;
+
+    if (QFile(strNamePath).exists()) {
+        pWindow->addTab(strNamePath);
+    }
+
+    qInfo() << "====toPlainText: " << pWindow->currentWrapper()->textEditor()->toPlainText();
+
+    QString strMsg("for(int i = 0; i <= 10; i++) {"
+                   "if (bRet) {                   "
+                   "    int a = 0;                "
+                   "}                             "
+                   "}H\ne\nl\nl\ne\n w\no\nr\nl\nd\nH\ne\nl\nl\ne\n w\no\nr\nl\nd\n"
+                   ""
+                   "H\ne\nl\nl\ne\n w\no\nr\nl\nd\nH\ne\nl\nl\ne\n w\no\nr\nl\nd\n"
+                   "H\ne\nl\nl\ne\n w\no\nr\nl\nd\nH\ne\nl\nl\ne\n w\no\nr\nl\nd\n"
+                   "H\ne\nl\nl\ne\n w\no\nr\nl\nd\nH\ne\nl\nl\ne\n w\no\nr\nl\nd\n"
+                   "H\ne\nl\nl\ne\n w\no\nr\nl\nd\nH\ne\nl\nl\ne\n w\no\nr\nl\nd\n");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    DApplicationHelper::instance()->setThemeType(DApplicationHelper::ColorType::DarkType);
+    QPaintEvent *pPaintEvent;
+    pWindow->currentWrapper()->textEditor()->codeFLodAreaPaintEvent(pPaintEvent);
+
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_pLeftAreaWidget->m_pLineNumberArea != nullptr);
+    pWindow->deleteLater();
+#endif
+}
+
 //void setCodeFlodFlagVisable(bool isVisable,bool bIsFirstOpen = false);
 TEST_F(test_textedit, setCodeFlodFlagVisable)
 {

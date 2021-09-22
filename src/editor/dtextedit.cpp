@@ -2094,7 +2094,8 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
     QPainter painter(m_pLeftAreaWidget->m_pLineNumberArea);
     QColor lineNumberAreaBackgroundColor;
-    if (QColor(m_backgroundColor).lightness() < 128) {
+
+    if (DApplicationHelper::instance()->themeType() == DApplicationHelper::ColorType::DarkType) {
         lineNumberAreaBackgroundColor = palette().brightText().color();
         lineNumberAreaBackgroundColor.setAlphaF(0.06);
 
@@ -2108,7 +2109,6 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
 
     int blockNumber = getFirstVisibleBlockId();
     QTextBlock block = document()->findBlockByNumber(blockNumber);
-
 
     int top = this->viewport()->geometry().top() + verticalScrollBar()->value();
     int bottom = top + static_cast<int>(document()->documentLayout()->blockBoundingRect(block).height());
@@ -2162,7 +2162,7 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
     QPainter painter(m_pLeftAreaWidget->m_pFlodArea);
 
     QColor codeFlodAreaBackgroundColor;
-    if (QColor(m_backgroundColor).lightness() < 128) {
+    if (DApplicationHelper::instance()->themeType() == DApplicationHelper::ColorType::DarkType) {
         codeFlodAreaBackgroundColor = palette().brightText().color();
         codeFlodAreaBackgroundColor.setAlphaF(0.06);
 
@@ -2250,34 +2250,6 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                 scaleunFoldPixmap = Utils::renderSVG(unflodImagePath, QSize(foldimage.height(), foldimage.width()), false);
                 scaleunFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
 
-        #if 0
-                if (fontHeight > foldimage.height()) {
-                    scaleFoldPixmap = Utils::renderSVG(flodImagePath, QSize(foldimage.height(), foldimage.width()), false);
-                    scaleFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
-                    scaleunFoldPixmap = Utils::renderSVG(unflodImagePath, QSize(foldimage.height(), foldimage.width()), false);
-                    scaleunFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
-                } else {
-                    double scale = nfoldImageHeight / foldimage.height();
-                    double nScaleWidth = scale * foldimage.height() * foldimage.height() / foldimage.width();
-                    scaleFoldPixmap = Utils::renderSVG(flodImagePath, QSize(static_cast<int>(foldimage.height() * scale), static_cast<int>(nScaleWidth)), false);
-                    scaleFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
-                    scaleunFoldPixmap = Utils::renderSVG(unflodImagePath, QSize(static_cast<int>(foldimage.height() * scale), static_cast<int>(nScaleWidth)), false);
-                    scaleunFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
-                }
-
-                int nOffset = (m_pLeftAreaWidget->m_pBookMarkArea->width() - scaleFoldPixmap.width()) / 2;
-                if (block.next().isVisible()) {
-                    if (block.isVisible()) {
-                        imageTop = cursorRect(cur).y() + (cursorRect(cur).height() - scaleFoldPixmap.height()) / 2;
-                        painter.drawPixmap(nOffset, imageTop/* - static_cast<int>(document()->documentMargin())*/, scaleFoldPixmap);
-                    }
-                } else {
-                    if (block.isVisible()) {
-                        imageTop = cursorRect(cur).y() + (cursorRect(cur).height() - scaleunFoldPixmap.height()) / 2;
-                        painter.drawPixmap(nOffset, imageTop/* - static_cast<int>(document()->documentMargin())*/, scaleunFoldPixmap);
-                    }
-                }
-        #endif
                 int nOffset = -8;
                 painter.setRenderHint(QPainter::Antialiasing, true);
                 painter.setRenderHints(QPainter::SmoothPixmapTransform);

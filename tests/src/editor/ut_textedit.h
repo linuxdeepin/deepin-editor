@@ -26,6 +26,7 @@
 #include <QUndoStack>
 #include <DMenu>
 #include <QList>
+#include <QFile>
 
 class test_textedit: public QObject, public::testing::Test
 {
