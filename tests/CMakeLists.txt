@@ -49,6 +49,8 @@ link_libraries(uchardet)
 set(PROJECT_NAME_TEST
     ${PROJECT_NAME}-test)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-inline")
+
 #Include all app own subdirectorys
 
 

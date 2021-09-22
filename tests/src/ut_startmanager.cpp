@@ -9,6 +9,11 @@ EditWrapper *wrapperstub(const QString &filePath)
     return new EditWrapper;
 }
 
+StartManager::FileTabInfo getFileTabInfostub()
+{
+    return StartManager::FileTabInfo{1,1};
+}
+
 TextEdit *textEditorstub()
 {
     return new TextEdit;
@@ -158,33 +163,31 @@ TEST(UT_StartManager_autoBackupFile,autoBackupFile)
 {
     StartManager *startManager = StartManager::instance();
     Window* w1 = new Window;
-    Window* w2 = new Window;
+
     EditWrapper* wr1 = new EditWrapper;
-    EditWrapper* wr2 = new EditWrapper;
+
     TextEdit* e1 = new TextEdit;
     e1->m_wrapper = wr1;
     e1->m_listBookmark = {1,2};
     wr1->m_bIsTemFile = true;
     wr1->m_pTextEdit = e1;
 
-    QList<Window*> windows = {w1,w2};
-    QMap<QString, EditWrapper *> wrappers{ {"wr1",wr1},{"wr2",wr2}};
+    QList<Window*> windows = {w1};
+    QMap<QString, EditWrapper *> wrappers{ {"wr1",wr1}};
     startManager->m_windows = windows;
     w1->m_wrappers = wrappers;
 
     Stub s1;
     s1.set(ADDR(QStringList,replace),returnstub);
     Stub s2;
-    s2.set(ADDR(EditWrapper,textEditor),textEditorstub);
+    s2.set(ADDR(StartManager,getFileTabInfo),getFileTabInfostub);
 
-    //startManager->autoBackupFile();
+    startManager->autoBackupFile();
     ASSERT_TRUE(startManager != nullptr);
 
     startManager->deleteLater();
     w1->deleteLater();
-    w2->deleteLater();
     wr1->deleteLater();
-    wr2->deleteLater();
     e1->deleteLater();
 }
 
