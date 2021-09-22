@@ -2143,7 +2143,7 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
         cur.setPosition(block.position(), QTextCursor::MoveAnchor);
 
         if (block.isVisible()) {
-            int w = lineNumberAreaWidth();
+            int w = this->m_fontSize<15?15:m_fontSize;
             updateLeftWidgetWidth(w);
             painter.drawText(0, cursorRect(cur).y(),
                              m_pLeftAreaWidget->m_pLineNumberArea->width(), cursorRect(cur).height() - static_cast<int>(document()->documentMargin()),
@@ -2288,7 +2288,7 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                      if (block.isVisible()) {
                          //imageTop = rt.y() ;
                          //painter.drawPixmap(nOffset, imageTop, rt.height(),rt.height(),scaleFoldPixmap);
-                         int w = lineNumberAreaWidth();
+                         int w = this->m_fontSize<15?15:m_fontSize;
                          updateLeftWidgetWidth(w);
                          QRect rect(0,cursorRect(cur).y(),w,w);
                          paintCodeFlod(&painter,rect);
@@ -2297,7 +2297,7 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                      if (block.isVisible()) {
                          //imageTop = rt.y() ;
                         // painter.drawPixmap(nOffset, imageTop,rt.height(),rt.height(), scaleunFoldPixmap);
-                         int w = lineNumberAreaWidth();
+                         int w = this->m_fontSize<15?15:m_fontSize;
                          updateLeftWidgetWidth(w);
                          QRect rect(0,cursorRect(cur).y(),w,w);
                          paintCodeFlod(&painter,rect,true);
@@ -3819,7 +3819,7 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
            // int nOffset = (m_pLeftAreaWidget->m_pBookMarkArea->width()  - scalePixmap.width()) / 2;
            // painter.drawPixmap(0 , imageTop, scalePixmap);
 
-            int w = lineNumberAreaWidth();
+            int w = this->m_fontSize<15?15:m_fontSize;
             updateLeftWidgetWidth(w);
             QRect rect(0,cursorRect(cur).y(),w,w);
             //rect = rect.adjusted(height/6,height/6,-1*height/6,-1*height/6);
@@ -4229,8 +4229,9 @@ int TextEdit::lineNumberAreaWidth()
         max /= 10;
         ++digits;
     }
+    int w = fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits;
 
-    return  fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits ;
+    return w>15?w:15;
 }
 
 void TextEdit::updateLeftWidgetWidth(int width)

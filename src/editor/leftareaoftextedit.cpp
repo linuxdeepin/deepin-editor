@@ -38,8 +38,8 @@ LeftAreaTextEdit::LeftAreaTextEdit(TextEdit *textEdit) :
     m_pLineNumberArea->setContentsMargins(0, 0, 0, 0);
     //m_pBookMarkArea->setFixedWidth(14);
    // m_pFlodArea->setFixedWidth(18);
-    m_pBookMarkArea->setFixedWidth(textEdit->cursorRect(textEdit->textCursor()).height());
-    m_pFlodArea->setFixedWidth(textEdit->cursorRect(textEdit->textCursor()).height());
+    //m_pBookMarkArea->setFixedWidth(textEdit->cursorRect(textEdit->textCursor()).height());
+   // m_pFlodArea->setFixedWidth(textEdit->cursorRect(textEdit->textCursor()).height());
 
     pHLayout->addWidget(m_pBookMarkArea);
     pHLayout->addWidget(m_pLineNumberArea);
