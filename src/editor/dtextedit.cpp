@@ -1896,10 +1896,10 @@ void TextEdit::updateHighlightLineSelection()
     m_currentLineSelection = selection;
 }
 
-bool TextEdit::updateKeywordSelections(QString keyword, QTextCharFormat charFormat, QList<QTextEdit::ExtraSelection> *listSelection)
+bool TextEdit::updateKeywordSelections(QString keyword, QTextCharFormat charFormat, QList<QTextEdit::ExtraSelection> &listSelection)
 {
     // Clear keyword selections first.
-    listSelection->clear();
+    listSelection.clear();
 
     // Update selections with keyword.
     if (!keyword.isEmpty()) {
@@ -1916,12 +1916,13 @@ bool TextEdit::updateKeywordSelections(QString keyword, QTextCharFormat charForm
 
         while (!cursor.isNull()) {
             extra.cursor = cursor;
-            listSelection->append(extra);
+            listSelection.append(extra);
             cursor = document()->find(keyword, cursor, flags);
         }
 
         return true;
     }
+
     return false;
 }
 
@@ -1988,7 +1989,6 @@ bool TextEdit::searchKeywordSeletion(QString keyword, QTextCursor cursor, bool f
             setTextCursor(next);
             ret = true;
         }
-
     } else {
         QTextCursor prev = document()->find(keyword, cursor, QTextDocument::FindBackward);
         if (!prev.isNull()) {
@@ -2008,8 +2008,9 @@ void TextEdit::renderAllSelections()
     QList<QPair<QTextEdit::ExtraSelection, qint64>> selectionsSortList;
 
     // 标记当前行的浅灰色
-    if (m_HightlightYes)
+    if (m_HightlightYes) {
         finalSelections.append(m_currentLineSelection);
+    }
     // 此处代码无作用，去除
     // else {
     //     selections.clear();

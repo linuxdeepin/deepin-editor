@@ -2099,19 +2099,232 @@ TEST(UT_test_textedit_updateHighlightLineSelection, UT_test_textedit_updateHighl
     pWindow->deleteLater();
 }
 
-TEST_F(test_textedit, renderAllSelections)
+//updateKeywordSelections 001
+TEST(UT_test_textedit_updateKeywordSelections, UT_test_textedit_updateKeywordSelections_001)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->renderAllSelections();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
+    QTextCharFormat charFormat;
+    charFormat.setBackground(QColor("red"));
+    QTextEdit::ExtraSelection extraSelection;
+    extraSelection.format = charFormat;
+    QList<QTextEdit::ExtraSelection> listExtraSelection;
+    listExtraSelection.append(extraSelection);
+    bool bRet = pWindow->currentWrapper()->textEditor()->updateKeywordSelections(QString("smile"), charFormat, listExtraSelection);
+
+    ASSERT_TRUE(bRet == false);
+    pWindow->deleteLater();
+}
+
+//updateKeywordSelections 002
+TEST(UT_test_textedit_updateKeywordSelections, UT_test_textedit_updateKeywordSelections_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    QTextCharFormat charFormat;
+    charFormat.setBackground(QColor("red"));
+    QTextEdit::ExtraSelection extraSelection;
+    extraSelection.format = charFormat;
+    QList<QTextEdit::ExtraSelection> listExtraSelection;
+    listExtraSelection.append(extraSelection);
+    bool bRet = pWindow->currentWrapper()->textEditor()->updateKeywordSelections(QString("world"), charFormat, listExtraSelection);
+
+    ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
+}
+
+//updateKeywordSelections 003
+TEST(UT_test_textedit_updateKeywordSelections, UT_test_textedit_updateKeywordSelections_003)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    QTextCharFormat charFormat;
+    charFormat.setBackground(QColor("red"));
+    QTextEdit::ExtraSelection extraSelection;
+    extraSelection.format = charFormat;
+    QList<QTextEdit::ExtraSelection> listExtraSelection;
+    listExtraSelection.append(extraSelection);
+    bool bRet = pWindow->currentWrapper()->textEditor()->updateKeywordSelections(QString(), charFormat, listExtraSelection);
+
+    ASSERT_TRUE(bRet == false);
+    pWindow->deleteLater();
+}
+
+//updateKeywordSelectionsInView 001
+TEST(UT_test_textedit_updateKeywordSelectionsInView, UT_test_textedit_updateKeywordSelectionsInView_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("H\ne\nl\nl\ne\n w\no\nr\nl\nd\nH\ne\nl\nl\ne\n w\no\nr\nl\nd\n"
+                   "H\ne\nl\nl\ne\n w\no\nr\nl\nd\nH\ne\nl\nl\ne\n w\no\nr\nl\nd\n"
+                   "H\ne\nl\nl\ne\n w\no\nr\nl\nd\nH\ne\nl\nl\ne\n w\no\nr\nl\nd\n");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    QTextCharFormat charFormat;
+    charFormat.setBackground(QColor("red"));
+    QTextEdit::ExtraSelection extraSelection;
+    extraSelection.format = charFormat;
+    QList<QTextEdit::ExtraSelection> listExtraSelection;
+    listExtraSelection.append(extraSelection);
+    bool bRet = pWindow->currentWrapper()->textEditor()->updateKeywordSelectionsInView(QString("smile"), charFormat, &listExtraSelection);
+
+    ASSERT_TRUE(bRet == false);
+    pWindow->deleteLater();
+}
+
+//updateKeywordSelectionsInView 002
+TEST(UT_test_textedit_updateKeywordSelectionsInView, UT_test_textedit_updateKeywordSelectionsInView_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    QTextCharFormat charFormat;
+    charFormat.setBackground(QColor("red"));
+    QTextEdit::ExtraSelection extraSelection;
+    extraSelection.format = charFormat;
+    QList<QTextEdit::ExtraSelection> listExtraSelection;
+    listExtraSelection.append(extraSelection);
+    bool bRet = pWindow->currentWrapper()->textEditor()->updateKeywordSelectionsInView(QString("smile"), charFormat, &listExtraSelection);
+
+    ASSERT_TRUE(bRet == false);
+    pWindow->deleteLater();
+}
+
+//updateKeywordSelectionsInView 003
+TEST(UT_test_textedit_updateKeywordSelectionsInView, UT_test_textedit_updateKeywordSelectionsInView_003)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("H\ne\nl\nl\ne\n w\no\nr\nl\nd\nH\ne\nl\nl\ne\n w\no\nr\nl\nd\n"
+                   "H\ne\nl\nl\ne\n w\no\nr\nl\nd\nH\ne\nl\nl\ne\n w\no\nr\nl\nd\n"
+                   "H\ne\nl\nl\ne\n w\no\nr\nl\nd\nH\ne\nl\nl\ne\n w\no\nr\nl\nd\n\n"
+                   "H\ne\nl\nl\ne\n w\no\nr\nl\nd\nH\ne\nl\nl\ne\n w\no\nr\nl\nd\n"
+                   "H\ne\nl\nl\ne\n w\no\nr\nl\nd\nH\ne\nl\nl\ne\n w\no\nr\nl\nd\n");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    QTextCharFormat charFormat;
+    charFormat.setBackground(QColor("red"));
+    QTextEdit::ExtraSelection extraSelection;
+    extraSelection.format = charFormat;
+    QList<QTextEdit::ExtraSelection> listExtraSelection;
+    listExtraSelection.append(extraSelection);
+    bool bRet = pWindow->currentWrapper()->textEditor()->updateKeywordSelectionsInView(QString("n"), charFormat, &listExtraSelection);
+
+    ASSERT_TRUE(bRet == false);
+    pWindow->deleteLater();
+}
+
+//updateKeywordSelectionsInView 004
+TEST(UT_test_textedit_updateKeywordSelectionsInView, UT_test_textedit_updateKeywordSelectionsInView_004)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    QTextCharFormat charFormat;
+    charFormat.setBackground(QColor("red"));
+    QTextEdit::ExtraSelection extraSelection;
+    extraSelection.format = charFormat;
+    QList<QTextEdit::ExtraSelection> listExtraSelection;
+    listExtraSelection.append(extraSelection);
+    bool bRet = pWindow->currentWrapper()->textEditor()->updateKeywordSelectionsInView(QString(), charFormat, &listExtraSelection);
+
+    ASSERT_TRUE(bRet == false);
+    pWindow->deleteLater();
+}
+
+//searchKeywordSeletion 001
+TEST(UT_test_textedit_searchKeywordSeletion, UT_test_textedit_searchKeywordSeletion_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    bool bRet = pWindow->currentWrapper()->textEditor()->searchKeywordSeletion(QString(), textCursor, true);
+
+    ASSERT_TRUE(bRet == false);
+    pWindow->deleteLater();
+}
+
+//searchKeywordSeletion 002
+TEST(UT_test_textedit_searchKeywordSeletion, UT_test_textedit_searchKeywordSeletion_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    bool bRet = pWindow->currentWrapper()->textEditor()->searchKeywordSeletion(QString("world"), textCursor, true);
+
+    ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
+}
+
+//searchKeywordSeletion 003
+TEST(UT_test_textedit_searchKeywordSeletion, UT_test_textedit_searchKeywordSeletion_003)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    bool bRet = pWindow->currentWrapper()->textEditor()->searchKeywordSeletion(QString("world"), textCursor, false);
+
+    ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
+}
+
+//renderAllSelections
+TEST(UT_test_textedit_renderAllSelections, UT_test_textedit_renderAllSelections_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->isMarkCurrentLine(true, QString("red"));
+    pWindow->currentWrapper()->textEditor()->markKeywordInView(QString("world"), QString("red"));
+    pWindow->currentWrapper()->textEditor()->m_HightlightYes = true;
+    pWindow->currentWrapper()->textEditor()->renderAllSelections();
+
+    ASSERT_TRUE(!pWindow->currentWrapper()->textEditor()->m_mapKeywordMarkSelections.isEmpty());
+    pWindow->deleteLater();
 }
 
 //void lineNumberAreaPaintEvent(QPaintEvent *event);
@@ -4081,8 +4294,6 @@ TEST_F(test_textedit, slotRedoAvailable)
 
     pWindow->deleteLater();
 }
-
-//void renderAllSelections();
 
 //void setBookmarkFlagVisable(bool isVisable,bool bIsFirstOpen = false);
 TEST_F(test_textedit, setBookmarkFlagVisable)
