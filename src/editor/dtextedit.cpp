@@ -1777,11 +1777,10 @@ void TextEdit::replaceRest(const QString &replaceText, const QString &withText)
     setTextCursor(startCursor);
 }
 
-void TextEdit::beforeReplace(QString _)
+void TextEdit::beforeReplace(const QString &strReplaceText)
 {
-    if (_.isEmpty() ||
-            !m_findHighlightSelection.cursor.hasSelection()) {
-        highlightKeyword(_, getPosition());
+    if (strReplaceText.isEmpty() || !m_findHighlightSelection.cursor.hasSelection()) {
+        highlightKeyword(strReplaceText, getPosition());
     }
 }
 
@@ -1853,12 +1852,12 @@ bool TextEdit::highlightKeyword(QString keyword, int position)
 bool TextEdit::highlightKeywordInView(QString keyword)
 {
     m_findMatchSelections.clear();
-    bool yes = updateKeywordSelectionsInView(keyword, m_findMatchFormat, &m_findMatchSelections);
+    bool bRet = updateKeywordSelectionsInView(keyword, m_findMatchFormat, &m_findMatchSelections);
     // 直接设置 setExtraSelections 会导致无法显示颜色标记，调用 renderAllSelections 进行显示更新
     // setExtraSelections(m_findMatchSelections);
     renderAllSelections();
 
-    return yes;
+    return bRet;
 }
 
 void TextEdit::clearFindMatchSelections()

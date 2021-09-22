@@ -1955,92 +1955,150 @@ TEST(UT_test_textedit_replaceRest, UT_test_textedit_replaceRest_003)
     pWindow->deleteLater();
 }
 
-TEST_F(test_textedit, beforeReplace)
+//beforeReplace
+TEST(UT_test_textedit_beforeReplace, UT_test_textedit_beforeReplace_001)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->beforeReplace("bb");
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
+    QString strRetBefore(pWindow->currentWrapper()->textEditor()->textCursor().block().text());
+    pWindow->currentWrapper()->textEditor()->beforeReplace(QString());
+    QString strRetAfter(pWindow->currentWrapper()->textEditor()->textCursor().block().text());
+
+    ASSERT_TRUE(!strRetAfter.compare(strRetBefore));
+    pWindow->deleteLater();
 }
-TEST_F(test_textedit, findKeywordForward)
+
+//findKeywordForward 001
+TEST(UT_test_textedit_findKeywordForward, UT_test_textedit_findKeywordForward_001)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->findKeywordForward("bb");
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
+    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    bool bRet = pWindow->currentWrapper()->textEditor()->findKeywordForward(QString("Helle"));
+
+    ASSERT_TRUE(bRet == false);
+    pWindow->deleteLater();
 }
-TEST_F(test_textedit, removeKeywords)
+
+//findKeywordForward 002
+TEST(UT_test_textedit_findKeywordForward, UT_test_textedit_findKeywordForward_002)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->removeKeywords();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
+    bool bRet = pWindow->currentWrapper()->textEditor()->findKeywordForward(QString("Helle"));
+
+    ASSERT_TRUE(bRet == false);
+    pWindow->deleteLater();
 }
-//void renderAllSelections();
-TEST_F(test_textedit, highlightKeyword)
+
+//removeKeywords
+TEST(UT_test_textedit_removeKeywords, UT_test_textedit_removeKeywords_001)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->highlightKeyword("aa", 2);
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
+    pWindow->currentWrapper()->textEditor()->removeKeywords();
+
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_findMatchSelections.isEmpty());
+    pWindow->deleteLater();
 }
-TEST_F(test_textedit, updateCursorKeywordSelection)
+
+//highlightKeyword
+TEST(UT_test_textedit_highlightKeyword, UT_test_textedit_highlightKeyword_001)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->updateCursorKeywordSelection("aa", true);
-    startManager->updateCursorKeywordSelection("aa", false);
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
+    bool bRet = pWindow->currentWrapper()->textEditor()->highlightKeyword(QString("world"), 0);
+
+    ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
 }
-TEST_F(test_textedit, updateHighlightLineSelection)
+
+//highlightKeywordInView
+TEST(UT_test_textedit_highlightKeywordInView, UT_test_textedit_highlightKeywordInView_001)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->updateHighlightLineSelection();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
+    bool bRet = pWindow->currentWrapper()->textEditor()->highlightKeywordInView(QString("world"));
+
+    ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
 }
+
+//clearFindMatchSelections
+TEST(UT_test_textedit_clearFindMatchSelections, UT_test_textedit_clearFindMatchSelections_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->clearFindMatchSelections();
+
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_findMatchSelections.isEmpty());
+    pWindow->deleteLater();
+}
+
+//updateCursorKeywordSelection
+TEST(UT_test_textedit_updateCursorKeywordSelection, UT_test_textedit_updateCursorKeywordSelection_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->updateCursorKeywordSelection(QString(), true);
+
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_findMatchSelections.isEmpty());
+    pWindow->deleteLater();
+}
+
+//updateHighlightLineSelection
+TEST(UT_test_textedit_updateHighlightLineSelection, UT_test_textedit_updateHighlightLineSelection_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->m_gestureAction = TextEdit::GA_slide;
+    pWindow->currentWrapper()->textEditor()->updateHighlightLineSelection();
+
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_findMatchSelections.isEmpty());
+    pWindow->deleteLater();
+}
+
 TEST_F(test_textedit, renderAllSelections)
 {
     QScrollBar *p = new QScrollBar();
