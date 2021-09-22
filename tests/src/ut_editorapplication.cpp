@@ -2,14 +2,28 @@
 #include "../../src/editorapplication.h"
 #include <QPushButton>
 #include <QKeyEvent>
+#include "src/stub.h"
 
-test_editorapplication::test_editorapplication()
+
+
+namespace editappstub
+{
+QWidget* activeWindowStub()
+{
+    return new QWidget;
+}
+}
+
+using namespace editappstub;
+
+
+UT_EditorApplication::UT_EditorApplication()
 {
 
 }
 
 
-TEST_F(test_editorapplication, EditorApplication)
+TEST(UT_EditorApplication_EditorApplication, EditorApplication_001)
 {
     int argc = 1;
     char* argv[] = {"test"};
@@ -22,7 +36,14 @@ TEST_F(test_editorapplication, EditorApplication)
     app->deleteLater();
 }
 
-TEST_F(test_editorapplication, notify)
+TEST(UT_EditorApplication_EditorApplication, EditorApplication_002)
+{
+    int argc = 1;
+    char* argv[] = {"test"};
+    //EditorApplication e(argc,argv);
+}
+
+TEST(UT_EditorApplication_pressSpace, notify)
 {
     int argc = 1;
     char* argv[] = {"test"};
@@ -42,7 +63,7 @@ TEST_F(test_editorapplication, notify)
     app->deleteLater();
 }
 
-TEST_F(test_editorapplication, pressSpace)
+TEST(UT_EditorApplication_pressSpace, pressSpace)
 {
     int argc = 1;
     char* argv[] = {"test"};
@@ -58,4 +79,19 @@ TEST_F(test_editorapplication, pressSpace)
 
     btn->deleteLater();
     app->deleteLater();
+}
+
+TEST(UT_EditorApplication_handleQuitAction, handleQuitAction)
+{
+    int argc = 1;
+    char* argv[] = {"test"};
+    //no deleted...
+    EditorApplication *app = new EditorApplication(argc,argv);
+    Stub s1;
+    s1.set(ADDR(QApplication,activeWindow),activeWindowStub);
+
+    app->handleQuitAction();
+
+    app->deleteLater();
+
 }

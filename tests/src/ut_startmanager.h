@@ -1,5 +1,5 @@
-#ifndef TEST_STARTMANAGER_H
-#define TEST_STARTMANAGER_H
+#ifndef UT_StartManager_H
+#define UT_StartManager_H
 #include"../../src/startmanager.h"
 #include"../../src/editor/dtextedit.h"
 #include"../../src/common/settings.h"
@@ -10,11 +10,11 @@
 #include <QObject>
 
 
-class test_startmanager: public QObject, public::testing::Test
+class UT_StartManager: public QObject, public::testing::Test
 {
         Q_OBJECT
 public:
-    test_startmanager();
+    UT_StartManager();
 };
 
-#endif // TEST_STARTMANAGER_H
+#endif // UT_StartManager_H

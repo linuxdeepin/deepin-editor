@@ -1,17 +1,17 @@
-#ifndef TEST_EDITORAPPLICATION_H
-#define TEST_EDITORAPPLICATION_H
+#ifndef UT_EditorApplication_H
+#define UT_EditorApplication_H
 
 #include "gtest/gtest.h"
 #include <QObject>
 
 
-class test_editorapplication: public QObject, public::testing::Test
+class UT_EditorApplication: public QObject, public::testing::Test
 {
         Q_OBJECT
 public:
-    test_editorapplication();
+    UT_EditorApplication();
 };
 
 
 
-#endif // TEST_EDITORAPPLICATION_H
+#endif // UT_EditorApplication_H
