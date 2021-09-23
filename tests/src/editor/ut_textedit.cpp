@@ -2970,57 +2970,194 @@ TEST(UT_test_textedit_restoreMarkStatus, UT_test_textedit_restoreMarkStatus_001)
     pWindow->deleteLater();
 }
 
+QString UT_test_textedit_completionWord_001_stub()
+{
+    return QString("wo");
+}
+
+//void completionWord(QString word) 001
+TEST(UT_test_textedit_completionWord, UT_test_textedit_completionWord_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    Stub stub_getWordAtCursor;
+    stub_getWordAtCursor.set(ADDR(TextEdit, getWordAtCursor), UT_test_textedit_completionWord_001_stub);
+    pWindow->currentWrapper()->textEditor()->completionWord("world");
+
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().block().text());
+    ASSERT_TRUE(!strRet.compare(QString("Helle worldrld")));
+    pWindow->deleteLater();
+}
+
+int UT_test_textedit_getWordAtMouse_001_stub()
+{
+    return 0;
+}
+
+//QString getWordAtMouse() 001
+TEST(UT_test_textedit_getWordAtMouse, UT_test_textedit_getWordAtMouse_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    Stub stub_characterCount;
+    stub_characterCount.set(ADDR(TextEdit, characterCount), UT_test_textedit_getWordAtMouse_001_stub);
+    QString strRet = pWindow->currentWrapper()->textEditor()->getWordAtMouse();
+
+    ASSERT_TRUE(strRet.isEmpty());
+    pWindow->deleteLater();
+}
+
+//QString getWordAtMouse() 002
+TEST(UT_test_textedit_getWordAtMouse, UT_test_textedit_getWordAtMouse_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    QString strRet = pWindow->currentWrapper()->textEditor()->getWordAtMouse();
+
+    ASSERT_TRUE(strRet.isEmpty());
+    pWindow->deleteLater();
+}
+
+//QString getWordAtCursor() 001
+TEST(UT_test_textedit_getWordAtCursore, UT_test_textedit_getWordAtCursor_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    Stub stub_characterCount;
+    stub_characterCount.set(ADDR(TextEdit, characterCount), UT_test_textedit_getWordAtMouse_001_stub);
+    QString strRet = pWindow->currentWrapper()->textEditor()->getWordAtCursor();
+
+    ASSERT_TRUE(strRet.isEmpty());
+    pWindow->deleteLater();
+}
+
+//QString getWordAtCursor() 002
+TEST(UT_test_textedit_getWordAtCursore, UT_test_textedit_getWordAtCursor_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle wor-ld");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    QString strRet = pWindow->currentWrapper()->textEditor()->getWordAtCursor();
+
+    ASSERT_TRUE(!strRet.compare(QString("ld")));
+    pWindow->deleteLater();
+}
+
+//void toggleReadOnlyMode() 001
+TEST(UT_test_textedit_toggleReadOnlyMode, UT_test_textedit_toggleReadOnlyMode_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->m_readOnlyMode = true;
+    pWindow->currentWrapper()->textEditor()->m_cursorMode = TextEdit::Overwrite;
+    pWindow->currentWrapper()->textEditor()->toggleReadOnlyMode();
+
+    bool bRet = pWindow->currentWrapper()->textEditor()->isReadOnly();
+    ASSERT_TRUE(bRet == false);
+    pWindow->deleteLater();
+}
+
+//void toggleReadOnlyMode() 002
+TEST(UT_test_textedit_toggleReadOnlyMode, UT_test_textedit_toggleReadOnlyMode_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->m_readOnlyMode = true;
+    pWindow->currentWrapper()->textEditor()->m_cursorMode = TextEdit::Readonly;
+    pWindow->currentWrapper()->textEditor()->toggleReadOnlyMode();
+
+    bool bRet = pWindow->currentWrapper()->textEditor()->isReadOnly();
+    ASSERT_TRUE(bRet == false);
+    pWindow->deleteLater();
+}
+
+//void toggleReadOnlyMode() 003
+TEST(UT_test_textedit_toggleReadOnlyMode, UT_test_textedit_toggleReadOnlyMode_003)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->m_readOnlyMode = false;
+    pWindow->currentWrapper()->textEditor()->toggleReadOnlyMode();
+
+    bool bRet = pWindow->currentWrapper()->textEditor()->isReadOnly();
+    ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
+}
+
+//void toggleComment(bool bValue) 001
+TEST(UT_test_textedit_toggleComment, UT_test_textedit_toggleComment_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->m_readOnlyMode = true;
+    pWindow->currentWrapper()->textEditor()->toggleComment(true);
+
+    bool bRet = pWindow->currentWrapper()->textEditor()->m_readOnlyMode;
+    ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
+}
+
+bool UT_test_textedit_toggleComment_002_stub()
+{
+    return true;
+}
+
+//void toggleComment(bool bValue) 002
+TEST(UT_test_textedit_toggleComment, UT_test_textedit_toggleComment_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    Stub stub_isValid;
+    stub_isValid.set(ADDR(Comment::CommentDefinition, isValid), UT_test_textedit_toggleComment_002_stub);
+    pWindow->currentWrapper()->textEditor()->m_readOnlyMode = false;
+    pWindow->currentWrapper()->textEditor()->toggleComment(true);
+
+    bool bRet = pWindow->currentWrapper()->textEditor()->m_commentDefinition.isValid();
+    ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
+}
+
 //void setThemeWithPath(const QString &path);
 TEST_F(test_textedit, setThemeWithPath)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->restoreMarkStatus();
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-
-//void completionWord(QString word);
-//QString getWordAtMouse();
-TEST_F(test_textedit, getWordAtMouse)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->getWordAtMouse();
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-//QString getWordAtCursor();
-
-//void toggleReadOnlyMode();
-TEST_F(test_textedit, toggleReadOnlyMode)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->toggleReadOnlyMode();
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-//void toggleComment(bool sister);
-TEST_F(test_textedit, toggleComment)
 {
     QScrollBar *p = new QScrollBar();
     TextEdit *startManager = new TextEdit();
@@ -3035,6 +3172,7 @@ TEST_F(test_textedit, toggleComment)
     startManager->deleteLater();
     p->deleteLater();
 }
+
 //bool atWordSeparator(int position);
 TEST_F(test_textedit, atWordSeparator)
 {

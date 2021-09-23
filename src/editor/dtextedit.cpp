@@ -3467,7 +3467,7 @@ void TextEdit::toggleReadOnlyMode()
     }
 }
 
-void TextEdit::toggleComment(bool sister)
+void TextEdit::toggleComment(bool bValue)
 {
     if (m_readOnlyMode) {
         popupNotify(tr("Read-Only mode is on"));
@@ -3479,10 +3479,15 @@ void TextEdit::toggleComment(bool sister)
     if (m_commentDefinition.isValid()) {
         QString  multiLineCommentMark = m_commentDefinition.multiLineStart.simplified();
         QString  singleLineCommentMark = m_commentDefinition.singleLine.simplified();
-        if (multiLineCommentMark.isEmpty() && singleLineCommentMark.isEmpty()) bHasCommnent = false;
-        else bHasCommnent = true;
+        if (multiLineCommentMark.isEmpty() && singleLineCommentMark.isEmpty()) {
+            bHasCommnent = false;
+        } else {
+            bHasCommnent = true;
+        }
     }
-    if (!bHasCommnent) return;
+    if (!bHasCommnent) {
+        return;
+    }
 
     const auto def = m_repository.definitionForFileName(QFileInfo(m_sFilePath).fileName());  //Java ,C++,HTML,
     QString name = def.name();
@@ -3490,7 +3495,7 @@ void TextEdit::toggleComment(bool sister)
         return;
 
     if (!def.filePath().isEmpty()) {
-        if (sister) {
+        if (bValue) {
             setComment();
         } else {
             removeComment();

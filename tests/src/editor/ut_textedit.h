@@ -9,6 +9,7 @@
 #include "../../src/startmanager.h"
 #include "../../src/editor/dtextedit.h"
 #include "../../src/common/CSyntaxHighlighter.h"
+#include "../../src/editor/uncommentselection.h"
 #include <QMenu>
 
 #include "../stub.h"
