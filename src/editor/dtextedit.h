@@ -233,17 +233,13 @@ public:
      */
     void updateMarkAllSelectColor();
 
-
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     void codeFLodAreaPaintEvent(QPaintEvent *event);
     void setBookmarkFlagVisable(bool isVisable, bool bIsFirstOpen = false);
     void setCodeFlodFlagVisable(bool isVisable, bool bIsFirstOpen = false);
     void setTheme(const QString &path);
-    bool highlightWordUnderMouse(QPoint pos);
     void removeHighlightWordUnderCursor();
     void setSettings(Settings *settings);
-    //设置tabbar修改状态是否带*,不改变document 修改属性
-    void setTabbarModified(bool modified);
     void copySelectedText();
     void cutSelectedText();
     void pasteText();

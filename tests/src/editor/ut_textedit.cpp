@@ -2509,7 +2509,7 @@ TEST(UT_test_textedit_updateMarkAllSelectColor, UT_test_textedit_updateMarkAllSe
     pWindow->deleteLater();
 }
 
-//void lineNumberAreaPaintEvent(QPaintEvent *event) 001
+// lineNumberAreaPaintEvent 001
 TEST(UT_test_textedit_lineNumberAreaPaintEvent, UT_test_textedit_lineNumberAreaPaintEvent_001)
 {
     Window *pWindow = new Window();
@@ -2530,7 +2530,7 @@ TEST(UT_test_textedit_lineNumberAreaPaintEvent, UT_test_textedit_lineNumberAreaP
     pWindow->deleteLater();
 }
 
-//void lineNumberAreaPaintEvent(QPaintEvent *event) 002
+//lineNumberAreaPaintEvent 002
 TEST(UT_test_textedit_lineNumberAreaPaintEvent, UT_test_textedit_lineNumberAreaPaintEvent_002)
 {
     Window *pWindow = new Window();
@@ -2547,30 +2547,12 @@ TEST(UT_test_textedit_lineNumberAreaPaintEvent, UT_test_textedit_lineNumberAreaP
     pWindow->deleteLater();
 }
 
-//void codeFLodAreaPaintEvent(QPaintEvent *event) 001
+//codeFLodAreaPaintEvent 001
 TEST(UT_test_textedit_codeFLodAreaPaintEvent, UT_test_textedit_codeFLodAreaPaintEvent_001)
 {
-#if 0
     Window *pWindow = new Window();
-    QString strNamePath = QCoreApplication::applicationDirPath() + QString("/1.cpp");
-    qInfo() << "====strNamePath: " << strNamePath;
-
-    if (QFile(strNamePath).exists()) {
-        pWindow->addTab(strNamePath);
-    }
-
-    qInfo() << "====toPlainText: " << pWindow->currentWrapper()->textEditor()->toPlainText();
-
-    QString strMsg("for(int i = 0; i <= 10; i++) {"
-                   "if (bRet) {                   "
-                   "    int a = 0;                "
-                   "}                             "
-                   "}H\ne\nl\nl\ne\n w\no\nr\nl\nd\nH\ne\nl\nl\ne\n w\no\nr\nl\nd\n"
-                   ""
-                   "H\ne\nl\nl\ne\n w\no\nr\nl\nd\nH\ne\nl\nl\ne\n w\no\nr\nl\nd\n"
-                   "H\ne\nl\nl\ne\n w\no\nr\nl\nd\nH\ne\nl\nl\ne\n w\no\nr\nl\nd\n"
-                   "H\ne\nl\nl\ne\n w\no\nr\nl\nd\nH\ne\nl\nl\ne\n w\no\nr\nl\nd\n"
-                   "H\ne\nl\nl\ne\n w\no\nr\nl\nd\nH\ne\nl\nl\ne\n w\no\nr\nl\nd\n");
+    pWindow->addBlankTab(QString());
+    QString strMsg("{\n{\n}\n}");
     QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
     pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
 
@@ -2578,222 +2560,418 @@ TEST(UT_test_textedit_codeFLodAreaPaintEvent, UT_test_textedit_codeFLodAreaPaint
     QPaintEvent *pPaintEvent;
     pWindow->currentWrapper()->textEditor()->codeFLodAreaPaintEvent(pPaintEvent);
 
-    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_pLeftAreaWidget->m_pLineNumberArea != nullptr);
+    ASSERT_TRUE(!pWindow->currentWrapper()->textEditor()->m_listFlodIconPos.isEmpty());
     pWindow->deleteLater();
-#endif
 }
 
-//void setCodeFlodFlagVisable(bool isVisable,bool bIsFirstOpen = false);
-TEST_F(test_textedit, setCodeFlodFlagVisable)
+//codeFLodAreaPaintEvent 002
+TEST(UT_test_textedit_codeFLodAreaPaintEvent, UT_test_textedit_codeFLodAreaPaintEvent_002)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->setCodeFlodFlagVisable(true, false);
-    startManager->setCodeFlodFlagVisable(false, false);
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("{\n{\n}\n}");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
+    DApplicationHelper::instance()->setThemeType(DApplicationHelper::ColorType::LightType);
+    QPaintEvent *pPaintEvent;
+    pWindow->currentWrapper()->textEditor()->codeFLodAreaPaintEvent(pPaintEvent);
+
+    ASSERT_TRUE(!pWindow->currentWrapper()->textEditor()->m_listFlodIconPos.isEmpty());
+    pWindow->deleteLater();
 }
+
+//setBookmarkFlagVisable 001
+TEST(UT_test_textedit_setBookmarkFlagVisable, UT_test_textedit_setBookmarkFlagVisable_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->setBookmarkFlagVisable(true, false);
+
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_pIsShowBookmarkArea == true);
+    pWindow->deleteLater();
+}
+
+//setBookmarkFlagVisable 002
+TEST(UT_test_textedit_setBookmarkFlagVisable, UT_test_textedit_setBookmarkFlagVisable_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->setBookmarkFlagVisable(false, false);
+
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_pIsShowBookmarkArea == false);
+    pWindow->deleteLater();
+}
+
+//setCodeFlodFlagVisable 001
+TEST(UT_test_textedit_setCodeFlodFlagVisable, UT_test_textedit_setCodeFlodFlagVisable_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->setCodeFlodFlagVisable(true, false);
+
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_pIsShowCodeFoldArea == true);
+    pWindow->deleteLater();
+}
+
+//setCodeFlodFlagVisable 002
+TEST(UT_test_textedit_setCodeFlodFlagVisable, UT_test_textedit_setCodeFlodFlagVisable_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->setCodeFlodFlagVisable(false, false);
+
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_pIsShowCodeFoldArea == false);
+    pWindow->deleteLater();
+}
+
+//setTheme 001
+TEST(UT_test_textedit_setTheme, UT_test_textedit_setTheme_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    QString strThemeFilePath("./../themes/deepin.theme");
+    pWindow->currentWrapper()->textEditor()->setTheme(strThemeFilePath);
+    QString strBgColorName(pWindow->currentWrapper()->textEditor()->m_backgroundColor.name());
+
+    ASSERT_TRUE(!strBgColorName.compare(QString("#000000")));
+    pWindow->deleteLater();
+}
+
+//void removeHighlightWordUnderCursor() 001
+TEST(UT_test_textedit_removeHighlightWordUnderCursor, UT_test_textedit_removeHighlightWordUnderCursor_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->removeHighlightWordUnderCursor();
+
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_nBookMarkHoverLine == -1);
+    pWindow->deleteLater();
+}
+
+//void setSettings(Settings *settings) 001
+TEST(UT_test_textedit_setSettings, UT_test_textedit_setSettings_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->setSettings(pWindow->currentWrapper()->textEditor()->m_settings);
+
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_settings != nullptr);
+    pWindow->deleteLater();
+}
+
+//void copySelectedText() 001
+TEST(UT_test_textedit_copySelectedText, UT_test_textedit_copySelectedText_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    QTextEdit::ExtraSelection extraSelection;
+    extraSelection.cursor = textCursor;
+    pWindow->currentWrapper()->textEditor()->m_altModSelections << extraSelection;
+    pWindow->currentWrapper()->textEditor()->m_bIsAltMod = true;
+    QClipboard *pClipboard = QApplication::clipboard();
+    pClipboard->clear();
+    pWindow->currentWrapper()->textEditor()->copySelectedText();
+
+    QString strRet(pClipboard->text());
+    ASSERT_TRUE(!strRet.compare(QString("Helle world")));
+    pWindow->deleteLater();
+}
+
+//void copySelectedText() 002
+TEST(UT_test_textedit_copySelectedText, UT_test_textedit_copySelectedText_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    QClipboard *pClipboard = QApplication::clipboard();
+    pClipboard->clear();
+    pWindow->currentWrapper()->textEditor()->copySelectedText();
+
+    QString strRet(pClipboard->text());
+    ASSERT_TRUE(!strRet.compare(QString("Helle world")));
+    pWindow->deleteLater();
+}
+
+//void copySelectedText() 003
+TEST(UT_test_textedit_copySelectedText, UT_test_textedit_copySelectedText_003)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    QClipboard *pClipboard = QApplication::clipboard();
+    pClipboard->clear();
+    pWindow->currentWrapper()->textEditor()->copySelectedText();
+
+    QString strRet(pClipboard->text());
+    ASSERT_TRUE(strRet.isEmpty());
+    pWindow->deleteLater();
+}
+
+//void cutSelectedText() 001
+TEST(UT_test_textedit_cutSelectedText, UT_test_textedit_cutSelectedText_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    QClipboard *pClipboard = QApplication::clipboard();
+    pClipboard->clear();
+    pWindow->currentWrapper()->textEditor()->cutSelectedText();
+
+    QString strRet1(pClipboard->text());
+    QString strRet2(pWindow->currentWrapper()->textEditor()->toPlainText());
+    ASSERT_TRUE(!strRet1.compare(QString("Helle world")) && !strRet2.compare(QString("Helle world\n")));
+    pWindow->deleteLater();
+}
+
+//void pasteText() 001
+TEST(UT_test_textedit_pasteText, UT_test_textedit_pasteText_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->copySelectedText();
+    textCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->pasteText();
+    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().block().text());
+
+    ASSERT_TRUE(!strRet.compare(QString("Helle worldHelle world")));
+    pWindow->deleteLater();
+}
+
+//void setMark() 001
+TEST(UT_test_textedit_setMark, UT_test_textedit_setMark_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->m_cursorMark = true;
+    pWindow->currentWrapper()->textEditor()->setMark();
+    bool bRet = pWindow->currentWrapper()->textEditor()->textCursor().hasSelection();
+
+    ASSERT_TRUE(bRet == false);
+    pWindow->deleteLater();
+}
+
+//void setMark() 002
+TEST(UT_test_textedit_setMark, UT_test_textedit_setMark_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->m_cursorMark = true;
+    pWindow->currentWrapper()->textEditor()->setMark();
+
+    bool bRet = pWindow->currentWrapper()->textEditor()->m_cursorMark;
+    ASSERT_TRUE(bRet == false);
+    pWindow->deleteLater();
+}
+
+//void setMark() 003
+TEST(UT_test_textedit_setMark, UT_test_textedit_setMark_003)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->m_cursorMark = false;
+    pWindow->currentWrapper()->textEditor()->setMark();
+
+    bool bRet = pWindow->currentWrapper()->textEditor()->m_cursorMark;
+    ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
+}
+
+//void unsetMark() 001
+TEST(UT_test_textedit_unsetMark, UT_test_textedit_unsetMark_003)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->m_cursorMark = true;
+    pWindow->currentWrapper()->textEditor()->unsetMark();
+
+    bool bRet = pWindow->currentWrapper()->textEditor()->m_cursorMark;
+    ASSERT_TRUE(bRet == false);
+    pWindow->deleteLater();
+}
+
+//bool tryUnsetMark() 001
+TEST(UT_test_textedit_tryUnsetMark, UT_test_textedit_tryUnsetMark_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->m_cursorMark = true;
+    bool bRet = pWindow->currentWrapper()->textEditor()->tryUnsetMark();
+
+    ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
+}
+
+//bool tryUnsetMark() 002
+TEST(UT_test_textedit_tryUnsetMark, UT_test_textedit_tryUnsetMark_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->m_cursorMark = false;
+    bool bRet = pWindow->currentWrapper()->textEditor()->tryUnsetMark();
+
+    ASSERT_TRUE(bRet == false);
+    pWindow->deleteLater();
+}
+
+//void exchangeMark() 001
+TEST(UT_test_textedit_exchangeMark, UT_test_textedit_exchangeMark_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    int iRetBefore = textCursor.position();
+    int iSelectStar = textCursor.selectionStart();
+    int iSelectEnd = textCursor.selectionEnd();
+    pWindow->currentWrapper()->textEditor()->exchangeMark();
+    int iRetAfter = textCursor.position();
+
+    ASSERT_TRUE(iRetAfter == iRetBefore);
+    pWindow->deleteLater();
+}
+
+//void exchangeMark() 002
+TEST(UT_test_textedit_exchangeMark, UT_test_textedit_exchangeMark_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+    textCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    int iRetBefore = textCursor.position();
+    pWindow->currentWrapper()->textEditor()->exchangeMark();
+    int iRetAfter = textCursor.position();
+
+    ASSERT_TRUE(iRetAfter == iRetBefore);
+    pWindow->deleteLater();
+}
+
+//void saveMarkStatus() 001
+TEST(UT_test_textedit_saveMarkStatus, UT_test_textedit_saveMarkStatus_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    int iRet1 = pWindow->currentWrapper()->textEditor()->m_cursorMarkPosition;
+    pWindow->currentWrapper()->textEditor()->setMark();
+    pWindow->currentWrapper()->textEditor()->saveMarkStatus();
+
+    int iRet = pWindow->currentWrapper()->textEditor()->m_cursorMarkPosition;
+    ASSERT_TRUE(iRet == 23);
+    pWindow->deleteLater();
+}
+
+//void restoreMarkStatus() 001
+TEST(UT_test_textedit_restoreMarkStatus, UT_test_textedit_restoreMarkStatus_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->m_cursorMarkStatus = true;
+    pWindow->currentWrapper()->textEditor()->restoreMarkStatus();
+
+    bool bRet = pWindow->currentWrapper()->textEditor()->textCursor().hasSelection();
+    ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
+}
+
 //void setThemeWithPath(const QString &path);
 TEST_F(test_textedit, setThemeWithPath)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    ee->OnThemeChangeSlot("aa");
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-//void setTheme(const KSyntaxHighlighting::Theme &theme, const QString &path);
-
-//bool highlightWordUnderMouse(QPoint pos);
-TEST_F(test_textedit, highlightWordUnderMouse)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    QPoint x(10, 10);
-    startManager->setWrapper(ee);
-    startManager->highlightWordUnderMouse(x);
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-//void removeHighlightWordUnderCursor();
-TEST_F(test_textedit, removeHighlightWordUnderCursor)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->removeHighlightWordUnderCursor();
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-
-//void setSettings(Settings *settings);
-TEST_F(test_textedit, setSettings)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    Settings *set;
-    startManager->setWrapper(ee);
-    startManager->setSettings(set);
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-
-//void copySelectedText();
-TEST_F(test_textedit, copySelectedText)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->copySelectedText();
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-
-//void cutSelectedText();
-TEST_F(test_textedit, cutSelectedText)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->cutSelectedText();
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-//void pasteText();
-TEST_F(test_textedit, pasteText)
-{
-    QClipboard *c = QApplication::clipboard();
-    c->setText("ddd");
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->pasteText();
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-
-//void setMark();
-TEST_F(test_textedit, setMark)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->setMark();
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-
-//void unsetMark();
-TEST_F(test_textedit, unsetMark)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->unsetMark();
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-
-//bool tryUnsetMark();
-TEST_F(test_textedit, tryUnsetMark)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->tryUnsetMark();
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-
-//void exchangeMark();
-TEST_F(test_textedit, exchangeMark)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->exchangeMark();
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-//void saveMarkStatus();
-TEST_F(test_textedit, saveMarkStatus)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->saveMarkStatus();
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-//void restoreMarkStatus();
-TEST_F(test_textedit, restoreMarkStatus)
 {
     QScrollBar *p = new QScrollBar();
     TextEdit *startManager = new TextEdit();
@@ -4518,24 +4696,12 @@ TEST_F(test_textedit, slotRedoAvailable)
     pWindow->deleteLater();
 }
 
-//void setBookmarkFlagVisable(bool isVisable,bool bIsFirstOpen = false);
-TEST_F(test_textedit, setBookmarkFlagVisable)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    startManager->setBookmarkFlagVisable(false, false);
-    startManager->setBookmarkFlagVisable(true, false);
-
-    ASSERT_TRUE(startManager->m_pLeftAreaWidget != nullptr);
-    startManager->deleteLater();
-    p->deleteLater();
-}
 /*
     void unCommentSelection();
     void setComment();
     void removeComment();
 */
+
 TEST_F(test_textedit, unCommentSelection)
 {
     EditWrapper *editWrapper = new EditWrapper;

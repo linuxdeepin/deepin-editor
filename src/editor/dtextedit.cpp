@@ -3237,49 +3237,9 @@ void TextEdit::setTheme(const QString &path)
     renderAllSelections();
 }
 
-bool TextEdit::highlightWordUnderMouse(QPoint pos)
-{
-    // Get cursor match mouse pointer coordinate, but cursor maybe not under mouse pointer.
-    QTextCursor cursor(cursorForPosition(pos));
-
-    // Get cursor rectangle.
-    auto rect = cursorRect(cursor);
-    int widthOffset = 10;
-    rect.setX(std::max(rect.x() - widthOffset / 2, 0));
-    rect.setWidth(rect.width() + widthOffset);
-
-    // Just highlight word under pointer when cursor rectangle contain moue pointer coordinate.
-    if ((rect.x() <= pos.x()) &&
-            (pos.x() <= rect.x() + rect.width()) &&
-            (rect.y() <= pos.y()) &&
-            (pos.y() <= rect.y() + rect.height())) {
-        // Move back to word bound start postion, and save cursor for convert case.
-        m_wordUnderPointerCursor = cursor;
-        m_wordUnderPointerCursor.select(QTextCursor::WordUnderCursor);
-        m_wordUnderPointerCursor.setPosition(m_wordUnderPointerCursor.anchor(), QTextCursor::MoveAnchor);
-
-        // Update highlight cursor.
-        QTextEdit::ExtraSelection selection;
-
-        selection.format.setBackground(m_selectionBgColor);
-        selection.format.setForeground(m_selectionColor);
-        selection.cursor = cursor;
-        selection.cursor.select(QTextCursor::WordUnderCursor);
-
-        //m_wordUnderCursorSelection = selection;
-
-        renderAllSelections();
-
-        return true;
-    } else {
-        return false;
-    }
-}
-
 void TextEdit::removeHighlightWordUnderCursor()
 {
     //m_highlightWordCacheCursor = m_wordUnderCursorSelection.cursor;
-
     QTextEdit::ExtraSelection selection;
     //m_wordUnderCursorSelection = selection;
 
