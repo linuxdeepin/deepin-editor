@@ -14,21 +14,21 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef TEST_UTILS_H
-#define TEST_UTILS_H
+#ifndef UT_Utils_H
+#define UT_Utils_H
 
 #include "gtest/gtest.h"
 #include <QObject>
 
 class Utils;
-class test_utils : public QObject
+class UT_Utils : public QObject
     , public ::testing::Test
 {
 public:
-    test_utils();
+    UT_Utils();
     virtual void SetUp() override;
     virtual void TearDown() override;
     Utils *utils;
 };
 
-#endif // TEST_UTILS_H
+#endif // UT_Utils_H

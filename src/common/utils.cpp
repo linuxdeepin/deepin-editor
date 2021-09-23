@@ -97,7 +97,7 @@ void Utils::applyQss(QWidget *widget, const QString &qssName)
     file.close();
 }
 
-static float codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, const QLocale::Country &country)
+float Utils::codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, const QLocale::Country &country)
 {
     qreal hep_count = 0;
     int non_base_latin_count = 0;
@@ -217,7 +217,7 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
         const QString &language = pattern.match(_data, 0, QRegularExpression::PartialPreferFirstMatch,
                                                 QRegularExpression::DontCheckSubjectStringMatchOption).captured("language");
 
-        if (!language.isEmpty()) {
+        if (0 != language.size()) {
             QLocale l(language);
 
             switch (l.script()) {
@@ -306,7 +306,7 @@ confidence:
             if (def_codec == codec)
                 def_codec = nullptr;
 
-            float c = codecConfidenceForData(codec, data, i.second);
+            float c = Utils::codecConfidenceForData(codec, data, i.second);
 
             if (prober_confidence > 0.5) {
                 c = c / 2 + prober_confidence / 2;
@@ -321,7 +321,7 @@ confidence:
 
             if (i.first == KEncodingProber::ChineseTraditional && c < 0.5) {
                 // test Big5
-                c = codecConfidenceForData(QTextCodec::codecForName("Big5"), data, i.second);
+                c = Utils::codecConfidenceForData(QTextCodec::codecForName("Big5"), data, i.second);
 
                 if (c > 0.5 && c > confidence) {
                     confidence = c;
@@ -339,7 +339,7 @@ confidence:
         }
     }
 
-    if (def_codec && codecConfidenceForData(def_codec, data, QLocale::system().country()) > confidence) {
+    if (def_codec && Utils::codecConfidenceForData(def_codec, data, QLocale::system().country()) > confidence) {
         return def_codec->name();
     }
 

@@ -90,4 +90,7 @@ public:
 
     //判断是否共享文件夹且只读
     static bool isShareDirAndReadOnly(const QString& filePath);
+
+
+    static float codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, const QLocale::Country &country);
 };
