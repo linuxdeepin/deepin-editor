@@ -23,25 +23,52 @@
 #include <DSettings>
 #include <QStandardPaths>
 #include <DtkCores>
+#include "src/stub.h"
 
-test_setting::test_setting()
+
+namespace settinsstub {
+
+
+
+KeySequenceEdit* keyvalue = nullptr;
+KeySequenceEdit* KeySequenceEditstub()
+{
+    if(keyvalue==nullptr)
+    {
+        DTK_CORE_NAMESPACE::DSettingsOption o;
+        o.setValue("123.456");
+        keyvalue = new KeySequenceEdit(&o);
+    }
+    return keyvalue;
+}
+}
+
+using namespace settinsstub;
+
+UT_Setting::UT_Setting()
 {
 }
 
-void test_setting::SetUp()
+void UT_Setting::SetUp()
 {
     m_setting = new Settings();
     EXPECT_NE(m_setting,nullptr);
 }
 
-void test_setting::TearDown()
+void UT_Setting::TearDown()
 {
     delete m_setting;
     m_setting=nullptr;
 }
 
-TEST_F(test_setting, Settings)
+QString retqstring()
 {
+    return "123.456";
+}
+
+TEST(UT_Setting_Settings, UT_Setting_Settings)
+{
+    Settings* m_setting = new Settings();
     QString figPath = QString("%1/%2/%3/config.conf")
                           .arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation))
                           .arg(qApp->organizationName())
@@ -67,14 +94,14 @@ TEST_F(test_setting, Settings)
 }
 
 //static Settings* instance();
-TEST_F(test_setting, instance)
+TEST(UT_Setting_instance, UT_Setting_instance)
 {
     EXPECT_NE(Settings::instance(),nullptr);
 
 }
 
 //void dtkThemeWorkaround(QWidget *parent, const QString &theme);
-TEST_F(test_setting, dtkThemeWorkaround)
+TEST(UT_Setting_dtkThemeWorkaround, UT_Setting_dtkThemeWorkaround)
 {
     QWidget *widget = new QWidget();
     Settings::instance()->dtkThemeWorkaround(widget, "dlight");
@@ -86,8 +113,10 @@ TEST_F(test_setting, dtkThemeWorkaround)
 }
 
 //static QPair<QWidget*, QWidget*> createFontComBoBoxHandle(QObject *obj);
-TEST_F(test_setting, createFontComBoBoxHandle)
+TEST(UT_Setting_createFontComBoBoxHandle, UT_Setting_createFontComBoBoxHandle)
 {
+    Settings* m_setting = new Settings();
+
     QWidget *widget = new QWidget();
     DSettingsDialog *dialog = new DSettingsDialog(widget);
     dialog->widgetFactory()->registerWidget("fontcombobox", m_setting->createFontComBoBoxHandle);
@@ -104,8 +133,10 @@ TEST_F(test_setting, createFontComBoBoxHandle)
 }
 
 //static QPair<QWidget*, QWidget*> createKeySequenceEditHandle(QObject *obj);
-TEST_F(test_setting, createKeySequenceEditHandle)
+TEST(UT_Setting_createKeySequenceEditHandle, UT_Setting_createKeySequenceEditHandle_001)
 {
+    Settings* m_setting = new Settings();
+
     QWidget *widget = new QWidget();
     DSettingsDialog *dialog = new DSettingsDialog(widget);
     dialog->widgetFactory()->registerWidget("fontcombobox", Settings::createKeySequenceEditHandle);
@@ -123,7 +154,7 @@ TEST_F(test_setting, createKeySequenceEditHandle)
 //static Settings* instance();
 
 //void setSettingDialog(DSettingsDialog *settingsDialog);
-TEST_F(test_setting, setSettingDialog)
+TEST(UT_Setting_setSettingDialog, UT_Setting_setSettingDialog)
 {
     QWidget *widget = new QWidget();
     DSettingsDialog *dialog = new DSettingsDialog(widget);
@@ -139,7 +170,7 @@ TEST_F(test_setting, setSettingDialog)
 
 //private:
 //void updateAllKeysWithKeymap(QString keymap);
-TEST_F(test_setting, updateAllKeysWithKeymap)
+TEST(UT_Setting_updateAllKeysWithKeymap, UT_Setting_updateAllKeysWithKeymap)
 {
     QString keymap = Settings::instance()->settings->option("shortcuts.keymap.keymap")->value().toString();
     Settings::instance()->updateAllKeysWithKeymap(keymap);
@@ -148,7 +179,7 @@ TEST_F(test_setting, updateAllKeysWithKeymap)
 }
 
 //void copyCustomizeKeysFromKeymap(QString keymap);
-TEST_F(test_setting, copyCustomizeKeysFromKeymap)
+TEST(UT_Setting_copyCustomizeKeysFromKeymap, UT_Setting_copyCustomizeKeysFromKeymap)
 {
     QString keymap = Settings::instance()->settings->option("shortcuts.keymap.keymap")->value().toString();
     Settings::instance()->copyCustomizeKeysFromKeymap(keymap);
@@ -157,29 +188,34 @@ TEST_F(test_setting, copyCustomizeKeysFromKeymap)
 }
 
 //此函数代码调试中已经覆盖， html中显示未覆盖
-TEST_F(test_setting, checkShortcutValid)
+TEST(UT_Setting_checkShortcutValid, UT_Setting_checkShortcutValid)
 {
+    Settings* m_setting = new Settings();
+
     bool ok;
     QString reason = "reason";
     EXPECT_NE(m_setting->checkShortcutValid("shortcuts.keymap.keymap", "Enter", reason, ok),true);
 }
 
-TEST_F(test_setting, checkShortcutValid2)
+TEST(UT_Setting_checkShortcutValid2, UT_Setting_checkShortcutValid2)
 {
+    Settings* m_setting = new Settings();
     bool ok;
     QString reason = "reason";
     EXPECT_NE(m_setting->checkShortcutValid("shortcuts.keymap.keymap", "<", reason, ok),true);
 }
 
-TEST_F(test_setting, checkShortcutValid3)
+TEST(UT_Setting_checkShortcutValid3, UT_Setting_checkShortcutValid3)
 {
+    Settings* m_setting = new Settings();
     bool ok;
     QString reason = "reason";
     EXPECT_NE(m_setting->checkShortcutValid("shortcuts.keymap.keymap<", "Num+", reason, ok),true);
 }
 
-TEST_F(test_setting, isShortcutConflict)
+TEST(UT_Setting_isShortcutConflict, UT_Setting_isShortcutConflict)
 {
+    Settings* m_setting = new Settings();
     //Settings::instance()->isShortcutConflict("shortcuts.keymap.keymap", "Enter");
     //    assert(1 == 1);
     QStringList list;
@@ -208,7 +244,7 @@ TEST_F(test_setting, isShortcutConflict)
     m_setting->slotupdateAllKeysWithKeymap(keymap);
 }
 
-TEST_F(test_setting, KeySequenceEdit)
+TEST(UT_Setting_KeySequenceEdit, UT_Setting_KeySequenceEdit)
 {
     QWidget *widget = new QWidget();
     DSettingsDialog *dialog = new DSettingsDialog(widget);
@@ -231,13 +267,13 @@ TEST_F(test_setting, KeySequenceEdit)
 }
 
 //以下两条CASE 脚本跑会造成程序崩，加两行debug后就不崩了
-//TEST_F(test_setting, createDialog2)
+//TEST(UT_Setting_createDialog2, UT_Setting_createDialog2)
 //{
 //    Settings set;
 //    set.createDialog("ba", "bb", false);
 //}
 
-//TEST_F(test_setting, createDialog)
+//TEST(UT_Setting_createDialog, UT_Setting_createDialog)
 //{
 //    Settings set;
 //    set.createDialog("ba", "bb", true);

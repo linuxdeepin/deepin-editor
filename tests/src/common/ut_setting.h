@@ -14,24 +14,24 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef TEST_SETTING_H
-#define TEST_SETTING_H
+#ifndef UT_Setting_H
+#define UT_Setting_H
 
 #include "gtest/gtest.h"
 #include <QTest>
 #include <QObject>
 class Settings;
 class KeySequenceEdit;
-class test_setting : public QObject
+class UT_Setting : public QObject
     , public ::testing::Test
 {
     Q_OBJECT
 
 public:
-    test_setting();
+    UT_Setting();
     virtual void SetUp() override;
     virtual void TearDown() override;
     Settings *m_setting;
 };
 
-#endif // TEST_SETTING_H
+#endif // UT_Setting_H

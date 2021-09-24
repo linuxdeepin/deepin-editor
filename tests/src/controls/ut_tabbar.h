@@ -1,16 +1,16 @@
-#ifndef TEST_TABBAR_H
-#define TEST_TABBAR_H
+#ifndef UT_Tabbar_H
+#define UT_Tabbar_H
 #include "gtest/gtest.h"
 #include <QObject>
 #include"../../src/controls/tabbar.h"
 
 
-class test_tabbar: public QObject, public::testing::Test
+class UT_Tabbar: public QObject, public::testing::Test
 {
     Q_OBJECT
 
 public:
-    test_tabbar();
+    UT_Tabbar();
 };
 
-#endif // TEST_TABBAR_H
+#endif // UT_Tabbar_H
