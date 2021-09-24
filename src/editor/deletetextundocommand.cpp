@@ -29,7 +29,7 @@ DeleteTextUndoCommand::DeleteTextUndoCommand(QTextCursor textcursor):
 {
     if(m_textCursor.hasSelection()){
         m_sInsertText = m_textCursor.selectedText();
-        qDebug()<<m_sInsertText;
+        //qDebug()<<m_sInsertText;
     }else{
         int pos = m_textCursor.positionInBlock() -1;
         if(pos >= 0){
@@ -68,7 +68,6 @@ void DeleteTextUndoCommand::undo()
     if(m_ColumnEditSelections.isEmpty()){
         m_textCursor.insertText(m_sInsertText);
         m_textCursor.movePosition(QTextCursor::Left,QTextCursor::KeepAnchor,m_sInsertText.length());
-        qDebug()<<"InsertTextUndoCommand[undo]:"<<m_sInsertText<<m_sInsertText.length();
 
     }else {
         int cnt = m_ColumnEditSelections.size();
@@ -76,7 +75,6 @@ void DeleteTextUndoCommand::undo()
             m_ColumnEditSelections[i].cursor.insertText(m_selectTextList[i]);
             m_ColumnEditSelections[i].cursor.movePosition(QTextCursor::Left,QTextCursor::KeepAnchor,m_selectTextList[i].length());
         }
-        qDebug()<<"InsertTextUndoCommand[undo]:"<<m_selectTextList;
     }
 
 }
@@ -87,13 +85,11 @@ void DeleteTextUndoCommand::redo()
 
     if(m_ColumnEditSelections.isEmpty()){
         m_textCursor.deletePreviousChar();
-        qDebug()<<"InsertTextUndoCommand[redo]:"<<m_sInsertText<<m_sInsertText.length();
     }else {
         int cnt = m_ColumnEditSelections.size();
         for (int i = 0; i < cnt; i++) {
             m_ColumnEditSelections[i].cursor.deletePreviousChar();
         }
-        qDebug()<<"InsertTextUndoCommand[redo]:"<<m_selectTextList;
     }
 }
 
@@ -134,7 +130,6 @@ DeleteTextUndoCommand2::DeleteTextUndoCommand2(QList<QTextEdit::ExtraSelection> 
 void DeleteTextUndoCommand2::undo()
 {
     if(m_ColumnEditSelections.isEmpty()){
-        qInfo()<<"****************chexiao************0= "<<m_textCursor.position();
         m_textCursor.setPosition(m_beginPostion);
         m_textCursor.insertText(m_sInsertText);
         m_textCursor.setPosition(m_beginPostion);

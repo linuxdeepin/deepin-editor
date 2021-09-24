@@ -14,10 +14,10 @@
 #include <QEvent>
 
 
-class test_deletetextundocommond: public QObject, public::testing::Test
+class UT_Deletetextundocommond: public QObject, public::testing::Test
 {
 public:
-    test_deletetextundocommond();
+    UT_Deletetextundocommond();
 };
 
 #endif // TEST_TEXTUNDOCOMMAND_H

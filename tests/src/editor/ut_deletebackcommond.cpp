@@ -3,12 +3,12 @@
 #include"../../src/widgets/window.h"
 #include "qplaintextedit.h"
 #include "qtextcursor.h"
-test_deletebackcommond::test_deletebackcommond()
+UT_Deletebackcommond::UT_Deletebackcommond()
 {
 
 }
 
-TEST_F(test_deletebackcommond, DeleteBackCommond)
+TEST(UT_Deletebackcommond_DeleteBackCommond, UT_Deletebackcommond_DeleteBackCommond)
 {
     QTextCursor cursor;
     QPlainTextEdit *pEdit = new QPlainTextEdit;
@@ -21,7 +21,7 @@ TEST_F(test_deletebackcommond, DeleteBackCommond)
     pEdit = nullptr;
 }
 
-TEST_F(test_deletebackcommond, redo)
+TEST(UT_Deletebackcommond_redo, UT_Deletebackcommond_redo)
 {
     QString text = "test";
     Window *pWindow = new Window;
@@ -41,7 +41,7 @@ TEST_F(test_deletebackcommond, redo)
     pWindow = nullptr;
 }
 
-TEST_F(test_deletebackcommond, undo)
+TEST(UT_Deletebackcommond_undo, UT_Deletebackcommond_undo)
 {
     QString text = "test";
     Window *pWindow = new Window;
@@ -63,12 +63,12 @@ TEST_F(test_deletebackcommond, undo)
 
 
 
-test_deletebackaltcommond::test_deletebackaltcommond()
+UT_Deletebackaltcommond::UT_Deletebackaltcommond()
 {
 
 }
 
-TEST_F(test_deletebackaltcommond,  DeleteBackAltCommond)
+TEST(UT_Deletebackaltcommond_DeleteBackAltCommond, UT_Deletebackaltcommond_DeleteBackAltCommond)
 {
     QString text = "test";
     QList<QTextEdit::ExtraSelection> list;
@@ -89,7 +89,7 @@ TEST_F(test_deletebackaltcommond,  DeleteBackAltCommond)
     edit = nullptr;
 }
 
-TEST_F(test_deletebackaltcommond, redo)
+TEST(UT_Deletebackaltcommond_redo, UT_Deletebackaltcommond_redo)
 {
 
     Window* window = new Window;
@@ -105,6 +105,7 @@ TEST_F(test_deletebackaltcommond, redo)
     list.push_back(sel);
     list.push_back(sel);
     DeleteBackAltCommond * commond = new DeleteBackAltCommond(list,edit);
+    commond->m_deletions = {{"123",1,1,1,cursor}};
     commond->redo();
 
     window->deleteLater();
@@ -115,7 +116,7 @@ TEST_F(test_deletebackaltcommond, redo)
 }
 
 
-TEST_F(test_deletebackaltcommond, undo)
+TEST(UT_Deletebackaltcommond_undo, UT_Deletebackaltcommond_undo)
 {
     Window* window = new Window;
     EditWrapper *wrapper = window->createEditor();
@@ -131,6 +132,7 @@ TEST_F(test_deletebackaltcommond, undo)
     list.push_back(sel);
 
     DeleteBackAltCommond* com = new DeleteBackAltCommond(list,edit);
+    com->m_deletions = {{"123",1,1,1,cursor}};
     com->undo();
 
     window->deleteLater();

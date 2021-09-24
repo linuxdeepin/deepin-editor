@@ -1,5 +1,5 @@
-#ifndef TEST_FLASHTWEEN_H
-#define TEST_FLASHTWEEN_H
+#ifndef UT_FlashTween_H
+#define UT_FlashTween_H
 #include "gtest/gtest.h"
 #include"../../src/editor/editwrapper.h"
 #include"../../src/widgets/window.h"
@@ -12,10 +12,10 @@
 #include <QEvent>
 #include <QTimer>
 
-class test_flashTween : public QObject, public::testing::Test
+class UT_FlashTween : public QObject, public::testing::Test
 {
 public:
-    test_flashTween();
+    UT_FlashTween();
 };
 
-#endif // TEST_FLASHTWEEN_H
+#endif // UT_FlashTween_H

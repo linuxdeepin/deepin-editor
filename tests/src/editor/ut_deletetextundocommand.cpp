@@ -1,13 +1,13 @@
 #include "ut_deletetextundocommand.h"
 
-test_deletetextundocommond::test_deletetextundocommond()
+UT_Deletetextundocommond::UT_Deletetextundocommond()
 {
 
 }
 
-TEST_F(test_deletetextundocommond, DeleteTextUndoCommand)
+TEST(UT_Deletetextundocommond_DeleteTextUndoCommand, UT_Deletetextundocommond_DeleteTextUndoCommand)
 {
-    #if 0
+#if 0
     Window* window = new Window;
     EditWrapper *wrapper = window->createEditor();
     TextEdit * edit = wrapper->textEditor();
@@ -33,10 +33,11 @@ TEST_F(test_deletetextundocommond, DeleteTextUndoCommand)
     delete commond1;commond1=nullptr;
     delete commond2;commond2=nullptr;
     delete commond3;commond3=nullptr;
-    #endif
+#endif
+
 }
 
-TEST_F(test_deletetextundocommond, undo)
+TEST(UT_Deletetextundocommond_undo, UT_Deletetextundocommond_undo)
 {
     QTextCursor cursor;
     DeleteTextUndoCommand * commond1 = new DeleteTextUndoCommand(cursor);
@@ -62,7 +63,7 @@ TEST_F(test_deletetextundocommond, undo)
 }
 
 
-TEST_F(test_deletetextundocommond, redo)
+TEST(UT_Deletetextundocommond_redo, UT_Deletetextundocommond_redo)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -89,12 +90,12 @@ TEST_F(test_deletetextundocommond, redo)
     delete commond2;commond2=nullptr;
     delete commond3;commond3=nullptr;
 
-    
+
 }
 
-TEST_F(test_deletetextundocommond, DeleteTextUndoCommand2)
+TEST(UT_Deletetextundocommond_DeleteTextUndoCommand2, UT_Deletetextundocommond_DeleteTextUndoCommand2)
 {
-    #if 0
+#if 0
     Window* window = new Window;
     EditWrapper *wrapper = window->createEditor();
     TextEdit * edit = wrapper->textEditor();
@@ -124,7 +125,7 @@ TEST_F(test_deletetextundocommond, DeleteTextUndoCommand2)
     delete commond1;commond1=nullptr;
     delete commond2;commond2=nullptr;
     delete commond3;commond3=nullptr;
-    #endif
+#endif
 }
 
 

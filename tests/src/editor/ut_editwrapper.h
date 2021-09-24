@@ -14,8 +14,8 @@
 * You should have received a copy of the GNU General Public License
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef TEST_EDITWRAPPER_H
-#define TEST_EDITWRAPPER_H
+#ifndef UT_Editwrapper_H
+#define UT_Editwrapper_H
 
 #include "../../src/startmanager.h"
 #include "../../src/editor/dtextedit.h"
@@ -34,11 +34,11 @@
 
 DWIDGET_USE_NAMESPACE
 
-class test_editwrapper: public QObject, public::testing::Test
+class UT_Editwrapper: public QObject, public::testing::Test
 {
 public:
-    test_editwrapper();
+    UT_Editwrapper();
     QByteArray FileLoadThreadRun(const QString &strFilePath, QByteArray *encode);
 };
 
-#endif // TEST_EDITWRAPPER_H
+#endif // UT_Editwrapper_H

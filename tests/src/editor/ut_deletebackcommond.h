@@ -1,24 +1,24 @@
-#ifndef TEST_DELETEBACKCOMMOND_H
-#define TEST_DELETEBACKCOMMOND_H
+#ifndef UT_Deletebackcommond_H
+#define UT_Deletebackcommond_H
 
 
 #include "gtest/gtest.h"
 #include <QObject>
 
 
-class test_deletebackcommond: public QObject, public::testing::Test
+class UT_Deletebackcommond: public QObject, public::testing::Test
 {
         Q_OBJECT
 public:
-    test_deletebackcommond();
+    UT_Deletebackcommond();
 };
 
-class test_deletebackaltcommond: public QObject, public::testing::Test
+class UT_Deletebackaltcommond: public QObject, public::testing::Test
 {
         Q_OBJECT
 public:
-    test_deletebackaltcommond();
+    UT_Deletebackaltcommond();
 };
 
 
-#endif // TEST_DELETEBACKCOMMOND_H
+#endif // UT_Deletebackcommond_H

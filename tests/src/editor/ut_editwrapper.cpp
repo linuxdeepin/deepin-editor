@@ -15,8 +15,54 @@
 * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "ut_editwrapper.h"
+#include "qfile.h"
+#include <KSyntaxHighlighting/SyntaxHighlighter>
+#include "DSettingsOption"
 
-test_editwrapper::test_editwrapper()
+namespace editwrapperstub {
+
+int intvalue=1;
+int retintstub()
+{
+    return intvalue;
+}
+
+bool retfalsestub()
+{
+    return false;
+}
+
+bool rettruestub()
+{
+    return true;
+}
+
+QStringList stringList = {"123","456"};
+QStringList retstringliststub()
+{
+    return stringList;
+}
+
+QPointer<DSettingsOption> retsettingoption()
+{
+    QPointer<DSettingsOption> d = new DSettingsOption;
+    QVariant* v = new QVariant(stringList);
+    d->setValue(*v);
+    return d;
+}
+
+QString retstring()
+{
+    return "123";
+}
+
+}
+
+
+
+using namespace editwrapperstub;
+
+UT_Editwrapper::UT_Editwrapper()
 {
     QString text = QString("#include \"window.h\"\n"
                            "#include \"urlinfo.h\"\n"
@@ -33,19 +79,19 @@ test_editwrapper::test_editwrapper()
     }
 }
 
-TEST_F(test_editwrapper, EditWrapper)
+TEST(UT_Editwrapper_EditWrapper, UT_Editwrapper_EditWrapper)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
     ASSERT_TRUE(pWindow->currentWrapper()->m_pBottomBar != nullptr);
     ASSERT_TRUE(pWindow->currentWrapper()->m_pTextEdit != nullptr);
-    
+
     delete pWindow;
     pWindow = nullptr;
 }
 
 //void setQuitFlag();
-TEST_F(test_editwrapper, setQuitFlag)
+TEST(UT_Editwrapper_setQuitFlag, UT_Editwrapper_setQuitFlag)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -57,7 +103,7 @@ TEST_F(test_editwrapper, setQuitFlag)
 }
 
 //bool getFileLoading();
-TEST_F(test_editwrapper, getFileLoading)
+TEST(UT_Editwrapper_getFileLoading, UT_Editwrapper_getFileLoading)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -69,7 +115,7 @@ TEST_F(test_editwrapper, getFileLoading)
 }
 
 //void openFile(const QString &filepath,QString qstrTruePath,bool bIsTemFile = false);
-TEST_F(test_editwrapper, openFile)
+TEST(UT_Editwrapper_openFile, UT_Editwrapper_openFile)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -86,7 +132,7 @@ bool saveFile_001_stub()
 }
 
 //bool saveFile_001();
-TEST_F(test_editwrapper, saveFile_001)
+TEST(UT_Editwrapper_saveFile, UT_Editwrapper_saveFile_001)
 {
 //    Window *pWindow = new Window();
 //    pWindow->addBlankTab(QString());
@@ -109,7 +155,7 @@ bool saveFile_002_stub()
 }
 
 //bool saveFile_002();
-TEST_F(test_editwrapper, saveFile_002)
+TEST(UT_Editwrapper_saveFile, UT_Editwrapper_saveFile_002)
 {
 //    Window *pWindow = new Window();
 //    pWindow->addBlankTab(QString());
@@ -126,7 +172,7 @@ TEST_F(test_editwrapper, saveFile_002)
 }
 
 //bool saveFile_003();
-TEST_F(test_editwrapper, saveFile_003)
+TEST(UT_Editwrapper_saveFile, UT_Editwrapper_saveFile_003)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -139,8 +185,54 @@ TEST_F(test_editwrapper, saveFile_003)
     pWindow = nullptr;
 }
 
+TEST(UT_Editwrapper_saveFile, UT_Editwrapper_saveFile_004)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->m_sFilePath = QString("");
+    pWindow->currentWrapper()->textEditor()->m_qstrTruePath = QString("");
+
+    typedef bool (*Fptr2)(QFile*,QFile::OpenMode);
+    Fptr2 A_foo = (Fptr2)((bool(QFile::*)(QFile::OpenMode))&QFile::open);
+    Stub s1;
+    s1.set(A_foo,rettruestub);
+
+    Stub s2;
+    s2.set(ADDR(QByteArray,isEmpty),rettruestub);
+
+    bool bRet = pWindow->currentWrapper()->saveFile();
+
+    delete pWindow;
+    pWindow = nullptr;
+}
+
+TEST(UT_Editwrapper_saveFile, UT_Editwrapper_saveFile_005)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->m_sFilePath = QString("");
+    pWindow->currentWrapper()->textEditor()->m_qstrTruePath = QString("");
+
+    typedef bool (*Fptr2)(QFile*,QFile::OpenMode);
+    Fptr2 A_foo = (Fptr2)((bool(QFile::*)(QFile::OpenMode))&QFile::open);
+    Stub s1;
+    s1.set(A_foo,rettruestub);
+
+    Stub s2;
+    s2.set(ADDR(QByteArray,isEmpty),retfalsestub);
+
+    Stub s3;
+    s3.set(ADDR(QByteArray,size),retintstub);
+
+    intvalue=0;
+    bool bRet = pWindow->currentWrapper()->saveFile();
+
+    delete pWindow;
+    pWindow = nullptr;
+}
+
 //bool saveAsFile_001(const QString &newFilePath, QByteArray encodeName);
-TEST_F(test_editwrapper, saveAsFile_001)
+TEST(UT_Editwrapper_saveAsFile_001, UT_Editwrapper_saveAsFile_001)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -158,7 +250,7 @@ bool saveAsFile_002_stub()
 }
 
 //bool saveAsFile_001(const QString &newFilePath, QByteArray encodeName);
-TEST_F(test_editwrapper, saveAsFile_002)
+TEST(UT_Editwrapper_saveAsFile, UT_Editwrapper_saveAsFile_002)
 {
 //    Window *pWindow = new Window();
 //    pWindow->addBlankTab(QString());
@@ -175,8 +267,39 @@ TEST_F(test_editwrapper, saveAsFile_002)
 //    pWindow->deleteLater();
 }
 
+TEST(UT_Editwrapper_saveAsFile, UT_Editwrapper_saveAsFile_003)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("12345"));
+
+
+    typedef int (*Fptr)(QFileDialog *);
+    Fptr fptr = (Fptr)(&QFileDialog::exec);
+    Stub s1;
+    s1.set(fptr,retintstub);
+
+    Stub s2;
+    s2.set(ADDR(QString,isEmpty),retfalsestub);
+
+    Stub s3;
+    s3.set(ADDR(QFileDialog,selectedFiles),retstringliststub);
+
+    typedef bool (*Fptr2)(QFile*,QFile::OpenMode);
+    Fptr2 A_foo = (Fptr2)((bool(QFile::*)(QFile::OpenMode))&QFile::open);
+    Stub s4;
+    s4.set(A_foo,rettruestub);
+
+    bool bRet = pWindow->currentWrapper()->saveAsFile();
+
+    EXPECT_NE(bRet,true);
+
+    pWindow->deleteLater();
+}
+
 //void updatePath(const QString &file);
-TEST_F(test_editwrapper, updatePath)
+TEST(UT_Editwrapper_updatePath, UT_Editwrapper_updatePath)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -189,7 +312,7 @@ TEST_F(test_editwrapper, updatePath)
 }
 
 //void hideWarningNotices();
-TEST_F(test_editwrapper, hideWarningNotices)
+TEST(UT_Editwrapper_hideWarningNotices, UT_Editwrapper_hideWarningNotices)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -198,13 +321,13 @@ TEST_F(test_editwrapper, hideWarningNotices)
     }
     pWindow->currentWrapper()->hideWarningNotices();
     ASSERT_TRUE(pWindow->currentWrapper()->m_pWaringNotices->isHidden());
-    
+
     delete pWindow;
     pWindow = nullptr;
 }
 
 //void checkForReload();
-TEST_F(test_editwrapper, checkForReload_001)
+TEST(UT_Editwrapper_checkForReload_001, UT_Editwrapper_checkForReload_001)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -222,7 +345,7 @@ bool checkForReload_002_stub()
 }
 
 //void checkForReload();
-TEST_F(test_editwrapper, checkForReload_002)
+TEST(UT_Editwrapper_checkForReload_002, UT_Editwrapper_checkForReload_002)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -239,7 +362,7 @@ TEST_F(test_editwrapper, checkForReload_002)
 //void initToastPosition() 无实现;
 
 //void showNotify(const QString &message);
-TEST_F(test_editwrapper, showNotify_001)
+TEST(UT_Editwrapper_showNotify_001, UT_Editwrapper_showNotify_001)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -252,7 +375,7 @@ TEST_F(test_editwrapper, showNotify_001)
 }
 
 //void showNotify(const QString &message);
-TEST_F(test_editwrapper, showNotify_002)
+TEST(UT_Editwrapper_showNotify_002, UT_Editwrapper_showNotify_002)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -265,7 +388,7 @@ TEST_F(test_editwrapper, showNotify_002)
 }
 
 //void setLineNumberShow(bool bIsShow,bool bIsFirstShow = false);
-TEST_F(test_editwrapper, setLineNumberShow_001)
+TEST(UT_Editwrapper_setLineNumberShow_001, UT_Editwrapper_setLineNumberShow_001)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -276,7 +399,7 @@ TEST_F(test_editwrapper, setLineNumberShow_001)
 }
 
 //void setLineNumberShow(bool bIsShow,bool bIsFirstShow = false);
-TEST_F(test_editwrapper, setLineNumberShow_002)
+TEST(UT_Editwrapper_setLineNumberShow_002, UT_Editwrapper_setLineNumberShow_002)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -287,7 +410,7 @@ TEST_F(test_editwrapper, setLineNumberShow_002)
 }
 
 //void setShowBlankCharacter(bool ok);
-TEST_F(test_editwrapper, setShowBlankCharacter_001)
+TEST(UT_Editwrapper_setShowBlankCharacter_001, UT_Editwrapper_setShowBlankCharacter_001)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -298,7 +421,7 @@ TEST_F(test_editwrapper, setShowBlankCharacter_001)
 }
 
 //void setShowBlankCharacter(bool ok);
-TEST_F(test_editwrapper, setShowBlankCharacter_002)
+TEST(UT_Editwrapper_setShowBlankCharacter_002, UT_Editwrapper_setShowBlankCharacter_002)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -309,27 +432,27 @@ TEST_F(test_editwrapper, setShowBlankCharacter_002)
 }
 
 //BottomBar *bottomBar();
-TEST_F(test_editwrapper, bottomBar)
+TEST(UT_Editwrapper_bottomBar, UT_Editwrapper_bottomBar)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
     ASSERT_TRUE(pWindow->currentWrapper()->bottomBar());
-    
+
     pWindow->deleteLater();
 }
 
 //QString filePath();
-TEST_F(test_editwrapper, filePath)
+TEST(UT_Editwrapper_filePath, UT_Editwrapper_filePath)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
     ASSERT_TRUE(!pWindow->currentWrapper()->filePath().isEmpty());
-    
+
     pWindow->deleteLater();
 }
 
 //TextEdit *textEditor() { return m_textEdit; }
-TEST_F(test_editwrapper, textEditor)
+TEST(UT_Editwrapper_textEditor, UT_Editwrapper_textEditor)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -346,7 +469,7 @@ int saveDraftFile001_exec_stub()
 }
 
 //bool saveDraftFile(); Subsequent processing
-TEST_F(test_editwrapper, saveDraftFile_001)
+TEST(UT_Editwrapper_saveDraftFile_001, UT_Editwrapper_saveDraftFile_001)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -365,7 +488,7 @@ int saveDraftFile002_exec_stub()
 }
 
 //bool saveDraftFile(); Subsequent processing
-TEST_F(test_editwrapper, saveDraftFile_002)
+TEST(UT_Editwrapper_saveDraftFile_002, UT_Editwrapper_saveDraftFile_002)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -384,7 +507,7 @@ void readFile_stub_001()
 }
 
 //void readFile(const QString &filePath);
-TEST_F(test_editwrapper, readFile_001)
+TEST(UT_Editwrapper_readFile_001, UT_Editwrapper_readFile_001)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -395,12 +518,12 @@ TEST_F(test_editwrapper, readFile_001)
     stub.set(ADDR(EditWrapper, loadContent), readFile_stub_001);
     bool bRet = pWindow->currentWrapper()->readFile(QByteArray());
     ASSERT_TRUE(bRet);
-    
+
     pWindow->deleteLater();
 }
 
 //void readFile(const QString &filePath);
-TEST_F(test_editwrapper, readFile_002)
+TEST(UT_Editwrapper_readFile_002, UT_Editwrapper_readFile_002)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -415,7 +538,7 @@ TEST_F(test_editwrapper, readFile_002)
     pWindow->deleteLater();
 }
 
-QByteArray test_editwrapper::FileLoadThreadRun(const QString &strFilePath, QByteArray *encode)
+QByteArray FileLoadThreadRun(const QString &strFilePath, QByteArray *encode)
 {
     QFile file(strFilePath);
 
@@ -448,7 +571,7 @@ void handleFileLoadFinished_001_setTextFinished_stub()
 }
 
 //void handleFileLoadFinished(const QByteArray &encode,const QString &content);
-TEST_F(test_editwrapper, handleFileLoadFinished_001)
+TEST(UT_Editwrapper_handleFileLoadFinished, UT_Editwrapper_handleFileLoadFinished_001)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -465,9 +588,116 @@ TEST_F(test_editwrapper, handleFileLoadFinished_001)
     pWindow->deleteLater();
 }
 
+TEST(UT_Editwrapper_handleFileLoadFinished, UT_Editwrapper_handleFileLoadFinished_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    const QString filePath = QCoreApplication::applicationDirPath() + QString("/Makefile");
+    QByteArray encode = QByteArray();
+    const QByteArray retFileContent = FileLoadThreadRun(filePath, &encode);
+    Stub setPrintEnabled_stub;
+    setPrintEnabled_stub.set(ADDR(Window, setPrintEnabled), handleFileLoadFinished_001_setPrintEnabled_stub);
+    Stub setTextFinished_stub;
+    setTextFinished_stub.set(ADDR(TextEdit, setTextFinished), handleFileLoadFinished_001_setTextFinished_stub);
+
+    Stub s1;
+    s1.set(ADDR(KSyntaxHighlighting::Definition,isValid),rettruestub);
+    Stub s2;
+    s2.set(ADDR(QString,isEmpty),retfalsestub);
+    Stub s3;
+    s3.set(ADDR(Utils,isDraftFile),retfalsestub);
+    Stub s4;
+    s4.set(ADDR(TextEdit,getReadOnlyPermission),rettruestub);
+    Stub s5;
+    s5.set(ADDR(EditWrapper,loadContent),rettruestub);
+    Stub s6;
+    s6.set(ADDR(EditWrapper,OnUpdateHighlighter),rettruestub);//DSettings
+    Stub s7;
+    s7.set(ADDR(DSettings,option),retsettingoption);
+    Stub s8;//QString toString() const;
+    s8.set((QString (QJsonValue::*)() const)ADDR(QJsonValue,toString),retstring);
+    Stub s9;
+    s9.set(ADDR(TextEdit,getFilePath),retstring);
+    Stub s10;
+    s10.set(ADDR(QJsonValue,isString),rettruestub);
+
+    QString c1 = "{\"bookMark\":\"7,7,8,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"cursorPosition\":\"7\",\"focus\":true,\"localPath\":\"/home/uos/.local/share/deepin/deepin-editor/blank-files/blank_file_2021-09-22_09-43-10-824\",\"modify\":true}";
+    QString c2 = "{\"bookMark\":\"1,0,1,0,0\",\"cursorPosition\":\"23\",\"localPath\":\"/home/uos/Desktop/563/526.txt\",\"modify\":false}";
+    stringList.clear();
+    stringList.push_back(c1);
+    stringList.push_back(c2);
+
+
+    pWindow->currentWrapper()->handleFileLoadFinished(encode, retFileContent);
+    ASSERT_TRUE(pWindow->currentWrapper()->m_pBottomBar->m_pEncodeMenu != nullptr);
+
+    pWindow->deleteLater();
+}
+
+
+TEST(UT_Editwrapper_handleFileLoadFinished, UT_Editwrapper_handleFileLoadFinished_003)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    const QString filePath = QCoreApplication::applicationDirPath() + QString("/Makefile");
+    QByteArray encode = QByteArray();
+    const QByteArray retFileContent = FileLoadThreadRun(filePath, &encode);
+    Stub setPrintEnabled_stub;
+    setPrintEnabled_stub.set(ADDR(Window, setPrintEnabled), handleFileLoadFinished_001_setPrintEnabled_stub);
+    Stub setTextFinished_stub;
+    setTextFinished_stub.set(ADDR(TextEdit, setTextFinished), handleFileLoadFinished_001_setTextFinished_stub);
+
+    Stub s1;
+    s1.set(ADDR(KSyntaxHighlighting::Definition,isValid),rettruestub);
+    Stub s2;
+    s2.set(ADDR(QString,isEmpty),retfalsestub);
+    Stub s3;
+    s3.set(ADDR(Utils,isDraftFile),retfalsestub);
+    Stub s4;
+    s4.set(ADDR(TextEdit,getReadOnlyPermission),rettruestub);
+    Stub s5;
+    s5.set(ADDR(EditWrapper,loadContent),rettruestub);
+    Stub s6;
+    s6.set(ADDR(EditWrapper,OnUpdateHighlighter),rettruestub);//DSettings
+    Stub s7;
+    s7.set(ADDR(DSettings,option),retsettingoption);
+    Stub s8;//QString toString() const;
+    s8.set((QString (QJsonValue::*)() const)ADDR(QJsonValue,toString),retstring);
+    Stub s9;
+    s9.set(ADDR(TextEdit,getFilePath),retstring);
+    Stub s10;
+    s10.set(ADDR(QJsonValue,isString),retfalsestub);
+
+    QString c1 = "{\"bookMark\":\"7,7,8,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0\",\"cursorPosition\":\"7\",\"focus\":true,\"localPath\":\"/home/uos/.local/share/deepin/deepin-editor/blank-files/blank_file_2021-09-22_09-43-10-824\",\"modify\":true}";
+    QString c2 = "{\"bookMark\":\"1,0,1,0,0\",\"cursorPosition\":\"23\",\"localPath\":\"/home/uos/Desktop/563/526.txt\",\"modify\":false}";
+    stringList.clear();
+    stringList.push_back(c1);
+    stringList.push_back(c2);
+
+
+    pWindow->currentWrapper()->handleFileLoadFinished(encode, retFileContent);
+    ASSERT_TRUE(pWindow->currentWrapper()->m_pBottomBar->m_pEncodeMenu != nullptr);
+
+    pWindow->deleteLater();
+}
+
+
 ////重新加载文件编码 1.文件修改 2.文件未修改处理逻辑一样 切换编码重新加载和另存为 梁卫东
 //bool reloadFileEncode(QByteArray encode);
-TEST_F(test_editwrapper, reloadFileEncode)
+TEST(UT_Editwrapper_reloadFileEncode, UT_Editwrapper_reloadFileEncode)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("12345"));
+    bool bRet = pWindow->currentWrapper()->reloadFileEncode(QByteArray("UTF-8"));
+    ASSERT_FALSE(bRet);
+
+    pWindow->deleteLater();
+}
+
+
+TEST(UT_Editwrapper_reloadFileEncode, UT_Editwrapper_reloadFileEncode_002)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -480,7 +710,7 @@ TEST_F(test_editwrapper, reloadFileEncode)
 }
 
 //bool reloadFileEncode(QByteArray encode);
-TEST_F(test_editwrapper, reloadFileEncode_002)
+TEST(UT_Editwrapper_reloadFileEncode, UT_Editwrapper_reloadFileEncode_003)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -495,22 +725,6 @@ int reloadFileEncode_003_exec_stub()
     return 0;
 }
 
-//bool reloadFileEncode(QByteArray encode);
-TEST_F(test_editwrapper, reloadFileEncode_003)
-{
-    Window *pWindow = new Window();
-    pWindow->addBlankTab(QString());
-    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
-                                                          QString("12345"));
-    typedef int (*fptr)(QDialog *);
-    fptr qDialogExec = (fptr)(&QDialog::exec);
-    Stub stub;
-    stub.set(qDialogExec, reloadFileEncode_003_exec_stub);
-    bool bRet = pWindow->currentWrapper()->reloadFileEncode(QByteArray());
-    ASSERT_FALSE(bRet);
-
-    pWindow->deleteLater();
-}
 
 int reloadFileEncode_004_exec_stub()
 {
@@ -523,7 +737,7 @@ bool reloadFileEncode_004_readFile_stub()
 }
 
 //bool reloadFileEncode(QByteArray encode);
-TEST_F(test_editwrapper, reloadFileEncode_004)
+TEST(UT_Editwrapper_reloadFileEncode, UT_Editwrapper_reloadFileEncode_004)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -552,7 +766,7 @@ bool reloadFileEncode_005_saveDraftFile_stub()
 }
 
 //bool reloadFileEncode(QByteArray encode);
-TEST_F(test_editwrapper, reloadFileEncode_005)
+TEST(UT_Editwrapper_reloadFileEncode, UT_Editwrapper_reloadFileEncode_005)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -581,7 +795,7 @@ bool reloadFileEncode_006_saveFile_stub()
 }
 
 //bool reloadFileEncode(QByteArray encode);
-TEST_F(test_editwrapper, reloadFileEncode_006)
+TEST(UT_Editwrapper_reloadFileEncode, UT_Editwrapper_reloadFileEncode_006)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -609,7 +823,7 @@ int reloadFileEncode_007_exec_stub()
 }
 
 //bool reloadFileEncode(QByteArray encode);
-TEST_F(test_editwrapper, reloadFileEncode_007)
+TEST(UT_Editwrapper_reloadFileEncode, UT_Editwrapper_reloadFileEncode_007)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -636,7 +850,7 @@ bool reloadFileEncode_008_readFile_stub()
 }
 
 //bool reloadFileEncode(QByteArray encode);
-TEST_F(test_editwrapper, reloadFileEncode_008)
+TEST(UT_Editwrapper_reloadFileEncode, UT_Editwrapper_reloadFileEncode_008)
 {
 //    Window *pWindow = new Window();
 //    pWindow->addBlankTab(QString());
@@ -652,6 +866,27 @@ TEST_F(test_editwrapper, reloadFileEncode_008)
 //    pWindow->deleteLater();
 }
 
+TEST(UT_Editwrapper_reloadFileEncode, UT_Editwrapper_reloadFileEncode_009)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("12345"));
+    typedef int (*fptr)(QDialog *);
+    fptr qDialogExec = (fptr)(&QDialog::exec);
+    Stub s1;
+    s1.set(qDialogExec, retintstub);
+
+    Stub s2;
+    s2.set(ADDR(TextEdit,getModified),rettruestub);
+
+    intvalue = 1;
+    bool bRet = pWindow->currentWrapper()->reloadFileEncode(QByteArray());
+    ASSERT_FALSE(bRet);
+
+    pWindow->deleteLater();
+}
+
 int reloadModifyFile_001_exec_stub()
 {
     return 0;
@@ -659,7 +894,7 @@ int reloadModifyFile_001_exec_stub()
 
 ////重写加载修改文件
 //void reloadModifyFile();
-TEST_F(test_editwrapper, reloadModifyFile_001)
+TEST(UT_Editwrapper_reloadModifyFile, UT_Editwrapper_reloadModifyFile_001)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -681,7 +916,7 @@ int reloadModifyFile_002_exec_stub()
 }
 
 //void reloadModifyFile();
-TEST_F(test_editwrapper, reloadModifyFile_002)
+TEST(UT_Editwrapper_reloadModifyFile, UT_Editwrapper_reloadModifyFile_002)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -703,7 +938,7 @@ int reloadModifyFile_003_exec_stub()
 }
 
 //void reloadModifyFile();
-TEST_F(test_editwrapper, reloadModifyFile_003)
+TEST(UT_Editwrapper_reloadModifyFile, UT_Editwrapper_reloadModifyFile_003)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -725,7 +960,7 @@ bool reloadModifyFile_004_isDraftFile_stub()
 }
 
 //void reloadModifyFile();
-TEST_F(test_editwrapper, reloadModifyFile_004)
+TEST(UT_Editwrapper_reloadModifyFile, UT_Editwrapper_reloadModifyFile_004)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -744,7 +979,7 @@ TEST_F(test_editwrapper, reloadModifyFile_004)
 }
 
 //void reloadModifyFile();
-TEST_F(test_editwrapper, reloadModifyFile_005)
+TEST(UT_Editwrapper_reloadModifyFile, UT_Editwrapper_reloadModifyFile_005)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -756,7 +991,7 @@ TEST_F(test_editwrapper, reloadModifyFile_005)
 
 ////获取文件编码
 //QString getTextEncode();
-TEST_F(test_editwrapper, getTextEncode)
+TEST(UT_Editwrapper_getTextEncode, UT_Editwrapper_getTextEncode)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -769,7 +1004,7 @@ TEST_F(test_editwrapper, getTextEncode)
 }
 
 //bool saveTemFile(QString qstrDir);
-TEST_F(test_editwrapper, saveTemFile_001)
+TEST(UT_Editwrapper_saveTemFile, UT_Editwrapper_saveTemFile_001)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -781,7 +1016,7 @@ TEST_F(test_editwrapper, saveTemFile_001)
 }
 
 //bool saveTemFile(QString qstrDir);
-TEST_F(test_editwrapper, saveTemFile_002)
+TEST(UT_Editwrapper_saveTemFile, UT_Editwrapper_saveTemFile_002)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -793,7 +1028,7 @@ TEST_F(test_editwrapper, saveTemFile_002)
 
 ////判断是否修改
 //bool isModified();
-TEST_F(test_editwrapper, isModified)
+TEST(UT_Editwrapper_isModified, UT_Editwrapper_isModified)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -807,26 +1042,40 @@ TEST_F(test_editwrapper, isModified)
 
 ////判断是否草稿文件
 //bool isDraftFile();
-TEST_F(test_editwrapper, isDraftFile)
+TEST(UT_Editwrapper_isDraftFile, UT_Editwrapper_isDraftFile)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
     bool bRet = pWindow->currentWrapper()->isDraftFile();
     ASSERT_TRUE(bRet);
-    
+
     pWindow->deleteLater();
 }
 
 ////判断内容是否为空
 //bool isPlainTextEmpty();
-TEST_F(test_editwrapper, isPlainTextEmpty)
+TEST(UT_Editwrapper_isPlainTextEmpty, UT_Editwrapper_isPlainTextEmpty)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
     bool bRet = pWindow->currentWrapper()->isPlainTextEmpty();
     ASSERT_TRUE(bRet);
-    
+
     pWindow->deleteLater();
+}
+
+TEST(UT_Editwrapper_OnThemeChangeSlot, UT_Editwrapper_OnThemeChangeSlot)
+{
+    EditWrapper* wra = new EditWrapper;
+    QTextDocument*doc = new QTextDocument;
+    wra->m_pSyntaxHighlighter = new CSyntaxHighlighter(doc);
+    wra->OnThemeChangeSlot("ddd");
+
+
+    EXPECT_NE(wra,nullptr);
+
+    wra->deleteLater();
+    doc->deleteLater();
 }
 
 

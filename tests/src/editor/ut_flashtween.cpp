@@ -1,24 +1,24 @@
 #include "ut_flashtween.h"
 
-test_flashTween::test_flashTween()
+UT_FlashTween::UT_FlashTween()
 {
 
 }
 
 //void startX(qreal t,qreal b,qreal c,qreal d, FunSlideInertial fSlideGesture);
-TEST_F(test_flashTween, startX)
+TEST(UT_FlashTween_startX, UT_FlashTween_startX)
 {
     FlashTween *a = new FlashTween();
     FunSlideInertial b;
     a->startX(1.1,1.1,1.1,1.1,b);
     int iRet = a->m_timerX->interval();
     ASSERT_TRUE(a->m_timerX->interval() == 15);
-    
+
     a->deleteLater();
 }
 
 //void startY(qreal t,qreal b,qreal c,qreal d, FunSlideInertial fSlideGesture);
-TEST_F(test_flashTween, startY)
+TEST(UT_FlashTween_startY, UT_FlashTween_startY)
 {
     FlashTween *a = new FlashTween();
     FunSlideInertial b;
@@ -30,7 +30,7 @@ TEST_F(test_flashTween, startY)
 }
 
 //bool activeX(){return m_timerX->isActive();}
-TEST_F(test_flashTween, activeX)
+TEST(UT_FlashTween_activeX, UT_FlashTween_activeX)
 {
     FlashTween *a = new FlashTween();
     FunSlideInertial b;
@@ -42,7 +42,7 @@ TEST_F(test_flashTween, activeX)
 }
 
 //bool activeY(){return m_timerY->isActive();}
-TEST_F(test_flashTween, activeY)
+TEST(UT_FlashTween_activeY, UT_FlashTween_activeY)
 {
     FlashTween *a = new FlashTween();
     FunSlideInertial b;
@@ -53,7 +53,7 @@ TEST_F(test_flashTween, activeY)
     a->deleteLater();
 }
 
-TEST_F(test_flashTween, stopX)
+TEST(UT_FlashTween_stopX, UT_FlashTween_stopX)
 {
     FlashTween *a = new FlashTween();
     a->stopX();
@@ -63,7 +63,7 @@ TEST_F(test_flashTween, stopX)
     a->deleteLater();
 }
 
-TEST_F(test_flashTween, stopY)
+TEST(UT_FlashTween_stopY, UT_FlashTween_stopY)
 {
     FlashTween *a = new FlashTween();
     a->stopY();
@@ -71,4 +71,30 @@ TEST_F(test_flashTween, stopY)
     ASSERT_TRUE(bRet == false);
 
     a->deleteLater();
+}
+
+TEST(UT_FlashTween___runY, UT_FlashTween___runY)
+{
+    FlashTween *a = new FlashTween();
+    a->m_timerX = new QTimer;
+    a->m_timerY = new QTimer;
+    //a->__runY();
+
+    EXPECT_NE(a->m_lastValueX,2.2);
+    a->deleteLater();
+    a->m_timerX->deleteLater();
+    a->m_timerY->deleteLater();
+}
+
+TEST(UT_FlashTween___runX, UT_FlashTween___runX)
+{
+    FlashTween *a = new FlashTween();
+    a->m_timerX = new QTimer;
+    a->m_timerY = new QTimer;
+    //a->__runX();
+
+    EXPECT_NE(a->m_lastValueX,2.2);
+    a->deleteLater();
+    a->m_timerX->deleteLater();
+    a->m_timerY->deleteLater();
 }
