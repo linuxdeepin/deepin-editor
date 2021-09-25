@@ -3156,6 +3156,323 @@ TEST(UT_test_textedit_toggleComment, UT_test_textedit_toggleComment_002)
     pWindow->deleteLater();
 }
 
+bool UT_test_textedit_toggleComment_003_stub()
+{
+    return false;
+}
+
+void UT_test_textedit_toggleComment_003_setComment_stub()
+{
+    return;
+}
+
+//void toggleComment(bool bValue) 003
+TEST(UT_test_textedit_toggleComment, UT_test_textedit_toggleComment_003)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    Stub stub_isValid;
+    stub_isValid.set(ADDR(Comment::CommentDefinition, isValid), UT_test_textedit_toggleComment_002_stub);
+    Stub stub_isEmpty;
+    stub_isEmpty.set(ADDR(QString, isEmpty), UT_test_textedit_toggleComment_003_stub);
+    Stub stub_setComment;
+    stub_setComment.set(ADDR(TextEdit, setComment), UT_test_textedit_toggleComment_003_setComment_stub);
+    pWindow->currentWrapper()->textEditor()->m_readOnlyMode = false;
+    pWindow->currentWrapper()->textEditor()->m_commentDefinition.multiLineStart = QString("Helle  \tworld\nHelle world");
+    pWindow->currentWrapper()->textEditor()->m_commentDefinition.singleLine = QString("Helle  \tworld\nHelle world");
+    pWindow->currentWrapper()->textEditor()->toggleComment(true);
+
+    bool bRet = pWindow->currentWrapper()->textEditor()->m_commentDefinition.isValid();
+    ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
+}
+
+void UT_test_textedit_toggleComment_004_removeComment_stub()
+{
+    return;
+}
+
+//void toggleComment(bool bValue) 004
+TEST(UT_test_textedit_toggleComment, UT_test_textedit_toggleComment_004)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    Stub stub_isValid;
+    stub_isValid.set(ADDR(Comment::CommentDefinition, isValid), UT_test_textedit_toggleComment_002_stub);
+    Stub stub_isEmpty;
+    stub_isEmpty.set(ADDR(QString, isEmpty), UT_test_textedit_toggleComment_003_stub);
+    Stub stub_removeComment;
+    stub_removeComment.set(ADDR(TextEdit, removeComment), UT_test_textedit_toggleComment_004_removeComment_stub);
+    pWindow->currentWrapper()->textEditor()->m_readOnlyMode = false;
+    pWindow->currentWrapper()->textEditor()->m_commentDefinition.multiLineStart = QString("Helle  \tworld\nHelle world");
+    pWindow->currentWrapper()->textEditor()->m_commentDefinition.singleLine = QString("Helle  \tworld\nHelle world");
+    pWindow->currentWrapper()->textEditor()->toggleComment(false);
+
+    bool bRet = pWindow->currentWrapper()->textEditor()->m_commentDefinition.isValid();
+    ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
+}
+
+int UT_test_textedit_getNextWordPosition_001_characterCount_stub()
+{
+    return 0;
+}
+
+//getNextWordPosition 001
+TEST(UT_test_textedit_getNextWordPosition, UT_test_textedit_getNextWordPosition_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    Stub stub_characterCount;
+    stub_characterCount.set(ADDR(TextEdit, characterCount), UT_test_textedit_getNextWordPosition_001_characterCount_stub);
+    int iRet = pWindow->currentWrapper()->textEditor()->getNextWordPosition(textCursor, QTextCursor::MoveMode::MoveAnchor);
+
+    ASSERT_TRUE(iRet == 0);
+    pWindow->deleteLater();
+}
+
+//getNextWordPosition 002
+TEST(UT_test_textedit_getNextWordPosition, UT_test_textedit_getNextWordPosition_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    int iRet = pWindow->currentWrapper()->textEditor()->getNextWordPosition(textCursor, QTextCursor::MoveMode::MoveAnchor);
+
+    ASSERT_TRUE(iRet == 17);
+    pWindow->deleteLater();
+}
+
+int UT_test_textedit_getPrevWordPosition_001_characterCount_stub()
+{
+    return 0;
+}
+
+//getPrevWordPosition 001
+TEST(UT_test_textedit_getPrevWordPosition, UT_test_textedit_getPrevWordPosition_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    Stub stub_characterCount;
+    stub_characterCount.set(ADDR(TextEdit, characterCount), UT_test_textedit_getPrevWordPosition_001_characterCount_stub);
+    int iRet = pWindow->currentWrapper()->textEditor()->getPrevWordPosition(textCursor, QTextCursor::MoveMode::MoveAnchor);
+
+    ASSERT_TRUE(iRet == 0);
+    pWindow->deleteLater();
+}
+
+//getPrevWordPosition 002
+TEST(UT_test_textedit_getPrevWordPosition, UT_test_textedit_getPrevWordPosition_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    int iRet = pWindow->currentWrapper()->textEditor()->getPrevWordPosition(textCursor, QTextCursor::MoveMode::MoveAnchor);
+
+    ASSERT_TRUE(iRet == 17);
+    pWindow->deleteLater();
+}
+
+//bool atWordSeparator(int position);
+TEST(UT_test_textedit_atWordSeparator, UT_test_textedit_atWordSeparator_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    bool bRet = pWindow->currentWrapper()->textEditor()->atWordSeparator(10);
+
+    ASSERT_TRUE(bRet == false);
+    pWindow->deleteLater();
+}
+
+//void showCursorBlink();
+TEST(UT_test_textedit_showCursorBlink, UT_test_textedit_showCursorBlink_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->showCursorBlink();
+    int iRet = QApplication::cursorFlashTime();
+
+    ASSERT_TRUE(iRet == 1000);
+    pWindow->deleteLater();
+}
+
+//void hideCursorBlink();
+TEST(UT_test_textedit_hideCursorBlink, UT_test_textedit_hideCursorBlink_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->hideCursorBlink();
+    int iRet = QApplication::cursorFlashTime();
+
+    ASSERT_TRUE(iRet == 0);
+    pWindow->deleteLater();
+}
+
+//void setReadOnlyPermission(bool permission);
+TEST(UT_test_textedit_setReadOnlyPermission, UT_test_textedit_setReadOnlyPermission_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->setReadOnlyPermission(true);
+    bool bRet = pWindow->currentWrapper()->textEditor()->isReadOnly();
+
+    ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
+}
+
+//void setReadOnlyPermission(bool permission);
+TEST(UT_test_textedit_setReadOnlyPermission, UT_test_textedit_setReadOnlyPermission_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->m_readOnlyMode = false;
+    pWindow->currentWrapper()->textEditor()->setReadOnlyPermission(false);
+    bool bRet = pWindow->currentWrapper()->textEditor()->isReadOnly();
+
+    ASSERT_TRUE(bRet == false);
+    pWindow->deleteLater();
+}
+
+//void setReadOnlyPermission(bool permission);
+TEST(UT_test_textedit_setReadOnlyPermission, UT_test_textedit_setReadOnlyPermission_003)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->m_readOnlyMode = true;
+    pWindow->currentWrapper()->textEditor()->setReadOnlyPermission(false);
+    bool bRet = pWindow->currentWrapper()->textEditor()->isReadOnly();
+
+    ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
+}
+
+//bool getReadOnlyPermission();
+TEST(UT_test_textedit_getReadOnlyPermission, UT_test_textedit_getReadOnlyPermission_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    bool bRet = pWindow->currentWrapper()->textEditor()->getReadOnlyPermission();
+
+    ASSERT_TRUE(bRet == false);
+    pWindow->deleteLater();
+}
+
+//bool getReadOnlyMode();
+TEST(UT_test_textedit_getReadOnlyMode, UT_test_textedit_getReadOnlyMode_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    bool bRet = pWindow->currentWrapper()->textEditor()->getReadOnlyMode();
+
+    ASSERT_TRUE(bRet == false);
+    pWindow->deleteLater();
+}
+
+//void hideRightMenu();
+TEST(UT_test_textedit_hideRightMenu, UT_test_textedit_hideRightMenu_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Helle world\nHelle world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->hideRightMenu();
+    bool bRet = pWindow->currentWrapper()->textEditor()->m_rightMenu->isHidden();
+
+    ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
+}
+
+//void flodOrUnflodAllLevel(bool isFlod);
+TEST(UT_test_textedit_flodOrUnflodAllLevel, UT_test_textedit_flodOrUnflodAllLevel_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("{\n{\n}\n}");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->flodOrUnflodAllLevel(true);
+    QTextOption::WrapMode eRet = pWindow->currentWrapper()->textEditor()->wordWrapMode();
+
+    ASSERT_TRUE(eRet == QTextOption::WrapMode::WrapAnywhere);
+    pWindow->deleteLater();
+}
+
+//void flodOrUnflodAllLevel(bool isFlod);
+TEST(UT_test_textedit_flodOrUnflodAllLevel, UT_test_textedit_flodOrUnflodAllLevel_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("{\n{\n}\n}");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->flodOrUnflodAllLevel(true);
+    pWindow->currentWrapper()->textEditor()->flodOrUnflodAllLevel(false);
+    QTextOption::WrapMode eRet = pWindow->currentWrapper()->textEditor()->wordWrapMode();
+
+    ASSERT_TRUE(eRet == QTextOption::WrapMode::WrapAnywhere);
+    pWindow->deleteLater();
+}
+
 //void setThemeWithPath(const QString &path);
 TEST_F(test_textedit, setThemeWithPath)
 {
@@ -3164,8 +3481,7 @@ TEST_F(test_textedit, setThemeWithPath)
     startManager->setVerticalScrollBar(p);
     EditWrapper *ee = new EditWrapper();
     startManager->setWrapper(ee);
-    startManager->toggleComment(true);
-    startManager->toggleComment(false);
+    startManager->restoreMarkStatus();
 
     ASSERT_TRUE(ee->m_pTextEdit != nullptr);
     ee->deleteLater();
@@ -3173,84 +3489,6 @@ TEST_F(test_textedit, setThemeWithPath)
     p->deleteLater();
 }
 
-//bool atWordSeparator(int position);
-TEST_F(test_textedit, atWordSeparator)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->atWordSeparator(2);
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-
-//void showCursorBlink();
-TEST_F(test_textedit, showCursorBlink)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->showCursorBlink();
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-//void hideCursorBlink();
-TEST_F(test_textedit, hideCursorBlink)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->hideCursorBlink();
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-
-//void setReadOnlyPermission(bool permission);
-TEST_F(test_textedit, setReadOnlyPermission)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->setReadOnlyPermission(true);
-    startManager->setReadOnlyPermission(false);
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-//bool getReadOnlyPermission();
-TEST_F(test_textedit, getReadOnlyPermission)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->getReadOnlyPermission();
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
 //bool getReadOnlyMode();
 TEST_F(test_textedit, getReadOnlyMode)
 {
@@ -3267,53 +3505,6 @@ TEST_F(test_textedit, getReadOnlyMode)
     p->deleteLater();
 }
 
-//void hideRightMenu();
-TEST_F(test_textedit, hideRightMenu)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->hideRightMenu();
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-
-//void clearBlack();
-TEST_F(test_textedit, clearBlack)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    //startManager->clearBlack();
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-//void flodOrUnflodAllLevel(bool isFlod);
-TEST_F(test_textedit, flodOrUnflodAllLevel)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->flodOrUnflodAllLevel(true);
-    startManager->flodOrUnflodAllLevel(false);
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
 //void flodOrUnflodCurrentLevel(bool isFlod);
 TEST_F(test_textedit, flodOrUnflodCurrentLevel)
 {

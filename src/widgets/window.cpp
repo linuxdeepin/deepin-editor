@@ -318,7 +318,6 @@ void Window::showCenterWindow(bool bIsCenter)
     // Below code must before this->titlebar()->setMenu, otherwise main menu can't display pre-build-in menu items by dtk.
     QString windowState = Settings::instance()->settings->option("advance.window.windowstate")->value().toString();
 
-
     if (bIsCenter) {
         Dtk::Widget::moveToCenter(this);
     }
@@ -326,7 +325,7 @@ void Window::showCenterWindow(bool bIsCenter)
     if (windowState == "window_maximum") {
         showMaximized();
         m_needMoveToCenter = true;
-    } else if (windowState == "fullscreen"){
+    } else if (windowState == "fullscreen") {
         showFullScreen();
         m_needMoveToCenter = true;
     } else {

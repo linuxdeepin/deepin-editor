@@ -263,7 +263,6 @@ public:
     bool getReadOnlyPermission();
     bool getReadOnlyMode();
     void hideRightMenu();
-    void clearBlack();
     void flodOrUnflodAllLevel(bool isFlod);
     void flodOrUnflodCurrentLevel(bool isFlod);
     void getHideRowContent(int iLine);

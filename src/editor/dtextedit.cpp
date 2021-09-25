@@ -3491,8 +3491,9 @@ void TextEdit::toggleComment(bool bValue)
 
     const auto def = m_repository.definitionForFileName(QFileInfo(m_sFilePath).fileName());  //Java ,C++,HTML,
     QString name = def.name();
-    if (name == "Markdown")
+    if (name == "Markdown") {
         return;
+    }
 
     if (!def.filePath().isEmpty()) {
         if (bValue) {
@@ -3558,8 +3559,8 @@ int TextEdit::getPrevWordPosition(QTextCursor cursor, QTextCursor::MoveMode move
     copyCursor.movePosition(QTextCursor::PreviousCharacter, moveMode);
     QChar *currentChar = copyCursor.selection().toPlainText().data();
 
-//    cursor.movePosition(QTextCursor::PreviousCharacter, moveMode);
-//    QChar currentChar = toPlainText().at(cursor.position());
+    //cursor.movePosition(QTextCursor::PreviousCharacter, moveMode);
+    //QChar currentChar = toPlainText().at(cursor.position());
 
     // Just to next non-space char if current char is space.
     if (currentChar->isSpace()) {
@@ -3567,8 +3568,8 @@ int TextEdit::getPrevWordPosition(QTextCursor cursor, QTextCursor::MoveMode move
             copyCursor.movePosition(QTextCursor::PreviousCharacter, moveMode);
             currentChar = copyCursor.selection().toPlainText().data();
 
-//            cursor.movePosition(QTextCursor::PreviousCharacter, moveMode);
-//            currentChar = toPlainText().at(cursor.position());
+            //cursor.movePosition(QTextCursor::PreviousCharacter, moveMode);
+            //currentChar = toPlainText().at(cursor.position());
         }
     }
     // Just to next word-separator char.
@@ -3666,8 +3667,9 @@ bool TextEdit::getReadOnlyMode()
 void TextEdit::hideRightMenu()
 {
     //arm平台全屏然后恢复窗口，右键菜单不会消失，所以加了这个函数
-    if (m_rightMenu)
+    if (m_rightMenu) {
         m_rightMenu->hide();
+    }
 }
 
 void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)

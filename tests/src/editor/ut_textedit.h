@@ -28,6 +28,7 @@
 #include <DMenu>
 #include <QList>
 #include <QFile>
+#include <QChar>
 
 class test_textedit: public QObject, public::testing::Test
 {
