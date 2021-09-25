@@ -3473,6 +3473,300 @@ TEST(UT_test_textedit_flodOrUnflodAllLevel, UT_test_textedit_flodOrUnflodAllLeve
     pWindow->deleteLater();
 }
 
+//void flodOrUnflodCurrentLevel(bool isFlod);
+TEST(UT_test_textedit_flodOrUnflodCurrentLevel, UT_test_textedit_flodOrUnflodCurrentLevel_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("{\n{\n}\n}");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->flodOrUnflodCurrentLevel(true);
+
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_pLeftAreaWidget != nullptr);
+    pWindow->deleteLater();
+}
+
+//void getHideRowContent
+TEST(UT_test_textedit_getHideRowContent, UT_test_textedit_getHideRowContent_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("{\nHello world\n{\nHello world\n}\n}");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->getHideRowContent(0);
+    QString strRet(pWindow->currentWrapper()->textEditor()->m_foldCodeShow->m_pContentEdit->toPlainText());
+
+    ASSERT_TRUE(strRet.compare(QString("{\nHello world\n{\nHello world\n}\n}")));
+    pWindow->deleteLater();
+}
+
+//void isNeedShowFoldIcon
+TEST(UT_test_textedit_getHideRowContent, UT_test_textedit_isNeedShowFoldIcon_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("{Hello world}");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    QTextBlock textBlock = pWindow->currentWrapper()->textEditor()->textCursor().block();
+    bool bRet = pWindow->currentWrapper()->textEditor()->isNeedShowFoldIcon(textBlock);
+
+    ASSERT_TRUE(bRet == false);
+    pWindow->deleteLater();
+}
+
+//void isNeedShowFoldIcon
+TEST(UT_test_textedit_getHideRowContent, UT_test_textedit_isNeedShowFoldIcon_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("{\nHello world}");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    QTextBlock textBlock = pWindow->currentWrapper()->textEditor()->textCursor().block();
+    bool bRet = pWindow->currentWrapper()->textEditor()->isNeedShowFoldIcon(textBlock);
+
+    ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
+}
+
+//int  getHighLightRowContentLineNum
+TEST(UT_test_textedit_getHighLightRowContentLineNum, UT_test_textedit_getHighLightRowContentLineNum_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("{Hello world}");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    int iRet = pWindow->currentWrapper()->textEditor()->getHighLightRowContentLineNum(0);
+
+    ASSERT_TRUE(iRet == 0);
+    pWindow->deleteLater();
+}
+
+//int  getHighLightRowContentLineNum
+TEST(UT_test_textedit_getHighLightRowContentLineNum, UT_test_textedit_getHighLightRowContentLineNum_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("{\nHello world}");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    int iRet = pWindow->currentWrapper()->textEditor()->getHighLightRowContentLineNum(1);
+
+    ASSERT_TRUE(iRet == 1);
+    pWindow->deleteLater();
+}
+
+//getHighLightRowContentLineNum
+TEST(UT_test_textedit_getHighLightRowContentLineNum, UT_test_textedit_getHighLightRowContentLineNum_003)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("{\nHello world}}");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    int iRet = pWindow->currentWrapper()->textEditor()->getHighLightRowContentLineNum(1);
+
+    ASSERT_TRUE(iRet == 1);
+    pWindow->deleteLater();
+}
+
+//paintCodeFlod
+TEST(UT_test_textedit_paintCodeFlod, UT_test_textedit_paintCodeFlod_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("{\nHello world}}");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    QPainter painter(pWindow->currentWrapper()->textEditor()->m_pLeftAreaWidget->m_pFlodArea);
+    QRect rect(0, pWindow->currentWrapper()->textEditor()->cursorRect(textCursor).y(), 15, 15);
+    pWindow->currentWrapper()->textEditor()->paintCodeFlod(&painter, rect, true);
+    QPainter::RenderHints eRet = painter.renderHints();
+    bool bRet = eRet.testFlag(QPainter::RenderHint::Antialiasing);
+
+    ASSERT_TRUE(bRet == false);
+    pWindow->deleteLater();
+}
+
+//getBackColor
+TEST(UT_test_textedit_getBackColor, UT_test_textedit_getBackColor_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("{\nHello world}}");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    QColor colorRet(pWindow->currentWrapper()->textEditor()->getBackColor());
+
+    ASSERT_TRUE(!colorRet.name().isEmpty());
+    pWindow->deleteLater();
+}
+
+//updateLeftWidgetWidth
+TEST(UT_test_textedit_updateLeftWidgetWidth, UT_test_textedit_updateLeftWidgetWidth_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->updateLeftWidgetWidth(20);
+    int iRet = pWindow->currentWrapper()->textEditor()->m_pLeftAreaWidget->m_pBookMarkArea->width();
+
+    ASSERT_TRUE(iRet == 20);
+    pWindow->deleteLater();
+}
+
+//lineNumberAreaWidth
+TEST(UT_test_textedit_lineNumberAreaWidth, UT_test_textedit_lineNumberAreaWidth_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("H\ne\nl\nl\no\n w\no\nr\nl\nd\nH\ne\nl\nl\no\n w\no\nr\nl\nd\n");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    int iRet = pWindow->currentWrapper()->textEditor()->lineNumberAreaWidth();
+
+    ASSERT_TRUE(iRet == 20);
+    pWindow->deleteLater();
+}
+
+//int  getLinePosYByLineNum(int iLine);
+TEST(UT_test_textedit_getLinePosYByLineNum, UT_test_textedit_getLinePosYByLineNum_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    int iRet = pWindow->currentWrapper()->textEditor()->getLinePosYByLineNum(0);
+
+    ASSERT_TRUE(iRet == 4);
+    pWindow->deleteLater();
+}
+
+//bool ifHasHighlight();
+TEST(UT_test_textedit_ifHasHighlight, UT_test_textedit_ifHasHighlight_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    QTextCharFormat charFormat;
+    charFormat.setBackground(QColor("red"));
+    QTextEdit::ExtraSelection findExtraSelection;
+    findExtraSelection.cursor = textCursor;
+    findExtraSelection.format = charFormat;
+    pWindow->currentWrapper()->textEditor()->m_findHighlightSelection = findExtraSelection;
+    bool bRet = pWindow->currentWrapper()->textEditor()->ifHasHighlight();
+
+    ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
+}
+
+//bool ifHasHighlight();
+TEST(UT_test_textedit_ifHasHighlight, UT_test_textedit_ifHasHighlight_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    bool bRet = pWindow->currentWrapper()->textEditor()->ifHasHighlight();
+
+    ASSERT_TRUE(bRet == false);
+    pWindow->deleteLater();
+}
+
+//bookMarkAreaPaintEvent
+TEST(UT_test_textedit_bookMarkAreaPaintEvent, UT_test_textedit_bookMarkAreaPaintEvent_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    DApplicationHelper::instance()->setThemeType(DApplicationHelper::ColorType::DarkType);
+    pWindow->currentWrapper()->textEditor()->m_listBookmark.append(1);
+    pWindow->currentWrapper()->textEditor()->m_nBookMarkHoverLine = 2;
+    QPaintEvent *pPaintEvent;
+    pWindow->currentWrapper()->textEditor()->bookMarkAreaPaintEvent(pPaintEvent);
+    int iRet = pWindow->currentWrapper()->textEditor()->m_pLeftAreaWidget->m_pBookMarkArea->width();
+
+    ASSERT_TRUE(iRet == 15);
+    pWindow->deleteLater();
+}
+
+//bookMarkAreaPaintEvent
+TEST(UT_test_textedit_bookMarkAreaPaintEvent, UT_test_textedit_bookMarkAreaPaintEvent_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    DApplicationHelper::instance()->setThemeType(DApplicationHelper::ColorType::LightType);
+    pWindow->currentWrapper()->textEditor()->m_listBookmark.append(1);
+    pWindow->currentWrapper()->textEditor()->m_nBookMarkHoverLine = 2;
+    QPaintEvent *pPaintEvent;
+    pWindow->currentWrapper()->textEditor()->bookMarkAreaPaintEvent(pPaintEvent);
+    int iRet = pWindow->currentWrapper()->textEditor()->m_pLeftAreaWidget->m_pBookMarkArea->width();
+
+    ASSERT_TRUE(iRet == 15);
+    pWindow->deleteLater();
+}
+
+//bookMarkAreaPaintEvent
+TEST(UT_test_textedit_bookMarkAreaPaintEvent, UT_test_textedit_bookMarkAreaPaintEvent_003)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    DApplicationHelper::instance()->setThemeType(DApplicationHelper::ColorType::LightType);
+    pWindow->currentWrapper()->textEditor()->m_listBookmark.append(1);
+    pWindow->currentWrapper()->textEditor()->m_nBookMarkHoverLine = 1;
+    QPaintEvent *pPaintEvent;
+    pWindow->currentWrapper()->textEditor()->bookMarkAreaPaintEvent(pPaintEvent);
+    int iRet = pWindow->currentWrapper()->textEditor()->m_pLeftAreaWidget->m_pBookMarkArea->width();
+
+    ASSERT_TRUE(iRet == 15);
+    pWindow->deleteLater();
+}
+
 //void setThemeWithPath(const QString &path);
 TEST_F(test_textedit, setThemeWithPath)
 {
@@ -3505,82 +3799,6 @@ TEST_F(test_textedit, getReadOnlyMode)
     p->deleteLater();
 }
 
-//void flodOrUnflodCurrentLevel(bool isFlod);
-TEST_F(test_textedit, flodOrUnflodCurrentLevel)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->flodOrUnflodCurrentLevel(true);
-    startManager->flodOrUnflodCurrentLevel(false);
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-//void getHideRowContent(int iLine);
-TEST_F(test_textedit, getHideRowContent)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->getHideRowContent(1);
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-//int  getHighLightRowContentLineNum(int iLine);
-TEST_F(test_textedit, getHighLightRowContentLineNum)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->getHighLightRowContentLineNum(1);
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-//int  getLinePosByLineNum(int iLine);
-TEST_F(test_textedit, getLinePosYByLineNum)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->getLinePosYByLineNum(1);
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-//bool ifHasHighlight();
-TEST_F(test_textedit, ifHasHighlight)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->ifHasHighlight();
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
 //void bookMarkAreaPaintEvent(QPaintEvent *event);
 TEST_F(test_textedit, bookMarkAreaPaintEvent)
 {

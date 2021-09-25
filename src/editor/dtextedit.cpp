@@ -3677,7 +3677,7 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
     BookMarkWidget *bookMarkArea = m_pLeftAreaWidget->m_pBookMarkArea;
     QPainter painter(bookMarkArea);
     QColor lineNumberAreaBackgroundColor;
-    if (QColor(m_backgroundColor).lightness() < 128) {
+    if (DApplicationHelper::instance()->themeType() == DApplicationHelper::ColorType::DarkType) {
         lineNumberAreaBackgroundColor = palette().brightText().color();
         lineNumberAreaBackgroundColor.setAlphaF(0.06);
 
@@ -3688,15 +3688,14 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
         m_lineNumbersColor.setAlphaF(0.3);
     }
     //painter.fillRect(event->rect(), lineNumberAreaBackgroundColor);
-
-//    int top = this->viewport()->geometry().top() + verticalScrollBar()->value();
+    //int top = this->viewport()->geometry().top() + verticalScrollBar()->value();
 
     QTextBlock lineBlock;//第几行文本块
     QImage image;
-//    QImage scaleImage;
+    //QImage scaleImage;
     QPixmap scalePixmap;
     QString pixmapPath;
-//    int startPoint = 0;//当前可见区域开始位置
+    //int startPoint = 0;//当前可见区域开始位置
     int imageTop = 0;//图片绘制位置
     int fontHeight = fontMetrics().height();
     double nBookmarkLineHeight = fontHeight;
@@ -4049,10 +4048,12 @@ bool TextEdit::isNeedShowFoldIcon(QTextBlock block)
 
 int TextEdit::getHighLightRowContentLineNum(int iLine)
 {
-
     bool isFirstLine = true;
-    if (iLine == 0) isFirstLine = true;
-    else isFirstLine = false;
+    if (iLine == 0) {
+        isFirstLine = true;
+    } else {
+        isFirstLine = false;
+    }
 
     QTextDocument *doc = document();
     //获取行号文本块
@@ -4144,10 +4145,11 @@ void TextEdit::paintCodeFlod(QPainter *painter, QRect rect, bool flod)
     path.lineTo(p3);
     path.lineTo(p2);
 
-    if(flod)
+    if(flod) {
         painter->rotate(-90);
+    }
 
-    QPen pen(this->palette().foreground(),2);
+    QPen pen(this->palette().foreground(), 2);
     painter->setPen(pen);
     painter->setRenderHint(QPainter::Antialiasing, true);
     painter->drawPath(path);

@@ -10,6 +10,7 @@
 #include "../../src/editor/dtextedit.h"
 #include "../../src/common/CSyntaxHighlighter.h"
 #include "../../src/editor/uncommentselection.h"
+#include "../../src/editor/showflodcodewidget.h"
 #include <QMenu>
 
 #include "../stub.h"
@@ -29,6 +30,7 @@
 #include <QList>
 #include <QFile>
 #include <QChar>
+#include <QPaintEvent>
 
 class test_textedit: public QObject, public::testing::Test
 {
