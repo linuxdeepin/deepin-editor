@@ -64,9 +64,6 @@ void PerformanceMonitor::initializAppFinish()
 void PerformanceMonitor::closeAppStart()
 {
     QDateTime current = QDateTime::currentDateTime();
-    qDebug() << "LOG_FLAG"
-             << QDateTime::currentDateTime().toString(Qt::ISODateWithMs)
-             << "start to close app";
     closeAppStartMs = current.toMSecsSinceEpoch();
 }
 

@@ -22,6 +22,19 @@ int retintstub()
     return intvalue;
 }
 
+
+QString string1="1";
+QString retstring1()
+{
+    return string1;
+}
+
+QString string2="2";
+QString retstring2()
+{
+    return string2;
+}
+
 }
 
 using namespace texteditstub;
@@ -4701,6 +4714,27 @@ TEST_F(test_textedit, paintEvent)
     p->deleteLater();
 }
 
+TEST(UT_TextEdit_paintEvent, UT_TextEdit_paintEvent_002)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QPaintEvent* e = new QPaintEvent(QRect(20,20,20,20));
+
+    QTextEdit::ExtraSelection s1,s2;
+    edit->m_altModSelections.push_back(s1);
+    edit->m_altModSelections.push_back(s2);
+    edit->m_bIsAltMod = true;
+
+    edit->paintEvent(e);
+
+    EXPECT_NE(edit,nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
 // bool blockContainStrBrackets(int line);
 TEST_F(test_textedit, blockContainStrBrackets)
 {
@@ -5611,4 +5645,2040 @@ TEST_F(test_textedit, keyPressEvent)
     ASSERT_TRUE(editWrapper->m_pTextEdit != nullptr);
     editWrapper->deleteLater();
     window->deleteLater();
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_002)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit,copy),rettruestub);
+
+    string1 = "e";
+    string2 = "e";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_003)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit,nextLine),rettruestub);
+
+    edit->m_readOnlyMode=true;
+    string1 = "J";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_004)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit,prevLine),rettruestub);
+
+    edit->m_readOnlyMode=true;
+    string1 = "K";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_005)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit,moveToEnd),rettruestub);
+
+    edit->m_readOnlyMode=true;
+    string1 = ",";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_006)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit,moveToStart),rettruestub);
+
+    edit->m_readOnlyMode=true;
+    string1 = ".";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_007)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit,backwardChar),rettruestub);
+
+    edit->m_readOnlyMode=true;
+    string1 = "H";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_008)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit,forwardChar),rettruestub);
+
+    edit->m_readOnlyMode=true;
+    string1 = "L";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_009)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit,scrollUp),rettruestub);
+
+    edit->m_readOnlyMode=true;
+    string1 = "space";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_010)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit,scrollDown),rettruestub);
+
+    edit->m_readOnlyMode=true;
+    string1 = "V";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_011)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit,forwardWord),rettruestub);
+
+    edit->m_readOnlyMode=true;
+    string1 = "F";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_012)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit,backwardWord),rettruestub);
+
+    edit->m_readOnlyMode=true;
+    string1 = "B";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_013)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit,moveToStartOfLine),rettruestub);
+
+    edit->m_readOnlyMode=true;
+    string1 = "A";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_014)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit,moveToEndOfLine),rettruestub);
+
+    edit->m_readOnlyMode=true;
+    string1 = "E";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_015)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit,moveToLineIndentation),rettruestub);
+
+    edit->m_readOnlyMode=true;
+    string1 = "M";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_016)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit,toggleReadOnlyMode),rettruestub);
+
+    edit->m_readOnlyMode=true;
+    edit->m_bReadOnlyPermission=false;
+    string1 = "Q";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_017)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit,scrollLineUp),rettruestub);
+
+    edit->m_readOnlyMode=true;
+    string1 = "Shfit+J";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_018)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit,scrollLineDown),rettruestub);
+
+    edit->m_readOnlyMode=true;
+    string1 = "Shfit+K";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_019)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit,forwardPair),rettruestub);
+
+    edit->m_readOnlyMode=true;
+    string1 = "P";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_020)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, backwardPair),rettruestub);
+
+    edit->m_readOnlyMode=true;
+    string1 = "N";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_021)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::NoModifier);
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, copyLines),rettruestub);
+
+    edit->m_readOnlyMode=true;
+    string1 = "Shift+:";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_022)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_H,Qt::ControlModifier);
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, copyLines),rettruestub);
+
+    edit->m_readOnlyMode=true;
+    string1 = "Shift+/";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_023)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_Control,Qt::NoModifier);
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, copyLines),rettruestub);
+
+    edit->m_readOnlyMode=true;
+    string1 = "987";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_024)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_F11,Qt::NoModifier);
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, copyLines),rettruestub);
+
+    edit->m_readOnlyMode=true;
+    string1 = "987";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_025)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_F1,Qt::NoModifier);
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, popupNotify),rettruestub);
+
+    edit->m_readOnlyMode=true;
+    string1 = "987";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_026)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_F1,Qt::GroupSwitchModifier);
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, popupNotify),rettruestub);
+
+    edit->m_readOnlyMode=true;
+    string1 = "987";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_027)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_F1,Qt::GroupSwitchModifier);
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, isReadOnly),rettruestub);
+
+
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = "987";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_028)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_ydiaeresis,Qt::NoModifier,"123");
+
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, insertColumnEditTextEx),retfalsestub);
+    Stub s4;
+    s4.set(ADDR(TextEdit, insertSelectTextEx),retfalsestub);
+
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = "987";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_029)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress,Qt::Key_9,Qt::KeypadModifier,"123");
+
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, insertColumnEditTextEx),retfalsestub);
+    Stub s4;
+    s4.set(ADDR(TextEdit, insertSelectTextEx),retfalsestub);
+
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = "987";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_030)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_Tab,Qt::NoModifier,"123");
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, insertColumnEditTextEx),retfalsestub);
+    Stub s4;
+    s4.set(ADDR(TextEdit, insertSelectTextEx),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = "987";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+//if (modifiers == Qt::NoModifier && (e->key() == Qt::Key_Backspace))
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_031)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_Backspace,Qt::NoModifier,"123");
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, insertColumnEditTextEx),retfalsestub);
+    Stub s4;
+    s4.set(ADDR(TextEdit, insertSelectTextEx),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = "987";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_032)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_Delete,Qt::NoModifier,"123");
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, insertColumnEditTextEx),retfalsestub);
+    Stub s4;
+    s4.set(ADDR(TextEdit, insertSelectTextEx),retfalsestub);
+
+    QTextEdit::ExtraSelection e1,e2;
+    edit->m_altModSelections.push_back(e1);
+    edit->m_altModSelections.push_back(e2);
+    edit->m_bIsAltMod=true;
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = "987";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_033)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_Delete,Qt::NoModifier,"123");
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, insertColumnEditTextEx),retfalsestub);
+    Stub s4;
+    s4.set(ADDR(TextEdit, insertSelectTextEx),retfalsestub);
+
+    QTextEdit::ExtraSelection e1,e2;
+    edit->m_altModSelections.push_back(e1);
+    edit->m_altModSelections.push_back(e2);
+    edit->m_bIsAltMod=false;
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = "987";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_034)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_Shift,Qt::ShiftModifier,"123");
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    Stub s2;
+    s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, insertColumnEditTextEx),retfalsestub);
+    Stub s4;
+    s4.set(ADDR(TextEdit, insertSelectTextEx),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = "987";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_035)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, insertColumnEditTextEx),retfalsestub);
+    Stub s4;
+    s4.set(ADDR(TextEdit, insertSelectTextEx),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "undo");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_036)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, insertColumnEditTextEx),retfalsestub);
+    Stub s4;
+    s4.set(ADDR(TextEdit, insertSelectTextEx),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "redo");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_037)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, cut),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "cut");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_038)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, paste),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "paste");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_039)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, scrollUp),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "scrollup");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_040)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, scrollDown),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "scrolldown");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_041)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, copyLines),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "copylines");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_042)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, cutlines),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "cutlines");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_043)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    //s3.set(ADDR(TextEdit, indentline),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "indentline");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_044)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, unindentText),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "backindentline");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_045)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, forwardChar),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "forwardchar");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_046)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, backwardWord),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "backwardword");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_047)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, nextLine),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "nextline");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_048)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, prevLine),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "prevline");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_049)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, newline),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "newline");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_050)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, openNewlineAbove),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "opennewlineabove");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_051)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, openNewlineBelow),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "opennewlinebelow");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_052)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, duplicateLine),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "duplicateline");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_053)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, killLine),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "killline");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_054)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit,  killCurrentLine),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "killcurrentline");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_055)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit,  moveLineDownUp),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "swaplineup");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_056)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit,  moveLineDownUp),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "swaplinedown");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_057)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit,  scrollLineUp),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "scrolllineup");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_058)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, scrollLineDown),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "scrolllinedown");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_059)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, scrollUp),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "scrollup");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_060)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, scrollDown),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "scrolldown");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_061)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, moveToEndOfLine),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "movetoendofline");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_062)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, moveToStartOfLine),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "movetostartofline");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_063)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, moveToStart),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "movetostart");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_064)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, moveToEnd),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "movetoend");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_065)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, moveToLineIndentation),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "movetolineindentation");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_066)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, upcaseWord),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "upcaseword");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_067)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, downcaseWord),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "downcaseword");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_068)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, capitalizeWord),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "capitalizeword");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_069)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, killBackwardWord),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "killbackwardword");
+    //string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_070)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_ydiaeresis + 3,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+
+    Stub s3;
+    s3.set(ADDR(TextEdit, killForwardWord),retfalsestub);
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "killforwardword");
+    edit->keyPressEvent(e);
+
+    s3.set(ADDR(TextEdit, forwardPair),retfalsestub);
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "forwardpair");
+    edit->keyPressEvent(e);
+
+    s3.set(ADDR(TextEdit, backwardPair),retfalsestub);
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "backwardpair");
+    edit->keyPressEvent(e);
+
+    s3.set(ADDR(TextEdit, transposeChar),retfalsestub);
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "transposechar");
+    edit->keyPressEvent(e);
+
+    s3.set(ADDR(TextEdit, setMark),retfalsestub);
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "setmark");
+    edit->keyPressEvent(e);
+
+    s3.set(ADDR(TextEdit, exchangeMark),retfalsestub);
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "exchangemark");
+    edit->keyPressEvent(e);
+
+    s3.set(ADDR(TextEdit, joinLines),retfalsestub);
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "joinlines");
+    edit->keyPressEvent(e);
+
+    s3.set(ADDR(TextEdit, toggleReadOnlyMode),retfalsestub);
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "togglereadonlymode");
+    edit->keyPressEvent(e);
+
+    s3.set(ADDR(TextEdit, toggleReadOnlyMode),retfalsestub);
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "togglereadonlymode");
+    edit->keyPressEvent(e);
+
+    s3.set(ADDR(TextEdit, toggleComment),retfalsestub);
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "togglecomment");
+    edit->keyPressEvent(e);
+
+    s3.set(ADDR(TextEdit, addOrDeleteBookMark),retfalsestub);
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "switchbookmark");
+    edit->keyPressEvent(e);
+
+    s3.set(ADDR(TextEdit, moveToPreviousBookMark),retfalsestub);
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "movetoprebookmark");
+    edit->keyPressEvent(e);
+
+    s3.set(ADDR(TextEdit, moveToNextBookMark),retfalsestub);
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "movetonextbookmark");
+    edit->keyPressEvent(e);
+
+    s3.set(ADDR(TextEdit, toggleMarkSelections),retfalsestub);
+    string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "mark");
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_071)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_Insert,Qt::NoModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, overwriteMode),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = "987";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_072)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QKeyEvent::KeyPress, Qt::Key_Insert,Qt::GroupSwitchModifier,"123");
+    edit->m_settings = Settings::instance();
+
+    Stub s1;
+    s1.set(ADDR(Utils,getKeyshortcut),retstring1);
+    //Stub s2;
+    //s2.set(ADDR(Utils,getKeyshortcutFromKeymap),retstring2);
+    Stub s3;
+    s3.set(ADDR(TextEdit, overwriteMode),retfalsestub);
+
+    edit->m_readOnlyMode = false;
+    edit->m_bReadOnlyPermission=false;
+    string1 = "Shift+Ins";
+    string2 = "789";
+    edit->keyPressEvent(e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
+
+TEST(UT_Textedit_resizeEvent, UT_Textedit_resizeEvent)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QResizeEvent* r = new QResizeEvent(QSize(30,30),QSize(20,20));
+
+
+    edit->m_isSelectAll = true;
+    edit->resizeEvent(r);
+
+    edit->m_isSelectAll = false;
+    edit->resizeEvent(r);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete r;
+    r = nullptr;
 }
