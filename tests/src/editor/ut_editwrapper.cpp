@@ -327,7 +327,7 @@ TEST(UT_Editwrapper_hideWarningNotices, UT_Editwrapper_hideWarningNotices)
 }
 
 //void checkForReload();
-TEST(UT_Editwrapper_checkForReload_001, UT_Editwrapper_checkForReload_001)
+TEST(UT_Editwrapper_checkForReload, UT_Editwrapper_checkForReload_001)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -345,7 +345,7 @@ bool checkForReload_002_stub()
 }
 
 //void checkForReload();
-TEST(UT_Editwrapper_checkForReload_002, UT_Editwrapper_checkForReload_002)
+TEST(UT_Editwrapper_checkForReload, UT_Editwrapper_checkForReload_002)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -362,7 +362,7 @@ TEST(UT_Editwrapper_checkForReload_002, UT_Editwrapper_checkForReload_002)
 //void initToastPosition() 无实现;
 
 //void showNotify(const QString &message);
-TEST(UT_Editwrapper_showNotify_001, UT_Editwrapper_showNotify_001)
+TEST(UT_Editwrapper_showNotify, UT_Editwrapper_showNotify_001)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -375,7 +375,7 @@ TEST(UT_Editwrapper_showNotify_001, UT_Editwrapper_showNotify_001)
 }
 
 //void showNotify(const QString &message);
-TEST(UT_Editwrapper_showNotify_002, UT_Editwrapper_showNotify_002)
+TEST(UT_Editwrapper_showNotify, UT_Editwrapper_showNotify_002)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -388,7 +388,7 @@ TEST(UT_Editwrapper_showNotify_002, UT_Editwrapper_showNotify_002)
 }
 
 //void setLineNumberShow(bool bIsShow,bool bIsFirstShow = false);
-TEST(UT_Editwrapper_setLineNumberShow_001, UT_Editwrapper_setLineNumberShow_001)
+TEST(UT_Editwrapper_setLineNumberShow, UT_Editwrapper_setLineNumberShow_001)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -399,7 +399,7 @@ TEST(UT_Editwrapper_setLineNumberShow_001, UT_Editwrapper_setLineNumberShow_001)
 }
 
 //void setLineNumberShow(bool bIsShow,bool bIsFirstShow = false);
-TEST(UT_Editwrapper_setLineNumberShow_002, UT_Editwrapper_setLineNumberShow_002)
+TEST(UT_Editwrapper_setLineNumberShow, UT_Editwrapper_setLineNumberShow_002)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -410,7 +410,7 @@ TEST(UT_Editwrapper_setLineNumberShow_002, UT_Editwrapper_setLineNumberShow_002)
 }
 
 //void setShowBlankCharacter(bool ok);
-TEST(UT_Editwrapper_setShowBlankCharacter_001, UT_Editwrapper_setShowBlankCharacter_001)
+TEST(UT_Editwrapper_setShowBlankCharacter, UT_Editwrapper_setShowBlankCharacter_001)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -421,7 +421,7 @@ TEST(UT_Editwrapper_setShowBlankCharacter_001, UT_Editwrapper_setShowBlankCharac
 }
 
 //void setShowBlankCharacter(bool ok);
-TEST(UT_Editwrapper_setShowBlankCharacter_002, UT_Editwrapper_setShowBlankCharacter_002)
+TEST(UT_Editwrapper_setShowBlankCharacter, UT_Editwrapper_setShowBlankCharacter_002)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -469,7 +469,7 @@ int saveDraftFile001_exec_stub()
 }
 
 //bool saveDraftFile(); Subsequent processing
-TEST(UT_Editwrapper_saveDraftFile_001, UT_Editwrapper_saveDraftFile_001)
+TEST(UT_Editwrapper_saveDraftFile, UT_Editwrapper_saveDraftFile_001)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -488,7 +488,7 @@ int saveDraftFile002_exec_stub()
 }
 
 //bool saveDraftFile(); Subsequent processing
-TEST(UT_Editwrapper_saveDraftFile_002, UT_Editwrapper_saveDraftFile_002)
+TEST(UT_Editwrapper_saveDraftFile, UT_Editwrapper_saveDraftFile_002)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -507,7 +507,7 @@ void readFile_stub_001()
 }
 
 //void readFile(const QString &filePath);
-TEST(UT_Editwrapper_readFile_001, UT_Editwrapper_readFile_001)
+TEST(UT_Editwrapper_readFile, UT_Editwrapper_readFile_001)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -523,7 +523,7 @@ TEST(UT_Editwrapper_readFile_001, UT_Editwrapper_readFile_001)
 }
 
 //void readFile(const QString &filePath);
-TEST(UT_Editwrapper_readFile_002, UT_Editwrapper_readFile_002)
+TEST(UT_Editwrapper_readFile, UT_Editwrapper_readFile_002)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
@@ -1078,5 +1078,72 @@ TEST(UT_Editwrapper_OnThemeChangeSlot, UT_Editwrapper_OnThemeChangeSlot)
     doc->deleteLater();
 }
 
+TEST(UT_Editwrapper_clearDoubleCharaterEncode, UT_Editwrapper_clearDoubleCharaterEncode_001)
+{
+    EditWrapper* wra = new EditWrapper;
 
+    Stub s1;
+    //bool contains(const QString &s, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+    s1.set((bool (QString::*)(const QString &, Qt::CaseSensitivity) const)ADDR(QString,contains),rettruestub);
+    Stub s2;
+    s2.set(ADDR(QFileInfo,size),retintstub);
+
+    intvalue = 1024*1024;
+    wra->clearDoubleCharaterEncode();
+
+
+    EXPECT_NE(wra,nullptr);
+    wra->deleteLater();
+}
+TEST(UT_Editwrapper_clearDoubleCharaterEncode, UT_Editwrapper_clearDoubleCharaterEncode_002)
+{
+    EditWrapper* wra = new EditWrapper;
+
+    Stub s1;
+    //bool contains(const QString &s, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+    s1.set((bool (QString::*)(const QString &, Qt::CaseSensitivity) const)ADDR(QString,contains),rettruestub);
+    Stub s2;
+    s2.set(ADDR(QFileInfo,size),retintstub);
+
+    intvalue = 1*1024;
+    wra->clearDoubleCharaterEncode();
+
+
+    EXPECT_NE(wra,nullptr);
+    wra->deleteLater();
+}
+
+TEST(UT_Editwrapper_loadContent, UT_Editwrapper_loadContent_001)
+{
+    Window* window = new Window();
+    EditWrapper* wra = new EditWrapper(window);
+
+    Stub s1;
+    s1.set(ADDR(QString,length),retintstub);
+
+    intvalue = 41*1024*1024;
+    wra->loadContent("ddd");
+
+
+    EXPECT_NE(wra,nullptr);
+    wra->deleteLater();
+    window->deleteLater();
+}
+
+TEST(UT_Editwrapper_loadContent, UT_Editwrapper_loadContent_002)
+{
+    Window* window = new Window();
+    EditWrapper* wra = new EditWrapper(window);
+
+    Stub s1;
+    s1.set(ADDR(QString,length),retintstub);
+
+    intvalue = 10*1024;
+    wra->loadContent("ddd");
+
+
+    EXPECT_NE(wra,nullptr);
+    wra->deleteLater();
+    window->deleteLater();
+}
 
