@@ -6560,7 +6560,7 @@ void TextEdit::resizeEvent(QResizeEvent *e)
     QPlainTextEdit::resizeEvent(e);
 }
 
-static bool isComment(const QString &text, int index, const QString &commentType)
+bool TextEdit::isComment(const QString &text, int index, const QString &commentType)
 {
     int length = commentType.length();
 
@@ -6828,10 +6828,10 @@ void TextEdit::setComment()
         QString text = startBlock.text().trimmed();
         doMultiLineStyleUncomment = text.startsWith(m_commentDefinition.multiLineStart)
                                     && text.endsWith(m_commentDefinition.multiLineEnd);
-        qDebug() << m_commentDefinition.multiLineStart;
+        //qDebug() << m_commentDefinition.multiLineStart;
         doMultiLineStyleComment = !doMultiLineStyleUncomment && !text.isEmpty();
 
-        qDebug() << "setComment:" << !text.isEmpty() << text << end << start;
+        //qDebug() << "setComment:" << !text.isEmpty() << text << end << start;
 
         start = startBlock.position();
         end = endBlock.position() + endBlock.length() - 1;
@@ -6892,7 +6892,7 @@ void TextEdit::removeComment()
     if (!m_commentDefinition.isValid())
         return;
 
-    qDebug() << m_commentDefinition.multiLineStart << m_commentDefinition.multiLineEnd << m_commentDefinition.singleLine;
+    //qDebug() << m_commentDefinition.multiLineStart << m_commentDefinition.multiLineEnd << m_commentDefinition.singleLine;
     QString tep = m_commentDefinition.singleLine;
     QString abb = tep.remove(QRegExp("\\s"));
 

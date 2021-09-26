@@ -471,6 +471,8 @@ public:
      */
     void updateSaveIndex();
 
+    static bool isComment(const QString &text, int index, const QString &commentType);
+
 signals:
     void clickFindAction();
     void clickReplaceAction();

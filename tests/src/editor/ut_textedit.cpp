@@ -3,6 +3,29 @@
 #include "../../src/widgets/window.h"
 #include <QUndoStack>
 
+
+namespace texteditstub {
+
+bool rettruestub()
+{
+    return true;
+}
+
+bool retfalsestub()
+{
+    return false;
+}
+
+int intvalue = 1;
+int retintstub()
+{
+    return intvalue;
+}
+
+}
+
+using namespace texteditstub;
+
 test_textedit::test_textedit()
 {
     QString text = QString("#include \"window.h\"\n"
@@ -4699,6 +4722,31 @@ TEST_F(test_textedit, blockContainStrBrackets)
     startManager->deleteLater();
     p->deleteLater();
 }
+
+TEST(UT_TextEdit_blockContainStrBrackets, UT_TextEdit_blockContainStrBrackets_002)
+{
+   TextEdit* edit = new TextEdit;
+   Stub s1;
+   s1.set((bool (QString::*) (QRegExp &) const )ADDR(QString,contains),rettruestub);
+
+   edit->blockContainStrBrackets(1);
+
+   EXPECT_NE(edit,nullptr);
+   edit->deleteLater();
+}
+
+TEST(UT_TextEdit_blockContainStrBrackets, UT_TextEdit_blockContainStrBrackets_003)
+{
+   TextEdit* edit = new TextEdit;
+   Stub s1;
+   s1.set((bool (QString::*) (QRegExp &) const )ADDR(QString,contains),retfalsestub);
+
+   edit->blockContainStrBrackets(1);
+
+   EXPECT_NE(edit,nullptr);
+   edit->deleteLater();
+}
+
 // bool setCursorKeywordSeletoin(int position, bool findNext);
 TEST_F(test_textedit, setCursorKeywordSeletoin)
 {
@@ -5262,6 +5310,128 @@ TEST_F(test_textedit, unCommentSelection)
     editWrapper->deleteLater();
 }
 
+TEST(UT_TextEdit_unCommentSelection, UT_TextEdit_unCommentSelection_002)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+
+    Stub s1;
+    s1.set(ADDR(Comment::CommentDefinition,isValid),rettruestub);
+    Stub s2;
+    s2.set(ADDR(QTextCursor,hasSelection),rettruestub);
+    Stub s3;
+    s3.set(ADDR(Comment::CommentDefinition,hasMultiLineStyle),rettruestub);
+    Stub s4;
+    s4.set(ADDR(QString,length),retintstub);
+    Stub s5;
+    s5.set(ADDR(TextEdit,isComment),rettruestub);
+
+
+    intvalue = -1000;
+    edit->unCommentSelection();
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+TEST(UT_TextEdit_unCommentSelection, UT_TextEdit_unCommentSelection_003)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+
+    Stub s1;
+    s1.set(ADDR(Comment::CommentDefinition,isValid),rettruestub);
+    Stub s2;
+    s2.set(ADDR(QTextCursor,hasSelection),retfalsestub);
+    Stub s3;
+    s3.set(ADDR(Comment::CommentDefinition,hasSingleLineStyle),retfalsestub);
+    Stub s4;
+    s4.set(ADDR(QString,length),retintstub);
+    Stub s5;
+    s5.set(ADDR(TextEdit,isComment),rettruestub);
+    Stub s6;
+    s6.set((bool (QString::*) (const QString &, Qt::CaseSensitivity) const )ADDR(QString,startsWith),rettruestub);
+    Stub s7;
+    s7.set((bool (QString::*) (const QString &, Qt::CaseSensitivity) const )ADDR(QString,endsWith),rettruestub);
+
+    intvalue = -1000;
+    edit->unCommentSelection();
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+TEST(UT_TextEdit_unCommentSelection, UT_TextEdit_unCommentSelection_004)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+
+    Stub s1;
+    s1.set(ADDR(Comment::CommentDefinition,isValid),rettruestub);
+    Stub s2;
+    s2.set(ADDR(QTextCursor,hasSelection),retfalsestub);
+    Stub s3;
+    s3.set(ADDR(Comment::CommentDefinition,hasSingleLineStyle),retfalsestub);
+    Stub s4;
+    s4.set(ADDR(QString,length),retintstub);
+    Stub s5;
+    s5.set(ADDR(TextEdit,isComment),rettruestub);
+    Stub s6;
+    s6.set((bool (QString::*) (const QString &, Qt::CaseSensitivity) const )ADDR(QString,startsWith),retfalsestub);
+    Stub s7;
+    s7.set((bool (QString::*) (const QString &, Qt::CaseSensitivity) const )ADDR(QString,endsWith),retfalsestub);
+    Stub s8;
+    s8.set(ADDR(QString,isEmpty),retfalsestub);
+
+    intvalue = -1000;
+    edit->unCommentSelection();
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+TEST(UT_TextEdit_unCommentSelection, UT_TextEdit_unCommentSelection_005)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+
+    Stub s1;
+    s1.set(ADDR(Comment::CommentDefinition,isValid),rettruestub);
+    Stub s2;
+    s2.set(ADDR(QTextCursor,hasSelection),retfalsestub);
+    Stub s3;
+    s3.set(ADDR(Comment::CommentDefinition,hasSingleLineStyle),retfalsestub);
+    Stub s4;
+    s4.set(ADDR(QString,length),retintstub);
+    Stub s5;
+    s5.set(ADDR(TextEdit,isComment),rettruestub);
+    Stub s6;
+    s6.set((bool (QString::*) (const QString &, Qt::CaseSensitivity) const )ADDR(QString,startsWith),retfalsestub);
+    Stub s7;
+    s7.set((bool (QString::*) (const QString &, Qt::CaseSensitivity) const )ADDR(QString,endsWith),retfalsestub);
+    Stub s8;
+    s8.set(ADDR(QString,isEmpty),rettruestub);
+
+    intvalue = -1000;
+    edit->unCommentSelection();
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+
 TEST_F(test_textedit, setComment)
 {
     EditWrapper *editWrapper = new EditWrapper;
@@ -5275,6 +5445,95 @@ TEST_F(test_textedit, setComment)
     editWrapper->deleteLater();
 }
 
+TEST(UT_TextEdit_setComment, UT_TextEdit_setComment_002)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    Stub s1;
+    s1.set(ADDR(Comment::CommentDefinition,isValid),rettruestub);
+    Stub s2;
+    s2.set(ADDR(QTextCursor,isNull),retfalsestub);
+    Stub s3;
+    s3.set(ADDR(QTextCursor,hasSelection),rettruestub);
+    Stub s4;
+    s4.set(ADDR(Comment::CommentDefinition,hasMultiLineStyle),rettruestub);
+    Stub s5;
+    s5.set(ADDR(QString,length),retintstub);
+    Stub s6;
+    s6.set(ADDR(TextEdit,isComment),rettruestub);
+
+    intvalue = -1000;
+    edit->setComment();
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+TEST(UT_TextEdit_setComment, UT_TextEdit_setComment_003)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    Stub s1;
+    s1.set(ADDR(Comment::CommentDefinition,isValid),rettruestub);
+    Stub s2;
+    s2.set(ADDR(QTextCursor,isNull),retfalsestub);
+    Stub s3;
+    s3.set(ADDR(QTextCursor,hasSelection),retfalsestub);
+    Stub s4;
+    s4.set(ADDR(Comment::CommentDefinition,hasSingleLineStyle),retfalsestub);
+    Stub s5;
+    s5.set(ADDR(QString,length),retintstub);
+    Stub s6;
+    s6.set(ADDR(TextEdit,isComment),rettruestub);
+    Stub s7;
+    s7.set((bool (QString::*) (const QString &, Qt::CaseSensitivity) const )ADDR(QString,startsWith),rettruestub);
+    Stub s8;
+    s8.set((bool (QString::*) (const QString &, Qt::CaseSensitivity) const )ADDR(QString,endsWith),rettruestub);
+
+    intvalue = -1000;
+    edit->setComment();
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+TEST(UT_TextEdit_setComment, UT_TextEdit_setComment_004)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    Stub s1;
+    s1.set(ADDR(Comment::CommentDefinition,isValid),rettruestub);
+    Stub s2;
+    s2.set(ADDR(QTextCursor,isNull),retfalsestub);
+    Stub s3;
+    s3.set(ADDR(QTextCursor,hasSelection),retfalsestub);
+    Stub s4;
+    s4.set(ADDR(Comment::CommentDefinition,hasSingleLineStyle),retfalsestub);
+    Stub s5;
+    s5.set(ADDR(QString,length),retintstub);
+    Stub s6;
+    s6.set(ADDR(TextEdit,isComment),rettruestub);
+    Stub s7;
+    s7.set((bool (QString::*) (const QString &, Qt::CaseSensitivity) const )ADDR(QString,startsWith),retfalsestub);
+    Stub s8;
+    s8.set((bool (QString::*) (const QString &, Qt::CaseSensitivity) const )ADDR(QString,endsWith),retfalsestub);
+
+    intvalue = -1000;
+    edit->setComment();
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
 TEST_F(test_textedit, removeComment)
 {
     EditWrapper *editWrapper = new EditWrapper;
@@ -5286,6 +5545,56 @@ TEST_F(test_textedit, removeComment)
 
     ASSERT_TRUE(editWrapper->m_pTextEdit != nullptr);
     editWrapper->deleteLater();
+}
+
+TEST(UT_Textedit_removeComment, UT_Textedit_removeComment_002)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    Stub s1;
+    s1.set(ADDR(Comment::CommentDefinition,isValid),rettruestub);
+    Stub s2;
+    s2.set(ADDR(QTextCursor,hasSelection),rettruestub);
+    Stub s3;
+    s3.set(ADDR(Comment::CommentDefinition,hasMultiLineStyle),rettruestub);
+    Stub s4;
+    s4.set(ADDR(QString,length),retintstub);
+    Stub s5;
+    s5.set(ADDR(TextEdit,isComment),rettruestub);
+
+    intvalue = -1000;
+    edit->removeComment();
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+TEST(UT_Textedit_removeComment, UT_Textedit_removeComment_003)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    Stub s1;
+    s1.set(ADDR(Comment::CommentDefinition,isValid),rettruestub);
+    Stub s2;
+    s2.set(ADDR(QTextCursor,hasSelection),retfalsestub);
+    Stub s3;
+    s3.set(ADDR(Comment::CommentDefinition,hasSingleLineStyle),retfalsestub);
+    Stub s4;
+    s4.set(ADDR(QString,length),retintstub);
+    Stub s5;
+    s5.set(ADDR(TextEdit,isComment),rettruestub);
+
+    intvalue = -1000;
+    edit->removeComment();
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
 }
 
 TEST_F(test_textedit, keyPressEvent)
