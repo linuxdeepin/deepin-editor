@@ -1299,7 +1299,12 @@ void TextEdit::killCurrentLine()
 
     auto cursor = this->textCursor();
     cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+    if(cursor.blockNumber()+1 != this->document()->blockCount()){
+        cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
+    }
+    else {
+        cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+    }
     if(!cursor.selectedText().isEmpty()){
         DeleteBackCommond* com = new DeleteBackCommond(cursor,this);
         m_pUndoStack->push(com);
