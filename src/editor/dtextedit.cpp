@@ -5940,11 +5940,6 @@ void TextEdit::mouseMoveEvent(QMouseEvent *e)
         int maxColumn = startColumn > column ? startColumn : column;
         int minRow = startRow < row ? startRow : row;
         int maxRow = startRow > row ? startRow : row;
-//        qDebug()<<"min========================:"<<minRow<<minColumn;
-//        qDebug()<<"max========================:"<<maxRow<<maxColumn;
-//        qDebug()<<mouseEvent->pos();
-//        qDebug()<<"begin pos:row="<<startRow<<" column="<<startColumn;
-//        qDebug()<<"Move  pos:row="<<row<<" column="<<column;
 
         QTextCharFormat format;
         QPalette palette;
@@ -6000,8 +5995,6 @@ void TextEdit::mouseReleaseEvent(QMouseEvent *e)
 {
     //add for single refers to the sliding
     if (e->type() == QEvent::MouseButtonRelease && e->source() == Qt::MouseEventSynthesizedByQt) {
-        qDebug() << "action is over" << m_gestureAction;
-
         if (m_gestureAction == GA_slide) {
 
             tweenX.startX(0, 0, changeX, durationX, std::bind(&TextEdit::slideGestureX, this, std::placeholders::_1));

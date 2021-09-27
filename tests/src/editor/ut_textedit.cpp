@@ -4534,7 +4534,8 @@ TEST_F(test_textedit, event)
     p->deleteLater();
 }
 
-// void inputMethodEvent(QInputMethodEvent *e) override;
+
+//TEST(UT_TextEdit_inputMethodEvent, UT_TextEdit_inputMethodEvent)
 
 // void mousePressEvent(QMouseEvent *e) override;
 TEST_F(test_textedit, mousePressEvent)
@@ -4560,6 +4561,29 @@ TEST_F(test_textedit, mousePressEvent)
     p->deleteLater();
 }
 
+TEST(UT_TextEdit_mousePressEvent, UT_TextEdit_mousePressEvent_002)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QMouseEvent* e = new QMouseEvent(QEvent::MouseButtonPress,QPointF(20.0,20.0),Qt::RightButton,Qt::RightButton,Qt::AltModifier);
+
+    Stub s1;
+    s1.set(ADDR(QMouseEvent,source),retintstub);
+
+    intvalue=2;
+    edit->m_bIsAltMod=true;
+    edit->m_bIsFindClose=true;
+    edit->mousePressEvent(e);
+
+
+    EXPECT_NE(edit,nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
+
 // void mouseMoveEvent(QMouseEvent *e) override;
 TEST_F(test_textedit, mouseMoveEvent)
 {
@@ -4583,6 +4607,29 @@ TEST_F(test_textedit, mouseMoveEvent)
     startManager->deleteLater();
     p->deleteLater();
 }
+
+TEST(UT_TextEdit_mouseMoveEvent, UT_TextEdit_mouseMoveEvent_002)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QMouseEvent* e = new QMouseEvent(QEvent::MouseMove,QPointF(20.0,20.0),Qt::LeftButton,Qt::LeftButton,Qt::AltModifier);
+
+    Stub s1;
+    s1.set(ADDR(QMouseEvent,source),retintstub);
+
+    intvalue=2;
+    edit->m_bIsAltMod=true;
+    edit->m_gestureAction == TextEdit::GA_slide;
+    edit->mouseMoveEvent(e);
+
+
+    EXPECT_NE(edit,nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
+}
 // void mouseReleaseEvent(QMouseEvent *e) override;
 TEST_F(test_textedit, mouseReleaseEvent)
 {
@@ -4605,6 +4652,27 @@ TEST_F(test_textedit, mouseReleaseEvent)
     ee->deleteLater();
     startManager->deleteLater();
     p->deleteLater();
+}
+
+TEST(UT_TextEdit_mouseReleaseEvent, UT_TextEdit_mouseReleaseEvent_002)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QMouseEvent* e = new QMouseEvent(QEvent::MouseButtonRelease,QPointF(20.0,20.0),Qt::LeftButton,Qt::LeftButton,Qt::NoModifier);
+
+    Stub s1;
+    s1.set(ADDR(QMouseEvent,source),retintstub);
+
+    intvalue = 2;
+    edit->mouseReleaseEvent(e);
+
+
+    EXPECT_NE(edit,nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e=nullptr;
 }
 
 // void wheelEvent(QWheelEvent *e) override;
@@ -5361,6 +5429,10 @@ TEST(UT_TextEdit_unCommentSelection, UT_TextEdit_unCommentSelection_002)
     s4.set(ADDR(QString,length),retintstub);
     Stub s5;
     s5.set(ADDR(TextEdit,isComment),rettruestub);
+    Stub s6;
+    s6.set(ADDR(TextEdit,deleteTextEx),rettruestub);
+    Stub s7;
+    s7.set(ADDR(TextEdit,insertTextEx),rettruestub);
 
 
     intvalue = -1000;
@@ -5392,6 +5464,10 @@ TEST(UT_TextEdit_unCommentSelection, UT_TextEdit_unCommentSelection_003)
     s6.set((bool (QString::*) (const QString &, Qt::CaseSensitivity) const )ADDR(QString,startsWith),rettruestub);
     Stub s7;
     s7.set((bool (QString::*) (const QString &, Qt::CaseSensitivity) const )ADDR(QString,endsWith),rettruestub);
+    Stub s8;
+    s8.set(ADDR(TextEdit,deleteTextEx),rettruestub);
+    Stub s9;
+    s9.set(ADDR(TextEdit,insertTextEx),rettruestub);
 
     intvalue = -1000;
     edit->unCommentSelection();
@@ -5424,6 +5500,10 @@ TEST(UT_TextEdit_unCommentSelection, UT_TextEdit_unCommentSelection_004)
     s7.set((bool (QString::*) (const QString &, Qt::CaseSensitivity) const )ADDR(QString,endsWith),retfalsestub);
     Stub s8;
     s8.set(ADDR(QString,isEmpty),retfalsestub);
+    Stub s9;
+    s9.set(ADDR(TextEdit,deleteTextEx),rettruestub);
+    Stub s10;
+    s10.set(ADDR(TextEdit,insertTextEx),rettruestub);
 
     intvalue = -1000;
     edit->unCommentSelection();
@@ -5456,6 +5536,10 @@ TEST(UT_TextEdit_unCommentSelection, UT_TextEdit_unCommentSelection_005)
     s7.set((bool (QString::*) (const QString &, Qt::CaseSensitivity) const )ADDR(QString,endsWith),retfalsestub);
     Stub s8;
     s8.set(ADDR(QString,isEmpty),rettruestub);
+    Stub s9;
+    s9.set(ADDR(TextEdit,deleteTextEx),rettruestub);
+    Stub s10;
+    s10.set(ADDR(TextEdit,insertTextEx),rettruestub);
 
     intvalue = -1000;
     edit->unCommentSelection();
@@ -7682,3 +7766,28 @@ TEST(UT_Textedit_resizeEvent, UT_Textedit_resizeEvent)
     delete r;
     r = nullptr;
 }
+
+TEST(UT_Textedit_dragMoveEvent, UT_Textedit_dragMoveEvent)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QMimeData* data = new QMimeData();
+    data->setText("ddd");
+    QDragMoveEvent* r = new QDragMoveEvent(QPoint(20,20),Qt::ActionMask,data,Qt::LeftButton,Qt::NoModifier);
+
+
+    QList<QUrl> urls = {{"123"},{"456"}};
+    data->setUrls(urls);
+    edit->m_readOnlyMode = false;
+    edit->dragMoveEvent(r);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    data->deleteLater();
+    delete r;
+    r = nullptr;
+}
+
+
