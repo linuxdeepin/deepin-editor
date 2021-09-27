@@ -88,7 +88,6 @@ static void printPage(int index, QPainter *painter, const QTextDocument *doc,
     ctx.palette.setColor(QPalette::Text, Qt::black);
 
     layout->draw(painter, ctx);
-
     painter->restore();
 }
 
