@@ -2,6 +2,8 @@
 #include "stub.h"
 #include "../../src/widgets/window.h"
 #include <QUndoStack>
+#include "QDBusReply"
+#include "QDBusConnection"
 
 
 namespace texteditstub {
@@ -22,6 +24,11 @@ int retintstub()
     return intvalue;
 }
 
+int intvalue2=1;
+int retintstub2()
+{
+    return intvalue2;
+}
 
 QString string1="1";
 QString retstring1()
@@ -35,6 +42,10 @@ QString retstring2()
     return string2;
 }
 
+QDBusConnection sessionBusstub()
+{
+    return QDBusConnection("123");
+}
 }
 
 using namespace texteditstub;
@@ -6545,6 +6556,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_032)
     s3.set(ADDR(TextEdit, insertColumnEditTextEx),retfalsestub);
     Stub s4;
     s4.set(ADDR(TextEdit, insertSelectTextEx),retfalsestub);
+    s4.set(ADDR(QUndoStack,push),rettruestub);
 
     QTextEdit::ExtraSelection e1,e2;
     edit->m_altModSelections.push_back(e1);
@@ -8091,7 +8103,8 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_009)
     e = nullptr;
 }
 
-TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_0010)
+
+TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_010)
 {
     TextEdit* edit = new TextEdit;
     EditWrapper* wra = new EditWrapper;
@@ -8128,3 +8141,432 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_0010)
 }
 
 
+TEST(UT_Textedit_updateMark, UT_Textedit_updateMark_002)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    QTextEdit::ExtraSelection e1,e2;
+    //QList<QPair<QTextEdit::ExtraSelection, qint64>>;
+    edit->m_wordMarkSelections.push_back({e1,1});
+    edit->m_wordMarkSelections.push_back({e2,2});
+
+    Stub s1;
+    s1.set(ADDR(QTextCursor,selectionEnd),retintstub);
+    Stub s2;
+    s2.set(ADDR(QTextCursor,selectionStart),retintstub2);
+
+    intvalue=10000;
+    intvalue2=-10000;
+    edit->m_bIsInputMethod = true;
+    edit->updateMark(1,2,3);
+
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+TEST(UT_Textedit_updateMark, UT_Textedit_updateMark_003)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    QTextEdit::ExtraSelection e1,e2;
+    //QList<QPair<QTextEdit::ExtraSelection, qint64>>;
+    edit->m_wordMarkSelections.push_back({e1,1});
+    edit->m_wordMarkSelections.push_back({e2,2});
+
+    Stub s1;
+    s1.set(ADDR(QTextCursor,selectionEnd),retintstub);
+    Stub s2;
+    s2.set(ADDR(QTextCursor,selectionStart),retintstub2);
+
+    intvalue=10000;
+    intvalue2=-10000;
+    edit->m_bIsInputMethod = false;
+    edit->updateMark(1,2,3);
+
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+
+TEST(UT_Textedit_updateMark, UT_Textedit_updateMark_004)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    QTextEdit::ExtraSelection e1,e2;
+    //QList<QPair<QTextEdit::ExtraSelection, qint64>>;
+    edit->m_wordMarkSelections.push_back({e1,1});
+    edit->m_wordMarkSelections.push_back({e2,2});
+    edit->m_mapWordMarkSelections[1]={e1};
+
+    Stub s1;
+    s1.set(ADDR(QTextCursor,selectionEnd),retintstub);
+    Stub s2;
+    s2.set(ADDR(QTextCursor,selectionStart),retintstub2);
+    Stub s3;
+    s3.set(ADDR(QTextCursor,position),retintstub);
+
+    intvalue=10000;
+    intvalue2=10000;
+    edit->m_bIsInputMethod = true;
+    edit->updateMark(1,2,3);
+
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+TEST(UT_Textedit_clearMarksForTextCursor, UT_Textedit_clearMarksForTextCursor_001)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    QTextEdit::ExtraSelection e1,e2;
+    //QList<QPair<QTextEdit::ExtraSelection, qint64>>;
+    edit->m_wordMarkSelections.push_back({e1,1});
+    edit->m_wordMarkSelections.push_back({e2,2});
+
+    Stub s1;
+    s1.set(ADDR(QTextCursor,hasSelection),rettruestub);
+
+    edit->clearMarksForTextCursor();
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+
+TEST(UT_Textedit_clearMarksForTextCursor, UT_Textedit_clearMarksForTextCursor_002)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    QTextEdit::ExtraSelection e1,e2;
+    //QList<QPair<QTextEdit::ExtraSelection, qint64>>;
+    edit->m_wordMarkSelections.push_back({e1,1});
+    edit->m_wordMarkSelections.push_back({e2,2});
+
+    Stub s0;
+    s0.set(ADDR(QTextCursor,hasSelection),retfalsestub);
+
+    Stub s1;
+    s1.set(ADDR(QTextCursor,selectionEnd),retintstub);
+    Stub s2;
+    s2.set(ADDR(QTextCursor,selectionStart),retintstub2);
+    Stub s3;
+    s3.set(ADDR(QTextCursor,position),retintstub);
+
+    intvalue=10;
+    intvalue2=10;
+    edit->clearMarksForTextCursor();
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+
+TEST(UT_Textedit_clearMarkOperationForCursor, UT_Textedit_clearMarkOperationForCursor_001)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    TextEdit::MarkOperation e1,e2;
+    //QList<QPair<QTextEdit::ExtraSelection, qint64>>;
+    edit->m_markOperations.push_back({e1,1});
+    edit->m_markOperations.push_back({e2,2});
+
+    Stub s1;
+    s1.set(ADDR(QTextCursor,hasSelection),rettruestub);
+
+    edit->clearMarkOperationForCursor(e1.cursor);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+
+TEST(UT_Textedit_tapAndHoldGestureTriggered, UT_Textedit_tapAndHoldGestureTriggered_001)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QTapAndHoldGesture * t = new QTapAndHoldGesture();
+
+    Stub s1;
+    s1.set(ADDR(QTapAndHoldGesture,state),retintstub);
+
+    intvalue = 0;
+    edit->tapAndHoldGestureTriggered(t);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    t->deleteLater();
+}
+
+TEST(UT_Textedit_tapAndHoldGestureTriggered, UT_Textedit_tapAndHoldGestureTriggered_002)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QTapAndHoldGesture * t = new QTapAndHoldGesture();
+
+    Stub s1;
+    s1.set(ADDR(QTapAndHoldGesture,state),retintstub);
+
+    intvalue = 1;
+    edit->tapAndHoldGestureTriggered(t);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    t->deleteLater();
+}
+
+TEST(UT_Textedit_tapAndHoldGestureTriggered, UT_Textedit_tapAndHoldGestureTriggered_003)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QTapAndHoldGesture * t = new QTapAndHoldGesture();
+
+    Stub s1;
+    s1.set(ADDR(QTapAndHoldGesture,state),retintstub);
+
+    intvalue = 2;
+    edit->tapAndHoldGestureTriggered(t);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    t->deleteLater();
+}
+
+TEST(UT_Textedit_tapAndHoldGestureTriggered, UT_Textedit_tapAndHoldGestureTriggered_004)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QTapAndHoldGesture * t = new QTapAndHoldGesture();
+
+    Stub s1;
+    s1.set(ADDR(QTapAndHoldGesture,state),retintstub);
+
+    intvalue = 3;
+    edit->tapAndHoldGestureTriggered(t);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    t->deleteLater();
+}
+
+TEST(UT_Textedit_tapAndHoldGestureTriggered, UT_Textedit_tapAndHoldGestureTriggered_005)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QTapAndHoldGesture * t = new QTapAndHoldGesture();
+
+    Stub s1;
+    s1.set(ADDR(QTapAndHoldGesture,state),retintstub);
+
+    intvalue = 4;
+    edit->tapAndHoldGestureTriggered(t);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    t->deleteLater();
+}
+
+TEST(UT_Textedit_panTriggered, UT_Textedit_panTriggered_001)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QPanGesture * t = new QPanGesture();
+
+    Stub s1;
+    s1.set(ADDR(QPanGesture,state),retintstub);
+
+    intvalue = 4;
+    edit->panTriggered(t);
+    intvalue = 3;
+    edit->panTriggered(t);
+    intvalue = 2;
+    edit->panTriggered(t);
+    intvalue = 1;
+    edit->panTriggered(t);
+    intvalue = 0;
+    edit->panTriggered(t);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    t->deleteLater();
+}
+
+
+TEST(UT_Textedit_pinchTriggered, UT_Textedit_pinchTriggered_001)
+{
+    Window* w = new Window;
+    TextEdit* edit = new TextEdit(w);
+    EditWrapper* wra = new EditWrapper(w);
+    edit->m_wrapper = wra;
+    QPinchGesture* t = new QPinchGesture();
+
+
+    Stub s1;
+    s1.set(ADDR(QPanGesture,state),retintstub);
+
+    intvalue = 4;
+    edit->pinchTriggered(t);
+    intvalue = 3;
+    edit->pinchTriggered(t);
+    intvalue = 2;
+    edit->pinchTriggered(t);
+    intvalue = 1;
+    edit->pinchTriggered(t);
+    intvalue = 0;
+    edit->pinchTriggered(t);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    w->deleteLater();
+    t->deleteLater();
+}
+
+TEST(UT_Textedit_swipeTriggered, UT_Textedit_swipeTriggered_001)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QPinchGesture* t = new QPinchGesture();
+
+
+    edit->swipeTriggered(nullptr);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    t->deleteLater();
+}
+
+TEST(UT_Textedit_popRightMenu, UT_Textedit_popRightMenu_001)
+{
+    Window* w = new Window;
+    TextEdit* edit = new TextEdit(w);
+    EditWrapper* wra = new EditWrapper(w);
+    edit->m_wrapper = wra;
+
+    edit->m_rightMenu = new QMenu;
+    // QAction *exec(const QPoint &pos, QAction *at = nullptr);
+    typedef QAction * (*fptr)(QMenu*,const QPoint &, QAction *);
+    fptr A_foo = (fptr)((QAction *(QMenu::*)(const QPoint &, QAction *))&QMenu::exec);
+    Stub s1;
+    s1.set(A_foo,retintstub);
+
+    Stub s2;
+    s2.set(ADDR(QUndoStack,canUndo),rettruestub);
+    Stub s3;
+    s3.set(ADDR(QUndoStack,canRedo),rettruestub);
+    Stub s4;
+    s4.set(ADDR(QTextCursor,hasSelection),rettruestub);
+    Stub s5;
+    s5.set(ADDR(TextEdit,canPaste),rettruestub);
+    Stub s6;
+    s6.set(ADDR(QTextDocument,isEmpty),retfalsestub);
+    Stub s7;
+    s7.set(ADDR(TextEdit,characterCount),retintstub);
+    Stub s8;
+    s8.set(ADDR(QString,isEmpty),retfalsestub);
+    Stub s9;
+    s9.set(ADDR(Window,isRegisteredFflytekAiassistant),rettruestub);
+    s9.set(ADDR(TextEdit,renderAllSelections),rettruestub);
+    //s9.set(ADDR(QDBusConnection,call),rettruestub);
+     s9.set(ADDR(QDBusConnection,sessionBus),sessionBusstub);
+    //inline QDBusReply& operator=(const  QDBusMessage & dbusError)
+  //  s9.set((QDBusReply<bool>& (QDBusReply<bool>::*) (const QDBusMessage &))ADDR(QDBusReply<bool>,operator=), rettruestub);
+    //inline QDBusReply& operator=(const QDBusError& dbusError)
+  //   s9.set((QDBusReply<bool>& (QDBusReply<bool>::*) (const QDBusError &))ADDR(QDBusReply<bool>,operator=), rettruestub);
+
+    intvalue=1;
+    edit->m_bReadOnlyPermission = false;
+    edit->popRightMenu(QPoint(10,10));
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    w->deleteLater();
+}
+
+
+TEST(UT_Textedit_popRightMenu, UT_Textedit_popRightMenu_002)
+{
+    Window* w = new Window;
+    TextEdit* edit = new TextEdit(w);
+    EditWrapper* wra = new EditWrapper(w);
+    edit->m_wrapper = wra;
+
+    edit->m_rightMenu = new QMenu;
+    edit->m_colorMarkMenu = new QMenu;
+    // QAction *exec(const QPoint &pos, QAction *at = nullptr);
+    typedef QAction * (*fptr)(QMenu*,const QPoint &, QAction *);
+    fptr A_foo = (fptr)((QAction *(QMenu::*)(const QPoint &, QAction *))&QMenu::exec);
+    Stub s1;
+    s1.set(A_foo,retintstub);
+
+    Stub s2;
+    s2.set(ADDR(QUndoStack,canUndo),rettruestub);
+    Stub s3;
+    s3.set(ADDR(QUndoStack,canRedo),rettruestub);
+    Stub s4;
+    s4.set(ADDR(QTextCursor,hasSelection),rettruestub);
+    Stub s5;
+    s5.set(ADDR(TextEdit,canPaste),rettruestub);
+    Stub s6;
+    s6.set(ADDR(QTextDocument,isEmpty),retfalsestub);
+    Stub s7;
+    s7.set(ADDR(TextEdit,characterCount),retintstub);
+    Stub s8;
+    s8.set(ADDR(QString,isEmpty),retfalsestub);
+    Stub s9;
+    s9.set(ADDR(Window,isRegisteredFflytekAiassistant),retfalsestub);
+    Stub s10;
+    s10.set(ADDR(QPoint,y),retintstub);
+    s10.set(ADDR(TextEdit,renderAllSelections),rettruestub);
+    s10.set(ADDR(QDBusConnection,sessionBus),sessionBusstub);
+    //s10.set((QDBusReply<bool>& (QDBusReply<bool>::*) (const QDBusMessage &))ADDR(QDBusReply<bool>,operator=), rettruestub);
+
+
+
+    TextEdit::MarkOperation m1,m2;
+    edit->m_markOperations.push_back({m1,1});
+    edit->m_markOperations.push_back({m2,2});
+    intvalue=1;
+    edit->m_bReadOnlyPermission = false;
+    edit->popRightMenu(QPoint(10,10));
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    w->deleteLater();
+}

@@ -3076,16 +3076,13 @@ void TextEdit::tapAndHoldGestureTriggered(QTapAndHoldGesture *tapAndHold)
         m_gestureAction = GA_hold;
         break;
     case Qt::GestureUpdated:
-        Q_ASSERT(false);
         break;
     case Qt::GestureCanceled:
-        Q_ASSERT(false);
         break;
     case Qt::GestureFinished:
         m_gestureAction = GA_null;
         break;
     default:
-        Q_ASSERT(false);
         break;
     }
 }
@@ -3105,7 +3102,6 @@ void TextEdit::panTriggered(QPanGesture *pan)
         m_gestureAction = GA_null;
         break;
     default:
-        Q_ASSERT(false);
         break;
     }
 }
@@ -3129,7 +3125,6 @@ void TextEdit::pinchTriggered(QPinchGesture *pinch)
         break;
     }
     case Qt::GestureCanceled: {
-        Q_ASSERT(false);
         break;
     }
     case Qt::GestureFinished: {
@@ -3139,7 +3134,6 @@ void TextEdit::pinchTriggered(QPinchGesture *pinch)
         break;
     }
     default: {
-        Q_ASSERT(false);
         break;
     }
     }//switch
