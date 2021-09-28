@@ -3814,90 +3814,323 @@ TEST(UT_test_textedit_bookMarkAreaPaintEvent, UT_test_textedit_bookMarkAreaPaint
     pWindow->deleteLater();
 }
 
-//void setThemeWithPath(const QString &path);
-TEST_F(test_textedit, setThemeWithPath)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->restoreMarkStatus();
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-
-//bool getReadOnlyMode();
-TEST_F(test_textedit, getReadOnlyMode)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->getReadOnlyMode();
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-
-//void bookMarkAreaPaintEvent(QPaintEvent *event);
-TEST_F(test_textedit, bookMarkAreaPaintEvent)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    QPaintEvent *e;
-    startManager->bookMarkAreaPaintEvent(e);
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-
 //int getLineFromPoint(const QPoint &point);
-TEST_F(test_textedit, getLineFromPoint)
+TEST(UT_test_textedit_getLineFromPoint, UT_test_textedit_getLineFromPoint_001)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    QPoint s(10, 10);
-    startManager->getLineFromPoint(s);
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
+    int iRet = pWindow->currentWrapper()->textEditor()->getLineFromPoint(QPoint(0, 13));
+
+    ASSERT_TRUE(iRet == 1);
+    pWindow->deleteLater();
 }
 
 //void addOrDeleteBookMark();
-TEST_F(test_textedit, addOrDeleteBookMark)
+TEST(UT_test_textedit_addOrDeleteBookMark, UT_test_textedit_addOrDeleteBookMark_001)
 {
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->addOrDeleteBookMark();
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
+    pWindow->currentWrapper()->textEditor()->m_bIsShortCut = true;
+    pWindow->currentWrapper()->textEditor()->m_listBookmark.append(2);
+    pWindow->currentWrapper()->textEditor()->addOrDeleteBookMark();
+
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_pLeftAreaWidget != nullptr);
+    pWindow->deleteLater();
+}
+
+//void addOrDeleteBookMark();
+TEST(UT_test_textedit_addOrDeleteBookMark, UT_test_textedit_addOrDeleteBookMark_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->m_bIsShortCut = false;
+    pWindow->currentWrapper()->textEditor()->m_listBookmark.append(2);
+    pWindow->currentWrapper()->textEditor()->addOrDeleteBookMark();
+
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_pLeftAreaWidget != nullptr);
+    pWindow->deleteLater();
+}
+
+//void addOrDeleteBookMark();
+TEST(UT_test_textedit_addOrDeleteBookMark, UT_test_textedit_addOrDeleteBookMark_003)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->m_bIsShortCut = true;
+    pWindow->currentWrapper()->textEditor()->addOrDeleteBookMark();
+
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_pLeftAreaWidget != nullptr);
+    pWindow->deleteLater();
 }
 
 //void moveToPreviousBookMark();
-TEST_F(test_textedit, moveToPreviousBookMark)
+TEST(UT_test_textedit_moveToPreviousBookMark, UT_test_textedit_moveToPreviousBookMark_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->m_listBookmark.append(1);
+    pWindow->currentWrapper()->textEditor()->moveToPreviousBookMark();
+
+    ASSERT_TRUE(!pWindow->currentWrapper()->textEditor()->m_listBookmark.isEmpty());
+    pWindow->deleteLater();
+}
+
+//void moveToPreviousBookMark();
+TEST(UT_test_textedit_moveToPreviousBookMark, UT_test_textedit_moveToPreviousBookMark_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->m_listBookmark.append(2);
+    pWindow->currentWrapper()->textEditor()->moveToPreviousBookMark();
+
+    ASSERT_TRUE(!pWindow->currentWrapper()->textEditor()->m_listBookmark.isEmpty());
+    pWindow->deleteLater();
+}
+
+//void moveToPreviousBookMark();
+TEST(UT_test_textedit_moveToPreviousBookMark, UT_test_textedit_moveToPreviousBookMark_003)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world\n");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->m_listBookmark.append(2);
+    pWindow->currentWrapper()->textEditor()->m_listBookmark.append(3);
+    pWindow->currentWrapper()->textEditor()->moveToPreviousBookMark();
+
+    ASSERT_TRUE(!pWindow->currentWrapper()->textEditor()->m_listBookmark.isEmpty());
+    pWindow->deleteLater();
+}
+
+//void moveToNextBookMark();
+TEST(UT_test_textedit_moveToNextBookMark, UT_test_textedit_moveToNextBookMark_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->m_listBookmark.append(1);
+    pWindow->currentWrapper()->textEditor()->moveToNextBookMark();
+
+    ASSERT_TRUE(!pWindow->currentWrapper()->textEditor()->m_listBookmark.isEmpty());
+    pWindow->deleteLater();
+}
+
+//void moveToNextBookMark();
+TEST(UT_test_textedit_moveToNextBookMark, UT_test_textedit_moveToNextBookMark_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->m_listBookmark.append(2);
+    pWindow->currentWrapper()->textEditor()->moveToNextBookMark();
+
+    ASSERT_TRUE(!pWindow->currentWrapper()->textEditor()->m_listBookmark.isEmpty());
+    pWindow->deleteLater();
+}
+
+//void moveToNextBookMark();
+TEST(UT_test_textedit_moveToNextBookMark, UT_test_textedit_moveToNextBookMarkk_003)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world\n");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->m_listBookmark.append(3);
+    pWindow->currentWrapper()->textEditor()->m_listBookmark.append(2);
+    pWindow->currentWrapper()->textEditor()->moveToNextBookMark();
+
+    ASSERT_TRUE(!pWindow->currentWrapper()->textEditor()->m_listBookmark.isEmpty());
+    pWindow->deleteLater();
+}
+
+//void checkBookmarkLineMove(int from, int charsRemoved, int charsAdded);
+TEST(UT_test_textedit_checkBookmarkLineMove, UT_test_textedit_checkBookmarkLineMove_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world\n");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->m_bIsFileOpen = true;
+    pWindow->currentWrapper()->textEditor()->checkBookmarkLineMove(3, 0, 0);
+
+    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_listBookmark.isEmpty());
+    pWindow->deleteLater();
+}
+
+//void checkBookmarkLineMove(int from, int charsRemoved, int charsAdded);
+TEST(UT_test_textedit_checkBookmarkLineMove, UT_test_textedit_checkBookmarkLineMove_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world\n");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->m_nLines = 4;
+    pWindow->currentWrapper()->textEditor()->m_listBookmark.append(2);
+    pWindow->currentWrapper()->textEditor()->checkBookmarkLineMove(3, 0, 0);
+    int iRet1 = pWindow->currentWrapper()->textEditor()->document()->blockCount();
+    int iRet2 = pWindow->currentWrapper()->textEditor()->m_nLines;
+
+    ASSERT_TRUE(iRet1 == iRet2);
+    pWindow->deleteLater();
+}
+
+//void checkBookmarkLineMove(int from, int charsRemoved, int charsAdded);
+TEST(UT_test_textedit_checkBookmarkLineMove, UT_test_textedit_checkBookmarkLineMove_003)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world\n");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->m_nLines = 4;
+    pWindow->currentWrapper()->textEditor()->m_nSelectEndLine = -1;
+    pWindow->currentWrapper()->textEditor()->m_listBookmark.append(3);
+    pWindow->currentWrapper()->textEditor()->checkBookmarkLineMove(3, 0, 0);
+    int iRet1 = pWindow->currentWrapper()->textEditor()->document()->blockCount();
+    int iRet2 = pWindow->currentWrapper()->textEditor()->m_nLines;
+
+    ASSERT_TRUE(iRet1 == iRet2);
+    pWindow->deleteLater();
+}
+
+//void checkBookmarkLineMove(int from, int charsRemoved, int charsAdded);
+TEST(UT_test_textedit_checkBookmarkLineMove, UT_test_textedit_checkBookmarkLineMove_004)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world\n");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->m_nLines = 3;
+    pWindow->currentWrapper()->textEditor()->m_nSelectEndLine = -1;
+    pWindow->currentWrapper()->textEditor()->m_listBookmark.append(3);
+    pWindow->currentWrapper()->textEditor()->checkBookmarkLineMove(1, 0, 0);
+    int iRet1 = pWindow->currentWrapper()->textEditor()->document()->blockCount();
+    int iRet2 = pWindow->currentWrapper()->textEditor()->m_nLines;
+
+    ASSERT_TRUE(iRet1 == iRet2);
+    pWindow->deleteLater();
+}
+
+//void setIsFileOpen();
+TEST(UT_test_textedit_setIsFileOpen, UT_test_textedit_setIsFileOpen_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world\n");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->setIsFileOpen();
+    bool  bRet = pWindow->currentWrapper()->textEditor()->m_bIsFileOpen;
+
+    ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
+}
+
+//void setTextFinished();
+TEST(UT_test_textedit_setTextFinished, UT_test_textedit_setTextFinished_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->m_listBookmark.append(1);
+    pWindow->currentWrapper()->textEditor()->setTextFinished();
+    bool  bRet = pWindow->currentWrapper()->textEditor()->m_bIsFileOpen;
+
+    ASSERT_TRUE(bRet == false);
+    pWindow->deleteLater();
+}
+
+QStringList UT_test_textedit_setTextFinished_002_readHistoryRecordofBookmark_stub()
+{
+    QStringList bookmarkList;
+    bookmarkList << "*(2,*1,*2,*1,*4,*1,*1,*1)*";
+    bookmarkList << "*(2,*1,*2,*1,*4,*1,*1)*";
+    bookmarkList << "*(5,*6,*7,*1,*1,*1,*1)*";
+
+    return bookmarkList;
+}
+
+QString m_sFilePath {QString()};
+QStringList UT_test_textedit_setTextFinished_002_readHistoryRecordofFilePath_stub()
+{
+    QStringList filePathList;
+    filePathList << "/home/guoshaoyu/Desktop/1.txt";
+    filePathList << "/home/guoshaoyu/.local/share/deepin/deepin-editor/blank-files/blank_file_2021-09-28_08-44-42-244";
+    filePathList << "/home/guoshaoyu/.local/share/deepin/deepin-editor/blank-files/blank_file_2021-09-26_11-37-20-780";
+    filePathList << m_sFilePath;
+
+    return filePathList;
+}
+
+//void setTextFinished();
+TEST(UT_test_textedit_setTextFinished, UT_test_textedit_setTextFinished_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    //pWindow->currentWrapper()->textEditor()->m_listBookmark.append(1);
+    Stub stub_readHistoryRecordofBookmark;
+    stub_readHistoryRecordofBookmark.set(ADDR(TextEdit, readHistoryRecordofBookmark), UT_test_textedit_setTextFinished_002_readHistoryRecordofBookmark_stub);
+    m_sFilePath = pWindow->currentWrapper()->textEditor()->m_sFilePath;
+    Stub stub_readHistoryRecordofFilePath;
+    stub_readHistoryRecordofFilePath.set(ADDR(TextEdit, readHistoryRecordofFilePath), UT_test_textedit_setTextFinished_002_readHistoryRecordofFilePath_stub);
+    pWindow->currentWrapper()->textEditor()->setTextFinished();
+    bool  bRet = pWindow->currentWrapper()->textEditor()->m_bIsFileOpen;
+
+    ASSERT_TRUE(bRet == false);
+    pWindow->deleteLater();
+}
+
+//void setThemeWithPath(const QString &path);
+TEST_F(test_textedit, setThemeWithPath)
 {
     QScrollBar *p = new QScrollBar();
     TextEdit *startManager = new TextEdit();
