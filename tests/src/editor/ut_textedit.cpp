@@ -4701,31 +4701,7 @@ TEST_F(test_textedit, wheelEvent)
     startManager->deleteLater();
     p->deleteLater();
 }
-// bool eventFilter(QObject *object, QEvent *event) override;
-TEST_F(test_textedit, eventFilter)
-{
-    //    QList<QTextEdit::ExtraSelection> listSelection;
-    //    QTextEdit::ExtraSelection selectio;
-    //    QScrollBar *p = new QScrollBar();TextEdit *startManager = new TextEdit();startManager->setVerticalScrollBar(p);
-    //    EditWrapper * ee = new EditWrapper();
-    //    Settings *s = new Settings();
-    //    startManager->setSettings(s);
-    //    startManager->setWrapper(ee);
-    //    QObject *object;
 
-    //    QEvent *e=new QEvent(QEvent::MouseButtonPress);
-    //    startManager->eventFilter(startManager,e);
-    //    //MouseButtonDblClick
-
-    //    QEvent *e1=new QEvent(QEvent::MouseButtonDblClick);
-    //    startManager->eventFilter(startManager,e1);
-    //    QEvent *e2=new QEvent(QEvent::HoverMove);
-    //    startManager->eventFilter(startManager,e2);
-    //    QEvent *e3=new QEvent(QEvent::HoverLeave);
-    //    startManager->eventFilter(startManager,e3);
-
-    //    
-}
 QAction *stub_exec(const QPoint &pos, QAction *at = nullptr)
 {
     Q_UNUSED(pos)
@@ -5581,6 +5557,11 @@ TEST(UT_TextEdit_setComment, UT_TextEdit_setComment_002)
     s5.set(ADDR(QString,length),retintstub);
     Stub s6;
     s6.set(ADDR(TextEdit,isComment),rettruestub);
+    Stub s7;
+    s7.set(ADDR(TextEdit,deleteTextEx),rettruestub);
+    Stub s8;
+    s8.set(ADDR(TextEdit,insertTextEx),rettruestub);
+
 
     intvalue = -1000;
     edit->setComment();
@@ -5612,6 +5593,11 @@ TEST(UT_TextEdit_setComment, UT_TextEdit_setComment_003)
     s7.set((bool (QString::*) (const QString &, Qt::CaseSensitivity) const )ADDR(QString,startsWith),rettruestub);
     Stub s8;
     s8.set((bool (QString::*) (const QString &, Qt::CaseSensitivity) const )ADDR(QString,endsWith),rettruestub);
+    Stub s9;
+    s9.set(ADDR(TextEdit,deleteTextEx),rettruestub);
+    Stub s10;
+    s10.set(ADDR(TextEdit,insertTextEx),rettruestub);
+
 
     intvalue = -1000;
     edit->setComment();
@@ -5643,6 +5629,11 @@ TEST(UT_TextEdit_setComment, UT_TextEdit_setComment_004)
     s7.set((bool (QString::*) (const QString &, Qt::CaseSensitivity) const )ADDR(QString,startsWith),retfalsestub);
     Stub s8;
     s8.set((bool (QString::*) (const QString &, Qt::CaseSensitivity) const )ADDR(QString,endsWith),retfalsestub);
+    Stub s9;
+    s9.set(ADDR(TextEdit,deleteTextEx),rettruestub);
+    Stub s10;
+    s10.set(ADDR(TextEdit,insertTextEx),rettruestub);
+
 
     intvalue = -1000;
     edit->setComment();
@@ -5681,6 +5672,10 @@ TEST(UT_Textedit_removeComment, UT_Textedit_removeComment_002)
     s4.set(ADDR(QString,length),retintstub);
     Stub s5;
     s5.set(ADDR(TextEdit,isComment),rettruestub);
+    Stub s6;
+    s6.set(ADDR(TextEdit,deleteTextEx),rettruestub);
+    Stub s7;
+    s7.set(ADDR(TextEdit,insertTextEx),rettruestub);
 
     intvalue = -1000;
     edit->removeComment();
@@ -5706,6 +5701,10 @@ TEST(UT_Textedit_removeComment, UT_Textedit_removeComment_003)
     s4.set(ADDR(QString,length),retintstub);
     Stub s5;
     s5.set(ADDR(TextEdit,isComment),rettruestub);
+    Stub s6;
+    s6.set(ADDR(TextEdit,deleteTextEx),rettruestub);
+    Stub s7;
+    s7.set(ADDR(TextEdit,insertTextEx),rettruestub);
 
     intvalue = -1000;
     edit->removeComment();
@@ -7788,6 +7787,344 @@ TEST(UT_Textedit_dragMoveEvent, UT_Textedit_dragMoveEvent)
     data->deleteLater();
     delete r;
     r = nullptr;
+}
+
+
+TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_001)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QTouchEvent* e = new QTouchEvent(QEvent::TouchBegin);
+
+
+    edit->eventFilter(wra,e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    delete e;
+    e = nullptr;
+}
+
+TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_002)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QMouseEvent* e = new QMouseEvent(QEvent::MouseButtonPress,QPointF(20.0,20.0),Qt::RightButton,Qt::RightButton,Qt::NoModifier);
+
+    edit->m_rightMenu = new QMenu;
+    // QAction *exec(const QPoint &pos, QAction *at = nullptr);
+    typedef QAction * (*fptr)(QMenu*,const QPoint &, QAction *);
+    fptr A_foo = (fptr)((QAction *(QMenu::*)(const QPoint &, QAction *))&QMenu::exec);
+    Stub s1;
+    s1.set(A_foo,retintstub);
+
+    intvalue=1;
+    edit->eventFilter(edit->m_pLeftAreaWidget->m_pBookMarkArea,e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    edit->m_rightMenu->deleteLater();
+    delete e;
+    e = nullptr;
+}
+
+TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_003)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QMouseEvent* e = new QMouseEvent(QEvent::MouseButtonPress,QPointF(20.0,20.0),Qt::LeftButton,Qt::LeftButton,Qt::NoModifier);
+
+    edit->m_rightMenu = new QMenu;
+    // QAction *exec(const QPoint &pos, QAction *at = nullptr);
+    typedef QAction * (*fptr)(QMenu*,const QPoint &, QAction *);
+    fptr A_foo = (fptr)((QAction *(QMenu::*)(const QPoint &, QAction *))&QMenu::exec);
+    Stub s1;
+    s1.set(A_foo,retintstub);
+    Stub s2;
+    s2.set(ADDR(TextEdit,renderAllSelections),retintstub);
+    Stub s3;
+    s3.set(ADDR(Comment::CommentDefinition,isValid),rettruestub);
+    Stub s4;
+    s4.set(ADDR(QTextBlock,isVisible),rettruestub);
+    Stub s5;
+    //inline bool contains(const QString &s, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+    s5.set((bool (QString::*)(const QStringRef &, Qt::CaseSensitivity) const) ADDR(QString,contains),rettruestub);
+    Stub s6;
+    //s6.set(ADDR(QString,isEmpty),retfalsestub);
+    Stub s7;
+    s7.set((bool (QString::*) (const QString &, Qt::CaseSensitivity) const )ADDR(QString,startsWith),rettruestub);
+    Stub s8;
+    s8.set((bool (QString::*)(const QString &, Qt::CaseSensitivity) const) ADDR(QString,contains),rettruestub);
+
+
+    intvalue=1;
+    edit->eventFilter(edit->m_pLeftAreaWidget->m_pFlodArea,e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    edit->m_rightMenu->deleteLater();
+    delete e;
+    e = nullptr;
+}
+
+TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_004)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QMouseEvent* e = new QMouseEvent(QEvent::MouseButtonPress,QPointF(20.0,20.0),Qt::LeftButton,Qt::LeftButton,Qt::NoModifier);
+
+    edit->m_rightMenu = new QMenu;
+    // QAction *exec(const QPoint &pos, QAction *at = nullptr);
+    typedef QAction * (*fptr)(QMenu*,const QPoint &, QAction *);
+    fptr A_foo = (fptr)((QAction *(QMenu::*)(const QPoint &, QAction *))&QMenu::exec);
+    Stub s1;
+    s1.set(A_foo,retintstub);
+    Stub s2;
+    s2.set(ADDR(TextEdit,renderAllSelections),retintstub);
+    Stub s3;
+    s3.set(ADDR(Comment::CommentDefinition,isValid),rettruestub);
+    Stub s4;
+    s4.set(ADDR(QTextBlock,isVisible),retfalsestub);
+    Stub s5;
+    //inline bool contains(const QString &s, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
+    s5.set((bool (QString::*)(const QStringRef &, Qt::CaseSensitivity) const) ADDR(QString,contains),rettruestub);
+    Stub s6;
+   // s6.set(ADDR(QString,isEmpty),retfalsestub);
+    Stub s7;
+    s7.set((bool (QString::*) (const QString &, Qt::CaseSensitivity) const )ADDR(QString,startsWith),retfalsestub);
+    Stub s8;
+    s8.set((bool (QString::*)(const QString &, Qt::CaseSensitivity) const) ADDR(QString,contains),rettruestub);
+
+
+    intvalue=1;
+    edit->eventFilter(edit->m_pLeftAreaWidget->m_pFlodArea,e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    edit->m_rightMenu->deleteLater();
+    delete e;
+    e = nullptr;
+}
+
+
+
+TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_005)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QMouseEvent* e = new QMouseEvent(QEvent::MouseButtonPress,QPointF(20.0,20.0),Qt::RightButton,Qt::RightButton,Qt::NoModifier);
+
+    edit->m_rightMenu = new QMenu;
+    // QAction *exec(const QPoint &pos, QAction *at = nullptr);
+    typedef QAction * (*fptr)(QMenu*,const QPoint &, QAction *);
+    fptr A_foo = (fptr)((QAction *(QMenu::*)(const QPoint &, QAction *))&QMenu::exec);
+    Stub s1;
+    s1.set(A_foo,retintstub);
+
+    Stub s2;
+    s2.set(ADDR(QList<int>,contains),rettruestub);
+    Stub s3;
+    s3.set(ADDR(QTextBlock,isVisible),rettruestub);
+
+    intvalue=1;
+    edit->m_listMainFlodAllPos.push_back(1);
+    edit->eventFilter(edit->m_pLeftAreaWidget->m_pFlodArea,e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    edit->m_rightMenu->deleteLater();
+    delete e;
+    e = nullptr;
+}
+
+
+TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_006)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QHoverEvent* e = new QHoverEvent(QEvent::HoverMove,QPointF(20.0,20.0),QPointF(30.0,30.0),Qt::NoModifier);
+
+    edit->m_rightMenu = new QMenu;
+    // QAction *exec(const QPoint &pos, QAction *at = nullptr);
+    typedef QAction * (*fptr)(QMenu*,const QPoint &, QAction *);
+    fptr A_foo = (fptr)((QAction *(QMenu::*)(const QPoint &, QAction *))&QMenu::exec);
+    Stub s1;
+    s1.set(A_foo,retintstub);
+
+    Stub s2;
+    s2.set(ADDR(QList<int>,contains),rettruestub);
+    Stub s3;
+    s3.set(ADDR(QTextBlock,isVisible),retfalsestub);
+    Stub s4;
+    s4.set(ADDR(TextEdit,getHideRowContent),rettruestub);
+    Stub s5;
+    s5.set(ADDR(TextEdit,getLinePosYByLineNum),rettruestub);
+
+    intvalue=1;
+    edit->m_listMainFlodAllPos.push_back(1);
+    edit->eventFilter(edit->m_pLeftAreaWidget->m_pFlodArea,e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    edit->m_rightMenu->deleteLater();
+    delete e;
+    e = nullptr;
+}
+
+TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_007)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QHoverEvent* e = new QHoverEvent(QEvent::HoverMove,QPointF(20.0,20.0),QPointF(30.0,30.0),Qt::NoModifier);
+
+    edit->m_rightMenu = new QMenu;
+    // QAction *exec(const QPoint &pos, QAction *at = nullptr);
+    typedef QAction * (*fptr)(QMenu*,const QPoint &, QAction *);
+    fptr A_foo = (fptr)((QAction *(QMenu::*)(const QPoint &, QAction *))&QMenu::exec);
+    Stub s1;
+    s1.set(A_foo,retintstub);
+
+    Stub s2;
+    s2.set(ADDR(QList<int>,contains),rettruestub);
+    Stub s3;
+    s3.set(ADDR(QTextBlock,isVisible),rettruestub);
+    Stub s4;
+    s4.set(ADDR(TextEdit,getHideRowContent),rettruestub);
+    Stub s5;
+    s5.set(ADDR(TextEdit,getHighLightRowContentLineNum),retintstub);
+
+
+    intvalue=4;
+    edit->m_listMainFlodAllPos.push_back(1);
+    edit->eventFilter(edit->m_pLeftAreaWidget->m_pFlodArea,e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    edit->m_rightMenu->deleteLater();
+    delete e;
+    e = nullptr;
+}
+
+TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_008)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QHoverEvent* e = new QHoverEvent(QEvent::HoverLeave,QPointF(20.0,20.0),QPointF(30.0,30.0),Qt::NoModifier);
+
+    edit->m_rightMenu = new QMenu;
+    // QAction *exec(const QPoint &pos, QAction *at = nullptr);
+    typedef QAction * (*fptr)(QMenu*,const QPoint &, QAction *);
+    fptr A_foo = (fptr)((QAction *(QMenu::*)(const QPoint &, QAction *))&QMenu::exec);
+    Stub s1;
+    s1.set(A_foo,retintstub);
+
+    Stub s2;
+    s2.set(ADDR(QList<int>,contains),rettruestub);
+    Stub s3;
+    s3.set(ADDR(QTextBlock,isVisible),rettruestub);
+    Stub s4;
+    s4.set(ADDR(TextEdit,getHideRowContent),rettruestub);
+    Stub s5;
+    s5.set(ADDR(TextEdit,getHighLightRowContentLineNum),retintstub);
+
+
+    intvalue=4;
+    edit->m_listMainFlodAllPos.push_back(1);
+    edit->eventFilter(edit->m_pLeftAreaWidget->m_pBookMarkArea,e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    edit->m_rightMenu->deleteLater();
+    delete e;
+    e = nullptr;
+}
+
+TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_009)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QHoverEvent* e = new QHoverEvent(QEvent::HoverLeave,QPointF(20.0,20.0),QPointF(30.0,30.0),Qt::NoModifier);
+
+    edit->m_rightMenu = new QMenu;
+    // QAction *exec(const QPoint &pos, QAction *at = nullptr);
+    typedef QAction * (*fptr)(QMenu*,const QPoint &, QAction *);
+    fptr A_foo = (fptr)((QAction *(QMenu::*)(const QPoint &, QAction *))&QMenu::exec);
+    Stub s1;
+    s1.set(A_foo,retintstub);
+
+    Stub s2;
+    s2.set(ADDR(QList<int>,contains),rettruestub);
+    Stub s3;
+    s3.set(ADDR(QTextBlock,isVisible),rettruestub);
+    Stub s4;
+    s4.set(ADDR(TextEdit,getHideRowContent),rettruestub);
+    Stub s5;
+    s5.set(ADDR(TextEdit,getHighLightRowContentLineNum),retintstub);
+
+
+    intvalue=4;
+    edit->m_listMainFlodAllPos.push_back(1);
+    edit->eventFilter(edit->m_pLeftAreaWidget->m_pFlodArea,e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    edit->m_rightMenu->deleteLater();
+    delete e;
+    e = nullptr;
+}
+
+TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_0010)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+    QKeyEvent* e = new QKeyEvent(QEvent::KeyRelease,Qt::Key_Tab,Qt::NoModifier);
+
+    edit->m_colorMarkMenu = new QMenu;
+    // QAction *exec(const QPoint &pos, QAction *at = nullptr);
+    typedef QAction * (*fptr)(QMenu*,const QPoint &, QAction *);
+    fptr A_foo = (fptr)((QAction *(QMenu::*)(const QPoint &, QAction *))&QMenu::exec);
+    Stub s1;
+    s1.set(A_foo,retintstub);
+
+    Stub s2;
+    s2.set(ADDR(QList<int>,contains),rettruestub);
+    Stub s3;
+    s3.set(ADDR(QTextBlock,isVisible),rettruestub);
+    Stub s4;
+    s4.set(ADDR(TextEdit,getHideRowContent),rettruestub);
+    Stub s5;
+    s5.set(ADDR(TextEdit,getHighLightRowContentLineNum),retintstub);
+
+
+    intvalue=4;
+    edit->m_listMainFlodAllPos.push_back(1);
+    edit->eventFilter(edit->m_colorMarkMenu,e);
+
+    ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    edit->m_rightMenu->deleteLater();
+    delete e;
+    e = nullptr;
 }
 
 
