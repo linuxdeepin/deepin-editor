@@ -634,7 +634,6 @@ void EditWrapper::handleCursorModeChanged(TextEdit::CursorMode mode)
     }
 }
 
-
 void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteArray &content)
 {
     m_Definition = m_Repository.definitionForFileName(m_pTextEdit->getFilePath());
@@ -650,7 +649,6 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteAr
         if (m_pSyntaxHighlighter) m_pSyntaxHighlighter->setDefinition(m_Definition);;
         m_pTextEdit->setSyntaxDefinition(m_Definition);
         m_pBottomBar->getHighlightMenu()->setCurrentTextOnly(m_Definition.translatedName());
-
     }
 
     if (!Utils::isDraftFile(m_pTextEdit->getFilePath())) {
