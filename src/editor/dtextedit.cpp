@@ -5642,6 +5642,8 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
         } else {
             insertSelectTextEx(textCursor(), e->commitString());
         }
+
+        m_isSelectAll = false;
     }
 }
 
@@ -5993,6 +5995,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             } else {
                 insertSelectTextEx(textCursor(), e->text());
             }
+            m_isSelectAll = false;
             return;
         }
 
@@ -6008,6 +6011,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             } else {
                 insertSelectTextEx(textCursor(), e->text());
             }
+            m_isSelectAll = false;
             return;
         }
 
@@ -6023,6 +6027,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             } else {
                 insertSelectTextEx(textCursor(), e->text());
             }
+            m_isSelectAll = false;
             return;
         }
 
@@ -6046,6 +6051,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
                 QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(cursor);
                 m_pUndoStack->push(pDeleteStack);
             }
+            m_isSelectAll = false;
             return;
         }
 
@@ -6070,6 +6076,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
                 DeleteBackCommond *commond = new DeleteBackCommond(cursor,this);
                 m_pUndoStack->push(commond);
             }
+            m_isSelectAll = false;
             return;
         }
 
@@ -6085,6 +6092,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             } else {
                insertSelectTextEx(textCursor(), e->text());
             }
+            m_isSelectAll = false;
             return;
         }
 
