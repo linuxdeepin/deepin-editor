@@ -32,6 +32,8 @@
 #include <QChar>
 #include <QPaintEvent>
 
+#include <DSettingsOption>
+
 class test_textedit: public QObject, public::testing::Test
 {
 public:

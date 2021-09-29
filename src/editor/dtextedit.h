@@ -357,12 +357,6 @@ public:
      */
     QStringList readHistoryRecordofFilePath(QString key);
 
-    /**
-     * @author liumaochuan ut000616
-     * @brief writeHistoryRecord 写入书签相关记录
-     */
-    void writeHistoryRecord();
-
     //标记功能相关
     /**
      * @author liumaochuan ut000616

@@ -4099,9 +4099,9 @@ QString m_sFilePath {QString()};
 QStringList UT_test_textedit_setTextFinished_002_readHistoryRecordofFilePath_stub()
 {
     QStringList filePathList;
-    filePathList << "/home/guoshaoyu/Desktop/1.txt";
-    filePathList << "/home/guoshaoyu/.local/share/deepin/deepin-editor/blank-files/blank_file_2021-09-28_08-44-42-244";
-    filePathList << "/home/guoshaoyu/.local/share/deepin/deepin-editor/blank-files/blank_file_2021-09-26_11-37-20-780";
+    filePathList << "~/Desktop/1.txt";
+    filePathList << "~/.local/share/deepin/deepin-editor/blank-files/blank_file_2021-09-28_08-44-42-244";
+    filePathList << "~/.local/share/deepin/deepin-editor/blank-files/blank_file_2021-09-26_11-37-20-780";
     filePathList << m_sFilePath;
 
     return filePathList;
@@ -4129,6 +4129,253 @@ TEST(UT_test_textedit_setTextFinished, UT_test_textedit_setTextFinished_002)
     pWindow->deleteLater();
 }
 
+QVariant UT_test_textedit_readHistoryRecord_001_option_stub()
+{
+    return QVariant("*{\"cursorPosition\":\"13\",\"modify\":false}*");
+}
+
+//QStringList readHistoryRecord(QString key);
+TEST(UT_test_textedit_readHistoryRecord, UT_test_textedit_readHistoryRecord_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    Stub stub_option;
+    stub_option.set(ADDR(DSettingsOption, value), UT_test_textedit_readHistoryRecord_001_option_stub);
+    QStringList stringListRet = pWindow->currentWrapper()->textEditor()->readHistoryRecord(QString("advance.editor.browsing_history_file"));
+
+    ASSERT_TRUE(stringListRet == QStringList("*{\"cursorPosition\":\"13\",\"modify\":false}*"));
+    pWindow->deleteLater();
+}
+
+QVariant UT_test_textedit_readHistoryRecordofBookmark_001_option_stub()
+{
+    return QVariant("*(\"cursorPosition\":\"13\",\"modify\":false)*");
+}
+
+//QStringList readHistoryRecordofBookmark();
+TEST(UT_test_textedit_readHistoryRecordofBookmark, UT_test_textedit_readHistoryRecordofBookmark_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    Stub stub_option;
+    stub_option.set(ADDR(DSettingsOption, value), UT_test_textedit_readHistoryRecordofBookmark_001_option_stub);
+    QStringList stringListRet = pWindow->currentWrapper()->textEditor()->readHistoryRecordofBookmark();
+
+    ASSERT_TRUE(stringListRet == QStringList("*(\"cursorPosition\":\"13\",\"modify\":false)*"));
+    pWindow->deleteLater();
+}
+
+QVariant UT_test_textedit_readHistoryRecordofFilePath_001_option_stub()
+{
+    return QVariant("*[\"cursorPosition\":\"13\",\"modify\":false]*");
+}
+
+//QStringList readHistoryRecordofFilePath();
+TEST(UT_test_textedit_readHistoryRecordofFilePath, UT_test_textedit_readHistoryRecordofFilePath_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    Stub stub_option;
+    stub_option.set(ADDR(DSettingsOption, value), UT_test_textedit_readHistoryRecordofFilePath_001_option_stub);
+    QStringList stringListRet = pWindow->currentWrapper()->textEditor()->readHistoryRecordofFilePath(QString());
+
+    ASSERT_TRUE(stringListRet != QStringList("*[\"cursorPosition\":\"13\",\"modify\":false]*"));
+    pWindow->deleteLater();
+}
+
+//void isMarkCurrentLine();
+TEST(UT_test_textedit_isMarkCurrentLine, UT_test_textedit_isMarkCurrentLine_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->isMarkCurrentLine(true, QString("red"), -1);
+    bool bRet = pWindow->currentWrapper()->textEditor()->m_markOperations.isEmpty();
+
+    ASSERT_TRUE(bRet == false);
+    pWindow->deleteLater();
+}
+
+//void isMarkCurrentLine();
+TEST(UT_test_textedit_isMarkCurrentLine, UT_test_textedit_isMarkCurrentLine_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->isMarkCurrentLine(true, QString("red"), -1);
+    bool bRet = pWindow->currentWrapper()->textEditor()->m_markOperations.isEmpty();
+
+    ASSERT_TRUE(bRet == false);
+    pWindow->deleteLater();
+}
+
+//void isMarkCurrentLine();
+TEST(UT_test_textedit_isMarkCurrentLine, UT_test_textedit_isMarkCurrentLine_003)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->isMarkCurrentLine(false, QString("red"), -1);
+    bool bRet = pWindow->currentWrapper()->textEditor()->m_markOperations.isEmpty();
+
+    ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
+}
+
+//void isMarkAllLine(bool isMark, QString strColor = "");
+TEST(UT_test_textedit_isMarkAllLine, UT_test_textedit_isMarkAllLine_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world one");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->isMarkAllLine(true, QString("red"));
+    bool bRet = pWindow->currentWrapper()->textEditor()->m_mapKeywordMarkSelections.isEmpty();
+
+    ASSERT_TRUE(bRet == false);
+    pWindow->deleteLater();
+}
+
+//void isMarkAllLine(bool isMark, QString strColor = "");
+TEST(UT_test_textedit_isMarkAllLine, UT_test_textedit_isMarkAllLine_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->isMarkAllLine(true, QString("red"));
+    bool bRet = pWindow->currentWrapper()->textEditor()->m_mapKeywordMarkSelections.isEmpty();
+
+    ASSERT_TRUE(bRet == false);
+    pWindow->deleteLater();
+}
+
+//void isMarkAllLine(bool isMark, QString strColor = "");
+TEST(UT_test_textedit_isMarkAllLine, UT_test_textedit_isMarkAllLine_003)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->isMarkAllLine(false, QString("red"));
+    QString strRet = pWindow->currentWrapper()->textEditor()->m_markAllSelection.format.background().color().name();
+
+    ASSERT_TRUE(!strRet.compare(QString("#ff0000")));
+    pWindow->deleteLater();
+}
+
+//void cancelLastMark();
+TEST(UT_test_textedit_cancelLastMark, UT_test_textedit_cancelLastMark_001)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    pWindow->currentWrapper()->textEditor()->m_markOperations.clear();
+    pWindow->currentWrapper()->textEditor()->cancelLastMark();
+    bool bRet = pWindow->currentWrapper()->textEditor()->m_markOperations.isEmpty();
+
+    ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
+}
+
+//void cancelLastMark();
+TEST(UT_test_textedit_cancelLastMark, UT_test_textedit_cancelLastMark_002)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->isMarkCurrentLine(true, QString("red"), -1);
+    //pWindow->currentWrapper()->textEditor()->isMarkAllLine(true, QString("red"));
+    pWindow->currentWrapper()->textEditor()->m_markOperations.last().first.type = TextEdit::MarkOperationType::MarkLine;
+    pWindow->currentWrapper()->textEditor()->cancelLastMark();
+    bool bRet = pWindow->currentWrapper()->textEditor()->m_markOperations.isEmpty();
+
+    ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
+}
+
+//void cancelLastMark();
+TEST(UT_test_textedit_cancelLastMark, UT_test_textedit_cancelLastMark_003)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->isMarkCurrentLine(true, QString("red"), -1);
+    pWindow->currentWrapper()->textEditor()->markAllInView(QString("red"), -1);
+    pWindow->currentWrapper()->textEditor()->m_markOperations.last().first.type = TextEdit::MarkOperationType::MarkAllMatch;
+    pWindow->currentWrapper()->textEditor()->cancelLastMark();
+    bool bRet = pWindow->currentWrapper()->textEditor()->m_markOperations.isEmpty();
+
+    ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
+}
+
+//void cancelLastMark();
+TEST(UT_test_textedit_cancelLastMark, UT_test_textedit_cancelLastMark_004)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    pWindow->currentWrapper()->textEditor()->isMarkCurrentLine(true, QString("red"), -1);
+    pWindow->currentWrapper()->textEditor()->markAllInView(QString("red"), -1);
+    pWindow->currentWrapper()->textEditor()->m_markOperations.last().first.type = TextEdit::MarkOperationType::MarkAll;
+    pWindow->currentWrapper()->textEditor()->m_mapKeywordMarkSelections.insert(QString(TEXT_EIDT_MARK_ALL),QList<QPair<QTextEdit::ExtraSelection, qint64>>());
+    pWindow->currentWrapper()->textEditor()->cancelLastMark();
+    bool bRet = pWindow->currentWrapper()->textEditor()->m_markOperations.isEmpty();
+
+    ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
+}
+
 //void setThemeWithPath(const QString &path);
 TEST_F(test_textedit, setThemeWithPath)
 {
@@ -4136,24 +4383,9 @@ TEST_F(test_textedit, setThemeWithPath)
     TextEdit *startManager = new TextEdit();
     startManager->setVerticalScrollBar(p);
     EditWrapper *ee = new EditWrapper();
+    Settings *s = new Settings();
+    startManager->setSettings(s);
     startManager->setWrapper(ee);
-    startManager->moveToPreviousBookMark();
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-
-//void checkBookmarkLineMove(int from, int charsRemoved, int charsAdded);
-TEST_F(test_textedit, checkBookmarkLineMove)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    startManager->setWrapper(ee);
-    startManager->checkBookmarkLineMove(2, 3, 4);
 
     ASSERT_TRUE(ee->m_pTextEdit != nullptr);
     ee->deleteLater();
@@ -4177,60 +4409,6 @@ TEST_F(test_textedit, setIsFileOpen)
     p->deleteLater();
 }
 
-//QStringList readHistoryRecordofBookmark();
-TEST_F(test_textedit, readHistoryRecordofBookmark)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
-    startManager->readHistoryRecordofBookmark();
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-
-//QStringList readHistoryRecordofFilePath(QString key);
-TEST_F(test_textedit, readHistoryRecordofFilePath)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
-    startManager->readHistoryRecordofFilePath("advance.editor.browsing_history_file");
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-
-//void writeHistoryRecord();
-TEST_F(test_textedit, writeHistoryRecord)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
-    startManager->writeHistoryRecord();
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-
 //void isMarkCurrentLine(bool isMark, QString strColor = "");
 TEST_F(test_textedit, isMarkCurrentLine)
 {
@@ -4243,44 +4421,6 @@ TEST_F(test_textedit, isMarkCurrentLine)
     startManager->setWrapper(ee);
     startManager->isMarkCurrentLine(true, "red");
     startManager->isMarkCurrentLine(false, "red");
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-}
-
-//void isMarkAllLine(bool isMark, QString strColor = "");
-TEST_F(test_textedit, isMarkAllLine)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
-    startManager->isMarkAllLine(true, "red");
-    startManager->isMarkAllLine(false, "red");
-
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
-    ee->deleteLater();
-    startManager->deleteLater();
-    p->deleteLater();
-    s->deleteLater();
-}
-
-//void cancelLastMark();
-TEST_F(test_textedit, cancelLastMark)
-{
-    QScrollBar *p = new QScrollBar();
-    TextEdit *startManager = new TextEdit();
-    startManager->setVerticalScrollBar(p);
-    EditWrapper *ee = new EditWrapper();
-    Settings *s = new Settings();
-    startManager->setSettings(s);
-    startManager->setWrapper(ee);
-    startManager->cancelLastMark();
 
     ASSERT_TRUE(ee->m_pTextEdit != nullptr);
     ee->deleteLater();

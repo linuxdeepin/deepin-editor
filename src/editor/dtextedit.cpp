@@ -155,7 +155,6 @@ TextEdit::TextEdit(QWidget *parent)
 
 TextEdit::~TextEdit()
 {
-    writeHistoryRecord();
     if (m_scrollAnimation != nullptr) {
         if (m_scrollAnimation->state() != QAbstractAnimation::Stopped) {
             m_scrollAnimation->stop();
@@ -4295,46 +4294,8 @@ QStringList TextEdit::readHistoryRecordofFilePath(QString key)
     return filePathList;
 }
 
-void TextEdit::writeHistoryRecord()
-{
-    QString history = m_settings->settings->option("advance.editor.browsing_history_file")->value().toString();
-    QStringList historyList = readHistoryRecord("advance.editor.browsing_history_file");
-
-    int nLeftPosition = history.indexOf(m_sFilePath);
-    int nRightPosition = history.indexOf("}*", nLeftPosition);
-    if (history.contains(m_sFilePath)) {
-        history.remove(nLeftPosition - 4, nRightPosition + 6 - nLeftPosition);
-    }
-
-    if (!m_listBookmark.isEmpty()) {
-
-        QString filePathandBookmarkLine = "*{*[" + m_sFilePath + "]**(";
-
-        foreach (auto line, m_listBookmark) {
-            if (line <= 0) {
-                line = 1;
-            }
-
-            filePathandBookmarkLine += QString::number(line) + ",*";
-        }
-
-        filePathandBookmarkLine.remove(filePathandBookmarkLine.count() - 2, 2);
-
-        if (historyList.count() <= 5) {
-//            qDebug() << "writeHistoryRecord()" <<  filePathandBookmarkLine + ")}" + history;
-            m_settings->settings->option("advance.editor.browsing_history_file")->setValue(filePathandBookmarkLine + ")*}*" + history);
-        } else {
-            history.remove(historyList.last());
-            m_settings->settings->option("advance.editor.browsing_history_file")->setValue(filePathandBookmarkLine + ")*}*" + history);
-        }
-    } else {
-        m_settings->settings->option("advance.editor.browsing_history_file")->setValue(history);
-    }
-}
-
 void TextEdit::writeEncodeHistoryRecord()
 {
-    qDebug() << "writeHistoryRecord";
     QString history = m_settings->settings->option("advance.editor.browsing_encode_history")->value().toString();
 
     QStringList pathList = readHistoryRecordofFilePath("advance.editor.browsing_encode_history");
@@ -4430,7 +4391,7 @@ void TextEdit::updateSaveIndex()
 void TextEdit::isMarkCurrentLine(bool isMark, QString strColor,  qint64 timeStamp)
 {
     qint64 operationTimeStamp = timeStamp;
-    if(operationTimeStamp < 0) {
+    if (operationTimeStamp < 0) {
         operationTimeStamp = QDateTime::currentDateTime().toMSecsSinceEpoch();
     }
 
