@@ -4,13 +4,23 @@
 #include "qfileinfo.h"
 #include "qfile.h"
 
-
 int exec_ret = 1;
 int QDialog_exec_stub()
 {
     return exec_ret;
 }
 
+int intvalue=1;
+int retintstub()
+{
+    return intvalue;
+}
+
+QString stringvalue="123";
+QString retstringstub()
+{
+    return stringvalue;
+}
 
 bool isDraft=false;
 bool EditWrapper_isDraftFile_stub()
@@ -2042,6 +2052,74 @@ TEST(UT_Window_getStackedWgt, UT_Window_getStackedWgt)
 
     EXPECT_NE(w,nullptr);
     w->deleteLater();
+}
+
+
+TEST(UT_Window_asynPrint, UT_Window_asynPrint)
+{
+    Window* w = new Window();
+    QPainter* painter = new QPainter(w);
+    DPrinter* printer = new DPrinter();
+    w->m_printDoc = new QTextDocument;
+    QVector<int> pr{1,2,3};
+
+    Stub stub;
+    stub.set(ADDR(Window,printPage),retintstub);
+    //bool newPage() override;
+    typedef bool (*fptr)(DPrinter*);
+    fptr A_foo = (fptr)(&DPrinter::newPage);
+    stub.set(A_foo,retintstub);
+
+    w->asynPrint(*painter,printer,pr);
+
+    EXPECT_NE(w,nullptr);
+    w->deleteLater();
+    delete painter;
+    painter=nullptr;
+    delete printer;
+    printer=nullptr;
+    w->m_printDoc->deleteLater();
+}
+
+TEST(UT_Window_slot_setTitleFocus, UT_Window_slot_setTitleFocus_002)
+{
+    Window* w = new Window();
+    EditWrapper* wra = new EditWrapper(w);
+    w->m_wrappers["a"] = wra;
+
+    Stub stub;
+    stub.set(ADDR(Tabbar,currentPath),retstringstub);
+    //bool newPage() override;
+//    typedef bool (*fptr)(DPrinter*);
+//    fptr A_foo = (fptr)(&DPrinter::newPage);
+//    stub.set(A_foo,retintstub);
+
+    stringvalue = "a";
+    w->slot_setTitleFocus();
+
+    EXPECT_NE(w,nullptr);
+    w->deleteLater();
+}
+
+TEST(UT_Window_keyPressEvent, UT_Window_keyPressEvent_007)
+{
+//    QStringList aa;
+//    Window *window = new Window();
+//    window->m_settings = Settings::instance();
+
+//    utils_getkeyshortcut = Utils::getKeyshortcutFromKeymap(window->m_settings, "window", "togglefullscreen");
+//    editwrapper_texteditor = new TextEdit;
+
+//    Stub s1;s1.set(ADDR(Utils,getKeyshortcut),Utils_getKeyshortcut_stub);
+//    Stub s2;s2.set(ADDR(EditWrapper,textEditor),EditWrapper_textEditor_stub);
+//    Stub s3;s3.set(ADDR(Utils,getKeyshortcutFromKeymap),Utils_getKeyshortcutFromKeymap_stub);
+
+//    window->keyPressEvent(eve);
+
+//    EXPECT_NE(window,nullptr);
+//    window->deleteLater();
+//    window->m_settings->deleteLater();
+//    editwrapper_texteditor->deleteLater();
 }
 
 

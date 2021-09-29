@@ -181,6 +181,7 @@ TEST(UT_StartManager_autoBackupFile,autoBackupFile)
     s1.set(ADDR(QStringList,replace),returnstub);
     Stub s2;
     s2.set(ADDR(StartManager,getFileTabInfo),getFileTabInfostub);
+    s2.set(ADDR(EditWrapper,saveTemFile),returnstub);
 
     startManager->autoBackupFile();
     ASSERT_TRUE(startManager != nullptr);

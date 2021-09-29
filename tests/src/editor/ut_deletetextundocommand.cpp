@@ -1,4 +1,27 @@
 #include "ut_deletetextundocommand.h"
+#include "src/stub.h"
+
+namespace deletetextstub {
+
+int intvalue=1;
+int retintstub()
+{
+    return intvalue;
+}
+
+bool rettruestub()
+{
+    return true;
+}
+bool retfalsestub()
+{
+    return false;
+}
+
+}
+
+using namespace deletetextstub;
+
 
 UT_Deletetextundocommond::UT_Deletetextundocommond()
 {
@@ -93,39 +116,301 @@ TEST(UT_Deletetextundocommond_redo, UT_Deletetextundocommond_redo)
 
 }
 
-TEST(UT_Deletetextundocommond_DeleteTextUndoCommand2, UT_Deletetextundocommond_DeleteTextUndoCommand2)
+TEST(UT_Deletetextundocommond_DeleteTextUndoCommand2, UT_Deletetextundocommond_DeleteTextUndoCommand2_001)
 {
-#if 0
+
     Window* window = new Window;
-    EditWrapper *wrapper = window->createEditor();
-    TextEdit * edit = wrapper->textEditor();
-    edit->insertTextEx(edit->textCursor(),"123456");
-    auto cursor1 = edit->textCursor();
-    edit->selectAll();
-    auto cursor2 = edit->textCursor();
+    EditWrapper* wrapper = new EditWrapper(window);
+    TextEdit * edit = new TextEdit(window);
+    edit->m_wrapper = wrapper;
 
+    QTextCursor cursor1,cursor2;
 
-    DeleteTextUndoCommand2 * commond1 = new DeleteTextUndoCommand2(cursor1,cursor1.selectedText(),edit,false);
-    DeleteTextUndoCommand2 * commond2 = new DeleteTextUndoCommand2(cursor2,cursor2.selectedText(),edit,true);
-    commond1->redo();
-    commond1->undo();
-    commond2->redo();
+    DeleteTextUndoCommand2 * commond1 = new DeleteTextUndoCommand2(cursor1,"ddd",edit,false);
 
     QTextEdit::ExtraSelection select[2];
     select[0].cursor = cursor1;
     select[1].cursor = cursor2;
 
     QList<QTextEdit::ExtraSelection> selections{select[0],select[1]};
+
+    Stub s1;
+    s1.set(ADDR(QTextCursor,positionInBlock),retintstub);
+    s1.set(ADDR(QTextCursor,hasSelection),retfalsestub);
+    s1.set(ADDR(QString,at),rettruestub);
+
+    intvalue = 1;
     DeleteTextUndoCommand2 * commond3 = new DeleteTextUndoCommand2(selections,"test",edit,false);
-    commond3->redo();
-    commond3->undo();
+
+    EXPECT_NE(edit,nullptr);
     window->deleteLater();
     wrapper->deleteLater();
     edit->deleteLater();
-    delete commond1;commond1=nullptr;
-    delete commond2;commond2=nullptr;
-    delete commond3;commond3=nullptr;
-#endif
+    delete commond1;
+    commond1=nullptr;
+    delete commond3;
+    commond3=nullptr;
+
 }
+
+
+TEST(UT_Deletetextundocommond_DeleteTextUndoCommand2, UT_Deletetextundocommond_DeleteTextUndoCommand2_002)
+{
+
+    Window* window = new Window;
+    EditWrapper* wrapper = new EditWrapper(window);
+    TextEdit * edit = new TextEdit(window);
+    edit->m_wrapper = wrapper;
+
+    QTextCursor cursor1,cursor2;
+
+
+    QTextEdit::ExtraSelection select[2];
+    select[0].cursor = cursor1;
+    select[1].cursor = cursor2;
+
+    QList<QTextEdit::ExtraSelection> selections{select[0],select[1]};
+
+    Stub s1;
+    s1.set(ADDR(QTextCursor,positionInBlock),retintstub);
+    s1.set(ADDR(QTextCursor,hasSelection),retfalsestub);
+    s1.set(ADDR(QString,at),rettruestub);
+
+    intvalue = -1;
+    DeleteTextUndoCommand2 * commond3 = new DeleteTextUndoCommand2(selections,"test",edit,false);
+
+    EXPECT_NE(edit,nullptr);
+    window->deleteLater();
+    wrapper->deleteLater();
+    edit->deleteLater();
+    delete commond3;
+    commond3=nullptr;
+
+}
+
+TEST(UT_Deletetextundocommond_DeleteTextUndoCommand2, UT_Deletetextundocommond_DeleteTextUndoCommand2_003)
+{
+
+    Window* window = new Window;
+    EditWrapper* wrapper = new EditWrapper(window);
+    TextEdit * edit = new TextEdit(window);
+    edit->m_wrapper = wrapper;
+
+    QTextCursor cursor1,cursor2;
+
+
+    QTextEdit::ExtraSelection select[2];
+    select[0].cursor = cursor1;
+    select[1].cursor = cursor2;
+
+    QList<QTextEdit::ExtraSelection> selections{select[0],select[1]};
+
+    Stub s1;
+    s1.set(ADDR(QTextCursor,positionInBlock),retintstub);
+    s1.set(ADDR(QTextCursor,hasSelection),rettruestub);
+    s1.set(ADDR(QString,at),rettruestub);
+
+    intvalue = -1;
+    DeleteTextUndoCommand2 * commond3 = new DeleteTextUndoCommand2(selections,"test",edit,false);
+
+    EXPECT_NE(edit,nullptr);
+    window->deleteLater();
+    wrapper->deleteLater();
+    edit->deleteLater();
+    delete commond3;
+    commond3=nullptr;
+
+}
+
+TEST(UT_Deletetextundocommond2_undo, UT_Deletetextundocommond2_undo_001)
+{
+
+    Window* window = new Window;
+    EditWrapper* wrapper = new EditWrapper(window);
+    TextEdit * edit = new TextEdit(window);
+    edit->m_wrapper = wrapper;
+
+    QTextCursor cursor1,cursor2;
+
+
+    QTextEdit::ExtraSelection select[2];
+    select[0].cursor = cursor1;
+    select[1].cursor = cursor2;
+
+    QList<QTextEdit::ExtraSelection> selections{select[0],select[1]};
+
+    Stub s1;
+    s1.set(ADDR(QTextCursor,positionInBlock),retintstub);
+    s1.set(ADDR(QTextCursor,hasSelection),retfalsestub);
+    s1.set(ADDR(QString,at),rettruestub);
+
+    intvalue = -1;
+    DeleteTextUndoCommand2 * commond3 = new DeleteTextUndoCommand2(selections,"test",edit,false);
+    commond3->m_ColumnEditSelections = selections;
+    commond3->undo();
+
+    EXPECT_NE(edit,nullptr);
+    window->deleteLater();
+    wrapper->deleteLater();
+    edit->deleteLater();
+    delete commond3;
+    commond3=nullptr;
+
+}
+
+TEST(UT_Deletetextundocommond2_undo, UT_Deletetextundocommond2_undo_002)
+{
+
+    Window* window = new Window;
+    EditWrapper* wrapper = new EditWrapper(window);
+    TextEdit * edit = new TextEdit(window);
+    edit->m_wrapper = wrapper;
+
+    QTextCursor cursor1,cursor2;
+
+
+    QTextEdit::ExtraSelection select[2];
+    select[0].cursor = cursor1;
+    select[1].cursor = cursor2;
+
+    QList<QTextEdit::ExtraSelection> selections{select[0],select[1]};
+
+    Stub s1;
+    s1.set(ADDR(QTextCursor,positionInBlock),retintstub);
+    s1.set(ADDR(QTextCursor,hasSelection),retfalsestub);
+    s1.set(ADDR(QString,at),rettruestub);
+
+    intvalue = -1;
+    DeleteTextUndoCommand2 * commond3 = new DeleteTextUndoCommand2(selections,"test",edit,false);
+    commond3->m_ColumnEditSelections.clear();
+    commond3->undo();
+
+    EXPECT_NE(edit,nullptr);
+    window->deleteLater();
+    wrapper->deleteLater();
+    edit->deleteLater();
+    delete commond3;
+    commond3=nullptr;
+
+}
+
+TEST(UT_Deletetextundocommond2_redo, UT_Deletetextundocommond2_redo_001)
+{
+
+    Window* window = new Window;
+    EditWrapper* wrapper = new EditWrapper(window);
+    TextEdit * edit = new TextEdit(window);
+    edit->m_wrapper = wrapper;
+
+    QTextCursor cursor1,cursor2;
+
+
+    QTextEdit::ExtraSelection select[2];
+    select[0].cursor = cursor1;
+    select[1].cursor = cursor2;
+
+    QList<QTextEdit::ExtraSelection> selections{select[0],select[1]};
+
+    Stub s1;
+    s1.set(ADDR(QTextCursor,positionInBlock),retintstub);
+    s1.set(ADDR(QTextCursor,hasSelection),retfalsestub);
+    s1.set(ADDR(QString,at),rettruestub);
+
+    intvalue = -1;
+    DeleteTextUndoCommand2 * commond3 = new DeleteTextUndoCommand2(selections,"test",edit,false);
+    commond3->m_ColumnEditSelections=selections;
+    commond3->redo();
+
+    EXPECT_NE(edit,nullptr);
+    window->deleteLater();
+    wrapper->deleteLater();
+    edit->deleteLater();
+    delete commond3;
+    commond3=nullptr;
+
+}
+
+TEST(UT_Deletetextundocommond2_redo, UT_Deletetextundocommond2_redo_002)
+{
+
+    Window* window = new Window;
+    EditWrapper* wrapper = new EditWrapper(window);
+    TextEdit * edit = new TextEdit(window);
+    edit->m_wrapper = wrapper;
+
+    QTextCursor cursor1,cursor2;
+
+
+    QTextEdit::ExtraSelection select[2];
+    select[0].cursor = cursor1;
+    select[1].cursor = cursor2;
+
+    QList<QTextEdit::ExtraSelection> selections{select[0],select[1]};
+
+    Stub s1;
+    s1.set(ADDR(QTextCursor,positionInBlock),retintstub);
+    s1.set(ADDR(QTextCursor,hasSelection),retfalsestub);
+    s1.set(ADDR(QTextCursor,atBlockEnd),rettruestub);
+    s1.set(ADDR(QTextCursor,atBlockStart),rettruestub);
+    s1.set(ADDR(QString,at),rettruestub);
+
+    intvalue = -1;
+    DeleteTextUndoCommand2 * commond3 = new DeleteTextUndoCommand2(selections,"test",edit,false);
+    commond3->m_ColumnEditSelections.clear();
+
+    commond3->m_iscurrLine=false;
+    commond3->redo();
+
+    EXPECT_NE(edit,nullptr);
+    window->deleteLater();
+    wrapper->deleteLater();
+    edit->deleteLater();
+    delete commond3;
+    commond3=nullptr;
+
+}
+
+TEST(UT_Deletetextundocommond2_redo, UT_Deletetextundocommond2_redo_003)
+{
+
+    Window* window = new Window;
+    EditWrapper* wrapper = new EditWrapper(window);
+    TextEdit * edit = new TextEdit(window);
+    edit->m_wrapper = wrapper;
+
+    QTextCursor cursor1,cursor2;
+
+
+    QTextEdit::ExtraSelection select[2];
+    select[0].cursor = cursor1;
+    select[1].cursor = cursor2;
+
+    QList<QTextEdit::ExtraSelection> selections{select[0],select[1]};
+
+    Stub s1;
+    s1.set(ADDR(QTextCursor,positionInBlock),retintstub);
+    s1.set(ADDR(QTextCursor,hasSelection),retfalsestub);
+    s1.set(ADDR(QTextCursor,atBlockEnd),rettruestub);
+    s1.set(ADDR(QTextCursor,atBlockStart),rettruestub);
+    s1.set(ADDR(QString,at),rettruestub);
+
+    intvalue = -1;
+    DeleteTextUndoCommand2 * commond3 = new DeleteTextUndoCommand2(selections,"test",edit,false);
+    commond3->m_ColumnEditSelections.clear();
+
+    commond3->m_iscurrLine=true;
+    commond3->redo();
+
+    EXPECT_NE(edit,nullptr);
+    window->deleteLater();
+    wrapper->deleteLater();
+    edit->deleteLater();
+    delete commond3;
+    commond3=nullptr;
+
+}
+
+
+
 
 

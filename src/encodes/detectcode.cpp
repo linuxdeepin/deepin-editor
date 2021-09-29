@@ -68,7 +68,7 @@ QByteArray DetectCode::UchardetCode(QString filepath)
             int retval = uchardet_handle_data(handle, buff, len);
             if (retval != 0)
             {
-                qDebug()<<QStringLiteral("Uchardet分析编码失败")<<QString(buff);
+                //qDebug()<<QStringLiteral("Uchardet分析编码失败")<<QString(buff);
                 continue;
             }
 
@@ -78,7 +78,7 @@ QByteArray DetectCode::UchardetCode(QString filepath)
 
         uchardet_data_end(handle);
         charset = uchardet_get_charset(handle);
-        qDebug()<<QStringLiteral("Uchardet文本的编码方式是:")<<charset;
+        //qDebug()<<QStringLiteral("Uchardet文本的编码方式是:")<<charset;
         uchardet_delete(handle);
     }
 
@@ -88,7 +88,7 @@ QByteArray DetectCode::UchardetCode(QString filepath)
     if(charset == "MAC-CENTRALEUROPE") charset = "MACCENTRALEUROPE";
     if(charset == "MAC-CYRILLIC") charset = "MACCYRILLIC";
     if(charset.contains("WINDOWS-")) charset = charset.replace("WINDOWS-","CP");
-    qDebug()<<"UchardetCode End:"<<QDateTime::currentDateTime().toString("hh:mm:ss");
+    //qDebug()<<"UchardetCode End:"<<QDateTime::currentDateTime().toString("hh:mm:ss");
     return charset;
 }
 
@@ -195,7 +195,7 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr, QByteArray &outS
         return true;
 
     } else {
-        qDebug()<<"编码转换失败";
+        //qDebug()<<"编码转换失败";
         return  false;
     }
 }

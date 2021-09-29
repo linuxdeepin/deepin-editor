@@ -4,6 +4,18 @@
 #include "../src/editor/editwrapper.h"
 #include "../src/widgets/window.h"
 #include "qtextcursor.h"
+#include "src/stub.h"
+
+
+namespace insertblockstub {
+int intvalue = 1;
+int retintstub()
+{
+    return intvalue;
+}
+}
+
+using namespace insertblockstub;
 
 test_insertblockbytextcommond::test_insertblockbytextcommond()
 {
@@ -75,6 +87,9 @@ TEST_F(test_insertblockbytextcommond, undo)
 
 TEST_F(test_insertblockbytextcommond, treat)
 {
+
+    Window* window = new Window;
+    EditWrapper* wrapper = new EditWrapper(window);
     QString text = "tt";
     for(int i=0;i<1024*1024;i++)
         text += "tt";
@@ -82,16 +97,23 @@ TEST_F(test_insertblockbytextcommond, treat)
     QTextCursor cursor;
     cursor.insertText(text);
     cursor.movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
-    TextEdit* edit = new TextEdit;
+    TextEdit* edit = new TextEdit(window);
+    edit->m_wrapper = wrapper;
     edit->setTextCursor(cursor);
-    InsertBlockByTextCommond* com = new InsertBlockByTextCommond(text,edit,nullptr);
+    InsertBlockByTextCommond* com = new InsertBlockByTextCommond(text,edit,wrapper);
+
+    Stub s1;
+    s1.set(ADDR(Window,setPrintEnabled),retintstub);
+
     com->treat();
 
-    ASSERT_TRUE(!edit->textCursor().hasSelection());
 
+    EXPECT_NE(edit,nullptr);
     delete com;
     com=nullptr;
     edit->deleteLater();
+    wrapper->deleteLater();
+    window->deleteLater();
 }
 
 
