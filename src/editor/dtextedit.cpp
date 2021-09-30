@@ -2094,7 +2094,6 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
         m_lineNumbersColor.setAlphaF(0.3);
     }
 
-    //painter.fillRect(event->rect(), codeFlodAreaBackgroundColor);
     int blockNumber = getFirstVisibleBlockId();
     QTextBlock block = document()->findBlockByNumber(blockNumber);
 
@@ -2107,15 +2106,8 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
         theme = "l";
     }
 
-    QString flodImagePath = QString(":/images/d-%1.svg").arg(theme);
-    QString unflodImagePath = QString(":/images/u-%1.svg").arg(theme);
-    QImage Unfoldimage(unflodImagePath);
-    QImage foldimage(flodImagePath);
-    QPixmap scaleFoldPixmap;
-    QPixmap scaleunFoldPixmap;
-    int imageTop = 0;//图片绘制位置
-    int fontHeight = fontMetrics().height();
-    double nfoldImageHeight = fontHeight;
+   // QString flodImagePath = QString(":/images/d-%1.svg").arg(theme);
+   //QString unflodImagePath = QString(":/images/u-%1.svg").arg(theme);
 
     QPoint endPoint;
 
@@ -2162,37 +2154,19 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
 
                 cur.setPosition(block.position(), QTextCursor::MoveAnchor);
 
-                auto rate = devicePixelRatioF();
-                if(rate <=1)
-                    rate = 1.25;
-                foldimage = foldimage.scaled(foldimage.width()*rate, foldimage.height()*rate);
-                scaleFoldPixmap = Utils::renderSVG(flodImagePath, QSize(foldimage.height(), foldimage.width()), false);
-                scaleFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
-                scaleunFoldPixmap = Utils::renderSVG(unflodImagePath, QSize(foldimage.height(), foldimage.width()), false);
-                scaleunFoldPixmap.setDevicePixelRatio(devicePixelRatioF());
-
-                int nOffset = -8;
                 painter.setRenderHint(QPainter::Antialiasing, true);
                 painter.setRenderHints(QPainter::SmoothPixmapTransform);
 
-                QRect rt = cursorRect(cur);
-
+                int w = this->m_fontSize<15?15:m_fontSize;
+                int offset = w<=15?0:w/3;
+                updateLeftWidgetWidth(w);
+                QRect rect(0,cursorRect(cur).y() + offset,w,w);
                 if (block.next().isVisible()) {
                      if (block.isVisible()) {
-                         //imageTop = rt.y() ;
-                         //painter.drawPixmap(nOffset, imageTop, rt.height(),rt.height(),scaleFoldPixmap);
-                         int w = this->m_fontSize<15?15:m_fontSize;
-                         updateLeftWidgetWidth(w);
-                         QRect rect(0,cursorRect(cur).y(),w,w);
                          paintCodeFlod(&painter,rect);
                       }
                   } else {
                      if (block.isVisible()) {
-                         //imageTop = rt.y() ;
-                        // painter.drawPixmap(nOffset, imageTop,rt.height(),rt.height(), scaleunFoldPixmap);
-                         int w = this->m_fontSize<15?15:m_fontSize;
-                         updateLeftWidgetWidth(w);
-                         QRect rect(0,cursorRect(cur).y(),w,w);
                          paintCodeFlod(&painter,rect,true);
                       }
                   }
@@ -2206,8 +2180,8 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
 
 void TextEdit::setBookmarkFlagVisable(bool isVisable, bool bIsFirstOpen)
 {
-    int leftAreaWidth = m_pLeftAreaWidget->width();
-    int bookmarkAreaWidth = m_pLeftAreaWidget->m_pBookMarkArea->width();
+    //int leftAreaWidth = m_pLeftAreaWidget->width();
+    //int bookmarkAreaWidth = m_pLeftAreaWidget->m_pBookMarkArea->width();
 
     if (!bIsFirstOpen) {
         if (isVisable) {
@@ -2223,8 +2197,8 @@ void TextEdit::setBookmarkFlagVisable(bool isVisable, bool bIsFirstOpen)
 
 void TextEdit::setCodeFlodFlagVisable(bool isVisable, bool bIsFirstOpen)
 {
-    int leftAreaWidth = m_pLeftAreaWidget->width();
-    int flodAreaWidth = m_pLeftAreaWidget->m_pFlodArea->width();
+    //int leftAreaWidth = m_pLeftAreaWidget->width();
+    //int flodAreaWidth = m_pLeftAreaWidget->m_pFlodArea->width();
     if (!bIsFirstOpen) {
         if (isVisable) {
             //m_pLeftAreaWidget->setFixedWidth(leftAreaWidth + flodAreaWidth);
@@ -3601,18 +3575,10 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
         lineNumberAreaBackgroundColor.setAlphaF(0.03);
         m_lineNumbersColor.setAlphaF(0.3);
     }
-    //painter.fillRect(event->rect(), lineNumberAreaBackgroundColor);
-    //int top = this->viewport()->geometry().top() + verticalScrollBar()->value();
 
     QTextBlock lineBlock;//第几行文本块
     QImage image;
-    //QImage scaleImage;
-    QPixmap scalePixmap;
     QString pixmapPath;
-    //int startPoint = 0;//当前可见区域开始位置
-    int imageTop = 0;//图片绘制位置
-    int fontHeight = fontMetrics().height();
-    double nBookmarkLineHeight = fontHeight;
     QList<int> list = m_listBookmark;
     bool bIsContains = false;
 
@@ -3645,36 +3611,10 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
                 continue;
             }
 
-            auto rate = devicePixelRatioF();
-            image = image.scaled(image.width()*rate,image.height()*rate);
-
-            scalePixmap = Utils::renderSVG(pixmapPath, QSize(image.height(), image.width()), false);
-            scalePixmap.setDevicePixelRatio(devicePixelRatioF());
-#if 0
-            if (fontHeight > image.height())
-            {
-                scalePixmap = Utils::renderSVG(pixmapPath, QSize(image.height(), image.width()), false);
-                scalePixmap.setDevicePixelRatio(devicePixelRatioF());
-            } else {
-                double scale = nBookmarkLineHeight / image.height();
-                int nScaleWidth = static_cast<int>(scale * image.width());
-                scalePixmap = Utils::renderSVG(pixmapPath, QSize(static_cast<int>(scale * image.height()), nScaleWidth), false);
-                scalePixmap.setDevicePixelRatio(devicePixelRatioF());
-            }
-
-            imageTop = cursorRect(cur).y() + (cursorRect(cur).height() - scalePixmap.height()) / 2;
-            int nOffset = (m_pLeftAreaWidget->m_pBookMarkArea->width()  - scalePixmap.width()) / 2;
-            painter.drawPixmap(nOffset, imageTop, scalePixmap);
-#endif
-
-            //imageTop = cursorRect(cur).y() ;
-           // int nOffset = (m_pLeftAreaWidget->m_pBookMarkArea->width()  - scalePixmap.width()) / 2;
-           // painter.drawPixmap(0 , imageTop, scalePixmap);
-
             int w = this->m_fontSize<15?15:m_fontSize;
+            int offset = w<=15?0:w/3;
             updateLeftWidgetWidth(w);
-            QRect rect(0,cursorRect(cur).y(),w,w);
-            //rect = rect.adjusted(height/6,height/6,-1*height/6,-1*height/6);
+            QRect rect(0,cursorRect(cur).y() + offset,w,w);
 
             QSvgRenderer render;
             render.load(pixmapPath);
@@ -3961,12 +3901,12 @@ bool TextEdit::isNeedShowFoldIcon(QTextBlock block)
 
 int TextEdit::getHighLightRowContentLineNum(int iLine)
 {
-    bool isFirstLine = true;
-    if (iLine == 0) {
-        isFirstLine = true;
-    } else {
-        isFirstLine = false;
-    }
+//    bool isFirstLine = true;
+//    if (iLine == 0) {
+//        isFirstLine = true;
+//    } else {
+//        isFirstLine = false;
+//    }
 
     QTextDocument *doc = document();
     //获取行号文本块
