@@ -2547,7 +2547,7 @@ TEST(UT_test_textedit_lineNumberAreaPaintEvent, UT_test_textedit_lineNumberAreaP
     QPaintEvent *pPaintEvent;
     pWindow->currentWrapper()->textEditor()->lineNumberAreaPaintEvent(pPaintEvent);
 
-    ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->m_pLeftAreaWidget->m_pLineNumberArea != nullptr);
+    EXPECT_NE(pWindow->currentWrapper()->textEditor()->m_pLeftAreaWidget->m_pLineNumberArea, nullptr);
     pWindow->deleteLater();
 }
 
@@ -4344,7 +4344,7 @@ TEST_F(test_textedit, setThemeWithPath)
     startManager->setSettings(s);
     startManager->setWrapper(ee);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     ee->deleteLater();
     startManager->deleteLater();
     p->deleteLater();
@@ -4360,7 +4360,7 @@ TEST_F(test_textedit, setIsFileOpen)
     startManager->setWrapper(ee);
     startManager->setIsFileOpen();
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     ee->deleteLater();
     startManager->deleteLater();
     p->deleteLater();
@@ -4379,7 +4379,7 @@ TEST_F(test_textedit, isMarkCurrentLine)
     startManager->isMarkCurrentLine(true, "red");
     startManager->isMarkCurrentLine(false, "red");
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     ee->deleteLater();
     startManager->deleteLater();
     p->deleteLater();
@@ -4398,7 +4398,7 @@ TEST_F(test_textedit, markSelectWord)
     startManager->setWrapper(ee);
     startManager->markSelectWord();
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     ee->deleteLater();
     startManager->deleteLater();
     p->deleteLater();
@@ -4417,7 +4417,7 @@ TEST_F(test_textedit, updateMark)
     startManager->setWrapper(ee);
     startManager->updateMark(1, 2, 3);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     ee->deleteLater();
     startManager->deleteLater();
     p->deleteLater();
@@ -4438,7 +4438,7 @@ TEST_F(test_textedit, containsExtraSelection)
     startManager->setWrapper(ee);
     startManager->containsExtraSelection(listSelection, selectio);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     ee->deleteLater();
     startManager->deleteLater();
     p->deleteLater();
@@ -4464,7 +4464,7 @@ TEST_F(test_textedit, appendExtraSelection)
     startManager->setWrapper(ee);
     startManager->appendExtraSelection(listSelection, selectio, "#000000", &listSelectionsd);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     ee->deleteLater();
     startManager->deleteLater();
     p->deleteLater();
@@ -4484,7 +4484,7 @@ TEST_F(test_textedit, setCursorStart)
     startManager->setWrapper(ee);
     startManager->setCursorStart(2);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     ee->deleteLater();
     startManager->deleteLater();
     p->deleteLater();
@@ -4504,7 +4504,7 @@ TEST_F(test_textedit, writeEncodeHistoryRecord)
     startManager->setWrapper(ee);
     startManager->writeEncodeHistoryRecord();
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     ee->deleteLater();
     startManager->deleteLater();
     p->deleteLater();
@@ -4524,7 +4524,7 @@ TEST_F(test_textedit, readEncodeHistoryRecord)
     startManager->setWrapper(ee);
     startManager->readEncodeHistoryRecord();
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     ee->deleteLater();
     startManager->deleteLater();
     p->deleteLater();
@@ -4545,7 +4545,7 @@ TEST_F(test_textedit, clickFindAction)
     startManager->setWrapper(ee);
     startManager->clickFindAction();
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     ee->deleteLater();
     startManager->deleteLater();
     p->deleteLater();
@@ -4565,7 +4565,7 @@ TEST_F(test_textedit, tellFindBarClose)
     startManager->setWrapper(ee);
     startManager->tellFindBarClose();
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     ee->deleteLater();
     startManager->deleteLater();
     p->deleteLater();
@@ -4586,7 +4586,7 @@ TEST_F(test_textedit, setEditPalette)
     startManager->setWrapper(ee);
     startManager->setEditPalette("aa", "aa");
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     s->deleteLater();
     ee->deleteLater();
     startManager->deleteLater();
@@ -4608,7 +4608,7 @@ TEST_F(test_textedit, setCodeFoldWidgetHide)
     startManager->setCodeFoldWidgetHide(true);
     startManager->setCodeFoldWidgetHide(false);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     s->deleteLater();
     ee->deleteLater();
     startManager->deleteLater();
@@ -4628,7 +4628,7 @@ TEST_F(test_textedit, updateLeftAreaWidget)
     startManager->setWrapper(ee);
     startManager->updateLeftAreaWidget();
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     s->deleteLater();
     ee->deleteLater();
     startManager->deleteLater();
@@ -4649,7 +4649,7 @@ TEST_F(test_textedit, updateLineNumber)
     startManager->setWrapper(ee);
     startManager->updateLeftAreaWidget();
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     s->deleteLater();
     ee->deleteLater();
     startManager->deleteLater();
@@ -4669,7 +4669,7 @@ TEST_F(test_textedit, handleScrollFinish)
     startManager->setWrapper(ee);
     startManager->handleScrollFinish();
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     s->deleteLater();
     ee->deleteLater();
     startManager->deleteLater();
@@ -4690,7 +4690,7 @@ TEST_F(test_textedit, slot_translate)
     startManager->setWrapper(ee);
     startManager->slot_translate();
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     s->deleteLater();
     ee->deleteLater();
     startManager->deleteLater();
@@ -4762,7 +4762,7 @@ TEST_F(test_textedit, transposeChar)
     startManager->setWrapper(ee);
     startManager->transposeChar();
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     s->deleteLater();
     ee->deleteLater();
     startManager->deleteLater();
@@ -4784,7 +4784,7 @@ TEST_F(test_textedit, handleCursorMarkChanged)
     startManager->handleCursorMarkChanged(true, QTextCursor());
     startManager->handleCursorMarkChanged(false, QTextCursor());
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     s->deleteLater();
     ee->deleteLater();
     startManager->deleteLater();
@@ -4805,7 +4805,7 @@ TEST_F(test_textedit, adjustScrollbarMargins)
     startManager->setWrapper(ee);
     startManager->adjustScrollbarMargins();
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     s->deleteLater();
     ee->deleteLater();
     startManager->deleteLater();
@@ -4826,7 +4826,7 @@ TEST_F(test_textedit, onSelectionArea)
     startManager->setWrapper(ee);
     startManager->onSelectionArea();
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     s->deleteLater();
     ee->deleteLater();
     startManager->deleteLater();
@@ -4846,7 +4846,7 @@ TEST_F(test_textedit, fingerZoom)
     startManager->setWrapper(ee);
     startManager->fingerZoom("aa", "aa", 3);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     s->deleteLater();
     ee->deleteLater();
     startManager->deleteLater();
@@ -4868,7 +4868,7 @@ TEST_F(test_textedit, event)
     QEvent *e = new QEvent(QEvent::Type::MouseButtonPress);
     startManager->event(e);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     s->deleteLater();
     ee->deleteLater();
     startManager->deleteLater();
@@ -4895,7 +4895,7 @@ TEST_F(test_textedit, mousePressEvent)
     QMouseEvent *e = new QMouseEvent(QMouseEvent::Type::Enter, b, Qt::MouseButton::LeftButton, Qt::MouseButton::LeftButton, Qt::KeyboardModifier::NoModifier);
     startManager->mousePressEvent(e);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     s->deleteLater();
     ee->deleteLater();
     startManager->deleteLater();
@@ -4942,7 +4942,7 @@ TEST_F(test_textedit, mouseMoveEvent)
     QMouseEvent *e = new QMouseEvent(QMouseEvent::Type::Enter, b, Qt::MouseButton::LeftButton, Qt::MouseButton::LeftButton, Qt::KeyboardModifier::NoModifier);
     startManager->mouseMoveEvent(e);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     s->deleteLater();
     ee->deleteLater();
     startManager->deleteLater();
@@ -4988,7 +4988,7 @@ TEST_F(test_textedit, mouseReleaseEvent)
     QMouseEvent *e = new QMouseEvent(QMouseEvent::Type::Enter, b, Qt::MouseButton::LeftButton, Qt::MouseButton::LeftButton, Qt::KeyboardModifier::NoModifier);
     startManager->mouseReleaseEvent(e);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     s->deleteLater();
     ee->deleteLater();
     startManager->deleteLater();
@@ -5036,7 +5036,7 @@ TEST_F(test_textedit, wheelEvent)
     //    Qt::Orientation orient = Qt::Vertical);
     startManager->wheelEvent(e);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     s->deleteLater();
     ee->deleteLater();
     startManager->deleteLater();
@@ -5069,7 +5069,7 @@ TEST_F(test_textedit, contextMenuEvent)
     QContextMenuEvent *e = new QContextMenuEvent(QContextMenuEvent::Reason::Keyboard, b);
     //startManager->contextMenuEvent(e);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     s->deleteLater();
     ee->deleteLater();
     startManager->deleteLater();
@@ -5092,7 +5092,7 @@ TEST_F(test_textedit, paintEvent)
     QPaintEvent *e = new QPaintEvent(a);
     startManager->paintEvent(e);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     s->deleteLater();
     ee->deleteLater();
     startManager->deleteLater();
@@ -5135,7 +5135,7 @@ TEST_F(test_textedit, blockContainStrBrackets)
     QPaintEvent *e;
     startManager->blockContainStrBrackets(2);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     s->deleteLater();
     ee->deleteLater();
     startManager->deleteLater();
@@ -5182,7 +5182,7 @@ TEST_F(test_textedit, setCursorKeywordSeletoin)
     startManager->setCursorKeywordSeletoin(2, true);
     startManager->setCursorKeywordSeletoin(2, false);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     s->deleteLater();
     ee->deleteLater();
     startManager->deleteLater();
@@ -5203,7 +5203,7 @@ TEST_F(test_textedit, cursorPositionChanged)
     QPaintEvent *e;
     startManager->cursorPositionChanged();
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     s->deleteLater();
     ee->deleteLater();
     startManager->deleteLater();
@@ -5225,7 +5225,7 @@ TEST_F(test_textedit, updateHighlightBrackets)
     QPaintEvent *e;
     startManager->updateHighlightBrackets(a, a);
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     s->deleteLater();
     ee->deleteLater();
     startManager->deleteLater();
@@ -5247,7 +5247,7 @@ TEST_F(test_textedit, getFirstVisibleBlockId)
     QPaintEvent *e;
     //startManager->getFirstVisibleBlockId();
 
-    ASSERT_TRUE(ee->m_pTextEdit != nullptr);
+    EXPECT_NE(ee->m_pTextEdit , nullptr);
     s->deleteLater();
     ee->deleteLater();
     startManager->deleteLater();
@@ -5725,7 +5725,7 @@ TEST_F(test_textedit, unCommentSelection)
     editWrapper->m_pTextEdit->setTextCursor(cursor);
     editWrapper->m_pTextEdit->unCommentSelection();
 
-    ASSERT_TRUE(editWrapper->m_pTextEdit != nullptr);
+    EXPECT_NE(editWrapper->m_pTextEdit , nullptr);
     editWrapper->deleteLater();
 }
 
@@ -5755,7 +5755,7 @@ TEST(UT_TextEdit_unCommentSelection, UT_TextEdit_unCommentSelection_002)
     intvalue = -1000;
     edit->unCommentSelection();
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
 }
@@ -5789,7 +5789,7 @@ TEST(UT_TextEdit_unCommentSelection, UT_TextEdit_unCommentSelection_003)
     intvalue = -1000;
     edit->unCommentSelection();
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
 }
@@ -5825,7 +5825,7 @@ TEST(UT_TextEdit_unCommentSelection, UT_TextEdit_unCommentSelection_004)
     intvalue = -1000;
     edit->unCommentSelection();
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
 }
@@ -5861,7 +5861,7 @@ TEST(UT_TextEdit_unCommentSelection, UT_TextEdit_unCommentSelection_005)
     intvalue = -1000;
     edit->unCommentSelection();
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
 }
@@ -5876,7 +5876,7 @@ TEST_F(test_textedit, setComment)
     editWrapper->m_pTextEdit->setTextCursor(cursor);
     editWrapper->m_pTextEdit->setComment();
 
-    ASSERT_TRUE(editWrapper->m_pTextEdit != nullptr);
+    EXPECT_NE(editWrapper->m_pTextEdit , nullptr);
     editWrapper->deleteLater();
 }
 
@@ -5907,7 +5907,7 @@ TEST(UT_TextEdit_setComment, UT_TextEdit_setComment_002)
     intvalue = -1000;
     edit->setComment();
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
 }
@@ -5943,7 +5943,7 @@ TEST(UT_TextEdit_setComment, UT_TextEdit_setComment_003)
     intvalue = -1000;
     edit->setComment();
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
 }
@@ -5979,7 +5979,7 @@ TEST(UT_TextEdit_setComment, UT_TextEdit_setComment_004)
     intvalue = -1000;
     edit->setComment();
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
 }
@@ -5993,7 +5993,7 @@ TEST_F(test_textedit, removeComment)
     editWrapper->m_pTextEdit->setTextCursor(cursor);
     editWrapper->m_pTextEdit->removeComment();
 
-    ASSERT_TRUE(editWrapper->m_pTextEdit != nullptr);
+    EXPECT_NE(editWrapper->m_pTextEdit , nullptr);
     editWrapper->deleteLater();
 }
 
@@ -6021,7 +6021,7 @@ TEST(UT_Textedit_removeComment, UT_Textedit_removeComment_002)
     intvalue = -1000;
     edit->removeComment();
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
 }
@@ -6050,7 +6050,7 @@ TEST(UT_Textedit_removeComment, UT_Textedit_removeComment_003)
     intvalue = -1000;
     edit->removeComment();
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
 }
@@ -6066,7 +6066,7 @@ TEST_F(test_textedit, keyPressEvent)
     QKeyEvent keyEvent(QEvent::KeyPress, Qt::Key_Insert, Qt::NoModifier);
     editWrapper->m_pTextEdit->keyPressEvent(&keyEvent);
 
-    ASSERT_TRUE(editWrapper->m_pTextEdit != nullptr);
+    EXPECT_NE(editWrapper->m_pTextEdit , nullptr);
     editWrapper->deleteLater();
     window->deleteLater();
 }
@@ -6089,7 +6089,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_002)
     string2 = "e";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6115,7 +6115,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_003)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6141,7 +6141,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_004)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6167,7 +6167,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_005)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6193,7 +6193,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_006)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6219,7 +6219,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_007)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6245,7 +6245,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_008)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6271,7 +6271,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_009)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6297,7 +6297,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_010)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6323,7 +6323,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_011)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6349,7 +6349,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_012)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6375,7 +6375,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_013)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6401,7 +6401,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_014)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6427,7 +6427,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_015)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6454,7 +6454,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_016)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6480,7 +6480,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_017)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6506,7 +6506,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_018)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6532,7 +6532,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_019)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6558,7 +6558,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_020)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6584,7 +6584,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_021)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6610,7 +6610,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_022)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6636,7 +6636,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_023)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6662,7 +6662,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_024)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6688,7 +6688,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_025)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6714,7 +6714,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_026)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6743,7 +6743,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_027)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6774,7 +6774,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_028)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6805,7 +6805,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_029)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6834,7 +6834,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_030)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6864,7 +6864,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_031)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6898,7 +6898,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_032)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6931,7 +6931,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_033)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6960,7 +6960,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_034)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -6990,7 +6990,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_035)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7020,7 +7020,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_036)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7048,7 +7048,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_037)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7076,7 +7076,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_038)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7104,7 +7104,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_039)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7132,7 +7132,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_040)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7160,7 +7160,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_041)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7188,7 +7188,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_042)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7216,7 +7216,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_043)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7244,7 +7244,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_044)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7272,7 +7272,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_045)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7301,7 +7301,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_046)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7329,7 +7329,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_047)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7357,7 +7357,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_048)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7385,7 +7385,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_049)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7413,7 +7413,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_050)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7441,7 +7441,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_051)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7469,7 +7469,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_052)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7497,7 +7497,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_053)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7525,7 +7525,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_054)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7553,7 +7553,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_055)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7581,7 +7581,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_056)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7609,7 +7609,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_057)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7637,7 +7637,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_058)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7665,7 +7665,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_059)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7693,7 +7693,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_060)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7721,7 +7721,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_061)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7749,7 +7749,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_062)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7777,7 +7777,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_063)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7805,7 +7805,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_064)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7833,7 +7833,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_065)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7861,7 +7861,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_066)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7889,7 +7889,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_067)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7917,7 +7917,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_068)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -7945,7 +7945,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_069)
     //string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -8023,7 +8023,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_070)
     string1 = Utils::getKeyshortcutFromKeymap(edit->m_settings, "editor", "mark");
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -8051,7 +8051,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_071)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -8079,7 +8079,7 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_072)
     string2 = "789";
     edit->keyPressEvent(e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -8101,7 +8101,7 @@ TEST(UT_Textedit_resizeEvent, UT_Textedit_resizeEvent)
     edit->m_isSelectAll = false;
     edit->resizeEvent(r);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete r;
@@ -8123,7 +8123,7 @@ TEST(UT_Textedit_dragMoveEvent, UT_Textedit_dragMoveEvent)
     edit->m_readOnlyMode = false;
     edit->dragMoveEvent(r);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     data->deleteLater();
@@ -8142,7 +8142,7 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_001)
 
     edit->eventFilter(wra,e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     delete e;
@@ -8166,7 +8166,7 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_002)
     intvalue=1;
     edit->eventFilter(edit->m_pLeftAreaWidget->m_pBookMarkArea,e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     edit->m_rightMenu->deleteLater();
@@ -8207,7 +8207,7 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_003)
     intvalue=1;
     edit->eventFilter(edit->m_pLeftAreaWidget->m_pFlodArea,e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     edit->m_rightMenu->deleteLater();
@@ -8248,7 +8248,7 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_004)
     intvalue=1;
     edit->eventFilter(edit->m_pLeftAreaWidget->m_pFlodArea,e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     edit->m_rightMenu->deleteLater();
@@ -8281,7 +8281,7 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_005)
     edit->m_listMainFlodAllPos.push_back(1);
     edit->eventFilter(edit->m_pLeftAreaWidget->m_pFlodArea,e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     edit->m_rightMenu->deleteLater();
@@ -8317,7 +8317,7 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_006)
     edit->m_listMainFlodAllPos.push_back(1);
     edit->eventFilter(edit->m_pLeftAreaWidget->m_pFlodArea,e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     edit->m_rightMenu->deleteLater();
@@ -8353,7 +8353,7 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_007)
     edit->m_listMainFlodAllPos.push_back(1);
     edit->eventFilter(edit->m_pLeftAreaWidget->m_pFlodArea,e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     edit->m_rightMenu->deleteLater();
@@ -8389,7 +8389,7 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_008)
     edit->m_listMainFlodAllPos.push_back(1);
     edit->eventFilter(edit->m_pLeftAreaWidget->m_pBookMarkArea,e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     edit->m_rightMenu->deleteLater();
@@ -8425,7 +8425,7 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_009)
     edit->m_listMainFlodAllPos.push_back(1);
     edit->eventFilter(edit->m_pLeftAreaWidget->m_pFlodArea,e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     edit->m_rightMenu->deleteLater();
@@ -8462,7 +8462,7 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_010)
     edit->m_listMainFlodAllPos.push_back(1);
     edit->eventFilter(edit->m_colorMarkMenu,e);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     edit->m_rightMenu->deleteLater();
@@ -8493,7 +8493,7 @@ TEST(UT_Textedit_updateMark, UT_Textedit_updateMark_002)
     edit->updateMark(1,2,3);
 
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
 }
@@ -8520,7 +8520,7 @@ TEST(UT_Textedit_updateMark, UT_Textedit_updateMark_003)
     edit->updateMark(1,2,3);
 
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
 }
@@ -8551,7 +8551,7 @@ TEST(UT_Textedit_updateMark, UT_Textedit_updateMark_004)
     edit->updateMark(1,2,3);
 
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
 }
@@ -8572,7 +8572,7 @@ TEST(UT_Textedit_clearMarksForTextCursor, UT_Textedit_clearMarksForTextCursor_00
 
     edit->clearMarksForTextCursor();
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
 }
@@ -8603,7 +8603,7 @@ TEST(UT_Textedit_clearMarksForTextCursor, UT_Textedit_clearMarksForTextCursor_00
     intvalue2=10;
     edit->clearMarksForTextCursor();
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
 }
@@ -8625,7 +8625,7 @@ TEST(UT_Textedit_clearMarkOperationForCursor, UT_Textedit_clearMarkOperationForC
 
     edit->clearMarkOperationForCursor(e1.cursor);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
 }
@@ -8644,7 +8644,7 @@ TEST(UT_Textedit_tapAndHoldGestureTriggered, UT_Textedit_tapAndHoldGestureTrigge
     intvalue = 0;
     edit->tapAndHoldGestureTriggered(t);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     t->deleteLater();
@@ -8663,7 +8663,7 @@ TEST(UT_Textedit_tapAndHoldGestureTriggered, UT_Textedit_tapAndHoldGestureTrigge
     intvalue = 1;
     edit->tapAndHoldGestureTriggered(t);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     t->deleteLater();
@@ -8682,7 +8682,7 @@ TEST(UT_Textedit_tapAndHoldGestureTriggered, UT_Textedit_tapAndHoldGestureTrigge
     intvalue = 2;
     edit->tapAndHoldGestureTriggered(t);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     t->deleteLater();
@@ -8701,7 +8701,7 @@ TEST(UT_Textedit_tapAndHoldGestureTriggered, UT_Textedit_tapAndHoldGestureTrigge
     intvalue = 3;
     edit->tapAndHoldGestureTriggered(t);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     t->deleteLater();
@@ -8720,7 +8720,7 @@ TEST(UT_Textedit_tapAndHoldGestureTriggered, UT_Textedit_tapAndHoldGestureTrigge
     intvalue = 4;
     edit->tapAndHoldGestureTriggered(t);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     t->deleteLater();
@@ -8747,7 +8747,7 @@ TEST(UT_Textedit_panTriggered, UT_Textedit_panTriggered_001)
     intvalue = 0;
     edit->panTriggered(t);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     t->deleteLater();
@@ -8777,7 +8777,7 @@ TEST(UT_Textedit_pinchTriggered, UT_Textedit_pinchTriggered_001)
     intvalue = 0;
     edit->pinchTriggered(t);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     w->deleteLater();
@@ -8794,7 +8794,7 @@ TEST(UT_Textedit_swipeTriggered, UT_Textedit_swipeTriggered_001)
 
     edit->swipeTriggered(nullptr);
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     t->deleteLater();
@@ -8842,7 +8842,7 @@ TEST(UT_Textedit_popRightMenu, UT_Textedit_popRightMenu_001)
     edit->m_bReadOnlyPermission = false;
     edit->popRightMenu(QPoint(10,10));
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     w->deleteLater();
@@ -8895,7 +8895,7 @@ TEST(UT_Textedit_popRightMenu, UT_Textedit_popRightMenu_002)
     edit->m_bReadOnlyPermission = false;
     edit->popRightMenu(QPoint(10,10));
 
-    ASSERT_TRUE(edit != nullptr);
+    EXPECT_NE(edit , nullptr);
     edit->deleteLater();
     wra->deleteLater();
     w->deleteLater();
