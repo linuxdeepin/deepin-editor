@@ -960,64 +960,56 @@ void TextEdit::openNewlineBelow()
 
 void TextEdit::moveLineDownUp(bool up)
 {
-    const QString t1 = this->document()->toPlainText();
+    if(up){
+        QTextCursor cursor = this->textCursor();
+        //current line isn't the first line of this document
+        if(0 != cursor.blockNumber()){
+            int startpos = 0;
+            int endpos = 0;
+            cursor.movePosition(QTextCursor::StartOfLine);
+            cursor.movePosition(QTextCursor::EndOfLine,QTextCursor::KeepAnchor);
+            endpos = cursor.position();
+            QString curtext = cursor.selectedText();
 
-    QTextCursor cursor = textCursor();
-    QTextCursor move = cursor;
-    bool hasSelection = cursor.hasSelection();
+            cursor.movePosition(QTextCursor::PreviousBlock);
+            startpos = cursor.position();
+            cursor.movePosition(QTextCursor::StartOfLine);
+            cursor.movePosition(QTextCursor::EndOfLine,QTextCursor::KeepAnchor);
+            QString uptext = cursor.selectedText();
 
-    // this opens folded items instead of destroying them
-    move.setVisualNavigation(false);
-    move.beginEditBlock();
+            cursor.setPosition(startpos);
+            cursor.setPosition(endpos,QTextCursor::KeepAnchor);
+            InsertTextUndoCommand* com = new InsertTextUndoCommand(cursor,curtext + "\n" + uptext);
+            m_pUndoStack->push(com);
 
-    if (hasSelection) {
-        move.setPosition(cursor.selectionStart());
-        move.movePosition(QTextCursor::StartOfBlock);
-        move.setPosition(cursor.selectionEnd(), QTextCursor::KeepAnchor);
-        move.movePosition(move.atBlockStart() ? QTextCursor::Left : QTextCursor::EndOfBlock,
-                          QTextCursor::KeepAnchor);
-    } else {
-        move.movePosition(QTextCursor::StartOfBlock);
-        move.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-    }
-    const QString text = move.selectedText();
-
-    move.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor);
-    move.removeSelectedText();
-
-    if (up) {
-        move.movePosition(QTextCursor::PreviousBlock);
-        move.insertBlock();
-        move.movePosition(QTextCursor::Left);
-    } else {
-        move.movePosition(QTextCursor::EndOfBlock);
-        if (move.atBlockStart()) { // empty block
-            move.movePosition(QTextCursor::NextBlock);
-            move.insertBlock();
-            move.movePosition(QTextCursor::Left);
-        } else {
-            move.insertBlock();
+            //ensure that this operation can be performed multiple times in succession.
+            cursor.setPosition(startpos);
+            this->setTextCursor(cursor);
         }
     }
+    else {
+        QTextCursor cursor = this->textCursor();
+        //current line isn't the last line of this document
+        if(cursor.blockNumber()+1 != this->document()->blockCount()){
+            int startpos = 0;
+            int endpos = 0;
+            cursor.movePosition(QTextCursor::StartOfLine);
+            startpos = cursor.position();
+            cursor.movePosition(QTextCursor::EndOfLine,QTextCursor::KeepAnchor);
+            QString curtext = cursor.selectedText();
 
-    int start = move.position();
-    move.clearSelection();
-    move.insertText(text);
-    int end = move.position();
+            cursor.movePosition(QTextCursor::NextBlock);
+            cursor.movePosition(QTextCursor::StartOfLine);
+            cursor.movePosition(QTextCursor::EndOfLine,QTextCursor::KeepAnchor);
+            endpos = cursor.position();
+            QString downtext = cursor.selectedText();
 
-    if (hasSelection) {
-        move.setPosition(end);
-        move.setPosition(start, QTextCursor::KeepAnchor);
-    } else {
-        move.setPosition(start);
+            cursor.setPosition(startpos);
+            cursor.setPosition(endpos,QTextCursor::KeepAnchor);
+            InsertTextUndoCommand* com = new InsertTextUndoCommand(cursor,downtext + "\n" + curtext);
+            m_pUndoStack->push(com);
+        }
     }
-
-    move.endEditBlock();
-    setTextCursor(move);
-
-    //after this operation,the text content changes
-    if(t1 != this->document()->toPlainText())
-        this->m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
 
 
 }
@@ -1196,62 +1188,25 @@ void TextEdit::cutlines()
 
 void TextEdit::joinLines()
 {
-    const int l1 = this->textCursor().blockNumber();
-    auto b1 = this->document()->findBlockByNumber(l1);
-    const QString t1 = b1.text();
+    QTextCursor cursor = this->textCursor();
+    //the current line isn't the last line of text.
+    if(cursor.blockNumber()+1 != this->document()->blockCount()){
+        int startpos = 0;
+        int endpos = 0;
+        cursor.movePosition(QTextCursor::EndOfBlock);
+        startpos = cursor.position();
+        cursor.movePosition(QTextCursor::NextBlock);
+        cursor.movePosition(QTextCursor::EndOfBlock,QTextCursor::KeepAnchor);
+        endpos = cursor.position();
+        QString t = cursor.selectedText();
 
-    if (blockCount() == getCurrentLine()) {
-        return;
-    }
-    if (textCursor().hasSelection()) {
-        // Get selection bound.
-        int startPos = textCursor().anchor();
-        int endPos = textCursor().position();
+        cursor.setPosition(startpos);
+        cursor.setPosition(endpos,QTextCursor::KeepAnchor);
+        auto com = new InsertTextUndoCommand(cursor,t);
+        m_pUndoStack->push(com);
 
-        if (startPos > endPos) {
-            std::swap(startPos, endPos);
-        }
-
-        // Expand selection to multi-lines bound.
-        QTextCursor startCursor = textCursor();
-        startCursor.setPosition(startPos, QTextCursor::MoveAnchor);
-        startCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-
-        QTextCursor endCursor = textCursor();
-        endCursor.setPosition(endPos, QTextCursor::MoveAnchor);
-        endCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
-
-        // Select multi-lines.
-        QTextCursor cursor = textCursor();
-        cursor.setPosition(startCursor.position(), QTextCursor::MoveAnchor);
-        cursor.setPosition(endCursor.position(), QTextCursor::KeepAnchor);
-
-        // Remove selected lines.
-        QString selectedLines = cursor.selectedText();
-        cursor.removeSelectedText();
-
-        // Insert line with join actoin.
-        // Because function `selectedText' will use Unicode char U+2029 instead \n,
-        // so we need replace Unicode char U+2029, not replace char '\n'.
-        cursor.insertText(selectedLines.replace(QChar(0x2029), " "));
-
-        setTextCursor(cursor);
-    } else {
-        QTextCursor cursor = textCursor();
-        cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
-        cursor.insertText(" ");
-        cursor.deleteChar();
-        cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
-
-        setTextCursor(cursor);
-    }
-
-    tryUnsetMark();
-
-    b1 = this->document()->findBlockByNumber(l1);
-    //after this operation,the text content changes
-    if(t1 != b1.text()) {
-        this->m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
+        cursor.setPosition(startpos);
+        this->setTextCursor(cursor);
     }
 }
 
@@ -1381,48 +1336,29 @@ void TextEdit::indentText()
 
 void TextEdit::unindentText()
 {
-    // Stop mark if mark is set.
-    tryUnsetMark();
-    hideCursorBlink();
+    QTextCursor cursor = this->textCursor();
+    int postion = cursor.position();
 
-    QTextCursor cursor = textCursor();
-    QTextBlock block;
-    QTextBlock end;
-
-    if (cursor.hasSelection()) {
-        block = document()->findBlock(cursor.selectionStart());
-        end = document()->findBlock(cursor.selectionEnd()).next();
-    } else {
-        block = cursor.block();
-        end = block.next();
+    if (document()->characterAt(cursor.position()-1) == '\t'){
+        cursor.setPosition(postion);
+        cursor.setPosition(postion - 1,QTextCursor::KeepAnchor);
+        DeleteBackCommond* com = new DeleteBackCommond(cursor,this);
+        m_pUndoStack->push(com);
     }
-
-    cursor.beginEditBlock();
-    bool modified=false;
-    while (block != end) {
-        cursor.setPosition(block.position());
-
-        if (document()->characterAt(cursor.position()) == '\t') {
-            cursor.deleteChar();
-            modified=true;
-        } else {
-            int pos = 0;
-            while (document()->characterAt(cursor.position()) == ' ' &&
-                    pos < m_tabSpaceNumber) {
-                pos++;
-                cursor.deleteChar();
-                modified=true;
-            }
+    else{
+        int cnt = 0;
+        while (document()->characterAt(cursor.position()-1) == ' ' && cnt < m_tabSpaceNumber) {
+            cnt++;
+            cursor.setPosition(postion-cnt);
         }
-
-        block = block.next();
+        if(cnt){
+            cursor.setPosition(postion);
+            cursor.setPosition(postion - cnt,QTextCursor::KeepAnchor);
+            DeleteBackCommond* com = new DeleteBackCommond(cursor,this);
+            m_pUndoStack->push(com);
+        }
     }
-    if (modified) {
-        this->m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
-    }
 
-    cursor.endEditBlock();
-    showCursorBlink();
 }
 
 void TextEdit::setTabSpaceNumber(int number)
@@ -1454,39 +1390,20 @@ void TextEdit::capitalizeWord()
 
 void TextEdit::transposeChar()
 {
-    const int l1 = this->textCursor().blockNumber();
-    auto b1 = this->document()->findBlockByNumber(l1);
-    auto b0 = this->document()->findBlockByNumber(l1-1);
-    auto b2 = this->document()->findBlockByNumber(l1+1);
-    const QString t1 = b1.text();
-    const QString t0 = b0.text();
-    const QString t2 = b2.text();
+    QTextCursor cursor = this->textCursor();
+    int pos = cursor.position();
+    cursor.setPosition(pos+1,QTextCursor::KeepAnchor);
+    QString r = cursor.selectedText();
+    cursor.setPosition(pos-1);
+    cursor.setPosition(pos,QTextCursor::KeepAnchor);
+    QString l = cursor.selectedText();
 
-    tryUnsetMark();
-
-    QTextCursor cursor = textCursor();
-    cursor.clearSelection();
-
-    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-    QString nextChar = cursor.selectedText();
-    cursor.removeSelectedText();
-
-    cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor);
-    QString prevChar = cursor.selectedText();
-    cursor.removeSelectedText();
-
-    cursor.insertText(nextChar);
-    cursor.insertText(prevChar);
-
-    if (!nextChar.isEmpty()) {
-        cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor);
+    if(!l.isEmpty() && !r.isEmpty()){
+        cursor.setPosition(pos-1);
+        cursor.setPosition(pos+1,QTextCursor::KeepAnchor);
+        auto com = new InsertTextUndoCommand(cursor,r+l);
+        m_pUndoStack->push(com);
     }
-
-    setTextCursor(cursor);
-
-    //after this operation,the text content changes
-    if(t0 != b0.text() || t1!=b1.text() || t2 !=b2.text())
-        this->m_wrapper->window()->updateModifyStatus(m_sFilePath, true);
 }
 
 void TextEdit::handleCursorMarkChanged(bool mark, QTextCursor cursor)

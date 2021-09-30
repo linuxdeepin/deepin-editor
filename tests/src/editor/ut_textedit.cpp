@@ -1510,49 +1510,6 @@ TEST_F(test_textedit, indentText_002)
     pWindow->deleteLater();
 }
 
-//unindentText 001
-TEST_F(test_textedit, unindentText_001)
-{
-    Window *pWindow = new Window();
-    pWindow->addBlankTab(QString());
-    QString strMsg("Holle world\nHolle world\nHolle world");
-    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
-    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
-
-    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
-    textCursor.movePosition(QTextCursor::PreviousWord, QTextCursor::KeepAnchor);
-    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
-    int iRetBefore = pWindow->currentWrapper()->textEditor()->textCursor().position();
-    pWindow->currentWrapper()->textEditor()->indentText();
-    pWindow->currentWrapper()->textEditor()->unindentText();
-    int iRetAfter = pWindow->currentWrapper()->textEditor()->textCursor().position();
-    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().block().text());
-
-    ASSERT_TRUE(iRetAfter == iRetBefore);
-    pWindow->deleteLater();
-}
-
-//unindentText 002
-TEST_F(test_textedit, unindentText_002)
-{
-    Window *pWindow = new Window();
-    pWindow->addBlankTab(QString());
-    QString strMsg("Holle world\nHolle world\nHolle world");
-    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
-    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
-
-    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
-    textCursor.movePosition(QTextCursor::PreviousWord, QTextCursor::MoveAnchor);
-    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
-    int iRetBefore = pWindow->currentWrapper()->textEditor()->textCursor().position();
-    pWindow->currentWrapper()->textEditor()->indentText();
-    pWindow->currentWrapper()->textEditor()->unindentText();
-    int iRetAfter = pWindow->currentWrapper()->textEditor()->textCursor().position();
-    QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().block().text());
-
-    ASSERT_TRUE(iRetAfter != iRetBefore);
-    pWindow->deleteLater();
-}
 
 //setTabSpaceNumber
 TEST_F(test_textedit, setTabSpaceNumber)
@@ -8939,6 +8896,21 @@ TEST(UT_Textedit_popRightMenu, UT_Textedit_popRightMenu_002)
     edit->popRightMenu(QPoint(10,10));
 
     ASSERT_TRUE(edit != nullptr);
+    edit->deleteLater();
+    wra->deleteLater();
+    w->deleteLater();
+}
+
+TEST(UT_Textedit_unindentText, UT_Textedit_unindentText)
+{
+    Window* w = new Window;
+    TextEdit* edit = new TextEdit(w);
+    EditWrapper* wra = new EditWrapper(w);
+    edit->m_wrapper = wra;
+
+    edit->unindentText();
+
+    EXPECT_NE(edit,nullptr);
     edit->deleteLater();
     wra->deleteLater();
     w->deleteLater();
