@@ -207,7 +207,7 @@ bool EditWrapper::saveAsFile()
     dialog.setDirectory(QDir::homePath());
     dialog.setNameFilter("*.txt");
 
-    this->setUpdatesEnabled(false);
+    //this->setUpdatesEnabled(false);
     int mode =  dialog.exec();
     this->setUpdatesEnabled(true);
     hideWarningNotices();
@@ -500,7 +500,7 @@ bool EditWrapper::saveDraftFile()
 
 
 
-    this->setUpdatesEnabled(false);
+    //this->setUpdatesEnabled(false);
     int mode =  dialog.exec(); // 0表示取消 1保存
     this->setUpdatesEnabled(true);
     hideWarningNotices();
