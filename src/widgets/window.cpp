@@ -929,53 +929,38 @@ QString Window::saveAsFileToDisk()
     //大文本加载过程不允许保存　梁卫东
     if (!wrapper || wrapper->getFileLoading()) return QString();
 
-    bool isDraft = wrapper->isDraftFile();
     QFileInfo fileInfo(wrapper->textEditor()->getTruePath());
-
-    DFileDialog dialog(this, tr("Save File"));
-    dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.addComboBox(QObject::tr("Encoding"),  QStringList() << wrapper->getTextEncode());
-    dialog.setDirectory(QDir::homePath());
-
+    bool isDraft = wrapper->isDraftFile();
+    QString strFileNmae;
     if (isDraft) {
         QRegularExpression reg("[^*](.+)");
         QRegularExpressionMatch match = reg.match(m_tabbar->currentName());
-        dialog.selectFile(match.captured(0) + ".txt");
+        strFileNmae = match.captured(0) + ".txt";
     } else {
-        dialog.setDirectory(fileInfo.dir());
-        dialog.selectFile(fileInfo.fileName());
+        strFileNmae = fileInfo.fileName();
+    }
+    const QString &newFilePath = DFileDialog::getSaveFileName(this, tr("Save File"), QDir::homePath(), "*.txt");
+    if (newFilePath.isEmpty()) {
+        return QString();
     }
 
-    wrapper->setUpdatesEnabled(false);
-    int mode = dialog.exec();
-    wrapper->setUpdatesEnabled(true);
+    wrapper->updatePath(wrapper->filePath(), newFilePath);
+    wrapper->saveFile();
 
-
-    if (mode == QDialog::Accepted) {
-        const QByteArray encode = dialog.getComboBoxValue(QObject::tr("Encoding")).toUtf8();
-        const QString endOfLine = dialog.getComboBoxValue(QObject::tr("Line Endings"));
-        const QString newFilePath = dialog.selectedFiles().value(0);
-
-        wrapper->updatePath(wrapper->filePath(), newFilePath);
-        wrapper->saveFile();
-
-        if (wrapper->filePath().contains(m_backupDir) || wrapper->filePath().contains(m_blankFileDir)) {
-            QFile(wrapper->filePath()).remove();
-        }
-
-        //删除自动备份文件
-        if (QFileInfo(m_autoBackupDir).exists()) {
-            QString truePath = wrapper->textEditor()->getTruePath();
-            fileInfo.setFile(truePath);
-            QString name = fileInfo.absolutePath().replace("/", "_");
-            QDir(m_autoBackupDir).remove(fileInfo.baseName() + "." + name + "." + fileInfo.suffix());
-        }
-
-        updateSaveAsFileName(wrapper->filePath(), newFilePath);
-        return newFilePath;
+    if (wrapper->filePath().contains(m_backupDir) || wrapper->filePath().contains(m_blankFileDir)) {
+        QFile(wrapper->filePath()).remove();
     }
 
-    return QString();
+    //删除自动备份文件
+    if (QFileInfo(m_autoBackupDir).exists()) {
+        QString truePath = wrapper->textEditor()->getTruePath();
+        fileInfo.setFile(truePath);
+        QString name = fileInfo.absolutePath().replace("/", "_");
+        QDir(m_autoBackupDir).remove(fileInfo.baseName() + "." + name + "." + fileInfo.suffix());
+    }
+
+    updateSaveAsFileName(wrapper->filePath(), newFilePath);
+    return newFilePath;
 }
 
 QString Window::saveBlankFileToDisk()

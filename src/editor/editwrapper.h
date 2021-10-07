@@ -165,6 +165,7 @@ private:
     //KSyntaxHighlighting::SyntaxHighlighter *m_pSyntaxHighlighter = nullptr;
     CSyntaxHighlighter *m_pSyntaxHighlighter = nullptr;
     bool m_bHighlighterAll = false;
+    QHBoxLayout *m_layout {nullptr};
 };
 
 #endif

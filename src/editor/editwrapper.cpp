@@ -52,7 +52,7 @@ EditWrapper::EditWrapper(Window *window, QWidget *parent)
     m_bQuit = false;
     m_pWaringNotices->hide();
     // Init layout and widgets.
-    QHBoxLayout *m_layout = new QHBoxLayout;
+    m_layout = new QHBoxLayout;
     m_pLeftAreaTextEdit = m_pTextEdit->getLeftAreaWidget();
     m_layout->setContentsMargins(0, 0, 0, 0);
     m_layout->setSpacing(0);
