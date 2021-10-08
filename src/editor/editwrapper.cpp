@@ -340,6 +340,7 @@ void EditWrapper::reloadModifyFile()
             }
             //重写加载文件
             readFile();
+            m_bIsTemFile=false;
         }
 
     } else {
@@ -852,14 +853,14 @@ void EditWrapper::updateSaveAsFileName(QString strOldFilePath, QString strNewFil
 void EditWrapper::setLineNumberShow(bool bIsShow, bool bIsFirstShow)
 {
     if (bIsShow && !bIsFirstShow) {
-        int lineNumberAreaWidth = m_pTextEdit->getLeftAreaWidget()->m_pLineNumberArea->width();
-        int leftAreaWidth = m_pTextEdit->getLeftAreaWidget()->width();
+        //int lineNumberAreaWidth = m_pTextEdit->getLeftAreaWidget()->m_pLineNumberArea->width();
+        //int leftAreaWidth = m_pTextEdit->getLeftAreaWidget()->width();
         m_pTextEdit->getLeftAreaWidget()->m_pLineNumberArea->show();
         //m_pTextEdit->getLeftAreaWidget()->setFixedWidth(leftAreaWidth + lineNumberAreaWidth);
 
     } else if (!bIsShow) {
-        int lineNumberAreaWidth = m_pTextEdit->getLeftAreaWidget()->m_pLineNumberArea->width();
-        int leftAreaWidth = m_pTextEdit->getLeftAreaWidget()->width();
+       // int lineNumberAreaWidth = m_pTextEdit->getLeftAreaWidget()->m_pLineNumberArea->width();
+        //int leftAreaWidth = m_pTextEdit->getLeftAreaWidget()->width();
         m_pTextEdit->getLeftAreaWidget()->m_pLineNumberArea->hide();
         //m_pTextEdit->getLeftAreaWidget()->setFixedWidth(leftAreaWidth - lineNumberAreaWidth);
     }
