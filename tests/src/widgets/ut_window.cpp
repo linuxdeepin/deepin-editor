@@ -2034,17 +2034,6 @@ TEST(UT_Window_setPrintEnabled, UT_Window_setPrintEnabled)
     w->deleteLater();
 }
 
-
-TEST(UT_Window_isRegisteredFflytekAiassistant, UT_Window_isRegisteredFflytekAiassistant)
-{
-    Window* w = new Window();
-    w->isRegisteredFflytekAiassistant();
-
-    EXPECT_NE(w,nullptr);
-    w->deleteLater();
-}
-
-
 TEST(UT_Window_getStackedWgt, UT_Window_getStackedWgt)
 {
     Window* w = new Window();

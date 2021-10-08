@@ -25,7 +25,6 @@
 class FileLoadThread : public QThread
 {
     Q_OBJECT
-
 public:
     FileLoadThread(const QString &filepath, QObject *QObject = nullptr);
     ~FileLoadThread();

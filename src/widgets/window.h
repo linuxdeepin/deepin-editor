@@ -36,6 +36,7 @@
 #include "../thememodule/themepanel.h"
 #include "../common/performancemonitor.h"
 #include "../common/dbusinterface.h"
+#include "../common/iflytekaiassistantthread.h"
 #include <DMainWindow>
 #include <DStackedWidget>
 #include <qprintpreviewdialog.h>
@@ -51,6 +52,12 @@ public:
     explicit Window(DMainWindow *parent = nullptr);
     ~Window() override;
 
+    /**
+     * @brief detectionIflytekaiassistant 检测语音助手服务是否被注册
+     * 通过dbus接口去检测语音助手服务会偶现应用卡死问题，开一个线程去检测规避应用卡死问题
+     */
+    void detectionIflytekaiassistant();
+    bool getIsRegistIflytekAiassistant();
     //跟新文件修改状态
     void updateModifyStatus(const QString &path, bool isModified);
     //跟新tab文件名称
@@ -72,9 +79,6 @@ public:
     bool closeTab();
     bool closeTab(const QString& fileName);
     void restoreTab();
-
-
-
     void clearBlack();
 
     EditWrapper *createEditor();
@@ -144,12 +148,7 @@ public:
     QString getKeywordForSearchAll();
     QString getKeywordForSearch();
     void setPrintEnabled(bool enabled);
-
-    //判断语音助手服务是否已被注册
-    bool isRegisteredFflytekAiassistant();
-
     QStackedWidget* getStackedWgt();
-
 
     static void printPage(int index, QPainter *painter, const QTextDocument *doc,
                                  const QRectF &body, const QRectF &pageCountBox);
@@ -222,6 +221,11 @@ public slots:
     void slotSigHightLightCurrentLine(bool bIsShow);
     void slotSigShowCodeFlodFlag(bool bIsShow);
     void slotSigChangeWindowSize(QString mode);
+    /**
+     * @brief slotIsRegisteredIflytekAiassistant 接收并设置注册标识位
+     * @param bIsRegistIflytekAiassistant 是否注册布尔标识位
+     */
+    void slotIsRegisteredIflytekAiassistant(bool bIsRegistIflytekAiassistant);
 
 private:
     void handleFocusWindowChanged(QWindow *w);
@@ -287,6 +291,8 @@ private:
     QPageLayout m_lastLayout;
     //判断是否是新的打印文档
     bool m_isNewPrint = false;
+    //语音助手服务是否被注册
+    bool m_bIsRegistIflytekAiassistant {false};
 };
 
 #endif

@@ -8829,7 +8829,6 @@ TEST(UT_Textedit_popRightMenu, UT_Textedit_popRightMenu_001)
     Stub s8;
     s8.set(ADDR(QString,isEmpty),retfalsestub);
     Stub s9;
-    s9.set(ADDR(Window,isRegisteredFflytekAiassistant),rettruestub);
     s9.set(ADDR(TextEdit,renderAllSelections),rettruestub);
     //s9.set(ADDR(QDBusConnection,call),rettruestub);
      s9.set(ADDR(QDBusConnection,sessionBus),sessionBusstub);
@@ -8878,8 +8877,6 @@ TEST(UT_Textedit_popRightMenu, UT_Textedit_popRightMenu_002)
     s7.set(ADDR(TextEdit,characterCount),retintstub);
     Stub s8;
     s8.set(ADDR(QString,isEmpty),retfalsestub);
-    Stub s9;
-    s9.set(ADDR(Window,isRegisteredFflytekAiassistant),retfalsestub);
     Stub s10;
     s10.set(ADDR(QPoint,y),retintstub);
     s10.set(ADDR(TextEdit,renderAllSelections),rettruestub);

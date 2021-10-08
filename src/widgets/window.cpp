@@ -162,6 +162,8 @@ Window::Window(DMainWindow *parent)
 
     //设置函数最大化或者正常窗口的初始化　2021.4.26 ut002764 lxp   fix bug:74774
     showCenterWindow(true);
+    //检测语音助手服务是否被注册
+    detectionIflytekaiassistant();
 
     // Init find bar.
     connect(m_findBar, &FindBar::findNext, this, &Window::handleFindNextSearchKeyword, Qt::QueuedConnection);
@@ -249,6 +251,20 @@ Window::~Window()
     }
 
     clearPrintTextDocument();
+}
+
+void Window::detectionIflytekaiassistant()
+{
+    IflytekAiassistantThread *pIflyThread = new IflytekAiassistantThread(this);
+    connect(pIflyThread, &IflytekAiassistantThread::sigIsRegisteredIflytekAiassistant,
+            this, &Window::slotIsRegisteredIflytekAiassistant);
+    connect(pIflyThread, &IflytekAiassistantThread::finished, pIflyThread, &IflytekAiassistantThread::deleteLater);
+    pIflyThread->start();
+}
+
+bool Window::getIsRegistIflytekAiassistant()
+{
+    return m_bIsRegistIflytekAiassistant;
 }
 
 void Window::updateModifyStatus(const QString &path, bool isModified)
@@ -2391,6 +2407,11 @@ void Window::slotSigChangeWindowSize(QString mode)
     }
 }
 
+void Window::slotIsRegisteredIflytekAiassistant(bool bIsRegistIflytekAiassistant)
+{
+    m_bIsRegistIflytekAiassistant = bIsRegistIflytekAiassistant;
+}
+
 void Window::handleFocusWindowChanged(QWindow *w)
 {
     if (windowHandle() != w || !currentWrapper() || !isActiveWindow()) {
@@ -2696,19 +2717,6 @@ void Window::setPrintEnabled(bool enabled)
             m_menu->actions().at(i)->setEnabled(enabled);
             return;
         }
-    }
-}
-
-bool Window::isRegisteredFflytekAiassistant()
-{
-    QDBusConnection connection = QDBusConnection::sessionBus();
-    QDBusConnectionInterface *bus = connection.interface();
-    bool isVailid = bus->isServiceRegistered("com.iflytek.aiassistant");
-    if (isVailid) {
-        return true;
-    } else {
-        qInfo() << "com.iflytek.aiassistant service no registered!";
-        return false;
     }
 }
 

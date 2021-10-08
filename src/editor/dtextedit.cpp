@@ -474,7 +474,7 @@ void TextEdit::popRightMenu(QPoint pos)
         (DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosHome) ||
         (DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosEducation)) {*/
 
-    if (m_wrapper->window()->isRegisteredFflytekAiassistant()) {
+    if (m_wrapper->window()->getIsRegistIflytekAiassistant()) {
         bool stopReadingState = false;
         QDBusMessage stopReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
                                                                      "/aiassistant/tts",
