@@ -547,6 +547,9 @@ public slots:
     void slotUndoAvailable(bool undoIsAvailable);
     void slotRedoAvailable(bool redoIsAvailable);
 
+    void redo_();
+    void undo_();
+
 protected:
     bool event(QEvent *evt) override;   //触摸屏event事件
     void dragEnterEvent(QDragEnterEvent *event) override;

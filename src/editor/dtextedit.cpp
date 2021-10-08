@@ -299,8 +299,12 @@ void TextEdit::initRightClickedMenu()
     m_cancelComment = new QAction(tr("Remove Comment"), this);
 
     connect(m_rightMenu, &DMenu::aboutToHide, this, &TextEdit::removeHighlightWordUnderCursor);
-    connect(m_undoAction, &QAction::triggered, m_pUndoStack, &QUndoStack::undo);
-    connect(m_redoAction, &QAction::triggered, m_pUndoStack, &QUndoStack::redo);
+    connect(m_undoAction, &QAction::triggered, this,[=](){
+        this->undo_();
+    });
+    connect(m_redoAction, &QAction::triggered, this,[=](){
+        this->redo_();
+    });
     connect(m_cutAction, &QAction::triggered, this, &TextEdit::slotCutAction);
     connect(m_copyAction, &QAction::triggered, this, &TextEdit::slotCopyAction);
     connect(m_pasteAction, &QAction::triggered, this, &TextEdit::slotPasteAction);
@@ -2698,6 +2702,22 @@ void TextEdit::slotUndoAvailable(bool undoIsAvailable)
 void TextEdit::slotRedoAvailable(bool redoIsAvailable)
 {
     m_canRedo = redoIsAvailable;
+}
+
+void TextEdit::redo_()
+{
+    m_pUndoStack->redo();
+    if(m_pUndoStack->index() == m_lastSaveIndex){
+        this->m_wrapper->window()->updateModifyStatus(m_sFilePath, false);
+    }
+
+}
+void TextEdit::undo_()
+{
+    m_pUndoStack->undo();
+    if(m_pUndoStack->index() == m_lastSaveIndex){
+        this->m_wrapper->window()->updateModifyStatus(m_sFilePath, false);
+    }
 }
 
 void TextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &closeChar)
@@ -6057,10 +6077,10 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
 
         //快捷建处理
         if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "undo")) {
-            m_pUndoStack->undo();
+           this->undo_();
             return;
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "redo")) {
-            m_pUndoStack->redo();
+           this->redo_();
             return;
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "cut")) {
 	    #if 0
