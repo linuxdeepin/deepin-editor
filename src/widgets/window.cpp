@@ -1367,7 +1367,8 @@ void Window::popupPrintDialog()
         QRegularExpressionMatch match = reg.match(name);
         m_pPreview->setDocName(QString(match.captured(0)));
     } else {
-        m_pPreview->setDocName(QString(QFileInfo(filePath).baseName()));
+        QString path = currentWrapper()->textEditor()->getTruePath();
+        m_pPreview->setDocName(QString(QFileInfo(path).baseName()));
     }
     m_pPreview->setAsynPreview(m_printDoc ? m_printDoc->pageCount() : PRINT_FLAG);
 
