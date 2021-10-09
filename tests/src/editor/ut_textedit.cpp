@@ -6983,6 +6983,8 @@ TEST(UT_TextEdit_KeyPressEvent, UT_TextEdit_KeyPressEvent_035)
     s3.set(ADDR(TextEdit, insertColumnEditTextEx),retfalsestub);
     Stub s4;
     s4.set(ADDR(TextEdit, insertSelectTextEx),retfalsestub);
+    s4.set(ADDR(TextEdit,undo_),retfalsestub);
+    s4.set(ADDR(TextEdit,redo_),retfalsestub);
 
     edit->m_readOnlyMode = false;
     edit->m_bReadOnlyPermission=false;

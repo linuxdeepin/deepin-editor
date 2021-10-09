@@ -962,6 +962,11 @@ void TextEdit::openNewlineBelow()
     m_pUndoStack->push(com);
 }
 
+/*
+ * swap tow lines.
+ * firstly,combine the contents of the current line with the contents of the previous or next line.
+ * then,insert the combined content.
+ * */
 void TextEdit::moveLineDownUp(bool up)
 {
     if(up){
@@ -987,6 +992,7 @@ void TextEdit::moveLineDownUp(bool up)
             m_pUndoStack->push(com);
 
             //ensure that this operation can be performed multiple times in succession.
+            //and make the vertical scroll bar change together at the same time.
             cursor.setPosition(startpos);
             this->setTextCursor(cursor);
         }
@@ -1012,6 +1018,10 @@ void TextEdit::moveLineDownUp(bool up)
             cursor.setPosition(endpos,QTextCursor::KeepAnchor);
             InsertTextUndoCommand* com = new InsertTextUndoCommand(cursor,downtext + "\n" + curtext);
             m_pUndoStack->push(com);
+
+            //make the vertical scroll bar change together.
+            cursor.setPosition(endpos);
+            this->setTextCursor(cursor);
         }
     }
 
@@ -2222,6 +2232,8 @@ void TextEdit::setHighLineCurrentLine(bool ok)
 
 void TextEdit::updateLeftAreaWidget()
 {
+#if 0
+// not used anymore
     int blockSize = QString::number(blockCount()).size();
     int leftAreaWidth = 0;
 
@@ -2237,6 +2249,7 @@ void TextEdit::updateLeftAreaWidget()
         leftAreaWidth += blockSize * fontMetrics().width('9') + 5;
     }
    // m_pLeftAreaWidget->setFixedWidth(leftAreaWidth);
+#endif
     m_pLeftAreaWidget->updateAll();
 }
 
