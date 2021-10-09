@@ -1116,18 +1116,23 @@ void TextEdit::scrollDown()
     }
 }
 
+/*
+ * copy the current line
+ * firstly,get the text of current line.
+ * then,insert the text with '\n' at the end of current line.
+ * */
 void TextEdit::duplicateLine()
 {
     auto cursor = textCursor();
     cursor.movePosition(QTextCursor::StartOfBlock,QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::EndOfBlock,QTextCursor::KeepAnchor);
     auto text = cursor.selectedText();
-    if(!text.isEmpty()){
-        text = "\n" + text;
-        cursor.movePosition(QTextCursor::EndOfBlock,QTextCursor::MoveAnchor);
-        auto com = new InsertTextUndoCommand(cursor,text);
-        m_pUndoStack->push(com);
-    }
+
+    text = "\n" + text;
+    cursor.movePosition(QTextCursor::EndOfBlock,QTextCursor::MoveAnchor);
+    auto com = new InsertTextUndoCommand(cursor,text);
+    m_pUndoStack->push(com);
+
 }
 
 void TextEdit::copyLines()
