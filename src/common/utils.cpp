@@ -47,6 +47,8 @@ QT_BEGIN_NAMESPACE
 extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
 QT_END_NAMESPACE
 
+QString Utils::m_systemLanguage;
+
 QString Utils::getQrcPath(const QString &imageName)
 {
     return QString(":/images/%1").arg(imageName);
@@ -788,4 +790,20 @@ bool Utils::isShareDirAndReadOnly(const QString &filePath)
 
     return ret;
 
+}
+
+QString Utils::getSystemLan()
+{
+    if(!m_systemLanguage.isEmpty()){
+        return m_systemLanguage;
+    }
+    else{
+        QDBusInterface ie("com.deepin.daemon.LangSelector",
+                          "/com/deepin/daemon/LangSelector",
+                          "com.deepin.daemon.LangSelector",
+                          QDBusConnection::sessionBus());
+
+        m_systemLanguage = ie.property("CurrentLocale").toString();
+        return m_systemLanguage;
+    }
 }

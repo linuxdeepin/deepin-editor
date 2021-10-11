@@ -2083,10 +2083,10 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
         cur.setPosition(block.position(), QTextCursor::MoveAnchor);
 
         if (block.isVisible()) {
-            int w = this->m_fontSize<15?15:m_fontSize;
+            int w = this->m_fontSize<=15?15:m_fontSize;
             updateLeftWidgetWidth(w);
             painter.drawText(0, cursorRect(cur).y(),
-                             m_pLeftAreaWidget->m_pLineNumberArea->width(), cursorRect(cur).height() - static_cast<int>(document()->documentMargin()),
+                             m_pLeftAreaWidget->m_pLineNumberArea->width(), cursorRect(cur).height(),
                              Qt::AlignVCenter | Qt::AlignHCenter, QString::number(block.blockNumber() + 1));
         }
 
@@ -2176,9 +2176,14 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                 painter.setRenderHint(QPainter::Antialiasing, true);
                 painter.setRenderHints(QPainter::SmoothPixmapTransform);
 
-                int w = this->m_fontSize<15?15:m_fontSize;
-                int offset = w<=15?0:w/3;
+                int w = this->m_fontSize<=15?15:m_fontSize;
                 updateLeftWidgetWidth(w);
+                int h = cursorRect(cur).height();
+                int offset = h<=20?h/8:h/4;
+                //the language currently set by the system is Tibetan.
+                if("bo_CN" == Utils::getSystemLan())
+                    offset = h<=20?0:h/10;
+
                 QRect rect(0,cursorRect(cur).y() + offset,w,w);
                 if (block.next().isVisible()) {
                      if (block.isVisible()) {
@@ -3654,11 +3659,15 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
                 continue;
             }
 
-            int w = this->m_fontSize<15?15:m_fontSize;
-            int offset = w<=15?0:w/3;
+            int w = this->m_fontSize<=15?15:m_fontSize;
             updateLeftWidgetWidth(w);
-            QRect rect(0,cursorRect(cur).y() + offset,w,w);
+            int h = cursorRect(cur).height();
+            int offset = h<=20?h/8:h/4;
+            //the language currently set by the system is Tibetan.
+            if("bo_CN" == Utils::getSystemLan())
+                offset = h<=20?0:h/10;
 
+            QRect rect(0,cursorRect(cur).y() + offset,w,w);
             QSvgRenderer render;
             render.load(pixmapPath);
             render.render(&painter,rect);

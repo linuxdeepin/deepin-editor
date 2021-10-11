@@ -93,4 +93,10 @@ public:
 
 
     static float codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, const QLocale::Country &country);
+
+    //return system language
+    static QString getSystemLan();
+
+private:
+    static QString m_systemLanguage;
 };
