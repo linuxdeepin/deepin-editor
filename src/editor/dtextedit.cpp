@@ -2533,6 +2533,9 @@ void TextEdit::setSelectAll()
 
 void TextEdit::slotSigColorSelected(bool bSelected, QColor color)
 {
+    if(m_isSelectAll) {
+        QPlainTextEdit::selectAll();
+    }
     isMarkCurrentLine(bSelected, color.name());
     renderAllSelections();
     m_colorMarkMenu->close();
@@ -2541,6 +2544,9 @@ void TextEdit::slotSigColorSelected(bool bSelected, QColor color)
 
 void TextEdit::slotSigColorAllSelected(bool bSelected, QColor color)
 {
+    if(m_isSelectAll) {
+        QPlainTextEdit::selectAll();
+    }
     isMarkAllLine(bSelected, color.name());
     renderAllSelections();
     m_colorMarkMenu->close();
