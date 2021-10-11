@@ -974,8 +974,11 @@ QString Window::saveAsFileToDisk()
         const QString newFilePath = dialog.selectedFiles().value(0);
 
         wrapper->updatePath(wrapper->filePath(), newFilePath);
-        if(!wrapper->saveFile())
+        if(!wrapper->saveFile()) {
+            /* 如果保存未成功，无需记录更新新文件路径 */
+            wrapper->updatePath(wrapper->filePath(), QString());
             return QString();
+        }
 
         if (wrapper->filePath().contains(m_backupDir) || wrapper->filePath().contains(m_blankFileDir)) {
             QFile(wrapper->filePath()).remove();
