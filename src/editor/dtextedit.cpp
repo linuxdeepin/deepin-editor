@@ -1133,6 +1133,9 @@ void TextEdit::duplicateLine()
     auto com = new InsertTextUndoCommand(cursor,text);
     m_pUndoStack->push(com);
 
+    //make the vertical scroll bar change together.
+    this->setTextCursor(cursor);
+
 }
 
 void TextEdit::copyLines()
