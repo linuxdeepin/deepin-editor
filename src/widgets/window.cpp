@@ -110,7 +110,6 @@ Window::Window(DMainWindow *parent)
       m_themePath(Settings::instance()->settings->option("advance.editor.theme")->value().toString())
 {
     qRegisterMetaType<TextEdit *>("TextEdit");
-
     m_rootSaveDBus = new DBusDaemon::dbus("com.deepin.editor.daemon", "/", QDBusConnection::systemBus(), this);
     m_settings = Settings::instance();
 

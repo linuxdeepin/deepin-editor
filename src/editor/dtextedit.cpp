@@ -1644,7 +1644,7 @@ void TextEdit::replaceAll(const QString &replaceText, const QString &withText)
 
     QString oldText = this->toPlainText();
     QString newText = oldText;
-    newText.replace(replaceText,withText);
+    newText.replace(replaceText, withText);
 
     if (oldText != newText) {
         ReplaceAllCommond* commond = new ReplaceAllCommond(oldText,newText,cursor);
@@ -1676,8 +1676,10 @@ void TextEdit::replaceNext(const QString &replaceText, const QString &withText)
     }
     cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, replaceText.size());
-    //cursor.insertText(withText);
-    insertSelectTextEx(cursor, withText);
+    QString strSelection(cursor.selectedText());
+    if (!strSelection.compare(replaceText)) {
+        insertSelectTextEx(cursor, withText);
+    }
 
     // Update cursor.
     setTextCursor(cursor);
@@ -1900,7 +1902,10 @@ bool TextEdit::updateKeywordSelectionsInView(QString keyword, QTextCharFormat ch
 
         while (!cursor.isNull()) {
             extra.cursor = cursor;
-            listSelection->append(extra);
+            /* 查找字符时，查找到完全相等的时候才高亮，如查找小写f时，大写的F不高亮 */
+            if (!extra.cursor.selectedText().compare(keyword)) {
+                listSelection->append(extra);
+            }
             cursor = document()->find(keyword, cursor);
 
             if (cursor.position() > endPos) {
