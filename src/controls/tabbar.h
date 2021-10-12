@@ -40,6 +40,11 @@ public:
     void addTabWithIndex(int index, const QString &filePath, const QString &tabName, const QString &tipPath = QString::null);
     void closeTab(int index);
     void closeCurrentTab();
+    /**
+     * @brief closeCurrentTab 移除指定文件对应的tab标签项
+     * @param strFilePath 指定的文件（路径加文件名）
+     */
+    void closeCurrentTab(const QString &strFilePath);
     void closeOtherTabs();
 
     void closeLeftTabs(const QString &filePath);

@@ -414,7 +414,6 @@ bool EditWrapper::saveFile()
             if (ok)  updateModifyStatus(false);
             m_bIsTemFile = false;
             return ok;
-
         } else {
             file.write(fileContent);
             QFileDevice::FileError error = file.error();

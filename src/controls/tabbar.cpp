@@ -162,6 +162,11 @@ void Tabbar::closeCurrentTab()
     closeTab(currentIndex());
 }
 
+void Tabbar::closeCurrentTab(const QString &strFilePath)
+{
+    closeTab(this->indexOf(strFilePath));
+}
+
 void Tabbar::closeOtherTabs()
 {
     closeOtherTabsExceptFile(currentPath());

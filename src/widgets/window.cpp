@@ -610,7 +610,7 @@ bool Window::closeTab(const QString &filePath)
             //不保存
             if (res == 1) {
                 removeWrapper(filePath, true);
-                m_tabbar->closeCurrentTab();
+                m_tabbar->closeCurrentTab(filePath);
                 QFile(filePath).remove();
                 return true;
             }
@@ -622,13 +622,13 @@ bool Window::closeTab(const QString &filePath)
 
                 if (wrapper->saveDraftFile()) {
                     removeWrapper(filePath, true);
-                    m_tabbar->closeCurrentTab();
+                    m_tabbar->closeCurrentTab(filePath);
                     QFile(filePath).remove();
                 }
             }
         } else {
             removeWrapper(filePath, true);
-            m_tabbar->closeCurrentTab();
+            m_tabbar->closeCurrentTab(filePath);
             QFile(filePath).remove();
         }
     }
@@ -649,7 +649,7 @@ bool Window::closeTab(const QString &filePath)
             //不保存
             if (res == 1) {
                 removeWrapper(filePath, true);
-                m_tabbar->closeCurrentTab();
+                m_tabbar->closeCurrentTab(filePath);
 
                 //删除备份文件
                 if (bIsBackupFile) {
@@ -668,11 +668,10 @@ bool Window::closeTab(const QString &filePath)
 
             //保存
             if (res == 2) {
-
                 if (bIsBackupFile) {
                     if (wrapper->saveFile()) {
                         removeWrapper(filePath, true);
-                        m_tabbar->closeCurrentTab();
+                        m_tabbar->closeCurrentTab(filePath);
                         QFile(filePath).remove();
                     }
                     else {
@@ -681,7 +680,7 @@ bool Window::closeTab(const QString &filePath)
                 } else {
                     if (wrapper->saveFile()) {
                         removeWrapper(filePath, true);
-                        m_tabbar->closeCurrentTab();
+                        m_tabbar->closeCurrentTab(filePath);
                     }
                     else {
                          saveAsFile();
@@ -690,7 +689,7 @@ bool Window::closeTab(const QString &filePath)
             }
         } else {
             removeWrapper(filePath, true);
-            m_tabbar->closeCurrentTab();
+            m_tabbar->closeCurrentTab(filePath);
         }
 
         //删除自动备份文件

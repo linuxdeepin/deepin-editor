@@ -69,7 +69,7 @@ TextEdit::TextEdit(QWidget *parent)
 {
     setUndoRedoEnabled(false);
     //撤销重做栈
-    m_pUndoStack = new QUndoStack(this);
+    m_pUndoStack = new QUndoStack();
 
     m_nLines = 0;
     m_nBookMarkHoverLine = -1;
@@ -126,7 +126,6 @@ TextEdit::TextEdit(QWidget *parent)
                              "/com/deepin/daemon/Gesture", "com.deepin.daemon.Gesture",
                              "Event",
                              this, SLOT(fingerZoom(QString, QString, int)));
-
 
     //初始化右键菜单
     initRightClickedMenu();
@@ -4247,8 +4246,6 @@ QStringList TextEdit::readEncodeHistoryRecord()
 
     return filePathList;
 }
-
-
 
 void TextEdit::tellFindBarClose()
 {
