@@ -959,6 +959,9 @@ void TextEdit::openNewlineBelow()
     cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
     InsertTextUndoCommand* com = new InsertTextUndoCommand(cursor,"\n");
     m_pUndoStack->push(com);
+
+    //make the vertical scroll bar change together.
+    this->setTextCursor(cursor);
 }
 
 /*
