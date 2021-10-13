@@ -2092,7 +2092,12 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
         if (block.isVisible()) {
             int w = this->m_fontSize<=15?15:m_fontSize;
             updateLeftWidgetWidth(w);
-            painter.drawText(0, cursorRect(cur).y(),
+            int offset = 0;
+            //the language currently set by the system is Tibetan.
+            if("bo_CN" == Utils::getSystemLan()){
+                offset = 2;
+            }
+            painter.drawText(0, cursorRect(cur).y() + offset,
                              m_pLeftAreaWidget->m_pLineNumberArea->width(), cursorRect(cur).height(),
                              Qt::AlignVCenter | Qt::AlignHCenter, QString::number(block.blockNumber() + 1));
         }
@@ -2190,6 +2195,7 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                 //the language currently set by the system is Tibetan.
                 if("bo_CN" == Utils::getSystemLan())
                     offset = h<=20?0:h/10;
+
 
                 QRect rect(0,cursorRect(cur).y() + offset,w,w);
                 if (block.next().isVisible()) {
@@ -3673,6 +3679,7 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
             //the language currently set by the system is Tibetan.
             if("bo_CN" == Utils::getSystemLan())
                 offset = h<=20?0:h/10;
+
 
             QRect rect(0,cursorRect(cur).y() + offset,w,w);
             QSvgRenderer render;
