@@ -808,6 +808,11 @@ void EditWrapper::OnUpdateHighlighter()
     }
 }
 
+void EditWrapper::setTemFile(bool value)
+{
+    m_bIsTemFile = value;
+}
+
 void EditWrapper::updateHighlighterAll()
 {
     if (m_pSyntaxHighlighter  && !m_bQuit && !m_bHighlighterAll) {

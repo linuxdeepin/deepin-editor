@@ -2755,6 +2755,8 @@ void TextEdit::redo_()
     m_pUndoStack->redo();
     if(m_pUndoStack->index() == m_lastSaveIndex){
         this->m_wrapper->window()->updateModifyStatus(m_sFilePath, false);
+        this->m_wrapper->setTemFile(false);
+        this->document()->setModified(false);
     }
 
 }
@@ -2763,6 +2765,8 @@ void TextEdit::undo_()
     m_pUndoStack->undo();
     if(m_pUndoStack->index() == m_lastSaveIndex){
         this->m_wrapper->window()->updateModifyStatus(m_sFilePath, false);
+        this->m_wrapper->setTemFile(false);
+        this->document()->setModified(false);
     }
 }
 

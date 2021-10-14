@@ -131,6 +131,8 @@ public slots:
     void OnThemeChangeSlot(QString theme);
     void UpdateBottomBarWordCnt(int cnt);
     void OnUpdateHighlighter();
+    //set the value of m_bIsTemFile
+    void setTemFile(bool value);
 public:
     void updateModifyStatus(bool isModified);
     void updateSaveAsFileName(QString strOldFilePath, QString strNewFilePath);
