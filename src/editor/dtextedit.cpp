@@ -951,6 +951,8 @@ void TextEdit::openNewlineAbove()
     cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
     InsertTextUndoCommand* com = new InsertTextUndoCommand(cursor,"\n");
     m_pUndoStack->push(com);
+    cursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
+    setTextCursor(cursor);
 }
 
 void TextEdit::openNewlineBelow()
@@ -2198,7 +2200,6 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                 //the language currently set by the system is Tibetan.
                 if("bo_CN" == Utils::getSystemLan())
                     offset = h<=20?0:h/10;
-
 
                 QRect rect(0,cursorRect(cur).y() + offset,w,w);
                 if (block.next().isVisible()) {
@@ -3682,7 +3683,6 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
             //the language currently set by the system is Tibetan.
             if("bo_CN" == Utils::getSystemLan())
                 offset = h<=20?0:h/10;
-
 
             QRect rect(0,cursorRect(cur).y() + offset,w,w);
             QSvgRenderer render;

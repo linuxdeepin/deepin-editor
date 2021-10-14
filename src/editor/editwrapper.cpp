@@ -935,7 +935,6 @@ void EditWrapper::loadContent(const QByteArray &strContent)
     int cnt = len / step;
     //文件末尾余数
     int mod = len % step;
-
     int max = 40 * 1024 * 1024;
 
     QString data;
