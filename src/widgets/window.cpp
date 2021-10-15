@@ -594,7 +594,9 @@ bool Window::closeTab(const QString &filePath)
         bIsBackupFile = true;
     }
 
-    if (wrapper->getFileLoading()) isModified = false;
+    if (wrapper->getFileLoading()) {
+        isModified = false;
+    }
 
     if (isDraftFile) {
         if (isModified) {
@@ -643,7 +645,9 @@ bool Window::closeTab(const QString &filePath)
             int res = dialog->exec();
 
             //取消或关闭弹窗不做任务操作
-            if (res == 0 || res == -1) return false;
+            if (res == 0 || res == -1) {
+                return false;
+            }
 
             //不保存
             if (res == 1) {
@@ -709,7 +713,6 @@ void Window::restoreTab()
     }
 }
 
-
 EditWrapper *Window::createEditor()
 {
     EditWrapper *wrapper = new EditWrapper(this);
@@ -724,7 +727,6 @@ EditWrapper *Window::createEditor()
     connect(wrapper->textEditor(), &TextEdit::textChanged, this, [ = ]() {
         updateJumpLineBar(wrapper->textEditor());
     }, Qt::QueuedConnection);
-
 
     bool wordWrap = m_settings->settings->option("base.font.wordwrap")->value().toBool();
     wrapper->textEditor()->m_pIsShowCodeFoldArea = m_settings->settings->option("base.font.codeflod")->value().toBool();
@@ -2190,7 +2192,7 @@ DDialog *Window::createDialog(const QString &title, const QString &content)
 {
     DDialog *dialog = new DDialog(title, content, this);
     //dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnBottomHint);
-    dialog->setWindowModality(Qt::WindowModal);
+    dialog->setWindowModality(Qt::ApplicationModal);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
     dialog->setIcon(QIcon::fromTheme("deepin-editor"));
     dialog->addButton(QString(tr("Cancel")), false, DDialog::ButtonNormal);

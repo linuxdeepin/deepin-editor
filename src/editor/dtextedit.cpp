@@ -62,7 +62,6 @@
 #include <qpa/qplatformtheme.h>
 #include <QtSvg/qsvgrenderer.h>
 
-
 TextEdit::TextEdit(QWidget *parent)
     : DPlainTextEdit(parent),
       m_wrapper(nullptr)
