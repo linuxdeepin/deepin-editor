@@ -931,15 +931,17 @@ QString Window::saveAsFileToDisk()
 
     QFileInfo fileInfo(wrapper->textEditor()->getTruePath());
     bool isDraft = wrapper->isDraftFile();
-    QString strFileNmae;
+    QString strFileName;
     if (isDraft) {
         QRegularExpression reg("[^*](.+)");
         QRegularExpressionMatch match = reg.match(m_tabbar->currentName());
-        strFileNmae = match.captured(0) + ".txt";
+        strFileName = match.captured(0) + ".txt";
     } else {
-        strFileNmae = fileInfo.fileName();
+        strFileName = fileInfo.fileName();
     }
-    const QString &newFilePath = DFileDialog::getSaveFileName(this, tr("Save File"), QDir::homePath(), "*.txt");
+
+    strFileName.truncate(strFileName.lastIndexOf("."));
+    const QString &newFilePath = DFileDialog::getSaveFileName(this, tr("Save File"), QString("./%1%2").arg(strFileName).arg(".txt"), QString(".txt"));
     if (newFilePath.isEmpty()) {
         return QString();
     }
