@@ -1599,6 +1599,9 @@ void Window::doPrint(DPrinter *printer, const QVector<int> &pageRange)
 
     (void)m_printDoc->documentLayout(); // make sure that there is a layout
 
+    if (currentWrapper() == nullptr) {
+        return;
+    }
     QColor background = currentWrapper()->textEditor()->palette().color(QPalette::Base);
     bool backgroundIsDark = background.value() < 128;
     //对文本进行分页处理
