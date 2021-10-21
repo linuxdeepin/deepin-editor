@@ -940,7 +940,8 @@ void TextEdit::newline()
     tryUnsetMark();
 
     QTextCursor cursor = textCursor();
-    cursor.insertText("\n");
+    auto com = new InsertTextUndoCommand(cursor,"\n");
+    m_pUndoStack->push(com);
     setTextCursor(cursor);
 }
 
