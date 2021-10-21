@@ -964,9 +964,9 @@ QString Window::saveAsFileToDisk()
         dialog.selectFile(fileInfo.fileName());
     }
 
-    wrapper->setUpdatesEnabled(false);
+    //wrapper->setUpdatesEnabled(false);
     int mode = dialog.exec();
-    wrapper->setUpdatesEnabled(true);
+    //wrapper->setUpdatesEnabled(true);
 
     if (mode == QDialog::Accepted) {
         const QByteArray encode = dialog.getComboBoxValue(QObject::tr("Encoding")).toUtf8();
