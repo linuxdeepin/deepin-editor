@@ -2456,7 +2456,9 @@ void Window::resizeEvent(QResizeEvent *e)
 
 void Window::closeEvent(QCloseEvent *e)
 {
-    PerformanceMonitor::closeAppStart();
+    if (StartManager::instance()->getIsTabFileLoading()) {
+        QApplication::quit();
+    }
 
     if (StartManager::instance()->isMultiWindow()) {
         if (!closeAllFiles()) {

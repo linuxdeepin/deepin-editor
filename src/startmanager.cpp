@@ -31,7 +31,6 @@
 #include <QPropertyAnimation>
 #include <DSettingsOption>
 #include <DAboutDialog>
-//#include <DSettings>
 
 DWIDGET_USE_NAMESPACE
 
@@ -53,7 +52,6 @@ StartManager::StartManager(QObject *parent)
     //Create blank directory if it not exist.
 
     initBlockShutdown();
-
 
     m_blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
     m_backupDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("backup-files");
@@ -239,6 +237,8 @@ int StartManager::recoverFile(Window *window)
 
     //根据备份信息恢复文件
     for (int i = 0; i < m_qlistTemFile.count(); i++) {
+        QApplication::processEvents();
+        m_bIsTabFileLoading = true;
         QJsonParseError jsonError;
         // 转化为 JSON 文档
         QJsonDocument doucment = QJsonDocument::fromJson(m_qlistTemFile.value(i).toUtf8(), &jsonError);
@@ -366,6 +366,7 @@ int StartManager::recoverFile(Window *window)
             }
         }
     }
+    m_bIsTabFileLoading = false;
 
     //当前活动页
     if (pFocusWindow != nullptr && !focusPath.isNull()) {
@@ -447,8 +448,10 @@ void StartManager::openFilesInTab(QStringList files)
         }
     } else {
         for (const QString &file : files) {
-
+            QApplication::processEvents();
+            m_bIsTabFileLoading = true;
             if (!checkPath(file)) {
+                m_bIsTabFileLoading = false;
                 return;
             }
 
@@ -466,6 +469,7 @@ void StartManager::openFilesInTab(QStringList files)
                     recoverFile(window);
                     window->addTab(file);
                 });
+                window->show();
             }
             // Open file tab in first window of window list.
             else {
@@ -478,9 +482,9 @@ void StartManager::openFilesInTab(QStringList files)
                 }
             }
         }
+        m_bIsTabFileLoading = false;
     }
 }
-
 
 void StartManager::createWindowFromWrapper(const QString &tabName, const QString &filePath, const QString &qstrTruePath, EditWrapper *buffer, bool isModifyed)
 {
@@ -586,7 +590,6 @@ Window *StartManager::createWindow(bool alwaysCenter)
                 }
             }
             QApplication::quit();
-            PerformanceMonitor::closeAPPFinish();
         }
     });
 
@@ -759,4 +762,9 @@ void StartManager::closeAboutForWindow(Window *window)
             }
         }
     }
+}
+
+bool StartManager::getIsTabFileLoading()
+{
+    return m_bIsTabFileLoading;
 }

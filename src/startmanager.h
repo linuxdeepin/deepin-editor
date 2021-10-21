@@ -98,6 +98,10 @@ public slots:
     void slotCheckUnsaveTab();
 
     void closeAboutForWindow(Window *window);
+    /**
+     * @brief getIsTabFileLoading 应用是否正在加载tab标签页
+     */
+    bool getIsTabFileLoading();
 
 private:
     void initBlockShutdown();
@@ -117,6 +121,7 @@ private:
     QString m_backupDir;///<用户备份文件目录
     QString m_autoBackupDir;///<自动备份文件目录
     Window* pFocusWindow;
+    bool m_bIsTabFileLoading {false};
 };
 
 #endif

@@ -498,8 +498,6 @@ bool EditWrapper::saveDraftFile()
         dialog.selectFile(match.captured(0) + ".txt");
     }
 
-
-
     //this->setUpdatesEnabled(false);
     int mode =  dialog.exec(); // 0表示取消 1保存
     this->setUpdatesEnabled(true);
@@ -651,9 +649,6 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteAr
 
     qint64 time3 = QDateTime::currentMSecsSinceEpoch();
     qDebug() << "===========end load file:" << time3 - time1;
-
-    PerformanceMonitor::openFileFinish(filePath(), QFileInfo(filePath()).size());
-
     m_bFileLoading = false;
     if (flag == true) m_pTextEdit->setReadOnlyPermission(true);
     if (m_bQuit) return;

@@ -47,9 +47,6 @@ DWIDGET_USE_NAMESPACE
 int main(int argc, char *argv[])
 {
     using namespace Dtk::Core;
-
-    PerformanceMonitor::initializeAppStart();
-
     qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
     QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
     //QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
@@ -89,8 +86,6 @@ int main(int argc, char *argv[])
         }
 
         dbus.registerObject("/com/deepin/Editor", startManager, QDBusConnection::ExportScriptableSlots);
-
-        PerformanceMonitor::initializAppFinish();
         return app.exec();
     }
     // Just send dbus message to exist editor process.
