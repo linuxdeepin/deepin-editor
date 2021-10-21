@@ -1362,26 +1362,29 @@ void TextEdit::indentText()
 void TextEdit::unindentText()
 {
     QTextCursor cursor = this->textCursor();
-    int postion = cursor.position();
+    cursor.movePosition(QTextCursor::StartOfBlock);
+    int pos = cursor.position();
+    cursor.setPosition(cursor.position()+1,QTextCursor::KeepAnchor);
 
-    if (document()->characterAt(cursor.position()-1) == '\t'){
-        cursor.setPosition(postion);
-        cursor.setPosition(postion - 1,QTextCursor::KeepAnchor);
+    //the text in front of document is '\t'.
+    if('t' == cursor.selectedText()){
         DeleteBackCommond* com = new DeleteBackCommond(cursor,this);
         m_pUndoStack->push(com);
     }
-    else{
-        int cnt = 0;
-        while (document()->characterAt(cursor.position()-1) == ' ' && cnt < m_tabSpaceNumber) {
+   //the text in front of document is ' '.
+    else if(' ' == cursor.selectedText()){
+        int startpos = pos;
+        int cnt=0;
+        // calculate the number of ' '.
+        while (document()->characterAt(pos) == ' ' && cnt < m_tabSpaceNumber) {
+            pos++;
             cnt++;
-            cursor.setPosition(postion-cnt);
         }
-        if(cnt){
-            cursor.setPosition(postion);
-            cursor.setPosition(postion - cnt,QTextCursor::KeepAnchor);
-            DeleteBackCommond* com = new DeleteBackCommond(cursor,this);
-            m_pUndoStack->push(com);
-        }
+        cursor.setPosition(startpos);
+        cursor.setPosition(pos,QTextCursor::KeepAnchor);
+        DeleteBackCommond* com = new DeleteBackCommond(cursor,this);
+        m_pUndoStack->push(com);
+
     }
 
 }
