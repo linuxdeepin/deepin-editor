@@ -247,8 +247,13 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
         return true;
     }
 
+    //temporarily use '*' to determine whether the text has been modified.
+    auto tabname = this->window()->getTabbar()->currentName();
+    bool hasFlag = false;
+    if(tabname.size() >0 && "*" == tabname[0])
+        hasFlag = true;
     //1.如果修改切换编码提示用户是否保存,不保存重新打开文件读取.2.没有修改是否另存为
-    if (m_pTextEdit->getModified()) {
+    if (m_pTextEdit->getModified() || hasFlag) {
         DDialog *dialog = new DDialog(tr("Encoding changed. Do you want to save the file now?"), "", this);
         //dialog->setWindowFlags(dialog->windowFlags() | Qt::WindowStaysOnBottomHint);
         dialog->setIcon(QIcon::fromTheme("deepin-editor"));
@@ -564,6 +569,7 @@ bool EditWrapper::saveDraftFile()
         QFile(m_pTextEdit->getFilePath()).remove();
         updateSaveAsFileName(m_pTextEdit->getFilePath(), newFilePath);
         m_pTextEdit->document()->setModified(false);
+        m_bIsTemFile = false;
         return true;
     }
 
