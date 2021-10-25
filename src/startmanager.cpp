@@ -484,9 +484,9 @@ void StartManager::openFilesInTab(QStringList files)
 
 void StartManager::createWindowFromWrapper(const QString &tabName, const QString &filePath, const QString &qstrTruePath, EditWrapper *buffer, bool isModifyed)
 {
-    Window *window = createWindow();
+    Window *pWindow = createWindow();
     //window->showCenterWindow();
-    QRect rect = window->rect();
+    QRect rect = pWindow->rect();
     QPoint pos = QCursor::pos() ;/*- window->topLevelWidget()->pos();*/
     QRect desktopRect = QApplication::desktop()->rect();
     QPoint startPos = pos;
@@ -505,8 +505,8 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
 
     QRect startRect(startPos, Tabbar::sm_pDragPixmap->rect().size());
     //QRect startRect(startPos, QSize(0,0));
-    QRect endRect(startPos, window->rect().size());
-    window->move(startPos);
+    QRect endRect(startPos, pWindow->rect().size());
+    pWindow->move(startPos);
     #if 0
     // window->setFixedSize(Tabbar::sm_pDragPixmap->rect().size());
     QLabel *pLab = new QLabel();
@@ -516,7 +516,7 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
     pLab->show();
     #endif
     //添加编辑窗口drop动态显示效果　梁卫东　２０２０－０８－２５　０９：５４：５７
-    QPropertyAnimation *geometry = new QPropertyAnimation(window, "geometry");
+    QPropertyAnimation *geometry = new QPropertyAnimation(pWindow, "geometry");
     geometry->setDuration(200);
     geometry->setStartValue(startRect);
     geometry->setEndValue(endRect);
@@ -534,16 +534,15 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
 
     QParallelAnimationGroup *group = new QParallelAnimationGroup;
     connect(group, &QParallelAnimationGroup::finished, this, [/*window,geometry,Opacity,group,*/ = ]() {
-        window->show();
-        window->showCenterWindow(false);
+        pWindow->show();
+        pWindow->showCenterWindow(false);
         geometry->deleteLater();
-        // Opacity->deleteLater();
         group->deleteLater();
 
-
-        window->addTabWithWrapper(buffer, filePath, qstrTruePath, tabName);
-        window->currentWrapper()->updateModifyStatus(isModifyed);
-        window->currentWrapper()->OnUpdateHighlighter();
+        pWindow->addTabWithWrapper(buffer, filePath, qstrTruePath, tabName);
+        pWindow->currentWrapper()->updateModifyStatus(isModifyed);
+        pWindow->currentWrapper()->OnUpdateHighlighter();
+        pWindow->setFocus();
     });
 
     group->addAnimation(geometry);
