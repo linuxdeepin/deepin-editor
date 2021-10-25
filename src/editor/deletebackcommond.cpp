@@ -19,6 +19,8 @@ void DeleteBackCommond::undo()
 {
     m_cursor.setPosition(m_insertPos);
     m_cursor.insertText(m_delText);
+
+    m_cursor.setPosition(m_delPos);
     m_edit->setTextCursor(m_cursor);
 }
 

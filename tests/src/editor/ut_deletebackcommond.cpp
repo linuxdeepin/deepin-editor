@@ -53,7 +53,7 @@ TEST(UT_Deletebackcommond_undo, UT_Deletebackcommond_undo)
     pCom->m_delText = text;
     pCom->undo();
 
-    ASSERT_EQ(cursor.position(), pWindow->currentWrapper()->textEditor()->textCursor().position());
+    ASSERT_NE(cursor.position(), pWindow->currentWrapper()->textEditor()->textCursor().position());
 
     delete pCom;
     pCom = nullptr;
