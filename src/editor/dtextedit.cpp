@@ -1367,13 +1367,13 @@ void TextEdit::unindentText()
     int pos = cursor.position();
     cursor.setPosition(cursor.position()+1,QTextCursor::KeepAnchor);
 
-    //the text in front of document is '\t'.
-    if('t' == cursor.selectedText()){
+    //the text in front of current line is '\t'.
+    if("\t" == cursor.selectedText()){
         DeleteBackCommond* com = new DeleteBackCommond(cursor,this);
         m_pUndoStack->push(com);
     }
-   //the text in front of document is ' '.
-    else if(' ' == cursor.selectedText()){
+    //the text in front of current line is ' '.
+    else if(" " == cursor.selectedText()){
         int startpos = pos;
         int cnt=0;
         // calculate the number of ' '.
