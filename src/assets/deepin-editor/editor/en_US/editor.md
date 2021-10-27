@@ -35,7 +35,7 @@ On the Text Editor Interface, press **Ctrl + Shift + ?** to view all the shortcu
 ### Manage Tabs
 
 - Create New Tabs/Windows
-  - Click ![plus_icon](../common/+.svg)or ![icon_menu](../common/icon_menu.svg)> **New tab** on the title bar or press **Ctrl + T** to create a new tab.
+  - Click ![plus_icon](../common/+.svg) or ![icon_menu](../common/icon_menu.svg)> **New tab** on the title bar or press **Ctrl + T** to create a new tab.
   - Click ![icon_menu](../common/icon_menu.svg)> **New window** or press **Ctrl + N** to create a new window.
 
 - Adjust Tabs/Windows
@@ -278,7 +278,7 @@ Click ![icon_menu](../common/icon_menu.svg)> **Settings** and you can perform th
 
 ### Theme
 
-The window theme provides three theme types, namely Light Theme, Dark Theme and System Theme.
+There are three window themes, namely Light Theme, Dark Theme and System Theme.
 
 1. On the Text Editor interface, click ![icon_menu](../common/icon_menu.svg).
 2.  Click **Theme** to select one theme.
