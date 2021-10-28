@@ -558,7 +558,7 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
 
 
     // add wrapper to this window.
-    m_tabbar->addTabWithIndex(index, filepath, tabName);
+    m_tabbar->addTabWithIndex(index, filepath, tabName, qstrTruePath);
     m_wrappers[filepath] = wrapper;
     wrapper->updatePath(filepath, qstrTruePath);
 
@@ -2443,7 +2443,13 @@ void Window::checkTabbarForReload()
     int cur = m_tabbar->currentIndex();
     QFileInfo fi(m_tabbar->truePathAt(cur));
     */
-    QFileInfo fi(m_tabbar->currentPath());
+    QFileInfo fi;
+    if (m_tabbar->currentPath().contains("backup-files")) {
+        fi.setFile(m_tabbar->truePathAt(m_tabbar->currentIndex()));
+    } else {
+        fi.setFile(m_tabbar->currentPath());
+    }
+
     QString tabName = m_tabbar->currentName();
     QString readOnlyStr = QString(" (%1)").arg(tr("Read-Only"));
     tabName.remove(readOnlyStr);

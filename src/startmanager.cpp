@@ -481,7 +481,6 @@ void StartManager::openFilesInTab(QStringList files)
     }
 }
 
-
 void StartManager::createWindowFromWrapper(const QString &tabName, const QString &filePath, const QString &qstrTruePath, EditWrapper *buffer, bool isModifyed)
 {
     Window *pWindow = createWindow();
