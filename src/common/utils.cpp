@@ -42,6 +42,7 @@
 #include <QTextCodec>
 #include <QImageReader>
 #include <QCryptographicHash>
+#include "qprocess.h"
 
 QT_BEGIN_NAMESPACE
 extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
@@ -806,4 +807,17 @@ QString Utils::getSystemLan()
         m_systemLanguage = ie.property("CurrentLocale").toString();
         return m_systemLanguage;
     }
+}
+
+
+//judge whether the protocol is wayland
+bool Utils::isWayland()
+{
+    static QString protocol;
+    if(protocol.isEmpty()){
+        protocol = QProcessEnvironment::systemEnvironment().value("XDG_SESSION_TYPE");
+    }
+
+    return protocol.contains("wayland");
+
 }

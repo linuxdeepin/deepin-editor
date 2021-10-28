@@ -350,9 +350,9 @@ QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option
     painter.drawImage(5,5,scaledImage);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
-//    if (count() == 1) {
-//        this->window()->hide();
-//    }
+    if (!Utils::isWayland() && count() == 1) {
+        this->window()->hide();
+    }
 
     // adjust offset.
     hotspot->setX(scaledWidth/2);
