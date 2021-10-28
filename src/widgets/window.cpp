@@ -558,7 +558,7 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
 
 
     // add wrapper to this window.
-    m_tabbar->addTabWithIndex(index, filepath, tabName);
+    m_tabbar->addTabWithIndex(index, filepath, tabName, qstrTruePath);
     m_wrappers[filepath] = wrapper;
     wrapper->updatePath(filepath, qstrTruePath);
 
@@ -2439,8 +2439,17 @@ void Window::updateThemePanelGeomerty()
 
 void Window::checkTabbarForReload()
 {
+    /* 修复99423 bug暂且屏蔽；拖拽出只读tab文件项，只读字样消失
     int cur = m_tabbar->currentIndex();
     QFileInfo fi(m_tabbar->truePathAt(cur));
+    */
+    QFileInfo fi;
+    if (m_tabbar->currentPath().contains("backup-files")) {
+        fi.setFile(m_tabbar->truePathAt(m_tabbar->currentIndex()));
+    } else {
+        fi.setFile(m_tabbar->currentPath());
+    }
+
     QString tabName = m_tabbar->currentName();
     QString readOnlyStr = QString(" (%1)").arg(tr("Read-Only"));
     tabName.remove(readOnlyStr);
