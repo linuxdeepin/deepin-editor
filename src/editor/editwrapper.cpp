@@ -879,7 +879,7 @@ Window *EditWrapper::window()
 }
 
 //支持大文本加载 界面不卡顿 秒关闭
-void EditWrapper::loadContent(const QByteArray &content)
+void EditWrapper::loadContent(const QByteArray &strContent)
 {
     m_pBottomBar->setChildEnabled(false);
     m_pWindow->setPrintEnabled(false);
@@ -889,7 +889,8 @@ void EditWrapper::loadContent(const QByteArray &content)
     //QTextDocument *doc = m_pTextEdit->document();
     QTextCursor cursor = m_pTextEdit->textCursor();
 
-    QString strContent = content.data();
+    /* 如此转换后打开1G以上的文本会闪退，Qt QString类的缺陷 */
+    //QString strContent = content.data();
 
     int len = strContent.length();
     //初始化显示文本大小
