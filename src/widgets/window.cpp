@@ -637,6 +637,7 @@ bool Window::closeTab(const QString &filePath)
     // need to prompt whether to save.
     else {
         QFileInfo fileInfo(filePath);
+        isModified = false;
         if (m_tabbar->textAt(m_tabbar->currentIndex()).front() == "*") {
             isModified = true;
         }
