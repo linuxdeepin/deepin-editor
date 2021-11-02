@@ -49,7 +49,7 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     //this->installEventFilter(this);
     //设置图标
     QString theme =  (DGuiApplicationHelper::instance()->applicationPalette().color(QPalette::Background).lightness() < 128) ? "dark" : "light";
-    QString arrowSvgPath = QString(":/images/arrow_%1.svg").arg(theme);
+    QString arrowSvgPath = QString(":/images/dropdown_arrow_%1.svg").arg(theme);
     //装换图片
     int scaled =qApp->devicePixelRatio() == 1.25 ? 2 : 1;
     QSvgRenderer svg_render(arrowSvgPath);
@@ -176,6 +176,7 @@ void DDropdownMenu::setMenuActionGroup(QActionGroup *actionGroup)
     deleteMenuActionGroup();
     m_actionGroup = actionGroup;
 }
+
 void DDropdownMenu::deleteMenuActionGroup()
 {
     if (m_actionGroup != nullptr) {
@@ -186,7 +187,7 @@ void DDropdownMenu::deleteMenuActionGroup()
 
 void DDropdownMenu::setTheme(const QString &theme)
 {
-    QString arrowSvgPath = QString(":/images/arrow_%1.svg").arg(theme);
+    QString arrowSvgPath = QString(":/images/dropdown_arrow_%1.svg").arg(theme);
     //装换图片
     int scaled =qApp->devicePixelRatio() == 1.25 ? 2 : 1;
     QSvgRenderer svg_render(arrowSvgPath);
