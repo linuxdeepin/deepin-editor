@@ -153,7 +153,6 @@ void Tabbar::closeTab(int index)
         return;
     }
     emit requestHistorySaved(fileAt(index));
-    //qDebug() << "removeTab(index)" << index;
     DTabBar::removeTab(index);
 }
 

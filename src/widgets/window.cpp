@@ -799,7 +799,6 @@ void Window::removeWrapper(const QString &filePath, bool isDelete)
 
     if (wrapper) {
         m_editorWidget->removeWidget(wrapper);
-
         m_wrappers.remove(filePath);
         if (isDelete) {
             disconnect(wrapper->textEditor(), nullptr);
@@ -945,7 +944,9 @@ QString Window::saveAsFileToDisk()
 {
     EditWrapper *wrapper = currentWrapper();
     //大文本加载过程不允许保存　梁卫东
-    if (!wrapper || wrapper->getFileLoading()) return QString();
+    if (!wrapper || wrapper->getFileLoading()) {
+        return QString();
+    }
 
     bool isDraft = wrapper->isDraftFile();
     QFileInfo fileInfo(wrapper->textEditor()->getTruePath());
@@ -990,6 +991,13 @@ QString Window::saveAsFileToDisk()
             fileInfo.setFile(truePath);
             QString name = fileInfo.absolutePath().replace("/", "_");
             QDir(m_autoBackupDir).remove(fileInfo.baseName() + "." + name + "." + fileInfo.suffix());
+        }
+
+        /* 如果另存为的文件名+路径与当前tab项对应的文件名+路径是一致，则直接做保存操作即可 */
+        if (!wrapper->filePath().compare(newFilePath)) {
+            if (saveFile()) {
+                return newFilePath;
+            }
         }
 
         updateSaveAsFileName(wrapper->filePath(), newFilePath);
