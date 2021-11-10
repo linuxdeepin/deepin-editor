@@ -2189,7 +2189,8 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                 int h = cursorRect(cur).height();
                 int offset = h<=20?h/8:h/4;
                 //the language currently set by the system is Tibetan.
-                if("bo_CN" == Utils::getSystemLan())
+                //and,the platform is not loogson.
+                if("bo_CN" == Utils::getSystemLan() && !Utils::isLoongsonPlatform())
                     offset = h<=20?0:h/10;
 
                 QRect rect(0,cursorRect(cur).y() + offset,w,w);
@@ -3676,7 +3677,8 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
             int h = cursorRect(cur).height();
             int offset = h<=20?h/8:h/4;
             //the language currently set by the system is Tibetan.
-            if("bo_CN" == Utils::getSystemLan())
+            //and,the platform is not loogson.
+            if("bo_CN" == Utils::getSystemLan() && !Utils::isLoongsonPlatform())
                 offset = h<=20?0:h/10;
 
             QRect rect(0,cursorRect(cur).y() + offset,w,w);

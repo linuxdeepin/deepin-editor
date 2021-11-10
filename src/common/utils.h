@@ -97,6 +97,8 @@ public:
     //return system language
     static QString getSystemLan();
 
+    static bool isLoongsonPlatform();
+
 private:
     static QString m_systemLanguage;
 };
