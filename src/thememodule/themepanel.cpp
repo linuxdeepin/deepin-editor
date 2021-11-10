@@ -34,7 +34,7 @@ ThemePanel::ThemePanel(QWidget *parent)
 {
     // init view.
     m_themeView->setModel(m_themeModel);
-    m_themeView->setItemDelegate(new ThemeItemDelegate);
+    m_themeView->setItemDelegate(new ThemeItemDelegate(this));
 
     QScroller::grabGesture(m_themeView, QScroller::TouchGesture);
 

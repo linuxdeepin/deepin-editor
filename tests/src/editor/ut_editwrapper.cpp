@@ -45,9 +45,10 @@ QStringList retstringliststub()
 
 QPointer<DSettingsOption> retsettingoption()
 {
-    QPointer<DSettingsOption> d = new DSettingsOption;
-    QVariant* v = new QVariant(stringList);
-    d->setValue(*v);
+    QPointer<DSettingsOption> d = new DSettingsOption();
+    QVariant v(stringList);
+    d->setValue(v);
+    QVariant p = d->value();
     return d;
 }
 

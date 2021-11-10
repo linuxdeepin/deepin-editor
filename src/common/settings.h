@@ -100,7 +100,7 @@ private:
     DDialog *createDialog(const QString &title, const QString &content, const bool &bIsConflicts);
 
 private:
-    Dtk::Core::QSettingBackend *m_backend;
+    Dtk::Core::QSettingBackend *m_backend {nullptr};
 
     bool m_bUserChangeKey = false;
     DSettingsDialog *m_pSettingsDialog;

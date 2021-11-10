@@ -243,22 +243,22 @@ protected:
     void dropEvent(QDropEvent *event) override;
 
 private:
-    DBusDaemon::dbus *m_rootSaveDBus;
+    DBusDaemon::dbus *m_rootSaveDBus {nullptr};
 
-    QWidget *m_centralWidget;
-    DStackedWidget *m_editorWidget;
-    QVBoxLayout *m_centralLayout;
-    Tabbar *m_tabbar;
+    QWidget *m_centralWidget {nullptr};
+    DStackedWidget *m_editorWidget {nullptr};
+    QVBoxLayout *m_centralLayout {nullptr};
+    Tabbar *m_tabbar {nullptr};
 
-    JumpLineBar *m_jumpLineBar;
-    ReplaceBar *m_replaceBar;
-    ThemePanel *m_themePanel;
-    FindBar *m_findBar;
-    Settings *m_settings;
+    JumpLineBar *m_jumpLineBar {nullptr};
+    ReplaceBar *m_replaceBar {nullptr};
+    ThemePanel *m_themePanel {nullptr};
+    FindBar *m_findBar {nullptr};
+    Settings *m_settings {nullptr};
 
     QMap<QString, EditWrapper *> m_wrappers;
 
-    DMenu *m_menu;
+    DMenu *m_menu {nullptr};
 
     QStringList m_closeFileHistory;
 
