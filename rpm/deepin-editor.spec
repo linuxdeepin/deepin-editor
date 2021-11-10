@@ -37,7 +37,8 @@ BuildRequires: kf5-kcodecs-devel
 BuildRequires: kf5-syntax-highlighting-devel
 BuildRequires: gtest-devel
 BuildRequires: gmock-devel
-
+BuildRequires: uchardet-devel
+BuildRequires: enca-devel
 
 
 %description
