@@ -91,6 +91,7 @@ TEST(UT_Setting_Settings, UT_Setting_Settings)
 
     EXPECT_NE(m_backend,nullptr);
     m_backend->deleteLater();
+    m_setting->deleteLater();
 }
 
 //static Settings* instance();
@@ -129,7 +130,7 @@ TEST(UT_Setting_createFontComBoBoxHandle, UT_Setting_createFontComBoBoxHandle)
     EXPECT_NE(widget,nullptr);
     widget->deleteLater();
     dialog->deleteLater();
-
+    m_setting->deleteLater();
 }
 
 //static QPair<QWidget*, QWidget*> createKeySequenceEditHandle(QObject *obj);
@@ -149,6 +150,7 @@ TEST(UT_Setting_createKeySequenceEditHandle, UT_Setting_createKeySequenceEditHan
     EXPECT_NE(widget,nullptr);
     widget->deleteLater();
     dialog->deleteLater();
+    m_setting->deleteLater();
 }
 
 //static Settings* instance();
@@ -158,14 +160,16 @@ TEST(UT_Setting_setSettingDialog, UT_Setting_setSettingDialog)
 {
     QWidget *widget = new QWidget();
     DSettingsDialog *dialog = new DSettingsDialog(widget);
-    Settings::instance()->setSettingDialog(dialog);
+    Settings *pSettings = Settings::instance();
+    pSettings->setSettingDialog(dialog);
 
-    EXPECT_NE(Settings::instance()->m_pSettingsDialog,nullptr);
+    EXPECT_NE(Settings::instance()->m_pSettingsDialog, nullptr);
 
     EXPECT_NE(dialog,nullptr);
     EXPECT_NE(widget,nullptr);
     widget->deleteLater();
     dialog->deleteLater();
+    pSettings->deleteLater();
 }
 
 //private:
@@ -195,6 +199,7 @@ TEST(UT_Setting_checkShortcutValid, UT_Setting_checkShortcutValid)
     bool ok;
     QString reason = "reason";
     EXPECT_NE(m_setting->checkShortcutValid("shortcuts.keymap.keymap", "Enter", reason, ok),true);
+    m_setting->deleteLater();
 }
 
 TEST(UT_Setting_checkShortcutValid2, UT_Setting_checkShortcutValid2)
@@ -203,6 +208,8 @@ TEST(UT_Setting_checkShortcutValid2, UT_Setting_checkShortcutValid2)
     bool ok;
     QString reason = "reason";
     EXPECT_NE(m_setting->checkShortcutValid("shortcuts.keymap.keymap", "<", reason, ok),true);
+
+    m_setting->deleteLater();
 }
 
 TEST(UT_Setting_checkShortcutValid3, UT_Setting_checkShortcutValid3)
@@ -211,6 +218,8 @@ TEST(UT_Setting_checkShortcutValid3, UT_Setting_checkShortcutValid3)
     bool ok;
     QString reason = "reason";
     EXPECT_NE(m_setting->checkShortcutValid("shortcuts.keymap.keymap<", "Num+", reason, ok),true);
+
+    m_setting->deleteLater();
 }
 
 TEST(UT_Setting_isShortcutConflict, UT_Setting_isShortcutConflict)
@@ -242,6 +251,8 @@ TEST(UT_Setting_isShortcutConflict, UT_Setting_isShortcutConflict)
 
     QVariant keymap = Settings::instance()->settings->option("shortcuts.keymap.keymap")->value();
     m_setting->slotupdateAllKeysWithKeymap(keymap);
+
+    m_setting->deleteLater();
 }
 
 TEST(UT_Setting_KeySequenceEdit, UT_Setting_KeySequenceEdit)

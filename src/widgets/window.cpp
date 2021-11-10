@@ -347,7 +347,6 @@ void Window::showCenterWindow(bool bIsCenter)
     } else {
         showNormal();
     }
-
 }
 
 void Window::initTitlebar()
