@@ -100,16 +100,21 @@ QString Utils_getKeyshortcutFromKeymap_stub()
 
 
 int option_stub_para=0;
+QPointer<DSettingsOption> pDSettingsOption = nullptr;
 QPointer<DSettingsOption> option_stub()
 {
-    QPointer<DSettingsOption> p = new DSettingsOption;
+    if (pDSettingsOption == nullptr) {
+        pDSettingsOption = new DSettingsOption;
+    }
+
+    //DSettingsOption p;
     if(option_stub_para==0)
-        p->setValue("window_maximum");
+        pDSettingsOption->setValue("window_maximum");
     else if(option_stub_para==1)
-        p->setValue("fullscreen");
+        pDSettingsOption->setValue("fullscreen");
     else
-        p->setValue("normal");
-    return p;
+        pDSettingsOption->setValue("normal");
+    return pDSettingsOption;
 }
 
 
@@ -137,8 +142,8 @@ TEST(UT_Window_showCenterWindow, UT_Window_showCenterWindow_001)
     EXPECT_NE(window1,nullptr);
 
     window1->deleteLater();
-
-
+    delete pDSettingsOption;
+    pDSettingsOption = nullptr;
 }
 
 TEST(UT_Window_showCenterWindow, UT_Window_showCenterWindow_002)
@@ -155,8 +160,8 @@ TEST(UT_Window_showCenterWindow, UT_Window_showCenterWindow_002)
     EXPECT_NE(window1,nullptr);
 
     window1->deleteLater();
-
-
+    delete pDSettingsOption;
+    pDSettingsOption = nullptr;
 }
 
 TEST(UT_Window_showCenterWindow, UT_Window_showCenterWindow_003)
@@ -173,7 +178,8 @@ TEST(UT_Window_showCenterWindow, UT_Window_showCenterWindow_003)
     EXPECT_NE(window1,nullptr);
 
     window1->deleteLater();
-
+    delete pDSettingsOption;
+    pDSettingsOption = nullptr;
 }
 
 
@@ -187,10 +193,8 @@ TEST(UT_Window_initTitlebar, UT_Window_initTitlebar)
     EXPECT_NE(window1->m_menu,nullptr);
 
     window1->deleteLater();
-
-
-
 }
+
 TEST(UT_Window_checkBlockShutdown, UT_Window_checkBlockShutdown)
 {
     Window * window1 = new Window();
