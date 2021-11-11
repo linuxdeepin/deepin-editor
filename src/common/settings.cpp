@@ -37,6 +37,45 @@
 #include <QStandardPaths>
 
 Settings *Settings::s_pSetting = nullptr;
+
+CustemBackend::CustemBackend(const QString &filepath, QObject *parent)
+    : DSettingsBackend (parent)
+{
+    m_settings = new QSettings(filepath, QSettings::IniFormat);
+}
+
+void CustemBackend::doSync()
+{
+    m_settings->sync();
+}
+
+void CustemBackend::doSetOption(const QString &key, const QVariant &value)
+{
+    m_writeLock.lock();
+    m_settings->setValue(key, value);
+    m_settings->sync();
+    m_writeLock.unlock();
+}
+
+QStringList CustemBackend::keys() const
+{
+    QStringList keyList = m_settings->allKeys();
+
+    return keyList;
+}
+
+QVariant CustemBackend::getOption(const QString &key) const
+{
+    return m_settings->value(key);
+}
+
+CustemBackend::~CustemBackend()
+{
+    ;
+}
+
+
+
 Settings::Settings(QWidget *parent)
     : QObject(parent)
 {
@@ -45,7 +84,7 @@ Settings::Settings(QWidget *parent)
                             .arg(qApp->organizationName())
                             .arg(qApp->applicationName());
 
-    m_backend = new QSettingBackend(strConfigPath);
+    m_backend = new CustemBackend(strConfigPath, this);
 
     settings = DSettings::fromJsonFile(":/resources/settings.json");
     settings->setBackend(m_backend);
@@ -115,6 +154,20 @@ Settings::~Settings()
         m_backend = nullptr;
     }
 }
+
+void Settings::setOption(const QString &key, const QVariant &value)
+{
+    if (getOption(key) != value) {
+        settings->setOption(key, value);
+        m_backend->doSetOption(key, value);
+    }
+}
+
+QVariant Settings::getOption(const QString &key)
+{
+    return settings->getOption(key);
+}
+
 
 void Settings::setSettingDialog(DSettingsDialog *settingsDialog)
 {

@@ -34,11 +34,31 @@
 #include <DApplication>
 #include <QLabel>
 #include <QPushButton>
-
+#include <QMutex>
 
 DWIDGET_USE_NAMESPACE
 DCORE_USE_NAMESPACE
 DTK_USE_NAMESPACE
+
+class CustemBackend : public DSettingsBackend
+{
+    Q_OBJECT
+public:
+    explicit CustemBackend(const QString &filepath, QObject *parent = nullptr);
+    ~CustemBackend();
+
+    //获取参数所有的key值
+    QStringList keys() const override;
+    //根据key获取内容
+    QVariant getOption(const QString &key) const;
+    //同步数据
+    void doSync() override;
+    //根据key值设置内容
+    void doSetOption(const QString &key, const QVariant &value) override;
+
+    QSettings *m_settings {nullptr};
+    QMutex m_writeLock;
+};
 
 
 class Settings : public QObject
@@ -55,6 +75,9 @@ public:
     static QPair<QWidget*, QWidget*> createKeySequenceEditHandle(QObject *obj);
     static Settings* instance();
 
+    void setOption(const QString &key, const QVariant &value);
+    //获取配置参数
+    QVariant getOption(const QString &key);
     void setSettingDialog(DSettingsDialog *settingsDialog);
 
     int m_iDefaultFontSize = 12;
@@ -100,7 +123,8 @@ private:
     DDialog *createDialog(const QString &title, const QString &content, const bool &bIsConflicts);
 
 private:
-    Dtk::Core::QSettingBackend *m_backend {nullptr};
+    //Dtk::Core::QSettingBackend *m_backend {nullptr};
+    CustemBackend *m_backend {nullptr};
 
     bool m_bUserChangeKey = false;
     DSettingsDialog *m_pSettingsDialog;
