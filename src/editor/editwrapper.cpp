@@ -204,9 +204,9 @@ bool EditWrapper::saveAsFile()
     dialog.setDirectory(QDir::homePath());
     dialog.setNameFilter("*.txt");
 
-    this->setUpdatesEnabled(false);
+    //this->setUpdatesEnabled(false);
     int mode =  dialog.exec();
-    this->setUpdatesEnabled(true);
+    //this->setUpdatesEnabled(true);
     hideWarningNotices();
 
     if (QDialog::Accepted == mode) {
@@ -536,9 +536,9 @@ bool EditWrapper::saveDraftFile()
         dialog.selectFile(match.captured(0) + ".txt");
     }
 
-    this->setUpdatesEnabled(false);
+    //this->setUpdatesEnabled(false);
     int mode =  dialog.exec(); // 0表示取消 1保存
-    this->setUpdatesEnabled(true);
+   // this->setUpdatesEnabled(true);
     hideWarningNotices();
 
     if (mode == 1) {
