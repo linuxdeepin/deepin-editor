@@ -549,7 +549,7 @@ bool Window::closeTab(const QString &filePath)
     EditWrapper *wrapper = m_wrappers.value(filePath);
 
     if (m_reading_list.contains(currentWrapper()->textEditor())) {
-        QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
+        //QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
     }
 
     if (!wrapper) return false;
@@ -2469,7 +2469,7 @@ void Window::closeEvent(QCloseEvent *e)
         backupFile();
     }
 
-    QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
+    //QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
 
     QList<EditWrapper *> needSaveList;
     QMap<QString, EditWrapper *> wrappers = m_wrappers;
@@ -2483,7 +2483,6 @@ void Window::closeEvent(QCloseEvent *e)
 
     disconnect(m_settings, nullptr, this, nullptr);
     //this->close();
-
 
     StartManager::instance()->closeAboutForWindow(this);
 
