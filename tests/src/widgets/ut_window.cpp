@@ -1071,7 +1071,7 @@ TEST(UT_Window_closeAllFiles, UT_Window_closeAllFiles)
 TEST(UT_Window_addTemFileTab, UT_Window_addTemFileTab)
 {
     Window *window = new Window();
-    window->addTemFileTab("aa","bb","cc");
+    window->addTemFileTab("aa","bb","cc","");
 
     EXPECT_NE(window->m_tabbar->count(),1);
 

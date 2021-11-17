@@ -227,7 +227,7 @@ int StartManager::recoverFile(Window *window)
     int recFilesSum = 0;
     QStringList files = blankFiles;
     QFileInfo fileInfo;
-
+    QString lastmodifiedtime;
     //去除非新建文件
     for (auto file : blankFiles) {
         if (!file.contains("blank_file")) {
@@ -284,6 +284,12 @@ int StartManager::recoverFile(Window *window)
                         bIsTemFile = value.toBool();
                     }
                 }
+                if(object.contains("lastModifiedTime")){
+                    auto v = object.value("lastModifiedTime");
+                    if(v.isString()){
+                        lastmodifiedtime = v.toString();
+                    }
+                }
 
                 //得到真实文件路径
                 if (object.contains("localPath")) {  // 包含指定的 key
@@ -301,7 +307,7 @@ int StartManager::recoverFile(Window *window)
                 //打开文件
                 if (!temFilePath.isEmpty()) {
                     if (Utils::fileExists(temFilePath)) {
-                        window->addTemFileTab(temFilePath, fileInfo.fileName(), localPath, bIsTemFile);
+                        window->addTemFileTab(temFilePath, fileInfo.fileName(), localPath,lastmodifiedtime, bIsTemFile);
 
                         //打开文件后设置书签
                         if (object.contains("bookMark")) {  // 包含指定的 key
@@ -333,11 +339,11 @@ int StartManager::recoverFile(Window *window)
 
                             if (index >= 0) {
                                 QString fileName = tr("Untitled %1").arg(index + 1);
-                                window->addTemFileTab(localPath, fileName, localPath, bIsTemFile);
+                                window->addTemFileTab(localPath, fileName, localPath,lastmodifiedtime, bIsTemFile);
 
                             }
                         } else {
-                            window->addTemFileTab(localPath, fileInfo.fileName(), localPath, bIsTemFile);
+                            window->addTemFileTab(localPath, fileInfo.fileName(), localPath,lastmodifiedtime, bIsTemFile);
                         }
 
                         //打开文件后设置书签
