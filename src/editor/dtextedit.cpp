@@ -69,7 +69,7 @@ TextEdit::TextEdit(QWidget *parent)
 {
     setUndoRedoEnabled(false);
     //撤销重做栈
-    m_pUndoStack = new QUndoStack(this);
+    m_pUndoStack = new QUndoStack();
 
     m_nLines = 0;
     m_nBookMarkHoverLine = -1;
@@ -172,6 +172,10 @@ TextEdit::~TextEdit()
     if (m_rightMenu != nullptr) {
         delete m_rightMenu;
         m_rightMenu = nullptr;
+    }
+
+    if (m_pUndoStack != nullptr) {
+        m_pUndoStack->deleteLater();
     }
 }
 
