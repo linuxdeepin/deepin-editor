@@ -2189,9 +2189,15 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                 int h = cursorRect(cur).height();
                 int offset = h<=20?h/8:h/4;
                 //the language currently set by the system is Tibetan.
-                //and,the platform is not loogson.
-                if("bo_CN" == Utils::getSystemLan() && !Utils::isLoongsonPlatform())
+                if("bo_CN" == Utils::getSystemLan())
                     offset = h<=20?0:h/10;
+
+                //the language currently set by the system is Tibetan.
+                //and,the platform is not loogson.
+                if("bo_CN" == Utils::getSystemLan() && Utils::isLoongsonPlatform()){
+                    offset = h<=20?h/4:h/2;
+                    qInfo()<<"here is bo_CN and loongson , offset has set";
+                }
 
                 QRect rect(0,cursorRect(cur).y() + offset,w,w);
                 if (block.next().isVisible()) {
@@ -3677,9 +3683,15 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
             int h = cursorRect(cur).height();
             int offset = h<=20?h/8:h/4;
             //the language currently set by the system is Tibetan.
-            //and,the platform is not loogson.
-            if("bo_CN" == Utils::getSystemLan() && !Utils::isLoongsonPlatform())
+            if("bo_CN" == Utils::getSystemLan())
                 offset = h<=20?0:h/10;
+
+            //the language currently set by the system is Tibetan.
+            //and,the platform is not loogson.
+            if("bo_CN" == Utils::getSystemLan() && Utils::isLoongsonPlatform()){
+                offset = h<=20?h/4:h/2;
+                qInfo()<<"here is bo_CN and loongson , offset has set";
+            }
 
             QRect rect(0,cursorRect(cur).y() + offset,w,w);
             QSvgRenderer render;
