@@ -22,6 +22,8 @@
 
 #include <QThread>
 
+#define DATA_SIZE_1024 1024
+
 class FileLoadThread : public QThread
 {
     Q_OBJECT

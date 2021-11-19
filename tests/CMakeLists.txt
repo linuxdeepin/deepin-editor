@@ -43,8 +43,12 @@ include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 include_directories(Qt5PrintSupport)
 include_directories(${GTEST_INCLUDE_DIRS})
 include_directories(src)
-link_libraries(enca)
 link_libraries(uchardet)
+link_libraries(chardet)
+
+pkg_check_modules(chardet REQUIRED chardet)
+include_directories(${chardet_INCLUDE_DIRS})
+link_directories(${chardet_LIBRARY_DIRS})
 
 set(PROJECT_NAME_TEST
     ${PROJECT_NAME}-test)
@@ -93,11 +97,13 @@ target_link_libraries(${PROJECT_NAME_TEST}
     ${Qt5Widgets_LIBRARIES}
     ${Qt5DBus_LIBRARIES}
     ${Qt5Concurrent_LIBRARIES}
+    ${chardet_LIBRARY_DIRS}
     KF5::Codecs
     KF5::SyntaxHighlighting
     -lpthread
     -lm
-        )
+    chardet
+)
 
 target_include_directories(${PROJECT_NAME_TEST} PUBLIC ${DtkWidget_INCLUDE_DIRS}
                                                        ${DtkCore_INCLUDE_DIRS}

@@ -23,13 +23,14 @@
 #define DETECTCODE_H
 #include <QString>
 #include <QMap>
+#include <chardet/chardet.h>
 #include <uchardet/uchardet.h>
-#include <enca.h>
 #include <iconv.h>
+
 /*
 *
-* 文本编码识别引用第三库识别 enca uchardet
-* enca识别不了使用uchardet
+* 文本编码识别引用第三库识别 chardet1 uchardet
+* chardet识别不了使用uchardet
 * 编码转换库使用iconv
 *
 * author:梁卫东 2020年10月15日16:56:11
@@ -46,13 +47,20 @@ public:
     DetectCode();
 
     //enca 识别文本编码
+    #if 0 /* 因为开源协议存在法律冲突，停止使用libenca0编码识别库 */
     static QByteArray EncaDetectCode (QString filepath);
+    #endif
+
+    /**
+     * @brief ChartDet_DetectingTextCoding libchardet1编码识别库识别编码
+     */
+    static int ChartDet_DetectingTextCoding(const char *str, QString &encoding, float &confidence);
 
     //uchardet 识别文编编码
     static QByteArray UchardetCode(QString filepath);
 
     //获取文件编码方式
-    static QByteArray GetFileEncodingFormat (QString filepath);
+    static QByteArray GetFileEncodingFormat (QString filepath, QByteArray content = QByteArray(""));
 
     static bool ChangeFileEncodingFormat(QByteArray& inputStr,QByteArray& outStr,QString fromCode,QString toCode=QString("UTF-8"));
 private:

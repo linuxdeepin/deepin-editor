@@ -19,7 +19,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thememodule)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/widgets)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/include)
 
-
 # Find the library
 find_package(PkgConfig REQUIRED)
 find_package(Qt5Widgets REQUIRED)
@@ -36,6 +35,10 @@ find_package(Qt5Xml REQUIRED)
 find_package(Qt5Svg REQUIRED)
 include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 
+pkg_check_modules(chardet REQUIRED chardet)
+include_directories(${chardet_INCLUDE_DIRS})
+link_directories(${chardet_LIBRARY_DIRS})
+
 # Tell CMake to create the executable
 add_executable(deepin-editor ${SRCS} deepin-editor.qrc)
 target_link_libraries(deepin-editor
@@ -48,11 +51,12 @@ target_link_libraries(deepin-editor
     ${DFrameworkdbus_LIBRARIES}
     ${Qt5Xml_LIBRARIES}
     ${Qt5Svg_LIBRARIES}
+    ${chardet_LIBRARY_DIRS}
     KF5::Codecs
     KF5::SyntaxHighlighting
     -lm
-    enca
     uchardet
+    chardet
 )
 
 set(CMAKE_INSTALL_PREFIX /usr)

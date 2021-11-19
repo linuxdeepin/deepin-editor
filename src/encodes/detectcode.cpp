@@ -33,21 +33,36 @@ DetectCode::DetectCode()
 
 }
 
-QByteArray DetectCode::GetFileEncodingFormat(QString filepath)
+QByteArray DetectCode::GetFileEncodingFormat(QString filepath, QByteArray content)
 {
-    QByteArray charset = DetectCode::EncaDetectCode(filepath);
+    QByteArray charset;
+    QString detectedResult;
+    float chardetconfidence = 0;
 
-    if(charset == "unknown" || charset == "???" || charset.isEmpty()){
+    QString str(content);
+    bool bFlag = str.contains(QRegExp("[\\x4e00-\\x9fa5]+")); //匹配的是中文
+    if (bFlag) {
+        QByteArray newContent = content;
+        newContent += "为增加探测率保留的中文";    //手动添加中文字符，避免字符长度太短而导致判断编码错误
+        DetectCode::ChartDet_DetectingTextCoding(newContent, detectedResult, chardetconfidence);
+    } else {
+        DetectCode::ChartDet_DetectingTextCoding(content, detectedResult, chardetconfidence);
+    }
+
+    charset = detectedResult.toLatin1();
+    if (charset == "unknown" || charset == "???" || charset.isEmpty()) {
        charset = DetectCode::UchardetCode(filepath);
     }
-    if(charset == "ASCII" || charset.isEmpty()) charset = "UTF-8";
-    return charset;
-}
 
+    if(charset == "ASCII" || charset.isEmpty()) {
+        charset = "UTF-8";
+    }
+
+    return charset.toUpper();
+}
 
 QByteArray DetectCode::UchardetCode(QString filepath)
 {
-    //qDebug()<<"UchardetCode Begin:"<<QDateTime::currentDateTime().toString("hh:mm:ss");
     FILE* fp;
     QByteArray charset;
 
@@ -66,9 +81,7 @@ QByteArray DetectCode::UchardetCode(QString filepath)
         {
             size_t len = fread(buff, 1, buffer_size, fp);
             int retval = uchardet_handle_data(handle, buff, len);
-            if (retval != 0)
-            {
-                //qDebug()<<QStringLiteral("Uchardet分析编码失败")<<QString(buff);
+            if (retval != 0) {
                 continue;
             }
 
@@ -78,7 +91,6 @@ QByteArray DetectCode::UchardetCode(QString filepath)
 
         uchardet_data_end(handle);
         charset = uchardet_get_charset(handle);
-        //qDebug()<<QStringLiteral("Uchardet文本的编码方式是:")<<charset;
         uchardet_delete(handle);
     }
 
@@ -88,32 +100,34 @@ QByteArray DetectCode::UchardetCode(QString filepath)
     if(charset == "MAC-CENTRALEUROPE") charset = "MACCENTRALEUROPE";
     if(charset == "MAC-CYRILLIC") charset = "MACCYRILLIC";
     if(charset.contains("WINDOWS-")) charset = charset.replace("WINDOWS-","CP");
-    //qDebug()<<"UchardetCode End:"<<QDateTime::currentDateTime().toString("hh:mm:ss");
     return charset;
 }
 
+#if 0 /* 因为开源协议存在法律冲突，停止使用libenca0编码识别库 */
 QByteArray DetectCode::EncaDetectCode(QString filepath)
 {
-  // qDebug()<<"EncaDetectCode Begin:"<<QDateTime::currentDateTime().toString("hh:mm:ss");
-  //"zh"中文 "be"俄罗斯 "bg"保加利亚 "cs"捷克文 "et"爱沙尼亚语 "hr"克罗地亚人[语]; "hu"匈牙利语 "lt"立陶宛 "lv"拉脱维亚语 "pl"波兰语 "ru"俄语 "sk"斯洛伐克人（语）  "sl"斯洛文尼亚人（语）  "uk"乌克兰人（语）
-    sm_LangsMap.clear();
+    /*
+     * 编码区域对应的简称
+     *"zh"中文 "be"俄罗斯 "bg"保加利亚 "cs"捷克文 "et"爱沙尼亚语 "hr"克罗地亚人[语]; "hu"匈牙利语 "lt"立陶宛
+     * "lv"拉脱维亚语 "pl"波兰语 "ru"俄语 "sk"斯洛伐克人（语）  "sl"斯洛文尼亚人（语）  "uk"乌克兰人（语）
+     */
 
+    sm_LangsMap.clear();
     const char* langArray[]={"zh","be","bg","cs","et","hr","hu","lt","lv","pl","ru","sk","sl","uk"};
-  // EncaAnalyserState
-//   size_t size;
-//   const char** lang = enca_get_languages(&size);
-//   QStringList langs;
-//    for (size_t i=0;i <size;i++) {
-//       langs<<lang[i];
-//    }
-//   qDebug()<<langs<<lang[size-2];
+    #if 0 /* EncaAnalyserState */
+    size_t size;
+    const char** lang = enca_get_languages(&size);
+    QStringList langs;
+    for (size_t i=0;i <size;i++) {
+       langs<<lang[i];
+    }
+    #endif
 
    QByteArray charset;
 
    for (size_t i= 0; i < sizeof (langArray)/sizeof (const char *); i++) {
 
        EncaAnalyser analyser = nullptr;
-
        analyser = enca_analyser_alloc(langArray[i]);
        enca_set_threshold(analyser, 1.38);
        enca_set_multibyte(analyser, 1);
@@ -164,7 +178,47 @@ QByteArray DetectCode::EncaDetectCode(QString filepath)
 
    return charset;
 }
+#endif
 
+int DetectCode::ChartDet_DetectingTextCoding(const char *str, QString &encoding, float &confidence)
+{
+    DetectObj *obj = detect_obj_init();
+
+    if (obj == nullptr) {
+        //qInfo() << "Memory Allocation failed\n";
+        return CHARDET_MEM_ALLOCATED_FAIL;
+    }
+
+#ifndef CHARDET_BINARY_SAFE
+    // before 1.0.5. This API is deprecated on 1.0.5
+    switch (detect(str, &obj))
+#else
+    // from 1.0.5
+    switch (detect_r(str, strlen(str), &obj))
+#endif
+    {
+    case CHARDET_OUT_OF_MEMORY :
+        qInfo() << "On handle processing, occured out of memory\n";
+        detect_obj_free(&obj);
+        return CHARDET_OUT_OF_MEMORY;
+    case CHARDET_NULL_OBJECT :
+        qInfo() << "2st argument of chardet() is must memory allocation with detect_obj_init API\n";
+        return CHARDET_NULL_OBJECT;
+    }
+
+#ifndef CHARDET_BOM_CHECK
+    //qInfo() << "encoding:" << obj->encoding << "; confidence: " << obj->confidence;
+#else
+    // from 1.0.6 support return whether exists BOM
+    qInfo() << "encoding:" << obj->encoding << "; confidence: " << obj->confidence << "; bom: " << obj->bom;
+#endif
+
+    encoding = obj->encoding;
+    confidence = obj->confidence;
+    detect_obj_free(&obj);
+
+    return CHARDET_SUCCESS ;
+}
 
 bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr, QByteArray &outStr,QString fromCode, QString toCode)
 {

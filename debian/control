@@ -18,7 +18,7 @@ Build-Depends:
  libdframeworkdbus-dev,
  libgtest-dev,
  libgmock-dev,
- libenca-dev (>= 1.19),
+ libchardet-dev,
  libuchardet-dev (>= 0.0.6)
 Rules-Requires-Root: no
 Standards-Version: 4.5.1
@@ -30,8 +30,7 @@ Depends:
  dde-qt5integration,
  ${shlibs:Depends},
  ${misc:Depends},
- libdtkwidget5 (>= 5.4.11),
- libenca0 (>= 1.19)
+ libdtkwidget5 (>= 5.4.11)
 Description: Text editor for DDE (Deepin Desktop Environment)
  Advanced text editor based on dtk.
  .

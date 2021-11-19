@@ -4,10 +4,6 @@
 namespace detectcodestub {
 
 QString stringvalue="1";
-QString retstringstub()
-{
-    return stringvalue;
-}
 
 int intvalue=1;
 int retintstub()
@@ -35,7 +31,6 @@ TEST(UT_GetFileEncodingFormat, UT_GetFileEncodingFormat_001)
     DetectCode* dc = new DetectCode;
 
     Stub stub;
-    stub.set(ADDR(DetectCode,EncaDetectCode),retstringstub);
     stub.set(ADDR(DetectCode,UchardetCode),retintstub);
 
     stringvalue = "unknown";
@@ -51,7 +46,6 @@ TEST(UT_GetFileEncodingFormat, UT_GetFileEncodingFormat_002)
     DetectCode* dc = new DetectCode;
 
     Stub stub;
-    stub.set(ADDR(DetectCode,EncaDetectCode),retstringstub);
     stub.set(ADDR(DetectCode,UchardetCode),retintstub);
 
     stringvalue = "ASCII";

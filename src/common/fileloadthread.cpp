@@ -43,9 +43,16 @@ void FileLoadThread::run()
         QByteArray indata = file.readAll();
         file.close();
         QByteArray outData;
-        // read the encode.
-        QByteArray encode = DetectCode::GetFileEncodingFormat(m_strFilePath);
-        QString textEncode =QString::fromLocal8Bit(encode);
+
+        //编码识别，如果文件数据大于1M，则只裁剪出1M文件数据去做编码探测
+        QByteArray dateUsedForCodeIdentify;
+        if (indata.length() > DATA_SIZE_1024 * DATA_SIZE_1024) {
+            dateUsedForCodeIdentify = indata.mid(0, DATA_SIZE_1024 * DATA_SIZE_1024);
+        } else {
+            dateUsedForCodeIdentify = indata;
+        }
+        QByteArray encode = DetectCode::GetFileEncodingFormat(m_strFilePath, dateUsedForCodeIdentify);
+        QString textEncode = QString::fromLocal8Bit(encode);
 
          if (textEncode.contains("ASCII", Qt::CaseInsensitive) || textEncode.contains("UTF-8", Qt::CaseInsensitive)) {
            emit sigLoadFinished(encode, indata);
