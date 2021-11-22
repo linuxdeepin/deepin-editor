@@ -2465,6 +2465,12 @@ void TextEdit::paste()
 
     const QClipboard *clipboard = QApplication::clipboard(); //获取剪切版内容
     auto text = clipboard->text();
+
+    if(text.size() > 500 * 1024 * 1024){
+        DMessageManager::instance()->sendMessage(this, QIcon(":/images/warning.svg"), tr("Failed to paste text: it is too large"));
+        return;
+    }
+
     if(text.isEmpty())
         return;
     if (!m_bIsAltMod){
