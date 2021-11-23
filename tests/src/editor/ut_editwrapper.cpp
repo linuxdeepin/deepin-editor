@@ -43,9 +43,12 @@ QStringList retstringliststub()
     return stringList;
 }
 
+QPointer<DSettingsOption> d = nullptr;
 QPointer<DSettingsOption> retsettingoption()
 {
-    QPointer<DSettingsOption> d = new DSettingsOption();
+    if (d == nullptr) {
+        d = new DSettingsOption();
+    }
     QVariant v(stringList);
     d->setValue(v);
     QVariant p = d->value();
@@ -678,6 +681,8 @@ TEST(UT_Editwrapper_handleFileLoadFinished, UT_Editwrapper_handleFileLoadFinishe
     ASSERT_TRUE(pWindow->currentWrapper()->m_pBottomBar->m_pEncodeMenu != nullptr);
 
     pWindow->deleteLater();
+    delete d;
+    d = nullptr;
 }
 
 

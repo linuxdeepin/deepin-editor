@@ -107,26 +107,23 @@ ColorSelectWdg::ColorSelectWdg(QString text,QWidget *parent):DWidget (parent),m_
 ColorSelectWdg::~ColorSelectWdg()
 {
     if (m_pHLayout2 != nullptr) {
-        delete m_pHLayout2;
-        m_pHLayout2 = nullptr;
+        m_pHLayout2->deleteLater();
     }
 
     if (m_pHLayout1 != nullptr) {
-        delete m_pHLayout1;
-        m_pHLayout1 = nullptr;
+        m_pHLayout1->deleteLater();
     }
 
     if (m_pMainLayout != nullptr) {
-        delete m_pMainLayout;
-        m_pMainLayout = nullptr;
+        m_pMainLayout->deleteLater();
     }
 }
 
 void ColorSelectWdg::initWidget()
 {
     m_pMainLayout = new QVBoxLayout;
-    m_pHLayout1 = new QHBoxLayout();
-    m_pHLayout2 = new QHBoxLayout();
+    m_pHLayout1 = new QHBoxLayout;
+    m_pHLayout2 = new QHBoxLayout;
 
     if(!m_text.isEmpty()){
         m_pButton = new DPushButton(m_text,this);

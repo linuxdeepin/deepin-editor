@@ -120,8 +120,10 @@ UT_Window::UT_Window()
 
 TEST(UT_Window_Window, UT_Window_Window_001)
 {
-    Window window1;
+    Window *pWindow = new Window;
 
+    ASSERT_TRUE(pWindow->m_editorWidget != nullptr);
+    pWindow->deleteLater();
 }
 
 TEST(UT_Window_showCenterWindow, UT_Window_showCenterWindow_001)
@@ -137,8 +139,6 @@ TEST(UT_Window_showCenterWindow, UT_Window_showCenterWindow_001)
     EXPECT_NE(window1,nullptr);
 
     window1->deleteLater();
-
-
 }
 
 TEST(UT_Window_showCenterWindow, UT_Window_showCenterWindow_002)
@@ -1980,17 +1980,16 @@ TEST(UT_Window_doprint, UT_Window_doprint)
     editwrapper_texteditor = new TextEdit;
     Stub s1;s1.set(ADDR(EditWrapper,textEditor),EditWrapper_textEditor_stub);
 
-
     QVector<int> pages{1,2,3,4,5};
     w->doPrint(p,pages);
 
-
-    EXPECT_NE(w,nullptr);
+    EXPECT_NE(w, nullptr);
     w->deleteLater();
     editwrapper_texteditor->deleteLater();
     w->m_printDoc->deleteLater();
     w->m_pPreview->deleteLater();
-
+    delete p;
+    p = nullptr;
 }
 
 
