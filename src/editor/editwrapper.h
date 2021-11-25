@@ -117,6 +117,10 @@ public:
     Window *window();
     void updateHighlighterAll();
 
+    //get and set m_tModifiedDateTime
+    QDateTime getLastModifiedTime() const;
+    void setLastModifiedTime(const QString& time);
+
 signals:
     void sigClearDoubleCharaterEncode();
 

@@ -329,6 +329,7 @@ void EditWrapper::reloadModifyFile()
         if (res == 1) {
             //重写加载文件
             readFile();
+            m_bIsTemFile = false;
         }
         //另存
         if (res == 2) {
@@ -603,7 +604,7 @@ void EditWrapper::checkForReload()
             m_pWaringNotices->setSaveAsBtn();
             m_pWaringNotices->show();
             DMessageManager::instance()->sendMessage(m_pTextEdit, m_pWaringNotices);
-        } else if (fi2.lastModified() != m_tModifiedDateTime) {
+        } else if (fi2.lastModified().toString() != m_tModifiedDateTime.toString()) {
             m_pWaringNotices->setMessage(tr("File has changed on disk. Reload?"));
             m_pWaringNotices->setReloadBtn();
             m_pWaringNotices->show();
@@ -839,6 +840,16 @@ void EditWrapper::updateHighlighterAll()
 
         m_bHighlighterAll = true;
     }
+}
+
+QDateTime EditWrapper::getLastModifiedTime() const
+{
+     return m_tModifiedDateTime;
+}
+
+void EditWrapper::setLastModifiedTime(const QString& time)
+{
+    m_tModifiedDateTime = QDateTime::fromString(time);
 }
 
 void EditWrapper::updateModifyStatus(bool bModified)

@@ -134,9 +134,10 @@ public:
      * @param qstrPath　打开文件路径
      * @param qstrName　真实文件名
      * @param qstrTruePath　真实文件路径
+     * @param qstrTruePath　最后一次修改时间
      * @param bIsTemFile　是否修改
      */
-    void addTemFileTab(QString qstrPath, QString qstrName, QString qstrTruePath, bool bIsTemFile = false);
+    void addTemFileTab(QString qstrPath, QString qstrName, QString qstrTruePath, QString lastModifiedTime,bool bIsTemFile = false);
 
     QMap<QString, EditWrapper *> getWrappers();
 

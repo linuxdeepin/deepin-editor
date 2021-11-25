@@ -1735,6 +1735,7 @@ void Window::backupFile()
         jsonObject.insert("localPath", localPath);
         jsonObject.insert("cursorPosition", QString::number(wrapper->textEditor()->textCursor().position()));
         jsonObject.insert("modify", wrapper->isModified());
+        jsonObject.insert("lastModifiedTime",wrapper->getLastModifiedTime().toString());
         QList<int> bookmarkList = wrapper->textEditor()->getBookmarkInfo();
         if (!bookmarkList.isEmpty()) {
             QString bookmarkInfo;
@@ -1800,7 +1801,7 @@ bool Window::closeAllFiles()
     return bIsCloseAll;
 }
 
-void Window::addTemFileTab(QString qstrPath, QString qstrName, QString qstrTruePath, bool bIsTemFile)
+void Window::addTemFileTab(QString qstrPath, QString qstrName, QString qstrTruePath, QString lastModifiedTime,bool bIsTemFile)
 {
     if (qstrPath.isEmpty() || !Utils::fileExists(qstrPath)) {
         return;
@@ -1809,9 +1810,15 @@ void Window::addTemFileTab(QString qstrPath, QString qstrName, QString qstrTrueP
     EditWrapper *wrapper = createEditor();
     m_tabbar->addTab(qstrPath, qstrName, qstrTruePath);
     wrapper->openFile(qstrPath, qstrTruePath, bIsTemFile);
+
+    //set m_tModifiedDateTime in wrapper again.
+    if(bIsTemFile && !lastModifiedTime.isEmpty()){
+        wrapper->setLastModifiedTime(lastModifiedTime);
+    }
     m_wrappers[qstrPath] = wrapper;
     showNewEditor(wrapper);
 }
+
 
 QMap<QString, EditWrapper *> Window::getWrappers()
 {
