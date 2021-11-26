@@ -549,6 +549,7 @@ public slots:
 
     void redo_();
     void undo_();
+    void moveText(int from,int to,const QString& text);
 
 protected:
     bool event(QEvent *evt) override;   //触摸屏event事件

@@ -32,6 +32,7 @@
 #include "replaceallcommond.h"
 #include "insertblockbytextcommond.h"
 #include "indenttextcommond.h"
+#include "undolist.h"
 
 #include <KF5/KSyntaxHighlighting/definition.h>
 #include <KF5/KSyntaxHighlighting/syntaxhighlighter.h>
@@ -2778,6 +2779,31 @@ void TextEdit::undo_()
     }
 }
 
+/*
+ * move the text from the positon of 'from' to the position of 'to'.
+ * */
+void TextEdit::moveText(int from,int to,const QString& text)
+{
+    auto cursor = this->textCursor();
+    auto list = new UndoList;
+    cursor.setPosition(from);
+    cursor.setPosition(from + text.size(),QTextCursor::KeepAnchor);
+    auto com1 = new DeleteBackCommond(cursor,this);
+    cursor.setPosition(to);
+    auto com2 = new InsertTextUndoCommand(cursor,text);
+
+    //the positon of 'from' is on the left of the position of 'to',
+    //therefore,firstly do the insert operation.
+    if(from < to){
+        list->appendCom(com2);
+        list->appendCom(com1);
+        m_pUndoStack->push(list);
+    }else if(from > to){
+        list->appendCom(com1);
+        list->appendCom(com2);
+        m_pUndoStack->push(list);
+    }
+}
 void TextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &closeChar)
 {
     QTextDocument *doc = document();
@@ -5660,7 +5686,62 @@ void TextEdit::dropEvent(QDropEvent *event)
     if (data->hasUrls() && data->urls().first().isLocalFile()) {
         qobject_cast<Window *>(this->window())->requestDropEvent(event);
     } else if (data->hasText() && !m_readOnlyMode) {
-        QPlainTextEdit::dropEvent(event);
+        //drag text in the same editor
+        if(event->source() && event->source()->parent() == this){
+            auto cursor = this->textCursor();
+            int srcpos = std::min(cursor.position(),cursor.anchor());
+            //use default behavior to make the cursor blink normally
+            QPlainTextEdit::dropEvent(event);
+            cursor = this->textCursor();
+            int dstpos = std::min(cursor.position(),cursor.anchor()) - data->text().size();
+
+            //fall back to the original state
+            if(srcpos != dstpos){
+                cursor.setPosition(dstpos);
+                cursor.setPosition(dstpos + data->text().size(),QTextCursor::KeepAnchor);
+                cursor.deleteChar();
+
+                cursor.setPosition(srcpos);
+                cursor.insertText(data->text());
+            }
+            if(srcpos < dstpos){
+                dstpos += data->text().size();
+            }
+
+            //perform moveText operation
+            moveText(srcpos,dstpos,data->text());
+
+
+         //drag text to another editor
+        }else if(event->source() && event->source()->parent() != this){
+
+            //use default behavior to make the cursor blink normally
+            QPlainTextEdit::dropEvent(event);
+
+            //operations in the destination editor.
+            //firstly do the restore operation,
+            //then, insert the text
+            auto cursor = this->textCursor();
+            int dstpos = std::min(cursor.position(),cursor.anchor()) - data->text().size();
+            cursor.setPosition(dstpos);
+            cursor.setPosition(dstpos + data->text().size(),QTextCursor::KeepAnchor);
+            cursor.deleteChar();
+            auto com = new InsertTextUndoCommand(cursor,data->text());
+            m_pUndoStack->push(com);
+
+            //operations in the source editor.
+            //firstly do the restore operation,
+            //then, delete the text
+            auto another = qobject_cast<TextEdit *>(event->source()->parent());
+            auto cursor2 = another->textCursor();
+            cursor2.insertText(data->text());
+            cursor2.setPosition(cursor2.position() - data->text().size(),QTextCursor::KeepAnchor);
+            auto com2 = new DeleteBackCommond(cursor2,another);
+            another->m_pUndoStack->push(com2);
+
+        }
+
+
     }
 }
 
