@@ -1981,7 +1981,11 @@ TEST(UT_Window_doprint, UT_Window_doprint)
     Stub s1;s1.set(ADDR(EditWrapper,textEditor),EditWrapper_textEditor_stub);
 
     QVector<int> pages{1,2,3,4,5};
+#if (DTK_VERSION_MAJOR > 5 \
+ || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR > 4) \
+ || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 4 && DTK_VERSION_PATCH >= 10))
     w->doPrint(p,pages);
+#endif
 
     EXPECT_NE(w, nullptr);
     w->deleteLater();
