@@ -51,6 +51,10 @@ void CustemBackend::doSync()
 
 void CustemBackend::doSetOption(const QString &key, const QVariant &value)
 {
+    /*
+     * 将配置值写入config配置文件
+     * 为了规避数据写入重复或者错乱，配置写入之前上锁，写入结束后开锁
+     */
     m_writeLock.lock();
     m_settings->setValue(key, value);
     m_settings->sync();
@@ -70,9 +74,7 @@ QVariant CustemBackend::getOption(const QString &key) const
 }
 
 CustemBackend::~CustemBackend()
-{
-    ;
-}
+{}
 
 
 
@@ -84,7 +86,7 @@ Settings::Settings(QWidget *parent)
                             .arg(qApp->organizationName())
                             .arg(qApp->applicationName());
 
-    m_backend = new CustemBackend(strConfigPath, this);
+    m_backend = new CustemBackend(strConfigPath);
 
     settings = DSettings::fromJsonFile(":/resources/settings.json");
     settings->setBackend(m_backend);
@@ -150,8 +152,7 @@ Settings::Settings(QWidget *parent)
 Settings::~Settings()
 {
     if (m_backend != nullptr) {
-        delete m_backend;
-        m_backend = nullptr;
+        m_backend->deleteLater();
     }
 }
 

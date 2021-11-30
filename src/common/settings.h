@@ -123,7 +123,6 @@ private:
     DDialog *createDialog(const QString &title, const QString &content, const bool &bIsConflicts);
 
 private:
-    //Dtk::Core::QSettingBackend *m_backend {nullptr};
     CustemBackend *m_backend {nullptr};
 
     bool m_bUserChangeKey = false;
