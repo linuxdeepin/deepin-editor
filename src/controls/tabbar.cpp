@@ -351,7 +351,7 @@ QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option
     painter.setRenderHint(QPainter::Antialiasing, true);
 
     if (!Utils::isWayland() && count() == 1) {
-        this->window()->hide();
+        this->window()->showMinimized();
     }
 
     // adjust offset.
