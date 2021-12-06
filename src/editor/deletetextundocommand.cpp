@@ -82,8 +82,7 @@ void DeleteTextUndoCommand::undo()
 
 void DeleteTextUndoCommand::redo()
 {
-
-    if(m_ColumnEditSelections.isEmpty()){
+    if (m_ColumnEditSelections.isEmpty()) {
         m_textCursor.deletePreviousChar();
     }else {
         int cnt = m_ColumnEditSelections.size();
