@@ -31,6 +31,7 @@
 #include "deletebackcommond.h"
 #include "replaceallcommond.h"
 #include "insertblockbytextcommond.h"
+#include "indenttextcommond.h"
 #include "undolist.h"
 
 #include <KF5/KSyntaxHighlighting/definition.h>
@@ -1337,37 +1338,24 @@ void TextEdit::killForwardWord()
 
 void TextEdit::indentText()
 {
-    // Stop mark if mark is set.
-    tryUnsetMark();
-    hideCursorBlink();
+    auto cursor = this->textCursor();
+    if(cursor.hasSelection()){
+        //calculate the start postion and the end postion of current selection.
+        int pos1 = cursor.position();
+        int pos2 = cursor.anchor();
+        if(pos1>pos2)
+            std::swap(pos1,pos2);
 
-    QTextCursor cursor = textCursor();
+        //calculate the start line and end line of current selection.
+        cursor.setPosition(pos1);
+        int line1 = cursor.blockNumber();
+        cursor.setPosition(pos2);
+        int line2 = cursor.blockNumber();
 
-    if (cursor.hasSelection()) {
-        QTextBlock block = document()->findBlock(cursor.selectionStart());
-        QTextBlock end = document()->findBlock(cursor.selectionEnd()).next();
-
-        cursor.beginEditBlock();
-
-        while (block != end) {
-            QString speaces(m_tabSpaceNumber, ' ');
-            cursor.setPosition(block.position());
-            cursor.insertText(speaces);
-            block = block.next();
-        }
-
-        cursor.endEditBlock();
-    } else {
-        cursor.beginEditBlock();
-
-        int indent = m_tabSpaceNumber - (cursor.positionInBlock() % m_tabSpaceNumber);
-        QString spaces(indent, ' ');
-        cursor.insertText(spaces);
-
-        cursor.endEditBlock();
+        //do the indent operation
+        auto com = new IndentTextCommond(this,pos1,pos2,line1,line2);
+        m_pUndoStack->push(com);
     }
-
-    showCursorBlink();
 }
 
 void TextEdit::unindentText()
@@ -1382,7 +1370,7 @@ void TextEdit::unindentText()
         DeleteBackCommond* com = new DeleteBackCommond(cursor,this);
         m_pUndoStack->push(com);
     }
-   //the text in front of current line is ' '.
+    //the text in front of current line is ' '.
     else if(" " == cursor.selectedText()){
         int startpos = pos;
         int cnt=0;
@@ -6135,7 +6123,29 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
                 insertColumnEditTextEx(e->text());
             } else {
-                insertSelectTextEx(textCursor(), e->text());
+                auto cursor = this->textCursor();
+                bool hassel = cursor.hasSelection();
+                auto selectedtext = cursor.selectedText();
+
+                //calculate the startline and endline.
+                auto anchor = cursor.anchor();
+                auto pos = cursor.position();
+                cursor.setPosition(anchor);
+                auto line1 = cursor.blockNumber();
+                cursor.setPosition(pos);
+                auto line2 = cursor.blockNumber();
+
+                //get the text of current line.
+                cursor.movePosition(QTextCursor::StartOfBlock);
+                cursor.movePosition(QTextCursor::EndOfBlock,QTextCursor::KeepAnchor);
+                auto currentline = cursor.selectedText();
+
+                if(hassel && e->key() == Qt::Key_Tab && (line1 != line2 || selectedtext == currentline)){
+                    indentText();
+                }
+                else{
+                    insertSelectTextEx(textCursor(), e->text());
+                }
             }
             m_isSelectAll = false;
             return;

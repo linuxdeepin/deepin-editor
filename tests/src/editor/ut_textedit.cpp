@@ -1513,7 +1513,7 @@ TEST_F(test_textedit, indentText_002)
     int iRetAfter = pWindow->currentWrapper()->textEditor()->textCursor().position();
     QString strRet(pWindow->currentWrapper()->textEditor()->textCursor().block().text());
 
-    ASSERT_TRUE(iRetAfter != iRetBefore);
+    EXPECT_EQ(iRetAfter , iRetBefore);
     pWindow->deleteLater();
 }
 
