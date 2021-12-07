@@ -6865,6 +6865,9 @@ void TextEdit::removeComment()
     }
 
     QString tep = m_commentDefinition.singleLine;
+    if (tep.isEmpty()) {
+        tep = m_commentDefinition.multiLineStart;
+    }
     QString abb = tep.remove(QRegExp("\\s"));
 
     if(m_isSelectAll) {
@@ -6971,7 +6974,7 @@ void TextEdit::removeComment()
         doSingleLineStyleUncomment = true;
         for (QTextBlock block = startBlock; block != endBlock; block = block.next()) {
             QString text = block.text().trimmed();
-            if (!text.isEmpty() && (!text.startsWith(m_commentDefinition.singleLine))) {
+            if (!text.isEmpty() && (!text.startsWith(m_commentDefinition.singleLine) || (!text.startsWith(m_commentDefinition.multiLineStart)))) {
                 if (!text.startsWith(abb)) {
                     doSingleLineStyleUncomment = false;
                     break;
