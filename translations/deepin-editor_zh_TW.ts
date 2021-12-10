@@ -1030,12 +1030,17 @@
         <translation>取消注釋</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="2455"/>
+        <location filename="../src/editor/dtextedit.cpp" line="2453"/>
         <source>Failed to paste text: it is too large</source>
         <translation>文字內容過大，貼上失敗</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="2659"/>
+        <location filename="../src/editor/dtextedit.cpp" line="2581"/>
+        <source>Copy failed: not enough memory</source>
+        <translation>記憶體不足，複製失敗</translation>
+    </message>
+    <message>
+        <location filename="../src/editor/dtextedit.cpp" line="2661"/>
         <source>Press ALT and click lines to edit in column mode</source>
         <translation>請使用ALT+滑鼠點選切換列編輯模式</translation>
     </message>
@@ -1085,14 +1090,14 @@
         <translation>已剪下目前行到剪貼簿</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3433"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3435"/>
         <source>Read-Only mode is off</source>
         <translation>唯讀模式已關閉</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3440"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3448"/>
-        <location filename="../src/editor/dtextedit.cpp" line="6069"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3442"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3450"/>
+        <location filename="../src/editor/dtextedit.cpp" line="6119"/>
         <source>Read-Only mode is on</source>
         <translation>唯讀模式已開啟</translation>
     </message>

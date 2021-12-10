@@ -1030,12 +1030,17 @@
         <translation>Odebrat komentář</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="2455"/>
+        <location filename="../src/editor/dtextedit.cpp" line="2453"/>
         <source>Failed to paste text: it is too large</source>
+        <translation>Nepodařilo se vložit text: je příliš dlouhý</translation>
+    </message>
+    <message>
+        <location filename="../src/editor/dtextedit.cpp" line="2581"/>
+        <source>Copy failed: not enough memory</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="2659"/>
+        <location filename="../src/editor/dtextedit.cpp" line="2661"/>
         <source>Press ALT and click lines to edit in column mode</source>
         <translation>Pro upravování ve sloupcovém režimu stiskněte ALT a klepejte na řádky</translation>
     </message>
@@ -1085,14 +1090,14 @@
         <translation>Stávající řádek zkrácen</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3433"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3435"/>
         <source>Read-Only mode is off</source>
         <translation>Režim pouze pro čtení je vypnut</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3440"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3448"/>
-        <location filename="../src/editor/dtextedit.cpp" line="6069"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3442"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3450"/>
+        <location filename="../src/editor/dtextedit.cpp" line="6119"/>
         <source>Read-Only mode is on</source>
         <translation>Režim pouze pro čtení je zapnut</translation>
     </message>

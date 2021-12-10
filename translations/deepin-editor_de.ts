@@ -1030,12 +1030,17 @@
         <translation>Kommentar entfernen</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="2455"/>
+        <location filename="../src/editor/dtextedit.cpp" line="2453"/>
         <source>Failed to paste text: it is too large</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="2659"/>
+        <location filename="../src/editor/dtextedit.cpp" line="2581"/>
+        <source>Copy failed: not enough memory</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/editor/dtextedit.cpp" line="2661"/>
         <source>Press ALT and click lines to edit in column mode</source>
         <translation>Drücke ALT und klicke auf Zeilen, um im Spaltenmodus zu bearbeiten</translation>
     </message>
@@ -1085,14 +1090,14 @@
         <translation>Aktuelle Zeile abgeschnitten</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3433"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3435"/>
         <source>Read-Only mode is off</source>
         <translation>Nur-Lese-Modus ist ausgeschaltet</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3440"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3448"/>
-        <location filename="../src/editor/dtextedit.cpp" line="6069"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3442"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3450"/>
+        <location filename="../src/editor/dtextedit.cpp" line="6119"/>
         <source>Read-Only mode is on</source>
         <translation>Nur-Lese-Modus ist eingeschaltet</translation>
     </message>

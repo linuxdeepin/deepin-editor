@@ -1030,12 +1030,17 @@
         <translation>མཆན་འདོར་བ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="2455"/>
+        <location filename="../src/editor/dtextedit.cpp" line="2453"/>
         <source>Failed to paste text: it is too large</source>
-        <translation type="unfinished"/>
+        <translation>ཡིག་ཆ་ཆེ་དྲགས་པས་སྦྱར་མི་ཐུབ།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="2659"/>
+        <location filename="../src/editor/dtextedit.cpp" line="2581"/>
+        <source>Copy failed: not enough memory</source>
+        <translation>གཤོང་ཚད་མ་འདང་བས་པར་སློག་བྱེད་ཐབས་བྲལ།</translation>
+    </message>
+    <message>
+        <location filename="../src/editor/dtextedit.cpp" line="2661"/>
         <source>Press ALT and click lines to edit in column mode</source>
         <translation>ALT+ཙི་གུའི་འདེམས་པ་སྤྱད་ནས་གཞུང་སྟར་རྩོམ་སྒྲིག་རྣམ་པ་བརྗེ་རྒྱུ།</translation>
     </message>
@@ -1085,14 +1090,14 @@
         <translation>མིག་སྔའི་སྟར་པ་འདི་དྲས་སྦྱར་པང་དུ་དྲས་གཏུབ་བྱས་ཟིན།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3433"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3435"/>
         <source>Read-Only mode is off</source>
         <translation>ཀློག་ཙམ་དཔེ་དབྱིབས་ཁ་བརྒྱབ་ཟིན།</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3440"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3448"/>
-        <location filename="../src/editor/dtextedit.cpp" line="6069"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3442"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3450"/>
+        <location filename="../src/editor/dtextedit.cpp" line="6119"/>
         <source>Read-Only mode is on</source>
         <translation>ཀློག་ཙམ་དཔེ་དབྱིབས་ཁ་ཕྱེ་ཟིན།</translation>
     </message>

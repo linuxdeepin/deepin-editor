@@ -35,8 +35,12 @@
 #define SAFE_DELETE(p)      if((p)) { delete (p); (p) = nullptr;}
 #endif
 
-#define DEEPIN_THEME      "/usr/share/deepin-editor/themes/deepin.theme"
-#define DEEPIN_DARK_THEME "/usr/share/deepin-editor/themes/deepin_dark.theme"
+#define DEEPIN_THEME        "/usr/share/deepin-editor/themes/deepin.theme"
+#define DEEPIN_DARK_THEME   "/usr/share/deepin-editor/themes/deepin_dark.theme"
+#define DATA_SIZE_1024      1024
+#define TEXT_EIDT_MARK_ALL  "MARK_ALL"
+#define PROC_MEMINFO_PATH   "/proc/meminfo"
+#define COPY_CONSUME_MEMORY_MULTIPLE 9
 
 class Utils
 {

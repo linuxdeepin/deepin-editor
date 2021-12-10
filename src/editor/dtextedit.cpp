@@ -2393,8 +2393,7 @@ void TextEdit::copy()
 {
     if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
         QString data;
-        for(auto it = m_altModSelections.begin();it!=m_altModSelections.end();it++)
-        {
+        for(auto it = m_altModSelections.begin();it!=m_altModSelections.end();it++) {
             auto text = (*it).cursor.selectedText();
             data += text ;
             if(it != m_altModSelections.end() - 1)
@@ -2417,7 +2416,6 @@ void TextEdit::copy()
             QString text = this->toPlainText();
             clipboard->setText(text);
         }
-
     }
 }
 
@@ -2451,7 +2449,7 @@ void TextEdit::paste()
     const QClipboard *clipboard = QApplication::clipboard(); //获取剪切版内容
     auto text = clipboard->text();
 
-    if(text.size() > 500 * 1024 * 1024){
+    if (text.size() > 500 * 1024 * 1024) {
         DMessageManager::instance()->sendMessage(this, QIcon(":/images/warning.svg"), tr("Failed to paste text: it is too large"));
         return;
     }
@@ -2577,7 +2575,11 @@ void TextEdit::slotCutAction(bool checked)
 void TextEdit::slotCopyAction(bool checked)
 {
     Q_UNUSED(checked);
-    this->copy();
+    if (isAbleCopy()) {
+        copy();
+    } else {
+        DMessageManager::instance()->sendMessage(this, QIcon(":/images/warning.svg"), tr("Copy failed: not enough memory"));
+    }
 }
 
 void TextEdit::slotPasteAction(bool checked)
@@ -3616,6 +3618,55 @@ void TextEdit::SendtoggleReadmessage()
         updateHighlightLineSelection();
         emit cursorModeChanged(Readonly);
     }
+}
+
+bool TextEdit::isAbleCopy()
+{
+    bool bRet = true;
+    qlonglong memory = 0;
+    qlonglong memoryAll = 0;
+    bool bVaule = false;
+    QFile file(PROC_MEMINFO_PATH);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qInfo() << "Open " << PROC_MEMINFO_PATH << " failed.";
+        return bRet;
+    }
+
+    QTextStream stream(&file);
+    qlonglong buff[16] = {0};
+    for (int i = 0; i <= 15; ++i) {
+        QString line = stream.readLine();
+        QStringList list = line.split(QRegExp("\\s{1,}"));
+        if (list.size() >= 2) {
+            buff[i] = list.at(1).toLongLong(&bVaule);
+        }
+    }
+
+    memoryAll = buff[0];
+    memory = buff[0] - buff[2];
+
+    if (m_isSelectAll) {
+        if (characterCount()/DATA_SIZE_1024 * COPY_CONSUME_MEMORY_MULTIPLE > (memoryAll - memory)) {
+            bRet = false;
+        }
+    } else if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
+        QString strSelectText;
+        for (auto it = m_altModSelections.begin(); it != m_altModSelections.end(); it++) {
+            auto text = (*it).cursor.selectedText();
+            strSelectText += text;
+            if(it != m_altModSelections.end() - 1)
+                strSelectText += "\n";
+        }
+        if (strSelectText.size()/DATA_SIZE_1024 * COPY_CONSUME_MEMORY_MULTIPLE > (memoryAll - memory)) {
+            bRet = false;
+        }
+    } else if (textCursor().hasSelection()) {
+        if (textCursor().selection().toPlainText().size()/DATA_SIZE_1024 * COPY_CONSUME_MEMORY_MULTIPLE > (memoryAll - memory)) {
+            bRet = false;
+        }
+    }
+
+    return bRet;
 }
 
 void TextEdit::SendtoggleReadOnlyMode() {
@@ -5979,7 +6030,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
     }
 
     if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "copy")) {
-        copy();
+        slotCopyAction();
         return;
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "selectall")) {
         #if 0

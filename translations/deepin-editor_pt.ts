@@ -51,7 +51,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="259"/>
         <source>Encoding changed. Do you want to save the file now?</source>
-        <translation>A codificação mudou. Deseja guardar o ficheiro agora?</translation>
+        <translation>A codificação foi alterada. Deseja guardar o ficheiro agora?</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="320"/>
@@ -1030,12 +1030,17 @@
         <translation>Remover comentário</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="2455"/>
+        <location filename="../src/editor/dtextedit.cpp" line="2453"/>
         <source>Failed to paste text: it is too large</source>
+        <translation>Falha ao colar texto: é demasiado grande</translation>
+    </message>
+    <message>
+        <location filename="../src/editor/dtextedit.cpp" line="2581"/>
+        <source>Copy failed: not enough memory</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="2659"/>
+        <location filename="../src/editor/dtextedit.cpp" line="2661"/>
         <source>Press ALT and click lines to edit in column mode</source>
         <translation>Prima ALT e clique em linhas para editar em modo de coluna</translation>
     </message>
@@ -1085,14 +1090,14 @@
         <translation>Linha atual cortada</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3433"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3435"/>
         <source>Read-Only mode is off</source>
         <translation>O modo de Apenas-Leitura está desligado</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3440"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3448"/>
-        <location filename="../src/editor/dtextedit.cpp" line="6069"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3442"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3450"/>
+        <location filename="../src/editor/dtextedit.cpp" line="6119"/>
         <source>Read-Only mode is on</source>
         <translation>O modo de Apenas-Leitura está ligado</translation>
     </message>
