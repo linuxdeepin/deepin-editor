@@ -600,20 +600,19 @@ void EditWrapper::checkForReload()
             return;
         }
 
-    QFileInfo fi2(m_pTextEdit->getTruePath());
+        QFileInfo finfo(m_pTextEdit->getTruePath());
 
-    if (!fi2.exists()) {
-        m_pWaringNotices->setMessage(tr("File removed on the disk. Save it now?"));
-        m_pWaringNotices->setSaveAsBtn();
-        m_pWaringNotices->show();
-        DMessageManager::instance()->sendMessage(m_pTextEdit, m_pWaringNotices);
-    } else if (fi2.lastModified().toString() != m_tModifiedDateTime.toString()) {
-        m_pWaringNotices->setMessage(tr("File has changed on disk. Reload?"));
-        m_pWaringNotices->setReloadBtn();
-        m_pWaringNotices->show();
-        DMessageManager::instance()->sendMessage(m_pTextEdit, m_pWaringNotices);
-    }
-
+        if (!finfo.exists()) {
+            m_pWaringNotices->setMessage(tr("File removed on the disk. Save it now?"));
+            m_pWaringNotices->setSaveAsBtn();
+            m_pWaringNotices->show();
+            DMessageManager::instance()->sendMessage(m_pTextEdit, m_pWaringNotices);
+        } else if (!m_tModifiedDateTime.toString().isEmpty() && finfo.lastModified().toString() != m_tModifiedDateTime.toString()) {
+            m_pWaringNotices->setMessage(tr("File has changed on disk. Reload?"));
+            m_pWaringNotices->setReloadBtn();
+            m_pWaringNotices->show();
+            DMessageManager::instance()->sendMessage(m_pTextEdit, m_pWaringNotices);
+        }
     });
 }
 
