@@ -3605,7 +3605,7 @@ void TextEdit::setReadOnlyPermission(bool permission)
         m_Permission = false;
         if (!m_readOnlyMode) {
             setReadOnly(false);
-            emit cursorModeChanged(Insert);
+            //emit cursorModeChanged(Insert);
         } else {
             setReadOnly(true);
             emit cursorModeChanged(Readonly);
@@ -6112,6 +6112,12 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
                 insertColumnEditTextEx(e->text());
             } else {
+                if(m_cursorMode == Overwrite){
+                    auto cursor = this->textCursor();
+                    cursor.clearSelection();
+                    cursor.movePosition(QTextCursor::Right,QTextCursor::KeepAnchor);
+                    this->setTextCursor(cursor);
+                }
                 insertSelectTextEx(textCursor(), e->text());
             }
 
