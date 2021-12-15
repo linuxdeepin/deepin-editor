@@ -685,7 +685,7 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteAr
     //clearDoubleCharaterEncode();
 
 
-    PerformanceMonitor::openFileFinish(filePath(), QFileInfo(filePath()).size());
+    //PerformanceMonitor::openFileFinish(filePath(), QFileInfo(filePath()).size());
 
     m_bFileLoading = false;
     if (flag == true) {
@@ -937,8 +937,13 @@ Window *EditWrapper::window()
 //支持大文本加载 界面不卡顿 秒关闭
 void EditWrapper::loadContent(const QByteArray &strContent)
 {
-    m_pBottomBar->setChildEnabled(false);
-    m_pWindow->setPrintEnabled(false);
+    if (m_pBottomBar != nullptr) {
+        m_pBottomBar->setChildEnabled(false);
+    }
+    if (m_pWindow != nullptr) {
+        m_pWindow->setPrintEnabled(false);
+    }
+
     QApplication::setOverrideCursor(Qt::WaitCursor);
     m_pTextEdit->clear();
     m_bQuit = false;
@@ -1012,8 +1017,12 @@ void EditWrapper::loadContent(const QByteArray &strContent)
             }
         }
     }
-    m_pWindow->setPrintEnabled(true);
-    m_pBottomBar->setChildEnabled(true);
+    if (m_pWindow != nullptr) {
+        m_pWindow->setPrintEnabled(true);
+    }
+    if (m_pBottomBar != nullptr) {
+        m_pBottomBar->setChildEnabled(true);
+    }
     QApplication::restoreOverrideCursor();
 }
 
