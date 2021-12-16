@@ -6173,6 +6173,12 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
                 insertColumnEditTextEx(e->text());
             } else {
+                if(m_cursorMode == Overwrite){
+                    auto cursor = this->textCursor();
+                    cursor.clearSelection();
+                    cursor.movePosition(QTextCursor::Right,QTextCursor::KeepAnchor);
+                    this->setTextCursor(cursor);
+                }
                 insertSelectTextEx(textCursor(), e->text());
             }
             m_isSelectAll = false;
