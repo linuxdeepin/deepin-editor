@@ -3446,6 +3446,17 @@ void TextEdit::toggleReadOnlyMode()
 
 void TextEdit::toggleComment(bool bValue)
 {
+    const auto def = m_repository.definitionForFileName(QFileInfo(m_sFilePath).fileName());
+    QTextCursor selectionCursor = textCursor();
+    selectionCursor.movePosition(QTextCursor::StartOfBlock);
+    selectionCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+    QString text = selectionCursor.selectedText();
+    // init base.
+    bool isBlankLine = text.trimmed().isEmpty();
+    if (characterCount() == 0 || isBlankLine || def.filePath().isEmpty()) {
+        return;
+    }
+
     if (m_readOnlyMode) {
         popupNotify(tr("Read-Only mode is on"));
         return;
@@ -3466,7 +3477,6 @@ void TextEdit::toggleComment(bool bValue)
         return;
     }
 
-    const auto def = m_repository.definitionForFileName(QFileInfo(m_sFilePath).fileName());  //Java ,C++,HTML,
     QString name = def.name();
     if (name == "Markdown") {
         return;
@@ -6986,7 +6996,6 @@ void TextEdit::removeComment()
 
         bool hasSelEnd = endPos >= multiLineEndLength
                          && isComment(endText, endPos - multiLineEndLength, m_commentDefinition.multiLineEnd);
-
         doMultiLineStyleUncomment = hasSelStart && hasSelEnd;
         doMultiLineStyleComment = !doMultiLineStyleUncomment
                                   && (hasLeadingCharacters
@@ -7011,7 +7020,6 @@ void TextEdit::removeComment()
         }
     }
 
-
     if (doMultiLineStyleUncomment) {
         cursor.setPosition(end);
         cursor.movePosition(QTextCursor::PreviousCharacter,
@@ -7025,12 +7033,21 @@ void TextEdit::removeComment()
                             m_commentDefinition.multiLineStart.length());
         //cursor.removeSelectedText();
         deleteTextEx(cursor);
+    } else if (textCursor().hasSelection() && m_commentDefinition.singleLine.isEmpty()) {
+        doSingleLineStyleUncomment = false;
     } else {
         int tmp = 0;//备注偏移量，判断备注标记后面有没有空格
         endBlock = endBlock.next();
         doSingleLineStyleUncomment = true;
         for (QTextBlock block = startBlock; block != endBlock; block = block.next()) {
             QString text = block.text().trimmed();
+            if (!text.isEmpty() && m_commentDefinition.singleLine.isEmpty()) {
+                if (text.startsWith(abb)) {
+                    doSingleLineStyleUncomment = false;
+                    break;
+                }
+            }
+
             if (!text.isEmpty() && (!text.startsWith(m_commentDefinition.singleLine) || (!text.startsWith(m_commentDefinition.multiLineStart)))) {
                 if (!text.startsWith(abb)) {
                     doSingleLineStyleUncomment = false;
