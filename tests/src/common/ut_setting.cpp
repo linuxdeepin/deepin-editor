@@ -25,10 +25,7 @@
 #include <DtkCores>
 #include "src/stub.h"
 
-
 namespace settinsstub {
-
-
 
 KeySequenceEdit* keyvalue = nullptr;
 KeySequenceEdit* KeySequenceEditstub()
@@ -47,12 +44,16 @@ using namespace settinsstub;
 
 UT_Setting::UT_Setting()
 {
+    m_setting = new Settings();
 }
 
 void UT_Setting::SetUp()
 {
-    m_setting = new Settings();
-    EXPECT_NE(m_setting,nullptr);
+    if (m_setting != nullptr) {
+        m_setting = new Settings();
+    }
+
+    EXPECT_NE(m_setting, nullptr);
 }
 
 void UT_Setting::TearDown()
@@ -94,6 +95,23 @@ TEST(UT_Setting_Settings, UT_Setting_Settings)
     m_setting->deleteLater();
 }
 
+TEST(UT_Setting_Settings, UT_Setting_Settings_002)
+{
+    Settings* m_setting = new Settings();
+    QString figPath = QString("%1/%2/%3/config.conf")
+                          .arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation))
+                          .arg(qApp->organizationName())
+                          .arg(qApp->applicationName());
+    QSettingBackend *m_backend = new QSettingBackend(figPath);
+    m_setting->~Settings();
+    EXPECT_NE(m_backend,nullptr);
+
+    if (m_backend != nullptr) {
+        m_backend->deleteLater();
+    }
+    m_setting->deleteLater();
+}
+
 //static Settings* instance();
 TEST(UT_Setting_instance, UT_Setting_instance)
 {
@@ -104,13 +122,16 @@ TEST(UT_Setting_instance, UT_Setting_instance)
 //void dtkThemeWorkaround(QWidget *parent, const QString &theme);
 TEST(UT_Setting_dtkThemeWorkaround, UT_Setting_dtkThemeWorkaround)
 {
-    QWidget *widget = new QWidget();
-    Settings::instance()->dtkThemeWorkaround(widget, "dlight");
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString("Holle world"));
+    Settings *Settings = Settings::instance();
+    Settings->dtkThemeWorkaround(pWindow, DEEPIN_THEME);
+    EXPECT_NE(pWindow, nullptr);
 
-
-    EXPECT_NE(widget,nullptr);
-    widget->deleteLater();
-
+    Settings->deleteLater();
+    pWindow->deleteLater();
 }
 
 //static QPair<QWidget*, QWidget*> createFontComBoBoxHandle(QObject *obj);

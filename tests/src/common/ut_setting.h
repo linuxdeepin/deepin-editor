@@ -20,6 +20,9 @@
 #include "gtest/gtest.h"
 #include <QTest>
 #include <QObject>
+#include "../../src/widgets/window.h"
+#include "../../src/common/utils.h"
+
 class Settings;
 class KeySequenceEdit;
 class UT_Setting : public QObject

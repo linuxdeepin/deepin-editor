@@ -112,15 +112,30 @@ TEST(UT_StartManager_slotCheckUnsaveTab, slotCheckUnsaveTab)
 }
 
 //checkPath
-TEST(UT_StartManager_checkPath, checkPath)
+TEST(UT_StartManager_checkPath, checkPath_001)
 {
-    StartManager *startManager = StartManager::instance();
-    startManager->m_windows.clear();
-    bool bRet = startManager->checkPath(".cache/deepin/deepin-editor");
-    ASSERT_TRUE(bRet == true);
+    QStringList fileLists;
+    QString strFilePath(QCoreApplication::applicationDirPath() + "/Makefile");
+    fileLists << strFilePath;
+    StartManager *pStartManager = StartManager::instance();
+    pStartManager->openFilesInTab(fileLists);
+    bool bRet = pStartManager->checkPath(strFilePath);
+    ASSERT_TRUE(bRet == false);
     
-    startManager->deleteLater();
+    pStartManager->deleteLater();
 }
+
+//checkPath
+TEST(UT_StartManager_checkPath, checkPath_002)
+{
+    StartManager *pStartManager = StartManager::instance();
+    pStartManager->openFilesInTab(QStringList());
+    bool bRet = pStartManager->checkPath(QString());
+    ASSERT_TRUE(bRet == true);
+
+    pStartManager->deleteLater();
+}
+
 TEST(UT_StartManager_ifKlu,ifKlu )
 {
     StartManager *startManager = StartManager::instance();
@@ -141,22 +156,53 @@ TEST(UT_StartManager_loadThem,loadTheme)
 }
 
 // bool isMultiWindow();
-TEST(UT_StartManager_isMultiWindow,isMultiWindow)
+TEST(UT_StartManager_isMultiWindow, isMultiWindow_001)
 {
-    StartManager *startManager = StartManager::instance();
-    bool bRet = startManager->isMultiWindow();
-    ASSERT_TRUE(bRet == false);
+    QStringList fileLists;
+    QString strMakeFilePath(QCoreApplication::applicationDirPath() + "/Makefile");
+    QString strCMakePath(QCoreApplication::applicationDirPath() + "/CMakeCache.txt");
+    fileLists << strMakeFilePath << strCMakePath;
+    StartManager *pStartManager = StartManager::instance();
+    bool bRet = pStartManager->isMultiWindow();
+    ASSERT_TRUE(bRet == true);
     
-    startManager->deleteLater();
+    pStartManager->deleteLater();
 }
 
-TEST(UT_StartManager_isTemFilesEmpty,isTemFilesEmpty)
+// bool isMultiWindow();
+TEST(UT_StartManager_isMultiWindow, isMultiWindow_002)
 {
-//    StartManager *startManager = StartManager::instance();
-//    bool bRet = startManager->isTemFilesEmpty();
-//    ASSERT_TRUE(bRet == true);
+    StartManager *pStartManager = StartManager::instance();
+    pStartManager->m_windows.clear();
+    bool bRet = pStartManager->isMultiWindow();
+    ASSERT_TRUE(bRet == false);
+
+    pStartManager->deleteLater();
+}
+
+TEST(UT_StartManager_isTemFilesEmpty, isTemFilesEmpty_001)
+{
+    QStringList fileLists;
+    QString strFilePath(QCoreApplication::applicationDirPath() + "/Makefile");
+    fileLists << strFilePath;
+    StartManager *pStartManager = StartManager::instance();
+    pStartManager->m_qlistTemFile.clear();
+    pStartManager->openFilesInTab(fileLists);
+    pStartManager->m_qlistTemFile << QString("");
+    bool bRet = pStartManager->isTemFilesEmpty();
+    ASSERT_TRUE(bRet == true);
     
-//    startManager->deleteLater();
+    pStartManager->deleteLater();
+}
+
+TEST(UT_StartManager_isTemFilesEmpty, isTemFilesEmpty_002)
+{
+    StartManager *pStartManager = StartManager::instance();
+    pStartManager->m_qlistTemFile.clear();
+    bool bRet = pStartManager->isTemFilesEmpty();
+    ASSERT_TRUE(bRet == false);
+
+    pStartManager->deleteLater();
 }
 
 TEST(UT_StartManager_autoBackupFile,autoBackupFile)

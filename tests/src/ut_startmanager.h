@@ -9,7 +9,6 @@
 #include "gtest/gtest.h"
 #include <QObject>
 
-
 class UT_StartManager: public QObject, public::testing::Test
 {
         Q_OBJECT
