@@ -112,50 +112,21 @@ private:
 class KeySequenceEdit : public DKeySequenceEdit
 {
 public:
-    inline KeySequenceEdit(DTK_CORE_NAMESPACE::DSettingsOption *opt, QWidget *parent = nullptr): DKeySequenceEdit(parent)
-    {
-        m_pOption = opt;
-        this->installEventFilter(this);
-    }
-	
-    DTK_CORE_NAMESPACE::DSettingsOption *option()
-    {
-        return m_pOption;
-    }
-    // ut002764 2021.7.05
-    void slotDSettingsOptionvalueChanged(const QVariant & value);
+    explicit KeySequenceEdit(DTK_CORE_NAMESPACE::DSettingsOption *opt, QWidget *parent = nullptr);
+    /**
+     * @brief option 获取设置页面操作句柄
+     */
+    DTK_CORE_NAMESPACE::DSettingsOption *option();
+    /**
+     * @brief slotDSettingsOptionvalueChanged 设置页面配置修改
+     */
+    void slotDSettingsOptionvalueChanged(const QVariant &value);
 
 protected:
-    inline bool eventFilter(QObject *object, QEvent *event)
-    {
-        //设置界面　回车键和空格键　切换输入 梁卫东　２０２０－０８－２１　１６：２８：３１
-        if (object == this) {
-            if (event->type() == QEvent::KeyPress) {
-                QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
-
-               //判断是否包含组合键　梁卫东　２０２０－０９－０２　１５：０３：５６
-                Qt::KeyboardModifiers modifiers = keyEvent->modifiers();
-                bool bHasModifier = (modifiers & Qt::ShiftModifier ||modifiers & Qt::ControlModifier ||
-                                     modifiers & Qt::AltModifier);
-
-                if (!bHasModifier && (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Space)) {
-                    QRect rect = this->rect();
-                    QList<QLabel*> childern = findChildren<QLabel*>();
-
-                    for (int i =0; i < childern.size(); i++) {
-                        QPoint pos(25,rect.height()/2);
-
-                        QMouseEvent event0(QEvent::MouseButtonPress, pos, Qt::LeftButton, Qt::LeftButton, Qt::NoModifier);
-                        DApplication::sendEvent(childern[i], &event0);
-                    }
-
-                    return true;
-                }
-            }
-        }
-
-        return DKeySequenceEdit::eventFilter(object, event);
-    }
+    /**
+     * @brief eventFilter 设置页面快捷键类的事件过滤器
+     */
+    bool eventFilter(QObject *object, QEvent *event);
 
 private:
     DTK_CORE_NAMESPACE::DSettingsOption *m_pOption = nullptr;

@@ -43,7 +43,7 @@ TEST(UT_EditorApplication_EditorApplication, EditorApplication_002)
     //EditorApplication e(argc,argv);
 }
 
-TEST(UT_EditorApplication_pressSpace, notify)
+TEST(UT_EditorApplication_pressSpace, notify_001)
 {
     int argc = 1;
     char* argv[] = {"test"};
@@ -54,7 +54,67 @@ TEST(UT_EditorApplication_pressSpace, notify)
 
     QPushButton* btn = new QPushButton;
     btn->setObjectName("CustomRebackButton");
-    bool bRet = app->notify(btn,e);
+    bool bRet = app->notify(btn, e);
+    ASSERT_TRUE(bRet == true);
+
+    btn->deleteLater();
+    delete e;
+    e = nullptr;
+    app->deleteLater();
+}
+
+TEST(UT_EditorApplication_pressSpace, notify_002)
+{
+    int argc = 1;
+    char* argv[] = {"test"};
+    //no deleted...
+    EditorApplication *app = new EditorApplication(argc,argv);
+    Qt::KeyboardModifier modefiers[4] = {Qt::ControlModifier,Qt::AltModifier,Qt::MetaModifier,Qt::NoModifier};
+    QKeyEvent *e = new QKeyEvent(QEvent::KeyPress, Qt::Key_Left, modefiers[0],"\r");
+
+    QPushButton* btn = new QPushButton;
+    btn->setObjectName("CustomRebackButton");
+    bool bRet = app->notify(btn, e);
+    ASSERT_TRUE(bRet == true);
+
+    btn->deleteLater();
+    delete e;
+    e = nullptr;
+    app->deleteLater();
+}
+
+TEST(UT_EditorApplication_pressSpace, notify_003)
+{
+    int argc = 1;
+    char* argv[] = {"test"};
+    //no deleted...
+    EditorApplication *app = new EditorApplication(argc,argv);
+    Qt::KeyboardModifier modefiers[4] = {Qt::ControlModifier,Qt::AltModifier,Qt::MetaModifier,Qt::NoModifier};
+    QKeyEvent *e = new QKeyEvent(QEvent::KeyPress, Qt::Key_Print, modefiers[0],"\r");
+
+    QPushButton* btn = new QPushButton;
+    btn->setObjectName("CustomRebackButton1");
+    bool bRet = app->notify(btn, e);
+    ASSERT_TRUE(bRet == true);
+
+    btn->deleteLater();
+    delete e;
+    e = nullptr;
+    app->deleteLater();
+}
+
+TEST(UT_EditorApplication_pressSpace, notify_004)
+{
+    int argc = 1;
+    char* argv[] = {"test"};
+    //no deleted...
+    EditorApplication *app = new EditorApplication(argc,argv);
+    Qt::KeyboardModifier modefiers[4] = {Qt::ControlModifier,Qt::AltModifier,Qt::MetaModifier,Qt::NoModifier};
+    QKeyEvent *e = new QKeyEvent(QEvent::KeyRelease, Qt::Key_Print, modefiers[0], "\r");
+
+    QPushButton* btn = new QPushButton;
+    btn->setObjectName("CustomRebackButton1");
+    bool bRet = app->notify(btn, e);
     ASSERT_TRUE(bRet == true);
 
     btn->deleteLater();

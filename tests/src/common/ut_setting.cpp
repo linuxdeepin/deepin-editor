@@ -251,12 +251,15 @@ TEST(UT_Setting_isShortcutConflict, UT_Setting_isShortcutConflict)
     QStringList list;
     list << "aa"
          << "bb";
-    EXPECT_NE(m_setting->isShortcutConflict("aa", "bb"),true);
+    EXPECT_NE(m_setting->isShortcutConflict("aa", "bb"), true);
 
-    EXPECT_NE(m_setting->isShortcutConflict("aa", "bb"),true);
+    EXPECT_NE(m_setting->isShortcutConflict("aa", "bb"), true);
 
     QVariant value;
-    m_setting->slotCustomshortcut("Ctrl+T",value);
+    QString strValue("Ctrl+Z");
+    const QString strKey("shortcuts.editor.undo");
+    m_setting->m_bUserChangeKey = false;
+    m_setting->slotCustomshortcut(strKey, strValue);
 
     m_setting->slotsigAdjustFont(value);
 
@@ -276,26 +279,108 @@ TEST(UT_Setting_isShortcutConflict, UT_Setting_isShortcutConflict)
     m_setting->deleteLater();
 }
 
-TEST(UT_Setting_KeySequenceEdit, UT_Setting_KeySequenceEdit)
+TEST(UT_Setting_isShortcutConflict, UT_Setting_slotsigAdjustFontSize)
 {
-//    QWidget *widget = new QWidget();
-//    DSettingsDialog *dialog = new DSettingsDialog(widget);
-//    auto option = qobject_cast<DTK_CORE_NAMESPACE::DSettingsOption *>(dialog);
+    Settings *pSettings = new Settings();
+    pSettings->slotsigAdjustFont(15);
+    ASSERT_TRUE(pSettings->m_backend != nullptr);
 
-//    KeySequenceEdit *shortCutLineEdit = new KeySequenceEdit(option);
-//    QEvent *e = new QEvent(QEvent::KeyPress);
-//    shortCutLineEdit->eventFilter(shortCutLineEdit,e);
+    pSettings->deleteLater();
+}
 
-//    QVariant keymap = Settings::instance()->settings->option("shortcuts.keymap.keymap")->value();
-//    shortCutLineEdit->slotDSettingsOptionvalueChanged(keymap);
+//
+TEST(UT_Setting_KeySequenceEdit, UT_Setting_KeySequenceEdit1)
+{
+    QWidget *widget = new QWidget();
+    DSettingsDialog *dialog = new DSettingsDialog(widget);
+    auto option = qobject_cast<DTK_CORE_NAMESPACE::DSettingsOption *>(dialog);
 
+    KeySequenceEdit *shortCutLineEdit = new KeySequenceEdit(option);
+    QEvent *e = new QEvent(QEvent::KeyPress);
+    shortCutLineEdit->eventFilter(shortCutLineEdit,e);
 
-//    EXPECT_NE(widget,nullptr);
-//    EXPECT_NE(shortCutLineEdit,nullptr);
-//    EXPECT_NE(e,nullptr);
-//    widget->deleteLater();
-//    shortCutLineEdit->deleteLater();
-//    delete e ;e=nullptr;
+    QVariant keymap = Settings::instance()->settings->option("shortcuts.keymap.keymap")->value();
+    shortCutLineEdit->slotDSettingsOptionvalueChanged(keymap);
+
+    EXPECT_NE(widget, nullptr);
+    EXPECT_NE(shortCutLineEdit, nullptr);
+    EXPECT_NE(e, nullptr);
+    widget->deleteLater();
+    dialog->deleteLater();
+    shortCutLineEdit->deleteLater();
+    delete e ;
+    e=nullptr;
+}
+
+TEST(UT_Setting_KeySequenceEdit, UT_KeySequenceEdit_KeySequenceEdit)
+{
+    DTK_CORE_NAMESPACE::DSettingsOption *opt = new DTK_CORE_NAMESPACE::DSettingsOption;
+    KeySequenceEdit *pKeySequenceEdit = new KeySequenceEdit(opt);
+    ASSERT_TRUE(pKeySequenceEdit->m_pOption != nullptr);
+
+    opt->deleteLater();
+    pKeySequenceEdit->deleteLater();
+}
+
+TEST(UT_Setting_KeySequenceEdit, UT_KeySequenceEdit_eventFilter_001)
+{
+    DTK_CORE_NAMESPACE::DSettingsOption *opt = new DTK_CORE_NAMESPACE::DSettingsOption;
+    KeySequenceEdit *pKeySequenceEdit = new KeySequenceEdit(opt);
+    Qt::KeyboardModifier modefiers[4] = {Qt::NoModifier, Qt::AltModifier, Qt::MetaModifier, Qt::NoModifier};
+    QKeyEvent *pKeyEvent = new QKeyEvent(QEvent::KeyPress, Qt::Key_Return, modefiers[0], "\r");
+    bool bRet = pKeySequenceEdit->eventFilter(pKeySequenceEdit, pKeyEvent);
+
+    ASSERT_TRUE(bRet == true);
+
+    opt->deleteLater();
+    pKeySequenceEdit->deleteLater();
+    delete pKeyEvent;
+    pKeyEvent = nullptr;
+}
+
+TEST(UT_Setting_KeySequenceEdit, UT_KeySequenceEdit_eventFilter_002)
+{
+    DTK_CORE_NAMESPACE::DSettingsOption *opt = new DTK_CORE_NAMESPACE::DSettingsOption;
+    KeySequenceEdit *pKeySequenceEdit = new KeySequenceEdit(opt);
+    bool bRet = pKeySequenceEdit->eventFilter(nullptr, nullptr);
+    ASSERT_TRUE(bRet == false);
+
+    opt->deleteLater();
+    pKeySequenceEdit->deleteLater();
+}
+
+TEST(UT_Setting_KeySequenceEdit, UT_KeySequenceEdit_slotDSettingsOptionvalueChanged_001)
+{
+    DTK_CORE_NAMESPACE::DSettingsOption *opt = new DTK_CORE_NAMESPACE::DSettingsOption;
+    KeySequenceEdit *pKeySequenceEdit = new KeySequenceEdit(opt);
+    pKeySequenceEdit->slotDSettingsOptionvalueChanged(QString(""));
+    ASSERT_TRUE(pKeySequenceEdit->m_pOption != nullptr);
+
+    opt->deleteLater();
+    pKeySequenceEdit->deleteLater();
+}
+
+TEST(UT_Setting_KeySequenceEdit, UT_KeySequenceEdit_slotDSettingsOptionvalueChanged_002)
+{
+    DTK_CORE_NAMESPACE::DSettingsOption *opt = new DTK_CORE_NAMESPACE::DSettingsOption;
+    KeySequenceEdit *pKeySequenceEdit = new KeySequenceEdit(opt);
+    pKeySequenceEdit->slotDSettingsOptionvalueChanged(QString("Ctr+t"));
+    ASSERT_TRUE(pKeySequenceEdit->m_pOption != nullptr);
+
+    opt->deleteLater();
+    pKeySequenceEdit->deleteLater();
+}
+
+TEST(UT_Setting_KeySequenceEdit, UT_KeySequenceEdit_option)
+{
+    DTK_CORE_NAMESPACE::DSettingsOption *opt = new DTK_CORE_NAMESPACE::DSettingsOption;
+    KeySequenceEdit *pKeySequenceEdit = new KeySequenceEdit(opt);
+    DTK_CORE_NAMESPACE::DSettingsOption *pRet = pKeySequenceEdit->option();
+
+    ASSERT_TRUE(pRet == opt);
+
+    opt->deleteLater();
+    pKeySequenceEdit->deleteLater();
 }
 
 //以下两条CASE 脚本跑会造成程序崩，加两行debug后就不崩了
