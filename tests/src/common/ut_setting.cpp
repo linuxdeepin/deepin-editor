@@ -158,7 +158,6 @@ TEST(UT_Setting_createFontComBoBoxHandle, UT_Setting_createFontComBoBoxHandle)
 TEST(UT_Setting_createKeySequenceEditHandle, UT_Setting_createKeySequenceEditHandle_001)
 {
     Settings* m_setting = new Settings();
-
     QWidget *widget = new QWidget();
     DSettingsDialog *dialog = new DSettingsDialog(widget);
     dialog->widgetFactory()->registerWidget("fontcombobox", Settings::createKeySequenceEditHandle);
@@ -279,12 +278,71 @@ TEST(UT_Setting_isShortcutConflict, UT_Setting_isShortcutConflict)
     m_setting->deleteLater();
 }
 
+TEST(UT_Setting_slotCustomshortcut, UT_Setting_slotCustomshortcut_001)
+{
+    QString strValue("Ctrl+Z");
+    const QString strKey("shortcuts.editor.undo");
+    Settings *pSettings = new Settings();
+    pSettings->m_bUserChangeKey = false;
+    pSettings->slotCustomshortcut(strKey, strValue);
+    ASSERT_TRUE(pSettings->m_bUserChangeKey == false);
+
+    pSettings->deleteLater();
+}
+
+
+QVariant stub_dsettings_option()
+{
+    QVariant variant = QString("Hello word");
+    return variant;
+}
+
+TEST(UT_Setting_slotCustomshortcut, UT_Setting_slotCustomshortcut_002)
+{
+    QString strValue("Ctrl+Z");
+    const QString strKey("shortcuts.editor.undo");
+    Settings *pSettings = new Settings();
+    pSettings->m_bUserChangeKey = false;
+    pSettings->slotCustomshortcut(strKey, strValue);
+    ASSERT_TRUE(pSettings->m_bUserChangeKey == false);
+
+    pSettings->deleteLater();
+}
+
 TEST(UT_Setting_isShortcutConflict, UT_Setting_slotsigAdjustFontSize)
 {
     Settings *pSettings = new Settings();
     pSettings->slotsigAdjustFont(15);
     ASSERT_TRUE(pSettings->m_backend != nullptr);
 
+    pSettings->deleteLater();
+}
+
+TEST(UT_Setting_createDialog, UT_Setting_createDialog_001)
+{
+    DSettingsDialog *pSettingsDialog = new DSettingsDialog;
+    Settings *pSettings = new Settings();
+    pSettings->m_pSettingsDialog = pSettingsDialog;
+    DDialog *pDialog = pSettings->createDialog(QString("title"), QString("content"), true);
+
+    ASSERT_TRUE(pDialog != nullptr);
+
+    pSettingsDialog->deleteLater();
+    pDialog->deleteLater();
+    pSettings->deleteLater();
+}
+
+TEST(UT_Setting_createDialog, UT_Setting_createDialog_002)
+{
+    DSettingsDialog *pSettingsDialog = new DSettingsDialog;
+    Settings *pSettings = new Settings();
+    pSettings->m_pSettingsDialog = pSettingsDialog;
+    DDialog *pDialog = pSettings->createDialog(QString("title"), QString("content"), false);
+
+    ASSERT_TRUE(pDialog != nullptr);
+
+    pSettingsDialog->deleteLater();
+    pDialog->deleteLater();
     pSettings->deleteLater();
 }
 

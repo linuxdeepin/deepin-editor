@@ -35,16 +35,13 @@
 #include <QLabel>
 #include <QPushButton>
 
-
 DWIDGET_USE_NAMESPACE
 DCORE_USE_NAMESPACE
 DTK_USE_NAMESPACE
 
-
 class Settings : public QObject
 {
     Q_OBJECT
-
 public:
     explicit Settings(QWidget *parent = 0);
     ~Settings();
@@ -54,13 +51,11 @@ public:
     static QPair<QWidget*, QWidget*> createFontComBoBoxHandle(QObject *obj);
     static QPair<QWidget*, QWidget*> createKeySequenceEditHandle(QObject *obj);
     static Settings* instance();
-
     void setSettingDialog(DSettingsDialog *settingsDialog);
 
     int m_iDefaultFontSize = 12;
     int m_iMaxFontSize = 50;
     int m_iMinFontSize = 8;
-
     DSettings *settings {nullptr};
 
 signals:
@@ -105,7 +100,6 @@ private:
     bool m_bUserChangeKey = false;
     DSettingsDialog *m_pSettingsDialog;
     static Settings* s_pSetting;
-    DKeySequenceEdit *m_pShortCutLineEdit;
     DDialog *m_pDialog;
 };
 
