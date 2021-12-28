@@ -877,6 +877,7 @@ void TextEdit::moveToLineIndentation()
 
 void TextEdit::nextLine()
 {
+    m_isSelectAll = false;
     if (!characterCount())
         return;
 
@@ -901,6 +902,7 @@ void TextEdit::nextLine()
 
 void TextEdit::prevLine()
 {
+    m_isSelectAll = false;
     if (!characterCount())
         return;
 
@@ -1150,7 +1152,6 @@ void TextEdit::duplicateLine()
 
     //make the vertical scroll bar change together.
     this->setTextCursor(cursor);
-
 }
 
 void TextEdit::copyLines()
