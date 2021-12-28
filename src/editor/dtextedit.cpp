@@ -1630,6 +1630,10 @@ void TextEdit::updateFont()
     font.setFamily(m_fontName);
     setFont(font);
     setTabStopWidth(m_tabSpaceNumber * QFontMetrics(font).width(QChar(0x2192)));
+
+    if (m_isSelectAll) {
+        selectTextInView();
+    }
 }
 
 void TextEdit::replaceAll(const QString &replaceText, const QString &withText)
@@ -2524,13 +2528,13 @@ void TextEdit::highlight()
 
 void TextEdit::selectTextInView()
 {
-    QPoint bottom = QPoint(this->viewport()->width(),this->viewport()->height());
-    int endPos = cursorForPosition(bottom).position();
-    int startPos = cursorForPosition(QPoint(0,0)).position();
+    int startPos = cursorForPosition(QPoint(0, 0)).position();
+    QPoint endPoint = QPoint(this->viewport()->width(), this->viewport()->height());
+    int endPos = cursorForPosition(endPoint).position();
 
-    auto cursor = this->textCursor();
-    cursor.setPosition(startPos);
-    cursor.setPosition(endPos, QTextCursor::KeepAnchor);
+    QTextCursor cursor = this->textCursor();
+    cursor.setPosition(endPos);
+    cursor.setPosition(startPos, QTextCursor::KeepAnchor);
     this->setTextCursor(cursor);
     this->horizontalScrollBar()->setValue(0);
 }
