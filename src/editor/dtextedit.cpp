@@ -3637,6 +3637,10 @@ void TextEdit::SendtoggleReadmessage()
 
 bool TextEdit::isAbleCopy()
 {
+    /*
+     * 读取并计算系统剩余内存大小，根据系统剩余内存大小决定本次复制操作是否要执行
+     * 解决的问题：复制大文本字符内容时会占用大内存，系统内存不足会导致应用闪退
+     */
     bool bRet = true;
     qlonglong memory = 0;
     qlonglong memoryAll = 0;
@@ -6471,7 +6475,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             joinLines();
             return;
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglereadonlymode")/*|| key=="Alt+Meta+L"*/) {
-//            setReadOnly(false);
+            //setReadOnly(false);
             toggleReadOnlyMode();
             return;
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglecomment")) {
@@ -6526,6 +6530,11 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             QRegularExpressionMatch match = re.match(key);
             if (match.hasMatch()) {
                 e->ignore();
+                return;
+            }
+
+            /* qt原生控件QPlainTextEdit对Alt+Tab快捷键有接收响应，需求里无定义Alt+Tab快捷键响应功能，遇到该快捷键直接return即可 */
+            if (key.contains(QString("Alt+Tab"))) {
                 return;
             }
 
