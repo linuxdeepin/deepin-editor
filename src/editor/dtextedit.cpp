@@ -2438,7 +2438,6 @@ void TextEdit::copy()
             QString text = this->toPlainText();
             clipboard->setText(text);
         }
-
     }
 }
 
@@ -6433,7 +6432,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             joinLines();
             return;
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglereadonlymode")/*|| key=="Alt+Meta+L"*/) {
-//            setReadOnly(false);
+            //setReadOnly(false);
             toggleReadOnlyMode();
             return;
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglecomment")) {
@@ -6488,6 +6487,11 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             QRegularExpressionMatch match = re.match(key);
             if (match.hasMatch()) {
                 e->ignore();
+                return;
+            }
+
+            /* qt原生控件QPlainTextEdit对Alt+Tab快捷键有接收响应，需求里无定义Alt+Tab快捷键响应功能，遇到该快捷键直接return即可 */
+            if (key.contains(QString("Alt+Tab"))) {
                 return;
             }
 
@@ -6991,7 +6995,6 @@ void TextEdit::removeComment()
         }
     }
 
-
     if (doMultiLineStyleUncomment) {
         cursor.setPosition(end);
         cursor.movePosition(QTextCursor::PreviousCharacter,
@@ -7057,7 +7060,6 @@ void TextEdit::removeComment()
             }
         }
     }
-
 
     // adjust selection when commenting out
     if (hasSelection && !doMultiLineStyleUncomment && !doSingleLineStyleUncomment) {

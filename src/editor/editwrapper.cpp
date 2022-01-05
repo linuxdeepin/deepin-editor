@@ -84,7 +84,7 @@ EditWrapper::EditWrapper(Window *window, QWidget *parent)
 EditWrapper::~EditWrapper()
 {
     if (m_pTextEdit != nullptr) {
-        disconnect(m_pTextEdit);
+    	disconnect(m_pTextEdit);
         delete m_pTextEdit;
         m_pTextEdit = nullptr;
     }
