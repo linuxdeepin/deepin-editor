@@ -444,8 +444,13 @@ void TextEdit::popRightMenu(QPoint pos)
             (textCursor().hasSelection() || !isBlankLine) &&
             !def.filePath().isEmpty()) {
 
-        // 对于vCard文件类型(.vcf)进行排除判断，不使用注释功能
-        if (def.name() != "Markdown" && def.name().contains("vCard") == false) {
+        /*
+         * 不支持注释的文件类型，右键菜单不显示“添加注释/取消注释”
+         * 不支持注释的文件类型：Markdown(.d)/vCard(.vcf)/JSON(.json)
+         */
+        if (def.name() != "Markdown"
+            && !def.name().contains(QString("vCard"))
+            && !def.name().contains(QString("JSON"))) {
             m_rightMenu->addAction(m_addComment);
             m_rightMenu->addAction(m_cancelComment);
         }
