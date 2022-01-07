@@ -229,19 +229,12 @@ QPair<QWidget *, QWidget *> Settings::createKeySequenceEditHandle(QObject *obj)
 
     shortCutLineEdit->ShortcutDirection(Qt::AlignLeft);
     shortCutLineEdit->setFocusPolicy(Qt::StrongFocus);
-    if (option->value().toString().isEmpty()) {
-        //option->setValue();
-    }
 
     // init.
     shortCutLineEdit->setKeySequence(QKeySequence(option->value().toString()));
     QPair<QWidget *, QWidget *> optionWidget = DSettingsWidgetFactory::createStandardItem(QByteArray(), option, shortCutLineEdit);
 
     option->connect(shortCutLineEdit, &DKeySequenceEdit::editingFinished, [ = ](const QKeySequence & sequence) {
-
-        if (sequence.toString() == "Enter") qDebug() << "==========Enter";
-
-
         QString checkName = option->key();
         QString reason;
         bool bIsConflicts = false;

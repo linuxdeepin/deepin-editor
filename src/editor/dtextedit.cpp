@@ -2229,16 +2229,8 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
 
 void TextEdit::setBookmarkFlagVisable(bool isVisable, bool bIsFirstOpen)
 {
-    //int leftAreaWidth = m_pLeftAreaWidget->width();
-    //int bookmarkAreaWidth = m_pLeftAreaWidget->m_pBookMarkArea->width();
-
-    if (!bIsFirstOpen) {
-        if (isVisable) {
-            //m_pLeftAreaWidget->setFixedWidth(leftAreaWidth + bookmarkAreaWidth);
-        } else {
-           // m_pLeftAreaWidget->setFixedWidth(leftAreaWidth - bookmarkAreaWidth);
-        }
-    }
+    int w = this->m_fontSize<=15?15:m_fontSize;
+    updateLeftWidgetWidth(w);
 
     m_pIsShowBookmarkArea = isVisable;
     m_pLeftAreaWidget->m_pBookMarkArea->setVisible(isVisable);
@@ -2246,15 +2238,9 @@ void TextEdit::setBookmarkFlagVisable(bool isVisable, bool bIsFirstOpen)
 
 void TextEdit::setCodeFlodFlagVisable(bool isVisable, bool bIsFirstOpen)
 {
-    //int leftAreaWidth = m_pLeftAreaWidget->width();
-    //int flodAreaWidth = m_pLeftAreaWidget->m_pFlodArea->width();
-    if (!bIsFirstOpen) {
-        if (isVisable) {
-            //m_pLeftAreaWidget->setFixedWidth(leftAreaWidth + flodAreaWidth);
-        } else {
-            //m_pLeftAreaWidget->setFixedWidth(leftAreaWidth - flodAreaWidth);
-        }
-    }
+    int w = this->m_fontSize<=15?15:m_fontSize;
+    updateLeftWidgetWidth(w);
+
     m_pIsShowCodeFoldArea = isVisable;
     m_pLeftAreaWidget->m_pFlodArea->setVisible(isVisable);
 }
