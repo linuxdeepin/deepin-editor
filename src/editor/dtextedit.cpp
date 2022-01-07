@@ -3455,6 +3455,17 @@ void TextEdit::toggleReadOnlyMode()
 
 void TextEdit::toggleComment(bool bValue)
 {
+    const auto def = m_repository.definitionForFileName(QFileInfo(m_sFilePath).fileName());
+    QTextCursor selectionCursor = textCursor();
+    selectionCursor.movePosition(QTextCursor::StartOfBlock);
+    selectionCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+    QString text = selectionCursor.selectedText();
+    // init base.
+    bool isBlankLine = text.trimmed().isEmpty();
+    if (characterCount() == 0 || isBlankLine || def.filePath().isEmpty()) {
+        return;
+    }
+
     if (m_readOnlyMode) {
         popupNotify(tr("Read-Only mode is on"));
         return;
@@ -3475,7 +3486,6 @@ void TextEdit::toggleComment(bool bValue)
         return;
     }
 
-    const auto def = m_repository.definitionForFileName(QFileInfo(m_sFilePath).fileName());  //Java ,C++,HTML,
     QString name = def.name();
     if (name == "Markdown") {
         return;
@@ -6895,16 +6905,19 @@ void TextEdit::setComment()
 void TextEdit::removeComment()
 {
     //此函数是删除了unCommentSelection()的if-else的comment分支得来的
-    if (!m_commentDefinition.isValid())
+    if (!m_commentDefinition.isValid()) {
         return;
+    }
 
-    //qDebug() << m_commentDefinition.multiLineStart << m_commentDefinition.multiLineEnd << m_commentDefinition.singleLine;
     QString tep = m_commentDefinition.singleLine;
+    if (tep.isEmpty()) {
+        tep = m_commentDefinition.multiLineStart;
+    }
     QString abb = tep.remove(QRegExp("\\s"));
 
-    if(m_isSelectAll)
+    if(m_isSelectAll) {
         QPlainTextEdit::selectAll();
-
+    }
 
     QTextCursor cursor = textCursor();
     QTextDocument *doc = cursor.document();
@@ -6961,7 +6974,6 @@ void TextEdit::removeComment()
 
         bool hasSelEnd = endPos >= multiLineEndLength
                          && isComment(endText, endPos - multiLineEndLength, m_commentDefinition.multiLineEnd);
-
         doMultiLineStyleUncomment = hasSelStart && hasSelEnd;
         doMultiLineStyleComment = !doMultiLineStyleUncomment
                                   && (hasLeadingCharacters
@@ -6999,13 +7011,22 @@ void TextEdit::removeComment()
                             m_commentDefinition.multiLineStart.length());
         //cursor.removeSelectedText();
         deleteTextEx(cursor);
+    } else if (textCursor().hasSelection() && m_commentDefinition.singleLine.isEmpty()) {
+        doSingleLineStyleUncomment = false;
     } else {
         int tmp = 0;//备注偏移量，判断备注标记后面有没有空格
         endBlock = endBlock.next();
         doSingleLineStyleUncomment = true;
         for (QTextBlock block = startBlock; block != endBlock; block = block.next()) {
             QString text = block.text().trimmed();
-            if (!text.isEmpty() && (!text.startsWith(m_commentDefinition.singleLine))) {
+            if (!text.isEmpty() && m_commentDefinition.singleLine.isEmpty()) {
+                if (text.startsWith(abb)) {
+                    doSingleLineStyleUncomment = false;
+                    break;
+                }
+            }
+
+            if (!text.isEmpty() && (!text.startsWith(m_commentDefinition.singleLine) || (!text.startsWith(m_commentDefinition.multiLineStart)))) {
                 if (!text.startsWith(abb)) {
                     doSingleLineStyleUncomment = false;
                     break;
