@@ -5785,10 +5785,25 @@ void TextEdit::dropEvent(QDropEvent *event)
             cursor2.setPosition(cursor2.position() - data->text().size(),QTextCursor::KeepAnchor);
             auto com2 = new DeleteBackCommond(cursor2,another);
             another->m_pUndoStack->push(com2);
-
+        } else if (!data->text().isEmpty()) {
+            if (!m_bIsAltMod){
+                int block = 1 * 1024 * 1024 ;
+                int size = data->text().size();
+                if(size > block){
+                    InsertBlockByTextCommond* commond = new InsertBlockByTextCommond(data->text(), this, m_wrapper);
+                    m_pUndoStack->push(commond);
+                }else{
+                    QTextCursor cursor = textCursor();
+                    insertSelectTextEx(cursor, data->text());
+                    unsetMark();
+                }
+            }
+            else {
+                insertColumnEditTextEx(data->text());
+            }
         }
-
-
+    } else {
+        QPlainTextEdit::dropEvent(event);
     }
 }
 
