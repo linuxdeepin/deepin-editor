@@ -27,6 +27,7 @@
 #include "FlashTween.h"
 #include "codeflodarea.h"
 #include "../common/settings.h"
+#include "../common/utils.h"
 #include "../widgets/ColorSelectWdg.h"
 #include "uncommentselection.h"
 //添加自定义撤销重做栈
@@ -48,8 +49,6 @@
 #include <QtDBus>
 #include <QGestureEvent>
 #include <QProxyStyle>
-
-#define TEXT_EIDT_MARK_ALL  "MARK_ALL"
 
 const QString SELECT_HIGHLIGHT_COLOR = "#2CA7F8";
 enum ConvertCase { UPPER, LOWER, CAPITALIZE };
@@ -591,6 +590,11 @@ private:
     //只读权限不显示中文输入提示框 ut002764 2021.6.23
     void SendtoggleReadOnlyMode();
     void SendtoggleReadmessage();
+
+    /**
+     * @brief isAbleCopy 读取可用内存，判断是否可复制文本
+     */
+    bool isAbleCopy();
 
 public:
     int getFirstVisibleBlockId() const;
