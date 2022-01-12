@@ -2454,11 +2454,6 @@ void TextEdit::paste()
     const QClipboard *clipboard = QApplication::clipboard(); //获取剪切版内容
     auto text = clipboard->text();
 
-    if (text.size() > 500 * 1024 * 1024) {
-        DMessageManager::instance()->sendMessage(this, QIcon(":/images/warning.svg"), tr("Failed to paste text: it is too large"));
-        return;
-    }
-
     if(text.isEmpty())
         return;
     if (!m_bIsAltMod){
@@ -2580,7 +2575,7 @@ void TextEdit::slotCutAction(bool checked)
 void TextEdit::slotCopyAction(bool checked)
 {
     Q_UNUSED(checked);
-    if (isAbleCopy()) {
+    if (isAbleOperation(OperationType::CopyOperation)) {
         copy();
     } else {
         DMessageManager::instance()->sendMessage(this, QIcon(":/images/warning.svg"), tr("Copy failed: not enough memory"));
@@ -2590,7 +2585,11 @@ void TextEdit::slotCopyAction(bool checked)
 void TextEdit::slotPasteAction(bool checked)
 {
     Q_UNUSED(checked);
-    this->paste();
+    if (isAbleOperation(OperationType::PasteOperation)) {
+        paste();
+    } else {
+        DMessageManager::instance()->sendMessage(this, QIcon(":/images/warning.svg"), tr("Paste failed: not enough memory"));
+    }
 }
 
 void TextEdit::slotDeleteAction(bool checked)
@@ -3635,11 +3634,11 @@ void TextEdit::SendtoggleReadmessage()
     }
 }
 
-bool TextEdit::isAbleCopy()
+bool TextEdit::isAbleOperation(int iOperationType)
 {
     /*
-     * 读取并计算系统剩余内存大小，根据系统剩余内存大小决定本次复制操作是否要执行
-     * 解决的问题：复制大文本字符内容时会占用大内存，系统内存不足会导致应用闪退
+     * 读取并计算系统剩余内存大小，根据系统剩余内存大小决定本次复制/粘贴操作是否可继续执行
+     * 解决的问题：复制/粘贴大文本字符内容时会占用大内存，系统内存不足会导致应用闪退
      */
     bool bRet = true;
     qlonglong memory = 0;
@@ -3663,24 +3662,36 @@ bool TextEdit::isAbleCopy()
 
     memoryAll = buff[0];
     memory = buff[0] - buff[2];
+    /* 系统当前可用内存大小 */
+    qlonglong iSystemAvailableMemory = memoryAll - memory;
+    file.close();
 
-    if (m_isSelectAll) {
-        if (characterCount()/DATA_SIZE_1024 * COPY_CONSUME_MEMORY_MULTIPLE > (memoryAll - memory)) {
-            bRet = false;
+    if (iOperationType == OperationType::CopyOperation) {
+        if (m_isSelectAll) {
+            if (characterCount()/DATA_SIZE_1024 * COPY_CONSUME_MEMORY_MULTIPLE > iSystemAvailableMemory) {
+                bRet = false;
+            }
+        } else if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
+            QString strSelectText;
+            for (auto it = m_altModSelections.begin(); it != m_altModSelections.end(); it++) {
+                auto text = (*it).cursor.selectedText();
+                strSelectText += text;
+                if(it != m_altModSelections.end() - 1)
+                    strSelectText += "\n";
+            }
+            if (strSelectText.size()/DATA_SIZE_1024 * COPY_CONSUME_MEMORY_MULTIPLE > iSystemAvailableMemory) {
+                bRet = false;
+            }
+        } else if (textCursor().hasSelection()) {
+            if (textCursor().selection().toPlainText().size()/DATA_SIZE_1024 * COPY_CONSUME_MEMORY_MULTIPLE > iSystemAvailableMemory) {
+                bRet = false;
+            }
         }
-    } else if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
-        QString strSelectText;
-        for (auto it = m_altModSelections.begin(); it != m_altModSelections.end(); it++) {
-            auto text = (*it).cursor.selectedText();
-            strSelectText += text;
-            if(it != m_altModSelections.end() - 1)
-                strSelectText += "\n";
-        }
-        if (strSelectText.size()/DATA_SIZE_1024 * COPY_CONSUME_MEMORY_MULTIPLE > (memoryAll - memory)) {
-            bRet = false;
-        }
-    } else if (textCursor().hasSelection()) {
-        if (textCursor().selection().toPlainText().size()/DATA_SIZE_1024 * COPY_CONSUME_MEMORY_MULTIPLE > (memoryAll - memory)) {
+    } else if (iOperationType == OperationType::PasteOperation) {
+        const QClipboard *clipboard = QApplication::clipboard();
+        QString strClipboardText = clipboard->text();
+
+        if (strClipboardText.size()/DATA_SIZE_1024 * PASTE_CONSUME_MEMORY_MULTIPLE > iSystemAvailableMemory) {
             bRet = false;
         }
     }
@@ -6366,7 +6377,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
                 insertSelectTextEx(textCursor(), clipboard->text());
             }
             #endif
-            this->paste();
+            slotPasteAction();
             return;
         }  else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "scrollup")) {
             //向上翻页

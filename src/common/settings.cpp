@@ -82,7 +82,6 @@ Settings::Settings(QWidget *parent)
         //emit themeChanged(value.toString());
     }); */
 
-
     auto tabSpaceNumber = settings->option("advance.editor.tabspacenumber");
     connect(tabSpaceNumber, &Dtk::Core::DSettingsOption::valueChanged, this, &Settings::slotsigAdjustTabSpaceNumber);
 

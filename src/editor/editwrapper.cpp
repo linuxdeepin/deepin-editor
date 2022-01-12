@@ -84,7 +84,7 @@ EditWrapper::EditWrapper(Window *window, QWidget *parent)
 EditWrapper::~EditWrapper()
 {
     if (m_pTextEdit != nullptr) {
-    disconnect(m_pTextEdit);
+        disconnect(m_pTextEdit);
         delete m_pTextEdit;
         m_pTextEdit = nullptr;
     }
@@ -382,7 +382,7 @@ bool EditWrapper::saveFile()
             QByteArray Outdata;
             DetectCode::ChangeFileEncodingFormat(fileContent, Outdata, QString("UTF-8"), m_sCurEncode);
             // 如果 iconv 转换错误
-            if(Outdata.size() == 0) {
+            if (Outdata.size() == 0) {
                 qWarning() << QString("iconv Encode Transformat from '%1' to '%2' Fail!")
                               .arg(QString("UTF-8")).arg(m_sCurEncode)
                            << ", start QTextCodec Encode Transformat.";

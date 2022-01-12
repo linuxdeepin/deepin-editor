@@ -32,7 +32,6 @@
 //#include <locale.h> // needed by FreeBSD for setlocale
 #include "encoding.h"
 
-
 #define MAX_COUNTRY_NUM 10
 enum
 {

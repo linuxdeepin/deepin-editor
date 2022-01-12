@@ -75,6 +75,11 @@ public:
         MarkAll
     };
 
+    enum OperationType {
+        CopyOperation,
+        PasteOperation
+    };
+
     struct MarkOperation
     {
         MarkOperationType type;
@@ -592,9 +597,9 @@ private:
     void SendtoggleReadmessage();
 
     /**
-     * @brief isAbleCopy 读取可用内存，判断是否可复制文本
+     * @brief isAbleOperation 读取可用内存，判断并解决操作是否可继续执行
      */
-    bool isAbleCopy();
+    bool isAbleOperation(int iOperationType);
 
 public:
     int getFirstVisibleBlockId() const;
