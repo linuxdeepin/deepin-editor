@@ -377,7 +377,8 @@ bool EditWrapper::saveFile()
     hideWarningNotices();
 
     if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-        QByteArray fileContent = m_pTextEdit->toPlainText().toLocal8Bit();
+        QByteArray fileContent;
+        getPlainTextContent(fileContent);
         if (!fileContent.isEmpty()) {
             QByteArray Outdata;
             DetectCode::ChangeFileEncodingFormat(fileContent, Outdata, QString("UTF-8"), m_sCurEncode);
@@ -444,7 +445,35 @@ bool EditWrapper::saveFile()
                                                  , QString(tr("You do not have permission to save %1")).arg(file.fileName()));
         return false;
     }
+}
 
+void EditWrapper::getPlainTextContent(QByteArray &plainTextContent)
+{
+    QString strPlainText = m_pTextEdit->toPlainText();
+    qint64 iPlainTextAllLen = strPlainText.length();
+    qint64 iStep = 300 * DATA_SIZE_1024 * DATA_SIZE_1024;
+    /* qt开发分析结论：大文本情况下toLocal8Bit()转换会引起应用闪退，此闪退问题qt方无法处理 */
+    /* 如果文本框里的文本内容小于等于300MB，无需分段转换 */
+    if (iPlainTextAllLen <= iStep) {
+        plainTextContent = QByteArray(strPlainText.toLocal8Bit());
+        return;
+    }
+
+    /*
+     * 如果文本框里的文本内容大于300MB，则采用分段转换，每段以300MB为单位
+     * 规避大文toLocal8Bit()转换时导致应用闪退的qt缺陷问题
+     */
+    qint64 iSections = iPlainTextAllLen / (300 * DATA_SIZE_1024 * DATA_SIZE_1024);
+    qint64 iResidue = iPlainTextAllLen % iStep;
+
+    for (int i = 0; i < iSections; i++) {
+        plainTextContent += strPlainText.mid(i * iStep, iStep).toLocal8Bit();
+        QApplication::processEvents();
+
+        if (i == iSections - 1 && iResidue > 0) {
+            plainTextContent += strPlainText.mid(iSections * iStep, iResidue).toLocal8Bit();
+        }
+    }
 }
 
 bool EditWrapper::saveTemFile(QString qstrDir)
@@ -452,9 +481,8 @@ bool EditWrapper::saveTemFile(QString qstrDir)
     QFile file(qstrDir);
 
     if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-        QByteArray fileContent = m_pTextEdit->toPlainText().toLocal8Bit();
-//        if(!fileContent.isEmpty())
-//        {
+        QByteArray fileContent;
+        getPlainTextContent(fileContent);
         QByteArray Outdata;
         DetectCode::ChangeFileEncodingFormat(fileContent, Outdata, QString("UTF-8"), m_sCurEncode);
         file.write(Outdata);

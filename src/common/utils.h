@@ -40,8 +40,8 @@
 #define DATA_SIZE_1024      1024
 #define TEXT_EIDT_MARK_ALL  "MARK_ALL"
 #define PROC_MEMINFO_PATH   "/proc/meminfo"
-#define COPY_CONSUME_MEMORY_MULTIPLE 9
-#define PASTE_CONSUME_MEMORY_MULTIPLE 5
+#define COPY_CONSUME_MEMORY_MULTIPLE 9      //复制文本时内存占用系数
+#define PASTE_CONSUME_MEMORY_MULTIPLE 5     //复制文本时内存占用系数
 
 class Utils
 {

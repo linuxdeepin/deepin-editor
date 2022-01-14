@@ -25,6 +25,7 @@
 #include "../controls/warningnotices.h"
 #include "../editor/leftareaoftextedit.h"
 #include "../common/CSyntaxHighlighter.h"
+#include "../common/utils.h"
 #include <QVBoxLayout>
 #include <QWidget>
 #include <DMessageManager>
@@ -70,6 +71,11 @@ public:
     bool readFile(QByteArray encode="");
     //保存文件
     bool saveFile();
+    /**
+     * @brief getPlainTextContent 获取文本框里的文本内容
+     * @param plainTextConteng 存放获取到的内容
+     */
+    void getPlainTextContent(QByteArray &plainTextContent);
     //重新加载文件编码
     bool saveAsFile(const QString &newFilePath, QByteArray encodeName);
     //保存草稿文件
