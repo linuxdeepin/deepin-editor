@@ -2457,7 +2457,7 @@ void TextEdit::paste()
     if(text.isEmpty())
         return;
     if (!m_bIsAltMod){
-        int block = 1 * 1024 * 1024 ;
+        int block = 1 * 1024 * 1024;
         int size = text.size();
         if(size > block){
             InsertBlockByTextCommond* commond = new InsertBlockByTextCommond(text,this,m_wrapper);
@@ -2473,43 +2473,6 @@ void TextEdit::paste()
     }
 
     m_isSelectAll = false;
-#if 0
-    //大文件粘贴-使用文本替换
-    if(m_isSelectAll)
-        QPlainTextEdit::selectAll();
-
-    const QClipboard *clipboard = QApplication::clipboard(); //获取剪切版内容
-    auto text = clipboard->text();
-    if(text.isEmpty())
-        return;
-
-    if (!m_bIsAltMod){
-        QString oldText = this->toPlainText();
-        QString newText(oldText);
-        QTextCursor cursor = textCursor();
-        if(cursor.hasSelection()){
-            int start = cursor.position();
-            int end = cursor.anchor();
-            if(start>end)
-                std::swap(start,end);
-            newText.remove(start,end-start);
-
-            newText.insert(start,text);
-            ReplaceAllCommond* commond = new ReplaceAllCommond(oldText,newText,cursor);
-            m_pUndoStack->push(commond);
-
-        }else{
-            int pos = cursor.position();
-            newText.insert(pos,text);
-            ReplaceAllCommond* commond = new ReplaceAllCommond(oldText,newText,cursor);
-            m_pUndoStack->push(commond);
-        }
-    }
-    else {
-        insertColumnEditTextEx(text);
-    }
-#endif
-
 }
 
 void TextEdit::highlight()
@@ -5797,21 +5760,18 @@ void TextEdit::dropEvent(QDropEvent *event)
             auto com2 = new DeleteBackCommond(cursor2,another);
             another->m_pUndoStack->push(com2);
         } else if (!data->text().isEmpty()) {
-            if (!m_bIsAltMod){
-                int block = 1 * 1024 * 1024 ;
-                int size = data->text().size();
-                if(size > block){
-                    InsertBlockByTextCommond* commond = new InsertBlockByTextCommond(data->text(), this, m_wrapper);
-                    m_pUndoStack->push(commond);
-                }else{
-                    QTextCursor cursor = textCursor();
-                    insertSelectTextEx(cursor, data->text());
-                    unsetMark();
-                }
+            if (m_bReadOnlyPermission || m_readOnlyMode) {
+                return;
             }
-            else {
-                insertColumnEditTextEx(data->text());
-            }
+
+            QPlainTextEdit::dropEvent(event);
+            auto cursor = this->textCursor();
+            int dstpos = std::min(cursor.position(),cursor.anchor()) - data->text().size();
+            cursor.setPosition(dstpos);
+            cursor.setPosition(dstpos + data->text().size(),QTextCursor::KeepAnchor);
+            cursor.deleteChar();
+            auto com = new InsertTextUndoCommand(cursor,data->text());
+            m_pUndoStack->push(com);
         }
     } else {
         QPlainTextEdit::dropEvent(event);
