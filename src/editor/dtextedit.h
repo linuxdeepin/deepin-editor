@@ -570,6 +570,7 @@ protected:
     void contextMenuEvent(QContextMenuEvent *event) override;
     void paintEvent(QPaintEvent *e) override;
     void resizeEvent(QResizeEvent *e) override;
+
 private:
     void unCommentSelection();
     void setComment();

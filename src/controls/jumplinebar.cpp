@@ -38,38 +38,31 @@ JumpLineBar::JumpLineBar(DFloatingWidget *parent)
 
     m_label = new QLabel();
     m_label->setText(tr("Go to Line: "));
-    m_editLine = new LineBar();
-
-    m_lineValidator = new QIntValidator;
-    m_editLine->lineEdit()->setValidator(m_lineValidator);
+    m_pSpinBoxInput = new DSpinBox;
+    m_pSpinBoxInput->lineEdit()->clear();
+    m_pSpinBoxInput->setButtonSymbols(QAbstractSpinBox::NoButtons);
+    m_pSpinBoxInput->installEventFilter(this);
 
     m_layout->addWidget(m_label);
-    m_layout->addWidget(m_editLine);
+    m_layout->addWidget(m_pSpinBoxInput);
     this->setLayout(m_layout);
 
     connect(this, &JumpLineBar::pressEsc, this, &JumpLineBar::jumpCancel, Qt::QueuedConnection);
-    connect(m_editLine, &LineBar::returnPressed, this, &JumpLineBar::jumpConfirm, Qt::QueuedConnection);
-    connect(m_editLine, &LineBar::textChanged, this, &JumpLineBar::handleLineChanged, Qt::QueuedConnection);
-    connect(m_editLine, &LineBar::focusOut, this, &JumpLineBar::handleFocusOut, Qt::QueuedConnection);
-    connect(m_editLine, &LineBar::focusChanged, this, &JumpLineBar::slotFocusChanged, Qt::QueuedConnection);
+    connect(m_pSpinBoxInput->lineEdit(), &QLineEdit::returnPressed, this, &JumpLineBar::jumpConfirm, Qt::QueuedConnection);
+    connect(m_pSpinBoxInput->lineEdit(), &QLineEdit::textChanged, this, &JumpLineBar::handleLineChanged, Qt::QueuedConnection);
 }
 
 JumpLineBar::~JumpLineBar()
-{
-    if (m_lineValidator != nullptr) {
-        delete m_lineValidator;
-        m_lineValidator = nullptr;
-    }
-}
+{}
 
 void JumpLineBar::focus()
 {
-    m_editLine->lineEdit()->setFocus();
+    m_pSpinBoxInput->lineEdit()->setFocus();
 }
 
 bool JumpLineBar::isFocus()
 {
-    return m_editLine->lineEdit()->hasFocus();
+    return m_pSpinBoxInput->lineEdit()->hasFocus();
 }
 
 void JumpLineBar::activeInput(QString file, int row, int column, int lineCount, int scrollOffset)
@@ -79,32 +72,29 @@ void JumpLineBar::activeInput(QString file, int row, int column, int lineCount, 
     m_rowBeforeJump = row;
     m_columnBeforeJump = column;
     m_jumpFileScrollOffset = scrollOffset;
-    m_lineValidator->setRange(1, lineCount);
+    m_pSpinBoxInput->setRange(1, lineCount);
+    m_pSpinBoxInput->clear();
     setFixedSize(nJumpLineBarWidth + QString::number(lineCount).size() * fontMetrics().width('9'), nJumpLineBarHeight);
 
     // Clear line number.
-    if (m_editLine->lineEdit()->text().toInt() > lineCount)
-        m_editLine->lineEdit()->setText("");
-
-    // Show jump line bar.
-//    show();
-//    raise();
-
-//    // Focus default.
-//    m_editLine->lineEdit()->setFocus();
+    if (m_pSpinBoxInput->lineEdit()->text().toInt() > lineCount)
+        m_pSpinBoxInput->lineEdit()->setText("");
 }
 
 void JumpLineBar::handleFocusOut()
 {
-    hide();
-
+    //hide();
     lostFocusExit();
 }
 
 void JumpLineBar::handleLineChanged()
 {
-    QString content = m_editLine->lineEdit()->text();
+    QString content = m_pSpinBoxInput->lineEdit()->text();
     if (content != "") {
+        if (content.toInt() == 0) {
+            m_pSpinBoxInput->clear();
+            return;
+        }
         jumpToLine(m_jumpFile, content.toInt(), false);
     }
 }
@@ -118,7 +108,7 @@ void JumpLineBar::jumpCancel()
 
 void JumpLineBar::jumpConfirm()
 {
-    QString content = m_editLine->lineEdit()->text();
+    QString content = m_pSpinBoxInput->lineEdit()->text();
     if (content != "") {
         jumpToLine(m_jumpFile, content.toInt(), true);
     }
@@ -127,15 +117,30 @@ void JumpLineBar::jumpConfirm()
 void JumpLineBar::slotFocusChanged(bool bFocus)
 {
     if (bFocus == false) {
-        //hide();
-
         lostFocusExit();
     }
 }
 
 // Hide 跳转到行窗口时，需要清空编辑框中的内容
-void JumpLineBar::hide(){
-    m_editLine->clear();
+void JumpLineBar::hide() {
+    m_pSpinBoxInput->clear();
     DFloatingWidget::hide();
+}
+
+bool JumpLineBar::eventFilter(QObject *pObject, QEvent *pEvent)
+{
+    if (pObject == m_pSpinBoxInput) {
+        if (pEvent->type() == QEvent::FocusOut) {
+            handleFocusOut();
+            /**
+             * 规避当DSpinBox输入框里为空且失去focus焦点时会显示上一次输入的数值内容的问题
+             */
+            if (m_pSpinBoxInput->lineEdit()->text() == "") {
+                m_pSpinBoxInput->lineEdit()->clear();
+            }
+        }
+    }
+
+    return DFloatingWidget::eventFilter(pObject, pEvent);
 }
 

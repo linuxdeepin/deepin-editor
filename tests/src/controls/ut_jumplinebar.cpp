@@ -55,10 +55,10 @@ TEST_F(test_jumplinebar, isFocus)
 TEST_F(test_jumplinebar, activeInput)
 {
     JumpLineBar *jumpLineBar = new JumpLineBar();
-    jumpLineBar->m_editLine->lineEdit()->setText("50");
+    jumpLineBar->m_pSpinBoxInput->lineEdit()->setText("50");
     jumpLineBar->activeInput("aa",1,1,1,1);
     
-    EXPECT_EQ(jumpLineBar->m_editLine->lineEdit()->text(),"");
+    EXPECT_EQ(jumpLineBar->m_pSpinBoxInput->lineEdit()->text(),"");
     EXPECT_NE(jumpLineBar,nullptr);
 
     delete jumpLineBar;jumpLineBar=nullptr;
@@ -81,7 +81,7 @@ TEST_F(test_jumplinebar, handleFocusOut)
 TEST_F(test_jumplinebar, handleLineChanged)
 {
     JumpLineBar *jumpLineBar = new JumpLineBar();
-    jumpLineBar->m_editLine->lineEdit()->setText("123");
+    jumpLineBar->m_pSpinBoxInput->lineEdit()->setText("123");
     jumpLineBar->handleLineChanged();
     
     EXPECT_NE(jumpLineBar,nullptr);
@@ -107,7 +107,7 @@ TEST_F(test_jumplinebar, jumpConfirm)
 {
     JumpLineBar *jumpLineBar = new JumpLineBar();
     jumpLineBar->jumpConfirm();
-    jumpLineBar->m_editLine->lineEdit()->setText("123");
+    jumpLineBar->m_pSpinBoxInput->lineEdit()->setText("123");
 
     EXPECT_NE(jumpLineBar,nullptr);
 

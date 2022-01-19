@@ -23,15 +23,15 @@
 #ifndef JUMPLINEBAR_H
 #define JUMPLINEBAR_H
 
-#include "linebar.h"
-
 #include <QHBoxLayout>
-#include <QIntValidator>
 #include <QLabel>
 #include <QPainter>
 #include <QWidget>
 #include <DApplicationHelper>
 #include <DFloatingWidget>
+#include <DSpinBox>
+#include <QLineEdit>
+#include <QEvent>
 
 DWIDGET_USE_NAMESPACE
 
@@ -41,25 +41,19 @@ const int nJumpLineBarHeight = 60;
 class JumpLineBar : public DFloatingWidget
 {
     Q_OBJECT
-
 public:
     explicit JumpLineBar(DFloatingWidget *parent = 0);
-
     ~JumpLineBar();
+
 public slots:
     void focus();
     bool isFocus();
-
     void activeInput(QString file, int row, int column, int lineCount, int scrollOffset);
-
     void handleFocusOut();
     void handleLineChanged();
-
     void jumpCancel();
     void jumpConfirm();
-
     void slotFocusChanged(bool bFocus);
-
     void hide();
 
 signals:
@@ -67,13 +61,14 @@ signals:
     void jumpToLine(QString file, int line, bool focusEditor);
     void lostFocusExit();
     void pressEsc();
+
 protected:
+    bool eventFilter(QObject *pObject, QEvent *pEvent);
 
 private:
-    LineBar *m_editLine;
-    QHBoxLayout *m_layout;
-    QIntValidator *m_lineValidator;
-    QLabel *m_label;
+    DSpinBox *m_pSpinBoxInput {nullptr};
+    QHBoxLayout *m_layout {nullptr};
+    QLabel *m_label {nullptr};
     QString m_jumpFile;
     int m_jumpFileScrollOffset;
     int m_rowBeforeJump;

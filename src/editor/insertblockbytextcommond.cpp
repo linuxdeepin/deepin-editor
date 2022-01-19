@@ -31,7 +31,6 @@ void InsertBlockByTextCommond::redo()
     treat(true);
     insertByBlock();
     treat(false);
-
 }
 
 void InsertBlockByTextCommond::undo()
@@ -49,7 +48,6 @@ void InsertBlockByTextCommond::undo()
     }
 
     treat(false);
-
 }
 
 void InsertBlockByTextCommond::treat(bool isStart)
