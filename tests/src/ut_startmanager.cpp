@@ -67,17 +67,18 @@ TEST(UT_StartManager_instance, instance)
 
 TEST(UT_StartManager_openFilesInWindow, openFilesInWindow)
 {
-//    StartManager *startManager = StartManager::instance();
-//    QStringList filePathList;
-//    filePathList<<".cache/deepin/deepin-editor";
-//    startManager->openFilesInWindow(filePathList);
+    StartManager *startManager = StartManager::instance();
+    QStringList filePathList;
+    filePathList<<".cache/deepin/deepin-editor";
+    startManager->openFilesInWindow(filePathList);
 
-//    filePathList<<".cache/deepin/";
-//    startManager->openFilesInWindow(filePathList);
-//    ASSERT_TRUE(startManager->m_windows.at(0) != nullptr);
+    filePathList<<".cache/deepin/";
+    startManager->openFilesInWindow(filePathList);
+    ASSERT_TRUE(startManager->m_windows.at(0) != nullptr);
 
-//    startManager->deleteLater();
+    startManager->deleteLater();
 }
+
 //initWindowPosition
 TEST(UT_StartManager_initWindowPosition, initWindowPosition)
 {
@@ -251,10 +252,11 @@ TEST(UT_StartManager_recoverFile,recoverFile_001)
     Stub s2;
     s2.set(ADDR(StartManager,popupExistTabs),returnstub);
 
-    Window w;
-    int iRet = startManager->recoverFile(&w);
+    Window *pWindow = new Window;
+    int iRet = startManager->recoverFile(pWindow);
     ASSERT_TRUE(iRet == 0);
     
+    pWindow->deleteLater();
     startManager->deleteLater();
 }
 
