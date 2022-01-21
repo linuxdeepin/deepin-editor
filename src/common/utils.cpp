@@ -531,7 +531,7 @@ bool Utils::isMimeTypeSupport(const QString &filepath)
         return true;
     }
 
-    if(filepath.endsWith("pub")){
+    if (filepath.endsWith("pub")) {
         return true;
     }
     // Please check full mime type list from: https://www.freeformatter.com/mime-types-list.html
@@ -573,7 +573,8 @@ bool Utils::isMimeTypeSupport(const QString &filepath)
                       << "application/x-wine-extension-ini"
                       << "model/vrml"
                       << "application/pkix-cert+pem"
-                      << "application/x-pak";
+                      << "application/x-pak"
+                      << "application/x-code-workspace";
 
     if (textMimeTypes.contains(mimeType)) {
         return true;
@@ -727,6 +728,7 @@ int Utils::getProcessCountByName(const char *pstrName)
         if ((fgets(buf, sizeof(buf)-1, fp)) != NULL) {
             count = atoi(buf);
         }
+        pclose(fp);
     } else {
         qDebug() << ">>> popen error";
     }
