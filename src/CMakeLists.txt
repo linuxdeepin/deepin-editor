@@ -68,9 +68,9 @@ install(FILES ${APP_ICONPATH} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hi
 install(FILES ${CMAKE_SOURCE_DIR}/src/images/deepin-editor.svg DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps/)
 
 # Install help manual
-if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "loongarch64")
-    install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets/loongarch64/deepin-editor DESTINATION /usr/share/deepin-manual/manual-assets/application/)
-elseif(${CMAKE_SYSTEM_PROCESSOR} MATCHES "sw_64")
+#if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "loongarch64")
+#    install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets/loongarch64/deepin-editor DESTINATION /usr/share/deepin-manual/manual-assets/application/)
+if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "sw_64")
     install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets/loongarch64/deepin-editor DESTINATION /usr/share/deepin-manual/manual-assets/application/)
 else()
     install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets/deepin-editor DESTINATION /usr/share/deepin-manual/manual-assets/application/)
