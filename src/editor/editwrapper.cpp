@@ -946,6 +946,15 @@ void EditWrapper::loadContent(const QByteArray &strContent)
     /* 如此转换后打开1G以上的文本会闪退，Qt QString类的缺陷 */
     //QString strContent = content.data();
 
+
+    QTextCodec::ConverterState state;
+    QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+    if(nullptr == codec){
+        qInfo()<<"QTextCodec::codecForName return nullptr";
+        return;
+    }
+
+
     int len = strContent.length();
     //初始化显示文本大小
     int InitContentPos = 5 * 1024;
@@ -963,7 +972,9 @@ void EditWrapper::loadContent(const QByteArray &strContent)
         for (int i = 0; i < cnt; i++) {
             //初始化秒开
             if (i == 0 && !m_bQuit) {
-                data = strContent.mid(i * step, step);
+                //data = strContent.mid(i * step, step);
+                QByteArray text = strContent.mid(i * step, step);
+                data = codec->toUnicode(text.constData(), text.size(), &state);
                 cursor.insertText(data);
                 QTextCursor firstLineCursor = m_pTextEdit->textCursor();
                 firstLineCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
@@ -974,11 +985,15 @@ void EditWrapper::loadContent(const QByteArray &strContent)
                 continue;
             }
             if (!m_bQuit) {
-                data = strContent.mid(i * step, step);
+                //data = strContent.mid(i * step, step);
+                QByteArray text = strContent.mid(i * step, step);
+                data = codec->toUnicode(text.constData(), text.size(), &state);
                 cursor.insertText(data);
                 QApplication::processEvents();
                 if (!m_bQuit && i == cnt - 1 && mod > 0) {
-                    data = strContent.mid(cnt * step, mod);
+                    //data = strContent.mid(cnt * step, mod);
+                    QByteArray text = strContent.mid(cnt * step, mod);
+                    data = codec->toUnicode(text.constData(), text.size(), &state);
                     cursor.insertText(data);
                     QApplication::processEvents();
                 }
@@ -987,7 +1002,9 @@ void EditWrapper::loadContent(const QByteArray &strContent)
     } else {
         //初始化秒开
         if (!m_bQuit && len > InitContentPos) {
-            data = strContent.mid(0, InitContentPos);
+            //data = strContent.mid(0, InitContentPos);
+            QByteArray text = strContent.mid(0, InitContentPos);
+            data = codec->toUnicode(text.constData(), text.size(), &state);
             cursor.insertText(data);
             QTextCursor firstLineCursor = m_pTextEdit->textCursor();
             firstLineCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
@@ -996,12 +1013,16 @@ void EditWrapper::loadContent(const QByteArray &strContent)
             OnUpdateHighlighter();
             QApplication::processEvents();
             if (!m_bQuit) {
-                data = strContent.mid(InitContentPos, len - InitContentPos);
+                //data = strContent.mid(InitContentPos, len - InitContentPos);
+                QByteArray text = strContent.mid(InitContentPos, len - InitContentPos);
+                data = codec->toUnicode(text.constData(), text.size(), &state);
                 cursor.insertText(data);
             }
         } else {
             if (!m_bQuit) {
-                cursor.insertText(strContent);
+                //cursor.insertText(strContent);
+                data = codec->toUnicode(strContent.constData(), strContent.size(), &state);
+                cursor.insertText(data);
                 QTextCursor firstLineCursor = m_pTextEdit->textCursor();
                 firstLineCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
                 m_pTextEdit->setTextCursor(firstLineCursor);
