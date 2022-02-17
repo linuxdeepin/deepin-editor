@@ -3472,18 +3472,13 @@ int TextEdit::getNextWordPosition(QTextCursor &cursor, QTextCursor::MoveMode mov
     // Move next char first.
     QTextCursor copyCursor = cursor;
     copyCursor.movePosition(QTextCursor::NextCharacter, moveMode);
-    QChar *currentChar = copyCursor.selection().toPlainText().data();
+    QString currentChar = copyCursor.selection().toPlainText();
 
-    //cursor.movePosition(QTextCursor::NextCharacter, moveMode);
-    //QChar currentChar = toPlainText().at(cursor.position() - 1);
     // Just to next non-space char if current char is space.
-    if (currentChar->isSpace()) {
-        while (copyCursor.position() < characterCount() - 1 && currentChar->isSpace()) {
+    if (currentChar.data()->isSpace()) {
+        while (copyCursor.position() < characterCount() - 1 && currentChar.data()->isSpace()) {
             copyCursor.movePosition(QTextCursor::NextCharacter, moveMode);
-            currentChar = copyCursor.selection().toPlainText().data();
-
-            //cursor.movePosition(QTextCursor::NextCharacter, moveMode);
-            //currentChar = toPlainText().at(cursor.position() - 1);
+            currentChar = copyCursor.selection().toPlainText();
         }
         while (copyCursor.position() < characterCount() - 1 && !atWordSeparator(copyCursor.position())) {
             copyCursor.movePosition(QTextCursor::NextCharacter, moveMode);
@@ -3495,7 +3490,6 @@ int TextEdit::getNextWordPosition(QTextCursor &cursor, QTextCursor::MoveMode mov
     else {
         while (copyCursor.position() < characterCount() - 1 && !atWordSeparator(copyCursor.position())) {
             copyCursor.movePosition(QTextCursor::NextCharacter, moveMode);
-            //cursor.movePosition(QTextCursor::NextCharacter, moveMode);
         }
     }
 
@@ -3511,26 +3505,19 @@ int TextEdit::getPrevWordPosition(QTextCursor cursor, QTextCursor::MoveMode move
     // Move prev char first.
     QTextCursor copyCursor = cursor;
     copyCursor.movePosition(QTextCursor::PreviousCharacter, moveMode);
-    QChar *currentChar = copyCursor.selection().toPlainText().data();
-
-    //cursor.movePosition(QTextCursor::PreviousCharacter, moveMode);
-    //QChar currentChar = toPlainText().at(cursor.position());
+    QString currentChar = copyCursor.selection().toPlainText();
 
     // Just to next non-space char if current char is space.
-    if (currentChar->isSpace()) {
-        while (copyCursor.position() > 0 && currentChar->isSpace()) {
+    if (currentChar.data()->isSpace()) {
+        while (copyCursor.position() > 0 && currentChar.data()->isSpace()) {
             copyCursor.movePosition(QTextCursor::PreviousCharacter, moveMode);
-            currentChar = copyCursor.selection().toPlainText().data();
-
-            //cursor.movePosition(QTextCursor::PreviousCharacter, moveMode);
-            //currentChar = toPlainText().at(cursor.position());
+            currentChar = copyCursor.selection().toPlainText();
         }
     }
     // Just to next word-separator char.
     else {
         while (copyCursor.position() > 0 && !atWordSeparator(copyCursor.position())) {
             copyCursor.movePosition(QTextCursor::PreviousCharacter, moveMode);
-            //cursor.movePosition(QTextCursor::PreviousCharacter, moveMode);
         }
     }
 

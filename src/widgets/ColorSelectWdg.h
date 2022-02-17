@@ -31,6 +31,7 @@
 #include <QPainterPath>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QPointer>
 
 using namespace Dtk::Widget;
 
@@ -87,9 +88,9 @@ protected:
     bool eventFilter(QObject *object, QEvent *event);
 
 private:
-    QVBoxLayout *m_pMainLayout {nullptr};
-    QHBoxLayout *m_pHLayout1 {nullptr};
-    QHBoxLayout *m_pHLayout2 {nullptr};
+    QPointer<QVBoxLayout> m_pMainLayout {nullptr};
+    QPointer<QHBoxLayout> m_pHLayout1 {nullptr};
+    QPointer<QHBoxLayout> m_pHLayout2 {nullptr};
     QList<ColorLabel*> m_colorLabels;
     int m_labelWidth = 23;
     int m_labelHeight = 23;
