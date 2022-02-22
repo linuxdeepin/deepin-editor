@@ -3588,7 +3588,7 @@ bool TextEdit::isAbleOperation(int iOperationType)
 {
     /*
      * 读取并计算系统剩余内存大小，根据系统剩余内存大小决定本次复制/粘贴操作是否可继续执行
-     * 解决的问题：复制/粘贴大文本字符内容时会占用大内存，系统内存不足会导致应用闪退
+     * 解决的问题：复制/粘贴大文本字符内容(50MB/100MB/500MB)时会占用大量内存，系统内存不足会导致应用闪退
      */
     bool bRet = true;
     qlonglong memory = 0;
@@ -3643,6 +3643,13 @@ bool TextEdit::isAbleOperation(int iOperationType)
 
         if (strClipboardText.size()/DATA_SIZE_1024 * PASTE_CONSUME_MEMORY_MULTIPLE > iSystemAvailableMemory) {
             bRet = false;
+        }
+
+        /* 当文本框里的文本内容达到800MB后，再次持续粘贴，则只允许粘贴<=500KB大小的文本内容 */
+        if (bRet == true) {
+            if (document()->characterCount() > (800 * DATA_SIZE_1024 * DATA_SIZE_1024) && strClipboardText.size()/DATA_SIZE_1024 > 500) {
+                bRet = false;
+            }
         }
     }
 
