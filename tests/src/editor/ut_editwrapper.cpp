@@ -960,6 +960,11 @@ int reloadModifyFile_002_exec_stub()
     return 1;
 }
 
+QByteArray reloadModifyFile_selectCoding()
+{
+    return QByteArray();
+}
+
 //void reloadModifyFile();
 TEST(UT_Editwrapper_reloadModifyFile, UT_Editwrapper_reloadModifyFile_002)
 {
@@ -971,6 +976,8 @@ TEST(UT_Editwrapper_reloadModifyFile, UT_Editwrapper_reloadModifyFile_002)
     fptr qDialogExec = (fptr)(&QDialog::exec);
     Stub stub;
     stub.set(qDialogExec, reloadModifyFile_002_exec_stub);
+    Stub stubSelectCoding;
+    stubSelectCoding.set(ADDR(DetectCode, selectCoding),reloadModifyFile_selectCoding);
     pWindow->currentWrapper()->reloadModifyFile();
     ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->getModified());
 
@@ -1028,6 +1035,8 @@ TEST(UT_Editwrapper_reloadModifyFile, UT_Editwrapper_reloadModifyFile_005)
 {
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
+    Stub stubSelectCoding;
+    stubSelectCoding.set(ADDR(DetectCode, selectCoding), reloadModifyFile_selectCoding);
     pWindow->currentWrapper()->reloadModifyFile();
     ASSERT_TRUE(pWindow->currentWrapper()->textEditor()->horizontalScrollBar()->value() == 0);
 

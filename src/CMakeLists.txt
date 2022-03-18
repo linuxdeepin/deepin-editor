@@ -33,6 +33,7 @@ find_package(KF5Codecs)
 find_package(DFrameworkdbus REQUIRED)
 find_package(Qt5Xml REQUIRED)
 find_package(Qt5Svg REQUIRED)
+find_package(ICU COMPONENTS i18n uc REQUIRED)
 include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 
 pkg_check_modules(chardet REQUIRED chardet)
@@ -54,6 +55,8 @@ target_link_libraries(deepin-editor
     ${chardet_LIBRARY_DIRS}
     KF5::Codecs
     KF5::SyntaxHighlighting
+    ICU::i18n
+    ICU::uc
     -lm
     uchardet
     chardet

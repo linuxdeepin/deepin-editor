@@ -35,30 +35,38 @@ DetectCode::DetectCode()
 
 QByteArray DetectCode::GetFileEncodingFormat(QString filepath, QByteArray content)
 {
-    QByteArray charset;
-    QString detectedResult;
+    QString charDetectedResult;
+    QByteArray ucharDetectdRet;
+    QByteArrayList icuDetectRetList;
+    QByteArray detectRet;
     float chardetconfidence = 0;
 
+    /* chardet识别编码 */
     QString str(content);
     bool bFlag = str.contains(QRegExp("[\\x4e00-\\x9fa5]+")); //匹配的是中文
     if (bFlag) {
         QByteArray newContent = content;
         newContent += "为增加探测率保留的中文";    //手动添加中文字符，避免字符长度太短而导致判断编码错误
-        DetectCode::ChartDet_DetectingTextCoding(newContent, detectedResult, chardetconfidence);
+        DetectCode::ChartDet_DetectingTextCoding(newContent, charDetectedResult, chardetconfidence);
     } else {
-        DetectCode::ChartDet_DetectingTextCoding(content, detectedResult, chardetconfidence);
+        DetectCode::ChartDet_DetectingTextCoding(content, charDetectedResult, chardetconfidence);
+    }
+    ucharDetectdRet = charDetectedResult.toLatin1();
+
+    /* uchardet识别编码 */
+    if (ucharDetectdRet == "unknown" || ucharDetectdRet == "???" || ucharDetectdRet.isEmpty()) {
+       ucharDetectdRet = DetectCode::UchardetCode(filepath);
     }
 
-    charset = detectedResult.toLatin1();
-    if (charset == "unknown" || charset == "???" || charset.isEmpty()) {
-       charset = DetectCode::UchardetCode(filepath);
+    /* icu识别编码 */
+    icuDetectTextEncoding(filepath, icuDetectRetList);
+    detectRet = selectCoding(ucharDetectdRet, icuDetectRetList);
+
+    if(detectRet == "ASCII" || detectRet.isEmpty()) {
+        detectRet = "UTF-8";
     }
 
-    if(charset == "ASCII" || charset.isEmpty()) {
-        charset = "UTF-8";
-    }
-
-    return charset.toUpper();
+    return detectRet.toUpper();
 }
 
 QByteArray DetectCode::UchardetCode(QString filepath)
@@ -101,6 +109,114 @@ QByteArray DetectCode::UchardetCode(QString filepath)
     if(charset == "MAC-CYRILLIC") charset = "MACCYRILLIC";
     if(charset.contains("WINDOWS-")) charset = charset.replace("WINDOWS-","CP");
     return charset;
+}
+
+void DetectCode::icuDetectTextEncoding(const QString &filePath, QByteArrayList &listDetectRet)
+{
+    FILE *file;
+    file = fopen(filePath.toLocal8Bit().data(), "rb");
+    if (file == nullptr) {
+        qInfo() << "fopen file failed.";
+        return;
+    }
+
+    int len = 0;
+    int iBuffSize = 4096;
+    char *detected = nullptr;
+    char *buffer = new char[iBuffSize];
+    memset(buffer, 0, iBuffSize);
+
+    while (!feof(file)) {
+        int32_t len = fread(buffer, 1, iBuffSize, file);
+        if (detected == nullptr) {
+            if (!detectTextEncoding(buffer, len, &detected, listDetectRet)) {
+                break;
+            }
+        }
+    }
+
+    delete [] buffer;
+    buffer = nullptr;
+    fclose(file);
+}
+
+bool DetectCode::detectTextEncoding(const char *data, size_t len, char **detected, QByteArrayList &listDetectRet)
+{
+    UCharsetDetector *csd;
+    const UCharsetMatch **csm;
+    int32_t match, matchCount = 0;
+
+    UErrorCode status = U_ZERO_ERROR;
+    csd = ucsdet_open(&status);
+    if (status != U_ZERO_ERROR) {
+        return false;
+    }
+
+    ucsdet_setText(csd, data, len, &status);
+    if (status != U_ZERO_ERROR) {
+        return false;
+    }
+
+    csm = ucsdet_detectAll(csd, &matchCount, &status);
+    //csm = ucsdet_detectAll_63(csd, &matchCount, &status);
+    if (status != U_ZERO_ERROR) {
+        return false;
+    }
+
+    for (match = 0; match < matchCount; match++) {
+        const char *name = ucsdet_getName(csm[match], &status);
+        int32_t confidence = ucsdet_getConfidence(csm[match], &status);
+    }
+
+    if (matchCount >= 3) {
+        *detected = strdup(ucsdet_getName(csm[0], &status));
+        listDetectRet << QByteArray(*detected);
+        *detected = strdup(ucsdet_getName(csm[1], &status));
+        listDetectRet << QByteArray(*detected);
+        *detected = strdup(ucsdet_getName(csm[2], &status));
+        listDetectRet << QByteArray(*detected);
+        if (status != U_ZERO_ERROR) {
+            return false;
+        }
+    } else if (matchCount > 0) {
+        *detected = strdup(ucsdet_getName(csm[0], &status));
+        listDetectRet << QByteArray(*detected);
+    }
+
+    ucsdet_close(csd);
+
+    return true;
+}
+
+QByteArray DetectCode::selectCoding(QByteArray ucharDetectdRet, QByteArrayList icuDetectRetList)
+{
+    if (ucharDetectdRet.isEmpty() && icuDetectRetList.isEmpty()) {
+        return QByteArray();
+    }
+
+    if (!ucharDetectdRet.isEmpty()) {
+        if (ucharDetectdRet.contains(icuDetectRetList[0])) {
+            return ucharDetectdRet;
+        }
+
+        if (!ucharDetectdRet.contains(icuDetectRetList[0])) {
+            if (icuDetectRetList.contains("GB18030")) {
+                return QByteArray("GB18030");
+            } else {
+                return ucharDetectdRet;
+            }
+        }
+    }
+
+    if (ucharDetectdRet.isEmpty()) {
+        if (icuDetectRetList.contains("GB18030")) {
+            return QByteArray("GB18030");
+        } else {
+            return icuDetectRetList[0];
+        }
+    }
+
+    return QByteArray();
 }
 
 #if 0 /* 因为开源协议存在法律冲突，停止使用libenca0编码识别库 */
@@ -188,6 +304,33 @@ int DetectCode::ChartDet_DetectingTextCoding(const char *str, QString &encoding,
         //qInfo() << "Memory Allocation failed\n";
         return CHARDET_MEM_ALLOCATED_FAIL;
     }
+
+
+    /* 另一种编码识别逻辑，暂且保留*/
+    /*size_t buffer_size = 1024;
+    char *buff = new char[buffer_size];
+    memset(buff, 0, buffer_size);
+
+    FILE *fp;
+    fp = fopen(filepath.toLocal8Bit().data(), "rb");
+    if (fp) {
+        while (!feof(fp)) {
+            size_t len = fread(buff, 1, buffer_size, fp);
+            detect(buff, &obj);
+            QString encoding = obj->encoding;
+            qInfo() << "==== encoding: " << encoding;
+            if (encoding == "") {
+                continue;
+            } else if (!encoding.isEmpty()) {
+                break;
+            }
+            fclose(fp);
+        }
+    }
+
+    delete [] buff;
+    buff = nullptr;*/
+
 
 #ifndef CHARDET_BINARY_SAFE
     // before 1.0.5. This API is deprecated on 1.0.5

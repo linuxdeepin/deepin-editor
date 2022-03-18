@@ -11,6 +11,12 @@ int retintstub()
     return intvalue;
 }
 
+QByteArray retByteArray = QByteArray();
+QByteArray reloadModifyFile_selectCoding()
+{
+    return retByteArray;
+}
+
 }
 
 
@@ -32,10 +38,10 @@ TEST(UT_GetFileEncodingFormat, UT_GetFileEncodingFormat_001)
 
     Stub stub;
     stub.set(ADDR(DetectCode,UchardetCode),retintstub);
-
     stringvalue = "unknown";
+    Stub stubSelectCoding;
+    stubSelectCoding.set(ADDR(DetectCode, selectCoding),reloadModifyFile_selectCoding);
     dc->GetFileEncodingFormat("123");
-
     EXPECT_NE(dc,nullptr);
     delete dc;
     dc=nullptr;
@@ -49,6 +55,8 @@ TEST(UT_GetFileEncodingFormat, UT_GetFileEncodingFormat_002)
     stub.set(ADDR(DetectCode,UchardetCode),retintstub);
 
     stringvalue = "ASCII";
+    Stub stubSelectCoding;
+    stubSelectCoding.set(ADDR(DetectCode, selectCoding),reloadModifyFile_selectCoding);
     dc->GetFileEncodingFormat("123");
 
     EXPECT_NE(dc,nullptr);
@@ -64,6 +72,8 @@ TEST(UT_GetFileEncodingFormat, UT_GetFileEncodingFormat_003)
     stub.set(ADDR(DetectCode,UchardetCode),retintstub);
 
     stringvalue = "unknown";
+    Stub stubSelectCoding;
+    stubSelectCoding.set(ADDR(DetectCode, selectCoding),reloadModifyFile_selectCoding);
     pDetectCode->GetFileEncodingFormat(QString("123"), QByteArray("我是中文"));
 
     EXPECT_NE(pDetectCode, nullptr);
@@ -84,6 +94,8 @@ TEST(UT_GetFileEncodingFormat, UT_GetFileEncodingFormat_004)
     stub.set(ADDR(DetectCode, ChartDet_DetectingTextCoding), chartDet_DetectingTextCoding_stub);
 
     stringvalue = "unknown";
+    Stub stubSelectCoding;
+    stubSelectCoding.set(ADDR(DetectCode, selectCoding),reloadModifyFile_selectCoding);
     pDetectCode->GetFileEncodingFormat(QString("123"), QByteArray("我是中文"));
 
     EXPECT_NE(pDetectCode,nullptr);

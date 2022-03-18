@@ -37,6 +37,7 @@ find_package(GTest REQUIRED)
 find_package(Qt5Xml REQUIRED)
 find_package(Qt5Svg REQUIRED)
 find_package(Qt5Test REQUIRED)
+find_package(ICU COMPONENTS i18n uc REQUIRED)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
@@ -100,6 +101,8 @@ target_link_libraries(${PROJECT_NAME_TEST}
     ${chardet_LIBRARY_DIRS}
     KF5::Codecs
     KF5::SyntaxHighlighting
+    ICU::i18n
+    ICU::uc
     -lpthread
     -lm
     uchardet

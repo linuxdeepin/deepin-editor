@@ -19,7 +19,8 @@ Build-Depends:
  libgtest-dev,
  libgmock-dev,
  libchardet-dev,
- libuchardet-dev (>= 0.0.6)
+ libuchardet-dev (>= 0.0.6),
+ libicu-dev
 Rules-Requires-Root: no
 Standards-Version: 4.5.1
 Homepage: https://github.com/linuxdeepin/deepin-editor
