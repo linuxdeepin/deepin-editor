@@ -34,7 +34,12 @@ find_package(KF5Codecs)
 find_package(DFrameworkdbus REQUIRED)
 find_package(Qt5Xml REQUIRED)
 find_package(Qt5Svg REQUIRED)
+find_package(ICU COMPONENTS i18n uc REQUIRED)
 include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
+
+pkg_check_modules(chardet REQUIRED chardet)
+include_directories(${chardet_INCLUDE_DIRS})
+link_directories(${chardet_LIBRARY_DIRS})
 
 # Tell CMake to create the executable
 add_executable(deepin-editor ${SRCS} deepin-editor.qrc)
@@ -50,13 +55,14 @@ target_link_libraries(deepin-editor
     ${Qt5Svg_LIBRARIES}
     KF5::Codecs
     KF5::SyntaxHighlighting
+    ICU::i18n
+    ICU::uc
     -lm
-    enca
     uchardet
+    chardet
 )
 
 set(CMAKE_INSTALL_PREFIX /usr)
-
 # Install qm files
 file(GLOB QM_FILES "${CMAKE_SOURCE_DIR}/translations/*.qm")
 install(FILES ${QM_FILES} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-editor/translations/)

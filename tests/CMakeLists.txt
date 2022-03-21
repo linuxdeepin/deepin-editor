@@ -37,14 +37,18 @@ find_package(GTest REQUIRED)
 find_package(Qt5Xml REQUIRED)
 find_package(Qt5Svg REQUIRED)
 find_package(Qt5Test REQUIRED)
+find_package(ICU COMPONENTS i18n uc REQUIRED)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
 include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 include_directories(Qt5PrintSupport)
 include_directories(${GTEST_INCLUDE_DIRS})
 include_directories(src)
-link_libraries(enca)
 link_libraries(uchardet)
+
+pkg_check_modules(chardet REQUIRED chardet)
+include_directories(${chardet_INCLUDE_DIRS})
+link_directories(${chardet_LIBRARY_DIRS})
 
 set(PROJECT_NAME_TEST
     ${PROJECT_NAME}-test)
@@ -95,9 +99,13 @@ target_link_libraries(${PROJECT_NAME_TEST}
     ${Qt5Concurrent_LIBRARIES}
     KF5::Codecs
     KF5::SyntaxHighlighting
+    ICU::i18n
+    ICU::uc
     -lpthread
     -lm
-        )
+    uchardet
+    chardet
+)
 
 target_include_directories(${PROJECT_NAME_TEST} PUBLIC ${DtkWidget_INCLUDE_DIRS}
                                                        ${DtkCore_INCLUDE_DIRS}

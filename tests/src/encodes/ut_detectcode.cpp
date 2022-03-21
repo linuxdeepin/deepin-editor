@@ -15,6 +15,12 @@ int retintstub()
     return intvalue;
 }
 
+QByteArray retByteArray = QByteArray();
+QByteArray reloadModifyFile_selectCoding()
+{
+    return retByteArray;
+}
+
 }
 
 
@@ -35,10 +41,12 @@ TEST(UT_GetFileEncodingFormat, UT_GetFileEncodingFormat_001)
     DetectCode* dc = new DetectCode;
 
     Stub stub;
-    stub.set(ADDR(DetectCode,EncaDetectCode),retstringstub);
+    //stub.set(ADDR(DetectCode,EncaDetectCode),retstringstub);
     stub.set(ADDR(DetectCode,UchardetCode),retintstub);
 
     stringvalue = "unknown";
+    Stub stubSelectCoding;
+    stubSelectCoding.set(ADDR(DetectCode, selectCoding),reloadModifyFile_selectCoding);
     dc->GetFileEncodingFormat("123");
 
     EXPECT_NE(dc,nullptr);
@@ -51,10 +59,12 @@ TEST(UT_GetFileEncodingFormat, UT_GetFileEncodingFormat_002)
     DetectCode* dc = new DetectCode;
 
     Stub stub;
-    stub.set(ADDR(DetectCode,EncaDetectCode),retstringstub);
+    //stub.set(ADDR(DetectCode,EncaDetectCode),retstringstub);
     stub.set(ADDR(DetectCode,UchardetCode),retintstub);
 
     stringvalue = "ASCII";
+    Stub stubSelectCoding;
+    stubSelectCoding.set(ADDR(DetectCode, selectCoding),reloadModifyFile_selectCoding);
     dc->GetFileEncodingFormat("123");
 
     EXPECT_NE(dc,nullptr);
