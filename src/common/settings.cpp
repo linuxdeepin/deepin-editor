@@ -211,10 +211,14 @@ QPair<QWidget *, QWidget *> Settings::createFontComBoBoxHandle(QObject *obj)
     // init.
     comboBox->setCurrentText(option->value().toString());
 
+    /* 国防送测定制化设置默认字体为CESI宋体-GB18030 */
+    comboBox->setCurrentText(QString("CESI宋体-GB18030"));
     connect(option, &DSettingsOption::valueChanged, comboBox, [ = ](QVariant var) {
         comboBox->setCurrentText(var.toString());
     });
 
+    /* 国防送测定制化设置默认字体为CESI宋体-GB18030 */
+    option->setValue(QString("CESI宋体-GB18030"));
     option->connect(comboBox, &QComboBox::currentTextChanged, option, [ = ](const QString & text) {
         option->setValue(text);
     });
