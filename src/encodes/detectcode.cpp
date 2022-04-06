@@ -39,7 +39,7 @@ QByteArray DetectCode::GetFileEncodingFormat(QString filepath, QByteArray conten
     QByteArray ucharDetectdRet;
     QByteArrayList icuDetectRetList;
     QByteArray detectRet;
-    float chardetconfidence = 0;
+    float chardetconfidence = 0.0f;
 
     /* chardet识别编码 */
     QString str(content);
@@ -54,7 +54,7 @@ QByteArray DetectCode::GetFileEncodingFormat(QString filepath, QByteArray conten
     ucharDetectdRet = charDetectedResult.toLatin1();
 
     /* uchardet识别编码 */
-    if (ucharDetectdRet == "unknown" || ucharDetectdRet == "???" || ucharDetectdRet.isEmpty()) {
+    if (ucharDetectdRet.contains("unknown") || ucharDetectdRet.contains("???") || ucharDetectdRet.isEmpty()) {
        ucharDetectdRet = DetectCode::UchardetCode(filepath);
     }
 
@@ -62,7 +62,7 @@ QByteArray DetectCode::GetFileEncodingFormat(QString filepath, QByteArray conten
     icuDetectTextEncoding(filepath, icuDetectRetList);
     detectRet = selectCoding(ucharDetectdRet, icuDetectRetList);
 
-    if(detectRet == "ASCII" || detectRet.isEmpty()) {
+    if(detectRet.contains("ASCII") || detectRet.isEmpty()) {
         detectRet = "UTF-8";
     }
 
