@@ -39,9 +39,10 @@
 Settings *Settings::s_pSetting = nullptr;
 
 CustemBackend::CustemBackend(const QString &filepath, QObject *parent)
-    : DSettingsBackend (parent)
+    : DSettingsBackend (parent),
+      m_settings (new QSettings(filepath, QSettings::IniFormat))
 {
-    m_settings = new QSettings(filepath, QSettings::IniFormat);
+
 }
 
 void CustemBackend::doSync()
