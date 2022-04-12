@@ -26,12 +26,12 @@
 #include "widgets/window.h"
 #include "editor/editwrapper.h"
 
-#include <com_deepin_dde_daemon_dock.h>
-#include <com_deepin_dde_daemon_dock_entry.h>
+// #include <com_deepin_dde_daemon_dock.h>
+// #include <com_deepin_dde_daemon_dock_entry.h>
 #include <QObject>
 
-using Dock          = com::deepin::dde::daemon::Dock;
-using Entry         = com::deepin::dde::daemon::dock::Entry;
+// using Dock          = com::deepin::dde::daemon::Dock;
+// using Entry         = com::deepin::dde::daemon::dock::Entry;
 
 
 class StartManager : public QObject
@@ -113,8 +113,8 @@ private:
     QList<QVariant> m_arg;
 
     QDBusPendingReply<QDBusUnixFileDescriptor> m_inhibitReply;
-    QScopedPointer<Dock> m_pDock;
-    QScopedPointer<Entry> m_pEntry;
+//    QScopedPointer<Dock> m_pDock;
+//    QScopedPointer<Entry> m_pEntry;
     QStringList m_qlistTemFile;///<备份信息列表
     QTimer *m_pTimer;
     QString m_blankFileDir;///<新建文件目录
