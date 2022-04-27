@@ -1345,72 +1345,28 @@ void Window::popupPrintDialog()
 
 void Window::popupPrintDialog()
 {
-    //大文本加载过程不允许打印操作
-    if (currentWrapper() && currentWrapper()->getFileLoading()) return;
+    QPrinter printer(QPrinter::HighResolution);
+    QPrintPreviewDialog preview(&printer, this);
 
-    const QString &filePath = currentWrapper()->textEditor()->getFilePath();
+    TextEdit *wrapper = currentWrapper()->textEditor();
+    const QString &filePath = wrapper->getFilePath();
     const QString &fileDir = QFileInfo(filePath).dir().absolutePath();
 
-    //适配打印接口2.0，dtk版本大于或等于5.4.10才放开最新的2.0打印预览接口
-#if (DTK_VERSION_MAJOR > 5 \
-    || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR > 4) \
-    || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 4 && DTK_VERSION_PATCH >= 10))
-
-    QTextDocument *doc = currentWrapper()->textEditor()->document();
-    if (doc != nullptr && !doc->isEmpty()) {
-        currentWrapper()->updateHighlighterAll();
-        m_printDoc = doc->clone(doc);
-    }
-
-    if (nullptr == m_printDoc) {
-        qDebug() << "The print document is not valid!";
-        return;
-    }
-
-    DPrinter printer(QPrinter::HighResolution);
-    m_isNewPrint = true;
-    m_pPreview = new DPrintPreviewDialog(this);
-    m_pPreview->setAttribute(Qt::WA_DeleteOnClose);
-
     if (fileDir == m_blankFileDir) {
-        QString name = m_tabbar->currentName();
-        QRegularExpression reg("[^*](.+)");
-        QRegularExpressionMatch match = reg.match(name);
-        m_pPreview->setDocName(QString(match.captured(0)));
+        printer.setOutputFileName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
+        printer.setDocName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
     } else {
-        QString path = currentWrapper()->textEditor()->getTruePath();
-        m_pPreview->setDocName(QString(QFileInfo(path).baseName()));
+        printer.setOutputFileName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
+        printer.setDocName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
     }
-    m_pPreview->setAsynPreview(m_printDoc ? m_printDoc->pageCount() : PRINT_FLAG);
 
-    connect(m_pPreview, &DPrintPreviewDialog::finished, this, [ = ] {
-        clearPrintTextDocument();
-    });
+    printer.setOutputFormat(QPrinter::PdfFormat);
 
-    connect(m_pPreview, QOverload<DPrinter *, const QVector<int> &>::of(&DPrintPreviewDialog::paintRequested),
-    this, [ = ](DPrinter * _printer, const QVector<int> &pageRange) {
-        this->doPrint(_printer, pageRange);
-    });
-
-    m_pPreview->exec();
-
-#else
-    DPrintPreviewDialog preview(this);
-
-    connect(&preview, QOverload<DPrinter *>::of(&DPrintPreviewDialog::paintRequested),
-            this, [ & ](DPrinter *printer) {
-        if (fileDir == m_blankFileDir) {
-            printer->setDocName(QString(m_tabbar->currentName()));
-        } else {
-            printer->setDocName(QString(QFileInfo(filePath).baseName()));
-        }
+    connect(&preview, &QPrintPreviewDialog::paintRequested, this, [ = ](QPrinter * printer) {
         currentWrapper()->textEditor()->print(printer);
     });
 
-    currentWrapper()->updateHighlighterAll();
-
     preview.exec();
-#endif
 }
 
 void Window::popupThemePanel()
