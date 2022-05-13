@@ -153,7 +153,7 @@ Window::Window(DMainWindow *parent)
     }
 
     // window minimum size.
-    setMinimumSize(1000, 600);
+    setMinimumSize(680, 300);
     // resize window size.
     int window_width = Settings::instance()->settings->option("advance.window.window_width")->value().toInt();
     int window_height = Settings::instance()->settings->option("advance.window.window_height")->value().toInt();
