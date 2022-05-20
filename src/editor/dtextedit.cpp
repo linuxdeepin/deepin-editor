@@ -6630,9 +6630,6 @@ void TextEdit::mouseReleaseEvent(QMouseEvent *e)
     return QPlainTextEdit::mouseReleaseEvent(e);
 }
 
-    QPlainTextEdit::mouseReleaseEvent(e);
-}
-
 void TextEdit::keyPressEvent(QKeyEvent *e)
 {
     Qt::KeyboardModifiers modifiers = e->modifiers();
