@@ -85,7 +85,7 @@ Settings::Settings(QWidget *parent)
                             .arg(qApp->organizationName())
                             .arg(qApp->applicationName());
 
-    m_backend = new CustemBackend(strConfigPath);
+    m_backend = new QSettingBackend(strConfigPath);
 
     settings = DSettings::fromJsonFile(":/resources/settings.json");
     settings->setBackend(m_backend);
