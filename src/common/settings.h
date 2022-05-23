@@ -114,6 +114,7 @@ private:
     bool checkShortcutValid(const QString &Name, QString Key, QString &Reason, bool &bIsConflicts);
     bool isShortcutConflict(const QString &Name, const QString &Key);
     DDialog *createDialog(const QString &title, const QString &content, const bool &bIsConflicts);
+    void removeLockFiles();
 
 private:
     Dtk::Core::QSettingBackend *m_backend {nullptr};
