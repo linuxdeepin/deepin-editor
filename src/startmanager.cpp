@@ -634,7 +634,10 @@ void StartManager::slotCloseWindow()
                 file.remove();
             }
         }
-        QApplication::quit();
+        QTimer::singleShot(1000,[](){
+            QApplication::quit();
+        });
+
         PerformanceMonitor::closeAPPFinish();
     }
 }

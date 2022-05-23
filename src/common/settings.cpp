@@ -85,6 +85,7 @@ Settings::Settings(QWidget *parent)
                             .arg(qApp->organizationName())
                             .arg(qApp->applicationName());
 
+    removeLockFiles();
     m_backend = new QSettingBackend(strConfigPath);
 
     settings = DSettings::fromJsonFile(":/resources/settings.json");
@@ -527,6 +528,29 @@ DDialog *Settings::createDialog(const QString &title, const QString &content, co
     }
 
     return dialog;
+}
+
+//删除config.conf配置文件目录下的.lock文件和.rmlock文件
+void Settings::removeLockFiles()
+{
+    QString configPath = QString("%1/%2/%3")
+            .arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation))
+            .arg(qApp->organizationName())
+            .arg(qApp->applicationName());
+
+    QDir dir(configPath);
+    if (!dir.exists()) {
+        return;
+    }
+
+    dir.setFilter(QDir::Files);
+    QStringList nameList = dir.entryList();
+    for (auto name: nameList) {
+        if (name.contains(".lock") || name.contains(".rmlock")) {
+            QFile file(name);
+            file.remove();
+        }
+    }
 }
 
 void Settings::slotCustomshortcut(const QString &key, const QVariant &value)
