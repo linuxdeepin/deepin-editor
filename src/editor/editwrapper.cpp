@@ -450,6 +450,10 @@ bool EditWrapper::saveFile()
 void EditWrapper::getPlainTextContent(QByteArray &plainTextContent)
 {
     QString strPlainText = m_pTextEdit->toPlainText();
+    if(BottomBar::EndlineFormat::Windows == m_pBottomBar->getEndlineFormat()){
+        strPlainText.replace("\n","\r\n");
+    }
+
     qint64 iPlainTextAllLen = strPlainText.length();
     qint64 iStep = 300 * DATA_SIZE_1024 * DATA_SIZE_1024;
     /* qt开发分析结论：大文本情况下toLocal8Bit()转换会引起应用闪退，此闪退问题qt方无法处理 */
@@ -1073,6 +1077,9 @@ void EditWrapper::loadContent(const QByteArray &strContent)
         m_pBottomBar->setChildEnabled(true);
     }
     QApplication::restoreOverrideCursor();
+
+    auto format = BottomBar::getEndlineFormat(strContent);
+    m_pBottomBar->setEndlineMenuText(format);
 }
 
 void EditWrapper::clearDoubleCharaterEncode()

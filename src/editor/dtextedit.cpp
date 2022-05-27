@@ -33,6 +33,7 @@
 #include "insertblockbytextcommond.h"
 #include "indenttextcommond.h"
 #include "undolist.h"
+#include "endlineformatcommond.h"
 
 #include <KF5/KSyntaxHighlighting/definition.h>
 #include <KF5/KSyntaxHighlighting/syntaxhighlighter.h>
@@ -2757,6 +2758,27 @@ void TextEdit::moveText(int from,int to,const QString& text)
         m_pUndoStack->push(list);
     }
 }
+
+/**
+ * @brief 行尾符号改变后处理函数；
+ * 1.这里并没有做"\n"和"\r\n"之间的替换，实际的替换动作在保存的时候才发生；
+ * 2.而是模拟修改动作，并加入撤销-还原栈中；
+ * @param
+ * @return
+ */
+
+void TextEdit::onEndlineFormatChanged(BottomBar::EndlineFormat from,BottomBar::EndlineFormat to)
+{
+    auto insertCom = new InsertTextUndoCommand(this->textCursor()," ");
+    auto deleteCom = new DeleteBackCommond(this->textCursor(),this);
+    auto endlineCom = new EndlineFormartCommand(m_wrapper->bottomBar(),from,to);
+    auto list = new UndoList();
+    list->appendCom(insertCom);
+    list->appendCom(deleteCom);
+    list->appendCom(endlineCom);
+    m_pUndoStack->push(list);
+}
+
 void TextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &closeChar)
 {
     QTextDocument *doc = document();

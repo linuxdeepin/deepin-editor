@@ -17,16 +17,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "bottombar.h"
-#include "../common/utils.h"
-#include "../editor/editwrapper.h"
-#include "../widgets/window.h"
-
 #include <QLabel>
 #include <QPainter>
 #include <QHBoxLayout>
 #include <DMenu>
 #include <DVerticalLine>
+#include "bottombar.h"
+#include "../common/utils.h"
+#include "../editor/editwrapper.h"
+#include "../widgets/window.h"
+#include "../editor/replaceallcommond.h"
 
 BottomBar::BottomBar(QWidget *parent)
     : QWidget(parent),
@@ -50,6 +50,8 @@ BottomBar::BottomBar(QWidget *parent)
     DFontSizeManager::instance()->bind(m_pCharCountLabel, DFontSizeManager::T9);
     DFontSizeManager::instance()->bind(m_pCursorStatus, DFontSizeManager::T9);
 
+    initFormatMenu();
+
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setContentsMargins(29, 1, 10, 0);
     layout->addWidget(m_pPositionLabel);
@@ -68,6 +70,8 @@ BottomBar::BottomBar(QWidget *parent)
     DVerticalLine *pVerticalLine2 = new DVerticalLine();
     pVerticalLine1->setFixedSize(1, 15);
     pVerticalLine2->setFixedSize(1, 15);
+    DVerticalLine *pVerticalLine3 = new DVerticalLine();
+    pVerticalLine3->setFixedSize(1, 15);
 
     layout->addStretch();
     layout->addWidget(m_pCursorStatus);
@@ -75,6 +79,8 @@ BottomBar::BottomBar(QWidget *parent)
     layout->addWidget(pVerticalLine1);
     layout->addWidget(m_pEncodeMenu);
     layout->addWidget(pVerticalLine2);
+    layout->addWidget(m_formatMenu);
+    layout->addWidget(pVerticalLine3);
     layout->addWidget(m_pHighlightMenu);
     setFixedHeight(32);
 
@@ -248,4 +254,74 @@ void BottomBar::slotSetTextEditFocus()
 {
     Window *pWindow = static_cast<Window *>(m_pWrapper->window());
     emit pWindow->pressEsc();
+}
+
+BottomBar::EndlineFormat BottomBar::getEndlineFormat(const QString& text)
+{
+    for(int i=0;i<text.size();i++){
+        if(text[i]=="\n"){
+            return EndlineFormat::Unix;
+        }
+        if(text[i]=="\r" && i+1<text.size() && text[i+1]=="\n"){
+            return EndlineFormat::Windows;
+        }
+    }
+
+    return EndlineFormat::Unknow;
+}
+
+BottomBar::EndlineFormat BottomBar:: getEndlineFormat()
+{
+    return m_endlineFormat;
+}
+
+//初始化行尾格式相关
+void BottomBar::initFormatMenu()
+{
+    m_formatMenu = new DDropdownMenu(this);
+    m_formatMenu->setCurrentTextOnly(tr("Unix-Format"));
+    DMenu *menu = new DMenu(this);
+    QActionGroup* actionGroup = new QActionGroup(menu);
+    actionGroup->setExclusive(true);
+    m_formatMenu->setMenu(menu);
+    m_formatMenu->setMenuActionGroup(actionGroup);
+
+    auto unixAction = menu->addAction(tr("Unix-Format"));
+    auto windowsAction = menu->addAction(tr("Windows-Format"));
+    unixAction->setProperty(FormatActionType,EndlineFormat::Unix);
+    windowsAction->setProperty(FormatActionType,EndlineFormat::Windows);
+    actionGroup->addAction(unixAction);
+    actionGroup->addAction(windowsAction);
+    connect(actionGroup, &QActionGroup::triggered, this,&BottomBar::onFormatMenuTrigged);
+
+}
+
+//行尾格式action槽函数
+void BottomBar::onFormatMenuTrigged(QAction* action)
+{
+    if(!action){
+        return;
+    }
+    int type = action->property(FormatActionType).toInt();
+    if(m_endlineFormat == type){
+        return;
+    }
+
+    m_pWrapper->textEditor()->onEndlineFormatChanged(m_endlineFormat,(EndlineFormat)type);
+    m_endlineFormat = (EndlineFormat)type;
+
+}
+
+//设置行尾menu text
+void BottomBar::setEndlineMenuText(EndlineFormat format)
+{
+    if(format == EndlineFormat::Unix || format == EndlineFormat::Unknow){
+        m_formatMenu->setCurrentTextOnly(tr("Unix-Format"));
+        m_endlineFormat = EndlineFormat::Unix;
+
+    }
+    else {
+        m_formatMenu->setCurrentTextOnly(tr("Windows-Format"));
+        m_endlineFormat = EndlineFormat::Windows;
+    }
 }

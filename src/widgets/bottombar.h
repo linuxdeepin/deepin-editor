@@ -27,11 +27,21 @@
 #include <DApplicationHelper>
 #include <DFontSizeManager>
 #include <QPainterPath>
+#include <DProgressBar>
+
+#define FormatActionType "format-action-type"
 
 class EditWrapper;
 class BottomBar : public QWidget
 {
     Q_OBJECT
+
+public:
+    enum EndlineFormat{
+        Unknow = -1,
+        Unix,
+        Windows
+    };
 
 public:
     explicit BottomBar(QWidget *parent = nullptr);
@@ -49,9 +59,17 @@ public:
 
     DDropdownMenu* getEncodeMenu();
     DDropdownMenu* getHighlightMenu();
+    static EndlineFormat getEndlineFormat(const QString& text);
+    EndlineFormat getEndlineFormat();
+    void setEndlineMenuText(EndlineFormat format);
 
 protected:
     void paintEvent(QPaintEvent *);
+
+private:
+    void initFormatMenu();
+private slots:
+    void onFormatMenuTrigged(QAction* action);
 
 private:
     EditWrapper *m_pWrapper {nullptr};
@@ -64,6 +82,9 @@ private:
     QString m_columnStr {QString()};
     QString m_chrCountStr {QString()};
     bool m_bIsFindOrReplace {false};
+    DDropdownMenu *m_formatMenu = nullptr;
+    EndlineFormat m_endlineFormat = EndlineFormat::Unix;
+
 
 public slots:
 	//编码按钮/文本类型按钮失去焦点后，设置光标回到文本框里
