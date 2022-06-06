@@ -7,6 +7,7 @@
 
 #include "dthememanager.h"
 #include "../controls/fontitemdelegate.h"
+#include "../widgets/pathsettintwgt.h"
 #include <DSettings>
 #include <DSettingsGroup>
 #include <DSettingsWidgetFactory>
@@ -131,6 +132,63 @@ Settings::Settings(QWidget *parent)
     connect(settings, &Dtk::Core::DSettings::valueChanged, this, &Settings::slotCustomshortcut);
 }
 
+void Settings::setSavePath(int id,const QString& path)
+{
+    switch (id) {
+    case PathSettingWgt::LastOptBox:{
+        auto opt = settings->option("advance.open_save_setting.open_save_lastopt_path");
+        opt->setValue(path);
+        break;
+    }
+    case PathSettingWgt::CurFileBox:{
+        auto opt = settings->option("advance.open_save_setting.open_save_curfile_path");
+        opt->setValue(path);
+        break;
+    }
+    case PathSettingWgt::CustomBox:{
+        auto opt = settings->option("advance.open_save_setting.open_save_custom_path");
+        opt->setValue(path);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+
+QString Settings::getSavePath(int id)
+{
+    QString path;
+    switch (id) {
+    case PathSettingWgt::LastOptBox:{
+        path = settings->option("advance.open_save_setting.open_save_lastopt_path")->value().toString();
+        break;
+    }
+    case PathSettingWgt::CurFileBox:{
+        path = settings->option("advance.open_save_setting.open_save_curfile_path")->value().toString();
+        break;
+    }
+    case PathSettingWgt::CustomBox:{
+        path = settings->option("advance.open_save_setting.open_save_custom_path")->value().toString();
+        break;
+    }
+    default:
+        break;
+    }
+
+    return path;
+}
+
+void Settings::setSavePathId(int id)
+{
+    auto opt = settings->option("advance.open_save_setting.savingpathwgt");
+    opt->setValue(QString::number(id));
+}
+int Settings::getSavePathId()
+{
+   return settings->option("advance.open_save_setting.savingpathwgt")->value().toInt();
+
+}
 Settings::~Settings()
 {
     if (m_backend != nullptr) {
@@ -189,6 +247,27 @@ QPair<QWidget *, QWidget *> Settings::createFontComBoBoxHandle(QObject *obj)
     });
 
     return optionWidget;
+}
+
+QWidget* Settings::createSavingPathWgt(QObject* obj)
+{
+    auto option = qobject_cast<DTK_CORE_NAMESPACE::DSettingsOption *>(obj);
+    QString name = option->name();
+    PathSettingWgt* pathwgt = new PathSettingWgt;
+    QPair<QWidget *, QWidget *> optionWidget = DSettingsWidgetFactory::createStandardItem(QByteArray(), option, pathwgt);
+
+    connect(option, &DSettingsOption::valueChanged, pathwgt, [ = ](QVariant var) {
+        int id = var.toInt();
+        pathwgt->onSaveIdChanged(id);
+    });
+
+    auto custompath = s_pSetting->settings->option("advance.open_save_setting.open_save_custom_path");
+    connect(custompath, &Dtk::Core::DSettingsOption::valueChanged, [=](QVariant var){
+        pathwgt->setEditText(var.toString());
+    });
+
+
+    return optionWidget.second;
 }
 
 QPair<QWidget *, QWidget *> Settings::createKeySequenceEditHandle(QObject *obj)

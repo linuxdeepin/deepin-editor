@@ -14,6 +14,7 @@
 #include <DSpinBox>
 #include <QLineEdit>
 #include <QEvent>
+#include <DIconButton>
 
 DWIDGET_USE_NAMESPACE
 
@@ -55,6 +56,7 @@ private:
     int m_columnBeforeJump;
     int m_lineCount;
     QColor m_backgroundColor;
+    DIconButton *m_closeButton=nullptr;
 };
 
 #endif

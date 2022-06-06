@@ -16,6 +16,7 @@
 #include "indenttextcommond.h"
 #include "undolist.h"
 #include "changemarkcommand.h"
+#include "endlineformatcommond.h"
 
 #include <KSyntaxHighlighting/definition.h>
 #include <KSyntaxHighlighting/syntaxhighlighter.h>
@@ -2028,6 +2029,19 @@ bool TextEdit::updateKeywordSelectionsInView(QString keyword, QTextCharFormat ch
         int endPos = endBlock.position() + endBlock.length() - 1;
 
         cursor = document()->find(keyword, beginPos);
+        QString multiLineText;
+        if(keyword.contains("\n")){
+            auto temp = this->textCursor();
+            temp.setPosition(beginPos);
+            while(temp.position()<endPos){
+                temp.movePosition(QTextCursor::EndOfLine,QTextCursor::KeepAnchor);
+                multiLineText += temp.selectedText();
+                multiLineText += "\n";
+                temp.setPosition(temp.position()+1);
+            }
+            cursor = findCursor(keyword,multiLineText,0,false,beginPos);
+
+        }
         if (cursor.isNull()) {
             return false;
         }
@@ -2035,10 +2049,15 @@ bool TextEdit::updateKeywordSelectionsInView(QString keyword, QTextCharFormat ch
         while (!cursor.isNull()) {
             extra.cursor = cursor;
             /* 查找字符时，查找到完全相等的时候才高亮，如查找小写f时，大写的F不高亮 */
-            if (!extra.cursor.selectedText().compare(keyword)) {
+            if (!extra.cursor.selectedText().compare(keyword) || keyword.contains("\n")) {
                 listSelection->append(extra);
             }
+
             cursor = document()->find(keyword, cursor);
+            if(keyword.contains("\n")){
+                int pos = std::max(extra.cursor.position(),extra.cursor.anchor());
+                cursor = findCursor(keyword,multiLineText,pos-beginPos,false,beginPos);
+            }
 
             if (cursor.position() > endPos) {
                 break;
@@ -2216,6 +2235,7 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
         nPageLine = blockCount() - 1;
     }
 
+    auto currentCursor = this->textCursor();
     cur = textCursor();
     for (int i = nStartLine; i <= nPageLine; i++) {
         if (i + 1 == m_markStartLine) {
@@ -2236,6 +2256,9 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
             //the language currently set by the system is Tibetan.
             if ("bo_CN" == Utils::getSystemLan()) {
                 offset = 2;
+            }
+            if(cur.blockNumber() == currentCursor.blockNumber()){
+                painter.setPen(Utils::getActiveColor());
             }
             painter.drawText(0, cursorRect(cur).y() + offset,
                              m_pLeftAreaWidget->m_pLineNumberArea->width(), cursorRect(cur).height(),
@@ -2923,7 +2946,7 @@ void TextEdit::moveText(int from, int to, const QString &text, bool copy)
  *        cursorPos: text起始位置在全文本中的位置
  * @return
  */
-QTextCursor TextEdit::findCursor(const QString &substr, const QString &text, int from, bool backward, int cursorPos)
+QTextCursor TextEdit::findCursor(const QString& substr,const QString& text,int from,bool backward,int cursorPos)
 {
     int index = -1;
     if (backward) {
@@ -2938,6 +2961,51 @@ QTextCursor TextEdit::findCursor(const QString &substr, const QString &text, int
         return cursor;
     } else {
         return QTextCursor();
+    }
+}
+
+/**
+ * @brief 点击行号处理：选中当前行，光标置于下一行行首
+ * @param
+ * @return
+ */
+void TextEdit::onPressedLineNumber(const QPoint& point)
+{
+    QScrollBar *pScrollBar = verticalScrollBar();
+    QPoint startPoint = QPointF(0, 0).toPoint();
+    QTextBlock beginBlock = cursorForPosition(startPoint).block();
+    QTextBlock endBlock;
+    if (pScrollBar->maximum() > 0) {
+        QPoint endPoint = QPointF(0, 1.5 * height()).toPoint();
+        endBlock = cursorForPosition(endPoint).block();
+    } else {
+        endBlock = document()->lastBlock();
+    }
+
+    int linenumber = -1;
+    auto cursor = this->textCursor();
+    while(beginBlock.position()<=endBlock.position()){
+        cursor.setPosition(beginBlock.position(), QTextCursor::MoveAnchor);
+        int offset = 0;
+        //the language currently set by the system is Tibetan.
+        if("bo_CN" == Utils::getSystemLan()){
+            offset = 2;
+        }
+        QRect rect(0,cursorRect(cursor).y() + offset,m_pLeftAreaWidget->m_pLineNumberArea->width(), cursorRect(cursor).height());
+        if(rect.contains(point)){
+            linenumber = beginBlock.blockNumber();
+            break;
+        }
+        beginBlock = beginBlock.next();
+    }
+    if(-1!=linenumber){
+        if(this->document()->lastBlock().blockNumber() == linenumber){
+            cursor.movePosition(QTextCursor::EndOfBlock,QTextCursor::KeepAnchor);
+        }
+        else {
+            cursor.movePosition(QTextCursor::NextBlock,QTextCursor::KeepAnchor);
+        }
+        this->setTextCursor(cursor);
     }
 }
 
@@ -2994,6 +3062,20 @@ QString TextEdit::selectedText()
     }
 
     return text;
+}
+
+/**
+ * @brief 行尾符号改变后处理函数；
+ * 1.这里并没有做"\n"和"\r\n"之间的替换，实际的替换动作在保存的时候才发生；
+ * 2.而是模拟修改动作，并加入撤销-还原栈中；
+ * @param
+ * @return
+ */
+
+void TextEdit::onEndlineFormatChanged(BottomBar::EndlineFormat from,BottomBar::EndlineFormat to)
+{
+    auto endlineCom = new EndlineFormartCommand(this,m_wrapper->bottomBar(),from,to);
+    m_pUndoStack->push(endlineCom);
 }
 
 void TextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &closeChar)
@@ -6539,19 +6621,8 @@ void TextEdit::mouseReleaseEvent(QMouseEvent *e)
         e->accept();
         return;
     }
-
-    // 获取鼠标中键释放事件，进行中键黏贴处理
-    // 此处判断从 QWidgetTextControlPrivate::mouseReleaseEvent() 摘录
-    if (Qt::MidButton == e->button()
-            && !isReadOnly()
-            && QApplication::clipboard()->supportsSelection()) {
-        const QMimeData *md = QApplication::clipboard()->mimeData(QClipboard::Selection);
-        // 判断文本内容，文本编辑器为纯文本编辑，不涉及剪贴板富文本内容
-        if (md && !md->text().isEmpty()) {
-            // 设置当前为中键黏贴状态，执行 QPlainTextEdit::mouseReleaseEvent(e) 时会触发文本变更信号。
-            m_MidButtonPatse = true;
-        }
-    }
+    return QPlainTextEdit::mouseReleaseEvent(e);
+}
 
     QPlainTextEdit::mouseReleaseEvent(e);
 }

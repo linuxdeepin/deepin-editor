@@ -24,6 +24,7 @@
 #include <QScreen>
 #include <iostream>
 #include <DApplicationSettings>
+#include <dsettingsoption.h>
 
 DWIDGET_USE_NAMESPACE
 
@@ -77,11 +78,21 @@ int main(int argc, char *argv[])
         };
         Eventlogutils::GetInstance()->writeLogs(objStartEvent);
 
-        if (hasWindowFlag) {
-            startManager->openFilesInWindow(urls);
-        } else {
-            startManager->openFilesInTab(urls);
+        bool save_tab_before_close = Settings::instance()->settings->option("advance.start.save_tab_before_close")->value().toBool();
+        if(!save_tab_before_close){
+            auto window = startManager->createWindow(true);
+            window->addBlankTab();
         }
+        else {
+            if (hasWindowFlag) {
+                startManager->openFilesInWindow(urls);
+            } else {
+                startManager->openFilesInTab(urls);
+            }
+
+
+        }
+
 
         dbus.registerObject("/com/deepin/Editor", startManager, QDBusConnection::ExportScriptableSlots);
 
