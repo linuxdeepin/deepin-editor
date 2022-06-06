@@ -33,6 +33,7 @@
 //添加自定义撤销重做栈
 #include "inserttextundocommand.h"
 #include "deletetextundocommand.h"
+#include "../widgets/bottombar.h"
 #include <QUndoStack>
 
 #include <KSyntaxHighlighting/Definition>
@@ -554,6 +555,10 @@ public slots:
     void redo_();
     void undo_();
     void moveText(int from,int to,const QString& text);
+    QTextCursor findCursor(const QString& substr,const QString& text,int from,bool backward=false,int cursorPos=0);
+    void onPressedLineNumber(const QPoint& point);
+    QString selectedText();
+    void onEndlineFormatChanged(BottomBar::EndlineFormat from,BottomBar::EndlineFormat to);
 
 protected:
     bool event(QEvent *evt) override;   //触摸屏event事件

@@ -21,6 +21,7 @@
 #include "dtextedit.h"
 #include "leftareaoftextedit.h"
 #include <QDebug>
+#include <QMouseEvent>
 
 LineNumberArea::LineNumberArea(LeftAreaTextEdit *leftAreaWidget)
 {
@@ -43,4 +44,18 @@ void LineNumberArea::paintEvent(QPaintEvent *e)
 QSize LineNumberArea::sizeHint() const
 {
     return QSize(m_leftAreaWidget->lineNumberAreaWidth(), 0);
+}
+
+
+void LineNumberArea::mousePressEvent(QMouseEvent *e)
+{
+//    m_pressPoint = e->pos();
+//    m_leftAreaWidget->update();
+    m_leftAreaWidget->getEdit()->onPressedLineNumber(e->pos());
+    QWidget::mousePressEvent(e);
+}
+
+QPoint LineNumberArea::getPressPoint()
+{
+    return m_pressPoint;
 }

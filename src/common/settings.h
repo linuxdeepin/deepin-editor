@@ -71,6 +71,7 @@ public:
     //static QWidget *createFontComBoBoxHandle(QObject *obj);
     static QPair<QWidget*, QWidget*> createFontComBoBoxHandle(QObject *obj);
     static QPair<QWidget*, QWidget*> createKeySequenceEditHandle(QObject *obj);
+    static QWidget* createSavingPathWgt(QObject* objg);
     static Settings* instance();
     void setSettingDialog(DSettingsDialog *settingsDialog);
 
@@ -78,6 +79,11 @@ public:
     int m_iMaxFontSize = 50;
     int m_iMinFontSize = 8;
     DSettings *settings {nullptr};
+
+    void setSavePath(int id,const QString& path);
+    QString getSavePath(int id);
+    void setSavePathId(int id);
+    int getSavePathId();
 
 signals:
     void sigAdjustFont(QString name);

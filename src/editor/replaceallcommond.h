@@ -5,6 +5,7 @@
 #include <QTextCursor>
 #include <QTextDocument>
 #include <QPlainTextEdit>
+#include "dtextedit.h"
 
 //全部替换撤销-重做
 class ReplaceAllCommond:public QUndoCommand

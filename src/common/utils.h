@@ -104,6 +104,8 @@ public:
 
     static bool isWayland();
 
+    static QString getActiveColor();
+
 private:
     static QString m_systemLanguage;
 };

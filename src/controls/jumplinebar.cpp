@@ -36,6 +36,12 @@ JumpLineBar::JumpLineBar(DFloatingWidget *parent)
     m_layout->setContentsMargins(10, 6, 10, 6);
     m_layout->setSpacing(0);
 
+    m_closeButton = new DIconButton(DStyle::SP_CloseButton);
+    m_closeButton->setIconSize(QSize(30, 30));
+    m_closeButton->setFixedSize(30, 30);
+    m_closeButton->setEnabledCircle(true);
+    m_closeButton->setFlat(true);
+
     m_label = new QLabel();
     m_label->setText(tr("Go to Line: "));
     m_pSpinBoxInput = new DSpinBox;
@@ -45,11 +51,13 @@ JumpLineBar::JumpLineBar(DFloatingWidget *parent)
 
     m_layout->addWidget(m_label);
     m_layout->addWidget(m_pSpinBoxInput);
+    m_layout->addWidget(m_closeButton);
     this->setLayout(m_layout);
 
     connect(this, &JumpLineBar::pressEsc, this, &JumpLineBar::jumpCancel, Qt::QueuedConnection);
     connect(m_pSpinBoxInput->lineEdit(), &QLineEdit::returnPressed, this, &JumpLineBar::jumpConfirm, Qt::QueuedConnection);
     connect(m_pSpinBoxInput->lineEdit(), &QLineEdit::textChanged, this, &JumpLineBar::handleLineChanged, Qt::QueuedConnection);
+    connect(m_closeButton, &DIconButton::clicked, this, &JumpLineBar::close, Qt::QueuedConnection);
 }
 
 JumpLineBar::~JumpLineBar()

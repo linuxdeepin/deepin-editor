@@ -21,7 +21,7 @@
  */
 
 #include "window.h"
-
+#include "pathsettintwgt.h"
 #include <DTitlebar>
 #include <DAnchors>
 #include <DThemeManager>
@@ -153,7 +153,7 @@ Window::Window(DMainWindow *parent)
     }
 
     // window minimum size.
-    setMinimumSize(1000, 600);
+    setMinimumSize(680, 300);
     // resize window size.
     int window_width = Settings::instance()->settings->option("advance.window.window_width")->value().toInt();
     int window_height = Settings::instance()->settings->option("advance.window.window_height")->value().toInt();
@@ -835,6 +835,12 @@ void Window::openFile()
         qDebug() << "historyDir or default path not existed:" << historyDir;
     }
 
+    QString path = m_settings->getSavePath(m_settings->getSavePathId());
+    if(path.isEmpty() || !QDir(path).exists()){
+        path = QDir::homePath() + "/Documents";
+    }
+    dialog.setDirectory(path);
+
     const int mode = dialog.exec();
 
     PerformanceMonitor::openFileStart();
@@ -955,6 +961,11 @@ QString Window::saveAsFileToDisk()
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.addComboBox(QObject::tr("Encoding"),  QStringList() << wrapper->getTextEncode());
     dialog.setDirectory(QDir::homePath());
+    QString path = m_settings->getSavePath(m_settings->getSavePathId());
+    if(path.isEmpty() || !QDir(path).exists()){
+        path = QDir::homePath() + "/Documents";
+    }
+    dialog.setDirectory(path);
 
     if (isDraft) {
         QRegularExpression reg("[^*](.+)");
@@ -973,6 +984,8 @@ QString Window::saveAsFileToDisk()
         const QByteArray encode = dialog.getComboBoxValue(QObject::tr("Encoding")).toUtf8();
         const QString endOfLine = dialog.getComboBoxValue(QObject::tr("Line Endings"));
         const QString newFilePath = dialog.selectedFiles().value(0);
+        Settings::instance()->setSavePath(PathSettingWgt::LastOptBox,QFileInfo(newFilePath).absolutePath());
+        Settings::instance()->setSavePath(PathSettingWgt::CurFileBox,QFileInfo(newFilePath).absolutePath());
 
         wrapper->updatePath(wrapper->filePath(), newFilePath);
         if(!wrapper->saveFile()) {
@@ -1133,6 +1146,7 @@ void Window::setFontSizeWithConfig(EditWrapper *wrapper)
 {
     int size = m_settings->settings->option("base.font.size")->value().toInt();
     wrapper->textEditor()->setFontSize(size);
+    wrapper->bottomBar()->setScaleLabelText(size);
 
     m_fontSize = size;
 }
@@ -1173,7 +1187,8 @@ void Window::popupFindBar()
     m_findBar->show();
     m_findBar->move(QPoint(4, height() - m_findBar->height() - 4));
 
-    QString text = wrapper->textEditor()->textCursor().selectedText();
+    //QString text = wrapper->textEditor()->textCursor().selectedText();
+    QString text = wrapper->textEditor()->selectedText();
     int row = wrapper->textEditor()->getCurrentLine();
     int column = wrapper->textEditor()->getCurrentColumn();
     int scrollOffset = wrapper->textEditor()->getScrollOffset();
@@ -1224,7 +1239,8 @@ void Window::popupReplaceBar()
     //addBottomWidget(m_replaceBar);
 
     QString tabPath = m_tabbar->currentPath();
-    QString text = wrapper->textEditor()->textCursor().selectedText();
+   // QString text = wrapper->textEditor()->textCursor().selectedText();
+    QString text = wrapper->textEditor()->selectedText();
     int row = wrapper->textEditor()->getCurrentLine();
     int column = wrapper->textEditor()->getCurrentColumn();
     int scrollOffset = wrapper->textEditor()->getScrollOffset();
@@ -1294,7 +1310,9 @@ void Window::popupSettingsDialog()
     DSettingsDialog *dialog = new DSettingsDialog(this);
     dialog->widgetFactory()->registerWidget("fontcombobox", Settings::createFontComBoBoxHandle);
     dialog->widgetFactory()->registerWidget("keySequenceEdit", Settings::createKeySequenceEditHandle);
-
+    dialog->widgetFactory()->registerWidget("savingpathwgt", Settings::createSavingPathWgt);
+    dialog->resize(680,300);
+    dialog->setMinimumSize(680,300);
     m_settings->setSettingDialog(dialog);
 
     dialog->updateSettings(m_settings->settings);
@@ -1947,7 +1965,9 @@ void Window::handleCurrentChanged(const int &index)
         bool bIsContains = false;
         EditWrapper *wrapper = m_wrappers.value(filepath);
         wrapper->textEditor()->setFocus();
-
+        if(!wrapper->isDraftFile()){
+            Settings::instance()->setSavePath(PathSettingWgt::CurFileBox,QFileInfo(filepath).absolutePath());
+        }
         for (int i = 0; i < m_editorWidget->count(); i++) {
             if (m_editorWidget->widget(i) == wrapper) {
                 bIsContains = true;
@@ -2358,6 +2378,7 @@ void Window::slotSigAdjustFontSize(int fontSize)
 {
     for (EditWrapper *wrapper : m_wrappers.values()) {
         wrapper->textEditor()->setFontSize(fontSize);
+        wrapper->bottomBar()->setScaleLabelText(fontSize);
         wrapper->OnUpdateHighlighter();
     }
 
@@ -2526,7 +2547,16 @@ void Window::closeEvent(QCloseEvent *e)
             return;
         }
     } else {
-        backupFile();
+//        bool save_tab_before_close = m_settings->settings->option("advance.start.save_tab_before_close")->value().toBool();
+//        if(!save_tab_before_close){
+//            if (!closeAllFiles()) {
+//                e->ignore();
+//                return;
+//            }
+//        }
+//        else{
+            backupFile();
+//        }
     }
 
     QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");

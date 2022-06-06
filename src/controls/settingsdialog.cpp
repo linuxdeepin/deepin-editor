@@ -107,6 +107,7 @@ void GenerateSettingTranslate()
     auto advance_windowName = QObject::tr("Window");
     auto advance_window_windowstateName = QObject::tr("Window size");
     auto advance_editor_tabspacenumberName = QObject::tr("Tab width");
+    auto allow_midbutton_paste_name = QObject::tr("allow midbutton paste");
 
     auto base_font_wordwrapText = QObject::tr("Word wrap");
     auto base_font_codeflod = QObject::tr("Code folding flag");

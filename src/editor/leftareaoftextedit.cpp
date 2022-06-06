@@ -119,3 +119,9 @@ void LeftAreaTextEdit::paintEvent(QPaintEvent *event)
 }
 
 
+TextEdit* LeftAreaTextEdit::getEdit()
+{
+    return m_pTextEdit;
+}
+
+

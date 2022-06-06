@@ -823,3 +823,21 @@ bool Utils::isWayland()
     return protocol.contains("wayland");
 
 }
+
+
+QString Utils::getActiveColor()
+{
+    static QString activeColor;
+    if(!activeColor.isEmpty()){
+        return activeColor;
+    }
+    else{
+        QDBusInterface d("com.deepin.daemon.Appearance",
+                          "/com/deepin/daemon/Appearance",
+                          "com.deepin.daemon.Appearance",
+                          QDBusConnection::sessionBus());
+
+        activeColor = d.property("QtActiveColor").toString();
+        return activeColor;
+    }
+}

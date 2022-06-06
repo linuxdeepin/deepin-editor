@@ -19,6 +19,7 @@
 #include "../widgets/window.h"
 #include "../encodes/detectcode.h"
 #include "../common/fileloadthread.h"
+#include "../widgets/pathsettintwgt.h"
 #include "editwrapper.h"
 #include "../common/utils.h"
 #include "leftareaoftextedit.h"
@@ -122,6 +123,11 @@ void EditWrapper::openFile(const QString &filepath, QString qstrTruePath, bool b
     // update file path.
     updatePath(filepath, qstrTruePath);
     m_pTextEdit->setIsFileOpen();
+
+    if(!bIsTemFile && !isDraftFile()){
+        Settings::instance()->setSavePath(PathSettingWgt::LastOptBox,QFileInfo(qstrTruePath).absolutePath());
+        Settings::instance()->setSavePath(PathSettingWgt::CurFileBox,QFileInfo(qstrTruePath).absolutePath());
+    }
 
     FileLoadThread *thread = new FileLoadThread(filepath);
     // begin to load the file.
@@ -450,6 +456,10 @@ bool EditWrapper::saveFile()
 void EditWrapper::getPlainTextContent(QByteArray &plainTextContent)
 {
     QString strPlainText = m_pTextEdit->toPlainText();
+    if(BottomBar::EndlineFormat::Windows == m_pBottomBar->getEndlineFormat()){
+        strPlainText.replace("\n","\r\n");
+    }
+
     qint64 iPlainTextAllLen = strPlainText.length();
     qint64 iStep = 300 * DATA_SIZE_1024 * DATA_SIZE_1024;
     /* qt开发分析结论：大文本情况下toLocal8Bit()转换会引起应用闪退，此闪退问题qt方无法处理 */
@@ -1002,6 +1012,7 @@ void EditWrapper::loadContent(const QByteArray &strContent)
     int max = 40 * 1024 * 1024;
 
     QString data;
+    int inserted = 0;
 
     if (len > max) {
         for (int i = 0; i < cnt; i++) {
@@ -1017,6 +1028,9 @@ void EditWrapper::loadContent(const QByteArray &strContent)
                 //秒开界面语法高亮
                 OnUpdateHighlighter();
                 QApplication::processEvents();
+                inserted += step;
+                float progress = (inserted*1.0)/len*100;
+                m_pBottomBar->setProgress(progress);
                 continue;
             }
             if (!m_bQuit) {
@@ -1025,16 +1039,22 @@ void EditWrapper::loadContent(const QByteArray &strContent)
                 data = codec->toUnicode(text.constData(), text.size(), &state);
                 cursor.insertText(data);
                 QApplication::processEvents();
+                inserted += step;
+                float progress = (inserted*1.0)/len*100;
+                m_pBottomBar->setProgress(progress);
                 if (!m_bQuit && i == cnt - 1 && mod > 0) {
                     //data = strContent.mid(cnt * step, mod);
                     QByteArray text = strContent.mid(cnt * step, mod);
                     data = codec->toUnicode(text.constData(), text.size(), &state);
                     cursor.insertText(data);
                     QApplication::processEvents();
+                    inserted += step;
+                    float progress = (inserted*1.0)/len*100;
+                    m_pBottomBar->setProgress(progress);
                 }
             }
         }
-    } else {
+    } else if(len>0){
         //初始化秒开
         if (!m_bQuit && len > InitContentPos) {
             //data = strContent.mid(0, InitContentPos);
@@ -1047,11 +1067,17 @@ void EditWrapper::loadContent(const QByteArray &strContent)
             //秒开界面语法高亮
             OnUpdateHighlighter();
             QApplication::processEvents();
+            inserted += InitContentPos;
+            float progress = (inserted*1.0)/len*100;
+            m_pBottomBar->setProgress(progress);
             if (!m_bQuit) {
                 //data = strContent.mid(InitContentPos, len - InitContentPos);
                 QByteArray text = strContent.mid(InitContentPos, len - InitContentPos);
                 data = codec->toUnicode(text.constData(), text.size(), &state);
                 cursor.insertText(data);
+                inserted += (len - InitContentPos);
+                float progress = (inserted*1.0)/len*100;
+                m_pBottomBar->setProgress(progress);
             }
         } else {
             if (!m_bQuit) {
@@ -1063,6 +1089,9 @@ void EditWrapper::loadContent(const QByteArray &strContent)
                 m_pTextEdit->setTextCursor(firstLineCursor);
                 //秒开界面语法高亮
                 OnUpdateHighlighter();
+                inserted += len;
+                float progress = (inserted*1.0)/len*100;
+                m_pBottomBar->setProgress(progress);
             }
         }
     }
@@ -1072,7 +1101,11 @@ void EditWrapper::loadContent(const QByteArray &strContent)
     if (m_pBottomBar != nullptr) {
         m_pBottomBar->setChildEnabled(true);
     }
+
     QApplication::restoreOverrideCursor();
+
+    auto format = BottomBar::getEndlineFormat(strContent);
+    m_pBottomBar->setEndlineMenuText(format);
 }
 
 void EditWrapper::clearDoubleCharaterEncode()
