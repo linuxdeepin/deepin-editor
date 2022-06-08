@@ -1,5 +1,6 @@
 #include "endlineformatcommond.h"
-EndlineFormartCommand::EndlineFormartCommand(BottomBar* bar,BottomBar::EndlineFormat from,BottomBar::EndlineFormat to):
+EndlineFormartCommand::EndlineFormartCommand(TextEdit* edit,BottomBar* bar,BottomBar::EndlineFormat from,BottomBar::EndlineFormat to):
+    m_edit(edit),
     m_bar(bar),
     m_from(from),
     m_to(to)
@@ -17,5 +18,10 @@ void EndlineFormartCommand::undo()
 }
 void EndlineFormartCommand::redo()
 {
+    auto cursor = m_edit->textCursor();
+    auto pos = cursor.position();
+    cursor.insertText(" ");
+    cursor.setPosition(pos);
+    cursor.deleteChar();
     m_bar->setEndlineMenuText(m_to);
 }

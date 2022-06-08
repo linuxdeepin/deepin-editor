@@ -56,10 +56,12 @@ public:
     void setChildEnabled(bool enabled);
     //设置所有焦点　梁卫东　２０２０－０９－１４　１０：５５：２２
     void setChildrenFocus(bool ok,QWidget* preOrderWidget = nullptr);
+    void setScaleLabelText(int fontSize);
+    void setProgress(int progress);
 
     DDropdownMenu* getEncodeMenu();
     DDropdownMenu* getHighlightMenu();
-    static EndlineFormat getEndlineFormat(const QString& text);
+    static EndlineFormat getEndlineFormat(const QByteArray& text);
     EndlineFormat getEndlineFormat();
     void setEndlineMenuText(EndlineFormat format);
 
@@ -84,6 +86,8 @@ private:
     bool m_bIsFindOrReplace {false};
     DDropdownMenu *m_formatMenu = nullptr;
     EndlineFormat m_endlineFormat = EndlineFormat::Unix;
+    QAction* m_unixAction = nullptr;
+    QAction* m_windowsAction = nullptr;
 
 
 public slots:

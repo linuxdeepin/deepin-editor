@@ -2769,14 +2769,8 @@ void TextEdit::moveText(int from,int to,const QString& text)
 
 void TextEdit::onEndlineFormatChanged(BottomBar::EndlineFormat from,BottomBar::EndlineFormat to)
 {
-    auto insertCom = new InsertTextUndoCommand(this->textCursor()," ");
-    auto deleteCom = new DeleteBackCommond(this->textCursor(),this);
-    auto endlineCom = new EndlineFormartCommand(m_wrapper->bottomBar(),from,to);
-    auto list = new UndoList();
-    list->appendCom(insertCom);
-    list->appendCom(deleteCom);
-    list->appendCom(endlineCom);
-    m_pUndoStack->push(list);
+    auto endlineCom = new EndlineFormartCommand(this,m_wrapper->bottomBar(),from,to);
+    m_pUndoStack->push(endlineCom);
 }
 
 void TextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &closeChar)

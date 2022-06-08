@@ -158,10 +158,12 @@ void BottomBar::setPalette(const QPalette &palette)
     m_pCursorStatus->setPalette(paCursorStatus);
     m_pEncodeMenu->getButton()->setPalette(paEncodeMenu);
     m_pHighlightMenu->getButton()->setPalette(paHighlightMenu);
+    m_formatMenu->getButton()->setPalette(paEncodeMenu);
 
     QString theme = (palette.color(QPalette::Background).lightness() < 128) ? "dark" : "light";
     m_pEncodeMenu->setTheme(theme);
     m_pHighlightMenu->setTheme(theme);
+    m_formatMenu->setTheme(theme);
 
     QWidget::setPalette(palette);
 }
@@ -178,15 +180,19 @@ void BottomBar::setChildEnabled(bool enabled)
     m_pHighlightMenu->setEnabled(enabled);
     m_pEncodeMenu->setRequestMenu(enabled);
     m_pHighlightMenu->setRequestMenu(enabled);
+    m_formatMenu->setEnabled(enabled);
 }
 
 void BottomBar::setChildrenFocus(bool ok,QWidget* preOrderWidget)
 {
     m_pEncodeMenu->setChildrenFocus(ok);
     m_pHighlightMenu->setChildrenFocus(ok);
+    m_formatMenu->setChildrenFocus(ok);
     if(ok) {
         if(preOrderWidget) setTabOrder(preOrderWidget,m_pEncodeMenu->getButton());
-        setTabOrder(m_pEncodeMenu->getButton(),m_pHighlightMenu->getButton());
+
+        setTabOrder(m_pEncodeMenu->getButton(),m_formatMenu->getButton());
+        setTabOrder(m_formatMenu->getButton(),m_pHighlightMenu->getButton());
     }
 }
 
@@ -256,13 +262,13 @@ void BottomBar::slotSetTextEditFocus()
     emit pWindow->pressEsc();
 }
 
-BottomBar::EndlineFormat BottomBar::getEndlineFormat(const QString& text)
+BottomBar::EndlineFormat BottomBar::getEndlineFormat(const QByteArray& text)
 {
     for(int i=0;i<text.size();i++){
-        if(text[i]=="\n"){
+        if(text[i]=='\n'){
             return EndlineFormat::Unix;
         }
-        if(text[i]=="\r" && i+1<text.size() && text[i+1]=="\n"){
+        if(text[i]=='\r' && i+1<text.size() && text[i+1]=='\n'){
             return EndlineFormat::Windows;
         }
     }
@@ -286,14 +292,13 @@ void BottomBar::initFormatMenu()
     m_formatMenu->setMenu(menu);
     m_formatMenu->setMenuActionGroup(actionGroup);
 
-    auto unixAction = menu->addAction(tr("Unix-Format"));
-    auto windowsAction = menu->addAction(tr("Windows-Format"));
-    unixAction->setProperty(FormatActionType,EndlineFormat::Unix);
-    windowsAction->setProperty(FormatActionType,EndlineFormat::Windows);
-    actionGroup->addAction(unixAction);
-    actionGroup->addAction(windowsAction);
+    m_unixAction = menu->addAction(tr("Unix-Format"));
+    m_windowsAction = menu->addAction(tr("Windows-Format"));
+    m_unixAction->setProperty(FormatActionType,EndlineFormat::Unix);
+    m_windowsAction->setProperty(FormatActionType,EndlineFormat::Windows);
+    actionGroup->addAction(m_unixAction);
+    actionGroup->addAction(m_windowsAction);
     connect(actionGroup, &QActionGroup::triggered, this,&BottomBar::onFormatMenuTrigged);
-
 }
 
 //行尾格式action槽函数
@@ -318,10 +323,16 @@ void BottomBar::setEndlineMenuText(EndlineFormat format)
     if(format == EndlineFormat::Unix || format == EndlineFormat::Unknow){
         m_formatMenu->setCurrentTextOnly(tr("Unix-Format"));
         m_endlineFormat = EndlineFormat::Unix;
+        m_windowsAction->setCheckable(false);
+        m_unixAction->setCheckable(true);
+        m_unixAction->setChecked(true);
 
     }
     else {
         m_formatMenu->setCurrentTextOnly(tr("Windows-Format"));
         m_endlineFormat = EndlineFormat::Windows;
+        m_unixAction->setCheckable(false);
+        m_windowsAction->setCheckable(true);
+        m_windowsAction->setChecked(true);
     }
 }
