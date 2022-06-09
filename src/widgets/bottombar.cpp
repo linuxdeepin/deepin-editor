@@ -101,6 +101,7 @@ BottomBar::BottomBar(QWidget *parent)
     //编码按钮/文本类型按钮失去焦点后，设置光标回到文本框里
     connect(m_pEncodeMenu, &DDropdownMenu::sigSetTextEditFocus, this, &BottomBar::slotSetTextEditFocus);
     connect(m_pHighlightMenu, &DDropdownMenu::sigSetTextEditFocus, this, &BottomBar::slotSetTextEditFocus);
+    connect(m_formatMenu,&DDropdownMenu::sigSetTextEditFocus, this, &BottomBar::slotSetTextEditFocus);
 }
 
 BottomBar::~BottomBar()
@@ -285,11 +286,9 @@ BottomBar::EndlineFormat BottomBar:: getEndlineFormat()
 void BottomBar::initFormatMenu()
 {
     m_formatMenu = new DDropdownMenu(this);
-    m_formatMenu->setCurrentTextOnly("Unix");
     DMenu *menu = new DMenu(this);
     QActionGroup* actionGroup = new QActionGroup(menu);
     actionGroup->setExclusive(true);
-    m_formatMenu->setMenu(menu);
     m_formatMenu->setMenuActionGroup(actionGroup);
 
     m_unixAction = menu->addAction("Unix");
@@ -299,6 +298,10 @@ void BottomBar::initFormatMenu()
     actionGroup->addAction(m_unixAction);
     actionGroup->addAction(m_windowsAction);
     connect(actionGroup, &QActionGroup::triggered, this,&BottomBar::onFormatMenuTrigged);
+
+    m_formatMenu->setMenu(menu);
+    m_formatMenu->setCurrentTextOnly("Unix");
+
 }
 
 //行尾格式action槽函数
@@ -323,16 +326,10 @@ void BottomBar::setEndlineMenuText(EndlineFormat format)
     if(format == EndlineFormat::Unix || format == EndlineFormat::Unknow){
         m_formatMenu->setCurrentTextOnly("Unix");
         m_endlineFormat = EndlineFormat::Unix;
-        m_windowsAction->setCheckable(false);
-        m_unixAction->setCheckable(true);
-        m_unixAction->setChecked(true);
 
     }
     else {
         m_formatMenu->setCurrentTextOnly("Windows");
         m_endlineFormat = EndlineFormat::Windows;
-        m_unixAction->setCheckable(false);
-        m_windowsAction->setCheckable(true);
-        m_windowsAction->setChecked(true);
     }
 }
