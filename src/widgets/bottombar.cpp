@@ -285,15 +285,15 @@ BottomBar::EndlineFormat BottomBar:: getEndlineFormat()
 void BottomBar::initFormatMenu()
 {
     m_formatMenu = new DDropdownMenu(this);
-    m_formatMenu->setCurrentTextOnly(tr("Unix-Format"));
+    m_formatMenu->setCurrentTextOnly("Unix");
     DMenu *menu = new DMenu(this);
     QActionGroup* actionGroup = new QActionGroup(menu);
     actionGroup->setExclusive(true);
     m_formatMenu->setMenu(menu);
     m_formatMenu->setMenuActionGroup(actionGroup);
 
-    m_unixAction = menu->addAction(tr("Unix-Format"));
-    m_windowsAction = menu->addAction(tr("Windows-Format"));
+    m_unixAction = menu->addAction("Unix");
+    m_windowsAction = menu->addAction("Windows");
     m_unixAction->setProperty(FormatActionType,EndlineFormat::Unix);
     m_windowsAction->setProperty(FormatActionType,EndlineFormat::Windows);
     actionGroup->addAction(m_unixAction);
@@ -321,7 +321,7 @@ void BottomBar::onFormatMenuTrigged(QAction* action)
 void BottomBar::setEndlineMenuText(EndlineFormat format)
 {
     if(format == EndlineFormat::Unix || format == EndlineFormat::Unknow){
-        m_formatMenu->setCurrentTextOnly(tr("Unix-Format"));
+        m_formatMenu->setCurrentTextOnly("Unix");
         m_endlineFormat = EndlineFormat::Unix;
         m_windowsAction->setCheckable(false);
         m_unixAction->setCheckable(true);
@@ -329,7 +329,7 @@ void BottomBar::setEndlineMenuText(EndlineFormat format)
 
     }
     else {
-        m_formatMenu->setCurrentTextOnly(tr("Windows-Format"));
+        m_formatMenu->setCurrentTextOnly("Windows");
         m_endlineFormat = EndlineFormat::Windows;
         m_unixAction->setCheckable(false);
         m_windowsAction->setCheckable(true);
