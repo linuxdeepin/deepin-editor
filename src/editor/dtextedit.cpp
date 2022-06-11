@@ -34,9 +34,9 @@
 #include "indenttextcommond.h"
 #include "undolist.h"
 
-#include <KF5/KSyntaxHighlighting/definition.h>
-#include <KF5/KSyntaxHighlighting/syntaxhighlighter.h>
-#include <KF5/KSyntaxHighlighting/theme.h>
+#include <KSyntaxHighlighting/definition.h>
+#include <KSyntaxHighlighting/syntaxhighlighter.h>
+#include <KSyntaxHighlighting/theme.h>
 
 #include <QAbstractTextDocumentLayout>
 #include <QTextDocumentFragment>
