@@ -360,7 +360,7 @@ void EditWrapper::reloadModifyFile()
         //重写加载文件
         readFile();
     }
-
+    m_pTextEdit->setBookMarkList(QList<int>());
     QFileInfo fi(m_pTextEdit->getTruePath());
     m_tModifiedDateTime = fi.lastModified();
 
@@ -577,6 +577,7 @@ bool EditWrapper::saveDraftFile()
     dialog.setNameFilter("*.txt");
 
     if (m_pWindow) {
+        m_pWindow = this->window();
         QRegularExpression reg("[^*](.+)");
         QRegularExpressionMatch match = reg.match(m_pWindow->getTabbar()->currentName());
         dialog.selectFile(match.captured(0) + ".txt");
