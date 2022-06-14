@@ -2547,16 +2547,16 @@ void Window::closeEvent(QCloseEvent *e)
             return;
         }
     } else {
-//        bool save_tab_before_close = m_settings->settings->option("advance.start.save_tab_before_close")->value().toBool();
-//        if(!save_tab_before_close){
-//            if (!closeAllFiles()) {
-//                e->ignore();
-//                return;
-//            }
-//        }
-//        else{
+        bool save_tab_before_close = m_settings->settings->option("advance.start.save_tab_before_close")->value().toBool();
+        if(!save_tab_before_close){
+            if (!closeAllFiles()) {
+                e->ignore();
+                return;
+            }
+        }
+        else{
             backupFile();
-//        }
+        }
     }
 
     QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
