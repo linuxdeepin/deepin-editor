@@ -3130,16 +3130,16 @@ void Window::closeEvent(QCloseEvent *e)
             return;
         }
     } else {
-//        bool save_tab_before_close = m_settings->settings->option("advance.start.save_tab_before_close")->value().toBool();
-//        if(!save_tab_before_close){
-//            if (!closeAllFiles()) {
-//                e->ignore();
-//                return;
-//            }
-//        }
-//        else{
+        bool save_tab_before_close = m_settings->settings->option("advance.start.save_tab_before_close")->value().toBool();
+        if(!save_tab_before_close){
+            if (!closeAllFiles()) {
+                e->ignore();
+                return;
+            }
+        }
+        else{
             backupFile();
-//        }
+        }
     }
 
     // WARNING: 调用 QProcess::startDetached() 前同步配置，防止多线程对 qgetenv() 中的 environmentMutex 加锁
