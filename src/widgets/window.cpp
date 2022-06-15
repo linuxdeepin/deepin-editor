@@ -153,7 +153,7 @@ Window::Window(DMainWindow *parent)
     }
 
     // window minimum size.
-    setMinimumSize(1000, 600);
+    setMinimumSize(680, 300);
     // resize window size.
     int window_width = Settings::instance()->settings->option("advance.window.window_width")->value().toInt();
     int window_height = Settings::instance()->settings->option("advance.window.window_height")->value().toInt();
@@ -2745,13 +2745,7 @@ bool Window::findBarIsVisiable()
 
 bool Window::replaceBarIsVisiable()
 {
-    if (m_replaceBar) {
-        if (m_replaceBar->isVisible()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    return m_replaceBar==nullptr?false:m_replaceBar->isVisible();
 }
 
 QString Window::getKeywordForSearchAll()

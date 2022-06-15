@@ -171,17 +171,35 @@ bool DetectCode::detectTextEncoding(const char *data, size_t len, char **detecte
     if (matchCount >= 3) {
         *detected = strdup(ucsdet_getName(csm[0], &status));
         listDetectRet << QByteArray(*detected);
+        if(*detected!=nullptr){
+            free(*detected);
+            *detected=nullptr;
+        }
         *detected = strdup(ucsdet_getName(csm[1], &status));
         listDetectRet << QByteArray(*detected);
+        if(*detected!=nullptr){
+            free(*detected);
+            *detected=nullptr;
+        }
         *detected = strdup(ucsdet_getName(csm[2], &status));
         listDetectRet << QByteArray(*detected);
+        if(*detected!=nullptr){
+            free(*detected);
+            *detected=nullptr;
+        }
+
         if (status != U_ZERO_ERROR) {
             return false;
         }
     } else if (matchCount > 0) {
         *detected = strdup(ucsdet_getName(csm[0], &status));
         listDetectRet << QByteArray(*detected);
+        if(*detected!=nullptr){
+            free(*detected);
+            *detected=nullptr;
+        }
     }
+
 
     ucsdet_close(csd);
 
