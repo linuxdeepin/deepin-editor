@@ -263,7 +263,7 @@ QWidget* Settings::createSavingPathWgt(QObject* obj)
 
     auto custompath = s_pSetting->settings->option("advance.open_save_setting.open_save_custom_path");
     connect(custompath, &Dtk::Core::DSettingsOption::valueChanged, [=](QVariant var){
-        pathwgt->setEditText(var.toString());
+        //pathwgt->setEditText(var.toString());
     });
 
 

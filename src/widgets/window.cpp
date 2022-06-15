@@ -977,7 +977,7 @@ void Window::openFile()
     }
 
     QString path = m_settings->getSavePath(m_settings->getSavePathId());
-    if(path.isEmpty() || !QDir(path).exists()){
+    if(path.isEmpty() || !QDir(path).exists() || !QFileInfo(path).isWritable() || !QDir(path).isReadable()){
         path = QDir::homePath() + "/Documents";
     }
     dialog.setDirectory(path);
@@ -1103,7 +1103,7 @@ QString Window::saveAsFileToDisk()
     dialog.addComboBox(QObject::tr("Encoding"),  QStringList() << wrapper->getTextEncode());
     dialog.setDirectory(QDir::homePath());
     QString path = m_settings->getSavePath(m_settings->getSavePathId());
-    if(path.isEmpty() || !QDir(path).exists()){
+    if(path.isEmpty() || !QDir(path).exists() || !QFileInfo(path).isWritable() || !QDir(path).isReadable()){
         path = QDir::homePath() + "/Documents";
     }
     dialog.setDirectory(path);
