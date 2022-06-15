@@ -157,6 +157,8 @@ Window::Window(DMainWindow *parent)
     // resize window size.
     int window_width = Settings::instance()->settings->option("advance.window.window_width")->value().toInt();
     int window_height = Settings::instance()->settings->option("advance.window.window_height")->value().toInt();
+    window_height ==1?window_height=600:window_height;
+    window_width ==1?window_width=1000:window_width;
     resize(window_width, window_height);
 
     //设置函数最大化或者正常窗口的初始化　2021.4.26 ut002764 lxp   fix bug:74774
@@ -836,7 +838,7 @@ void Window::openFile()
     }
 
     QString path = m_settings->getSavePath(m_settings->getSavePathId());
-    if(path.isEmpty() || !QDir(path).exists()){
+    if(path.isEmpty() || !QDir(path).exists() || !QFileInfo(path).isWritable() || !QDir(path).isReadable()){
         path = QDir::homePath() + "/Documents";
     }
     dialog.setDirectory(path);
@@ -962,7 +964,7 @@ QString Window::saveAsFileToDisk()
     dialog.addComboBox(QObject::tr("Encoding"),  QStringList() << wrapper->getTextEncode());
     dialog.setDirectory(QDir::homePath());
     QString path = m_settings->getSavePath(m_settings->getSavePathId());
-    if(path.isEmpty() || !QDir(path).exists()){
+    if(path.isEmpty() || !QDir(path).exists() || !QFileInfo(path).isWritable() || !QDir(path).isReadable()){
         path = QDir::homePath() + "/Documents";
     }
     dialog.setDirectory(path);
