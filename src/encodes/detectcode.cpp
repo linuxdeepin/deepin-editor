@@ -126,12 +126,15 @@ void DetectCode::icuDetectTextEncoding(const QString &filePath, QByteArrayList &
     char *buffer = new char[iBuffSize];
     memset(buffer, 0, iBuffSize);
 
+    int readed=0;
     while (!feof(file)) {
         int32_t len = fread(buffer, 1, iBuffSize, file);
-        if (detected == nullptr) {
-            if (!detectTextEncoding(buffer, len, &detected, listDetectRet)) {
-                break;
-            }
+        readed+=len;
+        if(readed>1*1024*1024){
+            break;
+        }
+        if (!detectTextEncoding(buffer, len, &detected, listDetectRet)) {
+            break;
         }
     }
 
@@ -169,35 +172,18 @@ bool DetectCode::detectTextEncoding(const char *data, size_t len, char **detecte
     }
 
     if (matchCount >= 3) {
-        *detected = strdup(ucsdet_getName(csm[0], &status));
-        listDetectRet << QByteArray(*detected);
-        if(*detected!=nullptr){
-            free(*detected);
-            *detected=nullptr;
-        }
-        *detected = strdup(ucsdet_getName(csm[1], &status));
-        listDetectRet << QByteArray(*detected);
-        if(*detected!=nullptr){
-            free(*detected);
-            *detected=nullptr;
-        }
-        *detected = strdup(ucsdet_getName(csm[2], &status));
-        listDetectRet << QByteArray(*detected);
-        if(*detected!=nullptr){
-            free(*detected);
-            *detected=nullptr;
+        for(int i=0;i<3;i++){
+            auto str = ucsdet_getName(csm[i], &status);
+            if (status != U_ZERO_ERROR) {
+                return false;
+            }
+            listDetectRet << QByteArray(str);
         }
 
-        if (status != U_ZERO_ERROR) {
-            return false;
-        }
+
     } else if (matchCount > 0) {
-        *detected = strdup(ucsdet_getName(csm[0], &status));
-        listDetectRet << QByteArray(*detected);
-        if(*detected!=nullptr){
-            free(*detected);
-            *detected=nullptr;
-        }
+        auto str = ucsdet_getName(csm[0], &status);
+        listDetectRet << QByteArray(str);
     }
 
 

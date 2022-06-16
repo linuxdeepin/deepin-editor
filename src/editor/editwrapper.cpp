@@ -974,6 +974,7 @@ void EditWrapper::loadContent(const QByteArray &strContent)
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
     m_pTextEdit->clear();
+    m_pTextEdit->setReadOnly(true);
     m_bQuit = false;
     //QTextDocument *doc = m_pTextEdit->document();
     QTextCursor cursor = m_pTextEdit->textCursor();
@@ -1072,6 +1073,8 @@ void EditWrapper::loadContent(const QByteArray &strContent)
     if (m_pBottomBar != nullptr) {
         m_pBottomBar->setChildEnabled(true);
     }
+    m_pTextEdit->setReadOnly(false);
+
     QApplication::restoreOverrideCursor();
 }
 
