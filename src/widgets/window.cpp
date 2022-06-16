@@ -1399,7 +1399,7 @@ void Window::popupPrintDialog()
         m_pPreview->setDocName(QString(match.captured(0)));
     } else {
         QString path = currentWrapper()->textEditor()->getTruePath();
-        m_pPreview->setDocName(QString(QFileInfo(path).baseName()));
+        m_pPreview->setDocName(QString(QFileInfo(path).completeBaseName()));
     }
     m_pPreview->setAsynPreview(m_printDoc ? m_printDoc->pageCount() : PRINT_FLAG);
 
