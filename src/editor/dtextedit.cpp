@@ -3634,7 +3634,7 @@ int TextEdit::getNextWordPosition(QTextCursor &cursor, QTextCursor::MoveMode mov
     if (currentChar.data()->isSpace()) {
         while (copyCursor.position() < characterCount() - 1 && currentChar.data()->isSpace()) {
             copyCursor.movePosition(QTextCursor::NextCharacter, moveMode);
-            currentChar = copyCursor.selection().toPlainText();
+            currentChar = copyCursor.selection().toPlainText().trimmed();
         }
         while (copyCursor.position() < characterCount() - 1 && !atWordSeparator(copyCursor.position())) {
             copyCursor.movePosition(QTextCursor::NextCharacter, moveMode);
