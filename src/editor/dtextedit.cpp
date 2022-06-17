@@ -3944,6 +3944,7 @@ void TextEdit::addOrDeleteBookMark()
 
 void TextEdit::moveToPreviousBookMark()
 {
+    if(m_listBookmark.isEmpty()) return;
     int line = getCurrentLine();
     int index = m_listBookmark.indexOf(line);
 
@@ -3951,7 +3952,6 @@ void TextEdit::moveToPreviousBookMark()
         jumpToLine(m_listBookmark.last(), false);
         return;
     }
-
     if (index == 0) {
         jumpToLine(m_listBookmark.last(), false);
     } else {
@@ -3961,6 +3961,7 @@ void TextEdit::moveToPreviousBookMark()
 
 void TextEdit::moveToNextBookMark()
 {
+    if(m_listBookmark.isEmpty()) return;
     int line = getCurrentLine();
     int index = m_listBookmark.indexOf(line);
 
