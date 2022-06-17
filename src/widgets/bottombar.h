@@ -46,7 +46,7 @@ public:
 
     DDropdownMenu* getEncodeMenu();
     DDropdownMenu* getHighlightMenu();
-    static EndlineFormat getEndlineFormat(const QString& text);
+    static EndlineFormat getEndlineFormat(const QByteArray& text);
     EndlineFormat getEndlineFormat();
     void setEndlineMenuText(EndlineFormat format);
 

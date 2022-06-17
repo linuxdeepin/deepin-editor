@@ -313,13 +313,13 @@ void BottomBar::slotSetTextEditFocus()
     emit pWindow->pressEsc();
 }
 
-BottomBar::EndlineFormat BottomBar::getEndlineFormat(const QString& text)
+BottomBar::EndlineFormat BottomBar::getEndlineFormat(const QByteArray& text)
 {
     for(int i=0;i<text.size();i++){
-        if(text[i]=="\n"){
+        if(text[i]=='\n'){
             return EndlineFormat::Unix;
         }
-        if(text[i]=="\r" && i+1<text.size() && text[i+1]=="\n"){
+        if(text[i]=='\r' && i+1<text.size() && text[i+1]=='\n'){
             return EndlineFormat::Windows;
         }
     }

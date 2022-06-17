@@ -1329,13 +1329,14 @@ void EditWrapper::loadContent(const QByteArray &strContent)
     }
     if (m_pBottomBar != nullptr) {
         m_pBottomBar->setChildEnabled(true);
+        auto format = BottomBar::getEndlineFormat(strContent);
+        m_pBottomBar->setEndlineMenuText(format);
     }
     m_pTextEdit->setReadOnly(false);
     m_pTextEdit->setLeftAreaUpdateState(TextEdit::FileOpenEnd);
     QApplication::restoreOverrideCursor();
 
-    auto format = BottomBar::getEndlineFormat(strContent);
-    m_pBottomBar->setEndlineMenuText(format);
+
 }
 
 /**
