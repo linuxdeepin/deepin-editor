@@ -1,4 +1,4 @@
-deepin-editor (5.9.6-1+u163) unstable; urgency=low
+deepin-editor (5.10.13) unstable; urgency=low
 
   [ Hu Feng <hufeng@uniontech.com> Fri, 19 Feb 2021 15:32:28 +0800 ]
   * debian/control

@@ -1,0 +1,43 @@
+package:
+  id: org.deepin.editor
+  name: "deepin-editor"
+  version: 5.10.13
+  kind: app
+  description: |
+    editor for deepin os.
+
+runtime:
+  id: org.deepin.Runtime
+  version: 20.5.0
+
+depends:
+  - id: "dde-qt-dbus-factory"
+    version: 5.5.12
+  - id: libchardet
+    version: 1.0.4
+    type: runtime
+  - id: kcodecs
+    version: 5.54.0
+  - id: "ksyntax-highlighting"
+    version: 5.54.0
+    type: runtime
+  - id: googletest 
+    version: 1.8.1 
+variables: 
+  extra_args: |
+    -DVERSION=${VERSION}
+source:
+  kind: local
+
+
+build:
+  kind: manual
+  manual:
+    configure: |
+      mkdir build
+      cd build
+      cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} ..
+      make -j6
+      #make test -j6
+      #test 用例包含从/usr/share读取内容，会导致失败
+      make -j install
