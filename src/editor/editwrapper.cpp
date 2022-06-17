@@ -985,6 +985,7 @@ void EditWrapper::loadContent(const QByteArray &strContent)
 
     QApplication::setOverrideCursor(Qt::WaitCursor);
     m_pTextEdit->clear();
+    m_pTextEdit->setReadOnly(true);
     m_bQuit = false;
     //QTextDocument *doc = m_pTextEdit->document();
     QTextCursor cursor = m_pTextEdit->textCursor();
@@ -1101,12 +1102,14 @@ void EditWrapper::loadContent(const QByteArray &strContent)
     }
     if (m_pBottomBar != nullptr) {
         m_pBottomBar->setChildEnabled(true);
+        auto format = BottomBar::getEndlineFormat(strContent);
+        m_pBottomBar->setEndlineMenuText(format);
     }
+    m_pTextEdit->setReadOnly(false);
 
     QApplication::restoreOverrideCursor();
 
-    auto format = BottomBar::getEndlineFormat(strContent);
-    m_pBottomBar->setEndlineMenuText(format);
+
 }
 
 void EditWrapper::clearDoubleCharaterEncode()
