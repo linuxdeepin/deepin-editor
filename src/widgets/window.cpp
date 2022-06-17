@@ -800,6 +800,10 @@ void Window::removeWrapper(const QString &filePath, bool isDelete)
     EditWrapper *wrapper = m_wrappers.value(filePath);
 
     if (wrapper) {
+        qInfo()<<"begin removeWrapper";
+        if(nullptr == m_editorWidget){
+            return;
+        }
         m_editorWidget->removeWidget(wrapper);
         m_wrappers.remove(filePath);
         if (isDelete) {
@@ -807,13 +811,17 @@ void Window::removeWrapper(const QString &filePath, bool isDelete)
             disconnect(wrapper, nullptr);
             wrapper->setQuitFlag();
             wrapper->deleteLater();
+            qInfo()<<"after delete wrapper";
         }
     }
 
     // Exit window after close all tabs.
     if (m_wrappers.isEmpty()) {
         close();
+        qInfo()<<"after close";
     }
+
+    qInfo()<<"end removeWrapper";
 }
 
 void Window::openFile()
@@ -1736,7 +1744,14 @@ void Window::backupFile()
     m_qlistTemFile = wrappers.keys();
 
     for (EditWrapper *wrapper : wrappers) {
+        if(nullptr == wrapper){
+            continue;
+        }
         if (wrapper->getFileLoading()) continue;
+
+        if(nullptr == wrapper->textEditor()){
+            continue;
+        }
 
         filePath = wrapper->textEditor()->getFilePath();
         localPath = wrapper->textEditor()->getTruePath();
@@ -1745,6 +1760,7 @@ void Window::backupFile()
             localPath = wrapper->textEditor()->getFilePath();
         }
 
+        qInfo()<<"begin backupFile()";
         StartManager::FileTabInfo tabInfo = StartManager::instance()->getFileTabInfo(filePath);
         curPos = QString::number(wrapper->textEditor()->textCursor().position());
         fileInfo.setFile(localPath);
@@ -1788,6 +1804,8 @@ void Window::backupFile()
             }
         }
 
+        qInfo()<<"after call wrapper->saveTemFile()";
+
         //使用json串形式保存
         document.setObject(jsonObject);
         QByteArray byteArray = document.toJson(QJsonDocument::Compact);
@@ -1801,10 +1819,13 @@ void Window::backupFile()
     if (QFileInfo(m_autoBackupDir).exists()) {
         QDir(m_autoBackupDir).removeRecursively();
     }
+
+    qInfo()<<"end backupFile()";
 }
 
 bool Window::closeAllFiles()
 {
+    qInfo()<<"begin closeAllFiles()";
     bool bIsCloseAll = true;
     QMap<QString, EditWrapper *> wrappers = m_wrappers;
 
@@ -1816,7 +1837,7 @@ bool Window::closeAllFiles()
             bIsCloseAll = false;
         }
     }
-
+    qInfo()<<"end closeAllFiles()";
     return bIsCloseAll;
 }
 
@@ -2567,6 +2588,9 @@ void Window::closeEvent(QCloseEvent *e)
     QMap<QString, EditWrapper *> wrappers = m_wrappers;
 
     for (EditWrapper *wrapper : wrappers) {
+        if(nullptr == wrapper){
+            continue;
+        }
         m_wrappers.remove(wrapper->filePath());
         disconnect(wrapper->textEditor());
         wrapper->setQuitFlag();
@@ -2753,13 +2777,7 @@ bool Window::findBarIsVisiable()
 
 bool Window::replaceBarIsVisiable()
 {
-    if (m_replaceBar) {
-        if (m_replaceBar->isVisible()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    return m_replaceBar==nullptr?false:m_replaceBar->isVisible();
 }
 
 QString Window::getKeywordForSearchAll()

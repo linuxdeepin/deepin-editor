@@ -233,6 +233,7 @@ void BottomBar::setScaleLabelText(int fontSize)
     else {
         float delta = (100-10)*1.0/(midFont - minFont);
         int target = 100 + delta * (fontSize-midFont);
+        target = std::max(10,target);
         text = QString("%1%").arg(target);
     }
 
