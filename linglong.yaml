@@ -19,6 +19,7 @@ depends:
     type: runtime
   - id: kcodecs
     version: 5.54.0
+    type: runtime
   - id: "ksyntax-highlighting"
     version: 5.54.0
     type: runtime
