@@ -554,7 +554,7 @@ public slots:
     void redo_();
     void undo_();
     void moveText(int from,int to,const QString& text);
-
+    QString selectedText();
 protected:
     bool event(QEvent *evt) override;   //触摸屏event事件
     void dragEnterEvent(QDragEnterEvent *event) override;

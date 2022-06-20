@@ -2384,7 +2384,7 @@ void TextEdit::cut()
         QTextCursor cursor = textCursor();
         //有选择内容才剪切
         if (cursor.hasSelection()) {
-            QString data = cursor.selectedText();
+            QString data = this->selectedText();
             QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(cursor);
             m_pUndoStack->push(pDeleteStack);
             QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
@@ -2411,7 +2411,8 @@ void TextEdit::copy()
         if(!m_isSelectAll){
             QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
             if (textCursor().hasSelection()) {
-                clipboard->setText(textCursor().selection().toPlainText());
+                //clipboard->setText(textCursor().selection().toPlainText());
+                clipboard->setText(this->selectedText());
                 tryUnsetMark();
             } else {
                 clipboard->setText(m_highlightWordCacheCursor.selectedText());
@@ -2757,6 +2758,41 @@ void TextEdit::moveText(int from,int to,const QString& text)
         m_pUndoStack->push(list);
     }
 }
+
+/**
+ * @brief 返回当前光标选中的内容
+ * @param
+ * @return
+ */
+QString TextEdit::selectedText()
+{
+    auto cursor = this->textCursor();
+    auto temp = cursor;
+    int startpos = std::min(cursor.anchor(),cursor.position());
+    int endpos = std::max(cursor.anchor(),cursor.position());
+    int startblock=0,endblock=0;
+    cursor.setPosition(startpos);
+    startblock = cursor.blockNumber();
+    cursor.setPosition(endpos);
+    endblock = cursor.blockNumber();
+    if(startblock == endblock){
+        return temp.selectedText();
+    }
+
+    QString text;
+    cursor.setPosition(startpos);
+    cursor.movePosition(QTextCursor::EndOfLine,QTextCursor::KeepAnchor);
+    text += cursor.selectedText();
+    cursor.setPosition(cursor.position()+1);
+    while(cursor.position()<endpos){
+        cursor.movePosition(QTextCursor::EndOfLine,QTextCursor::KeepAnchor);
+        text += "\n";
+        text += cursor.selectedText();
+        cursor.setPosition(cursor.position()+1);
+    }
+    return text;
+}
+
 void TextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &closeChar)
 {
     QTextDocument *doc = document();
