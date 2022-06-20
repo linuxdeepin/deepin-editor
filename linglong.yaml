@@ -25,6 +25,7 @@ depends:
     version: 1.8.1 
   - id: icu
     version: 63.1
+    type: runtime
 variables: 
   extra_args: |
     -DVERSION=${VERSION}
