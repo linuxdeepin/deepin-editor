@@ -23,6 +23,8 @@ depends:
     type: runtime
   - id: googletest 
     version: 1.8.1 
+  - id: icu
+    version: 63.1
 variables: 
   extra_args: |
     -DVERSION=${VERSION}
