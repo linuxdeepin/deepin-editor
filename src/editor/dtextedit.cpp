@@ -2415,7 +2415,7 @@ void TextEdit::cut()
         QTextCursor cursor = textCursor();
         //有选择内容才剪切
         if (cursor.hasSelection()) {
-            QString data = cursor.selectedText();
+            QString data = this->selectedText();
             QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(cursor);
             m_pUndoStack->push(pDeleteStack);
             QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
@@ -2902,15 +2902,15 @@ QString TextEdit::selectedText()
 /**
  * @brief 行尾符号改变后处理函数；
  * 1.这里并没有做"\n"和"\r\n"之间的替换，实际的替换动作在保存的时候才发生；
- * 2.而是模拟修改动作，并加入撤销-还原栈中；
  * @param
  * @return
  */
 
 void TextEdit::onEndlineFormatChanged(BottomBar::EndlineFormat from,BottomBar::EndlineFormat to)
 {
-    auto endlineCom = new EndlineFormartCommand(this,m_wrapper->bottomBar(),from,to);
-    m_pUndoStack->push(endlineCom);
+    //auto endlineCom = new EndlineFormartCommand(this,m_wrapper->bottomBar(),from,to);
+    //m_pUndoStack->push(endlineCom);
+    m_wrapper->bottomBar()->setEndlineMenuText(to);
 }
 
 void TextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &closeChar)
