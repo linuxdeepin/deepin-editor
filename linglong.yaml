@@ -30,7 +30,7 @@ depends:
     type: runtime
   - id: xcb-util
     type: runtime
-variables: 
+variables:
   extra_args: |
     -DVERSION=${VERSION}
 source:
