@@ -931,8 +931,8 @@ void Window::removeWrapper(const QString &filePath, bool isDelete)
     EditWrapper *wrapper = m_wrappers.value(filePath);
 
     if (wrapper) {
-        qInfo() << "begin removeWrapper";
-        if (nullptr == m_editorWidget) {
+        qInfo()<<"begin removeWrapper";
+        if(nullptr == m_editorWidget){
             return;
         }
         m_editorWidget->removeWidget(wrapper);
