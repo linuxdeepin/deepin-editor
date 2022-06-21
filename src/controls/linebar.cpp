@@ -46,13 +46,15 @@ void LineBar::handleTextChangeTimer()
     contentChanged();
 }
 
-void LineBar::handleTextChanged()
+void LineBar::handleTextChanged(const QString &str)
 {
     // Stop timer if new character is typed, avoid unused timer run.
     if (m_autoSaveTimer->isActive()) {
         m_autoSaveTimer->stop();
     }
-
+    if(str.isEmpty()) {
+        setAlert(false);
+    }
     // Start new timer.
     m_autoSaveTimer->start(m_autoSaveInternal);
 }

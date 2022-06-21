@@ -552,6 +552,7 @@ public slots:
     void redo_();
     void undo_();
     void moveText(int from, int to, const QString &text);
+    QTextCursor findCursor(const QString &substr, const QString &text, int from, bool backward = false, int cursorPos = 0);
     QString selectedText();
 protected:
     bool event(QEvent *evt) override;   //触摸屏event事件
