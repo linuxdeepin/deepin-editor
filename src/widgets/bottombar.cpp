@@ -42,7 +42,7 @@ BottomBar::BottomBar(QWidget *parent)
     QHBoxLayout* progressLayout = new QHBoxLayout;
     progressLayout->addWidget(m_progressLabel);
     progressLayout->addWidget(m_progressBar);
-    progressLayout->addStretch();
+   // progressLayout->addStretch();
 
     DFontSizeManager::instance()->bind(m_pPositionLabel, DFontSizeManager::T9);
     DFontSizeManager::instance()->bind(m_pCharCountLabel, DFontSizeManager::T9);
@@ -55,7 +55,7 @@ BottomBar::BottomBar(QWidget *parent)
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setContentsMargins(29, 1, 10, 0);
     layout->addLayout(progressLayout);
-    layout->addStretch();
+   // layout->addStretch();
     layout->addWidget(m_pPositionLabel);
     layout->addStretch();
     layout->addSpacerItem(new QSpacerItem(110,20,QSizePolicy::Expanding,QSizePolicy::Fixed));
@@ -117,6 +117,7 @@ BottomBar::BottomBar(QWidget *parent)
     //编码按钮/文本类型按钮失去焦点后，设置光标回到文本框里
     connect(m_pEncodeMenu, &DDropdownMenu::sigSetTextEditFocus, this, &BottomBar::slotSetTextEditFocus);
     connect(m_pHighlightMenu, &DDropdownMenu::sigSetTextEditFocus, this, &BottomBar::slotSetTextEditFocus);
+    connect(m_formatMenu,&DDropdownMenu::sigSetTextEditFocus, this, &BottomBar::slotSetTextEditFocus);
 }
 
 BottomBar::~BottomBar()
@@ -198,15 +199,19 @@ void BottomBar::setChildEnabled(bool enabled)
     m_pHighlightMenu->setEnabled(enabled);
     m_pEncodeMenu->setRequestMenu(enabled);
     m_pHighlightMenu->setRequestMenu(enabled);
+    m_formatMenu->setEnabled(enabled);
 }
 
 void BottomBar::setChildrenFocus(bool ok,QWidget* preOrderWidget)
 {
     m_pEncodeMenu->setChildrenFocus(ok);
     m_pHighlightMenu->setChildrenFocus(ok);
+    m_formatMenu->setChildrenFocus(ok);
     if(ok) {
         if(preOrderWidget) setTabOrder(preOrderWidget,m_pEncodeMenu->getButton());
-        setTabOrder(m_pEncodeMenu->getButton(),m_pHighlightMenu->getButton());
+
+        setTabOrder(m_pEncodeMenu->getButton(),m_formatMenu->getButton());
+        setTabOrder(m_formatMenu->getButton(),m_pHighlightMenu->getButton());
     }
 }
 
@@ -337,20 +342,21 @@ BottomBar::EndlineFormat BottomBar:: getEndlineFormat()
 void BottomBar::initFormatMenu()
 {
     m_formatMenu = new DDropdownMenu(this);
-    m_formatMenu->setCurrentTextOnly(tr("Unix-Format"));
     DMenu *menu = new DMenu(this);
     QActionGroup* actionGroup = new QActionGroup(menu);
     actionGroup->setExclusive(true);
-    m_formatMenu->setMenu(menu);
     m_formatMenu->setMenuActionGroup(actionGroup);
 
-    m_unixAction = menu->addAction(tr("Unix-Format"));
-    m_windowsAction = menu->addAction(tr("Windows-Format"));
+    m_unixAction = menu->addAction("Unix");
+    m_windowsAction = menu->addAction("Windows");
     m_unixAction->setProperty(FormatActionType,EndlineFormat::Unix);
     m_windowsAction->setProperty(FormatActionType,EndlineFormat::Windows);
     actionGroup->addAction(m_unixAction);
     actionGroup->addAction(m_windowsAction);
     connect(actionGroup, &QActionGroup::triggered, this,&BottomBar::onFormatMenuTrigged);
+
+    m_formatMenu->setMenu(menu);
+    m_formatMenu->setCurrentTextOnly("Unix");
 }
 
 //行尾格式action槽函数
@@ -373,18 +379,12 @@ void BottomBar::onFormatMenuTrigged(QAction* action)
 void BottomBar::setEndlineMenuText(EndlineFormat format)
 {
     if(format == EndlineFormat::Unix || format == EndlineFormat::Unknow){
-        m_formatMenu->setCurrentTextOnly(tr("Unix-Format"));
+        m_formatMenu->setCurrentTextOnly("Unix");
         m_endlineFormat = EndlineFormat::Unix;
-        m_windowsAction->setCheckable(false);
-        m_unixAction->setCheckable(true);
-        m_unixAction->setChecked(true);
 
     }
     else {
-        m_formatMenu->setCurrentTextOnly(tr("Windows-Format"));
+        m_formatMenu->setCurrentTextOnly("Windows");
         m_endlineFormat = EndlineFormat::Windows;
-        m_unixAction->setCheckable(false);
-        m_windowsAction->setCheckable(true);
-        m_windowsAction->setChecked(true);
     }
 }
