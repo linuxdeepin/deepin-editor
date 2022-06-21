@@ -1432,6 +1432,7 @@ void TextEdit::transposeChar()
         cursor.setPosition(pos+1,QTextCursor::KeepAnchor);
         auto com = new InsertTextUndoCommand(cursor,r+l);
         m_pUndoStack->push(com);
+        ensureCursorVisible();
     }
 }
 
@@ -1959,7 +1960,7 @@ bool TextEdit::searchKeywordSeletion(QString keyword, QTextCursor cursor, bool f
     int offsetLines = 3;
 
     if (findNext) {
-        QTextCursor next = document()->find(keyword, cursor);
+        QTextCursor next = document()->find(keyword, cursor,QTextDocument::FindCaseSensitively);
         if(keyword.contains("\n")){
             int pos = std::max(cursor.position(),cursor.anchor());
             next = findCursor(keyword,this->toPlainText(),pos);
@@ -1971,7 +1972,7 @@ bool TextEdit::searchKeywordSeletion(QString keyword, QTextCursor cursor, bool f
             ret = true;
         }
     } else {
-        QTextCursor prev = document()->find(keyword, cursor, QTextDocument::FindBackward);
+        QTextCursor prev = document()->find(keyword, cursor, QTextDocument::FindBackward | QTextDocument::FindCaseSensitively);
         if(keyword.contains("\n")){
             int pos = std::min(cursor.position(),cursor.anchor());
             prev = findCursor(keyword,this->toPlainText().mid(0,pos),-1,true);
@@ -5023,7 +5024,7 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
                     m_bIsInputMethod = false;
                 } else {
                     selection.cursor.setPosition(nStartPos, QTextCursor::MoveAnchor);
-                    selection.cursor.setPosition(from + 1, QTextCursor::KeepAnchor);
+                    selection.cursor.setPosition(from + charsAdded, QTextCursor::KeepAnchor);
                 }
 
                 m_wordMarkSelections.insert(i, QPair<QTextEdit::ExtraSelection, qint64>
@@ -6277,6 +6278,22 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             return;
         } else if (key == "Shift+/" && e->modifiers() == Qt::ControlModifier) {
             e->ignore();
+        } else if(e->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier)) {
+            if(e->key() == Qt::Key_Return || e->key() == Qt::Key_D || e->key() == Qt::Key_K
+                    || e->key() == Qt::Key_Up || e->key() == Qt::Key_Down) {
+                popupNotify(tr("Read-Only mode is on"));
+                return;
+            } else {
+                 e->ignore();
+            }
+        }else if (e->modifiers() == Qt::ControlModifier) {
+            if(e->key() == Qt::Key_Return || e->key() == Qt::Key_K || e->key() == Qt::Key_X ||
+                    e->key() == Qt::Key_V || e->key() == Qt::Key_J || e->key() == Qt::Key_Z || e->key() == Qt::Key_Y) {
+                popupNotify(tr("Read-Only mode is on"));
+                return;
+            } else {
+                 e->ignore();
+            }
         } else if (e->key() == Qt::Key_Control || e->key() == Qt::Key_Shift) {
             e->ignore();
         } else if (e->key() == Qt::Key_F11 || e->key() == Qt::Key_F5) {
