@@ -5023,7 +5023,7 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
                     m_bIsInputMethod = false;
                 } else {
                     selection.cursor.setPosition(nStartPos, QTextCursor::MoveAnchor);
-                    selection.cursor.setPosition(from, QTextCursor::KeepAnchor);
+                    selection.cursor.setPosition(from + 1, QTextCursor::KeepAnchor);
                 }
 
                 m_wordMarkSelections.insert(i, QPair<QTextEdit::ExtraSelection, qint64>
