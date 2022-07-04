@@ -41,6 +41,7 @@ JumpLineBar::JumpLineBar(DFloatingWidget *parent)
     m_closeButton->setFixedSize(30, 30);
     m_closeButton->setEnabledCircle(true);
     m_closeButton->setFlat(true);
+    m_closeButton->installEventFilter(this);
 
     m_label = new QLabel();
     m_label->setText(tr("Go to Line: "));
@@ -130,22 +131,31 @@ void JumpLineBar::slotFocusChanged(bool bFocus)
 }
 
 // Hide 跳转到行窗口时，需要清空编辑框中的内容
-void JumpLineBar::hide() {
+void JumpLineBar::hide()
+{
     m_pSpinBoxInput->clear();
     DFloatingWidget::hide();
 }
 
 bool JumpLineBar::eventFilter(QObject *pObject, QEvent *pEvent)
 {
-    if (pObject == m_pSpinBoxInput) {
-        if (pEvent->type() == QEvent::FocusOut) {
-            handleFocusOut();
+    if (pEvent->type() == QEvent::FocusOut) {
+        if (pObject == m_pSpinBoxInput) {
             /**
              * 规避当DSpinBox输入框里为空且失去focus焦点时会显示上一次输入的数值内容的问题
              */
             if (m_pSpinBoxInput->lineEdit()->text() == "") {
                 m_pSpinBoxInput->lineEdit()->clear();
             }
+
+            if (m_closeButton != qApp->focusObject()) {
+                handleFocusOut();
+            }
+        }
+
+        // 当前控件的关闭按钮角度丢失后触发退出信号
+        if (pObject == m_closeButton) {
+            handleFocusOut();
         }
     }
 
