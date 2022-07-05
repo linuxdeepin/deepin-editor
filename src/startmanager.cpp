@@ -283,9 +283,9 @@ int StartManager::recoverFile(Window *window)
                         bIsTemFile = value.toBool();
                     }
                 }
-                if(object.contains("lastModifiedTime")){
+                if (object.contains("lastModifiedTime")) {
                     auto v = object.value("lastModifiedTime");
-                    if(v.isString()){
+                    if (v.isString()) {
                         lastmodifiedtime = v.toString();
                     }
                 }
@@ -306,7 +306,7 @@ int StartManager::recoverFile(Window *window)
                 //打开文件
                 if (!temFilePath.isEmpty()) {
                     if (Utils::fileExists(temFilePath)) {
-                        window->addTemFileTab(temFilePath, fileInfo.fileName(), localPath,lastmodifiedtime, bIsTemFile);
+                        window->addTemFileTab(temFilePath, fileInfo.fileName(), localPath, lastmodifiedtime, bIsTemFile);
 
                         //打开文件后设置书签
                         if (object.contains("bookMark")) {  // 包含指定的 key
@@ -338,11 +338,11 @@ int StartManager::recoverFile(Window *window)
 
                             if (index >= 0) {
                                 QString fileName = tr("Untitled %1").arg(index + 1);
-                                window->addTemFileTab(localPath, fileName, localPath,lastmodifiedtime, bIsTemFile);
+                                window->addTemFileTab(localPath, fileName, localPath, lastmodifiedtime, bIsTemFile);
 
                             }
                         } else {
-                            window->addTemFileTab(localPath, fileInfo.fileName(), localPath,lastmodifiedtime, bIsTemFile);
+                            window->addTemFileTab(localPath, fileInfo.fileName(), localPath, lastmodifiedtime, bIsTemFile);
                         }
 
                         //打开文件后设置书签
@@ -511,14 +511,14 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
     //QRect startRect(startPos, QSize(0,0));
     QRect endRect(startPos, pWindow->rect().size());
     pWindow->move(startPos);
-    #if 0
+#if 0
     // window->setFixedSize(Tabbar::sm_pDragPixmap->rect().size());
     QLabel *pLab = new QLabel();
     //pLab->resize(Tabbar::sm_pDragPixmap->rect().size());
     pLab->move(pos);
     pLab->setPixmap(*Tabbar::sm_pDragPixmap);
     pLab->show();
-    #endif
+#endif
     //添加编辑窗口drop动态显示效果　梁卫东　２０２０－０８－２５　０９：５４：５７
     QPropertyAnimation *geometry = new QPropertyAnimation(pWindow, "geometry");
     geometry->setDuration(200);
@@ -527,14 +527,14 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
     geometry->setEasingCurve(QEasingCurve::InCubic);
 
     //OutCubic InCubic
-    #if 0
+#if 0
     QPropertyAnimation *Opacity = new QPropertyAnimation(this, "windowOpacity");
-    connect(Opacity,&QPropertyAnimation::finished,Opacity,&QPropertyAnimation::deleteLater);
+    connect(Opacity, &QPropertyAnimation::finished, Opacity, &QPropertyAnimation::deleteLater);
     Opacity->setDuration(200);
     Opacity->setStartValue(1.0);
     Opacity->setEndValue(0);
     Opacity->setEasingCurve(QEasingCurve::InCirc);
-    #endif
+#endif
 
     QParallelAnimationGroup *group = new QParallelAnimationGroup;
     connect(group, &QParallelAnimationGroup::finished, this, [/*window,geometry,Opacity,group,*/ = ]() {
@@ -614,14 +614,12 @@ void StartManager::slotCloseWindow()
 {
     Window *pWindow = static_cast<Window *>(sender());
     int windowIndex = m_windows.indexOf(pWindow);
-    //qDebug() << "Close window " << windowIndex;
-    if (windowIndex >= 0)
-    {
+
+    if (windowIndex >= 0) {
         m_windows.takeAt(windowIndex);
     }
 
-    if (m_windows.isEmpty())
-    {
+    if (m_windows.isEmpty()) {
         QDir path = QDir::currentPath();
         if (!path.exists()) {
             return ;
@@ -634,7 +632,12 @@ void StartManager::slotCloseWindow()
                 file.remove();
             }
         }
-        QTimer::singleShot(1000,[](){
+
+        // 在程序退出前（最后一个窗口关闭后），手动注销DBus服务，防止重启文本编辑器时判断应用仍在占用总线
+        // 导致被附加到上一文本编辑器进程
+        QDBusConnection::sessionBus().unregisterService("com.deepin.Editor");
+
+        QTimer::singleShot(1000, []() {
             QApplication::quit();
         });
 
@@ -670,21 +673,19 @@ void StartManager::popupExistTabs(FileTabInfo info)
         window->activateWindow();
     }
 
-    #if 0
-    int indexid=0;
-    uint winid=0;
+#if 0
+    int indexid = 0;
+    uint winid = 0;
     QDBusInterface dock("com.deepin.dde.daemon.Dock",
                         "/com/deepin/dde/daemon/Dock",
                         "com.deepin.dde.daemon.Dock",
                         QDBusConnection::sessionBus()
-                        );
+                       );
     QDBusReply<QStringList> rep = dock.call("GetEntryIDs");
 
-    for(auto name:rep.value())
-    {
-        if(name=="deepin-editor")
-        {
-            indexid=rep.value().indexOf(name);
+    for (auto name : rep.value()) {
+        if (name == "deepin-editor") {
+            indexid = rep.value().indexOf(name);
         }
     }
 
@@ -692,24 +693,24 @@ void StartManager::popupExistTabs(FileTabInfo info)
                            "/com/deepin/dde/daemon/Dock",
                            QDBusConnection::sessionBus(),
                            this
-                           )
-                  );
+                          )
+                 );
     QList<QDBusObjectPath> list = m_pDock->entries();
 
     m_pEntry.reset(new Entry("com.deepin.dde.daemon.Dock",
                              list[indexid].path(),
                              QDBusConnection::sessionBus(),
                              this));
-    winid= m_pEntry->currentWindow() ;
+    winid = m_pEntry->currentWindow() ;
 
 
     QDBusMessage active = QDBusMessage::createMethodCall("com.deepin.dde.daemon.Dock",
                                                          "/com/deepin/dde/daemon/Dock",
                                                          "com.deepin.dde.daemon.Dock",
                                                          "ActivateWindow");
-    active<<winid;
+    active << winid;
     QDBusConnection::sessionBus().call(active, QDBus::BlockWithGui);
-    #endif
+#endif
 }
 
 StartManager::FileTabInfo StartManager::getFileTabInfo(QString file)
