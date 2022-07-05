@@ -38,8 +38,58 @@
 #include <DSettingsOption>
 #include <DMenuBar>
 #include <QFileInfo>
+#include <QEvent>
 
 DCORE_USE_NAMESPACE
+
+enum ReadLengthType {
+    EReadStepSize = 1 * 1024 * 1024,    // 单次读取文件最大长度
+};
+
+/**
+ * @brief 处理文件时使用的事件类型，处理解析文件数据时，
+ *      将此事件抛给事件队列，使用事件队列分发解析任务
+ */
+class ParseFileEvent : public QEvent
+{
+public:
+    enum Type {
+        EParseFile = QEvent::User + 1024,
+    };
+
+    ParseFileEvent();
+    virtual ~ParseFileEvent();
+
+    // 返回此事件的克隆对象，用于下次任务。
+    ParseFileEvent *clone();
+
+    // 内部公开数据
+    int             m_alreadyReadOffset = 0;    // 当前已读取文本大小
+    QByteArray      m_contentData;              // 文本内容
+    QTextCursor     m_cursor;                   // 插入光标
+    QTextCodec      *m_codec = nullptr;         // 编码
+};
+
+ParseFileEvent::ParseFileEvent()
+    : QEvent(static_cast<QEvent::Type>(EParseFile))
+{
+}
+
+ParseFileEvent::~ParseFileEvent()
+{
+}
+
+ParseFileEvent *ParseFileEvent::clone()
+{
+    // 创建克隆对象，复制数据(浅拷贝)
+    ParseFileEvent *cloneEvent = new ParseFileEvent;
+    cloneEvent->m_contentData = this->m_contentData;
+    cloneEvent->m_alreadyReadOffset = this->m_alreadyReadOffset;
+    cloneEvent->m_cursor = this->m_cursor;
+    cloneEvent->m_codec = this->m_codec;
+    return cloneEvent;
+}
+
 
 EditWrapper::EditWrapper(Window *window, QWidget *parent)
     : QWidget(parent),
@@ -718,11 +768,16 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteAr
         updateModifyStatus(true);
     }
 
+    // 判断处理前后对象状态
+    QPointer<QObject> checkPtr(this);
+    // 加载数据
     loadContent(content);
+    if (checkPtr.isNull()) {
+        return;
+    }
+
     //先屏蔽，双字节空字符先按照显示字符编码号处理
     //clearDoubleCharaterEncode();
-
-
     //PerformanceMonitor::openFileFinish(filePath(), QFileInfo(filePath()).size());
 
     m_bFileLoading = false;
@@ -1013,6 +1068,55 @@ Window *EditWrapper::window()
     return m_pWindow;
 }
 
+void EditWrapper::customEvent(QEvent *e)
+{
+    // 处理解析文件任务，大文件不会在单次事件任务中处理，而是每次读取一部分并将下次任务抛出
+    if (static_cast<QEvent::Type>(ParseFileEvent::EParseFile) == e->type()) {
+        // 中途退出则不继续处理
+        if (m_bQuit) {
+            return;
+        }
+
+        ParseFileEvent *parseEvent = static_cast<ParseFileEvent *>(e);
+        int needReadLen = parseEvent->m_contentData.length() - parseEvent->m_alreadyReadOffset;
+
+        // 调整最大读取长度(单次读取最大长度)
+        if (needReadLen > EReadStepSize) {
+            needReadLen = EReadStepSize;
+        }
+
+        // 转码数据并插入光标位置
+        QByteArray text = parseEvent->m_contentData.mid(parseEvent->m_alreadyReadOffset, needReadLen);
+        QTextCodec::ConverterState state;
+        QString data = parseEvent->m_codec->toUnicode(text.constData(), text.size(), &state);
+        parseEvent->m_cursor.insertText(data);
+
+        // 当前为首次读取
+        if (0 == parseEvent->m_alreadyReadOffset) {
+            QTextCursor firstLineCursor = m_pTextEdit->textCursor();
+            firstLineCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+            m_pTextEdit->setTextCursor(firstLineCursor);
+            //秒开界面语法高亮
+            OnUpdateHighlighter();
+        }
+
+        // 此次读取后的偏移量
+        int curReadOffset = parseEvent->m_alreadyReadOffset + needReadLen;
+
+        // 是否已读取完成
+        if (parseEvent->m_contentData.length() == curReadOffset) {
+            // 异步读取结束
+            m_bAsyncReadFileFinished = true;
+        } else {
+            ParseFileEvent *nextEvent = parseEvent->clone();
+            // 调整已读取偏移位置
+            nextEvent->m_alreadyReadOffset = curReadOffset;
+            // 抛出下一次处理的事件，根据当前是否显示界面调整优先级
+            qApp->postEvent(this, nextEvent, isVisible() ? Qt::NormalEventPriority : (Qt::LowEventPriority - 1));
+        }
+    }
+}
+
 //支持大文本加载 界面不卡顿 秒关闭
 void EditWrapper::loadContent(const QByteArray &strContent)
 {
@@ -1042,52 +1146,39 @@ void EditWrapper::loadContent(const QByteArray &strContent)
         return;
     }
 
-
     int len = strContent.length();
     //初始化显示文本大小
     int InitContentPos = 5 * 1024;
-    //每次读取文件步长
-    int step = 1 * 1024 * 1024;
-    //循环读取次数
-    int cnt = len / step;
-    //文件末尾余数
-    int mod = len % step;
     int max = 40 * 1024 * 1024;
 
     QString data;
 
     if (len > max) {
-        for (int i = 0; i < cnt; i++) {
-            //初始化秒开
-            if (i == 0 && !m_bQuit) {
-                //data = strContent.mid(i * step, step);
-                QByteArray text = strContent.mid(i * step, step);
-                data = codec->toUnicode(text.constData(), text.size(), &state);
-                cursor.insertText(data);
-                QTextCursor firstLineCursor = m_pTextEdit->textCursor();
-                firstLineCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
-                m_pTextEdit->setTextCursor(firstLineCursor);
-                //秒开界面语法高亮
-                OnUpdateHighlighter();
-                QApplication::processEvents();
-                continue;
-            }
-            if (!m_bQuit) {
-                //data = strContent.mid(i * step, step);
-                QByteArray text = strContent.mid(i * step, step);
-                data = codec->toUnicode(text.constData(), text.size(), &state);
-                cursor.insertText(data);
-                QApplication::processEvents();
-                if (!m_bQuit && i == cnt - 1 && mod > 0) {
-                    //data = strContent.mid(cnt * step, mod);
-                    QByteArray text = strContent.mid(cnt * step, mod);
-                    data = codec->toUnicode(text.constData(), text.size(), &state);
-                    cursor.insertText(data);
-                    QApplication::processEvents();
-                }
-            }
+        // 当读取大文件时，采用事件队列方式处理
+        ParseFileEvent *parseEvent = new ParseFileEvent;
+        parseEvent->m_contentData = strContent;
+        parseEvent->m_cursor = cursor;
+        parseEvent->m_codec = codec;
+
+        // 将处理事件追加到事件队列
+        qApp->postEvent(this, parseEvent, Qt::HighEventPriority);
+
+        // 使用QPointer判断对象状态
+        QPointer<QObject> checkPtr(this);
+
+        // 程序未退出且读取未完成的情况，持续处理事件
+        m_bAsyncReadFileFinished = false;
+        while (!checkPtr.isNull() && !m_bQuit && !m_bAsyncReadFileFinished) {
+            QApplication::processEvents();
         }
-    } else {
+
+        // 判断当前对象是否已析构，使用processEvents()可能导致在处理事件时，当前编辑控件关闭，
+        // 且在事件循环中进行了析构，导致processEvents()退出时，this对象已析构，无法访问对象成员
+        if (checkPtr.isNull()) {
+            QApplication::restoreOverrideCursor();
+            return;
+        }
+    } else if (len > 0) {
         //初始化秒开
         if (!m_bQuit && len > InitContentPos) {
             //data = strContent.mid(0, InitContentPos);
@@ -1141,3 +1232,5 @@ void EditWrapper::clearDoubleCharaterEncode()
         emit sigClearDoubleCharaterEncode();
     }
 }
+
+

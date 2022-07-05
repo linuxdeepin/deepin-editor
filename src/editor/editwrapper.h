@@ -51,7 +51,7 @@ public:
         QFile::Permissions permissions;
     };
 
-    EditWrapper(Window* window=nullptr,QWidget *parent = nullptr);
+    EditWrapper(Window *window = nullptr, QWidget *parent = nullptr);
     ~EditWrapper();
 
     //清除焦点　梁卫东　２０２０－０９－１４　１１：００：５０
@@ -66,9 +66,9 @@ public:
      * @param qstrTruePath　真实文件路径
      * @param bIsTemFile　修改状态
      */
-    void openFile(const QString &filepath,QString qstrTruePath,bool bIsTemFile = false);
+    void openFile(const QString &filepath, QString qstrTruePath, bool bIsTemFile = false);
     //以默认编码encode重写读取去文件
-    bool readFile(QByteArray encode="");
+    bool readFile(QByteArray encode = "");
     //保存文件
     bool saveFile();
     /**
@@ -96,7 +96,7 @@ public:
      */
     bool saveTemFile(QString qstrDir);
     //更新路径
-    void updatePath(const QString &file,QString qstrTruePath = QString());
+    void updatePath(const QString &file, QString qstrTruePath = QString());
     //判断是否修改
     bool isModified();
     //判断是否草稿文件
@@ -114,7 +114,7 @@ public:
     void showNotify(const QString &message);
     bool getTextChangeFlag();
     void setTextChangeFlag(bool bFlag);
-    void setLineNumberShow(bool bIsShow,bool bIsFirstShow = false);
+    void setLineNumberShow(bool bIsShow, bool bIsFirstShow = false);
     void setShowBlankCharacter(bool ok);
     void handleCursorModeChanged(TextEdit::CursorMode mode);
     void clearDoubleCharaterEncode();
@@ -127,19 +127,23 @@ public:
 
     //get and set m_tModifiedDateTime
     QDateTime getLastModifiedTime() const;
-    void setLastModifiedTime(const QString& time);
+    void setLastModifiedTime(const QString &time);
 
 signals:
     void sigClearDoubleCharaterEncode();
 
+protected:
+    // 处理文件加载事件
+    virtual void customEvent(QEvent *e) override;
+
 private:
     // 类似setPlainText(QString) 接口支持大文本加载 不卡顿 秒退出 梁卫东 2020年11月11日16:56:27
-    void loadContent(const QByteArray&);
+    void loadContent(const QByteArray &);
     void handleHightlightChanged(const QString &name);
     int GetCorrectUnicode1(const QByteArray &ba);
 
 public slots:
-    void handleFileLoadFinished(const QByteArray &encode,const QByteArray &content);
+    void handleFileLoadFinished(const QByteArray &encode, const QByteArray &content);
     void OnThemeChangeSlot(QString theme);
     void UpdateBottomBarWordCnt(int cnt);
     void OnUpdateHighlighter();
@@ -155,9 +159,9 @@ private:
     QString  m_sCurEncode = QString("UTF-8");
 
     //左边栏　标记　行号　折叠三合一控件
-    LeftAreaTextEdit* m_pLeftAreaTextEdit = nullptr;
+    LeftAreaTextEdit *m_pLeftAreaTextEdit = nullptr;
     //
-    Window* m_pWindow = nullptr;
+    Window *m_pWindow = nullptr;
     //
     TextEdit *m_pTextEdit = nullptr;
     //
@@ -179,6 +183,8 @@ private:
     //KSyntaxHighlighting::SyntaxHighlighter *m_pSyntaxHighlighter = nullptr;
     CSyntaxHighlighter *m_pSyntaxHighlighter = nullptr;
     bool m_bHighlighterAll = false;
+
+    bool m_bAsyncReadFileFinished = false;
 };
 
 #endif
