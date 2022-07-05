@@ -158,6 +158,8 @@ Window::Window(DMainWindow *parent)
     // resize window size.
     int window_width = Settings::instance()->settings->option("advance.window.window_width")->value().toInt();
     int window_height = Settings::instance()->settings->option("advance.window.window_height")->value().toInt();
+    window_height == 1 ? window_height = 600 : window_height;
+    window_width == 1 ? window_width = 1000 : window_width;
     resize(window_width, window_height);
 
     //设置函数最大化或者正常窗口的初始化　2021.4.26 ut002764 lxp   fix bug:74774
@@ -415,6 +417,9 @@ void Window::initTitlebar()
     connect(m_tabbar, &DTabBar::tabCloseRequested, this, &Window::handleTabCloseRequested, Qt::QueuedConnection);
     connect(m_tabbar, &DTabBar::tabAddRequested, this, static_cast<void (Window::*)()>(&Window::addBlankTab), Qt::QueuedConnection);
     connect(m_tabbar, &DTabBar::currentChanged, this, &Window::handleCurrentChanged, Qt::QueuedConnection);
+    // 当标签页新增、删除时触发变更信号(用于备份当前打开文件信息)
+    connect(m_tabbar, &DTabBar::tabIsInserted, this, &Window::tabChanged, Qt::QueuedConnection);
+    connect(m_tabbar, &DTabBar::tabIsRemoved, this, &Window::tabChanged, Qt::QueuedConnection);
 
     connect(newWindowAction, &QAction::triggered, this, &Window::newWindow);
     connect(newTabAction, &QAction::triggered, this, static_cast<void (Window::*)()>(&Window::addBlankTab));
@@ -1233,7 +1238,8 @@ void Window::popupReplaceBar()
     //addBottomWidget(m_replaceBar);
 
     QString tabPath = m_tabbar->currentPath();
-    QString text = wrapper->textEditor()->textCursor().selectedText();
+    // QString text = wrapper->textEditor()->textCursor().selectedText();
+    QString text = wrapper->textEditor()->selectedText();
     int row = wrapper->textEditor()->getCurrentLine();
     int column = wrapper->textEditor()->getCurrentColumn();
     int scrollOffset = wrapper->textEditor()->getScrollOffset();
@@ -1303,7 +1309,6 @@ void Window::popupSettingsDialog()
     DSettingsDialog *dialog = new DSettingsDialog(this);
     dialog->widgetFactory()->registerWidget("fontcombobox", Settings::createFontComBoBoxHandle);
     dialog->widgetFactory()->registerWidget("keySequenceEdit", Settings::createKeySequenceEditHandle);
-
     m_settings->setSettingDialog(dialog);
 
     dialog->updateSettings(m_settings->settings);
@@ -1983,7 +1988,6 @@ void Window::handleCurrentChanged(const int &index)
         bool bIsContains = false;
         EditWrapper *wrapper = m_wrappers.value(filepath);
         wrapper->textEditor()->setFocus();
-
         for (int i = 0; i < m_editorWidget->count(); i++) {
             if (m_editorWidget->widget(i) == wrapper) {
                 bIsContains = true;

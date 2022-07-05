@@ -35,6 +35,12 @@
 
 DWIDGET_USE_NAMESPACE
 
+// 备份定时器间隔
+enum BackupInterval {
+    EAutoBackupInterval = 5 * 60 * 1000,        ///< 周期自动备份定时 5分钟
+    EDelayBackupInterval = 20,                  ///< 延迟备份间隔 20ms
+};
+
 StartManager *StartManager::m_instance = nullptr;
 
 StartManager *StartManager::instance()
@@ -71,7 +77,7 @@ StartManager::StartManager(QObject *parent)
     //按时间自动备份（5分钟）
     m_pTimer = new QTimer;
     connect(m_pTimer, &QTimer::timeout, this, &StartManager::autoBackupFile);
-    m_pTimer->start(5 * 60 * 1000);
+    m_pTimer->start(EAutoBackupInterval);
 }
 
 bool StartManager::checkPath(const QString &file)
@@ -568,6 +574,7 @@ Window *StartManager::createWindow(bool alwaysCenter)
     Window *window = new Window;
     connect(window, &Window::themeChanged, this, &StartManager::loadTheme, Qt::QueuedConnection);
     connect(window, &Window::sigJudgeBlockShutdown, this, &StartManager::slotCheckUnsaveTab, Qt::QueuedConnection);
+    connect(window, &Window::tabChanged, this, &StartManager::slotDelayBackupFile, Qt::QueuedConnection);
 
     // Quit application if close last window.
     connect(window, &Window::closeWindow, this, &StartManager::slotCloseWindow);
@@ -643,6 +650,27 @@ void StartManager::slotCloseWindow()
         });
 
         PerformanceMonitor::closeAPPFinish();
+    }
+}
+
+void StartManager::slotDelayBackupFile()
+{
+    // 判断定时器是否已在触发状态，防止短时间内的多次触发
+    if (!m_DelayTimer.isActive()) {
+        m_DelayTimer.start(EDelayBackupInterval, this);
+    }
+}
+
+void StartManager::timerEvent(QTimerEvent *e)
+{
+    // 判断是否为延迟备份
+    if (e->timerId() == m_DelayTimer.timerId()) {
+        m_DelayTimer.stop();
+        // 执行配置文件备份
+        autoBackupFile();
+
+        // 重启周期定时备份
+        m_pTimer->start(EAutoBackupInterval);
     }
 }
 

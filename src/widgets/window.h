@@ -77,7 +77,7 @@ public:
     void addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, const QString &qstrTruePath,
                            const QString &tabName, int index = -1);
     bool closeTab();
-    bool closeTab(const QString& fileName);
+    bool closeTab(const QString &fileName);
     void restoreTab();
     void clearBlack();
 
@@ -137,7 +137,7 @@ public:
      * @param qstrTruePath　最后一次修改时间
      * @param bIsTemFile　是否修改
      */
-    void addTemFileTab(QString qstrPath, QString qstrName, QString qstrTruePath, QString lastModifiedTime,bool bIsTemFile = false);
+    void addTemFileTab(QString qstrPath, QString qstrName, QString qstrTruePath, QString lastModifiedTime, bool bIsTemFile = false);
 
     QMap<QString, EditWrapper *> getWrappers();
 
@@ -149,10 +149,10 @@ public:
     QString getKeywordForSearchAll();
     QString getKeywordForSearch();
     void setPrintEnabled(bool enabled);
-    QStackedWidget* getStackedWgt();
+    QStackedWidget *getStackedWgt();
 
     static void printPage(int index, QPainter *painter, const QTextDocument *doc,
-                                 const QRectF &body, const QRectF &pageCountBox);
+                          const QRectF &body, const QRectF &pageCountBox);
 
 signals:
     void themeChanged(const QString themeName);
@@ -162,6 +162,8 @@ signals:
     void closeWindow();
     void sigJudgeBlockShutdown();
     void pressEsc();
+    // 标签页出现变更信号，文件添加或删除时触发
+    void tabChanged();
 
 public slots:
     void addBlankTab();

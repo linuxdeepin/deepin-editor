@@ -41,13 +41,12 @@ class StartManager : public QObject
     Q_CLASSINFO("D-Bus Interface", "com.deepin.Editor")
 
 public:
-    struct FileTabInfo
-    {
+    struct FileTabInfo {
         int windowIndex;
         int tabIndex;
     };
 
-    static StartManager* instance();
+    static StartManager *instance();
     explicit StartManager(QObject *parent = nullptr);
     bool checkPath(const QString &file);
     bool ifKlu();
@@ -90,7 +89,7 @@ public slots:
     void createWindowFromWrapper(const QString &tabName, const QString &filePath, const QString &qstrTruePath, EditWrapper *buffer, bool isModifyed);
     void loadTheme(const QString &themeName);
 
-    Window* createWindow(bool alwaysCenter = false);
+    Window *createWindow(bool alwaysCenter = false);
     void initWindowPosition(Window *window, bool alwaysCenter = false);
     void popupExistTabs(FileTabInfo info);
     FileTabInfo getFileTabInfo(QString file);
@@ -103,10 +102,17 @@ public slots:
     void slotCreatNewwindow();
     void slotCloseWindow();
 
+    // 延迟备份定时器，超时后备份配置文件
+    void slotDelayBackupFile();
+
+protected:
+    // 接收延迟更新定时任务，执行备份配置文件
+    virtual void timerEvent(QTimerEvent *e) override;
+
 private:
     void initBlockShutdown();
     static StartManager *m_instance;
-    QList<Window*> m_windows;
+    QList<Window *> m_windows;
 
     QDBusReply<QDBusUnixFileDescriptor> m_reply;
     QDBusInterface *m_pLoginManager = nullptr;
@@ -117,10 +123,11 @@ private:
     QScopedPointer<Entry> m_pEntry;
     QStringList m_qlistTemFile;///<备份信息列表
     QTimer *m_pTimer;
+    QBasicTimer m_DelayTimer; ///< 延迟备份定时器
     QString m_blankFileDir;///<新建文件目录
     QString m_backupDir;///<用户备份文件目录
     QString m_autoBackupDir;///<自动备份文件目录
-    Window* pFocusWindow;
+    Window *pFocusWindow;
 };
 
 #endif
