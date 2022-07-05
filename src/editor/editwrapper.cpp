@@ -39,8 +39,58 @@
 #include <DSettingsOption>
 #include <DMenuBar>
 #include <QFileInfo>
+#include <QEvent>
 
 DCORE_USE_NAMESPACE
+
+enum ReadLengthType {
+    EReadStepSize = 1 * 1024 * 1024,    // 单次读取文件最大长度
+};
+
+/**
+ * @brief 处理文件时使用的事件类型，处理解析文件数据时，
+ *      将此事件抛给事件队列，使用事件队列分发解析任务
+ */
+class ParseFileEvent : public QEvent
+{
+public:
+    enum Type {
+        EParseFile = QEvent::User + 1024,
+    };
+
+    ParseFileEvent();
+    virtual ~ParseFileEvent();
+
+    // 返回此事件的克隆对象，用于下次任务。
+    ParseFileEvent *clone();
+
+    // 内部公开数据
+    int             m_alreadyReadOffset = 0;    // 当前已读取文本大小
+    QByteArray      m_contentData;              // 文本内容
+    QTextCursor     m_cursor;                   // 插入光标
+    QTextCodec      *m_codec = nullptr;         // 编码
+};
+
+ParseFileEvent::ParseFileEvent()
+    : QEvent(static_cast<QEvent::Type>(EParseFile))
+{
+}
+
+ParseFileEvent::~ParseFileEvent()
+{
+}
+
+ParseFileEvent *ParseFileEvent::clone()
+{
+    // 创建克隆对象，复制数据(浅拷贝)
+    ParseFileEvent *cloneEvent = new ParseFileEvent;
+    cloneEvent->m_contentData = this->m_contentData;
+    cloneEvent->m_alreadyReadOffset = this->m_alreadyReadOffset;
+    cloneEvent->m_cursor = this->m_cursor;
+    cloneEvent->m_codec = this->m_codec;
+    return cloneEvent;
+}
+
 
 EditWrapper::EditWrapper(Window *window, QWidget *parent)
     : QWidget(parent),
@@ -124,9 +174,9 @@ void EditWrapper::openFile(const QString &filepath, QString qstrTruePath, bool b
     updatePath(filepath, qstrTruePath);
     m_pTextEdit->setIsFileOpen();
 
-    if(!bIsTemFile && !isDraftFile()){
-        Settings::instance()->setSavePath(PathSettingWgt::LastOptBox,QFileInfo(qstrTruePath).absolutePath());
-        Settings::instance()->setSavePath(PathSettingWgt::CurFileBox,QFileInfo(qstrTruePath).absolutePath());
+    if (!bIsTemFile && !isDraftFile()) {
+        Settings::instance()->setSavePath(PathSettingWgt::LastOptBox, QFileInfo(qstrTruePath).absolutePath());
+        Settings::instance()->setSavePath(PathSettingWgt::CurFileBox, QFileInfo(qstrTruePath).absolutePath());
     }
 
     FileLoadThread *thread = new FileLoadThread(filepath);
@@ -144,7 +194,7 @@ bool EditWrapper::readFile(QByteArray encode)
         m_sFirstEncode = newEncode;
     }
 
-	//QFile file(m_pTextEdit->getFilePath());
+    //QFile file(m_pTextEdit->getFilePath());
     QFile file2(m_pTextEdit->getTruePath());
 
     if (file2.open(QIODevice::ReadOnly)) {
@@ -256,7 +306,7 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
     //temporarily use '*' to determine whether the text has been modified.
     auto tabname = this->window()->getTabbar()->currentName();
     bool hasFlag = false;
-    if(tabname.size() >0 && "*" == tabname[0]){
+    if (tabname.size() > 0 && "*" == tabname[0]) {
         hasFlag = true;
     }
 
@@ -276,13 +326,13 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
         }
 
         //不保存,重写载入
-        #if 0
+#if 0
         if (res == 1) {
             bool ok = readFile(encode);
             //if(ok && m_sCurEncode != m_sFirstEncode) m_pTextEdit->setTabbarModified(true);
             return ok;
         }
-        #endif
+#endif
 
         //保存
         if (res == 1) {
@@ -337,7 +387,7 @@ void EditWrapper::reloadModifyFile()
         if (res == 1) {
             //重写加载文件
             readFile();
-            m_bIsTemFile=false;
+            m_bIsTemFile = false;
         }
         //另存
         if (res == 2) {
@@ -353,7 +403,7 @@ void EditWrapper::reloadModifyFile()
             }
             //重写加载文件
             readFile();
-            m_bIsTemFile=false;
+            m_bIsTemFile = false;
         }
 
     } else {
@@ -391,7 +441,7 @@ bool EditWrapper::saveFile()
             // 如果 iconv 转换错误
             if (Outdata.size() == 0) {
                 qWarning() << QString("iconv Encode Transformat from '%1' to '%2' Fail!")
-                              .arg(QString("UTF-8")).arg(m_sCurEncode)
+                           .arg(QString("UTF-8")).arg(m_sCurEncode)
                            << ", start QTextCodec Encode Transformat.";
                 // 使用 QTextCodec 进行转换尝试
                 QTextCodec *codec = QTextCodec::codecForName(m_sCurEncode.toUtf8());
@@ -401,12 +451,12 @@ bool EditWrapper::saveFile()
                     qWarning() << "Both iconv and QTextCodec Encode Transformat Fail!";
                 } else {
                     qWarning() << QString("QTextCodec Encode Transformat from '%1' to '%2' Success!")
-                                  .arg(QString("UTF-8")).arg(m_sCurEncode);
+                               .arg(QString("UTF-8")).arg(m_sCurEncode);
                     Outdata = encodedString;
                 }
             }
 
-            if(Outdata.isEmpty() == false) {
+            if (Outdata.isEmpty() == false) {
                 // 如果新数据为空，不进行文件写入，以降低文件内容损失
                 // 此时如果写入，整个文件将被清空
                 file.write(Outdata);
@@ -456,8 +506,8 @@ bool EditWrapper::saveFile()
 void EditWrapper::getPlainTextContent(QByteArray &plainTextContent)
 {
     QString strPlainText = m_pTextEdit->toPlainText();
-    if(BottomBar::EndlineFormat::Windows == m_pBottomBar->getEndlineFormat()){
-        strPlainText.replace("\n","\r\n");
+    if (BottomBar::EndlineFormat::Windows == m_pBottomBar->getEndlineFormat()) {
+        strPlainText.replace("\n", "\r\n");
     }
 
     qint64 iPlainTextAllLen = strPlainText.length();
@@ -510,25 +560,26 @@ bool EditWrapper::saveTemFile(QString qstrDir)
         }
         return ok;
 
-        #if 0
-        }else {
-            file.write(fileContent);
-            QFileDevice::FileError error = file.error();
-            file.close();
-            m_sFirstEncode = m_sCurEncode;
-
-               did save work?
-               only finalize if stream status == OK
-            bool ok = (error == QFileDevice::NoError);
-
-            // update status.
-            if (ok)  updateModifyStatus(true);
-            return ok;
-        }
-        #endif
+#if 0
     } else {
-        return false;
+        file.write(fileContent);
+        QFileDevice::FileError error = file.error();
+        file.close();
+        m_sFirstEncode = m_sCurEncode;
+
+        did save work ?
+        only finalize if stream status == OK
+        bool ok = (error == QFileDevice::NoError);
+
+        // update status.
+        if (ok)  updateModifyStatus(true);
+        return ok;
     }
+#endif
+} else
+{
+    return false;
+}
 }
 
 void EditWrapper::updatePath(const QString &file, QString qstrTruePath)
@@ -585,7 +636,7 @@ bool EditWrapper::saveDraftFile()
 
     //this->setUpdatesEnabled(false);
     int mode =  dialog.exec(); // 0表示取消 1保存
-   // this->setUpdatesEnabled(true);
+    // this->setUpdatesEnabled(true);
     hideWarningNotices();
 
     if (mode == 1) {
@@ -611,7 +662,7 @@ bool EditWrapper::saveDraftFile()
         QFile(m_pTextEdit->getFilePath()).remove();
         updateSaveAsFileName(m_pTextEdit->getFilePath(), newFilePath);
         m_pTextEdit->document()->setModified(false);
-         m_bIsTemFile = false;
+        m_bIsTemFile = false;
         return true;
     }
 
@@ -634,7 +685,7 @@ void EditWrapper::checkForReload()
 
     QFileInfo fi(m_pTextEdit->getTruePath());
 
-    QTimer::singleShot(50, [=]() {
+    QTimer::singleShot(50, [ = ]() {
         if (fi.lastModified() == m_tModifiedDateTime || m_pWaringNotices->isVisible()) {
             return;
         }
@@ -719,11 +770,16 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteAr
         updateModifyStatus(true);
     }
 
+    // 判断处理前后对象状态
+    QPointer<QObject> checkPtr(this);
+    // 加载数据
     loadContent(content);
+    if (checkPtr.isNull()) {
+        return;
+    }
+
     //先屏蔽，双字节空字符先按照显示字符编码号处理
     //clearDoubleCharaterEncode();
-
-
     //PerformanceMonitor::openFileFinish(filePath(), QFileInfo(filePath()).size());
 
     m_bFileLoading = false;
@@ -886,10 +942,10 @@ void EditWrapper::updateHighlighterAll()
 
 QDateTime EditWrapper::getLastModifiedTime() const
 {
-     return m_tModifiedDateTime;
+    return m_tModifiedDateTime;
 }
 
-void EditWrapper::setLastModifiedTime(const QString& time)
+void EditWrapper::setLastModifiedTime(const QString &time)
 {
     m_tModifiedDateTime = QDateTime::fromString(time);
 }
@@ -918,7 +974,7 @@ void EditWrapper::setLineNumberShow(bool bIsShow, bool bIsFirstShow)
         //m_pTextEdit->getLeftAreaWidget()->setFixedWidth(leftAreaWidth + lineNumberAreaWidth);
 
     } else if (!bIsShow) {
-       // int lineNumberAreaWidth = m_pTextEdit->getLeftAreaWidget()->m_pLineNumberArea->width();
+        // int lineNumberAreaWidth = m_pTextEdit->getLeftAreaWidget()->m_pLineNumberArea->width();
         //int leftAreaWidth = m_pTextEdit->getLeftAreaWidget()->width();
         m_pTextEdit->getLeftAreaWidget()->m_pLineNumberArea->hide();
         //m_pTextEdit->getLeftAreaWidget()->setFixedWidth(leftAreaWidth - lineNumberAreaWidth);
@@ -973,6 +1029,58 @@ Window *EditWrapper::window()
     return m_pWindow;
 }
 
+void EditWrapper::customEvent(QEvent *e)
+{
+    // 处理解析文件任务，大文件不会在单次事件任务中处理，而是每次读取一部分并将下次任务抛出
+    if (static_cast<QEvent::Type>(ParseFileEvent::EParseFile) == e->type()) {
+        // 中途退出则不继续处理
+        if (m_bQuit) {
+            return;
+        }
+
+        ParseFileEvent *parseEvent = static_cast<ParseFileEvent *>(e);
+        int needReadLen = parseEvent->m_contentData.length() - parseEvent->m_alreadyReadOffset;
+
+        // 调整最大读取长度(单次读取最大长度)
+        if (needReadLen > EReadStepSize) {
+            needReadLen = EReadStepSize;
+        }
+
+        // 转码数据并插入光标位置
+        QByteArray text = parseEvent->m_contentData.mid(parseEvent->m_alreadyReadOffset, needReadLen);
+        QTextCodec::ConverterState state;
+        QString data = parseEvent->m_codec->toUnicode(text.constData(), text.size(), &state);
+        parseEvent->m_cursor.insertText(data);
+
+        // 当前为首次读取
+        if (0 == parseEvent->m_alreadyReadOffset) {
+            QTextCursor firstLineCursor = m_pTextEdit->textCursor();
+            firstLineCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+            m_pTextEdit->setTextCursor(firstLineCursor);
+            //秒开界面语法高亮
+            OnUpdateHighlighter();
+        }
+
+        // 此次读取后的偏移量
+        int curReadOffset = parseEvent->m_alreadyReadOffset + needReadLen;
+        // 设置当前的进度条
+        float progress = (1.0f * curReadOffset) / parseEvent->m_contentData.length() * 100;
+        m_pBottomBar->setProgress(static_cast<int>(progress));
+
+        // 是否已读取完成
+        if (parseEvent->m_contentData.length() == curReadOffset) {
+            // 异步读取结束
+            m_bAsyncReadFileFinished = true;
+        } else {
+            ParseFileEvent *nextEvent = parseEvent->clone();
+            // 调整已读取偏移位置
+            nextEvent->m_alreadyReadOffset = curReadOffset;
+            // 抛出下一次处理的事件，根据当前是否显示界面调整优先级
+            qApp->postEvent(this, nextEvent, isVisible() ? Qt::NormalEventPriority : (Qt::LowEventPriority - 1));
+        }
+    }
+}
+
 //支持大文本加载 界面不卡顿 秒关闭
 void EditWrapper::loadContent(const QByteArray &strContent)
 {
@@ -996,67 +1104,45 @@ void EditWrapper::loadContent(const QByteArray &strContent)
 
     QTextCodec::ConverterState state;
     QTextCodec *codec = QTextCodec::codecForName("UTF-8");
-    if(nullptr == codec){
-        qInfo()<<"QTextCodec::codecForName return nullptr";
+    if (nullptr == codec) {
+        qInfo() << "QTextCodec::codecForName return nullptr";
         return;
     }
-
 
     int len = strContent.length();
     //初始化显示文本大小
     int InitContentPos = 5 * 1024;
-    //每次读取文件步长
-    int step = 1 * 1024 * 1024;
-    //循环读取次数
-    int cnt = len / step;
-    //文件末尾余数
-    int mod = len % step;
     int max = 40 * 1024 * 1024;
 
     QString data;
     int inserted = 0;
 
     if (len > max) {
-        for (int i = 0; i < cnt; i++) {
-            //初始化秒开
-            if (i == 0 && !m_bQuit) {
-                //data = strContent.mid(i * step, step);
-                QByteArray text = strContent.mid(i * step, step);
-                data = codec->toUnicode(text.constData(), text.size(), &state);
-                cursor.insertText(data);
-                QTextCursor firstLineCursor = m_pTextEdit->textCursor();
-                firstLineCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
-                m_pTextEdit->setTextCursor(firstLineCursor);
-                //秒开界面语法高亮
-                OnUpdateHighlighter();
-                QApplication::processEvents();
-                inserted += step;
-                float progress = (inserted*1.0)/len*100;
-                m_pBottomBar->setProgress(progress);
-                continue;
-            }
-            if (!m_bQuit) {
-                //data = strContent.mid(i * step, step);
-                QByteArray text = strContent.mid(i * step, step);
-                data = codec->toUnicode(text.constData(), text.size(), &state);
-                cursor.insertText(data);
-                QApplication::processEvents();
-                inserted += step;
-                float progress = (inserted*1.0)/len*100;
-                m_pBottomBar->setProgress(progress);
-                if (!m_bQuit && i == cnt - 1 && mod > 0) {
-                    //data = strContent.mid(cnt * step, mod);
-                    QByteArray text = strContent.mid(cnt * step, mod);
-                    data = codec->toUnicode(text.constData(), text.size(), &state);
-                    cursor.insertText(data);
-                    QApplication::processEvents();
-                    inserted += step;
-                    float progress = (inserted*1.0)/len*100;
-                    m_pBottomBar->setProgress(progress);
-                }
-            }
+        // 当读取大文件时，采用事件队列方式处理
+        ParseFileEvent *parseEvent = new ParseFileEvent;
+        parseEvent->m_contentData = strContent;
+        parseEvent->m_cursor = cursor;
+        parseEvent->m_codec = codec;
+
+        // 将处理事件追加到事件队列
+        qApp->postEvent(this, parseEvent, Qt::HighEventPriority);
+
+        // 使用QPointer判断对象状态
+        QPointer<QObject> checkPtr(this);
+
+        // 程序未退出且读取未完成的情况，持续处理事件
+        m_bAsyncReadFileFinished = false;
+        while (!checkPtr.isNull() && !m_bQuit && !m_bAsyncReadFileFinished) {
+            QApplication::processEvents();
         }
-    } else if(len>0){
+
+        // 判断当前对象是否已析构，使用processEvents()可能导致在处理事件时，当前编辑控件关闭，
+        // 且在事件循环中进行了析构，导致processEvents()退出时，this对象已析构，无法访问对象成员
+        if (checkPtr.isNull()) {
+            QApplication::restoreOverrideCursor();
+            return;
+        }
+    } else if (len > 0) {
         //初始化秒开
         if (!m_bQuit && len > InitContentPos) {
             //data = strContent.mid(0, InitContentPos);
@@ -1070,7 +1156,7 @@ void EditWrapper::loadContent(const QByteArray &strContent)
             OnUpdateHighlighter();
             QApplication::processEvents();
             inserted += InitContentPos;
-            float progress = (inserted*1.0)/len*100;
+            float progress = (inserted * 1.0) / len * 100;
             m_pBottomBar->setProgress(progress);
             if (!m_bQuit) {
                 //data = strContent.mid(InitContentPos, len - InitContentPos);
@@ -1078,7 +1164,7 @@ void EditWrapper::loadContent(const QByteArray &strContent)
                 data = codec->toUnicode(text.constData(), text.size(), &state);
                 cursor.insertText(data);
                 inserted += (len - InitContentPos);
-                float progress = (inserted*1.0)/len*100;
+                float progress = (inserted * 1.0) / len * 100;
                 m_pBottomBar->setProgress(progress);
             }
         } else {
@@ -1092,7 +1178,7 @@ void EditWrapper::loadContent(const QByteArray &strContent)
                 //秒开界面语法高亮
                 OnUpdateHighlighter();
                 inserted += len;
-                float progress = (inserted*1.0)/len*100;
+                float progress = (inserted * 1.0) / len * 100;
                 m_pBottomBar->setProgress(progress);
             }
         }
@@ -1123,3 +1209,5 @@ void EditWrapper::clearDoubleCharaterEncode()
         emit sigClearDoubleCharaterEncode();
     }
 }
+
+
