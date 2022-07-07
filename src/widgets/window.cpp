@@ -831,20 +831,6 @@ void Window::openFile()
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
 
     // read history directory.
-    QString historyDirStr = m_settings->settings->option("advance.editor.file_dialog_dir")->value().toString();
-
-    if (historyDirStr.isEmpty()) {
-        historyDirStr = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-    }
-
-    QDir historyDir(historyDirStr);
-
-    if (historyDir.exists()) {
-        dialog.setDirectory(historyDir);
-    } else {
-        qDebug() << "historyDir or default path not existed:" << historyDir;
-    }
-
     QString path = m_settings->getSavePath(m_settings->getSavePathId());
     if (path.isEmpty() || !QDir(path).exists() || !QFileInfo(path).isWritable() || !QDir(path).isReadable()) {
         path = QDir::homePath() + "/Documents";
@@ -854,8 +840,6 @@ void Window::openFile()
     const int mode = dialog.exec();
 
     PerformanceMonitor::openFileStart();
-    // save the directory string.
-    m_settings->settings->option("advance.editor.file_dialog_dir")->setValue(dialog.directoryUrl().toLocalFile());
 
     if (mode != QDialog::Accepted) {
         return;
@@ -900,7 +884,9 @@ bool Window::saveFile()
     }
 
     QFileInfo info(filePath);
-    if (info.exists()) {
+    // 文件是否已存在
+    bool bFileAlreadyExist = info.exists();
+    if (bFileAlreadyExist) {
         //判断文件是否有写的权限
         QFile temporaryBuffer(filePath);
         QFile::Permissions pers = temporaryBuffer.permissions();
@@ -943,6 +929,12 @@ bool Window::saveFile()
             QFileInfo fileInfo(filePath);
             QString name = fileInfo.absolutePath().replace("/", "_");
             QDir(m_autoBackupDir).remove(fileInfo.baseName() + "." + name + "." + fileInfo.suffix());
+        }
+
+        // 保存最后操作路径(已存在的文件将不会记录)
+        if (!bFileAlreadyExist) {
+            Settings::instance()->setSavePath(PathSettingWgt::LastOptBox, info.absolutePath());
+            Settings::instance()->setSavePath(PathSettingWgt::CurFileBox, info.absolutePath());
         }
 
         return true;
@@ -1023,6 +1015,10 @@ QString Window::saveAsFileToDisk()
             }
         }
 
+        // 保存最后操作路径(已存在的文件将不会记录)
+        Settings::instance()->setSavePath(PathSettingWgt::LastOptBox, QFileInfo(newFilePath).absolutePath());
+        Settings::instance()->setSavePath(PathSettingWgt::CurFileBox, QFileInfo(newFilePath).absolutePath());
+
         updateSaveAsFileName(wrapper->filePath(), newFilePath);
         return newFilePath;
     }
@@ -1064,7 +1060,10 @@ QString Window::saveBlankFileToDisk()
         m_wrappers.remove(filePath);
         m_wrappers.insert(newFilePath, wrapper);
 
-        // wrapper->textEditor()->loadHighlighter();
+        // 保存最后操作路径(已存在的文件将不会记录)
+        Settings::instance()->setSavePath(PathSettingWgt::LastOptBox, QFileInfo(newFilePath).absolutePath());
+        Settings::instance()->setSavePath(PathSettingWgt::CurFileBox, QFileInfo(newFilePath).absolutePath());
+
         return newFilePath;
     }
 
@@ -1103,26 +1102,17 @@ bool Window::saveAsOtherTabFile(EditWrapper *wrapper)
         const QString endOfLine = dialog.getComboBoxValue(QObject::tr("Line Endings"));
         const QString newFilePath = dialog.selectedFiles().value(0);
         const QFileInfo newFileInfo(newFilePath);
-//        EditWrapper::EndOfLineMode eol = EditWrapper::eolUnix;
-
-//        if (endOfLine == "Windows") {
-//            eol = EditWrapper::eolDos;
-//        } else if (endOfLine == "Mac OS") {
-//            eol = EditWrapper::eolMac;
-//        }
 
         if (isDraft) {
             QFile(filePath).remove();
         }
 
-        //m_tabbar->updateTab(m_tabbar->currentIndex(), newFilePath, newFileInfo.fileName());
-
-        //  wrapper->setTextCodec(encode);
         wrapper->updatePath(newFilePath);
-        //wrapper->setEndOfLineMode(eol);
         wrapper->saveFile();
 
-        // wrapper->textEditor()->loadHighlighter();
+        // 保存最后操作路径(已存在的文件将不会记录)
+        Settings::instance()->setSavePath(PathSettingWgt::LastOptBox, QFileInfo(newFilePath).absolutePath());
+        Settings::instance()->setSavePath(PathSettingWgt::CurFileBox, QFileInfo(newFilePath).absolutePath());
     } else {
         return false;
     }
@@ -1326,7 +1316,7 @@ void Window::popupSettingsDialog()
     m_settings->setSettingDialog(dialog);
 
     dialog->updateSettings(m_settings->settings);
-
+    
     dialog->exec();
 
     delete dialog;
