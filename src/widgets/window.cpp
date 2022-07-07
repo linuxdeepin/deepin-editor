@@ -1315,9 +1315,22 @@ void Window::popupSettingsDialog()
     dialog->setMinimumSize(680, 300);
     m_settings->setSettingDialog(dialog);
 
+    // 特殊处理，记录最后的操作路径、当前文件路径，防止“恢复默认”后，保存的信息被重置为“文档路径”
+    QString strLastOptPath = m_settings->getSavePath(PathSettingWgt::LastOptBox);
+    QString strCurFilePath = m_settings->getSavePath(PathSettingWgt::CurFileBox);
+
     dialog->updateSettings(m_settings->settings);
-    
     dialog->exec();
+
+    // 若设置后路径信息出现变更，则为“恢复默认”重置的路径，恢复为之前记录的路径信息
+    QString strMayChgLastOptPath = m_settings->getSavePath(PathSettingWgt::LastOptBox);
+    if (strLastOptPath != strMayChgLastOptPath) {
+        m_settings->setSavePath(PathSettingWgt::LastOptBox, strLastOptPath);
+    }
+    QString strMayChgCurFilePath = m_settings->getSavePath(PathSettingWgt::CurFileBox);
+    if (strCurFilePath != strMayChgCurFilePath) {
+        m_settings->setSavePath(PathSettingWgt::CurFileBox, strCurFilePath);
+    }
 
     delete dialog;
     m_settings->settings->sync();
