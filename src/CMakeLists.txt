@@ -7,8 +7,8 @@ endif ()
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/environments.h.in ${CMAKE_CURRENT_SOURCE_DIR}/environments.h @ONLY)
 
 # Sources files
-file(GLOB HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/*.h"  "encodes/*.h" "common/*.h" "controls/*.h" "editor/*.h"  "thememodule/*.h" "widgets/*.h")
-file(GLOB SRCS "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp" "encodes/*.cpp" "common/*.cpp" "controls/*.cpp" "editor/*.cpp"  "thememodule/*.cpp" "widgets/*.cpp")
+file(GLOB HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/*.h"  "encodes/*.h" "common/*.h" "controls/*.h" "editor/*.h"  "thememodule/*.h" "widgets/*.h" "basepub/*.h")
+file(GLOB SRCS "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp" "encodes/*.cpp" "common/*.cpp" "controls/*.cpp" "editor/*.cpp"  "thememodule/*.cpp" "widgets/*.cpp" "basepub/*.c")
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/encodes)
@@ -17,6 +17,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/controls)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/editor)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thememodule)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/widgets)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/basepub)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/include)
 
 # Find the library
@@ -60,6 +61,7 @@ target_link_libraries(deepin-editor
     -lm
     uchardet
     chardet
+    dl
 )
 
 set(CMAKE_INSTALL_PREFIX /usr)

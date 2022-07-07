@@ -43,6 +43,10 @@
 #include <DApplicationSettings>
 #include <dsettingsoption.h>
 
+extern "C" {
+#include "load_libs.h"
+}
+
 DWIDGET_USE_NAMESPACE
 
 int main(int argc, char *argv[])
@@ -88,11 +92,10 @@ int main(int argc, char *argv[])
         StartManager *startManager = StartManager::instance();
 
         bool save_tab_before_close = Settings::instance()->settings->option("advance.start.save_tab_before_close")->value().toBool();
-        if(!save_tab_before_close){
+        if (!save_tab_before_close) {
             auto window = startManager->createWindow(true);
             window->addBlankTab();
-        }
-        else {
+        } else {
             if (hasWindowFlag) {
                 startManager->openFilesInWindow(urls);
             } else {
@@ -102,6 +105,18 @@ int main(int argc, char *argv[])
 
         }
 
+        // 解析ZPD定制需求提供的库libdocumentpr.so
+        LoadLibNames tmp;
+        QByteArray documentpr = Utils::libPath("libdocumentpr.so").toLatin1();
+        tmp.chDocumentPr = documentpr.data();
+        setLibNames(tmp);
+
+        // ZPD定制需求接口测试
+        int intercept = -1;
+        if (getLoadLibsInstance()->m_document_close)
+            getLoadLibsInstance()->m_document_close(nullptr);
+        if (getLoadLibsInstance()->m_document_clip_copy)
+            getLoadLibsInstance()->m_document_clip_copy(nullptr, &intercept);
 
         dbus.registerObject("/com/deepin/Editor", startManager, QDBusConnection::ExportScriptableSlots);
 
