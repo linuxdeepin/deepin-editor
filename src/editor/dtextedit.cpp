@@ -4077,6 +4077,11 @@ void TextEdit::flodOrUnflodCurrentLevel(bool isFlod)
 
 void TextEdit::getHideRowContent(int iLine)
 {
+    // 预览文本块没有必要读取所有文本数据，调整为仅读取部分
+    // Note:需要注意单个文本块(一般为一行数据)过长的情况
+    // 最大显示的预览文本块数量，不超过1000
+    static int s_MaxDisplayBlockCount = 1000;
+
     //使用统一 折叠判断算法 根据左右"{""}"高亮算法
     QTextDocument *doc = document();
     //获取行数文本块
@@ -4136,19 +4141,25 @@ void TextEdit::getHideRowContent(int iLine)
     m_foldCodeShow->appendText("{", width());
     //左右括弧没有匹配到
     if (braceDepth != 0) {
-        //遍历最后右括弧文本块 设置块隐藏或显示
-        while (beginBlock.isValid()) {
+        // 读取文本块索引
+        int curIndex = 0;
+        //遍历最后右括弧文本块 设置块隐藏或显示,显示文本块不超过1000
+        while (beginBlock.isValid()
+               && (curIndex++ < s_MaxDisplayBlockCount)) {
             m_foldCodeShow->appendText(beginBlock.text(), width());
             beginBlock = beginBlock.next();
         }
 
         //如果左右"{" "}"在同一行不折叠
     } else if (endBlock == curBlock) {
-
         return;
     } else {
-        //遍历最后右括弧文本块 设置块隐藏或显示
-        while (beginBlock != endBlock && beginBlock.isValid()) {
+        // 读取文本块索引
+        int curIndex = 0;
+        //遍历最后右括弧文本块 设置块隐藏或显示,显示文本块不超过1000
+        while (beginBlock != endBlock
+                && beginBlock.isValid()
+                && (curIndex++ < s_MaxDisplayBlockCount)) {
             if (beginBlock.isValid()) {
                 m_foldCodeShow->appendText(beginBlock.text(), width());
             }
