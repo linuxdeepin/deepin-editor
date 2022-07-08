@@ -304,7 +304,7 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
             prober_encoding = pre_encoding;
         }
 
-confidence:
+    confidence:
         if (QTextCodec *codec = QTextCodec::codecForName(prober_encoding)) {
             if (def_codec == codec)
                 def_codec = nullptr;
@@ -395,7 +395,7 @@ QString Utils::getKeyshortcut(QKeyEvent *keyEvent)
 {
     QStringList keys;
     Qt::KeyboardModifiers modifiers = keyEvent->modifiers();
-    if (modifiers != Qt::NoModifier){
+    if (modifiers != Qt::NoModifier) {
         if (modifiers.testFlag(Qt::MetaModifier)) {
             keys.append("Meta");
         }
@@ -406,27 +406,27 @@ QString Utils::getKeyshortcut(QKeyEvent *keyEvent)
 
         if (modifiers.testFlag(Qt::AltModifier)) {
             keys.append("Alt");
-        }       
+        }
 
         if (modifiers.testFlag(Qt::ShiftModifier)) {
             keys.append("Shift");
         }
     }
 
-    if(keyEvent->key() !=0 && keyEvent->key() != Qt::Key_unknown){
+    if (keyEvent->key() != 0 && keyEvent->key() != Qt::Key_unknown) {
         keys.append(QKeySequence(keyEvent->key()).toString());
     }
 
-    for (int i = 0;i < keys.count();i++) {
+    for (int i = 0; i < keys.count(); i++) {
         if (keys.value(i).contains("Return")) {
-            keys.replace(i,"Enter");
+            keys.replace(i, "Enter");
         }
     }
 
     return keys.join("+");
 }
 
-QString Utils::getKeyshortcutFromKeymap(Settings* settings, const QString &keyCategory, const QString &keyName)
+QString Utils::getKeyshortcutFromKeymap(Settings *settings, const QString &keyCategory, const QString &keyName)
 {
     return settings->settings->option(QString("shortcuts.%1.%2").arg(keyCategory).arg(keyName))->value().toString();
 }
@@ -507,7 +507,7 @@ qreal Utils::easeOutQuint(qreal x)
 QVariantMap Utils::getThemeMapFromPath(const QString &filepath)
 {
     QFile file(filepath);
-    if(!file.open(QIODevice::ReadOnly)){
+    if (!file.open(QIODevice::ReadOnly)) {
         qDebug() << "Failed to open " << filepath;
         return QVariantMap();
     }
@@ -537,44 +537,44 @@ bool Utils::isMimeTypeSupport(const QString &filepath)
     // Please check full mime type list from: https://www.freeformatter.com/mime-types-list.html
     QStringList textMimeTypes;
     textMimeTypes << "application/cmd"
-                      << "application/javascript"
-                      << "application/json"
-                      << "application/pkix-cert"
-                      << "application/octet-stream"
-                      << "application/sql"
-                      << "application/vnd.apple.mpegurl"
-                      << "application/vnd.nokia.qt.qmakeprofile"
-                      << "application/vnd.nokia.xml.qt.resource"
-                      << "application/x-desktop"
-                      << "application/x-designer"
-                      << "application/x-empty"
-                      << "application/x-msdos-program"
-                      << "application/x-pearl"
-                      << "application/x-php"
-                      << "application/x-shellscript"
-                      << "application/x-sh"
-                      << "application/x-theme"
-                      << "application/x-cue"
-                      << "application/x-csh"
-                      << "application/x-asp"
-                      << "application/x-subrip"
-                      << "application/x-text"
-                      << "application/x-trash"
-                      << "application/x-xbel"
-                      << "application/x-yaml"
-                      << "application/x-pem-key"
-                      << "application/xml"
-                      << "application/yaml"
-                      << "application/x-zerosize"
-                      << "image/svg+xml"
-                      << "application/x-perl"
-                      << "application/x-ruby"
-                      << "application/x-mpegURL"
-                      << "application/x-wine-extension-ini"
-                      << "model/vrml"
-                      << "application/pkix-cert+pem"
-                      << "application/x-pak"
-                      << "application/x-code-workspace";
+                  << "application/javascript"
+                  << "application/json"
+                  << "application/pkix-cert"
+                  << "application/octet-stream"
+                  << "application/sql"
+                  << "application/vnd.apple.mpegurl"
+                  << "application/vnd.nokia.qt.qmakeprofile"
+                  << "application/vnd.nokia.xml.qt.resource"
+                  << "application/x-desktop"
+                  << "application/x-designer"
+                  << "application/x-empty"
+                  << "application/x-msdos-program"
+                  << "application/x-pearl"
+                  << "application/x-php"
+                  << "application/x-shellscript"
+                  << "application/x-sh"
+                  << "application/x-theme"
+                  << "application/x-cue"
+                  << "application/x-csh"
+                  << "application/x-asp"
+                  << "application/x-subrip"
+                  << "application/x-text"
+                  << "application/x-trash"
+                  << "application/x-xbel"
+                  << "application/x-yaml"
+                  << "application/x-pem-key"
+                  << "application/xml"
+                  << "application/yaml"
+                  << "application/x-zerosize"
+                  << "image/svg+xml"
+                  << "application/x-perl"
+                  << "application/x-ruby"
+                  << "application/x-mpegURL"
+                  << "application/x-wine-extension-ini"
+                  << "model/vrml"
+                  << "application/pkix-cert+pem"
+                  << "application/x-pak"
+                  << "application/x-code-workspace";
 
     if (textMimeTypes.contains(mimeType)) {
         return true;
@@ -587,6 +587,7 @@ bool Utils::isDraftFile(const QString &filepath)
 {
     QString draftDir = QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation)).first())
                        .filePath("blank-files");
+    draftDir = QDir::cleanPath(draftDir);
     QString dir = QFileInfo(filepath).dir().absolutePath();
     return dir == draftDir;
 }
@@ -598,7 +599,7 @@ bool Utils::isDraftFile(const QString &filepath)
 bool Utils::isBackupFile(const QString &filepath)
 {
     QString backupDir = QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation)).first())
-                       .filePath("backup-files");
+                        .filePath("backup-files");
     QString dir = QFileInfo(filepath).dir().absolutePath();
     return dir == backupDir;
 }
@@ -632,15 +633,15 @@ const QStringList Utils::getEncodeList()
     return encodeList;
 }
 
-QPixmap Utils::renderSVG(const QString &filePath, const QSize &size,bool bIsScale)
+QPixmap Utils::renderSVG(const QString &filePath, const QSize &size, bool bIsScale)
 {
-    int scaled =1;
+    int scaled = 1;
 
-    if(qApp->devicePixelRatio() == 1.25 && bIsScale) {
+    if (qApp->devicePixelRatio() == 1.25 && bIsScale) {
         scaled = 2;
     }
 
-    QPixmap pixmap(size*scaled);
+    QPixmap pixmap(size * scaled);
     pixmap.fill(Qt::transparent);
     QImageReader reader;
 
@@ -701,9 +702,9 @@ void Utils::clearChildrenFoucusEx(QWidget *pWidget)
 
     QObjectList childern = pWidget->children();
 
-    if(childern.size() <= 0) return;
+    if (childern.size() <= 0) return;
 
-    foreach(QObject* child , childern) {
+    foreach (QObject *child, childern) {
         if (!child->isWidgetType()) {
             continue;
         }
@@ -719,15 +720,15 @@ void Utils::setChildrenFocus(QWidget *pWidget, Qt::FocusPolicy policy)
 
     QObjectList childern = pWidget->children();
 
-    if(childern.size() <= 0) return;
+    if (childern.size() <= 0) return;
 
-    foreach(QObject* child , childern) {
+    foreach (QObject *child, childern) {
         if (!child->isWidgetType()) {
             continue;
         }
 
         QWidget *obj = static_cast<QWidget *>(child);
-        setChildrenFocus(obj,policy);
+        setChildrenFocus(obj, policy);
     }
 }
 
@@ -747,7 +748,7 @@ int Utils::getProcessCountByName(const char *pstrName)
     if ((fp = popen(command, "r")) != NULL) {
         char buf[1024];
         memset(buf, 0, sizeof(buf));
-        if ((fgets(buf, sizeof(buf)-1, fp)) != NULL) {
+        if ((fgets(buf, sizeof(buf) - 1, fp)) != NULL) {
             count = atoi(buf);
         }
         pclose(fp);
@@ -781,9 +782,9 @@ bool Utils::activeWindowFromDock(quintptr winId)
 {
     bool bRet = true;
     // new interface use application as id
-    QDBusInterface dockDbusInterface("com.deepin.dde.daemon.Dock" ,
-                                 "/com/deepin/dde/daemon/Dock",
-                                 "com.deepin.dde.daemon.Dock");
+    QDBusInterface dockDbusInterface("com.deepin.dde.daemon.Dock",
+                                     "/com/deepin/dde/daemon/Dock",
+                                     "com.deepin.dde.daemon.Dock");
     QDBusReply<void> reply = dockDbusInterface.call("ActivateWindow", winId);
     if (!reply.isValid()) {
         qDebug() << "call com.deepin.dde.daemon.Dock failed" << reply.error();
@@ -799,14 +800,14 @@ bool Utils::isShareDirAndReadOnly(const QString &filePath)
 
     const QString sharePath = "/var/lib/samba/usershares";
     QDir shareDir(sharePath);
-    if(shareDir.exists()){
+    if (shareDir.exists()) {
         QFileInfo fileInfo(filePath);
         auto name = fileInfo.dir().dirName();
-        if(shareDir.exists(name)){
+        if (shareDir.exists(name)) {
             QFile file(sharePath + "/" + name);
             if (file.open(QIODevice::ReadOnly)) {
                 QString fileContent = file.readAll();
-                if(fileContent.contains(":R"))
+                if (fileContent.contains(":R"))
                     ret = true;
                 file.close();
             }
@@ -819,10 +820,9 @@ bool Utils::isShareDirAndReadOnly(const QString &filePath)
 
 QString Utils::getSystemLan()
 {
-    if(!m_systemLanguage.isEmpty()){
+    if (!m_systemLanguage.isEmpty()) {
         return m_systemLanguage;
-    }
-    else{
+    } else {
         QDBusInterface ie("com.deepin.daemon.LangSelector",
                           "/com/deepin/daemon/LangSelector",
                           "com.deepin.daemon.LangSelector",
@@ -838,7 +838,7 @@ QString Utils::getSystemLan()
 bool Utils::isWayland()
 {
     static QString protocol;
-    if(protocol.isEmpty()){
+    if (protocol.isEmpty()) {
         protocol = QProcessEnvironment::systemEnvironment().value("XDG_SESSION_TYPE");
     }
 

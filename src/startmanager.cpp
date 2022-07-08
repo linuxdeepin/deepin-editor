@@ -54,9 +54,9 @@ StartManager::StartManager(QObject *parent)
 
     initBlockShutdown();
 
-    m_blankFileDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files");
-    m_backupDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("backup-files");
-    m_autoBackupDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("autoBackup-files");
+    m_blankFileDir = QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation)).first()).filePath("blank-files");
+    m_backupDir = QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation)).first()).filePath("backup-files");
+    m_autoBackupDir = QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation)).first()).filePath("autoBackup-files");
 
     if (!QFileInfo(m_blankFileDir).exists()) {
         QDir().mkpath(m_blankFileDir);
@@ -420,7 +420,7 @@ void StartManager::openFilesInWindow(QStringList files)
 void StartManager::openFilesInTab(QStringList files)
 {
     if (files.isEmpty()) {
-        QDir blankDirectory = QDir(QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files"));
+        QDir blankDirectory = QDir(QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation)).first()).filePath("blank-files"));
         QStringList blankFiles = blankDirectory.entryList(QStringList(), QDir::Files);
 
         if (m_windows.isEmpty()) {

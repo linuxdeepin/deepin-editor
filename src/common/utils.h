@@ -52,7 +52,7 @@ public:
     static void setFontSize(QPainter &painter, int textSize);
     static void applyQss(QWidget *widget, const QString &qssName);
     static QString getKeyshortcut(QKeyEvent *keyEvent);
-    static QString getKeyshortcutFromKeymap(Settings* settings, const QString &keyCategory, const QString &keyName);
+    static QString getKeyshortcutFromKeymap(Settings *settings, const QString &keyCategory, const QString &keyName);
     static bool fileExists(const QString &path);
     static bool fileIsWritable(const QString &path);
     static bool fileIsHome(const QString &path);
@@ -73,7 +73,7 @@ public:
     static bool isBackupFile(const QString &filepath);
     static QStringList cleanPath(const QStringList &filePaths);
     static const QStringList getEncodeList();
-    static QPixmap renderSVG(const QString &filePath, const QSize &size ,bool bIsScale = true);
+    static QPixmap renderSVG(const QString &filePath, const QSize &size, bool bIsScale = true);
     static QList<QColor> getHiglightColorList();
     /*******************************************************************************
      1. @函数:    clearChildrenFocus
@@ -84,9 +84,9 @@ public:
     *******************************************************************************/
     static void clearChildrenFocus(QObject *objParent);
     //清除　控件及子控件所以焦点　梁卫东　２０２０－０９－１４　１０：３４：１９
-    static void clearChildrenFoucusEx(QWidget* pWidget);
+    static void clearChildrenFoucusEx(QWidget *pWidget);
     //设置所有控件焦点 梁卫东　２０２０－０９－１５　１７：５５：１８
-    static void setChildrenFocus(QWidget* pWidget,Qt::FocusPolicy policy = Qt::StrongFocus);
+    static void setChildrenFocus(QWidget *pWidget, Qt::FocusPolicy policy = Qt::StrongFocus);
     //根据指定名称获取进程数量 秦浩玲　2021-01-26
     static int getProcessCountByName(const char *pstrName);
     //批量结束指定名称的进程 秦浩玲　2021-01-26
@@ -97,7 +97,7 @@ public:
     static bool activeWindowFromDock(quintptr winId);
 
     //判断是否共享文件夹且只读
-    static bool isShareDirAndReadOnly(const QString& filePath);
+    static bool isShareDirAndReadOnly(const QString &filePath);
 
 
     static float codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, const QLocale::Country &country);
