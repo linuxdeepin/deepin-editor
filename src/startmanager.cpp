@@ -133,6 +133,11 @@ bool StartManager::isTemFilesEmpty()
 
 void StartManager::autoBackupFile()
 {
+    // 标签页在拖拽状态时不执行备份
+    if (!m_bIsTagDragging) {
+        return;
+    }
+
     //如果自动备份文件夹不存在，创建自动备份文件夹
     if (!QFileInfo(m_autoBackupDir).exists()) {
         QDir().mkpath(m_autoBackupDir);
@@ -611,6 +616,16 @@ Window *StartManager::createWindow(bool alwaysCenter)
     initWindowPosition(window, alwaysCenter);
 
     connect(window, &Window::newWindow, this, &StartManager::slotCreatNewwindow);
+
+    // 标签页拖拽状态变更时触发，防止在拖拽过程中备份导致获取的标签状态异常
+    connect(window->getTabbar(), &DTabBar::dragStarted, this, [this](){
+        m_bIsTagDragging = true;
+    });
+    connect(window->getTabbar(), &DTabBar::dragEnd, this, [this](){
+        m_bIsTagDragging = false;
+        slotDelayBackupFile();
+    });
+
     // Append window in window list.
     m_windows << window;
 
@@ -655,8 +670,8 @@ void StartManager::slotCloseWindow()
 
 void StartManager::slotDelayBackupFile()
 {
-    // 判断定时器是否已在触发状态，防止短时间内的多次触发
-    if (!m_DelayTimer.isActive()) {
+    // 判断定时器是否已在触发状态，防止短时间内的多次触发，标签页拖拽状态不触发
+    if (!m_DelayTimer.isActive() && !m_bIsTagDragging) {
         m_DelayTimer.start(EDelayBackupInterval, this);
     }
 }
