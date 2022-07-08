@@ -586,10 +586,21 @@ bool Utils::isMimeTypeSupport(const QString &filepath)
 
 bool Utils::isDraftFile(const QString &filepath)
 {
-    QString draftDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first())
+    QString draftDir = QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation)).first())
                        .filePath("blank-files");
+    draftDir = QDir::cleanPath(draftDir);
     QString dir = QFileInfo(filepath).dir().absolutePath();
     return dir == draftDir;
+}
+
+QStringList Utils::cleanPath(const QStringList &filePaths)
+{
+    QStringList paths;
+    for (QString path : filePaths) {
+        paths.push_back(QDir::cleanPath(path));
+    }
+
+    return paths;
 }
 
 const QStringList Utils::getEncodeList()

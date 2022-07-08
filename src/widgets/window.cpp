@@ -103,9 +103,9 @@ Window::Window(DMainWindow *parent)
       m_themePanel(new ThemePanel(this)),
       m_findBar(new FindBar(this)),
       m_menu(new DMenu),
-      m_blankFileDir(QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("blank-files")),
-      m_backupDir(QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("backup-files")),
-      m_autoBackupDir(QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first()).filePath("autoBackup-files")),
+      m_blankFileDir(QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation)).first()).filePath("blank-files")),
+      m_backupDir(QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation)).first()).filePath("backup-files")),
+      m_autoBackupDir(QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation)).first()).filePath("autoBackup-files")),
       m_titlebarStyleSheet(titlebar()->styleSheet()),
       m_themePath(Settings::instance()->settings->option("advance.editor.theme")->value().toString())
 {
