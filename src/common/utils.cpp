@@ -585,10 +585,32 @@ bool Utils::isMimeTypeSupport(const QString &filepath)
 
 bool Utils::isDraftFile(const QString &filepath)
 {
-    QString draftDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first())
-                                                                            .filePath("blank-files");
+    QString draftDir = QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation)).first())
+                       .filePath("blank-files");
     QString dir = QFileInfo(filepath).dir().absolutePath();
     return dir == draftDir;
+}
+
+/**
+ * @param filepath 文件路径
+ * @return 返回传入文件路径 \a filepath 是否在备份文件夹 backup-files 中
+ */
+bool Utils::isBackupFile(const QString &filepath)
+{
+    QString backupDir = QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation)).first())
+                       .filePath("backup-files");
+    QString dir = QFileInfo(filepath).dir().absolutePath();
+    return dir == backupDir;
+}
+
+QStringList Utils::cleanPath(const QStringList &filePaths)
+{
+    QStringList paths;
+    for (QString path : filePaths) {
+        paths.push_back(QDir::cleanPath(path));
+    }
+
+    return paths;
 }
 
 const QStringList Utils::getEncodeList()

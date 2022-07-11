@@ -101,6 +101,8 @@ public:
     bool isModified();
     //判断是否草稿文件
     bool isDraftFile();
+    //判断是否为备份文件
+    bool isBackupFile();
     //判断内容是否为空
     bool isPlainTextEmpty();
 

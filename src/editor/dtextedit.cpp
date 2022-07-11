@@ -2715,8 +2715,12 @@ void TextEdit::slotRedoAvailable(bool redoIsAvailable)
 
 void TextEdit::redo_()
 {
+    if (!m_pUndoStack->canRedo()) {
+        return;
+    }
+
     m_pUndoStack->redo();
-    if(m_pUndoStack->index() == m_lastSaveIndex){
+    if (m_pUndoStack->index() == m_lastSaveIndex) {
         this->m_wrapper->window()->updateModifyStatus(m_sFilePath, false);
         this->m_wrapper->setTemFile(false);
         this->document()->setModified(false);
@@ -2725,8 +2729,18 @@ void TextEdit::redo_()
 }
 void TextEdit::undo_()
 {
+    if (!m_pUndoStack->canUndo()) {
+        return;
+    }
+
     m_pUndoStack->undo();
-    if(m_pUndoStack->index() == m_lastSaveIndex){
+
+    // 对撤销栈清空的情况下，有两种文件仍需保留*号(重做无需如下判定)
+    // 1. 备份文件，上次修改之后直接关闭时备份的文件，仍需要提示保存
+    // 2. 临时文件，上次修改后关闭，撤销操作后文件内容不为空
+    if (m_pUndoStack->index() == m_lastSaveIndex
+            && !m_wrapper->isBackupFile()
+            && !(m_wrapper->isDraftFile() && !m_wrapper->isPlainTextEmpty())) {
         this->m_wrapper->window()->updateModifyStatus(m_sFilePath, false);
         this->m_wrapper->setTemFile(false);
         this->document()->setModified(false);

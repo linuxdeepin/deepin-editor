@@ -69,6 +69,9 @@ public:
     static QVariantMap getThemeMapFromPath(const QString &filepath);
     static bool isMimeTypeSupport(const QString &filepath);
     static bool isDraftFile(const QString &filepath);
+    // 返回文件是否为备份文件
+    static bool isBackupFile(const QString &filepath);
+    static QStringList cleanPath(const QStringList &filePaths);
     static const QStringList getEncodeList();
     static QPixmap renderSVG(const QString &filePath, const QSize &size ,bool bIsScale = true);
     static QList<QColor> getHiglightColorList();

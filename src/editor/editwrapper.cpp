@@ -548,6 +548,14 @@ bool EditWrapper::isDraftFile()
     return Utils::isDraftFile(m_pTextEdit->getFilePath());
 }
 
+/**
+ * @return 返回当前编辑文件是否为备份文件
+ */
+bool EditWrapper::isBackupFile()
+{
+    return Utils::isBackupFile(m_pTextEdit->getFilePath());
+}
+
 bool EditWrapper::isPlainTextEmpty()
 {
     return m_pTextEdit->document()->isEmpty();
