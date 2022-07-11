@@ -577,7 +577,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="112"/>
         <source>Code folding flag</source>
-        <translation type="unfinished"/>
+        <translation>Code-Einklapp-Schalter</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="113"/>
@@ -1031,7 +1031,7 @@
     </message>
     <message>
         <source>Failed to paste text: it is too large</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Der Text konnte nicht eingefügt werden, da er zu lang ist</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="2581"/>
@@ -1091,7 +1091,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="2591"/>
         <source>Paste failed: not enough memory</source>
-        <translation type="unfinished"/>
+        <translation>Einfügen fehlgeschlagen: nicht genügend Speicher</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3439"/>

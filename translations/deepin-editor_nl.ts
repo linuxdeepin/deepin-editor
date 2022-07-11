@@ -1091,7 +1091,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="2591"/>
         <source>Paste failed: not enough memory</source>
-        <translation type="unfinished"/>
+        <translation>Het plakken is mislukt omdat er onvoldoende vrij geheugen is</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3439"/>

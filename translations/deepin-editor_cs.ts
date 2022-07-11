@@ -1091,7 +1091,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="2591"/>
         <source>Paste failed: not enough memory</source>
-        <translation type="unfinished"/>
+        <translation>Vložení se nezdařilo: nedostatek paměti</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3439"/>

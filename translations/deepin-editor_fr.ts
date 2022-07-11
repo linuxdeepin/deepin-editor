@@ -149,7 +149,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="24"/>
         <source>Basic</source>
-        <translation>Simple</translation>
+        <translation>De base</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="25"/>
@@ -1091,7 +1091,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="2591"/>
         <source>Paste failed: not enough memory</source>
-        <translation type="unfinished"/>
+        <translation>Échec du collage : mémoire insuffisante</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3439"/>
