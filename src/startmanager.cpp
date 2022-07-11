@@ -343,7 +343,8 @@ int StartManager::recoverFile(Window *window)
                     }
                 } else {
                     if (!localPath.isEmpty() && Utils::fileExists(localPath)) {
-                        if (Utils::isDraftFile(localPath)) {
+                        // 若为草稿文件或不支持的MIMETYPE文件，显示默认名称标签
+                        if (Utils::isDraftFile(localPath) || !Utils::isMimeTypeSupport(localPath)) {
                             //得到新建文件名称
                             int index = files.indexOf(QFileInfo(localPath).fileName());
 

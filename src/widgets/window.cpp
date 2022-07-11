@@ -1850,6 +1850,17 @@ void Window::addTemFileTab(QString qstrPath, QString qstrName, QString qstrTrueP
         return;
     }
 
+    // 若为MIMETYPE不支持的文件，给出无效文件提示 修复bug：https://pms.uniontech.com/bug-view-132653.html
+    if (!Utils::isMimeTypeSupport(qstrPath)) {
+        if (currentWrapper() == nullptr) {
+            this->addBlankTab();
+        }
+
+        DMessageManager::instance()->sendMessage(m_editorWidget->currentWidget(), QIcon(":/images/warning.svg")
+                                                 , tr("Invalid file: %1").arg(QFileInfo(qstrPath).fileName()));
+        return;
+    }
+
     EditWrapper *wrapper = createEditor();
     m_tabbar->addTab(qstrPath, qstrName, qstrTruePath);
     wrapper->openFile(qstrPath, qstrTruePath, bIsTemFile);
