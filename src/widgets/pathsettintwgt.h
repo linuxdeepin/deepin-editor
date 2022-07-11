@@ -20,6 +20,7 @@ public:
 public:
     PathSettingWgt(QWidget* parent = nullptr);
     virtual ~PathSettingWgt();
+
 public slots:
     void onSaveIdChanged(int id);
     void setEditText(const QString& text);
@@ -27,6 +28,8 @@ public slots:
 private:
     void init();
     void connections();
+    // 判断自定义路径是否合法，不合法返回 文档 路径
+    QString checkCustomPath(const QString &path) const;
 
 signals:
     void savingPathChanged(CheckBoxType id,const QString& path);

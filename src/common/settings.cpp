@@ -278,11 +278,11 @@ QWidget* Settings::createSavingPathWgt(QObject* obj)
         pathwgt->onSaveIdChanged(id);
     });
 
+    // 数据变更时更新自定义路径对话框内容
     auto custompath = s_pSetting->settings->option("advance.open_save_setting.open_save_custom_path");
-    connect(custompath, &Dtk::Core::DSettingsOption::valueChanged, [=](QVariant var){
-        //pathwgt->setEditText(var.toString());
-    });
-
+    connect(custompath, &Dtk::Core::DSettingsOption::valueChanged, pathwgt, [=](QVariant var){
+        pathwgt->setEditText(var.toString());
+    }, Qt::QueuedConnection);
 
     return optionWidget.second;
 }
