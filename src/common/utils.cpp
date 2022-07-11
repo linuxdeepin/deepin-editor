@@ -588,9 +588,20 @@ bool Utils::isDraftFile(const QString &filepath)
 {
     QString draftDir = QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation)).first())
                        .filePath("blank-files");
-    draftDir = QDir::cleanPath(draftDir);
     QString dir = QFileInfo(filepath).dir().absolutePath();
     return dir == draftDir;
+}
+
+/**
+ * @param filepath 文件路径
+ * @return 返回传入文件路径 \a filepath 是否在备份文件夹 backup-files 中
+ */
+bool Utils::isBackupFile(const QString &filepath)
+{
+    QString backupDir = QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation)).first())
+                       .filePath("backup-files");
+    QString dir = QFileInfo(filepath).dir().absolutePath();
+    return dir == backupDir;
 }
 
 QStringList Utils::cleanPath(const QStringList &filePaths)
