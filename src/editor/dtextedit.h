@@ -51,7 +51,6 @@
 #include <QGestureEvent>
 #include <QProxyStyle>
 
-const QString SELECT_HIGHLIGHT_COLOR = "#2CA7F8";
 enum ConvertCase { UPPER, LOWER, CAPITALIZE };
 
 class ShowFlodCodeWidget;
@@ -81,8 +80,7 @@ public:
         PasteOperation
     };
 
-    struct MarkOperation
-    {
+    struct MarkOperation {
         MarkOperationType type;
         QTextCursor cursor;
         QString color;
@@ -109,7 +107,7 @@ public:
 
     /* 处理快捷键“ctrl + k 和Ctrl +shift +K”,删除到行尾和删除整行的  删除和撤销功能；
      * currLine 表示删除的是不是整行，true 整行,false 删除到行尾 ut002764 2021.6.19*/
-    void deleteSelectTextEx(QTextCursor,QString text,bool currLine);
+    void deleteSelectTextEx(QTextCursor, QString text, bool currLine);
 
     //初始化右键菜单
     void initRightClickedMenu();
@@ -119,7 +117,7 @@ public:
     //
     void setWrapper(EditWrapper *);
 
-    EditWrapper* getWrapper();
+    EditWrapper *getWrapper();
 
     /**
      * @brief getFilePath 获取打开文件路径
@@ -275,7 +273,7 @@ public:
     int  getHighLightRowContentLineNum(int iLine);
 
     //代码折叠绘制
-    void paintCodeFlod(QPainter* painter,QRect rect,bool isFlod = false);
+    void paintCodeFlod(QPainter *painter, QRect rect, bool isFlod = false);
     //获取背景颜色
     QColor getBackColor();
     //更新左侧widget宽度
@@ -418,7 +416,7 @@ public:
      * @param listSelections 添加的指定字符格式列表
      */
     void appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSelections, QTextEdit::ExtraSelection selection
-                             , QString strColor, QList<QTextEdit::ExtraSelection> *listSelections);
+                              , QString strColor, QList<QTextEdit::ExtraSelection> *listSelections);
 
     void setCursorStart(int pos);
     void writeEncodeHistoryRecord();
@@ -554,11 +552,11 @@ public slots:
 
     void redo_();
     void undo_();
-    void moveText(int from,int to,const QString& text);
-    QTextCursor findCursor(const QString& substr,const QString& text,int from,bool backward=false,int cursorPos=0);
-    void onPressedLineNumber(const QPoint& point);
+    void moveText(int from, int to, const QString &text);
+    QTextCursor findCursor(const QString &substr, const QString &text, int from, bool backward = false, int cursorPos = 0);
+    void onPressedLineNumber(const QPoint &point);
     QString selectedText();
-    void onEndlineFormatChanged(BottomBar::EndlineFormat from,BottomBar::EndlineFormat to);
+    void onEndlineFormatChanged(BottomBar::EndlineFormat from, BottomBar::EndlineFormat to);
 
 protected:
     bool event(QEvent *evt) override;   //触摸屏event事件
@@ -628,7 +626,7 @@ private:
     // 不再使用
     //QTextEdit::ExtraSelection m_wordUnderCursorSelection;
     QList<QPair<QTextEdit::ExtraSelection, qint64>> m_wordMarkSelections;///< 记录标记的列表（分行记录）
-    QMap<int,QList<QTextEdit::ExtraSelection>> m_mapWordMarkSelections;///< 记录标记的表（按标记动作记录）
+    QMap<int, QList<QTextEdit::ExtraSelection>> m_mapWordMarkSelections; ///< 记录标记的表（按标记动作记录）
     QList<QPair<TextEdit::MarkOperation, qint64>> m_markOperations;    ///记录所有标记操作
     QMap<QString, QList<QPair<QTextEdit::ExtraSelection, qint64>>> m_mapKeywordMarkSelections; ///记录关键字对应的全文标记
     QTextEdit::ExtraSelection m_markAllSelection;///< “标记所有”的字符格式
@@ -682,7 +680,7 @@ private:
 
     //yanyuhan
     //颜色标记、折叠/展开、书签、列编辑、设置注释、取消注释;
-	//QAction *m_colorMarkAction;
+    //QAction *m_colorMarkAction;
     DMenu *m_collapseExpandMenu;
     DMenu *m_colorMarkMenu;
     QAction *m_cancleMarkCurrentLine;
@@ -699,7 +697,7 @@ private:
     QString m_strMarkAllLineColorName; ///< “标记所有”选择的颜色名称
 
     // 增加对于颜色选择的 Tab 顺序控制
-    QList<QPair<QAction*,bool>> m_MarkColorMenuTabOrder;
+    QList<QPair<QAction *, bool>> m_MarkColorMenuTabOrder;
 
     QAction *m_addComment;
     QAction *m_cancelComment;

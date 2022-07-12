@@ -6138,7 +6138,8 @@ void TextEdit::mouseMoveEvent(QMouseEvent *e)
 
         QTextCharFormat format;
         QPalette palette;
-        format.setBackground(QColor(SELECT_HIGHLIGHT_COLOR));
+        QColor highlightBackground = DGuiApplicationHelper::instance()->applicationPalette().color(QPalette::Highlight);
+        format.setBackground(highlightBackground);
         format.setForeground(palette.highlightedText());
 
         for (int iRow = minRow; iRow <= maxRow; iRow++) {
