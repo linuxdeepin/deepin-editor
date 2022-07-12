@@ -174,9 +174,9 @@ void EditWrapper::openFile(const QString &filepath, QString qstrTruePath, bool b
     updatePath(filepath, qstrTruePath);
     m_pTextEdit->setIsFileOpen();
 
-   if (!bIsTemFile && !isDraftFile()) {
-       Settings::instance()->setSavePath(PathSettingWgt::CurFileBox, QFileInfo(qstrTruePath).absolutePath());
-   }
+    if (!bIsTemFile && !isDraftFile()) {
+        Settings::instance()->setSavePath(PathSettingWgt::CurFileBox, QFileInfo(qstrTruePath).absolutePath());
+    }
 
     FileLoadThread *thread = new FileLoadThread(filepath);
     // begin to load the file.
@@ -1098,6 +1098,7 @@ void EditWrapper::loadContent(const QByteArray &strContent)
     QApplication::setOverrideCursor(Qt::WaitCursor);
     m_pTextEdit->clear();
     m_pTextEdit->setReadOnly(true);
+    m_pTextEdit->setLeftAreaUpdateState(TextEdit::FileOpenBegin);
     m_bQuit = false;
     //QTextDocument *doc = m_pTextEdit->document();
     QTextCursor cursor = m_pTextEdit->textCursor();
@@ -1196,7 +1197,7 @@ void EditWrapper::loadContent(const QByteArray &strContent)
         m_pBottomBar->setEndlineMenuText(format);
     }
     m_pTextEdit->setReadOnly(false);
-
+    m_pTextEdit->setLeftAreaUpdateState(TextEdit::FileOpenEnd);
     QApplication::restoreOverrideCursor();
 
 

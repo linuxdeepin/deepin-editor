@@ -74,6 +74,11 @@ public:
         MarkLine,
         MarkAll
     };
+    enum UpdateOperationType {
+        Normal,
+        FileOpenBegin,
+        FileOpenEnd,
+    };
 
     enum OperationType {
         CopyOperation,
@@ -611,6 +616,8 @@ private:
 
 public:
     int getFirstVisibleBlockId() const;
+    void setLeftAreaUpdateState(UpdateOperationType statevalue);
+    UpdateOperationType getLeftAreaUpdateState();
 
 public:
     bool bIsSetLineNumberWidth = true;
@@ -851,5 +858,7 @@ private:
     //只读权限模式执行一次的判断变量  ut002764 2021.6.23
     bool m_Permission = false;
     bool m_Permission2 = false;
+    //左边栏更新标记
+    UpdateOperationType m_LeftAreaUpdateState;
 };
 #endif
