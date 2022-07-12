@@ -96,9 +96,13 @@ public:
 
     //直接插入文本
     void insertTextEx(QTextCursor, QString);
+    //同时插入多个位置的文本
+    void insertMultiTextEx(const QList<QPair<QTextCursor, QString>> &multiText);
 
     //直接删除字符 删除选择或一个字符
     void deleteTextEx(QTextCursor);
+    //同时删除多个选取的文本
+    void deleteMultiTextEx(const QList<QTextCursor> &multiText);
 
     //插入选择文本字符
     void insertSelectTextEx(QTextCursor, QString);

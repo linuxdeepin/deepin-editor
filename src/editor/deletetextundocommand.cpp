@@ -24,8 +24,9 @@
 #include <QDebug>
 #include <QTextBlock>
 
-DeleteTextUndoCommand::DeleteTextUndoCommand(QTextCursor textcursor):
-    m_textCursor(textcursor)
+DeleteTextUndoCommand::DeleteTextUndoCommand(QTextCursor textcursor, QUndoCommand *parent)
+    : QUndoCommand(parent)
+    , m_textCursor(textcursor)
 {
     if(m_textCursor.hasSelection()){
         m_sInsertText = m_textCursor.selectedText();
@@ -41,8 +42,9 @@ DeleteTextUndoCommand::DeleteTextUndoCommand(QTextCursor textcursor):
     }
 }
 
-DeleteTextUndoCommand::DeleteTextUndoCommand(QList<QTextEdit::ExtraSelection> &selections):
-    m_ColumnEditSelections(selections)
+DeleteTextUndoCommand::DeleteTextUndoCommand(QList<QTextEdit::ExtraSelection> &selections, QUndoCommand *parent)
+    : QUndoCommand(parent)
+    , m_ColumnEditSelections(selections)
 {
     int cnt = m_ColumnEditSelections.size();
     for (int i = 0; i < cnt; i++) {
