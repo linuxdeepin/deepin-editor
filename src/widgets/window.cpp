@@ -59,6 +59,7 @@
 #define PRINT_FLAG 2
 #define PRINT_ACTION 8
 #define PRINT_FORMAT_MARGIN 10
+#define FLOATTIP_MARGIN 95
 
 /*!
  * \~chinese \brief printPage 绘制每一页文本纸张到打印机
@@ -523,8 +524,12 @@ void Window::addTab(const QString &filepath, bool activeTab)
         if (currentWrapper() == nullptr) {
             this->addBlankTab();
         }
+
+        QString strFileName = QFileInfo(filepath).fileName();
+        strFileName = tr("Invalid file: %1").arg(strFileName);
+        strFileName = Utils::lineFeed(strFileName, m_editorWidget->currentWidget()->width() - FLOATTIP_MARGIN, m_editorWidget->currentWidget()->font(), 2);
         DMessageManager::instance()->sendMessage(m_editorWidget->currentWidget(), QIcon(":/images/warning.svg")
-                                                 , tr("Invalid file: %1").arg(QFileInfo(filepath).fileName()));
+                                                 , strFileName);
     }
 }
 
@@ -1856,8 +1861,11 @@ void Window::addTemFileTab(QString qstrPath, QString qstrName, QString qstrTrueP
             this->addBlankTab();
         }
 
+        QString strFileName = QFileInfo(qstrPath).fileName();
+        strFileName = tr("Invalid file: %1").arg(strFileName);
+        strFileName = Utils::lineFeed(strFileName, m_editorWidget->currentWidget()->width() - FLOATTIP_MARGIN, m_editorWidget->currentWidget()->font(), 2);
         DMessageManager::instance()->sendMessage(m_editorWidget->currentWidget(), QIcon(":/images/warning.svg")
-                                                 , tr("Invalid file: %1").arg(QFileInfo(qstrPath).fileName()));
+                                                 , strFileName);
         return;
     }
 

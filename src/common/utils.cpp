@@ -599,7 +599,7 @@ bool Utils::isDraftFile(const QString &filepath)
 bool Utils::isBackupFile(const QString &filepath)
 {
     QString backupDir = QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation)).first())
-                       .filePath("backup-files");
+                        .filePath("backup-files");
     QString dir = QFileInfo(filepath).dir().absolutePath();
     return dir == backupDir;
 }
@@ -877,4 +877,39 @@ QString Utils::libPath(const QString &strlib)
     if (list.size() <= 0)
         return "";
     return list.last();
+}
+
+QString Utils::lineFeed(const QString &text, int nWidth, const QFont &font, int nElidedRow)
+{
+    if (nElidedRow < 0)
+        nElidedRow = 2;
+
+    QString strText = text;
+    QStringList strListLine;
+    QFontMetrics fm(font);
+    // 一行就直接中间截断显示
+    if (1 == nElidedRow)
+        return fm.elidedText(text, Qt::ElideMiddle, nWidth);
+
+    if (!strText.isEmpty()) {
+        for (int i = 1; i <= strText.size(); i++) {
+            if (fm.width(strText.left(i)) >= nWidth) {
+                if (strListLine.size() + 1 == nElidedRow)
+                    break;
+
+                strListLine.append(strText.left(i - 1));
+                strText = strText.right(strText.size() - i + 1);
+                i = 0;
+            }
+        }
+    }
+
+    // 多行时，对最后一行字符左侧省略
+    if (!strListLine.isEmpty()) {
+        strText = fm.elidedText(strText, Qt::ElideLeft, nWidth);
+        strListLine.append(strText);
+        strText = strListLine.join('\n');
+    }
+
+    return strText;
 }
