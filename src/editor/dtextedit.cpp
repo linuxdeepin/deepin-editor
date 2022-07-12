@@ -188,6 +188,26 @@ void TextEdit::insertTextEx(QTextCursor cursor, QString text)
     ensureCursorVisible();
 }
 
+/**
+ * @brief 将多组插入信息 \a multiText 压入单个撤销栈，便于撤销栈管理。
+ * @param multiText 多组插入信息，每组含插入光标位置和插入文本。
+ */
+void TextEdit::insertMultiTextEx(const QList<QPair<QTextCursor, QString> > &multiText)
+{
+    if (multiText.isEmpty()) {
+        return;
+    }
+
+    QUndoCommand *pMultiCommand = new QUndoCommand;
+    // 将所有的插入信息添加到单个撤销项中，便于单次处理
+    for (auto pairText : multiText) {
+        // pMultiCommand 析构时会自动析构子撤销项
+        (void)new InsertTextUndoCommand(pairText.first, pairText.second, pMultiCommand);
+    }
+    m_pUndoStack->push(pMultiCommand);
+    ensureCursorVisible();
+}
+
 void TextEdit::deleteSelectTextEx(QTextCursor cursor)
 {
     if (cursor.hasSelection()) {
@@ -206,6 +226,25 @@ void TextEdit::deleteTextEx(QTextCursor cursor)
 {
     QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(cursor);
     m_pUndoStack->push(pDeleteStack);
+}
+
+/**
+ * @brief 将多组删除信息 \a multiText 压入单个撤销栈，便于撤销栈管理。
+ * @param multiText 多组删除信息，每组含删除光标信息(删除位置和选取区域)。
+ */
+void TextEdit::deleteMultiTextEx(const QList<QTextCursor> &multiText)
+{
+    if (multiText.isEmpty()) {
+        return;
+    }
+
+    QUndoCommand *pMultiCommand = new QUndoCommand;
+    // 将所有的插入信息添加到单个撤销项中，便于单次处理
+    for (auto textCursor : multiText) {
+        // pMultiCommand 析构时会自动析构子撤销项
+        (void)new DeleteTextUndoCommand(textCursor, pMultiCommand);
+    }
+    m_pUndoStack->push(pMultiCommand);
 }
 
 void TextEdit::insertSelectTextEx(QTextCursor cursor, QString text)
@@ -7077,17 +7116,12 @@ void TextEdit::setComment()
         doMultiLineStyleComment = !doMultiLineStyleUncomment
                                   && (hasLeadingCharacters
                                       || hasTrailingCharacters
-                                      // || !m_commentDefinition.hasSingleLineStyle());
                                       || m_commentDefinition.hasMultiLineStyle());
     } else if (!hasSelection && !m_commentDefinition.hasSingleLineStyle()) {
-
         QString text = startBlock.text().trimmed();
         doMultiLineStyleUncomment = text.startsWith(m_commentDefinition.multiLineStart)
                                     && text.endsWith(m_commentDefinition.multiLineEnd);
-        //qDebug() << m_commentDefinition.multiLineStart;
         doMultiLineStyleComment = !doMultiLineStyleUncomment && !text.isEmpty();
-
-        //qDebug() << "setComment:" << !text.isEmpty() << text << end << start;
 
         start = startBlock.position();
         end = endBlock.position() + endBlock.length() - 1;
@@ -7103,10 +7137,15 @@ void TextEdit::setComment()
     }
 
     if (doMultiLineStyleComment) {
+        // 压入添加信息，注意光标索引顺序不能调换
+        QList<QPair<QTextCursor, QString> > multiText;
         cursor.setPosition(end);
-        insertTextEx(cursor, m_commentDefinition.multiLineEnd);
+        multiText.append(qMakePair(cursor, m_commentDefinition.multiLineEnd));
         cursor.setPosition(start);
-        insertTextEx(cursor, m_commentDefinition.multiLineStart);
+        multiText.append(qMakePair(cursor, m_commentDefinition.multiLineStart));
+
+        // 同时将两组插入信息压入撤销栈
+        insertMultiTextEx(multiText);
     } else {
         endBlock = endBlock.next();
         doSingleLineStyleUncomment = true;
@@ -7117,13 +7156,15 @@ void TextEdit::setComment()
                 break;
             }
         }
-        //qDebug()<<startBlock.text()<<startBlock.position() <<endBlock.text()<<endBlock.position() ;
+
+        QList<QPair<QTextCursor, QString> > multiText;
         for (QTextBlock block = startBlock; block != endBlock; block = block.next()) {
             cursor.setPosition(block.position());
-            insertTextEx(cursor, m_commentDefinition.singleLine);
+            multiText.append(qMakePair(cursor, m_commentDefinition.singleLine));
         }
+        // 同时将多组组插入信息压入撤销栈
+        insertMultiTextEx(multiText);
     }
-
 
     // adjust selection when commenting out
     if (hasSelection && !doMultiLineStyleUncomment && !doSingleLineStyleUncomment) {
@@ -7239,18 +7280,21 @@ void TextEdit::removeComment()
     }
 
     if (doMultiLineStyleUncomment) {
+        // 注意删除先后顺序不能调换
+        QList<QTextCursor> multiText;
         cursor.setPosition(end);
         cursor.movePosition(QTextCursor::PreviousCharacter,
                             QTextCursor::KeepAnchor,
                             m_commentDefinition.multiLineEnd.length());
-        //cursor.removeSelectedText();
-        deleteTextEx(cursor);
+        multiText.append(cursor);
         cursor.setPosition(start);
         cursor.movePosition(QTextCursor::NextCharacter,
                             QTextCursor::KeepAnchor,
                             m_commentDefinition.multiLineStart.length());
-        //cursor.removeSelectedText();
-        deleteTextEx(cursor);
+        multiText.append(cursor);
+
+        // 同时删除多组注释文本
+        deleteMultiTextEx(multiText);
     } else if (textCursor().hasSelection() && m_commentDefinition.singleLine.isEmpty()) {
         doSingleLineStyleUncomment = false;
     } else {
@@ -7283,6 +7327,8 @@ void TextEdit::removeComment()
             tmp = 1;
         }
         QString check = "";
+
+        QList<QTextCursor> multiText;
         for (QTextBlock block = startBlock; block != endBlock; block = block.next()) {
             if (doSingleLineStyleUncomment) {
                 text = block.text();
@@ -7298,8 +7344,8 @@ void TextEdit::removeComment()
                         cursor.movePosition(QTextCursor::NextCharacter,
                                             QTextCursor::KeepAnchor,
                                             singleLineLength - tmp);
-                        //cursor.removeSelectedText();
-                        deleteTextEx(cursor);
+                        // 添加待删除的文本
+                        multiText.append(cursor);
                         break;
                     }
                     if (i < text.size()) {
@@ -7310,6 +7356,12 @@ void TextEdit::removeComment()
                     ++i;
                 }
             }
+        }
+
+        if (!multiText.isEmpty())
+        {
+            // 同时删除多组注释文本
+            deleteMultiTextEx(multiText);
         }
     }
 

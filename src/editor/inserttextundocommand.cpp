@@ -22,16 +22,18 @@
 #include "inserttextundocommand.h"
 #include <QDebug>
 
-InsertTextUndoCommand::InsertTextUndoCommand(QTextCursor textcursor, QString text):
-    m_textCursor(textcursor),
-    m_sInsertText(text)
+InsertTextUndoCommand::InsertTextUndoCommand(QTextCursor textcursor, QString text, QUndoCommand *parent)
+    : QUndoCommand(parent)
+    , m_textCursor(textcursor)
+    , m_sInsertText(text)
 {
 
 }
 
-InsertTextUndoCommand::InsertTextUndoCommand(QList<QTextEdit::ExtraSelection> &selections, QString text):
-    m_sInsertText(text),
-    m_ColumnEditSelections(selections)
+InsertTextUndoCommand::InsertTextUndoCommand(QList<QTextEdit::ExtraSelection> &selections, QString text, QUndoCommand *parent)
+    : QUndoCommand(parent)
+    , m_sInsertText(text)
+    , m_ColumnEditSelections(selections)
 {
 
 }
