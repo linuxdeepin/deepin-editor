@@ -175,6 +175,7 @@ void EditWrapper::openFile(const QString &filepath, QString qstrTruePath, bool b
     m_pTextEdit->setIsFileOpen();
 
     if (!bIsTemFile && !isDraftFile()) {
+        Settings::instance()->setSavePath(PathSettingWgt::LastOptBox, QFileInfo(qstrTruePath).absolutePath());
         Settings::instance()->setSavePath(PathSettingWgt::CurFileBox, QFileInfo(qstrTruePath).absolutePath());
     }
 
