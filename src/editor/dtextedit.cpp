@@ -3852,6 +3852,10 @@ bool TextEdit::isAbleOperation(int iOperationType)
         const QClipboard *clipboard = QApplication::clipboard();
         QString strClipboardText = clipboard->text();
 
+        //文本内容大于系统总内存,不允许粘贴
+        if ((document()->characterCount() + strClipboardText.size()) / DATA_SIZE_1024 * PASTE_CONSUME_MEMORY_MULTIPLE > memoryAll) {
+            bRet = false;
+        }
         if (strClipboardText.size() / DATA_SIZE_1024 * PASTE_CONSUME_MEMORY_MULTIPLE > iSystemAvailableMemory) {
             bRet = false;
         }
