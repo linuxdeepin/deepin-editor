@@ -144,7 +144,15 @@ void Tabbar::resizeEvent(QResizeEvent *event)
         setTabToolTip(i, path);
     }
 
-    return DTabBar::resizeEvent(event);
+    if (m_bLayoutDirty)
+    {
+        m_bLayoutDirty = false;
+        // 临时修改方案：通过调用setIconSize()，更新内部的layoutDirty标识，强制重新刷新标签页布局, BUG链接：https://pms.uniontech.com/bug-view-137607.html
+        // TODO: 需要dtk暴露接口重新布局
+        setIconSize(iconSize());
+    }
+
+    DTabBar::resizeEvent(event);
 }
 
 void Tabbar::closeTab(int index)
@@ -717,6 +725,11 @@ void Tabbar::showTabs()
     if (currentIndex >= DTabBar::count() - 1) {
         m_closeRightTabAction->setEnabled(false);
     }
+}
+
+void Tabbar::markLayoutDirty()
+{
+    m_bLayoutDirty = true;
 }
 
 void Tabbar::handleTabReleased(int index)
