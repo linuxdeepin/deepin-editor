@@ -830,6 +830,9 @@ void TextEdit::moveToStart()
     } else {
         moveCursorNoBlink(QTextCursor::Start);
     }
+
+    // 移动展示区域，手动高亮文本
+    m_wrapper->OnUpdateHighlighter();
 }
 
 void TextEdit::moveToEnd()
@@ -841,6 +844,9 @@ void TextEdit::moveToEnd()
     } else {
         moveCursorNoBlink(QTextCursor::End);
     }
+    
+    // 移动展示区域，手动高亮文本
+    m_wrapper->OnUpdateHighlighter();
 }
 
 void TextEdit::moveToStartOfLine()
