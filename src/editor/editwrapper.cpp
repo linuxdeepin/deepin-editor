@@ -835,6 +835,50 @@ void EditWrapper::OnUpdateHighlighter()
             endBlock = m_pTextEdit->document()->lastBlock();
         }
 
+        // 判断当前文件是否支持高亮处理
+        if (m_pSyntaxHighlighter->definition().isValid()) {
+            // NOTE: 同样需要考虑极限条件下遍历全部文本的情况
+            // 限制最多向上查找512个文本块
+            static int s_MaxFindCount = 512;
+            int maxFindBlockNumber = qMax(0, (beginBlock.blockNumber() - s_MaxFindCount));
+
+            QChar begin = '{', end = '}';
+            int braceDepth = 0;
+            bool foundBrace = false;
+            // 判断是否此文本块为折叠区域起始的文本块，判断'{''}'处理
+            QTextBlock prevBlock = endBlock;
+            while (prevBlock.isValid()
+                   && !foundBrace
+                   && maxFindBlockNumber < prevBlock.blockNumber()) {
+                // 逆序查询文本块数据，查找起始文本块
+                QString text = prevBlock.text();
+                for (int i = text.size() - 1; i >= 0; i--) {
+                    if (text.at(i) == end) {
+                        braceDepth++;
+                    } else if (text.at(i) == begin) {
+                        braceDepth--;
+
+                        // 防止'{'处于展示文本块中间的情况，查询不准确
+                        if (braceDepth < 0) {
+                            braceDepth = 0;
+                        }
+
+                        // 判断是否查找到完整折叠区域
+                        if (0 == braceDepth
+                                && prevBlock.blockNumber() <= beginBlock.blockNumber()) {
+                            foundBrace = true;
+                            break;
+                        }
+                    }
+                }
+
+                prevBlock = prevBlock.previous();
+            }
+
+            // 无论是否查询到折叠区域，均更新起始文本块
+            beginBlock = prevBlock;
+        }
+
         if (!beginBlock.isValid() || !endBlock.isValid()) {
             return;
         }
