@@ -2493,10 +2493,14 @@ void Window::checkTabbarForReload()
     if (fi.exists() && !fi.isWritable()) {
         tabName.append(readOnlyStr);
         m_tabbar->setTabText(m_tabbar->currentIndex(), tabName);
+        // 标识需要重新布局标签页
+        m_tabbar->markLayoutDirty();
         wrapper->textEditor()->setReadOnlyPermission(true);
     } else {
         tabName.remove(readOnlyStr);
         m_tabbar->setTabText(m_tabbar->currentIndex(), tabName);
+        // 标识需要重新布局标签页
+        m_tabbar->markLayoutDirty();
         wrapper->textEditor()->setReadOnlyPermission(false);
     }
 

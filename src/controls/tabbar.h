@@ -68,6 +68,9 @@ public:
     void setDNDColor(const QString &startColor, const QString &endColor);
     void showTabs();
 
+    // 标记需要重新进行布局
+    void markLayoutDirty();
+
 signals:
     void requestHistorySaved(const QString &filePath);
     void closeTabs(const QStringList pathList);
@@ -86,6 +89,7 @@ protected:
     void mousePressEvent(QMouseEvent *e);
     void dropEvent(QDropEvent *e);
     void resizeEvent(QResizeEvent *event);
+
 private:
     void handleTabMoved(int fromIndex, int toIndex);
     void handleTabReleased(int index);
@@ -115,6 +119,8 @@ private:
     QString m_qstrDragName;
     QString m_qstrDragPath;
     EditWrapper *m_pWrapper = nullptr;
+
+    bool m_bLayoutDirty = false;
 
 public:
     static QPixmap *sm_pDragPixmap;
