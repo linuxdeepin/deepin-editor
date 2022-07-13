@@ -1755,7 +1755,9 @@ void Window::backupFile()
         if (nullptr == wrapper) {
             continue;
         }
-        if (wrapper->getFileLoading()) continue;
+        // 原流程中，不确定是因为需求原因还是程序容错逻辑，被设计为不保存正在加载的编辑视图现场；
+        // 当前为解决bug：https://pms.uniontech.com/bug-view-139049.html，暂时这样修改，确定无误后即合入主线。
+        //if (wrapper->getFileLoading()) continue;
 
         if (nullptr == wrapper->textEditor()) {
             continue;
