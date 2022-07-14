@@ -756,11 +756,11 @@ void Tabbar::handleTabDroped(int index, Qt::DropAction action, QObject *target)
 {
     Tabbar *tabbar = qobject_cast<Tabbar *>(target);
     if (tabbar == nullptr) {
-        Window *window = static_cast<Window *>(this->window());
-
-        window->move(QCursor::pos() - window->topLevelWidget()->pos());
-        window->show();
-        window->activateWindow();
+        // tab页拖动到外部应用如网页电子表格或wps电子表格时,
+        // DTabBar::dragActionChanged 信号收到的DropType为MoveAction,
+        // 这种情况下DTabBar内容不能发出DTabBar::tabReleaseRequested来重新构建编辑窗口
+        // 因此只能再次添加判断，若目标文本编辑窗口的TabBar未创建，则重新重建文本编辑窗口
+        handleTabReleased(index);
     } else {
 //        QString path = m_listOldTabPath.value(index);
 //        int newIndex = m_tabPaths.indexOf(path);
