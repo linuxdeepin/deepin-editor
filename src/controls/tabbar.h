@@ -68,9 +68,6 @@ public:
     void setDNDColor(const QString &startColor, const QString &endColor);
     void showTabs();
 
-    // 标记需要重新进行布局
-    void markLayoutDirty();
-
 signals:
     void requestHistorySaved(const QString &filePath);
     void closeTabs(const QStringList pathList);
