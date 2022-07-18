@@ -56,6 +56,7 @@ public slots:
     void jumpConfirm();
     void slotFocusChanged(bool bFocus);
     void hide();
+    int getLineCount();
 
 signals:
     void backToPosition(QString file, int row, int column, int scrollOffset);
@@ -74,8 +75,9 @@ private:
     int m_jumpFileScrollOffset;
     int m_rowBeforeJump;
     int m_columnBeforeJump;
+    int m_lineCount;
     QColor m_backgroundColor;
-    DIconButton *m_closeButton=nullptr;
+    DIconButton *m_closeButton = nullptr;
 };
 
 #endif
