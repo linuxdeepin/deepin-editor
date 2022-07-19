@@ -8921,3 +8921,479 @@ TEST(UT_Textedit_unindentText, UT_Textedit_unindentText)
     wra->deleteLater();
     w->deleteLater();
 }
+
+// static QList<QPair<MarkOperation, qint64> > convertMarkFromReplace(const QList<MarkReplaceInfo> &replaceInfo);
+TEST(UT_Textedit_convertMark, UT_Textedit_convertMarkToReplace)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    edit->setPlainText("12345\n"
+                       "12345\n"
+                       "12345\n");
+
+    QList<QPair<TextEdit::MarkOperation, qint64> > markInfo;
+    TextEdit::MarkOperation opt;
+    opt.type = TextEdit::MarkOnce;
+    opt.color = "#E5E5E5";
+    opt.cursor = edit->textCursor();
+    opt.cursor.setPosition(1);
+    opt.cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, 5);
+    opt.matchText = opt.cursor.selectedText();
+    markInfo.append(qMakePair(opt, 100));
+
+    TextEdit::MarkOperation opt2;
+    markInfo.append(qMakePair(opt2, 200));
+
+    auto replaceInfo = TextEdit::convertMarkToReplace(markInfo);
+    EXPECT_EQ(replaceInfo.size(), markInfo.size());
+
+    if (replaceInfo.size() == markInfo.size()) {
+        for (int i = 0; i < replaceInfo.size(); ++i) {
+            auto &mark = markInfo[i];
+            auto &replace = replaceInfo[i];
+
+            EXPECT_EQ(mark.first.type, replace.opt.type);
+            EXPECT_EQ(mark.first.color, replace.opt.color);
+            EXPECT_EQ(mark.first.cursor.selectionStart(), replace.start);
+            EXPECT_EQ(mark.first.cursor.selectionEnd(), replace.end);
+            EXPECT_EQ(mark.second, replace.time);
+        }
+    }
+
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+// static QList<MarkReplaceInfo> convertReplaceToMark(const QList<QPair<MarkOperation, qint64> > &markInfo);
+TEST(UT_Textedit_convertMark, UT_Textedit_convertReplaceToMark)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    edit->setPlainText("12345\n"
+                       "12345\n"
+                       "12345\n");
+
+    QList<TextEdit::MarkReplaceInfo> replaceInfo;
+    TextEdit::MarkReplaceInfo replace1;
+    replace1.opt.type = TextEdit::MarkOnce;
+    replace1.opt.color = "#E5E5E5";
+    replace1.opt.cursor = edit->textCursor();
+    replace1.start = 1;
+    replace1.end = 6;
+    replace1.time = INT_MAX;
+    replaceInfo.append(replace1);
+
+    TextEdit::MarkReplaceInfo replace2;
+    replaceInfo.append(replace2);
+
+    auto markInfo = TextEdit::convertReplaceToMark(replaceInfo);
+    EXPECT_EQ(replaceInfo.size(), markInfo.size());
+
+    if (replaceInfo.size() == markInfo.size()) {
+        for (int i = 0; i < replaceInfo.size(); ++i) {
+            auto &mark = markInfo[i];
+            auto &replace = replaceInfo[i];
+
+            EXPECT_EQ(mark.first.type, replace.opt.type);
+            EXPECT_EQ(mark.first.color, replace.opt.color);
+            if (!mark.first.cursor.isNull()) {
+                EXPECT_EQ(mark.first.cursor.selectionStart(), replace.start);
+                EXPECT_EQ(mark.first.cursor.selectionEnd(), replace.end);
+            }
+            EXPECT_EQ(mark.second, replace.time);
+        }
+    }
+
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+// 替换文本在颜色标记左侧
+TEST(UT_Textedit_replaceWithMark, UT_Textedit_replaceWithRightMark)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    QStringList markList {"45", "89\n", "hi\n1a", "d5\n"};
+
+    for (auto markText : markList) {
+        edit->setPlainText("123456789\n"
+                           "abcdefghi\n"
+                           "1a2b3c4d5\n");
+
+        QTextCursor cursor = edit->findCursor(markText, edit->toPlainText(), 0);
+        // note: 含跨行符时，Qt自动替换换行为Unicode U+2029，详见QTextCursor::selectedText()帮助
+        EXPECT_EQ(cursor.selectedText().replace("\u2029", "\n"), markText);
+        int oldStart = cursor.selectionStart();
+        int oldEnd = cursor.selectionEnd();
+
+        edit->setTextCursor(cursor);
+        edit->isMarkCurrentLine(true, "#E5E5E5");
+        edit->renderAllSelections();
+        EXPECT_FALSE(edit->extraSelections().isEmpty());
+
+        QString replaceText = "12";
+        QString withText = "abcd";
+        edit->replaceAll(replaceText, withText);
+
+        QTextCursor newCursor = edit->textCursor();
+        newCursor.setPosition(oldStart + withText.size() - replaceText.size());
+        newCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, oldEnd - oldStart);
+        QColor cursorColor = newCursor.charFormat().background().color();
+        EXPECT_EQ(markText, newCursor.selectedText().replace("\u2029", "\n"));
+
+        // 使用拓展标记判断颜色标记
+        bool find = false;
+        for (auto extra : edit->extraSelections()) {
+            if (extra.cursor.selectionStart() == newCursor.selectionStart()) {
+                EXPECT_EQ(extra.cursor.selectionEnd(), newCursor.selectionEnd());
+                EXPECT_EQ(extra.format.background().color(), QColor("#E5E5E5"));
+
+                find = true;
+                break;
+            }
+        }
+        EXPECT_TRUE(find);
+
+        edit->slotCancleMarkAllLine(false);
+    }
+
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+// 替换文本和颜色标记存在交集
+TEST(UT_Textedit_replaceWithMark, UT_Textedit_replaceWithIntersectMark)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    edit->setPlainText("123456789\n"
+                       "abcdefghi\n"
+                       "1a2b3c4d5\n");
+    QString strColor = "#E5E5E5";
+    // 选中 "456"
+    QString markText = "456";
+    QTextCursor cursor = edit->findCursor(markText, edit->toPlainText(), 0);
+    // note: 含跨行符时，Qt自动替换换行为Unicode U+2029，详见QTextCursor::selectedText()帮助
+    EXPECT_EQ(cursor.selectedText().replace("\u2029", "\n"), markText);
+
+    edit->setTextCursor(cursor);
+    edit->isMarkCurrentLine(true, strColor);
+    edit->renderAllSelections();
+    EXPECT_FALSE(edit->extraSelections().isEmpty());
+
+    QString replaceText = "567";
+    QString withText = "x567x";
+    // "1234x567x89\n"
+    edit->replaceAll(replaceText, withText);
+    EXPECT_FALSE(edit->m_wordMarkSelections.isEmpty());
+    if (!edit->m_wordMarkSelections.isEmpty()) {
+        auto markInfo = edit->m_wordMarkSelections.first();
+        QString selectText = markInfo.first.cursor.selectedText().replace("\u2029", "\n");
+        EXPECT_EQ(selectText, QString("4x567x"));
+        EXPECT_EQ(markInfo.first.format.background().color(), QColor(strColor));
+    }
+
+    replaceText = "234";
+    withText = "-234-";
+    // "1-234-x567x89\n"
+    edit->replaceAll(replaceText, withText);
+    EXPECT_FALSE(edit->m_wordMarkSelections.isEmpty());
+    if (!edit->m_wordMarkSelections.isEmpty()) {
+        auto markInfo = edit->m_wordMarkSelections.first();
+        QString selectText = markInfo.first.cursor.selectedText().replace("\u2029", "\n");
+        EXPECT_EQ(selectText, QString("-234-x567x"));
+        EXPECT_EQ(markInfo.first.format.background().color(), QColor(strColor));
+    }
+
+    replaceText = "x89\n";
+    withText = "x89\n123";
+    // "1-234-x567x89\n123"
+    edit->replaceAll(replaceText, withText);
+    EXPECT_FALSE(edit->m_wordMarkSelections.isEmpty());
+    if (!edit->m_wordMarkSelections.isEmpty()) {
+        auto markInfo = edit->m_wordMarkSelections.first();
+        QString selectText = markInfo.first.cursor.selectedText().replace("\u2029", "\n");
+        EXPECT_EQ(selectText, QString("-234-x567x89\n123"));
+        EXPECT_EQ(markInfo.first.format.background().color(), QColor(strColor));
+    }
+
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+// 替换文本和颜色标记处于边界，不应互相影响
+TEST(UT_Textedit_replaceWithMark, UT_Textedit_replaceWithBoundnaryMark)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    edit->setPlainText("123456789\n");
+    QString strColor = "#E5E5E5";
+    // 选中 "456"
+    QString markText = "456";
+    QTextCursor cursor = edit->findCursor(markText, edit->toPlainText(), 0);
+    // note: 含跨行符时，Qt自动替换换行为Unicode U+2029，详见QTextCursor::selectedText()帮助
+    EXPECT_EQ(cursor.selectedText().replace("\u2029", "\n"), markText);
+
+    edit->setTextCursor(cursor);
+    edit->isMarkCurrentLine(true, strColor);
+    edit->renderAllSelections();
+    EXPECT_FALSE(edit->extraSelections().isEmpty());
+
+    QString replaceText = "123";
+    QString withText = "x123x";
+    // "x123x456789\n"
+    edit->replaceAll(replaceText, withText);
+    EXPECT_FALSE(edit->m_wordMarkSelections.isEmpty());
+    if (!edit->m_wordMarkSelections.isEmpty()) {
+        auto markInfo = edit->m_wordMarkSelections.first();
+        QString selectText = markInfo.first.cursor.selectedText().replace("\u2029", "\n");
+        EXPECT_EQ(selectText, QString("456"));
+        EXPECT_EQ(markInfo.first.format.background().color(), QColor(strColor));
+    }
+
+    replaceText = "789";
+    withText = "x789x";
+    // "x123x456x789x\n"
+    edit->replaceAll(replaceText, withText);
+    EXPECT_FALSE(edit->m_wordMarkSelections.isEmpty());
+    if (!edit->m_wordMarkSelections.isEmpty()) {
+        auto markInfo = edit->m_wordMarkSelections.first();
+        QString selectText = markInfo.first.cursor.selectedText().replace("\u2029", "\n");
+        EXPECT_EQ(selectText, QString("456"));
+        EXPECT_EQ(markInfo.first.format.background().color(), QColor(strColor));
+    }
+
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+// 颜色标记有多组替换文本
+TEST(UT_Textedit_replaceWithMark, UT_Textedit_markWithMultiReplace)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    edit->setPlainText("123123123123\n");
+    QString strColor = "#E5E5E5";
+    // 选中 "31231231"
+    QTextCursor cursor = edit->textCursor();
+    cursor.setPosition(2);
+    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, 8);
+    EXPECT_EQ(cursor.selectedText().replace("\u2029", "\n"), QString("31231231"));
+
+    edit->setTextCursor(cursor);
+    edit->isMarkCurrentLine(true, strColor);
+    edit->renderAllSelections();
+    EXPECT_FALSE(edit->extraSelections().isEmpty());
+
+    QString replaceText = "123";
+    QString withText = "x123x";
+    // "x123xx123xx123xx123x\n"
+    edit->replaceAll(replaceText, withText);
+    EXPECT_FALSE(edit->m_wordMarkSelections.isEmpty());
+    if (!edit->m_wordMarkSelections.isEmpty()) {
+        auto markInfo = edit->m_wordMarkSelections.first();
+        QString selectText = markInfo.first.cursor.selectedText().replace("\u2029", "\n");
+        EXPECT_EQ(selectText, QString("x123xx123xx123xx123x"));
+        EXPECT_EQ(markInfo.first.cursor.selectionStart(), 0);
+        EXPECT_EQ(markInfo.first.cursor.selectionEnd(), selectText.size());
+        EXPECT_EQ(markInfo.first.format.background().color(), QColor(strColor));
+    }
+
+    // 重置
+    edit->slotCancleMarkAllLine();
+    edit->setPlainText("xxxxxx\n");
+    // 选中中间的两组x
+    cursor.setPosition(2);
+    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, 2);
+    EXPECT_EQ(cursor.selectedText().replace("\u2029", "\n"), QString("xx"));
+    edit->setTextCursor(cursor);
+    edit->isMarkCurrentLine(true, strColor);
+    edit->renderAllSelections();
+    EXPECT_FALSE(edit->extraSelections().isEmpty());
+
+    replaceText = "x";
+    withText = "xy";
+    // "xyxyxyxyxyxy\n"
+    edit->replaceAll(replaceText, withText);
+    EXPECT_FALSE(edit->m_wordMarkSelections.isEmpty());
+    if (!edit->m_wordMarkSelections.isEmpty()) {
+        auto markInfo = edit->m_wordMarkSelections.first();
+        QString selectText = markInfo.first.cursor.selectedText().replace("\u2029", "\n");
+        EXPECT_EQ(selectText, QString("xyxy"));
+        EXPECT_EQ(markInfo.first.cursor.selectionStart(), 4);
+        EXPECT_EQ(markInfo.first.cursor.selectionEnd(), 8);
+        EXPECT_EQ(markInfo.first.format.background().color(), QColor(strColor));
+    }
+
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+
+// 替换文本在单行颜色标记内部
+TEST(UT_Textedit_replaceWithMark, UT_Textedit_replaceWithLineMark)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    edit->setPlainText("123456789\n"
+                       "abcdefghi\n"
+                       "1a2b3c4d5\n");
+    QString strColor = "#E5E5E5";
+    QTextCursor cursor = edit->textCursor();
+    cursor.setPosition(0);
+
+    edit->setTextCursor(cursor);
+    // 选中首行 "123456789" 不包括换行符
+    edit->isMarkCurrentLine(true, strColor);
+    edit->renderAllSelections();
+    EXPECT_FALSE(edit->m_wordMarkSelections.isEmpty());
+
+    QString replaceText = "12";
+    QString withText = "xxxx";
+    // "xxxx3456789"
+    edit->replaceAll(replaceText, withText);
+    EXPECT_FALSE(edit->m_wordMarkSelections.isEmpty());
+
+    auto checkSelection = [&](const QString &cmpStr)->bool {
+        bool find = false;
+        for (auto selection : edit->m_wordMarkSelections) {
+            QString selectText = selection.first.cursor.selectedText().replace("\u2029", "\n");
+            if (selectText == cmpStr) {
+                EXPECT_EQ(selection.first.format.background().color(), QColor(strColor));
+                find = true;
+                break;
+            }
+        }
+        return find;
+    };
+    EXPECT_TRUE(checkSelection("xxxx3456789"));
+
+    replaceText = "xxxx";
+    withText = "12";
+    // "123456789"
+    edit->replaceAll(replaceText, withText);
+    EXPECT_FALSE(edit->m_wordMarkSelections.isEmpty());
+    EXPECT_TRUE(checkSelection("123456789"));
+
+    replaceText = "6789\nabcd";
+    withText = "";
+    // "12345efghi"
+    edit->replaceAll(replaceText, withText);
+    EXPECT_FALSE(edit->m_wordMarkSelections.isEmpty());
+    EXPECT_TRUE(checkSelection("12345efghi"));
+
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+// 替换文本跨过了单行颜色标记，形成多行颜色标记
+TEST(UT_Textedit_replaceWithMark, UT_Textedit_replaceWithMultiLineMark)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    edit->setPlainText("123456789\n"
+                       "abcdefghi\n"
+                       "1a2b3c4d5\n");
+    QString strColor = "#E5E5E5";
+    QTextCursor cursor = edit->textCursor();
+    cursor.setPosition(0);
+
+    edit->setTextCursor(cursor);
+    // 选中首行 "123456789" 不包括换行符
+    edit->isMarkCurrentLine(true, strColor);
+    edit->renderAllSelections();
+    EXPECT_FALSE(edit->m_wordMarkSelections.isEmpty());
+
+    QString replaceText = "34";
+    QString withText = "34\n34";
+    // "1234" -> "1234\n34"
+    edit->replaceAll(replaceText, withText);
+    EXPECT_FALSE(edit->m_wordMarkSelections.isEmpty());
+    EXPECT_EQ(edit->m_wordMarkSelections.size(), 2);
+
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+// 替换文本包含了颜色标记
+TEST(UT_Textedit_replaceWithMark, UT_Textedit_replaceWithInnerMark)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    edit->setPlainText("123456789\n"
+                       "abcdefghi\n");
+    QString strColor = "#E5E5E5";
+    QTextCursor cursor = edit->textCursor();
+    // 选中"6789\nabcd"
+    cursor.setPosition(5);
+    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, 9);
+
+    edit->setTextCursor(cursor);
+    edit->isMarkCurrentLine(true, strColor);
+    edit->renderAllSelections();
+    EXPECT_FALSE(edit->m_wordMarkSelections.isEmpty());
+
+    QString replaceText = "456789\nabcdef";
+    QString withText = "";
+    // 替换后不存在标记 "" 将被移除
+    edit->replaceAll(replaceText, withText);
+    EXPECT_TRUE(edit->m_wordMarkSelections.isEmpty());
+
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+// 替换文本在颜色标记内部
+TEST(UT_Textedit_replaceWithMark, UT_Textedit_replaceWithOutterMark)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    edit->setPlainText("123456789\n"
+                       "abcdefghi\n");
+    QString strColor = "#E5E5E5";
+    QTextCursor cursor = edit->textCursor();
+    // 选中"6789\nabcd"
+    cursor.setPosition(5);
+    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, 9);
+
+    edit->setTextCursor(cursor);
+    edit->isMarkCurrentLine(true, strColor);
+    edit->renderAllSelections();
+    EXPECT_FALSE(edit->m_wordMarkSelections.isEmpty());
+
+    QString replaceText = "89\n";
+    QString withText = "";
+    // "67abcd"
+    edit->replaceAll(replaceText, withText);
+    EXPECT_FALSE(edit->m_wordMarkSelections.isEmpty());
+
+    if (!edit->m_wordMarkSelections.isEmpty()) {
+        auto markInfo = edit->m_wordMarkSelections.first();
+        QString selectText = markInfo.first.cursor.selectedText().replace("\u2029", "\n");
+        EXPECT_EQ(selectText, QString("67abcd"));
+        EXPECT_EQ(markInfo.first.format.background().color(), QColor(strColor));
+    }
+
+    edit->deleteLater();
+    wra->deleteLater();
+}

@@ -516,6 +516,29 @@ TEST(UT_Utils_isShareDirAndReadOnly, isShareDirAndReadOnly)
 //    EXPECT_NE(Utils::isShareDirAndReadOnly("1/2/3"),true);
 }
 
+// static RegionIntersectType checkRegionIntersect(int x1, int y1, int x2, int y2);
+TEST(UT_Utils_checkRegionIntersect, checkRegionIntersect)
+{
+    // 测试各边界判断
+    Utils::RegionIntersectType type;
+    type = Utils::checkRegionIntersect(10, 20, 0, 9);
+    ASSERT_EQ(type, Utils::ELeft);
+    type = Utils::checkRegionIntersect(10, 20, 0, 10);
+    ASSERT_NE(type, Utils::ELeft);
 
+    type = Utils::checkRegionIntersect(10, 20, 21, 30);
+    ASSERT_EQ(type, Utils::ERight);
+    type = Utils::checkRegionIntersect(10, 20, 20, 30);
+    ASSERT_NE(type, Utils::ERight);
+
+    type = Utils::checkRegionIntersect(10, 20, 9, 15);
+    ASSERT_EQ(type, Utils::EIntersectLeft);
+    type = Utils::checkRegionIntersect(10, 20, 15, 21);
+    ASSERT_EQ(type, Utils::EIntersectRight);
+    type = Utils::checkRegionIntersect(10, 20, 9, 21);
+    ASSERT_EQ(type, Utils::EIntersectOutter);
+    type = Utils::checkRegionIntersect(10, 20, 10, 20);
+    ASSERT_EQ(type, Utils::EIntersectInner);
+}
 
 

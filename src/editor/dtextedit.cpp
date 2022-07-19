@@ -33,6 +33,7 @@
 #include "insertblockbytextcommond.h"
 #include "indenttextcommond.h"
 #include "undolist.h"
+#include "changemarkcommand.h"
 
 #include <KF5/KSyntaxHighlighting/definition.h>
 #include <KF5/KSyntaxHighlighting/syntaxhighlighter.h>
@@ -1688,20 +1689,33 @@ void TextEdit::replaceAll(const QString &replaceText, const QString &withText)
         return;
     }
 
+    // 替换文本相同，返回
+    if (replaceText == withText) {
+        return;
+    }
+
     QTextDocument::FindFlags flags;
     flags &= QTextDocument::FindCaseSensitively;
     QTextCursor cursor = textCursor();
     cursor.movePosition(QTextCursor::Start);
     QTextCursor startCursor = textCursor();
-    //startCursor.beginEditBlock();
 
     QString oldText = this->toPlainText();
+
+    // 保存旧的标记索引光标记录信息，只需要更新其坐标偏移信息即可
+    QList<TextEdit::MarkReplaceInfo> backupMarkList = convertMarkToReplace(m_markOperations);
+    auto replaceList = backupMarkList;
+    // 计算替换颜色标记信息
+    calcMarkReplaceList(replaceList, oldText, replaceText, withText);
+
     QString newText = oldText;
     newText.replace(replaceText, withText);
 
     if (oldText != newText) {
-        ReplaceAllCommond *commond = new ReplaceAllCommond(oldText, newText, cursor);
-        m_pUndoStack->push(commond);
+        ChangeMarkCommand *pChangeMark = new ChangeMarkCommand(this, backupMarkList, replaceList);
+        // 设置替换撤销项为颜色标记变更撤销项的子项
+        new ReplaceAllCommond(oldText, newText, cursor, pChangeMark);
+        m_pUndoStack->push(pChangeMark);
     }
 }
 
@@ -1719,8 +1733,9 @@ void TextEdit::replaceNext(const QString &replaceText, const QString &withText)
         //无限替换的根源
         return;
     }
+
     QTextCursor cursor = textCursor();
-    //cursor.setPosition(m_findHighlightSelection.cursor.position() - replaceText.size());
+
     if (m_cursorStart != -1) {
         cursor.setPosition(m_cursorStart);
         m_cursorStart = -1;
@@ -1729,9 +1744,67 @@ void TextEdit::replaceNext(const QString &replaceText, const QString &withText)
     }
     cursor.movePosition(QTextCursor::NoMove, QTextCursor::MoveAnchor);
     cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, replaceText.size());
+
+    // 文本替换长度变更调整量
+    int adjustlen = withText.size() - replaceText.size();
+    // 保存旧的标记索引光标记录信息，只需要更新其坐标偏移信息即可
+    QList<TextEdit::MarkReplaceInfo> backupMarkList = convertMarkToReplace(m_markOperations);
+    auto replaceList = backupMarkList;
+    for (auto &info : replaceList) {
+        if (MarkAll == info.opt.type
+                || MarkAllMatch == info.opt.type) {
+            continue;
+        }
+
+        // 获取替换文本区域和颜色标记区域的交叉关系
+        Utils::RegionIntersectType type = Utils::checkRegionIntersect(
+                    cursor.selectionStart(), cursor.selectionStart() + replaceText.size(), info.start, info.end);
+        // 仅进行单次处理
+        switch (type) {
+        case Utils::ELeft:
+            // 当前无交集，颜色标记在替换文本左侧，表示当前颜色标记已经经过
+            break;
+        case Utils::ERight: {
+            // 颜色标记位于右侧
+            info.start += adjustlen;
+            info.end += adjustlen;
+            break;
+        }
+        case Utils::EIntersectLeft: {
+            // 交集在替换文本左侧，拓展颜色标记右侧到替换文本右侧
+            info.end = cursor.selectionStart() + withText.size();
+            break;
+        }
+        case Utils::EIntersectRight: {
+            // 交集在替换文本右侧，拓展颜色标记左侧到替换文本左侧
+            info.start = cursor.selectionStart();
+            info.end += adjustlen;
+            break;
+        }
+        case Utils::EIntersectOutter: {
+            // 标记内容包含替换文本
+            info.end += adjustlen;
+            break;
+        }
+        case Utils::EIntersectInner: {
+            // 替换文本内容包含标记信息, 取消当前文本标记（无论单个文本还是单行文本，均移除）
+            // 在 manualUpdateAllMark() 函数处理会移除此标记
+            info.start = 0;
+            info.end = 0;
+            break;
+        }
+        default:
+            break;
+        }
+    }
+
     QString strSelection(cursor.selectedText());
-    if (!strSelection.compare(replaceText)) {
-        insertSelectTextEx(cursor, withText);
+    if (!strSelection.compare(replaceText) || replaceText.contains("\n")) {
+        ChangeMarkCommand *pChangeMark = new ChangeMarkCommand(this, backupMarkList, replaceList);
+        // 设置插入撤销项为颜色标记变更撤销项的子项
+        new InsertTextUndoCommand(cursor, withText, pChangeMark);
+        m_pUndoStack->push(pChangeMark);
+        ensureCursorVisible();
     }
 
     // Update cursor.
@@ -1750,11 +1823,15 @@ void TextEdit::replaceRest(const QString &replaceText, const QString &withText)
         return;
     }
 
+    // 替换文本相同，返回
+    if (replaceText == withText) {
+        return;
+    }
+
     QTextDocument::FindFlags flags;
     flags &= QTextDocument::FindCaseSensitively;
 
     QTextCursor cursor = textCursor();
-
     QTextCursor startCursor = textCursor();
     startCursor.beginEditBlock();
 
@@ -1762,12 +1839,21 @@ void TextEdit::replaceRest(const QString &replaceText, const QString &withText)
     QString oldText = this->toPlainText();
     QString newText = oldText.left(pos);
     QString right = oldText.right(oldText.size() - pos);
+
+    // 保存旧的标记索引光标记录信息，只需要更新其坐标偏移信息即可
+    QList<TextEdit::MarkReplaceInfo> backupMarkList = convertMarkToReplace(m_markOperations);
+    auto replaceList = backupMarkList;
+    // 计算替换颜色标记信息
+    calcMarkReplaceList(replaceList, right, replaceText, withText, pos);
+
     right.replace(replaceText, withText);
     newText += right;
 
     if (oldText != newText) {
-        ReplaceAllCommond *commond = new ReplaceAllCommond(oldText, newText, cursor);
-        m_pUndoStack->push(commond);
+        ChangeMarkCommand *pChangeMark = new ChangeMarkCommand(this, backupMarkList, replaceList);
+        // 设置替换撤销项为颜色标记变更撤销项的子项
+        new ReplaceAllCommond(oldText, newText, cursor, pChangeMark);
+        m_pUndoStack->push(pChangeMark);
     }
 
     startCursor.endEditBlock();
@@ -4568,8 +4654,8 @@ void TextEdit::markAllKeywordInView()
 
     for (it = m_markOperations.begin(); it != m_markOperations.end(); ++it) {
         if (MarkAllMatch == it->first.type) {
-            QString keyword = it->first.cursor.selectedText();
-            markKeywordInView(keyword, it->first.color, it->second);
+            // 标记当前视图根据匹配文本查找的所有文本
+            markKeywordInView(it->first.matchText, it->first.color, it->second);
         } else if (MarkAll == it->first.type) {
             markAllInView(it->first.color, it->second);
         }
@@ -4675,6 +4761,7 @@ void TextEdit::isMarkAllLine(bool isMark, QString strColor)
             markOperation.type = MarkAllMatch;
             markOperation.cursor = textCursor();
             markOperation.color = strColor;
+            markOperation.matchText = selectionText;
             m_markOperations.append(QPair<TextEdit::MarkOperation, qint64>(markOperation, timeStamp));
 
             if (updateKeywordSelectionsInView(selectionText, format, &listExtraSelection)) {
@@ -4840,6 +4927,372 @@ void TextEdit::toggleMarkSelections()
     }
 
     renderAllSelections();
+}
+
+/**
+ * @brief 转换标记项替换信息 \a replaceInfo 为标记项信息，标记项替换信息包含了光标的绝对位置，
+ *      在转换过程中，光标会更新当前选中区域为绝对位置
+ * @param replaceInfo 标记替换信息
+ * @return 转换后的标记操作项列表
+ */
+QList<QPair<TextEdit::MarkOperation, qint64> > TextEdit::convertReplaceToMark(const QList<TextEdit::MarkReplaceInfo> &replaceInfo)
+{
+    QList<QPair<TextEdit::MarkOperation, qint64> > markList;
+    for (auto info : replaceInfo) {
+        MarkOperation markOpt = info.opt;
+
+        // 更新当前光标选中信息
+        markOpt.cursor.setPosition(info.start);
+        markOpt.cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, info.end - info.start);
+
+        markList.append(qMakePair(markOpt, info.time));
+    }
+
+    return markList;
+}
+
+/**
+ * @brief 转换标记操作项 \a markInfo 为标记项替换信息，标记项替换信息包含了光标的绝对位置，
+ *      在转换过程中，会记录当前选中区域为绝对位置
+ * @param markInfo 标记信息
+ * @return 转换后的标记替换信息列表
+ */
+QList<TextEdit::MarkReplaceInfo> TextEdit::convertMarkToReplace(const QList<QPair<TextEdit::MarkOperation, qint64> > &markInfo)
+{
+    QList<TextEdit::MarkReplaceInfo> replaceMarkList;
+    for (auto info : markInfo) {
+        MarkReplaceInfo replace;
+        replace.opt = info.first;
+        replace.time = info.second;
+
+        // 记录当前光标位置，QTextDocument后续操作文本到QTextCursor光标范围时，会导致QTextCursor记录的光标位置失效
+        replace.start = info.first.cursor.selectionStart();
+        replace.end = info.first.cursor.selectionEnd();
+
+        replaceMarkList.append(replace);
+    }
+
+    return replaceMarkList;
+}
+
+/**
+ * @brief 更新所有的标记信息为 \a markInfo , 用于撤销项处理颜色标记变更
+ * @param markInfo 颜色标记信息列表
+ */
+void TextEdit::manualUpdateAllMark(const QList<QPair<MarkOperation, qint64> > &markInfo)
+{
+    m_markOperations = markInfo;
+
+    // 全部标记更新后，修改手动标记文本部分
+    m_wordMarkSelections.clear();
+    // 用于将跨行的单行颜色标记拓展为多行处理
+    QList<QPair<TextEdit::MarkOperation, qint64>> multiLineSelections;
+
+    for (auto itr = m_markOperations.begin(); itr != m_markOperations.end();) {
+        if (MarkAll == (*itr).first.type
+                || MarkAllMatch == (*itr).first.type) {
+            ++itr;
+            continue;
+        }
+
+        // 若无选中项，则过滤此颜色标记
+        if (!(*itr).first.cursor.hasSelection()) {
+            itr = m_markOperations.erase(itr);
+            continue;
+        }
+
+        auto &info = *itr;
+        if (MarkOnce == info.first.type) {
+            QTextEdit::ExtraSelection selection;
+            selection.format.setBackground(QColor(info.first.color));
+            selection.cursor = info.first.cursor;
+
+            // 更新单独文本标记
+            m_wordMarkSelections.append(qMakePair(selection, info.second));
+
+        } else if (MarkLine == info.first.type) {
+            int selectStart = info.first.cursor.selectionStart();
+            int selectEnd = info.first.cursor.selectionEnd();
+            QTextBlock startBlock = document()->findBlock(selectStart);
+            QTextBlock endBlock = document()->findBlock(selectEnd);
+
+            // 判断是否为多行颜色标记
+            bool isMultiLine = startBlock < endBlock;
+
+            while (startBlock.isValid()
+                   && endBlock.isValid()
+                   && !(endBlock < startBlock)) {
+                QTextEdit::ExtraSelection selection;
+                selection.format.setBackground(QColor(info.first.color));
+                selection.cursor = info.first.cursor;
+                // 更新单行标记的索引区间, 注意标记单行颜色不包括换行符
+                selection.cursor.setPosition(startBlock.position());
+                selection.cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, startBlock.length() - 1);
+
+                // 更新单行文本标记，允许使用一样的时间戳
+                m_wordMarkSelections.append(qMakePair(selection, info.second));
+
+                // 追加拆解的多行颜色标记信息，允许使用一样的时间戳
+                if (isMultiLine) {
+                    auto copyInfo = info;
+                    copyInfo.first.cursor = selection.cursor;
+                    multiLineSelections.append(copyInfo);
+                }
+
+                // 继续下一文本块处理
+                startBlock = startBlock.next();
+            }
+
+            // 若为多行颜色标记，会将当前文本颜色标记移除，后续添加为多行颜色标记
+            if (isMultiLine) {
+                itr = m_markOperations.erase(itr);
+                continue;
+            }
+        }
+
+        // 继续下一遍历
+        ++itr;
+    }
+
+    // 追加多行颜色标记处理记录
+    m_markOperations.append(multiLineSelections);
+
+    // 对修改后的颜色标记进行排序
+    std::sort(m_markOperations.begin(), m_markOperations.end(),
+              [](const QPair<TextEdit::MarkOperation, qint64> &a, const QPair<TextEdit::MarkOperation, qint64> &b){
+        return a.second < b.second;
+    });
+    std::sort(m_wordMarkSelections.begin(), m_wordMarkSelections.end(),
+              [](const QPair<QTextEdit::ExtraSelection, qint64> &a, const QPair<QTextEdit::ExtraSelection, qint64> &b){
+        return a.second < b.second;
+    });
+
+    // 计算全文标记部分并刷新界面颜色标记
+    markAllKeywordInView();
+}
+
+/**
+ * @brief 查询颜色标记范围内存在多少组替换文本的函数，对 \a markStart ~ \a markEnd 区间进行搜索，
+ *      判断 \a posList 中是否存在已查询到的替换文本位置索引，并将这些位置索引转换为索引区间列表返回。
+ * @param posList       已查询的替换文本位置索引
+ * @param markStart     颜色标记开始位置索引
+ * @param markEnd       颜色标记结束位置索引
+ * @param replaceText   替换的文本
+ * @return 查找到和颜色标记位置有交叉的文本位置索引区间
+ */
+static QPair<int, int> findMatchRange(const QList<int> &posList, int markStart, int markEnd, const QString &replaceText) {
+    // 判断颜色标记 info 范围内是否包含替换文本索引信息
+    QPair<int, int> foundPosRange {-1, -1};
+    if (posList.isEmpty()) {
+        return foundPosRange;
+    }
+
+    // 将颜色标记搜索范围向左延伸 replaceText.size() - 1 位置()，若此区间出现replaceText, 那么必定和 markStart ~ markEnd 相交
+    int adjustMarkStart = markStart - replaceText.size();
+
+    // 获取最近的左侧查找文本位置索引，使用 qUpperBound, 索引必须大于 adjustMarkStart
+    auto leftfindItr = qUpperBound(posList.begin(), posList.end(), adjustMarkStart);
+    if (leftfindItr != posList.end()
+            && (*leftfindItr) < markEnd) {
+        // 设置查询的左边界
+        foundPosRange.first = static_cast<int>(std::distance(posList.begin(), leftfindItr));
+    }
+
+    // 获取最近的右侧查找文本位置索引（小于右边界 markEnd）
+    auto rightFindItr = qLowerBound(posList.rbegin(), posList.rend(), markEnd - 1, std::greater<int>());
+    if (rightFindItr != posList.rend()
+            && markStart < (*rightFindItr)) {
+        // 设置右边界
+        foundPosRange.second = static_cast<int>(std::distance(rightFindItr, posList.rend() - 1));
+    } else if (-1 != foundPosRange.first) {
+        foundPosRange.second = foundPosRange.first;
+    }
+
+    return foundPosRange;
+}
+
+/**
+ * @brief 根据当前已查找到的替换文本偏移位置和颜色标记的交叉范围，调整颜色标记的位置
+ * @param foundPosList  已查询的替换文本位置索引
+ * @param info          需要计算的颜色标记
+ * @param replaceText   被替换的文本
+ * @param withText      替换后的文本
+ */
+static void updateMarkReplaceRange(const QList<int> &foundPosList, TextEdit::MarkReplaceInfo &info, const QString &replaceText, const QString &withText)
+{
+    // 文本替换长度变更调整量
+    int adjustlen = withText.size() - replaceText.size();
+    // 获取替换文本位置索引列表
+    QPair<int, int> posIndexRange = findMatchRange(foundPosList, info.start, info.end, replaceText);
+
+    if (-1 == posIndexRange.first
+            && -1 == posIndexRange.second) {
+        // 颜色标记内不包含替换文本，和替换文本无交集
+        // 根据当前查询位置判断 foundPosList[findCount - 1] 方向
+        if (!foundPosList.isEmpty()
+                && info.end <= foundPosList.last()) {
+            // 处于颜色标记右侧，减去右侧替换文本的偏移量
+            info.start += (foundPosList.size() - 1) * adjustlen;
+            info.end += (foundPosList.size() - 1) * adjustlen;
+        }
+        else {
+            // 处于颜色标记左侧
+            info.start += foundPosList.size() * adjustlen;
+            info.end += foundPosList.size() * adjustlen;
+        }
+    } else {
+        // 判断左侧是否有交集，拓展颜色标记到替换文本
+        if (-1 != posIndexRange.first
+                && foundPosList[posIndexRange.first] <= info.start) {
+            // 存在交叉，调整位置到左侧替换位置起始边界
+            info.start = foundPosList[posIndexRange.first] + (posIndexRange.first * adjustlen);
+        } else {
+            info.start += posIndexRange.first * adjustlen;
+        }
+
+        // 判断右侧是否有交集，拓展颜色标记到替换文本
+        if (-1 != posIndexRange.second
+                && info.end < (foundPosList[posIndexRange.second] + replaceText.size())) {
+            // 存在交叉，调整位置到右侧替换后文本的边界
+            info.end = foundPosList[posIndexRange.second] + (posIndexRange.second * adjustlen) + withText.size();
+        } else {
+            info.end += (posIndexRange.second + 1) * adjustlen;
+        }
+    }
+}
+
+/**
+ * @brief 根据传入的颜色标记信息 \a replaceList 计算文本 \a oldText 替换后颜色标记的位置变化
+ *      在文本替换过程前，记录当前标记光标位置，遍历需要替换的文本位置，记录需要修改的颜色标记位置变更。
+ * @param replaceList   颜色标记替换信息
+ * @param oldText       需要替换的文本内容
+ * @param replaceText   被替换的文本
+ * @param withText      替换后的文本
+ * @param offset        非全文替换时使用，用于补充文本缺失部分偏移量
+ *
+ * @note 文本替换颜色标记处理
+ * @li MarkOnce 单个文本颜色标记
+ *      1. 替换文本覆盖了颜色标记内容，移除颜色标记
+ *      2. 替换文本和单个颜色标记内容存在交叉，包括替换文本处于颜色标记内，将颜色标记拓展到替换文本，替换文本的背景色显示为颜色标记背景色
+ *      3. 若替换文本内包含多个颜色标记，每个颜色标记均拓展到替换文本，颜色标记显示层级按设置时间排列
+ * @li MarkLine 单行文本颜色标记
+ *      1. 同单个颜色标记处理
+ * @li MarkAllMatch 单个文本全文查找颜色标记
+ *      1. 替换前后不进行特殊处理
+ * @li MarkAll 全文颜色标记
+ *      1. 替换前后不进行特殊处理
+ */
+void TextEdit::calcMarkReplaceList(QList<TextEdit::MarkReplaceInfo> &replaceList, const QString &oldText, const QString &replaceText, const QString &withText, int offset) const
+{
+    // 当前替换项为空或相同，退出
+    if (replaceList.isEmpty()
+            || replaceText == withText) {
+        return;
+    }
+
+    // 将传入的替换列表排序，按光标位置先后顺序进行排列
+    std::sort(replaceList.begin(), replaceList.end(), [](const MarkReplaceInfo &a, const MarkReplaceInfo &b){
+        return a.start < b.start;
+    });
+
+    // 当前标记的索引，后续使用 updateMarkRange() 初始化，设置为-1
+    int currentMarkIndex = -1;
+    // 临时缓存的当前标记的索引范围
+    QPair<int, int> curMarkRange {0, 0};
+    // 更新当前标记替换项索引和其对应的标记范围
+    auto updateMarkIndexAndRange = [&]() {
+        currentMarkIndex++;
+        while (currentMarkIndex >= 0 && currentMarkIndex < replaceList.size()) {
+            auto &markInfo = replaceList.at(currentMarkIndex);
+            // 标记类型为标记全文或文本全文标记(使用文本查找而非光标位置)，不进行替换处理
+            if (MarkAllMatch == markInfo.opt.type
+                    || MarkAll == markInfo.opt.type) {
+                currentMarkIndex++;
+                continue;
+            }
+
+            curMarkRange = qMakePair(markInfo.start, markInfo.end);
+            break;
+        }
+    };
+    updateMarkIndexAndRange();
+
+    // 查找统计及已查找偏移量
+    int findOffset = 0;
+    QList<int> foundPosList;
+
+    // 查找替换位置，遍历查找替换文本出现位置
+    int findPos = oldText.indexOf(replaceText, findOffset);
+    // 需要取得左侧所有的变更相对偏移，从文本左侧开始循环遍历
+    while (-1 != findPos
+           && currentMarkIndex < replaceList.size()) {
+        // 转换为相对全文的偏移
+        int realPos = findPos + offset;
+        // 记录已查询的索引位置
+        foundPosList.append(realPos);
+
+        // 获取替换文本区域和颜色标记区域的交叉关系
+        Utils::RegionIntersectType type = Utils::checkRegionIntersect(realPos, realPos + replaceText.size(),
+                                                                      curMarkRange.first, curMarkRange.second);
+
+        // 判断是否处于查询范围内，处于右侧区间则后续处理
+        while (Utils::ERight != type) {
+            auto &info = replaceList[currentMarkIndex];
+
+            bool checkNext = false;
+            switch (type) {
+            case Utils::EIntersectInner: {
+                // 替换文本内容包含标记信息, 取消当前文本标记（无论单个文本还是单行文本，均移除）
+                // 在 manualUpdateAllMark() 函数处理会移除此标记
+                info.start = 0;
+                info.end = 0;
+                checkNext = true;
+                break;
+            }
+            case Utils::ELeft: {
+                // 当前无交集，颜色标记在替换文本左侧，表示当前颜色标记已经经过
+                updateMarkReplaceRange(foundPosList, info, replaceText, withText);
+
+                checkNext = true;
+                break;
+            }
+            // 其它交叉类型需要等待颜色标记区间内所有替换文本均查找后处理，单个颜色标记中可能含多个替换文本
+            default:
+                break;
+            }
+
+            if (checkNext) {
+                // 更新当前计算的颜色标记和范围
+                updateMarkIndexAndRange();
+                // 判断颜色标记是否计算完成
+                if (currentMarkIndex == replaceList.size()) {
+                    break;
+                }
+
+                // 继续查找下一颜色标记和当前查询位置的交叉范围
+                type = Utils::checkRegionIntersect(realPos, realPos + replaceText.size(), curMarkRange.first, curMarkRange.second);
+            } else {
+                break;
+            }
+        }
+
+        if (currentMarkIndex == replaceList.size()) {
+            break;
+        }
+
+        // 继续查找替换文本位置
+        findOffset = findPos + replaceText.size();
+        findPos = oldText.indexOf(replaceText, findOffset);
+    }
+
+    // 继续处理剩余颜色标记偏移
+    while (currentMarkIndex != replaceList.size()) {
+        // 将后续未处理到的颜色标记调整偏移量
+        auto &info = replaceList[currentMarkIndex];
+        updateMarkReplaceRange(foundPosList, info, replaceText, withText);
+
+        updateMarkIndexAndRange();
+    }
 }
 
 void TextEdit::markSelectWord()
@@ -6768,6 +7221,9 @@ void TextEdit::resizeEvent(QResizeEvent *e)
 {
     if (m_isSelectAll)
         selectTextInView();
+
+    // 显示区域变化时同时更新视图
+    markAllKeywordInView();
 
     QPlainTextEdit::resizeEvent(e);
 }

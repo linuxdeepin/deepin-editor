@@ -880,3 +880,36 @@ QString Utils::lineFeed(const QString &text, int nWidth, const QFont &font, int 
 
     return strText;
 }
+
+/**
+ * @brief 判断 [ \a x1, \a y1] 和 [ \a x2, \a y2] 区间是否存在交集
+ * @param x1 固定区间左边界
+ * @param y1 固定区间右边界
+ * @param x2 移动区间左边界
+ * @param y2 移动区间右边界
+ * @return RegionType 返回重叠区间类型
+ */
+Utils::RegionIntersectType Utils::checkRegionIntersect(int x1, int y1, int x2, int y2)
+{
+    if (y1 < x2) {
+        return ERight;
+    } else if (x1 > y2) {
+        return ELeft;
+    } else {
+        // 区间存在交集，判断交集类型
+        // 活动区间左边界超过固定区间左边界
+        bool outLeftBound = x1 > x2;
+        // 活动区间右边界超过固定区间右边界
+        bool outRightBound = y1 < y2;
+
+        if (outLeftBound && outRightBound) {
+            return EIntersectOutter;
+        } else if (outLeftBound) {
+            return EIntersectLeft;
+        } else if (outRightBound) {
+            return EIntersectRight;
+        } else {
+            return EIntersectInner;
+        }
+    }
+}

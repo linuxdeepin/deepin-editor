@@ -84,9 +84,22 @@ public:
     };
 
     struct MarkOperation {
-        MarkOperationType type;
-        QTextCursor cursor;
-        QString color;
+        MarkOperationType   type;           // 标记操作类型
+        QTextCursor         cursor;         // 在(MarkAll)时不使用
+        QString             color;          // 标记颜色
+        QString             matchText;      // 匹配文本，仅在全局标记匹配文本(MarkAllMatch)时使用
+
+        MarkOperation(): type(MarkOnce) {}
+    };
+
+    // 标记替换信息，包含光标的绝对信息
+    struct MarkReplaceInfo {
+        MarkOperation       opt;            // 标记项操作
+        int                 start;          // 光标选中起始位置
+        int                 end;            // 光标选中结束位置
+        qint64              time;           // 标记的操作时间
+
+        MarkReplaceInfo(): start(0), end(0), time(0) {}
     };
 
     TextEdit(QWidget *parent = nullptr);
@@ -236,6 +249,12 @@ public:
     bool markKeywordInView(QString keyword, QString color, qint64 timeStamp = -1);
     void markAllInView(QString color, qint64 timeStamp = -1);
     void toggleMarkSelections();
+
+    // 颜色标记操作列表和标记替换列表的互相转换函数
+    static QList<QPair<MarkOperation, qint64> > convertReplaceToMark(const QList<MarkReplaceInfo> &replaceInfo);
+    static QList<MarkReplaceInfo> convertMarkToReplace(const QList<QPair<MarkOperation, qint64> > &markInfo);
+    // 手动更新所有的标记信息，用于撤销栈处理更新当前颜色标记操作
+    void manualUpdateAllMark(const QList<QPair<MarkOperation, qint64> > &markInfo);
 
     /**
      * @author shaoyu.guo ut000455
@@ -604,10 +623,11 @@ private:
     void SendtoggleReadOnlyMode();
     void SendtoggleReadmessage();
 
-    /**
-     * @brief isAbleOperation 读取可用内存，判断并解决操作是否可继续执行
-     */
+    // 读取可用内存，判断并解决操作是否可继续执行
     bool isAbleOperation(int iOperationType);
+    // 计算颜色标记替换信息列表
+    void calcMarkReplaceList(QList<TextEdit::MarkReplaceInfo> &replaceList, const QString &oldText,
+                             const QString &replaceText, const QString &withText, int offset = 0) const;
 
 public:
     int getFirstVisibleBlockId() const;
@@ -633,7 +653,7 @@ private:
     //QTextEdit::ExtraSelection m_wordUnderCursorSelection;
     QList<QPair<QTextEdit::ExtraSelection, qint64>> m_wordMarkSelections;///< 记录标记的列表（分行记录）
     QMap<int, QList<QTextEdit::ExtraSelection>> m_mapWordMarkSelections; ///< 记录标记的表（按标记动作记录）
-    QList<QPair<TextEdit::MarkOperation, qint64>> m_markOperations;    ///记录所有标记操作
+    QList<QPair<TextEdit::MarkOperation, qint64>> m_markOperations;    ///记录所有标记操作(包括单个标记和全文标记)
     QMap<QString, QList<QPair<QTextEdit::ExtraSelection, qint64>>> m_mapKeywordMarkSelections; ///记录关键字对应的全文标记
     QTextEdit::ExtraSelection m_markAllSelection;///< “标记所有”的字符格式
     QList<QTextEdit::ExtraSelection> m_markFoldHighLightSelections;

@@ -5,12 +5,14 @@
 #include <QTextCursor>
 #include <QTextDocument>
 #include <QPlainTextEdit>
+#include <QPointer>
+#include "dtextedit.h"
 
-//全部替换撤销-重做
-class ReplaceAllCommond:public QUndoCommand
+// 全部替换撤销-重做
+class ReplaceAllCommond: public QUndoCommand
 {
 public:
-    ReplaceAllCommond(QString& oldText,QString& newText,QTextCursor cursor);
+    ReplaceAllCommond(QString &oldText, QString &newText, QTextCursor cursor, QUndoCommand *parent = nullptr);
     virtual ~ReplaceAllCommond();
 
     virtual void redo();
@@ -20,7 +22,6 @@ private:
     QString m_oldText;
     QString m_newText;
     QTextCursor m_cursor;
-
 };
 
 #endif // REPLACEALLCOMMOND_H

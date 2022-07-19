@@ -34,10 +34,6 @@ public:
     virtual void undo();
     virtual void redo();
 
-//private:
-//    InsertTextUndoCommand(const InsertTextUndoCommand&) = delete;
-//    InsertTextUndoCommand& operator=(const InsertTextUndoCommand&) = delete;
-
 private:
     QTextCursor m_textCursor;
     int m_beginPostion {0};
