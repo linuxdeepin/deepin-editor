@@ -46,6 +46,19 @@
 class Utils
 {
 public:
+    /**
+     * @brief 区间交叉类型
+     */
+    enum RegionIntersectType {
+        ELeft,              ///< 活动区间在固定区间左侧 例如 [0, 9] 和 [-5, -1]
+        ERight,             ///< 活动区间在固定区间右侧 例如 [0, 9] 和 [10, 15]
+
+        EIntersectLeft,     ///< 活动区间在固定区间左侧存在范围重叠 例如 [0, 9] 和 [-5, 5]
+        EIntersectRight,    ///< 活动区间在固定区间右侧存在范围重叠 例如 [0, 9] 和 [5, 15]
+        EIntersectOutter,   ///< 活动区间包含固定区间            例如 [0, 9] 和 [-10, 10]
+        EIntersectInner,    ///< 活动区间处于固定区间内部         例如 [0, 9] 和 [5, 6]
+    };
+
     static QString getQrcPath(const QString &imageName);
     static QString getQssPath(const QString &qssName);
     static QSize getRenderSize(int fontSize, const QString &string);
@@ -117,6 +130,9 @@ public:
 
     // 计算换行内容 text: 原始文本内容， nWidth: 一行最大宽度， font:字体大小, nElideRow: 最大显示行数，超出最大行时，中间内容加···省略号显示
     static QString lineFeed(const QString &text, int nWidth, const QFont &font, int nElidedRow = 2);
+
+    // 判断 [x1, y1] 和 [x2, y2] 区间是否存在交集，返回交集类型
+    static RegionIntersectType checkRegionIntersect(int x1, int y1, int x2, int y2);
 
 private:
     static QString m_systemLanguage;
