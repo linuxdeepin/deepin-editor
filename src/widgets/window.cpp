@@ -2152,7 +2152,7 @@ void Window::handleUpdateSearchKeyword(QWidget *widget, const QString &file, con
                 if (emptyKeyword) {
                     replaceBarWidget->setMismatchAlert(false);
                 } else {
-                    replaceBarWidget->setMismatchAlert(!findKeyword);
+                    replaceBarWidget->setMismatchAlert(false);
                 }
             }
         }
