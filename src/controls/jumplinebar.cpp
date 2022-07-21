@@ -72,6 +72,7 @@ void JumpLineBar::activeInput(QString file, int row, int column, int lineCount, 
     m_rowBeforeJump = row;
     m_columnBeforeJump = column;
     m_jumpFileScrollOffset = scrollOffset;
+    m_lineCount = lineCount;
     m_pSpinBoxInput->setRange(1, lineCount);
     m_pSpinBoxInput->clear();
     setFixedSize(nJumpLineBarWidth + QString::number(lineCount).size() * fontMetrics().width('9'), nJumpLineBarHeight);
@@ -122,9 +123,15 @@ void JumpLineBar::slotFocusChanged(bool bFocus)
 }
 
 // Hide 跳转到行窗口时，需要清空编辑框中的内容
-void JumpLineBar::hide() {
+void JumpLineBar::hide()
+{
     m_pSpinBoxInput->clear();
     DFloatingWidget::hide();
+}
+
+int JumpLineBar::getLineCount()
+{
+    return m_lineCount;
 }
 
 bool JumpLineBar::eventFilter(QObject *pObject, QEvent *pEvent)

@@ -1287,7 +1287,8 @@ void Window::popupJumpLineBar()
 
 void Window::updateJumpLineBar(TextEdit *editor)
 {
-    if (m_jumpLineBar->isVisible()) {
+    // 文本块内容未新增行不更新跳转行号
+    if (m_jumpLineBar->isVisible() && editor->blockCount() != m_jumpLineBar->getLineCount()) {
         QString tabPath = m_tabbar->currentPath();
         QString text = editor->textCursor().selectedText();
         int row = editor->getCurrentLine();
