@@ -703,7 +703,8 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteAr
 
     bool flag = m_pTextEdit->getReadOnlyPermission();
     if (flag == true) {
-        m_pTextEdit->setReadOnlyPermission(false);
+        // note: 特殊处理，由于需要TextEdit处于可编辑状态追加文件数据，临时设置非只读状态
+        m_pTextEdit->setReadOnly(false);
     }
 
     m_bFileLoading = true;
@@ -712,7 +713,6 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteAr
 
     //备份显示修改状态
     if (m_bIsTemFile) {
-        // m_bIsTemFile = false;
         updateModifyStatus(true);
     }
 
@@ -725,7 +725,7 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteAr
 
     m_bFileLoading = false;
     if (flag == true) {
-        m_pTextEdit->setReadOnlyPermission(true);
+        m_pTextEdit->setReadOnly(true);
     }
     if (m_bQuit) {
         return;
@@ -741,8 +741,6 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteAr
         // 解析未发生错误
         if (!doucment.isNull() && (jsonError.error == QJsonParseError::NoError)) {
             if (doucment.isObject()) {
-                QString temFilePath;
-                QString localPath;
                 // JSON 文档为对象
                 QJsonObject object = doucment.object();  // 转化为对象
 
@@ -778,7 +776,6 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteAr
     }
     //备份显示修改状态
     if (m_bIsTemFile) {
-        //m_bIsTemFile = false;
         updateModifyStatus(true);
     }
 
