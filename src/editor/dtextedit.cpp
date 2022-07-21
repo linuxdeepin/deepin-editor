@@ -4441,12 +4441,23 @@ void TextEdit::isMarkCurrentLine(bool isMark, QString strColor,  qint64 timeStam
             selection.cursor.setPosition(beginPos, QTextCursor::MoveAnchor);
             selection.cursor.setPosition(endPos, QTextCursor::KeepAnchor);
         }
-        markOperation.cursor = selection.cursor;
-
-        m_markOperations.append(QPair<TextEdit::MarkOperation, qint64>(markOperation, operationTimeStamp));
-        m_wordMarkSelections.append(
-            QPair<QTextEdit::ExtraSelection, qint64>
-            (selection, operationTimeStamp));
+        //alt选中光标单独处理
+        if (m_bIsAltMod) {
+            for (int i = 0; i < m_altModSelections.size(); ++i) {
+                markOperation.cursor = m_altModSelections[i].cursor;
+                selection.cursor = m_altModSelections[i].cursor;
+                m_markOperations.append(QPair<TextEdit::MarkOperation, qint64>(markOperation, operationTimeStamp));
+                m_wordMarkSelections.append(
+                    QPair<QTextEdit::ExtraSelection, qint64>
+                    (selection, operationTimeStamp));
+            }
+        } else {
+            markOperation.cursor = selection.cursor;
+            m_markOperations.append(QPair<TextEdit::MarkOperation, qint64>(markOperation, operationTimeStamp));
+            m_wordMarkSelections.append(
+                QPair<QTextEdit::ExtraSelection, qint64>
+                (selection, operationTimeStamp));
+        }
     } else {
         clearMarksForTextCursor();
     }
@@ -5828,7 +5839,7 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
         //列编辑添加撤销重做
         if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
             insertColumnEditTextEx(e->commitString());
-        } else {            
+        } else {
             // 覆盖模式下输入法输入时，单独处理，模拟选中替换处理
             if (Overwrite == m_cursorMode) {
                 auto cursor = this->textCursor();
@@ -5838,7 +5849,7 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
                 insertSelectTextEx(cursor, e->commitString());
             } else {
                 insertSelectTextEx(textCursor(), e->commitString());
-            }        
+            }
         }
 
         m_isSelectAll = false;
