@@ -1812,7 +1812,7 @@ bool Window::closeAllFiles()
 
     //关闭所有文件
     for (int i = 0; i < wrappers.count(); i++) {
-        m_tabbar->setCurrentIndex(0);
+        m_tabbar->setCurrentIndex(i);
 
         if (!closeTab()) {
             bIsCloseAll = false;

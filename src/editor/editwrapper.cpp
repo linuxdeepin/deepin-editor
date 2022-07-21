@@ -138,7 +138,7 @@ bool EditWrapper::readFile(QByteArray encode)
         m_sFirstEncode = newEncode;
     }
 
-	//QFile file(m_pTextEdit->getFilePath());
+    //QFile file(m_pTextEdit->getFilePath());
     QFile file2(m_pTextEdit->getTruePath());
 
     if (file2.open(QIODevice::ReadOnly)) {
@@ -250,7 +250,7 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
     //temporarily use '*' to determine whether the text has been modified.
     auto tabname = this->window()->getTabbar()->currentName();
     bool hasFlag = false;
-    if(tabname.size() >0 && "*" == tabname[0]){
+    if (tabname.size() > 0 && "*" == tabname[0]) {
         hasFlag = true;
     }
 
@@ -270,13 +270,13 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
         }
 
         //不保存,重写载入
-        #if 0
+#if 0
         if (res == 1) {
             bool ok = readFile(encode);
             //if(ok && m_sCurEncode != m_sFirstEncode) m_pTextEdit->setTabbarModified(true);
             return ok;
         }
-        #endif
+#endif
 
         //保存
         if (res == 1) {
@@ -331,7 +331,7 @@ void EditWrapper::reloadModifyFile()
         if (res == 1) {
             //重写加载文件
             readFile();
-            m_bIsTemFile=false;
+            m_bIsTemFile = false;
         }
         //另存
         if (res == 2) {
@@ -347,14 +347,14 @@ void EditWrapper::reloadModifyFile()
             }
             //重写加载文件
             readFile();
-            m_bIsTemFile=false;
+            m_bIsTemFile = false;
         }
 
     } else {
         //重写加载文件
         readFile();
     }
-
+    m_pTextEdit->setBookMarkList(QList<int>());
     QFileInfo fi(m_pTextEdit->getTruePath());
     m_tModifiedDateTime = fi.lastModified();
 
@@ -385,7 +385,7 @@ bool EditWrapper::saveFile()
             // 如果 iconv 转换错误
             if (Outdata.size() == 0) {
                 qWarning() << QString("iconv Encode Transformat from '%1' to '%2' Fail!")
-                              .arg(QString("UTF-8")).arg(m_sCurEncode)
+                           .arg(QString("UTF-8")).arg(m_sCurEncode)
                            << ", start QTextCodec Encode Transformat.";
                 // 使用 QTextCodec 进行转换尝试
                 QTextCodec *codec = QTextCodec::codecForName(m_sCurEncode.toUtf8());
@@ -395,12 +395,12 @@ bool EditWrapper::saveFile()
                     qWarning() << "Both iconv and QTextCodec Encode Transformat Fail!";
                 } else {
                     qWarning() << QString("QTextCodec Encode Transformat from '%1' to '%2' Success!")
-                                  .arg(QString("UTF-8")).arg(m_sCurEncode);
+                               .arg(QString("UTF-8")).arg(m_sCurEncode);
                     Outdata = encodedString;
                 }
             }
 
-            if(Outdata.isEmpty() == false) {
+            if (Outdata.isEmpty() == false) {
                 // 如果新数据为空，不进行文件写入，以降低文件内容损失
                 // 此时如果写入，整个文件将被清空
                 file.write(Outdata);
@@ -500,25 +500,26 @@ bool EditWrapper::saveTemFile(QString qstrDir)
         }
         return ok;
 
-        #if 0
-        }else {
-            file.write(fileContent);
-            QFileDevice::FileError error = file.error();
-            file.close();
-            m_sFirstEncode = m_sCurEncode;
-
-               did save work?
-               only finalize if stream status == OK
-            bool ok = (error == QFileDevice::NoError);
-
-            // update status.
-            if (ok)  updateModifyStatus(true);
-            return ok;
-        }
-        #endif
+#if 0
     } else {
-        return false;
+        file.write(fileContent);
+        QFileDevice::FileError error = file.error();
+        file.close();
+        m_sFirstEncode = m_sCurEncode;
+
+        did save work ?
+        only finalize if stream status == OK
+        bool ok = (error == QFileDevice::NoError);
+
+        // update status.
+        if (ok)  updateModifyStatus(true);
+        return ok;
     }
+#endif
+} else
+{
+    return false;
+}
 }
 
 void EditWrapper::updatePath(const QString &file, QString qstrTruePath)
@@ -575,6 +576,7 @@ bool EditWrapper::saveDraftFile()
     dialog.setNameFilter("*.txt");
 
     if (m_pWindow) {
+        m_pWindow = this->window();
         QRegularExpression reg("[^*](.+)");
         QRegularExpressionMatch match = reg.match(m_pWindow->getTabbar()->currentName());
         dialog.selectFile(match.captured(0) + ".txt");
@@ -582,7 +584,7 @@ bool EditWrapper::saveDraftFile()
 
     //this->setUpdatesEnabled(false);
     int mode =  dialog.exec(); // 0表示取消 1保存
-   // this->setUpdatesEnabled(true);
+    // this->setUpdatesEnabled(true);
     hideWarningNotices();
 
     if (mode == 1) {
@@ -608,7 +610,7 @@ bool EditWrapper::saveDraftFile()
         QFile(m_pTextEdit->getFilePath()).remove();
         updateSaveAsFileName(m_pTextEdit->getFilePath(), newFilePath);
         m_pTextEdit->document()->setModified(false);
-         m_bIsTemFile = false;
+        m_bIsTemFile = false;
         return true;
     }
 
@@ -631,7 +633,7 @@ void EditWrapper::checkForReload()
 
     QFileInfo fi(m_pTextEdit->getTruePath());
 
-    QTimer::singleShot(50, [=]() {
+    QTimer::singleShot(50, [ = ]() {
         if (fi.lastModified() == m_tModifiedDateTime || m_pWaringNotices->isVisible()) {
             return;
         }
@@ -880,10 +882,10 @@ void EditWrapper::updateHighlighterAll()
 
 QDateTime EditWrapper::getLastModifiedTime() const
 {
-     return m_tModifiedDateTime;
+    return m_tModifiedDateTime;
 }
 
-void EditWrapper::setLastModifiedTime(const QString& time)
+void EditWrapper::setLastModifiedTime(const QString &time)
 {
     m_tModifiedDateTime = QDateTime::fromString(time);
 }
@@ -912,7 +914,7 @@ void EditWrapper::setLineNumberShow(bool bIsShow, bool bIsFirstShow)
         //m_pTextEdit->getLeftAreaWidget()->setFixedWidth(leftAreaWidth + lineNumberAreaWidth);
 
     } else if (!bIsShow) {
-       // int lineNumberAreaWidth = m_pTextEdit->getLeftAreaWidget()->m_pLineNumberArea->width();
+        // int lineNumberAreaWidth = m_pTextEdit->getLeftAreaWidget()->m_pLineNumberArea->width();
         //int leftAreaWidth = m_pTextEdit->getLeftAreaWidget()->width();
         m_pTextEdit->getLeftAreaWidget()->m_pLineNumberArea->hide();
         //m_pTextEdit->getLeftAreaWidget()->setFixedWidth(leftAreaWidth - lineNumberAreaWidth);
@@ -990,8 +992,8 @@ void EditWrapper::loadContent(const QByteArray &strContent)
 
     QTextCodec::ConverterState state;
     QTextCodec *codec = QTextCodec::codecForName("UTF-8");
-    if(nullptr == codec){
-        qInfo()<<"QTextCodec::codecForName return nullptr";
+    if (nullptr == codec) {
+        qInfo() << "QTextCodec::codecForName return nullptr";
         return;
     }
 
