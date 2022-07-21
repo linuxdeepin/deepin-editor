@@ -836,18 +836,10 @@ void Window::openFile()
 
     // read history directory.
     QString historyDirStr = m_settings->settings->option("advance.editor.file_dialog_dir")->value().toString();
-
-    if (historyDirStr.isEmpty()) {
-        historyDirStr = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+    if (historyDirStr.isEmpty() || !QDir(historyDirStr).exists() || !QFileInfo(historyDirStr).isWritable() || !QDir(historyDirStr).isReadable()) {
+        historyDirStr = QDir::homePath() + "/Documents";
     }
-
-    QDir historyDir(historyDirStr);
-
-    if (historyDir.exists()) {
-        dialog.setDirectory(historyDir);
-    } else {
-        qDebug() << "historyDir or default path not existed:" << historyDir;
-    }
+    dialog.setDirectory(historyDirStr);
 
     const int mode = dialog.exec();
 
@@ -969,6 +961,11 @@ QString Window::saveAsFileToDisk()
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.addComboBox(QObject::tr("Encoding"),  QStringList() << wrapper->getTextEncode());
     dialog.setDirectory(QDir::homePath());
+    QString path = m_settings->settings->option("advance.editor.file_dialog_dir")->value().toString();
+    if (path.isEmpty() || !QDir(path).exists() || !QFileInfo(path).isWritable() || !QDir(path).isReadable()) {
+        path = QDir::homePath() + "/Documents";
+    }
+    dialog.setDirectory(path);
 
     if (isDraft) {
         QRegularExpression reg("[^*](.+)");
@@ -987,6 +984,7 @@ QString Window::saveAsFileToDisk()
         const QByteArray encode = dialog.getComboBoxValue(QObject::tr("Encoding")).toUtf8();
         const QString endOfLine = dialog.getComboBoxValue(QObject::tr("Line Endings"));
         const QString newFilePath = dialog.selectedFiles().value(0);
+        m_settings->settings->option("advance.editor.file_dialog_dir")->setValue(dialog.directoryUrl().toLocalFile());
 
         wrapper->updatePath(wrapper->filePath(), newFilePath);
         if (!wrapper->saveFile()) {
