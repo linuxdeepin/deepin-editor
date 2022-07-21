@@ -134,7 +134,7 @@ bool StartManager::isTemFilesEmpty()
 void StartManager::autoBackupFile()
 {
     // 标签页在拖拽状态时不执行备份
-    if (!m_bIsTagDragging) {
+    if (m_bIsTagDragging) {
         return;
     }
 
