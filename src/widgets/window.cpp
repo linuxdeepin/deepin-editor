@@ -68,7 +68,7 @@
  * \~chinese \param pageCountBox 绘制页码的范围
  */
 void Window::printPage(int index, QPainter *painter, const QTextDocument *doc,
-                      const QRectF &body, const QRectF &pageCountBox)
+                       const QRectF &body, const QRectF &pageCountBox)
 {
     painter->save();
 
@@ -370,7 +370,7 @@ void Window::initTitlebar()
     m_menu->addAction(saveAction);
     m_menu->addAction(saveAsAction);
     m_menu->addAction(printAction);
-	//此接口不可删除，预留的编辑器内部主题选择接口
+    //此接口不可删除，预留的编辑器内部主题选择接口
     //m_menu->addAction(switchThemeAction);
     m_menu->addSeparator();
     m_menu->addAction(settingAction);
@@ -550,9 +550,8 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
                              wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
     connect(wrapper->textEditor(), &QPlainTextEdit::cursorPositionChanged, wrapper->textEditor(), &TextEdit::cursorPositionChanged);
 
-    connect(wrapper->textEditor(),&QPlainTextEdit::textChanged,wrapper->textEditor(),[=]()
-    {
-       wrapper->UpdateBottomBarWordCnt(wrapper->textEditor()->characterCount());
+    connect(wrapper->textEditor(), &QPlainTextEdit::textChanged, wrapper->textEditor(), [ = ]() {
+        wrapper->UpdateBottomBarWordCnt(wrapper->textEditor()->characterCount());
     });
 
 
@@ -676,17 +675,15 @@ bool Window::closeTab(const QString &filePath)
                         removeWrapper(filePath, true);
                         m_tabbar->closeCurrentTab(filePath);
                         QFile(filePath).remove();
-                    }
-                    else {
-                         saveAsFile();
+                    } else {
+                        saveAsFile();
                     }
                 } else {
                     if (wrapper->saveFile()) {
                         removeWrapper(filePath, true);
                         m_tabbar->closeCurrentTab(filePath);
-                    }
-                    else {
-                         saveAsFile();
+                    } else {
+                        saveAsFile();
                     }
                 }
             }
@@ -798,8 +795,8 @@ void Window::removeWrapper(const QString &filePath, bool isDelete)
     EditWrapper *wrapper = m_wrappers.value(filePath);
 
     if (wrapper) {
-        qInfo()<<"begin removeWrapper";
-        if(nullptr == m_editorWidget){
+        qInfo() << "begin removeWrapper";
+        if (nullptr == m_editorWidget) {
             return;
         }
         m_editorWidget->removeWidget(wrapper);
@@ -809,17 +806,17 @@ void Window::removeWrapper(const QString &filePath, bool isDelete)
             disconnect(wrapper, nullptr);
             wrapper->setQuitFlag();
             wrapper->deleteLater();
-            qInfo()<<"after delete wrapper";
+            qInfo() << "after delete wrapper";
         }
     }
 
     // Exit window after close all tabs.
     if (m_wrappers.isEmpty()) {
         close();
-        qInfo()<<"after close";
+        qInfo() << "after close";
     }
 
-    qInfo()<<"end removeWrapper";
+    qInfo() << "end removeWrapper";
 }
 
 void Window::openFile()
@@ -983,7 +980,7 @@ QString Window::saveAsFileToDisk()
         const QString newFilePath = dialog.selectedFiles().value(0);
 
         wrapper->updatePath(wrapper->filePath(), newFilePath);
-        if(!wrapper->saveFile()) {
+        if (!wrapper->saveFile()) {
             /* 如果保存未成功，无需记录更新新文件路径 */
             wrapper->updatePath(wrapper->filePath(), QString());
             return QString();
@@ -1147,7 +1144,7 @@ void Window::setFontSizeWithConfig(EditWrapper *wrapper)
 
 void Window::popupFindBar()
 {
-    #if 0
+#if 0
     if (m_findBar->isVisible()) {
         m_findBar->move(QPoint(10, height() - 59));
         if (m_findBar->isFocus()) {
@@ -1158,7 +1155,7 @@ void Window::popupFindBar()
     } else {
         addBottomWidget(m_findBar);
     }
-    #endif
+#endif
 
     m_findBar->setSearched(false);
     QString tabPath = m_tabbar->currentPath();
@@ -1201,7 +1198,7 @@ void Window::popupReplaceBar()
         return;
     }
 
-    if(currentWrapper() && currentWrapper()->getFileLoading()){
+    if (currentWrapper() && currentWrapper()->getFileLoading()) {
         return;
     }
 
@@ -1343,7 +1340,7 @@ void Window::popupPrintDialog()
 
     printer.setOutputFormat(QPrinter::PdfFormat);
 
-    connect(&preview, &QPrintPreviewDialog::paintRequested, this, [ = ](QPrinter *printer) {
+    connect(&preview, &QPrintPreviewDialog::paintRequested, this, [ = ](QPrinter * printer) {
         currentWrapper()->textEditor()->print(printer);
     });
 
@@ -1406,7 +1403,7 @@ void Window::popupPrintDialog()
     DPrintPreviewDialog preview(this);
 
     connect(&preview, QOverload<DPrinter *>::of(&DPrintPreviewDialog::paintRequested),
-            this, [ & ](DPrinter *printer) {
+    this, [ & ](DPrinter * printer) {
         if (fileDir == m_blankFileDir) {
             printer->setDocName(QString(m_tabbar->currentName()));
         } else {
@@ -1622,8 +1619,8 @@ void Window::doPrint(DPrinter *printer, const QVector<int> &pageRange)
     bool backgroundIsDark = background.value() < 128;
     //对文本进行分页处理
     for (QTextBlock srcBlock = currentWrapper()->textEditor()->document()->firstBlock(), dstBlock = m_printDoc->firstBlock();
-         srcBlock.isValid() && dstBlock.isValid();
-         srcBlock = srcBlock.next(), dstBlock = dstBlock.next()) {
+            srcBlock.isValid() && dstBlock.isValid();
+            srcBlock = srcBlock.next(), dstBlock = dstBlock.next()) {
         QVector<QTextLayout::FormatRange> formatList = srcBlock.layout()->formats();
         if (backgroundIsDark) {
             // adjust syntax highlighting colors for better contrast
@@ -1652,9 +1649,9 @@ void Window::doPrint(DPrinter *printer, const QVector<int> &pageRange)
     int margin = (int)((2 / 2.54) * dpiy); // 2 cm margins
     margin = PRINT_FORMAT_MARGIN;
 
-     auto fmt = m_printDoc->rootFrame()->frameFormat();
-     fmt.setMargin(margin);
-     m_printDoc->rootFrame()->setFrameFormat(fmt);
+    auto fmt = m_printDoc->rootFrame()->frameFormat();
+    fmt.setMargin(margin);
+    m_printDoc->rootFrame()->setFrameFormat(fmt);
 
     QRectF pageRect(printer->pageRect());
     QRectF body = QRectF(0, 0, pageRect.width(), pageRect.height());
@@ -1724,12 +1721,12 @@ void Window::backupFile()
     m_qlistTemFile = wrappers.keys();
 
     for (EditWrapper *wrapper : wrappers) {
-        if(nullptr == wrapper){
+        if (nullptr == wrapper) {
             continue;
         }
         if (wrapper->getFileLoading()) continue;
 
-        if(nullptr == wrapper->textEditor()){
+        if (nullptr == wrapper->textEditor()) {
             continue;
         }
 
@@ -1740,7 +1737,7 @@ void Window::backupFile()
             localPath = wrapper->textEditor()->getFilePath();
         }
 
-        qInfo()<<"begin backupFile()";
+        qInfo() << "begin backupFile()";
         StartManager::FileTabInfo tabInfo = StartManager::instance()->getFileTabInfo(filePath);
         curPos = QString::number(wrapper->textEditor()->textCursor().position());
         fileInfo.setFile(localPath);
@@ -1750,7 +1747,7 @@ void Window::backupFile()
         jsonObject.insert("localPath", localPath);
         jsonObject.insert("cursorPosition", QString::number(wrapper->textEditor()->textCursor().position()));
         jsonObject.insert("modify", wrapper->isModified());
-        jsonObject.insert("lastModifiedTime",wrapper->getLastModifiedTime().toString());
+        jsonObject.insert("lastModifiedTime", wrapper->getLastModifiedTime().toString());
         QList<int> bookmarkList = wrapper->textEditor()->getBookmarkInfo();
         if (!bookmarkList.isEmpty()) {
             QString bookmarkInfo;
@@ -1784,7 +1781,7 @@ void Window::backupFile()
             }
         }
 
-        qInfo()<<"after call wrapper->saveTemFile()";
+        qInfo() << "after call wrapper->saveTemFile()";
 
         //使用json串形式保存
         document.setObject(jsonObject);
@@ -1800,12 +1797,12 @@ void Window::backupFile()
         QDir(m_autoBackupDir).removeRecursively();
     }
 
-    qInfo()<<"end backupFile()";
+    qInfo() << "end backupFile()";
 }
 
 bool Window::closeAllFiles()
 {
-    qInfo()<<"begin closeAllFiles()";
+    qInfo() << "begin closeAllFiles()";
     bool bIsCloseAll = true;
     QMap<QString, EditWrapper *> wrappers = m_wrappers;
 
@@ -1817,13 +1814,24 @@ bool Window::closeAllFiles()
             bIsCloseAll = false;
         }
     }
-    qInfo()<<"end closeAllFiles()";
+    qInfo() << "end closeAllFiles()";
     return bIsCloseAll;
 }
 
-void Window::addTemFileTab(QString qstrPath, QString qstrName, QString qstrTruePath, QString lastModifiedTime,bool bIsTemFile)
+void Window::addTemFileTab(QString qstrPath, QString qstrName, QString qstrTruePath, QString lastModifiedTime, bool bIsTemFile)
 {
     if (qstrPath.isEmpty() || !Utils::fileExists(qstrPath)) {
+        return;
+    }
+
+    // 若为MIMETYPE不支持的文件，给出无效文件提示 修复bug：https://pms.uniontech.com/bug-view-132653.html
+    if (!Utils::isMimeTypeSupport(qstrPath)) {
+        if (currentWrapper() == nullptr) {
+            this->addBlankTab();
+        }
+
+        DMessageManager::instance()->sendMessage(m_editorWidget->currentWidget(), QIcon(":/images/warning.svg")
+                                                 , tr("Invalid file: %1").arg(QFileInfo(qstrPath).fileName()));
         return;
     }
 
@@ -1832,7 +1840,7 @@ void Window::addTemFileTab(QString qstrPath, QString qstrName, QString qstrTrueP
     wrapper->openFile(qstrPath, qstrTruePath, bIsTemFile);
 
     //set m_tModifiedDateTime in wrapper again.
-    if(bIsTemFile && !lastModifiedTime.isEmpty()){
+    if (bIsTemFile && !lastModifiedTime.isEmpty()) {
         wrapper->setLastModifiedTime(lastModifiedTime);
     }
     m_wrappers[qstrPath] = wrapper;
@@ -2015,12 +2023,12 @@ void Window::handleBackToPosition(const QString &file, int row, int column, int 
 
 void Window::handleFindNextSearchKeyword(const QString &keyword)
 {
-    handleFindKeyword(keyword,true);
+    handleFindKeyword(keyword, true);
 }
 
 void Window::handleFindPrevSearchKeyword(const QString &keyword)
 {
-    handleFindKeyword(keyword,false);
+    handleFindKeyword(keyword, false);
 }
 
 void Window::handleFindKeyword(const QString &keyword, bool state)
@@ -2099,11 +2107,11 @@ void Window::handleReplaceSkip(QString file, QString keyword)
     } else {
         wrapper->textEditor()->highlightKeywordInView(m_keywordForSearchAll);
     }
-    #if 0
+#if 0
     EditWrapper *wrapper = currentWrapper();
     wrapper->textEditor()->updateCursorKeywordSelection(m_keywordForSearchAll, true);
     wrapper->textEditor()->renderAllSelections();
-    #endif
+#endif
 }
 
 void Window::handleRemoveSearchKeyword()
@@ -2531,12 +2539,12 @@ void Window::resizeEvent(QResizeEvent *e)
         wrapper->OnUpdateHighlighter();
     }
 
-    #if 0
+#if 0
     if (!(m_tabbar->currentPath() == "")) {
         EditWrapper *wrapper = m_wrappers.value(m_tabbar->currentPath());
         wrapper->textEditor()->hideRightMenu();
     }
-    #endif
+#endif
 
     DMainWindow::resizeEvent(e);
 }
@@ -2560,7 +2568,7 @@ void Window::closeEvent(QCloseEvent *e)
     QMap<QString, EditWrapper *> wrappers = m_wrappers;
 
     for (EditWrapper *wrapper : wrappers) {
-        if(nullptr == wrapper){
+        if (nullptr == wrapper) {
             continue;
         }
         m_wrappers.remove(wrapper->filePath());
@@ -2596,14 +2604,14 @@ void Window::hideEvent(QHideEvent *event)
     }
 
     //如果替换浮窗正显示着，则隐藏
-    #if 0
+#if 0
     if (m_replaceBar->isVisible()) {
         //m_replaceBar->hide();
         if (currentWrapper() != nullptr) {
             currentWrapper()->m_bottomBar->show();
         }
     }
-    #endif
+#endif
     DMainWindow::hideEvent(event);
 }
 
@@ -2612,8 +2620,8 @@ void Window::keyPressEvent(QKeyEvent *e)
     QString key = Utils::getKeyshortcut(e);
 
     if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "decrementfontsize") ||
-        key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "incrementfontsize") ||
-        key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "togglefullscreen")) {
+            key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "incrementfontsize") ||
+            key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "togglefullscreen")) {
         currentWrapper()->textEditor()->setCodeFoldWidgetHide(true);
     }
 
@@ -2749,7 +2757,7 @@ bool Window::findBarIsVisiable()
 
 bool Window::replaceBarIsVisiable()
 {
-    return m_replaceBar==nullptr?false:m_replaceBar->isVisible();
+    return m_replaceBar == nullptr ? false : m_replaceBar->isVisible();
 }
 
 QString Window::getKeywordForSearchAll()
