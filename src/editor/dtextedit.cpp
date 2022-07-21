@@ -2945,6 +2945,17 @@ int TextEdit::getFirstVisibleBlockId() const
     return startBlock.blockNumber();
 }
 
+void TextEdit::setLeftAreaUpdateState(TextEdit::UpdateOperationType statevalue)
+{
+    if (statevalue != m_LeftAreaUpdateState) {
+        m_LeftAreaUpdateState = statevalue;
+    }
+}
+
+TextEdit::UpdateOperationType TextEdit::getLeftAreaUpdateState()
+{
+    return m_LeftAreaUpdateState;
+}
 //line 开始处理的行号  isvisable是否折叠  iInitnum左括号默认开始计算的数量  isFirstLine是否是第一行，因为第一行默认不折叠
 bool TextEdit::getNeedControlLine(int line, bool isVisable)
 {
@@ -4240,9 +4251,12 @@ int TextEdit::lineNumberAreaWidth()
 
 void TextEdit::updateLeftWidgetWidth(int width)
 {
-    m_pLeftAreaWidget->m_pFlodArea->setFixedWidth(width);
-    m_pLeftAreaWidget->m_pLineNumberArea->setFixedWidth(lineNumberAreaWidth());
-    m_pLeftAreaWidget->m_pBookMarkArea->setFixedWidth(width);
+    if (m_LeftAreaUpdateState != TextEdit::FileOpenBegin) {
+        m_pLeftAreaWidget->m_pFlodArea->setFixedWidth(width);
+        m_pLeftAreaWidget->m_pLineNumberArea->setFixedWidth(lineNumberAreaWidth());
+        m_pLeftAreaWidget->m_pBookMarkArea->setFixedWidth(width);
+        setLeftAreaUpdateState(TextEdit::Normal);
+    }
 }
 
 int TextEdit::getLinePosYByLineNum(int iLine)

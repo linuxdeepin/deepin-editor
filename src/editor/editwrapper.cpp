@@ -982,6 +982,7 @@ void EditWrapper::loadContent(const QByteArray &strContent)
     QApplication::setOverrideCursor(Qt::WaitCursor);
     m_pTextEdit->clear();
     m_pTextEdit->setReadOnly(true);
+    m_pTextEdit->setLeftAreaUpdateState(TextEdit::FileOpenBegin);
     m_bQuit = false;
     //QTextDocument *doc = m_pTextEdit->document();
     QTextCursor cursor = m_pTextEdit->textCursor();
@@ -1081,7 +1082,7 @@ void EditWrapper::loadContent(const QByteArray &strContent)
         m_pBottomBar->setChildEnabled(true);
     }
     m_pTextEdit->setReadOnly(false);
-
+    m_pTextEdit->setLeftAreaUpdateState(TextEdit::FileOpenEnd);
     QApplication::restoreOverrideCursor();
 }
 
