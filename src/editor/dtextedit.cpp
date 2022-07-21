@@ -5828,8 +5828,17 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
         //列编辑添加撤销重做
         if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
             insertColumnEditTextEx(e->commitString());
-        } else {
-            insertSelectTextEx(textCursor(), e->commitString());
+        } else {            
+            // 覆盖模式下输入法输入时，单独处理，模拟选中替换处理
+            if (Overwrite == m_cursorMode) {
+                auto cursor = this->textCursor();
+                // 设置光标选中后续与当前输入法输入的文本相同长度
+                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, e->commitString().size());
+                // 使用此光标信息插入将输入的文本替换选中的长度
+                insertSelectTextEx(cursor, e->commitString());
+            } else {
+                insertSelectTextEx(textCursor(), e->commitString());
+            }        
         }
 
         m_isSelectAll = false;
