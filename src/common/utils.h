@@ -107,6 +107,9 @@ public:
 
     static bool isWayland();
 
+    // 计算换行内容 text: 原始文本内容， nWidth: 一行最大宽度， font:字体大小, nElideRow: 最大显示行数，超出最大行时，中间内容加···省略号显示
+    static QString lineFeed(const QString &text, int nWidth, const QFont &font, int nElidedRow = 2);
+
 private:
     static QString m_systemLanguage;
 };
