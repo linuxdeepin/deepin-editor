@@ -1031,12 +1031,12 @@
     </message>
     <message>
         <source>Failed to paste text: it is too large</source>
-        <translation type="unfinished"/>
+        <translation type="vanished">Gagal menampal teks: ia terlalu besar</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="2581"/>
         <source>Copy failed: not enough memory</source>
-        <translation type="unfinished"/>
+        <translation>Gagal salin: ingatan tidak mencukupi</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="2665"/>
@@ -1091,7 +1091,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="2591"/>
         <source>Paste failed: not enough memory</source>
-        <translation type="unfinished"/>
+        <translation>Gagal tampal: ingatan tidak mencukupi</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3439"/>

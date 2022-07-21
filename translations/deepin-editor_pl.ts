@@ -71,7 +71,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="612"/>
         <source>File has changed on disk. Reload?</source>
-        <translation>Plik został zmieniony na dysku. Czy chcesz go przeładować?</translation>
+        <translation>Plik został zmieniony na dysku. Czy chcesz go ponownie wczytać?</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="634"/>
@@ -287,7 +287,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="52"/>
         <source>Exit</source>
-        <translation>Wyjdź</translation>
+        <translation>Wyjście</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="53"/>
@@ -362,7 +362,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="67"/>
         <source>Duplicate line</source>
-        <translation>Powiel wiersz</translation>
+        <translation>Duplikuj wiersz</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="68"/>
@@ -387,7 +387,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="72"/>
         <source>Scroll up one line</source>
-        <translation>Przewiń jeden wiersz do góry</translation>
+        <translation>Przewiń jeden wiersz w górę</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="73"/>
@@ -397,12 +397,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="74"/>
         <source>Page up</source>
-        <translation>Przewiń stronę do góry</translation>
+        <translation>Strona w górę</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="75"/>
         <source>Page down</source>
-        <translation>Przewiń stronę w dół</translation>
+        <translation>Strona w dół</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="76"/>
@@ -457,12 +457,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="86"/>
         <source>Forward over a pair</source>
-        <translation>Naprzód nad parą</translation>
+        <translation>Przenieś się za nawias</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="87"/>
         <source>Backward over a pair</source>
-        <translation>Wstecz nad parą</translation>
+        <translation>Przenieś się przed nawias</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="88"/>
@@ -577,7 +577,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="112"/>
         <source>Code folding flag</source>
-        <translation>Kod składany flag</translation>
+        <translation>Pokaż strzałki zawijające kod</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="113"/>
@@ -602,7 +602,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="117"/>
         <source>Color mark</source>
-        <translation>Kolor zanaczenia</translation>
+        <translation>Kolor oznaczenia</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="120"/>
@@ -849,7 +849,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="235"/>
         <source>Undo</source>
-        <translation>Wstecz</translation>
+        <translation>Cofnij</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="236"/>
@@ -921,7 +921,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="249"/>
         <source>Display in file manager</source>
-        <translation>Wyświetl w menedżerze plików</translation>
+        <translation>Wyświetl w Menedżerze plików</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="250"/>
@@ -982,12 +982,12 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="261"/>
         <source>Fold All</source>
-        <translation>Złóż wszystko</translation>
+        <translation>Zwiń wszystko</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="262"/>
         <source>Fold Current Level</source>
-        <translation>Złóż bieżący poziom</translation>
+        <translation>Zwiń bieżący poziom</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="263"/>
@@ -1002,17 +1002,17 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="269"/>
         <source>Color Mark</source>
-        <translation>Kolor zaznaczenia</translation>
+        <translation>Kolor oznaczenia</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="273"/>
         <source>Clear All Marks</source>
-        <translation>Wyczyść wszystkie zaznaczenia</translation>
+        <translation>Wyczyść wszystkie oznaczenia</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="274"/>
         <source>Clear Last Mark</source>
-        <translation>Wyczyść ostatnie zaznaczenie</translation>
+        <translation>Wyczyść ostatnie oznaczenie</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="283"/>
@@ -1022,7 +1022,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="295"/>
         <source>Mark All</source>
-        <translation>Zaznacz wszystko</translation>
+        <translation>Oznacz wszystko</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="303"/>
@@ -1036,7 +1036,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="2581"/>
         <source>Copy failed: not enough memory</source>
-        <translation>Kopiowanie nieudane: nie wystarczająca ilość pamięci</translation>
+        <translation>Kopiowanie nieudane: niewystarczająca ilość pamięci</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="2665"/>
@@ -1091,7 +1091,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="2591"/>
         <source>Paste failed: not enough memory</source>
-        <translation type="unfinished"/>
+        <translation>Wklejanie nieudane: niewystarczająca ilość pamięci</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3439"/>
@@ -1103,7 +1103,7 @@
         <location filename="../src/editor/dtextedit.cpp" line="3465"/>
         <location filename="../src/editor/dtextedit.cpp" line="6150"/>
         <source>Read-Only mode is on</source>
-        <translation>Tryb tylko-do-odczytu jest aktywny</translation>
+        <translation>Tryb tylko-do-odczytu jest włączony</translation>
     </message>
 </context>
 <context>
@@ -1206,7 +1206,7 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="1211"/>
         <source>Read-Only mode is on</source>
-        <translation>Tryb tylko-do-odczytu jest aktywny</translation>
+        <translation>Tryb tylko-do-odczytu jest włączony</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1441"/>
