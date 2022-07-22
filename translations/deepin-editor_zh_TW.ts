@@ -14,7 +14,7 @@
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="41"/>
         <source>Characters %1</source>
-        <translation>字元數 %1</translation>
+        <translation>字數 %1</translation>
     </message>
 </context>
 <context>

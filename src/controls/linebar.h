@@ -38,7 +38,7 @@ public:
 
 public slots:
     void handleTextChangeTimer();
-    void handleTextChanged();
+    void handleTextChanged(const QString &str="");
     void sendText(QString t);
 
 signals:

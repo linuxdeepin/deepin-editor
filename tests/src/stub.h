@@ -169,7 +169,7 @@ public:
         if (-1 == mprotect(pageof(pstub->fn), m_pagesize * 2, PROT_READ | PROT_WRITE | PROT_EXEC))
 #endif       
         {
-            throw("stub set memory protect to w+r+x faild");
+            //throw("stub set memory protect to w+r+x faild");
         }
 
         if(pstub->far_jmp)
@@ -188,7 +188,7 @@ public:
         if (-1 == mprotect(pageof(pstub->fn), m_pagesize * 2, PROT_READ | PROT_EXEC))
 #endif     
         {
-            throw("stub set memory protect to r+x failed");
+            //throw("stub set memory protect to r+x failed");
         }
         m_result.insert(std::pair<char*,func_stub*>(fn,pstub));
         return;
@@ -216,7 +216,7 @@ public:
         if (-1 == mprotect(pageof(pstub->fn), m_pagesize * 2, PROT_READ | PROT_WRITE | PROT_EXEC))
 #endif       
         {
-            throw("stub reset memory protect to w+r+x faild");
+           // throw("stub reset memory protect to w+r+x faild");
         }
 
         if(pstub->far_jmp)
@@ -235,7 +235,7 @@ public:
         if (-1 == mprotect(pageof(pstub->fn), m_pagesize * 2, PROT_READ | PROT_EXEC))
 #endif     
         {
-            throw("stub reset memory protect to r+x failed");
+           // throw("stub reset memory protect to r+x failed");
         }
         m_result.erase(iter);
         delete pstub;

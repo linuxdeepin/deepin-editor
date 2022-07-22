@@ -144,7 +144,11 @@ void Tabbar::resizeEvent(QResizeEvent *event)
         setTabToolTip(i, path);
     }
 
-    return DTabBar::resizeEvent(event);
+    // 临时修改方案：通过调用setIconSize()，更新内部的layoutDirty标识，强制重新刷新标签页布局, BUG链接：https://pms.uniontech.com/bug-view-137607.html
+    // TODO: 需要dtk暴露接口重新布局
+    setIconSize(iconSize());
+
+    DTabBar::resizeEvent(event);
 }
 
 void Tabbar::closeTab(int index)
@@ -347,7 +351,7 @@ QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option
     backgroundImage.fill(QColor(palette().color(QPalette::Base)));
     // clip screenshot image with window radius.
     QPainter painter(&backgroundImage);
-    painter.drawImage(5,5,scaledImage);
+    painter.drawImage(5, 5, scaledImage);
     painter.setRenderHint(QPainter::Antialiasing, true);
 
     if (!Utils::isWayland() && count() == 1) {
@@ -355,7 +359,7 @@ QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option
     }
 
     // adjust offset.
-    hotspot->setX(scaledWidth/2);
+    hotspot->setX(scaledWidth / 2);
     hotspot->setY(scaledHeight / 2);
 
     QPainterPath rectPath;
@@ -385,12 +389,12 @@ QPixmap Tabbar::createDragPixmapFromTab(int index, const QStyleOptionTab &option
         return QPixmap::fromImage(backgroundImage);
     }
 
-    #if 0
-    QPixmap backgroundImage = DTabBar::createDragPixmapFromTab(index,option,hotspot);
-    if(sm_pDragPixmap) delete sm_pDragPixmap;
+#if 0
+    QPixmap backgroundImage = DTabBar::createDragPixmapFromTab(index, option, hotspot);
+    if (sm_pDragPixmap) delete sm_pDragPixmap;
     sm_pDragPixmap = new QPixmap(backgroundImage);
     return backgroundImage;
-    #endif
+#endif
 }
 
 QMimeData *Tabbar::createMimeDataFromTab(int index, const QStyleOptionTab &option) const
@@ -752,11 +756,11 @@ void Tabbar::handleTabDroped(int index, Qt::DropAction action, QObject *target)
 {
     Tabbar *tabbar = qobject_cast<Tabbar *>(target);
     if (tabbar == nullptr) {
-        Window *window = static_cast<Window *>(this->window());
-
-        window->move(QCursor::pos() - window->topLevelWidget()->pos());
-        window->show();
-        window->activateWindow();
+        // tab页拖动到外部应用如网页电子表格或wps电子表格时,
+        // DTabBar::dragActionChanged 信号收到的DropType为MoveAction,
+        // 这种情况下DTabBar内容不能发出DTabBar::tabReleaseRequested来重新构建编辑窗口
+        // 因此只能再次添加判断，若目标文本编辑窗口的TabBar未创建，则重新重建文本编辑窗口
+        handleTabReleased(index);
     } else {
 //        QString path = m_listOldTabPath.value(index);
 //        int newIndex = m_tabPaths.indexOf(path);

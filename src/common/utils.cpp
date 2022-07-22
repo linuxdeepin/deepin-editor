@@ -304,7 +304,7 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
             prober_encoding = pre_encoding;
         }
 
-confidence:
+    confidence:
         if (QTextCodec *codec = QTextCodec::codecForName(prober_encoding)) {
             if (def_codec == codec)
                 def_codec = nullptr;
@@ -395,7 +395,7 @@ QString Utils::getKeyshortcut(QKeyEvent *keyEvent)
 {
     QStringList keys;
     Qt::KeyboardModifiers modifiers = keyEvent->modifiers();
-    if (modifiers != Qt::NoModifier){
+    if (modifiers != Qt::NoModifier) {
         if (modifiers.testFlag(Qt::MetaModifier)) {
             keys.append("Meta");
         }
@@ -406,27 +406,27 @@ QString Utils::getKeyshortcut(QKeyEvent *keyEvent)
 
         if (modifiers.testFlag(Qt::AltModifier)) {
             keys.append("Alt");
-        }       
+        }
 
         if (modifiers.testFlag(Qt::ShiftModifier)) {
             keys.append("Shift");
         }
     }
 
-    if(keyEvent->key() !=0 && keyEvent->key() != Qt::Key_unknown){
+    if (keyEvent->key() != 0 && keyEvent->key() != Qt::Key_unknown) {
         keys.append(QKeySequence(keyEvent->key()).toString());
     }
 
-    for (int i = 0;i < keys.count();i++) {
+    for (int i = 0; i < keys.count(); i++) {
         if (keys.value(i).contains("Return")) {
-            keys.replace(i,"Enter");
+            keys.replace(i, "Enter");
         }
     }
 
     return keys.join("+");
 }
 
-QString Utils::getKeyshortcutFromKeymap(Settings* settings, const QString &keyCategory, const QString &keyName)
+QString Utils::getKeyshortcutFromKeymap(Settings *settings, const QString &keyCategory, const QString &keyName)
 {
     return settings->settings->option(QString("shortcuts.%1.%2").arg(keyCategory).arg(keyName))->value().toString();
 }
@@ -507,7 +507,7 @@ qreal Utils::easeOutQuint(qreal x)
 QVariantMap Utils::getThemeMapFromPath(const QString &filepath)
 {
     QFile file(filepath);
-    if(!file.open(QIODevice::ReadOnly)){
+    if (!file.open(QIODevice::ReadOnly)) {
         qDebug() << "Failed to open " << filepath;
         return QVariantMap();
     }
@@ -537,44 +537,44 @@ bool Utils::isMimeTypeSupport(const QString &filepath)
     // Please check full mime type list from: https://www.freeformatter.com/mime-types-list.html
     QStringList textMimeTypes;
     textMimeTypes << "application/cmd"
-                      << "application/javascript"
-                      << "application/json"
-                      << "application/pkix-cert"
-                      << "application/octet-stream"
-                      << "application/sql"
-                      << "application/vnd.apple.mpegurl"
-                      << "application/vnd.nokia.qt.qmakeprofile"
-                      << "application/vnd.nokia.xml.qt.resource"
-                      << "application/x-desktop"
-                      << "application/x-designer"
-                      << "application/x-empty"
-                      << "application/x-msdos-program"
-                      << "application/x-pearl"
-                      << "application/x-php"
-                      << "application/x-shellscript"
-                      << "application/x-sh"
-                      << "application/x-theme"
-                      << "application/x-cue"
-                      << "application/x-csh"
-                      << "application/x-asp"
-                      << "application/x-subrip"
-                      << "application/x-text"
-                      << "application/x-trash"
-                      << "application/x-xbel"
-                      << "application/x-yaml"
-                      << "application/x-pem-key"
-                      << "application/xml"
-                      << "application/yaml"
-                      << "application/x-zerosize"
-                      << "image/svg+xml"
-                      << "application/x-perl"
-                      << "application/x-ruby"
-                      << "application/x-mpegURL"
-                      << "application/x-wine-extension-ini"
-                      << "model/vrml"
-                      << "application/pkix-cert+pem"
-                      << "application/x-pak"
-                      << "application/x-code-workspace";
+                  << "application/javascript"
+                  << "application/json"
+                  << "application/pkix-cert"
+                  << "application/octet-stream"
+                  << "application/sql"
+                  << "application/vnd.apple.mpegurl"
+                  << "application/vnd.nokia.qt.qmakeprofile"
+                  << "application/vnd.nokia.xml.qt.resource"
+                  << "application/x-desktop"
+                  << "application/x-designer"
+                  << "application/x-empty"
+                  << "application/x-msdos-program"
+                  << "application/x-pearl"
+                  << "application/x-php"
+                  << "application/x-shellscript"
+                  << "application/x-sh"
+                  << "application/x-theme"
+                  << "application/x-cue"
+                  << "application/x-csh"
+                  << "application/x-asp"
+                  << "application/x-subrip"
+                  << "application/x-text"
+                  << "application/x-trash"
+                  << "application/x-xbel"
+                  << "application/x-yaml"
+                  << "application/x-pem-key"
+                  << "application/xml"
+                  << "application/yaml"
+                  << "application/x-zerosize"
+                  << "image/svg+xml"
+                  << "application/x-perl"
+                  << "application/x-ruby"
+                  << "application/x-mpegURL"
+                  << "application/x-wine-extension-ini"
+                  << "model/vrml"
+                  << "application/pkix-cert+pem"
+                  << "application/x-pak"
+                  << "application/x-code-workspace";
 
     if (textMimeTypes.contains(mimeType)) {
         return true;
@@ -585,10 +585,33 @@ bool Utils::isMimeTypeSupport(const QString &filepath)
 
 bool Utils::isDraftFile(const QString &filepath)
 {
-    QString draftDir = QDir(QStandardPaths::standardLocations(QStandardPaths::DataLocation).first())
-                                                                            .filePath("blank-files");
+    QString draftDir = QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation)).first())
+                       .filePath("blank-files");
+    draftDir = QDir::cleanPath(draftDir);
     QString dir = QFileInfo(filepath).dir().absolutePath();
     return dir == draftDir;
+}
+
+/**
+ * @param filepath 文件路径
+ * @return 返回传入文件路径 \a filepath 是否在备份文件夹 backup-files 中
+ */
+bool Utils::isBackupFile(const QString &filepath)
+{
+    QString backupDir = QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation)).first())
+                        .filePath("backup-files");
+    QString dir = QFileInfo(filepath).dir().absolutePath();
+    return dir == backupDir;
+}
+
+QStringList Utils::cleanPath(const QStringList &filePaths)
+{
+    QStringList paths;
+    for (QString path : filePaths) {
+        paths.push_back(QDir::cleanPath(path));
+    }
+
+    return paths;
 }
 
 const QStringList Utils::getEncodeList()
@@ -610,15 +633,15 @@ const QStringList Utils::getEncodeList()
     return encodeList;
 }
 
-QPixmap Utils::renderSVG(const QString &filePath, const QSize &size,bool bIsScale)
+QPixmap Utils::renderSVG(const QString &filePath, const QSize &size, bool bIsScale)
 {
-    int scaled =1;
+    int scaled = 1;
 
-    if(qApp->devicePixelRatio() == 1.25 && bIsScale) {
+    if (qApp->devicePixelRatio() == 1.25 && bIsScale) {
         scaled = 2;
     }
 
-    QPixmap pixmap(size*scaled);
+    QPixmap pixmap(size * scaled);
     pixmap.fill(Qt::transparent);
     QImageReader reader;
 
@@ -679,9 +702,9 @@ void Utils::clearChildrenFoucusEx(QWidget *pWidget)
 
     QObjectList childern = pWidget->children();
 
-    if(childern.size() <= 0) return;
+    if (childern.size() <= 0) return;
 
-    foreach(QObject* child , childern) {
+    foreach (QObject *child, childern) {
         if (!child->isWidgetType()) {
             continue;
         }
@@ -697,15 +720,15 @@ void Utils::setChildrenFocus(QWidget *pWidget, Qt::FocusPolicy policy)
 
     QObjectList childern = pWidget->children();
 
-    if(childern.size() <= 0) return;
+    if (childern.size() <= 0) return;
 
-    foreach(QObject* child , childern) {
+    foreach (QObject *child, childern) {
         if (!child->isWidgetType()) {
             continue;
         }
 
         QWidget *obj = static_cast<QWidget *>(child);
-        setChildrenFocus(obj,policy);
+        setChildrenFocus(obj, policy);
     }
 }
 
@@ -725,7 +748,7 @@ int Utils::getProcessCountByName(const char *pstrName)
     if ((fp = popen(command, "r")) != NULL) {
         char buf[1024];
         memset(buf, 0, sizeof(buf));
-        if ((fgets(buf, sizeof(buf)-1, fp)) != NULL) {
+        if ((fgets(buf, sizeof(buf) - 1, fp)) != NULL) {
             count = atoi(buf);
         }
         pclose(fp);
@@ -759,9 +782,9 @@ bool Utils::activeWindowFromDock(quintptr winId)
 {
     bool bRet = true;
     // new interface use application as id
-    QDBusInterface dockDbusInterface("com.deepin.dde.daemon.Dock" ,
-                                 "/com/deepin/dde/daemon/Dock",
-                                 "com.deepin.dde.daemon.Dock");
+    QDBusInterface dockDbusInterface("com.deepin.dde.daemon.Dock",
+                                     "/com/deepin/dde/daemon/Dock",
+                                     "com.deepin.dde.daemon.Dock");
     QDBusReply<void> reply = dockDbusInterface.call("ActivateWindow", winId);
     if (!reply.isValid()) {
         qDebug() << "call com.deepin.dde.daemon.Dock failed" << reply.error();
@@ -777,14 +800,14 @@ bool Utils::isShareDirAndReadOnly(const QString &filePath)
 
     const QString sharePath = "/var/lib/samba/usershares";
     QDir shareDir(sharePath);
-    if(shareDir.exists()){
+    if (shareDir.exists()) {
         QFileInfo fileInfo(filePath);
         auto name = fileInfo.dir().dirName();
-        if(shareDir.exists(name)){
+        if (shareDir.exists(name)) {
             QFile file(sharePath + "/" + name);
             if (file.open(QIODevice::ReadOnly)) {
                 QString fileContent = file.readAll();
-                if(fileContent.contains(":R"))
+                if (fileContent.contains(":R"))
                     ret = true;
                 file.close();
             }
@@ -797,10 +820,9 @@ bool Utils::isShareDirAndReadOnly(const QString &filePath)
 
 QString Utils::getSystemLan()
 {
-    if(!m_systemLanguage.isEmpty()){
+    if (!m_systemLanguage.isEmpty()) {
         return m_systemLanguage;
-    }
-    else{
+    } else {
         QDBusInterface ie("com.deepin.daemon.LangSelector",
                           "/com/deepin/daemon/LangSelector",
                           "com.deepin.daemon.LangSelector",
@@ -816,10 +838,78 @@ QString Utils::getSystemLan()
 bool Utils::isWayland()
 {
     static QString protocol;
-    if(protocol.isEmpty()){
+    if (protocol.isEmpty()) {
         protocol = QProcessEnvironment::systemEnvironment().value("XDG_SESSION_TYPE");
     }
 
     return protocol.contains("wayland");
 
+}
+
+QString Utils::lineFeed(const QString &text, int nWidth, const QFont &font, int nElidedRow)
+{
+    if (nElidedRow < 0)
+        nElidedRow = 2;
+
+    QString strText = text;
+    QStringList strListLine;
+    QFontMetrics fm(font);
+    // 一行就直接中间截断显示
+    if (1 == nElidedRow)
+        return fm.elidedText(text, Qt::ElideMiddle, nWidth);
+
+    if (!strText.isEmpty()) {
+        for (int i = 1; i <= strText.size(); i++) {
+            if (fm.width(strText.left(i)) >= nWidth) {
+                if (strListLine.size() + 1 == nElidedRow)
+                    break;
+
+                strListLine.append(strText.left(i - 1));
+                strText = strText.right(strText.size() - i + 1);
+                i = 0;
+            }
+        }
+    }
+
+    // 多行时，对最后一行字符左侧省略
+    if (!strListLine.isEmpty()) {
+        strText = fm.elidedText(strText, Qt::ElideLeft, nWidth);
+        strListLine.append(strText);
+        strText = strListLine.join('\n');
+    }
+
+    return strText;
+}
+
+/**
+ * @brief 判断 [ \a x1, \a y1] 和 [ \a x2, \a y2] 区间是否存在交集
+ * @param x1 固定区间左边界
+ * @param y1 固定区间右边界
+ * @param x2 移动区间左边界
+ * @param y2 移动区间右边界
+ * @return RegionType 返回重叠区间类型
+ */
+Utils::RegionIntersectType Utils::checkRegionIntersect(int x1, int y1, int x2, int y2)
+{
+    if (y1 < x2) {
+        return ERight;
+    } else if (x1 > y2) {
+        return ELeft;
+    } else {
+        // 区间存在交集，判断交集类型
+        // 活动区间左边界超过固定区间左边界
+        bool outLeftBound = x1 > x2;
+        // 活动区间右边界超过固定区间右边界
+        bool outRightBound = y1 < y2;
+
+        if (outLeftBound && outRightBound) {
+            return EIntersectOutter;
+        } else if (outLeftBound) {
+            return EIntersectLeft;
+        } else if (outRightBound) {
+            return EIntersectRight;
+        } else {
+            return EIntersectInner;
+        }
+    }
 }

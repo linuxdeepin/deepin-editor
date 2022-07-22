@@ -31,8 +31,8 @@
 class DeleteTextUndoCommand : public QUndoCommand
 {
 public:
-    explicit DeleteTextUndoCommand(QTextCursor textcursor);
-    explicit DeleteTextUndoCommand(QList<QTextEdit::ExtraSelection> &selections);
+    explicit DeleteTextUndoCommand(QTextCursor textcursor, QUndoCommand *parent = nullptr);
+    explicit DeleteTextUndoCommand(QList<QTextEdit::ExtraSelection> &selections, QUndoCommand *parent = nullptr);
     virtual void undo();
     virtual void redo();
 

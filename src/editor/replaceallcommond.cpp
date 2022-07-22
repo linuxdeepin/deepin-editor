@@ -2,13 +2,15 @@
 
 
 
-ReplaceAllCommond::ReplaceAllCommond(QString& oldText, QString& newText, QTextCursor cursor):
-    m_oldText(oldText),
-    m_newText(newText),
-    m_cursor(cursor)
+ReplaceAllCommond::ReplaceAllCommond(QString &oldText, QString &newText, QTextCursor cursor, QUndoCommand *parent)
+    : QUndoCommand(parent)
+    , m_oldText(oldText)
+    , m_newText(newText)
+    , m_cursor(cursor)
 {
 
 }
+
 ReplaceAllCommond::~ReplaceAllCommond()
 {
 
@@ -16,9 +18,8 @@ ReplaceAllCommond::~ReplaceAllCommond()
 
 void ReplaceAllCommond::redo()
 {
-
     m_cursor.setPosition(0);
-    m_cursor.movePosition(QTextCursor::End,QTextCursor::KeepAnchor);
+    m_cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
     m_cursor.deleteChar();
 
     m_cursor.insertText(m_newText);
@@ -27,8 +28,9 @@ void ReplaceAllCommond::redo()
 void ReplaceAllCommond::undo()
 {
     m_cursor.setPosition(0);
-    m_cursor.movePosition(QTextCursor::End,QTextCursor::KeepAnchor);
+    m_cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
     m_cursor.deleteChar();
 
     m_cursor.insertText(m_oldText);
 }
+

@@ -107,23 +107,30 @@ ColorSelectWdg::ColorSelectWdg(QString text,QWidget *parent):DWidget (parent),m_
 ColorSelectWdg::~ColorSelectWdg()
 {
     if (m_pHLayout2 != nullptr) {
-        m_pHLayout2->deleteLater();
+        delete m_pHLayout2;
+        m_pHLayout2=nullptr;
     }
 
     if (m_pHLayout1 != nullptr) {
-        m_pHLayout1->deleteLater();
+        delete m_pHLayout1;
+        m_pHLayout1=nullptr;
     }
 
     if (m_pMainLayout != nullptr) {
-        m_pMainLayout->deleteLater();
+        delete m_pMainLayout;
+        m_pMainLayout=nullptr;
     }
 }
 
 void ColorSelectWdg::initWidget()
 {
-    m_pMainLayout = new QVBoxLayout;
-    m_pHLayout1 = new QHBoxLayout;
-    m_pHLayout2 = new QHBoxLayout;
+    if(m_text.isEmpty()){
+        m_pHLayout2 = new QHBoxLayout(this);
+    }
+    else {
+        m_pMainLayout = new QVBoxLayout(this);
+        m_pHLayout2 = new QHBoxLayout;
+    }
 
     if(!m_text.isEmpty()){
         m_pButton = new DPushButton(m_text,this);
@@ -163,6 +170,7 @@ void ColorSelectWdg::initWidget()
     }
 
     if(!m_text.isEmpty()){
+        m_pHLayout1 = new QHBoxLayout;
         m_pHLayout1->addWidget(m_pButton);
         m_pHLayout1->addSpacerItem(new QSpacerItem(100,25,QSizePolicy::Expanding,QSizePolicy::Preferred));
 
@@ -172,10 +180,10 @@ void ColorSelectWdg::initWidget()
         m_pMainLayout->addLayout(m_pHLayout1);
         m_pMainLayout->addLayout(m_pHLayout2);
         m_pMainLayout->setContentsMargins(0,0,0,0);
-        this->setLayout(m_pMainLayout);
+        //this->setLayout(m_pMainLayout);
     }else {
         m_pHLayout2->setContentsMargins(8+m_labelWidth,0,8+m_labelWidth,0);
-        this->setLayout(m_pHLayout2);
+        //this->setLayout(m_pHLayout2);
     }
 }
 

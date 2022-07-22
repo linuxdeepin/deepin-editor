@@ -86,6 +86,7 @@ protected:
     void mousePressEvent(QMouseEvent *e);
     void dropEvent(QDropEvent *e);
     void resizeEvent(QResizeEvent *event);
+
 private:
     void handleTabMoved(int fromIndex, int toIndex);
     void handleTabReleased(int index);
@@ -115,6 +116,8 @@ private:
     QString m_qstrDragName;
     QString m_qstrDragPath;
     EditWrapper *m_pWrapper = nullptr;
+
+    bool m_bLayoutDirty = false;
 
 public:
     static QPixmap *sm_pDragPixmap;

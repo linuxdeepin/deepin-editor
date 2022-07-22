@@ -50,7 +50,6 @@
 #include <QGestureEvent>
 #include <QProxyStyle>
 
-const QString SELECT_HIGHLIGHT_COLOR = "#2CA7F8";
 enum ConvertCase { UPPER, LOWER, CAPITALIZE };
 
 class ShowFlodCodeWidget;
@@ -74,17 +73,33 @@ public:
         MarkLine,
         MarkAll
     };
-
+    enum UpdateOperationType {
+        Normal,
+        FileOpenBegin,
+        FileOpenEnd,
+    };
     enum OperationType {
         CopyOperation,
         PasteOperation
     };
 
-    struct MarkOperation
-    {
-        MarkOperationType type;
-        QTextCursor cursor;
-        QString color;
+    struct MarkOperation {
+        MarkOperationType   type;           // 标记操作类型
+        QTextCursor         cursor;         // 在(MarkAll)时不使用
+        QString             color;          // 标记颜色
+        QString             matchText;      // 匹配文本，仅在全局标记匹配文本(MarkAllMatch)时使用
+
+        MarkOperation(): type(MarkOnce) {}
+    };
+
+    // 标记替换信息，包含光标的绝对信息
+    struct MarkReplaceInfo {
+        MarkOperation       opt;            // 标记项操作
+        int                 start;          // 光标选中起始位置
+        int                 end;            // 光标选中结束位置
+        qint64              time;           // 标记的操作时间
+
+        MarkReplaceInfo(): start(0), end(0), time(0) {}
     };
 
     TextEdit(QWidget *parent = nullptr);
@@ -94,9 +109,13 @@ public:
 
     //直接插入文本
     void insertTextEx(QTextCursor, QString);
+    //同时插入多个位置的文本
+    void insertMultiTextEx(const QList<QPair<QTextCursor, QString>> &multiText);
 
     //直接删除字符 删除选择或一个字符
     void deleteTextEx(QTextCursor);
+    //同时删除多个选取的文本
+    void deleteMultiTextEx(const QList<QTextCursor> &multiText);
 
     //插入选择文本字符
     void insertSelectTextEx(QTextCursor, QString);
@@ -108,7 +127,7 @@ public:
 
     /* 处理快捷键“ctrl + k 和Ctrl +shift +K”,删除到行尾和删除整行的  删除和撤销功能；
      * currLine 表示删除的是不是整行，true 整行,false 删除到行尾 ut002764 2021.6.19*/
-    void deleteSelectTextEx(QTextCursor,QString text,bool currLine);
+    void deleteSelectTextEx(QTextCursor, QString text, bool currLine);
 
     //初始化右键菜单
     void initRightClickedMenu();
@@ -118,7 +137,7 @@ public:
     //
     void setWrapper(EditWrapper *);
 
-    EditWrapper* getWrapper();
+    EditWrapper *getWrapper();
 
     /**
      * @brief getFilePath 获取打开文件路径
@@ -231,6 +250,12 @@ public:
     void markAllInView(QString color, qint64 timeStamp = -1);
     void toggleMarkSelections();
 
+    // 颜色标记操作列表和标记替换列表的互相转换函数
+    static QList<QPair<MarkOperation, qint64> > convertReplaceToMark(const QList<MarkReplaceInfo> &replaceInfo);
+    static QList<MarkReplaceInfo> convertMarkToReplace(const QList<QPair<MarkOperation, qint64> > &markInfo);
+    // 手动更新所有的标记信息，用于撤销栈处理更新当前颜色标记操作
+    void manualUpdateAllMark(const QList<QPair<MarkOperation, qint64> > &markInfo);
+
     /**
      * @author shaoyu.guo ut000455
      * @brief updateMarkAllSelectColor 文档篇幅视图有变更时（翻页/滚动条变化/鼠标滚轮变化/键盘上下键），动态更新绘制可视范围内字符颜色
@@ -274,7 +299,7 @@ public:
     int  getHighLightRowContentLineNum(int iLine);
 
     //代码折叠绘制
-    void paintCodeFlod(QPainter* painter,QRect rect,bool isFlod = false);
+    void paintCodeFlod(QPainter *painter, QRect rect, bool isFlod = false);
     //获取背景颜色
     QColor getBackColor();
     //更新左侧widget宽度
@@ -417,7 +442,7 @@ public:
      * @param listSelections 添加的指定字符格式列表
      */
     void appendExtraSelection(QList<QTextEdit::ExtraSelection> wordMarkSelections, QTextEdit::ExtraSelection selection
-                             , QString strColor, QList<QTextEdit::ExtraSelection> *listSelections);
+                              , QString strColor, QList<QTextEdit::ExtraSelection> *listSelections);
 
     void setCursorStart(int pos);
     void writeEncodeHistoryRecord();
@@ -553,8 +578,9 @@ public slots:
 
     void redo_();
     void undo_();
-    void moveText(int from,int to,const QString& text);
-
+    void moveText(int from, int to, const QString &text);
+    QTextCursor findCursor(const QString &substr, const QString &text, int from, bool backward = false, int cursorPos = 0);
+    QString selectedText();
 protected:
     bool event(QEvent *evt) override;   //触摸屏event事件
     void dragEnterEvent(QDragEnterEvent *event) override;
@@ -597,13 +623,16 @@ private:
     void SendtoggleReadOnlyMode();
     void SendtoggleReadmessage();
 
-    /**
-     * @brief isAbleOperation 读取可用内存，判断并解决操作是否可继续执行
-     */
+    // 读取可用内存，判断并解决操作是否可继续执行
     bool isAbleOperation(int iOperationType);
+    // 计算颜色标记替换信息列表
+    void calcMarkReplaceList(QList<TextEdit::MarkReplaceInfo> &replaceList, const QString &oldText,
+                             const QString &replaceText, const QString &withText, int offset = 0) const;
 
 public:
     int getFirstVisibleBlockId() const;
+    void setLeftAreaUpdateState(UpdateOperationType statevalue);
+    UpdateOperationType getLeftAreaUpdateState();
 
 public:
     bool bIsSetLineNumberWidth = true;
@@ -623,8 +652,8 @@ private:
     // 不再使用
     //QTextEdit::ExtraSelection m_wordUnderCursorSelection;
     QList<QPair<QTextEdit::ExtraSelection, qint64>> m_wordMarkSelections;///< 记录标记的列表（分行记录）
-    QMap<int,QList<QTextEdit::ExtraSelection>> m_mapWordMarkSelections;///< 记录标记的表（按标记动作记录）
-    QList<QPair<TextEdit::MarkOperation, qint64>> m_markOperations;    ///记录所有标记操作
+    QMap<int, QList<QTextEdit::ExtraSelection>> m_mapWordMarkSelections; ///< 记录标记的表（按标记动作记录）
+    QList<QPair<TextEdit::MarkOperation, qint64>> m_markOperations;    ///记录所有标记操作(包括单个标记和全文标记)
     QMap<QString, QList<QPair<QTextEdit::ExtraSelection, qint64>>> m_mapKeywordMarkSelections; ///记录关键字对应的全文标记
     QTextEdit::ExtraSelection m_markAllSelection;///< “标记所有”的字符格式
     QList<QTextEdit::ExtraSelection> m_markFoldHighLightSelections;
@@ -677,7 +706,7 @@ private:
 
     //yanyuhan
     //颜色标记、折叠/展开、书签、列编辑、设置注释、取消注释;
-	//QAction *m_colorMarkAction;
+    //QAction *m_colorMarkAction;
     DMenu *m_collapseExpandMenu;
     DMenu *m_colorMarkMenu;
     QAction *m_cancleMarkCurrentLine;
@@ -694,7 +723,7 @@ private:
     QString m_strMarkAllLineColorName; ///< “标记所有”选择的颜色名称
 
     // 增加对于颜色选择的 Tab 顺序控制
-    QList<QPair<QAction*,bool>> m_MarkColorMenuTabOrder;
+    QList<QPair<QAction *, bool>> m_MarkColorMenuTabOrder;
 
     QAction *m_addComment;
     QAction *m_cancelComment;
@@ -844,5 +873,7 @@ private:
     //只读权限模式执行一次的判断变量  ut002764 2021.6.23
     bool m_Permission = false;
     bool m_Permission2 = false;
+    //左边栏更新标记
+    UpdateOperationType m_LeftAreaUpdateState;
 };
 #endif

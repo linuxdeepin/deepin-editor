@@ -1091,7 +1091,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="2591"/>
         <source>Paste failed: not enough memory</source>
-        <translation type="unfinished"/>
+        <translation>Ha fallat l&apos;acció d&apos;enganxar: no hi ha prou memòria.</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3439"/>

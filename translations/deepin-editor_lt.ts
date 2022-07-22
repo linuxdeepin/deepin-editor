@@ -32,12 +32,12 @@
 <context>
     <name>EditWrapper</name>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="611"/>
+        <location filename="../src/editor/editwrapper.cpp" line="647"/>
         <source>File has changed on disk. Reload?</source>
         <translation>Failas diske pasikeitė. Įkelti jį iš naujo?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="606"/>
+        <location filename="../src/editor/editwrapper.cpp" line="642"/>
         <source>File removed on the disk. Save it now?</source>
         <translation>Failas diske buvo pašalintas. Įrašyti jį dabar?</translation>
     </message>
@@ -57,23 +57,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="444"/>
+        <location filename="../src/editor/editwrapper.cpp" line="445"/>
         <source>You do not have permission to save %1</source>
         <translation type="unfinished">Jūs neturite leidimo įrašyti %1</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="633"/>
+        <location filename="../src/editor/editwrapper.cpp" line="669"/>
         <location filename="../src/widgets/bottombar.cpp" line="60"/>
         <source>INSERT</source>
         <translation>ĮTERPTI</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="636"/>
+        <location filename="../src/editor/editwrapper.cpp" line="672"/>
         <source>OVERWRITE</source>
         <translation>PERRAŠYTI</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="639"/>
+        <location filename="../src/editor/editwrapper.cpp" line="675"/>
         <source>R/O</source>
         <translation>TIK SKAITYMUI</translation>
     </message>
@@ -87,7 +87,7 @@
         <location filename="../src/editor/editwrapper.cpp" line="201"/>
         <location filename="../src/editor/editwrapper.cpp" line="264"/>
         <location filename="../src/editor/editwrapper.cpp" line="321"/>
-        <location filename="../src/editor/editwrapper.cpp" line="535"/>
+        <location filename="../src/editor/editwrapper.cpp" line="571"/>
         <source>Save</source>
         <translation>Įrašyti</translation>
     </message>
@@ -134,7 +134,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/startmanager.cpp" line="762"/>
+        <location filename="../src/startmanager.cpp" line="765"/>
         <source>File not saved</source>
         <translation type="unfinished"></translation>
     </message>
@@ -222,7 +222,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="31"/>
         <location filename="../src/controls/settingsdialog.cpp" line="107"/>
-        <location filename="../src/widgets/window.cpp" line="1482"/>
+        <location filename="../src/widgets/window.cpp" line="1490"/>
         <source>Window</source>
         <translation>Langas</translation>
     </message>
@@ -688,18 +688,18 @@
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="203"/>
-        <location filename="../src/editor/editwrapper.cpp" line="537"/>
-        <location filename="../src/widgets/window.cpp" line="956"/>
-        <location filename="../src/widgets/window.cpp" line="973"/>
-        <location filename="../src/widgets/window.cpp" line="1064"/>
-        <location filename="../src/widgets/window.cpp" line="1079"/>
+        <location filename="../src/editor/editwrapper.cpp" line="573"/>
+        <location filename="../src/widgets/window.cpp" line="964"/>
+        <location filename="../src/widgets/window.cpp" line="981"/>
+        <location filename="../src/widgets/window.cpp" line="1072"/>
+        <location filename="../src/widgets/window.cpp" line="1087"/>
         <source>Encoding</source>
         <translation type="unfinished">Koduotė</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="974"/>
-        <location filename="../src/widgets/window.cpp" line="1065"/>
-        <location filename="../src/widgets/window.cpp" line="1080"/>
+        <location filename="../src/widgets/window.cpp" line="982"/>
+        <location filename="../src/widgets/window.cpp" line="1073"/>
+        <location filename="../src/widgets/window.cpp" line="1088"/>
         <source>Line Endings</source>
         <translation type="unfinished">Eilučių pabaigos</translation>
     </message>
@@ -740,58 +740,58 @@
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../src/common/settings.cpp" line="91"/>
+        <location filename="../src/common/settings.cpp" line="132"/>
         <source>Standard</source>
         <translation>Standartinis</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="91"/>
+        <location filename="../src/common/settings.cpp" line="132"/>
         <source>Customize</source>
         <translation>Tinkinti</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="104"/>
+        <location filename="../src/common/settings.cpp" line="145"/>
         <source>Normal</source>
         <translation>Normalus</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="104"/>
+        <location filename="../src/common/settings.cpp" line="145"/>
         <source>Maximum</source>
         <translation>Didžiausias</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="104"/>
+        <location filename="../src/common/settings.cpp" line="145"/>
         <source>Fullscreen</source>
         <translation>Visas ekranas</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="292"/>
+        <location filename="../src/common/settings.cpp" line="333"/>
         <source>This shortcut conflicts with system shortcut %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="294"/>
+        <location filename="../src/common/settings.cpp" line="335"/>
         <source>This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="410"/>
-        <location filename="../src/common/settings.cpp" line="418"/>
+        <location filename="../src/common/settings.cpp" line="481"/>
+        <location filename="../src/common/settings.cpp" line="489"/>
         <source>The shortcut %1 is invalid, please set another one.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="445"/>
+        <location filename="../src/common/settings.cpp" line="524"/>
         <source>Cancel</source>
         <translation type="unfinished">Atsisakyti</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="446"/>
+        <location filename="../src/common/settings.cpp" line="525"/>
         <source>Replace</source>
         <translation type="unfinished">Pakeisti</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="448"/>
+        <location filename="../src/common/settings.cpp" line="527"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1023,17 +1023,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="2458"/>
-        <source>Failed to paste text: it is too large</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/editor/dtextedit.cpp" line="2586"/>
+        <location filename="../src/editor/dtextedit.cpp" line="2537"/>
         <source>Copy failed: not enough memory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="2666"/>
+        <location filename="../src/editor/dtextedit.cpp" line="2621"/>
         <source>Press ALT and click lines to edit in column mode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1063,34 +1058,39 @@
         <translation>Nėra</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1184"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1183"/>
         <source>Selected line(s) copied</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1190"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1189"/>
         <source>Current line copied</source>
         <translation>Dabartinė eilutė nukopijuota</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1210"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1209"/>
         <source>Selected line(s) clipped</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1222"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1220"/>
         <source>Current line clipped</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3440"/>
+        <location filename="../src/editor/dtextedit.cpp" line="2547"/>
+        <source>Paste failed: not enough memory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/editor/dtextedit.cpp" line="3444"/>
         <source>Read-Only mode is off</source>
         <translation>Tik skaitymo veiksena yra išjungta</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3447"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3466"/>
-        <location filename="../src/editor/dtextedit.cpp" line="6139"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3451"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3470"/>
+        <location filename="../src/editor/dtextedit.cpp" line="6185"/>
         <source>Read-Only mode is on</source>
         <translation>Tik skaitymo veiksena yra įjungta</translation>
     </message>
@@ -1138,38 +1138,38 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="471"/>
-        <location filename="../src/widgets/window.cpp" line="2468"/>
+        <location filename="../src/widgets/window.cpp" line="2489"/>
         <source>Read-Only</source>
         <translation>Tik skaitymui</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="918"/>
+        <location filename="../src/widgets/window.cpp" line="926"/>
         <source>Saved successfully</source>
         <translation>Sėkmingai įrašyta</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1211"/>
+        <location filename="../src/widgets/window.cpp" line="1219"/>
         <source>Read-Only mode is on</source>
         <translation type="unfinished">Tik skaitymo veiksena yra įjungta</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1492"/>
+        <location filename="../src/widgets/window.cpp" line="1500"/>
         <source>Ctrl+&apos;=&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1495"/>
+        <location filename="../src/widgets/window.cpp" line="1503"/>
         <source>Ctrl+&apos;-&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="2216"/>
+        <location filename="../src/widgets/window.cpp" line="2237"/>
         <source>Discard</source>
         <translation>Atmesti</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="360"/>
-        <location filename="../src/widgets/window.cpp" line="1542"/>
+        <location filename="../src/widgets/window.cpp" line="1550"/>
         <source>Settings</source>
         <translation>Nustatymai</translation>
     </message>
@@ -1184,9 +1184,9 @@
         <translation>Neteisingas failas: %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="954"/>
-        <location filename="../src/widgets/window.cpp" line="1021"/>
-        <location filename="../src/widgets/window.cpp" line="1062"/>
+        <location filename="../src/widgets/window.cpp" line="962"/>
+        <location filename="../src/widgets/window.cpp" line="1029"/>
+        <location filename="../src/widgets/window.cpp" line="1070"/>
         <source>Save File</source>
         <translation>Įrašyti failą</translation>
     </message>
@@ -1197,38 +1197,38 @@
         <translation>Ar norite įrašyti šį failą?</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1023"/>
+        <location filename="../src/widgets/window.cpp" line="1031"/>
         <source>Encoding</source>
         <translation>Koduotė</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1524"/>
+        <location filename="../src/widgets/window.cpp" line="1532"/>
         <source>Editor</source>
         <translation>Redaktorius</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="894"/>
+        <location filename="../src/widgets/window.cpp" line="902"/>
         <source>You do not have permission to save %1</source>
         <translation>Jūs neturite leidimo įrašyti %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1890"/>
+        <location filename="../src/widgets/window.cpp" line="1911"/>
         <source>Untitled %1</source>
         <translation>Be pavadinimo %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1441"/>
+        <location filename="../src/widgets/window.cpp" line="1449"/>
         <source>Current location remembered</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="2215"/>
+        <location filename="../src/widgets/window.cpp" line="2236"/>
         <source>Cancel</source>
         <translation>Atsisakyti</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="356"/>
-        <location filename="../src/widgets/window.cpp" line="2217"/>
+        <location filename="../src/widgets/window.cpp" line="2238"/>
         <source>Save</source>
         <translation>Įrašyti</translation>
     </message>
