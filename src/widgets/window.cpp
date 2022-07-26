@@ -541,6 +541,11 @@ void Window::initTitlebar()
 
     connect(m_tabbar, &Tabbar::closeTabs, this, &Window::handleTabsClosed, Qt::QueuedConnection);
     connect(m_tabbar, &Tabbar::requestHistorySaved, this, [ = ](const QString & filePath) {
+        // 单个Tab页关闭文件时记录文件信息
+        if (StartManager::instance()->checkPath(filePath)) {
+            Utils::recordCloseFile(filePath);
+        }
+
         if (QFileInfo(filePath).dir().absolutePath() == m_blankFileDir) {
             return;
         }
@@ -3294,6 +3299,12 @@ void Window::closeEvent(QCloseEvent *e)
                 return;
             }
         } else {
+            // 单个窗口时，没有记录单独关闭窗口，需要记录窗口信息。
+            for (auto itr = m_wrappers.begin(); itr != m_wrappers.end(); ++itr) {
+                QString filePath = itr.value()->textEditor()->getFilePath();
+                Utils::recordCloseFile(filePath);
+            }
+
             backupFile();
         }
     }
