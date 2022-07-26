@@ -1208,6 +1208,11 @@ void TextEdit::duplicateLine()
 
 void TextEdit::copyLines()
 {
+    // 添加权限判断是否允许拷贝，剪切；防止后续可能调用接口，冗余处理
+    if (!Utils::enableClipCopy(getFilePath())) {
+        return;
+    }
+
     // Record current cursor and build copy cursor.
     QTextCursor currentCursor = textCursor();
     QTextCursor copyCursor = textCursor();
@@ -1253,7 +1258,12 @@ void TextEdit::copyLines()
 
 void TextEdit::cutlines()
 {
-    if (m_isSelectAll) {
+    // 添加权限判断是否允许拷贝，剪切；防止后续可能调用接口，冗余处理
+    if (!Utils::enableClipCopy(getFilePath())) {
+        return;
+    }
+
+    if(m_isSelectAll) {
         QPlainTextEdit::selectAll();
     }
 
@@ -2530,6 +2540,11 @@ void TextEdit::cursorPositionChanged()
 
 void TextEdit::cut()
 {
+    // 添加权限判断是否允许拷贝，剪切；防止后续可能调用接口，冗余处理
+    if (!Utils::enableClipCopy(getFilePath())) {
+        return;
+    }
+
     if (m_isSelectAll)
         QPlainTextEdit::selectAll();
 
@@ -2568,6 +2583,11 @@ void TextEdit::cut()
 
 void TextEdit::copy()
 {
+    // 添加权限判断是否允许拷贝，剪切；防止后续可能调用接口，冗余处理
+    if (!Utils::enableClipCopy(getFilePath())) {
+        return;
+    }
+
     if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
         QString data;
         for (auto it = m_altModSelections.begin(); it != m_altModSelections.end(); it++) {
@@ -2708,6 +2728,11 @@ void TextEdit::slotCutAction(bool checked)
 void TextEdit::slotCopyAction(bool checked)
 {
     Q_UNUSED(checked);
+    // 添加权限判断是否允许拷贝，剪切；防止后续可能调用接口，冗余处理
+    if (!Utils::enableClipCopy(getFilePath())) {
+        return;
+    }
+
     if (isAbleOperation(OperationType::CopyOperation)) {
         copy();
     } else {
@@ -3558,6 +3583,11 @@ void TextEdit::setSettings(Settings *keySettings)
 
 void TextEdit::copySelectedText()
 {
+    // 添加权限判断是否允许拷贝，剪切；防止后续可能调用接口，冗余处理
+    if (!Utils::enableClipCopy(getFilePath())) {
+        return;
+    }
+
     if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
         QString data;
         for (auto sel : m_altModSelections) {
@@ -3579,6 +3609,11 @@ void TextEdit::copySelectedText()
 
 void TextEdit::cutSelectedText()
 {
+    // 添加权限判断是否允许拷贝，剪切；防止后续可能调用接口，冗余处理
+    if (!Utils::enableClipCopy(getFilePath())) {
+        return;
+    }
+
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setText(textCursor().selection().toPlainText());
 
