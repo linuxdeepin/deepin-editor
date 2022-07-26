@@ -123,6 +123,15 @@ public:
     static QVector<QPair<QString,QStringList>> getSupportEncoding();
     static QStringList getSupportEncodingList();
 
+    /**
+    * @brief libPath 动态库路径
+    * @param strlib 路径的字符串
+    */
+    static QString libPath(const QString &strlib);
+
+    // 加载外部定制库，如ZPD定制库的等
+    static void loadCustomDLL();
+
 private:
     static QString m_systemLanguage;
 };
