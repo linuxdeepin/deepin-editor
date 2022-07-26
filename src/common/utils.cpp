@@ -28,6 +28,12 @@
 #include <QCryptographicHash>
 #include "qprocess.h"
 
+#include <QLibraryInfo>
+
+extern "C" {
+#include "../basepub/load_libs.h"
+}
+
 DCORE_USE_NAMESPACE
 
 QT_BEGIN_NAMESPACE
@@ -1001,4 +1007,29 @@ QStringList Utils::getSupportEncodingList()
     std::sort(encodingList.begin(), encodingList.end());
 
     return encodingList;
+}
+
+QString Utils::libPath(const QString &strlib)
+{
+    QDir  dir;
+    QString path  = QLibraryInfo::location(QLibraryInfo::LibrariesPath);
+    dir.setPath(path);
+    QStringList list = dir.entryList(QStringList() << (strlib + "*"), QDir::NoDotAndDotDot | QDir::Files); //filter name with strlib
+
+    if (list.contains(strlib))
+        return strlib;
+
+    list.sort();
+    if (list.size() <= 0)
+        return "";
+    return list.last();
+}
+
+void Utils::loadCustomDLL()
+{
+    // 解析ZPD定制需求提供的库libzpdcallback.so
+    LoadLibNames tmp;
+    QByteArray zpdDll = Utils::libPath("libzpdcallback.so").toLatin1();
+    tmp.chZPDDLL = zpdDll.data();
+    setLibNames(tmp);
 }
