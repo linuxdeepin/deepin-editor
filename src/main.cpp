@@ -9,6 +9,7 @@
 #include "editorapplication.h"
 #include "performancemonitor.h"
 #include "eventlogutils.h"
+#include "common/utils.h"
 
 #include <DApplication>
 #include <DMainWindow>
@@ -91,6 +92,9 @@ int main(int argc, char *argv[])
                 startManager->openFilesInTab(urls);
             }
         }
+
+        // 解析ZPD定制需求提供的库libzpdcallback.so
+        Utils::loadCustomDLL();
 
         dbus.registerObject("/com/deepin/Editor", startManager, QDBusConnection::ExportScriptableSlots);
 

@@ -1033,3 +1033,32 @@ void Utils::loadCustomDLL()
     tmp.chZPDDLL = zpdDll.data();
     setLibNames(tmp);
 }
+
+/**
+ * @brief 根据传入的文件路径 \a filePath 返回是否允许对此文件内容进行剪切或拷贝
+ * @param filePath 文件完整路径
+ * @return 是否允许剪切或拷贝
+ */
+bool Utils::enableClipCopy(const QString &filePath)
+{
+    if (getLoadZPDLibsInstance()->m_document_clip_copy) {
+        // intercept 输出为1,拦截操作
+        int intercept = 1;
+        getLoadZPDLibsInstance()->m_document_clip_copy(filePath.toUtf8().data(), &intercept);
+
+        return 1 != intercept;
+    }
+
+    return true;
+}
+
+/**
+ * @brief 文件关闭前记录当前关闭的文件路径 \a filePath
+ * @param filePath 文件完整路径
+ */
+void Utils::recordCloseFile(const QString &filePath)
+{
+    if (getLoadZPDLibsInstance()->m_document_close) {
+        getLoadZPDLibsInstance()->m_document_close(filePath.toUtf8().data());
+    }
+}

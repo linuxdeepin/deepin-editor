@@ -11,6 +11,10 @@
 #include "../../src/startmanager.h"
 #include "../../src/editor/dtextedit.h"
 #include "../../src/common/utils.h"
+extern "C" {
+#include "../../src/basepub/load_libs.h"
+}
+
 #include "stub.h"
 #include <QTextCodec>
 #include <QByteArray>
@@ -557,4 +561,23 @@ TEST(UT_Utils_getSupportEncodingList, getSupportEncodingList)
     QStringList encodingList = Utils::getSupportEncodingList();
     ASSERT_FALSE(encodingList.isEmpty());
     ASSERT_TRUE(encodingList.contains("UTF-8"));
+}
+
+void uos_document_clip_copy_false(const char *path, int *intercept)
+{
+    Q_UNUSED(path)
+    if (intercept) {
+        *intercept = 1;
+    }
+}
+
+TEST(UT_Utils_zpdLib, enableClipCopy_notLoad_True)
+{
+    EXPECT_TRUE(Utils::enableClipCopy(""));
+    EXPECT_TRUE(Utils::enableClipCopy(QString::null));
+
+    getLoadZPDLibsInstance()->m_document_clip_copy = &uos_document_clip_copy_false;
+    EXPECT_FALSE(Utils::enableClipCopy(""));
+
+    getLoadZPDLibsInstance()->m_document_clip_copy = nullptr;
 }

@@ -131,6 +131,10 @@ public:
 
     // 加载外部定制库，如ZPD定制库的等
     static void loadCustomDLL();
+    // 根据传入的文件路径返回是否允许对此文件内容进行剪切或拷贝
+    static bool enableClipCopy(const QString &filePath);
+    // 文件关闭前记录当前关闭的文件路径
+    static void recordCloseFile(const QString &filePath);
 
 private:
     static QString m_systemLanguage;
