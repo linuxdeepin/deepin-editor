@@ -166,6 +166,8 @@ Window::Window(DMainWindow *parent)
     showCenterWindow(true);
     //检测语音助手服务是否被注册
     detectionIflytekaiassistant();
+    //读取语音助手配置文件
+    loadIflytekaiassistantConfig();
 
     // Init find bar.
     connect(m_findBar, &FindBar::findNext, this, &Window::handleFindNextSearchKeyword, Qt::QueuedConnection);
@@ -267,6 +269,38 @@ void Window::detectionIflytekaiassistant()
 bool Window::getIsRegistIflytekAiassistant()
 {
     return m_bIsRegistIflytekAiassistant;
+}
+
+void Window::loadIflytekaiassistantConfig()
+{
+    QString configPath = QString("%1/%2")
+                         .arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation))
+                         .arg("iflytek");
+
+    QDir dir(configPath);
+    if (!dir.exists()) {
+        return;
+    }
+    QString key = "base/enable";
+    dir.setFilter(QDir::Files);
+    QStringList nameList = dir.entryList();
+    for (auto name : nameList) {
+        if (name.contains("-iat") || name.contains("-tts") || name.contains("-trans")) {
+            QString filename = configPath + "/" + name;
+            QSettings file(filename, QSettings::IniFormat);
+            m_IflytekAiassistantState[name.split(".").first()] = file.value(key).toBool();
+        }
+    }
+}
+
+bool Window::getIflytekaiassistantConfig(const QString &mode_name)
+{
+    if (m_IflytekAiassistantState.contains(mode_name)) {
+        return m_IflytekAiassistantState[mode_name];
+    } else {
+        qWarning() << "mode_name is not valid";
+        return false;
+    }
 }
 
 void Window::updateModifyStatus(const QString &path, bool isModified)
