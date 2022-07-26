@@ -551,9 +551,12 @@ void TextEdit::popRightMenu(QPoint pos)
                                                                       "com.iflytek.aiassistant.tts",
                                                                       "getTTSEnable");
 
-        QDBusReply<bool> voiceReadingStateRet = QDBusConnection::sessionBus().call(voiceReadingMsg, QDBus::BlockWithGui);
+        QDBusReply<bool> voiceReadingStateRet = QDBusConnection::sessionBus().asyncCall(voiceReadingMsg, 100);
+        //没有收到返回就加载配置文件数据
         if (voiceReadingStateRet.isValid()) {
             voiceReadingState = voiceReadingStateRet.value();
+        } else {
+            voiceReadingState = m_wrapper->window()->getIflytekaiassistantConfig("aiassistant-tts");
         }
         if ((textCursor().hasSelection() && voiceReadingState) || m_hasColumnSelection) {
             m_voiceReadingAction->setEnabled(true);
@@ -566,9 +569,12 @@ void TextEdit::popRightMenu(QPoint pos)
                                                                    "com.iflytek.aiassistant.iat",
                                                                    "getIatEnable");
 
-        QDBusReply<bool> dictationStateRet = QDBusConnection::sessionBus().call(dictationMsg, QDBus::BlockWithGui);
+        QDBusReply<bool> dictationStateRet = QDBusConnection::sessionBus().asyncCall(dictationMsg, 100);
+        //没有收到返回就加载配置文件数据
         if (dictationStateRet.isValid()) {
             dictationState = dictationStateRet.value();
+        } else {
+            dictationState = m_wrapper->window()->getIflytekaiassistantConfig("aiassistant-iat");
         }
         m_dictationAction->setEnabled(dictationState);
         if (m_bReadOnlyPermission || m_readOnlyMode) {
@@ -583,9 +589,12 @@ void TextEdit::popRightMenu(QPoint pos)
                                                                           "com.iflytek.aiassistant.trans",
                                                                           "getTransEnable");
 
-        QDBusReply<bool> translateStateRet = QDBusConnection::sessionBus().call(translateReadingMsg, QDBus::BlockWithGui);
+        QDBusReply<bool> translateStateRet = QDBusConnection::sessionBus().asyncCall(translateReadingMsg, 100);
+        //没有收到返回就加载配置文件数据
         if (translateStateRet.isValid()) {
             translateState = translateStateRet.value();
+        } else {
+            translateState = m_wrapper->window()->getIflytekaiassistantConfig("aiassistant-trans");
         }
         if ((textCursor().hasSelection() && translateState) || m_hasColumnSelection) {
             m_translateAction->setEnabled(translateState);
@@ -844,7 +853,7 @@ void TextEdit::moveToEnd()
     } else {
         moveCursorNoBlink(QTextCursor::End);
     }
-    
+
     // 移动展示区域，手动高亮文本
     m_wrapper->OnUpdateHighlighter();
 }
@@ -1758,7 +1767,7 @@ void TextEdit::replaceNext(const QString &replaceText, const QString &withText)
 
         // 获取替换文本区域和颜色标记区域的交叉关系
         Utils::RegionIntersectType type = Utils::checkRegionIntersect(
-                    cursor.selectionStart(), cursor.selectionStart() + replaceText.size(), info.start, info.end);
+                                              cursor.selectionStart(), cursor.selectionStart() + replaceText.size(), info.start, info.end);
         // 仅进行单次处理
         switch (type) {
         case Utils::ELeft:
@@ -2068,10 +2077,10 @@ bool TextEdit::searchKeywordSeletion(QString keyword, QTextCursor cursor, bool f
     int offsetLines = 3;
 
     if (findNext) {
-        QTextCursor next = document()->find(keyword, cursor,QTextDocument::FindCaseSensitively);
-        if(keyword.contains("\n")){
-            int pos = std::max(cursor.position(),cursor.anchor());
-            next = findCursor(keyword,this->toPlainText(),pos);
+        QTextCursor next = document()->find(keyword, cursor, QTextDocument::FindCaseSensitively);
+        if (keyword.contains("\n")) {
+            int pos = std::max(cursor.position(), cursor.anchor());
+            next = findCursor(keyword, this->toPlainText(), pos);
         }
         if (!next.isNull()) {
             m_findHighlightSelection.cursor = next;
@@ -2081,9 +2090,9 @@ bool TextEdit::searchKeywordSeletion(QString keyword, QTextCursor cursor, bool f
         }
     } else {
         QTextCursor prev = document()->find(keyword, cursor, QTextDocument::FindBackward | QTextDocument::FindCaseSensitively);
-        if(keyword.contains("\n")){
-            int pos = std::min(cursor.position(),cursor.anchor());
-            prev = findCursor(keyword,this->toPlainText().mid(0,pos),-1,true);
+        if (keyword.contains("\n")) {
+            int pos = std::min(cursor.position(), cursor.anchor());
+            prev = findCursor(keyword, this->toPlainText().mid(0, pos), -1, true);
         }
         if (!prev.isNull()) {
             m_findHighlightSelection.cursor = prev;
@@ -4210,7 +4219,7 @@ void TextEdit::getHideRowContent(int iLine)
         int curIndex = 0;
         //遍历最后右括弧文本块 设置块隐藏或显示,显示文本块不超过1000
         while (beginBlock.isValid()
-               && (curIndex++ < s_MaxDisplayBlockCount)) {
+                && (curIndex++ < s_MaxDisplayBlockCount)) {
             m_foldCodeShow->appendText(beginBlock.text(), width());
             beginBlock = beginBlock.next();
         }
@@ -5031,8 +5040,8 @@ void TextEdit::manualUpdateAllMark(const QList<QPair<MarkOperation, qint64> > &m
             bool isMultiLine = startBlock < endBlock;
 
             while (startBlock.isValid()
-                   && endBlock.isValid()
-                   && !(endBlock < startBlock)) {
+                    && endBlock.isValid()
+                    && !(endBlock < startBlock)) {
                 QTextEdit::ExtraSelection selection;
                 selection.format.setBackground(QColor(info.first.color));
                 selection.cursor = info.first.cursor;
@@ -5070,11 +5079,11 @@ void TextEdit::manualUpdateAllMark(const QList<QPair<MarkOperation, qint64> > &m
 
     // 对修改后的颜色标记进行排序
     std::sort(m_markOperations.begin(), m_markOperations.end(),
-              [](const QPair<TextEdit::MarkOperation, qint64> &a, const QPair<TextEdit::MarkOperation, qint64> &b){
+    [](const QPair<TextEdit::MarkOperation, qint64> &a, const QPair<TextEdit::MarkOperation, qint64> &b) {
         return a.second < b.second;
     });
     std::sort(m_wordMarkSelections.begin(), m_wordMarkSelections.end(),
-              [](const QPair<QTextEdit::ExtraSelection, qint64> &a, const QPair<QTextEdit::ExtraSelection, qint64> &b){
+    [](const QPair<QTextEdit::ExtraSelection, qint64> &a, const QPair<QTextEdit::ExtraSelection, qint64> &b) {
         return a.second < b.second;
     });
 
@@ -5091,7 +5100,8 @@ void TextEdit::manualUpdateAllMark(const QList<QPair<MarkOperation, qint64> > &m
  * @param replaceText   替换的文本
  * @return 查找到和颜色标记位置有交叉的文本位置索引区间
  */
-static QPair<int, int> findMatchRange(const QList<int> &posList, int markStart, int markEnd, const QString &replaceText) {
+static QPair<int, int> findMatchRange(const QList<int> &posList, int markStart, int markEnd, const QString &replaceText)
+{
     // 判断颜色标记 info 范围内是否包含替换文本索引信息
     QPair<int, int> foundPosRange {-1, -1};
     if (posList.isEmpty()) {
@@ -5145,8 +5155,7 @@ static void updateMarkReplaceRange(const QList<int> &foundPosList, TextEdit::Mar
             // 处于颜色标记右侧，减去右侧替换文本的偏移量
             info.start += (foundPosList.size() - 1) * adjustlen;
             info.end += (foundPosList.size() - 1) * adjustlen;
-        }
-        else {
+        } else {
             // 处于颜色标记左侧
             info.start += foundPosList.size() * adjustlen;
             info.end += foundPosList.size() * adjustlen;
@@ -5202,7 +5211,7 @@ void TextEdit::calcMarkReplaceList(QList<TextEdit::MarkReplaceInfo> &replaceList
     }
 
     // 将传入的替换列表排序，按光标位置先后顺序进行排列
-    std::sort(replaceList.begin(), replaceList.end(), [](const MarkReplaceInfo &a, const MarkReplaceInfo &b){
+    std::sort(replaceList.begin(), replaceList.end(), [](const MarkReplaceInfo & a, const MarkReplaceInfo & b) {
         return a.start < b.start;
     });
 
@@ -5236,7 +5245,7 @@ void TextEdit::calcMarkReplaceList(QList<TextEdit::MarkReplaceInfo> &replaceList
     int findPos = oldText.indexOf(replaceText, findOffset);
     // 需要取得左侧所有的变更相对偏移，从文本左侧开始循环遍历
     while (-1 != findPos
-           && currentMarkIndex < replaceList.size()) {
+            && currentMarkIndex < replaceList.size()) {
         // 转换为相对全文的偏移
         int realPos = findPos + offset;
         // 记录已查询的索引位置
@@ -6735,21 +6744,21 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             return;
         } else if (key == "Shift+/" && e->modifiers() == Qt::ControlModifier) {
             e->ignore();
-        } else if(e->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier)) {
-            if(e->key() == Qt::Key_Return || e->key() == Qt::Key_D || e->key() == Qt::Key_K
+        } else if (e->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier)) {
+            if (e->key() == Qt::Key_Return || e->key() == Qt::Key_D || e->key() == Qt::Key_K
                     || e->key() == Qt::Key_Up || e->key() == Qt::Key_Down) {
                 popupNotify(tr("Read-Only mode is on"));
                 return;
             } else {
-                 e->ignore();
+                e->ignore();
             }
-        }else if (e->modifiers() == Qt::ControlModifier) {
-            if(e->key() == Qt::Key_Return || e->key() == Qt::Key_K || e->key() == Qt::Key_X ||
+        } else if (e->modifiers() == Qt::ControlModifier) {
+            if (e->key() == Qt::Key_Return || e->key() == Qt::Key_K || e->key() == Qt::Key_X ||
                     e->key() == Qt::Key_V || e->key() == Qt::Key_J || e->key() == Qt::Key_Z || e->key() == Qt::Key_Y) {
                 popupNotify(tr("Read-Only mode is on"));
                 return;
             } else {
-                 e->ignore();
+                e->ignore();
             }
         } else if (e->key() == Qt::Key_Control || e->key() == Qt::Key_Shift) {
             e->ignore();
@@ -7742,8 +7751,7 @@ void TextEdit::removeComment()
             }
         }
 
-        if (!multiText.isEmpty())
-        {
+        if (!multiText.isEmpty()) {
             // 同时删除多组注释文本
             deleteMultiTextEx(multiText);
         }
