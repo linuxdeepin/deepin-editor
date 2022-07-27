@@ -58,6 +58,15 @@ public:
      */
     void detectionIflytekaiassistant();
     bool getIsRegistIflytekAiassistant();
+    /**
+     * @brief 加载语音助手配置文件
+     */
+    void loadIflytekaiassistantConfig();
+    /**
+     * @brief 获取语音助手配置文件数据
+     * @param mode_name　接口模块名称
+     */
+    bool getIflytekaiassistantConfig(const QString &mode_name);
     //跟新文件修改状态
     void updateModifyStatus(const QString &path, bool isModified);
     //跟新tab文件名称
@@ -296,6 +305,8 @@ private:
     bool m_isNewPrint = false;
     //语音助手服务是否被注册
     bool m_bIsRegistIflytekAiassistant {false};
+    //记录语音助手接口配置状态
+    QMap<QString, bool> m_IflytekAiassistantState;
 };
 
 #endif
