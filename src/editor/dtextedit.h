@@ -238,8 +238,8 @@ public:
     void setTheme(const QString &path);
     void removeHighlightWordUnderCursor();
     void setSettings(Settings *settings);
-    void copySelectedText();
-    void cutSelectedText();
+    void copySelectedText(bool ignoreCheck = false);
+    void cutSelectedText(bool ignoreCheck = false);
     void pasteText();
     void setMark();
     void unsetMark();
@@ -508,9 +508,9 @@ public slots:
     void cursorPositionChanged();
 
     //剪切槽函数
-    void cut();
+    void cut(bool ignoreCheck = false);
     //复制槽函数
-    void copy();
+    void copy(bool ignoreCheck = false);
     //粘贴槽函数
     void paste();
     //修改后，高亮显示

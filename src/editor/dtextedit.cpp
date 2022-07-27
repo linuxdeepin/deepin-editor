@@ -1249,7 +1249,7 @@ void TextEdit::copyLines()
 
     // Copy lines to system clipboard.
     setTextCursor(copyCursor);
-    copySelectedText();
+    copySelectedText(true);
 
     // Reset cursor before copy lines.
     copyCursor.setPosition(currentCursor.position(), QTextCursor::MoveAnchor);
@@ -1268,7 +1268,7 @@ void TextEdit::cutlines()
     }
 
     if (textCursor().hasSelection() || m_bIsAltMod) {
-        this->cut();
+        this->cut(true);
         popupNotify(tr("Selected line(s) clipped"));
     } else {
         auto cursor = textCursor();
@@ -2538,10 +2538,14 @@ void TextEdit::cursorPositionChanged()
     m_pLeftAreaWidget->m_pFlodArea->update();
 }
 
-void TextEdit::cut()
+/**
+ * @brief 剪切光标选中的文本
+ * @param ignoreCheck 是否忽略权限判断(外部已进行)，默认false
+ */
+void TextEdit::cut(bool ignoreCheck)
 {
     // 添加权限判断是否允许拷贝，剪切；防止后续可能调用接口，冗余处理
-    if (!Utils::enableClipCopy(getFilePath())) {
+    if (!ignoreCheck && !Utils::enableClipCopy(getFilePath())) {
         return;
     }
 
@@ -2581,10 +2585,14 @@ void TextEdit::cut()
     unsetMark();
 }
 
-void TextEdit::copy()
+/**
+ * @brief 拷贝光标选中的文本
+ * @param ignoreCheck 是否忽略权限判断(外部已进行)，默认false
+ */
+void TextEdit::copy(bool ignoreCheck)
 {
     // 添加权限判断是否允许拷贝，剪切；防止后续可能调用接口，冗余处理
-    if (!Utils::enableClipCopy(getFilePath())) {
+    if (!ignoreCheck && !Utils::enableClipCopy(getFilePath())) {
         return;
     }
 
@@ -2728,10 +2736,6 @@ void TextEdit::slotCutAction(bool checked)
 void TextEdit::slotCopyAction(bool checked)
 {
     Q_UNUSED(checked);
-    // 添加权限判断是否允许拷贝，剪切；防止后续可能调用接口，冗余处理
-    if (!Utils::enableClipCopy(getFilePath())) {
-        return;
-    }
 
     if (isAbleOperation(OperationType::CopyOperation)) {
         copy();
@@ -3580,11 +3584,14 @@ void TextEdit::setSettings(Settings *keySettings)
     m_settings = keySettings;
 }
 
-
-void TextEdit::copySelectedText()
+/**
+ * @brief 拷贝选中的文本
+ * @param ignoreCheck 是否忽略权限判断(外部已进行)，默认false
+ */
+void TextEdit::copySelectedText(bool ignoreCheck)
 {
     // 添加权限判断是否允许拷贝，剪切；防止后续可能调用接口，冗余处理
-    if (!Utils::enableClipCopy(getFilePath())) {
+    if (!ignoreCheck && !Utils::enableClipCopy(getFilePath())) {
         return;
     }
 
@@ -3607,10 +3614,14 @@ void TextEdit::copySelectedText()
     tryUnsetMark();
 }
 
-void TextEdit::cutSelectedText()
+/**
+ * @brief 剪切选中的文本
+ * @param ignoreCheck 是否忽略权限判断(外部已进行)，默认false
+ */
+void TextEdit::cutSelectedText(bool ignoreCheck)
 {
     // 添加权限判断是否允许拷贝，剪切；防止后续可能调用接口，冗余处理
-    if (!Utils::enableClipCopy(getFilePath())) {
+    if (!ignoreCheck && !Utils::enableClipCopy(getFilePath())) {
         return;
     }
 
