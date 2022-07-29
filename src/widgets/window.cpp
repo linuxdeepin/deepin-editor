@@ -48,6 +48,8 @@
 #include <QGuiApplication>
 #include <QWindow>
 #include <DWidgetUtil>
+#include <QTextDocumentFragment>
+#include <dprintpreviewwidget.h>
 
 #ifdef DTKWIDGET_CLASS_DFileDialog
 
@@ -60,6 +62,32 @@
 #define PRINT_ACTION 8
 #define PRINT_FORMAT_MARGIN 10
 #define FLOATTIP_MARGIN 95
+
+/**
+ * @brief 根据传入的源文档 \a doc 创建新的文档
+ * @param doc 源文档指针
+ * @return 创建的新文档，用于拷贝数据
+ */
+static QTextDocument* createNewDocument(QTextDocument *doc) {
+    QTextDocument *createDoc = new QTextDocument(doc);
+    // 不记录撤销信息
+    createDoc->setUndoRedoEnabled(false);
+    createDoc->setMetaInformation(QTextDocument::DocumentTitle,
+                                   doc->metaInformation(QTextDocument::DocumentTitle));
+    createDoc->setMetaInformation(QTextDocument::DocumentUrl,
+                                   doc->metaInformation(QTextDocument::DocumentUrl));
+    createDoc->setDefaultFont(doc->defaultFont());
+    createDoc->setDefaultStyleSheet(doc->defaultStyleSheet());
+    createDoc->setIndentWidth(doc->indentWidth());
+
+    // 设置固定为从左向右布局，降低后续高亮等操作导致更新计算布局方向
+    auto textOption = createDoc->defaultTextOption();
+    textOption.setTextDirection(Qt::LeftToRight);
+    textOption.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+    createDoc->setDefaultTextOption(textOption);
+
+    return createDoc;
+}
 
 /*!
  * \~chinese \brief printPage 绘制每一页文本纸张到打印机
@@ -92,6 +120,50 @@ void Window::printPage(int index, QPainter *painter, const QTextDocument *doc,
 
     painter->restore();
 }
+
+/**
+ * @brief 使用多组文档打印，用于超大文档的情况
+ * @param index         纸张索引
+ * @param painter       打印指针
+ * @param printInfo     多组文档信息
+ * @param body          范围大小
+ * @param pageCountBox  绘制页码的范围
+ */
+void Window::printPageWithMultiDoc(int index, QPainter *painter, const QVector<Window::PrintInfo> &printInfo,
+                                   const QRectF &body, const QRectF &pageCountBox)
+{
+    painter->save();
+
+    int docIndex = index;
+    for (auto info : printInfo)
+    {
+        if (docIndex <= info.doc->pageCount()) {
+            // 调整绘制工具坐标到当前页面顶部
+            painter->translate(body.left(), body.top() - (docIndex - 1) * body.height());
+
+            // 绘制页码
+            painter->setFont(QFont(info.doc->defaultFont()));
+            const QRectF box = pageCountBox.translated(0, (docIndex - 1) * body.height());
+            const QString pageString = QString::number(index);
+            painter->drawText(box, Qt::AlignRight, pageString);
+
+            // 设置文档裁剪区域
+            const QRectF docView(0, (docIndex - 1) * body.height(), body.width(), body.height());
+            QAbstractTextDocumentLayout *layout = info.doc->documentLayout();
+            QAbstractTextDocumentLayout::PaintContext ctx;
+            ctx.clip = docView;
+            ctx.palette.setColor(QPalette::Text, Qt::black);
+            // 绘制文档
+            layout->draw(painter, ctx);
+
+            break;
+        }
+        docIndex -= info.doc->pageCount();
+    }
+
+    painter->restore();
+}
+
 
 Window::Window(DMainWindow *parent)
     : DMainWindow(parent),
@@ -620,6 +692,12 @@ bool Window::closeTab(const QString &filePath)
     }
 
     if (!wrapper) return false;
+
+    // 当前窗口为打印文本窗口
+    if (wrapper == m_printWrapper) {
+        // 退出打印
+        m_bPrintProcessing = false;
+    }
 
     disconnect(wrapper, nullptr);
     disconnect(wrapper->textEditor(), &TextEdit::textChanged, nullptr, nullptr);
@@ -1350,6 +1428,9 @@ void Window::popupSettingsDialog()
     m_settings->settings->sync();
 }
 
+/**
+ * @brief 清空打印文档信息，用于关闭打印对话框或中止打印时释放构造的临时文档
+ */
 void Window::clearPrintTextDocument()
 {
     if (m_printDoc != nullptr) {
@@ -1358,8 +1439,136 @@ void Window::clearPrintTextDocument()
         }
         m_printDoc = nullptr;
     }
+
+    // 清空打印对象列表
+    if (!m_printDocList.isEmpty()) {
+        for (auto &info : m_printDocList) {
+            if (info.highlighter) {
+                delete info.highlighter;
+            }
+
+            if (info.doc) {
+                info.doc->clear();
+                delete info.doc;
+            }
+        }
+
+        m_printDocList.clear();
+    }
 }
 
+/**
+ * @brief 克隆文本数据，不同于 QTextDocument::clone(), 主要用于大文本的拷贝，拷贝过程通过
+ *      QApplication::processEvents() 执行其它事件
+ * @param editWrapper 文本编辑处理，提供文本编辑器和高亮信息
+ * @return 是否克隆数据成功
+ *
+ * @note Qt自带的布局算法在超长文本时存在计算越界的问题，计算后的
+ */
+bool Window::cloneLargeDocument(EditWrapper *editWrapper)
+{
+    if (!editWrapper) {
+        return false;
+    }
+
+    // 获取源文本
+    QTextDocument *srcDoc = editWrapper->textEditor()->document();
+    // 是否需要高亮
+    bool needHighlighter = editWrapper->getSyntaxHighlighter()
+            && editWrapper->getSyntaxHighlighter()->definition().isValid();
+    // 创建新的打印信息
+    auto createPrintInfo = [=]()->PrintInfo {
+        PrintInfo info;
+        info.doc = createNewDocument(srcDoc);
+        if (needHighlighter) {
+            // 构造高亮处理
+            info.highlighter = new CSyntaxHighlighter(info.doc);
+            info.highlighter->setDefinition(editWrapper->getSyntaxHighlighter()->definition());
+            info.highlighter->setTheme(editWrapper->getSyntaxHighlighter()->theme());
+        }
+        return info;
+    };
+
+    // 每次拷贝约100kb数据
+    static const int s_StepCopyCharCount = 1024 * 100;
+    // 单个文档字符不超过50MB, 防止布局失败
+    static const int s_MaxDocCharCount = 1024 * 1024 * 50;
+    // 单个文档文本块数不超过10万行
+    static const int s_MaxDocBlockCount = 100000;
+
+    // 创建首个拷贝文本对象
+    PrintInfo info = createPrintInfo();
+    QTextDocument *copyDoc = info.doc;
+    m_printDocList.append(info);
+
+    try {
+        // 此次拷贝到字符数统计
+        int currentCopyCharCount = 0;
+        // 此次拷贝勾选的文本块数
+        int currentSelectBlock = 0;
+        // 已读取的源文件偏移量
+        int srcOffset = 0;
+
+        // 标记开始处理
+        m_bPrintProcessing = true;
+        QPointer<QObject> checkPtr(this);
+
+        QTextCursor copyCursor(copyDoc);
+        QTextCursor srcCursor(srcDoc);
+
+        for (QTextBlock srcBlock = srcDoc->firstBlock(); srcBlock.isValid(); srcBlock = srcBlock.next()) {
+            currentSelectBlock++;
+            currentCopyCharCount += srcBlock.length();
+
+            if (currentCopyCharCount >= s_StepCopyCharCount) {
+                // 判断是否超过单个文档允许的最大范围
+                if ((copyDoc->characterCount() + currentCopyCharCount) > s_MaxDocCharCount
+                        || (copyDoc->blockCount() + currentSelectBlock) > s_MaxDocBlockCount) {
+                    // 创建新的打印文档
+                    m_printDocList.append(createPrintInfo());
+                    copyDoc = m_printDocList.last().doc;
+                    // 创建新的插入光标
+                    copyCursor = QTextCursor(copyDoc);
+                }
+
+                srcCursor.setPosition(srcOffset);
+                srcCursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor, currentSelectBlock);
+                copyCursor.insertFragment(QTextDocumentFragment(srcCursor));
+
+                srcOffset += currentCopyCharCount;
+                currentSelectBlock = 0;
+                currentCopyCharCount = 0;
+            }
+
+            // 处理其它事件
+            qApp->processEvents();
+            if (!checkPtr || !m_bPrintProcessing) {
+                qWarning() << "Abort print copy!";
+                clearPrintTextDocument();
+                return false;
+            }
+        }
+
+        // 补充保存最后的信息
+        srcCursor.setPosition(srcOffset);
+        srcCursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor, currentSelectBlock);
+        // 保证拷贝到文档末尾
+        srcCursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor, 1);
+        copyCursor.insertFragment(QTextDocumentFragment(srcCursor));
+
+        m_bPrintProcessing = false;
+    } catch (const std::exception &e) {
+        qWarning() << "Print copy doc error!" << e.what();
+        // 清理数据
+        m_bPrintProcessing = false;
+        clearPrintTextDocument();
+        return false;
+    }
+
+    return true;
+}
+
+\
 #if 0 //Qt原生打印预览调用
 void Window::popupPrintDialog()
 {
@@ -1393,6 +1602,11 @@ void Window::popupPrintDialog()
     //大文本加载过程不允许打印操作
     if (currentWrapper() && currentWrapper()->getFileLoading()) return;
 
+    // 已有处理的打印事件，不继续进入
+    if (m_bPrintProcessing) {
+        return;
+    }
+
     const QString &filePath = currentWrapper()->textEditor()->getFilePath();
     const QString &fileDir = QFileInfo(filePath).dir().absolutePath();
 
@@ -1402,13 +1616,43 @@ void Window::popupPrintDialog()
     || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 4 && DTK_VERSION_PATCH >= 10))
 
     QTextDocument *doc = currentWrapper()->textEditor()->document();
+    m_bLargePrint = false;
+    m_bPrintProcessing = false;
+    m_printWrapper = currentWrapper();
+    m_multiDocPageCount = 0;
+
     if (doc != nullptr && !doc->isEmpty()) {
-        currentWrapper()->updateHighlighterAll();
-        m_printDoc = doc->clone(doc);
+        static const int s_maxDirectReadLen = 1024 * 1024 * 10;
+        static const int s_maxHighlighterDirectReadLen = 1024 * 1024 * 5;
+        // 判断是否需要文本高亮，文本数据量大小，不同数据量使用不同分支。
+        bool needHighlighter = currentWrapper()->getSyntaxHighlighter()
+                && currentWrapper()->getSyntaxHighlighter()->definition().isValid();
+
+        if (needHighlighter
+                && doc->characterCount() > s_maxHighlighterDirectReadLen) {
+            // 需要高亮且数据量超过 5MB
+            m_bLargePrint = true;
+        } else if (!needHighlighter
+                   && doc->characterCount() > s_maxDirectReadLen) {
+            // 无需高亮且数据量超过 10MB
+            m_bLargePrint = true;
+        } else {
+            currentWrapper()->updateHighlighterAll();
+            m_printDoc = doc->clone(doc);
+        }
+
+        // 大文件处理
+        if (m_bLargePrint) {
+            // 克隆大文本数据
+            if (!cloneLargeDocument(currentWrapper())) {
+                return;
+            }
+        }
     }
 
-    if (nullptr == m_printDoc) {
-        qDebug() << "The print document is not valid!";
+    if ((!m_bLargePrint && nullptr == m_printDoc)
+            || (m_bLargePrint && m_printDocList.isEmpty())) {
+        qWarning() << "The print document is not valid!";
         return;
     }
 
@@ -1426,15 +1670,26 @@ void Window::popupPrintDialog()
         QString path = currentWrapper()->textEditor()->getTruePath();
         m_pPreview->setDocName(QString(QFileInfo(path).baseName()));
     }
-    m_pPreview->setAsynPreview(m_printDoc ? m_printDoc->pageCount() : PRINT_FLAG);
+
+    // 后续布局计算后再更新打印页数
+    m_pPreview->setAsynPreview(PRINT_FLAG);
 
     connect(m_pPreview, &DPrintPreviewDialog::finished, this, [ = ] {
+        m_bPrintProcessing = false;
+        clearPrintTextDocument();
+    });
+    connect(m_pPreview, &DPrintPreviewDialog::rejected, this, [ = ] {
+        m_bPrintProcessing = false;
         clearPrintTextDocument();
     });
 
     connect(m_pPreview, QOverload<DPrinter *, const QVector<int> &>::of(&DPrintPreviewDialog::paintRequested),
     this, [ = ](DPrinter * _printer, const QVector<int> &pageRange) {
-        this->doPrint(_printer, pageRange);
+        if (m_bLargePrint) {
+            this->doPrintWithLargeDoc(_printer, pageRange);
+        } else {
+            this->doPrint(_printer, pageRange);
+        }
     });
 
     m_pPreview->exec();
@@ -1715,6 +1970,186 @@ void Window::doPrint(DPrinter *printer, const QVector<int> &pageRange)
             printer->newPage();
     }
 }
+
+/**
+ * @brief 用于较大的文本文件进行打印计算和绘制，使用 processEvents 规避打印输入
+ * @param printer       打印指针
+ * @param pageRange     打印范围
+ */
+void Window::doPrintWithLargeDoc(DPrinter *printer, const QVector<int> &pageRange)
+{
+    if (m_bPrintProcessing) {
+        return;
+    }
+
+    if (m_printDocList.isEmpty()) {
+        return;
+    }
+
+    //如果打印预览请求的页码为空，则直接返回
+    if (pageRange.isEmpty()) {
+        return;
+    }
+
+    QPainter p(printer);
+    if (!p.isActive())
+        return;
+
+    if (m_lastLayout.isValid() && !m_isNewPrint) {
+        if (m_lastLayout == printer->pageLayout()) {
+            // 如果打印属性没发生变化，直接加载已生成的资源，提高切换速度
+            asynPrint(p, printer, pageRange);
+            return;
+        }
+    }
+
+    //保留print的打印布局
+    m_lastLayout = printer->pageLayout();
+    m_isNewPrint = false;
+
+    if (currentWrapper() == nullptr) {
+        return;
+    }
+
+    qWarning() << "calc print large doc!";
+
+    // 执行处理时屏蔽其它输入
+    DPrintPreviewWidget *prieviewWidget = m_pPreview->findChild<DPrintPreviewWidget *>();
+    QStringList findWidgetList {"leftWidget", "rightWidget"};
+    QWidgetList widList;
+    if (prieviewWidget) {
+        // 通过设置刷新标识，防止频繁的触发刷新
+        prieviewWidget->refreshBegin();
+
+        for (QString widStr : findWidgetList) {
+            QWidget *wid = m_pPreview->findChild<QWidget *>(widStr);
+            if (wid) {
+                wid->setEnabled(false);
+                widList.append(wid);
+            } else {
+                qWarning() << "not find widget";
+            }
+        }
+
+        QApplication::processEvents();
+    }
+
+    m_bPrintProcessing = true;
+    QPointer<QObject> checkPtr(this);
+
+    int dpiy = p.device()->logicalDpiY();
+    int margin = static_cast<int>((2 / 2.54) * dpiy); // 2 cm margins
+    margin = PRINT_FORMAT_MARGIN;
+
+    QRectF pageRect(printer->pageRect());
+    QRectF body = QRectF(0, 0, pageRect.width(), pageRect.height());
+    // 使用首个文档信息即可
+    QFontMetrics fontMetrics(m_printDocList.first().doc->defaultFont(), p.device());
+    QRectF titleBox(margin,
+                    body.bottom() - margin
+                    + fontMetrics.height()
+                    - 6 * dpiy / 72.0,
+                    body.width() - 2 * margin,
+                    fontMetrics.height());
+
+    // 进行文本高亮和布局
+    QColor background = m_printWrapper->textEditor()->palette().color(QPalette::Base);
+    bool backgroundIsDark = background.value() < 128;
+
+    m_multiDocPageCount = 0;
+    for (auto &info : m_printDocList) {
+        QTextDocument *printDoc = info.doc;
+
+        QAbstractTextDocumentLayout *lay = info.doc->documentLayout();
+        lay->setPaintDevice(p.device());
+
+        auto fmt = printDoc->rootFrame()->frameFormat();
+        fmt.setMargin(margin);
+        printDoc->rootFrame()->setFrameFormat(fmt);
+
+        // 设置打印大小
+        printDoc->setPageSize(body.size());
+
+        if (info.highlighter) {
+            info.highlighter->setEnableHighlight(true);
+        }
+
+        for (QTextBlock block = printDoc->firstBlock(); block.isValid(); block = block.next()) {
+            // 调整为开始布局前高亮(纯文本无需高亮)
+            if (info.highlighter) {
+                info.highlighter->rehighlightBlock(block);
+
+                // 调整颜色对比度
+                if (backgroundIsDark) {
+                    QVector<QTextLayout::FormatRange> formatList = block.layout()->formats();
+                    // adjust syntax highlighting colors for better contrast
+                    for (int i = formatList.count() - 1; i >= 0; --i) {
+                        QTextCharFormat &format = formatList[i].format;
+                        if (format.background().color() == background) {
+                            QBrush brush = format.foreground();
+                            QColor color = brush.color();
+                            int h, s, v, a;
+                            color.getHsv(&h, &s, &v, &a);
+                            color.setHsv(h, s, qMin(128, v), a);
+                            brush.setColor(color);
+                            format.setForeground(brush);
+                        }
+                        format.setBackground(Qt::white);
+                    }
+
+                    block.layout()->setFormats(formatList);
+                }
+            }
+
+            // 通过对单个文本块进行布局，拆分布局总时间，防止布局时间过长
+            lay->blockBoundingRect(block);
+            // 处理其它事件
+            qApp->processEvents(QEventLoop::AllEvents | QEventLoop::DialogExec);
+            // 判断当前窗口是否关闭，退出打印状态
+            if (!checkPtr || !m_bPrintProcessing) {
+                qWarning() << "Abort print layout!";
+
+                // 手动清理数据
+                QObject::disconnect(m_pPreview, nullptr, this, nullptr);
+                clearPrintTextDocument();
+
+                // 异常退出、中断打印时需要关闭窗口
+                QMetaObject::invokeMethod(m_pPreview, "reject", Qt::QueuedConnection);
+                return;
+            }
+        }
+
+        if (info.highlighter) {
+            info.highlighter->setEnableHighlight(false);
+        }
+
+        // 更新文件总打印页数
+        m_multiDocPageCount += printDoc->pageCount();
+    }
+
+    if (prieviewWidget) {
+        prieviewWidget->refreshEnd();
+    }
+
+    m_bPrintProcessing = false;
+    for (auto wid : widList) {
+        wid->setEnabled(true);
+    }
+
+    //输出总页码给到打印预览
+    m_pPreview->setAsynPreview(m_multiDocPageCount);
+
+    if (!m_printDocList.isEmpty()) {
+        //渲染第一页文本
+        for (int i = 0; i < pageRange.count(); ++i) {
+            if (pageRange[i] > m_multiDocPageCount)
+                continue;
+            printPageWithMultiDoc(pageRange[i], &p, m_printDocList, body, titleBox);
+            if (i != pageRange.count() - 1)
+                printer->newPage();
+        }
+    }
+}
 #endif
 
 /*!
@@ -1723,7 +2158,9 @@ void Window::doPrint(DPrinter *printer, const QVector<int> &pageRange)
  */
 void Window::asynPrint(QPainter &p, DPrinter *printer, const QVector<int> &pageRange)
 {
-    if (nullptr == m_printDoc) {
+    if ((!m_bLargePrint && nullptr == m_printDoc)
+            || (m_bLargePrint && m_printDocList.isEmpty())) {
+        qWarning() << "The print document is not valid!";
         return;
     }
 
@@ -1731,19 +2168,34 @@ void Window::asynPrint(QPainter &p, DPrinter *printer, const QVector<int> &pageR
     int dpiy = p.device()->logicalDpiY();
     int margin = (int)((2 / 2.54) * dpiy); // 2 cm margins
     QRectF body = QRectF(0, 0, pageRect.width(), pageRect.height());
-    QFontMetrics fontMetrics(m_printDoc->defaultFont(), p.device());
+
+    QTextDocument *curDoc = m_bLargePrint ? m_printDocList.first().doc : m_printDoc;
+    QFontMetrics fontMetrics(curDoc->defaultFont(), p.device());
     QRectF titleBox(margin,
                     body.bottom() - margin
                     + fontMetrics.height()
                     - 6 * dpiy / 72.0,
                     body.width() - 2 * margin,
                     fontMetrics.height());
-    for (int i = 0; i < pageRange.count(); ++i) {
-        if (pageRange[i] > m_printDoc->pageCount())
-            continue;
-        Window::printPage(pageRange[i], &p, m_printDoc, body, titleBox);
-        if (i != pageRange.count() - 1)
-            printer->newPage();
+
+    if (m_bLargePrint
+            && !m_printDocList.isEmpty()) {
+        // 大文本打印
+        for (int i = 0; i < pageRange.count(); ++i) {
+            if (pageRange[i] > m_multiDocPageCount)
+                continue;
+            printPageWithMultiDoc(pageRange[i], &p, m_printDocList, body, titleBox);
+            if (i != pageRange.count() - 1)
+                printer->newPage();
+        }
+    } else {
+        for (int i = 0; i < pageRange.count(); ++i) {
+            if (pageRange[i] > m_printDoc->pageCount())
+                continue;
+            Window::printPage(pageRange[i], &p, m_printDoc, body, titleBox);
+            if (i != pageRange.count() - 1)
+                printer->newPage();
+        }
     }
 }
 

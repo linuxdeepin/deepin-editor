@@ -37,6 +37,7 @@
 #include "../common/performancemonitor.h"
 #include "../common/dbusinterface.h"
 #include "../common/iflytekaiassistantthread.h"
+#include "../common/CSyntaxHighlighter.h"
 #include <DMainWindow>
 #include <DStackedWidget>
 #include <qprintpreviewdialog.h>
@@ -49,6 +50,12 @@ class Window : public DMainWindow
     Q_OBJECT
 
 public:
+    // 打印文档信息，用于超大文档的打印
+    struct PrintInfo {
+        QTextDocument       *doc = nullptr;         // 打印的文本
+        CSyntaxHighlighter  *highlighter = nullptr; // 高亮处理
+    };
+
     explicit Window(DMainWindow *parent = nullptr);
     ~Window() override;
 
@@ -124,7 +131,11 @@ public:
     void remberPositionRestore();
 
     void displayShortcuts();
+    // 文本打印
     void doPrint(DPrinter *printer, const QVector<int> &pageRange);
+    // 大文本打印
+    void doPrintWithLargeDoc(DPrinter *printer, const QVector<int> &pageRange);
+    // 翻页预览打印，无需重新布局
     void asynPrint(QPainter &p, DPrinter *printer, const QVector<int> &pageRange);
 
     /**
@@ -245,6 +256,12 @@ private:
     void checkTabbarForReload();
     void clearPrintTextDocument();
 
+    // 克隆文本数据
+    bool cloneLargeDocument(EditWrapper *editWrapper);
+    // 打印多文本数据
+    void printPageWithMultiDoc(int index, QPainter *painter, const QVector<PrintInfo> &printInfo,
+                               const QRectF &body, const QRectF &pageCountBox);
+
 protected:
     void resizeEvent(QResizeEvent *event) override;
     void closeEvent(QCloseEvent *event) override;
@@ -297,12 +314,17 @@ private:
     QProcess *m_shortcutViewProcess = nullptr;
     bool m_needMoveToCenter = false;
     DPrintPreviewDialog *m_pPreview {nullptr};
+
     //打印文本
-    QTextDocument *m_printDoc = nullptr;
-    //打印布局
-    QPageLayout m_lastLayout;
-    //判断是否是新的打印文档
-    bool m_isNewPrint = false;
+    QTextDocument *m_printDoc = nullptr;            // 打印文档，用于普通文档打印
+    QPageLayout m_lastLayout;                       // 打印布局
+    bool m_isNewPrint = false;                      // 判断是否是新的打印文档
+    bool m_bLargePrint = false;                     // 是否为大文件打印
+    bool m_bPrintProcessing = false;                // 文件打印计算中
+    EditWrapper *m_printWrapper = nullptr;          // 当前处理的编辑对象(关闭标签页时需要退出打印)
+    QVector<PrintInfo> m_printDocList;              // 打印文档列表，用于超大文档打印
+    int m_multiDocPageCount = 0;                    // 用于超大文档打印时单独记录多文档的打印页数
+
     //语音助手服务是否被注册
     bool m_bIsRegistIflytekAiassistant {false};
     //记录语音助手接口配置状态
