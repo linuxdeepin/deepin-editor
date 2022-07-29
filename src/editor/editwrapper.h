@@ -129,6 +129,10 @@ public:
     QDateTime getLastModifiedTime() const;
     void setLastModifiedTime(const QString &time);
 
+    // 取得当前编辑器使用的高亮处理(用于打印高亮)
+    inline CSyntaxHighlighter *getSyntaxHighlighter() const
+    { return m_pSyntaxHighlighter; }
+
 signals:
     void sigClearDoubleCharaterEncode();
 

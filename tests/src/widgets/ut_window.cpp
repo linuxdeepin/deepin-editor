@@ -2005,6 +2005,56 @@ TEST(UT_Window_doprint, UT_Window_doprint)
     p = nullptr;
 }
 
+TEST(UT_Window_doprint, UT_Window_doPrintWithLargeDoc)
+{
+    Window* w = new Window();
+    DPrinter* p = new DPrinter;
+    w->m_pPreview = new DPrintPreviewDialog;
+    Window::PrintInfo info;
+    info.doc = new QTextDocument;
+    w->m_printDocList.append(info);
+
+    editwrapper_texteditor = new TextEdit;
+    Stub s1;s1.set(ADDR(EditWrapper,textEditor),EditWrapper_textEditor_stub);
+
+    QVector<int> pages{1,2,3,4,5};
+#if (DTK_VERSION_MAJOR > 5 \
+ || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR > 4) \
+ || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR == 4 && DTK_VERSION_PATCH >= 10))
+    w->doPrintWithLargeDoc(p, pages);
+#endif
+
+    EXPECT_NE(w, nullptr);
+    w->deleteLater();
+    editwrapper_texteditor->deleteLater();
+    w->m_printDoc->deleteLater();
+    w->m_pPreview->deleteLater();
+    delete p;
+    p = nullptr;
+}
+
+TEST(UT_Window_doprint, UT_Window_cloneLargeDocument)
+{
+    Window* w = new Window();
+    EditWrapper* wra = new EditWrapper(w);
+    QString text = "123";
+    wra->textEditor()->document()->setPlainText(text);
+
+    // 拷贝数据
+    w->cloneLargeDocument(wra);
+    EXPECT_FALSE(w->m_printDocList.isEmpty());
+    if (!w->m_printDocList.isEmpty()) {
+        EXPECT_NE(w->m_printDocList.first().doc, nullptr);
+    }
+
+    // 清空数据
+    w->clearPrintTextDocument();
+    EXPECT_TRUE(w->m_printDocList.isEmpty());
+
+    wra->deleteLater();
+    w->deleteLater();
+}
+
 
 TEST(UT_Window_slotClearDoubleCharaterEncode, UT_Window_slotClearDoubleCharaterEncode)
 {
