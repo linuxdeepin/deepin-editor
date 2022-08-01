@@ -183,7 +183,7 @@ TextEdit::~TextEdit()
 
 void TextEdit::insertTextEx(QTextCursor cursor, QString text)
 {
-    QUndoCommand *pInsertStack = new InsertTextUndoCommand(cursor, text);
+    QUndoCommand *pInsertStack = new InsertTextUndoCommand(cursor, text, this);
     m_pUndoStack->push(pInsertStack);
     ensureCursorVisible();
 }
@@ -202,7 +202,7 @@ void TextEdit::insertMultiTextEx(const QList<QPair<QTextCursor, QString> > &mult
     // 将所有的插入信息添加到单个撤销项中，便于单次处理
     for (auto pairText : multiText) {
         // pMultiCommand 析构时会自动析构子撤销项
-        (void)new InsertTextUndoCommand(pairText.first, pairText.second, pMultiCommand);
+        (void)new InsertTextUndoCommand(pairText.first, pairText.second, this, pMultiCommand);
     }
     m_pUndoStack->push(pMultiCommand);
     ensureCursorVisible();
@@ -211,7 +211,7 @@ void TextEdit::insertMultiTextEx(const QList<QPair<QTextCursor, QString> > &mult
 void TextEdit::deleteSelectTextEx(QTextCursor cursor)
 {
     if (cursor.hasSelection()) {
-        QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(cursor);
+        QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(cursor, this);
         m_pUndoStack->push(pDeleteStack);
     }
 }
@@ -224,7 +224,7 @@ void TextEdit::deleteSelectTextEx(QTextCursor cursor, QString text, bool currLin
 
 void TextEdit::deleteTextEx(QTextCursor cursor)
 {
-    QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(cursor);
+    QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(cursor, this);
     m_pUndoStack->push(pDeleteStack);
 }
 
@@ -242,14 +242,14 @@ void TextEdit::deleteMultiTextEx(const QList<QTextCursor> &multiText)
     // 将所有的插入信息添加到单个撤销项中，便于单次处理
     for (auto textCursor : multiText) {
         // pMultiCommand 析构时会自动析构子撤销项
-        (void)new DeleteTextUndoCommand(textCursor, pMultiCommand);
+        (void)new DeleteTextUndoCommand(textCursor, this, pMultiCommand);
     }
     m_pUndoStack->push(pMultiCommand);
 }
 
 void TextEdit::insertSelectTextEx(QTextCursor cursor, QString text)
 {
-    QUndoCommand *pInsertStack = new InsertTextUndoCommand(cursor, text);
+    QUndoCommand *pInsertStack = new InsertTextUndoCommand(cursor, text, this);
     m_pUndoStack->push(pInsertStack);
     ensureCursorVisible();
 }
@@ -263,7 +263,7 @@ void TextEdit::insertColumnEditTextEx(QString text)
     for (int i = 0; i < m_altModSelections.size(); i++) {
         if (m_altModSelections[i].cursor.hasSelection()) deleteTextEx(m_altModSelections[i].cursor);
     }
-    QUndoCommand *pInsertStack = new InsertTextUndoCommand(m_altModSelections, text);
+    QUndoCommand *pInsertStack = new InsertTextUndoCommand(m_altModSelections, text, this);
     m_pUndoStack->push(pInsertStack);
     ensureCursorVisible();
 }
@@ -1008,7 +1008,7 @@ void TextEdit::newline()
     tryUnsetMark();
 
     QTextCursor cursor = textCursor();
-    auto com = new InsertTextUndoCommand(cursor, "\n");
+    auto com = new InsertTextUndoCommand(cursor, "\n", this);
     m_pUndoStack->push(com);
     setTextCursor(cursor);
 }
@@ -1017,7 +1017,7 @@ void TextEdit::openNewlineAbove()
 {
     QTextCursor cursor = textCursor();
     cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
-    InsertTextUndoCommand *com = new InsertTextUndoCommand(cursor, "\n");
+    InsertTextUndoCommand *com = new InsertTextUndoCommand(cursor, "\n", this);
     m_pUndoStack->push(com);
     cursor.movePosition(QTextCursor::Up, QTextCursor::MoveAnchor);
     setTextCursor(cursor);
@@ -1027,7 +1027,7 @@ void TextEdit::openNewlineBelow()
 {
     QTextCursor cursor = textCursor();
     cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
-    InsertTextUndoCommand *com = new InsertTextUndoCommand(cursor, "\n");
+    InsertTextUndoCommand *com = new InsertTextUndoCommand(cursor, "\n", this);
     m_pUndoStack->push(com);
 
     //make the vertical scroll bar change together.
@@ -1060,7 +1060,7 @@ void TextEdit::moveLineDownUp(bool up)
 
             cursor.setPosition(startpos);
             cursor.setPosition(endpos, QTextCursor::KeepAnchor);
-            InsertTextUndoCommand *com = new InsertTextUndoCommand(cursor, curtext + "\n" + uptext);
+            InsertTextUndoCommand *com = new InsertTextUndoCommand(cursor, curtext + "\n" + uptext, this);
             m_pUndoStack->push(com);
 
             //ensure that this operation can be performed multiple times in succession.
@@ -1087,7 +1087,7 @@ void TextEdit::moveLineDownUp(bool up)
 
             cursor.setPosition(startpos);
             cursor.setPosition(endpos, QTextCursor::KeepAnchor);
-            InsertTextUndoCommand *com = new InsertTextUndoCommand(cursor, downtext + "\n" + curtext);
+            InsertTextUndoCommand *com = new InsertTextUndoCommand(cursor, downtext + "\n" + curtext, this);
             m_pUndoStack->push(com);
 
             //make the vertical scroll bar change together.
@@ -1201,7 +1201,7 @@ void TextEdit::duplicateLine()
 
     text = "\n" + text;
     cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
-    auto com = new InsertTextUndoCommand(cursor, text);
+    auto com = new InsertTextUndoCommand(cursor, text, this);
     m_pUndoStack->push(com);
 
     //make the vertical scroll bar change together.
@@ -1268,7 +1268,7 @@ void TextEdit::cutlines()
         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
         if (cursor.hasSelection()) {
             QString data = cursor.selectedText();
-            QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(cursor);
+            QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(cursor, this);
             m_pUndoStack->push(pDeleteStack);
             QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
             clipboard->setText(data);
@@ -1293,7 +1293,7 @@ void TextEdit::joinLines()
 
         cursor.setPosition(startpos);
         cursor.setPosition(endpos, QTextCursor::KeepAnchor);
-        auto com = new InsertTextUndoCommand(cursor, t);
+        auto com = new InsertTextUndoCommand(cursor, t, this);
         m_pUndoStack->push(com);
 
         cursor.setPosition(startpos);
@@ -1481,7 +1481,7 @@ void TextEdit::transposeChar()
     if (!l.isEmpty() && !r.isEmpty()) {
         cursor.setPosition(pos - 1);
         cursor.setPosition(pos + 1, QTextCursor::KeepAnchor);
-        auto com = new InsertTextUndoCommand(cursor, r + l);
+        auto com = new InsertTextUndoCommand(cursor, r + l, this);
         m_pUndoStack->push(com);
         ensureCursorVisible();
     }
@@ -1565,7 +1565,7 @@ void TextEdit::convertWordCase(ConvertCase convertCase)
 
         // 如果没有实际文本更改效果，不进行文本替换操作
         if (text != textCursor().selectedText()) {
-            InsertTextUndoCommand *insertCommond = new InsertTextUndoCommand(textCursor(), text);
+            InsertTextUndoCommand *insertCommond = new InsertTextUndoCommand(textCursor(), text, this);
             m_pUndoStack->push(insertCommond);
         }
     } else {
@@ -1590,7 +1590,7 @@ void TextEdit::convertWordCase(ConvertCase convertCase)
                 text = capitalizeText(text);
             }
 
-            InsertTextUndoCommand *insertCommond = new InsertTextUndoCommand(cursor, text);
+            InsertTextUndoCommand *insertCommond = new InsertTextUndoCommand(cursor, text, this);
             m_pUndoStack->push(insertCommond);
 
             setTextCursor(cursor);
@@ -1811,7 +1811,7 @@ void TextEdit::replaceNext(const QString &replaceText, const QString &withText)
     if (!strSelection.compare(replaceText) || replaceText.contains("\n")) {
         ChangeMarkCommand *pChangeMark = new ChangeMarkCommand(this, backupMarkList, replaceList);
         // 设置插入撤销项为颜色标记变更撤销项的子项
-        new InsertTextUndoCommand(cursor, withText, pChangeMark);
+        new InsertTextUndoCommand(cursor, withText, this, pChangeMark);
         m_pUndoStack->push(pChangeMark);
         ensureCursorVisible();
     }
@@ -2517,7 +2517,7 @@ void TextEdit::cut()
         //删除有选择
         for (int i = 0; i < m_altModSelections.size(); i++) {
             if (m_altModSelections[i].cursor.hasSelection()) {
-                QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(m_altModSelections[i].cursor);
+                QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(m_altModSelections[i].cursor, this);
                 m_pUndoStack->push(pDeleteStack);
             }
         }
@@ -2529,7 +2529,7 @@ void TextEdit::cut()
         //有选择内容才剪切
         if (cursor.hasSelection()) {
             QString data = this->selectedText();
-            QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(cursor);
+            QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(cursor, this);
             m_pUndoStack->push(pDeleteStack);
             QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
             clipboard->setText(data);
@@ -2707,13 +2707,13 @@ void TextEdit::slotDeleteAction(bool checked)
     if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
         for (int i = 0; i < m_altModSelections.size(); i++) {
             if (m_altModSelections[i].cursor.hasSelection()) {
-                QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(m_altModSelections[i].cursor);
+                QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(m_altModSelections[i].cursor, this);
                 m_pUndoStack->push(pDeleteStack);
             }
         }
     } else {
         if (textCursor().hasSelection()) {
-            QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(textCursor());
+            QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(textCursor(), this);
             m_pUndoStack->push(pDeleteStack);
         } else {
             setTextCursor(m_highlightWordCacheCursor);
@@ -2899,7 +2899,7 @@ void TextEdit::moveText(int from, int to, const QString &text)
     cursor.setPosition(from + text.size(), QTextCursor::KeepAnchor);
     auto com1 = new DeleteBackCommond(cursor, this);
     cursor.setPosition(to);
-    auto com2 = new InsertTextUndoCommand(cursor, text);
+    auto com2 = new InsertTextUndoCommand(cursor, text, this);
 
     //the positon of 'from' is on the left of the position of 'to',
     //therefore,firstly do the insert operation.
@@ -6365,7 +6365,7 @@ void TextEdit::dropEvent(QDropEvent *event)
             cursor.setPosition(dstpos);
             cursor.setPosition(dstpos + data->text().size(), QTextCursor::KeepAnchor);
             cursor.deleteChar();
-            auto com = new InsertTextUndoCommand(cursor, data->text());
+            auto com = new InsertTextUndoCommand(cursor, data->text(), this);
             m_pUndoStack->push(com);
 
             //operations in the source editor.
@@ -6388,7 +6388,7 @@ void TextEdit::dropEvent(QDropEvent *event)
             cursor.setPosition(dstpos);
             cursor.setPosition(dstpos + data->text().size(), QTextCursor::KeepAnchor);
             cursor.deleteChar();
-            auto com = new InsertTextUndoCommand(cursor, data->text());
+            auto com = new InsertTextUndoCommand(cursor, data->text(), this);
             m_pUndoStack->push(com);
         }
     } else {
@@ -6868,7 +6868,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
                 QPlainTextEdit::selectAll();
 
             if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
-                QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(m_altModSelections);
+                QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(m_altModSelections, this);
                 m_pUndoStack->push(pDeleteStack);
             } else {
                 //修改backspace删除，在文档最末尾点击backspace,引起标签栏*出现问题
@@ -6878,7 +6878,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
                 }
                 QString m_delText = cursor.selectedText();
                 if (m_delText.size() <= 0) return;
-                QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(cursor);
+                QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(cursor, this);
                 m_pUndoStack->push(pDeleteStack);
             }
             m_isSelectAll = false;
