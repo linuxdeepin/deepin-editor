@@ -29,6 +29,9 @@ void DeleteBackCommond::redo()
     m_cursor.setPosition(m_delPos);
     m_cursor.setPosition(m_delPos+m_delText.size(), QTextCursor::KeepAnchor);
     m_cursor.deleteChar();
+
+    // 撤销恢复时光标移回要撤销的位置
+    m_edit->setTextCursor(m_cursor);
 }
 
 DeleteBackAltCommond::DeleteBackAltCommond(QList<QTextEdit::ExtraSelection> &selections,QPlainTextEdit* edit):

@@ -31,13 +31,13 @@
 class DeleteTextUndoCommand : public QUndoCommand
 {
 public:
-    explicit DeleteTextUndoCommand(QTextCursor textcursor, QUndoCommand *parent = nullptr);
-    explicit DeleteTextUndoCommand(QList<QTextEdit::ExtraSelection> &selections, QUndoCommand *parent = nullptr);
+    explicit DeleteTextUndoCommand(QTextCursor textcursor, QPlainTextEdit* edit, QUndoCommand *parent = nullptr);
+    explicit DeleteTextUndoCommand(QList<QTextEdit::ExtraSelection> &selections, QPlainTextEdit* edit, QUndoCommand *parent = nullptr);
     virtual void undo();
     virtual void redo();
 
-
 private:
+    QPlainTextEdit* m_edit;
     QTextCursor m_textCursor;
     QString m_sInsertText;
     QList<QString> m_selectTextList;

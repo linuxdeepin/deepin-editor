@@ -24,8 +24,9 @@
 #include <QDebug>
 #include <QTextBlock>
 
-DeleteTextUndoCommand::DeleteTextUndoCommand(QTextCursor textcursor, QUndoCommand *parent)
+DeleteTextUndoCommand::DeleteTextUndoCommand(QTextCursor textcursor, QPlainTextEdit* edit, QUndoCommand *parent)
     : QUndoCommand(parent)
+    , m_edit(edit)
     , m_textCursor(textcursor)
 {
     if(m_textCursor.hasSelection()){
@@ -42,8 +43,9 @@ DeleteTextUndoCommand::DeleteTextUndoCommand(QTextCursor textcursor, QUndoComman
     }
 }
 
-DeleteTextUndoCommand::DeleteTextUndoCommand(QList<QTextEdit::ExtraSelection> &selections, QUndoCommand *parent)
+DeleteTextUndoCommand::DeleteTextUndoCommand(QList<QTextEdit::ExtraSelection> &selections, QPlainTextEdit *edit, QUndoCommand *parent)
     : QUndoCommand(parent)
+    , m_edit(edit)
     , m_ColumnEditSelections(selections)
 {
     int cnt = m_ColumnEditSelections.size();
@@ -71,11 +73,19 @@ void DeleteTextUndoCommand::undo()
         m_textCursor.insertText(m_sInsertText);
         m_textCursor.movePosition(QTextCursor::Left,QTextCursor::KeepAnchor,m_sInsertText.length());
 
+        // 进行撤销/恢复时将光标移动到撤销位置
+        if (m_edit) {
+            m_edit->setTextCursor(m_textCursor);
+        }
     }else {
         int cnt = m_ColumnEditSelections.size();
         for (int i = 0; i < cnt; i++) {
             m_ColumnEditSelections[i].cursor.insertText(m_selectTextList[i]);
             m_ColumnEditSelections[i].cursor.movePosition(QTextCursor::Left,QTextCursor::KeepAnchor,m_selectTextList[i].length());
+        }
+
+        if (m_edit && !m_ColumnEditSelections.isEmpty()) {
+            m_edit->setTextCursor(m_ColumnEditSelections.last().cursor);
         }
     }
 
@@ -86,10 +96,19 @@ void DeleteTextUndoCommand::redo()
 {
     if (m_ColumnEditSelections.isEmpty()) {
         m_textCursor.deletePreviousChar();
+
+        // 进行撤销/恢复时将光标移动到撤销位置
+        if (m_edit) {
+            m_edit->setTextCursor(m_textCursor);
+        }
     }else {
         int cnt = m_ColumnEditSelections.size();
         for (int i = 0; i < cnt; i++) {
             m_ColumnEditSelections[i].cursor.deletePreviousChar();
+        }
+
+        if (m_edit && !m_ColumnEditSelections.isEmpty()) {
+            m_edit->setTextCursor(m_ColumnEditSelections.last().cursor);
         }
     }
 }
@@ -177,11 +196,15 @@ void DeleteTextUndoCommand2::redo()
         m_sInsertText = m_textCursor.selectedText();
         m_beginPostion = m_textCursor.selectionStart();
         m_textCursor.deletePreviousChar();
+
+        // 进行撤销/恢复时将光标移动到撤销位置
+        m_edit->setTextCursor(m_textCursor);
     }else {
         int cnt = m_ColumnEditSelections.size();
         for (int i = 0; i < cnt; i++) {
             m_beginPostion = m_ColumnEditSelections[i].cursor.selectionStart();
             m_ColumnEditSelections[i].cursor.deletePreviousChar();
+            m_edit->setTextCursor(m_ColumnEditSelections[i].cursor);
         }
     }
 }
