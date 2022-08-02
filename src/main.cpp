@@ -26,6 +26,7 @@
 #include "urlinfo.h"
 #include "editorapplication.h"
 #include "performancemonitor.h"
+#include "eventlogutils.h"
 
 #include <DApplication>
 #include <DMainWindow>
@@ -85,6 +86,13 @@ int main(int argc, char *argv[])
     // Start editor process if not found any editor use DBus.
     if (dbus.registerService("com.deepin.Editor")) {
         StartManager *startManager = StartManager::instance();
+        //埋点记录启动数据
+        QJsonObject objStartEvent{
+            {"tid", Eventlogutils::StartUp},
+            {"vsersion", VERSION},
+            {"mode", 1},
+        };
+        Eventlogutils::GetInstance()->writeLogs(objStartEvent);
 
         if (hasWindowFlag) {
             startManager->openFilesInWindow(urls);
