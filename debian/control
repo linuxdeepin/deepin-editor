@@ -38,3 +38,4 @@ Description: Text editor for DDE (Deepin Desktop Environment)
  Advanced text editor based on dtk.
  .
  This package is part of DDE (Deepin Desktop Environment).
+Recommends: uos-reporter, deepin-event-log
