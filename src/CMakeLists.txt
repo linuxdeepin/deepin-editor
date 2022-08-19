@@ -62,13 +62,16 @@ target_link_libraries(deepin-editor
     chardet
 )
 
-set(CMAKE_INSTALL_PREFIX /usr)
+include(GNUInstallDirs)
+if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+   set(CMAKE_INSTALL_PREFIX /usr)
+endif ()
 
 # Install qm files
 file(GLOB QM_FILES "${CMAKE_SOURCE_DIR}/translations/*.qm")
-install(FILES ${QM_FILES} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-editor/translations/)
-install(FILES ${APP_ICONPATH} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps/)
-install(FILES ${CMAKE_SOURCE_DIR}/src/images/deepin-editor.svg DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps/)
+install(FILES ${QM_FILES} DESTINATION ${CMAKE_INSTALL_DATADIR}/deepin-editor/translations/)
+install(FILES ${APP_ICONPATH} DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps/)
+install(FILES ${CMAKE_SOURCE_DIR}/src/images/deepin-editor.svg DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps/)
 
 #代码覆盖率开关
 if(CMAKE_COVERAGE_ARG STREQUAL "CMAKE_COVERAGE_ARG_ON")
@@ -78,13 +81,13 @@ endif()
 
 # Install help manual
 #if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "loongarch64")
-#    install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets/loongarch64/deepin-editor DESTINATION /usr/share/deepin-manual/manual-assets/application/)
+#    install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets/loongarch64/deepin-editor DESTINATION ${CMAKE_INSTALL_DATADIR}/deepin-manual/manual-assets/application/)
 if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "sw_64")
-    install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets/loongarch64/deepin-editor DESTINATION /usr/share/deepin-manual/manual-assets/application/)
+    install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets/loongarch64/deepin-editor DESTINATION ${CMAKE_INSTALL_DATADIR}/deepin-manual/manual-assets/application/)
 else()
-    install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets/deepin-editor DESTINATION /usr/share/deepin-manual/manual-assets/application/)
+    install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets/deepin-editor DESTINATION ${CMAKE_INSTALL_DATADIR}/deepin-manual/manual-assets/application/)
 endif()
 
-install(TARGETS deepin-editor DESTINATION bin/)
-install(FILES ${CMAKE_SOURCE_DIR}/deepin-editor.desktop DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications/)
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/themes DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-editor/)
+install(TARGETS deepin-editor DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(FILES ${CMAKE_SOURCE_DIR}/deepin-editor.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications/)
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/themes DESTINATION ${CMAKE_INSTALL_DATADIR}/deepin-editor/)
