@@ -2347,7 +2347,8 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
                 int w = this->m_fontSize <= 15 ? 15 : m_fontSize;
                 updateLeftWidgetWidth(w);
                 int h = cursorRect(cur).height();
-                int offset = h <= 20 ? h / 8 : h / 4;
+                // 绘制行纵向居中
+                int offset = qMax(0, (h - w) / 2);
                 //the language currently set by the system is Tibetan.
                 if ("bo_CN" == Utils::getSystemLan())
                     offset = h <= 20 ? 0 : h / 10;
@@ -3971,7 +3972,8 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
             int w = this->m_fontSize <= 15 ? 15 : m_fontSize;
             updateLeftWidgetWidth(w);
             int h = cursorRect(cur).height();
-            int offset = h <= 20 ? h / 8 : h / 4;
+            // 绘制行纵向居中
+            int offset = qMax(0, (h - w) / 2);
             //the language currently set by the system is Tibetan.
             if ("bo_CN" == Utils::getSystemLan())
                 offset = h <= 20 ? 0 : h / 10;
