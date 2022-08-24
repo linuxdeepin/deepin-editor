@@ -411,6 +411,11 @@ QString Utils::getKeyshortcut(QKeyEvent *keyEvent)
         if (modifiers.testFlag(Qt::ShiftModifier)) {
             keys.append("Shift");
         }
+
+        // 添加小键盘处理，若为小键盘按键按下，组合键需添加 Num ，例如 Ctrl+Num+6 / Ctrl+Num+Up
+        if (modifiers.testFlag(Qt::KeypadModifier)) {
+            keys.append("Num");
+        }
     }
 
     if (keyEvent->key() != 0 && keyEvent->key() != Qt::Key_unknown) {
