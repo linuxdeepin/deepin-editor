@@ -2318,7 +2318,8 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
 
             //获取行数文本块 出去字符串判断　梁卫东２０２０年０９月０１日１７：１６：１７
             QString text = block.text();
-            QRegExp regExp("^\"*\"&");
+            //若存在字符串行，多个字符串中间的 '{' '}' 同样被忽略
+            QRegExp regExp("\".*\"");
             QString curText = text.remove(regExp);
 
             //不同类型文件注释符号不同 梁卫东　２０２０－０９－０３　１７：２８：４５
@@ -3026,19 +3027,31 @@ void TextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &close
                                         QTextCursor::KeepAnchor);
 
         int braceDepth = 1;
+        // 判断当前是否处于字符串内，字符串内的 openChar closeChar  {} () [] 等不进行统计
+        bool inCodeString = false;
         QChar c;
-
         while (!(c = doc->characterAt(position)).isNull()) {
-            if (c == begin) {
-                braceDepth++;
-            } else if (c == end) {
-                braceDepth--;
+            if (inCodeString) {
+                // 判断 " 是否存在转义字符，若不存在，则退出字符串模式
+                // 注意回退(!forward)模式下，position = 0，characterAt(position - 1) 将返回空字符，同样符合判断，不会触发越界访问
+                if ('"' == c
+                        && '\\' != doc->characterAt(position - 1)) {
+                    inCodeString = false;
+                }
+            } else {
+                if (c == begin) {
+                    braceDepth++;
+                } else if (c == end) {
+                    braceDepth--;
 
-                if (!braceDepth) {
-                    bracketEndCursor = QTextCursor(doc);
-                    bracketEndCursor.setPosition(position);
-                    bracketEndCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-                    break;
+                    if (!braceDepth) {
+                        bracketEndCursor = QTextCursor(doc);
+                        bracketEndCursor.setPosition(position);
+                        bracketEndCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+                        break;
+                    }
+                } else if ('"' == c) {
+                    inCodeString = true;
                 }
             }
 
@@ -3099,59 +3112,12 @@ TextEdit::UpdateOperationType TextEdit::getLeftAreaUpdateState()
 //line 开始处理的行号  isvisable是否折叠  iInitnum左括号默认开始计算的数量  isFirstLine是否是第一行，因为第一行默认不折叠
 bool TextEdit::getNeedControlLine(int line, bool isVisable)
 {
-    QTextDocument *doc = document();
-
-    //获取行数文本块
-    QTextBlock curBlock = doc->findBlockByNumber(line);
-
-    //左括弧文本块 右括弧文本块
-    QTextBlock beginBlock = curBlock.next(), endBlock = curBlock.next();
-
-    //如果是第一行不包括左括弧"{"
-    if (line == 0 && !curBlock.text().contains("{")) {
-        curBlock = curBlock.next();
-    }
-
-    //获取左括弧最后位置
-    int position = curBlock.position();
-    int offset = curBlock.text().lastIndexOf('{');
-    position += offset;
-
-
-    //获取当前文本块第一个字符光标
-    QChar begin = '{', end = '}';
-    QTextCursor cursor = textCursor();
-    cursor.setPosition(position, QTextCursor::MoveAnchor);
-    cursor.clearSelection();
-
-    //左括弧光标 右括弧光标
-    QTextCursor bracketBeginCursor = cursor;
-    QTextCursor bracketEndCursor = cursor;
-    bracketBeginCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-
-    //获取最后右括弧光标
-    int braceDepth = 0;
-    QChar c;
-    while (!(c = doc->characterAt(position)).isNull()) {
-        if (c == begin) {
-            braceDepth++;
-        } else if (c == end) {
-            braceDepth--;
-
-            if (0 == braceDepth) {
-                bracketEndCursor = QTextCursor(doc);
-                bracketEndCursor.setPosition(position);
-                bracketEndCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-                //获取有括弧最后文本块
-                endBlock = bracketEndCursor.block();
-                break;
-            }
-        }
-        position++;
-    }
+    // 查询折叠区域文本块范围
+    QTextBlock beginBlock, endBlock, curBlock;
+    bool bFoundBrace = findFoldBlock(line, beginBlock, endBlock, curBlock);
 
     //没有找到右括弧折叠左括弧后面所有行
-    if (braceDepth != 0) {
+    if (!bFoundBrace) {
         //遍历最后右括弧文本块 设置块隐藏或显示
         while (beginBlock.isValid()) {
             beginBlock.setVisible(isVisable);
@@ -3160,7 +3126,7 @@ bool TextEdit::getNeedControlLine(int line, bool isVisable)
         }
         return true;
         //没有找到匹配左右括弧 //如果左右"{" "}"在同一行不折叠
-    } else if (braceDepth != 0 || endBlock == curBlock) {
+    } else if (!bFoundBrace || endBlock == curBlock) {
         return false;
     } else {
         //遍历最后右括弧文本块 设置块隐藏或显示
@@ -4156,55 +4122,9 @@ void TextEdit::getHideRowContent(int iLine)
     // 最大显示的预览文本块数量，不超过1000
     static int s_MaxDisplayBlockCount = 1000;
 
-    //使用统一 折叠判断算法 根据左右"{""}"高亮算法
-    QTextDocument *doc = document();
-    //获取行数文本块
-    QTextBlock curBlock = doc->findBlockByNumber(iLine);
-
-    //左括弧文本块 右括弧文本块
-    QTextBlock beginBlock = curBlock.next(), endBlock = curBlock.next();
-
-    //如果是第一行不包括左括弧"{"
-    if (iLine == 0 && !curBlock.text().contains("{")) {
-        curBlock = curBlock.next();
-    }
-
-    //获取左括弧最后位置
-    int position = curBlock.position();
-    int offset = curBlock.text().lastIndexOf('{');
-    position += offset;
-
-    //获取当前文本块第一个字符光标
-    QChar begin = '{', end = '}';
-    QTextCursor cursor = textCursor();
-    cursor.setPosition(position, QTextCursor::MoveAnchor);
-    cursor.clearSelection();
-
-    //左括弧光标 右括弧光标
-    QTextCursor bracketBeginCursor = cursor;
-    QTextCursor bracketEndCursor = cursor;
-    bracketBeginCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-
-    //获取最后右括弧光标
-    int braceDepth = 0;
-    QChar c;
-    while (!(c = doc->characterAt(position)).isNull()) {
-        if (c == begin) {
-            braceDepth++;
-        } else if (c == end) {
-            braceDepth--;
-
-            if (0 == braceDepth) {
-                bracketEndCursor = QTextCursor(doc);
-                bracketEndCursor.setPosition(position);
-                bracketEndCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-                //获取有括弧最后文本块
-                endBlock = bracketEndCursor.block();
-                break;
-            }
-        }
-        position++;
-    }
+    // 查询折叠区域文本块范围
+    QTextBlock beginBlock, endBlock, curBlock;
+    bool bFoundBrace = findFoldBlock(iLine, beginBlock, endBlock, curBlock);
 
     if (QColor(m_backgroundColor).lightness() < 128) {
         m_foldCodeShow->initHighLight(m_sFilePath, false);
@@ -4214,7 +4134,7 @@ void TextEdit::getHideRowContent(int iLine)
 
     m_foldCodeShow->appendText("{", width());
     //左右括弧没有匹配到
-    if (braceDepth != 0) {
+    if (!bFoundBrace) {
         // 读取文本块索引
         int curIndex = 0;
         //遍历最后右括弧文本块 设置块隐藏或显示,显示文本块不超过1000
@@ -4273,66 +4193,12 @@ bool TextEdit::isNeedShowFoldIcon(QTextBlock block)
 
 int TextEdit::getHighLightRowContentLineNum(int iLine)
 {
-//    bool isFirstLine = true;
-//    if (iLine == 0) {
-//        isFirstLine = true;
-//    } else {
-//        isFirstLine = false;
-//    }
-
-    QTextDocument *doc = document();
-    //获取行号文本块
-    QTextBlock curBlock = doc->findBlockByNumber(iLine);
-
-    //开始本文块 结束文本块
-    QTextBlock beginBlock = curBlock.next(), endBlock = curBlock.next();
-
-    //如果是第一行不包括左括弧"{"
-    if (iLine == 0 && !curBlock.text().contains("{")) {
-        curBlock = curBlock.next();
-    }
-
-    //获取当前块文本左括弧所在光标
-    int position = curBlock.position();
-    int offset = curBlock.text().lastIndexOf('{');
-    position += offset;
-
-
-    //获取当前文本块第一个字符光标
-    QChar begin = '{', end = '}';
-    QTextCursor cursor = textCursor();
-    cursor.setPosition(position, QTextCursor::MoveAnchor);
-    cursor.clearSelection();
-
-    //左括弧光标 右括弧光标
-    QTextCursor bracketBeginCursor = cursor;
-    QTextCursor bracketEndCursor = cursor;
-    bracketBeginCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-
-    //获取最后右括弧光标
-    int braceDepth = 0;
-
-    QChar c;
-    while (!(c = doc->characterAt(position)).isNull()) {
-
-        if (c == begin) {
-            braceDepth++;
-        } else if (c == end) {
-            braceDepth--;
-
-            if (0 == braceDepth) {
-                bracketEndCursor = QTextCursor(doc);
-                bracketEndCursor.setPosition(position);
-                bracketEndCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-                endBlock = bracketEndCursor.block();
-                break;
-            }
-        }
-        position++;
-    }
+    // 查询折叠区域文本块范围
+    QTextBlock beginBlock, endBlock, curBlock;
+    bool bFoundBrace = findFoldBlock(iLine, beginBlock, endBlock, curBlock);
 
     //左右括弧没有匹配到
-    if (braceDepth != 0) {
+    if (!bFoundBrace) {
         //遍历最后右括弧文本块 设置块隐藏或显示
         while (beginBlock.isValid()) {
             iLine++;
@@ -4340,7 +4206,7 @@ int TextEdit::getHighLightRowContentLineNum(int iLine)
         }
         return iLine;
         //如果左右"{" "}"在同一行不折叠
-    } else if (0 != braceDepth || endBlock == curBlock) {
+    } else if (!bFoundBrace || endBlock == curBlock) {
         return iLine;
     } else {
         while (beginBlock != endBlock && beginBlock.isValid()) {
@@ -7780,11 +7646,90 @@ bool TextEdit::blockContainStrBrackets(int line)
     //获取行数文本块
     QTextBlock curBlock = document()->findBlockByNumber(line);
     QString text = curBlock.text();
-    QRegExp regExp("^\"*\"&");
+    //若存在字符串行，多个字符串中间的 '{' '}' 同样被忽略
+    QRegExp regExp("\".*\"");
     if (text.contains(regExp)) {
         QString curText = text.remove(regExp);
         return curText.contains("{");
     } else {
         return text.contains("{");
     }
+}
+
+/**
+ * @brief 根据传入的起始行号 \a line ，查找在此行号下的折叠区域，查找后将返回查询过程中的折叠区域起始文本块
+ *      \a beginBlock 和结束文本块 \a endBlock 。
+ * @param line          查找起始行号
+ * @param beginBlock    起始文本块
+ * @param endBlock      结束文本框
+ * @param curBlock      行号对应文本块
+ * @return 是否查找到折叠区域
+ */
+bool TextEdit::findFoldBlock(int line, QTextBlock &beginBlock, QTextBlock &endBlock, QTextBlock &curBlock)
+{
+    //使用统一 折叠判断算法 根据左右"{""}"高亮算法
+    QTextDocument *doc = document();
+    //获取行号对应文本块
+    curBlock = doc->findBlockByNumber(line);
+
+    //开始本文块 结束文本块
+    beginBlock = curBlock.next();
+    endBlock = curBlock.next();
+
+    //如果是第一行不包括左括弧"{"
+    if (line == 0 && !curBlock.text().contains("{")) {
+        curBlock = curBlock.next();
+    }
+
+    //获取当前块文本左括弧所在光标
+    int position = curBlock.position();
+    int offset = curBlock.text().lastIndexOf('{');
+    position += offset;
+
+    //获取当前文本块第一个字符光标
+    QChar begin = '{', end = '}';
+    QTextCursor cursor = textCursor();
+    cursor.setPosition(position, QTextCursor::MoveAnchor);
+    cursor.clearSelection();
+
+    //左括弧光标 右括弧光标
+    QTextCursor bracketBeginCursor = cursor;
+    QTextCursor bracketEndCursor = cursor;
+    bracketBeginCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+
+    //获取最后右括弧光标
+    int braceDepth = 0;
+    // 判断当前是否处于字符串内，字符串内的 { } 不进行统计
+    bool inCodeString = false;
+    QChar c;
+    while (!(c = doc->characterAt(position)).isNull()) {
+        // 判断是否处于字符串内，已在字符串内将不处理其它字符，只判断结束处理
+        if (inCodeString) {
+            // 判断 " 前是否存在转义字符，若不存在，则退出字符串
+            if ('"' == c
+                    && '\\' != doc->characterAt(position - 1)) {
+                inCodeString = false;
+            }
+        } else {
+            if (c == begin) {
+                braceDepth++;
+            } else if (c == end) {
+                braceDepth--;
+
+                if (0 == braceDepth) {
+                    bracketEndCursor = QTextCursor(doc);
+                    bracketEndCursor.setPosition(position);
+                    bracketEndCursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+                    endBlock = bracketEndCursor.block();
+                    break;
+                }
+            } else if ('"' == c) {
+                inCodeString = true;
+            }
+        }
+
+        position++;
+    }
+
+    return 0 == braceDepth;
 }

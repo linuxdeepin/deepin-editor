@@ -628,6 +628,8 @@ private:
     // 计算颜色标记替换信息列表
     void calcMarkReplaceList(QList<TextEdit::MarkReplaceInfo> &replaceList, const QString &oldText,
                              const QString &replaceText, const QString &withText, int offset = 0) const;
+    // 查找行号line起始的折叠区域
+    bool findFoldBlock(int line, QTextBlock &beginBlock, QTextBlock &endBlock, QTextBlock &curBlock);
 
 public:
     int getFirstVisibleBlockId() const;
