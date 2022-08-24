@@ -6645,6 +6645,13 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             return;
         }
 
+        // 左右移动光标后退出全选状态
+        if (Qt::Key_Left == e->key()
+                || Qt::Key_Right == e->key()) {
+            m_isSelectAll = false;
+            // 继续后续判断
+        }
+
         //插入键盘可现实字符
         if (modifiers == Qt::NoModifier && (e->key() <= Qt::Key_ydiaeresis && e->key() >= Qt::Key_Space) && !e->text().isEmpty()) {
 
