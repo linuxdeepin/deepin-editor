@@ -677,21 +677,33 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
     wrapper->OnThemeChangeSlot(m_themePath);
 }
 
+/**
+ * @return 关闭当前焦点的标签页并返回是否成功关闭。
+ */
 bool Window::closeTab()
 {
     const QString &filePath = m_tabbar->currentPath();
+    // 避免异常情况重入时当前已无标签页的情况
+    if (filePath.isEmpty()) {
+        return false;
+    }
     return closeTab(filePath);
 }
 
 bool Window::closeTab(const QString &filePath)
 {
     EditWrapper *wrapper = m_wrappers.value(filePath);
+    if (!wrapper) {
+        return false;
+    }
+
+    if (!currentWrapper()) {
+        return false;
+    }
 
     if (m_reading_list.contains(currentWrapper()->textEditor())) {
         QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
     }
-
-    if (!wrapper) return false;
 
     // 当前窗口为打印文本窗口
     if (wrapper == m_printWrapper) {
@@ -2423,10 +2435,24 @@ void Window::addBlankTab(const QString &blankFile)
     showNewEditor(wrapper);
 }
 
+/**
+ * @brief 标签页关闭请求处理
+ * @param index 标签页索引
+ *
+ * @note 由于使用 Qt::QueuedConnection 模式，在界面被其它任务阻塞时，可能触发多次关闭事件,
+ *      导致队列中存在多个请求关闭任务，阻塞结束后，重复触发，删除所有的标签页，导致窗口关闭。
+ */
 void Window::handleTabCloseRequested(int index)
 {
-    activeTab(index);
-    closeTab();
+    // 延迟执行关闭标签页
+    if (!m_delayCloseTabTimer.isActive()) {
+        // 记录关闭标签索引
+        m_requestCloseTabIndex = index;
+
+        // 延迟10ms
+        static const int s_nDelayTime = 10;
+        m_delayCloseTabTimer.start(s_nDelayTime, this);
+    }
 }
 
 void Window::handleTabsClosed(QStringList tabList)
@@ -3232,6 +3258,23 @@ void Window::dropEvent(QDropEvent *event)
         //后添加不支持文件　在最后编辑页面显示
         foreach (QString var, otherfiles) {
             addTab(var, true);
+        }
+    }
+}
+
+/**
+ * @brief 处理定时事件 \a e , 主要处理延迟关闭标签事件，会在定时器结束后关闭标签页
+ */
+void Window::timerEvent(QTimerEvent *e)
+{
+    // 处理延迟关闭标签事件
+    if (e->timerId() == m_delayCloseTabTimer.timerId()) {
+        m_delayCloseTabTimer.stop();
+
+        // 判断当前处理的标签页是否合法
+        if (0 <= m_requestCloseTabIndex && m_requestCloseTabIndex < m_tabbar->count()) {
+            activeTab(m_requestCloseTabIndex);
+            closeTab();
         }
     }
 }
