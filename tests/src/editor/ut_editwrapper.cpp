@@ -602,6 +602,52 @@ void handleFileLoadFinished_001_setTextFinished_stub()
     return;
 }
 
+TEST(UT_Editwrapper_handleFilePreProcess, handleFilePreProcess_normalData_pass)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    const QString filePath = QCoreApplication::applicationDirPath() + QString("/Makefile");
+    QByteArray encode = QByteArray();
+    const QByteArray retFileContent = FileLoadThreadRun(filePath, &encode);
+    // 预读取数据
+    pWindow->currentWrapper()->handleFilePreProcess(encode, retFileContent);
+
+    EXPECT_EQ(pWindow->currentWrapper()->m_bHasPreProcess, true);
+    // 均为UTF-8格式
+    EXPECT_EQ(pWindow->currentWrapper()->m_pTextEdit->toPlainText().toUtf8(), retFileContent);
+
+    pWindow->deleteLater();
+}
+
+QString disableToUnicode(const char *in, int length, QTextCodec::ConverterState *state = nullptr)
+{
+    Q_UNUSED(in)
+    Q_UNUSED(length)
+    Q_UNUSED(state)
+    return nullptr;
+}
+
+TEST(UT_Editwrapper_handleFilePreProcess, handleFilePreProcess_errorData_failed)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    const QString filePath = QCoreApplication::applicationDirPath() + QString("/Makefile");
+    QByteArray encode = QByteArray();
+    const QByteArray retFileContent = FileLoadThreadRun(filePath, &encode);
+
+    // 定义重载函数类型
+    typedef  QString (QTextCodec::*toUnicodeType)(const char *, int, QTextCodec::ConverterState *) const;
+    Stub setToUnicodeDisabled_stub;
+    setToUnicodeDisabled_stub.set((toUnicodeType)ADDR(QTextCodec, toUnicode), disableToUnicode);
+    // 预读取数据
+    pWindow->currentWrapper()->handleFilePreProcess(encode, retFileContent);
+
+    EXPECT_EQ(pWindow->currentWrapper()->m_bHasPreProcess, true);
+    EXPECT_TRUE(pWindow->currentWrapper()->m_pTextEdit->toPlainText().isEmpty());
+
+    pWindow->deleteLater();
+}
+
 //void handleFileLoadFinished(const QByteArray &encode,const QString &content);
 TEST(UT_Editwrapper_handleFileLoadFinished, UT_Editwrapper_handleFileLoadFinished_001)
 {
