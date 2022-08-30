@@ -41,6 +41,9 @@ enum BackupInterval {
     EDelayBackupInterval = 20,                  ///< 延迟备份间隔 20ms
 };
 
+// 用于配置文件书签的标识
+static const QString s_bookMarkKey = "advance.editor.bookmark";
+
 StartManager *StartManager::m_instance = nullptr;
 
 StartManager *StartManager::instance()
@@ -73,6 +76,8 @@ StartManager::StartManager(QObject *parent)
     }
 
     m_qlistTemFile = Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->value().toStringList();
+    // 初始化书签信息记录表
+    initBookmark();
 
     //按时间自动备份（5分钟）
     m_pTimer = new QTimer;
@@ -194,6 +199,12 @@ void StartManager::autoBackupFile()
                 }
 
                 jsonObject.insert("bookMark", bookmarkInfo);
+
+                // 更新记录全局书签信息
+                m_bookmarkTable.insert(localPath, bookmarkList);
+            } else {
+                // 无书签，移除
+                m_bookmarkTable.remove(localPath);
             }
 
             //记录活动页
@@ -226,6 +237,8 @@ void StartManager::autoBackupFile()
 
     //将json串列表写入配置文件
     Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->setValue(m_qlistTemFile);
+    // 备份书签信息
+    saveBookmark();
 }
 
 int StartManager::recoverFile(Window *window)
@@ -328,6 +341,9 @@ int StartManager::recoverFile(Window *window)
                                 bookmarkList = analyzeBookmakeInfo(value.toString());
                                 window->wrapper(temFilePath)->textEditor()->setBookMarkList(bookmarkList);
                             }
+                        } else if (m_bookmarkTable.contains(temFilePath)) {
+                            // 若文件已有配置，则以文件为准，否则以全局配置为准
+                            window->wrapper(localPath)->textEditor()->setBookMarkList(m_bookmarkTable.value(temFilePath));
                         }
 
                         if (object.contains("focus")) {  // 包含指定的 key
@@ -366,6 +382,9 @@ int StartManager::recoverFile(Window *window)
                                 bookmarkList = analyzeBookmakeInfo(value.toString());
                                 window->wrapper(localPath)->textEditor()->setBookMarkList(bookmarkList);
                             }
+                        } else if (m_bookmarkTable.contains(localPath)) {
+                            // 若文件已有配置，则以文件为准，否则以全局配置为准
+                            window->wrapper(localPath)->textEditor()->setBookMarkList(m_bookmarkTable.value(localPath));
                         }
 
                         if (object.contains("focus")) {  // 包含指定的 key
@@ -643,6 +662,9 @@ void StartManager::slotCloseWindow()
     }
 
     if (m_windows.isEmpty()) {
+        // 保存书签信息
+        saveBookmark();
+
         QDir path = QDir::currentPath();
         if (!path.exists()) {
             return ;
@@ -789,8 +811,25 @@ QList<int> StartManager::analyzeBookmakeInfo(QString bookmarkInfo)
         nLeftPosition = nRightPosition;
     }
 
-    bookmarkList << bookmarkInfo.mid(nRightPosition, bookmarkInfo.count() - 1).toInt();
     return bookmarkList;
+}
+
+/**
+ * @brief 主动更新记录书签信息
+ * @param localPath 文件路径
+ * @param bookmark  书签信息
+ */
+void StartManager::recordBookmark(const QString &localPath, const QList<int> &bookmark)
+{
+    m_bookmarkTable.insert(localPath, bookmark);
+}
+
+/**
+ * @return 返回文件 \a localPath 的书签记录
+ */
+QList<int> StartManager::findBookmark(const QString &localPath)
+{
+    return m_bookmarkTable.value(localPath);
 }
 
 void StartManager::initBlockShutdown()
@@ -814,6 +853,78 @@ void StartManager::initBlockShutdown()
     if (m_reply.isValid()) {
         m_reply.value().fileDescriptor();
     }
+}
+
+/**
+ * @brief 从配置文件中获取全局的书签信息，包括已关闭的所有文件书签，
+ *      会遍历每个书签记录并判断文件是否存在，若文件被删除或移动，则不再记录对应的书签信息。
+ */
+void StartManager::initBookmark()
+{
+    // 遍历书签信息列表
+    QStringList bookmarkInfoList = Settings::instance()->settings->value(s_bookMarkKey).toStringList();
+    for (const QString &bookmarkInfo : bookmarkInfoList) {
+        QJsonParseError readError;
+        QJsonDocument doc = QJsonDocument::fromJson(bookmarkInfo.toUtf8(), &readError);
+        if (QJsonParseError::NoError == readError.error
+                && !doc.isNull()) {
+            QJsonObject obj = doc.object();
+            QString filePath = obj.value("localPath").toString();
+
+            // 判断文件是否仍存在，若不存在，则不保留书签信息
+            if (!filePath.isEmpty()
+                    && QFileInfo::exists(filePath)) {
+                QString bookmarkStr = obj.value("bookmark").toString();
+                if (!bookmarkStr.isEmpty()) {
+                    QList<int> bookmarkList = analyzeBookmakeInfo(bookmarkStr);
+                    if (!bookmarkList.isEmpty()) {
+                        // 文件存在且书签标记非空，缓存书签信息
+                        m_bookmarkTable.insert(filePath, bookmarkList);
+                    }
+                }
+            }
+        }
+    }
+}
+
+/**
+ * @brief 将当前记录的所有文件的书签信息转换为Json数据列表记录到配置信息中，
+ *      被删除或移动文件的书签将被销毁。
+ */
+void StartManager::saveBookmark()
+{
+    QStringList recordInfo;
+    // 遍历记录
+    for (auto itr = m_bookmarkTable.begin(); itr != m_bookmarkTable.end();) {
+        if (!QFileInfo::exists(itr.key())
+                || itr.value().isEmpty()) {
+            // 文件不存在则销毁记录
+            itr = m_bookmarkTable.erase(itr);
+        } else {
+            QJsonObject obj;
+            obj.insert("localPath", itr.key());
+
+            // 遍历书签信息并组合
+            QString bookmarkInfo;
+            const auto &markList = itr.value();
+            for (int i = 0; i < markList.count(); i++) {
+                if (i == itr.value().count() - 1) {
+                    bookmarkInfo.append(QString::number(markList.value(i)));
+                } else {
+                    bookmarkInfo.append(QString::number(markList.value(i)) + ",");
+                }
+            }
+            obj.insert("bookmark", bookmarkInfo);
+
+            QJsonDocument doc(obj);
+            recordInfo.append(doc.toJson(QJsonDocument::Compact));
+
+            ++itr;
+        }
+    }
+
+    // 将书签信息保存至配置文件
+    Settings::instance()->settings->option(s_bookMarkKey)->setValue(recordInfo);
 }
 
 void StartManager::slotCheckUnsaveTab()

@@ -612,6 +612,10 @@ void Window::addTab(const QString &filepath, bool activeTab)
                 }
 
                 wrapper->openFile(filepath, filepath);
+
+                // 查找文件是否存在书签
+                auto bookmarkInfo = StartManager::instance()->findBookmark(filepath);
+                wrapper->textEditor()->setBookMarkList(bookmarkInfo);
             }
             // Activate window.
             activateWindow();
@@ -713,6 +717,13 @@ bool Window::closeTab(const QString &filePath)
 
     if (wrapper->getFileLoading()) {
         isModified = false;
+    }
+
+    // 关闭标签页前，记录全局的书签信息
+    QList<int> bookmarkInfo = wrapper->textEditor()->getBookmarkInfo();
+    if (!bookmarkInfo.isEmpty()) {
+        QString localPath = wrapper->textEditor()->getTruePath();
+        StartManager::instance()->recordBookmark(localPath, bookmarkInfo);
     }
 
     if (isDraftFile) {
@@ -2333,6 +2344,10 @@ void Window::addTemFileTab(QString qstrPath, QString qstrName, QString qstrTrueP
     EditWrapper *wrapper = createEditor();
     m_tabbar->addTab(qstrPath, qstrName, qstrTruePath);
     wrapper->openFile(qstrPath, qstrTruePath, bIsTemFile);
+
+    // 查找文件是否存在书签，临时文件同样可标记书签
+    auto bookmarkInfo = StartManager::instance()->findBookmark(qstrTruePath);
+    wrapper->textEditor()->setBookMarkList(bookmarkInfo);
 
     //set m_tModifiedDateTime in wrapper again.
     if (bIsTemFile && !lastModifiedTime.isEmpty()) {

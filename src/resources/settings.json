@@ -2059,6 +2059,12 @@
                             "hide": true,
                             "reset": true,
                             "default": "/usr/share/deepin-editor/themes/deepin.theme"
+                        },
+                        {
+                            "key": "bookmark",
+                            "hide": true,
+                            "reset": false,
+                            "default": ""
                         }
                     ]
                 }
