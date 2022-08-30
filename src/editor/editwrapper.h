@@ -129,6 +129,9 @@ public:
     QDateTime getLastModifiedTime() const;
     void setLastModifiedTime(const QString &time);
 
+    void updateModifyStatus(bool isModified);
+    void updateSaveAsFileName(QString strOldFilePath, QString strNewFilePath);
+
     // 取得当前编辑器使用的高亮处理(用于打印高亮)
     inline CSyntaxHighlighter *getSyntaxHighlighter() const
     { return m_pSyntaxHighlighter; }
@@ -145,17 +148,19 @@ private:
     void loadContent(const QByteArray &);
     void handleHightlightChanged(const QString &name);
     int GetCorrectUnicode1(const QByteArray &ba);
+    // 文件加载时重新初始化部分设置
+    void reinitOnFileLoad(const QByteArray &encode);
 
 public slots:
+    // 处理文档预加载数据
+    void handleFilePreProcess(const QByteArray &encode, const QByteArray &content);
     void handleFileLoadFinished(const QByteArray &encode, const QByteArray &content);
     void OnThemeChangeSlot(QString theme);
     void UpdateBottomBarWordCnt(int cnt);
     void OnUpdateHighlighter();
     //set the value of m_bIsTemFile
     void setTemFile(bool value);
-public:
-    void updateModifyStatus(bool isModified);
-    void updateSaveAsFileName(QString strOldFilePath, QString strNewFilePath);
+
 private:
     //第一次打开文件编码
     QString m_sFirstEncode = QString("UTF-8");
@@ -189,6 +194,7 @@ private:
     bool m_bHighlighterAll = false;
 
     bool m_bAsyncReadFileFinished = false;
+    bool m_bHasPreProcess = false;               // 预处理标识
 };
 
 #endif

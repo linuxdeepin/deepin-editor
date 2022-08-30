@@ -172,9 +172,12 @@ void EditWrapper::openFile(const QString &filepath, QString qstrTruePath, bool b
     // update file path.
     updatePath(filepath, qstrTruePath);
     m_pTextEdit->setIsFileOpen();
+    // 设置预处理标识位
+    m_bHasPreProcess = false;
 
     FileLoadThread *thread = new FileLoadThread(filepath);
     // begin to load the file.
+    connect(thread, &FileLoadThread::sigPreProcess, this, &EditWrapper::handleFilePreProcess);
     connect(thread, &FileLoadThread::sigLoadFinished, this, &EditWrapper::handleFileLoadFinished);
     connect(thread, &FileLoadThread::finished, thread, &FileLoadThread::deleteLater);
     thread->start();
@@ -729,28 +732,52 @@ void EditWrapper::handleCursorModeChanged(TextEdit::CursorMode mode)
     }
 }
 
-void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteArray &content)
+/**
+ * @brief 处理文件预加载服务
+ * @param encode    文件编码
+ * @param content   文件内容，不超过1MB
+ *
+ * @note 预加载的数据量较小(1MB)，且可能分割字符，在文件完成读取后，预加载的数据将被清空并重新加载完整文档。
+ */
+void EditWrapper::handleFilePreProcess(const QByteArray &encode, const QByteArray &content)
 {
-    m_Definition = m_Repository.definitionForFileName(m_pTextEdit->getFilePath());
-    if (m_Definition.isValid() && !m_Definition.filePath().isEmpty()) {
-        if (!m_pSyntaxHighlighter) m_pSyntaxHighlighter = new CSyntaxHighlighter(m_pTextEdit->document());
-        QString m_themePath = Settings::instance()->settings->option("advance.editor.theme")->value().toString();
-        if (m_themePath.contains("dark")) {
-            m_pSyntaxHighlighter->setTheme(m_Repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme));
-        } else {
-            m_pSyntaxHighlighter->setTheme(m_Repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
-        }
+    // 重新加载处理
+    reinitOnFileLoad(encode);
+    // 已进行预处理标识
+    m_bHasPreProcess = true;
 
-        if (m_pSyntaxHighlighter) m_pSyntaxHighlighter->setDefinition(m_Definition);;
-        m_pTextEdit->setSyntaxDefinition(m_Definition);
-        m_pBottomBar->getHighlightMenu()->setCurrentTextOnly(m_Definition.translatedName());
+    // 设置界面交互效果
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    m_pTextEdit->clear();
+    m_pTextEdit->setLeftAreaUpdateState(TextEdit::FileOpenBegin);
+    QTextCursor cursor = m_pTextEdit->textCursor();
+
+    QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+    if (!codec) {
+        qInfo() << "QTextCodec::codecForName \"UTF-8\" return nullptr";
+        return;
     }
 
-    if (!Utils::isDraftFile(m_pTextEdit->getFilePath())) {
-        DRecentData data;
-        data.appName = "Deepin Editor";
-        data.appExec = "deepin-editor";
-        DRecentManager::addItem(m_pTextEdit->getFilePath(), data);
+    // 直接加载数据到文档页面
+    QString data = codec->toUnicode(content.constData(), content.size());
+    cursor.insertText(data);
+    // 界面语法高亮
+    OnUpdateHighlighter();
+
+    m_pTextEdit->setLeftAreaUpdateState(TextEdit::FileOpenEnd);
+    QApplication::restoreOverrideCursor();
+}
+
+/**
+ * @brief 处理文件加载完成服务，取得加载完成的所有文件数据，重新初始化界面
+ * @param encode    文件编码
+ * @param content   完整文件内容
+ */
+void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteArray &content)
+{
+    // 判断是否预加载，若已预加载，则无需重新初始化
+    if (!m_bHasPreProcess) {
+        reinitOnFileLoad(encode);
     }
 
     bool flag = m_pTextEdit->getReadOnlyPermission();
@@ -760,8 +787,6 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteAr
     }
 
     m_bFileLoading = true;
-    m_sCurEncode = encode;
-    m_sFirstEncode = encode;
 
     //备份显示修改状态
     if (m_bIsTemFile) {
@@ -1221,6 +1246,39 @@ void EditWrapper::loadContent(const QByteArray &strContent)
     QApplication::restoreOverrideCursor();
 }
 
+/**
+ * @brief 文件加载时重新执行初始化，包括重置文件高亮配置、记录文件信息。
+ * @param encode 当前文件解析的编码
+ */
+void EditWrapper::reinitOnFileLoad(const QByteArray &encode)
+{
+    m_Definition = m_Repository.definitionForFileName(m_pTextEdit->getFilePath());
+    if (m_Definition.isValid() && !m_Definition.filePath().isEmpty()) {
+        if (!m_pSyntaxHighlighter) m_pSyntaxHighlighter = new CSyntaxHighlighter(m_pTextEdit->document());
+        QString m_themePath = Settings::instance()->settings->option("advance.editor.theme")->value().toString();
+        if (m_themePath.contains("dark")) {
+            m_pSyntaxHighlighter->setTheme(m_Repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme));
+        } else {
+            m_pSyntaxHighlighter->setTheme(m_Repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
+        }
+
+        if (m_pSyntaxHighlighter) m_pSyntaxHighlighter->setDefinition(m_Definition);;
+        m_pTextEdit->setSyntaxDefinition(m_Definition);
+        m_pBottomBar->getHighlightMenu()->setCurrentTextOnly(m_Definition.translatedName());
+    }
+
+    if (!Utils::isDraftFile(m_pTextEdit->getFilePath())) {
+        DRecentData data;
+        data.appName = "Deepin Editor";
+        data.appExec = "deepin-editor";
+        DRecentManager::addItem(m_pTextEdit->getFilePath(), data);
+    }
+
+    // 初始化设置编码
+    m_sCurEncode = encode;
+    m_sFirstEncode = encode;
+}
+
 void EditWrapper::clearDoubleCharaterEncode()
 {
     if (QFileInfo(filePath()).baseName().contains("double")
@@ -1232,5 +1290,3 @@ void EditWrapper::clearDoubleCharaterEncode()
         emit sigClearDoubleCharaterEncode();
     }
 }
-
-
