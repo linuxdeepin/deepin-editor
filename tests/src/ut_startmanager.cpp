@@ -2,6 +2,7 @@
 #include "src/stub.h"
 #include "qdir.h"
 #include "../../src/widgets/window.h"
+
 namespace startmanagerstub {
 
 EditWrapper *wrapperstub(const QString &filePath)
@@ -360,6 +361,13 @@ TEST(UT_StartManager_analyzeBookmakeInfo,analyzeBookmakeInfo)
     QList<int> list = startManager->analyzeBookmakeInfo(QString());
     ASSERT_TRUE(!list.isEmpty());
     
+    list = {0, 1, 2};
+    EXPECT_EQ(startManager->analyzeBookmakeInfo("0,1,2"), list);
+    list = {999, 2, 1};
+    EXPECT_EQ(startManager->analyzeBookmakeInfo("999, 2, 1"), list);
+    list = {0, 1, 999};
+    EXPECT_EQ(startManager->analyzeBookmakeInfo("0, 1, 999"), list);
+
     startManager->deleteLater();
 }
 
@@ -380,3 +388,83 @@ TEST(UT_StartManager_slotCloseWindow,slotCloseWindow)
     startManager->deleteLater();
 }
 
+TEST(UT_StartManager_bookmark, recordBookmark_normal_pass)
+{
+    StartManager *startManager = new StartManager;
+    QString path("test");
+    QList<int> bookmark {0, 1, 2};
+    startManager->recordBookmark(path, bookmark);
+
+    EXPECT_FALSE(startManager->m_bookmarkTable.isEmpty());
+    EXPECT_EQ(startManager->m_bookmarkTable.value(path), bookmark);
+    delete startManager;
+}
+
+TEST(UT_StartManager_bookmark, findBookmark_normal_pass)
+{
+    StartManager *startManager = new StartManager;
+    QString path("test");
+    QList<int> bookmark {0, 1, 2};
+    startManager->m_bookmarkTable.insert(path, bookmark);
+
+    EXPECT_EQ(startManager->findBookmark(path), bookmark);
+    EXPECT_TRUE(startManager->findBookmark(QString("")).isEmpty());
+
+    delete startManager;
+}
+
+// stub打桩函数
+QStringList toStringListStub()
+{
+    return {"{\"bookmark\":\"0,1\",\"localPath\":\"test\"}"};
+}
+
+bool fileIsExistsStub(const QString &path)
+{
+    Q_UNUSED(path)
+    return true;
+}
+
+TEST(UT_StartManager_bookmark, initBookmark_normal_pass)
+{
+    StartManager *startManager = new StartManager;
+
+    typedef bool (*FileExistFunc)(const QString &);
+    Stub stub;
+    stub.set(ADDR(QVariant, toStringList), toStringListStub);
+    stub.set((FileExistFunc)ADDR(QFileInfo, exists), fileIsExistsStub);
+
+    startManager->initBookmark();
+
+    EXPECT_FALSE(startManager->m_bookmarkTable.isEmpty());
+    QList<int> bookmark {0, 1};
+    EXPECT_EQ(startManager->findBookmark(QString("test")), bookmark);
+
+    delete startManager;
+}
+
+TEST(UT_StartManager_bookmark, saveBookmark_normal_pass)
+{
+    StartManager *startManager = new StartManager;
+
+    typedef bool (*FileExistFunc)(const QString &);
+    Stub stub;
+    stub.set((FileExistFunc)ADDR(QFileInfo, exists), fileIsExistsStub);
+
+    QString path("test");
+    QList<int> bookmark {0, 1};
+    startManager->m_bookmarkTable.insert(path, bookmark);
+    startManager->saveBookmark();
+
+    QStringList saveData = Settings::instance()->settings->value("advance.editor.bookmark").toStringList();
+    EXPECT_FALSE(saveData.isEmpty());
+    if (!saveData.isEmpty()) {
+        QJsonDocument doc = QJsonDocument::fromJson(saveData.first().toUtf8());
+        QJsonObject obj = doc.object();
+        EXPECT_EQ(obj.value("localPath").toString(), path);
+        QList<int> parseBookmark = startManager->analyzeBookmakeInfo(obj.value("bookmark").toString());
+        EXPECT_EQ(bookmark, parseBookmark);
+    }
+
+    delete startManager;
+}

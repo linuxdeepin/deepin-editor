@@ -831,17 +831,8 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteAr
                     QJsonValue localPathValue = object.value("localPath");  // 获取指定 key 对应的 value
                     QJsonValue temFilePathValue = object.value("temFilePath");  // 获取指定 key 对应的 value
 
-                    if (localPathValue.toString() == m_pTextEdit->getFilePath()) {
-                        QJsonValue value = object.value("cursorPosition");  // 获取指定 key 对应的 value
-
-                        if (value.isString()) {
-                            QTextCursor cursor = m_pTextEdit->textCursor();
-                            cursor.setPosition(value.toString().toInt());
-                            m_pTextEdit->setTextCursor(cursor);
-                            OnUpdateHighlighter();
-                            break;
-                        }
-                    } else if (temFilePathValue.toString() == m_pTextEdit->getFilePath()) {
+                    if (localPathValue.toString() == m_pTextEdit->getFilePath()
+                            || temFilePathValue.toString() == m_pTextEdit->getFilePath()) {
                         QJsonValue value = object.value("cursorPosition");  // 获取指定 key 对应的 value
 
                         if (value.isString()) {
@@ -856,6 +847,7 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteAr
             }
         }
     }
+
     //备份显示修改状态
     if (m_bIsTemFile) {
         updateModifyStatus(true);
