@@ -270,6 +270,8 @@ protected:
     void keyReleaseEvent(QKeyEvent *keyEvent) override;
     void dragEnterEvent(QDragEnterEvent *e) override;
     void dropEvent(QDropEvent *event) override;
+    // 处理延迟处理等定时器事件
+    void timerEvent(QTimerEvent *e) override;
 
 private:
     DBusDaemon::dbus *m_rootSaveDBus {nullptr};
@@ -324,6 +326,9 @@ private:
     EditWrapper *m_printWrapper = nullptr;          // 当前处理的编辑对象(关闭标签页时需要退出打印)
     QVector<PrintInfo> m_printDocList;              // 打印文档列表，用于超大文档打印
     int m_multiDocPageCount = 0;                    // 用于超大文档打印时单独记录多文档的打印页数
+
+    QBasicTimer m_delayCloseTabTimer;               // 延迟关闭标签页定时器，防止异常情况多次触发关闭同一标签页的情况
+    int m_requestCloseTabIndex = 0;                 // 请求关闭的标签页索引
 
     //语音助手服务是否被注册
     bool m_bIsRegistIflytekAiassistant {false};
