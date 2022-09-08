@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2021 - 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 //#ifndef TEST_ENCODING_H
 //#define TEST_ENCODING_H
 

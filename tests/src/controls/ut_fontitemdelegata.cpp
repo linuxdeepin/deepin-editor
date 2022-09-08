@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include "ut_fontitemdelegata.h"
 #include "../src/controls/fontitemdelegate.h"
 #include <QPainter>

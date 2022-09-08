@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include "ut_toolbar.h"
 #include "../src/controls/toolbar.h"
 test_toolbar::test_toolbar()
