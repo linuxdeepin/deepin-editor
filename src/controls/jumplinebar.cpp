@@ -54,8 +54,9 @@ void JumpLineBar::activeInput(QString file, int row, int column, int lineCount, 
     m_columnBeforeJump = column;
     m_jumpFileScrollOffset = scrollOffset;
     m_lineCount = lineCount;
-    m_pSpinBoxInput->setRange(1, lineCount);
-    m_pSpinBoxInput->clear();
+    // 调整为 0~lineCount ，0已被处理不允许首位输入，不影响仅单行的情况
+    // 设置 range 后会自动调整输入范围，不使用 clear() 防止在读取文件时已输入的行号被清空
+    m_pSpinBoxInput->setRange(0, lineCount);
     setFixedSize(nJumpLineBarWidth + QString::number(lineCount).size() * fontMetrics().width('9'), nJumpLineBarHeight);
 
     // Clear line number.
