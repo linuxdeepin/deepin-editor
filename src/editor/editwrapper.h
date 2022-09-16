@@ -64,7 +64,7 @@ public:
     //重新加载文件编码
     bool saveAsFile(const QString &newFilePath, QByteArray encodeName);
     //保存草稿文件
-    bool saveDraftFile();
+    bool saveDraftFile(QString &newFilePath);
     //另存为第一次打开文件编码文件
     bool saveAsFile();
     //重新加载文件编码 1.文件修改 2.文件未修改处理逻辑一样 切换编码重新加载和另存为 梁卫东

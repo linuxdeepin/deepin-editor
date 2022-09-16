@@ -497,7 +497,9 @@ TEST(UT_Editwrapper_saveDraftFile, UT_Editwrapper_saveDraftFile_001)
     fptr fileDialogExec = (fptr)(&QDialog::exec);
     Stub stub;
     stub.set(fileDialogExec, saveDraftFile001_exec_stub);
-    pWindow->currentWrapper()->saveDraftFile();
+    QString newFilePath;
+    pWindow->currentWrapper()->saveDraftFile(newFilePath);
+    EXPECT_EQ(pWindow->m_tabbar->currentPath(), newFilePath);
 
     pWindow->deleteLater();
 }
@@ -516,7 +518,9 @@ TEST(UT_Editwrapper_saveDraftFile, UT_Editwrapper_saveDraftFile_002)
     fptr fileDialogExec = (fptr)(&QDialog::exec);
     Stub stub;
     stub.set(fileDialogExec, saveDraftFile002_exec_stub);
-    pWindow->currentWrapper()->saveDraftFile();
+    QString newFilePath;
+    pWindow->currentWrapper()->saveDraftFile(newFilePath);
+    EXPECT_TRUE((newFilePath.isEmpty()));
 
     pWindow->deleteLater();
 }
@@ -578,6 +582,8 @@ QByteArray FileLoadThreadRun(const QString &strFilePath, QByteArray *encode)
            return outData;
          }
     }
+
+    return QByteArray();
 }
 
 void handleFileLoadFinished_001_setPrintEnabled_stub()
@@ -1035,7 +1041,8 @@ TEST(UT_Editwrapper_reloadModifyFile, UT_Editwrapper_reloadModifyFile_003)
     Stub stub;
     stub.set(qDialogExec, reloadModifyFile_003_exec_stub);
     pWindow->currentWrapper()->reloadModifyFile();
-    ASSERT_FALSE(pWindow->currentWrapper()->saveDraftFile());
+    QString newFilePath;
+    ASSERT_FALSE(pWindow->currentWrapper()->saveDraftFile(newFilePath));
 
     pWindow->deleteLater();
 }

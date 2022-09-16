@@ -321,7 +321,8 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
         if (res == 1) {
             //草稿文件
             if (Utils::isDraftFile(m_pTextEdit->getFilePath())) {
-                if (saveDraftFile()) {
+                QString newFilePath;
+                if (saveDraftFile(newFilePath)) {
                     return readFile(encode);
                 } else {
                     return false;
@@ -376,7 +377,8 @@ void EditWrapper::reloadModifyFile()
         if (res == 2) {
             //临时文件保存另存为 需要删除源草稿文件文件
             if (Utils::isDraftFile(m_pTextEdit->getFilePath())) {
-                if (!saveDraftFile()) {
+                QString newFilePath;
+                if (!saveDraftFile(newFilePath)) {
                     return;
                 }
             } else {
@@ -606,7 +608,13 @@ bool EditWrapper::isTemFile()
     return m_bIsTemFile;
 }
 
-bool EditWrapper::saveDraftFile()
+/**
+ * @brief 保存草稿文件，若保存成功，新文件路径通过 \a newFilePath 返回，
+ *      且对应标签页已更新为新的文件信息。
+ * @param newFilePath 保存的新文件路径
+ * @return 是否保存成功
+ */
+bool EditWrapper::saveDraftFile(QString &newFilePath)
 {
     DFileDialog dialog(this, tr("Save"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
@@ -627,7 +635,7 @@ bool EditWrapper::saveDraftFile()
     hideWarningNotices();
 
     if (mode == 1) {
-        const QString newFilePath = dialog.selectedFiles().value(0);
+        newFilePath = dialog.selectedFiles().value(0);
         if (newFilePath.isEmpty())
             return false;
 
@@ -906,8 +914,8 @@ void EditWrapper::OnUpdateHighlighter()
             // 判断是否此文本块为折叠区域起始的文本块，判断'{''}'处理
             QTextBlock prevBlock = endBlock;
             while (prevBlock.isValid()
-                   && !foundBrace
-                   && maxFindBlockNumber < prevBlock.blockNumber()) {
+                    && !foundBrace
+                    && maxFindBlockNumber < prevBlock.blockNumber()) {
                 // 逆序查询文本块数据，查找起始文本块
                 QString text = prevBlock.text();
                 for (int i = text.size() - 1; i >= 0; i--) {
