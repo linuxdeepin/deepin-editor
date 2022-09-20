@@ -50,14 +50,15 @@
  * @param doc 源文档指针
  * @return 创建的新文档，用于拷贝数据
  */
-static QTextDocument* createNewDocument(QTextDocument *doc) {
+static QTextDocument *createNewDocument(QTextDocument *doc)
+{
     QTextDocument *createDoc = new QTextDocument(doc);
     // 不记录撤销信息
     createDoc->setUndoRedoEnabled(false);
     createDoc->setMetaInformation(QTextDocument::DocumentTitle,
-                                   doc->metaInformation(QTextDocument::DocumentTitle));
+                                  doc->metaInformation(QTextDocument::DocumentTitle));
     createDoc->setMetaInformation(QTextDocument::DocumentUrl,
-                                   doc->metaInformation(QTextDocument::DocumentUrl));
+                                  doc->metaInformation(QTextDocument::DocumentUrl));
     createDoc->setDefaultFont(doc->defaultFont());
     createDoc->setDefaultStyleSheet(doc->defaultStyleSheet());
     createDoc->setIndentWidth(doc->indentWidth());
@@ -117,8 +118,7 @@ void Window::printPageWithMultiDoc(int index, QPainter *painter, const QVector<W
     painter->save();
 
     int docIndex = index;
-    for (auto info : printInfo)
-    {
+    for (auto info : printInfo) {
         if (docIndex <= info.doc->pageCount()) {
             // 调整绘制工具坐标到当前页面顶部
             painter->translate(body.left(), body.top() - (docIndex - 1) * body.height());
@@ -740,13 +740,17 @@ bool Window::closeTab(const QString &filePath)
 
             //保存
             if (res == 2) {
-
                 QFileInfo fileInfo(filePath);
+                QString newFilePath;
 
-                if (wrapper->saveDraftFile()) {
+                if (wrapper->saveDraftFile(newFilePath)) {
                     removeWrapper(filePath, true);
-                    m_tabbar->closeCurrentTab(filePath);
+                    // 保存临时文件后已更新tab页的文件路径，使用新的文件路径删除窗口
+                    m_tabbar->closeCurrentTab(newFilePath);
                     QFile(filePath).remove();
+                } else {
+                    // 保存不成功时不关闭窗口
+                    return false;
                 }
             }
         } else {
@@ -1480,12 +1484,13 @@ bool Window::cloneLargeDocument(EditWrapper *editWrapper)
     QTextDocument *srcDoc = editWrapper->textEditor()->document();
     // 是否需要高亮
     bool needHighlighter = editWrapper->getSyntaxHighlighter()
-            && editWrapper->getSyntaxHighlighter()->definition().isValid();
+                           && editWrapper->getSyntaxHighlighter()->definition().isValid();
     // 创建新的打印信息
-    auto createPrintInfo = [=]()->PrintInfo {
+    auto createPrintInfo = [ = ]()->PrintInfo {
         PrintInfo info;
         info.doc = createNewDocument(srcDoc);
-        if (needHighlighter) {
+        if (needHighlighter)
+        {
             // 构造高亮处理
             info.highlighter = new CSyntaxHighlighter(info.doc);
             info.highlighter->setDefinition(editWrapper->getSyntaxHighlighter()->definition());
@@ -1631,7 +1636,7 @@ void Window::popupPrintDialog()
         static const int s_maxHighlighterDirectReadLen = 1024 * 1024 * 5;
         // 判断是否需要文本高亮，文本数据量大小，不同数据量使用不同分支。
         bool needHighlighter = currentWrapper()->getSyntaxHighlighter()
-                && currentWrapper()->getSyntaxHighlighter()->definition().isValid();
+                               && currentWrapper()->getSyntaxHighlighter()->definition().isValid();
 
         if (needHighlighter
                 && doc->characterCount() > s_maxHighlighterDirectReadLen) {
@@ -2300,19 +2305,25 @@ void Window::backupFile()
 bool Window::closeAllFiles()
 {
     qInfo() << "begin closeAllFiles()";
-    bool bIsCloseAll = true;
     QMap<QString, EditWrapper *> wrappers = m_wrappers;
 
+    // 被删除的窗口索引已变更，需要计算其范围
+    int closedTabCount = 0;
     //关闭所有文件
     for (int i = 0; i < wrappers.count(); i++) {
-        m_tabbar->setCurrentIndex(i);
+        // 窗口索引 - 已删除窗口索引
+        m_tabbar->setCurrentIndex(i - closedTabCount);
 
         if (!closeTab()) {
-            bIsCloseAll = false;
+            // 取消操作时，停留在当前标签页
+            return false;
+        } else {
+            // 窗口已删除，调整索引
+            ++closedTabCount;
         }
     }
     qInfo() << "end closeAllFiles()";
-    return bIsCloseAll;
+    return true;
 }
 
 void Window::addTemFileTab(QString qstrPath, QString qstrName, QString qstrTruePath, QString lastModifiedTime, bool bIsTemFile)
