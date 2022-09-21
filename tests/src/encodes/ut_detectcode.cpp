@@ -5,6 +5,9 @@
 #include "ut_detectcode.h"
 #include "src/stub.h"
 #include "../../src/encodes/detectcode.h"
+
+#include <QTextCodec>
+
 namespace detectcodestub {
 
 QString stringvalue="1";
@@ -105,6 +108,80 @@ TEST(UT_GetFileEncodingFormat, UT_GetFileEncodingFormat_004)
     EXPECT_NE(pDetectCode,nullptr);
     delete pDetectCode;
     pDetectCode = nullptr;
+}
+
+void detectCode_icuDetectTextEncoding_stub(const QString &filePath, QByteArrayList &listDetectRet)
+{
+    Q_UNUSED(filePath)
+    Q_UNUSED(listDetectRet)
+}
+
+QByteArray detectCode_selectCoding_stub(QByteArray ucharDetectdRet, QByteArrayList icuDetectRetList)
+{
+    Q_UNUSED(icuDetectRetList);
+    return ucharDetectdRet;
+}
+
+TEST(UT_GetFileEncodingFormat, UT_GetFileEncodingFormat_zh_CNContent_UTF8_Pass)
+{
+    Stub stubDetectCode;
+    stubDetectCode.set(ADDR(DetectCode, icuDetectTextEncoding), detectCode_icuDetectTextEncoding_stub);
+    stubDetectCode.set(ADDR(DetectCode, selectCoding), detectCode_selectCoding_stub);
+
+    QByteArray content("你好，我是中文测试文本");
+    while (content.size() > 8) {
+        // 手动破坏尾部字符编码
+        content.chop(1);
+        QByteArray encode = DetectCode::GetFileEncodingFormat(QString("123"), content);
+        EXPECT_EQ(encode, QByteArray("UTF-8"));
+    }
+}
+
+TEST(UT_GetFileEncodingFormat, UT_GetFileEncodingFormat_zh_CNContent_GBK_Pass)
+{
+    Stub stubDetectCode;
+    stubDetectCode.set(ADDR(DetectCode, icuDetectTextEncoding), detectCode_icuDetectTextEncoding_stub);
+    stubDetectCode.set(ADDR(DetectCode, selectCoding), detectCode_selectCoding_stub);
+
+    QTextCodec *codec = QTextCodec::codecForName("GB18030");
+    QByteArray content = codec->fromUnicode("你好，我是中文测试文本");
+    while (content.size() > 8) {
+        // 手动破坏尾部字符编码
+        content.chop(1);
+        QByteArray encode = DetectCode::GetFileEncodingFormat(QString("123"), content);
+        EXPECT_EQ(encode, QByteArray("GB18030"));
+    }
+}
+
+TEST(UT_GetFileEncodingFormat, UT_GetFileEncodingFormat_zh_CNContent_BIG5_Pass)
+{
+    Stub stubDetectCode;
+    stubDetectCode.set(ADDR(DetectCode, icuDetectTextEncoding), detectCode_icuDetectTextEncoding_stub);
+    stubDetectCode.set(ADDR(DetectCode, selectCoding), detectCode_selectCoding_stub);
+
+    QTextCodec *codec = QTextCodec::codecForName("BIG5");
+    QByteArray content = codec->fromUnicode("你好，我是中文测试文本");
+    while (content.size() > 8) {
+        // 手动破坏尾部字符编码
+        content.chop(1);
+        QByteArray encode = DetectCode::GetFileEncodingFormat(QString("123"), content);
+        EXPECT_EQ(encode, QByteArray("BIG5"));
+    }
+}
+
+TEST(UT_GetFileEncodingFormat, UT_GetFileEncodingFormat_ErrorContent_UTF8_Pass)
+{
+    Stub stubDetectCode;
+    stubDetectCode.set(ADDR(DetectCode, icuDetectTextEncoding), detectCode_icuDetectTextEncoding_stub);
+    stubDetectCode.set(ADDR(DetectCode, selectCoding), detectCode_selectCoding_stub);
+
+    QByteArray content("你好，我是中文繁體中文བོད་ཡིགКирилли́こんにちは안녕하십니까Hello");
+    while (content.size() > 8) {
+        // 手动破坏尾部字符编码
+        content.chop(1);
+        QByteArray encode = DetectCode::GetFileEncodingFormat(QString("123"), content);
+        EXPECT_EQ(encode, QByteArray("UTF-8"));
+    }
 }
 
 TEST(UT_EncaDetectCode, UT_EncaDetectCode)

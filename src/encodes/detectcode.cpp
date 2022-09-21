@@ -16,6 +16,15 @@ DetectCode::DetectCode()
 
 }
 
+/**
+ * @brief 根据文件头内容 \a content 取得文件 \a filepath 字符编码格式
+ * @param filepath  待获取字符编码文件
+ * @param content   文件头内容
+ * @return 文件字符编码格式
+ *
+ * @note 对于大文本文件，文件头内容 \a content 可能在文件中间截断，\a content 尾部带有被截断的字符，
+ *      极大的降低字符编码识别率。为此，在识别率过低时裁剪尾部数据，重新检测以提高文本识别率。
+ */
 QByteArray DetectCode::GetFileEncodingFormat(QString filepath, QByteArray content)
 {
     QString charDetectedResult;
@@ -24,61 +33,42 @@ QByteArray DetectCode::GetFileEncodingFormat(QString filepath, QByteArray conten
     QByteArray detectRet;
     float chardetconfidence = 0.0f;
 
+    // 最低的检测准确度判断，低于90%需要调整策略
+    static const float s_dMinConfidence = 0.9f;
+
     /* chardet识别编码 */
     QString str(content);
-    bool bFlag = str.contains(QRegExp("[\\x4e00-\\x9fa5]+")); //匹配的是中文
+    // 匹配的是中文(仅在UTF-8编码下)
+    bool bFlag = str.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
     if (bFlag) {
-        // 判断校验内容是否为大文本数据(>=1MB)，大文本数据存在中间字符被截断的可能
-        static const int s_dLargeContentSize = 1024 * 1024;
-        bool isLargeContent = bool(content.size() >= s_dLargeContentSize);
-
+        const QByteArray suffix = "为增加探测率保留的中文";
         QByteArray newContent = content;
-        if (isLargeContent) {
-            // 大文本数据存在从文档中间截断的可能，导致unicode中文字符被截断，解析为乱码，处理部分情况
-            ushort lastCheck = *reinterpret_cast<ushort *>(newContent.data() + newContent.size() - 2);
-            if (lastCheck < 0x4E00 || lastCheck > 0x9fa5) {
-                // 移除尾部字符
-                newContent.chop(1);
-            }
-        }
-
-        newContent += "为增加探测率保留的中文";    //手动添加中文字符，避免字符长度太短而导致判断编码错误
+        //手动添加中文字符，避免字符长度太短而导致判断编码错误
+        newContent += suffix;
         DetectCode::ChartDet_DetectingTextCoding(newContent, charDetectedResult, chardetconfidence);
 
-        // 最低的检测准确度判断，低于90%需要调整策略
-        static const float s_dMinConfidence = 0.9f;
-        if (chardetconfidence < s_dMinConfidence
-                && isLargeContent) {
-            int findSplitPos = newContent.size() / 2;
-            // 查找中文字符位置，期望以完整中文字符位置进行分割
-            while (findSplitPos < newContent.size() - 1) {
-                ushort zhChar = *reinterpret_cast<ushort *>(newContent.data() + findSplitPos);
-                if (0x4E00 <= zhChar && zhChar <= 0x9fa5) {
-                    // 回退到完整分割索引位置
-                    findSplitPos--;
-                    break;
-                }
-                ++findSplitPos;
-            }
-
-            if (findSplitPos != newContent.size() - 1) {
-                QString detectRet1, detectRet2;
-                float confidence1 = 0.0f, confidence2 = 0.0f;
-                DetectCode::ChartDet_DetectingTextCoding(newContent.left(findSplitPos), detectRet1, confidence1);
-                DetectCode::ChartDet_DetectingTextCoding(newContent.right(newContent.size() - findSplitPos), detectRet2, confidence2);
-
-                // 判断是否存在更高准确度的文件格式
-                if (confidence1 > confidence2
-                        && confidence1 > chardetconfidence) {
-                    charDetectedResult = detectRet1;
-                } else if (confidence2 > confidence1
-                           && confidence2 > chardetconfidence) {
-                    charDetectedResult = detectRet2;
-                }
-            }
+        // 大文本数据存在从文档中间截断的可能，导致unicode中文字符被截断，解析为乱码，处理部分情况
+        // 根据文本中断的情况，每次尝试解析编码后移除尾部字符，直到识别率达到90%以上
+        int tryCount = 5;
+        while (chardetconfidence < s_dMinConfidence
+               && newContent.size() > suffix.size()
+               && tryCount-- > 0) {
+            // 移除可能的乱码尾部字符
+            newContent.remove(newContent.size() - suffix.size(), 1);
+            DetectCode::ChartDet_DetectingTextCoding(newContent, charDetectedResult, chardetconfidence);
         }
     } else {
         DetectCode::ChartDet_DetectingTextCoding(content, charDetectedResult, chardetconfidence);
+
+        // 部分非unicode编码同为中文，例如 GB18030, BIG5 等中文编码，同样判断识别率，识别率较低手动干预多次检测
+        int tryCount = 5;
+        QByteArray newContent = content;
+        while (chardetconfidence < s_dMinConfidence
+               && !newContent.isEmpty()
+               && tryCount-- > 0) {
+            newContent.chop(1);
+            DetectCode::ChartDet_DetectingTextCoding(newContent, charDetectedResult, chardetconfidence);
+        }
     }
     ucharDetectdRet = charDetectedResult.toLatin1();
 
@@ -222,7 +212,8 @@ bool DetectCode::detectTextEncoding(const char *data, size_t len, char **detecte
 
 QByteArray DetectCode::selectCoding(QByteArray ucharDetectdRet, QByteArrayList icuDetectRetList)
 {
-    if (ucharDetectdRet.isEmpty() && icuDetectRetList.isEmpty()) {
+    // 列表不允许为空
+    if (icuDetectRetList.isEmpty()) {
         return QByteArray();
     }
 
