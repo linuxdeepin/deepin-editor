@@ -51,7 +51,7 @@ License: CC-BY-4.0
 # assets
 Files: src/assets/* src/images/* src/themes/* src/qss/* tests/src/themes/*
 Copyright: UnionTech Software Technology Co., Ltd.
-License: GPL-3.0-or-later
+License: CC-BY-4.0
 
 # translations
 Files: translations/*
