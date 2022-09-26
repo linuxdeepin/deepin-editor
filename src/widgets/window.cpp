@@ -2577,6 +2577,9 @@ void Window::handleFindKeyword(const QString &keyword, bool state)
     wrapper->textEditor()->renderAllSelections();
     wrapper->textEditor()->restoreMarkStatus();
     wrapper->textEditor()->updateLeftAreaWidget();
+
+    // 变更查询字符串位置后(可能滚屏)，刷新当前界面的代码高亮效果
+    wrapper->OnUpdateHighlighter();
 }
 
 void Window::slotFindbarClose()
@@ -2680,6 +2683,8 @@ void Window::handleUpdateSearchKeyword(QWidget *widget, const QString &file, con
     }
     EditWrapper *wrapper = currentWrapper();
     wrapper->textEditor()->updateLeftAreaWidget();
+    // 在设置查询字符串并跳转后，及时刷新代码高亮效果
+    wrapper->OnUpdateHighlighter();
 }
 
 void Window::loadTheme(const QString &path)
