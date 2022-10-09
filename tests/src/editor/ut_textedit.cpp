@@ -9401,3 +9401,61 @@ TEST(UT_Textedit_replaceWithMark, UT_Textedit_replaceWithOutterMark)
     edit->deleteLater();
     wra->deleteLater();
 }
+
+TEST(UT_Textedit_selectText, SelectText_SingleBlock_Pass)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    edit->setPlainText("123456789\n");
+    // 选中 "456"
+    QTextCursor cursor = edit->textCursor();
+    cursor.setPosition(3);
+    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, 3);
+    edit->setTextCursor(cursor);
+
+    EXPECT_EQ(cursor.selectedText(), edit->selectedText());
+    EXPECT_EQ(QString("456"), edit->selectedText());
+
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+TEST(UT_Textedit_selectText, SelectText_MultiBlock_Pass)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    edit->setPlainText("123456789\n"
+                       "abcdefghi\n"
+                       "123456789\n");
+    // 选中 "789\nabc"
+    QString str1 = QString("789\nabc");
+    QTextCursor cursor = edit->textCursor();
+    cursor.setPosition(6);
+    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, str1.length());
+    edit->setTextCursor(cursor);
+    EXPECT_EQ(cursor.selectedText().replace("\u2029", "\n"), edit->selectedText());
+    EXPECT_EQ(str1, edit->selectedText());
+
+    // 选中 "789\nabcdefghi\n123"
+    QString str2 = QString("789\nabcdefghi\n123");
+    cursor.setPosition(6);
+    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, str2.length());
+    edit->setTextCursor(cursor);
+    EXPECT_EQ(cursor.selectedText().replace("\u2029", "\n"), edit->selectedText());
+    EXPECT_EQ(str2, edit->selectedText());
+
+    // 选中 "789\nabcdefghi\n123456789\n"
+    QString str3 = QString("789\nabcdefghi\n123456789\n");
+    cursor.setPosition(6);
+    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, str3.length());
+    edit->setTextCursor(cursor);
+    EXPECT_EQ(cursor.selectedText().replace("\u2029", "\n"), edit->selectedText());
+    EXPECT_EQ(str3, edit->selectedText());
+
+    edit->deleteLater();
+    wra->deleteLater();
+}
