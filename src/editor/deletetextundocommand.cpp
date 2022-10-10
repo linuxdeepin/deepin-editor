@@ -11,6 +11,7 @@ DeleteTextUndoCommand::DeleteTextUndoCommand(QTextCursor textcursor, QPlainTextE
     : QUndoCommand(parent)
     , m_edit(edit)
     , m_textCursor(textcursor)
+    , m_beginPos(m_textCursor.position())
 {
     if(m_textCursor.hasSelection()){
         m_sInsertText = m_textCursor.selectedText();
@@ -30,6 +31,7 @@ DeleteTextUndoCommand::DeleteTextUndoCommand(QList<QTextEdit::ExtraSelection> &s
     : QUndoCommand(parent)
     , m_edit(edit)
     , m_ColumnEditSelections(selections)
+    , m_beginPos(m_textCursor.position())
 {
     int cnt = m_ColumnEditSelections.size();
     for (int i = 0; i < cnt; i++) {
@@ -53,6 +55,8 @@ DeleteTextUndoCommand::DeleteTextUndoCommand(QList<QTextEdit::ExtraSelection> &s
 void DeleteTextUndoCommand::undo()
 {
     if(m_ColumnEditSelections.isEmpty()){
+        // 插入前将光标恢复到删除前位置
+        m_textCursor.setPosition(m_beginPos);
         m_textCursor.insertText(m_sInsertText);
         m_textCursor.movePosition(QTextCursor::Left,QTextCursor::KeepAnchor,m_sInsertText.length());
 
