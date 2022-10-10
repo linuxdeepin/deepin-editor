@@ -25,6 +25,7 @@ private:
     QString m_sInsertText;
     QList<QString> m_selectTextList;
     QList<QTextEdit::ExtraSelection> m_ColumnEditSelections;
+    int m_beginPos;     // 记录光标删除前位置
 };
 
 //重写ctrl + k 和Ctrl +shift +K 逻辑的删除和撤销功能 ut002764
