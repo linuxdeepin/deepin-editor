@@ -2926,9 +2926,10 @@ QTextCursor TextEdit::findCursor(const QString &substr, const QString &text, int
 }
 
 /**
- * @brief 返回当前光标选中的内容
- * @param
- * @return
+ * @return 返回当前光标选中的内容
+ * @note 如果从编辑器获得的选中文本跨越换行符，则文本将包含 Unicode U+2029 段落分隔符而不是换行符 \n 字符。
+ *      可使用 QString::replace() 将这些字符替换为换行符，为避免文本原有 Unicode U+2029 分割符影响，
+ *      手动调整换行符插入位置。
  */
 QString TextEdit::selectedText()
 {
@@ -2941,21 +2942,41 @@ QString TextEdit::selectedText()
     startblock = cursor.blockNumber();
     cursor.setPosition(endpos);
     endblock = cursor.blockNumber();
+    // 仅单个文本块，直接提取文本数据
     if (startblock == endblock) {
         return temp.selectedText();
     }
 
     QString text;
     cursor.setPosition(startpos);
-    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+    // 取得首个文本块内容
+    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
     text += cursor.selectedText();
     cursor.setPosition(cursor.position() + 1);
-    while (cursor.position() < endpos) {
-        cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+
+    // 获取中间完整文本块内容
+    while ((cursor.position() + cursor.block().length()) < endpos) {
+        cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
         text += "\n";
         text += cursor.selectedText();
         cursor.setPosition(cursor.position() + 1);
     }
+
+    // 取得尾部文本块内容
+    if (cursor.position() < endpos) {
+        // 判断是否尾部文本块达到当前文本块末尾，到达末尾需要将 U+2029 替换为 \n
+        bool needAdjustNewline = bool(cursor.position() + cursor.block().length() == endpos);
+
+        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, endpos - cursor.position());
+        text += "\n";
+        text += cursor.selectedText();
+
+        if (needAdjustNewline
+                && text.endsWith("\u2029")) {
+            text.back() = QChar('\n');
+        }
+    }
+
     return text;
 }
 
