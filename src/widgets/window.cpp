@@ -1617,9 +1617,6 @@ void Window::popupPrintDialog()
         return;
     }
 
-    const QString &filePath = currentWrapper()->textEditor()->getFilePath();
-    const QString &fileDir = QFileInfo(filePath).dir().absolutePath();
-
     //适配打印接口2.0，dtk版本大于或等于5.4.10才放开最新的2.0打印预览接口
 #if (DTK_VERSION_MAJOR > 5 \
     || (DTK_VERSION_MAJOR == 5 && DTK_VERSION_MINOR > 4) \
@@ -1671,14 +1668,15 @@ void Window::popupPrintDialog()
     m_pPreview = new DPrintPreviewDialog(this);
     m_pPreview->setAttribute(Qt::WA_DeleteOnClose);
 
+    // 设置 QPrinter 的文档名称，保留绝对路径和文件后缀(在cups的page_log中保留完整的job-name)
+    // 注意和文件的输出文件路径进行区分
+    const QString &filePath = currentWrapper()->textEditor()->getFilePath();
+    const QString &fileDir = QFileInfo(filePath).dir().absolutePath();
     if (fileDir == m_blankFileDir) {
-        QString name = m_tabbar->currentName();
-        QRegularExpression reg("[^*](.+)");
-        QRegularExpressionMatch match = reg.match(name);
-        m_pPreview->setDocName(QString(match.captured(0)));
+        m_pPreview->setDocName(filePath);
     } else {
         QString path = currentWrapper()->textEditor()->getTruePath();
-        m_pPreview->setDocName(QString(QFileInfo(path).baseName()));
+        m_pPreview->setDocName(path);
     }
 
     // 后续布局计算后再更新打印页数
