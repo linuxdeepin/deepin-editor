@@ -149,3 +149,43 @@ TEST_F(test_InsertTextUndoCommand, undo_withTextCursor_restoreCursor)
     delete command2;
     delete edit;
 }
+
+TEST(test_MidButtonInsertTextUndoCommand, redo_withTextCursor_restoreCursor)
+{
+    // 重做恢复光标位置
+    QPlainTextEdit *edit = new QPlainTextEdit;
+    edit->setPlainText("123789");
+
+    QTextCursor cursor = edit->textCursor();
+    cursor.setPosition(3);
+    MidButtonInsertTextUndoCommand *command = new MidButtonInsertTextUndoCommand(cursor, QString("456"), edit);
+    EXPECT_EQ(command->m_beginPostion, 3);
+    EXPECT_EQ(command->m_endPostion, 6);
+    command->redo();
+
+    EXPECT_EQ(QString("123456789"), edit->toPlainText());
+    EXPECT_EQ(6, edit->textCursor().position());
+
+    delete command;
+    delete edit;
+}
+
+TEST(test_MidButtonInsertTextUndoCommand, undo_withTextCursor_restoreCursor)
+{
+    // 撤销后恢复光标位置
+    QPlainTextEdit *edit = new QPlainTextEdit;
+    edit->setPlainText("123456789");
+
+    QTextCursor cursor = edit->textCursor();
+    cursor.setPosition(6);
+    MidButtonInsertTextUndoCommand *command = new MidButtonInsertTextUndoCommand(cursor, QString("456"), edit);
+    command->m_endPostion = 6;
+    command->m_beginPostion = 3;
+    command->undo();
+
+    EXPECT_EQ(QString("123789"), edit->toPlainText());
+    EXPECT_EQ(3, edit->textCursor().position());
+
+    delete command;
+    delete edit;
+}
