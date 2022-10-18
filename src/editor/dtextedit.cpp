@@ -6291,7 +6291,13 @@ void TextEdit::dropEvent(QDropEvent *event)
 {
     const QMimeData *data = event->mimeData();
 
-    if (data->hasUrls() && data->urls().first().isLocalFile()) {
+    // 判断是否存在url信息，需要注意即使hasUrls()为true, urls()仍可能返回空，使用urls().first()可能越界
+    QList<QUrl> dataUrls;
+    if (data->hasUrls()) {
+        dataUrls = data->urls();
+    } 
+
+    if (!dataUrls.isEmpty() && dataUrls.first().isLocalFile()) {
         qobject_cast<Window *>(this->window())->requestDropEvent(event);
     } else if (data->hasText() && !m_readOnlyMode) {
         //drag text in the same editor
