@@ -2037,12 +2037,22 @@ TEST(UT_Window_doprint, UT_Window_doPrintWithLargeDoc)
     p = nullptr;
 }
 
+void stubProcessEvents(QEventLoop::ProcessEventsFlags flags = QEventLoop::AllEvents)
+{
+    Q_UNUSED(flags);
+}
+
 TEST(UT_Window_doprint, UT_Window_cloneLargeDocument)
 {
     Window* w = new Window();
     EditWrapper* wra = new EditWrapper(w);
     QString text = "123";
     wra->textEditor()->document()->setPlainText(text);
+
+    // 不在ut中使用Eventloop
+    typedef void (*Func)(QEventLoop::ProcessEventsFlags);
+    Stub s1;
+    s1.set((Func)ADDR(QCoreApplication, processEvents), stubProcessEvents);
 
     // 拷贝数据
     w->cloneLargeDocument(wra);

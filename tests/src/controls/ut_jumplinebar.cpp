@@ -46,7 +46,7 @@ TEST_F(test_jumplinebar, activeInput)
     jumpLineBar->m_pSpinBoxInput->lineEdit()->setText("50");
     jumpLineBar->activeInput("aa",1,1,1,1);
     
-    EXPECT_EQ(jumpLineBar->m_pSpinBoxInput->lineEdit()->text(),"");
+    EXPECT_EQ(jumpLineBar->m_pSpinBoxInput->lineEdit()->text(),"1");
     EXPECT_NE(jumpLineBar,nullptr);
 
     delete jumpLineBar;jumpLineBar=nullptr;
