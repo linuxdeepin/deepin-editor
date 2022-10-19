@@ -710,15 +710,21 @@ void Tabbar::showTabs()
 
 void Tabbar::handleTabReleased(int index)
 {
-    //qDebug() << "handleTabReleased" << index;
     if (index == -1) index = 0;
     QString path = m_listOldTabPath.value(index);
+    if (path.isEmpty()) {
+        return;
+    }
+
     int newIndex = m_tabPaths.indexOf(path);
     const QString tabPath = fileAt(newIndex);
     const QString tabName = textAt(newIndex);
 
     Window *window = static_cast<Window *>(this->window());
     EditWrapper *wrapper = window->wrapper(tabPath);
+    if (!wrapper) {
+        return;
+    }
 
     StartManager::instance()->createWindowFromWrapper(tabName, tabPath, wrapper->textEditor()->getTruePath(), wrapper, wrapper->isModified());
 
