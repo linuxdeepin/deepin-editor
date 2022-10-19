@@ -102,6 +102,8 @@ TextEdit::TextEdit(QWidget *parent)
 
     connect(document(), &QTextDocument::contentsChange, this, &TextEdit::updateMark);
     connect(document(), &QTextDocument::contentsChange, this, &TextEdit::checkBookmarkLineMove);
+    connect(document(), &QTextDocument::contentsChange, this, &TextEdit::onTextContentChanged);
+
     connect(m_pUndoStack, &QUndoStack::canRedoChanged, this, &TextEdit::slotCanRedoChanged);
     connect(m_pUndoStack, &QUndoStack::canUndoChanged, this, &TextEdit::slotCanUndoChanged);
 
@@ -6518,7 +6520,21 @@ void TextEdit::mouseReleaseEvent(QMouseEvent *e)
         e->accept();
         return;
     }
-    return QPlainTextEdit::mouseReleaseEvent(e);
+
+    // 获取鼠标中键释放事件，进行中键黏贴处理
+    // 此处判断从 QWidgetTextControlPrivate::mouseReleaseEvent() 摘录
+    if (Qt::MidButton == e->button()
+            && !isReadOnly()
+            && QApplication::clipboard()->supportsSelection()) {
+        const QMimeData *md = QApplication::clipboard()->mimeData(QClipboard::Selection);
+        // 判断文本内容，文本编辑器为纯文本编辑，不涉及剪贴板富文本内容
+        if (md && !md->text().isEmpty()) {
+            // 设置当前为中键黏贴状态，执行 QPlainTextEdit::mouseReleaseEvent(e) 时会触发文本变更信号。
+            m_MidButtonPatse = true;
+        }
+    }
+
+    QPlainTextEdit::mouseReleaseEvent(e);
 }
 
 void TextEdit::keyPressEvent(QKeyEvent *e)
@@ -7744,4 +7760,33 @@ bool TextEdit::findFoldBlock(int line, QTextBlock &beginBlock, QTextBlock &endBl
     }
 
     return 0 == braceDepth;
+}
+
+/**
+ * @brief 文档内容变更时触发
+ *      当前用于记录中键更新前后的动作并压入撤销栈，需要注意鼠标中键不会移除字符仅会插入选中的字符。
+ * @param from          更新的光标位置
+ * @param charsRemoved  移除的字符数
+ * @param charsAdded    插入的字符数
+ */
+void TextEdit::onTextContentChanged(int from, int charsRemoved, int charsAdded)
+{
+    Q_UNUSED(charsRemoved)
+
+    // 判断是否正在执行中键黏贴动作
+    if (m_MidButtonPatse) {
+        QUndoCommand *undo = new QUndoCommand;
+        m_pUndoStack->push(undo);
+
+        // 记录鼠标中键变更，滞后插入撤销栈，在push()时不执行redo()
+        QTextCursor cursor = textCursor();
+        cursor.setPosition(from);
+        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, charsAdded);
+        // 取得已插入的文本信息
+        QString insertText = cursor.selectedText();
+        cursor.setPosition(from);
+        (void)new MidButtonInsertTextUndoCommand(cursor, insertText, this, undo);
+
+        m_MidButtonPatse = false;
+    }
 }

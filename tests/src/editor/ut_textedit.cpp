@@ -9459,3 +9459,32 @@ TEST(UT_Textedit_selectText, SelectText_MultiBlock_Pass)
     edit->deleteLater();
     wra->deleteLater();
 }
+
+TEST(UT_Textedit_MidButtonInsertText, onTextContentChanged_MidButtonInsertText_Pass)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    QString sourceText("123456789");
+    edit->setPlainText(sourceText);
+    edit->m_MidButtonPatse = true;
+
+    QString insertText("test");
+    QTextCursor cursor = edit->textCursor();
+    cursor.setPosition(4);
+    // 插入触发 onTextContentChanged()
+    cursor.insertText(insertText);
+
+    EXPECT_TRUE(edit->m_pUndoStack->canUndo());
+    edit->m_pUndoStack->undo();
+    EXPECT_EQ(edit->toPlainText(), sourceText);
+
+    cursor = edit->textCursor();
+    EXPECT_EQ(cursor.position(), 4);
+
+    EXPECT_FALSE(edit->m_MidButtonPatse);
+
+    edit->deleteLater();
+    wra->deleteLater();
+}

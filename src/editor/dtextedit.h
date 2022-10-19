@@ -613,6 +613,10 @@ private:
     // 查找行号line起始的折叠区域
     bool findFoldBlock(int line, QTextBlock &beginBlock, QTextBlock &endBlock, QTextBlock &curBlock);
 
+private slots:
+    // 文档内容变更时触发
+    void onTextContentChanged(int from, int charsRemoved, int charsAdded);
+
 public:
     int getFirstVisibleBlockId() const;
     void setLeftAreaUpdateState(UpdateOperationType statevalue);
@@ -859,5 +863,7 @@ private:
     bool m_Permission2 = false;
     //左边栏更新标记
     UpdateOperationType m_LeftAreaUpdateState;
+
+    bool m_MidButtonPatse = false;      // 鼠标中键黏贴处理
 };
 #endif
