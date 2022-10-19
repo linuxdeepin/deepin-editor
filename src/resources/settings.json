@@ -1995,13 +1995,13 @@
             "name": "Advanced",
             "groups": [
                 {
-                    "key": "start",
-                    "name": "Start",
+                    "key": "startup",
+                    "name": "Startup",
                     "options": [
                         {
                             "key": "save_tab_before_close",
-                            "name": "save tab before close",
-                            "text": "save tab before close",
+                            "name": "Reopen last closed tabs",
+                            "text": "Reopen last closed tabs",
                             "type": "checkbox",
                             "default": true
                         }
@@ -2045,8 +2045,8 @@
                         },
                         {
                             "key": "allow_midbutton_paste",
-                            "name": "allow midbutton paste",
-                            "text": "allow midbutton paste",
+                            "name": "Paste by pressing a middle mouse button",
+                            "text": "Paste by pressing a middle mouse button",
                             "type": "checkbox",
                             "default": true
                         },
@@ -2090,7 +2090,7 @@
                 },
                 {
                     "key": "open_save_setting",
-                    "name": "Open Save Setting",
+                    "name": "Open/Save Settings",
                     "options": [
                         {
                             "key": "savingpathwgt",

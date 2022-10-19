@@ -50,9 +50,9 @@ void PathSettingWgt::init()
     m_group->addButton(m_curFileBox,CurFileBox);
     m_group->addButton(m_customBox,CustomBox);
 
-    m_lastOptBox->setText("remember the last opt path");
-    m_curFileBox->setText("be consistent with it cur file path");
-    m_customBox->setText("custom the file path");
+    m_lastOptBox->setText(tr("Remember the last used path"));
+    m_curFileBox->setText(tr("Same path as the current file"));
+    m_customBox->setText(tr("Customize the default path"));
     m_customBtn->setEnabled(false);
     m_customEdit->setDisabled(true);
     m_customEdit->setClearButtonEnabled(false);

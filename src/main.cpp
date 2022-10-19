@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
         };
         Eventlogutils::GetInstance()->writeLogs(objStartEvent);
 
-        bool save_tab_before_close = Settings::instance()->settings->option("advance.start.save_tab_before_close")->value().toBool();
+        bool save_tab_before_close = Settings::instance()->settings->option("advance.startup.save_tab_before_close")->value().toBool();
         if(!save_tab_before_close){
             auto window = startManager->createWindow(true);
             window->addBlankTab();

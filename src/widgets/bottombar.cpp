@@ -35,7 +35,7 @@ BottomBar::BottomBar(QWidget *parent)
     m_pCursorStatus->setFont(font);
     m_scaleLabel->setFont(font);
     m_progressLabel->setFont(font);
-    m_progressLabel->setText(tr("text loading:"));
+    m_progressLabel->setText(tr("Loading:"));
     m_progressBar->setRange(0,100);
     m_progressBar->setTextVisible(false);
     m_progressBar->setMinimumWidth(80);
