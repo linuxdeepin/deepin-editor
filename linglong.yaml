@@ -43,7 +43,7 @@ build:
     configure: |
       mkdir build
       cd build
-      cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} ..
+      cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} ${extra_args} ..
       make -j6
       #make test -j6
       #test 用例包含从/usr/share读取内容，会导致失败
