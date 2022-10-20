@@ -42,6 +42,7 @@
 
 #define PRINT_FLAG 2
 #define PRINT_ACTION 8
+#define PRINT_FORMAT_MARGIN 10
 #define FLOATTIP_MARGIN 95
 
 /**
@@ -207,7 +208,7 @@ Window::Window(DMainWindow *parent)
     }
 
     // window minimum size.
-    setMinimumSize(1000, 600);
+    setMinimumSize(680, 300);
     // resize window size.
     int window_width = Settings::instance()->settings->option("advance.window.window_width")->value().toInt();
     int window_height = Settings::instance()->settings->option("advance.window.window_height")->value().toInt();
@@ -931,8 +932,8 @@ void Window::removeWrapper(const QString &filePath, bool isDelete)
     EditWrapper *wrapper = m_wrappers.value(filePath);
 
     if (wrapper) {
-        qInfo()<<"begin removeWrapper";
-        if(nullptr == m_editorWidget){
+        qInfo() << "begin removeWrapper";
+        if (nullptr == m_editorWidget) {
             return;
         }
         m_editorWidget->removeWidget(wrapper);
@@ -2542,9 +2543,6 @@ void Window::handleCurrentChanged(const int &index)
         bool bIsContains = false;
         EditWrapper *wrapper = m_wrappers.value(filepath);
         wrapper->textEditor()->setFocus();
-        if(!wrapper->isDraftFile()){
-            Settings::instance()->setSavePath(PathSettingWgt::CurFileBox,QFileInfo(filepath).absolutePath());
-        }
         for (int i = 0; i < m_editorWidget->count(); i++) {
             if (m_editorWidget->widget(i) == wrapper) {
                 bIsContains = true;

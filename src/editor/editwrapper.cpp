@@ -1383,3 +1383,5 @@ void EditWrapper::clearDoubleCharaterEncode()
         emit sigClearDoubleCharaterEncode();
     }
 }
+
+
