@@ -72,8 +72,11 @@ QByteArray DetectCode::GetFileEncodingFormat(QString filepath, QByteArray conten
     }
     ucharDetectdRet = charDetectedResult.toLatin1();
 
-    /* uchardet识别编码 */
-    if (ucharDetectdRet.contains("unknown") || ucharDetectdRet.contains("???") || ucharDetectdRet.isEmpty()) {
+    // uchardet识别编码 若识别率过低, 考虑是否非单字节编码格式。
+    if (ucharDetectdRet.contains("unknown")
+            || ucharDetectdRet.contains("???")
+            || ucharDetectdRet.isEmpty()
+            || chardetconfidence < s_dMinConfidence) {
         ucharDetectdRet = DetectCode::UchardetCode(filepath);
     }
 
@@ -226,6 +229,11 @@ QByteArray DetectCode::selectCoding(QByteArray ucharDetectdRet, QByteArrayList i
             if (icuDetectRetList.contains("GB18030")) {
                 return QByteArray("GB18030");
             } else {
+                // 筛选部分带后缀的编码格式，例如 UTF-16 BE 和 UTF-16
+                if (icuDetectRetList[0].contains(ucharDetectdRet)) {
+                    return icuDetectRetList[0];
+                }
+
                 return ucharDetectdRet;
             }
         }
