@@ -9488,3 +9488,33 @@ TEST(UT_Textedit_MidButtonInsertText, onTextContentChanged_MidButtonInsertText_P
     edit->deleteLater();
     wra->deleteLater();
 }
+
+DPalette stubApplicationPalette()
+{
+    DPalette pa;
+    pa.setColor(DPalette::Highlight, QColor(Qt::red));
+    return pa;
+}
+
+TEST(UT_Textedit_onAppPaletteChanged, OnAppPaletteChanged_ChangeBackground_Pass)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    Stub s;
+    s.set(ADDR(DGuiApplicationHelper, applicationPalette), stubApplicationPalette);
+
+    QTextEdit::ExtraSelection selection;
+    selection.format.setBackground(QBrush(Qt::white));
+    edit->m_altModSelections.append(selection);
+    edit->m_bIsAltMod = true;
+    edit->onAppPaletteChanged();
+
+    ASSERT_FALSE(edit->m_altModSelections.isEmpty());
+    QBrush background = edit->m_altModSelections.first().format.background();
+    EXPECT_EQ(QColor(Qt::red), background.color());
+
+    edit->deleteLater();
+    wra->deleteLater();
+}

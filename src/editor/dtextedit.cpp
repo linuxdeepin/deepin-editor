@@ -137,6 +137,9 @@ TextEdit::TextEdit(QWidget *parent)
     // Don't blink the cursor when selecting text
     // Recover blink when not selecting text.
     connect(this, &TextEdit::selectionChanged, this, &TextEdit::slotSelectionChanged, Qt::QueuedConnection);
+
+    // 系统调色板更新时重绘列选取项
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::applicationPaletteChanged, this, &TextEdit::onAppPaletteChanged);
 }
 
 TextEdit::~TextEdit()
@@ -3076,6 +3079,23 @@ void TextEdit::onEndlineFormatChanged(BottomBar::EndlineFormat from,BottomBar::E
     //auto endlineCom = new EndlineFormartCommand(this,m_wrapper->bottomBar(),from,to);
     //m_pUndoStack->push(endlineCom);
     m_wrapper->bottomBar()->setEndlineMenuText(to);
+}
+
+/**
+ * @brief 系统调色板更新时重绘部分组件，例如：列选取项
+ */
+void TextEdit::onAppPaletteChanged()
+{
+    // 判断是否处于列选取状态
+    if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
+        QColor highlightBackground = DGuiApplicationHelper::instance()->applicationPalette().color(QPalette::Highlight);
+        for (auto &selection : m_altModSelections) {
+            selection.format.setBackground(highlightBackground);
+        }
+
+        // 更新高亮状态
+        renderAllSelections();
+    }
 }
 
 void TextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &closeChar)

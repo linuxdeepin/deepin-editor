@@ -568,6 +568,9 @@ public slots:
     QString selectedText();
     void onEndlineFormatChanged(BottomBar::EndlineFormat from,BottomBar::EndlineFormat to);
 
+    // 当前程序调色板更新时重绘部分组件
+    void onAppPaletteChanged();
+
 protected:
     bool event(QEvent *evt) override;   //触摸屏event事件
     void dragEnterEvent(QDragEnterEvent *event) override;
