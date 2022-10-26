@@ -65,7 +65,7 @@ if(DEFINED ENV{PREFIX})
 else()
    set(CMAKE_INSTALL_PREFIX /usr)
 endif()
-add_definitions(-DLINGLONG_PREFIX=\"${CMAKE_INSTALL_PREFIX}\")
+add_definitions(-DLINGLONG_PREFIX=\"${CMAKE_INSTALL_PREFIX}/\")
 
 # Install qm files
 file(GLOB QM_FILES "${CMAKE_SOURCE_DIR}/translations/*.qm")
