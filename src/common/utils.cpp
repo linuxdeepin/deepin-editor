@@ -601,6 +601,18 @@ QStringList Utils::cleanPath(const QStringList &filePaths)
     return paths;
 }
 
+/**
+ * @return 返回程序使用的默认数据(存放临时、备份文件)存放位置，不同环境下路径不同
+ *  [debian]    /home/user/.local/share/deepin/deepin-editor/
+ *  [linglong]  /home/user/.linglong/org.deepin.editor/share/deepin/deepin-editor/
+ */
+QString Utils::localDataPath()
+{
+    auto dataPaths = Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation));
+    return dataPaths.isEmpty() ? QDir::homePath() + "/.local/share/deepin/deepin-editor/"
+                               : dataPaths.first();
+}
+
 const QStringList Utils::getEncodeList()
 {
     QStringList encodeList;

@@ -365,7 +365,7 @@ void Window::updateModifyStatus(const QString &path, bool isModified)
 
     QString tabName;
     QString filePath = m_tabbar->truePathAt(tabIndex);
-    if (filePath.isNull() || filePath.length() <= 0 || filePath.contains("/.local/share/deepin/deepin-editor/blank-files")) {
+    if (filePath.isNull() || filePath.length() <= 0 || Utils::isDraftFile(filePath)) {
         tabName = m_tabbar->textAt(tabIndex);
         if (isModified) {
             if (!tabName.contains('*')) {

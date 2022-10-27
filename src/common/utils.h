@@ -72,6 +72,8 @@ public:
     // 返回文件是否为备份文件
     static bool isBackupFile(const QString &filepath);
     static QStringList cleanPath(const QStringList &filePaths);
+    // 返回程序使用的本地数据路径(存放临时、备份文件)
+    static QString localDataPath();
     static const QStringList getEncodeList();
     static QPixmap renderSVG(const QString &filePath, const QSize &size, bool bIsScale = true);
     static QList<QColor> getHiglightColorList();
