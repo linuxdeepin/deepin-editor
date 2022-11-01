@@ -290,10 +290,19 @@ QPair<QWidget *, QWidget *> Settings::createKeySequenceEditHandle(QObject *obj)
         QStringList keySplitList = option->key().split(".");
         keySplitList[1] = QString("%1_keymap_%2").arg(keySplitList[1]).arg(keymap->value().toString());
 
-        if (!instance()->checkShortcutValid(checkName, sequence.toString(), reason, bIsConflicts)) {
+        // 获取默认设置的组合键序列
+        QString defaultKey;
+        auto defaultOption = instance()->settings->option(keySplitList.join("."));
+        if (defaultOption) {
+            defaultKey = defaultOption->defaultValue().toString();
+        }
+
+        // 判断新设置的组合键序列是否允许
+        if (!instance()->checkShortcutValid(checkName, sequence.toString(), reason, bIsConflicts, defaultKey)) {
             instance()->m_pDialog = instance()->createDialog(reason, "", bIsConflicts);
             instance()->m_pDialog->exec();
-            shortCutLineEdit->setKeySequence(QKeySequence(instance()->settings->value(keySplitList.join(".")).toString()));
+            // 恢复组合键序列
+            shortCutLineEdit->setKeySequence(instance()->settings->value(keySplitList.join(".")).toString());
             keymap->setValue("emacs");
             keymap->setValue("customize");
             return;
@@ -306,36 +315,36 @@ QPair<QWidget *, QWidget *> Settings::createKeySequenceEditHandle(QObject *obj)
         if (keymap->value().toString() != "customize") {
             instance()->m_bUserChangeKey = true;
 
-            for (auto option : instance()->settings->group("shortcuts.window_keymap_customize")->options()) {
-                QStringList keySplitList = option->key().split(".");
-                keySplitList[1] = QString("window_keymap_%1").arg(keymap->value().toString());
+            for (auto loopOption : instance()->settings->group("shortcuts.window_keymap_customize")->options()) {
+                QStringList loopKeySplitList = loopOption->key().split(".");
+                loopKeySplitList[1] = QString("window_keymap_%1").arg(keymap->value().toString());
 
-                if (option->value().toString() == sequence.toString()) {
+                if (loopOption->value().toString() == sequence.toString()) {
 
-                    if (checkName.contains(keySplitList.last())) {
+                    if (checkName.contains(loopKeySplitList.last())) {
                         keymap->setValue("customize");
                         //return;
                     } else {
                         bIsConflicts = true;
-                        keySplitList[1] = QString("window_keymap_%1").arg("customize");
-                        conflictsKeys = keySplitList.join(".");
+                        loopKeySplitList[1] = QString("window_keymap_%1").arg("customize");
+                        conflictsKeys = loopKeySplitList.join(".");
                     }
                 }
             }
 
-            for (auto option : instance()->settings->group("shortcuts.editor_keymap_customize")->options()) {
-                QStringList keySplitList = option->key().split(".");
-                keySplitList[1] = QString("editor_keymap_%1").arg(keymap->value().toString());
+            for (auto loopOption : instance()->settings->group("shortcuts.editor_keymap_customize")->options()) {
+                QStringList loopKeySplitList = loopOption->key().split(".");
+                loopKeySplitList[1] = QString("editor_keymap_%1").arg(keymap->value().toString());
 
-                if (option->value().toString() == sequence.toString()) {
+                if (loopOption->value().toString() == sequence.toString()) {
 
-                    if (checkName.contains(keySplitList.last())) {
+                    if (checkName.contains(loopKeySplitList.last())) {
                         keymap->setValue("customize");
                         //return;
                     } else {
                         bIsConflicts = true;
-                        keySplitList[1] = QString("editor_keymap_%1").arg("customize");
-                        conflictsKeys = keySplitList.join(".");
+                        loopKeySplitList[1] = QString("editor_keymap_%1").arg("customize");
+                        conflictsKeys = loopKeySplitList.join(".");
                     }
                 }
             }
@@ -344,32 +353,32 @@ QPair<QWidget *, QWidget *> Settings::createKeySequenceEditHandle(QObject *obj)
         }  else {
             bIsCustomize = true;
             instance()->m_bUserChangeKey = true;
-            for (auto option : instance()->settings->group("shortcuts.window_keymap_customize")->options()) {
-                QStringList keySplitList = option->key().split(".");
-                keySplitList[1] = QString("window_keymap_%1").arg(keymap->value().toString());
+            for (auto loopOption : instance()->settings->group("shortcuts.window_keymap_customize")->options()) {
+                QStringList loopKeySplitList = loopOption->key().split(".");
+                loopKeySplitList[1] = QString("window_keymap_%1").arg(keymap->value().toString());
 
-                if (option->value().toString() == sequence.toString()) {
+                if (loopOption->value().toString() == sequence.toString()) {
 
-                    if (checkName.contains(keySplitList.last())) {
+                    if (checkName.contains(loopKeySplitList.last())) {
                         //return;
                     } else {
                         bIsConflicts = true;
-                        conflictsKeys = keySplitList.join(".");
+                        conflictsKeys = loopKeySplitList.join(".");
                     }
                 }
             }
 
-            for (auto option : instance()->settings->group("shortcuts.editor_keymap_customize")->options()) {
-                QStringList keySplitList = option->key().split(".");
-                keySplitList[1] = QString("editor_keymap_%1").arg(keymap->value().toString());
+            for (auto loopOption : instance()->settings->group("shortcuts.editor_keymap_customize")->options()) {
+                QStringList loopKeySplitList = loopOption->key().split(".");
+                loopKeySplitList[1] = QString("editor_keymap_%1").arg(keymap->value().toString());
 
-                if (option->value().toString() == sequence.toString()) {
+                if (loopOption->value().toString() == sequence.toString()) {
 
-                    if (checkName.contains(keySplitList.last())) {
+                    if (checkName.contains(loopKeySplitList.last())) {
                         //return;
                     } else {
                         bIsConflicts = true;
-                        conflictsKeys = keySplitList.join(".");
+                        conflictsKeys = loopKeySplitList.join(".");
                     }
                 }
             }
@@ -526,7 +535,7 @@ void Settings::copyCustomizeKeysFromKeymap(QString keymap)
     m_bUserChangeKey = false;
 }
 
-bool Settings::checkShortcutValid(const QString &Name, QString Key, QString &Reason, bool &bIsConflicts)
+bool Settings::checkShortcutValid(const QString &Name, QString Key, QString &Reason, bool &bIsConflicts, QString defaultValue)
 {
     Q_UNUSED(Name);
 
@@ -553,14 +562,14 @@ bool Settings::checkShortcutValid(const QString &Name, QString Key, QString &Rea
         return  false;
     }
 
-//    // 与设置里的快捷键冲突检测
-//    if (isShortcutConflict(Name, Key)) {
-//        Reason = tr("This shortcut key conflicts with %1, click add to make this shortcut key take effect immediately").arg(style);
-//        bIsConflicts = true;
-//        return  false;
-//    }
+    // 屏蔽Shift组合键处理，但允许恢复为默认组合键序列
+    if (Key.contains("Shift")
+            && Key != defaultValue) {
+        Reason = tr("The shortcut %1 is invalid, please set another one.").arg(style);
+        bIsConflicts = false;
+        return false;
+    }
 
-//    bIsConflicts = true;
     return true;
 }
 

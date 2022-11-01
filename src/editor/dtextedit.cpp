@@ -7131,25 +7131,23 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "mark")) {
             toggleMarkSelections();
             return;
-        } else if (e->key() == Qt::Key_Insert && key != "Shift+Ins") {
-            if (e->modifiers() == Qt::NoModifier) {
-                setOverwriteMode(!overwriteMode());
-                //update();
-                if (!overwriteMode()) {
-                    auto cursor = this->textCursor();
-                    cursor.clearSelection();
-                    cursor.movePosition(QTextCursor::Right);
-                    this->setTextCursor(cursor);
+        } else if (e->key() == Qt::Key_Insert && key != "Shift+Ins" && e->modifiers() == Qt::NoModifier) {
+            setOverwriteMode(!overwriteMode());
+            //update();
+            if (!overwriteMode()) {
+                auto cursor = this->textCursor();
+                cursor.clearSelection();
+                cursor.movePosition(QTextCursor::Right);
+                this->setTextCursor(cursor);
 
-                    cursor = this->textCursor();
-                    cursor.movePosition(QTextCursor::Left);
-                    this->setTextCursor(cursor);
-                }
-
-                m_cursorMode = overwriteMode() ? Overwrite : Insert;
-                emit cursorModeChanged(m_cursorMode);
-                e->accept();
+                cursor = this->textCursor();
+                cursor.movePosition(QTextCursor::Left);
+                this->setTextCursor(cursor);
             }
+
+            m_cursorMode = overwriteMode() ? Overwrite : Insert;
+            emit cursorModeChanged(m_cursorMode);
+            e->accept();
         } else {
             // Post event to window widget if key match window key list.
             for (auto option : m_settings->settings->group("shortcuts.window")->options()) {
