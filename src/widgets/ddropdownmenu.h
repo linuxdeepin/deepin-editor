@@ -37,6 +37,7 @@ public:
     void setChildrenFocus(bool ok);
     void setRequestMenu(bool request);
     DToolButton* getButton();
+    QString getCurrentText() const;
 
 public slots:
     void setCurrentAction(QAction*);

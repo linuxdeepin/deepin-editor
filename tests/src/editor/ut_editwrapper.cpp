@@ -525,6 +525,39 @@ TEST(UT_Editwrapper_saveDraftFile, UT_Editwrapper_saveDraftFile_002)
     pWindow->deleteLater();
 }
 
+// QString getComboBoxValue(const QString &text) const;
+QString stubGetComboBoxValue(const QString &text) {
+    Q_UNUSED(text)
+    return QString("GB18030");
+}
+
+TEST(UT_Editwrapper_saveDraftFile, saveDraftFile_ChangeSaveEncode_EncodeChange)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->m_pTextEdit->setPlainText(QString::fromUtf8("123abc中文测试一二三四"));
+
+    QString convertEncode("GB18030");
+    pWindow->currentWrapper()->m_sCurEncode = convertEncode;
+
+    typedef int (*fptr)(QDialog *);
+    fptr fileDialogExec = (fptr)(&QDialog::exec);
+    Stub stub;
+    stub.set(fileDialogExec, saveDraftFile001_exec_stub);
+
+    typedef QString (DFileDialog::*DialogFunc)(const QString &);
+    stub.set((DialogFunc)ADDR(DFileDialog, getComboBoxValue), stubGetComboBoxValue);
+
+    QString newFilePath;
+    pWindow->currentWrapper()->saveDraftFile(newFilePath);
+    EXPECT_EQ(pWindow->m_tabbar->currentPath(), newFilePath);
+
+    pWindow->currentWrapper()->readFile();
+    EXPECT_EQ(pWindow->currentWrapper()->m_sCurEncode, convertEncode);
+
+    pWindow->deleteLater();
+}
+
 void readFile_stub_001()
 {
     return;
@@ -557,6 +590,7 @@ TEST(UT_Editwrapper_readFile, UT_Editwrapper_readFile_002)
     Stub stub;
     stub.set(ADDR(EditWrapper, loadContent), readFile_stub_001);
     bool bRet = pWindow->currentWrapper()->readFile(QByteArray("UTF-8"));
+    EXPECT_EQ(QString("UTF-8"), pWindow->currentWrapper()->m_sCurEncode);
     ASSERT_FALSE(bRet);
 
     pWindow->deleteLater();
@@ -949,27 +983,61 @@ TEST(UT_Editwrapper_reloadFileEncode, UT_Editwrapper_reloadFileEncode_008)
     pWindow->deleteLater();
 }
 
-TEST(UT_Editwrapper_reloadFileEncode, UT_Editwrapper_reloadFileEncode_009)
+bool reloadFileEncode_BeforeDeraftEdit_getModified_stub()
 {
-    /*
+    return true;
+}
+
+int reloadFileEncode_BeforeDeraftEdit_exec_save_stub()
+{
+    return 1;
+}
+
+TEST(UT_Editwrapper_reloadFileEncode, reloadFileEncode_BeforeDeraftEdit_ChangeEncode)
+{
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
-    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
-                                                          QString("12345"));
+    pWindow->currentWrapper()->textEditor()->setPlainText(QString::fromUtf8("123abc中文测试"));
+
+    Stub getModified_stub;
+    getModified_stub.set(ADDR(TextEdit, getModified), reloadFileEncode_BeforeDeraftEdit_getModified_stub);
     typedef int (*fptr)(QDialog *);
     fptr qDialogExec = (fptr)(&QDialog::exec);
-    Stub s1;
-    s1.set(qDialogExec, retintstub);
+    Stub stub;
+    stub.set(qDialogExec, reloadFileEncode_BeforeDeraftEdit_exec_save_stub);
 
-    Stub s2;
-    s2.set(ADDR(TextEdit,getModified),rettruestub);
-
-    intvalue = 1;
-    bool bRet = pWindow->currentWrapper()->reloadFileEncode(QByteArray());
-    ASSERT_TRUE(bRet);
+    QByteArray convertEncode("GB18030");
+    bool bRet = pWindow->currentWrapper()->reloadFileEncode(convertEncode);
+    EXPECT_TRUE(bRet);
+    EXPECT_EQ(convertEncode, pWindow->currentWrapper()->m_sCurEncode.toUtf8());
 
     pWindow->deleteLater();
-    */
+}
+
+TEST(UT_Editwrapper_reloadFileEncode, reloadFileEncode_SaveFileChangeCode_ChangeEncode)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->setPlainText(QString::fromUtf8("123abc中文测试"));
+
+    Stub getModified_stub;
+    getModified_stub.set(ADDR(TextEdit, getModified), reloadFileEncode_BeforeDeraftEdit_getModified_stub);
+    typedef int (*fptr)(QDialog *);
+    fptr qDialogExec = (fptr)(&QDialog::exec);
+    Stub stub;
+    stub.set(qDialogExec, reloadFileEncode_BeforeDeraftEdit_exec_save_stub);
+
+    QString newFilePath;
+    pWindow->currentWrapper()->saveDraftFile(newFilePath);
+    pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
+                                                          QString::fromUtf8("中文测试2"));
+
+    QByteArray convertEncode("GB18030");
+    bool bRet = pWindow->currentWrapper()->reloadFileEncode(convertEncode);
+    EXPECT_TRUE(bRet);
+    EXPECT_EQ(convertEncode, pWindow->currentWrapper()->m_sCurEncode.toUtf8());
+
+    pWindow->deleteLater();
 }
 
 int reloadModifyFile_001_exec_stub()

@@ -207,6 +207,11 @@ DToolButton *DDropdownMenu::getButton()
     return m_pToolButton;
 }
 
+QString DDropdownMenu::getCurrentText() const
+{
+    return m_text;
+}
+
 DDropdownMenu *DDropdownMenu::createEncodeMenu()
 {
     DDropdownMenu *m_pEncodeMenu = new DDropdownMenu();
