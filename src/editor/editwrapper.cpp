@@ -169,23 +169,29 @@ void EditWrapper::openFile(const QString &filepath, QString qstrTruePath, bool b
     thread->start();
 }
 
+/**
+ * @brief 按文件编码 \a encode 读取当前文件数据，若文件存在异常，则返回读取失败。
+ *      \a encode 可缺省，按文件默认编码读取。
+ * @param encode 文件编码
+ * @return 是否成功读取文件数据
+ */
 bool EditWrapper::readFile(QByteArray encode)
 {
-    QByteArray newEncode = encode;
-    if (newEncode.isEmpty()) {
-        newEncode = DetectCode::GetFileEncodingFormat(m_pTextEdit->getFilePath());
-        m_sFirstEncode = newEncode;
-    }
+    QFile file(m_pTextEdit->getTruePath());
+    if (file.open(QIODevice::ReadOnly)) {
+        QByteArray fileContent = file.readAll();
+        QByteArray newEncode = encode;
+        if (newEncode.isEmpty()) {
+            // 接口修改，补充文件头内容，最多读取1MB文件头数据
+            newEncode = DetectCode::GetFileEncodingFormat(
+                        m_pTextEdit->getFilePath(), fileContent.left(DATA_SIZE_1024 * DATA_SIZE_1024));
+            m_sFirstEncode = newEncode;
+        }
 
-    //QFile file(m_pTextEdit->getFilePath());
-    QFile file2(m_pTextEdit->getTruePath());
-
-    if (file2.open(QIODevice::ReadOnly)) {
-        QByteArray fileContent = file2.readAll();
         QByteArray Outdata;
         DetectCode::ChangeFileEncodingFormat(fileContent, Outdata, newEncode, QString("UTF-8"));
         loadContent(Outdata);
-        file2.close();
+        file.close();
         m_sCurEncode = newEncode;
         updateModifyStatus(false);
         return true;
@@ -239,7 +245,7 @@ bool EditWrapper::saveAsFile()
 {
     DFileDialog dialog(this, tr("Save"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.addComboBox(QObject::tr("Encoding"),  QStringList() << m_sFirstEncode);
+dialog.addComboBox(QObject::tr("Encoding"),  QStringList() << m_sFirstEncode);
     dialog.setDirectory(QDir::homePath());
     dialog.setNameFilter("*.txt");
 
@@ -272,6 +278,11 @@ bool EditWrapper::saveAsFile()
     return false;
 }
 
+/**
+ * @brief 按文件编码 \a encode 重新加载文件，并返回是否加载成功。文件有变更会提示是否保存。
+ * @param encode 文件编码
+ * @return 返回是否加载成功
+ */
 bool EditWrapper::reloadFileEncode(QByteArray encode)
 {
     //切换编码相同不重写加载
@@ -319,17 +330,25 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
 
         //保存
         if (res == 1) {
+            // 保存文件前更新当前文件的编码格式
+            QString tempEncode = m_sCurEncode;
+            m_sCurEncode = encode;
+
             //草稿文件
             if (Utils::isDraftFile(m_pTextEdit->getFilePath())) {
                 QString newFilePath;
                 if (saveDraftFile(newFilePath)) {
                     return readFile(encode);
-                } else {
-                    return false;
                 }
             } else {
-                return (saveFile() && readFile(encode));
+                if (saveFile()) {
+                    return readFile(encode);
+                }
             }
+
+            // 未成功保存，复位编码格式
+            m_sCurEncode = tempEncode;
+            return false;
         }
 
         return false;
