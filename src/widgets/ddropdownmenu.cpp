@@ -324,6 +324,13 @@ DDropdownMenu *DDropdownMenu::createHighLightMenu()
         m_pActionGroup->addAction(action);
     }
 
+    // 转发选中“None“无高亮选项的信号
+    connect(noHlAction, &QAction::triggered, m_pHighLightMenu, [noHlAction, m_pHighLightMenu] (bool checked) {
+        if (checked) {
+            emit m_pHighLightMenu->currentActionChanged(noHlAction);
+        }
+    });
+
     connect(m_pActionGroup, &QActionGroup::triggered, m_pHighLightMenu, [m_pHighLightMenu] (QAction *action) {
         const auto defName = action->text();
         const auto def = m_pHighLightMenu->m_Repository.definitionForName(defName);
@@ -333,7 +340,7 @@ DDropdownMenu *DDropdownMenu::createHighLightMenu()
         else {
             m_pHighLightMenu->setText(tr("None"));
         }
-
+        
     });
 
     m_pHighLightMenu->setText(tr("None"));

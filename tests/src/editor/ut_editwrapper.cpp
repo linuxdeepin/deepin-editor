@@ -1310,3 +1310,25 @@ TEST(UT_Editwrapper_loadContent, UT_Editwrapper_loadContent_002)
     window->deleteLater();
 }
 
+TEST(UT_Editwrapper_reloadFileHighlight, reloadFileHighlight_ChangeDefinition_Success)
+{
+    Window* window = new Window();
+    EditWrapper* wra = new EditWrapper(window);
+    wra->m_pTextEdit->setPlainText("#include <iostream>;\n"
+                                   "int main(int argc, char *argv[]) { }");
+    const QString definitionName("C++");
+    wra->reloadFileHighlight(definitionName);
+    EXPECT_FALSE(wra->m_bHighlighterAll);
+    EXPECT_TRUE(wra->m_Definition.isValid());
+    EXPECT_EQ(wra->m_Definition.name(), definitionName);
+    EXPECT_NE(wra->m_pSyntaxHighlighter, nullptr);
+
+    wra->reloadFileHighlight(QString("None"));
+    EXPECT_FALSE(wra->m_bHighlighterAll);
+    EXPECT_FALSE(wra->m_Definition.isValid());
+    EXPECT_EQ(wra->m_pSyntaxHighlighter, nullptr);
+
+    wra->deleteLater();
+    window->deleteLater();
+}
+
