@@ -69,16 +69,14 @@ public:
     bool saveAsFile();
     //重新加载文件编码 1.文件修改 2.文件未修改处理逻辑一样 切换编码重新加载和另存为 梁卫东
     bool reloadFileEncode(QByteArray encode);
+    // 重新加载文件高亮类型
+    void reloadFileHighlight(QString definitionName);
     //重写加载修改文件
     void reloadModifyFile();
     //获取文件编码
     QString getTextEncode();
 
-    /**
-     * @brief saveTemFile 保存备份文件
-     * @param qstrDir　备份文件路径
-     * @return true or false
-     */
+    // 保存备份文件
     bool saveTemFile(QString qstrDir);
     //更新路径
     void updatePath(const QString &file, QString qstrTruePath = QString());

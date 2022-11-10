@@ -81,6 +81,9 @@ BottomBar::BottomBar(QWidget *parent)
     //切换文件类型
     connect(m_pHighlightMenu, &DDropdownMenu::currentActionChanged, this,[this](QAction* pAct) {
         m_pHighlightMenu->setCurrentTextOnly(pAct->text());
+
+        // 更新使用格式高亮类型
+        m_pWrapper->reloadFileHighlight(pAct->text());
     });
 
     //编码按钮/文本类型按钮失去焦点后，设置光标回到文本框里

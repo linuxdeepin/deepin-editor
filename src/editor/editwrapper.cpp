@@ -357,6 +357,62 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
     }
 }
 
+/**
+ * @brief 根据高亮格式文件的名称 \a definitionName 查询高亮格式配置，并格式化文档。
+ *      若未查找到格式，例如“None”，则移除高亮效果。
+ * @param definitionName 高亮格式文件名称
+ */
+void EditWrapper::reloadFileHighlight(QString definitionName)
+{
+    m_Definition = m_Repository.definitionForName(definitionName);
+    if (m_Definition.isValid() && !m_Definition.filePath().isEmpty()) {
+        if (!m_pSyntaxHighlighter) m_pSyntaxHighlighter = new CSyntaxHighlighter(m_pTextEdit->document());
+        QString m_themePath = Settings::instance()->settings->option("advance.editor.theme")->value().toString();
+        if (m_themePath.contains("dark")) {
+            m_pSyntaxHighlighter->setTheme(m_Repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme));
+        } else {
+            m_pSyntaxHighlighter->setTheme(m_Repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
+        }
+        if (m_pSyntaxHighlighter) m_pSyntaxHighlighter->setDefinition(m_Definition);;
+        m_pTextEdit->setSyntaxDefinition(m_Definition);
+
+        // 获取当前展示区域文本块
+        QPoint startPoint = QPoint(0, 0);
+        QTextBlock beginBlock = m_pTextEdit->cursorForPosition(startPoint).block();
+        QTextBlock endBlock;
+
+        QScrollBar *pScrollBar = m_pTextEdit->verticalScrollBar();
+        if (pScrollBar->maximum() > 0) {
+            QPoint endPoint = QPointF(0, 1.5 * m_pTextEdit->height()).toPoint();
+            endBlock = m_pTextEdit->cursorForPosition(endPoint).block();
+        } else {
+            endBlock = m_pTextEdit->document()->lastBlock();
+        }
+
+        // 移除当前页面旧的高亮内容
+        QTextCursor cursor(beginBlock);
+        cursor.beginEditBlock();
+        for (QTextBlock var = beginBlock; var != endBlock; var = var.next()) {
+            var.layout()->clearFormats();
+        }
+        cursor.endEditBlock();
+        // 复位标识位
+        m_bHighlighterAll = false;
+
+        // 重新高亮当前界面
+        OnUpdateHighlighter();
+    } else {
+        // 不允许的高亮格式或无对应的高亮格式文件，例如“None”，移除高亮效果
+        m_bHighlighterAll = false;
+        m_Definition = KSyntaxHighlighting::Definition();
+        if (m_pSyntaxHighlighter) {
+            m_pSyntaxHighlighter->deleteLater();
+            m_pSyntaxHighlighter = nullptr;
+        }
+        m_pTextEdit->setSyntaxDefinition(m_Definition);
+    }
+}
+
 void EditWrapper::reloadModifyFile()
 {
     hideWarningNotices();
@@ -536,6 +592,11 @@ void EditWrapper::getPlainTextContent(QByteArray &plainTextContent)
     }
 }
 
+/**
+ * @brief saveTemFile 保存备份文件
+ * @param qstrDir　备份文件路径
+ * @return true or false
+ */
 bool EditWrapper::saveTemFile(QString qstrDir)
 {
     QFile file(qstrDir);
@@ -909,7 +970,7 @@ void EditWrapper::OnUpdateHighlighter()
 {
     if (m_pSyntaxHighlighter  && !m_bQuit && !m_bHighlighterAll) {
         QScrollBar *pScrollBar = m_pTextEdit->verticalScrollBar();
-        QPoint startPoint = QPointF(0, 0).toPoint();
+        QPoint startPoint = QPoint(0, 0);
         QTextBlock beginBlock = m_pTextEdit->cursorForPosition(startPoint).block();
         QTextBlock endBlock;
 
