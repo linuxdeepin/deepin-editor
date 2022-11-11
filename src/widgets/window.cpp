@@ -42,7 +42,6 @@
 
 #define PRINT_FLAG 2
 #define PRINT_ACTION 8
-#define PRINT_FORMAT_MARGIN 10
 #define FLOATTIP_MARGIN 95
 
 /**
@@ -1950,7 +1949,6 @@ void Window::doPrint(DPrinter *printer, const QVector<int> &pageRange)
 
     int dpiy = p.device()->logicalDpiY();
     int margin = (int)((2 / 2.54) * dpiy); // 2 cm margins
-    margin = PRINT_FORMAT_MARGIN;
 
     auto fmt = m_printDoc->rootFrame()->frameFormat();
     fmt.setMargin(margin);
@@ -2047,7 +2045,6 @@ void Window::doPrintWithLargeDoc(DPrinter *printer, const QVector<int> &pageRang
 
     int dpiy = p.device()->logicalDpiY();
     int margin = static_cast<int>((2 / 2.54) * dpiy); // 2 cm margins
-    margin = PRINT_FORMAT_MARGIN;
 
     QRectF pageRect(printer->pageRect());
     QRectF body = QRectF(0, 0, pageRect.width(), pageRect.height());
