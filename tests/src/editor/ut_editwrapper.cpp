@@ -1332,3 +1332,25 @@ TEST(UT_Editwrapper_reloadFileHighlight, reloadFileHighlight_ChangeDefinition_Su
     window->deleteLater();
 }
 
+TEST(UT_Editwrapper_reloadFileHighlight, reloadFileHighlight_SingleLineText_Success)
+{
+    Window* window = new Window();
+    EditWrapper* wra = new EditWrapper(window);
+    wra->m_pTextEdit->setPlainText("import time");
+    auto firstBlock = wra->m_pTextEdit->document()->firstBlock();
+    auto formats = firstBlock.layout()->formats();
+    EXPECT_TRUE(formats.isEmpty());
+
+    const QString definitionName("Python");
+    wra->reloadFileHighlight(definitionName);
+    EXPECT_TRUE(wra->m_Definition.isValid());
+    EXPECT_EQ(wra->m_Definition.name(), definitionName);
+    EXPECT_NE(wra->m_pSyntaxHighlighter, nullptr);
+
+    firstBlock = wra->m_pTextEdit->document()->firstBlock();
+    formats = firstBlock.layout()->formats();
+    EXPECT_FALSE(formats.isEmpty());
+
+    wra->deleteLater();
+    window->deleteLater();
+}

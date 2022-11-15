@@ -392,8 +392,11 @@ void EditWrapper::reloadFileHighlight(QString definitionName)
         // 移除当前页面旧的高亮内容
         QTextCursor cursor(beginBlock);
         cursor.beginEditBlock();
-        for (QTextBlock var = beginBlock; var != endBlock; var = var.next()) {
+        for (QTextBlock var = beginBlock; var.isValid(); var = var.next()) {
             var.layout()->clearFormats();
+            if (var == endBlock) {
+                break;
+            }
         }
         cursor.endEditBlock();
         // 复位标识位
