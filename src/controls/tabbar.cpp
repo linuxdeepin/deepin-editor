@@ -19,6 +19,29 @@
 
 QPixmap *Tabbar::sm_pDragPixmap = nullptr;
 
+/**
+ * @brief ‘&’在Qt中被标记为助记符，替换 \a str 中的‘&’字符为“&&”，以正确显示文件名中的‘&’符号
+ *      painter 绘制 CE_ToolButtonLabel 时设置了 Qt::TextShowMnemonic
+ * @note 在插入、新建标签页时，内部已使用替换，部分外部更新标签页名称，需手动处理
+ * @sa Tabbar::addTabWithIndex(), Tabbar::insertFromMimeData(), Tabbar::setTabText()
+ */
+QString replaceMnemonic(const QString &str)
+{
+    QString tmp = str;
+    tmp.replace(QChar('&'), QString("&&"));
+    return tmp;
+}
+
+/**
+ * @brief ‘&’在Qt中被标记为助记符，替换 \a str 中的"&&字符为'&'，以正确取得文件名中的‘&’符号
+ */
+QString restoreMnemonic(const QString &str)
+{
+    QString tmp = str;
+    tmp.replace(QString("&&"), QChar('&'));
+    return tmp;
+}
+
 Tabbar::Tabbar(QWidget *parent)
     : DTabBar(parent)
 {
@@ -69,8 +92,9 @@ void Tabbar::addTabWithIndex(int index, const QString &filePath, const QString &
     m_tabPaths.insert(index, filePath);
     m_tabTruePaths.insert(index, tipPath);
     // }
-    //除去空白符 梁卫东 ２０２０－０８－２６　１４：４９：１５
-    QString trimmedName = tabName.simplified();
+
+    // 除去空白符 梁卫东 ２０２０－０８－２６　１４：４９：１５ ；适配助记符
+    QString trimmedName = replaceMnemonic(tabName.simplified());
     DTabBar::insertTab(index, trimmedName);
     DTabBar::setCurrentIndex(index);
     if (filePath.contains("/.local/share/deepin/deepin-editor/")) {
@@ -207,7 +231,8 @@ void Tabbar::closeRightTabs(const QString &filePath)
 
 void Tabbar::updateTab(int index, const QString &filePath, const QString &tabName)
 {
-    DTabBar::setTabText(index, tabName);
+    // 适配助记符 '&' 后设置文本
+    setTabText(index, tabName);
     m_tabPaths[index] = filePath;
     m_tabTruePaths[index] = filePath;
     //show file path at tab,blank file only show it's name.
@@ -266,7 +291,7 @@ int Tabbar::indexOf(const QString &filePath)
 
 QString Tabbar::currentName() const
 {
-    return DTabBar::tabText(currentIndex());
+    return textAt(currentIndex());
 }
 
 QString Tabbar::currentPath() const
@@ -286,7 +311,18 @@ QString Tabbar::fileAt(int index) const
 
 QString Tabbar::textAt(int index) const
 {
-    return DTabBar::tabText(index);
+    // 获取显示文本时恢复设置的助记符 '&'
+    return restoreMnemonic(DTabBar::tabText(index));
+}
+
+/**
+ * @brief 设置索引 \a index 指向标签页显示文本为 \a text
+ */
+void Tabbar::setTabText(int index, const QString &text)
+{
+    // 替换助记符
+    QString tmp = replaceMnemonic(text);
+    DTabBar::setTabText(index, tmp);
 }
 
 void Tabbar::setTabPalette(const QString &activeColor, const QString &highlightColor)

@@ -48,6 +48,9 @@ public:
     QString fileAt(int index) const;
     QString textAt(int index) const;
 
+    // 设置索引为index的标签页显示文本为text
+    void setTabText(int index, const QString &text);
+
     void setTabPalette(const QString &activeColor, const QString &inactiveColor);
     void setBackground(const QString &startColor, const QString &endColor);
     void setDNDColor(const QString &startColor, const QString &endColor);
