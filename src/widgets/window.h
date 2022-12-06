@@ -237,6 +237,7 @@ private:
     void updateThemePanelGeomerty();
     void checkTabbarForReload();
     void clearPrintTextDocument();
+    void setWindowTitleInfo();
 
     // 克隆文本数据
     bool cloneLargeDocument(EditWrapper *editWrapper);
