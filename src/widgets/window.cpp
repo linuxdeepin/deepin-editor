@@ -295,6 +295,7 @@ Window::Window(DMainWindow *parent)
 
     //setChildrenFocus(false);
     Utils::clearChildrenFocus(m_tabbar);//使用此函数把tabbar的组件焦点去掉(左右箭头不能focus)
+
 }
 
 Window::~Window()
@@ -1462,6 +1463,18 @@ void Window::clearPrintTextDocument()
         }
 
         m_printDocList.clear();
+    }
+}
+
+void Window::setWindowTitleInfo()
+{
+    if (m_tabbar) {
+        qDebug() << __FUNCTION__ << "--" << m_tabbar->truePathAt(m_tabbar->currentIndex());
+        if (m_tabbar->truePathAt(m_tabbar->currentIndex()) != "") {
+            setWindowTitle(m_tabbar->truePathAt(m_tabbar->currentIndex()));
+        } else {
+            setWindowTitle(m_tabbar->currentName());
+        }
     }
 }
 
@@ -3037,6 +3050,7 @@ void Window::checkTabbarForReload()
         wrapper->textEditor()->setReadOnlyPermission(false);
     }
 
+    setWindowTitleInfo();
     //m_tabbar->setTabText(m_tabbar->currentIndex(), tabName);
     //判断是否需要阻塞系统关机
     emit sigJudgeBlockShutdown();
