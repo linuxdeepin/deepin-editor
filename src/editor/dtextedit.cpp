@@ -2874,28 +2874,42 @@ void TextEdit::undo_()
     }
 }
 
-/*
- * move the text from the positon of 'from' to the position of 'to'.
- * */
-void TextEdit::moveText(int from, int to, const QString &text)
+/*!
+   \brief 从索引位置 \a from 移动文本内容 \a text 到 \a to, 当仅拷贝文本时，
+        \a copy 置为true.
+   \param from 移动/拷贝文本位置
+   \param to 目的文本位置
+   \param text 文本内容
+   \param copy 是否为拷贝文本，默认为移动
+ */
+void TextEdit::moveText(int from, int to, const QString &text, bool copy)
 {
     auto cursor = this->textCursor();
     auto list = new UndoList;
     cursor.setPosition(from);
-    cursor.setPosition(from + text.size(), QTextCursor::KeepAnchor);
-    auto com1 = new DeleteBackCommond(cursor, this);
+    QUndoCommand *delCommand = nullptr;
+    // 拷贝模式下无需删除文本
+    if (!copy) {
+        cursor.setPosition(from + text.size(), QTextCursor::KeepAnchor);
+        delCommand = new DeleteBackCommond(cursor, this);
+    }
+
     cursor.setPosition(to);
-    auto com2 = new InsertTextUndoCommand(cursor, text, this);
+    auto insertCommand = new InsertTextUndoCommand(cursor, text, this);
 
     //the positon of 'from' is on the left of the position of 'to',
     //therefore,firstly do the insert operation.
     if (from < to) {
-        list->appendCom(com2);
-        list->appendCom(com1);
+        list->appendCom(insertCommand);
+        if (!copy) {
+            list->appendCom(delCommand);
+        }
         m_pUndoStack->push(list);
     } else if (from > to) {
-        list->appendCom(com1);
-        list->appendCom(com2);
+        if (!copy) {
+            list->appendCom(delCommand);
+        }
+        list->appendCom(insertCommand);
         m_pUndoStack->push(list);
     }
 }
@@ -6207,6 +6221,9 @@ void TextEdit::dropEvent(QDropEvent *event)
             cursor = this->textCursor();
             int dstpos = std::min(cursor.position(), cursor.anchor()) - data->text().size();
 
+            // 检测是否为拷贝文件而不是移动文件，使用Ctrl仅拷贝
+            bool copyText = event->keyboardModifiers().testFlag(Qt::ControlModifier);
+
             //fall back to the original state
             if (srcpos != dstpos) {
                 cursor.setPosition(dstpos);
@@ -6214,15 +6231,17 @@ void TextEdit::dropEvent(QDropEvent *event)
                 cursor.deleteChar();
 
                 cursor.setPosition(srcpos);
-                cursor.insertText(data->text());
+                // 拷贝模式下不对原文本操作
+                if (!copyText) {
+                    cursor.insertText(data->text());
+                }
             }
-            if (srcpos < dstpos) {
+            if (srcpos < dstpos && !copyText) {
                 dstpos += data->text().size();
             }
 
             //perform moveText operation
-            moveText(srcpos, dstpos, data->text());
-
+            moveText(srcpos, dstpos, data->text(), copyText);
 
             //drag text to another editor
         } else if (event->source() && event->source()->parent() != this) {

@@ -560,7 +560,7 @@ public slots:
 
     void redo_();
     void undo_();
-    void moveText(int from, int to, const QString &text);
+    void moveText(int from, int to, const QString& text, bool copy = false);
     QTextCursor findCursor(const QString &substr, const QString &text, int from, bool backward = false, int cursorPos = 0);
     QString selectedText();
 protected:
