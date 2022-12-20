@@ -6647,8 +6647,20 @@ void TextEdit::mouseReleaseEvent(QMouseEvent *e)
         e->accept();
         return;
     }
-    return QPlainTextEdit::mouseReleaseEvent(e);
-}
+
+    if(e->button() == Qt::MidButton){
+        bool midButtonPaste = m_settings->settings->option("advance.editor.allow_midbutton_paste")->value().toBool();
+        if(midButtonPaste){
+            // 只读模式过滤鼠标中间黏贴
+            if (m_readOnlyMode || m_bReadOnlyPermission) {
+                popupNotify(tr("Read-Only mode is on"));
+                return;
+            }
+
+            slotPasteAction();
+        }
+        return;
+    }
 
 void TextEdit::keyPressEvent(QKeyEvent *e)
 {
