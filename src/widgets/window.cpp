@@ -978,6 +978,10 @@ void Window::openFile()
     }
 
     QString path = m_settings->getSavePath(m_settings->getSavePathId());
+    // 使用当前文件路径时，打开当前文件的目录，新建文档为系统-文档目录
+    if (PathSettingWgt::CurFileBox == m_settings->getSavePathId()) {
+        path = getCurrentOpenFilePath();
+    }
     if(path.isEmpty() || !QDir(path).exists() || !QFileInfo(path).isWritable() || !QDir(path).isReadable()){
         path = QDir::homePath() + "/Documents";
     }
@@ -1103,7 +1107,12 @@ QString Window::saveAsFileToDisk()
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.addComboBox(QObject::tr("Encoding"),  QStringList() << wrapper->getTextEncode());
     dialog.setDirectory(QDir::homePath());
+
     QString path = m_settings->getSavePath(m_settings->getSavePathId());
+    // 使用当前文件路径时，打开当前文件的目录，新建文档为系统-文档目录
+    if (PathSettingWgt::CurFileBox == m_settings->getSavePathId()) {
+        path = getCurrentOpenFilePath();
+    }
     if(path.isEmpty() || !QDir(path).exists() || !QFileInfo(path).isWritable() || !QDir(path).isReadable()){
         path = QDir::homePath() + "/Documents";
     }
@@ -1505,6 +1514,28 @@ void Window::setWindowTitleInfo()
             setWindowTitle(m_tabbar->currentName());
         }
     }
+}
+
+/**
+ * @brief 取得当前文件打开文档目录，新建文档为"系统-文档"目录(~/Documents)
+ * @return 当前文件打开文档目录
+ */
+QString Window::getCurrentOpenFilePath()
+{
+    QString path;
+    EditWrapper *wrapper = currentWrapper();
+    if (wrapper) {
+        QString curFilePath = wrapper->textEditor() ? wrapper->textEditor()->getTruePath()
+                                                    : wrapper->filePath();
+        // 临时文件或备份文件，均返回"文档"目录
+        if (Utils::isDraftFile(curFilePath) || Utils::isBackupFile(curFilePath)) {
+            path = QDir::homePath() + "/Documents";
+        } else {
+            path = QFileInfo(curFilePath).absolutePath();
+        }
+    }
+
+    return path;
 }
 
 /**

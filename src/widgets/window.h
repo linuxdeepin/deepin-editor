@@ -238,6 +238,8 @@ private:
     void checkTabbarForReload();
     void clearPrintTextDocument();
     void setWindowTitleInfo();
+    // 取得当前文档打开路径（新建文档为"系统-文档"目录）
+    QString getCurrentOpenFilePath();
 
     // 克隆文本数据
     bool cloneLargeDocument(EditWrapper *editWrapper);
