@@ -1,9 +1,13 @@
 #include "pathsettintwgt.h"
+#include "../common/settings.h"
+
+#include <DStyleHelper>
+
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QButtonGroup>
 #include <QFileDialog>
-#include "../common/settings.h"
+
 PathSettingWgt::PathSettingWgt(QWidget* parent):DWidget(parent)
 {
     init();
@@ -36,6 +40,7 @@ void PathSettingWgt::onSaveIdChanged(int id)
         break;
     }
 }
+
 void PathSettingWgt::init()
 {
     QVBoxLayout* layout = new QVBoxLayout(this);
@@ -45,7 +50,12 @@ void PathSettingWgt::init()
     m_lastOptBox = new DCheckBox(this);
     m_customBox = new DCheckBox(this);
     m_customEdit = new DLineEdit(this);
-    m_customBtn = new DPushButton(this);
+    m_customBtn = new DSuggestButton(this);
+    // 获取DTK提供的选取按钮，保持和 DFileChooserEdit 相同的设置
+    m_customBtn->setFixedSize(36, 36);
+    m_customBtn->setIconSize(QSize(24, 24));
+    m_customBtn->setIcon(DStyleHelper(style()).standardIcon(DStyle::SP_SelectElement, nullptr));
+
     m_group->addButton(m_lastOptBox,LastOptBox);
     m_group->addButton(m_curFileBox,CurFileBox);
     m_group->addButton(m_customBox,CustomBox);
@@ -73,7 +83,7 @@ void PathSettingWgt::init()
 void PathSettingWgt::connections()
 {
     connect(m_group,static_cast<void(QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked),this,&PathSettingWgt::onBoxClicked);
-    connect(m_customBtn,&DPushButton::clicked,this,&PathSettingWgt::onBtnClicked);
+    connect(m_customBtn, &QPushButton::clicked, this, &PathSettingWgt::onBtnClicked);
 }
 
 void PathSettingWgt::setEditText(const QString& text)

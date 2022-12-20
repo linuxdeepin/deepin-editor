@@ -1,9 +1,11 @@
 #ifndef PATHSETTINTWGT_H
 #define PATHSETTINTWGT_H
+
 #include <DWidget>
 #include <DCheckBox>
-#include <DPushButton>
+#include <DSuggestButton>
 #include <DLineEdit>
+
 #include <QButtonGroup>
 
 DWIDGET_USE_NAMESPACE
@@ -40,7 +42,7 @@ private:
     DCheckBox* m_lastOptBox = nullptr;
     DCheckBox* m_customBox = nullptr;
     DLineEdit* m_customEdit = nullptr;
-    DPushButton* m_customBtn = nullptr;
+    DSuggestButton* m_customBtn = nullptr;
     QButtonGroup* m_group = nullptr;
 };
 
