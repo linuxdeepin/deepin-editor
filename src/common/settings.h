@@ -69,7 +69,7 @@ public:
 
 signals:
     void sigAdjustFont(QString name);
-    void sigAdjustFontSize(int fontSize);
+    void sigAdjustFontSize(qreal fontSize);
     void sigAdjustTabSpaceNumber(int number);
     void sigAdjustWordWrap(bool enable);
     void sigAdjustBookmark(bool enable);

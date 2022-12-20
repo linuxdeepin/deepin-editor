@@ -41,7 +41,7 @@ public:
     void setChildEnabled(bool enabled);
     //设置所有焦点　梁卫东　２０２０－０９－１４　１０：５５：２２
     void setChildrenFocus(bool ok,QWidget* preOrderWidget = nullptr);
-    void setScaleLabelText(int fontSize);
+    void setScaleLabelText(qreal fontSize);
     void setProgress(int progress);
 
     DDropdownMenu* getEncodeMenu();

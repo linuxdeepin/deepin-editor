@@ -1276,15 +1276,66 @@ void Window::changeSettingDialogComboxFontNumber(int fontNumber)
     m_settings->settings->option("base.font.size")->setValue(fontNumber);
 }
 
+/**
+ * @brief 根据传入的字体大小计算字体的比例，字体大小范围在 8 ~ 500，比例范围在 10% ~ 500%,
+ *      默认字体大小为12。因此在 8~12 和 12~50 两组范围字体的缩放间隔不同。
+ * @param fontSize 字体大小
+ * @return 字体缩放比例，范围 10 ~ 500
+ */
+qreal Window::calcFontScale(qreal fontSize)
+{
+    if (qFuzzyCompare(fontSize, m_settings->m_iDefaultFontSize)) {
+        return 100.0;
+    } else if (fontSize > m_settings->m_iDefaultFontSize) {
+        static const qreal delta = (500 - 100) * 1.0 / (m_settings->m_iMaxFontSize - m_settings->m_iDefaultFontSize);
+        qreal fontScale = 100 + delta * (fontSize - m_settings->m_iDefaultFontSize);
+        return qMin(fontScale, 500.0);
+    } else {
+        static const qreal delta = (100 - 10) * 1.0 / ( m_settings->m_iDefaultFontSize - m_settings->m_iMinFontSize);
+        qreal fontScale = 100 + delta * (fontSize - m_settings->m_iDefaultFontSize);
+        return qMax(fontScale, 10.0);
+    }
+}
+
+/**
+ * @brief 根据字体缩放比例返回字体大小
+ * @param fontScale 字体缩放比例
+ * @return 字体大小，范围 8~50
+ */
+qreal Window::calcFontSizeFromScale(qreal fontScale)
+{
+    if (qFuzzyCompare(fontScale, 100.0)) {
+        return m_settings->m_iDefaultFontSize;
+    } else if (fontScale > 100.0) {
+        static const qreal delta = (m_settings->m_iMaxFontSize - m_settings->m_iDefaultFontSize) * 1.0 / (500 - 100);
+        qreal fontSize = m_settings->m_iDefaultFontSize + delta * ((fontScale) - 100);
+        return qMin<qreal>(fontSize, m_settings->m_iMaxFontSize);
+    } else {
+        static const qreal delta = (m_settings->m_iDefaultFontSize - m_settings->m_iMinFontSize) * 1.0 / (100 - 10) ;
+        qreal fontSize = m_settings->m_iMinFontSize + delta * (fontScale - 10);
+        return qMax<qreal>(fontSize, m_settings->m_iMinFontSize);
+    }
+}
+
 void Window::decrementFontSize()
 {
-    int size = std::max(m_fontSize - 1, m_settings->m_iMinFontSize);
+    qreal fontScale = calcFontScale(m_fontSize);
+    // 减少10%
+    fontScale -= 10;
+    m_fontSize = calcFontSizeFromScale(fontScale);
+
+    qreal size = qMax<qreal>(m_fontSize, m_settings->m_iMinFontSize);
     m_settings->settings->option("base.font.size")->setValue(size);
 }
 
 void Window::incrementFontSize()
 {
-    int size = std::min(m_fontSize + 1, m_settings->m_iMaxFontSize);
+    qreal fontScale = calcFontScale(m_fontSize);
+    // 增加10%
+    fontScale += 10;
+    m_fontSize = calcFontSizeFromScale(fontScale);
+
+    qreal size = qMin<qreal>(m_fontSize, m_settings->m_iMaxFontSize);
     m_settings->settings->option("base.font.size")->setValue(size);
 }
 
@@ -1295,7 +1346,7 @@ void Window::resetFontSize()
 
 void Window::setFontSizeWithConfig(EditWrapper *wrapper)
 {
-    int size = m_settings->settings->option("base.font.size")->value().toInt();
+    qreal size = m_settings->settings->option("base.font.size")->value().toReal();
     wrapper->textEditor()->setFontSize(size);
     wrapper->bottomBar()->setScaleLabelText(size);
 
@@ -2985,7 +3036,7 @@ void Window::slotSigAdjustFont(QString fontName)
     }
 }
 
-void Window::slotSigAdjustFontSize(int fontSize)
+void Window::slotSigAdjustFontSize(qreal fontSize)
 {
     for (EditWrapper *wrapper : m_wrappers.values()) {
         wrapper->textEditor()->setFontSize(fontSize);

@@ -217,7 +217,7 @@ public slots:
     void slotClearDoubleCharaterEncode();
     void slotSigThemeChanged(const QString &path);
     void slotSigAdjustFont(QString fontName);
-    void slotSigAdjustFontSize(int fontSize);
+    void slotSigAdjustFontSize(qreal fontSize);
     void slotSigAdjustTabSpaceNumber(int number);
     void slotSigAdjustWordWrap(bool enable);
     void slotSigSetLineNumberShow(bool bIsShow);
@@ -240,6 +240,10 @@ private:
     void setWindowTitleInfo();
     // 取得当前文档打开路径（新建文档为"系统-文档"目录）
     QString getCurrentOpenFilePath();
+    // 计算字体大小的缩放比例
+    qreal calcFontScale(qreal fontSize);
+    // 从字体缩放比例推算字体大小
+    qreal calcFontSizeFromScale(qreal fontScale);
 
     // 克隆文本数据
     bool cloneLargeDocument(EditWrapper *editWrapper);
@@ -286,7 +290,7 @@ private:
     QString m_blankFileDir;
     QString m_backupDir;
     QString m_autoBackupDir;
-    int m_fontSize = 0;
+    qreal m_fontSize = 0;
 
     QString m_titlebarStyleSheet;
 

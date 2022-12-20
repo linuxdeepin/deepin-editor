@@ -215,23 +215,23 @@ void BottomBar::setChildrenFocus(bool ok,QWidget* preOrderWidget)
     }
 }
 
-void BottomBar::setScaleLabelText(int fontSize)
+void BottomBar::setScaleLabelText(qreal fontSize)
 {
     int maxFont = 50;
     int minFont = 8;
     int midFont = 12;
     QString text;
-    if(fontSize == midFont){
+    if (qFuzzyCompare(fontSize, midFont)) {
         text = "100%";
     }
     else if(fontSize > midFont){
         float delta = (500-100)*1.0/(maxFont - midFont);
-        int target = 100 + delta * (fontSize-midFont);
+        int target = 100 + qRound(delta * (fontSize-midFont));
         text = QString("%1%").arg(target);
     }
     else {
         float delta = (100-10)*1.0/(midFont - minFont);
-        int target = 100 + delta * (fontSize-midFont);
+        int target = 100 + qRound(delta * (fontSize-midFont));
         target = std::max(10,target);
         text = QString("%1%").arg(target);
     }

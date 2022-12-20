@@ -1652,7 +1652,7 @@ void TextEdit::setFontFamily(QString name)
     updateLeftAreaWidget();
 }
 
-void TextEdit::setFontSize(int size)
+void TextEdit::setFontSize(qreal size)
 {
     // Update font.
     m_fontSize = size;
@@ -1666,7 +1666,7 @@ void TextEdit::updateFont()
 {
     QFont font = document()->defaultFont();
     font.setFixedPitch(true);
-    font.setPointSize(m_fontSize);
+    font.setPointSizeF(m_fontSize);
     font.setFamily(m_fontName);
     setFont(font);
     setTabStopWidth(m_tabSpaceNumber * QFontMetrics(font).width(QChar(0x2192)));

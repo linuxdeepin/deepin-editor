@@ -205,7 +205,7 @@ public:
 
     void setLineWrapMode(bool enable);
     void setFontFamily(QString fontName);
-    void setFontSize(int fontSize);
+    void setFontSize(qreal fontSize);
     void updateFont();
 
     void replaceAll(const QString &replaceText, const QString &withText);
@@ -747,7 +747,7 @@ private:
     int m_cursorWidthChangeDelay = 2000;
     bool m_bReadOnlyPermission = false;
 
-    int m_fontSize = 16;
+    qreal m_fontSize = 16;
     QString m_fontName;
 
     Comment::CommentDefinition m_commentDefinition;

@@ -660,7 +660,7 @@ void Settings::slotsigAdjustFont(QVariant value)
 
 void Settings::slotsigAdjustFontSize(QVariant value)
 {
-    emit sigAdjustFontSize(value.toInt());
+    emit sigAdjustFontSize(value.toReal());
 }
 
 void Settings::slotsigAdjustWordWrap(QVariant value)
