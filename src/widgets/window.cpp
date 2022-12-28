@@ -688,7 +688,15 @@ bool Window::closeTab(const QString &filePath)
     }
 
     if (m_reading_list.contains(currentWrapper()->textEditor())) {
-        QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
+        if (m_settings->settings) {
+            m_settings->settings->sync();
+        }
+
+        QProcess process;
+        process.start("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
+        if (!process.waitForFinished(10)) {
+            process.terminate();
+        }
     }
 
     // 当前窗口为打印文本窗口
@@ -3101,7 +3109,20 @@ void Window::closeEvent(QCloseEvent *e)
         backupFile();
     }
 
-    QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
+    // WARNING: 调用 QProcess::startDetached() 前同步配置，防止多线程对 qgetenv() 中的 environmentMutex 加锁
+    // 导致创建进程 fork() 时保留了 environmentMutex 锁状态，使得父子进程陷入资源竞态，阻塞状态。
+    if (m_settings->settings) {
+        m_settings->settings->sync();
+    }
+
+    // 退出打印状态
+    m_bPrintProcessing = false;
+
+    QProcess process;
+    process.start("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
+    if (!process.waitForFinished(10)) {
+        process.terminate();
+    }
 
     QList<EditWrapper *> needSaveList;
     QMap<QString, EditWrapper *> wrappers = m_wrappers;
