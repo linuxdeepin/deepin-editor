@@ -610,7 +610,7 @@ QString Utils::localDataPath()
 {
     auto dataPaths = Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation));
     return dataPaths.isEmpty() ? QDir::homePath() + "/.local/share/deepin/deepin-editor/"
-                               : dataPaths.first();
+           : dataPaths.first();
 }
 
 const QStringList Utils::getEncodeList()
@@ -781,12 +781,12 @@ bool Utils::activeWindowFromDock(quintptr winId)
 {
     bool bRet = true;
     // new interface use application as id
-    QDBusInterface dockDbusInterface("com.deepin.dde.daemon.Dock",
-                                     "/com/deepin/dde/daemon/Dock",
-                                     "com.deepin.dde.daemon.Dock");
+    QDBusInterface dockDbusInterface("com.deepin.dde.daemon.Dock1",
+                                     "/com/deepin/dde/daemon/Dock1",
+                                     "com.deepin.dde.daemon.Dock1");
     QDBusReply<void> reply = dockDbusInterface.call("ActivateWindow", winId);
     if (!reply.isValid()) {
-        qDebug() << "call com.deepin.dde.daemon.Dock failed" << reply.error();
+        qDebug() << "call com.deepin.dde.daemon.Dock1 failed" << reply.error();
         bRet = false;
     }
 
@@ -822,12 +822,8 @@ QString Utils::getSystemLan()
     if (!m_systemLanguage.isEmpty()) {
         return m_systemLanguage;
     } else {
-        QDBusInterface ie("com.deepin.daemon.LangSelector",
-                          "/com/deepin/daemon/LangSelector",
-                          "com.deepin.daemon.LangSelector",
-                          QDBusConnection::sessionBus());
-
-        m_systemLanguage = ie.property("CurrentLocale").toString();
+        m_systemLanguage = QLocale::system().name();
+        qWarning() << "getSystemLan is" << m_systemLanguage;
         return m_systemLanguage;
     }
 }
@@ -849,16 +845,17 @@ bool Utils::isWayland()
 QString Utils::getActiveColor()
 {
     static QString activeColor;
-    if(!activeColor.isEmpty()){
+    if (!activeColor.isEmpty()) {
         return activeColor;
-    }
-    else{
-        QDBusInterface d("com.deepin.daemon.Appearance",
-                          "/com/deepin/daemon/Appearance",
-                          "com.deepin.daemon.Appearance",
-                          QDBusConnection::sessionBus());
+    } else {
+        QDBusInterface d("com.deepin.daemon.Appearance1",
+                         "/com/deepin/daemon/Appearance1",
+                         "com.deepin.daemon.Appearance1",
+                         QDBusConnection::sessionBus());
 
         activeColor = d.property("QtActiveColor").toString();
+        qDebug() << "getActiveColor is " << activeColor;
+
         return activeColor;
     }
 }

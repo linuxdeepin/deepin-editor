@@ -631,8 +631,8 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
 
     //这里会重复连接信号和槽，先全部取消
     QDBusConnection dbus = QDBusConnection::sessionBus();
-    dbus.systemBus().disconnect("com.deepin.daemon.Gesture",
-                                "/com/deepin/daemon/Gesture", "com.deepin.daemon.Gesture",
+    dbus.systemBus().disconnect("com.deepin.daemon.Gesture1",
+                                "/com/deepin/daemon/Gesture1", "com.deepin.daemon.Gesture1",
                                 "Event",
                                 wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
     wrapper->textEditor()->disconnect();
@@ -644,8 +644,8 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
     connect(wrapper->textEditor(), &TextEdit::popupNotify, this, &Window::showNotify, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::signal_setTitleFocus, this, &Window::slot_setTitleFocus, Qt::QueuedConnection);
 
-    dbus.systemBus().connect("com.deepin.daemon.Gesture",
-                             "/com/deepin/daemon/Gesture", "com.deepin.daemon.Gesture",
+    dbus.systemBus().connect("com.deepin.daemon.Gesture1",
+                             "/com/deepin/daemon/Gesture1", "com.deepin.daemon.Gesture1",
                              "Event",
                              wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
     connect(wrapper->textEditor(), &QPlainTextEdit::cursorPositionChanged, wrapper->textEditor(), &TextEdit::cursorPositionChanged);
@@ -982,7 +982,7 @@ void Window::openFile()
     if (PathSettingWgt::CurFileBox == m_settings->getSavePathId()) {
         path = getCurrentOpenFilePath();
     }
-    if(path.isEmpty() || !QDir(path).exists() || !QFileInfo(path).isWritable() || !QDir(path).isReadable()){
+    if (path.isEmpty() || !QDir(path).exists() || !QFileInfo(path).isWritable() || !QDir(path).isReadable()) {
         path = QDir::homePath() + "/Documents";
     }
     dialog.setDirectory(path);
@@ -1113,7 +1113,7 @@ QString Window::saveAsFileToDisk()
     if (PathSettingWgt::CurFileBox == m_settings->getSavePathId()) {
         path = getCurrentOpenFilePath();
     }
-    if(path.isEmpty() || !QDir(path).exists() || !QFileInfo(path).isWritable() || !QDir(path).isReadable()){
+    if (path.isEmpty() || !QDir(path).exists() || !QFileInfo(path).isWritable() || !QDir(path).isReadable()) {
         path = QDir::homePath() + "/Documents";
     }
     dialog.setDirectory(path);
@@ -1135,8 +1135,8 @@ QString Window::saveAsFileToDisk()
         const QByteArray encode = dialog.getComboBoxValue(QObject::tr("Encoding")).toUtf8();
         const QString endOfLine = dialog.getComboBoxValue(QObject::tr("Line Endings"));
         const QString newFilePath = dialog.selectedFiles().value(0);
-        Settings::instance()->setSavePath(PathSettingWgt::LastOptBox,QFileInfo(newFilePath).absolutePath());
-        Settings::instance()->setSavePath(PathSettingWgt::CurFileBox,QFileInfo(newFilePath).absolutePath());
+        Settings::instance()->setSavePath(PathSettingWgt::LastOptBox, QFileInfo(newFilePath).absolutePath());
+        Settings::instance()->setSavePath(PathSettingWgt::CurFileBox, QFileInfo(newFilePath).absolutePath());
 
         wrapper->updatePath(wrapper->filePath(), newFilePath);
         if (!wrapper->saveFile()) {
@@ -1291,7 +1291,7 @@ qreal Window::calcFontScale(qreal fontSize)
         qreal fontScale = 100 + delta * (fontSize - m_settings->m_iDefaultFontSize);
         return qMin(fontScale, 500.0);
     } else {
-        static const qreal delta = (100 - 10) * 1.0 / ( m_settings->m_iDefaultFontSize - m_settings->m_iMinFontSize);
+        static const qreal delta = (100 - 10) * 1.0 / (m_settings->m_iDefaultFontSize - m_settings->m_iMinFontSize);
         qreal fontScale = 100 + delta * (fontSize - m_settings->m_iDefaultFontSize);
         return qMax(fontScale, 10.0);
     }
@@ -1514,8 +1514,8 @@ void Window::popupSettingsDialog()
     dialog->widgetFactory()->registerWidget("fontcombobox", Settings::createFontComBoBoxHandle);
     dialog->widgetFactory()->registerWidget("keySequenceEdit", Settings::createKeySequenceEditHandle);
     dialog->widgetFactory()->registerWidget("savingpathwgt", Settings::createSavingPathWgt);
-    dialog->resize(680,300);
-    dialog->setMinimumSize(680,300);
+    dialog->resize(680, 300);
+    dialog->setMinimumSize(680, 300);
     m_settings->setSettingDialog(dialog);
 
     dialog->updateSettings(m_settings->settings);
@@ -1577,7 +1577,7 @@ QString Window::getCurrentOpenFilePath()
     EditWrapper *wrapper = currentWrapper();
     if (wrapper) {
         QString curFilePath = wrapper->textEditor() ? wrapper->textEditor()->getTruePath()
-                                                    : wrapper->filePath();
+                              : wrapper->filePath();
         // 临时文件或备份文件，均返回"文档"目录
         if (Utils::isDraftFile(curFilePath) || Utils::isBackupFile(curFilePath)) {
             path = QDir::homePath() + "/Documents";
@@ -3211,13 +3211,12 @@ void Window::closeEvent(QCloseEvent *e)
         }
     } else {
         bool save_tab_before_close = m_settings->settings->option("advance.startup.save_tab_before_close")->value().toBool();
-        if(!save_tab_before_close){
+        if (!save_tab_before_close) {
             if (!closeAllFiles()) {
                 e->ignore();
                 return;
             }
-        }
-        else{
+        } else {
             backupFile();
         }
     }
