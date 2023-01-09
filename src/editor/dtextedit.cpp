@@ -109,8 +109,8 @@ TextEdit::TextEdit(QWidget *parent)
     connect(m_pUndoStack, &QUndoStack::canUndoChanged, this, &TextEdit::slotCanUndoChanged);
 
     QDBusConnection dbus = QDBusConnection::sessionBus();
-    dbus.systemBus().connect("com.deepin.daemon.Gesture1",
-                             "/com/deepin/daemon/Gesture1", "com.deepin.daemon.Gesture1",
+    dbus.systemBus().connect("org.deepin.dde.Gesture1",
+                             "/org/deepin/dde/Gesture1", "org.deepin.dde.Gesture1",
                              "Event",
                              this, SLOT(fingerZoom(QString, QString, int)));
 

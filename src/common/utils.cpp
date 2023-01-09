@@ -781,12 +781,12 @@ bool Utils::activeWindowFromDock(quintptr winId)
 {
     bool bRet = true;
     // new interface use application as id
-    QDBusInterface dockDbusInterface("com.deepin.dde.daemon.Dock1",
-                                     "/com/deepin/dde/daemon/Dock1",
-                                     "com.deepin.dde.daemon.Dock1");
+    QDBusInterface dockDbusInterface("com.deepin.dde.daemon.Dock",
+                                     "/com/deepin/dde/daemon/Dock",
+                                     "com.deepin.dde.daemon.Dock");
     QDBusReply<void> reply = dockDbusInterface.call("ActivateWindow", winId);
     if (!reply.isValid()) {
-        qDebug() << "call com.deepin.dde.daemon.Dock1 failed" << reply.error();
+        qDebug() << "call org.deepin.dde.daemon.Dock1 failed" << reply.error();
         bRet = false;
     }
 
@@ -848,9 +848,9 @@ QString Utils::getActiveColor()
     if (!activeColor.isEmpty()) {
         return activeColor;
     } else {
-        QDBusInterface d("com.deepin.daemon.Appearance1",
-                         "/com/deepin/daemon/Appearance1",
-                         "com.deepin.daemon.Appearance1",
+        QDBusInterface d("org.deepin.dde.Appearance1",
+                         "/org/deepin/dde/Appearance1",
+                         "org.deepin.dde.Appearance1",
                          QDBusConnection::sessionBus());
 
         activeColor = d.property("QtActiveColor").toString();

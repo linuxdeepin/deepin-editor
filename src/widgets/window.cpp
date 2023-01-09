@@ -631,8 +631,8 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
 
     //这里会重复连接信号和槽，先全部取消
     QDBusConnection dbus = QDBusConnection::sessionBus();
-    dbus.systemBus().disconnect("com.deepin.daemon.Gesture1",
-                                "/com/deepin/daemon/Gesture1", "com.deepin.daemon.Gesture1",
+    dbus.systemBus().disconnect("org.deepin.dde.Gesture1",
+                                "/org/deepin/dde/Gesture1", "org.deepin.dde.Gesture1",
                                 "Event",
                                 wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
     wrapper->textEditor()->disconnect();
@@ -644,8 +644,8 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
     connect(wrapper->textEditor(), &TextEdit::popupNotify, this, &Window::showNotify, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::signal_setTitleFocus, this, &Window::slot_setTitleFocus, Qt::QueuedConnection);
 
-    dbus.systemBus().connect("com.deepin.daemon.Gesture1",
-                             "/com/deepin/daemon/Gesture1", "com.deepin.daemon.Gesture1",
+    dbus.systemBus().connect("org.deepin.dde.Gesture1",
+                             "/org/deepin/dde/Gesture1", "org.deepin.dde.Gesture1",
                              "Event",
                              wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
     connect(wrapper->textEditor(), &QPlainTextEdit::cursorPositionChanged, wrapper->textEditor(), &TextEdit::cursorPositionChanged);
