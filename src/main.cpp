@@ -61,6 +61,7 @@ int main(int argc, char *argv[])
         UrlInfo info(path);
         urls << info.url.toLocalFile();
     }
+    qInfo() << Q_FUNC_INFO << "Open file urls" << urls;
 
     bool hasWindowFlag = parser.isSet(newWindowOption);
 

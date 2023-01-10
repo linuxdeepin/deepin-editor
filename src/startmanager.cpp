@@ -467,7 +467,8 @@ void StartManager::openFilesInTab(QStringList files)
         for (const QString &file : files) {
 
             if (!checkPath(file)) {
-                return;
+                // 存在已打开文件时，进行下一文件判断
+                continue;
             }
 
             FileTabInfo info = getFileTabInfo(file);
