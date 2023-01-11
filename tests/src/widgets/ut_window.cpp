@@ -1234,6 +1234,7 @@ TEST(UT_Window_decrementFontSize, UT_Window_decrementFontSize)
     Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->m_settings =Settings::instance();
+    window->m_fontSize = 12;
     qreal oldFontSize = window->m_fontSize;
     window->decrementFontSize();
     EXPECT_GT(oldFontSize, window->m_fontSize);

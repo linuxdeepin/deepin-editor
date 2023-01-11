@@ -116,12 +116,6 @@ public:
     // 判断 [x1, y1] 和 [x2, y2] 区间是否存在交集，返回交集类型
     static RegionIntersectType checkRegionIntersect(int x1, int y1, int x2, int y2);
 
-    // 计算换行内容 text: 原始文本内容， nWidth: 一行最大宽度， font:字体大小, nElideRow: 最大显示行数，超出最大行时，中间内容加···省略号显示
-    static QString lineFeed(const QString &text, int nWidth, const QFont &font, int nElidedRow = 2);
-
-    // 判断 [x1, y1] 和 [x2, y2] 区间是否存在交集，返回交集类型
-    static RegionIntersectType checkRegionIntersect(int x1, int y1, int x2, int y2);
-
 private:
     static QString m_systemLanguage;
 };

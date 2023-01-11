@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2019 - 2023 UnionTech Software Technology Co., Ltd.
+//
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #include "endlineformatcommond.h"
 EndlineFormartCommand::EndlineFormartCommand(TextEdit* edit,BottomBar* bar,BottomBar::EndlineFormat from,BottomBar::EndlineFormat to):
     m_edit(edit),
