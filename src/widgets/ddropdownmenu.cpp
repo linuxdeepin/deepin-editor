@@ -93,53 +93,26 @@ void DDropdownMenu::setCurrentAction(QAction *pAct)
 
 void DDropdownMenu::setCurrentTextOnly(const QString &name)
 {
-  // QList<QAction*> menuList = m_menu->actions();
+   QList<QAction*> menuList = m_menu->actions();
 
-//   for (int i = 0; i < menuList.size(); i++) {
-//       if(menuList[i]->menu()){
-//           QList<QAction*> acts = menuList[i]->menu()->actions();
-//           if(acts.size() == 0) continue;
-//           for (int j = 0; j < acts.size(); j++) {
-//           if(acts[j]->text() != name){
-//               acts[j]->setCheckable(false);
-//               acts[j]->setChecked(false);
-//           }
-//           else{
-//               acts[j]->setCheckable(true);
-//               acts[j]->setChecked(true);
-//           }
-//        }
-//      }
-//   }
-   for(auto ac:m_menu->actions()){
-       setCheckedExclusive(ac,name);
+   for (int i = 0; i < menuList.size(); i++) {
+       if(menuList[i]->menu()){
+           QList<QAction*> acts = menuList[i]->menu()->actions();
+           if(acts.size() == 0) continue;
+           for (int j = 0; j < acts.size(); j++) {
+           if(acts[j]->text() != name){
+               acts[j]->setCheckable(false);
+               acts[j]->setChecked(false);
+           }
+           else{
+               acts[j]->setCheckable(true);
+               acts[j]->setChecked(true);
+           }
+        }
+      }
    }
 
    setText(name);
-}
-
-
-void DDropdownMenu::setCheckedExclusive(QAction* action,const QString& name)
-{
-    if(nullptr == action){
-        return;
-    }
-
-    if(action->menu()){
-        for(auto ac:action->menu()->actions()){
-            setCheckedExclusive(ac,name);
-        }
-    }
-    else {
-        if(action->text() != name){
-            action->setCheckable(false);
-            action->setChecked(false);
-        }
-        else{
-            action->setCheckable(true);
-            action->setChecked(true);
-        }
-    }
 }
 
 void DDropdownMenu::slotRequestMenu(bool request)

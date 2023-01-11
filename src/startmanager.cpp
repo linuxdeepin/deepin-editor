@@ -561,7 +561,6 @@ void StartManager::createWindowFromWrapper(const QString &tabName, const QString
         pWindow->currentWrapper()->updateModifyStatus(isModifyed);
         pWindow->currentWrapper()->OnUpdateHighlighter();
         pWindow->setFocus();
-        pWindow->setFontSizeWithConfig(pWindow->currentWrapper());
     });
 
     group->addAnimation(geometry);

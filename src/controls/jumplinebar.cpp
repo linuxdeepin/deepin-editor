@@ -24,12 +24,6 @@ JumpLineBar::JumpLineBar(DFloatingWidget *parent)
     m_layout->setContentsMargins(10, 6, 10, 6);
     m_layout->setSpacing(5);
 
-    m_closeButton = new DIconButton(DStyle::SP_CloseButton);
-    m_closeButton->setIconSize(QSize(30, 30));
-    m_closeButton->setFixedSize(30, 30);
-    m_closeButton->setEnabledCircle(true);
-    m_closeButton->setFlat(true);
-
     m_label = new QLabel();
     m_label->setText(tr("Go to Line: "));
     // 按文本长度计算显示宽度，不同语言下翻译文本长度不一，需完整显示
@@ -42,7 +36,6 @@ JumpLineBar::JumpLineBar(DFloatingWidget *parent)
 
     m_layout->addWidget(m_label);
     m_layout->addWidget(m_pSpinBoxInput);
-    m_layout->addWidget(m_closeButton);
     this->setLayout(m_layout);
 
     // 初始化浮动条宽度，根据文本长度计算
@@ -52,7 +45,6 @@ JumpLineBar::JumpLineBar(DFloatingWidget *parent)
     connect(this, &JumpLineBar::pressEsc, this, &JumpLineBar::jumpCancel, Qt::QueuedConnection);
     connect(m_pSpinBoxInput->lineEdit(), &QLineEdit::returnPressed, this, &JumpLineBar::jumpConfirm, Qt::QueuedConnection);
     connect(m_pSpinBoxInput->lineEdit(), &QLineEdit::textChanged, this, &JumpLineBar::handleLineChanged, Qt::QueuedConnection);
-    connect(m_closeButton, &DIconButton::clicked, this, &JumpLineBar::close, Qt::QueuedConnection);
 }
 
 JumpLineBar::~JumpLineBar()

@@ -1,9 +1,9 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText:  - 2022 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "window.h"
-#include "pathsettintwgt.h"
+
 #include <DTitlebar>
 #include <DAnchors>
 #include <DThemeManager>
@@ -42,7 +42,6 @@
 
 #define PRINT_FLAG 2
 #define PRINT_ACTION 8
-#define PRINT_FORMAT_MARGIN 10
 #define FLOATTIP_MARGIN 95
 
 /**
@@ -365,7 +364,7 @@ void Window::updateModifyStatus(const QString &path, bool isModified)
 
     QString tabName;
     QString filePath = m_tabbar->truePathAt(tabIndex);
-    if (filePath.isNull() || filePath.length() <= 0 || Utils::isDraftFile(filePath)) {
+    if (filePath.isNull() || filePath.length() <= 0 || filePath.contains("/.local/share/deepin/deepin-editor/blank-files")) {
         tabName = m_tabbar->textAt(tabIndex);
         if (isModified) {
             if (!tabName.contains('*')) {
@@ -631,8 +630,8 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
 
     //这里会重复连接信号和槽，先全部取消
     QDBusConnection dbus = QDBusConnection::sessionBus();
-    dbus.systemBus().disconnect("org.deepin.dde.Gesture1",
-                                "/org/deepin/dde/Gesture1", "org.deepin.dde.Gesture1",
+    dbus.systemBus().disconnect("com.deepin.daemon.Gesture",
+                                "/com/deepin/daemon/Gesture", "com.deepin.daemon.Gesture",
                                 "Event",
                                 wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
     wrapper->textEditor()->disconnect();
@@ -644,8 +643,8 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
     connect(wrapper->textEditor(), &TextEdit::popupNotify, this, &Window::showNotify, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::signal_setTitleFocus, this, &Window::slot_setTitleFocus, Qt::QueuedConnection);
 
-    dbus.systemBus().connect("org.deepin.dde.Gesture1",
-                             "/org/deepin/dde/Gesture1", "org.deepin.dde.Gesture1",
+    dbus.systemBus().connect("com.deepin.daemon.Gesture",
+                             "/com/deepin/daemon/Gesture", "com.deepin.daemon.Gesture",
                              "Event",
                              wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
     connect(wrapper->textEditor(), &QPlainTextEdit::cursorPositionChanged, wrapper->textEditor(), &TextEdit::cursorPositionChanged);
@@ -969,24 +968,6 @@ void Window::openFile()
     }
     dialog.setDirectory(historyDirStr);
 
-    QDir historyDir(historyDirStr);
-
-    if (historyDir.exists()) {
-        dialog.setDirectory(historyDir);
-    } else {
-        qDebug() << "historyDir or default path not existed:" << historyDir;
-    }
-
-    QString path = m_settings->getSavePath(m_settings->getSavePathId());
-    // 使用当前文件路径时，打开当前文件的目录，新建文档为系统-文档目录
-    if (PathSettingWgt::CurFileBox == m_settings->getSavePathId()) {
-        path = getCurrentOpenFilePath();
-    }
-    if (path.isEmpty() || !QDir(path).exists() || !QFileInfo(path).isWritable() || !QDir(path).isReadable()) {
-        path = QDir::homePath() + "/Documents";
-    }
-    dialog.setDirectory(path);
-
     const int mode = dialog.exec();
 
     PerformanceMonitor::openFileStart();
@@ -1107,12 +1088,7 @@ QString Window::saveAsFileToDisk()
     dialog.setAcceptMode(QFileDialog::AcceptSave);
     dialog.addComboBox(QObject::tr("Encoding"),  QStringList() << wrapper->getTextEncode());
     dialog.setDirectory(QDir::homePath());
-
-    QString path = m_settings->getSavePath(m_settings->getSavePathId());
-    // 使用当前文件路径时，打开当前文件的目录，新建文档为系统-文档目录
-    if (PathSettingWgt::CurFileBox == m_settings->getSavePathId()) {
-        path = getCurrentOpenFilePath();
-    }
+    QString path = m_settings->settings->option("advance.editor.file_dialog_dir")->value().toString();
     if (path.isEmpty() || !QDir(path).exists() || !QFileInfo(path).isWritable() || !QDir(path).isReadable()) {
         path = QDir::homePath() + "/Documents";
     }
@@ -1135,8 +1111,7 @@ QString Window::saveAsFileToDisk()
         const QByteArray encode = dialog.getComboBoxValue(QObject::tr("Encoding")).toUtf8();
         const QString endOfLine = dialog.getComboBoxValue(QObject::tr("Line Endings"));
         const QString newFilePath = dialog.selectedFiles().value(0);
-        Settings::instance()->setSavePath(PathSettingWgt::LastOptBox, QFileInfo(newFilePath).absolutePath());
-        Settings::instance()->setSavePath(PathSettingWgt::CurFileBox, QFileInfo(newFilePath).absolutePath());
+        m_settings->settings->option("advance.editor.file_dialog_dir")->setValue(dialog.directoryUrl().toLocalFile());
 
         wrapper->updatePath(wrapper->filePath(), newFilePath);
         if (!wrapper->saveFile()) {
@@ -1276,66 +1251,15 @@ void Window::changeSettingDialogComboxFontNumber(int fontNumber)
     m_settings->settings->option("base.font.size")->setValue(fontNumber);
 }
 
-/**
- * @brief 根据传入的字体大小计算字体的比例，字体大小范围在 8 ~ 500，比例范围在 10% ~ 500%,
- *      默认字体大小为12。因此在 8~12 和 12~50 两组范围字体的缩放间隔不同。
- * @param fontSize 字体大小
- * @return 字体缩放比例，范围 10 ~ 500
- */
-qreal Window::calcFontScale(qreal fontSize)
-{
-    if (qFuzzyCompare(fontSize, m_settings->m_iDefaultFontSize)) {
-        return 100.0;
-    } else if (fontSize > m_settings->m_iDefaultFontSize) {
-        static const qreal delta = (500 - 100) * 1.0 / (m_settings->m_iMaxFontSize - m_settings->m_iDefaultFontSize);
-        qreal fontScale = 100 + delta * (fontSize - m_settings->m_iDefaultFontSize);
-        return qMin(fontScale, 500.0);
-    } else {
-        static const qreal delta = (100 - 10) * 1.0 / (m_settings->m_iDefaultFontSize - m_settings->m_iMinFontSize);
-        qreal fontScale = 100 + delta * (fontSize - m_settings->m_iDefaultFontSize);
-        return qMax(fontScale, 10.0);
-    }
-}
-
-/**
- * @brief 根据字体缩放比例返回字体大小
- * @param fontScale 字体缩放比例
- * @return 字体大小，范围 8~50
- */
-qreal Window::calcFontSizeFromScale(qreal fontScale)
-{
-    if (qFuzzyCompare(fontScale, 100.0)) {
-        return m_settings->m_iDefaultFontSize;
-    } else if (fontScale > 100.0) {
-        static const qreal delta = (m_settings->m_iMaxFontSize - m_settings->m_iDefaultFontSize) * 1.0 / (500 - 100);
-        qreal fontSize = m_settings->m_iDefaultFontSize + delta * ((fontScale) - 100);
-        return qMin<qreal>(fontSize, m_settings->m_iMaxFontSize);
-    } else {
-        static const qreal delta = (m_settings->m_iDefaultFontSize - m_settings->m_iMinFontSize) * 1.0 / (100 - 10) ;
-        qreal fontSize = m_settings->m_iMinFontSize + delta * (fontScale - 10);
-        return qMax<qreal>(fontSize, m_settings->m_iMinFontSize);
-    }
-}
-
 void Window::decrementFontSize()
 {
-    qreal fontScale = calcFontScale(m_fontSize);
-    // 减少10%
-    fontScale -= 10;
-    m_fontSize = calcFontSizeFromScale(fontScale);
-
-    qreal size = qMax<qreal>(m_fontSize, m_settings->m_iMinFontSize);
+    int size = std::max(m_fontSize - 1, m_settings->m_iMinFontSize);
     m_settings->settings->option("base.font.size")->setValue(size);
 }
 
 void Window::incrementFontSize()
 {
-    qreal fontScale = calcFontScale(m_fontSize);
-    // 增加10%
-    fontScale += 10;
-    m_fontSize = calcFontSizeFromScale(fontScale);
-
-    qreal size = qMin<qreal>(m_fontSize, m_settings->m_iMaxFontSize);
+    int size = std::min(m_fontSize + 1, m_settings->m_iMaxFontSize);
     m_settings->settings->option("base.font.size")->setValue(size);
 }
 
@@ -1346,9 +1270,8 @@ void Window::resetFontSize()
 
 void Window::setFontSizeWithConfig(EditWrapper *wrapper)
 {
-    qreal size = m_settings->settings->option("base.font.size")->value().toReal();
+    int size = m_settings->settings->option("base.font.size")->value().toInt();
     wrapper->textEditor()->setFontSize(size);
-    wrapper->bottomBar()->setScaleLabelText(size);
 
     m_fontSize = size;
 }
@@ -1389,8 +1312,7 @@ void Window::popupFindBar()
     m_findBar->show();
     m_findBar->move(QPoint(4, height() - m_findBar->height() - 4));
 
-    //QString text = wrapper->textEditor()->textCursor().selectedText();
-    QString text = wrapper->textEditor()->selectedText();
+    QString text = wrapper->textEditor()->textCursor().selectedText();
     int row = wrapper->textEditor()->getCurrentLine();
     int column = wrapper->textEditor()->getCurrentColumn();
     int scrollOffset = wrapper->textEditor()->getScrollOffset();
@@ -1513,9 +1435,6 @@ void Window::popupSettingsDialog()
     DSettingsDialog *dialog = new DSettingsDialog(this);
     dialog->widgetFactory()->registerWidget("fontcombobox", Settings::createFontComBoBoxHandle);
     dialog->widgetFactory()->registerWidget("keySequenceEdit", Settings::createKeySequenceEditHandle);
-    dialog->widgetFactory()->registerWidget("savingpathwgt", Settings::createSavingPathWgt);
-    dialog->resize(680, 300);
-    dialog->setMinimumSize(680, 300);
     m_settings->setSettingDialog(dialog);
 
     dialog->updateSettings(m_settings->settings);
@@ -1565,28 +1484,6 @@ void Window::setWindowTitleInfo()
             setWindowTitle(m_tabbar->currentName());
         }
     }
-}
-
-/**
- * @brief 取得当前文件打开文档目录，新建文档为"系统-文档"目录(~/Documents)
- * @return 当前文件打开文档目录
- */
-QString Window::getCurrentOpenFilePath()
-{
-    QString path;
-    EditWrapper *wrapper = currentWrapper();
-    if (wrapper) {
-        QString curFilePath = wrapper->textEditor() ? wrapper->textEditor()->getTruePath()
-                              : wrapper->filePath();
-        // 临时文件或备份文件，均返回"文档"目录
-        if (Utils::isDraftFile(curFilePath) || Utils::isBackupFile(curFilePath)) {
-            path = QDir::homePath() + "/Documents";
-        } else {
-            path = QFileInfo(curFilePath).absolutePath();
-        }
-    }
-
-    return path;
 }
 
 /**
@@ -3036,11 +2933,10 @@ void Window::slotSigAdjustFont(QString fontName)
     }
 }
 
-void Window::slotSigAdjustFontSize(qreal fontSize)
+void Window::slotSigAdjustFontSize(int fontSize)
 {
     for (EditWrapper *wrapper : m_wrappers.values()) {
         wrapper->textEditor()->setFontSize(fontSize);
-        wrapper->bottomBar()->setScaleLabelText(fontSize);
         wrapper->OnUpdateHighlighter();
     }
 
@@ -3210,15 +3106,7 @@ void Window::closeEvent(QCloseEvent *e)
             return;
         }
     } else {
-        bool save_tab_before_close = m_settings->settings->option("advance.startup.save_tab_before_close")->value().toBool();
-        if (!save_tab_before_close) {
-            if (!closeAllFiles()) {
-                e->ignore();
-                return;
-            }
-        } else {
-            backupFile();
-        }
+        backupFile();
     }
 
     // WARNING: 调用 QProcess::startDetached() 前同步配置，防止多线程对 qgetenv() 中的 environmentMutex 加锁

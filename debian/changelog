@@ -1,11 +1,4 @@
-deepin-editor (6.0.0) unstable; urgency=low
-
-  * New version 6.0.0
-  * Sync v23 source code from gerrit.
-
- -- renbin <renbin@uniontech.com>  Wed, 11 Jan 2023 14:04:01 +0000
-
-deepin-editor (5.10.13) unstable; urgency=low
+deepin-editor (5.9.6-1) unstable; urgency=low
 
   [ Hu Feng <hufeng@uniontech.com> Fri, 19 Feb 2021 15:32:28 +0800 ]
   * debian/control

@@ -10,10 +10,6 @@
 #include <QDebug>
 #include <QDir>
 
-#ifndef LINGLONG_PREFIX
-#define LINGLONG_PREFIX "/usr/"
-#endif
-
 ThemeListModel::ThemeListModel(QObject *parent)
     : QAbstractListModel(parent)
 {
@@ -70,7 +66,7 @@ QVariant ThemeListModel::data(const QModelIndex &index, int role) const
 
 void ThemeListModel::initThemes()
 {
-    QFileInfoList infoList = QDir(QString("%1share/deepin-editor/themes").arg(LINGLONG_PREFIX)).entryInfoList(QDir::Files | QDir::NoDotAndDotDot);
+    QFileInfoList infoList = QDir("/usr/share/deepin-editor/themes").entryInfoList(QDir::Files | QDir::NoDotAndDotDot);
 
     for (QFileInfo info : infoList) {
         QVariantMap jsonMap = Utils::getThemeMapFromPath(info.filePath());

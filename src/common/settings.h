@@ -53,7 +53,6 @@ public:
     //static QWidget *createFontComBoBoxHandle(QObject *obj);
     static QPair<QWidget*, QWidget*> createFontComBoBoxHandle(QObject *obj);
     static QPair<QWidget*, QWidget*> createKeySequenceEditHandle(QObject *obj);
-    static QWidget* createSavingPathWgt(QObject* objg);
     static Settings* instance();
     void setSettingDialog(DSettingsDialog *settingsDialog);
 
@@ -62,14 +61,9 @@ public:
     int m_iMinFontSize = 8;
     DSettings *settings {nullptr};
 
-    void setSavePath(int id,const QString& path);
-    QString getSavePath(int id);
-    void setSavePathId(int id);
-    int getSavePathId();
-
 signals:
     void sigAdjustFont(QString name);
-    void sigAdjustFontSize(qreal fontSize);
+    void sigAdjustFontSize(int fontSize);
     void sigAdjustTabSpaceNumber(int number);
     void sigAdjustWordWrap(bool enable);
     void sigAdjustBookmark(bool enable);
@@ -99,7 +93,7 @@ public slots:
 private:
     void updateAllKeysWithKeymap(QString keymap);
     void copyCustomizeKeysFromKeymap(QString keymap);
-    bool checkShortcutValid(const QString &Name, QString Key, QString &Reason, bool &bIsConflicts, QString defaultValue = QString::null);
+    bool checkShortcutValid(const QString &Name, QString Key, QString &Reason, bool &bIsConflicts);
     bool isShortcutConflict(const QString &Name, const QString &Key);
     DDialog *createDialog(const QString &title, const QString &content, const bool &bIsConflicts);
     void removeLockFiles();

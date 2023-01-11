@@ -18,12 +18,8 @@
 #define SAFE_DELETE(p)      if((p)) { delete (p); (p) = nullptr;}
 #endif
 
-#ifndef LINGLONG_PREFIX
-#define LINGLONG_PREFIX "/usr/"
-#endif
-
-#define DEEPIN_THEME        QString("%1share/deepin-editor/themes/deepin.theme").arg(LINGLONG_PREFIX)
-#define DEEPIN_DARK_THEME   QString("%1share/deepin-editor/themes/deepin_dark.theme").arg(LINGLONG_PREFIX)
+#define DEEPIN_THEME        "/usr/share/deepin-editor/themes/deepin.theme"
+#define DEEPIN_DARK_THEME   "/usr/share/deepin-editor/themes/deepin_dark.theme"
 #define DATA_SIZE_1024      1024
 #define TEXT_EIDT_MARK_ALL  "MARK_ALL"
 #define PROC_MEMINFO_PATH   "/proc/meminfo"
@@ -72,8 +68,6 @@ public:
     // 返回文件是否为备份文件
     static bool isBackupFile(const QString &filepath);
     static QStringList cleanPath(const QStringList &filePaths);
-    // 返回程序使用的本地数据路径(存放临时、备份文件)
-    static QString localDataPath();
     static const QStringList getEncodeList();
     static QPixmap renderSVG(const QString &filePath, const QSize &size, bool bIsScale = true);
     static QList<QColor> getHiglightColorList();
@@ -109,7 +103,6 @@ public:
 
     static bool isWayland();
 
-    static QString getActiveColor();
     // 计算换行内容 text: 原始文本内容， nWidth: 一行最大宽度， font:字体大小, nElideRow: 最大显示行数，超出最大行时，中间内容加···省略号显示
     static QString lineFeed(const QString &text, int nWidth, const QFont &font, int nElidedRow = 2);
 

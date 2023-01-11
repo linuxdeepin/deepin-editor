@@ -97,8 +97,8 @@ void Tabbar::addTabWithIndex(int index, const QString &filePath, const QString &
     QString trimmedName = replaceMnemonic(tabName.simplified());
     DTabBar::insertTab(index, trimmedName);
     DTabBar::setCurrentIndex(index);
-    if (filePath.contains(Utils::localDataPath())) {
-        if (Utils::isBackupFile(filePath) && !tipPath.isNull() && tipPath.length() > 0) {
+    if (filePath.contains("/.local/share/deepin/deepin-editor/")) {
+        if (filePath.contains("/.local/share/deepin/deepin-editor/backup-files") && !tipPath.isNull() && tipPath.length() > 0) {
             setTabToolTip(index, tipPath);
         } else {
             setTabToolTip(index, tabName);
@@ -235,9 +235,9 @@ void Tabbar::updateTab(int index, const QString &filePath, const QString &tabNam
     setTabText(index, tabName);
     m_tabPaths[index] = filePath;
     m_tabTruePaths[index] = filePath;
-
     //show file path at tab,blank file only show it's name.
-    if (filePath.contains(Utils::localDataPath())) {
+
+    if (filePath.contains("/.local/share/deepin/deepin-editor/")) {
         setTabToolTip(index, tabName);
     } else {
         QString path = filePath;

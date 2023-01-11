@@ -43,7 +43,6 @@ public slots:
     void setCurrentAction(QAction*);
     void setCurrentTextOnly(const QString& name);
     void slotRequestMenu(bool request);
-    void setCheckedExclusive(QAction* action,const QString& name);
 
 public:
     //创建编码菜单

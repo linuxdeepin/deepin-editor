@@ -601,18 +601,6 @@ QStringList Utils::cleanPath(const QStringList &filePaths)
     return paths;
 }
 
-/**
- * @return 返回程序使用的默认数据(存放临时、备份文件)存放位置，不同环境下路径不同
- *  [debian]    /home/user/.local/share/deepin/deepin-editor/
- *  [linglong]  /home/user/.linglong/org.deepin.editor/share/deepin/deepin-editor/
- */
-QString Utils::localDataPath()
-{
-    auto dataPaths = Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation));
-    return dataPaths.isEmpty() ? QDir::homePath() + "/.local/share/deepin/deepin-editor/"
-           : dataPaths.first();
-}
-
 const QStringList Utils::getEncodeList()
 {
     QStringList encodeList;
@@ -786,7 +774,7 @@ bool Utils::activeWindowFromDock(quintptr winId)
                                      "com.deepin.dde.daemon.Dock");
     QDBusReply<void> reply = dockDbusInterface.call("ActivateWindow", winId);
     if (!reply.isValid()) {
-        qDebug() << "call org.deepin.dde.daemon.Dock1 failed" << reply.error();
+        qDebug() << "call com.deepin.dde.daemon.Dock failed" << reply.error();
         bRet = false;
     }
 
@@ -822,8 +810,12 @@ QString Utils::getSystemLan()
     if (!m_systemLanguage.isEmpty()) {
         return m_systemLanguage;
     } else {
-        m_systemLanguage = QLocale::system().name();
-        qWarning() << "getSystemLan is" << m_systemLanguage;
+        QDBusInterface ie("com.deepin.daemon.LangSelector",
+                          "/com/deepin/daemon/LangSelector",
+                          "com.deepin.daemon.LangSelector",
+                          QDBusConnection::sessionBus());
+
+        m_systemLanguage = ie.property("CurrentLocale").toString();
         return m_systemLanguage;
     }
 }
@@ -839,25 +831,6 @@ bool Utils::isWayland()
 
     return protocol.contains("wayland");
 
-}
-
-
-QString Utils::getActiveColor()
-{
-    static QString activeColor;
-    if (!activeColor.isEmpty()) {
-        return activeColor;
-    } else {
-        QDBusInterface d("org.deepin.dde.Appearance1",
-                         "/org/deepin/dde/Appearance1",
-                         "org.deepin.dde.Appearance1",
-                         QDBusConnection::sessionBus());
-
-        activeColor = d.property("QtActiveColor").toString();
-        qDebug() << "getActiveColor is " << activeColor;
-
-        return activeColor;
-    }
 }
 
 QString Utils::lineFeed(const QString &text, int nWidth, const QFont &font, int nElidedRow)
