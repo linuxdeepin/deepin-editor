@@ -26,6 +26,7 @@ public:
     void updateBookMark();
     void updateCodeFlod();
     void updateAll();
+    TextEdit* getEdit();
 protected:
     void paintEvent(QPaintEvent *event);
 public:
