@@ -14,16 +14,18 @@
 #include <DMainWindow>
 #include <DWidgetUtil>
 #include <DLog>
+#include <DApplicationSettings>
+#include <DSettingsOption>
 
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QDBusConnection>
 #include <QDBusInterface>
-#include <QDebug>
 #include <QDesktopWidget>
 #include <QScreen>
+#include <QDebug>
+
 #include <iostream>
-#include <DApplicationSettings>
 
 DWIDGET_USE_NAMESPACE
 
@@ -33,18 +35,17 @@ int main(int argc, char *argv[])
 
     PerformanceMonitor::initializeAppStart();
     if (!QString(qgetenv("XDG_CURRENT_DESKTOP")).toLower().startsWith("deepin")) {
-
         setenv("XDG_CURRENT_DESKTOP", "Deepin", 1);
     }
 
     qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
     QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
-    //QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+    // QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     EditorApplication app(argc, argv);
     Dtk::Core::DLogManager::registerConsoleAppender();
     Dtk::Core::DLogManager::registerFileAppender();
-    //save theme
+    // save theme
     DApplicationSettings savetheme;
 
     // Parser input arguments.
@@ -77,10 +78,17 @@ int main(int argc, char *argv[])
         };
         Eventlogutils::GetInstance()->writeLogs(objStartEvent);
 
-        if (hasWindowFlag) {
-            startManager->openFilesInWindow(urls);
+        bool save_tab_before_close =
+            Settings::instance()->settings->option("advance.startup.save_tab_before_close")->value().toBool();
+        if (!save_tab_before_close && urls.isEmpty()) {
+            auto window = startManager->createWindow(true);
+            window->addBlankTab();
         } else {
-            startManager->openFilesInTab(urls);
+            if (hasWindowFlag) {
+                startManager->openFilesInWindow(urls);
+            } else {
+                startManager->openFilesInTab(urls);
+            }
         }
 
         dbus.registerObject("/com/deepin/Editor", startManager, QDBusConnection::ExportScriptableSlots);
@@ -90,10 +98,8 @@ int main(int argc, char *argv[])
     }
     // Just send dbus message to exist editor process.
     else {
-        QDBusInterface notification("com.deepin.Editor",
-                                    "/com/deepin/Editor",
-                                    "com.deepin.Editor",
-                                    QDBusConnection::sessionBus());
+        QDBusInterface notification(
+            "com.deepin.Editor", "/com/deepin/Editor", "com.deepin.Editor", QDBusConnection::sessionBus());
 
         QList<QVariant> args;
         args << urls;

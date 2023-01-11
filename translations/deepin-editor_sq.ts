@@ -16,13 +16,18 @@
         <source>Characters %1</source>
         <translation>Shenja %1</translation>
     </message>
+    <message>
+        <location filename="../src/widgets/bottombar.cpp" line="53"/>
+        <source>Loading:</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>DDropdownMenu</name>
     <message>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="290"/>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="341"/>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="346"/>
+        <location filename="../src/widgets/ddropdownmenu.cpp" line="327"/>
+        <location filename="../src/widgets/ddropdownmenu.cpp" line="371"/>
+        <location filename="../src/widgets/ddropdownmenu.cpp" line="376"/>
         <source>None</source>
         <translation>Asnjë</translation>
     </message>
@@ -30,62 +35,62 @@
 <context>
     <name>EditWrapper</name>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="246"/>
-        <location filename="../src/editor/editwrapper.cpp" line="314"/>
-        <location filename="../src/editor/editwrapper.cpp" line="439"/>
-        <location filename="../src/editor/editwrapper.cpp" line="702"/>
+        <location filename="../src/editor/editwrapper.cpp" line="207"/>
+        <location filename="../src/editor/editwrapper.cpp" line="270"/>
+        <location filename="../src/editor/editwrapper.cpp" line="327"/>
+        <location filename="../src/editor/editwrapper.cpp" line="573"/>
         <source>Save</source>
         <translation>Ruaje</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="434"/>
+        <location filename="../src/editor/editwrapper.cpp" line="322"/>
         <source>Do you want to save this file?</source>
         <translation>Doni të ruhet kjo kartelë?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="312"/>
-        <location filename="../src/editor/editwrapper.cpp" line="437"/>
+        <location filename="../src/editor/editwrapper.cpp" line="268"/>
+        <location filename="../src/editor/editwrapper.cpp" line="325"/>
         <source>Cancel</source>
         <translation>Anuloje</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="309"/>
+        <location filename="../src/editor/editwrapper.cpp" line="265"/>
         <source>Encoding changed. Do you want to save the file now?</source>
         <translation>Kodimi ndryshoi. Doni të ruhet kartela tani?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="438"/>
+        <location filename="../src/editor/editwrapper.cpp" line="326"/>
         <source>Discard</source>
         <translation>Hidhe Tej</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="564"/>
+        <location filename="../src/editor/editwrapper.cpp" line="451"/>
         <source>You do not have permission to save %1</source>
         <translation>S’keni leje të ruani %1</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="774"/>
+        <location filename="../src/editor/editwrapper.cpp" line="645"/>
         <source>File removed on the disk. Save it now?</source>
         <translation>Kartela u hoq nga disku. Të ruhet tani?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="779"/>
+        <location filename="../src/editor/editwrapper.cpp" line="650"/>
         <source>File has changed on disk. Reload?</source>
         <translation>Kartela ka ndryshuar në disk. Të ringarkohet?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="801"/>
-        <location filename="../src/widgets/bottombar.cpp" line="45"/>
+        <location filename="../src/editor/editwrapper.cpp" line="672"/>
+        <location filename="../src/widgets/bottombar.cpp" line="82"/>
         <source>INSERT</source>
         <translation>FUTE</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="804"/>
+        <location filename="../src/editor/editwrapper.cpp" line="675"/>
         <source>OVERWRITE</source>
         <translation>MBISHKRUAJE</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="807"/>
+        <location filename="../src/editor/editwrapper.cpp" line="678"/>
         <source>R/O</source>
         <translation>V/L</translation>
     </message>
@@ -116,7 +121,7 @@
 <context>
     <name>JumpLineBar</name>
     <message>
-        <location filename="../src/controls/jumplinebar.cpp" line="28"/>
+        <location filename="../src/controls/jumplinebar.cpp" line="46"/>
         <source>Go to Line: </source>
         <translation>Shko te Rreshti: </translation>
     </message>
@@ -135,6 +140,24 @@
     </message>
 </context>
 <context>
+    <name>PathSettingWgt</name>
+    <message>
+        <location filename="../src/widgets/pathsettintwgt.cpp" line="53"/>
+        <source>Remember the last used path</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/widgets/pathsettintwgt.cpp" line="54"/>
+        <source>Same path as the current file</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/widgets/pathsettintwgt.cpp" line="55"/>
+        <source>Customize the default path</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
     <name>QObject</name>
     <message>
         <location filename="../src/editorapplication.cpp" line="19"/>
@@ -142,12 +165,12 @@
         <translation>Përpunues Tekstesh</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="248"/>
-        <location filename="../src/editor/editwrapper.cpp" line="704"/>
-        <location filename="../src/widgets/window.cpp" line="1089"/>
-        <location filename="../src/widgets/window.cpp" line="1111"/>
-        <location filename="../src/widgets/window.cpp" line="1203"/>
-        <location filename="../src/widgets/window.cpp" line="1218"/>
+        <location filename="../src/editor/editwrapper.cpp" line="209"/>
+        <location filename="../src/editor/editwrapper.cpp" line="575"/>
+        <location filename="../src/widgets/window.cpp" line="972"/>
+        <location filename="../src/widgets/window.cpp" line="994"/>
+        <location filename="../src/widgets/window.cpp" line="1087"/>
+        <location filename="../src/widgets/window.cpp" line="1102"/>
         <source>Encoding</source>
         <translation>Kodim</translation>
     </message>
@@ -183,9 +206,9 @@
         <translation>Skemë tastiere</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="16"/>
-        <location filename="../src/controls/settingsdialog.cpp" line="92"/>
-        <location filename="../src/widgets/window.cpp" line="1811"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="31"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="107"/>
+        <location filename="../src/widgets/window.cpp" line="1510"/>
         <source>Window</source>
         <translation>Dritare</translation>
     </message>
@@ -575,134 +598,154 @@
         <translation>Gjerësi Tabulacioni</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="96"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="110"/>
+        <source>Paste by pressing a middle mouse button</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="112"/>
+        <source>Startup</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="113"/>
+        <source>Reopen last closed tabs</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="115"/>
+        <source>Open/Save Settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="117"/>
         <source>Word wrap</source>
         <translation>Mbështjellje fjale</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="97"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="118"/>
         <source>Code folding flag</source>
         <translation>Shenjë për mbështjellje kodi</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="98"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="119"/>
         <source>Show line numbers</source>
         <translation>Shfaq numra rreshtash</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="99"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="120"/>
         <source>Show bookmarks icon</source>
         <translation>Shfaq ikonë faqerojtësish</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="100"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="121"/>
         <source>Show whitespaces and tabs</source>
         <translation>Shfaq hapësira të zbrazëta dhe tabulacione</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="101"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="122"/>
         <source>Highlight current line</source>
         <translation>Thekso rreshtin e tanishëm</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="102"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="123"/>
         <source>Color mark</source>
         <translation>Shenjë ngjyre</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="105"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="126"/>
         <source>Unicode</source>
         <translation>Unikod</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="106"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="127"/>
         <source>WesternEuropean</source>
         <translation>Europiane Perëndimore</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="107"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="128"/>
         <source>CentralEuropean</source>
         <translation>Europiane Qendrore</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="108"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="129"/>
         <source>Baltic</source>
         <translation>Baltike</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="109"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="130"/>
         <source>Cyrillic</source>
         <translation>Cirilike</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="110"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="131"/>
         <source>Arabic</source>
         <translation>Arabe</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="115"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="136"/>
         <source>Celtic</source>
         <translation>Kelte</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="116"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="137"/>
         <source>SouthEasternEuropean</source>
         <translation>Europiane Juglindore</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="111"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="132"/>
         <source>Greek</source>
         <translation>Greke</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="112"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="133"/>
         <source>Hebrew</source>
         <translation>Hebraishte</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="117"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="138"/>
         <source>ChineseSimplified</source>
         <translation>Kineze të Thjeshtuara</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="118"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="139"/>
         <source>ChineseTraditional</source>
         <translation>Kineze Tradicionale</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="119"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="140"/>
         <source>Japanese</source>
         <translation>Japoneze</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="120"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="141"/>
         <source>Korean</source>
         <translation>Koreane</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="114"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="135"/>
         <source>Thai</source>
         <translation>Tajlandeze</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="113"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="134"/>
         <source>Turkish</source>
         <translation>Turke</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="121"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="142"/>
         <source>Vietnamese</source>
         <translation>Vietnameze</translation>
     </message>
     <message>
-        <location filename="../src/startmanager.cpp" line="832"/>
+        <location filename="../src/startmanager.cpp" line="766"/>
         <source>File not saved</source>
         <translation>Kartela s’u ruajt</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1112"/>
-        <location filename="../src/widgets/window.cpp" line="1204"/>
-        <location filename="../src/widgets/window.cpp" line="1219"/>
+        <location filename="../src/widgets/window.cpp" line="995"/>
+        <location filename="../src/widgets/window.cpp" line="1088"/>
+        <location filename="../src/widgets/window.cpp" line="1103"/>
         <source>Line Endings</source>
         <translation>Funde Rreshtash</translation>
     </message>
@@ -752,58 +795,58 @@
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../src/common/settings.cpp" line="115"/>
+        <location filename="../src/common/settings.cpp" line="133"/>
         <source>Standard</source>
         <translation>Standarde</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="115"/>
+        <location filename="../src/common/settings.cpp" line="133"/>
         <source>Customize</source>
         <translation>Përshtateni</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="128"/>
+        <location filename="../src/common/settings.cpp" line="146"/>
         <source>Normal</source>
         <translation>Normale</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="128"/>
+        <location filename="../src/common/settings.cpp" line="146"/>
         <source>Maximum</source>
         <translation>Maksimum</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="128"/>
+        <location filename="../src/common/settings.cpp" line="146"/>
         <source>Fullscreen</source>
         <translation>Sa krejt ekrani</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="316"/>
+        <location filename="../src/common/settings.cpp" line="412"/>
         <source>This shortcut conflicts with system shortcut %1</source>
         <translation>Kjo shkurtore përplaset me shkurtoren e sistemit %1</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="318"/>
+        <location filename="../src/common/settings.cpp" line="414"/>
         <source>This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately</source>
         <translation>Kjo shkurtore përplaset me %1, klikoni mbi Zëvendësoje për ta bërë këtë shkurtore të hyjë në fuqi menjëherë</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="464"/>
-        <location filename="../src/common/settings.cpp" line="472"/>
+        <location filename="../src/common/settings.cpp" line="560"/>
+        <location filename="../src/common/settings.cpp" line="568"/>
         <source>The shortcut %1 is invalid, please set another one.</source>
         <translation>Shkurtorja %1 është e pavlefshme, ju lutemi, caktoni një tjetër.</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="507"/>
+        <location filename="../src/common/settings.cpp" line="603"/>
         <source>Cancel</source>
         <translation>Anuloje</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="508"/>
+        <location filename="../src/common/settings.cpp" line="604"/>
         <source>Replace</source>
         <translation>Zëvendësoje</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="510"/>
+        <location filename="../src/common/settings.cpp" line="606"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
@@ -852,259 +895,257 @@
 <context>
     <name>TextEdit</name>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="259"/>
+        <location filename="../src/editor/dtextedit.cpp" line="236"/>
         <source>Undo</source>
         <translation>Zhbëje</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="260"/>
+        <location filename="../src/editor/dtextedit.cpp" line="237"/>
         <source>Redo</source>
         <translation>Ribëje</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="261"/>
+        <location filename="../src/editor/dtextedit.cpp" line="238"/>
         <source>Cut</source>
         <translation>Prije</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="262"/>
+        <location filename="../src/editor/dtextedit.cpp" line="239"/>
         <source>Copy</source>
         <translation>Kopjoje</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="263"/>
+        <location filename="../src/editor/dtextedit.cpp" line="240"/>
         <source>Paste</source>
         <translation>Ngjite</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="264"/>
+        <location filename="../src/editor/dtextedit.cpp" line="241"/>
         <source>Delete</source>
         <translation>Fshije</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="265"/>
+        <location filename="../src/editor/dtextedit.cpp" line="242"/>
         <source>Select All</source>
         <translation>Përzgjidhi Krejt</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="266"/>
-        <location filename="../src/widgets/window.cpp" line="450"/>
+        <location filename="../src/editor/dtextedit.cpp" line="243"/>
+        <location filename="../src/widgets/window.cpp" line="363"/>
         <source>Find</source>
         <translation>Gjej</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="267"/>
-        <location filename="../src/widgets/window.cpp" line="451"/>
+        <location filename="../src/editor/dtextedit.cpp" line="244"/>
+        <location filename="../src/widgets/window.cpp" line="364"/>
         <source>Replace</source>
         <translation>Zëvendësoje</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="268"/>
+        <location filename="../src/editor/dtextedit.cpp" line="245"/>
         <source>Go to Line</source>
         <translation>Shko te Rreshti</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="269"/>
+        <location filename="../src/editor/dtextedit.cpp" line="246"/>
         <source>Turn on Read-Only mode</source>
         <translation>Aktivizo mënyrën “Vetëm Për Lexim”</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="270"/>
+        <location filename="../src/editor/dtextedit.cpp" line="247"/>
         <source>Turn off Read-Only mode</source>
         <translation>Çaktivizo mënyrën “Vetëm Për Lexim”</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="271"/>
+        <location filename="../src/editor/dtextedit.cpp" line="248"/>
         <source>Fullscreen</source>
         <translation>Sa krejt ekrani</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="272"/>
+        <location filename="../src/editor/dtextedit.cpp" line="249"/>
         <source>Exit fullscreen</source>
         <translation>Dil nga mënyra sa krejt ekrani</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="273"/>
+        <location filename="../src/editor/dtextedit.cpp" line="250"/>
         <source>Display in file manager</source>
         <translation>Shfaqe në përgjegjës kartelash</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="274"/>
-        <location filename="../src/editor/dtextedit.cpp" line="326"/>
+        <location filename="../src/editor/dtextedit.cpp" line="251"/>
+        <location filename="../src/editor/dtextedit.cpp" line="303"/>
         <source>Add Comment</source>
         <translation>Shtoni Koment</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="275"/>
+        <location filename="../src/editor/dtextedit.cpp" line="252"/>
         <source>Text to Speech</source>
         <translation>Nga Tekst Në të Folur</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="276"/>
+        <location filename="../src/editor/dtextedit.cpp" line="253"/>
         <source>Stop reading</source>
         <translation>Ndale leximin</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="277"/>
+        <location filename="../src/editor/dtextedit.cpp" line="254"/>
         <source>Speech to Text</source>
         <translation>Nga e Folur Në Tekst</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="278"/>
+        <location filename="../src/editor/dtextedit.cpp" line="255"/>
         <source>Translate</source>
         <translation>Përkthejeni</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="279"/>
+        <location filename="../src/editor/dtextedit.cpp" line="256"/>
         <source>Column Mode</source>
         <translation>Mënyrë Shtylla</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="280"/>
+        <location filename="../src/editor/dtextedit.cpp" line="257"/>
         <source>Add bookmark</source>
         <translation>Shtoni faqerojtës</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="281"/>
+        <location filename="../src/editor/dtextedit.cpp" line="258"/>
         <source>Remove Bookmark</source>
         <translation>Hiqe Faqerojtësin</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="282"/>
+        <location filename="../src/editor/dtextedit.cpp" line="259"/>
         <source>Previous bookmark</source>
         <translation>Faqerojtësi i mëparshëm</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="283"/>
+        <location filename="../src/editor/dtextedit.cpp" line="260"/>
         <source>Next bookmark</source>
         <translation>Faqerojtësi pasues</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="284"/>
+        <location filename="../src/editor/dtextedit.cpp" line="261"/>
         <source>Remove All Bookmarks</source>
         <translation>Hiqi Krejt Faqerojtësit</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="285"/>
+        <location filename="../src/editor/dtextedit.cpp" line="262"/>
         <source>Fold All</source>
         <translation>Palosi Krejt</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="286"/>
+        <location filename="../src/editor/dtextedit.cpp" line="263"/>
         <source>Fold Current Level</source>
         <translation>Palos Nivelin e Tanishëm</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="287"/>
+        <location filename="../src/editor/dtextedit.cpp" line="264"/>
         <source>Unfold All</source>
         <translation>Shpalosi Krejt</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="288"/>
+        <location filename="../src/editor/dtextedit.cpp" line="265"/>
         <source>Unfold Current Level</source>
         <translation>Shpalos Nivelin e Tanishëm</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="293"/>
+        <location filename="../src/editor/dtextedit.cpp" line="270"/>
         <source>Color Mark</source>
         <translation>Shenjë Ngjyre</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="297"/>
+        <location filename="../src/editor/dtextedit.cpp" line="274"/>
         <source>Clear All Marks</source>
         <translation>Hiqi Krejt Shenjat</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="298"/>
+        <location filename="../src/editor/dtextedit.cpp" line="275"/>
         <source>Clear Last Mark</source>
         <translation>Spastro Shenjën e Fundit</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="307"/>
+        <location filename="../src/editor/dtextedit.cpp" line="284"/>
         <source>Mark</source>
         <translation>Vëri shenjë</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="319"/>
+        <location filename="../src/editor/dtextedit.cpp" line="296"/>
         <source>Mark All</source>
         <translation>Vëru Shenjë të Tërëve</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="327"/>
+        <location filename="../src/editor/dtextedit.cpp" line="304"/>
         <source>Remove Comment</source>
         <translation>Hiqe Komentin</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="2672"/>
+        <location filename="../src/editor/dtextedit.cpp" line="2576"/>
         <source>Copy failed: not enough memory</source>
         <translation>Kopjimi dështoi: s’ka kujtesë të mjaftueshme</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="2756"/>
+        <location filename="../src/editor/dtextedit.cpp" line="2660"/>
         <source>Press ALT and click lines to edit in column mode</source>
         <translation>Shtypni tastin ALT dhe klikoni mbi rreshtat që të përpunohen nën mënyrën shtyllë</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="370"/>
+        <location filename="../src/editor/dtextedit.cpp" line="347"/>
         <source>Change Case</source>
         <translation>Këmbe Shkronja</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="371"/>
+        <location filename="../src/editor/dtextedit.cpp" line="348"/>
         <source>Upper Case</source>
         <translation>Kaloje në Shkronja të Mëdha</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="372"/>
+        <location filename="../src/editor/dtextedit.cpp" line="349"/>
         <source>Lower Case</source>
         <translation>Kaloje në Shkronja të Vogla</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="373"/>
+        <location filename="../src/editor/dtextedit.cpp" line="350"/>
         <source>Capitalize</source>
         <translation>Kaloje Në Shkronjë të Madhe</translation>
     </message>
     <message>
-        <location filename="../src/widgets/bottombar.cpp" line="49"/>
+        <location filename="../src/widgets/bottombar.cpp" line="86"/>
         <source>None</source>
         <translation>Asnjë</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1222"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1185"/>
         <source>Selected line(s) copied</source>
         <translation>U kopjua rreshti(at) i përzgjedhur</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1228"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1191"/>
         <source>Current line copied</source>
         <translation>U kopjua rreshti i tanishëm</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1248"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1211"/>
         <source>Selected line(s) clipped</source>
         <translation>Rreshti(at) i përzgjedhur u qeth</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1259"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1223"/>
         <source>Current line clipped</source>
         <translation>Rreshti i tanishëm u qeth</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="2682"/>
+        <location filename="../src/editor/dtextedit.cpp" line="2586"/>
         <source>Paste failed: not enough memory</source>
         <translation>Ngjitja dështoi: kujtesë e pamjaftueshme</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3617"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3558"/>
         <source>Read-Only mode is off</source>
         <translation>Mënyra “Vetëm Për Lexim” është off</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3624"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3643"/>
-        <location filename="../src/editor/dtextedit.cpp" line="6656"/>
-        <location filename="../src/editor/dtextedit.cpp" line="6664"/>
-        <location filename="../src/editor/dtextedit.cpp" line="6675"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3565"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3584"/>
+        <location filename="../src/editor/dtextedit.cpp" line="6285"/>
         <source>Read-Only mode is on</source>
         <translation>Mënyra “Vetëm Për Lexim” është on</translation>
     </message>
@@ -1120,130 +1161,129 @@
 <context>
     <name>Window</name>
     <message>
-        <location filename="../src/controls/warningnotices.cpp" line="21"/>
-        <location filename="../src/widgets/window.cpp" line="446"/>
+        <location filename="../src/controls/warningnotices.cpp" line="38"/>
+        <location filename="../src/widgets/window.cpp" line="359"/>
         <source>Save as</source>
         <translation>Ruaje si</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="442"/>
+        <location filename="../src/widgets/window.cpp" line="355"/>
         <source>New window</source>
         <translation>Dritare e re</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="443"/>
+        <location filename="../src/widgets/window.cpp" line="356"/>
         <source>New tab</source>
         <translation>Skedë e re</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="444"/>
+        <location filename="../src/widgets/window.cpp" line="357"/>
         <source>Open file</source>
         <translation>Hap kartelë</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="445"/>
-        <location filename="../src/widgets/window.cpp" line="2796"/>
+        <location filename="../src/widgets/window.cpp" line="358"/>
+        <location filename="../src/widgets/window.cpp" line="2260"/>
         <source>Save</source>
         <translation>Ruaje</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="447"/>
+        <location filename="../src/widgets/window.cpp" line="360"/>
         <source>Print</source>
         <translation>Shtype</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="448"/>
+        <location filename="../src/widgets/window.cpp" line="361"/>
         <source>Switch theme</source>
         <translation>Këmbeni temë</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="449"/>
-        <location filename="../src/widgets/window.cpp" line="1871"/>
+        <location filename="../src/widgets/window.cpp" line="362"/>
+        <location filename="../src/widgets/window.cpp" line="1570"/>
         <source>Settings</source>
         <translation>Rregullime</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="563"/>
-        <location filename="../src/widgets/window.cpp" line="3047"/>
+        <location filename="../src/widgets/window.cpp" line="473"/>
+        <location filename="../src/widgets/window.cpp" line="2512"/>
         <source>Read-Only</source>
         <translation>Vetëm-Lexim</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="579"/>
+        <location filename="../src/widgets/window.cpp" line="489"/>
         <source>You do not have permission to open %1</source>
         <translation>S’keni leje të hapni %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="619"/>
-        <location filename="../src/widgets/window.cpp" line="2359"/>
+        <location filename="../src/widgets/window.cpp" line="524"/>
         <source>Invalid file: %1</source>
         <translation>Kartelë e pavlefshme: %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="733"/>
-        <location filename="../src/widgets/window.cpp" line="779"/>
+        <location filename="../src/widgets/window.cpp" line="604"/>
+        <location filename="../src/widgets/window.cpp" line="646"/>
         <source>Do you want to save this file?</source>
         <translation>Doni të ruhet kjo kartelë?</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1027"/>
+        <location filename="../src/widgets/window.cpp" line="910"/>
         <source>You do not have permission to save %1</source>
         <translation>S’keni leje të ruani %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1051"/>
+        <location filename="../src/widgets/window.cpp" line="934"/>
         <source>Saved successfully</source>
         <translation>U ruajt me sukses</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1087"/>
-        <location filename="../src/widgets/window.cpp" line="1160"/>
-        <location filename="../src/widgets/window.cpp" line="1201"/>
+        <location filename="../src/widgets/window.cpp" line="970"/>
+        <location filename="../src/widgets/window.cpp" line="1044"/>
+        <location filename="../src/widgets/window.cpp" line="1085"/>
         <source>Save File</source>
         <translation>Ruaje Kartelën</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1162"/>
+        <location filename="../src/widgets/window.cpp" line="1046"/>
         <source>Encoding</source>
         <translation>Kodim</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1350"/>
+        <location filename="../src/widgets/window.cpp" line="1236"/>
         <source>Read-Only mode is on</source>
         <translation>Mënyra “Vetëm Për Lexim” është on</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1770"/>
+        <location filename="../src/widgets/window.cpp" line="1469"/>
         <source>Current location remembered</source>
         <translation>Vendi i tanishëm u mbajt mend</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1821"/>
+        <location filename="../src/widgets/window.cpp" line="1520"/>
         <source>Ctrl+&apos;=&apos;</source>
         <translation>Ctrl+&apos;=&apos;</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1824"/>
+        <location filename="../src/widgets/window.cpp" line="1523"/>
         <source>Ctrl+&apos;-&apos;</source>
         <translation>Ctrl+&apos;-&apos;</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1853"/>
+        <location filename="../src/widgets/window.cpp" line="1552"/>
         <source>Editor</source>
         <translation>Përpunues</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="2451"/>
+        <location filename="../src/widgets/window.cpp" line="1931"/>
         <source>Untitled %1</source>
         <translation>%1 pa titull</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="2794"/>
+        <location filename="../src/widgets/window.cpp" line="2258"/>
         <source>Cancel</source>
         <translation>Anuloje</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="2795"/>
+        <location filename="../src/widgets/window.cpp" line="2259"/>
         <source>Discard</source>
         <translation>Hidhe Tej</translation>
     </message>

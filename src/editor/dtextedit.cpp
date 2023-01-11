@@ -16,6 +16,7 @@
 #include "indenttextcommond.h"
 #include "undolist.h"
 #include "changemarkcommand.h"
+#include "endlineformatcommond.h"
 
 #include <KSyntaxHighlighting/definition.h>
 #include <KSyntaxHighlighting/syntaxhighlighter.h>
@@ -108,8 +109,8 @@ TextEdit::TextEdit(QWidget *parent)
     connect(m_pUndoStack, &QUndoStack::canUndoChanged, this, &TextEdit::slotCanUndoChanged);
 
     QDBusConnection dbus = QDBusConnection::sessionBus();
-    dbus.systemBus().connect("com.deepin.daemon.Gesture",
-                             "/com/deepin/daemon/Gesture", "com.deepin.daemon.Gesture",
+    dbus.systemBus().connect("org.deepin.dde.Gesture1",
+                             "/org/deepin/dde/Gesture1", "org.deepin.dde.Gesture1",
                              "Event",
                              this, SLOT(fingerZoom(QString, QString, int)));
 
@@ -136,6 +137,9 @@ TextEdit::TextEdit(QWidget *parent)
     // Don't blink the cursor when selecting text
     // Recover blink when not selecting text.
     connect(this, &TextEdit::selectionChanged, this, &TextEdit::slotSelectionChanged, Qt::QueuedConnection);
+
+    // 系统调色板更新时重绘列选取项
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::applicationPaletteChanged, this, &TextEdit::onAppPaletteChanged);
 }
 
 TextEdit::~TextEdit()
@@ -837,7 +841,7 @@ void TextEdit::moveToEnd()
     } else {
         moveCursorNoBlink(QTextCursor::End);
     }
-    
+
     // 移动展示区域，手动高亮文本
     m_wrapper->OnUpdateHighlighter();
 }
@@ -1648,7 +1652,7 @@ void TextEdit::setFontFamily(QString name)
     updateLeftAreaWidget();
 }
 
-void TextEdit::setFontSize(int size)
+void TextEdit::setFontSize(qreal size)
 {
     // Update font.
     m_fontSize = size;
@@ -1662,7 +1666,7 @@ void TextEdit::updateFont()
 {
     QFont font = document()->defaultFont();
     font.setFixedPitch(true);
-    font.setPointSize(m_fontSize);
+    font.setPointSizeF(m_fontSize);
     font.setFamily(m_fontName);
     setFont(font);
     setTabStopWidth(m_tabSpaceNumber * QFontMetrics(font).width(QChar(0x2192)));
@@ -1751,7 +1755,7 @@ void TextEdit::replaceNext(const QString &replaceText, const QString &withText)
 
         // 获取替换文本区域和颜色标记区域的交叉关系
         Utils::RegionIntersectType type = Utils::checkRegionIntersect(
-                    cursor.selectionStart(), cursor.selectionStart() + replaceText.size(), info.start, info.end);
+                                              cursor.selectionStart(), cursor.selectionStart() + replaceText.size(), info.start, info.end);
         // 仅进行单次处理
         switch (type) {
         case Utils::ELeft:
@@ -2028,6 +2032,19 @@ bool TextEdit::updateKeywordSelectionsInView(QString keyword, QTextCharFormat ch
         int endPos = endBlock.position() + endBlock.length() - 1;
 
         cursor = document()->find(keyword, beginPos);
+        QString multiLineText;
+        if (keyword.contains("\n")) {
+            auto temp = this->textCursor();
+            temp.setPosition(beginPos);
+            while (temp.position() < endPos) {
+                temp.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+                multiLineText += temp.selectedText();
+                multiLineText += "\n";
+                temp.setPosition(temp.position() + 1);
+            }
+            cursor = findCursor(keyword, multiLineText, 0, false, beginPos);
+
+        }
         if (cursor.isNull()) {
             return false;
         }
@@ -2035,10 +2052,15 @@ bool TextEdit::updateKeywordSelectionsInView(QString keyword, QTextCharFormat ch
         while (!cursor.isNull()) {
             extra.cursor = cursor;
             /* 查找字符时，查找到完全相等的时候才高亮，如查找小写f时，大写的F不高亮 */
-            if (!extra.cursor.selectedText().compare(keyword)) {
+            if (!extra.cursor.selectedText().compare(keyword) || keyword.contains("\n")) {
                 listSelection->append(extra);
             }
+
             cursor = document()->find(keyword, cursor);
+            if (keyword.contains("\n")) {
+                int pos = std::max(extra.cursor.position(), extra.cursor.anchor());
+                cursor = findCursor(keyword, multiLineText, pos - beginPos, false, beginPos);
+            }
 
             if (cursor.position() > endPos) {
                 break;
@@ -2061,10 +2083,10 @@ bool TextEdit::searchKeywordSeletion(QString keyword, QTextCursor cursor, bool f
     int offsetLines = 3;
 
     if (findNext) {
-        QTextCursor next = document()->find(keyword, cursor,QTextDocument::FindCaseSensitively);
-        if(keyword.contains("\n")){
-            int pos = std::max(cursor.position(),cursor.anchor());
-            next = findCursor(keyword,this->toPlainText(),pos);
+        QTextCursor next = document()->find(keyword, cursor, QTextDocument::FindCaseSensitively);
+        if (keyword.contains("\n")) {
+            int pos = std::max(cursor.position(), cursor.anchor());
+            next = findCursor(keyword, this->toPlainText(), pos);
         }
         if (!next.isNull()) {
             m_findHighlightSelection.cursor = next;
@@ -2074,9 +2096,9 @@ bool TextEdit::searchKeywordSeletion(QString keyword, QTextCursor cursor, bool f
         }
     } else {
         QTextCursor prev = document()->find(keyword, cursor, QTextDocument::FindBackward | QTextDocument::FindCaseSensitively);
-        if(keyword.contains("\n")){
-            int pos = std::min(cursor.position(),cursor.anchor());
-            prev = findCursor(keyword,this->toPlainText().mid(0,pos),-1,true);
+        if (keyword.contains("\n")) {
+            int pos = std::min(cursor.position(), cursor.anchor());
+            prev = findCursor(keyword, this->toPlainText().mid(0, pos), -1, true);
         }
         if (!prev.isNull()) {
             m_findHighlightSelection.cursor = prev;
@@ -2216,6 +2238,7 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
         nPageLine = blockCount() - 1;
     }
 
+    auto currentCursor = this->textCursor();
     cur = textCursor();
     for (int i = nStartLine; i <= nPageLine; i++) {
         if (i + 1 == m_markStartLine) {
@@ -2236,6 +2259,9 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
             //the language currently set by the system is Tibetan.
             if ("bo_CN" == Utils::getSystemLan()) {
                 offset = 2;
+            }
+            if (cur.blockNumber() == currentCursor.blockNumber()) {
+                painter.setPen(Utils::getActiveColor());
             }
             painter.drawText(0, cursorRect(cur).y() + offset,
                              m_pLeftAreaWidget->m_pLineNumberArea->width(), cursorRect(cur).height(),
@@ -2942,6 +2968,50 @@ QTextCursor TextEdit::findCursor(const QString &substr, const QString &text, int
 }
 
 /**
+ * @brief 点击行号处理：选中当前行，光标置于下一行行首
+ * @param
+ * @return
+ */
+void TextEdit::onPressedLineNumber(const QPoint &point)
+{
+    QScrollBar *pScrollBar = verticalScrollBar();
+    QPoint startPoint = QPointF(0, 0).toPoint();
+    QTextBlock beginBlock = cursorForPosition(startPoint).block();
+    QTextBlock endBlock;
+    if (pScrollBar->maximum() > 0) {
+        QPoint endPoint = QPointF(0, 1.5 * height()).toPoint();
+        endBlock = cursorForPosition(endPoint).block();
+    } else {
+        endBlock = document()->lastBlock();
+    }
+
+    int linenumber = -1;
+    auto cursor = this->textCursor();
+    while (beginBlock.position() <= endBlock.position()) {
+        cursor.setPosition(beginBlock.position(), QTextCursor::MoveAnchor);
+        int offset = 0;
+        //the language currently set by the system is Tibetan.
+        if ("bo_CN" == Utils::getSystemLan()) {
+            offset = 2;
+        }
+        QRect rect(0, cursorRect(cursor).y() + offset, m_pLeftAreaWidget->m_pLineNumberArea->width(), cursorRect(cursor).height());
+        if (rect.contains(point)) {
+            linenumber = beginBlock.blockNumber();
+            break;
+        }
+        beginBlock = beginBlock.next();
+    }
+    if (-1 != linenumber) {
+        if (this->document()->lastBlock().blockNumber() == linenumber) {
+            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
+        } else {
+            cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
+        }
+        this->setTextCursor(cursor);
+    }
+}
+
+/**
  * @return 返回当前光标选中的内容
  * @note 如果从编辑器获得的选中文本跨越换行符，则文本将包含 Unicode U+2029 段落分隔符而不是换行符 \n 字符。
  *      可使用 QString::replace() 将这些字符替换为换行符，为避免文本原有 Unicode U+2029 分割符影响，
@@ -2994,6 +3064,37 @@ QString TextEdit::selectedText()
     }
 
     return text;
+}
+
+/**
+ * @brief 行尾符号改变后处理函数；
+ * 1.这里并没有做"\n"和"\r\n"之间的替换，实际的替换动作在保存的时候才发生；
+ * @param
+ * @return
+ */
+
+void TextEdit::onEndlineFormatChanged(BottomBar::EndlineFormat from, BottomBar::EndlineFormat to)
+{
+    //auto endlineCom = new EndlineFormartCommand(this,m_wrapper->bottomBar(),from,to);
+    //m_pUndoStack->push(endlineCom);
+    m_wrapper->bottomBar()->setEndlineMenuText(to);
+}
+
+/**
+ * @brief 系统调色板更新时重绘部分组件，例如：列选取项
+ */
+void TextEdit::onAppPaletteChanged()
+{
+    // 判断是否处于列选取状态
+    if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
+        QColor highlightBackground = DGuiApplicationHelper::instance()->applicationPalette().color(QPalette::Highlight);
+        for (auto &selection : m_altModSelections) {
+            selection.format.setBackground(highlightBackground);
+        }
+
+        // 更新高亮状态
+        renderAllSelections();
+    }
 }
 
 void TextEdit::updateHighlightBrackets(const QChar &openChar, const QChar &closeChar)
@@ -4166,7 +4267,7 @@ void TextEdit::getHideRowContent(int iLine)
         int curIndex = 0;
         //遍历最后右括弧文本块 设置块隐藏或显示,显示文本块不超过1000
         while (beginBlock.isValid()
-               && (curIndex++ < s_MaxDisplayBlockCount)) {
+                && (curIndex++ < s_MaxDisplayBlockCount)) {
             m_foldCodeShow->appendText(beginBlock.text(), width());
             beginBlock = beginBlock.next();
         }
@@ -4933,8 +5034,8 @@ void TextEdit::manualUpdateAllMark(const QList<QPair<MarkOperation, qint64> > &m
             bool isMultiLine = startBlock < endBlock;
 
             while (startBlock.isValid()
-                   && endBlock.isValid()
-                   && !(endBlock < startBlock)) {
+                    && endBlock.isValid()
+                    && !(endBlock < startBlock)) {
                 QTextEdit::ExtraSelection selection;
                 selection.format.setBackground(QColor(info.first.color));
                 selection.cursor = info.first.cursor;
@@ -4972,11 +5073,11 @@ void TextEdit::manualUpdateAllMark(const QList<QPair<MarkOperation, qint64> > &m
 
     // 对修改后的颜色标记进行排序
     std::sort(m_markOperations.begin(), m_markOperations.end(),
-              [](const QPair<TextEdit::MarkOperation, qint64> &a, const QPair<TextEdit::MarkOperation, qint64> &b){
+    [](const QPair<TextEdit::MarkOperation, qint64> &a, const QPair<TextEdit::MarkOperation, qint64> &b) {
         return a.second < b.second;
     });
     std::sort(m_wordMarkSelections.begin(), m_wordMarkSelections.end(),
-              [](const QPair<QTextEdit::ExtraSelection, qint64> &a, const QPair<QTextEdit::ExtraSelection, qint64> &b){
+    [](const QPair<QTextEdit::ExtraSelection, qint64> &a, const QPair<QTextEdit::ExtraSelection, qint64> &b) {
         return a.second < b.second;
     });
 
@@ -4993,7 +5094,8 @@ void TextEdit::manualUpdateAllMark(const QList<QPair<MarkOperation, qint64> > &m
  * @param replaceText   替换的文本
  * @return 查找到和颜色标记位置有交叉的文本位置索引区间
  */
-static QPair<int, int> findMatchRange(const QList<int> &posList, int markStart, int markEnd, const QString &replaceText) {
+static QPair<int, int> findMatchRange(const QList<int> &posList, int markStart, int markEnd, const QString &replaceText)
+{
     // 判断颜色标记 info 范围内是否包含替换文本索引信息
     QPair<int, int> foundPosRange {-1, -1};
     if (posList.isEmpty()) {
@@ -5047,8 +5149,7 @@ static void updateMarkReplaceRange(const QList<int> &foundPosList, TextEdit::Mar
             // 处于颜色标记右侧，减去右侧替换文本的偏移量
             info.start += (foundPosList.size() - 1) * adjustlen;
             info.end += (foundPosList.size() - 1) * adjustlen;
-        }
-        else {
+        } else {
             // 处于颜色标记左侧
             info.start += foundPosList.size() * adjustlen;
             info.end += foundPosList.size() * adjustlen;
@@ -5104,7 +5205,7 @@ void TextEdit::calcMarkReplaceList(QList<TextEdit::MarkReplaceInfo> &replaceList
     }
 
     // 将传入的替换列表排序，按光标位置先后顺序进行排列
-    std::sort(replaceList.begin(), replaceList.end(), [](const MarkReplaceInfo &a, const MarkReplaceInfo &b){
+    std::sort(replaceList.begin(), replaceList.end(), [](const MarkReplaceInfo & a, const MarkReplaceInfo & b) {
         return a.start < b.start;
     });
 
@@ -5138,7 +5239,7 @@ void TextEdit::calcMarkReplaceList(QList<TextEdit::MarkReplaceInfo> &replaceList
     int findPos = oldText.indexOf(replaceText, findOffset);
     // 需要取得左侧所有的变更相对偏移，从文本左侧开始循环遍历
     while (-1 != findPos
-           && currentMarkIndex < replaceList.size()) {
+            && currentMarkIndex < replaceList.size()) {
         // 转换为相对全文的偏移
         int realPos = findPos + offset;
         // 记录已查询的索引位置
@@ -6215,7 +6316,13 @@ void TextEdit::dropEvent(QDropEvent *event)
 {
     const QMimeData *data = event->mimeData();
 
-    if (data->hasUrls() && data->urls().first().isLocalFile()) {
+    // 判断是否存在url信息，需要注意即使hasUrls()为true, urls()仍可能返回空，使用urls().first()可能越界
+    QList<QUrl> dataUrls;
+    if (data->hasUrls()) {
+        dataUrls = data->urls();
+    }
+
+    if (!dataUrls.isEmpty() && dataUrls.first().isLocalFile()) {
         qobject_cast<Window *>(this->window())->requestDropEvent(event);
     } else if (data->hasText() && !m_readOnlyMode) {
         //drag text in the same editor
@@ -6546,20 +6653,21 @@ void TextEdit::mouseReleaseEvent(QMouseEvent *e)
         return;
     }
 
-    // 获取鼠标中键释放事件，进行中键黏贴处理
-    // 此处判断从 QWidgetTextControlPrivate::mouseReleaseEvent() 摘录
-    if (Qt::MidButton == e->button()
-            && !isReadOnly()
-            && QApplication::clipboard()->supportsSelection()) {
-        const QMimeData *md = QApplication::clipboard()->mimeData(QClipboard::Selection);
-        // 判断文本内容，文本编辑器为纯文本编辑，不涉及剪贴板富文本内容
-        if (md && !md->text().isEmpty()) {
-            // 设置当前为中键黏贴状态，执行 QPlainTextEdit::mouseReleaseEvent(e) 时会触发文本变更信号。
-            m_MidButtonPatse = true;
+    if (e->button() == Qt::MidButton) {
+        bool midButtonPaste = m_settings->settings->option("advance.editor.allow_midbutton_paste")->value().toBool();
+        if (midButtonPaste) {
+            // 只读模式过滤鼠标中间黏贴
+            if (m_readOnlyMode || m_bReadOnlyPermission) {
+                popupNotify(tr("Read-Only mode is on"));
+                return;
+            }
+
+            slotPasteAction();
         }
+        return;
     }
 
-    QPlainTextEdit::mouseReleaseEvent(e);
+    return QPlainTextEdit::mouseReleaseEvent(e);
 }
 
 void TextEdit::keyPressEvent(QKeyEvent *e)
@@ -6656,21 +6764,21 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
             return;
         } else if (key == "Shift+/" && e->modifiers() == Qt::ControlModifier) {
             e->ignore();
-        } else if(e->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier)) {
-            if(e->key() == Qt::Key_Return || e->key() == Qt::Key_D || e->key() == Qt::Key_K
+        } else if (e->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier)) {
+            if (e->key() == Qt::Key_Return || e->key() == Qt::Key_D || e->key() == Qt::Key_K
                     || e->key() == Qt::Key_Up || e->key() == Qt::Key_Down) {
                 popupNotify(tr("Read-Only mode is on"));
                 return;
             } else {
-                 e->ignore();
+                e->ignore();
             }
-        }else if (e->modifiers() == Qt::ControlModifier) {
-            if(e->key() == Qt::Key_Return || e->key() == Qt::Key_K || e->key() == Qt::Key_X ||
+        } else if (e->modifiers() == Qt::ControlModifier) {
+            if (e->key() == Qt::Key_Return || e->key() == Qt::Key_K || e->key() == Qt::Key_X ||
                     e->key() == Qt::Key_V || e->key() == Qt::Key_J || e->key() == Qt::Key_Z || e->key() == Qt::Key_Y) {
                 popupNotify(tr("Read-Only mode is on"));
                 return;
             } else {
-                 e->ignore();
+                e->ignore();
             }
         } else if (e->key() == Qt::Key_Control || e->key() == Qt::Key_Shift) {
             e->ignore();
@@ -7043,25 +7151,23 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "mark")) {
             toggleMarkSelections();
             return;
-        } else if (e->key() == Qt::Key_Insert && key != "Shift+Ins") {
-            if (e->modifiers() == Qt::NoModifier) {
-                setOverwriteMode(!overwriteMode());
-                //update();
-                if (!overwriteMode()) {
-                    auto cursor = this->textCursor();
-                    cursor.clearSelection();
-                    cursor.movePosition(QTextCursor::Right);
-                    this->setTextCursor(cursor);
+        } else if (e->key() == Qt::Key_Insert && key != "Shift+Ins" && e->modifiers() == Qt::NoModifier) {
+            setOverwriteMode(!overwriteMode());
+            //update();
+            if (!overwriteMode()) {
+                auto cursor = this->textCursor();
+                cursor.clearSelection();
+                cursor.movePosition(QTextCursor::Right);
+                this->setTextCursor(cursor);
 
-                    cursor = this->textCursor();
-                    cursor.movePosition(QTextCursor::Left);
-                    this->setTextCursor(cursor);
-                }
-
-                m_cursorMode = overwriteMode() ? Overwrite : Insert;
-                emit cursorModeChanged(m_cursorMode);
-                e->accept();
+                cursor = this->textCursor();
+                cursor.movePosition(QTextCursor::Left);
+                this->setTextCursor(cursor);
             }
+
+            m_cursorMode = overwriteMode() ? Overwrite : Insert;
+            emit cursorModeChanged(m_cursorMode);
+            e->accept();
         } else {
             // Post event to window widget if key match window key list.
             for (auto option : m_settings->settings->group("shortcuts.window")->options()) {
@@ -7670,8 +7776,7 @@ void TextEdit::removeComment()
             }
         }
 
-        if (!multiText.isEmpty())
-        {
+        if (!multiText.isEmpty()) {
             // 同时删除多组注释文本
             deleteMultiTextEx(multiText);
         }
