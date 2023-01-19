@@ -887,38 +887,6 @@ bool Utils::isWayland()
 
 }
 
-
-QString Utils::getActiveColor()
-{
-    static QString activeColor;
-    if (!activeColor.isEmpty()) {
-        return activeColor;
-    } else {
-        switch (getSystemVersion()) {
-            case V23: {
-                QDBusInterface d("org.deepin.dde.Appearance1",
-                             "/org/deepin/dde/Appearance1",
-                             "org.deepin.dde.Appearance1",
-                             QDBusConnection::sessionBus());
-                activeColor = d.property("QtActiveColor").toString();
-                break;
-            }
-            default: {
-
-                QDBusInterface d("com.deepin.daemon.Appearance",
-                                "/com/deepin/daemon/Appearance",
-                                "com.deepin.daemon.Appearance",
-                              QDBusConnection::sessionBus());
-                activeColor = d.property("QtActiveColor").toString();
-                break;
-            }
-        }
-        qDebug() << "getActiveColor is " << activeColor;
-
-        return activeColor;
-    }
-}
-
 QString Utils::lineFeed(const QString &text, int nWidth, const QFont &font, int nElidedRow)
 {
     if (nElidedRow < 0)
