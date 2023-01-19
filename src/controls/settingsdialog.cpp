@@ -30,6 +30,8 @@ void GenerateSettingTranslate()
     auto shortcuts_window_help = QObject::tr("Help");
     auto shortcuts_window_togglefullscreenName = QObject::tr("Toggle fullscreen");
     auto shortcuts_window_findName = QObject::tr("Find");
+    Q_UNUSED(QObject::tr("Find Next"));
+    Q_UNUSED(QObject::tr("Find Previous"));
     auto shortcuts_window_replaceName = QObject::tr("Replace");
     auto shortcuts_window_jumptolineName = QObject::tr("Go to line");
     auto shortcuts_window_savepositionName = QObject::tr("Save cursor position");

@@ -186,6 +186,18 @@
                             "default":  "Ctrl+F"
                         },
                         {
+                            "key": "findNext",
+                            "name": "Find Next",
+                            "type": "keySequenceEdit",
+                            "default":  "F3"
+                        },
+                        {
+                            "key": "findPrev",
+                            "name": "Find Previous",
+                            "type": "keySequenceEdit",
+                            "default":  "Shift+F3"
+                        },
+                        {
                             "key": "replace",
                             "name": "Replace",
                             "type": "keySequenceEdit",
