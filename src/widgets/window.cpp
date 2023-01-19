@@ -1432,6 +1432,10 @@ void Window::popupFindBar()
     int scrollOffset = wrapper->textEditor()->getScrollOffset();
 
     m_findBar->activeInput(text, tabPath, row, column, scrollOffset);
+    // highlight keyword when findbar show
+    wrapper->textEditor()->highlightKeywordInView(text);
+    // set keywords
+    m_keywordForSearchAll = m_keywordForSearch = text;
 
     QTimer::singleShot(10, this, [ = ] { m_findBar->focus(); });
 }
@@ -3379,6 +3383,10 @@ void Window::keyPressEvent(QKeyEvent *e)
         }
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "find")) {
         popupFindBar();
+    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "findNext")) {
+        handleFindNextSearchKeyword(m_keywordForSearch);
+    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "findPrev")) {
+        handleFindPrevSearchKeyword(m_keywordForSearch);
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "replace")) {
         popupReplaceBar();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "jumptoline")) {
