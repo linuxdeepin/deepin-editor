@@ -2271,7 +2271,7 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
                 offset = 2;
             }
             if (cur.blockNumber() == currentCursor.blockNumber()) {
-                painter.setPen(Utils::getActiveColor());
+                painter.setPen(qApp->palette().highlight().color());
             }
             painter.drawText(0, cursorRect(cur).y() + offset,
                              m_pLeftAreaWidget->m_pLineNumberArea->width(), cursorRect(cur).height(),
