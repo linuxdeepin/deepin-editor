@@ -51,8 +51,8 @@ QByteArray DetectCode::GetFileEncodingFormat(QString filepath, QByteArray conten
         // 根据文本中断的情况，每次尝试解析编码后移除尾部字符，直到识别率达到90%以上
         int tryCount = 5;
         while (chardetconfidence < s_dMinConfidence
-               && newContent.size() > suffix.size()
-               && tryCount-- > 0) {
+                && newContent.size() > suffix.size()
+                && tryCount-- > 0) {
             // 移除可能的乱码尾部字符
             newContent.remove(newContent.size() - suffix.size(), 1);
             DetectCode::ChartDet_DetectingTextCoding(newContent, charDetectedResult, chardetconfidence);
@@ -64,8 +64,8 @@ QByteArray DetectCode::GetFileEncodingFormat(QString filepath, QByteArray conten
         int tryCount = 5;
         QByteArray newContent = content;
         while (chardetconfidence < s_dMinConfidence
-               && !newContent.isEmpty()
-               && tryCount-- > 0) {
+                && !newContent.isEmpty()
+                && tryCount-- > 0) {
             newContent.chop(1);
             DetectCode::ChartDet_DetectingTextCoding(newContent, charDetectedResult, chardetconfidence);
         }
@@ -74,6 +74,7 @@ QByteArray DetectCode::GetFileEncodingFormat(QString filepath, QByteArray conten
 
     // uchardet识别编码 若识别率过低, 考虑是否非单字节编码格式。
     if (ucharDetectdRet.contains("unknown")
+            || ucharDetectdRet.contains("ASCII")
             || ucharDetectdRet.contains("???")
             || ucharDetectdRet.isEmpty()
             || chardetconfidence < s_dMinConfidence) {
@@ -390,7 +391,7 @@ int DetectCode::ChartDet_DetectingTextCoding(const char *str, QString &encoding,
     confidence = obj->confidence;
     detect_obj_free(&obj);
 
-    return CHARDET_SUCCESS ;
+    return CHARDET_SUCCESS;
 }
 
 bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr, QByteArray &outStr, QString fromCode, QString toCode)
@@ -401,28 +402,44 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr, QByteArray &outS
     }
 
     iconv_t handle = iconv_open(toCode.toLocal8Bit().data(), fromCode.toLocal8Bit().data());
-    // int val = 1;
-    // iconvctl(handle, ICONV_SET_DISCARD_ILSEQ, &val);
-
     if (handle != reinterpret_cast<iconv_t>(-1)) {
         char *inbuf = inputStr.data();
-        size_t inbytesleft = static_cast<size_t>(inputStr.size()) + 1;
+        size_t inbytesleft = static_cast<size_t>(inputStr.size());
         size_t outbytesleft = 4 * inbytesleft;
         char *outbuf = new char[outbytesleft];
-        char *tmp = outbuf;
+        char *bufferHeader = outbuf;
+        size_t maxBufferSize = outbytesleft;
 
         memset(outbuf, 0, outbytesleft);
-        iconv(handle, &inbuf, &inbytesleft, &outbuf, &outbytesleft);
-        iconv_close(handle);
-        outStr = QByteArray(tmp);
+        size_t ret = iconv(handle, &inbuf, &inbytesleft, &outbuf, &outbytesleft);
+        if (static_cast<size_t>(-1) == ret) {
+            // 记录错误信息
+            int errorNum = errno;
+            qWarning() << Q_FUNC_INFO << "iconv() convert text encoding error, errocode:" << errorNum;
+        }
 
-        delete [] tmp;
-        tmp = nullptr;
+        iconv_close(handle);
+
+        // 手动添加 UTF BOM 信息
+        static QMap<QString, QByteArray> byteOrderMark = {
+            {"UTF-16LE", QByteArray::fromHex("FFFE")},
+            {"UTF-16BE", QByteArray::fromHex("FEFF")},
+            {"UTF-32LE", QByteArray::fromHex("FFFE0000")},
+            {"UTF-32BE", QByteArray::fromHex("0000FEFF")}
+        };
+        outStr.append(byteOrderMark.value(toCode));
+
+        // 计算 iconv() 实际转换的字节数
+        size_t realConvertSize = maxBufferSize - outbytesleft;
+        outStr += QByteArray(bufferHeader, static_cast<int>(realConvertSize));
+
+        delete [] bufferHeader;
+        bufferHeader = nullptr;
 
         return true;
 
     } else {
-        //qDebug()<<"编码转换失败";
+        qWarning() << Q_FUNC_INFO << "Text encoding convert error, iconv_open() failed.";
         return  false;
     }
 }
