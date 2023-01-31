@@ -7,6 +7,8 @@
 #include <DSettings>
 #include <DSettingsOption>
 #include <DMessageManager>
+#include <DSysInfo>
+
 #include <QRegularExpression>
 #include <QJsonDocument>
 #include <QMimeDatabase>
@@ -25,6 +27,8 @@
 #include <QImageReader>
 #include <QCryptographicHash>
 #include "qprocess.h"
+
+DCORE_USE_NAMESPACE
 
 QT_BEGIN_NAMESPACE
 extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
@@ -780,14 +784,29 @@ QString Utils::getStringMD5Hash(const QString &input)
 bool Utils::activeWindowFromDock(quintptr winId)
 {
     bool bRet = true;
-    // new interface use application as id
-    QDBusInterface dockDbusInterface("com.deepin.dde.daemon.Dock",
-                                     "/com/deepin/dde/daemon/Dock",
-                                     "com.deepin.dde.daemon.Dock");
-    QDBusReply<void> reply = dockDbusInterface.call("ActivateWindow", winId);
-    if (!reply.isValid()) {
-        qDebug() << "call org.deepin.dde.daemon.Dock1 failed" << reply.error();
-        bRet = false;
+    // 优先采用V23接口
+    QDBusInterface dockDbusInterfaceV23("org.deepin.dde.daemon.Dock1",
+                                        "/org/deepin/dde/daemon/Dock1",
+                                        "org.deepin.dde.daemon.Dock1");
+    if (dockDbusInterfaceV23.isValid()) {
+        QDBusReply<void> reply = dockDbusInterfaceV23.call("ActivateWindow", winId);
+        if (!reply.isValid()) {
+            qDebug() << "call v23 org.deepin.dde.daemon.Dock1 failed" << reply.error();
+            bRet = false;
+        } else {
+            return bRet;
+        }
+    }
+
+    QDBusInterface dockDbusInterfaceV20("com.deepin.dde.daemon.Dock",
+                                        "/com/deepin/dde/daemon/Dock",
+                                        "com.deepin.dde.daemon.Dock");
+    if (dockDbusInterfaceV20.isValid() && !bRet) {
+        QDBusReply<void> reply = dockDbusInterfaceV20.call("ActivateWindow", winId);
+        if (!reply.isValid()) {
+            qDebug() << "call v20 com.deepin.dde.daemon.Dock failed" << reply.error();
+            bRet = false;
+        }
     }
 
     return bRet;
@@ -822,10 +841,37 @@ QString Utils::getSystemLan()
     if (!m_systemLanguage.isEmpty()) {
         return m_systemLanguage;
     } else {
-        m_systemLanguage = QLocale::system().name();
+        switch (getSystemVersion()) {
+            case V23:
+                m_systemLanguage = QLocale::system().name();
+                break;
+            default: {
+                QDBusInterface ie("com.deepin.daemon.LangSelector",
+                                "/com/deepin/daemon/LangSelector",
+                                "com.deepin.daemon.LangSelector",
+                                QDBusConnection::sessionBus());
+                m_systemLanguage = ie.property("CurrentLocale").toString();
+                break;
+            }
+        }
+
         qWarning() << "getSystemLan is" << m_systemLanguage;
         return m_systemLanguage;
     }
+}
+
+/**
+ * @return 获取当前系统版本并返回
+ */
+Utils::SystemVersion Utils::getSystemVersion()
+{
+    QString version = DSysInfo::majorVersion();
+    if ("23" == version) {
+        return V23;
+    }
+
+    // 其它版本默认V20
+    return V20;
 }
 
 
@@ -848,12 +894,25 @@ QString Utils::getActiveColor()
     if (!activeColor.isEmpty()) {
         return activeColor;
     } else {
-        QDBusInterface d("org.deepin.dde.Appearance1",
-                         "/org/deepin/dde/Appearance1",
-                         "org.deepin.dde.Appearance1",
-                         QDBusConnection::sessionBus());
+        switch (getSystemVersion()) {
+            case V23: {
+                QDBusInterface d("org.deepin.dde.Appearance1",
+                             "/org/deepin/dde/Appearance1",
+                             "org.deepin.dde.Appearance1",
+                             QDBusConnection::sessionBus());
+                activeColor = d.property("QtActiveColor").toString();
+                break;
+            }
+            default: {
 
-        activeColor = d.property("QtActiveColor").toString();
+                QDBusInterface d("com.deepin.daemon.Appearance",
+                                "/com/deepin/daemon/Appearance",
+                                "com.deepin.daemon.Appearance",
+                              QDBusConnection::sessionBus());
+                activeColor = d.property("QtActiveColor").toString();
+                break;
+            }
+        }
         qDebug() << "getActiveColor is " << activeColor;
 
         return activeColor;

@@ -631,10 +631,20 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
 
     //这里会重复连接信号和槽，先全部取消
     QDBusConnection dbus = QDBusConnection::sessionBus();
-    dbus.systemBus().disconnect("org.deepin.dde.Gesture1",
+    switch (Utils::getSystemVersion()) {
+        case Utils::V23:
+            dbus.systemBus().disconnect("org.deepin.dde.Gesture1",
                                 "/org/deepin/dde/Gesture1", "org.deepin.dde.Gesture1",
                                 "Event",
                                 wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
+            break;
+        default:
+            dbus.systemBus().disconnect("com.deepin.daemon.Gesture",
+                                        "/com/deepin/daemon/Gesture", "com.deepin.daemon.Gesture",
+                                        "Event",
+                                        wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
+            break;
+    }
     wrapper->textEditor()->disconnect();
     connect(wrapper->textEditor(), &TextEdit::cursorModeChanged, wrapper, &EditWrapper::handleCursorModeChanged);
     connect(wrapper->textEditor(), &TextEdit::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);
@@ -644,10 +654,20 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
     connect(wrapper->textEditor(), &TextEdit::popupNotify, this, &Window::showNotify, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::signal_setTitleFocus, this, &Window::slot_setTitleFocus, Qt::QueuedConnection);
 
-    dbus.systemBus().connect("org.deepin.dde.Gesture1",
-                             "/org/deepin/dde/Gesture1", "org.deepin.dde.Gesture1",
-                             "Event",
-                             wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
+    switch (Utils::getSystemVersion()) {
+        case Utils::V23:
+            dbus.systemBus().connect("org.deepin.dde.Gesture1",
+                                "/org/deepin/dde/Gesture1", "org.deepin.dde.Gesture1",
+                                "Event",
+                                wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
+            break;
+        default:
+            dbus.systemBus().connect("com.deepin.daemon.Gesture",
+                                    "/com/deepin/daemon/Gesture", "com.deepin.daemon.Gesture",
+                                    "Event",
+                                    wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
+            break;
+    }
     connect(wrapper->textEditor(), &QPlainTextEdit::cursorPositionChanged, wrapper->textEditor(), &TextEdit::cursorPositionChanged);
 
     connect(wrapper->textEditor(), &QPlainTextEdit::textChanged, wrapper->textEditor(), [ = ]() {
