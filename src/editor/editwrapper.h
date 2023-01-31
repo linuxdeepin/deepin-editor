@@ -137,7 +137,7 @@ private:
 public slots:
     // 处理文档预加载数据
     void handleFilePreProcess(const QByteArray &encode, const QByteArray &content);
-    void handleFileLoadFinished(const QByteArray &encode, const QByteArray &content);
+    void handleFileLoadFinished(const QByteArray &encode, const QByteArray &content, bool error);
     void OnThemeChangeSlot(QString theme);
     void UpdateBottomBarWordCnt(int cnt);
     void OnUpdateHighlighter();

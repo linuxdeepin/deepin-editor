@@ -263,7 +263,7 @@ public:
     void completionWord(QString word);
     QString getWordAtMouse();
     QString getWordAtCursor();
-    void toggleReadOnlyMode();
+    void toggleReadOnlyMode(bool notNotify = false);
     void toggleComment(bool bValue);
     int getNextWordPosition(QTextCursor &cursor, QTextCursor::MoveMode moveMode);
     int getPrevWordPosition(QTextCursor cursor, QTextCursor::MoveMode moveMode);
