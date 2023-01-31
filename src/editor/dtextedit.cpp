@@ -109,10 +109,20 @@ TextEdit::TextEdit(QWidget *parent)
     connect(m_pUndoStack, &QUndoStack::canUndoChanged, this, &TextEdit::slotCanUndoChanged);
 
     QDBusConnection dbus = QDBusConnection::sessionBus();
-    dbus.systemBus().connect("org.deepin.dde.Gesture1",
-                             "/org/deepin/dde/Gesture1", "org.deepin.dde.Gesture1",
-                             "Event",
-                             this, SLOT(fingerZoom(QString, QString, int)));
+    switch (Utils::getSystemVersion()) {
+        case Utils::V23:
+            dbus.systemBus().connect("org.deepin.dde.Gesture1",
+                                    "/org/deepin/dde/Gesture1", "org.deepin.dde.Gesture1",
+                                    "Event",
+                                    this, SLOT(fingerZoom(QString, QString, int)));
+            break;
+        default:
+            dbus.systemBus().connect("com.deepin.daemon.Gesture",
+                                    "/com/deepin/daemon/Gesture", "com.deepin.daemon.Gesture",
+                                    "Event",
+                                    this, SLOT(fingerZoom(QString, QString, int)));
+            break;
+    }
 
     //初始化右键菜单
     initRightClickedMenu();
