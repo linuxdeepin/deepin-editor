@@ -46,6 +46,14 @@ public:
         EIntersectInner,    ///< 活动区间处于固定区间内部         例如 [0, 9] 和 [5, 6]
     };
 
+    /**
+     * @brief 当前运行时系统环境
+     */
+    enum SystemVersion {
+        V20,
+        V23,
+    };
+
     static QString getQrcPath(const QString &imageName);
     static QString getQssPath(const QString &qssName);
     static QSize getRenderSize(int fontSize, const QString &string);
@@ -106,6 +114,8 @@ public:
 
     //return system language
     static QString getSystemLan();
+    // 取得系统版本是否为 V23
+    static SystemVersion getSystemVersion();
 
     static bool isWayland();
 
