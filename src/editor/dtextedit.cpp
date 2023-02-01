@@ -1324,7 +1324,7 @@ void TextEdit::killLine()
         }
 
         if (!cursor.selectedText().isEmpty()) {
-            DeleteBackCommond *com = new DeleteBackCommond(cursor, this);
+            DeleteBackCommand *com = new DeleteBackCommand(cursor, this);
             m_pUndoStack->push(com);
         }
     }
@@ -1348,7 +1348,7 @@ void TextEdit::killCurrentLine()
         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
     }
     if (!cursor.selectedText().isEmpty()) {
-        DeleteBackCommond *com = new DeleteBackCommond(cursor, this);
+        DeleteBackCommand *com = new DeleteBackCommand(cursor, this);
         m_pUndoStack->push(com);
     }
 }
@@ -1404,7 +1404,7 @@ void TextEdit::indentText()
         int line2 = cursor.blockNumber();
 
         //do the indent operation
-        auto com = new IndentTextCommond(this, pos1, pos2, line1, line2);
+        auto com = new IndentTextCommand(this, pos1, pos2, line1, line2);
         m_pUndoStack->push(com);
     }
 }
@@ -1418,7 +1418,7 @@ void TextEdit::unindentText()
 
     //the text in front of current line is '\t'.
     if ("\t" == cursor.selectedText()) {
-        DeleteBackCommond *com = new DeleteBackCommond(cursor, this);
+        DeleteBackCommand *com = new DeleteBackCommand(cursor, this);
         m_pUndoStack->push(com);
     }
     //the text in front of current line is ' '.
@@ -1432,7 +1432,7 @@ void TextEdit::unindentText()
         }
         cursor.setPosition(startpos);
         cursor.setPosition(pos, QTextCursor::KeepAnchor);
-        DeleteBackCommond *com = new DeleteBackCommond(cursor, this);
+        DeleteBackCommand *com = new DeleteBackCommand(cursor, this);
         m_pUndoStack->push(com);
 
     }
@@ -1563,8 +1563,8 @@ void TextEdit::convertWordCase(ConvertCase convertCase)
 
         // 如果没有实际文本更改效果，不进行文本替换操作
         if (text != textCursor().selectedText()) {
-            InsertTextUndoCommand *insertCommond = new InsertTextUndoCommand(textCursor(), text, this);
-            m_pUndoStack->push(insertCommond);
+            InsertTextUndoCommand *insertCommand = new InsertTextUndoCommand(textCursor(), text, this);
+            m_pUndoStack->push(insertCommand);
         }
     } else {
         QTextCursor cursor;
@@ -1588,8 +1588,8 @@ void TextEdit::convertWordCase(ConvertCase convertCase)
                 text = capitalizeText(text);
             }
 
-            InsertTextUndoCommand *insertCommond = new InsertTextUndoCommand(cursor, text, this);
-            m_pUndoStack->push(insertCommond);
+            InsertTextUndoCommand *insertCommand = new InsertTextUndoCommand(cursor, text, this);
+            m_pUndoStack->push(insertCommand);
 
             setTextCursor(cursor);
 
@@ -1721,7 +1721,7 @@ void TextEdit::replaceAll(const QString &replaceText, const QString &withText)
     if (oldText != newText) {
         ChangeMarkCommand *pChangeMark = new ChangeMarkCommand(this, backupMarkList, replaceList);
         // 设置替换撤销项为颜色标记变更撤销项的子项
-        new ReplaceAllCommond(oldText, newText, cursor, pChangeMark);
+        new ReplaceAllCommand(oldText, newText, cursor, pChangeMark);
         m_pUndoStack->push(pChangeMark);
     }
 }
@@ -1859,7 +1859,7 @@ void TextEdit::replaceRest(const QString &replaceText, const QString &withText)
     if (oldText != newText) {
         ChangeMarkCommand *pChangeMark = new ChangeMarkCommand(this, backupMarkList, replaceList);
         // 设置替换撤销项为颜色标记变更撤销项的子项
-        new ReplaceAllCommond(oldText, newText, cursor, pChangeMark);
+        new ReplaceAllCommand(oldText, newText, cursor, pChangeMark);
         m_pUndoStack->push(pChangeMark);
     }
 
@@ -2626,7 +2626,7 @@ void TextEdit::paste()
         int block = 1 * 1024 * 1024;
         int size = text.size();
         if (size > block) {
-            InsertBlockByTextCommond *commond = new InsertBlockByTextCommond(text, this, m_wrapper);
+            InsertBlockByTextCommand *commond = new InsertBlockByTextCommand(text, this, m_wrapper);
             m_pUndoStack->push(commond);
         } else {
             QTextCursor cursor = textCursor();
@@ -2927,7 +2927,7 @@ void TextEdit::moveText(int from, int to, const QString &text, bool copy)
     // 拷贝模式下无需删除文本
     if (!copy) {
         cursor.setPosition(from + text.size(), QTextCursor::KeepAnchor);
-        delCommand = new DeleteBackCommond(cursor, this);
+        delCommand = new DeleteBackCommand(cursor, this);
     }
 
     cursor.setPosition(to);
@@ -6390,7 +6390,7 @@ void TextEdit::dropEvent(QDropEvent *event)
             auto cursor2 = another->textCursor();
             cursor2.insertText(data->text());
             cursor2.setPosition(cursor2.position() - data->text().size(), QTextCursor::KeepAnchor);
-            auto com2 = new DeleteBackCommond(cursor2, another);
+            auto com2 = new DeleteBackCommand(cursor2, another);
             another->m_pUndoStack->push(com2);
         } else if (!data->text().isEmpty()) {
             if (m_bReadOnlyPermission || m_readOnlyMode) {
@@ -6928,7 +6928,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
                 QPlainTextEdit::selectAll();
 
             if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
-                DeleteBackAltCommond *commond = new DeleteBackAltCommond(m_altModSelections, this);
+                DeleteBackAltCommand *commond = new DeleteBackAltCommand(m_altModSelections, this);
                 m_pUndoStack->push(commond);
             } else {
                 //修改delete删除，在文档最末尾点击delete,引起标签栏*出现问题
@@ -6939,7 +6939,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
                 QString m_delText = cursor.selectedText();
                 if (m_delText.size() <= 0) return;
 
-                DeleteBackCommond *commond = new DeleteBackCommond(cursor, this);
+                DeleteBackCommand *commond = new DeleteBackCommand(cursor, this);
                 m_pUndoStack->push(commond);
             }
             m_isSelectAll = false;
