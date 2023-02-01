@@ -1,6 +1,13 @@
 cmake_minimum_required(VERSION 3.7)
 
-project(deepin-editor)
+set(VERSION "6.0.0" CACHE STRING "Application version")
+
+project(deepin-editor
+    VERSION ${VERSION}
+    DESCRIPTION "Text editor for DDE"
+    HOMEPAGE_URL "https://github.com/linuxdeepin/deepin-editor"
+    LANGUAGES CXX C
+)
 
 #set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_STANDARD 11)
