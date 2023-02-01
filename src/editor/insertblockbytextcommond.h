@@ -13,11 +13,11 @@ class TextEdit;
 class EditWrapper;
 
 //分块插入文本-撤销重做
-class InsertBlockByTextCommond:public QUndoCommand
+class InsertBlockByTextCommand:public QUndoCommand
 {
 public:
-    InsertBlockByTextCommond(const QString& text,TextEdit* edit,EditWrapper* wrapper);
-    virtual ~InsertBlockByTextCommond();
+    InsertBlockByTextCommand(const QString& text,TextEdit* edit,EditWrapper* wrapper);
+    virtual ~InsertBlockByTextCommand();
 
     virtual void redo();
     virtual void undo();

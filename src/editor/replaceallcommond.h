@@ -13,11 +13,11 @@
 #include "dtextedit.h"
 
 // 全部替换撤销-重做
-class ReplaceAllCommond: public QUndoCommand
+class ReplaceAllCommand: public QUndoCommand
 {
 public:
-    ReplaceAllCommond(QString &oldText, QString &newText, QTextCursor cursor, QUndoCommand *parent = nullptr);
-    virtual ~ReplaceAllCommond();
+    ReplaceAllCommand(QString &oldText, QString &newText, QTextCursor cursor, QUndoCommand *parent = nullptr);
+    virtual ~ReplaceAllCommand();
 
     virtual void redo();
     virtual void undo();

@@ -6,7 +6,7 @@
 
 
 
-ReplaceAllCommond::ReplaceAllCommond(QString &oldText, QString &newText, QTextCursor cursor, QUndoCommand *parent)
+ReplaceAllCommand::ReplaceAllCommand(QString &oldText, QString &newText, QTextCursor cursor, QUndoCommand *parent)
     : QUndoCommand(parent)
     , m_oldText(oldText)
     , m_newText(newText)
@@ -15,12 +15,12 @@ ReplaceAllCommond::ReplaceAllCommond(QString &oldText, QString &newText, QTextCu
 
 }
 
-ReplaceAllCommond::~ReplaceAllCommond()
+ReplaceAllCommand::~ReplaceAllCommand()
 {
 
 }
 
-void ReplaceAllCommond::redo()
+void ReplaceAllCommand::redo()
 {
     m_cursor.setPosition(0);
     m_cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
@@ -29,7 +29,7 @@ void ReplaceAllCommond::redo()
     m_cursor.insertText(m_newText);
 }
 
-void ReplaceAllCommond::undo()
+void ReplaceAllCommand::undo()
 {
     m_cursor.setPosition(0);
     m_cursor.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
@@ -37,4 +37,3 @@ void ReplaceAllCommond::undo()
 
     m_cursor.insertText(m_oldText);
 }
-

@@ -31,8 +31,9 @@ DWIDGET_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
-    using namespace Dtk::Core;
-
+    DCORE_USE_NAMESPACE
+    DLogManager::registerConsoleAppender();
+    DLogManager::registerFileAppender();
     PerformanceMonitor::initializeAppStart();
     if (!QString(qgetenv("XDG_CURRENT_DESKTOP")).toLower().startsWith("deepin")) {
         setenv("XDG_CURRENT_DESKTOP", "Deepin", 1);
@@ -43,8 +44,6 @@ int main(int argc, char *argv[])
     // QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     EditorApplication app(argc, argv);
-    Dtk::Core::DLogManager::registerConsoleAppender();
-    Dtk::Core::DLogManager::registerFileAppender();
     // save theme
     DApplicationSettings savetheme;
 
@@ -73,7 +72,7 @@ int main(int argc, char *argv[])
         //埋点记录启动数据
         QJsonObject objStartEvent{
             {"tid", Eventlogutils::StartUp},
-            {"vsersion", VERSION},
+            {"version", VERSION},
             {"mode", 1},
         };
         Eventlogutils::GetInstance()->writeLogs(objStartEvent);
