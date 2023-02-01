@@ -94,6 +94,11 @@
         <source>R/O</source>
         <translation>只读</translation>
     </message>
+    <message>
+        <location filename="../src/editor/editwrapper.cpp" line="960"/>
+        <source>The file cannot be read, which may be too large or has been damaged!</source>
+        <translation>无法读取该文件，文件可能过大或损坏！</translation>
+    </message>
 </context>
 <context>
     <name>FindBar</name>

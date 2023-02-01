@@ -53,6 +53,12 @@ void WarningNotices::setSaveAsBtn()
     setWidget(m_saveAsBtn);
 }
 
+void WarningNotices::clearBtn()
+{
+    m_saveAsBtn->setVisible(false);
+    m_reloadBtn->setVisible(false);
+}
+
 void WarningNotices::slotreloadBtnClicked()
 {
     this->hide();

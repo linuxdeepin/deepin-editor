@@ -860,45 +860,48 @@ void EditWrapper::handleFilePreProcess(const QByteArray &encode, const QByteArra
  * @param encode    文件编码
  * @param content   完整文件内容
  */
-void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteArray &content)
+void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteArray &content, bool error)
 {
     // 判断是否预加载，若已预加载，则无需重新初始化
     if (!m_bHasPreProcess) {
         reinitOnFileLoad(encode);
     }
 
-    bool flag = m_pTextEdit->getReadOnlyPermission();
-    if (flag == true) {
-        // note: 特殊处理，由于需要TextEdit处于可编辑状态追加文件数据，临时设置非只读状态
-        m_pTextEdit->setReadOnly(false);
+    if (!error) {
+        bool flag = m_pTextEdit->getReadOnlyPermission();
+        if (flag == true) {
+            // note: 特殊处理，由于需要TextEdit处于可编辑状态追加文件数据，临时设置非只读状态
+            m_pTextEdit->setReadOnly(false);
+        }
+
+        m_bFileLoading = true;
+
+        //备份显示修改状态
+        if (m_bIsTemFile) {
+            updateModifyStatus(true);
+        }
+
+        // 判断处理前后对象状态
+        QPointer<QObject> checkPtr(this);
+        // 加载数据
+        loadContent(content);
+        if (checkPtr.isNull()) {
+            return;
+        }
+
+        m_bFileLoading = false;
+        if (flag == true) {
+            m_pTextEdit->setReadOnly(true);
+        }
+
+        if (m_bQuit) {
+            return;
+        }
+    } else {
+        // 清除之前读取的数据
+        m_pTextEdit->clear();
     }
 
-    m_bFileLoading = true;
-
-    //备份显示修改状态
-    if (m_bIsTemFile) {
-        updateModifyStatus(true);
-    }
-
-    // 判断处理前后对象状态
-    QPointer<QObject> checkPtr(this);
-    // 加载数据
-    loadContent(content);
-    if (checkPtr.isNull()) {
-        return;
-    }
-
-    //先屏蔽，双字节空字符先按照显示字符编码号处理
-    //clearDoubleCharaterEncode();
-    //PerformanceMonitor::openFileFinish(filePath(), QFileInfo(filePath()).size());
-
-    m_bFileLoading = false;
-    if (flag == true) {
-        m_pTextEdit->setReadOnly(true);
-    }
-    if (m_bQuit) {
-        return;
-    }
     m_pTextEdit->setTextFinished();
 
     QStringList temFileList = Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->value().toStringList();
@@ -946,6 +949,19 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteAr
     }
 
     m_pBottomBar->setEncodeName(m_sCurEncode);
+
+    // 提示读取错误信息
+    if (error) {
+        // 设置文本为只读模式，且不显示通知
+        if (!m_pTextEdit->getReadOnlyMode()) {
+            m_pTextEdit->toggleReadOnlyMode(true);
+        }
+
+        m_pWaringNotices->setMessage(tr("The file cannot be read, which may be too large or has been damaged!"));
+        m_pWaringNotices->clearBtn();
+        m_pWaringNotices->show();
+        DMessageManager::instance()->sendMessage(m_pTextEdit, m_pWaringNotices);
+    }
 }
 
 

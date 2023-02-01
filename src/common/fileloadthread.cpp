@@ -45,9 +45,18 @@ void FileLoadThread::run()
             }
         }
 
-        // reads all remaining data from the file.
-        indata += file.read(file.size());
-        file.close();
+        // 读取申请开辟内存空间时，捕获可能出现的 std::bad_alloc() 异常，防止闪退。
+        try {
+            // reads all remaining data from the file.
+            indata += file.read(file.size());
+            file.close();
+        } catch (const std::exception &e) {
+            qWarning() << Q_FUNC_INFO << "Read file data error, " << QString(e.what());
+
+            file.close();
+            emit sigLoadFinished(encode, indata, true);
+            return;
+        }
 
         if (encode.isEmpty()) {
             //编码识别，如果文件数据大于1M，则只裁剪出1M文件数据去做编码探测
@@ -62,11 +71,11 @@ void FileLoadThread::run()
 
         QString textEncode = QString::fromLocal8Bit(encode);
         if (textEncode.contains("ASCII", Qt::CaseInsensitive) || textEncode.contains("UTF-8", Qt::CaseInsensitive)) {
-            emit sigLoadFinished(encode, indata);
+            emit sigLoadFinished(encode, indata, false);
         } else {
             QByteArray outData;
             DetectCode::ChangeFileEncodingFormat(indata, outData, textEncode, QString("UTF-8"));
-            emit sigLoadFinished(encode, outData);
+            emit sigLoadFinished(encode, outData, false);
         }
     }
 

@@ -22,6 +22,7 @@ public:
 
     void setReloadBtn();
     void setSaveAsBtn();
+    void clearBtn();
 
 signals:
     void reloadBtnClicked();
