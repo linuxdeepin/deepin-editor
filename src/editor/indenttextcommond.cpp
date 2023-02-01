@@ -5,7 +5,7 @@
 #include "indenttextcommond.h"
 #include "dtextedit.h"
 
-IndentTextCommond::IndentTextCommond(TextEdit* edit,int startpos,int endpos,int startline,int endline):
+IndentTextCommand::IndentTextCommand(TextEdit* edit,int startpos,int endpos,int startline,int endline):
     m_edit(edit),
     m_startpos(startpos),
     m_endpos(endpos),
@@ -14,12 +14,12 @@ IndentTextCommond::IndentTextCommond(TextEdit* edit,int startpos,int endpos,int 
 {
     m_hasselected = m_edit->textCursor().hasSelection();
 }
-IndentTextCommond::~IndentTextCommond()
+IndentTextCommand::~IndentTextCommand()
 {
 
 }
 
-void IndentTextCommond::redo()
+void IndentTextCommand::redo()
 {
     auto cursor = m_edit->textCursor();
 
@@ -51,7 +51,7 @@ void IndentTextCommond::redo()
 
 
 
-void IndentTextCommond::undo()
+void IndentTextCommand::undo()
 {
     auto cursor = m_edit->textCursor();
 
