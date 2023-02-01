@@ -688,7 +688,7 @@ TEST(UT_Editwrapper_handleFileLoadFinished, UT_Editwrapper_handleFileLoadFinishe
     setPrintEnabled_stub.set(ADDR(Window, setPrintEnabled), handleFileLoadFinished_001_setPrintEnabled_stub);
     Stub setTextFinished_stub;
     setTextFinished_stub.set(ADDR(TextEdit, setTextFinished), handleFileLoadFinished_001_setTextFinished_stub);
-    pWindow->currentWrapper()->handleFileLoadFinished(encode, retFileContent);
+    pWindow->currentWrapper()->handleFileLoadFinished(encode, retFileContent, false);
     ASSERT_TRUE(pWindow->currentWrapper()->m_pBottomBar->m_pEncodeMenu != nullptr);
 
     pWindow->deleteLater();
@@ -734,7 +734,7 @@ TEST(UT_Editwrapper_handleFileLoadFinished, UT_Editwrapper_handleFileLoadFinishe
     stringList.push_back(c2);
 
 
-    pWindow->currentWrapper()->handleFileLoadFinished(encode, retFileContent);
+    pWindow->currentWrapper()->handleFileLoadFinished(encode, retFileContent, false);
     ASSERT_TRUE(pWindow->currentWrapper()->m_pBottomBar->m_pEncodeMenu != nullptr);
 
     pWindow->deleteLater();
@@ -781,7 +781,7 @@ TEST(UT_Editwrapper_handleFileLoadFinished, UT_Editwrapper_handleFileLoadFinishe
     stringList.push_back(c2);
 
 
-    pWindow->currentWrapper()->handleFileLoadFinished(encode, retFileContent);
+    pWindow->currentWrapper()->handleFileLoadFinished(encode, retFileContent, false);
     ASSERT_TRUE(pWindow->currentWrapper()->m_pBottomBar->m_pEncodeMenu != nullptr);
 
     pWindow->deleteLater();
@@ -789,6 +789,22 @@ TEST(UT_Editwrapper_handleFileLoadFinished, UT_Editwrapper_handleFileLoadFinishe
     d = nullptr;
 }
 
+TEST(UT_Editwrapper_handleFileLoadFinished, UT_Editwrapper_handleFileLoadFinished_004_error)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    const QString filePath = QCoreApplication::applicationDirPath() + QString("/Makefile");
+    QByteArray encode = QByteArray();
+    const QByteArray retFileContent = FileLoadThreadRun(filePath, &encode);
+    Stub setPrintEnabled_stub;
+    setPrintEnabled_stub.set(ADDR(Window, setPrintEnabled), handleFileLoadFinished_001_setPrintEnabled_stub);
+    Stub setTextFinished_stub;
+    setTextFinished_stub.set(ADDR(TextEdit, setTextFinished), handleFileLoadFinished_001_setTextFinished_stub);
+    pWindow->currentWrapper()->handleFileLoadFinished(encode, retFileContent, true);
+    EXPECT_TRUE(pWindow->currentWrapper()->textEditor()->getReadOnlyPermission());
+
+    pWindow->deleteLater();
+}
 
 ////重新加载文件编码 1.文件修改 2.文件未修改处理逻辑一样 切换编码重新加载和另存为 梁卫东
 //bool reloadFileEncode(QByteArray encode);

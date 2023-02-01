@@ -19,7 +19,7 @@ public:
 signals:
     // 预处理信号，优先处理文件头，防止出现加载时间过长的情况
     void sigPreProcess(const QByteArray &encode, const QByteArray &content);
-    void sigLoadFinished(const QByteArray &encode, const QByteArray &content);
+    void sigLoadFinished(const QByteArray &encode, const QByteArray &content, bool error = false);
 
 private:
     QString m_strFilePath;

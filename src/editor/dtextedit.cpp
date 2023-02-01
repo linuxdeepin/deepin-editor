@@ -3713,7 +3713,7 @@ QString TextEdit::getWordAtMouse()
     }
 }
 
-void TextEdit::toggleReadOnlyMode()
+void TextEdit::toggleReadOnlyMode(bool notNotify)
 {
     if (m_readOnlyMode) {
         if (m_cursorMode == Overwrite) {
@@ -3725,14 +3725,20 @@ void TextEdit::toggleReadOnlyMode()
         m_readOnlyMode = false;
         setCursorWidth(1);
         updateHighlightLineSelection();
-        popupNotify(tr("Read-Only mode is off"));
+
+        if (!notNotify) {
+            popupNotify(tr("Read-Only mode is off"));
+        }
     } else {
         m_readOnlyMode = true;
         setReadOnly(true);
         setCursorWidth(0); //隐藏光标
         document()->clearUndoRedoStacks();
         updateHighlightLineSelection();
-        popupNotify(tr("Read-Only mode is on"));
+
+        if (!notNotify) {
+            popupNotify(tr("Read-Only mode is on"));
+        }
         emit cursorModeChanged(Readonly);
     }
 }
