@@ -3,17 +3,19 @@
 export QT_SELECT=5
 include /usr/share/dpkg/default.mk
 
-DEB_BUILD_ARCH ?= $(shell dpkg-architecture -qDEB_BUILD_ARCH)
-DH_AUTO_ARGS = --parallel --buildsystem=cmake
+DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
+
+VERSION = $(DEB_VERSION_UPSTREAM)
+PACK_VER = $(shell echo $(VERSION) | awk -F'[+_~-]' '{print $$1}')
 
 # Uncomment this to turn on verbose mode.
 export DH_VERBOSE=1
 
 %:
-	dh $@ --parallel
+	dh $@
 
 override_dh_auto_configure:
 	dh_auto_configure -- \
 	  -DCMAKE_BUILD_TYPE=Release \
 	  -DCMAKE_SAFETYTEST_ARG="CMAKE_SAFETYTEST_ARG_OFF" \
-	  -DAPP_VERSION=$(DEB_VERSION_UPSTREAM) -DVERSION=$(DEB_VERSION_UPSTREAM) LIB_INSTALL_DIR=/usr/lib/$(DEB_HOST_MULTIARCH)
+	  -DVERSION=$(PACK_VER)
