@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2017 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -17,8 +17,6 @@
 #include <QtSvg/QSvgRenderer>
 
 using namespace Dtk::Core;
-
-QVector<QPair<QString,QStringList>> DDropdownMenu::sm_groupEncodeVec;
 
 DDropdownMenu::DDropdownMenu(QWidget *parent)
     : QFrame(parent)
@@ -243,45 +241,13 @@ DDropdownMenu *DDropdownMenu::createEncodeMenu()
 {
     DDropdownMenu *m_pEncodeMenu = new DDropdownMenu();
     DMenu* m_pMenu = new DMenu();
-    if(sm_groupEncodeVec.isEmpty()){
-        QFile file(":/encodes/encodes.ini");
-        QString data;
-        if(file.open(QIODevice::ReadOnly))
-        {
-           data = QString::fromUtf8(file.readAll());
-           file.close();
-        }
 
-        QTextStream readStream(&data,QIODevice::ReadOnly);
-        while (!readStream.atEnd()) {
-            QString group = readStream.readLine();
-            QString key = group.mid(1,group.length()-2);
-            QString encodes = readStream.readLine();
-            QString value = encodes.mid(8,encodes.length()-2);
-            sm_groupEncodeVec.append(QPair<QString,QStringList>(key,value.split(",")));
-
-            QStringList list = value.split(",");
-            QMenu* groupMenu = new QMenu(QObject::tr(key.toLocal8Bit().data()));
-             foreach(QString var,list)
-             {
-               QAction *act= groupMenu->addAction(QObject::tr(var.toLocal8Bit().data()));
-               if(act->text() == "UTF-8") {
-                   m_pEncodeMenu->m_pActUtf8 = act;
-                   act->setChecked(true);
-               }else {
-                   act->setCheckable(false);
-               }
-
-             }
-
-            m_pMenu->addMenu(groupMenu);
-        }
-    }else {
-
-        int cnt = sm_groupEncodeVec.size();
-        for (int i = 0;i < cnt;i++) {
-            QMenu* groupMenu = new QMenu(QObject::tr(sm_groupEncodeVec[i].first.toLocal8Bit().data()));
-             foreach(QString var,sm_groupEncodeVec[i].second)
+    auto groupEncodeVec = Utils::getSupportEncoding();
+    if (!groupEncodeVec.isEmpty()) {
+        int cnt = groupEncodeVec.size();
+        for (int i = 0; i < cnt;i++) {
+            QMenu* groupMenu = new QMenu(QObject::tr(groupEncodeVec[i].first.toLocal8Bit().data()));
+             foreach(QString var, groupEncodeVec[i].second)
              {
                QAction *act= groupMenu->addAction(QObject::tr(var.toLocal8Bit().data()));
                if(act->text() == "UTF-8") {

@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -54,6 +54,14 @@ bool editwrapper_saveFile = false;
 bool EditWrapper_saveFile_stub()
 {
     return editwrapper_saveFile;
+}
+
+bool editwrapper_saveAsFile = false;
+bool EditWrapper_saveAsFile_stub(const QString &newFilePath, const QByteArray &encodeName)
+{
+    Q_UNUSED(newFilePath);
+    Q_UNUSED(encodeName);
+    return  editwrapper_saveAsFile;
 }
 
 EditWrapper* window_currentWrapper = nullptr;
@@ -534,7 +542,7 @@ TEST(UT_Window_saveAsFileToDisk, UT_Window_saveAsFileToDisk_002)
     exec_ret=1;
     editwrapper_saveFile = true;
     isDraft=false;
-
+    editwrapper_saveAsFile = true;
 
     Stub s0;s0.set(ADDR(Window,currentWrapper),Window_currentWrapper_stub);
     typedef int (*Fptr)(QFileDialog *);
@@ -543,16 +551,15 @@ TEST(UT_Window_saveAsFileToDisk, UT_Window_saveAsFileToDisk_002)
     Stub s2;s2.set(ADDR(EditWrapper,saveFile),EditWrapper_saveFile_stub);
     Stub s3;s3.set(ADDR(Window,updateSaveAsFileName),Window_updateSabeAsFileNameTemp_stub);
     Stub s4;s4.set(ADDR(EditWrapper,isDraftFile),EditWrapper_isDraftFile_stub);
-
+    Stub s5;s5.set((bool(EditWrapper::*)(const QString &, const QByteArray&))ADDR(EditWrapper, saveAsFile), EditWrapper_saveAsFile_stub);
 
     EXPECT_NE(window1->saveAsFileToDisk(),"1");
 
     EXPECT_NE(window1,nullptr);
     window1->deleteLater();
     window_currentWrapper->deleteLater();
-
-
 }
+
 //saveBlankFileToDisk
 TEST(UT_Window_saveBlankFileToDisk, UT_Window_saveBlankFileToDisk)
 {
@@ -563,8 +570,8 @@ TEST(UT_Window_saveBlankFileToDisk, UT_Window_saveBlankFileToDisk)
 
     window1->deleteLater();
 
-
 }
+
 //saveAsOtherTabFile
 TEST(UT_Window_saveAsOtherTabFile, UT_Window_saveAsOtherTabFile_001)
 {

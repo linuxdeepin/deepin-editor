@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -109,7 +109,6 @@ public:
     //判断是否共享文件夹且只读
     static bool isShareDirAndReadOnly(const QString &filePath);
 
-
     static float codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, const QLocale::Country &country);
 
     //return system language
@@ -125,6 +124,9 @@ public:
 
     // 判断 [x1, y1] 和 [x2, y2] 区间是否存在交集，返回交集类型
     static RegionIntersectType checkRegionIntersect(int x1, int y1, int x2, int y2);
+    // 取得当前文本编辑器支持的编码格式，从文件 :/encodes/encodes.ini 中读取
+    static QVector<QPair<QString,QStringList>> getSupportEncoding();
+    static QStringList getSupportEncodingList();
 
 private:
     static QString m_systemLanguage;

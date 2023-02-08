@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2017 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -93,17 +93,16 @@ BottomBar::BottomBar(QWidget *parent)
 
     //切换编码
     connect(m_pEncodeMenu, &DDropdownMenu::currentActionChanged, this,[this](QAction* pAct){
-        // 保持界面统一，先更新底栏展示结果
+        // 保持界面统一
         QString previousText = m_pEncodeMenu->getCurrentText();
-        m_pEncodeMenu->setCurrentTextOnly(pAct->text());
 
         // 处于文件加载状态或转换失败则恢复默认编码格式
         if (m_pWrapper->getFileLoading() || !m_pWrapper->reloadFileEncode(pAct->text().toLocal8Bit())) {
             m_pEncodeMenu->setCurrentTextOnly(previousText);
+        } else {
+            // 存储完成后更新底栏显示文本，重载时可能需要保存旧文本
+            m_pEncodeMenu->setCurrentTextOnly(pAct->text());
         }
-
-        //先屏蔽，双字节空字符先按照显示字符编码号处理
-        //m_pWrapper->clearDoubleCharaterEncode();
     });
 
     //切换文件类型
