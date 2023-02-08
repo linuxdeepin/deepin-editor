@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -120,26 +120,12 @@ public:
     // 翻页预览打印，无需重新布局
     void asynPrint(QPainter &p, DPrinter *printer, const QVector<int> &pageRange);
 
-    /**
-     * @brief backupFile 备份文件
-     */
+    // 备份文件
     void backupFile();
-
-    /**
-     * @brief closeAllFiles 关闭当前窗口所有文件
-     * @return
-     */
+    // 关闭当前窗口所有文件
     bool closeAllFiles();
-
-    /**
-     * @brief addTemFileTab　恢复备份文件标签页
-     * @param qstrPath　打开文件路径
-     * @param qstrName　真实文件名
-     * @param qstrTruePath　真实文件路径
-     * @param qstrTruePath　最后一次修改时间
-     * @param bIsTemFile　是否修改
-     */
-    void addTemFileTab(QString qstrPath, QString qstrName, QString qstrTruePath, QString lastModifiedTime, bool bIsTemFile = false);
+    // 恢复备份文件标签页
+    void addTemFileTab(const QString &qstrPath, const QString &qstrName, const QString &qstrTruePath, const QString &lastModifiedTime, bool bIsTemFile = false);
 
     QMap<QString, EditWrapper *> getWrappers();
 
@@ -192,7 +178,7 @@ public slots:
     void slotReplacebarClose();
 
     void handleReplaceAll(const QString &replaceText, const QString &withText);
-    void handleReplaceNext(QString file, const QString &replaceText, const QString &withText);
+    void handleReplaceNext(const QString &file, const QString &replaceText, const QString &withText);
     void handleReplaceRest(const QString &replaceText, const QString &withText);
     void handleReplaceSkip(QString file, QString keyword);
 

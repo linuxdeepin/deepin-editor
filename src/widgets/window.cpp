@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -632,18 +632,18 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
     //这里会重复连接信号和槽，先全部取消
     QDBusConnection dbus = QDBusConnection::sessionBus();
     switch (Utils::getSystemVersion()) {
-        case Utils::V23:
-            dbus.systemBus().disconnect("org.deepin.dde.Gesture1",
-                                "/org/deepin/dde/Gesture1", "org.deepin.dde.Gesture1",
-                                "Event",
-                                wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
-            break;
-        default:
-            dbus.systemBus().disconnect("com.deepin.daemon.Gesture",
-                                        "/com/deepin/daemon/Gesture", "com.deepin.daemon.Gesture",
-                                        "Event",
-                                        wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
-            break;
+    case Utils::V23:
+        dbus.systemBus().disconnect("org.deepin.dde.Gesture1",
+                                    "/org/deepin/dde/Gesture1", "org.deepin.dde.Gesture1",
+                                    "Event",
+                                    wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
+        break;
+    default:
+        dbus.systemBus().disconnect("com.deepin.daemon.Gesture",
+                                    "/com/deepin/daemon/Gesture", "com.deepin.daemon.Gesture",
+                                    "Event",
+                                    wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
+        break;
     }
     wrapper->textEditor()->disconnect();
     connect(wrapper->textEditor(), &TextEdit::cursorModeChanged, wrapper, &EditWrapper::handleCursorModeChanged);
@@ -655,18 +655,18 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
     connect(wrapper->textEditor(), &TextEdit::signal_setTitleFocus, this, &Window::slot_setTitleFocus, Qt::QueuedConnection);
 
     switch (Utils::getSystemVersion()) {
-        case Utils::V23:
-            dbus.systemBus().connect("org.deepin.dde.Gesture1",
-                                "/org/deepin/dde/Gesture1", "org.deepin.dde.Gesture1",
-                                "Event",
-                                wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
-            break;
-        default:
-            dbus.systemBus().connect("com.deepin.daemon.Gesture",
-                                    "/com/deepin/daemon/Gesture", "com.deepin.daemon.Gesture",
-                                    "Event",
-                                    wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
-            break;
+    case Utils::V23:
+        dbus.systemBus().connect("org.deepin.dde.Gesture1",
+                                 "/org/deepin/dde/Gesture1", "org.deepin.dde.Gesture1",
+                                 "Event",
+                                 wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
+        break;
+    default:
+        dbus.systemBus().connect("com.deepin.daemon.Gesture",
+                                 "/com/deepin/daemon/Gesture", "com.deepin.daemon.Gesture",
+                                 "Event",
+                                 wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
+        break;
     }
     connect(wrapper->textEditor(), &QPlainTextEdit::cursorPositionChanged, wrapper->textEditor(), &TextEdit::cursorPositionChanged);
 
@@ -1076,10 +1076,6 @@ bool Window::saveFile()
     } else {
         temPath = filePath;
     }
-
-    //updateSaveAsFileName(temPath, filePath);
-    //wrapperEdit->updatePath(temPath,filePath);
-
     bool success = wrapperEdit->saveFile();
 
     if (success) {
@@ -1125,8 +1121,13 @@ QString Window::saveAsFileToDisk()
 
     DFileDialog dialog(this, tr("Save File"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.addComboBox(QObject::tr("Encoding"),  QStringList() << wrapper->getTextEncode());
     dialog.setDirectory(QDir::homePath());
+    // 允许选取保存的编码格式
+    DFileDialog::DComboBoxOptions encodingOptions;
+    encodingOptions.editable = false;
+    encodingOptions.defaultValue = wrapper->getTextEncode();
+    encodingOptions.data = Utils::getSupportEncodingList();
+    dialog.addComboBox(QObject::tr("Encoding"), encodingOptions);
 
     QString path = m_settings->getSavePath(m_settings->getSavePathId());
     // 使用当前文件路径时，打开当前文件的目录，新建文档为系统-文档目录
@@ -1147,22 +1148,37 @@ QString Window::saveAsFileToDisk()
         dialog.selectFile(fileInfo.fileName());
     }
 
-    //wrapper->setUpdatesEnabled(false);
     int mode = dialog.exec();
-    //wrapper->setUpdatesEnabled(true);
-
     if (mode == QDialog::Accepted) {
         const QByteArray encode = dialog.getComboBoxValue(QObject::tr("Encoding")).toUtf8();
-        const QString endOfLine = dialog.getComboBoxValue(QObject::tr("Line Endings"));
         const QString newFilePath = dialog.selectedFiles().value(0);
         Settings::instance()->setSavePath(PathSettingWgt::LastOptBox, QFileInfo(newFilePath).absolutePath());
         Settings::instance()->setSavePath(PathSettingWgt::CurFileBox, QFileInfo(newFilePath).absolutePath());
 
         wrapper->updatePath(wrapper->filePath(), newFilePath);
-        if (!wrapper->saveFile()) {
+
+        bool needChangeEncode = (encode != wrapper->getTextEncode().toUtf8());
+        bool saveSucc = false;
+        if (QFileInfo(wrapper->filePath()).absoluteFilePath()
+                == QFileInfo(newFilePath).absoluteFilePath()) {
+            // 相同路径，直接保存文件
+            saveSucc = wrapper->saveFile(encode);
+        } else {
+            saveSucc = wrapper->saveAsFile(newFilePath, encode);
+        }
+
+        if (!saveSucc) {
             /* 如果保存未成功，无需记录更新新文件路径 */
             wrapper->updatePath(wrapper->filePath(), QString());
             return QString();
+        } else {
+            // 更新文件编码
+            wrapper->bottomBar()->setEncodeName(encode);
+
+            // 若编码变更，保存完成后，重新加载文件
+            if (needChangeEncode) {
+                wrapper->readFile(encode);
+            }
         }
 
         if (wrapper->filePath().contains(m_backupDir) || wrapper->filePath().contains(m_blankFileDir)) {
@@ -2093,7 +2109,7 @@ void Window::doPrint(DPrinter *printer, const QVector<int> &pageRange)
     layout->setPaintDevice(p.device());
 
     int dpiy = p.device()->logicalDpiY();
-    int margin = (int)((2 / 2.54) * dpiy); // 2 cm margins
+    int margin = static_cast<int>((2 / 2.54) * dpiy); // 2 cm margins
 
     auto fmt = m_printDoc->rootFrame()->frameFormat();
     fmt.setMargin(margin);
@@ -2316,7 +2332,7 @@ void Window::asynPrint(QPainter &p, DPrinter *printer, const QVector<int> &pageR
 
     QRectF pageRect(printer->pageRect());
     int dpiy = p.device()->logicalDpiY();
-    int margin = (int)((2 / 2.54) * dpiy); // 2 cm margins
+    int margin = static_cast<int>((2 / 2.54) * dpiy); // 2 cm margins
     QRectF body = QRectF(0, 0, pageRect.width(), pageRect.height());
 
     QTextDocument *curDoc = m_bLargePrint ? m_printDocList.first().doc : m_printDoc;
@@ -2466,7 +2482,15 @@ bool Window::closeAllFiles()
     return true;
 }
 
-void Window::addTemFileTab(QString qstrPath, QString qstrName, QString qstrTruePath, QString lastModifiedTime, bool bIsTemFile)
+/**
+ * @brief addTemFileTab　恢复备份文件标签页
+ * @param qstrPath　打开文件路径
+ * @param qstrName　真实文件名
+ * @param qstrTruePath　真实文件路径
+ * @param qstrTruePath　最后一次修改时间
+ * @param bIsTemFile　是否修改
+ */
+void Window::addTemFileTab(const QString &qstrPath, const QString &qstrName, const QString &qstrTruePath, const QString &lastModifiedTime, bool bIsTemFile)
 {
     if (qstrPath.isEmpty() || !Utils::fileExists(qstrPath)) {
         return;
@@ -2509,8 +2533,6 @@ QMap<QString, EditWrapper *> Window::getWrappers()
 
 void Window::setChildrenFocus(bool ok)
 {
-    QMap<QString, EditWrapper *>::Iterator it = m_wrappers.begin();
-
     if (ok) {
         DIconButton *addButton = m_tabbar->findChild<DIconButton *>("AddButton");
         DIconButton *optionBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowOptionButton");
@@ -2754,8 +2776,9 @@ void Window::handleReplaceAll(const QString &replaceText, const QString &withTex
     wrapper->textEditor()->replaceAll(replaceText, withText);
 }
 
-void Window::handleReplaceNext(QString file, const QString &replaceText, const QString &withText)
+void Window::handleReplaceNext(const QString &file, const QString &replaceText, const QString &withText)
 {
+    Q_UNUSED(file);
     m_keywordForSearch = replaceText;
     m_keywordForSearchAll = replaceText;
     EditWrapper *wrapper = currentWrapper();
