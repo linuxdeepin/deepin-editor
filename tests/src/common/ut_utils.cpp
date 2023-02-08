@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -529,4 +529,32 @@ TEST(UT_Utils_checkRegionIntersect, checkRegionIntersect)
     ASSERT_EQ(type, Utils::EIntersectInner);
 }
 
+QByteArray supportEncoding_readAll_stub()
+{
+    return QByteArray();
+}
 
+TEST(UT_Utils_getSupportEncoding, getSupportEncoding)
+{
+    auto encoding = Utils::getSupportEncoding();
+    ASSERT_FALSE(encoding.isEmpty());
+}
+
+TEST(UT_Utils_getSupportEncoding, getSupportEncodingWithError)
+{
+    Stub stub1;
+    typedef QVector<QPair<QString, QStringList> > VecType;
+    stub1.set(ADDR(VecType, isEmpty), supportEncoding_readAll_stub);
+    Stub stub2;
+    stub2.set(ADDR(QIODevice, readAll), supportEncoding_readAll_stub);
+
+    auto encoding = Utils::getSupportEncoding();
+    ASSERT_TRUE(encoding.isEmpty());
+}
+
+TEST(UT_Utils_getSupportEncodingList, getSupportEncodingList)
+{
+    QStringList encodingList = Utils::getSupportEncodingList();
+    ASSERT_FALSE(encodingList.isEmpty());
+    ASSERT_TRUE(encodingList.contains("UTF-8"));
+}

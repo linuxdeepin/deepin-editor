@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: 2011-2022 UnionTech Software Technology Co., Ltd.
+﻿// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -88,8 +88,6 @@ public:
     TextEdit(QWidget *parent = nullptr);
     ~TextEdit() override;
 
-    //在光标处添加删除内容
-
     //直接插入文本
     void insertTextEx(QTextCursor, QString);
     //同时插入多个位置的文本
@@ -119,25 +117,18 @@ public:
     void popRightMenu(QPoint pos = QPoint());
     //
     void setWrapper(EditWrapper *);
-
     EditWrapper *getWrapper();
 
-    /**
-     * @brief getFilePath 获取打开文件路径
-     * @return 打开文件路径
-     */
+    // 获取打开文件路径
     inline QString getFilePath() { return m_sFilePath;}
-    //
-    inline void setFilePath(QString file) { m_sFilePath = file;}
-    //
+    // 设置文件路径
+    inline void setFilePath(const QString &file) { m_sFilePath = file;}
+    // 取得左侧的导航控件，包含行号、书签、折叠控件等
     inline LeftAreaTextEdit *getLeftAreaWidget() { return m_pLeftAreaWidget;}
-    /**
-     * @brief 是否撤销重做操作
-     */
+
+    // 是否允许撤销重做操作
     bool isUndoRedoOpt();
-    /**
-     * @brief 判断文档是否被修改
-     */
+    // 判断文档是否被修改
     bool getModified();
 
     int getCurrentLine();
@@ -184,9 +175,7 @@ public:
     //剪切选中行或当前行至剪贴板中
     void cutlines();
 
-    /**
-     * @brief joinLines 合并行
-     */
+    // joinLines 合并行
     void joinLines();
 
     void killLine();
@@ -239,10 +228,7 @@ public:
     // 手动更新所有的标记信息，用于撤销栈处理更新当前颜色标记操作
     void manualUpdateAllMark(const QList<QPair<MarkOperation, qint64> > &markInfo);
 
-    /**
-     * @author shaoyu.guo ut000455
-     * @brief updateMarkAllSelectColor 文档篇幅视图有变更时（翻页/滚动条变化/鼠标滚轮变化/键盘上下键），动态更新绘制可视范围内字符颜色
-     */
+    // 文档篇幅视图有变更时（翻页/滚动条变化/鼠标滚轮变化/键盘上下键），动态更新绘制可视范围内字符颜色
     void updateMarkAllSelectColor();
 
     void lineNumberAreaPaintEvent(QPaintEvent *event);

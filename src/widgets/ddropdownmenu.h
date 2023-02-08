@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2017 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -81,8 +81,6 @@ private:
     bool m_bPressed =false;
     bool isRequest = false;
     KSyntaxHighlighting::Repository m_Repository;
-private:
-    static QVector<QPair<QString,QStringList>> sm_groupEncodeVec;
 };
 
 #endif

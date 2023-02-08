@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -985,4 +985,51 @@ Utils::RegionIntersectType Utils::checkRegionIntersect(int x1, int y1, int x2, i
             return EIntersectInner;
         }
     }
+}
+
+/**
+ * @return 取得当前文本编辑器支持的编码格式，按区域划分，从文件 :/encodes/encodes.ini 中读取
+ * @note 非多线程安全，仅在 gui 线程调用
+ */
+QVector<QPair<QString, QStringList> > Utils::getSupportEncoding()
+{
+    static QVector<QPair<QString, QStringList> > s_groupEncodeVec;
+    if (s_groupEncodeVec.isEmpty()) {
+        QVector<QPair<QString, QStringList> > tmpEncodeVec;
+
+        QFile file(":/encodes/encodes.ini");
+        QString data;
+        if (file.open(QIODevice::ReadOnly)) {
+            data = QString::fromUtf8(file.readAll());
+            file.close();
+        }
+
+        QTextStream readStream(&data,QIODevice::ReadOnly);
+        while (!readStream.atEnd()) {
+            QString group = readStream.readLine();
+            QString key = group.mid(1,group.length()-2);
+            QString encodes = readStream.readLine();
+            QString value = encodes.mid(8,encodes.length()-2);
+            tmpEncodeVec.append(QPair<QString,QStringList>(key, value.split(",")));
+        }
+
+        s_groupEncodeVec = tmpEncodeVec;
+    }
+
+    return s_groupEncodeVec;
+}
+
+/**
+ * @return 取得当前文本编辑器支持的编码格式列表
+ */
+QStringList Utils::getSupportEncodingList()
+{
+    QStringList encodingList;
+    auto supportEncoding = getSupportEncoding();
+    for (auto encodingData : supportEncoding) {
+        encodingList.append(encodingData.second);
+    }
+    std::sort(encodingList.begin(), encodingList.end());
+
+    return encodingList;
 }

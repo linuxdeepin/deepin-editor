@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2017 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -52,17 +52,17 @@ public:
      * @param bIsTemFile　修改状态
      */
     void openFile(const QString &filepath, QString qstrTruePath, bool bIsTemFile = false);
-    //以默认编码encode重写读取去文件
+    // 以编码 encode 重新读取文件
     bool readFile(QByteArray encode = "");
-    //保存文件
-    bool saveFile();
+    // 按编码 encode 保存文件
+    bool saveFile(QByteArray encode = "");
     /**
      * @brief getPlainTextContent 获取文本框里的文本内容
      * @param plainTextConteng 存放获取到的内容
      */
     void getPlainTextContent(QByteArray &plainTextContent);
     //重新加载文件编码
-    bool saveAsFile(const QString &newFilePath, QByteArray encodeName);
+    bool saveAsFile(const QString &newFilePath, const QByteArray &encodeName);
     //保存草稿文件
     bool saveDraftFile(QString &newFilePath);
     //另存为第一次打开文件编码文件

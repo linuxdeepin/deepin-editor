@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -121,9 +121,9 @@ QByteArray DetectCode::UchardetCode(QString filepath)
 
         uchardet_data_end(handle);
         charset = uchardet_get_charset(handle);
-        uchardet_delete(handle);
     }
 
+    uchardet_delete(handle);
     delete [] buff;
     buff = nullptr;
 
@@ -394,10 +394,75 @@ int DetectCode::ChartDet_DetectingTextCoding(const char *str, QString &encoding,
     return CHARDET_SUCCESS;
 }
 
-bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr, QByteArray &outStr, QString fromCode, QString toCode)
+/**
+ * @return 根据 UTF-8 字符编码，返回传入的字符串 \a buf 头部字符可能占用的字节数量
+ * @note 不同编码UTF-8字节划分示例，除首个字节为0外
+ *  如果一个字节的第一位是0，则这个字节单独就是一个字符；如果第一位是1，则连续有多少个1，就表示当前字符占用多少个字节。
+ *  0000 0000-0000 007F | 0xxxxxxx
+ *  0000 0080-0000 07FF | 110xxxxx 10xxxxxx
+ *  0000 0800-0000 FFFF | 1110xxxx 10xxxxxx 10xxxxxx
+ *  0001 0000-0010 FFFF | 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+ *
+ * @link https://zh.wikipedia.org/wiki/UTF-8
+ */
+int utf8MultiByteCount(char *buf, size_t size)
+{
+    // UTF 字符类型，单字符，中间字符，双字节，三字节，四字节
+    enum UtfCharType {
+        Single,
+        Mid,
+        DoubleBytes,
+        ThreeBytes,
+        FourBytes,
+    };
+
+    // 取得 UTF-8 字节序数值
+    auto LeftBitFunc = [](char data)->int {
+        // 返回前导1的个数
+        int res = 0;
+        while (data & 0x80) {
+            res++;
+            data <<= 1;
+        }
+        return res;
+    };
+
+    int count = 0;
+    while (size > 0 && count < FourBytes) {
+        int leftBits = LeftBitFunc(*buf);
+        switch (leftBits) {
+        case Mid:
+            count++;
+            break;
+        case DoubleBytes:
+        case ThreeBytes:
+        case FourBytes:
+            return leftBits;
+        default:
+            // 超过4字节或单字节，均返回1
+            return 1;
+        }
+
+        buf++;
+        size--;
+    }
+
+    return count;
+}
+
+/**
+ * @brief 将输入的字符序列 \a inputStr 从编码 \a fromCode 转换为编码 \a toCode, 并返回转换后的字符序列。
+ * @return 字符编码转换是否成功
+ */
+bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr, QByteArray &outStr, const QString &fromCode, const QString &toCode)
 {
     if (fromCode == toCode) {
         outStr = inputStr;
+        return true;
+    }
+
+    if (inputStr.isEmpty()) {
+        outStr.clear();
         return true;
     }
 
@@ -411,11 +476,51 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr, QByteArray &outS
         size_t maxBufferSize = outbytesleft;
 
         memset(outbuf, 0, outbytesleft);
-        size_t ret = iconv(handle, &inbuf, &inbytesleft, &outbuf, &outbytesleft);
-        if (static_cast<size_t>(-1) == ret) {
-            // 记录错误信息
-            int errorNum = errno;
-            qWarning() << Q_FUNC_INFO << "iconv() convert text encoding error, errocode:" << errorNum;
+
+        try {
+            size_t ret = 0;
+            do {
+                ret = iconv(handle, &inbuf, &inbytesleft, &outbuf, &outbytesleft);
+                if (static_cast<size_t>(-1) == ret) {
+                    // 记录错误信息
+                    int errorNum = errno;
+                    qWarning() << Q_FUNC_INFO << qPrintable("iconv() convert text encoding error, errocode:") << errorNum;
+
+                    // 遇到错误的输入，错误码 EILSEQ (84)，跳过当前位置并添加'?'
+                    if (EILSEQ == errorNum) {
+                        // 缓冲区不足跳出
+                        if (outbytesleft == 0) {
+                            break;
+                        }
+
+                        // 源编码为 UTF-8 时，可计算需跳过的字符数
+                        size_t bytes = 1;
+                        if (fromCode.toUpper() == "UTF-8") {
+                            bytes = static_cast<size_t>(utf8MultiByteCount(inbuf, inbytesleft));
+                        }
+                        // 跳过错误字符
+                        outbytesleft--;
+                        *outbuf = '?';
+                        outbuf++;
+
+                        // 待转换字节序结束，跳出
+                        if (inbytesleft <= bytes) {
+                            inbuf += inbytesleft;
+                            inbytesleft = 0;
+                            break;
+                        }
+                        inbuf += bytes;
+                        inbytesleft -= bytes;
+
+                        continue;
+                    } else {
+                        break;
+                    }
+                }
+            } while (static_cast<size_t>(-1) == ret);
+
+        } catch (const std::exception &e) {
+            qWarning() << Q_FUNC_INFO << qPrintable("iconv convert encoding catching exception") << qPrintable(e.what());
         }
 
         iconv_close(handle);
@@ -439,7 +544,7 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr, QByteArray &outS
         return true;
 
     } else {
-        qWarning() << Q_FUNC_INFO << "Text encoding convert error, iconv_open() failed.";
+        qWarning() << Q_FUNC_INFO << qPrintable("Text encoding convert error, iconv_open() failed.");
         return  false;
     }
 }

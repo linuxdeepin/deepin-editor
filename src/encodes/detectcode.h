@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -70,10 +70,11 @@ public:
      **/
     static QByteArray selectCoding(QByteArray ucharDetectdRet, QByteArrayList icuDetectRetList);
 
-    //获取文件编码方式
+    // 获取文件编码方式
     static QByteArray GetFileEncodingFormat(QString filepath, QByteArray content = QByteArray(""));
+    // 转换文本编码格式
+    static bool ChangeFileEncodingFormat(QByteArray& inputStr, QByteArray& outStr, const QString &fromCode, const QString &toCode = QString("UTF-8"));
 
-    static bool ChangeFileEncodingFormat(QByteArray& inputStr,QByteArray& outStr,QString fromCode,QString toCode=QString("UTF-8"));
 private:
     static  QMap<QString,QByteArray> sm_LangsMap;
 };

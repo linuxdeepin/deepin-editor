@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -12,10 +12,9 @@ namespace detectcodestub {
 
 QString stringvalue="1";
 
-int intvalue=1;
-int retintstub()
+QByteArray retintstub()
 {
-    return intvalue;
+    return QByteArray();
 }
 
 QByteArray retByteArray = QByteArray();
