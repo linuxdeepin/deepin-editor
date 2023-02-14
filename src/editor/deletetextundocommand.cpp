@@ -16,6 +16,7 @@ DeleteTextUndoCommand::DeleteTextUndoCommand(QTextCursor textcursor, QPlainTextE
     if(m_textCursor.hasSelection()){
         m_sInsertText = m_textCursor.selectedText();
         //qDebug()<<m_sInsertText;
+        m_beginPos -= m_sInsertText.length();
     }else{
         int pos = m_textCursor.positionInBlock() -1;
         if(pos >= 0){
@@ -48,6 +49,9 @@ DeleteTextUndoCommand::DeleteTextUndoCommand(QList<QTextEdit::ExtraSelection> &s
                 m_selectTextList.append("\n");
             }
         }
+    }
+    if (cnt > 0 && m_ColumnEditSelections[0].cursor.hasSelection()) {
+        m_beginPos -= m_ColumnEditSelections[0].cursor.selectedText().length();
     }
 }
 
