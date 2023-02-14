@@ -1,3 +1,11 @@
+deepin-editor (6.0.1) unstable; urgency=medium
+
+  * Improve convert text encoding.
+  * Adaptor V23 DDE DBus interface.
+  * Fix debian rules error. 
+
+ -- renbin <renbin@uniontech.com>  Tue, 14 Feb 2023 15:04:06 +0800
+
 deepin-editor (6.0.0) unstable; urgency=low
 
   * New version 6.0.0
