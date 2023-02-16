@@ -1,3 +1,9 @@
+deepin-editor (6.0.2) unstable; urgency=medium
+
+  * Improve text search and highlight color.
+
+ -- renbin <renbin@uniontech.com>  Thu, 16 Feb 2023 14:42:04 +0800
+
 deepin-editor (6.0.1) unstable; urgency=medium
 
   * Improve convert text encoding.
