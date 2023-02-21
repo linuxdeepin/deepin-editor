@@ -29,7 +29,6 @@ BottomBar::BottomBar(QWidget *parent)
       m_progressBar(new DProgressBar)
 {
     QFont font;
-    font.setFamily("SourceHanSansSC-Normal");
     m_pPositionLabel->setFont(font);
     m_pCharCountLabel->setFont(font);
     m_pCursorStatus->setFont(font);
