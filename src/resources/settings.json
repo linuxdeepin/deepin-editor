@@ -650,6 +650,18 @@
                             "default":  "F1"
                         },
                         {
+                            "key": "findNext",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "F3"
+                        },
+                        {
+                            "key": "findPrev",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "Shift+F3"
+                        },
+                        {
                             "key": "find",
                             "hide" : true,
                             "reset" : false,
@@ -1132,6 +1144,18 @@
                             "default":  "F1"
                         },
                         {
+                            "key": "findNext",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "F3"
+                        },
+                        {
+                            "key": "findPrev",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "Shift+F3"
+                        },
+                        {
                             "key": "find",
                             "hide" : true,
                             "reset" : false,
@@ -1612,6 +1636,18 @@
                             "hide" : true,
                             "reset" : false,
                             "default":  "F1"
+                        },
+                        {
+                            "key": "findNext",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "F3"
+                        },
+                        {
+                            "key": "findPrev",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "Shift+F3"
                         },
                         {
                             "key": "find",

@@ -551,7 +551,7 @@ public slots:
     void moveText(int from, int to, const QString& text, bool copy = false);
     QTextCursor findCursor(const QString &substr, const QString &text, int from, bool backward = false, int cursorPos = 0);
     void onPressedLineNumber(const QPoint& point);
-    QString selectedText();
+    QString selectedText(bool checkCRLF = false);
     void onEndlineFormatChanged(BottomBar::EndlineFormat from,BottomBar::EndlineFormat to);
 
     // 当前程序调色板更新时重绘部分组件
