@@ -47,7 +47,6 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     //设置字体
     int fontsize =DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T9);
     m_font.setPixelSize(fontsize);
-    m_font.setFamily("SourceHanSansSC-Normal");
 
      //添加布局
     QHBoxLayout *layout = new QHBoxLayout();
@@ -360,10 +359,10 @@ QIcon DDropdownMenu::createIcon()
         arrowPixmap = m_arrowPixmap;
     }
 
-    //根据字体大小设置icon大小
-    //height 30    width QFontMetrics fm(font()) fm.width(text)+40;
-    int fontWidth = QFontMetrics(m_font).width(m_text)+20;
-    int fontHeight = QFontMetrics(m_font).height();
+    // 根据字体大小设置icon大小，按计算的字体高度，而非从字体文件中读取的高度(部分字体中英文高度不同)
+    QFontMetrics metrics(m_font);
+    int fontWidth = metrics.width(m_text) + 20;
+    int fontHeight = metrics.size(Qt::TextSingleLine, m_text).height();
     int iconW = 8;
     int iconH = 5;
 
