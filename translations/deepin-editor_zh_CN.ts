@@ -294,6 +294,16 @@
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="33"/>
+        <source>Find Next</source>
+        <translation>查找下一个</translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="34"/>
+        <source>Find Previous</source>
+        <translation>查找上一个</translation>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="33"/>
         <source>Replace</source>
         <translation>替换</translation>
     </message>

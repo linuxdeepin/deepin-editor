@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -9456,6 +9456,44 @@ TEST(UT_Textedit_selectText, SelectText_MultiBlock_Pass)
     EXPECT_EQ(cursor.selectedText().replace("\u2029", "\n"), edit->selectedText());
     EXPECT_EQ(str3, edit->selectedText());
 
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+TEST(UT_Textedit_selectText, SelectText_MultiBlock_MultiByte_Pass)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    // 此字符串为多字节编码
+    edit->setPlainText("𢝐𢝑𢝒𢝓𢝔𢝕𢝖𢝗𢝘𢝙\n"
+                       "𢝚𢝛𢝜𢝝𢝞𢝟𢝠𢝡𢝢𢝣\n"
+                       "𢝤𢝥𢝦𢝧𢝨𢝩𢝪𢝫𢝬𢝭\n");
+    // 选中 "𢝘𢝙\n𢝚𢝛"
+    QString str1 = QString("𢝘𢝙\n𢝚𢝛");
+    QTextCursor cursor = edit->textCursor();
+    cursor.setPosition(16);
+    cursor.setPosition(16 + str1.length(), QTextCursor::KeepAnchor);
+    edit->setTextCursor(cursor);
+    EXPECT_EQ(cursor.selectedText().replace("\u2029", "\n"), edit->selectedText());
+    EXPECT_EQ(str1, edit->selectedText());
+
+    // 选中 "𢝘𢝙\n𢝚𢝛𢝜𢝝𢝞𢝟𢝠𢝡𢝢𢝣\n𢝤𢝥"
+    QString str2 = QString("𢝘𢝙\n𢝚𢝛𢝜𢝝𢝞𢝟𢝠𢝡𢝢𢝣\n𢝤𢝥");
+    cursor.setPosition(16);
+    cursor.setPosition(16 + str2.length(), QTextCursor::KeepAnchor);
+    edit->setTextCursor(cursor);
+    EXPECT_EQ(cursor.selectedText().replace("\u2029", "\n"), edit->selectedText());
+    EXPECT_EQ(str2, edit->selectedText());
+
+    // 选中 "𢝘𢝙\n𢝚𢝛𢝜𢝝𢝞𢝟𢝠𢝡𢝢𢝣\n𢝤𢝥𢝦𢝧𢝨𢝩𢝪𢝫𢝬𢝭\n"
+    QString str3 = QString("𢝘𢝙\n𢝚𢝛𢝜𢝝𢝞𢝟𢝠𢝡𢝢𢝣\n𢝤𢝥𢝦𢝧𢝨𢝩𢝪𢝫𢝬𢝭\n");
+    cursor.setPosition(16);
+    cursor.setPosition(16 + str3.length(), QTextCursor::KeepAnchor);
+    edit->setTextCursor(cursor);
+    EXPECT_EQ(cursor.selectedText().replace("\u2029", "\n"), edit->selectedText());
+    EXPECT_EQ(str3, edit->selectedText());
     edit->deleteLater();
     wra->deleteLater();
 }

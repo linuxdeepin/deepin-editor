@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -10,7 +10,7 @@ InsertTextUndoCommand::InsertTextUndoCommand(QTextCursor textcursor, QString tex
     , m_textCursor(textcursor)
     , m_sInsertText(text)
 {
-
+    m_sInsertText.replace("\r\n", "\n");
 }
 
 InsertTextUndoCommand::InsertTextUndoCommand(QList<QTextEdit::ExtraSelection> &selections, QString text, QPlainTextEdit *edit, QUndoCommand *parent)
@@ -19,19 +19,19 @@ InsertTextUndoCommand::InsertTextUndoCommand(QList<QTextEdit::ExtraSelection> &s
     , m_sInsertText(text)
     , m_ColumnEditSelections(selections)
 {
-
+    m_sInsertText.replace("\r\n", "\n");
 }
-
 
 void InsertTextUndoCommand::undo()
 {
     if (m_ColumnEditSelections.isEmpty()) {
+        // 注意部分字符显示占位超过1
         m_textCursor.setPosition(m_endPostion);
-        m_textCursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor, m_endPostion - m_beginPostion);
+        m_textCursor.setPosition(m_beginPostion, QTextCursor::KeepAnchor);
         m_textCursor.deleteChar();
         if (m_selectText != QString()) {
             m_textCursor.insertText(m_selectText);
-            m_textCursor.movePosition(QTextCursor::Left, QTextCursor::KeepAnchor, m_selectText.length());
+            m_textCursor.setPosition(m_textCursor.position() - m_selectText.length(), QTextCursor::KeepAnchor);
         }
 
         // 进行撤销/恢复时将光标移动到撤销位置
@@ -51,7 +51,6 @@ void InsertTextUndoCommand::undo()
 
 }
 
-
 void InsertTextUndoCommand::redo()
 {
     if (m_ColumnEditSelections.isEmpty()) {
@@ -59,15 +58,9 @@ void InsertTextUndoCommand::redo()
             m_selectText = m_textCursor.selectedText();
             m_textCursor.removeSelectedText();
         }
-        #if 0
-        else if(!m_selectText.isEmpty())
-        {
-           m_textCursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor, m_selectText.size());
-           m_textCursor.removeSelectedText();
-        }
-        #endif
+
         m_textCursor.insertText(m_sInsertText);
-        m_textCursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor, m_sInsertText.length());
+        m_textCursor.setPosition(m_textCursor.position() - m_sInsertText.length(), QTextCursor::KeepAnchor);
         m_beginPostion = m_textCursor.selectionStart();
         m_endPostion = m_textCursor.selectionEnd();
 
@@ -81,7 +74,8 @@ void InsertTextUndoCommand::redo()
         int cnt = m_ColumnEditSelections.size();
         for (int i = 0; i < cnt; i++) {
             m_ColumnEditSelections[i].cursor.insertText(m_sInsertText);
-            m_ColumnEditSelections[i].cursor.movePosition(QTextCursor::Left, QTextCursor::KeepAnchor, m_sInsertText.length());
+            m_ColumnEditSelections[i].cursor.setPosition(m_ColumnEditSelections[i].cursor.position() - m_sInsertText.length() + 1,
+                                                         QTextCursor::KeepAnchor);
         }
 
         if (m_pEdit && !m_ColumnEditSelections.isEmpty()) {
@@ -104,6 +98,7 @@ MidButtonInsertTextUndoCommand::MidButtonInsertTextUndoCommand(QTextCursor textc
     , m_textCursor(textcursor)
     , m_sInsertText(text)
 {
+    m_sInsertText.replace("\r\n", "\n");
     // 中键黏贴需要构造时计算一次光标位置
     m_beginPostion = m_textCursor.position();
     m_endPostion = m_textCursor.position() + m_sInsertText.length();
@@ -115,7 +110,7 @@ MidButtonInsertTextUndoCommand::MidButtonInsertTextUndoCommand(QTextCursor textc
 void MidButtonInsertTextUndoCommand::undo()
 {
     m_textCursor.setPosition(m_endPostion);
-    m_textCursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor, m_endPostion - m_beginPostion);
+    m_textCursor.setPosition(m_beginPostion, QTextCursor::KeepAnchor);
     m_textCursor.deleteChar();
 
     // 进行撤销/恢复时将光标移动到撤销位置
@@ -132,7 +127,7 @@ void MidButtonInsertTextUndoCommand::undo()
 void MidButtonInsertTextUndoCommand::redo()
 {
     m_textCursor.insertText(m_sInsertText);
-    m_textCursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor, m_sInsertText.length());
+    m_textCursor.setPosition(m_textCursor.position() - m_sInsertText.length(), QTextCursor::KeepAnchor);
     m_beginPostion = m_textCursor.selectionStart();
     m_endPostion = m_textCursor.selectionEnd();
 
