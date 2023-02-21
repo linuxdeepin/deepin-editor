@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -504,13 +504,23 @@ void Settings::updateAllKeysWithKeymap(QString keymap)
     for (auto option : settings->group("shortcuts.window")->options()) {
         QStringList keySplitList = option->key().split(".");
         keySplitList[1] = QString("%1_keymap_%2").arg(keySplitList[1]).arg(keymap);
-        option->setValue(settings->option(keySplitList.join("."))->value().toString());
+        auto opt = settings->option(keySplitList.join("."));
+        if (opt) {
+            option->setValue(opt->value().toString());
+        } else {
+            qWarning() << "Unknown shortcut key:" << keySplitList.join(".");
+        }
     }
 
     for (auto option : settings->group("shortcuts.editor")->options()) {
         QStringList keySplitList = option->key().split(".");
         keySplitList[1] = QString("%1_keymap_%2").arg(keySplitList[1]).arg(keymap);
-        option->setValue(settings->option(keySplitList.join("."))->value().toString());
+        auto opt = settings->option(keySplitList.join("."));
+        if (opt) {
+            option->setValue(opt->value().toString());
+        } else {
+            qWarning() << "Unknown shortcut key:" << keySplitList.join(".");
+        }
     }
 
     m_bUserChangeKey = false;

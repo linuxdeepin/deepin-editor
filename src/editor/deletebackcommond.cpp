@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -49,7 +49,7 @@ DeleteBackAltCommand::DeleteBackAltCommand(QList<QTextEdit::ExtraSelection> &sel
         auto cursor = m_ColumnEditSelections[i].cursor;
 
         if(!cursor.hasSelection() && !cursor.atBlockEnd()){
-            cursor.movePosition(QTextCursor::Right,QTextCursor::KeepAnchor,1);
+            cursor.setPosition(cursor.position() + 1, QTextCursor::KeepAnchor);
         }
 
         text = cursor.selectedText();

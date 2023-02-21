@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -2041,20 +2041,23 @@ bool TextEdit::updateKeywordSelectionsInView(QString keyword, QTextCharFormat ch
         }
         int endPos = endBlock.position() + endBlock.length() - 1;
 
-        cursor = document()->find(keyword, beginPos);
+        // 内部计算时，均视为 \n 结尾
+        QLatin1Char endLine('\n');
         QString multiLineText;
-        if (keyword.contains("\n")) {
+        if (keyword.contains(endLine)) {
             auto temp = this->textCursor();
             temp.setPosition(beginPos);
             while (temp.position() < endPos) {
                 temp.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
                 multiLineText += temp.selectedText();
-                multiLineText += "\n";
+                multiLineText += endLine;
                 temp.setPosition(temp.position() + 1);
             }
             cursor = findCursor(keyword, multiLineText, 0, false, beginPos);
-
+        } else {
+            cursor = document()->find(keyword, beginPos);
         }
+
         if (cursor.isNull()) {
             return false;
         }
@@ -2062,14 +2065,15 @@ bool TextEdit::updateKeywordSelectionsInView(QString keyword, QTextCharFormat ch
         while (!cursor.isNull()) {
             extra.cursor = cursor;
             /* 查找字符时，查找到完全相等的时候才高亮，如查找小写f时，大写的F不高亮 */
-            if (!extra.cursor.selectedText().compare(keyword) || keyword.contains("\n")) {
+            if (!extra.cursor.selectedText().compare(keyword) || keyword.contains(endLine)) {
                 listSelection->append(extra);
             }
 
-            cursor = document()->find(keyword, cursor);
-            if (keyword.contains("\n")) {
+            if (keyword.contains(endLine)) {
                 int pos = std::max(extra.cursor.position(), extra.cursor.anchor());
                 cursor = findCursor(keyword, multiLineText, pos - beginPos, false, beginPos);
+            } else {
+                cursor = document()->find(keyword, cursor);
             }
 
             if (cursor.position() > endPos) {
@@ -2550,7 +2554,7 @@ void TextEdit::cut()
         QTextCursor cursor = textCursor();
         //有选择内容才剪切
         if (cursor.hasSelection()) {
-            QString data = this->selectedText();
+            QString data = this->selectedText(true);
             QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(cursor, this);
             m_pUndoStack->push(pDeleteStack);
             QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
@@ -2578,7 +2582,7 @@ void TextEdit::copy()
             QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
             if (textCursor().hasSelection()) {
                 //clipboard->setText(textCursor().selection().toPlainText());
-                clipboard->setText(this->selectedText());
+                clipboard->setText(this->selectedText(true));
                 tryUnsetMark();
             } else {
                 clipboard->setText(m_highlightWordCacheCursor.selectedText());
@@ -2961,16 +2965,23 @@ void TextEdit::moveText(int from, int to, const QString &text, bool copy)
  */
 QTextCursor TextEdit::findCursor(const QString &substr, const QString &text, int from, bool backward, int cursorPos)
 {
+    // 处理换行符为 \r\n (光标计算时被视为单个字符)的情况，移除多计算的字符数
+    // text 均为 \n 结尾
+    QString findSubStr = substr;
+    if (BottomBar::Windows == m_wrapper->bottomBar()->getEndlineFormat()) {
+        findSubStr.replace("\r\n", "\n");
+    }
+
     int index = -1;
     if (backward) {
-        index = text.lastIndexOf(substr, from);
+        index = text.lastIndexOf(findSubStr, from);
     } else {
-        index = text.indexOf(substr, from);
+        index = text.indexOf(findSubStr, from);
     }
     if (-1 != index) {
         auto cursor = this->textCursor();
         cursor.setPosition(index + cursorPos);
-        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, substr.size());
+        cursor.setPosition(cursor.position() + findSubStr.size(), QTextCursor::KeepAnchor);
         return cursor;
     } else {
         return QTextCursor();
@@ -3027,7 +3038,7 @@ void TextEdit::onPressedLineNumber(const QPoint &point)
  *      可使用 QString::replace() 将这些字符替换为换行符，为避免文本原有 Unicode U+2029 分割符影响，
  *      手动调整换行符插入位置。
  */
-QString TextEdit::selectedText()
+QString TextEdit::selectedText(bool checkCRLF)
 {
     auto cursor = this->textCursor();
     auto temp = cursor;
@@ -3050,10 +3061,16 @@ QString TextEdit::selectedText()
     text += cursor.selectedText();
     cursor.setPosition(cursor.position() + 1);
 
+    // 不同风格使用不同换行符，默认不替换，仅在剪贴板、保存文件等时设置
+    QString endLine = "\n";
+    if (checkCRLF && BottomBar::Windows == m_wrapper->bottomBar()->getEndlineFormat()) {
+        endLine = "\r\n";
+    }
+
     // 获取中间完整文本块内容
     while ((cursor.position() + cursor.block().length()) < endpos) {
         cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
-        text += "\n";
+        text += endLine;
         text += cursor.selectedText();
         cursor.setPosition(cursor.position() + 1);
     }
@@ -3062,14 +3079,12 @@ QString TextEdit::selectedText()
     if (cursor.position() < endpos) {
         // 判断是否尾部文本块达到当前文本块末尾，到达末尾需要将 U+2029 替换为 \n
         bool needAdjustNewline = bool(cursor.position() + cursor.block().length() == endpos);
-
-        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, endpos - cursor.position());
-        text += "\n";
+        cursor.setPosition(endpos, QTextCursor::KeepAnchor);
+        text += endLine;
         text += cursor.selectedText();
 
-        if (needAdjustNewline
-                && text.endsWith("\u2029")) {
-            text.back() = QChar('\n');
+        if (needAdjustNewline && text.endsWith("\u2029")) {
+            text.replace("\u2029", endLine);
         }
     }
 
@@ -7921,7 +7936,7 @@ void TextEdit::onTextContentChanged(int from, int charsRemoved, int charsAdded)
         // 记录鼠标中键变更，滞后插入撤销栈，在push()时不执行redo()
         QTextCursor cursor = textCursor();
         cursor.setPosition(from);
-        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, charsAdded);
+        cursor.setPosition(from + charsAdded, QTextCursor::KeepAnchor);
         // 取得已插入的文本信息
         QString insertText = cursor.selectedText();
         cursor.setPosition(from);
