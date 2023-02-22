@@ -1,0 +1,17 @@
+{
+    "magic":"dsg.config.meta",
+    "version":"1.0",
+    "contents":{
+        "disableImproveGB18030":{
+            "value":false,
+            "serial":0,
+            "flags":[],
+            "name":"屏蔽提高GB18030编码识别率",
+            "name[zh_CN]":"屏蔽提高GB18030编码识别率",
+            "description[zh_CN]":"屏蔽提高中文环境下GB18030编码的识别率的策略，默认不屏蔽",
+            "description":"Block the strategy to improve the recognition rate of GB18030 encoding in the Chinese environment, the default is not blocked",
+            "permissions":"readwrite",
+            "visibility":"private"
+        }   
+    }   
+}  
