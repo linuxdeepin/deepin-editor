@@ -3,18 +3,20 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "detectcode.h"
+#include "../common/config.h"
+
 #include <QByteArray>
 #include <QString>
 #include <QDebug>
 #include <QDateTime>
+
 #include <stdio.h>
 
 QMap<QString, QByteArray> DetectCode::sm_LangsMap;
+// 最低的检测准确度判断，低于90%需要调整策略
+static const float gs_dMinConfidence = 0.9f;
 
-DetectCode::DetectCode()
-{
-
-}
+DetectCode::DetectCode() {}
 
 /**
  * @brief 根据文件头内容 \a content 取得文件 \a filepath 字符编码格式
@@ -33,9 +35,6 @@ QByteArray DetectCode::GetFileEncodingFormat(QString filepath, QByteArray conten
     QByteArray detectRet;
     float chardetconfidence = 0.0f;
 
-    // 最低的检测准确度判断，低于90%需要调整策略
-    static const float s_dMinConfidence = 0.9f;
-
     /* chardet识别编码 */
     QString str(content);
     // 匹配的是中文(仅在UTF-8编码下)
@@ -50,9 +49,7 @@ QByteArray DetectCode::GetFileEncodingFormat(QString filepath, QByteArray conten
         // 大文本数据存在从文档中间截断的可能，导致unicode中文字符被截断，解析为乱码，处理部分情况
         // 根据文本中断的情况，每次尝试解析编码后移除尾部字符，直到识别率达到90%以上
         int tryCount = 5;
-        while (chardetconfidence < s_dMinConfidence
-                && newContent.size() > suffix.size()
-                && tryCount-- > 0) {
+        while (chardetconfidence < gs_dMinConfidence && newContent.size() > suffix.size() && tryCount-- > 0) {
             // 移除可能的乱码尾部字符
             newContent.remove(newContent.size() - suffix.size(), 1);
             DetectCode::ChartDet_DetectingTextCoding(newContent, charDetectedResult, chardetconfidence);
@@ -63,9 +60,7 @@ QByteArray DetectCode::GetFileEncodingFormat(QString filepath, QByteArray conten
         // 部分非unicode编码同为中文，例如 GB18030, BIG5 等中文编码，同样判断识别率，识别率较低手动干预多次检测
         int tryCount = 5;
         QByteArray newContent = content;
-        while (chardetconfidence < s_dMinConfidence
-                && !newContent.isEmpty()
-                && tryCount-- > 0) {
+        while (chardetconfidence < gs_dMinConfidence && !newContent.isEmpty() && tryCount-- > 0) {
             newContent.chop(1);
             DetectCode::ChartDet_DetectingTextCoding(newContent, charDetectedResult, chardetconfidence);
         }
@@ -73,17 +68,14 @@ QByteArray DetectCode::GetFileEncodingFormat(QString filepath, QByteArray conten
     ucharDetectdRet = charDetectedResult.toLatin1();
 
     // uchardet识别编码 若识别率过低, 考虑是否非单字节编码格式。
-    if (ucharDetectdRet.contains("unknown")
-            || ucharDetectdRet.contains("ASCII")
-            || ucharDetectdRet.contains("???")
-            || ucharDetectdRet.isEmpty()
-            || chardetconfidence < s_dMinConfidence) {
+    if (ucharDetectdRet.contains("unknown") || ucharDetectdRet.contains("ASCII") || ucharDetectdRet.contains("???") ||
+        ucharDetectdRet.isEmpty() || chardetconfidence < gs_dMinConfidence) {
         ucharDetectdRet = DetectCode::UchardetCode(filepath);
     }
 
-    /* icu识别编码 */
+    // icu识别编码
     icuDetectTextEncoding(filepath, icuDetectRetList);
-    detectRet = selectCoding(ucharDetectdRet, icuDetectRetList);
+    detectRet = selectCoding(ucharDetectdRet, icuDetectRetList, chardetconfidence);
 
     if (detectRet.contains("ASCII") || detectRet.isEmpty()) {
         detectRet = "UTF-8";
@@ -124,15 +116,23 @@ QByteArray DetectCode::UchardetCode(QString filepath)
     }
 
     uchardet_delete(handle);
-    delete [] buff;
+    delete[] buff;
     buff = nullptr;
 
-    if (charset == "MAC-CENTRALEUROPE") charset = "MACCENTRALEUROPE";
-    if (charset == "MAC-CYRILLIC") charset = "MACCYRILLIC";
-    if (charset.contains("WINDOWS-")) charset = charset.replace("WINDOWS-", "CP");
+    if (charset == "MAC-CENTRALEUROPE")
+        charset = "MACCENTRALEUROPE";
+    if (charset == "MAC-CYRILLIC")
+        charset = "MACCYRILLIC";
+    if (charset.contains("WINDOWS-"))
+        charset = charset.replace("WINDOWS-", "CP");
     return charset;
 }
 
+/**
+ * @author guoshao
+ * @brief  icuDetectTextEncoding() icu库编码识别
+ * @param  filePath:文件路径，listDetectRet:编码识别结果存在的变量
+ **/
 void DetectCode::icuDetectTextEncoding(const QString &filePath, QByteArrayList &listDetectRet)
 {
     FILE *file;
@@ -142,34 +142,43 @@ void DetectCode::icuDetectTextEncoding(const QString &filePath, QByteArrayList &
         return;
     }
 
-    int len = 0;
-    int iBuffSize = 4096;
+    size_t iBuffSize = 4096;
     char *detected = nullptr;
     char *buffer = new char[iBuffSize];
     memset(buffer, 0, iBuffSize);
 
     int readed = 0;
     while (!feof(file)) {
-        int32_t len = fread(buffer, 1, iBuffSize, file);
+        size_t len = fread(buffer, 1, iBuffSize, file);
         readed += len;
         if (readed > 1 * 1024 * 1024) {
             break;
         }
-        if (!detectTextEncoding(buffer, len, &detected, listDetectRet)) {
+
+        if (detectTextEncoding(buffer, len, &detected, listDetectRet)) {
             break;
         }
     }
 
-    delete [] buffer;
+    delete[] buffer;
     buffer = nullptr;
     fclose(file);
 }
 
+/**
+ * @author guoshao
+ * @brief  detectTextEncoding() icu库编码识别内层函数
+ * @param  data:要识别的内容，len:要识别的内容的长度，detected:编码识别结果存在的变量，
+ *         listDetectRet:编码识别结果存在的list
+ * @return true:识别成功，false:识别失败
+ **/
 bool DetectCode::detectTextEncoding(const char *data, size_t len, char **detected, QByteArrayList &listDetectRet)
 {
+    Q_UNUSED(detected);
+
     UCharsetDetector *csd;
     const UCharsetMatch **csm;
-    int32_t match, matchCount = 0;
+    int32_t matchCount = 0;
 
     UErrorCode status = U_ZERO_ERROR;
     csd = ucsdet_open(&status);
@@ -183,38 +192,37 @@ bool DetectCode::detectTextEncoding(const char *data, size_t len, char **detecte
     }
 
     csm = ucsdet_detectAll(csd, &matchCount, &status);
-    //csm = ucsdet_detectAll_63(csd, &matchCount, &status);
     if (status != U_ZERO_ERROR) {
         return false;
     }
 
-    for (match = 0; match < matchCount; match++) {
-        const char *name = ucsdet_getName(csm[match], &status);
-        int32_t confidence = ucsdet_getConfidence(csm[match], &status);
+    int readMax = 0;
+    // 提高GB18030识别率时，拓展允许读取的编码列表
+    if (Config::instance()->enableImproveGB18030()) {
+        readMax = qMin(6, matchCount);
+    } else {
+        readMax = qMin(3, matchCount);
     }
 
-    if (matchCount >= 3) {
-        for (int i = 0; i < 3; i++) {
-            auto str = ucsdet_getName(csm[i], &status);
-            if (status != U_ZERO_ERROR) {
-                return false;
-            }
-            listDetectRet << QByteArray(str);
+    for (int i = 0; i < readMax; i++) {
+        auto str = ucsdet_getName(csm[i], &status);
+        if (status != U_ZERO_ERROR) {
+            return false;
         }
-
-
-    } else if (matchCount > 0) {
-        auto str = ucsdet_getName(csm[0], &status);
         listDetectRet << QByteArray(str);
     }
 
-
     ucsdet_close(csd);
-
     return true;
 }
 
-QByteArray DetectCode::selectCoding(QByteArray ucharDetectdRet, QByteArrayList icuDetectRetList)
+/**
+ * @author guoshao
+ * @brief  selectCoding() 筛选识别出来的编码
+ * @param  ucharDetectdRet:chardet/uchardet识别的编码结果，icuDetectRetList:编码识别结果存在的list
+ * @return 筛选编码的结果
+ **/
+QByteArray DetectCode::selectCoding(QByteArray ucharDetectdRet, QByteArrayList icuDetectRetList, float confidence)
 {
     // 列表不允许为空
     if (icuDetectRetList.isEmpty()) {
@@ -222,11 +230,23 @@ QByteArray DetectCode::selectCoding(QByteArray ucharDetectdRet, QByteArrayList i
     }
 
     if (!ucharDetectdRet.isEmpty()) {
-        if (ucharDetectdRet.contains(icuDetectRetList[0])) {
-            return ucharDetectdRet;
+        // 获取是否允许提高GB18030编码的策略
+        if (Config::instance()->enableImproveGB18030()) {
+            // 中文环境优先匹配GB18030编码
+            if (QLocale::Chinese == QLocale::system().language()) {
+                if (confidence < gs_dMinConfidence && icuDetectRetList.contains("GB18030")) {
+                    return QByteArray("GB18030");
+                }
+
+                if (QByteArray("ASCII") == ucharDetectdRet) {
+                    return QByteArray("GB18030");
+                }
+            }
         }
 
-        if (!ucharDetectdRet.contains(icuDetectRetList[0])) {
+        if (ucharDetectdRet.contains(icuDetectRetList[0])) {
+            return ucharDetectdRet;
+        } else {
             if (icuDetectRetList.contains("GB18030")) {
                 return QByteArray("GB18030");
             } else {
@@ -327,15 +347,17 @@ QByteArray DetectCode::EncaDetectCode(QString filepath)
 }
 #endif
 
+/**
+ * @brief ChartDet_DetectingTextCoding libchardet1编码识别库识别编码
+ */
 int DetectCode::ChartDet_DetectingTextCoding(const char *str, QString &encoding, float &confidence)
 {
     DetectObj *obj = detect_obj_init();
 
     if (obj == nullptr) {
-        //qInfo() << "Memory Allocation failed\n";
+        // qInfo() << "Memory Allocation failed\n";
         return CHARDET_MEM_ALLOCATED_FAIL;
     }
-
 
     /* 另一种编码识别逻辑，暂且保留*/
     /*size_t buffer_size = 1024;
@@ -362,7 +384,6 @@ int DetectCode::ChartDet_DetectingTextCoding(const char *str, QString &encoding,
     delete [] buff;
     buff = nullptr;*/
 
-
 #ifndef CHARDET_BINARY_SAFE
     // before 1.0.5. This API is deprecated on 1.0.5
     switch (detect(str, &obj))
@@ -371,17 +392,17 @@ int DetectCode::ChartDet_DetectingTextCoding(const char *str, QString &encoding,
     switch (detect_r(str, strlen(str), &obj))
 #endif
     {
-    case CHARDET_OUT_OF_MEMORY :
-        qInfo() << "On handle processing, occured out of memory\n";
-        detect_obj_free(&obj);
-        return CHARDET_OUT_OF_MEMORY;
-    case CHARDET_NULL_OBJECT :
-        qInfo() << "2st argument of chardet() is must memory allocation with detect_obj_init API\n";
-        return CHARDET_NULL_OBJECT;
+        case CHARDET_OUT_OF_MEMORY:
+            qInfo() << "On handle processing, occured out of memory\n";
+            detect_obj_free(&obj);
+            return CHARDET_OUT_OF_MEMORY;
+        case CHARDET_NULL_OBJECT:
+            qInfo() << "2st argument of chardet() is must memory allocation with detect_obj_init API\n";
+            return CHARDET_NULL_OBJECT;
     }
 
 #ifndef CHARDET_BOM_CHECK
-    //qInfo() << "encoding:" << obj->encoding << "; confidence: " << obj->confidence;
+        // qInfo() << "encoding:" << obj->encoding << "; confidence: " << obj->confidence;
 #else
     // from 1.0.6 support return whether exists BOM
     qInfo() << "encoding:" << obj->encoding << "; confidence: " << obj->confidence << "; bom: " << obj->bom;
@@ -417,7 +438,7 @@ int utf8MultiByteCount(char *buf, size_t size)
     };
 
     // 取得 UTF-8 字节序数值
-    auto LeftBitFunc = [](char data)->int {
+    auto LeftBitFunc = [](char data) -> int {
         // 返回前导1的个数
         int res = 0;
         while (data & 0x80) {
@@ -431,16 +452,16 @@ int utf8MultiByteCount(char *buf, size_t size)
     while (size > 0 && count < FourBytes) {
         int leftBits = LeftBitFunc(*buf);
         switch (leftBits) {
-        case Mid:
-            count++;
-            break;
-        case DoubleBytes:
-        case ThreeBytes:
-        case FourBytes:
-            return leftBits;
-        default:
-            // 超过4字节或单字节，均返回1
-            return 1;
+            case Mid:
+                count++;
+                break;
+            case DoubleBytes:
+            case ThreeBytes:
+            case FourBytes:
+                return leftBits;
+            default:
+                // 超过4字节或单字节，均返回1
+                return 1;
         }
 
         buf++;
@@ -454,7 +475,10 @@ int utf8MultiByteCount(char *buf, size_t size)
  * @brief 将输入的字符序列 \a inputStr 从编码 \a fromCode 转换为编码 \a toCode, 并返回转换后的字符序列。
  * @return 字符编码转换是否成功
  */
-bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr, QByteArray &outStr, const QString &fromCode, const QString &toCode)
+bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr,
+                                          QByteArray &outStr,
+                                          const QString &fromCode,
+                                          const QString &toCode)
 {
     if (fromCode == toCode) {
         outStr = inputStr;
@@ -477,14 +501,14 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr, QByteArray &outS
 
         memset(outbuf, 0, outbytesleft);
 
+        int errorNum = 0;
         try {
             size_t ret = 0;
             do {
                 ret = iconv(handle, &inbuf, &inbytesleft, &outbuf, &outbytesleft);
                 if (static_cast<size_t>(-1) == ret) {
                     // 记录错误信息
-                    int errorNum = errno;
-                    qWarning() << Q_FUNC_INFO << qPrintable("iconv() convert text encoding error, errocode:") << errorNum;
+                    errorNum = errno;
 
                     // 遇到错误的输入，错误码 EILSEQ (84)，跳过当前位置并添加'?'
                     if (EILSEQ == errorNum) {
@@ -498,7 +522,7 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr, QByteArray &outS
                         if (fromCode.toUpper() == "UTF-8") {
                             bytes = static_cast<size_t>(utf8MultiByteCount(inbuf, inbytesleft));
                         }
-                        // 跳过错误字符
+                        // 跳过错误字符，设置错误字符为'?'
                         outbytesleft--;
                         *outbuf = '?';
                         outbuf++;
@@ -523,29 +547,29 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr, QByteArray &outS
             qWarning() << Q_FUNC_INFO << qPrintable("iconv convert encoding catching exception") << qPrintable(e.what());
         }
 
+        if (errorNum) {
+            qWarning() << Q_FUNC_INFO << qPrintable("iconv() convert text encoding error, errocode:") << errorNum;
+        }
         iconv_close(handle);
 
         // 手动添加 UTF BOM 信息
-        static QMap<QString, QByteArray> byteOrderMark = {
-            {"UTF-16LE", QByteArray::fromHex("FFFE")},
-            {"UTF-16BE", QByteArray::fromHex("FEFF")},
-            {"UTF-32LE", QByteArray::fromHex("FFFE0000")},
-            {"UTF-32BE", QByteArray::fromHex("0000FEFF")}
-        };
+        static QMap<QString, QByteArray> byteOrderMark = {{"UTF-16LE", QByteArray::fromHex("FFFE")},
+                                                          {"UTF-16BE", QByteArray::fromHex("FEFF")},
+                                                          {"UTF-32LE", QByteArray::fromHex("FFFE0000")},
+                                                          {"UTF-32BE", QByteArray::fromHex("0000FEFF")}};
         outStr.append(byteOrderMark.value(toCode));
 
         // 计算 iconv() 实际转换的字节数
         size_t realConvertSize = maxBufferSize - outbytesleft;
         outStr += QByteArray(bufferHeader, static_cast<int>(realConvertSize));
 
-        delete [] bufferHeader;
+        delete[] bufferHeader;
         bufferHeader = nullptr;
 
         return true;
 
     } else {
         qWarning() << Q_FUNC_INFO << qPrintable("Text encoding convert error, iconv_open() failed.");
-        return  false;
+        return false;
     }
 }
-
