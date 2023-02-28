@@ -236,6 +236,8 @@ private:
     // 打印多文本数据
     void printPageWithMultiDoc(int index, QPainter *painter, const QVector<PrintInfo> &printInfo,
                                const QRectF &body, const QRectF &pageCountBox);
+    // 重新更新文本
+    void rehighlightPrintDoc(QTextDocument *doc, CSyntaxHighlighter *highlighter);
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -299,6 +301,8 @@ private:
     bool m_bLargePrint = false;                     // 是否为大文件打印
     bool m_bPrintProcessing = false;                // 文件打印计算中
     EditWrapper *m_printWrapper = nullptr;          // 当前处理的编辑对象(关闭标签页时需要退出打印)
+    QTextDocument *printCopyDoc = nullptr;              // 用于大文本打印时的拷贝文档
+    CSyntaxHighlighter *printCopyHighlighter = nullptr; // 用于大文本打印时的高亮文档
     QVector<PrintInfo> m_printDocList;              // 打印文档列表，用于超大文档打印
     int m_multiDocPageCount = 0;                    // 用于超大文档打印时单独记录多文档的打印页数
 

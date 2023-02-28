@@ -2177,25 +2177,25 @@ TEST(UT_Window_slot_setTitleFocus, UT_Window_slot_setTitleFocus_002)
     w->deleteLater();
 }
 
-TEST(UT_Window_keyPressEvent, UT_Window_keyPressEvent_007)
+TEST(UT_Window_rehighlightPrintDoc, rehighlightPrintDoc_HighlightCpp_pass)
 {
-//    QStringList aa;
-//    Window *window = new Window();
-//    window->m_settings = Settings::instance();
+    Window* w = new Window;
+    w->addBlankTab();
+    w->m_printWrapper = w->currentWrapper();
+    QTextDocument *doc = new QTextDocument;
+    doc->setPlainText("#include <iostream>;\n"
+                      "int main(int argc, char *argv[]) { }");
 
-//    utils_getkeyshortcut = Utils::getKeyshortcutFromKeymap(window->m_settings, "window", "togglefullscreen");
-//    editwrapper_texteditor = new TextEdit;
+    CSyntaxHighlighter *highlighter = new CSyntaxHighlighter(doc);
+    KSyntaxHighlighting::Repository repository;
+    highlighter->setDefinition(repository.definitionForName("C++"));
+    highlighter->setTheme(repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
 
-//    Stub s1;s1.set(ADDR(Utils,getKeyshortcut),Utils_getKeyshortcut_stub);
-//    Stub s2;s2.set(ADDR(EditWrapper,textEditor),EditWrapper_textEditor_stub);
-//    Stub s3;s3.set(ADDR(Utils,getKeyshortcutFromKeymap),Utils_getKeyshortcutFromKeymap_stub);
+    w->rehighlightPrintDoc(doc, highlighter);
+    EXPECT_FALSE(doc->firstBlock().textFormats().isEmpty());
 
-//    window->keyPressEvent(eve);
-
-//    EXPECT_NE(window,nullptr);
-//    window->deleteLater();
-//    window->m_settings->deleteLater();
-//    editwrapper_texteditor->deleteLater();
+    doc->deleteLater();
+    w->deleteLater();
 }
 
 
