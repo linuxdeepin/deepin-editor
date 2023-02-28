@@ -112,8 +112,8 @@ void Window::printPage(int index, QPainter *painter, const QTextDocument *doc,
  * @param body          范围大小
  * @param pageCountBox  绘制页码的范围
  */
-void Window::printPageWithMultiDoc(int index, QPainter *painter, const QVector<Window::PrintInfo> &printInfo,
-                                   const QRectF &body, const QRectF &pageCountBox)
+void Window::printPageWithMultiDoc(
+    int index, QPainter *painter, const QVector<Window::PrintInfo> &printInfo, const QRectF &body, const QRectF &pageCountBox)
 {
     painter->save();
 
@@ -132,11 +132,61 @@ void Window::printPageWithMultiDoc(int index, QPainter *painter, const QVector<W
             // 设置文档裁剪区域
             const QRectF docView(0, (docIndex - 1) * body.height(), body.width(), body.height());
             QAbstractTextDocumentLayout *layout = info.doc->documentLayout();
-            QAbstractTextDocumentLayout::PaintContext ctx;
-            ctx.clip = docView;
-            ctx.palette.setColor(QPalette::Text, Qt::black);
-            // 绘制文档
-            layout->draw(painter, ctx);
+
+            // 大文本的高亮单独处理
+            if (info.highlighter) {
+                // 提前两页拷贝数据，用于处理高亮计算时连续处理
+                qreal offsetHeight = qMax<qreal>(0, (qMin(2, docIndex - 1) * body.height()));
+                QPointF point = docView.topLeft() - QPointF(0, offsetHeight);
+                int pos = layout->hitTest(point, Qt::FuzzyHit);
+                QTextCursor cursor(info.doc);
+                cursor.setPosition(pos);
+                // 选取后续内容
+                int endPos = layout->hitTest(docView.bottomLeft(), Qt::FuzzyHit);
+                endPos = qMin(endPos + 1000, info.doc->characterCount() - 1);
+                cursor.setPosition(endPos, QTextCursor::KeepAnchor);
+                cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+
+                // 创建临时文档
+                QTextDocument *tmpDoc = createNewDocument(info.doc);
+                QTextCursor insertCursor(tmpDoc);
+                insertCursor.beginEditBlock();
+                insertCursor.insertFragment(QTextDocumentFragment(cursor));
+                insertCursor.endEditBlock();
+
+                auto margin = info.doc->rootFrame()->frameFormat().margin();
+                auto fmt = tmpDoc->rootFrame()->frameFormat();
+                fmt.setMargin(margin);
+                tmpDoc->rootFrame()->setFrameFormat(fmt);
+
+                tmpDoc->setPageSize(body.size());
+                // 重新高亮文本
+                auto newHighlighter = new CSyntaxHighlighter(tmpDoc);
+                newHighlighter->setDefinition(info.highlighter->definition());
+                newHighlighter->setTheme(info.highlighter->theme());
+                rehighlightPrintDoc(tmpDoc, newHighlighter);
+
+                // 确保布局完成
+                tmpDoc->pageCount();
+
+                // 调整显示位置
+                painter->resetTransform();
+                painter->translate(body.left(), body.top() - offsetHeight);
+                QAbstractTextDocumentLayout::PaintContext ctx;
+                ctx.clip = QRectF(0, offsetHeight, body.width(), body.height());
+                ctx.palette.setColor(QPalette::Text, Qt::black);
+                tmpDoc->documentLayout()->setPaintDevice(painter->device());
+                tmpDoc->documentLayout()->draw(painter, ctx);
+
+                delete newHighlighter;
+                delete tmpDoc;
+            } else {
+                QAbstractTextDocumentLayout::PaintContext ctx;
+                ctx.clip = docView;
+                ctx.palette.setColor(QPalette::Text, Qt::black);
+                // 绘制文档
+                layout->draw(painter, ctx);
+            }
 
             break;
         }
@@ -145,7 +195,6 @@ void Window::printPageWithMultiDoc(int index, QPainter *painter, const QVector<W
 
     painter->restore();
 }
-
 
 Window::Window(DMainWindow *parent)
     : DMainWindow(parent),
@@ -1635,7 +1684,8 @@ QString Window::getCurrentOpenFilePath()
  * @param editWrapper 文本编辑处理，提供文本编辑器和高亮信息
  * @return 是否克隆数据成功
  *
- * @note Qt自带的布局算法在超长文本时存在计算越界的问题，计算后的
+ * @note Qt自带的布局算法在超长文本时存在计算越界的问题，计算长度将返回溢出值，导致显示异常，
+        调整为拆分的文档结构
  */
 bool Window::cloneLargeDocument(EditWrapper *editWrapper)
 {
@@ -1695,8 +1745,8 @@ bool Window::cloneLargeDocument(EditWrapper *editWrapper)
 
             if (currentCopyCharCount >= s_StepCopyCharCount) {
                 // 判断是否超过单个文档允许的最大范围
-                if ((copyDoc->characterCount() + currentCopyCharCount) > s_MaxDocCharCount
-                        || (copyDoc->blockCount() + currentSelectBlock) > s_MaxDocBlockCount) {
+                if ((copyDoc->characterCount() + currentCopyCharCount) > s_MaxDocCharCount ||
+                    (copyDoc->blockCount() + currentSelectBlock) > s_MaxDocBlockCount) {
                     // 创建新的打印文档
                     m_printDocList.append(createPrintInfo());
                     copyDoc = m_printDocList.last().doc;
@@ -1741,34 +1791,46 @@ bool Window::cloneLargeDocument(EditWrapper *editWrapper)
     return true;
 }
 
-\
-#if 0 //Qt原生打印预览调用
-void Window::popupPrintDialog()
+/**
+   @brief 使用 \a highlighter 重新高亮传入的文本 \a doc ,此函数用于大文本打印时对临时文本的处理
+ */
+void Window::rehighlightPrintDoc(QTextDocument *doc, CSyntaxHighlighter *highlighter)
 {
-    QPrinter printer(QPrinter::HighResolution);
-    QPrintPreviewDialog preview(this);
-
-    TextEdit *wrapper = currentWrapper()->textEditor();
-    const QString &filePath = wrapper->filepath;
-    const QString &fileDir = QFileInfo(filePath).dir().absolutePath();
-
-    if (fileDir == m_blankFileDir) {
-        printer.setOutputFileName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
-        printer.setDocName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
-    } else {
-        printer.setOutputFileName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
-        printer.setDocName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
+    if (!doc || !highlighter) {
+        return;
     }
 
-    printer.setOutputFormat(QPrinter::PdfFormat);
+    QColor background = m_printWrapper->textEditor()->palette().color(QPalette::Base);
+    bool backgroundIsDark = background.value() < 128;
 
-    connect(&preview, &QPrintPreviewDialog::paintRequested, this, [ = ](QPrinter * printer) {
-        currentWrapper()->textEditor()->print(printer);
-    });
+    highlighter->setEnableHighlight(true);
+    if (backgroundIsDark) {
+        for (QTextBlock block = doc->firstBlock(); block.isValid(); block = block.next()) {
+            highlighter->rehighlightBlock(block);
 
-    preview.exec();
+            QVector<QTextLayout::FormatRange> formatList = block.layout()->formats();
+            // adjust syntax highlighting colors for better contrast
+            for (int i = formatList.count() - 1; i >= 0; --i) {
+                QTextCharFormat &format = formatList[i].format;
+                if (format.background().color() == background) {
+                    QBrush brush = format.foreground();
+                    QColor color = brush.color();
+                    int h, s, v, a;
+                    color.getHsv(&h, &s, &v, &a);
+                    color.setHsv(h, s, qMin(128, v), a);
+                    brush.setColor(color);
+                    format.setForeground(brush);
+                }
+                format.setBackground(Qt::white);
+            }
+
+            block.layout()->setFormats(formatList);
+        }
+    } else {
+        highlighter->rehighlight();
+    }
+    highlighter->setEnableHighlight(false);
 }
-#endif
 
 void Window::popupPrintDialog()
 {
@@ -1782,6 +1844,8 @@ void Window::popupPrintDialog()
 
     const QString &filePath = currentWrapper()->textEditor()->getFilePath();
     const QString &fileDir = QFileInfo(filePath).dir().absolutePath();
+
+    qInfo() << qPrintable("Start print doc");
 
     //适配打印接口2.0，dtk版本大于或等于5.4.10才放开最新的2.0打印预览接口
 #if (DTK_VERSION_MAJOR > 5 \
@@ -1816,6 +1880,7 @@ void Window::popupPrintDialog()
 
         // 大文件处理
         if (m_bLargePrint) {
+            qInfo() << qPrintable("Clone large print document");
             // 克隆大文本数据
             if (!cloneLargeDocument(currentWrapper())) {
                 return;
@@ -2182,7 +2247,7 @@ void Window::doPrintWithLargeDoc(DPrinter *printer, const QVector<int> &pageRang
         return;
     }
 
-    qWarning() << "calc print large doc!";
+    qInfo() << qPrintable("Calc print large doc!");
 
     // 执行处理时屏蔽其它输入
     DPrintPreviewWidget *prieviewWidget = m_pPreview->findChild<DPrintPreviewWidget *>();
@@ -2222,10 +2287,7 @@ void Window::doPrintWithLargeDoc(DPrinter *printer, const QVector<int> &pageRang
                     body.width() - 2 * margin,
                     fontMetrics.height());
 
-    // 进行文本高亮和布局
-    QColor background = m_printWrapper->textEditor()->palette().color(QPalette::Base);
-    bool backgroundIsDark = background.value() < 128;
-
+    // Note:大文本打印的高亮处理被延迟到实际打印时计算
     m_multiDocPageCount = 0;
     for (auto &info : m_printDocList) {
         QTextDocument *printDoc = info.doc;
@@ -2240,37 +2302,7 @@ void Window::doPrintWithLargeDoc(DPrinter *printer, const QVector<int> &pageRang
         // 设置打印大小
         printDoc->setPageSize(body.size());
 
-        if (info.highlighter) {
-            info.highlighter->setEnableHighlight(true);
-        }
-
         for (QTextBlock block = printDoc->firstBlock(); block.isValid(); block = block.next()) {
-            // 调整为开始布局前高亮(纯文本无需高亮)
-            if (info.highlighter) {
-                info.highlighter->rehighlightBlock(block);
-
-                // 调整颜色对比度
-                if (backgroundIsDark) {
-                    QVector<QTextLayout::FormatRange> formatList = block.layout()->formats();
-                    // adjust syntax highlighting colors for better contrast
-                    for (int i = formatList.count() - 1; i >= 0; --i) {
-                        QTextCharFormat &format = formatList[i].format;
-                        if (format.background().color() == background) {
-                            QBrush brush = format.foreground();
-                            QColor color = brush.color();
-                            int h, s, v, a;
-                            color.getHsv(&h, &s, &v, &a);
-                            color.setHsv(h, s, qMin(128, v), a);
-                            brush.setColor(color);
-                            format.setForeground(brush);
-                        }
-                        format.setBackground(Qt::white);
-                    }
-
-                    block.layout()->setFormats(formatList);
-                }
-            }
-
             // 通过对单个文本块进行布局，拆分布局总时间，防止布局时间过长
             lay->blockBoundingRect(block);
             // 处理其它事件
@@ -2287,10 +2319,6 @@ void Window::doPrintWithLargeDoc(DPrinter *printer, const QVector<int> &pageRang
                 QMetaObject::invokeMethod(m_pPreview, "reject", Qt::QueuedConnection);
                 return;
             }
-        }
-
-        if (info.highlighter) {
-            info.highlighter->setEnableHighlight(false);
         }
 
         // 更新文件总打印页数
@@ -2319,6 +2347,8 @@ void Window::doPrintWithLargeDoc(DPrinter *printer, const QVector<int> &pageRang
                 printer->newPage();
         }
     }
+
+    qInfo() << qPrintable("Calc print large doc finised!");
 }
 #endif
 
