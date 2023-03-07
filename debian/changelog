@@ -1,3 +1,10 @@
+deepin-editor (6.0.3) unstable; urgency=medium
+
+  * Improve GB18030 text encoding recognition rate.
+  * Fix print large document bug.
+
+ -- Deepin Packages Builder <packages@deepin.com>  Tue, 07 Mar 2023 10:43:27 +0800
+
 deepin-editor (6.0.2) unstable; urgency=medium
 
   * Improve text search and highlight color.
