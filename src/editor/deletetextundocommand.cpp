@@ -11,7 +11,7 @@ DeleteTextUndoCommand::DeleteTextUndoCommand(QTextCursor textcursor, QPlainTextE
     : QUndoCommand(parent)
     , m_edit(edit)
     , m_textCursor(textcursor)
-    , m_beginPos(m_textCursor.position())
+    , m_beginPos(m_textCursor.selectionStart())
 {
     if (m_textCursor.hasSelection()) {
         m_sInsertText = m_textCursor.selectedText();
@@ -32,7 +32,7 @@ DeleteTextUndoCommand::DeleteTextUndoCommand(QList<QTextEdit::ExtraSelection> &s
     : QUndoCommand(parent)
     , m_edit(edit)
     , m_ColumnEditSelections(selections)
-    , m_beginPos(m_textCursor.position())
+    , m_beginPos(m_textCursor.selectionStart())
 {
     int cnt = m_ColumnEditSelections.size();
     for (int i = 0; i < cnt; i++) {
