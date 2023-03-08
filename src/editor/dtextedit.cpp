@@ -6649,8 +6649,7 @@ void TextEdit::mouseMoveEvent(QMouseEvent *e)
             selection.format = format;
             m_altModSelections << selection;
         }
-        //清除撤销重做栈
-        m_pUndoStack->clear();
+
         renderAllSelections();
         update();
     }

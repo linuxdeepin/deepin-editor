@@ -2786,6 +2786,33 @@ TEST(UT_test_textedit_cutSelectedText, UT_test_textedit_cutSelectedText_001)
     pWindow->deleteLater();
 }
 
+TEST(UT_test_textedit_cutSelectedText, cutSelectedText_withMultiByteText_passed)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    // 多字节字符编码 CJK
+    // 𢝐𢝑𢝒𢝓𢝔𢝕𢝖𢝗𢝘𢝙\n𢝚𢝛𢝜𢝝𢝞𢝟𢝠𢝡𢝢𢝣
+    QString strMsg("\360\242\235\220\360\242\235\221\360\242\235\222\360\242\235\223\360\242\235\224"
+                   "\360\242\235\225\360\242\235\226\360\242\235\227\360\242\235\230\360\242\235\231\n"
+                   "\360\242\235\232\360\242\235\233\360\242\235\234\360\242\235\235\360\242\235\236"
+                   "\360\242\235\237\360\242\235\240\360\242\235\241\360\242\235\242\360\242\235\243");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor.setPosition(0);
+    textCursor.setPosition(6, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    QClipboard *pClipboard = QApplication::clipboard();
+    pClipboard->clear();
+    pWindow->currentWrapper()->textEditor()->cutSelectedText();
+
+    QString strRet1(pClipboard->text());
+    QString strRet2(pWindow->currentWrapper()->textEditor()->toPlainText());
+    EXPECT_EQ(strRet1, strMsg.left(6));
+    EXPECT_EQ(strRet2, strMsg.mid(6));
+    pWindow->deleteLater();
+}
+
 //void pasteText() 001
 TEST(UT_test_textedit_pasteText, UT_test_textedit_pasteText_001)
 {
@@ -5201,6 +5228,7 @@ TEST_F(test_textedit, setCursorKeywordSeletoin)
     startManager->deleteLater();
     p->deleteLater();
 }
+
 // void cursorPositionChanged();
 TEST_F(test_textedit, cursorPositionChanged)
 {
@@ -5222,6 +5250,65 @@ TEST_F(test_textedit, cursorPositionChanged)
     startManager->deleteLater();
     p->deleteLater();
 }
+
+// void cut();
+TEST_F(test_textedit, cut_normal_passed)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("hello world\n"
+                   "hello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    QClipboard *pClipboard = QApplication::clipboard();
+    pClipboard->clear();
+    pWindow->currentWrapper()->textEditor()->cut();
+
+    QString strRet1(pClipboard->text());
+    QString strRet2(pWindow->currentWrapper()->textEditor()->toPlainText());
+    EXPECT_EQ(strRet1, QString("hello world"));
+    EXPECT_EQ(strRet2, QString("hello world\n"));
+    pWindow->currentWrapper()->textEditor()->undo_();
+    QString strRet3(pWindow->currentWrapper()->textEditor()->toPlainText());
+    EXPECT_EQ(strRet3, strMsg);
+
+    pWindow->deleteLater();
+}
+
+TEST_F(test_textedit, cut_withMultiByteText_passed)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    // 多字节字符编码 CJK
+    // 𢝐𢝑𢝒𢝓𢝔𢝕𢝖𢝗𢝘𢝙\n𢝚𢝛𢝜𢝝𢝞𢝟𢝠𢝡𢝢𢝣
+    QString strMsg("\360\242\235\220\360\242\235\221\360\242\235\222\360\242\235\223\360\242\235\224"
+                   "\360\242\235\225\360\242\235\226\360\242\235\227\360\242\235\230\360\242\235\231\n"
+                   "\360\242\235\232\360\242\235\233\360\242\235\234\360\242\235\235\360\242\235\236"
+                   "\360\242\235\237\360\242\235\240\360\242\235\241\360\242\235\242\360\242\235\243");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor.setPosition(0);
+    textCursor.setPosition(6, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    QClipboard *pClipboard = QApplication::clipboard();
+    pClipboard->clear();
+    pWindow->currentWrapper()->textEditor()->cut();
+
+    QString strRet1(pClipboard->text());
+    QString strRet2(pWindow->currentWrapper()->textEditor()->toPlainText());
+    EXPECT_EQ(strRet1, strMsg.leftRef(6));
+    EXPECT_EQ(strRet2, strMsg.midRef(6));
+    pWindow->currentWrapper()->textEditor()->undo_();
+    QString strRet3(pWindow->currentWrapper()->textEditor()->toPlainText());
+    EXPECT_EQ(strRet3, strMsg);
+
+    pWindow->deleteLater();
+}
+
 // void updateHighlightBrackets(const QChar &openChar, const QChar &closeChar);
 TEST_F(test_textedit, updateHighlightBrackets)
 {
@@ -9466,12 +9553,17 @@ TEST(UT_Textedit_selectText, SelectText_MultiBlock_MultiByte_Pass)
     EditWrapper* wra = new EditWrapper;
     edit->m_wrapper = wra;
 
-    // 此字符串为多字节编码
-    edit->setPlainText("𢝐𢝑𢝒𢝓𢝔𢝕𢝖𢝗𢝘𢝙\n"
-                       "𢝚𢝛𢝜𢝝𢝞𢝟𢝠𢝡𢝢𢝣\n"
-                       "𢝤𢝥𢝦𢝧𢝨𢝩𢝪𢝫𢝬𢝭\n");
+    // 此字符串为特殊多字节编码 CJK
+    // "𢝐𢝑𢝒𢝓𢝔𢝕𢝖𢝗𢝘𢝙\n𢝚𢝛𢝜𢝝𢝞𢝟𢝠𢝡𢝢𢝣\n𢝤𢝥𢝦𢝧𢝨𢝩𢝪𢝫𢝬𢝭\n"
+    QString multiByteText("\360\242\235\220\360\242\235\221\360\242\235\222\360\242\235\223\360\242\235\224"
+                          "\360\242\235\225\360\242\235\226\360\242\235\227\360\242\235\230\360\242\235\231\n"
+                          "\360\242\235\232\360\242\235\233\360\242\235\234\360\242\235\235\360\242\235\236"
+                          "\360\242\235\237\360\242\235\240\360\242\235\241\360\242\235\242\360\242\235\243\n"
+                          "\360\242\235\244\360\242\235\245\360\242\235\246\360\242\235\247\360\242\235\250"
+                          "\360\242\235\251\360\242\235\252\360\242\235\253\360\242\235\254\360\242\235\255\n");
+    edit->setPlainText(multiByteText);
     // 选中 "𢝘𢝙\n𢝚𢝛"
-    QString str1 = QString("𢝘𢝙\n𢝚𢝛");
+    QString str1 = QString("\360\242\235\230\360\242\235\231\n\360\242\235\232\360\242\235\233");
     QTextCursor cursor = edit->textCursor();
     cursor.setPosition(16);
     cursor.setPosition(16 + str1.length(), QTextCursor::KeepAnchor);
@@ -9480,7 +9572,7 @@ TEST(UT_Textedit_selectText, SelectText_MultiBlock_MultiByte_Pass)
     EXPECT_EQ(str1, edit->selectedText());
 
     // 选中 "𢝘𢝙\n𢝚𢝛𢝜𢝝𢝞𢝟𢝠𢝡𢝢𢝣\n𢝤𢝥"
-    QString str2 = QString("𢝘𢝙\n𢝚𢝛𢝜𢝝𢝞𢝟𢝠𢝡𢝢𢝣\n𢝤𢝥");
+    QString str2 = multiByteText.mid(16, 30);
     cursor.setPosition(16);
     cursor.setPosition(16 + str2.length(), QTextCursor::KeepAnchor);
     edit->setTextCursor(cursor);
@@ -9488,7 +9580,7 @@ TEST(UT_Textedit_selectText, SelectText_MultiBlock_MultiByte_Pass)
     EXPECT_EQ(str2, edit->selectedText());
 
     // 选中 "𢝘𢝙\n𢝚𢝛𢝜𢝝𢝞𢝟𢝠𢝡𢝢𢝣\n𢝤𢝥𢝦𢝧𢝨𢝩𢝪𢝫𢝬𢝭\n"
-    QString str3 = QString("𢝘𢝙\n𢝚𢝛𢝜𢝝𢝞𢝟𢝠𢝡𢝢𢝣\n𢝤𢝥𢝦𢝧𢝨𢝩𢝪𢝫𢝬𢝭\n");
+    QString str3 = multiByteText.mid(16);
     cursor.setPosition(16);
     cursor.setPosition(16 + str3.length(), QTextCursor::KeepAnchor);
     edit->setTextCursor(cursor);
