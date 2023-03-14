@@ -147,9 +147,6 @@ TextEdit::TextEdit(QWidget *parent)
     // Don't blink the cursor when selecting text
     // Recover blink when not selecting text.
     connect(this, &TextEdit::selectionChanged, this, &TextEdit::slotSelectionChanged, Qt::QueuedConnection);
-
-    // 系统调色板更新时重绘列选取项
-    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::applicationPaletteChanged, this, &TextEdit::onAppPaletteChanged);
 }
 
 TextEdit::~TextEdit()
@@ -3296,8 +3293,18 @@ bool TextEdit::getNeedControlLine(int line, bool isVisable)
 
 bool TextEdit::event(QEvent *event)
 {
-    if (event->type() == QEvent::Gesture)
-        gestureEvent(static_cast<QGestureEvent *>(event));
+    switch (event->type()) {
+        case QEvent::Gesture:
+            gestureEvent(static_cast<QGestureEvent *>(event));
+            break;
+        case QEvent::PaletteChange:
+            // 调色板更新时更新选取高亮颜色
+            onAppPaletteChanged();
+            break;
+        default:
+            break;
+    }
+
     return DPlainTextEdit::event(event);
 }
 
