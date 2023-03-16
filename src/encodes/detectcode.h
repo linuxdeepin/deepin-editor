@@ -60,6 +60,11 @@ public:
                                          const QString &fromCode,
                                          const QString &toCode = QString("UTF-8"));
 
+    static bool convertEncodingTextCodec(QByteArray &inputStr,
+                                         QByteArray &outStr,
+                                         const QString &fromCode,
+                                         const QString &toCode = QString("UTF-8"));
+
 private:
     static QMap<QString, QByteArray> sm_LangsMap;
 };
