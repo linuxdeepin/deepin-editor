@@ -1,3 +1,9 @@
+deepin-editor (6.0.5) unstable; urgency=medium
+
+  * Fix application palette change bug. 
+
+ -- Deepin Packages Builder <packages@deepin.com> Thu, 16 Mar 2023 09:42:02 +0800
+
 deepin-editor (6.0.4) unstable; urgency=medium
 
   * Update version to distinguish pro/community.
