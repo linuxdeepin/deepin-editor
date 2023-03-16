@@ -859,5 +859,7 @@ private:
     UpdateOperationType m_LeftAreaUpdateState;
 
     bool m_MidButtonPatse = false;      // 鼠标中键黏贴处理
+    bool m_isPreeditBefore = false;     // 上一个输入法时间是否是 preedit
+    int m_preeditLengthBefore = 0;
 };
 #endif
