@@ -6440,25 +6440,47 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
     if (m_isSelectAll)
         QPlainTextEdit::selectAll();
 
-    if (!m_readOnlyMode && !m_bReadOnlyPermission && !e->commitString().isEmpty()) {
+    if (m_readOnlyMode || m_bReadOnlyPermission) {
+        return;
+    }
+
+    if (m_isPreeditBefore) {
+        // 每次 preedit 都是完整的字符串，所以撤销上次的 preedit
+        undo_();
+
+        // 将光标移回原位
+        if (Overwrite == m_cursorMode) {
+            auto cursor = textCursor();
+            cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::MoveAnchor, m_preeditLengthBefore);
+            setTextCursor(cursor);
+        }
+    }
+    bool isPreedit = !e->preeditString().isEmpty();
+    if (isPreedit || !e->commitString().isEmpty()) {
+        const QString &text = isPreedit ? e->preeditString() : e->commitString();
+
         //列编辑添加撤销重做
         if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
-            insertColumnEditTextEx(e->commitString());
+            insertColumnEditTextEx(text);
         } else {
             // 覆盖模式下输入法输入时，单独处理，模拟选中替换处理
             if (Overwrite == m_cursorMode) {
                 auto cursor = this->textCursor();
                 // 设置光标选中后续与当前输入法输入的文本相同长度
-                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, e->commitString().size());
+                cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, text.size());
                 // 使用此光标信息插入将输入的文本替换选中的长度
-                insertSelectTextEx(cursor, e->commitString());
+                insertSelectTextEx(cursor, text);
             } else {
-                insertSelectTextEx(textCursor(), e->commitString());
+                insertSelectTextEx(textCursor(), text);
             }
         }
 
         m_isSelectAll = false;
     }
+
+    m_isPreeditBefore = isPreedit;
+    m_preeditLengthBefore = e->preeditString().length();
+
 }
 
 void TextEdit::mousePressEvent(QMouseEvent *e)
