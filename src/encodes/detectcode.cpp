@@ -9,12 +9,19 @@
 #include <QString>
 #include <QDebug>
 #include <QDateTime>
+#include <QTextCodec>
 
 #include <stdio.h>
 
 QMap<QString, QByteArray> DetectCode::sm_LangsMap;
 // 最低的检测准确度判断，低于90%需要调整策略
 static const float gs_dMinConfidence = 0.9f;
+
+// 手动添加 UTF BOM 信息
+static QMap<QString, QByteArray> gs_byteOrderMark = {{"UTF-16LE", QByteArray::fromHex("FFFE")},
+                                                     {"UTF-16BE", QByteArray::fromHex("FEFF")},
+                                                     {"UTF-32LE", QByteArray::fromHex("FFFE0000")},
+                                                     {"UTF-32BE", QByteArray::fromHex("0000FEFF")}};
 
 DetectCode::DetectCode() {}
 
@@ -490,6 +497,14 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr,
         return true;
     }
 
+#ifndef DISABLE_TEXTCODEC
+    // 使用QTextCodec对部分编码进行处理
+    static QStringList codecList { "GB18030" };
+    if (codecList.contains(fromCode) || codecList.contains(toCode)) {
+        return convertEncodingTextCodec(inputStr, outStr, fromCode, toCode);
+    }
+#endif
+
     iconv_t handle = iconv_open(toCode.toLocal8Bit().data(), fromCode.toLocal8Bit().data());
     if (handle != reinterpret_cast<iconv_t>(-1)) {
         char *inbuf = inputStr.data();
@@ -553,11 +568,7 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr,
         iconv_close(handle);
 
         // 手动添加 UTF BOM 信息
-        static QMap<QString, QByteArray> byteOrderMark = {{"UTF-16LE", QByteArray::fromHex("FFFE")},
-                                                          {"UTF-16BE", QByteArray::fromHex("FEFF")},
-                                                          {"UTF-32LE", QByteArray::fromHex("FFFE0000")},
-                                                          {"UTF-32BE", QByteArray::fromHex("0000FEFF")}};
-        outStr.append(byteOrderMark.value(toCode));
+        outStr.append(gs_byteOrderMark.value(toCode));
 
         // 计算 iconv() 实际转换的字节数
         size_t realConvertSize = maxBufferSize - outbytesleft;
@@ -572,4 +583,39 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr,
         qWarning() << Q_FUNC_INFO << qPrintable("Text encoding convert error, iconv_open() failed.");
         return false;
     }
+}
+
+/**
+ * @brief 使用QTextCodec将输入的字符序列 \a inputStr 从编码 \a fromCode 转换为编码 \a toCode, 并返回转换后的字符序列。
+ * @return 字符编码转换是否成功
+ */
+bool DetectCode::convertEncodingTextCodec(QByteArray &inputStr,
+                                          QByteArray &outStr,
+                                          const QString &fromCode,
+                                          const QString &toCode)
+{
+    QString convertData;
+    if (fromCode != "UTF-8") {
+        QTextCodec *fromCodec = QTextCodec::codecForName(fromCode.toUtf8());
+        if (!fromCodec) {
+            return false;
+        }
+
+        convertData = fromCodec->toUnicode(inputStr);
+    }
+
+    if (toCode != "UTF-8") {
+        QTextCodec *toCodec = QTextCodec::codecForName(toCode.toUtf8());
+        if (!toCodec) {
+            return false;
+        }
+
+        outStr = toCodec->fromUnicode(convertData);
+    } else {
+        outStr = convertData.toUtf8();
+    }
+
+    // 手动添加 UTF BOM 信息
+    outStr.append(gs_byteOrderMark.value(toCode));
+    return true;
 }
