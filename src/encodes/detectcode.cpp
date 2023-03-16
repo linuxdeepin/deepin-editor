@@ -602,6 +602,8 @@ bool DetectCode::convertEncodingTextCodec(QByteArray &inputStr,
         }
 
         convertData = fromCodec->toUnicode(inputStr);
+    } else {
+        convertData = QString::fromUtf8(inputStr);
     }
 
     if (toCode != "UTF-8") {
