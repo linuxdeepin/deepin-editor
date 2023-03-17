@@ -13,7 +13,10 @@
 
 #include <stdio.h>
 
+#define DISABLE_TEXTCODEC
+
 QMap<QString, QByteArray> DetectCode::sm_LangsMap;
+
 // 最低的检测准确度判断，低于90%需要调整策略
 static const float gs_dMinConfidence = 0.9f;
 
@@ -22,6 +25,71 @@ static QMap<QString, QByteArray> gs_byteOrderMark = {{"UTF-16LE", QByteArray::fr
                                                      {"UTF-16BE", QByteArray::fromHex("FEFF")},
                                                      {"UTF-32LE", QByteArray::fromHex("FFFE0000")},
                                                      {"UTF-32BE", QByteArray::fromHex("0000FEFF")}};
+// GB18030-UTF8 PUA区域映射表
+static QHash<QByteArray, quint32> gs_UTF8MapGB18030Data{
+    {"\uE81E", 0x37903582}, {"\uE826", 0x38903582}, {"\uE82B", 0x39903582}, {"\uE82C", 0x30913582}, {"\uE832", 0x31913582},
+    {"\uE843", 0x32913582}, {"\uE854", 0x33913582}, {"\uE864", 0x34913582}, {"\uE78D", 0x36823184}, {"\uE78F", 0x37823184},
+    {"\uE78E", 0x38823184}, {"\uE790", 0x39823184}, {"\uE791", 0x30833184}, {"\uE792", 0x31833184}, {"\uE793", 0x32833184},
+    {"\uE794", 0x33833184}, {"\uE795", 0x34833184}, {"\uE796", 0x35833184}, /*{"\uE816", 0x31903295}, {"\uE817", 0x33903295},
+    {"\uE818", 0x30973295}, {"\uE831", 0x37B93695}, {"\uE83B", 0x35BA3096}, {"\uE855", 0x30B63596}*/};
+// GB18030 -> UTF8 编码转换时需要特殊处理，保留GB18030特殊编码的字符
+static QHash<QByteArray, QByteArray> gs_ReplaceFromGB18030_2005Error{
+    {QByteArray::fromHex("FE51"), QByteArray::fromHex("FFFFFF01")},
+    {QByteArray::fromHex("FE52"), QByteArray::fromHex("FFFFFF02")},
+    {QByteArray::fromHex("FE53"), QByteArray::fromHex("FFFFFF03")},
+    {QByteArray::fromHex("FE6C"), QByteArray::fromHex("FFFFFF04")},
+    {QByteArray::fromHex("FE76"), QByteArray::fromHex("FFFFFF05")},
+    {QByteArray::fromHex("FE91"), QByteArray::fromHex("FFFFFF06")}};
+static QHash<QByteArray, QByteArray> gs_ReplaceToUTF8_2005Error{{"\uE816", QByteArray::fromHex("FFFFFF01")},
+                                                                {"\uE817", QByteArray::fromHex("FFFFFF02")},
+                                                                {"\uE818", QByteArray::fromHex("FFFFFF03")},
+                                                                {"\uE831", QByteArray::fromHex("FFFFFF04")},
+                                                                {"\uE83B", QByteArray::fromHex("FFFFFF05")},
+                                                                {"\uE855", QByteArray::fromHex("FFFFFF06")}};
+static QHash<QByteArray, QByteArray> gs_ReplaceGB18030ToUTF8_2005Error{{"\uE816", QByteArray::fromHex("FE51")},
+                                                                       {"\uE817", QByteArray::fromHex("FE52")},
+                                                                       {"\uE818", QByteArray::fromHex("FE53")},
+                                                                       {"\uE831", QByteArray::fromHex("FE6C")},
+                                                                       {"\uE83B", QByteArray::fromHex("FE76")},
+                                                                       {"\uE855", QByteArray::fromHex("FE91")}};
+
+static QHash<QByteArray, QByteArray> gs_ReplaceFromUtf8_2020Error{
+    {QByteArray::fromHex("95329031"), QByteArray::fromHex("FFFF11")},
+    {QByteArray::fromHex("95329033"), QByteArray::fromHex("FFFF12")},
+    {QByteArray::fromHex("95329730"), QByteArray::fromHex("FFFF13")},
+    {QByteArray::fromHex("9536B937"), QByteArray::fromHex("FFFF14")},
+    {QByteArray::fromHex("9630BA35"), QByteArray::fromHex("FFFF15")},
+    {QByteArray::fromHex("9635B630"), QByteArray::fromHex("FFFF16")},
+};
+static QHash<QByteArray, QByteArray> gs_ReplaceToGB18030_2020Error{
+    {QByteArray::fromHex("F0A08287"), QByteArray::fromHex("FFFF11")},
+    {QByteArray::fromHex("F0A08289"), QByteArray::fromHex("FFFF12")},
+    {QByteArray::fromHex("F0A0838C"), QByteArray::fromHex("FFFF13")},
+    {QByteArray::fromHex("F0A19797"), QByteArray::fromHex("FFFF14")},
+    {QByteArray::fromHex("F0A2A68F"), QByteArray::fromHex("FFFF15")},
+    {QByteArray::fromHex("F0A487BE"), QByteArray::fromHex("FFFF16")},
+};
+static QHash<QByteArray, QByteArray> gs_ReplaceFromUtf8ToGB18030_2020Error{
+    {QByteArray::fromHex("95329031"), "\u20087"},
+    {QByteArray::fromHex("95329033"), "\u20089"},
+    {QByteArray::fromHex("95329730"), "\u200CC"},
+    {QByteArray::fromHex("9536B937"), "\u215D7"},
+    {QByteArray::fromHex("9630BA35"), "\u2298F"},
+    {QByteArray::fromHex("9635B630"), "\u241FE"},
+};
+
+// 见QTextCodec::mibEnum()
+enum MibEncoding {
+    UnknownMib = 0,
+    UTF_8 = 106,
+    GB18030 = 114,
+    UTF_16BE = 1013,
+    UTF_16LE = 1014,
+    UTF_16 = 1015,
+    UTF_32 = 1017,
+    UTF_32BE = 1018,
+    UTF_32LE = 1019,
+};
 
 DetectCode::DetectCode() {}
 
@@ -479,6 +547,108 @@ int utf8MultiByteCount(char *buf, size_t size)
 }
 
 /**
+   @brief 检测 GB18030 转换 UTF-8 时PUA区域异常处理
+
+   @note GB18030 PUA区域编码转换各版本异同
+   iconv当前使用2022标志，遇到PUA区域将报错(2022不再支持)，此处兼容2005设计，
+   GB18030 - UTF-8 互转时，将PUA区域字符按2005标准转换
+   | GB18030 原始数据（HEX）  | GB18030-2005 to UTF8  | GB18030-2022 toUtf8   |
+   |------------------------|-----------------------|-----------------------|
+   | 0x37903582             |		\uE81E          |		\u9FB4          |
+   | 0x38903582             |		\uE826          |		\u9FB5          |
+   | 0x39903582             |		\uE82B          |		\u9FB6          |
+   | 0x30913582             |		\uE82C          |		\u9FB7          |
+   | 0x31913582             |		\uE832          |		\u9FB8          |
+   | 0x32913582             |		\uE843          |		\u9FB9          |
+   | 0x33913582             |		\uE854          |		\u9FBA          |
+   | 0x34913582             |		\uE864          |		\u9FBB          |
+   | 0x36823184             |		\uE78D          |		\uFE10          |
+   | 0x37823184             |		\uE78F          |		\uFE11          |
+   | 0x38823184             |		\uE78E          |		\uFE12          |
+   | 0x39823184             |		\uE790          |		\uFE13          |
+   | 0x30833184             |		\uE791          |		\uFE14          |
+   | 0x31833184             |		\uE792          |		\uFE15          |
+   | 0x32833184             |		\uE793          |		\uFE16          |
+   | 0x33833184             |		\uE794          |		\uFE17          |
+   | 0x34833184             |		\uE795          |		\uFE18          |
+   | 0x35833184             |		\uE796          |		\uFE19          |
+
+   以下为特殊字符，2005和2022转换后编码，映射Unicode编码，此次不做特殊处理
+   | GB18030 原始数据（HEX）  | GB18030 to UTF8      | Unicode 4.1映射        |
+   |------------------------|----------------------|------------------------|
+   | 0x31903295             |       U+E816         |		\u20087         |
+   | 0x33903295             |       U+E817         |		\u20089         |
+   | 0x30973295             |       U+E818         |		\u200CC         |
+   | 0x37B93695             |       U+E831         |		\u215D7         |
+   | 0x35BA3096             |       U+E83B         |		\u2298F         |
+   | 0x30B63596             |       U+E855         |		\u241FE         |
+ */
+bool checkGB18030ToUtf8Error(char *buf, size_t size, size_t &replaceLen, QByteArray &appendChar)
+{
+    // 对于GB18030-2005编码规范PUA区域的字符，iconv报错，替换为对应的字符序。
+    static const int sc_minGB18030PUACharLen = 4;
+    if (size < sc_minGB18030PUACharLen) {
+        replaceLen = 1;
+        appendChar = "?";
+        return false;
+    }
+
+    quint32 puaChar = *reinterpret_cast<quint32 *>(buf);
+    appendChar = gs_UTF8MapGB18030Data.key(puaChar);
+    if (appendChar.isEmpty()) {
+        // FFFFFF0X -> \uE816...\uE855
+        appendChar = gs_ReplaceToUTF8_2005Error.key(QByteArray(buf, sc_minGB18030PUACharLen));
+    }
+
+    if (appendChar.isEmpty()) {
+        replaceLen = 1;
+        appendChar = "?";
+        return false;
+    } else {
+        replaceLen = sc_minGB18030PUACharLen;
+        return true;
+    }
+}
+
+/**
+   @brief 检测 UTF-8 转换 GB18030 时PUA区域异常处理
+ */
+bool checkUTF8ToGB18030Error(char *buf, size_t size, size_t &replaceLen, QByteArray &appendChar)
+{
+    // 待转换的PUA字符均为3
+    static const int sc_minUTFPUACharLen = 3;
+    if (size < sc_minUTFPUACharLen) {
+        replaceLen = 1;
+        appendChar = "?";
+        return false;
+    }
+
+    QByteArray puaChar(buf, sc_minUTFPUACharLen);
+    quint32 gb18030char = gs_UTF8MapGB18030Data.value(puaChar, 0);
+    if (!gb18030char) {
+        appendChar = gs_ReplaceGB18030ToUTF8_2005Error.value(puaChar);
+        if (appendChar.isEmpty()) {
+            appendChar = gs_ReplaceFromUtf8_2020Error.key(puaChar);
+        }
+
+        if (!appendChar.isEmpty()) {
+            replaceLen = sc_minUTFPUACharLen;
+            return true;
+        }
+    }
+
+    if (!gb18030char) {
+        replaceLen = 1;
+        appendChar = "?";
+        return false;
+    } else {
+        replaceLen = sc_minUTFPUACharLen;
+        appendChar = QByteArray(reinterpret_cast<char *>(&gb18030char), sizeof(gb18030char));
+        return true;
+    }
+}
+
+/**
  * @brief 将输入的字符序列 \a inputStr 从编码 \a fromCode 转换为编码 \a toCode, 并返回转换后的字符序列。
  * @return 字符编码转换是否成功
  */
@@ -499,7 +669,7 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr,
 
 #ifndef DISABLE_TEXTCODEC
     // 使用QTextCodec对部分编码进行处理
-    static QStringList codecList { "GB18030" };
+    static QStringList codecList{"GB18030"};
     if (codecList.contains(fromCode) || codecList.contains(toCode)) {
         return convertEncodingTextCodec(inputStr, outStr, fromCode, toCode);
     }
@@ -507,6 +677,28 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr,
 
     iconv_t handle = iconv_open(toCode.toLocal8Bit().data(), fromCode.toLocal8Bit().data());
     if (handle != reinterpret_cast<iconv_t>(-1)) {
+        MibEncoding fromMib = UnknownMib;
+        MibEncoding toMib = UnknownMib;
+        QTextCodec *fromCodec = QTextCodec::codecForName(fromCode.toUtf8());
+        if (fromCodec) {
+            fromMib = static_cast<MibEncoding>(fromCodec->mibEnum());
+        }
+        QTextCodec *toCodec = QTextCodec::codecForName(toCode.toUtf8());
+        if (toCodec) {
+            toMib = static_cast<MibEncoding>(toCodec->mibEnum());
+        }
+
+        if (GB18030 == fromMib && UTF_8 == toMib) {
+            // \uE816...\uE855 -> FFFFFF0X
+            for (auto itr = gs_ReplaceFromGB18030_2005Error.begin(); itr != gs_ReplaceFromGB18030_2005Error.end(); ++itr) {
+                inputStr.replace(itr.key(), itr.value());
+            }
+        } else if (UTF_8 == fromMib && GB18030 == toMib) {
+            for (auto itr = gs_ReplaceToGB18030_2020Error.begin(); itr != gs_ReplaceToGB18030_2020Error.end(); ++itr) {
+                inputStr.replace(itr.key(), itr.value());
+            }
+        }
+
         char *inbuf = inputStr.data();
         size_t inbytesleft = static_cast<size_t>(inputStr.size());
         size_t outbytesleft = 4 * inbytesleft;
@@ -532,26 +724,55 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr,
                             break;
                         }
 
-                        // 源编码为 UTF-8 时，可计算需跳过的字符数
-                        size_t bytes = 1;
-                        if (fromCode.toUpper() == "UTF-8") {
-                            bytes = static_cast<size_t>(utf8MultiByteCount(inbuf, inbytesleft));
-                        }
+                        size_t replaceLen = 1;
                         // 跳过错误字符，设置错误字符为'?'
-                        outbytesleft--;
-                        *outbuf = '?';
-                        outbuf++;
+                        QByteArray appendChar = "?";
 
-                        // 待转换字节序结束，跳出
-                        if (inbytesleft <= bytes) {
+                        switch (fromMib) {
+                            case UTF_8: {
+                                // 特殊处理，若为UTF-8 到 GB18030的转换，优先排查异常数据
+                                if (GB18030 == toMib) {
+                                    if (checkUTF8ToGB18030Error(inbuf, inbytesleft, replaceLen, appendChar)) {
+                                        break;
+                                    }
+                                }
+
+                                // 源编码为 UTF-8 时，可计算需跳过的字符数
+                                replaceLen = static_cast<size_t>(utf8MultiByteCount(inbuf, inbytesleft));
+                            } break;
+                            case GB18030:
+                                // 特殊处理，若为GB18030 到 UTF-8 的转换，优先排查异常数据
+                                if (UTF_8 == toMib) {
+                                    if (checkGB18030ToUtf8Error(inbuf, inbytesleft, replaceLen, appendChar)) {
+                                        break;
+                                    }
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+
+                        qWarning() << "------------replaced" << appendChar.toHex();
+
+                        // 替换错误字符为对应字符
+                        size_t appendSize = static_cast<size_t>(appendChar.size());
+                        if (outbytesleft < appendSize) {
+                            break;
+                        }
+
+                        outbytesleft -= appendSize;
+                        ::memcpy(outbuf, appendChar.data(), appendSize);
+                        outbuf += appendSize;
+
+                        if (inbytesleft <= replaceLen) {
+                            // 移动至末尾
                             inbuf += inbytesleft;
                             inbytesleft = 0;
                             break;
                         }
-                        inbuf += bytes;
-                        inbytesleft -= bytes;
 
-                        continue;
+                        inbuf += replaceLen;
+                        inbytesleft -= replaceLen;
                     } else {
                         break;
                     }
@@ -581,7 +802,8 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr,
 
     } else {
         qWarning() << Q_FUNC_INFO << qPrintable("Text encoding convert error, iconv_open() failed.");
-        return false;
+        // 尝试使用QTextCodec加载
+        return convertEncodingTextCodec(inputStr, outStr, fromCode, toCode);
     }
 }
 
