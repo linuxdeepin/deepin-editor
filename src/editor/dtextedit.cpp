@@ -3245,6 +3245,11 @@ void TextEdit::setLeftAreaUpdateState(TextEdit::UpdateOperationType statevalue)
 {
     if (statevalue != m_LeftAreaUpdateState) {
         m_LeftAreaUpdateState = statevalue;
+
+        // 当文件读取完成时，手动触发更新界面
+        if (TextEdit::FileOpenEnd == m_LeftAreaUpdateState) {
+            m_pLeftAreaWidget->updateAll();
+        }
     }
 }
 
