@@ -4421,7 +4421,9 @@ int TextEdit::lineNumberAreaWidth()
         max /= 10;
         ++digits;
     }
-    int w = fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits;
+    // 行号使用单独字体
+    QFontMetrics fm(m_fontLineNumberArea);
+    int w = fm.horizontalAdvance(QLatin1Char('9')) * digits;
 
     return w > 15 ? w : 15;
 }
