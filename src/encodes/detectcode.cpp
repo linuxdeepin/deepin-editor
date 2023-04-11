@@ -25,14 +25,27 @@ static QMap<QString, QByteArray> gs_byteOrderMark = {{"UTF-16LE", QByteArray::fr
                                                      {"UTF-16BE", QByteArray::fromHex("FEFF")},
                                                      {"UTF-32LE", QByteArray::fromHex("FFFE0000")},
                                                      {"UTF-32BE", QByteArray::fromHex("0000FEFF")}};
-// GB18030-UTF8 PUA区域映射表
+
+/**
+  # GB18030-2022 - UTF-8 编码转换处理
+  为适配 GB18030-2022 规范，{gs_UTF8MapGB18030Data} 为 GB18030-UTF8 PUA 区域映射表，对应 GB18030-2022 规范附录D 表D.1
+  替换2005和2022规范中转换存在差异的部分， 见 \l{https://en.wikipedia.org/wiki/GB_18030}
+ */
 static QHash<QByteArray, quint32> gs_UTF8MapGB18030Data{
     {"\uE81E", 0x37903582}, {"\uE826", 0x38903582}, {"\uE82B", 0x39903582}, {"\uE82C", 0x30913582}, {"\uE832", 0x31913582},
     {"\uE843", 0x32913582}, {"\uE854", 0x33913582}, {"\uE864", 0x34913582}, {"\uE78D", 0x36823184}, {"\uE78F", 0x37823184},
     {"\uE78E", 0x38823184}, {"\uE790", 0x39823184}, {"\uE791", 0x30833184}, {"\uE792", 0x31833184}, {"\uE793", 0x32833184},
     {"\uE794", 0x33833184}, {"\uE795", 0x34833184}, {"\uE796", 0x35833184}, /*{"\uE816", 0x31903295}, {"\uE817", 0x33903295},
     {"\uE818", 0x30973295}, {"\uE831", 0x37B93695}, {"\uE83B", 0x35BA3096}, {"\uE855", 0x30B63596}*/};
-// GB18030 -> UTF8 编码转换时需要特殊处理，保留GB18030特殊编码的字符
+
+/**
+  # GB18030-2022 规范附录D 表D.2处理
+  GB18030 -> UTF8 编码转换时需要特殊处理，保留GB18030特殊编码的字符
+  在转换 0xFE51...0xFE91 编码时，GB18030 规范和 Unciode 4.1 规范转换后的编码不同，以 0xFE51 为例:
+  1. 按 GB18030-2022 编码规范，0xFE51 转换为 \uE816 ，而非 \u20087，因此在转码前将 0xFE51 替换为转码标识 0xFFFFFF01 ;
+  2. iconv 在转码遇到 0xFFFFFF01 时将报错退出，此时将 0xFFFFFF01 转换为 GB18030-2022 编码 \uE816 ;
+  3. 由于根据 Unciode 4.1 规范，转换 UTF-8 到 GB18030 编码时，\uE816 不应存在，此时同样保存，手动还原编码为 0xFE51。
+ */
 static QHash<QByteArray, QByteArray> gs_ReplaceFromGB18030_2005Error{
     {QByteArray::fromHex("FE51"), QByteArray::fromHex("FFFFFF01")},
     {QByteArray::fromHex("FE52"), QByteArray::fromHex("FFFFFF02")},
@@ -46,13 +59,18 @@ static QHash<QByteArray, QByteArray> gs_ReplaceToUTF8_2005Error{{"\uE816", QByte
                                                                 {"\uE831", QByteArray::fromHex("FFFFFF04")},
                                                                 {"\uE83B", QByteArray::fromHex("FFFFFF05")},
                                                                 {"\uE855", QByteArray::fromHex("FFFFFF06")}};
-static QHash<QByteArray, QByteArray> gs_ReplaceGB18030ToUTF8_2005Error{{"\uE816", QByteArray::fromHex("FE51")},
+static QHash<QByteArray, QByteArray> gs_ReplaceUtf8ToGB18030_2005Error{{"\uE816", QByteArray::fromHex("FE51")},
                                                                        {"\uE817", QByteArray::fromHex("FE52")},
                                                                        {"\uE818", QByteArray::fromHex("FE53")},
                                                                        {"\uE831", QByteArray::fromHex("FE6C")},
                                                                        {"\uE83B", QByteArray::fromHex("FE76")},
                                                                        {"\uE855", QByteArray::fromHex("FE91")}};
 
+/**
+  同样，由于 0xFE51 和 0x95329031 在 Unciode 4.1 规范，均转换为 \u20087 ，但反向转换时，\u20087 转换为 0xFE51 。
+  导致数据互转时，源数据出现了变更，因此同样需要特殊处理，在 UTF-8 转换为 GB18030-2022 时，将 0xF0A08287(\u20087) 替换,
+  并在实际转换过程中替换为 0x95329031 ，保证 GB18030-2022 编码转换准确
+ */
 static QHash<QByteArray, QByteArray> gs_ReplaceFromUtf8_2020Error{
     {QByteArray::fromHex("95329031"), QByteArray::fromHex("FFFF11")},
     {QByteArray::fromHex("95329033"), QByteArray::fromHex("FFFF12")},
@@ -61,6 +79,7 @@ static QHash<QByteArray, QByteArray> gs_ReplaceFromUtf8_2020Error{
     {QByteArray::fromHex("9630BA35"), QByteArray::fromHex("FFFF15")},
     {QByteArray::fromHex("9635B630"), QByteArray::fromHex("FFFF16")},
 };
+// 0xF0A08287 为 \u20087 的 UTF-8 HEX 编码
 static QHash<QByteArray, QByteArray> gs_ReplaceToGB18030_2020Error{
     {QByteArray::fromHex("F0A08287"), QByteArray::fromHex("FFFF11")},
     {QByteArray::fromHex("F0A08289"), QByteArray::fromHex("FFFF12")},
@@ -573,7 +592,7 @@ int utf8MultiByteCount(char *buf, size_t size)
    | 0x34833184             |		\uE795          |		\uFE18          |
    | 0x35833184             |		\uE796          |		\uFE19          |
 
-   以下为特殊字符，2005和2022转换后编码，映射Unicode编码，此次不做特殊处理
+   以下为特殊字符，2005和2022转换后编码，映射Unicode编码
    | GB18030 原始数据（HEX）  | GB18030 to UTF8      | Unicode 4.1映射        |
    |------------------------|----------------------|------------------------|
    | 0x31903295             |       U+E816         |		\u20087         |
@@ -626,8 +645,10 @@ bool checkUTF8ToGB18030Error(char *buf, size_t size, size_t &replaceLen, QByteAr
     QByteArray puaChar(buf, sc_minUTFPUACharLen);
     quint32 gb18030char = gs_UTF8MapGB18030Data.value(puaChar, 0);
     if (!gb18030char) {
-        appendChar = gs_ReplaceGB18030ToUTF8_2005Error.value(puaChar);
+        // \uE816 -> 0xFE51
+        appendChar = gs_ReplaceUtf8ToGB18030_2005Error.value(puaChar);
         if (appendChar.isEmpty()) {
+            // 0xFFFF11 -> 0x95329031
             appendChar = gs_ReplaceFromUtf8_2020Error.key(puaChar);
         }
 
@@ -635,9 +656,7 @@ bool checkUTF8ToGB18030Error(char *buf, size_t size, size_t &replaceLen, QByteAr
             replaceLen = sc_minUTFPUACharLen;
             return true;
         }
-    }
 
-    if (!gb18030char) {
         replaceLen = 1;
         appendChar = "?";
         return false;
@@ -688,8 +707,8 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr,
             toMib = static_cast<MibEncoding>(toCodec->mibEnum());
         }
 
+        // 替换需手动修改 UTF-8 和 GB180303 编码转换的部分
         if (GB18030 == fromMib && UTF_8 == toMib) {
-            // \uE816...\uE855 -> FFFFFF0X
             for (auto itr = gs_ReplaceFromGB18030_2005Error.begin(); itr != gs_ReplaceFromGB18030_2005Error.end(); ++itr) {
                 inputStr.replace(itr.key(), itr.value());
             }
@@ -752,7 +771,7 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr,
                                 break;
                         }
 
-                        qWarning() << "------------replaced" << appendChar.toHex();
+                        qWarning() << "Text code error, replace to: " << appendChar.toHex();
 
                         // 替换错误字符为对应字符
                         size_t appendSize = static_cast<size_t>(appendChar.size());
