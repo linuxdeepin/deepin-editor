@@ -1,3 +1,14 @@
+deepin-editor (6.0.6) unstable; urgency=medium
+
+  * fix: 修复使用特殊字体时，序号显示不全(Bug: 188417)(Influence: 序号显示)
+  * fix: 修复加载完小文件时，行号显示不全问题(Influence: 行号显示)
+  * fix: 修复GB18030部分编码转换错误问题(Influence: 编码转换)
+  * fix: 修复源编码为UTF-8时编码转换空白的问题(Influence: 编码转换)
+  * feat: 适配GB18030-2022规范兼容2005标准(Bug: 193311)(Influence: 编码转换 GB18030显示 另存)
+  * fix: 更新翻译显示(Bug: 110761)
+
+ -- Deepin Packages Builder <packages@deepin.org>  Thu, 13 Apr 2023 13:51:25 +0800
+
 deepin-editor (6.0.5) unstable; urgency=medium
 
   * Fix application palette change bug. 
