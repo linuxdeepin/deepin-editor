@@ -783,7 +783,7 @@ QString Utils::getStringMD5Hash(const QString &input)
 
 bool Utils::activeWindowFromDock(quintptr winId)
 {
-    bool bRet = true;
+    bool bRet = false;
     // 优先采用V23接口
     QDBusInterface dockDbusInterfaceV23("org.deepin.dde.daemon.Dock1",
                                         "/org/deepin/dde/daemon/Dock1",
@@ -792,9 +792,8 @@ bool Utils::activeWindowFromDock(quintptr winId)
         QDBusReply<void> reply = dockDbusInterfaceV23.call("ActivateWindow", winId);
         if (!reply.isValid()) {
             qDebug() << "call v23 org.deepin.dde.daemon.Dock1 failed" << reply.error();
-            bRet = false;
         } else {
-            return bRet;
+            return true;
         }
     }
 
@@ -806,6 +805,8 @@ bool Utils::activeWindowFromDock(quintptr winId)
         if (!reply.isValid()) {
             qDebug() << "call v20 com.deepin.dde.daemon.Dock failed" << reply.error();
             bRet = false;
+        } else {
+            return true;
         }
     }
 
