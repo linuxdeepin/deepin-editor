@@ -213,18 +213,30 @@ bool EditWrapper::readFile(QByteArray encode)
  */
 bool EditWrapper::saveAsFile(const QString &newFilePath, const QByteArray &encodeName)
 {
+    // WARNING: 对于超长文件，Qt在使用 QSaveFile 保存文件时，若当前环境不支持创建无名文件(UnnamedFile),
+    // 会在相同路径创建临时文件，路径为保存文件名 + 唯一后缀，此临时文件名可能超过255长度限制，导致保存失败。
+    // 因此，过长的文件名屏蔽使用QSaveFile。QTemporaryFile 创建文件名的代码地址：
+    // link: https://github.com/qt/qtbase/blob/7191b8fe38788ac57e15e4124955c3cd8333d858/src/corelib/io/qtemporaryfile.cpp#L181
+    const int limitFileNameLength = 245;
+    QFileInfo fileNameInfo(newFilePath);
+    bool disableSaveProtect = fileNameInfo.fileName().length() > limitFileNameLength;
+
     // use QSaveFile for safely save files.
     QSaveFile saveFile(newFilePath);
-    saveFile.setDirectWriteFallback(true);
+    if (!disableSaveProtect) {
+        saveFile.setDirectWriteFallback(true);
 
-    if (!saveFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-        qWarning() << Q_FUNC_INFO << "Open save file path error, " << saveFile.errorString();
-        QWidget *curWidget = this->window()->getStackedWgt()->currentWidget();
-        if (curWidget) {
-            DMessageManager::instance()->sendMessage(curWidget, QIcon(":/images/warning.svg"),
-                                                     QString(tr("You do not have permission to save %1")).arg(saveFile.fileName()));
+        if (!saveFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+            qWarning() << Q_FUNC_INFO << "Open save file path error, " << saveFile.errorString();
+            QWidget *curWidget = this->window()->getStackedWgt()->currentWidget();
+            if (curWidget) {
+                DMessageManager::instance()->sendMessage(curWidget, QIcon(":/images/warning.svg"),
+                                                         QString(tr("You do not have permission to save %1")).arg(saveFile.fileName()));
+            }
+            return false;
         }
-        return false;
+    } else {
+        qWarning() << QString("SaveAs file name to long, disable QSaveFile. path: %1").arg(newFilePath);
     }
 
     QFile file(newFilePath);
@@ -271,13 +283,15 @@ bool EditWrapper::saveAsFile(const QString &newFilePath, const QByteArray &encod
     QFileDevice::FileError error = file.error();
     file.close();
 
-    // flush file.
-    if (!saveFile.flush()) {
-        return false;
+    if (!disableSaveProtect) {
+        // flush file.
+        if (!saveFile.flush()) {
+            return false;
+        }
+        // ensure that the file is written to disk
+        fsync(saveFile.handle());
     }
 
-    // ensure that the file is written to disk
-    fsync(saveFile.handle());
     QFileInfo fi(filePath());
     m_tModifiedDateTime = fi.lastModified();
 
