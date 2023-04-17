@@ -217,19 +217,17 @@ void Settings::dtkThemeWorkaround(QWidget *parent, const QString &theme)
     }
 }
 
-//QWidget *Settings::createFontComBoBoxHandle(QObject *obj)
 QPair<QWidget *, QWidget *> Settings::createFontComBoBoxHandle(QObject *obj)
 {
     auto option = qobject_cast<DTK_CORE_NAMESPACE::DSettingsOption *>(obj);
 
     QComboBox *comboBox = new QComboBox;
-    //QWidget *optionWidget = DSettingsWidgetFactory::createTwoColumWidget(option, comboBox);
     QPair<QWidget *, QWidget *> optionWidget = DSettingsWidgetFactory::createStandardItem(QByteArray(), option, comboBox);
 
     QFontDatabase fontDatabase;
     comboBox->addItems(fontDatabase.families());
-    //comboBox->setItemDelegate(new FontItemDelegate);
-    //comboBox->setFixedSize(240, 36);
+    // 设置最小宽度，以保持和下方 OptionDSpinBox 一样的长度
+    comboBox->setMinimumSize(240, 36);
 
     if (option->value().toString().isEmpty()) {
         option->setValue(QFontDatabase::systemFont(QFontDatabase::FixedFont).family());
