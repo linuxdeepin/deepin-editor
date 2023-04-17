@@ -33,8 +33,8 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     //设置图标
     QString theme =  (DGuiApplicationHelper::instance()->applicationPalette().color(QPalette::Background).lightness() < 128) ? "dark" : "light";
     QString arrowSvgPath = QString(":/images/dropdown_arrow_%1.svg").arg(theme);
-    //装换图片
-    int scaled =qApp->devicePixelRatio() == 1.25 ? 2 : 1;
+    // 根据当前显示缩放转换图片
+    qreal scaled = this->devicePixelRatioF();
     QSvgRenderer svg_render(arrowSvgPath);
     QPixmap pixmap(QSize(8,5)*scaled);
     pixmap.fill(Qt::transparent);
@@ -197,8 +197,8 @@ void DDropdownMenu::deleteMenuActionGroup()
 void DDropdownMenu::setTheme(const QString &theme)
 {
     QString arrowSvgPath = QString(":/images/dropdown_arrow_%1.svg").arg(theme);
-    //装换图片
-    int scaled =qApp->devicePixelRatio() == 1.25 ? 2 : 1;
+    // 根据当前显示缩放转换图片
+    qreal scaled = this->devicePixelRatioF();
     QSvgRenderer svg_render(arrowSvgPath);
 
     QPixmap pixmap(QSize(8,5)*scaled);
