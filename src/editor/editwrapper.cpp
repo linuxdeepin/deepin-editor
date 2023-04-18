@@ -86,6 +86,9 @@ EditWrapper::EditWrapper(Window *window, QWidget *parent)
       m_pWaringNotices(new WarningNotices(WarningNotices::ResidentType, this))
 
 {
+    // 更新单独添加的高亮格式文件
+    m_Repository.addCustomSearchPath(KF5_HIGHLIGHT_PATH);
+
     m_bQuit = false;
     m_pWaringNotices->hide();
     // Init layout and widgets.

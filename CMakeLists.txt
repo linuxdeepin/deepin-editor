@@ -25,6 +25,12 @@ endif ()
 include_directories(${PROJECT_BINARY_DIR})
 configure_file(${PROJECT_SOURCE_DIR}/src/environments.h.in ${PROJECT_BINARY_DIR}/environments.h @ONLY)
 
+# 玲珑路径配置
+add_definitions(-DLINGLONG_PREFIX=\"${CMAKE_INSTALL_PREFIX}/\")
+# 高亮文件路径配置
+set(KF5_HIGHLIGHT_INSTALL_PATH ${CMAKE_INSTALL_PREFIX}/share/deepin-editor/org.kde.syntax-highlighing)
+add_definitions(-DKF5_HIGHLIGHT_PATH=\"${KF5_HIGHLIGHT_INSTALL_PATH}\")
+
 add_subdirectory(src)
 
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
