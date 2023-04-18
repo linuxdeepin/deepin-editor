@@ -52,6 +52,9 @@ TextEdit::TextEdit(QWidget *parent)
     : DPlainTextEdit(parent),
       m_wrapper(nullptr)
 {
+    // 更新单独添加的高亮格式文件
+    m_repository.addCustomSearchPath(KF5_HIGHLIGHT_PATH);
+
     setUndoRedoEnabled(false);
     //撤销重做栈
     m_pUndoStack = new QUndoStack();

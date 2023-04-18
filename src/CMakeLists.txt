@@ -60,7 +60,6 @@ target_link_libraries(deepin-editor
     chardet
 )
 
-add_definitions(-DLINGLONG_PREFIX=\"${CMAKE_INSTALL_PREFIX}/\")
 
 # Install qm files
 file(GLOB QM_FILES "${CMAKE_SOURCE_DIR}/translations/*.qm")
@@ -97,3 +96,7 @@ else()
     install(FILES ${DCONFIG_FILES} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/dsg/configs/${DCONFIG_APPID})
     message("-- DConfig is not supported by DTK")
 endif()
+
+# 添加KF5格式高亮配置文件，/usr/share/org.kde.syntax-highlighting/syntax/ 为所有用户可读取高亮配置的路径
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/misc/org.kde.syntax-highlighing/syntax
+    DESTINATION ${KF5_HIGHLIGHT_INSTALL_PATH})

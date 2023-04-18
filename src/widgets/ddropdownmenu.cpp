@@ -23,6 +23,9 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     , m_pToolButton(new DToolButton(this))
     , m_menu(new DMenu)
 {
+    // 更新单独添加的高亮格式文件
+    m_Repository.addCustomSearchPath(KF5_HIGHLIGHT_PATH);
+
     //设置toobutton属性
     m_pToolButton->setFocusPolicy(Qt::StrongFocus);
     m_pToolButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
