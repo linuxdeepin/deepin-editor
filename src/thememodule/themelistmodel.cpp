@@ -10,10 +10,6 @@
 #include <QDebug>
 #include <QDir>
 
-#ifndef LINGLONG_PREFIX
-#define LINGLONG_PREFIX "/usr/"
-#endif
-
 ThemeListModel::ThemeListModel(QObject *parent)
     : QAbstractListModel(parent)
 {
