@@ -39,7 +39,7 @@ Copyright: UnionTech Software Technology Co., Ltd.
 License: CC0-1.0
 
 # config files
-Files: com.deepin.editor.daemon.service com.deepin.editor.policy deepin-editor.desktop
+Files: com.deepin.editor.daemon.service com.deepin.editor.policy deepin-editor.desktop misc/*
 Copyright: UnionTech Software Technology Co., Ltd.
 License: CC0-1.0
 
