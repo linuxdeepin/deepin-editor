@@ -60,11 +60,6 @@ target_link_libraries(deepin-editor
     chardet
 )
 
-if(DEFINED ENV{PREFIX})
-   set(CMAKE_INSTALL_PREFIX $ENV{PREFIX})
-else()
-   set(CMAKE_INSTALL_PREFIX /usr)
-endif()
 add_definitions(-DLINGLONG_PREFIX=\"${CMAKE_INSTALL_PREFIX}/\")
 
 # Install qm files
@@ -83,17 +78,9 @@ endif()
 #if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "loongarch64")
 #    install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets/loongarch64/deepin-editor DESTINATION /usr/share/deepin-manual/manual-assets/application/)
 if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "sw_64")
-    if(DEFINED ENV{PREFIX})
-        install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets/loongarch64/deepin-editor DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-manual/manual-assets/application/)
-    else()
-        install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets/loongarch64/deepin-editor DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-manual/manual-assets/application/)
-    endif()
+    install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets/loongarch64/deepin-editor DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-manual/manual-assets/application/)
 else()
-    if(DEFINED ENV{PREFIX})
-        install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets/deepin-editor DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-manual/manual-assets/application/)
-    else()
-        install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets/deepin-editor DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-manual/manual-assets/application/)
-    endif()
+    install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/assets/deepin-editor DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-manual/manual-assets/application/)
 endif()
 
 install(TARGETS deepin-editor DESTINATION bin/)
