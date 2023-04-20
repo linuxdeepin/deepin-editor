@@ -1,3 +1,14 @@
+deepin-editor (6.0.7) unstable; urgency=medium
+
+  * fix: 修复最小化后，双击文件无法弹出编辑器窗口(Bug: 194029)(Influence: 激活窗口)
+  * fix: 修复另存255长度文件名的文件权限不足问题(Bug: 192375)(Influence: 长文件名另存)
+  * fix: 修复设置界面中字体和字号选项未对齐(Influence: 设置界面)
+  * fix: 修复高分屏1.5缩放下图标模糊(Bug: 171749)(Influence: 高分屏缩放显示)
+  * fix: 修复VBScript文件未高亮问题(Bug: 154719)(Influence: vbs格式高亮 授权文件)
+  * chore: remove redundant code for linglong.  
+
+ -- Deepin Packages Builder <packages@deepin.org>  Thu, 20 Apr 2023 15:02:15 +0800
+
 deepin-editor (6.0.6) unstable; urgency=medium
 
   * fix: 修复使用特殊字体时，序号显示不全(Bug: 188417)(Influence: 序号显示)
