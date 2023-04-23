@@ -27,6 +27,7 @@ static QMap<QString, QByteArray> gs_byteOrderMark = {{"UTF-16LE", QByteArray::fr
                                                      {"UTF-32BE", QByteArray::fromHex("0000FEFF")}};
 
 /**
+  FIXME: 临时方案，后续修改iconv等编码转换处理
   # GB18030-2022 - UTF-8 编码转换处理
   为适配 GB18030-2022 规范，{gs_UTF8MapGB18030Data} 为 GB18030-UTF8 PUA 区域映射表，对应 GB18030-2022 规范附录D 表D.1
   替换2005和2022规范中转换存在差异的部分， 见 \l{https://en.wikipedia.org/wiki/GB_18030}

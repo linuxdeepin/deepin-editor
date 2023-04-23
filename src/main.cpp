@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -32,8 +32,6 @@ DWIDGET_USE_NAMESPACE
 int main(int argc, char *argv[])
 {
     DCORE_USE_NAMESPACE
-    DLogManager::registerConsoleAppender();
-    DLogManager::registerFileAppender();
     PerformanceMonitor::initializeAppStart();
     if (!QString(qgetenv("XDG_CURRENT_DESKTOP")).toLower().startsWith("deepin")) {
         setenv("XDG_CURRENT_DESKTOP", "Deepin", 1);
@@ -46,6 +44,10 @@ int main(int argc, char *argv[])
     EditorApplication app(argc, argv);
     // save theme
     DApplicationSettings savetheme;
+
+    // 需在App构造后初始化日志设置
+    DLogManager::registerConsoleAppender();
+    DLogManager::registerFileAppender();
 
     // Parser input arguments.
     QCommandLineParser parser;
