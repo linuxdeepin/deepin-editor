@@ -1995,7 +1995,7 @@ bool TextEdit::updateKeywordSelections(QString keyword, QTextCharFormat charForm
     if (!keyword.isEmpty()) {
         QTextCursor cursor(document());
         QTextDocument::FindFlags flags;
-        //flags &= QTextDocument::FindCaseSensitively;
+        flags |= QTextDocument::FindCaseSensitively;
         QTextEdit::ExtraSelection extra;
         extra.format = charFormat;
         cursor = document()->find(keyword, cursor, flags);
@@ -2044,6 +2044,8 @@ bool TextEdit::updateKeywordSelectionsInView(QString keyword, QTextCharFormat ch
         // 内部计算时，均视为 \n 结尾
         QLatin1Char endLine('\n');
         QString multiLineText;
+        QTextDocument::FindFlags flags;
+        flags |= QTextDocument::FindCaseSensitively;
         if (keyword.contains(endLine)) {
             auto temp = this->textCursor();
             temp.setPosition(beginPos);
@@ -2055,7 +2057,7 @@ bool TextEdit::updateKeywordSelectionsInView(QString keyword, QTextCharFormat ch
             }
             cursor = findCursor(keyword, multiLineText, 0, false, beginPos);
         } else {
-            cursor = document()->find(keyword, beginPos);
+            cursor = document()->find(keyword, beginPos, flags);
         }
 
         if (cursor.isNull()) {
@@ -2073,7 +2075,7 @@ bool TextEdit::updateKeywordSelectionsInView(QString keyword, QTextCharFormat ch
                 int pos = std::max(extra.cursor.position(), extra.cursor.anchor());
                 cursor = findCursor(keyword, multiLineText, pos - beginPos, false, beginPos);
             } else {
-                cursor = document()->find(keyword, cursor);
+                cursor = document()->find(keyword, cursor, flags);
             }
 
             if (cursor.position() > endPos) {
