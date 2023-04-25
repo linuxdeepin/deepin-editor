@@ -1,3 +1,9 @@
+deepin-editor (6.0.8) unstable; urgency=medium
+
+  * fix: 修复未正确记录日志(Influence: 日志文件)
+
+ -- Deepin Packages Builder <packages@deepin.org>  Tue, 25 Apr 2023 10:52:41 +0800
+
 deepin-editor (6.0.7) unstable; urgency=medium
 
   * fix: 修复最小化后，双击文件无法弹出编辑器窗口(Bug: 194029)(Influence: 激活窗口)
