@@ -1,3 +1,9 @@
+deepin-editor (6.0.9) unstable; urgency=medium
+
+  * fix: deepin-editor searching problem(Bug: 4203)
+
+ -- Deepin Packages Builder <packages@deepin.org>  Thu, 11 May 2023 13:36:30 +0800
+
 deepin-editor (6.0.8) unstable; urgency=medium
 
   * fix: 修复未正确记录日志(Influence: 日志文件)
