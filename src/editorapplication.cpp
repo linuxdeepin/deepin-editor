@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -22,6 +22,15 @@ EditorApplication::EditorApplication(int &argc, char *argv[]) : DApplication(arg
     setProductName(DApplication::translate("MainWindow", "Text Editor"));
     setApplicationDescription(DApplication::translate("MainWindow", descriptionText) + "\n");
     setApplicationAcknowledgementPage(acknowledgementLink);
+
+    // 通过宏区分是否允许调用开源信息弹窗配置接口
+#ifdef DTKWIDGET_CLASS_DLicenseDialog
+    setApplicationCreditsFile(":/resources/licenses/deepin-editor.json");
+    setLicensePath(":/resources/licenses/data");
+#else
+    qInfo() << qPrintable("Disable use dtkwidget DLiscenseDialog.");
+#endif
+
     setQuitOnLastWindowClosed(false);
 }
 

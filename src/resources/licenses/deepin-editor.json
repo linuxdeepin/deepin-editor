@@ -1,0 +1,110 @@
+[
+    {
+        "name": "libuchardet-dev",
+        "version": "",
+        "copyright": "NOASSERTION",
+        "license": "MPL-1.1"
+    },
+    {
+        "name": "libuchardet-dev",
+        "version": "",
+        "copyright": "NOASSERTION",
+        "license": "GPL-2.0-or-later"
+    },
+    {
+        "name": "libuchardet-dev",
+        "version": "",
+        "copyright": "NOASSERTION",
+        "license": "LGPL-2.1-or-later"
+    },
+    {
+        "name": "pkg-config",
+        "version": "",
+        "copyright": "NOASSERTION",
+        "license": "MIT"
+    },
+    {
+        "name": "libkf5codecs-dev",
+        "version": "",
+        "copyright": "NOASSERTION",
+        "license": "LGPL-2.0-or-later"
+    },
+    {
+        "name": "libicu-dev",
+        "version": "",
+        "copyright": "NOASSERTION",
+        "license": "ICU"
+    },
+    {
+        "name": "qtbase5-private-dev",
+        "version": "",
+        "copyright": "NOASSERTION",
+        "license": "GPL-2.0-only"
+    },
+    {
+        "name": "qtbase5-private-dev",
+        "version": "",
+        "copyright": "NOASSERTION",
+        "license": "LGPL-3.0-only"
+    },
+    {
+        "name": "libchardet-dev",
+        "version": "",
+        "copyright": "NOASSERTION",
+        "license": "MPL-1.1"
+    },
+    {
+        "name": "libchardet-dev",
+        "version": "",
+        "copyright": "NOASSERTION",
+        "license": "LGPL-2.1-only"
+    },
+    {
+        "name": "libqt5widgets5",
+        "version": "",
+        "copyright": "NOASSERTION",
+        "license": "LGPL-3.0-only"
+    },
+    {
+        "name": "libqt5widgets5",
+        "version": "",
+        "copyright": "NOASSERTION",
+        "license": "GPL-2.0-only"
+    },
+    {
+        "name": "libgmock-dev",
+        "version": "",
+        "copyright": "NOASSERTION",
+        "license": "BSD-3-Clause"
+    },
+    {
+        "name": "libpolkit-qt5-1-dev",
+        "version": "",
+        "copyright": "NOASSERTION",
+        "license": "LGPL-2.0-or-later"
+    },
+    {
+        "name": "qttools5-dev-tools",
+        "version": "",
+        "copyright": "NOASSERTION",
+        "license": "GPL-3.0-only"
+    },
+    {
+        "name": "libkf5syntaxhighlighting-dev",
+        "version": "",
+        "copyright": "NOASSERTION",
+        "license": "MIT"
+    },
+    {
+        "name": "libgtest-dev",
+        "version": "",
+        "copyright": "NOASSERTION",
+        "license": "BSD-3-Clause"
+    },
+    {
+        "name": "cmake",
+        "version": "",
+        "copyright": "NOASSERTION",
+        "license": "BSD-3-Clause"
+    }
+]
