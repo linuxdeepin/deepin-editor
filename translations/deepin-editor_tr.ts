@@ -17,7 +17,7 @@
         <translation>%1 Karakter</translation>
     </message>
     <message>
-        <location filename="../src/widgets/bottombar.cpp" line="53"/>
+        <location filename="../src/widgets/bottombar.cpp" line="37"/>
         <source>Loading:</source>
         <translation type="unfinished"/>
     </message>
@@ -25,9 +25,9 @@
 <context>
     <name>DDropdownMenu</name>
     <message>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="327"/>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="371"/>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="376"/>
+        <location filename="../src/widgets/ddropdownmenu.cpp" line="285"/>
+        <location filename="../src/widgets/ddropdownmenu.cpp" line="336"/>
+        <location filename="../src/widgets/ddropdownmenu.cpp" line="341"/>
         <source>None</source>
         <translation>Yok</translation>
     </message>
@@ -35,67 +35,68 @@
 <context>
     <name>EditWrapper</name>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="207"/>
-        <location filename="../src/editor/editwrapper.cpp" line="270"/>
-        <location filename="../src/editor/editwrapper.cpp" line="327"/>
-        <location filename="../src/editor/editwrapper.cpp" line="573"/>
+        <location filename="../src/editor/editwrapper.cpp" line="308"/>
+        <location filename="../src/editor/editwrapper.cpp" line="374"/>
+        <location filename="../src/editor/editwrapper.cpp" line="504"/>
+        <location filename="../src/editor/editwrapper.cpp" line="788"/>
         <source>Save</source>
         <translation>Kaydet</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="322"/>
+        <location filename="../src/editor/editwrapper.cpp" line="499"/>
         <source>Do you want to save this file?</source>
         <translation>Bu dosyayı kaydetmek ister misiniz?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="268"/>
-        <location filename="../src/editor/editwrapper.cpp" line="325"/>
+        <location filename="../src/editor/editwrapper.cpp" line="372"/>
+        <location filename="../src/editor/editwrapper.cpp" line="502"/>
         <source>Cancel</source>
         <translation>İptal</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="265"/>
+        <location filename="../src/editor/editwrapper.cpp" line="369"/>
         <source>Encoding changed. Do you want to save the file now?</source>
         <translation>Kodlama değişti. Dosyayı şimdi kaydetmek istiyor musunuz?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="326"/>
+        <location filename="../src/editor/editwrapper.cpp" line="503"/>
         <source>Discard</source>
         <translation>Yoksay</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="451"/>
+        <location filename="../src/editor/editwrapper.cpp" line="237"/>
+        <location filename="../src/editor/editwrapper.cpp" line="646"/>
         <source>You do not have permission to save %1</source>
         <translation>%1 dosyasını kaydetme izniniz yok</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="645"/>
+        <location filename="../src/editor/editwrapper.cpp" line="865"/>
         <source>File removed on the disk. Save it now?</source>
         <translation>Dosya diskten silinmiş. Şimdi kaydetmek ister misiniz?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="650"/>
+        <location filename="../src/editor/editwrapper.cpp" line="870"/>
         <source>File has changed on disk. Reload?</source>
         <translation>Disk üzerindeki dosya değişmiş. Yeniden yüklensin mi?</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="672"/>
-        <location filename="../src/widgets/bottombar.cpp" line="82"/>
+        <location filename="../src/editor/editwrapper.cpp" line="892"/>
+        <location filename="../src/widgets/bottombar.cpp" line="66"/>
         <source>INSERT</source>
         <translation>EKLE</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="675"/>
+        <location filename="../src/editor/editwrapper.cpp" line="895"/>
         <source>OVERWRITE</source>
         <translation>ÜZERİNE YAZ</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="678"/>
+        <location filename="../src/editor/editwrapper.cpp" line="898"/>
         <source>R/O</source>
         <translation>S/O</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="945"/>
+        <location filename="../src/editor/editwrapper.cpp" line="1041"/>
         <source>The file cannot be read, which may be too large or has been damaged!</source>
         <translation type="unfinished"/>
     </message>
@@ -121,7 +122,7 @@
 <context>
     <name>JumpLineBar</name>
     <message>
-        <location filename="../src/controls/jumplinebar.cpp" line="46"/>
+        <location filename="../src/controls/jumplinebar.cpp" line="34"/>
         <source>Go to Line: </source>
         <translation>Şu Satıra Git:</translation>
     </message>
@@ -142,17 +143,17 @@
 <context>
     <name>PathSettingWgt</name>
     <message>
-        <location filename="../src/widgets/pathsettintwgt.cpp" line="53"/>
+        <location filename="../src/widgets/pathsettintwgt.cpp" line="67"/>
         <source>Remember the last used path</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/widgets/pathsettintwgt.cpp" line="54"/>
+        <location filename="../src/widgets/pathsettintwgt.cpp" line="68"/>
         <source>Same path as the current file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/widgets/pathsettintwgt.cpp" line="55"/>
+        <location filename="../src/widgets/pathsettintwgt.cpp" line="69"/>
         <source>Customize the default path</source>
         <translation type="unfinished"/>
     </message>
@@ -165,12 +166,13 @@
         <translation>Metin Düzenleyici</translation>
     </message>
     <message>
-        <location filename="../src/editor/editwrapper.cpp" line="209"/>
-        <location filename="../src/editor/editwrapper.cpp" line="575"/>
-        <location filename="../src/widgets/window.cpp" line="972"/>
-        <location filename="../src/widgets/window.cpp" line="994"/>
-        <location filename="../src/widgets/window.cpp" line="1087"/>
-        <location filename="../src/widgets/window.cpp" line="1102"/>
+        <location filename="../src/editor/editwrapper.cpp" line="310"/>
+        <location filename="../src/editor/editwrapper.cpp" line="798"/>
+        <location filename="../src/editor/editwrapper.cpp" line="811"/>
+        <location filename="../src/widgets/window.cpp" line="1179"/>
+        <location filename="../src/widgets/window.cpp" line="1202"/>
+        <location filename="../src/widgets/window.cpp" line="1313"/>
+        <location filename="../src/widgets/window.cpp" line="1328"/>
         <source>Encoding</source>
         <translation>Kodlama</translation>
     </message>
@@ -206,9 +208,9 @@
         <translation>Tuş Eşleşmesi</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="31"/>
-        <location filename="../src/controls/settingsdialog.cpp" line="107"/>
-        <location filename="../src/widgets/window.cpp" line="1510"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="16"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="94"/>
+        <location filename="../src/widgets/window.cpp" line="2019"/>
         <source>Window</source>
         <translation>Pencere</translation>
     </message>
@@ -294,458 +296,467 @@
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="33"/>
+        <source>Find Next</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="34"/>
+        <source>Find Previous</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../src/controls/settingsdialog.cpp" line="35"/>
         <source>Replace</source>
         <translation>Değiştir</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="34"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="36"/>
         <source>Go to line</source>
         <translation>Şu satıra git</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="35"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="37"/>
         <source>Save cursor position</source>
         <translation>İmleç konumunu kaydet</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="36"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="38"/>
         <source>Reset cursor position</source>
         <translation>İmleç konumunu sıfırla</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="37"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="39"/>
         <source>Exit</source>
         <translation>Çıkış</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="38"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="40"/>
         <source>Display shortcuts</source>
         <translation>Kısayolları görüntüle</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="39"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="41"/>
         <source>Print</source>
         <translation>Yazdır</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="40"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="42"/>
         <source>Editor</source>
         <translation>Düzenleyici</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="41"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="43"/>
         <source>Increase indent</source>
         <translation>Girinti düzeyini arttır</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="42"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="44"/>
         <source>Decrease indent</source>
         <translation>Girinti düzeyini azalt</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="43"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="45"/>
         <source>Forward character</source>
         <translation>Sonraki karakter</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="44"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="46"/>
         <source>Backward character</source>
         <translation>Önceki karakter</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="45"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="47"/>
         <source>Forward word</source>
         <translation>Sonraki sözcük</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="46"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="48"/>
         <source>Backward word</source>
         <translation>Önceki sözcük</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="47"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="49"/>
         <source>Next line</source>
         <translation>Sonraki satır</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="48"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="50"/>
         <source>Previous line</source>
         <translation>Önceki satır</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="49"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="51"/>
         <source>New line</source>
         <translation>Yeni satır</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="50"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="52"/>
         <source>New line above</source>
         <translation>Üste yeni satır</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="51"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="53"/>
         <source>New line below</source>
         <translation>Alta yeni satır</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="52"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="54"/>
         <source>Duplicate line</source>
         <translation>Yinelenen satır</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="53"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="55"/>
         <source>Delete to end of line</source>
         <translation>Satır sonuna kadar sil</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="54"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="56"/>
         <source>Delete current line</source>
         <translation>Mevcut satırı sil</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="55"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="57"/>
         <source>Swap line up</source>
         <translation>Üstteki satır ile değiştir</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="56"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="58"/>
         <source>Swap line down</source>
         <translation>Alttaki satır ile değiştir</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="57"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="59"/>
         <source>Scroll up one line</source>
         <translation>Bir satır yukarı kaydır</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="58"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="60"/>
         <source>Scroll down one line</source>
         <translation>Bir satır aşağı kaydır</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="59"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="61"/>
         <source>Page up</source>
         <translation>Sayfa üstü</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="60"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="62"/>
         <source>Page down</source>
         <translation>Sayfa altı</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="61"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="63"/>
         <source>Move to end of line</source>
         <translation>Satır sonuna git</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="62"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="64"/>
         <source>Move to start of line</source>
         <translation>Satır başına git</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="63"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="65"/>
         <source>Move to end of text</source>
         <translation>Metnin sonuna git</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="64"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="66"/>
         <source>Move to start of text</source>
         <translation>Metnin başına git</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="65"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="67"/>
         <source>Move to line indentation</source>
         <translation>Satır girintisine git</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="66"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="68"/>
         <source>Upper case</source>
         <translation>Büyük harf</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="67"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="69"/>
         <source>Lower case</source>
         <translation>Küçük harf</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="68"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="70"/>
         <source>Capitalize</source>
         <translation>İlk harfleri büyüt</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="69"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="71"/>
         <source>Delete backward word</source>
         <translation>Önceki sözcüğü sil</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="70"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="72"/>
         <source>Delete forward word</source>
         <translation>Sonraki sözcüğü sil</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="71"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="73"/>
         <source>Forward over a pair</source>
         <translation>Sonraki çift</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="72"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="74"/>
         <source>Backward over a pair</source>
         <translation>Önceki çift</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="73"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="75"/>
         <source>Select all</source>
         <translation>Tümünü seç</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="74"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="76"/>
         <source>Copy</source>
         <translation>Kopyala</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="75"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="77"/>
         <source>Cut</source>
         <translation>Kes</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="76"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="78"/>
         <source>Paste</source>
         <translation>Yapıştır</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="77"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="79"/>
         <source>Transpose character</source>
         <translation>Karakteri dönüştür</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="78"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="80"/>
         <source>Mark</source>
         <translation>İşaretle</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="79"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="81"/>
         <source>Unmark</source>
         <translation>İşareti kaldır</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="80"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="82"/>
         <source>Copy line</source>
         <translation>Satırı kopyala</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="81"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="83"/>
         <source>Cut line</source>
         <translation>Satırı kes</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="82"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="84"/>
         <source>Merge lines</source>
         <translation>Satırları birleştir</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="83"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="85"/>
         <source>Read-Only mode</source>
         <translation>Salt okunur kip</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="84"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="86"/>
         <source>Add comment</source>
         <translation>Yorum ekle</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="85"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="87"/>
         <source>Remove comment</source>
         <translation>Yorumu kaldır</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="86"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="88"/>
         <source>Undo</source>
         <translation>Geri al</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="87"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="89"/>
         <source>Redo</source>
         <translation>Yinele</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="88"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="90"/>
         <source>Add/Remove bookmark</source>
         <translation>Yer imi Ekle/Kaldır</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="89"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="91"/>
         <source>Move to previous bookmark</source>
         <translation>Önceki yer imine git</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="90"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="92"/>
         <source>Move to next bookmark</source>
         <translation>Sonraki yer imine git</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="91"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="93"/>
         <source>Advanced</source>
         <translation>Gelişmiş</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="93"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="95"/>
         <source>Window size</source>
         <translation>Pencere boyutu</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="94"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="96"/>
         <source>Tab width</source>
         <translation>Sekme genişliği</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="110"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="97"/>
         <source>Paste by pressing a middle mouse button</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="112"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="99"/>
         <source>Startup</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="113"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="100"/>
         <source>Reopen last closed tabs</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="115"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="102"/>
         <source>Open/Save Settings</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="117"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="104"/>
         <source>Word wrap</source>
         <translation>Sözcük kaydır</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="118"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="105"/>
         <source>Code folding flag</source>
         <translation>Kod katlama bayrağı</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="119"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="106"/>
         <source>Show line numbers</source>
         <translation>Satır numaralarını göster</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="120"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="107"/>
         <source>Show bookmarks icon</source>
         <translation>Yer imi simgesini göster</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="121"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="108"/>
         <source>Show whitespaces and tabs</source>
         <translation>Boşluk ve sekmeleri göster</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="122"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="109"/>
         <source>Highlight current line</source>
         <translation>Mevcut satırı vurgula</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="123"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="110"/>
         <source>Color mark</source>
         <translation>Renk işareti</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="126"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="113"/>
         <source>Unicode</source>
         <translation>Unicode</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="127"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="114"/>
         <source>WesternEuropean</source>
         <translation>WesternEuropean</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="128"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="115"/>
         <source>CentralEuropean</source>
         <translation>CentralEuropean</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="129"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="116"/>
         <source>Baltic</source>
         <translation>Baltic</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="130"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="117"/>
         <source>Cyrillic</source>
         <translation>Cyrillic</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="131"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="118"/>
         <source>Arabic</source>
         <translation>Arabic</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="136"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="123"/>
         <source>Celtic</source>
         <translation>Celtic</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="137"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="124"/>
         <source>SouthEasternEuropean</source>
         <translation>SouthEasternEuropean</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="132"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="119"/>
         <source>Greek</source>
         <translation>Greek</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="133"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="120"/>
         <source>Hebrew</source>
         <translation>Hebrew</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="138"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="125"/>
         <source>ChineseSimplified</source>
         <translation>ChineseSimplified</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="139"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="126"/>
         <source>ChineseTraditional</source>
         <translation>ChineseTraditional</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="140"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="127"/>
         <source>Japanese</source>
         <translation>Japonca</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="141"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="128"/>
         <source>Korean</source>
         <translation>Korece</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="135"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="122"/>
         <source>Thai</source>
         <translation>Tayca</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="134"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="121"/>
         <source>Turkish</source>
         <translation>Türkçe</translation>
     </message>
     <message>
-        <location filename="../src/controls/settingsdialog.cpp" line="142"/>
+        <location filename="../src/controls/settingsdialog.cpp" line="129"/>
         <source>Vietnamese</source>
         <translation>Vietnamca</translation>
     </message>
     <message>
-        <location filename="../src/startmanager.cpp" line="766"/>
+        <location filename="../src/startmanager.cpp" line="833"/>
         <source>File not saved</source>
         <translation>Dosya kaydedilmedi</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="995"/>
-        <location filename="../src/widgets/window.cpp" line="1088"/>
-        <location filename="../src/widgets/window.cpp" line="1103"/>
+        <location filename="../src/widgets/window.cpp" line="1314"/>
+        <location filename="../src/widgets/window.cpp" line="1329"/>
         <source>Line Endings</source>
         <translation>Satır Sonları</translation>
     </message>
@@ -795,43 +806,44 @@
 <context>
     <name>Settings</name>
     <message>
-        <location filename="../src/common/settings.cpp" line="133"/>
+        <location filename="../src/common/settings.cpp" line="116"/>
         <source>Standard</source>
         <translation>Standart</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="133"/>
+        <location filename="../src/common/settings.cpp" line="116"/>
         <source>Customize</source>
         <translation>Özelleştir</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="146"/>
+        <location filename="../src/common/settings.cpp" line="129"/>
         <source>Normal</source>
         <translation>Normal</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="146"/>
+        <location filename="../src/common/settings.cpp" line="129"/>
         <source>Maximum</source>
         <translation>En fazla</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="146"/>
+        <location filename="../src/common/settings.cpp" line="129"/>
         <source>Fullscreen</source>
         <translation>Tam ekran</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="412"/>
+        <location filename="../src/common/settings.cpp" line="402"/>
         <source>This shortcut conflicts with system shortcut %1</source>
         <translation>Bu kısayol, %1 sistem kısayolu ile çakışıyor</translation>
     </message>
     <message>
-        <location filename="../src/common/settings.cpp" line="414"/>
+        <location filename="../src/common/settings.cpp" line="404"/>
         <source>This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately</source>
         <translation>Bu kısayol %1 ile çakışıyor, bu kısayolu hemen etkin hale getirmek için Değiştire tıklayın</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="560"/>
         <location filename="../src/common/settings.cpp" line="568"/>
+        <location filename="../src/common/settings.cpp" line="576"/>
         <source>The shortcut %1 is invalid, please set another one.</source>
         <translation>%1 kısayolu geçersiz, lütfen başka bir tane ayarlayın.</translation>
     </message>
@@ -895,257 +907,260 @@
 <context>
     <name>TextEdit</name>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="236"/>
+        <location filename="../src/editor/dtextedit.cpp" line="273"/>
         <source>Undo</source>
         <translation>Geri al</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="237"/>
+        <location filename="../src/editor/dtextedit.cpp" line="274"/>
         <source>Redo</source>
         <translation>Yinele</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="238"/>
+        <location filename="../src/editor/dtextedit.cpp" line="275"/>
         <source>Cut</source>
         <translation>Kes</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="239"/>
+        <location filename="../src/editor/dtextedit.cpp" line="276"/>
         <source>Copy</source>
         <translation>Kopyala</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="240"/>
+        <location filename="../src/editor/dtextedit.cpp" line="277"/>
         <source>Paste</source>
         <translation>Yapıştır</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="241"/>
+        <location filename="../src/editor/dtextedit.cpp" line="278"/>
         <source>Delete</source>
         <translation>Sil</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="242"/>
+        <location filename="../src/editor/dtextedit.cpp" line="279"/>
         <source>Select All</source>
         <translation>Tümünü Seç</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="243"/>
-        <location filename="../src/widgets/window.cpp" line="363"/>
+        <location filename="../src/editor/dtextedit.cpp" line="280"/>
+        <location filename="../src/widgets/window.cpp" line="500"/>
         <source>Find</source>
         <translation>Bul</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="244"/>
-        <location filename="../src/widgets/window.cpp" line="364"/>
+        <location filename="../src/editor/dtextedit.cpp" line="281"/>
+        <location filename="../src/widgets/window.cpp" line="501"/>
         <source>Replace</source>
         <translation>Değiştir</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="245"/>
+        <location filename="../src/editor/dtextedit.cpp" line="282"/>
         <source>Go to Line</source>
         <translation>Şu Satıra Git</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="246"/>
+        <location filename="../src/editor/dtextedit.cpp" line="283"/>
         <source>Turn on Read-Only mode</source>
         <translation>Salt Okunur Kipi Aç</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="247"/>
+        <location filename="../src/editor/dtextedit.cpp" line="284"/>
         <source>Turn off Read-Only mode</source>
         <translation>Salt Okunur Kipi Kapat</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="248"/>
+        <location filename="../src/editor/dtextedit.cpp" line="285"/>
         <source>Fullscreen</source>
         <translation>Tam ekran</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="249"/>
+        <location filename="../src/editor/dtextedit.cpp" line="286"/>
         <source>Exit fullscreen</source>
         <translation>Tam ekrandan çık</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="250"/>
+        <location filename="../src/editor/dtextedit.cpp" line="287"/>
         <source>Display in file manager</source>
         <translation>Dosya yöneticisinde görüntüle</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="251"/>
-        <location filename="../src/editor/dtextedit.cpp" line="303"/>
+        <location filename="../src/editor/dtextedit.cpp" line="288"/>
+        <location filename="../src/editor/dtextedit.cpp" line="340"/>
         <source>Add Comment</source>
         <translation>Yorum Ekle</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="252"/>
+        <location filename="../src/editor/dtextedit.cpp" line="289"/>
         <source>Text to Speech</source>
         <translation>Yazıdan Konuşmaya</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="253"/>
+        <location filename="../src/editor/dtextedit.cpp" line="290"/>
         <source>Stop reading</source>
         <translation>Okumayı durdur</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="254"/>
+        <location filename="../src/editor/dtextedit.cpp" line="291"/>
         <source>Speech to Text</source>
         <translation>Konuşmadan Yazıya</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="255"/>
+        <location filename="../src/editor/dtextedit.cpp" line="292"/>
         <source>Translate</source>
         <translation>Çeviri</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="256"/>
+        <location filename="../src/editor/dtextedit.cpp" line="293"/>
         <source>Column Mode</source>
         <translation>Sütun Kipi</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="257"/>
+        <location filename="../src/editor/dtextedit.cpp" line="294"/>
         <source>Add bookmark</source>
         <translation>Yer imlerine ekle</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="258"/>
+        <location filename="../src/editor/dtextedit.cpp" line="295"/>
         <source>Remove Bookmark</source>
         <translation>Yer İmini Kaldır</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="259"/>
+        <location filename="../src/editor/dtextedit.cpp" line="296"/>
         <source>Previous bookmark</source>
         <translation>Önceki yer imi</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="260"/>
+        <location filename="../src/editor/dtextedit.cpp" line="297"/>
         <source>Next bookmark</source>
         <translation>Sonraki yer imi</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="261"/>
+        <location filename="../src/editor/dtextedit.cpp" line="298"/>
         <source>Remove All Bookmarks</source>
         <translation>Tüm Yer İmlerini Kaldır</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="262"/>
+        <location filename="../src/editor/dtextedit.cpp" line="299"/>
         <source>Fold All</source>
         <translation>Tümünü Katla</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="263"/>
+        <location filename="../src/editor/dtextedit.cpp" line="300"/>
         <source>Fold Current Level</source>
         <translation>Mevcut Seviyeyi Katla</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="264"/>
+        <location filename="../src/editor/dtextedit.cpp" line="301"/>
         <source>Unfold All</source>
         <translation>Tümünü Katlama</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="265"/>
+        <location filename="../src/editor/dtextedit.cpp" line="302"/>
         <source>Unfold Current Level</source>
         <translation>Mevcut Seviyeyi Katlama</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="270"/>
+        <location filename="../src/editor/dtextedit.cpp" line="307"/>
         <source>Color Mark</source>
         <translation>Renk İşareti</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="274"/>
+        <location filename="../src/editor/dtextedit.cpp" line="311"/>
         <source>Clear All Marks</source>
         <translation>Tüm İşaretleri Temizle</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="275"/>
+        <location filename="../src/editor/dtextedit.cpp" line="312"/>
         <source>Clear Last Mark</source>
         <translation>Son İşareti Temizle</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="284"/>
+        <location filename="../src/editor/dtextedit.cpp" line="321"/>
         <source>Mark</source>
         <translation>İşaretle</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="296"/>
+        <location filename="../src/editor/dtextedit.cpp" line="333"/>
         <source>Mark All</source>
         <translation>Tümünü İşaretle</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="304"/>
+        <location filename="../src/editor/dtextedit.cpp" line="341"/>
         <source>Remove Comment</source>
         <translation>Yorumu Kaldır</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="2576"/>
+        <location filename="../src/editor/dtextedit.cpp" line="2714"/>
         <source>Copy failed: not enough memory</source>
         <translation>Kopyalama başarısız: yeterli bellek yok</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="2660"/>
+        <location filename="../src/editor/dtextedit.cpp" line="2798"/>
         <source>Press ALT and click lines to edit in column mode</source>
         <translation>Sütun kipinde düzenlemek için ALT tuşuna bas ve satırları tıkla</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="347"/>
+        <location filename="../src/editor/dtextedit.cpp" line="384"/>
         <source>Change Case</source>
         <translation>Büyük Küçük Harfi Değiştir</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="348"/>
+        <location filename="../src/editor/dtextedit.cpp" line="385"/>
         <source>Upper Case</source>
         <translation>Büyük Harf</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="349"/>
+        <location filename="../src/editor/dtextedit.cpp" line="386"/>
         <source>Lower Case</source>
         <translation>Küçük Harf</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="350"/>
+        <location filename="../src/editor/dtextedit.cpp" line="387"/>
         <source>Capitalize</source>
         <translation>İlk Harfleri Büyüt</translation>
     </message>
     <message>
-        <location filename="../src/widgets/bottombar.cpp" line="86"/>
+        <location filename="../src/widgets/bottombar.cpp" line="70"/>
         <source>None</source>
         <translation>Yok</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1185"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1236"/>
         <source>Selected line(s) copied</source>
         <translation>Seçilen satır(lar) kopyalandı</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1191"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1242"/>
         <source>Current line copied</source>
         <translation>Mevcut satır kopyalandı</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1211"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1262"/>
         <source>Selected line(s) clipped</source>
         <translation>Seçilen satır(lar) kırpıldı</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="1223"/>
+        <location filename="../src/editor/dtextedit.cpp" line="1273"/>
         <source>Current line clipped</source>
         <translation>Mevcut satır kopyalandı</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="2586"/>
+        <location filename="../src/editor/dtextedit.cpp" line="2724"/>
         <source>Paste failed: not enough memory</source>
         <translation>Yapıştırılamadı: yeterli bellek yok</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3558"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3762"/>
         <source>Read-Only mode is off</source>
         <translation>Salt okunur kip kapalı</translation>
     </message>
     <message>
-        <location filename="../src/editor/dtextedit.cpp" line="3565"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3584"/>
-        <location filename="../src/editor/dtextedit.cpp" line="6285"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3772"/>
+        <location filename="../src/editor/dtextedit.cpp" line="3792"/>
+        <location filename="../src/editor/dtextedit.cpp" line="6726"/>
+        <location filename="../src/editor/dtextedit.cpp" line="6835"/>
+        <location filename="../src/editor/dtextedit.cpp" line="6843"/>
+        <location filename="../src/editor/dtextedit.cpp" line="6854"/>
         <source>Read-Only mode is on</source>
         <translation>Salt okunur kip açık</translation>
     </message>
@@ -1161,129 +1176,130 @@
 <context>
     <name>Window</name>
     <message>
-        <location filename="../src/controls/warningnotices.cpp" line="38"/>
-        <location filename="../src/widgets/window.cpp" line="359"/>
+        <location filename="../src/controls/warningnotices.cpp" line="21"/>
+        <location filename="../src/widgets/window.cpp" line="496"/>
         <source>Save as</source>
         <translation>Farklı kaydet</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="355"/>
+        <location filename="../src/widgets/window.cpp" line="492"/>
         <source>New window</source>
         <translation>Yeni pencere</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="356"/>
+        <location filename="../src/widgets/window.cpp" line="493"/>
         <source>New tab</source>
         <translation>Yeni sekme</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="357"/>
+        <location filename="../src/widgets/window.cpp" line="494"/>
         <source>Open file</source>
         <translation>Dosya aç</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="358"/>
-        <location filename="../src/widgets/window.cpp" line="2260"/>
+        <location filename="../src/widgets/window.cpp" line="495"/>
+        <location filename="../src/widgets/window.cpp" line="2976"/>
         <source>Save</source>
         <translation>Kaydet</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="360"/>
+        <location filename="../src/widgets/window.cpp" line="497"/>
         <source>Print</source>
         <translation>Yazdır</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="361"/>
+        <location filename="../src/widgets/window.cpp" line="498"/>
         <source>Switch theme</source>
         <translation>Temayı değiştir</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="362"/>
-        <location filename="../src/widgets/window.cpp" line="1570"/>
+        <location filename="../src/widgets/window.cpp" line="499"/>
+        <location filename="../src/widgets/window.cpp" line="2079"/>
         <source>Settings</source>
         <translation>Ayarlar</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="473"/>
-        <location filename="../src/widgets/window.cpp" line="2512"/>
+        <location filename="../src/widgets/window.cpp" line="613"/>
+        <location filename="../src/widgets/window.cpp" line="3228"/>
         <source>Read-Only</source>
         <translation>Salt Okunur</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="489"/>
+        <location filename="../src/widgets/window.cpp" line="629"/>
         <source>You do not have permission to open %1</source>
         <translation>%1 dosyasını açma izniniz yok</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="524"/>
+        <location filename="../src/widgets/window.cpp" line="669"/>
+        <location filename="../src/widgets/window.cpp" line="2540"/>
         <source>Invalid file: %1</source>
         <translation>Geçersiz dosya: %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="604"/>
-        <location filename="../src/widgets/window.cpp" line="646"/>
+        <location filename="../src/widgets/window.cpp" line="803"/>
+        <location filename="../src/widgets/window.cpp" line="849"/>
         <source>Do you want to save this file?</source>
         <translation>Bu dosyayı kaydetmek ister misiniz?</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="910"/>
+        <location filename="../src/widgets/window.cpp" line="1115"/>
         <source>You do not have permission to save %1</source>
         <translation>%1 dosyasını kaydetme izniniz yok</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="934"/>
+        <location filename="../src/widgets/window.cpp" line="1135"/>
         <source>Saved successfully</source>
         <translation>Başarıyla kaydedildi</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="970"/>
-        <location filename="../src/widgets/window.cpp" line="1044"/>
-        <location filename="../src/widgets/window.cpp" line="1085"/>
+        <location filename="../src/widgets/window.cpp" line="1171"/>
+        <location filename="../src/widgets/window.cpp" line="1270"/>
+        <location filename="../src/widgets/window.cpp" line="1311"/>
         <source>Save File</source>
         <translation>Dosyayı Kaydet</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1046"/>
+        <location filename="../src/widgets/window.cpp" line="1272"/>
         <source>Encoding</source>
         <translation>Kodlama</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1236"/>
+        <location filename="../src/widgets/window.cpp" line="1517"/>
         <source>Read-Only mode is on</source>
         <translation>Salt okunur kip açık</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1469"/>
+        <location filename="../src/widgets/window.cpp" line="1978"/>
         <source>Current location remembered</source>
         <translation>Mevcut konum hatırlandı</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1520"/>
+        <location filename="../src/widgets/window.cpp" line="2029"/>
         <source>Ctrl+&apos;=&apos;</source>
         <translation>Ctrl+&apos;=&apos;</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1523"/>
+        <location filename="../src/widgets/window.cpp" line="2032"/>
         <source>Ctrl+&apos;-&apos;</source>
         <translation>Ctrl+&apos;-&apos;</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1552"/>
+        <location filename="../src/widgets/window.cpp" line="2061"/>
         <source>Editor</source>
         <translation>Düzenleyici</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="1931"/>
+        <location filename="../src/widgets/window.cpp" line="2630"/>
         <source>Untitled %1</source>
         <translation>Başlıksız %1</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="2258"/>
+        <location filename="../src/widgets/window.cpp" line="2974"/>
         <source>Cancel</source>
         <translation>İptal</translation>
     </message>
     <message>
-        <location filename="../src/widgets/window.cpp" line="2259"/>
+        <location filename="../src/widgets/window.cpp" line="2975"/>
         <source>Discard</source>
         <translation>Yoksay</translation>
     </message>
