@@ -1,3 +1,10 @@
+deepin-editor (6.0.10) unstable; urgency=medium
+
+  * chore: 更新翻译配置和翻译文件(Influence: 翻译配置 翻译文件)
+  * chore: 更新藏文翻译文件 (#251)(Influence: 翻译文件)
+
+ -- Deepin Packages Builder <packages@deepin.org>  Wed, 24 May 2023 13:20:03 +0800
+
 deepin-editor (6.0.9) unstable; urgency=medium
 
   * fix: deepin-editor searching problem(Bug: 4203)
