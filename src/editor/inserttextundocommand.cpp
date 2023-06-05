@@ -4,7 +4,7 @@
 
 #include "inserttextundocommand.h"
 
-InsertTextUndoCommand::InsertTextUndoCommand(QTextCursor textcursor, QString text, QPlainTextEdit *edit, QUndoCommand *parent)
+InsertTextUndoCommand::InsertTextUndoCommand(const QTextCursor &textcursor, const QString &text, QPlainTextEdit *edit, QUndoCommand *parent)
     : QUndoCommand(parent)
     , m_pEdit(edit)
     , m_textCursor(textcursor)
@@ -13,7 +13,10 @@ InsertTextUndoCommand::InsertTextUndoCommand(QTextCursor textcursor, QString tex
     m_sInsertText.replace("\r\n", "\n");
 }
 
-InsertTextUndoCommand::InsertTextUndoCommand(QList<QTextEdit::ExtraSelection> &selections, QString text, QPlainTextEdit *edit, QUndoCommand *parent)
+InsertTextUndoCommand::InsertTextUndoCommand(QList<QTextEdit::ExtraSelection> &selections,
+                                             const QString &text,
+                                             QPlainTextEdit *edit,
+                                             QUndoCommand *parent)
     : QUndoCommand(parent)
     , m_pEdit(edit)
     , m_sInsertText(text)
@@ -48,7 +51,6 @@ void InsertTextUndoCommand::undo()
             m_pEdit->setTextCursor(m_ColumnEditSelections.last().cursor);
         }
     }
-
 }
 
 void InsertTextUndoCommand::redo()
@@ -86,13 +88,15 @@ void InsertTextUndoCommand::redo()
     }
 }
 
-
 /**
  * @class MidButtonInsertTextUndoCommand
  * @brief 用于鼠标中键黏贴的插入撤销项，使用 QClipboard::Selection 类型插入选中的数据，
  *      需要注意中键插入不会覆盖被选中的文本。
  */
-MidButtonInsertTextUndoCommand::MidButtonInsertTextUndoCommand(QTextCursor textcursor, QString text, QPlainTextEdit *edit, QUndoCommand *parent)
+MidButtonInsertTextUndoCommand::MidButtonInsertTextUndoCommand(const QTextCursor &textcursor,
+                                                               const QString &text,
+                                                               QPlainTextEdit *edit,
+                                                               QUndoCommand *parent)
     : QUndoCommand(parent)
     , m_pEdit(edit)
     , m_textCursor(textcursor)
@@ -135,6 +139,54 @@ void MidButtonInsertTextUndoCommand::redo()
     if (m_pEdit) {
         QTextCursor curCursor = m_pEdit->textCursor();
         curCursor.setPosition(m_endPostion);
+        m_pEdit->setTextCursor(curCursor);
+    }
+}
+
+/**
+   @brief 用于拖拽 `Drag` 插入的文本，仅插入不会覆盖数据。由于 `Drag` 操作时会先执行删除操作，
+        QTextCuesor可能变更，调整为使用固定偏移量。
+ */
+DragInsertTextUndoCommand::DragInsertTextUndoCommand(const QTextCursor &textcursor,
+                                                     const QString &text,
+                                                     QPlainTextEdit *edit,
+                                                     QUndoCommand *parent)
+    : QUndoCommand(parent)
+    , m_pEdit(edit)
+    , m_textCursor(textcursor)
+    , m_sInsertText(text)
+{
+    m_beginPostion = m_textCursor.selectionStart();
+}
+
+/**
+   @brief 复位插入操作
+ */
+void DragInsertTextUndoCommand::undo()
+{
+    m_textCursor.setPosition(m_beginPostion);
+    m_textCursor.setPosition(m_beginPostion + m_sInsertText.size(), QTextCursor::KeepAnchor);
+    m_textCursor.deleteChar();
+
+    if (m_pEdit) {
+        m_pEdit->setTextCursor(m_textCursor);
+    }
+}
+
+/**
+   @brief 重做插入操作，使用固定偏移量
+ */
+void DragInsertTextUndoCommand::redo()
+{
+    if (m_beginPostion != m_textCursor.position()) {
+        m_textCursor.setPosition(m_beginPostion);
+    }
+
+    m_textCursor.insertText(m_sInsertText);
+
+    if (m_pEdit) {
+        QTextCursor curCursor = m_pEdit->textCursor();
+        curCursor.setPosition(m_beginPostion + m_sInsertText.size());
         m_pEdit->setTextCursor(curCursor);
     }
 }

@@ -9648,3 +9648,73 @@ TEST(UT_Textedit_onAppPaletteChanged, OnAppPaletteChanged_ChangeBackground_Pass)
     edit->deleteLater();
     wra->deleteLater();
 }
+
+TEST(UT_Textedit_MoveText, moveText_Move_Pass)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    QString sourceText("123456789\n");
+    edit->setPlainText(sourceText);
+
+    edit->moveText(0, 10, "12");
+    EXPECT_EQ(edit->toPlainText(), QString("3456789\n12"));
+    edit->undo_();
+    EXPECT_EQ(edit->toPlainText(), sourceText);
+    edit->redo_();
+    EXPECT_EQ(edit->toPlainText(), QString("3456789\n12"));
+
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+TEST(UT_Textedit_MoveText, moveText_Copy_Pass)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    QString sourceText("123456789\n");
+    edit->setPlainText(sourceText);
+
+    edit->moveText(0, 10, "12", true);
+    EXPECT_EQ(edit->toPlainText(), QString("123456789\n12"));
+    edit->undo_();
+    EXPECT_EQ(edit->toPlainText(), sourceText);
+    edit->redo_();
+    EXPECT_EQ(edit->toPlainText(), QString("123456789\n12"));
+
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+TEST(UT_Textedit_MoveText, moveText_Multi_Pass)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    edit->insertTextEx(edit->textCursor(), "1\n");
+    edit->insertTextEx(edit->textCursor(), "2\n");
+    EXPECT_EQ(edit->toPlainText(), QString("1\n2\n"));
+
+    edit->moveText(2, 1, "2");
+    EXPECT_EQ(edit->toPlainText(), QString("12\n\n"));
+    edit->moveText(0, 4, "12");
+    EXPECT_EQ(edit->toPlainText(), QString("\n\n12"));
+    edit->moveText(2, 0, "12", true);
+    EXPECT_EQ(edit->toPlainText(), QString("12\n\n12"));
+
+    while(edit->m_pUndoStack->canUndo()) {
+        edit->undo_();
+    }
+    EXPECT_TRUE(edit->toPlainText().isEmpty());
+    while(edit->m_pUndoStack->canRedo()) {
+        edit->redo_();
+    }
+    EXPECT_EQ(edit->toPlainText(), QString("12\n\n12"));
+
+    edit->deleteLater();
+    wra->deleteLater();
+}
