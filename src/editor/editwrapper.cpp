@@ -110,6 +110,7 @@ EditWrapper::EditWrapper(Window *window, QWidget *parent)
     connect(m_pTextEdit, &TextEdit::cursorModeChanged, this, &EditWrapper::handleCursorModeChanged);
     connect(m_pWaringNotices, &WarningNotices::reloadBtnClicked, this, &EditWrapper::reloadModifyFile);
     connect(m_pWaringNotices, &WarningNotices::saveAsBtnClicked, m_pWindow, &Window::saveAsFile);
+    // NOTE: 文本高亮会触发重新布局，与界面布局(拖拽、放大窗口)变更时的布局操作冲突，因此调整更新顺序，在布局后刷新高亮
     connect(m_pTextEdit->verticalScrollBar(), &QScrollBar::valueChanged, this, [this](int) {
         OnUpdateHighlighter();
         if ((m_pWindow->findBarIsVisiable() || m_pWindow->replaceBarIsVisiable()) &&
@@ -118,7 +119,7 @@ EditWrapper::EditWrapper(Window *window, QWidget *parent)
         }
 
         m_pTextEdit->markAllKeywordInView();
-    });
+    }, Qt::QueuedConnection);
 }
 
 EditWrapper::~EditWrapper()
@@ -1076,6 +1077,10 @@ void EditWrapper::UpdateBottomBarWordCnt(int cnt)
     m_pBottomBar->updateWordCount(cnt);
 }
 
+/**
+ * @brief 界面显示内容变更时触发，将查询当前显示的内容
+ * @param forceUpdate 是否强制重设高亮处理，部分高亮无需重复设置
+ */
 void EditWrapper::OnUpdateHighlighter()
 {
     if (m_pSyntaxHighlighter  && !m_bQuit && !m_bHighlighterAll) {
@@ -1083,6 +1088,7 @@ void EditWrapper::OnUpdateHighlighter()
         QPoint startPoint = QPoint(0, 0);
         QTextBlock beginBlock = m_pTextEdit->cursorForPosition(startPoint).block();
         QTextBlock endBlock;
+        QTextBlock foundBlock;
 
         if (pScrollBar->maximum() > 0) {
             QPoint endPoint = QPointF(0, 1.5 * m_pTextEdit->height()).toPoint();
@@ -1131,23 +1137,39 @@ void EditWrapper::OnUpdateHighlighter()
                 prevBlock = prevBlock.previous();
             }
 
-            // 无论是否查询到折叠区域，均更新起始文本块
-            beginBlock = prevBlock;
+            // 仅在查询到折叠区域更新文本块
+            if (foundBrace) {
+                foundBlock = prevBlock;
+            }
         }
 
         if (!beginBlock.isValid() || !endBlock.isValid()) {
             return;
         }
 
-        for (QTextBlock var = beginBlock; var != endBlock; var = var.next()) {
+        auto rehighlightBlock = [this](const QTextBlock &block) {
             m_pSyntaxHighlighter->setEnableHighlight(true);
-            m_pSyntaxHighlighter->rehighlightBlock(var);
+            m_pSyntaxHighlighter->rehighlightBlock(block);
             m_pSyntaxHighlighter->setEnableHighlight(false);
+        };
+
+        if (foundBlock.isValid() && foundBlock < beginBlock) {
+            for (QTextBlock var = foundBlock; var.isValid() && var != beginBlock; var = var.next())
+            {
+                // Kate syntax highlighter 在高亮文本后会设置数据，通过此数据判断是否需要重复设置高亮
+                if (var.userData()) {
+                    continue;
+                }
+
+                rehighlightBlock(var);
+            }
         }
 
-        m_pSyntaxHighlighter->setEnableHighlight(true);
-        m_pSyntaxHighlighter->rehighlightBlock(endBlock);
-        m_pSyntaxHighlighter->setEnableHighlight(false);
+        for (QTextBlock var = beginBlock; var != endBlock; var = var.next()) {
+            rehighlightBlock(var);
+        }
+
+        rehighlightBlock(endBlock);
     }
 }
 
