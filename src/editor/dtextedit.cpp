@@ -7335,6 +7335,17 @@ void TextEdit::resizeEvent(QResizeEvent *e)
     // 显示区域变化时同时更新视图
     markAllKeywordInView();
 
+    // 当前处于文档页面尾部时，缩放后保持焦点在文档页面尾部
+    if (e->oldSize().width() < e->size().width() && verticalScrollBar()->maximum() == verticalScrollBar()->value()) {
+        QTimer::singleShot(0, [this]() {
+            // 宽度变大时文档布局大小变更信号未触发，手动通知
+            auto docLayout = this->document()->documentLayout();
+            Q_EMIT docLayout->documentSizeChanged(docLayout->documentSize());
+
+            verticalScrollBar()->setValue(verticalScrollBar()->maximum());
+        });
+    }
+
     QPlainTextEdit::resizeEvent(e);
 }
 
