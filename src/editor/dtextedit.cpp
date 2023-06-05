@@ -2937,7 +2937,7 @@ void TextEdit::moveText(int from, int to, const QString &text, bool copy)
     }
 
     cursor.setPosition(to);
-    auto insertCommand = new InsertTextUndoCommand(cursor, text, this);
+    auto insertCommand = new DragInsertTextUndoCommand(cursor, text, this);
 
     //the positon of 'from' is on the left of the position of 'to',
     //therefore,firstly do the insert operation.

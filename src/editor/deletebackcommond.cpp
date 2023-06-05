@@ -24,8 +24,10 @@ void DeleteBackCommand::undo()
     m_cursor.setPosition(m_insertPos);
     m_cursor.insertText(m_delText);
 
-    m_cursor.setPosition(m_delPos);
-    m_edit->setTextCursor(m_cursor);
+    QTextCursor cursor = m_edit->textCursor();
+    cursor.setPosition(m_insertPos);
+    cursor.setPosition(m_insertPos + m_delText.size(), QTextCursor::KeepAnchor);
+    m_edit->setTextCursor(cursor);
 }
 
 void DeleteBackCommand::redo()
