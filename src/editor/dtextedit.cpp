@@ -6414,7 +6414,7 @@ void TextEdit::dropEvent(QDropEvent *event)
             cursor.setPosition(dstpos);
             cursor.setPosition(dstpos + data->text().size(), QTextCursor::KeepAnchor);
             cursor.deleteChar();
-            auto com = new InsertTextUndoCommand(cursor, data->text(), this);
+            auto com = new DragInsertTextUndoCommand(cursor, data->text(), this);
             m_pUndoStack->push(com);
 
             //operations in the source editor.
@@ -6437,7 +6437,7 @@ void TextEdit::dropEvent(QDropEvent *event)
             cursor.setPosition(dstpos);
             cursor.setPosition(dstpos + data->text().size(), QTextCursor::KeepAnchor);
             cursor.deleteChar();
-            auto com = new InsertTextUndoCommand(cursor, data->text(), this);
+            auto com = new DragInsertTextUndoCommand(cursor, data->text(), this);
             m_pUndoStack->push(com);
         }
     } else {
