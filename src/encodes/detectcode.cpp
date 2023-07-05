@@ -168,12 +168,18 @@ QByteArray DetectCode::GetFileEncodingFormat(QString filepath, QByteArray conten
         ucharDetectdRet = DetectCode::UchardetCode(filepath);
     }
 
-    // icu识别编码
-    icuDetectTextEncoding(filepath, icuDetectRetList);
-    detectRet = selectCoding(ucharDetectdRet, icuDetectRetList, chardetconfidence);
+    if (ucharDetectdRet.contains("ASCII")) {
+        // 使用配置的默认文件编码，默认为UTF-8
+        detectRet = Config::instance()->defaultEncoding();
+    } else {
+        // icu识别编码
+        icuDetectTextEncoding(filepath, icuDetectRetList);
+        detectRet = selectCoding(ucharDetectdRet, icuDetectRetList, chardetconfidence);
 
-    if (detectRet.contains("ASCII") || detectRet.isEmpty()) {
-        detectRet = "UTF-8";
+        if (detectRet.contains("ASCII") || detectRet.isEmpty()) {
+            // 使用配置的默认文件编码，默认为UTF-8
+            detectRet = Config::instance()->defaultEncoding();
+        }
     }
 
     return detectRet.toUpper();
@@ -330,10 +336,6 @@ QByteArray DetectCode::selectCoding(QByteArray ucharDetectdRet, QByteArrayList i
             // 中文环境优先匹配GB18030编码
             if (QLocale::Chinese == QLocale::system().language()) {
                 if (confidence < gs_dMinConfidence && icuDetectRetList.contains("GB18030")) {
-                    return QByteArray("GB18030");
-                }
-
-                if (QByteArray("ASCII") == ucharDetectdRet) {
                     return QByteArray("GB18030");
                 }
             }
@@ -698,24 +700,29 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr,
     iconv_t handle = iconv_open(toCode.toLocal8Bit().data(), fromCode.toLocal8Bit().data());
     if (handle != reinterpret_cast<iconv_t>(-1)) {
         MibEncoding fromMib = UnknownMib;
-        MibEncoding toMib = UnknownMib;
         QTextCodec *fromCodec = QTextCodec::codecForName(fromCode.toUtf8());
         if (fromCodec) {
             fromMib = static_cast<MibEncoding>(fromCodec->mibEnum());
         }
-        QTextCodec *toCodec = QTextCodec::codecForName(toCode.toUtf8());
-        if (toCodec) {
-            toMib = static_cast<MibEncoding>(toCodec->mibEnum());
-        }
+        // 不使用上层修改的Iconv处理时，不检测转换的编码格式，跳过GB18030转换特殊处理
+        MibEncoding toMib = UnknownMib;
 
-        // 替换需手动修改 UTF-8 和 GB180303 编码转换的部分
-        if (GB18030 == fromMib && UTF_8 == toMib) {
-            for (auto itr = gs_ReplaceFromGB18030_2005Error.begin(); itr != gs_ReplaceFromGB18030_2005Error.end(); ++itr) {
-                inputStr.replace(itr.key(), itr.value());
+        const bool enablePatchedIconv = Config::instance()->enablePatchedIconv();
+        if (enablePatchedIconv) {
+            QTextCodec *toCodec = QTextCodec::codecForName(toCode.toUtf8());
+            if (toCodec) {
+                toMib = static_cast<MibEncoding>(toCodec->mibEnum());
             }
-        } else if (UTF_8 == fromMib && GB18030 == toMib) {
-            for (auto itr = gs_ReplaceToGB18030_2020Error.begin(); itr != gs_ReplaceToGB18030_2020Error.end(); ++itr) {
-                inputStr.replace(itr.key(), itr.value());
+
+            // 替换需手动修改 UTF-8 和 GB180303 编码转换的部分
+            if (GB18030 == fromMib && UTF_8 == toMib) {
+                for (auto itr = gs_ReplaceFromGB18030_2005Error.begin(); itr != gs_ReplaceFromGB18030_2005Error.end(); ++itr) {
+                    inputStr.replace(itr.key(), itr.value());
+                }
+            } else if (UTF_8 == fromMib && GB18030 == toMib) {
+                for (auto itr = gs_ReplaceToGB18030_2020Error.begin(); itr != gs_ReplaceToGB18030_2020Error.end(); ++itr) {
+                    inputStr.replace(itr.key(), itr.value());
+                }
             }
         }
 
@@ -772,8 +779,6 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr,
                                 break;
                         }
 
-                        qWarning() << "Text code error, replace to: " << appendChar.toHex();
-
                         // 替换错误字符为对应字符
                         size_t appendSize = static_cast<size_t>(appendChar.size());
                         if (outbytesleft < appendSize) {
@@ -800,11 +805,11 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr,
             } while (static_cast<size_t>(-1) == ret);
 
         } catch (const std::exception &e) {
-            qWarning() << Q_FUNC_INFO << qPrintable("iconv convert encoding catching exception") << qPrintable(e.what());
+            qWarning() << qPrintable("iconv convert encoding catching exception") << qPrintable(e.what());
         }
 
         if (errorNum) {
-            qWarning() << Q_FUNC_INFO << qPrintable("iconv() convert text encoding error, errocode:") << errorNum;
+            qWarning() << qPrintable("iconv() convert text encoding error, errocode:") << errorNum;
         }
         iconv_close(handle);
 
@@ -821,7 +826,7 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr,
         return true;
 
     } else {
-        qWarning() << Q_FUNC_INFO << qPrintable("Text encoding convert error, iconv_open() failed.");
+        qWarning() << qPrintable("Text encoding convert error, iconv_open() failed.");
         // 尝试使用QTextCodec加载
         return convertEncodingTextCodec(inputStr, outStr, fromCode, toCode);
     }
