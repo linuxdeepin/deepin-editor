@@ -1043,10 +1043,14 @@ bool Utils::enableClipCopy(const QString &filePath)
 {
     if (getLoadZPDLibsInstance()->m_document_clip_copy) {
         // intercept 输出为1,拦截操作
+        static const int disableFlag = 1;
         int intercept = 1;
         getLoadZPDLibsInstance()->m_document_clip_copy(filePath.toUtf8().data(), &intercept);
 
-        return 1 != intercept;
+        if (disableFlag == intercept) {
+            qWarning() << qPrintable("ZPD access control! Disable clip or copy document!");
+            return false;
+        }
     }
 
     return true;
