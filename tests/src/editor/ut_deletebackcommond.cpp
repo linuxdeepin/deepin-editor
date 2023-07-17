@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022-2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -52,20 +52,17 @@ TEST(UT_Deletebackcommond_undo, UT_Deletebackcommond_undo)
     pWindow->addBlankTab(QString());
     QTextCursor cursor = pWindow->currentWrapper()->textEditor()->textCursor();
     pWindow->currentWrapper()->textEditor()->insertPlainText(QString("12345"));
-    cursor.setPosition(10, QTextCursor::MoveMode::KeepAnchor);
+    cursor.setPosition(5, QTextCursor::MoveMode::KeepAnchor);
     DeleteBackCommand *pCom = new DeleteBackCommand(cursor, pWindow->currentWrapper()->textEditor());
     pCom->m_delText = text;
     pCom->undo();
 
-    ASSERT_NE(cursor.position(), pWindow->currentWrapper()->textEditor()->textCursor().position());
+    EXPECT_EQ(cursor.position(), pWindow->currentWrapper()->textEditor()->textCursor().position());
 
     delete pCom;
     pCom = nullptr;
-    delete pWindow;
-    pWindow = nullptr;
+    pWindow->deleteLater();
 }
-
-
 
 UT_Deletebackaltcommond::UT_Deletebackaltcommond()
 {
