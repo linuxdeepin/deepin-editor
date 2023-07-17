@@ -769,6 +769,8 @@ TEST(UT_Editwrapper_handleFileLoadFinished, UT_Editwrapper_handleFileLoadFinishe
     setPrintEnabled_stub.set(ADDR(Window, setPrintEnabled), handleFileLoadFinished_001_setPrintEnabled_stub);
     Stub setTextFinished_stub;
     setTextFinished_stub.set(ADDR(TextEdit, setTextFinished), handleFileLoadFinished_001_setTextFinished_stub);
+    Stub loadContent_stub;
+    loadContent_stub.set(ADDR(EditWrapper, loadContent), rettruestub);
     pWindow->currentWrapper()->handleFileLoadFinished(encode, retFileContent, false);
     ASSERT_TRUE(pWindow->currentWrapper()->m_pBottomBar->m_pEncodeMenu != nullptr);
 

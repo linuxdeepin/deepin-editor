@@ -3686,7 +3686,10 @@ TEST(UT_test_textedit_lineNumberAreaWidth, UT_test_textedit_lineNumberAreaWidth_
 
     int iRet = pWindow->currentWrapper()->textEditor()->lineNumberAreaWidth();
 
-    ASSERT_TRUE(iRet == 20);
+    QFontMetrics fm(pWindow->currentWrapper()->textEditor()->m_fontLineNumberArea);
+    int calcWitdh = fm.horizontalAdvance(QLatin1Char('9')) * 2;
+
+    EXPECT_EQ(iRet, calcWitdh);
     pWindow->deleteLater();
 }
 
