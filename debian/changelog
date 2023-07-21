@@ -1,3 +1,14 @@
+deepin-editor (6.0.11) unstable; urgency=medium
+
+  * fix: Document in maximumized window is incomplete.(Bug: 172681)(Influence: SyntaxHighlight)
+  * fix: Redo drag text error.(Bug: 196349)(Influence: DragText UnitTest)
+  * fix: Redo drag text from other app error.(Influence: DragText)
+  * fix: Roll back gb18030 midification.(Influence: GB18030 Encoding)
+  * feat: Merge zpd requirement.(Task: 29499)
+  * fix: failed unit test case.(Influence: UT)
+
+ -- Deepin Packages Builder <packages@deepin.org>  Fri, 21 Jul 2023 14:29:57 +0800
+
 deepin-editor (6.0.10) unstable; urgency=medium
 
   * chore: 更新翻译配置和翻译文件(Influence: 翻译配置 翻译文件)
