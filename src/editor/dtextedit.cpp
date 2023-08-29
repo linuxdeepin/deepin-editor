@@ -3021,45 +3021,41 @@ QTextCursor TextEdit::findCursor(const QString &substr, const QString &text, int
 
 /**
  * @brief 点击行号处理：选中当前行，光标置于下一行行首
- * @param
- * @return
+   @param point 当前鼠标点击的位置
+   @note 在 "bo_CN" 语言环境下，光标向上偏移2像素进行比较。
  */
 void TextEdit::onPressedLineNumber(const QPoint &point)
 {
-    QScrollBar *pScrollBar = verticalScrollBar();
-    QPoint startPoint = QPointF(0, 0).toPoint();
-    QTextBlock beginBlock = cursorForPosition(startPoint).block();
-    QTextBlock endBlock;
-    if (pScrollBar->maximum() > 0) {
-        QPoint endPoint = QPointF(0, 1.5 * height()).toPoint();
-        endBlock = cursorForPosition(endPoint).block();
-    } else {
-        endBlock = document()->lastBlock();
+    // 在执行大文件加载过程中，由于 cursorForPosition() 计算耗时，不响应点击处理
+    if (TextEdit::FileOpenBegin == m_LeftAreaUpdateState) {
+        return;
     }
 
-    int linenumber = -1;
-    auto cursor = this->textCursor();
-    while (beginBlock.position() <= endBlock.position()) {
-        cursor.setPosition(beginBlock.position(), QTextCursor::MoveAnchor);
-        int offset = 0;
-        //the language currently set by the system is Tibetan.
-        if ("bo_CN" == Utils::getSystemLan()) {
-            offset = 2;
-        }
-        QRect rect(0, cursorRect(cursor).y() + offset, m_pLeftAreaWidget->m_pLineNumberArea->width(), cursorRect(cursor).height());
-        if (rect.contains(point)) {
-            linenumber = beginBlock.blockNumber();
-            break;
-        }
-        beginBlock = beginBlock.next();
+    if (point.x() < 0 || point.x() > m_pLeftAreaWidget->m_pLineNumberArea->width()) {
+        return;
     }
-    if (-1 != linenumber) {
-        if (this->document()->lastBlock().blockNumber() == linenumber) {
+
+    int offset = 0;
+    //the language currently set by the system is Tibetan.
+    if ("bo_CN" == Utils::getSystemLan()) {
+        offset = 2;
+    }
+
+    QPoint checkPoint(point.x(), qMax(0, point.y() - offset));
+    QTextBlock possibleBlock = cursorForPosition(checkPoint).block();
+
+    if (possibleBlock.isValid()) {
+        QTextCursor cursor = textCursor();
+        cursor.setPosition(possibleBlock.position(), QTextCursor::MoveAnchor);
+
+        // 尾行光标不调整到下一行
+        if (possibleBlock == document()->lastBlock()) {
             cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::KeepAnchor);
         } else {
             cursor.movePosition(QTextCursor::NextBlock, QTextCursor::KeepAnchor);
         }
-        this->setTextCursor(cursor);
+
+        setTextCursor(cursor);
     }
 }
 
