@@ -9721,3 +9721,117 @@ TEST(UT_Textedit_MoveText, moveText_Multi_Pass)
     edit->deleteLater();
     wra->deleteLater();
 }
+
+TEST(UT_Textedit_onPressedLineNumber, onPressedLineNumber_BoundaryCheck_Pass)
+{
+    // 边界检查
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    edit->onPressedLineNumber(QPoint(0, 0));
+    EXPECT_EQ(edit->textCursor().position(), 0);
+
+    edit->onPressedLineNumber(QPoint(0, 100));
+    EXPECT_EQ(edit->textCursor().position(), 0);
+
+    edit->insertTextEx(edit->textCursor(), "123\n222\n333");
+    auto cursor = edit->textCursor();
+    cursor.setPosition(0);
+    edit->setTextCursor(cursor);
+    edit->onPressedLineNumber(QPoint(-1, -1));
+    EXPECT_EQ(edit->textCursor().position(), 0);
+    EXPECT_TRUE(edit->textCursor().selectedText().isEmpty());
+
+    edit->onPressedLineNumber(QPoint(INT_MAX, INT_MAX));
+    EXPECT_EQ(edit->textCursor().position(), 0);
+    EXPECT_TRUE(edit->textCursor().selectedText().isEmpty());
+
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+TEST(UT_Textedit_onPressedLineNumber, onPressedLineNumber_MultiBlock_Pass)
+{
+    // 多行不同位置选取
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    edit->insertTextEx(edit->textCursor(), "123\n222\n333");
+    QTextCursor cursor = edit->textCursor();
+
+    QTextBlock selectBlock = edit->document()->firstBlock();
+    cursor.setPosition(selectBlock.position(), QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+    QRect rect = edit->cursorRect(cursor);
+    edit->onPressedLineNumber(QPoint(rect.left(), rect.center().y()));
+    EXPECT_EQ(edit->textCursor().selectedText().replace("\u2029", "\n"), QString("123\n"));
+
+    selectBlock = edit->document()->lastBlock();
+    cursor.setPosition(selectBlock.position(), QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+    rect = edit->cursorRect(cursor);
+    edit->onPressedLineNumber(QPoint(rect.left(), rect.center().y()));
+    EXPECT_EQ(edit->textCursor().selectedText().replace("\u2029", "\n"), QString("333"));
+
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+TEST(UT_Textedit_onPressedLineNumber, onPressedLineNumber_OutOfBlock_Pass)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    edit->insertTextEx(edit->textCursor(), "123\n222\n333");
+    QTextCursor cursor = edit->textCursor();
+
+    QTextBlock selectBlock = edit->document()->lastBlock();
+    cursor.setPosition(selectBlock.position(), QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+    QRect rect = edit->cursorRect(cursor);
+    // 超过文档范围选取将锁定尾行
+    edit->onPressedLineNumber(QPoint(rect.left(), rect.center().y() + rect.height()));
+    EXPECT_EQ(edit->textCursor().selectedText().replace("\u2029", "\n"), QString("333"));
+
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+QString stub_getSystemLan()
+{
+    return "bo_CN";
+}
+
+TEST(UT_Textedit_onPressedLineNumber, onPressedLineNumber_LanBo_CN_Pass)
+{
+    // bo_CN 语言环境调整偏移量，光标向下偏移2
+    Stub stub;
+    stub.set(ADDR(Utils, getSystemLan), stub_getSystemLan);
+
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    edit->insertTextEx(edit->textCursor(), "123\n222\n333");
+    QTextCursor cursor = edit->textCursor();
+
+    QTextBlock selectBlock = edit->document()->firstBlock();
+    cursor.setPosition(selectBlock.position(), QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+    QRect rect = edit->cursorRect(cursor);
+    edit->onPressedLineNumber(QPoint(rect.left(), rect.bottom() + 2));
+    EXPECT_EQ(edit->textCursor().selectedText().replace("\u2029", "\n"), QString("123\n"));
+
+    selectBlock = selectBlock.next();
+    cursor.setPosition(selectBlock.position(), QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+    rect = edit->cursorRect(cursor);
+    edit->onPressedLineNumber(QPoint(rect.left(), rect.bottom() + 2));
+    EXPECT_EQ(edit->textCursor().selectedText().replace("\u2029", "\n"), QString("222\n"));
+
+    edit->deleteLater();
+    wra->deleteLater();
+}

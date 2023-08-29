@@ -57,14 +57,19 @@ int main(int argc, char *argv[])
     parser.addOption(newWindowOption);
     parser.process(app);
 
+    qInfo() << qPrintable(QString("App start, pid: %1, version: %2").arg(app.applicationPid()).arg(app.applicationVersion()));
+
     QStringList urls;
     QStringList arguments = parser.positionalArguments();
 
     for (const QString &path : arguments) {
         UrlInfo info(path);
         urls << info.url.toLocalFile();
+
+        QFileInfo fileInfo(path);
+        qInfo() << qPrintable(QString("Open file, isFile: %1, suffix: %2, size: %3, permssion: %4").arg(fileInfo.isFile())
+                   .arg(fileInfo.suffix()).arg(fileInfo.size()).arg(fileInfo.permissions()));
     }
-    qInfo() << Q_FUNC_INFO << "Open file urls" << urls;
 
     bool hasWindowFlag = parser.isSet(newWindowOption);
 
