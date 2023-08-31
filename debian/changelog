@@ -1,3 +1,9 @@
+deepin-editor (6.0.12) unstable; urgency=medium
+
+  * fix: onPressedLineNumber() may cause process hangs.(Bug: 215591)(Influence: LineNumber)
+
+ -- renbin <renbin@uniontech.com>  Thu, 31 Aug 2023 16:04:59 +0800
+
 deepin-editor (6.0.11) unstable; urgency=medium
 
   * fix: Document in maximumized window is incomplete.(Bug: 172681)(Influence: SyntaxHighlight)
