@@ -571,7 +571,9 @@ bool Utils::isMimeTypeSupport(const QString &filepath)
                   << "model/vrml"
                   << "application/pkix-cert+pem"
                   << "application/x-pak"
-                  << "application/x-code-workspace";
+                  << "application/x-code-workspace"
+                  << "application/toml"
+                  << "audio/x-mod";
 
     if (textMimeTypes.contains(mimeType)) {
         return true;
