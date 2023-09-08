@@ -1,3 +1,10 @@
+deepin-editor (6.0.13) unstable; urgency=medium
+
+  * fix: Add support mimetype mod/toml.(Bug: 210815, 212273)(Influence: SupportFormat)
+  * fix: Add mimetype toml in .desktop(Bug: 210815)
+
+ -- Deepin Packages Builder <packages@deepin.org>  Fri, 08 Sep 2023 14:21:02 +0800
+
 deepin-editor (6.0.12) unstable; urgency=medium
 
   * fix: onPressedLineNumber() may cause process hangs.(Bug: 215591)(Influence: LineNumber)
