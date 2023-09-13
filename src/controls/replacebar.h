@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -33,7 +33,7 @@ public:
     void setMismatchAlert(bool isAlert);
     void setsearched(bool _);
 
-signals:
+Q_SIGNALS:
     void pressEsc();
     void replaceNext(QString file, QString replaceText, QString withText);
     void replaceSkip(QString file, QString keyword);
@@ -48,7 +48,7 @@ signals:
 
     void sigReplacebarClose();
 
-public slots:
+public Q_SLOTS:
     void change();
     void replaceClose();
     void handleContentChanged();
@@ -61,6 +61,9 @@ protected:
     void hideEvent(QHideEvent *event);
     bool focusNextPrevChild(bool next);
     void keyPressEvent(QKeyEvent *e);
+
+private:
+    Q_SLOT void updateSizeMode();
 
 private:
     QPushButton *m_replaceAllButton;

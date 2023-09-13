@@ -136,6 +136,9 @@ public:
     // 文件关闭前记录当前关闭的文件路径
     static void recordCloseFile(const QString &filePath);
 
+    // 发送浮动提示信息，并且字体大小跟随 qApp 应用默认字体而不是父窗口字体
+    static void sendFloatMessageFixedFont(QWidget *par, const QIcon &icon, const QString &message);
+
 private:
     static QString m_systemLanguage;
 };

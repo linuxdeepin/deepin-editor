@@ -2740,7 +2740,11 @@ void TextEdit::slotCopyAction(bool checked)
     if (isAbleOperation(OperationType::CopyOperation)) {
         copy();
     } else {
+#ifdef DTKWIDGET_CLASS_DSizeMode
+        Utils::sendFloatMessageFixedFont(this, QIcon(":/images/warning.svg"), tr("Copy failed: not enough memory"));
+#else
         DMessageManager::instance()->sendMessage(this, QIcon(":/images/warning.svg"), tr("Copy failed: not enough memory"));
+#endif
     }
 }
 
@@ -2750,7 +2754,11 @@ void TextEdit::slotPasteAction(bool checked)
     if (isAbleOperation(OperationType::PasteOperation)) {
         paste();
     } else {
+#ifdef DTKWIDGET_CLASS_DSizeMode
+        Utils::sendFloatMessageFixedFont(this, QIcon(":/images/warning.svg"), tr("Paste failed: not enough memory"));
+#else
         DMessageManager::instance()->sendMessage(this, QIcon(":/images/warning.svg"), tr("Paste failed: not enough memory"));
+#endif
     }
 }
 
@@ -2824,7 +2832,11 @@ void TextEdit::slotdictationAction(bool checked)
 void TextEdit::slotColumnEditAction(bool checked)
 {
     Q_UNUSED(checked);
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    Utils::sendFloatMessageFixedFont(this, QIcon(":/images/ok.svg"), tr("Press ALT and click lines to edit in column mode"));
+#else
     DMessageManager::instance()->sendMessage(this, QIcon(":/images/ok.svg"), tr("Press ALT and click lines to edit in column mode"));
+#endif
 }
 
 void TextEdit::slotPreBookMarkAction(bool checked)

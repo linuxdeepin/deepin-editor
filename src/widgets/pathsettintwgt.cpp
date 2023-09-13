@@ -6,21 +6,30 @@
 #include "../common/settings.h"
 
 #include <DStyleHelper>
+#include <DGuiApplicationHelper>
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QButtonGroup>
 #include <QFileDialog>
 
+// 不同布局模式参数
+const int s_PSWSuggestBtnSize = 36;
+const int s_PSWSuggestIconSize = 24;
+const int s_PSWSuggestBtnSizeCompact = 24;
+const int s_PSWSuggestIconSizeCompact = 16;
+
 PathSettingWgt::PathSettingWgt(QWidget* parent):DWidget(parent)
 {
     init();
     onSaveIdChanged(Settings::instance()->getSavePathId());
 }
+
 PathSettingWgt::~PathSettingWgt()
 {
 
 }
+
 void PathSettingWgt::onSaveIdChanged(int id)
 {
     switch (id) {
@@ -82,6 +91,10 @@ void PathSettingWgt::init()
 
     connections();
 
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    updateSizeMode();
+    QObject::connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, &PathSettingWgt::updateSizeMode);
+#endif
 }
 
 void PathSettingWgt::connections()
@@ -112,13 +125,6 @@ void PathSettingWgt::onBoxClicked(int id)
     }
     case CustomBox:{
         Settings::instance()->setSavePathId(CustomBox);
-//        auto path = Settings::instance()->getSavePath(CustomBox);
-//        if(path.isEmpty()){
-//            path = QDir::homePath() + "/Documents";
-//            Settings::instance()->setSavePath(CustomBox,path);
-//            Settings::instance()->setSavePath(LastOptBox,path);
-//            Settings::instance()->setSavePath(CurFileBox,path);
-//        }
         setEditText(Settings::instance()->getSavePath(CustomBox));
         m_customBtn->setEnabled(true);
         break;
@@ -146,4 +152,21 @@ void PathSettingWgt::onBtnClicked()
     path = dialog.selectedFiles().at(0);
     setEditText(path);
     Settings::instance()->setSavePath(PathSettingWgt::CustomBox,path);
+}
+
+/**
+   @brief 根据界面布局模式 `DGuiApplicationHelper::isCompactMode()` 切换当前界面布局参数。
+        需要注意，界面参数同设计图参数并非完全一致，而是按照实际的显示像素值进行比对。
+ */
+void PathSettingWgt::updateSizeMode()
+{
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    if (DGuiApplicationHelper::isCompactMode()) {
+        m_customBtn->setFixedSize(s_PSWSuggestBtnSizeCompact, s_PSWSuggestBtnSizeCompact);
+        m_customBtn->setIconSize(QSize(s_PSWSuggestIconSizeCompact, s_PSWSuggestIconSizeCompact));
+    } else {
+        m_customBtn->setFixedSize(s_PSWSuggestBtnSize, s_PSWSuggestBtnSize);
+        m_customBtn->setIconSize(QSize(s_PSWSuggestIconSize, s_PSWSuggestIconSize));
+    }
+#endif
 }

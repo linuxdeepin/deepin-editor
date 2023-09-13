@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2017 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -49,14 +49,15 @@ public:
     static EndlineFormat getEndlineFormat(const QByteArray& text);
     EndlineFormat getEndlineFormat();
     void setEndlineMenuText(EndlineFormat format);
+    static int defaultHeight();
 
 protected:
     void paintEvent(QPaintEvent *);
 
 private:
     void initFormatMenu();
-private slots:
-    void onFormatMenuTrigged(QAction* action);
+    Q_SLOT void onFormatMenuTrigged(QAction* action);
+    Q_SLOT void updateSizeMode();
 
 private:
     EditWrapper *m_pWrapper {nullptr};

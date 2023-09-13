@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -37,7 +37,7 @@ public slots:
     void hide();
     int getLineCount();
 
-signals:
+Q_SIGNALS:
     void backToPosition(QString file, int row, int column, int scrollOffset);
     void jumpToLine(QString file, int line, bool focusEditor);
     void lostFocusExit();
@@ -45,6 +45,7 @@ signals:
 
 protected:
     bool eventFilter(QObject *pObject, QEvent *pEvent);
+    Q_SLOT void updateSizeMode();
 
 private:
     DSpinBox *m_pSpinBoxInput {nullptr};
