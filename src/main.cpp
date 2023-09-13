@@ -76,6 +76,16 @@ int main(int argc, char *argv[])
     QDBusConnection dbus = QDBusConnection::sessionBus();
     // Start editor process if not found any editor use DBus.
     if (dbus.registerService("com.deepin.Editor")) {
+#ifdef DTKWIDGET_CLASS_DSizeMode
+        // 不同模式下的基础字体像素大小不同，系统级别为 T6 的字体大小, 默认是 14px ；在紧凑模式下 T6 为 12px
+        QObject::connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, [](){
+            const int genericPixelSize = 14;
+            const int genericPixelSizeCompact = 12;
+            DFontSizeManager::instance()->setFontGenericPixelSize(
+                        DGuiApplicationHelper::isCompactMode() ? genericPixelSizeCompact : genericPixelSize);
+        });
+#endif
+
         StartManager *startManager = StartManager::instance();
         //埋点记录启动数据
         QJsonObject objStartEvent{

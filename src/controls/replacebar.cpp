@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -6,6 +6,15 @@
 #include "../common/utils.h"
 
 #include <QDebug>
+
+// 不同布局模式下界面参数，不完全对应设计图固定值，调整后实际像素值和设计图对应
+const int s_RBHeight = 60;
+const QMargins s_RBContetsMargins = {16, 0, 10, 0};
+const int s_RBCloseBtnSize = 30;
+const int s_RBHeight_Compact = 40;
+const QMargins s_RBContetsMarginsCompact = {16, 1, 6, 0};
+const int s_RBCloseBtnSizeCompact = 26;
+const int s_RBCloseIconSizeCompact = 27;
 
 ReplaceBar::ReplaceBar(QWidget *parent)
     :  DFloatingWidget(parent)
@@ -17,7 +26,8 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     // Init layout and widgets.
     m_layout = new QHBoxLayout();
     m_layout->setSpacing(10);
-    m_layout->setContentsMargins(16, 6, 10, 6);
+    m_layout->setContentsMargins(16, 0, 10, 0);
+    m_layout->setAlignment(Qt::AlignVCenter);
     m_replaceLabel = new QLabel(tr("Find"));
     //m_replaceLabel->setMinimumHeight(36);
     m_replaceLine = new LineBar();
@@ -82,6 +92,11 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     connect(m_replaceAllButton, &QPushButton::clicked, this, &ReplaceBar::handleReplaceAll, Qt::QueuedConnection);
 
     connect(m_closeButton, &DIconButton::clicked, this, &ReplaceBar::replaceClose, Qt::QueuedConnection);
+
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    updateSizeMode();
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, &ReplaceBar::updateSizeMode);
+#endif
 }
 
 bool ReplaceBar::isFocus()
@@ -203,6 +218,31 @@ void ReplaceBar::keyPressEvent(QKeyEvent *e)
             m_replaceSkipButton->click();
         }
     }
+}
+
+/**
+   @brief 根据界面布局模式 `DGuiApplicationHelper::isCompactMode()` 切换当前界面布局参数。
+        需要注意，界面参数同设计图参数并非完全一致，而是按照实际的显示像素值进行比对。
+ */
+void ReplaceBar::updateSizeMode()
+{
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    if (DGuiApplicationHelper::isCompactMode()) {
+        setFixedHeight(s_RBHeight_Compact);
+        m_closeButton->setFixedSize(s_RBCloseBtnSizeCompact, s_RBCloseBtnSizeCompact);
+        m_closeButton->setIconSize(QSize(s_RBCloseIconSizeCompact, s_RBCloseIconSizeCompact));
+
+        m_layout->setContentsMargins(s_RBContetsMarginsCompact);
+        m_layout->invalidate();
+    } else {
+        setFixedHeight(s_RBHeight);
+        m_closeButton->setFixedSize(s_RBCloseBtnSize, s_RBCloseBtnSize);
+        m_closeButton->setIconSize(QSize(s_RBCloseBtnSize, s_RBCloseBtnSize));
+
+        m_layout->setContentsMargins(s_RBContetsMargins);
+        m_layout->invalidate();
+    }
+#endif
 }
 
 void ReplaceBar::setMismatchAlert(bool isAlert)

@@ -26,7 +26,8 @@ public:
 public:
     PathSettingWgt(QWidget* parent = nullptr);
     virtual ~PathSettingWgt();
-public slots:
+
+public Q_SLOTS:
     void onSaveIdChanged(int id);
     void setEditText(const QString& text);
 
@@ -34,12 +35,13 @@ private:
     void init();
     void connections();
 
-signals:
+Q_SIGNALS:
     void savingPathChanged(CheckBoxType id,const QString& path);
 
-private slots:
+private Q_SLOTS:
     void onBoxClicked(int);
     void onBtnClicked();
+    void updateSizeMode();
 
 private:
     DCheckBox* m_curFileBox = nullptr;

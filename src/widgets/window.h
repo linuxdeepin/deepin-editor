@@ -142,7 +142,7 @@ public:
     static void printPage(int index, QPainter *painter, const QTextDocument *doc,
                           const QRectF &body, const QRectF &pageCountBox);
 
-signals:
+Q_SIGNALS:
     void themeChanged(const QString themeName);
     void requestDragEnterEvent(QDragEnterEvent *);
     void requestDropEvent(QDropEvent *);
@@ -153,7 +153,7 @@ signals:
     // 标签页出现变更信号，文件添加或删除时触发
     void tabChanged();
 
-public slots:
+public Q_SLOTS:
     void addBlankTab();
     void addBlankTab(const QString &blankFile);
     void handleTabCloseRequested(int index);
@@ -238,6 +238,9 @@ private:
                                const QRectF &body, const QRectF &pageCountBox);
     // 重新更新文本
     void rehighlightPrintDoc(QTextDocument *doc, CSyntaxHighlighter *highlighter);
+
+    // 接收布局模式变更信号，更新界面布局
+    Q_SLOT void updateSizeMode();
 
 protected:
     void resizeEvent(QResizeEvent *event) override;

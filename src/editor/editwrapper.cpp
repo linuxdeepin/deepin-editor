@@ -879,9 +879,17 @@ void EditWrapper::checkForReload()
 void EditWrapper::showNotify(const QString &message)
 {
     if (m_pTextEdit->getReadOnlyPermission() || m_pTextEdit->getReadOnlyMode()) {
+#ifdef DTKWIDGET_CLASS_DSizeMode
+        Utils::sendFloatMessageFixedFont(m_pTextEdit, QIcon(":/images/warning.svg"), message);
+#else
         DMessageManager::instance()->sendMessage(m_pTextEdit, QIcon(":/images/warning.svg"), message);
+#endif
     } else {
+#ifdef DTKWIDGET_CLASS_DSizeMode
+        Utils::sendFloatMessageFixedFont(m_pTextEdit, QIcon(":/images/ok.svg"), message);
+#else
         DMessageManager::instance()->sendMessage(m_pTextEdit, QIcon(":/images/ok.svg"), message);
+#endif
     }
 }
 
