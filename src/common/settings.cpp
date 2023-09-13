@@ -19,6 +19,7 @@
 #include <QDebug>
 #include <QDir>
 #include <QStandardPaths>
+#include <DGuiApplicationHelper>
 
 Settings *Settings::s_pSetting = nullptr;
 
@@ -244,6 +245,16 @@ QPair<QWidget *, QWidget *> Settings::createFontComBoBoxHandle(QObject *obj)
         option->setValue(text);
     });
 
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    // 适配紧凑模式，不同布局下调整高度
+    const int defaultHeight = 36;
+    const int compactHeight = 24;
+    comboBox->setFixedHeight(DGuiApplicationHelper::isCompactMode() ? compactHeight : defaultHeight);
+    QObject::connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, comboBox, [ = ](){
+        comboBox->setFixedHeight(DGuiApplicationHelper::isCompactMode() ? compactHeight : defaultHeight);
+    });
+#endif
+
     return optionWidget;
 }
 
@@ -263,7 +274,6 @@ QWidget* Settings::createSavingPathWgt(QObject* obj)
     connect(custompath, &Dtk::Core::DSettingsOption::valueChanged, [=](QVariant var){
         //pathwgt->setEditText(var.toString());
     });
-
 
     return optionWidget.second;
 }

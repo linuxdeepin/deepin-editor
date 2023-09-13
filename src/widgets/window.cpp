@@ -346,6 +346,10 @@ Window::Window(DMainWindow *parent)
     //setChildrenFocus(false);
     Utils::clearChildrenFocus(m_tabbar);//使用此函数把tabbar的组件焦点去掉(左右箭头不能focus)
 
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    // 适配紧凑模式更新，注意 Qt::QueuedConnection 需要在其他子组件更新后触发
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, &Window::updateSizeMode, Qt::QueuedConnection);
+#endif
 }
 
 Window::~Window()
@@ -1837,6 +1841,24 @@ void Window::rehighlightPrintDoc(QTextDocument *doc, CSyntaxHighlighter *highlig
     highlighter->setEnableHighlight(false);
 }
 
+/**
+   @brief 接收布局模式变更信号 DGuiApplicationHelper::sizeModeChanged() ，更新界面布局
+        Window 接收布局模式变更，调整 findBar 和 replaceBar 的坐标位置。
+   @note 需要在 findBar / replaceBar / bottomBar 更新后触发更新
+ */
+void Window::updateSizeMode()
+{
+    if (m_findBar && m_findBar->isVisible()) {
+        currentWrapper()->bottomBar()->updateSize(m_findBar->height() + 8, true);
+        m_findBar->move(QPoint(4, height() - m_findBar->height() - 4));
+    }
+
+    if (m_replaceBar && m_replaceBar->isVisible()) {
+        currentWrapper()->bottomBar()->updateSize(m_replaceBar->height() + 8, true);
+        m_replaceBar->move(QPoint(4, height() - m_replaceBar->height() - 4));
+    }
+}
+
 void Window::popupPrintDialog()
 {
     //大文本加载过程不允许打印操作
@@ -2721,7 +2743,7 @@ void Window::handleCurrentChanged(const int &index)
 
     if (currentWrapper() != nullptr) {
         currentWrapper()->bottomBar()->show();
-        currentWrapper()->bottomBar()->updateSize(32, false);
+        currentWrapper()->bottomBar()->updateSize(BottomBar::defaultHeight(), false);
     }
 }
 
@@ -2791,7 +2813,7 @@ void Window::slotFindbarClose()
         wrapper->bottomBar()->show();
     }
 
-    wrapper->bottomBar()->updateSize(32, false);
+    wrapper->bottomBar()->updateSize(BottomBar::defaultHeight(), false);
     currentWrapper()->textEditor()->setFocus();
     currentWrapper()->textEditor()->tellFindBarClose();
 }
@@ -2804,7 +2826,7 @@ void Window::slotReplacebarClose()
         wrapper->bottomBar()->show();
     }
 
-    wrapper->bottomBar()->updateSize(32, false);
+    wrapper->bottomBar()->updateSize(BottomBar::defaultHeight(), false);
     currentWrapper()->textEditor()->setFocus();
     currentWrapper()->textEditor()->tellFindBarClose();
 }

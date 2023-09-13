@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2017 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -16,8 +16,13 @@
 #include <QPixmap>
 #include <DFrame>
 #include <QDesktopWidget>
+#include <DGuiApplicationHelper>
 
 QPixmap *Tabbar::sm_pDragPixmap = nullptr;
+
+// 不同模式下的界面调整
+const int s_TabbarHeight = 40;
+const int s_TabbarHeightCompact = 26;
 
 /**
  * @brief ‘&’在Qt中被标记为助记符，替换 \a str 中的‘&’字符为“&&”，以正确显示文件名中的‘&’符号
@@ -64,6 +69,13 @@ Tabbar::Tabbar(QWidget *parent)
     connect(this, &DTabBar::tabIsRemoved, this, &Tabbar::handleTabIsRemoved);
     connect(this, &DTabBar::tabReleaseRequested, this, &Tabbar::handleTabReleased);
     connect(this, &DTabBar::dragActionChanged, this, &Tabbar::handleDragActionChanged);
+
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, [ this ](){
+        // 更新当前控件，自动调用 sizeHint() 更新界面参数
+        this->update();
+    });
+#endif
 }
 
 Tabbar::~Tabbar()
@@ -692,7 +704,6 @@ void Tabbar::dropEvent(QDropEvent *e)
 
 QSize Tabbar::tabSizeHint(int index) const
 {
-
     if (index >= 0) {
         int total = this->width();
 
@@ -706,7 +717,11 @@ QSize Tabbar::tabSizeHint(int index) const
             aveargeWidth = 110;
         }
 
+#ifdef DTKWIDGET_CLASS_DSizeMode
+        return QSize(aveargeWidth, DGuiApplicationHelper::isCompactMode() ? s_TabbarHeightCompact : s_TabbarHeight);
+#else
         return QSize(aveargeWidth, 40);
+#endif
     }
 
     return DTabBar::tabSizeHint(index);
@@ -715,13 +730,21 @@ QSize Tabbar::tabSizeHint(int index) const
 QSize Tabbar::minimumTabSizeHint(int index) const
 {
     Q_UNUSED(index)
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    return QSize(110, DGuiApplicationHelper::isCompactMode() ? s_TabbarHeightCompact : s_TabbarHeight);
+#else
     return QSize(110, 40);
+#endif
 }
 
 QSize Tabbar::maximumTabSizeHint(int index) const
 {
     Q_UNUSED(index)
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    return QSize(160, DGuiApplicationHelper::isCompactMode() ? s_TabbarHeightCompact : s_TabbarHeight);
+#else
     return QSize(160, 40);
+#endif
 }
 
 void Tabbar::handleTabMoved(int fromIndex, int toIndex)

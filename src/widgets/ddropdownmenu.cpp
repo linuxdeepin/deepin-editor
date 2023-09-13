@@ -18,6 +18,10 @@
 
 using namespace Dtk::Core;
 
+// 不同布局模式(紧凑)
+const int s_DDropdownMenuHeight = 28;
+const int s_DDropdownMenuHeightCompact = 20;
+
 DDropdownMenu::DDropdownMenu(QWidget *parent)
     : QFrame(parent)
     , m_pToolButton(new DToolButton(this))
@@ -48,7 +52,7 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     m_pToolButton->setIcon(createIcon());
 
     //设置字体
-    int fontsize =DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T9);
+    int fontsize = DFontSizeManager::instance()->fontPixelSize(DFontSizeManager::T9);
     m_font.setPixelSize(fontsize);
 
      //添加布局
@@ -62,6 +66,15 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     //设置字体自适应大小
     //设置界面大小根据内容大小自适应 梁卫东 2020.7.7
     connect(qApp,&DApplication::fontChanged,this,&DDropdownMenu::OnFontChangedSlot);
+
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    m_pToolButton->setFixedHeight(DGuiApplicationHelper::isCompactMode() ? s_DDropdownMenuHeightCompact : s_DDropdownMenuHeight);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, [this](){
+        m_pToolButton->setFixedHeight(DGuiApplicationHelper::isCompactMode() ? s_DDropdownMenuHeightCompact : s_DDropdownMenuHeight);
+    });
+#else
+    m_pToolButton->setFixedHeight(s_DDropdownMenuHeight);
+#endif
 }
 
 DDropdownMenu::~DDropdownMenu()
@@ -369,8 +382,12 @@ QIcon DDropdownMenu::createIcon()
     int iconW = 8;
     int iconH = 5;
 
-    int totalWidth = fontWidth + iconW + 20;
-    int totalHeigth = 28;
+    int totalWidth = fontWidth + iconW + 10;
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    int totalHeigth = DGuiApplicationHelper::isCompactMode() ? s_DDropdownMenuHeightCompact : s_DDropdownMenuHeight;
+#else
+    int totalHeigth = s_DDropdownMenuHeight;
+#endif
     m_pToolButton->setFixedSize(totalWidth,totalHeigth);
     m_pToolButton->setIconSize(QSize(totalWidth,totalHeigth));
 

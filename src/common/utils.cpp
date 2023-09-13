@@ -8,6 +8,7 @@
 #include <DSettingsOption>
 #include <DMessageManager>
 #include <DSysInfo>
+#include <DGuiApplicationHelper>
 
 #include <QRegularExpression>
 #include <QJsonDocument>
@@ -1067,4 +1068,40 @@ void Utils::recordCloseFile(const QString &filePath)
     if (getLoadZPDLibsInstance()->m_document_close) {
         getLoadZPDLibsInstance()->m_document_close(filePath.toUtf8().data());
     }
+}
+
+/**
+   @brief 发送弹窗提示消息 \a message , 使用 \a icon 设置提示图标，\a par 是浮动窗口计算位置的父窗口。
+        这个函数效果和 DMessageManager::sendMessage() 类似，但是提示信息的文字字体将跟随 qApp 变化,
+        而不是直接使用父窗口的字体。
+ */
+void Utils::sendFloatMessageFixedFont(QWidget *par, const QIcon &icon, const QString &message)
+{
+    // 以下代码和 DMessageManager::sendMessage() 流程一致。
+    QWidget *content = par->findChild<QWidget *>("_d_message_manager_content", Qt::FindDirectChildrenOnly);
+    int text_message_count = 0;
+
+    for (DFloatingMessage *message : content->findChildren<DFloatingMessage*>(QString(), Qt::FindDirectChildrenOnly)) {
+        if (message->messageType() == DFloatingMessage::TransientType) {
+            ++text_message_count;
+        }
+    }
+
+    // TransientType 类型的通知消息，最多只允许同时显示三个
+    if (text_message_count >= 3)
+        return;
+
+    // 浮动临时提示信息，自动销毁
+    DFloatingMessage *floMsg = new DFloatingMessage(DFloatingMessage::TransientType);
+    floMsg->setAttribute(Qt::WA_DeleteOnClose);
+    floMsg->setIcon(icon);
+    floMsg->setMessage(message);
+    floMsg->setFont(qApp->font());
+
+    // 绑定 qApp 字体变更信号
+    QObject::connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::fontChanged, floMsg, [ = ](const QFont &font){
+        floMsg->setFont(font);
+    });
+
+    DMessageManager::instance()->sendMessage(par, floMsg);
 }

@@ -8,10 +8,15 @@
 #include <DMenu>
 #include <DVerticalLine>
 #include "bottombar.h"
+#include "bottombar.h"
 #include "../common/utils.h"
 #include "../editor/editwrapper.h"
 #include "../widgets/window.h"
 #include "../editor/replaceallcommond.h"
+
+// 不同布局模式(紧凑)
+const int s_BottomBarHeight = 32;
+const int s_BottomBarHeightCompact = 26;
 
 BottomBar::BottomBar(QWidget *parent)
     : QWidget(parent),
@@ -53,6 +58,7 @@ BottomBar::BottomBar(QWidget *parent)
 
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setContentsMargins(29, 1, 10, 0);
+    layout->setAlignment(Qt::AlignVCenter);
     layout->addLayout(progressLayout);
    // layout->addStretch();
     layout->addWidget(m_pPositionLabel);
@@ -88,7 +94,6 @@ BottomBar::BottomBar(QWidget *parent)
     layout->addWidget(m_formatMenu);
     layout->addWidget(pVerticalLine3);
     layout->addWidget(m_pHighlightMenu);
-    setFixedHeight(32);
 
     //切换编码
     connect(m_pEncodeMenu, &DDropdownMenu::currentActionChanged, this,[this](QAction* pAct){
@@ -116,6 +121,13 @@ BottomBar::BottomBar(QWidget *parent)
     connect(m_pEncodeMenu, &DDropdownMenu::sigSetTextEditFocus, this, &BottomBar::slotSetTextEditFocus);
     connect(m_pHighlightMenu, &DDropdownMenu::sigSetTextEditFocus, this, &BottomBar::slotSetTextEditFocus);
     connect(m_formatMenu,&DDropdownMenu::sigSetTextEditFocus, this, &BottomBar::slotSetTextEditFocus);
+
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    updateSizeMode();
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, &BottomBar::updateSizeMode);
+#else
+    setFixedHeight(s_BottomBarHeight);
+#endif
 }
 
 BottomBar::~BottomBar()
@@ -373,6 +385,21 @@ void BottomBar::onFormatMenuTrigged(QAction* action)
 
 }
 
+/**
+   @brief 根据界面布局模式 `DGuiApplicationHelper::isCompactMode()` 切换当前界面布局参数。
+        需要注意，界面参数同设计图参数并非完全一致，而是按照实际的显示像素值进行比对。
+ */
+void BottomBar::updateSizeMode()
+{
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    if (DGuiApplicationHelper::isCompactMode()) {
+        setFixedHeight(s_BottomBarHeightCompact);
+    } else {
+        setFixedHeight(s_BottomBarHeight);
+    }
+#endif
+}
+
 //设置行尾menu text
 void BottomBar::setEndlineMenuText(EndlineFormat format)
 {
@@ -385,4 +412,12 @@ void BottomBar::setEndlineMenuText(EndlineFormat format)
         m_formatMenu->setCurrentTextOnly("Windows");
         m_endlineFormat = EndlineFormat::Windows;
     }
+}
+
+/**
+   @return 返回默认的底部栏高度，此高度在紧凑模式下有不同值
+ */
+int BottomBar::defaultHeight()
+{
+    return DGuiApplicationHelper::isCompactMode() ? s_BottomBarHeightCompact : s_BottomBarHeight;
 }
