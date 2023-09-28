@@ -41,7 +41,14 @@ FindBar::FindBar(QWidget *parent)
     m_layout->setContentsMargins(16, 6, 10, 6);
 
     m_layout->addWidget(m_findLabel);
-    m_layout->addWidget(m_editLine);
+
+    // 单独处理输入框，由于Qt坐标机制，奇数处理存在累计误差，导致显示效果和预期存在差异，添加 spacer 强制输入框居中
+    QVBoxLayout *lineBarLayout = new QVBoxLayout();
+    lineBarLayout->addItem(new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
+    lineBarLayout->addWidget(m_editLine);
+    lineBarLayout->addItem(new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
+    m_layout->addLayout(lineBarLayout);
+
     m_layout->addWidget(m_findPrevButton);
     m_layout->addWidget(m_findNextButton);
     m_layout->addWidget(m_closeButton);
