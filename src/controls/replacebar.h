@@ -64,6 +64,7 @@ protected:
 
 private:
     Q_SLOT void updateSizeMode();
+    QVBoxLayout *createVerticalLine(QWidget *content) const;
 
 private:
     QPushButton *m_replaceAllButton;
