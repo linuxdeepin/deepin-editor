@@ -143,7 +143,7 @@ public:
                           const QRectF &body, const QRectF &pageCountBox);
 
 Q_SIGNALS:
-    void themeChanged(const QString themeName);
+    void themeChanged(const QString &themeName);
     void requestDragEnterEvent(QDragEnterEvent *);
     void requestDropEvent(QDropEvent *);
     void newWindow();

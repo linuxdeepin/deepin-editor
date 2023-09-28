@@ -1079,13 +1079,10 @@ void Utils::sendFloatMessageFixedFont(QWidget *par, const QIcon &icon, const QSt
 {
     // 以下代码和 DMessageManager::sendMessage() 流程一致。
     QWidget *content = par->findChild<QWidget *>("_d_message_manager_content", Qt::FindDirectChildrenOnly);
-    int text_message_count = 0;
-
-    for (DFloatingMessage *message : content->findChildren<DFloatingMessage*>(QString(), Qt::FindDirectChildrenOnly)) {
-        if (message->messageType() == DFloatingMessage::TransientType) {
-            ++text_message_count;
-        }
-    }
+    auto msgWidgets = content->findChildren<DFloatingMessage*>(QString(), Qt::FindDirectChildrenOnly);
+    auto text_message_count = std::count_if(msgWidgets.begin(), msgWidgets.end(), [](DFloatingMessage *msg){
+        return bool(msg->messageType() == DFloatingMessage::TransientType);
+    });
 
     // TransientType 类型的通知消息，最多只允许同时显示三个
     if (text_message_count >= 3)
