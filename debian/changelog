@@ -1,3 +1,12 @@
+deepin-editor (6.0.14) unstable; urgency=medium
+
+  * fix: Add support mimetype mod/toml.(Bug: 210815, 212273)(Influence: SupportFormat)
+  * fix: Add mimetype toml in .desktop(Bug: 210815)
+  * feat: adapt compact mode.(Task: 292061)(Influence: UI)
+  * fix: Adapt compact mode for findbar and replacebar.(Bug: 220159)
+
+ -- renbin <renbin@uniontech.com>  Thu, 19 Oct 2023 13:25:37 +0800
+
 deepin-editor (6.0.13) unstable; urgency=medium
 
   * fix: Add support mimetype mod/toml.(Bug: 210815, 212273)(Influence: SupportFormat)
