@@ -419,5 +419,9 @@ void BottomBar::setEndlineMenuText(EndlineFormat format)
  */
 int BottomBar::defaultHeight()
 {
+#ifdef DTKWIDGET_CLASS_DSizeMode
     return DGuiApplicationHelper::isCompactMode() ? s_BottomBarHeightCompact : s_BottomBarHeight;
+#else
+    return s_BottomBarHeight;
+#endif
 }

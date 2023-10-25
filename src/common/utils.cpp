@@ -1095,10 +1095,12 @@ void Utils::sendFloatMessageFixedFont(QWidget *par, const QIcon &icon, const QSt
     floMsg->setMessage(message);
     floMsg->setFont(qApp->font());
 
+#ifdef DTKWIDGET_CLASS_DSizeMode
     // 绑定 qApp 字体变更信号
     QObject::connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::fontChanged, floMsg, [ = ](const QFont &font){
         floMsg->setFont(font);
     });
+#endif
 
     DMessageManager::instance()->sendMessage(par, floMsg);
 }
