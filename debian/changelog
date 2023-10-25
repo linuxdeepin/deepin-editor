@@ -1,3 +1,9 @@
+deepin-editor (6.0.15) unstable; urgency=medium
+
+  * fix: Tab height error under low version dtk. 
+
+ -- renbin <renbin@uniontech.com>  Wed, 25 Oct 2023 13:28:05 +0800
+
 deepin-editor (6.0.14) unstable; urgency=medium
 
   * fix: Add support mimetype mod/toml.(Bug: 210815, 212273)(Influence: SupportFormat)
