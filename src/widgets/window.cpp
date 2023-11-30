@@ -684,7 +684,7 @@ void Window::addTab(const QString &filepath, bool activeTab)
 void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, const QString &qstrTruePath, const QString &tabName, int index)
 {
     if (index == -1) {
-        index = m_tabbar->currentIndex() + 1;
+        index = m_tabbar->count();
     }
 
     //这里会重复连接信号和槽，先全部取消

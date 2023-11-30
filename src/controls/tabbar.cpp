@@ -92,7 +92,7 @@ Tabbar::~Tabbar()
 
 void Tabbar::addTab(const QString &filePath, const QString &tabName, const QString &tipPath)
 {
-    addTabWithIndex(currentIndex() + 1, filePath, tabName, tipPath);
+    addTabWithIndex(count(), filePath, tabName, tipPath);
 }
 
 void Tabbar::addTabWithIndex(int index, const QString &filePath, const QString &tabName, const QString &tipPath)
