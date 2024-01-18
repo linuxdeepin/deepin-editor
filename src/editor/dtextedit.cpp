@@ -882,48 +882,31 @@ void TextEdit::moveToLineIndentation()
 {
     // Init cursor and move type.
     QTextCursor cursor = textCursor();
-    auto moveMode = m_cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
-
     // Get line start position.
-    cursor.movePosition(QTextCursor::StartOfBlock, moveMode);
+    cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
     int startColumn = cursor.columnNumber();
-
     // Get line end position.
-    cursor.movePosition(QTextCursor::EndOfBlock, moveMode);
+    cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
     int endColumn = cursor.columnNumber();
-
-    // Move to line start first.
-    cursor.movePosition(QTextCursor::StartOfBlock, moveMode);
-    int nStartPos = cursor.position();
-
-    if (nStartPos - 1 < 0) {
-        nStartPos = 0;
-        //cursor.setPosition(nStartPos, QTextCursor::MoveAnchor);
-        cursor.setPosition(nStartPos + 1, moveMode);
-    } else {
-        cursor.setPosition(nStartPos - 1, moveMode);
-        cursor.setPosition(nStartPos, QTextCursor::KeepAnchor);
-    }
-
-    //cursor.movePosition(QTextCursor::PreviousCharacter,QTextCursor::KeepAnchor);
-    // Move to first non-blank char of line.
+    // Move the cursor to line start first while keep the anchor to end of block.
+    cursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
     int column = startColumn;
-    while (column < endColumn) {
+    while (column < endColumn)
+    {
         QChar currentChar = *cursor.selection().toPlainText().data();
-        //QChar currentChar = toPlainText().at(std::max(cursor.position() - 1, 0));
-
-        if (!currentChar.isSpace()) {
-            //cursor.setPosition(cursor.position(), QTextCursor::MoveAnchor);
-            cursor.setPosition(cursor.position() - 1, moveMode);
+        if (!currentChar.isSpace())
+        {
+            //stop and reset anchor while be at row indentation.
+            cursor.setPosition(cursor.position(), QTextCursor::MoveAnchor);
             break;
-        } else {
-            //cursor.setPosition(cursor.position(), QTextCursor::MoveAnchor);
-            cursor.setPosition(cursor.position() + 1, moveMode);
         }
-
+        else
+        {
+            //while including 'space',just move ahead.
+            cursor.setPosition(cursor.position() + 1, QTextCursor::KeepAnchor);
+        }
         column++;
     }
-
     cursor.clearSelection();
     setTextCursor(cursor);
 }
@@ -3654,7 +3637,7 @@ void TextEdit::setMark()
 {
     bool currentMark = m_cursorMark;
     bool markCursorChanged = false;
-
+     qWarning()<<m_cursorMark;
     if (m_cursorMark) {
         if (textCursor().hasSelection()) {
             markCursorChanged = true;
@@ -6793,7 +6776,6 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
 {
     Qt::KeyboardModifiers modifiers = e->modifiers();
     QString key = Utils::getKeyshortcut(e);
-
     //没有修改键　插入文件
     //按下esc的时候,光标退出编辑区，切换至标题栏
     if (modifiers == Qt::NoModifier && e->key() == Qt::Key_Escape) {
