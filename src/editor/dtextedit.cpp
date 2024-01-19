@@ -758,7 +758,7 @@ void TextEdit::forwardPair()
     setTextCursor(removeSelectionCursor);
 
     // Start search.
-    if (find(QRegExp("[\"'>)}]"))) {
+    if (find(QRegExp("[\]>)}]"))) {
         int findPos = textCursor().position();
 
         QTextCursor cursor = textCursor();
@@ -792,7 +792,7 @@ void TextEdit::backwardPair()
     QTextDocument::FindFlags options;
     options |= QTextDocument::FindBackward;
 
-    if (find(QRegExp("[\"'<({]"), options)) {
+    if (find(QRegExp("[\[<({]"), options)) {
         QTextCursor cursor = textCursor();
         auto moveMode = m_cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
 
@@ -3637,7 +3637,6 @@ void TextEdit::setMark()
 {
     bool currentMark = m_cursorMark;
     bool markCursorChanged = false;
-     qWarning()<<m_cursorMark;
     if (m_cursorMark) {
         if (textCursor().hasSelection()) {
             markCursorChanged = true;
