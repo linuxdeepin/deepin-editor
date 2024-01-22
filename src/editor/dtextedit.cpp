@@ -2551,6 +2551,7 @@ void TextEdit::cut(bool ignoreCheck)
                 m_pUndoStack->push(pDeleteStack);
             }
         }
+        
         //设置到剪切板
         QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
         clipboard->setText(data);
@@ -3138,7 +3139,6 @@ void TextEdit::onAppPaletteChanged()
         for (auto &selection : m_altModSelections) {
             selection.format.setBackground(highlightBackground);
         }
-
         // 更新高亮状态
         renderAllSelections();
     }
@@ -6533,34 +6533,42 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
 
 void TextEdit::mousePressEvent(QMouseEvent *e)
 {
-    if (m_bIsFindClose) {
+    if (m_bIsFindClose)
+    {
         m_bIsFindClose = false;
         removeKeywords();
     }
     if (e->button() != Qt::RightButton)
         m_isSelectAll = false;
 
-    if (Qt::MouseEventSynthesizedByQt == e->source()) {
+    if (Qt::MouseEventSynthesizedByQt == e->source())
+    {
         m_startY = e->y();
         m_startX = e->x();
     }
-    if (e->source() == Qt::MouseEventSynthesizedByQt) {
+    if (e->source() == Qt::MouseEventSynthesizedByQt)
+    {
         m_lastTouchBeginPos = e->pos();
 
-        if (QScroller::hasScroller(this)) {
+        if (QScroller::hasScroller(this))
+        {
             QScroller::scroller(this)->deleteLater();
         }
 
-        if (m_updateEnableSelectionByMouseTimer) {
+        if (m_updateEnableSelectionByMouseTimer)
+        {
             m_updateEnableSelectionByMouseTimer->stop();
-        } else {
+        }
+        else
+        {
             m_updateEnableSelectionByMouseTimer = new QTimer(this);
             m_updateEnableSelectionByMouseTimer->setSingleShot(true);
 
             static QObject *theme_settings = reinterpret_cast<QObject *>(qvariant_cast<quintptr>(qApp->property("_d_theme_settings_object")));
             QVariant touchFlickBeginMoveDelay;
 
-            if (theme_settings) {
+            if (theme_settings)
+            {
                 touchFlickBeginMoveDelay = theme_settings->property("touchFlickBeginMoveDelay");
             }
 
@@ -6571,34 +6579,41 @@ void TextEdit::mousePressEvent(QMouseEvent *e)
         m_updateEnableSelectionByMouseTimer->start();
     }
 
-    //add for single refers to the sliding
-    if (e->type() == QEvent::MouseButtonPress && e->source() == Qt::MouseEventSynthesizedByQt) {
+    // add for single refers to the sliding
+    if (e->type() == QEvent::MouseButtonPress && e->source() == Qt::MouseEventSynthesizedByQt)
+    {
         m_lastMouseTimeX = e->timestamp();
         m_lastMouseTimeY = e->timestamp();
         m_lastMouseYpos = e->pos().y();
         m_lastMouseXpos = e->pos().x();
 
-        if (tweenY.activeY()) {
+        if (tweenY.activeY())
+        {
             m_slideContinueY = true;
             tweenY.stopY();
         }
 
-        if (tweenX.activeX()) {
+        if (tweenX.activeX())
+        {
             m_slideContinueX = true;
             tweenX.stopX();
         }
     }
 
-    if (e->modifiers() == Qt::AltModifier) {
+    if (e->modifiers() == Qt::AltModifier)
+    {
         m_bIsAltMod = true;
-        //鼠标点击位置为光标位置 　获取光标行列位置
+        // 鼠标点击位置为光标位置 　获取光标行列位置
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(e);
         m_altStartTextCursor = this->cursorForPosition(mouseEvent->pos());
         m_altStartTextCursor.clearSelection();
         this->setTextCursor(m_altStartTextCursor);
         m_altModSelections.clear();
-    } else {
-        if (e->button() != 2) { //右键,调用右键菜单时候不能清空
+    }
+    else
+    {
+        if (e->button() != 2)
+        { // 右键,调用右键菜单时候不能清空
             m_bIsAltMod = false;
             m_altModSelections.clear();
         }
@@ -6609,13 +6624,15 @@ void TextEdit::mousePressEvent(QMouseEvent *e)
 
 void TextEdit::mouseMoveEvent(QMouseEvent *e)
 {
-    if (Qt::MouseEventSynthesizedByQt == e->source()) {
+    if (Qt::MouseEventSynthesizedByQt == e->source())
+    {
         m_endY = e->y();
         m_endX = e->x();
     }
 
-    //add for single refers to the sliding
-    if (e->type() == QEvent::MouseMove && e->source() == Qt::MouseEventSynthesizedByQt) {
+    // add for single refers to the sliding
+    if (e->type() == QEvent::MouseMove && e->source() == Qt::MouseEventSynthesizedByQt)
+    {
         const ulong diffTimeX = e->timestamp() - m_lastMouseTimeX;
         const ulong diffTimeY = e->timestamp() - m_lastMouseTimeY;
         const int diffYpos = e->pos().y() - m_lastMouseYpos;
@@ -6625,7 +6642,8 @@ void TextEdit::mouseMoveEvent(QMouseEvent *e)
         m_lastMouseYpos = e->pos().y();
         m_lastMouseXpos = e->pos().x();
 
-        if (m_gestureAction == GA_slide) {
+        if (m_gestureAction == GA_slide)
+        {
             QFont font = this->font();
 
             /*开根号时数值越大衰减比例越大*/
@@ -6646,11 +6664,12 @@ void TextEdit::mouseMoveEvent(QMouseEvent *e)
             m_stepSpeedX /= sqrt(font.pointSize() * 4.0);
             changeX = m_stepSpeedX * sqrt(abs(m_stepSpeedX)) * 100;
 
-            //return true;
+            // return true;
         }
 
-        if (m_gestureAction != GA_null) {
-            //return true;
+        if (m_gestureAction != GA_null)
+        {
+            // return true;
         }
     }
 
@@ -6658,75 +6677,101 @@ void TextEdit::mouseMoveEvent(QMouseEvent *e)
     // so they need to be restored.
     QApplication::restoreOverrideCursor();
 
-    if (viewport()->cursor().shape() != Qt::IBeamCursor) {
+    if (viewport()->cursor().shape() != Qt::IBeamCursor)
+    {
         viewport()->setCursor(Qt::IBeamCursor);
     }
 
     QPlainTextEdit::mouseMoveEvent(e);
-
-    if (e->modifiers() == Qt::AltModifier && m_bIsAltMod) {
+    if (e->modifiers() == Qt::AltModifier && m_bIsAltMod)
+    {
         m_altModSelections.clear();
         QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(e);
 
         QPoint curPos = mouseEvent->pos();
         m_altEndTextCursor = this->cursorForPosition(curPos);
-
         int column = m_altEndTextCursor.positionInBlock();
         int row = m_altEndTextCursor.blockNumber();
-
         int startColumn = m_altStartTextCursor.positionInBlock();
         int startRow = m_altStartTextCursor.blockNumber();
-
-        int minColumn = startColumn < column ? startColumn : column;
-        int maxColumn = startColumn > column ? startColumn : column;
         int minRow = startRow < row ? startRow : row;
         int maxRow = startRow > row ? startRow : row;
-
+        int judgeCursorPosX;
+        int nowPosX;
+        int judgeAncherPosX;
+        int judgeStartLength;
+        int judgeEndLength;
+        int startLineIdx;
+        int endLineIdx;
+        bool downOrUp;
         QTextCharFormat format;
         QPalette palette;
         QColor highlightBackground = DGuiApplicationHelper::instance()->applicationPalette().color(QPalette::Highlight);
         format.setBackground(highlightBackground);
         format.setForeground(palette.highlightedText());
-
-        for (int iRow = minRow; iRow <= maxRow; iRow++) {
-            QTextBlock block = document()->findBlockByNumber(iRow);
-            QTextCursor cursor(block);
-            cursor.movePosition(QTextCursor::EndOfBlock, QTextCursor::MoveAnchor);
-
-            QPoint blockTailPos = this->cursorRect(cursor).bottomRight();
-
-            //位置从0开始
-            int length = block.text().length();
-
-            //鼠标x坐标大于当前块最后字符位置　遍历获取最大块长度
-            if (curPos.x() >= blockTailPos.x()  && length > maxColumn) {
-                maxColumn = length;
-            }
+        {
+            QTextBlock block = document()->findBlockByNumber(startRow);
+            QTextLine startLine = block.layout()->lineForTextPosition(m_altStartTextCursor.positionInBlock());
+            judgeAncherPosX = startLine.cursorToX(m_altStartTextCursor.positionInBlock());
+            judgeStartLength = m_altStartTextCursor.positionInBlock() - startLine.textStart();
+            startLineIdx = startLine.lineNumber();
         }
-
-
-        for (int iRow = minRow; iRow <= maxRow; iRow++) {
+        {
+            QTextBlock block = document()->findBlockByNumber(row);
+            QTextLine endLine = block.layout()->lineForTextPosition(m_altEndTextCursor.positionInBlock());
+            judgeCursorPosX = mouseEvent->pos().x();
+            judgeEndLength = m_altEndTextCursor.positionInBlock() - endLine.textStart();
+            endLineIdx = endLine.lineNumber();
+        }
+        downOrUp = row > startRow ? true : startRow > row          ? false
+                                       : endLineIdx > startLineIdx ? true
+                                                                   : false;
+        for (int iRow = minRow; iRow <= maxRow; iRow++)
+        {
             QTextBlock block = document()->findBlockByNumber(iRow);
-            int length = block.text().size();
-
-            if (length < minColumn) continue;
-
+            int lineAt = 0;
+            int lineCount = block.lineCount();
             QTextEdit::ExtraSelection selection;
-            QTextCursor cursor = this->textCursor();
-            cursor.clearSelection();
-            setTextCursor(cursor);
-            cursor.setPosition(block.position() + minColumn, QTextCursor::MoveAnchor);
-            if (length < maxColumn) {
-                cursor.setPosition(block.position() + length, QTextCursor::KeepAnchor);
-            } else {
-                cursor.setPosition(block.position() + maxColumn, QTextCursor::KeepAnchor);
+            //对开始块和结束块的行数做判断
+            if (iRow == minRow)
+            {
+                lineAt = downOrUp ? startLineIdx : endLineIdx;
             }
-
-            selection.cursor = cursor;
-            selection.format = format;
-            m_altModSelections << selection;
+            if (iRow == maxRow)
+            {
+                lineCount = downOrUp ? endLineIdx + 1 : startLineIdx + 1;
+            }
+            for (; lineAt < lineCount; lineAt++)
+            {
+            //引入行的判断
+                QTextCursor cursor = this->textCursor();
+                cursor.clearSelection();
+                setTextCursor(cursor);
+                QTextLine lineInBlock = block.layout()->lineAt(lineAt);
+                int lineLength = lineInBlock.textLength();
+                if (lineLength < judgeStartLength && lineLength < judgeEndLength)
+                {
+                    continue;
+                }
+                int properColumn;
+                properColumn = lineInBlock.xToCursor(judgeAncherPosX);
+                cursor.setPosition(block.position() + properColumn, QTextCursor::MoveAnchor);
+            //由于窗口大小小于块的最大长度的外部UI问题，这里要进行对鼠标pos进行若达到最大值无法对每行最后一个字符的覆盖的问题处理
+            //扩大了judgeCursorPosX的最大限度。
+                if (lineInBlock.width() <= lineInBlock.cursorToX(lineInBlock.textStart() + lineInBlock.textLength()))
+                {
+                    if (judgeCursorPosX > lineInBlock.cursorToX(lineInBlock.textStart() + lineInBlock.textLength() - 1))
+                    {
+                        judgeCursorPosX = lineInBlock.cursorToX(lineInBlock.textStart() + lineInBlock.textLength());
+                    }
+                }
+                properColumn = lineInBlock.xToCursor(judgeCursorPosX);
+                cursor.setPosition(block.position() + properColumn, QTextCursor::KeepAnchor);
+                selection.cursor = cursor;
+                selection.format = format;
+                m_altModSelections << selection;
+            }
         }
-
         renderAllSelections();
         update();
     }
@@ -7334,7 +7379,6 @@ void TextEdit::paintEvent(QPaintEvent *e)
             }
         }
     }
-
     QColor lineColor = palette().text().color();
 
     if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
@@ -7348,15 +7392,11 @@ void TextEdit::paintEvent(QPaintEvent *e)
         pen.setWidth(cursorWidth);
         painter.setPen(pen);
 
-        QList<int> rowList;
-        for (int i = 0 ; i < m_altModSelections.size(); i++) {
-            //if(m_altModSelections[i].cursor.positionInBlock() == cursoColumn){
-            int row = m_altModSelections[i].cursor.blockNumber();
-            if (!rowList.contains(row)) {
-                rowList << row;
-                QRect textCursorRect = this->cursorRect(m_altModSelections[i].cursor);
-                painter.drawRect(textCursorRect);
-            }
+        for (int i = 0; i < m_altModSelections.size(); i++)
+        {
+            // if(m_altModSelections[i].cursor.positionInBlock() == cursoColumn){
+            QRect textCursorRect = this->cursorRect(m_altModSelections[i].cursor);
+            painter.drawRect(textCursorRect);
             // }
         }
     }
