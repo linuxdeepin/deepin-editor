@@ -2545,12 +2545,8 @@ void TextEdit::cut(bool ignoreCheck)
                 data += "\n";
         }
         //删除有选择
-        for (int i = 0; i < m_altModSelections.size(); i++) {
-            if (m_altModSelections[i].cursor.hasSelection()) {
-                QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(m_altModSelections[i].cursor, this);
+                QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(m_altModSelections, this);
                 m_pUndoStack->push(pDeleteStack);
-            }
-        }
         
         //设置到剪切板
         QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
@@ -6690,83 +6686,90 @@ void TextEdit::mouseMoveEvent(QMouseEvent *e)
 
         QPoint curPos = mouseEvent->pos();
         m_altEndTextCursor = this->cursorForPosition(curPos);
-        int column = m_altEndTextCursor.positionInBlock();
         int row = m_altEndTextCursor.blockNumber();
-        int startColumn = m_altStartTextCursor.positionInBlock();
         int startRow = m_altStartTextCursor.blockNumber();
         int minRow = startRow < row ? startRow : row;
         int maxRow = startRow > row ? startRow : row;
-        int judgeCursorPosX;
-        int nowPosX;
-        int judgeAncherPosX;
-        int judgeStartLength;
-        int judgeEndLength;
-        int startLineIdx;
-        int endLineIdx;
-        bool downOrUp;
         QTextCharFormat format;
         QPalette palette;
         QColor highlightBackground = DGuiApplicationHelper::instance()->applicationPalette().color(QPalette::Highlight);
         format.setBackground(highlightBackground);
         format.setForeground(palette.highlightedText());
+        int judgeAncherPosX;
+        int judgeStartLength;
+        int startLineIdx;
         {
             QTextBlock block = document()->findBlockByNumber(startRow);
-            QTextLine startLine = block.layout()->lineForTextPosition(m_altStartTextCursor.positionInBlock());
-            judgeAncherPosX = startLine.cursorToX(m_altStartTextCursor.positionInBlock());
-            judgeStartLength = m_altStartTextCursor.positionInBlock() - startLine.textStart();
+            int startCurPos = m_altStartTextCursor.positionInBlock();
+            QTextLine startLine = block.layout()->lineForTextPosition(startCurPos);
+            judgeAncherPosX = startLine.cursorToX(startCurPos);
+            judgeStartLength = startCurPos - startLine.textStart();
             startLineIdx = startLine.lineNumber();
         }
+        int judgeCursorPosX;
+        int judgeEndLength;
+        int endLineIdx;
         {
             QTextBlock block = document()->findBlockByNumber(row);
-            QTextLine endLine = block.layout()->lineForTextPosition(m_altEndTextCursor.positionInBlock());
-            judgeCursorPosX = mouseEvent->pos().x();
-            judgeEndLength = m_altEndTextCursor.positionInBlock() - endLine.textStart();
+            int endCurPos = m_altEndTextCursor.positionInBlock();
+            QTextLine endLine = block.layout()->lineForTextPosition(endCurPos);
+            judgeCursorPosX = curPos.x();
+            judgeEndLength = endCurPos - endLine.textStart();
             endLineIdx = endLine.lineNumber();
         }
-        downOrUp = row > startRow ? true : startRow > row          ? false
-                                       : endLineIdx > startLineIdx ? true
-                                                                   : false;
+        bool isDown = false;
+        if (row > startRow)
+        {
+            isDown = true;
+        }
+        else if (row == startRow && endLineIdx >= startLineIdx)
+        {
+            isDown = true;
+        }
         for (int iRow = minRow; iRow <= maxRow; iRow++)
         {
             QTextBlock block = document()->findBlockByNumber(iRow);
             int lineAt = 0;
             int lineCount = block.lineCount();
-            QTextEdit::ExtraSelection selection;
-            //对开始块和结束块的行数做判断
+            // 对开始块和结束块的行数做判断
             if (iRow == minRow)
             {
-                lineAt = downOrUp ? startLineIdx : endLineIdx;
+                lineAt = isDown ? startLineIdx : endLineIdx;
             }
             if (iRow == maxRow)
             {
-                lineCount = downOrUp ? endLineIdx + 1 : startLineIdx + 1;
+                lineCount = isDown ? endLineIdx + 1 : startLineIdx + 1;
             }
             for (; lineAt < lineCount; lineAt++)
             {
-            //引入行的判断
-                QTextCursor cursor = this->textCursor();
-                cursor.clearSelection();
-                setTextCursor(cursor);
+                // 引入行的判断
                 QTextLine lineInBlock = block.layout()->lineAt(lineAt);
                 int lineLength = lineInBlock.textLength();
                 if (lineLength < judgeStartLength && lineLength < judgeEndLength)
                 {
                     continue;
                 }
+                QTextCursor cursor = this->textCursor();
+                cursor.clearSelection();
+                setTextCursor(cursor);
                 int properColumn;
+                int blockPos = block.position();
                 properColumn = lineInBlock.xToCursor(judgeAncherPosX);
-                cursor.setPosition(block.position() + properColumn, QTextCursor::MoveAnchor);
-            //由于窗口大小小于块的最大长度的外部UI问题，这里要进行对鼠标pos进行若达到最大值无法对每行最后一个字符的覆盖的问题处理
-            //扩大了judgeCursorPosX的最大限度。
-                if (lineInBlock.width() <= lineInBlock.cursorToX(lineInBlock.textStart() + lineInBlock.textLength()))
+                cursor.setPosition(blockPos + properColumn, QTextCursor::MoveAnchor);
+                // 由于窗口大小小于块的最大长度的外部UI问题，这里要进行对鼠标pos进行若达到最大值无法对每行最后一个字符的覆盖的问题处理
+                // 扩大了judgeCursorPosX的最大限度。
+                int lineEndPosInBlock = lineInBlock.textStart() + lineInBlock.textLength();
+                int lineEndPosToX = lineInBlock.cursorToX(lineEndPosInBlock);
+                if (lineInBlock.width() <= lineEndPosToX)
                 {
-                    if (judgeCursorPosX > lineInBlock.cursorToX(lineInBlock.textStart() + lineInBlock.textLength() - 1))
+                    if (judgeCursorPosX > lineInBlock.cursorToX(lineEndPosInBlock - 1))
                     {
-                        judgeCursorPosX = lineInBlock.cursorToX(lineInBlock.textStart() + lineInBlock.textLength());
+                        judgeCursorPosX = lineEndPosToX;
                     }
                 }
                 properColumn = lineInBlock.xToCursor(judgeCursorPosX);
-                cursor.setPosition(block.position() + properColumn, QTextCursor::KeepAnchor);
+                cursor.setPosition(blockPos + properColumn, QTextCursor::KeepAnchor);
+                QTextEdit::ExtraSelection selection;
                 selection.cursor = cursor;
                 selection.format = format;
                 m_altModSelections << selection;
@@ -7385,7 +7388,6 @@ void TextEdit::paintEvent(QPaintEvent *e)
 
         QTextCursor textCursor = this->textCursor();
         int cursorWidth = this->cursorWidth();
-        //int cursoColumn = textCursor.positionInBlock();
         QPainter painter(viewport());
         QPen pen;
         pen.setColor(lineColor);
@@ -7394,10 +7396,8 @@ void TextEdit::paintEvent(QPaintEvent *e)
 
         for (int i = 0; i < m_altModSelections.size(); i++)
         {
-            // if(m_altModSelections[i].cursor.positionInBlock() == cursoColumn){
             QRect textCursorRect = this->cursorRect(m_altModSelections[i].cursor);
             painter.drawRect(textCursorRect);
-            // }
         }
     }
 }
