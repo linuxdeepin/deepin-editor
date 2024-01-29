@@ -68,7 +68,8 @@ TEST(UT_Deletetextundocommond_DeleteTextUndoCommand, UT_Deletetextundocommond_De
 TEST(UT_Deletetextundocommond_undo, UT_Deletetextundocommond_undo)
 {
     QTextCursor cursor;
-    DeleteTextUndoCommand * commond1 = new DeleteTextUndoCommand(cursor, nullptr);
+    QPlainTextEdit *nulptr;
+    DeleteTextUndoCommand *commond1 = new DeleteTextUndoCommand(cursor, nulptr);
     commond1->m_sInsertText = "ddd";
 
     QList<QTextEdit::ExtraSelection> extraSelections;
@@ -78,7 +79,7 @@ TEST(UT_Deletetextundocommond_undo, UT_Deletetextundocommond_undo)
     selection.format.setProperty(QTextFormat::FullWidthSelection, true);
     selection.cursor.clearSelection();
     extraSelections.append(selection);
-    DeleteTextUndoCommand * commond2 = new DeleteTextUndoCommand(extraSelections, nullptr);
+    DeleteTextUndoCommand *commond2 = new DeleteTextUndoCommand(extraSelections, nulptr);
 
     commond1->undo();
     commond2->undo();
@@ -128,20 +129,21 @@ TEST(UT_Deletetextundocommond_undo, undo_withTextCursor_restoreCursor)
 
 TEST(UT_Deletetextundocommond_redo, UT_Deletetextundocommond_redo)
 {
+    QPlainTextEdit *nulptr = nullptr;
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
     pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
                                                           QString("Holle world."));
     QTextCursor cursor1 = pWindow->currentWrapper()->textEditor()->textCursor();
     auto cursor2 = pWindow->currentWrapper()->textEditor()->textCursor();
-    DeleteTextUndoCommand * commond1 = new DeleteTextUndoCommand(cursor1, nullptr);
-    DeleteTextUndoCommand * commond2 = new DeleteTextUndoCommand(cursor2, nullptr);
+    DeleteTextUndoCommand *commond1 = new DeleteTextUndoCommand(cursor1, nulptr);
+    DeleteTextUndoCommand *commond2 = new DeleteTextUndoCommand(cursor2, nulptr);
     QTextEdit::ExtraSelection select[2];
     select[0].cursor = cursor1;
     select[1].cursor = cursor2;
 
     QList<QTextEdit::ExtraSelection> selections{select[0],select[1]};
-    DeleteTextUndoCommand * commond3 = new DeleteTextUndoCommand(selections, nullptr);
+    DeleteTextUndoCommand *commond3 = new DeleteTextUndoCommand(selections, nulptr);
     commond1->redo();
     commond2->redo();
     commond3->redo();
