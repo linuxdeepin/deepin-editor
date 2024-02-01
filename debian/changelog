@@ -1,3 +1,17 @@
+deepin-editor (6.0.16) unstable; urgency=medium
+
+  * feat: add new tab to the end
+    Thanks to Cloud
+  * chore: remove duplicate value for key "MimeType" in desktop file
+    Thanks to hotime
+  * fix: Shortcut 'Ctrl + M cursor' move to row indentation
+         not implemented (Bug: 233877)
+  * fix: Shortcuts Alt + P / N match the help (Bug: 233883)
+  * fix: the Column Edit cannot align the selected columns (Bug: 234517)
+  * fix: After column editing,lines are not withdrawn together (Bug: 241475)
+
+ -- renbin <renbin@uniontech.com>  Thu, 01 Feb 2024 14:10:32 +0800
+
 deepin-editor (6.0.15) unstable; urgency=medium
 
   * fix: Tab height error under low version dtk. 
