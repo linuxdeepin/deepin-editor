@@ -7,9 +7,10 @@
 #include <QDebug>
 #include <QTextBlock>
 
-DeleteTextUndoCommand::DeleteTextUndoCommand(QTextCursor textcursor, QPlainTextEdit *edit, QUndoCommand *parent)
+DeleteTextUndoCommand::DeleteTextUndoCommand(QTextCursor textcursor, TextEdit *tEdit,QUndoCommand *parent)
     : QUndoCommand(parent)
-    , m_edit(edit)
+    , m_edit(tEdit)
+    , m_tEdit(tEdit)
     , m_textCursor(textcursor)
     , m_beginPos(m_textCursor.selectionStart())
 {
@@ -24,13 +25,15 @@ DeleteTextUndoCommand::DeleteTextUndoCommand(QTextCursor textcursor, QPlainTextE
             m_sInsertText = "\n";
         }
     }
+    tEdit->m_altModSelectionsCounts.push_back(0);
 }
 
 DeleteTextUndoCommand::DeleteTextUndoCommand(QList<QTextEdit::ExtraSelection> &selections,
-                                             QPlainTextEdit *edit,
+                                             TextEdit *tEdit,
                                              QUndoCommand *parent)
     : QUndoCommand(parent)
-    , m_edit(edit)
+    , m_edit(tEdit)
+    , m_tEdit(tEdit)
     , m_ColumnEditSelections(selections)
     , m_beginPos(m_textCursor.selectionStart())
 {
@@ -49,8 +52,46 @@ DeleteTextUndoCommand::DeleteTextUndoCommand(QList<QTextEdit::ExtraSelection> &s
             }
         }
     }
+    m_tEdit->m_altModSelectionsCounts.push_back(cnt);
 }
-
+DeleteTextUndoCommand::DeleteTextUndoCommand(QTextCursor textcursor, QPlainTextEdit *tEdit,QUndoCommand *parent)
+    : QUndoCommand(parent)
+    , m_edit(tEdit)
+    , m_tEdit()
+    , m_textCursor(textcursor)
+    , m_beginPos(m_textCursor.selectionStart())
+{
+    if (m_textCursor.hasSelection()) {
+        m_sInsertText = m_textCursor.selectedText();
+    } else {
+        int pos = m_textCursor.positionInBlock() - 1;
+        if (pos >= 0) {
+            m_sInsertText = m_textCursor.block().text().at(pos);
+        } else {
+            //上一行lastQChar
+            m_sInsertText = "\n";
+        }
+    }
+}
+DeleteTextUndoCommand::DeleteTextUndoCommand(QList<QTextEdit::ExtraSelection> &selections,QPlainTextEdit*tEdit, QUndoCommand *parent)
+ : QUndoCommand(parent)
+    , m_edit(tEdit)
+    , m_tEdit()
+    , m_ColumnEditSelections(selections)
+    , m_beginPos(m_textCursor.selectionStart())
+{
+    if (m_textCursor.hasSelection()) {
+        m_sInsertText = m_textCursor.selectedText();
+    } else {
+        int pos = m_textCursor.positionInBlock() - 1;
+        if (pos >= 0) {
+            m_sInsertText = m_textCursor.block().text().at(pos);
+        } else {
+            //上一行lastQChar
+            m_sInsertText = "\n";
+        }
+    }
+}
 void DeleteTextUndoCommand::undo()
 {
     if (m_ColumnEditSelections.isEmpty()) {
@@ -67,10 +108,18 @@ void DeleteTextUndoCommand::undo()
         int cnt = m_ColumnEditSelections.size();
         for (int i = 0; i < cnt; i++) {
             m_ColumnEditSelections[i].cursor.insertText(m_selectTextList[i]);
-            m_ColumnEditSelections[i].cursor.setPosition(
+            if(!m_tEdit->m_altModIsRight){
+                m_ColumnEditSelections[i].cursor.setPosition(
                 m_ColumnEditSelections[i].cursor.position() - m_selectTextList[i].length(), QTextCursor::KeepAnchor);
+            }
+            else{
+                m_ColumnEditSelections[i].cursor.setPosition(
+                m_ColumnEditSelections[i].cursor.position() - m_selectTextList[i].length(), QTextCursor::MoveAnchor);
+                m_ColumnEditSelections[i].cursor.setPosition(
+                m_ColumnEditSelections[i].cursor.position() + m_selectTextList[i].length(), QTextCursor::KeepAnchor);
+            }
+            m_tEdit->m_altModSelectionsCopy.push_back(m_ColumnEditSelections[i]);
         }
-
         if (m_edit && !m_ColumnEditSelections.isEmpty()) {
             m_edit->setTextCursor(m_ColumnEditSelections.last().cursor);
         }

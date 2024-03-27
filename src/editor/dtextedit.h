@@ -621,6 +621,9 @@ public:
     bool m_pIsShowCodeFoldArea;
     bool m_pIsShowBookmarkArea;
     bool m_bIsMarkAllLine {false}; ///< 颜色“标记所有”标志
+    bool m_altModIsRight;
+    QList<QTextEdit::ExtraSelection> m_altModSelectionsCopy;
+    QList<int>m_altModSelectionsCounts;
 
 private:
     EditWrapper *m_wrapper;

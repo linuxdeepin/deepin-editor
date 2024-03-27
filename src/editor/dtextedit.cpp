@@ -2547,7 +2547,7 @@ void TextEdit::cut(bool ignoreCheck)
         //删除有选择
                 QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(m_altModSelections, this);
                 m_pUndoStack->push(pDeleteStack);
-        
+
         //设置到剪切板
         QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
         clipboard->setText(data);
@@ -2922,9 +2922,19 @@ void TextEdit::undo_()
     if (!m_pUndoStack->canUndo()) {
         return;
     }
-
     m_pUndoStack->undo();
-
+    //对撤销过后的光标渲染进行复原
+    if (!m_altModSelectionsCounts.empty())
+    {
+        if (int m_altModSelectionsCount = m_altModSelectionsCounts.back())
+        {
+            m_altModSelections = m_altModSelectionsCopy;
+            m_altModSelectionsCopy.clear();
+            m_bIsAltMod = true;
+            renderAllSelections();
+        }
+        m_altModSelectionsCounts.pop_back();
+    }
     // 对撤销栈清空的情况下，有两种文件仍需保留*号(重做无需如下判定)
     // 1. 备份文件，上次修改之后直接关闭时备份的文件，仍需要提示保存
     // 2. 临时文件，上次修改后关闭，撤销操作后文件内容不为空
@@ -6717,6 +6727,7 @@ void TextEdit::mouseMoveEvent(QMouseEvent *e)
             judgeEndLength = endCurPos - endLine.textStart();
             endLineIdx = endLine.lineNumber();
         }
+        m_altModIsRight=judgeCursorPosX>judgeAncherPosX;
         bool isDown = false;
         if (row > startRow)
         {
@@ -7371,7 +7382,6 @@ void TextEdit::contextMenuEvent(QContextMenuEvent *event)
 void TextEdit::paintEvent(QPaintEvent *e)
 {
     DPlainTextEdit::paintEvent(e);
-
     if (m_altModSelections.length() > 0) {
         for (auto sel : m_altModSelections) {
             if (sel.cursor.hasSelection()) {
@@ -7383,7 +7393,6 @@ void TextEdit::paintEvent(QPaintEvent *e)
         }
     }
     QColor lineColor = palette().text().color();
-
     if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
 
         QTextCursor textCursor = this->textCursor();
