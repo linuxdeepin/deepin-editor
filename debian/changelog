@@ -1,3 +1,9 @@
+deepin-editor (6.0.17) unstable; urgency=medium
+
+  * feat: Change default shortcuts popup position(Task: 332267)(Influence: Shortcuts)
+
+ -- renbin <renbin@uniontech.com>  Wed, 27 Mar 2024 15:37:32 +0800
+
 deepin-editor (6.0.16) unstable; urgency=medium
 
   * feat: add new tab to the end
