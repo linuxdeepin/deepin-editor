@@ -940,6 +940,9 @@ EditWrapper *Window::createEditor()
         updateJumpLineBar(wrapper->textEditor());
     }, Qt::QueuedConnection);
 
+    // Editor renderAllSelections执行完毕后，调用onEditorRenderAllFinish更新状态文字
+    connect(wrapper->textEditor(),&TextEdit::signal_renderAllFinish,this,&Window::onEditorRenderAllFinish,Qt::QueuedConnection);
+
     bool wordWrap = m_settings->settings->option("base.font.wordwrap")->value().toBool();
     wrapper->textEditor()->m_pIsShowCodeFoldArea = m_settings->settings->option("base.font.codeflod")->value().toBool();
     wrapper->OnThemeChangeSlot(m_themePath);
@@ -1546,6 +1549,10 @@ void Window::popupReplaceBar()
     int scrollOffset = wrapper->textEditor()->getScrollOffset();
 
     m_replaceBar->activeInput(text, tabPath, row, column, scrollOffset);
+
+    wrapper->textEditor()->highlightKeywordInView(text);
+    // set keywords
+    m_keywordForSearchAll = m_keywordForSearch = text;
 
     QTimer::singleShot(10, this, [ = ] { m_replaceBar->focus(); });
 }
@@ -3592,6 +3599,21 @@ void Window::setPrintEnabled(bool enabled)
             m_menu->actions().at(i)->setEnabled(enabled);
             return;
         }
+    }
+}
+
+void  Window::onEditorRenderAllFinish(QString status)
+{
+    EditWrapper *wrapper = currentWrapper();
+
+    if (currentWrapper() == nullptr) {
+        return;
+    }
+    if(m_findBar->isVisible()){
+        m_findBar->setStatusText(status);
+    }
+    if(m_replaceBar->isVisible()){
+        m_replaceBar->setStatusText(status);
     }
 }
 

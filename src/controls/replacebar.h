@@ -32,6 +32,7 @@ public:
     void activeInput(QString text, QString file, int row, int column, int scrollOffset);
     void setMismatchAlert(bool isAlert);
     void setsearched(bool _);
+    void setStatusText(QString text);
 
 Q_SIGNALS:
     void pressEsc();
@@ -77,6 +78,7 @@ private:
     QHBoxLayout *m_layout;
     QLabel *m_replaceLabel;
     QLabel *m_withLabel;
+    QLabel *m_statusLabel;
     QString m_replaceFile;
     int m_replaceFileColumn;
     int m_replaceFileRow;

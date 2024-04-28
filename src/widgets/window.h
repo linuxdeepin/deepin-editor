@@ -242,6 +242,8 @@ private:
     // 接收布局模式变更信号，更新界面布局
     Q_SLOT void updateSizeMode();
 
+    Q_SLOT void onEditorRenderAllFinish(QString text);
+
 protected:
     void resizeEvent(QResizeEvent *event) override;
     void closeEvent(QCloseEvent *event) override;
