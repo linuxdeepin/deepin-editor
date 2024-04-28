@@ -32,6 +32,7 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     m_replaceLine = new LineBar();
     m_withLabel = new QLabel(tr("Replace With"));
     m_withLine = new LineBar();
+    m_statusLabel = new QLabel(tr(""));
     m_replaceButton = new QPushButton(tr("Replace"));
     m_replaceSkipButton = new QPushButton(tr("Skip"));
     m_replaceRestButton = new QPushButton(tr("Replace Rest"));
@@ -46,6 +47,8 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     m_layout->addLayout(createVerticalLine(m_replaceLine));
     m_layout->addWidget(m_withLabel);
     m_layout->addLayout(createVerticalLine(m_withLine));
+
+    m_layout->addWidget(m_statusLabel);
     m_layout->addWidget(m_replaceButton);
     m_layout->addWidget(m_replaceSkipButton);
     m_layout->addWidget(m_replaceRestButton);
@@ -259,4 +262,9 @@ void ReplaceBar::setsearched(bool _)
 void ReplaceBar::change()
 {
     searched = false;
+}
+
+void ReplaceBar::setStatusText(QString str)
+{
+    m_statusLabel->setText(str);
 }

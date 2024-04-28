@@ -41,6 +41,7 @@ public:
     void receiveText(QString t);
     void setSearched(bool _);
     void findPreClicked();
+    void setStatusText(QString str);
 
 Q_SIGNALS:
     void pressEsc();
@@ -74,6 +75,7 @@ private:
     LineBar *m_editLine;
     QHBoxLayout *m_layout;
     QLabel *m_findLabel;
+    QLabel *m_statusLabel;
     QString m_findFile;
     int m_findFileColumn;
     int m_findFileRow;

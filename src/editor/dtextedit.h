@@ -476,6 +476,7 @@ signals:
     void popupNotify(QString notify);
     void signal_readingPath();
     void signal_setTitleFocus();
+    void signal_renderAllFinish(QString text);
 public slots:
     /**
      * @author liumaochuan ut000616
@@ -861,5 +862,7 @@ private:
     bool m_MidButtonPatse = false;      // 鼠标中键黏贴处理
     bool m_isPreeditBefore = false;     // 上一个输入法时间是否是 preedit
     int m_preeditLengthBefore = 0;
+    QString m_headStatusStr;
+    QString m_tailStatusStr;
 };
 #endif
