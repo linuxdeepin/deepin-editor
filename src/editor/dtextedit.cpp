@@ -2014,72 +2014,76 @@ bool TextEdit::updateKeywordSelectionsInView(QString keyword, QTextCharFormat ch
     // Clear keyword selections first.
     listSelection->clear();
 
-    // Update selections with keyword.
-    if (!keyword.isEmpty()) {
-        QTextCursor cursor(document());
-        QTextEdit::ExtraSelection extra;
-        extra.format = charFormat;
-
-        QScrollBar *pScrollBar = verticalScrollBar();
-        QPoint startPoint = QPointF(0, 0).toPoint();
-        QTextBlock beginBlock = cursorForPosition(startPoint).block();
-        int beginPos = beginBlock.position();
-        QTextBlock endBlock;
-
-        if (pScrollBar->maximum() > 0) {
-            QPoint endPoint = QPointF(0, 1.5 * height()).toPoint();
-            endBlock = cursorForPosition(endPoint).block();
-        } else {
-            endBlock = document()->lastBlock();
-        }
-        int endPos = endBlock.position() + endBlock.length() - 1;
-
-        // 内部计算时，均视为 \n 结尾
-        QLatin1Char endLine('\n');
-        QString multiLineText;
-        QTextDocument::FindFlags flags;
-        flags |= QTextDocument::FindCaseSensitively;
-        if (keyword.contains(endLine)) {
-            auto temp = this->textCursor();
-            temp.setPosition(beginPos);
-            while (temp.position() < endPos) {
-                temp.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
-                multiLineText += temp.selectedText();
-                multiLineText += endLine;
-                temp.setPosition(temp.position() + 1);
-            }
-            cursor = findCursor(keyword, multiLineText, 0, false, beginPos);
-        } else {
-            cursor = document()->find(keyword, beginPos, flags);
-        }
-
-        if (cursor.isNull()) {
-            return false;
-        }
-
-        while (!cursor.isNull()) {
-            extra.cursor = cursor;
-            /* 查找字符时，查找到完全相等的时候才高亮，如查找小写f时，大写的F不高亮 */
-            if (!extra.cursor.selectedText().compare(keyword) || keyword.contains(endLine)) {
-                listSelection->append(extra);
-            }
-
-            if (keyword.contains(endLine)) {
-                int pos = std::max(extra.cursor.position(), extra.cursor.anchor());
-                cursor = findCursor(keyword, multiLineText, pos - beginPos, false, beginPos);
-            } else {
-                cursor = document()->find(keyword, cursor, flags);
-            }
-
-            if (cursor.position() > endPos) {
-                break;
-            }
-        }
-
-        return true;
+    if (keyword.isEmpty()) {
+        return false;
     }
 
-    return false;
+    this->updateSearchStatus(keyword);
+
+    // Update selections with keyword.
+    QTextCursor cursor(document());
+    QTextEdit::ExtraSelection extra;
+    extra.format = charFormat;
+
+    QScrollBar *pScrollBar = verticalScrollBar();
+    QPoint startPoint = QPointF(0, 0).toPoint();
+    QTextBlock beginBlock = cursorForPosition(startPoint).block();
+    int beginPos = beginBlock.position();
+    QTextBlock endBlock;
+
+    if (pScrollBar->maximum() > 0) {
+        QPoint endPoint = QPointF(0, 1.5 * height()).toPoint();
+        endBlock = cursorForPosition(endPoint).block();
+    } else {
+        endBlock = document()->lastBlock();
+    }
+    int endPos = endBlock.position() + endBlock.length() - 1;
+
+    // 内部计算时，均视为 \n 结尾
+    QLatin1Char endLine('\n');
+    QString multiLineText;
+    QTextDocument::FindFlags flags;
+    flags |= QTextDocument::FindCaseSensitively;
+    if (keyword.contains(endLine)) {
+        auto temp = this->textCursor();
+        temp.setPosition(beginPos);
+        while (temp.position() < endPos) {
+            temp.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+            multiLineText += temp.selectedText();
+            multiLineText += endLine;
+            temp.setPosition(temp.position() + 1);
+        }
+        cursor = findCursor(keyword, multiLineText, 0, false, beginPos);
+    } else {
+        cursor = document()->find(keyword, beginPos, flags);
+    }
+
+    if (cursor.isNull()) {
+        return false;
+    }
+
+    
+
+    while (!cursor.isNull()) {
+        extra.cursor = cursor;
+        /* 查找字符时，查找到完全相等的时候才高亮，如查找小写f时，大写的F不高亮 */
+        if (!extra.cursor.selectedText().compare(keyword) || keyword.contains(endLine)) {
+            listSelection->append(extra);
+        }
+
+        if (keyword.contains(endLine)) {
+            int pos = std::max(extra.cursor.position(), extra.cursor.anchor());
+            cursor = findCursor(keyword, multiLineText, pos - beginPos, false, beginPos);
+        } else {
+            cursor = document()->find(keyword, cursor, flags);
+        }
+
+        if (cursor.position() > endPos) {
+            break;
+        }
+    }
+
+    return true;
 }
 
 bool TextEdit::searchKeywordSeletion(QString keyword, QTextCursor cursor, bool findNext)
@@ -2195,6 +2199,10 @@ void TextEdit::renderAllSelections()
 
     // 设置到 QPlainText 中进行渲染
     setExtraSelections(finalSelections);
+
+    QString status = m_searchCount == 0 ? QString("No Reuslt") : QString("%1/%2").arg(m_searchStep).arg(m_searchCount);
+    // 发射信号，通知window更新状态文字
+    Q_EMIT signal_renderAllFinish(this, status);
 }
 
 void TextEdit::updateMarkAllSelectColor()
@@ -8069,5 +8077,34 @@ void TextEdit::onTextContentChanged(int from, int charsRemoved, int charsAdded)
         (void)new MidButtonInsertTextUndoCommand(cursor, insertText, this, undo);
 
         m_MidButtonPatse = false;
+    }
+}
+
+void TextEdit::updateSearchStatus(const QString &keyword)
+{
+    QTextCursor currentCursor = textCursor();
+
+    if (currentCursor.isNull())
+    {
+        return;
+    }
+
+    // 记录当前cursor在结果列表中的位置
+    int anchorPosition = currentCursor.anchor();
+    m_searchCount = 0;
+
+    QString plainText = this->toPlainText();
+    m_searchCount = plainText.count(keyword);
+
+    int searchStart = -1;
+    for (size_t i = 0; i < m_searchCount; i++)
+    {
+        int appearPosition = plainText.indexOf(keyword, searchStart + 1);
+        if (appearPosition >= anchorPosition)
+        {
+            m_searchStep = i + 1;
+            break;
+        }
+        searchStart = appearPosition;
     }
 }

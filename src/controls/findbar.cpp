@@ -31,6 +31,7 @@ FindBar::FindBar(QWidget *parent)
     m_layout->setAlignment(Qt::AlignVCenter);
     m_findLabel = new QLabel(tr("Find"));
     m_editLine = new LineBar();
+    m_statusLabel = new QLabel(tr(""));
     m_findPrevButton = new QPushButton(tr("Previous"));
     m_findNextButton = new QPushButton(tr("Next"));
     m_closeButton = new DIconButton(DStyle::SP_CloseButton);
@@ -49,6 +50,7 @@ FindBar::FindBar(QWidget *parent)
     lineBarLayout->addItem(new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
     m_layout->addLayout(lineBarLayout);
 
+    m_layout->addWidget(m_statusLabel);
     m_layout->addWidget(m_findPrevButton);
     m_layout->addWidget(m_findNextButton);
     m_layout->addWidget(m_closeButton);
@@ -215,4 +217,9 @@ void FindBar::findPreClicked()
     } else {
         emit findPrev(m_editLine->lineEdit()->text());
     }
+}
+
+void FindBar::setStatusText(QString statusStr)
+{
+    m_statusLabel->setText(statusStr);
 }
