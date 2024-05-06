@@ -476,6 +476,7 @@ signals:
     void popupNotify(QString notify);
     void signal_readingPath();
     void signal_setTitleFocus();
+    void signal_renderAllFinish(const TextEdit *editor, const QString &statusText);
 public slots:
     /**
      * @author liumaochuan ut000616
@@ -606,6 +607,8 @@ private:
                              const QString &replaceText, const QString &withText, int offset = 0) const;
     // 查找行号line起始的折叠区域
     bool findFoldBlock(int line, QTextBlock &beginBlock, QTextBlock &endBlock, QTextBlock &curBlock);
+    // 更新 查找/替换 时位置信息
+    void updateSearchStatus(const QString &keyword);
 
 private slots:
     // 文档内容变更时触发
@@ -861,5 +864,7 @@ private:
     bool m_MidButtonPatse = false;      // 鼠标中键黏贴处理
     bool m_isPreeditBefore = false;     // 上一个输入法时间是否是 preedit
     int m_preeditLengthBefore = 0;
+    size_t m_searchStep = 0;
+    size_t m_searchCount = 0;
 };
 #endif
