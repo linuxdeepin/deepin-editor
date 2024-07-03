@@ -1679,7 +1679,7 @@ void TextEdit::updateFont()
     }
 }
 
-void TextEdit::replaceAll(const QString &replaceText, const QString &withText)
+void TextEdit::replaceAll(const QString &replaceText, const QString &withText, Qt::CaseSensitivity caseFlag)
 {
     if (m_readOnlyMode || m_bReadOnlyPermission) {
         return;
@@ -1694,8 +1694,6 @@ void TextEdit::replaceAll(const QString &replaceText, const QString &withText)
         return;
     }
 
-    QTextDocument::FindFlags flags;
-    flags &= QTextDocument::FindCaseSensitively;
     QTextCursor cursor = textCursor();
     cursor.movePosition(QTextCursor::Start);
     QTextCursor startCursor = textCursor();
@@ -1706,10 +1704,10 @@ void TextEdit::replaceAll(const QString &replaceText, const QString &withText)
     QList<TextEdit::MarkReplaceInfo> backupMarkList = convertMarkToReplace(m_markOperations);
     auto replaceList = backupMarkList;
     // 计算替换颜色标记信息
-    calcMarkReplaceList(replaceList, oldText, replaceText, withText);
+    calcMarkReplaceList(replaceList, oldText, replaceText, withText, 0, caseFlag);
 
     QString newText = oldText;
-    newText.replace(replaceText, withText);
+    newText.replace(replaceText, withText, caseFlag);
 
     if (oldText != newText) {
         ChangeMarkCommand *pChangeMark = new ChangeMarkCommand(this, backupMarkList, replaceList);
@@ -1719,7 +1717,7 @@ void TextEdit::replaceAll(const QString &replaceText, const QString &withText)
     }
 }
 
-void TextEdit::replaceNext(const QString &replaceText, const QString &withText)
+void TextEdit::replaceNext(const QString &replaceText, const QString &withText, Qt::CaseSensitivity caseFlag)
 {
     if (m_readOnlyMode || m_bReadOnlyPermission) {
         return;
@@ -1799,7 +1797,7 @@ void TextEdit::replaceNext(const QString &replaceText, const QString &withText)
     }
 
     QString strSelection(cursor.selectedText());
-    if (!strSelection.compare(replaceText) || replaceText.contains("\n")) {
+    if (!strSelection.compare(replaceText, caseFlag) || replaceText.contains("\n")) {
         ChangeMarkCommand *pChangeMark = new ChangeMarkCommand(this, backupMarkList, replaceList);
         // 设置插入撤销项为颜色标记变更撤销项的子项
         new InsertTextUndoCommand(cursor, withText, this, pChangeMark);
@@ -1809,10 +1807,10 @@ void TextEdit::replaceNext(const QString &replaceText, const QString &withText)
 
     // Update cursor.
     setTextCursor(cursor);
-    highlightKeyword(replaceText, getPosition());
+    highlightKeyword(replaceText, getPosition(), caseFlag);
 }
 
-void TextEdit::replaceRest(const QString &replaceText, const QString &withText)
+void TextEdit::replaceRest(const QString &replaceText, const QString &withText, Qt::CaseSensitivity caseFlag)
 {
     if (m_readOnlyMode || m_bReadOnlyPermission) {
         return;
@@ -1828,9 +1826,6 @@ void TextEdit::replaceRest(const QString &replaceText, const QString &withText)
         return;
     }
 
-    QTextDocument::FindFlags flags;
-    flags &= QTextDocument::FindCaseSensitively;
-
     QTextCursor cursor = textCursor();
     QTextCursor startCursor = textCursor();
     startCursor.beginEditBlock();
@@ -1844,9 +1839,9 @@ void TextEdit::replaceRest(const QString &replaceText, const QString &withText)
     QList<TextEdit::MarkReplaceInfo> backupMarkList = convertMarkToReplace(m_markOperations);
     auto replaceList = backupMarkList;
     // 计算替换颜色标记信息
-    calcMarkReplaceList(replaceList, right, replaceText, withText, pos);
+    calcMarkReplaceList(replaceList, right, replaceText, withText, pos, caseFlag);
 
-    right.replace(replaceText, withText);
+    right.replace(replaceText, withText, caseFlag);
     newText += right;
 
     if (oldText != newText) {
@@ -1860,10 +1855,10 @@ void TextEdit::replaceRest(const QString &replaceText, const QString &withText)
     setTextCursor(startCursor);
 }
 
-void TextEdit::beforeReplace(const QString &strReplaceText)
+void TextEdit::beforeReplace(const QString &strReplaceText, Qt::CaseSensitivity caseFlag)
 {
     if (strReplaceText.isEmpty() || !m_findHighlightSelection.cursor.hasSelection()) {
-        highlightKeyword(strReplaceText, getPosition());
+        highlightKeyword(strReplaceText, getPosition(), caseFlag);
     }
 }
 
@@ -1879,8 +1874,9 @@ bool TextEdit::findKeywordForward(const QString &keyword)
         //setTextCursor(cursor);
 
         QTextDocument::FindFlags options;
-        options &= QTextDocument::FindCaseSensitively;
-
+        if (Qt::CaseSensitive == defaultCaseSensitive) {
+            options &= QTextDocument::FindCaseSensitively;
+        }
         bool foundOne = find(keyword, options);
 
         cursor.setPosition(endPos, QTextCursor::MoveAnchor);
@@ -1896,8 +1892,9 @@ bool TextEdit::findKeywordForward(const QString &keyword)
         //setTextCursor(cursor);
 
         QTextDocument::FindFlags options;
-        options &= QTextDocument::FindCaseSensitively;
-
+        if (Qt::CaseSensitive == defaultCaseSensitive) {
+            options &= QTextDocument::FindCaseSensitively;
+        }
         bool foundOne = find(keyword, options);
 
         //setTextCursor(recordCursor);
@@ -1920,22 +1917,22 @@ void TextEdit::removeKeywords()
     //setFocus();
 }
 
-bool TextEdit::highlightKeyword(QString keyword, int position)
+bool TextEdit::highlightKeyword(const QString &keyword, int position, Qt::CaseSensitivity caseFlag)
 {
     Q_UNUSED(position)
     m_findMatchSelections.clear();
     updateHighlightLineSelection();
     updateCursorKeywordSelection(keyword, true);
-    bool bRet = updateKeywordSelectionsInView(keyword, m_findMatchFormat, &m_findMatchSelections);
+    bool bRet = updateKeywordSelectionsInView(keyword, m_findMatchFormat, &m_findMatchSelections, caseFlag);
     renderAllSelections();
 
     return bRet;
 }
 
-bool TextEdit::highlightKeywordInView(QString keyword)
+bool TextEdit::highlightKeywordInView(const QString &keyword, Qt::CaseSensitivity caseFlag)
 {
     m_findMatchSelections.clear();
-    bool bRet = updateKeywordSelectionsInView(keyword, m_findMatchFormat, &m_findMatchSelections);
+    bool bRet = updateKeywordSelectionsInView(keyword, m_findMatchFormat, &m_findMatchSelections, caseFlag);
     // 直接设置 setExtraSelections 会导致无法显示颜色标记，调用 renderAllSelections 进行显示更新
     // setExtraSelections(m_findMatchSelections);
     renderAllSelections();
@@ -1988,7 +1985,9 @@ bool TextEdit::updateKeywordSelections(QString keyword, QTextCharFormat charForm
     if (!keyword.isEmpty()) {
         QTextCursor cursor(document());
         QTextDocument::FindFlags flags;
-        flags |= QTextDocument::FindCaseSensitively;
+        if (Qt::CaseSensitive == defaultCaseSensitive) {
+            flags |= QTextDocument::FindCaseSensitively;
+        }
         QTextEdit::ExtraSelection extra;
         extra.format = charFormat;
         cursor = document()->find(keyword, cursor, flags);
@@ -2009,7 +2008,8 @@ bool TextEdit::updateKeywordSelections(QString keyword, QTextCharFormat charForm
     return false;
 }
 
-bool TextEdit::updateKeywordSelectionsInView(QString keyword, QTextCharFormat charFormat, QList<QTextEdit::ExtraSelection> *listSelection)
+bool TextEdit::updateKeywordSelectionsInView(QString keyword, QTextCharFormat charFormat,
+                                             QList<QTextEdit::ExtraSelection> *listSelection, Qt::CaseSensitivity caseFlag)
 {
     // Clear keyword selections first.
     listSelection->clear();
@@ -2038,7 +2038,9 @@ bool TextEdit::updateKeywordSelectionsInView(QString keyword, QTextCharFormat ch
         QLatin1Char endLine('\n');
         QString multiLineText;
         QTextDocument::FindFlags flags;
-        flags |= QTextDocument::FindCaseSensitively;
+        if (Qt::CaseSensitive == caseFlag) {
+            flags |= QTextDocument::FindCaseSensitively;
+        }
         if (keyword.contains(endLine)) {
             auto temp = this->textCursor();
             temp.setPosition(beginPos);
@@ -2048,7 +2050,7 @@ bool TextEdit::updateKeywordSelectionsInView(QString keyword, QTextCharFormat ch
                 multiLineText += endLine;
                 temp.setPosition(temp.position() + 1);
             }
-            cursor = findCursor(keyword, multiLineText, 0, false, beginPos);
+            cursor = findCursor(keyword, multiLineText, 0, false, beginPos, caseFlag);
         } else {
             cursor = document()->find(keyword, beginPos, flags);
         }
@@ -2059,14 +2061,16 @@ bool TextEdit::updateKeywordSelectionsInView(QString keyword, QTextCharFormat ch
 
         while (!cursor.isNull()) {
             extra.cursor = cursor;
+            // 调整为不区分大小写
+            Qt::CaseSensitivity option = defaultCaseSensitive;
             /* 查找字符时，查找到完全相等的时候才高亮，如查找小写f时，大写的F不高亮 */
-            if (!extra.cursor.selectedText().compare(keyword) || keyword.contains(endLine)) {
+            if (!extra.cursor.selectedText().compare(keyword, option) || keyword.contains(endLine, option)) {
                 listSelection->append(extra);
             }
 
             if (keyword.contains(endLine)) {
                 int pos = std::max(extra.cursor.position(), extra.cursor.anchor());
-                cursor = findCursor(keyword, multiLineText, pos - beginPos, false, beginPos);
+                cursor = findCursor(keyword, multiLineText, pos - beginPos, false, beginPos, caseFlag);
             } else {
                 cursor = document()->find(keyword, cursor, flags);
             }
@@ -2092,10 +2096,15 @@ bool TextEdit::searchKeywordSeletion(QString keyword, QTextCursor cursor, bool f
     int offsetLines = 3;
 
     if (findNext) {
-        QTextCursor next = document()->find(keyword, cursor, QTextDocument::FindCaseSensitively);
+        QTextDocument::FindFlags options;
+        if (Qt::CaseSensitive == defaultCaseSensitive) {
+            options &= QTextDocument::FindCaseSensitively;
+        }
+
+        QTextCursor next = document()->find(keyword, cursor, options);
         if (keyword.contains("\n")) {
             int pos = std::max(cursor.position(), cursor.anchor());
-            next = findCursor(keyword, this->toPlainText(), pos);
+            next = findCursor(keyword, this->toPlainText(), pos, false, 0, defaultCaseSensitive);
         }
         if (!next.isNull()) {
             m_findHighlightSelection.cursor = next;
@@ -2104,10 +2113,15 @@ bool TextEdit::searchKeywordSeletion(QString keyword, QTextCursor cursor, bool f
             ret = true;
         }
     } else {
-        QTextCursor prev = document()->find(keyword, cursor, QTextDocument::FindBackward | QTextDocument::FindCaseSensitively);
+        QTextDocument::FindFlags options = QTextDocument::FindBackward;
+        if (Qt::CaseSensitive == defaultCaseSensitive) {
+            options &= QTextDocument::FindCaseSensitively;
+        }
+
+        QTextCursor prev = document()->find(keyword, cursor, options);
         if (keyword.contains("\n")) {
             int pos = std::min(cursor.position(), cursor.anchor());
-            prev = findCursor(keyword, this->toPlainText().mid(0, pos), -1, true);
+            prev = findCursor(keyword, this->toPlainText().mid(0, pos), -1, true, defaultCaseSensitive);
         }
         if (!prev.isNull()) {
             m_findHighlightSelection.cursor = prev;
@@ -2986,7 +3000,8 @@ void TextEdit::moveText(int from, int to, const QString &text, bool copy)
  *        cursorPos: text起始位置在全文本中的位置
  * @return
  */
-QTextCursor TextEdit::findCursor(const QString &substr, const QString &text, int from, bool backward, int cursorPos)
+QTextCursor TextEdit::findCursor(const QString &substr, const QString &text, int from, bool backward,
+                                 int cursorPos, Qt::CaseSensitivity caseFlag)
 {
     // 处理换行符为 \r\n (光标计算时被视为单个字符)的情况，移除多计算的字符数
     // text 均为 \n 结尾
@@ -2997,9 +3012,9 @@ QTextCursor TextEdit::findCursor(const QString &substr, const QString &text, int
 
     int index = -1;
     if (backward) {
-        index = text.lastIndexOf(findSubStr, from);
+        index = text.lastIndexOf(findSubStr, from, caseFlag);
     } else {
-        index = text.indexOf(findSubStr, from);
+        index = text.indexOf(findSubStr, from, caseFlag);
     }
     if (-1 != index) {
         auto cursor = this->textCursor();
@@ -5272,7 +5287,8 @@ static void updateMarkReplaceRange(const QList<int> &foundPosList, TextEdit::Mar
  * @li MarkAll 全文颜色标记
  *      1. 替换前后不进行特殊处理
  */
-void TextEdit::calcMarkReplaceList(QList<TextEdit::MarkReplaceInfo> &replaceList, const QString &oldText, const QString &replaceText, const QString &withText, int offset) const
+void TextEdit::calcMarkReplaceList(QList<TextEdit::MarkReplaceInfo> &replaceList, const QString &oldText,
+                                   const QString &replaceText, const QString &withText, int offset, Qt::CaseSensitivity caseFlag) const
 {
     // 当前替换项为空或相同，退出
     if (replaceList.isEmpty()
@@ -5312,7 +5328,7 @@ void TextEdit::calcMarkReplaceList(QList<TextEdit::MarkReplaceInfo> &replaceList
     QList<int> foundPosList;
 
     // 查找替换位置，遍历查找替换文本出现位置
-    int findPos = oldText.indexOf(replaceText, findOffset);
+    int findPos = oldText.indexOf(replaceText, findOffset, caseFlag);
     // 需要取得左侧所有的变更相对偏移，从文本左侧开始循环遍历
     while (-1 != findPos
             && currentMarkIndex < replaceList.size()) {
@@ -5372,7 +5388,7 @@ void TextEdit::calcMarkReplaceList(QList<TextEdit::MarkReplaceInfo> &replaceList
 
         // 继续查找替换文本位置
         findOffset = findPos + replaceText.size();
-        findPos = oldText.indexOf(replaceText, findOffset);
+        findPos = oldText.indexOf(replaceText, findOffset, caseFlag);
     }
 
     // 继续处理剩余颜色标记偏移
