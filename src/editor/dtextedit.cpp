@@ -1875,7 +1875,7 @@ bool TextEdit::findKeywordForward(const QString &keyword)
 
         QTextDocument::FindFlags options;
         if (Qt::CaseSensitive == defaultCaseSensitive) {
-            options &= QTextDocument::FindCaseSensitively;
+            options |= QTextDocument::FindCaseSensitively;
         }
         bool foundOne = find(keyword, options);
 
@@ -1893,7 +1893,7 @@ bool TextEdit::findKeywordForward(const QString &keyword)
 
         QTextDocument::FindFlags options;
         if (Qt::CaseSensitive == defaultCaseSensitive) {
-            options &= QTextDocument::FindCaseSensitively;
+            options |= QTextDocument::FindCaseSensitively;
         }
         bool foundOne = find(keyword, options);
 
@@ -2098,7 +2098,7 @@ bool TextEdit::searchKeywordSeletion(QString keyword, QTextCursor cursor, bool f
     if (findNext) {
         QTextDocument::FindFlags options;
         if (Qt::CaseSensitive == defaultCaseSensitive) {
-            options &= QTextDocument::FindCaseSensitively;
+            options |= QTextDocument::FindCaseSensitively;
         }
 
         QTextCursor next = document()->find(keyword, cursor, options);
@@ -2115,7 +2115,7 @@ bool TextEdit::searchKeywordSeletion(QString keyword, QTextCursor cursor, bool f
     } else {
         QTextDocument::FindFlags options = QTextDocument::FindBackward;
         if (Qt::CaseSensitive == defaultCaseSensitive) {
-            options &= QTextDocument::FindCaseSensitively;
+            options |= QTextDocument::FindCaseSensitively;
         }
 
         QTextCursor prev = document()->find(keyword, cursor, options);
