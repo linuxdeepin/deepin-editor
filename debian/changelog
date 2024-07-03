@@ -1,3 +1,10 @@
+deepin-editor (6.0.18) unstable; urgency=medium
+
+  * fix: Change default search to be case insensitive(Bug: 262733)
+  * fix: Wrong case sensitive config(Bug: 262733)
+
+ -- renbin <renbin@uniontech.com>  Wed, 03 Jul 2024 18:14:32 +0800
+
 deepin-editor (6.0.17) unstable; urgency=medium
 
   * feat: Change default shortcuts popup position(Task: 332267)(Influence: Shortcuts)
