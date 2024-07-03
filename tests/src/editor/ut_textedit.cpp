@@ -1801,6 +1801,7 @@ TEST(UT_test_textedit_replaceAll, UT_test_textedit_replaceAll_002)
     QString strRetAfter(pWindow->currentWrapper()->textEditor()->toPlainText());
 
     ASSERT_TRUE(!strRetAfter.compare(strRetBefore));
+
     pWindow->deleteLater();
 }
 
@@ -1819,6 +1820,35 @@ TEST(UT_test_textedit_replaceAll, UT_test_textedit_replaceAll_003)
     QString strRetAfter(pWindow->currentWrapper()->textEditor()->toPlainText());
 
     ASSERT_TRUE(!strRetAfter.compare(QString("Holle Holle\nHolle Holle")));
+
+    pWindow->currentWrapper()->textEditor()->replaceAll(QString("holle"), QString("World"));
+    strRetAfter = QString(pWindow->currentWrapper()->textEditor()->toPlainText());
+    ASSERT_TRUE(!strRetAfter.compare(QString("World World\nWorld World")));
+
+    pWindow->deleteLater();
+}
+
+//replaceAll check case sensitive
+TEST(UT_test_textedit_replaceAll, UT_test_textedit_replaceAll_CaseSensitive)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    auto *textEdit = pWindow->currentWrapper()->textEditor();
+
+    // NotChange
+    textEdit->replaceAll(QString("hello"), QString("world"), Qt::CaseSensitive);
+    ASSERT_TRUE(!textEdit->toPlainText().compare(strMsg));
+
+    textEdit->replaceAll(QString("hello"), QString("World"), Qt::CaseInsensitive);
+    ASSERT_TRUE(!textEdit->toPlainText().compare(QString("World world\nWorld world")));
+
+    textEdit->replaceAll(QString("world"), QString("World"), Qt::CaseInsensitive);
+    ASSERT_TRUE(!textEdit->toPlainText().compare(QString("World World\nWorld World")));
+
     pWindow->deleteLater();
 }
 
@@ -1909,6 +1939,38 @@ TEST(UT_test_textedit_replaceNext, UT_test_textedit_replaceNext_004)
     pWindow->deleteLater();
 }
 
+//replaceNext check sensitive
+TEST(UT_test_textedit_replaceNext, UT_test_textedit_replaceNext_CaseSensitive)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    auto *textEdit = pWindow->currentWrapper()->textEditor();
+    QTextCursor textCursor = textEdit->textCursor();
+    textEdit->insertTextEx(textCursor, strMsg);
+
+    textCursor = textEdit->textCursor();
+    textCursor.movePosition(QTextCursor::Start);
+    textCursor.movePosition(QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
+    textEdit->setTextCursor(textCursor);
+    textEdit->m_findHighlightSelection.cursor = textCursor;
+
+    QString strReplaceText("hello");
+    QString strWithText("World");
+    QString strRetBefore(textEdit->textCursor().block().text());
+
+    textEdit->replaceNext(strReplaceText, strWithText, Qt::CaseSensitive);
+    QString strRetAfter(textEdit->textCursor().block().text());
+    ASSERT_TRUE(!strRetAfter.compare(strRetBefore));
+
+    textEdit->setTextCursor(textCursor);
+    textEdit->m_findHighlightSelection.cursor = textCursor;
+    textEdit->replaceNext(strReplaceText, strWithText, Qt::CaseInsensitive);
+    ASSERT_TRUE(!textEdit->toPlainText().compare("World world\nHello world"));
+
+    pWindow->deleteLater();
+}
+
 //replaceRest 001
 TEST(UT_test_textedit_replaceRest, UT_test_textedit_replaceRest_001)
 {
@@ -1969,6 +2031,33 @@ TEST(UT_test_textedit_replaceRest, UT_test_textedit_replaceRest_003)
     ASSERT_TRUE(!strRetAfter.compare(QString("Helle Helle Helle Helle")));
     pWindow->deleteLater();
 }
+
+//replaceRest check case sensitive
+TEST(UT_test_textedit_replaceRest, UT_test_textedit_replaceRest_CaseSensitive)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world Hello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    QString strReplaceText("World");
+    QString strWithText("Hello");
+    QString strRetBefore(pWindow->currentWrapper()->textEditor()->textCursor().block().text());
+    pWindow->currentWrapper()->textEditor()->replaceRest(strReplaceText, strWithText, Qt::CaseSensitive);
+    QString strRetAfter(pWindow->currentWrapper()->textEditor()->textCursor().block().text());
+    ASSERT_TRUE(!strRetAfter.compare(strRetBefore));
+
+    pWindow->currentWrapper()->textEditor()->replaceRest(strReplaceText, strWithText, Qt::CaseInsensitive);
+    strRetAfter = QString(pWindow->currentWrapper()->textEditor()->textCursor().block().text());
+    ASSERT_TRUE(!strRetAfter.compare("Hello Hello Hello Hello"));
+
+    pWindow->deleteLater();
+}
+
 
 //beforeReplace
 TEST(UT_test_textedit_beforeReplace, UT_test_textedit_beforeReplace_001)
@@ -2047,6 +2136,27 @@ TEST(UT_test_textedit_highlightKeyword, UT_test_textedit_highlightKeyword_001)
     bool bRet = pWindow->currentWrapper()->textEditor()->highlightKeyword(QString("world"), 0);
 
     ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
+}
+
+//highlightKeyword case sensitive
+TEST(UT_test_textedit_highlightKeyword, UT_test_textedit_highlightKeyword_CaseSensitive)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    bool bRet = pWindow->currentWrapper()->textEditor()->highlightKeyword(QString("World"), 0);
+    ASSERT_TRUE(bRet);
+
+    bRet = pWindow->currentWrapper()->textEditor()->highlightKeyword(QString("hello"), 0);
+    ASSERT_TRUE(bRet);
+
+    bRet = pWindow->currentWrapper()->textEditor()->highlightKeyword(QString("World"), 0, Qt::CaseSensitive);
+    ASSERT_FALSE(bRet);
+
     pWindow->deleteLater();
 }
 
@@ -2130,8 +2240,12 @@ TEST(UT_test_textedit_updateKeywordSelections, UT_test_textedit_updateKeywordSel
     QList<QTextEdit::ExtraSelection> listExtraSelection;
     listExtraSelection.append(extraSelection);
     bool bRet = pWindow->currentWrapper()->textEditor()->updateKeywordSelections(QString("smile"), charFormat, listExtraSelection);
-
     ASSERT_TRUE(bRet == false);
+
+    pWindow->currentWrapper()->textEditor()->defaultCaseSensitive = Qt::CaseSensitive;
+    bRet = pWindow->currentWrapper()->textEditor()->updateKeywordSelections(QString("World"), charFormat, listExtraSelection);
+    ASSERT_TRUE(bRet == false);
+
     pWindow->deleteLater();
 }
 
@@ -2151,8 +2265,11 @@ TEST(UT_test_textedit_updateKeywordSelections, UT_test_textedit_updateKeywordSel
     QList<QTextEdit::ExtraSelection> listExtraSelection;
     listExtraSelection.append(extraSelection);
     bool bRet = pWindow->currentWrapper()->textEditor()->updateKeywordSelections(QString("world"), charFormat, listExtraSelection);
-
     ASSERT_TRUE(bRet == true);
+
+    bRet = pWindow->currentWrapper()->textEditor()->updateKeywordSelections(QString("World"), charFormat, listExtraSelection);
+    ASSERT_TRUE(bRet == true);
+
     pWindow->deleteLater();
 }
 
