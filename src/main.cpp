@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2024 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -38,7 +38,9 @@ int main(int argc, char *argv[])
         setenv("XDG_CURRENT_DESKTOP", "Deepin", 1);
     }
 
-    qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
+    if (Utils::isWayland() && !Utils::isTreeland()) {
+        qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
+    }
     QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
     // QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 

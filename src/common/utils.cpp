@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2024 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -872,18 +872,20 @@ QString Utils::getSystemLan()
 
 /**
  * @return 获取当前系统版本并返回
+ * @note 现在大于 V23 的环境同样返回V23
+ *
+ * TODO: 新版镜像稳定后更新为更新的版本
  */
 Utils::SystemVersion Utils::getSystemVersion()
 {
     QString version = DSysInfo::majorVersion();
-    if ("23" == version) {
+    if (version.toInt() >= 23) {
         return V23;
     }
 
     // 其它版本默认V20
     return V20;
 }
-
 
 //judge whether the protocol is wayland
 bool Utils::isWayland()
@@ -894,7 +896,14 @@ bool Utils::isWayland()
     }
 
     return protocol.contains("wayland");
+}
 
+/**
+   @return 返回当前桌面环境是否是 Treeland
+ */
+bool Utils::isTreeland()
+{
+    return qEnvironmentVariable("DDE_CURRENT_COMPOSITOR") == QStringLiteral("TreeLand");
 }
 
 QString Utils::lineFeed(const QString &text, int nWidth, const QFont &font, int nElidedRow)
