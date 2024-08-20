@@ -2,8 +2,8 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#ifndef IndentTextCommond_H
-#define IndentTextCommond_H
+#ifndef IndentTextCommand_H
+#define IndentTextCommand_H
 
 #include <QUndoCommand>
 #include <QTextCursor>
@@ -11,11 +11,11 @@
 #include <QPlainTextEdit>
 class TextEdit;
 //indent text in front of multiple lines
-class IndentTextCommond:public QUndoCommand
+class IndentTextCommand:public QUndoCommand
 {
 public:
-    IndentTextCommond(TextEdit* edit,int startpos,int endpos,int startline,int endline);
-    virtual ~IndentTextCommond();
+    IndentTextCommand(TextEdit* edit,int startpos,int endpos,int startline,int endline);
+    virtual ~IndentTextCommand();
 
     virtual void redo();
     virtual void undo();
@@ -35,4 +35,4 @@ private:
 
 };
 
-#endif // IndentTextCommond_H
+#endif // IndentTextCommand_H

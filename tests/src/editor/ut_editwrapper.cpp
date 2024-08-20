@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -25,7 +25,7 @@ bool rettruestub()
     return true;
 }
 
-QStringList stringList = {"123","456"};
+QStringList stringList = {"/tmp/ut_123.txt","/tmp/ut_456.txt"};
 QStringList retstringliststub()
 {
     return stringList;
@@ -131,7 +131,6 @@ void hideWarningNotices_stub()
 //bool saveFile_001();
 TEST(UT_Editwrapper_saveFile, UT_Editwrapper_saveFile_001)
 {
-    /*
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
     pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
@@ -145,10 +144,9 @@ TEST(UT_Editwrapper_saveFile, UT_Editwrapper_saveFile_001)
         stub.set(pWindow->currentWrapper()->saveFile(), saveFile_001_stub());
         bRet = pWindow->currentWrapper()->saveFile();
     }
-    ASSERT_TRUE(bRet == true);
+    EXPECT_TRUE(bRet == true);
 
     pWindow->deleteLater();
-    */
 }
 
 bool saveFile_002_stub()
@@ -159,7 +157,6 @@ bool saveFile_002_stub()
 //bool saveFile_002();
 TEST(UT_Editwrapper_saveFile, UT_Editwrapper_saveFile_002)
 {
-    /*
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
     bool bRet = pWindow->currentWrapper()->saveFile();
@@ -170,17 +167,14 @@ TEST(UT_Editwrapper_saveFile, UT_Editwrapper_saveFile_002)
         stub.set(pWindow->currentWrapper()->saveFile(), saveFile_002_stub());
         bRet = pWindow->currentWrapper()->saveFile();
     }
-    ASSERT_TRUE(bRet == true);
+    EXPECT_TRUE(bRet == true);
 
-    delete pWindow;
-    pWindow = nullptr;
-    */
+    pWindow->deleteLater();
 }
 
 //bool saveFile_003();
 TEST(UT_Editwrapper_saveFile, UT_Editwrapper_saveFile_003)
 {
-    /*
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
     pWindow->currentWrapper()->textEditor()->m_sFilePath = QString("");
@@ -188,16 +182,13 @@ TEST(UT_Editwrapper_saveFile, UT_Editwrapper_saveFile_003)
     Stub stubNotices;
     stubNotices.set(ADDR(EditWrapper, hideWarningNotices), hideWarningNotices_stub);
     bool bRet = pWindow->currentWrapper()->saveFile();
-    ASSERT_TRUE(bRet == false);
+    EXPECT_TRUE(bRet == false);
 
-    delete pWindow;
-    pWindow = nullptr;
-    */
+    pWindow->deleteLater();
 }
 
 TEST(UT_Editwrapper_saveFile, UT_Editwrapper_saveFile_004)
 {
-    /*
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
     pWindow->currentWrapper()->textEditor()->m_sFilePath = QString("");
@@ -214,15 +205,13 @@ TEST(UT_Editwrapper_saveFile, UT_Editwrapper_saveFile_004)
     s2.set(ADDR(QByteArray,isEmpty),rettruestub);
 
     bool bRet = pWindow->currentWrapper()->saveFile();
+    EXPECT_TRUE(bRet);
 
-    delete pWindow;
-    pWindow = nullptr;
-    */
+    pWindow->deleteLater();
 }
 
 TEST(UT_Editwrapper_saveFile, UT_Editwrapper_saveFile_005)
 {
-    /*
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
     pWindow->currentWrapper()->textEditor()->m_sFilePath = QString("");
@@ -243,11 +232,51 @@ TEST(UT_Editwrapper_saveFile, UT_Editwrapper_saveFile_005)
 
     intvalue=0;
     bool bRet = pWindow->currentWrapper()->saveFile();
+    EXPECT_TRUE(bRet);
 
-    delete pWindow;
-    pWindow = nullptr;
-    */
+    pWindow->deleteLater();
 }
+
+
+TEST(UT_Editwrapper_saveFile, UT_Editwrapper_saveFile_with_encode)
+{
+    Window *pWindow = new Window;
+    pWindow->addBlankTab(QString());
+    QString tmpFilePath("/tmp/UT_Editwrapper_saveFile.txt");
+    pWindow->currentWrapper()->textEditor()->m_sFilePath = tmpFilePath;
+    pWindow->currentWrapper()->textEditor()->m_qstrTruePath = tmpFilePath;
+
+    QByteArray encoding("GB18030");
+    QByteArray utfData("\u4e2d\u6587\u6d4b\u8bd5\u4e00\u4e8c\u4e09\u56db\u0031\u0032\u0033\u0034\u0035\u0036\u0037"
+                       "\u0038\u0039\u0061\u0062\u0063\u0064\u0065\u0066\u0067\u0068");
+    pWindow->currentWrapper()->textEditor()->setPlainText(QString::fromUtf8(utfData));
+
+    Stub stubNotices;
+    stubNotices.set(ADDR(EditWrapper, hideWarningNotices), hideWarningNotices_stub);
+    intvalue = 1;
+    typedef int (*Fptr)(QFileDialog *);
+    Fptr fptr = (Fptr)(&QFileDialog::exec);
+    Stub s1;
+    s1.set(fptr,retintstub);
+
+    intvalue = 1;
+    bool bRet = pWindow->currentWrapper()->saveFile(encoding);
+    EXPECT_TRUE(bRet);
+
+    QFile tmpFile(tmpFilePath);
+    EXPECT_TRUE(tmpFile.exists());
+    QByteArray saveData;
+    if (tmpFile.open(QFile::ReadOnly | QFile::Text)) {
+        saveData = tmpFile.readAll();
+        tmpFile.close();
+    }
+
+    QTextCodec *codec = QTextCodec::codecForName(encoding);
+    EXPECT_EQ(codec->fromUnicode(utfData), saveData);
+
+    pWindow->deleteLater();
+}
+
 
 //bool saveAsFile_001(const QString &newFilePath, QByteArray encodeName);
 TEST(UT_Editwrapper_saveAsFile_001, UT_Editwrapper_saveAsFile_001)
@@ -257,7 +286,7 @@ TEST(UT_Editwrapper_saveAsFile_001, UT_Editwrapper_saveAsFile_001)
     pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
                                                           QString("12345"));
     bool bRet = pWindow->currentWrapper()->saveAsFile(QString(), QByteArray("UTF-8"));
-    ASSERT_TRUE(bRet == false);
+    EXPECT_FALSE(bRet);
 
     pWindow->deleteLater();
 }
@@ -270,31 +299,24 @@ bool saveAsFile_002_stub()
 //bool saveAsFile_001(const QString &newFilePath, QByteArray encodeName);
 TEST(UT_Editwrapper_saveAsFile, UT_Editwrapper_saveAsFile_002)
 {
-    /*
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
     pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
                                                           QString("12345"));
     QString newFilePaht(pWindow->currentWrapper()->textEditor()->getTruePath());
     bool bRet = pWindow->currentWrapper()->saveAsFile(newFilePaht, QByteArray("UTF-8"));
-    if (bRet == false) {
-        Stub stub;
-        stub.set(pWindow->currentWrapper()->saveAsFile(), saveAsFile_002_stub());
-    }
-    ASSERT_TRUE(bRet == true);
+    EXPECT_TRUE(bRet);
 
     pWindow->deleteLater();
-    */
 }
 
 TEST(UT_Editwrapper_saveAsFile, UT_Editwrapper_saveAsFile_003)
 {
-    /*
     Window *pWindow = new Window();
     pWindow->addBlankTab(QString());
     pWindow->currentWrapper()->textEditor()->insertTextEx(pWindow->currentWrapper()->textEditor()->textCursor(),
                                                           QString("12345"));
-
+    intvalue = 1;
     typedef int (*Fptr)(QFileDialog *);
     Fptr fptr = (Fptr)(&QFileDialog::exec);
     Stub s1;
@@ -302,7 +324,6 @@ TEST(UT_Editwrapper_saveAsFile, UT_Editwrapper_saveAsFile_003)
 
     Stub s2;
     s2.set(ADDR(QString,isEmpty),retfalsestub);
-
     Stub s3;
     s3.set(ADDR(QFileDialog,selectedFiles),retstringliststub);
 
@@ -313,9 +334,69 @@ TEST(UT_Editwrapper_saveAsFile, UT_Editwrapper_saveAsFile_003)
 
     bool bRet = pWindow->currentWrapper()->saveAsFile();
 
-    EXPECT_NE(bRet,true);
+    EXPECT_TRUE(bRet);
     pWindow->deleteLater();
-    */
+}
+
+// bool saveAsFile(const QString &newFilePath, const QByteArray &encodeName);
+TEST(UT_Editwrapper_saveAsFile, UT_Editwrapper_saveFile_with_change_encoding)
+{
+    Window *pWindow = new Window;
+    QString saveAsPath("/tmp/ut_saveAsFile.txt");
+    QByteArray encoding("GB18030");
+    // Utf8 Text: 中文测试一二三四123456789abcdefgh
+    QByteArray utfData("\u4e2d\u6587\u6d4b\u8bd5\u4e00\u4e8c\u4e09\u56db\u0031\u0032\u0033\u0034\u0035\u0036\u0037"
+                       "\u0038\u0039\u0061\u0062\u0063\u0064\u0065\u0066\u0067\u0068");
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->setPlainText(QString::fromUtf8(utfData));
+
+    // 默认文本编码为 UTF-8, 转换为 GB18030
+    bool ret = pWindow->currentWrapper()->saveAsFile(saveAsPath, encoding);
+    EXPECT_TRUE(ret);
+
+    QFile saveAsFile(saveAsPath);
+    EXPECT_TRUE(saveAsFile.open(QFile::ReadOnly | QFile::Text));
+    QByteArray saveData = saveAsFile.readAll();
+    saveAsFile.close();
+    saveAsFile.remove();
+
+    QTextCodec *codec = QTextCodec::codecForName(encoding);
+    EXPECT_EQ(codec->fromUnicode(utfData), saveData);
+
+    pWindow->deleteLater();
+}
+
+// bool saveAsFile(const QString &newFilePath, const QByteArray &encodeName);
+TEST(UT_Editwrapper_saveAsFile, UT_Editwrapper_saveFile_with_error_encoding)
+{
+    Window *pWindow = new Window;
+    QString saveAsPath("/tmp/ut_saveAsFile.txt");
+    QByteArray errEncoding("ERROR-ENCODING");
+    // Utf8 Text: 中文测试一二三四123456789abcdefgh
+    QByteArray utfData("\u4e2d\u6587\u6d4b\u8bd5\u4e00\u4e8c\u4e09\u56db\u0031\u0032\u0033\u0034\u0035\u0036\u0037"
+                       "\u0038\u0039\u0061\u0062\u0063\u0064\u0065\u0066\u0067\u0068");
+    pWindow->addBlankTab(QString());
+    pWindow->currentWrapper()->textEditor()->setPlainText(QString::fromUtf8(utfData));
+
+    // 默认文本编码为 UTF-8, 转换为 GB18030
+    bool ret = pWindow->currentWrapper()->saveAsFile(saveAsPath, errEncoding);
+    EXPECT_FALSE(ret);
+
+    pWindow->deleteLater();
+}
+
+// bool saveAsFile(const QString &newFilePath, const QByteArray &encodeName);
+TEST(UT_Editwrapper_saveAsFile, UT_Editwrapper_saveFile_with_empty_data)
+{
+    Window *pWindow = new Window;
+    QString saveAsPath("/tmp/ut_saveAsFile.txt");
+    pWindow->addBlankTab(QString());
+
+    // 默认文本编码为 UTF-8, 转换为 GB18030
+    bool ret = pWindow->currentWrapper()->saveAsFile(saveAsPath, "UTF-8");
+    EXPECT_TRUE(ret);
+
+    pWindow->deleteLater();
 }
 
 //void updatePath(const QString &file);
@@ -688,6 +769,8 @@ TEST(UT_Editwrapper_handleFileLoadFinished, UT_Editwrapper_handleFileLoadFinishe
     setPrintEnabled_stub.set(ADDR(Window, setPrintEnabled), handleFileLoadFinished_001_setPrintEnabled_stub);
     Stub setTextFinished_stub;
     setTextFinished_stub.set(ADDR(TextEdit, setTextFinished), handleFileLoadFinished_001_setTextFinished_stub);
+    Stub loadContent_stub;
+    loadContent_stub.set(ADDR(EditWrapper, loadContent), rettruestub);
     pWindow->currentWrapper()->handleFileLoadFinished(encode, retFileContent, false);
     ASSERT_TRUE(pWindow->currentWrapper()->m_pBottomBar->m_pEncodeMenu != nullptr);
 
@@ -801,7 +884,8 @@ TEST(UT_Editwrapper_handleFileLoadFinished, UT_Editwrapper_handleFileLoadFinishe
     Stub setTextFinished_stub;
     setTextFinished_stub.set(ADDR(TextEdit, setTextFinished), handleFileLoadFinished_001_setTextFinished_stub);
     pWindow->currentWrapper()->handleFileLoadFinished(encode, retFileContent, true);
-    EXPECT_TRUE(pWindow->currentWrapper()->textEditor()->getReadOnlyPermission());
+    EXPECT_FALSE(pWindow->currentWrapper()->textEditor()->getReadOnlyPermission());
+    EXPECT_TRUE(pWindow->currentWrapper()->textEditor()->getReadOnlyMode());
 
     pWindow->deleteLater();
 }

@@ -1,8 +1,9 @@
-// SPDX-FileCopyrightText: 2019 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "ut_ddropdownmenu.h"
+#include "../stub.h"
 
 #include <QKeyEvent>
 #include <QFlags>
@@ -134,29 +135,29 @@ TEST_F(test_ddropdownmenu, getButton)
 
 }
 
+bool createEncodeMenu_isEmpty_stub()
+{
+    return true;
+}
+
 // 测试函数 DDropdownMenu::createEncodeMenu
 TEST_F(test_ddropdownmenu, createEncodeMenu)
 {
-
-    // 场景1: sm_groupEncodeVec为空
-    DDropdownMenu::sm_groupEncodeVec.clear();
-    DDropdownMenu *dropMenu = new DDropdownMenu();
-    dropMenu->createEncodeMenu();
-    EXPECT_GT(DDropdownMenu::sm_groupEncodeVec.size(), 0);
-    EXPECT_NE(dropMenu,nullptr);
+    // 场景2: sm_groupEncodeVec为空
+    Stub stub;
+    typedef QVector<QPair<QString, QStringList> > VecType;
+    stub.set(ADDR(VecType, isEmpty), createEncodeMenu_isEmpty_stub);
+    DDropdownMenu *dropMenu = DDropdownMenu::createEncodeMenu();
+    ASSERT_NE(dropMenu, nullptr);
+    EXPECT_TRUE(dropMenu->m_menu->actions().isEmpty());
     dropMenu->deleteLater();
-
-
 
     // 场景1: sm_groupEncodeVec不为空
-    DDropdownMenu::sm_groupEncodeVec.clear();
-    dropMenu = new DDropdownMenu();
-    dropMenu->createEncodeMenu();
-    dropMenu->createEncodeMenu();
-    EXPECT_NE(dropMenu,nullptr);
+    stub.reset(ADDR(VecType, isEmpty));
+    dropMenu = DDropdownMenu::createEncodeMenu();
+    ASSERT_NE(dropMenu, nullptr);
+    EXPECT_FALSE(dropMenu->m_menu->actions().isEmpty());
     dropMenu->deleteLater();
-
-
 }
 
 // 测试函数 DDropdownMenu::createHighLightMenu

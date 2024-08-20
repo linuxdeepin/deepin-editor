@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -120,26 +120,12 @@ public:
     // 翻页预览打印，无需重新布局
     void asynPrint(QPainter &p, DPrinter *printer, const QVector<int> &pageRange);
 
-    /**
-     * @brief backupFile 备份文件
-     */
+    // 备份文件
     void backupFile();
-
-    /**
-     * @brief closeAllFiles 关闭当前窗口所有文件
-     * @return
-     */
+    // 关闭当前窗口所有文件
     bool closeAllFiles();
-
-    /**
-     * @brief addTemFileTab　恢复备份文件标签页
-     * @param qstrPath　打开文件路径
-     * @param qstrName　真实文件名
-     * @param qstrTruePath　真实文件路径
-     * @param qstrTruePath　最后一次修改时间
-     * @param bIsTemFile　是否修改
-     */
-    void addTemFileTab(QString qstrPath, QString qstrName, QString qstrTruePath, QString lastModifiedTime, bool bIsTemFile = false);
+    // 恢复备份文件标签页
+    void addTemFileTab(const QString &qstrPath, const QString &qstrName, const QString &qstrTruePath, const QString &lastModifiedTime, bool bIsTemFile = false);
 
     QMap<QString, EditWrapper *> getWrappers();
 
@@ -156,8 +142,8 @@ public:
     static void printPage(int index, QPainter *painter, const QTextDocument *doc,
                           const QRectF &body, const QRectF &pageCountBox);
 
-signals:
-    void themeChanged(const QString themeName);
+Q_SIGNALS:
+    void themeChanged(const QString &themeName);
     void requestDragEnterEvent(QDragEnterEvent *);
     void requestDropEvent(QDropEvent *);
     void newWindow();
@@ -167,7 +153,7 @@ signals:
     // 标签页出现变更信号，文件添加或删除时触发
     void tabChanged();
 
-public slots:
+public Q_SLOTS:
     void addBlankTab();
     void addBlankTab(const QString &blankFile);
     void handleTabCloseRequested(int index);
@@ -192,7 +178,7 @@ public slots:
     void slotReplacebarClose();
 
     void handleReplaceAll(const QString &replaceText, const QString &withText);
-    void handleReplaceNext(QString file, const QString &replaceText, const QString &withText);
+    void handleReplaceNext(const QString &file, const QString &replaceText, const QString &withText);
     void handleReplaceRest(const QString &replaceText, const QString &withText);
     void handleReplaceSkip(QString file, QString keyword);
 
@@ -217,7 +203,7 @@ public slots:
     void slotClearDoubleCharaterEncode();
     void slotSigThemeChanged(const QString &path);
     void slotSigAdjustFont(QString fontName);
-    void slotSigAdjustFontSize(int fontSize);
+    void slotSigAdjustFontSize(qreal fontSize);
     void slotSigAdjustTabSpaceNumber(int number);
     void slotSigAdjustWordWrap(bool enable);
     void slotSigSetLineNumberShow(bool bIsShow);
@@ -238,12 +224,23 @@ private:
     void checkTabbarForReload();
     void clearPrintTextDocument();
     void setWindowTitleInfo();
+    // 取得当前文档打开路径（新建文档为"系统-文档"目录）
+    QString getCurrentOpenFilePath();
+    // 计算字体大小的缩放比例
+    qreal calcFontScale(qreal fontSize);
+    // 从字体缩放比例推算字体大小
+    qreal calcFontSizeFromScale(qreal fontScale);
 
     // 克隆文本数据
     bool cloneLargeDocument(EditWrapper *editWrapper);
     // 打印多文本数据
     void printPageWithMultiDoc(int index, QPainter *painter, const QVector<PrintInfo> &printInfo,
                                const QRectF &body, const QRectF &pageCountBox);
+    // 重新更新文本
+    void rehighlightPrintDoc(QTextDocument *doc, CSyntaxHighlighter *highlighter);
+
+    // 接收布局模式变更信号，更新界面布局
+    Q_SLOT void updateSizeMode();
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
@@ -284,7 +281,7 @@ private:
     QString m_blankFileDir;
     QString m_backupDir;
     QString m_autoBackupDir;
-    int m_fontSize = 0;
+    qreal m_fontSize = 0;
 
     QString m_titlebarStyleSheet;
 
@@ -307,6 +304,8 @@ private:
     bool m_bLargePrint = false;                     // 是否为大文件打印
     bool m_bPrintProcessing = false;                // 文件打印计算中
     EditWrapper *m_printWrapper = nullptr;          // 当前处理的编辑对象(关闭标签页时需要退出打印)
+    QTextDocument *printCopyDoc = nullptr;              // 用于大文本打印时的拷贝文档
+    CSyntaxHighlighter *printCopyHighlighter = nullptr; // 用于大文本打印时的高亮文档
     QVector<PrintInfo> m_printDocList;              // 打印文档列表，用于超大文档打印
     int m_multiDocPageCount = 0;                    // 用于超大文档打印时单独记录多文档的打印页数
 

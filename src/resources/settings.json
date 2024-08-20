@@ -186,6 +186,18 @@
                             "default":  "Ctrl+F"
                         },
                         {
+                            "key": "findNext",
+                            "name": "Find Next",
+                            "type": "keySequenceEdit",
+                            "default":  "F3"
+                        },
+                        {
+                            "key": "findPrev",
+                            "name": "Find Previous",
+                            "type": "keySequenceEdit",
+                            "default":  "Shift+F3"
+                        },
+                        {
                             "key": "replace",
                             "name": "Replace",
                             "type": "keySequenceEdit",
@@ -636,6 +648,18 @@
                             "hide": true,
                             "reset": false,
                             "default":  "F1"
+                        },
+                        {
+                            "key": "findNext",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "F3"
+                        },
+                        {
+                            "key": "findPrev",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "Shift+F3"
                         },
                         {
                             "key": "find",
@@ -1120,6 +1144,18 @@
                             "default":  "F1"
                         },
                         {
+                            "key": "findNext",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "F3"
+                        },
+                        {
+                            "key": "findPrev",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "Shift+F3"
+                        },
+                        {
                             "key": "find",
                             "hide" : true,
                             "reset" : false,
@@ -1602,6 +1638,18 @@
                             "default":  "F1"
                         },
                         {
+                            "key": "findNext",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "F3"
+                        },
+                        {
+                            "key": "findPrev",
+                            "hide" : true,
+                            "reset" : false,
+                            "default":  "Shift+F3"
+                        },
+                        {
                             "key": "find",
                             "hide" : true,
                             "reset" : false,
@@ -1995,6 +2043,19 @@
             "name": "Advanced",
             "groups": [
                 {
+                    "key": "startup",
+                    "name": "Startup",
+                    "options": [
+                        {
+                            "key": "save_tab_before_close",
+                            "name": "Reopen last closed tabs",
+                            "text": "Reopen last closed tabs",
+                            "type": "checkbox",
+                            "default": true
+                        }
+                    ]
+                },
+                {
                     "key": "window",
                     "name": "Window",
                     "options": [
@@ -2029,6 +2090,13 @@
                             "default": 4,
                             "min": 1,
                             "max": 24
+                        },
+                        {
+                            "key": "allow_midbutton_paste",
+                            "name": "Paste by pressing a middle mouse button",
+                            "text": "Paste by pressing a middle mouse button",
+                            "type": "checkbox",
+                            "default": true
                         },
                         {
                             "key": "file_dialog_dir",
@@ -2067,7 +2135,32 @@
                             "default": ""
                         }
                     ]
+                },
+                {
+                    "key": "open_save_setting",
+                    "name": "Open/Save Settings",
+                    "options": [
+                        {
+                            "key": "savingpathwgt",
+                            "type": "savingpathwgt",
+                            "default":"0"
+                        },
+                        {
+                            "key": "open_save_curfile_path",
+                            "hide": true
+                        },
+                        {
+                            "key": "open_save_lastopt_path",
+                            "hide": true
+                        },
+                        {
+                            "key": "open_save_custom_path",
+                            "hide": true
+                        }
+                    ]
+
                 }
+
             ]
         }
     ]

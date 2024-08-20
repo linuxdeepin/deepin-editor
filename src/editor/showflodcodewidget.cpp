@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -36,6 +36,9 @@ ShowFlodCodeWidget::ShowFlodCodeWidget(DWidget *parent)
     pSubLayout->addWidget(m_pContentEdit);
     this->setLayout(pSubLayout);
     m_highlighter = new KSyntaxHighlighting::SyntaxHighlighter(m_pContentEdit->document());
+
+    // 更新单独添加的高亮格式文件
+    m_repository.addCustomSearchPath(KF5_HIGHLIGHT_PATH);
 }
 
 ShowFlodCodeWidget::~ShowFlodCodeWidget()

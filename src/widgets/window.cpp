@@ -1,9 +1,9 @@
-// SPDX-FileCopyrightText:  - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "window.h"
-
+#include "pathsettintwgt.h"
 #include <DTitlebar>
 #include <DAnchors>
 #include <DThemeManager>
@@ -42,6 +42,7 @@
 
 #define PRINT_FLAG 2
 #define PRINT_ACTION 8
+#define PRINT_FORMAT_MARGIN 10
 #define FLOATTIP_MARGIN 95
 
 /**
@@ -111,8 +112,8 @@ void Window::printPage(int index, QPainter *painter, const QTextDocument *doc,
  * @param body          范围大小
  * @param pageCountBox  绘制页码的范围
  */
-void Window::printPageWithMultiDoc(int index, QPainter *painter, const QVector<Window::PrintInfo> &printInfo,
-                                   const QRectF &body, const QRectF &pageCountBox)
+void Window::printPageWithMultiDoc(
+    int index, QPainter *painter, const QVector<Window::PrintInfo> &printInfo, const QRectF &body, const QRectF &pageCountBox)
 {
     painter->save();
 
@@ -131,11 +132,61 @@ void Window::printPageWithMultiDoc(int index, QPainter *painter, const QVector<W
             // 设置文档裁剪区域
             const QRectF docView(0, (docIndex - 1) * body.height(), body.width(), body.height());
             QAbstractTextDocumentLayout *layout = info.doc->documentLayout();
-            QAbstractTextDocumentLayout::PaintContext ctx;
-            ctx.clip = docView;
-            ctx.palette.setColor(QPalette::Text, Qt::black);
-            // 绘制文档
-            layout->draw(painter, ctx);
+
+            // 大文本的高亮单独处理
+            if (info.highlighter) {
+                // 提前两页拷贝数据，用于处理高亮计算时连续处理
+                qreal offsetHeight = qMax<qreal>(0, (qMin(2, docIndex - 1) * body.height()));
+                QPointF point = docView.topLeft() - QPointF(0, offsetHeight);
+                int pos = layout->hitTest(point, Qt::FuzzyHit);
+                QTextCursor cursor(info.doc);
+                cursor.setPosition(pos);
+                // 选取后续内容
+                int endPos = layout->hitTest(docView.bottomLeft(), Qt::FuzzyHit);
+                endPos = qMin(endPos + 1000, info.doc->characterCount() - 1);
+                cursor.setPosition(endPos, QTextCursor::KeepAnchor);
+                cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+
+                // 创建临时文档
+                QTextDocument *tmpDoc = createNewDocument(info.doc);
+                QTextCursor insertCursor(tmpDoc);
+                insertCursor.beginEditBlock();
+                insertCursor.insertFragment(QTextDocumentFragment(cursor));
+                insertCursor.endEditBlock();
+
+                auto margin = info.doc->rootFrame()->frameFormat().margin();
+                auto fmt = tmpDoc->rootFrame()->frameFormat();
+                fmt.setMargin(margin);
+                tmpDoc->rootFrame()->setFrameFormat(fmt);
+
+                tmpDoc->setPageSize(body.size());
+                // 重新高亮文本
+                auto newHighlighter = new CSyntaxHighlighter(tmpDoc);
+                newHighlighter->setDefinition(info.highlighter->definition());
+                newHighlighter->setTheme(info.highlighter->theme());
+                rehighlightPrintDoc(tmpDoc, newHighlighter);
+
+                // 确保布局完成
+                tmpDoc->pageCount();
+
+                // 调整显示位置
+                painter->resetTransform();
+                painter->translate(body.left(), body.top() - offsetHeight);
+                QAbstractTextDocumentLayout::PaintContext ctx;
+                ctx.clip = QRectF(0, offsetHeight, body.width(), body.height());
+                ctx.palette.setColor(QPalette::Text, Qt::black);
+                tmpDoc->documentLayout()->setPaintDevice(painter->device());
+                tmpDoc->documentLayout()->draw(painter, ctx);
+
+                delete newHighlighter;
+                delete tmpDoc;
+            } else {
+                QAbstractTextDocumentLayout::PaintContext ctx;
+                ctx.clip = docView;
+                ctx.palette.setColor(QPalette::Text, Qt::black);
+                // 绘制文档
+                layout->draw(painter, ctx);
+            }
 
             break;
         }
@@ -144,7 +195,6 @@ void Window::printPageWithMultiDoc(int index, QPainter *painter, const QVector<W
 
     painter->restore();
 }
-
 
 Window::Window(DMainWindow *parent)
     : DMainWindow(parent),
@@ -296,6 +346,10 @@ Window::Window(DMainWindow *parent)
     //setChildrenFocus(false);
     Utils::clearChildrenFocus(m_tabbar);//使用此函数把tabbar的组件焦点去掉(左右箭头不能focus)
 
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    // 适配紧凑模式更新，注意 Qt::QueuedConnection 需要在其他子组件更新后触发
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, &Window::updateSizeMode, Qt::QueuedConnection);
+#endif
 }
 
 Window::~Window()
@@ -364,7 +418,7 @@ void Window::updateModifyStatus(const QString &path, bool isModified)
 
     QString tabName;
     QString filePath = m_tabbar->truePathAt(tabIndex);
-    if (filePath.isNull() || filePath.length() <= 0 || filePath.contains("/.local/share/deepin/deepin-editor/blank-files")) {
+    if (filePath.isNull() || filePath.length() <= 0 || Utils::isDraftFile(filePath)) {
         tabName = m_tabbar->textAt(tabIndex);
         if (isModified) {
             if (!tabName.contains('*')) {
@@ -491,6 +545,11 @@ void Window::initTitlebar()
 
     connect(m_tabbar, &Tabbar::closeTabs, this, &Window::handleTabsClosed, Qt::QueuedConnection);
     connect(m_tabbar, &Tabbar::requestHistorySaved, this, [ = ](const QString & filePath) {
+        // 单个Tab页关闭文件时记录文件信息
+        if (StartManager::instance()->checkPath(filePath)) {
+            Utils::recordCloseFile(filePath);
+        }
+
         if (QFileInfo(filePath).dir().absolutePath() == m_blankFileDir) {
             return;
         }
@@ -625,15 +684,25 @@ void Window::addTab(const QString &filepath, bool activeTab)
 void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, const QString &qstrTruePath, const QString &tabName, int index)
 {
     if (index == -1) {
-        index = m_tabbar->currentIndex() + 1;
+        index = m_tabbar->count();
     }
 
     //这里会重复连接信号和槽，先全部取消
     QDBusConnection dbus = QDBusConnection::sessionBus();
-    dbus.systemBus().disconnect("com.deepin.daemon.Gesture",
-                                "/com/deepin/daemon/Gesture", "com.deepin.daemon.Gesture",
-                                "Event",
-                                wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
+    switch (Utils::getSystemVersion()) {
+    case Utils::V23:
+        dbus.systemBus().disconnect("org.deepin.dde.Gesture1",
+                                    "/org/deepin/dde/Gesture1", "org.deepin.dde.Gesture1",
+                                    "Event",
+                                    wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
+        break;
+    default:
+        dbus.systemBus().disconnect("com.deepin.daemon.Gesture",
+                                    "/com/deepin/daemon/Gesture", "com.deepin.daemon.Gesture",
+                                    "Event",
+                                    wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
+        break;
+    }
     wrapper->textEditor()->disconnect();
     connect(wrapper->textEditor(), &TextEdit::cursorModeChanged, wrapper, &EditWrapper::handleCursorModeChanged);
     connect(wrapper->textEditor(), &TextEdit::clickFindAction, this, &Window::popupFindBar, Qt::QueuedConnection);
@@ -643,10 +712,20 @@ void Window::addTabWithWrapper(EditWrapper *wrapper, const QString &filepath, co
     connect(wrapper->textEditor(), &TextEdit::popupNotify, this, &Window::showNotify, Qt::QueuedConnection);
     connect(wrapper->textEditor(), &TextEdit::signal_setTitleFocus, this, &Window::slot_setTitleFocus, Qt::QueuedConnection);
 
-    dbus.systemBus().connect("com.deepin.daemon.Gesture",
-                             "/com/deepin/daemon/Gesture", "com.deepin.daemon.Gesture",
-                             "Event",
-                             wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
+    switch (Utils::getSystemVersion()) {
+    case Utils::V23:
+        dbus.systemBus().connect("org.deepin.dde.Gesture1",
+                                 "/org/deepin/dde/Gesture1", "org.deepin.dde.Gesture1",
+                                 "Event",
+                                 wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
+        break;
+    default:
+        dbus.systemBus().connect("com.deepin.daemon.Gesture",
+                                 "/com/deepin/daemon/Gesture", "com.deepin.daemon.Gesture",
+                                 "Event",
+                                 wrapper->textEditor(), SLOT(fingerZoom(QString, QString, int)));
+        break;
+    }
     connect(wrapper->textEditor(), &QPlainTextEdit::cursorPositionChanged, wrapper->textEditor(), &TextEdit::cursorPositionChanged);
 
     connect(wrapper->textEditor(), &QPlainTextEdit::textChanged, wrapper->textEditor(), [ = ]() {
@@ -968,6 +1047,24 @@ void Window::openFile()
     }
     dialog.setDirectory(historyDirStr);
 
+    QDir historyDir(historyDirStr);
+
+    if (historyDir.exists()) {
+        dialog.setDirectory(historyDir);
+    } else {
+        qDebug() << "historyDir or default path not existed:" << historyDir;
+    }
+
+    QString path = m_settings->getSavePath(m_settings->getSavePathId());
+    // 使用当前文件路径时，打开当前文件的目录，新建文档为系统-文档目录
+    if (PathSettingWgt::CurFileBox == m_settings->getSavePathId()) {
+        path = getCurrentOpenFilePath();
+    }
+    if (path.isEmpty() || !QDir(path).exists() || !QFileInfo(path).isWritable() || !QDir(path).isReadable()) {
+        path = QDir::homePath() + "/Documents";
+    }
+    dialog.setDirectory(path);
+
     const int mode = dialog.exec();
 
     PerformanceMonitor::openFileStart();
@@ -1037,10 +1134,6 @@ bool Window::saveFile()
     } else {
         temPath = filePath;
     }
-
-    //updateSaveAsFileName(temPath, filePath);
-    //wrapperEdit->updatePath(temPath,filePath);
-
     bool success = wrapperEdit->saveFile();
 
     if (success) {
@@ -1086,9 +1179,19 @@ QString Window::saveAsFileToDisk()
 
     DFileDialog dialog(this, tr("Save File"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.addComboBox(QObject::tr("Encoding"),  QStringList() << wrapper->getTextEncode());
     dialog.setDirectory(QDir::homePath());
-    QString path = m_settings->settings->option("advance.editor.file_dialog_dir")->value().toString();
+    // 允许选取保存的编码格式
+    DFileDialog::DComboBoxOptions encodingOptions;
+    encodingOptions.editable = false;
+    encodingOptions.defaultValue = wrapper->getTextEncode();
+    encodingOptions.data = Utils::getSupportEncodingList();
+    dialog.addComboBox(QObject::tr("Encoding"), encodingOptions);
+
+    QString path = m_settings->getSavePath(m_settings->getSavePathId());
+    // 使用当前文件路径时，打开当前文件的目录，新建文档为系统-文档目录
+    if (PathSettingWgt::CurFileBox == m_settings->getSavePathId()) {
+        path = getCurrentOpenFilePath();
+    }
     if (path.isEmpty() || !QDir(path).exists() || !QFileInfo(path).isWritable() || !QDir(path).isReadable()) {
         path = QDir::homePath() + "/Documents";
     }
@@ -1103,21 +1206,37 @@ QString Window::saveAsFileToDisk()
         dialog.selectFile(fileInfo.fileName());
     }
 
-    //wrapper->setUpdatesEnabled(false);
     int mode = dialog.exec();
-    //wrapper->setUpdatesEnabled(true);
-
     if (mode == QDialog::Accepted) {
         const QByteArray encode = dialog.getComboBoxValue(QObject::tr("Encoding")).toUtf8();
-        const QString endOfLine = dialog.getComboBoxValue(QObject::tr("Line Endings"));
         const QString newFilePath = dialog.selectedFiles().value(0);
-        m_settings->settings->option("advance.editor.file_dialog_dir")->setValue(dialog.directoryUrl().toLocalFile());
+        Settings::instance()->setSavePath(PathSettingWgt::LastOptBox, QFileInfo(newFilePath).absolutePath());
+        Settings::instance()->setSavePath(PathSettingWgt::CurFileBox, QFileInfo(newFilePath).absolutePath());
 
         wrapper->updatePath(wrapper->filePath(), newFilePath);
-        if (!wrapper->saveFile()) {
+
+        bool needChangeEncode = (encode != wrapper->getTextEncode().toUtf8());
+        bool saveSucc = false;
+        if (QFileInfo(wrapper->filePath()).absoluteFilePath()
+                == QFileInfo(newFilePath).absoluteFilePath()) {
+            // 相同路径，直接保存文件
+            saveSucc = wrapper->saveFile(encode);
+        } else {
+            saveSucc = wrapper->saveAsFile(newFilePath, encode);
+        }
+
+        if (!saveSucc) {
             /* 如果保存未成功，无需记录更新新文件路径 */
             wrapper->updatePath(wrapper->filePath(), QString());
             return QString();
+        } else {
+            // 更新文件编码
+            wrapper->bottomBar()->setEncodeName(encode);
+
+            // 若编码变更，保存完成后，重新加载文件
+            if (needChangeEncode) {
+                wrapper->readFile(encode);
+            }
         }
 
         if (wrapper->filePath().contains(m_backupDir) || wrapper->filePath().contains(m_blankFileDir)) {
@@ -1251,15 +1370,66 @@ void Window::changeSettingDialogComboxFontNumber(int fontNumber)
     m_settings->settings->option("base.font.size")->setValue(fontNumber);
 }
 
+/**
+ * @brief 根据传入的字体大小计算字体的比例，字体大小范围在 8 ~ 500，比例范围在 10% ~ 500%,
+ *      默认字体大小为12。因此在 8~12 和 12~50 两组范围字体的缩放间隔不同。
+ * @param fontSize 字体大小
+ * @return 字体缩放比例，范围 10 ~ 500
+ */
+qreal Window::calcFontScale(qreal fontSize)
+{
+    if (qFuzzyCompare(fontSize, m_settings->m_iDefaultFontSize)) {
+        return 100.0;
+    } else if (fontSize > m_settings->m_iDefaultFontSize) {
+        static const qreal delta = (500 - 100) * 1.0 / (m_settings->m_iMaxFontSize - m_settings->m_iDefaultFontSize);
+        qreal fontScale = 100 + delta * (fontSize - m_settings->m_iDefaultFontSize);
+        return qMin(fontScale, 500.0);
+    } else {
+        static const qreal delta = (100 - 10) * 1.0 / (m_settings->m_iDefaultFontSize - m_settings->m_iMinFontSize);
+        qreal fontScale = 100 + delta * (fontSize - m_settings->m_iDefaultFontSize);
+        return qMax(fontScale, 10.0);
+    }
+}
+
+/**
+ * @brief 根据字体缩放比例返回字体大小
+ * @param fontScale 字体缩放比例
+ * @return 字体大小，范围 8~50
+ */
+qreal Window::calcFontSizeFromScale(qreal fontScale)
+{
+    if (qFuzzyCompare(fontScale, 100.0)) {
+        return m_settings->m_iDefaultFontSize;
+    } else if (fontScale > 100.0) {
+        static const qreal delta = (m_settings->m_iMaxFontSize - m_settings->m_iDefaultFontSize) * 1.0 / (500 - 100);
+        qreal fontSize = m_settings->m_iDefaultFontSize + delta * ((fontScale) - 100);
+        return qMin<qreal>(fontSize, m_settings->m_iMaxFontSize);
+    } else {
+        static const qreal delta = (m_settings->m_iDefaultFontSize - m_settings->m_iMinFontSize) * 1.0 / (100 - 10) ;
+        qreal fontSize = m_settings->m_iMinFontSize + delta * (fontScale - 10);
+        return qMax<qreal>(fontSize, m_settings->m_iMinFontSize);
+    }
+}
+
 void Window::decrementFontSize()
 {
-    int size = std::max(m_fontSize - 1, m_settings->m_iMinFontSize);
+    qreal fontScale = calcFontScale(m_fontSize);
+    // 减少10%
+    fontScale -= 10;
+    m_fontSize = calcFontSizeFromScale(fontScale);
+
+    qreal size = qMax<qreal>(m_fontSize, m_settings->m_iMinFontSize);
     m_settings->settings->option("base.font.size")->setValue(size);
 }
 
 void Window::incrementFontSize()
 {
-    int size = std::min(m_fontSize + 1, m_settings->m_iMaxFontSize);
+    qreal fontScale = calcFontScale(m_fontSize);
+    // 增加10%
+    fontScale += 10;
+    m_fontSize = calcFontSizeFromScale(fontScale);
+
+    qreal size = qMin<qreal>(m_fontSize, m_settings->m_iMaxFontSize);
     m_settings->settings->option("base.font.size")->setValue(size);
 }
 
@@ -1270,8 +1440,9 @@ void Window::resetFontSize()
 
 void Window::setFontSizeWithConfig(EditWrapper *wrapper)
 {
-    int size = m_settings->settings->option("base.font.size")->value().toInt();
+    qreal size = m_settings->settings->option("base.font.size")->value().toReal();
     wrapper->textEditor()->setFontSize(size);
+    wrapper->bottomBar()->setScaleLabelText(size);
 
     m_fontSize = size;
 }
@@ -1312,12 +1483,17 @@ void Window::popupFindBar()
     m_findBar->show();
     m_findBar->move(QPoint(4, height() - m_findBar->height() - 4));
 
-    QString text = wrapper->textEditor()->textCursor().selectedText();
+    //QString text = wrapper->textEditor()->textCursor().selectedText();
+    QString text = wrapper->textEditor()->selectedText();
     int row = wrapper->textEditor()->getCurrentLine();
     int column = wrapper->textEditor()->getCurrentColumn();
     int scrollOffset = wrapper->textEditor()->getScrollOffset();
 
     m_findBar->activeInput(text, tabPath, row, column, scrollOffset);
+    // highlight keyword when findbar show
+    wrapper->textEditor()->highlightKeywordInView(text);
+    // set keywords
+    m_keywordForSearchAll = m_keywordForSearch = text;
 
     QTimer::singleShot(10, this, [ = ] { m_findBar->focus(); });
 }
@@ -1435,6 +1611,9 @@ void Window::popupSettingsDialog()
     DSettingsDialog *dialog = new DSettingsDialog(this);
     dialog->widgetFactory()->registerWidget("fontcombobox", Settings::createFontComBoBoxHandle);
     dialog->widgetFactory()->registerWidget("keySequenceEdit", Settings::createKeySequenceEditHandle);
+    dialog->widgetFactory()->registerWidget("savingpathwgt", Settings::createSavingPathWgt);
+    dialog->resize(680, 300);
+    dialog->setMinimumSize(680, 300);
     m_settings->setSettingDialog(dialog);
 
     dialog->updateSettings(m_settings->settings);
@@ -1487,12 +1666,35 @@ void Window::setWindowTitleInfo()
 }
 
 /**
+ * @brief 取得当前文件打开文档目录，新建文档为"系统-文档"目录(~/Documents)
+ * @return 当前文件打开文档目录
+ */
+QString Window::getCurrentOpenFilePath()
+{
+    QString path;
+    EditWrapper *wrapper = currentWrapper();
+    if (wrapper) {
+        QString curFilePath = wrapper->textEditor() ? wrapper->textEditor()->getTruePath()
+                              : wrapper->filePath();
+        // 临时文件或备份文件，均返回"文档"目录
+        if (Utils::isDraftFile(curFilePath) || Utils::isBackupFile(curFilePath)) {
+            path = QDir::homePath() + "/Documents";
+        } else {
+            path = QFileInfo(curFilePath).absolutePath();
+        }
+    }
+
+    return path;
+}
+
+/**
  * @brief 克隆文本数据，不同于 QTextDocument::clone(), 主要用于大文本的拷贝，拷贝过程通过
  *      QApplication::processEvents() 执行其它事件
  * @param editWrapper 文本编辑处理，提供文本编辑器和高亮信息
  * @return 是否克隆数据成功
  *
- * @note Qt自带的布局算法在超长文本时存在计算越界的问题，计算后的
+ * @note Qt自带的布局算法在超长文本时存在计算越界的问题，计算长度将返回溢出值，导致显示异常，
+        调整为拆分的文档结构
  */
 bool Window::cloneLargeDocument(EditWrapper *editWrapper)
 {
@@ -1552,8 +1754,8 @@ bool Window::cloneLargeDocument(EditWrapper *editWrapper)
 
             if (currentCopyCharCount >= s_StepCopyCharCount) {
                 // 判断是否超过单个文档允许的最大范围
-                if ((copyDoc->characterCount() + currentCopyCharCount) > s_MaxDocCharCount
-                        || (copyDoc->blockCount() + currentSelectBlock) > s_MaxDocBlockCount) {
+                if ((copyDoc->characterCount() + currentCopyCharCount) > s_MaxDocCharCount ||
+                    (copyDoc->blockCount() + currentSelectBlock) > s_MaxDocBlockCount) {
                     // 创建新的打印文档
                     m_printDocList.append(createPrintInfo());
                     copyDoc = m_printDocList.last().doc;
@@ -1598,34 +1800,64 @@ bool Window::cloneLargeDocument(EditWrapper *editWrapper)
     return true;
 }
 
-\
-#if 0 //Qt原生打印预览调用
-void Window::popupPrintDialog()
+/**
+   @brief 使用 \a highlighter 重新高亮传入的文本 \a doc ,此函数用于大文本打印时对临时文本的处理
+ */
+void Window::rehighlightPrintDoc(QTextDocument *doc, CSyntaxHighlighter *highlighter)
 {
-    QPrinter printer(QPrinter::HighResolution);
-    QPrintPreviewDialog preview(this);
-
-    TextEdit *wrapper = currentWrapper()->textEditor();
-    const QString &filePath = wrapper->filepath;
-    const QString &fileDir = QFileInfo(filePath).dir().absolutePath();
-
-    if (fileDir == m_blankFileDir) {
-        printer.setOutputFileName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
-        printer.setDocName(QString("%1/%2.pdf").arg(QDir::homePath(), m_tabbar->currentName()));
-    } else {
-        printer.setOutputFileName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
-        printer.setDocName(QString("%1/%2.pdf").arg(fileDir, QFileInfo(filePath).baseName()));
+    if (!doc || !highlighter) {
+        return;
     }
 
-    printer.setOutputFormat(QPrinter::PdfFormat);
+    QColor background = m_printWrapper->textEditor()->palette().color(QPalette::Base);
+    bool backgroundIsDark = background.value() < 128;
 
-    connect(&preview, &QPrintPreviewDialog::paintRequested, this, [ = ](QPrinter * printer) {
-        currentWrapper()->textEditor()->print(printer);
-    });
+    highlighter->setEnableHighlight(true);
+    if (backgroundIsDark) {
+        for (QTextBlock block = doc->firstBlock(); block.isValid(); block = block.next()) {
+            highlighter->rehighlightBlock(block);
 
-    preview.exec();
+            QVector<QTextLayout::FormatRange> formatList = block.layout()->formats();
+            // adjust syntax highlighting colors for better contrast
+            for (int i = formatList.count() - 1; i >= 0; --i) {
+                QTextCharFormat &format = formatList[i].format;
+                if (format.background().color() == background) {
+                    QBrush brush = format.foreground();
+                    QColor color = brush.color();
+                    int h, s, v, a;
+                    color.getHsv(&h, &s, &v, &a);
+                    color.setHsv(h, s, qMin(128, v), a);
+                    brush.setColor(color);
+                    format.setForeground(brush);
+                }
+                format.setBackground(Qt::white);
+            }
+
+            block.layout()->setFormats(formatList);
+        }
+    } else {
+        highlighter->rehighlight();
+    }
+    highlighter->setEnableHighlight(false);
 }
-#endif
+
+/**
+   @brief 接收布局模式变更信号 DGuiApplicationHelper::sizeModeChanged() ，更新界面布局
+        Window 接收布局模式变更，调整 findBar 和 replaceBar 的坐标位置。
+   @note 需要在 findBar / replaceBar / bottomBar 更新后触发更新
+ */
+void Window::updateSizeMode()
+{
+    if (m_findBar && m_findBar->isVisible()) {
+        currentWrapper()->bottomBar()->updateSize(m_findBar->height() + 8, true);
+        m_findBar->move(QPoint(4, height() - m_findBar->height() - 4));
+    }
+
+    if (m_replaceBar && m_replaceBar->isVisible()) {
+        currentWrapper()->bottomBar()->updateSize(m_replaceBar->height() + 8, true);
+        m_replaceBar->move(QPoint(4, height() - m_replaceBar->height() - 4));
+    }
+}
 
 void Window::popupPrintDialog()
 {
@@ -1639,6 +1871,8 @@ void Window::popupPrintDialog()
 
     const QString &filePath = currentWrapper()->textEditor()->getFilePath();
     const QString &fileDir = QFileInfo(filePath).dir().absolutePath();
+
+    qInfo() << qPrintable("Start print doc");
 
     //适配打印接口2.0，dtk版本大于或等于5.4.10才放开最新的2.0打印预览接口
 #if (DTK_VERSION_MAJOR > 5 \
@@ -1673,6 +1907,7 @@ void Window::popupPrintDialog()
 
         // 大文件处理
         if (m_bLargePrint) {
+            qInfo() << qPrintable("Clone large print document");
             // 克隆大文本数据
             if (!cloneLargeDocument(currentWrapper())) {
                 return;
@@ -1793,6 +2028,18 @@ void Window::displayShortcuts()
     QRect rect = window()->geometry();
     QPoint pos(rect.x() + rect.width() / 2,
                rect.y() + rect.height() / 2);
+    // 获取当前焦点位置（光标所在屏幕中心）
+    QScreen *screen = nullptr;
+    if (DGuiApplicationHelper::isTabletEnvironment()) {
+        // bug 88079 避免屏幕旋转弹出位置错误
+        screen = qApp->primaryScreen();
+    } else {
+        screen = QGuiApplication::screenAt(QCursor::pos());
+    }
+
+    if (screen) {
+        pos = screen->geometry().center();
+    }
 
     //窗体快捷键
     QStringList windowKeymaps;
@@ -1970,7 +2217,7 @@ void Window::doPrint(DPrinter *printer, const QVector<int> &pageRange)
     layout->setPaintDevice(p.device());
 
     int dpiy = p.device()->logicalDpiY();
-    int margin = (int)((2 / 2.54) * dpiy); // 2 cm margins
+    int margin = static_cast<int>((2 / 2.54) * dpiy); // 2 cm margins
 
     auto fmt = m_printDoc->rootFrame()->frameFormat();
     fmt.setMargin(margin);
@@ -2039,7 +2286,7 @@ void Window::doPrintWithLargeDoc(DPrinter *printer, const QVector<int> &pageRang
         return;
     }
 
-    qWarning() << "calc print large doc!";
+    qInfo() << qPrintable("Calc print large doc!");
 
     // 执行处理时屏蔽其它输入
     DPrintPreviewWidget *prieviewWidget = m_pPreview->findChild<DPrintPreviewWidget *>();
@@ -2079,10 +2326,7 @@ void Window::doPrintWithLargeDoc(DPrinter *printer, const QVector<int> &pageRang
                     body.width() - 2 * margin,
                     fontMetrics.height());
 
-    // 进行文本高亮和布局
-    QColor background = m_printWrapper->textEditor()->palette().color(QPalette::Base);
-    bool backgroundIsDark = background.value() < 128;
-
+    // Note:大文本打印的高亮处理被延迟到实际打印时计算
     m_multiDocPageCount = 0;
     for (auto &info : m_printDocList) {
         QTextDocument *printDoc = info.doc;
@@ -2097,37 +2341,7 @@ void Window::doPrintWithLargeDoc(DPrinter *printer, const QVector<int> &pageRang
         // 设置打印大小
         printDoc->setPageSize(body.size());
 
-        if (info.highlighter) {
-            info.highlighter->setEnableHighlight(true);
-        }
-
         for (QTextBlock block = printDoc->firstBlock(); block.isValid(); block = block.next()) {
-            // 调整为开始布局前高亮(纯文本无需高亮)
-            if (info.highlighter) {
-                info.highlighter->rehighlightBlock(block);
-
-                // 调整颜色对比度
-                if (backgroundIsDark) {
-                    QVector<QTextLayout::FormatRange> formatList = block.layout()->formats();
-                    // adjust syntax highlighting colors for better contrast
-                    for (int i = formatList.count() - 1; i >= 0; --i) {
-                        QTextCharFormat &format = formatList[i].format;
-                        if (format.background().color() == background) {
-                            QBrush brush = format.foreground();
-                            QColor color = brush.color();
-                            int h, s, v, a;
-                            color.getHsv(&h, &s, &v, &a);
-                            color.setHsv(h, s, qMin(128, v), a);
-                            brush.setColor(color);
-                            format.setForeground(brush);
-                        }
-                        format.setBackground(Qt::white);
-                    }
-
-                    block.layout()->setFormats(formatList);
-                }
-            }
-
             // 通过对单个文本块进行布局，拆分布局总时间，防止布局时间过长
             lay->blockBoundingRect(block);
             // 处理其它事件
@@ -2144,10 +2358,6 @@ void Window::doPrintWithLargeDoc(DPrinter *printer, const QVector<int> &pageRang
                 QMetaObject::invokeMethod(m_pPreview, "reject", Qt::QueuedConnection);
                 return;
             }
-        }
-
-        if (info.highlighter) {
-            info.highlighter->setEnableHighlight(false);
         }
 
         // 更新文件总打印页数
@@ -2176,6 +2386,8 @@ void Window::doPrintWithLargeDoc(DPrinter *printer, const QVector<int> &pageRang
                 printer->newPage();
         }
     }
+
+    qInfo() << qPrintable("Calc print large doc finised!");
 }
 #endif
 
@@ -2193,7 +2405,7 @@ void Window::asynPrint(QPainter &p, DPrinter *printer, const QVector<int> &pageR
 
     QRectF pageRect(printer->pageRect());
     int dpiy = p.device()->logicalDpiY();
-    int margin = (int)((2 / 2.54) * dpiy); // 2 cm margins
+    int margin = static_cast<int>((2 / 2.54) * dpiy); // 2 cm margins
     QRectF body = QRectF(0, 0, pageRect.width(), pageRect.height());
 
     QTextDocument *curDoc = m_bLargePrint ? m_printDocList.first().doc : m_printDoc;
@@ -2343,7 +2555,15 @@ bool Window::closeAllFiles()
     return true;
 }
 
-void Window::addTemFileTab(QString qstrPath, QString qstrName, QString qstrTruePath, QString lastModifiedTime, bool bIsTemFile)
+/**
+ * @brief addTemFileTab　恢复备份文件标签页
+ * @param qstrPath　打开文件路径
+ * @param qstrName　真实文件名
+ * @param qstrTruePath　真实文件路径
+ * @param qstrTruePath　最后一次修改时间
+ * @param bIsTemFile　是否修改
+ */
+void Window::addTemFileTab(const QString &qstrPath, const QString &qstrName, const QString &qstrTruePath, const QString &lastModifiedTime, bool bIsTemFile)
 {
     if (qstrPath.isEmpty() || !Utils::fileExists(qstrPath)) {
         return;
@@ -2386,8 +2606,6 @@ QMap<QString, EditWrapper *> Window::getWrappers()
 
 void Window::setChildrenFocus(bool ok)
 {
-    QMap<QString, EditWrapper *>::Iterator it = m_wrappers.begin();
-
     if (ok) {
         DIconButton *addButton = m_tabbar->findChild<DIconButton *>("AddButton");
         DIconButton *optionBtn = titlebar()->findChild<DIconButton *>("DTitlebarDWindowOptionButton");
@@ -2537,7 +2755,7 @@ void Window::handleCurrentChanged(const int &index)
 
     if (currentWrapper() != nullptr) {
         currentWrapper()->bottomBar()->show();
-        currentWrapper()->bottomBar()->updateSize(32, false);
+        currentWrapper()->bottomBar()->updateSize(BottomBar::defaultHeight(), false);
     }
 }
 
@@ -2607,7 +2825,7 @@ void Window::slotFindbarClose()
         wrapper->bottomBar()->show();
     }
 
-    wrapper->bottomBar()->updateSize(32, false);
+    wrapper->bottomBar()->updateSize(BottomBar::defaultHeight(), false);
     currentWrapper()->textEditor()->setFocus();
     currentWrapper()->textEditor()->tellFindBarClose();
 }
@@ -2620,7 +2838,7 @@ void Window::slotReplacebarClose()
         wrapper->bottomBar()->show();
     }
 
-    wrapper->bottomBar()->updateSize(32, false);
+    wrapper->bottomBar()->updateSize(BottomBar::defaultHeight(), false);
     currentWrapper()->textEditor()->setFocus();
     currentWrapper()->textEditor()->tellFindBarClose();
 }
@@ -2631,8 +2849,9 @@ void Window::handleReplaceAll(const QString &replaceText, const QString &withTex
     wrapper->textEditor()->replaceAll(replaceText, withText);
 }
 
-void Window::handleReplaceNext(QString file, const QString &replaceText, const QString &withText)
+void Window::handleReplaceNext(const QString &file, const QString &replaceText, const QString &withText)
 {
+    Q_UNUSED(file);
     m_keywordForSearch = replaceText;
     m_keywordForSearchAll = replaceText;
     EditWrapper *wrapper = currentWrapper();
@@ -2933,10 +3152,11 @@ void Window::slotSigAdjustFont(QString fontName)
     }
 }
 
-void Window::slotSigAdjustFontSize(int fontSize)
+void Window::slotSigAdjustFontSize(qreal fontSize)
 {
     for (EditWrapper *wrapper : m_wrappers.values()) {
         wrapper->textEditor()->setFontSize(fontSize);
+        wrapper->bottomBar()->setScaleLabelText(fontSize);
         wrapper->OnUpdateHighlighter();
     }
 
@@ -3106,7 +3326,21 @@ void Window::closeEvent(QCloseEvent *e)
             return;
         }
     } else {
-        backupFile();
+        bool save_tab_before_close = m_settings->settings->option("advance.startup.save_tab_before_close")->value().toBool();
+        if (!save_tab_before_close) {
+            if (!closeAllFiles()) {
+                e->ignore();
+                return;
+            }
+        } else {
+            // 单个窗口时，没有记录单独关闭窗口，需要记录窗口信息。
+            for (auto itr = m_wrappers.begin(); itr != m_wrappers.end(); ++itr) {
+                QString filePath = itr.value()->textEditor()->getFilePath();
+                Utils::recordCloseFile(filePath);
+            }
+
+            backupFile();
+        }
     }
 
     // WARNING: 调用 QProcess::startDetached() 前同步配置，防止多线程对 qgetenv() 中的 environmentMutex 加锁
@@ -3224,6 +3458,10 @@ void Window::keyPressEvent(QKeyEvent *e)
         }
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "find")) {
         popupFindBar();
+    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "findNext")) {
+        handleFindNextSearchKeyword(m_keywordForSearch);
+    } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "findPrev")) {
+        handleFindPrevSearchKeyword(m_keywordForSearch);
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "replace")) {
         popupReplaceBar();
     } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "window", "jumptoline")) {

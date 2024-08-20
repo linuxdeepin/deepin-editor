@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -6,6 +6,15 @@
 #include "../common/utils.h"
 
 #include <QDebug>
+
+// 不同布局模式下界面参数，不完全对应设计图固定值，调整后实际像素值和设计图对应
+const int s_RBHeight = 60;
+const QMargins s_RBContetsMargins = {16, 0, 10, 0};
+const int s_RBCloseBtnSize = 30;
+const int s_RBHeight_Compact = 40;
+const QMargins s_RBContetsMarginsCompact = {16, 0, 6, 0};
+const int s_RBCloseBtnSizeCompact = 26;
+const int s_RBCloseIconSizeCompact = 27;
 
 ReplaceBar::ReplaceBar(QWidget *parent)
     :  DFloatingWidget(parent)
@@ -17,27 +26,16 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     // Init layout and widgets.
     m_layout = new QHBoxLayout();
     m_layout->setSpacing(10);
-    m_layout->setContentsMargins(16, 6, 10, 6);
+    m_layout->setContentsMargins(16, 0, 10, 0);
+    m_layout->setAlignment(Qt::AlignVCenter);
     m_replaceLabel = new QLabel(tr("Find"));
-    //m_replaceLabel->setMinimumHeight(36);
     m_replaceLine = new LineBar();
-    //m_replaceLine->lineEdit()->setMinimumHeight(36);
     m_withLabel = new QLabel(tr("Replace With"));
-    //m_withLabel->setMinimumHeight(36);
     m_withLine = new LineBar();
-    //m_withLine->lineEdit()->setMinimumHeight(36);
     m_replaceButton = new QPushButton(tr("Replace"));
-    //m_replaceButton->setMinimumWidth(66);
-    //m_replaceButton->setMinimumHeight(36);
     m_replaceSkipButton = new QPushButton(tr("Skip"));
-    //m_replaceSkipButton->setMinimumWidth(66);
-    //m_replaceSkipButton->setMinimumHeight(36);
     m_replaceRestButton = new QPushButton(tr("Replace Rest"));
-    //m_replaceRestButton->setMinimumWidth(80);
-    //m_replaceRestButton->setMinimumHeight(36);
     m_replaceAllButton = new QPushButton(tr("Replace All"));
-    //m_replaceAllButton->setMinimumWidth(80);
-    //m_replaceAllButton->setMinimumHeight(36);
     m_closeButton = new DIconButton(DStyle::SP_CloseButton);
     m_closeButton->setFlat(true);
     m_closeButton->setFixedSize(30, 30);
@@ -45,9 +43,9 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     m_closeButton->setIconSize(QSize(30, 30));
 
     m_layout->addWidget(m_replaceLabel);
-    m_layout->addWidget(m_replaceLine);
+    m_layout->addLayout(createVerticalLine(m_replaceLine));
     m_layout->addWidget(m_withLabel);
-    m_layout->addWidget(m_withLine);
+    m_layout->addLayout(createVerticalLine(m_withLine));
     m_layout->addWidget(m_replaceButton);
     m_layout->addWidget(m_replaceSkipButton);
     m_layout->addWidget(m_replaceRestButton);
@@ -82,6 +80,11 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     connect(m_replaceAllButton, &QPushButton::clicked, this, &ReplaceBar::handleReplaceAll, Qt::QueuedConnection);
 
     connect(m_closeButton, &DIconButton::clicked, this, &ReplaceBar::replaceClose, Qt::QueuedConnection);
+
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    updateSizeMode();
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, &ReplaceBar::updateSizeMode);
+#endif
 }
 
 bool ReplaceBar::isFocus()
@@ -203,6 +206,44 @@ void ReplaceBar::keyPressEvent(QKeyEvent *e)
             m_replaceSkipButton->click();
         }
     }
+}
+
+/**
+   @brief 根据界面布局模式 `DGuiApplicationHelper::isCompactMode()` 切换当前界面布局参数。
+        需要注意，界面参数同设计图参数并非完全一致，而是按照实际的显示像素值进行比对。
+ */
+void ReplaceBar::updateSizeMode()
+{
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    if (DGuiApplicationHelper::isCompactMode()) {
+        setFixedHeight(s_RBHeight_Compact);
+        m_closeButton->setFixedSize(s_RBCloseBtnSizeCompact, s_RBCloseBtnSizeCompact);
+        m_closeButton->setIconSize(QSize(s_RBCloseIconSizeCompact, s_RBCloseIconSizeCompact));
+
+        m_layout->setContentsMargins(s_RBContetsMarginsCompact);
+        m_layout->invalidate();
+    } else {
+        setFixedHeight(s_RBHeight);
+        m_closeButton->setFixedSize(s_RBCloseBtnSize, s_RBCloseBtnSize);
+        m_closeButton->setIconSize(QSize(s_RBCloseBtnSize, s_RBCloseBtnSize));
+
+        m_layout->setContentsMargins(s_RBContetsMargins);
+        m_layout->invalidate();
+    }
+#endif
+}
+
+/**
+   @brief 单独处理输入框 \a bar，由于Qt坐标机制，奇数处理存在累计误差，
+    导致显示效果和预期存在差异，添加 spacer 强制输入框居中，组合完成返回布局。
+ */
+QVBoxLayout *ReplaceBar::createVerticalLine(QWidget *content) const
+{
+    QVBoxLayout *lineBarLayout = new QVBoxLayout();
+    lineBarLayout->addItem(new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
+    lineBarLayout->addWidget(content);
+    lineBarLayout->addItem(new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
+    return lineBarLayout;
 }
 
 void ReplaceBar::setMismatchAlert(bool isAlert)

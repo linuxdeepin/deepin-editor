@@ -4,8 +4,8 @@
  "http://www.freedesktop.org/standards/PolicyKit/1.0/policyconfig.dtd">
 <policyconfig>
   <action id="com.deepin.editor.saveFile">
-    <description>write file to /etc</description>
-    <message>Save file to filesystem</message>
+    <description>Save file with administrator privilege</description>
+    <message>Save file with administrator privilege</message>
     <defaults>
       <allow_inactive>no</allow_inactive>
       <allow_active>auth_admin</allow_active>

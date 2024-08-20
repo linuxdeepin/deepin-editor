@@ -1,4 +1,4 @@
-﻿// SPDX-FileCopyrightText: 2011-2022 UnionTech Software Technology Co., Ltd.
+﻿// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -15,6 +15,7 @@
 //添加自定义撤销重做栈
 #include "inserttextundocommand.h"
 #include "deletetextundocommand.h"
+#include "../widgets/bottombar.h"
 #include <QUndoStack>
 
 #include <KSyntaxHighlighting/Definition>
@@ -87,8 +88,6 @@ public:
     TextEdit(QWidget *parent = nullptr);
     ~TextEdit() override;
 
-    //在光标处添加删除内容
-
     //直接插入文本
     void insertTextEx(QTextCursor, QString);
     //同时插入多个位置的文本
@@ -118,25 +117,18 @@ public:
     void popRightMenu(QPoint pos = QPoint());
     //
     void setWrapper(EditWrapper *);
-
     EditWrapper *getWrapper();
 
-    /**
-     * @brief getFilePath 获取打开文件路径
-     * @return 打开文件路径
-     */
+    // 获取打开文件路径
     inline QString getFilePath() { return m_sFilePath;}
-    //
-    inline void setFilePath(QString file) { m_sFilePath = file;}
-    //
+    // 设置文件路径
+    inline void setFilePath(const QString &file) { m_sFilePath = file;}
+    // 取得左侧的导航控件，包含行号、书签、折叠控件等
     inline LeftAreaTextEdit *getLeftAreaWidget() { return m_pLeftAreaWidget;}
-    /**
-     * @brief 是否撤销重做操作
-     */
+
+    // 是否允许撤销重做操作
     bool isUndoRedoOpt();
-    /**
-     * @brief 判断文档是否被修改
-     */
+    // 判断文档是否被修改
     bool getModified();
 
     int getCurrentLine();
@@ -183,9 +175,7 @@ public:
     //剪切选中行或当前行至剪贴板中
     void cutlines();
 
-    /**
-     * @brief joinLines 合并行
-     */
+    // joinLines 合并行
     void joinLines();
 
     void killLine();
@@ -204,24 +194,25 @@ public:
 
     void setLineWrapMode(bool enable);
     void setFontFamily(QString fontName);
-    void setFontSize(int fontSize);
+    void setFontSize(qreal fontSize);
     void updateFont();
 
-    void replaceAll(const QString &replaceText, const QString &withText);
-    void replaceNext(const QString &replaceText, const QString &withText);
-    void replaceRest(const QString &replaceText, const QString &withText);
-    void beforeReplace(const QString &strReplaceText);
+    void replaceAll(const QString &replaceText, const QString &withText, Qt::CaseSensitivity caseFlag = Qt::CaseInsensitive);
+    void replaceNext(const QString &replaceText, const QString &withText, Qt::CaseSensitivity caseFlag = Qt::CaseInsensitive);
+    void replaceRest(const QString &replaceText, const QString &withText, Qt::CaseSensitivity caseFlag = Qt::CaseInsensitive);
+    void beforeReplace(const QString &strReplaceText, Qt::CaseSensitivity caseFlag = Qt::CaseInsensitive);
 
     bool findKeywordForward(const QString &keyword);
 
     void removeKeywords();
-    bool highlightKeyword(QString keyword, int position);
-    bool highlightKeywordInView(QString keyword);
+    bool highlightKeyword(const QString &keyword, int position, Qt::CaseSensitivity caseFlag = Qt::CaseInsensitive);
+    bool highlightKeywordInView(const QString &keyword, Qt::CaseSensitivity caseFlag = Qt::CaseInsensitive);
     void clearFindMatchSelections();
     void updateCursorKeywordSelection(QString keyword, bool findNext);
     void updateHighlightLineSelection();
     bool updateKeywordSelections(QString keyword, QTextCharFormat charFormat, QList<QTextEdit::ExtraSelection> &listSelection);
-    bool updateKeywordSelectionsInView(QString keyword, QTextCharFormat charFormat, QList<QTextEdit::ExtraSelection> *listSelection);
+    bool updateKeywordSelectionsInView(QString keyword, QTextCharFormat charFormat, QList<QTextEdit::ExtraSelection> *listSelection,
+                                       Qt::CaseSensitivity caseFlag = Qt::CaseInsensitive);
     bool searchKeywordSeletion(QString keyword, QTextCursor cursor, bool findNext);
     void renderAllSelections();
 
@@ -238,10 +229,7 @@ public:
     // 手动更新所有的标记信息，用于撤销栈处理更新当前颜色标记操作
     void manualUpdateAllMark(const QList<QPair<MarkOperation, qint64> > &markInfo);
 
-    /**
-     * @author shaoyu.guo ut000455
-     * @brief updateMarkAllSelectColor 文档篇幅视图有变更时（翻页/滚动条变化/鼠标滚轮变化/键盘上下键），动态更新绘制可视范围内字符颜色
-     */
+    // 文档篇幅视图有变更时（翻页/滚动条变化/鼠标滚轮变化/键盘上下键），动态更新绘制可视范围内字符颜色
     void updateMarkAllSelectColor();
 
     void lineNumberAreaPaintEvent(QPaintEvent *event);
@@ -251,8 +239,8 @@ public:
     void setTheme(const QString &path);
     void removeHighlightWordUnderCursor();
     void setSettings(Settings *settings);
-    void copySelectedText();
-    void cutSelectedText();
+    void copySelectedText(bool ignoreCheck = false);
+    void cutSelectedText(bool ignoreCheck = false);
     void pasteText();
     void setMark();
     void unsetMark();
@@ -521,9 +509,9 @@ public slots:
     void cursorPositionChanged();
 
     //剪切槽函数
-    void cut();
+    void cut(bool ignoreCheck = false);
     //复制槽函数
-    void copy();
+    void copy(bool ignoreCheck = false);
     //粘贴槽函数
     void paste();
     //修改后，高亮显示
@@ -560,9 +548,17 @@ public slots:
 
     void redo_();
     void undo_();
+
     void moveText(int from, int to, const QString& text, bool copy = false);
-    QTextCursor findCursor(const QString &substr, const QString &text, int from, bool backward = false, int cursorPos = 0);
-    QString selectedText();
+    QTextCursor findCursor(const QString &substr, const QString &text, int from, bool backward = false, int cursorPos = 0,
+                           Qt::CaseSensitivity caseFlag = Qt::CaseInsensitive);
+    void onPressedLineNumber(const QPoint& point);
+    QString selectedText(bool checkCRLF = false);
+    void onEndlineFormatChanged(BottomBar::EndlineFormat from,BottomBar::EndlineFormat to);
+
+    // 当前程序调色板更新时重绘部分组件
+    void onAppPaletteChanged();
+
 protected:
     bool event(QEvent *evt) override;   //触摸屏event事件
     void dragEnterEvent(QDragEnterEvent *event) override;
@@ -609,7 +605,8 @@ private:
     bool isAbleOperation(int iOperationType);
     // 计算颜色标记替换信息列表
     void calcMarkReplaceList(QList<TextEdit::MarkReplaceInfo> &replaceList, const QString &oldText,
-                             const QString &replaceText, const QString &withText, int offset = 0) const;
+                             const QString &replaceText, const QString &withText, int offset = 0,
+                             Qt::CaseSensitivity caseFlag = Qt::CaseInsensitive) const;
     // 查找行号line起始的折叠区域
     bool findFoldBlock(int line, QTextBlock &beginBlock, QTextBlock &endBlock, QTextBlock &curBlock);
 
@@ -739,7 +736,7 @@ private:
     int m_cursorWidthChangeDelay = 2000;
     bool m_bReadOnlyPermission = false;
 
-    int m_fontSize = 16;
+    qreal m_fontSize = 16;
     QString m_fontName;
 
     Comment::CommentDefinition m_commentDefinition;
@@ -865,5 +862,9 @@ private:
     UpdateOperationType m_LeftAreaUpdateState;
 
     bool m_MidButtonPatse = false;      // 鼠标中键黏贴处理
+    bool m_isPreeditBefore = false;     // 上一个输入法时间是否是 preedit
+    int m_preeditLengthBefore = 0;
+
+    Qt::CaseSensitivity defaultCaseSensitive = Qt::CaseInsensitive; // 查找匹配时默认不区分
 };
 #endif

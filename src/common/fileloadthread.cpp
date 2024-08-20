@@ -78,4 +78,7 @@ void FileLoadThread::run()
             emit sigLoadFinished(encode, outData, false);
         }
     }
+
+    this->quit();
+    this->deleteLater();
 }

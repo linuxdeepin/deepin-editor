@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2022 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -1801,6 +1801,7 @@ TEST(UT_test_textedit_replaceAll, UT_test_textedit_replaceAll_002)
     QString strRetAfter(pWindow->currentWrapper()->textEditor()->toPlainText());
 
     ASSERT_TRUE(!strRetAfter.compare(strRetBefore));
+
     pWindow->deleteLater();
 }
 
@@ -1819,6 +1820,35 @@ TEST(UT_test_textedit_replaceAll, UT_test_textedit_replaceAll_003)
     QString strRetAfter(pWindow->currentWrapper()->textEditor()->toPlainText());
 
     ASSERT_TRUE(!strRetAfter.compare(QString("Holle Holle\nHolle Holle")));
+
+    pWindow->currentWrapper()->textEditor()->replaceAll(QString("holle"), QString("World"));
+    strRetAfter = QString(pWindow->currentWrapper()->textEditor()->toPlainText());
+    ASSERT_TRUE(!strRetAfter.compare(QString("World World\nWorld World")));
+
+    pWindow->deleteLater();
+}
+
+//replaceAll check case sensitive
+TEST(UT_test_textedit_replaceAll, UT_test_textedit_replaceAll_CaseSensitive)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    auto *textEdit = pWindow->currentWrapper()->textEditor();
+
+    // NotChange
+    textEdit->replaceAll(QString("hello"), QString("world"), Qt::CaseSensitive);
+    ASSERT_TRUE(!textEdit->toPlainText().compare(strMsg));
+
+    textEdit->replaceAll(QString("hello"), QString("World"), Qt::CaseInsensitive);
+    ASSERT_TRUE(!textEdit->toPlainText().compare(QString("World world\nWorld world")));
+
+    textEdit->replaceAll(QString("world"), QString("World"), Qt::CaseInsensitive);
+    ASSERT_TRUE(!textEdit->toPlainText().compare(QString("World World\nWorld World")));
+
     pWindow->deleteLater();
 }
 
@@ -1909,6 +1939,38 @@ TEST(UT_test_textedit_replaceNext, UT_test_textedit_replaceNext_004)
     pWindow->deleteLater();
 }
 
+//replaceNext check sensitive
+TEST(UT_test_textedit_replaceNext, UT_test_textedit_replaceNext_CaseSensitive)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    auto *textEdit = pWindow->currentWrapper()->textEditor();
+    QTextCursor textCursor = textEdit->textCursor();
+    textEdit->insertTextEx(textCursor, strMsg);
+
+    textCursor = textEdit->textCursor();
+    textCursor.movePosition(QTextCursor::Start);
+    textCursor.movePosition(QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
+    textEdit->setTextCursor(textCursor);
+    textEdit->m_findHighlightSelection.cursor = textCursor;
+
+    QString strReplaceText("hello");
+    QString strWithText("World");
+    QString strRetBefore(textEdit->textCursor().block().text());
+
+    textEdit->replaceNext(strReplaceText, strWithText, Qt::CaseSensitive);
+    QString strRetAfter(textEdit->textCursor().block().text());
+    ASSERT_TRUE(!strRetAfter.compare(strRetBefore));
+
+    textEdit->setTextCursor(textCursor);
+    textEdit->m_findHighlightSelection.cursor = textCursor;
+    textEdit->replaceNext(strReplaceText, strWithText, Qt::CaseInsensitive);
+    ASSERT_TRUE(!textEdit->toPlainText().compare("World world\nHello world"));
+
+    pWindow->deleteLater();
+}
+
 //replaceRest 001
 TEST(UT_test_textedit_replaceRest, UT_test_textedit_replaceRest_001)
 {
@@ -1969,6 +2031,33 @@ TEST(UT_test_textedit_replaceRest, UT_test_textedit_replaceRest_003)
     ASSERT_TRUE(!strRetAfter.compare(QString("Helle Helle Helle Helle")));
     pWindow->deleteLater();
 }
+
+//replaceRest check case sensitive
+TEST(UT_test_textedit_replaceRest, UT_test_textedit_replaceRest_CaseSensitive)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world Hello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::MoveAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    QString strReplaceText("World");
+    QString strWithText("Hello");
+    QString strRetBefore(pWindow->currentWrapper()->textEditor()->textCursor().block().text());
+    pWindow->currentWrapper()->textEditor()->replaceRest(strReplaceText, strWithText, Qt::CaseSensitive);
+    QString strRetAfter(pWindow->currentWrapper()->textEditor()->textCursor().block().text());
+    ASSERT_TRUE(!strRetAfter.compare(strRetBefore));
+
+    pWindow->currentWrapper()->textEditor()->replaceRest(strReplaceText, strWithText, Qt::CaseInsensitive);
+    strRetAfter = QString(pWindow->currentWrapper()->textEditor()->textCursor().block().text());
+    ASSERT_TRUE(!strRetAfter.compare("Hello Hello Hello Hello"));
+
+    pWindow->deleteLater();
+}
+
 
 //beforeReplace
 TEST(UT_test_textedit_beforeReplace, UT_test_textedit_beforeReplace_001)
@@ -2047,6 +2136,27 @@ TEST(UT_test_textedit_highlightKeyword, UT_test_textedit_highlightKeyword_001)
     bool bRet = pWindow->currentWrapper()->textEditor()->highlightKeyword(QString("world"), 0);
 
     ASSERT_TRUE(bRet == true);
+    pWindow->deleteLater();
+}
+
+//highlightKeyword case sensitive
+TEST(UT_test_textedit_highlightKeyword, UT_test_textedit_highlightKeyword_CaseSensitive)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("Hello world\nHello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    bool bRet = pWindow->currentWrapper()->textEditor()->highlightKeyword(QString("World"), 0);
+    ASSERT_TRUE(bRet);
+
+    bRet = pWindow->currentWrapper()->textEditor()->highlightKeyword(QString("hello"), 0);
+    ASSERT_TRUE(bRet);
+
+    bRet = pWindow->currentWrapper()->textEditor()->highlightKeyword(QString("World"), 0, Qt::CaseSensitive);
+    ASSERT_FALSE(bRet);
+
     pWindow->deleteLater();
 }
 
@@ -2130,8 +2240,12 @@ TEST(UT_test_textedit_updateKeywordSelections, UT_test_textedit_updateKeywordSel
     QList<QTextEdit::ExtraSelection> listExtraSelection;
     listExtraSelection.append(extraSelection);
     bool bRet = pWindow->currentWrapper()->textEditor()->updateKeywordSelections(QString("smile"), charFormat, listExtraSelection);
-
     ASSERT_TRUE(bRet == false);
+
+    pWindow->currentWrapper()->textEditor()->defaultCaseSensitive = Qt::CaseSensitive;
+    bRet = pWindow->currentWrapper()->textEditor()->updateKeywordSelections(QString("World"), charFormat, listExtraSelection);
+    ASSERT_TRUE(bRet == false);
+
     pWindow->deleteLater();
 }
 
@@ -2151,8 +2265,11 @@ TEST(UT_test_textedit_updateKeywordSelections, UT_test_textedit_updateKeywordSel
     QList<QTextEdit::ExtraSelection> listExtraSelection;
     listExtraSelection.append(extraSelection);
     bool bRet = pWindow->currentWrapper()->textEditor()->updateKeywordSelections(QString("world"), charFormat, listExtraSelection);
-
     ASSERT_TRUE(bRet == true);
+
+    bRet = pWindow->currentWrapper()->textEditor()->updateKeywordSelections(QString("World"), charFormat, listExtraSelection);
+    ASSERT_TRUE(bRet == true);
+
     pWindow->deleteLater();
 }
 
@@ -2783,6 +2900,33 @@ TEST(UT_test_textedit_cutSelectedText, UT_test_textedit_cutSelectedText_001)
     QString strRet1(pClipboard->text());
     QString strRet2(pWindow->currentWrapper()->textEditor()->toPlainText());
     ASSERT_TRUE(!strRet1.compare(QString("Helle world")) && !strRet2.compare(QString("Helle world\n")));
+    pWindow->deleteLater();
+}
+
+TEST(UT_test_textedit_cutSelectedText, cutSelectedText_withMultiByteText_passed)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    // 多字节字符编码 CJK
+    // 𢝐𢝑𢝒𢝓𢝔𢝕𢝖𢝗𢝘𢝙\n𢝚𢝛𢝜𢝝𢝞𢝟𢝠𢝡𢝢𢝣
+    QString strMsg("\360\242\235\220\360\242\235\221\360\242\235\222\360\242\235\223\360\242\235\224"
+                   "\360\242\235\225\360\242\235\226\360\242\235\227\360\242\235\230\360\242\235\231\n"
+                   "\360\242\235\232\360\242\235\233\360\242\235\234\360\242\235\235\360\242\235\236"
+                   "\360\242\235\237\360\242\235\240\360\242\235\241\360\242\235\242\360\242\235\243");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor.setPosition(0);
+    textCursor.setPosition(6, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    QClipboard *pClipboard = QApplication::clipboard();
+    pClipboard->clear();
+    pWindow->currentWrapper()->textEditor()->cutSelectedText();
+
+    QString strRet1(pClipboard->text());
+    QString strRet2(pWindow->currentWrapper()->textEditor()->toPlainText());
+    EXPECT_EQ(strRet1, strMsg.left(6));
+    EXPECT_EQ(strRet2, strMsg.mid(6));
     pWindow->deleteLater();
 }
 
@@ -3659,7 +3803,10 @@ TEST(UT_test_textedit_lineNumberAreaWidth, UT_test_textedit_lineNumberAreaWidth_
 
     int iRet = pWindow->currentWrapper()->textEditor()->lineNumberAreaWidth();
 
-    ASSERT_TRUE(iRet == 20);
+    QFontMetrics fm(pWindow->currentWrapper()->textEditor()->m_fontLineNumberArea);
+    int calcWitdh = fm.horizontalAdvance(QLatin1Char('9')) * 2;
+
+    EXPECT_EQ(iRet, calcWitdh);
     pWindow->deleteLater();
 }
 
@@ -5201,6 +5348,7 @@ TEST_F(test_textedit, setCursorKeywordSeletoin)
     startManager->deleteLater();
     p->deleteLater();
 }
+
 // void cursorPositionChanged();
 TEST_F(test_textedit, cursorPositionChanged)
 {
@@ -5222,6 +5370,65 @@ TEST_F(test_textedit, cursorPositionChanged)
     startManager->deleteLater();
     p->deleteLater();
 }
+
+// void cut();
+TEST_F(test_textedit, cut_normal_passed)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    QString strMsg("hello world\n"
+                   "hello world");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor.movePosition(QTextCursor::StartOfBlock, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    QClipboard *pClipboard = QApplication::clipboard();
+    pClipboard->clear();
+    pWindow->currentWrapper()->textEditor()->cut();
+
+    QString strRet1(pClipboard->text());
+    QString strRet2(pWindow->currentWrapper()->textEditor()->toPlainText());
+    EXPECT_EQ(strRet1, QString("hello world"));
+    EXPECT_EQ(strRet2, QString("hello world\n"));
+    pWindow->currentWrapper()->textEditor()->undo_();
+    QString strRet3(pWindow->currentWrapper()->textEditor()->toPlainText());
+    EXPECT_EQ(strRet3, strMsg);
+
+    pWindow->deleteLater();
+}
+
+TEST_F(test_textedit, cut_withMultiByteText_passed)
+{
+    Window *pWindow = new Window();
+    pWindow->addBlankTab(QString());
+    // 多字节字符编码 CJK
+    // 𢝐𢝑𢝒𢝓𢝔𢝕𢝖𢝗𢝘𢝙\n𢝚𢝛𢝜𢝝𢝞𢝟𢝠𢝡𢝢𢝣
+    QString strMsg("\360\242\235\220\360\242\235\221\360\242\235\222\360\242\235\223\360\242\235\224"
+                   "\360\242\235\225\360\242\235\226\360\242\235\227\360\242\235\230\360\242\235\231\n"
+                   "\360\242\235\232\360\242\235\233\360\242\235\234\360\242\235\235\360\242\235\236"
+                   "\360\242\235\237\360\242\235\240\360\242\235\241\360\242\235\242\360\242\235\243");
+    QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
+    pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
+
+    textCursor.setPosition(0);
+    textCursor.setPosition(6, QTextCursor::KeepAnchor);
+    pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
+    QClipboard *pClipboard = QApplication::clipboard();
+    pClipboard->clear();
+    pWindow->currentWrapper()->textEditor()->cut();
+
+    QString strRet1(pClipboard->text());
+    QString strRet2(pWindow->currentWrapper()->textEditor()->toPlainText());
+    EXPECT_EQ(strRet1, strMsg.leftRef(6));
+    EXPECT_EQ(strRet2, strMsg.midRef(6));
+    pWindow->currentWrapper()->textEditor()->undo_();
+    QString strRet3(pWindow->currentWrapper()->textEditor()->toPlainText());
+    EXPECT_EQ(strRet3, strMsg);
+
+    pWindow->deleteLater();
+}
+
 // void updateHighlightBrackets(const QChar &openChar, const QChar &closeChar);
 TEST_F(test_textedit, updateHighlightBrackets)
 {
@@ -9460,6 +9667,49 @@ TEST(UT_Textedit_selectText, SelectText_MultiBlock_Pass)
     wra->deleteLater();
 }
 
+TEST(UT_Textedit_selectText, SelectText_MultiBlock_MultiByte_Pass)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    // 此字符串为特殊多字节编码 CJK
+    // "𢝐𢝑𢝒𢝓𢝔𢝕𢝖𢝗𢝘𢝙\n𢝚𢝛𢝜𢝝𢝞𢝟𢝠𢝡𢝢𢝣\n𢝤𢝥𢝦𢝧𢝨𢝩𢝪𢝫𢝬𢝭\n"
+    QString multiByteText("\360\242\235\220\360\242\235\221\360\242\235\222\360\242\235\223\360\242\235\224"
+                          "\360\242\235\225\360\242\235\226\360\242\235\227\360\242\235\230\360\242\235\231\n"
+                          "\360\242\235\232\360\242\235\233\360\242\235\234\360\242\235\235\360\242\235\236"
+                          "\360\242\235\237\360\242\235\240\360\242\235\241\360\242\235\242\360\242\235\243\n"
+                          "\360\242\235\244\360\242\235\245\360\242\235\246\360\242\235\247\360\242\235\250"
+                          "\360\242\235\251\360\242\235\252\360\242\235\253\360\242\235\254\360\242\235\255\n");
+    edit->setPlainText(multiByteText);
+    // 选中 "𢝘𢝙\n𢝚𢝛"
+    QString str1 = QString("\360\242\235\230\360\242\235\231\n\360\242\235\232\360\242\235\233");
+    QTextCursor cursor = edit->textCursor();
+    cursor.setPosition(16);
+    cursor.setPosition(16 + str1.length(), QTextCursor::KeepAnchor);
+    edit->setTextCursor(cursor);
+    EXPECT_EQ(cursor.selectedText().replace("\u2029", "\n"), edit->selectedText());
+    EXPECT_EQ(str1, edit->selectedText());
+
+    // 选中 "𢝘𢝙\n𢝚𢝛𢝜𢝝𢝞𢝟𢝠𢝡𢝢𢝣\n𢝤𢝥"
+    QString str2 = multiByteText.mid(16, 30);
+    cursor.setPosition(16);
+    cursor.setPosition(16 + str2.length(), QTextCursor::KeepAnchor);
+    edit->setTextCursor(cursor);
+    EXPECT_EQ(cursor.selectedText().replace("\u2029", "\n"), edit->selectedText());
+    EXPECT_EQ(str2, edit->selectedText());
+
+    // 选中 "𢝘𢝙\n𢝚𢝛𢝜𢝝𢝞𢝟𢝠𢝡𢝢𢝣\n𢝤𢝥𢝦𢝧𢝨𢝩𢝪𢝫𢝬𢝭\n"
+    QString str3 = multiByteText.mid(16);
+    cursor.setPosition(16);
+    cursor.setPosition(16 + str3.length(), QTextCursor::KeepAnchor);
+    edit->setTextCursor(cursor);
+    EXPECT_EQ(cursor.selectedText().replace("\u2029", "\n"), edit->selectedText());
+    EXPECT_EQ(str3, edit->selectedText());
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
 TEST(UT_Textedit_MidButtonInsertText, onTextContentChanged_MidButtonInsertText_Pass)
 {
     TextEdit* edit = new TextEdit;
@@ -9484,6 +9734,220 @@ TEST(UT_Textedit_MidButtonInsertText, onTextContentChanged_MidButtonInsertText_P
     EXPECT_EQ(cursor.position(), 4);
 
     EXPECT_FALSE(edit->m_MidButtonPatse);
+
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+DPalette stubApplicationPalette()
+{
+    DPalette pa;
+    pa.setColor(DPalette::Highlight, QColor(Qt::red));
+    return pa;
+}
+
+TEST(UT_Textedit_onAppPaletteChanged, OnAppPaletteChanged_ChangeBackground_Pass)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    Stub s;
+    s.set(ADDR(DGuiApplicationHelper, applicationPalette), stubApplicationPalette);
+
+    QTextEdit::ExtraSelection selection;
+    selection.format.setBackground(QBrush(Qt::white));
+    edit->m_altModSelections.append(selection);
+    edit->m_bIsAltMod = true;
+    edit->onAppPaletteChanged();
+
+    ASSERT_FALSE(edit->m_altModSelections.isEmpty());
+    QBrush background = edit->m_altModSelections.first().format.background();
+    EXPECT_EQ(QColor(Qt::red), background.color());
+
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+TEST(UT_Textedit_MoveText, moveText_Move_Pass)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    QString sourceText("123456789\n");
+    edit->setPlainText(sourceText);
+
+    edit->moveText(0, 10, "12");
+    EXPECT_EQ(edit->toPlainText(), QString("3456789\n12"));
+    edit->undo_();
+    EXPECT_EQ(edit->toPlainText(), sourceText);
+    edit->redo_();
+    EXPECT_EQ(edit->toPlainText(), QString("3456789\n12"));
+
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+TEST(UT_Textedit_MoveText, moveText_Copy_Pass)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    QString sourceText("123456789\n");
+    edit->setPlainText(sourceText);
+
+    edit->moveText(0, 10, "12", true);
+    EXPECT_EQ(edit->toPlainText(), QString("123456789\n12"));
+    edit->undo_();
+    EXPECT_EQ(edit->toPlainText(), sourceText);
+    edit->redo_();
+    EXPECT_EQ(edit->toPlainText(), QString("123456789\n12"));
+
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+TEST(UT_Textedit_MoveText, moveText_Multi_Pass)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    edit->insertTextEx(edit->textCursor(), "1\n");
+    edit->insertTextEx(edit->textCursor(), "2\n");
+    EXPECT_EQ(edit->toPlainText(), QString("1\n2\n"));
+
+    edit->moveText(2, 1, "2");
+    EXPECT_EQ(edit->toPlainText(), QString("12\n\n"));
+    edit->moveText(0, 4, "12");
+    EXPECT_EQ(edit->toPlainText(), QString("\n\n12"));
+    edit->moveText(2, 0, "12", true);
+    EXPECT_EQ(edit->toPlainText(), QString("12\n\n12"));
+
+    while(edit->m_pUndoStack->canUndo()) {
+        edit->undo_();
+    }
+    EXPECT_TRUE(edit->toPlainText().isEmpty());
+    while(edit->m_pUndoStack->canRedo()) {
+        edit->redo_();
+    }
+    EXPECT_EQ(edit->toPlainText(), QString("12\n\n12"));
+
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+TEST(UT_Textedit_onPressedLineNumber, onPressedLineNumber_BoundaryCheck_Pass)
+{
+    // 边界检查
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    edit->onPressedLineNumber(QPoint(0, 0));
+    EXPECT_EQ(edit->textCursor().position(), 0);
+
+    edit->onPressedLineNumber(QPoint(0, 100));
+    EXPECT_EQ(edit->textCursor().position(), 0);
+
+    edit->insertTextEx(edit->textCursor(), "123\n222\n333");
+    auto cursor = edit->textCursor();
+    cursor.setPosition(0);
+    edit->setTextCursor(cursor);
+    edit->onPressedLineNumber(QPoint(-1, -1));
+    EXPECT_EQ(edit->textCursor().position(), 0);
+    EXPECT_TRUE(edit->textCursor().selectedText().isEmpty());
+
+    edit->onPressedLineNumber(QPoint(INT_MAX, INT_MAX));
+    EXPECT_EQ(edit->textCursor().position(), 0);
+    EXPECT_TRUE(edit->textCursor().selectedText().isEmpty());
+
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+TEST(UT_Textedit_onPressedLineNumber, onPressedLineNumber_MultiBlock_Pass)
+{
+    // 多行不同位置选取
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    edit->insertTextEx(edit->textCursor(), "123\n222\n333");
+    QTextCursor cursor = edit->textCursor();
+
+    QTextBlock selectBlock = edit->document()->firstBlock();
+    cursor.setPosition(selectBlock.position(), QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+    QRect rect = edit->cursorRect(cursor);
+    edit->onPressedLineNumber(QPoint(rect.left(), rect.center().y()));
+    EXPECT_EQ(edit->textCursor().selectedText().replace("\u2029", "\n"), QString("123\n"));
+
+    selectBlock = edit->document()->lastBlock();
+    cursor.setPosition(selectBlock.position(), QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+    rect = edit->cursorRect(cursor);
+    edit->onPressedLineNumber(QPoint(rect.left(), rect.center().y()));
+    EXPECT_EQ(edit->textCursor().selectedText().replace("\u2029", "\n"), QString("333"));
+
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+TEST(UT_Textedit_onPressedLineNumber, onPressedLineNumber_OutOfBlock_Pass)
+{
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    edit->insertTextEx(edit->textCursor(), "123\n222\n333");
+    QTextCursor cursor = edit->textCursor();
+
+    QTextBlock selectBlock = edit->document()->lastBlock();
+    cursor.setPosition(selectBlock.position(), QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+    QRect rect = edit->cursorRect(cursor);
+    // 超过文档范围选取将锁定尾行
+    edit->onPressedLineNumber(QPoint(rect.left(), rect.center().y() + rect.height()));
+    EXPECT_EQ(edit->textCursor().selectedText().replace("\u2029", "\n"), QString("333"));
+
+    edit->deleteLater();
+    wra->deleteLater();
+}
+
+QString stub_getSystemLan()
+{
+    return "bo_CN";
+}
+
+TEST(UT_Textedit_onPressedLineNumber, onPressedLineNumber_LanBo_CN_Pass)
+{
+    // bo_CN 语言环境调整偏移量，光标向下偏移2
+    Stub stub;
+    stub.set(ADDR(Utils, getSystemLan), stub_getSystemLan);
+
+    TextEdit* edit = new TextEdit;
+    EditWrapper* wra = new EditWrapper;
+    edit->m_wrapper = wra;
+
+    edit->insertTextEx(edit->textCursor(), "123\n222\n333");
+    QTextCursor cursor = edit->textCursor();
+
+    QTextBlock selectBlock = edit->document()->firstBlock();
+    cursor.setPosition(selectBlock.position(), QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+    QRect rect = edit->cursorRect(cursor);
+    edit->onPressedLineNumber(QPoint(rect.left(), rect.bottom() + 2));
+    EXPECT_EQ(edit->textCursor().selectedText().replace("\u2029", "\n"), QString("123\n"));
+
+    selectBlock = selectBlock.next();
+    cursor.setPosition(selectBlock.position(), QTextCursor::MoveAnchor);
+    cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
+    rect = edit->cursorRect(cursor);
+    edit->onPressedLineNumber(QPoint(rect.left(), rect.bottom() + 2));
+    EXPECT_EQ(edit->textCursor().selectedText().replace("\u2029", "\n"), QString("222\n"));
 
     edit->deleteLater();
     wra->deleteLater();

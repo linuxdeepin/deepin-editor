@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -7,6 +7,9 @@
 #include <DSettings>
 #include <DSettingsOption>
 #include <DMessageManager>
+#include <DSysInfo>
+#include <DGuiApplicationHelper>
+
 #include <QRegularExpression>
 #include <QJsonDocument>
 #include <QMimeDatabase>
@@ -25,6 +28,14 @@
 #include <QImageReader>
 #include <QCryptographicHash>
 #include "qprocess.h"
+
+#include <QLibraryInfo>
+
+extern "C" {
+#include "../basepub/load_libs.h"
+}
+
+DCORE_USE_NAMESPACE
 
 QT_BEGIN_NAMESPACE
 extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
@@ -561,7 +572,9 @@ bool Utils::isMimeTypeSupport(const QString &filepath)
                   << "model/vrml"
                   << "application/pkix-cert+pem"
                   << "application/x-pak"
-                  << "application/x-code-workspace";
+                  << "application/x-code-workspace"
+                  << "application/toml"
+                  << "audio/x-mod";
 
     if (textMimeTypes.contains(mimeType)) {
         return true;
@@ -599,6 +612,18 @@ QStringList Utils::cleanPath(const QStringList &filePaths)
     }
 
     return paths;
+}
+
+/**
+ * @return 返回程序使用的默认数据(存放临时、备份文件)存放位置，不同环境下路径不同
+ *  [debian]    /home/user/.local/share/deepin/deepin-editor/
+ *  [linglong]  /home/user/.linglong/org.deepin.editor/share/deepin/deepin-editor/
+ */
+QString Utils::localDataPath()
+{
+    auto dataPaths = Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation));
+    return dataPaths.isEmpty() ? QDir::homePath() + "/.local/share/deepin/deepin-editor/"
+           : dataPaths.first();
 }
 
 const QStringList Utils::getEncodeList()
@@ -767,15 +792,31 @@ QString Utils::getStringMD5Hash(const QString &input)
 
 bool Utils::activeWindowFromDock(quintptr winId)
 {
-    bool bRet = true;
-    // new interface use application as id
-    QDBusInterface dockDbusInterface("com.deepin.dde.daemon.Dock",
-                                     "/com/deepin/dde/daemon/Dock",
-                                     "com.deepin.dde.daemon.Dock");
-    QDBusReply<void> reply = dockDbusInterface.call("ActivateWindow", winId);
-    if (!reply.isValid()) {
-        qDebug() << "call com.deepin.dde.daemon.Dock failed" << reply.error();
-        bRet = false;
+    bool bRet = false;
+    // 优先采用V23接口
+    QDBusInterface dockDbusInterfaceV23("org.deepin.dde.daemon.Dock1",
+                                        "/org/deepin/dde/daemon/Dock1",
+                                        "org.deepin.dde.daemon.Dock1");
+    if (dockDbusInterfaceV23.isValid()) {
+        QDBusReply<void> reply = dockDbusInterfaceV23.call("ActivateWindow", winId);
+        if (!reply.isValid()) {
+            qDebug() << "call v23 org.deepin.dde.daemon.Dock1 failed" << reply.error();
+        } else {
+            return true;
+        }
+    }
+
+    QDBusInterface dockDbusInterfaceV20("com.deepin.dde.daemon.Dock",
+                                        "/com/deepin/dde/daemon/Dock",
+                                        "com.deepin.dde.daemon.Dock");
+    if (dockDbusInterfaceV20.isValid() && !bRet) {
+        QDBusReply<void> reply = dockDbusInterfaceV20.call("ActivateWindow", winId);
+        if (!reply.isValid()) {
+            qDebug() << "call v20 com.deepin.dde.daemon.Dock failed" << reply.error();
+            bRet = false;
+        } else {
+            return true;
+        }
     }
 
     return bRet;
@@ -810,14 +851,37 @@ QString Utils::getSystemLan()
     if (!m_systemLanguage.isEmpty()) {
         return m_systemLanguage;
     } else {
-        QDBusInterface ie("com.deepin.daemon.LangSelector",
-                          "/com/deepin/daemon/LangSelector",
-                          "com.deepin.daemon.LangSelector",
-                          QDBusConnection::sessionBus());
+        switch (getSystemVersion()) {
+            case V23:
+                m_systemLanguage = QLocale::system().name();
+                break;
+            default: {
+                QDBusInterface ie("com.deepin.daemon.LangSelector",
+                                "/com/deepin/daemon/LangSelector",
+                                "com.deepin.daemon.LangSelector",
+                                QDBusConnection::sessionBus());
+                m_systemLanguage = ie.property("CurrentLocale").toString();
+                break;
+            }
+        }
 
-        m_systemLanguage = ie.property("CurrentLocale").toString();
+        qWarning() << "getSystemLan is" << m_systemLanguage;
         return m_systemLanguage;
     }
+}
+
+/**
+ * @return 获取当前系统版本并返回
+ */
+Utils::SystemVersion Utils::getSystemVersion()
+{
+    QString version = DSysInfo::majorVersion();
+    if ("23" == version) {
+        return V23;
+    }
+
+    // 其它版本默认V20
+    return V20;
 }
 
 
@@ -899,4 +963,144 @@ Utils::RegionIntersectType Utils::checkRegionIntersect(int x1, int y1, int x2, i
             return EIntersectInner;
         }
     }
+}
+
+/**
+ * @return 取得当前文本编辑器支持的编码格式，按区域划分，从文件 :/encodes/encodes.ini 中读取
+ * @note 非多线程安全，仅在 gui 线程调用
+ */
+QVector<QPair<QString, QStringList> > Utils::getSupportEncoding()
+{
+    static QVector<QPair<QString, QStringList> > s_groupEncodeVec;
+    if (s_groupEncodeVec.isEmpty()) {
+        QVector<QPair<QString, QStringList> > tmpEncodeVec;
+
+        QFile file(":/encodes/encodes.ini");
+        QString data;
+        if (file.open(QIODevice::ReadOnly)) {
+            data = QString::fromUtf8(file.readAll());
+            file.close();
+        }
+
+        QTextStream readStream(&data,QIODevice::ReadOnly);
+        while (!readStream.atEnd()) {
+            QString group = readStream.readLine();
+            QString key = group.mid(1,group.length()-2);
+            QString encodes = readStream.readLine();
+            QString value = encodes.mid(8,encodes.length()-2);
+            tmpEncodeVec.append(QPair<QString,QStringList>(key, value.split(",")));
+        }
+
+        s_groupEncodeVec = tmpEncodeVec;
+    }
+
+    return s_groupEncodeVec;
+}
+
+/**
+ * @return 取得当前文本编辑器支持的编码格式列表
+ */
+QStringList Utils::getSupportEncodingList()
+{
+    QStringList encodingList;
+    auto supportEncoding = getSupportEncoding();
+    for (auto encodingData : supportEncoding) {
+        encodingList.append(encodingData.second);
+    }
+    std::sort(encodingList.begin(), encodingList.end());
+
+    return encodingList;
+}
+
+QString Utils::libPath(const QString &strlib)
+{
+    QDir  dir;
+    QString path  = QLibraryInfo::location(QLibraryInfo::LibrariesPath);
+    dir.setPath(path);
+    QStringList list = dir.entryList(QStringList() << (strlib + "*"), QDir::NoDotAndDotDot | QDir::Files); //filter name with strlib
+
+    if (list.contains(strlib))
+        return strlib;
+
+    list.sort();
+    if (list.size() <= 0)
+        return "";
+    return list.last();
+}
+
+void Utils::loadCustomDLL()
+{
+    // 解析ZPD定制需求提供的库libzpdcallback.so
+    LoadLibNames tmp;
+    QByteArray zpdDll = Utils::libPath("libzpdcallback.so").toLatin1();
+    tmp.chZPDDLL = zpdDll.data();
+    setLibNames(tmp);
+}
+
+/**
+ * @brief 根据传入的文件路径 \a filePath 返回是否允许对此文件内容进行剪切或拷贝
+ * @param filePath 文件完整路径
+ * @return 是否允许剪切或拷贝
+ */
+bool Utils::enableClipCopy(const QString &filePath)
+{
+    if (getLoadZPDLibsInstance()->m_document_clip_copy) {
+        // intercept 输出为1,拦截操作
+        static const int disableFlag = 1;
+        int intercept = 1;
+        getLoadZPDLibsInstance()->m_document_clip_copy(filePath.toUtf8().data(), &intercept);
+
+        if (disableFlag == intercept) {
+            qWarning() << qPrintable("ZPD access control! Disable clip or copy document!");
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/**
+ * @brief 文件关闭前记录当前关闭的文件路径 \a filePath
+ * @param filePath 文件完整路径
+ */
+void Utils::recordCloseFile(const QString &filePath)
+{
+    if (getLoadZPDLibsInstance()->m_document_close) {
+        getLoadZPDLibsInstance()->m_document_close(filePath.toUtf8().data());
+    }
+}
+
+/**
+   @brief 发送弹窗提示消息 \a message , 使用 \a icon 设置提示图标，\a par 是浮动窗口计算位置的父窗口。
+        这个函数效果和 DMessageManager::sendMessage() 类似，但是提示信息的文字字体将跟随 qApp 变化,
+        而不是直接使用父窗口的字体。
+ */
+void Utils::sendFloatMessageFixedFont(QWidget *par, const QIcon &icon, const QString &message)
+{
+    // 以下代码和 DMessageManager::sendMessage() 流程一致。
+    QWidget *content = par->findChild<QWidget *>("_d_message_manager_content", Qt::FindDirectChildrenOnly);
+    auto msgWidgets = content->findChildren<DFloatingMessage*>(QString(), Qt::FindDirectChildrenOnly);
+    auto text_message_count = std::count_if(msgWidgets.begin(), msgWidgets.end(), [](DFloatingMessage *msg){
+        return bool(msg->messageType() == DFloatingMessage::TransientType);
+    });
+
+    // TransientType 类型的通知消息，最多只允许同时显示三个
+    if (text_message_count >= 3)
+        return;
+
+    // 浮动临时提示信息，自动销毁
+    DFloatingMessage *floMsg = new DFloatingMessage(DFloatingMessage::TransientType);
+    floMsg->setAttribute(Qt::WA_DeleteOnClose);
+    floMsg->setIcon(icon);
+    floMsg->setMessage(message);
+    floMsg->setFont(qApp->font());
+
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    // 绑定 qApp 字体变更信号
+    QObject::connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::fontChanged, floMsg, [ = ](const QFont &font){
+        floMsg->setFont(font);
+    });
+#endif
+
+    DMessageManager::instance()->sendMessage(par, floMsg);
 }

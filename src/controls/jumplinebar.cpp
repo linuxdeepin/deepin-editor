@@ -1,28 +1,44 @@
-// SPDX-FileCopyrightText: 2011-2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "jumplinebar.h"
 
 #include <DThemeManager>
+#include <DGuiApplicationHelper>
 
 #include <QDebug>
 
 // 各项组件的默认大小
-const int nJumpLineBarWidth = 212;
-const int nJumpLineBarHeight = 60;
+const int s_nJumpLineBarWidth = 232;
+const int s_nJumpLineBarHeight = 60;
+const QMargins s_JLBDefaultMarigins = {10, 0, 10, 0};
 const int s_nJumpLineBarSpinBoxWidth = 124;
 const int s_nJumpLineBarSPinBoxHeight = 36;
+const int s_nCloseButtonSize = 30;
 // 水平方向与边界间距
 const int s_nJumpLineBarHorizenMargin = 10;
+// 紧凑模式下的控件高度调整(相较设计图调整，以使得实际像素与设计图一致)
+const int s_nJumpLineBarWidthCompact = 212;
+const int s_nJumpLineBarHeightCompact = 40;
+const QMargins s_JLBCompactMarigins = {10, 0, 0, 0};
+const int s_nJumpLineBarSPinBoxHeightCompact = 28;
+const int s_nCloseButtonSizeCompact = 27;
 
 JumpLineBar::JumpLineBar(DFloatingWidget *parent)
     : DFloatingWidget(parent)
 {
     // Init layout and widgets.
     m_layout = new QHBoxLayout();
-    m_layout->setContentsMargins(10, 6, 10, 6);
+    m_layout->setContentsMargins(10, 0, 10, 0);
+    m_layout->setAlignment(Qt::AlignVCenter);
     m_layout->setSpacing(5);
+
+    m_closeButton = new DIconButton(DStyle::SP_CloseButton);
+    m_closeButton->setIconSize(QSize(30, 30));
+    m_closeButton->setFixedSize(30, 30);
+    m_closeButton->setEnabledCircle(true);
+    m_closeButton->setFlat(true);
 
     m_label = new QLabel();
     m_label->setText(tr("Go to Line: "));
@@ -36,15 +52,23 @@ JumpLineBar::JumpLineBar(DFloatingWidget *parent)
 
     m_layout->addWidget(m_label);
     m_layout->addWidget(m_pSpinBoxInput);
+    m_layout->addWidget(m_closeButton);
     this->setLayout(m_layout);
 
     // 初始化浮动条宽度，根据文本长度计算
-    setFixedHeight(nJumpLineBarHeight);
+    setFixedHeight(s_nJumpLineBarHeight);
     setFixedWidth(m_layout->sizeHint().width() + s_nJumpLineBarHorizenMargin);
 
     connect(this, &JumpLineBar::pressEsc, this, &JumpLineBar::jumpCancel, Qt::QueuedConnection);
     connect(m_pSpinBoxInput->lineEdit(), &QLineEdit::returnPressed, this, &JumpLineBar::jumpConfirm, Qt::QueuedConnection);
     connect(m_pSpinBoxInput->lineEdit(), &QLineEdit::textChanged, this, &JumpLineBar::handleLineChanged, Qt::QueuedConnection);
+    connect(m_closeButton, &DIconButton::clicked, this, &JumpLineBar::close, Qt::QueuedConnection);
+
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    // 初始化布局模式
+    updateSizeMode();
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, &JumpLineBar::updateSizeMode);
+#endif
 }
 
 JumpLineBar::~JumpLineBar()
@@ -151,5 +175,30 @@ bool JumpLineBar::eventFilter(QObject *pObject, QEvent *pEvent)
     }
 
     return DFloatingWidget::eventFilter(pObject, pEvent);
+}
+
+/**
+   @brief 根据界面布局模式 `DGuiApplicationHelper::isCompactMode()` 切换当前界面布局参数。
+        需要注意，界面参数同设计图参数并非完全一致，而是按照实际的显示像素值进行比对。
+ */
+void JumpLineBar::updateSizeMode()
+{
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    if (DGuiApplicationHelper::isCompactMode()) {
+        m_layout->setContentsMargins(s_JLBCompactMarigins);
+        m_closeButton->setIconSize(QSize(s_nCloseButtonSizeCompact, s_nCloseButtonSizeCompact));
+        m_closeButton->setFixedSize(QSize(s_nCloseButtonSizeCompact, s_nCloseButtonSizeCompact));
+        m_pSpinBoxInput->setFixedHeight(s_nJumpLineBarSPinBoxHeightCompact);
+        setMinimumWidth(s_nJumpLineBarWidthCompact);
+        setFixedHeight(s_nJumpLineBarHeightCompact);
+    } else {
+        m_layout->setContentsMargins(s_JLBDefaultMarigins);
+        m_closeButton->setIconSize(QSize(s_nCloseButtonSize, s_nCloseButtonSize));
+        m_closeButton->setFixedSize(QSize(s_nCloseButtonSize, s_nCloseButtonSize));
+        m_pSpinBoxInput->setFixedHeight(s_nJumpLineBarSPinBoxHeight);
+        setMinimumWidth(s_nJumpLineBarWidth);
+        setFixedHeight(s_nJumpLineBarHeight);
+    }
+#endif
 }
 

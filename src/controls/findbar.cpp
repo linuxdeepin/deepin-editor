@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -6,6 +6,15 @@
 #include "../common/utils.h"
 
 #include <QDebug>
+
+// 不同布局模式下界面参数，不完全对应设计图固定值，调整后实际像素值和设计图对应
+const int s_FBHeight = 60;
+const QMargins s_FBContentMargins = {16, 0, 10, 0};
+const int s_FBCloseBtnSize = 30;
+const int s_FBHeightCompact = 40;
+const QMargins s_FBContentMarginsCompact = {16, 0, 6, 0};
+const int s_FBCloseBtnSizeCompact = 26;
+const int s_FBCloseIconSizeCompact = 27;
 
 FindBar::FindBar(QWidget *parent)
     : DFloatingWidget(parent)
@@ -19,14 +28,11 @@ FindBar::FindBar(QWidget *parent)
 
     m_layout = new QHBoxLayout();
     m_layout->setSpacing(10);
+    m_layout->setAlignment(Qt::AlignVCenter);
     m_findLabel = new QLabel(tr("Find"));
-    m_findLabel->setMinimumHeight(36);
     m_editLine = new LineBar();
-    m_editLine->lineEdit()->setMinimumHeight(36);
     m_findPrevButton = new QPushButton(tr("Previous"));
-    //m_findPrevButton->setFixedSize(80, 36);
     m_findNextButton = new QPushButton(tr("Next"));
-    //m_findNextButton->setFixedSize(80, 36);
     m_closeButton = new DIconButton(DStyle::SP_CloseButton);
     m_closeButton->setIconSize(QSize(30, 30));
     m_closeButton->setFixedSize(30, 30);
@@ -35,7 +41,14 @@ FindBar::FindBar(QWidget *parent)
     m_layout->setContentsMargins(16, 6, 10, 6);
 
     m_layout->addWidget(m_findLabel);
-    m_layout->addWidget(m_editLine);
+
+    // 单独处理输入框，由于Qt坐标机制，奇数处理存在累计误差，导致显示效果和预期存在差异，添加 spacer 强制输入框居中
+    QVBoxLayout *lineBarLayout = new QVBoxLayout();
+    lineBarLayout->addItem(new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
+    lineBarLayout->addWidget(m_editLine);
+    lineBarLayout->addItem(new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
+    m_layout->addLayout(lineBarLayout);
+
     m_layout->addWidget(m_findPrevButton);
     m_layout->addWidget(m_findNextButton);
     m_layout->addWidget(m_closeButton);
@@ -58,6 +71,11 @@ FindBar::FindBar(QWidget *parent)
     //connect(m_findPrevButton, &QPushButton::clicked, this, &FindBar::findPrev, Qt::QueuedConnection);
 
     connect(m_closeButton, &DIconButton::clicked, this, &FindBar::findCancel, Qt::QueuedConnection);
+
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    updateSizeMode();
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, &FindBar::updateSizeMode);
+#endif
 }
 
 bool FindBar::isFocus()
@@ -143,6 +161,31 @@ void FindBar::keyPressEvent(QKeyEvent *e)
             m_findNextButton->click();
         }
     }
+}
+
+/**
+   @brief 根据界面布局模式 `DGuiApplicationHelper::isCompactMode()` 切换当前界面布局参数。
+        需要注意，界面参数同设计图参数并非完全一致，而是按照实际的显示像素值进行比对。
+ */
+void FindBar::updateSizeMode()
+{
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    if (DGuiApplicationHelper::isCompactMode()) {
+        setFixedHeight(s_FBHeightCompact);
+        m_closeButton->setFixedSize(s_FBCloseBtnSizeCompact, s_FBCloseBtnSizeCompact);
+        m_closeButton->setIconSize(QSize(s_FBCloseIconSizeCompact, s_FBCloseIconSizeCompact));
+
+        m_layout->setContentsMargins(s_FBContentMarginsCompact);
+        m_layout->invalidate();
+    } else {
+        setFixedHeight(s_FBHeight);
+        m_closeButton->setFixedSize(s_FBCloseBtnSize, s_FBCloseBtnSize);
+        m_closeButton->setIconSize(QSize(s_FBCloseBtnSize, s_FBCloseBtnSize));
+
+        m_layout->setContentsMargins(s_FBContentMargins);
+        m_layout->invalidate();
+    }
+#endif
 }
 
 void FindBar::setMismatchAlert(bool isAlert)

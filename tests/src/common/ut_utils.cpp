@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2019 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2019 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -11,6 +11,10 @@
 #include "../../src/startmanager.h"
 #include "../../src/editor/dtextedit.h"
 #include "../../src/common/utils.h"
+extern "C" {
+#include "../../src/basepub/load_libs.h"
+}
+
 #include "stub.h"
 #include <QTextCodec>
 #include <QByteArray>
@@ -529,4 +533,51 @@ TEST(UT_Utils_checkRegionIntersect, checkRegionIntersect)
     ASSERT_EQ(type, Utils::EIntersectInner);
 }
 
+QByteArray supportEncoding_readAll_stub()
+{
+    return QByteArray();
+}
 
+TEST(UT_Utils_getSupportEncoding, getSupportEncoding)
+{
+    auto encoding = Utils::getSupportEncoding();
+    ASSERT_FALSE(encoding.isEmpty());
+}
+
+TEST(UT_Utils_getSupportEncoding, getSupportEncodingWithError)
+{
+    Stub stub1;
+    typedef QVector<QPair<QString, QStringList> > VecType;
+    stub1.set(ADDR(VecType, isEmpty), supportEncoding_readAll_stub);
+    Stub stub2;
+    stub2.set(ADDR(QIODevice, readAll), supportEncoding_readAll_stub);
+
+    auto encoding = Utils::getSupportEncoding();
+    ASSERT_TRUE(encoding.isEmpty());
+}
+
+TEST(UT_Utils_getSupportEncodingList, getSupportEncodingList)
+{
+    QStringList encodingList = Utils::getSupportEncodingList();
+    ASSERT_FALSE(encodingList.isEmpty());
+    ASSERT_TRUE(encodingList.contains("UTF-8"));
+}
+
+void uos_document_clip_copy_false(const char *path, int *intercept)
+{
+    Q_UNUSED(path)
+    if (intercept) {
+        *intercept = 1;
+    }
+}
+
+TEST(UT_Utils_zpdLib, enableClipCopy_notLoad_True)
+{
+    EXPECT_TRUE(Utils::enableClipCopy(""));
+    EXPECT_TRUE(Utils::enableClipCopy(QString::null));
+
+    getLoadZPDLibsInstance()->m_document_clip_copy = &uos_document_clip_copy_false;
+    EXPECT_FALSE(Utils::enableClipCopy(""));
+
+    getLoadZPDLibsInstance()->m_document_clip_copy = nullptr;
+}

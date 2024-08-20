@@ -1,10 +1,11 @@
-// SPDX-FileCopyrightText: 2017 - 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2017 - 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "../widgets/window.h"
 #include "../encodes/detectcode.h"
 #include "../common/fileloadthread.h"
+#include "../widgets/pathsettintwgt.h"
 #include "editwrapper.h"
 #include "../common/utils.h"
 #include "leftareaoftextedit.h"
@@ -85,6 +86,9 @@ EditWrapper::EditWrapper(Window *window, QWidget *parent)
       m_pWaringNotices(new WarningNotices(WarningNotices::ResidentType, this))
 
 {
+    // 更新单独添加的高亮格式文件
+    m_Repository.addCustomSearchPath(KF5_HIGHLIGHT_PATH);
+
     m_bQuit = false;
     m_pWaringNotices->hide();
     // Init layout and widgets.
@@ -106,6 +110,7 @@ EditWrapper::EditWrapper(Window *window, QWidget *parent)
     connect(m_pTextEdit, &TextEdit::cursorModeChanged, this, &EditWrapper::handleCursorModeChanged);
     connect(m_pWaringNotices, &WarningNotices::reloadBtnClicked, this, &EditWrapper::reloadModifyFile);
     connect(m_pWaringNotices, &WarningNotices::saveAsBtnClicked, m_pWindow, &Window::saveAsFile);
+    // NOTE: 文本高亮会触发重新布局，与界面布局(拖拽、放大窗口)变更时的布局操作冲突，因此调整更新顺序，在布局后刷新高亮
     connect(m_pTextEdit->verticalScrollBar(), &QScrollBar::valueChanged, this, [this](int) {
         OnUpdateHighlighter();
         if ((m_pWindow->findBarIsVisiable() || m_pWindow->replaceBarIsVisiable()) &&
@@ -114,7 +119,7 @@ EditWrapper::EditWrapper(Window *window, QWidget *parent)
         }
 
         m_pTextEdit->markAllKeywordInView();
-    });
+    }, Qt::QueuedConnection);
 }
 
 EditWrapper::~EditWrapper()
@@ -161,6 +166,11 @@ void EditWrapper::openFile(const QString &filepath, QString qstrTruePath, bool b
     // 设置预处理标识位
     m_bHasPreProcess = false;
 
+    if (!bIsTemFile && !isDraftFile()) {
+        Settings::instance()->setSavePath(PathSettingWgt::LastOptBox, QFileInfo(qstrTruePath).absolutePath());
+        Settings::instance()->setSavePath(PathSettingWgt::CurFileBox, QFileInfo(qstrTruePath).absolutePath());
+    }
+
     FileLoadThread *thread = new FileLoadThread(filepath);
     // begin to load the file.
     connect(thread, &FileLoadThread::sigPreProcess, this, &EditWrapper::handleFilePreProcess);
@@ -184,7 +194,7 @@ bool EditWrapper::readFile(QByteArray encode)
         if (newEncode.isEmpty()) {
             // 接口修改，补充文件头内容，最多读取1MB文件头数据
             newEncode = DetectCode::GetFileEncodingFormat(
-                        m_pTextEdit->getFilePath(), fileContent.left(DATA_SIZE_1024 * DATA_SIZE_1024));
+                            m_pTextEdit->getFilePath(), fileContent.left(DATA_SIZE_1024 * DATA_SIZE_1024));
             m_sFirstEncode = newEncode;
         }
 
@@ -199,14 +209,38 @@ bool EditWrapper::readFile(QByteArray encode)
     return false;
 }
 
-bool EditWrapper::saveAsFile(const QString &newFilePath, QByteArray encodeName)
+/**
+ * @brief 将当前文件内容按编码格式 \a encodeName 保存到指定路径 \a newFilePath
+ * @param newFilePath 另存的文件路径
+ * @param encodeName 文件保存时指定的文件格式
+ * @return 是否成功另存文件
+ */
+bool EditWrapper::saveAsFile(const QString &newFilePath, const QByteArray &encodeName)
 {
+    // WARNING: 对于超长文件，Qt在使用 QSaveFile 保存文件时，若当前环境不支持创建无名文件(UnnamedFile),
+    // 会在相同路径创建临时文件，路径为保存文件名 + 唯一后缀，此临时文件名可能超过255长度限制，导致保存失败。
+    // 因此，过长的文件名屏蔽使用QSaveFile。QTemporaryFile 创建文件名的代码地址：
+    // link: https://github.com/qt/qtbase/blob/7191b8fe38788ac57e15e4124955c3cd8333d858/src/corelib/io/qtemporaryfile.cpp#L181
+    const int limitFileNameLength = 245;
+    QFileInfo fileNameInfo(newFilePath);
+    bool disableSaveProtect = fileNameInfo.fileName().length() > limitFileNameLength;
+
     // use QSaveFile for safely save files.
     QSaveFile saveFile(newFilePath);
-    saveFile.setDirectWriteFallback(true);
+    if (!disableSaveProtect) {
+        saveFile.setDirectWriteFallback(true);
 
-    if (!saveFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-        return false;
+        if (!saveFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+            qWarning() << Q_FUNC_INFO << "Open save file path error, " << saveFile.errorString();
+            QWidget *curWidget = this->window()->getStackedWgt()->currentWidget();
+            if (curWidget) {
+                DMessageManager::instance()->sendMessage(curWidget, QIcon(":/images/warning.svg"),
+                                                         QString(tr("You do not have permission to save %1")).arg(saveFile.fileName()));
+            }
+            return false;
+        }
+    } else {
+        qWarning() << QString("SaveAs file name to long, disable QSaveFile. path: %1").arg(newFilePath);
     }
 
     QFile file(newFilePath);
@@ -215,43 +249,70 @@ bool EditWrapper::saveAsFile(const QString &newFilePath, QByteArray encodeName)
     }
 
     //auto append new line char to end of file when file's format is Linux/MacOS
-    QByteArray fileContent = m_pTextEdit->toPlainText().toUtf8();
+    QByteArray fileContent;
+    getPlainTextContent(fileContent);
 
     QByteArray Outdata;
-    DetectCode::ChangeFileEncodingFormat(fileContent, Outdata, QString("UTF-8"), encodeName);
-    file.write(Outdata);
+    bool convertSucc = DetectCode::ChangeFileEncodingFormat(fileContent, Outdata, QString("UTF-8"), encodeName);
+
+    // 转换存在异常
+    if (!convertSucc) {
+        qWarning() << QString("iconv Encode Transformat from '%1' to '%2' Fail! start QTextCodec Encode Transformat.")
+                      .arg(QString("UTF-8")).arg(m_sCurEncode);
+        // 使用 QTextCodec 进行转换尝试
+        QTextCodec *codec = QTextCodec::codecForName(encodeName);
+        if (codec) {
+            QByteArray encodedString = codec->fromUnicode(fileContent);
+            if (encodedString.isEmpty()) {
+                qWarning() << qPrintable("Both iconv and QTextCodec Encode Transformat Fail!");
+            } else {
+                qInfo() << QString("QTextCodec Encode Transformat from '%1' to '%2' Success!")
+                           .arg(QString("UTF-8")).arg(m_sCurEncode);
+
+                Outdata = encodedString;
+                convertSucc = true;
+            }
+
+        } else {
+            qWarning() << qPrintable("Unsupported QTextCodec Encode") << m_sCurEncode;
+        }
+    }
+
+    if (!Outdata.isEmpty()) {
+        // 如果新数据为空，不进行文件写入，以降低文件内容损失
+        file.write(Outdata);
+    }
+
     // close and delete file.
     QFileDevice::FileError error = file.error();
     file.close();
 
-    // flush file.
-    if (!saveFile.flush()) {
-        return false;
+    if (!disableSaveProtect) {
+        // flush file.
+        if (!saveFile.flush()) {
+            return false;
+        }
+        // ensure that the file is written to disk
+        fsync(saveFile.handle());
     }
 
-    // ensure that the file is written to disk
-    fsync(saveFile.handle());
     QFileInfo fi(filePath());
     m_tModifiedDateTime = fi.lastModified();
 
     // did save work?
     // only finalize if stream status == OK
-    bool ok = (error == QFileDevice::NoError);
-
-    return ok;
+    return convertSucc && (error == QFileDevice::NoError);
 }
 
 bool EditWrapper::saveAsFile()
 {
     DFileDialog dialog(this, tr("Save"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
-dialog.addComboBox(QObject::tr("Encoding"),  QStringList() << m_sFirstEncode);
+    dialog.addComboBox(QObject::tr("Encoding"),  QStringList() << m_sFirstEncode);
     dialog.setDirectory(QDir::homePath());
     dialog.setNameFilter("*.txt");
 
-    //this->setUpdatesEnabled(false);
     int mode =  dialog.exec();
-    //this->setUpdatesEnabled(true);
     hideWarningNotices();
 
     if (QDialog::Accepted == mode) {
@@ -265,7 +326,7 @@ dialog.addComboBox(QObject::tr("Encoding"),  QStringList() << m_sFirstEncode);
             return false;
         }
 
-        // 以新的编码保存内容到文件
+        // 以新的编码保存内容到文件，无论何种格式，展示的文本编码为UTF-8
         QByteArray inputData = m_pTextEdit->toPlainText().toUtf8();
         QByteArray outData;
         DetectCode::ChangeFileEncodingFormat(inputData, outData, QString("UTF-8"), m_sFirstEncode);
@@ -330,25 +391,30 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
 
         //保存
         if (res == 1) {
-            // 保存文件前更新当前文件的编码格式
+            // 保存文件前缓存当前文件的编码格式，文件将按之前的编码格式保存
             QString tempEncode = m_sCurEncode;
-            m_sCurEncode = encode;
 
             //草稿文件
+            bool reloadSucc = false;
             if (Utils::isDraftFile(m_pTextEdit->getFilePath())) {
                 QString newFilePath;
                 if (saveDraftFile(newFilePath)) {
-                    return readFile(encode);
+                    reloadSucc = readFile(encode);
                 }
             } else {
-                if (saveFile()) {
-                    return readFile(encode);
+                if (this->window()->saveAsFile()) {
+                    reloadSucc = readFile(encode);
                 }
             }
 
-            // 未成功保存，复位编码格式
-            m_sCurEncode = tempEncode;
-            return false;
+            if (reloadSucc) {
+                // 保存成功，更新编码格式
+                m_pBottomBar->setEncodeName(encode);
+            } else {
+                // 未成功保存，复位编码格式
+                m_sCurEncode = tempEncode;
+            }
+            return reloadSucc;
         }
 
         return false;
@@ -460,7 +526,7 @@ void EditWrapper::reloadModifyFile()
                     return;
                 }
             } else {
-                if (!saveAsFile()) {
+                if (!this->window()->saveAsFile()) {
                     return;
                 }
             }
@@ -489,7 +555,13 @@ QString EditWrapper::getTextEncode()
     return m_sCurEncode;
 }
 
-bool EditWrapper::saveFile()
+/**
+ * @brief 保存当前文件数据，若设置了特定的编码格式 \a encode , 则按此编码格式存储，
+ *      否则使用当前显示的文本编码。
+ * @param encode 文件编码
+ * @return 是否成功保存文件数据
+ */
+bool EditWrapper::saveFile(QByteArray encode)
 {
     QString qstrFilePath = m_pTextEdit->getTruePath();
     QFile file(qstrFilePath);
@@ -498,24 +570,35 @@ bool EditWrapper::saveFile()
     if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         QByteArray fileContent;
         getPlainTextContent(fileContent);
+
+        if (!encode.isEmpty()) {
+            m_sCurEncode = encode;
+            // 更新底栏编码格式
+            m_pBottomBar->setEncodeName(encode);
+        }
+
         if (!fileContent.isEmpty()) {
             QByteArray Outdata;
             DetectCode::ChangeFileEncodingFormat(fileContent, Outdata, QString("UTF-8"), m_sCurEncode);
             // 如果 iconv 转换错误
-            if (Outdata.size() == 0) {
-                qWarning() << QString("iconv Encode Transformat from '%1' to '%2' Fail!")
-                           .arg(QString("UTF-8")).arg(m_sCurEncode)
-                           << ", start QTextCodec Encode Transformat.";
+            if (Outdata.isEmpty()) {
+                qWarning() << qPrintable(QString("iconv Encode Transformat from '%1' to '%2' Fail! start QTextCodec Encode Transformat.")
+                                         .arg(QString("UTF-8")).arg(m_sCurEncode));
                 // 使用 QTextCodec 进行转换尝试
                 QTextCodec *codec = QTextCodec::codecForName(m_sCurEncode.toUtf8());
-                QByteArray encodedString = codec->fromUnicode(fileContent);
+                if (codec) {
+                    QByteArray encodedString = codec->fromUnicode(fileContent);
 
-                if (encodedString.isEmpty()) {
-                    qWarning() << "Both iconv and QTextCodec Encode Transformat Fail!";
+                    if (encodedString.isEmpty()) {
+                        qWarning() << qPrintable("Both iconv and QTextCodec Encode Transformat Fail!");
+                    } else {
+                        qWarning() << qPrintable(QString("QTextCodec Encode Transformat from '%1' to '%2' Success!")
+                                                 .arg(QString("UTF-8")).arg(m_sCurEncode));
+                        Outdata = encodedString;
+                    }
+
                 } else {
-                    qWarning() << QString("QTextCodec Encode Transformat from '%1' to '%2' Success!")
-                               .arg(QString("UTF-8")).arg(m_sCurEncode);
-                    Outdata = encodedString;
+                    qWarning() << qPrintable("Unsupported QTextCodec format:") << m_sCurEncode;
                 }
             }
 
@@ -569,6 +652,10 @@ bool EditWrapper::saveFile()
 void EditWrapper::getPlainTextContent(QByteArray &plainTextContent)
 {
     QString strPlainText = m_pTextEdit->toPlainText();
+    if (BottomBar::EndlineFormat::Windows == m_pBottomBar->getEndlineFormat()) {
+        strPlainText.replace("\n", "\r\n");
+    }
+
     qint64 iPlainTextAllLen = strPlainText.length();
     qint64 iStep = 300 * DATA_SIZE_1024 * DATA_SIZE_1024;
     /* qt开发分析结论：大文本情况下toLocal8Bit()转换会引起应用闪退，此闪退问题qt方无法处理 */
@@ -701,9 +788,15 @@ bool EditWrapper::saveDraftFile(QString &newFilePath)
 {
     DFileDialog dialog(this, tr("Save"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.addComboBox(QObject::tr("Encoding"),  QStringList() << m_sCurEncode);
     dialog.setDirectory(QDir::homePath());
     dialog.setNameFilter("*.txt");
+
+    // 允许选取保存的编码格式
+    DFileDialog::DComboBoxOptions encodingOptions;
+    encodingOptions.editable = false;
+    encodingOptions.defaultValue = getTextEncode();
+    encodingOptions.data = Utils::getSupportEncodingList();
+    dialog.addComboBox(QObject::tr("Encoding"), encodingOptions);
 
     if (m_pWindow) {
         m_pWindow = this->window();
@@ -712,12 +805,11 @@ bool EditWrapper::saveDraftFile(QString &newFilePath)
         dialog.selectFile(match.captured(0) + ".txt");
     }
 
-    //this->setUpdatesEnabled(false);
     int mode =  dialog.exec(); // 0表示取消 1保存
-    // this->setUpdatesEnabled(true);
     hideWarningNotices();
 
     if (mode == 1) {
+        const QByteArray encode = dialog.getComboBoxValue(QObject::tr("Encoding")).toUtf8();
         newFilePath = dialog.selectedFiles().value(0);
         if (newFilePath.isEmpty())
             return false;
@@ -731,7 +823,7 @@ bool EditWrapper::saveDraftFile(QString &newFilePath)
         // 以新的编码保存内容到文件
         QByteArray inputData = m_pTextEdit->toPlainText().toUtf8();
         QByteArray outData;
-        DetectCode::ChangeFileEncodingFormat(inputData, outData, QString("UTF-8"), m_sCurEncode);
+        DetectCode::ChangeFileEncodingFormat(inputData, outData, QString("UTF-8"), encode);
         qfile.write(outData);
         qfile.close();
 
@@ -787,9 +879,17 @@ void EditWrapper::checkForReload()
 void EditWrapper::showNotify(const QString &message)
 {
     if (m_pTextEdit->getReadOnlyPermission() || m_pTextEdit->getReadOnlyMode()) {
+#ifdef DTKWIDGET_CLASS_DSizeMode
+        Utils::sendFloatMessageFixedFont(m_pTextEdit, QIcon(":/images/warning.svg"), message);
+#else
         DMessageManager::instance()->sendMessage(m_pTextEdit, QIcon(":/images/warning.svg"), message);
+#endif
     } else {
+#ifdef DTKWIDGET_CLASS_DSizeMode
+        Utils::sendFloatMessageFixedFont(m_pTextEdit, QIcon(":/images/ok.svg"), message);
+#else
         DMessageManager::instance()->sendMessage(m_pTextEdit, QIcon(":/images/ok.svg"), message);
+#endif
     }
 }
 
@@ -985,6 +1085,10 @@ void EditWrapper::UpdateBottomBarWordCnt(int cnt)
     m_pBottomBar->updateWordCount(cnt);
 }
 
+/**
+ * @brief 界面显示内容变更时触发，将查询当前显示的内容
+ * @param forceUpdate 是否强制重设高亮处理，部分高亮无需重复设置
+ */
 void EditWrapper::OnUpdateHighlighter()
 {
     if (m_pSyntaxHighlighter  && !m_bQuit && !m_bHighlighterAll) {
@@ -992,6 +1096,7 @@ void EditWrapper::OnUpdateHighlighter()
         QPoint startPoint = QPoint(0, 0);
         QTextBlock beginBlock = m_pTextEdit->cursorForPosition(startPoint).block();
         QTextBlock endBlock;
+        QTextBlock foundBlock;
 
         if (pScrollBar->maximum() > 0) {
             QPoint endPoint = QPointF(0, 1.5 * m_pTextEdit->height()).toPoint();
@@ -1040,23 +1145,39 @@ void EditWrapper::OnUpdateHighlighter()
                 prevBlock = prevBlock.previous();
             }
 
-            // 无论是否查询到折叠区域，均更新起始文本块
-            beginBlock = prevBlock;
+            // 仅在查询到折叠区域更新文本块
+            if (foundBrace) {
+                foundBlock = prevBlock;
+            }
         }
 
         if (!beginBlock.isValid() || !endBlock.isValid()) {
             return;
         }
 
-        for (QTextBlock var = beginBlock; var != endBlock; var = var.next()) {
+        auto rehighlightBlock = [this](const QTextBlock &block) {
             m_pSyntaxHighlighter->setEnableHighlight(true);
-            m_pSyntaxHighlighter->rehighlightBlock(var);
+            m_pSyntaxHighlighter->rehighlightBlock(block);
             m_pSyntaxHighlighter->setEnableHighlight(false);
+        };
+
+        if (foundBlock.isValid() && foundBlock < beginBlock) {
+            for (QTextBlock var = foundBlock; var.isValid() && var != beginBlock; var = var.next())
+            {
+                // Kate syntax highlighter 在高亮文本后会设置数据，通过此数据判断是否需要重复设置高亮
+                if (var.userData()) {
+                    continue;
+                }
+
+                rehighlightBlock(var);
+            }
         }
 
-        m_pSyntaxHighlighter->setEnableHighlight(true);
-        m_pSyntaxHighlighter->rehighlightBlock(endBlock);
-        m_pSyntaxHighlighter->setEnableHighlight(false);
+        for (QTextBlock var = beginBlock; var != endBlock; var = var.next()) {
+            rehighlightBlock(var);
+        }
+
+        rehighlightBlock(endBlock);
     }
 }
 
@@ -1262,6 +1383,7 @@ void EditWrapper::loadContent(const QByteArray &strContent)
     int max = 40 * 1024 * 1024;
 
     QString data;
+    int inserted = 0;
 
     if (len > max) {
         // 当读取大文件时，采用事件队列方式处理
@@ -1301,11 +1423,17 @@ void EditWrapper::loadContent(const QByteArray &strContent)
             //秒开界面语法高亮
             OnUpdateHighlighter();
             QApplication::processEvents();
+            inserted += InitContentPos;
+            double progress = (inserted * 1.0) / len * 100;
+            m_pBottomBar->setProgress(static_cast<int>(progress));
             if (!m_bQuit) {
                 //data = strContent.mid(InitContentPos, len - InitContentPos);
                 QByteArray text = strContent.mid(InitContentPos, len - InitContentPos);
                 data = codec->toUnicode(text.constData(), text.size(), &state);
                 cursor.insertText(data);
+                inserted += (len - InitContentPos);
+                progress = (inserted * 1.0) / len * 100;
+                m_pBottomBar->setProgress(static_cast<int>(progress));
             }
         } else {
             if (!m_bQuit) {
@@ -1317,6 +1445,9 @@ void EditWrapper::loadContent(const QByteArray &strContent)
                 m_pTextEdit->setTextCursor(firstLineCursor);
                 //秒开界面语法高亮
                 OnUpdateHighlighter();
+                inserted += len;
+                double progress = (inserted * 1.0) / len * 100;
+                m_pBottomBar->setProgress(static_cast<int>(progress));
             }
         }
     }
@@ -1325,10 +1456,14 @@ void EditWrapper::loadContent(const QByteArray &strContent)
     }
     if (m_pBottomBar != nullptr) {
         m_pBottomBar->setChildEnabled(true);
+        auto format = BottomBar::getEndlineFormat(strContent);
+        m_pBottomBar->setEndlineMenuText(format);
     }
     m_pTextEdit->setReadOnly(false);
     m_pTextEdit->setLeftAreaUpdateState(TextEdit::FileOpenEnd);
     QApplication::restoreOverrideCursor();
+
+
 }
 
 /**
@@ -1347,7 +1482,7 @@ void EditWrapper::reinitOnFileLoad(const QByteArray &encode)
             m_pSyntaxHighlighter->setTheme(m_Repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
         }
 
-        if (m_pSyntaxHighlighter) m_pSyntaxHighlighter->setDefinition(m_Definition);;
+        if (m_pSyntaxHighlighter) m_pSyntaxHighlighter->setDefinition(m_Definition);
         m_pTextEdit->setSyntaxDefinition(m_Definition);
         m_pBottomBar->getHighlightMenu()->setCurrentTextOnly(m_Definition.translatedName());
     }

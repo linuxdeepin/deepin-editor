@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -54,6 +54,14 @@ bool editwrapper_saveFile = false;
 bool EditWrapper_saveFile_stub()
 {
     return editwrapper_saveFile;
+}
+
+bool editwrapper_saveAsFile = false;
+bool EditWrapper_saveAsFile_stub(const QString &newFilePath, const QByteArray &encodeName)
+{
+    Q_UNUSED(newFilePath);
+    Q_UNUSED(encodeName);
+    return  editwrapper_saveAsFile;
 }
 
 EditWrapper* window_currentWrapper = nullptr;
@@ -534,7 +542,7 @@ TEST(UT_Window_saveAsFileToDisk, UT_Window_saveAsFileToDisk_002)
     exec_ret=1;
     editwrapper_saveFile = true;
     isDraft=false;
-
+    editwrapper_saveAsFile = true;
 
     Stub s0;s0.set(ADDR(Window,currentWrapper),Window_currentWrapper_stub);
     typedef int (*Fptr)(QFileDialog *);
@@ -543,16 +551,15 @@ TEST(UT_Window_saveAsFileToDisk, UT_Window_saveAsFileToDisk_002)
     Stub s2;s2.set(ADDR(EditWrapper,saveFile),EditWrapper_saveFile_stub);
     Stub s3;s3.set(ADDR(Window,updateSaveAsFileName),Window_updateSabeAsFileNameTemp_stub);
     Stub s4;s4.set(ADDR(EditWrapper,isDraftFile),EditWrapper_isDraftFile_stub);
-
+    Stub s5;s5.set((bool(EditWrapper::*)(const QString &, const QByteArray&))ADDR(EditWrapper, saveAsFile), EditWrapper_saveAsFile_stub);
 
     EXPECT_NE(window1->saveAsFileToDisk(),"1");
 
     EXPECT_NE(window1,nullptr);
     window1->deleteLater();
     window_currentWrapper->deleteLater();
-
-
 }
+
 //saveBlankFileToDisk
 TEST(UT_Window_saveBlankFileToDisk, UT_Window_saveBlankFileToDisk)
 {
@@ -563,8 +570,8 @@ TEST(UT_Window_saveBlankFileToDisk, UT_Window_saveBlankFileToDisk)
 
     window1->deleteLater();
 
-
 }
+
 //saveAsOtherTabFile
 TEST(UT_Window_saveAsOtherTabFile, UT_Window_saveAsOtherTabFile_001)
 {
@@ -1234,7 +1241,10 @@ TEST(UT_Window_decrementFontSize, UT_Window_decrementFontSize)
     Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->m_settings =Settings::instance();
+    window->m_fontSize = 12;
+    qreal oldFontSize = window->m_fontSize;
     window->decrementFontSize();
+    EXPECT_GT(oldFontSize, window->m_fontSize);
 
     EXPECT_NE(window,nullptr);
     window->deleteLater();
@@ -1248,8 +1258,9 @@ TEST(UT_Window_incrementFontSize, UT_Window_incrementFontSize)
     Window *window = new Window();
     EditWrapper * a = new EditWrapper();
     window->m_settings =Settings::instance();
+    qreal oldFontSize = window->m_fontSize;
     window->incrementFontSize();
-
+    EXPECT_LT(oldFontSize, window->m_fontSize);
 
     EXPECT_NE(window,nullptr);
     window->deleteLater();
@@ -2166,25 +2177,25 @@ TEST(UT_Window_slot_setTitleFocus, UT_Window_slot_setTitleFocus_002)
     w->deleteLater();
 }
 
-TEST(UT_Window_keyPressEvent, UT_Window_keyPressEvent_007)
+TEST(UT_Window_rehighlightPrintDoc, rehighlightPrintDoc_HighlightCpp_pass)
 {
-//    QStringList aa;
-//    Window *window = new Window();
-//    window->m_settings = Settings::instance();
+    Window* w = new Window;
+    w->addBlankTab();
+    w->m_printWrapper = w->currentWrapper();
+    QTextDocument *doc = new QTextDocument;
+    doc->setPlainText("#include <iostream>;\n"
+                      "int main(int argc, char *argv[]) { }");
 
-//    utils_getkeyshortcut = Utils::getKeyshortcutFromKeymap(window->m_settings, "window", "togglefullscreen");
-//    editwrapper_texteditor = new TextEdit;
+    CSyntaxHighlighter *highlighter = new CSyntaxHighlighter(doc);
+    KSyntaxHighlighting::Repository repository;
+    highlighter->setDefinition(repository.definitionForName("C++"));
+    highlighter->setTheme(repository.defaultTheme(KSyntaxHighlighting::Repository::LightTheme));
 
-//    Stub s1;s1.set(ADDR(Utils,getKeyshortcut),Utils_getKeyshortcut_stub);
-//    Stub s2;s2.set(ADDR(EditWrapper,textEditor),EditWrapper_textEditor_stub);
-//    Stub s3;s3.set(ADDR(Utils,getKeyshortcutFromKeymap),Utils_getKeyshortcutFromKeymap_stub);
+    w->rehighlightPrintDoc(doc, highlighter);
+    EXPECT_FALSE(doc->firstBlock().textFormats().isEmpty());
 
-//    window->keyPressEvent(eve);
-
-//    EXPECT_NE(window,nullptr);
-//    window->deleteLater();
-//    window->m_settings->deleteLater();
-//    editwrapper_texteditor->deleteLater();
+    doc->deleteLater();
+    w->deleteLater();
 }
 
 

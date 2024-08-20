@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2011-2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -42,7 +42,7 @@ public:
     void setSearched(bool _);
     void findPreClicked();
 
-signals:
+Q_SIGNALS:
     void pressEsc();
     void findNext(const QString &keyword);
     void findPrev(const QString &keyword);
@@ -53,7 +53,7 @@ signals:
     //add guoshao
     void sigFindbarClose();
 
-public slots:
+public Q_SLOTS:
     void findCancel();
     void handleContentChanged();
     void handleFindNext();
@@ -63,6 +63,9 @@ protected:
     void hideEvent(QHideEvent *event) override;
     bool focusNextPrevChild(bool next) override;
     void keyPressEvent(QKeyEvent *e) override;
+
+private:
+    Q_SLOT void updateSizeMode();
 
 private:
     QPushButton *m_findNextButton;

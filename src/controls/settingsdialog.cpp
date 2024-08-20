@@ -30,6 +30,8 @@ void GenerateSettingTranslate()
     auto shortcuts_window_help = QObject::tr("Help");
     auto shortcuts_window_togglefullscreenName = QObject::tr("Toggle fullscreen");
     auto shortcuts_window_findName = QObject::tr("Find");
+    Q_UNUSED(QObject::tr("Find Next"));
+    Q_UNUSED(QObject::tr("Find Previous"));
     auto shortcuts_window_replaceName = QObject::tr("Replace");
     auto shortcuts_window_jumptolineName = QObject::tr("Go to line");
     auto shortcuts_window_savepositionName = QObject::tr("Save cursor position");
@@ -92,6 +94,12 @@ void GenerateSettingTranslate()
     auto advance_windowName = QObject::tr("Window");
     auto advance_window_windowstateName = QObject::tr("Window size");
     auto advance_editor_tabspacenumberName = QObject::tr("Tab width");
+    auto allow_midbutton_paste_name = QObject::tr("Paste by pressing a middle mouse button");
+
+    auto advance_startup_name = QObject::tr("Startup");
+    auto advance_startup_saveTabBeforeCloseName = QObject::tr("Reopen last closed tabs");
+
+    auto advance_open_save_setting_name = QObject::tr("Open/Save Settings");
 
     auto base_font_wordwrapText = QObject::tr("Word wrap");
     auto base_font_codeflod = QObject::tr("Code folding flag");

@@ -1,11 +1,17 @@
-// SPDX-FileCopyrightText: 2011-2022 UnionTech Software Technology Co., Ltd.
+// SPDX-FileCopyrightText: 2011-2023 UnionTech Software Technology Co., Ltd.
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "linebar.h"
 #include "../common/utils.h"
 
+#include <DGuiApplicationHelper>
+
 #include <QDebug>
+
+// 不同布局模式(紧凑)
+const int s_nLineBarHeight = 36;
+const int s_nLineBarHeightCompact = 24;
 
 LineBar::LineBar(DLineEdit *parent)
     : DLineEdit(parent)
@@ -20,6 +26,13 @@ LineBar::LineBar(DLineEdit *parent)
     connect(m_autoSaveTimer, &QTimer::timeout, this, &LineBar::handleTextChangeTimer);
     connect(this, &DLineEdit::textEdited, this, &LineBar::sendText, Qt::QueuedConnection);
     connect(this, &DLineEdit::textChanged, this, &LineBar::handleTextChanged, Qt::QueuedConnection);
+
+#ifdef DTKWIDGET_CLASS_DSizeMode
+    setFixedHeight(DGuiApplicationHelper::isCompactMode() ? s_nLineBarHeightCompact : s_nLineBarHeight);
+    connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, [this](){
+        setFixedHeight(DGuiApplicationHelper::isCompactMode() ? s_nLineBarHeightCompact : s_nLineBarHeight);
+    });
+#endif
 }
 
 void LineBar::handleTextChangeTimer()
