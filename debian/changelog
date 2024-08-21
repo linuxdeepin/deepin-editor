@@ -1,3 +1,10 @@
+deepin-editor (6.5.0) unstable; urgency=medium
+
+  * chore(CI): add debian check workflow
+  * feat: adapt treeland(Influence: Wayland)
+
+ -- renbin <renbin@uniontech.com>  Wed, 21 Aug 2024 15:25:06 +0800
+
 deepin-editor (6.0.18) unstable; urgency=medium
 
   * fix: Change default search to be case insensitive(Bug: 262733)
