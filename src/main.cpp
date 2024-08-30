@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
 
         QFileInfo fileInfo(path);
         qInfo() << qPrintable(QString("Open file, isFile: %1, suffix: %2, size: %3, permssion: %4").arg(fileInfo.isFile())
-                   .arg(fileInfo.suffix()).arg(fileInfo.size()).arg(fileInfo.permissions()));
+                              .arg(fileInfo.suffix()).arg(fileInfo.size()).arg(fileInfo.permissions()));
     }
 
     bool hasWindowFlag = parser.isSet(newWindowOption);
@@ -78,11 +78,11 @@ int main(int argc, char *argv[])
     if (dbus.registerService("com.deepin.Editor")) {
 #ifdef DTKWIDGET_CLASS_DSizeMode
         // 不同模式下的基础字体像素大小不同，系统级别为 T6 的字体大小, 默认是 14px ；在紧凑模式下 T6 为 12px
-        QObject::connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, [](){
+        QObject::connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, []() {
             const int genericPixelSize = 14;
             const int genericPixelSizeCompact = 12;
             DFontSizeManager::instance()->setFontGenericPixelSize(
-                        DGuiApplicationHelper::isCompactMode() ? genericPixelSizeCompact : genericPixelSize);
+                DGuiApplicationHelper::isCompactMode() ? genericPixelSizeCompact : genericPixelSize);
         });
 #endif
 
@@ -107,10 +107,10 @@ int main(int argc, char *argv[])
                 startManager->openFilesInTab(urls);
             }
         }
-
+#if _ZPD_
         // 解析ZPD定制需求提供的库libzpdcallback.so
         Utils::loadCustomDLL();
-
+#endif
         dbus.registerObject("/com/deepin/Editor", startManager, QDBusConnection::ExportScriptableSlots);
 
         PerformanceMonitor::initializAppFinish();
