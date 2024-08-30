@@ -74,33 +74,33 @@ UT_Utils::UT_Utils()
 void UT_Utils::SetUp()
 {
     utils = new Utils;
-    EXPECT_NE(utils,nullptr);
+    EXPECT_NE(utils, nullptr);
 }
 
 void UT_Utils::TearDown()
 {
     delete utils;
-    utils=nullptr;
+    utils = nullptr;
 }
 
 //static QString getQrcPath(const QString &imageName);
 TEST(UT_Utils_getQrcPath, UT_Utils_getQrcPath)
 {
-    EXPECT_NE(Utils::getQrcPath("aa").contains("aa"),false);
+    EXPECT_NE(Utils::getQrcPath("aa").contains("aa"), false);
 
 }
 
 //static QString getQssPath(const QString &qssName);
 TEST(UT_Utils_getQssPath, UT_Utils_getQssPath)
 {
-    EXPECT_NE(Utils::getQssPath("aa").contains("aa"),false);
+    EXPECT_NE(Utils::getQssPath("aa").contains("aa"), false);
 
 }
 
 //static QSize getRenderSize(int fontSize, const QString &string);
 TEST(UT_Utils_getRenderSize, UT_Utils_getRenderSize)
 {
-    EXPECT_NE(Utils::getRenderSize(1, "aa").width(),0);
+    EXPECT_NE(Utils::getRenderSize(1, "aa").width(), 0);
 
 }
 
@@ -110,7 +110,7 @@ TEST(UT_Utils_setFontSize, UT_Utils_setFontSize)
     QImage image(10, 10, QImage::Format_RGB888);
     QPainter painter(&image);
     Utils::setFontSize(painter, 1);
-    EXPECT_NE(painter.font().pixelSize(),0);
+    EXPECT_NE(painter.font().pixelSize(), 0);
 
 }
 
@@ -120,7 +120,7 @@ TEST(UT_Utils_applyQss, UT_Utils_applyQss)
     QWidget *widget = new QWidget;
     Utils::applyQss(widget, "1");
 
-    EXPECT_NE(widget,nullptr);
+    EXPECT_NE(widget, nullptr);
     widget->deleteLater();
 }
 
@@ -129,33 +129,33 @@ TEST(UT_Utils_getKeyshortcut, UT_Utils_getKeyshortcut)
 {
     //QKeyEvent::Type
     QKeyEvent *keyEvent = new QKeyEvent(QEvent::KeyPress, 1, Qt::NoModifier);
-    EXPECT_EQ(Utils::getKeyshortcut(keyEvent).contains("+"),false);
+    EXPECT_EQ(Utils::getKeyshortcut(keyEvent).contains("+"), false);
 
 }
 
 //static QString getKeyshortcutFromKeymap(Settings* settings, const QString &keyCategory, const QString &keyName);
 TEST(UT_Utils_getKeyshortcutFromKeymap, UT_Utils_getKeyshortcutFromKeymap)
 {
-    EXPECT_NE(Utils::getKeyshortcutFromKeymap(Settings::instance(), "editor", "selectall")," ");
+    EXPECT_NE(Utils::getKeyshortcutFromKeymap(Settings::instance(), "editor", "selectall"), " ");
 
 }
 
 //static bool fileExists(const QString &path);
 TEST(UT_Utils_fileExists, UT_Utils_fileExists)
 {
-    EXPECT_NE(Utils::fileExists("aa"),true);
+    EXPECT_NE(Utils::fileExists("aa"), true);
 }
 
 //static bool fileIsWritable(const QString &path);
 TEST(UT_Utils_fileIsWritable, UT_Utils_fileIsWritable)
 {
-    EXPECT_NE(Utils::fileIsWritable("aa"),true);
+    EXPECT_NE(Utils::fileIsWritable("aa"), true);
 }
 
 //static bool fileIsHome(const QString &path);
 TEST(UT_Utils_fileIsHome, UT_Utils_fileIsHome)
 {
-    EXPECT_NE(Utils::fileIsHome("aa"),true);
+    EXPECT_NE(Utils::fileIsHome("aa"), true);
 
 }
 
@@ -166,7 +166,7 @@ TEST(UT_Utils_fileIsHome, UT_Utils_fileIsHome)
 TEST(UT_Utils_dropShadow, UT_Utils_dropShadow)
 {
     QImage image(10, 10, QImage::Format_RGB888);
-    EXPECT_NE(Utils::dropShadow(QPixmap::fromImage(image), 1.5, QColor("#000000"), QPoint(1, 1)).isNull(),true);
+    EXPECT_NE(Utils::dropShadow(QPixmap::fromImage(image), 1.5, QColor("#000000"), QPoint(1, 1)).isNull(), true);
     Utils::dropShadow(QPixmap::fromImage(image), 1.5, QColor("#000000"));
 
 }
@@ -174,15 +174,15 @@ TEST(UT_Utils_dropShadow, UT_Utils_dropShadow)
 //static QByteArray detectEncode(const QByteArray &data, const QString &fileName = QString());
 TEST(UT_Utils_detectEncode, UT_Utils_detectEncode_001)
 {
-    EXPECT_NE(Utils::detectEncode("aa").size(),0);
+    EXPECT_NE(Utils::detectEncode("aa").size(), 0);
 }
 
 TEST(UT_Utils_detectEncode, UT_Utils_detectEncode_002)
 {
-    Utils* utils = new Utils;
+    Utils *utils = new Utils;
     QByteArray array;
     array.clear();
-    EXPECT_NE(utils->detectEncode(array).size(),0);
+    EXPECT_NE(utils->detectEncode(array).size(), 0);
 
     delete utils;
     utils = nullptr;
@@ -280,7 +280,7 @@ TEST(UT_Utils_detectEncode, UT_Utils_detectEncode_006)
 
 TEST(UT_Utils_detectEncode, UT_Utils_detectEncode_007)
 {
-    Utils* utils = new Utils;
+    Utils *utils = new Utils;
 
     typedef QTextCodec *(*fptr)(const QByteArray &, QTextCodec *);
     fptr A_foo = (fptr)(&QTextCodec::codecForUtfText);
@@ -289,42 +289,42 @@ TEST(UT_Utils_detectEncode, UT_Utils_detectEncode_007)
     st.set(A_foo, stub_codecForUtfText);
 
     Stub s1;
-    s1.set(ADDR(QMimeType,name),namestub);
+    s1.set(ADDR(QMimeType, name), namestub);
     namevalue = "application/xml";
 
     Stub s2;
-    s2.set(ADDR(QString,size),retintstub);
+    s2.set(ADDR(QString, size), retintstub);
 
     Stub s3;
-    s3.set((QLocale::Script(QLocale::*)() const )ADDR(QLocale,script), scriptstub2);
+    s3.set((QLocale::Script(QLocale::*)() const)ADDR(QLocale, script), scriptstub2);
     scriptvalue2 = QLocale::SimplifiedChineseScript;
 
     QByteArray array("-");
-    EXPECT_NE(utils->detectEncode(array).size(),0);
+    EXPECT_NE(utils->detectEncode(array).size(), 0);
 
     scriptvalue2 = QLocale::TraditionalChineseScript;
-    EXPECT_NE(utils->detectEncode(array).size(),0);
+    EXPECT_NE(utils->detectEncode(array).size(), 0);
 
     scriptvalue2 = QLocale::CyrillicScript;
-    EXPECT_NE(utils->detectEncode(array).size(),0);
+    EXPECT_NE(utils->detectEncode(array).size(), 0);
 
     scriptvalue2 = QLocale::GreekScript;
-    EXPECT_NE(utils->detectEncode(array).size(),0);
+    EXPECT_NE(utils->detectEncode(array).size(), 0);
 
     scriptvalue2 = QLocale::HebrewScript;
-    EXPECT_NE(utils->detectEncode(array).size(),0);
+    EXPECT_NE(utils->detectEncode(array).size(), 0);
 
     scriptvalue2 = QLocale::JapaneseScript;
-    EXPECT_NE(utils->detectEncode(array).size(),0);
+    EXPECT_NE(utils->detectEncode(array).size(), 0);
 
     scriptvalue2 = QLocale::KoreanScript;
-    EXPECT_NE(utils->detectEncode(array).size(),0);
+    EXPECT_NE(utils->detectEncode(array).size(), 0);
 
     scriptvalue2 = QLocale::ThaiScript;
-    EXPECT_NE(utils->detectEncode(array).size(),0);
+    EXPECT_NE(utils->detectEncode(array).size(), 0);
 
     scriptvalue2 = QLocale::AvestanScript;
-    EXPECT_NE(utils->detectEncode(array).size(),0);
+    EXPECT_NE(utils->detectEncode(array).size(), 0);
 
 
     delete utils;
@@ -334,63 +334,63 @@ TEST(UT_Utils_detectEncode, UT_Utils_detectEncode_007)
 //static QByteArray getEncode(const QByteArray &data);
 TEST(UT_Utils_getEncode, UT_Utils_getEncode)
 {
-    EXPECT_NE(Utils::getEncode("aa").isEmpty(),true);
+    EXPECT_NE(Utils::getEncode("aa").isEmpty(), true);
 
 }
 
 //static qreal easeInOut(qreal x);
 TEST(UT_Utils_easeInOut, UT_Utils_easeInOut)
 {
-    EXPECT_NE(Utils::easeInOut(0.1),0);
+    EXPECT_NE(Utils::easeInOut(0.1), 0);
 }
 
 //static qreal easeInQuad(qreal x);
 TEST(UT_Utils_easeInQuad, UT_Utils_easeInQuad)
 {
-    EXPECT_NE(Utils::easeInQuad(0.1),0);
+    EXPECT_NE(Utils::easeInQuad(0.1), 0);
 }
 
 //static qreal easeInQuint(qreal x);
 TEST(UT_Utils_easeInQuint, UT_Utils_easeInQuint)
 {
-    EXPECT_NE(Utils::easeInQuint(0.1),0);
+    EXPECT_NE(Utils::easeInQuint(0.1), 0);
 }
 
 //static qreal easeOutQuad(qreal x);
 TEST(UT_Utils_easeOutQuad, UT_Utils_easeOutQuad)
 {
-    EXPECT_NE(Utils::easeOutQuad(0.1),0);
+    EXPECT_NE(Utils::easeOutQuad(0.1), 0);
 }
 
 //static qreal easeOutQuint(qreal x);
 TEST(UT_Utils_easeOutQuint, UT_Utils_easeOutQuint)
 {
-    EXPECT_NE(Utils::easeOutQuint(0.1),0);
+    EXPECT_NE(Utils::easeOutQuint(0.1), 0);
 }
 
 //static QVariantMap getThemeMapFromPath(const QString &filepath);
 TEST(UT_Utils_getThemeMapFromPath, UT_Utils_getThemeMapFromPath)
 {
-   EXPECT_NE(Utils::getThemeMapFromPath("aa").isEmpty(),false);
+    EXPECT_NE(Utils::getThemeMapFromPath("aa").isEmpty(), false);
 }
 
 //static bool isMimeTypeSupport(const QString &filepath);
 TEST(UT_Utils_isMimeTypeSupport, UT_Utils_isMimeTypeSupport)
 {
-   EXPECT_NE(Utils::isMimeTypeSupport("aa"),false);
+    EXPECT_NE(Utils::isMimeTypeSupport("aa"), false);
 }
 
 //static bool isDraftFile(const QString &filepath);
 TEST(UT_Utils_isDraftFile, UT_Utils_isDraftFile)
 {
-    EXPECT_NE(Utils::isDraftFile("aa"),true);
+    EXPECT_NE(Utils::isDraftFile("aa"), true);
 }
 
 //static const QStringList getEncodeList();
 TEST(UT_Utils_getEncodeList, UT_Utils_getEncodeList)
 {
     Utils::getEncodeList();
-    EXPECT_NE(Utils::renderSVG("", QSize(40, 40), false).isNull(),false);
+    EXPECT_NE(Utils::renderSVG("", QSize(40, 40), false).isNull(), false);
 
 }
 
@@ -446,13 +446,13 @@ TEST(UT_Utils_codecConfidenceForData, UT_Utils_codecConfidenceForData_002)
 
 TEST(UT_Utils_clearChildrenFoucusEx, clearChildrenFoucusEx)
 {
-    QWidget* wgt = new QWidget;
-    QPushButton* btn = new QPushButton(wgt);
+    QWidget *wgt = new QWidget;
+    QPushButton *btn = new QPushButton(wgt);
 
     Utils::clearChildrenFoucusEx(wgt);
 
-    EXPECT_NE(wgt,nullptr);
-    EXPECT_NE(btn,nullptr);
+    EXPECT_NE(wgt, nullptr);
+    EXPECT_NE(btn, nullptr);
 
     wgt->deleteLater();
     btn->deleteLater();
@@ -461,13 +461,13 @@ TEST(UT_Utils_clearChildrenFoucusEx, clearChildrenFoucusEx)
 
 TEST(UT_Utils_setChildrenFocus, setChildrenFocus)
 {
-    QWidget* wgt = new QWidget;
-    QPushButton* btn = new QPushButton(wgt);
+    QWidget *wgt = new QWidget;
+    QPushButton *btn = new QPushButton(wgt);
 
-    Utils::setChildrenFocus(wgt,Qt::NoFocus);
+    Utils::setChildrenFocus(wgt, Qt::NoFocus);
 
-    EXPECT_NE(wgt,nullptr);
-    EXPECT_NE(btn,nullptr);
+    EXPECT_NE(wgt, nullptr);
+    EXPECT_NE(btn, nullptr);
 
     wgt->deleteLater();
     btn->deleteLater();
@@ -479,7 +479,7 @@ TEST(UT_Utils_getProcessCountByName, getProcessCountByName)
     char a[10] = {"12345"};
     Utils::getProcessCountByName(a);
 
-    EXPECT_NE(a[0],'2');
+    EXPECT_NE(a[0], '2');
 }
 
 TEST(UT_Utils_killProcessByName, killProcessByName)
@@ -487,7 +487,7 @@ TEST(UT_Utils_killProcessByName, killProcessByName)
     char a[10] = {"12345"};
     Utils::killProcessByName(a);
 
-    EXPECT_NE(a[0],'2');
+    EXPECT_NE(a[0], '2');
 }
 
 
@@ -570,7 +570,7 @@ void uos_document_clip_copy_false(const char *path, int *intercept)
         *intercept = 1;
     }
 }
-
+#if _ZPD_
 TEST(UT_Utils_zpdLib, enableClipCopy_notLoad_True)
 {
     EXPECT_TRUE(Utils::enableClipCopy(""));
@@ -581,3 +581,4 @@ TEST(UT_Utils_zpdLib, enableClipCopy_notLoad_True)
 
     getLoadZPDLibsInstance()->m_document_clip_copy = nullptr;
 }
+#endif
