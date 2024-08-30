@@ -78,7 +78,7 @@ QSize Utils::getRenderSize(int fontSize, const QString &string)
 
 void Utils::setFontSize(QPainter &painter, int textSize)
 {
-    QFont font = painter.font() ;
+    QFont font = painter.font();
     font.setPointSize(textSize);
     painter.setFont(font);
 }
@@ -134,12 +134,12 @@ float Utils::codecConfidenceForData(const QTextCodec *codec, const QByteArray &d
         default:
             // full-width character, emoji, 常用标点, 拉丁文补充1，天城文补充，CJK符号和标点符号（如：【】）
             if ((ch.unicode() >= 0xff00 && ch <= 0xffef)
-                    || (ch.unicode() >= 0x2600 && ch.unicode() <= 0x27ff)
-                    || (ch.unicode() >= 0x2000 && ch.unicode() <= 0x206f)
-                    || (ch.unicode() >= 0x80 && ch.unicode() <= 0xff)
-                    || (ch.unicode() >= 0xa8e0 && ch.unicode() <= 0xa8ff)
-                    || (ch.unicode() >= 0x0900 && ch.unicode() <= 0x097f)
-                    || (ch.unicode() >= 0x3000 && ch.unicode() <= 0x303f)) {
+                || (ch.unicode() >= 0x2600 && ch.unicode() <= 0x27ff)
+                || (ch.unicode() >= 0x2000 && ch.unicode() <= 0x206f)
+                || (ch.unicode() >= 0x80 && ch.unicode() <= 0xff)
+                || (ch.unicode() >= 0xa8e0 && ch.unicode() <= 0xa8ff)
+                || (ch.unicode() >= 0x0900 && ch.unicode() <= 0x097f)
+                || (ch.unicode() >= 0x3000 && ch.unicode() <= 0x303f)) {
                 ++hep_count;
             } else if (ch.isSurrogate() && ch.isHighSurrogate()) {
                 ++i;
@@ -195,14 +195,15 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
     KEncodingProber::ProberType proberType = KEncodingProber::Universal;
 
     if (mimetype_name == QStringLiteral("application/xml")
-            || mimetype_name == QStringLiteral("text/html")
-            || mimetype_name == QStringLiteral("application/xhtml+xml")) {
+        || mimetype_name == QStringLiteral("text/html")
+        || mimetype_name == QStringLiteral("application/xhtml+xml")) {
         const QString &_data = QString::fromLatin1(data);
         QRegularExpression pattern("<\\bmeta.+\\bcharset=(?'charset'\\S+?)\\s*['\"/>]");
 
         pattern.setPatternOptions(QRegularExpression::DontCaptureOption | QRegularExpression::CaseInsensitiveOption);
         const QString &charset = pattern.match(_data, 0, QRegularExpression::PartialPreferFirstMatch,
-                                               QRegularExpression::DontCheckSubjectStringMatchOption).captured("charset");
+                                               QRegularExpression::DontCheckSubjectStringMatchOption)
+                                         .captured("charset");
 
         if (!charset.isEmpty()) {
             return charset.toLatin1();
@@ -211,7 +212,8 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
         pattern.setPattern("<\\bmeta\\s+http-equiv=\"Content-Language\"\\s+content=\"(?'language'[a-zA-Z-]+)\"");
 
         const QString &language = pattern.match(_data, 0, QRegularExpression::PartialPreferFirstMatch,
-                                                QRegularExpression::DontCheckSubjectStringMatchOption).captured("language");
+                                                QRegularExpression::DontCheckSubjectStringMatchOption)
+                                          .captured("language");
 
         if (0 != language.size()) {
             QLocale l(language);
@@ -267,10 +269,10 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
 
     // for CJK
     const QList<QPair<KEncodingProber::ProberType, QLocale::Country>> fallback_list {
-        {KEncodingProber::ChineseSimplified, QLocale::China},
-        {KEncodingProber::ChineseTraditional, QLocale::China},
-        {KEncodingProber::Japanese, QLocale::Japan},
-        {KEncodingProber::Korean, QLocale::NorthKorea},
+        { KEncodingProber::ChineseSimplified, QLocale::China },
+        { KEncodingProber::ChineseTraditional, QLocale::China },
+        { KEncodingProber::Japanese, QLocale::Japan },
+        { KEncodingProber::Korean, QLocale::NorthKorea },
         //{KEncodingProber::Cyrillic, QLocale::Russia},
         //{KEncodingProber::Greek, QLocale::Greece},
         //{proberType, QLocale::system().country()}
@@ -586,7 +588,7 @@ bool Utils::isMimeTypeSupport(const QString &filepath)
 bool Utils::isDraftFile(const QString &filepath)
 {
     QString draftDir = QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation)).first())
-                       .filePath("blank-files");
+                               .filePath("blank-files");
     draftDir = QDir::cleanPath(draftDir);
     QString dir = QFileInfo(filepath).dir().absolutePath();
     return dir == draftDir;
@@ -599,7 +601,7 @@ bool Utils::isDraftFile(const QString &filepath)
 bool Utils::isBackupFile(const QString &filepath)
 {
     QString backupDir = QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation)).first())
-                        .filePath("backup-files");
+                                .filePath("backup-files");
     QString dir = QFileInfo(filepath).dir().absolutePath();
     return dir == backupDir;
 }
@@ -623,7 +625,7 @@ QString Utils::localDataPath()
 {
     auto dataPaths = Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation));
     return dataPaths.isEmpty() ? QDir::homePath() + "/.local/share/deepin/deepin-editor/"
-           : dataPaths.first();
+                               : dataPaths.first();
 }
 
 const QStringList Utils::getEncodeList()
@@ -843,7 +845,6 @@ bool Utils::isShareDirAndReadOnly(const QString &filePath)
     }
 
     return ret;
-
 }
 
 QString Utils::getSystemLan()
@@ -852,17 +853,17 @@ QString Utils::getSystemLan()
         return m_systemLanguage;
     } else {
         switch (getSystemVersion()) {
-            case V23:
-                m_systemLanguage = QLocale::system().name();
-                break;
-            default: {
-                QDBusInterface ie("com.deepin.daemon.LangSelector",
-                                "/com/deepin/daemon/LangSelector",
-                                "com.deepin.daemon.LangSelector",
-                                QDBusConnection::sessionBus());
-                m_systemLanguage = ie.property("CurrentLocale").toString();
-                break;
-            }
+        case V23:
+            m_systemLanguage = QLocale::system().name();
+            break;
+        default: {
+            QDBusInterface ie("com.deepin.daemon.LangSelector",
+                              "/com/deepin/daemon/LangSelector",
+                              "com.deepin.daemon.LangSelector",
+                              QDBusConnection::sessionBus());
+            m_systemLanguage = ie.property("CurrentLocale").toString();
+            break;
+        }
         }
 
         qWarning() << "getSystemLan is" << m_systemLanguage;
@@ -978,11 +979,11 @@ Utils::RegionIntersectType Utils::checkRegionIntersect(int x1, int y1, int x2, i
  * @return 取得当前文本编辑器支持的编码格式，按区域划分，从文件 :/encodes/encodes.ini 中读取
  * @note 非多线程安全，仅在 gui 线程调用
  */
-QVector<QPair<QString, QStringList> > Utils::getSupportEncoding()
+QVector<QPair<QString, QStringList>> Utils::getSupportEncoding()
 {
-    static QVector<QPair<QString, QStringList> > s_groupEncodeVec;
+    static QVector<QPair<QString, QStringList>> s_groupEncodeVec;
     if (s_groupEncodeVec.isEmpty()) {
-        QVector<QPair<QString, QStringList> > tmpEncodeVec;
+        QVector<QPair<QString, QStringList>> tmpEncodeVec;
 
         QFile file(":/encodes/encodes.ini");
         QString data;
@@ -991,13 +992,13 @@ QVector<QPair<QString, QStringList> > Utils::getSupportEncoding()
             file.close();
         }
 
-        QTextStream readStream(&data,QIODevice::ReadOnly);
+        QTextStream readStream(&data, QIODevice::ReadOnly);
         while (!readStream.atEnd()) {
             QString group = readStream.readLine();
-            QString key = group.mid(1,group.length()-2);
+            QString key = group.mid(1, group.length() - 2);
             QString encodes = readStream.readLine();
-            QString value = encodes.mid(8,encodes.length()-2);
-            tmpEncodeVec.append(QPair<QString,QStringList>(key, value.split(",")));
+            QString value = encodes.mid(8, encodes.length() - 2);
+            tmpEncodeVec.append(QPair<QString, QStringList>(key, value.split(",")));
         }
 
         s_groupEncodeVec = tmpEncodeVec;
@@ -1023,10 +1024,10 @@ QStringList Utils::getSupportEncodingList()
 
 QString Utils::libPath(const QString &strlib)
 {
-    QDir  dir;
-    QString path  = QLibraryInfo::location(QLibraryInfo::LibrariesPath);
+    QDir dir;
+    QString path = QLibraryInfo::location(QLibraryInfo::LibrariesPath);
     dir.setPath(path);
-    QStringList list = dir.entryList(QStringList() << (strlib + "*"), QDir::NoDotAndDotDot | QDir::Files); //filter name with strlib
+    QStringList list = dir.entryList(QStringList() << (strlib + "*"), QDir::NoDotAndDotDot | QDir::Files);   //filter name with strlib
 
     if (list.contains(strlib))
         return strlib;
@@ -1042,7 +1043,11 @@ void Utils::loadCustomDLL()
     // 解析ZPD定制需求提供的库libzpdcallback.so
     LoadLibNames tmp;
     QByteArray zpdDll = Utils::libPath("libzpdcallback.so").toLatin1();
-    tmp.chZPDDLL = zpdDll.data();
+    if (QFile::exists(zpdDll)) {
+        tmp.chZPDDLL = zpdDll.data();
+    } else {
+        tmp.chZPDDLL = NULL;
+    }
     setLibNames(tmp);
 }
 
@@ -1053,6 +1058,7 @@ void Utils::loadCustomDLL()
  */
 bool Utils::enableClipCopy(const QString &filePath)
 {
+#if _ZPD_
     if (getLoadZPDLibsInstance()->m_document_clip_copy) {
         // intercept 输出为1,拦截操作
         static const int disableFlag = 1;
@@ -1064,7 +1070,7 @@ bool Utils::enableClipCopy(const QString &filePath)
             return false;
         }
     }
-
+#endif
     return true;
 }
 
@@ -1074,9 +1080,11 @@ bool Utils::enableClipCopy(const QString &filePath)
  */
 void Utils::recordCloseFile(const QString &filePath)
 {
+#if _ZPD_
     if (getLoadZPDLibsInstance()->m_document_close) {
         getLoadZPDLibsInstance()->m_document_close(filePath.toUtf8().data());
     }
+#endif
 }
 
 /**
@@ -1088,8 +1096,8 @@ void Utils::sendFloatMessageFixedFont(QWidget *par, const QIcon &icon, const QSt
 {
     // 以下代码和 DMessageManager::sendMessage() 流程一致。
     QWidget *content = par->findChild<QWidget *>("_d_message_manager_content", Qt::FindDirectChildrenOnly);
-    auto msgWidgets = content->findChildren<DFloatingMessage*>(QString(), Qt::FindDirectChildrenOnly);
-    auto text_message_count = std::count_if(msgWidgets.begin(), msgWidgets.end(), [](DFloatingMessage *msg){
+    auto msgWidgets = content->findChildren<DFloatingMessage *>(QString(), Qt::FindDirectChildrenOnly);
+    auto text_message_count = std::count_if(msgWidgets.begin(), msgWidgets.end(), [](DFloatingMessage *msg) {
         return bool(msg->messageType() == DFloatingMessage::TransientType);
     });
 
@@ -1106,7 +1114,7 @@ void Utils::sendFloatMessageFixedFont(QWidget *par, const QIcon &icon, const QSt
 
 #ifdef DTKWIDGET_CLASS_DSizeMode
     // 绑定 qApp 字体变更信号
-    QObject::connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::fontChanged, floMsg, [ = ](const QFont &font){
+    QObject::connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::fontChanged, floMsg, [=](const QFont &font) {
         floMsg->setFont(font);
     });
 #endif
