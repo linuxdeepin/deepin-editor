@@ -1,3 +1,9 @@
+deepin-editor (6.5.1) unstable; urgency=medium
+
+  * fix: Register application/x-zerosize MimeType in desktop file (Bug: 267705)
+
+ -- wangrong <wangrong@uniontech.com>  Tue, 03 Sep 2024 15:43:20 +0800
+
 deepin-editor (6.5.0) unstable; urgency=medium
 
   * chore(CI): add debian check workflow
