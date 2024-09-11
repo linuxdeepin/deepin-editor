@@ -13,3 +13,6 @@ third/
 *.txt.user
 
 .vscode/*
+
+#linglong building dir
+linglong
