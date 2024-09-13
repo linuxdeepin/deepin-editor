@@ -1,3 +1,10 @@
+deepin-editor (6.5.2) unstable; urgency=medium
+
+  * New version 6.5.2
+  * Adapt linglong.
+
+-- re2zero <yangwu@uniontech.com>  Fri, 13 Sep 2024 14:06:16 +0800
+
 deepin-editor (6.5.1) unstable; urgency=medium
 
   * fix: Register application/x-zerosize MimeType in desktop file (Bug: 267705)
