@@ -3,8 +3,12 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "inserttextundocommand.h"
+#include "dtextedit.h"
 
-InsertTextUndoCommand::InsertTextUndoCommand(const QTextCursor &textcursor, const QString &text, QPlainTextEdit *edit, QUndoCommand *parent)
+InsertTextUndoCommand::InsertTextUndoCommand(const QTextCursor &textcursor,
+                                             const QString &text,
+                                             TextEdit *edit,
+                                             QUndoCommand *parent)
     : QUndoCommand(parent)
     , m_pEdit(edit)
     , m_textCursor(textcursor)
@@ -15,20 +19,29 @@ InsertTextUndoCommand::InsertTextUndoCommand(const QTextCursor &textcursor, cons
 
 InsertTextUndoCommand::InsertTextUndoCommand(QList<QTextEdit::ExtraSelection> &selections,
                                              const QString &text,
-                                             QPlainTextEdit *edit,
+                                             TextEdit *edit,
                                              QUndoCommand *parent)
     : QUndoCommand(parent)
     , m_pEdit(edit)
     , m_sInsertText(text)
-    , m_ColumnEditSelections(selections)
+    , m_columnEditSelections(selections)
 {
     m_sInsertText.replace("\r\n", "\n");
+
+    for (const auto &selection : m_columnEditSelections) {
+        ColumnReplaceNode replaceNode;
+        replaceNode.startPos = selection.cursor.selectionStart();
+        replaceNode.endPos = selection.cursor.selectionEnd();
+        replaceNode.leftToRight = selection.cursor.anchor() <= selection.cursor.position();
+        replaceNode.originText = selection.cursor.selectedText();
+        m_replaces.append(replaceNode);
+    }
 }
 
 void InsertTextUndoCommand::undo()
 {
-    if (m_ColumnEditSelections.isEmpty()) {
-        // 注意部分字符显示占位超过1
+    if (m_columnEditSelections.isEmpty()) {
+        // note that some characters appear to occupy more than 1 place
         m_textCursor.setPosition(m_endPostion);
         m_textCursor.setPosition(m_beginPostion, QTextCursor::KeepAnchor);
         m_textCursor.deleteChar();
@@ -37,25 +50,44 @@ void InsertTextUndoCommand::undo()
             m_textCursor.setPosition(m_textCursor.position() - m_selectText.length(), QTextCursor::KeepAnchor);
         }
 
-        // 进行撤销/恢复时将光标移动到撤销位置
+        // restore cursor position
         if (m_pEdit) {
             m_pEdit->setTextCursor(m_textCursor);
         }
     } else {
-        int cnt = m_ColumnEditSelections.size();
-        for (int i = 0; i < cnt; i++) {
-            m_ColumnEditSelections[i].cursor.deleteChar();
+        Q_ASSERT_X(m_columnEditSelections.size() == m_replaces.size(), "Column editing insert undo", "column data size check");
+
+        for (int i = 0; i < m_columnEditSelections.size(); i++) {
+            QTextEdit::ExtraSelection &selection = m_columnEditSelections[i];
+            const ColumnReplaceNode &replaceNode = m_replaces[i];
+
+            // restore origin text
+            QTextCursor cursor = selection.cursor;
+            cursor.setPosition(replaceNode.startPos);
+            cursor.setPosition(replaceNode.startPos + m_sInsertText.size(), QTextCursor::KeepAnchor);
+            cursor.insertText(replaceNode.originText);
+
+            if (replaceNode.leftToRight) {
+                cursor.setPosition(replaceNode.startPos);
+                cursor.setPosition(replaceNode.endPos, QTextCursor::KeepAnchor);
+            } else {
+                cursor.setPosition(replaceNode.endPos);
+                cursor.setPosition(replaceNode.startPos, QTextCursor::KeepAnchor);
+            }
+
+            selection.cursor = cursor;
         }
 
-        if (m_pEdit && !m_ColumnEditSelections.isEmpty()) {
-            m_pEdit->setTextCursor(m_ColumnEditSelections.last().cursor);
+        if (m_pEdit && !m_columnEditSelections.isEmpty()) {
+            m_pEdit->restoreColumnEditSelection(m_columnEditSelections);
+            m_pEdit->setTextCursor(m_columnEditSelections.last().cursor);
         }
     }
 }
 
 void InsertTextUndoCommand::redo()
 {
-    if (m_ColumnEditSelections.isEmpty()) {
+    if (m_columnEditSelections.isEmpty()) {
         if (m_textCursor.hasSelection()) {
             m_selectText = m_textCursor.selectedText();
             m_textCursor.removeSelectedText();
@@ -66,26 +98,50 @@ void InsertTextUndoCommand::redo()
         m_beginPostion = m_textCursor.selectionStart();
         m_endPostion = m_textCursor.selectionEnd();
 
-        // 进行撤销/恢复时将光标移动到撤销位置
+        // restore cursor position
         if (m_pEdit) {
             QTextCursor curCursor = m_pEdit->textCursor();
             curCursor.setPosition(m_endPostion);
             m_pEdit->setTextCursor(curCursor);
         }
     } else {
-        int cnt = m_ColumnEditSelections.size();
-        for (int i = 0; i < cnt; i++) {
-            m_ColumnEditSelections[i].cursor.insertText(m_sInsertText);
-            m_ColumnEditSelections[i].cursor.setPosition(m_ColumnEditSelections[i].cursor.position() - m_sInsertText.length() + 1,
-                                                         QTextCursor::KeepAnchor);
+        Q_ASSERT_X(m_columnEditSelections.size() == m_replaces.size(), "Column editing insert undo", "column data size check");
+
+        // insert will change all text cursor
+        int columnOffset = 0;
+        for (int i = 0; i < m_columnEditSelections.size(); i++) {
+            QTextEdit::ExtraSelection &selection = m_columnEditSelections[i];
+            const ColumnReplaceNode &replaceNode = m_replaces[i];
+
+            // remove origin text with replace text
+            QTextCursor cursor = selection.cursor;
+            cursor.setPosition(columnOffset + replaceNode.startPos);
+            cursor.setPosition(columnOffset + replaceNode.endPos, QTextCursor::KeepAnchor);
+            cursor.insertText(m_sInsertText);
+
+            if (replaceNode.leftToRight) {
+                cursor.setPosition(columnOffset + replaceNode.startPos);
+                cursor.setPosition(columnOffset + replaceNode.startPos + m_sInsertText.size(), QTextCursor::KeepAnchor);
+            } else {
+                cursor.setPosition(columnOffset + replaceNode.startPos + m_sInsertText.size());
+                cursor.setPosition(columnOffset + replaceNode.startPos, QTextCursor::KeepAnchor);
+            }
+
+            selection.cursor = cursor;
+            columnOffset += m_sInsertText.size() - replaceNode.originText.size();
         }
 
-        if (m_pEdit && !m_ColumnEditSelections.isEmpty()) {
+        if (m_pEdit && !m_columnEditSelections.isEmpty()) {
             QTextCursor curCursor = m_pEdit->textCursor();
-            curCursor.setPosition(m_ColumnEditSelections.last().cursor.selectionEnd());
+            curCursor.setPosition(m_columnEditSelections.last().cursor.selectionEnd());
             m_pEdit->setTextCursor(curCursor);
         }
     }
+}
+
+int InsertTextUndoCommand::id() const
+{
+    return m_columnEditSelections.isEmpty() ? Utils::IdColumnEditInsert : Utils::IdInsert;
 }
 
 /**

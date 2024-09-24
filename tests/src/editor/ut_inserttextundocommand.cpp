@@ -4,6 +4,8 @@
 
 #include "ut_inserttextundocommand.h"
 #include "../../src/editor/inserttextundocommand.h"
+#include "../../src/editor/dtextedit.h"
+#include "../../src/widgets/window.h"
 
 test_InsertTextUndoCommand::test_InsertTextUndoCommand()
 {
@@ -82,7 +84,9 @@ TEST_F(test_InsertTextUndoCommand, redo2)
 TEST_F(test_InsertTextUndoCommand, redo_withTextCursor_restoreCursor)
 {
     // 重做恢复光标位置
-    QPlainTextEdit *edit = new QPlainTextEdit;
+    Window *window = new Window;
+    EditWrapper *wrapper = window->createEditor();
+    TextEdit *edit = wrapper->textEditor();
     edit->setPlainText("123789");
 
     QTextCursor cursor = edit->textCursor();
@@ -108,15 +112,19 @@ TEST_F(test_InsertTextUndoCommand, redo_withTextCursor_restoreCursor)
     EXPECT_EQ(QString("123456789"), edit->toPlainText());
     EXPECT_EQ(6, edit->textCursor().position());
 
+    window->deleteLater();
+    wrapper->deleteLater();
+    edit->deleteLater();
     delete command;
     delete command2;
-    delete edit;
 }
 
 TEST_F(test_InsertTextUndoCommand, undo_withTextCursor_restoreCursor)
 {
     // 撤销后恢复光标位置
-    QPlainTextEdit *edit = new QPlainTextEdit;
+    Window *window = new Window;
+    EditWrapper *wrapper = window->createEditor();
+    TextEdit *edit = wrapper->textEditor();
     edit->setPlainText("123456789");
 
     QTextCursor cursor = edit->textCursor();
@@ -137,7 +145,6 @@ TEST_F(test_InsertTextUndoCommand, undo_withTextCursor_restoreCursor)
     selection.format.setProperty(QTextFormat::FullWidthSelection, true);
     selection.cursor = edit->textCursor();
     selection.cursor.setPosition(3);
-    selection.cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, 3);
     extraSelections.append(selection);
     InsertTextUndoCommand *command2 = new InsertTextUndoCommand(extraSelections, QString("456"), edit);
     command2->undo();
@@ -145,9 +152,11 @@ TEST_F(test_InsertTextUndoCommand, undo_withTextCursor_restoreCursor)
     EXPECT_EQ(QString("123789"), edit->toPlainText());
     EXPECT_EQ(3, edit->textCursor().position());
 
+    window->deleteLater();
+    wrapper->deleteLater();
+    edit->deleteLater();
     delete command;
     delete command2;
-    delete edit;
 }
 
 TEST(test_MidButtonInsertTextUndoCommand, redo_withTextCursor_restoreCursor)
