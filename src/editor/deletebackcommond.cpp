@@ -5,19 +5,16 @@
 #include "deletebackcommond.h"
 #include <QTextBlock>
 
-DeleteBackCommand::DeleteBackCommand(QTextCursor cursor, QPlainTextEdit *edit):
-    m_cursor(cursor),
-    m_edit(edit)
+DeleteBackCommand::DeleteBackCommand(QTextCursor cursor, QPlainTextEdit *edit)
+    : m_cursor(cursor)
+    , m_edit(edit)
 {
     m_delText = m_cursor.selectedText();
     m_delPos = std::min(m_cursor.position(), m_cursor.anchor());
     m_insertPos = m_delPos;
 }
 
-DeleteBackCommand::~DeleteBackCommand()
-{
-
-}
+DeleteBackCommand::~DeleteBackCommand() {}
 
 void DeleteBackCommand::undo()
 {
@@ -33,30 +30,30 @@ void DeleteBackCommand::undo()
 void DeleteBackCommand::redo()
 {
     m_cursor.setPosition(m_delPos);
-    m_cursor.setPosition(m_delPos+m_delText.size(), QTextCursor::KeepAnchor);
+    m_cursor.setPosition(m_delPos + m_delText.size(), QTextCursor::KeepAnchor);
     m_cursor.deleteChar();
 
     // 撤销恢复时光标移回要撤销的位置
     m_edit->setTextCursor(m_cursor);
 }
 
-DeleteBackAltCommand::DeleteBackAltCommand(QList<QTextEdit::ExtraSelection> &selections,QPlainTextEdit* edit):
-    m_ColumnEditSelections(selections),
-    m_edit(edit)
+DeleteBackAltCommand::DeleteBackAltCommand(const QList<QTextEdit::ExtraSelection> &selections, QPlainTextEdit *edit)
+    : m_ColumnEditSelections(selections)
+    , m_edit(edit)
 {
     int size = m_ColumnEditSelections.size();
-    int sum=0;
-    for(int i=0;i<size;i++){
+    int sum = 0;
+    for (int i = 0; i < size; i++) {
         QString text;
         auto cursor = m_ColumnEditSelections[i].cursor;
 
-        if(!cursor.hasSelection() && !cursor.atBlockEnd()){
+        if (!cursor.hasSelection() && !cursor.atBlockEnd()) {
             cursor.setPosition(cursor.position() + 1, QTextCursor::KeepAnchor);
         }
 
         text = cursor.selectedText();
-        if(!text.isEmpty()){
-            int pos = std::min(cursor.anchor(),cursor.position());
+        if (!text.isEmpty()) {
+            int pos = std::min(cursor.anchor(), cursor.position());
             DelNode node;
             node.m_cursor = cursor;
             node.m_insertPos = pos;
@@ -70,43 +67,40 @@ DeleteBackAltCommand::DeleteBackAltCommand(QList<QTextEdit::ExtraSelection> &sel
     }
 }
 
-DeleteBackAltCommand::~DeleteBackAltCommand()
-{
-
-}
+DeleteBackAltCommand::~DeleteBackAltCommand() {}
 
 void DeleteBackAltCommand::undo()
 {
-
     int size = m_deletions.size();
-    for(int i=0;i<size;i++){
+    for (int i = 0; i < size; i++) {
         auto cursor = m_deletions[i].m_cursor;
         int pos = m_deletions[i].m_insertPos;
         QString text = m_deletions[i].m_delText;
-        cursor.setPosition(pos,QTextCursor::MoveAnchor);
+        cursor.setPosition(pos, QTextCursor::MoveAnchor);
         cursor.insertText(text);
 
-        cursor.setPosition(pos,QTextCursor::MoveAnchor);
+        cursor.setPosition(pos, QTextCursor::MoveAnchor);
         int id = m_deletions[i].m_id_in_Column;
-        m_ColumnEditSelections[id].cursor = cursor;
-        m_edit->setTextCursor(cursor);
-    }
 
+        if (0 <= id && id < m_ColumnEditSelections.size()) {
+            m_ColumnEditSelections[id].cursor = cursor;
+            m_edit->setTextCursor(cursor);
+        }
+    }
 }
 
 void DeleteBackAltCommand::redo()
 {
     int size = m_deletions.size();
 
-    for(int i=0;i<size;i++){
+    for (int i = 0; i < size; i++) {
         auto cursor = m_deletions[i].m_cursor;
         int pos = m_deletions[i].m_delPos;
         QString text = m_deletions[i].m_delText;
-        cursor.setPosition(pos,QTextCursor::MoveAnchor);
+        cursor.setPosition(pos, QTextCursor::MoveAnchor);
 
-        for(int j=0;j<text.size();j++){
+        for (int j = 0; j < text.size(); j++) {
             cursor.deleteChar();
         }
     }
-
 }

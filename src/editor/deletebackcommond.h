@@ -8,30 +8,29 @@
 #include <QTextCursor>
 #include <QTextEdit>
 #include <qplaintextedit.h>
-//向后删除单一文字或选中文字的撤销重做
-class DeleteBackCommand:public QUndoCommand
+// 向后删除单一文字或选中文字的撤销重做
+class DeleteBackCommand : public QUndoCommand
 {
 public:
-    DeleteBackCommand(QTextCursor cursor,QPlainTextEdit* edit);
+    DeleteBackCommand(QTextCursor cursor, QPlainTextEdit *edit);
     virtual ~DeleteBackCommand();
     virtual void undo();
     virtual void redo();
 
 private:
     QTextCursor m_cursor;
-    QString m_delText {QString()};
-    int m_delPos {0};
-    int m_insertPos {0};
+    QString m_delText{QString()};
+    int m_delPos{0};
+    int m_insertPos{0};
 
-    QPlainTextEdit* m_edit;
-
+    QPlainTextEdit *m_edit;
 };
 
-//列模式下向后删除的撤销重做
-class DeleteBackAltCommand:public QUndoCommand
+// 列模式下向后删除的撤销重做
+class DeleteBackAltCommand : public QUndoCommand
 {
 public:
-    DeleteBackAltCommand(QList<QTextEdit::ExtraSelection> &selections,QPlainTextEdit* edit);
+    DeleteBackAltCommand(const QList<QTextEdit::ExtraSelection> &selections, QPlainTextEdit *edit);
     virtual ~DeleteBackAltCommand();
     virtual void undo();
     virtual void redo();
@@ -47,9 +46,9 @@ public:
     };
 
 private:
-    QList<QTextEdit::ExtraSelection>& m_ColumnEditSelections;
+    QList<QTextEdit::ExtraSelection> m_ColumnEditSelections;
     QList<DelNode> m_deletions;
-    QPlainTextEdit* m_edit;
+    QPlainTextEdit *m_edit;
 };
 
-#endif // DELETEBACKCOMMOND_H
+#endif  // DELETEBACKCOMMOND_H
