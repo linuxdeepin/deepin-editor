@@ -9753,7 +9753,7 @@ TEST(UT_Textedit_onAppPaletteChanged, OnAppPaletteChanged_ChangeBackground_Pass)
     edit->m_wrapper = wra;
 
     Stub s;
-    s.set(ADDR(DGuiApplicationHelper, applicationPalette), stubApplicationPalette);
+    s.set((DPalette(DGuiApplicationHelper::*)() const)(&DGuiApplicationHelper::applicationPalette), stubApplicationPalette);
 
     QTextEdit::ExtraSelection selection;
     selection.format.setBackground(QBrush(Qt::white));

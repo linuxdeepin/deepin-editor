@@ -4,13 +4,10 @@
 
 #include "ut_deletebackcommond.h"
 #include "../src/editor/deletebackcommond.h"
-#include"../../src/widgets/window.h"
+#include "../../src/widgets/window.h"
 #include "qplaintextedit.h"
 #include "qtextcursor.h"
-UT_Deletebackcommond::UT_Deletebackcommond()
-{
-
-}
+UT_Deletebackcommond::UT_Deletebackcommond() {}
 
 TEST(UT_Deletebackcommond_DeleteBackCommand, UT_Deletebackcommond_DeleteBackCommand)
 {
@@ -64,10 +61,7 @@ TEST(UT_Deletebackcommond_undo, UT_Deletebackcommond_undo)
     pWindow->deleteLater();
 }
 
-UT_Deletebackaltcommond::UT_Deletebackaltcommond()
-{
-
-}
+UT_Deletebackaltcommond::UT_Deletebackaltcommond() {}
 
 TEST(UT_Deletebackaltcommond_DeleteBackAltCommand, UT_Deletebackaltcommond_DeleteBackAltCommand)
 {
@@ -81,8 +75,8 @@ TEST(UT_Deletebackaltcommond_DeleteBackAltCommand, UT_Deletebackaltcommond_Delet
     list.push_back(sel);
     list.push_back(sel);
 
-    QPlainTextEdit* edit = new QPlainTextEdit;
-    DeleteBackAltCommand* com = new DeleteBackAltCommand(list, edit);
+    QPlainTextEdit *edit = new QPlainTextEdit;
+    DeleteBackAltCommand *com = new DeleteBackAltCommand(list, edit);
 
     delete com;
     com = nullptr;
@@ -92,48 +86,47 @@ TEST(UT_Deletebackaltcommond_DeleteBackAltCommand, UT_Deletebackaltcommond_Delet
 
 TEST(UT_Deletebackaltcommond_redo, UT_Deletebackaltcommond_redo)
 {
-
-    Window* window = new Window;
+    Window *window = new Window;
     EditWrapper *wrapper = window->createEditor();
-    TextEdit * edit = wrapper->textEditor();
+    TextEdit *edit = wrapper->textEditor();
     QString text = "test";
     QList<QTextEdit::ExtraSelection> list;
     QTextEdit::ExtraSelection sel;
     QTextCursor cursor;
     cursor.insertText(text);
-    cursor.movePosition(QTextCursor::Start,QTextCursor::KeepAnchor);
+    cursor.movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
     sel.cursor = cursor;
     list.push_back(sel);
     list.push_back(sel);
-    DeleteBackAltCommand * commond = new DeleteBackAltCommand(list,edit);
-    commond->m_deletions = {{"123",1,1,1,cursor}};
+    DeleteBackAltCommand *commond = new DeleteBackAltCommand(list, edit);
+    commond->m_deletions = {{"123", 1, 1, 1, cursor}};
     commond->redo();
 
     window->deleteLater();
     wrapper->deleteLater();
     edit->deleteLater();
 
-    delete commond;commond=nullptr;
+    delete commond;
+    commond = nullptr;
 }
-
 
 TEST(UT_Deletebackaltcommond_undo, UT_Deletebackaltcommond_undo)
 {
-    Window* window = new Window;
+    Window *window = new Window;
     EditWrapper *wrapper = window->createEditor();
-    TextEdit * edit = wrapper->textEditor();
+    TextEdit *edit = wrapper->textEditor();
     QString text = "test";
     QList<QTextEdit::ExtraSelection> list;
     QTextEdit::ExtraSelection sel;
     QTextCursor cursor;
     cursor.insertText(text);
-    cursor.movePosition(QTextCursor::Start,QTextCursor::KeepAnchor);
+    cursor.movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
     sel.cursor = cursor;
     list.push_back(sel);
     list.push_back(sel);
 
-    DeleteBackAltCommand* com = new DeleteBackAltCommand(list,edit);
-    com->m_deletions = {{"123",1,1,1,cursor}};
+    DeleteBackAltCommand *com = new DeleteBackAltCommand(list, edit);
+    com->m_deletions = {{"123", 1, 1, 1, cursor}};
     com->undo();
 
     window->deleteLater();
@@ -141,5 +134,45 @@ TEST(UT_Deletebackaltcommond_undo, UT_Deletebackaltcommond_undo)
     edit->deleteLater();
     delete com;
     com = nullptr;
+}
 
+TEST(UT_Deletebackaltcommond_MoveCursor, UT_Deletebackaltcommond_MoveCursor)
+{
+    Window *window = new Window;
+    EditWrapper *wrapper = window->createEditor();
+    TextEdit *edit = wrapper->textEditor();
+    QString text = "123456\nabcdef";
+    edit->setPlainText(text);
+
+    QList<QTextEdit::ExtraSelection> list;
+    QTextEdit::ExtraSelection sel;
+    QTextCursor cursor = edit->textCursor();
+    // select the left 3 colums: 123|456
+    //                           abc|def
+    cursor.movePosition(QTextCursor::Start);
+    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, 3);
+    sel.cursor = cursor;
+    list.append(sel);
+
+    cursor.movePosition(QTextCursor::NextBlock);
+    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, 3);
+    sel.cursor = cursor;
+    list.append(sel);
+
+    DeleteBackAltCommand *com = new DeleteBackAltCommand(list, edit);
+    com->redo();
+    EXPECT_EQ(edit->toPlainText(), QString("456\ndef"));
+
+    list.clear();
+    cursor.movePosition(QTextCursor::End);
+    edit->setTextCursor(cursor);
+
+    com->undo();
+    EXPECT_EQ(edit->toPlainText(), text);
+
+    window->deleteLater();
+    wrapper->deleteLater();
+    edit->deleteLater();
+    delete com;
+    com = nullptr;
 }
