@@ -11,24 +11,40 @@
 #include <QTextEdit>
 #include <QPlainTextEdit>
 
+class TextEdit;
+
 class InsertTextUndoCommand : public QUndoCommand
 {
 public:
-    explicit InsertTextUndoCommand(const QTextCursor &textcursor, const QString &text, QPlainTextEdit *edit, QUndoCommand *parent = nullptr);
+    explicit InsertTextUndoCommand(const QTextCursor &textcursor,
+                                   const QString &text,
+                                   TextEdit *edit,
+                                   QUndoCommand *parent = nullptr);
     explicit InsertTextUndoCommand(QList<QTextEdit::ExtraSelection> &selections,
                                    const QString &text,
-                                   QPlainTextEdit *edit,
+                                   TextEdit *edit,
                                    QUndoCommand *parent = nullptr);
-    virtual void undo();
-    virtual void redo();
+    void undo() override;
+    void redo() override;
+
+    int id() const override;
 
 private:
-    QPlainTextEdit *m_pEdit = nullptr;
+    struct ColumnReplaceNode
+    {
+        int startPos{false};
+        int endPos{false};
+        bool leftToRight{true};
+        QString originText;  // replaced text before insert.
+    };
+
+    TextEdit *m_pEdit = nullptr;
     QTextCursor m_textCursor;
     int m_beginPostion{0};
     int m_endPostion{0};
     QString m_sInsertText;
-    QList<QTextEdit::ExtraSelection> m_ColumnEditSelections;
+    QList<QTextEdit::ExtraSelection> m_columnEditSelections;
+    QList<ColumnReplaceNode> m_replaces;
     QString m_selectText = QString();
 };
 
