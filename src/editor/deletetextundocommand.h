@@ -11,16 +11,20 @@
 #include <QTextEdit>
 #include <qplaintextedit.h>
 
+class TextEdit;
+
 class DeleteTextUndoCommand : public QUndoCommand
 {
 public:
-    explicit DeleteTextUndoCommand(QTextCursor textcursor, QPlainTextEdit* edit, QUndoCommand *parent = nullptr);
-    explicit DeleteTextUndoCommand(QList<QTextEdit::ExtraSelection> &selections, QPlainTextEdit* edit, QUndoCommand *parent = nullptr);
-    virtual void undo();
-    virtual void redo();
+    explicit DeleteTextUndoCommand(QTextCursor textcursor, TextEdit* edit, QUndoCommand *parent = nullptr);
+    explicit DeleteTextUndoCommand(QList<QTextEdit::ExtraSelection> &selections, TextEdit* edit, QUndoCommand *parent = nullptr);
+    void undo() override;
+    void redo() override;
+
+    int id() const override;
 
 private:
-    QPlainTextEdit* m_edit;
+    TextEdit* m_edit;
     QTextCursor m_textCursor;
     QString m_sInsertText;
     QList<QString> m_selectTextList;

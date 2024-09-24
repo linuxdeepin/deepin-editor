@@ -466,6 +466,8 @@ public:
 
     static bool isComment(const QString &text, int index, const QString &commentType);
 
+    void restoreColumnEditSelection(const QList<QTextEdit::ExtraSelection> &selections);
+
 signals:
     void clickFindAction();
     void clickReplaceAction();
@@ -609,6 +611,8 @@ private:
                              Qt::CaseSensitivity caseFlag = Qt::CaseInsensitive) const;
     // 查找行号line起始的折叠区域
     bool findFoldBlock(int line, QTextBlock &beginBlock, QTextBlock &endBlock, QTextBlock &curBlock);
+
+    bool refreshUndoRedoColumnStatus();
 
 private slots:
     // 文档内容变更时触发

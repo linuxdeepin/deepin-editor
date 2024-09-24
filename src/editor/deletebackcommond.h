@@ -4,18 +4,22 @@
 
 #ifndef DELETEBACKCOMMOND_H
 #define DELETEBACKCOMMOND_H
+
 #include <QUndoCommand>
 #include <QTextCursor>
 #include <QTextEdit>
 #include <qplaintextedit.h>
-// 向后删除单一文字或选中文字的撤销重做
+
+class TextEdit;
+
+// Delete selected text or charactor (if not selected) backward
 class DeleteBackCommand : public QUndoCommand
 {
 public:
     DeleteBackCommand(QTextCursor cursor, QPlainTextEdit *edit);
-    virtual ~DeleteBackCommand();
-    virtual void undo();
-    virtual void redo();
+    ~DeleteBackCommand() override;
+    void undo() override;
+    void redo() override;
 
 private:
     QTextCursor m_cursor;
@@ -26,29 +30,32 @@ private:
     QPlainTextEdit *m_edit;
 };
 
-// 列模式下向后删除的撤销重做
+// Delete redo / undo on column editing
 class DeleteBackAltCommand : public QUndoCommand
 {
 public:
-    DeleteBackAltCommand(const QList<QTextEdit::ExtraSelection> &selections, QPlainTextEdit *edit);
-    virtual ~DeleteBackAltCommand();
-    virtual void undo();
-    virtual void redo();
+    DeleteBackAltCommand(const QList<QTextEdit::ExtraSelection> &selections, TextEdit *edit, bool backward = false);
+    ~DeleteBackAltCommand() override;
+    void undo() override;
+    void redo() override;
+
+    int id() const override;
 
 public:
     struct DelNode
     {
-        QString m_delText;
-        int m_delPos;
-        int m_insertPos;
-        int m_id_in_Column;
-        QTextCursor m_cursor;
+        QString delText;
+        int delPos;
+        int insertPos;
+        int idInColumn;
+        QTextCursor cursor;
+        bool leftToRight;  // select orientation
     };
 
 private:
-    QList<QTextEdit::ExtraSelection> m_ColumnEditSelections;
+    QList<QTextEdit::ExtraSelection> m_columnEditSelections;
     QList<DelNode> m_deletions;
-    QPlainTextEdit *m_edit;
+    TextEdit *m_edit;
 };
 
 #endif  // DELETEBACKCOMMOND_H

@@ -3,10 +3,15 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "ut_deletebackcommond.h"
+
+#include <QPlainTextEdit>
+#include <QTextCursor>
+
+#include "stub.h"
+
 #include "../src/editor/deletebackcommond.h"
 #include "../../src/widgets/window.h"
-#include "qplaintextedit.h"
-#include "qtextcursor.h"
+
 UT_Deletebackcommond::UT_Deletebackcommond() {}
 
 TEST(UT_Deletebackcommond_DeleteBackCommand, UT_Deletebackcommond_DeleteBackCommand)
@@ -75,7 +80,7 @@ TEST(UT_Deletebackaltcommond_DeleteBackAltCommand, UT_Deletebackaltcommond_Delet
     list.push_back(sel);
     list.push_back(sel);
 
-    QPlainTextEdit *edit = new QPlainTextEdit;
+    TextEdit *edit = new TextEdit;
     DeleteBackAltCommand *com = new DeleteBackAltCommand(list, edit);
 
     delete com;
@@ -99,7 +104,7 @@ TEST(UT_Deletebackaltcommond_redo, UT_Deletebackaltcommond_redo)
     list.push_back(sel);
     list.push_back(sel);
     DeleteBackAltCommand *commond = new DeleteBackAltCommand(list, edit);
-    commond->m_deletions = {{"123", 1, 1, 1, cursor}};
+    commond->m_deletions = {{"123", 1, 1, 1, cursor, true}};
     commond->redo();
 
     window->deleteLater();
@@ -136,7 +141,7 @@ TEST(UT_Deletebackaltcommond_undo, UT_Deletebackaltcommond_undo)
     com = nullptr;
 }
 
-TEST(UT_Deletebackaltcommond_MoveCursor, UT_Deletebackaltcommond_MoveCursor)
+TEST(UT_Deletebackaltcommond_MoveCursor, MoveCursor_Undo)
 {
     Window *window = new Window;
     EditWrapper *wrapper = window->createEditor();
@@ -175,4 +180,167 @@ TEST(UT_Deletebackaltcommond_MoveCursor, UT_Deletebackaltcommond_MoveCursor)
     edit->deleteLater();
     delete com;
     com = nullptr;
+}
+
+void stub_slotCanUndoRedoChanged(bool)
+{
+    // do nothing
+}
+
+void stub_command_updateModifyStatus(const QString &, bool)
+{
+    // do nothing
+}
+
+TEST(UT_Deletebackaltcommond_Selection, Selection_ColumnStatus_Restore)
+{
+    Stub s;
+    s.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoRedoChanged);
+    s.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanUndoRedoChanged);
+    s.set(ADDR(Window, updateModifyStatus), stub_command_updateModifyStatus);
+
+    Window *window = new Window;
+    EditWrapper *wrapper = window->createEditor();
+    TextEdit *edit = wrapper->textEditor();
+    QString text = "123456\nabcdef";
+    edit->setPlainText(text);
+
+    QList<QTextEdit::ExtraSelection> list;
+    QTextEdit::ExtraSelection sel;
+    QTextCursor cursor = edit->textCursor();
+    cursor.movePosition(QTextCursor::Start);
+    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, 3);
+    sel.cursor = cursor;
+    list.append(sel);
+    cursor.movePosition(QTextCursor::NextBlock);
+    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor, 3);
+    sel.cursor = cursor;
+    list.append(sel);
+
+    DeleteBackCommand *emptyCommand = new DeleteBackCommand({}, edit);
+    edit->m_pUndoStack->push(emptyCommand);
+
+    DeleteBackAltCommand *com = new DeleteBackAltCommand(list, edit);
+    edit->m_pUndoStack->push(com);
+
+    edit->undo_();
+    // temp command
+    edit->undo_();
+
+    EXPECT_TRUE(edit->m_altModSelections.isEmpty());
+    EXPECT_FALSE(edit->m_bIsAltMod);
+
+    // temp command
+    edit->redo_();
+
+    EXPECT_TRUE(edit->m_altModSelections.isEmpty());
+    EXPECT_FALSE(edit->m_bIsAltMod);
+
+    // delete command
+    edit->redo_();
+
+    EXPECT_EQ(edit->m_altModSelections.size(), list.size());
+    EXPECT_TRUE(edit->m_bIsAltMod);
+
+    window->deleteLater();
+    wrapper->deleteLater();
+    edit->deleteLater();
+}
+
+TEST(UT_Deletebackaltcommond_DelStart, DelStart_TextUpdate_Success)
+{
+    Stub s;
+    s.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoRedoChanged);
+    s.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanUndoRedoChanged);
+    s.set(ADDR(Window, updateModifyStatus), stub_command_updateModifyStatus);
+
+    Window *window = new Window;
+    EditWrapper *wrapper = window->createEditor();
+    TextEdit *edit = wrapper->textEditor();
+    QString text = "123456\nabcdef";
+    edit->setPlainText(text);
+
+    QList<QTextEdit::ExtraSelection> list;
+    QTextEdit::ExtraSelection sel;
+    QTextCursor cursor = edit->textCursor();
+    // at start of block: |123456
+    //                    |abcdef
+    cursor.movePosition(QTextCursor::Start);
+    sel.cursor = cursor;
+    list.append(sel);
+
+    cursor.movePosition(QTextCursor::NextBlock);
+    sel.cursor = cursor;
+    list.append(sel);
+
+    // backward delete
+    DeleteBackAltCommand *comBackward = new DeleteBackAltCommand(list, edit, true);
+    edit->m_pUndoStack->push(comBackward);
+    EXPECT_EQ(edit->toPlainText(), QString("23456\nbcdef"));
+
+    edit->m_pUndoStack->undo();
+    EXPECT_EQ(edit->toPlainText(), text);
+
+    // forward delete
+    list[0].cursor.setPosition(0);
+    list[1].cursor.setPosition(7);
+    DeleteBackAltCommand *comForward = new DeleteBackAltCommand(list, edit);
+    edit->m_pUndoStack->push(comForward);
+    EXPECT_EQ(edit->toPlainText(), QString("123456abcdef"));
+
+    edit->m_pUndoStack->undo();
+    EXPECT_EQ(edit->toPlainText(), text);
+
+    window->deleteLater();
+    wrapper->deleteLater();
+    edit->deleteLater();
+}
+
+TEST(UT_Deletebackaltcommond_DelEnd, DelEnd_TextUpdate_Success)
+{
+    Stub s;
+    s.set(ADDR(TextEdit, slotCanUndoChanged), stub_slotCanUndoRedoChanged);
+    s.set(ADDR(TextEdit, slotCanRedoChanged), stub_slotCanUndoRedoChanged);
+    s.set(ADDR(Window, updateModifyStatus), stub_command_updateModifyStatus);
+
+    Window *window = new Window;
+    EditWrapper *wrapper = window->createEditor();
+    TextEdit *edit = wrapper->textEditor();
+    QString text = "123456\nabcdef";
+    edit->setPlainText(text);
+
+    QList<QTextEdit::ExtraSelection> list;
+    QTextEdit::ExtraSelection sel;
+    QTextCursor cursor = edit->textCursor();
+    // at end of block: 123456|
+    //                  abcdef|
+    cursor.movePosition(QTextCursor::EndOfBlock);
+    sel.cursor = cursor;
+    list.append(sel);
+
+    cursor.movePosition(QTextCursor::End);
+    sel.cursor = cursor;
+    list.append(sel);
+
+    // forward delete
+    DeleteBackAltCommand *comForward = new DeleteBackAltCommand(list, edit);
+    edit->m_pUndoStack->push(comForward);
+    EXPECT_EQ(edit->toPlainText(), QString("12345\nabcde"));
+
+    edit->m_pUndoStack->undo();
+    EXPECT_EQ(edit->toPlainText(), text);
+
+    // backward delete
+    list[0].cursor.setPosition(6);
+    list[1].cursor.setPosition(13);
+    DeleteBackAltCommand *comBackward = new DeleteBackAltCommand(list, edit, true);
+    edit->m_pUndoStack->push(comBackward);
+    EXPECT_EQ(edit->toPlainText(), QString("123456abcdef"));
+
+    edit->m_pUndoStack->undo();
+    EXPECT_EQ(edit->toPlainText(), text);
+
+    window->deleteLater();
+    wrapper->deleteLater();
+    edit->deleteLater();
 }

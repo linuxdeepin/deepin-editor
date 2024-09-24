@@ -3,7 +3,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "deletebackcommond.h"
+
 #include <QTextBlock>
+
+#include "dtextedit.h"
 
 DeleteBackCommand::DeleteBackCommand(QTextCursor cursor, QPlainTextEdit *edit)
     : m_cursor(cursor)
@@ -33,33 +36,52 @@ void DeleteBackCommand::redo()
     m_cursor.setPosition(m_delPos + m_delText.size(), QTextCursor::KeepAnchor);
     m_cursor.deleteChar();
 
-    // 撤销恢复时光标移回要撤销的位置
+    // restore cursor position
     m_edit->setTextCursor(m_cursor);
 }
 
-DeleteBackAltCommand::DeleteBackAltCommand(const QList<QTextEdit::ExtraSelection> &selections, QPlainTextEdit *edit)
-    : m_ColumnEditSelections(selections)
+/**
+   @brief Delete column selection with 'Backsapce' or 'Delete'
+        The \a backward is default delete character direction (if not selected).
+        The 'Backspace' button is forward, and the 'Delete' button is backward.
+ */
+DeleteBackAltCommand::DeleteBackAltCommand(const QList<QTextEdit::ExtraSelection> &selections,
+                                                 TextEdit *edit,
+                                                 bool backward)
+    : m_columnEditSelections(selections)
     , m_edit(edit)
 {
-    int size = m_ColumnEditSelections.size();
     int sum = 0;
-    for (int i = 0; i < size; i++) {
+    for (int i = 0; i < m_columnEditSelections.size(); i++) {
         QString text;
-        auto cursor = m_ColumnEditSelections[i].cursor;
+        auto cursor = m_columnEditSelections[i].cursor;
 
-        if (!cursor.hasSelection() && !cursor.atBlockEnd()) {
-            cursor.setPosition(cursor.position() + 1, QTextCursor::KeepAnchor);
+        if (!cursor.hasSelection()) {
+            // keyboard 'delete' button
+            if (backward) {
+                if (!cursor.atEnd()) {
+                    cursor.setPosition(cursor.position() + 1, QTextCursor::KeepAnchor);
+                }
+
+            } else {
+                // keyboard 'backspace' button
+                if (!cursor.atStart()) {
+                    cursor.setPosition(cursor.position() - 1);
+                    cursor.setPosition(cursor.position() + 1, QTextCursor::KeepAnchor);
+                }
+            }
         }
 
         text = cursor.selectedText();
         if (!text.isEmpty()) {
             int pos = std::min(cursor.anchor(), cursor.position());
             DelNode node;
-            node.m_cursor = cursor;
-            node.m_insertPos = pos;
-            node.m_delPos = pos - sum;
-            node.m_delText = text;
-            node.m_id_in_Column = i;
+            node.cursor = cursor;
+            node.insertPos = pos;
+            node.delPos = pos - sum;
+            node.delText = text;
+            node.idInColumn = i;
+            node.leftToRight = cursor.anchor() < cursor.position();
             m_deletions.push_back(node);
 
             sum += text.size();
@@ -71,36 +93,52 @@ DeleteBackAltCommand::~DeleteBackAltCommand() {}
 
 void DeleteBackAltCommand::undo()
 {
-    int size = m_deletions.size();
-    for (int i = 0; i < size; i++) {
-        auto cursor = m_deletions[i].m_cursor;
-        int pos = m_deletions[i].m_insertPos;
-        QString text = m_deletions[i].m_delText;
+    for (const DelNode &node : m_deletions) {
+        auto cursor = node.cursor;
+        const int pos = node.insertPos;
+        const QString text = node.delText;
         cursor.setPosition(pos, QTextCursor::MoveAnchor);
         cursor.insertText(text);
 
-        cursor.setPosition(pos, QTextCursor::MoveAnchor);
-        int id = m_deletions[i].m_id_in_Column;
-
-        if (0 <= id && id < m_ColumnEditSelections.size()) {
-            m_ColumnEditSelections[id].cursor = cursor;
-            m_edit->setTextCursor(cursor);
+        if (0 <= node.idInColumn && node.idInColumn < m_columnEditSelections.size()) {
+            const int endPos = pos + text.size();
+            if (node.leftToRight) {
+                cursor.setPosition(pos);
+                cursor.setPosition(endPos, QTextCursor::KeepAnchor);
+            } else {
+                cursor.setPosition(endPos);
+                cursor.setPosition(pos, QTextCursor::KeepAnchor);
+            }
+            m_columnEditSelections[node.idInColumn].cursor = cursor;
         }
+    }
+
+    if (m_edit && !m_columnEditSelections.isEmpty()) {
+        m_edit->restoreColumnEditSelection(m_columnEditSelections);
+        m_edit->setTextCursor(m_columnEditSelections.last().cursor);
     }
 }
 
 void DeleteBackAltCommand::redo()
 {
-    int size = m_deletions.size();
-
-    for (int i = 0; i < size; i++) {
-        auto cursor = m_deletions[i].m_cursor;
-        int pos = m_deletions[i].m_delPos;
-        QString text = m_deletions[i].m_delText;
+    for (int i = 0; i < m_deletions.size(); i++) {
+        auto cursor = m_deletions[i].cursor;
+        const int pos = m_deletions[i].delPos;
+        const QString text = m_deletions[i].delText;
         cursor.setPosition(pos, QTextCursor::MoveAnchor);
 
         for (int j = 0; j < text.size(); j++) {
             cursor.deleteChar();
         }
     }
+
+    if (m_edit && !m_columnEditSelections.isEmpty()) {
+        m_edit->restoreColumnEditSelection(m_columnEditSelections);
+        m_edit->setTextCursor(m_columnEditSelections.last().cursor);
+    }
+}
+
+int DeleteBackAltCommand::id() const
+{
+    return Utils::IdColumnEditDelete;
 }

@@ -15,16 +15,20 @@
 #include <QDBusReply>
 
 #ifndef SAFE_DELETE
-#define SAFE_DELETE(p)      if((p)) { delete (p); (p) = nullptr;}
+#define SAFE_DELETE(p)                                                                                                           \
+    if ((p)) {                                                                                                                   \
+        delete (p);                                                                                                              \
+        (p) = nullptr;                                                                                                           \
+    }
 #endif
 
-#define DEEPIN_THEME        QString("%1share/deepin-editor/themes/deepin.theme").arg(LINGLONG_PREFIX)
-#define DEEPIN_DARK_THEME   QString("%1share/deepin-editor/themes/deepin_dark.theme").arg(LINGLONG_PREFIX)
-#define DATA_SIZE_1024      1024
-#define TEXT_EIDT_MARK_ALL  "MARK_ALL"
-#define PROC_MEMINFO_PATH   "/proc/meminfo"
-#define COPY_CONSUME_MEMORY_MULTIPLE 9      //复制文本时内存占用系数
-#define PASTE_CONSUME_MEMORY_MULTIPLE 7     //粘贴文本时内存占用系数
+#define DEEPIN_THEME QString("%1share/deepin-editor/themes/deepin.theme").arg(LINGLONG_PREFIX)
+#define DEEPIN_DARK_THEME QString("%1share/deepin-editor/themes/deepin_dark.theme").arg(LINGLONG_PREFIX)
+#define DATA_SIZE_1024 1024
+#define TEXT_EIDT_MARK_ALL "MARK_ALL"
+#define PROC_MEMINFO_PATH "/proc/meminfo"
+#define COPY_CONSUME_MEMORY_MULTIPLE 9   // 复制文本时内存占用系数
+#define PASTE_CONSUME_MEMORY_MULTIPLE 7  // 粘贴文本时内存占用系数
 
 class Utils
 {
@@ -33,13 +37,13 @@ public:
      * @brief 区间交叉类型
      */
     enum RegionIntersectType {
-        ELeft,              ///< 活动区间在固定区间左侧 例如 [0, 9] 和 [-5, -1]
-        ERight,             ///< 活动区间在固定区间右侧 例如 [0, 9] 和 [10, 15]
+        ELeft,   ///< 活动区间在固定区间左侧 例如 [0, 9] 和 [-5, -1]
+        ERight,  ///< 活动区间在固定区间右侧 例如 [0, 9] 和 [10, 15]
 
-        EIntersectLeft,     ///< 活动区间在固定区间左侧存在范围重叠 例如 [0, 9] 和 [-5, 5]
-        EIntersectRight,    ///< 活动区间在固定区间右侧存在范围重叠 例如 [0, 9] 和 [5, 15]
-        EIntersectOutter,   ///< 活动区间包含固定区间            例如 [0, 9] 和 [-10, 10]
-        EIntersectInner,    ///< 活动区间处于固定区间内部         例如 [0, 9] 和 [5, 6]
+        EIntersectLeft,    ///< 活动区间在固定区间左侧存在范围重叠 例如 [0, 9] 和 [-5, 5]
+        EIntersectRight,   ///< 活动区间在固定区间右侧存在范围重叠 例如 [0, 9] 和 [5, 15]
+        EIntersectOutter,  ///< 活动区间包含固定区间            例如 [0, 9] 和 [-10, 10]
+        EIntersectInner,   ///< 活动区间处于固定区间内部         例如 [0, 9] 和 [5, 6]
     };
 
     /**
@@ -48,6 +52,18 @@ public:
     enum SystemVersion {
         V20,
         V23,
+    };
+
+    // TODO: annother command type
+    enum UndoCommandId {
+        IdDefault = -1,     // default QUndoCommand::id() return
+        IdUnknown = 256,    // sa: QTextUndoCommand::Command::Custom
+        IdInsert,
+        IdDelete,
+
+        IdColumnEdit = 0x1000,  // column edit mark
+        IdColumnEditInsert = IdColumnEdit | IdInsert,
+        IdColumnEditDelete = IdColumnEdit | IdDelete,  // column editing delete command
     };
 
     static QString getQrcPath(const QString &imageName);
@@ -89,25 +105,25 @@ public:
             安全考虑，不要全局使用．仅在个别控件中使用
     *******************************************************************************/
     static void clearChildrenFocus(QObject *objParent);
-    //清除　控件及子控件所以焦点　梁卫东　２０２０－０９－１４　１０：３４：１９
+    // 清除　控件及子控件所以焦点　梁卫东　２０２０－０９－１４　１０：３４：１９
     static void clearChildrenFoucusEx(QWidget *pWidget);
-    //设置所有控件焦点 梁卫东　２０２０－０９－１５　１７：５５：１８
+    // 设置所有控件焦点 梁卫东　２０２０－０９－１５　１７：５５：１８
     static void setChildrenFocus(QWidget *pWidget, Qt::FocusPolicy policy = Qt::StrongFocus);
-    //根据指定名称获取进程数量 秦浩玲　2021-01-26
+    // 根据指定名称获取进程数量 秦浩玲　2021-01-26
     static int getProcessCountByName(const char *pstrName);
-    //批量结束指定名称的进程 秦浩玲　2021-01-26
+    // 批量结束指定名称的进程 秦浩玲　2021-01-26
     static void killProcessByName(const char *pstrName);
-    //计算字符串MD5哈希值 秦浩玲　2021-01-28
+    // 计算字符串MD5哈希值 秦浩玲　2021-01-28
     static QString getStringMD5Hash(const QString &input);
-    //通过dbus接口从任务栏激活窗口 add by guoshaoyu 2021-04-07
+    // 通过dbus接口从任务栏激活窗口 add by guoshaoyu 2021-04-07
     static bool activeWindowFromDock(quintptr winId);
 
-    //判断是否共享文件夹且只读
+    // 判断是否共享文件夹且只读
     static bool isShareDirAndReadOnly(const QString &filePath);
 
     static float codecConfidenceForData(const QTextCodec *codec, const QByteArray &data, const QLocale::Country &country);
 
-    //return system language
+    // return system language
     static QString getSystemLan();
     // 取得系统版本是否为 V23
     static SystemVersion getSystemVersion();
@@ -115,19 +131,20 @@ public:
     static bool isWayland();
     static bool isTreeland();
 
-    // 计算换行内容 text: 原始文本内容， nWidth: 一行最大宽度， font:字体大小, nElideRow: 最大显示行数，超出最大行时，中间内容加···省略号显示
+    // 计算换行内容 text: 原始文本内容， nWidth: 一行最大宽度， font:字体大小, nElideRow:
+    // 最大显示行数，超出最大行时，中间内容加···省略号显示
     static QString lineFeed(const QString &text, int nWidth, const QFont &font, int nElidedRow = 2);
 
     // 判断 [x1, y1] 和 [x2, y2] 区间是否存在交集，返回交集类型
     static RegionIntersectType checkRegionIntersect(int x1, int y1, int x2, int y2);
     // 取得当前文本编辑器支持的编码格式，从文件 :/encodes/encodes.ini 中读取
-    static QVector<QPair<QString,QStringList>> getSupportEncoding();
+    static QVector<QPair<QString, QStringList>> getSupportEncoding();
     static QStringList getSupportEncodingList();
 
     /**
-    * @brief libPath 动态库路径
-    * @param strlib 路径的字符串
-    */
+     * @brief libPath 动态库路径
+     * @param strlib 路径的字符串
+     */
     static QString libPath(const QString &strlib);
 
     // 加载外部定制库，如ZPD定制库的等
