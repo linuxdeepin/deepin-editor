@@ -258,9 +258,6 @@ void TextEdit::insertColumnEditTextEx(QString text)
         QPlainTextEdit::selectAll();
     }
 
-    for (int i = 0; i < m_altModSelections.size(); i++) {
-        if (m_altModSelections[i].cursor.hasSelection()) deleteTextEx(m_altModSelections[i].cursor);
-    }
     QUndoCommand *pInsertStack = new InsertTextUndoCommand(m_altModSelections, text, this);
     m_pUndoStack->push(pInsertStack);
     ensureCursorVisible();
@@ -2558,9 +2555,9 @@ void TextEdit::cut(bool ignoreCheck)
             if (it != m_altModSelections.end() - 1)
                 data += "\n";
         }
-        //删除有选择
-                QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(m_altModSelections, this);
-                m_pUndoStack->push(pDeleteStack);
+        // Record the column edit delete command
+        QUndoCommand *pDeleteStack = new DeleteBackAltCommand(m_altModSelections, this);
+        m_pUndoStack->push(pDeleteStack);
         
         //设置到剪切板
         QClipboard *clipboard = QApplication::clipboard();   //获取系统剪贴板指针
@@ -2764,12 +2761,8 @@ void TextEdit::slotDeleteAction(bool checked)
     }
 
     if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
-        for (int i = 0; i < m_altModSelections.size(); i++) {
-            if (m_altModSelections[i].cursor.hasSelection()) {
-                QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(m_altModSelections[i].cursor, this);
-                m_pUndoStack->push(pDeleteStack);
-            }
-        }
+        QUndoCommand *pDeleteStack = new DeleteBackAltCommand(m_altModSelections, this);
+        m_pUndoStack->push(pDeleteStack);
     } else {
         if (textCursor().hasSelection()) {
             QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(textCursor(), this);
@@ -2923,7 +2916,16 @@ void TextEdit::redo_()
         return;
     }
 
+    // Get current stack info before redo
+    const bool needUpdate = refreshUndoRedoColumnStatus();
+
     m_pUndoStack->redo();
+
+    if (needUpdate) {
+        renderAllSelections();
+        update();
+    }
+
     if (m_pUndoStack->index() == m_lastSaveIndex) {
         this->m_wrapper->window()->updateModifyStatus(m_sFilePath, false);
         this->m_wrapper->setTemFile(false);
@@ -2938,6 +2940,11 @@ void TextEdit::undo_()
     }
 
     m_pUndoStack->undo();
+
+    if (refreshUndoRedoColumnStatus()) {
+        renderAllSelections();
+        update();
+    }
 
     // 对撤销栈清空的情况下，有两种文件仍需保留*号(重做无需如下判定)
     // 1. 备份文件，上次修改之后直接关闭时备份的文件，仍需要提示保存
@@ -7059,7 +7066,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
                 QPlainTextEdit::selectAll();
 
             if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
-                QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(m_altModSelections, this);
+                QUndoCommand *pDeleteStack = new DeleteBackAltCommand(m_altModSelections, this);
                 m_pUndoStack->push(pDeleteStack);
             } else {
                 //修改backspace删除，在文档最末尾点击backspace,引起标签栏*出现问题
@@ -7082,7 +7089,7 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
                 QPlainTextEdit::selectAll();
 
             if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
-                DeleteBackAltCommand *commond = new DeleteBackAltCommand(m_altModSelections, this);
+                DeleteBackAltCommand *commond = new DeleteBackAltCommand(m_altModSelections, this, true);
                 m_pUndoStack->push(commond);
             } else {
                 //修改delete删除，在文档最末尾点击delete,引起标签栏*出现问题
@@ -7455,6 +7462,10 @@ bool TextEdit::isComment(const QString &text, int index, const QString &commentT
     return true;
 }
 
+void TextEdit::restoreColumnEditSelection(const QList<QTextEdit::ExtraSelection> &selections)
+{
+    m_altModSelections = selections;
+}
 
 void TextEdit::unCommentSelection()
 {
@@ -8057,6 +8068,34 @@ bool TextEdit::findFoldBlock(int line, QTextBlock &beginBlock, QTextBlock &endBl
     }
 
     return 0 == braceDepth;
+}
+
+/**
+   @brief Call this function after undo/redo , refresh column edit status.
+   @return Ture if need update seletion status.
+ */
+bool TextEdit::refreshUndoRedoColumnStatus()
+{
+    if (const QUndoCommand *cmd = m_pUndoStack->command(m_pUndoStack->index())) {
+        const int id = cmd->id();
+        const bool columnEdit = (id != Utils::IdDefault) && (Utils::IdColumnEdit & id);
+        if (columnEdit != m_bIsAltMod) {
+            // update selection
+            m_bIsAltMod = columnEdit;
+            if (!m_bIsAltMod) {
+                m_altModSelections.clear();
+            }
+
+            return true;
+        }
+
+        // in column editing, update every time.
+        if (columnEdit) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /**

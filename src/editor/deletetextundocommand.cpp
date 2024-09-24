@@ -7,7 +7,9 @@
 #include <QDebug>
 #include <QTextBlock>
 
-DeleteTextUndoCommand::DeleteTextUndoCommand(QTextCursor textcursor, QPlainTextEdit *edit, QUndoCommand *parent)
+#include "dtextedit.h"
+
+DeleteTextUndoCommand::DeleteTextUndoCommand(QTextCursor textcursor, TextEdit *edit, QUndoCommand *parent)
     : QUndoCommand(parent)
     , m_edit(edit)
     , m_textCursor(textcursor)
@@ -27,7 +29,7 @@ DeleteTextUndoCommand::DeleteTextUndoCommand(QTextCursor textcursor, QPlainTextE
 }
 
 DeleteTextUndoCommand::DeleteTextUndoCommand(QList<QTextEdit::ExtraSelection> &selections,
-                                             QPlainTextEdit *edit,
+                                             TextEdit *edit,
                                              QUndoCommand *parent)
     : QUndoCommand(parent)
     , m_edit(edit)
@@ -72,6 +74,7 @@ void DeleteTextUndoCommand::undo()
         }
 
         if (m_edit && !m_ColumnEditSelections.isEmpty()) {
+            m_edit->restoreColumnEditSelection(m_ColumnEditSelections);
             m_edit->setTextCursor(m_ColumnEditSelections.last().cursor);
         }
     }
@@ -93,9 +96,16 @@ void DeleteTextUndoCommand::redo()
         }
 
         if (m_edit && !m_ColumnEditSelections.isEmpty()) {
+            m_edit->restoreColumnEditSelection(m_ColumnEditSelections);
             m_edit->setTextCursor(m_ColumnEditSelections.last().cursor);
         }
     }
+}
+
+int DeleteTextUndoCommand::id() const
+{
+    return m_ColumnEditSelections.isEmpty() ? Utils::IdDelete
+                                            : Utils::IdColumnEditDelete;
 }
 
 DeleteTextUndoCommand2::DeleteTextUndoCommand2(QTextCursor textcursor, QString text, QPlainTextEdit *edit, bool currLine)

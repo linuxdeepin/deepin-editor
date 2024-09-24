@@ -92,8 +92,8 @@ TEST(UT_Deletetextundocommond_undo, UT_Deletetextundocommond_undo)
 
 TEST(UT_Deletetextundocommond_undo, undo_withTextCursor_restoreCursor)
 {
-    // 撤销后恢复光标位置
-    QPlainTextEdit *edit = new QPlainTextEdit;
+    // Revert the cursor position after undo
+    TextEdit *edit = new TextEdit;
     edit->setPlainText("123456789");
 
     QTextCursor cursor = edit->textCursor();
@@ -156,8 +156,8 @@ TEST(UT_Deletetextundocommond_redo, UT_Deletetextundocommond_redo)
 
 TEST(UT_Deletetextundocommond_rddo, redo_withTextCursor_changeCursor)
 {
-    // 重做后恢复光标位置
-    QPlainTextEdit *edit = new QPlainTextEdit;
+    // Restore the cursor position after redo
+    TextEdit *edit = new TextEdit;
     edit->setPlainText("123456789");
 
     QTextCursor cursor = edit->textCursor();
