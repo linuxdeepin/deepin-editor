@@ -25,6 +25,8 @@ build: |
 
   # 获取版本号
   VERSION=$(head -1 debian/changelog | awk -F'[()]' '{print $2}')
+  # 使用sed命令替换version的值
+  sed -i "s/^  version: .*/  version: ${VERSION}.1/" linglong.yaml
 
   cmake -B build ${conf_args} \
         -DCMAKE_SAFETYTEST_ARG="CMAKE_SAFETYTEST_ARG_OFF" \
@@ -33,7 +35,17 @@ build: |
         -DVERSION=${VERSION}
 
   cmake --build build -j`nproc`
-  cmake --build build --target install
+  cmake --build build --target install > install.log 2>&1
+
+  # 项目生成应用名和动态隐式加载的依赖库，ldd无法找到的其他库
+  LDD_FILES=(
+    deepin-editor
+    libdeepin-event-log.so
+    libzpdcallback.so
+  )
+
+  # 生成.install 文件
+  bash ./deploy_dep "${LDD_FILES[@]}"
 
 sources:
   # - kind: git

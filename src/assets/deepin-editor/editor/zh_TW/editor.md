@@ -184,7 +184,7 @@
 ### 列编辑
 在文字編輯器介面，按住鍵盤上的 **Alt** 鍵不放，滑鼠左鍵單擊多列啟動列編輯模式，為多行程式碼同時編輯相同的內容，提高工作效率。
 
-![column mode](fig/column mode.png)
+![column mode](fig/column_mode.png)
 
 ### 顏色標記
 
