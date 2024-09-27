@@ -204,7 +204,7 @@ You can perform the following operations after enabling the Text to Speech and S
 
 Press and hold the **Alt** key on the keyboard, drag the mouse to select multiple lines, and edit the identical contents in multiple lines of codes efficiently by using the column mode function. 
 
-![mode](fig/column mode.png)
+![mode](fig/column_mode.png)
 
 ### Color Mark
 

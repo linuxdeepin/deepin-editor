@@ -187,7 +187,7 @@ Use the shortcuts below to edit lines easily:
 
 Press and hold the **Alt** key on the keyboard, drag the mouse to select multiple lines, and edit the identical contents in multiple lines of codes efficiently by using the column mode function. 
 
-![mode](fig/column mode.png)
+![mode](fig/column_mode.png)
 
 ### Color Mark
 
