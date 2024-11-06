@@ -38,9 +38,6 @@ int main(int argc, char *argv[])
         setenv("XDG_CURRENT_DESKTOP", "Deepin", 1);
     }
 
-    if (Utils::isWayland() && !Utils::isTreeland()) {
-        qputenv("QT_WAYLAND_SHELL_INTEGRATION", "kwayland-shell");
-    }
     QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
     // QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 

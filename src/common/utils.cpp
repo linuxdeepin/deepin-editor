@@ -899,13 +899,6 @@ bool Utils::isWayland()
     return protocol.contains("wayland");
 }
 
-/**
-   @return 返回当前桌面环境是否是 Treeland
- */
-bool Utils::isTreeland()
-{
-    return qEnvironmentVariable("DDE_CURRENT_COMPOSITOR") == QStringLiteral("TreeLand");
-}
 
 QString Utils::lineFeed(const QString &text, int nWidth, const QFont &font, int nElidedRow)
 {
