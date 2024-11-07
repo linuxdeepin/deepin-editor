@@ -1032,6 +1032,7 @@ void Window::removeWrapper(const QString &filePath, bool isDelete)
     }
 
     qInfo() << "end removeWrapper";
+    StartManager::instance()->delayMallocTrim();
 }
 
 void Window::openFile()
@@ -3282,6 +3283,7 @@ void Window::checkTabbarForReload()
     //m_tabbar->setTabText(m_tabbar->currentIndex(), tabName);
     //判断是否需要阻塞系统关机
     emit sigJudgeBlockShutdown();
+    StartManager::instance()->delayMallocTrim();
 }
 
 void Window::resizeEvent(QResizeEvent *e)
