@@ -69,6 +69,9 @@ public:
     // 查找文件对应的书签记录
     QList<int> findBookmark(const QString &localPath);
 
+    // 延迟释放堆内存
+    void delayMallocTrim();
+
 public slots:
     Q_SCRIPTABLE void openFilesInTab(QStringList files);
     Q_SCRIPTABLE void openFilesInWindow(QStringList files);
@@ -124,6 +127,7 @@ private:
     Window *pFocusWindow;
 
     bool    m_bIsTagDragging = false;   ///< 当前Tab页处于拖拽状态时，部分处理被延后
+    QBasicTimer  m_FreeMemTimer;    ///< 延迟释放堆内存
 };
 
 #endif

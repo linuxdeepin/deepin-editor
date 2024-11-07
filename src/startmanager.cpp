@@ -4,6 +4,7 @@
 
 #include "startmanager.h"
 //#include <settings.h>
+#include <malloc.h>
 
 #include <DApplication>
 #include <QDesktopWidget>
@@ -667,6 +668,7 @@ void StartManager::slotCloseWindow()
         QDBusConnection::sessionBus().unregisterService("com.deepin.Editor");
 
         QTimer::singleShot(1000, []() {
+             StartManager::instance()->delayMallocTrim();
             QApplication::quit();
         });
 
@@ -682,6 +684,13 @@ void StartManager::slotDelayBackupFile()
     }
 }
 
+void StartManager::delayMallocTrim()
+{
+    if (!m_FreeMemTimer.isActive()) {
+        m_FreeMemTimer.start(1000, this);
+    }
+}
+
 void StartManager::timerEvent(QTimerEvent *e)
 {
     // 判断是否为延迟备份
@@ -692,6 +701,12 @@ void StartManager::timerEvent(QTimerEvent *e)
 
         // 重启周期定时备份
         m_pTimer->start(EAutoBackupInterval);
+    }
+
+    if (e->timerId() == m_FreeMemTimer.timerId()) {
+        m_FreeMemTimer.stop();
+        malloc_trim(0);
+        qInfo() << "malloc_trim over";
     }
 }
 
