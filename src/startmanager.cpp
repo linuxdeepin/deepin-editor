@@ -15,6 +15,8 @@
 #include <DAboutDialog>
 //#include <DSettings>
 
+#include "common/iflytek_ai_assistant.h"
+
 DWIDGET_USE_NAMESPACE
 
 // 备份定时器间隔
@@ -65,6 +67,9 @@ StartManager::StartManager(QObject *parent)
     m_pTimer = new QTimer;
     connect(m_pTimer, &QTimer::timeout, this, &StartManager::autoBackupFile);
     m_pTimer->start(EAutoBackupInterval);
+
+    // init flytek backend, check service valid
+    IflytekAiAssistant::instance()->checkAiExists();
 }
 
 bool StartManager::checkPath(const QString &file)
