@@ -18,7 +18,7 @@
 #include "../thememodule/themepanel.h"
 #include "../common/performancemonitor.h"
 #include "../common/dbusinterface.h"
-#include "../common/iflytekaiassistantthread.h"
+#include "../common/iflytek_ai_assistant.h"
 #include "../common/CSyntaxHighlighter.h"
 #include <DMainWindow>
 #include <DStackedWidget>
@@ -41,12 +41,6 @@ public:
     explicit Window(DMainWindow *parent = nullptr);
     ~Window() override;
 
-    /**
-     * @brief detectionIflytekaiassistant 检测语音助手服务是否被注册
-     * 通过dbus接口去检测语音助手服务会偶现应用卡死问题，开一个线程去检测规避应用卡死问题
-     */
-    void detectionIflytekaiassistant();
-    bool getIsRegistIflytekAiassistant();
     /**
      * @brief 加载语音助手配置文件
      */
@@ -212,11 +206,6 @@ public Q_SLOTS:
     void slotSigHightLightCurrentLine(bool bIsShow);
     void slotSigShowCodeFlodFlag(bool bIsShow);
     void slotSigChangeWindowSize(QString mode);
-    /**
-     * @brief slotIsRegisteredIflytekAiassistant 接收并设置注册标识位
-     * @param bIsRegistIflytekAiassistant 是否注册布尔标识位
-     */
-    void slotIsRegisteredIflytekAiassistant(bool bIsRegistIflytekAiassistant);
 
 private:
     void handleFocusWindowChanged(QWindow *w);

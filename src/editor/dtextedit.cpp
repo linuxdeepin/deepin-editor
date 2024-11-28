@@ -522,16 +522,11 @@ void TextEdit::popRightMenu(QPoint pos)
         (DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosHome) ||
         (DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosEducation)) {*/
 
-    if (m_wrapper->window()->getIsRegistIflytekAiassistant()) {
+    if (IflytekAiAssistant::instance()->valid()) {
         bool stopReadingState = false;
-        QDBusMessage stopReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
-                                                                     "/aiassistant/tts",
-                                                                     "com.iflytek.aiassistant.tts",
-                                                                     "isTTSInWorking");
-
-        QDBusReply<bool> stopReadingStateRet = QDBusConnection::sessionBus().asyncCall(stopReadingMsg, 100);
-        if (stopReadingStateRet.isValid()) {
-            stopReadingState = stopReadingStateRet.value();
+        auto ret = IflytekAiAssistant::instance()->isTtsInWorking();
+        if (IflytekAiAssistant::Invalid != ret) {
+            stopReadingState = (IflytekAiAssistant::Enable == ret);
         }
         if (!stopReadingState) {
             m_rightMenu->addAction(m_voiceReadingAction);
@@ -540,34 +535,25 @@ void TextEdit::popRightMenu(QPoint pos)
             m_rightMenu->removeAction(m_voiceReadingAction);
             m_rightMenu->addAction(m_stopReadingAction);
         }
-        bool voiceReadingState = false;
-        QDBusMessage voiceReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
-                                                                      "/aiassistant/tts",
-                                                                      "com.iflytek.aiassistant.tts",
-                                                                      "getTTSEnable");
 
-        QDBusReply<bool> voiceReadingStateRet = QDBusConnection::sessionBus().asyncCall(voiceReadingMsg, 100);
+        bool voiceReadingState = false;
+        ret = IflytekAiAssistant::instance()->isTtsEnable();
         //没有收到返回就加载配置文件数据
-        if (voiceReadingStateRet.isValid()) {
-            voiceReadingState = voiceReadingStateRet.value();
+        if (IflytekAiAssistant::Invalid != ret) {
+            voiceReadingState = (IflytekAiAssistant::Enable == ret);
         } else {
             voiceReadingState = m_wrapper->window()->getIflytekaiassistantConfig("aiassistant-tts");
         }
         if ((textCursor().hasSelection() && voiceReadingState) || m_hasColumnSelection) {
             m_voiceReadingAction->setEnabled(true);
         }
-
         m_rightMenu->addAction(m_dictationAction);
-        bool dictationState = false;
-        QDBusMessage dictationMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
-                                                                   "/aiassistant/iat",
-                                                                   "com.iflytek.aiassistant.iat",
-                                                                   "getIatEnable");
 
-        QDBusReply<bool> dictationStateRet = QDBusConnection::sessionBus().asyncCall(dictationMsg, 100);
+        bool dictationState = false;
+        ret = IflytekAiAssistant::instance()->getIatEnable();
         //没有收到返回就加载配置文件数据
-        if (dictationStateRet.isValid()) {
-            dictationState = dictationStateRet.value();
+        if (IflytekAiAssistant::Invalid != ret) {
+            dictationState = (IflytekAiAssistant::Enable == ret);
         } else {
             dictationState = m_wrapper->window()->getIflytekaiassistantConfig("aiassistant-iat");
         }
@@ -576,24 +562,23 @@ void TextEdit::popRightMenu(QPoint pos)
             m_dictationAction->setEnabled(false);
         }
 
+        // temporarily disable text to translate
+#ifdef ENABLE_IFLYTEK_TRANSLATE
         m_rightMenu->addAction(m_translateAction);
         m_translateAction->setEnabled(false);
-        bool translateState = false;
-        QDBusMessage translateReadingMsg = QDBusMessage::createMethodCall("com.iflytek.aiassistant",
-                                                                          "/aiassistant/trans",
-                                                                          "com.iflytek.aiassistant.trans",
-                                                                          "getTransEnable");
 
-        QDBusReply<bool> translateStateRet = QDBusConnection::sessionBus().asyncCall(translateReadingMsg, 100);
+        bool translateState = false;
+        ret = IflytekAiAssistant::instance()->getTransEnable();
         //没有收到返回就加载配置文件数据
-        if (translateStateRet.isValid()) {
-            translateState = translateStateRet.value();
+        if (IflytekAiAssistant::Invalid != ret) {
+            translateState = (IflytekAiAssistant::Enable == ret);
         } else {
             translateState = m_wrapper->window()->getIflytekaiassistantConfig("aiassistant-trans");
         }
         if ((textCursor().hasSelection() && translateState) || m_hasColumnSelection) {
             m_translateAction->setEnabled(translateState);
         }
+#endif
     }
 
 
@@ -2800,20 +2785,20 @@ void TextEdit::slotCancelComment(bool checked)
 void TextEdit::slotVoiceReadingAction(bool checked)
 {
     Q_UNUSED(checked);
-    QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.TextToSpeech");
+    IflytekAiAssistant::instance()->textToSpeech();
     emit signal_readingPath();
 }
 
 bool TextEdit::slotStopReadingAction(bool checked)
 {
     Q_UNUSED(checked);
-    return QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/tts com.iflytek.aiassistant.tts.stopTTSDirectly");
+    return IflytekAiAssistant::instance()->stopTtsDirectly();
 }
 
 void TextEdit::slotdictationAction(bool checked)
 {
     Q_UNUSED(checked);
-    QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.SpeechToText");
+    IflytekAiAssistant::instance()->speechToText();
 }
 
 void TextEdit::slotColumnEditAction(bool checked)
@@ -3745,7 +3730,7 @@ void TextEdit::restoreMarkStatus()
 
 void TextEdit::slot_translate()
 {
-    QProcess::startDetached("dbus-send  --print-reply --dest=com.iflytek.aiassistant /aiassistant/deepinmain com.iflytek.aiassistant.mainWindow.TextToTranslate");
+    IflytekAiAssistant::instance()->textToTranslate();
 }
 
 QString TextEdit::getWordAtCursor()
