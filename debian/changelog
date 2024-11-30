@@ -1,3 +1,10 @@
+deepin-editor (6.5.5) unstable; urgency=medium
+
+  * chore: update linglong version
+  * feat: adapt new ai assistant(Task: 36825)
+
+ -- renbin <renbin@uniontech.com>  Sat, 30 Nov 2024 11:46:16 +0800
+
 deepin-editor (6.5.4) unstable; urgency=medium
 
   * remove kwayland-shell env 
