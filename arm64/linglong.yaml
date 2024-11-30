@@ -7,13 +7,13 @@ version: "1"
 package:
   id: org.deepin.editor
   name: "deepin-editor"
-  version: 6.5.5.1
+  version: 6.5.6.1
   kind: app
   description: |
     editor for deepin os.
 
 base: org.deepin.base/23.1.0/arm64
-runtime: org.deepin.runtime.dtk/23.1.0/arm64
+runtime: org.deepin.runtime.dtk/23.2.0/arm64
 
 command:
   - deepin-editor
