@@ -6533,6 +6533,26 @@ void TextEdit::inputMethodEvent(QInputMethodEvent *e)
     m_isPreeditBefore = isPreedit;
     m_preeditLengthBefore = e->preeditString().length();
 
+    // check if del operation, e.g.: for AI speech to text
+    if (e->preeditString().isEmpty() && e->commitString().isEmpty()
+        && e->replacementLength() && e->replacementStart() < 0) {
+        if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
+            // check position
+            if (e->replacementLength() > 1) {
+                for (auto &seleciton : m_altModSelections) {
+                    seleciton.cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor, e->replacementLength());
+                }
+            }
+
+            QUndoCommand *pDeleteStack = new DeleteBackAltCommand(m_altModSelections, this);
+            m_pUndoStack->push(pDeleteStack);
+        } else {
+            auto cursor = textCursor();
+            cursor.movePosition(QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor, e->replacementLength());
+            QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(cursor, this);
+            m_pUndoStack->push(pDeleteStack);
+        }
+    }
 }
 
 void TextEdit::mousePressEvent(QMouseEvent *e)
