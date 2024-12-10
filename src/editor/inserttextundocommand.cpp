@@ -141,7 +141,7 @@ void InsertTextUndoCommand::redo()
 
 int InsertTextUndoCommand::id() const
 {
-    return m_columnEditSelections.isEmpty() ? Utils::IdColumnEditInsert : Utils::IdInsert;
+    return m_columnEditSelections.isEmpty() ? Utils::IdInsert : Utils::IdColumnEditInsert;
 }
 
 /**
