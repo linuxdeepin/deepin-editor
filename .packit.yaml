@@ -4,7 +4,7 @@
 specfile_path: rpm/deepin-editor.spec
 
 # add or remove files that should be synced
-synced_files:
+files_to_sync:
     - rpm/deepin-editor.spec
     - .packit.yaml
 
