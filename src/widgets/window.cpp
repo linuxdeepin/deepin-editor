@@ -1864,7 +1864,7 @@ void Window::addTemFileTab(QString qstrPath, QString qstrName, QString qstrTrueP
         return;
     }
 
-    // 若为MIMETYPE不支持的文件，给出无效文件提示 修复bug：https://pms.uniontech.com/bug-view-132653.html
+    // 若为MIMETYPE不支持的文件，给出无效文件提示 修复bug 132653
     if (!Utils::isMimeTypeSupport(qstrPath)) {
         if (currentWrapper() == nullptr) {
             this->addBlankTab();
