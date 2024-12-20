@@ -165,7 +165,7 @@ void Tabbar::resizeEvent(QResizeEvent *event)
         setTabToolTip(i, path);
     }
 
-    // 临时修改方案：通过调用setIconSize()，更新内部的layoutDirty标识，强制重新刷新标签页布局, BUG链接：https://pms.uniontech.com/bug-view-137607.html
+    // 临时修改方案：通过调用setIconSize()，更新内部的layoutDirty标识，强制重新刷新标签页布局, BUG 137607
     // TODO: 需要dtk暴露接口重新布局
     setIconSize(iconSize());
 
