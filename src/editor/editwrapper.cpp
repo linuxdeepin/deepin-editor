@@ -1320,7 +1320,17 @@ void EditWrapper::customEvent(QEvent *e)
         QByteArray text = parseEvent->m_contentData.mid(parseEvent->m_alreadyReadOffset, needReadLen);
         QTextCodec::ConverterState state;
         QString data = parseEvent->m_codec->toUnicode(text.constData(), text.size(), &state);
-        parseEvent->m_cursor.insertText(data);
+
+        // TODO: Qt5 just under 2^30 characters in one QString.
+        //  In Qt6.8, the value up to almost 2^63, release on Qt6.
+        try {
+            parseEvent->m_cursor.insertText(data);
+        } catch (std::exception &e) {
+            qCritical() << "Insert file data error" << e.what();
+            // read abort!
+            m_bAsyncReadFileFinished = true;
+            return;
+        }
 
         // 当前为首次读取
         if (0 == parseEvent->m_alreadyReadOffset) {
