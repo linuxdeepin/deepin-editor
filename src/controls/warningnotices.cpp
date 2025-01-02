@@ -42,6 +42,13 @@ WarningNotices::WarningNotices(MessageType notifyType, QWidget *parent)
         this->setFont(font);
     });
 #endif
+
+    // TODO: wait dtkwidget fixed, see dtkwidget PR-628
+    connect(this, &DFloatingMessage::closeButtonClicked, this, [this]() {
+        if (this->isVisible()) {
+            this->close();
+        }
+    });
 }
 
 WarningNotices::~WarningNotices() {}
