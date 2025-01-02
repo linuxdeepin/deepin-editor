@@ -1,3 +1,9 @@
+deepin-editor (6.5.10) unstable; urgency=medium
+
+  * fix: floating message cannot be closed(Bug: 297669)
+
+ -- renbin <renbin@uniontech.com>  Thu, 02 Jan 2025 20:28:25 +0800
+
 deepin-editor (6.5.9) unstable; urgency=medium
 
   * fix: remove invalid  url (#308)
