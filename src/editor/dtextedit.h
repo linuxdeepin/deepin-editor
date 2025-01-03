@@ -476,7 +476,7 @@ signals:
     void cursorMarkChanged(bool mark, QTextCursor cursor);
     void cursorModeChanged(CursorMode mode);
     void hightlightChanged(const QString &name);
-    void popupNotify(QString notify);
+    void popupNotify(QString notify, bool warning = false);
     void signal_readingPath();
     void signal_setTitleFocus();
 public slots:

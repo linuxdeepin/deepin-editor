@@ -94,7 +94,7 @@ public:
     void hideWarningNotices();
     void checkForReload();
     void initToastPosition();
-    void showNotify(const QString &message);
+    void showNotify(const QString &message, bool warning = false);
     bool getTextChangeFlag();
     void setTextChangeFlag(bool bFlag);
     void setLineNumberShow(bool bIsShow, bool bIsFirstShow = false);
