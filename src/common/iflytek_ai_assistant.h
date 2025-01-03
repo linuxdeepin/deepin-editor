@@ -16,28 +16,37 @@ class IflytekAiAssistant : public QObject
 public:
     static IflytekAiAssistant *instance();
 
-    bool valid() const;
-    void checkAiExists();
-
-    enum CallRet {
+    enum CallStatus {
         Invalid = -1,
         Disable = 0,
         Enable = 1,
+        NotInstalled,   // not install uos-ai
+        NoInputDevice,  // the dbus interface not valid or return disable
+        NoOutputDevice,
+
+        Success = Enable,
+        Failed = Disable,
     };
 
+    inline CallStatus status() const { return m_status; }
+    inline bool valid() const { return Enable == status(); }
+    void checkAiExists();
+
     // text to speech
-    CallRet isTtsInWorking() const;
-    CallRet isTtsEnable() const;
-    void textToSpeech();
-    bool stopTtsDirectly();
+    CallStatus isTtsInWorking() const;
+    CallStatus isTtsEnable() const;
+    CallStatus textToSpeech() const;
+    CallStatus stopTtsDirectly() const;
 
     // speech to text
-    CallRet getIatEnable() const;
-    void speechToText();
+    CallStatus getIatEnable() const;
+    CallStatus speechToText() const;
 
     // text translation
-    CallRet getTransEnable() const;
-    void textToTranslate();
+    CallStatus getTransEnable() const;
+    CallStatus textToTranslate() const;
+
+    QString errorString(CallStatus ret) const;
 
     Q_SIGNAL void initFinished();
 
@@ -46,7 +55,7 @@ private:
     ~IflytekAiAssistant() override = default;
 
     bool m_inited{false};
-    bool m_valid{false};
+    CallStatus m_status{Invalid};
 };
 
 #endif  // IFLYTEKAIASSISTANT_H

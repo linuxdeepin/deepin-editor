@@ -1638,7 +1638,6 @@ void Window::clearPrintTextDocument()
 void Window::setWindowTitleInfo()
 {
     if (m_tabbar) {
-        qDebug() << __FUNCTION__ << "--" << m_tabbar->truePathAt(m_tabbar->currentIndex());
         if (m_tabbar->truePathAt(m_tabbar->currentIndex()) != "") {
             setWindowTitle(m_tabbar->truePathAt(m_tabbar->currentIndex()));
         } else {
@@ -2940,14 +2939,14 @@ void Window::showNewEditor(EditWrapper *wrapper)
     m_editorWidget->setCurrentWidget(wrapper);
 }
 
-void Window::showNotify(const QString &message)
+void Window::showNotify(const QString &message, bool warning)
 {
     //DMainWindow::sendMessage(QIcon(":/images/ok.svg"), message);
     //如果是第一次打开编辑器，需要创建一个空白编辑显示框窗体
     if (currentWrapper() == nullptr) {
         this->addBlankTab();
     }
-    currentWrapper()->showNotify(message);
+    currentWrapper()->showNotify(message, warning);
 }
 
 int Window::getBlankFileIndex()

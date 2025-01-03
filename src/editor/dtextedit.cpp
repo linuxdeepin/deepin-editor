@@ -516,71 +516,18 @@ void TextEdit::popRightMenu(QPoint pos)
         m_rightMenu->addAction(m_fullscreenAction);
     }
 
-    /* 专业版/家庭版/教育版鼠标右键菜单支持语音读写 */
-    /* 更换成只要发现有com.iflytek.aiassistant服务已经注册开启，则开启支持语音读写功能 */
-    /*if ((DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosProfessional) ||
-        (DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosHome) ||
-        (DSysInfo::uosEditionType() == DSysInfo::UosEdition::UosEducation)) {*/
+    // 'UOS AI' actions
+    m_rightMenu->addAction(m_voiceReadingAction);
+    m_voiceReadingAction->setEnabled((textCursor().hasSelection() || m_hasColumnSelection));
 
-    if (IflytekAiAssistant::instance()->valid()) {
-        bool stopReadingState = false;
-        auto ret = IflytekAiAssistant::instance()->isTtsInWorking();
-        if (IflytekAiAssistant::Invalid != ret) {
-            stopReadingState = (IflytekAiAssistant::Enable == ret);
-        }
-        if (!stopReadingState) {
-            m_rightMenu->addAction(m_voiceReadingAction);
-            m_voiceReadingAction->setEnabled(false);
-        } else {
-            m_rightMenu->removeAction(m_voiceReadingAction);
-            m_rightMenu->addAction(m_stopReadingAction);
-        }
+    m_rightMenu->addAction(m_dictationAction);
+    m_dictationAction->setEnabled(!(m_bReadOnlyPermission || m_readOnlyMode));
 
-        bool voiceReadingState = false;
-        ret = IflytekAiAssistant::instance()->isTtsEnable();
-        //没有收到返回就加载配置文件数据
-        if (IflytekAiAssistant::Invalid != ret) {
-            voiceReadingState = (IflytekAiAssistant::Enable == ret);
-        } else {
-            voiceReadingState = m_wrapper->window()->getIflytekaiassistantConfig("aiassistant-tts");
-        }
-        if ((textCursor().hasSelection() && voiceReadingState) || m_hasColumnSelection) {
-            m_voiceReadingAction->setEnabled(true);
-        }
-        m_rightMenu->addAction(m_dictationAction);
-
-        bool dictationState = false;
-        ret = IflytekAiAssistant::instance()->getIatEnable();
-        //没有收到返回就加载配置文件数据
-        if (IflytekAiAssistant::Invalid != ret) {
-            dictationState = (IflytekAiAssistant::Enable == ret);
-        } else {
-            dictationState = m_wrapper->window()->getIflytekaiassistantConfig("aiassistant-iat");
-        }
-        m_dictationAction->setEnabled(dictationState);
-        if (m_bReadOnlyPermission || m_readOnlyMode) {
-            m_dictationAction->setEnabled(false);
-        }
-
-        // temporarily disable text to translate
+    // temporarily disable text to translate
 #ifdef ENABLE_IFLYTEK_TRANSLATE
-        m_rightMenu->addAction(m_translateAction);
-        m_translateAction->setEnabled(false);
-
-        bool translateState = false;
-        ret = IflytekAiAssistant::instance()->getTransEnable();
-        //没有收到返回就加载配置文件数据
-        if (IflytekAiAssistant::Invalid != ret) {
-            translateState = (IflytekAiAssistant::Enable == ret);
-        } else {
-            translateState = m_wrapper->window()->getIflytekaiassistantConfig("aiassistant-trans");
-        }
-        if ((textCursor().hasSelection() && translateState) || m_hasColumnSelection) {
-            m_translateAction->setEnabled(translateState);
-        }
+    m_rightMenu->addAction(m_translateAction);
+    m_translateAction->setEnabled((textCursor().hasSelection() || m_hasColumnSelection));
 #endif
-    }
-
 
     if (!this->document()->isEmpty()) {
 
@@ -2671,6 +2618,12 @@ void TextEdit::selectTextInView()
     this->horizontalScrollBar()->setValue(0);
 }
 
+/**
+ * @note Temporary workaround by overriding selectAll() to fix PMS-79951
+ * Prevents redundant clipboard memory usage from repeated text copying
+ * This issue has been fixed in Wayland/Treeland, but still exists in X11
+ * @todo Consider using QPlainTextEdit::selectAll() only when migrating to Treeland
+ */
 void TextEdit::setSelectAll()
 {
     if (m_wrapper->getFileLoading())
@@ -2679,6 +2632,23 @@ void TextEdit::setSelectAll()
     m_bIsAltMod = false;
     m_isSelectAll = true;
     selectTextInView();
+
+    if (!document()->isEmpty() && IflytekAiAssistant::instance()->valid()) {
+        if (auto clip = qApp->clipboard()) {
+            // limit the size of the text to avoid performance issue
+            static const int kMaxSelectCount = 200000;
+            int charCount = document()->characterCount();
+
+            if (charCount < kMaxSelectCount) {
+                clip->setText(toPlainText(), QClipboard::Selection);
+            } else {
+                auto selectCursor = textCursor();
+                selectCursor.setPosition(0);
+                selectCursor.setPosition(kMaxSelectCount, QTextCursor::KeepAnchor);
+                clip->setText(selectCursor.selectedText(), QClipboard::Selection);
+            }
+        }
+    }
 }
 
 void TextEdit::slotSigColorSelected(bool bSelected, QColor color)
@@ -2785,7 +2755,11 @@ void TextEdit::slotCancelComment(bool checked)
 void TextEdit::slotVoiceReadingAction(bool checked)
 {
     Q_UNUSED(checked);
-    IflytekAiAssistant::instance()->textToSpeech();
+    auto ret = IflytekAiAssistant::instance()->textToSpeech();
+    if (IflytekAiAssistant::Success != ret) {
+        Q_EMIT popupNotify(IflytekAiAssistant::instance()->errorString(ret), true);
+    }
+
     emit signal_readingPath();
 }
 
@@ -2798,7 +2772,10 @@ bool TextEdit::slotStopReadingAction(bool checked)
 void TextEdit::slotdictationAction(bool checked)
 {
     Q_UNUSED(checked);
-    IflytekAiAssistant::instance()->speechToText();
+    auto ret = IflytekAiAssistant::instance()->speechToText();
+    if (IflytekAiAssistant::Success != ret) {
+        Q_EMIT popupNotify(IflytekAiAssistant::instance()->errorString(ret), true);
+    }
 }
 
 void TextEdit::slotColumnEditAction(bool checked)
@@ -3730,7 +3707,10 @@ void TextEdit::restoreMarkStatus()
 
 void TextEdit::slot_translate()
 {
-    IflytekAiAssistant::instance()->textToTranslate();
+    auto ret = IflytekAiAssistant::instance()->textToTranslate();
+    if (IflytekAiAssistant::Success != ret) {
+        Q_EMIT popupNotify(IflytekAiAssistant::instance()->errorString(ret), true);
+    }
 }
 
 QString TextEdit::getWordAtCursor()

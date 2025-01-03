@@ -182,7 +182,7 @@ public Q_SLOTS:
     void loadTheme(const QString &path);
 
     void showNewEditor(EditWrapper *wrapper);
-    void showNotify(const QString &message);
+    void showNotify(const QString &message, bool warning = false);
     int getBlankFileIndex();
 
     DDialog *createDialog(const QString &title, const QString &content);
