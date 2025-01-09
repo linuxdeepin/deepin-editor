@@ -63,7 +63,7 @@ QSize Utils::getRenderSize(int fontSize, const QString &string)
     int height = 0;
 
     for (const QString &line : string.split("\n")) {
-        int lineWidth = fm.width(line);
+        int lineWidth = fm.horizontalAdvance(line);
         int lineHeight = fm.height();
 
         if (lineWidth > width) {
@@ -133,7 +133,7 @@ float Utils::codecConfidenceForData(const QTextCodec *codec, const QByteArray &d
             break;
         default:
             // full-width character, emoji, 常用标点, 拉丁文补充1，天城文补充，CJK符号和标点符号（如：【】）
-            if ((ch.unicode() >= 0xff00 && ch <= 0xffef)
+            if ((ch.unicode() >= 0xff00 && ch.unicode() <= 0xffef)
                 || (ch.unicode() >= 0x2600 && ch.unicode() <= 0x27ff)
                 || (ch.unicode() >= 0x2000 && ch.unicode() <= 0x206f)
                 || (ch.unicode() >= 0x80 && ch.unicode() <= 0xff)
@@ -255,7 +255,11 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
         QTextStream stream(data);
 
         pattern.setPatternOptions(QRegularExpression::DontCaptureOption | QRegularExpression::CaseInsensitiveOption);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         stream.setCodec("latin1");
+#else
+        stream.setEncoding(QStringConverter::Latin1);
+#endif
 
         while (!stream.atEnd()) {
             const QString &_data = stream.readLine();
@@ -587,7 +591,7 @@ bool Utils::isMimeTypeSupport(const QString &filepath)
 
 bool Utils::isDraftFile(const QString &filepath)
 {
-    QString draftDir = QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation)).first())
+    QString draftDir = QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation)).first())
                                .filePath("blank-files");
     draftDir = QDir::cleanPath(draftDir);
     QString dir = QFileInfo(filepath).dir().absolutePath();
@@ -600,7 +604,7 @@ bool Utils::isDraftFile(const QString &filepath)
  */
 bool Utils::isBackupFile(const QString &filepath)
 {
-    QString backupDir = QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation)).first())
+    QString backupDir = QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation)).first())
                                 .filePath("backup-files");
     QString dir = QFileInfo(filepath).dir().absolutePath();
     return dir == backupDir;
@@ -623,7 +627,7 @@ QStringList Utils::cleanPath(const QStringList &filePaths)
  */
 QString Utils::localDataPath()
 {
-    auto dataPaths = Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation));
+    auto dataPaths = Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation));
     return dataPaths.isEmpty() ? QDir::homePath() + "/.local/share/deepin/deepin-editor/"
                                : dataPaths.first();
 }
@@ -785,8 +789,7 @@ void Utils::killProcessByName(const char *pstrName)
 
 QString Utils::getStringMD5Hash(const QString &input)
 {
-    QByteArray byteArray;
-    byteArray.append(input);
+    QByteArray byteArray = input.toUtf8();;
     QByteArray md5Path = QCryptographicHash::hash(byteArray, QCryptographicHash::Md5);
 
     return md5Path.toHex();
@@ -914,7 +917,7 @@ QString Utils::lineFeed(const QString &text, int nWidth, const QFont &font, int 
 
     if (!strText.isEmpty()) {
         for (int i = 1; i <= strText.size(); i++) {
-            if (fm.width(strText.left(i)) >= nWidth) {
+            if (fm.horizontalAdvance(strText.left(i)) >= nWidth) {
                 if (strListLine.size() + 1 == nElidedRow)
                     break;
 

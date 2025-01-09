@@ -22,26 +22,43 @@ set(APP_QRC "../src/deepin-editor.qrc")
 
 # Find the library
 find_package(PkgConfig REQUIRED)
-find_package(Qt5Widgets REQUIRED)
-find_package(Qt5DBus REQUIRED)
-find_package(Qt5Concurrent REQUIRED)
-find_package(Qt5PrintSupport REQUIRED)
-find_package(Qt5Gui REQUIRED)
-find_package(DtkWidget REQUIRED)
-find_package(DtkCore REQUIRED)
-find_package(KF5SyntaxHighlighting)
-find_package(KF5Codecs)
+
+
+set(qt_required_components Gui Widgets DBus Concurrent PrintSupport Svg Xml Test)
+if (QT_DESIRED_VERSION MATCHES 6)
+    list(APPEND qt_required_components Core5Compat)
+endif()
+find_package(Qt${QT_DESIRED_VERSION} REQUIRED COMPONENTS ${qt_required_components})
+find_package(Dtk${DTK_VERSION_MAJOR} REQUIRED COMPONENTS Widget Core)
+find_package(KF${KF_VERSION_MAJOR}Codecs REQUIRED)
+find_package(KF${KF_VERSION_MAJOR}SyntaxHighlighting REQUIRED)
+
+set(LINK_LIBS
+    Qt${QT_VERSION_MAJOR}::Gui
+    Qt${QT_VERSION_MAJOR}::Widgets
+    Qt${QT_VERSION_MAJOR}::Xml
+    Qt${QT_VERSION_MAJOR}::Svg
+    Qt${QT_VERSION_MAJOR}::Concurrent
+    Qt${QT_VERSION_MAJOR}::PrintSupport
+    Qt${QT_VERSION_MAJOR}::DBus
+    Qt${QT_VERSION_MAJOR}::Test
+    Dtk${DTK_VERSION_MAJOR}::Widget
+    Dtk${DTK_VERSION_MAJOR}::Core
+    KF${KF_VERSION_MAJOR}::Codecs
+    KF${KF_VERSION_MAJOR}::SyntaxHighlighting
+)
+
+if (QT_DESIRED_VERSION MATCHES 6)
+    list(APPEND LINK_LIBS Qt${QT_DESIRED_VERSION}::Core5Compat)
+else()
+    include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
+endif()
+
 find_package(DFrameworkdbus REQUIRED)
-find_package(Qt5Test REQUIRED)
 find_package(GTest REQUIRED)
-find_package(Qt5Xml REQUIRED)
-find_package(Qt5Svg REQUIRED)
-find_package(Qt5Test REQUIRED)
 find_package(ICU COMPONENTS i18n uc REQUIRED)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
-include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
-include_directories(Qt5PrintSupport)
 include_directories(${GTEST_INCLUDE_DIRS})
 include_directories(src)
 link_libraries(uchardet)
@@ -82,27 +99,13 @@ add_executable(${PROJECT_NAME_TEST}
 # 生成测试可执行程序的依赖库
 target_link_libraries(${PROJECT_NAME_TEST}
         gmock gmock_main gtest gtest_main
-    ${DtkWidget_LIBRARIES}
-    ${DtkCore_LIBRARIES}
+    ${LINK_LIBS}
     ${DFrameworkdbus_LIBRARIES}
     ${GSTREAMER_LIBRARIES}
-    ${Qt5PrintSupport_LIBRARIES}
     ${LIBDMR_LIBRARIES}
     ${GTEST_LIBRARIES}
     ${GTEST_MAIN_LIBRARIES}
-    ${Qt5Xml_LIBRARIES}
-    ${Qt5Svg_LIBRARIES}
-    Qt5::Core
-    Qt5::Gui
-    Qt5::Widgets
-    Qt5::DBus
-    Qt5::Test
-    ${Qt5Widgets_LIBRARIES}
-    ${Qt5DBus_LIBRARIES}
-    ${Qt5Concurrent_LIBRARIES}
     ${chardet_LIBRARY_DIRS}
-    KF5::Codecs
-    KF5::SyntaxHighlighting
     ICU::i18n
     ICU::uc
     -lpthread
@@ -112,9 +115,6 @@ target_link_libraries(${PROJECT_NAME_TEST}
     chardet
 )
 
-target_include_directories(${PROJECT_NAME_TEST} PUBLIC ${DtkWidget_INCLUDE_DIRS}
-                                                       ${DtkCore_INCLUDE_DIRS}
-                                                       ${DtkGui_INCLUDE_DIRS})
 #以下注释
 add_custom_target(test
 #    #执行mkdir -p 创建 coverageResult

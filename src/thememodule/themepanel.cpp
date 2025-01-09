@@ -27,7 +27,7 @@ ThemePanel::ThemePanel(QWidget *parent)
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(m_themeView);
 
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
 
     setFixedWidth(250);

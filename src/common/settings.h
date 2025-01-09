@@ -99,7 +99,7 @@ public slots:
 private:
     void updateAllKeysWithKeymap(QString keymap);
     void copyCustomizeKeysFromKeymap(QString keymap);
-    bool checkShortcutValid(const QString &Name, QString Key, QString &Reason, bool &bIsConflicts, QString defaultValue = QString::null);
+    bool checkShortcutValid(const QString &Name, QString Key, QString &Reason, bool &bIsConflicts, QString defaultValue = QString());
     bool isShortcutConflict(const QString &Name, const QString &Key);
     DDialog *createDialog(const QString &title, const QString &content, const bool &bIsConflicts);
     void removeLockFiles();
