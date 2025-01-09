@@ -1,3 +1,9 @@
+deepin-editor (6.5.11) unstable; urgency=medium
+
+  * chore: New version 6.5.11.
+
+ -- xiepengfei <xiepengfei@uniontech.com>  Thu, 09 Jan 2025 17:38:34 +0800
+
 deepin-editor (6.5.10) unstable; urgency=medium
 
   * fix: floating message cannot be closed(Bug: 297669)
