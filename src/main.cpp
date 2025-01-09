@@ -15,14 +15,14 @@
 #include <DMainWindow>
 #include <DWidgetUtil>
 #include <DLog>
-#include <DApplicationSettings>
+// #include <DApplicationSettings>
 #include <DSettingsOption>
 
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QDBusConnection>
 #include <QDBusInterface>
-#include <QDesktopWidget>
+// #include <QDesktopWidget>
 #include <QScreen>
 #include <QDebug>
 
@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
 
     EditorApplication app(argc, argv);
     // save theme
-    DApplicationSettings savetheme;
+    // DApplicationSettings savetheme;
 
     // 需在App构造后初始化日志设置
     DLogManager::registerConsoleAppender();

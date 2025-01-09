@@ -15,11 +15,9 @@
 #include "dimagebutton.h"
 #include <QColor>
 #include <DIconButton>
-#include <DApplicationHelper>
+#include <DGuiApplicationHelper>
 #include <DFloatingWidget>
 #include <QMouseEvent>
-#include <qmouseeventtransition.h>
-#include <QMouseEventTransition>
 
 #include <DPalette>
 #include <DAbstractDialog>

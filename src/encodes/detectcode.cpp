@@ -10,6 +10,7 @@
 #include <QDebug>
 #include <QDateTime>
 #include <QTextCodec>
+#include <QRegularExpression>
 
 #include <stdio.h>
 
@@ -133,7 +134,12 @@ QByteArray DetectCode::GetFileEncodingFormat(QString filepath, QByteArray conten
     /* chardet识别编码 */
     QString str(content);
     // 匹配的是中文(仅在UTF-8编码下)
-    bool bFlag = str.contains(QRegExp("[\\x4e00-\\x9fa5]+"));
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    QRegExp reg("[\\x4e00-\\x9fa5]+");
+#else
+    QRegularExpression reg("[\\x4e00-\\x9fa5]+");
+#endif
+    bool bFlag = str.contains(reg);
     if (bFlag) {
         const QByteArray suffix = "为增加探测率保留的中文";
         QByteArray newContent = content;

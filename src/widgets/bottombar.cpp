@@ -5,6 +5,7 @@
 #include <QLabel>
 #include <QPainter>
 #include <QHBoxLayout>
+#include <QActionGroup>
 #include <DMenu>
 #include <DVerticalLine>
 #include "bottombar.h"
@@ -166,11 +167,11 @@ void BottomBar::setCursorStatus(const QString &text)
 
 void BottomBar::setPalette(const QPalette &palette)
 {
-    DPalette paPositionLabel  = DApplicationHelper::instance()->applicationPalette();
-    DPalette paCharCountLabel = DApplicationHelper::instance()->applicationPalette();
-    DPalette paCursorStatus = DApplicationHelper::instance()->applicationPalette();
-    DPalette paEncodeMenu = DApplicationHelper::instance()->applicationPalette();
-    DPalette paHighlightMenu = DApplicationHelper::instance()->applicationPalette();
+    DPalette paPositionLabel  = DGuiApplicationHelper::instance()->applicationPalette();
+    DPalette paCharCountLabel = DGuiApplicationHelper::instance()->applicationPalette();
+    DPalette paCursorStatus = DGuiApplicationHelper::instance()->applicationPalette();
+    DPalette paEncodeMenu = DGuiApplicationHelper::instance()->applicationPalette();
+    DPalette paHighlightMenu = DGuiApplicationHelper::instance()->applicationPalette();
 
     QColor colorFont = paPositionLabel.textTips().color();
 
@@ -189,7 +190,7 @@ void BottomBar::setPalette(const QPalette &palette)
     m_scaleLabel->setPalette(paPositionLabel);
     m_formatMenu->getButton()->setPalette(paEncodeMenu);
 
-    QString theme = (palette.color(QPalette::Background).lightness() < 128) ? "dark" : "light";
+    QString theme = (palette.color(QPalette::Window).lightness() < 128) ? "dark" : "light";
     m_pEncodeMenu->setTheme(theme);
     m_pHighlightMenu->setTheme(theme);
     m_formatMenu->setTheme(theme);
@@ -278,7 +279,7 @@ void BottomBar::paintEvent(QPaintEvent *)
     QPainter painter(this);
     painter.setOpacity(1);
 
-    QColor backgroundColor = palette().color(QPalette::Background);
+    QColor backgroundColor = palette().color(QPalette::Window);
     QColor bottombarBackgroundColor;
     if (backgroundColor.lightness() < 128) {
         bottombarBackgroundColor = palette().base().color();

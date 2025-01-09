@@ -4,7 +4,7 @@
 
 #include "jumplinebar.h"
 
-#include <DThemeManager>
+// #include <DThemeManager>
 #include <DGuiApplicationHelper>
 
 #include <QDebug>
@@ -43,7 +43,7 @@ JumpLineBar::JumpLineBar(DFloatingWidget *parent)
     m_label = new QLabel();
     m_label->setText(tr("Go to Line: "));
     // 按文本长度计算显示宽度，不同语言下翻译文本长度不一，需完整显示
-    m_label->setFixedWidth(fontMetrics().width(m_label->text()));
+    m_label->setFixedWidth(fontMetrics().horizontalAdvance(m_label->text()));
     m_pSpinBoxInput = new DSpinBox;
     m_pSpinBoxInput->setFixedSize(s_nJumpLineBarSpinBoxWidth, s_nJumpLineBarSPinBoxHeight);
     m_pSpinBoxInput->lineEdit()->clear();
@@ -95,7 +95,7 @@ void JumpLineBar::activeInput(QString file, int row, int column, int lineCount, 
     // 调整为 0~lineCount ，0已被处理不允许首位输入，不影响仅单行的情况
     // 设置 range 后会自动调整输入范围，不使用 clear() 防止在读取文件时已输入的行号被清空
     m_pSpinBoxInput->setRange(0, lineCount);
-    int lineWidth = QString::number(lineCount).size() * fontMetrics().width('9');
+    int lineWidth = QString::number(lineCount).size() * fontMetrics().horizontalAdvance('9');
     if (m_pSpinBoxInput->minimumWidth() < lineWidth) {
         m_pSpinBoxInput->setFixedWidth(lineWidth);
     } else {

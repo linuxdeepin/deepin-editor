@@ -8,12 +8,16 @@
 #include <QPalette>
 #include <QVBoxLayout>
 #include <DWindowManagerHelper>
+#include <DGuiApplicationHelper>
 #include <QGraphicsDropShadowEffect>
 #include <QXmlStreamReader>
 
 namespace KSyntaxHighlighting {
     class SyntaxHighlighter;
 }
+
+DGUI_USE_NAMESPACE
+DWIDGET_USE_NAMESPACE
 
 ShowFlodCodeWidget::ShowFlodCodeWidget(DWidget *parent)
     : DFrame(parent)
@@ -73,7 +77,7 @@ void ShowFlodCodeWidget::setStyle(bool bIsLineWrap)
     QPalette pa = palette();
     QColor color(25,25,25);
 
-    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::ColorType::DarkType) {
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType) {
         color.setAlphaF(0.8);
         pa.setColor(QPalette::Base,color);
         m_pContentEdit->setPalette(pa);
@@ -115,7 +119,7 @@ void ShowFlodCodeWidget::hideFirstBlock()
 
 void ShowFlodCodeWidget::appendText(QString strText, int maxWidth)
 {
-    int textWidth = m_pContentEdit->fontMetrics().width(strText) + 10;
+    int textWidth = m_pContentEdit->fontMetrics().horizontalAdvance(strText) + 10;
 
     if (m_nTextWidth < textWidth) {
         m_nTextWidth = textWidth;

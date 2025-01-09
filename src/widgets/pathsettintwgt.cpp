@@ -99,7 +99,14 @@ void PathSettingWgt::init()
 
 void PathSettingWgt::connections()
 {
-    connect(m_group,static_cast<void(QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked),this,&PathSettingWgt::onBoxClicked);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    connect(m_group, static_cast<void(QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked),this,&PathSettingWgt::onBoxClicked);
+#else
+    connect(m_group, static_cast<void(QButtonGroup::*)(QAbstractButton*)>(&QButtonGroup::buttonClicked), this, [this](QAbstractButton* button) {
+        int id = m_group->id(button);
+        onBoxClicked(id);
+    });
+#endif
     connect(m_customBtn, &QPushButton::clicked, this, &PathSettingWgt::onBtnClicked);
 }
 
@@ -137,7 +144,7 @@ void PathSettingWgt::onBoxClicked(int id)
 void PathSettingWgt::onBtnClicked()
 {
     QFileDialog dialog(this);
-    dialog.setFileMode(QFileDialog::DirectoryOnly);
+    dialog.setFileMode(QFileDialog::Directory);
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
     QString path = Settings::instance()->getSavePath(PathSettingWgt::CustomBox);
     if(!QDir(path).exists() || path.isEmpty()){
