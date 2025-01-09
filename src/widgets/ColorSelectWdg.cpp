@@ -43,7 +43,11 @@ void ColorLabel::paintEvent(QPaintEvent *event)
     QRect r = rect();
 
     QPainter painter(this);
-    painter.setRenderHints(QPainter::Antialiasing |QPainter::SmoothPixmapTransform | QPainter::Qt4CompatiblePainting);
+    painter.setRenderHints(QPainter::Antialiasing |QPainter::SmoothPixmapTransform
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+     | QPainter::Qt4CompatiblePainting
+#endif
+    );
 
 
     QPainterPath bigCircle;

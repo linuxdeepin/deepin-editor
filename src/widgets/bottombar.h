@@ -9,7 +9,7 @@
 #include <QLabel>
 #include <DLabel>
 #include "ddropdownmenu.h"
-#include <DApplicationHelper>
+#include <DGuiApplicationHelper>
 #include <DFontSizeManager>
 #include <QPainterPath>
 #include <DProgressBar>

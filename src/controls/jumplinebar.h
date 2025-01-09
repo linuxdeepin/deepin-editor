@@ -9,7 +9,7 @@
 #include <QLabel>
 #include <QPainter>
 #include <QWidget>
-#include <DApplicationHelper>
+#include <DGuiApplicationHelper>
 #include <DFloatingWidget>
 #include <DSpinBox>
 #include <QLineEdit>

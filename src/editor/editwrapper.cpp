@@ -1063,7 +1063,7 @@ void EditWrapper::OnThemeChangeSlot(QString theme)
 
     //设置底部栏
     QPalette palette = m_pBottomBar->palette();
-    palette.setColor(QPalette::Background, backgroundColor);
+    palette.setColor(QPalette::Window, backgroundColor);
     palette.setColor(QPalette::Text, textColor);
     m_pBottomBar->setPalette(palette);
 

@@ -11,8 +11,9 @@ EditorApplication::EditorApplication(int &argc, char *argv[]) : DApplication(arg
     const char *descriptionText = QT_TRANSLATE_NOOP(
         "MainWindow", "Text Editor is a powerful tool for viewing and editing text files.");
     const QString acknowledgementLink = "https://www.deepin.org/original/deepin-editor/";
-
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     setAttribute(Qt::AA_UseHighDpiPixmaps);
+#endif
     loadTranslator();
     setOrganizationName("deepin");
     setApplicationName("deepin-editor");

@@ -2654,7 +2654,7 @@ TEST(UT_test_textedit_lineNumberAreaPaintEvent, UT_test_textedit_lineNumberAreaP
     QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
     pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
 
-    DApplicationHelper::instance()->setThemeType(DApplicationHelper::ColorType::DarkType);
+    DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::ColorType::DarkType);
     QPaintEvent *pPaintEvent;
     pWindow->currentWrapper()->textEditor()->lineNumberAreaPaintEvent(pPaintEvent);
 
@@ -2671,7 +2671,7 @@ TEST(UT_test_textedit_lineNumberAreaPaintEvent, UT_test_textedit_lineNumberAreaP
     QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
     pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
 
-    DApplicationHelper::instance()->setThemeType(DApplicationHelper::ColorType::LightType);
+    DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::ColorType::LightType);
     QPaintEvent *pPaintEvent;
     pWindow->currentWrapper()->textEditor()->lineNumberAreaPaintEvent(pPaintEvent);
 
@@ -2688,7 +2688,7 @@ TEST(UT_test_textedit_codeFLodAreaPaintEvent, UT_test_textedit_codeFLodAreaPaint
     QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
     pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
 
-    DApplicationHelper::instance()->setThemeType(DApplicationHelper::ColorType::DarkType);
+    DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::ColorType::DarkType);
     QPaintEvent *pPaintEvent;
     pWindow->currentWrapper()->textEditor()->codeFLodAreaPaintEvent(pPaintEvent);
 
@@ -2705,7 +2705,7 @@ TEST(UT_test_textedit_codeFLodAreaPaintEvent, UT_test_textedit_codeFLodAreaPaint
     QTextCursor textCursor = pWindow->currentWrapper()->textEditor()->textCursor();
     pWindow->currentWrapper()->textEditor()->insertTextEx(textCursor, strMsg);
 
-    DApplicationHelper::instance()->setThemeType(DApplicationHelper::ColorType::LightType);
+    DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::ColorType::LightType);
     QPaintEvent *pPaintEvent;
     pWindow->currentWrapper()->textEditor()->codeFLodAreaPaintEvent(pPaintEvent);
 
@@ -3874,7 +3874,7 @@ TEST(UT_test_textedit_bookMarkAreaPaintEvent, UT_test_textedit_bookMarkAreaPaint
 
     textCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
     pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
-    DApplicationHelper::instance()->setThemeType(DApplicationHelper::ColorType::DarkType);
+    DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::ColorType::DarkType);
     pWindow->currentWrapper()->textEditor()->m_listBookmark.append(1);
     pWindow->currentWrapper()->textEditor()->m_nBookMarkHoverLine = 2;
     QPaintEvent *pPaintEvent;
@@ -3896,7 +3896,7 @@ TEST(UT_test_textedit_bookMarkAreaPaintEvent, UT_test_textedit_bookMarkAreaPaint
 
     textCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
     pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
-    DApplicationHelper::instance()->setThemeType(DApplicationHelper::ColorType::LightType);
+    DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::ColorType::LightType);
     pWindow->currentWrapper()->textEditor()->m_listBookmark.append(1);
     pWindow->currentWrapper()->textEditor()->m_nBookMarkHoverLine = 2;
     QPaintEvent *pPaintEvent;
@@ -3918,7 +3918,7 @@ TEST(UT_test_textedit_bookMarkAreaPaintEvent, UT_test_textedit_bookMarkAreaPaint
 
     textCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
     pWindow->currentWrapper()->textEditor()->setTextCursor(textCursor);
-    DApplicationHelper::instance()->setThemeType(DApplicationHelper::ColorType::LightType);
+    DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::ColorType::LightType);
     pWindow->currentWrapper()->textEditor()->m_listBookmark.append(1);
     pWindow->currentWrapper()->textEditor()->m_nBookMarkHoverLine = 1;
     QPaintEvent *pPaintEvent;
@@ -5188,6 +5188,7 @@ TEST_F(test_textedit, wheelEvent)
     Settings *s = new Settings();
     startManager->setSettings(s);
     startManager->setWrapper(ee);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QPointF pos;
     QWheelEvent *e = new QWheelEvent(pos, 4, Qt::MouseButton::LeftButton, Qt::KeyboardModifier::AltModifier);
 
@@ -5195,6 +5196,7 @@ TEST_F(test_textedit, wheelEvent)
     //    Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers,
     //    Qt::Orientation orient = Qt::Vertical);
     startManager->wheelEvent(e);
+#endif
 
     EXPECT_NE(ee->m_pTextEdit , nullptr);
     s->deleteLater();
@@ -5306,7 +5308,9 @@ TEST(UT_TextEdit_blockContainStrBrackets, UT_TextEdit_blockContainStrBrackets_00
 {
    TextEdit* edit = new TextEdit;
    Stub s1;
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
    s1.set((bool (QString::*) (QRegExp &) const )ADDR(QString,contains),rettruestub);
+#endif
 
    edit->blockContainStrBrackets(1);
 
@@ -5318,7 +5322,9 @@ TEST(UT_TextEdit_blockContainStrBrackets, UT_TextEdit_blockContainStrBrackets_00
 {
    TextEdit* edit = new TextEdit;
    Stub s1;
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
    s1.set((bool (QString::*) (QRegExp &) const )ADDR(QString,contains),retfalsestub);
+#endif
 
    edit->blockContainStrBrackets(1);
 
@@ -5420,8 +5426,8 @@ TEST_F(test_textedit, cut_withMultiByteText_passed)
 
     QString strRet1(pClipboard->text());
     QString strRet2(pWindow->currentWrapper()->textEditor()->toPlainText());
-    EXPECT_EQ(strRet1, strMsg.leftRef(6));
-    EXPECT_EQ(strRet2, strMsg.midRef(6));
+    EXPECT_EQ(strRet1, strMsg.left(6));
+    EXPECT_EQ(strRet2, strMsg.mid(6));
     pWindow->currentWrapper()->textEditor()->undo_();
     QString strRet3(pWindow->currentWrapper()->textEditor()->toPlainText());
     EXPECT_EQ(strRet3, strMsg);
@@ -8415,9 +8421,11 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_003)
     s3.set(ADDR(Comment::CommentDefinition,isValid),rettruestub);
     Stub s4;
     s4.set(ADDR(QTextBlock,isVisible),rettruestub);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     Stub s5;
     //inline bool contains(const QString &s, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
     s5.set((bool (QString::*)(const QStringRef &, Qt::CaseSensitivity) const) ADDR(QString,contains),rettruestub);
+#endif
     Stub s6;
     //s6.set(ADDR(QString,isEmpty),retfalsestub);
     Stub s7;
@@ -8456,9 +8464,11 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_004)
     s3.set(ADDR(Comment::CommentDefinition,isValid),rettruestub);
     Stub s4;
     s4.set(ADDR(QTextBlock,isVisible),retfalsestub);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     Stub s5;
     //inline bool contains(const QString &s, Qt::CaseSensitivity cs = Qt::CaseSensitive) const;
     s5.set((bool (QString::*)(const QStringRef &, Qt::CaseSensitivity) const) ADDR(QString,contains),rettruestub);
+#endif
     Stub s6;
    // s6.set(ADDR(QString,isEmpty),retfalsestub);
     Stub s7;
@@ -8493,9 +8503,10 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_005)
     fptr A_foo = (fptr)((QAction *(QMenu::*)(const QPoint &, QAction *))&QMenu::exec);
     Stub s1;
     s1.set(A_foo,retintstub);
-
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     Stub s2;
     s2.set(ADDR(QList<int>,contains),rettruestub);
+#endif
     Stub s3;
     s3.set(ADDR(QTextBlock,isVisible),rettruestub);
 
@@ -8525,9 +8536,10 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_006)
     fptr A_foo = (fptr)((QAction *(QMenu::*)(const QPoint &, QAction *))&QMenu::exec);
     Stub s1;
     s1.set(A_foo,retintstub);
-
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     Stub s2;
     s2.set(ADDR(QList<int>,contains),rettruestub);
+#endif
     Stub s3;
     s3.set(ADDR(QTextBlock,isVisible),retfalsestub);
     Stub s4;
@@ -8560,9 +8572,10 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_007)
     fptr A_foo = (fptr)((QAction *(QMenu::*)(const QPoint &, QAction *))&QMenu::exec);
     Stub s1;
     s1.set(A_foo,retintstub);
-
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     Stub s2;
     s2.set(ADDR(QList<int>,contains),rettruestub);
+#endif
     Stub s3;
     s3.set(ADDR(QTextBlock,isVisible),rettruestub);
     Stub s4;
@@ -8596,9 +8609,10 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_008)
     fptr A_foo = (fptr)((QAction *(QMenu::*)(const QPoint &, QAction *))&QMenu::exec);
     Stub s1;
     s1.set(A_foo,retintstub);
-
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     Stub s2;
     s2.set(ADDR(QList<int>,contains),rettruestub);
+#endif
     Stub s3;
     s3.set(ADDR(QTextBlock,isVisible),rettruestub);
     Stub s4;
@@ -8632,9 +8646,10 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_009)
     fptr A_foo = (fptr)((QAction *(QMenu::*)(const QPoint &, QAction *))&QMenu::exec);
     Stub s1;
     s1.set(A_foo,retintstub);
-
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     Stub s2;
     s2.set(ADDR(QList<int>,contains),rettruestub);
+#endif
     Stub s3;
     s3.set(ADDR(QTextBlock,isVisible),rettruestub);
     Stub s4;
@@ -8669,9 +8684,10 @@ TEST(UT_Textedit_eventFilter, UT_Textedit_eventFilter_010)
     fptr A_foo = (fptr)((QAction *(QMenu::*)(const QPoint &, QAction *))&QMenu::exec);
     Stub s1;
     s1.set(A_foo,retintstub);
-
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     Stub s2;
     s2.set(ADDR(QList<int>,contains),rettruestub);
+#endif
     Stub s3;
     s3.set(ADDR(QTextBlock,isVisible),rettruestub);
     Stub s4;

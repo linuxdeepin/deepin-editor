@@ -6,7 +6,7 @@
 #define SHOWFLODCODEWIDGET_H
 #include <DFrame>
 #include <DPlainTextEdit>
-#include <DApplicationHelper>
+#include <DGuiApplicationHelper>
 #include <KSyntaxHighlighting/repository.h>
 #include <KSyntaxHighlighting/definition.h>
 #include <KSyntaxHighlighting/syntaxhighlighter.h>

@@ -44,8 +44,10 @@
 #include <QStyleHints>
 #include <DSysInfo>
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
 #include <private/qguiapplication_p.h>
 #include <qpa/qplatformtheme.h>
+#endif
 #include <QtSvg/qsvgrenderer.h>
 
 TextEdit::TextEdit(QWidget *parent)
@@ -66,8 +68,10 @@ TextEdit::TextEdit(QWidget *parent)
     m_bIsShortCut = false;
     m_bIsInputMethod = false;
     m_isSelectAll = false;
-    m_touchTapDistance = QGuiApplicationPrivate::platformTheme()->themeHint(QPlatformTheme::TouchDoubleTapDistance).toInt();
     m_fontLineNumberArea.setFamily("SourceHanSansSC-Normal");
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    m_touchTapDistance = QGuiApplicationPrivate::platformTheme()->themeHint(QPlatformTheme::TouchDoubleTapDistance).toInt();
+#endif
 
     m_pLeftAreaWidget = new LeftAreaTextEdit(this);
     m_pLeftAreaWidget->m_pFlodArea->setAttribute(Qt::WA_Hover, true); //开启悬停事件
@@ -85,7 +89,7 @@ TextEdit::TextEdit(QWidget *parent)
     setFocusPolicy(Qt::StrongFocus);
     setMouseTracking(true);
     setContentsMargins(0, 0, 0, 0);
-    setEditPalette(palette().foreground().color().name(), palette().foreground().color().name());
+    setEditPalette(palette().windowText().color().name(), palette().windowText().color().name());
 
     grabGesture(Qt::TapGesture);
     grabGesture(Qt::TapAndHoldGesture);
@@ -687,7 +691,12 @@ void TextEdit::forwardPair()
     setTextCursor(removeSelectionCursor);
 
     // Start search.
-    if (find(QRegExp("[\]>)}]"))) {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    QRegExp regExp("[\\]>)}]");
+#else
+    QRegularExpression regExp("[\\]>)}]");
+#endif
+    if (find(regExp)) {
         int findPos = textCursor().position();
 
         QTextCursor cursor = textCursor();
@@ -721,7 +730,12 @@ void TextEdit::backwardPair()
     QTextDocument::FindFlags options;
     options |= QTextDocument::FindBackward;
 
-    if (find(QRegExp("[\[<({]"), options)) {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    QRegExp regExp("[\[<({]");
+#else
+    QRegularExpression regExp("[\[<({]");
+#endif
+    if (find(regExp, options)) {
         QTextCursor cursor = textCursor();
         auto moveMode = m_cursorMark ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
 
@@ -1601,7 +1615,7 @@ void TextEdit::updateFont()
     font.setPointSizeF(m_fontSize);
     font.setFamily(m_fontName);
     setFont(font);
-    setTabStopWidth(m_tabSpaceNumber * QFontMetrics(font).width(QChar(0x2192)));
+    setTabStopDistance(m_tabSpaceNumber * QFontMetrics(font).horizontalAdvance(QChar(0x2192)));
 
     if (m_isSelectAll) {
         selectTextInView();
@@ -2111,7 +2125,7 @@ void TextEdit::renderAllSelections()
     }
 
     // 通过时间戳重新排序颜色标记功能的 selections
-    qSort(selectionsSortList.begin(), selectionsSortList.end(), [](const QPair<QTextEdit::ExtraSelection, qint64> &A, const QPair<QTextEdit::ExtraSelection, qint64> &B) {
+    std::sort(selectionsSortList.begin(), selectionsSortList.end(), [](const QPair<QTextEdit::ExtraSelection, qint64> &A, const QPair<QTextEdit::ExtraSelection, qint64> &B) {
         return (A.second < B.second);
     });
 
@@ -2156,7 +2170,7 @@ void TextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
     QPainter painter(m_pLeftAreaWidget->m_pLineNumberArea);
     QColor lineNumberAreaBackgroundColor;
 
-    if (DApplicationHelper::instance()->themeType() == DApplicationHelper::ColorType::DarkType) {
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::ColorType::DarkType) {
         lineNumberAreaBackgroundColor = palette().brightText().color();
         lineNumberAreaBackgroundColor.setAlphaF(0.06);
 
@@ -2232,7 +2246,7 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
     QPainter painter(m_pLeftAreaWidget->m_pFlodArea);
 
     QColor codeFlodAreaBackgroundColor;
-    if (DApplicationHelper::instance()->themeType() == DApplicationHelper::ColorType::DarkType) {
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::ColorType::DarkType) {
         codeFlodAreaBackgroundColor = palette().brightText().color();
         codeFlodAreaBackgroundColor.setAlphaF(0.06);
 
@@ -2281,7 +2295,11 @@ void TextEdit::codeFLodAreaPaintEvent(QPaintEvent *event)
             //获取行数文本块 出去字符串判断　梁卫东２０２０年０９月０１日１７：１６：１７
             QString text = block.text();
             //若存在字符串行，多个字符串中间的 '{' '}' 同样被忽略
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
             QRegExp regExp("\".*\"");
+#else
+            QRegularExpression regExp("\".*\"");
+#endif
             QString curText = text.remove(regExp);
 
             //不同类型文件注释符号不同 梁卫东　２０２０－０９－０３　１７：２８：４５
@@ -3987,7 +4005,12 @@ bool TextEdit::isAbleOperation(int iOperationType)
     qlonglong buff[16] = {0};
     for (int i = 0; i <= 15; ++i) {
         QString line = stream.readLine();
-        QStringList list = line.split(QRegExp("\\s{1,}"));
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+        QRegExp reg("\\s{1,}");
+#else
+        QRegularExpression reg("\\s{1,}");
+#endif
+        QStringList list = line.split(reg);
         if (list.size() >= 2) {
             buff[i] = list.at(1).toLongLong(&bVaule);
         }
@@ -4076,7 +4099,7 @@ void TextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
     BookMarkWidget *bookMarkArea = m_pLeftAreaWidget->m_pBookMarkArea;
     QPainter painter(bookMarkArea);
     QColor lineNumberAreaBackgroundColor;
-    if (DApplicationHelper::instance()->themeType() == DApplicationHelper::ColorType::DarkType) {
+    if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::ColorType::DarkType) {
         lineNumberAreaBackgroundColor = palette().brightText().color();
         lineNumberAreaBackgroundColor.setAlphaF(0.06);
 
@@ -4363,7 +4386,7 @@ bool TextEdit::isNeedShowFoldIcon(QTextBlock block)
     QString blockText = block.text();
     bool hasFindLeft = false; // 是否已经找到当前行第一个左括号
     int rightNum = 0, leftNum = 0;//右括号数目、左括号数目
-    for (int i = 0 ; i < blockText.count(); ++i) {
+    for (int i = 0 ; i < blockText.size(); ++i) {
         if (blockText.at(i) == "}" && hasFindLeft) {
             rightNum++;
         } else if (blockText.at(i) == "{") {
@@ -4429,7 +4452,7 @@ void TextEdit::paintCodeFlod(QPainter *painter, QRect rect, bool flod)
         painter->rotate(-90);
     }
 
-    QPen pen(this->palette().foreground(), 2);
+    QPen pen(this->palette().windowText(), 2);
     painter->setPen(pen);
     painter->setRenderHint(QPainter::Antialiasing, true);
     painter->drawPath(path);
@@ -4514,7 +4537,7 @@ void TextEdit::setTextFinished()
         QString qstrLines = bookmarkList.value(filePathList.indexOf(qstrPath));
         QString sign;
 
-        for (int i = 0; i < qstrLines.count() - 1; i++) {
+        for (int i = 0; i < qstrLines.size() - 1; i++) {
             sign = qstrLines.at(i);
             sign.append(qstrLines.at(i + 1));
 
@@ -5169,7 +5192,7 @@ static QPair<int, int> findMatchRange(const QList<int> &posList, int markStart, 
     int adjustMarkStart = markStart - replaceText.size();
 
     // 获取最近的左侧查找文本位置索引，使用 qUpperBound, 索引必须大于 adjustMarkStart
-    auto leftfindItr = qUpperBound(posList.begin(), posList.end(), adjustMarkStart);
+    auto leftfindItr = std::upper_bound(posList.begin(), posList.end(), adjustMarkStart);
     if (leftfindItr != posList.end()
             && (*leftfindItr) < markEnd) {
         // 设置查询的左边界
@@ -5177,7 +5200,7 @@ static QPair<int, int> findMatchRange(const QList<int> &posList, int markStart, 
     }
 
     // 获取最近的右侧查找文本位置索引（小于右边界 markEnd）
-    auto rightFindItr = qLowerBound(posList.rbegin(), posList.rend(), markEnd - 1, std::greater<int>());
+    auto rightFindItr = std::lower_bound(posList.rbegin(), posList.rend(), markEnd - 1, std::greater<int>());
     if (rightFindItr != posList.rend()
             && markStart < (*rightFindItr)) {
         // 设置右边界
@@ -5480,7 +5503,7 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
 
                     //添加第一段标记
                     selection.cursor.setPosition(nStartPos, QTextCursor::MoveAnchor);
-                    selection.cursor.setPosition(nCurrentPos - m_qstrCommitString.count(), QTextCursor::KeepAnchor);
+                    selection.cursor.setPosition(nCurrentPos - m_qstrCommitString.size(), QTextCursor::KeepAnchor);
                     m_wordMarkSelections.insert(i, QPair<QTextEdit::ExtraSelection, qint64>
                                                 (selection, timeStamp));
 
@@ -5544,7 +5567,7 @@ void TextEdit::updateMark(int from, int charsRemoved, int charsAdded)
 
                 if (m_bIsInputMethod) {
                     selection.cursor.setPosition(nStartPos, QTextCursor::MoveAnchor);
-                    selection.cursor.setPosition(nEndPos - m_qstrCommitString.count(), QTextCursor::KeepAnchor);
+                    selection.cursor.setPosition(nEndPos - m_qstrCommitString.size(), QTextCursor::KeepAnchor);
                     m_bIsInputMethod = false;
                 } else {
                     selection.cursor.setPosition(nStartPos, QTextCursor::MoveAnchor);
@@ -6810,7 +6833,13 @@ void TextEdit::mouseReleaseEvent(QMouseEvent *e)
         return;
     }
 
-    if (e->button() == Qt::MidButton) {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    bool midClick = (e->button() == Qt::MidButton);
+#else
+    bool midClick = (e->button() == Qt::MiddleButton);
+#endif
+
+    if (midClick) {
         bool midButtonPaste = m_settings->settings->option("advance.editor.allow_midbutton_paste")->value().toBool();
         if (midButtonPaste) {
             // 只读模式过滤鼠标中间黏贴
@@ -7775,7 +7804,12 @@ void TextEdit::removeComment()
     if (tep.isEmpty()) {
         tep = m_commentDefinition.multiLineStart;
     }
-    QString abb = tep.remove(QRegExp("\\s"));
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    QRegExp s("\\s");
+#else
+    QRegularExpression s("\\s");
+#endif
+    QString abb = tep.remove(s);
 
     if (m_isSelectAll) {
         QPlainTextEdit::selectAll();
@@ -7968,7 +8002,11 @@ bool TextEdit::blockContainStrBrackets(int line)
     QTextBlock curBlock = document()->findBlockByNumber(line);
     QString text = curBlock.text();
     //若存在字符串行，多个字符串中间的 '{' '}' 同样被忽略
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QRegExp regExp("\".*\"");
+#else
+    QRegularExpression regExp("\".*\"");
+#endif
     if (text.contains(regExp)) {
         QString curText = text.remove(regExp);
         return curText.contains("{");

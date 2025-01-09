@@ -13,7 +13,7 @@
 #include <QWidget>
 #include "dimagebutton.h"
 #include <DIconButton>
-#include <DApplicationHelper>
+#include <DGuiApplicationHelper>
 #include <DFloatingWidget>
 #include <DAbstractDialog>
 

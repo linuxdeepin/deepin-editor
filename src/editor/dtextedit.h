@@ -28,7 +28,7 @@
 #include <QLineEdit>
 #include <QPropertyAnimation>
 #include <QFont>
-#include <DApplicationHelper>
+#include <DGuiApplicationHelper>
 #include <QtDBus>
 #include <QGestureEvent>
 #include <QProxyStyle>

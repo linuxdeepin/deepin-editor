@@ -565,7 +565,11 @@ bool Settings::checkShortcutValid(const QString &Name, QString Key, QString &Rea
     // 单键
     if (Key.count("+") == 0) {
         //F1-F12是允许的，这个正则不够精确，但是没关系。
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         QRegExp regexp("^F[0-9]{1,2}$");
+#else
+        QRegularExpression regexp("^F[0-9]{1,2}$");
+#endif
         if (!Key.contains(regexp)) {
             Reason = tr("The shortcut %1 is invalid, please set another one.").arg(style);
             bIsConflicts = false;
@@ -573,7 +577,11 @@ bool Settings::checkShortcutValid(const QString &Name, QString Key, QString &Rea
         }
     }
     // 小键盘单键都不允许
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QRegExp regexpNum("^Num+.*");
+#else
+    QRegularExpression regexpNum("^Num+.*");
+#endif
     if (Key.contains(regexpNum)) {
         Reason = tr("The shortcut %1 is invalid, please set another one.").arg(style);
         bIsConflicts = false;
