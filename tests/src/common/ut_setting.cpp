@@ -10,7 +10,7 @@
 #include <DSettingsOption>
 #include <DSettings>
 #include <QStandardPaths>
-#include <DtkCores>
+// #include <DtkCores>
 #include "src/stub.h"
 
 namespace settinsstub {
@@ -71,11 +71,12 @@ TEST(UT_Setting_Settings, UT_Setting_Settings)
     //        QVariant value;
     //        fontFamliy->valueChanged(value);
     //        sleep(500);
-
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QVariant retVal;
     QMetaObject::invokeMethod(fontFamliy, "valueChanged", Qt::DirectConnection,
                               QGenericReturnArgument(),
                               Q_ARG(QVariant, "dsd"));
+#endif
 
 
     EXPECT_NE(m_backend,nullptr);

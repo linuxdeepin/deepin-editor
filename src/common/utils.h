@@ -13,6 +13,7 @@
 #include <QIcon>
 #include <QDBusInterface>
 #include <QDBusReply>
+#include <QTextCodec>
 
 #ifndef SAFE_DELETE
 #define SAFE_DELETE(p)                                                                                                           \

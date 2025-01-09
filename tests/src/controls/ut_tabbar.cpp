@@ -537,7 +537,11 @@ TEST(UT_Tabbar_mousePressEvent, UT_Tabbar_mousePressEvent)
     int index = 0;
     QStyleOptionTab option;
     QPoint p;
-    QMouseEvent* event = new QMouseEvent(QEvent::None,QPoint(),Qt::MidButton,Qt::MidButton,Qt::NoModifier);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    QMouseEvent* event = new QMouseEvent(QEvent::None, QPoint(), Qt::MidButton, Qt::MidButton, Qt::NoModifier);
+#else
+    QMouseEvent* event = new QMouseEvent(QEvent::None, QPoint(), Qt::MiddleButton, Qt::MiddleButton, Qt::NoModifier);
+#endif
 
 
     Window * window = new Window;

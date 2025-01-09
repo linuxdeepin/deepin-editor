@@ -6,8 +6,6 @@
 #include "pathsettintwgt.h"
 #include <DTitlebar>
 #include <DAnchors>
-#include <DThemeManager>
-#include <DToast>
 #include <DSettingsWidgetFactory>
 #include <DSettingsGroup>
 #include <DSettings>
@@ -207,9 +205,9 @@ Window::Window(DMainWindow *parent)
       m_themePanel(new ThemePanel(this)),
       m_findBar(new FindBar(this)),
       m_menu(new DMenu),
-      m_blankFileDir(QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation)).first()).filePath("blank-files")),
-      m_backupDir(QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation)).first()).filePath("backup-files")),
-      m_autoBackupDir(QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::DataLocation)).first()).filePath("autoBackup-files")),
+      m_blankFileDir(QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation)).first()).filePath("blank-files")),
+      m_backupDir(QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation)).first()).filePath("backup-files")),
+      m_autoBackupDir(QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation)).first()).filePath("autoBackup-files")),
       m_titlebarStyleSheet(titlebar()->styleSheet()),
       m_themePath(Settings::instance()->settings->option("advance.editor.theme")->value().toString())
 {
@@ -244,7 +242,7 @@ Window::Window(DMainWindow *parent)
     //connect(m_settings, &Settings::sigChangeWindowSize, this, &Window::slotSigChangeWindowSize);
 
     // Init layout and editor.
-    m_centralLayout->setMargin(0);
+    m_centralLayout->setContentsMargins(0, 0, 0, 0);
     m_centralLayout->setSpacing(0);
 
     m_centralLayout->addWidget(m_editorWidget);
@@ -2204,7 +2202,12 @@ void Window::doPrint(DPrinter *printer, const QVector<int> &pageRange)
     fmt.setMargin(margin);
     m_printDoc->rootFrame()->setFrameFormat(fmt);
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QRectF pageRect(printer->pageRect());
+#else
+    QRectF pageRect(printer->pageRect(QPrinter::Point));
+#endif
+
     QRectF body = QRectF(0, 0, pageRect.width(), pageRect.height());
     QFontMetrics fontMetrics(m_printDoc->defaultFont(), p.device());
     QRectF titleBox(margin,
@@ -2296,7 +2299,11 @@ void Window::doPrintWithLargeDoc(DPrinter *printer, const QVector<int> &pageRang
     int dpiy = p.device()->logicalDpiY();
     int margin = static_cast<int>((2 / 2.54) * dpiy); // 2 cm margins
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QRectF pageRect(printer->pageRect());
+#else
+    QRectF pageRect(printer->pageRect(QPrinter::Point));
+#endif
     QRectF body = QRectF(0, 0, pageRect.width(), pageRect.height());
     // 使用首个文档信息即可
     QFontMetrics fontMetrics(m_printDocList.first().doc->defaultFont(), p.device());
@@ -2384,7 +2391,11 @@ void Window::asynPrint(QPainter &p, DPrinter *printer, const QVector<int> &pageR
         return;
     }
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QRectF pageRect(printer->pageRect());
+#else
+    QRectF pageRect(printer->pageRect(QPrinter::Point));
+#endif
     int dpiy = p.device()->logicalDpiY();
     int margin = static_cast<int>((2 / 2.54) * dpiy); // 2 cm margins
     QRectF body = QRectF(0, 0, pageRect.width(), pageRect.height());

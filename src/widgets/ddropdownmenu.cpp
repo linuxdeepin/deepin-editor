@@ -13,10 +13,14 @@
 #include <QDebug>
 #include <DFontSizeManager>
 #include <DLabel>
-#include <DApplicationHelper>
+#include <DGuiApplicationHelper>
+#include <DPaletteHelper>
 #include <QtSvg/QSvgRenderer>
+#include <QActionGroup>
+#include <QFile>
 
-using namespace Dtk::Core;
+// using namespace Dtk::Core;
+DWIDGET_USE_NAMESPACE
 
 // 不同布局模式(紧凑)
 const int s_DDropdownMenuHeight = 28;
@@ -38,7 +42,7 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     m_pToolButton->installEventFilter(this);
     //this->installEventFilter(this);
     //设置图标
-    QString theme =  (DGuiApplicationHelper::instance()->applicationPalette().color(QPalette::Background).lightness() < 128) ? "dark" : "light";
+    QString theme =  (DGuiApplicationHelper::instance()->applicationPalette().color(QPalette::Window).lightness() < 128) ? "dark" : "light";
     QString arrowSvgPath = QString(":/images/dropdown_arrow_%1.svg").arg(theme);
     // 根据当前显示缩放转换图片
     qreal scaled = this->devicePixelRatioF();
@@ -63,9 +67,13 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
 
     connect(this, &DDropdownMenu::requestContextMenu, this, &DDropdownMenu::slotRequestMenu);
 
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     //设置字体自适应大小
     //设置界面大小根据内容大小自适应 梁卫东 2020.7.7
     connect(qApp,&DApplication::fontChanged,this,&DDropdownMenu::OnFontChangedSlot);
+#else
+    qApp->installEventFilter(this);
+#endif
 
 #ifdef DTKWIDGET_CLASS_DSizeMode
     m_pToolButton->setFixedHeight(DGuiApplicationHelper::isCompactMode() ? s_DDropdownMenuHeightCompact : s_DDropdownMenuHeight);
@@ -360,8 +368,7 @@ DDropdownMenu *DDropdownMenu::createHighLightMenu()
 
 QIcon DDropdownMenu::createIcon()
 {
-
-    DPalette dpalette  = DApplicationHelper::instance()->palette(m_pToolButton);
+    DPalette dpalette  = DPaletteHelper::instance()->palette(m_pToolButton);
     QColor textColor;
 
     QPixmap arrowPixmap;
@@ -377,7 +384,7 @@ QIcon DDropdownMenu::createIcon()
 
     // 根据字体大小设置icon大小，按计算的字体高度，而非从字体文件中读取的高度(部分字体中英文高度不同)
     QFontMetrics metrics(m_font);
-    int fontWidth = metrics.width(m_text) + 20;
+    int fontWidth = metrics.horizontalAdvance(m_text) + 20;
     int fontHeight = metrics.size(Qt::TextSingleLine, m_text).height();
     int iconW = 8;
     int iconH = 5;
@@ -426,6 +433,15 @@ void DDropdownMenu::OnFontChangedSlot(const QFont &font)
 
 bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
 {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+    if (event->type() == QEvent::ApplicationFontChange) {
+        // 处理字体变化
+        QFont font = qApp->font(); // 获取当前应用程序字体
+        OnFontChangedSlot(font);   // 调用槽函数更新字体
+        return true;
+    }
+#endif
+
     if(object == m_pToolButton){
         if(event->type() == QEvent::KeyPress){
             QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);

@@ -62,7 +62,7 @@ TEST_F(TestBottomBar, checkSetPalette)
     QString backgroundColor = "#f8f8f8";
     QString textColor = "#1f1c1b";
     QPalette palette = bottomBar->palette();
-    palette.setColor(QPalette::Background, backgroundColor);
+    palette.setColor(QPalette::Window, backgroundColor);
     palette.setColor(QPalette::Text, textColor);
     bottomBar->setPalette(palette);
 

@@ -228,9 +228,10 @@ TEST(UT_StartManager_autoBackupFile,autoBackupFile)
     QMap<QString, EditWrapper *> wrappers{ {"wr1",wr1}};
     startManager->m_windows = windows;
     w1->m_wrappers = wrappers;
-
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     Stub s1;
     s1.set(ADDR(QStringList,replace),returnstub);
+#endif
     Stub s2;
     s2.set(ADDR(StartManager,getFileTabInfo),getFileTabInfostub);
     s2.set(ADDR(EditWrapper,saveTemFile),returnstub);

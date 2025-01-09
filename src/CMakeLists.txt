@@ -1,7 +1,5 @@
 if (NOT (${CMAKE_BUILD_TYPE} MATCHES "Debug"))
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
-    # generate qm files
-    execute_process(COMMAND bash "${CMAKE_SOURCE_DIR}/translate_generation.sh" WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
 endif ()
 
 # Sources files
@@ -20,20 +18,38 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/include)
 
 # Find the library
 find_package(PkgConfig REQUIRED)
-find_package(Qt5Widgets REQUIRED)
-find_package(Qt5DBus REQUIRED)
-find_package(Qt5Concurrent REQUIRED)
-find_package(Qt5PrintSupport REQUIRED)
-find_package(Qt5Gui REQUIRED)
-find_package(DtkWidget REQUIRED)
-find_package(DtkCore REQUIRED)
-find_package(KF5SyntaxHighlighting)
-find_package(KF5Codecs)
+
+set(qt_required_components Gui Widgets DBus Concurrent PrintSupport Svg Xml)
+if (QT_DESIRED_VERSION MATCHES 6)
+    list(APPEND qt_required_components Core5Compat)
+endif()
+find_package(Qt${QT_DESIRED_VERSION} REQUIRED COMPONENTS ${qt_required_components})
+find_package(Dtk${DTK_VERSION_MAJOR} REQUIRED COMPONENTS Widget Core)
+find_package(KF${KF_VERSION_MAJOR}Codecs REQUIRED)
+find_package(KF${KF_VERSION_MAJOR}SyntaxHighlighting REQUIRED)
+
+set(LINK_LIBS
+    Qt${QT_VERSION_MAJOR}::Gui
+    Qt${QT_VERSION_MAJOR}::Widgets
+    Qt${QT_VERSION_MAJOR}::Xml
+    Qt${QT_VERSION_MAJOR}::Svg
+    Qt${QT_VERSION_MAJOR}::Concurrent
+    Qt${QT_VERSION_MAJOR}::PrintSupport
+    Qt${QT_VERSION_MAJOR}::DBus
+    Dtk${DTK_VERSION_MAJOR}::Widget
+    Dtk${DTK_VERSION_MAJOR}::Core
+    KF${KF_VERSION_MAJOR}::Codecs
+    KF${KF_VERSION_MAJOR}::SyntaxHighlighting
+)
+
+if (QT_DESIRED_VERSION MATCHES 6)
+    list(APPEND LINK_LIBS Qt${QT_DESIRED_VERSION}::Core5Compat)
+else()
+    include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
+endif()
+
 find_package(DFrameworkdbus REQUIRED)
-find_package(Qt5Xml REQUIRED)
-find_package(Qt5Svg REQUIRED)
 find_package(ICU COMPONENTS i18n uc REQUIRED)
-include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 
 pkg_check_modules(chardet REQUIRED chardet)
 include_directories(${chardet_INCLUDE_DIRS})
@@ -42,18 +58,9 @@ link_directories(${chardet_LIBRARY_DIRS})
 # Tell CMake to create the executable
 add_executable(deepin-editor ${SRCS} deepin-editor.qrc)
 target_link_libraries(deepin-editor
-    ${DtkWidget_LIBRARIES}
-    ${DtkCore_LIBRARIES}
-    ${Qt5Widgets_LIBRARIES}
-    ${Qt5DBus_LIBRARIES}
-    ${Qt5PrintSupport_LIBRARIES}
-    ${Qt5Concurrent_LIBRARIES}
+    ${LINK_LIBS}
     ${DFrameworkdbus_LIBRARIES}
-    ${Qt5Xml_LIBRARIES}
-    ${Qt5Svg_LIBRARIES}
     ${chardet_LIBRARY_DIRS}
-    KF5::Codecs
-    KF5::SyntaxHighlighting
     ICU::i18n
     ICU::uc
     -lm
@@ -63,9 +70,14 @@ target_link_libraries(deepin-editor
 )
 
 
-# Install qm files
-file(GLOB QM_FILES "${CMAKE_SOURCE_DIR}/translations/*.qm")
-install(FILES ${QM_FILES} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/deepin-editor/translations/)
+# translation files
+TRANSLATION_GENERATE(QM_FILES ${CMAKE_SOURCE_DIR}/translations)
+add_custom_target(${PROJECT_NAME}_qm_files DEPENDS ${QM_FILES})
+add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_qm_files)
+
+# Install translations
+install(FILES ${QM_FILES} DESTINATION share/${PROJECT_NAME}/translations)
+
 install(FILES ${APP_ICONPATH} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps/)
 install(FILES ${CMAKE_SOURCE_DIR}/src/images/deepin-editor.svg DESTINATION ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor/scalable/apps/)
 
@@ -92,7 +104,11 @@ install(DIRECTORY ${CMAKE_SOURCE_DIR}/src/themes DESTINATION ${CMAKE_INSTALL_PRE
 set(DCONFIG_APPID org.deepin.editor)
 file(GLOB DCONFIG_FILES "${CMAKE_SOURCE_DIR}/misc/configs/*.json")
 if(DEFINED DSG_DATA_DIR)
-    dconfig_meta_files(APPID ${DCONFIG_APPID} FILES ${DCONFIG_FILES})
+    if (DTK_VERSION_MAJOR EQUAL "6")
+        dtk_add_config_meta_files(APPID ${DCONFIG_APPID} FILES ${DCONFIG_FILES})
+    else()
+        dconfig_meta_files(APPID ${DCONFIG_APPID} FILES ${DCONFIG_FILES})
+    endif()
     message("-- DConfig is supported by DTK")
 else()
     install(FILES ${DCONFIG_FILES} DESTINATION ${CMAKE_INSTALL_PREFIX}/share/dsg/configs/${DCONFIG_APPID})

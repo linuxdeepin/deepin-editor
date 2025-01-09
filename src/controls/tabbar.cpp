@@ -15,7 +15,6 @@
 #include <DWindowManagerHelper>
 #include <QPixmap>
 #include <DFrame>
-#include <QDesktopWidget>
 #include <DGuiApplicationHelper>
 
 QPixmap *Tabbar::sm_pDragPixmap = nullptr;
@@ -118,7 +117,7 @@ void Tabbar::addTabWithIndex(int index, const QString &filePath, const QString &
     } else {
         QString path = filePath;
         QFontMetrics fontMetrics(font());
-        int nFontWidth = fontMetrics.width(path) * (qApp->devicePixelRatio() == 1.25 ? 2 : 1);
+        int nFontWidth = fontMetrics.horizontalAdvance(path) * (qApp->devicePixelRatio() == 1.25 ? 2 : 1);
 
         Window *pWindow = static_cast<Window *>(this->window());
         int w = pWindow->width() - 200;
@@ -146,7 +145,7 @@ void Tabbar::resizeEvent(QResizeEvent *event)
         QString path = tabToolTip(i);
         path = path.replace("\n", "");
         QFontMetrics fontMetrics(font());
-        int nFontWidth = fontMetrics.width(path) * (qApp->devicePixelRatio() == 1.25 ? 2 : 1);
+        int nFontWidth = fontMetrics.horizontalAdvance(path) * (qApp->devicePixelRatio() == 1.25 ? 2 : 1);
 
         Window *pWindow = static_cast<Window *>(this->window());
         int w = pWindow->width() - 200;
@@ -254,7 +253,7 @@ void Tabbar::updateTab(int index, const QString &filePath, const QString &tabNam
     } else {
         QString path = filePath;
         QFontMetrics fontMetrics(font());
-        int nFontWidth = fontMetrics.width(path) * (qApp->devicePixelRatio() == 1.25 ? 2 : 1);
+        int nFontWidth = fontMetrics.horizontalAdvance(path) * (qApp->devicePixelRatio() == 1.25 ? 2 : 1);
 
         Window *pWindow = static_cast<Window *>(this->window());
         int w = pWindow->width() - 200;
@@ -667,7 +666,12 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
 
 void Tabbar::mousePressEvent(QMouseEvent *e)
 {
-    if (e->button() == Qt::MidButton) {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    bool midClick = (e->button() == Qt::MidButton);
+#else
+    bool midClick = (e->button() == Qt::MiddleButton);
+#endif
+    if (midClick) {
         emit tabCloseRequested(tabAt(QPoint(e->x(), e->y())));
     }
 
@@ -751,8 +755,13 @@ void Tabbar::handleTabMoved(int fromIndex, int toIndex)
 {
     //qDebug () << "handleTabMoved";
     if (m_tabPaths.count() > fromIndex && m_tabPaths.count() > toIndex && fromIndex >= 0 && toIndex >= 0) {
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         m_tabPaths.swap(fromIndex, toIndex);
         m_tabTruePaths.swap(fromIndex, toIndex);
+#else
+        m_tabPaths.swapItemsAt(fromIndex, toIndex);
+        m_tabTruePaths.swapItemsAt(fromIndex, toIndex);
+#endif
     }
 }
 

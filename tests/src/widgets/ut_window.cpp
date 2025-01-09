@@ -1682,11 +1682,11 @@ TEST(UT_Window_slotSigThemeChanged, UT_Window_slotSigThemeChanged)
     pWindow->addBlankTab();
     pWindow->addTabWithWrapper(pEditWrapper, "bb", "aad", "aadd", 1);
     pWindow->m_settings = Settings::instance();
-    DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::LightType);
+    DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::LightType);
     pWindow->slotSigThemeChanged(DEEPIN_THEME);
     pWindow->slotSigThemeChanged(DEEPIN_DARK_THEME);
 
-    DGuiApplicationHelper::instance()->setThemeType(DGuiApplicationHelper::DarkType);
+    DGuiApplicationHelper::instance()->setPaletteType(DGuiApplicationHelper::DarkType);
     //pWindow->slotSigThemeChanged(DEEPIN_THEME);
     //pWindow->slotSigThemeChanged(DEEPIN_DARK_THEME);
 
