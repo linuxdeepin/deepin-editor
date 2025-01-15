@@ -878,6 +878,10 @@ void EditWrapper::checkForReload()
 
 void EditWrapper::showNotify(const QString &message, bool warning)
 {
+    if (message.isEmpty()) {
+        return;
+    }
+
     if (warning || m_pTextEdit->getReadOnlyPermission() || m_pTextEdit->getReadOnlyMode()) {
 #ifdef DTKWIDGET_CLASS_DSizeMode
         Utils::sendFloatMessageFixedFont(m_pTextEdit, QIcon(":/images/warning.svg"), message);
