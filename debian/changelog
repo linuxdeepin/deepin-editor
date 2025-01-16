@@ -1,3 +1,10 @@
+deepin-editor (6.5.12) unstable; urgency=medium
+
+  * chore: add org_deepin_editor configuration class (#320)
+  * fix: cannot detect uos-ai in linglong (#321)(Bug: 300549)
+
+ -- renbin <renbin@uniontech.com>  Thu, 16 Jan 2025 17:06:44 +0800
+
 deepin-editor (6.5.11) unstable; urgency=medium
 
   * chore: New version 6.5.11.
