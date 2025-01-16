@@ -6,6 +6,7 @@
 #define IFLYTEKAIASSISTANT_H
 
 #include <QObject>
+#include <QSharedPointer>
 
 class QDBusInterface;
 
@@ -17,11 +18,12 @@ public:
     static IflytekAiAssistant *instance();
 
     enum CallStatus {
-        Invalid = -1,
+        Invalid = -1,  // interface no result or error
         Disable = 0,
         Enable = 1,
-        NotInstalled,   // not install uos-ai
-        NoInputDevice,  // the dbus interface not valid or return disable
+        NotInstalled,     // not install uos-ai
+        NoUserAgreement,  // the user agreement not agreed
+        NoInputDevice,    // the dbus interface not valid or return disable
         NoOutputDevice,
 
         Success = Enable,
@@ -31,20 +33,21 @@ public:
     inline CallStatus status() const { return m_status; }
     inline bool valid() const { return Enable == status(); }
     void checkAiExists();
+    CallStatus checkValid();
 
     // text to speech
     CallStatus isTtsInWorking() const;
     CallStatus isTtsEnable() const;
-    CallStatus textToSpeech() const;
+    CallStatus textToSpeech();
     CallStatus stopTtsDirectly() const;
 
     // speech to text
     CallStatus getIatEnable() const;
-    CallStatus speechToText() const;
+    CallStatus speechToText();
 
     // text translation
     CallStatus getTransEnable() const;
-    CallStatus textToTranslate() const;
+    CallStatus textToTranslate();
 
     QString errorString(CallStatus ret) const;
 
@@ -54,8 +57,15 @@ private:
     explicit IflytekAiAssistant(QObject *object = nullptr);
     ~IflytekAiAssistant() override = default;
 
+    static CallStatus copilotInstalled(const QSharedPointer<QDBusInterface> &copilot);
+    static CallStatus isCopilotEnabled(const QSharedPointer<QDBusInterface> &copilot);
+    static CallStatus launchCopilotChat(const QSharedPointer<QDBusInterface> &copilot);
+
+    static QString copilotService();
+
     bool m_inited{false};
     CallStatus m_status{Invalid};
+    QSharedPointer<QDBusInterface> m_copilot;
 };
 
 #endif  // IFLYTEKAIASSISTANT_H
