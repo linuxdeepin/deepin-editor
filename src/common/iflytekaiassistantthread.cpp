@@ -4,24 +4,32 @@
 
 #include "iflytekaiassistantthread.h"
 
-IflytekAiassistantThread::IflytekAiassistantThread(QObject *parent)
-    : QThread (parent)
-{}
+#include <QDBusInterface>
 
-IflytekAiassistantThread::~IflytekAiassistantThread()
-{}
+IflytekAiassistantThread::IflytekAiassistantThread(QObject *parent)
+    : QThread(parent)
+{
+}
+
+IflytekAiassistantThread::~IflytekAiassistantThread() {}
 
 void IflytekAiassistantThread::run()
 {
-    bool bIsRegistIflytekAiassistant = false;
     QDBusConnection connection = QDBusConnection::sessionBus();
     QDBusConnectionInterface *bus = connection.interface();
-    bool isVailid = bus->isServiceRegistered("com.iflytek.aiassistant");
-    if (isVailid) {
-        bIsRegistIflytekAiassistant = true;
-    } else {
-        qInfo() << "com.iflytek.aiassistant service no registered!";
+    bool bIsRegistUosAiAssistant = bus->isServiceRegistered("com.iflytek.aiassistant");
+    if (!bIsRegistUosAiAssistant) {
+        qInfo() << "com.iflytek.aiassistant service no registered, try get introspect.";
+
+        QDBusInterface introspect("com.iflytek.aiassistant", "/aiassistant/deepinmain", "org.freedesktop.DBus.Introspectable");
+        QDBusReply<QString> version = introspect.call("Introspect");
+        if (version.isValid()) {
+            bIsRegistUosAiAssistant = true;
+            qInfo() << "com.iflytek.aiassistant Introspect success.";
+        } else {
+            qInfo() << "com.iflytek.aiassistant Introspect also failed. " << version.error().message();
+        }
     }
 
-    emit sigIsRegisteredIflytekAiassistant(bIsRegistIflytekAiassistant);
+    emit sigIsRegisteredIflytekAiassistant(bIsRegistUosAiAssistant);
 }
