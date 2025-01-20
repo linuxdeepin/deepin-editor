@@ -1,3 +1,10 @@
+deepin-editor (6.5.13) unstable; urgency=medium
+
+  * chore: v6.5.13 release.
+  * feat: support qt6 build.
+
+ -- re2zero <yangwu@uniontech.com>  Mon, 20 Jan 2025 16:30:43 +0800
+
 deepin-editor (6.5.12) unstable; urgency=medium
 
   * chore: add org_deepin_editor configuration class (#320)
