@@ -57,6 +57,8 @@ private:
     explicit IflytekAiAssistant(QObject *object = nullptr);
     ~IflytekAiAssistant() override = default;
 
+    CallStatus stopTtsDirectlyInternal() const;
+
     static CallStatus copilotInstalled(const QSharedPointer<QDBusInterface> &copilot);
     static CallStatus isCopilotEnabled(const QSharedPointer<QDBusInterface> &copilot);
     static CallStatus launchCopilotChat(const QSharedPointer<QDBusInterface> &copilot);
