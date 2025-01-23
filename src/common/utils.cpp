@@ -38,7 +38,8 @@ extern "C" {
 DCORE_USE_NAMESPACE
 
 QT_BEGIN_NAMESPACE
-extern Q_WIDGETS_EXPORT void qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
+extern Q_WIDGETS_EXPORT void
+qt_blurImage(QPainter *p, QImage &blurImage, qreal radius, bool quality, bool alphaOnly, int transposed = 0);
 QT_END_NAMESPACE
 
 QString Utils::m_systemLanguage;
@@ -110,63 +111,60 @@ float Utils::codecConfidenceForData(const QTextCodec *codec, const QByteArray &d
             ++non_base_latin_count;
 
         switch (ch.script()) {
-        case QChar::Script_Hiragana:
-        case QChar::Script_Katakana:
-            hep_count += (country == QLocale::Japan) ? 1.2 : 0.5;
-            unidentification_count += (country == QLocale::Japan) ? 0 : 0.3;
-            break;
-        case QChar::Script_Han:
-            hep_count += (country == QLocale::China) ? 1.2 : 0.5;
-            unidentification_count += (country == QLocale::China) ? 0 : 0.3;
-            break;
-        case QChar::Script_Hangul:
-            hep_count += (country == QLocale::NorthKorea) || (country == QLocale::SouthKorea) ? 1.2 : 0.5;
-            unidentification_count += (country == QLocale::NorthKorea) || (country == QLocale::SouthKorea) ? 0 : 0.3;
-            break;
-        case QChar::Script_Cyrillic:
-            hep_count += (country == QLocale::Russia) ? 1.2 : 0.5;
-            unidentification_count += (country == QLocale::Russia) ? 0 : 0.3;
-            break;
-        case QChar::Script_Devanagari:
-            hep_count += (country == QLocale::Nepal || country == QLocale::India) ? 1.2 : 0.5;
-            unidentification_count += (country == QLocale::Nepal || country == QLocale::India) ? 0 : 0.3;
-            break;
-        default:
-            // full-width character, emoji, 常用标点, 拉丁文补充1，天城文补充，CJK符号和标点符号（如：【】）
-            if ((ch.unicode() >= 0xff00 && ch.unicode() <= 0xffef)
-                || (ch.unicode() >= 0x2600 && ch.unicode() <= 0x27ff)
-                || (ch.unicode() >= 0x2000 && ch.unicode() <= 0x206f)
-                || (ch.unicode() >= 0x80 && ch.unicode() <= 0xff)
-                || (ch.unicode() >= 0xa8e0 && ch.unicode() <= 0xa8ff)
-                || (ch.unicode() >= 0x0900 && ch.unicode() <= 0x097f)
-                || (ch.unicode() >= 0x3000 && ch.unicode() <= 0x303f)) {
-                ++hep_count;
-            } else if (ch.isSurrogate() && ch.isHighSurrogate()) {
-                ++i;
+            case QChar::Script_Hiragana:
+            case QChar::Script_Katakana:
+                hep_count += (country == QLocale::Japan) ? 1.2 : 0.5;
+                unidentification_count += (country == QLocale::Japan) ? 0 : 0.3;
+                break;
+            case QChar::Script_Han:
+                hep_count += (country == QLocale::China) ? 1.2 : 0.5;
+                unidentification_count += (country == QLocale::China) ? 0 : 0.3;
+                break;
+            case QChar::Script_Hangul:
+                hep_count += (country == QLocale::NorthKorea) || (country == QLocale::SouthKorea) ? 1.2 : 0.5;
+                unidentification_count += (country == QLocale::NorthKorea) || (country == QLocale::SouthKorea) ? 0 : 0.3;
+                break;
+            case QChar::Script_Cyrillic:
+                hep_count += (country == QLocale::Russia) ? 1.2 : 0.5;
+                unidentification_count += (country == QLocale::Russia) ? 0 : 0.3;
+                break;
+            case QChar::Script_Devanagari:
+                hep_count += (country == QLocale::Nepal || country == QLocale::India) ? 1.2 : 0.5;
+                unidentification_count += (country == QLocale::Nepal || country == QLocale::India) ? 0 : 0.3;
+                break;
+            default:
+                // full-width character, emoji, 常用标点, 拉丁文补充1，天城文补充，CJK符号和标点符号（如：【】）
+                if ((ch.unicode() >= 0xff00 && ch.unicode() <= 0xffef) || (ch.unicode() >= 0x2600 && ch.unicode() <= 0x27ff) ||
+                    (ch.unicode() >= 0x2000 && ch.unicode() <= 0x206f) || (ch.unicode() >= 0x80 && ch.unicode() <= 0xff) ||
+                    (ch.unicode() >= 0xa8e0 && ch.unicode() <= 0xa8ff) || (ch.unicode() >= 0x0900 && ch.unicode() <= 0x097f) ||
+                    (ch.unicode() >= 0x3000 && ch.unicode() <= 0x303f)) {
+                    ++hep_count;
+                } else if (ch.isSurrogate() && ch.isHighSurrogate()) {
+                    ++i;
 
-                if (i < unicode_data.size()) {
-                    const QChar &next_ch = unicode_data.at(i);
+                    if (i < unicode_data.size()) {
+                        const QChar &next_ch = unicode_data.at(i);
 
-                    if (!next_ch.isLowSurrogate()) {
-                        --i;
-                        break;
+                        if (!next_ch.isLowSurrogate()) {
+                            --i;
+                            break;
+                        }
+
+                        uint unicode = QChar::surrogateToUcs4(ch, next_ch);
+
+                        // emoji
+                        if (unicode >= 0x1f000 && unicode <= 0x1f6ff) {
+                            hep_count += 2;
+                        }
                     }
-
-                    uint unicode = QChar::surrogateToUcs4(ch, next_ch);
-
-                    // emoji
-                    if (unicode >= 0x1f000 && unicode <= 0x1f6ff) {
-                        hep_count += 2;
-                    }
+                } else if (ch.unicode() == QChar::ReplacementCharacter) {
+                    ++replacement_count;
+                } else if (ch.unicode() > 0x7f) {
+                    // 因为UTF-8编码的容错性很低，所以未识别的编码只需要判断是否为 QChar::ReplacementCharacter 就能排除
+                    if (codec->name() != "UTF-8")
+                        ++unidentification_count;
                 }
-            } else if (ch.unicode() == QChar::ReplacementCharacter) {
-                ++replacement_count;
-            } else if (ch.unicode() > 0x7f) {
-                // 因为UTF-8编码的容错性很低，所以未识别的编码只需要判断是否为 QChar::ReplacementCharacter 就能排除
-                if (codec->name() != "UTF-8")
-                    ++unidentification_count;
-            }
-            break;
+                break;
         }
     }
 
@@ -190,20 +188,22 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
     }
 
     QMimeDatabase mime_database;
-    const QMimeType &mime_type = fileName.isEmpty() ? mime_database.mimeTypeForData(data) : mime_database.mimeTypeForFileNameAndData(fileName, data);
+    const QMimeType &mime_type =
+        fileName.isEmpty() ? mime_database.mimeTypeForData(data) : mime_database.mimeTypeForFileNameAndData(fileName, data);
     const QString &mimetype_name = mime_type.name();
     KEncodingProber::ProberType proberType = KEncodingProber::Universal;
 
-    if (mimetype_name == QStringLiteral("application/xml")
-        || mimetype_name == QStringLiteral("text/html")
-        || mimetype_name == QStringLiteral("application/xhtml+xml")) {
+    if (mimetype_name == QStringLiteral("application/xml") || mimetype_name == QStringLiteral("text/html") ||
+        mimetype_name == QStringLiteral("application/xhtml+xml")) {
         const QString &_data = QString::fromLatin1(data);
         QRegularExpression pattern("<\\bmeta.+\\bcharset=(?'charset'\\S+?)\\s*['\"/>]");
 
         pattern.setPatternOptions(QRegularExpression::DontCaptureOption | QRegularExpression::CaseInsensitiveOption);
-        const QString &charset = pattern.match(_data, 0, QRegularExpression::PartialPreferFirstMatch,
-                                               QRegularExpression::DontCheckSubjectStringMatchOption)
-                                         .captured("charset");
+        const QString &charset =
+            pattern
+                .match(
+                    _data, 0, QRegularExpression::PartialPreferFirstMatch, QRegularExpression::DontCheckSubjectStringMatchOption)
+                .captured("charset");
 
         if (!charset.isEmpty()) {
             return charset.toLatin1();
@@ -211,43 +211,45 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
 
         pattern.setPattern("<\\bmeta\\s+http-equiv=\"Content-Language\"\\s+content=\"(?'language'[a-zA-Z-]+)\"");
 
-        const QString &language = pattern.match(_data, 0, QRegularExpression::PartialPreferFirstMatch,
-                                                QRegularExpression::DontCheckSubjectStringMatchOption)
-                                          .captured("language");
+        const QString &language =
+            pattern
+                .match(
+                    _data, 0, QRegularExpression::PartialPreferFirstMatch, QRegularExpression::DontCheckSubjectStringMatchOption)
+                .captured("language");
 
         if (0 != language.size()) {
             QLocale l(language);
 
             switch (l.script()) {
-            case QLocale::ArabicScript:
-                proberType = KEncodingProber::Arabic;
-                break;
-            case QLocale::SimplifiedChineseScript:
-                proberType = KEncodingProber::ChineseSimplified;
-                break;
-            case QLocale::TraditionalChineseScript:
-                proberType = KEncodingProber::ChineseTraditional;
-                break;
-            case QLocale::CyrillicScript:
-                proberType = KEncodingProber::Cyrillic;
-                break;
-            case QLocale::GreekScript:
-                proberType = KEncodingProber::Greek;
-                break;
-            case QLocale::HebrewScript:
-                proberType = KEncodingProber::Hebrew;
-                break;
-            case QLocale::JapaneseScript:
-                proberType = KEncodingProber::Japanese;
-                break;
-            case QLocale::KoreanScript:
-                proberType = KEncodingProber::Korean;
-                break;
-            case QLocale::ThaiScript:
-                proberType = KEncodingProber::Thai;
-                break;
-            default:
-                break;
+                case QLocale::ArabicScript:
+                    proberType = KEncodingProber::Arabic;
+                    break;
+                case QLocale::SimplifiedChineseScript:
+                    proberType = KEncodingProber::ChineseSimplified;
+                    break;
+                case QLocale::TraditionalChineseScript:
+                    proberType = KEncodingProber::ChineseTraditional;
+                    break;
+                case QLocale::CyrillicScript:
+                    proberType = KEncodingProber::Cyrillic;
+                    break;
+                case QLocale::GreekScript:
+                    proberType = KEncodingProber::Greek;
+                    break;
+                case QLocale::HebrewScript:
+                    proberType = KEncodingProber::Hebrew;
+                    break;
+                case QLocale::JapaneseScript:
+                    proberType = KEncodingProber::Japanese;
+                    break;
+                case QLocale::KoreanScript:
+                    proberType = KEncodingProber::Korean;
+                    break;
+                case QLocale::ThaiScript:
+                    proberType = KEncodingProber::Thai;
+                    break;
+                default:
+                    break;
             }
         }
     } else if (mimetype_name == "text/x-python") {
@@ -272,11 +274,11 @@ QByteArray Utils::detectEncode(const QByteArray &data, const QString &fileName)
     }
 
     // for CJK
-    const QList<QPair<KEncodingProber::ProberType, QLocale::Country>> fallback_list {
-        { KEncodingProber::ChineseSimplified, QLocale::China },
-        { KEncodingProber::ChineseTraditional, QLocale::China },
-        { KEncodingProber::Japanese, QLocale::Japan },
-        { KEncodingProber::Korean, QLocale::NorthKorea },
+    const QList<QPair<KEncodingProber::ProberType, QLocale::Country>> fallback_list{
+        {KEncodingProber::ChineseSimplified, QLocale::China},
+        {KEncodingProber::ChineseTraditional, QLocale::China},
+        {KEncodingProber::Japanese, QLocale::Japan},
+        {KEncodingProber::Korean, QLocale::NorthKorea},
         //{KEncodingProber::Cyrillic, QLocale::Russia},
         //{KEncodingProber::Greek, QLocale::Greece},
         //{proberType, QLocale::system().country()}
@@ -592,7 +594,7 @@ bool Utils::isMimeTypeSupport(const QString &filepath)
 bool Utils::isDraftFile(const QString &filepath)
 {
     QString draftDir = QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation)).first())
-                               .filePath("blank-files");
+                           .filePath("blank-files");
     draftDir = QDir::cleanPath(draftDir);
     QString dir = QFileInfo(filepath).dir().absolutePath();
     return dir == draftDir;
@@ -605,7 +607,7 @@ bool Utils::isDraftFile(const QString &filepath)
 bool Utils::isBackupFile(const QString &filepath)
 {
     QString backupDir = QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation)).first())
-                                .filePath("backup-files");
+                            .filePath("backup-files");
     QString dir = QFileInfo(filepath).dir().absolutePath();
     return dir == backupDir;
 }
@@ -628,8 +630,7 @@ QStringList Utils::cleanPath(const QStringList &filePaths)
 QString Utils::localDataPath()
 {
     auto dataPaths = Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation));
-    return dataPaths.isEmpty() ? QDir::homePath() + "/.local/share/deepin/deepin-editor/"
-                               : dataPaths.first();
+    return dataPaths.isEmpty() ? QDir::homePath() + "/.local/share/deepin/deepin-editor/" : dataPaths.first();
 }
 
 const QStringList Utils::getEncodeList()
@@ -694,16 +695,16 @@ void Utils::clearChildrenFocus(QObject *objParent)
 {
     // 可以获取焦点的控件名称列表
     QStringList foucswidgetlist;
-    //foucswidgetlist << "QLineEdit" << TERM_WIDGET_NAME;
+    // foucswidgetlist << "QLineEdit" << TERM_WIDGET_NAME;
 
-    //qDebug() << "checkChildrenFocus start" << objParent->children().size();
+    // qDebug() << "checkChildrenFocus start" << objParent->children().size();
     for (QObject *obj : objParent->children()) {
         if (!obj->isWidgetType()) {
             continue;
         }
         QWidget *widget = static_cast<QWidget *>(obj);
         if (Qt::NoFocus != widget->focusPolicy()) {
-            //qDebug() << widget << widget->focusPolicy() << widget->metaObject()->className();
+            // qDebug() << widget << widget->focusPolicy() << widget->metaObject()->className();
             if (!foucswidgetlist.contains(widget->metaObject()->className())) {
                 widget->setFocusPolicy(Qt::NoFocus);
             }
@@ -711,7 +712,7 @@ void Utils::clearChildrenFocus(QObject *objParent)
         clearChildrenFocus(obj);
     }
 
-    //qDebug() << "checkChildrenFocus over" << objParent->children().size();
+    // qDebug() << "checkChildrenFocus over" << objParent->children().size();
 }
 
 void Utils::clearChildrenFoucusEx(QWidget *pWidget)
@@ -720,7 +721,8 @@ void Utils::clearChildrenFoucusEx(QWidget *pWidget)
 
     QObjectList childern = pWidget->children();
 
-    if (childern.size() <= 0) return;
+    if (childern.size() <= 0)
+        return;
 
     foreach (QObject *child, childern) {
         if (!child->isWidgetType()) {
@@ -738,7 +740,8 @@ void Utils::setChildrenFocus(QWidget *pWidget, Qt::FocusPolicy policy)
 
     QObjectList childern = pWidget->children();
 
-    if (childern.size() <= 0) return;
+    if (childern.size() <= 0)
+        return;
 
     foreach (QObject *child, childern) {
         if (!child->isWidgetType()) {
@@ -789,7 +792,8 @@ void Utils::killProcessByName(const char *pstrName)
 
 QString Utils::getStringMD5Hash(const QString &input)
 {
-    QByteArray byteArray = input.toUtf8();;
+    QByteArray byteArray = input.toUtf8();
+    ;
     QByteArray md5Path = QCryptographicHash::hash(byteArray, QCryptographicHash::Md5);
 
     return md5Path.toHex();
@@ -799,9 +803,8 @@ bool Utils::activeWindowFromDock(quintptr winId)
 {
     bool bRet = false;
     // 优先采用V23接口
-    QDBusInterface dockDbusInterfaceV23("org.deepin.dde.daemon.Dock1",
-                                        "/org/deepin/dde/daemon/Dock1",
-                                        "org.deepin.dde.daemon.Dock1");
+    QDBusInterface dockDbusInterfaceV23(
+        "org.deepin.dde.daemon.Dock1", "/org/deepin/dde/daemon/Dock1", "org.deepin.dde.daemon.Dock1");
     if (dockDbusInterfaceV23.isValid()) {
         QDBusReply<void> reply = dockDbusInterfaceV23.call("ActivateWindow", winId);
         if (!reply.isValid()) {
@@ -811,9 +814,8 @@ bool Utils::activeWindowFromDock(quintptr winId)
         }
     }
 
-    QDBusInterface dockDbusInterfaceV20("com.deepin.dde.daemon.Dock",
-                                        "/com/deepin/dde/daemon/Dock",
-                                        "com.deepin.dde.daemon.Dock");
+    QDBusInterface dockDbusInterfaceV20(
+        "com.deepin.dde.daemon.Dock", "/com/deepin/dde/daemon/Dock", "com.deepin.dde.daemon.Dock");
     if (dockDbusInterfaceV20.isValid() && !bRet) {
         QDBusReply<void> reply = dockDbusInterfaceV20.call("ActivateWindow", winId);
         if (!reply.isValid()) {
@@ -856,17 +858,17 @@ QString Utils::getSystemLan()
         return m_systemLanguage;
     } else {
         switch (getSystemVersion()) {
-        case V23:
-            m_systemLanguage = QLocale::system().name();
-            break;
-        default: {
-            QDBusInterface ie("com.deepin.daemon.LangSelector",
-                              "/com/deepin/daemon/LangSelector",
-                              "com.deepin.daemon.LangSelector",
-                              QDBusConnection::sessionBus());
-            m_systemLanguage = ie.property("CurrentLocale").toString();
-            break;
-        }
+            case V23:
+                m_systemLanguage = QLocale::system().name();
+                break;
+            default: {
+                QDBusInterface ie("com.deepin.daemon.LangSelector",
+                                  "/com/deepin/daemon/LangSelector",
+                                  "com.deepin.daemon.LangSelector",
+                                  QDBusConnection::sessionBus());
+                m_systemLanguage = ie.property("CurrentLocale").toString();
+                break;
+            }
         }
 
         qWarning() << "getSystemLan is" << m_systemLanguage;
@@ -891,7 +893,7 @@ Utils::SystemVersion Utils::getSystemVersion()
     return V20;
 }
 
-//judge whether the protocol is wayland
+// judge whether the protocol is wayland
 bool Utils::isWayland()
 {
     static QString protocol;
@@ -901,7 +903,6 @@ bool Utils::isWayland()
 
     return protocol.contains("wayland");
 }
-
 
 QString Utils::lineFeed(const QString &text, int nWidth, const QFont &font, int nElidedRow)
 {
@@ -1023,7 +1024,8 @@ QString Utils::libPath(const QString &strlib)
     QDir dir;
     QString path = QLibraryInfo::location(QLibraryInfo::LibrariesPath);
     dir.setPath(path);
-    QStringList list = dir.entryList(QStringList() << (strlib + "*"), QDir::NoDotAndDotDot | QDir::Files);   //filter name with strlib
+    QStringList list =
+        dir.entryList(QStringList() << (strlib + "*"), QDir::NoDotAndDotDot | QDir::Files);  // filter name with strlib
 
     if (list.contains(strlib))
         return strlib;
@@ -1091,15 +1093,16 @@ void Utils::recordCloseFile(const QString &filePath)
 void Utils::sendFloatMessageFixedFont(QWidget *par, const QIcon &icon, const QString &message)
 {
     // 以下代码和 DMessageManager::sendMessage() 流程一致。
-    QWidget *content = par->findChild<QWidget *>("_d_message_manager_content", Qt::FindDirectChildrenOnly);
-    auto msgWidgets = content->findChildren<DFloatingMessage *>(QString(), Qt::FindDirectChildrenOnly);
-    auto text_message_count = std::count_if(msgWidgets.begin(), msgWidgets.end(), [](DFloatingMessage *msg) {
-        return bool(msg->messageType() == DFloatingMessage::TransientType);
-    });
+    if (QWidget *content = par->findChild<QWidget *>("_d_message_manager_content", Qt::FindDirectChildrenOnly)) {
+        auto msgWidgets = content->findChildren<DFloatingMessage *>(QString(), Qt::FindDirectChildrenOnly);
+        auto text_message_count = std::count_if(msgWidgets.begin(), msgWidgets.end(), [](DFloatingMessage *msg) {
+            return bool(msg->messageType() == DFloatingMessage::TransientType);
+        });
 
-    // TransientType 类型的通知消息，最多只允许同时显示三个
-    if (text_message_count >= 3)
-        return;
+        // TransientType 类型的通知消息，最多只允许同时显示三个
+        if (text_message_count >= 3)
+            return;
+    }
 
     // 浮动临时提示信息，自动销毁
     DFloatingMessage *floMsg = new DFloatingMessage(DFloatingMessage::TransientType);

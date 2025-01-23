@@ -109,7 +109,7 @@ IflytekAiAssistant::CallStatus IflytekAiAssistant::textToSpeech()
 
     // playing, stop first
     if (isTtsInWorking()) {
-        if (Success != stopTtsDirectly()) {
+        if (Success != stopTtsDirectlyInternal()) {
             return Failed;
         }
     }
@@ -121,6 +121,16 @@ IflytekAiAssistant::CallStatus IflytekAiAssistant::textToSpeech()
 }
 
 IflytekAiAssistant::CallStatus IflytekAiAssistant::stopTtsDirectly() const
+{
+    // BUG-301561 : disable stop tts when close tab or window
+#ifdef ENABLE_STOP_TTS
+    return stopTtsDirectlyInternal()
+#else
+    return Enable;
+#endif
+}
+
+IflytekAiAssistant::CallStatus IflytekAiAssistant::stopTtsDirectlyInternal() const
 {
     if (Enable != status()) {
         return status();
