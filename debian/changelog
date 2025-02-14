@@ -1,3 +1,10 @@
+deepin-editor (6.5.14) unstable; urgency=medium
+
+  * Update version to 6.5.14
+  * Update linglong.yaml for qt6.8 runtime
+
+ -- wangrong <wangrong@uniontech.com>  Fri, 07 Feb 2025 13:44:45 +0800
+
 deepin-editor (6.5.13) unstable; urgency=medium
 
   * chore: v6.5.13 release.
