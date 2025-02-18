@@ -582,7 +582,9 @@ bool Utils::isMimeTypeSupport(const QString &filepath)
                   << "application/x-pak"
                   << "application/x-code-workspace"
                   << "application/toml"
-                  << "audio/x-mod";
+                  << "audio/x-mod"
+                  << "application/pkix-attr-cert"
+                  << "application/x-x509-ca-cert";
 
     if (textMimeTypes.contains(mimeType)) {
         return true;
