@@ -6942,6 +6942,9 @@ void TextEdit::keyPressEvent(QKeyEvent *e)
         } else if (key == "Shift+:") {
             copyLines();
             return;
+        } else if (key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "mark")) {
+            toggleMarkSelections();
+            return;
         } else if ((key == Utils::getKeyshortcutFromKeymap(m_settings, "editor", "togglereadonlymode")/* || key=="Alt+Meta+L"*/)
                    && m_bReadOnlyPermission == false) {
 //            setReadOnly(false);
