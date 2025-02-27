@@ -1,3 +1,9 @@
+deepin-editor (6.5.16) unstable; urgency=medium
+
+  * Bump version to 6.5.16
+
+ -- wangrong <wangrong@uniontech.com>  Thu, 27 Feb 2025 19:17:02 +0800
+
 deepin-editor (6.5.15) unstable; urgency=medium
 
   * chore: New version 6.5.15.
