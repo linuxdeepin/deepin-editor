@@ -2919,6 +2919,7 @@ void Window::loadTheme(const QString &path)
 {
     QFileInfo fileInfo(path);
     if (!fileInfo.exists()) {
+        qWarning() << "Theme file not exists!" << path;
         return;
     }
 
