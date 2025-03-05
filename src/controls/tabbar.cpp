@@ -338,11 +338,17 @@ void Tabbar::setTabText(int index, const QString &text)
 
 void Tabbar::setTabPalette(const QString &activeColor, const QString &highlightColor)
 {
+    // Not recommend manually setPalette()
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    Q_UNUSED(activeColor)
+    Q_UNUSED(highlightColor)
+#else
     QPalette pa = this->palette();
     pa.setColor(QPalette::Inactive, QPalette::HighlightedText, QColor(highlightColor));
     pa.setColor(QPalette::Inactive, QPalette::WindowText, QColor(activeColor));
     pa.setColor(QPalette::Active, QPalette::WindowText, QColor(activeColor));
     setPalette(pa);
+#endif
 }
 
 void Tabbar::setBackground(const QString &startColor, const QString &endColor)

@@ -4655,10 +4655,16 @@ void TextEdit::tellFindBarClose()
 
 void TextEdit::setEditPalette(const QString &activeColor, const QString &inactiveColor)
 {
+    // Not recommend manually setPalette()
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    Q_UNUSED(activeColor)
+    Q_UNUSED(inactiveColor)
+#else
     QPalette pa = this->palette();
     pa.setColor(QPalette::Inactive, QPalette::Text, QColor(inactiveColor));
     pa.setColor(QPalette::Active, QPalette::Text, QColor(activeColor));
     setPalette(pa);
+#endif
 }
 
 void TextEdit::setCodeFoldWidgetHide(bool isHidden)
