@@ -1,3 +1,10 @@
+deepin-editor (6.5.17) unstable; urgency=medium
+
+  * fix: text color not change with theme change(Bug: 305473)
+  * fix: crash on hover leave statusbar menu
+
+ -- renbin <renbin@uniontech.com>  Thu, 06 Mar 2025 19:04:48 +0800
+
 deepin-editor (6.5.16) unstable; urgency=medium
 
   * Bump version to 6.5.16
