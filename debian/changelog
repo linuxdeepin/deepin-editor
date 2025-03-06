@@ -1,3 +1,10 @@
+deepin-editor (6.5.17) unstable; urgency=medium
+
+  * tag 6.5.17
+  * update linglong base&runtime.
+
+ -- re2zero <yangwu@uniontech.com>  Thu, 06 Mar 2025 10:48:45 +0800
+
 deepin-editor (6.5.16) unstable; urgency=medium
 
   * Bump version to 6.5.16
