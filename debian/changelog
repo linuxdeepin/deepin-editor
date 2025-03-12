@@ -1,3 +1,9 @@
+deepin-editor (6.5.17) unstable; urgency=medium
+
+  * Bump version to 6.5.17
+
+ -- Wang Yu <wangyu@uniontch.com>  Wed, 12 Mar 2025 20:21:34 +0800
+
 deepin-editor (6.5.16) unstable; urgency=medium
 
   * Bump version to 6.5.16
