@@ -1058,11 +1058,11 @@ void Window::openFile()
     QStringList supportfileNames;
     QStringList otherfiles;
     for (const QString &file : dialog.selectedFiles()) {
-
-        if (Utils::isMimeTypeSupport(file)) {
-            supportfileNames.append(file);
+        QString canonicalFile = QFileInfo(file).canonicalFilePath();
+        if (Utils::isMimeTypeSupport(canonicalFile)) {
+            supportfileNames.append(canonicalFile);
         } else {
-            otherfiles.append(file);
+            otherfiles.append(canonicalFile);
         }
 
         //先添加支持的文件
@@ -3510,7 +3510,7 @@ void Window::dropEvent(QDropEvent *event)
         QStringList supportfileNames;
         QStringList otherfiles;
         for (auto url : mimeData->urls()) {
-            QString file = url.toLocalFile();
+            QString file = QFileInfo(url.toLocalFile()).canonicalFilePath();
             if (Utils::isMimeTypeSupport(file)) {
                 supportfileNames.append(file);
             } else {

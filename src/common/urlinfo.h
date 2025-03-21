@@ -18,7 +18,7 @@ public:
     {
         // Just check if the path is an existing file.
         if (QFile::exists(path)) {
-            url = QUrl::fromLocalFile(QDir::current().absoluteFilePath(path));
+            url = QUrl::fromLocalFile(QFileInfo(path).canonicalFilePath());
             return;
         }
 
@@ -37,7 +37,7 @@ public:
         // assume a local file and just convert it to an url.
         if (!url.isValid()) {
             // create absolute file path, we will e.g. pass this over dbus to other processes
-            url = QUrl::fromLocalFile(QDir::current().absoluteFilePath(path));
+            url = QUrl::fromLocalFile(QFileInfo(path).canonicalFilePath());
         }
     }
 

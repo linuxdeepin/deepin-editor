@@ -419,7 +419,8 @@ void StartManager::openFilesInWindow(QStringList files)
         window->activateWindow();
     } else {
         for (const QString &file : files) {
-            FileTabInfo info = getFileTabInfo(file);
+            QString canonicalFile = QFileInfo(file).canonicalFilePath();
+            FileTabInfo info = getFileTabInfo(canonicalFile);
 
             // Open exist tab if file has opened.
             if (info.windowIndex != -1) {
@@ -429,7 +430,7 @@ void StartManager::openFilesInWindow(QStringList files)
             else {
                 Window *window = createWindow();
                 window->showCenterWindow(true);
-                window->addTab(file);
+                window->addTab(canonicalFile);
             }
         }
     }
@@ -471,13 +472,13 @@ void StartManager::openFilesInTab(QStringList files)
         }
     } else {
         for (const QString &file : files) {
-
-            if (!checkPath(file)) {
+            QString canonicalFile = QFileInfo(file).canonicalFilePath();
+            if (!checkPath(canonicalFile)) {
                 // 存在已打开文件时，进行下一文件判断
                 continue;
             }
 
-            FileTabInfo info = getFileTabInfo(file);
+            FileTabInfo info = getFileTabInfo(canonicalFile);
 
             // Open exist tab if file has opened.
             if (info.windowIndex != -1) {
@@ -489,13 +490,13 @@ void StartManager::openFilesInTab(QStringList files)
                 window->showCenterWindow(true);
                 QTimer::singleShot(50, [ = ] {
                     recoverFile(window);
-                    window->addTab(file);
+                    window->addTab(canonicalFile);
                 });
             }
             // Open file tab in first window of window list.
             else {
                 Window *window = m_windows[0];
-                window->addTab(file);
+                window->addTab(canonicalFile);
                 //window->setWindowState(Qt::WindowActive);
                 //通过dbus接口从任务栏激活窗口
                 if (!Q_LIKELY(Utils::activeWindowFromDock(window->winId()))) {
