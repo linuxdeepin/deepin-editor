@@ -20,7 +20,6 @@ Build-Depends:
  libpolkit-qt6-1-dev | libpolkit-qt5-1-dev,
  libkf6syntaxhighlighting-dev | libkf5syntaxhighlighting-dev,
  libkf6codecs-dev | libkf5codecs-dev,
- libdframeworkdbus-dev,
  libgtest-dev,
  libgmock-dev,
  libchardet-dev,

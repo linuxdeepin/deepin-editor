@@ -22,7 +22,6 @@ build: |
   bash ./install_dep linglong/sources "${PREFIX}"
 
   # 修改路径
-  sed -i "s|/usr|$(echo $PREFIX)|g" ${PREFIX}/lib/${TRIPLET}/cmake/DFrameworkdbus/DFrameworkdbusConfig.cmake
   sed -i 's|set(QT_LRELEASE "/lib/qt${QT_VERSION_MAJOR}/bin/lrelease")|set(QT_LRELEASE "lrelease")|g' cmake/translation-generate.cmake
 
   # 构建
@@ -228,12 +227,6 @@ sources:
   - kind: file
     url: http://10.20.64.92:8080/testing25_daily/pool/main/libd/libdeflate/libdeflate0_1.18-1_amd64.deb
     digest: 1b411007d982c5f2f2a6d1e2d0af7a85cbc274770e533fbd895fc54956a995ba
-  - kind: file
-    url: http://10.20.64.92:8080/testing25_daily/pool/main/d/dde-qt-dbus-factory/libdframeworkdbus-dev_6.0.1_amd64.deb
-    digest: de285dd1d32d74341aab6ca7bc91d2b99cd5ac23bdaaa503e14c259c92f7e5d7
-  - kind: file
-    url: http://10.20.64.92:8080/testing25_daily/pool/main/d/dde-qt-dbus-factory/libdframeworkdbus2_6.0.1_amd64.deb
-    digest: e22a0658f7b9eb395cd8a6e8cacf6dcdc6988581de152719cbef410d8ccf5def
   - kind: file
     url: http://10.20.64.92:8080/testing25_daily/pool/main/d/double-conversion/libdouble-conversion3_3.3.0-1_amd64.deb
     digest: e6c6d028a74d0a752ae638ec19b8239f404c36d676c7569936f31000d25a75f4

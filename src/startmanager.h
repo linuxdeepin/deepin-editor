@@ -8,12 +8,12 @@
 #include "widgets/window.h"
 #include "editor/editwrapper.h"
 
-#include <com_deepin_dde_daemon_dock.h>
-#include <com_deepin_dde_daemon_dock_entry.h>
+#include "dbus/com_deepin_dde_daemon_dock.h"
+#include "dbus/com_deepin_dde_daemon_dock_entry.h"
 #include <QObject>
 
 using Dock          = com::deepin::dde::daemon::Dock;
-using Entry         = com::deepin::dde::daemon::dock::Entry;
+using Entry         = com::deepin::dde::daemon::Entry;
 
 
 class StartManager : public QObject
