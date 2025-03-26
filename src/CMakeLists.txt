@@ -14,6 +14,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/editor)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/thememodule)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/widgets)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/basepub)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/dbus)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/lib/include)
 
 # Find the library
@@ -48,7 +49,6 @@ else()
     include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 endif()
 
-find_package(DFrameworkdbus REQUIRED)
 find_package(ICU COMPONENTS i18n uc REQUIRED)
 
 pkg_check_modules(chardet REQUIRED chardet)
@@ -59,7 +59,6 @@ link_directories(${chardet_LIBRARY_DIRS})
 add_executable(deepin-editor ${SRCS} deepin-editor.qrc)
 target_link_libraries(deepin-editor
     ${LINK_LIBS}
-    ${DFrameworkdbus_LIBRARIES}
     ${chardet_LIBRARY_DIRS}
     ICU::i18n
     ICU::uc

@@ -54,7 +54,6 @@ else()
     include_directories(${Qt5Gui_PRIVATE_INCLUDE_DIRS})
 endif()
 
-find_package(DFrameworkdbus REQUIRED)
 find_package(GTest REQUIRED)
 find_package(ICU COMPONENTS i18n uc REQUIRED)
 
@@ -100,7 +99,6 @@ add_executable(${PROJECT_NAME_TEST}
 target_link_libraries(${PROJECT_NAME_TEST}
         gmock gmock_main gtest gtest_main
     ${LINK_LIBS}
-    ${DFrameworkdbus_LIBRARIES}
     ${GSTREAMER_LIBRARIES}
     ${LIBDMR_LIBRARIES}
     ${GTEST_LIBRARIES}
