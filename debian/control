@@ -27,7 +27,6 @@ Build-Depends:
  libicu-dev
 Rules-Requires-Root: no
 Standards-Version: 4.5.1
-Homepage: https://github.com/linuxdeepin/deepin-editor
 
 Package: deepin-editor
 Architecture: any
