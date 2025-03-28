@@ -1,3 +1,9 @@
+deepin-editor (6.5.20) unstable; urgency=medium
+
+  * fix: update lrelease path in translation generation
+
+ -- renbin <renbin@uniontech.com>  Fri, 28 Mar 2025 10:02:21 +0800
+
 deepin-editor (6.5.19) unstable; urgency=medium
 
   * fix: use canonical file path(Bug: 297679)
