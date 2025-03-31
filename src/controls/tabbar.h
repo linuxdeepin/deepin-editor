@@ -71,7 +71,6 @@ protected:
     QSize tabSizeHint(int index) const;
     QSize minimumTabSizeHint(int index) const;
     QSize maximumTabSizeHint(int index) const;
-    void mousePressEvent(QMouseEvent *e);
     void dropEvent(QDropEvent *e);
     void resizeEvent(QResizeEvent *event);
 
