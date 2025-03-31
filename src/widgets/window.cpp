@@ -2031,12 +2031,16 @@ void Window::displayShortcuts()
                rect.y() + rect.height() / 2);
     // 获取当前焦点位置（光标所在屏幕中心）
     QScreen *screen = nullptr;
+#if DTK_VERSION > DTK_VERSION_CHECK(5, 5, 2, 0)
     if (DGuiApplicationHelper::isTabletEnvironment()) {
         // bug 88079 避免屏幕旋转弹出位置错误
         screen = qApp->primaryScreen();
     } else {
         screen = QGuiApplication::screenAt(QCursor::pos());
     }
+#else
+    screen = QGuiApplication::screenAt(QCursor::pos());
+#endif
 
     if (screen) {
         pos = screen->geometry().center();
