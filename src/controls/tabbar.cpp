@@ -58,6 +58,7 @@ Tabbar::Tabbar(QWidget *parent)
     setTabsClosable(true);
     setVisibleAddButton(true);
     setDragable(true);
+    setAcceptDrops(true);
     // setStartDragDistance(40);
     setElideMode(Qt::ElideMiddle);
     setTabPalette(palette().buttonText().color().name(), palette().highlightedText().color().name());
@@ -649,7 +650,10 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
                 return true;
             }
         }
-
+        if (mouseEvent->button() == Qt::MidButton) {
+            emit tabCloseRequested(tabAt(QPoint(mouseEvent->x(), mouseEvent->y())));
+            return true;
+        }
     } else if (event->type() == QEvent::DragEnter) {
 
 //        if ((!e->source() || e->source()->parent() != this) &&
@@ -663,15 +667,6 @@ bool Tabbar::eventFilter(QObject *, QEvent *event)
     }
 
     return false;
-}
-
-void Tabbar::mousePressEvent(QMouseEvent *e)
-{
-    if (e->button() == Qt::MidButton) {
-        emit tabCloseRequested(tabAt(QPoint(e->x(), e->y())));
-    }
-
-    DTabBar::mousePressEvent(e);
 }
 
 void Tabbar::dropEvent(QDropEvent *e)
