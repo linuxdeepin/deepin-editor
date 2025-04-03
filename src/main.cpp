@@ -15,14 +15,12 @@
 #include <DMainWindow>
 #include <DWidgetUtil>
 #include <DLog>
-// #include <DApplicationSettings>
 #include <DSettingsOption>
 
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QDBusConnection>
 #include <QDBusInterface>
-// #include <QDesktopWidget>
 #include <QScreen>
 #include <QDebug>
 
@@ -39,7 +37,6 @@ int main(int argc, char *argv[])
     }
 
     QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
-    // QGuiApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 
     EditorApplication app(argc, argv);
     // save theme
