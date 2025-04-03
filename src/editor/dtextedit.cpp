@@ -520,6 +520,11 @@ void TextEdit::popRightMenu(QPoint pos)
         m_rightMenu->addAction(m_fullscreenAction);
     }
 
+    // Block ai actions on mips by default.
+#ifdef __mips__
+    if (IflytekAiAssistant::instance()->valid()) {
+#endif // __mips__
+
     // 'UOS AI' actions
     m_rightMenu->addAction(m_voiceReadingAction);
     m_voiceReadingAction->setEnabled((textCursor().hasSelection() || m_hasColumnSelection));
@@ -532,6 +537,10 @@ void TextEdit::popRightMenu(QPoint pos)
     m_rightMenu->addAction(m_translateAction);
     m_translateAction->setEnabled((textCursor().hasSelection() || m_hasColumnSelection));
 #endif
+
+#ifdef __mips__
+    }
+#endif  // __mips__
 
     if (!this->document()->isEmpty()) {
 
