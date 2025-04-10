@@ -1,3 +1,9 @@
+deepin-editor (6.5.22) unstable; urgency=medium
+
+  * fix: Disable AI features on MIPS(Bug: 309189)
+
+ -- renbin <renbin@uniontech.com>  Thu, 10 Apr 2025 19:17:12 +0800
+
 deepin-editor (6.5.21) unstable; urgency=medium
 
   * chore: update desktop file
