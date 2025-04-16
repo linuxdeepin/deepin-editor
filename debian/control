@@ -31,10 +31,10 @@ Standards-Version: 4.5.1
 Package: deepin-editor
 Architecture: any
 Depends:
- dde-qt5integration,
  ${shlibs:Depends},
  ${misc:Depends},
- libdtkwidget5 (>= 5.4.11),
+ dde-qt6integration | dde-qt5integration,
+ libdtk6widget | libdtkwidget5 (>= 5.4.11),
  libuchardet0 (>= 0.0.6),
  libchardet1
 Description: Text editor for DDE (Deepin Desktop Environment)
