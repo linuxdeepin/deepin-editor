@@ -48,6 +48,14 @@ public:
     };
 
     /**
+     * @brief A text operation type for memory checking
+     */
+    enum OperationType {
+        CopyOperation,
+        PasteOperation
+    };
+
+    /**
      * @brief 当前运行时系统环境
      */
     enum SystemVersion {
@@ -156,6 +164,11 @@ public:
 
     // 发送浮动提示信息，并且字体大小跟随 qApp 应用默认字体而不是父窗口字体
     static void sendFloatMessageFixedFont(QWidget *par, const QIcon &icon, const QString &message);
+
+    // Gets system memory information from /proc/meminfo
+    static bool getSystemMemoryInfo(qlonglong &totalMemory, qlonglong &freeMemory);
+    // Checks if the system has sufficient memory to perform the specified operation.
+    static bool isMemorySufficientForOperation(OperationType operationType, qlonglong operationDataSize, qlonglong currentDocumentSize);
 
 private:
     static QString m_systemLanguage;
