@@ -448,6 +448,10 @@ void Window::updateSaveAsFileName(QString strOldFilePath, QString strNewFilePath
 {
     int tabIndex = m_tabbar->indexOf(strOldFilePath);
     EditWrapper *wrapper = m_wrappers.value(strOldFilePath);
+    if (!wrapper) {
+        qWarning() << "Failed to get wrapper for old path";
+        return;
+    }
     m_tabbar->updateTab(tabIndex, strNewFilePath, QFileInfo(strNewFilePath).fileName());
     wrapper->updatePath(strNewFilePath);
 
@@ -464,6 +468,10 @@ void Window::updateSabeAsFileNameTemp(QString strOldFilePath, QString strNewFile
 {
     int tabIndex = m_tabbar->indexOf(strOldFilePath);
     EditWrapper *wrapper = m_wrappers.value(strOldFilePath);
+    if (!wrapper) {
+        qWarning() << "Failed to get wrapper for old path";
+        return;
+    }
     m_tabbar->updateTab(tabIndex, strNewFilePath, QFileInfo(strNewFilePath).fileName());
     wrapper->updatePath(strNewFilePath);
     m_wrappers.remove(strOldFilePath);
@@ -973,12 +981,28 @@ EditWrapper *Window::currentWrapper()
 EditWrapper *Window::wrapper(const QString &filePath)
 {
     if (m_wrappers.contains(filePath)) {
-        return m_wrappers.value(filePath);
+        EditWrapper* wrapper = m_wrappers.value(filePath);
+        // Although contains check passed, add a safety check
+        if (!wrapper) {
+             qWarning() << "Wrapper is null even after contains check";
+             return nullptr;
+        }
+        return wrapper;
     } else {
-        for (auto wrapper : m_wrappers) {
-            QString truePath = wrapper->textEditor()->getTruePath();
+        for (auto iterWrapper : m_wrappers) {
+            // Check if iterWrapper itself is valid before accessing members
+            if (!iterWrapper || !iterWrapper->textEditor()) continue;
+
+            QString truePath = iterWrapper->textEditor()->getTruePath();
             if (truePath == filePath) {
-                return m_wrappers.value(wrapper->textEditor()->getFilePath());
+                QString originalWrapperPath = iterWrapper->textEditor()->getFilePath();
+                EditWrapper* foundWrapper = m_wrappers.value(originalWrapperPath);
+                if (!foundWrapper) {
+                    qWarning() << "Failed to get wrapper for original path when searching";
+                    // Continue searching instead of returning nullptr immediately
+                    continue;
+                }
+                return foundWrapper;
             }
         }
 
@@ -989,7 +1013,12 @@ EditWrapper *Window::wrapper(const QString &filePath)
 TextEdit *Window::getTextEditor(const QString &filepath)
 {
     if (m_wrappers.contains(filepath)) {
-        return m_wrappers.value(filepath)->textEditor();
+        EditWrapper* wrapper = m_wrappers.value(filepath);
+        if (!wrapper) {
+             qWarning() << "Wrapper is null even after contains check";
+             return nullptr;
+        }
+        return wrapper->textEditor();
     } else {
         return nullptr;
     }
@@ -1270,6 +1299,10 @@ QString Window::saveBlankFileToDisk()
 {
     QString filePath = m_tabbar->currentPath();
     EditWrapper *wrapper = m_wrappers.value(filePath);
+    if (!wrapper) {
+        qWarning() << "Failed to get wrapper for current path";
+        return QString();
+    }
     bool isDraft = Utils::isDraftFile(filePath);
     QFileInfo fileInfo(filePath);
 
@@ -1451,10 +1484,18 @@ void Window::setFontSizeWithConfig(EditWrapper *wrapper)
 void Window::popupFindBar()
 {
 #if 0
+    // This block seems related to UI focus management and might be outdated or incorrect.
+    // The original code directly calls textEditor()->setFocus() without checking if the wrapper or textEditor is null.
+    // Adding a null check here.
     if (m_findBar->isVisible()) {
         m_findBar->move(QPoint(10, height() - 59));
         if (m_findBar->isFocus()) {
-            m_wrappers.value(m_tabbar->currentPath())->textEditor()->setFocus();
+            EditWrapper* wrapper = m_wrappers.value(m_tabbar->currentPath());
+            if (wrapper && wrapper->textEditor()) {
+                wrapper->textEditor()->setFocus();
+            } else {
+                 qWarning() << "Failed to get wrapper or text editor to set focus in popupFindBar";
+            }
         } else {
             m_findBar->focus();
         }
@@ -2019,7 +2060,12 @@ void Window::remberPositionRestore()
         const int &column = m_remberPositionColumn;
 
         activeTab(m_tabbar->indexOf(m_remberPositionFilePath));
-        m_wrappers.value(filePath)->textEditor()->scrollToLine(scrollOffset, row, column);
+        EditWrapper* wrapper = m_wrappers.value(filePath);
+         if (!wrapper || !wrapper->textEditor()) {
+             qWarning() << "Failed to get wrapper or text editor in remberPositionRestore";
+             return;
+         }
+        wrapper->textEditor()->scrollToLine(scrollOffset, row, column);
     }
 }
 
@@ -2744,6 +2790,14 @@ void Window::handleCurrentChanged(const int &index)
     if (m_wrappers.contains(filepath)) {
         bool bIsContains = false;
         EditWrapper *wrapper = m_wrappers.value(filepath);
+        if (!wrapper || !wrapper->textEditor()) {
+             qWarning() << "Failed to get wrapper or text editor in handleCurrentChanged";
+             // Attempt to remove potentially problematic widget if wrapper is null but was in m_wrappers
+             if (!wrapper && m_editorWidget) {
+                 // Find widget by path if possible, or handle error
+             }
+             return; // Exit early if wrapper or editor is invalid
+         }
         wrapper->textEditor()->setFocus();
         for (int i = 0; i < m_editorWidget->count(); i++) {
             if (m_editorWidget->widget(i) == wrapper) {
@@ -2785,7 +2839,12 @@ void Window::handleJumpLineBarJumpToLine(const QString &filepath, int line, bool
 void Window::handleBackToPosition(const QString &file, int row, int column, int scrollOffset)
 {
     if (m_wrappers.contains(file)) {
-        m_wrappers.value(file)->textEditor()->scrollToLine(scrollOffset, row, column);
+        EditWrapper* wrapper = m_wrappers.value(file);
+        if (!wrapper || !wrapper->textEditor()) {
+             qWarning() << "Failed to get wrapper or text editor in handleBackToPosition";
+             return;
+         }
+        wrapper->textEditor()->scrollToLine(scrollOffset, row, column);
     }
 }
 
@@ -2896,12 +2955,16 @@ void Window::handleRemoveSearchKeyword()
 void Window::handleUpdateSearchKeyword(QWidget *widget, const QString &file, const QString &keyword)
 {
     if (file == m_tabbar->currentPath() && m_wrappers.contains(file)) {
+        EditWrapper* wrapper = m_wrappers.value(file);
+        if (!wrapper || !wrapper->textEditor()) {
+             qWarning() << "Failed to get wrapper or text editor in handleUpdateSearchKeyword";
+             return;
+         }
 
         // Update input widget warning status along with keyword match situation.
-        bool findKeyword = m_wrappers.value(file)->textEditor()->highlightKeyword(keyword, m_wrappers.value(file)->textEditor()->getPosition());
+        bool findKeyword = wrapper->textEditor()->highlightKeyword(keyword, wrapper->textEditor()->getPosition());
         m_keywordForSearchAll = keyword;
         m_keywordForSearch = keyword;
-        //    bool findKeyword = m_wrappers.value(file)->textEditor()->findKeywordForward(keyword);
         bool emptyKeyword = keyword.trimmed().isEmpty();
 
         auto *findBarWidget = qobject_cast<FindBar *>(widget);
@@ -3273,6 +3336,11 @@ void Window::checkTabbarForReload()
     tabName.remove(readOnlyStr);
 
     EditWrapper *wrapper = m_wrappers.value(m_tabbar->currentPath());
+    if (!wrapper || !wrapper->textEditor()) {
+        qWarning() << "Failed to get wrapper or text editor in checkTabbarForReload";
+        return;
+    }
+
     if (fi.exists() && !fi.isWritable()) {
         tabName.append(readOnlyStr);
         m_tabbar->setTabText(m_tabbar->currentIndex(), tabName);
