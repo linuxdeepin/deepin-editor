@@ -2710,7 +2710,7 @@ void TextEdit::slotCopyAction(bool checked)
 {
     Q_UNUSED(checked);
 
-    if (isAbleOperation(OperationType::CopyOperation)) {
+    if (isAbleOperation(Utils::CopyOperation)) {
         copy();
     } else {
 #ifdef DTKWIDGET_CLASS_DSizeMode
@@ -2724,7 +2724,7 @@ void TextEdit::slotCopyAction(bool checked)
 void TextEdit::slotPasteAction(bool checked)
 {
     Q_UNUSED(checked);
-    if (isAbleOperation(OperationType::PasteOperation)) {
+    if (isAbleOperation(Utils::PasteOperation)) {
         paste();
     } else {
 #ifdef DTKWIDGET_CLASS_DSizeMode
@@ -3994,81 +3994,33 @@ void TextEdit::SendtoggleReadmessage()
     }
 }
 
-bool TextEdit::isAbleOperation(int iOperationType)
+bool TextEdit::isAbleOperation(Utils::OperationType iOperationType)
 {
-    /*
-     * 读取并计算系统剩余内存大小，根据系统剩余内存大小决定本次复制/粘贴操作是否可继续执行
-     * 解决的问题：复制/粘贴大文本字符内容(50MB/100MB/500MB)时会占用大量内存，系统内存不足会导致应用闪退
-     */
     bool bRet = true;
-    qlonglong memory = 0;
-    qlonglong memoryAll = 0;
-    bool bVaule = false;
-    QFile file(PROC_MEMINFO_PATH);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qInfo() << "Open " << PROC_MEMINFO_PATH << " failed.";
-        return bRet;
-    }
+    qlonglong operationDataSize = 0;
+    qlonglong currentDocSize = document()->characterCount();
 
-    QTextStream stream(&file);
-    qlonglong buff[16] = {0};
-    for (int i = 0; i <= 15; ++i) {
-        QString line = stream.readLine();
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-        QRegExp reg("\\s{1,}");
-#else
-        QRegularExpression reg("\\s{1,}");
-#endif
-        QStringList list = line.split(reg);
-        if (list.size() >= 2) {
-            buff[i] = list.at(1).toLongLong(&bVaule);
-        }
-    }
-
-    memoryAll = buff[0];
-    memory = buff[0] - buff[2];
-    /* 系统当前可用内存大小 */
-    qlonglong iSystemAvailableMemory = memoryAll - memory;
-    file.close();
-
-    if (iOperationType == OperationType::CopyOperation) {
+    if (iOperationType == Utils::CopyOperation) {
         if (m_isSelectAll) {
-            if (characterCount() / DATA_SIZE_1024 * COPY_CONSUME_MEMORY_MULTIPLE > iSystemAvailableMemory) {
-                bRet = false;
-            }
+            operationDataSize = currentDocSize;
         } else if (m_bIsAltMod && !m_altModSelections.isEmpty()) {
-            QString strSelectText;
             for (auto it = m_altModSelections.begin(); it != m_altModSelections.end(); it++) {
-                auto text = (*it).cursor.selectedText();
-                strSelectText += text;
+                auto &itCursor = (*it).cursor;
+                operationDataSize += (itCursor.selectionEnd() - itCursor.selectionStart());
                 if (it != m_altModSelections.end() - 1)
-                    strSelectText += "\n";
-            }
-            if (strSelectText.size() / DATA_SIZE_1024 * COPY_CONSUME_MEMORY_MULTIPLE > iSystemAvailableMemory) {
-                bRet = false;
+                    operationDataSize++;
             }
         } else if (textCursor().hasSelection()) {
-            if (textCursor().selection().toPlainText().size() / DATA_SIZE_1024 * COPY_CONSUME_MEMORY_MULTIPLE > iSystemAvailableMemory) {
-                bRet = false;
-            }
+            operationDataSize = textCursor().selectionEnd() - textCursor().selectionStart();
         }
-    } else if (iOperationType == OperationType::PasteOperation) {
+        bRet = Utils::isMemorySufficientForOperation(iOperationType, operationDataSize, currentDocSize);
+
+    } else if (iOperationType == Utils::PasteOperation) {
         const QClipboard *clipboard = QApplication::clipboard();
         QString strClipboardText = clipboard->text();
-        //文本内容大于系统总内存,不允许粘贴
-        if ((document()->characterCount() + strClipboardText.size()) / DATA_SIZE_1024 * PASTE_CONSUME_MEMORY_MULTIPLE > memoryAll) {
-            bRet = false;
-        }
-        if (strClipboardText.size() / DATA_SIZE_1024 * PASTE_CONSUME_MEMORY_MULTIPLE > iSystemAvailableMemory) {
-            bRet = false;
-        }
-
-        /* 当文本框里的文本内容达到800MB后，再次持续粘贴，则只允许粘贴<=500KB大小的文本内容 */
-        if (bRet == true) {
-            if (document()->characterCount() > (800 * DATA_SIZE_1024 * DATA_SIZE_1024) && strClipboardText.size() / DATA_SIZE_1024 > 500) {
-                bRet = false;
-            }
-        }
+        operationDataSize = strClipboardText.size();
+ 
+        bRet = Utils::isMemorySufficientForOperation(iOperationType, operationDataSize, currentDocSize);
     }
 
     return bRet;

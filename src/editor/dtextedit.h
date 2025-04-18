@@ -61,10 +61,6 @@ public:
         FileOpenBegin,
         FileOpenEnd,
     };
-    enum OperationType {
-        CopyOperation,
-        PasteOperation
-    };
 
     struct MarkOperation {
         MarkOperationType   type;           // 标记操作类型
@@ -604,7 +600,7 @@ private:
     void SendtoggleReadmessage();
 
     // 读取可用内存，判断并解决操作是否可继续执行
-    bool isAbleOperation(int iOperationType);
+    bool isAbleOperation(Utils::OperationType iOperationType);
     // 计算颜色标记替换信息列表
     void calcMarkReplaceList(QList<TextEdit::MarkReplaceInfo> &replaceList, const QString &oldText,
                              const QString &replaceText, const QString &withText, int offset = 0,
