@@ -1110,3 +1110,108 @@ void Utils::sendFloatMessageFixedFont(QWidget *par, const QIcon &icon, const QSt
 
     DMessageManager::instance()->sendMessage(par, floMsg);
 }
+
+/**
+ * @brief Gets system memory information from /proc/meminfo
+ * @param[out] totalMemory Total system memory in KB
+ * @param[out] freeMemory Available memory in KB (MemAvailable if exists, otherwise MemFree+Buffers+Cached)
+ * @return True if memory info was successfully read and parsed, false otherwise
+ */
+bool Utils::getSystemMemoryInfo(qlonglong &totalMemory, qlonglong &freeMemory)
+{
+    qlonglong memFree = 0;
+    qlonglong buffers = 0;
+    qlonglong cached = 0;
+    bool valueOk = false;
+
+    QFile file(PROC_MEMINFO_PATH);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning() << "Utils: Failed to open" << PROC_MEMINFO_PATH << "for memory check.";
+        return false;
+    }
+
+    QByteArray allData = file.readAll();
+    file.close();
+
+    QTextStream stream(allData);
+    QString line;
+    while (!stream.atEnd()) {
+        line = stream.readLine();
+        if (line.startsWith("MemTotal:")) {
+            totalMemory = line.section(':', 1, 1).trimmed().section(' ', 0, 0).toLongLong(&valueOk);
+        } else if (line.startsWith("MemFree:")) {
+            memFree = line.section(':', 1, 1).trimmed().section(' ', 0, 0).toLongLong(&valueOk);
+        } else if (line.startsWith("Buffers:")) {
+            buffers = line.section(':', 1, 1).trimmed().section(' ', 0, 0).toLongLong(&valueOk);
+        } else if (line.startsWith("Cached:")) {
+            cached = line.section(':', 1, 1).trimmed().section(' ', 0, 0).toLongLong(&valueOk);
+        } else if (line.startsWith("MemAvailable:")) {
+            freeMemory = line.section(':', 1, 1).trimmed().section(' ', 0, 0).toLongLong(&valueOk);
+            break;
+        }
+        if (stream.atEnd() && freeMemory == 0) {
+            freeMemory = memFree + buffers + cached;
+        }
+    }
+
+    return (totalMemory > 0 && freeMemory > 0);
+}
+
+/**
+ * @brief Checks if the system has sufficient memory to perform the specified operation.
+ * @param operationType The type of operation (Copy/Paste).
+ * @param operationDataSize The size of the data involved in the operation (bytes).
+ * @param currentDocumentSize The current size of the document (characters/bytes).
+ * @return True if memory is sufficient, false otherwise.
+ */
+bool Utils::isMemorySufficientForOperation(OperationType operationType, qlonglong operationDataSize, qlonglong currentDocumentSize)
+{
+    qlonglong memoryFree = 0;
+    qlonglong memoryTotal = 0;
+
+    if (!getSystemMemoryInfo(memoryTotal, memoryFree)) {
+        // Conservatively allow the operation if memory info cannot be read
+        return true;
+    }
+
+    // Convert KB to Bytes for comparison
+    qlonglong availableMemoryBytes = memoryFree * DATA_SIZE_1024;
+    qlonglong totalMemoryBytes = memoryTotal * DATA_SIZE_1024;
+
+    // Judge based on operation type
+    if (operationType == OperationType::CopyOperation) {
+        // Copy operation: Estimated memory consumption = data size * factor
+        qlonglong estimatedMemoryNeeded = operationDataSize * COPY_CONSUME_MEMORY_MULTIPLE;
+        if (estimatedMemoryNeeded > availableMemoryBytes) {
+            qWarning() << "Utils: Insufficient memory for copy operation. Needed(est):" << estimatedMemoryNeeded << "Available:" << availableMemoryBytes;
+            return false;
+        }
+    } else if (operationType == OperationType::PasteOperation) {
+        // Paste operation: Estimated memory consumption = paste data size * factor
+        qlonglong estimatedMemoryNeededForPaste = operationDataSize * PASTE_CONSUME_MEMORY_MULTIPLE;
+        // Estimated total document memory after paste
+        qlonglong estimatedTotalDocMemory = (currentDocumentSize + operationDataSize) * PASTE_CONSUME_MEMORY_MULTIPLE; // Estimate using paste factor
+
+        // Check if pasting the data itself would cause insufficient memory
+        if (estimatedMemoryNeededForPaste > availableMemoryBytes) {
+            qWarning() << "Utils: Insufficient memory for paste operation (paste data). Needed(est):" << estimatedMemoryNeededForPaste << "Available:" << availableMemoryBytes;
+            return false;
+        }
+
+        // Check if the estimated total document size after paste exceeds total system memory (very rough check)
+        if (estimatedTotalDocMemory > totalMemoryBytes) {
+            qWarning() << "Utils: Paste operation might exceed total system memory. Estimated total doc memory:" << estimatedTotalDocMemory << "Total system memory:" << totalMemoryBytes;
+            return false;
+        }
+
+        // Check specific threshold: Restrict paste size if document reaches 800MB
+        const qlonglong DOC_SIZE_LIMIT_800MB = 800LL * DATA_SIZE_1024 * DATA_SIZE_1024;
+        const qlonglong PASTE_SIZE_LIMIT_500KB = 500LL * DATA_SIZE_1024;
+        if (currentDocumentSize > DOC_SIZE_LIMIT_800MB && operationDataSize > PASTE_SIZE_LIMIT_500KB) {
+            qWarning() << "Utils: Paste operation restricted. Document size exceeds 800MB and paste data exceeds 500KB.";
+            return false;
+        }
+    }
+
+    return true; // Memory is sufficient
+}
