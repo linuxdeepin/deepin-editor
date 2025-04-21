@@ -8,9 +8,11 @@
  */
 
 #include "text_file_saver.h"
+#include "utils.h"
 #include "../encodes/detectcode.h"
 
 #include <QSaveFile>
+#include <QApplication>
 #include <QFileInfo>
 #include <QTextCodec>
 #include <QDebug>
@@ -122,6 +124,14 @@ bool TextFileSaver::saveToFile(QFileDevice &file)
             return false;
         }
 
+        auto characterCount = m_document->characterCount();
+        // Check memory for document content (QChar is 2 bytes)
+        qlonglong docMemoryNeeded = characterCount * 2;
+        if (!Utils::isMemorySufficientForOperation(Utils::OperationType::RawOperation, docMemoryNeeded, characterCount)) {
+            m_errorString = QObject::tr("Insufficient memory to load document content");
+            return false;
+        }
+
         const QString content = m_document->toPlainText();
         const ushort *data = content.utf16();
         const int length = content.length();
@@ -132,8 +142,16 @@ bool TextFileSaver::saveToFile(QFileDevice &file)
         for (int i = 0; i < length; i += chunkSize) {
             int currentChunkSize = qMin(chunkSize, length - i);
             QByteArray input(reinterpret_cast<const char *>(data + i), currentChunkSize * sizeof(ushort));
-            QByteArray outData;
 
+            // Check memory for encoding conversion (input + estimated output size)
+            qlonglong conversionMemoryNeeded = input.size() * 2;  // Estimate 2x for worst case
+            if (!Utils::isMemorySufficientForOperation(
+                    Utils::OperationType::RawOperation, conversionMemoryNeeded, characterCount)) {
+                m_errorString = QObject::tr("Insufficient memory for encoding conversion");
+                return false;
+            }
+
+            QByteArray outData;
             if (!convertEncoding(input, outData)) {
                 m_errorString = QObject::tr("Encoding conversion failed");
                 return false;
@@ -143,6 +161,8 @@ bool TextFileSaver::saveToFile(QFileDevice &file)
                 m_errorString = QObject::tr("Converted content is empty");
                 return false;
             }
+
+            QApplication::processEvents();
 
             qint64 written = file.write(outData);
             if (written != outData.size()) {
@@ -162,15 +182,6 @@ bool TextFileSaver::saveToFile(QFileDevice &file)
         m_errorString = QObject::tr("Unknown error occurred");
         return false;
     }
-}
-
-/**
- * @brief Gets the document content as plain text
- * @return The document content as QString
- */
-QString TextFileSaver::getDocumentContent() const
-{
-    return m_document->toPlainText();
 }
 
 /**
