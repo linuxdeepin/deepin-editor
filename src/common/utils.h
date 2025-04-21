@@ -47,7 +47,8 @@ public:
      */
     enum OperationType {
         CopyOperation,
-        PasteOperation
+        PasteOperation,
+        RawOperation
     };
 
     /**

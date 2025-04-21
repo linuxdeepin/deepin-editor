@@ -25,7 +25,6 @@ public:
 
 private:
     bool saveToFile(QFileDevice &file);
-    QString getDocumentContent() const;
     bool convertEncoding(QByteArray &input, QByteArray &output) const;
 
 private:

@@ -2,18 +2,12 @@
 //
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-#include "../widgets/window.h"
-#include "../encodes/detectcode.h"
-#include "../common/fileloadthread.h"
-#include "../widgets/pathsettintwgt.h"
 #include "editwrapper.h"
-#include "../common/utils.h"
 #include "leftareaoftextedit.h"
 #include "drecentmanager.h"
-#include "../common/settings.h"
-#include <DSettingsOption>
-#include <DSettings>
+
 #include <unistd.h>
+
 #include <QCoreApplication>
 #include <QApplication>
 #include <QSaveFile>
@@ -22,10 +16,20 @@
 #include <QDebug>
 #include <QTimer>
 #include <QDir>
-#include <DSettingsOption>
-#include <DMenuBar>
 #include <QFileInfo>
 #include <QEvent>
+
+#include <DSettings>
+#include <DSettingsOption>
+#include <DMenuBar>
+
+#include "../common/fileloadthread.h"
+#include "../common/utils.h"
+#include "../common/settings.h"
+#include "../common/text_file_saver.h"
+#include "../encodes/detectcode.h"
+#include "../widgets/window.h"
+#include "../widgets/pathsettintwgt.h"
 
 DCORE_USE_NAMESPACE
 
@@ -217,121 +221,59 @@ bool EditWrapper::readFile(QByteArray encode)
  */
 bool EditWrapper::saveAsFile(const QString &newFilePath, const QByteArray &encodeName)
 {
-    // WARNING: 对于超长文件，Qt在使用 QSaveFile 保存文件时，若当前环境不支持创建无名文件(UnnamedFile),
-    // 会在相同路径创建临时文件，路径为保存文件名 + 唯一后缀，此临时文件名可能超过255长度限制，导致保存失败。
-    // 因此，过长的文件名屏蔽使用QSaveFile。QTemporaryFile 创建文件名的代码地址：
-    // link: https://github.com/qt/qtbase/blob/7191b8fe38788ac57e15e4124955c3cd8333d858/src/corelib/io/qtemporaryfile.cpp#L181
-    const int limitFileNameLength = 245;
-    QFileInfo fileNameInfo(newFilePath);
-    bool disableSaveProtect = fileNameInfo.fileName().length() > limitFileNameLength;
-
-    // use QSaveFile for safely save files.
-    QSaveFile saveFile(newFilePath);
-    if (!disableSaveProtect) {
-        saveFile.setDirectWriteFallback(true);
-
-        if (!saveFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-            qWarning() << Q_FUNC_INFO << "Open save file path error, " << saveFile.errorString();
-            QWidget *curWidget = this->window()->getStackedWgt()->currentWidget();
-            if (curWidget) {
-                DMessageManager::instance()->sendMessage(curWidget, QIcon(":/images/warning.svg"),
-                                                         QString(tr("You do not have permission to save %1")).arg(saveFile.fileName()));
-            }
-            return false;
+    // Use TextFileSaver for safe file saving
+    TextFileSaver saver(m_pTextEdit->document());
+    saver.setFilePath(newFilePath);
+    saver.setEncoding(encodeName);
+    
+    bool saveSuccess = saver.save();
+    if (!saveSuccess) {
+        qWarning() << "Failed to save file:" << saver.errorString();
+        QWidget *curWidget = this->window()->getStackedWgt()->currentWidget();
+        if (curWidget) {
+            DMessageManager::instance()->sendMessage(
+                curWidget,
+                QIcon(":/images/warning.svg"),
+                QString(tr("You do not have permission to save %1")).arg(QFileInfo(newFilePath).fileName())
+            );
         }
-    } else {
-        qWarning() << QString("SaveAs file name to long, disable QSaveFile. path: %1").arg(newFilePath);
-    }
-
-    QFile file(newFilePath);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         return false;
-    }
-
-    //auto append new line char to end of file when file's format is Linux/MacOS
-    QByteArray fileContent;
-    getPlainTextContent(fileContent);
-
-    QByteArray Outdata;
-    bool convertSucc = DetectCode::ChangeFileEncodingFormat(fileContent, Outdata, QString("UTF-8"), encodeName);
-
-    // 转换存在异常
-    if (!convertSucc) {
-        qWarning() << QString("iconv Encode Transformat from '%1' to '%2' Fail! start QTextCodec Encode Transformat.")
-                      .arg(QString("UTF-8")).arg(m_sCurEncode);
-        // 使用 QTextCodec 进行转换尝试
-        QTextCodec *codec = QTextCodec::codecForName(encodeName);
-        if (codec) {
-            QByteArray encodedString = codec->fromUnicode(fileContent);
-            if (encodedString.isEmpty()) {
-                qWarning() << qPrintable("Both iconv and QTextCodec Encode Transformat Fail!");
-            } else {
-                qInfo() << QString("QTextCodec Encode Transformat from '%1' to '%2' Success!")
-                           .arg(QString("UTF-8")).arg(m_sCurEncode);
-
-                Outdata = encodedString;
-                convertSucc = true;
-            }
-
-        } else {
-            qWarning() << qPrintable("Unsupported QTextCodec Encode") << m_sCurEncode;
-        }
-    }
-
-    if (!Outdata.isEmpty()) {
-        // 如果新数据为空，不进行文件写入，以降低文件内容损失
-        file.write(Outdata);
-    }
-
-    // close and delete file.
-    QFileDevice::FileError error = file.error();
-    file.close();
-
-    if (!disableSaveProtect) {
-        // flush file.
-        if (!saveFile.flush()) {
-            return false;
-        }
-        // ensure that the file is written to disk
-        fsync(saveFile.handle());
     }
 
     QFileInfo fi(filePath());
     m_tModifiedDateTime = fi.lastModified();
 
-    // did save work?
-    // only finalize if stream status == OK
-    return convertSucc && (error == QFileDevice::NoError);
+    return true;
 }
 
 bool EditWrapper::saveAsFile()
 {
+    // Create save file dialog
     DFileDialog dialog(this, tr("Save"));
     dialog.setAcceptMode(QFileDialog::AcceptSave);
-    dialog.addComboBox(QObject::tr("Encoding"),  QStringList() << m_sFirstEncode);
+    dialog.addComboBox(QObject::tr("Encoding"), QStringList() << m_sFirstEncode);
     dialog.setDirectory(QDir::homePath());
     dialog.setNameFilter("*.txt");
 
-    int mode =  dialog.exec();
+    // Execute dialog and check result
+    int mode = dialog.exec();
     hideWarningNotices();
 
     if (QDialog::Accepted == mode) {
         const QString newFilePath = dialog.selectedFiles().value(0);
-        if (newFilePath.isEmpty())
-            return false;
-
-        QFile qfile(newFilePath);
-
-        if (!qfile.open(QFile::WriteOnly | QIODevice::Truncate)) {
+        if (newFilePath.isEmpty()) {
             return false;
         }
 
-        // 以新的编码保存内容到文件，无论何种格式，展示的文本编码为UTF-8
-        QByteArray inputData = m_pTextEdit->toPlainText().toUtf8();
-        QByteArray outData;
-        DetectCode::ChangeFileEncodingFormat(inputData, outData, QString("UTF-8"), m_sFirstEncode);
-        qfile.write(outData);
-        qfile.close();
+        // Use TextFileSaver for safe file saving
+        TextFileSaver saver(m_pTextEdit->document());
+        saver.setFilePath(newFilePath);
+        saver.setEncoding(m_sFirstEncode.toUtf8());
+        
+        if (!saver.save()) {
+            qWarning() << "Failed to save file:" << saver.errorString();
+            return false;
+        }
 
         return true;
     }
@@ -564,89 +506,35 @@ QString EditWrapper::getTextEncode()
 bool EditWrapper::saveFile(QByteArray encode)
 {
     QString qstrFilePath = m_pTextEdit->getTruePath();
-    QFile file(qstrFilePath);
     hideWarningNotices();
 
-    if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-        QByteArray fileContent;
-        getPlainTextContent(fileContent);
-
-        if (!encode.isEmpty()) {
-            m_sCurEncode = encode;
-            // 更新底栏编码格式
-            m_pBottomBar->setEncodeName(encode);
-        }
-
-        if (!fileContent.isEmpty()) {
-            QByteArray Outdata;
-            DetectCode::ChangeFileEncodingFormat(fileContent, Outdata, QString("UTF-8"), m_sCurEncode);
-            // 如果 iconv 转换错误
-            if (Outdata.isEmpty()) {
-                qWarning() << qPrintable(QString("iconv Encode Transformat from '%1' to '%2' Fail! start QTextCodec Encode Transformat.")
-                                         .arg(QString("UTF-8")).arg(m_sCurEncode));
-                // 使用 QTextCodec 进行转换尝试
-                QTextCodec *codec = QTextCodec::codecForName(m_sCurEncode.toUtf8());
-                if (codec) {
-                    QByteArray encodedString = codec->fromUnicode(fileContent);
-
-                    if (encodedString.isEmpty()) {
-                        qWarning() << qPrintable("Both iconv and QTextCodec Encode Transformat Fail!");
-                    } else {
-                        qWarning() << qPrintable(QString("QTextCodec Encode Transformat from '%1' to '%2' Success!")
-                                                 .arg(QString("UTF-8")).arg(m_sCurEncode));
-                        Outdata = encodedString;
-                    }
-
-                } else {
-                    qWarning() << qPrintable("Unsupported QTextCodec format:") << m_sCurEncode;
-                }
-            }
-
-            if (Outdata.isEmpty() == false) {
-                // 如果新数据为空，不进行文件写入，以降低文件内容损失
-                // 此时如果写入，整个文件将被清空
-                file.write(Outdata);
-            }
-
-            QFileDevice::FileError error = file.error();
-            file.close();
-            m_sFirstEncode = m_sCurEncode;
-
-            QFileInfo fi(qstrFilePath);
-            m_tModifiedDateTime = fi.lastModified();
-
-            // did save work?
-            // only finalize if stream status == OK
-            // 增加对于转换失败的判断，新数据为空，ok返回false
-            bool ok = (Outdata.isEmpty() == false && error == QFileDevice::NoError);
-
-            // update status.
-            if (ok)  updateModifyStatus(false);
-            m_bIsTemFile = false;
-            return ok;
-        } else {
-            file.write(fileContent);
-            QFileDevice::FileError error = file.error();
-            file.close();
-            m_sFirstEncode = m_sCurEncode;
-
-            QFileInfo fi(qstrFilePath);
-            m_tModifiedDateTime = fi.lastModified();
-
-            // did save work?
-            // only finalize if stream status == OK
-            bool ok = (error == QFileDevice::NoError);
-
-            // update status.
-            if (ok)  updateModifyStatus(false);
-            m_bIsTemFile = false;
-            return ok;
-        }
-    } else {
-        DMessageManager::instance()->sendMessage(this->window()->getStackedWgt()->currentWidget(), QIcon(":/images/warning.svg")
-                                                 , QString(tr("You do not have permission to save %1")).arg(file.fileName()));
-        return false;
+    // 更新编码设置
+    if (!encode.isEmpty()) {
+        m_sCurEncode = encode;
+        m_pBottomBar->setEncodeName(encode);
     }
+
+    // 使用TextFileSaver进行文件保存
+    TextFileSaver saver(m_pTextEdit->document());
+    saver.setFilePath(qstrFilePath);
+    saver.setEncoding(m_sCurEncode.toUtf8());
+    
+    bool ok = saver.save();
+    if (ok) {
+        m_sFirstEncode = m_sCurEncode;
+        QFileInfo fi(qstrFilePath);
+        m_tModifiedDateTime = fi.lastModified();
+        updateModifyStatus(false);
+        m_bIsTemFile = false;
+    } else {
+        DMessageManager::instance()->sendMessage(
+            this->window()->getStackedWgt()->currentWidget(),
+            QIcon(":/images/warning.svg"),
+            QString(tr("You do not have permission to save %1")).arg(QFileInfo(qstrFilePath).fileName())
+        );
+    }
+
+    return ok;
 }
 
 void EditWrapper::getPlainTextContent(QByteArray &plainTextContent)
@@ -689,48 +577,17 @@ void EditWrapper::getPlainTextContent(QByteArray &plainTextContent)
  */
 bool EditWrapper::saveTemFile(QString qstrDir)
 {
-    QFile file(qstrDir);
-
-    if (file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-        QByteArray fileContent;
-        getPlainTextContent(fileContent);
-        QByteArray Outdata;
-        DetectCode::ChangeFileEncodingFormat(fileContent, Outdata, QString("UTF-8"), m_sCurEncode);
-        file.write(Outdata);
-        QFileDevice::FileError error = file.error();
-        file.close();
+    // Use TextFileSaver for safe file saving
+    TextFileSaver saver(m_pTextEdit->document());
+    saver.setFilePath(qstrDir);
+    saver.setEncoding(m_sCurEncode.toUtf8());
+    
+    bool ok = saver.save();
+    if (ok) {
         m_sFirstEncode = m_sCurEncode;
-
-        // did save work?
-        // only finalize if stream status == OK
-        bool ok = (error == QFileDevice::NoError);
-
-        // update status.
-        if (ok) {
-            updateModifyStatus(isModified());
-        }
-        return ok;
-
-#if 0
-    } else {
-        file.write(fileContent);
-        QFileDevice::FileError error = file.error();
-        file.close();
-        m_sFirstEncode = m_sCurEncode;
-
-        did save work ?
-        only finalize if stream status == OK
-        bool ok = (error == QFileDevice::NoError);
-
-        // update status.
-        if (ok)  updateModifyStatus(true);
-        return ok;
+        updateModifyStatus(isModified());
     }
-#endif
-} else
-{
-    return false;
-}
+    return ok;
 }
 
 void EditWrapper::updatePath(const QString &file, QString qstrTruePath)
@@ -809,25 +666,22 @@ bool EditWrapper::saveDraftFile(QString &newFilePath)
     hideWarningNotices();
 
     if (mode == 1) {
+        // Get selected encoding and file path
         const QByteArray encode = dialog.getComboBoxValue(QObject::tr("Encoding")).toUtf8();
         newFilePath = dialog.selectedFiles().value(0);
         if (newFilePath.isEmpty())
             return false;
 
-        QFile qfile(newFilePath);
-
-        if (!qfile.open(QFile::WriteOnly)) {
+        // Use TextFileSaver to save the file
+        TextFileSaver saver(m_pTextEdit->document());
+        saver.setFilePath(newFilePath);
+        saver.setEncoding(encode);
+        
+        if (!saver.save()) {
             return false;
         }
 
-        // 以新的编码保存内容到文件
-        QByteArray inputData = m_pTextEdit->toPlainText().toUtf8();
-        QByteArray outData;
-        DetectCode::ChangeFileEncodingFormat(inputData, outData, QString("UTF-8"), encode);
-        qfile.write(outData);
-        qfile.close();
-
-        //草稿文件保存 等同于重写打开
+        // For draft files, remove the old file and update paths
         m_sFirstEncode = m_sCurEncode;
         QFile(m_pTextEdit->getFilePath()).remove();
         updateSaveAsFileName(m_pTextEdit->getFilePath(), newFilePath);
