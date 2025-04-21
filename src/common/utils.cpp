@@ -1191,38 +1191,55 @@ bool Utils::isMemorySufficientForOperation(OperationType operationType, qlonglon
     qlonglong totalMemoryBytes = memoryTotal * DATA_SIZE_1024;
 
     // Judge based on operation type
-    if (operationType == OperationType::CopyOperation) {
-        // Copy operation: Estimated memory consumption = data size * factor
-        qlonglong estimatedMemoryNeeded = operationDataSize * COPY_CONSUME_MEMORY_MULTIPLE;
-        if (estimatedMemoryNeeded > availableMemoryBytes) {
-            qWarning() << "Utils: Insufficient memory for copy operation. Needed(est):" << estimatedMemoryNeeded << "Available:" << availableMemoryBytes;
-            return false;
+    switch (operationType) {
+        case OperationType::RawOperation:
+            // Raw operation: Directly compare the data size with available memory
+            if (operationDataSize > availableMemoryBytes) {
+                qWarning() << "Utils: Insufficient memory for raw operation. Needed:" << operationDataSize << "Available:" << availableMemoryBytes;
+                return false;
+            }
+            break;
+            
+        case OperationType::CopyOperation: {
+            // Copy operation: Estimated memory consumption = data size * factor
+            qlonglong estimatedMemoryNeeded = operationDataSize * COPY_CONSUME_MEMORY_MULTIPLE;
+            if (estimatedMemoryNeeded > availableMemoryBytes) {
+                qWarning() << "Utils: Insufficient memory for copy operation. Needed(est):" << estimatedMemoryNeeded << "Available:" << availableMemoryBytes;
+                return false;
+            }
+            break;
         }
-    } else if (operationType == OperationType::PasteOperation) {
-        // Paste operation: Estimated memory consumption = paste data size * factor
-        qlonglong estimatedMemoryNeededForPaste = operationDataSize * PASTE_CONSUME_MEMORY_MULTIPLE;
-        // Estimated total document memory after paste
-        qlonglong estimatedTotalDocMemory = (currentDocumentSize + operationDataSize) * PASTE_CONSUME_MEMORY_MULTIPLE; // Estimate using paste factor
+            
+        case OperationType::PasteOperation: {
+            // Paste operation: Estimated memory consumption = paste data size * factor
+            qlonglong estimatedMemoryNeededForPaste = operationDataSize * PASTE_CONSUME_MEMORY_MULTIPLE;
+            // Estimated total document memory after paste
+            qlonglong estimatedTotalDocMemory = (currentDocumentSize + operationDataSize) * PASTE_CONSUME_MEMORY_MULTIPLE;
 
-        // Check if pasting the data itself would cause insufficient memory
-        if (estimatedMemoryNeededForPaste > availableMemoryBytes) {
-            qWarning() << "Utils: Insufficient memory for paste operation (paste data). Needed(est):" << estimatedMemoryNeededForPaste << "Available:" << availableMemoryBytes;
-            return false;
+            // Check if pasting the data itself would cause insufficient memory
+            if (estimatedMemoryNeededForPaste > availableMemoryBytes) {
+                qWarning() << "Utils: Insufficient memory for paste operation (paste data). Needed(est):" << estimatedMemoryNeededForPaste << "Available:" << availableMemoryBytes;
+                return false;
+            }
+
+            // Check if the estimated total document size after paste exceeds total system memory
+            if (estimatedTotalDocMemory > totalMemoryBytes) {
+                qWarning() << "Utils: Paste operation might exceed total system memory. Estimated total doc memory:" << estimatedTotalDocMemory << "Total system memory:" << totalMemoryBytes;
+                return false;
+            }
+
+            // Check specific threshold: Restrict paste size if document reaches 800MB
+            const qlonglong DOC_SIZE_LIMIT_800MB = 800LL * DATA_SIZE_1024 * DATA_SIZE_1024;
+            const qlonglong PASTE_SIZE_LIMIT_500KB = 500LL * DATA_SIZE_1024;
+            if (currentDocumentSize > DOC_SIZE_LIMIT_800MB && operationDataSize > PASTE_SIZE_LIMIT_500KB) {
+                qWarning() << "Utils: Paste operation restricted. Document size exceeds 800MB and paste data exceeds 500KB.";
+                return false;
+            }
+            break;
         }
 
-        // Check if the estimated total document size after paste exceeds total system memory (very rough check)
-        if (estimatedTotalDocMemory > totalMemoryBytes) {
-            qWarning() << "Utils: Paste operation might exceed total system memory. Estimated total doc memory:" << estimatedTotalDocMemory << "Total system memory:" << totalMemoryBytes;
-            return false;
-        }
-
-        // Check specific threshold: Restrict paste size if document reaches 800MB
-        const qlonglong DOC_SIZE_LIMIT_800MB = 800LL * DATA_SIZE_1024 * DATA_SIZE_1024;
-        const qlonglong PASTE_SIZE_LIMIT_500KB = 500LL * DATA_SIZE_1024;
-        if (currentDocumentSize > DOC_SIZE_LIMIT_800MB && operationDataSize > PASTE_SIZE_LIMIT_500KB) {
-            qWarning() << "Utils: Paste operation restricted. Document size exceeds 800MB and paste data exceeds 500KB.";
-            return false;
-        }
+        default:
+            break;
     }
 
     return true; // Memory is sufficient
