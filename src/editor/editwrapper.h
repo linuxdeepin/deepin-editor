@@ -134,6 +134,8 @@ private:
     // 文件加载时重新初始化部分设置
     void reinitOnFileLoad(const QByteArray &encode);
 
+    Q_SLOT void onReadAllocError();
+
 public slots:
     // 处理文档预加载数据
     void handleFilePreProcess(const QByteArray &encode, const QByteArray &content);

@@ -896,15 +896,7 @@ void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteAr
 
     // 提示读取错误信息
     if (error) {
-        // 设置文本为只读模式，且不显示通知
-        if (!m_pTextEdit->getReadOnlyMode()) {
-            m_pTextEdit->toggleReadOnlyMode(true);
-        }
-
-        m_pWaringNotices->setMessage(tr("The file cannot be read, which may be too large or has been damaged!"));
-        m_pWaringNotices->clearBtn();
-        m_pWaringNotices->show();
-        DMessageManager::instance()->sendMessage(m_pTextEdit, m_pWaringNotices);
+        onReadAllocError();
     }
 }
 
@@ -1162,42 +1154,58 @@ void EditWrapper::customEvent(QEvent *e)
             return;
         }
 
-        ParseFileEvent *parseEvent = static_cast<ParseFileEvent *>(e);
-        int needReadLen = parseEvent->m_contentData.length() - parseEvent->m_alreadyReadOffset;
+        bool errorOccurred = false;
+        try {
 
-        // 调整最大读取长度(单次读取最大长度)
-        if (needReadLen > EReadStepSize) {
-            needReadLen = EReadStepSize;
+            ParseFileEvent *parseEvent = static_cast<ParseFileEvent *>(e);
+            int needReadLen = parseEvent->m_contentData.length() - parseEvent->m_alreadyReadOffset;
+
+            // 调整最大读取长度(单次读取最大长度)
+            if (needReadLen > EReadStepSize) {
+                needReadLen = EReadStepSize;
+            }
+
+            // 转码数据并插入光标位置
+            QByteArray text = parseEvent->m_contentData.mid(parseEvent->m_alreadyReadOffset, needReadLen);
+            QTextCodec::ConverterState state;
+            QString data = parseEvent->m_codec->toUnicode(text.constData(), text.size(), &state);
+            parseEvent->m_cursor.insertText(data);
+
+            // 当前为首次读取
+            if (0 == parseEvent->m_alreadyReadOffset) {
+                QTextCursor firstLineCursor = m_pTextEdit->textCursor();
+                firstLineCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
+                m_pTextEdit->setTextCursor(firstLineCursor);
+                //秒开界面语法高亮
+                OnUpdateHighlighter();
+            }
+
+            // 此次读取后的偏移量
+            int curReadOffset = parseEvent->m_alreadyReadOffset + needReadLen;
+
+            // 是否已读取完成
+            if (parseEvent->m_contentData.length() == curReadOffset) {
+                // 异步读取结束
+                m_bAsyncReadFileFinished = true;
+            } else {
+                ParseFileEvent *nextEvent = parseEvent->clone();
+                // 调整已读取偏移位置
+                nextEvent->m_alreadyReadOffset = curReadOffset;
+                // 抛出下一次处理的事件，根据当前是否显示界面调整优先级
+                qApp->postEvent(this, nextEvent, isVisible() ? Qt::NormalEventPriority : (Qt::LowEventPriority - 1));
+            }
+
+        } catch (const std::bad_alloc &) {
+            errorOccurred = true;
+            qWarning() << "Memory allocation failed";
+        } catch (const std::exception &e) {
+            errorOccurred = true;
+            qWarning() << QString("Error occurred: %1").arg(e.what());
         }
 
-        // 转码数据并插入光标位置
-        QByteArray text = parseEvent->m_contentData.mid(parseEvent->m_alreadyReadOffset, needReadLen);
-        QTextCodec::ConverterState state;
-        QString data = parseEvent->m_codec->toUnicode(text.constData(), text.size(), &state);
-        parseEvent->m_cursor.insertText(data);
-
-        // 当前为首次读取
-        if (0 == parseEvent->m_alreadyReadOffset) {
-            QTextCursor firstLineCursor = m_pTextEdit->textCursor();
-            firstLineCursor.movePosition(QTextCursor::Start, QTextCursor::MoveAnchor);
-            m_pTextEdit->setTextCursor(firstLineCursor);
-            //秒开界面语法高亮
-            OnUpdateHighlighter();
-        }
-
-        // 此次读取后的偏移量
-        int curReadOffset = parseEvent->m_alreadyReadOffset + needReadLen;
-
-        // 是否已读取完成
-        if (parseEvent->m_contentData.length() == curReadOffset) {
-            // 异步读取结束
+        if (errorOccurred) {
             m_bAsyncReadFileFinished = true;
-        } else {
-            ParseFileEvent *nextEvent = parseEvent->clone();
-            // 调整已读取偏移位置
-            nextEvent->m_alreadyReadOffset = curReadOffset;
-            // 抛出下一次处理的事件，根据当前是否显示界面调整优先级
-            qApp->postEvent(this, nextEvent, isVisible() ? Qt::NormalEventPriority : (Qt::LowEventPriority - 1));
+            QMetaObject::invokeMethod(this, &EditWrapper::onReadAllocError, Qt::QueuedConnection);
         }
     }
 }
@@ -1351,6 +1359,19 @@ void EditWrapper::reinitOnFileLoad(const QByteArray &encode)
     // 初始化设置编码
     m_sCurEncode = encode;
     m_sFirstEncode = encode;
+}
+
+void EditWrapper::onReadAllocError()
+{
+    // 设置文本为只读模式，且不显示通知
+    if (!m_pTextEdit->getReadOnlyMode()) {
+        m_pTextEdit->toggleReadOnlyMode(true);
+    }
+
+    m_pWaringNotices->setMessage(tr("The file cannot be read, which may be too large or has been damaged!"));
+    m_pWaringNotices->clearBtn();
+    m_pWaringNotices->show();
+    DMessageManager::instance()->sendMessage(m_pTextEdit, m_pWaringNotices);
 }
 
 void EditWrapper::clearDoubleCharaterEncode()
