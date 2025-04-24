@@ -1,3 +1,11 @@
+deepin-editor (6.5.24) unstable; urgency=medium
+
+  * fix: Refactor file saving with TextFileSaver and add safety checks
+  * fix: Refactor file saving with memory validation
+  * fix: capture bad_alloc(Bug: 311693)
+
+ -- renbin <renbin@uniontech.com>  Thu, 24 Apr 2025 17:14:55 +0800
+
 deepin-editor (6.5.23) unstable; urgency=medium
 
   * Fix: Add Qt6 support while maintaining Qt5 compatibility
