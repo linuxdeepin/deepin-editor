@@ -142,6 +142,9 @@ void StartManager::autoBackupFile()
     QFileInfo fileInfo;
     m_qlistTemFile.clear();
     listBackupInfo = Settings::instance()->settings->option("advance.editor.browsing_history_temfile")->value().toStringList();
+    if (m_windows.isEmpty()) {
+        return;
+    }
 
     //记录所有的文件信息
     for (int var = 0; var < m_windows.count(); ++var) {
