@@ -16,19 +16,19 @@ IflytekAiassistantThread::~IflytekAiassistantThread() {}
 void IflytekAiassistantThread::run()
 {
     QDBusConnection connection = QDBusConnection::sessionBus();
-    QDBusConnectionInterface *bus = connection.interface();
-    bool bIsRegistUosAiAssistant = bus->isServiceRegistered("com.iflytek.aiassistant");
-    if (!bIsRegistUosAiAssistant) {
-        qInfo() << "com.iflytek.aiassistant service no registered, try get introspect.";
+    bool bIsRegistUosAiAssistant = false;
 
-        QDBusInterface introspect("com.iflytek.aiassistant", "/aiassistant/deepinmain", "org.freedesktop.DBus.Introspectable");
-        QDBusReply<QString> version = introspect.call("Introspect");
-        if (version.isValid()) {
-            bIsRegistUosAiAssistant = true;
-            qInfo() << "com.iflytek.aiassistant Introspect success.";
-        } else {
-            qInfo() << "com.iflytek.aiassistant Introspect also failed. " << version.error().message();
-        }
+    // 直接尝试调用 DBus 接口
+    QDBusInterface aiInterface("com.iflytek.aiassistant",
+                             "/aiassistant/deepinmain",
+                             "org.freedesktop.DBus.Introspectable");
+
+    QDBusReply<QString> reply = aiInterface.call("Introspect");
+    if (reply.isValid()) {
+        bIsRegistUosAiAssistant = true;
+        qInfo() << "com.iflytek.aiassistant service is available.";
+    } else {
+        qInfo() << "Failed to connect to com.iflytek.aiassistant: " << reply.error().message();
     }
 
     emit sigIsRegisteredIflytekAiassistant(bIsRegistUosAiAssistant);
