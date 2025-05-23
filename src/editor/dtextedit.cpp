@@ -54,6 +54,7 @@ TextEdit::TextEdit(QWidget *parent)
     : DPlainTextEdit(parent),
       m_wrapper(nullptr)
 {
+    qDebug() << "Initializing TextEdit component";
     // 更新单独添加的高亮格式文件
     m_repository.addCustomSearchPath(KF5_HIGHLIGHT_PATH);
 
@@ -158,6 +159,7 @@ TextEdit::TextEdit(QWidget *parent)
 
 TextEdit::~TextEdit()
 {
+    qDebug() << "Destroying TextEdit component";
     if (m_scrollAnimation != nullptr) {
         if (m_scrollAnimation->state() != QAbstractAnimation::Stopped) {
             m_scrollAnimation->stop();
@@ -185,9 +187,11 @@ TextEdit::~TextEdit()
 
 void TextEdit::insertTextEx(QTextCursor cursor, QString text)
 {
+    qDebug() << "Inserting text at position:" << cursor.position() << "Length:" << text.length();
     QUndoCommand *pInsertStack = new InsertTextUndoCommand(cursor, text, this);
     m_pUndoStack->push(pInsertStack);
     ensureCursorVisible();
+    qDebug() << "Text inserted successfully";
 }
 
 /**
@@ -196,7 +200,9 @@ void TextEdit::insertTextEx(QTextCursor cursor, QString text)
  */
 void TextEdit::insertMultiTextEx(const QList<QPair<QTextCursor, QString> > &multiText)
 {
+    qDebug() << "Inserting multiple texts, count:" << multiText.size();
     if (multiText.isEmpty()) {
+        qDebug() << "Multi text insert skipped - empty input";
         return;
     }
 
@@ -212,6 +218,8 @@ void TextEdit::insertMultiTextEx(const QList<QPair<QTextCursor, QString> > &mult
 
 void TextEdit::deleteSelectTextEx(QTextCursor cursor)
 {
+    qDebug() << "Deleting selected text at position:" << cursor.position()
+               << "Selection length:" << cursor.selectedText().length();
     if (cursor.hasSelection()) {
         QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(cursor, this);
         m_pUndoStack->push(pDeleteStack);
@@ -226,6 +234,7 @@ void TextEdit::deleteSelectTextEx(QTextCursor cursor, QString text, bool currLin
 
 void TextEdit::deleteTextEx(QTextCursor cursor)
 {
+    qDebug() << "Deleting text at position:" << cursor.position();
     QUndoCommand *pDeleteStack = new DeleteTextUndoCommand(cursor, this);
     m_pUndoStack->push(pDeleteStack);
 }
@@ -991,10 +1000,12 @@ void TextEdit::moveLineDownUp(bool up)
             cursor.movePosition(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
             QString uptext = cursor.selectedText();
 
+            qDebug() << "Moving line down from:" << cursor.blockNumber() << "to:" << cursor.blockNumber()+1;
             cursor.setPosition(startpos);
             cursor.setPosition(endpos, QTextCursor::KeepAnchor);
             InsertTextUndoCommand *com = new InsertTextUndoCommand(cursor, curtext + "\n" + uptext, this);
             m_pUndoStack->push(com);
+            qDebug() << "Line move completed";
 
             //ensure that this operation can be performed multiple times in succession.
             //and make the vertical scroll bar change together at the same time.
@@ -1018,10 +1029,12 @@ void TextEdit::moveLineDownUp(bool up)
             endpos = cursor.position();
             QString downtext = cursor.selectedText();
 
+            qDebug() << "Moving line up from:" << cursor.blockNumber()+1 << "to:" << cursor.blockNumber();
             cursor.setPosition(startpos);
             cursor.setPosition(endpos, QTextCursor::KeepAnchor);
             InsertTextUndoCommand *com = new InsertTextUndoCommand(cursor, downtext + "\n" + curtext, this);
             m_pUndoStack->push(com);
+            qDebug() << "Line move completed";
 
             //make the vertical scroll bar change together.
             cursor.setPosition(endpos);
@@ -1633,18 +1646,25 @@ void TextEdit::updateFont()
 
 void TextEdit::replaceAll(const QString &replaceText, const QString &withText, Qt::CaseSensitivity caseFlag)
 {
+    qDebug() << "Starting replace all operation";
+    
     if (m_readOnlyMode || m_bReadOnlyPermission) {
+        qDebug() << "Replace cancelled - read only mode";
         return;
     }
 
     if (replaceText.isEmpty()) {
+        qDebug() << "Replace cancelled - empty search text";
         return;
     }
 
     // 替换文本相同，返回
     if (replaceText == withText) {
+        qDebug() << "Replace cancelled - same replace text";
         return;
     }
+
+    qDebug() << "Replacing all occurrences of:" << replaceText.left(20) << "with:" << withText.left(20);
 
     QTextCursor cursor = textCursor();
     cursor.movePosition(QTextCursor::Start);
@@ -1760,23 +1780,31 @@ void TextEdit::replaceNext(const QString &replaceText, const QString &withText, 
     // Update cursor.
     setTextCursor(cursor);
     highlightKeyword(replaceText, getPosition(), caseFlag);
+    qDebug() << "Replace all operation completed for:" << replaceText.left(20);
 }
 
 void TextEdit::replaceRest(const QString &replaceText, const QString &withText, Qt::CaseSensitivity caseFlag)
 {
+    qDebug() << "Starting replace rest operation";
+    
     if (m_readOnlyMode || m_bReadOnlyPermission) {
+        qDebug() << "Replace cancelled - read only mode";
         return;
     }
 
     // If replace text is nothing, don't do replace action.
     if (replaceText.isEmpty()) {
+        qDebug() << "Replace cancelled - empty search text";
         return;
     }
 
     // 替换文本相同，返回
     if (replaceText == withText) {
+        qDebug() << "Replace cancelled - same replace text";
         return;
     }
+
+    qDebug() << "Replacing rest occurrences of:" << replaceText.left(20) << "with:" << withText.left(20);
 
     QTextCursor cursor = textCursor();
     QTextCursor startCursor = textCursor();
@@ -1805,6 +1833,7 @@ void TextEdit::replaceRest(const QString &replaceText, const QString &withText, 
 
     startCursor.endEditBlock();
     setTextCursor(startCursor);
+    qDebug() << "Replace rest operation completed for:" << replaceText.left(20);
 }
 
 void TextEdit::beforeReplace(const QString &strReplaceText, Qt::CaseSensitivity caseFlag)
@@ -1816,6 +1845,8 @@ void TextEdit::beforeReplace(const QString &strReplaceText, Qt::CaseSensitivity 
 
 bool TextEdit::findKeywordForward(const QString &keyword)
 {
+    qDebug() << "Finding keyword forward:" << keyword.left(20);
+    
     if (textCursor().hasSelection()) {
         // Get selection bound.
         int startPos = textCursor().anchor();
@@ -2901,38 +2932,51 @@ void TextEdit::slotRedoAvailable(bool redoIsAvailable)
 
 void TextEdit::redo_()
 {
+    qDebug() << "Starting redo operation";
     if (!m_pUndoStack->canRedo()) {
+        qDebug() << "Redo operation skipped - nothing to redo";
         return;
     }
 
     // Get current stack info before redo
     const bool needUpdate = refreshUndoRedoColumnStatus();
+    qDebug() << "Redo operation - need update selections:" << needUpdate;
 
     m_pUndoStack->redo();
+    qDebug() << "Redo operation executed, new stack index:" << m_pUndoStack->index();
 
     if (needUpdate) {
         renderAllSelections();
         update();
+        qDebug() << "Selections updated after redo";
     }
 
     if (m_pUndoStack->index() == m_lastSaveIndex) {
         this->m_wrapper->window()->updateModifyStatus(m_sFilePath, false);
         this->m_wrapper->setTemFile(false);
         this->document()->setModified(false);
+        qDebug() << "File modification status reset after redo";
     }
-
+    qDebug() << "Redo operation completed successfully";
 }
+
 void TextEdit::undo_()
 {
+    qDebug() << "Starting undo operation";
+    qDebug() << "Starting undo operation";
     if (!m_pUndoStack->canUndo()) {
+        qDebug() << "Undo operation skipped - nothing to undo";
         return;
     }
 
     m_pUndoStack->undo();
+    qDebug() << "Undo operation executed, new stack index:" << m_pUndoStack->index();
 
-    if (refreshUndoRedoColumnStatus()) {
+    const bool needUpdate = refreshUndoRedoColumnStatus();
+    if (needUpdate) {
         renderAllSelections();
         update();
+        qDebug() << "Selections updated after undo";
     }
 
     // 对撤销栈清空的情况下，有两种文件仍需保留*号(重做无需如下判定)
@@ -2944,7 +2988,9 @@ void TextEdit::undo_()
         this->m_wrapper->window()->updateModifyStatus(m_sFilePath, false);
         this->m_wrapper->setTemFile(false);
         this->document()->setModified(false);
+        qDebug() << "File modification status reset after undo";
     }
+    qDebug() << "Undo operation completed successfully";
 }
 
 /*!
@@ -2999,6 +3045,9 @@ void TextEdit::moveText(int from, int to, const QString &text, bool copy)
 QTextCursor TextEdit::findCursor(const QString &substr, const QString &text, int from, bool backward,
                                  int cursorPos, Qt::CaseSensitivity caseFlag)
 {
+    qDebug() << "Finding text:" << substr.left(20) << "from position:" << from
+               << "direction:" << (backward ? "backward" : "forward");
+
     // 处理换行符为 \r\n (光标计算时被视为单个字符)的情况，移除多计算的字符数
     // text 均为 \n 结尾
     QString findSubStr = substr;
@@ -3013,11 +3062,13 @@ QTextCursor TextEdit::findCursor(const QString &substr, const QString &text, int
         index = text.indexOf(findSubStr, from, caseFlag);
     }
     if (-1 != index) {
+        qDebug() << "Find successful at position:" << index;
         auto cursor = this->textCursor();
         cursor.setPosition(index + cursorPos);
         cursor.setPosition(cursor.position() + findSubStr.size(), QTextCursor::KeepAnchor);
         return cursor;
     } else {
+        qDebug() << "Find failed - text not found";
         return QTextCursor();
     }
 }

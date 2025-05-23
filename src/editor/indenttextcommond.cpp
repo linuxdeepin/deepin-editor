@@ -4,6 +4,7 @@
 
 #include "indenttextcommond.h"
 #include "dtextedit.h"
+#include <QDebug>
 
 IndentTextCommand::IndentTextCommand(TextEdit* edit,int startpos,int endpos,int startline,int endline):
     m_edit(edit),
@@ -12,15 +13,20 @@ IndentTextCommand::IndentTextCommand(TextEdit* edit,int startpos,int endpos,int 
     m_startline(startline),
     m_endline(endline)
 {
+    qDebug() << "IndentTextCommand created - startpos:" << startpos
+             << "endpos:" << endpos << "lines:" << startline << "-" << endline
+             << "hasSelection:" << m_edit->textCursor().hasSelection();
     m_hasselected = m_edit->textCursor().hasSelection();
 }
 IndentTextCommand::~IndentTextCommand()
 {
-
+    qDebug() << "IndentTextCommand destroyed";
 }
 
 void IndentTextCommand::redo()
 {
+    qInfo() << "IndentTextCommand redo - adding indents to lines:"
+            << m_startline << "-" << m_endline;
     auto cursor = m_edit->textCursor();
 
     //insert "\t" in front of multiple lines.
@@ -53,6 +59,8 @@ void IndentTextCommand::redo()
 
 void IndentTextCommand::undo()
 {
+    qInfo() << "IndentTextCommand undo - removing indents from lines:"
+            << m_startline << "-" << m_endline;
     auto cursor = m_edit->textCursor();
 
     //delete "\t" in front of multiple lines.

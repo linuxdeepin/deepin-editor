@@ -10,16 +10,21 @@ ChangeMarkCommand::ChangeMarkCommand(QPointer<TextEdit> editPtr, const QList<Tex
     , m_oldMarkReplace(oldMark)
     , m_newMarkReplace(newMark)
 {
+    qDebug() << "ChangeMarkCommand created with"
+                << oldMark.size() << "old marks and"
+                << newMark.size() << "new marks";
 
 }
 
 ChangeMarkCommand::~ChangeMarkCommand()
 {
+    qDebug() << "ChangeMarkCommand destroyed";
 
 }
 
 void ChangeMarkCommand::undo()
 {
+    qDebug() << "Executing ChangeMarkCommand undo";
     // 优先执行子撤销项，保证在文本操作后执行
     QUndoCommand::undo();
 
@@ -32,6 +37,7 @@ void ChangeMarkCommand::undo()
 
 void ChangeMarkCommand::redo()
 {
+    qDebug() << "Executing ChangeMarkCommand redo";
     // 优先执行子撤销项，保证在文本操作后执行
     QUndoCommand::redo();
 

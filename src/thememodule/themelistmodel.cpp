@@ -13,21 +13,25 @@
 ThemeListModel::ThemeListModel(QObject *parent)
     : QAbstractListModel(parent)
 {
+    qDebug() << "ThemeListModel constructor";
     initThemes();
 }
 
 ThemeListModel::~ThemeListModel()
 {
+    qDebug() << "ThemeListModel destructor";
 }
 
 void ThemeListModel::setFrameColor(const QString &selectedColor, const QString &normalColor)
 {
+    qInfo() << "Setting frame colors - selected:" << selectedColor << "normal:" << normalColor;
     m_frameSelectedColor = selectedColor;
     m_frameNormalColor = normalColor;
 }
 
 void ThemeListModel::setSelection(const QString &path)
 {
+    qDebug() << "Setting selection for theme path:" << path;
     for (auto pair : m_themes) {
         if (path == pair.second) {
             const int row = m_themes.indexOf(pair);
@@ -45,6 +49,7 @@ int ThemeListModel::rowCount(const QModelIndex &parent) const
 
 QVariant ThemeListModel::data(const QModelIndex &index, int role) const
 {
+    qDebug() << "Getting data for row:" << index.row() << "role:" << role;
     const int r = index.row();
 
     const QString &name = m_themes.at(r).first;
@@ -66,6 +71,7 @@ QVariant ThemeListModel::data(const QModelIndex &index, int role) const
 
 void ThemeListModel::initThemes()
 {
+    qDebug() << "Initializing theme list";
     QFileInfoList infoList = QDir(QString("%1share/deepin-editor/themes").arg(LINGLONG_PREFIX)).entryInfoList(QDir::Files | QDir::NoDotAndDotDot);
 
     for (QFileInfo info : infoList) {
@@ -74,9 +80,11 @@ void ThemeListModel::initThemes()
         pair.first = jsonMap["metadata"].toMap()["name"].toString();
         pair.second = info.filePath();
 
+        qDebug() << "Found theme:" << pair.first << "at path:" << pair.second;
         m_themes << pair;
     }
 
+    qDebug() << "Sorting themes by background lightness";
     std::sort(m_themes.begin(), m_themes.end(),
               [=] (QPair<QString, QString> &a, QPair<QString, QString> &b) {
                   QVariantMap firstMap = Utils::getThemeMapFromPath(a.second);

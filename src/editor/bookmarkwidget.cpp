@@ -8,12 +8,13 @@
 
 BookMarkWidget::BookMarkWidget(LeftAreaTextEdit *leftAreaWidget)
 {
+    qDebug() << "BookMarkWidget constructor";
     m_leftAreaWidget = leftAreaWidget;
 }
 
 BookMarkWidget::~BookMarkWidget()
 {
-
+    qDebug() << "BookMarkWidget destructor";
 }
 
 void BookMarkWidget::paintEvent(QPaintEvent *event)

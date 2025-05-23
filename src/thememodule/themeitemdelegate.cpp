@@ -11,15 +11,17 @@
 ThemeItemDelegate::ThemeItemDelegate(QObject *parent)
     : QAbstractItemDelegate(parent)
 {
-
+    qDebug() << "ThemeItemDelegate constructor";
 }
 
 ThemeItemDelegate::~ThemeItemDelegate()
 {
+    qDebug() << "ThemeItemDelegate destructor";
 }
 
 void ThemeItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    qDebug() << "Start painting theme item for index:" << index.row();
     const QString &themePath = index.data(ThemeListModel::ThemePath).toString();
     const QString &themeName = index.data(ThemeListModel::ThemeName).toString();
     QVariantMap jsonMap = Utils::getThemeMapFromPath(themePath);
@@ -48,6 +50,7 @@ void ThemeItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
     int paddingY = 8;
 
     // draw background.
+    qDebug() << "Drawing background for theme item";
     QPainterPath backgroundPath;
     backgroundPath.addRoundedRect(QRect(rect.x() + paddingX,
                                         rect.y() + paddingY,
@@ -59,6 +62,7 @@ void ThemeItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
     painter->fillPath(backgroundPath, QColor(backgroundColor));
 
     // draw frame.
+    qDebug() << "Drawing frame for theme item";
     QPainterPath framePath;
     framePath.addRoundedRect(QRect(rect.x() + paddingX,
                                    rect.y() + paddingY,
@@ -132,9 +136,11 @@ void ThemeItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
     int bracketY = includeY + lineHeight * 4;
     painter->setPen(QPen(QColor(normalColor)));
     painter->drawText(QRect(rect.x() + bracketX, rect.y() + bracketY, rect.width(), lineHeight), Qt::AlignLeft | Qt::AlignTop, "}");
+    qDebug() << "Finished painting theme item";
 }
 
 QSize ThemeItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    qDebug() << "Getting size hint for theme item";
     return QSize(-1, 130);
 }

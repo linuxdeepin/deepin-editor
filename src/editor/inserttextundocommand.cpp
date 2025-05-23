@@ -15,6 +15,7 @@ InsertTextUndoCommand::InsertTextUndoCommand(const QTextCursor &textcursor,
     , m_sInsertText(text)
 {
     m_sInsertText.replace("\r\n", "\n");
+    qDebug() << "InsertTextUndoCommand created";
 }
 
 InsertTextUndoCommand::InsertTextUndoCommand(QList<QTextEdit::ExtraSelection> &selections,
@@ -27,6 +28,7 @@ InsertTextUndoCommand::InsertTextUndoCommand(QList<QTextEdit::ExtraSelection> &s
     , m_columnEditSelections(selections)
 {
     m_sInsertText.replace("\r\n", "\n");
+    qDebug() << "InsertTextUndoCommand(multi-selection) created";
 
     for (const auto &selection : m_columnEditSelections) {
         ColumnReplaceNode replaceNode;
@@ -40,7 +42,9 @@ InsertTextUndoCommand::InsertTextUndoCommand(QList<QTextEdit::ExtraSelection> &s
 
 void InsertTextUndoCommand::undo()
 {
+    qDebug() << "InsertTextUndoCommand undo";
     if (m_columnEditSelections.isEmpty()) {
+        qDebug() << "InsertTextUndoCommand undo, columnEditSelections empty";
         // note that some characters appear to occupy more than 1 place
         m_textCursor.setPosition(m_endPostion);
         m_textCursor.setPosition(m_beginPostion, QTextCursor::KeepAnchor);
@@ -55,6 +59,7 @@ void InsertTextUndoCommand::undo()
             m_pEdit->setTextCursor(m_textCursor);
         }
     } else {
+        qDebug() << "InsertTextUndoCommand undo, columnEditSelections not empty";
         Q_ASSERT_X(m_columnEditSelections.size() == m_replaces.size(), "Column editing insert undo", "column data size check");
 
         for (int i = 0; i < m_columnEditSelections.size(); i++) {
@@ -87,7 +92,9 @@ void InsertTextUndoCommand::undo()
 
 void InsertTextUndoCommand::redo()
 {
+    qDebug() << "InsertTextUndoCommand redo";
     if (m_columnEditSelections.isEmpty()) {
+        qDebug() << "InsertTextUndoCommand redo, columnEditSelections empty";
         if (m_textCursor.hasSelection()) {
             m_selectText = m_textCursor.selectedText();
             m_textCursor.removeSelectedText();
@@ -105,6 +112,7 @@ void InsertTextUndoCommand::redo()
             m_pEdit->setTextCursor(curCursor);
         }
     } else {
+        qDebug() << "InsertTextUndoCommand redo, columnEditSelections not empty";
         Q_ASSERT_X(m_columnEditSelections.size() == m_replaces.size(), "Column editing insert undo", "column data size check");
 
         // insert will change all text cursor
@@ -159,6 +167,8 @@ MidButtonInsertTextUndoCommand::MidButtonInsertTextUndoCommand(const QTextCursor
     , m_sInsertText(text)
 {
     m_sInsertText.replace("\r\n", "\n");
+    qDebug() << "MidButtonInsertTextUndoCommand created, text size:" << m_sInsertText.size()
+                          << "cursor pos:" << textcursor.position() << "edit:" << edit;
     // 中键黏贴需要构造时计算一次光标位置
     m_beginPostion = m_textCursor.position();
     m_endPostion = m_textCursor.position() + m_sInsertText.length();
@@ -169,6 +179,8 @@ MidButtonInsertTextUndoCommand::MidButtonInsertTextUndoCommand(const QTextCursor
  */
 void MidButtonInsertTextUndoCommand::undo()
 {
+    qDebug() << "MidButtonInsertTextUndoCommand undo, removing text from"
+                          << m_beginPostion << "to" << m_endPostion;
     m_textCursor.setPosition(m_endPostion);
     m_textCursor.setPosition(m_beginPostion, QTextCursor::KeepAnchor);
     m_textCursor.deleteChar();
@@ -186,10 +198,12 @@ void MidButtonInsertTextUndoCommand::undo()
  */
 void MidButtonInsertTextUndoCommand::redo()
 {
+    qDebug() << "MidButtonInsertTextUndoCommand redo - inserting text size:" << m_sInsertText.size();
     m_textCursor.insertText(m_sInsertText);
     m_textCursor.setPosition(m_textCursor.position() - m_sInsertText.length(), QTextCursor::KeepAnchor);
     m_beginPostion = m_textCursor.selectionStart();
     m_endPostion = m_textCursor.selectionEnd();
+    qDebug() << "Inserted text at position:" << m_beginPostion << "-" << m_endPostion;
 
     // 进行撤销/恢复时将光标移动到撤销位置
     if (m_pEdit) {
@@ -212,6 +226,8 @@ DragInsertTextUndoCommand::DragInsertTextUndoCommand(const QTextCursor &textcurs
     , m_textCursor(textcursor)
     , m_sInsertText(text)
 {
+    qDebug() << "DragInsertTextUndoCommand created, text size:" << text.size()
+                          << "cursor pos:" << textcursor.position() << "edit:" << edit;
     m_beginPostion = m_textCursor.selectionStart();
 }
 
@@ -220,6 +236,8 @@ DragInsertTextUndoCommand::DragInsertTextUndoCommand(const QTextCursor &textcurs
  */
 void DragInsertTextUndoCommand::undo()
 {
+    qDebug() << "DragInsertTextUndoCommand undo, removing text from"
+                          << m_beginPostion << "to" << m_beginPostion + m_sInsertText.size();
     m_textCursor.setPosition(m_beginPostion);
     m_textCursor.setPosition(m_beginPostion + m_sInsertText.size(), QTextCursor::KeepAnchor);
     m_textCursor.deleteChar();
@@ -234,11 +252,13 @@ void DragInsertTextUndoCommand::undo()
  */
 void DragInsertTextUndoCommand::redo()
 {
+    qDebug() << "DragInsertTextUndoCommand redo - inserting text size:" << m_sInsertText.size();
     if (m_beginPostion != m_textCursor.position()) {
         m_textCursor.setPosition(m_beginPostion);
     }
 
     m_textCursor.insertText(m_sInsertText);
+    qDebug() << "Inserted text at position:" << m_beginPostion;
 
     if (m_pEdit) {
         QTextCursor curCursor = m_pEdit->textCursor();

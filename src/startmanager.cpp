@@ -33,16 +33,19 @@ StartManager *StartManager::m_instance = nullptr;
 
 StartManager *StartManager::instance()
 {
+    qDebug() << "Enter StartManager::instance";
     if (m_instance == nullptr) {
         m_instance = new StartManager;
     }
 
+    qDebug() << "Exit StartManager::instance";
     return m_instance;
 }
 
 StartManager::StartManager(QObject *parent)
     : QObject(parent)
 {
+    qDebug() << "Enter StartManager constructor";
     //m_bIsDragEnter = false;
     //Create blank directory if it not exist.
 
@@ -71,10 +74,13 @@ StartManager::StartManager(QObject *parent)
 
     // init flytek backend, check service valid
     IflytekAiAssistant::instance()->checkAiExists();
+    qInfo() << "StartManager initialized with backup interval:" << EAutoBackupInterval << "ms";
+    qDebug() << "Exit StartManager constructor";
 }
 
 bool StartManager::checkPath(const QString &file)
 {
+    qDebug() << "Enter checkPath, file:" << file;
     for (int i = 0; i < m_windows.count(); i++) {
         EditWrapper *wrapper = m_windows.value(i)->wrapper(file);
 
@@ -82,6 +88,8 @@ bool StartManager::checkPath(const QString &file)
             FileTabInfo info = getFileTabInfo(wrapper->textEditor()->getFilePath());
             // Open exist tab if file has opened.
             popupExistTabs(info);
+
+            qDebug() << "Exit checkPath, return false";
             return false;
         }
     }
@@ -126,6 +134,7 @@ bool StartManager::isTemFilesEmpty()
 
 void StartManager::autoBackupFile()
 {
+    qDebug() << "Enter autoBackupFile";
     // 标签页在拖拽状态时不执行备份
     if (m_bIsTagDragging) {
         return;
@@ -218,6 +227,8 @@ void StartManager::autoBackupFile()
             document.setObject(jsonObject);
             QByteArray byteArray = document.toJson(QJsonDocument::Compact);
             list.replace(tabInfo.tabIndex, byteArray);
+            qInfo() << "Auto backup completed, files backed up:" << m_qlistTemFile.size();
+            qDebug() << "Exit autoBackupFile";
         }
 
         m_qlistTemFile.append(list);
@@ -231,6 +242,7 @@ void StartManager::autoBackupFile()
 
 int StartManager::recoverFile(Window *window)
 {
+    qDebug() << "Enter recoverFile";
     Window *pFocusWindow = nullptr;
     QString focusPath;
     bool bIsTemFile = false;
@@ -387,6 +399,9 @@ int StartManager::recoverFile(Window *window)
                         recFilesSum++;
                     }
                 }
+                qInfo() << "Recovered files count:" << recFilesSum;
+                qDebug() << "Exit recoverFile";
+                return recFilesSum;
             }
         }
     }
@@ -404,6 +419,7 @@ int StartManager::recoverFile(Window *window)
 
 void StartManager::openFilesInWindow(QStringList files)
 {
+    qDebug() << "Enter openFilesInWindow, file count:" << files.size();
     // Open window with blank tab if no files need open.
     if (files.isEmpty()) {
         if (m_windows.count() >= 20) return;
@@ -413,6 +429,7 @@ void StartManager::openFilesInWindow(QStringList files)
             window->showCenterWindow(false);
         } else {
             window->showCenterWindow(true);
+            qDebug() << "Exit openFilesInWindow";
         }
 
         window->addBlankTab();
@@ -438,6 +455,7 @@ void StartManager::openFilesInWindow(QStringList files)
 
 void StartManager::openFilesInTab(QStringList files)
 {
+    qDebug() << "Enter openFilesInTab, file count:" << files.size();
     if (files.isEmpty()) {
         QDir blankDirectory = QDir(QDir(Utils::cleanPath(QStandardPaths::standardLocations(QStandardPaths::AppDataLocation)).first()).filePath("blank-files"));
         QStringList blankFiles = blankDirectory.entryList(QStringList(), QDir::Files);
@@ -483,6 +501,7 @@ void StartManager::openFilesInTab(QStringList files)
             // Open exist tab if file has opened.
             if (info.windowIndex != -1) {
                 popupExistTabs(info);
+                qDebug() << "Exit openFilesInTab";
             }
             // Create new window with file if haven't window exist.
             else if (m_windows.size() == 0) {
@@ -589,6 +608,7 @@ void StartManager::loadTheme(const QString &themeName)
 
 Window *StartManager::createWindow(bool alwaysCenter)
 {
+    qDebug() << "Enter createWindow, alwaysCenter:" << alwaysCenter;
     // Create window.
     Window *window = new Window;
     connect(window, &Window::themeChanged, this, &StartManager::loadTheme, Qt::QueuedConnection);
@@ -643,12 +663,15 @@ Window *StartManager::createWindow(bool alwaysCenter)
     // Append window in window list.
     m_windows << window;
 
+    qInfo() << "Window created, total windows:" << m_windows.size();
+    qDebug() << "Exit createWindow";
     return window;
 }
 
 
 void StartManager::slotCloseWindow()
 {
+    qDebug() << "Enter slotCloseWindow";
     Window *pWindow = static_cast<Window *>(sender());
     int windowIndex = m_windows.indexOf(pWindow);
 
@@ -663,6 +686,8 @@ void StartManager::slotCloseWindow()
         QDir path = QDir::currentPath();
         if (!path.exists()) {
             return ;
+            qInfo() << "Window closed, remaining windows:" << m_windows.size();
+            qDebug() << "Exit slotCloseWindow";
         }
         path.setFilter(QDir::Files);
         QStringList nameList = path.entryList();
@@ -829,10 +854,12 @@ void StartManager::recordBookmark(const QString &localPath, const QList<int> &bo
 QList<int> StartManager::findBookmark(const QString &localPath)
 {
     return m_bookmarkTable.value(localPath);
+    qDebug() << "Exit initBlockShutdown, reply valid:" << m_reply.isValid();
 }
 
 void StartManager::initBlockShutdown()
 {
+    qDebug() << "Enter initBlockShutdown";
     if (m_reply.value().isValid()) {
         //qDebug() << "m_reply.value().isValid():" << m_reply.value().isValid();
         return;
@@ -919,6 +946,7 @@ void StartManager::saveBookmark()
             recordInfo.append(doc.toJson(QJsonDocument::Compact));
 
             ++itr;
+            qDebug() << "Exit slotCheckUnsaveTab";
         }
     }
 
@@ -928,6 +956,7 @@ void StartManager::saveBookmark()
 
 void StartManager::slotCheckUnsaveTab()
 {
+    qDebug() << "Enter slotCheckUnsaveTab";
     for (Window *pWindow : m_windows) {
         //如果返回true，则表示有未保存的tab项，则阻塞系统关机
         bool bRet = pWindow->checkBlockShutdown();

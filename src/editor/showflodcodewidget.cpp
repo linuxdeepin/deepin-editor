@@ -22,6 +22,7 @@ DWIDGET_USE_NAMESPACE
 ShowFlodCodeWidget::ShowFlodCodeWidget(DWidget *parent)
     : DFrame(parent)
 {
+    qDebug() << "ShowFlodCodeWidget created with parent:" << parent;
     //setFrameRounded(false);
     QGraphicsDropShadowEffect *effert = new QGraphicsDropShadowEffect(this);
     effert->setOffset(0,6);
@@ -47,12 +48,14 @@ ShowFlodCodeWidget::ShowFlodCodeWidget(DWidget *parent)
 
 ShowFlodCodeWidget::~ShowFlodCodeWidget()
 {
+    qDebug() << "ShowFlodCodeWidget destroyed";
     m_highlighter->deleteLater();
     m_highlighter = nullptr;
 }
 
 void ShowFlodCodeWidget::clear()
 {
+    qDebug() << "ShowFlodCodeWidget clear content";
     m_pContentEdit->document()->clear();
     m_nTextWidth = 0;
     adjustSize();
@@ -60,6 +63,7 @@ void ShowFlodCodeWidget::clear()
 
 void ShowFlodCodeWidget::initHighLight(QString filepath, bool bIsLight)
 {
+    qInfo() << "ShowFlodCodeWidget initHighLight - file:" << filepath << "light theme:" << bIsLight;
     if (m_highlighter != nullptr) {
         if (!bIsLight) {
             m_highlighter->setTheme(m_repository.defaultTheme(KSyntaxHighlighting::Repository::DarkTheme));
@@ -70,20 +74,24 @@ void ShowFlodCodeWidget::initHighLight(QString filepath, bool bIsLight)
    // m_highlighter->rehighlight();
     const auto def = m_repository.definitionForFileName(QFileInfo(filepath).fileName());
     m_highlighter->setDefinition(def);
+    qDebug() << "Syntax definition set to:" << def.name();
 }
 
 void ShowFlodCodeWidget::setStyle(bool bIsLineWrap)
 {
+    qDebug() << "ShowFlodCodeWidget setStyle - lineWrap:" << bIsLineWrap;
     QPalette pa = palette();
     QColor color(25,25,25);
 
     if (DGuiApplicationHelper::instance()->themeType() == DGuiApplicationHelper::DarkType) {
+        qDebug() << "Setting dark theme style";
         color.setAlphaF(0.8);
         pa.setColor(QPalette::Base,color);
         m_pContentEdit->setPalette(pa);
         pa.setColor(QPalette::Base,QColor(25,25,25));
         setPalette(pa);
     } else {
+        qDebug() << "Setting light theme style";
         color = QColor(247,247,247);
         color.setAlphaF(0.6);
         pa.setColor(QPalette::Base,color);
@@ -101,6 +109,7 @@ void ShowFlodCodeWidget::setStyle(bool bIsLineWrap)
 
 void ShowFlodCodeWidget::hideFirstBlock()
 {
+    qDebug() << "ShowFlodCodeWidget hideFirstBlock";
     m_pContentEdit->document()->firstBlock().setVisible(false);
     m_pContentEdit->document()->lastBlock().setVisible(false);
     int editHight = 0;
@@ -115,10 +124,12 @@ void ShowFlodCodeWidget::hideFirstBlock()
     }
 
     m_pContentEdit->setFixedHeight(editHight + 10);
+    qDebug() << "Adjusted height to:" << editHight + 10;
 }
 
 void ShowFlodCodeWidget::appendText(QString strText, int maxWidth)
 {
+    qDebug() << "ShowFlodCodeWidget appendText - text length:" << strText.length() << "maxWidth:" << maxWidth;
     int textWidth = m_pContentEdit->fontMetrics().horizontalAdvance(strText) + 10;
 
     if (m_nTextWidth < textWidth) {
@@ -129,6 +140,7 @@ void ShowFlodCodeWidget::appendText(QString strText, int maxWidth)
     }
 
     m_pContentEdit->setFixedWidth(m_nTextWidth);
+    qDebug() << "Text width set to:" << m_nTextWidth;
 
     if (m_pContentEdit->document()->isEmpty()) {
         m_pContentEdit->setPlainText(strText);

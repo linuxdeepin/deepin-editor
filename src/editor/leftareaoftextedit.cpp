@@ -15,6 +15,7 @@
 LeftAreaTextEdit::LeftAreaTextEdit(TextEdit *textEdit) :
     m_pTextEdit(textEdit)
 {
+    qDebug() << "LeftAreaTextEdit created with textEdit:" << textEdit;
     QHBoxLayout *pHLayout = new QHBoxLayout(this);
     m_pLineNumberArea = new LineNumberArea(this);
     m_pBookMarkArea = new BookMarkWidget(this);
@@ -34,11 +35,12 @@ LeftAreaTextEdit::LeftAreaTextEdit(TextEdit *textEdit) :
     pHLayout->setContentsMargins(0, 0, 0, 0);
     pHLayout->setSpacing(0);
     this->setLayout(pHLayout);
+    qDebug() << "LeftAreaTextEdit layout initialized with 3 areas";
 }
 
 LeftAreaTextEdit::~LeftAreaTextEdit()
 {
-
+    qDebug() << "LeftAreaTextEdit destroyed";
 }
 
 void LeftAreaTextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
@@ -71,16 +73,19 @@ void LeftAreaTextEdit::codeFlodAreaPaintEvent(QPaintEvent *event)
 
 void LeftAreaTextEdit::updateLineNumber()
 {
+    qDebug() << "LeftAreaTextEdit updateLineNumber";
     if (m_pLineNumberArea) m_pLineNumberArea->update();
 }
 
 void LeftAreaTextEdit::updateBookMark()
 {
+    qDebug() << "LeftAreaTextEdit updateBookMark";
     if (m_pBookMarkArea) m_pBookMarkArea->update();
 }
 
 void LeftAreaTextEdit::updateCodeFlod()
 {
+    qDebug() << "LeftAreaTextEdit updateCodeFlod";
     if (m_pFlodArea) m_pFlodArea->update();
 }
 

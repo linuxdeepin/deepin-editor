@@ -148,11 +148,13 @@ EditWrapper::~EditWrapper()
 
 void EditWrapper::setQuitFlag()
 {
+    qDebug() << "Setting quit flag to true";
     m_bQuit = true;
 }
 
 bool EditWrapper::isQuit()
 {
+    qDebug() << "Checking quit status:" << m_bQuit;
     return m_bQuit;
 }
 
@@ -163,6 +165,8 @@ bool EditWrapper::getFileLoading()
 
 void EditWrapper::openFile(const QString &filepath, QString qstrTruePath, bool bIsTemFile)
 {
+    qDebug() << "Opening file:" << filepath << "Real path:" << qstrTruePath << "Is temp:" << bIsTemFile;
+    
     m_bIsTemFile = bIsTemFile;
     // update file path.
     updatePath(filepath, qstrTruePath);
@@ -171,11 +175,14 @@ void EditWrapper::openFile(const QString &filepath, QString qstrTruePath, bool b
     m_bHasPreProcess = false;
 
     if (!bIsTemFile && !isDraftFile()) {
-        Settings::instance()->setSavePath(PathSettingWgt::LastOptBox, QFileInfo(qstrTruePath).absolutePath());
-        Settings::instance()->setSavePath(PathSettingWgt::CurFileBox, QFileInfo(qstrTruePath).absolutePath());
+        QString absPath = QFileInfo(qstrTruePath).absolutePath();
+        qDebug() << "Setting save paths to:" << absPath;
+        Settings::instance()->setSavePath(PathSettingWgt::LastOptBox, absPath);
+        Settings::instance()->setSavePath(PathSettingWgt::CurFileBox, absPath);
     }
 
     FileLoadThread *thread = new FileLoadThread(filepath);
+    qDebug() << "Created file load thread for:" << filepath;
     // begin to load the file.
     connect(thread, &FileLoadThread::sigPreProcess, this, &EditWrapper::handleFilePreProcess);
     connect(thread, &FileLoadThread::sigLoadFinished, this, &EditWrapper::handleFileLoadFinished);
@@ -191,19 +198,31 @@ void EditWrapper::openFile(const QString &filepath, QString qstrTruePath, bool b
  */
 bool EditWrapper::readFile(QByteArray encode)
 {
-    QFile file(m_pTextEdit->getTruePath());
+    qDebug() << "Reading file with encoding:" << encode;
+    QString filePath = m_pTextEdit->getTruePath();
+    qDebug() << "Reading file:" << filePath << "with encode:" << encode;
+    
+    QFile file(filePath);
     if (file.open(QIODevice::ReadOnly)) {
+        qDebug() << "File opened successfully";
         QByteArray fileContent = file.readAll();
         QByteArray newEncode = encode;
         if (newEncode.isEmpty()) {
+            qDebug() << "Auto detecting file encoding";
             // 接口修改，补充文件头内容，最多读取1MB文件头数据
             newEncode = DetectCode::GetFileEncodingFormat(
                             m_pTextEdit->getFilePath(), fileContent.left(DATA_SIZE_1024 * DATA_SIZE_1024));
+            qDebug() << "Detected file encoding:" << newEncode;
             m_sFirstEncode = newEncode;
         }
 
         QByteArray Outdata;
-        DetectCode::ChangeFileEncodingFormat(fileContent, Outdata, newEncode, QString("UTF-8"));
+        bool encodeSuccess = DetectCode::ChangeFileEncodingFormat(fileContent, Outdata, newEncode, QString("UTF-8"));
+        if (!encodeSuccess) {
+            qWarning() << "Failed to convert file encoding";
+            return false;
+        }
+        qDebug() << "File encoding converted successfully";
         loadContent(Outdata);
         file.close();
         m_sCurEncode = newEncode;
@@ -221,6 +240,8 @@ bool EditWrapper::readFile(QByteArray encode)
  */
 bool EditWrapper::saveAsFile(const QString &newFilePath, const QByteArray &encodeName)
 {
+    qDebug() << "Attempting to save file to:" << newFilePath << "with encoding:" << encodeName;
+    
     // Use TextFileSaver for safe file saving
     TextFileSaver saver(m_pTextEdit->document());
     saver.setFilePath(newFilePath);
@@ -228,7 +249,7 @@ bool EditWrapper::saveAsFile(const QString &newFilePath, const QByteArray &encod
     
     bool saveSuccess = saver.save();
     if (!saveSuccess) {
-        qWarning() << "Failed to save file:" << saver.errorString();
+        qWarning() << "Failed to save file:" << newFilePath << "Error:" << saver.errorString();
         QWidget *curWidget = this->window()->getStackedWgt()->currentWidget();
         if (curWidget) {
             DMessageManager::instance()->sendMessage(
@@ -288,8 +309,11 @@ bool EditWrapper::saveAsFile()
  */
 bool EditWrapper::reloadFileEncode(QByteArray encode)
 {
+    qDebug() << "Reloading file with new encoding:" << encode << "Current encoding:" << m_sCurEncode;
+    
     //切换编码相同不重写加载
     if (m_sCurEncode == encode) {
+        qDebug() << "Encoding unchanged, skipping reload";
         return false;
     }
 
@@ -372,6 +396,7 @@ bool EditWrapper::reloadFileEncode(QByteArray encode)
  */
 void EditWrapper::reloadFileHighlight(QString definitionName)
 {
+    qDebug() << "Reloading syntax highlight with definition:" << definitionName;
     m_Definition = m_Repository.definitionForName(definitionName);
     if (m_Definition.isValid() && !m_Definition.filePath().isEmpty()) {
         if (!m_pSyntaxHighlighter) m_pSyntaxHighlighter = new CSyntaxHighlighter(m_pTextEdit->document());
@@ -810,12 +835,16 @@ void EditWrapper::handleFilePreProcess(const QByteArray &encode, const QByteArra
  */
 void EditWrapper::handleFileLoadFinished(const QByteArray &encode, const QByteArray &content, bool error)
 {
+    qDebug() << "File load finished. Encoding:" << encode << "Error:" << error << "Preprocessed:" << m_bHasPreProcess;
+    
     // 判断是否预加载，若已预加载，则无需重新初始化
     if (!m_bHasPreProcess) {
+        qDebug() << "Performing initial file load initialization";
         reinitOnFileLoad(encode);
     }
 
     if (!error) {
+        qDebug() << "File content loaded successfully. Size:" << content.size() << "bytes";
         bool flag = m_pTextEdit->getReadOnlyPermission();
         if (flag == true) {
             // note: 特殊处理，由于需要TextEdit处于可编辑状态追加文件数据，临时设置非只读状态
@@ -1071,12 +1100,22 @@ void EditWrapper::setLastModifiedTime(const QString &time)
 }
 void EditWrapper::updateModifyStatus(bool bModified)
 {
-    if (getFileLoading()) return;
-    if (!bModified)
+    if (getFileLoading()) {
+        qDebug() << "Skipping modify status update during file loading";
+        return;
+    }
+    
+    QString filePath = m_pTextEdit->getFilePath();
+    qDebug() << "Updating modify status for:" << filePath << "New status:" << bModified;
+    
+    if (!bModified) {
+        qDebug() << "Updating save index for:" << filePath;
         m_pTextEdit->updateSaveIndex();
+    }
+    
     m_pTextEdit->document()->setModified(bModified);
     Window *pWindow = static_cast<Window *>(QWidget::window());
-    pWindow->updateModifyStatus(m_pTextEdit->getFilePath(), bModified);
+    pWindow->updateModifyStatus(filePath, bModified);
 }
 
 void EditWrapper::updateSaveAsFileName(QString strOldFilePath, QString strNewFilePath)

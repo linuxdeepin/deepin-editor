@@ -125,6 +125,7 @@ DetectCode::DetectCode() {}
  */
 QByteArray DetectCode::GetFileEncodingFormat(QString filepath, QByteArray content)
 {
+    qDebug() << "Enter GetFileEncodingFormat";
     QString charDetectedResult;
     QByteArray ucharDetectdRet;
     QByteArrayList icuDetectRetList;
@@ -188,11 +189,14 @@ QByteArray DetectCode::GetFileEncodingFormat(QString filepath, QByteArray conten
         }
     }
 
+    qDebug() << "Exit GetFileEncodingFormat";
     return detectRet.toUpper();
 }
 
 QByteArray DetectCode::UchardetCode(QString filepath)
 {
+    qDebug() << "Enter UchardetCode, file:" << filepath;
+
     FILE *fp;
     QByteArray charset;
 
@@ -232,6 +236,8 @@ QByteArray DetectCode::UchardetCode(QString filepath)
         charset = "MACCYRILLIC";
     if (charset.contains("WINDOWS-"))
         charset = charset.replace("WINDOWS-", "CP");
+
+    qDebug() << "Exit UchardetCode";
     return charset;
 }
 
@@ -242,6 +248,7 @@ QByteArray DetectCode::UchardetCode(QString filepath)
  **/
 void DetectCode::icuDetectTextEncoding(const QString &filePath, QByteArrayList &listDetectRet)
 {
+    qDebug() << "Enter icuDetectTextEncoding, file:" << filePath;
     FILE *file;
     file = fopen(filePath.toLocal8Bit().data(), "rb");
     if (file == nullptr) {
@@ -260,16 +267,19 @@ void DetectCode::icuDetectTextEncoding(const QString &filePath, QByteArrayList &
         readed += len;
         if (readed > 1 * 1024 * 1024) {
             break;
+            qDebug() << "[DetectCode] Exit icuDetectTextEncoding, detected encodings:" << listDetectRet;
         }
 
         if (detectTextEncoding(buffer, len, &detected, listDetectRet)) {
             break;
+            qDebug() << "Exit icuDetectTextEncoding, detected encodings:" << listDetectRet;
         }
     }
 
     delete[] buffer;
     buffer = nullptr;
     fclose(file);
+    qDebug() << "Exit icuDetectTextEncoding, detected encodings:" << listDetectRet;
 }
 
 /**
@@ -281,6 +291,8 @@ void DetectCode::icuDetectTextEncoding(const QString &filePath, QByteArrayList &
  **/
 bool DetectCode::detectTextEncoding(const char *data, size_t len, char **detected, QByteArrayList &listDetectRet)
 {
+    qDebug() << "[DetectCode] Enter detectTextEncoding, data size:" << len;
+
     Q_UNUSED(detected);
 
     UCharsetDetector *csd;
@@ -320,6 +332,8 @@ bool DetectCode::detectTextEncoding(const char *data, size_t len, char **detecte
     }
 
     ucsdet_close(csd);
+    qDebug() << "Exit detectTextEncoding, result:" << !listDetectRet.isEmpty();
+
     return true;
 }
 
@@ -331,8 +345,12 @@ bool DetectCode::detectTextEncoding(const char *data, size_t len, char **detecte
  **/
 QByteArray DetectCode::selectCoding(QByteArray ucharDetectdRet, QByteArrayList icuDetectRetList, float confidence)
 {
+    qDebug() << "[DetectCode] Enter selectCoding, uchardet:" << ucharDetectdRet
+             << "icu:" << icuDetectRetList << "confidence:" << confidence;
+
     // 列表不允许为空
     if (icuDetectRetList.isEmpty()) {
+        qDebug() << "[DetectCode] Exit selectCoding, selected:" << (icuDetectRetList.isEmpty() ? QByteArray() : icuDetectRetList[0]);
         return QByteArray();
     }
 
@@ -371,6 +389,7 @@ QByteArray DetectCode::selectCoding(QByteArray ucharDetectdRet, QByteArrayList i
         }
     }
 
+    qDebug() << "Exit selectCoding, selected:" << (icuDetectRetList.isEmpty() ? QByteArray() : icuDetectRetList[0]);
     return QByteArray();
 }
 
@@ -685,6 +704,9 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr,
                                           const QString &fromCode,
                                           const QString &toCode)
 {
+    qDebug() << "[DetectCode] Enter ChangeFileEncodingFormat, from:" << fromCode << "to:" << toCode
+             << "input size:" << inputStr.size();
+
     if (fromCode == toCode) {
         outStr = inputStr;
         return true;
@@ -805,6 +827,7 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr,
                         inbuf += replaceLen;
                         inbytesleft -= replaceLen;
                     } else {
+                        qWarning() << "[DetectCode] iconv_open failed for conversion from" << fromCode << "to" << toCode;
                         break;
                     }
                 }
@@ -829,6 +852,8 @@ bool DetectCode::ChangeFileEncodingFormat(QByteArray &inputStr,
         delete[] bufferHeader;
         bufferHeader = nullptr;
 
+        qDebug() << "Exit convertEncodingTextCodec, output size:" << outStr.size();
+
         return true;
 
     } else {
@@ -847,6 +872,9 @@ bool DetectCode::convertEncodingTextCodec(QByteArray &inputStr,
                                           const QString &fromCode,
                                           const QString &toCode)
 {
+    qDebug() << "Enter convertEncodingTextCodec, from:" << fromCode << "to:" << toCode
+             << "input size:" << inputStr.size();
+
     QString convertData;
     if (fromCode != "UTF-8") {
         QTextCodec *fromCodec = QTextCodec::codecForName(fromCode.toUtf8());
@@ -872,5 +900,6 @@ bool DetectCode::convertEncodingTextCodec(QByteArray &inputStr,
 
     // 手动添加 UTF BOM 信息
     outStr.append(gs_byteOrderMark.value(toCode));
+    qDebug() << "Exit convertEncodingTextCodec, output size:" << outStr.size();
     return true;
 }

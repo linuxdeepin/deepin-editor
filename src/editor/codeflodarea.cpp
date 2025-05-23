@@ -5,14 +5,18 @@
 #include "codeflodarea.h"
 #include "leftareaoftextedit.h"
 
+#include <QDebug>
+
 
 CodeFlodArea::CodeFlodArea(LeftAreaTextEdit *leftAreaWidget)
 {
+    qDebug() << "CodeFlodArea created";
     m_pLeftAreaWidget = leftAreaWidget;
 }
 
 CodeFlodArea::~CodeFlodArea()
 {
+    qDebug() << "CodeFlodArea destroyed";
 
 }
 

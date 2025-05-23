@@ -17,6 +17,7 @@ ThemePanel::ThemePanel(QWidget *parent)
       m_themeModel(new ThemeListModel),
       m_window(static_cast<Window *>(parent))
 {
+    qDebug() << "ThemePanel constructor";
     // init view.
     m_themeView->setModel(m_themeModel);
     m_themeView->setItemDelegate(new ThemeItemDelegate(this));
@@ -43,6 +44,7 @@ ThemePanel::ThemePanel(QWidget *parent)
 
 ThemePanel::~ThemePanel()
 {
+    qDebug() << "ThemePanel destructor";
 }
 
 void ThemePanel::paintEvent(QPaintEvent *e)
@@ -59,9 +61,9 @@ void ThemePanel::paintEvent(QPaintEvent *e)
     painter.setOpacity(0.1);
     painter.fillPath(separatorPath, m_frameColor);
 }
-
 void ThemePanel::setBackground(const QString &color)
 {
+    qDebug() << "Setting panel background color:" << color;
     m_backgroundColor = QColor(color);
 
     if (m_backgroundColor.lightness() < 128) {
@@ -75,6 +77,7 @@ void ThemePanel::setBackground(const QString &color)
 
 void ThemePanel::popup()
 {
+    qDebug() << "Showing theme panel with animation";
     QWidget::show();
     QWidget::raise();
 
@@ -95,6 +98,7 @@ void ThemePanel::popup()
 
 void ThemePanel::hide()
 {
+    qDebug() << "Hiding theme panel with animation";
     QRect rect = geometry();
     QRect windowRect = m_window->geometry();
     QPropertyAnimation *animation = new QPropertyAnimation(this, "geometry");
@@ -116,5 +120,6 @@ void ThemePanel::setFrameColor(const QString &selectedColor, const QString &norm
 
 void ThemePanel::setSelectionTheme(const QString &path)
 {
+    qDebug() << "Setting selected theme path:" << path;
     m_themeModel->setSelection(path);
 }

@@ -27,16 +27,18 @@ CustemBackend::CustemBackend(const QString &filepath, QObject *parent)
     : DSettingsBackend (parent),
       m_settings (new QSettings(filepath, QSettings::IniFormat))
 {
-
+    qDebug() << "CustemBackend::CustemBackend" << filepath;
 }
 
 void CustemBackend::doSync()
 {
+    qDebug() << "CustemBackend::doSync";
     m_settings->sync();
 }
 
 void CustemBackend::doSetOption(const QString &key, const QVariant &value)
 {
+    qDebug() << "CustemBackend::doSetOption" << key << value;
     /*
      * 将配置值写入config配置文件
      * 为了规避数据写入重复或者错乱，配置写入之前上锁，写入结束后开锁
@@ -50,31 +52,44 @@ void CustemBackend::doSetOption(const QString &key, const QVariant &value)
 QStringList CustemBackend::keys() const
 {
     QStringList keyList = m_settings->allKeys();
+    qDebug() << "CustemBackend::keys" << keyList;
 
     return keyList;
 }
 
 QVariant CustemBackend::getOption(const QString &key) const
 {
+    qDebug() << "CustemBackend::getOption" << key;
     return m_settings->value(key);
 }
 
 CustemBackend::~CustemBackend()
-{}
+{
+    qDebug() << "CustemBackend::~CustemBackend";
+}
 
 Settings::Settings(QWidget *parent)
     : QObject(parent)
 {
+    qDebug() << "Initializing Settings instance";
+    
     QString strConfigPath = QString("%1/%2/%3/config.conf")
                             .arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation))
                             .arg(qApp->organizationName())
                             .arg(qApp->applicationName());
+    qDebug() << "Config file path:" << strConfigPath;
 
     removeLockFiles();
     m_backend = new QSettingBackend(strConfigPath);
+    qDebug() << "Created QSettingBackend for config file";
 
     settings = DSettings::fromJsonFile(":/resources/settings.json");
+    if (!settings) {
+        qWarning() << "Failed to load settings from JSON file";
+        return;
+    }
     settings->setBackend(m_backend);
+    qInfo() << "Settings initialized successfully";
 
     auto fontFamliy = settings->option("base.font.family");
     connect(fontFamliy, &Dtk::Core::DSettingsOption::valueChanged, this, &Settings::slotsigAdjustFont);
@@ -135,6 +150,7 @@ Settings::Settings(QWidget *parent)
 
 void Settings::setSavePath(int id,const QString& path)
 {
+    qDebug() << "Setting save path for id:" << id << "path:" << path;
     switch (id) {
     case PathSettingWgt::LastOptBox:{
         auto opt = settings->option("advance.open_save_setting.open_save_lastopt_path");
@@ -159,6 +175,7 @@ void Settings::setSavePath(int id,const QString& path)
 
 QString Settings::getSavePath(int id)
 {
+    qDebug() << "Getting save path for id:" << id;
     QString path;
     switch (id) {
     case PathSettingWgt::LastOptBox:{
@@ -182,8 +199,10 @@ QString Settings::getSavePath(int id)
 
 void Settings::setSavePathId(int id)
 {
+    qDebug() << "Setting save path ID:" << id;
     auto opt = settings->option("advance.open_save_setting.savingpathwgt");
     opt->setValue(QString::number(id));
+    qDebug() << "Save path ID set to:" << opt->value();
 }
 int Settings::getSavePathId()
 {
@@ -192,21 +211,27 @@ int Settings::getSavePathId()
 }
 Settings::~Settings()
 {
+    qDebug() << "Destroying Settings instance";
     if (m_backend != nullptr) {
+        qDebug() << "Cleaning up settings backend";
         delete m_backend;
         m_backend = nullptr;
     }
+    qDebug() << "Settings instance destroyed";
 }
 
 void Settings::setSettingDialog(DSettingsDialog *settingsDialog)
 {
+    qDebug() << "Setting dialog instance";
     m_pSettingsDialog = settingsDialog;
 }
 
 // This function is workaround, it will remove after DTK fixed SettingDialog theme bug.
 void Settings::dtkThemeWorkaround(QWidget *parent, const QString &theme)
 {
+    qDebug() << "Applying DTK theme workaround, theme:" << theme;
     parent->setStyle(QStyleFactory::create(theme));
+    qDebug() << "Theme applied to parent widget";
 
     for (auto obj : parent->children()) {
         auto w = qobject_cast<QWidget *>(obj);
@@ -260,6 +285,7 @@ QPair<QWidget *, QWidget *> Settings::createFontComBoBoxHandle(QObject *obj)
 
 QWidget* Settings::createSavingPathWgt(QObject* obj)
 {
+    qDebug() << "Creating saving path widget";
     auto option = qobject_cast<DTK_CORE_NAMESPACE::DSettingsOption *>(obj);
     QString name = option->name();
     PathSettingWgt* pathwgt = new PathSettingWgt;
@@ -499,7 +525,9 @@ bool KeySequenceEdit::eventFilter(QObject *object, QEvent *event)
 }
 Settings *Settings::instance()
 {
+    qDebug() << "Accessing Settings singleton instance";
     if (s_pSetting == nullptr) {
+        qDebug() << "Creating new Settings instance";
         s_pSetting = new Settings;
     }
     return s_pSetting;
@@ -507,8 +535,10 @@ Settings *Settings::instance()
 
 void Settings::updateAllKeysWithKeymap(QString keymap)
 {
+    qDebug() << "Updating all keys with keymap:" << keymap;
     m_bUserChangeKey = true;
 
+    int updatedCount = 0;
     for (auto option : settings->group("shortcuts.window")->options()) {
         QStringList keySplitList = option->key().split(".");
         keySplitList[1] = QString("%1_keymap_%2").arg(keySplitList[1]).arg(keymap);
@@ -521,6 +551,7 @@ void Settings::updateAllKeysWithKeymap(QString keymap)
     }
 
     for (auto option : settings->group("shortcuts.editor")->options()) {
+        updatedCount++;
         QStringList keySplitList = option->key().split(".");
         keySplitList[1] = QString("%1_keymap_%2").arg(keySplitList[1]).arg(keymap);
         auto opt = settings->option(keySplitList.join("."));
@@ -532,6 +563,7 @@ void Settings::updateAllKeysWithKeymap(QString keymap)
     }
 
     m_bUserChangeKey = false;
+    qInfo() << "Updated" << updatedCount << "shortcuts with keymap:" << keymap;
 }
 
 void Settings::copyCustomizeKeysFromKeymap(QString keymap)
@@ -630,24 +662,34 @@ DDialog *Settings::createDialog(const QString &title, const QString &content, co
 //删除config.conf配置文件目录下的.lock文件和.rmlock文件
 void Settings::removeLockFiles()
 {
+    qDebug() << "Removing lock files";
     QString configPath = QString("%1/%2/%3")
             .arg(QStandardPaths::writableLocation(QStandardPaths::ConfigLocation))
             .arg(qApp->organizationName())
             .arg(qApp->applicationName());
+    qDebug() << "Config directory:" << configPath;
 
     QDir dir(configPath);
     if (!dir.exists()) {
+        qDebug() << "Config directory does not exist";
         return;
     }
 
     dir.setFilter(QDir::Files);
     QStringList nameList = dir.entryList();
+    int removedCount = 0;
     for (auto name: nameList) {
         if (name.contains(".lock") || name.contains(".rmlock")) {
+            qDebug() << "Removing lock file:" << name;
             QFile file(name);
-            file.remove();
+            if (file.remove()) {
+                removedCount++;
+            } else {
+                qWarning() << "Failed to remove lock file:" << name;
+            }
         }
     }
+    qInfo() << "Removed" << removedCount << "lock files";
 }
 
 void Settings::slotCustomshortcut(const QString &key, const QVariant &value)
@@ -681,46 +723,55 @@ void Settings::slotCustomshortcut(const QString &key, const QVariant &value)
 
 void Settings::slotsigAdjustFont(QVariant value)
 {
+    qDebug() << "Font family changed to:" << value.toString();
     emit sigAdjustFont(value.toString());
 }
 
 void Settings::slotsigAdjustFontSize(QVariant value)
 {
+    qDebug() << "Font size changed to:" << value.toReal();
     emit sigAdjustFontSize(value.toReal());
 }
 
 void Settings::slotsigAdjustWordWrap(QVariant value)
 {
+    qDebug() << "Word wrap setting changed to:" << value.toBool();
     emit sigAdjustWordWrap(value.toBool());
 }
 
 void Settings::slotsigSetLineNumberShow(QVariant value)
 {
+    qDebug() << "Line number show setting changed to:" << value.toBool();
     emit sigSetLineNumberShow(value.toBool());
 }
 
 void Settings::slotsigAdjustBookmark(QVariant value)
 {
+    qDebug() << "Bookmark setting changed to:" << value.toBool();
     emit sigAdjustBookmark(value.toBool());
 }
 
 void Settings::slotsigShowCodeFlodFlag(QVariant value)
 {
+    qDebug() << "Code fold flag setting changed to:" << value.toBool();
     emit sigShowCodeFlodFlag(value.toBool());
 }
 
 void Settings::slotsigShowBlankCharacter(QVariant value)
 {
+    qDebug() << "Blank character setting changed to:" << value.toBool();
     emit sigShowBlankCharacter(value.toBool());
 }
 
 void Settings::slotsigHightLightCurrentLine(QVariant value)
 {
+    qDebug() << "Highlight current line setting changed to:" << value.toBool();
     emit sigHightLightCurrentLine(value.toBool());
 }
 
 void Settings::slotsigAdjustTabSpaceNumber(QVariant value)
 {
+    qDebug() << "Tab space number changed to:" << value.toInt();
     emit sigAdjustTabSpaceNumber(value.toInt());
 }
 

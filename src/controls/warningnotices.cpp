@@ -17,6 +17,7 @@ const int s_WNCloseBtnSizeCompact = 26;
 WarningNotices::WarningNotices(MessageType notifyType, QWidget *parent)
     : DFloatingMessage(notifyType, parent)
 {
+    qDebug() << "WarningNotices constructor start, type:" << notifyType;
     this->setFont(qApp->font());
 
     setIcon(QIcon(":/images/warning.svg"));
@@ -24,9 +25,11 @@ WarningNotices::WarningNotices(MessageType notifyType, QWidget *parent)
     m_saveAsBtn = new QPushButton(qApp->translate("Window", "Save as"), this);
     m_reloadBtn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     m_saveAsBtn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    qDebug() << "Warning buttons initialized";
 
     connect(m_reloadBtn, &QPushButton::clicked, this, &WarningNotices::slotreloadBtnClicked);
     connect(m_saveAsBtn, &QPushButton::clicked, this, &WarningNotices::slotsaveAsBtnClicked);
+    qDebug() << "Warning button signals connected";
 
 #ifdef DTKWIDGET_CLASS_DSizeMode
     DDialogCloseButton *closeBtn = findChild<DDialogCloseButton *>();
@@ -81,12 +84,14 @@ void WarningNotices::clearBtn()
 
 void WarningNotices::slotreloadBtnClicked()
 {
+    qDebug() << "Reload button clicked, hiding warning";
     this->hide();
     emit reloadBtnClicked();
 }
 
 void WarningNotices::slotsaveAsBtnClicked()
 {
+    qDebug() << "SaveAs button clicked, hiding warning";
     this->hide();
     emit saveAsBtnClicked();
 }

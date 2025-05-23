@@ -28,12 +28,13 @@ const int s_nCloseButtonSizeCompact = 27;
 JumpLineBar::JumpLineBar(DFloatingWidget *parent)
     : DFloatingWidget(parent)
 {
+    qDebug() << "JumpLineBar constructor start";
     // Init layout and widgets.
     m_layout = new QHBoxLayout();
     m_layout->setContentsMargins(10, 0, 10, 0);
     m_layout->setAlignment(Qt::AlignVCenter);
     m_layout->setSpacing(5);
-
+    qDebug() << "Base layout initialized";
     m_closeButton = new DIconButton(DStyle::SP_CloseButton);
     m_closeButton->setIconSize(QSize(30, 30));
     m_closeButton->setFixedSize(30, 30);
@@ -76,6 +77,7 @@ JumpLineBar::~JumpLineBar()
 
 void JumpLineBar::focus()
 {
+    qDebug() << "Setting focus to line input";
     m_pSpinBoxInput->lineEdit()->setFocus();
 }
 
@@ -86,6 +88,9 @@ bool JumpLineBar::isFocus()
 
 void JumpLineBar::activeInput(QString file, int row, int column, int lineCount, int scrollOffset)
 {
+    qDebug() << "Activating input for file:" << file
+                   << "row:" << row << "column:" << column
+                   << "lineCount:" << lineCount;
     // Save file info for back to line.
     m_jumpFile = file;
     m_rowBeforeJump = row;
@@ -104,8 +109,10 @@ void JumpLineBar::activeInput(QString file, int row, int column, int lineCount, 
     setFixedWidth(m_layout->sizeHint().width() + s_nJumpLineBarHorizenMargin);
 
     // Clear line number.
-    if (m_pSpinBoxInput->lineEdit()->text().toInt() > lineCount)
+    if (m_pSpinBoxInput->lineEdit()->text().toInt() > lineCount) {
+        qDebug() << "Clearing invalid line number input";
         m_pSpinBoxInput->lineEdit()->setText("");
+    }
 }
 
 void JumpLineBar::handleFocusOut()
@@ -184,7 +191,10 @@ bool JumpLineBar::eventFilter(QObject *pObject, QEvent *pEvent)
 void JumpLineBar::updateSizeMode()
 {
 #ifdef DTKWIDGET_CLASS_DSizeMode
-    if (DGuiApplicationHelper::isCompactMode()) {
+    bool isCompact = DGuiApplicationHelper::isCompactMode();
+    qDebug() << "Updating size mode, compact:" << isCompact;
+    
+    if (isCompact) {
         m_layout->setContentsMargins(s_JLBCompactMarigins);
         m_closeButton->setIconSize(QSize(s_nCloseButtonSizeCompact, s_nCloseButtonSizeCompact));
         m_closeButton->setFixedSize(QSize(s_nCloseButtonSizeCompact, s_nCloseButtonSizeCompact));
