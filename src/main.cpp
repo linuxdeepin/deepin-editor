@@ -30,22 +30,24 @@ DWIDGET_USE_NAMESPACE
 
 int main(int argc, char *argv[])
 {
+    qDebug() << "Application starting with arguments:" << QCoreApplication::arguments();
     DCORE_USE_NAMESPACE
     PerformanceMonitor::initializeAppStart();
     if (!QString(qgetenv("XDG_CURRENT_DESKTOP")).toLower().startsWith("deepin")) {
         setenv("XDG_CURRENT_DESKTOP", "Deepin", 1);
     }
-
+    qDebug() << "XDG_CURRENT_DESKTOP set to:" << qgetenv("XDG_CURRENT_DESKTOP");
     QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
 
     EditorApplication app(argc, argv);
+    qInfo() << "Application instance created, version:" << app.applicationVersion();
     // save theme
     // DApplicationSettings savetheme;
 
     // 需在App构造后初始化日志设置
     DLogManager::registerConsoleAppender();
     DLogManager::registerFileAppender();
-
+    qDebug() << "Log system initialized";
     // Parser input arguments.
     QCommandLineParser parser;
     const QCommandLineOption newWindowOption("w", "Open file in new window");
@@ -71,7 +73,9 @@ int main(int argc, char *argv[])
 
     QDBusConnection dbus = QDBusConnection::sessionBus();
     // Start editor process if not found any editor use DBus.
+    qDebug() << "Attempting to register DBus service";
     if (dbus.registerService("com.deepin.Editor")) {
+        qInfo() << "DBus service registered successfully";
 #ifdef DTKWIDGET_CLASS_DSizeMode
         // 不同模式下的基础字体像素大小不同，系统级别为 T6 的字体大小, 默认是 14px ；在紧凑模式下 T6 为 12px
         QObject::connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, []() {
@@ -110,6 +114,7 @@ int main(int argc, char *argv[])
         dbus.registerObject("/com/deepin/Editor", startManager, QDBusConnection::ExportScriptableSlots);
 
         PerformanceMonitor::initializAppFinish();
+        qDebug() << "Entering main event loop";
         return app.exec();
     }
     // Just send dbus message to exist editor process.
@@ -127,5 +132,6 @@ int main(int argc, char *argv[])
         }
     }
 
+    qDebug() << "Application exiting with code 0";
     return 0;
 }

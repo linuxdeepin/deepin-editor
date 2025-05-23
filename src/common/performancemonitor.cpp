@@ -19,7 +19,7 @@ qint64 PerformanceMonitor::openFileFinishMs      = 0;
 
 PerformanceMonitor::PerformanceMonitor()
 {
-
+    qDebug() << "PerformanceMonitor instance created";
 }
 
 void PerformanceMonitor::initializeAppStart()
@@ -29,6 +29,7 @@ void PerformanceMonitor::initializeAppStart()
              << QDateTime::currentDateTime().toString(Qt::ISODateWithMs)
              << "start to initialize app";
     initializeAppStartMs = current.toMSecsSinceEpoch();
+    qDebug() << "Application start timestamp recorded:" << initializeAppStartMs;
 }
 
 void PerformanceMonitor::initializAppFinish()
@@ -47,6 +48,7 @@ void PerformanceMonitor::closeAppStart()
 {
     QDateTime current = QDateTime::currentDateTime();
     closeAppStartMs = current.toMSecsSinceEpoch();
+    qDebug() << "Application close process started, timestamp:" << closeAppStartMs;
 }
 
 void PerformanceMonitor::closeAPPFinish()

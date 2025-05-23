@@ -85,6 +85,7 @@ void ColorLabel::mousePressEvent(QMouseEvent *e)
 
 ColorSelectWdg::ColorSelectWdg(QString text,QWidget *parent):DWidget (parent),m_text(text)
 {
+    qDebug() << "ColorSelectWdg constructor with text:" << text;
     setFocusPolicy(Qt::NoFocus);
     setMouseTracking(true);
     if(!text.isEmpty())setFixedHeight(60);
@@ -94,6 +95,7 @@ ColorSelectWdg::ColorSelectWdg(QString text,QWidget *parent):DWidget (parent),m_
 
 ColorSelectWdg::~ColorSelectWdg()
 {
+    qDebug() << "ColorSelectWdg destructor";
     if (m_pHLayout2 != nullptr) {
         delete m_pHLayout2;
         m_pHLayout2=nullptr;
@@ -125,6 +127,7 @@ void ColorSelectWdg::initWidget()
         m_pButton->setMinimumSize(80,25);
         m_pButton->setFlat(true);
         connect(m_pButton,&QPushButton::clicked,this,[this](){
+            qInfo() << "Color select button clicked, default color:" << m_defaultColor.name();
             //发送选择信号
             emit this->sigColorSelected(true,m_defaultColor);
         });
@@ -138,6 +141,7 @@ void ColorSelectWdg::initWidget()
         //第一个设置默认标记颜色
         if(i == 0){
             m_defaultColor = colors[i];
+            qDebug() << "Setting default color to:" << m_defaultColor.name();
             colorlabel->setColorSelected(true);
         }
 
@@ -146,9 +150,13 @@ void ColorSelectWdg::initWidget()
 
         connect(colorlabel,&ColorLabel::sigColorClicked,this,[this,colorlabel](bool bSelect,QColor color){
             if(bSelect){
+                qDebug() << "Color label clicked, selected color:" << color.name();
                 foreach(ColorLabel* pLabel,m_colorLabels){
                     //如果选择　设置其他颜色label为未选中状态
-                    if(pLabel != colorlabel && pLabel->isSelected()) pLabel->setColorSelected(false);
+                    if(pLabel != colorlabel && pLabel->isSelected()) {
+                        qDebug() << "Deselecting color label:" << pLabel->getColor().name();
+                        pLabel->setColorSelected(false);
+                    }
                 }
                 m_defaultColor = color;
                 //发送选择信号

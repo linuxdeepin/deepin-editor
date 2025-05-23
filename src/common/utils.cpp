@@ -46,12 +46,18 @@ QString Utils::m_systemLanguage;
 
 QString Utils::getQrcPath(const QString &imageName)
 {
-    return QString(":/images/%1").arg(imageName);
+    qDebug() << "Enter getQrcPath, imageName:" << imageName;
+    QString path = QString(":/images/%1").arg(imageName);
+    qDebug() << "Exit getQrcPath, return path:" << path;
+    return path;
 }
 
 QString Utils::getQssPath(const QString &qssName)
 {
-    return QString(":/qss/%1").arg(qssName);
+    qDebug() << "Enter getQssPath, qssName:" << qssName;
+    QString path = QString(":/qss/%1").arg(qssName);
+    qDebug() << "Exit getQssPath, return path:" << path;
+    return path;
 }
 
 QSize Utils::getRenderSize(int fontSize, const QString &string)
@@ -375,16 +381,20 @@ QByteArray Utils::getEncode(const QByteArray &data)
 
 bool Utils::fileExists(const QString &path)
 {
+    qDebug() << "Enter fileExists, path:" << path;
     QFileInfo check_file(path);
-
-    return check_file.exists() && check_file.isFile();
+    bool exists = check_file.exists() && check_file.isFile();
+    qDebug() << "Exit fileExists, file exists:" << exists;
+    return exists;
 }
 
 bool Utils::fileIsWritable(const QString &path)
 {
+    qDebug() << "Enter fileIsWritable, path:" << path;
     QFileDevice::Permissions permissions = QFile(path).permissions();
-
-    return permissions & QFileDevice::WriteUser;
+    bool writable = permissions & QFileDevice::WriteUser;
+    qDebug() << "Exit fileIsWritable, is writable:" << writable;
+    return writable;
 }
 
 bool Utils::fileIsHome(const QString &path)
@@ -514,7 +524,7 @@ QVariantMap Utils::getThemeMapFromPath(const QString &filepath)
 {
     QFile file(filepath);
     if (!file.open(QIODevice::ReadOnly)) {
-        qDebug() << "Failed to open " << filepath;
+        qDebug() << "Failed to open theme file:" << filepath;
         return QVariantMap();
     }
 
@@ -1131,6 +1141,7 @@ void Utils::sendFloatMessageFixedFont(QWidget *par, const QIcon &icon, const QSt
  */
 bool Utils::getSystemMemoryInfo(qlonglong &totalMemory, qlonglong &freeMemory)
 {
+    qDebug() << "Enter getSystemMemoryInfo";
     qlonglong memFree = 0;
     qlonglong buffers = 0;
     qlonglong cached = 0;
@@ -1178,11 +1189,14 @@ bool Utils::getSystemMemoryInfo(qlonglong &totalMemory, qlonglong &freeMemory)
  */
 bool Utils::isMemorySufficientForOperation(OperationType operationType, qlonglong operationDataSize, qlonglong currentDocumentSize)
 {
+    qDebug() << "Enter isMemorySufficientForOperation";
+
     qlonglong memoryFree = 0;
     qlonglong memoryTotal = 0;
 
     if (!getSystemMemoryInfo(memoryTotal, memoryFree)) {
         // Conservatively allow the operation if memory info cannot be read
+        qWarning() << "Failed to get system memory info, conservatively allowing operation";
         return true;
     }
 
@@ -1242,5 +1256,6 @@ bool Utils::isMemorySufficientForOperation(OperationType operationType, qlonglon
             break;
     }
 
+    qDebug() << "Exit isMemorySufficientForOperation, return true";
     return true; // Memory is sufficient
 }

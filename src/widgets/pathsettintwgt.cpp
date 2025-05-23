@@ -21,13 +21,14 @@ const int s_PSWSuggestIconSizeCompact = 16;
 
 PathSettingWgt::PathSettingWgt(QWidget* parent):DWidget(parent)
 {
+    qDebug() << "PathSettingWgt constructor";
     init();
     onSaveIdChanged(Settings::instance()->getSavePathId());
 }
 
 PathSettingWgt::~PathSettingWgt()
 {
-
+    qDebug() << "PathSettingWgt destructor";
 }
 
 void PathSettingWgt::onSaveIdChanged(int id)
@@ -119,6 +120,7 @@ void PathSettingWgt::setEditText(const QString& text)
 
 void PathSettingWgt::onBoxClicked(int id)
 {
+    qInfo() << "Save path option changed to:" << id;
     switch (id) {
     case CurFileBox:{
         Settings::instance()->setSavePathId(CurFileBox);
@@ -132,7 +134,9 @@ void PathSettingWgt::onBoxClicked(int id)
     }
     case CustomBox:{
         Settings::instance()->setSavePathId(CustomBox);
-        setEditText(Settings::instance()->getSavePath(CustomBox));
+        QString path = Settings::instance()->getSavePath(CustomBox);
+        qDebug() << "Custom path set to:" << path;
+        setEditText(path);
         m_customBtn->setEnabled(true);
         break;
     }
@@ -143,20 +147,24 @@ void PathSettingWgt::onBoxClicked(int id)
 
 void PathSettingWgt::onBtnClicked()
 {
+    qDebug() << "Custom path button clicked";
     QFileDialog dialog(this);
     dialog.setFileMode(QFileDialog::Directory);
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
     QString path = Settings::instance()->getSavePath(PathSettingWgt::CustomBox);
     if(!QDir(path).exists() || path.isEmpty()){
         path = QDir::homePath() + "/Documents";
+        qDebug() << "Using default documents path:" << path;
     }
     dialog.setDirectory(path);
     const int mode = dialog.exec();
     if (mode != QDialog::Accepted) {
+        qDebug() << "Path selection dialog canceled";
         return;
     }
 
     path = dialog.selectedFiles().at(0);
+    qInfo() << "Selected new custom path:" << path;
     setEditText(path);
     Settings::instance()->setSavePath(PathSettingWgt::CustomBox,path);
 }

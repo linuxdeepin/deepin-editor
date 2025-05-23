@@ -8,6 +8,7 @@
 
 EditorApplication::EditorApplication(int &argc, char *argv[]) : DApplication(argc, argv)
 {
+    qDebug() << "Enter EditorApplication constructor";
     const char *descriptionText = QT_TRANSLATE_NOOP(
         "MainWindow", "Text Editor is a powerful tool for viewing and editing text files.");
     const QString acknowledgementLink = "https://www.deepin.org/original/deepin-editor/";
@@ -24,19 +25,27 @@ EditorApplication::EditorApplication(int &argc, char *argv[]) : DApplication(arg
     setApplicationDescription(DApplication::translate("MainWindow", descriptionText) + "\n");
     setApplicationAcknowledgementPage(acknowledgementLink);
     setQuitOnLastWindowClosed(false);
+    qDebug() << "Exit EditorApplication constructor";
+    qInfo() << "Application initialized with version:" << VERSION;
 }
 
 EditorApplication::~EditorApplication()
 {
+    qDebug() << "Enter EditorApplication destructor";
     // app结束时，释放
     if (nullptr != StartManager::instance()) {
         delete StartManager::instance();
     }
+    qDebug() << "Exit EditorApplication destructor";
+    qInfo() << "Application resources released";
 }
 
 void EditorApplication::handleQuitAction()
 {
+    qDebug() << "Enter handleQuitAction";
     activeWindow()->close();
+    qDebug() << "Exit handleQuitAction";
+    qInfo() << "Quit action triggered, closing active window";
 }
 
 bool EditorApplication::notify(QObject *object, QEvent *event)
@@ -62,6 +71,7 @@ bool EditorApplication::notify(QObject *object, QEvent *event)
             // 模拟空格键按下事件
             pressSpace(pushButton);
             return true;
+            qDebug() << "Exit notify, event processed";
         }
         /***add end by ut001121***/
         // 左键
@@ -74,6 +84,7 @@ bool EditorApplication::notify(QObject *object, QEvent *event)
             // 模拟空格键按下事件
             pressSpace(pushButton);
             return true;
+            qDebug() << "Exit pressSpace, space key simulated";
         }
 
         return QApplication::notify(object, event);
@@ -84,6 +95,7 @@ bool EditorApplication::notify(QObject *object, QEvent *event)
 
 void EditorApplication::pressSpace(DPushButton *pushButton)
 {
+    qDebug() << "Enter pressSpace, button:" << pushButton->objectName();
     // 模拟空格键按下事件
     QKeyEvent pressSpace(QEvent::KeyPress, Qt::Key_Space, Qt::NoModifier, " ");
     QApplication::sendEvent(pushButton, &pressSpace);

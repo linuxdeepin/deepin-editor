@@ -25,8 +25,10 @@ const QString g_keyEnablePatchedIconv = "enablePatchedIconv";
  */
 bool detectIconvUse2005Standard()
 {
+    qDebug() << "Detecting iconv use GB18030-2005 standard";
     iconv_t handle = iconv_open("UTF-8", "GB18030");
     if (handle == reinterpret_cast<iconv_t>(-1)) {
+        qWarning() << "Failed to open iconv handle for GB18030";
         return true;
     }
 
@@ -41,15 +43,16 @@ bool detectIconvUse2005Standard()
     iconv_close(handle);
 
     if (ret == static_cast<size_t>(-1)) {
+        qWarning() << "Failed to convert GB18030 to UTF-8";
         return true;
     }
 
     if (!output.contains("\uE816")) {
-        qInfo() << "Current iconv gb18030 standard is 2005.";
+        qInfo() << "Current iconv uses GB18030-2005 standard";
         return true;
     }
 
-    qInfo() << "Current iconv gb18030 standard is 2022.";
+    qInfo() << "Current iconv uses GB18030-2022 standard";
     return false;
 }
 
@@ -64,6 +67,7 @@ Config::Config(QObject *parent)
     : QObject(parent)
     , encoding("UTF-8")
 {
+    qDebug() << "Initializing Config instance";
 #ifdef DTKCORE_CLASS_DConfigFile
     dconfig = DConfig::create("org.deepin.editor", "org.deepin.editor");
     if (dconfig->isValid()) {
@@ -103,6 +107,7 @@ Config::Config(QObject *parent)
 
 Config::~Config()
 {
+    qDebug() << "Destroying Config instance";
 #ifdef DTKCORE_CLASS_DConfigFile
     if (dconfig) {
         delete dconfig;
@@ -112,6 +117,7 @@ Config::~Config()
 
 Config *Config::instance()
 {
+    qDebug() << "Getting Config singleton instance";
     static Config config;
     return &config;
 }

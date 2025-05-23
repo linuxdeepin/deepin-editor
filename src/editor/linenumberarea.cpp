@@ -10,6 +10,7 @@
 
 LineNumberArea::LineNumberArea(LeftAreaTextEdit *leftAreaWidget)
 {
+    qDebug() << "LineNumberArea created with leftAreaWidget:" << leftAreaWidget;
     m_leftAreaWidget = leftAreaWidget;
     setContentsMargins(0, 0, 0, 0);
     //m_textEdit = textEdit;
@@ -17,6 +18,7 @@ LineNumberArea::LineNumberArea(LeftAreaTextEdit *leftAreaWidget)
 
 LineNumberArea::~LineNumberArea()
 {
+    qDebug() << "LineNumberArea destroyed";
 }
 
 void LineNumberArea::paintEvent(QPaintEvent *e)
@@ -34,6 +36,7 @@ QSize LineNumberArea::sizeHint() const
 
 void LineNumberArea::mousePressEvent(QMouseEvent *e)
 {
+    qDebug() << "LineNumberArea mousePressEvent at position:" << e->pos();
 //    m_pressPoint = e->pos();
 //    m_leftAreaWidget->update();
     m_leftAreaWidget->getEdit()->onPressedLineNumber(e->pos());

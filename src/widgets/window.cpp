@@ -211,6 +211,8 @@ Window::Window(DMainWindow *parent)
       m_titlebarStyleSheet(titlebar()->styleSheet()),
       m_themePath(Settings::instance()->settings->option("advance.editor.theme")->value().toString())
 {
+    qDebug() << "Window constructor called";
+
     qRegisterMetaType<TextEdit *>("TextEdit");
     m_rootSaveDBus = new DBusDaemon::dbus("com.deepin.editor.daemon", "/", QDBusConnection::systemBus(), this);
     m_settings = Settings::instance();
@@ -350,6 +352,8 @@ Window::Window(DMainWindow *parent)
 
 Window::~Window()
 {
+    qDebug() << "Window destructor called";
+
     // We don't need clean pointers because application has exit here.
     if (nullptr != m_shortcutViewProcess) {
         delete (m_shortcutViewProcess);
@@ -462,6 +466,8 @@ void Window::updateSabeAsFileNameTemp(QString strOldFilePath, QString strNewFile
 
 void Window::showCenterWindow(bool bIsCenter)
 {
+    qDebug() << "Window::showCenterWindow() - bIsCenter:" << bIsCenter;
+
     // Init window state with config.
     // Below code must before this->titlebar()->setMenu, otherwise main menu can't display pre-build-in menu items by dtk.
     QString windowState = Settings::instance()->settings->option("advance.window.windowstate")->value().toString();
@@ -1045,6 +1051,8 @@ void Window::removeWrapper(const QString &filePath, bool isDelete)
 
 void Window::openFile()
 {
+    qDebug() << "Opening file dialog";
+
     QFileDialog dialog(this);
     dialog.setFileMode(QFileDialog::ExistingFiles);
     dialog.setAcceptMode(QFileDialog::AcceptOpen);
@@ -1108,6 +1116,8 @@ void Window::openFile()
 
 bool Window::saveFile()
 {
+    qDebug() << "Saving current file";
+
     EditWrapper *wrapperEdit = currentWrapper();
 
     //大文本加载过程不允许保存
@@ -2980,6 +2990,8 @@ void Window::handleUpdateSearchKeyword(QWidget *widget, const QString &file, con
 
 void Window::loadTheme(const QString &path)
 {
+    qInfo() << "Loading theme:" << path;
+
     QFileInfo fileInfo(path);
     if (!fileInfo.exists()) {
         qWarning() << "Theme file not exists!" << path;

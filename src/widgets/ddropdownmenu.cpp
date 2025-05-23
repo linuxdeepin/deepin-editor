@@ -18,6 +18,7 @@
 #include <QtSvg/QSvgRenderer>
 #include <QActionGroup>
 #include <QFile>
+#include <QLoggingCategory>
 
 // using namespace Dtk::Core;
 DWIDGET_USE_NAMESPACE
@@ -31,6 +32,7 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
     , m_pToolButton(new DToolButton(this))
     , m_menu(new DMenu)
 {
+    qDebug() << "DDropdownMenu constructor";
     // 更新单独添加的高亮格式文件
     m_Repository.addCustomSearchPath(KF5_HIGHLIGHT_PATH);
 
@@ -87,6 +89,7 @@ DDropdownMenu::DDropdownMenu(QWidget *parent)
 
 DDropdownMenu::~DDropdownMenu()
 {
+    qDebug() << "DDropdownMenu destructor";
     deleteMenuActionGroup();
     deleteMenu();
 }
@@ -293,6 +296,7 @@ DDropdownMenu *DDropdownMenu::createEncodeMenu()
     }
 
     connect(m_pMenu, &DMenu::triggered, m_pEncodeMenu,[m_pEncodeMenu](QAction *action) {
+        qInfo() << "Encoding changed to:" << action->text();
         //编码内容改变触发内容改变和信号发射 梁卫东 2020.7.7
         if (m_pEncodeMenu->m_text != action->text()) {
             emit m_pEncodeMenu->currentActionChanged(action);
@@ -349,6 +353,7 @@ DDropdownMenu *DDropdownMenu::createHighLightMenu()
     // 转发选中“None“无高亮选项的信号
     connect(noHlAction, &QAction::triggered, m_pHighLightMenu, [noHlAction, m_pHighLightMenu] (bool checked) {
         if (checked) {
+            qInfo() << "Highlight mode changed to None";
             emit m_pHighLightMenu->currentActionChanged(noHlAction);
         }
     });
@@ -357,9 +362,11 @@ DDropdownMenu *DDropdownMenu::createHighLightMenu()
         const auto defName = action->text();
         const auto def = m_pHighLightMenu->m_Repository.definitionForName(defName);
         if (def.isValid() && m_pHighLightMenu->m_text != action->text()) {
+            qInfo() << "Highlight mode changed to:" << defName;
             emit m_pHighLightMenu->currentActionChanged(action);
         }
         else {
+            qDebug() << "Invalid highlight definition, setting to None";
             m_pHighLightMenu->setText(tr("None"));
         }
         
@@ -451,12 +458,11 @@ bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
     if(object == m_pToolButton){
         if(event->type() == QEvent::KeyPress){
             QKeyEvent *keyEvent = static_cast<QKeyEvent *>(event);
-            //QString key = Utils::getKeyshortcut(keyEvent);
+            qDebug() << "Key pressed:" << keyEvent->key();
             if(keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Space)        //按下enter展开列表
             {
-                //if(isRequest){
-                    Q_EMIT requestContextMenu(false);
-                //}
+                qDebug() << "Triggering context menu via keyboard";
+                Q_EMIT requestContextMenu(false);
                 return true;
             }
             return false;
@@ -465,11 +471,10 @@ bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
         if(event->type() == QEvent::MouseButtonPress){
             QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
             if(mouseEvent->button() == Qt::LeftButton){
+                qDebug() << "Left mouse button pressed on dropdown menu";
                 m_bPressed = true;
-                //if (isRequest) {
-                    //重新绘制icon 点击改变前景色
-                    m_pToolButton->setIcon(createIcon());
-                //}
+                //重新绘制icon 点击改变前景色
+                m_pToolButton->setIcon(createIcon());
                 return true;
             }
 
@@ -484,6 +489,7 @@ bool DDropdownMenu::eventFilter(QObject *object, QEvent *event)
                 m_bPressed = false;
                 m_pToolButton->setIcon(createIcon());
                 if (isEnabled()) {
+                    qDebug() << "Left mouse button released, showing context menu";
                     Q_EMIT requestContextMenu(true);
                 }
                 m_pToolButton->clearFocus();

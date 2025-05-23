@@ -5,7 +5,7 @@
 #include "deletebackcommond.h"
 
 #include <QTextBlock>
-
+#include <QDebug>
 #include "dtextedit.h"
 
 DeleteBackCommand::DeleteBackCommand(QTextCursor cursor, QPlainTextEdit *edit)
@@ -15,12 +15,20 @@ DeleteBackCommand::DeleteBackCommand(QTextCursor cursor, QPlainTextEdit *edit)
     m_delText = m_cursor.selectedText();
     m_delPos = std::min(m_cursor.position(), m_cursor.anchor());
     m_insertPos = m_delPos;
+    
+    qDebug() << "DeleteBackCommand created - delete pos:" << m_delPos
+                << ", text length:" << m_delText.length();
 }
 
-DeleteBackCommand::~DeleteBackCommand() {}
+DeleteBackCommand::~DeleteBackCommand()
+{
+    qDebug() << "DeleteBackCommand destroyed";
+}
 
 void DeleteBackCommand::undo()
 {
+    qDebug() << "DeleteBackCommand undo - inserting text at:" << m_insertPos
+                << ", length:" << m_delText.length();
     m_cursor.setPosition(m_insertPos);
     m_cursor.insertText(m_delText);
 
@@ -32,6 +40,8 @@ void DeleteBackCommand::undo()
 
 void DeleteBackCommand::redo()
 {
+    qDebug() << "DeleteBackCommand redo - deleting text at:" << m_delPos
+                << ", length:" << m_delText.length();
     m_cursor.setPosition(m_delPos);
     m_cursor.setPosition(m_delPos + m_delText.size(), QTextCursor::KeepAnchor);
     m_cursor.deleteChar();
@@ -51,6 +61,8 @@ DeleteBackAltCommand::DeleteBackAltCommand(const QList<QTextEdit::ExtraSelection
     : m_columnEditSelections(selections)
     , m_edit(edit)
 {
+    qDebug() << "DeleteBackAltCommand created with" << selections.size()
+                << "selections, backward:" << backward;
     int sum = 0;
     for (int i = 0; i < m_columnEditSelections.size(); i++) {
         QString text;
@@ -89,10 +101,15 @@ DeleteBackAltCommand::DeleteBackAltCommand(const QList<QTextEdit::ExtraSelection
     }
 }
 
-DeleteBackAltCommand::~DeleteBackAltCommand() {}
+DeleteBackAltCommand::~DeleteBackAltCommand()
+{
+    qDebug() << "DeleteBackAltCommand destroyed";
+}
 
 void DeleteBackAltCommand::undo()
 {
+    qDebug() << "DeleteBackAltCommand undo - restoring"
+                << m_deletions.size() << "deletions";
     for (const DelNode &node : m_deletions) {
         auto cursor = node.cursor;
         const int pos = node.insertPos;
@@ -121,6 +138,8 @@ void DeleteBackAltCommand::undo()
 
 void DeleteBackAltCommand::redo()
 {
+    qDebug() << "DeleteBackAltCommand redo - executing"
+                << m_deletions.size() << "deletions";
     for (int i = 0; i < m_deletions.size(); i++) {
         auto cursor = m_deletions[i].cursor;
         const int pos = m_deletions[i].delPos;

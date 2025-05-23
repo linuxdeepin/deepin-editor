@@ -19,10 +19,11 @@ const int s_RBCloseIconSizeCompact = 27;
 ReplaceBar::ReplaceBar(QWidget *parent)
     :  DFloatingWidget(parent)
 {
+    qDebug() << "ReplaceBar constructor start";
     // Init.
     hide();
     setFixedHeight(60);
-
+    qDebug() << "ReplaceBar initialized with height 60";
     // Init layout and widgets.
     m_layout = new QHBoxLayout();
     m_layout->setSpacing(10);
@@ -99,23 +100,30 @@ void ReplaceBar::focus()
 
 void ReplaceBar::activeInput(QString text, QString file, int row, int column, int scrollOffset)
 {
+    qDebug() << "Activating replace bar for file:" << file
+                      << "at row:" << row << "column:" << column;
     // Try fill keyword with select text.
     m_withLine->lineEdit()->clear();
     m_replaceLine->lineEdit()->clear();
     m_replaceLine->lineEdit()->insert(text);
     m_replaceLine->lineEdit()->selectAll();
+    qDebug() << "Initial search text set, length:" << text.length();
 
     // Show.
     show();
+    qDebug() << "Replace bar shown";
 
     // Save file info for back to position.
     m_replaceFile = file;
     m_replaceFileRow = row;
     m_replaceFileColumn = column;
     m_replaceFileSrollOffset = scrollOffset;
+    qDebug() << "Saved position info - row:" << row
+                       << "column:" << column << "scrollOffset:" << scrollOffset;
 
     // Focus.
     focus();
+    qDebug() << "Focus set to replace input";
 }
 
 void ReplaceBar::handleSkip()
@@ -137,12 +145,19 @@ void ReplaceBar::handleContentChanged()
 
 void ReplaceBar::handleReplaceNext()
 {
+    QString searchText = m_replaceLine->lineEdit()->text();
+    QString replaceText = m_withLine->lineEdit()->text();
+    qDebug() << "Replacing next occurrence, search length:"
+                      << searchText.length() << "replace length:" << replaceText.length();
+                      
     if (!searched) {
+        qDebug() << "First search, removing previous keywords";
         emit removeSearchKeyword();
-        emit beforeReplace(m_replaceLine->lineEdit()->text());
+        emit beforeReplace(searchText);
     }
-    replaceNext(m_replaceFile, m_replaceLine->lineEdit()->text(), m_withLine->lineEdit()->text());
+    replaceNext(m_replaceFile, searchText, replaceText);
     searched = true;
+    qDebug() << "Replace next completed";
 }
 
 void ReplaceBar::handleReplaceRest()
@@ -215,7 +230,10 @@ void ReplaceBar::keyPressEvent(QKeyEvent *e)
 void ReplaceBar::updateSizeMode()
 {
 #ifdef DTKWIDGET_CLASS_DSizeMode
-    if (DGuiApplicationHelper::isCompactMode()) {
+    bool isCompact = DGuiApplicationHelper::isCompactMode();
+    qDebug() << "Updating size mode, compact:" << isCompact;
+    
+    if (isCompact) {
         setFixedHeight(s_RBHeight_Compact);
         m_closeButton->setFixedSize(s_RBCloseBtnSizeCompact, s_RBCloseBtnSizeCompact);
         m_closeButton->setIconSize(QSize(s_RBCloseIconSizeCompact, s_RBCloseIconSizeCompact));

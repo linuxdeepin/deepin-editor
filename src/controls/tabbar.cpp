@@ -49,6 +49,7 @@ QString restoreMnemonic(const QString &str)
 Tabbar::Tabbar(QWidget *parent)
     : DTabBar(parent)
 {
+    qDebug() << "Tabbar constructor start";
     m_rightClickTab = -1;
 
     installEventFilter(this);
@@ -61,7 +62,7 @@ Tabbar::Tabbar(QWidget *parent)
     setElideMode(Qt::ElideMiddle);
     setTabPalette(palette().buttonText().color().name(), palette().highlightedText().color().name());
     setFocusPolicy(Qt::NoFocus);
-
+    qDebug() << "Tabbar initialized with movable and closable tabs";
     connect(this, &DTabBar::dragStarted, this, &Tabbar::onTabDrapStart);
     connect(this, &DTabBar::tabMoved, this, &Tabbar::handleTabMoved);
     connect(this, &DTabBar::tabDroped, this, &Tabbar::handleTabDroped);
@@ -91,6 +92,8 @@ Tabbar::~Tabbar()
 
 void Tabbar::addTab(const QString &filePath, const QString &tabName, const QString &tipPath)
 {
+    qDebug() << "Adding tab for file:" << QFileInfo(filePath).fileName()
+                  << "with name:" << tabName;
     addTabWithIndex(count(), filePath, tabName, tipPath);
 }
 
@@ -174,9 +177,13 @@ void Tabbar::resizeEvent(QResizeEvent *event)
 void Tabbar::closeTab(int index)
 {
     if (index < 0) {
+        qWarning() << "Attempt to close tab with invalid index:" << index;
         return;
     }
-    emit requestHistorySaved(fileAt(index));
+    QString file = fileAt(index);
+    qDebug() << "Closing tab index:" << index
+                  << "file:" << QFileInfo(file).fileName();
+    emit requestHistorySaved(file);
     DTabBar::removeTab(index);
 }
 
@@ -242,6 +249,9 @@ void Tabbar::closeRightTabs(const QString &filePath)
 
 void Tabbar::updateTab(int index, const QString &filePath, const QString &tabName)
 {
+    qDebug() << "Updating tab index:" << index
+                   << "file:" << QFileInfo(filePath).fileName()
+                   << "new name:" << tabName;
     // 适配助记符 '&' 后设置文本
     setTabText(index, tabName);
     m_tabPaths[index] = filePath;
@@ -837,7 +847,9 @@ void Tabbar::handleTabDroped(int index, Qt::DropAction action, QObject *target)
 
 void Tabbar::onTabDrapStart()
 {
+    qDebug() << "Tab drag operation started";
     Window *window = static_cast<Window *>(this->window());
     window->setChildrenFocus(false);
     m_listOldTabPath = m_tabPaths;
+    qDebug() << "Saved" << m_listOldTabPath.size() << "tabs for drag operation";
 }
