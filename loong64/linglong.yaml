@@ -10,7 +10,7 @@ version: "1"
 package:
   id: org.deepin.editor
   name: "deepin-editor"
-  version: 6.5.25.1
+  version: 6.5.26.1
   kind: app
   description: |
     editor for deepin os.
