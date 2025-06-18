@@ -8,13 +8,11 @@
 
 ## 使用入門
 
-通過以下方式運行或關閉文本編輯器，或者創建文本編輯器的快捷方式。
-
 ### 運行文本編輯器
 
 1. 單擊任務欄上的啟動器圖標 ![deepin_launcher](../common/deepin_launcher.svg)，進入啟動器界面。
-2. 上下滾動鼠標滾輪瀏覽或通過搜索，找到文本編輯器圖標![deepin_editor](../common/deepin_editor.svg)，單擊運行。
-3. 右鍵單擊![deepin_editor](../common/deepin_editor.svg)，您可以：
+2. 上下滾動鼠標滾輪瀏覽或通過搜索，找到文本編輯器圖標 ![deepin_editor](../common/deepin_editor.svg)，單擊運行。
+3. 右鍵單擊 ![deepin_editor](../common/deepin_editor.svg)，您可以：
 
  - 單擊 **傳送到桌面**，在桌面創建快捷方式。
  - 單擊 **傳送到任務欄**，將應用程序固定到任務欄。
@@ -39,8 +37,8 @@
 
 - 新建標籤頁/窗口
 
-   - 單擊標籤頁上的 ![plus_icon](../common/+.svg) 或 ![icon_menu](../common/icon_menu.svg) > **新標籤頁** 或使用快捷鍵 **Ctrl + T** 創建一個新的標籤頁。
-   - 單擊![icon_menu](../common/icon_menu.svg) > **新窗口** 或使用快捷鍵 **Ctrl + N** 創建一個新的窗口。
+   - 單擊標籤頁上的按鈕 ![plus_icon](../common/+.svg) 或 ![icon_menu](../common/icon_menu.svg) > **新標籤頁** 或使用快捷鍵 **Ctrl + T** 創建一個新的標籤頁。
+   - 單擊 ![icon_menu](../common/icon_menu.svg) > **新窗口** 或使用快捷鍵 **Ctrl + N** 創建一個新的窗口。
 
 - 調整標籤頁/窗口
 
@@ -52,7 +50,7 @@
 
    當窗口中僅有一個標籤頁時，關閉標籤頁的同時也會關閉窗口。
    - 使用快捷鍵 **Ctrl + W** 關閉當前標籤頁。
-   - 單擊標籤頁上的按鈕 ![close_icon](../common/close_icon.svg) 或者單擊鼠標中鍵，關閉當前標籤頁。
+   - 單擊標籤頁上的 ![close_icon](../common/close_icon.svg) 按鈕或者單擊鼠標中鍵，關閉當前標籤頁。
    - 右鍵單擊標籤頁，選擇 **關閉標籤頁** 、**關閉其他標籤頁** 或 **更多關閉方式** 來關閉標籤頁。
 
    > ![notes](../common/notes.svg)說明：如果您的文件發生了變化而沒有保存，文本編輯器會在關閉前提示您保存更改。
@@ -70,6 +68,7 @@
 ### 保存文件
 - 單擊 ![icon_menu](../common/icon_menu.svg) > **保存** 或使用快捷鍵 **Ctrl + S**，保存當前文件。
 - 單擊 ![icon_menu](../common/icon_menu.svg) > **另存為** 或使用快捷鍵 **Ctrl + Shift + S**，另存當前文件。
+
 
 
 ### 打印文件
@@ -113,7 +112,7 @@
 
 您也可以使用快捷鍵 **Alt + U/ L/ C** 迅速切換大小寫。
 
-![toggle_case](fig/d_toggle_case.png)
+![toggle_case](fig/toggle_case.png)
 
 ### 高亮文本
 
@@ -134,7 +133,7 @@
 
 ### 撤銷操作
 
-如果在編輯文本時發生誤操作, 可以使用快捷鍵 **Ctrl + Z** 撤銷操作， 或者在右鍵菜單中選擇 **撤銷**。
+如果在編輯文本時發生誤操作，可以使用快捷鍵 **Ctrl + Z** 撤銷操作，或者在右鍵菜單中選擇 **撤銷**。
 
 ### 查找文本
 
@@ -179,11 +178,27 @@
 1. 使用文本編輯器打開文檔，單擊右鍵，選擇 **開啟只讀模式**。
 2. 在只讀模式下，單擊右鍵，選擇 **關閉只讀模式**。
 
-![read_only](fig/d_read_only.png)
+![read_only](fig/read_only.png)
 
-![read_only](fig/d_read_only02.png)
+![read_only](fig/read_only02.png)
+
+### 語音朗讀
+
+1. 選取一段文字後，點擊右鍵選擇 **語音朗讀**，即可將選中的文字以語音播報。
+
+2. 朗讀過程中，點擊朗讀控制項上的關閉按鈕即可終止語音朗讀。
+
+   > ![notes](../common/notes.svg)說明：當未選擇文字時，右鍵菜單中 **語音朗讀** 不可啟動，處置灰狀態。
 
 
+![read_only](fig/reading.png)
+
+### 語音聽寫
+
+1. 在文字編輯區域內，點擊滑鼠右鍵選擇 **語音聽寫**，即可透過咪高峰輸入語音，轉換成的文字將會插入至游標所在位置。
+2. 在聽寫模式下，點擊聽寫控制項上的關閉按鈕即可停止語音聽寫。
+
+![read-only](fig/listen.png)
 
 ### 列編輯
 
@@ -195,7 +210,7 @@
 
 在文本編輯器界面，單擊鼠標右鍵選擇 **顏色標記**，在其下拉列表中進行選擇。
 
-![color](fig/d_color_tag.png)
+![color](fig/color_tag.png)
 
    - **設置標記**：對某一行或某一段文本內容添加顏色標記；有8種顏色按鈕可供選擇。
       + 將光標定在某一行，標記當前所在的行。
@@ -208,15 +223,14 @@
 
 
 
-
 ### 書籤管理
 
-在文本編輯器設置界面，勾選 **顯示書籤圖標** 後，您可以為任意一行的文本內容添加一個書籤。將鼠標指針移至左側欄任意行號前面會顯示圖標  ![icon](../common/bookmark_normal_light.svg)，添加成功後該行的書籤圖標會變為藍色填充的圖標 ![bookmarkbig](../common/bookmarkbig_checked_light.svg)。
+在文本編輯器設置界面，勾選 **顯示書籤圖標** 後，您可以為任意一行的文本內容添加一個書籤。將鼠標指針移至左側欄任意行號前面會顯示圖標 ![icon](../common/bookmark_normal_light.svg)，添加成功後該行的書籤圖標會變為藍色填充的圖標 ![bookmarkbig](../common/bookmarkbig_checked_light.svg)。
 
 - 添加書籤
 
   + 鼠標左鍵單擊 ![icon](../common/bookmark_normal_light.svg)，為該行添加書籤。
-  + 鼠標右鍵單擊![icon](../common/bookmark_normal_light.svg)，選擇 **添加書籤**，為該行添加一個書籤。
+  + 鼠標右鍵單擊 ![icon](../common/bookmark_normal_light.svg)，選擇 **添加書籤**，為該行添加一個書籤。
   + 將光標定在文本中任意一行，使用快捷鍵 **Ctrl + F2** 為該行添加一個書籤。
 
 - 刪除書籤
@@ -247,24 +261,24 @@
 ## 主菜單
 
 在主菜單中，您可以新建窗口、新建標籤頁、[查找文本](#查找文本)、[替換文本](#替換文本)、保存文件、切換窗口主題、查看幫助手冊，了解文本編輯器的更多訊息。
-
 ### 設置
 
 您可以對基礎訊息、快捷鍵和高級訊息進行設置。
 
 #### 基礎設置
 
-1. 單擊![icon_menu](../common/icon_menu.svg)> **設置**。
+1. 單擊 ![icon_menu](../common/icon_menu.svg)> **設置**。
 2. 在基礎設置選項，您可以選擇：
  - 設置字體樣式和字號大小。
  - 勾選 **自動換行**，在編輯區自動換行。
- - 勾選 **顯示代碼摺疊標誌**，在左側欄顯示![next](../common/next.svg)或者![next](../common/next_down.svg)按鈕，右鍵單擊按鈕選擇摺疊/展開當前層次或所有層次。
+ - 勾選 **顯示代碼摺疊標誌**，在左側欄顯示 ![next](../common/next.svg)或者![next](../common/next_down.svg)按鈕，右鍵單擊按鈕選擇摺疊/展開當前層次或所有層次。
  - 勾選 **顯示行號**，在左側欄顯示行號。
  - 勾選 **當前行高亮**，光標所在的行高亮顯示。
  - 勾選 **顯示書籤圖標**，在左側欄顯示書籤圖標。
  - 勾選 **顯示空白制符/製表符**，顯示文本中的空白字符和製表符，您也可手動輸入或刪除空白字符和製表符。
 
    > ![tips](../common/tips.svg)竅門：您還可以使用 **Ctrl + 「+」/ 「-」** 來調節文本編輯器的默認字號。使用 **Ctrl + 0** 恢復默認字號。
+
 
 
 #### 快捷鍵設置
@@ -278,7 +292,7 @@
 
 #### 高級設置
 
-1. 單擊![icon_menu](../common/icon_menu.svg)>**設置**。
+1. 單擊 ![icon_menu](../common/icon_menu.svg) >**設置**。
 2. 在 **高級設置** 選項，您可以設置：
    - 窗口狀態：正常窗口，最大化或全螢幕。
    - Tab字符寬度：Tab縮進所佔用的空間大小。
@@ -289,7 +303,7 @@
 
 窗口主題包含淺色主題、深色主題和系統主題。
 
-1. 在文本編輯器界面，單擊![icon_menu](../common/icon_menu.svg)。
+1. 在文本編輯器界面，單擊 ![icon_menu](../common/icon_menu.svg)。
 2. 單擊 **主題**，選擇一個主題顏色。
 
 ### 幫助

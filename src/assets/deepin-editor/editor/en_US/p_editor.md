@@ -74,9 +74,9 @@ To print a file in the Text Editor interface, you should connect and set up the 
 3. Click the **Advanced** option on the preview interface to select parameters including paper size and layout. 
 4. Click **Print** to start printing at the printer selected.
 
-![preview](fig/preview.png)
+![pagesetup](fig/printer.png)
 
-![pagesetup](fig/advanced-preview.png)
+![printer](fig/printer_setting.png)
 
 ## Edit Texts
 
@@ -108,7 +108,7 @@ It helps you change the case of selected text. You can change it to lowercase, u
 
 You can also use **Alt** + **U/L/C** to quickly switch the cases.
 
-![changecase](fig/changecase.png)
+![togglecase](fig/togglecase.png)
 
 ### Highlight Texts
 Text Editor supports highlighting different kinds of texts.
@@ -174,31 +174,27 @@ Use the shortcuts below to edit lines easily:
 ### Enable/Disable Read-only Mode
 
 1. Open the document with Text Editor, right-click on the Text Editor interface, and select **Turn on Read-Only mode**.
+1. Right-click on the Text Editor interface, and select **Turn off Read-Only mode** under the read-only mode.
 
 ![readonly](fig/read_only.png)
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-2. Right-click on the Text Editor interface, and select **Turn off Read-Only mode** under the read-only mode.
 
 ![read-only](fig/read_only_02.png)
 
 ### Text to Speech  
 
-You can perform the following operations after enabling the Text to Speech and Speech to Text features in the Control Center.
-
-1. Right-click and select **Speech to Text**. The input voices through microphone will be converted to texts and can be edited in the document.
-2. Select a paragraph of texts. Right-click it and select **Text to Speech**. The texts selected will be broadcast.
+1. Select a paragraph of texts. Right-click it and select **Text to Speech**. The texts selected will be broadcast.
+1. During playback, you can stop the **Text to Speech** by clicking the close button on the reading control.
 
 > ![notes](../common/notes.svg) Notes: The **Text to Speech** option in the right-click menu is grayed out and cannot be activated when no text is selected.
 
-![speech](fig/texttospeech.png)
+![read-only](fig/reading.png)
 
-### Translate
+### Speech to Text
 
-1. Enable **Translation** in **Control Center** > **Assistive Tools** and set the corresponding language pairs according to your needs. 
-2. Select the texts to be translated in Text Editor. Right-click and select **Translate**, and the texts selected will be translated into the target language.
+1. In the text editor area, right-click and select **Speech to Text**. Input speech through the microphone to insert transcribed text at the cursor position.
+2. During dictation, you can stop **Speech to Text**  by clicking the close button on the dictation control.
 
-![translate](fig/translate.png)
+![read-only](fig/listen.png)
 
 ### Use Column Mode
 
@@ -210,7 +206,7 @@ Press and hold the **Alt** key on the keyboard, drag the mouse to select multipl
 
 Select the text to be marked in Text Editor, right-click to select **Color Mark**, and select the corresponding options in the drop-down list as needed.
 
-![colormark](fig/colormark.png)
+![color](fig/colortag.png)
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
 - Select **Mark** to mark a certain line or a paragraph of texts. You can choose from 8 colors displayed through icons.
