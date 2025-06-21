@@ -28,8 +28,6 @@
     <name>DDropdownMenu</name>
     <message>
         <location filename="../src/widgets/ddropdownmenu.cpp" line="316"/>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="370"/>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="375"/>
         <source>None</source>
         <translation>يوق</translation>
     </message>
@@ -38,9 +36,6 @@
     <name>EditWrapper</name>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="273"/>
-        <location filename="../src/editor/editwrapper.cpp" line="341"/>
-        <location filename="../src/editor/editwrapper.cpp" line="472"/>
-        <location filename="../src/editor/editwrapper.cpp" line="671"/>
         <source>Save</source>
         <translation>ساقلاش</translation>
     </message>
@@ -51,7 +46,6 @@
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="339"/>
-        <location filename="../src/editor/editwrapper.cpp" line="470"/>
         <source>Cancel</source>
         <translation>بىكار قىلىش</translation>
     </message>
@@ -67,7 +61,6 @@
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="258"/>
-        <location filename="../src/editor/editwrapper.cpp" line="558"/>
         <source>You do not have permission to save %1</source>
         <translation>%1نى ساقلاش ھوقۇقىڭىز يوق</translation>
     </message>
@@ -83,7 +76,6 @@
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="784"/>
-        <location filename="../src/widgets/bottombar.cpp" line="74"/>
         <source>INSERT</source>
         <translation>كىرگۈزۈش</translation>
     </message>
@@ -169,12 +161,6 @@
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="275"/>
-        <location filename="../src/editor/editwrapper.cpp" line="681"/>
-        <location filename="../src/editor/editwrapper.cpp" line="695"/>
-        <location filename="../src/widgets/window.cpp" line="1207"/>
-        <location filename="../src/widgets/window.cpp" line="1230"/>
-        <location filename="../src/widgets/window.cpp" line="1345"/>
-        <location filename="../src/widgets/window.cpp" line="1360"/>
         <source>Encoding</source>
         <translation>كودلاش</translation>
     </message>
@@ -205,14 +191,11 @@
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="14"/>
-        <location filename="../src/controls/settingsdialog.cpp" line="15"/>
         <source>Keymap</source>
         <translation>تېزلەتمە كۆرۈنسۇن</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="16"/>
-        <location filename="../src/controls/settingsdialog.cpp" line="94"/>
-        <location filename="../src/widgets/window.cpp" line="2093"/>
         <source>Window</source>
         <translation>كۆزنەك</translation>
     </message>
@@ -758,64 +741,63 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1346"/>
-        <location filename="../src/widgets/window.cpp" line="1361"/>
         <source>Line Endings</source>
         <translation>قۇر تاشلاش بەلگىسى</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="243"/>
-        <source>Please install &apos;UOS AI&apos; from the App Store before using</source>
-        <translation type="unfinished"></translation>
+        <source>Please install 'UOS AI' from the App Store before using</source>
+        <translation>ئۇنى ئاستىلەش چۈشىنىش ئۈچۈن 'UOS AI' نى ئەپ سىتى ئاستىدىن سېنىشلىق كېرەك</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="245"/>
         <source>No audio input device detected. Please check and try again</source>
-        <translation type="unfinished"></translation>
+        <translation>ئەپسىلەش كىرەكلىك ھەجىمەتىنى ھەققىدە تەسىر قىلمىغان. تەسىر قىلىڭ ۋە ھەققىدە كېرەك</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="247"/>
         <source>No audio output device detected. Please check and try again</source>
-        <translation type="unfinished"></translation>
+        <translation>ئەپسىلەش چыغىش ھەجىمەتىنى ھەققىدە تەسىر قىلمىغان. تەسىر قىلىڭ ۋە ھەققىدە كېرەك</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="65"/>
         <source>File path is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>ھۆججەت يولى ھەققىدە كۆرۈنگۈچ</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="141"/>
         <source>Insufficient memory to load document content</source>
-        <translation type="unfinished"></translation>
+        <translation>ھۆججەت مېنىسىنى چۈشىنىش چۈشىنىشلىق مېمىرىيىسى ھەققىدە كۆرۈنگۈچ</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="163"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation type="unfinished"></translation>
+        <translation>كىرەكلىك مېمىرىيىسى ھەققىدە كۆرۈنگۈچ</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="169"/>
         <source>Encoding conversion failed</source>
-        <translation type="unfinished"></translation>
+        <translation>كىرەكلىك ھەجىمەتىنى تەسىر قىلغان</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="175"/>
         <source>Converted content is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>تەسىر قىلغان مېنىسىنى ھەققىدە كۆرۈنگۈچ</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="193"/>
         <source>Memory allocation failed</source>
-        <translation type="unfinished"></translation>
+        <translation>مېمىرىيىسى تەسىر قىلغان</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="196"/>
         <source>Error occurred: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>تەسىر قىلغان: %1</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="199"/>
         <source>Unknown error occurred</source>
-        <translation type="unfinished"></translation>
+        <translation>نىشانلىق تەسىر قىلمىغان</translation>
     </message>
 </context>
 <context>
@@ -899,8 +881,6 @@
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="606"/>
-        <location filename="../src/common/settings.cpp" line="618"/>
-        <location filename="../src/common/settings.cpp" line="626"/>
         <source>The shortcut %1 is invalid, please set another one.</source>
         <translation>%1 ئۈنۈمسىز، قايتا بەلگىلەڭ</translation>
     </message>
@@ -1000,13 +980,11 @@
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="290"/>
-        <location filename="../src/widgets/window.cpp" line="500"/>
         <source>Find</source>
         <translation>ئىزدەش</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="291"/>
-        <location filename="../src/widgets/window.cpp" line="501"/>
         <source>Replace</source>
         <translation>ئالماشتۇرۇش</translation>
     </message>
@@ -1042,7 +1020,6 @@
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="298"/>
-        <location filename="../src/editor/dtextedit.cpp" line="350"/>
         <source>Add Comment</source>
         <translation>ئىزاھات قوشۇش</translation>
     </message>
@@ -1148,13 +1125,11 @@
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="2748"/>
-        <location filename="../src/editor/dtextedit.cpp" line="2750"/>
         <source>Copy failed: not enough memory</source>
         <translation>ئىچكى ساقلىغۇچ يېتىشمىدى، كۆچۈرەلمىدى</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="2843"/>
-        <location filename="../src/editor/dtextedit.cpp" line="2845"/>
         <source>Press ALT and click lines to edit in column mode</source>
         <translation>ئىستون تەھرىرلەش ھالىتىنى ئالماشتۇرۇش ئۈچۈن ALT   بىلەن مائۇسنى ئىشلىتىڭ</translation>
     </message>
@@ -1205,7 +1180,6 @@
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="2762"/>
-        <location filename="../src/editor/dtextedit.cpp" line="2764"/>
         <source>Paste failed: not enough memory</source>
         <translation>ئىچكى ساقلىغۇچ يېتىشمىدى، چاپلانمىدى</translation>
     </message>
@@ -1216,11 +1190,6 @@
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3869"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3889"/>
-        <location filename="../src/editor/dtextedit.cpp" line="6865"/>
-        <location filename="../src/editor/dtextedit.cpp" line="6976"/>
-        <location filename="../src/editor/dtextedit.cpp" line="6984"/>
-        <location filename="../src/editor/dtextedit.cpp" line="6995"/>
         <source>Read-Only mode is on</source>
         <translation>پەقەت ئوقۇيدىغان ھالەتنى ئېچىلدى</translation>
     </message>
@@ -1237,7 +1206,6 @@
     <name>Window</name>
     <message>
         <location filename="../src/controls/warningnotices.cpp" line="25"/>
-        <location filename="../src/widgets/window.cpp" line="496"/>
         <source>Save as</source>
         <translation>باشقا ساقلاش</translation>
     </message>
@@ -1258,7 +1226,6 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="495"/>
-        <location filename="../src/widgets/window.cpp" line="3083"/>
         <source>Save</source>
         <translation>ساقلاش</translation>
     </message>
@@ -1274,13 +1241,11 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="499"/>
-        <location filename="../src/widgets/window.cpp" line="2153"/>
         <source>Settings</source>
         <translation>تەڭشەك</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="618"/>
-        <location filename="../src/widgets/window.cpp" line="3330"/>
         <source>Read-Only</source>
         <translation>پەقەت ئوقۇيدىغان قىلىش</translation>
     </message>
@@ -1291,13 +1256,11 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="674"/>
-        <location filename="../src/widgets/window.cpp" line="2627"/>
         <source>Invalid file: %1</source>
         <translation>ئۈنۈمسىز ھۆججەت: %1</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="806"/>
-        <location filename="../src/widgets/window.cpp" line="852"/>
         <source>Do you want to save this file?</source>
         <translation>بۇ ھۆججەتنى ساقلامسىز؟</translation>
     </message>
@@ -1313,8 +1276,6 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1199"/>
-        <location filename="../src/widgets/window.cpp" line="1302"/>
-        <location filename="../src/widgets/window.cpp" line="1343"/>
         <source>Save File</source>
         <translation>ساقلاش</translation>
     </message>
@@ -1335,13 +1296,13 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2103"/>
-        <source>Ctrl+&apos;=&apos;</source>
-        <translation>Ctrl+&apos;=&apos;</translation>
+        <source>Ctrl+'='</source>
+        <translation>Ctrl+'='</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2106"/>
-        <source>Ctrl+&apos;-&apos;</source>
-        <translation>Ctrl+&apos;-&apos;</translation>
+        <source>Ctrl+'-'</source>
+        <translation>Ctrl+'-'</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2135"/>

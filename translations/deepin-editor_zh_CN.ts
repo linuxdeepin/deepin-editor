@@ -28,8 +28,6 @@
     <name>DDropdownMenu</name>
     <message>
         <location filename="../src/widgets/ddropdownmenu.cpp" line="316"/>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="370"/>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="375"/>
         <source>None</source>
         <translation>无</translation>
     </message>
@@ -38,9 +36,6 @@
     <name>EditWrapper</name>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="273"/>
-        <location filename="../src/editor/editwrapper.cpp" line="341"/>
-        <location filename="../src/editor/editwrapper.cpp" line="472"/>
-        <location filename="../src/editor/editwrapper.cpp" line="671"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
@@ -51,7 +46,6 @@
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="339"/>
-        <location filename="../src/editor/editwrapper.cpp" line="470"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -67,7 +61,6 @@
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="258"/>
-        <location filename="../src/editor/editwrapper.cpp" line="558"/>
         <source>You do not have permission to save %1</source>
         <translation>您没有权限保存%1</translation>
     </message>
@@ -83,7 +76,6 @@
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="784"/>
-        <location filename="../src/widgets/bottombar.cpp" line="74"/>
         <source>INSERT</source>
         <translation>插入</translation>
     </message>
@@ -169,12 +161,6 @@
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="275"/>
-        <location filename="../src/editor/editwrapper.cpp" line="681"/>
-        <location filename="../src/editor/editwrapper.cpp" line="695"/>
-        <location filename="../src/widgets/window.cpp" line="1207"/>
-        <location filename="../src/widgets/window.cpp" line="1230"/>
-        <location filename="../src/widgets/window.cpp" line="1345"/>
-        <location filename="../src/widgets/window.cpp" line="1360"/>
         <source>Encoding</source>
         <translation>编码</translation>
     </message>
@@ -205,14 +191,11 @@
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="14"/>
-        <location filename="../src/controls/settingsdialog.cpp" line="15"/>
         <source>Keymap</source>
         <translation>快捷键映射</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="16"/>
-        <location filename="../src/controls/settingsdialog.cpp" line="94"/>
-        <location filename="../src/widgets/window.cpp" line="2093"/>
         <source>Window</source>
         <translation>窗口</translation>
     </message>
@@ -758,13 +741,12 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1346"/>
-        <location filename="../src/widgets/window.cpp" line="1361"/>
         <source>Line Endings</source>
         <translation>换行符</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="243"/>
-        <source>Please install &apos;UOS AI&apos; from the App Store before using</source>
+        <source>Please install 'UOS AI' from the App Store before using</source>
         <translation>请前往应用商店安装“UOS AI”后再使用</translation>
     </message>
     <message>
@@ -780,42 +762,42 @@
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="65"/>
         <source>File path is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>文件路径为空</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="141"/>
         <source>Insufficient memory to load document content</source>
-        <translation type="unfinished"></translation>
+        <translation>内存不足，无法加载文档内容</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="163"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation type="unfinished"></translation>
+        <translation>内存不足，无法进行编码转换</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="169"/>
         <source>Encoding conversion failed</source>
-        <translation type="unfinished"></translation>
+        <translation>编码转换失败</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="175"/>
         <source>Converted content is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>转换后的内容为空</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="193"/>
         <source>Memory allocation failed</source>
-        <translation type="unfinished"></translation>
+        <translation>内存分配失败</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="196"/>
         <source>Error occurred: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>发生错误: %1</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="199"/>
         <source>Unknown error occurred</source>
-        <translation type="unfinished"></translation>
+        <translation>发生未知错误</translation>
     </message>
 </context>
 <context>
@@ -899,8 +881,6 @@
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="606"/>
-        <location filename="../src/common/settings.cpp" line="618"/>
-        <location filename="../src/common/settings.cpp" line="626"/>
         <source>The shortcut %1 is invalid, please set another one.</source>
         <translation>%1为无效快捷键，请重新设置</translation>
     </message>
@@ -1000,13 +980,11 @@
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="290"/>
-        <location filename="../src/widgets/window.cpp" line="500"/>
         <source>Find</source>
         <translation>查找</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="291"/>
-        <location filename="../src/widgets/window.cpp" line="501"/>
         <source>Replace</source>
         <translation>替换</translation>
     </message>
@@ -1042,7 +1020,6 @@
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="298"/>
-        <location filename="../src/editor/dtextedit.cpp" line="350"/>
         <source>Add Comment</source>
         <translation>添加注释</translation>
     </message>
@@ -1148,13 +1125,11 @@
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="2748"/>
-        <location filename="../src/editor/dtextedit.cpp" line="2750"/>
         <source>Copy failed: not enough memory</source>
         <translation>内存不足，复制失败</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="2843"/>
-        <location filename="../src/editor/dtextedit.cpp" line="2845"/>
         <source>Press ALT and click lines to edit in column mode</source>
         <translation>请使用ALT+鼠标点选切换列编辑模式</translation>
     </message>
@@ -1205,7 +1180,6 @@
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="2762"/>
-        <location filename="../src/editor/dtextedit.cpp" line="2764"/>
         <source>Paste failed: not enough memory</source>
         <translation>内存不足，粘贴失败</translation>
     </message>
@@ -1216,11 +1190,6 @@
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3869"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3889"/>
-        <location filename="../src/editor/dtextedit.cpp" line="6865"/>
-        <location filename="../src/editor/dtextedit.cpp" line="6976"/>
-        <location filename="../src/editor/dtextedit.cpp" line="6984"/>
-        <location filename="../src/editor/dtextedit.cpp" line="6995"/>
         <source>Read-Only mode is on</source>
         <translation>只读模式已开启</translation>
     </message>
@@ -1237,7 +1206,6 @@
     <name>Window</name>
     <message>
         <location filename="../src/controls/warningnotices.cpp" line="25"/>
-        <location filename="../src/widgets/window.cpp" line="496"/>
         <source>Save as</source>
         <translation>另存为</translation>
     </message>
@@ -1258,7 +1226,6 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="495"/>
-        <location filename="../src/widgets/window.cpp" line="3083"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
@@ -1274,13 +1241,11 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="499"/>
-        <location filename="../src/widgets/window.cpp" line="2153"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="618"/>
-        <location filename="../src/widgets/window.cpp" line="3330"/>
         <source>Read-Only</source>
         <translation>只读</translation>
     </message>
@@ -1291,13 +1256,11 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="674"/>
-        <location filename="../src/widgets/window.cpp" line="2627"/>
         <source>Invalid file: %1</source>
         <translation>无效文件：%1</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="806"/>
-        <location filename="../src/widgets/window.cpp" line="852"/>
         <source>Do you want to save this file?</source>
         <translation>您是否要保存此文件？</translation>
     </message>
@@ -1313,8 +1276,6 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1199"/>
-        <location filename="../src/widgets/window.cpp" line="1302"/>
-        <location filename="../src/widgets/window.cpp" line="1343"/>
         <source>Save File</source>
         <translation>保存</translation>
     </message>
@@ -1335,13 +1296,13 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2103"/>
-        <source>Ctrl+&apos;=&apos;</source>
-        <translation>Ctrl+&apos;=&apos;</translation>
+        <source>Ctrl+'='</source>
+        <translation>Ctrl+'='</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2106"/>
-        <source>Ctrl+&apos;-&apos;</source>
-        <translation>Ctrl+&apos;-&apos;</translation>
+        <source>Ctrl+'-'</source>
+        <translation>Ctrl+'-'</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2135"/>

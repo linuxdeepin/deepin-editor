@@ -28,8 +28,6 @@
     <name>DDropdownMenu</name>
     <message>
         <location filename="../src/widgets/ddropdownmenu.cpp" line="316"/>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="370"/>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="375"/>
         <source>None</source>
         <translation>Cap</translation>
     </message>
@@ -38,9 +36,6 @@
     <name>EditWrapper</name>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="273"/>
-        <location filename="../src/editor/editwrapper.cpp" line="341"/>
-        <location filename="../src/editor/editwrapper.cpp" line="472"/>
-        <location filename="../src/editor/editwrapper.cpp" line="671"/>
         <source>Save</source>
         <translation>Desa</translation>
     </message>
@@ -51,7 +46,6 @@
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="339"/>
-        <location filename="../src/editor/editwrapper.cpp" line="470"/>
         <source>Cancel</source>
         <translation>Cancel·la</translation>
     </message>
@@ -67,14 +61,13 @@
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="258"/>
-        <location filename="../src/editor/editwrapper.cpp" line="558"/>
         <source>You do not have permission to save %1</source>
         <translation>No teniu permís per desar %1</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="745"/>
         <source>File removed on the disk. Save it now?</source>
-        <translation>El fitxer s&apos;ha eliminat del disc. El voleu desar ara?</translation>
+        <translation>El fitxer s'ha eliminat del disc. El voleu desar ara?</translation>
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="750"/>
@@ -83,7 +76,6 @@
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="784"/>
-        <location filename="../src/widgets/bottombar.cpp" line="74"/>
         <source>INSERT</source>
         <translation>INSEREIX</translation>
     </message>
@@ -134,7 +126,7 @@
     <message>
         <location filename="../src/editorapplication.cpp" line="12"/>
         <source>Text Editor is a powerful tool for viewing and editing text files.</source>
-        <translation>L&apos;Editor de text és és una eina potent per visualitzar i editar fitxers de text.</translation>
+        <translation>L'Editor de text és és una eina potent per visualitzar i editar fitxers de text.</translation>
     </message>
     <message>
         <location filename="../src/editorapplication.cpp" line="24"/>
@@ -169,12 +161,6 @@
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="275"/>
-        <location filename="../src/editor/editwrapper.cpp" line="681"/>
-        <location filename="../src/editor/editwrapper.cpp" line="695"/>
-        <location filename="../src/widgets/window.cpp" line="1207"/>
-        <location filename="../src/widgets/window.cpp" line="1230"/>
-        <location filename="../src/widgets/window.cpp" line="1345"/>
-        <location filename="../src/widgets/window.cpp" line="1360"/>
         <source>Encoding</source>
         <translation>Codificació</translation>
     </message>
@@ -205,14 +191,11 @@
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="14"/>
-        <location filename="../src/controls/settingsdialog.cpp" line="15"/>
         <source>Keymap</source>
         <translation>Mapa de tecles</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="16"/>
-        <location filename="../src/controls/settingsdialog.cpp" line="94"/>
-        <location filename="../src/widgets/window.cpp" line="2093"/>
         <source>Window</source>
         <translation>Finestra</translation>
     </message>
@@ -304,7 +287,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="34"/>
         <source>Find Previous</source>
-        <translation>Troba l&apos;anterior</translation>
+        <translation>Troba l'anterior</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="35"/>
@@ -454,7 +437,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="64"/>
         <source>Move to start of line</source>
-        <translation>Mou a l&apos;inici de la línia</translation>
+        <translation>Mou a l'inici de la línia</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="65"/>
@@ -464,7 +447,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="66"/>
         <source>Move to start of text</source>
-        <translation>Mou a l&apos;inici del text</translation>
+        <translation>Mou a l'inici del text</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="67"/>
@@ -629,7 +612,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="102"/>
         <source>Open/Save Settings</source>
-        <translation>Configuració d&apos;obertura / desament</translation>
+        <translation>Configuració d'obertura / desament</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="104"/>
@@ -758,64 +741,63 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1346"/>
-        <location filename="../src/widgets/window.cpp" line="1361"/>
         <source>Line Endings</source>
         <translation>Finals de línia</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="243"/>
-        <source>Please install &apos;UOS AI&apos; from the App Store before using</source>
-        <translation type="unfinished"></translation>
+        <source>Please install 'UOS AI' from the App Store before using</source>
+        <translation>Si us plau, instal·li 'UOS AI' de l'App Store abans d'utilitzar</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="245"/>
         <source>No audio input device detected. Please check and try again</source>
-        <translation type="unfinished"></translation>
+        <translation>No s'ha detectat cap dispositiu d'entrada d'àudio. Comproveu i torneu a provar</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="247"/>
         <source>No audio output device detected. Please check and try again</source>
-        <translation type="unfinished"></translation>
+        <translation>No s'ha detectat cap dispositiu de sortida d'àudio. Comproveu i torneu a provar</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="65"/>
         <source>File path is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>La ruta del fitxer està buida</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="141"/>
         <source>Insufficient memory to load document content</source>
-        <translation type="unfinished"></translation>
+        <translation>No hi ha memòria suficient per carregar el contingut del document</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="163"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation type="unfinished"></translation>
+        <translation>No hi ha memòria suficient per a la conversió d'encodatge</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="169"/>
         <source>Encoding conversion failed</source>
-        <translation type="unfinished"></translation>
+        <translation>La conversió d'encodatge ha fallat</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="175"/>
         <source>Converted content is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>El contingut convertit està buit</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="193"/>
         <source>Memory allocation failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Ha fallat l'assignació de memòria</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="196"/>
         <source>Error occurred: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>S'ha produït un error: %1</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="199"/>
         <source>Unknown error occurred</source>
-        <translation type="unfinished"></translation>
+        <translation>S'ha produït un error desconegut</translation>
     </message>
 </context>
 <context>
@@ -843,7 +825,7 @@
     <message>
         <location filename="../src/controls/replacebar.cpp" line="38"/>
         <source>Replace Rest</source>
-        <translation>Reemplaça&apos;n la resta</translation>
+        <translation>Reemplaça'n la resta</translation>
     </message>
     <message>
         <location filename="../src/controls/replacebar.cpp" line="39"/>
@@ -899,8 +881,6 @@
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="606"/>
-        <location filename="../src/common/settings.cpp" line="618"/>
-        <location filename="../src/common/settings.cpp" line="626"/>
         <source>The shortcut %1 is invalid, please set another one.</source>
         <translation>La drecera %1 no és vàlida. Establiu-ne una altra.</translation>
     </message>
@@ -917,7 +897,7 @@
     <message>
         <location filename="../src/common/settings.cpp" line="656"/>
         <source>OK</source>
-        <translation>D&apos;acord</translation>
+        <translation>D'acord</translation>
     </message>
 </context>
 <context>
@@ -948,7 +928,7 @@
     <message>
         <location filename="../src/controls/tabbar.cpp" line="570"/>
         <source>Close tabs to the left</source>
-        <translation>Tanca les pestanyes de l&apos;esquerra</translation>
+        <translation>Tanca les pestanyes de l'esquerra</translation>
     </message>
     <message>
         <location filename="../src/controls/tabbar.cpp" line="571"/>
@@ -1000,13 +980,11 @@
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="290"/>
-        <location filename="../src/widgets/window.cpp" line="500"/>
         <source>Find</source>
         <translation>Troba</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="291"/>
-        <location filename="../src/widgets/window.cpp" line="501"/>
         <source>Replace</source>
         <translation>Reemplaça</translation>
     </message>
@@ -1042,7 +1020,6 @@
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="298"/>
-        <location filename="../src/editor/dtextedit.cpp" line="350"/>
         <source>Add Comment</source>
         <translation>Afegeix-hi un comentari</translation>
     </message>
@@ -1148,20 +1125,18 @@
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="2748"/>
-        <location filename="../src/editor/dtextedit.cpp" line="2750"/>
         <source>Copy failed: not enough memory</source>
         <translation>La còpia ha fallat: no hi ha prou memòria.</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="2843"/>
-        <location filename="../src/editor/dtextedit.cpp" line="2845"/>
         <source>Press ALT and click lines to edit in column mode</source>
         <translation>Premeu ALT i feu clic a les línies per editar-lo en mode columna</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="394"/>
         <source>Change Case</source>
-        <translation>Canvia&apos;n la caixa</translation>
+        <translation>Canvia'n la caixa</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="395"/>
@@ -1186,28 +1161,27 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="1189"/>
         <source>Selected line(s) copied</source>
-        <translation>S&apos;han copiat les línies seleccionades.</translation>
+        <translation>S'han copiat les línies seleccionades.</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="1195"/>
         <source>Current line copied</source>
-        <translation>S&apos;ha copiat la línia actual.</translation>
+        <translation>S'ha copiat la línia actual.</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="1220"/>
         <source>Selected line(s) clipped</source>
-        <translation>S&apos;han retallat les línies seleccionades.</translation>
+        <translation>S'han retallat les línies seleccionades.</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="1231"/>
         <source>Current line clipped</source>
-        <translation>S&apos;ha retallat la línia actual.</translation>
+        <translation>S'ha retallat la línia actual.</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="2762"/>
-        <location filename="../src/editor/dtextedit.cpp" line="2764"/>
         <source>Paste failed: not enough memory</source>
-        <translation>Ha fallat l&apos;acció d&apos;enganxar: no hi ha prou memòria.</translation>
+        <translation>Ha fallat l'acció d'enganxar: no hi ha prou memòria.</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3859"/>
@@ -1216,11 +1190,6 @@
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3869"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3889"/>
-        <location filename="../src/editor/dtextedit.cpp" line="6865"/>
-        <location filename="../src/editor/dtextedit.cpp" line="6976"/>
-        <location filename="../src/editor/dtextedit.cpp" line="6984"/>
-        <location filename="../src/editor/dtextedit.cpp" line="6995"/>
         <source>Read-Only mode is on</source>
         <translation>Mode de lectura activat</translation>
     </message>
@@ -1237,7 +1206,6 @@
     <name>Window</name>
     <message>
         <location filename="../src/controls/warningnotices.cpp" line="25"/>
-        <location filename="../src/widgets/window.cpp" line="496"/>
         <source>Save as</source>
         <translation>Desa com a</translation>
     </message>
@@ -1258,7 +1226,6 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="495"/>
-        <location filename="../src/widgets/window.cpp" line="3083"/>
         <source>Save</source>
         <translation>Desa</translation>
     </message>
@@ -1274,13 +1241,11 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="499"/>
-        <location filename="../src/widgets/window.cpp" line="2153"/>
         <source>Settings</source>
         <translation>Paràmetres</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="618"/>
-        <location filename="../src/widgets/window.cpp" line="3330"/>
         <source>Read-Only</source>
         <translation>Només de lectura</translation>
     </message>
@@ -1291,13 +1256,11 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="674"/>
-        <location filename="../src/widgets/window.cpp" line="2627"/>
         <source>Invalid file: %1</source>
         <translation>Fitxer no vàlid: %1</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="806"/>
-        <location filename="../src/widgets/window.cpp" line="852"/>
         <source>Do you want to save this file?</source>
         <translation>Voleu desar aquest fitxer?</translation>
     </message>
@@ -1309,12 +1272,10 @@
     <message>
         <location filename="../src/widgets/window.cpp" line="1163"/>
         <source>Saved successfully</source>
-        <translation>S&apos;ha desat correctament</translation>
+        <translation>S'ha desat correctament</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1199"/>
-        <location filename="../src/widgets/window.cpp" line="1302"/>
-        <location filename="../src/widgets/window.cpp" line="1343"/>
         <source>Save File</source>
         <translation>Desa el fitxer</translation>
     </message>
@@ -1335,12 +1296,12 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2103"/>
-        <source>Ctrl+&apos;=&apos;</source>
+        <source>Ctrl+'='</source>
         <translation>Ctrl + =</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2106"/>
-        <source>Ctrl+&apos;-&apos;</source>
+        <source>Ctrl+'-'</source>
         <translation>Ctrl + -</translation>
     </message>
     <message>

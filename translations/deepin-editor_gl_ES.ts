@@ -21,15 +21,13 @@
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="44"/>
         <source>Loading:</source>
-        <translation type="unfinished"></translation>
+        <translation>Cargando:</translation>
     </message>
 </context>
 <context>
     <name>DDropdownMenu</name>
     <message>
         <location filename="../src/widgets/ddropdownmenu.cpp" line="316"/>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="370"/>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="375"/>
         <source>None</source>
         <translation>Ningún</translation>
     </message>
@@ -38,9 +36,6 @@
     <name>EditWrapper</name>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="273"/>
-        <location filename="../src/editor/editwrapper.cpp" line="341"/>
-        <location filename="../src/editor/editwrapper.cpp" line="472"/>
-        <location filename="../src/editor/editwrapper.cpp" line="671"/>
         <source>Save</source>
         <translation>Gardar</translation>
     </message>
@@ -51,7 +46,6 @@
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="339"/>
-        <location filename="../src/editor/editwrapper.cpp" line="470"/>
         <source>Cancel</source>
         <translation>Cancelar</translation>
     </message>
@@ -67,7 +61,6 @@
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="258"/>
-        <location filename="../src/editor/editwrapper.cpp" line="558"/>
         <source>You do not have permission to save %1</source>
         <translation>Non tes permiso para gardar% 1</translation>
     </message>
@@ -83,7 +76,6 @@
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="784"/>
-        <location filename="../src/widgets/bottombar.cpp" line="74"/>
         <source>INSERT</source>
         <translation>INSERTAR</translation>
     </message>
@@ -100,7 +92,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="1417"/>
         <source>The file cannot be read, which may be too large or has been damaged!</source>
-        <translation type="unfinished"></translation>
+        <translation>O ficheiro non pode lerse, pode ser demasiado grande ou está danado!</translation>
     </message>
 </context>
 <context>
@@ -147,17 +139,17 @@
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="77"/>
         <source>Remember the last used path</source>
-        <translation type="unfinished"></translation>
+        <translation>Lembrar o camiño utilizado anteriormente</translation>
     </message>
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="78"/>
         <source>Same path as the current file</source>
-        <translation type="unfinished"></translation>
+        <translation>O mesmo camiño que o ficheiro actual</translation>
     </message>
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="79"/>
         <source>Customize the default path</source>
-        <translation type="unfinished"></translation>
+        <translation>Personalizar o camiño predeterminado</translation>
     </message>
 </context>
 <context>
@@ -169,12 +161,6 @@
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="275"/>
-        <location filename="../src/editor/editwrapper.cpp" line="681"/>
-        <location filename="../src/editor/editwrapper.cpp" line="695"/>
-        <location filename="../src/widgets/window.cpp" line="1207"/>
-        <location filename="../src/widgets/window.cpp" line="1230"/>
-        <location filename="../src/widgets/window.cpp" line="1345"/>
-        <location filename="../src/widgets/window.cpp" line="1360"/>
         <source>Encoding</source>
         <translation>Codificación</translation>
     </message>
@@ -205,14 +191,11 @@
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="14"/>
-        <location filename="../src/controls/settingsdialog.cpp" line="15"/>
         <source>Keymap</source>
         <translation>Mapa de clave</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="16"/>
-        <location filename="../src/controls/settingsdialog.cpp" line="94"/>
-        <location filename="../src/widgets/window.cpp" line="2093"/>
         <source>Window</source>
         <translation>Xanela</translation>
     </message>
@@ -269,12 +252,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="27"/>
         <source>Increment font size</source>
-        <translation type="unfinished"></translation>
+        <translation>Aumentar o tamaño da fonte</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="28"/>
         <source>Decrement font size</source>
-        <translation type="unfinished"></translation>
+        <translation>Decremente o tamaño da fonte</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="29"/>
@@ -299,12 +282,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="33"/>
         <source>Find Next</source>
-        <translation type="unfinished"></translation>
+        <translation>Buscar seguinte</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="34"/>
         <source>Find Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>Buscar anterior</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="35"/>
@@ -614,22 +597,22 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="97"/>
         <source>Paste by pressing a middle mouse button</source>
-        <translation type="unfinished"></translation>
+        <translation>Pegar ao pulsar o botón do medio do rato</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="99"/>
         <source>Startup</source>
-        <translation type="unfinished"></translation>
+        <translation>Iniciar</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="100"/>
         <source>Reopen last closed tabs</source>
-        <translation type="unfinished"></translation>
+        <translation>Reabrir as últimas pestanas pechadas</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="102"/>
         <source>Open/Save Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Abrir/Gardar Configuración</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="104"/>
@@ -649,17 +632,17 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="107"/>
         <source>Show bookmarks icon</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar icono de marcadores</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="108"/>
         <source>Show whitespaces and tabs</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostrar espazos en branco e pestanas</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="109"/>
         <source>Highlight current line</source>
-        <translation type="unfinished"></translation>
+        <translation>Destacar a liña actual</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="110"/>
@@ -669,87 +652,87 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="113"/>
         <source>Unicode</source>
-        <translation type="unfinished"></translation>
+        <translation>Unicode</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="114"/>
         <source>WesternEuropean</source>
-        <translation type="unfinished"></translation>
+        <translation>OccidentalEuropeo</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="115"/>
         <source>CentralEuropean</source>
-        <translation type="unfinished"></translation>
+        <translation>CentralEuropeo</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="116"/>
         <source>Baltic</source>
-        <translation type="unfinished"></translation>
+        <translation>Báltico</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="117"/>
         <source>Cyrillic</source>
-        <translation type="unfinished"></translation>
+        <translation>Cirílico</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="118"/>
         <source>Arabic</source>
-        <translation type="unfinished"></translation>
+        <translation>Árabe</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="123"/>
         <source>Celtic</source>
-        <translation type="unfinished"></translation>
+        <translation>Céltico</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="124"/>
         <source>SouthEasternEuropean</source>
-        <translation type="unfinished"></translation>
+        <translation>SuroesteEuropeo</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="119"/>
         <source>Greek</source>
-        <translation type="unfinished"></translation>
+        <translation>Grego</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="120"/>
         <source>Hebrew</source>
-        <translation type="unfinished"></translation>
+        <translation>Hebreo</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="125"/>
         <source>ChineseSimplified</source>
-        <translation type="unfinished"></translation>
+        <translation>Chinés Simplificado</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="126"/>
         <source>ChineseTraditional</source>
-        <translation type="unfinished"></translation>
+        <translation>Chinés Tradicional</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="127"/>
         <source>Japanese</source>
-        <translation type="unfinished"></translation>
+        <translation>Xaponés</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="128"/>
         <source>Korean</source>
-        <translation type="unfinished"></translation>
+        <translation>Coreano</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="122"/>
         <source>Thai</source>
-        <translation type="unfinished"></translation>
+        <translation>التايلاندي</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="121"/>
         <source>Turkish</source>
-        <translation type="unfinished"></translation>
+        <translation>التوركي</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="129"/>
         <source>Vietnamese</source>
-        <translation type="unfinished"></translation>
+        <translation>الفيتنامي</translation>
     </message>
     <message>
         <location filename="../src/startmanager.cpp" line="875"/>
@@ -758,64 +741,63 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1346"/>
-        <location filename="../src/widgets/window.cpp" line="1361"/>
         <source>Line Endings</source>
         <translation>Finais das liñas</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="243"/>
-        <source>Please install &apos;UOS AI&apos; from the App Store before using</source>
-        <translation type="unfinished"></translation>
+        <source>Please install 'UOS AI' from the App Store before using</source>
+        <translation>الرجاء تثبيت 'UOS AI' من متجر التطبيقات قبل الاستخدام</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="245"/>
         <source>No audio input device detected. Please check and try again</source>
-        <translation type="unfinished"></translation>
+        <translation>لم يتم اكتشاف جهاز إدخال صوتي. الرجاء التحقق وحاول مرة أخرى</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="247"/>
         <source>No audio output device detected. Please check and try again</source>
-        <translation type="unfinished"></translation>
+        <translation>لم يتم اكتشاف جهاز إخراج صوتي. الرجاء التحقق وحاول مرة أخرى</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="65"/>
         <source>File path is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>مسار الملف فارغ</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="141"/>
         <source>Insufficient memory to load document content</source>
-        <translation type="unfinished"></translation>
+        <translation>لا يتوفر ذاكرة كافية لتحميل محتوى المستند</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="163"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation type="unfinished"></translation>
+        <translation>لا يتوفر ذاكرة كافية لتحويل الترميز</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="169"/>
         <source>Encoding conversion failed</source>
-        <translation type="unfinished"></translation>
+        <translation>فشل تحويل الترميز</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="175"/>
         <source>Converted content is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>محتوى التحويل فارغ</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="193"/>
         <source>Memory allocation failed</source>
-        <translation type="unfinished"></translation>
+        <translation>فشل تخصيص الذاكرة</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="196"/>
         <source>Error occurred: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>حدث خطأ: %1</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="199"/>
         <source>Unknown error occurred</source>
-        <translation type="unfinished"></translation>
+        <translation>حدث خطأ غير معروف</translation>
     </message>
 </context>
 <context>
@@ -890,7 +872,7 @@
     <message>
         <location filename="../src/common/settings.cpp" line="438"/>
         <source>This shortcut conflicts with system shortcut %1</source>
-        <translation type="unfinished"></translation>
+        <translation>هذا المختصر يتعارض مع مختصر النظام %1</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="440"/>
@@ -899,10 +881,8 @@
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="606"/>
-        <location filename="../src/common/settings.cpp" line="618"/>
-        <location filename="../src/common/settings.cpp" line="626"/>
         <source>The shortcut %1 is invalid, please set another one.</source>
-        <translation type="unfinished"></translation>
+        <translation>المختصر %1 غير صحيح، الرجاء تحديد مختصر آخر.</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="653"/>
@@ -917,7 +897,7 @@
     <message>
         <location filename="../src/common/settings.cpp" line="656"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>موافق</translation>
     </message>
 </context>
 <context>
@@ -1000,13 +980,11 @@
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="290"/>
-        <location filename="../src/widgets/window.cpp" line="500"/>
         <source>Find</source>
         <translation>Atopar</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="291"/>
-        <location filename="../src/widgets/window.cpp" line="501"/>
         <source>Replace</source>
         <translation>Substituír</translation>
     </message>
@@ -1042,7 +1020,6 @@
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="298"/>
-        <location filename="../src/editor/dtextedit.cpp" line="350"/>
         <source>Add Comment</source>
         <translation>Engadir comentario</translation>
     </message>
@@ -1054,7 +1031,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="300"/>
         <source>Stop reading</source>
-        <translation type="unfinished"></translation>
+        <translation>توقف عن القراءة</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="301"/>
@@ -1074,7 +1051,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="304"/>
         <source>Add bookmark</source>
-        <translation type="unfinished"></translation>
+        <translation>أضف مرجعًا</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="305"/>
@@ -1084,12 +1061,12 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="306"/>
         <source>Previous bookmark</source>
-        <translation type="unfinished"></translation>
+        <translation>المرجع السابق</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="307"/>
         <source>Next bookmark</source>
-        <translation type="unfinished"></translation>
+        <translation>المرجع التالي</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="308"/>
@@ -1148,15 +1125,13 @@
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="2748"/>
-        <location filename="../src/editor/dtextedit.cpp" line="2750"/>
         <source>Copy failed: not enough memory</source>
-        <translation type="unfinished"></translation>
+        <translation>فشل النسخ: لا يوجد ذاكرة كافية</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="2843"/>
-        <location filename="../src/editor/dtextedit.cpp" line="2845"/>
         <source>Press ALT and click lines to edit in column mode</source>
-        <translation type="unfinished"></translation>
+        <translation>اضغط على ALT وانقر على السطور للتحرير في وضع العمود</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="394"/>
@@ -1205,9 +1180,8 @@
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="2762"/>
-        <location filename="../src/editor/dtextedit.cpp" line="2764"/>
         <source>Paste failed: not enough memory</source>
-        <translation type="unfinished"></translation>
+        <translation>فشل اللصق: لا يوجد ذاكرة كافية</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3859"/>
@@ -1216,11 +1190,6 @@
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3869"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3889"/>
-        <location filename="../src/editor/dtextedit.cpp" line="6865"/>
-        <location filename="../src/editor/dtextedit.cpp" line="6976"/>
-        <location filename="../src/editor/dtextedit.cpp" line="6984"/>
-        <location filename="../src/editor/dtextedit.cpp" line="6995"/>
         <source>Read-Only mode is on</source>
         <translation>O modo só-ler está acendido</translation>
     </message>
@@ -1237,7 +1206,6 @@
     <name>Window</name>
     <message>
         <location filename="../src/controls/warningnotices.cpp" line="25"/>
-        <location filename="../src/widgets/window.cpp" line="496"/>
         <source>Save as</source>
         <translation>Gardar como</translation>
     </message>
@@ -1258,7 +1226,6 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="495"/>
-        <location filename="../src/widgets/window.cpp" line="3083"/>
         <source>Save</source>
         <translation>Gardar</translation>
     </message>
@@ -1274,13 +1241,11 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="499"/>
-        <location filename="../src/widgets/window.cpp" line="2153"/>
         <source>Settings</source>
         <translation>Configuracións</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="618"/>
-        <location filename="../src/widgets/window.cpp" line="3330"/>
         <source>Read-Only</source>
         <translation>Só-ler</translation>
     </message>
@@ -1291,13 +1256,11 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="674"/>
-        <location filename="../src/widgets/window.cpp" line="2627"/>
         <source>Invalid file: %1</source>
         <translation>Ficheiro non válido: %1</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="806"/>
-        <location filename="../src/widgets/window.cpp" line="852"/>
         <source>Do you want to save this file?</source>
         <translation>Quere gardar este ficheiro?</translation>
     </message>
@@ -1313,8 +1276,6 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1199"/>
-        <location filename="../src/widgets/window.cpp" line="1302"/>
-        <location filename="../src/widgets/window.cpp" line="1343"/>
         <source>Save File</source>
         <translation>Gardar ficheiro</translation>
     </message>
@@ -1335,13 +1296,13 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2103"/>
-        <source>Ctrl+&apos;=&apos;</source>
-        <translation>Ctrl+&apos;=&apos;</translation>
+        <source>Ctrl+'='</source>
+        <translation>Ctrl+'='</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2106"/>
-        <source>Ctrl+&apos;-&apos;</source>
-        <translation>Ctrl+&apos;-&apos;</translation>
+        <source>Ctrl+'-'</source>
+        <translation>Ctrl+'-'</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2135"/>

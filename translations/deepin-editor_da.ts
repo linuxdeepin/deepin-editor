@@ -21,15 +21,13 @@
     <message>
         <location filename="../src/widgets/bottombar.cpp" line="44"/>
         <source>Loading:</source>
-        <translation type="unfinished"></translation>
+        <translation>Indlæser:</translation>
     </message>
 </context>
 <context>
     <name>DDropdownMenu</name>
     <message>
         <location filename="../src/widgets/ddropdownmenu.cpp" line="316"/>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="370"/>
-        <location filename="../src/widgets/ddropdownmenu.cpp" line="375"/>
         <source>None</source>
         <translation>Ingen</translation>
     </message>
@@ -38,9 +36,6 @@
     <name>EditWrapper</name>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="273"/>
-        <location filename="../src/editor/editwrapper.cpp" line="341"/>
-        <location filename="../src/editor/editwrapper.cpp" line="472"/>
-        <location filename="../src/editor/editwrapper.cpp" line="671"/>
         <source>Save</source>
         <translation>Gem</translation>
     </message>
@@ -51,7 +46,6 @@
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="339"/>
-        <location filename="../src/editor/editwrapper.cpp" line="470"/>
         <source>Cancel</source>
         <translation>Annuller</translation>
     </message>
@@ -67,7 +61,6 @@
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="258"/>
-        <location filename="../src/editor/editwrapper.cpp" line="558"/>
         <source>You do not have permission to save %1</source>
         <translation>Du har ikke tilladelse til at gemme %1</translation>
     </message>
@@ -83,7 +76,6 @@
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="784"/>
-        <location filename="../src/widgets/bottombar.cpp" line="74"/>
         <source>INSERT</source>
         <translation>INDSÆT</translation>
     </message>
@@ -100,7 +92,7 @@
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="1417"/>
         <source>The file cannot be read, which may be too large or has been damaged!</source>
-        <translation type="unfinished"></translation>
+        <translation>Filen kan ikke læses, hvilket kan skyldes, at den er for stor eller beskadiget!</translation>
     </message>
 </context>
 <context>
@@ -147,17 +139,17 @@
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="77"/>
         <source>Remember the last used path</source>
-        <translation type="unfinished"></translation>
+        <translation>Husk den sidst brugte sti</translation>
     </message>
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="78"/>
         <source>Same path as the current file</source>
-        <translation type="unfinished"></translation>
+        <translation>Samme sti som den aktuelle fil</translation>
     </message>
     <message>
         <location filename="../src/widgets/pathsettintwgt.cpp" line="79"/>
         <source>Customize the default path</source>
-        <translation type="unfinished"></translation>
+        <translation>Tilpas standardsti</translation>
     </message>
 </context>
 <context>
@@ -169,12 +161,6 @@
     </message>
     <message>
         <location filename="../src/editor/editwrapper.cpp" line="275"/>
-        <location filename="../src/editor/editwrapper.cpp" line="681"/>
-        <location filename="../src/editor/editwrapper.cpp" line="695"/>
-        <location filename="../src/widgets/window.cpp" line="1207"/>
-        <location filename="../src/widgets/window.cpp" line="1230"/>
-        <location filename="../src/widgets/window.cpp" line="1345"/>
-        <location filename="../src/widgets/window.cpp" line="1360"/>
         <source>Encoding</source>
         <translation>Kodning</translation>
     </message>
@@ -205,14 +191,11 @@
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="14"/>
-        <location filename="../src/controls/settingsdialog.cpp" line="15"/>
         <source>Keymap</source>
         <translation>Tegnkort</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="16"/>
-        <location filename="../src/controls/settingsdialog.cpp" line="94"/>
-        <location filename="../src/widgets/window.cpp" line="2093"/>
         <source>Window</source>
         <translation>Vindue</translation>
     </message>
@@ -299,12 +282,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="33"/>
         <source>Find Next</source>
-        <translation type="unfinished"></translation>
+        <translation>Find næste</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="34"/>
         <source>Find Previous</source>
-        <translation type="unfinished"></translation>
+        <translation>Find forrige</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="35"/>
@@ -564,12 +547,12 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="86"/>
         <source>Add comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Tilføj kommentar</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="87"/>
         <source>Remove comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjern kommentar</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="88"/>
@@ -584,17 +567,17 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="90"/>
         <source>Add/Remove bookmark</source>
-        <translation type="unfinished"></translation>
+        <translation>Tilføj/Fjern bogmærke</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="91"/>
         <source>Move to previous bookmark</source>
-        <translation type="unfinished"></translation>
+        <translation>Gå til forrige bogmærke</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="92"/>
         <source>Move to next bookmark</source>
-        <translation type="unfinished"></translation>
+        <translation>Gå til næste bogmærke</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="93"/>
@@ -614,92 +597,92 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="97"/>
         <source>Paste by pressing a middle mouse button</source>
-        <translation type="unfinished"></translation>
+        <translation>Indsæt ved at trykke på midt museknap</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="99"/>
         <source>Startup</source>
-        <translation type="unfinished"></translation>
+        <translation>Start</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="100"/>
         <source>Reopen last closed tabs</source>
-        <translation type="unfinished"></translation>
+        <translation>Genåbn last closed tabs</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="102"/>
         <source>Open/Save Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>Åbn/Vis indstillinger</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="104"/>
         <source>Word wrap</source>
-        <translation type="unfinished"></translation>
+        <translation>Ordfold</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="105"/>
         <source>Code folding flag</source>
-        <translation type="unfinished"></translation>
+        <translation>Kodefoldflag</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="106"/>
         <source>Show line numbers</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis linjenumre</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="107"/>
         <source>Show bookmarks icon</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis bogmærkeikonen</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="108"/>
         <source>Show whitespaces and tabs</source>
-        <translation type="unfinished"></translation>
+        <translation>Vis mellemrum og tabulatorer</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="109"/>
         <source>Highlight current line</source>
-        <translation type="unfinished"></translation>
+        <translation>Markér aktuel linje</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="110"/>
         <source>Color mark</source>
-        <translation type="unfinished"></translation>
+        <translation>Farve markering</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="113"/>
         <source>Unicode</source>
-        <translation type="unfinished"></translation>
+        <translation>Unicode</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="114"/>
         <source>WesternEuropean</source>
-        <translation type="unfinished"></translation>
+        <translation>Vest europæisk</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="115"/>
         <source>CentralEuropean</source>
-        <translation type="unfinished"></translation>
+        <translation>Central europæisk</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="116"/>
         <source>Baltic</source>
-        <translation type="unfinished"></translation>
+        <translation>Baltisk</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="117"/>
         <source>Cyrillic</source>
-        <translation type="unfinished"></translation>
+        <translation>Cyrillisk</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="118"/>
         <source>Arabic</source>
-        <translation type="unfinished"></translation>
+        <translation>Arabisk</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="123"/>
         <source>Celtic</source>
-        <translation type="unfinished"></translation>
+        <translation>Keltisk</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="124"/>
@@ -709,17 +692,17 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="119"/>
         <source>Greek</source>
-        <translation type="unfinished"></translation>
+        <translation>Græsk</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="120"/>
         <source>Hebrew</source>
-        <translation type="unfinished"></translation>
+        <translation>Hebrejisk</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="125"/>
         <source>ChineseSimplified</source>
-        <translation type="unfinished"></translation>
+        <translation>Kinesisk forenklet</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="126"/>
@@ -729,17 +712,17 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="127"/>
         <source>Japanese</source>
-        <translation type="unfinished"></translation>
+        <translation>Japansk</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="128"/>
         <source>Korean</source>
-        <translation type="unfinished"></translation>
+        <translation>Koreansk</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="122"/>
         <source>Thai</source>
-        <translation type="unfinished"></translation>
+        <translation>Thailandsk</translation>
     </message>
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="121"/>
@@ -749,7 +732,7 @@
     <message>
         <location filename="../src/controls/settingsdialog.cpp" line="129"/>
         <source>Vietnamese</source>
-        <translation type="unfinished"></translation>
+        <translation>Vietnamesisk</translation>
     </message>
     <message>
         <location filename="../src/startmanager.cpp" line="875"/>
@@ -758,64 +741,63 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1346"/>
-        <location filename="../src/widgets/window.cpp" line="1361"/>
         <source>Line Endings</source>
         <translation>Linjeskift</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="243"/>
-        <source>Please install &apos;UOS AI&apos; from the App Store before using</source>
-        <translation type="unfinished"></translation>
+        <source>Please install 'UOS AI' from the App Store before using</source>
+        <translation>Vennligst installer 'UOS AI' fra AppStore inden brug</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="245"/>
         <source>No audio input device detected. Please check and try again</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingen lydindgangsudstyr er detekteret. Tjek og prøv igen</translation>
     </message>
     <message>
         <location filename="../src/common/iflytek_ai_assistant.cpp" line="247"/>
         <source>No audio output device detected. Please check and try again</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingen lydoutputudstyr er detekteret. Tjek og prøv igen</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="65"/>
         <source>File path is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>Filenavnet er tomt</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="141"/>
         <source>Insufficient memory to load document content</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilstrækkeligt hukommelse til at indlæse dokumentindhold</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="163"/>
         <source>Insufficient memory for encoding conversion</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilstrækkeligt hukommelse til kodetranslation</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="169"/>
         <source>Encoding conversion failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Kodetranslation fejlede</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="175"/>
         <source>Converted content is empty</source>
-        <translation type="unfinished"></translation>
+        <translation>Det konverterede indhold er tomt</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="193"/>
         <source>Memory allocation failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Hukommelsesallokering fejlede</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="196"/>
         <source>Error occurred: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Fejl opstod: %1</translation>
     </message>
     <message>
         <location filename="../src/common/text_file_saver.cpp" line="199"/>
         <source>Unknown error occurred</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukendt fejl opstod</translation>
     </message>
 </context>
 <context>
@@ -890,19 +872,19 @@
     <message>
         <location filename="../src/common/settings.cpp" line="438"/>
         <source>This shortcut conflicts with system shortcut %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Denne genknytning kolliderer med systemgenk nyttelse %1</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="440"/>
         <source>This shortcut conflicts with %1, click on Replace to make this shortcut effective immediately</source>
-        <translation type="unfinished"></translation>
+        <translation>>-
+Denne genknytning kolliderer med %1, klik på Erstat for at gøre denne genknytning
+aktiv umiddelbart</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="606"/>
-        <location filename="../src/common/settings.cpp" line="618"/>
-        <location filename="../src/common/settings.cpp" line="626"/>
         <source>The shortcut %1 is invalid, please set another one.</source>
-        <translation type="unfinished"></translation>
+        <translation>Denne genknytning %1 er ugyldig, venligst indstil en anden.</translation>
     </message>
     <message>
         <location filename="../src/common/settings.cpp" line="653"/>
@@ -917,7 +899,7 @@
     <message>
         <location filename="../src/common/settings.cpp" line="656"/>
         <source>OK</source>
-        <translation type="unfinished"></translation>
+        <translation>OK</translation>
     </message>
 </context>
 <context>
@@ -943,22 +925,22 @@
     <message>
         <location filename="../src/controls/tabbar.cpp" line="569"/>
         <source>More options</source>
-        <translation type="unfinished"></translation>
+        <translation>Flere muligheder</translation>
     </message>
     <message>
         <location filename="../src/controls/tabbar.cpp" line="570"/>
         <source>Close tabs to the left</source>
-        <translation type="unfinished"></translation>
+        <translation>Luk faneblad til venstre</translation>
     </message>
     <message>
         <location filename="../src/controls/tabbar.cpp" line="571"/>
         <source>Close tabs to the right</source>
-        <translation type="unfinished"></translation>
+        <translation>Luk faneblad til højre</translation>
     </message>
     <message>
         <location filename="../src/controls/tabbar.cpp" line="572"/>
         <source>Close unmodified tabs</source>
-        <translation type="unfinished"></translation>
+        <translation>Luk ubehandlede faneblad</translation>
     </message>
 </context>
 <context>
@@ -1000,13 +982,11 @@
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="290"/>
-        <location filename="../src/widgets/window.cpp" line="500"/>
         <source>Find</source>
         <translation>Find</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="291"/>
-        <location filename="../src/widgets/window.cpp" line="501"/>
         <source>Replace</source>
         <translation>Erstat</translation>
     </message>
@@ -1042,9 +1022,8 @@
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="298"/>
-        <location filename="../src/editor/dtextedit.cpp" line="350"/>
         <source>Add Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Tilføj kommentar</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="299"/>
@@ -1054,7 +1033,7 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="300"/>
         <source>Stop reading</source>
-        <translation type="unfinished"></translation>
+        <translation>Stop reading</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="301"/>
@@ -1069,67 +1048,67 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="303"/>
         <source>Column Mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Søjlevis</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="304"/>
         <source>Add bookmark</source>
-        <translation type="unfinished"></translation>
+        <translation>Tilføj bogmærke</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="305"/>
         <source>Remove Bookmark</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjern bogmærke</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="306"/>
         <source>Previous bookmark</source>
-        <translation type="unfinished"></translation>
+        <translation>Forrige bogmærke</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="307"/>
         <source>Next bookmark</source>
-        <translation type="unfinished"></translation>
+        <translation>Næste bogmærke</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="308"/>
         <source>Remove All Bookmarks</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjern alle bogmærker</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="309"/>
         <source>Fold All</source>
-        <translation type="unfinished"></translation>
+        <translation>Fold alle</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="310"/>
         <source>Fold Current Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Fold nuværende niveau</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="311"/>
         <source>Unfold All</source>
-        <translation type="unfinished"></translation>
+        <translation>Ufold alle</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="312"/>
         <source>Unfold Current Level</source>
-        <translation type="unfinished"></translation>
+        <translation>Ufold nuværende niveau</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="317"/>
         <source>Color Mark</source>
-        <translation type="unfinished"></translation>
+        <translation>Farve markering</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="321"/>
         <source>Clear All Marks</source>
-        <translation type="unfinished"></translation>
+        <translation>Ryd alle markeringer</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="322"/>
         <source>Clear Last Mark</source>
-        <translation type="unfinished"></translation>
+        <translation>Ryd sidste markering</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="331"/>
@@ -1139,24 +1118,22 @@
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="343"/>
         <source>Mark All</source>
-        <translation type="unfinished"></translation>
+        <translation>Markér alle</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="351"/>
         <source>Remove Comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjern kommentar</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="2748"/>
-        <location filename="../src/editor/dtextedit.cpp" line="2750"/>
         <source>Copy failed: not enough memory</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopier fejlet: ikke nok hukommelse</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="2843"/>
-        <location filename="../src/editor/dtextedit.cpp" line="2845"/>
         <source>Press ALT and click lines to edit in column mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Tryk ALT og klik på linjer for at redigere i søjlevis</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="394"/>
@@ -1205,9 +1182,8 @@
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="2762"/>
-        <location filename="../src/editor/dtextedit.cpp" line="2764"/>
         <source>Paste failed: not enough memory</source>
-        <translation type="unfinished"></translation>
+        <translation>Indsæt fejlet: ikke nok hukommelse</translation>
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3859"/>
@@ -1216,11 +1192,6 @@
     </message>
     <message>
         <location filename="../src/editor/dtextedit.cpp" line="3869"/>
-        <location filename="../src/editor/dtextedit.cpp" line="3889"/>
-        <location filename="../src/editor/dtextedit.cpp" line="6865"/>
-        <location filename="../src/editor/dtextedit.cpp" line="6976"/>
-        <location filename="../src/editor/dtextedit.cpp" line="6984"/>
-        <location filename="../src/editor/dtextedit.cpp" line="6995"/>
         <source>Read-Only mode is on</source>
         <translation>Skrivebeskyttet tilstand er aktiveret</translation>
     </message>
@@ -1237,7 +1208,6 @@
     <name>Window</name>
     <message>
         <location filename="../src/controls/warningnotices.cpp" line="25"/>
-        <location filename="../src/widgets/window.cpp" line="496"/>
         <source>Save as</source>
         <translation>Gem som</translation>
     </message>
@@ -1258,7 +1228,6 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="495"/>
-        <location filename="../src/widgets/window.cpp" line="3083"/>
         <source>Save</source>
         <translation>Gem</translation>
     </message>
@@ -1274,13 +1243,11 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="499"/>
-        <location filename="../src/widgets/window.cpp" line="2153"/>
         <source>Settings</source>
         <translation>Indstillinger</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="618"/>
-        <location filename="../src/widgets/window.cpp" line="3330"/>
         <source>Read-Only</source>
         <translation>Skrivebeskyttet</translation>
     </message>
@@ -1291,13 +1258,11 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="674"/>
-        <location filename="../src/widgets/window.cpp" line="2627"/>
         <source>Invalid file: %1</source>
         <translation>Ugyldig fil: %1</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="806"/>
-        <location filename="../src/widgets/window.cpp" line="852"/>
         <source>Do you want to save this file?</source>
         <translation>Vil du gemme filen?</translation>
     </message>
@@ -1313,8 +1278,6 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="1199"/>
-        <location filename="../src/widgets/window.cpp" line="1302"/>
-        <location filename="../src/widgets/window.cpp" line="1343"/>
         <source>Save File</source>
         <translation>Gem fil</translation>
     </message>
@@ -1335,13 +1298,13 @@
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2103"/>
-        <source>Ctrl+&apos;=&apos;</source>
-        <translation type="unfinished"></translation>
+        <source>Ctrl+'='</source>
+        <translation>Ctrl+=''</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2106"/>
-        <source>Ctrl+&apos;-&apos;</source>
-        <translation type="unfinished"></translation>
+        <source>Ctrl+'-'</source>
+        <translation>Ctrl='-'</translation>
     </message>
     <message>
         <location filename="../src/widgets/window.cpp" line="2135"/>
