@@ -1005,6 +1005,28 @@
         <translation>语音听写</translation>
     </message>
     <message>
+        <location filename="../src/editor/dtextedit.cpp" line="2814"/>
+        <location filename="../src/editor/dtextedit.cpp" line="2816"/>
+        <source>No audio output device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
+        <translation>未检测到音频输出设备，请检查后重试</translation>
+    </message>
+    <message>
+        <location filename="../src/editor/dtextedit.cpp" line="2838"/>
+        <location filename="../src/editor/dtextedit.cpp" line="2840"/>
+        <source>No audio input device was detected. Please ensure your speakers or headphones are properly connected and try again.</source>
+        <translation>未检测到音频输入设备，请检查后重试</translation>
+    </message>
+    <message>
+        <location filename="../src/editor/dtextedit.cpp" line="2826"/>
+        <location filename="../src/editor/dtextedit.cpp" line="2828"/>
+        <location filename="../src/editor/dtextedit.cpp" line="2852"/>
+        <location filename="../src/editor/dtextedit.cpp" line="2854"/>
+        <location filename="../src/editor/dtextedit.cpp" line="2868"/>
+        <location filename="../src/editor/dtextedit.cpp" line="2870"/>
+        <source>Please install UOS AI from the app store first.</source>
+        <translation>请前往应用商店安装“UOS AI”后再使用</translation>
+    </message>
+    <message>
         <location filename="../src/editor/dtextedit.cpp" line="292"/>
         <source>Translate</source>
         <translation>文本翻译</translation>

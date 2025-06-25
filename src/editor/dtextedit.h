@@ -529,6 +529,13 @@ public slots:
     void slotVoiceReadingAction(bool checked = false);
     bool slotStopReadingAction(bool checked = false);
     void slotdictationAction(bool checked = false);
+    
+    // 音频设备检测方法
+    bool checkAudioOutputDevice();
+    bool checkAudioInputDevice();
+    
+    // 音频设备状态监听槽函数
+    void onAudioPortEnabledChanged(quint32 cardId, const QString &portName, bool enabled);
     void slotColumnEditAction(bool checked = false);
     void slotPreBookMarkAction(bool checked = false);
     void slotNextBookMarkAction(bool checked = false);
