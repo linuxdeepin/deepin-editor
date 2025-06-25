@@ -19,11 +19,13 @@ FlashTween::~FlashTween()
 {
     qDebug() << "FlashTween destroyed";
     if (m_timerX != nullptr) {
+        qDebug() << "delete m_timerX";
         delete m_timerX;
         m_timerX = nullptr;
     }
 
     if (m_timerY != nullptr) {
+        qDebug() << "delete m_timerY";
         delete m_timerY;
         m_timerY = nullptr;
     }
@@ -43,9 +45,11 @@ void FlashTween::startY(qreal t,qreal b,qreal c,qreal d, FunSlideInertial f)
     m_directionY = m_changeValueY<0?1:-1;
 
     if (m_timerY != nullptr) {
-    m_timerY->stop();
-    m_timerY->start(CELL_TIME);
+        qDebug() << "m_timerY is not null";
+        m_timerY->stop();
+        m_timerY->start(CELL_TIME);
     }
+    qDebug() << "FlashTween startY end";
 }
 
 void FlashTween::startX(qreal t,qreal b,qreal c,qreal d, FunSlideInertial f)
@@ -61,8 +65,12 @@ void FlashTween::startX(qreal t,qreal b,qreal c,qreal d, FunSlideInertial f)
     m_fSlideGestureX = f;
     m_directionX = m_changeValueX<0?1:-1;
 
-    m_timerX->stop();
-    m_timerX->start(CELL_TIME);
+    if (m_timerX != nullptr) {
+        qDebug() << "m_timerX is not null";
+        m_timerX->stop();
+        m_timerX->start(CELL_TIME);
+    }
+    qDebug() << "FlashTween startX end";
 }
 
 void FlashTween::__runY()
@@ -74,14 +82,17 @@ void FlashTween::__runY()
              << "value:" << m_lastValueY << "delta:" << m_lastValueY-tempValue;
 
     if(m_currentTimeY<m_durationTimeY){
+        qDebug() << "m_currentTimeY < m_durationTimeY";
         m_currentTimeY+=CELL_TIME;
     }
     else {
         qDebug() << "FlashTween Y animation completed";
         if (m_timerY != nullptr) {
-        m_timerY->stop();
+            qDebug() << "m_timerY is not null";
+            m_timerY->stop();
         }
     }
+    qDebug() << "FlashTween Y animation completed";
 }
 
 void FlashTween::__runX()
@@ -93,11 +104,13 @@ void FlashTween::__runX()
              << "value:" << m_lastValueX << "delta:" << m_lastValueX-tempValue;
 
     if(m_currentTimeX<m_durationTimeX){
+        qDebug() << "m_currentTimeX < m_durationTimeX";
         m_currentTimeX+=CELL_TIME;
     }
     else {
         qDebug() << "FlashTween X animation completed";
         m_timerX->stop();
     }
+    qDebug() << "FlashTween X animation completed";
 }
 

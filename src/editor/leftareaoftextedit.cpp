@@ -45,11 +45,13 @@ LeftAreaTextEdit::~LeftAreaTextEdit()
 
 void LeftAreaTextEdit::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
+    qDebug() << "LeftAreaTextEdit lineNumberAreaPaintEvent";
     m_pTextEdit->lineNumberAreaPaintEvent(event);
 }
 
 int LeftAreaTextEdit::lineNumberAreaWidth()
 {
+    qDebug() << "LeftAreaTextEdit lineNumberAreaWidth";
     int digits = 1;
     int max = qMax(1, m_pTextEdit->document()->blockCount());
     while (max >= 10) {
@@ -57,62 +59,90 @@ int LeftAreaTextEdit::lineNumberAreaWidth()
         ++digits;
     }
 
+    qDebug() << "LeftAreaTextEdit lineNumberAreaWidth return";
     return 13 + fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits + 40;
 }
 
 
 void LeftAreaTextEdit::bookMarkAreaPaintEvent(QPaintEvent *event)
 {
+    qDebug() << "LeftAreaTextEdit bookMarkAreaPaintEvent";
     m_pTextEdit->bookMarkAreaPaintEvent(event);
 }
 
 void LeftAreaTextEdit::codeFlodAreaPaintEvent(QPaintEvent *event)
 {
+    qDebug() << "LeftAreaTextEdit codeFlodAreaPaintEvent";
     m_pTextEdit->codeFLodAreaPaintEvent(event);
 }
 
 void LeftAreaTextEdit::updateLineNumber()
 {
     qDebug() << "LeftAreaTextEdit updateLineNumber";
-    if (m_pLineNumberArea) m_pLineNumberArea->update();
+    if (m_pLineNumberArea) {
+        qDebug() << "LeftAreaTextEdit updateLineNumber m_pLineNumberArea";
+        m_pLineNumberArea->update();
+    }
 }
 
 void LeftAreaTextEdit::updateBookMark()
 {
     qDebug() << "LeftAreaTextEdit updateBookMark";
-    if (m_pBookMarkArea) m_pBookMarkArea->update();
+    if (m_pBookMarkArea) {
+        qDebug() << "LeftAreaTextEdit updateBookMark m_pBookMarkArea";
+        m_pBookMarkArea->update();
+    }
 }
 
 void LeftAreaTextEdit::updateCodeFlod()
 {
     qDebug() << "LeftAreaTextEdit updateCodeFlod";
-    if (m_pFlodArea) m_pFlodArea->update();
+    if (m_pFlodArea) {
+        qDebug() << "LeftAreaTextEdit updateCodeFlod m_pFlodArea";
+        m_pFlodArea->update();
+    }
 }
 
 void LeftAreaTextEdit::updateAll()
 {
-    if (m_pLineNumberArea) m_pLineNumberArea->update();
-    if (m_pBookMarkArea) m_pBookMarkArea->update();
-    if (m_pFlodArea) m_pFlodArea->update();
+    qDebug() << "LeftAreaTextEdit updateAll";
+    if (m_pLineNumberArea) {
+        qDebug() << "LeftAreaTextEdit updateAll m_pLineNumberArea";
+        m_pLineNumberArea->update();
+    }
+    if (m_pBookMarkArea) {
+        qDebug() << "LeftAreaTextEdit updateAll m_pBookMarkArea";
+        m_pBookMarkArea->update();
+    }
+    if (m_pFlodArea) {
+        qDebug() << "LeftAreaTextEdit updateAll m_pFlodArea";
+        m_pFlodArea->update();
+    }
+    qDebug() << "LeftAreaTextEdit updateAll exit";
 }
 
 void LeftAreaTextEdit::paintEvent(QPaintEvent *event)
 {
+    qDebug() << "LeftAreaTextEdit paintEvent";
     QPainter painter(this);
     QColor bdColor;
     if (m_pTextEdit->getBackColor().lightness() < 128) {
+        qDebug() << "LeftAreaTextEdit paintEvent getBackColor lightness < 128";
         bdColor = palette().brightText().color();
         bdColor.setAlphaF(0.06);
     } else {
+        qDebug() << "LeftAreaTextEdit paintEvent getBackColor lightness >= 128";
         bdColor = palette().brightText().color();
         bdColor.setAlphaF(0.03);
     }
     painter.fillRect(event->rect(), bdColor);
+    qDebug() << "LeftAreaTextEdit paintEvent exit";
 }
 
 
 TextEdit* LeftAreaTextEdit::getEdit()
 {
+    qDebug() << "LeftAreaTextEdit getEdit";
     return m_pTextEdit;
 }
 

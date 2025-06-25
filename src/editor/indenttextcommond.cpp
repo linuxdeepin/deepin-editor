@@ -40,19 +40,23 @@ void IndentTextCommand::redo()
 
     //reset selection.
     if(m_hasselected){
+        qDebug() << "IndentTextCommand redo, m_hasselected";
         if(m_startline == m_endline){
+            qDebug() << "IndentTextCommand redo, m_startline == m_endline";
             cursor.setPosition(m_startpos);
             cursor.movePosition(QTextCursor::StartOfBlock);
             cursor.movePosition(QTextCursor::EndOfBlock,QTextCursor::KeepAnchor);
             m_edit->setTextCursor(cursor);
         }
         else{
+            qDebug() << "IndentTextCommand redo, m_startline != m_endline";
             cursor.setPosition(m_startpos+1);
             cursor.setPosition(m_endpos + m_endline - m_startline +1,QTextCursor::KeepAnchor);
             m_edit->setTextCursor(cursor);
         }
 
     }
+    qDebug() << "IndentTextCommand redo exit";
 }
 
 
@@ -66,6 +70,7 @@ void IndentTextCommand::undo()
     //delete "\t" in front of multiple lines.
     cursor.setPosition(m_startpos);
     for(int i=m_startline;i<=m_endline;i++){
+        qDebug() << "IndentTextCommand undo, i:" << i;
         cursor.movePosition(QTextCursor::StartOfBlock);
         cursor.deleteChar();
 
@@ -74,8 +79,10 @@ void IndentTextCommand::undo()
 
     //reset selection
     if(m_hasselected){
+        qDebug() << "IndentTextCommand undo, m_hasselected";
         cursor.setPosition(m_startpos);
         cursor.setPosition(m_endpos,QTextCursor::KeepAnchor);
         m_edit->setTextCursor(cursor);
     }
+    qDebug() << "IndentTextCommand undo exit";
 }

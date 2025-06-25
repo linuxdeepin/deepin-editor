@@ -40,6 +40,7 @@ ThemePanel::ThemePanel(QWidget *parent)
         m_themeView->setCurrentIndex(idx);
         m_themeView->scrollTo(idx);
     });
+    qDebug() << "ThemePanel initialized";
 }
 
 ThemePanel::~ThemePanel()
@@ -67,12 +68,15 @@ void ThemePanel::setBackground(const QString &color)
     m_backgroundColor = QColor(color);
 
     if (m_backgroundColor.lightness() < 128) {
+        qDebug() << "Background color is dark";
         m_frameColor = m_frameDarkColor;
     } else {
+        qDebug() << "Background color is light";
         m_frameColor = m_frameLightColor;
     }
 
     update();
+    qDebug() << "Panel background color set";
 }
 
 void ThemePanel::popup()
@@ -94,6 +98,7 @@ void ThemePanel::popup()
 
     connect(animation, &QPropertyAnimation::valueChanged, this, [=] { m_themeView->adjustScrollbarMargins(); });
     connect(animation, &QPropertyAnimation::finished, animation, &QPropertyAnimation::deleteLater);
+    qDebug() << "popup end";
 }
 
 void ThemePanel::hide()
@@ -111,10 +116,12 @@ void ThemePanel::hide()
 
     connect(animation, &QPropertyAnimation::finished, this, &QWidget::hide);
     connect(animation, &QPropertyAnimation::finished, animation, &QPropertyAnimation::deleteLater);
+    qDebug() << "hide end";
 }
 
 void ThemePanel::setFrameColor(const QString &selectedColor, const QString &normalColor)
 {
+    qDebug() << "Setting frame color:" << selectedColor << normalColor;
     m_themeModel->setFrameColor(selectedColor, normalColor);
 }
 

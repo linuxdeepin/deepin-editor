@@ -24,6 +24,7 @@ PathSettingWgt::PathSettingWgt(QWidget* parent):DWidget(parent)
     qDebug() << "PathSettingWgt constructor";
     init();
     onSaveIdChanged(Settings::instance()->getSavePathId());
+    qDebug() << "PathSettingWgt constructor end";
 }
 
 PathSettingWgt::~PathSettingWgt()
@@ -33,18 +34,22 @@ PathSettingWgt::~PathSettingWgt()
 
 void PathSettingWgt::onSaveIdChanged(int id)
 {
+    qDebug() << "PathSettingWgt onSaveIdChanged, id:" << id;
     switch (id) {
     case CurFileBox:{
+        qDebug() << "CurFileBox selected";
         m_curFileBox->setChecked(true);
         m_customBtn->setEnabled(false);
         break;
     }
     case LastOptBox:{
+        qDebug() << "LastOptBox selected";
         m_lastOptBox->setChecked(true);
         m_customBtn->setEnabled(false);
         break;
     }
     case CustomBox:{
+        qDebug() << "CustomBox selected";
         m_customBox->setChecked(true);
         m_customBtn->setEnabled(true);
         setEditText(Settings::instance()->getSavePath(CustomBox));
@@ -53,10 +58,12 @@ void PathSettingWgt::onSaveIdChanged(int id)
     default:
         break;
     }
+    qDebug() << "PathSettingWgt onSaveIdChanged end";
 }
 
 void PathSettingWgt::init()
 {
+    qDebug() << "PathSettingWgt init";
     QVBoxLayout* layout = new QVBoxLayout(this);
     m_group = new QButtonGroup(this);
     layout->setContentsMargins(0,0,0,0);
@@ -96,10 +103,12 @@ void PathSettingWgt::init()
     updateSizeMode();
     QObject::connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, &PathSettingWgt::updateSizeMode);
 #endif
+    qDebug() << "PathSettingWgt init end";
 }
 
 void PathSettingWgt::connections()
 {
+    qDebug() << "PathSettingWgt connections";
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     connect(m_group, static_cast<void(QButtonGroup::*)(int)>(&QButtonGroup::buttonClicked),this,&PathSettingWgt::onBoxClicked);
 #else
@@ -109,13 +118,16 @@ void PathSettingWgt::connections()
     });
 #endif
     connect(m_customBtn, &QPushButton::clicked, this, &PathSettingWgt::onBtnClicked);
+    qDebug() << "PathSettingWgt connections end";
 }
 
 void PathSettingWgt::setEditText(const QString& text)
 {
+    qDebug() << "PathSettingWgt setEditText:" << text;
     QFontMetrics metrics(m_customEdit->font());
     Qt::TextElideMode em = Qt::TextElideMode::ElideMiddle;
     m_customEdit->setText(metrics.elidedText(text, em, 175));
+    qDebug() << "PathSettingWgt setEditText end";
 }
 
 void PathSettingWgt::onBoxClicked(int id)
@@ -123,16 +135,19 @@ void PathSettingWgt::onBoxClicked(int id)
     qInfo() << "Save path option changed to:" << id;
     switch (id) {
     case CurFileBox:{
+        qDebug() << "CurFileBox selected";
         Settings::instance()->setSavePathId(CurFileBox);
         m_customBtn->setEnabled(false);
         break;
     }
     case LastOptBox:{
+        qDebug() << "LastOptBox selected";
         Settings::instance()->setSavePathId(LastOptBox);
         m_customBtn->setEnabled(false);
         break;
     }
     case CustomBox:{
+        qDebug() << "CustomBox selected";
         Settings::instance()->setSavePathId(CustomBox);
         QString path = Settings::instance()->getSavePath(CustomBox);
         qDebug() << "Custom path set to:" << path;
@@ -143,6 +158,7 @@ void PathSettingWgt::onBoxClicked(int id)
     default:
         break;
     }
+    qDebug() << "PathSettingWgt onBoxClicked end";
 }
 
 void PathSettingWgt::onBtnClicked()
@@ -167,6 +183,7 @@ void PathSettingWgt::onBtnClicked()
     qInfo() << "Selected new custom path:" << path;
     setEditText(path);
     Settings::instance()->setSavePath(PathSettingWgt::CustomBox,path);
+    qDebug() << "PathSettingWgt onBtnClicked end";
 }
 
 /**
@@ -175,13 +192,17 @@ void PathSettingWgt::onBtnClicked()
  */
 void PathSettingWgt::updateSizeMode()
 {
+    qDebug() << "PathSettingWgt updateSizeMode";
 #ifdef DTKWIDGET_CLASS_DSizeMode
     if (DGuiApplicationHelper::isCompactMode()) {
+        qDebug() << "Compact mode";
         m_customBtn->setFixedSize(s_PSWSuggestBtnSizeCompact, s_PSWSuggestBtnSizeCompact);
         m_customBtn->setIconSize(QSize(s_PSWSuggestIconSizeCompact, s_PSWSuggestIconSizeCompact));
     } else {
+        qDebug() << "Normal mode";
         m_customBtn->setFixedSize(s_PSWSuggestBtnSize, s_PSWSuggestBtnSize);
         m_customBtn->setIconSize(QSize(s_PSWSuggestIconSize, s_PSWSuggestIconSize));
     }
 #endif
+    qDebug() << "PathSettingWgt updateSizeMode end";
 }

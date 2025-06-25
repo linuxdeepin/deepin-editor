@@ -86,16 +86,20 @@ ReplaceBar::ReplaceBar(QWidget *parent)
     updateSizeMode();
     connect(DGuiApplicationHelper::instance(), &DGuiApplicationHelper::sizeModeChanged, this, &ReplaceBar::updateSizeMode);
 #endif
+    qDebug() << "ReplaceBar constructor end";
 }
 
 bool ReplaceBar::isFocus()
 {
+    qDebug() << "isFocus";
     return m_replaceLine->hasFocus();
 }
 
 void ReplaceBar::focus()
 {
+    qDebug() << "focus";
     m_replaceLine->lineEdit()->setFocus();
+    qDebug() << "focus success";
 }
 
 void ReplaceBar::activeInput(QString text, QString file, int row, int column, int scrollOffset)
@@ -128,23 +132,28 @@ void ReplaceBar::activeInput(QString text, QString file, int row, int column, in
 
 void ReplaceBar::handleSkip()
 {
+    qDebug() << "handleSkip";
     emit replaceSkip(m_replaceFile, m_replaceLine->lineEdit()->text());
 }
 
 void ReplaceBar::replaceClose()
 {
+    qDebug() << "replaceClose";
     searched = false;
     hide();
     emit sigReplacebarClose();
+    qDebug() << "replaceClose end";
 }
 
 void ReplaceBar::handleContentChanged()
 {
+    qDebug() << "handleContentChanged";
     updateSearchKeyword(m_replaceFile, m_replaceLine->lineEdit()->text());
 }
 
 void ReplaceBar::handleReplaceNext()
 {
+    qDebug() << "handleReplaceNext";
     QString searchText = m_replaceLine->lineEdit()->text();
     QString replaceText = m_withLine->lineEdit()->text();
     qDebug() << "Replacing next occurrence, search length:"
@@ -162,65 +171,80 @@ void ReplaceBar::handleReplaceNext()
 
 void ReplaceBar::handleReplaceRest()
 {
+    qDebug() << "handleReplaceRest";
     replaceRest(m_replaceLine->lineEdit()->text(), m_withLine->lineEdit()->text());
 }
 
 void ReplaceBar::handleReplaceAll()
 {
+    qDebug() << "handleReplaceAll";
     replaceAll(m_replaceLine->lineEdit()->text(), m_withLine->lineEdit()->text());
 }
 
 void ReplaceBar::hideEvent(QHideEvent *)
 {
+    qDebug() << "hideEvent";
     searched = false;
     removeSearchKeyword();
 }
 
 bool ReplaceBar::focusNextPrevChild(bool)
 {
+    qDebug() << "focusNextPrevChild";
     // Make keyword jump between two EditLine widgets.
     auto *editWidget = qobject_cast<LineBar *>(focusWidget());
     if (editWidget != nullptr) {
+        qDebug() << "editWidget" << editWidget;
         if (editWidget == m_replaceLine) {
             m_withLine->lineEdit()->setFocus();
-
+            qDebug() << "focus withLine";
             return true;
         } else if (editWidget == m_withLine) {
             m_replaceLine->lineEdit()->setFocus();
-
+            qDebug() << "focus replaceLine";
             return true;
         }
     }
-
+    qDebug() << "focusNextPrevChild end";
     return false;
 }
 
 void ReplaceBar::keyPressEvent(QKeyEvent *e)
 {
+    qDebug() << "keyPressEvent";
     const QString &key = Utils::getKeyshortcut(e);
     if (key == "Esc") {
+        qDebug() << "Esc";
         QWidget::hide();
         emit sigReplacebarClose();
+        qDebug() << "sigReplacebarClose";
     }
     if (m_closeButton->hasFocus() && key == "Tab") {
+        qDebug() << "Tab";
         m_replaceLine->lineEdit()->setFocus();
     } else {
         DFloatingWidget::keyPressEvent(e);
     }
     if (key == "Enter") {
+        qDebug() << "Enter";
         if (m_replaceAllButton->hasFocus()) {
+            qDebug() << "replaceAllButton";
             m_replaceAllButton->click();
         }
         if (m_replaceButton->hasFocus()) {
+            qDebug() << "replaceButton";
             m_replaceButton->click();
         }
         if (m_replaceRestButton->hasFocus()) {
+            qDebug() << "replaceRestButton";
             m_replaceRestButton->click();
         }
         if (m_replaceSkipButton->hasFocus()) {
+            qDebug() << "replaceSkipButton";
             m_replaceSkipButton->click();
         }
     }
+    qDebug() << "keyPressEvent end";
 }
 
 /**
@@ -229,11 +253,13 @@ void ReplaceBar::keyPressEvent(QKeyEvent *e)
  */
 void ReplaceBar::updateSizeMode()
 {
+    qDebug() << "updateSizeMode";
 #ifdef DTKWIDGET_CLASS_DSizeMode
     bool isCompact = DGuiApplicationHelper::isCompactMode();
     qDebug() << "Updating size mode, compact:" << isCompact;
     
     if (isCompact) {
+        qDebug() << "isCompact";
         setFixedHeight(s_RBHeight_Compact);
         m_closeButton->setFixedSize(s_RBCloseBtnSizeCompact, s_RBCloseBtnSizeCompact);
         m_closeButton->setIconSize(QSize(s_RBCloseIconSizeCompact, s_RBCloseIconSizeCompact));
@@ -241,6 +267,7 @@ void ReplaceBar::updateSizeMode()
         m_layout->setContentsMargins(s_RBContetsMarginsCompact);
         m_layout->invalidate();
     } else {
+        qDebug() << "is not compact";
         setFixedHeight(s_RBHeight);
         m_closeButton->setFixedSize(s_RBCloseBtnSize, s_RBCloseBtnSize);
         m_closeButton->setIconSize(QSize(s_RBCloseBtnSize, s_RBCloseBtnSize));
@@ -249,6 +276,7 @@ void ReplaceBar::updateSizeMode()
         m_layout->invalidate();
     }
 #endif
+    qDebug() << "updateSizeMode end";
 }
 
 /**
@@ -257,24 +285,29 @@ void ReplaceBar::updateSizeMode()
  */
 QVBoxLayout *ReplaceBar::createVerticalLine(QWidget *content) const
 {
+    qDebug() << "createVerticalLine";
     QVBoxLayout *lineBarLayout = new QVBoxLayout();
     lineBarLayout->addItem(new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
     lineBarLayout->addWidget(content);
     lineBarLayout->addItem(new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
+    qDebug() << "createVerticalLine end";
     return lineBarLayout;
 }
 
 void ReplaceBar::setMismatchAlert(bool isAlert)
 {
+    qDebug() << "setMismatchAlert";
     m_replaceLine->setAlert(isAlert);
 }
 
 void ReplaceBar::setsearched(bool _)
 {
+    qDebug() << "setsearched";
     searched = _;
 }
 
 void ReplaceBar::change()
 {
+    qDebug() << "change";
     searched = false;
 }

@@ -37,6 +37,7 @@ void ThemeListModel::setSelection(const QString &path)
             const int row = m_themes.indexOf(pair);
             const QModelIndex &idx = QAbstractListModel::index(row, 0);
             emit requestCurrentIndex(idx);
+            qDebug() << "Break, Selection set for theme path:" << path;
             break;
         }
     }
@@ -57,15 +58,20 @@ QVariant ThemeListModel::data(const QModelIndex &index, int role) const
 
     switch (role) {
     case ThemeName:
+        qDebug() << "Theme name:" << name;
         return name;
     case ThemePath:
+        qDebug() << "Theme path:" << path;
         return path;
     case FrameNormalColor:
+        qDebug() << "Frame normal color:" << m_frameNormalColor;
         return m_frameNormalColor;
     case FrameSelectedColor:
+        qDebug() << "Frame selected color:" << m_frameSelectedColor;
         return m_frameSelectedColor;
     }
 
+    qDebug() << "No data for role:" << role;
     return QVariant();
 }
 
@@ -95,4 +101,6 @@ void ThemeListModel::initThemes()
 
                   return QColor(firstColor).lightness() < QColor(secondColor).lightness();
               });
+
+    qDebug() << "Themes:" << m_themes;
 }
